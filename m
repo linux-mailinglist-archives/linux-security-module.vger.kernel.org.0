@@ -2,55 +2,109 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFA8FFB2
-	for <lists+linux-security-module@lfdr.de>; Tue, 30 Apr 2019 20:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94681003B
+	for <lists+linux-security-module@lfdr.de>; Tue, 30 Apr 2019 21:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbfD3SZE (ORCPT
+        id S1726150AbfD3TTr (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 30 Apr 2019 14:25:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50728 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726431AbfD3SZE (ORCPT
+        Tue, 30 Apr 2019 15:19:47 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:43202 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbfD3TTq (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 30 Apr 2019 14:25:04 -0400
-Subject: Re: [GIT PULL] SELinux fixes for v5.1 (#3)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556648703;
-        bh=lH6236Wdd2e1xct8m9E1lVmpcCCpId/hAfshAXY5srE=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=2ChchlfVxElYvAyi4CHpXDHp83y+g9Dqo/R9JhaKY1nUZEw/T59NtH+OXHce5+R81
-         G4lTIwxRSy6qMWGwC2fumbqt/7CavoTu8+o+NYpZ/zcyZlP1i+C7J1iUC5y86fl+ym
-         ywk631HhYicttyS328caszXhtFVMW08Qh05fUKwg=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAHC9VhQ6QF7LvuFjr2YdYNX-3pW80nm+VJh4jK080JsKOzOVsA@mail.gmail.com>
-References: <CAHC9VhQ6QF7LvuFjr2YdYNX-3pW80nm+VJh4jK080JsKOzOVsA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAHC9VhQ6QF7LvuFjr2YdYNX-3pW80nm+VJh4jK080JsKOzOVsA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
- tags/selinux-pr-20190429
-X-PR-Tracked-Commit-Id: dfbd199a7cfe3e3cd8531e1353cdbd7175bfbc5e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fea27bc7ff43a8beb6bebe6d4fe9eb889e185d4a
-Message-Id: <155664870354.13312.10312761470463339803.pr-tracker-bot@kernel.org>
-Date:   Tue, 30 Apr 2019 18:25:03 +0000
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Tue, 30 Apr 2019 15:19:46 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t81so12197139oig.10
+        for <linux-security-module@vger.kernel.org>; Tue, 30 Apr 2019 12:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g3qC6EpvLSeHFr2sRZhVsgJD/RMgh/dYJRkIiVXTq9w=;
+        b=Nnxc1mQbpIdlfxZJ7b65LkwEBcnT2G3SZCW1ewlTv0HCLQ4SeZltNWI5DB2nRlxokd
+         RbaAGI3WnQpjuhLJY9ogavnDOrcrgDcvHLoP1iCDhPh5D+pmfThLuStn7g+aL5vdM5ar
+         sr/4+METBLx3UHpY+uyqkruCyquSMHVBY6rqFpT8B7wIk5ADufaYUkL6d/EkL+nrEEJL
+         A52w4k7dbRxEjbEjnCVFV55IGN5uMzHbR/DBtTPsL+cdGWrwxwSHUVqQrT8gQ7y1NYdl
+         R9H10F3TJ2anAK5lqoJyjCsDV1U8YOZ066fwedQIWhxvucztM9lbs98EpH9FMtFY+vbv
+         PdHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g3qC6EpvLSeHFr2sRZhVsgJD/RMgh/dYJRkIiVXTq9w=;
+        b=HzPz9e3H6cDorW3h58rAyHWWQrwUPGRaeWTEJ4dwXug7YMXXWTLHO3WpVKi7H99lvF
+         EgXExHNiXIHBGimCMYhmhGKAUCnonIiDBiDYhLo+OqtToc765MdpsbKYZ9t4kE9XFhKI
+         oDheXQgPTZZsq7O200RMgb4TSJhxYOGx4GuDaLDZaEZ3SEoYGslCHUfm+IGEu9c240V5
+         jCCn5AGpbAoYMn4nHWdAITEN2DaFkPgUx6A4iIUNE47D/ubCaHJE7yjeE6GoSfxKGr6H
+         +dtgclQ6eH8OqnyDjXNROMFKs5NNC9ZomLKgsTjYuklPM5dXcBFfP0zgwkjQxyr11gM+
+         a/hQ==
+X-Gm-Message-State: APjAAAURQD+RssaJcY2B/m2WY7GKVqY0RU/Iq+kNfg6NdG7TUf+0lt5j
+        0UraFhl4/DMSnGGgB47B104HkJxjL3NtbxbLyxRimg==
+X-Google-Smtp-Source: APXvYqxkhEi0s8vy1kV0tccLSHaysowwTaDcwz5lI7gFIXwU1OEMUPDBxvGY5LUoFgErWFKKyHF8OmhxBFF+gGMYJP8=
+X-Received: by 2002:aca:dcd7:: with SMTP id t206mr4274264oig.68.1556651985980;
+ Tue, 30 Apr 2019 12:19:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190404003249.14356-1-matthewgarrett@google.com> <20190404003249.14356-23-matthewgarrett@google.com>
+In-Reply-To: <20190404003249.14356-23-matthewgarrett@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 30 Apr 2019 15:19:20 -0400
+Message-ID: <CAG48ez0uVYJHycXv8jTvYrSGomhsQrQkR+Jpf-vXYJYn58eEjw@mail.gmail.com>
+Subject: Re: [PATCH V32 22/27] bpf: Restrict bpf when kernel lockdown is in
+ confidentiality mode
+To:     Matthew Garrett <matthewgarrett@google.com>, bpf@vger.kernel.org
+Cc:     James Morris <jmorris@namei.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Chun-Yi Lee <jlee@suse.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The pull request you sent on Mon, 29 Apr 2019 18:55:19 -0400:
++bpf list
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20190429
+On Wed, Apr 3, 2019 at 8:34 PM Matthew Garrett
+<matthewgarrett@google.com> wrote:
+> There are some bpf functions can be used to read kernel memory:
+> bpf_probe_read, bpf_probe_write_user and bpf_trace_printk.  These allow
+> private keys in kernel memory (e.g. the hibernation image signing key) to
+> be read by an eBPF program and kernel memory to be altered without
+> restriction. Disable them if the kernel has been locked down in
+> confidentiality mode.
+>
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
+> cc: netdev@vger.kernel.org
+> cc: Chun-Yi Lee <jlee@suse.com>
+> cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  kernel/trace/bpf_trace.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 8b068adb9da1..9e8eda605b5e 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -137,6 +137,9 @@ BPF_CALL_3(bpf_probe_read, void *, dst, u32, size, const void *, unsafe_ptr)
+>  {
+>         int ret;
+>
+> +       if (kernel_is_locked_down("BPF", LOCKDOWN_CONFIDENTIALITY))
+> +               return -EINVAL;
+> +
+>         ret = probe_kernel_read(dst, unsafe_ptr, size);
+>         if (unlikely(ret < 0))
+>                 memset(dst, 0, size);
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fea27bc7ff43a8beb6bebe6d4fe9eb889e185d4a
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+This looks wrong. bpf_probe_read_proto is declared with an
+ARG_PTR_TO_UNINIT_MEM argument, so if you don't do a "memset(dst, 0,
+size);" like in the probe_kernel_read() error path, the BPF program
+can read uninitialized memory.
