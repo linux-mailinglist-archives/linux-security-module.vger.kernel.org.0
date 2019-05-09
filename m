@@ -2,54 +2,65 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52959193CE
-	for <lists+linux-security-module@lfdr.de>; Thu,  9 May 2019 22:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCD919524
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2019 00:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbfEIUuU (ORCPT
+        id S1726909AbfEIWT5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 9 May 2019 16:50:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37416 "EHLO mail.kernel.org"
+        Thu, 9 May 2019 18:19:57 -0400
+Received: from namei.org ([65.99.196.166]:38378 "EHLO namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726968AbfEIUuQ (ORCPT
+        id S1726824AbfEIWT5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 9 May 2019 16:50:16 -0400
-Subject: Re: [GIT PULL] Security subsystem: Smack updates for v5.2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557435015;
-        bh=gIJEdJgaa6GXbK6N5/rL43It8AHH+QUeyq0uEvYq6FU=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=mwIG5r0185QMyMQcvZTAXA9UpK1iXkEe1RstPra7YDMZjz8AhQdszuavGeUbjl2g/
-         LLcn0SrMDwZWrEyvt90eBgGhdsG7RlHlGfJQGxg8jFk3pTIvq5972KFTwe0e0UgCHI
-         8ONheii/niwoNB2KPWos6x7ehckXXwE1UzfRt1ww=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <alpine.LRH.2.21.1905100325330.25349@namei.org>
-References: <alpine.LRH.2.21.1905100325330.25349@namei.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <alpine.LRH.2.21.1905100325330.25349@namei.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git
- next-smack
-X-PR-Tracked-Commit-Id: 8d31a5c35ed179825a2145881ad7cd8f9907d94b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 800c608c976c3f0a6d02ed7fbc600f1f6962ac73
-Message-Id: <155743501574.12157.3971455155840137875.pr-tracker-bot@kernel.org>
-Date:   Thu, 09 May 2019 20:50:15 +0000
-To:     James Morris <jmorris@namei.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+        Thu, 9 May 2019 18:19:57 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id x49MJtYU014529;
+        Thu, 9 May 2019 22:19:55 GMT
+Date:   Fri, 10 May 2019 08:19:55 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>
+Subject: Re: [GIT PULL] security subsytem: TPM changes for v5.2
+In-Reply-To: <CAHk-=whqzNFfeNOouBjH2GKMVgMi22fsNOaCgbUOnCPmKmEXeQ@mail.gmail.com>
+Message-ID: <alpine.LRH.2.21.1905100819390.13541@namei.org>
+References: <alpine.LRH.2.21.1905100320110.25349@namei.org> <CAHk-=whqzNFfeNOouBjH2GKMVgMi22fsNOaCgbUOnCPmKmEXeQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The pull request you sent on Fri, 10 May 2019 03:28:49 +1000 (AEST):
+On Thu, 9 May 2019, Linus Torvalds wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git next-smack
+> On Thu, May 9, 2019 at 10:23 AM James Morris <jmorris@namei.org> wrote:
+> >
+> > Bugfixes and new selftests for v5.1 features (partial reads in /dev/tpm0).
+> 
+> What the heck is going on?
+> 
+> I got all of these long ago in the "TPM fixes" branch for 5.1. One
+> month ago, merge commit a556810d8e06.
+> 
+> These are just rebased (!) copies of stuff I already have, and they should
+> 
+>  (a) never have been rebased in the first place
+> 
+>  (b) certainly not be re-sent to me as a new branch
+> 
+> Please throw this branch away and make sure it really is dead and
+> buried and never shows up again.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/800c608c976c3f0a6d02ed7fbc600f1f6962ac73
+Yikes, ok.
 
-Thank you!
+> And take a moment to look at what happened and why this broken branch
+> was duplicated and sent twice!
+
+Could it be something I pulled in? I haven't used 'rebase' in many years.
+
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+James Morris
+<jmorris@namei.org>
+
