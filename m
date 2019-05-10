@@ -2,114 +2,77 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3E919F39
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2019 16:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F4A1A201
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2019 18:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbfEJOeU (ORCPT
+        id S1727771AbfEJQym (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 10 May 2019 10:34:20 -0400
-Received: from mga14.intel.com ([192.55.52.115]:32461 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727248AbfEJOeT (ORCPT
+        Fri, 10 May 2019 12:54:42 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:36055 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727800AbfEJQym (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 10 May 2019 10:34:19 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 May 2019 07:34:16 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
-  by orsmga002.jf.intel.com with ESMTP; 10 May 2019 07:34:08 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hP6b9-0004Sg-Pc; Fri, 10 May 2019 17:34:07 +0300
-Date:   Fri, 10 May 2019 17:34:07 +0300
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-rpi-kernel@lists.infradead.org" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 03/16] lib,treewide: add new match_string() helper/macro
-Message-ID: <20190510143407.GA9224@smile.fi.intel.com>
-References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
- <20190508112842.11654-5-alexandru.ardelean@analog.com>
- <20190508131128.GL9224@smile.fi.intel.com>
- <20190508131856.GB10138@kroah.com>
- <b2440bc9485456a7a90a488c528997587b22088b.camel@analog.com>
- <4df165bc4247e60aa4952fd55cb0c77e60712767.camel@analog.com>
+        Fri, 10 May 2019 12:54:42 -0400
+Received: by mail-lf1-f68.google.com with SMTP id y10so4646585lfl.3
+        for <linux-security-module@vger.kernel.org>; Fri, 10 May 2019 09:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=teyAXz9aykZ29Ynkf0/pUzS9u8QM+umNpzpW+ZToHRw=;
+        b=XIh8EA8MUYC9ZfQwd4nS42dAFIXehXTQ9ExQgOBW9Yj8aHIlhEEu/yMn8NTgvGKXZ0
+         fU644LXBUDs5/0+b+VttXiFOMpxLSZuHtF4ogmRVB5AQgpjd4hZjmkRMD9L0UzXldHT+
+         EOGtlg03/sgjANIzj9BsTcPE/HDdhtMc6frng=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=teyAXz9aykZ29Ynkf0/pUzS9u8QM+umNpzpW+ZToHRw=;
+        b=REgTsQD58IAyOBIMcbQdoclceUhZelDatrB4nGnC4sX1YJcd3hLUGh/2K+0UqM1aCs
+         p24BeuFUVfTGeEPiixt+cYgFNP0XtHNcVCt7/7mVZdA6ygbA6rAFzDu6fzDhQrQ0PNJK
+         qtGO34FOa0K8sotvI7zs+s9Ce4ODnpsAQc9C5fetktj1mGrVxsYVpD7/vFGX6TNn5GUs
+         WeCBGgbji/bK0A2fF5h0GrSKW4SBhJJc1/HYAW/uCiUL4RJ5m0tnqoKrp2KHP2hVhAUw
+         Knayi8AviB2FuVwrnALVCOqUYjxQqFZtQkCXjMrW4kZCyTQi/Y54siYyHMmfFQG9fyaR
+         D4zQ==
+X-Gm-Message-State: APjAAAXFiSeN6+3m6MZMgUZCWqrLzxADeN921VIu5E3mrsxNDP/koXiE
+        jCJ7DPIfE6OS3I+8OmUkmwb2vUVCBmA=
+X-Google-Smtp-Source: APXvYqyU+i3RQk2nQY1KEqvL2BQ4nmezdpo/zfXvsO90j5Lf1w0kABnbmxUD+bgADTPdvU1uk6WU7Q==
+X-Received: by 2002:a19:a8c8:: with SMTP id r191mr6649333lfe.85.1557507280017;
+        Fri, 10 May 2019 09:54:40 -0700 (PDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id v20sm1619959lfe.11.2019.05.10.09.54.38
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 May 2019 09:54:39 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id d15so5671609ljc.7
+        for <linux-security-module@vger.kernel.org>; Fri, 10 May 2019 09:54:38 -0700 (PDT)
+X-Received: by 2002:a2e:9044:: with SMTP id n4mr6483923ljg.94.1557507278383;
+ Fri, 10 May 2019 09:54:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4df165bc4247e60aa4952fd55cb0c77e60712767.camel@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <alpine.LRH.2.21.1905100325330.25349@namei.org>
+ <CAHk-=wjjfZSxaivGyE0A3S2ZHCi=BVGdwG4++QVS80OTshBR1Q@mail.gmail.com> <f7420347-a926-e923-9914-714ead9298ec@I-love.SAKURA.ne.jp>
+In-Reply-To: <f7420347-a926-e923-9914-714ead9298ec@I-love.SAKURA.ne.jp>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 May 2019 09:54:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi_oN0zQnwYu91CbXoEfRhxCiy6QD3FVfp+pfC-4P1-Kg@mail.gmail.com>
+Message-ID: <CAHk-=wi_oN0zQnwYu91CbXoEfRhxCiy6QD3FVfp+pfC-4P1-Kg@mail.gmail.com>
+Subject: Re: [GIT PULL] Security subsystem: Smack updates for v5.2
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     LSM List <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, May 10, 2019 at 09:15:27AM +0000, Ardelean, Alexandru wrote:
-> On Wed, 2019-05-08 at 16:22 +0300, Alexandru Ardelean wrote:
-> > On Wed, 2019-05-08 at 15:18 +0200, Greg KH wrote:
-> > > On Wed, May 08, 2019 at 04:11:28PM +0300, Andy Shevchenko wrote:
-> > > > On Wed, May 08, 2019 at 02:28:29PM +0300, Alexandru Ardelean wrote:
+On Fri, May 10, 2019 at 3:50 AM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> but I don't maintain a git tree for sending pull requests.
 
-> > > > Can you split include/linux/ change from the rest?
-> > > 
-> > > That would break the build, why do you want it split out?  This makes
-> > > sense all as a single patch to me.
-> > > 
-> > 
-> > Not really.
-> > It would be just be the new match_string() helper/macro in a new commit.
-> > And the conversions of the simple users of match_string() (the ones using
-> > ARRAY_SIZE()) in another commit.
-> > 
-> 
-> I should have asked in my previous reply.
-> Leave this as-is or re-formulate in 2 patches ?
+Any chance you would do so?
 
-Depends on on what you would like to spend your time: collecting Acks for all
-pieces in treewide patch or send new API first followed up by per driver /
-module update in next cycle.
+Anyway, I am not suggesting we change anything this merge window,
+that's just too painful and would be too chaotic. But I'd love for
+this to be sorted out by the next one, perhaps?
 
-I also have no strong preference.
-And I think it's good to add Heikki Krogerus to Cc list for both patch series,
-since he is the author of sysfs variant and may have something to comment on
-the rest.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+                 Linus
