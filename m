@@ -2,91 +2,114 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5191321BBB
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 May 2019 18:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F30321C14
+	for <lists+linux-security-module@lfdr.de>; Fri, 17 May 2019 18:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726659AbfEQQhq (ORCPT
+        id S1727838AbfEQQ7D (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 17 May 2019 12:37:46 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:35234 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726238AbfEQQhp (ORCPT
+        Fri, 17 May 2019 12:59:03 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:32951 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727370AbfEQQ7C (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 17 May 2019 12:37:45 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t1so2126024pgc.2
-        for <linux-security-module@vger.kernel.org>; Fri, 17 May 2019 09:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VgMR8fw/3btcfeCqUg+SAAzIGGZgPBuWMbQyEv64ZSw=;
-        b=VsbWyvJhK63OLyZtQo8OaklsBhS46OZmNozcVmNGar+obQPJhvlUBVqOtwGNUSk1eg
-         XQLDrD2d4ySpIj+jC/9WTu8arAVvxo1JKc+nmnC7ij3hJEvOBgk1CqWeKXnT7VCYKeoC
-         VGVRU6vvl7th23Ka2qGEjSEJ0XcL1IbV/xwEs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VgMR8fw/3btcfeCqUg+SAAzIGGZgPBuWMbQyEv64ZSw=;
-        b=SO0ERb6cylfNLzysHFB0nx7qqnj9tSAxweMl7MXyFT+yhNtTyvfnj794HLHcttAeyo
-         7vtNDALOficNMxXbZrBfXoBu4phsv6yLzqxc5OD3PC7S3EYCuZlfHKeWqcnBAZh1JZeg
-         mS8x7JEumELbjofBF5tlRpHk9RT7y/3jbAeXYTjie3cLMc+9GU6Y0mEWdxEmuw2dgZ3D
-         /wDZBz0R9nfrgGU74YP9/ZwYB+hn94iBEBUIdEUNNEPMPQPQBBC29c5tNQwCwGwOH9E2
-         eQ65YLpE+SLX+KIYKgLYJ8owjcAhMSojux2pe95OAms/T3/pfMfcnKnWiizVQg8Z3Ie/
-         bdag==
-X-Gm-Message-State: APjAAAXjrpHL3cMt+kZBeABmX8AZ1GyspwmAO8uUYxUzRdgfYXuxL1ZR
-        ohFMxGumWP3SOqh8qTWCuJ4l+g==
-X-Google-Smtp-Source: APXvYqwFidnBAPTL+woN/ou51mJsyoX35Z9berovyuDT4vsLcTEwjuG1xg0yIHCeu2pFUSIcHbV0oQ==
-X-Received: by 2002:a63:4342:: with SMTP id q63mr57175169pga.435.1558111065442;
-        Fri, 17 May 2019 09:37:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s137sm15534495pfc.119.2019.05.17.09.37.44
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 17 May 2019 09:37:44 -0700 (PDT)
-Date:   Fri, 17 May 2019 09:37:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sandeep Patil <sspatil@android.com>,
-        Laura Abbott <labbott@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] lib: introduce test_meminit module
-Message-ID: <201905170937.7A1E646F61@keescook>
-References: <20190514143537.10435-1-glider@google.com>
- <20190514143537.10435-3-glider@google.com>
- <201905151752.2BD430A@keescook>
- <CAG_fn=VVZ1FBygbAeTbdo2U2d2Zga6Z7wVitkqZB0YffCKYzag@mail.gmail.com>
+        Fri, 17 May 2019 12:59:02 -0400
+Received: from lhreml707-cah.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id DD288D5C50E3A877CF75;
+        Fri, 17 May 2019 17:59:00 +0100 (IST)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.154)
+ by smtpsuk.huawei.com (10.201.108.48) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Fri, 17 May 2019 17:58:52 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <viro@zeniv.linux.org.uk>
+CC:     <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
+        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
+        <takondra@cisco.com>, <kamensky@cisco.com>, <hpa@zytor.com>,
+        <arnd@arndb.de>, <rob@landley.net>, <james.w.mcmechan@gmail.com>,
+        <niveditas98@gmail.com>, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v3 0/2] initramfs: add support for xattrs in the initial ram disk
+Date:   Fri, 17 May 2019 18:55:17 +0200
+Message-ID: <20190517165519.11507-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=VVZ1FBygbAeTbdo2U2d2Zga6Z7wVitkqZB0YffCKYzag@mail.gmail.com>
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.154]
+X-CFilter-Loop: Reflected
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, May 17, 2019 at 05:51:17PM +0200, Alexander Potapenko wrote:
-> On Thu, May 16, 2019 at 3:02 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Tue, May 14, 2019 at 04:35:35PM +0200, Alexander Potapenko wrote:
-> > > Add tests for heap and pagealloc initialization.
-> > > These can be used to check init_on_alloc and init_on_free implementations
-> > > as well as other approaches to initialization.
-> >
-> > This is nice! Easy way to test the results. It might be helpful to show
-> > here what to expect when loading this module:
->
-> Do you want me to add the expected output to the patch description?
+This patch set aims at solving the following use case: appraise files from
+the initial ram disk. To do that, IMA checks the signature/hash from the
+security.ima xattr. Unfortunately, this use case cannot be implemented
+currently, as the CPIO format does not support xattrs.
 
-Yes, I think it's worth having, as a way to show people what to expect
-when running the test, without having to actually enable, build, and
-run it themselves.
+This proposal consists in marshaling pathnames and xattrs in a file called
+.xattr-list. They are unmarshaled by the CPIO parser after all files have
+been extracted, or before the next ram disk is processed.
+
+The difference from v1 (https://lkml.org/lkml/2018/11/22/1182) is that all
+xattrs are stored in a single file and not per file (solves the file name
+limitation issue, as it is not necessary to add a suffix to files
+containing xattrs).
+
+The difference with another proposal
+(https://lore.kernel.org/patchwork/cover/888071/) is that xattrs can be
+included in an image without changing the image format, as opposed to
+defining a new one. As seen from the discussion, if a new format has to be
+defined, it should fix the issues of the existing format, which requires
+more time.
+
+To fulfill both requirements, adding support for xattrs in a short time and
+defining a new image format properly, this patch set takes an incremental
+approach: it introduces a parser of xattrs that can be used either if
+xattrs are in a regular file or directly added to the image (this patch set
+reuses patch 9/15 of the existing proposal); in addition, it introduces a
+wrapper of the xattr parser, to read xattrs from a file.
+
+The changes introduced by this patch set don't cause any compatibility
+issue: kernels without the xattr parser simply extracts .xattr-list and
+don't unmarshal xattrs; kernels with the xattr parser don't unmarshal
+xattrs if .xattr-list is not found in the image.
+
+From the kernel space perspective, backporting this functionality to older
+kernels should be very easy. It is sufficient to add two calls to the new
+function do_readxattrs(). From the user space perspective, no change is
+required for the use case. A new dracut module (module-setup.sh) will
+execute:
+
+getfattr --absolute-names -d -h -R -e hex -m security.ima \
+    <file list> | xattr.awk -b > ${initdir}/.xattr-list
+
+where xattr.awk is the script that marshals xattrs (see patch 3/3). The
+same can be done with the initramfs-tools ram disk generator.
+
+Changelog
+
+v2:
+- replace ksys_lsetxattr() with kern_path() and vfs_setxattr()
+  (suggested by Jann Horn)
+- replace ksys_open()/ksys_read()/ksys_close() with
+  filp_open()/kernel_read()/fput()
+  (suggested by Jann Horn)
+- use path variable instead of name_buf in do_readxattrs()
+- set last byte of str to 0 in do_readxattrs()
+- call do_readxattrs() in do_name() before replacing an existing
+  .xattr-list
+- pass pathname to do_setxattrs()
+
+
+Mimi Zohar (1):
+  initramfs: set extended attributes
+
+Roberto Sassu (1):
+  initramfs: introduce do_readxattrs()
+
+ init/initramfs.c | 170 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 168 insertions(+), 2 deletions(-)
 
 -- 
-Kees Cook
+2.17.1
+
