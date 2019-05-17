@@ -2,162 +2,149 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B3E21B8D
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 May 2019 18:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77D821B9B
+	for <lists+linux-security-module@lfdr.de>; Fri, 17 May 2019 18:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726339AbfEQQYn (ORCPT
+        id S1725985AbfEQQ14 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 17 May 2019 12:24:43 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:43287 "EHLO
+        Fri, 17 May 2019 12:27:56 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43520 "EHLO
         mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbfEQQYn (ORCPT
+        with ESMTP id S1725932AbfEQQ14 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 17 May 2019 12:24:43 -0400
-Received: by mail-pl1-f195.google.com with SMTP id n8so3552221plp.10
-        for <linux-security-module@vger.kernel.org>; Fri, 17 May 2019 09:24:42 -0700 (PDT)
+        Fri, 17 May 2019 12:27:56 -0400
+Received: by mail-pl1-f195.google.com with SMTP id n8so3555521plp.10
+        for <linux-security-module@vger.kernel.org>; Fri, 17 May 2019 09:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=aV3rffMxuXG8e12nRoLl587y9MXM8TOV+Ti1qX5jxqI=;
-        b=NXpueBp2RQMTp7/ult69Cy5m/zTxwcPQ4jUpkeJZIDfT5NUWtRfdwnURyUvF+j6BFp
-         AtAoNq/qumpwpOFcKFiEZaF/sZdU1y/HLKnK9X7UPX0N/K43J1jkVrMf5Xs5CqVetGcL
-         ZBfYzEeuzoVND9qwgMHdjgycO60Wj5qtT1MAM5cT1Ytwi56EKX3k7ReMiyMZ8xdGHNre
-         mM4fVZcEHDooxUjnhbVinIyKSNOV8KWA1dtbI6Y7eb62sxO2ITHJnViW49OB1VjvhKtv
-         DGINjLmb++niWPUIc88gcCTcevakt4/DwbPMhlaoWreegbl0aeJ3i93b5EK1cmpI033W
-         Wulg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iWEen/ZJGfJ/91ljuOGunKKjV2wkX9buixAuCmp2VbQ=;
+        b=BrIhPn8ivTpMxlGPBk6IKIJLDMLnaVlDNMmu/vyM0gUSzZQvMLtGhLveRkfKi2vAM6
+         +YkxY+z/cz2xTsv4w3Vlqtv9pbXvDXBqlfpTdOthbYK93wuom517jGpjWySLJNPNrOSc
+         h8Jjt1InPKK6ea8zEWJIYE8CvdlJcSCOeFKdo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=aV3rffMxuXG8e12nRoLl587y9MXM8TOV+Ti1qX5jxqI=;
-        b=EKysF9HF73Ys/vXDrGsE7abKu4a5SASBfF2/F03boVI+74OLm0KXSJw6XGAPnXOvXL
-         IPgpekxUNUN33ARpVgVnvZWbgcWnOmliAQ2JLmzxJwB5C58TD0/drQGLlCUoWBPfhzeA
-         wQM6dFtAgi1Nbk7dp8JkhJo/47B0XZ80fsMKjMGqXH2n/4rS8ydkovKFwgC0uWbHJGr1
-         EELvna38mMOSEB24V2Hs9ScLPcLakFKTvNWx0srmQXtlw64Uku9dCd20sPF5G0UEGfVu
-         qsBy4hskTz1iqXLUH02MNq2QQIPC18yr0LnsThGqFaIxgdm2KultJPQOqCKGN8ppjajo
-         ql0Q==
-X-Gm-Message-State: APjAAAUvv0dP8xa7pUegM4XHfogBCjGYFE4AnPRUBMne2RKL5NX783EJ
-        iQOhO/SshAqwu1XKeyGOes8jhw==
-X-Google-Smtp-Source: APXvYqzLLqL8f8ufEhA84JZ4KDsuDGxuqP9EQI1cVkvo3Az2BKCevLwr9qASi18i0IIJwQ0nWw2g6w==
-X-Received: by 2002:a17:902:be0e:: with SMTP id r14mr40513480pls.152.1558110282349;
-        Fri, 17 May 2019 09:24:42 -0700 (PDT)
-Received: from ?IPv6:2600:1010:b066:f2e9:80d1:f40f:2e81:3df1? ([2600:1010:b066:f2e9:80d1:f40f:2e81:3df1])
-        by smtp.gmail.com with ESMTPSA id k9sm10974460pfa.180.2019.05.17.09.24.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 17 May 2019 09:24:41 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: SGX vs LSM (Re: [PATCH v20 00/28] Intel SGX1 support)
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16E227)
-In-Reply-To: <ca807220-47e2-5ec2-982c-4fb4a72439c6@tycho.nsa.gov>
-Date:   Fri, 17 May 2019 09:24:39 -0700
-Cc:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iWEen/ZJGfJ/91ljuOGunKKjV2wkX9buixAuCmp2VbQ=;
+        b=eQMl/jXsP4BpkT77IYW8sezwK7t6PG3bDyZ2AFVOD9sC02o1YVNq9NPiOyVTJnAKMt
+         5h2Q/ZnEbMTMJnJogktMuSBN82WKH9VG5EpbkqRGakwrBxDSdhN/RA6VjxBZ2ApOyC3y
+         nXNAAr9yF5nzGIqxktePu4a7Enn43RXtedTbcyL0yJYNiQJuxMZwwzGpew3oFd8Illx9
+         eDF9wcjtYh2B1ZFuRuweWs9T6fe8pea3QJ7CwZxFdioLPzjbmldaPkBUqqJT9t3i3zs/
+         TTMxdBQWLVJvQ8ZEiB2+zrJL6gLMJSmQlGJ4MGiRZBzs0nKWGPn3S1N640u5RPmL0OjR
+         iPHA==
+X-Gm-Message-State: APjAAAUHSAal2L/1WDroVIzGRQ/U1Yk6jwumHvX/UN0GMk5qKROK8s1K
+        VDeT9CMlQGoNVN02HhkcaVH5eA==
+X-Google-Smtp-Source: APXvYqzdfBNgSus/Lm8itRXOgphQ1CTGG6b41OjNny+0hxO3EQG2Jz/Uzp0pZo6RricP0oBOyE23uA==
+X-Received: by 2002:a17:902:7d90:: with SMTP id a16mr56467129plm.122.1558110476011;
+        Fri, 17 May 2019 09:27:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i65sm12436762pgc.3.2019.05.17.09.27.54
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 May 2019 09:27:55 -0700 (PDT)
+Date:   Fri, 17 May 2019 09:27:54 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Dr. Greg" <greg@enjellic.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "nhorman@redhat.com" <nhorman@redhat.com>,
-        "npmccallum@redhat.com" <npmccallum@redhat.com>,
-        "Ayoun, Serge" <serge.ayoun@intel.com>,
-        "Katz-zamir, Shay" <shay.katz-zamir@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Svahn, Kai" <kai.svahn@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        David Rientjes <rientjes@google.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <ECF62380-A58A-4829-AFF0-F7D439D6F886@amacapital.net>
-References: <20190515013031.GF1977@linux.intel.com> <CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com> <alpine.LRH.2.21.1905160543070.19802@namei.org> <CALCETrX_Q6qwNRNF0TL2tgfm1j6DKLX7NVHHmWbMFtk3WnHDKw@mail.gmail.com> <alpine.LRH.2.21.1905160844130.29250@namei.org> <CALCETrX2ovRx3Rre+1_xC-q6CiybyLjQ-gmB4FZF_qCZ-Qd+4A@mail.gmail.com> <960B34DE67B9E140824F1DCDEC400C0F654E38CD@ORSMSX116.amr.corp.intel.com> <CALCETrUfmyQ7ivNzQic0FyPXe1fmAnoK093jnz0i8DRn2LvdSA@mail.gmail.com> <960B34DE67B9E140824F1DCDEC400C0F654E3FB9@ORSMSX116.amr.corp.intel.com> <6a97c099-2f42-672e-a258-95bc09152363@tycho.nsa.gov> <20190517150948.GA15632@linux.intel.com> <ca807220-47e2-5ec2-982c-4fb4a72439c6@tycho.nsa.gov>
-To:     Stephen Smalley <sds@tycho.nsa.gov>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sandeep Patil <sspatil@android.com>,
+        Laura Abbott <labbott@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] gfp: mm: introduce __GFP_NO_AUTOINIT
+Message-ID: <201905170925.6FD47DDFFF@keescook>
+References: <20190514143537.10435-1-glider@google.com>
+ <20190514143537.10435-4-glider@google.com>
+ <20190517125916.GF1825@dhcp22.suse.cz>
+ <CAG_fn=VG6vrCdpEv0g73M-Au4wW07w8g0uydEiHA96QOfcCVhA@mail.gmail.com>
+ <20190517132542.GJ6836@dhcp22.suse.cz>
+ <CAG_fn=Ve88z2ezFjV6CthufMUhJ-ePNMT2=3m6J3nHWh9iSgsg@mail.gmail.com>
+ <20190517140108.GK6836@dhcp22.suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190517140108.GK6836@dhcp22.suse.cz>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Fri, May 17, 2019 at 04:01:08PM +0200, Michal Hocko wrote:
+> On Fri 17-05-19 15:37:14, Alexander Potapenko wrote:
+> > > > > Freeing a memory is an opt-in feature and the slab allocator can already
+> > > > > tell many (with constructor or GFP_ZERO) do not need it.
+> > > > Sorry, I didn't understand this piece. Could you please elaborate?
+> > >
+> > > The allocator can assume that caches with a constructor will initialize
+> > > the object so additional zeroying is not needed. GFP_ZERO should be self
+> > > explanatory.
+> > Ah, I see. We already do that, see the want_init_on_alloc()
+> > implementation here: https://patchwork.kernel.org/patch/10943087/
+> > > > > So can we go without this gfp thing and see whether somebody actually
+> > > > > finds a performance problem with the feature enabled and think about
+> > > > > what can we do about it rather than add this maint. nightmare from the
+> > > > > very beginning?
+> > > >
+> > > > There were two reasons to introduce this flag initially.
+> > > > The first was double initialization of pages allocated for SLUB.
+> > >
+> > > Could you elaborate please?
+> > When the kernel allocates an object from SLUB, and SLUB happens to be
+> > short on free pages, it requests some from the page allocator.
+> > Those pages are initialized by the page allocator
+> 
+> ... when the feature is enabled ...
+> 
+> > and split into objects. Finally SLUB initializes one of the available
+> > objects and returns it back to the kernel.
+> > Therefore the object is initialized twice for the first time (when it
+> > comes directly from the page allocator).
+> > This cost is however amortized by SLUB reusing the object after it's been freed.
+> 
+> OK, I see what you mean now. Is there any way to special case the page
+> allocation for this feature? E.g. your implementation tries to make this
+> zeroying special but why cannot you simply do this
+> 
+> 
+> struct page *
+> ____alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order, int preferred_nid,
+> 							nodemask_t *nodemask)
+> {
+> 	//current implementation
+> }
+> 
+> struct page *
+> __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order, int preferred_nid,
+> 							nodemask_t *nodemask)
+> {
+> 	if (your_feature_enabled)
+> 		gfp_mask |= __GFP_ZERO;
+> 	return ____alloc_pages_nodemask(gfp_mask, order, preferred_nid,
+> 					nodemask);
+> }
+> 
+> and use ____alloc_pages_nodemask from the slab or other internal
+> allocators?
 
+If an additional allocator function is preferred over a new GFP flag, then
+I don't see any reason not to do this. (Though adding more "__"s seems
+a bit unfriendly to code-documentation.) What might be better naming?
 
-> On May 17, 2019, at 9:20 AM, Stephen Smalley <sds@tycho.nsa.gov> wrote:
->=20
->> On 5/17/19 11:09 AM, Sean Christopherson wrote:
->>> On Fri, May 17, 2019 at 09:53:06AM -0400, Stephen Smalley wrote:
->>>> On 5/16/19 6:23 PM, Xing, Cedric wrote:
->>>> I thought EXECMOD applied to files (and memory mappings backed by them)=
- but
->>>> I was probably wrong. It sounds like EXECMOD applies to the whole proce=
-ss so
->>>> would allow all pages within a process's address space to be modified t=
-hen
->>>> executed, regardless the backing files. Am I correct this time?
->>>=20
->>> No, you were correct the first time I think; EXECMOD is used to control
->>> whether a process can make executable a private file mapping that has
->>> previously been modified (e.g. text relocation); it is a special case to=
+This would mean that the skb changes later in the series would use the
+"no auto init" version of the allocator too, then.
 
->>> support text relocations without having to allow full EXECMEM (i.e. exec=
-ute
->>> arbitrary memory).
->>>=20
->>> SELinux checks relevant to W^X include:
->>>=20
->>> - EXECMEM: mmap/mprotect PROT_EXEC an anonymous mapping (regardless of
->>> PROT_WRITE, since we know the content has to have been written at some
->>> point) or a private file mapping that is also PROT_WRITE.
->>> - EXECMOD: mprotect PROT_EXEC a private file mapping that has been
->>> previously modified, typically for text relocations,
->>> - FILE__WRITE: mmap/mprotect PROT_WRITE a shared file mapping,
->>> - FILE__EXECUTE: mmap/mprotect PROT_EXEC a file mapping.
->>>=20
->>> (ignoring EXECSTACK and EXECHEAP here since they aren't really relevant t=
-o
->>> this discussion)
->>>=20
->>> So if you want to ensure W^X, then you wouldn't allow EXECMEM for the
->>> process, EXECMOD by the process to any file, and the combination of both=
-
->>> FILE__WRITE and FILE__EXECUTE by the process to any file.
->>>=20
->>> If the /dev/sgx/enclave mappings are MAP_SHARED and you aren't using an
->>> anonymous inode, then I would expect that only the FILE__WRITE and
->>> FILE__EXECUTE checks are relevant.
->> Yep, I was just typing this up in a different thread:
->> I think we may want to change the SGX API to alloc an anon inode for each=
-
->> enclave instead of hanging every enclave off of the /dev/sgx/enclave inod=
-e.
->> Because /dev/sgx/enclave is NOT private, SELinux's file_map_prot_check()
->> will only require FILE__WRITE and FILE__EXECUTE to mprotect() enclave VMA=
-s
->> to RWX.  Backing each enclave with an anon inode will make SELinux treat
->> EPC memory like anonymous mappings, which is what we want (I think), e.g.=
-
->> making *any* EPC page executable will require PROCESS__EXECMEM (SGX is
->> 64-bit only at this point, so SELinux will always have default_noexec).
->=20
-> I don't think we want to require EXECMEM (or equivalently both FILE__WRITE=
- and FILE__EXECUTE to /dev/sgx/enclave) for making any EPC page executable, o=
-nly if the page is also writable or previously modified.  The intent is to p=
-revent arbitrary code execution without EXECMEM (or FILE__WRITE|FILE__EXECUT=
-E), while still allowing enclaves to be created without EXECMEM as long as t=
-he EPC page mapping is only ever mapped RX and its initial contents came fro=
-m an unmodified file mapping that was PROT_EXEC (and hence already checked v=
-ia FILE__EXECUTE).
-
-That agrees with my thoughts. Actually plumbing everything together so this w=
-orks could be a bit interesting.  I assume it=E2=80=99ll need a special case=
- in SELinux or maybe a new vm_op.=
+-- 
+Kees Cook
