@@ -2,19 +2,19 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E8921C57
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 May 2019 19:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D719E21C4D
+	for <lists+linux-security-module@lfdr.de>; Fri, 17 May 2019 19:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728262AbfEQRUi (ORCPT
+        id S1728185AbfEQRTM (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 17 May 2019 13:20:38 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:34545 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726726AbfEQRUi (ORCPT
+        Fri, 17 May 2019 13:19:12 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:35503 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726753AbfEQRTL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 17 May 2019 13:20:38 -0400
-Received: by mail-pl1-f196.google.com with SMTP id w7so3645495plz.1
-        for <linux-security-module@vger.kernel.org>; Fri, 17 May 2019 10:20:38 -0700 (PDT)
+        Fri, 17 May 2019 13:19:11 -0400
+Received: by mail-pf1-f193.google.com with SMTP id t87so3995428pfa.2
+        for <linux-security-module@vger.kernel.org>; Fri, 17 May 2019 10:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amacapital-net.20150623.gappssmtp.com; s=20150623;
         h=content-transfer-encoding:from:mime-version:subject:date:message-id
@@ -31,21 +31,21 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:content-transfer-encoding:from:mime-version
          :subject:date:message-id:references:cc:in-reply-to:to;
         bh=JAswoR5Qv/2WYAqzx6JaoqD58LtbqKgAkfQL5B0Gl2k=;
-        b=bW02MPgwArmuIinjrIkVW7nMIhhVwf2af2OdtH6MRcc8YQ0KO15QW6inVI8I1jxhHD
-         vMIQk86NO+cUhEiT1K8Lz91E4LTbKfBI8dKXTmcyFUkbo8mshDr5wtSLipRdlnCVp924
-         XGIXoS4vN+Bv1z/KJ0w0/0/FsIJy0/ZtyzUVUlAkUvIc21Z0v8ZFxD4zjgMc4Avt4u+a
-         CbOD9fPogVMTAFcVghjTRYwTwSksg5XFUVe9rkN7v3L6lgCRiiDR7aCGbbFYeex+alSu
-         erR/uBv40D3c0n7YTB8QgWIJ8OJF6f7DOXhYOWWB6L58yuJcBYBHUjTgzvXCLKh2hPeK
-         W7Mg==
-X-Gm-Message-State: APjAAAU0AeMMzHWwjsb9bWkw+sP3z0qYfivmKPl2oxtVgSD8jM8xJjSH
-        iEp8j8oDf4kkLdruPRmqcBD3hQ==
-X-Google-Smtp-Source: APXvYqx+qyuENZ/nUYFbGVAoO8hVLoci4YkNPBz4AUML7LDx6gfKrTjzh035v8BrqjYhwueHCgWmdA==
-X-Received: by 2002:a17:902:201:: with SMTP id 1mr13358334plc.263.1558113637940;
-        Fri, 17 May 2019 10:20:37 -0700 (PDT)
+        b=tn0zUAwcZr9wAhnXZjPT4ClYSd8qoTX9iZjHaiR8Ji93YoW3mZPN5yy36+sybJWX7j
+         pcdUlYJDLPCLEz29XMz1TVWlPGBnAxk53phdi0T1/gOU7s3VqPI25NFgNtPu7oW5/nYC
+         KlrjZXyQkG37htuMAkc2pC1gmWD3aEeK7vAwvsxIec+J6DvOkmOpSYSDWPlMfZXx6CdP
+         OcYNBEPaQfHBIIXXqKEX4Df8WG8GdXbQDGK2DpksUprAX+MvnnpVafZCZL9+AmC7HVW6
+         z9Whb1J6hQcvA4vfMRqyDqSdgDA9/YOs7cYMd8eEb9/sKirRNmLxq+l1jEO6GY9ZsUMP
+         ZzcQ==
+X-Gm-Message-State: APjAAAVuOyzJCuAHFiUIVNOxedCEM19qPd27dnbRBpmwMwGWiQ8zmlcu
+        z88KOy9cl/vQ4P6T1s47vyNFKA==
+X-Google-Smtp-Source: APXvYqzB8HQYLiqoUkmvgy2Qbfkq0oKD7/O5SMJJluI3vpUX7KQUH6p/CAsDENs2ofp3S28Iz4r7gA==
+X-Received: by 2002:aa7:8c10:: with SMTP id c16mr16875764pfd.89.1558113551080;
+        Fri, 17 May 2019 10:19:11 -0700 (PDT)
 Received: from [10.232.242.123] (96.sub-97-41-134.myvzw.com. [97.41.134.96])
-        by smtp.gmail.com with ESMTPSA id o7sm13935991pfp.168.2019.05.17.10.20.37
+        by smtp.gmail.com with ESMTPSA id t2sm3841651pfh.166.2019.05.17.10.18.22
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 17 May 2019 10:20:37 -0700 (PDT)
+        Fri, 17 May 2019 10:19:10 -0700 (PDT)
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: quoted-printable
 From:   Andy Lutomirski <luto@amacapital.net>
