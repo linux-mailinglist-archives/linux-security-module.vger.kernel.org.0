@@ -2,177 +2,104 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCB924251
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 22:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A550E2429F
+	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 23:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726987AbfETUzS (ORCPT
+        id S1726061AbfETVTX (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 20 May 2019 16:55:18 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:46505 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726933AbfETUzQ (ORCPT
+        Mon, 20 May 2019 17:19:23 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53780 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726653AbfETVTX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 20 May 2019 16:55:16 -0400
-Received: by mail-pg1-f201.google.com with SMTP id t16so10521210pgv.13
-        for <linux-security-module@vger.kernel.org>; Mon, 20 May 2019 13:55:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=2S/gHsQaO08L1k/kaLAgP/iaI6c/d06OZBDkdH1Ekx0=;
-        b=bn7WHiENp+Jgwq76sRokv6v0WVMG7P/MdlQ0xYiJJeuGCup45bH514LUOM4BaBFOuw
-         hIy6lnvtRfymw2xIt/dCmLB5QS6fGxTOlZYBEXpo0fOw05p1vzBfpNRMnKilxoy8UJmN
-         RundMf4Zidiv5pdMqiDJvIqlfmZe4p5XNL2Bn1ZR7Dqmvkh6yYJEVYefZZAvfG0DAdhn
-         WVNDbeYz1YoQ3AbvTdCoacQlkFj8rWvYmubnWoAplDxM0LIxIKMh5grd4dEY/YsLNvRf
-         rvu7FgRa2sS22ddDAmespjdjtj/wHQO2czYud2euSGrg99uYS6zQvwMyGrquZxSrhL+P
-         d4xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2S/gHsQaO08L1k/kaLAgP/iaI6c/d06OZBDkdH1Ekx0=;
-        b=MdZnBNKM+RWu6eAYxL4p78yLwu+CK7lddb0Q3yoClhpC+W+NZja7tLdw2qHw4MnaF4
-         b7fuZXhXRAaY+BNuc6E7mBWFjVMkLOltfRDdfBBYXUHuv8KRjsa6MZi+Fzpy4g+JfGYe
-         zMq/sz8+/o+rhZPs0FPAyKjLpV+QcbpgXzeA9Kvu/wrLLAwYosvqRfRjoIwhTboBcqza
-         1nKHODRusDqMMXah7ZjQp4OwRuYE90JBiUqd0iKqXgihpGTcwy9dHXQiotUarzoiS4bI
-         f8B2kXRLguGkrRfwi1rgRsEz5EVjL9/R+aSzNnB05ZKqMu6tZW5UX/WruP8y127C6ATD
-         M7rg==
-X-Gm-Message-State: APjAAAVh6eZQ5luGySNO2PEy8dSEqxa2Eg12DnmulJRWbYvNPndCElSC
-        ZycJNvvDJP7dL6BtpVcRSGlKDotpHNFJqjFdgYWYNg==
-X-Google-Smtp-Source: APXvYqzXluYerRenEIporaBqlL0VKRUEYZ6bb//DTlFcuJIwvPvXL8WLmsndEpl+oa5KGu6dGG7EK4vv+klAAzBgskcu3w==
-X-Received: by 2002:a63:1061:: with SMTP id 33mr51272273pgq.328.1558385715691;
- Mon, 20 May 2019 13:55:15 -0700 (PDT)
-Date:   Mon, 20 May 2019 13:55:01 -0700
-In-Reply-To: <20190520205501.177637-1-matthewgarrett@google.com>
-Message-Id: <20190520205501.177637-5-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190520205501.177637-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [PATCH V7 4/4] efi: Attempt to get the TCG2 event log in the boot stub
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
-        roberto.sassu@huawei.com, linux-efi@vger.kernel.org,
+        Mon, 20 May 2019 17:19:23 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4KL1sqI008357
+        for <linux-security-module@vger.kernel.org>; Mon, 20 May 2019 17:19:22 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sm0p7ybby-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Mon, 20 May 2019 17:19:22 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 20 May 2019 22:19:20 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 20 May 2019 22:19:16 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4KLJF2158130518
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 May 2019 21:19:15 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E4E6AE051;
+        Mon, 20 May 2019 21:19:15 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44269AE045;
+        Mon, 20 May 2019 21:19:14 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.80.109])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 20 May 2019 21:19:14 +0000 (GMT)
+Subject: Re: [PATCH 1/4] evm: check hash algorithm passed to init_desc()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        dmitry.kasatkin@huawei.com, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tweek@google.com, bsz@semihalf.com,
-        Matthew Garrett <mjg59@google.com>
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
+        stable@vger.kernel.org
+Date:   Mon, 20 May 2019 17:19:03 -0400
+In-Reply-To: <20190516161257.6640-1-roberto.sassu@huawei.com>
+References: <20190516161257.6640-1-roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19052021-0028-0000-0000-0000036FBB40
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19052021-0029-0000-0000-0000242F6259
+Message-Id: <1558387143.4039.74.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-20_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905200132
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Matthew Garrett <mjg59@google.com>
+On Thu, 2019-05-16 at 18:12 +0200, Roberto Sassu wrote:
+> This patch prevents memory access beyond the evm_tfm array by checking the
+> validity of the index (hash algorithm) passed to init_desc(). The hash
+> algorithm can be arbitrarily set if the security.ima xattr type is not
+> EVM_XATTR_HMAC.
+> 
+> Fixes: 5feeb61183dde ("evm: Allow non-SHA1 digital signatures")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Cc: stable@vger.kernel.org
 
-Right now we only attempt to obtain the SHA1-only event log. The
-protocol also supports a crypto agile log format, which contains digests
-for all algorithms in use. Attempt to obtain this first, and fall back
-to obtaining the older format if the system doesn't support it. This is
-lightly complicated by the event sizes being variable (as we don't know
-in advance which algorithms are in use), and the interface giving us
-back a pointer to the start of the final entry rather than a pointer to
-the end of the log - as a result, we need to parse the final entry to
-figure out its length in order to know how much data to copy up to the
-OS.
+Thanks!
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
----
- drivers/firmware/efi/libstub/tpm.c | 50 ++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/firmware/efi/libstub/tpm.c b/drivers/firmware/efi/libstub/tpm.c
-index 5bd04f75d8d6..6b3b507a54eb 100644
---- a/drivers/firmware/efi/libstub/tpm.c
-+++ b/drivers/firmware/efi/libstub/tpm.c
-@@ -57,7 +57,7 @@ void efi_enable_reset_attack_mitigation(efi_system_table_t *sys_table_arg)
- 
- #endif
- 
--static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
-+void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
- {
- 	efi_guid_t tcg2_guid = EFI_TCG2_PROTOCOL_GUID;
- 	efi_guid_t linux_eventlog_guid = LINUX_EFI_TPM_EVENT_LOG_GUID;
-@@ -67,6 +67,7 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 	unsigned long first_entry_addr, last_entry_addr;
- 	size_t log_size, last_entry_size;
- 	efi_bool_t truncated;
-+	int version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_2;
- 	void *tcg2_protocol = NULL;
- 
- 	status = efi_call_early(locate_protocol, &tcg2_guid, NULL,
-@@ -74,14 +75,20 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 	if (status != EFI_SUCCESS)
- 		return;
- 
--	status = efi_call_proto(efi_tcg2_protocol, get_event_log, tcg2_protocol,
--				EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2,
--				&log_location, &log_last_entry, &truncated);
--	if (status != EFI_SUCCESS)
--		return;
-+	status = efi_call_proto(efi_tcg2_protocol, get_event_log,
-+				tcg2_protocol, version, &log_location,
-+				&log_last_entry, &truncated);
-+
-+	if (status != EFI_SUCCESS || !log_location) {
-+		version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+		status = efi_call_proto(efi_tcg2_protocol, get_event_log,
-+					tcg2_protocol, version, &log_location,
-+					&log_last_entry, &truncated);
-+		if (status != EFI_SUCCESS || !log_location)
-+			return;
-+
-+	}
- 
--	if (!log_location)
--		return;
- 	first_entry_addr = (unsigned long) log_location;
- 
- 	/*
-@@ -96,8 +103,23 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 		 * We need to calculate its size to deduce the full size of
- 		 * the logs.
- 		 */
--		last_entry_size = sizeof(struct tcpa_event) +
--			((struct tcpa_event *) last_entry_addr)->event_size;
-+		if (version == EFI_TCG2_EVENT_LOG_FORMAT_TCG_2) {
-+			/*
-+			 * The TCG2 log format has variable length entries,
-+			 * and the information to decode the hash algorithms
-+			 * back into a size is contained in the first entry -
-+			 * pass a pointer to the final entry (to calculate its
-+			 * size) and the first entry (so we know how long each
-+			 * digest is)
-+			 */
-+			last_entry_size =
-+				__calc_tpm2_event_size((void *)last_entry_addr,
-+						    (void *)(long)log_location,
-+						    false);
-+		} else {
-+			last_entry_size = sizeof(struct tcpa_event) +
-+			   ((struct tcpa_event *) last_entry_addr)->event_size;
-+		}
- 		log_size = log_last_entry - log_location + last_entry_size;
- 	}
- 
-@@ -114,7 +136,7 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- 
- 	memset(log_tbl, 0, sizeof(*log_tbl) + log_size);
- 	log_tbl->size = log_size;
--	log_tbl->version = EFI_TCG2_EVENT_LOG_FORMAT_TCG_1_2;
-+	log_tbl->version = version;
- 	memcpy(log_tbl->log, (void *) first_entry_addr, log_size);
- 
- 	status = efi_call_early(install_configuration_table,
-@@ -126,9 +148,3 @@ static void efi_retrieve_tpm2_eventlog_1_2(efi_system_table_t *sys_table_arg)
- err_free:
- 	efi_call_early(free_pool, log_tbl);
- }
--
--void efi_retrieve_tpm2_eventlog(efi_system_table_t *sys_table_arg)
--{
--	/* Only try to retrieve the logs in 1.2 format. */
--	efi_retrieve_tpm2_eventlog_1_2(sys_table_arg);
--}
--- 
-2.21.0.1020.gf2820cf01a-goog
+> ---
+>  security/integrity/evm/evm_crypto.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> index e11564eb645b..82a38e801ee4 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -89,6 +89,9 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+>  		tfm = &hmac_tfm;
+>  		algo = evm_hmac;
+>  	} else {
+> +		if (hash_algo >= HASH_ALGO__LAST)
+> +			return ERR_PTR(-EINVAL);
+> +
+>  		tfm = &evm_tfm[hash_algo];
+>  		algo = hash_algo_name[hash_algo];
+>  	}
 
