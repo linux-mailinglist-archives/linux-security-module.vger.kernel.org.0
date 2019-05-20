@@ -2,78 +2,61 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F3423F2B
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 19:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CA524258
+	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 22:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390594AbfETRhb (ORCPT
+        id S1726823AbfETUzI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 20 May 2019 13:37:31 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:34645 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389161AbfETRhb (ORCPT
+        Mon, 20 May 2019 16:55:08 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:44928 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726813AbfETUzH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 20 May 2019 13:37:31 -0400
-Received: by mail-ua1-f66.google.com with SMTP id 7so181552uah.1
-        for <linux-security-module@vger.kernel.org>; Mon, 20 May 2019 10:37:31 -0700 (PDT)
+        Mon, 20 May 2019 16:55:07 -0400
+Received: by mail-qt1-f202.google.com with SMTP id t51so15300014qtb.11
+        for <linux-security-module@vger.kernel.org>; Mon, 20 May 2019 13:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vDBzgk3+2zzaDlSxwytUrA3Kc0EghhVaruTPNWK1ttg=;
-        b=CwchGZjIFzmqStPHXdkdMvjtXevOL6aMDz0RbbxhvTvOywv3R7HbSxVIiPR86vVgVJ
-         28yp6/OUTu6GifEPNjnYBzsfPg5Y7BbwwV5Ty4ILdR7ZbBYLoKzOGlZ1hMwqgeyZohQS
-         a9Xty3qBzDrM1VhvrAeqYsd8bm4McRK6eMvwStNI7jp8RC5DjasBTN49ChbDaScmiIHc
-         LTl2jGq3y/n5qeMsGBeWktpO3+3aP8DzWvndvfXt1nfhBIsEP6nW4S6oWCWrYYgtNWmE
-         SMz99yiCt+Utdgd/gzX6yrRr7ihWyoWsQAjda+WeCB98a3ybcjj/r3oR4U9vY176w7BS
-         0c3w==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=CEe51n1cJjGjM3r3jhy0lvCRaDr0xuP675ZqA1iPYL4=;
+        b=KwKcFS84Od+0uDcbkZwTpIrT43f2kU8zmORrILLiHk2F8YkNKiv1DApHnhAMtYlYNA
+         TTKtXmA8TJ8/ipv7ecH3TyAPVRf9bZ8GXZEFmFgwDXPD4Hjtc9OoZlG6aBmwZtYTn8Oc
+         Nvt9VJVKM4ko0egxxq7cUr2yFh5bt2A6FPsfeESlkTgj+tTo5HipWQkdt0PV7yGNpC2p
+         qwWO/zif0wXn7M/9LQBi1kh21TF0FRSHZu9qfX+5MMJsj7woSz3xBh9gb5WkU4/0KX4c
+         dnI+ZE7GgTCEi7VKzXkA1bmYAkK0Nv9eJ0xJyAJqd/DQAikMJoy/AIkKcuCOHk84b2v+
+         el5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vDBzgk3+2zzaDlSxwytUrA3Kc0EghhVaruTPNWK1ttg=;
-        b=jCpS4J7RtRslRI1xSknK9LTjEb5pCooEv3eskTgsYpHeEl5EAKv9nYVr3O0NZXAndf
-         rvqqIm3eNx2ISUw9BNer5FR/Ql1c3NdcaQto3TZVSGMmpOcB7SZ4/D2+wAG9k3sVhAf7
-         1wav51KX87esLOhyg52HAAPunZOm/ivKnCP/B9DNPDEC0mw2WxmRE1yHj3Jj5ziJhIz0
-         Km8S5+IwHBKi2n8HEGmcGEs6kB34Nuj4/PXC7CnB+pOPvdDtW/sxT7xvCV9AFs1AWfCa
-         Q3tgzhEiAxj5MxI87sLbQ4gV4y7C/ErTeKXXcn7tfBYXnxdSf4KhOfKdO4kOvCdYQVu6
-         6+tA==
-X-Gm-Message-State: APjAAAUL3DlXsaRqBcVsqyVjeU+cZiLGO8vkKNE9szl/mzIpJXHnk1av
-        jLegszKLaLKi1Wzez5eAj1cjBJi8EuUq8+R04DtNgw==
-X-Google-Smtp-Source: APXvYqxP8zxzm4jZKGosdcwN4a0RkbFAaC28vOtz1R97u76s4VbaoqHPsL53swQmuIAJyZjvBa85qqDRttnmEtWmwhM=
-X-Received: by 2002:ab0:670c:: with SMTP id q12mr13594032uam.106.1558373850690;
- Mon, 20 May 2019 10:37:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190517213918.26045-1-matthewgarrett@google.com>
-In-Reply-To: <20190517213918.26045-1-matthewgarrett@google.com>
-From:   Bartosz Szczepanek <bsz@semihalf.com>
-Date:   Mon, 20 May 2019 19:37:19 +0200
-Message-ID: <CABLO=+mSkR8fwm5dDB2757OK=BKZGM9jHR6OuCkzazgFcVy=dg@mail.gmail.com>
-Subject: Re: [PATCH V6 0/4] Add support for crypto agile TPM event logs
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=CEe51n1cJjGjM3r3jhy0lvCRaDr0xuP675ZqA1iPYL4=;
+        b=akNQHWG72t27DgH2Q9B0MIW+BGb8Ajg50xQWIYijzbtAzCRmTtGVjvJDXBGnstynBq
+         IvzuqPSvGHSMzzKH8+GxUUZqcPOqVRvDYSsf3xUafZD0uQ9yy8C9p/pbY0aRHm4U89Nv
+         dxD+iyvlFXd9MaOYpWayKbVgwtOGBitVru/Y/YpqpjlsSsm8O3KS0bH87f5LnBf8WiM+
+         f5Cdqw9OuJHmFLhk3oOBIixxDvGNRM3FMeUkNg3U3TLeUyy006kAN+zryeqxNGqH8xPY
+         ijXd4taGYs1lDlUs/VApJIsbov8HVvioMRK8XW4jqPwU9r4qDALryXrpVFTZRbUPo6LK
+         EUeQ==
+X-Gm-Message-State: APjAAAXPMF9l84hw1nIXYC2CGuDBR5quhAIKdRnElhEeVOcH5hZ0auFw
+        WHql2/QS3koYkwQlR8TAVRsmJkImBmgHrAh8FZ/c6w==
+X-Google-Smtp-Source: APXvYqxcgPZwWQB2M99XR5b353YmJ/Ei17uYUIv35ZBhj13nsYbaZL7VC+EcLkbxPlvT59VqEEmZiqG52LG+K02tnRds4g==
+X-Received: by 2002:a05:620a:144c:: with SMTP id i12mr32298826qkl.243.1558385706056;
+ Mon, 20 May 2019 13:55:06 -0700 (PDT)
+Date:   Mon, 20 May 2019 13:54:57 -0700
+Message-Id: <20190520205501.177637-1-matthewgarrett@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
+Subject: [PATCH V7 0/4] Add support for crypto agile logs
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        roberto.sassu@huawei.com, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tweek@google.com, bsz@semihalf.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Matthew,
+Identical to previous version except without the KSAN workaround - Ard
+has a better solution for that.
 
-On Fri, May 17, 2019 at 11:39 PM Matthew Garrett
-<matthewgarrett@google.com> wrote:
->
-> Updated with the fixes from Bartosz and the header fixes folded in.
-> Bartosz, my machine still doesn't generate any final event log entries -
-> are you able to give this a test and make sure it's good?
 
-Yes, I'll check that and let you know. May be later this week.
-
-Best regards,
-Bartosz
