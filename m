@@ -2,247 +2,143 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B311822F32
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 10:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C709230E6
+	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 12:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730574AbfETIrb (ORCPT
+        id S1731488AbfETKEF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 20 May 2019 04:47:31 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32955 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727499AbfETIrb (ORCPT
+        Mon, 20 May 2019 06:04:05 -0400
+Received: from wind.enjellic.com ([76.10.64.91]:32974 "EHLO wind.enjellic.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729834AbfETKEE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 20 May 2019 04:47:31 -0400
-Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 4BE9A91FD6E0516857B2;
-        Mon, 20 May 2019 09:47:29 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.37) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 20 May
- 2019 09:47:21 +0100
-Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
-To:     <hpa@zytor.com>, <viro@zeniv.linux.org.uk>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
-        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
-        <takondra@cisco.com>, <kamensky@cisco.com>, <arnd@arndb.de>,
-        <rob@landley.net>, <james.w.mcmechan@gmail.com>,
-        <niveditas98@gmail.com>
-References: <20190517165519.11507-1-roberto.sassu@huawei.com>
- <20190517165519.11507-3-roberto.sassu@huawei.com>
- <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <2fbe55dc-2f4a-e476-79d0-06931b4f1dee@huawei.com>
-Date:   Mon, 20 May 2019 10:47:27 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
-MIME-Version: 1.0
-In-Reply-To: <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+        Mon, 20 May 2019 06:04:04 -0400
+X-Greylist: delayed 1333 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 May 2019 06:04:03 EDT
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id x4K9cIa4007978;
+        Mon, 20 May 2019 04:38:18 -0500
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id x4K9cFlE007977;
+        Mon, 20 May 2019 04:38:15 -0500
+Date:   Mon, 20 May 2019 04:38:15 -0500
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     James Morris <jmorris@namei.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Dr. Greg" <greg@enjellic.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "nhorman@redhat.com" <nhorman@redhat.com>,
+        "npmccallum@redhat.com" <npmccallum@redhat.com>,
+        "Ayoun, Serge" <serge.ayoun@intel.com>,
+        "Katz-zamir, Shay" <shay.katz-zamir@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Svahn, Kai" <kai.svahn@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: SGX vs LSM (Re: [PATCH v20 00/28] Intel SGX1 support)
+Message-ID: <20190520093815.GA7187@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <CALCETrVbgTCnPo=PAq0-KoaRwt--urrPzn==quAJ8wodCpkBkw@mail.gmail.com> <20190514204527.GC1977@linux.intel.com> <CALCETrX6aL367mMJh5+Y1Seznfu-AvhPV6P7GkWF4Dhu0GV8cw@mail.gmail.com> <20190515013031.GF1977@linux.intel.com> <CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com> <alpine.LRH.2.21.1905160543070.19802@namei.org> <CALCETrX_Q6qwNRNF0TL2tgfm1j6DKLX7NVHHmWbMFtk3WnHDKw@mail.gmail.com> <alpine.LRH.2.21.1905160844130.29250@namei.org> <CALCETrX2ovRx3Rre+1_xC-q6CiybyLjQ-gmB4FZF_qCZ-Qd+4A@mail.gmail.com> <alpine.LRH.2.21.1905161716460.23647@namei.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.21.1905161716460.23647@namei.org>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Mon, 20 May 2019 04:38:18 -0500 (CDT)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 5/17/2019 10:18 PM, hpa@zytor.com wrote:
-> On May 17, 2019 9:55:19 AM PDT, Roberto Sassu <roberto.sassu@huawei.com> wrote:
->> This patch adds support for an alternative method to add xattrs to
->> files in
->> the rootfs filesystem. Instead of extracting them directly from the ram
->> disk image, they are extracted from a regular file called .xattr-list,
->> that
->> can be added by any ram disk generator available today. The file format
->> is:
->>
->> <file #N data len (ASCII, 10 chars)><file #N path>\0
->> <xattr #N data len (ASCII, 8 chars)><xattr #N name>\0<xattr #N value>
->>
->> .xattr-list can be generated by executing:
->>
->> $ getfattr --absolute-names -d -h -R -e hex -m - \
->>       <file list> | xattr.awk -b > ${initdir}/.xattr-list
->>
->> where the content of the xattr.awk script is:
->>
->> #! /usr/bin/awk -f
->> {
->>   if (!length($0)) {
->>     printf("%.10x%s\0", len, file);
->>     for (x in xattr) {
->>       printf("%.8x%s\0", xattr_len[x], x);
->>       for (i = 0; i < length(xattr[x]) / 2; i++) {
->>         printf("%c", strtonum("0x"substr(xattr[x], i * 2 + 1, 2)));
->>       }
->>     }
->>     i = 0;
->>     delete xattr;
->>     delete xattr_len;
->>     next;
->>   };
->>   if (i == 0) {
->>     file=$3;
->>     len=length(file) + 8 + 1;
->>   }
->>   if (i > 0) {
->>     split($0, a, "=");
->>     xattr[a[1]]=substr(a[2], 3);
->>     xattr_len[a[1]]=length(a[1]) + 1 + 8 + length(xattr[a[1]]) / 2;
->>     len+=xattr_len[a[1]];
->>   };
->>   i++;
->> }
->>
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
->> init/initramfs.c | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
->> 1 file changed, 99 insertions(+)
->>
->> diff --git a/init/initramfs.c b/init/initramfs.c
->> index 0c6dd1d5d3f6..6ec018c6279a 100644
->> --- a/init/initramfs.c
->> +++ b/init/initramfs.c
->> @@ -13,6 +13,8 @@
->> #include <linux/namei.h>
->> #include <linux/xattr.h>
->>
->> +#define XATTR_LIST_FILENAME ".xattr-list"
->> +
->> static ssize_t __init xwrite(int fd, const char *p, size_t count)
->> {
->> 	ssize_t out = 0;
->> @@ -382,6 +384,97 @@ static int __init __maybe_unused do_setxattrs(char
->> *pathname)
->> 	return 0;
->> }
->>
->> +struct path_hdr {
->> +	char p_size[10]; /* total size including p_size field */
->> +	char p_data[];   /* <path>\0<xattrs> */
->> +};
->> +
->> +static int __init do_readxattrs(void)
->> +{
->> +	struct path_hdr hdr;
->> +	char *path = NULL;
->> +	char str[sizeof(hdr.p_size) + 1];
->> +	unsigned long file_entry_size;
->> +	size_t size, path_size, total_size;
->> +	struct kstat st;
->> +	struct file *file;
->> +	loff_t pos;
->> +	int ret;
->> +
->> +	ret = vfs_lstat(XATTR_LIST_FILENAME, &st);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	total_size = st.size;
->> +
->> +	file = filp_open(XATTR_LIST_FILENAME, O_RDONLY, 0);
->> +	if (IS_ERR(file))
->> +		return PTR_ERR(file);
->> +
->> +	pos = file->f_pos;
->> +
->> +	while (total_size) {
->> +		size = kernel_read(file, (char *)&hdr, sizeof(hdr), &pos);
->> +		if (size != sizeof(hdr)) {
->> +			ret = -EIO;
->> +			goto out;
->> +		}
->> +
->> +		total_size -= size;
->> +
->> +		str[sizeof(hdr.p_size)] = 0;
->> +		memcpy(str, hdr.p_size, sizeof(hdr.p_size));
->> +		ret = kstrtoul(str, 16, &file_entry_size);
->> +		if (ret < 0)
->> +			goto out;
->> +
->> +		file_entry_size -= sizeof(sizeof(hdr.p_size));
->> +		if (file_entry_size > total_size) {
->> +			ret = -EINVAL;
->> +			goto out;
->> +		}
->> +
->> +		path = vmalloc(file_entry_size);
->> +		if (!path) {
->> +			ret = -ENOMEM;
->> +			goto out;
->> +		}
->> +
->> +		size = kernel_read(file, path, file_entry_size, &pos);
->> +		if (size != file_entry_size) {
->> +			ret = -EIO;
->> +			goto out_free;
->> +		}
->> +
->> +		total_size -= size;
->> +
->> +		path_size = strnlen(path, file_entry_size);
->> +		if (path_size == file_entry_size) {
->> +			ret = -EINVAL;
->> +			goto out_free;
->> +		}
->> +
->> +		xattr_buf = path + path_size + 1;
->> +		xattr_len = file_entry_size - path_size - 1;
->> +
->> +		ret = do_setxattrs(path);
->> +		vfree(path);
->> +		path = NULL;
->> +
->> +		if (ret < 0)
->> +			break;
->> +	}
->> +out_free:
->> +	vfree(path);
->> +out:
->> +	fput(file);
->> +
->> +	if (ret < 0)
->> +		error("Unable to parse xattrs");
->> +
->> +	return ret;
->> +}
->> +
->> static __initdata int wfd;
->>
->> static int __init do_name(void)
->> @@ -391,6 +484,11 @@ static int __init do_name(void)
->> 	if (strcmp(collected, "TRAILER!!!") == 0) {
->> 		free_hash();
->> 		return 0;
->> +	} else if (strcmp(collected, XATTR_LIST_FILENAME) == 0) {
->> +		struct kstat st;
->> +
->> +		if (!vfs_lstat(collected, &st))
->> +			do_readxattrs();
->> 	}
->> 	clean_path(collected, mode);
->> 	if (S_ISREG(mode)) {
->> @@ -562,6 +660,7 @@ static char * __init unpack_to_rootfs(char *buf,
->> unsigned long len)
->> 		buf += my_inptr;
->> 		len -= my_inptr;
->> 	}
->> +	do_readxattrs();
->> 	dir_utime();
->> 	kfree(name_buf);
->> 	kfree(symlink_buf);
+On Thu, May 16, 2019 at 05:24:33PM +1000, James Morris wrote:
+
+Good morning, I hope everyone had a pleasant weekend.
+
+James, I believe the last time our paths crossed was at the Linux
+Security Summit in Seattle, I trust you have been well since then.
+
+> On Wed, 15 May 2019, Andy Lutomirski wrote:
 > 
-> Ok... I just realized this does not work for a modular initramfs, composed at load time from multiple files, which is a very real problem. Should be easy enough to deal with: instead of one large file, use one companion file per source file, perhaps something like filename..xattrs (suggesting double dots to make it less likely to conflict with a "real" file.) No leading dot, as it makes it more likely that archivers will sort them before the file proper.
+> > On Wed, May 15, 2019 at 3:46 PM James Morris <jmorris@namei.org> wrote:
+> > >
+> > > You could try user.sigstruct, which does not require any privs.
+> > >
+> > 
+> > I don't think I understand your proposal.  What file would this
+> > attribute be on?  What would consume it?
 
-Version 1 of the patch set worked exactly in this way. However, Rob
-pointed out that this would be a problem if file names plus the suffix
-exceed 255 characters.
+> It would be on the enclave file, so you keep the sigstruct bound to
+> it, rather than needing a separate file to manage.  It would
+> simplify any LSM policy check.
+>
+> It would be consumed by (I guess) the SGX_INIT_THE_ENCLAVE ioctl in your 
+> example, instead of having a 2nd fd.
 
-Roberto
+I've watched this discussion regarding LSM, sigstructs and file
+descriptors with some fascination, since all of this infrastructure
+already exists and should be well understood by anyone who has been
+active in SGX runtime development.  There would thus seem to be a
+disconnect between SGX driver developers and the consumers of the
+services of the driver.
 
--- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+The existing enclave format, codified by the silo within Intel that is
+responsible for the existing SDK/PSW, implements a notes section
+stored inside a standard ELF shared library image.  The notes section
+contains a significant amount of metadata that is used to direct the
+instantiation of what will be the initialized enclave image.  Said
+metadata includes a copy of the sigstruct that was generated when the
+enclave was signed, which is the event that triggers metadata
+generation.
+
+All of this means that any enclave that gets loaded effectively
+triggers both LSM and IMA checks.
+
+James, if you remember, the paper that we presented in Seattle
+described the initial implementation of an extension to the Linux IMA
+infrastructure that tracks whether or not processes can be 'trusted'.
+That work has gone on to include running the trust modeling and
+disciplining engine inside of a namespace specific SGX enclave.  We
+would be happy to make available execution trajectory logs that
+clearly document IMA and LSM checks being conducted on enclaves.
+
+There is a strong probability that we will be maintaining and
+supporting a modified version of whatever driver that goes upstream.
+In support of this we are putting together a white paper discussing
+security architecture concerns inherent in an SGX driver.  With the
+intent of avoiding LKML verbosity we will post a URL to the paper when
+it is available if there is interest.
+
+The issue of EDMM has already come up, suffice it to say that EDMM
+makes LSM inspection of enclave content, while desirable, largely
+irrelevant from a security perspective.
+
+> James Morris
+
+Best wishes for a productive week.
+
+Dr. Greg
+
+As always,
+Dr. G.W. Wettstein, Ph.D.   Enjellic Systems Development, LLC.
+4206 N. 19th Ave.           Specializing in information infra-structure
+Fargo, ND  58102            development.
+PH: 701-281-1686            EMAIL: greg@enjellic.com
+------------------------------------------------------------------------------
+"If you plugged up your nose and mouth right before you sneezed, would
+ the sneeze go out your ears or would your head explode?  Either way I'm
+ afraid to try."
+                                -- Nick Kean
