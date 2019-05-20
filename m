@@ -2,123 +2,102 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 190172308B
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 11:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9F023265
+	for <lists+linux-security-module@lfdr.de>; Mon, 20 May 2019 13:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730687AbfETJju (ORCPT
+        id S1731231AbfETL36 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 20 May 2019 05:39:50 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:32956 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727720AbfETJju (ORCPT
+        Mon, 20 May 2019 07:29:58 -0400
+Received: from mga11.intel.com ([192.55.52.93]:40347 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731225AbfETL35 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 20 May 2019 05:39:50 -0400
-Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 4A75E6FA85003A8236AE;
-        Mon, 20 May 2019 10:39:48 +0100 (IST)
-Received: from [10.220.96.108] (10.220.96.108) by smtpsuk.huawei.com
- (10.201.108.37) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 20 May
- 2019 10:39:40 +0100
-Subject: Re: [PATCH v3 2/2] initramfs: introduce do_readxattrs()
-To:     Arvind Sankar <nivedita@alum.mit.edu>,
-        "H. Peter Anvin" <hpa@zytor.com>
-CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zohar@linux.vnet.ibm.com>,
-        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
-        <takondra@cisco.com>, <kamensky@cisco.com>, <arnd@arndb.de>,
-        <rob@landley.net>, <james.w.mcmechan@gmail.com>,
-        <niveditas98@gmail.com>
-References: <20190517165519.11507-1-roberto.sassu@huawei.com>
- <20190517165519.11507-3-roberto.sassu@huawei.com>
- <CD9A4F89-7CA5-4329-A06A-F8DEB87905A5@zytor.com>
- <20190517210219.GA5998@rani.riverdale.lan>
- <d48f35a1-aab1-2f20-2e91-5e81a84b107f@zytor.com>
- <20190517221731.GA11358@rani.riverdale.lan>
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <7bdca169-7a01-8c55-40e4-a832e876a0e5@huawei.com>
-Date:   Mon, 20 May 2019 11:39:46 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        Mon, 20 May 2019 07:29:57 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 May 2019 04:29:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,491,1549958400"; 
+   d="scan'208";a="173589444"
+Received: from mhauser-mobl.ger.corp.intel.com (HELO localhost) ([10.252.47.244])
+  by fmsmga002.fm.intel.com with ESMTP; 20 May 2019 04:29:46 -0700
+Date:   Mon, 20 May 2019 14:29:45 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Dr. Greg" <greg@enjellic.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "nhorman@redhat.com" <nhorman@redhat.com>,
+        "npmccallum@redhat.com" <npmccallum@redhat.com>,
+        "Ayoun, Serge" <serge.ayoun@intel.com>,
+        "Katz-zamir, Shay" <shay.katz-zamir@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Svahn, Kai" <kai.svahn@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: SGX vs LSM (Re: [PATCH v20 00/28] Intel SGX1 support)
+Message-ID: <20190520112945.GA27805@linux.intel.com>
+References: <20190513102926.GD8743@linux.intel.com>
+ <20190514104323.GA7591@linux.intel.com>
+ <CALCETrVbgTCnPo=PAq0-KoaRwt--urrPzn==quAJ8wodCpkBkw@mail.gmail.com>
+ <20190514204527.GC1977@linux.intel.com>
+ <CALCETrX6aL367mMJh5+Y1Seznfu-AvhPV6P7GkWF4Dhu0GV8cw@mail.gmail.com>
+ <20190515013031.GF1977@linux.intel.com>
+ <CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com>
+ <20190516051622.GC6388@linux.intel.com>
+ <CALCETrVx1hgY67mP+73w5rT+eY+APcfS0YJ+XwtTLNz3CbVNMA@mail.gmail.com>
+ <20190516224550.GC11204@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190517221731.GA11358@rani.riverdale.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.220.96.108]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190516224550.GC11204@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 5/18/2019 12:17 AM, Arvind Sankar wrote:
-> On Fri, May 17, 2019 at 02:47:31PM -0700, H. Peter Anvin wrote:
->> On 5/17/19 2:02 PM, Arvind Sankar wrote:
->>> On Fri, May 17, 2019 at 01:18:11PM -0700, hpa@zytor.com wrote:
->>>>
->>>> Ok... I just realized this does not work for a modular initramfs, composed at load time from multiple files, which is a very real problem. Should be easy enough to deal with: instead of one large file, use one companion file per source file, perhaps something like filename..xattrs (suggesting double dots to make it less likely to conflict with a "real" file.) No leading dot, as it makes it more likely that archivers will sort them before the file proper.
->>> This version of the patch was changed from the previous one exactly to deal with this case --
->>> it allows for the bootloader to load multiple initramfs archives, each
->>> with its own .xattr-list file, and to have that work properly.
->>> Could you elaborate on the issue that you see?
->>>
->>
->> Well, for one thing, how do you define "cpio archive", each with its own
->> .xattr-list file? Second, that would seem to depend on the ordering, no,
->> in which case you depend critically on .xattr-list file following the
->> files, which most archivers won't do.
->>
->> Either way it seems cleaner to have this per file; especially if/as it
->> can be done without actually mucking up the format.
->>
->> I need to run, but I'll post a more detailed explanation of what I did
->> in a little bit.
->>
->> 	-hpa
->>
-> Not sure what you mean by how do I define it? Each cpio archive will
-> contain its own .xattr-list file with signatures for the files within
-> it, that was the idea.
+On Thu, May 16, 2019 at 03:45:50PM -0700, Sean Christopherson wrote:
+> On Thu, May 16, 2019 at 02:02:58PM -0700, Andy Lutomirski wrote:
+> > > On May 15, 2019, at 10:16 PM, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> > > There is a problem here though. Usually the enclave itself is just a
+> > > loader that then loads the application from outside source and creates
+> > > the executable pages from the content.
+> > >
+> > > A great example of this is Graphene that bootstraps unmodified Linux
+> > > applications to an enclave:
+> > >
+> > > https://github.com/oscarlab/graphene
+> > >
+> > 
+> > ISTM you should need EXECMEM or similar to run Graphene, then.
 > 
-> You need to review the code more closely I think -- it does not depend
-> on the .xattr-list file following the files to which it applies.
-> 
-> The code first extracts .xattr-list as though it was a regular file. If
-> a later dupe shows up (presumably from a second archive, although the
-> patch will actually allow a second one in the same archive), it will
-> then process the existing .xattr-list file and apply the attributes
-> listed within it. It then will proceed to read the second one and
-> overwrite the first one with it (this is the normal behaviour in the
-> kernel cpio parser). At the end once all the archives have been
-> extracted, if there is an .xattr-list file in the rootfs it will be
-> parsed (it would've been the last one encountered, which hasn't been
-> parsed yet, just extracted).
-> 
-> Regarding the idea to use the high 16 bits of the mode field in
-> the header that's another possibility. It would just require additional
-> support in the program that actually creates the archive though, which
-> the current patch doesn't.
+> Agreed, Graphene is effectively running arbitrary enclave code.  I'm
+> guessing there is nothing that prevents extending/reworking Graphene to
+> allow generating the enclave ahead of time so as to avoid populating the
+> guts of the enclave at runtime, i.e. it's likely possible to run an
+> unmodified application in an enclave without EXECMEM if that's something
+> Graphene or its users really care about.
 
-Yes, for adding signatures for a subset of files, no changes to the ram
-disk generator are necessary. Everything is done by a custom module. To
-support a generic use case, it would be necessary to modify the
-generator to execute getfattr and the awk script after files have been
-placed in the temporary directory.
+I'd guess that also people adding SGX support to containers want
+somewhat similar framework to work on so that you can just wrap a
+container with an enclave.
 
-If I understood the new proposal correctly, it would be task for cpio to
-read file metadata after the content and create a new record for each
-file with mode 0x18000, type of metadata encoded in the file name and
-metadata as file content. I don't know how easy it would be to modify
-cpio. Probably the amount of changes would be reasonable.
-
-The kernel will behave in a similar way. It will call do_readxattrs() in
-do_copy() for each file. Since the only difference between the current
-and the new proposal would be two additional calls to do_readxattrs() in
-do_name() and unpack_to_rootfs(), maybe we could support both.
-
-Roberto
-
--- 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Bo PENG, Jian LI, Yanli SHI
+/Jarkko
