@@ -2,29 +2,30 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A8825BF3
-	for <lists+linux-security-module@lfdr.de>; Wed, 22 May 2019 04:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3904625BF7
+	for <lists+linux-security-module@lfdr.de>; Wed, 22 May 2019 04:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727294AbfEVClA (ORCPT
+        id S1727733AbfEVCsy (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 21 May 2019 22:41:00 -0400
-Received: from namei.org ([65.99.196.166]:33694 "EHLO namei.org"
+        Tue, 21 May 2019 22:48:54 -0400
+Received: from namei.org ([65.99.196.166]:33706 "EHLO namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727208AbfEVClA (ORCPT
+        id S1727424AbfEVCsy (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 21 May 2019 22:41:00 -0400
+        Tue, 21 May 2019 22:48:54 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id x4M2et1w006403;
-        Wed, 22 May 2019 02:40:55 GMT
-Date:   Wed, 22 May 2019 12:40:55 +1000 (AEST)
+        by namei.org (8.14.4/8.14.4) with ESMTP id x4M2mnNd006699;
+        Wed, 22 May 2019 02:48:49 GMT
+Date:   Wed, 22 May 2019 12:48:49 +1000 (AEST)
 From:   James Morris <jmorris@namei.org>
 To:     Matthew Garrett <matthewgarrett@google.com>
 cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>
-Subject: Re: [RFC] Turn lockdown into an LSM
-In-Reply-To: <20190521224013.3782-1-matthewgarrett@google.com>
-Message-ID: <alpine.LRH.2.21.1905221203070.3967@namei.org>
-References: <20190521224013.3782-1-matthewgarrett@google.com>
+        linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>
+Subject: Re: [RFC 2/2] Add the ability to lock down access to the running
+ kernel image
+In-Reply-To: <20190521224013.3782-3-matthewgarrett@google.com>
+Message-ID: <alpine.LRH.2.21.1905221246040.3967@namei.org>
+References: <20190521224013.3782-1-matthewgarrett@google.com> <20190521224013.3782-3-matthewgarrett@google.com>
 User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -34,26 +35,12 @@ List-ID: <linux-security-module.vger.kernel.org>
 
 On Tue, 21 May 2019, Matthew Garrett wrote:
 
-> Hi James,
-> 
-> This is a quick attempt to integrate lockdown into the existing LSM
-> framework. It adds a new lockdown security hook and an LSM that defines
-> the existing coarse-grained policy, and also adds a new
-> DEFINE_EARLY_LSM() definition in order to permit lockdown (and
-> potentially other modules) to be initialised at the top of kernel init
-> in order to allow policy to be imposed on stuff that happens in
-> setup_arch(). The goal here is to allow policy to be devolved to other
-> LSMs on systems that have a secure mechanism for loading LSM policy
-> early in boot, allowing creation of arbitrarily complicated policies
-> without interfering with the common-case coarse-grained approach.
-> 
-> This should probably be extended so a uapi-exposed constant is passed to
-> the hook in order to make it easier to write policy in other LSMs, but
-> does this broadly look like you were imagining?
+> +	int (*locked_down)(const char *where, enum lockdown_level level);
 
-This looks promising!
+> +static int lockdown_is_locked_down(const char *what, enum lockdown_level level)
 
-An LSM could also potentially implement its own policy for the hook.
+I'm guessing 'what' is the best option here.
+
 
 -- 
 James Morris
