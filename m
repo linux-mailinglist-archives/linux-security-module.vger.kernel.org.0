@@ -2,79 +2,42 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D93332B081
-	for <lists+linux-security-module@lfdr.de>; Mon, 27 May 2019 10:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36622BA1B
+	for <lists+linux-security-module@lfdr.de>; Mon, 27 May 2019 20:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbfE0Inw (ORCPT
+        id S1727126AbfE0S1B (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 27 May 2019 04:43:52 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:41282 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725908AbfE0Inv (ORCPT
+        Mon, 27 May 2019 14:27:01 -0400
+Received: from dolcegabbana.com ([198.23.132.36]:38200 "EHLO petraband.com"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726839AbfE0S1B (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 27 May 2019 04:43:51 -0400
-Received: by mail-ot1-f67.google.com with SMTP id l25so14128128otp.8;
-        Mon, 27 May 2019 01:43:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SPyeTzPFoh+1jcHD1T6EeO+I9ugNzJgCyHNSVSPB+Tc=;
-        b=CurKgiqG1W2/kcwqKQGypZEHcqAaKeeiBvQOmycmxO1M+JUNpY1wcado5riTLx4FgG
-         KoAuupXk1Co0lLXoLzVZk0CvOYk7xlutqqlEq5DZk3/LMCHkjffnoinnb9e32YvycQy8
-         ziXuqUmjx/p/KoWMf47CE+jo966cTxXZ/QZn2/qErM/uzZ6ujgEDVfRRgopAaD6kJKZj
-         Thp50xWIEhTq1yDoPNKmKuhGmOQDuMveeVlMnKE+WWRL4hBg2kwXBkVZQse0hRHudESs
-         DyuBbNdhcgcC++eX5TnpHOy8uFHrP2P0257cxe/WUfISunfz2lJjT6b48Se2N812QYc+
-         6YIQ==
-X-Gm-Message-State: APjAAAUPr7GH+9lLtlo50P8cRh7osBh4bF0CR5KFM/Npp13or1BEUC//
-        VGOAIkJoib2ZcJWVVgLKoZZY7j4ThLNydZb6Nnw=
-X-Google-Smtp-Source: APXvYqxIlLFH84yhUFerMj/YlUDBNDBRTGJTxhPDFRXnfvuo7mYZbz39ugxbhoZlfat/iRijWwRpROWfadWrjYSeMCE=
-X-Received: by 2002:a9d:7dd5:: with SMTP id k21mr43860970otn.167.1558946630255;
- Mon, 27 May 2019 01:43:50 -0700 (PDT)
+        Mon, 27 May 2019 14:27:01 -0400
+X-Greylist: delayed 9644 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 May 2019 14:26:49 EDT
+To:     linux-security-module@vger.kernel.org
+Subject: Help to get traffic
+Message-ID: <c0cfaf6c25e84d90002e665b070ac8dc@walkeralextra.tech>
+Date:   Mon, 27 May 2019 13:59:08 +0200
+From:   "Alex Walker" <schutz@walkeralextra.tech>
+Reply-To: fanfenqi@sina.com
 MIME-Version: 1.0
-References: <cover.1558362030.git.mchehab+samsung@kernel.org> <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-In-Reply-To: <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 May 2019 10:43:39 +0200
-Message-ID: <CAJZ5v0iiSo=yoyZTt6ddf5fBRGy1wSvzmA-ZaHH33nivkSp22Q@mail.gmail.com>
-Subject: Re: [PATCH 10/10] docs: fix broken documentation links
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-gpio@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        xen-devel@lists.xenproject.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        devel@driverdev.osuosl.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, May 20, 2019 at 4:48 PM Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> wrote:
->
-> Mostly due to x86 and acpi conversion, several documentation
-> links are still pointing to the old file. Fix them.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Hi
 
-For the ACPI part:
+Do you need traffic for your website, or ecommerce store?
+We can bring 1-2 thousands of visitors to your website daily.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+No matter what you are selling, products or service. Getting more traffic
+is the key to your business.
+
+Please reply if interested, we will go options for you.
+
+Thanks,
+Alex Walker
+Whatsapp: +8617199402387
+
