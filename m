@@ -2,86 +2,167 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1898F2CF16
-	for <lists+linux-security-module@lfdr.de>; Tue, 28 May 2019 21:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79A82CF2B
+	for <lists+linux-security-module@lfdr.de>; Tue, 28 May 2019 21:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727147AbfE1TCS (ORCPT
+        id S1727482AbfE1TGI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 28 May 2019 15:02:18 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:33534 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbfE1TCR (ORCPT
+        Tue, 28 May 2019 15:06:08 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52168 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726452AbfE1TGI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 28 May 2019 15:02:17 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 92379821EF;
-        Tue, 28 May 2019 19:02:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3152C1001DD8;
-        Tue, 28 May 2019 19:02:16 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <6889f4f9-4ae0-8a92-a2fc-04151ad8ed9f@schaufler-ca.com>
-References: <6889f4f9-4ae0-8a92-a2fc-04151ad8ed9f@schaufler-ca.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     dhowells@redhat.com, James Morris <jmorris@namei.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PULL] Smack: Restore the smackfsdef mount option
+        Tue, 28 May 2019 15:06:08 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4SJ62ur073276
+        for <linux-security-module@vger.kernel.org>; Tue, 28 May 2019 15:06:06 -0400
+Received: from e13.ny.us.ibm.com (e13.ny.us.ibm.com [129.33.205.203])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2ss8w3mpsh-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Tue, 28 May 2019 15:06:04 -0400
+Received: from localhost
+        by e13.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-security-module@vger.kernel.org> from <bauerman@linux.ibm.com>;
+        Tue, 28 May 2019 20:03:30 +0100
+Received: from b01cxnp22033.gho.pok.ibm.com (9.57.198.23)
+        by e13.ny.us.ibm.com (146.89.104.200) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 28 May 2019 20:03:25 +0100
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4SJ3OtQ34996472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 May 2019 19:03:24 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F409AC059;
+        Tue, 28 May 2019 19:03:24 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8FD62AC064;
+        Tue, 28 May 2019 19:03:20 +0000 (GMT)
+Received: from morokweng.localdomain (unknown [9.85.218.160])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Tue, 28 May 2019 19:03:20 +0000 (GMT)
+References: <20190418035120.2354-1-bauerman@linux.ibm.com> <20190418035120.2354-2-bauerman@linux.ibm.com> <1557416528.10635.62.camel@linux.ibm.com>
+User-agent: mu4e 1.0; emacs 26.2
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "AKASHI\, Takahiro" <takahiro.akashi@linaro.org>
+Subject: Re: [PATCH v10 01/12] MODSIGN: Export module signature definitions
+In-reply-to: <1557416528.10635.62.camel@linux.ibm.com>
+Date:   Tue, 28 May 2019 16:03:15 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <10709.1559070135.1@warthog.procyon.org.uk>
-Date:   Tue, 28 May 2019 20:02:15 +0100
-Message-ID: <10710.1559070135@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Tue, 28 May 2019 19:02:17 +0000 (UTC)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+x-cbid: 19052819-0064-0000-0000-000003E60CE6
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011176; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01209913; UDB=6.00635630; IPR=6.00990943;
+ MB=3.00027089; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-28 19:03:29
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19052819-0065-0000-0000-00003DA623F4
+Message-Id: <875zpu766k.fsf@morokweng.localdomain>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-28_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905280119
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Casey Schaufler <casey@schaufler-ca.com> wrote:
 
-> James, this is a repair for a regression introduced in 5.1.
-> It should be pulled for 5.2 and added to 5.1.
-> 
-> The following changes since commit 619ae03e922b65a1a5d4269ceae1e9e13a058d6b:
-> 
->   Smack: Fix kbuild reported build error (2019-04-30 14:13:32 -0700)
-> 
-> are available in the git repository at:
-> 
->   https://github.com/cschaufler/next-smack.git smack-for-5.2-b
-> 
-> for you to fetch changes up to a5765ce797070d046dc53ccceeb0ed304cb918eb:
-> 
->   Smack: Restore the smackfsdef mount option (2019-05-28 10:22:04 -0700)
+Mimi Zohar <zohar@linux.ibm.com> writes:
 
-Can you hold this for the moment, please?
+> On Thu, 2019-04-18 at 00:51 -0300, Thiago Jung Bauermann wrote:
+>> IMA will use the module_signature format for append signatures, so export
+>> the relevant definitions and factor out the code which verifies that the
+>> appended signature trailer is valid.
+>> 
+>> Also, create a CONFIG_MODULE_SIG_FORMAT option so that IMA can select it
+>> and be able to use mod_check_sig() without having to depend on either
+>> CONFIG_MODULE_SIG or CONFIG_MODULES.
+>> 
+>> Signed-off-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+>> Cc: Jessica Yu <jeyu@kernel.org>
+>
+> Just a couple minor questions/comments below.
+>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Note that there appears to be another problem by inspection of the code.  I
-think that smack_sb_eat_lsm_opts() strips the "smack" prefix off of the
-options, whereas smack_fs_context_parse_param() does not.
+Thanks for your review and your comments!
 
-This means that there's no need to do this:
+>> diff --git a/init/Kconfig b/init/Kconfig
+>> index 4592bf7997c0..a71019553ee1 100644
+>> --- a/init/Kconfig
+>> +++ b/init/Kconfig
+>> @@ -1906,7 +1906,7 @@ config MODULE_SRCVERSION_ALL
+>>  config MODULE_SIG
+>>  	bool "Module signature verification"
+>>  	depends on MODULES
+>> -	select SYSTEM_DATA_VERIFICATION
+>> +	select MODULE_SIG_FORMAT
+>>  	help
+>>  	  Check modules for valid signatures upon load: the signature
+>>  	  is simply appended to the module. For more information see
+>> @@ -2036,6 +2036,10 @@ config TRIM_UNUSED_KSYMS
+>>  
+>>  endif # MODULES
+>>  
+>> +config MODULE_SIG_FORMAT
+>> +	def_bool n
+>> +	select SYSTEM_DATA_VERIFICATION
+>
+> Normally Kconfigs, in the same file, are defined before they are used.
+>  I'm not sure if that is required or just a convention.
 
-	 static const struct fs_parameter_spec smack_param_specs[] = {
-	+	fsparam_string("fsdef",		Opt_fsdefault),
-		fsparam_string("fsdefault",	Opt_fsdefault),
-		fsparam_string("fsfloor",	Opt_fsfloor),
-		fsparam_string("fshat",		Opt_fshat),
+I think it's a convention, because it seemed to work in the current way.
+For the next version I moved the config MODULE_SIG_FORMAT definition to
+just before "menuconfig MODULES"
 
-but that all the option names in that table *do* need prefixing with "smack".
+>> diff --git a/kernel/module_signature.c b/kernel/module_signature.c
+>> new file mode 100644
+>> index 000000000000..6d5e59f27f55
+>> --- /dev/null
+>> +++ b/kernel/module_signature.c
+>> @@ -0,0 +1,45 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Module signature checker
+>> + *
+>> + * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
+>> + * Written by David Howells (dhowells@redhat.com)
+>> + */
+>> +
+>> +#include <linux/errno.h>
+>> +#include <linux/printk.h>
+>> +#include <linux/module_signature.h>
+>> +#include <asm/byteorder.h>
+>> +
+>> +/**
+>> + * mod_check_sig - check that the given signature is sane
+>> + *
+>> + * @ms:		Signature to check.
+>> + * @file_len:	Size of the file to which @ms is appended.
+>
+> "name" is missing.
 
-The way you enter the LSM is going to depend on whether
-generic_parse_monolithic() is called.  You're only going to enter this way if
-mount(2) is the syscall of entry and the filesystem doesn't override the
-->parse_monolithic() option (none in the upstream kernel).
+Fixed.
 
-David
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
+
