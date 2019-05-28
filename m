@@ -2,137 +2,66 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BE02C06E
-	for <lists+linux-security-module@lfdr.de>; Tue, 28 May 2019 09:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6BF2C65D
+	for <lists+linux-security-module@lfdr.de>; Tue, 28 May 2019 14:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbfE1HkI (ORCPT
+        id S1726620AbfE1MXR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 28 May 2019 03:40:08 -0400
-Received: from mail-eopbgr770071.outbound.protection.outlook.com ([40.107.77.71]:63759
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727853AbfE1HkF (ORCPT
+        Tue, 28 May 2019 08:23:17 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:53002 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726580AbfE1MXR (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 28 May 2019 03:40:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector1-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EVygfSY8hqy/DBUvsHRCgGvieeoiCENlb8QcgTW8Qa0=;
- b=ug3p+80+pta3QSOyYVopWCIPknnTa/9XApeIFW+44+SXRahs8pvbg98CvxDZWD2q7UoHIhgUD6Sn7ZbGyOWHdj4WAzkhg9cumlMLts6dyltoEMjlw9eglOAVG8lj96mIW2ArwyzQcb/gVfwCJxWUUom9Q8RHLT+KaOaucx79tQQ=
-Received: from BN3PR03CA0110.namprd03.prod.outlook.com (2603:10b6:400:4::28)
- by BLUPR03MB552.namprd03.prod.outlook.com (2a01:111:e400:883::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.22; Tue, 28 May
- 2019 07:39:58 +0000
-Received: from SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::202) by BN3PR03CA0110.outlook.office365.com
- (2603:10b6:400:4::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1943.16 via Frontend
- Transport; Tue, 28 May 2019 07:39:58 +0000
-Authentication-Results: spf=pass (sender IP is 137.71.25.55)
- smtp.mailfrom=analog.com; lists.freedesktop.org; dkim=none (message not
- signed) header.d=none;lists.freedesktop.org; dmarc=bestguesspass action=none
- header.from=analog.com;
-Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
- 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
- client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
-Received: from nwd2mta1.analog.com (137.71.25.55) by
- SN1NAM02FT022.mail.protection.outlook.com (10.152.72.148) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
- via Frontend Transport; Tue, 28 May 2019 07:39:57 +0000
-Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
-        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x4S7duOZ023275
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Tue, 28 May 2019 00:39:56 -0700
-Received: from saturn.analog.com (10.50.1.244) by NWD2HUBCAS7.ad.analog.com
- (10.64.69.107) with Microsoft SMTP Server id 14.3.408.0; Tue, 28 May 2019
- 03:39:56 -0400
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <linux-omap@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <devel@driverdev.osuosl.org>,
-        <linux-usb@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <andriy.shevchenko@linux.intel.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH 3/3][V2] lib: re-introduce new match_string() helper/macro
-Date:   Tue, 28 May 2019 10:39:32 +0300
-Message-ID: <20190528073932.25365-3-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190528073932.25365-1-alexandru.ardelean@analog.com>
-References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
- <20190528073932.25365-1-alexandru.ardelean@analog.com>
+        Tue, 28 May 2019 08:23:17 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 4ED3A81132;
+        Tue, 28 May 2019 12:23:11 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-125-65.rdu2.redhat.com [10.10.125.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 330067C0B5;
+        Tue, 28 May 2019 12:23:07 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1ebab7e7-f7ee-b910-9cc8-5d826eee8e97@schaufler-ca.com>
+References: <1ebab7e7-f7ee-b910-9cc8-5d826eee8e97@schaufler-ca.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     dhowells@redhat.com, LKML <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, jose.bollo@iot.bzh,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH] Smack: Restore the smackfsdef mount option
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(1496009)(136003)(39860400002)(346002)(396003)(376002)(2980300002)(199004)(189003)(126002)(2441003)(86362001)(44832011)(5660300002)(2201001)(478600001)(446003)(476003)(2616005)(53416004)(47776003)(316002)(11346002)(2870700001)(2906002)(6666004)(356004)(50226002)(51416003)(7696005)(7416002)(76176011)(48376002)(4326008)(305945005)(70586007)(70206006)(336012)(26005)(77096007)(186003)(1076003)(7636002)(246002)(486006)(426003)(7406005)(110136005)(54906003)(106002)(107886003)(50466002)(36756003)(8936002)(8676002)(921003)(83996005)(1121003)(2101003);DIR:OUT;SFP:1101;SCL:1;SRVR:BLUPR03MB552;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9f7495c6-88de-4750-c0e9-08d6e33faf63
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(4709054)(1401327)(2017052603328);SRVR:BLUPR03MB552;
-X-MS-TrafficTypeDiagnostic: BLUPR03MB552:
-X-Microsoft-Antispam-PRVS: <BLUPR03MB5526A3F85F374B6EF9329F1F91E0@BLUPR03MB552.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1443;
-X-Forefront-PRVS: 00514A2FE6
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: MswgKhZP9m+ZsGUEhWl3phwXCL8yuqzj7xcxpK+dGlJBf9m5zMl51gqC3LUtKdWQ8Os49FCltfeNbu6Phw/B8l5WNlH00oAhRzdjikewQHYUEmLqJ6/urfczkkAV7S6v3P1UMtUMTOYDySCPLD3RO66kjwZftNeRvVV3dsDqCax4qYOjNj2PWP5gkM5PjRZmJWiCQ5YjWYviSRnNrXmzdalwSZTQ416f6pMfl95WCkKeJFuhdayQMWJGsRNhTOHuxm5bGOp4NnJa6ZTV5K+ilvVE4Xb082rHyJdnAOFnjmjlMMgU1yiCJ2yKYrrmhTGSsWl7mABejle5Gq03Z59rpn0+AbER3kkbBxVnYXW8nX3mrHd8Gqzr89K0YpmuIcGMyscsEWrsfpd9tI6dbYg4W4+zRy2MwWGNPPr9JWXwDBM=
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2019 07:39:57.3627
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f7495c6-88de-4750-c0e9-08d6e33faf63
-X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLUPR03MB552
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <11439.1559046181.1@warthog.procyon.org.uk>
+Date:   Tue, 28 May 2019 13:23:01 +0100
+Message-ID: <11440.1559046181@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Tue, 28 May 2019 12:23:17 +0000 (UTC)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This change re-introduces `match_string()` as a macro that uses
-ARRAY_SIZE() to compute the size of the array.
+Casey Schaufler <casey@schaufler-ca.com> wrote:
 
-After this change, work can start on migrating subsystems to use this new
-helper. Since the original helper is pretty used, migrating to this new one
-will take a while, and will be reviewed by each subsystem.
+> The change was made in commit c3300aaf95fb4 from Al Viro.
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- include/linux/string.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+This should be in a "Fixes:" tag?
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 7149fcdf62df..34491b075449 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -198,6 +198,15 @@ static inline int strtobool(const char *s, bool *res)
- int __match_string(const char * const *array, size_t n, const char *string);
- int __sysfs_match_string(const char * const *array, size_t n, const char *s);
- 
-+/**
-+ * match_string - matches given string in an array
-+ * @_a: array of strings
-+ * @_s: string to match with
-+ *
-+ * Helper for __match_string(). Calculates the size of @a automatically.
-+ */
-+#define match_string(_a, _s) __match_string(_a, ARRAY_SIZE(_a), _s)
-+
- /**
-  * sysfs_match_string - matches given string in an array
-  * @_a: array of strings
--- 
-2.20.1
+> +	fsparam_string("fsdef",		Opt_fsdefault),
+>  	fsparam_string("fsdefault",	Opt_fsdefault),
+>  	fsparam_string("fsfloor",	Opt_fsfloor),
+>  	fsparam_string("fshat",		Opt_fshat),
 
+Would it be better to delete the "fsdefault" line?
+
+Also, should all of these be prefixed with "smack"?  So:
+
+  	fsparam_string("smackfsdef",	Opt_fsdefault),
+  	fsparam_string("smackfsfloor",	Opt_fsfloor),
+  	fsparam_string("smackfshat",	Opt_fshat),	
+
+David
