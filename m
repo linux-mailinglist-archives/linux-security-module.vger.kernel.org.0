@@ -2,128 +2,111 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE89300E5
-	for <lists+linux-security-module@lfdr.de>; Thu, 30 May 2019 19:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0245D300ED
+	for <lists+linux-security-module@lfdr.de>; Thu, 30 May 2019 19:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725961AbfE3RVw (ORCPT
+        id S1726280AbfE3RZT (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 30 May 2019 13:21:52 -0400
-Received: from mga12.intel.com ([192.55.52.136]:15132 "EHLO mga12.intel.com"
+        Thu, 30 May 2019 13:25:19 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33128 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726566AbfE3RVw (ORCPT
+        id S1725961AbfE3RZT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 30 May 2019 13:21:52 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 May 2019 10:21:51 -0700
-X-ExtLoop1: 1
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.36])
-  by orsmga004.jf.intel.com with ESMTP; 30 May 2019 10:21:51 -0700
-Date:   Thu, 30 May 2019 10:21:51 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     "Xing, Cedric" <cedric.xing@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Dr. Greg" <greg@enjellic.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "nhorman@redhat.com" <nhorman@redhat.com>,
-        "npmccallum@redhat.com" <npmccallum@redhat.com>,
-        "Ayoun, Serge" <serge.ayoun@intel.com>,
-        "Katz-zamir, Shay" <shay.katz-zamir@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Svahn, Kai" <kai.svahn@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: SGX vs LSM (Re: [PATCH v20 00/28] Intel SGX1 support)
-Message-ID: <20190530172150.GA23930@linux.intel.com>
-References: <CALCETrUyAAhnQ+RUeN1L41TKj-vcD2CNt-FJ9siO=Zo6gvH1Aw@mail.gmail.com>
- <20190524224107.GJ365@linux.intel.com>
- <683B5E3D-AFB6-4B45-8D39-B00847312209@amacapital.net>
- <960B34DE67B9E140824F1DCDEC400C0F654E965F@ORSMSX116.amr.corp.intel.com>
- <CALCETrXXVMutX8eZk6nnkOAeS+Tj0sQd0FkW+wk6Rx8hQxCe6w@mail.gmail.com>
- <960B34DE67B9E140824F1DCDEC400C0F654E9824@ORSMSX116.amr.corp.intel.com>
- <20190528202407.GB13158@linux.intel.com>
- <CALCETrWTXCb1jru1G5G3sOp5AV8iYUtrffiSxE-5gotXtrZD-g@mail.gmail.com>
- <20190528214107.GD13158@linux.intel.com>
- <960B34DE67B9E140824F1DCDEC400C0F654EB439@ORSMSX116.amr.corp.intel.com>
+        Thu, 30 May 2019 13:25:19 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 4E814E3E00;
+        Thu, 30 May 2019 17:25:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7B3660BE1;
+        Thu, 30 May 2019 17:25:11 +0000 (UTC)
+Subject: [PATCH 00/10] keys: Miscellany [ver #2]
+From:   David Howells <dhowells@redhat.com>
+To:     keyrings@vger.kernel.org
+Cc:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Eric Biggers <ebiggers@google.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        dhowells@redhat.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ebiggers@kernel.org
+Date:   Thu, 30 May 2019 18:25:11 +0100
+Message-ID: <155923711088.949.14909672457214372214.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/unknown-version
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <960B34DE67B9E140824F1DCDEC400C0F654EB439@ORSMSX116.amr.corp.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Thu, 30 May 2019 17:25:19 +0000 (UTC)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, May 29, 2019 at 10:38:06PM -0700, Xing, Cedric wrote:
-> > From: Christopherson, Sean J
-> > Sent: Tuesday, May 28, 2019 2:41 PM
-> > 
-> > On Tue, May 28, 2019 at 01:48:02PM -0700, Andy Lutomirski wrote:
-> > > On Tue, May 28, 2019 at 1:24 PM Sean Christopherson
-> > > <sean.j.christopherson@intel.com> wrote:
-> > > >
-> > > > Actually, I think we do have everything we need from an LSM perspective.
-> > > > LSMs just need to understand that sgx_enclave_load() with a NULL vma
-> > > > implies a transition from RW.  For example, SELinux would interpret
-> > > > sgx_enclave_load(NULL, RX) as requiring FILE__EXECMOD.
-> > >
-> > > You lost me here.  What operation triggers this callback?  And
-> > > wouldn't sgx_enclave_load(NULL, RX) sometimes be a transition from RO
-> > > or just some fresh executable zero bytes?
-> > 
-> > An explicit ioctl() after EACCEPTCOPY to update the allowed permissions.
-> > For all intents and purposes, the EAUG'd page must start RW.  Maybe a better way to phrase
-> > it is that at some point the page must be writable to have any value whatsover.
-> > EACCEPTCOPY explicitly requires the page to be at least RW.  EACCEPT technically doesn't
-> > require RW, but a RO or RX zero page is useless.  Userspace could still EACCEPT with RO or
-> > RX, but SGX would assume a minimum of RW for the purposes of the LSM check.
-> 
-> Why is an explicit ioctl() necessary after EACCEPTCOPY? Or why is mprotect() not sufficient?
 
-Ignore this, I was trying to avoid having to add a vm_ops mprotect(),
-which Andy pointed out was silly.
+Here are some miscellaneous keyrings fixes and improvements intended for
+the next merge window:
 
-> > In theory, it's still your MAXPERM model, but with the unnecessary states removed and the
-> > others enforced/handled by the natural SGX transitions instead of explictly in ioctls.
-> > Underneath the hood the SGX driver would still need to track the MAXPERM.
-> 
-> What are the "unnecessary states" removed? 
+ (1) Fix a bunch of warnings from sparse, including missing RCU bits and
+     kdoc-function argument mismatches
 
-Andy proposed taking full RWX in MAXPERMs, but really we only need "can
-writes ever happen to this page", as that allows the SGX driver to avoid
-having to track if a page has been mapped PROT_WRITE by any VMA in any
-process.
+ (2) Implement a keyctl to allow a key to be moved from one keyring to
+     another, with the option of prohibiting key replacement in the
+     destination keyring.
 
-> I'm not sure understand the proposal fully. The whole thing looks to me like
-> the driver is undertaking things that should/would otherwise be done by
-> mmap()/mprotect() syscalls. It also imposes unnecessary restrictions on user
-> mode code, such as mmap(PROT_NONE), ACTIVATE_REGION can be called only once,
-> etc. What'd happen if ACTIVATE_REGION is called with a range spanning
-> multiple/partial VMAs? What'd happen if an enclave was unmapped than mapped
-> again? I'd say the proposal is unintuitive at least.
-> 
-> In theory, if the driver can keep track of MAXPERM for all pages within an
-> enclave, then it could fail mmap() if the requested prot conflicts with any
-> page's MAXPERM within that range. Otherwise, MAXPERM could be copied into
-> VM_MAY* flags then mprotect() will just follow through. Wouldn't that be a
-> much simpler and more intuitive approach?
+ (3) Grant Link permission to possessors of request_key_auth tokens so that
+     upcall servicing daemons can more easily arrange things such that only
+     the necessary auth key is passed to the actual service program, and
+     not all the auth keys a daemon might possesss.
 
-Ignore all this, again I was trying to avoid hooking mprotect().
+ (4) Improvement in lookup_user_key().
+
+ (5) Implement a keyctl to allow keyrings subsystem capabilities to be
+     queried.
+
+The patches can be found on the following branch:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-misc
+
+The keyutils next branch has commits to make available, document and test
+the move-key and capabilities code:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/log/?h=next
+
+Changes:
+
+ (*) Fixed lock ordering bug in KEYCTL_MOVE.
+
+ (*) Added improvement patch from Eric.
+
+ (*) Added capabilities patch.
+
+David
+---
+David Howells (9):
+      keys: sparse: Fix key_fs[ug]id_changed()
+      keys: sparse: Fix incorrect RCU accesses
+      keys: sparse: Fix kdoc mismatches
+      keys: Change keyring_serialise_link_sem to a mutex
+      keys: Break bits out of key_unlink()
+      keys: Hoist locking out of __key_link_begin()
+      keys: Add a keyctl to move a key between keyrings
+      keys: Grant Link permission to possessers of request_key auth keys
+      keys: Add capability-checking keyctl function
+
+Eric Biggers (1):
+      KEYS: reuse keyring_index_key::desc_len in lookup_user_key()
+
+
+ Documentation/security/keys/core.rst |   21 +++
+ include/linux/key.h                  |   13 +-
+ include/uapi/linux/keyctl.h          |   17 ++
+ kernel/cred.c                        |    4 
+ security/keys/compat.c               |    6 +
+ security/keys/internal.h             |    7 +
+ security/keys/key.c                  |   23 ++-
+ security/keys/keyctl.c               |   92 +++++++++++
+ security/keys/keyring.c              |  275 +++++++++++++++++++++++++++-------
+ security/keys/process_keys.c         |   26 +--
+ security/keys/request_key.c          |    7 +
+ security/keys/request_key_auth.c     |    4 
+ 12 files changed, 413 insertions(+), 82 deletions(-)
+
