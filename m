@@ -2,49 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B877C3241D
-	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6DF32422
+	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbfFBQwm (ORCPT
+        id S1726998AbfFBQwz (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 2 Jun 2019 12:52:42 -0400
-Received: from sonic310-27.consmr.mail.gq1.yahoo.com ([98.137.69.153]:34565
-        "EHLO sonic310-27.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726969AbfFBQwl (ORCPT
+        Sun, 2 Jun 2019 12:52:55 -0400
+Received: from sonic317-38.consmr.mail.ne1.yahoo.com ([66.163.184.49]:34889
+        "EHLO sonic317-38.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726993AbfFBQwz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 2 Jun 2019 12:52:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494360; bh=DXZobVlHba7NLExIjhRRZRkmastZlDIkiPrs42J8njM=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=Ca6crS2AbXGqaqYcaD8ikm/maUYQox3BNJJLjfp/JwCLD+O1YtPzQoAZwSKGQM4z3uWaPy8CFjn1CJghphqMWfSi8jAP/qsRjQ3xuQ7vLqIevAxTYP3P93c8u8M+gLExXhlOrFq7VAL4cze49CsmLclXSkKYQGTtMKe2s4M2efb+K5I4a8hBa2euBrwTmkphN8Hg0Q/EjlK7nPpk9whmkOrTdFqcxX66FQLAonjqW6Q9XyHMUDQp1xHMPx4vRT+4j9+PXG17sHXIvg+6zE926H1Mk5+Vk3dw3uT6BAFRmezAYrn9vKrOre+mypKjuW+3US1G6uajf2Vxq69ZY4eqsQ==
-X-YMail-OSG: s6n1_YQVM1lDPVC8A3OMrgySjobyxi4XPDRH9utBp2sIWlyw4X8wreJR6qiO7n4
- xS9Sd20mg_Wx8lXWLsOwDz05PuiRWPI0urPT7raTA12cbJdOv4zEmMvd61PJKefOlRfdxrp6Bvii
- a091fqFfeCkZy7I1kNFC8t3e.cdkiEUdUQg9iM4BBlktEytf_6gxVBfyjhhQrfk.WuE5SN00b1Gl
- ysrVO4fYa9Qw1qaxOLDbKM4BXUAinVngfdkUBsdR6rTOpSslfLzcHT3k_JwjKPySqhx9oZJjxqRN
- oKhjGHWMOThB9yhfFS9fEAczfDaPaDEgaycEPmonTmY4jsVN.f_Zcc7yMdu2PJhqVxh_4kWygjZa
- YdFZDVJIzI5mm0fI6I3fxlaSKyPh75oJON7Ixw30FydD7djwVm9xaq0N9hZCmsUFzQr6siWJEHvz
- cc4pHAH0cdVMOAaRhl2lxSne2XP4nVi3R2byeagoVBLIY5xHGwAtFAkpv5lofT0KffRi.ZMvuYSN
- m.W9EyYmLoOraujbk6B2jjJAHokWCusKU72PHrSoRKLHyqLpDpeKkTHoQAye2NfN8k2YnQCApVxj
- 6N1xaDvRFYnFz.ihP_4MgP3rO93TzSsOa1dDQC77VFMMENUjmRXPMAiB6M1MEIyDwZG.SdYR9YGT
- yR_Pst2gKOX7aqccY7G39BHtVES_Xtt___3fgpOBUbnjhkmhOp.8akNVU8aR7YpNOsrEWftE_5W3
- sJktvi6PabaJR.SasjudTx4WtNHjNlzG0jIfUwiD5JstVWhMxxd8XqHizV5.212TshAcKPBZJ2lQ
- diE14esBYO6CL6M8GDXbQrFS0GVX62LS32825p46iNOeyQr4ERoWduWU4vrjC_.xsHvMsIwF.K.f
- WtKLXPOM6e3TpvzvrzyKEjNj0f4ktzUeKMlZplw8Y6ukP0MyQMJUmTbPFgPUBoWkKTE4vAAdn.PT
- PhzvvZipHXRF99KXQuVwildUC96lAU.cKOGSPzGdaxLJyOH3FcF4gmMSnxZzcbpIjRf3ZpDeh_ht
- 9tW8l.SLhXSaqhaacCBiPve5Bjzzg9whzpxO0AOv3fTgE6mTLZkB0i7UcGuR_IncIYP0CTVga_h3
- NfkppaFBwwHgGXAgT_ynWaWrjkpXUh9p7oTZK0Z08wflqDDaRyNQLjpnZW1XMIyJRhkR6.1.fG1e
- 6pVnkYaDET6sWJF4vdmhfGwvWMZHi.VbAXlsRKfoNN73RBx4UYBMge_6nycRh4TKAm4trR2LATeM
- GTS9x7AlUXZxmxunN5Dltg_ukA6MatyleO0aJ.opJqSpCAKPrZPwL2gQ-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.gq1.yahoo.com with HTTP; Sun, 2 Jun 2019 16:52:40 +0000
+        Sun, 2 Jun 2019 12:52:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494374; bh=n7o8QGFhmUAYfuuVtS2cjj7dSkuQxOxyGbWYP+SBOLg=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=n48gwVeFVX0n5/5KntUUwoFVWUsMxXga8a+2JtqaRqdvOKqyKVNck5raEp1VvxrLJDcsLODXX9vBdj2JzDnisoRW6uRPs3Ki397Sy2BujqeV4/qJ3AibZcP7BMJCmwNJrg+qERcx7La/oz08LKYbxBEXEqnIauxmQ2SDwpofDn8wXXGViUXCYpcYx5fvS5vfpcImVBNyfZgGXQWQEnyKhNc6NIzhKe+8r2aDiVsXui8M3XG/AeR9fRwMzRBx9whVqt46UTCyP8b5Urvmy3m9UMiuzPmJ1ZI6tpNNw8Akw+rFm5ZSVY7J91sN0fZoXgN9rFLii9eZzU73SpcSwl3obg==
+X-YMail-OSG: pC9PScEVM1l8CwjVfEZ6.ngDIJGDhn3wBv8aBW2lCEP4TWSALaHPgZzQ0pRSUXB
+ Uh_Wc8JAtxPQ.FCGZvPM.6dqEAZM5_2kgBigmZXG0wJapUMhP_BmLunbqgRzMisezEmhS_Ci3mw4
+ ATUTLb4juKqWql_6t6GW.Z5z_iZdWbin_xtOQi3oYP1HUwyC4soO0XmFIZprXCXjx0CkEFH6fvxt
+ Tp0.OcuR.p1UaGUlIeF2DHJoHTxWYJoCR3Jnmwmeqfq3V3dYQBfYb7ySKQSnfhoaKV3Eww.yM12I
+ anZWCqKJImnOtkl322Eu9OiGnE2gz8yHGe7jvYikTmvCs63kPm7DRT75PQlkAnZ_FZf8NXzYLxui
+ bC8bMWW7ZDGDJw3JUuxo2Kksgl19iX_vb5s_gvdjCi5zdkrj7GPQ01Nbyqdm8obGSBubRbWWJirM
+ TRIX.pGs1P6eHvg0xv0lpl0TSTDlA9oIP_iVg79rbPY_SykUwjIuu7jVg9pBwT3vxRnP2UDXPqDt
+ dy5SaUcPwf1OS.Kty7VBGo3HSZqDb8FMGeVbbZXvuRNECsh0zp.VBzFt1h.Jm6SOy.NQsGvhVAz8
+ xxwY9xdFEwHul677l2zFWG9.m0Iw1qTVQ_wKglLTvOWZsNqbDzYlkcLS4Tf2RAqlOgnGvOulj1ER
+ balhPz66p8M5romoRtJvdHm_VcrfA93l2zO5GVDNn_j7Mj607.gs40DGHAANZZrdoU6FxFj1cZls
+ Hbqqso7IOW5rbiDMQiCouTaqpkCBfyw3Uy5E_cRou.o2m1kN_Ks2qJY8OiYwWOX3SPiQy2XXb7_O
+ OVUuTt_XmfsOT2tU5ZB7ctvng82Ut9utobgijtsJ0UZd__Dpdgq1HaCwN53xvi0UkNKhxuqtsCmH
+ MdF5S9SxslKNo.wkxFNBzfNs7D0ecxc7oan6BlwrPsTmA0JxS2CtklUOHrgj.Alcvw9QqKOTAHhY
+ QMQUrKejXouO1.tdUlKx4zeu18mWl0yYQYppXNiK4K5lbE1hVw9wYW_Rh8B8O5xB3BXl6iCc302M
+ suBQaAlm912e2M3RXGLE1CuJfjZQMs5nz4.yNBjhmS_EVOSVdveO1gGPUYqx0XpKffhB_ggxtu2a
+ BtCu5K2fjytUKSTDpqfVBoNpKCxURGar5.ny.J4fCJSZlehdNQn.w.Kqeg5jbDmsMc6Bl4CtgjxA
+ 0kpdNZ0BMXCCPytRK7Sj1M0AAp._CMd9GrDdHyGLDbOlwHk3O_YKZFp9rZidnXbDNybz7MCi20KG
+ msWwAaI_li46OWPKaNMwhO..4rYGFR1kOiu3lcmumg3roTOyrYOiR
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Sun, 2 Jun 2019 16:52:54 +0000
 Received: from c-73-223-4-185.hsd1.ca.comcast.net (EHLO localhost.net) ([73.223.4.185])
-          by smtp408.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 225d748664d0767f72d028f09ace7268;
-          Sun, 02 Jun 2019 16:52:39 +0000 (UTC)
+          by smtp409.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 0c0e3da8255eb26ca342a489fa1b8a19;
+          Sun, 02 Jun 2019 16:52:51 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH 27/58] NET: Remove scaffolding on secmarks
-Date:   Sun,  2 Jun 2019 09:50:30 -0700
-Message-Id: <20190602165101.25079-28-casey@schaufler-ca.com>
+Subject: [PATCH 28/58] NET: Remove scaffolding on new secmarks
+Date:   Sun,  2 Jun 2019 09:50:31 -0700
+Message-Id: <20190602165101.25079-29-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190602165101.25079-1-casey@schaufler-ca.com>
 References: <20190602165101.25079-1-casey@schaufler-ca.com>
@@ -54,43 +54,36 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Replace the lsm_export scaffolding in xt_SECMARK.c
-This raises an issue, in that Smack users have been
-using SECMARK_MODE_SEL, which is suppoed to be exclusively
-for SELinux. This is worked around in the code, but not
-fully addressed.
+Replace the lsm_export scaffolding in nft_meta.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- net/netfilter/xt_SECMARK.c | 8 +++++++-
+ net/netfilter/nft_meta.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/xt_SECMARK.c b/net/netfilter/xt_SECMARK.c
-index 2def8d8898e6..9a2a97c200a2 100644
---- a/net/netfilter/xt_SECMARK.c
-+++ b/net/netfilter/xt_SECMARK.c
-@@ -55,6 +55,7 @@ static int checkentry_lsm(struct xt_secmark_target_info *info)
- 	info->secctx[SECMARK_SECCTX_MAX - 1] = '\0';
- 	info->secid = 0;
+diff --git a/net/netfilter/nft_meta.c b/net/netfilter/nft_meta.c
+index 598bea8e4799..a1d3dab5bc25 100644
+--- a/net/netfilter/nft_meta.c
++++ b/net/netfilter/nft_meta.c
+@@ -580,11 +580,17 @@ static int nft_secmark_compute_secid(struct nft_secmark *priv)
+ 	u32 tmp_secid = 0;
+ 	int err;
  
 +	lsm_export_init(&le);
- 	err = security_secctx_to_secid(info->secctx, strlen(info->secctx), &le);
- 	if (err) {
- 		if (err == -EINVAL)
-@@ -63,7 +64,12 @@ static int checkentry_lsm(struct xt_secmark_target_info *info)
+ 	err = security_secctx_to_secid(priv->ctx, strlen(priv->ctx), &le);
+ 	if (err)
  		return err;
- 	}
  
--	lsm_export_secid(&le, &info->secid);
-+	/* Smack is cheating, using SECMARK_MODE_SEL */
+-	lsm_export_secid(&le, &tmp_secid);
++	/* Use the "best" secid */
 +	if (le.selinux)
-+		info->secid = le.selinux;
++		tmp_secid = le.selinux;
 +	else
-+		info->secid = le.smack;
++		tmp_secid = le.smack;
 +
- 	if (!info->secid) {
- 		pr_info_ratelimited("unable to map security context \'%s\'\n",
- 				    info->secctx);
+ 	if (!tmp_secid)
+ 		return -ENOENT;
+ 
 -- 
 2.19.1
 
