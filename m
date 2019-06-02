@@ -2,49 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C9032430
-	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3E032435
+	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727021AbfFBQxQ (ORCPT
+        id S1727035AbfFBQx1 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 2 Jun 2019 12:53:16 -0400
-Received: from sonic305-8.consmr.mail.bf2.yahoo.com ([74.6.133.47]:38520 "EHLO
-        sonic305-8.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727015AbfFBQxP (ORCPT
+        Sun, 2 Jun 2019 12:53:27 -0400
+Received: from sonic310-27.consmr.mail.gq1.yahoo.com ([98.137.69.153]:44840
+        "EHLO sonic310-27.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727003AbfFBQx0 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 2 Jun 2019 12:53:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494395; bh=zfBzq44MmcEq1Uo3O/oH4Lkcr97+L8XoyMvRBXLr+Uw=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=pSLViKX9XwzPWHDeQbs1mCWAQouOX0d5VIV6cGG7N0nfI6Kh/nAkxbkdaYKj8SB7UOPCHHI4MBcL1gcCVjOCCxkoGTq3fELERr4REGSl9hyTjBD5ojbyOpZAgUUZv1GHzoQzLjQ74s8ww6ai8lVpUZo+NY5I+fUIYyqDknR2jI6pZ6b7M+5pCuwlEFSN+JpGvgZzjk2uIr6Y569gXUh/n+PEog59YYeLsaZcNss/Ti0eecX0PLnr+Zi6JS+Cr/x2fhE3piu/y24qWwZToA+Mfe9S2Uwv82lcuyZ8rsEiFlpFsN4zaC9VDknp/DqB3KrZ7BdT0S9+JLQ0nuc+gflprg==
-X-YMail-OSG: WVEU2ukVM1nah2BCHatiKixJPmV9NbXf8.JwkjTRF2s5rdTMYALu74dLThq7Uf9
- JLH74nS.Ts_ic7rfUhKmAHBGozpSuGLREwmndYZAJ6X0yFiW4D_sK3RF7bldQIKoKGxlfVxaD4nc
- lbblB6ZMxCnhsVlN.DCkrn2n7CJRYEqaANyK7fFn3pd8HvYxgSQtny2IpPhfCaQeUNoWsWgfIHon
- DHVNoxCU7LuAaMR1p2LWzjUCGZ1mlMA7uwNc8gJ4EMeg8NQnD3lCuNRbjhEPox83RCEkSyTqdVTz
- 7hz7QU5ySc2vXRNMKk42WVVcGKuo4BNQWIOaqfXO2OeD5.M.5vhH8JgpeFH7LbQVtUGncrEVn8XM
- goZU0VZIpK921c1rx54bsVcGx7lVVuOBeu_OftjAYvq7gMZy4JkIO9JM0qf1a4S5YKsMXM1fsIJ8
- LB2oFS54SWQRSKFxyhRyStRGI2GFgVswL6LZUh4TxQHScurFlLWZnUJCsPvhTdp2nxOvATTWCwvJ
- U1a4DukzKAyx1h4RifWAuu57b4TWZGucJ6ppPM2Du_OtBiIj_SQE18iYpi5rgJHtDpVjLXDvBKBM
- 3cOs6aj95PC4LI.CjMrAmhSJ.UQqs.Igm8LQD4vJppvmtoJFCY_spVObDb3SPW.YHXY9RrOz1sZG
- rI5HbF_huT1lb58w4YYbzjoy3UyeKceTFH6OCUFsHHl7n_DyRUyRUDZATAzIwGWRY1I9cdPeCVEH
- vz5ElHSKnw0WaNLioSSLKWk4vJ.J_V0vajwYKUfAYSgX0.fyAVWzc5NW40bowTelqZP7qk9EKhtG
- VMZRfLSGpKAiOjCPIikk7US5jZOtFe6Kwq2h9Hzkd05IHV_gKqAwO_AYUF.jhPtmM1xV9Y19iSr2
- f2b5zY1ScSXdLSfdmFKzNplA10bMqPx.uKE8lUGwUfqzhg2kRctdUk8EozV4PfKdtleTwy.CwSq3
- YfCzSFrr1euC7DC6PcL3.JDapi0K1958_KZ1IP6tJsUVvm.4zWZEu_t8udLOZU1NBx3EtFERbT20
- EIKDdNCXw_HrA8Dz9Ni3WaeI0w.ui8ggOtoxQtqadXjOW8BMhUn1xo1IaKab3.GckXO.YY4xxrBm
- TztwhbrZ9U_c4SKCTgRdjztg9kwhulKd2JZhFVPFwKqLFnyP.b72bS4AYjs73GLBZFRQawuykI54
- _Nxt1SBHzy19iPgzphz7afxgPmsNIjiFC4Eb08y7_Kbz.YyQb_V6S6xpF94jaGCgaJro25WVCdl4
- HkTVLQkQO24LfrABmmY7QXaTqLZvqb5X__Gh1jArBJklANIWkRrnLvnF0Og--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Sun, 2 Jun 2019 16:53:15 +0000
+        Sun, 2 Jun 2019 12:53:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494405; bh=K172cq+NB5Z0YjmWFKPzhzudN0HRFKrT7HKe6u3/BmU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=LVo5p4TN1N2ORA84bDvRKV4uU7w90WE8lBTggB2/TnHkVuOt3PJKWGR19QMa6JPzTYv9uvQXA0blNCjy4EYp+fRCf20+JVUs4Hgx+UJAfP4R/2wKyuCpZICV3I2DqVpL1hFumeWctc+7gdI7mF+RiOnhrlMPLKa7De5QepEnSPnW2bWle/YI0H+S7aEIxNCgkoN48AKwxzm7hH3Eg4KNLHvBRE1pBbhEdYMqGppvACiZW4QRT8fvnDKCEntUZ0eWbuJJ0wgbvogcoRRSXIO6rvaSh5OTEscgPM5c9/2OlffsE8C0w2JrQ5KE3Y/CvjSOwmRxS7k1WQadPWk24pQaqA==
+X-YMail-OSG: y9JupqQVM1lcoiwfRXcZhtOXqOX0lYs_su_lc8vG9XsbUo.UDGLUo8ow0yWE4PI
+ m65dwKAsO2kGLXZKY2Q4qXBG629zcljCjY26cSpOKRFU0IOx.ePBYlZBmdzE7cUTXvCN8VbY23xH
+ GfxwKYJPqN.s5exHbwQqcRUK8gfl8wEpYMXHPwMCoETSv8yumq83b0whhoQRDFdkYnTdYykIZkIC
+ GJ_m02QuehoMN5CBxcNVs2z8MrGDyJQ.e7LFIhcqwIvgvyTOkuFPfCMZztq7bNeYNG.pR3qfWvet
+ fcl5.Sf0v_U7foBPh5SjwufqRPs6VI4aDhZlibxmLbTmgWlXxf2wis3EWVlZqoALvLv1bpSdSmWF
+ QgwUE6dCAoaRhKPwIpDA1k2PfoE1A27goblVB04PHlqFoiIfcbXgTqpaVLvHA832Uw8QSk1vfZ.q
+ NOjLsUg3lZmFuiM4BBUpY_hJ.iSBPAa3YebnWs8U44U0K26nqOmGFnTWdsQF7mBbWgDf5PC_5dKi
+ .OPRqgTexgGO3l2fTbAaEpvsYpfsh18DbKt0fr7dkKiDGdru8DjlbI1Fp7w8qAj7efIPSytc.aLj
+ OJ2J.n2SBex6CoTxIUr0HGMVeSWTJf9E_ugeRJ75uMpllqWHuRDT2rfBZtEwBL9ZIH89IjXCsWVf
+ sxc9h6ofuM3K_psm6ZDER5LhmRBy1ji2aN6q8iwDtXkutF3OhmoksNniXY5pDvzdBqvVEQ7L0oIR
+ qMN90oRlc2rCV.xhutppc3qPN_3n9jqsZNuQAtQ_gPpnktTUJa6IsLS2gTuaKUbT0hYmyA0Hx3E9
+ Ksb_B0WnNVzmvmV3eVRwEyKziHsZsrBsgM_XUjTanqTlDi7myOfKECnhAgi8G9HJlnD3e.W0JsW6
+ sX1jFF2ZfBigKaHGJFaG95T7Jo5Zua5sVPqwkQCFJBmqOlbvIe0iRbkUfgHjgZv8raG8g5VIacVU
+ nmTcBAWlNUU00cvOGQvcljSvUaHaoOT4eBwPe5URpxeo98St2D8V63LJPA7udNANBsg11_VwPrcz
+ 0n_RRMFYtT9WN4CgB889FkWovWLgCNBSAaSiRuarTTewudgicRcVvj9wrCHRJnZ5zOm39hJpsP4i
+ zNIoHuHtWj1KNge6iP_7A2WBLLldEdBF1WBWrKOzZMBbHINwdPUsw.KBRFgcV8zsqAavGLPrZkxU
+ U8wwWyzU.0xL.0l8flY5dsx8ERkf3HXfQgXEmji_misf7GzQY7FGy7bFnIqNwgn5VQ7kY4TXPYFu
+ qVEtygVslk2dNWzakj1d6bDpbp9vOYq6B5pNx0bWBP8fvyV_jBMYA6g--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.gq1.yahoo.com with HTTP; Sun, 2 Jun 2019 16:53:25 +0000
 Received: from c-73-223-4-185.hsd1.ca.comcast.net (EHLO localhost.net) ([73.223.4.185])
-          by smtp430.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 740888a1156cdff0756b5bee8a218310;
-          Sun, 02 Jun 2019 16:53:11 +0000 (UTC)
+          by smtp414.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 037f0ce5b74e0a8af50a9035f5845b74;
+          Sun, 02 Jun 2019 16:53:23 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH 35/58] LSM: Limit calls to certain module hooks
-Date:   Sun,  2 Jun 2019 09:50:38 -0700
-Message-Id: <20190602165101.25079-36-casey@schaufler-ca.com>
+Subject: [PATCH 36/58] LSM: Create a data structure for a security context
+Date:   Sun,  2 Jun 2019 09:50:39 -0700
+Message-Id: <20190602165101.25079-37-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190602165101.25079-1-casey@schaufler-ca.com>
 References: <20190602165101.25079-1-casey@schaufler-ca.com>
@@ -54,91 +54,37 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-LSM hooks dealing with security context strings should
-only be called for one security module. Add call macros
-that invoke a single module hook and us in for those cases.
+A "security context" is the text representation of
+the information used by LSMs. This provides a structure
+so that the use can be made consistant.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- security/security.c | 32 ++++++++++++++++++++++++++++----
- 1 file changed, 28 insertions(+), 4 deletions(-)
+ include/linux/security.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/security/security.c b/security/security.c
-index 69983ad68233..365970f2501d 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -698,6 +698,16 @@ int lsm_superblock_alloc(struct super_block *sb)
- 			P->hook.FUNC(__VA_ARGS__);		\
- 	} while (0)
+diff --git a/include/linux/security.h b/include/linux/security.h
+index dde36e850cf0..e12b169deed6 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -116,6 +116,17 @@ static inline bool lsm_export_equal(struct lsm_export *l, struct lsm_export *m)
+ 	return true;
+ }
  
-+#define call_one_void_hook(FUNC, ...)				\
-+	do {							\
-+		struct security_hook_list *P;			\
-+								\
-+		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
-+			P->hook.FUNC(__VA_ARGS__);		\
-+			break;					\
-+		}						\
-+	} while (0)
++/* Text representation of LSM specific security information - a "context" */
++struct lsm_context {
++	char	*context;
++	u32	len;
++};
 +
- #define call_int_hook(FUNC, IRC, ...) ({			\
- 	int RC = IRC;						\
- 	do {							\
-@@ -712,6 +722,19 @@ int lsm_superblock_alloc(struct super_block *sb)
- 	RC;							\
- })
- 
-+#define call_one_int_hook(FUNC, IRC, ...) ({			\
-+	int RC = IRC;						\
-+	do {							\
-+		struct security_hook_list *P;			\
-+								\
-+		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
-+			RC = P->hook.FUNC(__VA_ARGS__);		\
-+			break;					\
-+		}						\
-+	} while (0);						\
-+	RC;							\
-+})
++static inline void lsm_context_init(struct lsm_context *cp)
++{
++	memset(cp, 0, sizeof(*cp));
++}
 +
- /* Security operations */
- 
- int security_binder_set_context_mgr(struct task_struct *mgr)
-@@ -1951,7 +1974,8 @@ EXPORT_SYMBOL(security_ismaclabel);
- 
- int security_secid_to_secctx(struct lsm_export *l, char **secdata, u32 *seclen)
- {
--	return call_int_hook(secid_to_secctx, -EOPNOTSUPP, l, secdata, seclen);
-+	return call_one_int_hook(secid_to_secctx, -EOPNOTSUPP, l, secdata,
-+				 seclen);
- }
- EXPORT_SYMBOL(security_secid_to_secctx);
- 
-@@ -1959,13 +1983,13 @@ int security_secctx_to_secid(const char *secdata, u32 seclen,
- 			     struct lsm_export *l)
- {
- 	lsm_export_init(l);
--	return call_int_hook(secctx_to_secid, 0, secdata, seclen, l);
-+	return call_one_int_hook(secctx_to_secid, 0, secdata, seclen, l);
- }
- EXPORT_SYMBOL(security_secctx_to_secid);
- 
- void security_release_secctx(char *secdata, u32 seclen)
- {
--	call_void_hook(release_secctx, secdata, seclen);
-+	call_one_void_hook(release_secctx, secdata, seclen);
- }
- EXPORT_SYMBOL(security_release_secctx);
- 
-@@ -2090,7 +2114,7 @@ EXPORT_SYMBOL(security_sock_rcv_skb);
- int security_socket_getpeersec_stream(struct socket *sock, char __user *optval,
- 				      int __user *optlen, unsigned len)
- {
--	return call_int_hook(socket_getpeersec_stream, -ENOPROTOOPT, sock,
-+	return call_one_int_hook(socket_getpeersec_stream, -ENOPROTOOPT, sock,
- 				optval, optlen, len);
- }
- 
+ /* These functions are in security/commoncap.c */
+ extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
+ 		       int cap, unsigned int opts);
 -- 
 2.19.1
 
