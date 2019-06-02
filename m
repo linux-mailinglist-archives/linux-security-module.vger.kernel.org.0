@@ -2,49 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCFC3242B
-	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C9032430
+	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbfFBQxL (ORCPT
+        id S1727021AbfFBQxQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 2 Jun 2019 12:53:11 -0400
-Received: from sonic305-8.consmr.mail.bf2.yahoo.com ([74.6.133.47]:33243 "EHLO
+        Sun, 2 Jun 2019 12:53:16 -0400
+Received: from sonic305-8.consmr.mail.bf2.yahoo.com ([74.6.133.47]:38520 "EHLO
         sonic305-8.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727001AbfFBQxL (ORCPT
+        by vger.kernel.org with ESMTP id S1727015AbfFBQxP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 2 Jun 2019 12:53:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494390; bh=VEDYIM3R1NMqedNbn6scDMcxUUfpt0y9Ccbwl5mHx6o=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=BHxUuw7ir0TiQjAsxuK9YW3NBArfHpRoIYgkkYDalA+VwNbHW5P5XfspRUU+TiJM6TNn6DpXKTdWfcU3649JJ47WxfjJD5aNMnS7rXqtqY3XyaCUK9sf7joPDXctgmRSvlFAftcXuS8j/EU0yCkIlG4k2isGSvPKh1UXY9UTDmyUOEGa1ldBz0xMNhlFIbU3R/aBTqVOT1yjp37laDrQeSGpRkiLFjB7AVaz03rNR0Ur+LruUvqmtNeq0m8aiu0y60vJvciSXeBMVGGHWWZ/etXMj1/4Aa8EaHw+XNlcLngX4EtTIC70h3DqR5ry4keKgngoqELmE0xUAFE9rgxczA==
-X-YMail-OSG: UnHewdQVM1npGHJz0_Zujs2p_zDfigqvXyaTFxBdwvP_cdShwwsURiVO7Q7geQG
- bVhgjKFJ1mEZpOsi24UHrJtelqmVIIhvDdtiyBMsZr0FE7nU.VGu3O09fIOyyxzJiZZX2JyLrvNM
- oJpDauGX1V27ZEmUx.uedbL7tPzRG3QqspWCIR9YBYD.kEuS5VJTnpH_qGcufdE76a5nQy5EmNCw
- 2igF8G48Ievc_b4_3VDp6QYkUbMVLEzLL1eRtDmLmeVE.e_YbykudhrOU.pIebB609Q_BTR20j1m
- _IJq15C_gGC8tAaLKJu9S3CgyGk2LWUQc9rNvm5SV7IJgSB_BhBATob08Pa6pBSU8xFcHh0T4qBn
- 63obH6R9HD_x.w.wVzFTr3vxVAImjqzRg1J1r0dtYCiOOljLyhbvkB9xoP8BaNOPDTwvJ6_2dCmW
- mczKnkGtZslOI4JJjzG85UuhjBgX1QVYIjSbqB9Bxw0lkZy3jO.1lYuV3ubMbzbmNs77pFVdk1dl
- XxVFTijrs.YPdMXRJtfDF4s5E.1UNAzta6VUkmMKNZMARHm5iGQ19_w.9hwPF1rHtBlSi3c7dnOR
- y8X6lTrkcnkQcPyBe6hp0w.1FSpsfMQyp2KYxLnHfqHPIvlrbEJkEX_.YpR_r3w5ivY2b.gekLe_
- NNqFqGmOyHSE855QV7HNwMt2.DN5SOmVrWy6tMrwtTbSl8urMinWRZz8ytCKx6mqowrwWsClFVYg
- Dugkk4LHo1j9MI1PGbjYgbveLbtsAwbQN788aGaZjK9DW6qcSI38.P15TGU150_sq0d49jF5.5Ke
- jCk3ng0yv7bBFNUIs35Dg9L8YfYNHlPMFqsVmKGIh41DbSwVAI5zB_S3y1qk23qa7aDLR0n6jaV1
- m1HytTUZPWiISpyYBQYwroAbDZO9EXqivQS1CcT8pz9IysuLlnvIyAi1DbNmZVrLYeF14seni9WV
- Rlg2Yp2Dntn3WYwTlZbs26QGm1Z5pW46TC33_XCmwA.3PVQ1xLWpHhEtQOg9b7p7DfTzlVeFP5y6
- UV22nzMVYY6aR31qVv9pCejPHL1TyeMlkn6TUXUApQkKrU9xeZzqMOXFglImEOHz1r44hOCN18pQ
- rcpoYvfF.9XWvEYGxz9_hiBXQKnfXDtv8mxWyfFMA04fsvwu3yg2TlMYYyBb_EbGdbI3OPK9TRe6
- Mv8R7X1GjMMgVJ5X4jXiGgbaNF8W4uPZ6UG7kDi6oaPJC8_m.xMSfp6TSHYtzxQrCKFuTSHyA872
- xOx1dORDTcB8GI6BD1bX2D7JkZfCHVikR.kfUchSu9b2FjQfTXxzKGNQ-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Sun, 2 Jun 2019 16:53:10 +0000
+        Sun, 2 Jun 2019 12:53:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494395; bh=zfBzq44MmcEq1Uo3O/oH4Lkcr97+L8XoyMvRBXLr+Uw=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=pSLViKX9XwzPWHDeQbs1mCWAQouOX0d5VIV6cGG7N0nfI6Kh/nAkxbkdaYKj8SB7UOPCHHI4MBcL1gcCVjOCCxkoGTq3fELERr4REGSl9hyTjBD5ojbyOpZAgUUZv1GHzoQzLjQ74s8ww6ai8lVpUZo+NY5I+fUIYyqDknR2jI6pZ6b7M+5pCuwlEFSN+JpGvgZzjk2uIr6Y569gXUh/n+PEog59YYeLsaZcNss/Ti0eecX0PLnr+Zi6JS+Cr/x2fhE3piu/y24qWwZToA+Mfe9S2Uwv82lcuyZ8rsEiFlpFsN4zaC9VDknp/DqB3KrZ7BdT0S9+JLQ0nuc+gflprg==
+X-YMail-OSG: WVEU2ukVM1nah2BCHatiKixJPmV9NbXf8.JwkjTRF2s5rdTMYALu74dLThq7Uf9
+ JLH74nS.Ts_ic7rfUhKmAHBGozpSuGLREwmndYZAJ6X0yFiW4D_sK3RF7bldQIKoKGxlfVxaD4nc
+ lbblB6ZMxCnhsVlN.DCkrn2n7CJRYEqaANyK7fFn3pd8HvYxgSQtny2IpPhfCaQeUNoWsWgfIHon
+ DHVNoxCU7LuAaMR1p2LWzjUCGZ1mlMA7uwNc8gJ4EMeg8NQnD3lCuNRbjhEPox83RCEkSyTqdVTz
+ 7hz7QU5ySc2vXRNMKk42WVVcGKuo4BNQWIOaqfXO2OeD5.M.5vhH8JgpeFH7LbQVtUGncrEVn8XM
+ goZU0VZIpK921c1rx54bsVcGx7lVVuOBeu_OftjAYvq7gMZy4JkIO9JM0qf1a4S5YKsMXM1fsIJ8
+ LB2oFS54SWQRSKFxyhRyStRGI2GFgVswL6LZUh4TxQHScurFlLWZnUJCsPvhTdp2nxOvATTWCwvJ
+ U1a4DukzKAyx1h4RifWAuu57b4TWZGucJ6ppPM2Du_OtBiIj_SQE18iYpi5rgJHtDpVjLXDvBKBM
+ 3cOs6aj95PC4LI.CjMrAmhSJ.UQqs.Igm8LQD4vJppvmtoJFCY_spVObDb3SPW.YHXY9RrOz1sZG
+ rI5HbF_huT1lb58w4YYbzjoy3UyeKceTFH6OCUFsHHl7n_DyRUyRUDZATAzIwGWRY1I9cdPeCVEH
+ vz5ElHSKnw0WaNLioSSLKWk4vJ.J_V0vajwYKUfAYSgX0.fyAVWzc5NW40bowTelqZP7qk9EKhtG
+ VMZRfLSGpKAiOjCPIikk7US5jZOtFe6Kwq2h9Hzkd05IHV_gKqAwO_AYUF.jhPtmM1xV9Y19iSr2
+ f2b5zY1ScSXdLSfdmFKzNplA10bMqPx.uKE8lUGwUfqzhg2kRctdUk8EozV4PfKdtleTwy.CwSq3
+ YfCzSFrr1euC7DC6PcL3.JDapi0K1958_KZ1IP6tJsUVvm.4zWZEu_t8udLOZU1NBx3EtFERbT20
+ EIKDdNCXw_HrA8Dz9Ni3WaeI0w.ui8ggOtoxQtqadXjOW8BMhUn1xo1IaKab3.GckXO.YY4xxrBm
+ TztwhbrZ9U_c4SKCTgRdjztg9kwhulKd2JZhFVPFwKqLFnyP.b72bS4AYjs73GLBZFRQawuykI54
+ _Nxt1SBHzy19iPgzphz7afxgPmsNIjiFC4Eb08y7_Kbz.YyQb_V6S6xpF94jaGCgaJro25WVCdl4
+ HkTVLQkQO24LfrABmmY7QXaTqLZvqb5X__Gh1jArBJklANIWkRrnLvnF0Og--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Sun, 2 Jun 2019 16:53:15 +0000
 Received: from c-73-223-4-185.hsd1.ca.comcast.net (EHLO localhost.net) ([73.223.4.185])
           by smtp430.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 740888a1156cdff0756b5bee8a218310;
-          Sun, 02 Jun 2019 16:53:09 +0000 (UTC)
+          Sun, 02 Jun 2019 16:53:11 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH 34/58] AppArmor: Remove unnecessary hook stub
-Date:   Sun,  2 Jun 2019 09:50:37 -0700
-Message-Id: <20190602165101.25079-35-casey@schaufler-ca.com>
+Subject: [PATCH 35/58] LSM: Limit calls to certain module hooks
+Date:   Sun,  2 Jun 2019 09:50:38 -0700
+Message-Id: <20190602165101.25079-36-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190602165101.25079-1-casey@schaufler-ca.com>
 References: <20190602165101.25079-1-casey@schaufler-ca.com>
@@ -54,45 +54,91 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Remove the getpeersec_dgram hook stub. It's unnecessary
-and disrupts stacking.
+LSM hooks dealing with security context strings should
+only be called for one security module. Add call macros
+that invoke a single module hook and us in for those cases.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- security/apparmor/lsm.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ security/security.c | 32 ++++++++++++++++++++++++++++----
+ 1 file changed, 28 insertions(+), 4 deletions(-)
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 24b638bd4305..76c409737370 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1094,15 +1094,9 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock,
-  * @secid: pointer to where to put the secid of the packet
-  *
-  * Sets the netlabel socket state on sk from parent
-+ *
-+ * The TODO stub interfered with stacking and was removed - Casey
-  */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb,
--					    struct lsm_export *l)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
+diff --git a/security/security.c b/security/security.c
+index 69983ad68233..365970f2501d 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -698,6 +698,16 @@ int lsm_superblock_alloc(struct super_block *sb)
+ 			P->hook.FUNC(__VA_ARGS__);		\
+ 	} while (0)
  
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-@@ -1202,8 +1196,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
++#define call_one_void_hook(FUNC, ...)				\
++	do {							\
++		struct security_hook_list *P;			\
++								\
++		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
++			P->hook.FUNC(__VA_ARGS__);		\
++			break;					\
++		}						\
++	} while (0)
++
+ #define call_int_hook(FUNC, IRC, ...) ({			\
+ 	int RC = IRC;						\
+ 	do {							\
+@@ -712,6 +722,19 @@ int lsm_superblock_alloc(struct super_block *sb)
+ 	RC;							\
+ })
+ 
++#define call_one_int_hook(FUNC, IRC, ...) ({			\
++	int RC = IRC;						\
++	do {							\
++		struct security_hook_list *P;			\
++								\
++		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
++			RC = P->hook.FUNC(__VA_ARGS__);		\
++			break;					\
++		}						\
++	} while (0);						\
++	RC;							\
++})
++
+ /* Security operations */
+ 
+ int security_binder_set_context_mgr(struct task_struct *mgr)
+@@ -1951,7 +1974,8 @@ EXPORT_SYMBOL(security_ismaclabel);
+ 
+ int security_secid_to_secctx(struct lsm_export *l, char **secdata, u32 *seclen)
+ {
+-	return call_int_hook(secid_to_secctx, -EOPNOTSUPP, l, secdata, seclen);
++	return call_one_int_hook(secid_to_secctx, -EOPNOTSUPP, l, secdata,
++				 seclen);
+ }
+ EXPORT_SYMBOL(security_secid_to_secctx);
+ 
+@@ -1959,13 +1983,13 @@ int security_secctx_to_secid(const char *secdata, u32 seclen,
+ 			     struct lsm_export *l)
+ {
+ 	lsm_export_init(l);
+-	return call_int_hook(secctx_to_secid, 0, secdata, seclen, l);
++	return call_one_int_hook(secctx_to_secid, 0, secdata, seclen, l);
+ }
+ EXPORT_SYMBOL(security_secctx_to_secid);
+ 
+ void security_release_secctx(char *secdata, u32 seclen)
+ {
+-	call_void_hook(release_secctx, secdata, seclen);
++	call_one_void_hook(release_secctx, secdata, seclen);
+ }
+ EXPORT_SYMBOL(security_release_secctx);
+ 
+@@ -2090,7 +2114,7 @@ EXPORT_SYMBOL(security_sock_rcv_skb);
+ int security_socket_getpeersec_stream(struct socket *sock, char __user *optval,
+ 				      int __user *optlen, unsigned len)
+ {
+-	return call_int_hook(socket_getpeersec_stream, -ENOPROTOOPT, sock,
++	return call_one_int_hook(socket_getpeersec_stream, -ENOPROTOOPT, sock,
+ 				optval, optlen, len);
+ }
+ 
 -- 
 2.19.1
 
