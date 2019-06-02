@@ -2,49 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAA332424
-	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BDD3242A
+	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2019 18:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbfFBQw4 (ORCPT
+        id S1727007AbfFBQxI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 2 Jun 2019 12:52:56 -0400
-Received: from sonic317-38.consmr.mail.ne1.yahoo.com ([66.163.184.49]:44332
-        "EHLO sonic317-38.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726988AbfFBQw4 (ORCPT
+        Sun, 2 Jun 2019 12:53:08 -0400
+Received: from sonic303-8.consmr.mail.bf2.yahoo.com ([74.6.131.47]:32871 "EHLO
+        sonic303-8.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726789AbfFBQxI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 2 Jun 2019 12:52:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494374; bh=gEWZCQzFlqcooAYwsHr2Nt701eG0L+I40RIrEVg4i3g=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=fmOzxFWVFWJg0d7+w8ZCOEzSMh6ci3AY81F2UlbLYeODgRxTtkK2ZaIhr7KjD/boLeWreTFeqgg4twj2XHUdVbHPalO2gimBpQxWPFFIo/CxipUvetQDNXGambsmjmtFpRqnfExl8Z9BZIPSpmZuCXNsxMg+5fsDP3Wm9+ZR0RThLYg78KWZ4hRsbA0rmeVid9a0S4rLNcIPoomY3TNjl7Zo5hSgURyv+gtwRilvlQEQQSvJQP0yEByhDplEM4rpzypdDkOqQ3ARsNhfn3xK2556fwD2dvnstqVkBHckV+IjRSYe4abaoZhDhla8bijQKSo3FGodssGTYp7ntrz6pQ==
-X-YMail-OSG: g0MlfR8VM1lehV9zPXYdUiJ3UQQp8wDqMmpq9WmNFhgnPYjuDBWpZZ7DAV2KS5k
- YAJJ7i7ESfKQsjGeEcVNy2RtGPfITohxrVlyw8XKTO5yhcMv90S44njieh4myXjA3nuFDsKo00z5
- 5D9K81X8DI0LMXKJkcfsqFYbRJlg94pAyfEumMn91C1WGGf7wVm1Q9BUvTonA_XlTU.NEvdw6vVI
- nstPsV96ZTw9ihUdZzMgQlNIkLOA1lusp.sKlKT0yaqWYFkGF.o8rqgrcaI2Wxbjj3fHrArCa_ER
- SH6nvFuNW.dVZSdvGNlTLZ00lEqIom2I63KhzmaCCLUc4bF8gpHittOhqvIGwsvfGbsR_xl0zLsm
- _VVnJheF1NLN1F6BUUJ_Hm1HYtG28crmajThjpIkEsbTiGkK90_HODxCj1Lwmd8zeQnwAPOdvrnf
- hHSNx97daDR5Zg2v3b_ONFh7.dwofTBKFjDUsSL4lShFNbG5oU.RnC3Fz_ylXVkBDiIuGuGrPAWk
- LRO82DOrZ4GChIyg8vH3ApNB200ze2wYF0ktgiYuVnl6oGZcvsmN3vKyQt6Q0ZMS0rgCzmHiqNTO
- 1eOfP_i0cjk894R_CjjavnMv8inL_LlTmB5vykXMMQO07m.vldmBP9g5gcpUMCRAyt5JSZ13J7AM
- BD7RAkOmDf9s2w_I10FhfyOByIPoJf5MBJDilR.gl5.7_JfhZKsx5HCKXy5jg_dFIsZqTnpSdTRm
- CQzj7mIaPehV1g2wmMogfbcCz..PpyKppnIVokoE5GGY8FM2H3prlsoOEoncBVRNWouDEx4FwwCl
- K7pl7sxxzjh1LSPVoqtFF1ynlwivHoohW_gOsfugNBg1Q3eU0NpB5QBEM_Z29eFHNXqxVE_waVyC
- 7O5BvhDy22dMaFnNjCrc_W0TbskJ.FByOuUZQE.wR26CVC2Ar8mzkNBPXf.udMT1z2TDDUEr60Xi
- 7r1K7x2pkgwwLlM56DhvaASEIlPlj6JNzOGYjIikIe7fNA_hu0sWdL6NpEwoOdCzjz1FbWXocuP3
- iCktmW7haCnQkkh_4LZVM2krlJri6dUxKE1ned1APM7NW2Z_0HhYATF29fJvl5lwWgDKRkDuQI_H
- P7QBkUNLCm4.kqqLpDqiINMsGMtgqljaY.AZPW6P4ovRgfsSwHWIcJKuz.yM3wCIYSY1fw4ckAMp
- nvVT3GxdSkqkcHxmUUck690vB7lREP53jGMHs5CK._1F5rYbHkOgqkg_qr00bsYSJAV0A3QHGp4p
- xVpvVMA35YWPOYBvUw1E4d69gl1GG2CSL9YJPlA4AROCzOQEW_v3zAg--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Sun, 2 Jun 2019 16:52:54 +0000
+        Sun, 2 Jun 2019 12:53:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559494387; bh=cOt9caKD/749IXNAg082OZdZ8wyzsShJ6Dne6L26IXA=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=V/yfTB4Bvuf0mleZIpJzrQbmnlRVqPNpn1vpSX2seKqKsA6sh4x5kiOyLcxV8aGbWzWjsWCcwbBni9uCVYv2lWQJLVAk5xauFGUKrdTtq1cE7RNsCGrRd6Le3zX57/AVmqJrY+OmJ/zNOQb4vlWjyOuFud90jOPYl9JOW9+E3kyBNs+jC06o8K8WNQrS7/5IQ5TgMDsZs+nYRnyQX1rYBgK0GUfNTmgjL1jVjlmyib6CzN+VTr2bT9HhBrzDmcCfRxYp5tKHWkF299CLRUy8Qd91WyOZfxCl53phqI5EktXsZ/9Vwhxhz8vHl0luiMj39aS74Pr+zcOLlBnUte51ZA==
+X-YMail-OSG: KpTs0qcVM1nEUPkWDpaRfdUIoTk4IpSwXhHqlPf_542uJwcivoGz5DWGNioiV1l
+ rHYD6Vs3l4pxv4ZSqRmWQpXR3jViQWTEXeNUbl8uY3tUWw_CoT9gK.53Ll5F0O337jKg.5cQ4jwf
+ B5J_ZQpvUB.DyxWyW9RaRgU1_T9ECw7vBydG537Z1jxRTlJqnAUTEBXpnR_VVJQHh3XoYqEvg42x
+ 2Ru9Qphvyq5b3h.1gjSF0anjSkMQy4UA3Frx1YOyMqEBgDVXl_fOn22egl54MtT_gwwO32hrrO_q
+ gtYi.fxNciz6.T2KnUilGpsHXzJiBFk8rL.sR8jK.WIk8.NR3msjgxR_jlpoVFbCANcDLJNqeb5G
+ HPgXy6HfAkfapKmLn7RxUVwDt9JfmR.4YMyPMFPmayYxNAIsBQWqsypK1AA9Sg2._jQ7Y3B.FQBE
+ CisPouBg_wt3.r0LPFHdIavpxGKOzW04BNvCAkWrK2cv7ywaj9T8dSU242fDKKn5IH0YkK0LG5jA
+ zYJlcxaDd4pHoA2me6pYNtWRXq2WmKeksu43PLYvlFoJuNKQUCYkdqY7eprc9IvFV6hvEaPiFqSf
+ ltIBQv445VRB7XK_FUKQ7Arnx2vhl3aMlhMM_RU39yhsjbv43ZRgRQ1k__w_2TbDZHQy6zNdOPmu
+ 2NM7rhkek2naMlPcUhEp_..H8WLlOzPlpyZQWdvSqgnDxqck8DSiT4TmGjsChFufvS62QEPHWJxm
+ srtLELQx3afciA1AaNfUlD3aZTvrdjS5LdQHVrprY832SMOFrhA2D8m0RL32.fomRiFQyofZkQ1N
+ K2ArVpC46bFK0xu8__4axMFEgApUd4a2tUccsNy594zyPdKxa5mlw.7vT52yqZuiCPh41IFYGJ79
+ NSQGVSeYLHOrp9nbA5xIrmXJGsUo4iveawMjihaLuyyOeArfT6MASQ.Nk9wguyQyU2yvXowf4A5v
+ laGSHNDanS_sGvIRuEMq2cFLwpC9W82pgSrYoOMUoNVskd9ZWxhPil1zyGxn7OQB6kjwAt2DAXQX
+ DL1zRBJS.KWbCSuCAOecenHxW5yfqcW1NCQ50pFOAmUxdUJE8ImO_o98Orz_P9KUZP5gQg29S8PI
+ 9x4AifuCDMVruDD6WvgIT.92gU7fgJVekjmrjC2Un1KeGF0flxDExX8zsgJ9gj.P5qP0TGDHnzIg
+ Gz4o8F7PYDXps_wxv7f7Y4VaCcz6oxdxomifg9PU8.Ya031X_rBfQ6U.4kctpXBNQ6zuuaBtU1x6
+ sAb99UY85681W_z8.X1HkxLOcUhUe8mcUW8mgjmtbZ8_YxxHVUzYXSK5V
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Sun, 2 Jun 2019 16:53:07 +0000
 Received: from c-73-223-4-185.hsd1.ca.comcast.net (EHLO localhost.net) ([73.223.4.185])
-          by smtp409.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 0c0e3da8255eb26ca342a489fa1b8a19;
-          Sun, 02 Jun 2019 16:52:54 +0000 (UTC)
+          by smtp430.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 740888a1156cdff0756b5bee8a218310;
+          Sun, 02 Jun 2019 16:53:06 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH 31/58] LSM: Remove lsm_export scaffolding functions
-Date:   Sun,  2 Jun 2019 09:50:34 -0700
-Message-Id: <20190602165101.25079-32-casey@schaufler-ca.com>
+Subject: [PATCH 32/58] IMA: FIXUP prototype using lsm_export
+Date:   Sun,  2 Jun 2019 09:50:35 -0700
+Message-Id: <20190602165101.25079-33-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190602165101.25079-1-casey@schaufler-ca.com>
 References: <20190602165101.25079-1-casey@schaufler-ca.com>
@@ -54,68 +54,28 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The scaffolding functions lsm_export_secid and lsm_export_to_all
-are no longer required. Remove them.
+Fix the prototype on a function stub
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- include/linux/security.h | 43 ----------------------------------------
- 1 file changed, 43 deletions(-)
+ security/integrity/ima/ima.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 9d8115b3d679..dde36e850cf0 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -116,49 +116,6 @@ static inline bool lsm_export_equal(struct lsm_export *l, struct lsm_export *m)
- 	return true;
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 8b109ad0de2e..7ae41218eb07 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -309,8 +309,8 @@ static inline int security_filter_rule_init(u32 field, u32 op, char *rulestr,
+ 	return -EINVAL;
  }
  
--/**
-- * lsm_export_secid - pull the useful secid out of a lsm_export
-- * @data: the containing data structure
-- * @secid: where to put the one that matters.
-- *
-- * Shim that will disappear when all lsm_export conversions are done.
-- */
--static inline void lsm_export_secid(struct lsm_export *data, u32 *secid)
--{
--	switch (data->flags) {
--	case LSM_EXPORT_NONE:
--		*secid = 0;
--		break;
--	case LSM_EXPORT_SELINUX:
--		*secid = data->selinux;
--		break;
--	case LSM_EXPORT_SMACK:
--		*secid = data->smack;
--		break;
--	case LSM_EXPORT_APPARMOR:
--		*secid = data->apparmor;
--		break;
--	case LSM_EXPORT_SELINUX | LSM_EXPORT_SMACK | LSM_EXPORT_APPARMOR:
--		/* For scaffolding only */
--		*secid = data->selinux;
--		break;
--	default:
--		pr_warn("%s flags=0x%u - not a valid set\n", __func__,
--			data->flags);
--		*secid = 0;
--		break;
--	}
--}
--
--static inline void lsm_export_to_all(struct lsm_export *data, u32 secid)
--{
--	data->selinux = secid;
--	data->smack = secid;
--	data->apparmor = secid;
--	data->flags = LSM_EXPORT_SELINUX | LSM_EXPORT_SMACK |
--		      LSM_EXPORT_APPARMOR;
--}
--
- /* These functions are in security/commoncap.c */
- extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
- 		       int cap, unsigned int opts);
+-static inline int security_filter_rule_match(u32 secid, u32 field, u32 op,
+-					     void *lsmrule)
++static inline int security_filter_rule_match(struct lsm_export *l, u32 field,
++					     u32 op, void *lsmrule)
+ {
+ 	return -EINVAL;
+ }
 -- 
 2.19.1
 
