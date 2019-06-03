@@ -2,49 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FABF33A35
-	for <lists+linux-security-module@lfdr.de>; Mon,  3 Jun 2019 23:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F0C33A60
+	for <lists+linux-security-module@lfdr.de>; Mon,  3 Jun 2019 23:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbfFCVuu (ORCPT
+        id S1726270AbfFCV5R (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 3 Jun 2019 17:50:50 -0400
-Received: from sonic302-9.consmr.mail.bf2.yahoo.com ([74.6.135.48]:45828 "EHLO
-        sonic302-9.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726652AbfFCVut (ORCPT
+        Mon, 3 Jun 2019 17:57:17 -0400
+Received: from sonic305-9.consmr.mail.bf2.yahoo.com ([74.6.133.48]:38111 "EHLO
+        sonic305-9.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726140AbfFCV5P (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 3 Jun 2019 17:50:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559598649; bh=VhpqopIotudNuCiLKYtTB/ElDm9HB0G0nVPd3S5kTaE=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=YWqY1U0gQpf8Ln4u/mRoJP2mctY+WC6farf2jIe0vRG7VJimM9aeFWxtTILRuDlP5sq4CUyE65fihRjEDo2SPlO2/CnXfh74+nc0heIHATEGPaYMC7+6cLxc9t4IdaVNtG3qE0MINMRsHPjLWTmjMBMU84hf5hwDah/s3Qihux3rz8C2AxAIrTQJvAAPTxfTxpdURszejuW0Ya4zgjKDbzSt8c1zoFCn8zKRAvGGqKHyY8yRaCN+VUmdMGNxjSWFWOhkTmvgJAqtbrFtyYoBdOzcuwrhcuNgZXsotHbQ2Ar4K6hoXhaiZtOsSYVfjjC5KMwCFg5m/7CI5go/2scrwA==
-X-YMail-OSG: Lc26mNIVM1noavuX5n_RtsofjV41Db_Ii2wtvB5qh8rksUZJovRNZlxtFetFtQa
- hWcH8eQMuQo2WVU1LUYObpJDtSmRxbyIpFhBqNt9QBWJThZm3nxZmrAaNdUaoK1SnFpzlx__n1Jj
- 4Go1xiCk_YYXx_3s1DXjVJro8Aol0uotQQTA9_hSQ1H4hSZIQmWHcwSCiBfYLDFz_4JBq_x8g5Fn
- aflmefKWEBqmtBrej2IHR74cgRfT_V3JM9Ji4tgOd.aSVXyw_mkmKYiFM684bPuKlVkwMXRRmdAj
- _ozwU2VUJxLFLv7f4DO6MU5pL6nb3gZyS8dpN2twnwXStzai03yhrUK9_rD2m01a0JXkMEvIY.aE
- vyNtoZTRqPaYuIrZLxOCaDHmr8BrQi4UA3YbJBLdjvfR.kkEJCQB8YCJH5NCDIsDorMr_STPs70x
- a7qUFBJHZ4zzvdbXLdX5wbS9vJiOU1d_6.Tv5AQifHq_.0v7RDw38.Udqh.zjics8pahTr9Urmi4
- Us.VX2ve2gnSe4mrblh7j4udEJe.hVRaHa099SnB8mw0wkjkMBDGaU4HGIyhQxKy1spJZ1vbnRTj
- oDJUTYtzhpVBax1_EBrXKLxaoeaBREKQT25MpmBffIhZw5tsjJkzgw_yvPnMlv555ilCMWlnOWxU
- 0zbWDdY2f3NrWMnF.l_4qGgR0xdVl0kkGP4BdwI81vVF8qQJZKUjSAbcempTcZqP.f_YvIxSSzwC
- dbysT2WMo5ltD950AKWw1r58hdZjAH_85Ml.EmTpsda546jUo9chCD94ibLpm0B1_77C4ELxY5vt
- dyJreuEV8.vQQc2v7wsz8vu8hzB0VvSvS1tmQy0mTyo4HYqirE9y242DeixBKsxMaprb4s.dAnTO
- kggvlLv0zsfHSd8xDbWtMH5hUo_A2bTB7vDzPRJweeMyyoL1pJCzDJfIZua.QvzpDWfIA1JF_Fxi
- UHEhJomKM2qOev.1vxAxfIajgFnqrLxJgxxKUzuFSH9T8Nksf6ge058MPQFLjzCwUxqABdhj8a.8
- Rb8kGz47uwNLSHS0p2mpdqcYXkrt8ACUsO_67j_HRiACY33OxdVzC9rGr5n_zqacsNWTmSuaDgwH
- kZp1ssHk2Eisk3u1RmPADN0mZo7kSa6kXXIuZy32mFJ.HKx5Phznf4p4w5uM1nQTbpgNIAz2h3OS
- MPO_f_Gx8y33mNjvlp6SvAIC1jB9Eppx.47C5KvisXX1CEX6214SHtBMvH9KzNLXldR8svcd9_wU
- pNPeObqAtkA--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.bf2.yahoo.com with HTTP; Mon, 3 Jun 2019 21:50:49 +0000
+        Mon, 3 Jun 2019 17:57:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559599033; bh=MqYBVS0X2GKN7bu5a6b7FcKrqVEbRQaK7PCjon7JIvY=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=stUhYzO2ywz86JSYnKxaRaxrzNQfWI38oT10/Pq0Hy4Q/4jW5Kg9LNYq8+Ll9cghS5vbHmQlrjU7Qip/CLlMakbj8ae7BBXFxbmxKE9o+nu5QXG+l/lBwvO+ztLAUzWJi767gbtwHdHXGqbuv9w9NPPU1HbLp3O9YvBF6m45axppRg+HyaNj/xgcH8kvVMBkRryFzYpOp788rDazPd8ZsOhy5MYhGAy4zMZVFMtNNFs5ZTKyulybRbSA8UapOFghkknhtY/Xw0lSN4gwfUx/HxXYDAEu+6euUzrRKvT/uaBgh+4ymbPTEh8WO7xe21IxH9JuXoZexw+Ol3QiF00YMw==
+X-YMail-OSG: 0TEXN78VM1nnUftZhPli84ZBCo1vsOKsSAsggFjC2k47SOskSOxpp29vlcLSIjw
+ W4ZKf6R0BAPvdH5oVAYttbicqSWSkA7Yhp4EjA.tlE0DsXpof.r5Ezk1z3kQf4mwJBIMoHg6FsHE
+ L8NiESaps9iu9.zJ7lAdrSbrzxCWDTgFpRz52K.KA2OxMu6dm0Re6EwWj2mYVmDRkd8_z_KRBtcF
+ 32C_52dGTPczrJbzGnupySlyQBLmWnabuy5tX0zregwvOq8sVPeO8yNPoo53g4mNTnUNeTutlm1X
+ aymLSoZOTRiDt3ERVKHexnUZ8aqQvRmctNPAclZvHfxV7dSFJjeSD5JXg39op8FKq9t44_A4JDUa
+ nY3TFCmQJVkBnP.Hv1zJWfmJF4ufLldh1Pa.BH1pKvdpKzvIzI7.HgoqxSjUTEDghYtLQafDEnhy
+ S_KXekPoDMfkHg5OkKVqviqwBAicNwWd_z5V8OT5T_E9tc1K1aMrC1SKPus6iGp5LwIONkyrp5Oz
+ AXJBcv.xCVuC17tKiGT6ylnujaYB5aYWa9hUnDfKg3XX8JwfXlUtj70kLq9zIQvOrYyoXRr1WsT5
+ MGdViNTojtGtLkc1pK0M.4N7jwrcixBtHIjjDFpeW7jV2QnkO.2TXhKy5bCpPNCfno9MUYyNziyl
+ CgUR4dMmQKAYxS7iAs24y6sACZZ8x.9twFuVBkEsBOwlYWe0fqJsfZvjVzjvxLM9NYpOUqqYRukg
+ ZsuMMPx9adT_1Gw9yub_fIo7MigplqarHim6rrKvNGLY9bTEbIJ2VYLMhbyOOGBfbWkE979eqxvU
+ AziE9h1bXzFddgtMgtRNM2YaaRTKo_NH82LVrUfRYtD3hITaGefGtlO.oHsR9m0vSMgNx41JLzVw
+ mCTA2ZVJM8TzvLe9so_Nqkw1wnv5FfaiA8eP3lNsrKAF4O8v1nU6l6UWvKBV16bw.kf27JJcso1_
+ MkTce0Bj.d1Ij6SWNk4yqOa9Z5dzNRcal.U.MOdHBGUiOZlOlmqjpAZ1b8E07IAPGEeXL2WOUjpY
+ 0W07AYGLcmry5HCtHgz3VKgUKIjM.okcw.GeCK5cipJCezX8ZkasVa2st763rjmcQNQ1ylHDxANJ
+ 2nhySWCC9kXcA4RG82OqeJb7vQ1TqKrS94dMOC7tLZHjQCyz3ndtkfHQFs_Tf.fz93skgK90xFVI
+ yFednVFW37epo57JL1YfMRuoFD7dvZuBtoSCSYJHDtAKxBgQ8nFA5Uz_ZlwcLfXxNpz7CqyY.2Z3
+ moIFZesKbJbOabGia
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Mon, 3 Jun 2019 21:57:13 +0000
 Received: from c-73-223-4-185.hsd1.ca.comcast.net (EHLO [192.168.0.103]) ([73.223.4.185])
-          by smtp415.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 3fe81df611a3b892f9504b6653dc7653;
-          Mon, 03 Jun 2019 21:40:44 +0000 (UTC)
-Subject: Re: [PATCH 25/58] IMA: Clean out lsm_export scaffolding
+          by smtp415.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID f3ad74a48ed0e943b0ad35d50423f031;
+          Mon, 03 Jun 2019 21:57:12 +0000 (UTC)
+Subject: Re: [PATCH 46/58] LSM: Use lsm_context in release_secctx hooks
 To:     Kees Cook <keescook@chromium.org>
 Cc:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov, casey@schaufler-ca.com
 References: <20190531231020.628-1-casey@schaufler-ca.com>
- <20190531231020.628-26-casey@schaufler-ca.com>
- <201906011905.75B11DC86@keescook>
+ <20190531231020.628-47-casey@schaufler-ca.com>
+ <201906011920.C5CC2777@keescook>
 From:   Casey Schaufler <casey@schaufler-ca.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=casey@schaufler-ca.com; keydata=
@@ -91,12 +91,12 @@ Autocrypt: addr=casey@schaufler-ca.com; keydata=
  wQ1QL4o4t1hviM7LyoflsCLnQFJh6RSBhBpKQinMJl/z0A6NYDkQi6vEGMDBWX/M2vk9Jvwa
  v0cEBfY3Z5oFgkh7BUORsu1V+Hn0fR/Lqq/Pyq+nTR26WzGDkolLsDr3IH0TiAVH5ZuPxyz6
  abzjfg==
-Message-ID: <ca667eb3-bf5a-4031-43bd-4b7178af233b@schaufler-ca.com>
-Date:   Mon, 3 Jun 2019 14:40:43 -0700
+Message-ID: <ddf30b32-d05b-c1cc-f49f-dd5679879bb4@schaufler-ca.com>
+Date:   Mon, 3 Jun 2019 14:57:11 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <201906011905.75B11DC86@keescook>
+In-Reply-To: <201906011920.C5CC2777@keescook>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -104,26 +104,25 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 6/1/2019 7:06 PM, Kees Cook wrote:
-> On Fri, May 31, 2019 at 04:09:47PM -0700, Casey Schaufler wrote:
->> +++ b/security/integrity/ima/ima_api.c
->> @@ -159,7 +159,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
->>   * ima_get_action - appraise & measure decision based on policy.
->>   * @inode: pointer to inode to measure
->>   * @cred: pointer to credentials structure to validate
->> - * @secid: secid of the task being validated
->> + * @l: LAM data of the task being validated
->>   * @mask: contains the permission mask (MAY_READ, MAY_WRITE, MAY_EXEC,
->>   *        MAY_APPEND)
->>   * @func: caller identifier
-> Call this "l" just hurts me. Why shouldn't it still be secid?
+On 6/1/2019 7:27 PM, Kees Cook wrote:
+> On Fri, May 31, 2019 at 04:10:08PM -0700, Casey Schaufler wrote:
+>> -void apparmor_release_secctx(char *secdata, u32 seclen)
+>> +void apparmor_release_secctx(struct lsm_context *cp)
+>>  {
+>> -	kfree(secdata);
+>> +	kfree(cp->context);
+>>  }
+> Maybe better to have common helper?
+>
+> void lsm_context_clear(struct lsm_context *cp)
+> {
+>     kfree(cp->context);
+>     cp->context = NULL;
+>     cp->len = 0;
+> }
 
-Changing the type while leaving the name alone, or
-changed slightly (e.g. secids instead of secid) makes
-tracking down unchanged uses much harder. How about
-lsme, or export?
-
-> Also typo: LAM -> LSM.
-
-That too.
+The caller, security_release_secctx(), does a
+lsm_context_init after the module specific code.
+The helper wouldn't be generic, since Smack does
+not do a kfree() on cp->context.
 
