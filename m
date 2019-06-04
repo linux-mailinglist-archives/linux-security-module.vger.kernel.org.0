@@ -2,26 +2,26 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7EA3510F
-	for <lists+linux-security-module@lfdr.de>; Tue,  4 Jun 2019 22:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508E23511A
+	for <lists+linux-security-module@lfdr.de>; Tue,  4 Jun 2019 22:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbfFDUeq (ORCPT
+        id S1726305AbfFDUgu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 4 Jun 2019 16:34:46 -0400
-Received: from mga14.intel.com ([192.55.52.115]:52259 "EHLO mga14.intel.com"
+        Tue, 4 Jun 2019 16:36:50 -0400
+Received: from mga01.intel.com ([192.55.52.88]:44647 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726530AbfFDUeq (ORCPT
+        id S1726033AbfFDUgu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 4 Jun 2019 16:34:46 -0400
+        Tue, 4 Jun 2019 16:36:50 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 13:34:45 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 13:36:50 -0700
 X-ExtLoop1: 1
 Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.36])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jun 2019 13:34:45 -0700
-Date:   Tue, 4 Jun 2019 13:34:45 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jun 2019 13:36:49 -0700
+Date:   Tue, 4 Jun 2019 13:36:49 -0700
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Andy Lutomirski <luto@kernel.org>
 Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
@@ -50,48 +50,41 @@ Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         David Rientjes <rientjes@google.com>,
         William Roberts <william.c.roberts@intel.com>,
         Philip Tricca <philip.b.tricca@intel.com>
-Subject: Re: [RFC PATCH 7/9] x86/sgx: Enforce noexec filesystem restriction
- for enclaves
-Message-ID: <20190604203445.GB7775@linux.intel.com>
+Subject: Re: [RFC PATCH 8/9] LSM: x86/sgx: Introduce ->enclave_load() hook
+ for Intel SGX
+Message-ID: <20190604203649.GC7775@linux.intel.com>
 References: <20190531233159.30992-1-sean.j.christopherson@intel.com>
- <20190531233159.30992-8-sean.j.christopherson@intel.com>
- <20190604162555.GC3811@linux.intel.com>
- <CALCETrUqcQNbRvBe2UqQih8RHnuwn3KaC=xJU1cRsaEVsCQUgw@mail.gmail.com>
+ <20190531233159.30992-9-sean.j.christopherson@intel.com>
+ <CALCETrXf3ujAn6uOwWMU8SRZOvBRb8ALvo_LQvwxc899mrakwQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALCETrUqcQNbRvBe2UqQih8RHnuwn3KaC=xJU1cRsaEVsCQUgw@mail.gmail.com>
+In-Reply-To: <CALCETrXf3ujAn6uOwWMU8SRZOvBRb8ALvo_LQvwxc899mrakwQ@mail.gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jun 04, 2019 at 01:25:10PM -0700, Andy Lutomirski wrote:
-> On Tue, Jun 4, 2019 at 9:26 AM Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Fri, May 31, 2019 at 04:31:57PM -0700, Sean Christopherson wrote:
-> > > Do not allow an enclave page to be mapped with PROT_EXEC if the source
-> > > page is backed by a file on a noexec file system.
-> > >
-> > > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> >
-> > Why don't you just check in sgx_encl_add_page() that whether the path
-> > comes from noexec and deny if SECINFO contains X?
-> >
+On Tue, Jun 04, 2019 at 01:29:10PM -0700, Andy Lutomirski wrote:
+> On Fri, May 31, 2019 at 4:32 PM Sean Christopherson
+> <sean.j.christopherson@intel.com> wrote:
+> >  static int sgx_encl_add_page(struct sgx_encl *encl, unsigned long addr,
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index 47f58cfb6a19..0562775424a0 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -1446,6 +1446,14 @@
+> >   * @bpf_prog_free_security:
+> >   *     Clean up the security information stored inside bpf prog.
+> >   *
+> > + * Security hooks for Intel SGX enclaves.
+> > + *
+> > + * @enclave_load:
+> > + *     On success, returns 0 and optionally adjusts @allowed_prot
+> > + *     @vma: the source memory region of the enclave page being loaded.
+> > + *     @prot: the initial protection of the enclave page.
 > 
-> SECINFO seems almost entirely useless for this kind of thing because
-> of SGX2.  I'm thinking that SECINFO should be completely ignored for
-> anything other than its required architectural purpose.
+> What do you mean "initial"?  The page is always mapped PROT_NONE when
+> this is called, right?  I feel like I must be missing something here.
 
-Agreed.
-
-I've already (somewhat unknowingly) reworked the SELinux patch such that
-it ignores @prot (the SECINFO protections) and only looks at @allowed_prot
-(the declared protections).  If the kernel ignores SECINFO protections
-entirely then the LSM hook can simply be:
-
-  int selinux_enclave_load(struct vm_area_struct *vma, unsigned long prot)
-
-I.e. LSMs can be blissfully unaware that @prot isn't technically what's
-going into the PTEs *now*.
+Initial protection in the EPCM.  Yet another reason to ignore SECINFO.
