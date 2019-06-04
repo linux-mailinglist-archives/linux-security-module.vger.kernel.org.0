@@ -2,117 +2,180 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6909635102
-	for <lists+linux-security-module@lfdr.de>; Tue,  4 Jun 2019 22:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6803511E
+	for <lists+linux-security-module@lfdr.de>; Tue,  4 Jun 2019 22:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbfFDUc0 (ORCPT
+        id S1726568AbfFDUhY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 4 Jun 2019 16:32:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60390 "EHLO mail.kernel.org"
+        Tue, 4 Jun 2019 16:37:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33728 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726789AbfFDUcY (ORCPT
+        id S1726527AbfFDUhY (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 4 Jun 2019 16:32:24 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        Tue, 4 Jun 2019 16:37:24 -0400
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5B0A20866
-        for <linux-security-module@vger.kernel.org>; Tue,  4 Jun 2019 20:26:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0849E21655
+        for <linux-security-module@vger.kernel.org>; Tue,  4 Jun 2019 20:29:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559679979;
-        bh=S4TVF7E2iuUumroeAZ+UX1mM+MIND0JGN/wS2NYA7x4=;
+        s=default; t=1559680163;
+        bh=cFvISWqZtenk/itmER7f+dDnKlLEKMgxPk2A4pPepQo=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TZBQqTNxxTzP1mGVaees7RCepfLJrDp5RqAlHnL/Ymc/ao63W7bUZ2+GUYPGLR70H
-         NfXQhyKCul5pGMw0cZZoSHpg0S1JbeoCbhmSuGPei3w66RYX2/ENL8maMPOo/zBUsi
-         cFK3D30x08WNFrS12M+rfNw1TJIvGfAx/SxwGo54=
-Received: by mail-wr1-f50.google.com with SMTP id m3so1365784wrv.2
-        for <linux-security-module@vger.kernel.org>; Tue, 04 Jun 2019 13:26:18 -0700 (PDT)
-X-Gm-Message-State: APjAAAVpqzpqWmuTRC9Cj2mJQYT0a+qFsGHUwZWXGT4oa6v0ZIzR/maf
-        pbeTi8v2IQKNbsrfw868XDU134ih+Ltllc494v9USg==
-X-Google-Smtp-Source: APXvYqwa0ftoy0sMT67Ri2vN0Uz4JEOrVwQyRXQKgM3vFKhn6zeRoO/sOuA5vu06dNe8x+pyx4YNLtPF6kNlT7kOoDU=
-X-Received: by 2002:a5d:610e:: with SMTP id v14mr22433987wrt.343.1559679977366;
- Tue, 04 Jun 2019 13:26:17 -0700 (PDT)
+        b=2HRcWilzppDkhdZc4TaBjrV5UIkT55QL43VjaSXEiVplRVpcAxBwNkDcNug+37B+Y
+         t9fbgeUJZIdsTchPZypFGwlhJLgpyuR/aNqVnzXAOqtuoX8oEoU5j1y8GrjbLYqYJn
+         ogGs6TSf8PXi12+IZT5rOfJH6kFTruNBQ6p9qQWM=
+Received: by mail-wr1-f46.google.com with SMTP id m3so1373190wrv.2
+        for <linux-security-module@vger.kernel.org>; Tue, 04 Jun 2019 13:29:22 -0700 (PDT)
+X-Gm-Message-State: APjAAAXhmSO0kpmZZWl68TPFYPDRfUdPWyU9Cl9pEEbOIn4JvFzSFvet
+        gb5WOeakrS+LAVQQURBTWHYN0WGvdhro2hDkC7OX1Q==
+X-Google-Smtp-Source: APXvYqzggKbEmevf1hAGqsqkg6nyK2jhLYRBA68/pK6t43ULfTO2FFzNf9MvZev2j4Pu6QQWtmJouUP2ZUsabFVGcpo=
+X-Received: by 2002:adf:f2c8:: with SMTP id d8mr92723wrp.221.1559680161582;
+ Tue, 04 Jun 2019 13:29:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190531233159.30992-1-sean.j.christopherson@intel.com>
- <20190531233159.30992-8-sean.j.christopherson@intel.com> <960B34DE67B9E140824F1DCDEC400C0F654ECC53@ORSMSX116.amr.corp.intel.com>
-In-Reply-To: <960B34DE67B9E140824F1DCDEC400C0F654ECC53@ORSMSX116.amr.corp.intel.com>
+References: <20190531233159.30992-1-sean.j.christopherson@intel.com> <20190531233159.30992-9-sean.j.christopherson@intel.com>
+In-Reply-To: <20190531233159.30992-9-sean.j.christopherson@intel.com>
 From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 4 Jun 2019 13:26:06 -0700
-X-Gmail-Original-Message-ID: <CALCETrVnpFFxNr0=PB9DWqQLeuNoFaa8_iihAcxcQMNrm5ChzA@mail.gmail.com>
-Message-ID: <CALCETrVnpFFxNr0=PB9DWqQLeuNoFaa8_iihAcxcQMNrm5ChzA@mail.gmail.com>
-Subject: Re: [RFC PATCH 7/9] x86/sgx: Enforce noexec filesystem restriction
- for enclaves
-To:     "Xing, Cedric" <cedric.xing@intel.com>
-Cc:     "Christopherson, Sean J" <sean.j.christopherson@intel.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+Date:   Tue, 4 Jun 2019 13:29:10 -0700
+X-Gmail-Original-Message-ID: <CALCETrXf3ujAn6uOwWMU8SRZOvBRb8ALvo_LQvwxc899mrakwQ@mail.gmail.com>
+Message-ID: <CALCETrXf3ujAn6uOwWMU8SRZOvBRb8ALvo_LQvwxc899mrakwQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 8/9] LSM: x86/sgx: Introduce ->enclave_load() hook for
+ Intel SGX
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
+        Cedric Xing <cedric.xing@intel.com>,
         Stephen Smalley <sds@tycho.nsa.gov>,
         James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
         LSM List <linux-security-module@vger.kernel.org>,
         Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
         Jethro Beekman <jethro@fortanix.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "nhorman@redhat.com" <nhorman@redhat.com>,
-        "npmccallum@redhat.com" <npmccallum@redhat.com>,
-        "Ayoun, Serge" <serge.ayoun@intel.com>,
-        "Katz-zamir, Shay" <shay.katz-zamir@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
+        linux-sgx@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, nhorman@redhat.com,
+        npmccallum@redhat.com, Serge Ayoun <serge.ayoun@intel.com>,
+        Shay Katz-zamir <shay.katz-zamir@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Svahn, Kai" <kai.svahn@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Kai Svahn <kai.svahn@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
         Josh Triplett <josh@joshtriplett.org>,
-        "Huang, Kai" <kai.huang@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
         David Rientjes <rientjes@google.com>,
-        "Roberts, William C" <william.c.roberts@intel.com>,
-        "Tricca, Philip B" <philip.b.tricca@intel.com>
+        William Roberts <william.c.roberts@intel.com>,
+        Philip Tricca <philip.b.tricca@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sun, Jun 2, 2019 at 11:29 PM Xing, Cedric <cedric.xing@intel.com> wrote:
+On Fri, May 31, 2019 at 4:32 PM Sean Christopherson
+<sean.j.christopherson@intel.com> wrote:
 >
-> > From: Christopherson, Sean J
-> > Sent: Friday, May 31, 2019 4:32 PM
-> >
-> > Do not allow an enclave page to be mapped with PROT_EXEC if the source page is backed by a
-> > file on a noexec file system.
-> >
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > ---
-> >  arch/x86/kernel/cpu/sgx/driver/ioctl.c | 26 ++++++++++++++++++++++++--
-> >  1 file changed, 24 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/kernel/cpu/sgx/driver/ioctl.c
-> > b/arch/x86/kernel/cpu/sgx/driver/ioctl.c
-> > index c30acd3fbbdd..5f71be7cbb01 100644
-> > --- a/arch/x86/kernel/cpu/sgx/driver/ioctl.c
-> > +++ b/arch/x86/kernel/cpu/sgx/driver/ioctl.c
-> > @@ -576,6 +576,27 @@ static int __sgx_encl_add_page(struct sgx_encl *encl, unsigned long
-> > addr,
-> >       return ret;
-> >  }
-> >
-> > +static int sgx_encl_page_protect(unsigned long src, unsigned long prot,
-> > +                              unsigned long *allowed_prot)
-> > +{
-> > +     struct vm_area_struct *vma;
-> > +
-> > +     if (!(*allowed_prot & VM_EXEC))
-> > +             goto do_check;
-> > +
-> > +     down_read(&current->mm->mmap_sem);
-> > +     vma = find_vma(current->mm, src);
-> > +     if (!vma || (vma->vm_file && path_noexec(&vma->vm_file->f_path)))
-> > +             *allowed_prot &= ~VM_EXEC;
+> enclave_load() is roughly analogous to the existing file_mprotect().
 >
-> Testing (vma->vm_flags & VM_MAYEXEC) == 0 should be a better approach.
+> Due to the nature of SGX and its Enclave Page Cache (EPC), all enclave
+> VMAs are backed by a single file, i.e. /dev/sgx/enclave, that must be
+> MAP_SHARED.  Furthermore, all enclaves need read, write and execute
+> VMAs.  As a result, file_mprotect() does not provide any meaningful
+> security for enclaves since an LSM can only deny/grant access to the
+> EPC as a whole.
+>
+> security_enclave_load() is called when SGX is first loading an enclave
+> page, i.e. copying a page from normal memory into the EPC.  The notable
+> difference from file_mprotect() is the allowed_prot parameter, which
+> is essentially an SGX-specific version of a VMA's MAY_{READ,WRITE,EXEC}
+> flags.  The purpose of allowed_prot is to enable checks such as
+> SELinux's FILE__EXECMOD permission without having to track and update
+> VMAs across multiple mm structs, i.e. SGX can ensure userspace doesn't
+> overstep its bounds simply by restricting an enclave VMA's protections
+> by vetting what is maximally allowed during build time.
+>
+> An alternative to the allowed_prot approach would be to use an enclave's
+> SIGSTRUCT (a smallish structure that can uniquely identify an enclave)
+> as a proxy for the enclave.  For example, SGX could take and hold a
+> reference to the file containing the SIGSTRUCT (if it's in a file) and
+> call security_enclave_load() during mprotect().  While the SIGSTRUCT
+> approach would provide better precision, the actual value added was
+> deemed to be negligible.  On the other hand, pinning a file for the
+> lifetime of the enclave is ugly, and essentially caching LSM policies
+> in each page's allowed_prot avoids having to make an extra LSM upcall
+> during mprotect().
+>
+> Note, extensive discussion yielded no sane alternative to some form of
+> SGX specific LSM hook[1].
+>
+> [1] https://lkml.kernel.org/r/CALCETrXf8mSK45h7sTK5Wf+pXLVn=Bjsc_RLpgO-h-qdzBRo5Q@mail.gmail.com
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> ---
+>  arch/x86/kernel/cpu/sgx/driver/ioctl.c | 14 +++++++++-----
+>  include/linux/lsm_hooks.h              | 16 ++++++++++++++++
+>  include/linux/security.h               |  2 ++
+>  security/security.c                    |  8 ++++++++
+>  4 files changed, 35 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/x86/kernel/cpu/sgx/driver/ioctl.c b/arch/x86/kernel/cpu/sgx/driver/ioctl.c
+> index 5f71be7cbb01..260417ecbcff 100644
+> --- a/arch/x86/kernel/cpu/sgx/driver/ioctl.c
+> +++ b/arch/x86/kernel/cpu/sgx/driver/ioctl.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/highmem.h>
+>  #include <linux/ratelimit.h>
+>  #include <linux/sched/signal.h>
+> +#include <linux/security.h>
+>  #include <linux/shmem_fs.h>
+>  #include <linux/slab.h>
+>  #include <linux/suspend.h>
+> @@ -580,21 +581,24 @@ static int sgx_encl_page_protect(unsigned long src, unsigned long prot,
+>                                  unsigned long *allowed_prot)
+>  {
+>         struct vm_area_struct *vma;
+> +       int ret = 0;
+>
+> -       if (!(*allowed_prot & VM_EXEC))
+> +       if (!(*allowed_prot & VM_EXEC) && !IS_ENABLED(CONFIG_SECURITY))
+>                 goto do_check;
+>
+>         down_read(&current->mm->mmap_sem);
+>         vma = find_vma(current->mm, src);
+>         if (!vma || (vma->vm_file && path_noexec(&vma->vm_file->f_path)))
+>                 *allowed_prot &= ~VM_EXEC;
+> +#ifdef CONFIG_SECURITY
+> +       ret = security_enclave_load(vma, prot, allowed_prot);
+> +#endif
+>         up_read(&current->mm->mmap_sem);
+>
+>  do_check:
+> -       if (prot & ~*allowed_prot)
+> -               return -EACCES;
+> -
+> -       return 0;
+> +       if (!ret && (prot & ~*allowed_prot))
+> +               ret = -EACCES;
+> +       return ret;
+>  }
+>
+>  static int sgx_encl_add_page(struct sgx_encl *encl, unsigned long addr,
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 47f58cfb6a19..0562775424a0 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -1446,6 +1446,14 @@
+>   * @bpf_prog_free_security:
+>   *     Clean up the security information stored inside bpf prog.
+>   *
+> + * Security hooks for Intel SGX enclaves.
+> + *
+> + * @enclave_load:
+> + *     On success, returns 0 and optionally adjusts @allowed_prot
+> + *     @vma: the source memory region of the enclave page being loaded.
+> + *     @prot: the initial protection of the enclave page.
 
-I think I agree, although that would need a comment explaining why it works.
+What do you mean "initial"?  The page is always mapped PROT_NONE when
+this is called, right?  I feel like I must be missing something here.
