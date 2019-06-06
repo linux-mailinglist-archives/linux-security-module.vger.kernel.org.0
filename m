@@ -2,513 +2,219 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7BF38691
-	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jun 2019 10:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE39537AAB
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Jun 2019 19:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfFGIzs (ORCPT
+        id S1729977AbfFFRML (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 7 Jun 2019 04:55:48 -0400
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:46018 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbfFGIzs (ORCPT
+        Thu, 6 Jun 2019 13:12:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47842 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729975AbfFFRMK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 7 Jun 2019 04:55:48 -0400
-Received: by mail-qt1-f201.google.com with SMTP id g14so1254555qta.12
-        for <linux-security-module@vger.kernel.org>; Fri, 07 Jun 2019 01:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=M+tMoyKxyBmCiZ50qgzoES0Jlvpfav0QYsjG0XEBtto=;
-        b=jkpOfi4ncHdpmJWxxrjJMFkyM6Qwj0heVKuXt12XtDostMZOIs3w5M0NmeYGpZrI+2
-         1TTOPbfvIIzibYeYcT8LVgCml+4T+g9RR3vfV1u7wUCEJx/YKn/YO1eOnikFUi3/0dxx
-         2vHM2Y19NpaPw+YdigPYfTJg3bQanNggERyN6Vu0AhhrO8wq2m+EtFfQmvY24tjsGDnR
-         m3LqxyXZ6wRW7iS7MfqsSaz0cTnZqy7/CgFPCD7sLJK3GZ2BEoyAVlwEfjQASjOF8EXM
-         H9BoNi3CplK14AziReQ+jW2WhXV0XngHz/313Ti54WaWxdkURJBK5SUKhXtZjSHMweyt
-         m1uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=M+tMoyKxyBmCiZ50qgzoES0Jlvpfav0QYsjG0XEBtto=;
-        b=NmzffPnRDnWp9I3st0kHiH21Yj4BovW6Khq2H/5GwlbCW+6LfTU8AFwm8dRnwmuXJW
-         C1FOnuZ/uzKDZ1QNMWOyNzLdSf+WMCkLH7KWI8lPDmuZ3VdpYReHAzSlzPaP4I0D/dxR
-         wK0EbhcOWDrenpcPTUt0zseNkH1O+egWILcZYMmBk/T0ag4uUHFCroh9kI3S58UWLgyl
-         FVdYeLvQjfnqZJfAaaA9fLtB7JFUz2tA2jsKDgDoz+q55wHO823yw9O6bq6ZlkQ3H3Zu
-         FS/S8cuNxlRqCfyTnb+r8Wvq3RQnAXuo0U2lSf1AlckYQdxaekYL68Hf1VLULXNsTxXD
-         I+Ug==
-X-Gm-Message-State: APjAAAWWew9jRcWwyAWd6gsxQUJNdc9KkL3fWHdyPvwxYb55MP9z9YAi
-        iHwFDKFEzGdydzgjM4fs3Dt+cOBk9nc=
-X-Google-Smtp-Source: APXvYqz1UChbORPwg/DdBiTfImvoOwJkNeWBemS96Z/2yDIcLrcObCeLF/+ere+kYaQg7ozw7ojn/bdPVxE=
-X-Received: by 2002:a05:620a:624:: with SMTP id 4mr43032082qkv.15.1559897746806;
- Fri, 07 Jun 2019 01:55:46 -0700 (PDT)
-Date:   Thu,  6 Jun 2019 18:48:45 +0200
-In-Reply-To: <20190606164845.179427-1-glider@google.com>
-Message-Id: <20190606164845.179427-4-glider@google.com>
-Mime-Version: 1.0
-References: <20190606164845.179427-1-glider@google.com>
-X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
-Subject: [PATCH v6 3/3] lib: introduce test_meminit module
-From:   Alexander Potapenko <glider@google.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sandeep Patil <sspatil@android.com>,
-        Laura Abbott <labbott@redhat.com>,
-        Jann Horn <jannh@google.com>, Marco Elver <elver@google.com>,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
+        Thu, 6 Jun 2019 13:12:10 -0400
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3074B20B7C
+        for <linux-security-module@vger.kernel.org>; Thu,  6 Jun 2019 17:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559841129;
+        bh=eGMr7DoLIYR8UAjWgzFrqPiUh2ExP+Mttqzga+MgnkE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=0hle2nhbR2j30aFu/wj5a0oPnKJKZaOV8Iaj4zpzbUwG5TNgRZ1Y9cEdYTe26tZBj
+         NU4NTwPAOst0j9szSsplymqFiuVyIz26Rl29hS116ruQRNEobofla7Fn5qSJ/oY4Jx
+         8n+xJ+5eQNp4TG+D3Fmjjbh8SPCHloL2hK8Or5cU=
+Received: by mail-wm1-f44.google.com with SMTP id h19so2292824wme.0
+        for <linux-security-module@vger.kernel.org>; Thu, 06 Jun 2019 10:12:09 -0700 (PDT)
+X-Gm-Message-State: APjAAAWPh6VM5pUhDn1x172pGSx2JhJttUTA1TGMyZ92hAMZ3wXXmZZX
+        V5YjCoG72yoIdxM+TWGtVlbIp/J/o+l2HHsflq5tWQ==
+X-Google-Smtp-Source: APXvYqxF2/aZhWBhL7/nZs8kAI6o4jWXCnyQL0WIhGhKQNoGeALkczoYjn7lAoJ1sviKMS+lCfqerwAfZZ7eqb0UxSQ=
+X-Received: by 2002:a7b:c450:: with SMTP id l16mr802034wmi.0.1559841127574;
+ Thu, 06 Jun 2019 10:12:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <b91710d8-cd2d-6b93-8619-130b9d15983d@tycho.nsa.gov>
+ <155981411940.17513.7137844619951358374.stgit@warthog.procyon.org.uk>
+ <3813.1559827003@warthog.procyon.org.uk> <8382af23-548c-f162-0e82-11e308049735@tycho.nsa.gov>
+ <0eb007c5-b4a0-9384-d915-37b0e5a158bf@schaufler-ca.com>
+In-Reply-To: <0eb007c5-b4a0-9384-d915-37b0e5a158bf@schaufler-ca.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Thu, 6 Jun 2019 10:11:56 -0700
+X-Gmail-Original-Message-ID: <CALCETrWn_C8oReKXGMXiJDOGoYWMs+jg2DWa5ZipKAceyXkx5w@mail.gmail.com>
+Message-ID: <CALCETrWn_C8oReKXGMXiJDOGoYWMs+jg2DWa5ZipKAceyXkx5w@mail.gmail.com>
+Subject: Re: [RFC][PATCH 00/10] Mount, FS, Block and Keyrings notifications
+ [ver #3]
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>, raven@themaw.net,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add tests for heap and pagealloc initialization.
-These can be used to check init_on_alloc and init_on_free implementations
-as well as other approaches to initialization.
+On Thu, Jun 6, 2019 at 9:43 AM Casey Schaufler <casey@schaufler-ca.com> wro=
+te:
+>
+> On 6/6/2019 7:05 AM, Stephen Smalley wrote:
+> > On 6/6/19 9:16 AM, David Howells wrote:
+> >> Stephen Smalley <sds@tycho.nsa.gov> wrote:
+> >>
+> >> This might be easier to discuss if you can reply to:
+> >>
+> >>     https://lore.kernel.org/lkml/5393.1559768763@warthog.procyon.org.u=
+k/
+> >>
+> >> which is on the ver #2 posting of this patchset.
+> >
+> > Sorry for being late to the party.  Not sure whether you're asking me t=
+o respond only there or both there and here to your comments below.  I'll s=
+tart here but can revisit if it's a problem.
+> >>
+> >>>> LSM support is included, but controversial:
+> >>>>
+> >>>>    (1) The creds of the process that did the fput() that reduced the=
+ refcount
+> >>>>        to zero are cached in the file struct.
+> >>>>
+> >>>>    (2) __fput() overrides the current creds with the creds from (1) =
+whilst
+> >>>>        doing the cleanup, thereby making sure that the creds seen by=
+ the
+> >>>>        destruction notification generated by mntput() appears to com=
+e from
+> >>>>        the last fputter.
+> >>>>
+> >>>>    (3) security_post_notification() is called for each queue that we=
+ might
+> >>>>        want to post a notification into, thereby allowing the LSM to=
+ prevent
+> >>>>        covert communications.
+> >>>>
+> >>>>    (?) Do I need to add security_set_watch(), say, to rule on whethe=
+r a watch
+> >>>>        may be set in the first place?  I might need to add a variant=
+ per
+> >>>>        watch-type.
+> >>>>
+> >>>>    (?) Do I really need to keep track of the process creds in which =
+an
+> >>>>        implicit object destruction happened?  For example, imagine y=
+ou create
+> >>>>        an fd with fsopen()/fsmount().  It is marked to dissolve the =
+mount it
+> >>>>        refers to on close unless move_mount() clears that flag.  Now=
+, imagine
+> >>>>        someone looking at that fd through procfs at the same time as=
+ you exit
+> >>>>        due to an error.  The LSM sees the destruction notification c=
+ome from
+> >>>>        the looker if they happen to do their fput() after yours.
+> >>>
+> >>>
+> >>> I'm not in favor of this approach.
+> >>
+> >> Which bit?  The last point?  Keeping track of the process creds after =
+an
+> >> implicit object destruction.
+> >
+> > (1), (2), (3), and the last point.
+> >
+> >>> Can we check permission to the object being watched when a watch is s=
+et
+> >>> (read-like access),
+> >>
+> >> Yes, and I need to do that.  I think it's likely to require an extra h=
+ook for
+> >> each entry point added because the objects are different:
+> >>
+> >>     int security_watch_key(struct watch *watch, struct key *key);
+> >>     int security_watch_sb(struct watch *watch, struct path *path);
+> >>     int security_watch_mount(struct watch *watch, struct path *path);
+> >>     int security_watch_devices(struct watch *watch);
+> >>
+> >>> make sure every access that can trigger a notification requires a
+> >>> (write-like) permission to the accessed object,
+> >>
+> >> "write-like permssion" for whom?  The triggerer or the watcher?
+> >
+> > The former, i.e. the process that performed the operation that triggere=
+d the notification.  Think of it as a write from the process to the accesse=
+d object, which triggers a notification (another write) on some related obj=
+ect (the watched object), which is then read by the watcher.
+>
+> We agree that the process that performed the operation that triggered
+> the notification is the initial subject. Smack will treat the process
+> with the watch set (in particular, its ring buffer) as the object
+> being written to. SELinux, with its finer grained controls, will
+> involve other things as noted above. There are other place where we
+> see this, notably IP packet delivery.
+>
+> The implication is that the information about the triggering
+> process needs to be available throughout.
+>
+> >
+> >> There are various 'classes' of events:
+> >>
+> >>   (1) System events (eg. hardware I/O errors, automount points expirin=
+g).
+> >>
+> >>   (2) Direct events (eg. automounts, manual mounts, EDQUOT, key linkag=
+e).
+> >>
+> >>   (3) Indirect events (eg. exit/close doing the last fput and causing =
+an
+> >>       unmount).
+> >>
+> >> Class (1) are uncaused by a process, so I use init_cred for them.  One=
+ could
+> >> argue that the automount point expiry should perhaps take place under =
+the
+> >> creds of whoever triggered it in the first place, but we need to be ca=
+reful
+> >> about long-term cred pinning.
+> >
+> > This seems equivalent to just checking whether the watcher is allowed t=
+o get that kind of event, no other cred truly needed.
+> >
+> >> Class (2) the causing process must've had permission to cause them - o=
+therwise
+> >> we wouldn't have got the event.
+> >
+> > So we've already done a check on the causing process, and we're going t=
+o check whether the watcher can set the watch. We just need to establish th=
+e connection between the accessed object and the watched object in some man=
+ner.
+>
+> I don't agree. That is, I don't believe it is sufficient.
+> There is no guarantee that being able to set a watch on an
+> object implies that every process that can trigger the event
+> can send it to you.
+>
+>         Watcher has Smack label W
+>         Triggerer has Smack label T
+>         Watched object has Smack label O
+>
+>         Relevant Smack rules are
+>
+>         W O rw
+>         T O rw
+>
+> The watcher will be able to set the watch,
+> the triggerer will be able to trigger the event,
+> but there is nothing that would allow the watcher
+> to receive the event. This is not a case of watcher
+> reading the watched object, as the event is delivered
+> without any action by watcher.
 
-Expected test output in the case the kernel provides heap initialization
-(e.g. when running with either init_on_alloc=1 or init_on_free=1):
-
-  test_meminit: all 10 tests in test_pages passed
-  test_meminit: all 40 tests in test_kvmalloc passed
-  test_meminit: all 60 tests in test_kmemcache passed
-  test_meminit: all 10 tests in test_rcu_persistent passed
-  test_meminit: all 120 tests passed!
-
-Signed-off-by: Alexander Potapenko <glider@google.com>
-To: Kees Cook <keescook@chromium.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-To: Christoph Lameter <cl@linux.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kostya Serebryany <kcc@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Sandeep Patil <sspatil@android.com>
-Cc: Laura Abbott <labbott@redhat.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Marco Elver <elver@google.com>
-Cc: linux-mm@kvack.org
-Cc: linux-security-module@vger.kernel.org
-Cc: kernel-hardening@lists.openwall.com
----
- v3:
-  - added example test output to the description
-  - fixed a missing include spotted by kbuild test robot <lkp@intel.com>
-  - added a missing MODULE_LICENSE
-  - call do_kmem_cache_size() with size >= sizeof(void*) to unbreak
-  debug builds
- v5:
-  - added tests for RCU slabs and __GFP_ZERO
----
- lib/Kconfig.debug  |   8 +
- lib/Makefile       |   1 +
- lib/test_meminit.c | 362 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 371 insertions(+)
- create mode 100644 lib/test_meminit.c
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index cbdfae379896..085711f14abf 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2040,6 +2040,14 @@ config TEST_STACKINIT
- 
- 	  If unsure, say N.
- 
-+config TEST_MEMINIT
-+	tristate "Test heap/page initialization"
-+	help
-+	  Test if the kernel is zero-initializing heap and page allocations.
-+	  This can be useful to test init_on_alloc and init_on_free features.
-+
-+	  If unsure, say N.
-+
- endif # RUNTIME_TESTING_MENU
- 
- config MEMTEST
-diff --git a/lib/Makefile b/lib/Makefile
-index fb7697031a79..05980c802500 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -91,6 +91,7 @@ obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
- obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
- obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
- obj-$(CONFIG_TEST_STACKINIT) += test_stackinit.o
-+obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
- 
- obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
- 
-diff --git a/lib/test_meminit.c b/lib/test_meminit.c
-new file mode 100644
-index 000000000000..ed7efec1387b
---- /dev/null
-+++ b/lib/test_meminit.c
-@@ -0,0 +1,362 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test cases for SL[AOU]B/page initialization at alloc/free time.
-+ */
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/vmalloc.h>
-+
-+#define GARBAGE_INT (0x09A7BA9E)
-+#define GARBAGE_BYTE (0x9E)
-+
-+#define REPORT_FAILURES_IN_FN() \
-+	do {	\
-+		if (failures)	\
-+			pr_info("%s failed %d out of %d times\n",	\
-+				__func__, failures, num_tests);		\
-+		else		\
-+			pr_info("all %d tests in %s passed\n",		\
-+				num_tests, __func__);			\
-+	} while (0)
-+
-+/* Calculate the number of uninitialized bytes in the buffer. */
-+static int __init count_nonzero_bytes(void *ptr, size_t size)
-+{
-+	int i, ret = 0;
-+	unsigned char *p = (unsigned char *)ptr;
-+
-+	for (i = 0; i < size; i++)
-+		if (p[i])
-+			ret++;
-+	return ret;
-+}
-+
-+/* Fill a buffer with garbage, skipping |skip| first bytes. */
-+static void __init fill_with_garbage_skip(void *ptr, size_t size, size_t skip)
-+{
-+	unsigned int *p = (unsigned int *)ptr;
-+	int i = 0;
-+
-+	if (skip) {
-+		WARN_ON(skip > size);
-+		p += skip;
-+	}
-+	while (size >= sizeof(*p)) {
-+		p[i] = GARBAGE_INT;
-+		i++;
-+		size -= sizeof(*p);
-+	}
-+	if (size)
-+		memset(&p[i], GARBAGE_BYTE, size);
-+}
-+
-+static void __init fill_with_garbage(void *ptr, size_t size)
-+{
-+	fill_with_garbage_skip(ptr, size, 0);
-+}
-+
-+static int __init do_alloc_pages_order(int order, int *total_failures)
-+{
-+	struct page *page;
-+	void *buf;
-+	size_t size = PAGE_SIZE << order;
-+
-+	page = alloc_pages(GFP_KERNEL, order);
-+	buf = page_address(page);
-+	fill_with_garbage(buf, size);
-+	__free_pages(page, order);
-+
-+	page = alloc_pages(GFP_KERNEL, order);
-+	buf = page_address(page);
-+	if (count_nonzero_bytes(buf, size))
-+		(*total_failures)++;
-+	fill_with_garbage(buf, size);
-+	__free_pages(page, order);
-+	return 1;
-+}
-+
-+/* Test the page allocator by calling alloc_pages with different orders. */
-+static int __init test_pages(int *total_failures)
-+{
-+	int failures = 0, num_tests = 0;
-+	int i;
-+
-+	for (i = 0; i < 10; i++)
-+		num_tests += do_alloc_pages_order(i, &failures);
-+
-+	REPORT_FAILURES_IN_FN();
-+	*total_failures += failures;
-+	return num_tests;
-+}
-+
-+/* Test kmalloc() with given parameters. */
-+static int __init do_kmalloc_size(size_t size, int *total_failures)
-+{
-+	void *buf;
-+
-+	buf = kmalloc(size, GFP_KERNEL);
-+	fill_with_garbage(buf, size);
-+	kfree(buf);
-+
-+	buf = kmalloc(size, GFP_KERNEL);
-+	if (count_nonzero_bytes(buf, size))
-+		(*total_failures)++;
-+	fill_with_garbage(buf, size);
-+	kfree(buf);
-+	return 1;
-+}
-+
-+/* Test vmalloc() with given parameters. */
-+static int __init do_vmalloc_size(size_t size, int *total_failures)
-+{
-+	void *buf;
-+
-+	buf = vmalloc(size);
-+	fill_with_garbage(buf, size);
-+	vfree(buf);
-+
-+	buf = vmalloc(size);
-+	if (count_nonzero_bytes(buf, size))
-+		(*total_failures)++;
-+	fill_with_garbage(buf, size);
-+	vfree(buf);
-+	return 1;
-+}
-+
-+/* Test kmalloc()/vmalloc() by allocating objects of different sizes. */
-+static int __init test_kvmalloc(int *total_failures)
-+{
-+	int failures = 0, num_tests = 0;
-+	int i, size;
-+
-+	for (i = 0; i < 20; i++) {
-+		size = 1 << i;
-+		num_tests += do_kmalloc_size(size, &failures);
-+		num_tests += do_vmalloc_size(size, &failures);
-+	}
-+
-+	REPORT_FAILURES_IN_FN();
-+	*total_failures += failures;
-+	return num_tests;
-+}
-+
-+#define CTOR_BYTES (sizeof(unsigned int))
-+#define CTOR_PATTERN (0x41414141)
-+/* Initialize the first 4 bytes of the object. */
-+static void test_ctor(void *obj)
-+{
-+	*(unsigned int *)obj = CTOR_PATTERN;
-+}
-+
-+/*
-+ * Check the invariants for the buffer allocated from a slab cache.
-+ * If the cache has a test constructor, the first 4 bytes of the object must
-+ * always remain equal to CTOR_PATTERN.
-+ * If the cache isn't an RCU-typesafe one, or if the allocation is done with
-+ * __GFP_ZERO, then the object contents must be zeroed after allocation.
-+ * If the cache is an RCU-typesafe one, the object contents must never be
-+ * zeroed after the first use. This is checked by memcmp() in
-+ * do_kmem_cache_size().
-+ */
-+static bool __init check_buf(void *buf, int size, bool want_ctor,
-+			     bool want_rcu, bool want_zero)
-+{
-+	int bytes;
-+	bool fail = false;
-+
-+	bytes = count_nonzero_bytes(buf, size);
-+	WARN_ON(want_ctor && want_zero);
-+	if (want_zero)
-+		return bytes;
-+	if (want_ctor) {
-+		if (*(unsigned int *)buf != CTOR_PATTERN)
-+			fail = 1;
-+	} else {
-+		if (bytes)
-+			fail = !want_rcu;
-+	}
-+	return fail;
-+}
-+
-+/*
-+ * Test kmem_cache with given parameters:
-+ *  want_ctor - use a constructor;
-+ *  want_rcu - use SLAB_TYPESAFE_BY_RCU;
-+ *  want_zero - use __GFP_ZERO.
-+ */
-+static int __init do_kmem_cache_size(size_t size, bool want_ctor,
-+				     bool want_rcu, bool want_zero,
-+				     int *total_failures)
-+{
-+	struct kmem_cache *c;
-+	int iter;
-+	bool fail = false;
-+	gfp_t alloc_mask = GFP_KERNEL | (want_zero ? __GFP_ZERO : 0);
-+	void *buf, *buf_copy;
-+
-+	c = kmem_cache_create("test_cache", size, 1,
-+			      want_rcu ? SLAB_TYPESAFE_BY_RCU : 0,
-+			      want_ctor ? test_ctor : NULL);
-+	for (iter = 0; iter < 10; iter++) {
-+		buf = kmem_cache_alloc(c, alloc_mask);
-+		/* Check that buf is zeroed, if it must be. */
-+		fail = check_buf(buf, size, want_ctor, want_rcu, want_zero);
-+		fill_with_garbage_skip(buf, size, want_ctor ? CTOR_BYTES : 0);
-+		/*
-+		 * If this is an RCU cache, use a critical section to ensure we
-+		 * can touch objects after they're freed.
-+		 */
-+		if (want_rcu) {
-+			rcu_read_lock();
-+			/*
-+			 * Copy the buffer to check that it's not wiped on
-+			 * free().
-+			 */
-+			buf_copy = kmalloc(size, GFP_KERNEL);
-+			if (buf_copy)
-+				memcpy(buf_copy, buf, size);
-+		}
-+		kmem_cache_free(c, buf);
-+		if (want_rcu) {
-+			/*
-+			 * Check that |buf| is intact after kmem_cache_free().
-+			 * |want_zero| is false, because we wrote garbage to
-+			 * the buffer already.
-+			 */
-+			fail |= check_buf(buf, size, want_ctor, want_rcu,
-+					  false);
-+			if (buf_copy) {
-+				fail |= (bool)memcmp(buf, buf_copy, size);
-+				kfree(buf_copy);
-+			}
-+			rcu_read_unlock();
-+		}
-+	}
-+	kmem_cache_destroy(c);
-+
-+	*total_failures += fail;
-+	return 1;
-+}
-+
-+/*
-+ * Check that the data written to an RCU-allocated object survives
-+ * reallocation.
-+ */
-+static int __init do_kmem_cache_rcu_persistent(int size, int *total_failures)
-+{
-+	struct kmem_cache *c;
-+	void *buf, *buf_contents, *saved_ptr;
-+	void **used_objects;
-+	int i, iter, maxiter = 1024;
-+	bool fail = false;
-+
-+	c = kmem_cache_create("test_cache", size, size, SLAB_TYPESAFE_BY_RCU,
-+			      NULL);
-+	buf = kmem_cache_alloc(c, GFP_KERNEL);
-+	saved_ptr = buf;
-+	fill_with_garbage(buf, size);
-+	buf_contents = kmalloc(size, GFP_KERNEL);
-+	if (!buf_contents)
-+		goto out;
-+	used_objects = kmalloc_array(maxiter, sizeof(void *), GFP_KERNEL);
-+	if (!used_objects) {
-+		kfree(buf_contents);
-+		goto out;
-+	}
-+	memcpy(buf_contents, buf, size);
-+	kmem_cache_free(c, buf);
-+	/*
-+	 * Run for a fixed number of iterations. If we never hit saved_ptr,
-+	 * assume the test passes.
-+	 */
-+	for (iter = 0; iter < maxiter; iter++) {
-+		buf = kmem_cache_alloc(c, GFP_KERNEL);
-+		used_objects[iter] = buf;
-+		if (buf == saved_ptr) {
-+			fail = memcmp(buf_contents, buf, size);
-+			for (i = 0; i <= iter; i++)
-+				kmem_cache_free(c, used_objects[i]);
-+			goto free_out;
-+		}
-+	}
-+
-+free_out:
-+	kmem_cache_destroy(c);
-+	kfree(buf_contents);
-+	kfree(used_objects);
-+out:
-+	*total_failures += fail;
-+	return 1;
-+}
-+
-+/*
-+ * Test kmem_cache allocation by creating caches of different sizes, with and
-+ * without constructors, with and without SLAB_TYPESAFE_BY_RCU.
-+ */
-+static int __init test_kmemcache(int *total_failures)
-+{
-+	int failures = 0, num_tests = 0;
-+	int i, flags, size;
-+	bool ctor, rcu, zero;
-+
-+	for (i = 0; i < 10; i++) {
-+		size = 8 << i;
-+		for (flags = 0; flags < 8; flags++) {
-+			ctor = flags & 1;
-+			rcu = flags & 2;
-+			zero = flags & 4;
-+			if (ctor & zero)
-+				continue;
-+			num_tests += do_kmem_cache_size(size, ctor, rcu, zero,
-+							&failures);
-+		}
-+	}
-+	REPORT_FAILURES_IN_FN();
-+	*total_failures += failures;
-+	return num_tests;
-+}
-+
-+/* Test the behavior of SLAB_TYPESAFE_BY_RCU caches of different sizes. */
-+static int __init test_rcu_persistent(int *total_failures)
-+{
-+	int failures = 0, num_tests = 0;
-+	int i, size;
-+
-+	for (i = 0; i < 10; i++) {
-+		size = 8 << i;
-+		num_tests += do_kmem_cache_rcu_persistent(size, &failures);
-+	}
-+	REPORT_FAILURES_IN_FN();
-+	*total_failures += failures;
-+	return num_tests;
-+}
-+
-+/*
-+ * Run the tests. Each test function returns the number of executed tests and
-+ * updates |failures| with the number of failed tests.
-+ */
-+static int __init test_meminit_init(void)
-+{
-+	int failures = 0, num_tests = 0;
-+
-+	num_tests += test_pages(&failures);
-+	num_tests += test_kvmalloc(&failures);
-+	num_tests += test_kmemcache(&failures);
-+	num_tests += test_rcu_persistent(&failures);
-+
-+	if (failures == 0)
-+		pr_info("all %d tests passed!\n", num_tests);
-+	else
-+		pr_info("failures: %d out of %d\n", failures, num_tests);
-+
-+	return failures ? -EINVAL : 0;
-+}
-+module_init(test_meminit_init);
-+
-+MODULE_LICENSE("GPL");
--- 
-2.22.0.rc1.311.g5d7573a151-goog
-
+I think this is an example of a bogus policy that should not be
+supported by the kernel.
