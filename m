@@ -2,177 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92086369E8
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Jun 2019 04:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADD336B79
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Jun 2019 07:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726835AbfFFCMF (ORCPT
+        id S1726238AbfFFFVF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 5 Jun 2019 22:12:05 -0400
-Received: from mga02.intel.com ([134.134.136.20]:19592 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726541AbfFFCLv (ORCPT
+        Thu, 6 Jun 2019 01:21:05 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:52220 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725267AbfFFFVF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 5 Jun 2019 22:11:51 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jun 2019 19:11:50 -0700
-X-ExtLoop1: 1
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.36])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jun 2019 19:11:49 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Cedric Xing <cedric.xing@intel.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        Jethro Beekman <jethro@fortanix.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        linux-sgx@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, nhorman@redhat.com,
-        npmccallum@redhat.com, Serge Ayoun <serge.ayoun@intel.com>,
-        Shay Katz-zamir <shay.katz-zamir@intel.com>,
-        Haitao Huang <haitao.huang@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Kai Svahn <kai.svahn@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Kai Huang <kai.huang@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        William Roberts <william.c.roberts@intel.com>,
-        Philip Tricca <philip.b.tricca@intel.com>
-Subject: [RFC PATCH v2 5/5] security/selinux: Add enclave_load() implementation
-Date:   Wed,  5 Jun 2019 19:11:45 -0700
-Message-Id: <20190606021145.12604-6-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190606021145.12604-1-sean.j.christopherson@intel.com>
-References: <20190606021145.12604-1-sean.j.christopherson@intel.com>
+        Thu, 6 Jun 2019 01:21:05 -0400
+Received: from fsav101.sakura.ne.jp (fsav101.sakura.ne.jp [27.133.134.228])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x565KdJh017988;
+        Thu, 6 Jun 2019 14:20:39 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav101.sakura.ne.jp (F-Secure/fsigk_smtp/530/fsav101.sakura.ne.jp);
+ Thu, 06 Jun 2019 14:20:39 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/530/fsav101.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x565KdJL017984;
+        Thu, 6 Jun 2019 14:20:39 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: (from i-love@localhost)
+        by www262.sakura.ne.jp (8.15.2/8.15.2/Submit) id x565Kd8j017983;
+        Thu, 6 Jun 2019 14:20:39 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Message-Id: <201906060520.x565Kd8j017983@www262.sakura.ne.jp>
+X-Authentication-Warning: www262.sakura.ne.jp: i-love set sender to penguin-kernel@i-love.sakura.ne.jp using -f
+Subject: Re: KASAN: use-after-free Read in =?ISO-2022-JP?B?dG9tb3lvX3JlYWxwYXRo?=
+ =?ISO-2022-JP?B?X2Zyb21fcGF0aA==?=
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+To:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org
+Cc:     syzbot <syzbot+0341f6a4d729d4e0acf1@syzkaller.appspotmail.com>,
+        jmorris@namei.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Thu, 06 Jun 2019 14:20:39 +0900
+References: <0000000000004f43fa058a97f4d3@google.com> 
+Content-Type: text/plain; charset="ISO-2022-JP"
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The goal of selinux_enclave_load() is to provide a facsimile of the
-existing selinux_file_mprotect() and file_map_prot_check() policies,
-but tailored to the unique properties of SGX.
+Tetsuo Handa wrote:
+> The problem is that TOMOYO is accessing already freed socket from security_file_open()
+> which later fails with -ENXIO (because we can't get file descriptor of sockets via
+> /proc/pid/fd/n interface), and the file descriptor is getting released before
+> security_file_open() completes because we do not raise "struct file"->f_count of
+> the file which is accessible via /proc/pid/fd/n interface. We can avoid this problem
+> if we can avoid calling security_file_open() which after all fails with -ENXIO.
+> How should we handle this race? Let LSM modules check if security_file_open() was
+> called on a socket?
 
-For example, an enclave page is technically backed by a MAP_SHARED file,
-but the "file" is essentially shared memory that is never persisted
-anywhere and also requires execute permissions (for some pages).
+Well, just refusing security_file_open() is not sufficient, for open(O_PATH) allows installing
+file descriptor where SOCKET_I(inode)->sk can change at any moment, and TOMOYO cannot tell
+whether it is safe to access SOCKET_I(inode)->sk from security_inode_getattr().
 
-The basic concept is to require appropriate execute permissions on the
-source of the enclave for pages that are requesting PROT_EXEC, e.g. if
-an enclave page is being loaded from a regular file, require
-FILE__EXECUTE and/or FILE__EXECMOND, and if it's coming from an
-anonymous/private mapping, require PROCESS__EXECMEM since the process
-is essentially executing from the mapping, albeit in a roundabout way.
+But refusing open(O_PATH) as well might break userspace programs. Oh, no...
 
-Note, FILE__READ and FILE__WRITE are intentionally not required even if
-the source page is backed by a regular file.  Writes to the enclave page
-are contained to the EPC, i.e. never hit the original file, and read
-permissions have already been vetted (or the VMA doesn't have PROT_READ,
-in which case loading the page into the enclave will fail).
-
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
----
- security/selinux/hooks.c | 69 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
-
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 3ec702cf46ca..3c5418edf51c 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -6726,6 +6726,71 @@ static void selinux_bpf_prog_free(struct bpf_prog_aux *aux)
- }
- #endif
+----------------------------------------
+diff --git a/fs/open.c b/fs/open.c
+index b5b80469b93d..ea69668e2cd8 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -728,6 +728,16 @@ static int do_dentry_open(struct file *f,
+ 	/* Ensure that we skip any errors that predate opening of the file */
+ 	f->f_wb_err = filemap_sample_wb_err(f->f_mapping);
  
-+#ifdef CONFIG_INTEL_SGX
-+int selinux_enclave_load(struct vm_area_struct *vma, unsigned long prot)
-+{
-+	const struct cred *cred = current_cred();
-+	u32 sid = cred_sid(cred);
-+	int ret;
-+
-+	/* SGX is supported only in 64-bit kernels. */
-+	WARN_ON_ONCE(!default_noexec);
-+
-+	/* Only executable enclave pages are restricted in any way. */
-+	if (!(prot & PROT_EXEC))
-+		return 0;
-+
 +	/*
-+	 * The source page is exectuable, i.e. has already passed SELinux's
-+	 * checks, and userspace is not requesting RW->RX capabilities.
++	 * Sockets must not be opened via /proc/pid/fd/n, even with O_PATH,
++	 * for SOCKET_I(inode)->sk can be kfree()d at any moment after a file
++	 * descriptor obtained by opening /proc/pid/fd/n was installed.
 +	 */
-+	if ((vma->vm_flags & VM_EXEC) && !(prot & PROT_WRITE))
-+		return 0;
-+
-+	/*
-+	 * The source page is not executable, or userspace is requesting the
-+	 * ability to do a RW->RX conversion.  Permissions are required as
-+	 * follows, in order of increasing privelege:
-+	 *
-+	 * EXECUTE - Load an executable enclave page without RW->RX intent from
-+	 *           a non-executable vma that is backed by a shared mapping to
-+	 *           a regular file that has not undergone COW.
-+	 *
-+	 * EXECMOD - Load an executable enclave page without RW->RX intent from
-+	 *           a non-executable vma that is backed by a shared mapping to
-+	 *           a regular file that *has* undergone COW.
-+	 *
-+	 *         - Load an enclave page *with* RW->RX intent from a shared
-+	 *           mapping to a regular file.
-+	 *
-+	 * EXECMEM - Load an exectuable enclave page from an anonymous mapping.
-+	 *
-+	 *         - Load an exectuable enclave page from a private file, e.g.
-+	 *           from a shared mapping to a hugetlbfs file.
-+	 *
-+	 *         - Load an enclave page *with* RW->RX intent from a private
-+	 *           mapping to a regular file.
-+	 *
-+	 * Note, this hybrid EXECMOD and EXECMEM behavior is intentional and
-+	 * reflects the nature of enclaves and the EPC, e.g. EPC is effectively
-+	 * a non-persistent shared file, but each enclave is a private domain
-+	 * within that shared file, so delegate to the source of the enclave.
-+	 */
-+	if (vma->vm_file && !IS_PRIVATE(file_inode(vma->vm_file) &&
-+	    ((vma->vm_flags & VM_SHARED) || !(prot & PROT_WRITE)))) {
-+		if (!vma->anon_vma && !(prot & PROT_WRITE))
-+			ret = file_has_perm(cred, vma->vm_file, FILE__EXECUTE);
-+		else
-+			ret = file_has_perm(cred, vma->vm_file, FILE__EXECMOD);
-+	} else {
-+		ret = avc_has_perm(&selinux_state,
-+				   sid, sid, SECCLASS_PROCESS,
-+				   PROCESS__EXECMEM, NULL);
++	if (unlikely(S_ISSOCK(inode->i_mode))) {
++		error = (f->f_flags & O_PATH) ? -ENOENT : -ENXIO;
++		goto cleanup_file;
 +	}
-+	return ret;
-+}
-+#endif
 +
- struct lsm_blob_sizes selinux_blob_sizes __lsm_ro_after_init = {
- 	.lbs_cred = sizeof(struct task_security_struct),
- 	.lbs_file = sizeof(struct file_security_struct),
-@@ -6968,6 +7033,10 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(bpf_map_free_security, selinux_bpf_map_free),
- 	LSM_HOOK_INIT(bpf_prog_free_security, selinux_bpf_prog_free),
- #endif
-+
-+#ifdef CONFIG_INTEL_SGX
-+	LSM_HOOK_INIT(enclave_load, selinux_enclave_load),
-+#endif
- };
- 
- static __init int selinux_init(void)
--- 
-2.21.0
+ 	if (unlikely(f->f_flags & O_PATH)) {
+ 		f->f_mode = FMODE_PATH | FMODE_OPENED;
+ 		f->f_op = &empty_fops;
+----------------------------------------
 
+----------------------------------------
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/socket.h>
+
+int main(int argc, char *argv[])
+{
+        pid_t pid = getpid();
+        int fd = socket(AF_INET, SOCK_STREAM, 0);
+        char buffer[128] = { };
+        if (fork() == 0) {
+                struct stat buf = { };
+                close(fd);
+                snprintf(buffer, sizeof(buffer) - 1, "/proc/%u/fd/%u", pid, fd);
+                fd = open(buffer, __O_PATH);
+                sleep(5);
+                fstat(fd, &buf);
+                _exit(0);
+        }
+        sleep(2);
+        close(fd);
+        return 0;
+}
+----------------------------------------
