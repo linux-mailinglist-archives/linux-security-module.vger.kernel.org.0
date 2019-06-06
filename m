@@ -2,131 +2,145 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0EE7369D1
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Jun 2019 04:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CAA369E4
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Jun 2019 04:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfFFCI7 (ORCPT
+        id S1726674AbfFFCLu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 5 Jun 2019 22:08:59 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:59224 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbfFFCI6 (ORCPT
+        Wed, 5 Jun 2019 22:11:50 -0400
+Received: from mga17.intel.com ([192.55.52.151]:61631 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726541AbfFFCLu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 5 Jun 2019 22:08:58 -0400
-Received: from fsav302.sakura.ne.jp (fsav302.sakura.ne.jp [153.120.85.133])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x5628UTB064831;
-        Thu, 6 Jun 2019 11:08:30 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav302.sakura.ne.jp (F-Secure/fsigk_smtp/530/fsav302.sakura.ne.jp);
- Thu, 06 Jun 2019 11:08:30 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/530/fsav302.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x5628TDc064823;
-        Thu, 6 Jun 2019 11:08:30 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: (from i-love@localhost)
-        by www262.sakura.ne.jp (8.15.2/8.15.2/Submit) id x5628T0g064822;
-        Thu, 6 Jun 2019 11:08:29 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Message-Id: <201906060208.x5628T0g064822@www262.sakura.ne.jp>
-X-Authentication-Warning: www262.sakura.ne.jp: i-love set sender to penguin-kernel@i-love.sakura.ne.jp using -f
-Subject: Re: KASAN: use-after-free Read in =?ISO-2022-JP?B?dG9tb3lvX3JlYWxwYXRo?=
- =?ISO-2022-JP?B?X2Zyb21fcGF0aA==?=
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-To:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org
-Cc:     syzbot <syzbot+0341f6a4d729d4e0acf1@syzkaller.appspotmail.com>,
-        jmorris@namei.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp
+        Wed, 5 Jun 2019 22:11:50 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jun 2019 19:11:49 -0700
+X-ExtLoop1: 1
+Received: from sjchrist-coffee.jf.intel.com ([10.54.74.36])
+  by orsmga004.jf.intel.com with ESMTP; 05 Jun 2019 19:11:49 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Cedric Xing <cedric.xing@intel.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        Jethro Beekman <jethro@fortanix.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        linux-sgx@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, nhorman@redhat.com,
+        npmccallum@redhat.com, Serge Ayoun <serge.ayoun@intel.com>,
+        Shay Katz-zamir <shay.katz-zamir@intel.com>,
+        Haitao Huang <haitao.huang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kai Svahn <kai.svahn@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Kai Huang <kai.huang@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        William Roberts <william.c.roberts@intel.com>,
+        Philip Tricca <philip.b.tricca@intel.com>
+Subject: [RFC PATCH v2 0/5] security: x86/sgx: SGX vs. LSM
+Date:   Wed,  5 Jun 2019 19:11:40 -0700
+Message-Id: <20190606021145.12604-1-sean.j.christopherson@intel.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Date:   Thu, 06 Jun 2019 11:08:29 +0900
-References: <0000000000004f43fa058a97f4d3@google.com>
-In-Reply-To: <0000000000004f43fa058a97f4d3@google.com>
-Content-Type: text/plain; charset="ISO-2022-JP"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Here is a reproducer.
+This series is the result of a rather absurd amount of discussion over
+how to get SGX to play nice with LSM policies, without having to resort
+to evil shenanigans or put undue burden on userspace.  Discussions are
+still ongoing, e.g. folks are exploring alternatives to changing the
+proposed SGX UAPI, but I wanted to get this updated version of the code
+posted to show a fairly minimal implemenation(from a kernel perspective),
+e.g. the diff stats aren't too scary, especially considering 50% of the
+added lines are comments.
 
-The problem is that TOMOYO is accessing already freed socket from security_file_open()
-which later fails with -ENXIO (because we can't get file descriptor of sockets via
-/proc/pid/fd/n interface), and the file descriptor is getting released before
-security_file_open() completes because we do not raise "struct file"->f_count of
-the file which is accessible via /proc/pid/fd/n interface. We can avoid this problem
-if we can avoid calling security_file_open() which after all fails with -ENXIO.
-How should we handle this race? Let LSM modules check if security_file_open() was
-called on a socket?
+This series is a delta to Jarkko's ongoing SGX series and applies on
+Jarkko's current master at https://github.com/jsakkine-intel/linux-sgx.git:
 
-----------------------------------------
-diff --git a/fs/open.c b/fs/open.c
-index b5b80469b93d..995ffcb37128 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -765,6 +765,12 @@ static int do_dentry_open(struct file *f,
- 	error = security_file_open(f);
- 	if (error)
- 		goto cleanup_all;
-+	if (!strcmp(current->comm, "a.out") &&
-+	    f->f_path.dentry->d_sb->s_magic == SOCKFS_MAGIC) {
-+		printk("Start open(socket) delay\n");
-+		schedule_timeout_killable(HZ * 5);
-+		printk("End open(socket) delay\n");
-+	}
- 
- 	error = break_lease(locks_inode(f), f->f_flags);
- 	if (error)
-----------------------------------------
+  dfc89a83b5bc ("docs: x86/sgx: Document the enclave API")
 
-----------------------------------------
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/socket.h>
+The basic gist of the approach is to track an enclave's page protections
+separately from any vmas that map the page, and separate from the hardware
+enforced protections.  The SGX UAPI is modified to require userspace to
+explicitly define the protections for each enclave page, i.e. the ioctl
+to add pages to an enclave is extended to take PROT_{READ,WRITE,EXEC}
+flags.
 
-int main(int argc, char *argv[])
-{
-	pid_t pid = getpid();
-	int fd = socket(AF_ISDN, SOCK_RAW, 0);
-	char buffer[128] = { };
-	if (fork() == 0) {
-		close(fd);
-		snprintf(buffer, sizeof(buffer) - 1, "/proc/%u/fd/%u", pid, fd);
-		open(buffer, 3);
-		_exit(0);
-	}
-	sleep(2);
-	close(fd);
-	return 0;
-}
-----------------------------------------
+An enclave page's protections are the maximal protections that userspace
+can use to map the page, e.g. mprotect() and mmap() are rejected if the
+protections for the vma would be more permissible than those of the
+associated enclave page.
 
-----------------------------------------
-getpid()                                = 32504
-socket(AF_ISDN, SOCK_RAW, 0)            = 3
-clone(strace: Process 32505 attached
-child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7efea30dda10) = 32505
-[pid 32504] rt_sigprocmask(SIG_BLOCK, [CHLD],  <unfinished ...>
-[pid 32505] close(3 <unfinished ...>
-[pid 32504] <... rt_sigprocmask resumed> [], 8) = 0
-[pid 32505] <... close resumed> )       = 0
-[pid 32504] rt_sigaction(SIGCHLD, NULL, {SIG_DFL, [], 0}, 8) = 0
-[pid 32505] open("/proc/32504/fd/3", O_ACCMODE <unfinished ...>
-[pid 32504] rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
-[pid 32504] nanosleep({2, 0}, 0x7ffd3c608150) = 0
-[pid 32504] close(3)                    = 0
-[pid 32504] exit_group(0)               = ?
-[pid 32504] +++ exited with 0 +++
-<... open resumed> )                    = -1 ENXIO (No such device or address)
-exit_group(0)                           = ?
-----------------------------------------
+Tracking protections for an enclave page (in additional to vmas) allows
+SGX to invoke LSM upcalls while the enclave is being built.  This is
+critical to enabling LSMs to implement policies for enclave pages that
+are functionally equivalent to existing policies for normal pages.
 
-----------------------------------------
-[   95.109628] Start open(socket) delay
-[   97.113150] base_sock_release(00000000506a3239) sk=00000000016d0ceb
-[  100.142235] End open(socket) delay
-----------------------------------------
+v1: https://lkml.kernel.org/r/20190531233159.30992-1-sean.j.christopherson@intel.com
+
+v2:
+  - Dropped the patch(es) to extend the SGX UAPI to allow adding multiple
+    enclave pages in a single syscall [Jarkko].
+
+  - Reject ioctl() immediately on LSM denial [Stephen].
+
+  - Rework SELinux code to avoid checking EXEMEM multiple times [Stephen].
+
+  - Adding missing equivalents to existing selinux_file_protect() checks
+    [Stephen].
+
+  - Hold mmap_sem across copy_to_user() to prevent a TOCTOU race when
+    checking the source vma [Stephen].
+
+  - Stubify security_enclave_load() if !CONFIG_SECURITY [Stephen].
+
+  - Make flags a 32-bit field [Andy].
+
+  - Don't validate the SECINFO protection flags against the enclave
+    page's protection flags [Andy].
+
+  - Rename mprotect() hook to may_mprotect() [Andy].
+
+  - Test 'vma->vm_flags & VM_MAYEXEC' instead of manually checking for
+    a noexec path [Jarkko].
+
+  - Drop the SGX defined flags (use PROT_*) [Jarkko].
+
+  - Improve comments and changelogs [Jarkko].
+
+Sean Christopherson (5):
+  mm: Introduce vm_ops->may_mprotect()
+  x86/sgx: Require userspace to define enclave pages' protection bits
+  x86/sgx: Enforce noexec filesystem restriction for enclaves
+  LSM: x86/sgx: Introduce ->enclave_load() hook for Intel SGX
+  security/selinux: Add enclave_load() implementation
+
+ arch/x86/include/uapi/asm/sgx.h        |  2 +
+ arch/x86/kernel/cpu/sgx/driver/ioctl.c | 57 ++++++++++++++++++---
+ arch/x86/kernel/cpu/sgx/driver/main.c  |  5 ++
+ arch/x86/kernel/cpu/sgx/encl.c         | 53 ++++++++++++++++++++
+ arch/x86/kernel/cpu/sgx/encl.h         |  4 ++
+ include/linux/lsm_hooks.h              | 13 +++++
+ include/linux/mm.h                     |  2 +
+ include/linux/security.h               | 12 +++++
+ mm/mprotect.c                          | 15 ++++--
+ security/security.c                    |  7 +++
+ security/selinux/hooks.c               | 69 ++++++++++++++++++++++++++
+ 11 files changed, 228 insertions(+), 11 deletions(-)
+
+-- 
+2.21.0
+
