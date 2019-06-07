@@ -2,113 +2,119 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD23B3821D
-	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jun 2019 02:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C9D3823A
+	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jun 2019 02:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728268AbfFGAYK (ORCPT
+        id S1727059AbfFGAjz (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 6 Jun 2019 20:24:10 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:42128 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728164AbfFGAYJ (ORCPT
+        Thu, 6 Jun 2019 20:39:55 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34588 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726671AbfFGAjz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 6 Jun 2019 20:24:09 -0400
-Received: by mail-pl1-f194.google.com with SMTP id go2so95800plb.9;
-        Thu, 06 Jun 2019 17:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jdwxKl4wizRzQbk4/KFjYiC+r5p9VBOXnRG4nGLJdyM=;
-        b=frlMsdvRlMIKMpedZliCN+HPffi6wAqXgAoTFT8Ks+g5V7zdE7bX8303KGk27gtbes
-         KMHRG6XxHla+t/fP27Flq6gQ4Pv6SdLY5U4NbA2c1MIQuZwsttKx6pVpUxn8YO/EGFAX
-         9rgGij9qUU0JNksQt5hHOuXHl2Tzi2sluMKkmdzufcam7R2Q213zaozVtY3CHbANb1GT
-         HD8d0cfs4kHCjLoETZCpWnSW/UMg8aPu92Aakyfpky0kzUO/hMKQNiwIEr19kzLJRFB0
-         2xqVrL6IHVIj7ycebNkSBfparupv7fFgKsy7dpANcDbDMl5NcIgik2M989+cU/l16kd/
-         rQQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jdwxKl4wizRzQbk4/KFjYiC+r5p9VBOXnRG4nGLJdyM=;
-        b=BeMZK73EAf0eP0xu1pqTrLYwbm4EJ1gP77xlrB5IhYXYm9ADjFNCwEFiTymd939fdA
-         mqgRey5PdThzM1LCTHCgl3okYu1AAYsVGn+JuZljUoulV4fz2XTeBciv0Zj+xk7+b7VM
-         9hD0/MtiITgymti0YVoPskED46grgrgtuAvUVwKkE7l4KKj7jJCUMMmzHp6HX0h1pOA6
-         8WWDtUNw0HzFnwkeB/QAc+uCNuf869Iy/2uvEqSf/O+AYtWcBUODQGXDi0h2/dkeILD3
-         zwq+IxUyXFKsWDWc7e4I2o+BSseF+RxOicRY2k090SIN6Bpz6QZbnv3gSI5zuKL3HyjE
-         qC8w==
-X-Gm-Message-State: APjAAAUtR2jea9/RxYBZgD+0Hb8OXE8iOV7lsMXL4O4i5/ANlTwfG0os
-        0PVTzB/ldxoetm32j2WNRPGzH7jT
-X-Google-Smtp-Source: APXvYqz/nkScLwgduXSW5wicT5ZRU/9QLcW+qAU40EZc1xQ7j9Og96KOCy6jxVbdHntHKFuBJ50DIA==
-X-Received: by 2002:a17:902:f01:: with SMTP id 1mr52664019ply.170.1559867048193;
-        Thu, 06 Jun 2019 17:24:08 -0700 (PDT)
-Received: from localhost.localdomain ([167.220.98.69])
-        by smtp.gmail.com with ESMTPSA id o13sm324179pfh.23.2019.06.06.17.24.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 17:24:07 -0700 (PDT)
-From:   Prakhar Srivastava <prsriva02@gmail.com>
-To:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zohar@linux.ibm.com, roberto.sassu@huawei.com, vgoyal@redhat.com,
-        Prakhar Srivastava <prsriva02@gmail.com>
-Subject: [PATCH v7 3/3] call ima_kexec_cmdline to measure the cmdline args
-Date:   Thu,  6 Jun 2019 17:23:30 -0700
-Message-Id: <20190607002330.2999-4-prsriva02@gmail.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190607002330.2999-1-prsriva02@gmail.com>
-References: <20190607002330.2999-1-prsriva02@gmail.com>
+        Thu, 6 Jun 2019 20:39:55 -0400
+Received: from static-50-53-54-166.bvtn.or.frontiernet.net ([50.53.54.166] helo=[192.168.192.153])
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <john.johansen@canonical.com>)
+        id 1hZ2vB-0007zT-8A; Fri, 07 Jun 2019 00:39:53 +0000
+From:   John Johansen <john.johansen@canonical.com>
+Subject: [GIT PULL] apparmor bug fixes for v5.3-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKLM <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=john.johansen@canonical.com; prefer-encrypt=mutual; keydata=
+ xsFNBE5mrPoBEADAk19PsgVgBKkImmR2isPQ6o7KJhTTKjJdwVbkWSnNn+o6Up5knKP1f49E
+ BQlceWg1yp/NwbR8ad+eSEO/uma/K+PqWvBptKC9SWD97FG4uB4/caomLEU97sLQMtnvGWdx
+ rxVRGM4anzWYMgzz5TZmIiVTZ43Ou5VpaS1Vz1ZSxP3h/xKNZr/TcW5WQai8u3PWVnbkjhSZ
+ PHv1BghN69qxEPomrJBm1gmtx3ZiVmFXluwTmTgJOkpFol7nbJ0ilnYHrA7SX3CtR1upeUpM
+ a/WIanVO96WdTjHHIa43fbhmQube4txS3FcQLOJVqQsx6lE9B7qAppm9hQ10qPWwdfPy/+0W
+ 6AWtNu5ASiGVCInWzl2HBqYd/Zll93zUq+NIoCn8sDAM9iH+wtaGDcJywIGIn+edKNtK72AM
+ gChTg/j1ZoWH6ZeWPjuUfubVzZto1FMoGJ/SF4MmdQG1iQNtf4sFZbEgXuy9cGi2bomF0zvy
+ BJSANpxlKNBDYKzN6Kz09HUAkjlFMNgomL/cjqgABtAx59L+dVIZfaF281pIcUZzwvh5+JoG
+ eOW5uBSMbE7L38nszooykIJ5XrAchkJxNfz7k+FnQeKEkNzEd2LWc3QF4BQZYRT6PHHga3Rg
+ ykW5+1wTMqJILdmtaPbXrF3FvnV0LRPcv4xKx7B3fGm7ygdoowARAQABzR1Kb2huIEpvaGFu
+ c2VuIDxqb2huQGpqbXgubmV0PsLBegQTAQoAJAIbAwULCQgHAwUVCgkICwUWAgMBAAIeAQIX
+ gAUCTo0YVwIZAQAKCRAFLzZwGNXD2LxJD/9TJZCpwlncTgYeraEMeDfkWv8c1IsM1j0AmE4V
+ tL+fE780ZVP9gkjgkdYSxt7ecETPTKMaZSisrl1RwqU0oogXdXQSpxrGH01icu/2n0jcYSqY
+ KggPxy78BGs2LZq4XPfJTZmHZGnXGq/eDr/mSnj0aavBJmMZ6jbiPz6yHtBYPZ9fdo8btczw
+ P41YeWoIu26/8II6f0Xm3VC5oAa8v7Rd+RWZa8TMwlhzHExxel3jtI7IzzOsnmE9/8Dm0ARD
+ 5iTLCXwR1cwI/J9BF/S1Xv8PN1huT3ItCNdatgp8zqoJkgPVjmvyL64Q3fEkYbfHOWsaba9/
+ kAVtBNz9RTFh7IHDfECVaToujBd7BtPqr+qIjWFadJD3I5eLCVJvVrrolrCATlFtN3YkQs6J
+ n1AiIVIU3bHR8Gjevgz5Ll6SCGHgRrkyRpnSYaU/uLgn37N6AYxi/QAL+by3CyEFLjzWAEvy
+ Q8bq3Iucn7JEbhS/J//dUqLoeUf8tsGi00zmrITZYeFYARhQMtsfizIrVDtz1iPf/ZMp5gRB
+ niyjpXn131cm3M3gv6HrQsAGnn8AJru8GDi5XJYIco/1+x/qEiN2nClaAOpbhzN2eUvPDY5W
+ 0q3bA/Zp2mfG52vbRI+tQ0Br1Hd/vsntUHO903mMZep2NzN3BZ5qEvPvG4rW5Zq2DpybWc7B
+ TQROZqz6ARAAoqw6kkBhWyM1fvgamAVjeZ6nKEfnRWbkC94L1EsJLup3Wb2X0ABNOHSkbSD4
+ pAuC2tKF/EGBt5CP7QdVKRGcQzAd6b2c1Idy9RLw6w4gi+nn/d1Pm1kkYhkSi5zWaIg0m5RQ
+ Uk+El8zkf5tcE/1N0Z5OK2JhjwFu5bX0a0l4cFGWVQEciVMDKRtxMjEtk3SxFalm6ZdQ2pp2
+ 822clnq4zZ9mWu1d2waxiz+b5Ia4weDYa7n41URcBEUbJAgnicJkJtCTwyIxIW2KnVyOrjvk
+ QzIBvaP0FdP2vvZoPMdlCIzOlIkPLgxE0IWueTXeBJhNs01pb8bLqmTIMlu4LvBELA/veiaj
+ j5s8y542H/aHsfBf4MQUhHxO/BZV7h06KSUfIaY7OgAgKuGNB3UiaIUS5+a9gnEOQLDxKRy/
+ a7Q1v9S+Nvx+7j8iH3jkQJhxT6ZBhZGRx0gkH3T+F0nNDm5NaJUsaswgJrqFZkUGd2Mrm1qn
+ KwXiAt8SIcENdq33R0KKKRC80Xgwj8Jn30vXLSG+NO1GH0UMcAxMwy/pvk6LU5JGjZR73J5U
+ LVhH4MLbDggD3mPaiG8+fotTrJUPqqhg9hyUEPpYG7sqt74Xn79+CEZcjLHzyl6vAFE2W0kx
+ lLtQtUZUHO36afFv8qGpO3ZqPvjBUuatXF6tvUQCwf3H6XMAEQEAAcLBXwQYAQoACQUCTmas
+ +gIbDAAKCRAFLzZwGNXD2D/XD/0ddM/4ai1b+Tl1jznKajX3kG+MeEYeI4f40vco3rOLrnRG
+ FOcbyyfVF69MKepie4OwoI1jcTU0ADecnbWnDNHpr0SczxBMro3bnrLhsmvjunTYIvssBZtB
+ 4aVJjuLILPUlnhFqa7fbVq0ZQjbiV/rt2jBENdm9pbJZ6GjnpYIcAbPCCa/ffL4/SQRSYHXo
+ hGiiS4y5jBTmK5ltfewLOw02fkexH+IJFrrGBXDSg6n2Sgxnn++NF34fXcm9piaw3mKsICm+
+ 0hdNh4afGZ6IWV8PG2teooVDp4dYih++xX/XS8zBCc1O9w4nzlP2gKzlqSWbhiWpifRJBFa4
+ WtAeJTdXYd37j/BI4RWWhnyw7aAPNGj33ytGHNUf6Ro2/jtj4tF1y/QFXqjJG/wGjpdtRfbt
+ UjqLHIsvfPNNJq/958p74ndACidlWSHzj+Op26KpbFnmwNO0psiUsnhvHFwPO/vAbl3RsR5+
+ 0Ro+hvs2cEmQuv9r/bDlCfpzp2t3cK+rhxUqisOx8DZfz1BnkaoCRFbvvvk+7L/fomPntGPk
+ qJciYE8TGHkZw1hOku+4OoM2GB5nEDlj+2TF/jLQ+EipX9PkPJYvxfRlC6dK8PKKfX9KdfmA
+ IcgHfnV1jSn+8yH2djBPtKiqW0J69aIsyx7iV/03paPCjJh7Xq9vAzydN5U/UA==
+Organization: Canonical
+Message-ID: <de770db0-5451-c57f-df52-75114ad290e9@canonical.com>
+Date:   Thu, 6 Jun 2019 17:39:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-During soft reboot(kexec_file_load) boot cmdline args
-are not measured.Thus the new kernel on load boots with
-an assumption of cold reboot.
+Hi Linus,
 
-This patch makes a call to the ima hook ima_kexec_cmdline,
-added in "Add a new ima hook ima_kexec_cmdline to measure
-cmdline args"
-to measure the boot cmdline args into the ima log.
 
-- call ima_kexec_cmdline from kexec_file_load.
-- move the call ima_add_kexec_buffer after the cmdline
-args have been measured.
+Can you please pull the following bug fixes for apparmor
+Thanks!
 
-Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
----
- kernel/kexec_file.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+- John
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 072b6ee55e3f..ed4727586fc3 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -198,9 +198,6 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 		return ret;
- 	image->kernel_buf_len = size;
- 
--	/* IMA needs to pass the measurement list to the next kernel. */
--	ima_add_kexec_buffer(image);
--
- 	/* Call arch image probe handlers */
- 	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
- 					    image->kernel_buf_len);
-@@ -241,8 +238,13 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 			ret = -EINVAL;
- 			goto out;
- 		}
-+
-+		ima_kexec_cmdline(image->cmdline_buf, image->cmdline_buf_len - 1);
- 	}
- 
-+	/* IMA needs to pass the measurement list to the next kernel. */
-+	ima_add_kexec_buffer(image);
-+
- 	/* Call arch image load handlers */
- 	ldata = arch_kexec_kernel_image_load(image);
- 
--- 
-2.19.1
+
+The following changes since commit b8a5afa418c1f5c8d7814ef829a88e60ae52f618:
+
+  net: correct zerocopy refcnt with udp MSG_MORE (2019-05-31 06:40:10 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-pr-2019-06-06
+
+for you to fetch changes up to dd60c38193b1cd8bc1cbde1425881cd5227ef466:
+
+  apparmor: enforce nullbyte at end of tag string (2019-05-31 06:50:00 -0700)
+
+----------------------------------------------------------------
++ Bug Fixes
+  - Fix PROFILE_MEDIATES for untrusted input
+  - enforce nullbyte at end of tag string
+
+----------------------------------------------------------------
+Jann Horn (1):
+      apparmor: enforce nullbyte at end of tag string
+
+John Johansen (1):
+      apparmor: fix PROFILE_MEDIATES for untrusted input
+
+ security/apparmor/include/policy.h | 11 ++++++++++-
+ security/apparmor/policy_unpack.c  |  2 +-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
 
