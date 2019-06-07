@@ -2,90 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7C3383B3
-	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jun 2019 07:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451AE384C6
+	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jun 2019 09:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbfFGFTS (ORCPT
+        id S1727055AbfFGHNm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 7 Jun 2019 01:19:18 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42413 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725497AbfFGFTS (ORCPT
+        Fri, 7 Jun 2019 03:13:42 -0400
+Received: from smtp1.iitb.ac.in ([103.21.127.13]:45354 "EHLO smtp1.iitb.ac.in"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727190AbfFGHNl (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 7 Jun 2019 01:19:18 -0400
-Received: by mail-lf1-f67.google.com with SMTP id y13so596481lfh.9
-        for <linux-security-module@vger.kernel.org>; Thu, 06 Jun 2019 22:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gcgoiMaasR9GYRsYKIbgillYLme+avvxyb1D2UipF2A=;
-        b=SP39a6dKhm2JhOqt3S0Fm0qRBQu9iyXJKug3k/afiQrepK7Q2eS1h0zRSVggRpCuuR
-         g9Waph99295vdX3PMAjEGsSeAs1TBn/4CX99WfxKIuzqjFADrB9+b6f8DcX/DP+HcPFt
-         kILQsby0yTn/aQE3U0yncwScOJUmJKIBNnUBDm3GO+rAjm2bKQcCCz86gS1h+9zE7Jy5
-         Kqt8eQ21CZWLEDCqZKd8vdPHSNJ++duTcJr+GNaDNvj339S7HBzy6A2s3IiFd2ozg6nI
-         4kYz/ztUrgXhV7m5UnC5fsEVRsDs0j6wS5CG5WeT6dwdNNevjmQo1do8nK1KjAXT4hs3
-         qzjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gcgoiMaasR9GYRsYKIbgillYLme+avvxyb1D2UipF2A=;
-        b=hZ4aO3pPDIiiq5B3xRcPq4J4H4ZNk97X7rhgUDb5s6i1c+InK0Ti6nsNCFIW6OrQoN
-         iUZKzicShjMxzCrF6Y3WgkDQ5gC1BzHkfX7i7ch4h+eSWeB+de5MQzoskhI8Ppv0f10Y
-         9lnerhAbgQPNxSEM7DdgLbWd71ec4EK6PzrBwZfTx2y9T8fKJFh/pgHqvaxkHVAKjeIe
-         CZEXa6EYk3zRpURKZ35i1cjMCzOSSUdkqTWE3RDKnXHsva3nzEf9b1GTC6DJgUAzUG6V
-         0B2TOJLJpEtoPk7LBPp58r0cV9/dqnBZ99Ix7Z9ET8bKdzaImRhJPlBbY/L6PlmiqwID
-         i3yg==
-X-Gm-Message-State: APjAAAWj1fm4zQ+tXdAHwOjS2WJTJGBVVYZuxi+6lV0jHV5BJAvh87oT
-        p/yUuvsKy+J543O2ZxAfY50Y5wL9Ewb4cNRu1w3d
-X-Google-Smtp-Source: APXvYqzsTuviT5aNkwwxpngJQ/DjOkvU8YIIHHF9yGzi6lk6g5L9aG5wM1AhEEb5I6PbUv2+dma9rY8UVj6QAQGcTGU=
-X-Received: by 2002:a19:7716:: with SMTP id s22mr8063496lfc.64.1559884755951;
- Thu, 06 Jun 2019 22:19:15 -0700 (PDT)
+        Fri, 7 Jun 2019 03:13:41 -0400
+Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
+        by smtp1.iitb.ac.in (Postfix) with SMTP id 0AEE3105B77F
+        for <linux-security-module@vger.kernel.org>; Fri,  7 Jun 2019 12:01:34 +0530 (IST)
+Received: (qmail 27999 invoked by uid 510); 7 Jun 2019 12:01:33 +0530
+X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <rws@aero.iitb.ac.in>, uid 501) with qmail-scanner-2.11
+ spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/25472} 
+ Clear:RC:1(10.200.1.25):SA:0(1.5/7.0):. Processed in 2.069313 secs; 07 Jun 2019 12:01:33 +0530
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on ldns1.iitb.ac.in
+X-Spam-Level: *
+X-Spam-Status: No, score=1.5 required=7.0 tests=BAYES_50,IITB_ORIG,
+        MISSING_HEADERS,PROPER_IITB_MSGID,T_RP_MATCHES_RCVD autolearn=disabled
+        version=3.4.1
+X-Spam-Pyzor: Reported 0 times.
+X-Envelope-From: rws@aero.iitb.ac.in
+X-Qmail-Scanner-Mime-Attachments: |
+X-Qmail-Scanner-Zip-Files: |
+Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
+  by ldns1.iitb.ac.in with SMTP; 7 Jun 2019 12:01:31 +0530
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by ldns1.iitb.ac.in (Postfix) with ESMTP id 80518360036;
+        Fri,  7 Jun 2019 12:01:17 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id E4B948902E55E;
+        Fri,  7 Jun 2019 12:01:16 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id uy24o_MU5OGU; Fri,  7 Jun 2019 12:01:16 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 5C3AC8902E548;
+        Fri,  7 Jun 2019 12:01:14 +0530 (IST)
+X-Virus-Scanned: amavisd-new at aero.iitb.ac.in
+Received: from vayu.aero.iitb.ac.in ([127.0.0.1])
+        by localhost (vayu.aero.iitb.ac.in [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2kbUWSjAc2AF; Fri,  7 Jun 2019 12:01:14 +0530 (IST)
+Received: from vayu.aero.iitb.ac.in (vayu.aero.iitb.ac.in [10.101.1.1])
+        by vayu.aero.iitb.ac.in (Postfix) with ESMTP id 0EEE684310111;
+        Fri,  7 Jun 2019 12:01:10 +0530 (IST)
+Date:   Fri, 7 Jun 2019 12:01:09 +0530 (IST)
+From:   Martins Henry <rws@aero.iitb.ac.in>
+Message-ID: <412557711.60336.1559889069980.JavaMail.zimbra@aero.iitb.ac.in>
+Subject: Thanks and I wait for your answer
 MIME-Version: 1.0
-References: <20190605083606.4209-1-janne.karhunen@gmail.com>
- <9121835b-d6ac-c9d5-349a-1ef7024c6192@schaufler-ca.com> <CAE=NcrahPmzmB-xJwxzXqaPGtJY+ijbxV4wXz7K=y-ocw4Cmwg@mail.gmail.com>
- <1edfbd72-f492-db17-8717-a8cfe30d9654@schaufler-ca.com> <CAHC9VhTzwPoxYPxYWn15ZQQwM6Q3wGJSRybb-zu_ZDA1xU6ziQ@mail.gmail.com>
- <alpine.LRH.2.21.1906071043160.21512@namei.org>
-In-Reply-To: <alpine.LRH.2.21.1906071043160.21512@namei.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 7 Jun 2019 01:19:04 -0400
-Message-ID: <CAHC9VhSrjVmnsAuXDmHVmsyDaEF10nsvdxq7VsfCsh=NfaOMQg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] LSM: switch to blocking policy update notifiers
-To:     James Morris <jmorris@namei.org>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.101.1.5]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF11 (Win)/8.8.12_GA_3794)
+Thread-Index: SsslhYkcLNFU69da/wYft5cO9/ZYnA==
+Thread-Topic: Thanks and I wait for your answer
+To:     unlisted-recipients:; (no To-header on input)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Jun 6, 2019 at 8:45 PM James Morris <jmorris@namei.org> wrote:
-> On Wed, 5 Jun 2019, Paul Moore wrote:
-> > On Wed, Jun 5, 2019 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > > On 6/5/2019 9:51 AM, Janne Karhunen wrote:
-> > >
-> > > One hook with an added "bool blocking" argument, if
-> > > that's the only difference?
-> >
-> > I think there is value in keeping a similar convention to the notifier
-> > code on which this is based, see include/linux/notifier.h.
->
-> Although this doesn't seem to be what other users in the kernel are doing.
+Hello,
 
-How many of them potentially have the need for both blocking and
-non-blocking notifiers?  I didn't go through the entire list of
-callers, but it seems all that I looked at used only one type.  The
-simple fact that we started with one type of notifier for the LSM, and
-we are now switching to the other (and getting lucky that it is safe
-to do so for the existing callers) seems to lend some weight to the
-argument we may need both and adding "block"/"blocking"/etc. to the
-name has value.
+I am Martin Henry, An American Citizen; I am the personal secretary to
+Mr. Donald Railton, the controller of a Lottery Company. Please I am
+having big problem now, I have a 6yrs old daughter who has leukemia, a
+disease of the blood, and she needs a bone marrow transplant or she
+will die.
 
--- 
-paul moore
-www.paul-moore.com
+Please I am only asking for your help and you will benefit from it
+also. As an insider with Lottery Firm, working as the personal
+secretary to the controller, I want you to send me your name to play,
+I have some numbers that are going to win, stored in his secret data
+system in the office. The Lottery is an online entry with credit card
+anywhere with a name and address. All I want you to do is to send your
+name to play it and I will send confirmation to you.
+
+I will play with my card on your name and the Prize will be shared
+equally between us. Immediately the results are released they will
+contact you for payment as the oversea winner. The lotto can be played
+with 9.00 dollars, or 50 dollars but the prize will be Millions.
+Remember that I am playing on your name with my card; I just want to
+front you for this, because I need this money to save the life of my
+little daughter.
+
+Thanks and I wait for your answer
+Martin Henry.
