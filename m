@@ -2,218 +2,91 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F11139072
-	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jun 2019 17:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B6E3925A
+	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jun 2019 18:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732014AbfFGPwK convert rfc822-to-8bit (ORCPT
+        id S1730550AbfFGQlH (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 7 Jun 2019 11:52:10 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:45762 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730266AbfFGPwI (ORCPT
+        Fri, 7 Jun 2019 12:41:07 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:37905 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729953AbfFGQlH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 7 Jun 2019 11:52:08 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A1E209B3B7;
-        Fri,  7 Jun 2019 15:52:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-173.rdu2.redhat.com [10.10.120.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B6A1160D7C;
-        Fri,  7 Jun 2019 15:52:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20190607151228.GA1872258@magnolia>
-References: <20190607151228.GA1872258@magnolia> <155991702981.15579.6007568669839441045.stgit@warthog.procyon.org.uk> <155991706083.15579.16359443779582362339.stgit@warthog.procyon.org.uk>
-To:     "Darrick J. Wong" <darrick.wong@oracle.com>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk, raven@themaw.net,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/13] uapi: General notification ring definitions [ver #4]
+        Fri, 7 Jun 2019 12:41:07 -0400
+Received: by mail-lf1-f68.google.com with SMTP id b11so2107838lfa.5
+        for <linux-security-module@vger.kernel.org>; Fri, 07 Jun 2019 09:41:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/hjS06kksmvXKKACQCnPiaKbtP2R8cOVn1m0gpdsIsk=;
+        b=OZMxqdUWGyNBlPYl3DcxShmsv9iCdGBuWVI8mpGyqO8IwRynjBT9fPkhnJaQggffy5
+         rmXtERqcYDfoLeheyZW8mY4tYKc5XVa0lHT+e7AVmf5v4Zq68YwtRhbLe0i713O8d/rD
+         Ko4pfrfcY7S8q1zPpMy8L6jrtTFnSd+HzC884=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/hjS06kksmvXKKACQCnPiaKbtP2R8cOVn1m0gpdsIsk=;
+        b=lwiT47/pvJ0gZn1CyzQ8dIrze4HTB/Lg+pp/NyjcLcKlGsatwqFH/GVmnirchq7T+Z
+         DJpvF5HFFYJsZKPUB2WnQEd9mbh/e76a77pvtjc4xtzmrL2dlDnSltZH3vF+YXUDmZXE
+         fpQ5ZD4RwMyS8WBh65Ih+7fm7tTFrX04u5ZQsuwjDcMV5jbA6ei/qsb/iH8z1V0UKS3V
+         QPUZayanpmrWRL1gR7DHclihrnIkKQf9bZS09GPquwXvVH3zmFZQLqqBrOgUHefFcw8g
+         Icdxpk+ChzWXtyJOtp/SLPBu5Rvy5nyt21FDQEXSRGB/I2mALW4IQB+dWbSQWyC8t5pP
+         vHvA==
+X-Gm-Message-State: APjAAAVEuuv4RdKijS1pShmTiAP1euXLWvrDTsC96VAITRUITZ/w3aBn
+        1vPeDW5wih4aARtDcJ8yc/GiFo3/bzg=
+X-Google-Smtp-Source: APXvYqxCnYS5LgIDPv8ydv7bktgHTGAL52+4MjKTqCsUzsLKExixNb2LB1A+KZvHKTe1DSHdAKUZ2w==
+X-Received: by 2002:a19:7110:: with SMTP id m16mr27403790lfc.4.1559925665042;
+        Fri, 07 Jun 2019 09:41:05 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id o8sm467365ljh.42.2019.06.07.09.41.04
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Jun 2019 09:41:04 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id r15so2092504lfm.11
+        for <linux-security-module@vger.kernel.org>; Fri, 07 Jun 2019 09:41:04 -0700 (PDT)
+X-Received: by 2002:ac2:59c9:: with SMTP id x9mr27015971lfn.52.1559925663867;
+ Fri, 07 Jun 2019 09:41:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <29221.1559922719.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: 8BIT
-Date:   Fri, 07 Jun 2019 16:51:59 +0100
-Message-ID: <29222.1559922719@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Fri, 07 Jun 2019 15:52:08 +0000 (UTC)
+References: <de770db0-5451-c57f-df52-75114ad290e9@canonical.com>
+In-Reply-To: <de770db0-5451-c57f-df52-75114ad290e9@canonical.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 7 Jun 2019 09:40:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg=io4rX2qzupdd4XdYy6okMx5jjzEwXe_UvLQgLsSUFA@mail.gmail.com>
+Message-ID: <CAHk-=wg=io4rX2qzupdd4XdYy6okMx5jjzEwXe_UvLQgLsSUFA@mail.gmail.com>
+Subject: Re: [GIT PULL] apparmor bug fixes for v5.3-rc4
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     LKLM <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Darrick J. Wong <darrick.wong@oracle.com> wrote:
+On Thu, Jun 6, 2019 at 5:39 PM John Johansen
+<john.johansen@canonical.com> wrote:
+>
+> Can you please pull the following bug fixes for apparmor
 
-> > +enum watch_notification_type {
-> > +	WATCH_TYPE_META		= 0,	/* Special record */
-> > +	WATCH_TYPE_MOUNT_NOTIFY	= 1,	/* Mount notification record */
-> > +	WATCH_TYPE_SB_NOTIFY	= 2,	/* Superblock notification */
-> > +	WATCH_TYPE_KEY_NOTIFY	= 3,	/* Key/keyring change notification */
-> > +	WATCH_TYPE_BLOCK_NOTIFY	= 4,	/* Block layer notifications */
-> > +#define WATCH_TYPE___NR 5
-> 
-> Given the way enums work I think you can just make WATCH_TYPE___NR the
-> last element in the enum?
+No I can not.
 
-Yeah.  I've a feeling I'd been asked not to do that, but I don't remember who
-by.
+You have for some completely unrecognizable reason rebased OTHER PEOPLES WORK.
 
-> > +struct watch_notification {
-> 
-> Kind of a long name...
+There are two new apparmor commits in there, but there are also 89
+random rebased patches from the networking tree.
 
-*shrug*.  Try to avoid conflicts with userspace symbols.
+What is going with all the security subsystem issues? Why does this
+garbage keep on happening, and why are the security trees doing this
+when everybody else has learnt.
 
-> > +	__u32			type:24;	/* enum watch_notification_type */
-> > +	__u32			subtype:8;	/* Type-specific subtype (filterable) */
-> 
-> 16777216 diferent types and 256 different subtypes?  My gut instinct
-> wants a better balance, though I don't know where I'd draw the line.
-> Probably 12 bits for type and 10 for subtype?  OTOH I don't have a good
-> sense of how many distinct notification types an XFS would want to send
-> back to userspace, and maybe 256 subtypes is fine.  We could always
-> reserve another watch_notification_type if we need > 256.
-> 
-> Ok, no objections. :)
+DO NOT REBASE. NOT EVER. YOU CLEARLY DO NOT KNOW WHAT YOU ARE DOING.
+"git rebase" and "git merge" are not commands you should ever EVER
+EVER use, because you don't seem to understand what they do.
 
-If a source wants more than 256 subtypes, it can always allocate an additional
-type.  Note that the greater the number of subtypes, the larger the filter
-structure (added in patch 5).
+I'm seriously fed up with all the security subsystem by now. This is
+not ok. It's not even one person, it seems to be a common issue where
+people do completely odd things that make zero sense.
 
-> > +	__u32			info;
-> > +#define WATCH_INFO_OVERRUN	0x00000001	/* Event(s) lost due to overrun */
-> > +#define WATCH_INFO_ENOMEM	0x00000002	/* Event(s) lost due to ENOMEM */
-> > +#define WATCH_INFO_RECURSIVE	0x00000004	/* Change was recursive */
-> > +#define WATCH_INFO_LENGTH	0x000001f8	/* Length of record / sizeof(watch_notification) */
-> 
-> This is a mask, isn't it?  Could we perhaps have some helpers here?
-> Something along the lines of...
-> 
-> #define WATCH_INFO_LENGTH_MASK	0x000001f8
-> #define WATCH_INFO_LENGTH_SHIFT	3
-> 
-> static inline size_t watch_notification_length(struct watch_notification *wn)
-> {
-> 	return (wn->info & WATCH_INFO_LENGTH_MASK) >> WATCH_INFO_LENGTH_SHIFT *
-> 			sizeof(struct watch_notification);
-> }
-> 
-> static inline struct watch_notification *watch_notification_next(
-> 		struct watch_notification *wn)
-> {
-> 	return wn + ((wn->info & WATCH_INFO_LENGTH_MASK) >>
-> 			WATCH_INFO_LENGTH_SHIFT);
-> }
-
-No inline functions in UAPI headers, please.  I'd love to kill off the ones
-that we have, but that would break things.
-
-> ...so that we don't have to opencode all of the ring buffer walking
-> magic and stuff?
-
-There'll end up being a small userspace library, I think.
-
-> (I might also shorten the namespace from WATCH_INFO_ to WNI_ ...)
-
-I'd rather not do that.  WNI_ could mean all sorts of things - at a first
-glance, it sounds like something to do with Windows or windowing.
-
-> Hmm so the length field is 6 bits and therefore the maximum size of a
-> notification record is ... 63 * (sizeof(u32)  * 2) = 504 bytes?  Which
-> means that kernel users can send back a maximum payload of 496 bytes?
-> That's probably big enough for random fs notifications (bad metadata
-> detected, media errors, etc.)
-
-Yep.  The ring buffer is limited in capacity since it has to be unswappable so
-that notifications can be written into it from softirq context or under lock.
-
-> Judging from the sample program I guess all that userspace does is
-> allocate a memory buffer and toss it into the kernel, which then
-> initializes the ring management variables, and from there we just scan
-> around the ring buffer every time poll(watch_fd) says there's something
-> to do?
-
-Yes.  Further, if head == tail, then it's empty.  Note that since head and
-tail will go up to 4G, but the buffer is limited to less than that, there's no
-need for a requisite unusable slot in the ring as head != tail when the ring
-is full.
-
-> How does userspace tell the kernel the size of the ring buffer?
-
-If you looked in the sample program, you might have noticed this in the main()
-function:
-
-	if (ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, BUF_SIZE) == -1) {
-
-The chardev allocates the buffer and then userspace mmaps it.
-
-I need to steal the locked-page accounting from the epoll patches to stop
-someone from using this to lock away all memory.
-
-> Does (watch_notification->info & WATCH_INFO_LENGTH) == 0 have any
-> meaning besides apparently "stop looking at me"?
-
-That's an illegal value, indicating a kernel bug.
-
-> > +#define WATCH_INFO_IN_SUBTREE	0x00000200	/* Change was not at watched root */
-> > +#define WATCH_INFO_TYPE_FLAGS	0x00ff0000	/* Type-specific flags */
-> 
-> WATCH_INFO_FLAG_MASK ?
-
-Yeah.
-
-> > +#define WATCH_INFO_FLAG_0	0x00010000
-> > +#define WATCH_INFO_FLAG_1	0x00020000
-> > +#define WATCH_INFO_FLAG_2	0x00040000
-> > +#define WATCH_INFO_FLAG_3	0x00080000
-> > +#define WATCH_INFO_FLAG_4	0x00100000
-> > +#define WATCH_INFO_FLAG_5	0x00200000
-> > +#define WATCH_INFO_FLAG_6	0x00400000
-> > +#define WATCH_INFO_FLAG_7	0x00800000
-> > +#define WATCH_INFO_ID		0xff000000	/* ID of watchpoint */
-> 
-> WATCH_INFO_ID_MASK ?
-
-Sure.
-
-> > +#define WATCH_INFO_ID__SHIFT	24
-> 
-> Why double underscore here?
-
-Because it's related to WATCH_INFO_ID, but isn't a mask on ->info.
-
-> > +};
-> > +
-> > +#define WATCH_LENGTH_SHIFT	3
-> > +
-> > +struct watch_queue_buffer {
-> > +	union {
-> > +		/* The first few entries are special, containing the
-> > +		 * ring management variables.
-> 
-> The first /two/ entries, correct?
-
-Currently two.
-
-> Also, weird multiline comment style.
-
-Not really.
-
-> > +		 */
-> > +		struct {
-> > +			struct watch_notification watch; /* WATCH_TYPE_META */
-> 
-> Do these structures have to be cache-aligned for the atomic reads and
-> writes to work?
-
-I hope not, otherwise we're screwed all over the kernel, particularly with
-structure randomisation.
-
-Further, what alignment is "cache aligned"?  It can vary by CPU for a single
-arch.
-
-David
+                   Linus
