@@ -2,33 +2,31 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D953CD26
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Jun 2019 15:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53773CD53
+	for <lists+linux-security-module@lfdr.de>; Tue, 11 Jun 2019 15:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404112AbfFKNky (ORCPT
+        id S2389298AbfFKNsj (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 11 Jun 2019 09:40:54 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:18548 "EHLO huawei.com"
+        Tue, 11 Jun 2019 09:48:39 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:18549 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2403885AbfFKNky (ORCPT
+        id S2387866AbfFKNsi (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 11 Jun 2019 09:40:54 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id D4B7443CC9D69D440122;
-        Tue, 11 Jun 2019 21:40:50 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Tue, 11 Jun 2019
- 21:40:40 +0800
+        Tue, 11 Jun 2019 09:48:38 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id AF7B39DEFC9E36BF9118;
+        Tue, 11 Jun 2019 21:48:36 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Tue, 11 Jun 2019
+ 21:48:29 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>
+To:     <serge@hallyn.com>, <jmorris@namei.org>
 CC:     <linux-kernel@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] ima: Make arch_policy_entry static
-Date:   Tue, 11 Jun 2019 21:40:32 +0800
-Message-ID: <20190611134032.14656-1-yuehaibing@huawei.com>
+Subject: [PATCH -next] security: Make capability_hooks static
+Date:   Tue, 11 Jun 2019 21:48:15 +0800
+Message-ID: <20190611134815.16612-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -40,28 +38,28 @@ List-ID: <linux-security-module.vger.kernel.org>
 
 Fix sparse warning:
 
-security/integrity/ima/ima_policy.c:202:23: warning:
- symbol 'arch_policy_entry' was not declared. Should it be static?
+security/commoncap.c:1347:27: warning:
+ symbol 'capability_hooks' was not declared. Should it be static?
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- security/integrity/ima/ima_policy.c | 2 +-
+ security/commoncap.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 1cc822a..cd1b728 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -199,7 +199,7 @@ static struct ima_rule_entry secure_boot_rules[] __ro_after_init = {
- };
+diff --git a/security/commoncap.c b/security/commoncap.c
+index c0b9664..3150bed 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -1339,7 +1339,7 @@ int cap_mmap_file(struct file *file, unsigned long reqprot,
  
- /* An array of architecture specific rules */
--struct ima_rule_entry *arch_policy_entry __ro_after_init;
-+static struct ima_rule_entry *arch_policy_entry __ro_after_init;
+ #ifdef CONFIG_SECURITY
  
- static LIST_HEAD(ima_default_rules);
- static LIST_HEAD(ima_policy_rules);
+-struct security_hook_list capability_hooks[] __lsm_ro_after_init = {
++static struct security_hook_list capability_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(capable, cap_capable),
+ 	LSM_HOOK_INIT(settime, cap_settime),
+ 	LSM_HOOK_INIT(ptrace_access_check, cap_ptrace_access_check),
 -- 
 2.7.4
 
