@@ -2,96 +2,189 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C3D4314B
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 Jun 2019 22:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C645B44900
+	for <lists+linux-security-module@lfdr.de>; Thu, 13 Jun 2019 19:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389757AbfFLU7T (ORCPT
+        id S1729136AbfFMRM6 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 12 Jun 2019 16:59:19 -0400
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:39675 "EHLO
-        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389499AbfFLU7T (ORCPT
+        Thu, 13 Jun 2019 13:12:58 -0400
+Received: from mga12.intel.com ([192.55.52.136]:33800 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728982AbfFLWCq (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 12 Jun 2019 16:59:19 -0400
-Received: by mail-lj1-f175.google.com with SMTP id v18so16361139ljh.6
-        for <linux-security-module@vger.kernel.org>; Wed, 12 Jun 2019 13:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=l3VEyWUIpz19ynNy/N2qHdEiDLqpzuYJDD7NorzZ7xc=;
-        b=N2HZ4/L5uWJ8QNMKDSq0FO7tTwa7rTy4QL45jcK35gfpeeQw2qQZq01cIdQtxhG41D
-         2568TNO1fhu46tbEeVx1JoKSvpG1NG9yKiBzsUnlaQvbSXsi6kG+f2qTAtU1drEbSEiF
-         xcRbsYkmZVCjE/j1Xzk7FxQ8fm+layLakyIpAGLaBKzo1aPTI036n5Lhdb+eYBvzyQl8
-         FxcUURBFsI0JNdOrhm5UA7otbbT2VU9ymTBIkZfejGahJUObQ6EIu5+7f0odQKDyGGJi
-         Odpv5uATkGYtakdyOZfZwZb1ly1DEEjcIt5Lkko583FlfQtaHO+57aosTnFqar5y8tky
-         2RdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=l3VEyWUIpz19ynNy/N2qHdEiDLqpzuYJDD7NorzZ7xc=;
-        b=d4L74WWepfuS+dsn6w6uScJDbLRwwuWMOGwTZn9Zv5Jzq2Of6FqTiWjg//TZiJYvEO
-         2JiPOA6JAntDQmXzqzIJG/UTX6Wr62u2tsBZaTHtibaGNMl6ta0Zly9LDC3pKmFWlF85
-         cqHVCLftVerIcM67wk3RsH1BsMn6hkflChjfHYLcbXB3id2wopWPprzMJ4X2JfeWdoi+
-         zoNLWdtBSHV/ZK+Ez/o9bi5FoaWzAZHmZS8pgpmMKOtjPFnyOvMRtm+D1ESVxDkZpvNh
-         nawRAnFd9C4s68w/cUxyJdodr+InnY9U0Kf6IgNL0I7QBcmAnJ7Oa3qHAZMLU6YMfHfE
-         kYjg==
-X-Gm-Message-State: APjAAAWh/lzEDk5HPc2gUVsh/yZKx650g+wPSlc8EeTvQpmJo39BK6At
-        ny49ZGaQYzgxGQywReiriVAnK0a/8c4uMMoCBA/W
-X-Google-Smtp-Source: APXvYqyQ9xRqxco6pzmg3Kllok/kjb/RUNCEP+XpYPOK05OKF32F7Ru4shBbfMW+WyLGgAMoWcG0oW76u5p69zhqhcw=
-X-Received: by 2002:a2e:9106:: with SMTP id m6mr31118354ljg.164.1560373156513;
- Wed, 12 Jun 2019 13:59:16 -0700 (PDT)
+        Wed, 12 Jun 2019 18:02:46 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 15:02:43 -0700
+X-ExtLoop1: 1
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.36])
+  by orsmga003.jf.intel.com with ESMTP; 12 Jun 2019 15:02:42 -0700
+Date:   Wed, 12 Jun 2019 15:02:42 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
+        Cedric Xing <cedric.xing@intel.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        selinux@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-sgx@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>, nhorman@redhat.com,
+        pmccallum@redhat.com, "Ayoun, Serge" <serge.ayoun@intel.com>,
+        "Katz-zamir, Shay" <shay.katz-zamir@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Svahn, Kai" <kai.svahn@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        "Roberts, William C" <william.c.roberts@intel.com>,
+        Philip Tricca <philip.b.tricca@intel.com>
+Subject: Re: [RFC PATCH v1 2/3] LSM/x86/sgx: Implement SGX specific hooks in
+ SELinux
+Message-ID: <20190612220242.GJ20308@linux.intel.com>
+References: <cover.1560131039.git.cedric.xing@intel.com>
+ <a382d46f66756e13929ca9244479dd9f689c470e.1560131039.git.cedric.xing@intel.com>
+ <b6f099cd-c0eb-d5cf-847d-27a15ac5ceaf@tycho.nsa.gov>
+ <20190611220243.GB3416@linux.intel.com>
+ <CALCETrWQT3AG+-OKBOzuw-a6VPApkNYsKqZiBmS56-b-72bfYQ@mail.gmail.com>
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 12 Jun 2019 16:59:05 -0400
-Message-ID: <CAHC9VhT8tYyUt_gtUR-jD-33LMW2RmzSXwP_OgPrh5ujQSiuUA@mail.gmail.com>
-Subject: [GIT PULL] SELinux fixes for v5.2 (#2)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrWQT3AG+-OKBOzuw-a6VPApkNYsKqZiBmS56-b-72bfYQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Linus,
+On Wed, Jun 12, 2019 at 12:30:20PM -0700, Andy Lutomirski wrote:
+> On Tue, Jun 11, 2019 at 3:02 PM Sean Christopherson
+> <sean.j.christopherson@intel.com> wrote:
+> >
+> >   1. Require userspace to explicitly specificy (maximal) enclave page
+> >      permissions at build time.  The enclave page permissions are provided
+> >      to, and checked by, LSMs at enclave build time.
+> >
+> >      Pros: Low-complexity kernel implementation, straightforward auditing
+> >      Cons: Sullies the SGX UAPI to some extent, may increase complexity of
+> >            SGX2 enclave loaders.
+> 
+> In my notes, this works like this.  This is similar, but not
+> identical, to what Sean has been sending out.
 
-Three patches for v5.2; one fixes a problem where we weren't correctly
-logging raw SELinux labels, the other two fix problems where we
-weren't properly checking calls to kmemdup().  Please merge for the
-next v5.2-rc release.
+...
 
-Thanks,
--Paul
---
-The following changes since commit 05174c95b83f8aca0c47b87115abb7a6387aafa5:
+> mmap() and mprotect() enforce the following rules:
+> 
+>  - Deny if a PROT_ flag is requested but the corresponding ALLOW_ flag
+>    is not set for all pages in question.
+> 
+>  - Deny if PROT_WRITE, PROT_EXEC, and DENY_WX are all set.
+> 
+>  - Deny if PROT_EXEC, ALLOW_WRITE, and DENY_X_IF_ALLOW_WRITE are all set.
+> 
+> mprotect() and mmap() do *not* call SGX-specific LSM hooks to ask for
+> permission, although they can optionally call an LSM hook if they hit one of
+> the -EPERM cases for auditing purposes.
 
- selinux: do not report error on connect(AF_UNSPEC) (2019-05-20 21:46:02 -0400)
+IMO, #1 only makes sense if it's stripped down to avoid auditing and
+locking complications, i.e. gets a pass/fail at security_enclave_load()
+and clears VM_MAY* flags during mmap().  If we want WX and W->X to be
+differentiated by security_enclave_init() as opposed to
+security_enclave_load(), then we should just scrap #1.
 
-are available in the Git repository at:
+> I think this model works quite well in an SGX1 world.  The main thing
+> that makes me uneasy about this model is that, in SGX2, it requires
+> that an SGX2-compatible enclave loader must pre-declare to the kernel
+> whether it intends for its dynamically allocated memory to be
+> ALLOW_EXEC.  If ALLOW_EXEC is set but not actually needed, it will
+> still fail if DENY_X_IF_ALLOW_WRITE ends up being set.  The other
+> version below does not have this limitation.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
-   tags/selinux-pr-20190612
+I'm not convinced this will be a meaningful limitation in practice, though
+that's probably obvious from my RFCs :-).  That being said, the UAPI quirk
+is essentially a dealbreaker for multiple people, so let's drop #1.
 
-for you to fetch changes up to fec6375320c6399c708fa9801f8cfbf950fee623:
+I discussed the options with Cedric offline, and he is ok with option #2
+*if* the idea actually translates to acceptable code and doesn't present
+problems for userspace and/or future SGX features.
 
- selinux: fix a missing-check bug in selinux_sb_eat_lsm_opts()
-   (2019-06-12 12:27:26 -0400)
+So, I'll work on an RFC series to implement #2 as described below.  If it
+works out, yay!  If not, i.e. option #2 is fundamentally broken, I'll
+shift my focus to Cedric's code (option #3).
 
-----------------------------------------------------------------
-selinux/stable-5.2 PR 20190612
+> >   2. Pre-check LSM permissions and dynamically track mappings to enclave
+> >      pages, e.g. add an SGX mprotect() hook to restrict W->X and WX
+> >      based on the pre-checked permissions.
+> >
+> >      Pros: Does not impact SGX UAPI, medium kernel complexity
+> >      Cons: Auditing is complex/weird, requires taking enclave-specific
+> >            lock during mprotect() to query/update tracking.
+> 
+> Here's how this looks in my mind.  It's quite similar, except that
+> ALLOW_READ, ALLOW_WRITE, and ALLOW_EXEC are replaced with a little
+> state machine.
+> 
+> EADD does not take any special flags.  It calls this LSM hook:
+> 
+>   int security_enclave_load(struct vm_area_struct *source);
+> 
+> This hook can return -EPERM.  Otherwise it 0 or ALLOC_EXEC_IF_UNMODIFIED
+> (i.e. 1).  This hook enforces permissions (a) and (b).
+> 
+> The driver tracks a state for each page, and the possible states are:
+> 
+>  - CLEAN_MAYEXEC /* no W or X VMAs have existed, but X is okay */
+>  - CLEAN_NOEXEC /* no W or X VMAs have existed, and X is not okay */
+>  - CLEAN_EXEC /* no W VMA has existed, but an X VMA has existed */
+>  - DIRTY /* a W VMA has existed */
+> 
+> The initial state for a page is CLEAN_MAYEXEC if the hook said
+> ALLOW_EXEC_IF_UNMODIFIED and CLEAN_NOEXEC otherwise.
+> 
+> The future EAUG does not call a hook at all and puts pages into the state
+> CLEAN_NOEXEC.  If SGX3 or later ever adds EAUG-but-don't-clear, it can
+> call security_enclave_load() and add CLEAN_MAYEXEC pages if appropriate.
+> 
+> EINIT takes a sigstruct pointer.  SGX calls a new hook:
+> 
+>   unsigned int security_enclave_init(struct sigstruct *sigstruct,
+> struct vm_area_struct *source, unsigned int flags);
+> 
+> This hook can return -EPERM.  Otherwise it returns 0 or a combination of
+> flags DENY_WX and DENY_X_DIRTY.  The driver saves this value.
+> These represent permissions (c) and (d).
+> 
+> If we want to have a permission for "execute code supplied from outside the
+> enclave that was not measured", we could have a flag like
+> HAS_UNMEASURED_CLEAN_EXEC_PAGE that the LSM could consider.
+>
+> mmap() and mprotect() enforce the following rules:
+> 
+>  - If VM_EXEC is requested and (either the page is DIRTY or VM_WRITE is
+>    requested) and DENY_X_DIRTY, then deny.
+> 
+>  - If VM_WRITE and VM_EXEC are both requested and DENY_WX, then deny.
+> 
+>  - If VM_WRITE is requested, we need to update the state.  If it was
+>    CLEAN_EXEC, then we reject if DENY_X_DIRTY.  Otherwise we change the
+>    state to DIRTY.
+> 
+>  - If VM_EXEC is requested and the page is CLEAN_NOEXEC, then deny.
+> 
+> mprotect() and mmap() do *not* call SGX-specific LSM hooks to ask for
+> permission, although they can optionally call an LSM hook if they hit one of
+> the -EPERM cases for auditing purposes.
+> 
+> Before the SIGSTRUCT is provided to the driver, the driver acts as though
+> DENY_X_DIRTY and DENY_WX are both set.
 
-----------------------------------------------------------------
-Gen Zhang (2):
-     selinux: fix a missing-check bug in selinux_add_mnt_opt( )
-     selinux: fix a missing-check bug in selinux_sb_eat_lsm_opts()
-
-Ondrej Mosnacek (1):
-     selinux: log raw contexts as untrusted strings
-
-security/selinux/avc.c   | 10 ++++++++--
-security/selinux/hooks.c | 39 ++++++++++++++++++++++++++++-----------
-2 files changed, 36 insertions(+), 13 deletions(-)
-
--- 
-paul moore
-www.paul-moore.com
