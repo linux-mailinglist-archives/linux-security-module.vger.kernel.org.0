@@ -2,25 +2,26 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E51343950
-	for <lists+linux-security-module@lfdr.de>; Thu, 13 Jun 2019 17:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F7A439E8
+	for <lists+linux-security-module@lfdr.de>; Thu, 13 Jun 2019 17:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732678AbfFMPNE (ORCPT
+        id S1732708AbfFMPR0 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 13 Jun 2019 11:13:04 -0400
-Received: from mga02.intel.com ([134.134.136.20]:6651 "EHLO mga02.intel.com"
+        Thu, 13 Jun 2019 11:17:26 -0400
+Received: from mga05.intel.com ([192.55.52.43]:36291 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732613AbfFMPND (ORCPT
+        id S1733088AbfFMPRU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:13:03 -0400
-X-Amp-Result: UNSCANNABLE
+        Thu, 13 Jun 2019 11:17:20 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 08:13:02 -0700
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 08:17:19 -0700
 X-ExtLoop1: 1
 Received: from bbouchn-mobl.ger.corp.intel.com (HELO localhost) ([10.252.35.22])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jun 2019 08:12:58 -0700
-Date:   Thu, 13 Jun 2019 18:12:57 +0300
+  by orsmga004.jf.intel.com with ESMTP; 13 Jun 2019 08:17:15 -0700
+Date:   Thu, 13 Jun 2019 18:17:14 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     Sumit Garg <sumit.garg@linaro.org>
 Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
@@ -31,25 +32,32 @@ Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         tee-dev@lists.linaro.org
 Subject: Re: [RFC 1/7] tee: optee: allow kernel pages to register as shm
-Message-ID: <20190613151257.GA18488@linux.intel.com>
+Message-ID: <20190613151714.GC18488@linux.intel.com>
 References: <1560421833-27414-1-git-send-email-sumit.garg@linaro.org>
  <1560421833-27414-2-git-send-email-sumit.garg@linaro.org>
+ <20190613151257.GA18488@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1560421833-27414-2-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <20190613151257.GA18488@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Jun 13, 2019 at 04:00:27PM +0530, Sumit Garg wrote:
-> Kernel pages are marked as normal type memory only so allow kernel pages
-> to be registered as shared memory with OP-TEE.
+On Thu, Jun 13, 2019 at 06:12:57PM +0300, Jarkko Sakkinen wrote:
+> On Thu, Jun 13, 2019 at 04:00:27PM +0530, Sumit Garg wrote:
+> > Kernel pages are marked as normal type memory only so allow kernel pages
+> > to be registered as shared memory with OP-TEE.
+> > 
+> > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 > 
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> Just out of pure interest why this was not allowed before?
 
-Just out of pure interest why this was not allowed before?
+Please spare me and ignore that one :-) Obviouslly because it
+was not used.
+
+Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 /Jarkko
