@@ -2,135 +2,187 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 565B5448B6
-	for <lists+linux-security-module@lfdr.de>; Thu, 13 Jun 2019 19:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0024F4477A
+	for <lists+linux-security-module@lfdr.de>; Thu, 13 Jun 2019 19:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729258AbfFMRKz (ORCPT
+        id S1730026AbfFMQ7r convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 13 Jun 2019 13:10:55 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59366 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729193AbfFLWbz (ORCPT
+        Thu, 13 Jun 2019 12:59:47 -0400
+Received: from mga06.intel.com ([134.134.136.31]:22262 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729804AbfFMAKj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 12 Jun 2019 18:31:55 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5CMVTaK192165
-        for <linux-security-module@vger.kernel.org>; Wed, 12 Jun 2019 18:31:53 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2t379tpqbq-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-security-module@vger.kernel.org>; Wed, 12 Jun 2019 18:31:52 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 12 Jun 2019 23:31:51 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 12 Jun 2019 23:31:46 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5CMVjkq55836814
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jun 2019 22:31:45 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20D615205F;
-        Wed, 12 Jun 2019 22:31:45 +0000 (GMT)
-Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2CA8B52054;
-        Wed, 12 Jun 2019 22:31:44 +0000 (GMT)
-Subject: Re: [PATCH V8 3/3] Call ima_kexec_cmdline to measure the cmdline
- args
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Prakhar Srivastava <prsriva02@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     roberto.sassu@huawei.com, vgoyal@redhat.com,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Dave Young <dyoung@redhat.com>,
-        kexec <kexec@lists.infradead.org>
-Date:   Wed, 12 Jun 2019 18:31:43 -0400
-In-Reply-To: <20190612221549.28399-4-prsriva02@gmail.com>
-References: <20190612221549.28399-1-prsriva02@gmail.com>
-         <20190612221549.28399-4-prsriva02@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19061222-0012-0000-0000-00000328A073
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061222-0013-0000-0000-00002161A9C6
-Message-Id: <1560378703.4578.91.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-12_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906120158
+        Wed, 12 Jun 2019 20:10:39 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 17:10:38 -0700
+X-ExtLoop1: 1
+Received: from orsmsx103.amr.corp.intel.com ([10.22.225.130])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jun 2019 17:10:38 -0700
+Received: from orsmsx116.amr.corp.intel.com ([169.254.7.166]) by
+ ORSMSX103.amr.corp.intel.com ([169.254.5.232]) with mapi id 14.03.0415.000;
+ Wed, 12 Jun 2019 17:10:37 -0700
+From:   "Xing, Cedric" <cedric.xing@intel.com>
+To:     "Christopherson, Sean J" <sean.j.christopherson@intel.com>,
+        "Andy Lutomirski" <luto@kernel.org>
+CC:     Stephen Smalley <sds@tycho.nsa.gov>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "nhorman@redhat.com" <nhorman@redhat.com>,
+        "pmccallum@redhat.com" <pmccallum@redhat.com>,
+        "Ayoun, Serge" <serge.ayoun@intel.com>,
+        "Katz-zamir, Shay" <shay.katz-zamir@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Svahn, Kai" <kai.svahn@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        David Rientjes <rientjes@google.com>,
+        "Roberts, William C" <william.c.roberts@intel.com>,
+        "Tricca, Philip B" <philip.b.tricca@intel.com>
+Subject: RE: [RFC PATCH v1 2/3] LSM/x86/sgx: Implement SGX specific hooks in
+ SELinux
+Thread-Topic: [RFC PATCH v1 2/3] LSM/x86/sgx: Implement SGX specific hooks
+ in SELinux
+Thread-Index: AQHVH1ilvNGS2ZisK0eWTCWidam/YaaW7RmAgACMWICAAWfBAIAAKpIA//+YzvA=
+Date:   Thu, 13 Jun 2019 00:10:37 +0000
+Message-ID: <960B34DE67B9E140824F1DCDEC400C0F65503261@ORSMSX116.amr.corp.intel.com>
+References: <cover.1560131039.git.cedric.xing@intel.com>
+ <a382d46f66756e13929ca9244479dd9f689c470e.1560131039.git.cedric.xing@intel.com>
+ <b6f099cd-c0eb-d5cf-847d-27a15ac5ceaf@tycho.nsa.gov>
+ <20190611220243.GB3416@linux.intel.com>
+ <CALCETrWQT3AG+-OKBOzuw-a6VPApkNYsKqZiBmS56-b-72bfYQ@mail.gmail.com>
+ <20190612220242.GJ20308@linux.intel.com>
+In-Reply-To: <20190612220242.GJ20308@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMDhmOWQxYWItZGYxOC00NDE5LWI5YmQtMjdkNDE0ZTdmYjVmIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiYmM4cGFEMU03UU9yd1pLVSs0bEU5czk2RUNacmxySk1RU2w5b1puWjlWTkRIQ3BLdnZJeEVoa1VsTHdMV2pJMiJ9
+x-ctpclassification: CTP_NT
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.22.254.138]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-[Cc: kexec mailing list]
-
-Hi Eric, Dave,
-
-On Wed, 2019-06-12 at 15:15 -0700, Prakhar Srivastava wrote:
-> During soft reboot(kexec_file_load) boot cmdline args
-> are not measured.Thus the new kernel on load boots with
-> an assumption of cold reboot.
+> From: Christopherson, Sean J
+> Sent: Wednesday, June 12, 2019 3:03 PM
 > 
-> This patch makes a call to the ima hook ima_kexec_cmdline,
-> added in "Define a new IMA hook to measure the boot command
-> line arguments"
-> to measure the boot cmdline args into the ima log.
+> > I think this model works quite well in an SGX1 world.  The main thing
+> > that makes me uneasy about this model is that, in SGX2, it requires
+> > that an SGX2-compatible enclave loader must pre-declare to the kernel
+> > whether it intends for its dynamically allocated memory to be
+> > ALLOW_EXEC.  If ALLOW_EXEC is set but not actually needed, it will
+> > still fail if DENY_X_IF_ALLOW_WRITE ends up being set.  The other
+> > version below does not have this limitation.
 > 
-> - call ima_kexec_cmdline from kexec_file_load.
-> - move the call ima_add_kexec_buffer after the cmdline
-> args have been measured.
+> I'm not convinced this will be a meaningful limitation in practice,
+> though that's probably obvious from my RFCs :-).  That being said, the
+> UAPI quirk is essentially a dealbreaker for multiple people, so let's
+> drop #1.
 > 
-> Signed-off-by: Prakhar Srivastava <prsriva02@gmail.com>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Cc: Dave Young <dyoung@redhat.com>
-
-Any chance we could get some Acks?
-
-thanks,
-
-Mimi
-
-> ---
->  kernel/kexec_file.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> I discussed the options with Cedric offline, and he is ok with option #2
+> *if* the idea actually translates to acceptable code and doesn't present
+> problems for userspace and/or future SGX features.
 > 
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 072b6ee55e3f..b0c724e5d86c 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -198,9 +198,6 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
->  		return ret;
->  	image->kernel_buf_len = size;
->  
-> -	/* IMA needs to pass the measurement list to the next kernel. */
-> -	ima_add_kexec_buffer(image);
-> -
->  	/* Call arch image probe handlers */
->  	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
->  					    image->kernel_buf_len);
-> @@ -241,8 +238,14 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
->  			ret = -EINVAL;
->  			goto out;
->  		}
-> +
-> +		ima_kexec_cmdline(image->cmdline_buf,
-> +				  image->cmdline_buf_len - 1);
->  	}
->  
-> +	/* IMA needs to pass the measurement list to the next kernel. */
-> +	ima_add_kexec_buffer(image);
-> +
->  	/* Call arch image load handlers */
->  	ldata = arch_kexec_kernel_image_load(image);
->  
+> So, I'll work on an RFC series to implement #2 as described below.  If
+> it works out, yay!  If not, i.e. option #2 is fundamentally broken, I'll
+> shift my focus to Cedric's code (option #3).
+> 
+> > >   2. Pre-check LSM permissions and dynamically track mappings to
+> enclave
+> > >      pages, e.g. add an SGX mprotect() hook to restrict W->X and WX
+> > >      based on the pre-checked permissions.
+> > >
+> > >      Pros: Does not impact SGX UAPI, medium kernel complexity
+> > >      Cons: Auditing is complex/weird, requires taking enclave-
+> specific
+> > >            lock during mprotect() to query/update tracking.
+> >
+> > Here's how this looks in my mind.  It's quite similar, except that
+> > ALLOW_READ, ALLOW_WRITE, and ALLOW_EXEC are replaced with a little
+> > state machine.
+> >
+> > EADD does not take any special flags.  It calls this LSM hook:
+> >
+> >   int security_enclave_load(struct vm_area_struct *source);
+> >
+> > This hook can return -EPERM.  Otherwise it 0 or
+> > ALLOC_EXEC_IF_UNMODIFIED (i.e. 1).  This hook enforces permissions (a)
+> and (b).
+> >
+> > The driver tracks a state for each page, and the possible states are:
+> >
+> >  - CLEAN_MAYEXEC /* no W or X VMAs have existed, but X is okay */
+> >  - CLEAN_NOEXEC /* no W or X VMAs have existed, and X is not okay */
+> >  - CLEAN_EXEC /* no W VMA has existed, but an X VMA has existed */
+> >  - DIRTY /* a W VMA has existed */
+> >
+> > The initial state for a page is CLEAN_MAYEXEC if the hook said
+> > ALLOW_EXEC_IF_UNMODIFIED and CLEAN_NOEXEC otherwise.
+> >
+> > The future EAUG does not call a hook at all and puts pages into the
+> > state CLEAN_NOEXEC.  If SGX3 or later ever adds EAUG-but-don't-clear,
+> > it can call security_enclave_load() and add CLEAN_MAYEXEC pages if
+> appropriate.
+> >
+> > EINIT takes a sigstruct pointer.  SGX calls a new hook:
+> >
+> >   unsigned int security_enclave_init(struct sigstruct *sigstruct,
+> > struct vm_area_struct *source, unsigned int flags);
+> >
+> > This hook can return -EPERM.  Otherwise it returns 0 or a combination
+> > of flags DENY_WX and DENY_X_DIRTY.  The driver saves this value.
+> > These represent permissions (c) and (d).
+> >
+> > If we want to have a permission for "execute code supplied from
+> > outside the enclave that was not measured", we could have a flag like
+> > HAS_UNMEASURED_CLEAN_EXEC_PAGE that the LSM could consider.
+> >
+> > mmap() and mprotect() enforce the following rules:
+> >
+> >  - If VM_EXEC is requested and (either the page is DIRTY or VM_WRITE
+> is
+> >    requested) and DENY_X_DIRTY, then deny.
+> >
+> >  - If VM_WRITE and VM_EXEC are both requested and DENY_WX, then deny.
+> >
+> >  - If VM_WRITE is requested, we need to update the state.  If it was
+> >    CLEAN_EXEC, then we reject if DENY_X_DIRTY.  Otherwise we change
+> the
+> >    state to DIRTY.
+> >
+> >  - If VM_EXEC is requested and the page is CLEAN_NOEXEC, then deny.
+> >
+> > mprotect() and mmap() do *not* call SGX-specific LSM hooks to ask for
+> > permission, although they can optionally call an LSM hook if they hit
+> > one of the -EPERM cases for auditing purposes.
+> >
+> > Before the SIGSTRUCT is provided to the driver, the driver acts as
+> > though DENY_X_DIRTY and DENY_WX are both set.
+
+I think we've been discussing 2 topics simultaneously, one is the state machine that accepts/rejects mmap/mprotect requests, while the other is where is the best place to put it. I think we have an agreement on the former, and IMO option #2 and #3 differ only in the latter.
+
+Option #2 keeps the state machine inside SGX subsystem, so it could reuse existing data structures for page tracking/locking to some extent. Sean may have smarter ideas, but it looks to me like the existing 'struct sgx_encl_page' tracks individual enclave pages while the FSM states apply to ranges. So in order *not* to test page by page in mmap/mprotect, I guess some new range oriented structures are still necessary. But I don't think it very important anyway. 
+
+My major concern is more from the architecture/modularity perspective. Specifically, the state machine is defined by LSM but SGX does the state transitions. That's a brittle relationship that'd break easily if the state machine changes in future, or if different LSM modules want to define different FSMs (comprised of different set of states and/or triggers). After all, what's needed by the SGX subsystem is just the decision, not the FSM definition. I think we should take a closer look at this area once Sean's patch comes out.
 
