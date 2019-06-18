@@ -2,94 +2,126 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7D349A56
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jun 2019 09:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B579B49DC1
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jun 2019 11:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725870AbfFRHUD (ORCPT
+        id S1729325AbfFRJrv (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 18 Jun 2019 03:20:03 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:33367 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726091AbfFRHUD (ORCPT
+        Tue, 18 Jun 2019 05:47:51 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:34129 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729113AbfFRJrv (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 18 Jun 2019 03:20:03 -0400
-Received: by mail-oi1-f193.google.com with SMTP id q186so8331793oia.0
-        for <linux-security-module@vger.kernel.org>; Tue, 18 Jun 2019 00:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KBk0vI4RQMrq25uWSdJ+2ep8omPhMVPkB3j/qaHLhoE=;
-        b=Y3HKJITKouhlh1TaWa8IWuAVIdnIJ3wgmjU7crc90t1KDNlYYvSLwj18Z0zor9/CM7
-         15NCMxEnt9WljXbe3UmAHttwdlrKLaCbiCPf0CFYydlVSL+a5h3Fnj5GWUqU2aBl0lft
-         KhcoBYkCUzUb3OOk5cRxE9pLL16NEkLvSrj6I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KBk0vI4RQMrq25uWSdJ+2ep8omPhMVPkB3j/qaHLhoE=;
-        b=CdCLZAuyjVEMh41aEkT1A+cAKmfOIlx6ru9jbkQeEcbbzc1QwC11wgWhxdE3D04kHj
-         rMFzPegMCHEeETMHfR8kBnMPATJPbUGukHYKE0t+jTM/hADaOgXG3T4N028RgETwf3Vw
-         DPwxBC7ap77hGilj+c3DiQvux/HB4JmyLQGxKcc2Vg7iHC7vRwbsYe5x8kfF+NVAhG3g
-         Ny3f6t4yA4c0e4/aSZ7QrlJD1jYnkvU/y64env+vRAJrklqxfOUZ7E7QKj8Au9Zkd6gd
-         Gnl/8ybjJ+0PePEGvCgg5GRcLaWXDzls2iTLorAKfbktbAxNacsGJfdS6ItKW+gJ9iDW
-         47Ng==
-X-Gm-Message-State: APjAAAWKAUr2HfVREoJrA7ZbOPlNEa2hNdjJW39C4H+5/rzS80G3mD/o
-        mFUgBM/gGi50JugpAK1cwnRXCZa3G8P4+w==
-X-Google-Smtp-Source: APXvYqxsGDOAjuyeiUBQQfKlHRpkhzSzNh4pYCucZFBzZqr6L06keNW+FE4qiWVrESZjwyeODy5DBQ==
-X-Received: by 2002:a63:1d1d:: with SMTP id d29mr956576pgd.259.1560835616920;
-        Mon, 17 Jun 2019 22:26:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q198sm18025478pfq.155.2019.06.17.22.26.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 17 Jun 2019 22:26:56 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 22:26:54 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Hocko <mhocko@kernel.org>,
+        Tue, 18 Jun 2019 05:47:51 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MvazO-1iVYJd1CNC-00sfaV; Tue, 18 Jun 2019 11:47:35 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        Alexander Popov <alex.popov@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sandeep Patil <sspatil@android.com>,
-        Laura Abbott <labbott@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v7 1/2] mm: security: introduce init_on_alloc=1 and
- init_on_free=1 boot options
-Message-ID: <201906172225.4645462F1E@keescook>
-References: <20190617151050.92663-1-glider@google.com>
- <20190617151050.92663-2-glider@google.com>
- <20190617151027.6422016d74a7dc4c7a562fc6@linux-foundation.org>
- <201906172157.8E88196@keescook>
- <20190617221932.7406c74b6a8114a406984b70@linux-foundation.org>
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] structleak: disable BYREF_ALL in combination with KASAN_STACK
+Date:   Tue, 18 Jun 2019 11:47:13 +0200
+Message-Id: <20190618094731.3677294-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190617221932.7406c74b6a8114a406984b70@linux-foundation.org>
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:peaZfmlkgECAGz9riypsIjV4ic/JP7FXX72Osd9/Mq+xyvBdsCS
+ QBR6nMT1ohGbRCit/XsDuRwE9m62UtxQb8P0hVuaqx/phcvYootks744nTD7mnuahBKuDRd
+ nlFPtsir0LRT4s7DskzMEeyJxjArgwMxWUyRsgRPXJRek+d2c5rWM1qoz78m39pnj+BpCM6
+ +yskDQBig2i7wcwA6yOBg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mt0pBl9Irk8=:bYl9+u5Pgnw4rI3NpDMYHT
+ i53Q/NuCg7Ndw7pN9sP3ZPFD5oeob8tWcVRjg+sNsM7RJ5b9tSeQixOT4O5MYt/D3k3OxKKFR
+ CsMMgCj6iveTYDoMsmni/ibnZEv82LWgLycDF/VppP+KZDUEtaLbGUL1zO2KSr9QbWPN8aFc+
+ lRLUI9FmI141/v+985lLmm3oOfEgVbmyl/+U0etuXukfVHrJ2YAISq96Nax93pejvbGmN/R6E
+ gMxHU1tztk8Bz8A9z+LMq1SuiZ+fCaWyUv7cz//JBCwF0A7R3amDs1oofWWmGIhZ2woS7knzk
+ s2PUnpiym4S4dWsQXv4Nm1q7zRzXDtGcHuwqhdfls7EcfffVnoBSejJk958zKoe9Usl3xWCK1
+ /VC9gy9fE8Lu+nU5LxlteBelIwC5h1mcq3slnIylUnNW+FfZ01OCbNerLhuiMZrsRfuOG3j9R
+ oySFqVKdqDDE77EVHlxUtZAKaY7H5C/Y74EzN7nfv/c3E2mHSdN7IZHpEbZztPDEqa72lY1Ko
+ 8jW/nWO+ZzsizP7A//X5ToG2yMsjuCd3Bx4XEbTmCGpgAREI2JI637qz53t4QPAkoNsjSDSKs
+ GVIY8zbeF2JUvFkqt5Xx1omS8tFFZKlzcdalZOoMjwUo0ntoXLnDbOtPirWOLhizc1pqZri7Z
+ ZnGvPtxhuCnVqCQk9ESm64GpMnDxt0gfXVzKqAu1fYwaMqXdZQAOAw2Jq18zIJuTgzkyl+5Vm
+ qNG0l247NeNjdJmxBsYCKJm7kUZFWaEYg7MCEg==
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Jun 17, 2019 at 10:19:32PM -0700, Andrew Morton wrote:
-> On Mon, 17 Jun 2019 22:07:41 -0700 Kees Cook <keescook@chromium.org> wrote:
-> 
-> > This is expected to be on-by-default on Android and Chrome
-> > OS. And it gives the opportunity for anyone else to use it under distros
-> > too via the boot args. (The init_on_free feature is regularly requested
-> > by folks where memory forensics is included in their thread models.)
-> 
-> Thanks.  I added the above to the changelog.  I assumed s/thread/threat/
+The combination of KASAN_STACK and GCC_PLUGIN_STRUCTLEAK_BYREF_ALL
+leads to much larger kernel stack usage, as seen from the warnings
+about functions that now exceed the 2048 byte limit:
 
-Heh whoops, yes, "threat" was intended. Thanks! :)
+drivers/media/i2c/tvp5150.c:253:1: error: the frame size of 3936 bytes is larger than 2048 bytes
+fs/ocfs2/dlm/dlmrecovery.c:737:1: error: the frame size of 2088 bytes is larger than 2048 bytes
+fs/ocfs2/aops.c:1892:1: error: the frame size of 2088 bytes is larger than 2048 bytes
+fs/ocfs2/namei.c:1677:1: error: the frame size of 2584 bytes is larger than 2048 bytes
+fs/ocfs2/super.c:1186:1: error: the frame size of 2640 bytes is larger than 2048 bytes
+fs/ocfs2/xattr.c:3678:1: error: the frame size of 2176 bytes is larger than 2048 bytes
+net/bridge/br_netlink.c:1505:1: error: the frame size of 2448 bytes is larger than 2048 bytes
+net/ieee802154/nl802154.c:548:1: error: the frame size of 2232 bytes is larger than 2048 bytes
+net/wireless/nl80211.c:1726:1: error: the frame size of 2224 bytes is larger than 2048 bytes
+net/wireless/nl80211.c:6472:1: error: the frame size of 2112 bytes is larger than 2048 bytes
+net/wireless/nl80211.c:2357:1: error: the frame size of 4584 bytes is larger than 2048 bytes
+net/wireless/nl80211.c:5108:1: error: the frame size of 2760 bytes is larger than 2048 bytes
+drivers/media/tuners/r820t.c:1327:1: error: the frame size of 2816 bytes is larger than 2048 bytes
 
+The warnings are distracting, and risking a kernel stack overflow is
+generally not beneficial to performance, so it may be best to disallow
+that particular combination. This can be done by turning off either
+one. I picked the dependency in GCC_PLUGIN_STRUCTLEAK_BYREF_ALL, as
+this option is designed to make uninitialized stack usage less harmful
+when enabled on its own, but it also prevents KASAN from detecting those
+cases in which it was in fact needed.
+
+KASAN_STACK is currently implied by KASAN on gcc, but could be made a
+user selectable option if we want to allow combining (non-stack) KASAN
+wtih GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+
+Note that it woult be possible to specifically address the files that
+print the warning, but presumably the overall stack usage is still
+significantly higher than in other configurations, so this would not
+address the full problem.
+
+I could not test this with CONFIG_INIT_STACK_ALL, which may or may not
+suffer from a similar problem.
+
+Fixes: 81a56f6dcd20 ("gcc-plugins: structleak: Generalize to all variable types")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ security/Kconfig.hardening | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index c6cb2d9b2905..e742d1006a4b 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -73,6 +73,7 @@ choice
+ 	config GCC_PLUGIN_STRUCTLEAK_BYREF_ALL
+ 		bool "zero-init anything passed by reference (very strong)"
+ 		depends on GCC_PLUGINS
++		depends on !(KASAN && KASAN_STACK=1)
+ 		select GCC_PLUGIN_STRUCTLEAK
+ 		help
+ 		  Zero-initialize any stack variables that may be passed
+@@ -80,6 +81,10 @@ choice
+ 		  initialized. This is intended to eliminate all classes
+ 		  of uninitialized stack variable exploits and information
+ 		  exposures.
++		  As a side-effect, this keeps a lot of variables on the
++		  stack that can otherwise be optimized out, so combining
++		  this with CONFIG_KASAN_STACK can lead to a stack overflow
++		  and is disallowed.
+ 
+ 	config INIT_STACK_ALL
+ 		bool "0xAA-init everything on the stack (strongest)"
 -- 
-Kees Cook
+2.20.0
+
