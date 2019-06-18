@@ -2,77 +2,63 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC1A494CC
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jun 2019 00:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A6D496AB
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jun 2019 03:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727540AbfFQWK3 (ORCPT
+        id S1726851AbfFRB21 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 17 Jun 2019 18:10:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51616 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727479AbfFQWK3 (ORCPT
+        Mon, 17 Jun 2019 21:28:27 -0400
+Received: from mx6378.ciavia.eu ([178.156.202.117]:59987 "EHLO
+        slot0.presuure.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfFRB20 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 17 Jun 2019 18:10:29 -0400
-Received: from localhost.localdomain (c-73-223-200-170.hsd1.ca.comcast.net [73.223.200.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1C63C2063F;
-        Mon, 17 Jun 2019 22:10:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560809428;
-        bh=6hk1cXgfeLMtsbZeOg0ZmMrTcg85OizuNzmzx7hw5Qk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=H48R91d0qMOGPYc36iLZLmJlRYEKAuboBC6PlZ9ejBJSJze08FWJ9JVor9FNIsA7u
-         lYq2c89IGdozntcAfBaEyx4Rd8jMHeGcEzDqBs2fxtvbpqhd0ZqIb3uoby3nU4r+NA
-         QC6TyqKkmVl9RQzC6UReWmI4QGQ4j6deJdV8sc14=
-Date:   Mon, 17 Jun 2019 15:10:27 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sandeep Patil <sspatil@android.com>,
-        Laura Abbott <labbott@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v7 1/2] mm: security: introduce init_on_alloc=1 and
- init_on_free=1 boot options
-Message-Id: <20190617151027.6422016d74a7dc4c7a562fc6@linux-foundation.org>
-In-Reply-To: <20190617151050.92663-2-glider@google.com>
-References: <20190617151050.92663-1-glider@google.com>
-        <20190617151050.92663-2-glider@google.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Mon, 17 Jun 2019 21:28:26 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jun 2019 21:28:25 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=presuure.ga;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=nuekwa@presuure.ga;
+ bh=EclTUBt0EgOxKrPKBvCtV8KGfLA=;
+ b=Ic0Rz1tLwT57lIL/IEQUBS4weesRdXNyxOMsq7/Fqij0Tdd3PpwE6Sl7TBRqfyVGvKCckUGpYAsK
+   RshxzuzGXLM/4LRouIjUPO1xgm7WuA5DEmxYxs+dpMAevRdcBVuCJOEEZ4qIOR6/fnoYIfu/szGY
+   5TPTDXCGvRBUuNUIo8fR1x7K6TQwU6o6ulQ+gJwn1H2HvDKcAS0wNSVRBE4rDgSrA9DItABHJbW7
+   fx4sJTgzP7Ag4ilfkd671hErqrlIPoeod7sBSBL8AfYzFAs2dtc4/LDw/Jzt2sgTiI29u6jQtY/o
+   hTrfL6t8ERjQj0ES1q++KTEiD7tedRR8Xkl7xw==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=presuure.ga;
+ b=dP5VmnCYk+Si2OycLa75hajsClgP//gNGbuAKrFWmVDalbSrsJxUmBuotjY12HRGteNH1dsDzcmG
+   l4TLFOs7W7RdlHmrHsB2w4iHaTB5eDZHk6zfHkB/wkmqrK5VDm9+nc8l293XNWDQMzQvacVcJRjL
+   um/YNHzlsUUZn1lKq0nQfsXYhoyZ53RIXk4BMhXmr8TSq8ioC/CmEX/IF9B6eTd9KWuUTSUMD8/t
+   bwWSS8ISWJ7o9pOf8rE3MAcNrITd3wmBmODXxQ7L1CmukxKnm4l69ipfFAEzQ7mmnmV+9Xl548E3
+   mstM/JCPrIyhnguM6TI/mcGxOU8FTAJrj5qAOw==;
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: June inquiry
+To:     Recipients <nuekwa@presuure.ga>
+From:   "Marketing Dept" <nuekwa@presuure.ga>
+Date:   Tue, 18 Jun 2019 04:18:15 +0300
+Reply-To: great.pacific@aol.com
+Message-ID: <0.0.E.456.1D52573AC9616FA.0@slot0.presuure.ga>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, 17 Jun 2019 17:10:49 +0200 Alexander Potapenko <glider@google.com> wrote:
+Hello dear,
+ =
 
-> Slowdown for the new features compared to init_on_free=0,
-> init_on_alloc=0:
-> 
-> hackbench, init_on_free=1:  +7.62% sys time (st.err 0.74%)
-> hackbench, init_on_alloc=1: +7.75% sys time (st.err 2.14%)
+We are in the market for your products after meeting at your stand during l=
+ast expo.
+ =
 
-Sanity check time.  Is anyone really going to use this?  Seriously,
-honestly, for real?  If "yes" then how did we determine that?
+Please kindly send us your latest catalog and price list so as to start a n=
+ew project/order as promised during the exhibition. =
 
-Also, a bit of a nit: "init_on_alloc" and "init_on_free" aren't very
-well chosen names for the boot options - they could refer to any kernel
-object at all, really.  init_pages_on_alloc would be better?  I don't think
-this matters much - the boot options are already chaotic.  But still...
+ =
 
+I would appreciate your response about the above details required so we can=
+ revert back to you asap.
+ =
 
+Kind regards
+ =
+
+Hyuan Cloe
