@@ -2,32 +2,50 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 242C549B26
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jun 2019 09:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7D349A56
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jun 2019 09:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729251AbfFRHr0 (ORCPT
+        id S1725870AbfFRHUD (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 18 Jun 2019 03:47:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58374 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729260AbfFRHrX (ORCPT
+        Tue, 18 Jun 2019 03:20:03 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:33367 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfFRHUD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 18 Jun 2019 03:47:23 -0400
-Received: from localhost.localdomain (c-73-223-200-170.hsd1.ca.comcast.net [73.223.200.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 097272084D;
-        Tue, 18 Jun 2019 05:19:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560835173;
-        bh=D6idtN2vuJNZSoRrBJEbsCDVqnmpSZdTylzmezC3ViA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=zpPILBBCAqMR9mMbYvimRhFwP9kZjL2AU5MfjZJzY+WvSEkteYVoW+sbq7pdcFPzw
-         7gcuAso+EV/aRtthzZDjhBmjrmxqfdLWq9frm+edibB8kMEZifuHcKNvThHI+539eX
-         cWp7GyxgMkZgpW/SDbOJ6lRDGCDBgF5xmFGDc2Io=
-Date:   Mon, 17 Jun 2019 22:19:32 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Kees Cook <keescook@chromium.org>
+        Tue, 18 Jun 2019 03:20:03 -0400
+Received: by mail-oi1-f193.google.com with SMTP id q186so8331793oia.0
+        for <linux-security-module@vger.kernel.org>; Tue, 18 Jun 2019 00:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KBk0vI4RQMrq25uWSdJ+2ep8omPhMVPkB3j/qaHLhoE=;
+        b=Y3HKJITKouhlh1TaWa8IWuAVIdnIJ3wgmjU7crc90t1KDNlYYvSLwj18Z0zor9/CM7
+         15NCMxEnt9WljXbe3UmAHttwdlrKLaCbiCPf0CFYydlVSL+a5h3Fnj5GWUqU2aBl0lft
+         KhcoBYkCUzUb3OOk5cRxE9pLL16NEkLvSrj6I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KBk0vI4RQMrq25uWSdJ+2ep8omPhMVPkB3j/qaHLhoE=;
+        b=CdCLZAuyjVEMh41aEkT1A+cAKmfOIlx6ru9jbkQeEcbbzc1QwC11wgWhxdE3D04kHj
+         rMFzPegMCHEeETMHfR8kBnMPATJPbUGukHYKE0t+jTM/hADaOgXG3T4N028RgETwf3Vw
+         DPwxBC7ap77hGilj+c3DiQvux/HB4JmyLQGxKcc2Vg7iHC7vRwbsYe5x8kfF+NVAhG3g
+         Ny3f6t4yA4c0e4/aSZ7QrlJD1jYnkvU/y64env+vRAJrklqxfOUZ7E7QKj8Au9Zkd6gd
+         Gnl/8ybjJ+0PePEGvCgg5GRcLaWXDzls2iTLorAKfbktbAxNacsGJfdS6ItKW+gJ9iDW
+         47Ng==
+X-Gm-Message-State: APjAAAWKAUr2HfVREoJrA7ZbOPlNEa2hNdjJW39C4H+5/rzS80G3mD/o
+        mFUgBM/gGi50JugpAK1cwnRXCZa3G8P4+w==
+X-Google-Smtp-Source: APXvYqxsGDOAjuyeiUBQQfKlHRpkhzSzNh4pYCucZFBzZqr6L06keNW+FE4qiWVrESZjwyeODy5DBQ==
+X-Received: by 2002:a63:1d1d:: with SMTP id d29mr956576pgd.259.1560835616920;
+        Mon, 17 Jun 2019 22:26:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q198sm18025478pfq.155.2019.06.17.22.26.55
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 17 Jun 2019 22:26:56 -0700 (PDT)
+Date:   Mon, 17 Jun 2019 22:26:54 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Alexander Potapenko <glider@google.com>,
         Christoph Lameter <cl@linux.com>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
@@ -47,25 +65,31 @@ Cc:     Alexander Potapenko <glider@google.com>,
         kernel-hardening@lists.openwall.com
 Subject: Re: [PATCH v7 1/2] mm: security: introduce init_on_alloc=1 and
  init_on_free=1 boot options
-Message-Id: <20190617221932.7406c74b6a8114a406984b70@linux-foundation.org>
-In-Reply-To: <201906172157.8E88196@keescook>
+Message-ID: <201906172225.4645462F1E@keescook>
 References: <20190617151050.92663-1-glider@google.com>
-        <20190617151050.92663-2-glider@google.com>
-        <20190617151027.6422016d74a7dc4c7a562fc6@linux-foundation.org>
-        <201906172157.8E88196@keescook>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+ <20190617151050.92663-2-glider@google.com>
+ <20190617151027.6422016d74a7dc4c7a562fc6@linux-foundation.org>
+ <201906172157.8E88196@keescook>
+ <20190617221932.7406c74b6a8114a406984b70@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190617221932.7406c74b6a8114a406984b70@linux-foundation.org>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, 17 Jun 2019 22:07:41 -0700 Kees Cook <keescook@chromium.org> wrote:
+On Mon, Jun 17, 2019 at 10:19:32PM -0700, Andrew Morton wrote:
+> On Mon, 17 Jun 2019 22:07:41 -0700 Kees Cook <keescook@chromium.org> wrote:
+> 
+> > This is expected to be on-by-default on Android and Chrome
+> > OS. And it gives the opportunity for anyone else to use it under distros
+> > too via the boot args. (The init_on_free feature is regularly requested
+> > by folks where memory forensics is included in their thread models.)
+> 
+> Thanks.  I added the above to the changelog.  I assumed s/thread/threat/
 
-> This is expected to be on-by-default on Android and Chrome
-> OS. And it gives the opportunity for anyone else to use it under distros
-> too via the boot args. (The init_on_free feature is regularly requested
-> by folks where memory forensics is included in their thread models.)
+Heh whoops, yes, "threat" was intended. Thanks! :)
 
-Thanks.  I added the above to the changelog.  I assumed s/thread/threat/
+-- 
+Kees Cook
