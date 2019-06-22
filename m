@@ -2,129 +2,103 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C804F26B
-	for <lists+linux-security-module@lfdr.de>; Sat, 22 Jun 2019 02:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC84B4F23B
+	for <lists+linux-security-module@lfdr.de>; Sat, 22 Jun 2019 02:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbfFVAEi (ORCPT
+        id S1726817AbfFVAEl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 21 Jun 2019 20:04:38 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:54323 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726740AbfFVAEi (ORCPT
+        Fri, 21 Jun 2019 20:04:41 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:40490 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726803AbfFVAEl (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 21 Jun 2019 20:04:38 -0400
-Received: by mail-pf1-f202.google.com with SMTP id c17so5302606pfb.21
-        for <linux-security-module@vger.kernel.org>; Fri, 21 Jun 2019 17:04:38 -0700 (PDT)
+        Fri, 21 Jun 2019 20:04:41 -0400
+Received: by mail-qt1-f202.google.com with SMTP id z6so9775092qtj.7
+        for <linux-security-module@vger.kernel.org>; Fri, 21 Jun 2019 17:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=zyyz4Cz4gGHUXuxtWW1WrDh1XJA1NU8T7MmFpiT0rrE=;
-        b=YIv34y8sbA5lbQnK/eli+pwNC0VaL5Zccqe5P08QByeHBjnT4ZCaFF6VNL0237nXRe
-         Y82y2K6IWweiDfz+suVmozJiIJZ4FiWrNiF+czLcZ885+84IldvjGYnCqd6cBVGOB6X2
-         LIB2ZUGsmvExhTJU+g5rsLSfPaB38pUV78wxFfZqkdvu5Ty0dz1z8kt1VvYSbRJXtjNZ
-         PLQq1u/pklNhYtpNo+/JudN2J6hh+ZEnvhrWfXMwYC7LO2f/KTEcHLdaZib/MbY/cT6M
-         aVlj+/7Xd3xzeZffz22TPbGJZPZ1gHSJhdPrgKyRQrQrSPgPzbAC5RkBFZ9Hz3KfX+B5
-         eKNQ==
+        bh=kMkOq/TdZP2DxC+0jYMlNvaXt/K0jRyWoQ2RXLMuYi0=;
+        b=QRjJLKdNtZo8CP4nTH7hluG2qV1AXyHaeNhLgJ9dx1fDUKb4PKvKgsxZC9qD/JpyOc
+         nDlpqLlNjPK2Fr6/XPB9DFGktNMicEjN1U3rsUDXfXc0qt6uDJ4LiVqBRuB0IEYVTdqC
+         g9pw8gFOb/hrRGu3KsVlrmVHnvI6Fg2+fFpvLxGvsYk9kHFo5degfWEqDha7Y8eH/AMU
+         owop8HB8frx+BdG4M4kFYi15V93p/L6y8OBHHLti5WrGcp5xyaJuzKxcJQQIy7uVl5RI
+         bM63+qZ8cl4gZwKMeJroO8r+Eqm/Y9IaQqorCVln/XP6Sft3X+wUDeJFpOaUTuF1wRyz
+         uPNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=zyyz4Cz4gGHUXuxtWW1WrDh1XJA1NU8T7MmFpiT0rrE=;
-        b=qr5wlRG1X1bhce5+rbix4V/+I4Bbl4ZsSNjo5krapwCgI5BWZ4ewjywiLOd2ymYlRs
-         GzSy6TFFwZv8MeEezctrVwSEceLX8ivpNCJKIix/ENBujXvLUxGEISIAH9jaTXfLAyRQ
-         G+WCAJ6f+ZPIcMav0imExeprs2vhBs57Y60BT/tIGwKOSdGRD+ow1RlOowg12jdNZEzI
-         orkMxUahJeyd8qirleTvU/XO2AQBcucQ0Ig6gf2LBhCFFXknewvDFk2csKt98oB2giij
-         g+LzFRgAEu2qzYfD7ZY//p4YgQzWUsUqUKzUHCbU55Y5epJUwvPEAz9bHJFcft64OeMT
-         evag==
-X-Gm-Message-State: APjAAAUBL8p45k8/7iTt0NF+t0eJ33HCGeKhST6a7r2WVoPmIizOXqhS
-        CN8c7+SNGyhMxC6NdGpI3rvU9HQQ1dIHxgsjAMgujw==
-X-Google-Smtp-Source: APXvYqxrieaEV4JvvipGtYx+FVX4wzWJu+9dkQO98TgTYS8DbVQaONy7gFhmlvKZ4R1EVRlKzulPfnPIGtj1Uc2BV2hMgw==
-X-Received: by 2002:a63:f817:: with SMTP id n23mr21183139pgh.35.1561161877500;
- Fri, 21 Jun 2019 17:04:37 -0700 (PDT)
-Date:   Fri, 21 Jun 2019 17:03:43 -0700
+        bh=kMkOq/TdZP2DxC+0jYMlNvaXt/K0jRyWoQ2RXLMuYi0=;
+        b=SHHTQZf4o2pn13AgJQw9283Sd1shOfsky33b2cKmLXArScGa6oSJfGpWCgrqKHUGuk
+         4qm1ngx5DeGVAug8MZmvxVJxG1bZOZoCSh130LCw81KuvDRLf9tSkdDehCdOlEjV+w+u
+         MddWb8cB4UfXkJFB0yXZwaL8X9aWHeV2MMaoaYJdixLN/NYa/V56WbFILOjQUWWVJlLT
+         vvUfBJs0rzHwP+nQgsTFtgTgZAkYf1+YKkpUWICpl2ndZObOzlqW1T09+QlYMizUzz2B
+         L1EtunAdL0pDkSE037d17TukSPZgqWCBcnA0Wee303DSar4sa5rXbgwyxZNaMg84kevP
+         PkZg==
+X-Gm-Message-State: APjAAAXnmxYOCuZa8yY6TG72vPjk0+F7pGrQf/EJJumQUriyBRgwFNvN
+        6fQvI6TbVPS6aKxf6KB2FTY/A9vLMAAicD0VIMneDw==
+X-Google-Smtp-Source: APXvYqyfTelCSA7v0vPY8aBBSkh56jUJFjBxZnlm2jUkbBn4LGuF/pZ/ysDWTqqbVvj8Ybj3gU9B9i2a5Gg4/j2L/hPeGw==
+X-Received: by 2002:a37:a9c9:: with SMTP id s192mr111878928qke.335.1561161880192;
+ Fri, 21 Jun 2019 17:04:40 -0700 (PDT)
+Date:   Fri, 21 Jun 2019 17:03:44 -0700
 In-Reply-To: <20190622000358.19895-1-matthewgarrett@google.com>
-Message-Id: <20190622000358.19895-15-matthewgarrett@google.com>
+Message-Id: <20190622000358.19895-16-matthewgarrett@google.com>
 Mime-Version: 1.0
 References: <20190622000358.19895-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH V34 14/29] ACPI: Limit access to custom_method when the kernel
- is locked down
+Subject: [PATCH V34 15/29] acpi: Ignore acpi_rsdp kernel param when the kernel
+ has been locked down
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     jmorris@namei.org
 Cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Josh Boyer <jwboyer@redhat.com>,
+        David Howells <dhowells@redhat.com>,
         Matthew Garrett <mjg59@google.com>,
-        David Howells <dhowells@redhat.com>, linux-acpi@vger.kernel.org
+        Dave Young <dyoung@redhat.com>, linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Matthew Garrett <mjg59@srcf.ucam.org>
+From: Josh Boyer <jwboyer@redhat.com>
 
-custom_method effectively allows arbitrary access to system memory, making
-it possible for an attacker to circumvent restrictions on module loading.
-Disable it if the kernel is locked down.
+This option allows userspace to pass the RSDP address to the kernel, which
+makes it possible for a user to modify the workings of hardware .  Reject
+the option when the kernel is locked down.
 
-Signed-off-by: Matthew Garrett <mjg59@google.com>
+Signed-off-by: Josh Boyer <jwboyer@redhat.com>
 Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+cc: Dave Young <dyoung@redhat.com>
 cc: linux-acpi@vger.kernel.org
 ---
- drivers/acpi/custom_method.c | 6 ++++++
- include/linux/security.h     | 1 +
- security/lockdown/lockdown.c | 1 +
- 3 files changed, 8 insertions(+)
+ drivers/acpi/osl.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/custom_method.c b/drivers/acpi/custom_method.c
-index aa972dc5cb7e..6e56f9f43492 100644
---- a/drivers/acpi/custom_method.c
-+++ b/drivers/acpi/custom_method.c
-@@ -8,6 +8,7 @@
- #include <linux/uaccess.h>
- #include <linux/debugfs.h>
- #include <linux/acpi.h>
+diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+index f29e427d0d1d..60cda8a0f36b 100644
+--- a/drivers/acpi/osl.c
++++ b/drivers/acpi/osl.c
+@@ -40,6 +40,7 @@
+ #include <linux/list.h>
+ #include <linux/jiffies.h>
+ #include <linux/semaphore.h>
 +#include <linux/security.h>
  
- #include "internal.h"
+ #include <asm/io.h>
+ #include <linux/uaccess.h>
+@@ -194,7 +195,7 @@ acpi_physical_address __init acpi_os_get_root_pointer(void)
+ 	acpi_physical_address pa;
  
-@@ -28,6 +29,11 @@ static ssize_t cm_write(struct file *file, const char __user * user_buf,
- 
- 	struct acpi_table_header table;
- 	acpi_status status;
-+	int ret;
-+
-+	ret = security_locked_down(LOCKDOWN_ACPI_TABLES);
-+	if (ret)
-+		return ret;
- 
- 	if (!(*ppos)) {
- 		/* parse the table header to get the table length */
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 30bc6f058926..cc2b5ee4cadd 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -89,6 +89,7 @@ enum lockdown_reason {
- 	LOCKDOWN_PCI_ACCESS,
- 	LOCKDOWN_IOPORT,
- 	LOCKDOWN_MSR,
-+	LOCKDOWN_ACPI_TABLES,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 297a065e6261..1725224f0024 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -25,6 +25,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_PCI_ACCESS] = "direct PCI access",
- 	[LOCKDOWN_IOPORT] = "raw io port access",
- 	[LOCKDOWN_MSR] = "raw MSR access",
-+	[LOCKDOWN_ACPI_TABLES] = "modified ACPI tables",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
+ #ifdef CONFIG_KEXEC
+-	if (acpi_rsdp)
++	if (acpi_rsdp && !security_locked_down(LOCKDOWN_ACPI_TABLES))
+ 		return acpi_rsdp;
+ #endif
+ 	pa = acpi_arch_get_root_pointer();
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
