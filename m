@@ -2,94 +2,106 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C63851CDD
-	for <lists+linux-security-module@lfdr.de>; Mon, 24 Jun 2019 23:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA5451D15
+	for <lists+linux-security-module@lfdr.de>; Mon, 24 Jun 2019 23:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfFXVJ6 (ORCPT
+        id S1731542AbfFXV1s (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 24 Jun 2019 17:09:58 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37266 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbfFXVJ6 (ORCPT
+        Mon, 24 Jun 2019 17:27:48 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25384 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726731AbfFXV1s (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 24 Jun 2019 17:09:58 -0400
-Received: by mail-pl1-f196.google.com with SMTP id bh12so7574655plb.4
-        for <linux-security-module@vger.kernel.org>; Mon, 24 Jun 2019 14:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+M9GTKc889J/I4j8FdnQoUxnObw5B7R/lYgu2IzB7wI=;
-        b=Zxf/1zMIOK7HgcBG8KOWwQkar56B+aG7cMOyPTymRHLLRUXd3T9MMnoGLayGq4hytU
-         ll1sZ70yOCvNS0pqGnvw/bBA1Ujt25ThPVxNzTiL46lwGjVGdOGvZ2hfRfjh2B+vS8aH
-         M38pT5k5eeEPZXsTdYQoErvBdaH7KeAYleN2c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+M9GTKc889J/I4j8FdnQoUxnObw5B7R/lYgu2IzB7wI=;
-        b=conpHDIKwErEqrGQytaMmAkBPx4EOXNG6C5ciMVt/tLldqlGNwZLCrTTfSYlmPE+5j
-         c0NRZ4WbYxauzxd6IpwBmTKkqpy+nJ+yORJsC0vIr+MzT+Gf2qdkRrd9RDTMuiGRJM5v
-         11PQu58EED5eeYp0nf+M7E5HX3Hn61C1I202/REGB3DkG/ewObgBdO8F+35q/ElYP+lW
-         O3gKxXObTeVwLF2xlYC4IcGDcWxXhYzY534MCpq2e1BPVYKxGkpK6qPpO3DFg9rwglti
-         jZdBkM78PTNmzBX2zwoCYANVX/rICgrJQB7Fg2yA+glVSqVnwuZGGDFzzHw73nExSefr
-         mmyw==
-X-Gm-Message-State: APjAAAXDsStp1VIcw825PzErq3VV2IeW4JmZ/CBFw6OUXY3l0U8bS+4e
-        ocJtaZbT6TOkJ58fL8wZ/Fx+uw==
-X-Google-Smtp-Source: APXvYqwPjIj377DrJtcVZCD2Ebl8o8MphZbpTJcSjhVVRx5WG/PMyImnCnAjQNOTzSq8HpQ6mo8vXw==
-X-Received: by 2002:a17:902:7443:: with SMTP id e3mr13650915plt.176.1561410597791;
-        Mon, 24 Jun 2019 14:09:57 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i3sm13706719pfo.138.2019.06.24.14.09.56
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Jun 2019 14:09:56 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 14:09:55 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: Re: [PATCH v3 10/24] Use lsmblob in security_ipc_getsecid
-Message-ID: <201906241408.FE94F84A@keescook>
-References: <20190621185233.6766-1-casey@schaufler-ca.com>
- <20190621185233.6766-11-casey@schaufler-ca.com>
- <201906221545.43D54F0F@keescook>
- <a70ad13e-bc69-ef03-1f9a-3378c38cae23@schaufler-ca.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a70ad13e-bc69-ef03-1f9a-3378c38cae23@schaufler-ca.com>
+        Mon, 24 Jun 2019 17:27:48 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5OLMEQu030082
+        for <linux-security-module@vger.kernel.org>; Mon, 24 Jun 2019 17:27:46 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tb66ugm0g-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Mon, 24 Jun 2019 17:27:46 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Mon, 24 Jun 2019 22:27:44 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 24 Jun 2019 22:27:40 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5OLRdCl50462832
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 21:27:39 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 70859A4057;
+        Mon, 24 Jun 2019 21:27:39 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 68810A4040;
+        Mon, 24 Jun 2019 21:27:38 +0000 (GMT)
+Received: from dhcp-9-31-103-88.watson.ibm.com (unknown [9.31.103.88])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Jun 2019 21:27:38 +0000 (GMT)
+Subject: Re: [PATCH V31 07/25] kexec_file: Restrict at runtime if the kernel
+ is locked down
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Matthew Garrett <mjg59@google.com>, Dave Young <dyoung@redhat.com>
+Cc:     James Morris <jmorris@namei.org>, Jiri Bohac <jbohac@suse.cz>,
+        Linux API <linux-api@vger.kernel.org>,
+        kexec@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 24 Jun 2019 17:27:37 -0400
+In-Reply-To: <CACdnJusPtYLdg7ZPhBo=Y5EsBz6B+5M2zYscBrLcc89oNnPkdQ@mail.gmail.com>
+References: <20190326182742.16950-1-matthewgarrett@google.com>
+         <20190326182742.16950-8-matthewgarrett@google.com>
+         <20190621064340.GB4528@localhost.localdomain>
+         <CACdnJut=J1YTpM4s6g5XWCEs+=X0Jvf8otfMg+w=_oqSZmf01Q@mail.gmail.com>
+         <20190624015206.GB2976@dhcp-128-65.nay.redhat.com>
+         <CACdnJusPtYLdg7ZPhBo=Y5EsBz6B+5M2zYscBrLcc89oNnPkdQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062421-0008-0000-0000-000002F6A77A
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062421-0009-0000-0000-00002263D4EA
+Message-Id: <1561411657.4340.70.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_14:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=3 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906240169
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Jun 24, 2019 at 09:39:05AM -0700, Casey Schaufler wrote:
-> On 6/22/2019 3:48 PM, Kees Cook wrote:
-> > On Fri, Jun 21, 2019 at 11:52:19AM -0700, Casey Schaufler wrote:
-> >> +	struct security_hook_list *hp;
-> >> +
-> >> +	lsmblob_init(blob, 0);
-> >> +	hlist_for_each_entry(hp, &security_hook_heads.ipc_getsecid, list)
-> >> +		hp->hook.ipc_getsecid(ipcp, &blob->secid[hp->slot]);
-> > Just for sanity when using hp->slot, it might be good to do something
-> > like this in the places it gets used. Like for here:
+Hi Matthew,
+
+On Mon, 2019-06-24 at 14:06 -0700, Matthew Garrett wrote:
+> On Sun, Jun 23, 2019 at 6:52 PM Dave Young <dyoung@redhat.com> wrote:
 > >
-> > 	if (!WARN_ON(hp->slot < 0 || hp->slot >= LSMBLOB_COUNT))
-> > 		hp->hook.ipc_getsecid(ipcp, &blob->secid[hp->slot]);
+> > On 06/21/19 at 01:18pm, Matthew Garrett wrote:
+> > > I don't think so - we want it to be possible to load images if they
+> > > have a valid signature.
 > >
-> > This _should_ be overkill, but since lists of hooks that trigger slot
-> > assignment is hardcoded, it seems nice to cover any future problems or
-> > mismatches.
+> > I know it works like this way because of the previous patch.  But from
+> > the patch log "When KEXEC_SIG is not enabled, kernel should not load
+> > images", it is simple to check it early for !IS_ENABLED(CONFIG_KEXEC_SIG) &&
+> > kernel_is_locked_down(reason, LOCKDOWN_INTEGRITY)  instead of depending
+> > on the late code to verify signature.  In that way, easier to
+> > understand the logic, no?
 > 
-> How about a CONFIG_LSM_SLOT_CHECK around a function lsm_slot_check()?
-> If configured, it does the WARN_ON, and if not it's a static inline
-> true return. As you say, it's probably overkill, but it would be available
-> for the paranoid/debug/bringup situation.
+> But that combination doesn't enforce signature validation? We can't
+> depend on !IS_ENABLED(CONFIG_KEXEC_SIG_FORCE) because then it'll
+> enforce signature validation even if lockdown is disabled.
 
-No, this doesn't need another CONFIG. The test is nearly free and WARN
-means it's wrapped in an unlikely already. I think just adding it
-outright would be fine.
+I agree with Dave.  There should be a stub lockdown function to
+prevent enforcing lockdown when it isn't enabled.
 
--- 
-Kees Cook
+Mimi
+
