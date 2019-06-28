@@ -2,87 +2,123 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C29059954
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 Jun 2019 13:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0C259B58
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 Jun 2019 14:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbfF1LmA (ORCPT
+        id S1727219AbfF1McV (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 28 Jun 2019 07:42:00 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33220 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726562AbfF1LmA (ORCPT
+        Fri, 28 Jun 2019 08:32:21 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:39346 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727041AbfF1Mam (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 28 Jun 2019 07:42:00 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5SBcG3P049167
-        for <linux-security-module@vger.kernel.org>; Fri, 28 Jun 2019 07:41:59 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tdgc5cjbb-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-security-module@vger.kernel.org>; Fri, 28 Jun 2019 07:41:59 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Fri, 28 Jun 2019 12:41:57 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 28 Jun 2019 12:41:54 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5SBfroG58458292
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jun 2019 11:41:53 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 464294C044;
-        Fri, 28 Jun 2019 11:41:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 660CD4C04E;
-        Fri, 28 Jun 2019 11:41:52 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.81.240])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Jun 2019 11:41:52 +0000 (GMT)
-Subject: Re: [PATCH] ima: Update MAX_TEMPLATE_NAME_LEN to fit largest
- reasonable definition
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 28 Jun 2019 07:41:41 -0400
-In-Reply-To: <20190627232546.28746-1-bauerman@linux.ibm.com>
-References: <20190627232546.28746-1-bauerman@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19062811-0016-0000-0000-0000028D563F
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062811-0017-0000-0000-000032EAD99E
-Message-Id: <1561722101.4264.3.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-28_04:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906280139
+        Fri, 28 Jun 2019 08:30:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ykWkFsumL0ayFcjE+xBNFzyP+ofeeOxpiUoXLTtt7vY=; b=LTqUMzhs41rcttK/soKsV1UIN3
+        LoQYuPajw1HHFL3YMIv6D/yUuQALnQpcQF+7onrNI2iaTqsK0bQhqVi6IcXycksWISx+3RYnjdf17
+        tZmbpoV0iiQiRPnnceV3TnvbhhxiCsrTMIRbKsi307xqI2e+13y6x8j01plF4zNJvms+sK/kw0ntj
+        VFwVV7+OHkOjg2f2viWFKJhidq1uDrBkrPhQASslBz23bXxo285FdMvebQPdXkBUUxEPg0WZm3PLS
+        /lpZjBKvAzRqLugjwDvvLJVrOKpwzptQCzjefAKUmashyWLkZJfeFZZfkDwLjKeNK0uRr1tA6mtFg
+        IREdxPVw==;
+Received: from [186.213.242.156] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hgq1U-00055T-Lv; Fri, 28 Jun 2019 12:30:36 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hgq1S-0005Sa-Fu; Fri, 28 Jun 2019 09:30:34 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Ning Sun <ning.sun@intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        tboot-devel@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 21/39] docs: x86: move two x86-specific files to x86 arch dir
+Date:   Fri, 28 Jun 2019 09:30:14 -0300
+Message-Id: <caa8ba95b2b74a93e588edfa6bbd50b7bfa7ee09.1561724493.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1561724493.git.mchehab+samsung@kernel.org>
+References: <cover.1561724493.git.mchehab+samsung@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 2019-06-27 at 20:25 -0300, Thiago Jung Bauermann wrote:
-> MAX_TEMPLATE_NAME_LEN is used when restoring measurements carried over from
-> a kexec. It should be set to the length of a template containing all fields
-> except for 'd' and 'n', which don't need to be accounted for since they
-> shouldn't be defined in the same template description as 'd-ng' and 'n-ng'.
-> 
-> That length is greater than the current 15, so update using a sizeof() to
-> show where the number comes from and also can be visually shown to be
-> correct. The sizeof() is calculated at compile time.
-> 
-> Signed-off-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Those two docs belong to the x86 architecture:
 
-Thanks, it's now in next-queued-testing.
+   Documentation/Intel-IOMMU.txt -> Documentation/x86/intel-iommu.rst
+   Documentation/intel_txt.txt -> Documentation/x86/intel_txt.rst
 
-Mimi
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ Documentation/x86/index.rst                            | 2 ++
+ Documentation/{Intel-IOMMU.txt => x86/intel-iommu.rst} | 0
+ Documentation/{intel_txt.txt => x86/intel_txt.rst}     | 0
+ MAINTAINERS                                            | 2 +-
+ security/Kconfig                                       | 2 +-
+ 5 files changed, 4 insertions(+), 2 deletions(-)
+ rename Documentation/{Intel-IOMMU.txt => x86/intel-iommu.rst} (100%)
+ rename Documentation/{intel_txt.txt => x86/intel_txt.rst} (100%)
+
+diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+index f2de1b2d3ac7..af64c4bb4447 100644
+--- a/Documentation/x86/index.rst
++++ b/Documentation/x86/index.rst
+@@ -20,6 +20,8 @@ x86-specific Documentation
+    mtrr
+    pat
+    intel_mpx
++   intel-iommu
++   intel_txt
+    amd-memory-encryption
+    pti
+    mds
+diff --git a/Documentation/Intel-IOMMU.txt b/Documentation/x86/intel-iommu.rst
+similarity index 100%
+rename from Documentation/Intel-IOMMU.txt
+rename to Documentation/x86/intel-iommu.rst
+diff --git a/Documentation/intel_txt.txt b/Documentation/x86/intel_txt.rst
+similarity index 100%
+rename from Documentation/intel_txt.txt
+rename to Documentation/x86/intel_txt.rst
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3f0f654d1166..29d1498ad39d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8259,7 +8259,7 @@ L:	tboot-devel@lists.sourceforge.net
+ W:	http://tboot.sourceforge.net
+ T:	hg http://tboot.hg.sourceforge.net:8000/hgroot/tboot/tboot
+ S:	Supported
+-F:	Documentation/intel_txt.txt
++F:	Documentation/x86/intel_txt.rst
+ F:	include/linux/tboot.h
+ F:	arch/x86/kernel/tboot.c
+ 
+diff --git a/security/Kconfig b/security/Kconfig
+index 06a30851511a..0d65594b5196 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -121,7 +121,7 @@ config INTEL_TXT
+ 	  See <http://www.intel.com/technology/security/> for more information
+ 	  about Intel(R) TXT.
+ 	  See <http://tboot.sourceforge.net> for more information about tboot.
+-	  See Documentation/intel_txt.txt for a description of how to enable
++	  See Documentation/x86/intel_txt.rst for a description of how to enable
+ 	  Intel TXT support in a kernel boot.
+ 
+ 	  If you are unsure as to whether this is required, answer N.
+-- 
+2.21.0
 
