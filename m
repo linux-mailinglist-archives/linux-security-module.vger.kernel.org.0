@@ -2,157 +2,171 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D835D67D
-	for <lists+linux-security-module@lfdr.de>; Tue,  2 Jul 2019 21:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1452F5DACB
+	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jul 2019 03:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727091AbfGBTAy (ORCPT
+        id S1727409AbfGCB2F (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 2 Jul 2019 15:00:54 -0400
-Received: from mout.web.de ([217.72.192.78]:44445 "EHLO mout.web.de"
+        Tue, 2 Jul 2019 21:28:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35840 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726457AbfGBTAx (ORCPT
+        id S1727152AbfGCB2E (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 2 Jul 2019 15:00:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1562094041;
-        bh=E3pGj2dkiDZ6+glyTl7AWQYkPf1IakfUILl61N8Rv88=;
-        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=C601VR8Hi8PIlCpfgrtCjCTRKfGyRxJdzErAoDbrwZ0oFqTOxcKmJdP9P6N/Of9Y+
-         BrNi9GpaET/ilru8EB+Lz9f69rbJeNxCCNSrLv7i2PmZZHooGD4jAgaHzlCkGBd2qO
-         +HkL1lQ0VqQwiL4eHik14pyUXJo7I6ncYai4+RrM=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([78.48.11.114]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0M2uWg-1iZfaw2bLi-00se0K; Tue, 02
- Jul 2019 21:00:40 +0200
-To:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Tue, 2 Jul 2019 21:28:04 -0400
+Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B896A21954;
+        Tue,  2 Jul 2019 22:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562108356;
+        bh=iRu3VNOe2UUsUii+YtWwRL9+vOwU1d4+9aIcTU3Xflk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uHdrGlf41wDBUbR8nmq0GhdtDDlZO0yuNmpD6khamveWRyuhExuvwehPTjqBHRhwz
+         hDCshEIl1r1SB5ixh6T2DjLlZDgTJZoi1YP+DJAcIwZJ/5+Z5eQBeYolBp+HAyle8g
+         EOSCdB/5O0adv8tI4NTLTlB43TBtChALpoIMg8Ho=
+Date:   Tue, 2 Jul 2019 15:59:15 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Kees Cook <keescook@chromium.org>,
+        Michal Hocko <mhocko@suse.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Michal Hocko <mhocko@kernel.org>,
         James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] ima: Replace two seq_printf() calls by seq_puts() in
- ima_show_template_data_ascii()
-Openpgp: preference=signencrypt
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <7f60a9e1-3002-3186-2a30-50b69abd0cc7@web.de>
-Date:   Tue, 2 Jul 2019 21:00:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KFkYLIY1npATDLLhuwbMwksEqkmtX6kkYsSV0Vd5j+uT98uc8s8
- ytf9I4RR3CVXfh3qQeqLpbbgSnArsFUa22Eibg6d2NbdtixPr58KR217by6cPmPAkd2m6Un
- 0IL5gpxmme3Da5VSz36bKQBAm+NLF2goyoCt0lmFSLmhSgWTtUmcr6H1C1WFdmePPVwD3KP
- AoPd7IZXFUBD0v+0upWTw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jFmE59tYiBk=:SASPnTibklJREuEIBB+wz0
- Cb5YsV+cMMgSV1tbU/NOvhu49pP8/MgZ7GVVfrvN5sAsmCCiQExF/fx7B1AqRl0UKeQvyQnuL
- jdHaBbTXDJUD0gACWD+hBi0afqeuT1d1r8jJkvXZ1yH9CArZQm8RDuBWFJamIaSCrc2dj/UZV
- OnjHYEZtVqBN89OgYztx5p3QVppBiwzEfvl3Ngx2xEj/MctQad9hdQMgFx2V1fjUppcmX7fAc
- 8PSBHdz7V6eBcFbT6sNmPXCr5ubmGWi03zmwxMen0ceK126uTKPs0sX2TJguLLupoY6kIrGqz
- bmVBwoMBI12McDOUCEotOETdzznsCzxSFK/opGpdQdqCpVjQNKKOAkQLSFRi6oGB4botoFy8i
- nMkS+BDlxZi9y7prnS7VNBoF3FmOca0LVfq28C1l12DjiSROx2UZfmmFM7jtdc4YX4faDDeV2
- UirDaHtgzWWNWWvnXTjGt9KQTpK8jubnDAbznM8XOoRv3Iel6lI+TnrVcILvm0Vga4pXfs9Ma
- kgYnwS9C2EIzm3jlB5aXjI8XpZouNBN21HDGenU06l5IU5g+Nplx1Z0vrnc/qki6Pg5HB0mx5
- IwD3eLjT0agbzihELRnLSx0cH5JNv1qFGQANqCHuELNe8HSAHR3jvA2fJ5TObftCQ7JQxHvgT
- j+4yWzWmiZ+NTsBgr+LKbhHkenn2r6pHFH6cmPZm2NL0jBI+T+6/FeJcArrbV3J61yaVjxqBR
- LWNT1TUpX9Q5ZY/zsYXt/wIHtDTfy+YfjsKL9bvI1Z2d32PZhnZEStiV137dCtg6PoZbbPsM2
- CNz4adpenZLSm8uGSa9jNeOzO86RHDV3ARDRgGh0oZ5JvxGUW90XxrSMio28hBl0bPiCJiSoR
- F1gTlXTM/0cL72w/NFBeeRy7wqAqfgQNvO/skrMj2cEQgcHCq7RvNlB9256/t2539C4NJTD15
- V4rIEI4NnOnYN7AWBJwf+XlkAq1ds1nqxImeoTAzokTvi8ae9hGP1eKr5kMULLbn0+aLxA2EG
- 2TrN6F3QPkENadNqGHz9GLYzZ2syEZLAe+YLtEgM0YiMNhbmbWQk9bdFg1uocMxOPpi/qwQ4y
- M0MMNQcKIxD1Gr7ZR5++nAU6ti4rLY3OqO8
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sandeep Patil <sspatil@android.com>,
+        Laura Abbott <labbott@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marco Elver <elver@google.com>, Qian Cai <cai@lca.pw>,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH v10 1/2] mm: security: introduce init_on_alloc=1 and
+ init_on_free=1 boot options
+Message-Id: <20190702155915.ab5e7053e5c0d49e84c6ed67@linux-foundation.org>
+In-Reply-To: <20190628093131.199499-2-glider@google.com>
+References: <20190628093131.199499-1-glider@google.com>
+        <20190628093131.199499-2-glider@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Tue, 2 Jul 2019 20:52:21 +0200
+On Fri, 28 Jun 2019 11:31:30 +0200 Alexander Potapenko <glider@google.com> wrote:
 
-Two strings which did not contain a data format specification should be pu=
-t
-into a sequence. Thus use the corresponding function =E2=80=9Cseq_puts=E2=
-=80=9D.
+> The new options are needed to prevent possible information leaks and
+> make control-flow bugs that depend on uninitialized values more
+> deterministic.
+> 
+> This is expected to be on-by-default on Android and Chrome OS. And it
+> gives the opportunity for anyone else to use it under distros too via
+> the boot args. (The init_on_free feature is regularly requested by
+> folks where memory forensics is included in their threat models.)
+> 
+> init_on_alloc=1 makes the kernel initialize newly allocated pages and heap
+> objects with zeroes. Initialization is done at allocation time at the
+> places where checks for __GFP_ZERO are performed.
+> 
+> init_on_free=1 makes the kernel initialize freed pages and heap objects
+> with zeroes upon their deletion. This helps to ensure sensitive data
+> doesn't leak via use-after-free accesses.
+> 
+> Both init_on_alloc=1 and init_on_free=1 guarantee that the allocator
+> returns zeroed memory. The two exceptions are slab caches with
+> constructors and SLAB_TYPESAFE_BY_RCU flag. Those are never
+> zero-initialized to preserve their semantics.
+> 
+> Both init_on_alloc and init_on_free default to zero, but those defaults
+> can be overridden with CONFIG_INIT_ON_ALLOC_DEFAULT_ON and
+> CONFIG_INIT_ON_FREE_DEFAULT_ON.
+> 
+> If either SLUB poisoning or page poisoning is enabled, those options
+> take precedence over init_on_alloc and init_on_free: initialization is
+> only applied to unpoisoned allocations.
+> 
+> Slowdown for the new features compared to init_on_free=0,
+> init_on_alloc=0:
+> 
+> hackbench, init_on_free=1:  +7.62% sys time (st.err 0.74%)
+> hackbench, init_on_alloc=1: +7.75% sys time (st.err 2.14%)
+> 
+> Linux build with -j12, init_on_free=1:  +8.38% wall time (st.err 0.39%)
+> Linux build with -j12, init_on_free=1:  +24.42% sys time (st.err 0.52%)
+> Linux build with -j12, init_on_alloc=1: -0.13% wall time (st.err 0.42%)
+> Linux build with -j12, init_on_alloc=1: +0.57% sys time (st.err 0.40%)
+> 
+> The slowdown for init_on_free=0, init_on_alloc=0 compared to the
+> baseline is within the standard error.
+> 
+> The new features are also going to pave the way for hardware memory
+> tagging (e.g. arm64's MTE), which will require both on_alloc and on_free
+> hooks to set the tags for heap objects. With MTE, tagging will have the
+> same cost as memory initialization.
+> 
+> Although init_on_free is rather costly, there are paranoid use-cases where
+> in-memory data lifetime is desired to be minimized. There are various
+> arguments for/against the realism of the associated threat models, but
+> given that we'll need the infrastructure for MTE anyway, and there are
+> people who want wipe-on-free behavior no matter what the performance cost,
+> it seems reasonable to include it in this series.
+>
+> ...
+>
+>  v10:
+>   - added Acked-by: tags
+>   - converted pr_warn() to pr_info()
 
-This issue was detected by using the Coccinelle software.
+There are unchangelogged alterations between v9 and v10.  The
+replacement of IS_ENABLED(CONFIG_PAGE_POISONING)) with
+page_poisoning_enabled().
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- security/integrity/ima/ima_template_lib.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrit=
-y/ima/ima_template_lib.c
-index 9fe0ef7f91e2..05636e9b19b1 100644
-=2D-- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -74,7 +74,7 @@ static void ima_show_template_data_ascii(struct seq_file=
- *m,
- 	case DATA_FMT_DIGEST_WITH_ALGO:
- 		buf_ptr =3D strnchr(field_data->data, buflen, ':');
- 		if (buf_ptr !=3D field_data->data)
--			seq_printf(m, "%s", field_data->data);
-+			seq_puts(m, field_data->data);
-
- 		/* skip ':' and '\0' */
- 		buf_ptr +=3D 2;
-@@ -87,7 +87,7 @@ static void ima_show_template_data_ascii(struct seq_file=
- *m,
- 		ima_print_digest(m, buf_ptr, buflen);
- 		break;
- 	case DATA_FMT_STRING:
--		seq_printf(m, "%s", buf_ptr);
-+		seq_puts(m, buf_ptr);
- 		break;
- 	default:
- 		break;
-=2D-
-2.22.0
+--- a/mm/page_alloc.c~mm-security-introduce-init_on_alloc=1-and-init_on_free=1-boot-options-v10
++++ a/mm/page_alloc.c
+@@ -157,8 +157,8 @@ static int __init early_init_on_alloc(ch
+ 	if (!buf)
+ 		return -EINVAL;
+ 	ret = kstrtobool(buf, &bool_result);
+-	if (bool_result && IS_ENABLED(CONFIG_PAGE_POISONING))
+-		pr_warn("mem auto-init: CONFIG_PAGE_POISONING is on, will take precedence over init_on_alloc\n");
++	if (bool_result && page_poisoning_enabled())
++		pr_info("mem auto-init: CONFIG_PAGE_POISONING is on, will take precedence over init_on_alloc\n");
+ 	if (bool_result)
+ 		static_branch_enable(&init_on_alloc);
+ 	else
+@@ -175,8 +175,8 @@ static int __init early_init_on_free(cha
+ 	if (!buf)
+ 		return -EINVAL;
+ 	ret = kstrtobool(buf, &bool_result);
+-	if (bool_result && IS_ENABLED(CONFIG_PAGE_POISONING))
+-		pr_warn("mem auto-init: CONFIG_PAGE_POISONING is on, will take precedence over init_on_free\n");
++	if (bool_result && page_poisoning_enabled())
++		pr_info("mem auto-init: CONFIG_PAGE_POISONING is on, will take precedence over init_on_free\n");
+ 	if (bool_result)
+ 		static_branch_enable(&init_on_free);
+ 	else
+--- a/mm/slub.c~mm-security-introduce-init_on_alloc=1-and-init_on_free=1-boot-options-v10
++++ a/mm/slub.c
+@@ -1281,9 +1281,8 @@ check_slabs:
+ out:
+ 	if ((static_branch_unlikely(&init_on_alloc) ||
+ 	     static_branch_unlikely(&init_on_free)) &&
+-	    (slub_debug & SLAB_POISON)) {
+-		pr_warn("mem auto-init: SLAB_POISON will take precedence over init_on_alloc/init_on_free\n");
+-	}
++	    (slub_debug & SLAB_POISON))
++		pr_info("mem auto-init: SLAB_POISON will take precedence over init_on_alloc/init_on_free\n");
+ 	return 1;
+ }
+ 
+_
 
