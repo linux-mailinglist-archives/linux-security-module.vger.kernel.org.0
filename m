@@ -2,48 +2,48 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D24E85EE6D
-	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jul 2019 23:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2765EE6B
+	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jul 2019 23:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbfGCV0b (ORCPT
+        id S1727021AbfGCV03 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 3 Jul 2019 17:26:31 -0400
-Received: from sonic314-27.consmr.mail.ne1.yahoo.com ([66.163.189.153]:35146
-        "EHLO sonic314-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727341AbfGCV0a (ORCPT
+        Wed, 3 Jul 2019 17:26:29 -0400
+Received: from sonic310-22.consmr.mail.bf2.yahoo.com ([74.6.135.196]:35858
+        "EHLO sonic310-22.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727338AbfGCV03 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 3 Jul 2019 17:26:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1562189188; bh=aGyFxBCKVDPk80ns0DK3ZdP2nGMKgpbcCOrX7VDI3ak=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=EtcDEVGX5da3y9JLvjYWbRunmt0oq8RsYfglLUHl5YIZNomoaAAqSUzweZ+VCfeXyxL3V7Zd53s26omDh5goMenQQ6V5nkLh8o3vDDpY2hfzePfr09MEVRXh2daZOwKjP0GC5mXOxzVQNrfCWb+iGe7g6kd/kXfrWjRIE6+NXCj0s3Y6OpiU0HJY5ZDHht2rAsqk7/KpjVs9H3JPqVTLXHUk+cOKNlCTlgnYS61LG7p+lJKBBuutZzlJK8EKpJbKyBeqwYbAuTmyS4DeT6jJdxiDBjyOFPkRy3/Ty+k075epgsRb5nA/XxbAdUpGO4H2nU+1j0W+3XSxaoyVnR6tWA==
-X-YMail-OSG: Qk8umIkVM1nU9XffwYug0tiu6ij9TMUxJROdcHruJmgn5GzCeMCWYu3C1CrWSwV
- YQI3YvGAWrCq4JxATESfWHsJ4FTGhuFx4Nynhnrm3YUVogYM5xhGAJdhU_94Zah9zw5CRb.LBIUz
- 36Fmjy56G1A_yWuCZckq6ur7NKy4LAXexzJCa6ihGHTA2wNZrMlIYeb4t7k_3NFwDxM9FQfAds.d
- sLTom8csecr4I0nYjGJIlxgc41VLhUtEA_6WPyi5fkx3VhoJP9sZ5dTZlrjWEQW5OWVAvlYyCkBu
- J0V3pUjx.F9QoCsIq2Bl9UWAWyd36s02EY.4aYjT1dbZjH5ZUiKpQv1SZSN1q.zYnUYFErOju9CD
- XvOQOz1QsJn_dVTr1Am9nUeEWu5NP3i2gYc_zXyfyAgGaryeafFxg7wsL19dnPesvijnpiF3Y3uN
- Aw0.Oc4W85dOr65AGWBQ81lAJc3FGQ37_dbQsDNt5NZ0R.Xq4B6CfznYQZ.8Hyb7MPUGzATGcVEJ
- frZfrAV_M__0RKuj71yrAdhZkmmK6Jr5Kw.vYoAxheIPTvro2stVlvLFCuSZo0Bdr7BC7AO3Wdb9
- DTeWlsmQyAAYUntHQWk66jFEne6DdEozjk7hXSaiuAcnPjLrjrCJqe_5gTTYDEXCMz_Z01O.2x7V
- _.oz1CVh_In_MCqldJ0tVMB0geuOZY8wPQbO01CLZPuhArjIQUAD2aYg9Sz_3RW38t14ctd1IXH1
- SCBQxuwCc4bhIbb3Pm4sB3AQr5dhUkAPSr6UlEEmC6OHd3jljCMepFwWXoBgwbGfScYxqOUBy1uO
- 2.TlENbW91Lz_p1ZQ9OwtkOjvpz7u4FVixL0Y1GejcBbHpbG2DvzMwtFE7BoAiwztKy01499JXeb
- yR0AHnyO9tWrq8o74lkcHK5qRJTLsmx53iBJWq25jIVUEv7h4KsvOviIOmGcLb9mQzv080WNG46O
- 6LCjmlpZwRUAHZX32QHAebYMvsCaGS3XLbn7XVpVyYFDVtGKIkvJ_XrjJyTBrdDmZWgFlvilim6g
- rxUWM1v0UIzuutXOlKadKe9PJp_DJlMh3.hTmqs2XDejJU5n6pmqfRMtmA4AKQakZzdB6gTzYbVL
- VeU9iNdKghZ6gx7jbXaPGbOykACl36i8vE.70JLT9OQOz9PlnrFXLggN94kTUtHV_bO4WIHPOmvR
- 5.0RlwkspR34BALJQiU9DFkqmj4NVrGOZr.G.p9c.1I_6TjxdAAcUo7.FsqP8.fznc4Q_j7dKZDZ
- eXJ40A3d7.kGTnwXLbnPYFpMFwGVngEEzLpsk.PzMLMcvp7b5
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Wed, 3 Jul 2019 21:26:28 +0000
-Received: by smtp420.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 2c078f1d0732da9907514b19d300052b;
-          Wed, 03 Jul 2019 21:26:22 +0000 (UTC)
+        Wed, 3 Jul 2019 17:26:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1562189187; bh=NX1Wm9mZ2rrFAh4r01JvGuFtS1Wfm+5+bHPs+vG06x4=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=biwURfd6mfmUJsNkFW3kUJ/ZU+Mx1yzp9m6pLKFrSpG1npzzifTXbsk+915Kxd4LTSfW6+8UMrzylQ8zs3/qlrELvcStVhS4hMraPOFJYgpVUk9gMniPoUmBjI+nzk+UGfQ87J7hKIjbUbTpORUgN3V0YhZ9iVi656taUhbyczqftDW/D1lz+Ld/vfXBnfjody+iCQ1nE0Y4l0hneOx7Dv715p7YpAZZFSDAGtU7sa0Bjoa3nqBciGmR+kdVEKn6PHGw2xbeR0QSUszS4ZUXriJbPKtSfesLipSN8p08MfKOKogRqNysOot2k3XIwZpYt1FOZnCA7djSsaaSHA9xuw==
+X-YMail-OSG: i8MHiH4VM1luroodjbdEj4illAUt.0UzN3BSVV1XTQulMT_UntHseMdCX1iT.dD
+ YrstDXklHNS41XPwQBsbjqTr4XEwKa0ToCkRyDVzYzyHEwFznfzJy0sgZE8tghy6uYLwZ2hPmCby
+ mq6SwKbp1q5CGh3KQNB65wXJw1o2HVy9K5fV3xmseVSxVyeBqNdF.jLdFYJ_wbzrBDX2Y2vfg.X0
+ cw.5_84lGB5tjCKldagJ6O.RKX.zw7gMMbjW0hppAyDU1L7FENJxH4.36Rqbo_hMnwbRjHYBnsTZ
+ JqAMMHQd00QYBXt3AddOFDTMntSALn2meZyDH28pKhZt2pv83ixWkXroYH60WDZYXUJed9LYsC7y
+ 1BBklBcQoTCJ_ZJIbGHq0hOS4ZHnmLavxxOoCmQVsZsJnKW85Udsm9YvWUmHiBSStcpEIJ_8Kdwd
+ k7Jyc8Q3PbW37uhtJUKKAJ5n94.xdmtiY42bAd5cnauGkgx.L9X2Aui4BAVof_n4Hh50NvFjVxw4
+ xzaTMRWXrnIbqGdyEOK3htuU.6Oz3J23ym1htScrvous_LevwTV1wSv4ot3O2pNv5S747Hz8mRCH
+ uyoIdOjPIam1E6JzhWg3IlbsyCab34w3OPxTeDRpsle6nIoIjj6KhCQWtE6zDLP94cR4y7HqT8AK
+ sOItmP1Y19eK2LXDPLuV2tNK_Yz.13YtTagAns.5J0NPp0hYc9RmOehM7zJql3HJOUoS7zpjQa6f
+ ofYGaTWD4n4KYmiCoz2DvIW3PvL56f5ErdF_0vFylnKgCS80eGJDENWeB5LMkG.SwcMb.agzZdGY
+ zY_WJ2WCQQ6859Hms1ipDI7gmlHH1qaQt0tp4MSWgC3jAqSroXX65dOnc6OqGAqwTCz8hNNwZxD4
+ m7Mfgq0M2cZ6TttXRbYE8_yDmhp9.X9O2OEnniHBW7keEUwJWJdinL5oyO7RWLmRay4BU0QC6Vx7
+ BzUEY5ZwAu0xYsalbOV4pHv1EO51evFUXxY0NWWgdGsyD9eNCJcgRYp4cIPbMO9B.ROTZubfqYwT
+ 2sSGzQdxDS9sS1cK.u6OPh09xDx2LBc7gVAmkWxuLftIipTE.GNJ6Vd3Xqb30ussrZDKdr3BHIKx
+ M0IFcK.5r16L7m.yLRGGBlDWvrHQZvc2Q_dosXfQ.ffZGYYjvKJumefqDNXY3Vi8kNvpk_HSUQnO
+ Kls_Jto.zMtW4ojdGtJVhUTz1NSWLMpQcz9Fe67IPq61X3v6jI0xjFDDqtcLxXjo1tI0x7n5Qnd5
+ sslkhORiUhRaf8jWdd2jrCYJJ1vMizBBONNCW1ckBBHKY47ZGZscZ
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Wed, 3 Jul 2019 21:26:27 +0000
+Received: by smtp421.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID dcee8b60478c08e91221837756b9c2c8;
+          Wed, 03 Jul 2019 21:26:27 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH v5 19/23] LSM: Use lsmcontext in security_inode_getsecctx
-Date:   Wed,  3 Jul 2019 14:25:34 -0700
-Message-Id: <20190703212538.7383-20-casey@schaufler-ca.com>
+Subject: [PATCH v5 20/23] LSM: security_secid_to_secctx in netlink netfilter
+Date:   Wed,  3 Jul 2019 14:25:35 -0700
+Message-Id: <20190703212538.7383-21-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190703212538.7383-1-casey@schaufler-ca.com>
 References: <20190703212538.7383-1-casey@schaufler-ca.com>
@@ -53,260 +53,108 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Change the security_inode_getsecctx() interface to fill
-a lsmcontext structure instead of data and length pointers.
-This provides the information about which LSM created the
-context so that security_release_secctx() can use the
-correct hook. A lsmcontext is used within kernfs to store
-the security information as well.
+Change netlink netfilter interfaces to use lsmcontext
+pointers, and remove scaffolding.
 
-security_inode_getsecctx() does not use the "display"
-value. There's only one possible user at any time at
-this point, and the use is only internal.
-
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: John Johansen <john.johansen@canonical.com>
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- fs/kernfs/dir.c             |  9 ++-------
- fs/kernfs/inode.c           | 34 ++++++++++++----------------------
- fs/kernfs/kernfs-internal.h |  3 +--
- fs/nfsd/nfs4xdr.c           | 23 +++++++++--------------
- include/linux/security.h    |  5 +++--
- security/security.c         | 13 +++++++++++--
- 6 files changed, 38 insertions(+), 49 deletions(-)
+ net/netfilter/nfnetlink_queue.c | 32 +++++++++++++-------------------
+ 1 file changed, 13 insertions(+), 19 deletions(-)
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index c8362b6d556e..1d000289d8b7 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -532,13 +532,8 @@ void kernfs_put(struct kernfs_node *kn)
- 	kfree_const(kn->name);
- 
- 	if (kn->iattr) {
--		struct lsmcontext scaff; /* scaffolding */
--
--		if (kn->iattr->ia_secdata) {
--			lsmcontext_init(&scaff, kn->iattr->ia_secdata,
--					kn->iattr->ia_secdata_len, 0);
--			security_release_secctx(&scaff);
--		}
-+		if (kn->iattr->ia_context.context)
-+			security_release_secctx(&kn->iattr->ia_context);
- 		simple_xattrs_free(&kn->iattr->xattrs);
- 		kmem_cache_free(kernfs_iattrs_cache, kn->iattr);
- 	}
-diff --git a/fs/kernfs/inode.c b/fs/kernfs/inode.c
-index 02cde9dac5ee..ffbf7863306d 100644
---- a/fs/kernfs/inode.c
-+++ b/fs/kernfs/inode.c
-@@ -135,21 +135,14 @@ int kernfs_iop_setattr(struct dentry *dentry, struct iattr *iattr)
- 	return error;
+diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
+index 5593ee05d106..58d5bd7a376e 100644
+--- a/net/netfilter/nfnetlink_queue.c
++++ b/net/netfilter/nfnetlink_queue.c
+@@ -305,12 +305,10 @@ static int nfqnl_put_sk_uidgid(struct sk_buff *skb, struct sock *sk)
+ 	return -1;
  }
  
--static int kernfs_node_setsecdata(struct kernfs_iattrs *attrs, void **secdata,
--				  u32 *secdata_len)
-+static void kernfs_node_setsecdata(struct kernfs_iattrs *attrs,
-+				   struct lsmcontext *cp)
+-static u32 nfqnl_get_sk_secctx(struct sk_buff *skb, char **secdata)
++static u32 nfqnl_get_sk_secctx(struct sk_buff *skb, struct lsmcontext *context)
  {
--	void *old_secdata;
--	size_t old_secdata_len;
-+	struct lsmcontext old_context;
+-	u32 seclen = 0;
+ #if IS_ENABLED(CONFIG_NETWORK_SECMARK)
+ 	struct lsmblob blob;
+-	struct lsmcontext context = { };
  
--	old_secdata = attrs->ia_secdata;
--	old_secdata_len = attrs->ia_secdata_len;
--
--	attrs->ia_secdata = *secdata;
--	attrs->ia_secdata_len = *secdata_len;
--
--	*secdata = old_secdata;
--	*secdata_len = old_secdata_len;
--	return 0;
-+	old_context = attrs->ia_context;
-+	attrs->ia_context = *cp;
-+	*cp = old_context;
- }
+ 	if (!skb || !sk_fullsock(skb->sk))
+ 		return 0;
+@@ -318,15 +316,16 @@ static u32 nfqnl_get_sk_secctx(struct sk_buff *skb, char **secdata)
+ 	read_lock_bh(&skb->sk->sk_callback_lock);
  
- ssize_t kernfs_iop_listxattr(struct dentry *dentry, char *buf, size_t size)
-@@ -192,8 +185,8 @@ static void kernfs_refresh_inode(struct kernfs_node *kn, struct inode *inode)
- 		 * persistent copy in kernfs_node.
- 		 */
- 		set_inode_attr(inode, &attrs->ia_iattr);
--		security_inode_notifysecctx(inode, attrs->ia_secdata,
--					    attrs->ia_secdata_len);
-+		security_inode_notifysecctx(inode, attrs->ia_context.context,
-+					    attrs->ia_context.len);
+ 	if (skb->secmark) {
++		/* Any LSM might be looking for the secmark */
+ 		lsmblob_init(&blob, skb->secmark);
+-		security_secid_to_secctx(&blob, &context);
+-		*secdata = context.context;
++		security_secid_to_secctx(&blob, context);
  	}
  
- 	if (kernfs_type(kn) == KERNFS_DIR)
-@@ -350,8 +343,6 @@ static int kernfs_security_xattr_set(const struct xattr_handler *handler,
- 	struct kernfs_node *kn = inode->i_private;
- 	struct kernfs_iattrs *attrs;
- 	struct lsmcontext context;
--	void *secdata;
--	u32 secdata_len = 0;
- 	int error;
- 
- 	attrs = kernfs_iattrs(kn);
-@@ -361,18 +352,17 @@ static int kernfs_security_xattr_set(const struct xattr_handler *handler,
- 	error = security_inode_setsecurity(inode, suffix, value, size, flags);
- 	if (error)
- 		return error;
--	error = security_inode_getsecctx(inode, &secdata, &secdata_len);
-+	error = security_inode_getsecctx(inode, &context);
- 	if (error)
- 		return error;
- 
- 	mutex_lock(&kernfs_mutex);
--	error = kernfs_node_setsecdata(attrs, &secdata, &secdata_len);
-+	kernfs_node_setsecdata(attrs, &context);
- 	mutex_unlock(&kernfs_mutex);
- 
--	if (secdata) {
--		lsmcontext_init(&context, secdata, secdata_len, 0);
-+	if (context.context)
- 		security_release_secctx(&context);
--	}
-+
- 	return error;
- }
- 
-diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
-index 0b7d197a904c..844a028d282f 100644
---- a/fs/kernfs/kernfs-internal.h
-+++ b/fs/kernfs/kernfs-internal.h
-@@ -21,8 +21,7 @@
- 
- struct kernfs_iattrs {
- 	struct iattr		ia_iattr;
--	void			*ia_secdata;
--	u32			ia_secdata_len;
-+	struct lsmcontext	ia_context;
- 
- 	struct simple_xattrs	xattrs;
- };
-diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
-index bb3db033e144..d2dbec9c3340 100644
---- a/fs/nfsd/nfs4xdr.c
-+++ b/fs/nfsd/nfs4xdr.c
-@@ -2304,11 +2304,11 @@ nfsd4_encode_layout_types(struct xdr_stream *xdr, u32 layout_types)
- #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
- static inline __be32
- nfsd4_encode_security_label(struct xdr_stream *xdr, struct svc_rqst *rqstp,
--			    void *context, int len)
-+			    struct lsmcontext *context)
- {
- 	__be32 *p;
- 
--	p = xdr_reserve_space(xdr, len + 4 + 4 + 4);
-+	p = xdr_reserve_space(xdr, context->len + 4 + 4 + 4);
- 	if (!p)
- 		return nfserr_resource;
- 
-@@ -2318,13 +2318,13 @@ nfsd4_encode_security_label(struct xdr_stream *xdr, struct svc_rqst *rqstp,
- 	 */
- 	*p++ = cpu_to_be32(0); /* lfs */
- 	*p++ = cpu_to_be32(0); /* pi */
--	p = xdr_encode_opaque(p, context, len);
-+	p = xdr_encode_opaque(p, context->context, context->len);
- 	return 0;
- }
- #else
- static inline __be32
- nfsd4_encode_security_label(struct xdr_stream *xdr, struct svc_rqst *rqstp,
--			    void *context, int len)
-+			    struct lsmcontext *context)
- { return 0; }
+ 	read_unlock_bh(&skb->sk->sk_callback_lock);
+-	seclen = context.len;
++	return context->len;
++#else
++	return 0;
  #endif
+-	return seclen;
+ }
  
-@@ -2420,9 +2420,7 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
- 	__be32 status;
- 	int err;
- 	struct nfs4_acl *acl = NULL;
+ static u32 nfqnl_get_bridge_size(struct nf_queue_entry *entry)
+@@ -402,8 +401,7 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+ 	enum ip_conntrack_info uninitialized_var(ctinfo);
+ 	struct nfnl_ct_hook *nfnl_ct;
+ 	bool csum_verify;
 -	struct lsmcontext scaff; /* scaffolding */
--	void *context = NULL;
--	int contextlen;
+-	char *secdata = NULL;
 +	struct lsmcontext context = { };
- 	bool contextsupport = false;
- 	struct nfsd4_compoundres *resp = rqstp->rq_resp;
- 	u32 minorversion = resp->cstate.minorversion;
-@@ -2479,7 +2477,7 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
- 	     bmval0 & FATTR4_WORD0_SUPPORTED_ATTRS) {
- 		if (exp->ex_flags & NFSEXP_SECURITY_LABEL)
- 			err = security_inode_getsecctx(d_inode(dentry),
--						&context, &contextlen);
-+						       &context);
- 		else
- 			err = -EOPNOTSUPP;
- 		contextsupport = (err == 0);
-@@ -2908,8 +2906,7 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
+ 	u32 seclen = 0;
+ 
+ 	size =    nlmsg_total_size(sizeof(struct nfgenmsg))
+@@ -470,7 +468,7 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
  	}
  
- 	if (bmval2 & FATTR4_WORD2_SECURITY_LABEL) {
--		status = nfsd4_encode_security_label(xdr, rqstp, context,
--								contextlen);
-+		status = nfsd4_encode_security_label(xdr, rqstp, &context);
- 		if (status)
- 			goto out;
+ 	if ((queue->flags & NFQA_CFG_F_SECCTX) && entskb->sk) {
+-		seclen = nfqnl_get_sk_secctx(entskb, &secdata);
++		seclen = nfqnl_get_sk_secctx(entskb, &context);
+ 		if (seclen)
+ 			size += nla_total_size(seclen);
  	}
-@@ -2920,10 +2917,8 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
+@@ -605,7 +603,7 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+ 	    nfqnl_put_sk_uidgid(skb, entskb->sk) < 0)
+ 		goto nla_put_failure;
  
- out:
- #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
--	if (context) {
--		lsmcontext_init(&scaff, context, contextlen, 0); /*scaffolding*/
+-	if (seclen && nla_put(skb, NFQA_SECCTX, seclen, secdata))
++	if (seclen && nla_put(skb, NFQA_SECCTX, context.len, context.context))
+ 		goto nla_put_failure;
+ 
+ 	if (ct && nfnl_ct->build(skb, ct, ctinfo, NFQA_CT, NFQA_CT_INFO) < 0)
+@@ -633,10 +631,8 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+ 	}
+ 
+ 	nlh->nlmsg_len = skb->len;
+-	if (seclen) {
+-		lsmcontext_init(&scaff, secdata, seclen, 0);
 -		security_release_secctx(&scaff);
 -	}
-+	if (context.context)
++	if (seclen)
 +		security_release_secctx(&context);
- #endif /* CONFIG_NFSD_V4_SECURITY_LABEL */
- 	kfree(acl);
- 	if (tempfh) {
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 2674eb70c2d7..c16aea55be97 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -489,7 +489,7 @@ void security_release_secctx(struct lsmcontext *cp);
- void security_inode_invalidate_secctx(struct inode *inode);
- int security_inode_notifysecctx(struct inode *inode, void *ctx, u32 ctxlen);
- int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen);
--int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen);
-+int security_inode_getsecctx(struct inode *inode, struct lsmcontext *cp);
- #else /* CONFIG_SECURITY */
+ 	return skb;
  
- static inline int call_lsm_notifier(enum lsm_event event, void *data)
-@@ -1290,7 +1290,8 @@ static inline int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32
- {
- 	return -EOPNOTSUPP;
+ nla_put_failure:
+@@ -644,10 +640,8 @@ nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+ 	kfree_skb(skb);
+ 	net_err_ratelimited("nf_queue: error creating packet message\n");
+ nlmsg_failure:
+-	if (seclen) {
+-		lsmcontext_init(&scaff, secdata, seclen, 0);
+-		security_release_secctx(&scaff);
+-	}
++	if (seclen)
++		security_release_secctx(&context);
+ 	return NULL;
  }
--static inline int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
-+static inline int security_inode_getsecctx(struct inode *inode,
-+					   struct lsmcontext *cp)
- {
- 	return -EOPNOTSUPP;
- }
-diff --git a/security/security.c b/security/security.c
-index 54d7e7f02a8b..7c1c50ac2278 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -2179,9 +2179,18 @@ int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen)
- }
- EXPORT_SYMBOL(security_inode_setsecctx);
- 
--int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
-+int security_inode_getsecctx(struct inode *inode, struct lsmcontext *cp)
- {
--	return call_int_hook(inode_getsecctx, -EOPNOTSUPP, inode, ctx, ctxlen);
-+	struct security_hook_list *hp;
-+
-+	memset(cp, 0, sizeof(*cp));
-+
-+	hlist_for_each_entry(hp, &security_hook_heads.inode_getsecctx, list) {
-+		cp->slot = hp->lsmid->slot;
-+		return hp->hook.inode_getsecctx(inode, (void **)&cp->context,
-+						&cp->len);
-+	}
-+	return -EOPNOTSUPP;
- }
- EXPORT_SYMBOL(security_inode_getsecctx);
  
 -- 
 2.20.1
