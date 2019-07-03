@@ -2,209 +2,216 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 407A35EC43
-	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jul 2019 21:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C235EE4D
+	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jul 2019 23:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfGCTIu (ORCPT
+        id S1726988AbfGCVZq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 3 Jul 2019 15:08:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40930 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726430AbfGCTIu (ORCPT
+        Wed, 3 Jul 2019 17:25:46 -0400
+Received: from sonic308-13.consmr.mail.gq1.yahoo.com ([98.137.68.37]:33950
+        "EHLO sonic308-13.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726678AbfGCVZp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 3 Jul 2019 15:08:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34097218A0;
-        Wed,  3 Jul 2019 19:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562180928;
-        bh=HoXkaVqeIwrvWqdQqRzUqS/2kqEcLJsak8sUVTa70Mg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iCGRdqfrO1yKOvMzmAzI4FSJ11JFFdrT8uAKg+aygBP5h5IfEI6mCyBes+A3df9OC
-         Ie4OwB9l5sIwKRko882CHgAkuHxlAwo7FQ0azM7j+nkURsbAu2Rj2Ldo80uVacZ9Ll
-         swNUriKPHqt6e9DGUl5mf0/CKOg3sWOFNDJaxhoM=
-Date:   Wed, 3 Jul 2019 21:08:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
-        raven@themaw.net, Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] Add a general, global device notification watch list
- [ver #5]
-Message-ID: <20190703190846.GA15663@kroah.com>
-References: <156173690158.15137.3985163001079120218.stgit@warthog.procyon.org.uk>
- <156173697086.15137.9549379251509621554.stgit@warthog.procyon.org.uk>
+        Wed, 3 Jul 2019 17:25:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1562189144; bh=Pde3iHPa0yx8AIgjuwjqruyKzPtj4PyPwRJUa2Mkbu4=; h=From:To:Cc:Subject:Date:From:Subject; b=UEnYH3jtZrQYbO7NLVJqs9lh768vaJ+FnUDSOQeTcsUE02q95YjB0Ne8mYSLhet3By/8ODJ8RscekebYOcoPs/aapbi83yZAs6SUybD+ob0lcqtRdBwy2K5Uu8u2DCJO87tl/CroigHe7Yknlw2B0txL/9b8AhKu0oYiEO7hm3Ld8kiEJK8qjCTHZK05W/DES23QShg35Tq/PPitJg3JG7pVk95EqSewvqH+4R6xoujhYbJcOGd1xfGEOkVZpzQCI5nQUrqU+1DvytGiObwU4ES7XLiJb1gX3aHrPKbHJpPgVG0zU6gOY7P+AfR3X2g3gtE0qnVuA2BhJHg4j2hQrg==
+X-YMail-OSG: yDB5q_sVM1nahhetukeNX0Uz2U5ibQKcVgiA4IjItmQFGeNDEfRi2noOlN4ExjQ
+ U_SGiP9dyXKJDAtDLb3oJTLJF0iE_lxFVo6D3VXeOKNeRB7xNDj5GdyxNDhilZx1QjIo_kbih1fg
+ 3QJxA.s3H8Fqe9BazX2zlCG4ihFynxyDjFAO6y1ykLxssSjm_xTtFgbg1l5nm1h3vqr_wiwTMa..
+ 9_ymMnaGsehHRESt7C4Qs24x73NA6KRLdUvRFMw5ZsOXO_FpSmYePLBQX7unze46lsM2uFxJfXPz
+ p08NXiJj21.54ZZPik1bRtibn6UT9MEpLXpucx2Bj7blTn2N16MUs.fHIB1larmzfJYtiSQCkX95
+ t_f60t3HWXZMInAAmH2kvysTaq8Du.ySJTQ43g08gc0otkRqz6RCxga9iIpBhOogrydsJ0ZNPz7B
+ mSQyY_QZzGfVwlCZqWOq5hBikX.iZA.gmGph_.r6c2DqLnutXXwIGIP4OInaaEALzeTiC9ZfzOQl
+ _G8t2WQ7jSGGbL3wXdckWxEjFG0x3FjbcUjQYK4ZwS4O6rD8KropsXhdspkTIYj2yrJ1udVgrrf0
+ FW27QemmwHtGlvjHYkSmbgDSji10HhhK0dMhPhVpqqDWGfY9EtiOQhJHn0LaKtObjMluvuL_0hGd
+ GFvlyXpm4mUD51khquysm2pyl2iUNRmqkLRnSLqQoqCxqr_Gp.tcLGTInHD8MDPePxYX7rWeKWKa
+ rHxOKZZO0_NpR0J4HE1VTqvzKHYRUFBmShS2ci2gKYfw2klc1NhXRvY1BAMPC1ocaznjb5RcWPAJ
+ QkKpnrDk8N7GYw5Vkn_tOwjM46zaO2XW9YhEns1Wm_OHgr3.RZ8Csb.qt4isePZxfRnENn_E80YJ
+ MQBrpZ_EIHXpDP_4gi08ZXgOv1VI9IY3tAazq6Kb9YGjuYUCFEPijVjpez9.xJJDjuFEESE_jj.O
+ vmOuSX0b1Uhq0AghKxSJNICWxsb9WvHM4B9zvRDfZp20bIpYjdNl8bnnwvzE0f5lP6rUZKWbq9wI
+ KCsCTzNucoor5Hy2CJgOnmw43chYyw8xBqyZzuJZWMT1M4sCqOij1rQxeQovzjq6z7naNQGszIga
+ K0TK7tw__MPRt7Jzq.3tZ5pVYTnjO0WO4vFBQfVOWL6BgX3zB9xVR8l.KkQJaixyzEBIPsqgY3w6
+ uVCChfK.QXk2LqvYy7BSMRkjDPa0iN_9xc.IPWwR3bdI75lTLlSGZaxHZPDg_Z6Ai8JAbPZfYA5s
+ QRsJTQP1JeLkN2zjDt1N9zQS6HyX7..6kSwvWVsIiJ5GxLmZbk3MaJC1D521PGEK549c-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.gq1.yahoo.com with HTTP; Wed, 3 Jul 2019 21:25:44 +0000
+Received: by smtp407.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 65d8826dfc020e8c34ff6376721f657c;
+          Wed, 03 Jul 2019 21:25:40 +0000 (UTC)
+From:   Casey Schaufler <casey@schaufler-ca.com>
+To:     casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     casey@schaufler-ca.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com, sds@tycho.nsa.gov
+Subject: [PATCH v5 00/23] LSM: Module stacking for AppArmor
+Date:   Wed,  3 Jul 2019 14:25:15 -0700
+Message-Id: <20190703212538.7383-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <156173697086.15137.9549379251509621554.stgit@warthog.procyon.org.uk>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Jun 28, 2019 at 04:49:30PM +0100, David Howells wrote:
-> Create a general, global watch list that can be used for the posting of
-> device notification events, for such things as device attachment,
-> detachment and errors on sources such as block devices and USB devices.
-> This can be enabled with:
-> 
-> 	CONFIG_DEVICE_NOTIFICATIONS
-> 
-> To add a watch on this list, an event queue must be created and configured:
-> 
->         fd = open("/dev/event_queue", O_RDWR);
->         ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, page_size << n);
-> 
-> and then a watch can be placed upon it using a system call:
-> 
->         watch_devices(fd, 12, 0);
-> 
-> Unless the application wants to receive all events, it should employ
-> appropriate filters.
+This patchset provides the changes required for
+the AppArmor security module to stack safely with any other.
 
-Ok, as discussed off-list, this is needed by the other patches
-afterward, i.e. the USB and block ones, which makes more sense.
+v5: Incorporate feedback from v4
+    - Initialize the lsmcontext in security_secid_to_secctx()
+    - Clear the lsmcontext in all security_release_secctx() cases
+    - Don't use the "display" on strictly internal context
+      interfaces.
+    - The SELinux binder hooks check for cases where the context
+      "display" isn't compatible with SELinux.
 
-Some tiny nits:
+v4: Incorporate feedback from v3
+    - Mark new lsm_<blob>_alloc functions static
+    - Replace the lsm and slot fields of the security_hook_list
+      with a pointer to a LSM allocated lsm_id structure. The
+      LSM identifies if it needs a slot explicitly. Use the
+      lsm_id rather than make security_add_hooks return the
+      slot value.
+    - Validate slot values used in security.c
+    - Reworked the "display" process attribute handling so that
+      it works right and doesn't use goofy list processing.
+    - fix display value check in dentry_init_security
+    - Replace audit_log of secids with '?' instead of deleting
+      the audit log
 
-> diff --git a/drivers/base/watch.c b/drivers/base/watch.c
-> new file mode 100644
-> index 000000000000..00336607dc73
-> --- /dev/null
-> +++ b/drivers/base/watch.c
-> @@ -0,0 +1,90 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Event notifications.
-> + *
-> + * Copyright (C) 2019 Red Hat, Inc. All Rights Reserved.
-> + * Written by David Howells (dhowells@redhat.com)
-> + */
-> +
-> +#include <linux/watch_queue.h>
-> +#include <linux/syscalls.h>
-> +#include <linux/init_task.h>
-> +#include <linux/security.h>
+v3: Incorporate feedback from v2
+    - Make lsmblob parameter and variable names more
+      meaningful, changing "le" and "l" to "blob".
+    - Improve consistency of constant naming.
+    - Do more sanity checking during LSM initialization.
+    - Be a bit clearer about what is temporary scaffolding.
+    - Rather than clutter security_getpeersec_dgram with
+      otherwise unnecessary checks remove the apparmor
+      stub, which does nothing useful.
 
-You forgot to include device.h which has the prototype for your global
-function :)
+Patches 0001-0003 complete the process of moving management
+of security blobs that might be shared from the individual
+modules to the infrastructure.
 
-> +
-> +/*
-> + * Global queue for watching for device layer events.
-> + */
-> +static struct watch_list device_watchers = {
-> +	.watchers	= HLIST_HEAD_INIT,
-> +	.lock		= __SPIN_LOCK_UNLOCKED(&device_watchers.lock),
-> +};
-> +
-> +static DEFINE_SPINLOCK(device_watchers_lock);
-> +
-> +/**
-> + * post_device_notification - Post notification of a device event
-> + * @n - The notification to post
-> + * @id - The device ID
-> + *
-> + * Note that there's only a global queue to which all events are posted.  Might
-> + * want to provide per-dev queues also.
-> + */
-> +void post_device_notification(struct watch_notification *n, u64 id)
-> +{
-> +	post_watch_notification(&device_watchers, n, &init_cred, id);
-> +}
+Patches 0004-0014 replace system use of a "secid" with
+a structure "lsmblob" containing information from the
+security modules to be held and reused later. At this
+point lsmblob contains an array of u32 secids, one "slot"
+for each of the security modules compiled into the
+kernel that used secids. A "slot" is allocated when
+a security module requests one.
+The infrastructure is changed to use the slot number
+to pass the correct secid to or from the security module
+hooks.
 
-Don't you need to export this symbol?
+It is important that the lsmblob be a fixed size entity
+that does not have to be allocated. Several of the places
+where it is used would have performance and/or locking
+issues with dynamic allocation.
 
-> +
-> +/**
-> + * sys_watch_devices - Watch for device events.
-> + * @watch_fd: The watch queue to send notifications to.
-> + * @watch_id: The watch ID to be placed in the notification (-1 to remove watch)
-> + * @flags: Flags (reserved for future)
-> + */
-> +SYSCALL_DEFINE3(watch_devices, int, watch_fd, int, watch_id, unsigned int, flags)
+Patch 0015 provides a mechanism for a process to
+identify which security module's hooks should be used
+when displaying or converting a security context string.
+A new interface /proc/.../attr/display contains the name
+of the security module to show. Reading from this file
+will present the name of the module, while writing to
+it will set the value. Only names of active security
+modules are accepted. Internally, the name is translated
+to the appropriate "slot" number for the module which
+is then stored in the task security blob.
 
-Finally, the driver core gets a syscall!  :)
+Patch 0016 Starts the process of changing how a security
+context is represented. Since it is possible for a
+security context to have been generated by more than one
+security module it is now necessary to note which module
+created a security context so that the correct "release"
+hook can be called. There are several places where the
+module that created a security context cannot be inferred.
 
-Don't we need a manpage and a kselftest for it?
+This is achieved by introducing a "lsmcontext" structure
+which contains the context string, its length and the
+"slot" number of the security module that created it.
+The security_release_secctx() interface is changed,
+replacing the (string,len) pointer pair with a lsmcontext
+pointer.
 
-> +{
-> +	struct watch_queue *wqueue;
-> +	struct watch_list *wlist = &device_watchers;
+Patches 0017-0020 convert the security interfaces from
+(string,len) pointer pairs to a lsmcontext pointer.
+The slot number identifying the creating module is
+added by the infrastructure. Where the security context
+is stored for extended periods the data type is changed.
 
-No real need for wlist, right?  You just set it to this value and then
-it never changes?
+The Netlabel code is converted to save lsmblob structures
+instead of secids in Patch 0021.
 
-> +	struct watch *watch;
-> +	long ret = -ENOMEM;
-> +	u64 id = 0; /* Might want to allow dev# here. */
+Finally, with all interference on the AppArmor hooks
+removed, Patch 0022 removes the exclusive bit from
+AppArmor. An unnecessary stub hook was also removed.
 
-I don't understand the comment here, what does "dev#" refer to?
+Patch 0023 adds checks to the SELinux binder hooks
+which verify that if either "display" used is SELinux
+both are.
 
-> +
-> +	if (watch_id < -1 || watch_id > 0xff || flags)
-> +		return -EINVAL;
-> +
-> +	wqueue = get_watch_queue(watch_fd);
-> +	if (IS_ERR(wqueue)) {
-> +		ret = PTR_ERR(wqueue);
-> +		goto err;
-> +	}
-> +
-> +	if (watch_id >= 0) {
-> +		watch = kzalloc(sizeof(*watch), GFP_KERNEL);
-> +		if (!watch)
-> +			goto err_wqueue;
-> +
-> +		init_watch(watch, wqueue);
-> +		watch->id	= id;
-> +		watch->info_id	= (u32)watch_id << WATCH_INFO_ID__SHIFT;
-> +
-> +		ret = security_watch_devices(watch);
-> +		if (ret < 0)
-> +			goto err_watch;
-> +
-> +		spin_lock(&device_watchers_lock);
-> +		ret = add_watch_to_object(watch, wlist);
-> +		spin_unlock(&device_watchers_lock);
-> +		if (ret == 0)
-> +			watch = NULL;
-> +	} else {
-> +		spin_lock(&device_watchers_lock);
-> +		ret = remove_watch_from_object(wlist, wqueue, id, false);
-> +		spin_unlock(&device_watchers_lock);
-> +	}
-> +
-> +err_watch:
-> +	kfree(watch);
-> +err_wqueue:
-> +	put_watch_queue(wqueue);
-> +err:
-> +	return ret;
-> +}
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index e85264fb6616..c947c078b1be 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -26,6 +26,7 @@
->  #include <linux/uidgid.h>
->  #include <linux/gfp.h>
->  #include <linux/overflow.h>
-> +#include <linux/watch_queue.h>
+The Ubuntu project is using an earlier version of
+this patchset in their distribution to enable stacking
+for containers.
 
-No need for this, just do:
+Performance measurements to date have the change
+within the "noise". Better benchmarks are in the
+works.
 
-struct watch_notification;
+https://github.com/cschaufler/lsm-stacking.git#stack-5.2-v5-apparmor
 
-so that things build.
-
-thanks,
-
-greg k-h
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+---
+ drivers/android/binder.c                |  24 +-
+ fs/kernfs/dir.c                         |   5 +-
+ fs/kernfs/inode.c                       |  35 +--
+ fs/kernfs/kernfs-internal.h             |   3 +-
+ fs/nfs/nfs4proc.c                       |  22 +-
+ fs/nfsd/nfs4xdr.c                       |  20 +-
+ fs/proc/base.c                          |   1 +
+ include/linux/cred.h                    |   3 +-
+ include/linux/lsm_hooks.h               |  28 +-
+ include/linux/security.h                | 169 +++++++++---
+ include/net/af_unix.h                   |   2 +-
+ include/net/netlabel.h                  |   8 +-
+ include/net/scm.h                       |  14 +-
+ kernel/audit.c                          |  34 +--
+ kernel/audit.h                          |   5 +-
+ kernel/auditfilter.c                    |   9 +-
+ kernel/auditsc.c                        |  83 +++---
+ kernel/cred.c                           |  12 +-
+ net/ipv4/cipso_ipv4.c                   |   6 +-
+ net/ipv4/ip_sockglue.c                  |  12 +-
+ net/netfilter/nf_conntrack_netlink.c    |  20 +-
+ net/netfilter/nf_conntrack_standalone.c |  11 +-
+ net/netfilter/nfnetlink_queue.c         |  26 +-
+ net/netfilter/nft_meta.c                |  13 +-
+ net/netfilter/xt_SECMARK.c              |   5 +-
+ net/netlabel/netlabel_kapi.c            |   6 +-
+ net/netlabel/netlabel_unlabeled.c       |  95 ++++---
+ net/netlabel/netlabel_unlabeled.h       |   2 +-
+ net/netlabel/netlabel_user.c            |  13 +-
+ net/netlabel/netlabel_user.h            |   6 +-
+ net/unix/af_unix.c                      |   6 +-
+ security/apparmor/include/net.h         |   6 +-
+ security/apparmor/lsm.c                 |  65 ++---
+ security/commoncap.c                    |   7 +-
+ security/integrity/ima/ima.h            |  14 +-
+ security/integrity/ima/ima_api.c        |   9 +-
+ security/integrity/ima/ima_appraise.c   |   6 +-
+ security/integrity/ima/ima_main.c       |  36 +--
+ security/integrity/ima/ima_policy.c     |  19 +-
+ security/loadpin/loadpin.c              |   8 +-
+ security/safesetid/lsm.c                |   8 +-
+ security/security.c                     | 445 ++++++++++++++++++++++++++++----
+ security/selinux/hooks.c                | 201 ++++++++-------
+ security/selinux/include/objsec.h       |  18 ++
+ security/selinux/include/security.h     |   1 +
+ security/selinux/netlabel.c             |  25 +-
+ security/selinux/ss/services.c          |   7 +-
+ security/smack/smack.h                  |  19 ++
+ security/smack/smack_lsm.c              | 156 ++++++-----
+ security/smack/smack_netfilter.c        |   8 +-
+ security/smack/smackfs.c                |  10 +-
+ security/tomoyo/tomoyo.c                |   8 +-
+ security/yama/yama_lsm.c                |   7 +-
+ 53 files changed, 1167 insertions(+), 614 deletions(-)
