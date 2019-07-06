@@ -2,63 +2,73 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B014560D83
-	for <lists+linux-security-module@lfdr.de>; Sat,  6 Jul 2019 00:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7F160F05
+	for <lists+linux-security-module@lfdr.de>; Sat,  6 Jul 2019 07:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727652AbfGEV77 (ORCPT
+        id S1725917AbfGFFEf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 5 Jul 2019 17:59:59 -0400
-Received: from out176.e-adjacentdigital.co.uk ([178.156.202.12]:36999 "EHLO
-        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1728145AbfGEV77 (ORCPT
+        Sat, 6 Jul 2019 01:04:35 -0400
+Received: from mga06.intel.com ([134.134.136.31]:36387 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725909AbfGFFEf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 5 Jul 2019 17:59:59 -0400
-X-Greylist: delayed 632 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:59:57 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
- bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
- b=cpMXVDTaZpj9X3bJR4y9LG7NE+n++V/m9mHiU99EdEEtBF4KBt4kRzPnp/QR5cnXAV3Zvy8GGate
-   aPLXGGNYGB7AVdQDZjCr5auCqJtacFJLmgqMDhGfxKwtiZk5Qosb/ON7CBGpdXllVgYuvmK9aItO
-   nL+0O+A+VvDrE4Qelztyv6h72VcJvXt+GoW2qeniG5CuQkE0RKOOdzD7XAdiwzHXY/0nbE5vg8VU
-   lhDvq3HYgNh6T3XjEOf4niQ/1wN9275XYu47EPBVT000yiHGpXZzUrdwOHWhjlIMCZpwTVRTlAxM
-   R3soeTwfvwe1djhLv02y3r353j0ml3W0uQBTkw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
- b=Stl6YuDoEigCYEqvg11SW5A47fj2et8S3ew/J+pxkNDG5q/d2/+mpIXrCNWk2Tmfvp/zubrohcQE
-   JQaY9PG2xBBFE5XCf1q8JP9hDVP/wck7iYDN8Cjp8KuGZmTHI1fM+rwzrl5o18EHiddW5dYbIVRx
-   k4NfXj2XDIBb0qu+SBu+cspnPMfeR81cizsrPWTttGHj6bujhsZck5tOo308q4qNpZzujEEv8XR8
-   3UIhYBQCj1rFew87+JeJYldpmeRyvRYCbKwawNhfFU8KsVT8miP3O4qY7qR66mQ3x57YNsuuQbax
-   JPnk01UAYUNuXK/3dj9Q7AL6/F+gSGytJmln9g==;
-Content-Type: text/plain; charset="iso-8859-1"
+        Sat, 6 Jul 2019 01:04:35 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jul 2019 22:04:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,457,1557212400"; 
+   d="scan'208";a="155403210"
+Received: from bxing-desk.ccr.corp.intel.com (HELO [134.134.148.187]) ([134.134.148.187])
+  by orsmga007.jf.intel.com with ESMTP; 05 Jul 2019 22:04:34 -0700
+Subject: Re: [RFC PATCH v2 0/3] security/x86/sgx: SGX specific LSM hooks
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-sgx@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, casey.schaufler@intel.com,
+        jmorris@namei.org, luto@kernel.org, jethro@fortanix.com,
+        greg@enjellic.com, sds@tycho.nsa.gov,
+        sean.j.christopherson@intel.com
+References: <20190619222401.14942-1-sean.j.christopherson@intel.com>
+ <cover.1561588012.git.cedric.xing@intel.com>
+ <20190703231650.bhnkn34ccrzdwwhz@linux.intel.com>
+From:   "Xing, Cedric" <cedric.xing@intel.com>
+Message-ID: <415f8ae7-93d4-129e-4169-ffc7059398e5@intel.com>
+Date:   Fri, 5 Jul 2019 22:04:31 -0700
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Quotes needed For July Shipments
-To:     Recipients <purchase@mathewsons.ga>
-From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
-Date:   Sat, 06 Jul 2019 00:39:23 +0300
-Reply-To: jpexcc@aol.com
-Message-ID: <0.0.4D.154.1D53379EAC32008.0@slot0.mathewsons.ga>
+In-Reply-To: <20190703231650.bhnkn34ccrzdwwhz@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello dear,
- =
+On 7/3/2019 4:16 PM, Jarkko Sakkinen wrote:
+> On Thu, Jun 27, 2019 at 11:56:18AM -0700, Cedric Xing wrote:
+> 
+> I think it is fine to have these patch sets as a discussion starters but
+> it does not make any sense to me to upstream LSM changes with the SGX
+> foundations.
 
-We are in the market for your products after meeting at your stand during l=
-ast expo.
- =
+Guess LSM is a gating factor, because otherwise SGX could be abused to 
+make executable EPC from pages that are otherwise not allowed to be 
+executable. Am I missing anything?
 
-Please kindly send us your latest catalog and price list so as to start a n=
-ew project/order as promised during the exhibition. =
+> 
+> This is exactly the same situation as with KVM changes. The patch set is
+> already way too big to fit to the standards [1].
+> 
+> The eye should be on whether the uapi (e.g. device files, ioctl's) will
+> work for LSM's in a legit way. Do we need more of these different
+> flavors of experimental LSM changes or can we make some conclusions with
+> the real issue we are trying to deal with?
+> 
+> [1] "Do not send more than 15 patches at once to the vger mailing lists!!!"
+>      https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#select-the-recipients-for-your-patch
+> 
+> /Jarkko
+> 
 
- =
-
-I would appreciate your response about the above details required so we can=
- revert back to you asap.
- =
-
-Kind regards
- =
-
-Rhema Zoeh
