@@ -2,54 +2,34 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3543C61013
-	for <lists+linux-security-module@lfdr.de>; Sat,  6 Jul 2019 12:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB916111E
+	for <lists+linux-security-module@lfdr.de>; Sat,  6 Jul 2019 16:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbfGFKze (ORCPT
+        id S1726555AbfGFOdJ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 6 Jul 2019 06:55:34 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:44388 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727079AbfGFKz1 (ORCPT
+        Sat, 6 Jul 2019 10:33:09 -0400
+Received: from mail-40130.protonmail.ch ([185.70.40.130]:17788 "EHLO
+        mail-40130.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726446AbfGFOdI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 6 Jul 2019 06:55:27 -0400
-Received: by mail-wr1-f67.google.com with SMTP id p17so1088797wrf.11;
-        Sat, 06 Jul 2019 03:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=7bgA3KVSNsVJyluNyhiPajryn8BOsiL4nv8POO6e3hg=;
-        b=U523Em2KEtwXXxdV/BGn5jTzA7rwZNHEXsm1OcyY68qXcXEIgtM7G0Cet6d7ccvPCH
-         xbNCt3TDC5HduqU/DgmJHVWSZe3KHZA5S97dUyH+Nq+WuUGuXAX0ragXjruWpmzsAxwt
-         ZI947WMH7fH0XqCrCOg3eUA/2YAFkYNqtSug+CIUNQQHYURAjMXd6h9N5ALvdD0NpxEB
-         AK2lAV8bchfSrDSx25gT6m0BWN8JZu//SbcHOnuqBRH2eqm3G2johuskfOsaaGz6nZlh
-         deThmGjYCWPUDpw151T+5llw2TOJGBzuERv8CkChSGkkIYR0JLd+dQLERH79C+pRIoUr
-         14dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=7bgA3KVSNsVJyluNyhiPajryn8BOsiL4nv8POO6e3hg=;
-        b=nNRln7yBC7okm2wMCweZiJkf9x/qlQ9VEEaAbR+OBqtjNlMIeYblh4mB8/ALkfe09Z
-         vQZQo3YMLBncXjnD/ct8ruVaqUgcLZF5cRRW7lEdcuJzTnxgJ8FZQFl68ovyAUJoQJT2
-         ms14w+uR+kMXofW+n3vXYLTZZB96a8yQ2hyw6fHvSYR/kRuOEnda+wMwyhu0KljiMRgW
-         L8pkvbg1WhhuuO4h8DFEcfxffUcgmFvoJp3ILjvWHznEay7E+0IE9Aa6byT/rqUmJLEl
-         Wb/xJJO1Yz9fMi1rU4DJgmOCHX59bj+rndMq2RImlSnAQjaYVY56nd8L48DwgT4X8FEj
-         5ryw==
-X-Gm-Message-State: APjAAAWYPntvrsA4cspqBkH6mbnTacqtsj2osb0Qb3JuccEwjl9mbKSJ
-        AwILX3ojkreMOQp0Ci45DFDZGgNsNNnxSw==
-X-Google-Smtp-Source: APXvYqzPbEUIxunmBrxyk9NAIxCXus8RCS7gBuXZApUJVMJ6c1dTQqt5X0xbeRxaG4n4nmyktigDXg==
-X-Received: by 2002:adf:e843:: with SMTP id d3mr9048922wrn.249.1562410525376;
-        Sat, 06 Jul 2019 03:55:25 -0700 (PDT)
-Received: from localhost (net-93-71-3-102.cust.vodafonedsl.it. [93.71.3.102])
-        by smtp.gmail.com with ESMTPSA id h11sm12578794wrx.93.2019.07.06.03.55.24
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 06 Jul 2019 03:55:25 -0700 (PDT)
-From:   Salvatore Mesoraca <s.mesoraca16@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-hardening@lists.openwall.com, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Sat, 6 Jul 2019 10:33:08 -0400
+Date:   Sat, 06 Jul 2019 14:33:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.ch;
+        s=default; t=1562423586;
+        bh=haA5wvB0xh+dZtWZGeuep4dEUXcEIlBy0xdSwX483iI=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:
+         Feedback-ID:From;
+        b=HQzIhk8PxKYt36ErbKPrQMJqON9fHmTQ3PYtYZqeFvsD1zSHVwbkoGWN0bzw7aR8K
+         ARMyt0tMl0YH2vDYzZbyJiNYKRjCOTq+GXhhio/qQiJlEQqHfHCkqYGRG+bPNFvlhE
+         1q+18riMHNgpRcuVQ6PozQhMO2ct7zAiMwLG2T2M=
+To:     Salvatore Mesoraca <s.mesoraca16@gmail.com>
+From:   Jordan Glover <Golden_Miller83@protonmail.ch>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-hardening@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
         Brad Spengler <spender@grsecurity.net>,
         Casey Schaufler <casey@schaufler-ca.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -57,44 +37,37 @@ Cc:     kernel-hardening@lists.openwall.com, linux-mm@kvack.org,
         Jann Horn <jannh@google.com>,
         Kees Cook <keescook@chromium.org>,
         PaX Team <pageexec@freemail.hu>,
-        Salvatore Mesoraca <s.mesoraca16@gmail.com>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH v5 12/12] MAINTAINERS: take maintainership for S.A.R.A.
-Date:   Sat,  6 Jul 2019 12:54:53 +0200
-Message-Id: <1562410493-8661-13-git-send-email-s.mesoraca16@gmail.com>
-X-Mailer: git-send-email 1.9.1
+Reply-To: Jordan Glover <Golden_Miller83@protonmail.ch>
+Subject: Re: [PATCH v5 00/12] S.A.R.A. a new stacked LSM
+Message-ID: <HJktY5gtjje4zNNpxEQx_tBd_TRDsjz0-7kL29cMNXFvB_t6KSgOHHXFQef04GQFqCi1Ie3oZFh9DS9_m-70pJtnunZ2XS0UlGxXwK9UcYo=@protonmail.ch>
 In-Reply-To: <1562410493-8661-1-git-send-email-s.mesoraca16@gmail.com>
 References: <1562410493-8661-1-git-send-email-s.mesoraca16@gmail.com>
+Feedback-ID: QEdvdaLhFJaqnofhWA-dldGwsuoeDdDw7vz0UPs8r8sanA3bIt8zJdf4aDqYKSy4gJuZ0WvFYJtvq21y6ge_uQ==:Ext:ProtonMail
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.6 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,GAPPY_SUBJECT autolearn=no
+        autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.protonmail.ch
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Signed-off-by: Salvatore Mesoraca <s.mesoraca16@gmail.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On Saturday, July 6, 2019 10:54 AM, Salvatore Mesoraca <s.mesoraca16@gmail.=
+com> wrote:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f16e5d0..de6dab1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13925,6 +13925,15 @@ F:	drivers/phy/samsung/phy-s5pv210-usb2.c
- F:	drivers/phy/samsung/phy-samsung-usb2.c
- F:	drivers/phy/samsung/phy-samsung-usb2.h
- 
-+SARA SECURITY MODULE
-+M:	Salvatore Mesoraca <s.mesoraca16@gmail.com>
-+T:	git git://github.com/smeso/sara.git lsm/sara/master
-+W:	https://sara.smeso.it
-+S:	Maintained
-+F:	security/sara/
-+F:	arch/x86/security/sara/
-+F:	Documentation/admin-guide/LSM/SARA.rst
-+
- SC1200 WDT DRIVER
- M:	Zwane Mwaikambo <zwanem@gmail.com>
- S:	Maintained
--- 
-1.9.1
+> S.A.R.A. is meant to be stacked but it needs cred blobs and the procattr
+> interface, so I temporarily implemented those parts in a way that won't
+> be acceptable for upstream, but it works for now. I know that there
+> is some ongoing work to make cred blobs and procattr stackable, as soon
+> as the new interfaces will be available I'll reimplement the involved
+> parts.
 
+I thought all stacking pieces for minor LSM were merged in Linux 5.1.
+Is there still something missing or is this comment out-fo-date?
+
+Jordan
