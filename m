@@ -2,158 +2,149 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F9762720
-	for <lists+linux-security-module@lfdr.de>; Mon,  8 Jul 2019 19:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8099B626F4
+	for <lists+linux-security-module@lfdr.de>; Mon,  8 Jul 2019 19:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728859AbfGHRaF (ORCPT
+        id S1730614AbfGHRQ5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 8 Jul 2019 13:30:05 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:54874 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728708AbfGHRaF (ORCPT
+        Mon, 8 Jul 2019 13:16:57 -0400
+Received: from mga07.intel.com ([134.134.136.100]:26052 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729583AbfGHRQ5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 8 Jul 2019 13:30:05 -0400
-X-Greylist: delayed 1036 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Jul 2019 13:30:04 EDT
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1hkXC2-0006vl-KJ; Mon, 08 Jul 2019 11:12:46 -0600
-Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1hkXC1-0003TO-Pp; Mon, 08 Jul 2019 11:12:46 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        David Howells <dhowells@redhat.com>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
-        linux-security-module@vger.kernel.org
-References: <155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk>
-        <155059611887.17079.12991580316407924257.stgit@warthog.procyon.org.uk>
-        <c5b901ca-c243-bf80-91be-a794c4433415@I-love.SAKURA.ne.jp>
-        <20190708131831.GT17978@ZenIV.linux.org.uk>
-Date:   Mon, 08 Jul 2019 12:12:21 -0500
-In-Reply-To: <20190708131831.GT17978@ZenIV.linux.org.uk> (Al Viro's message of
-        "Mon, 8 Jul 2019 14:18:31 +0100")
-Message-ID: <874l3wo3gq.fsf@xmission.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
+        Mon, 8 Jul 2019 13:16:57 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2019 10:16:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,466,1557212400"; 
+   d="scan'208";a="316772142"
+Received: from bxing-desk.ccr.corp.intel.com (HELO [134.134.148.187]) ([134.134.148.187])
+  by orsmga004.jf.intel.com with ESMTP; 08 Jul 2019 10:16:56 -0700
+Subject: Re: [RFC PATCH v3 3/4] X86/sgx: Introduce EMA as a new LSM module
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        linux-sgx@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+References: <cover.1562542383.git.cedric.xing@intel.com>
+ <41e1a1a2f66226d88d45675434eb34dde5d0f50d.1562542383.git.cedric.xing@intel.com>
+ <fb4352a4-7ef4-6824-a2ab-21e5fcb208ae@schaufler-ca.com>
+From:   "Xing, Cedric" <cedric.xing@intel.com>
+Message-ID: <ce4dcce2-88fb-ccec-f173-fc567d9ca006@intel.com>
+Date:   Mon, 8 Jul 2019 10:16:56 -0700
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1hkXC1-0003TO-Pp;;;mid=<874l3wo3gq.fsf@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX192tN/s3LkYgXUqSFAo72Dnkakbu71PirI=
-X-SA-Exim-Connect-IP: 72.206.97.68
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa05.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,XMNoVowels,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.7 XMSubLong Long Subject
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Al Viro <viro@zeniv.linux.org.uk>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 465 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 2.3 (0.5%), b_tie_ro: 1.54 (0.3%), parse: 0.78
-        (0.2%), extract_message_metadata: 13 (2.9%), get_uri_detail_list: 1.96
-        (0.4%), tests_pri_-1000: 11 (2.3%), tests_pri_-950: 1.06 (0.2%),
-        tests_pri_-900: 0.85 (0.2%), tests_pri_-90: 26 (5.6%), check_bayes: 25
-        (5.4%), b_tokenize: 7 (1.5%), b_tok_get_all: 9 (2.0%), b_comp_prob:
-        2.9 (0.6%), b_tok_touch_all: 3.9 (0.8%), b_finish: 0.57 (0.1%),
-        tests_pri_0: 397 (85.3%), check_dkim_signature: 0.54 (0.1%),
-        check_dkim_adsp: 2.7 (0.6%), poll_dns_idle: 0.03 (0.0%), tests_pri_10:
-        1.80 (0.4%), tests_pri_500: 8 (1.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 02/10] vfs: syscall: Add move_mount(2) to move mounts around
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+In-Reply-To: <fb4352a4-7ef4-6824-a2ab-21e5fcb208ae@schaufler-ca.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Al Viro <viro@zeniv.linux.org.uk> writes:
+On 7/8/2019 9:26 AM, Casey Schaufler wrote:
+> In this scheme you use an ema LSM to manage your ema data.
+> A quick sketch looks like:
+> 
+> 	sgx_something_in() calls
+> 		security_enclave_load() calls
+> 			ema_enclave_load()
+> 			selinux_enclave_load()
+> 			otherlsm_enclave_load()
+> 
+> Why is this better than:
+> 
+> 	sgx_something_in() calls
+> 		ema_enclave_load()
+> 		security_enclave_load() calls
+> 			selinux_enclave_load()
+> 			otherlsm_enclave_load()
 
-> On Mon, Jul 08, 2019 at 09:02:10PM +0900, Tetsuo Handa wrote:
->> Hello, David Howells.
->> 
->> I realized via https://lwn.net/Articles/792622/ that a new set of
->> system calls for filesystem mounting has been added to Linux 5.2. But
->> I feel that LSM modules are not ready to support these system calls.
->> 
->> An example is move_mount() added by this patch. This patch added
->> security_move_mount() LSM hook but none of in-tree LSM modules are
->> providing "LSM_HOOK_INIT(move_mount, ...)" entry. Therefore, currently
->> security_move_mount() is a no-op. At least for TOMOYO, I want to check
->> mount manipulations caused by system calls because allowing mounts on
->> arbitrary location is not acceptable for pathname based access control.
->> What happened? I want TOMOYO to perform similar checks like mount() does.
->
-> That would be like tomoyo_check_mount_acl(), right?
->         if (need_dev) {
->                 /* Get mount point or device file. */
->                 if (!dev_name || kern_path(dev_name, LOOKUP_FOLLOW, &path)) {
->                         error = -ENOENT;
->                         goto out;
->                 }
->                 obj.path1 = path;
->                 requested_dev_name = tomoyo_realpath_from_path(&path);
->                 if (!requested_dev_name) {
->                         error = -ENOENT;
->                         goto out;
->                 }
->         } else {
-> is an obvious crap for *ALL* cases.  You are doing pathname resolution,
-> followed by normalization and checks.  Then the result of said pathname
-> resolution is thrown out and it's redone (usually by something in fs/super.c).
-> Results of _that_ get used.
->
-> Could you spell TOCTOU?  And yes, exploiting that takes a lot less than
-> being able to do mount(2) in the first place - just pass it
-> /proc/self/fd/69/<some acceptable path>/. with descriptor refering to
-> opened root directory.  With ~/<some acceptable path> being a symlink
-> to whatever you actually want to hit.  And descriptor 42 being your
-> opened homedir.  Now have that call of mount(2) overlap with dup2(42, 69)
-> from another thread sharing your descriptor table.  It doesn't take much
-> to get the timing right, especially if you can arrange for some other
-> activity frequently hitting namespace_sem at least shared (e.g. reading
-> /proc/mounts in a loop from another process); that's likely to stall
-> mount(2) at the point of lock_mount(), which comes *AFTER* the point
-> where LSM hook is stuck into.
->
-> Again, *ANY* checks on "dev_name" in ->sb_mount() instances are so much
-> snake oil.  Always had been.
+Are you talking about moving EMA somewhere outside LSM? If so, where?
 
-Al you do realize that the TOCTOU you are talking about comes the system
-call API.  TOMOYO can only be faulted for not playing in their own
-sandbox and not reaching out and fixing the vfs implementation details.
-Userspace has always had to very careful to only mount filesystems
-on paths that root completely controls and won't change.
+> 
+> 
+> If you did really want ema to behave like an LSM
+> you would put the file data that SELinux is managing
+> into the ema portion of the blob and provide interfaces
+> for the SELinux (or whoever) to use that. Also, it's
+> an abomination (as I've stated before) for ema to
+> rely on SELinux to provide a file_free() hook for
+> ema's data. If you continue down the LSM route, you
+> need to provide an ema_file_free() hook. You can't
+> count on SELinux to do it for you. If there are multiple
+> LSMs (coming soon!) that use the ema data, they'll all
+> try to free it, and then Bad Things can happen.
 
-Further system calls for manipulating the mount tree have historically
-done a crap job of validating their inputs.  Relying on the fact that
-only root can call them.  So the idea of guarding against root doing
-something silly was silly.
+I'm afraid you have misunderstood the code. What is kept open and gets 
+closed in selinux_file_free() is the sigstruct file. SELinux uses it to 
+determine the page permissions for enclave pages from anonymous sources. 
+It is a policy choice made inside SELinux and has nothing to do with EMA.
 
-So I figure at the end of the day if the new security hooks for the new
-mount system calls don't make it possible to remove the TOCTOU that is
-on you and Dave.  You two touched that code last after all.
+There's indeed an ema_file_free_security() to free the EMA map for 
+enclaves being closed. EMA does *NOT* rely on any other LSMs to free 
+data for it. The only exception is when an LSM fails enclave_load(), it 
+has to call ema_remove_range() to remove the range being added, which 
+was *not* required originally in v2.
 
-Not updating the new security hooks to at least do as good a job as the
-old security hooks is the definition of regression.
+>> +/**
+>> + * ema - Enclave Memory Area structure for LSM modules
+> 
+> LSM modules is redundant. "LSM" or "LSMs" would be better.
 
-So Al.  Please simmer down and take the valid criticism.
+Noted
 
-Eric
+>> diff --git a/security/Makefile b/security/Makefile
+>> index c598b904938f..b66d03a94853 100644
+>> --- a/security/Makefile
+>> +++ b/security/Makefile
+>> @@ -28,6 +28,7 @@ obj-$(CONFIG_SECURITY_YAMA)		+= yama/
+>>   obj-$(CONFIG_SECURITY_LOADPIN)		+= loadpin/
+>>   obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
+>>   obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
+>> +obj-$(CONFIG_INTEL_SGX)			+= commonema.o
+> 
+> The config option and the file name ought to match,
+> or at least be closer.
+
+Just trying to match file names as "capability" uses commoncap.c.
+
+Like I said, this feature could potentially be used by TEEs other than 
+SGX. For now, SGX is the only user so it is tied to CONFIG_INTEL_SGX. I 
+can rename it to ema.c or enclave.c. Do you have a preference?
+
+>> diff --git a/security/commonema.c b/security/commonema.c
+> 
+> Put this in a subdirectory. Please.
+
+Then why is commoncap.c located in this directory? I'm just trying to 
+match the existing convention.
+
+>> +static struct lsm_blob_sizes ema_blob_sizes __lsm_ro_after_init = {
+>> +	.lbs_file = sizeof(atomic_long_t),
+>> +};
+> 
+> If this is ema's data ema must manage it. You *must* have
+> a file_free().
+
+There is one indeed - ema_file_free_security().
+
+> 
+>> +
+>> +static atomic_long_t *_map_file(struct file *encl)
+>> +{
+>> +	return (void *)((char *)(encl->f_security) + ema_blob_sizes.lbs_file);
+> 
+> I don't trust all the casting going on here, especially since
+> you don't end up with the type you should be returning.
+
+Will change.
+
+>> +}
+>> +
+>> +static struct ema_map *_alloc_map(void)
+> 
+> Function header comments, please.
+
+Will add.
