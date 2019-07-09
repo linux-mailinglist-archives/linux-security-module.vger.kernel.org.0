@@ -2,94 +2,58 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D6862DBD
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jul 2019 03:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FDB62E8E
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jul 2019 05:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbfGIBwy (ORCPT
+        id S1727462AbfGIDPD (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 8 Jul 2019 21:52:54 -0400
-Received: from mga06.intel.com ([134.134.136.31]:22016 "EHLO mga06.intel.com"
+        Mon, 8 Jul 2019 23:15:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60854 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727054AbfGIBwy (ORCPT
+        id S1726072AbfGIDPD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 8 Jul 2019 21:52:54 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2019 18:52:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,468,1557212400"; 
-   d="scan'208";a="185802901"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.165])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Jul 2019 18:52:52 -0700
-Date:   Mon, 8 Jul 2019 18:52:52 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     "Dr. Greg" <greg@enjellic.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        Stephen Smalley <stephen.smalley@gmail.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "Schaufler, Casey" <casey.schaufler@intel.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "jethro@fortanix.com" <jethro@fortanix.com>,
-        "sds@tycho.nsa.gov" <sds@tycho.nsa.gov>,
-        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [RFC PATCH v2 1/3] x86/sgx: Add SGX specific LSM hooks
-Message-ID: <20190709015252.GC24799@linux.intel.com>
-References: <960B34DE67B9E140824F1DCDEC400C0F6551D585@ORSMSX116.amr.corp.intel.com>
- <f59529e4-6cc8-2405-d7db-2519727f9a80@schaufler-ca.com>
- <960B34DE67B9E140824F1DCDEC400C0F6551D7F7@ORSMSX116.amr.corp.intel.com>
- <63c92ab6-dc8d-826b-b8bf-05ad262f06e4@schaufler-ca.com>
- <960B34DE67B9E140824F1DCDEC400C0F6551DBF7@ORSMSX116.amr.corp.intel.com>
- <9e45df1b-3aac-e851-4ef2-5b262f5139bd@schaufler-ca.com>
- <20190703094651.GA29601@wind.enjellic.com>
- <012fc47d-4e9d-3398-0d9d-d9298a758c8d@schaufler-ca.com>
- <20190707133023.GA4521@wind.enjellic.com>
- <256013f7-292d-7014-9abb-61755f07eb25@schaufler-ca.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <256013f7-292d-7014-9abb-61755f07eb25@schaufler-ca.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        Mon, 8 Jul 2019 23:15:03 -0400
+Subject: Re: [GIT PULL] Keys: Set 3 - Keyrings namespacing for 5.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562642102;
+        bh=boTuLsU2t2PBkQzaviQYR4IqG4XrFTvJAKfUCSM+R/E=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=wnKgAxEAjs1SrLbnFRTFo8VOhIXp2h4KlIsZHZbnYiQDNEdH4oMLwKZT3Wa3ZPPHe
+         656RITGkFcWftW9m9Z+wWQ0gApC0mewdpNJwwxPnV2nVessD1dLIyqpLnTYGXk5Py7
+         FkaVBeu89G6xOsk7tLXwB5HSg69JP5xk+tWx4l/8=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <27850.1562361644@warthog.procyon.org.uk>
+References: <27850.1562361644@warthog.procyon.org.uk>
+X-PR-Tracked-List-Id: <linux-nfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <27850.1562361644@warthog.procyon.org.uk>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
+ tags/keys-namespace-20190627
+X-PR-Tracked-Commit-Id: a58946c158a040068e7c94dc1d58bbd273258068
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2e12256b9a76584fa3a6da19210509d4775aee36
+Message-Id: <156264210219.2709.3738517122070198743.pr-tracker-bot@kernel.org>
+Date:   Tue, 09 Jul 2019 03:15:02 +0000
+To:     David Howells <dhowells@redhat.com>
+Cc:     torvalds@linux-foundation.org, dhowells@redhat.com,
+        jmorris@namei.org, ebiederm@xmission.com, dwalsh@redhat.com,
+        keyrings@vger.kernel.org, netdev@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-afs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Jul 08, 2019 at 05:02:00PM -0700, Casey Schaufler wrote:
-> On 7/7/2019 6:30 AM, Dr. Greg wrote:
-> > On Wed, Jul 03, 2019 at 08:32:10AM -0700, Casey Schaufler wrote:
-> >
-> > Good morning, I hope the weekend has been enjoyable for everyone.
-> >
-> >>>> On 7/2/2019 12:42 AM, Xing, Cedric wrote:
-> >>>>> ...
-> >>>>> Guess this discussion will never end if we don't get into
-> >>>>> code. Guess it'd be more productive to talk over phone then come back
-> >>>>> to this thread with a conclusion. Will that be ok with you?
-> >>>> I don't think that a phone call is going to help. Talking code
-> >>>> issues tends to muddle them in my brain. If you can give me a few
-> >>>> days I will propose a rough version of how I think your code should
-> >>>> be integrated into the LSM environment. I'm spending more time
-> >>>> trying (unsuccessfully :( ) to discribe the issues in English than
-> >>>> it will probably take in C.
-> >>> While Casey is off writing his rosetta stone,
-> >> I'd hardly call it that. More of an effort to round the corners on
-> >> the square peg. And Cedric has some ideas on how to approach that.
-> > Should we infer from this comment that, of the two competing
-> > strategies, Cedric's is the favored architecture?
-> 
-> With Cedric's latest patches I'd say there's only one
-> strategy. There's still some refinement to do, but we're
-> getting there.
+The pull request you sent on Fri, 05 Jul 2019 22:20:44 +0100:
 
-Dynamic tracking has an unsolvable race condition.  If process A maps a
-page W and process B maps the same page X, then the result of W^X checks
-depends on the order of mprotect() calls between A and B.
+> git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/keys-namespace-20190627
 
-If we're ok saying "don't do that" then I can get behind dynamic tracking
-as a whole.  Even if we settle on dynamic tracking, where that tracking
-code lives is still an open IMO.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2e12256b9a76584fa3a6da19210509d4775aee36
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
