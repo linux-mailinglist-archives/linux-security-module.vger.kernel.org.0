@@ -2,244 +2,142 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D6F648B3
-	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2019 16:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F13C64AA4
+	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2019 18:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727359AbfGJOzY (ORCPT
+        id S1727466AbfGJQU4 convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 10 Jul 2019 10:55:24 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:44660 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726380AbfGJOzY (ORCPT
+        Wed, 10 Jul 2019 12:20:56 -0400
+Received: from m4a0041g.houston.softwaregrp.com ([15.124.2.87]:44631 "EHLO
+        m4a0041g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727377AbfGJQU4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 10 Jul 2019 10:55:24 -0400
-Received: by mail-yb1-f196.google.com with SMTP id a14so835731ybm.11;
-        Wed, 10 Jul 2019 07:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QCiTMtxWZLPJb5y6myKW6/LqRAFmEt/hmzQDDMTW8VI=;
-        b=lEAScme2mzOQ+tU9R4si7PoXLwO6ANudoejGNvbvXY7MTia3jsDqXVK2sT7T4ezaA8
-         ZC4iXV3mp74Kk/A5sykoJYHMeB7eC9DYwai4hnX303CgGyj/Et2Ard1470VsuyZmEq/Q
-         Zrsjy/wNgl+wh/8Qa6Bvo92PqPEBBv4YzpXEHI+PRSQIT67cEGiWBA9o5HCZHpOPoKt0
-         GSIWFuXGblzSC+AcGxl/L1itQekXjckZxhNhibF3a6SHfKqVX96KeE3BwGm9mos3w+Gg
-         MtgEQDmPLzOv9/H64lLCIm/8VGZDhLyQzhq4IZ5azGRZUwNd6yPl+Vxnms0+Hd8bOeLt
-         WjBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QCiTMtxWZLPJb5y6myKW6/LqRAFmEt/hmzQDDMTW8VI=;
-        b=MmAazY1m+v3Yh2ZliV8OeyZ5FvlJ5kwQcQyj9Tz2kmHLf7PyK1OSi+4Za0+BTFN3aY
-         GCKwAQ2q8mYbNrpyFWFIkaPt52h9ZLECQs71SoAQ+aKE2gSgoPIxdrsGfoLvrDJp766v
-         sKYgBIiUKbIDxoi21akkwXR/ZYQ/UyPrNwoJpLfH6Hox3VMtNlUEWRfZJZEMinJ0x6ZH
-         c9dUCWZy/o5SViXU3Ln97q5OvwhX3htWGWe4D1PbAHSx9QczIboXE0YXCZxswzsDyDYk
-         tx7m99WbkWoYSVhOpYtPFaXlu+gHrFumM6ajJiN9PYjYDRNSOhGKWvGZTIfOtB/CBaMf
-         fxVg==
-X-Gm-Message-State: APjAAAUXzfrFCN5lpkMkO5D3nnwGQPH0DgbhnEVOOICblEQLbmrie2ZV
-        Q5/HhzIDmAlP8dX06Oq8TS6mME1HntziRPhS8YhsCA==
-X-Google-Smtp-Source: APXvYqy2ZYzPT4Hl6P3dw3H30HQZL3QHerrdT5q0XUMb6fhSaBXk0zgxuJcflF5qEH5p0TTt0jJmcKFd2E8H1UmCPlI=
-X-Received: by 2002:a25:aaea:: with SMTP id t97mr16794751ybi.126.1562770522978;
- Wed, 10 Jul 2019 07:55:22 -0700 (PDT)
+        Wed, 10 Jul 2019 12:20:56 -0400
+X-Greylist: delayed 2090 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jul 2019 12:20:02 EDT
+Received: FROM m4a0041g.houston.softwaregrp.com (15.120.17.146) BY m4a0041g.houston.softwaregrp.com WITH ESMTP;
+ Wed, 10 Jul 2019 16:19:52 +0000
+Received: from M9W0067.microfocus.com (2002:f79:be::f79:be) by
+ M4W0334.microfocus.com (2002:f78:1192::f78:1192) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10; Wed, 10 Jul 2019 15:26:04 +0000
+Received: from NAM05-BY2-obe.outbound.protection.outlook.com (15.124.72.11) by
+ M9W0067.microfocus.com (15.121.0.190) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10 via Frontend Transport; Wed, 10 Jul 2019 15:26:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b9X8jDCKGhL7vIGJw80VKuAughKxm+U3ZDVfl0no8f825xmZlWHcCWSKfsrx8nLY3HeZMqw4wHzwoka61fZuItF8Bg0ZdNoA6vYrC5AJfNrEjHGEBX9bk6cz0hWzWYPK6XLNkDCIJblxC6f3rBlDi++9i4om7WczJvJ+BRmi9X8NWaXZhPGjgEXlhQcC/OEWlctyyHogs+SbY8leAdLn4ivaJ2ECPfyObdRrewZFK5kmyVfZW0Pi/ipX055+QxoxopO6rUbj/dQp44pnHto+DZs42He4VLl2EakUlp7iZU5ucKFgSTkxGhIkNWlBZw6kKw6j2DQMJ1E2JdUrzZJRLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TTt3N137NfPoRDi/y3O0RFORyFm1UZDYTHsKxAtBcxU=;
+ b=WRhaKsPL0ddaLcXsf9ah/oP//k1nZluJLqg+qQR+Q/ZI8qXMRRKTH3/ZNUUuv9g8BOqhreP+tABQzhhyYakgZZms7a37G62tcSdsTIuM+QhTiR22xazr8PMhou5DDM+Rsy8zOze3cRmCnJIXt5/S+cFSU7JI+5wVJHT185xeD8WnLu3a7gq20EPa1FKZz8/J94GtnnzzvGDWOF673EAvPF+SoZ5AjpJiU8KZf/7vPxhMd3kR2g+Pd5MLpjHbp0d7pnv4Gl1JELzHIyQMqzUj1URumU7pZFbICvdoYtkw1clmsvpzQdNe43cmdFB33RHWQ8P0uxzYbcJEB01oPTKTNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=suse.com;dmarc=pass action=none header.from=suse.com;dkim=pass
+ header.d=suse.com;arc=none
+Received: from BYAPR18MB2725.namprd18.prod.outlook.com (20.179.56.95) by
+ BYAPR18MB2952.namprd18.prod.outlook.com (20.179.59.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2073.10; Wed, 10 Jul 2019 15:26:02 +0000
+Received: from BYAPR18MB2725.namprd18.prod.outlook.com
+ ([fe80::9c11:600:7b6b:6a32]) by BYAPR18MB2725.namprd18.prod.outlook.com
+ ([fe80::9c11:600:7b6b:6a32%7]) with mapi id 15.20.2073.008; Wed, 10 Jul 2019
+ 15:26:02 +0000
+From:   Joey Lee <JLee@suse.com>
+To:     Jiri Kosina <jikos@kernel.org>
+CC:     Pavel Machek <pavel@ucw.cz>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        "David Howells" <dhowells@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH V34 10/29] hibernate: Disable when the kernel is locked
+ down
+Thread-Topic: [PATCH V34 10/29] hibernate: Disable when the kernel is locked
+ down
+Thread-Index: AQHVNzPImMFF/5PBvEamjEIg+L0CxQ==
+Date:   Wed, 10 Jul 2019 15:26:02 +0000
+Message-ID: <20190710152547.GQ11107@linux-l9pv.suse>
+References: <20190622000358.19895-1-matthewgarrett@google.com>
+ <20190622000358.19895-11-matthewgarrett@google.com>
+ <20190622175208.GB30317@amd>
+ <nycvar.YFH.7.76.1906241520500.27227@cbobk.fhfr.pm>
+In-Reply-To: <nycvar.YFH.7.76.1906241520500.27227@cbobk.fhfr.pm>
+Accept-Language: zh-TW, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: DB3PR0102CA0017.eurprd01.prod.exchangelabs.com
+ (2603:10a6:8::30) To BYAPR18MB2725.namprd18.prod.outlook.com
+ (2603:10b6:a03:103::31)
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=JLee@suse.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [124.11.22.254]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 07506e7d-26ce-47f0-4cfc-08d7054aeaf2
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR18MB2952;
+x-ms-traffictypediagnostic: BYAPR18MB2952:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <BYAPR18MB2952B346C50EF33585D3D476A3F00@BYAPR18MB2952.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0094E3478A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(189003)(199004)(2906002)(14454004)(66446008)(66556008)(4326008)(11346002)(64756008)(446003)(66476007)(66946007)(1076003)(486006)(186003)(86362001)(305945005)(71200400001)(102836004)(478600001)(7416002)(6916009)(76176011)(966005)(229853002)(9686003)(81156014)(6512007)(81166006)(54906003)(6246003)(68736007)(3846002)(6116002)(25786009)(386003)(8936002)(7736002)(476003)(66066001)(36756003)(80792005)(4744005)(5660300002)(6436002)(99286004)(53936002)(6506007)(8676002)(52116002)(316002)(6306002)(71190400001)(6486002)(33656002)(14444005)(26005)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR18MB2952;H:BYAPR18MB2725.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: suse.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: hiKQ1IQsNuUV2S7ta13UgQBfp1hWIIs8SgzgRcq9d651ornEXB/gQNKkRD4WY1Db5cSXNfYVTjSwadtmRYTtCMkxCzzhRFCbOUV+QY4AILGJQb6r9j49g1V7L74001p6DhK0QMzw6287VPnAgtMkGxae6sQW0Nrz78DhuZpu7WqTyUs9GHKEnqNUFQNl4JSZOzI/n5jvq1mS0T4S/HR+yr0tJ3ktT0AyQDE5jtT26lFk7OB899PlFmRxgCYsRu0sVGg2zvkmLgtqqtNBJrPd+5mCGQEs/Ltbz2LQ4ZkCJOFh3di0w/9/GoKvDdcu8WtRL+6coC1qWaBjELWFwcEZh9gHXbQf8xh1FJ6ghLgdO+UHn7Y3kJHlNCVqSp/E23qJz0lrZhc+6mGmNu/39kmRSk95cpLJ2ZddQC2hn2JtXow=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <570ACDF99ABAD3428E41574A4B38E684@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20190710133403.855-1-acgoide@tycho.nsa.gov>
-In-Reply-To: <20190710133403.855-1-acgoide@tycho.nsa.gov>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 10 Jul 2019 17:55:11 +0300
-Message-ID: <CAOQ4uxhKP9AUHqYN24ELP5OcyaJQcpS9hdzuZOm5uJpokFAXvg@mail.gmail.com>
-Subject: Re: [RFC PATCH] fanotify, inotify, dnotify, security: add security
- hook for fs notifications
-To:     Aaron Goidel <acgoide@tycho.nsa.gov>
-Cc:     Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>, Jan Kara <jack@suse.cz>,
-        James Morris <jmorris@namei.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07506e7d-26ce-47f0-4cfc-08d7054aeaf2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2019 15:26:02.5570
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 856b813c-16e5-49a5-85ec-6f081e13b527
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JLee@suse.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2952
+X-OriginatorOrg: suse.com
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Jul 10, 2019 at 4:34 PM Aaron Goidel <acgoide@tycho.nsa.gov> wrote:
->
-> As of now, setting watches on filesystem objects has, at most, applied a
-> check for read access to the inode, and in the case of fanotify, requires
-> CAP_SYS_ADMIN. No specific security hook or permission check has been
-> provided to control the setting of watches. Using any of inotify, dnotify,
-> or fanotify, it is possible to observe, not only write-like operations, but
-> even read access to a file. Modeling the watch as being merely a read from
-> the file is insufficient. Furthermore, fanotify watches grant more power to
-> an application in the form of permission events. While notification events
-> are solely, unidirectional (i.e. they only pass information to the
-> receiving application), permission events are blocking. Permission events
-> make a request to the receiving application which will then reply with a
-> decision as to whether or not that action may be completed.
->
-> In order to solve these issues, a new LSM hook is implemented and has been
-> placed within the system calls for marking filesystem objects with inotify,
-> fanotify, and dnotify watches. These calls to the hook are placed at the
-> point at which the target inode has been resolved and are provided with
-> both the inode and the mask of requested notification events. The mask has
-> already been translated into common FS_* values shared by the entirety of
-> the fs notification infrastructure.
->
-> This only provides a hook at the point of setting a watch, and presumes
-> that permission to set a particular watch implies the ability to receive
-> all notification about that object which match the mask. This is all that
-> is required for SELinux. If other security modules require additional hooks
-> or infrastructure to control delivery of notification, these can be added
-> by them. It does not make sense for us to propose hooks for which we have
-> no implementation. The understanding that all notifications received by the
-> requesting application are all strictly of a type for which the application
-> has been granted permission shows that this implementation is sufficient in
-> its coverage.
->
-> Fanotify further has the issue that it returns a file descriptor with the
-> file mode specified during fanotify_init() to the watching process on
-> event. This is already covered by the LSM security_file_open hook if the
-> security module implements checking of the requested file mode there.
->
-> The selinux_inode_notify hook implementation works by adding three new
-> file permissions: watch, watch_reads, and watch_with_perm (descriptions
-> about which will follow). The hook then decides which subset of these
-> permissions must be held by the requesting application based on the
-> contents of the provided mask. The selinux_file_open hook already checks
-> the requested file mode and therefore ensures that a watching process
-> cannot escalate its access through fanotify.
->
-> The watch permission is the baseline permission for setting a watch on an
-> object and is a requirement for any watch to be set whatsoever. It should
-> be noted that having either of the other two permissions (watch_reads and
-> watch_with_perm) does not imply the watch permission, though this could be
-> changed if need be.
->
-> The watch_reads permission is required to receive notifications from
-> read-exclusive events on filesystem objects. These events include accessing
-> a file for the purpose of reading and closing a file which has been opened
-> read-only. This distinction has been drawn in order to provide a direct
-> indication in the policy for this otherwise not obvious capability. Read
-> access to a file should not necessarily imply the ability to observe read
-> events on a file.
->
-> Finally, watch_with_perm only applies to fanotify masks since it is the
-> only way to set a mask which allows for the blocking, permission event.
-> This permission is needed for any watch which is of this type. Though
-> fanotify requires CAP_SYS_ADMIN, this is insufficient as it gives implicit
-> trust to root, which we do not do, and does not support least privilege.
->
-> Signed-off-by: Aaron Goidel <acgoide@tycho.nsa.gov>
-> ---
->  fs/notify/dnotify/dnotify.c         | 14 +++++++++++---
->  fs/notify/fanotify/fanotify_user.c  | 11 +++++++++--
->  fs/notify/inotify/inotify_user.c    | 12 ++++++++++--
->  include/linux/lsm_hooks.h           |  2 ++
->  include/linux/security.h            |  7 +++++++
->  security/security.c                 |  5 +++++
->  security/selinux/hooks.c            | 22 ++++++++++++++++++++++
->  security/selinux/include/classmap.h |  2 +-
->  8 files changed, 67 insertions(+), 8 deletions(-)
->
-> diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
-> index 250369d6901d..e91ce092efb1 100644
-> --- a/fs/notify/dnotify/dnotify.c
-> +++ b/fs/notify/dnotify/dnotify.c
-> @@ -22,6 +22,7 @@
->  #include <linux/sched/signal.h>
->  #include <linux/dnotify.h>
->  #include <linux/init.h>
-> +#include <linux/security.h>
->  #include <linux/spinlock.h>
->  #include <linux/slab.h>
->  #include <linux/fdtable.h>
-> @@ -288,6 +289,16 @@ int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
->                 goto out_err;
->         }
->
-> +       /*
-> +        * convert the userspace DN_* "arg" to the internal FS_*
-> +        * defined in fsnotify
-> +        */
-> +       mask = convert_arg(arg);
-> +
-> +       error = security_inode_notify(inode, mask);
-> +       if (error)
-> +               goto out_err;
-> +
->         /* expect most fcntl to add new rather than augment old */
->         dn = kmem_cache_alloc(dnotify_struct_cache, GFP_KERNEL);
->         if (!dn) {
-> @@ -302,9 +313,6 @@ int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
->                 goto out_err;
->         }
->
-> -       /* convert the userspace DN_* "arg" to the internal FS_* defines in fsnotify */
-> -       mask = convert_arg(arg);
-> -
->         /* set up the new_fsn_mark and new_dn_mark */
->         new_fsn_mark = &new_dn_mark->fsn_mark;
->         fsnotify_init_mark(new_fsn_mark, dnotify_group);
-> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-> index a90bb19dcfa2..c0d9fa998377 100644
-> --- a/fs/notify/fanotify/fanotify_user.c
-> +++ b/fs/notify/fanotify/fanotify_user.c
-> @@ -528,7 +528,7 @@ static const struct file_operations fanotify_fops = {
->  };
->
->  static int fanotify_find_path(int dfd, const char __user *filename,
-> -                             struct path *path, unsigned int flags)
-> +                             struct path *path, unsigned int flags, __u64 mask)
->  {
->         int ret;
->
-> @@ -567,8 +567,15 @@ static int fanotify_find_path(int dfd, const char __user *filename,
->
->         /* you can only watch an inode if you have read permissions on it */
->         ret = inode_permission(path->dentry->d_inode, MAY_READ);
-> +       if (ret) {
-> +               path_put(path);
-> +               goto out;
-> +       }
-> +
-> +       ret = security_inode_notify(path->dentry->d_inode, mask);
->         if (ret)
->                 path_put(path);
-> +
->  out:
->         return ret;
->  }
-> @@ -1014,7 +1021,7 @@ static int do_fanotify_mark(int fanotify_fd, unsigned int flags, __u64 mask,
->                 goto fput_and_out;
->         }
->
-> -       ret = fanotify_find_path(dfd, pathname, &path, flags);
-> +       ret = fanotify_find_path(dfd, pathname, &path, flags, mask);
->         if (ret)
->                 goto fput_and_out;
+Hi,
+
+On Mon, Jun 24, 2019 at 03:21:23PM +0200, Jiri Kosina wrote:
+> On Sat, 22 Jun 2019, Pavel Machek wrote:
+> 
+> > > There is currently no way to verify the resume image when returning
+> > > from hibernate.  This might compromise the signed modules trust model,
+> > > so until we can work with signed hibernate images we disable it when the
+> > > kernel is locked down.
+> > 
+> > I keep getting these...
+> > 
+> > IIRC suse has patches to verify the images.
+> 
+> Yeah, Joey Lee is taking care of those. CCing.
 >
 
-So the mark_type doesn't matter to SELinux?
-You have no need for mount_noitify and sb_notify hooks?
-A watch permission on the mount/sb root inode implies permission
-(as CAP_SYS_ADMIN) to watch all events in mount/sb?
+The last time that I sent for hibernation encryption and authentication is
+here:
+    https://lkml.org/lkml/2019/1/3/281 
 
-[...]
+It needs some big changes after review:
+ - Simplify the design: remove keyring dependency and trampoline. 
+ - Encrypted whole snapshot image instead of only data pages.
+ - Using TPM:
+	- Direct use TPM API in hibernation instead of keyring
+	- Localities (suggested by James Bottomley)
 
-> +static int selinux_inode_notify(struct inode *inode, u64 mask)
-> +{
-> +       u32 perm = FILE__WATCH; // basic permission, can a watch be set?
-> +
-> +       struct common_audit_data ad;
-> +
-> +       ad.type = LSM_AUDIT_DATA_INODE;
-> +       ad.u.inode = inode;
-> +
-> +       // check if the mask is requesting ability to set a blocking watch
-> +       if (mask & (FS_OPEN_PERM | FS_OPEN_EXEC_PERM | FS_ACCESS_PERM))
+I am still finding enough time to implement those changes, especial TPM
+parts.
 
-Better ALL_FSNOTIFY_PERM_EVENTS
-
-Thanks,
-Amir.
+Thanks
+Joey Lee
