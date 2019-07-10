@@ -2,143 +2,80 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9706D64B0D
-	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2019 18:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF7464B75
+	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2019 19:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbfGJQ57 (ORCPT
+        id S1727889AbfGJR07 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 10 Jul 2019 12:57:59 -0400
-Received: from mga06.intel.com ([134.134.136.31]:22559 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727414AbfGJQ57 (ORCPT
+        Wed, 10 Jul 2019 13:26:59 -0400
+Received: from smtprelay0224.hostedemail.com ([216.40.44.224]:57878 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727197AbfGJR07 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 10 Jul 2019 12:57:59 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jul 2019 09:57:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,475,1557212400"; 
-   d="scan'208";a="156555167"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.165])
-  by orsmga007.jf.intel.com with ESMTP; 10 Jul 2019 09:57:58 -0700
-Date:   Wed, 10 Jul 2019 09:57:58 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     "Xing, Cedric" <cedric.xing@intel.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-sgx@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org,
-        Bill Roberts <william.c.roberts@intel.com>,
-        Casey Schaufler <casey.schaufler@intel.com>,
-        James Morris <jmorris@namei.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Dr . Greg Wettstein" <greg@enjellic.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>
-Subject: Re: [RFC PATCH v4 00/12] security: x86/sgx: SGX vs. LSM
-Message-ID: <20190710165758.GD4348@linux.intel.com>
-References: <20190619222401.14942-1-sean.j.christopherson@intel.com>
- <20190705160549.tzsck5ho5kvtdhit@linux.intel.com>
- <20190708172930.GA20791@linux.intel.com>
- <20190709162203.gzyvulah5u7eksip@linux.intel.com>
- <20190709170917.GD25369@linux.intel.com>
- <512391ba-fe0d-e758-ae32-09660c1264f7@intel.com>
- <20190709222534.GG25369@linux.intel.com>
- <35b9dd93-4988-d998-056c-aeae36076bc0@intel.com>
+        Wed, 10 Jul 2019 13:26:59 -0400
+X-Greylist: delayed 455 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jul 2019 13:26:58 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id CD51818014B82;
+        Wed, 10 Jul 2019 17:19:23 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 39B65181D3419;
+        Wed, 10 Jul 2019 17:19:22 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::,RULES_HIT:41:355:379:599:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:2895:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3873:3874:4321:5007:6120:7901:7903:8957:9038:10004:10128:10234:10400:10848:11026:11232:11658:11914:12043:12048:12297:12438:12740:12760:12895:13019:13069:13141:13160:13229:13230:13255:13311:13357:13439:14096:14097:14181:14659:14721:21080:21212:21627:21660:30029:30054:30070:30091,0,RBL:172.56.44.31:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:25,LUA_SUMMARY:none
+X-HE-Tag: need92_16e176f97c651
+X-Filterd-Recvd-Size: 2181
+Received: from XPS-9350 (unknown [172.56.44.31])
+        (Authenticated sender: joe@perches.com)
+        by omf11.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 10 Jul 2019 17:19:16 +0000 (UTC)
+Message-ID: <6ce2ce60b2435940bc8dfa07fa2553c4524d2db5.camel@perches.com>
+Subject: Re: [RFC PATCH] fanotify, inotify, dnotify, security: add security
+ hook for fs notifications
+From:   Joe Perches <joe@perches.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Aaron Goidel <acgoide@tycho.nsa.gov>, paul@paul-moore.com
+Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, dhowells@redhat.com, jack@suse.cz,
+        amir73il@gmail.com, jmorris@namei.org, sds@tycho.nsa.gov,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 10 Jul 2019 10:18:46 -0700
+In-Reply-To: <cb754dda-fbce-8169-4cd7-eef66e8d809e@infradead.org>
+References: <20190710133403.855-1-acgoide@tycho.nsa.gov>
+         <4fd98c88-61a6-a155-5028-db22a778d3c1@schaufler-ca.com>
+         <cb754dda-fbce-8169-4cd7-eef66e8d809e@infradead.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35b9dd93-4988-d998-056c-aeae36076bc0@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jul 09, 2019 at 04:11:08PM -0700, Xing, Cedric wrote:
-> On 7/9/2019 3:25 PM, Sean Christopherson wrote:
-> >On Tue, Jul 09, 2019 at 01:41:28PM -0700, Xing, Cedric wrote:
-> >>On 7/9/2019 10:09 AM, Sean Christopherson wrote:
-> >>>Translating those to SGX, with a lot of input from Stephen, I ended up
-> >>>with the following:
-> >>>
-> >>>   - FILE__ENCLAVE_EXECUTE: equivalent to FILE__EXECUTE, required to gain X
-> >>>                            on an enclave page loaded from a regular file
-> >>>
-> >>>   - PROCESS2__ENCLAVE_EXECDIRTY: hybrid of EXECMOD and EXECUTE+WRITE,
-> >>>                                  required to gain W->X on an enclave page
-> >>
-> >>EXECMOD basically indicates a file containing self-modifying code. Your
-> >>ENCLAVE_EXECDIRTY is however a process permission, which is illogical.
-> >
-> >How is it illogical?  If a PROCESS wants to EXECute a DIRTY ENCLAVE page,
-> >then it needs PROCESS2__ENCLAVE_EXECDIRTY
-> Just think of the purpose of FILE__EXECMOD. It indicates to LSM the file has
-> self-modifying code, hence W->X transition should be considered "normal" and
-> allowed, regardless which process that file is loaded into.
+On Wed, 2019-07-10 at 09:49 -0700, Randy Dunlap wrote:
+> On 7/10/19 9:38 AM, Casey Schaufler wrote:
+> > On 7/10/2019 6:34 AM, Aaron Goidel wrote:
+> > > @@ -3261,6 +3262,26 @@ static int selinux_inode_removexattr(struct dentry *dentry, const char *name)
+> > >  	return -EACCES;
+> > >  }
+> > >  
+> > > +static int selinux_inode_notify(struct inode *inode, u64 mask)
+> > > +{
+> > > +	u32 perm = FILE__WATCH; // basic permission, can a watch be set?
+> > 
+> > We don't use // comments in the Linux kernel.
+> > 
 > 
-> The same thing for enclaves here. Whether an enclave contains self-modifying
-> code is specific to that enclave, regardless which process it is loaded
-> into.
+> I thought that we had recently moved into the 21st century on that issue,
+> but I don't see it mentioned in coding-style.rst.  Maybe we need a Doc update.
 > 
-> But what are you doing is quite the opposite, and that's I mean by
-> "illogical".
+> checkpatch allows C99 comments by default.
+> Joe, do you recall about this?
 
-Ah.  My intent was to minimize the number of new labels, and because W->X
-scenarios are not guaranteed to be backed by a file, I went with a per
-process permission.  Ditto for EXECANON.  I'm not opposed to also having a
-per file permission that can be used when possible.
+My recollection is it was something I thought was
+just simple and useful so I added it to checkpatch
+without going through the negative of the nominal
+approvals required by modifying CodingStyle.
 
-Something like this?  And maybe merge EXECANON and EXECDIRTY into a single
-permission?
 
-Depending on whether sigstruct is required to be in a pinned file, EAUG
-pages would need either EXECDIRTY or EXECMOD.
 
-static int selinux_enclave_load(struct vm_area_struct *vma, unsigned long prot,
-				bool measured)
-{
-	const struct cred *cred = current_cred();
-	u32 sid = cred_sid(cred);
-	int ret;
-
-	/* Currently supported only in noexec kernels. */
-	WARN_ON_ONCE(!default_noexec);
-
-	/* Only executable enclave pages are restricted in any way. */
-	if (!(prot & PROT_EXEC))
-		return 0;
-
-	if (!measured) {
-		ret = enclave_has_perm(sid, PROCESS2__ENCLAVE_EXECUNMR);
-		if (ret)
-			goto out;
-	}
-
-	if (!vma->vm_file || IS_PRIVATE(file_inode(vma->vm_file))) {
-		ret = enclave_has_perm(sid, PROCESS2__ENCLAVE_EXECANON);
-		if (ret)
-			goto out;
-
-		/* Ability to do W->X within the enclave. */
-		if (prot & PROT_WRITE)
-			ret = enclave_has_perm(sid,
-					       PROCESS2__ENCLAVE_EXECDIRTY);
-	} else {
-		ret = file_has_perm(cred, vma->vm_file, FILE__ENCLAVE_EXECUTE);
-		if (ret)
-			goto out;
-
-		/*
-		 * Load code from a modified private mapping, or from any file
-		 * mapping with the ability to do W->X within the enclave.
-		 */
-		if (vma->anon_vma || (prot & PROT_WRITE))
-			ret = file_has_perm(cred, vma->vm_file,
-					    FILE__ENCLAVE_EXECMOD);
-	}
-
-out:
-	return ret;
-}
