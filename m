@@ -2,122 +2,94 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 792F169C0D
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 22:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9ED69EE9
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2019 00:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732811AbfGOUBW (ORCPT
+        id S1730796AbfGOWYA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 15 Jul 2019 16:01:22 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:56316 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732771AbfGOUBK (ORCPT
+        Mon, 15 Jul 2019 18:24:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39000 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730768AbfGOWYA (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 15 Jul 2019 16:01:10 -0400
-Received: by mail-pf1-f201.google.com with SMTP id i26so10824233pfo.22
-        for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2019 13:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=dW3mrZIEp1awhdhw/Gqc2hqiwmL3xRsZmPf/kk0Pt2o=;
-        b=QgsOBiTZ0JhGodLW/2DddiolYVh1/RB2P89soOifvOkQAzAzj6aYj874inMcQbf3VF
-         xIIB2u2IJscrI0ajrGL9OY7tvtGZ2dRmXXPfodDUx8Tc2cRd3DS3+JRzX6JPu5ld1fiq
-         ktIEGLvBlrPjHXVdJZU5GlDhxSfY/1VeW1AWBneKr1dmb/b8/ToFzQieChyjqVJy2rct
-         T1oAJMJFnipJ6mKvQ43tWK4kMMM7LgHioVLczeGji5iBUo6NUPumV98PLuxE9R7R+m+r
-         Y+b3mu0fnGkey7EA1KW2dWvIVqjz7n2nY+aaqtE34JAljTplN395F2YnFoxko5GiYLNg
-         b53g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dW3mrZIEp1awhdhw/Gqc2hqiwmL3xRsZmPf/kk0Pt2o=;
-        b=KPfkVOxcQetmUit5P1kLyLryAgMn9jMmHiPpTe5aBaHIfOg1Zn6rPW5YaSLiG1cdGY
-         ZUm+PvP0xCu5B97W4iRIeBOG8Ph+sU0ZFMfEq8om8HVEOkaklomB0kKBcT5AXq9fSgob
-         8mZh7jfH6fTbOCrG4uvLOuOJiLvi+0FhIl6YYZIkH3ELRyKVJRprgokWl+3fbdYJUP4E
-         BmtYKydPTOYRKDIwaMtIesw5AmjaW3RBm3TzL62K1S3HwWK5JZ3F4TGH7UjH9jI0qCYy
-         2IuW8JL3qWWyVw1P8/RGVASbJ6m0FHsX9jbLFcTFAtSxC1x/FaS/FD4RNLUVEJRkJF2r
-         EA6g==
-X-Gm-Message-State: APjAAAVnSW3bCrjP1H+n9oXcFt3/Po7NftsKidQCJ7DgmaIyyZjnXg+m
-        4EWPFcu+5ceziFHKa07YPnukzE+CTuzflXqDhJOBPA==
-X-Google-Smtp-Source: APXvYqxyIbjo/rprP2+a3LVCiD9lzTGJMTCQXA9mBfowhfTZ5DAkTI1aTkwiyc4SG4vQGr0LCsXl7VoQfC/s7XMPlfaSAw==
-X-Received: by 2002:a63:c748:: with SMTP id v8mr12746095pgg.418.1563220869628;
- Mon, 15 Jul 2019 13:01:09 -0700 (PDT)
-Date:   Mon, 15 Jul 2019 12:59:46 -0700
-In-Reply-To: <20190715195946.223443-1-matthewgarrett@google.com>
-Message-Id: <20190715195946.223443-30-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190715195946.223443-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH V35 29/29] lockdown: Print current->comm in restriction messages
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>
+        Mon, 15 Jul 2019 18:24:00 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF43F2173B
+        for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2019 22:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563229438;
+        bh=sXN8yTSkzlc2tuMkiJcjFdTjSzcCd65oQqUJ3FJmeJY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=yON+IeagokTNon69qlcZndQWj7stI4VQZQG7sYNtg2WMcfC2tsSYgTRnz2O2zMiHu
+         bxqjJ6RDNj36L80JFV6bcheGpUt0M+2iRiyYzR3mHI7EA7U3RClMAgaRo5FQWhDWpw
+         Nq7QbNzbDqlOv8A62BrrHUzwF4k2wiK0UPJ+dhNs=
+Received: by mail-wr1-f48.google.com with SMTP id z1so18704092wru.13
+        for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2019 15:23:58 -0700 (PDT)
+X-Gm-Message-State: APjAAAW3lxpF2uK+XatBr5J+bcEjEP3OzVxQiXKPxnxqDOz1tpp4slCD
+        InPH3sm3Gb76bPGZ/qzn3idPBiso0WpIc08RnzI/Og==
+X-Google-Smtp-Source: APXvYqyj/9VuP/+ihUF83njy2/IebE75lbwjE05Fh3u3X6o4w/jRKgrJb1caiXxXudMLSyjB+41C03VLnS0S0oyPpNY=
+X-Received: by 2002:adf:cc85:: with SMTP id p5mr29293788wrj.47.1563229437236;
+ Mon, 15 Jul 2019 15:23:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <960B34DE67B9E140824F1DCDEC400C0F6551D585@ORSMSX116.amr.corp.intel.com>
+ <f59529e4-6cc8-2405-d7db-2519727f9a80@schaufler-ca.com> <960B34DE67B9E140824F1DCDEC400C0F6551D7F7@ORSMSX116.amr.corp.intel.com>
+ <63c92ab6-dc8d-826b-b8bf-05ad262f06e4@schaufler-ca.com> <960B34DE67B9E140824F1DCDEC400C0F6551DBF7@ORSMSX116.amr.corp.intel.com>
+ <9e45df1b-3aac-e851-4ef2-5b262f5139bd@schaufler-ca.com> <20190703094651.GA29601@wind.enjellic.com>
+ <012fc47d-4e9d-3398-0d9d-d9298a758c8d@schaufler-ca.com> <20190707133023.GA4521@wind.enjellic.com>
+ <256013f7-292d-7014-9abb-61755f07eb25@schaufler-ca.com> <20190711102247.GA5357@wind.enjellic.com>
+In-Reply-To: <20190711102247.GA5357@wind.enjellic.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 15 Jul 2019 15:23:45 -0700
+X-Gmail-Original-Message-ID: <CALCETrWmvtSaqtdZWeBdTMYP-38xeyWhf5TP9vV+OY30nHgJbQ@mail.gmail.com>
+Message-ID: <CALCETrWmvtSaqtdZWeBdTMYP-38xeyWhf5TP9vV+OY30nHgJbQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] x86/sgx: Add SGX specific LSM hooks
+To:     "Dr. Greg" <greg@idfusion.net>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        Stephen Smalley <stephen.smalley@gmail.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "Schaufler, Casey" <casey.schaufler@intel.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "jethro@fortanix.com" <jethro@fortanix.com>,
+        "sds@tycho.nsa.gov" <sds@tycho.nsa.gov>,
+        "jarkko.sakkinen@linux.intel.com" <jarkko.sakkinen@linux.intel.com>,
+        "Christopherson, Sean J" <sean.j.christopherson@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Print the content of current->comm in messages generated by lockdown to
-indicate a restriction that was hit.  This makes it a bit easier to find
-out what caused the message.
+On Thu, Jul 11, 2019 at 3:23 AM Dr. Greg <greg@idfusion.net> wrote:
+>
+> On Mon, Jul 08, 2019 at 05:02:00PM -0700, Casey Schaufler wrote:
+>
+> > > On 7/7/2019 6:30 AM, Dr. Greg wrote:
+> > > All well taken points from an implementation perspective, but they
+> > > elide the point I was trying to make.  Which is the fact that without
+> > > any semblance of a discussion regarding the requirements needed to
+> > > implement a security architecture around the concept of a TEE, this
+> > > entire process, despite Cedric's well intentioned efforts, amounts to
+> > > pounding a square solution into the round hole of a security problem.
+>
+> > Lead with code. I love a good requirements document, but one of the
+> > few places where I agree with the agile folks is that working code
+> > speaks loudly.
+> >
+> > > Which, as I noted in my e-mail, is tantamount to security theater.
+> >
+> > Not buying that. Not rejecting it, either. Without code
+> > to judge it's kind of hard to say.
+>
+> We tried the code approach.
+>
 
-The message now patterned something like:
+You sent code.  That code did not, in any respect, address the issue
+of how LSMs were supposed to control what code got executed.
 
-        Lockdown: <comm>: <what> is restricted; see man kernel_lockdown.7
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- fs/proc/kcore.c              | 5 +++--
- security/lockdown/lockdown.c | 8 ++++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-index ee2c576cc94e..e2ed8e08cc7a 100644
---- a/fs/proc/kcore.c
-+++ b/fs/proc/kcore.c
-@@ -548,11 +548,12 @@ static int open_kcore(struct inode *inode, struct file *filp)
- {
- 	int ret = security_locked_down(LOCKDOWN_KCORE);
- 
--	if (ret)
--		return ret;
- 	if (!capable(CAP_SYS_RAWIO))
- 		return -EPERM;
- 
-+	if (ret)
-+		return ret;
-+
- 	filp->private_data = kmalloc(PAGE_SIZE, GFP_KERNEL);
- 	if (!filp->private_data)
- 		return -ENOMEM;
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index fd7cdbddd814..bbf30d34542c 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -81,10 +81,14 @@ early_param("lockdown", lockdown_param);
-  */
- static int lockdown_is_locked_down(enum lockdown_reason what)
- {
-+	if (WARN(what >= LOCKDOWN_CONFIDENTIALITY_MAX,
-+		 "Invalid lockdown reason"))
-+		return -EPERM;
-+
- 	if (kernel_locked_down >= what) {
- 		if (lockdown_reasons[what])
--			pr_notice("Lockdown: %s is restricted; see man kernel_lockdown.7\n",
--				  lockdown_reasons[what]);
-+			pr_notice("Lockdown: %s: %s is restricted; see man kernel_lockdown.7\n",
-+				  current->comm, lockdown_reasons[what]);
- 		return -EPERM;
- 	}
- 
--- 
-2.22.0.510.g264f2c817a-goog
-
+Do you have an actual suggestion here that we should pay attention to?
