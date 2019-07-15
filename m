@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5842068CD1
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 15:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA2A68EC7
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 16:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732446AbfGONx4 (ORCPT
+        id S2388373AbfGOOJk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 15 Jul 2019 09:53:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52594 "EHLO mail.kernel.org"
+        Mon, 15 Jul 2019 10:09:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33248 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732442AbfGONx4 (ORCPT
+        id S2387983AbfGOOJe (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:53:56 -0400
+        Mon, 15 Jul 2019 10:09:34 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84E202067C;
-        Mon, 15 Jul 2019 13:53:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 09F09212F5;
+        Mon, 15 Jul 2019 14:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563198835;
-        bh=GvqaO8Hfj0YZ4S9SDbciSuBjpZBuybUg36GS1rxr7mk=;
+        s=default; t=1563199773;
+        bh=PLsGesLjtXXM/WMov317wtvkxa6wBD7fcbSpD4dBj9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=087873uw/4BcCTV1ksCIXhcvEYHZ5cSdi2/TQpoj+Ay3oxWF4d3odiOP7e2RRjAdy
-         v7w7XZo8YMPTM1A1ZvE8tjTzGdNM1+AlqioSbgVw45Di9OqV4Vwczu4Sha/JjQ2IEC
-         Xoou+WcOsOhG3DVTK+hC+/Ip8/JJMxqskwLdjiZA=
+        b=FuWDUUW4QLhJCcUYEoixP7SxqvieQYuhuQ8xpRCP7XDmrzF3J9JhZA73xW+1Z9SWw
+         TUBThNas5CTjgDUtUiHMpEFGrHx6EMl76jJnlXsQypHdZYGF7NFXD4DOAyNh6F8Off
+         IfbLA4qSNM8vIlJZsDOpgG8dbWVx/RpR4u3ZS2K8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -33,12 +33,12 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 116/249] integrity: Fix __integrity_init_keyring() section mismatch
-Date:   Mon, 15 Jul 2019 09:44:41 -0400
-Message-Id: <20190715134655.4076-116-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 102/219] integrity: Fix __integrity_init_keyring() section mismatch
+Date:   Mon, 15 Jul 2019 10:01:43 -0400
+Message-Id: <20190715140341.6443-102-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
-References: <20190715134655.4076-1-sashal@kernel.org>
+In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
+References: <20190715140341.6443-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index 4582bc26770a..868ade3e8970 100644
+index e19c2eb72c51..37869214c243 100644
 --- a/security/integrity/digsig.c
 +++ b/security/integrity/digsig.c
-@@ -69,8 +69,9 @@ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+@@ -73,8 +73,9 @@ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
  	return -EOPNOTSUPP;
  }
  
