@@ -2,51 +2,67 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D604268567
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 10:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062AC687CA
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 13:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729555AbfGOIac (ORCPT
+        id S1729958AbfGOLEV (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 15 Jul 2019 04:30:32 -0400
-Received: from s2mx02.siteserve.jp ([210.248.135.119]:22508 "EHLO
-        s2mx02.siteserve.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbfGOIaa (ORCPT
+        Mon, 15 Jul 2019 07:04:21 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46324 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729952AbfGOLES (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 15 Jul 2019 04:30:30 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by s2mx02.siteserve.jp (Postfix) with ESMTP id 5CD6C11BF16;
-        Mon, 15 Jul 2019 17:10:52 +0900 (JST)
-X-Virus-Scanned: amavisd-new at s2mx02.siteserve.jp
-Received: from s2mx02.siteserve.jp ([127.0.0.1])
-        by localhost (mail.siteserve.jp [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xrzqXF2rmh7E; Mon, 15 Jul 2019 17:10:51 +0900 (JST)
-Received: from webmail.nakagawa-consul.com (localhost.localdomain [127.0.0.1])
-        by s2mx02.siteserve.jp (Postfix) with ESMTP id D280B11BDB1;
-        Mon, 15 Jul 2019 17:10:49 +0900 (JST)
-Received: from 174.128.236.106
-        (RisuMail authenticated user morita@nakagawa-consul.com)
-        by webmail.nakagawa-consul.com with HTTP;
-        Mon, 15 Jul 2019 17:10:50 +0900 (JST)
-Message-ID: <50258.174.128.236.106.1563178250.risu@webmail.nakagawa-consul.com>
-Date:   Mon, 15 Jul 2019 17:10:50 +0900 (JST)
-Subject: Loan offer !!
-From:   "Smith Jerry" <morita@nakagawa-consul.com>
-Reply-To: kasaperkoloans@yahoo.com.hk
-User-Agent: RisuMail 3.1
-X-Mailer: RisuMail 3.1
+        Mon, 15 Jul 2019 07:04:18 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 65so12276530oid.13
+        for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2019 04:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=Iux65787KeJtZlk/UWQ8a71sdq3L+JuOBHwZwxVHUOu0Hal0brUmaUtWDT+1EakAhq
+         MtJF/vbEQagCDLqdjzXV0tE8x5YNwPsclB57z/jA+URpkAaidKGibNAiJ897B2Q2rv9p
+         uYOBtZylJRmtRio8wDP4GwRiBknU84/FmWsMFw620mFEJwR9vSM1QlmEIUdghWeLiQPg
+         3/o6A/ASY/U2XQTJeOVMsZoeyZcCfYvLw2Rbw2pE/fk67uX5NyEzWB6tv7TG5MeHZvc/
+         X3yp2nduS0Os162TiWKhkMGOmC5wMIt1cVEoe4V7hwUEXyYLehvgYaVidvFk20QbqjFn
+         kL9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=Kt2ZCuNLX3cfvnq3qOZ3qUdf99YLesygGCdvTjXe+/HnNNplikSAZFgmVxsJOFFo2n
+         m+DB5SxBBZ0rS9p+5b6SOUUnuiWEV08fYXTmVDkURHCui9e8tTKv5c7SAjX0c+SiU72O
+         FHqVhdYcjaoLIfj7zu/aik6YkiJRrgzpw6v/Y/5RDZ8W3zX2TR1UeOo7llbi/G8Q2clq
+         djPNEVZTuPTtNZ7NtbHVD+64+3f4wymE5Oq7kH5rv5LhKst6FW4GH+e0HOM2f7tss/JM
+         ZGKHqYBOs/5JRaJnQ8qUK5LVyELyw66ldV3YMU28B2jFw0FKNvnB3KnjE71JynWxrX9f
+         orrg==
+X-Gm-Message-State: APjAAAX1WQ1sqE4j8Ib+KUhQpCKoZfyevfG5E8P8ASMa4fQstf8CFAtx
+        FeRCR9C+EKrTKF2lG/YFMvIr7iUJyDzQEr+v9Zhnp0p0SGw=
+X-Google-Smtp-Source: APXvYqwI9SCHvCHLnvHckfwL+oW1shcNAvZVS/wk3iQ3LTmyEMELfYQBoBiEv/cUvggIHp2fQao9ul2L5mSBnKj2EDA=
+X-Received: by 2002:a63:ad07:: with SMTP id g7mr24480194pgf.405.1563188657092;
+ Mon, 15 Jul 2019 04:04:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;charset=us-ascii
-Content-Transfer-Encoding: 8bit
-X-Priority: 3 (Normal)
-Importance: Normal
+Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:04:16
+ -0700 (PDT)
+From:   Donald Douglas <ddouglasng@gmail.com>
+Date:   Mon, 15 Jul 2019 04:04:16 -0700
+Message-ID: <CALVR28EP4VMYZDqzau6uFTJmxHs6we+nYre3JstaZ5qSsvppFQ@mail.gmail.com>
+Subject: Kindly Respond
 To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Hello,
+I am Barr Fredrick Mbogo a business consultant i have a lucrative
+business to discuss with you from the Eastern part of Africa Uganda to
+be precise aimed at agreed percentage upon your acceptance of my hand
+in business and friendship. Kindly respond to me if you are interested
+to partner with me for an update. Very important.
 
-
-
-Do you need a Loan? email us now on kasaperkoloans@yahoo.com.hk and get
-more details on the loan we offer
-
+Yours Sincerely,
+Donald Douglas,
+For,
+Barr Frederick Mbogo
+Legal Consultant.
+Reply to: barrfredmbogo@consultant.com
