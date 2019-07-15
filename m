@@ -2,104 +2,122 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8455469C06
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 22:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792F169C0D
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 22:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732733AbfGOUBJ (ORCPT
+        id S1732811AbfGOUBW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 15 Jul 2019 16:01:09 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:38610 "EHLO
+        Mon, 15 Jul 2019 16:01:22 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:56316 "EHLO
         mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732764AbfGOUBI (ORCPT
+        with ESMTP id S1732771AbfGOUBK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 15 Jul 2019 16:01:08 -0400
-Received: by mail-pf1-f201.google.com with SMTP id e25so10866142pfn.5
-        for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2019 13:01:07 -0700 (PDT)
+        Mon, 15 Jul 2019 16:01:10 -0400
+Received: by mail-pf1-f201.google.com with SMTP id i26so10824233pfo.22
+        for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2019 13:01:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=1gkPgS/LUQWYTDhNcm4n5VtrDpueDO81OkRBGTKoxwg=;
-        b=SGpuCm9nyv32QRgah8+1J8biiXF/tNR9HQ4GFBCBrRmNuWoaPEMCoMeG8CznrJ2xBC
-         zkbDMbcYm8YcsYwmLzYCmSKjnsTMSvkKRRECL0tqQ36b9oNCLd5cuBcoa4BpCMdF21Fu
-         O2tmCsQco516iIqUSW/mBRVF6fBtQAPjVYpsnS6G2E/HLyeMh1D0p0TkTpbvhIPBXbtS
-         qtbaAbxFrni0pU2z0i41Fjy8ygJksGW51zsL1JC0ZC9Y3KF+G5b/rSrWYgjlPNfyEXRH
-         GI0wIh/cCu2IgLJwz+vjTQ1V+oJarCXW6xl6K2cpPDlePYHuZsHrVGZ78+B3jX0whKqm
-         o3xw==
+        bh=dW3mrZIEp1awhdhw/Gqc2hqiwmL3xRsZmPf/kk0Pt2o=;
+        b=QgsOBiTZ0JhGodLW/2DddiolYVh1/RB2P89soOifvOkQAzAzj6aYj874inMcQbf3VF
+         xIIB2u2IJscrI0ajrGL9OY7tvtGZ2dRmXXPfodDUx8Tc2cRd3DS3+JRzX6JPu5ld1fiq
+         ktIEGLvBlrPjHXVdJZU5GlDhxSfY/1VeW1AWBneKr1dmb/b8/ToFzQieChyjqVJy2rct
+         T1oAJMJFnipJ6mKvQ43tWK4kMMM7LgHioVLczeGji5iBUo6NUPumV98PLuxE9R7R+m+r
+         Y+b3mu0fnGkey7EA1KW2dWvIVqjz7n2nY+aaqtE34JAljTplN395F2YnFoxko5GiYLNg
+         b53g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=1gkPgS/LUQWYTDhNcm4n5VtrDpueDO81OkRBGTKoxwg=;
-        b=N/Xhb2TnHXY40N9rtyWhM3kdz5iWdmgWTbazFv/3Zw1XHaP9TUpBnp7lxxJehaedKe
-         8NaGUI3LRUKttL5ha4zl6fX0gGWMp6RuGQ87YrdlzSPgbUQpdiyt57qALa+nbi0/82+T
-         DR78dCB42yFH6MHJrmgxrEgY56XHLvwXxZj2d+WUqcjdrleezRRJsPDoLetO+rAodZQ4
-         5xQN83fl+jfIoKNu9f2xOm8wIs+dehJtf9JWxXq11/fQ52XpFa/Al3egqfMCWbeGFPgF
-         GJCbGZyt/Dv/JwALqk3CCYeUUgDCfctrOA7F3Ss16Zr34H1RnDBGXxob8OPoLUF4GxLn
-         TF6g==
-X-Gm-Message-State: APjAAAXsrs0GqjaLLy2g7jA3Zwt/OrMCvkSlHuVPJ/f3q/e0Ldl7IkOg
-        wTLYaoaJs5nr6VPym9SZFWdyB0FZ9E20GhDjHnkzMg==
-X-Google-Smtp-Source: APXvYqx8IB42RsjuQvqr21hPpPSRXnXopU3sD+HW/qRD9CSWBN6XHwG27W8+mPAUWW4oj0dcn2icPxBiU0iXrQYpoIx1NQ==
-X-Received: by 2002:a63:7e1d:: with SMTP id z29mr28729222pgc.346.1563220867059;
- Mon, 15 Jul 2019 13:01:07 -0700 (PDT)
-Date:   Mon, 15 Jul 2019 12:59:45 -0700
+        bh=dW3mrZIEp1awhdhw/Gqc2hqiwmL3xRsZmPf/kk0Pt2o=;
+        b=KPfkVOxcQetmUit5P1kLyLryAgMn9jMmHiPpTe5aBaHIfOg1Zn6rPW5YaSLiG1cdGY
+         ZUm+PvP0xCu5B97W4iRIeBOG8Ph+sU0ZFMfEq8om8HVEOkaklomB0kKBcT5AXq9fSgob
+         8mZh7jfH6fTbOCrG4uvLOuOJiLvi+0FhIl6YYZIkH3ELRyKVJRprgokWl+3fbdYJUP4E
+         BmtYKydPTOYRKDIwaMtIesw5AmjaW3RBm3TzL62K1S3HwWK5JZ3F4TGH7UjH9jI0qCYy
+         2IuW8JL3qWWyVw1P8/RGVASbJ6m0FHsX9jbLFcTFAtSxC1x/FaS/FD4RNLUVEJRkJF2r
+         EA6g==
+X-Gm-Message-State: APjAAAVnSW3bCrjP1H+n9oXcFt3/Po7NftsKidQCJ7DgmaIyyZjnXg+m
+        4EWPFcu+5ceziFHKa07YPnukzE+CTuzflXqDhJOBPA==
+X-Google-Smtp-Source: APXvYqxyIbjo/rprP2+a3LVCiD9lzTGJMTCQXA9mBfowhfTZ5DAkTI1aTkwiyc4SG4vQGr0LCsXl7VoQfC/s7XMPlfaSAw==
+X-Received: by 2002:a63:c748:: with SMTP id v8mr12746095pgg.418.1563220869628;
+ Mon, 15 Jul 2019 13:01:09 -0700 (PDT)
+Date:   Mon, 15 Jul 2019 12:59:46 -0700
 In-Reply-To: <20190715195946.223443-1-matthewgarrett@google.com>
-Message-Id: <20190715195946.223443-29-matthewgarrett@google.com>
+Message-Id: <20190715195946.223443-30-matthewgarrett@google.com>
 Mime-Version: 1.0
 References: <20190715195946.223443-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH V35 28/29] efi: Restrict efivar_ssdt_load when the kernel is
- locked down
+Subject: [PATCH V35 29/29] lockdown: Print current->comm in restriction messages
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     jmorris@namei.org
 Cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
         Matthew Garrett <matthewgarrett@google.com>,
+        David Howells <dhowells@redhat.com>,
         Matthew Garrett <mjg59@google.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Kees Cook <keescook@chromium.org>, linux-efi@vger.kernel.org
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-efivar_ssdt_load allows the kernel to import arbitrary ACPI code from an
-EFI variable, which gives arbitrary code execution in ring 0. Prevent
-that when the kernel is locked down.
+Print the content of current->comm in messages generated by lockdown to
+indicate a restriction that was hit.  This makes it a bit easier to find
+out what caused the message.
 
+The message now patterned something like:
+
+        Lockdown: <comm>: <what> is restricted; see man kernel_lockdown.7
+
+Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Matthew Garrett <mjg59@google.com>
-Acked-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc: linux-efi@vger.kernel.org
 ---
- drivers/firmware/efi/efi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/proc/kcore.c              | 5 +++--
+ security/lockdown/lockdown.c | 8 ++++++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index ad3b1f4866b3..776f479e5499 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -30,6 +30,7 @@
- #include <linux/acpi.h>
- #include <linux/ucs2_string.h>
- #include <linux/memblock.h>
-+#include <linux/security.h>
- 
- #include <asm/early_ioremap.h>
- 
-@@ -242,6 +243,11 @@ static void generic_ops_unregister(void)
- static char efivar_ssdt[EFIVAR_SSDT_NAME_MAX] __initdata;
- static int __init efivar_ssdt_setup(char *str)
+diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+index ee2c576cc94e..e2ed8e08cc7a 100644
+--- a/fs/proc/kcore.c
++++ b/fs/proc/kcore.c
+@@ -548,11 +548,12 @@ static int open_kcore(struct inode *inode, struct file *filp)
  {
-+	int ret = security_locked_down(LOCKDOWN_ACPI_TABLES);
-+
+ 	int ret = security_locked_down(LOCKDOWN_KCORE);
+ 
+-	if (ret)
+-		return ret;
+ 	if (!capable(CAP_SYS_RAWIO))
+ 		return -EPERM;
+ 
 +	if (ret)
 +		return ret;
 +
- 	if (strlen(str) < sizeof(efivar_ssdt))
- 		memcpy(efivar_ssdt, str, strlen(str));
- 	else
+ 	filp->private_data = kmalloc(PAGE_SIZE, GFP_KERNEL);
+ 	if (!filp->private_data)
+ 		return -ENOMEM;
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index fd7cdbddd814..bbf30d34542c 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -81,10 +81,14 @@ early_param("lockdown", lockdown_param);
+  */
+ static int lockdown_is_locked_down(enum lockdown_reason what)
+ {
++	if (WARN(what >= LOCKDOWN_CONFIDENTIALITY_MAX,
++		 "Invalid lockdown reason"))
++		return -EPERM;
++
+ 	if (kernel_locked_down >= what) {
+ 		if (lockdown_reasons[what])
+-			pr_notice("Lockdown: %s is restricted; see man kernel_lockdown.7\n",
+-				  lockdown_reasons[what]);
++			pr_notice("Lockdown: %s: %s is restricted; see man kernel_lockdown.7\n",
++				  current->comm, lockdown_reasons[what]);
+ 		return -EPERM;
+ 	}
+ 
 -- 
 2.22.0.510.g264f2c817a-goog
 
