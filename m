@@ -2,67 +2,94 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 062AC687CA
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 13:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5842068CD1
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2019 15:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729958AbfGOLEV (ORCPT
+        id S1732446AbfGONx4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 15 Jul 2019 07:04:21 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46324 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729952AbfGOLES (ORCPT
+        Mon, 15 Jul 2019 09:53:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52594 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732442AbfGONx4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 15 Jul 2019 07:04:18 -0400
-Received: by mail-oi1-f196.google.com with SMTP id 65so12276530oid.13
-        for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2019 04:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=Iux65787KeJtZlk/UWQ8a71sdq3L+JuOBHwZwxVHUOu0Hal0brUmaUtWDT+1EakAhq
-         MtJF/vbEQagCDLqdjzXV0tE8x5YNwPsclB57z/jA+URpkAaidKGibNAiJ897B2Q2rv9p
-         uYOBtZylJRmtRio8wDP4GwRiBknU84/FmWsMFw620mFEJwR9vSM1QlmEIUdghWeLiQPg
-         3/o6A/ASY/U2XQTJeOVMsZoeyZcCfYvLw2Rbw2pE/fk67uX5NyEzWB6tv7TG5MeHZvc/
-         X3yp2nduS0Os162TiWKhkMGOmC5wMIt1cVEoe4V7hwUEXyYLehvgYaVidvFk20QbqjFn
-         kL9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
-        b=Kt2ZCuNLX3cfvnq3qOZ3qUdf99YLesygGCdvTjXe+/HnNNplikSAZFgmVxsJOFFo2n
-         m+DB5SxBBZ0rS9p+5b6SOUUnuiWEV08fYXTmVDkURHCui9e8tTKv5c7SAjX0c+SiU72O
-         FHqVhdYcjaoLIfj7zu/aik6YkiJRrgzpw6v/Y/5RDZ8W3zX2TR1UeOo7llbi/G8Q2clq
-         djPNEVZTuPTtNZ7NtbHVD+64+3f4wymE5Oq7kH5rv5LhKst6FW4GH+e0HOM2f7tss/JM
-         ZGKHqYBOs/5JRaJnQ8qUK5LVyELyw66ldV3YMU28B2jFw0FKNvnB3KnjE71JynWxrX9f
-         orrg==
-X-Gm-Message-State: APjAAAX1WQ1sqE4j8Ib+KUhQpCKoZfyevfG5E8P8ASMa4fQstf8CFAtx
-        FeRCR9C+EKrTKF2lG/YFMvIr7iUJyDzQEr+v9Zhnp0p0SGw=
-X-Google-Smtp-Source: APXvYqwI9SCHvCHLnvHckfwL+oW1shcNAvZVS/wk3iQ3LTmyEMELfYQBoBiEv/cUvggIHp2fQao9ul2L5mSBnKj2EDA=
-X-Received: by 2002:a63:ad07:: with SMTP id g7mr24480194pgf.405.1563188657092;
- Mon, 15 Jul 2019 04:04:17 -0700 (PDT)
+        Mon, 15 Jul 2019 09:53:56 -0400
+Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 84E202067C;
+        Mon, 15 Jul 2019 13:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563198835;
+        bh=GvqaO8Hfj0YZ4S9SDbciSuBjpZBuybUg36GS1rxr7mk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=087873uw/4BcCTV1ksCIXhcvEYHZ5cSdi2/TQpoj+Ay3oxWF4d3odiOP7e2RRjAdy
+         v7w7XZo8YMPTM1A1ZvE8tjTzGdNM1+AlqioSbgVw45Di9OqV4Vwczu4Sha/JjQ2IEC
+         Xoou+WcOsOhG3DVTK+hC+/Ip8/JJMxqskwLdjiZA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 116/249] integrity: Fix __integrity_init_keyring() section mismatch
+Date:   Mon, 15 Jul 2019 09:44:41 -0400
+Message-Id: <20190715134655.4076-116-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
+References: <20190715134655.4076-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:04:16
- -0700 (PDT)
-From:   Donald Douglas <ddouglasng@gmail.com>
-Date:   Mon, 15 Jul 2019 04:04:16 -0700
-Message-ID: <CALVR28EP4VMYZDqzau6uFTJmxHs6we+nYre3JstaZ5qSsvppFQ@mail.gmail.com>
-Subject: Kindly Respond
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello,
-I am Barr Fredrick Mbogo a business consultant i have a lucrative
-business to discuss with you from the Eastern part of Africa Uganda to
-be precise aimed at agreed percentage upon your acceptance of my hand
-in business and friendship. Kindly respond to me if you are interested
-to partner with me for an update. Very important.
+From: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Yours Sincerely,
-Donald Douglas,
-For,
-Barr Frederick Mbogo
-Legal Consultant.
-Reply to: barrfredmbogo@consultant.com
+[ Upstream commit 8c655784e2cf59cb6140759b8b546d98261d1ad9 ]
+
+With gcc-4.6.3:
+
+    WARNING: vmlinux.o(.text.unlikely+0x24c64): Section mismatch in reference from the function __integrity_init_keyring() to the function .init.text:set_platform_trusted_keys()
+    The function __integrity_init_keyring() references
+    the function __init set_platform_trusted_keys().
+    This is often because __integrity_init_keyring lacks a __init
+    annotation or the annotation of set_platform_trusted_keys is wrong.
+
+Indeed, if the compiler decides not to inline __integrity_init_keyring(),
+a warning is issued.
+
+Fix this by adding the missing __init annotation.
+
+Fixes: 9dc92c45177ab70e ("integrity: Define a trusted platform keyring")
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+Reviewed-by: James Morris <jamorris@linux.microsoft.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ security/integrity/digsig.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index 4582bc26770a..868ade3e8970 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -69,8 +69,9 @@ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+ 	return -EOPNOTSUPP;
+ }
+ 
+-static int __integrity_init_keyring(const unsigned int id, key_perm_t perm,
+-				    struct key_restriction *restriction)
++static int __init __integrity_init_keyring(const unsigned int id,
++					   key_perm_t perm,
++					   struct key_restriction *restriction)
+ {
+ 	const struct cred *cred = current_cred();
+ 	int err = 0;
+-- 
+2.20.1
+
