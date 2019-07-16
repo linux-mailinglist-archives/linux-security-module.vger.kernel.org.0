@@ -2,91 +2,55 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4F36AF9D
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2019 21:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892EC6B003
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2019 21:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388566AbfGPTOU (ORCPT
+        id S2388866AbfGPTkU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 16 Jul 2019 15:14:20 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40516 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728495AbfGPTOT (ORCPT
+        Tue, 16 Jul 2019 15:40:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35884 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388878AbfGPTkT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 16 Jul 2019 15:14:19 -0400
-Received: by mail-lj1-f193.google.com with SMTP id m8so21057890lji.7
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jul 2019 12:14:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rzi+JrWYOGsut3jRglpj5XGk5dwbip2b5zr2IEOORsQ=;
-        b=NDP+AiRbqFoE4Bm5bbT/neoI5d4JAEi6PzptAWbUc53rXNNZVneAKqYHClpnBnf9HW
-         tLNwRGBOa4ywIBb+yKxs/Nq5Jvc/V3ekIE62VXA2NnPUnWJBJz1u5qBjSMBZ7AKObDZc
-         KEv2XwVHDbea6qyaoed63pZMua/dqh/CKoKTc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rzi+JrWYOGsut3jRglpj5XGk5dwbip2b5zr2IEOORsQ=;
-        b=sluHItxFeMajjAMyptjSescOXwdmN1vM6a8VxcVotaiBp0ts+8MN05fNSpD/Etqm/S
-         F1omj+1sJpc/3sKqddvz3+AtIrjbLHMrsfgu9wg53Asm0SwRnlF5cua7zHeBaEQ0lTU0
-         2R1Yly73az4JF9xf8vB4qbn1HZO0o29fHVvhRcX2LwK9zsTETwz5/KwuQOdP5e9RMdq+
-         lKP2E4oTwXyKZQrgdVsAgYzeO3Ny9+gqAloKw9CRUaLzNFeTC/59feQnBu42zIN1IpSN
-         Hd2JmUOoBFUePSq/EfR5ugDLe5qMaHxN1oGpSv0mlye7Q2BNnSz4eTtIYampT7yb44Hd
-         4jwg==
-X-Gm-Message-State: APjAAAWX/CcJZHCjeBHTvIKXhUzHBC4RM0k1BSGvYHxfUuEVTbC0IjzJ
-        bm4Nc+NqB1cKaKFOUqjOA9br0rJN72s=
-X-Google-Smtp-Source: APXvYqzNRiqdgp9ZB7cP/3LvprNa9B0vci6SpFya/DIdFKLAAjwsVNhG80OD+ApEhYynqcuSUl+lcA==
-X-Received: by 2002:a2e:7315:: with SMTP id o21mr11018179ljc.3.1563304457233;
-        Tue, 16 Jul 2019 12:14:17 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id p15sm3984806lji.80.2019.07.16.12.14.16
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 12:14:16 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id 62so9669040lfa.8
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jul 2019 12:14:16 -0700 (PDT)
-X-Received: by 2002:ac2:4839:: with SMTP id 25mr15611221lft.79.1563304456035;
- Tue, 16 Jul 2019 12:14:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJ-EccPGqp4PmRkFk505QhDKHWn-ajxS0__Nk9VS32jV_+3Y2A@mail.gmail.com>
- <CAHk-=whY1J-LFvTa8ihiPNRSv1dwxPk9ycPCEhdcjsk7c=tGAw@mail.gmail.com>
-In-Reply-To: <CAHk-=whY1J-LFvTa8ihiPNRSv1dwxPk9ycPCEhdcjsk7c=tGAw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 16 Jul 2019 12:13:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wip4gKuWrh-1Dj-B-t5V5uGLj4NRCgHtVGJ0A9DOaDCNw@mail.gmail.com>
-Message-ID: <CAHk-=wip4gKuWrh-1Dj-B-t5V5uGLj4NRCgHtVGJ0A9DOaDCNw@mail.gmail.com>
+        Tue, 16 Jul 2019 15:40:19 -0400
 Subject: Re: [GIT PULL] SafeSetID LSM changes for 5.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563306018;
+        bh=bN+oPIpyG5yQRc1UOp9OsN9wQ+tN14n6Tz0myt6bt4Q=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=znNFF6ILmeJCJCMeqP3N+3aNxIwuCYtneYAhO0BYIY5hcw+Q6yrLl5Pkc7NClIxm4
+         CEJOPk40twh5aqH6561PBFvMC5XsPyvAfpe6bXwMqAZPqZjpNyl1Ie9tARpM7KvJbq
+         qsIf+UZlmH0zM8hnARZL4TeCSXXt/TBAiJXoftzs=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJ-EccPGqp4PmRkFk505QhDKHWn-ajxS0__Nk9VS32jV_+3Y2A@mail.gmail.com>
+References: <CAJ-EccPGqp4PmRkFk505QhDKHWn-ajxS0__Nk9VS32jV_+3Y2A@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJ-EccPGqp4PmRkFk505QhDKHWn-ajxS0__Nk9VS32jV_+3Y2A@mail.gmail.com>
+X-PR-Tracked-Remote: https://github.com/micah-morton/linux.git
+ tags/safesetid-5.3
+X-PR-Tracked-Commit-Id: e10337daefecb47209fd2af5f4fab0d1a370737f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1ec4013bab89058dcc594dfe7b5a20f5d46bbc5f
+Message-Id: <156330601855.24987.15351466493711255800.pr-tracker-bot@kernel.org>
+Date:   Tue, 16 Jul 2019 19:40:18 +0000
 To:     Micah Morton <mortonm@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     torvalds@linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jul 16, 2019 at 12:06 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
->  - Please use the "git pull-request" format and then add any extra
-> notes you feel are necessary
->
->    Yes, your pull request is *almost* git pull-request, but you seem
-> to have actively removed whitespace making it almost illegible. It's
-> really hard to pick out the line that has the actual git repository
-> address, because it's basically hidden inside one big blob of text.
+The pull request you sent on Mon, 15 Jul 2019 09:04:48 -0700:
 
-Extra note on this: you seem to have done "git pull-request" in a wide
-window, and then copied-and-pasted it into your MUA.
+> https://github.com/micah-morton/linux.git tags/safesetid-5.3
 
-So the diffstat lines are also very long, and then they line-wrap and
-it all looks nasty.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1ec4013bab89058dcc594dfe7b5a20f5d46bbc5f
 
-Avoid this by either using a file for the output (that you then edit
-for your own added messages), or using a normal 80x25 terminal or
-something.
+Thank you!
 
-I guess I should ask Junio to add a "--stat=80" to the upstream git
-request-pull script.
-
-                   Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
