@@ -2,53 +2,53 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6116D554
-	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jul 2019 21:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468CE6D4FE
+	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jul 2019 21:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391536AbfGRTqi (ORCPT
+        id S2391558AbfGRTof (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 18 Jul 2019 15:46:38 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:56142 "EHLO
+        Thu, 18 Jul 2019 15:44:35 -0400
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:55043 "EHLO
         mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391525AbfGRToc (ORCPT
+        with ESMTP id S2391549AbfGRTof (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 18 Jul 2019 15:44:32 -0400
-Received: by mail-pg1-f201.google.com with SMTP id z14so10236418pgr.22
-        for <linux-security-module@vger.kernel.org>; Thu, 18 Jul 2019 12:44:32 -0700 (PDT)
+        Thu, 18 Jul 2019 15:44:35 -0400
+Received: by mail-pg1-f201.google.com with SMTP id m17so8313506pgh.21
+        for <linux-security-module@vger.kernel.org>; Thu, 18 Jul 2019 12:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=oRvWsZp4PPUfRyX2ON14DSSZgIGsbQD9v/C1S79uaF4=;
-        b=GvCEMMQFq8YVuuH/+JijpqMd2l2xH6x1LMaUu/SVjMGJOGBby5tLLNPrZj6pXsPLEd
-         ZFSxIg5suyCmyTsSQVYRKUaR8xC1f+4xFHsqFVxXoTpsAXKbowhu4vjYgddRbVmUa8Fl
-         EZumOubz5h8kwiV9SmskAV3kv23BydkTpRqFDT7+m0Jan8LgXyeIt/aD+OoaQFM7iQsz
-         cL9+qzHdKAITKq0WPFZbrXvRFsWQN5pwTr3sjOcaotgjM2trQ6fZaMf71DjWW/VGs3KQ
-         YKJqe8gmiPzo6DojHAdNNYOGay8QxOvfeaIXCY+038zQeV+by699BL8r8awvLWH12EpO
-         45Tg==
+        bh=eu667FWqsyv1eiS+2MgLd1pI1Yi90NnjxQ1QKJHeSZs=;
+        b=ohrtYog4gGPeInnSgPNEoQxrDXPaBrUloNn0kHObJFwMww/WL/1QitIjfRTdQ7Io3l
+         3SFmno+zU0LHqnjj1iwf/EcXC0mkATM1jwJSktN3EWogC7qhjF9T+4Vc2XXS/dPtmlKX
+         mz5jQECVWQ2KxykCHqcx7Q4Oj8ogBpTDoACnxdCUgqa3Ot4HPl0AkiJXF4fk6mY7//oL
+         7PbCHo+Yh6dVRTJvVO6GMzSfDJ2XD8gX5qc9TCAmUHKXJA2d2DOUhz+oq/Fg4W64rGof
+         PvjyvsAmKWx9isgpl4njBFhx7acc40bmEcgvG4s2a7Usp9NXUY50lVDgZ8lf+u3ipVh8
+         +y9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=oRvWsZp4PPUfRyX2ON14DSSZgIGsbQD9v/C1S79uaF4=;
-        b=uf3/vD1Ick7UpslDFmvMZUtwUSGGb/uQHkOUFgeNL7IrKKhVWrcyIw54kvG4Qj9flY
-         OcIcJeHUqHCb1+rgYGFHdE2/NUoyoNf1KCBroOuLg4e0839rSOwrtHajkbDedMGNds4e
-         ybm6dlhPn4uzB8o9qmOQZlsPU6GMEONMoHJZY6Te4YNZb/B+9I5FY8I5gTsfK7US/r0O
-         sbHBKgMM3+x5/tRPifBwbCHJQx8k4DG+Zsp6MR3qNfURdZxtzseRJtHM7iiAXlHLuCMi
-         HV0Mp9vTftfz8korhlFCEHBdWiqqd7ZqvZZYZJZ/cbtizB1Vd+JksT3p7tbym6Zt81FY
-         yOtg==
-X-Gm-Message-State: APjAAAXbmqY+TRnnEMz0Bb+pKf2prerLEWBtf0ZLsqt/3nC25qM8s4x1
-        GhrCT1UocP0EU3CnAHo82wNCAh102hbfDB2+nXejGw==
-X-Google-Smtp-Source: APXvYqwtMjJhE9QZ+9DHXbweIeAox0CuZXW9cE82ADx+CCjrC+PGj+9gFGrydyeYFQYQ27UGyztfwVA2E/6h4peFZC3szg==
-X-Received: by 2002:a63:ce45:: with SMTP id r5mr24775979pgi.435.1563479071446;
- Thu, 18 Jul 2019 12:44:31 -0700 (PDT)
-Date:   Thu, 18 Jul 2019 12:43:51 -0700
+        bh=eu667FWqsyv1eiS+2MgLd1pI1Yi90NnjxQ1QKJHeSZs=;
+        b=jHJRd685cRnDtlvULhw9ysuR5a15Omo4JOZ6K/BniC0E0un3ToCOHwRzG/3tiJ8DjQ
+         jrFR4/g3sT+Oh0jxih8yHLTGQmNTCNTtz5t0bt5TKIZa25uvIGnDoM5VYxAXpvMH3TUn
+         KwvwNQZwVdwD4v3n82czznBH3f4HHQJQnPZqtRPMlwAcHfb7qMVnr8Ua0+7zCrtF5ZSD
+         5MnOHSQQ1fN3HvrxoPmwe+JUr7K6VqSiZuhA9G4Y5A3fYnyMblsWhmRIha/9a417sjKp
+         Hpuqaq/tLKQJh6WFR2CwMDzqbltz4/ajzeJhw53uC2p6j+oGbmju1GvKlMo9nRDTg1M+
+         2lYA==
+X-Gm-Message-State: APjAAAWOzV9Nv/vWcYmFKBl3QfyDbaeDOFEgfMlrHpO0viqmqXXF+q6H
+        z8yT4TiVdNesseHDKs5VoV0Je1IDbg4rpItR3f09Xg==
+X-Google-Smtp-Source: APXvYqz2hh3xf3NNVSMQwnKxLqxoPr5fEA/x4WWO1oTU5T/O29MD4PGWgIppNaZkbdLHJf6ADY0SDRBtGzSuhQYGFEqqag==
+X-Received: by 2002:a65:500d:: with SMTP id f13mr48703316pgo.151.1563479074121;
+ Thu, 18 Jul 2019 12:44:34 -0700 (PDT)
+Date:   Thu, 18 Jul 2019 12:43:52 -0700
 In-Reply-To: <20190718194415.108476-1-matthewgarrett@google.com>
-Message-Id: <20190718194415.108476-6-matthewgarrett@google.com>
+Message-Id: <20190718194415.108476-7-matthewgarrett@google.com>
 Mime-Version: 1.0
 References: <20190718194415.108476-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH V36 05/29] Restrict /dev/{mem,kmem,port} when the kernel is
+Subject: [PATCH V36 06/29] kexec_load: Disable at runtime if the kernel is
  locked down
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     jmorris@namei.org
@@ -57,7 +57,8 @@ Cc:     linux-security-module@vger.kernel.org,
         Matthew Garrett <mjg59@srcf.ucam.org>,
         David Howells <dhowells@redhat.com>,
         Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org
+        Dave Young <dyoung@redhat.com>,
+        Kees Cook <keescook@chromium.org>, kexec@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
@@ -65,73 +66,64 @@ List-ID: <linux-security-module.vger.kernel.org>
 
 From: Matthew Garrett <mjg59@srcf.ucam.org>
 
-Allowing users to read and write to core kernel memory makes it possible
-for the kernel to be subverted, avoiding module loading restrictions, and
-also to steal cryptographic information.
+The kexec_load() syscall permits the loading and execution of arbitrary
+code in ring 0, which is something that lock-down is meant to prevent. It
+makes sense to disable kexec_load() in this situation.
 
-Disallow /dev/mem and /dev/kmem from being opened this when the kernel has
-been locked down to prevent this.
-
-Also disallow /dev/port from being opened to prevent raw ioport access and
-thus DMA from being used to accomplish the same thing.
+This does not affect kexec_file_load() syscall which can check for a
+signature on the image to be booted.
 
 Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Matthew Garrett <mjg59@google.com>
+Acked-by: Dave Young <dyoung@redhat.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: x86@kernel.org
+cc: kexec@lists.infradead.org
 ---
- drivers/char/mem.c           | 7 +++++--
  include/linux/security.h     | 1 +
+ kernel/kexec.c               | 8 ++++++++
  security/lockdown/lockdown.c | 1 +
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ 3 files changed, 10 insertions(+)
 
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index b08dc50f9f26..d0148aee1aab 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -29,8 +29,8 @@
- #include <linux/export.h>
- #include <linux/io.h>
- #include <linux/uio.h>
--
- #include <linux/uaccess.h>
-+#include <linux/security.h>
- 
- #ifdef CONFIG_IA64
- # include <linux/efi.h>
-@@ -786,7 +786,10 @@ static loff_t memory_lseek(struct file *file, loff_t offset, int orig)
- 
- static int open_port(struct inode *inode, struct file *filp)
- {
--	return capable(CAP_SYS_RAWIO) ? 0 : -EPERM;
-+	if (!capable(CAP_SYS_RAWIO))
-+		return -EPERM;
-+
-+	return security_locked_down(LOCKDOWN_DEV_MEM);
- }
- 
- #define zero_lseek	null_lseek
 diff --git a/include/linux/security.h b/include/linux/security.h
-index 8e70063074a1..9458152601b5 100644
+index 9458152601b5..69c5de539e9a 100644
 --- a/include/linux/security.h
 +++ b/include/linux/security.h
-@@ -104,6 +104,7 @@ enum lsm_event {
- enum lockdown_reason {
+@@ -105,6 +105,7 @@ enum lockdown_reason {
  	LOCKDOWN_NONE,
  	LOCKDOWN_MODULE_SIGNATURE,
-+	LOCKDOWN_DEV_MEM,
+ 	LOCKDOWN_DEV_MEM,
++	LOCKDOWN_KEXEC,
  	LOCKDOWN_INTEGRITY_MAX,
  	LOCKDOWN_CONFIDENTIALITY_MAX,
  };
+diff --git a/kernel/kexec.c b/kernel/kexec.c
+index 1b018f1a6e0d..bc933c0db9bf 100644
+--- a/kernel/kexec.c
++++ b/kernel/kexec.c
+@@ -205,6 +205,14 @@ static inline int kexec_load_check(unsigned long nr_segments,
+ 	if (result < 0)
+ 		return result;
+ 
++	/*
++	 * kexec can be used to circumvent module loading restrictions, so
++	 * prevent loading in that case
++	 */
++	result = security_locked_down(LOCKDOWN_KEXEC);
++	if (result)
++		return result;
++
+ 	/*
+ 	 * Verify we have a legal set of flags
+ 	 * This leaves us room for future extensions.
 diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 2c53fd9f5c9b..d2ef29d9f0b2 100644
+index d2ef29d9f0b2..6f302c156bc8 100644
 --- a/security/lockdown/lockdown.c
 +++ b/security/lockdown/lockdown.c
-@@ -19,6 +19,7 @@ static enum lockdown_reason kernel_locked_down;
- static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+@@ -20,6 +20,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
  	[LOCKDOWN_NONE] = "none",
  	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
-+	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
+ 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
++	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
  	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
  };
