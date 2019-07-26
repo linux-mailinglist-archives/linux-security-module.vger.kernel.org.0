@@ -2,90 +2,90 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A70574DFB
-	for <lists+linux-security-module@lfdr.de>; Thu, 25 Jul 2019 14:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43D975CCE
+	for <lists+linux-security-module@lfdr.de>; Fri, 26 Jul 2019 04:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729373AbfGYMRI (ORCPT
+        id S1725942AbfGZCOt (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 25 Jul 2019 08:17:08 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:54535 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729566AbfGYMRI (ORCPT
+        Thu, 25 Jul 2019 22:14:49 -0400
+Received: from condef-01.nifty.com ([202.248.20.66]:57775 "EHLO
+        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbfGZCOt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 25 Jul 2019 08:17:08 -0400
-Received: by mail-pf1-f202.google.com with SMTP id y66so30753028pfb.21
-        for <linux-security-module@vger.kernel.org>; Thu, 25 Jul 2019 05:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:cc;
-        bh=ljHSm6Zzu7WQyG9Dr0/JwBFIPwkJWPZ7lmDnCVtXIlE=;
-        b=Akqpe6Ca2kvfIFTvnoJ+c5OIYtAWTfjYFlxZ91JhehPR4MBfJm9ywhoCD3lGefBXW0
-         n7SlpQFWfYgG4Aeujtxv2t7rdZa2kXKrO9hHdeloLRjBRpBGpMGC+IgBRq2hYlz74cwT
-         010HpW9jL8W5gbrRGoEO3Y5fFruckvISszQcCXS5Fakkmmuet7C21J+u8swlLNVNjOq5
-         Y1f7sdvOFzNM443uu1ysPbXSRudZDiBnFMX+WjpLHVbB5ENiuVLz2sPMw8Llub0ae2DF
-         odjWLHT2fIwPD/mrVsCYEKgBnlnMvrlYvMqvBgUUd2lfogU6I9BnZ/kduh+R4OJE/trK
-         0jzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
-        bh=ljHSm6Zzu7WQyG9Dr0/JwBFIPwkJWPZ7lmDnCVtXIlE=;
-        b=FuJ+I/e/JFxgOY5sGDGbTvb8jV1XeI0FGYnbwrxiCPWFJbwmMbOEQ/DwaTPJwW5Bzw
-         zbxhiCSgQAmkFYb/DfuvwnijMy7OUowU2Flxpk9ToR0P3LWoJ++jaZGJcmOFtNAEPu3w
-         8uYBOw9mjoIihpsoDdokZgYqrhha2J1k7a6nzkA5/MNDKgq4ago/L6JP/cF9AbEi3Ucq
-         vWx7cwhHIiMKU+L6qne0P4ZI3TuuyjmPCLug4+qp3XCYIedMlOikleRV5e/iu737MkHx
-         HgMaxqf6Sd0KaiPJ95P01NmWx67JDUQ4Ze1WfVvIBTDOn4XPoMcG8qkys4H47uvSiyWt
-         WPGg==
-X-Gm-Message-State: APjAAAXhNB/6Fjlb314R8B3dijrYXl/un7zaUZxMxecvOWA4w7E4LbMh
-        kk6tKH+8RBMoQbatyK5DJJkcLG0wK1Y=
-X-Google-Smtp-Source: APXvYqz7yDmnI8s4vZuY1Ns1rw5n80XNvB05UiBPhLd8LH+m+RekLRU9SaXAoHp8e/m+hAePiBCX3thvsdg=
-X-Received: by 2002:a63:cb4f:: with SMTP id m15mr10449746pgi.100.1564057027478;
- Thu, 25 Jul 2019 05:17:07 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 14:17:03 +0200
-Message-Id: <20190725121703.210874-1-glider@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.22.0.657.g960e92d24f-goog
-Subject: [PATCH] test_meminit: use GFP_ATOMIC in RCU critical section
-From:   Alexander Potapenko <glider@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Thu, 25 Jul 2019 22:14:49 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-01.nifty.com with ESMTP id x6Q2BkHP024719;
+        Fri, 26 Jul 2019 11:11:46 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id x6Q2B03j020523;
+        Fri, 26 Jul 2019 11:11:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x6Q2B03j020523
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1564107062;
+        bh=HtcIZbZ1cRNbQwQ8xFJxK6kDpAQ+ysB+8/CuJSWfBmU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dUApB1VGtbZ7YUhYHnmVTvbvV4McLS446urzu4TTIrCx6Q3uzjOXkejckWvxWj0Ny
+         NVy979g1POs6m9GgEH1PVmliV+NSBj2CT5XFuFq4DqXXr0TZGArMAncmaLAO5uOXl6
+         tOoAnXg9snAbHp5BoxQKYV37oYvFCTgTb0PbISJNh7xRO1megtbpTk9cVECvy7jJ/D
+         f6xwBqVY73xZCbjtmlakoN05mP8V4G/tBCqg6qpiRYSQwbCNRY4/drTsYrvrQeLJz7
+         MdYDS8mOf4YiQ91NP+RL1ed6bIiuPQTQ7EVudW5KAysyzD88m7WsQs0JmF/BqkNl17
+         9a1YdDVcwhWKQ==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Dave Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+Subject: [PATCH 1/5] integrity: remove unneeded, broken attempt to add -fshort-wchar
+Date:   Fri, 26 Jul 2019 11:10:54 +0900
+Message-Id: <20190726021058.4212-2-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190726021058.4212-1-yamada.masahiro@socionext.com>
+References: <20190726021058.4212-1-yamada.masahiro@socionext.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-kmalloc() shouldn't sleep while in RCU critical section, therefore
-use GFP_ATOMIC instead of GFP_KERNEL.
+I guess commit 15ea0e1e3e18 ("efi: Import certificates from UEFI Secure
+Boot") attempted to add -fshort-wchar for building load_uefi.o, but it
+has never worked as intended.
 
-The bug has been spotted by the 0day kernel testing robot.
+load_uefi.o is created in the platform_certs/ sub-directory. If you
+really want to add -fshort-wchar, the correct code is:
 
-Fixes: 7e659650cbda ("lib: introduce test_meminit module")
-Signed-off-by: Alexander Potapenko <glider@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-security-module@vger.kernel.org
+  $(obj)/platform_certs/load_uefi.o: KBUILD_CFLAGS += -fshort-wchar
+
+or, in a more Kbuild-ish way:
+
+  CFLAGS_load_uefi.o := -fshort-wchar
+
+But, you do not need to fix it.
+
+Commit 8c97023cf051 ("Kbuild: use -fshort-wchar globally") had already
+added -fshort-wchar globally. This code was unneeded in the first place.
+
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
- lib/test_meminit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/test_meminit.c b/lib/test_meminit.c
-index 62d19f270cad..9729f271d150 100644
---- a/lib/test_meminit.c
-+++ b/lib/test_meminit.c
-@@ -222,7 +222,7 @@ static int __init do_kmem_cache_size(size_t size, bool want_ctor,
- 		 * Copy the buffer to check that it's not wiped on
- 		 * free().
- 		 */
--		buf_copy = kmalloc(size, GFP_KERNEL);
-+		buf_copy = kmalloc(size, GFP_ATOMIC);
- 		if (buf_copy)
- 			memcpy(buf_copy, buf, size);
+ security/integrity/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+index 19faace69644..b6d6273a4176 100644
+--- a/security/integrity/Makefile
++++ b/security/integrity/Makefile
+@@ -13,7 +13,6 @@ integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyrin
+ integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
+ 					platform_certs/load_uefi.o
+ integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
+-$(obj)/load_uefi.o: KBUILD_CFLAGS += -fshort-wchar
  
+ subdir-$(CONFIG_IMA)			+= ima
+ obj-$(CONFIG_IMA)			+= ima/
 -- 
-2.22.0.657.g960e92d24f-goog
+2.17.1
 
