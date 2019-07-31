@@ -2,125 +2,131 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF4F7CC83
-	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2019 21:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C477CCA4
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2019 21:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729381AbfGaTJm (ORCPT
+        id S1730690AbfGaTTY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 31 Jul 2019 15:09:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727520AbfGaTJm (ORCPT
+        Wed, 31 Jul 2019 15:19:24 -0400
+Received: from gateway23.websitewelcome.com ([192.185.49.218]:14242 "EHLO
+        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730029AbfGaTTY (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 31 Jul 2019 15:09:42 -0400
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7FC762182B
-        for <linux-security-module@vger.kernel.org>; Wed, 31 Jul 2019 19:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564600180;
-        bh=5sbq1CUz/4Np8diMsPeYBJ+i1aJj9MKsghvG1UWBzjg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EZHhqpan5TKtpQ81oKj2cKstineoX3GVqcoD1rjnhWw5RVfbdFLFCKTanF5OehRSW
-         8TQ2MuDoWX2jmbV2Dae5nCcCv29C/K5OsMB9sm1vxJGaAO15N9x3A195qJZF63jmlj
-         JfJeMOXlLCcPc1TTIJ7EWgPOk06X3UAQnocRvKI8=
-Received: by mail-wm1-f45.google.com with SMTP id h19so1940098wme.0
-        for <linux-security-module@vger.kernel.org>; Wed, 31 Jul 2019 12:09:40 -0700 (PDT)
-X-Gm-Message-State: APjAAAVleIYHYtssJigqPO6GVQrtZZnxrWtj93mvUU23s1mhcMwWkTYf
-        zp825YzksQs/j9rnM2FVVCmOEmHxHouflgo/vfbaFA==
-X-Google-Smtp-Source: APXvYqx4zb8LrcibSKUodOi60ie226tvSHupyQ0d4LTQVRZ4SeTKKUMFrOQKYUOpT8Ag2AxIjIWeCiufncu+lKbqMAs=
-X-Received: by 2002:a1c:9a53:: with SMTP id c80mr51242084wme.173.1564600178852;
- Wed, 31 Jul 2019 12:09:38 -0700 (PDT)
+        Wed, 31 Jul 2019 15:19:24 -0400
+X-Greylist: delayed 1463 seconds by postgrey-1.27 at vger.kernel.org; Wed, 31 Jul 2019 15:19:23 EDT
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 15F345AD9
+        for <linux-security-module@vger.kernel.org>; Wed, 31 Jul 2019 13:55:00 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id stkahJoEC4FKpstkahTGkh; Wed, 31 Jul 2019 13:55:00 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KIJv1aOM1ysMzR07N3FqA1hGoliaxCsgaIx5trxif/g=; b=akhndPKOuVlMO4SCbZd6JPHzEY
+        0WMX7pBKsNJEwCHoZ1mjnjO422FmDfNANLZT7NXHmhFt/fTdPpP7Qppqqlahn5yPCGb7dKp3/r6Hq
+        M4KEUSr0BLrBHAfGB67bqI2pGJNZya+BTuty+ycZaOxN02KT69Pzqh5f4iDY5GrYZtOgF0Lv2w5G0
+        ORyp7lcPiFSSMThZZf/D+E2b/WYp8BSVLuMt8tzasDgRL9JiTZVosBnfNGU6Iz/XmXc8Lb/3C5o72
+        1uKtAWtB17diOLZfcOzhNszcNg6Tzch0Kj/9byNyFy4umMa7GNlzXvDPUuxBOOr5VqcmjY72KfyFD
+        bbcDzwEw==;
+Received: from [187.192.11.120] (port=38908 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hstkY-003ws3-UA; Wed, 31 Jul 2019 13:54:59 -0500
+Date:   Wed, 31 Jul 2019 13:54:57 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] tomoyo: common: Fix potential Spectre v1 vulnerability
+Message-ID: <20190731185457.GA21407@embeddedor>
 MIME-Version: 1.0
-References: <20190627201923.2589391-1-songliubraving@fb.com>
- <20190627201923.2589391-2-songliubraving@fb.com> <21894f45-70d8-dfca-8c02-044f776c5e05@kernel.org>
- <3C595328-3ABE-4421-9772-8D41094A4F57@fb.com> <CALCETrWBnH4Q43POU8cQ7YMjb9LioK28FDEQf7aHZbdf1eBZWg@mail.gmail.com>
- <0DE7F23E-9CD2-4F03-82B5-835506B59056@fb.com> <CALCETrWBWbNFJvsTCeUchu3BZJ3SH3dvtXLUB2EhnPrzFfsLNA@mail.gmail.com>
- <201907021115.DCD56BBABB@keescook> <CALCETrXTta26CTtEDnzvtd03-WOGdXcnsAogP8JjLkcj4-mHvg@mail.gmail.com>
- <4A7A225A-6C23-4C0F-9A95-7C6C56B281ED@fb.com> <CALCETrX2bMnwC6_t4b_G-hzJSfMPrkK4YKs5ebcecv2LJ0rt3w@mail.gmail.com>
- <514D5453-0AEE-420F-AEB6-3F4F58C62E7E@fb.com> <1DE886F3-3982-45DE-B545-67AD6A4871AB@amacapital.net>
- <7F51F8B8-CF4C-4D82-AAE1-F0F28951DB7F@fb.com> <77354A95-4107-41A7-8936-D144F01C3CA4@fb.com>
- <369476A8-4CE1-43DA-9239-06437C0384C7@fb.com> <CALCETrUpVMrk7aaf0trfg9AfZ4fy279uJgZH7V+gZzjFw=hUxA@mail.gmail.com>
- <D4040C0C-47D6-4852-933C-59EB53C05242@fb.com>
-In-Reply-To: <D4040C0C-47D6-4852-933C-59EB53C05242@fb.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 31 Jul 2019 12:09:27 -0700
-X-Gmail-Original-Message-ID: <CALCETrVoZL1YGUxx3kM-d21TWVRKdKw=f2B8aE5wc2zmX1cQ4g@mail.gmail.com>
-Message-ID: <CALCETrVoZL1YGUxx3kM-d21TWVRKdKw=f2B8aE5wc2zmX1cQ4g@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Jann Horn <jannh@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.11.120
+X-Source-L: No
+X-Exim-ID: 1hstkY-003ws3-UA
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.11.120]:38908
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 5
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Jul 31, 2019 at 1:10 AM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Jul 30, 2019, at 1:24 PM, Andy Lutomirski <luto@kernel.org> wrote:
-> >
-> > On Mon, Jul 29, 2019 at 10:07 PM Song Liu <songliubraving@fb.com> wrote:
-> >>
-> >> Hi Andy,
-> >>
-> >>> On Jul 27, 2019, at 11:20 AM, Song Liu <songliubraving@fb.com> wrote:
-> >>>
-> >>> Hi Andy,
-> >>>
-> >>>
->
-> [...]
->
-> >>>
-> >>
-> >> I would like more comments on this.
-> >>
-> >> Currently, bpf permission is more or less "root or nothing", which we
-> >> would like to change.
-> >>
-> >> The short term goal is to separate bpf from root, in other words, it is
-> >> "all or nothing". Special user space utilities, such as systemd, would
-> >> benefit from this. Once this is implemented, systemd can call sys_bpf()
-> >> when it is not running as root.
-> >
-> > As generally nasty as Linux capabilities are, this sounds like a good
-> > use for CAP_BPF_ADMIN.
->
-> I actually agree CAP_BPF_ADMIN makes sense. The hard part is to make
-> existing tools (setcap, getcap, etc.) and libraries aware of the new CAP.
+profile is controlled by user-space via /sys/kernel/security/tomoyo/profile,
+hence leading to a potential exploitation of the Spectre variant 1
+vulnerability.
 
-It's been done before -- it's not that hard.  IMO the main tricky bit
-would be try be somewhat careful about defining exactly what
-CAP_BPF_ADMIN does.
+This issue was detected with the help of Smatch:
 
-> > I don't see why you need to invent a whole new mechanism for this.
-> > The entire cgroup ecosystem outside bpf() does just fine using the
-> > write permission on files in cgroupfs to control access.  Why can't
-> > bpf() do the same thing?
->
-> It is easier to use write permission for BPF_PROG_ATTACH. But it is
-> not easy to do the same for other bpf commands: BPF_PROG_LOAD and
-> BPF_MAP_*. A lot of these commands don't have target concept. Maybe
-> we should have target concept for all these commands. But that is a
-> much bigger project. OTOH, "all or nothing" model allows all these
-> commands at once.
+security/tomoyo/common.c:498 tomoyo_assign_profile() warn: potential spectre issue 'ns->profile_ptr' [r] (local cap)
+security/tomoyo/common.c:499 tomoyo_assign_profile() warn: possible spectre second half.  'ptr'
+security/tomoyo/common.c:505 tomoyo_assign_profile() warn: possible spectre second half.  'ptr'
+security/tomoyo/common.c:523 tomoyo_assign_profile() warn: possible spectre second half.  'ptr'
 
-For BPF_PROG_LOAD, I admit I've never understood why permission is
-required at all.  I think that CAP_SYS_ADMIN or similar should be
-needed to get is_priv in the verifier, but I think that should mainly
-be useful for tracing, and that requires lots of privilege anyway.
-BPF_MAP_* is probably the trickiest part.  One solution would be some
-kind of bpffs, but I'm sure other solutions are possible.
+Fix this by sanitizing profile before using it to index ns->profile_ptr
+
+Notice that given that speculation windows are large, the policy is
+to kill the speculation on the first load and not worry if it can be
+completed with a dependent load/store [1].
+
+[1] https://lore.kernel.org/lkml/20180423164740.GY17484@dhcp22.suse.cz/
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ security/tomoyo/common.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/security/tomoyo/common.c b/security/tomoyo/common.c
+index dd3d5942e669..45858dbcfdb9 100644
+--- a/security/tomoyo/common.c
++++ b/security/tomoyo/common.c
+@@ -8,6 +8,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/slab.h>
+ #include <linux/security.h>
++#include <linux/nospec.h>
+ #include "common.h"
+ 
+ /* String table for operation mode. */
+@@ -488,13 +489,15 @@ static void tomoyo_print_number_union(struct tomoyo_io_buffer *head,
+  * Returns pointer to "struct tomoyo_profile" on success, NULL otherwise.
+  */
+ static struct tomoyo_profile *tomoyo_assign_profile
+-(struct tomoyo_policy_namespace *ns, const unsigned int profile)
++(struct tomoyo_policy_namespace *ns, unsigned int profile)
+ {
+ 	struct tomoyo_profile *ptr;
+ 	struct tomoyo_profile *entry;
+ 
+ 	if (profile >= TOMOYO_MAX_PROFILES)
+ 		return NULL;
++	profile = array_index_nospec(profile, TOMOYO_MAX_PROFILES);
++
+ 	ptr = ns->profile_ptr[profile];
+ 	if (ptr)
+ 		return ptr;
+-- 
+2.22.0
+
