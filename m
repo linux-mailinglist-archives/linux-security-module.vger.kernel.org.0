@@ -2,131 +2,138 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C477CCA4
-	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2019 21:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B93A7CC89
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2019 21:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730690AbfGaTTY (ORCPT
+        id S1727729AbfGaTLH (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 31 Jul 2019 15:19:24 -0400
-Received: from gateway23.websitewelcome.com ([192.185.49.218]:14242 "EHLO
-        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730029AbfGaTTY (ORCPT
+        Wed, 31 Jul 2019 15:11:07 -0400
+Received: from smtp-out.ssi.gouv.fr ([86.65.182.90]:62535 "EHLO
+        smtp-out.ssi.gouv.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbfGaTLH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 31 Jul 2019 15:19:24 -0400
-X-Greylist: delayed 1463 seconds by postgrey-1.27 at vger.kernel.org; Wed, 31 Jul 2019 15:19:23 EDT
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 15F345AD9
-        for <linux-security-module@vger.kernel.org>; Wed, 31 Jul 2019 13:55:00 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id stkahJoEC4FKpstkahTGkh; Wed, 31 Jul 2019 13:55:00 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KIJv1aOM1ysMzR07N3FqA1hGoliaxCsgaIx5trxif/g=; b=akhndPKOuVlMO4SCbZd6JPHzEY
-        0WMX7pBKsNJEwCHoZ1mjnjO422FmDfNANLZT7NXHmhFt/fTdPpP7Qppqqlahn5yPCGb7dKp3/r6Hq
-        M4KEUSr0BLrBHAfGB67bqI2pGJNZya+BTuty+ycZaOxN02KT69Pzqh5f4iDY5GrYZtOgF0Lv2w5G0
-        ORyp7lcPiFSSMThZZf/D+E2b/WYp8BSVLuMt8tzasDgRL9JiTZVosBnfNGU6Iz/XmXc8Lb/3C5o72
-        1uKtAWtB17diOLZfcOzhNszcNg6Tzch0Kj/9byNyFy4umMa7GNlzXvDPUuxBOOr5VqcmjY72KfyFD
-        bbcDzwEw==;
-Received: from [187.192.11.120] (port=38908 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hstkY-003ws3-UA; Wed, 31 Jul 2019 13:54:59 -0500
-Date:   Wed, 31 Jul 2019 13:54:57 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] tomoyo: common: Fix potential Spectre v1 vulnerability
-Message-ID: <20190731185457.GA21407@embeddedor>
+        Wed, 31 Jul 2019 15:11:07 -0400
+Received: from smtp-out.ssi.gouv.fr (localhost [127.0.0.1])
+        by smtp-out.ssi.gouv.fr (Postfix) with ESMTP id C4A35D0006F;
+        Wed, 31 Jul 2019 21:11:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ssi.gouv.fr;
+        s=20160407; t=1564600272;
+        bh=SfyOReVnNROKfZwttu5Z/yffmm1NmOYb+Llaggymyc8=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To:From:Subject;
+        b=K+A6FnWZ2vYNRnksB4DVngotvdOUnevIk1RgwU8g3acfbqfGiL+9aaVddGfaKtmBd
+         uyGl5LKbVpIhgAmJATK1quDSGs/yrgbPD3vZypBh4eV1IOprFYM3TcN6fCpGP9iwB+
+         buoLb8CFqVJFSQ9t3CGsOa6QfT35DGjx3zKHlWnjzdizlRyxmuvGdEzBXKzNTImfS4
+         cbUnlvyRDylsexMyiSnZRHK49fG+hix0qdkrLm+QnPmLjw5OT9wfojYgHZ51zZDP9x
+         YnTpRJDKUpZCNREaLFcyHUZZF4CznTLXSlXhyqbiErIEHjFrPFCNMVTaaGnCDp/VpT
+         qQQB+ogiJJWUQ==
+Subject: Re: [PATCH bpf-next v10 06/10] bpf,landlock: Add a new map type:
+ inode
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Drysdale <drysdale@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        John Johansen <john.johansen@canonical.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>, Tejun Heo <tj@kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thomas Graf <tgraf@suug.ch>, Tycho Andersen <tycho@tycho.ws>,
+        Will Drewry <wad@chromium.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>
+References: <20190721213116.23476-1-mic@digikod.net>
+ <20190721213116.23476-7-mic@digikod.net>
+ <20190727014048.3czy3n2hi6hfdy3m@ast-mbp.dhcp.thefacebook.com>
+ <a870c2c9-d2f7-e0fa-c8cc-35dbf8b5b87d@ssi.gouv.fr>
+ <CAADnVQLqkfVijWoOM29PxCL_yK6K0fr8B89r4c5EKgddevJhGQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>
+Message-ID: <59e8fab9-34df-0ebe-ca6b-8b34bf582b75@ssi.gouv.fr>
+Date:   Wed, 31 Jul 2019 21:11:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.11.120
-X-Source-L: No
-X-Exim-ID: 1hstkY-003ws3-UA
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.11.120]:38908
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 5
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+In-Reply-To: <CAADnVQLqkfVijWoOM29PxCL_yK6K0fr8B89r4c5EKgddevJhGQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-profile is controlled by user-space via /sys/kernel/security/tomoyo/profile,
-hence leading to a potential exploitation of the Spectre variant 1
-vulnerability.
 
-This issue was detected with the help of Smatch:
 
-security/tomoyo/common.c:498 tomoyo_assign_profile() warn: potential spectre issue 'ns->profile_ptr' [r] (local cap)
-security/tomoyo/common.c:499 tomoyo_assign_profile() warn: possible spectre second half.  'ptr'
-security/tomoyo/common.c:505 tomoyo_assign_profile() warn: possible spectre second half.  'ptr'
-security/tomoyo/common.c:523 tomoyo_assign_profile() warn: possible spectre second half.  'ptr'
+On 31/07/2019 20:58, Alexei Starovoitov wrote:
+> On Wed, Jul 31, 2019 at 11:46 AM Micka=C3=ABl Sala=C3=BCn
+> <mickael.salaun@ssi.gouv.fr> wrote:
+>>>> +    for (i =3D 0; i < htab->n_buckets; i++) {
+>>>> +            head =3D select_bucket(htab, i);
+>>>> +            hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
+>>>> +                    landlock_inode_remove_map(*((struct inode **)l->k=
+ey), map);
+>>>> +            }
+>>>> +    }
+>>>> +    htab_map_free(map);
+>>>> +}
+>>>
+>>> user space can delete the map.
+>>> that will trigger inode_htab_map_free() which will call
+>>> landlock_inode_remove_map().
+>>> which will simply itereate the list and delete from the list.
+>>
+>> landlock_inode_remove_map() removes the reference to the map (being
+>> freed) from the inode (with an RCU lock).
+>
+> I'm going to ignore everything else for now and focus only on this bit,
+> since it's fundamental issue to address before this discussion can
+> go any further.
+> rcu_lock is not a spin_lock. I'm pretty sure you know this.
+> But you're arguing that it's somehow protecting from the race
+> I mentioned above?
+>
 
-Fix this by sanitizing profile before using it to index ns->profile_ptr
+I was just clarifying your comment to avoid misunderstanding about what
+is being removed.
 
-Notice that given that speculation windows are large, the policy is
-to kill the speculation on the first load and not worry if it can be
-completed with a dependent load/store [1].
+As said in the full response, there is currently a race but, if I add a
+bpf_map_inc() call when the map is referenced by inode->security, then I
+don't see how a race could occur because such added map could only be
+freed in a security_inode_free() (as long as it retains a reference to
+this inode).
 
-[1] https://lore.kernel.org/lkml/20180423164740.GY17484@dhcp22.suse.cz/
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- security/tomoyo/common.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+--
+Micka=C3=ABl Sala=C3=BCn
+ANSSI/SDE/ST/LAM
 
-diff --git a/security/tomoyo/common.c b/security/tomoyo/common.c
-index dd3d5942e669..45858dbcfdb9 100644
---- a/security/tomoyo/common.c
-+++ b/security/tomoyo/common.c
-@@ -8,6 +8,7 @@
- #include <linux/uaccess.h>
- #include <linux/slab.h>
- #include <linux/security.h>
-+#include <linux/nospec.h>
- #include "common.h"
- 
- /* String table for operation mode. */
-@@ -488,13 +489,15 @@ static void tomoyo_print_number_union(struct tomoyo_io_buffer *head,
-  * Returns pointer to "struct tomoyo_profile" on success, NULL otherwise.
-  */
- static struct tomoyo_profile *tomoyo_assign_profile
--(struct tomoyo_policy_namespace *ns, const unsigned int profile)
-+(struct tomoyo_policy_namespace *ns, unsigned int profile)
- {
- 	struct tomoyo_profile *ptr;
- 	struct tomoyo_profile *entry;
- 
- 	if (profile >= TOMOYO_MAX_PROFILES)
- 		return NULL;
-+	profile = array_index_nospec(profile, TOMOYO_MAX_PROFILES);
-+
- 	ptr = ns->profile_ptr[profile];
- 	if (ptr)
- 		return ptr;
--- 
-2.22.0
-
+Les donn=C3=A9es =C3=A0 caract=C3=A8re personnel recueillies et trait=C3=A9=
+es dans le cadre de cet =C3=A9change, le sont =C3=A0 seule fin d=E2=80=99ex=
+=C3=A9cution d=E2=80=99une relation professionnelle et s=E2=80=99op=C3=A8re=
+nt dans cette seule finalit=C3=A9 et pour la dur=C3=A9e n=C3=A9cessaire =C3=
+=A0 cette relation. Si vous souhaitez faire usage de vos droits de consulta=
+tion, de rectification et de suppression de vos donn=C3=A9es, veuillez cont=
+acter contact.rgpd@sgdsn.gouv.fr. Si vous avez re=C3=A7u ce message par err=
+eur, nous vous remercions d=E2=80=99en informer l=E2=80=99exp=C3=A9diteur e=
+t de d=C3=A9truire le message. The personal data collected and processed du=
+ring this exchange aims solely at completing a business relationship and is=
+ limited to the necessary duration of that relationship. If you wish to use=
+ your rights of consultation, rectification and deletion of your data, plea=
+se contact: contact.rgpd@sgdsn.gouv.fr. If you have received this message i=
+n error, we thank you for informing the sender and destroying the message.
