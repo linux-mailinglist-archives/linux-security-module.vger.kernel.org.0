@@ -2,138 +2,82 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B93A7CC89
-	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2019 21:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAC67D017
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2019 23:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfGaTLH (ORCPT
+        id S1726421AbfGaVal (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 31 Jul 2019 15:11:07 -0400
-Received: from smtp-out.ssi.gouv.fr ([86.65.182.90]:62535 "EHLO
-        smtp-out.ssi.gouv.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbfGaTLH (ORCPT
+        Wed, 31 Jul 2019 17:30:41 -0400
+Received: from mail-io1-f43.google.com ([209.85.166.43]:44527 "EHLO
+        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726096AbfGaVal (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 31 Jul 2019 15:11:07 -0400
-Received: from smtp-out.ssi.gouv.fr (localhost [127.0.0.1])
-        by smtp-out.ssi.gouv.fr (Postfix) with ESMTP id C4A35D0006F;
-        Wed, 31 Jul 2019 21:11:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ssi.gouv.fr;
-        s=20160407; t=1564600272;
-        bh=SfyOReVnNROKfZwttu5Z/yffmm1NmOYb+Llaggymyc8=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To:From:Subject;
-        b=K+A6FnWZ2vYNRnksB4DVngotvdOUnevIk1RgwU8g3acfbqfGiL+9aaVddGfaKtmBd
-         uyGl5LKbVpIhgAmJATK1quDSGs/yrgbPD3vZypBh4eV1IOprFYM3TcN6fCpGP9iwB+
-         buoLb8CFqVJFSQ9t3CGsOa6QfT35DGjx3zKHlWnjzdizlRyxmuvGdEzBXKzNTImfS4
-         cbUnlvyRDylsexMyiSnZRHK49fG+hix0qdkrLm+QnPmLjw5OT9wfojYgHZ51zZDP9x
-         YnTpRJDKUpZCNREaLFcyHUZZF4CznTLXSlXhyqbiErIEHjFrPFCNMVTaaGnCDp/VpT
-         qQQB+ogiJJWUQ==
-Subject: Re: [PATCH bpf-next v10 06/10] bpf,landlock: Add a new map type:
- inode
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Drysdale <drysdale@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        John Johansen <john.johansen@canonical.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>, Tejun Heo <tj@kernel.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thomas Graf <tgraf@suug.ch>, Tycho Andersen <tycho@tycho.ws>,
-        Will Drewry <wad@chromium.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>
-References: <20190721213116.23476-1-mic@digikod.net>
- <20190721213116.23476-7-mic@digikod.net>
- <20190727014048.3czy3n2hi6hfdy3m@ast-mbp.dhcp.thefacebook.com>
- <a870c2c9-d2f7-e0fa-c8cc-35dbf8b5b87d@ssi.gouv.fr>
- <CAADnVQLqkfVijWoOM29PxCL_yK6K0fr8B89r4c5EKgddevJhGQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>
-Message-ID: <59e8fab9-34df-0ebe-ca6b-8b34bf582b75@ssi.gouv.fr>
-Date:   Wed, 31 Jul 2019 21:11:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:52.0) Gecko/20100101
- Thunderbird/52.9.0
+        Wed, 31 Jul 2019 17:30:41 -0400
+Received: by mail-io1-f43.google.com with SMTP id s7so139446704iob.11
+        for <linux-security-module@vger.kernel.org>; Wed, 31 Jul 2019 14:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=LorXcbFrkDiur0GwKhOS0WtYPlhd7m6A9hFg1D5qG4Q=;
+        b=Y+XYLq1GfpFsLdBp2odvBbnfZzGEE/EAyXfNcZDp6CRNDfB+xJ/SwxMyaaLKVBYn0N
+         +jVpn09a5mkEl8XQG4Gi6OnmJ+6QOZEPwBvzaziIVbZuLdM4Gx+hUxXTHsBnrpA+F6ko
+         W245s6uNCJby+pvNSQ7bsI9RWFURyKTIwAN9M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=LorXcbFrkDiur0GwKhOS0WtYPlhd7m6A9hFg1D5qG4Q=;
+        b=cMfcY1xn1EjPQH4YlWE7CUPMjbI4M9a04B2Ht5uoZ+ByeTiEzje1TyxBFv/qUTtZhT
+         UqOFROY3xeHbdmVnbkPFt7fU7WeQC0OrMUw1xFw1Pkx1Pw+a9gu2jf0P05uTGfbNw2bQ
+         /lWZm9Fn4zJUK7CZq0Ak0/v3Y4v5xHlier+6SPZCImHm0iDwWP92Zqwv6zIEtadQjJb1
+         +cBifR7tCHlauZJFXvL1ytXrs7z8RBVHcRV2bbpqlHhJW+CvFqmXzBFEox0DaR32mpYe
+         G7pA6A6GrB2Vz+3aVzolDaiqt1Q4rOa2SlLOOhT2O0WOCv4q+bEpYEXvbBdATRKEKsTb
+         Fh3A==
+X-Gm-Message-State: APjAAAWUwjI9VOsiRDSYcJmxwhcZW+aVevLLV9h8g5DcTTtD67ud2rlS
+        0rg8n7C4L1xDT0bUBinb7VcUp/S83hs7gVsNKv6Bx7eKx6M=
+X-Google-Smtp-Source: APXvYqy3BKFTmjWzotYFCuzp4BPjn1MMaYy70Rlzz2fRaa9EbCnLYGgLAER+4pJYzAzQGEaU/wQqEBNu6KjKMF9N374=
+X-Received: by 2002:a02:710f:: with SMTP id n15mr87971397jac.119.1564608640491;
+ Wed, 31 Jul 2019 14:30:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQLqkfVijWoOM29PxCL_yK6K0fr8B89r4c5EKgddevJhGQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+From:   Micah Morton <mortonm@chromium.org>
+Date:   Wed, 31 Jul 2019 14:30:29 -0700
+Message-ID: <CAJ-EccMXEVktpuPS5BwkGqTo++dGcpHAuSUZo7WgJhAzFByz0g@mail.gmail.com>
+Subject: [GIT PULL] SafeSetID MAINTAINERS file update for v5.3
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Hi Linus,
 
+You mentioned a couple weeks ago it would be good if I added myself to
+the MAINTAINERS file for the SafeSetID LSM. Here's the pull request
+for v5.3.
 
-On 31/07/2019 20:58, Alexei Starovoitov wrote:
-> On Wed, Jul 31, 2019 at 11:46 AM Micka=C3=ABl Sala=C3=BCn
-> <mickael.salaun@ssi.gouv.fr> wrote:
->>>> +    for (i =3D 0; i < htab->n_buckets; i++) {
->>>> +            head =3D select_bucket(htab, i);
->>>> +            hlist_nulls_for_each_entry_safe(l, n, head, hash_node) {
->>>> +                    landlock_inode_remove_map(*((struct inode **)l->k=
-ey), map);
->>>> +            }
->>>> +    }
->>>> +    htab_map_free(map);
->>>> +}
->>>
->>> user space can delete the map.
->>> that will trigger inode_htab_map_free() which will call
->>> landlock_inode_remove_map().
->>> which will simply itereate the list and delete from the list.
->>
->> landlock_inode_remove_map() removes the reference to the map (being
->> freed) from the inode (with an RCU lock).
->
-> I'm going to ignore everything else for now and focus only on this bit,
-> since it's fundamental issue to address before this discussion can
-> go any further.
-> rcu_lock is not a spin_lock. I'm pretty sure you know this.
-> But you're arguing that it's somehow protecting from the race
-> I mentioned above?
->
-
-I was just clarifying your comment to avoid misunderstanding about what
-is being removed.
-
-As said in the full response, there is currently a race but, if I add a
-bpf_map_inc() call when the map is referenced by inode->security, then I
-don't see how a race could occur because such added map could only be
-freed in a security_inode_free() (as long as it retains a reference to
-this inode).
-
-
+Thanks!
 --
-Micka=C3=ABl Sala=C3=BCn
-ANSSI/SDE/ST/LAM
+The following changes since commit 179757afbef5f64b9bd25e6161f72fc1a52a8f2e:
 
-Les donn=C3=A9es =C3=A0 caract=C3=A8re personnel recueillies et trait=C3=A9=
-es dans le cadre de cet =C3=A9change, le sont =C3=A0 seule fin d=E2=80=99ex=
-=C3=A9cution d=E2=80=99une relation professionnelle et s=E2=80=99op=C3=A8re=
-nt dans cette seule finalit=C3=A9 et pour la dur=C3=A9e n=C3=A9cessaire =C3=
-=A0 cette relation. Si vous souhaitez faire usage de vos droits de consulta=
-tion, de rectification et de suppression de vos donn=C3=A9es, veuillez cont=
-acter contact.rgpd@sgdsn.gouv.fr. Si vous avez re=C3=A7u ce message par err=
-eur, nous vous remercions d=E2=80=99en informer l=E2=80=99exp=C3=A9diteur e=
-t de d=C3=A9truire le message. The personal data collected and processed du=
-ring this exchange aims solely at completing a business relationship and is=
- limited to the necessary duration of that relationship. If you wish to use=
- your rights of consultation, rectification and deletion of your data, plea=
-se contact: contact.rgpd@sgdsn.gouv.fr. If you have received this message i=
-n error, we thank you for informing the sender and destroying the message.
+  Merge commit 'v5.3-rc2^0' (2019-07-31 13:45:16 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/micah-morton/linux.git tags/safesetid-maintainers-5.3-rc2
+
+for you to fetch changes up to 7e20e910eabdf0af90fd10e712f15b413be8e135:
+
+  Add entry in MAINTAINERS file for SafeSetID LSM (2019-07-31 13:58:11 -0700)
+
+----------------------------------------------------------------
+Add entry in MAINTAINERS file for SafeSetID LSM.
+
+Has not had any bake time or testing, since its just changes to a text file.
+
+----------------------------------------------------------------
+Micah Morton (1):
+      Add entry in MAINTAINERS file for SafeSetID LSM
+
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
