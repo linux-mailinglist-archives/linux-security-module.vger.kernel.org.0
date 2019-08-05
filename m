@@ -2,82 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B02DD826ED
-	for <lists+linux-security-module@lfdr.de>; Mon,  5 Aug 2019 23:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBD2826F8
+	for <lists+linux-security-module@lfdr.de>; Mon,  5 Aug 2019 23:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730600AbfHEV32 (ORCPT
+        id S1730457AbfHEVag (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 5 Aug 2019 17:29:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47264 "EHLO mail.kernel.org"
+        Mon, 5 Aug 2019 17:30:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47794 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730827AbfHEV3N (ORCPT
+        id S1729383AbfHEVag (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 5 Aug 2019 17:29:13 -0400
-Received: from localhost (c-67-180-165-146.hsd1.ca.comcast.net [67.180.165.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Aug 2019 17:30:36 -0400
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 940BA216F4;
-        Mon,  5 Aug 2019 21:29:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 48EF1217D9
+        for <linux-security-module@vger.kernel.org>; Mon,  5 Aug 2019 21:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565040552;
-        bh=u+3SYBPVgv/FEIxWu9RLECxDzTwrB/RGyZBZnMDQAec=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jERS4ABosOx4Nh0Qu2Lfi1dqigzT8zM+tMPMVq2zw4+f7Z+9O1FXkt6rXMe23xDL+
-         v+gizQCi+rDkwwvX6At/Am3eneEnSl9CoSiQfC37IPtAPtSPbDVW0kAaUT4b9ZNCq8
-         N/hamxJdUghTGHeiSGCv1/60I3uA4e6UKmMySj1g=
-From:   Andy Lutomirski <luto@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Kees Cook <keescook@chromium.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Jann Horn <jannh@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: [WIP 4/4] bpf: Allow creating all program types without privilege
-Date:   Mon,  5 Aug 2019 14:29:05 -0700
-Message-Id: <9e77ae06243555a96a3fd5e854f61d24823110c9.1565040372.git.luto@kernel.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1565040372.git.luto@kernel.org>
-References: <cover.1565040372.git.luto@kernel.org>
+        s=default; t=1565040635;
+        bh=bU2EdjyrlVSqPSDwqxFhx3rVMAseexUwlZ36ObsJD5I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=skDhAqQtLhK6T9wZtuaemo1o5e5E84OuKPLPr/mSYDktc+mRy5UTMvGM9ClBf58zs
+         WPOMRxDiQVMpzR3zO9NfpCGkhBYbLNu8FR91nOEtWwz34hCnAlt7/tFA048QH/bqwB
+         lvXnKQKoefaX/tmkdLYD7ob7N++dKfyu7A24ucpA=
+Received: by mail-wm1-f43.google.com with SMTP id f17so74352009wme.2
+        for <linux-security-module@vger.kernel.org>; Mon, 05 Aug 2019 14:30:35 -0700 (PDT)
+X-Gm-Message-State: APjAAAX71f63u9ZN6WZiw7lcM1uabNOw/SknkZwKYf6InLFbM5hod5+2
+        zi199fnYaadZL1MZOYWGQWNPqB22BM9XM4ylohS8rA==
+X-Google-Smtp-Source: APXvYqxXkE3NHpwDZvfzWnYwkmLM3SlFEulCiSUglpZtaxjMLweZ+bmDk9MERg5aPe9ADDw7RinGpjv9/NN5waY6SZ8=
+X-Received: by 2002:a7b:c149:: with SMTP id z9mr306648wmi.0.1565040633709;
+ Mon, 05 Aug 2019 14:30:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190619152018.GC1203@linux.intel.com> <20190620221702.GE20474@linux.intel.com>
+ <20190707190809.GE19593@linux.intel.com> <1b7369a08e98dd08a4f8bb19b16479f12bee130f.camel@linux.intel.com>
+ <20190708161932.GE20433@linux.intel.com> <20190709160634.3yupyabf5svnj4ds@linux.intel.com>
+ <20190710172553.GE4348@linux.intel.com> <CALCETrXMAwHod_KZYPGWjTjg-fxOb1=02=Qj2g1o624wOPfPZQ@mail.gmail.com>
+ <20190801163839.wvcnq57hity4wwrk@linux.intel.com> <CALCETrWBewZyqVUf3cPDj11eSWXqfDG0z50vVw+Yg0Z8r0AtCg@mail.gmail.com>
+ <20190805205104.6ylxomqq37deqb3v@linux.intel.com>
+In-Reply-To: <20190805205104.6ylxomqq37deqb3v@linux.intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 5 Aug 2019 14:30:22 -0700
+X-Gmail-Original-Message-ID: <CALCETrVcaL5KfR0V2fiHzQtyQdEC7d9iFNDKp9yBj7QZQsdXyw@mail.gmail.com>
+Message-ID: <CALCETrVcaL5KfR0V2fiHzQtyQdEC7d9iFNDKp9yBj7QZQsdXyw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 04/12] x86/sgx: Require userspace to define enclave
+ pages' protection bits
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        "Schaufler, Casey" <casey.schaufler@intel.com>,
+        James Morris <jmorris@namei.org>, linux-sgx@vger.kernel.org,
+        Dave Hansen <dave.hansen@intel.com>,
+        Cedric Xing <cedric.xing@intel.com>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Dr . Greg Wettstein" <greg@enjellic.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        LSM List <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This doesn't let you *run* the programs except in test mode, so it should
-be safe.  Famous last words.
+On Mon, Aug 5, 2019 at 1:51 PM Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Sun, Aug 04, 2019 at 03:20:24PM -0700, Andy Lutomirski wrote:
+> > On Thu, Aug 1, 2019 at 9:38 AM Jarkko Sakkinen
+> > <jarkko.sakkinen@linux.intel.com> wrote:
+> > >
+> > > On Mon, Jul 15, 2019 at 03:29:23PM -0700, Andy Lutomirski wrote:
+> > > > I would say it differently: regardless of exactly how /dev/sgx/enclave
+> > > > is wired up under the hood, we want a way that a process can be
+> > > > granted permission to usefully run enclaves without being granted
+> > > > permission to execute whatever bytes of code it wants.  Preferably
+> > > > without requiring LSMs to maintain some form of enclave signature
+> > > > whitelist.
+> > >
+> > > Would it be better to have a signer whitelist instead or some
+> > > combination? E.g. you could whiteliste either by signer or
+> > > enclave signature.
+> > >
+> >
+> > I'm not sure, and also don't really think we need to commit to an
+> > answer right now.  I do think that the eventual solution should be
+> > more flexible than just whitelisting the signers.  In particular, it
+> > should be possible to make secure enclaves, open-source or otherwise,
+> > that are reproducibly buildable.  This more or less requires that the
+> > signing private key not be a secret, which means that no one would
+> > want to whitelist the signing key.  The enclave would be trusted, and
+> > would seal data, on the basis of its MRENCLAVE, and the policy, if
+> > any, would want to whitelist the MRENCLAVE or perhaps the whole
+> > SIGSTRUCT.
+> >
+> > But my overall point is that it should be possible to have a conherent
+> > policy that allows any enclave whatsoever to run but that still
+> > respects EXECMEM and such.
+>
+> So could kernel embed a fixed signing key that would be made available
+> through sysfs for signing? Already have one for my selftest.
+>
 
-This assumes that the check-privilege-to-call-privileged-functions
-patch actually catches all the cases and that there's nothing else
-that should need privilege lurking in the type-specific verifiers.
+Do you mean a public and private key?  I was imagining that someone
+would just create a key pair and publish it for the case of SGX
+programs that don't depend on MRSIGNER.  There doesn't have to be just
+one.
 
-Signed-off-by: Andy Lutomirski <luto@kernel.org>
----
- kernel/bpf/syscall.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 23f8f89d2a86..730afa2be786 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1649,8 +1649,7 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	    attr->insn_cnt > (capable(CAP_SYS_ADMIN) ? BPF_COMPLEXITY_LIMIT_INSNS : BPF_MAXINSNS))
- 		return -E2BIG;
- 	if (type != BPF_PROG_TYPE_SOCKET_FILTER &&
--	    type != BPF_PROG_TYPE_CGROUP_SKB &&
--	    !capable(CAP_SYS_ADMIN))
-+	    type != BPF_PROG_TYPE_CGROUP_SKB)
- 		return -EPERM;
- 
- 	bpf_prog_load_fixup_attach_type(attr);
--- 
-2.21.0
-
+But I may be misunderstanding you.
