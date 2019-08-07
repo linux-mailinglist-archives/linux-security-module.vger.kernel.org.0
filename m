@@ -2,49 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A678560B
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Aug 2019 00:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A98085610
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Aug 2019 00:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389454AbfHGWnA (ORCPT
+        id S2388910AbfHGWnF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Aug 2019 18:43:00 -0400
-Received: from sonic303-28.consmr.mail.ne1.yahoo.com ([66.163.188.154]:34261
+        Wed, 7 Aug 2019 18:43:05 -0400
+Received: from sonic303-28.consmr.mail.ne1.yahoo.com ([66.163.188.154]:45689
         "EHLO sonic303-28.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389109AbfHGWnA (ORCPT
+        by vger.kernel.org with ESMTP id S2389595AbfHGWnF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Aug 2019 18:43:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1565217779; bh=6n13r+TGuRrCgC6xMf8Ht0oQXK5h6JL9/vz8UiExqsE=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=dih5+u/Jm+Ac74/E2AppKYjjX7+ve0FuWskbUkWQ3lDZpKvF7KUA+uEoyOsu6H6zP6ia1uaCvhmhS6rX7/KUZAcWFVA64MqPcLWv1NNAXDVWEwJ61q/wIkFDRdOvQ5rj6f44g5jfuJriCGy4cenHB6amgoc5ib6bo8/IVyn+zJvrIOI5cRt7KTNet3PKc8Fr1Cw32fjcRuVK20qcTChECdayMxf7GXjXY7TVboNWfZmY6m4Z64+YAwuFVUIptlA9WZXbJQuSGAJ3dNFs2nTpdb+KLMvxExL85VWBKoPoJtQGIF2yN2Ywgw6bj6mgXN44JNo+4QF8wYT/kejJ2bJeMg==
-X-YMail-OSG: .EHJt2YVM1muOdznfEYeSKsASUwX6gwdyTRtbSqW2UshQydxm3R_2dHNuNReTlE
- 7poA63lSPWvauqvHF5UsRbTzaa1ymAy6m89DepfLrTOYbh2x0JEH326uRahE1IAxnqU4wFPl06jk
- _wKj81FqsN1.v4.iUvp5oh8oem81e6CFdZEgZfkbpbd62dbV8YgFf1cU.yOhkYQnEs7YW8iQvZcc
- EdAoBp7tRIIWvMqQCzxAzLoCPt74__y5lZHnlGTkGlTTkBCB6eVhawAwKO4z1s8G6WiD7gDaWb_Y
- abHyj3YFO_GH0Qdx6eUpj0a4zbe7TihwW_kPGrP_YIcgjqVvMwrZcN5iplgejhB2Xw_de.dSiSHz
- NTM_I6I3TigZLzkp8EnC7jfPck_WnyUAQ1OlEAbeaH.8NJ7DAdf83w3Ld6.djEAyu6jRTwVDuWNJ
- yESPg9U8pLoeBtYG7BHpzR7ybo7sRSZaelpf4hfqgpKBA8KA1LqnsFouyop7Di.MAYydJxTdN9gy
- Au.H6u6HMltdjFpo_kngkwQR8FV_CJbzEqaB_CVn5NrT0Hp5eOTjPNuNkOGX4vRn1ufyKqIzPbjB
- UYTqgiGw2LVB8TtThyNx_Zft0HM0SQ2gl2wzZnG1DQhZBPs1xBt.iH1EacEraFFy6KrpdPwoQXd3
- XS89Jdij_Q.RILlv6qGQI7XM8GFEPYhihzOdZwTTKSfV6jSWAWFMgmiUB3QxbCJVj5qlKoPXVP3i
- ukaLUfidxhfO3XaIgREdtlpNjG._u04axz2LMhKJIgF0XVD7M_110BJ1j1QlB3LJlk5LcIsyIRd8
- 0Ormim4tlpoSL5VsigU8iBgiFTJfDm87ZCVbJExQL3jrHbWnvpXddEQWEsMPhiby1dcqgz_nkWJF
- f7nMs0iU7l2EWkwJ6KG_YNC3YuOIMCwtyTJKSeFGKKxVoccH3OWjdTjfvK_LR.IPCmsiWxtVzqGK
- nMfF6sVzMbbhOKnc4CF9SdIKLPoLDyIGr_WDimZ2tqpJQwyKD_gNc8fybdkkmjO38D0mlbJ1yMiD
- ct54iUL_8rF8h.WLVz77kIMQBYJ0U0e2OEMWKuTTHD5VEzM8KcZMhy6p3nQKfIjQMAOAmY0qR_87
- l7xx8LCG8.0bNIrSvozMIHKklr_08lGdwJVrDBDM.h4drJ4rwoYjm5J2kkzP1Rw68TMCsuoHzFZJ
- _u1.evBCN_ZCX.FwpsGDPttfooaBMoOluh5LbuJ83JqvCExvqQaDIYXFwGy.wSHBVbawVakGHUqv
- QGSa96fgMJ9880D_jNgwJqxy3K6aY9DIsJXhziMXKBKQT87sjnS6e_Sd4mIpsNuZ_BbsJrpQN3Kz
- .0hGN8acU
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Aug 2019 22:42:59 +0000
+        Wed, 7 Aug 2019 18:43:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1565217784; bh=ZUvYNpJVEFecctk/GVbqBSpS33JuXn1Z6n8l1Juxt+8=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=kfpJkTsGkeD1IrmTUW+6TU+mYqmYE/eiC6oCKn7xlWpDttkH0Z0DpsHYE6xE3PLtSLGlzqOqQc2wm0P1OFgg+KVG5lY5C5pGyxHCG9OtJ5DtiO1qXREvPpuxr+vtITQSgDFslAEnVRCwQ2o4dh+zjgmLZPjumHem72/YGI4HLGfdgUO4eC71vB7+hZl+N1lcMSEvXmd6XQiyzkvCo5JbC+G7YLxeCV/pJHd2o79MCuFXXvJ/5YBm4aqOt4AytR7cZdluVRwph67nzdIaS/kzZ5KEqrLT9ns9ep63nlziUFbAL4q1amBmDv49uDFy42kezCKjXnlzW6yjcLpZ0Xvq5A==
+X-YMail-OSG: XfLy2akVM1kOH7soX8bWdYB6lcpddonom1xINN4DR02fo5TgetX_.ULqQNJMypa
+ p2N8xCR5Lcerm.mvTFNw1_hxm7KaRP2eLKjvW_Yy4R5bttqMLxKPJk70ln85rUSA0oXVt_rUC_lN
+ YOmJ1.W1y.z4ERcpDgcakYNzJcaElGP2_xBNr4EyXQ5gJn141dKDAJuz05kCMwPT20Q1f0iMU.vK
+ 8Uq0HOzyRwOvNg9o5RgVtQzWIBazBLdZVGKR0bopmBebO3Y5G3XiO8stxtjAcZdDkRVyPm589qh.
+ 4k1F.RfAUHgsqd3oiRQGhKAItBxXpaJ.ZH8c2OwEtpFXtcKfR31tUYTjodYvpSirlnQQuANIqem6
+ pwy6vYPU.01gXCuwIDQir5CDGnn4j_x7irzykumBeri9uQocjCn.SMp8nu3oPswwWD2F4X5iO5tL
+ AvNHpB_7lLoES0CJgUpjN0GhShMayX6tGWS5I4NrdhiCgliDFCuaxsTylz3fgdv6mG_iRANavSBQ
+ e1ouw3G8B6jNBPgsDVfSxtJjSGD_8YfXQXBLAk8E0PMRdRssUAIKdY39bxyefqBnZRDdKBf18ZyU
+ jevaCdkaus0fb9h2CG71HcnwJJDMWtb1tydjRlPJsgokVa.AsmlbPuqqWSLHQkSkCGd4r.4_Le8H
+ LB03UZE1617ksJ7.RnMP6woo21xCS4moh_uAgmSlgVuJtXR6lBK2I6zdH0VDplVyJmKxPdoo7Zvp
+ 31_kA75Ct64.295vI_jL2OQQSZIpNVrtSCsLn.MV2cqfTrjm6JryyCglLzzH7RH6Xm1aJIqDZ33L
+ JlcQ_IQ_dx27wgwWn75dmLMeCMMB9gxLvKmCc9LjbKbeW4oR9OpM2b7VPpc.1OnzOvZ7ogxqc1uc
+ bJHXK1R69YzcMpopKF49QAdI8sKnCMLBTMw4WDR6BT2OxL5d5T_g8sQ82EPunvGIbkQRVFUsCXa1
+ YsVzeKcs6CfnFCR9jht1zpJAFQV_rlwlz4ER9L7Q8J7MIOj8UiN1hGlZDIq90jCzNOp7ZOeiBGW1
+ XngBtLCLtBXi6QEmcS52pIYzdIVhHxunlkvrnT_QqusgH7v8jQlG1Xhb4.YYkxq7lcLJNgHhFRKM
+ Db.TGfQZEqJ7yC6F2FmwfuCBR.YDV2mdo9g_nCITECdN60VzcOPbyWfHsnMepc376AnZvBIPx.Ia
+ VWcCvPoSW70jNS5fhclEUEXblz1m52w7znd0.uggMNtNmqR48SPLbdeLwk8i9hx3yctwx1dHAODK
+ bbJ61bKerloyWVQcar2Vqlc7SsNoxKQZjHmKL4POZA87imfUiV8Pc3yfZ5AFGzoR2iTWR6cbGnH2
+ vFFyhFInIczk-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Aug 2019 22:43:04 +0000
 Received: by smtp406.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID a922c1f55dc5f6c930e3c4333b468534;
-          Wed, 07 Aug 2019 22:42:58 +0000 (UTC)
+          Wed, 07 Aug 2019 22:42:59 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH v7 04/16] LSM: List multiple security attributes in security_inode_listsecurity
-Date:   Wed,  7 Aug 2019 15:42:33 -0700
-Message-Id: <20190807224245.10798-6-casey@schaufler-ca.com>
+Subject: [PATCH v7 05/16] LSM: Multiple modules using security_ismaclabel
+Date:   Wed,  7 Aug 2019 15:42:34 -0700
+Message-Id: <20190807224245.10798-7-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190807224245.10798-1-casey@schaufler-ca.com>
 References: <20190807224245.10798-1-casey@schaufler-ca.com>
@@ -54,56 +54,33 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Listing security extended attributes is extended to the case
-where there is more than one security module that provides them.
-The same format used in other xattr list providers:
-	name1\0name2\0name3
-is used.
+Correct the infrastructure logic calling ismaclabel hooks
+to reflect the yes/no result of the call. Instead of the
+usual "any failure is an error" this hook uses "any success
+is success".
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- security/security.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ security/security.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/security/security.c b/security/security.c
-index a58e60970035..87cb3562646b 100644
+index 87cb3562646b..13102d16bf2c 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -1475,9 +1475,34 @@ int security_inode_setsecurity(struct inode *inode, const char *name, const void
+@@ -2212,7 +2212,12 @@ int security_netlink_send(struct sock *sk, struct sk_buff *skb)
  
- int security_inode_listsecurity(struct inode *inode, char *buffer, size_t buffer_size)
+ int security_ismaclabel(const char *name)
  {
+-	return call_int_hook(ismaclabel, 0, name);
 +	struct security_hook_list *hp;
-+	bool first = true;
-+	int finallen = 0;
-+	int len;
 +
- 	if (unlikely(IS_PRIVATE(inode)))
- 		return 0;
--	return call_int_hook(inode_listsecurity, 0, inode, buffer, buffer_size);
-+
-+	hlist_for_each_entry(hp, &security_hook_heads.inode_listsecurity,
-+			     list) {
-+		len = hp->hook.inode_listsecurity(inode, buffer, buffer_size);
-+		if (len < buffer_size) {
-+			if (buffer)
-+				buffer[len] = '\0';
-+			buffer_size -= len + 1;
-+		} else {
-+			buffer = NULL;
-+			buffer_size = 0;
-+		}
-+		if (first) {
-+			finallen = len;
-+			first = false;
-+		} else
-+			finallen += len + 1;
-+		if (buffer)
-+			buffer += len + 1;
-+	}
-+	return finallen;
++	hlist_for_each_entry(hp, &security_hook_heads.ismaclabel, list)
++		if (hp->hook.ismaclabel(name) != 0)
++			return 1;
++	return 0;
  }
- EXPORT_SYMBOL(security_inode_listsecurity);
+ EXPORT_SYMBOL(security_ismaclabel);
  
 -- 
 2.20.1
