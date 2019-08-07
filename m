@@ -2,48 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 250098561E
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Aug 2019 00:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EC685627
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Aug 2019 00:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389611AbfHGWnQ (ORCPT
+        id S2389605AbfHGWnU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Aug 2019 18:43:16 -0400
-Received: from sonic310-23.consmr.mail.bf2.yahoo.com ([74.6.135.197]:46701
-        "EHLO sonic310-23.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389628AbfHGWnQ (ORCPT
+        Wed, 7 Aug 2019 18:43:20 -0400
+Received: from sonic317-27.consmr.mail.gq1.yahoo.com ([98.137.66.153]:43306
+        "EHLO sonic317-27.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389631AbfHGWnT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Aug 2019 18:43:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1565217793; bh=NcR9H7CD11MKd3LBKLjdg9p2YChurfqM33tVMOrp+JM=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=nhC3Kholby+ym7pI8f0RXunb2thRhByp0v4XmKEDZ/Dza67HnJplrf5ViTOT/hygzyL6SkZ914k4+RUGm1+Lr6wv6owWEKqtImEwJTipVAhPxNVTUsOps0OBJr6a7amkUevOsCiSImbDrj+JvoSZ6mucLFnZpczLwTJlNtjB/l7XfYwFZDFbvd+UNohD5h4SpNtmV5pcoK+OWOYxu5kl/unjAbhHZoCKrU4iG0oG3dIBVYsiCV9rp1uOO5VAFi3tmzmDambYSv2dSrtSrb94zwOybDMR8tJ1QcU4Kho1+FT/EnRI0WnXnpHywEm61wdk9gr0tUM/IJMu2GCi0142MA==
-X-YMail-OSG: L8Q.vVQVM1nhxEA6JF8_WlMxrVMd16p6mUKYVmYlKAxZp51UYiArnD.7uPnIoC.
- 0x62lToLN6L5Hz7LCNG8RSbtfQ3zGzixyFl.uxg_EfSUMxt7lzPqWCdAUZxWxbFB4gXtHLjY9pwn
- PaNMbtOVKkYwdGQ8g83Wiyio0dc8pDTHLxWRInfcpc305c_e9D.JBlkz.AkMDuBqqz6FQ2Q98CZ7
- Sc5DbqUcrhoVJPoGNcbKPKNUWsMt6JOxmYoA7Da5nOWLDdzzYpjcdyrYzeQCRpzDLkgGAwHcSP2K
- Gtz4Oxtmrt7ha6Ni3Upb8xNPe8MnbyS4neZEcae.YWvxfp.GKhI6uoYhU1SMOV9zGhoyS1zqLXJf
- FG00A6MceGxlMApLSY_T5jWSKRNWKQAubj4ylqojSn5usifDHx0NrhuHWFEEtYSH.4yEaYUcOlfJ
- XK.ZfiqbiCiykkRaJhZ_.jCcQo_9o5gMWygeuOWwPomfj3W8wkKwdBOsBamINdSG7zBaQbxvTILg
- FbFdq7Jdj8Z9TvSZJlAFVr33sot2iyHqiGCXuEEKF0SOEuSoJB.k.o2EX1AWb45c33tvUziL5_EK
- bv2nPLslo3XX3WfUSO9OwNsei3kA.w3wDm1KS.ePMwELk9CMNHEb3gCPe8gAZJje9G4SkjsjWNka
- yYJSVR_xsZiXNsKM2m6SpSkQEi3g5bcZtpePqznJ3X3i.18nSVsjiDnQOXUpBHH.oSx9YLDN4EhF
- y.7T6m6XYWMS0wmw7yRcEqL9jqcKdldsiE3XorQ6faIpxQAkOErxiU5KLvwQOojZ32bSJNojDm_P
- gcV07tqdNbUMXrgHHugTlRlO4lhOYK5FMs25Wi5XZaguMfKmEsSztbIXE6dwiX0yDLCLge9YNGKL
- bqqhXAwMXR3.Z0HhZczx2cX.Y43KsxypEKFhj5463B4PAv32kUX1RWmxFF6fc5rSeQHiz.3iky2I
- nK1QV_hIscNPhT5d3107_3YE9YtwZlLVqvVjniOcgmk75KNex.LpN.OmOOdKuJO1cEmN0t1Rj39_
- tPDqmsDRK.92xkBa9UIl10XBIg07Wj7vwKBxW65D6xumyhuj0ie2J7u6AHxxQGp.GmKCKxqmRxp2
- g63fSoljFR_Z5_9OuCDEoRcfLOZjB9mVH13U.GpyCN9lKzMBZRTbzNNmWm7R7zr_OzriD2rknsMH
- 1mPq_YKZ2a7daXcfPqnFajZ54uf1CpYAboBSAoYMRDCajzI3ULnWnj1xw5PtdSWmpdw5cWILzYnt
- hkzV6SMSLrij_oDehqYAjqwk.kBxABjjRnd_2tQ38.yyG714L.Zsp_0rrwHOAWYJPzsE-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Wed, 7 Aug 2019 22:43:13 +0000
-Received: by smtp401.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 90d0e6b59b40235a6b1cae6254f016be;
-          Wed, 07 Aug 2019 22:43:12 +0000 (UTC)
+        Wed, 7 Aug 2019 18:43:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1565217798; bh=rgt35VYK8xtWCyWCZH0+rRuwRdtZJYLmJIf0XfoyZVQ=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=gVyeaIiN+aFvS7j0igFCpk4MA+lDBU/1BxSoFR475ZnwhJQ5Ke1vsREW9ELqA0F+MkocpQ1nW8ze/YlOVfgmE4pE3oZnx0nJ9HgNTgEOoAf2Y9er/DYnohvxCvxkMLsE4nlmycevdxlGbPx8lKc3Unq80JkZ6LXJpFzcnDhM0Tt+J/nhJjCzJ7pUf8wpWM9KS/s4Kcf0OBY4U03WMKQ2gGrFz8m608QNFGfAC2q0kkA/G+JfXcAPZrl2zmf/O3w/6pboLHqSYzJfCYeM79W5NMZbcaK2xR+b4qzdheNU6R1yYNpFbKCOmxcdVJhxvLq9780Sr8V1DqQSA+AhaC+isQ==
+X-YMail-OSG: .k6Q0lwVM1n9bI21Q4Q1mWByexH2psMldO2kvAIsCnrBjh.peeYhc2bYF97.F9U
+ fjNcmIXB39bZWkMK5ID7vTakY8PbMtBqgLHBmNso4SiRkRyqGYDHEZrPPHrGZlvoSC.VKeMP44ri
+ X1ydJGR1z1QZ1ocgIz6lwnx6SNcPmTbclTgv6zP6igUlh1uPHeIuOE.SPF3iO_qV2Yc9fhHIe1eS
+ U4w3j2_lj7h5gu5SHBz5sZ8sGBnV4Jw4ckiXxlGivZYQzbaWsKKLwh9XMLoIdJZxkkXXGCLG4uU1
+ KMUnTjcbcjo.oKcBzenLYIAnlClkmYs8z7Xw0AaIR.8HvbAzAH.Cs.rcsxTVby3UXqxZqUP5Afxq
+ 7KaXJpGbAZLA0sIBH1s7bGLO..XMen7scz8iHKERmrj5urHPoG5DlrwLQeSSm7e2rSvkiVNCR0TB
+ Z.8TM3LL2SUyGcmYVAR3xq08yBcG.qnz9VNZyUtlmt9AbK4ZYl0KqnSKpVGVCWKBYSkodHVPtKVB
+ aUXlgFBDuCVgM1no2j2KTPvKsgBUY3Z4nlEycYj_cIBJwhY8DrUA1ULWCDmPaOwtEfc2YbsG16cH
+ ALbUTEDSx.Hmqy_p7vQRWdkoDo8JJurfrguGznd61tGwURrky8_ed2AdlkDbnhLfN8it08leIi.c
+ q.kvTK8ytslF2wvsy1j2t9ZZ.ySswtJH1kxK__CIRIxzxCGmrZ_.b2Tx5GZptexz2KTFhShIHxPF
+ o5KvDJQ.xq0xEYN0DYuz2sqW4oZ16.Cv.fNaFu8SipdW.6MsIXvRMJS92Jk2b0yVcfkIB7K_zx.E
+ 1oBgnl1Ipr4wh0FW7T5FFh34djrOowdBt8UZi__1eKogA3S6DKUtIh0jQU1RP64SoSffAs3uWpAu
+ 3hAm8kPYwBsUnrCBN1RPhG.joj_vWY1botErCYiBQZweac.vq4dKQzaNaNzYWgKHAX1Xjb2LZ4HR
+ udSiQAgQEuGEN44Bduwq7lb7gBdFDylOVMCSA4cI8q89iR2oVoN3pYICFSpxVhlU7NKrhgsH.j3u
+ bWyxIPYkU1Vsoa9PzC6Zk.S6TscNs72Y1eS5.wWMdbOPfvuZmrJ.Mhv8LofDYg2fyYTqjiZplLk7
+ Hgd8W0c4hjC0zFweNqu9s01la3bqAlFre3tj8tbXWZOozshxNSjY9kYUQJbX2bSr0Cy83mUsoaJA
+ PZ3RxLFHxWXTu2ole7o7dqmr_u1qIcU9DHISqxq_q5B745mQE3483WenQE4Vlr21018cZC8lbZ6Y
+ MOMqzzFhydyzsHOWyiIqP.Jt1r.AJ_Pcq0TG9LYxvDy_qhZro993pP7lK5Cutn5JDDIXzU5yWwOB
+ VqyRM_jBL
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.gq1.yahoo.com with HTTP; Wed, 7 Aug 2019 22:43:18 +0000
+Received: by smtp405.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID b31e22a1723893410aaa66faa171513d;
+          Wed, 07 Aug 2019 22:43:16 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH v7 13/16] LSM: Remember the NLTYPE of netlabel sockets
-Date:   Wed,  7 Aug 2019 15:42:42 -0700
-Message-Id: <20190807224245.10798-15-casey@schaufler-ca.com>
+Subject: [PATCH v7 14/16] LSM: Hook for netlabel reconciliation
+Date:   Wed,  7 Aug 2019 15:42:43 -0700
+Message-Id: <20190807224245.10798-16-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190807224245.10798-1-casey@schaufler-ca.com>
 References: <20190807224245.10798-1-casey@schaufler-ca.com>
@@ -53,163 +54,236 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add the NLTYPE returned when setting labels on sockets
-to the information retained by SELinux and Smack.
+Add an LSM function security_reconcile_netlbl() which
+uses the new LSM hook socket_netlbl_secattr() to decide
+if the active security modules are in agreement regarding
+the labeling of a network packet.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- security/selinux/include/objsec.h |  1 +
- security/selinux/netlabel.c       | 20 ++++++++++++++------
- security/smack/smack.h            |  1 +
- security/smack/smack_lsm.c        | 17 ++++++++++++-----
- 4 files changed, 28 insertions(+), 11 deletions(-)
+ include/linux/lsm_hooks.h           | 15 +++++++++
+ include/linux/security.h            |  9 ++++++
+ security/security.c                 | 50 +++++++++++++++++++++++++++++
+ security/selinux/hooks.c            |  3 ++
+ security/selinux/include/netlabel.h |  7 ++++
+ security/selinux/netlabel.c         |  9 ++++++
+ security/smack/smack_lsm.c          |  9 ++++++
+ 7 files changed, 102 insertions(+)
 
-diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
-index 3b78aa4ee98f..5ab0d0d212bd 100644
---- a/security/selinux/include/objsec.h
-+++ b/security/selinux/include/objsec.h
-@@ -124,6 +124,7 @@ struct sk_security_struct {
- 		NLBL_REQSKB,
- 		NLBL_CONNLABELED,
- 	} nlbl_state;
-+	int nlbl_set;			/* Raw NLTYPE	*/
- 	struct netlbl_lsm_secattr *nlbl_secattr; /* NetLabel sec attributes */
- #endif
- 	u32 sid;			/* SID of this object */
-diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
-index 8088a787777a..56e780340114 100644
---- a/security/selinux/netlabel.c
-+++ b/security/selinux/netlabel.c
-@@ -185,6 +185,7 @@ void selinux_netlbl_sk_security_free(struct sk_security_struct *sksec)
- void selinux_netlbl_sk_security_reset(struct sk_security_struct *sksec)
- {
- 	sksec->nlbl_state = NLBL_UNSET;
-+	sksec->nlbl_set = NETLBL_NLTYPE_NONE;
- }
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index 67797c67093b..4bf88fa5b55d 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -29,6 +29,9 @@
+ #include <linux/init.h>
+ #include <linux/rculist.h>
  
++#ifdef CONFIG_NETLABEL
++struct netlbl_lsm_secattr;
++#endif
  /**
-@@ -244,14 +245,14 @@ int selinux_netlbl_skbuff_setsid(struct sk_buff *skb,
- 	int rc;
- 	struct netlbl_lsm_secattr secattr_storage;
- 	struct netlbl_lsm_secattr *secattr = NULL;
-+	struct sk_security_struct *sksec;
- 	struct sock *sk;
- 
- 	/* if this is a locally generated packet check to see if it is already
- 	 * being labeled by it's parent socket, if it is just exit */
- 	sk = skb_to_full_sk(skb);
- 	if (sk != NULL) {
--		struct sk_security_struct *sksec = selinux_sock(sk);
--
-+		sksec = selinux_sock(sk);
- 		if (sksec->nlbl_state != NLBL_REQSKB)
- 			return 0;
- 		secattr = selinux_netlbl_sock_getattr(sk, sid);
-@@ -266,8 +267,11 @@ int selinux_netlbl_skbuff_setsid(struct sk_buff *skb,
- 	}
- 
- 	rc = netlbl_skbuff_setattr(skb, family, secattr);
--	if (rc > 0)
-+	if (rc >= 0) {
-+		if (sk != NULL)
-+			sksec->nlbl_set = rc;
- 		rc = 0;
-+	}
- 
- skbuff_setsid_return:
- 	if (secattr == &secattr_storage)
-@@ -325,6 +329,7 @@ int selinux_netlbl_sctp_assoc_request(struct sctp_endpoint *ep,
- 	rc = netlbl_conn_setattr(ep->base.sk, addr, &secattr);
- 	if (rc >= 0) {
- 		sksec->nlbl_state = NLBL_LABELED;
-+		sksec->nlbl_set = rc;
- 		rc = 0;
- 	}
- 
-@@ -428,8 +433,10 @@ int selinux_netlbl_socket_post_create(struct sock *sk, u16 family)
- 		sksec->nlbl_state = NLBL_REQSKB;
- 	else if (rc >= 0)
- 		sksec->nlbl_state = NLBL_LABELED;
--	if (rc > 0)
-+	if (rc >= 0) {
-+		sksec->nlbl_set = rc;
- 		rc = 0;
-+	}
- 
- 	return rc;
- }
-@@ -573,8 +580,8 @@ static int selinux_netlbl_socket_connect_helper(struct sock *sk,
- 	if (addr->sa_family == AF_UNSPEC) {
- 		netlbl_sock_delattr(sk);
- 		sksec->nlbl_state = NLBL_REQSKB;
--		rc = 0;
--		return rc;
-+		sksec->nlbl_set = NETLBL_NLTYPE_ADDRSELECT;
-+		return 0;
- 	}
- 	secattr = selinux_netlbl_sock_genattr(sk);
- 	if (secattr == NULL) {
-@@ -584,6 +591,7 @@ static int selinux_netlbl_socket_connect_helper(struct sock *sk,
- 	rc = netlbl_conn_setattr(sk, addr, secattr);
- 	if (rc >= 0) {
- 		sksec->nlbl_state = NLBL_CONNLABELED;
-+		sksec->nlbl_set = rc;
- 		rc = 0;
- 	}
- 
-diff --git a/security/smack/smack.h b/security/smack/smack.h
-index f28db5a42b7b..b531f7ea21a7 100644
---- a/security/smack/smack.h
-+++ b/security/smack/smack.h
-@@ -104,6 +104,7 @@ struct socket_smack {
- 	struct smack_known	*smk_out;	/* outbound label */
- 	struct smack_known	*smk_in;	/* inbound label */
- 	struct smack_known	*smk_packet;	/* TCP peer label */
-+	int			smk_set;	/* Netlabel NLTYPE */
+  * union security_list_options - Linux Security Module hook function list
+  *
+@@ -1432,6 +1435,10 @@
+  * @bpf_prog_free_security:
+  *	Clean up the security information stored inside bpf prog.
+  *
++ * Security hooks for network labeling (Netlabel) operations.
++ *
++ * @socket_netlbl_secattr:
++ *	Report the netlabel attributes this module wants for this socket.
+  */
+ union security_list_options {
+ 	int (*binder_set_context_mgr)(struct task_struct *mgr);
+@@ -1788,6 +1795,11 @@ union security_list_options {
+ 	int (*bpf_prog_alloc_security)(struct bpf_prog_aux *aux);
+ 	void (*bpf_prog_free_security)(struct bpf_prog_aux *aux);
+ #endif /* CONFIG_BPF_SYSCALL */
++#ifdef CONFIG_NETLABEL
++	void (*socket_netlbl_secattr)(struct sock *sk,
++				      struct netlbl_lsm_secattr **secattr,
++				      int *set);
++#endif
  };
  
+ struct security_hook_heads {
+@@ -2025,6 +2037,9 @@ struct security_hook_heads {
+ 	struct hlist_head bpf_prog_alloc_security;
+ 	struct hlist_head bpf_prog_free_security;
+ #endif /* CONFIG_BPF_SYSCALL */
++#ifdef CONFIG_NETLABEL
++	struct hlist_head socket_netlbl_secattr;
++#endif
+ } __randomize_layout;
+ 
  /*
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 62189558bb6a..87c81cbc8c67 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -2409,13 +2409,16 @@ static int smack_netlabel(struct sock *sk, int labeled)
- 	bh_lock_sock_nested(sk);
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 0e699d4ed13a..c234d881c206 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -1934,5 +1934,14 @@ static inline void security_bpf_prog_free(struct bpf_prog_aux *aux)
+ #endif /* CONFIG_SECURITY */
+ #endif /* CONFIG_BPF_SYSCALL */
  
- 	if (ssp->smk_out == smack_net_ambient ||
--	    labeled == SMACK_UNLABELED_SOCKET)
-+	    labeled == SMACK_UNLABELED_SOCKET) {
- 		netlbl_sock_delattr(sk);
--	else {
-+		ssp->smk_set = NETLBL_NLTYPE_UNLABELED;
-+	} else {
- 		skp = ssp->smk_out;
- 		rc = netlbl_sock_setattr(sk, sk->sk_family, &skp->smk_netlabel);
--		if (rc > 0)
-+		if (rc >= 0) {
- 			rc = 0;
-+			ssp->smk_set = rc;
++#ifdef CONFIG_NETLABEL
++extern int security_reconcile_netlbl(struct sock *sk);
++#else
++static inline int security_reconcile_netlbl(struct sock *sk)
++{
++	return 0;
++}
++#endif
++
+ #endif /* ! __LINUX_SECURITY_H */
+ 
+diff --git a/security/security.c b/security/security.c
+index e726fc7c6712..bfe40c11f5bf 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -34,6 +34,9 @@
+ #include <linux/binfmts.h>
+ #include <net/flow.h>
+ #include <net/sock.h>
++#ifdef CONFIG_NETLABEL
++#include <net/netlabel.h>
++#endif
+ 
+ #define MAX_LSM_EVM_XATTR	2
+ 
+@@ -3003,3 +3006,50 @@ void security_bpf_prog_free(struct bpf_prog_aux *aux)
+ 	call_void_hook(bpf_prog_free_security, aux);
+ }
+ #endif /* CONFIG_BPF_SYSCALL */
++
++#ifdef CONFIG_NETLABEL
++int security_reconcile_netlbl(struct sock *sk)
++{
++	struct netlbl_lsm_secattr *prev = NULL;
++	struct netlbl_lsm_secattr *this = NULL;
++	int prev_set = 0;
++	int this_set = 0;
++	struct security_hook_list *hp;
++
++	hlist_for_each_entry(hp, &security_hook_heads.socket_netlbl_secattr,
++				list) {
++		hp->hook.socket_netlbl_secattr(sk, &this, &this_set);
++		if (this_set == 0 || this == NULL)
++			continue;
++		if (prev != NULL) {
++			/*
++			 * Both unlabeled is easily acceptable.
++			 */
++			if (prev_set == NETLBL_NLTYPE_UNLABELED &&
++			    this_set == NETLBL_NLTYPE_UNLABELED)
++				continue;
++			/*
++			 * The nltype being different means that
++			 * the secattrs aren't comparible. Except
++			 * that ADDRSELECT means that couldn't know
++			 * when the socket was created.
++			 */
++			if (prev_set != this_set &&
++			    prev_set != NETLBL_NLTYPE_ADDRSELECT &&
++			    this_set != NETLBL_NLTYPE_ADDRSELECT)
++				return -EACCES;
++			/*
++			 * Count on the Netlabel system's judgement.
++			 */
++			if (!netlbl_secattr_equal(prev, this))
++				return -EACCES;
 +		}
- 	}
- 
- 	bh_unlock_sock(sk);
-@@ -4145,10 +4148,14 @@ static int smack_inet_conn_request(struct sock *sk, struct sk_buff *skb,
- 
- 	if (hskp == NULL) {
- 		rc = netlbl_req_setattr(req, &skp->smk_netlabel);
--		if (rc > 0)
-+		if (rc >= 0) {
-+			ssp->smk_set = rc;
- 			rc = 0;
--	} else
-+		}
-+	} else {
- 		netlbl_req_delattr(req);
-+		rc = NETLBL_NLTYPE_UNLABELED;
++		prev = this;
++		prev_set = this_set;
 +	}
++	/*
++	 * No conflicts have been found.
++	 */
++	return 0;
++}
++#endif /* CONFIG_NETLABEL */
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 91ef2ae77abb..48468a4b478c 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -6887,6 +6887,9 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(bpf_map_free_security, selinux_bpf_map_free),
+ 	LSM_HOOK_INIT(bpf_prog_free_security, selinux_bpf_prog_free),
+ #endif
++#ifdef CONFIG_NETLABEL
++	LSM_HOOK_INIT(socket_netlbl_secattr, selinux_socket_netlbl_secattr),
++#endif
+ };
+ 
+ static __init int selinux_init(void)
+diff --git a/security/selinux/include/netlabel.h b/security/selinux/include/netlabel.h
+index 8671de09c363..b316c62e7bcc 100644
+--- a/security/selinux/include/netlabel.h
++++ b/security/selinux/include/netlabel.h
+@@ -69,6 +69,9 @@ int selinux_netlbl_socket_setsockopt(struct socket *sock,
+ int selinux_netlbl_socket_connect(struct sock *sk, struct sockaddr *addr);
+ int selinux_netlbl_socket_connect_locked(struct sock *sk,
+ 					 struct sockaddr *addr);
++void selinux_socket_netlbl_secattr(struct sock *sk,
++				   struct netlbl_lsm_secattr **secattr,
++				   int *set);
+ 
+ #else
+ static inline void selinux_netlbl_cache_invalidate(void)
+@@ -165,6 +168,10 @@ static inline int selinux_netlbl_socket_connect_locked(struct sock *sk,
+ {
+ 	return 0;
+ }
++static inline void selinux_socket_netlbl_secattr(struct sock *sk,
++					struct netlbl_lsm_secattr **secattr)
++{
++}
+ #endif /* CONFIG_NETLABEL */
+ 
+ #endif
+diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
+index 56e780340114..0f50a646c8cd 100644
+--- a/security/selinux/netlabel.c
++++ b/security/selinux/netlabel.c
+@@ -642,3 +642,12 @@ int selinux_netlbl_socket_connect(struct sock *sk, struct sockaddr *addr)
  
  	return rc;
  }
++
++void selinux_socket_netlbl_secattr(struct sock *sk,
++				   struct netlbl_lsm_secattr **secattr,
++				   int *set)
++{
++	struct sk_security_struct *sksec = selinux_sock(sk);
++	*secattr = sksec->nlbl_secattr;
++	*set = sksec->nlbl_set;
++}
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index 87c81cbc8c67..122c13604d28 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -4572,6 +4572,14 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
+ 	}
+ 	return 0;
+ }
++void smack_socket_netlbl_secattr(struct sock *sk,
++				 struct netlbl_lsm_secattr **secattr,
++				 int *set)
++{
++	struct socket_smack *ssp = smack_sock(sk);
++	*secattr = &ssp->smk_out->smk_netlabel;
++	*set = ssp->smk_set;
++}
+ 
+ struct lsm_blob_sizes smack_blob_sizes __lsm_ro_after_init = {
+ 	.lbs_cred = sizeof(struct task_smack),
+@@ -4733,6 +4741,7 @@ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(inode_copy_up, smack_inode_copy_up),
+ 	LSM_HOOK_INIT(inode_copy_up_xattr, smack_inode_copy_up_xattr),
+ 	LSM_HOOK_INIT(dentry_create_files_as, smack_dentry_create_files_as),
++	LSM_HOOK_INIT(socket_netlbl_secattr, smack_socket_netlbl_secattr),
+ };
+ 
+ 
 -- 
 2.20.1
 
