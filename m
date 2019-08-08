@@ -2,122 +2,139 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D45856EC
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Aug 2019 02:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFB785724
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Aug 2019 02:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389786AbfHHAIn (ORCPT
+        id S2389622AbfHHAJn (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Aug 2019 20:08:43 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:36116 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389800AbfHHAIl (ORCPT
+        Wed, 7 Aug 2019 20:09:43 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:51384 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730652AbfHHAHh (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Aug 2019 20:08:41 -0400
-Received: by mail-vk1-f201.google.com with SMTP id o75so37664403vke.3
-        for <linux-security-module@vger.kernel.org>; Wed, 07 Aug 2019 17:08:40 -0700 (PDT)
+        Wed, 7 Aug 2019 20:07:37 -0400
+Received: by mail-pg1-f202.google.com with SMTP id c9so275567pgm.18
+        for <linux-security-module@vger.kernel.org>; Wed, 07 Aug 2019 17:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=QAOtO6nDHkYJ9N49TmHslQT3rCi9zyycpSkmU2B1+ww=;
-        b=UNLABroCADTP2lRj6WXK9ks7taxeIwX7apuvzgPN+SSwyiYIw9M1JIzQ11nyWkr0nd
-         auaYOQ96K8A0C0wqBYZCk6v/qae3ZfIDiK9ohFw5VtmeInfKk59XHKLlBAt9DK9be9i+
-         tpzkvCxKDCRl7CLtKUQCWMv7CUS4Bmn8X2YGeTODNSEntx/U2+iFxrdNvFbqFnoA0BSR
-         6AUjALIVdmgdrJgYCIWuF4TmYaaleMsMU7Ms5sj4SqsBR0z+IlFpl8lnvR704dPIHUIM
-         qqfSk7DFKViWyjwwFsEexIFGPBohDz9s+Vm/G3LYfBQnH9eTHKFqTKOZVSsgutOdjC2R
-         b4Nw==
+        bh=YL983DZYCsDH2/bxBW55mkIkXEZ4iV1BlOwZ0Y9UQbo=;
+        b=ZkgIbIkxpkM6RHrVJ5F5wRRahbvNebuI+iYB5sBF/gbF7hJXYGn/E3enNeek2yvj7a
+         zXnup1xUD1a+bDexnXrqRyg3zVYGJk0D5Z3/7uiaGtXK8sAodqIGziYCJxXYBrL/qRsK
+         qn/6gQuzuvnpFoCsujfhY4Q+lzB88RGoFVmSlIbX8gy54nAOx/X4o3An99MFbOLbY3fF
+         VEb4KOlGU8qxfLu5MrcKE4PvVdf9vvugdNeTmWM9eip5ojht/Dte+ZpXSPp3FUKPjL5Q
+         OWChZ+etOyu33vavtQ/XXWp856rrwp0XUClHtnNcIkV0Yng0iQkxVE5gkgoUIHrrTB3g
+         EK5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=QAOtO6nDHkYJ9N49TmHslQT3rCi9zyycpSkmU2B1+ww=;
-        b=T3ATYp/Tfw4+JW1JIoo1Us7T1KY7149W097K0mQ6v1V077coaYsh1m5eh5mdTyPM7S
-         HWT9a2aT3LswLmck5IkgGp71sNHb6xs5CfvfQCmxilxPVHpJrlwRKWhLJC35R2xnF9zA
-         TxnPNWRwT5w3BPbk/hn+DUy4G3YpeNwPCS1TA/LLGkoPpTJtcIVBFy4uEK0ZzKeLe/nA
-         rtfcxk66ATehyVuYy6awYvxTRqRV5opmVvEXkIcHcVX7lWKcaCZsTZh+vVNVeYLVEsQx
-         n1dKGflBs5LqVcZVgne79cI/oRx39FU3aLfzayl41o9kGF8TfSgNorhpFFN5lZXskI/M
-         /shA==
-X-Gm-Message-State: APjAAAX/fWswYbRBpQl+uOjSk/uU2ZAsi0RlaByHBy99Nfsv3COtDu6z
-        pJ4tenWzt5Sj6lGZw0eBM1/neFxk5qPIYOdLXRuPpQ==
-X-Google-Smtp-Source: APXvYqxjfOjMVIvi1XfETlUu/RMBz7orOf6co5eDHl8Jr6kBkqjBF9E+N10FvWJcCg9WD+lr3G3JdXg+fI/jU7KDUo5edw==
-X-Received: by 2002:a1f:2242:: with SMTP id i63mr4639075vki.69.1565222919839;
- Wed, 07 Aug 2019 17:08:39 -0700 (PDT)
-Date:   Wed,  7 Aug 2019 17:07:21 -0700
+        bh=YL983DZYCsDH2/bxBW55mkIkXEZ4iV1BlOwZ0Y9UQbo=;
+        b=bYJP+9+XwLWB3mJeT1Dv7NAciLH7Z31+mCyKAShhuxMLkS2VEROb1uAcFPvBjd7VVZ
+         l7tBX0WvJL+QOiOEMJ1uK/2YbcOSZIzfFCU/cPgeOwir3J4S803EUGnZi7psYzDEtTVN
+         anrcfHVIG4d85DyznGREW/NrBwEwsZ4UaFFZ6Yn+RGr/PkZhY1T1NRSoEcD3PyAOrKXo
+         +S9rhRt1rWTbTuy2n7XldrsNVuAMM+aaA6ZqDdpwAP/Ninz+BxSuX4h66KkLE36eDJ+P
+         trpYLpsUmYW92YGYeZJsSUw+2+osbRsbX9UyYvEpEvif8s5fMb4rrbJn2iT2Dke6zAyc
+         L3sA==
+X-Gm-Message-State: APjAAAXb66UsjPI6LYG4Bny2Mq2kjEuFe28mNlPKcMYHVXzP5K0KAEeR
+        TufeXVuc4EUQCP2071NCSnEQ6rQvdHZfugGEARtKwg==
+X-Google-Smtp-Source: APXvYqy1rMt7IYQEnvUTMTdvNv/ls9xHIA2QghWA0Kj/etxe1pEs/b+3H3c4KKiJicMB2RXpHgtuYqO01k0YrblXJk+Naw==
+X-Received: by 2002:a65:5382:: with SMTP id x2mr4566847pgq.422.1565222857072;
+ Wed, 07 Aug 2019 17:07:37 -0700 (PDT)
+Date:   Wed,  7 Aug 2019 17:06:57 -0700
 In-Reply-To: <20190808000721.124691-1-matthewgarrett@google.com>
-Message-Id: <20190808000721.124691-30-matthewgarrett@google.com>
+Message-Id: <20190808000721.124691-6-matthewgarrett@google.com>
 Mime-Version: 1.0
 References: <20190808000721.124691-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-Subject: [PATCH V38 29/29] lockdown: Print current->comm in restriction messages
+Subject: [PATCH V38 05/29] Restrict /dev/{mem,kmem,port} when the kernel is
+ locked down
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     jmorris@namei.org
 Cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
         David Howells <dhowells@redhat.com>,
         Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>
+        Kees Cook <keescook@chromium.org>, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Print the content of current->comm in messages generated by lockdown to
-indicate a restriction that was hit.  This makes it a bit easier to find
-out what caused the message.
+From: Matthew Garrett <mjg59@srcf.ucam.org>
 
-The message now patterned something like:
+Allowing users to read and write to core kernel memory makes it possible
+for the kernel to be subverted, avoiding module loading restrictions, and
+also to steal cryptographic information.
 
-        Lockdown: <comm>: <what> is restricted; see man kernel_lockdown.7
+Disallow /dev/mem and /dev/kmem from being opened this when the kernel has
+been locked down to prevent this.
+
+Also disallow /dev/port from being opened to prevent raw ioport access and
+thus DMA from being used to accomplish the same thing.
 
 Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Matthew Garrett <mjg59@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: x86@kernel.org
 ---
- fs/proc/kcore.c              | 5 +++--
- security/lockdown/lockdown.c | 8 ++++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ drivers/char/mem.c           | 7 +++++--
+ include/linux/security.h     | 1 +
+ security/lockdown/lockdown.c | 1 +
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-index ee2c576cc94e..e2ed8e08cc7a 100644
---- a/fs/proc/kcore.c
-+++ b/fs/proc/kcore.c
-@@ -548,11 +548,12 @@ static int open_kcore(struct inode *inode, struct file *filp)
- {
- 	int ret = security_locked_down(LOCKDOWN_KCORE);
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index b08dc50f9f26..d0148aee1aab 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -29,8 +29,8 @@
+ #include <linux/export.h>
+ #include <linux/io.h>
+ #include <linux/uio.h>
+-
+ #include <linux/uaccess.h>
++#include <linux/security.h>
  
--	if (ret)
--		return ret;
- 	if (!capable(CAP_SYS_RAWIO))
- 		return -EPERM;
+ #ifdef CONFIG_IA64
+ # include <linux/efi.h>
+@@ -786,7 +786,10 @@ static loff_t memory_lseek(struct file *file, loff_t offset, int orig)
  
-+	if (ret)
-+		return ret;
-+
- 	filp->private_data = kmalloc(PAGE_SIZE, GFP_KERNEL);
- 	if (!filp->private_data)
- 		return -ENOMEM;
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 173191562047..f6c74cf6a798 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -81,10 +81,14 @@ early_param("lockdown", lockdown_param);
-  */
- static int lockdown_is_locked_down(enum lockdown_reason what)
+ static int open_port(struct inode *inode, struct file *filp)
  {
-+	if (WARN(what >= LOCKDOWN_CONFIDENTIALITY_MAX,
-+		 "Invalid lockdown reason"))
+-	return capable(CAP_SYS_RAWIO) ? 0 : -EPERM;
++	if (!capable(CAP_SYS_RAWIO))
 +		return -EPERM;
 +
- 	if (kernel_locked_down >= what) {
- 		if (lockdown_reasons[what])
--			pr_notice("Lockdown: %s is restricted; see man kernel_lockdown.7\n",
--				  lockdown_reasons[what]);
-+			pr_notice("Lockdown: %s: %s is restricted; see man kernel_lockdown.7\n",
-+				  current->comm, lockdown_reasons[what]);
- 		return -EPERM;
- 	}
++	return security_locked_down(LOCKDOWN_DEV_MEM);
+ }
  
+ #define zero_lseek	null_lseek
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 8e70063074a1..9458152601b5 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -104,6 +104,7 @@ enum lsm_event {
+ enum lockdown_reason {
+ 	LOCKDOWN_NONE,
+ 	LOCKDOWN_MODULE_SIGNATURE,
++	LOCKDOWN_DEV_MEM,
+ 	LOCKDOWN_INTEGRITY_MAX,
+ 	LOCKDOWN_CONFIDENTIALITY_MAX,
+ };
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 2c53fd9f5c9b..d2ef29d9f0b2 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -19,6 +19,7 @@ static enum lockdown_reason kernel_locked_down;
+ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+ 	[LOCKDOWN_NONE] = "none",
+ 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
++	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
+ 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+ 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+ };
 -- 
 2.22.0.770.g0f2c4a37fd-goog
 
