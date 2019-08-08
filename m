@@ -2,183 +2,128 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A37E85711
+	by mail.lfdr.de (Postfix) with ESMTP id F303F85712
 	for <lists+linux-security-module@lfdr.de>; Thu,  8 Aug 2019 02:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730634AbfHHAHg (ORCPT
+        id S1730693AbfHHAHl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Aug 2019 20:07:36 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:36122 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730635AbfHHAHf (ORCPT
+        Wed, 7 Aug 2019 20:07:41 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:32832 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730681AbfHHAHk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Aug 2019 20:07:35 -0400
-Received: by mail-pg1-f201.google.com with SMTP id y7so7474920pgq.3
-        for <linux-security-module@vger.kernel.org>; Wed, 07 Aug 2019 17:07:35 -0700 (PDT)
+        Wed, 7 Aug 2019 20:07:40 -0400
+Received: by mail-pl1-f202.google.com with SMTP id f5so4485012plr.0
+        for <linux-security-module@vger.kernel.org>; Wed, 07 Aug 2019 17:07:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=u2905WeoBzsTcUqrWVSX7p6zMJ6qFdPBK2S0ptkFjO4=;
-        b=VoR40voXGZ4r3EI7oQ5TJp8v2YX39brgb6d/zSs8ft4hklym8/Gt2a9+o//N9qLOFE
-         lL6d+hjXYM0ZfhO+JnOxPtMKcWI9ufmjAi1pqwnizkXVz3zYxdkgQjIR1X0RkHyrspZ7
-         n+ULWEiaxWUUmkq6xJrie3FKlqw8wqf8m17SkFtTyX+bobwjSvbQl+w/6TWNvSUHZKqJ
-         GAnEr/kt4WthH2MCiRcvNlAHaYXhmg0G4eRma/ptAee5bJusZYJnxdpEUf6wSgY/KjwJ
-         AkJWag1ewJUIEDQXVqTbfGIG6/Y0zDemscTSwNyJCkT6GUOWGkukpVtf/FxaDBHt7M1e
-         NSdQ==
+        bh=F1VsQKe1CvGe90szBrckBeIyG/tsASbX2ypyWhc14LE=;
+        b=qMlQjFH4LNkPFt7okSAYQH4LtgYOG/hpHDLWPX566YGyPNtYJPUP46rcks4c8eYnlb
+         0bNs4gihvrRlVOh7tP/Xx/1BqrbyEXSnnaOOpY9HI+9wJsc3wJD2PF5r/GwLRZeUaYMb
+         amKeZJBCwihyM/juh7mpeQuNxOuwGxJ9NIxBA9znCQKrTU72jhbs+1l3EcTedt8WGozq
+         BelKAb8SlmNg4vuZFYuqAK88knD3oJ0DDgpmSGebDO7s3E3QGb7ZbaHu1OLTTpwaG5sS
+         F0qMtxQ/4l2MjyX8Z6GY0yoXhEMxtyJK+E73Gdo88OD3vLRca9iG/my2Faw6p3KXszOw
+         kfgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=u2905WeoBzsTcUqrWVSX7p6zMJ6qFdPBK2S0ptkFjO4=;
-        b=fYTSYAFlz1NQXTiQW+HtYQMtgnQLKVsV3PHOBZ5JBgJdmk/pj/a6UGrVr7VlbAAqfC
-         nr+F5rC9hi7uo9hQrAYOt1CW3ZdTAI4xVz3npvnbQTH/wC3bAwqJFYfx5mGjaEKnzEEn
-         d6wzxuh834VoNcsBzNcWv6nDojRFHgW7OQdFmn2Vya85y/h2LPRYy+2NTEhKG32MPa/A
-         nPSUN4IrWKO5QzIu8oa3dIhHcTuv/E0DVNDyZ/SezU1uAA+xzapEnO8X6CifGwylry+e
-         iefdgjf6lYrnoyFs+Tu7Rtm3to20A1G5x4H33vYPQmTOtxi7UXl+GlC/pm9oLJH45vc7
-         RKmw==
-X-Gm-Message-State: APjAAAX0TxM0nZDpM6HbjAvqZZ9thl9cNA2CkU21tgHeuARTK9uIhUMe
-        1Pal2RBsMylDzbPIQvKDh2zoeebar60gmoOEkQHusg==
-X-Google-Smtp-Source: APXvYqyR4AfaEXJW2ENR7zwCKUIvKwO1QMtq0y+rmGIcu67Yrsi7oIJ0VRtdvsK+tFTLWpJIe/+Jj+iYyJyKasMUao2L5A==
-X-Received: by 2002:a63:9249:: with SMTP id s9mr9774501pgn.356.1565222854591;
- Wed, 07 Aug 2019 17:07:34 -0700 (PDT)
-Date:   Wed,  7 Aug 2019 17:06:56 -0700
+        bh=F1VsQKe1CvGe90szBrckBeIyG/tsASbX2ypyWhc14LE=;
+        b=fki7KmJ45am/358P1eDSfjupd1TNr+lgZvf1us6CNM202LV4OLqUqtyjO297k0kEwQ
+         Das31NU7qAh3zdgaId1Zm3ar8Za3cLRmoOvSH4QWppJdlP8d0IMBxJAAQo1FwqGCgYQJ
+         vUvZhs0UjWNrfdm18IMLlHaX5e/tK/xeJSOJhVpcQciQru96VNUUjhaWP0hQHrJ9a91l
+         fxr5oQnkOmqaSl/LByvP8mGgbiONGCTAnem0JUh7ppNdrh8FPN/SHcBW343YsdAsaGB/
+         vifYO49HTHZIn3xPtnrubMFTl9Pm41CrML8Vk68D6nAqv5dOvw9yromUKi2QlKJWvdiL
+         x3rQ==
+X-Gm-Message-State: APjAAAWTkPrmsb73yeCHWfJmaUkvtHpeL05ZkiIUZ4CIqZ2A4yMk+Gid
+        sP/zwLV4YbrMd/3kHoqZlG+pPgt23fnbIYnSj6HqXg==
+X-Google-Smtp-Source: APXvYqyhRtz7BIHwY/gc5z8qI7waq/52irPZx7U7/ay1YZFhLhsfUoUA1xgDlFmESnZc3tLh3+OeQj7gqeFdOTwZNMoaFQ==
+X-Received: by 2002:a65:6815:: with SMTP id l21mr10209698pgt.146.1565222859667;
+ Wed, 07 Aug 2019 17:07:39 -0700 (PDT)
+Date:   Wed,  7 Aug 2019 17:06:58 -0700
 In-Reply-To: <20190808000721.124691-1-matthewgarrett@google.com>
-Message-Id: <20190808000721.124691-5-matthewgarrett@google.com>
+Message-Id: <20190808000721.124691-7-matthewgarrett@google.com>
 Mime-Version: 1.0
 References: <20190808000721.124691-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-Subject: [PATCH V38 04/29] Enforce module signatures if the kernel is locked down
+Subject: [PATCH V38 06/29] kexec_load: Disable at runtime if the kernel is
+ locked down
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     jmorris@namei.org
 Cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
         David Howells <dhowells@redhat.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Kees Cook <keescook@chromium.org>, Jessica Yu <jeyu@kernel.org>
+        Matthew Garrett <mjg59@google.com>,
+        Dave Young <dyoung@redhat.com>,
+        Kees Cook <keescook@chromium.org>, kexec@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: David Howells <dhowells@redhat.com>
+From: Matthew Garrett <mjg59@srcf.ucam.org>
 
-If the kernel is locked down, require that all modules have valid
-signatures that we can verify.
+The kexec_load() syscall permits the loading and execution of arbitrary
+code in ring 0, which is something that lock-down is meant to prevent. It
+makes sense to disable kexec_load() in this situation.
 
-I have adjusted the errors generated:
-
- (1) If there's no signature (ENODATA) or we can't check it (ENOPKG,
-     ENOKEY), then:
-
-     (a) If signatures are enforced then EKEYREJECTED is returned.
-
-     (b) If there's no signature or we can't check it, but the kernel is
-	 locked down then EPERM is returned (this is then consistent with
-	 other lockdown cases).
-
- (2) If the signature is unparseable (EBADMSG, EINVAL), the signature fails
-     the check (EKEYREJECTED) or a system error occurs (eg. ENOMEM), we
-     return the error we got.
-
-Note that the X.509 code doesn't check for key expiry as the RTC might not
-be valid or might not have been transferred to the kernel's clock yet.
-
- [Modified by Matthew Garrett to remove the IMA integration. This will
-  be replaced with integration with the IMA architecture policy
-  patchset.]
+This does not affect kexec_file_load() syscall which can check for a
+signature on the image to be booted.
 
 Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <matthewgarrett@google.com>
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Acked-by: Dave Young <dyoung@redhat.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: Jessica Yu <jeyu@kernel.org>
+cc: kexec@lists.infradead.org
 ---
- include/linux/security.h     |  1 +
- kernel/module.c              | 37 +++++++++++++++++++++++++++++-------
- security/lockdown/lockdown.c |  1 +
- 3 files changed, 32 insertions(+), 7 deletions(-)
+ include/linux/security.h     | 1 +
+ kernel/kexec.c               | 8 ++++++++
+ security/lockdown/lockdown.c | 1 +
+ 3 files changed, 10 insertions(+)
 
 diff --git a/include/linux/security.h b/include/linux/security.h
-index 54a0532ec12f..8e70063074a1 100644
+index 9458152601b5..69c5de539e9a 100644
 --- a/include/linux/security.h
 +++ b/include/linux/security.h
-@@ -103,6 +103,7 @@ enum lsm_event {
-  */
- enum lockdown_reason {
+@@ -105,6 +105,7 @@ enum lockdown_reason {
  	LOCKDOWN_NONE,
-+	LOCKDOWN_MODULE_SIGNATURE,
+ 	LOCKDOWN_MODULE_SIGNATURE,
+ 	LOCKDOWN_DEV_MEM,
++	LOCKDOWN_KEXEC,
  	LOCKDOWN_INTEGRITY_MAX,
  	LOCKDOWN_CONFIDENTIALITY_MAX,
  };
-diff --git a/kernel/module.c b/kernel/module.c
-index cd8df516666d..318209889e26 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2771,8 +2771,9 @@ static inline void kmemleak_load_module(const struct module *mod,
- #ifdef CONFIG_MODULE_SIG
- static int module_sig_check(struct load_info *info, int flags)
- {
--	int err = -ENOKEY;
-+	int err = -ENODATA;
- 	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
-+	const char *reason;
- 	const void *mod = info->hdr;
+diff --git a/kernel/kexec.c b/kernel/kexec.c
+index 1b018f1a6e0d..bc933c0db9bf 100644
+--- a/kernel/kexec.c
++++ b/kernel/kexec.c
+@@ -205,6 +205,14 @@ static inline int kexec_load_check(unsigned long nr_segments,
+ 	if (result < 0)
+ 		return result;
  
- 	/*
-@@ -2787,16 +2788,38 @@ static int module_sig_check(struct load_info *info, int flags)
- 		err = mod_verify_sig(mod, info);
- 	}
- 
--	if (!err) {
-+	switch (err) {
-+	case 0:
- 		info->sig_ok = true;
- 		return 0;
--	}
- 
--	/* Not having a signature is only an error if we're strict. */
--	if (err == -ENOKEY && !is_module_sig_enforced())
--		err = 0;
-+		/* We don't permit modules to be loaded into trusted kernels
-+		 * without a valid signature on them, but if we're not
-+		 * enforcing, certain errors are non-fatal.
-+		 */
-+	case -ENODATA:
-+		reason = "Loading of unsigned module";
-+		goto decide;
-+	case -ENOPKG:
-+		reason = "Loading of module with unsupported crypto";
-+		goto decide;
-+	case -ENOKEY:
-+		reason = "Loading of module with unavailable key";
-+	decide:
-+		if (is_module_sig_enforced()) {
-+			pr_notice("%s is rejected\n", reason);
-+			return -EKEYREJECTED;
-+		}
- 
--	return err;
-+		return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++	/*
++	 * kexec can be used to circumvent module loading restrictions, so
++	 * prevent loading in that case
++	 */
++	result = security_locked_down(LOCKDOWN_KEXEC);
++	if (result)
++		return result;
 +
-+		/* All other errors are fatal, including nomem, unparseable
-+		 * signatures and signature check failures - even if signatures
-+		 * aren't required.
-+		 */
-+	default:
-+		return err;
-+	}
- }
- #else /* !CONFIG_MODULE_SIG */
- static int module_sig_check(struct load_info *info, int flags)
+ 	/*
+ 	 * Verify we have a legal set of flags
+ 	 * This leaves us room for future extensions.
 diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index d30c4d254b5f..2c53fd9f5c9b 100644
+index d2ef29d9f0b2..6f302c156bc8 100644
 --- a/security/lockdown/lockdown.c
 +++ b/security/lockdown/lockdown.c
-@@ -18,6 +18,7 @@ static enum lockdown_reason kernel_locked_down;
- 
- static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+@@ -20,6 +20,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
  	[LOCKDOWN_NONE] = "none",
-+	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
+ 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
+ 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
++	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
  	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
  };
