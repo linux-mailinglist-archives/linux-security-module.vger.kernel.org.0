@@ -2,87 +2,174 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC5B8E07F
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 Aug 2019 00:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C428E0B2
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 Aug 2019 00:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729907AbfHNWO1 (ORCPT
+        id S1728849AbfHNWay (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 14 Aug 2019 18:14:27 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:41558 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729881AbfHNWOV (ORCPT
+        Wed, 14 Aug 2019 18:30:54 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:46629 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728262AbfHNWay (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 14 Aug 2019 18:14:21 -0400
-Received: by mail-qt1-f193.google.com with SMTP id i4so353318qtj.8
-        for <linux-security-module@vger.kernel.org>; Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
+        Wed, 14 Aug 2019 18:30:54 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q139so196503pfc.13
+        for <linux-security-module@vger.kernel.org>; Wed, 14 Aug 2019 15:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=l5PC+4msT+R1VOq1FIInu61dIh2STHPN9aSBt/Y5M3n644FfA169IT6wzP+sfbruwG
-         5vHd8QNfmmF7FOlV1OW4+1ls9+argQAW0MZ9696kjqRFjMtNiRxkPVvom8CpuMz6+P3J
-         lvnykAE+N5ClLjt8+21Oenlj55mmWn47h6bOufTUj3iAyACG+cL0ImoQgj5m6u3w1/lr
-         fVPm9fs++0X3Li7mpOQ13No26+jYpH9OobXYps5GGnrfpp0Xq6qTsPtsJRMHzlRsuSi2
-         Q5RuPSHMeFGhG1MzboDTj+tp2IBpQDy9TN5wUYjWC528WeGARQxpLHz2F9meUvIkEvkQ
-         sSPA==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=yFT0DexMwrpcpBksqM27vWgfwGLdGdnJxoa44QNbmXc=;
+        b=mdyzDvu42tTkOsWy6oTPXu18OkStVhbhSoIT/SQap4fGl7XOdtBH5ZFB0bHDYa1y/z
+         nIG/PUjvCypqMuWoHSfsttI9fau5EVlapKeEuOV2JM9Xu7BhrYnpIqEeq9aUx5/xcZv8
+         mEi6tWij5/6vd9gQGKGUeUwwC7mnS84sZfs6oiOuZx90z/9scFOevardh43fJcAjndhO
+         7XbOPsnwVlU9htX6OWr4qG5AYWLTeQjQeYSRqO1jVj5ihkf/BawHcc1xYEe1FGXuxL2y
+         L2Zc2Lh1QA2T7+ehxuiCBbV/8RfmubBfWt8kIW5Kkl4xy5rSfi3onKqL1VkYlha0+6h9
+         qNQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=D0/0e4M0HTQnCGDWhXUPi6Sfb+dGO3aEsBuvCKrpuZNe+6+hS8pDnHaz2v8ez4zpVJ
-         j2G1esa6MzpfV8fB3Y6djwQwEpDwo7EL3WNE4NYS1ymIMAiIS/LeWTvqW/XBbM+92jxJ
-         7urKobbIL0JNGbZQO1WabLS4e4Ak43QtsIAWT592gytbU+2jdDPzXOmZXXDQPvOUlmXs
-         cWvqowvkMoxoILyivmIqgKXMkbPYZMN9PH6yZH4ydM3t05kiCgGUt9FfqHsP1zPxbhd+
-         rsYH0sgV20NhXO3PFNwRReGO63IrFdhWCtbT1aI9YcderI8KfgzS75JQB3xzO8IcEPnU
-         LxFw==
-X-Gm-Message-State: APjAAAUOm2hLb5yvW58bXTgq0E1T3YCGQtlH8dRBcZZJ8o/e5V2doRTv
-        QsJNRwWQs0EKiLGku50nOkMfVs7JPjyeAjjoUUM=
-X-Google-Smtp-Source: APXvYqwvEwq36YC/YcFdGthiFQqEswOUmu8y33AXL4ty34gsygcaTEjmhvj04/dFUfa1vFoE719aJcDSjuFoUwkSVes=
-X-Received: by 2002:aed:3826:: with SMTP id j35mr1333309qte.54.1565820860049;
- Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 15:14:19
- -0700 (PDT)
-Reply-To: Katerinejones19@gmail.com
-From:   "MS. MARYANNA B. THOMASON" <westernunion.benin982@gmail.com>
-Date:   Wed, 14 Aug 2019 23:14:19 +0100
-Message-ID: <CAP=nHB+U+By16HzeUHiDfPT5KNtemGam6gniZhL2s7_itZ3F8w@mail.gmail.com>
-Subject: TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
- THIS ATM CARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=yFT0DexMwrpcpBksqM27vWgfwGLdGdnJxoa44QNbmXc=;
+        b=HYBWyVmoU152wyWOnVgqkX1c2Ks5vqgAyVteMSW8LYhJlD2G2kzMZr0IwquN3bDFCh
+         G6tAGbiwxvMVi72uxuf9CgaaGSofwTiVPVxag0nKYpA4n053klG8eht9tIZ4eKfQrcEz
+         NUCdtGbbB6G4G3b+5pUqVagoan1hsfrdP1Uc4YCrVotQVmHsovoS1/HftErwC0mWWrnT
+         +QOzgn3TVO5aGAtwFwkbWaLOZx6y42rhHPivg3nflTlE3pTLDOotTTX0FxVfH+B+1A+P
+         +6SBjQsj5ZGxEtCFjNyI7zPvdGyBCaoaxAPbLLr7SH0u5Sv4XZayLfv1uWtMtL9aSBfB
+         VUgw==
+X-Gm-Message-State: APjAAAXLAfM756XZ18IAOExoqDY6n9JtPMjIkGhOQNCAPgZdzUEb6FBI
+        aUGls03E/G7hs66sH2mXKPzfPw==
+X-Google-Smtp-Source: APXvYqzJ31qf7hxB+vYykfcoT3+2aPYGmhoqmEYaHxavvuZTHNyJQKWgpyrk5FWfjptWB1rUiqJeVg==
+X-Received: by 2002:a63:5d54:: with SMTP id o20mr1120079pgm.413.1565821853550;
+        Wed, 14 Aug 2019 15:30:53 -0700 (PDT)
+Received: from ?IPv6:2600:1010:b04e:b450:9121:34aa:70f4:e97c? ([2600:1010:b04e:b450:9121:34aa:70f4:e97c])
+        by smtp.gmail.com with ESMTPSA id 4sm917288pfc.92.2019.08.14.15.30.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Aug 2019 15:30:52 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v2 bpf-next 1/4] bpf: unprivileged BPF access via /dev/bpf
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16G77)
+In-Reply-To: <20190814220545.co5pucyo5jk3weiv@ast-mbp.dhcp.thefacebook.com>
+Date:   Wed, 14 Aug 2019 15:30:51 -0700
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Daniel Colascione <dancol@google.com>,
+        Song Liu <songliubraving@fb.com>,
+        Kees Cook <keescook@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Jann Horn <jannh@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AD211133-EA60-4B91-AB1B-201713F50AB2@amacapital.net>
+References: <EE7B7AE1-3D44-4561-94B9-E97A626A251D@fb.com> <CALCETrXX-Jeb4wiQuL6FUai4wNMmMiUxuLLh_Lb9mT7h=0GgAw@mail.gmail.com> <20190805192122.laxcaz75k4vxdspn@ast-mbp> <CALCETrVtPs8gY-H4gmzSqPboid3CB++n50SvYd6RU9YVde_-Ow@mail.gmail.com> <20190806011134.p5baub5l3t5fkmou@ast-mbp> <CALCETrXEHL3+NAY6P6vUj7Pvd9ZpZsYC6VCLXOaNxb90a_POGw@mail.gmail.com> <20190813215823.3sfbakzzjjykyng2@ast-mbp> <CALCETrVT-dDXQGukGs5S1DkzvQv9_e=axzr_GyEd2c4T4z8Qng@mail.gmail.com> <20190814005737.4qg6wh4a53vmso2v@ast-mbp> <CALCETrUkqUprujww26VxHwkdXQ3DWJH8nnL2VBYpK2EU0oX_YA@mail.gmail.com> <20190814220545.co5pucyo5jk3weiv@ast-mbp.dhcp.thefacebook.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-ATTN DEAR PARCEL BENEFICIARY.
 
-I AM CATHY JONES,DIPLOMATIC AGENT ASIGNED ON THE DELIVERY OF YOUR ATM
-CARD THROUGH MS. MARYANNA B. THOMASON, DHL MANAGEMENT DIRECTOR NEW
-YORK.
-TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
-THIS ATM CARD, So before i deliver I want you to send me.
-official diplomatic agent delivery fee sum of $150.00 us
- only. I am here at JFK Airport,Florida. USA
 
-SEND THIS FEE BY WESTERN UNION OR MONEY WITH RECEIVER'S NAME AND ADDRESS BELOW.
+> On Aug 14, 2019, at 3:05 PM, Alexei Starovoitov <alexei.starovoitov@gmail.=
+com> wrote:
+>=20
+>> On Wed, Aug 14, 2019 at 10:51:23AM -0700, Andy Lutomirski wrote:
+>>=20
+>> If eBPF is genuinely not usable by programs that are not fully trusted
+>> by the admin, then no kernel changes at all are needed.  Programs that
+>> want to reduce their own privileges can easily fork() a privileged
+>> subprocess or run a little helper to which they delegate BPF
+>> operations.  This is far more flexible than anything that will ever be
+>> in the kernel because it allows the helper to verify that the rest of
+>> the program is doing exactly what it's supposed to and restrict eBPF
+>> operations to exactly the subset that is needed.  So a container
+>> manager or network manager that drops some provilege could have a
+>> little bpf-helper that manages its BPF XDP, firewalling, etc
+>> configuration.  The two processes would talk over a socketpair.
+>=20
+> there were three projects that tried to delegate bpf operations.
+> All of them failed.
+> bpf operational workflow is much more complex than you're imagining.
+> fork() also doesn't work for all cases.
+> I gave this example before: consider multiple systemd-like deamons
+> that need to do bpf operations that want to pass this 'bpf capability'
+> to other deamons written by other teams. Some of them will start
+> non-root, but still need to do bpf. They will be rpm installed
+> and live upgraded while running.
+> We considered to make systemd such centralized bpf delegation
+> authority too. It didn't work. bpf in kernel grows quickly.
+> libbpf part grows independently. llvm keeps evolving.
+> All of them are being changed while system overall has to stay
+> operational. Centralized approach breaks apart.
+>=20
+>> The interesting cases you're talking about really *do* involved
+>> unprivileged or less privileged eBPF, though.  Let's see:
+>>=20
+>> systemd --user: systemd --user *is not privileged at all*.  There's no
+>> issue of reducing privilege, since systemd --user doesn't have any
+>> privilege to begin with.  But systemd supports some eBPF features, and
+>> presumably it would like to support them in the systemd --user case.
+>> This is unprivileged eBPF.
+>=20
+> Let's disambiguate the terminology.
+> This /dev/bpf patch set started as describing the feature as 'unprivileged=
+ bpf'.
+> I think that was a mistake.
+> Let's call systemd-like deamon usage of bpf 'less privileged bpf'.
+> This is not unprivileged.
+> 'unprivileged bpf' is what sysctl kernel.unprivileged_bpf_disabled control=
+s.
+>=20
+> There is a huge difference between the two.
+> I'm against extending 'unprivileged bpf' even a bit more than what it is
+> today for many reasons mentioned earlier.
+> The /dev/bpf is about 'less privileged'.
+> Less privileged than root. We need to split part of full root capability
+> into bpf capability. So that most of the root can be dropped.
+> This is very similar to what cap_net_admin does.
+> cap_net_amdin can bring down eth0 which is just as bad as crashing the box=
+.
+> cap_net_admin is very much privileged. Just 'less privileged' than root.
+> Same thing for cap_bpf.
 
-RECEIVER'S NAME-----------------ERROL PRINGLE
-ADDRESS----------------3500 OLD DENTON RD APT 208; CARROLLTON, TEXAS 75007
-COUNTRY----------------USA
-AMOUNT--------------------$150.00 ONLY
-TEST QUESTION----------------WHO IS THE CREATOR
-ANSWER------------------GOD
- meanwhile this $150.00 is required by the Custom Service,USA Homeland
-Security,for protection of your delivery, it will make the ATM CARD
-and funds worth $15.8MILLION US DOLLARS secure, Beleiev me, this is my
-word, remark my word,you will receive your delivery from me, Mrs.
-Cathy Jones once you send this only $150.00 today.
-I WAIT ON YOUR PAYMENT CONFIRMATION, ONCE I GOT YOUR PAYMENT, I WILL
-FINALLY ARRIVE TO YOUR NEAREST ADDRESS. today
-THANKS AND MAY GOD BLESS  YOU
-CATHY JONES,DIPLOMATIC AGENT
-EMAIL; katerinejones19@gmail.com
-CALL OR TEXT ME, DIPLOMATIC AGENT MS. CATHY JONES
-Phone Number; (408) 650-6103,
+The new pseudo-capability in this patch set is absurdly broad. I=E2=80=99ve p=
+roposed some finer-grained divisions in this thread. Do you have comments on=
+ them?
+
+>=20
+> May be we should do both cap_bpf and /dev/bpf to make it clear that
+> this is the same thing. Two interfaces to achieve the same result.
+
+What for?  If there=E2=80=99s a CAP_BPF, then why do you want /dev/bpf? Espe=
+cially if you define it to do the same thing.
+
+>=20
+>> Seccomp.  Seccomp already uses cBPF, which is a form of BPF although
+>> it doesn't involve the bpf() syscall.  There are some seccomp
+>> proposals in the works that will want some stuff from eBPF.  In
+>=20
+> I'm afraid these proposals won't go anywhere.
+
+Can you explain why?
+
+>=20
+>> So it's a bit of a chicken-and-egg situation.  There aren't major
+>> unprivileged eBPF users because the kernel support isn't there.
+>=20
+> As I said before there are zero known use cases of 'unprivileged bpf'.
+>=20
+> If I understand you correctly you're refusing to accept that
+> 'less privileged bpf' is a valid use case while pushing for extending
+> scope of 'unprivileged'.
+
+No, I=E2=80=99m not.  I have no objection at all if you try to come up with a=
+ clear definition of what the capability checks do and what it means to gran=
+t a new permission to a task.  Changing *all* of the capable checks is needl=
+essly broad.=
