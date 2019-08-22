@@ -2,83 +2,92 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C18398C81
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Aug 2019 09:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0664993B0
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Aug 2019 14:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731574AbfHVHmw (ORCPT
+        id S2388622AbfHVMdZ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 22 Aug 2019 03:42:52 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:52075 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731525AbfHVHmw (ORCPT
+        Thu, 22 Aug 2019 08:33:25 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36006 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388608AbfHVMdZ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 22 Aug 2019 03:42:52 -0400
-Received: from fsav102.sakura.ne.jp (fsav102.sakura.ne.jp [27.133.134.229])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x7M7gR6B078219;
-        Thu, 22 Aug 2019 16:42:27 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav102.sakura.ne.jp (F-Secure/fsigk_smtp/530/fsav102.sakura.ne.jp);
- Thu, 22 Aug 2019 16:42:27 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/530/fsav102.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x7M7gQ1A078163;
-        Thu, 22 Aug 2019 16:42:26 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: (from i-love@localhost)
-        by www262.sakura.ne.jp (8.15.2/8.15.2/Submit) id x7M7gQJW078160;
-        Thu, 22 Aug 2019 16:42:26 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Message-Id: <201908220742.x7M7gQJW078160@www262.sakura.ne.jp>
-X-Authentication-Warning: www262.sakura.ne.jp: i-love set sender to penguin-kernel@i-love.sakura.ne.jp using -f
-Subject: Re: [PATCH v2] tomoyo: Don't check open/getattr permission on sockets.
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
-        syzbot <syzbot+0341f6a4d729d4e0acf1@syzkaller.appspotmail.com>,
-        jmorris@namei.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp,
-        "David S. Miller" <davem@davemloft.net>
+        Thu, 22 Aug 2019 08:33:25 -0400
+Received: by mail-lj1-f195.google.com with SMTP id u15so5392315ljl.3
+        for <linux-security-module@vger.kernel.org>; Thu, 22 Aug 2019 05:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=iVbicIO0p0gRad2mojfMoXPK1bvee8m7TQDWF1D1ACPE9HqmNhL2GBY+oHjfleXep+
+         wlwnOwIGGXywTfWnwFY2sQ2+h7NA0iPrPVMp/fpPZz0TCkDtzEkceGvTPOs+5VsA+PDA
+         bog9JENsSaOIYx1EC+/cR0/9HBbgj+daWMstdn5zms4O325GD0AQaD/ms3ETHmSt6uto
+         Q6665qufcUQQcAyfjYrg0fnfHXit5ax05ENYUjOrRwG/w//Vr5t0ubPdCTC7BmhWIJWz
+         mQQKKeL+2FnzNGwY3o/OwTiNkaLGMTHC1jVl8gl5NMf5tKp3Dcziy6EpzKOnIMzsAz/Z
+         Gt/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=cyqt6w0IWdWSEeb3MUeYX8rrHcxNeyMbfbgk1EsOVI5AaNYtsR/qEjjCdM0/5QBpXr
+         vM4VbWgtyDIqH4t0o+a0/uDY3CYoLli1w+Vcju7cU2OA4OPz+465cxcp3BzYXnEQ/d09
+         hjnaBTIYDthL1bld/pePG7GfV+leOjgIpH1qo6emAN0EpGn8i1kRibTIuiKrylCTBQa+
+         TrJqhbthiaY5EMIdaGS9xNluZnC61ypaj889IKxS6m/k2j8MAhhKiajjKCiAw0p2R5iq
+         1nq9u2sC93kNCjUYtoJZHY/D6uu+VXGgNi0++u4YeJL8B01FirB3j+MPo6x3xXdkpm0m
+         PVwQ==
+X-Gm-Message-State: APjAAAWIFuYzx6XcJuk9a/HfCjHXnNniot88nmIctEDgA5QodU0iGfxC
+        k7HlRXY+x7r5A2ihs7BMVYZECbYVDOsRN3sb8Rg=
+X-Google-Smtp-Source: APXvYqzw94KeAGRPQVwAh+UJFBQ7DOYzf35Giv9H76e1wjU00JCNb63boziaVgpph5IBHV5hsn94tmvSTLyQYtVZmJc=
+X-Received: by 2002:a2e:63cd:: with SMTP id s74mr17881307lje.3.1566477203899;
+ Thu, 22 Aug 2019 05:33:23 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Thu, 22 Aug 2019 16:42:26 +0900
-References: <201908220655.x7M6tVmv029579@www262.sakura.ne.jp> <20190822070129.GL6111@zzz.localdomain>
-In-Reply-To: <20190822070129.GL6111@zzz.localdomain>
-Content-Type: text/plain; charset="ISO-2022-JP"
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:33:23
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:33:23 +0000
+Message-ID: <CAN-_bTaBz=R_5Eq36MajojFPC316zxdyXEEVzKzzZgeSdGG98A@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Eric Biggers wrote:
-> On Thu, Aug 22, 2019 at 03:55:31PM +0900, Tetsuo Handa wrote:
-> > > Also, isn't the same bug in other places too?:
-> > > 
-> > > 	- tomoyo_path_chmod()
-> > > 	- tomoyo_path_chown()
-> > > 	- smack_inode_getsecurity()
-> > > 	- smack_inode_setsecurity()
-> > 
-> > What's the bug? The file descriptor returned by open(O_PATH) cannot be
-> > passed to read(2), write(2), fchmod(2), fchown(2), fgetxattr(2), mmap(2) etc.
-> > 
-> 
-> chmod(2), chown(2), getxattr(2), and setxattr(2) take a path, not a fd.
-> 
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-OK. Then, is the correct fix
-
-  inode_lock(inode);
-  if (SOCKET_I(inode)->sk) {
-    // Can access SOCKET_I(sock)->sk->*
-  } else {
-    // Already close()d. Don't touch.
-  }
-  inode_unlock(inode);
-
-thanks to
-
-  commit 6d8c50dcb029872b ("socket: close race condition between sock_close() and sockfs_setattr()")
-  commit ff7b11aa481f682e ("net: socket: set sock->sk to NULL after calling proto_ops::release()")
-
-changes?
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
