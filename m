@@ -2,117 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49380A2AE1
-	for <lists+linux-security-module@lfdr.de>; Fri, 30 Aug 2019 01:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831ABA2B4B
+	for <lists+linux-security-module@lfdr.de>; Fri, 30 Aug 2019 02:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728325AbfH2XaZ (ORCPT
+        id S1726825AbfH3AJc (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 29 Aug 2019 19:30:25 -0400
-Received: from sonic303-28.consmr.mail.ne1.yahoo.com ([66.163.188.154]:42202
-        "EHLO sonic303-28.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728317AbfH2XaZ (ORCPT
+        Thu, 29 Aug 2019 20:09:32 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14322 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726014AbfH3AJc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 29 Aug 2019 19:30:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1567121424; bh=bTpYSfOPPyQC93rL07mL99qbU5sEPagdbqHFlgN48s4=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=sf8FaplBhhdBf6vSm5Xr17BLtcflyUsZ6fcvJoA46sg2FpsBSiUTYYHbVJ5o7x04YDYxL1iKutuvfzmL3y2eIJQzMIRQAtdm4g9vZmLdfA+ASMLsT2HxM8ZvkNqE73Gw7z9ajSEClRYnKrthhJi8pmqsg0Bd3SSWMG1e9FSx1wAhXDb5pKAhYtK9ZLptHkJ9I0li2sGsqAOzaF5l6BpkHggXKTs0/jwHzeS7Vph3N2cVXYgV1k4zntB1blkmHjtHJpQ0Sd0AkR0aNNZ2P9BVQOin1baKkakRL/YmZCUQvFoKsXaJum0YQVwZRoDnfB9CCOh4ubF/OCRMO3Q1TaGlow==
-X-YMail-OSG: G76YARAVM1nujaGxjU1QYhUmz4a2wGhNuid9b1IXb4ype2nnTG7mEyoYVSqZNBl
- cDf3P8LCE0eSUsawEs3NiTYzRwO07w1_bmpWfj7lMKWXM7xc50A5E7FUNXPjU0NmpnsRCvTz5tT1
- 3oodvAhKbz2uCC_qMlBEs.Qcoi5IVtfd9dNgY0WBV5NwcdQRKBLOLeUF_PBQ4qblK2hjTYAvHqJw
- aW2azpVybcMzCbIncyK5ojyeLPz0sEmWi1LdSNi4YjT9RYkgktSciNwbLIbf56wmFwPN6LKhpDas
- 4rM8_0KwsR2pw.9kwbpW2lVSwTa9.ho4Po43A22tZJtrTgfjNDGgfWKtKb6MecF49q1awif.hjQt
- AV5EXSMzo1sItZon3QfU8i1.tElTizkDYo9rXZwzcVbgkJ0fQnfNpKFswHvXsVhkuPQ86RZba5ja
- jOJ2w823e6wZHPNFMjHw5LZECdpclqNV6CFUB6YSy8lcBx5LcAZ_nAm9dgljW45N12JVjOr9bFdo
- JJpjRjhp.ufdYYbFtbZtwmwwxqyiM.7epWve_GdRAKElAKtPASCO32e.siYjsXVLaPPjKZGWfw0C
- 73dVHamUb7gWauuCgGn0ku.WJ_Fyq_y.H4h8r62mGGFBn5ukjEkb03eziiXwsVNgbfBHVAVSLTUc
- Iq9sJwCKzxbSUyFjNlKA7z4PPy7jpYA_8AF1McDh.8HlXAIIHwTgFLOoQ6As6wnXUlbIuiNSu.b.
- nUDvSuN361JBBKAt8kQFF5RcDbBfCgSvTVKQBEy8AM74gxzaS6Bi1ia5oo6lXj4oafV5AsnZuj2U
- RIrzGCG5Wi6u.WOsXK42NbOsBhg1e3PlCgMwYichFJg3pyFLBM9TTxmnf26_pK817vfEyectkf7H
- rwiaQplicU8WhubsOTqSoMJVvUKDY0sbUxqsRiYNAL9EYhTn5inYl4DSDRKNAdaVpOrVV1Jxis_n
- 7qzFOZTmqgw0rgZL5H0o.8mNlIy2jhAfdVN_uumGxWUJIZP_sbTOwLxbBP05Tnd1uP0IbT9FfWVy
- 7J5x3WAXLUJLJ0KQ_hlmCcsTvzGWF9kCSJu3.m8zUeZg.hB00VFKj5xmRxbnj8b7YwVKigl.DEBZ
- BA_9u0j.aI6gYpCbxnyEbdexZQJZXoORb_HHXxRAzMyeKtPenIpDhRr_dkNTFGIcWwUIWwMbK8iV
- QGSiMEmBNTsCe6pHddWMoz1lytqNeAtAqsFchJ68y6GZIDig6Ep07HKMjMWWE0UCCXKrcMcwBnFR
- ZY_ii1omXdOHP3c14Ixk7tY9Us4HlK5G_2eBQsrWG0llnfXxSuQsWleIeY6YvraD9lYWuR4UAaW1
- CiYkVm1fLvgMJJla8TmAOJg--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Thu, 29 Aug 2019 23:30:24 +0000
-Received: by smtp408.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID d0dbf8f29a1f39b20bf1052e42e06980;
-          Thu, 29 Aug 2019 23:30:23 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     casey@schaufler-ca.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH v8 28/28] AppArmor: Remove the exclusive flag
-Date:   Thu, 29 Aug 2019 16:29:35 -0700
-Message-Id: <20190829232935.7099-29-casey@schaufler-ca.com>
+        Thu, 29 Aug 2019 20:09:32 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7U07LfO111295;
+        Thu, 29 Aug 2019 20:09:29 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2upna1f03b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Aug 2019 20:09:28 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7U04jrk002048;
+        Fri, 30 Aug 2019 00:09:28 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma02dal.us.ibm.com with ESMTP id 2un65kb7fm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Aug 2019 00:09:28 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7U09QQl57082294
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Aug 2019 00:09:27 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DBDBD136059;
+        Fri, 30 Aug 2019 00:09:26 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F50813604F;
+        Fri, 30 Aug 2019 00:09:26 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Aug 2019 00:09:26 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     jarkko.sakkinen@linux.intel.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-stable@vger.kernel.org
+Subject: [PATCH] tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts
+Date:   Thu, 29 Aug 2019 20:09:06 -0400
+Message-Id: <20190830000906.2369009-1-stefanb@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829232935.7099-1-casey@schaufler-ca.com>
-References: <20190829232935.7099-1-casey@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-29_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=954 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908290242
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the inclusion of the "display" process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+The tpm_tis_core has to set the TPM_CHIP_FLAG_IRQ before probing for
+interrupts since there is no other place in the code that would set
+it.
+
+Cc: linux-stable@vger.kernel.org
+Fixes: 570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+ drivers/char/tpm/tpm_tis_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 5d25959610f9..fb5d5af426c6 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1071,22 +1071,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock, char **optval,
- 	return error;
- }
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index ffa9048d8f6c..270f43acbb77 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -981,6 +981,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		}
  
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1190,8 +1174,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1702,7 +1684,7 @@ static int __init apparmor_init(void)
- 
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
+ 		tpm_chip_start(chip);
++		chip->flags |= TPM_CHIP_FLAG_IRQ;
+ 		if (irq) {
+ 			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
+ 						 irq);
 -- 
-2.20.1
+2.14.5
 
