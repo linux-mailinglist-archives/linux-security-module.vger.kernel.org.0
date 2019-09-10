@@ -2,281 +2,47 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6434AAE9C1
-	for <lists+linux-security-module@lfdr.de>; Tue, 10 Sep 2019 13:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6884DAEA5F
+	for <lists+linux-security-module@lfdr.de>; Tue, 10 Sep 2019 14:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393041AbfIJL4x (ORCPT
+        id S2388426AbfIJMaF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 10 Sep 2019 07:56:53 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35677 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388328AbfIJL4w (ORCPT
+        Tue, 10 Sep 2019 08:30:05 -0400
+Received: from namei.org ([65.99.196.166]:43636 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729868AbfIJMaF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 10 Sep 2019 07:56:52 -0400
-Received: by mail-wr1-f67.google.com with SMTP id g7so19678081wrx.2
-        for <linux-security-module@vger.kernel.org>; Tue, 10 Sep 2019 04:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lgmJPtZQ8fyvuHmMOh0a9ZreWnclwauCPln6Fe4dsAY=;
-        b=IdAVenQm+KFl73tqIuoKRLF16IuBa66JLF9e3L97ri0rt1+h13KE7e/z9EFxsEw55/
-         5Gg9Q2C/Pqh22uIIEB+S0T5w5wL8ylwDuDMWCnJhmD6IHoGEDjwyaW46T2hBA9yjnE+/
-         qntn7RAEUAWM4IqnU33TBEjzQWA1193y70e+s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lgmJPtZQ8fyvuHmMOh0a9ZreWnclwauCPln6Fe4dsAY=;
-        b=YkGmMHMzqSRUIM8V9n610/lsv2LSiJ8CXSnQ7tj1p+laUZA9226+aPFB9WVY3EAyIZ
-         NXn5OUuF8ed51fgVeEyGRRf60BLgXtjvRwfrvaIpoFZwhJPBX2hEbQo71MBnonkpbR5N
-         m2dE8inmIEzPfCqNNzn3rshFCObl/O1JrbgO9H5mQ/KdCx2gkjgJN/ri4HU1QtTCngxo
-         QVofkB0SGdu7oKyin9elz1kPppBVyIJej2ouPg5Wq/3XjqeV/gjaokcqpsEAdwp7ToNI
-         a+EgC03Q48T8mG89A/pfky5UzprfXpxUU3+ReC5Q3hmm9uKpjOAdETihA9ryBvuWp320
-         FRfQ==
-X-Gm-Message-State: APjAAAUuvrQxXIkRwlKyFH53q55VHFJo/lbCuo8kHLkeiXBttc/Ch9Ff
-        28XDIv5bA3UgWUxnsPtFhQprsA==
-X-Google-Smtp-Source: APXvYqwsJ62ovsvYrjSdhTzzrg9GHfIWeorKeBgzq7lDd93TJ6kuVNJcQfYw6ooL0kkzPRzV/HrWJw==
-X-Received: by 2002:a5d:43cc:: with SMTP id v12mr13130776wrr.75.1568116607885;
-        Tue, 10 Sep 2019 04:56:47 -0700 (PDT)
-Received: from kpsingh-kernel.c.hoisthospitality.com (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id q19sm23732935wra.89.2019.09.10.04.56.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2019 04:56:47 -0700 (PDT)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Florent Revest <revest@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [RFC v1 14/14] krsi: Pin arg pages only when needed
-Date:   Tue, 10 Sep 2019 13:55:27 +0200
-Message-Id: <20190910115527.5235-15-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190910115527.5235-1-kpsingh@chromium.org>
-References: <20190910115527.5235-1-kpsingh@chromium.org>
+        Tue, 10 Sep 2019 08:30:05 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id x8ACTxV6027709;
+        Tue, 10 Sep 2019 12:30:00 GMT
+Date:   Tue, 10 Sep 2019 05:29:59 -0700 (PDT)
+From:   James Morris <jmorris@namei.org>
+To:     Matthew Garrett <matthewgarrett@google.com>
+cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: [PATCH 0/2] Minor lockdown fixups
+In-Reply-To: <20190910100318.204420-1-matthewgarrett@google.com>
+Message-ID: <alpine.LRH.2.21.1909100529300.27252@namei.org>
+References: <20190910100318.204420-1-matthewgarrett@google.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: KP Singh <kpsingh@google.com>
+On Tue, 10 Sep 2019, Matthew Garrett wrote:
 
-Adds a callback which is called when a new program is attached
-to a hook. The callback registered by the process_exection hook
-checks if a program that has calls to a helper that requires pages to
-be pinned (eg. krsi_get_env_var).
+> Constify some arrays and fix an #ifdef that I typoed.
+> 
 
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- include/linux/krsi.h              |  1 +
- security/krsi/include/hooks.h     |  5 ++-
- security/krsi/include/krsi_init.h |  7 ++++
- security/krsi/krsi.c              | 62 ++++++++++++++++++++++++++++---
- security/krsi/ops.c               | 10 ++++-
- 5 files changed, 77 insertions(+), 8 deletions(-)
+Applied to
+git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git next-lockdown
+and next-testing
 
-diff --git a/include/linux/krsi.h b/include/linux/krsi.h
-index c7d1790d0c1f..e443d0309764 100644
---- a/include/linux/krsi.h
-+++ b/include/linux/krsi.h
-@@ -7,6 +7,7 @@
- 
- #ifdef CONFIG_SECURITY_KRSI
- int krsi_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog);
-+extern const struct bpf_func_proto krsi_get_env_var_proto;
- #else
- static inline int krsi_prog_attach(const union bpf_attr *attr,
- 				   struct bpf_prog *prog)
-diff --git a/security/krsi/include/hooks.h b/security/krsi/include/hooks.h
-index e070c452b5de..38293125ff99 100644
---- a/security/krsi/include/hooks.h
-+++ b/security/krsi/include/hooks.h
-@@ -8,7 +8,7 @@
-  *
-  * Format:
-  *
-- *   KRSI_HOOK_INIT(TYPE, NAME, LSM_HOOK, KRSI_HOOK_FN)
-+ *   KRSI_HOOK_INIT(TYPE, NAME, LSM_HOOK, KRSI_HOOK_FN, CALLBACK)
-  *
-  * KRSI adds one layer of indirection between the name of the hook and the name
-  * it exposes to the userspace in Security FS to prevent the userspace from
-@@ -18,4 +18,5 @@
- KRSI_HOOK_INIT(PROCESS_EXECUTION,
- 	       process_execution,
- 	       bprm_check_security,
--	       krsi_process_execution)
-+	       krsi_process_execution,
-+	       krsi_process_execution_cb)
-diff --git a/security/krsi/include/krsi_init.h b/security/krsi/include/krsi_init.h
-index 6152847c3b08..99801d5b273a 100644
---- a/security/krsi/include/krsi_init.h
-+++ b/security/krsi/include/krsi_init.h
-@@ -31,6 +31,8 @@ struct krsi_ctx {
- 	};
- };
- 
-+typedef int (*krsi_prog_attach_t) (struct bpf_prog_array *);
-+
- /*
-  * The LSM creates one file per hook.
-  *
-@@ -61,6 +63,11 @@ struct krsi_hook {
- 	 * The eBPF programs that are attached to this hook.
- 	 */
- 	struct bpf_prog_array __rcu	*progs;
-+	/*
-+	 * The attach callback is called before a new program is attached
-+	 * to the hook and is passed the updated bpf_prog_array as an argument.
-+	 */
-+	krsi_prog_attach_t attach_callback;
- };
- 
- extern struct krsi_hook krsi_hooks_list[];
-diff --git a/security/krsi/krsi.c b/security/krsi/krsi.c
-index 00a7150c1b22..a4443d7aa150 100644
---- a/security/krsi/krsi.c
-+++ b/security/krsi/krsi.c
-@@ -5,15 +5,65 @@
- #include <linux/bpf.h>
- #include <linux/binfmts.h>
- #include <linux/highmem.h>
-+#include <linux/krsi.h>
- #include <linux/mm.h>
- 
- #include "krsi_init.h"
- 
-+/*
-+ * need_arg_pages is only updated in bprm_check_security_cb
-+ * when a mutex on krsi_hook for bprm_check_security is already
-+ * held. need_arg_pages avoids pinning pages when no program
-+ * that needs them is attached to the hook.
-+ */
-+static bool need_arg_pages;
-+
-+/*
-+ * Checks if the instruction is a BPF_CALL to an eBPF helper located
-+ * at the given address.
-+ */
-+static inline bool bpf_is_call_to_func(struct bpf_insn *insn,
-+				       void *func_addr)
-+{
-+	u8 opcode = BPF_OP(insn->code);
-+
-+	if (opcode != BPF_CALL)
-+		return false;
-+
-+	if (insn->src_reg == BPF_PSEUDO_CALL)
-+		return false;
-+
-+	/*
-+	 * The BPF verifier updates the value of insn->imm from the
-+	 * enum bpf_func_id to the offset of the address of helper
-+	 * from the __bpf_call_base.
-+	 */
-+	return __bpf_call_base + insn->imm == func_addr;
-+}
-+
-+static int krsi_process_execution_cb(struct bpf_prog_array *array)
-+{
-+	struct bpf_prog_array_item *item = array->items;
-+	struct bpf_prog *p;
-+	const struct bpf_func_proto *proto = &krsi_get_env_var_proto;
-+	int i;
-+
-+	while ((p = READ_ONCE(item->prog))) {
-+		for (i = 0; i < p->len; i++) {
-+			if (bpf_is_call_to_func(&p->insnsi[i], proto->func))
-+				need_arg_pages = true;
-+		}
-+		item++;
-+	}
-+	return 0;
-+}
-+
- struct krsi_hook krsi_hooks_list[] = {
--	#define KRSI_HOOK_INIT(TYPE, NAME, H, I) \
-+	#define KRSI_HOOK_INIT(TYPE, NAME, H, I, CB) \
- 		[TYPE] = { \
- 			.h_type = TYPE, \
- 			.name = #NAME, \
-+			.attach_callback = CB, \
- 		},
- 	#include "hooks.h"
- 	#undef KRSI_HOOK_INIT
-@@ -75,9 +125,11 @@ static int krsi_process_execution(struct linux_binprm *bprm)
- 		.bprm = bprm,
- 	};
- 
--	ret = pin_arg_pages(&ctx.bprm_ctx);
--	if (ret < 0)
--		goto out_arg_pages;
-+	if (READ_ONCE(need_arg_pages)) {
-+		ret = pin_arg_pages(&ctx.bprm_ctx);
-+		if (ret < 0)
-+			goto out_arg_pages;
-+	}
- 
- 	ret = krsi_run_progs(PROCESS_EXECUTION, &ctx);
- 	kfree(ctx.bprm_ctx.arg_pages);
-@@ -87,7 +139,7 @@ static int krsi_process_execution(struct linux_binprm *bprm)
- }
- 
- static struct security_hook_list krsi_hooks[] __lsm_ro_after_init = {
--	#define KRSI_HOOK_INIT(T, N, HOOK, IMPL) LSM_HOOK_INIT(HOOK, IMPL),
-+	#define KRSI_HOOK_INIT(T, N, HOOK, IMPL, CB) LSM_HOOK_INIT(HOOK, IMPL),
- 	#include "hooks.h"
- 	#undef KRSI_HOOK_INIT
- };
-diff --git a/security/krsi/ops.c b/security/krsi/ops.c
-index 1db94dfaac15..2de682371eff 100644
---- a/security/krsi/ops.c
-+++ b/security/krsi/ops.c
-@@ -139,6 +139,14 @@ int krsi_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 		goto unlock;
- 	}
- 
-+	if (h->attach_callback) {
-+		ret = h->attach_callback(new_array);
-+		if (ret < 0) {
-+			bpf_prog_array_free(new_array);
-+			goto unlock;
-+		}
-+	}
-+
- 	rcu_assign_pointer(h->progs, new_array);
- 	bpf_prog_array_free(old_array);
- 
-@@ -278,7 +286,7 @@ BPF_CALL_5(krsi_get_env_var, struct krsi_ctx *, ctx, char *, name, u32, n_size,
- 	return get_env_var(ctx, name, dest, n_size, size);
- }
- 
--static const struct bpf_func_proto krsi_get_env_var_proto = {
-+const struct bpf_func_proto krsi_get_env_var_proto = {
- 	.func = krsi_get_env_var,
- 	.gpl_only = true,
- 	.ret_type = RET_INTEGER,
+
 -- 
-2.20.1
+James Morris
+<jmorris@namei.org>
 
