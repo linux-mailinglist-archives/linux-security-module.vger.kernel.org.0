@@ -2,116 +2,67 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE89B2567
-	for <lists+linux-security-module@lfdr.de>; Fri, 13 Sep 2019 20:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D61B2B53
+	for <lists+linux-security-module@lfdr.de>; Sat, 14 Sep 2019 15:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389964AbfIMSwC (ORCPT
+        id S2388594AbfINNEr (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 13 Sep 2019 14:52:02 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:33303 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389946AbfIMSwC (ORCPT
+        Sat, 14 Sep 2019 09:04:47 -0400
+Received: from mga06.intel.com ([134.134.136.31]:18258 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388575AbfINNEr (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 13 Sep 2019 14:52:02 -0400
-Received: from lhreml701-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 7C8E0838EB7978359F1B;
-        Fri, 13 Sep 2019 19:51:59 +0100 (IST)
-Received: from A170120444-LP.china.huawei.com (10.47.67.210) by
- smtpsuk.huawei.com (10.201.108.42) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Fri, 13 Sep 2019 19:51:49 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <jarkko.sakkinen@linux.intel.com>, <zohar@linux.ibm.com>,
-        <jsnitsel@redhat.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4] KEYS: trusted: correctly initialize digests and fix locking issue
-Date:   Fri, 13 Sep 2019 20:51:36 +0200
-Message-ID: <20190913185136.780-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 14 Sep 2019 09:04:47 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Sep 2019 06:04:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
+   d="scan'208";a="188149021"
+Received: from krusocki-mobl.ger.corp.intel.com (HELO localhost) ([10.252.40.34])
+  by orsmga003.jf.intel.com with ESMTP; 14 Sep 2019 06:04:42 -0700
+Date:   Sat, 14 Sep 2019 14:04:41 +0100
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     zohar@linux.ibm.com, jsnitsel@redhat.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com
+Subject: Re: [PATCH v4] KEYS: trusted: correctly initialize digests and fix
+ locking issue
+Message-ID: <20190914130441.GE9560@linux.intel.com>
+References: <20190913185136.780-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.47.67.210]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190913185136.780-1-roberto.sassu@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Commit 0b6cf6b97b7e ("tpm: pass an array of tpm_extend_digest structures to
-tpm_pcr_extend()") modifies tpm_pcr_extend() to accept a digest for each
-PCR bank. After modification, tpm_pcr_extend() expects that digests are
-passed in the same order as the algorithms set in chip->allocated_banks.
+On Fri, Sep 13, 2019 at 08:51:36PM +0200, Roberto Sassu wrote:
+> Commit 0b6cf6b97b7e ("tpm: pass an array of tpm_extend_digest structures to
+> tpm_pcr_extend()") modifies tpm_pcr_extend() to accept a digest for each
+> PCR bank. After modification, tpm_pcr_extend() expects that digests are
+> passed in the same order as the algorithms set in chip->allocated_banks.
+> 
+> This patch fixes two issues introduced in the last iterations of the patch
+> set: missing initialization of the TPM algorithm ID in the tpm_digest
+> structures passed to tpm_pcr_extend() by the trusted key module, and
+> unreleased locks in the TPM driver due to returning from tpm_pcr_extend()
+> without calling tpm_put_ops().
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Fixes: 0b6cf6b97b7e ("tpm: pass an array of tpm_extend_digest structures to tpm_pcr_extend()")
 
-This patch fixes two issues introduced in the last iterations of the patch
-set: missing initialization of the TPM algorithm ID in the tpm_digest
-structures passed to tpm_pcr_extend() by the trusted key module, and
-unreleased locks in the TPM driver due to returning from tpm_pcr_extend()
-without calling tpm_put_ops().
+Reviewed-by:  <jarkko.sakkinen@linux.intel.com>
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-Fixes: 0b6cf6b97b7e ("tpm: pass an array of tpm_extend_digest structures to tpm_pcr_extend()")
----
- drivers/char/tpm/tpm-interface.c | 14 +++++++++-----
- security/keys/trusted.c          |  5 +++++
- 2 files changed, 14 insertions(+), 5 deletions(-)
+I picked up this patch to my tree.
 
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 1b4f95c13e00..d9ace5480665 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -320,18 +320,22 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 	if (!chip)
- 		return -ENODEV;
- 
--	for (i = 0; i < chip->nr_allocated_banks; i++)
--		if (digests[i].alg_id != chip->allocated_banks[i].alg_id)
--			return -EINVAL;
-+	for (i = 0; i < chip->nr_allocated_banks; i++) {
-+		if (digests[i].alg_id != chip->allocated_banks[i].alg_id) {
-+			rc = EINVAL;
-+			goto out;
-+		}
-+	}
- 
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
- 		rc = tpm2_pcr_extend(chip, pcr_idx, digests);
--		tpm_put_ops(chip);
--		return rc;
-+		goto out;
- 	}
- 
- 	rc = tpm1_pcr_extend(chip, pcr_idx, digests[0].digest,
- 			     "attempting extend a PCR value");
-+
-+out:
- 	tpm_put_ops(chip);
- 	return rc;
- }
-diff --git a/security/keys/trusted.c b/security/keys/trusted.c
-index ade699131065..1fbd77816610 100644
---- a/security/keys/trusted.c
-+++ b/security/keys/trusted.c
-@@ -1228,11 +1228,16 @@ static int __init trusted_shash_alloc(void)
- 
- static int __init init_digests(void)
- {
-+	int i;
-+
- 	digests = kcalloc(chip->nr_allocated_banks, sizeof(*digests),
- 			  GFP_KERNEL);
- 	if (!digests)
- 		return -ENOMEM;
- 
-+	for (i = 0; i < chip->nr_allocated_banks; i++)
-+		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-+
- 	return 0;
- }
- 
--- 
-2.17.1
-
+/Jarkko
