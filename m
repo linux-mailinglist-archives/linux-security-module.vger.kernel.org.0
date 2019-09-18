@@ -2,139 +2,113 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58847B564E
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Sep 2019 21:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4E5B5D13
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Sep 2019 08:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727624AbfIQTiS (ORCPT
+        id S1729862AbfIRGbe (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 17 Sep 2019 15:38:18 -0400
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:36386 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727405AbfIQTiS (ORCPT
+        Wed, 18 Sep 2019 02:31:34 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38173 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729573AbfIRGXU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 17 Sep 2019 15:38:18 -0400
-Received: by mail-lf1-f46.google.com with SMTP id x80so3843285lff.3
-        for <linux-security-module@vger.kernel.org>; Tue, 17 Sep 2019 12:38:17 -0700 (PDT)
+        Wed, 18 Sep 2019 02:23:20 -0400
+Received: by mail-ot1-f67.google.com with SMTP id e11so4168952otl.5
+        for <linux-security-module@vger.kernel.org>; Tue, 17 Sep 2019 23:23:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=DPMCqyPE0QzC55vTbDjf3OpUmm9PZ45gf2c/NXtRms4=;
-        b=cs2Ud6vhFRVLTHwS+TJWy/K0npQyVF7UGgwFXhyL38hI/XrrcUkCxchVudDRV+Y87Q
-         SwtTBuQ56G1UsSCImNsJOZoEs+B6xqduRc2ulEFSQtg8gsFXEeGNpLX7iYfpiIYh4ps+
-         wf3bOWH9ypIoXMcpUL9q/5JjQtIv3c5bJwBTTwff9Bnq5bsjgC0KptAs/J4DgPb785Jt
-         hucVAkYaQq/z4g+HeY7tUFV6kbJ5eMApqA3AVMa8QJIJKfQtsT7Cc3k2SU0F1C0H6kG2
-         p8prEPIpWW3q9H9ubTS0EVOCB6jEXBiu6siA3frXYxv01bu/4aZjEuFM/pC1W6ebt7da
-         X2oQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wK9VKPT5PALGow0s1AD18j7lV+EvX5g7BMBWsTpeIng=;
+        b=xv6lI474DYSgaSu5RV4eJEBRp8AAJwvehRoTTpWaCo2J8ub7oPk4fmWmvkg1ZEyHq+
+         TtxFAJNA+CkO15cIf36iqqP9X57G/JNY3Jb2I187WuFFnZsD/6zxHIOCkgH6EgYA1jfH
+         YFSSbCekS/IoziCPiLuxaZHnZq5wzOhwRethzETOZxKFgUsGwW/D4ZLudka0rLN2bOSj
+         SAypaAGTp5bpQL5XY1Q813yX/HmVuGih8Q5wEvBX1r4lbpI+8QupHhP+fcbRFrASg2mL
+         7pMs60vrA8DXbpmTG++BM1jE99VkeCVDR9xwYrqoLW/I0P3yuAd+Xz5+qsRpoB02XtZC
+         WfkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=DPMCqyPE0QzC55vTbDjf3OpUmm9PZ45gf2c/NXtRms4=;
-        b=LQJdCj79t88++6cdGecX3gKCBbkYrSuHP2H3d/BwKupV39ED4FYqG1SBvl7MEyNETJ
-         OtRJ8cpL0l7sUy6wAUSBwWQtXsfPquJZkVvYsBxge/LucFQ16qT7pU6dRjZO69mMuQXy
-         zcjOoxUhvKQ1hskkYm4bw9bsF+TW5k82laiQeNsDYpvfJS32zpPyQFzvC+LYsfMx1WS0
-         uSD/eYBuxnRqCTtULDUXpKIZ+8lB54jeGr46kks/FqlDB2kGJcbtbRNeydzFV0UmItUj
-         4vsdBRDaWD/bHCeBJtzZ1SO3CL4vdvxOnhb73QqwWYOJiX7jcP5ZB56ggeRGL4nJDQCX
-         0QNg==
-X-Gm-Message-State: APjAAAWv10vlDTfmgLJiwvFqPsXzWXskAHlc2XEgBUoNWvtcZ0B3hWpY
-        QlAVghmDF7mN9EkAwcIwM7Qg47schA62Vfwj9tNT
-X-Google-Smtp-Source: APXvYqxDlAIJZz7PnVeZd8+3jQfl+vZQNh7Br/xAk4fcswBcE4hm4+BMHvXr9jeBipijFUcWCYKs3rAS2d82E6s93K8=
-X-Received: by 2002:a19:6517:: with SMTP id z23mr2690779lfb.31.1568749096080;
- Tue, 17 Sep 2019 12:38:16 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wK9VKPT5PALGow0s1AD18j7lV+EvX5g7BMBWsTpeIng=;
+        b=XXeCz1G8WVyU+4wtC9uUKfii4Ej99F7nfjHYFCiCH6I6HwcRkTVlg8ZYFh089Uc5Gj
+         dGRonHMY59pHAwIZPYvkcXhm9QsuHKmQUGqgMRVHpfWEi9Wrh5o8OIDKQhXVKmZlAJYG
+         uuCXoPMGYEw4yEB89p5SOgSSnaP1c2PS8oBH3UeaP6B1chy3spG2UlZ4RFquOXVkcsyX
+         SsftWDOyA4Ta5+gYb068dhbI7B6qGm0VKhl2QmuZHoZRCcS4tjLF5lsrQkyPLHPiQM1L
+         3R88mjohFoV8JOjuuSl3DIXebEL+cVjSsmhyGq/kUlHqjXmbuIBK1owd7YwHbkTcEmq5
+         cbVA==
+X-Gm-Message-State: APjAAAWLWpdefMrg+0U5Xe27XHErD2/WdeH+zLu6G6xwsna3uFh7ZgFs
+        vX2VZ2Tw9eJHu+0c8OGOMiJ3ufXD5dB2m7pR/3PVCUAg29c=
+X-Google-Smtp-Source: APXvYqyy689jL78FRCBaToum4k1f1kK7Ku7U2vf7SNBEYUwL9xj0w29sOcLAmo488CIy0XySfEE42rIulH1rHL8wJvo=
+X-Received: by 2002:a9d:24e4:: with SMTP id z91mr1722754ota.41.1568787800000;
+ Tue, 17 Sep 2019 23:23:20 -0700 (PDT)
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 17 Sep 2019 15:38:05 -0400
-Message-ID: <CAHC9VhT1n=zwWJRSqF+OLzQq2r_8Bf0TjO-1QEe3yfLHAnomfA@mail.gmail.com>
-Subject: [GIT PULL] SELinux patches for v5.4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
+References: <1568630064-14887-1-git-send-email-sumit.garg@linaro.org>
+ <1568630064-14887-5-git-send-email-sumit.garg@linaro.org> <20190917181415.GA8472@linux.intel.com>
+ <20190917181507.GB8472@linux.intel.com>
+In-Reply-To: <20190917181507.GB8472@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 18 Sep 2019 11:53:08 +0530
+Message-ID: <CAFA6WYMbUGQ6+-XvR9_qSc=oVe1QSTg4kB-+y6rBmQLq+B6skg@mail.gmail.com>
+Subject: Re: [Patch v6 4/4] KEYS: trusted: Move TPM2 trusted keys code
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     dhowells@redhat.com, peterhuewe@gmx.de, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        jejb@linux.ibm.com, Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Linus,
+On Tue, 17 Sep 2019 at 23:45, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Tue, Sep 17, 2019 at 09:14:15PM +0300, Jarkko Sakkinen wrote:
+> > On Mon, Sep 16, 2019 at 04:04:24PM +0530, Sumit Garg wrote:
+> > > Move TPM2 trusted keys code to trusted keys subsystem. The reason
+> > > being it's better to consolidate all the trusted keys code to a single
+> > > location so that it can be maintained sanely.
+> > >
+> > > Suggested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> >
+> > This commit has couple of issues that I only noticed when looking into
+> > bug reported by Mimi.
+> >
+> > Right now tpm_send() is the exported function that is used by other
+> > subsystems. tpm_transmit_cmd() is an internal function. This commit adds
+> > two unrelated code paths to send TPM commands, which is unacceptable.
 
-Eight SELinux patches for v5.4, the highlights are listed below and
-all pass the selinux-testsuite, please merge for v5.4.
+Makes sense, will update.
 
-- Add LSM hooks, and SELinux access control hooks, for dnotify,
-fanotify, and inotify watches.  This has been discussed with both the
-LSM and fs/notify folks and everybody is good with these new hooks.
+> >
+> > You should make tpm2 functionality to use tpm_send() instead and remove
+> > tpm_seal_trusted() and tpm_unseal_trusted() completely in this commit.
 
-- The LSM stacking changes missed a few calls to current_security() in
-the SELinux code; we fix those and remove current_security() for good.
+Okay.
 
-- Improve our network object labeling cache so that we always return
-the object's label, even when under memory pressure.  Previously we
-would return an error if we couldn't allocate a new cache entry, now
-we always return the label even if we can't create a new cache entry
-for it.
+>
+> The consequence is that the result needs unfortunately re-review. Sorry
+> about that, just took this time to notice this glitch.
 
-- Convert the sidtab atomic_t counter to a normal u32 with
-READ/WRITE_ONCE() and memory barrier protection.
+No worries :). I will send next version of patch-set.
 
-- A few patches to policydb.c to clean things up (remove forward
-declarations, long lines, bad variable names, etc.).
+FYI, I will be travelling for Linaro Connect next week so you could
+expect some delays in my responses.
 
-Thanks,
--Paul
+-Sumit
 
---
-The following changes since commit 45385237f65aeee73641f1ef737d7273905a233f:
-
- selinux: fix memory leak in policydb_init() (2019-07-31 16:51:23 -0400)
-
-are available in the Git repository at:
-
- git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
-   tags/selinux-pr-20190917
-
-for you to fetch changes up to 15322a0d90b6fd62ae8f22e5b87f735c3fdfeff7:
-
- lsm: remove current_security() (2019-09-04 18:53:39 -0400)
-
-----------------------------------------------------------------
-selinux/stable-5.4 PR 20190917
-
-----------------------------------------------------------------
-Aaron Goidel (1):
-     fanotify, inotify, dnotify, security: add security hook for fs
-       notifications
-
-Ondrej Mosnacek (3):
-     selinux: policydb - fix some checkpatch.pl warnings
-     selinux: policydb - rename type_val_to_struct_array
-     selinux: avoid atomic_t usage in sidtab
-
-Paul Moore (3):
-     selinux: shuffle around policydb.c to get rid of forward declarations
-     selinux: always return a secid from the network caches if we find one
-     lsm: remove current_security()
-
-Stephen Smalley (1):
-     selinux: fix residual uses of current_security() for the SELinux blob
-
-fs/notify/dnotify/dnotify.c         |  15 +-
-fs/notify/fanotify/fanotify_user.c  |  19 +-
-fs/notify/inotify/inotify_user.c    |  14 +-
-include/linux/cred.h                |   1 -
-include/linux/lsm_hooks.h           |   9 +-
-include/linux/security.h            |  10 +-
-security/security.c                 |   6 +
-security/selinux/hooks.c            |  49 ++++-
-security/selinux/include/classmap.h |   5 +-
-security/selinux/include/objsec.h   |  20 +-
-security/selinux/netif.c            |  31 ++-
-security/selinux/netnode.c          |  30 ++-
-security/selinux/netport.c          |  24 +--
-security/selinux/ss/policydb.c      | 402 +++++++++++++++---------------
-security/selinux/ss/policydb.h      |   2 +-
-security/selinux/ss/services.c      |   6 +-
-security/selinux/ss/sidtab.c        |  48 ++---
-security/selinux/ss/sidtab.h        |  19 +-
-18 files changed, 403 insertions(+), 307 deletions(-)
-
--- 
-paul moore
-www.paul-moore.com
+>
+> /Jarkko
