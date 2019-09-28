@@ -2,56 +2,85 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0103FC0F66
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Sep 2019 05:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2B9C113E
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Sep 2019 17:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725990AbfI1DAF (ORCPT
+        id S1728576AbfI1PyT (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 27 Sep 2019 23:00:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39408 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725815AbfI1DAF (ORCPT
+        Sat, 28 Sep 2019 11:54:19 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:37523 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728396AbfI1PyT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 27 Sep 2019 23:00:05 -0400
-Subject: Re: [GIT PULL] integrity subsystem updates for v5.4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569639604;
-        bh=jtFKP3EkySB41LzARpvXmneUuAPeP7ujI6kguXSjZzE=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=0nknJWqkBgHRjXDoGIYHILxyIfnpb/zEJhc0IL679rjklLpWB8ii3m+z1U9195eYH
-         9heY5cspuIbb9r+XVvSBcUY1dnYGy6DCRyuRLhlPmfE0WrPwCYktpfXjseSizGRTP4
-         QhK6+DkHw8XGDNXlVgR6XjxEbp8k1hJNqHk9yVik=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1568237365.5783.39.camel@linux.ibm.com>
-References: <1568237365.5783.39.camel@linux.ibm.com>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1568237365.5783.39.camel@linux.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
- next-integrity
-X-PR-Tracked-Commit-Id: 2a7f0e53daf29ca6dc9fbe2a27158f13474ec1b5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f1f2f614d535564992f32e720739cb53cf03489f
-Message-Id: <156963960435.16958.10604183293405631549.pr-tracker-bot@kernel.org>
-Date:   Sat, 28 Sep 2019 03:00:04 +0000
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        Sat, 28 Sep 2019 11:54:19 -0400
+Received: by mail-lf1-f65.google.com with SMTP id w67so4045096lff.4
+        for <linux-security-module@vger.kernel.org>; Sat, 28 Sep 2019 08:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t8T238MUDL4113LkTajENXs+VpX+RgbW801Zuroll2s=;
+        b=gymVBvAsRB2Ub4vGq1nY66bYrZvJ5qgn5kJMlZ4CPZkZXu97A8ex9TnljNZlH3BnpL
+         98xBkSkyGma49sQaAHQPjVoft2weY/moz59SqB+u2zOEVMNBau7Ylt7BtHvDjyMNUom3
+         2jccrp6mN+X3TEontHNfMcPG1DL40IAEM3byk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t8T238MUDL4113LkTajENXs+VpX+RgbW801Zuroll2s=;
+        b=EhuAjMk6+OKCKlM10dLqpwb2LCaWw9NzR+zeR8w6DHDYpO0QdRmZXpsLWAWHq8e7dw
+         yte7fwDWkqhJQ8P2ovAFBSBDgsYTibkirvTbnGeayetQz1TCuSAWd8DwBpS+TazH+rzX
+         5+V601/HIvwda27SBxTHMS4NVo023ohw1UezZyaPUgcg6qnya/7+rjPYxMkHCnUEPZOJ
+         WFcviS367SfWTSzvnuCOB/OBADT14DP7S8O3ripc+LiogdICKxcDsI6HATb7qyUxntx8
+         7UkP5M8D39dN+r1XXg3ZM36lHEgYXFWmy4MUQl+wGnySubYVpqDWRxfdyRu5c/YuX0/P
+         OGKw==
+X-Gm-Message-State: APjAAAW5Mr8pu2Nux1HOIRrsmcK8JcxTWNtMQysZWKEybGpkHaIpgR9O
+        MtKFOrIXyuYxtyGJD+iO5fKVGtJXXJs=
+X-Google-Smtp-Source: APXvYqwhqFzn1OYi506aqrUfKkvciOZUitb7gbcbgyISZshuiQjOOIncdmVjDUhBWyJUPXtJA+EjTw==
+X-Received: by 2002:a19:c80b:: with SMTP id y11mr6585032lff.184.1569686056940;
+        Sat, 28 Sep 2019 08:54:16 -0700 (PDT)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
+        by smtp.gmail.com with ESMTPSA id r19sm1356839ljd.95.2019.09.28.08.54.14
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Sep 2019 08:54:15 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id a22so5340876ljd.0
+        for <linux-security-module@vger.kernel.org>; Sat, 28 Sep 2019 08:54:14 -0700 (PDT)
+X-Received: by 2002:a2e:3e07:: with SMTP id l7mr6544992lja.180.1569686054663;
+ Sat, 28 Sep 2019 08:54:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <alpine.LRH.2.21.1909101402230.20291@namei.org>
+ <nycvar.YEU.7.76.1909251652360.15418@gjva.wvxbf.pm> <CAHk-=wjYz8UQkzBX_1h3cqzDHKEWwyXjnbCoHYWnjn=9RPVOeg@mail.gmail.com>
+In-Reply-To: <CAHk-=wjYz8UQkzBX_1h3cqzDHKEWwyXjnbCoHYWnjn=9RPVOeg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 28 Sep 2019 08:53:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg=7y82dJYeLzQeup70CHBT7MpCC155d85cPFctNsxUYA@mail.gmail.com>
+Message-ID: <CAHk-=wg=7y82dJYeLzQeup70CHBT7MpCC155d85cPFctNsxUYA@mail.gmail.com>
+Subject: Re: [GIT PULL][SECURITY] Kernel lockdown patches for v5.4
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     James Morris <jmorris@namei.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Matthew Garrett <mjg59@google.com>,
+        David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The pull request you sent on Wed, 11 Sep 2019 17:29:25 -0400:
+On Fri, Sep 27, 2019 at 11:19 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> This is one of the pull requests that I have to go through commit by
+> commit because of the history of this thing.
+>
+> And I've yet to empty my queue of all the _regular_ things that came
+> in this merge window, so I haven't had time.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+I've emptied my queue (well, in the meantime I got new pull requests,
+but what else is new..) and went through the security pulls yesterday
+and this morning, and found nothing objectionable.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f1f2f614d535564992f32e720739cb53cf03489f
+So it's merged now.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+                Linus
