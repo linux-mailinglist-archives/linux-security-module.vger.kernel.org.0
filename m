@@ -2,41 +2,41 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3253FC183C
-	for <lists+linux-security-module@lfdr.de>; Sun, 29 Sep 2019 19:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41070C180B
+	for <lists+linux-security-module@lfdr.de>; Sun, 29 Sep 2019 19:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729536AbfI2Rbz (ORCPT
+        id S1729142AbfI2RlP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 29 Sep 2019 13:31:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42528 "EHLO mail.kernel.org"
+        Sun, 29 Sep 2019 13:41:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729532AbfI2Rbz (ORCPT
+        id S1730144AbfI2Rdn (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:31:55 -0400
+        Sun, 29 Sep 2019 13:33:43 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2336F21A4C;
-        Sun, 29 Sep 2019 17:31:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A05D521D7F;
+        Sun, 29 Sep 2019 17:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778314;
+        s=default; t=1569778422;
         bh=k/CKsmCS30QHIytIpsZwjwBWQ5cbvop2pcjUtBpbhDo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zrN2QIhK34UqxWmq3lZ3sQ6LchmlSqfp0K1U9nbOx3jurjQRFkSqY6Bve23ySKX3N
-         N/B4xFdYvGxecN8vZfWcP8q+rcK/q6EwPeoYZgUGmwsVrBRyJC4lsS4TQsa05mR5aF
-         Pr4SfbbyJD2NaJweGWDJN4Wj2+U5ZQ4Bpy2+xxVw=
+        b=MoLK1y4+y0R0UF/WrD+DGTZmOYljMosgI7noBBYckNdhdZEygzxSIK1vdA4MQFeiS
+         MlnxtUIN/IbQ4TorC69Ptv08VfdW2b9I4Mw6hYvxElFvhaJmq2EgUHikvhYM1znkpS
+         ZCNA02P4VYvfcn3NQ7EmbUuv9V+HHGzQDVtXI8Zw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
         Casey Schaufler <casey@schaufler-ca.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 31/49] security: smack: Fix possible null-pointer dereferences in smack_socket_sock_rcv_skb()
-Date:   Sun, 29 Sep 2019 13:30:31 -0400
-Message-Id: <20190929173053.8400-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 28/42] security: smack: Fix possible null-pointer dereferences in smack_socket_sock_rcv_skb()
+Date:   Sun, 29 Sep 2019 13:32:27 -0400
+Message-Id: <20190929173244.8918-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173053.8400-1-sashal@kernel.org>
-References: <20190929173053.8400-1-sashal@kernel.org>
+In-Reply-To: <20190929173244.8918-1-sashal@kernel.org>
+References: <20190929173244.8918-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
