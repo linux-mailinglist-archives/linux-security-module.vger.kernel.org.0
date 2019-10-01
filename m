@@ -2,84 +2,109 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 589B8C3E1B
-	for <lists+linux-security-module@lfdr.de>; Tue,  1 Oct 2019 19:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1197AC438E
+	for <lists+linux-security-module@lfdr.de>; Wed,  2 Oct 2019 00:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbfJAREg (ORCPT
+        id S1728080AbfJAWK4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 1 Oct 2019 13:04:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50352 "EHLO mail.kernel.org"
+        Tue, 1 Oct 2019 18:10:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727670AbfJAQj0 (ORCPT
+        id S1726392AbfJAWKz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:39:26 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 1 Oct 2019 18:10:55 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AAB5421872;
-        Tue,  1 Oct 2019 16:39:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569947966;
-        bh=uOi64M7D10KweumGcEk7pWtgTYT8TAKC8lUsJlYhmAQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vWboagiD+P2IhT7gOaPDHpZfsjH4akDoCvpn8AIVxTe1UuSD8ct6qFNY35Twp38Pp
-         1kT2zIniwtPqIol7veeJQ2hOMpeQZVy21wmLTMgxQWOlWTvLSDPUYxeSqj8qPZfWo1
-         SOItGf4NlbwOR8qDJ4AVy/WMDVQC7AslFurN+UGY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 03/71] ima: fix freeing ongoing ahash_request
-Date:   Tue,  1 Oct 2019 12:38:13 -0400
-Message-Id: <20191001163922.14735-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
-References: <20191001163922.14735-1-sashal@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 009AE20873;
+        Tue,  1 Oct 2019 22:10:53 +0000 (UTC)
+Date:   Tue, 1 Oct 2019 18:10:52 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, kernel-team <kernel-team@fb.com>,
+        Linux API <linux-api@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] bpf, capabilities: introduce CAP_BPF
+Message-ID: <20191001181052.43c9fabb@gandalf.local.home>
+In-Reply-To: <20191001012226.vwpe56won5r7gbrz@ast-mbp.dhcp.thefacebook.com>
+References: <CALCETrV8iJv9+Ai11_1_r6MapPhhwt9hjxi=6EoixytabTScqg@mail.gmail.com>
+        <20190828003447.htgzsxs5oevn3eys@ast-mbp.dhcp.thefacebook.com>
+        <CALCETrVbPPPr=BdPAx=tJKxD3oLXP4OVSgCYrB_E4vb6idELow@mail.gmail.com>
+        <20190828044340.zeha3k3cmmxgfqj7@ast-mbp.dhcp.thefacebook.com>
+        <CALCETrW1o+Lazi2Ng6b9JN6jeJffgdW9f3HvqYhNo4TpHRXW=g@mail.gmail.com>
+        <20190828225512.q6qbvkdiqih2iewk@ast-mbp.dhcp.thefacebook.com>
+        <DA52992F-4862-4945-8482-FE619A04C753@amacapital.net>
+        <20190829040721.ef6rumbaunkavyrr@ast-mbp.dhcp.thefacebook.com>
+        <20190928193727.1769e90c@oasis.local.home>
+        <201909301129.5A1129C@keescook>
+        <20191001012226.vwpe56won5r7gbrz@ast-mbp.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Sascha Hauer <s.hauer@pengutronix.de>
+On Mon, 30 Sep 2019 18:22:28 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-[ Upstream commit 4ece3125f21b1d42b84896c5646dbf0e878464e1 ]
+> tracefs is a file system, so clearly file based acls are much better fit
+> for all tracefs operations.
+> But that is not the case for ftrace overall.
+> bpf_trace_printk() calls trace_printk() that dumps into trace pipe.
+> Technically it's ftrace operation, but it cannot be controlled by tracefs
+> and by file permissions. That's the motivation to guard bpf_trace_printk()
+> usage from bpf program with CAP_TRACING.
 
-integrity_kernel_read() can fail in which case we forward to call
-ahash_request_free() on a currently running request. We have to wait
-for its completion before we can free the request.
+BTW, I'd rather have bpf use an event that records a string than using
+trace printk itself.
 
-This was observed by interrupting a "find / -type f -xdev -print0 | xargs -0
-cat 1>/dev/null" with ctrl-c on an IMA enabled filesystem.
+Perhaps something like "bpf_print" event? That could be defined like:
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- security/integrity/ima/ima_crypto.c | 5 +++++
- 1 file changed, 5 insertions(+)
+TRACE_EVENT(bpf_print,
+	TP_PROTO(const char *msg),
+	TP_ARGS(msg),
+	TP_STRUCT__entry(
+		__string(msg, msg)
+	),
+	TP_fast_assign(
+		__assign_str(msg, msg)
+	),
+	TP_printk("msg=%s", __get_str(msg))
+);
 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 7532b062be594..73044fc6a9521 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -271,6 +271,11 @@ static int ima_calc_file_hash_atfm(struct file *file,
- 		if (rc != rbuf_len) {
- 			if (rc >= 0)
- 				rc = -EINVAL;
-+			/*
-+			 * Forward current rc, do not overwrite with return value
-+			 * from ahash_wait()
-+			 */
-+			ahash_wait(ahash_rc, &wait);
- 			goto out3;
- 		}
- 
--- 
-2.20.1
+And then you can just format the string from the bpf_trace_printk()
+into msg, and then have:
 
+	trace_bpf_print(msg);
+
+The user could then just enable the trace event from the file system. I
+could also work on making instances work like /tmp does (with the
+sticky bit) in creation. That way people with write access to the
+instances directory, can make their own buffers that they can use (and
+others can't access).
+
+
+> 
+> Both 'trace' and 'trace_pipe' have quirky side effects.
+> Like opening 'trace' file will make all parallel trace_printk() to be ignored.
+> While reading 'trace_pipe' file will clear it.
+> The point that traditional 'read' and 'write' ACLs don't map as-is
+> to tracefs, so I would be careful categorizing things into
+> confidentiality vs integrity only based on access type.
+
+What exactly is the bpf_trace_printk() used for? I may have other ideas
+that can help.
+
+-- Steve
