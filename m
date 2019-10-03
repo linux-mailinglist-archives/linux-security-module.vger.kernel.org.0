@@ -2,102 +2,84 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB02CCAA50
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2019 19:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD73CAC22
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2019 19:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732962AbfJCRDa (ORCPT
+        id S1732668AbfJCQGC (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 3 Oct 2019 13:03:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52490 "EHLO mail.kernel.org"
+        Thu, 3 Oct 2019 12:06:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53048 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392519AbfJCQlx (ORCPT
+        id S1732666AbfJCQGC (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:41:53 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        Thu, 3 Oct 2019 12:06:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1F81D206BB;
-        Thu,  3 Oct 2019 16:41:50 +0000 (UTC)
-Date:   Thu, 3 Oct 2019 12:41:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@fb.com>, Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <Kernel-team@fb.com>,
-        Linux API <linux-api@vger.kernel.org>
-Subject: Re: trace_printk issue. Was: [PATCH bpf-next] bpf, capabilities:
- introduce CAP_BPF
-Message-ID: <20191003124148.4b94a720@gandalf.local.home>
-In-Reply-To: <20191003161838.7lz746aa2lzl7qi4@ast-mbp.dhcp.thefacebook.com>
-References: <DA52992F-4862-4945-8482-FE619A04C753@amacapital.net>
-        <20190829040721.ef6rumbaunkavyrr@ast-mbp.dhcp.thefacebook.com>
-        <20190928193727.1769e90c@oasis.local.home>
-        <201909301129.5A1129C@keescook>
-        <20191001012226.vwpe56won5r7gbrz@ast-mbp.dhcp.thefacebook.com>
-        <20191001181052.43c9fabb@gandalf.local.home>
-        <6e8b910c-a739-857d-4867-395bd369bc6a@fb.com>
-        <20191001184731.0ec98c7a@gandalf.local.home>
-        <a98725c6-a7db-1d9f-7033-5ecd96438c8d@fb.com>
-        <20191002190027.4e204ea8@gandalf.local.home>
-        <20191003161838.7lz746aa2lzl7qi4@ast-mbp.dhcp.thefacebook.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        by mail.kernel.org (Postfix) with ESMTPSA id D00FD20865;
+        Thu,  3 Oct 2019 16:06:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570118761;
+        bh=/hNYO7OwP1ns9IydcyK7+oKU9B/j5I0pC2OP9X9GgJE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zfaol7yfvJl1fZjCZvKlgijC+nDNwcIZz/akxxmPsVqbb0pPqZJh012V50Pb/7/ta
+         xf3rrMYhgPpsRv7PIRxjbmBqnfx9DMnVYbOwXxDcP6VZr8Yaqk/Iv8SBmxIgOwyh3c
+         ezquYVr+L3WNVsg/8Q0t8gh+ohB5sFEs8Q8ia+vQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Mark Salyzyn <salyzyn@android.com>,
+        linux-security-module@vger.kernel.org, kernel-team@android.com,
+        Miklos Szeredi <mszeredi@redhat.com>
+Subject: [PATCH 4.9 115/129] ovl: filter of trusted xattr results in audit
+Date:   Thu,  3 Oct 2019 17:53:58 +0200
+Message-Id: <20191003154411.608470733@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191003154318.081116689@linuxfoundation.org>
+References: <20191003154318.081116689@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 3 Oct 2019 09:18:40 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+From: Mark Salyzyn <salyzyn@android.com>
 
-> I think dropping last events is just as bad. Is there a mode to overwrite old
-> and keep the last N (like perf does) ?
+commit 5c2e9f346b815841f9bed6029ebcb06415caf640 upstream.
 
-Well, it drops it by pages. Thus you should always have the last page
-of events.
+When filtering xattr list for reading, presence of trusted xattr
+results in a security audit log.  However, if there is other content
+no errno will be set, and if there isn't, the errno will be -ENODATA
+and not -EPERM as is usually associated with a lack of capability.
+The check does not block the request to list the xattrs present.
 
-> Peter Wu brought this issue to my attention in
-> commit 55c33dfbeb83 ("bpf: clarify when bpf_trace_printk discards lines").
-> And later sent similar doc fix to ftrace.rst.
+Switch to ns_capable_noaudit to reflect a more appropriate check.
 
-It was documented there, he just elaborated on it more:
+Signed-off-by: Mark Salyzyn <salyzyn@android.com>
+Cc: linux-security-module@vger.kernel.org
+Cc: kernel-team@android.com
+Cc: stable@vger.kernel.org # v3.18+
+Fixes: a082c6f680da ("ovl: filter trusted xattr for non-admin")
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-        This file holds the output of the trace in a human
-        readable format (described below). Note, tracing is temporarily
--       disabled while this file is being read (opened).
-+       disabled when the file is open for reading. Once all readers
-+       are closed, tracing is re-enabled.
+---
+ fs/overlayfs/inode.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- a/fs/overlayfs/inode.c
++++ b/fs/overlayfs/inode.c
+@@ -234,7 +234,8 @@ static bool ovl_can_list(const char *s)
+ 		return true;
+ 
+ 	/* Never list trusted.overlay, list other trusted for superuser only */
+-	return !ovl_is_private_xattr(s) && capable(CAP_SYS_ADMIN);
++	return !ovl_is_private_xattr(s) &&
++	       ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN);
+ }
+ 
+ ssize_t ovl_listxattr(struct dentry *dentry, char *list, size_t size)
 
 
-> To be honest if I knew of this trace_printk quirk I would not have picked it
-> as a debugging mechanism for bpf.
-> I urge you to fix it.
-
-It's not a trivial fix by far.
-
-Note, trying to read the trace file without disabling the writes to it,
-will most likely make reading it when function tracing enabled totally
-garbage, as the buffer will most likely be filled for every read event.
-That is, each read event will not be related to the next event that is
-read, making it very confusing.
-
-Although, I may be able to make it work per page. That way you get at
-least a page worth of events.
-
-Now, I could also make it where you have to stop tracing to read the
-trace file. That is, if you try to open the trace files while the
-buffer is active, it will error -EBUSY. Forcing you to stop tracing to
-read it, otherwise you would need to read the trace_pipe. At least this
-way you will not get surprised that events were dropped.
-
--- Steve
