@@ -2,41 +2,41 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93949CA776
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2019 18:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F08CA853
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2019 19:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393205AbfJCQxn (ORCPT
+        id S2390859AbfJCQZC (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 3 Oct 2019 12:53:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41734 "EHLO mail.kernel.org"
+        Thu, 3 Oct 2019 12:25:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732255AbfJCQxi (ORCPT
+        id S2390430AbfJCQXB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 3 Oct 2019 12:53:38 -0400
+        Thu, 3 Oct 2019 12:23:01 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C50620862;
-        Thu,  3 Oct 2019 16:53:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 17F5320867;
+        Thu,  3 Oct 2019 16:22:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570121617;
-        bh=ppvgryPXoAV87FTYKqBMl7LfUlYuP5FSY5V3yCvro1c=;
+        s=default; t=1570119780;
+        bh=SAVbqIJhRYHkOPmJ45qk1R9z0FcxOwplAbdfGkY42Zs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f71YjRlFTpy3K74cONVnCxRD2XOvbRPELlFdIgHtaoN+Q4l7XxJGQAXNv/5iiE9Hk
-         xDURYDrQ72LhJ9dNvyK4sQQCGWsUIhoDdHsXcNkiE8BkeXXAU4Pb/RRcHn4T7G5hPN
-         A4mPc8vlvBmwoQLKstvEO/wsQwF2g6mrUJzOHi3k=
+        b=yAEDHAFZwWkyOIuUE8SlvXNkDQkskt5PKaHiD0K/rqOUiaJ4ql8NdC9HIDC/X+EYW
+         v1ctPZCrdkza8I8QEFbk/+zFpAnSH+yUDfyJyF2jUEW4uHi4k8eC7gRvNHoSb1phu9
+         ZRULjYBhRFp3JD77ncgQBd/nl+gyKmhfZ8FRNByI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Mark Salyzyn <salyzyn@android.com>,
         linux-security-module@vger.kernel.org, kernel-team@android.com,
         Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 5.3 308/344] ovl: filter of trusted xattr results in audit
-Date:   Thu,  3 Oct 2019 17:54:33 +0200
-Message-Id: <20191003154609.636796606@linuxfoundation.org>
+Subject: [PATCH 4.19 189/211] ovl: filter of trusted xattr results in audit
+Date:   Thu,  3 Oct 2019 17:54:15 +0200
+Message-Id: <20191003154528.368762802@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191003154540.062170222@linuxfoundation.org>
-References: <20191003154540.062170222@linuxfoundation.org>
+In-Reply-To: <20191003154447.010950442@linuxfoundation.org>
+References: <20191003154447.010950442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,7 +71,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/fs/overlayfs/inode.c
 +++ b/fs/overlayfs/inode.c
-@@ -383,7 +383,8 @@ static bool ovl_can_list(const char *s)
+@@ -386,7 +386,8 @@ static bool ovl_can_list(const char *s)
  		return true;
  
  	/* Never list trusted.overlay, list other trusted for superuser only */
