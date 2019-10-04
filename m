@@ -2,86 +2,87 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D057CC066
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2019 18:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD891CC2EA
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2019 20:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728479AbfJDQWM (ORCPT
+        id S1727647AbfJDStL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 4 Oct 2019 12:22:12 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40479 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725974AbfJDQWM (ORCPT
+        Fri, 4 Oct 2019 14:49:11 -0400
+Received: from mga17.intel.com ([192.55.52.151]:38274 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725775AbfJDStK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 4 Oct 2019 12:22:12 -0400
-Received: by mail-lj1-f195.google.com with SMTP id 7so7109500ljw.7
-        for <linux-security-module@vger.kernel.org>; Fri, 04 Oct 2019 09:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=GpNdYRES46RfzpVIgTMPzZ6u6WQI6KIHaSlhSlcg/+c=;
-        b=tB1PxgZSXA8+uUq+GXk0orxx5DBiJxO48SpzLzSLblhUp+o/+rQmKqIEvvdezTiG0J
-         VQFjpIlLe1AdsjYWZMz3mR/yJT/1RoxqNpiu1cnCwUwdr/6Bj9jFzzFpr+Ye+x1qzJsy
-         RYPfEXiPlIqwaA+GYpJ/rA8Gn9kekuKs1Dj2gq4Az2HuC07aJLoaAgxNuVA3FmncQBRw
-         a6U2Jao4nOAuEjFiiz2ColIe5SwVduEr54zsKqZhFAigT1C/1hPPWcG28h1mkkUdpVsX
-         d5ZjCVzLtUaq2GQ+2zu5F3biWyCzyJiU1iqOxR6ye3YecZw9LbYymH9RqTxKoEovczeU
-         /SmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=GpNdYRES46RfzpVIgTMPzZ6u6WQI6KIHaSlhSlcg/+c=;
-        b=jaGTUg6tqrI1ZwOoAME/wmv9PBcpgomc/pVCc0STS8NVHDp9GeT6eOp96uj+DdHGoS
-         oWBtykzkxgwd2Py8zz3Su1/dVV6P21XvXN9l++EKZelyxLHHzvgFKUBBv11Z0zyRpnKi
-         i+vOHSZvNEv+nzDXbxGGWmQDHUSEgmmUefc3gLrtDoRFW4tQ+QYQZuu1a5dP2zF3DwZ/
-         3q9cSSgh+nUovMR/oi9FS+E9xh+fEOgUgArfhnRNonnwU/tgLC0NdZe5hYRuchimC82/
-         gCAFDGWsMbIiIgWLtwCg/PtiOxnbcT27uxDpp6pK3smsUd3jS4f/Qj2fnkwVlH9ALedW
-         GEcQ==
-X-Gm-Message-State: APjAAAVEKUZbdHvinexIfbBWza6v5a1wysoaYPubwVkwI8M/CLf8seO3
-        dyeAJOExuMZu5ZMrhFkkBAP+UdkjqQCZ5OEHvw==
-X-Google-Smtp-Source: APXvYqy9qVFiQ6AGqTNCZivSoxGtdbhf+2F6b2GI53rcXwtTkiuxxp4MTcyRCYQiQcOYFTNbWisM03aAfjOn/E+g410=
-X-Received: by 2002:a2e:9d16:: with SMTP id t22mr8946091lji.207.1570206130285;
- Fri, 04 Oct 2019 09:22:10 -0700 (PDT)
+        Fri, 4 Oct 2019 14:49:10 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 11:49:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,257,1566889200"; 
+   d="scan'208";a="191670432"
+Received: from nzaki1-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.4.57])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Oct 2019 11:49:03 -0700
+Date:   Fri, 4 Oct 2019 21:49:02 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     dhowells@redhat.com, peterhuewe@gmx.de, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        jejb@linux.ibm.com, Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>
+Subject: Re: [Patch v6 4/4] KEYS: trusted: Move TPM2 trusted keys code
+Message-ID: <20191004184902.GG6945@linux.intel.com>
+References: <1568630064-14887-1-git-send-email-sumit.garg@linaro.org>
+ <1568630064-14887-5-git-send-email-sumit.garg@linaro.org>
+ <20190917181415.GA8472@linux.intel.com>
+ <20190917181507.GB8472@linux.intel.com>
+ <CAFA6WYMbUGQ6+-XvR9_qSc=oVe1QSTg4kB-+y6rBmQLq+B6skg@mail.gmail.com>
+ <20190925011115.GA3503@linux.intel.com>
+ <CAFA6WYObsZnTptYg1Qorxt0FMaxHKoZ6D53Wjsj05OEGNhpckg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a2e:9997:0:0:0:0:0 with HTTP; Fri, 4 Oct 2019 09:22:09 -0700 (PDT)
-Reply-To: kylieelizabethwatson2019@gmail.com
-From:   "Sgt. Kylie Elizabeth Watson" <kyliewatson974@gmail.com>
-Date:   Fri, 4 Oct 2019 20:52:09 +0430
-Message-ID: <CAAH3L_Z0kr+-QF_UYQW6c1dsL1YwcYVq94zEY5pPaZ6rRhQAYQ@mail.gmail.com>
-Subject: Assist Request From You
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYObsZnTptYg1Qorxt0FMaxHKoZ6D53Wjsj05OEGNhpckg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
-Accept my greetings to you
+On Fri, Oct 04, 2019 at 11:35:29AM +0530, Sumit Garg wrote:
+> Hi Jarkko,
+> 
+> On Wed, 25 Sep 2019 at 06:41, Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > On Wed, Sep 18, 2019 at 11:53:08AM +0530, Sumit Garg wrote:
+> > > No worries :). I will send next version of patch-set.
+> > >
+> > > FYI, I will be travelling for Linaro Connect next week so you could
+> > > expect some delays in my responses.
+> >
+> > These patches will go to v5.5. There is nothing to rush.
+> 
+> I am back now on my regular schedule after Linaro Connect. And I see
+> your patch-set [1] to detach page allocation from tpm_buf. It seems
+> like either this patch-set needs rebase over yours or vice-versa.
+> 
+> So should I wait to send next version of this patch-set until your
+> patch-set arrives in tpmdd master/next branch or would you like to
+> rebase your patch-set over this?
 
-Assist Request From You
+For me either way works. If you patch set is earlier ready for
+merge I'll rework mine. Doing it otherwise would be unnecessary
+micromanagement.
 
-I am 28 years old single an orphan my parents died when I am five
-years old nobody to help me,I send you my business proposal with tears
-and sorrow,Please let this not be a surprised message to you because I
-decided to contact you on this magnitude and lucrative transaction for
-our present and future survival in life. Moreover, I have laid all the
-solemn trust in you before i decided to disclose this successful and
-confidential transaction to you.
-
-I am  Kylie Elizabeth Watson ,I hope all is well with you? I am female
-soldier working as United Nations peace keeping troop in Afghanistan
-on war against terrorism. I have in my possession the sum of
-$3.5million USD Which I made here in Afghanistan 2014,I deposited this
-money with a Red Cross agent. I want you to stand as my beneficiary
-and receive the fund And keep it safe so that as soon as am through
-with my mission here in Afghanistan.
-
-You will assist me to invest it in a good profitable Venture or you
-keep it for me until I arrive your country, I will give You 40% of the
-total money for your assistance after you have receive The money.
-Please reply back to me if you are willing to work with me so that I
-can send you the information where the money is been deposited, your
-urgent reply is needed in my email address below
-(kylieelizabethwatson2019@gmail.com) so i can send you more details.
-
-Thank Yours
-Sgt,Kylie Elizabeth Watson
+/Jarkko
