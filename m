@@ -2,87 +2,72 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD891CC2EA
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2019 20:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90833CC36B
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2019 21:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbfJDStL (ORCPT
+        id S1730542AbfJDTLj (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 4 Oct 2019 14:49:11 -0400
-Received: from mga17.intel.com ([192.55.52.151]:38274 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbfJDStK (ORCPT
+        Fri, 4 Oct 2019 15:11:39 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44896 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730550AbfJDTLj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 4 Oct 2019 14:49:10 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 11:49:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,257,1566889200"; 
-   d="scan'208";a="191670432"
-Received: from nzaki1-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.4.57])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Oct 2019 11:49:03 -0700
-Date:   Fri, 4 Oct 2019 21:49:02 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     dhowells@redhat.com, peterhuewe@gmx.de, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-security-module@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        jgg@ziepe.ca, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        jejb@linux.ibm.com, Mimi Zohar <zohar@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Subject: Re: [Patch v6 4/4] KEYS: trusted: Move TPM2 trusted keys code
-Message-ID: <20191004184902.GG6945@linux.intel.com>
-References: <1568630064-14887-1-git-send-email-sumit.garg@linaro.org>
- <1568630064-14887-5-git-send-email-sumit.garg@linaro.org>
- <20190917181415.GA8472@linux.intel.com>
- <20190917181507.GB8472@linux.intel.com>
- <CAFA6WYMbUGQ6+-XvR9_qSc=oVe1QSTg4kB-+y6rBmQLq+B6skg@mail.gmail.com>
- <20190925011115.GA3503@linux.intel.com>
- <CAFA6WYObsZnTptYg1Qorxt0FMaxHKoZ6D53Wjsj05OEGNhpckg@mail.gmail.com>
+        Fri, 4 Oct 2019 15:11:39 -0400
+Received: by mail-lj1-f196.google.com with SMTP id m13so7547764ljj.11
+        for <linux-security-module@vger.kernel.org>; Fri, 04 Oct 2019 12:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=usuFISMqci9f735wNqIFTbIm+6Oe9vY9sfRcppqbt5s=;
+        b=HvnR1KR73qda6vY/C+pVxksN+VkAF79ybdTbYLgp2BPfIBTG3X5fPcL8CE/yRW+uYB
+         JcVyzvlgJ6a7Zo3IibEn8NznBc491IMUS7uRPQ2Xi9AskMnPYjzHlY0I24qeDxgvE2FD
+         a7sfDNkFfsbRQKT7Hkd/KJRDBgEOAcZaJc/qhjwn9HaGcxj1w9Cn4mZuNq3oSqE/XsII
+         YTdyE6x1+6JuJjv1gs9xZgr0HuM6VueBCMuQ71OTx2p9m5jrN/ipjmDSP9DBbbMOMvSB
+         2NYml5bEyyVkbiMwCNW4mMYiZ5Bz0QF6bjm/SnC1T8JED+3Ikj77qK6j4BTtzgYdniIo
+         h81g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=usuFISMqci9f735wNqIFTbIm+6Oe9vY9sfRcppqbt5s=;
+        b=GuqRaev7JDl/wHVkSk73aEEEXNJexpBRDtErul6aRbAy9r2rhRFaw4RKRk9LkW0rHn
+         pM38fNd559+/A5Mzbq9EEPc/gGmtS+BPnkdI58TkJkcjte4JgwyDVFDUxDnTLSwvv3Mt
+         C4K1bn5E6CZiv7ys1attJHaFsOhT/UGADbBkM6GPz6nBIjVW3l6uS0wHZ9hxdALEP0d7
+         vleeCv+Kk1UnB7iTRhVfOiIXwPYngk5TiWIOv98HyfFlVeQXZDklx0uPE2TqrfCqCKIS
+         Z8dPU65J+7A4MXaVIn9MZbIj2AyjLkV3Lsy4Y5GwW1L5DrZ7jNGNyzp9rgj0T4z/OCFD
+         KXmA==
+X-Gm-Message-State: APjAAAXzeHfnEAOhsc69USHwt1Nrxw+fo7jVW3IRE/39VwqHa1f+KMaR
+        okxQRYzrGaS99pvE9bbBMtpL0jxWFKiOVn3tfmM=
+X-Google-Smtp-Source: APXvYqxneftEXtgdp62+HuPpOF3H0Ge3/BzgCLs+OMAlvJEqXQGw4KdTusSyG/LNSfeR/H5ALp5GlFHQBbsKFNhd5wY=
+X-Received: by 2002:a2e:2953:: with SMTP id u80mr10372271lje.233.1570216296619;
+ Fri, 04 Oct 2019 12:11:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYObsZnTptYg1Qorxt0FMaxHKoZ6D53Wjsj05OEGNhpckg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6504:1175:0:0:0:0 with HTTP; Fri, 4 Oct 2019 12:11:35
+ -0700 (PDT)
+Reply-To: helenpatrrick@gmail.com
+From:   Angel Helen <isslamicbank@gmail.com>
+Date:   Fri, 4 Oct 2019 19:11:35 +0000
+Message-ID: <CABU49e=m5HNGJpwvNO_mW5jcwDtgW+5F4a+BVr03n1jFqfBEXA@mail.gmail.com>
+Subject: HELLO PLEASE CAN I SPEAK WITH YOU?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Oct 04, 2019 at 11:35:29AM +0530, Sumit Garg wrote:
-> Hi Jarkko,
-> 
-> On Wed, 25 Sep 2019 at 06:41, Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
-> >
-> > On Wed, Sep 18, 2019 at 11:53:08AM +0530, Sumit Garg wrote:
-> > > No worries :). I will send next version of patch-set.
-> > >
-> > > FYI, I will be travelling for Linaro Connect next week so you could
-> > > expect some delays in my responses.
-> >
-> > These patches will go to v5.5. There is nothing to rush.
-> 
-> I am back now on my regular schedule after Linaro Connect. And I see
-> your patch-set [1] to detach page allocation from tpm_buf. It seems
-> like either this patch-set needs rebase over yours or vice-versa.
-> 
-> So should I wait to send next version of this patch-set until your
-> patch-set arrives in tpmdd master/next branch or would you like to
-> rebase your patch-set over this?
+Hello dear,
+My name is Miss Helen i am a humble sincere single girl looking for
+true love, and a partner to assist me transfer my late father money,
+an amount of, (Four Million Two Hundred Thousand US Dollars) to your
+country for investment. I will give you 40% after the transfer, while
+the remaining amount will be invest in your country in your names,
+with 50% equal profits sharing.
 
-For me either way works. If you patch set is earlier ready for
-merge I'll rework mine. Doing it otherwise would be unnecessary
-micromanagement.
+Send me your pictures with brief introductions about your self's, so
+that i will give you further details and procedure.
 
-/Jarkko
+Message me to my email: helenpatrrick@gmail.com
+
+I awaits your answer today.
+God bless you.
+Miss Helen.
