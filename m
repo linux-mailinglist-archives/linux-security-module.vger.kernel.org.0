@@ -2,43 +2,25 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB59D3180
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2019 21:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7CDD341D
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Oct 2019 01:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbfJJTmE (ORCPT
+        id S1726358AbfJJXAe (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 10 Oct 2019 15:42:04 -0400
-Received: from namei.org ([65.99.196.166]:53524 "EHLO namei.org"
+        Thu, 10 Oct 2019 19:00:34 -0400
+Received: from namei.org ([65.99.196.166]:53540 "EHLO namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725867AbfJJTmE (ORCPT
+        id S1726321AbfJJXAe (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 10 Oct 2019 15:42:04 -0400
+        Thu, 10 Oct 2019 19:00:34 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id x9AJf1pp032000;
-        Thu, 10 Oct 2019 19:41:01 GMT
-Date:   Fri, 11 Oct 2019 06:41:01 +1100 (AEDT)
+        by namei.org (8.14.4/8.14.4) with ESMTP id x9AN0Xil009597
+        for <linux-security-module@vger.kernel.org>; Thu, 10 Oct 2019 23:00:33 GMT
+Date:   Fri, 11 Oct 2019 10:00:33 +1100 (AEDT)
 From:   James Morris <jmorris@namei.org>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, rostedt@goodmis.org,
-        primiano@google.com, rsavitski@google.com, jeffv@google.com,
-        kernel-team@android.com, Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-security-module@vger.kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Namhyung Kim <namhyung@kernel.org>, selinux@vger.kernel.org,
-        Song Liu <songliubraving@fb.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCH RFC] perf_event: Add support for LSM and SELinux checks
-In-Reply-To: <dc0cacef-fff5-b837-97a4-ed7336934bf6@schaufler-ca.com>
-Message-ID: <alpine.LRH.2.21.1910110637300.31442@namei.org>
-References: <20191009203657.6070-1-joel@joelfernandes.org> <710c5bc0-deca-2649-8351-678e177214e9@schaufler-ca.com> <alpine.LRH.2.21.1910100912210.29840@namei.org> <2b94802d-12ea-4f2d-bb65-eda3b3542bb2@schaufler-ca.com> <alpine.LRH.2.21.1910101343470.8343@namei.org>
- <dc0cacef-fff5-b837-97a4-ed7336934bf6@schaufler-ca.com>
+To:     linux-security-module@vger.kernel.org
+Subject: shmem: fix LSM options parsing (fwd)
+Message-ID: <alpine.LRH.2.21.1910111000260.9215@namei.org>
 User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -46,20 +28,45 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 10 Oct 2019, Casey Schaufler wrote:
+---------- Forwarded message ----------
+Date: Thu, 10 Oct 2019 15:42:18 +0000
+From: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Reply-To: Al Viro <viro@zeniv.linux.org.uk>
+To: git-commits-head@vger.kernel.org
+Subject: shmem: fix LSM options parsing
 
-> > Because it is not necessary.
-> 
-> The logic escapes me, but OK.
+Commit:     33f37c648812bdbe1bd1eea75ddab3e799d51e77
+Parent:     a3bc18a48e2e678efe62f1f9989902f9cd19e0ff
+Refname:    refs/heads/master
+Web:        https://git.kernel.org/torvalds/c/33f37c648812bdbe1bd1eea75ddab3e799d51e77
+Author:     Al Viro <viro@zeniv.linux.org.uk>
+AuthorDate: Wed Oct 9 22:48:01 2019 -0400
+Committer:  Al Viro <viro@zeniv.linux.org.uk>
+CommitDate: Wed Oct 9 22:48:01 2019 -0400
 
-We should only extend the stacking infrastructure to what is concretely 
-required. We don't yet have a use-case for stacking perf_event so we 
-should keep the code as simple as possible. As soon as multiple LSMs 
-determine they need to share the blob, we can convert the code to blob 
-sharing.
+    shmem: fix LSM options parsing
+    
+    ->parse_monolithic() there forgets to call security_sb_eat_lsm_opts()
+    
+    Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ mm/shmem.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
--- 
-James Morris
-<jmorris@namei.org>
-
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 0f7fd4a85db6..8dcc8d04cbaf 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -3482,6 +3482,12 @@ static int shmem_parse_options(struct fs_context *fc, void *data)
+ {
+ 	char *options = data;
+ 
++	if (options) {
++		int err = security_sb_eat_lsm_opts(options, &fc->security);
++		if (err)
++			return err;
++	}
++
+ 	while (options != NULL) {
+ 		char *this_char = options;
+ 		for (;;) {
