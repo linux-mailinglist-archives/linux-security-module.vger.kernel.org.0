@@ -2,75 +2,91 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A817DBAAC
-	for <lists+linux-security-module@lfdr.de>; Fri, 18 Oct 2019 02:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED21DBAEF
+	for <lists+linux-security-module@lfdr.de>; Fri, 18 Oct 2019 02:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503951AbfJRAU2 (ORCPT
+        id S1728419AbfJRAef (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 17 Oct 2019 20:20:28 -0400
-Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2503926AbfJRAU1 (ORCPT
+        Thu, 17 Oct 2019 20:34:35 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:35847 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726951AbfJRAee (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 17 Oct 2019 20:20:27 -0400
-X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by usrv.lan (Postfix) with SMTP id E44FB186481;
-        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
-Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
-Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
-From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-To:     linux-nvme@lists.infradead.org
-Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
-Date:   Thu, 17 Oct 19 10:59:51 GMT
-X-Mailer: MIME-tools 5.503 (Entity 5.501)
+        Thu, 17 Oct 2019 20:34:34 -0400
+Received: by mail-qt1-f193.google.com with SMTP id o12so6575533qtf.3
+        for <linux-security-module@vger.kernel.org>; Thu, 17 Oct 2019 17:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EUlu1SWs2RKAwKCxV/9R7y8e+BDWGAAyqQ0an1Lsr9Q=;
+        b=OXsvF7SQN+XYVlWUa+QkhyzQlY82oddbjvaFWnStUlidnn51dbg5obEKiaFj5zoc6y
+         vwi5qirf6p/I0EprCYIHbJ5s7+dKa9zNJS8Qct/sXCBLvXojZX4N73eeclUdVuTxr2on
+         fZXxUG70SWof9y9B7g5dOIsLuBZ7XoEFF9ecWJvzkLQKUHpTID6x+qqIrr18yBuXY8dt
+         zYEoKT5bh90GuwYNAIGH9pzHKtKGDQmuA/V53vp9QsYW8ruCmJvctmoiowhBgqny1/H5
+         hYvFurEpJdqTOzUYmmTUEqt0V85cGgxkNayG1xlayYRjioTgROxq8AM9L70jMK/3QGEx
+         O06w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EUlu1SWs2RKAwKCxV/9R7y8e+BDWGAAyqQ0an1Lsr9Q=;
+        b=NwlOpc/SOmuT7EiPHDSysToJk1Z1mtocwqYDuxGx3dP6q2W94AJAL+wytlSmljfa7a
+         fmTX9lUWlLGmvQjm42oMECUVTjso0FJxfuc1wzaqNS72QcdLxkT9xiBY5UZX+Rw0RosW
+         qlumXBvSk54w+oWrofCfEa0/fkHLJ1fQmXHs8gxbxzcdc78TiGYYkUQ8GL7T9csuAc0X
+         ToZRSxNeH7AGISS1FUaXnTu7HHYpaFVXCqpa69+U3C7RtxVuk8dplODbcLhACyvbv24W
+         TrmtTHIrjFKIMELwTOiKm/90xdyF3R9US5QBxUEJ7KWuDsjTAaw2hNCRtgoNogYOFYzG
+         qCDA==
+X-Gm-Message-State: APjAAAXLUfYM3nWE+3U85F5pEWPrRayIr4xLJiJEvizohbmpxE5icFfd
+        TRWJpZbz2iXkqhT2Tfin+HFWgukcO7Dr7lvzcdOA
+X-Google-Smtp-Source: APXvYqysQ8azqkhvfL+IXNSJUTjI5cgJ7rhGxwOr2jR4+xdknSlXEXLf5ULzXQL+NHfP+CJNDsIennPxYQdpYJ61h60=
+X-Received: by 2002:ac8:5147:: with SMTP id h7mr6962616qtn.160.1571358872431;
+ Thu, 17 Oct 2019 17:34:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="EFA7_FB09FAD2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+References: <20191018001816.94460-1-brendanhiggins@google.com>
+In-Reply-To: <20191018001816.94460-1-brendanhiggins@google.com>
+From:   Iurii Zaikin <yzaikin@google.com>
+Date:   Thu, 17 Oct 2019 17:33:56 -0700
+Message-ID: <CAAXuY3rLEt9nqOBSNaWjLMHNg6pDHdjtg7hFiYx-KCDhyfnkcg@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah <shuah@kernel.org>, john.johansen@canonical.com,
+        jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        alan.maguire@oracle.com, davidgow@google.com,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Thu, Oct 17, 2019 at 5:19 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
 
---EFA7_FB09FAD2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
-
-Dear Sir / Madam
-
-
-
-Since ever we left your country back to Canada , we have gotten Government=
- approval and we have been busying planning for the less privilege Childre=
-n projects.
-
-We are planning to release first batch of the funds $2,990,000.00 within 1=
-4 days for building an estate for motherless children in your city.
-
-I want you to use my mother;s company name to register this charity projec=
-t in your country after receiving the project funds.
-
-It must be registered as { Bayraktar Group Homeless Children Ltd }.
-
-
-Can you handle and supervise this big project ?
-Can you manager all the workers as a senior supervisor ?
-We want to be sure you can handle it before we proceed with this project.
-
-
-Please call me if you want to hear from us + 1-917 580 4919.
-Please can you manage such project please Kindly reply for further details=
-.
-
-Your full names-----------
-
-
-
-Ekrem Bayraktar.
-Bayraktar Shipping Group
-
---EFA7_FB09FAD2--
-
+> +config SECURITY_APPARMOR_TEST
+> +       bool "Build KUnit tests for policy_unpack.c"
+> +       default n
+> +       depends on KUNIT && SECURITY_APPARMOR
+> +       help
+>
+select SECURITY_APPARMOR ?
+> +       KUNIT_EXPECT_EQ(test, size, TEST_BLOB_DATA_SIZE);
+> +       KUNIT_EXPECT_TRUE(test,
+> +               memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE) == 0);
+I think this must be  KUNIT_ASSERT_EQ(test, size, TEST_BLOB_DATA_SIZE);,
+otherwise there could be a buffer overflow in memcmp. All tests that
+follow such pattern
+are suspect. Also, not sure about your stylistic preference for
+KUNIT_EXPECT_TRUE(test,
+               memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE) == 0);
+vs
+KUNIT_EXPECT_EQ(test,
+               0,
+               memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE));
