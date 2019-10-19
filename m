@@ -2,60 +2,95 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38217DD95D
-	for <lists+linux-security-module@lfdr.de>; Sat, 19 Oct 2019 17:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7720DDA21
+	for <lists+linux-security-module@lfdr.de>; Sat, 19 Oct 2019 20:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725926AbfJSP3t (ORCPT
+        id S1726103AbfJSSgr (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 19 Oct 2019 11:29:49 -0400
-Received: from [221.146.236.9] ([221.146.236.9]:50980 "EHLO theworld.email"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725924AbfJSP3t (ORCPT
+        Sat, 19 Oct 2019 14:36:47 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42838 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbfJSSgr (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 19 Oct 2019 11:29:49 -0400
-Received: from (HELO 2jvzsgq) [137.164.211.128]
-        by 127.0.0.1 with ESMTP id 46581525;
-        Thu, 17 Oct 2019 11:34:02 -0500
-Message-ID: <r2387n1w-977$9w18$77@psy6l4rbwlr>
-From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-To:     lzs@npgc.sina.net
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
-Date:   Thu, 17 Oct 19 11:34:02 GMT
+        Sat, 19 Oct 2019 14:36:47 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q12so5811858pff.9;
+        Sat, 19 Oct 2019 11:36:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=diC5OhcgPAQon4MoTk8oBGJIDhBSL5N3IWATCx4/9pA=;
+        b=fPzpyISqGRrzhG3UjcuuoLYaIWtp+frAaLeP6a6dfGgX/cLKXk+T9NFIDUtYY8oPGG
+         4KYgmWPdyz5bbiBKd0DnLXt1lVV02TSCMB/oGkGKqBl1BcoAQ13vKI3Mh3j1nwwUcLSR
+         w0ciXPA6NjD5BbhhT2B5pHfd9iAySV0pbzPut53QAPVKvIafm+B6odLaeMzb8qd9ZQ+b
+         hI/7pmc/NdMRZpioE30XcpiaGGGQxunwG6ZjH01FIo6xRQoSFL5gXwoa+DAeYS3m0xx/
+         L8u9i0KTn2vTAHbRz/bsLlfJMT+tp9hkHpQtE7T/s3NZ6g9rO0o9QxjezZntUHgC5Rwq
+         M5zw==
+X-Gm-Message-State: APjAAAXxbk1au8JZEnFgCwO5OJwP27r9DQX7fV4mc8NKB/eJ0xM+lMgX
+        0TTRJHXV0jR3vWNCcmpPFL4=
+X-Google-Smtp-Source: APXvYqzcpP34+frn1/CdUknue2M5Tq2aDYuthXzjQKvIYfvhH7DL4POvzlf4Nw6JCIodII+YDGkI6Q==
+X-Received: by 2002:a63:1e04:: with SMTP id e4mr16626950pge.4.1571510205979;
+        Sat, 19 Oct 2019 11:36:45 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id e192sm10404393pfh.83.2019.10.19.11.36.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2019 11:36:44 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 8F7D440256; Sat, 19 Oct 2019 18:36:43 +0000 (UTC)
+Date:   Sat, 19 Oct 2019 18:36:43 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Matthias Maennich <maennich@google.com>, shuah@kernel.org,
+        john.johansen@canonical.com, jmorris@namei.org, serge@hallyn.com,
+        keescook@chromium.org, yzaikin@google.com, davidgow@google.com,
+        tytso@mit.edu, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+Message-ID: <20191019183643.GG11244@42.do-not-panic.com>
+References: <20191018001816.94460-1-brendanhiggins@google.com>
+ <20191018122949.GD11244@42.do-not-panic.com>
+ <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="A..EE._..77.E8.D0C3__0_"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Sat, Oct 19, 2019 at 01:56:01PM +0100, Alan Maguire wrote:
+> On Fri, 18 Oct 2019, Luis Chamberlain wrote:
+> 
+> > On Thu, Oct 17, 2019 at 05:18:16PM -0700, Brendan Higgins wrote:
+> > > From: Mike Salvatore <mike.salvatore@canonical.com>
+> > > 
+> > > In order to write the tests against the policy unpacking code, some
+> > > static functions needed to be exposed for testing purposes. One of the
+> > > goals of this patch is to establish a pattern for which testing these
+> > > kinds of functions should be done in the future.
+> > 
+> > And you'd run into the same situation expressed elsewhere with kunit of
+> > an issue of the kunit test as built-in working but if built as a module
+> > then it would not work, given the lack of exports. Symbols namespaces
+> > should resolve this [0], and we'd be careful where a driver imports this
+> > namespace.
+> > 
+> > [0] https://lwn.net/Articles/798254/
+> >
+> 
+> Thanks for the link! Looks interesting for us definitely!
+> 
+> WRT adding tests, I think what we're aiming at is a set of best practices 
+> to advise test developers using KUnit, while attempting to minimize 
+> side-effects of any changes we need to make to support testability.
+> 
+> One aspect of this we probably have to consider is inlining of code. 
 
---A..EE._..77.E8.D0C3__0_
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Sure. Makes sense.
 
-Greetings
-
-My name is Barrister Hans Erich.
-
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
-
-Your full names ---------
-
-
-Your urgent response will be appreciated
-
-Thank you and God bless you.
-
-Barrister Hans Erich
-
-Yours sincerely,
-Barrister Hans Erich
-
---A..EE._..77.E8.D0C3__0_--
-
+  Luis
