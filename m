@@ -2,277 +2,218 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8459AE0F11
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Oct 2019 02:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CC2E124B
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Oct 2019 08:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732625AbfJWASh (ORCPT
+        id S2389090AbfJWGkA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 22 Oct 2019 20:18:37 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:45298 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732315AbfJWAS0 (ORCPT
+        Wed, 23 Oct 2019 02:40:00 -0400
+Received: from mail-yb1-f194.google.com ([209.85.219.194]:38345 "EHLO
+        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387946AbfJWGkA (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 22 Oct 2019 20:18:26 -0400
-Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1B7132010AC8;
-        Tue, 22 Oct 2019 17:18:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1B7132010AC8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1571789905;
-        bh=l3/xpxDJDNPHhTjWJ68OgeQThxUX96N97fTeydZwHaM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WFw4V83FIRb9/kKNS80AHaLOAxb18GAxUAoHQDsmgtjgeYqh4zjQTx/5eHQBz4A7W
-         sg6wHJlSkrhtKDNqK5vSXxOCCWZiJYGcF3MRPLdr7YJmMvV9VOlZyVAtHySJPZsNT8
-         59WqKDVFBJd8zSoyI1OXfNViIfpKYIPGQcm2ymUY=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, dhowells@redhat.com, casey@schaufler-ca.com,
-        sashal@kernel.org, jamorris@linux.microsoft.com,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-Cc:     nramas@linux.microsoft.com
-Subject: [PATCH v1 6/6] KEYS: measure keys when they are created or updated
-Date:   Tue, 22 Oct 2019 17:18:18 -0700
-Message-Id: <20191023001818.3684-7-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191023001818.3684-1-nramas@linux.microsoft.com>
-References: <20191023001818.3684-1-nramas@linux.microsoft.com>
+        Wed, 23 Oct 2019 02:40:00 -0400
+Received: by mail-yb1-f194.google.com with SMTP id r68so5981516ybf.5;
+        Tue, 22 Oct 2019 23:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GsRmmy8kO0r1yWjAMGmPFWzuU6qtFEhb9ZOIoYR8bqI=;
+        b=ah8A6oKbZMJU0gw9xfPeocFp3eXf7lI+zU+AJDWNiCwdRCULkp+9BDeAmtpZYH3lMY
+         EKE9L5k6t6fwLilnlvkd+MO5RLsmpKF7PMuBAjDyb5oLnRN2GZ8UgoO3xJctNpkm6U2H
+         uYanhg0bHOeACWodS7wXKQ6V/zpZguzlXQ367/Kstm7cNK7dEAPl2WkSnlrCOF9sVSXC
+         4CoJBE2dpLqBd0fMfC/jE8p4Q5msr5EeWQYRIDKdh8SpQLBwjWwT7ux/X25PZF2ap2Mw
+         9idSJxJEMvYp7Ukc+tRm4FzD092+uxZOm9Yf4IDIizo8S3hMHRzmpLBcqWSJuFyJQwK6
+         Mcuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GsRmmy8kO0r1yWjAMGmPFWzuU6qtFEhb9ZOIoYR8bqI=;
+        b=eCPGJhpdCX2jW7K4QUMlH6m1TUlE+hEHAWxPfKd5bD1YWYtWbucCS3ql7EDBI+M3U4
+         KJQtU+MCYXf9Chs9EeLNvE7OKLPmhnfvaJrmb9nKh8jSo4sBfpeboQElIstbcHcQmHNd
+         lkE5VadpJyA3jX7wQmniim0iZ34QEOR/6ZOIJmp3jdPht3twrwn4GHaZ7hC6aawuBLXk
+         2gbQzxB1t1lddk4moSTs3ETHHPuLQsoGJO5Asgz0N+hcfYr9h1YTp1QexPq0+Ksp38jd
+         xv3cyX9yp/lUA4piA0Ns0ciCPt/+tac9Hkfind1fZrWzZG5ke74JlHfapzxdK8lNvlnq
+         o96g==
+X-Gm-Message-State: APjAAAVWdwEX4TihwMaDonsa/y/KenFGP6gdTq8tcc4ORIlj66A75sqm
+        CkP3oP0FOJMEZk2xZEmQU5ByZjkamSr3hH1E5PQ=
+X-Google-Smtp-Source: APXvYqyEfIXS1YE02Mcv67dN7iXghA3NKnUKoWWnlXbuVJEjLidLeAzeaD6xfSscivEuXqFzslSUfPde/2zcn8Ccszs=
+X-Received: by 2002:a25:8308:: with SMTP id s8mr4983149ybk.126.1571812797949;
+ Tue, 22 Oct 2019 23:39:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191022204453.97058-1-salyzyn@android.com> <20191022204453.97058-5-salyzyn@android.com>
+In-Reply-To: <20191022204453.97058-5-salyzyn@android.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 23 Oct 2019 09:39:47 +0300
+Message-ID: <CAOQ4uxgWOmV_x5gRZ9tR+u86GE6JoXn-MSxKkvi87e9owMApZw@mail.gmail.com>
+Subject: Re: [PATCH v14 4/5] overlayfs: internal getxattr operations without
+ sepolicy checking
+To:     Mark Salyzyn <salyzyn@android.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-team@android.com, Miklos Szeredi <miklos@szeredi.hu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-doc@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-A new LSM function namely, security_key_create_or_update, has
-been added. This function is called by key_create_or_update
-function when a new key is created or an existing key is updated.
-This call is made when the key has been instantiated and linked
-to the target keyring.
+On Tue, Oct 22, 2019 at 11:46 PM Mark Salyzyn <salyzyn@android.com> wrote:
+>
+> Check impure, opaque, origin & meta xattr with no sepolicy audit
+> (using __vfs_getxattr) since these operations are internal to
+> overlayfs operations and do not disclose any data.  This became
+> an issue for credential override off since sys_admin would have
+> been required by the caller; whereas would have been inherently
+> present for the creator since it performed the mount.
+>
+> This is a change in operations since we do not check in the new
+> ovl_do_vfs_getxattr function if the credential override is off or
+> not.  Reasoning is that the sepolicy check is unnecessary overhead,
+> especially since the check can be expensive.
+>
+> Because for override credentials off, this affects _everyone_ that
+> underneath performs private xattr calls without the appropriate
+> sepolicy permissions and sys_admin capability.  Providing blanket
+> support for sys_admin would be bad for all possible callers.
+>
+> For the override credentials on, this will affect only the mounter,
+> should it lack sepolicy permissions. Not considered a security
+> problem since mounting by definition has sys_admin capabilities,
+> but sepolicy contexts would still need to be crafted.
+>
 
-security_key_create_or_update is passed the target keyring, key,
-key creation flags, and a boolean flag indicating whether
-the key was newly created or an existing key was updated.
-This function calls the ima function ima_post_key_create_or_update
-to measure the key.
+It sounds reasonable to me, but I am not a "security person".
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- include/linux/ima.h      | 15 +++++++-
- include/linux/security.h | 13 ++++++-
- security/keys/key.c      | 78 +++++++++++++++++++++++++++++++++++-----
- security/security.c      | 10 ++++++
- 4 files changed, 105 insertions(+), 11 deletions(-)
+> It should be noted that there is precedence, __vfs_getxattr is used
+> in other filesystems for their own internal trusted xattr management.
+>
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index a20ad398d260..ce763901380d 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -24,7 +24,11 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 			      enum kernel_read_file_id id);
- extern void ima_post_path_mknod(struct dentry *dentry);
- extern void ima_kexec_cmdline(const void *buf, int size);
--
-+extern int ima_post_key_create_or_update(struct key *keyring,
-+					 struct key *key,
-+					 const struct cred *cred,
-+					 unsigned long flags,
-+					 bool create);
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
- #endif
-@@ -91,6 +95,15 @@ static inline void ima_post_path_mknod(struct dentry *dentry)
- }
- 
- static inline void ima_kexec_cmdline(const void *buf, int size) {}
-+
-+static inline int ima_post_key_create_or_update(struct key *keyring,
-+						struct key *key,
-+						const struct cred *cred,
-+						unsigned long flags,
-+						bool create)
-+{
-+	return 0;
-+}
- #endif /* CONFIG_IMA */
- 
- #ifndef CONFIG_IMA_KEXEC
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 5f7441abbf42..c8348da3db2e 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -1677,7 +1677,9 @@ void security_key_free(struct key *key);
- int security_key_permission(key_ref_t key_ref,
- 			    const struct cred *cred, unsigned perm);
- int security_key_getsecurity(struct key *key, char **_buffer);
--
-+int security_key_create_or_update(struct key *keyring, struct key *key,
-+				  const struct cred *cred,
-+				  unsigned long flags, bool create);
- #else
- 
- static inline int security_key_alloc(struct key *key,
-@@ -1704,6 +1706,15 @@ static inline int security_key_getsecurity(struct key *key, char **_buffer)
- 	return 0;
- }
- 
-+static inline int security_key_create_or_update(struct key *keyring,
-+						struct key *key,
-+						const struct cred *cred,
-+						unsigned long flags,
-+						bool create)
-+{
-+	return 0;
-+}
-+
- #endif
- #endif /* CONFIG_KEYS */
- 
-diff --git a/security/keys/key.c b/security/keys/key.c
-index 764f4c57913e..b913feaf196e 100644
---- a/security/keys/key.c
-+++ b/security/keys/key.c
-@@ -781,7 +781,7 @@ static inline key_ref_t __key_update(key_ref_t key_ref,
- }
- 
- /**
-- * key_create_or_update - Update or create and instantiate a key.
-+ * __key_create_or_update - Update or create and instantiate a key.
-  * @keyring_ref: A pointer to the destination keyring with possession flag.
-  * @type: The type of key.
-  * @description: The searchable description for the key.
-@@ -789,6 +789,8 @@ static inline key_ref_t __key_update(key_ref_t key_ref,
-  * @plen: The length of @payload.
-  * @perm: The permissions mask for a new key.
-  * @flags: The quota flags for a new key.
-+ * @create: Set to true if the key was newly created.
-+ *          Set to false if the key was updated.
-  *
-  * Search the destination keyring for a key of the same description and if one
-  * is found, update it, otherwise create and instantiate a new one and create a
-@@ -805,13 +807,14 @@ static inline key_ref_t __key_update(key_ref_t key_ref,
-  * On success, the possession flag from the keyring ref will be tacked on to
-  * the key ref before it is returned.
-  */
--key_ref_t key_create_or_update(key_ref_t keyring_ref,
--			       const char *type,
--			       const char *description,
--			       const void *payload,
--			       size_t plen,
--			       key_perm_t perm,
--			       unsigned long flags)
-+static key_ref_t __key_create_or_update(key_ref_t keyring_ref,
-+					const char *type,
-+					const char *description,
-+					const void *payload,
-+					size_t plen,
-+					key_perm_t perm,
-+					unsigned long flags,
-+					bool *create)
- {
- 	struct keyring_index_key index_key = {
- 		.description	= description,
-@@ -936,6 +939,7 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
- 		goto error_link_end;
- 	}
- 
-+	*create = true;
- 	key_ref = make_key_ref(key, is_key_possessed(keyring_ref));
- 
- error_link_end:
-@@ -948,7 +952,7 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
- error:
- 	return key_ref;
- 
-- found_matching_key:
-+found_matching_key:
- 	/* we found a matching key, so we're going to try to update it
- 	 * - we can drop the locks first as we have the key pinned
- 	 */
-@@ -964,9 +968,65 @@ key_ref_t key_create_or_update(key_ref_t keyring_ref,
- 		}
- 	}
- 
-+	*create = false;
- 	key_ref = __key_update(key_ref, &prep);
- 	goto error_free_prep;
- }
-+
-+/**
-+ * key_create_or_update - Update or create and instantiate a key.
-+ * @keyring_ref: A pointer to the destination keyring with possession flag.
-+ * @type: The type of key.
-+ * @description: The searchable description for the key.
-+ * @payload: The data to use to instantiate or update the key.
-+ * @plen: The length of @payload.
-+ * @perm: The permissions mask for a new key.
-+ * @flags: The quota flags for a new key.
-+ *
-+ * Calls the internal function __key_create_or_update.
-+ * If successful calls the security LSM hook.
-+ */
-+key_ref_t key_create_or_update(key_ref_t keyring_ref,
-+			       const char *type,
-+			       const char *description,
-+			       const void *payload,
-+			       size_t plen,
-+			       key_perm_t perm,
-+			       unsigned long flags)
-+{
-+	key_ref_t key_ref;
-+	struct key *keyring, *key = NULL;
-+	int ret = 0;
-+	bool create = false;
-+
-+	key_ref = __key_create_or_update(keyring_ref, type, description,
-+					 payload, plen, perm, flags,
-+					 &create);
-+	if (IS_ERR(key_ref))
-+		goto out;
-+
-+	keyring = key_ref_to_ptr(keyring_ref);
-+	key = key_ref_to_ptr(key_ref);
-+
-+	/* let the security module know about
-+	 * the created or updated key.
-+	 */
-+	ret = security_key_create_or_update(keyring, key,
-+					    current_cred(),
-+					    flags, create);
-+	if (ret < 0)
-+		goto security_error;
-+	else
-+		goto out;
-+
-+security_error:
-+	key_unlink(keyring, key);
-+	key_put(key);
-+	key_ref = ERR_PTR(ret);
-+
-+out:
-+	return key_ref;
-+}
- EXPORT_SYMBOL(key_create_or_update);
- 
- /**
-diff --git a/security/security.c b/security/security.c
-index 250ee2d76406..707a9e7fa94d 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -2303,6 +2303,16 @@ int security_key_getsecurity(struct key *key, char **_buffer)
- 	return call_int_hook(key_getsecurity, 0, key, _buffer);
- }
- 
-+int security_key_create_or_update(struct key *keyring,
-+				  struct key *key,
-+				  const struct cred *cred,
-+				  unsigned long flags,
-+				  bool create)
-+{
-+	return ima_post_key_create_or_update(keyring, key, cred,
-+					     flags, create);
-+}
-+
- #endif	/* CONFIG_KEYS */
- 
- #ifdef CONFIG_AUDIT
--- 
-2.17.1
+Urgh! "other" filesystems meaning ecryptfs_getxattr()?
+That looks like a loop hole to read any trusted xattr without any
+security checks. Not sure its a good example...
 
+> Signed-off-by: Mark Salyzyn <salyzyn@android.com>
+> Cc: Miklos Szeredi <miklos@szeredi.hu>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Vivek Goyal <vgoyal@redhat.com>
+> Cc: Eric W. Biederman <ebiederm@xmission.com>
+> Cc: Amir Goldstein <amir73il@gmail.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Stephen Smalley <sds@tycho.nsa.gov>
+> Cc: linux-unionfs@vger.kernel.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: kernel-team@android.com
+> Cc: linux-security-module@vger.kernel.org
+>
+> ---
+> v14 - rebase to use xattr_gs_args.
+>
+> v13 - rebase to use __vfs_getxattr flags option
+>
+> v12 - rebase
+>
+> v11 - switch name to ovl_do_vfs_getxattr, fortify comment
+>
+> v10 - added to patch series
+>
+> ---
+>  fs/overlayfs/namei.c     | 12 +++++++-----
+>  fs/overlayfs/overlayfs.h |  2 ++
+>  fs/overlayfs/util.c      | 32 +++++++++++++++++++++++---------
+>  3 files changed, 32 insertions(+), 14 deletions(-)
+>
+> diff --git a/fs/overlayfs/namei.c b/fs/overlayfs/namei.c
+> index 9702f0d5309d..a4a452c489fa 100644
+> --- a/fs/overlayfs/namei.c
+> +++ b/fs/overlayfs/namei.c
+> @@ -106,10 +106,11 @@ int ovl_check_fh_len(struct ovl_fh *fh, int fh_len)
+>
+>  static struct ovl_fh *ovl_get_fh(struct dentry *dentry, const char *name)
+>  {
+> -       int res, err;
+> +       ssize_t res;
+> +       int err;
+>         struct ovl_fh *fh = NULL;
+>
+> -       res = vfs_getxattr(dentry, name, NULL, 0);
+> +       res = ovl_do_vfs_getxattr(dentry, name, NULL, 0);
+>         if (res < 0) {
+>                 if (res == -ENODATA || res == -EOPNOTSUPP)
+>                         return NULL;
+> @@ -123,7 +124,7 @@ static struct ovl_fh *ovl_get_fh(struct dentry *dentry, const char *name)
+>         if (!fh)
+>                 return ERR_PTR(-ENOMEM);
+>
+> -       res = vfs_getxattr(dentry, name, fh, res);
+> +       res = ovl_do_vfs_getxattr(dentry, name, fh, res);
+>         if (res < 0)
+>                 goto fail;
+>
+> @@ -141,10 +142,11 @@ static struct ovl_fh *ovl_get_fh(struct dentry *dentry, const char *name)
+>         return NULL;
+>
+>  fail:
+> -       pr_warn_ratelimited("overlayfs: failed to get origin (%i)\n", res);
+> +       pr_warn_ratelimited("overlayfs: failed to get origin (%zi)\n", res);
+>         goto out;
+>  invalid:
+> -       pr_warn_ratelimited("overlayfs: invalid origin (%*phN)\n", res, fh);
+> +       pr_warn_ratelimited("overlayfs: invalid origin (%*phN)\n",
+> +                           (int)res, fh);
+>         goto out;
+>  }
+>
+> diff --git a/fs/overlayfs/overlayfs.h b/fs/overlayfs/overlayfs.h
+> index c6a8ec049099..72762642b247 100644
+> --- a/fs/overlayfs/overlayfs.h
+> +++ b/fs/overlayfs/overlayfs.h
+> @@ -205,6 +205,8 @@ int ovl_want_write(struct dentry *dentry);
+>  void ovl_drop_write(struct dentry *dentry);
+>  struct dentry *ovl_workdir(struct dentry *dentry);
+>  const struct cred *ovl_override_creds(struct super_block *sb);
+> +ssize_t ovl_do_vfs_getxattr(struct dentry *dentry, const char *name, void *buf,
+> +                           size_t size);
+>  struct super_block *ovl_same_sb(struct super_block *sb);
+>  int ovl_can_decode_fh(struct super_block *sb);
+>  struct dentry *ovl_indexdir(struct super_block *sb);
+> diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
+> index f5678a3f8350..bed12aed902c 100644
+> --- a/fs/overlayfs/util.c
+> +++ b/fs/overlayfs/util.c
+> @@ -40,6 +40,20 @@ const struct cred *ovl_override_creds(struct super_block *sb)
+>         return override_creds(ofs->creator_cred);
+>  }
+>
+> +ssize_t ovl_do_vfs_getxattr(struct dentry *dentry, const char *name, void *buf,
+> +                           size_t size)
+> +{
+> +       struct xattr_gs_args args = {};
+> +
+> +       args.dentry = dentry;
+> +       args.inode = d_inode(dentry);
+> +       args.name = name;
+> +       args.buffer = buf;
+> +       args.size = size;
+> +       args.flags = XATTR_NOSECURITY;
+> +       return __vfs_getxattr(&args);
+> +}
+> +
+
+We do not understand each other.
+I commented on this several times.
+please put the wrapper helper ovl_do_getxattr() in overlayfs.h
+next to the other ovl_do_ wrapper helpers and add pr_debug()
+as all other wrappers have.
+
+Thanks,
+Amir.
