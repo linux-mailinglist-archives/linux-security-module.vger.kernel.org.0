@@ -2,118 +2,92 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C525E3DD1
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Oct 2019 22:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034C3E3E2E
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Oct 2019 23:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728739AbfJXUyX (ORCPT
+        id S1728957AbfJXVaR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 24 Oct 2019 16:54:23 -0400
-Received: from sonic317-26.consmr.mail.gq1.yahoo.com ([98.137.66.152]:44108
-        "EHLO sonic317-26.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728451AbfJXUyX (ORCPT
+        Thu, 24 Oct 2019 17:30:17 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:43724 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729297AbfJXVaP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 24 Oct 2019 16:54:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1571950462; bh=iwsRob8mPxB0HBTr6zJlKet/+mwbmqKHtrH1kfUdiQ4=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=hOd+HKuJY7+tSf1z7k5MiC18YLE/zCzeH8/xmOW2/DbxD7VVTrU/7lZxWF1TQ2eP+XyciY5qcUohck3IrbwWmSTxxMXKHB0OPgZG9CCU2yh5qoaey5PL/aCKmHGbw0Y/j8iN2fi3Juz7+maKbt2wLc7reAiKRD/JDcCMPFCvGDv0YvY+3kY8GK5WCUB6U9aLYR7Db1oOwlFDX4M49W4MAm29KH4pu13dVFES7OCKKSFg/EkVnsxLQcWrThB8kdq8h9oPAEZrWInX9/HovowcoTE+D/Eu8XUsDMeHoz8g9nn6KcBLloTkecf1qIU0yqobdjKIP/aAepRlZ1tSoE1A1g==
-X-YMail-OSG: vMLqY.AVM1nG3P8Xwi2RBRkok9gAo.PA8upUxYzde5fO5uq0vL33Y6C5UcVbcEB
- .gqmTfyYro63WUc1uOBTd5gSa4X67b4xfZKgj9IuvasH4tdZGwJiEGOZNayCd.YCRol3xoy.8TSf
- ScqRnJbhnVDJsWRPDk4TgXr.qQ8jT7G2Wt6myepLdEZw.M3Ps8yN7nIcxJvGI9hF0aPwGEPnjoCx
- DyJ4wSa7Ad9ZCIKtsQfEQzFqVR840ow.f9XDg3rANj3xFBqUjuJ2hKrqD_LF4OKbTNX.Eacn0EYd
- wxq.7lDE3NWjGsPxdWiybOOCUccQRxxUldO3wvPpELZ2jUazu2BvgikEiTN35ThHvCV.Sti3SOkS
- DaFlglfNfugkqTwOS1jr9DiNBnNp4h2O5tzw74QwfAHuF0Wsan4Kr8T.yrV1XZN8i_nNT_NitKmB
- 9rb3GwsKfiZQFKB.Iet9LjGUuslrDZp71DBBUoSQp1VS7Z._purpxWfrh.iSyvtK.l0xLIJZ5mBp
- 8aHYfkfCEDx.m4P25aaUbcNZ8w_QJaEw.tqaehiOauHcMkvEDHlRD00d98kK_zKXeoxTNy.CBYZw
- 2Naj5i02.2gBHiSDjSGnVNWokWGUGRA7lRh.Th4C1QRaBpBkYoxx21vXzxwyNgj2hV7MQXB5Oofr
- KPFFUAQkoYEaoTUonBCALu8VtQOPuogyd73XwSO8SB1j8J3gKXM_QKYCuGIa_dEPOM.4MLnxK686
- Kb3Xma0Y3fBI0639GjD6Li_sTca1VbOBQoUzLKN4Q.uAz9RI6B0pHxP2bnl0rsmEHRIo7H_z_cV8
- 2KTZe4UJ_tdqa5CbsknJZGXBfVx7u5P1mQzcKdOZMDjkl38d7X2ZU_B6gRkjnJPUsrDAGiNsFvQy
- xrwYs446aeOUTGGRf15se0Yk4hUCRUmExVo3xmBMxBfbUla5iHio7W3r34.HeV2q_IcpneHX1U83
- ehIDmhURYz_2cp9boygCD91F0.cocG5RO8NpALKuGVDfOzTfdrrY7ES5OgoGeBdbK0SUraKzY_ak
- CtUhlTDpo_G_WnHXp3OWcC6Bffgt5LU1peZtMAjfVk3VF8eKkwk42P3fg9mFgX0AhLb6P_ncNDdM
- FrxaIjNTrryZYlaz_DRpGhTha1mXDYfFtQAvAPojRD9PYGUceJHWIQ9wyrlgKlAjesaVEUHkzKUc
- NbqqMuwTMMu6BnSY_1MayTfKCWqpGeW38vp4anbPrOpXdCwrBi2NKGONnEmwJncSX_4KY2kLgQY2
- AyRKMRQ_JPiQSjnxWbjGadOCbdOMIR0zgFAH99_qMNku7L5TMoBttm0piAja1hMUB_hAhq.LJJ.z
- anncN_f6TsN7RZKTt3Q1DDkPDO_HG5Mgrdgvy3b99vRdhNrZdkoBuLn.2sYLIXurM9K8IkUQQ9Cu
- wWR1hEGA.mm0tDufbZchiFlgQ8QjF
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.gq1.yahoo.com with HTTP; Thu, 24 Oct 2019 20:54:22 +0000
-Received: by smtp427.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 35bc741c4cc33d8052afba24f4af420a;
-          Thu, 24 Oct 2019 20:54:21 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     casey@schaufler-ca.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH v10 25/25] AppArmor: Remove the exclusive flag
-Date:   Thu, 24 Oct 2019 13:52:28 -0700
-Message-Id: <20191024205228.6922-26-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191024205228.6922-1-casey@schaufler-ca.com>
-References: <20191024205228.6922-1-casey@schaufler-ca.com>
+        Thu, 24 Oct 2019 17:30:15 -0400
+Received: by mail-lf1-f66.google.com with SMTP id v24so303425lfe.10
+        for <linux-security-module@vger.kernel.org>; Thu, 24 Oct 2019 14:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h5FP/voiQdxeaQU3Va8HH5cRZmi1OHTMwBKcRrrOo6E=;
+        b=G+CKE+0sNMbBuosjchwhgzz8NQwfbV/8kKBYcW1zgIA+wCHZXB0W4xnrddKNkrujly
+         nBXQf8TMFFxtwDaqAlubm1WQBu/DIP2jq0ClHTeKxpnxD8j4n3vqHGpl41RLHFrD0jXc
+         jfdzDY5G/0JxiPvAj8Pc7cihC14c7Kl2f6hiQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h5FP/voiQdxeaQU3Va8HH5cRZmi1OHTMwBKcRrrOo6E=;
+        b=BWnmU66FzPAcabS2DGLQZw9fjCtPxLuTUlORRBncgc2hymF52IQwqZfZC2ZEvKyXAb
+         sRP/0USe30iqSrL5rT0UROQdf3EjHfcpU9uxquai/9PkSQ3LIrY6X8FujILdBTC43J6l
+         uqc62nVUEETB7yc12jfNNwqhpDcRBt+FogdTk+uyFVm6kRuuiiip6S6XCrm8wRu3CKp3
+         ToQwWWEblDk0ffbAw//bbIpYEFnL1uCggjqPe9y36ctECkLiGupXmMOW3k68LSm0+SgG
+         2eI8O7+Lg44S5M8DuYuolT/uMfZidYtUE4R+6yVK6hNsb6SfxFyKB6aJK6V+xgJyDshD
+         oegg==
+X-Gm-Message-State: APjAAAW133BtJQnGFRlN9MRd1hVAGLQPPLh3OIj+EJx1/SrO4VxHItXj
+        2ZKGsv6m9hggj7nWF7wm4i8LoimyHNMP6A==
+X-Google-Smtp-Source: APXvYqwE2RUejjiYFx80DwJB5Oxq1JZ2FFvMatNPok9TWrlDtcsYznT+HGnL14dKMpF5muDyKx/l6g==
+X-Received: by 2002:ac2:554d:: with SMTP id l13mr202721lfk.116.1571952611975;
+        Thu, 24 Oct 2019 14:30:11 -0700 (PDT)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id t24sm11266794ljc.23.2019.10.24.14.30.08
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Oct 2019 14:30:08 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id l21so270390lje.4
+        for <linux-security-module@vger.kernel.org>; Thu, 24 Oct 2019 14:30:08 -0700 (PDT)
+X-Received: by 2002:a05:651c:331:: with SMTP id b17mr3303284ljp.133.1571952607809;
+ Thu, 24 Oct 2019 14:30:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <157186182463.3995.13922458878706311997.stgit@warthog.procyon.org.uk>
+ <30394.1571936252@warthog.procyon.org.uk>
+In-Reply-To: <30394.1571936252@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 24 Oct 2019 17:29:51 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wiMho2AhcTWC3-3zGK7639XL9UT=AheMXY0pxGHDACn6g@mail.gmail.com>
+Message-ID: <CAHk-=wiMho2AhcTWC3-3zGK7639XL9UT=AheMXY0pxGHDACn6g@mail.gmail.com>
+Subject: Re: [RFC PATCH 11/10] pipe: Add fsync() support [ver #2]
+To:     David Howells <dhowells@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the inclusion of the "display" process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+On Thu, Oct 24, 2019 at 12:57 PM David Howells <dhowells@redhat.com> wrote:
+>
+> pipe: Add fsync() support
+>
+> The keyrings testsuite needs the ability to wait for all the outstanding
+> notifications in the queue to have been processed so that it can then go
+> through them to find out whether the notifications it expected have been
+> emitted.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+Can't you just do
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index ef6035a4fa7e..0e7997a3a9d9 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1107,22 +1107,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock, char **optval,
- 	return error;
- }
- 
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1226,8 +1210,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1738,7 +1720,7 @@ static int __init apparmor_init(void)
- 
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
--- 
-2.20.1
+    ioctl(fd, FIONREAD, &count);
 
+in a loop instead? "No paperwork. Just sprinkle some msleep() crack on
+him, and let's get out of here"
+
+               Linus
