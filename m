@@ -2,77 +2,59 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B81E567A
-	for <lists+linux-security-module@lfdr.de>; Sat, 26 Oct 2019 00:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC211E5DEC
+	for <lists+linux-security-module@lfdr.de>; Sat, 26 Oct 2019 17:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbfJYW2i (ORCPT
+        id S1726216AbfJZP34 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 25 Oct 2019 18:28:38 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:41486 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726388AbfJYW2h (ORCPT
+        Sat, 26 Oct 2019 11:29:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726189AbfJZP34 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 25 Oct 2019 18:28:37 -0400
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CEB0B2010AC6;
-        Fri, 25 Oct 2019 15:28:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CEB0B2010AC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1572042516;
-        bh=V6ZSkzy97Ph9Iz78UInOh5o3ydNZF/8k2BxCyvk6lyQ=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=KHiPpw6dkWKNFofkiya6TL+ZsFpP4nBwS4CyMT4p+8dAJR7wh56P63jvGCra7uDmP
-         uoop4pQgCcZztR0hto1QHsJg1K1yHQzXiiowcK+YFuYA/qPG8V19d/ItFH94Rn+8vb
-         BtJVzxKRY4VfGbqn8hlB5Yp0Ll4AcWQ/wuxWfh8c=
-Subject: Re: [PATCH v2 1/4] KEYS: Defined an ima hook for measuring keys on
- key create or update
-To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
-        casey@schaufler-ca.com, sashal@kernel.org,
-        jamorris@linux.microsoft.com,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-References: <20191023233950.22072-1-nramas@linux.microsoft.com>
- <20191023233950.22072-2-nramas@linux.microsoft.com>
- <1572032428.4532.72.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <c1de8055-89a7-25dd-d99a-427e2c2c4c59@linux.microsoft.com>
-Date:   Fri, 25 Oct 2019 15:28:54 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Sat, 26 Oct 2019 11:29:56 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 775FA20663;
+        Sat, 26 Oct 2019 15:29:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572103795;
+        bh=7bDy0tt9zpS5NCLVgX24iEPWYoUYIoqUv866wtEpd/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h1Mo0hA83F+IruKPal8A7Xt3eFcA0MqHKmxIQ5j2hA5QUG7QM9FDJyOcc8jzXeIhE
+         vnsEE3AwlW3Q9GlEz/p0jpZc3xXDTgDWKE48aPhKIiAENNcVc2fl06cKuP0S9pTBgK
+         icQMuLGggXG/AnD4PWMorLAK9+KPgbJyZIGj/zD4=
+Date:   Sat, 26 Oct 2019 11:29:54 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Micah Morton <mortonm@chromium.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Please pick ("LSM: SafeSetID: Stop releasing uninitialized
+ ruleset") to 5.3 stable
+Message-ID: <20191026152954.GI31224@sasha-vm>
+References: <CAD=FV=Uui+a6TS85VNv3XVApq7xYifd8m_ZTmShTC2jeGEO4jg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1572032428.4532.72.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=Uui+a6TS85VNv3XVApq7xYifd8m_ZTmShTC2jeGEO4jg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 10/25/2019 12:40 PM, Mimi Zohar wrote:
+On Fri, Oct 25, 2019 at 09:44:09AM -0700, Doug Anderson wrote:
+>If you're still taking things for 5.3 stable, I humbly request picking
+>up commit 21ab8580b383 ("LSM: SafeSetID: Stop releasing uninitialized
+>ruleset").  While bisecting other problems this crash tripped me up
+>and I would have been able to bisect faster had the fix been in
+>linux-stable.  Only kernel 5.3 is affected.
 
->> +void ima_post_key_create_or_update(struct key *keyring, struct key *key,
->> +				   unsigned long flags, bool create)
->> +{
->> +	const struct public_key *pk;
->> +
->> +	if (key->type != &key_type_asymmetric)
->> +		return;
->> +
->> +	if (!ima_initialized)
->> +		return;
-> 
-> There's no reason to define a new variable to determine if IMA is
-> initialized.  Use ima_policy_flag.  
+Queued up, thanks!
 
-Please correct me if I am wrong -
-
-ima_policy_flag will be set to 0 if IMA is not yet initialized
-OR
-IMA is initialized, but ima_policy_flag could be still set to 0 (say, 
-due to the configured policy).
-
-In the latter case the measurement request should be a NOP immediately.
-
-  -lakshmi
-
+-- 
+Thanks,
+Sasha
