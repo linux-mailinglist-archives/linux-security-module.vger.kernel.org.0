@@ -2,65 +2,90 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D401E6A65
-	for <lists+linux-security-module@lfdr.de>; Mon, 28 Oct 2019 02:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D64BE743B
+	for <lists+linux-security-module@lfdr.de>; Mon, 28 Oct 2019 15:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727912AbfJ1BL0 convert rfc822-to-8bit (ORCPT
+        id S1727119AbfJ1O6i (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 27 Oct 2019 21:11:26 -0400
-Received: from posta.amasya.edu.tr ([193.255.105.20]:21447 "EHLO
-        posta.amasya.edu.tr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727581AbfJ1BL0 (ORCPT
+        Mon, 28 Oct 2019 10:58:38 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:42786 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726563AbfJ1O6h (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 27 Oct 2019 21:11:26 -0400
-X-Greylist: delayed 412 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Oct 2019 21:11:23 EDT
-Received: by posta.amasya.edu.tr (Postfix, from userid 110)
-        id C70373C0849; Mon, 28 Oct 2019 04:04:29 +0300 (+03)
-X-Virus-Scanned: by SpamTitan at amasya.edu.tr
-Authentication-Results: posta.amasya.edu.tr; none
-Date:   Mon, 28 Oct 2019 04:04:17 +0300 (EET)
-From:   Bellucci Capital Partners <pinar.sen@amasya.edu.tr>
-Reply-To: Bellucci Capital Partners <info@belluccicp.net>
-Message-ID: <562889327.193976.1572224657561.JavaMail.zimbra@amasya.edu.tr>
-Subject: 
+        Mon, 28 Oct 2019 10:58:37 -0400
+Received: from [10.137.112.108] (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AD8EF2010AC5;
+        Mon, 28 Oct 2019 07:58:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AD8EF2010AC5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1572274716;
+        bh=+4i7snc8+CJH6rwfZpPIV08+c2Slr7iBUhUCuWfrlls=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=j0UFvLFAwzPt56V4SalGwYBFPyo5AY8x+FDt/QbWoI7weuCwz94pbxHS2dxcBywsO
+         /Au8gNVv1GfwxnunbQq+3l5z+IcOX8CI0/1qn/lWU1D3WD4s1o3bl2iSeln9CRJSRq
+         DIjRAtjUzDkwRDz3GalJJ9ckMbiYvrkixtFgKYFE=
+Subject: Re: [PATCH v2 1/4] KEYS: Defined an ima hook for measuring keys on
+ key create or update
+To:     Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
+        casey@schaufler-ca.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+References: <20191023233950.22072-1-nramas@linux.microsoft.com>
+ <20191023233950.22072-2-nramas@linux.microsoft.com>
+ <1572032428.4532.72.camel@linux.ibm.com>
+ <c1de8055-89a7-25dd-d99a-427e2c2c4c59@linux.microsoft.com>
+ <1572187644.4532.211.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <1d7730ff-9847-c6be-4f4f-8cf1e90a71f2@linux.microsoft.com>
+Date:   Mon, 28 Oct 2019 07:58:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [198.46.170.187]
-X-Mailer: Zimbra 8.8.15_GA_3869 (ZimbraWebClient - FF70 (Win)/8.8.15_GA_3869)
-Thread-Index: PnLc5EXjHjSmm3JIfAjZcRGfZDdKBA==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <1572187644.4532.211.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On 10/27/19 7:47 AM, Mimi Zohar wrote:
 
+>>> There's no reason to define a new variable to determine if IMA is
+>>> initialized.  Use ima_policy_flag.
+>>
+>> Please correct me if I am wrong -
+>>
+>> ima_policy_flag will be set to 0 if IMA is not yet initialized
+>> OR
+>> IMA is initialized, but ima_policy_flag could be still set to 0 (say,
+>> due to the configured policy).
+>>
+>> In the latter case the measurement request should be a NOP immediately.
+> 
+> I'm not sure.  The builtin keys most likely will be loaded prior to a
+> custom IMA policy containing "keyring" rules are defined.
+> 
+> Mimi
 
-Hej,
+I am not sure if I described it clearly - let me clarify:
 
-Vi har en enorm kreditportfölj, vi är intresserade av att finansiera projekt med stor volym. Förfarandena är följande:
+Say, we use ima_policy_flag to determine whether to
+measure the key immediately or
+queue the key for measurement and, measure when IMA is initialized.
 
-1-Klienten måste skicka en kort sammanfattning av projektet. Detta måste innehålla det totala beloppet som krävs för projektet, beräknad avkastning på investeringen, lånets återbetalningsperiod, detta får inte vara mer än 15 år.
+We can incorrectly keep queuing keys in the case when IMA is 
+initialized, but due to the way IMA policy is configured ima_policy_flag 
+is still 0.
 
-2- Klienten kommer att behöva försäkra det nämnda projektet hos ett försäkringsbolag om det totala lånebeloppet för att garantera lånet som säkerhet.
+That's why I feel a separate boolean flag would be needed to know 
+whether IMA is initialized or not.
 
-3- Räntan är 1% per år.
+If IMA is initialized, ima_policy_flag will dictate whether to measure 
+the key or not.
 
-4-återbetalningstid är 15 år
+thanks,
+  -lakshmi
 
-5 Finansiering tar ungefär 10 bankdagar från den dag du presenterar försäkringscertifikatet.
-
-
-Om du är nöjd med ovanstående procedurer skicka mig en avsiktsförklaring på ditt företags brevhuvud.
-
-För ytterligare information om hur du kan få ett lån från: Svara omedelbart på den här e-postmeddelanden:
-info@belluccicp.net
-
-Hälsningar, när vi väntar på ditt svar.
-
-Vänliga hälsningar
-Manuel Baressi
-Annonspersonal
-WEB: https://www.belluccicp.net
-Bu e-posta mesaji kisiye ozel olup, gizli bilgiler iceriyor olabilir. Eger bu e-posta mesaji size yanlislikla ulasmissa, icerigini hicbir sekilde kullanmayiniz ve e-postayi siliniz. Amasya Universitesi bu e-posta mesajinin icerigi ile ilgili olarak hicbir hukuksal sorumlulugu kabul etmez. The information contained in this communication may contain confidential or legally privileged information. Amasya University doesn't accept any legal responsibility for the contents and attachments of this message. The sender does not accept any liability for any errors or omissions or any viruses in the context of this message which arise as a result of internet transmission.
