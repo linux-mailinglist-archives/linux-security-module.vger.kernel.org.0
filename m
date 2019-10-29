@@ -2,26 +2,28 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7D6E7AD6
-	for <lists+linux-security-module@lfdr.de>; Mon, 28 Oct 2019 22:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E798E8474
+	for <lists+linux-security-module@lfdr.de>; Tue, 29 Oct 2019 10:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbfJ1VGG (ORCPT
+        id S1726089AbfJ2J33 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 28 Oct 2019 17:06:06 -0400
-Received: from mga09.intel.com ([134.134.136.24]:24397 "EHLO mga09.intel.com"
+        Tue, 29 Oct 2019 05:29:29 -0400
+Received: from mga17.intel.com ([192.55.52.151]:29616 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389544AbfJ1VGG (ORCPT
+        id S1726025AbfJ2J33 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 28 Oct 2019 17:06:06 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        Tue, 29 Oct 2019 05:29:29 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Oct 2019 14:06:05 -0700
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 02:29:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,241,1569308400"; 
-   d="scan'208";a="224759940"
-Received: from shrehore-mobl1.ti.intel.com (HELO localhost) ([10.251.82.5])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Oct 2019 14:05:56 -0700
+X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
+   d="scan'208";a="211694582"
+Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.122])
+  by orsmga002.jf.intel.com with ESMTP; 29 Oct 2019 02:29:20 -0700
+Date:   Tue, 29 Oct 2019 11:29:20 +0200
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-sgx@vger.kernel.org
@@ -33,224 +35,68 @@ Cc:     akpm@linux-foundation.org, dave.hansen@intel.com,
         kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
         luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
         cedric.xing@intel.com, puiterwijk@redhat.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v23 15/24] x86/sgx: Add provisioning
-Date:   Mon, 28 Oct 2019 23:03:15 +0200
-Message-Id: <20191028210324.12475-16-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191028210324.12475-1-jarkko.sakkinen@linux.intel.com>
+        linux-security-module@vger.kernel.org,
+        Suresh Siddha <suresh.b.siddha@intel.com>
+Subject: Re: [PATCH v23 12/24] x86/sgx: Linux Enclave Driver
+Message-ID: <20191029092920.GA14494@linux.intel.com>
 References: <20191028210324.12475-1-jarkko.sakkinen@linux.intel.com>
+ <20191028210324.12475-13-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=a
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191028210324.12475-13-jarkko.sakkinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-In order to provide a mechanism for devilering provisoning rights:
+On Mon, Oct 28, 2019 at 11:03:12PM +0200, Jarkko Sakkinen wrote:
+> +/**
+> + * sgx_ioc_enclave_add_pages() - The handler for %SGX_IOC_ENCLAVE_ADD_PAGES
+> + * @encl:       pointer to an enclave instance (via ioctl() file pointer)
+> + * @arg:	a user pointer to a struct sgx_enclave_add_pages instance
+> + *
+> + * Add (EADD) one or more pages to an uninitialized enclave, and optionally
+> + * extend (EEXTEND) the measurement with the contents of the page. The range of
+> + * pages must be virtually contiguous. The SECINFO and measurement mask are
+> + * applied to all pages, i.e. pages with different properties must be added in
+> + * separate calls.
+> + *
+> + * A SECINFO for a TCS is required to always contain zero permissions because
+> + * CPU silently zeros them. Allowing anything else would cause a mismatch in
+> + * the measurement.
+> + *
+> + * mmap()'s protection bits are capped by the page permissions. For each page
+> + * address, the maximum protection bits are computed with the following
+> + * heuristics:
+> + *
+> + * 1. A regular page: PROT_R, PROT_W and PROT_X match the SECINFO permissions.
+> + * 2. A TCS page: PROT_R | PROT_W.
+> + * 3. No page: PROT_NONE.
+> + *
+> + * mmap() is not allowed to surpass the minimum of the maximum protection bits
+> + * within the given address range.
+> + *
+> + * As stated above, a non-existent page is interpreted as a page with no
+> + * permissions. In effect, this allows mmap() with PROT_NONE to be used to seek
+> + * an address range for the enclave that can be then populated into SECS.
+> + *
+> + * @arg->addr, @arg->src and @arg->length are adjusted to reflect the
+> + * remaining pages that need to be added to the enclave, e.g. userspace can
+> + * re-invoke SGX_IOC_ENCLAVE_ADD_PAGES using the same struct in response to an
+> + * ERESTARTSYS error.
+> + *
+> + * Return:
+> + *   0 on success,
+> + *   -EINVAL if any input param or the SECINFO contains invalid data,
+> + *   -EACCES if an executable source page is located in a noexec partition,
+> + *   -ENOMEM if any memory allocation, including EPC, fails,
+> + *   -ERESTARTSYS if a pending signal is recognized
+> + */
+> +static long sgx_ioc_enclave_add_pages(struct sgx_encl *encl, void __user *arg)
 
-1. Add a new device file /dev/sgx/provision that works as a token for
-   allowing an enclave to have the provisioning privileges.
-2. Add a new ioctl called SGX_IOC_ENCLAVE_SET_ATTRIBUTE that accepts the
-   following data structure:
+This should return the number of pages processed instead of zero on
+success. Kernel needs to be able to cap the amount it will process.
 
-   struct sgx_enclave_set_attribute {
-           __u64 addr;
-           __u64 attribute_fd;
-   };
-
-A daemon could sit on top of /dev/sgx/provision and send a file
-descriptor of this file to a process that needs to be able to provision
-enclaves.
-
-The way this API is used is straight-forward. Lets assume that dev_fd is
-a handle to /dev/sgx/enclave and prov_fd is a handle to
-/dev/sgx/provision.  You would allow SGX_IOC_ENCLAVE_CREATE to
-initialize an enclave with the PROVISIONKEY attribute by
-
-params.addr = <enclave address>;
-params.token_fd = prov_fd;
-
-ioctl(dev_fd, SGX_IOC_ENCLAVE_SET_ATTRIBUTE, &params);
-
-Cc: linux-security-module@vger.kernel.org
-Suggested-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- arch/x86/include/uapi/asm/sgx.h  | 11 ++++++++
- arch/x86/kernel/cpu/sgx/driver.c | 23 +++++++++++++++-
- arch/x86/kernel/cpu/sgx/driver.h |  2 ++
- arch/x86/kernel/cpu/sgx/ioctl.c  | 47 ++++++++++++++++++++++++++++++++
- 4 files changed, 82 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
-index e0f79ebdfd8a..e7b20f1e41b3 100644
---- a/arch/x86/include/uapi/asm/sgx.h
-+++ b/arch/x86/include/uapi/asm/sgx.h
-@@ -25,6 +25,8 @@ enum sgx_page_flags {
- 	_IOWR(SGX_MAGIC, 0x01, struct sgx_enclave_add_pages)
- #define SGX_IOC_ENCLAVE_INIT \
- 	_IOW(SGX_MAGIC, 0x02, struct sgx_enclave_init)
-+#define SGX_IOC_ENCLAVE_SET_ATTRIBUTE \
-+	_IOW(SGX_MAGIC, 0x03, struct sgx_enclave_set_attribute)
- 
- /**
-  * struct sgx_enclave_create - parameter structure for the
-@@ -61,4 +63,13 @@ struct sgx_enclave_init {
- 	__u64 sigstruct;
- };
- 
-+/**
-+ * struct sgx_enclave_set_attribute - parameter structure for the
-+ *				      %SGX_IOC_ENCLAVE_SET_ATTRIBUTE ioctl
-+ * @attribute_fd:	file handle of the attribute file in the securityfs
-+ */
-+struct sgx_enclave_set_attribute {
-+	__u64 attribute_fd;
-+};
-+
- #endif /* _UAPI_ASM_X86_SGX_H */
-diff --git a/arch/x86/kernel/cpu/sgx/driver.c b/arch/x86/kernel/cpu/sgx/driver.c
-index c724dcccf2e2..4d996463b213 100644
---- a/arch/x86/kernel/cpu/sgx/driver.c
-+++ b/arch/x86/kernel/cpu/sgx/driver.c
-@@ -141,12 +141,18 @@ static const struct file_operations sgx_encl_fops = {
- 	.get_unmapped_area	= sgx_get_unmapped_area,
- };
- 
-+const struct file_operations sgx_provision_fops = {
-+	.owner			= THIS_MODULE,
-+};
-+
- static struct bus_type sgx_bus_type = {
- 	.name	= "sgx",
- };
- 
- static struct device sgx_encl_dev;
- static struct cdev sgx_encl_cdev;
-+static struct device sgx_provision_dev;
-+static struct cdev sgx_provision_cdev;
- static dev_t sgx_devt;
- 
- static void sgx_dev_release(struct device *dev)
-@@ -223,22 +229,37 @@ int __init sgx_drv_init(void)
- 	if (ret)
- 		goto err_chrdev_region;
- 
-+	ret = sgx_dev_init("sgx/provision", &sgx_provision_dev,
-+			   &sgx_provision_cdev, &sgx_provision_fops, 1);
-+	if (ret)
-+		goto err_encl_dev;
-+
- 	sgx_encl_wq = alloc_workqueue("sgx-encl-wq",
- 				      WQ_UNBOUND | WQ_FREEZABLE, 1);
- 	if (!sgx_encl_wq) {
- 		ret = -ENOMEM;
--		goto err_encl_dev;
-+		goto err_provision_dev;
- 	}
- 
- 	ret = cdev_device_add(&sgx_encl_cdev, &sgx_encl_dev);
- 	if (ret)
- 		goto err_encl_wq;
- 
-+	ret = cdev_device_add(&sgx_provision_cdev, &sgx_provision_dev);
-+	if (ret)
-+		goto err_encl_cdev;
-+
- 	return 0;
- 
-+err_encl_cdev:
-+	cdev_device_del(&sgx_encl_cdev, &sgx_encl_dev);
-+
- err_encl_wq:
- 	destroy_workqueue(sgx_encl_wq);
- 
-+err_provision_dev:
-+	put_device(&sgx_provision_dev);
-+
- err_encl_dev:
- 	put_device(&sgx_encl_dev);
- 
-diff --git a/arch/x86/kernel/cpu/sgx/driver.h b/arch/x86/kernel/cpu/sgx/driver.h
-index e95c6e86c0c6..2f13886522a8 100644
---- a/arch/x86/kernel/cpu/sgx/driver.h
-+++ b/arch/x86/kernel/cpu/sgx/driver.h
-@@ -25,6 +25,8 @@ extern u64 sgx_attributes_reserved_mask;
- extern u64 sgx_xfrm_reserved_mask;
- extern u32 sgx_xsave_size_tbl[64];
- 
-+extern const struct file_operations sgx_provision_fops;
-+
- long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg);
- 
- int sgx_drv_init(void);
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index 691efac24ed7..e71618cef90c 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -622,6 +622,50 @@ static long sgx_ioc_enclave_init(struct sgx_encl *encl, void __user *arg)
- 	return ret;
- }
- 
-+/**
-+ * sgx_ioc_enclave_set_attribute - handler for %SGX_IOC_ENCLAVE_SET_ATTRIBUTE
-+ * @filep:	open file to /dev/sgx
-+ * @arg:	userspace pointer to a struct sgx_enclave_set_attribute instance
-+ *
-+ * Mark the enclave as being allowed to access a restricted attribute bit.
-+ * The requested attribute is specified via the attribute_fd field in the
-+ * provided struct sgx_enclave_set_attribute.  The attribute_fd must be a
-+ * handle to an SGX attribute file, e.g. “/dev/sgx/provision".
-+ *
-+ * Failure to explicitly request access to a restricted attribute will cause
-+ * sgx_ioc_enclave_init() to fail.  Currently, the only restricted attribute
-+ * is access to the PROVISION_KEY.
-+ *
-+ * Note, access to the EINITTOKEN_KEY is disallowed entirely.
-+ *
-+ * Return: 0 on success, -errno otherwise
-+ */
-+static long sgx_ioc_enclave_set_attribute(struct sgx_encl *encl,
-+					  void __user *arg)
-+{
-+	struct sgx_enclave_set_attribute params;
-+	struct file *attribute_file;
-+	int ret;
-+
-+	if (copy_from_user(&params, arg, sizeof(params)))
-+		return -EFAULT;
-+
-+	attribute_file = fget(params.attribute_fd);
-+	if (!attribute_file)
-+		return -EINVAL;
-+
-+	if (attribute_file->f_op != &sgx_provision_fops) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	encl->allowed_attributes |= SGX_ATTR_PROVISIONKEY;
-+	ret = 0;
-+
-+out:
-+	fput(attribute_file);
-+	return ret;
-+}
- 
- long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- {
-@@ -645,6 +689,9 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	case SGX_IOC_ENCLAVE_INIT:
- 		ret = sgx_ioc_enclave_init(encl, (void __user *)arg);
- 		break;
-+	case SGX_IOC_ENCLAVE_SET_ATTRIBUTE:
-+		ret = sgx_ioc_enclave_set_attribute(encl, (void __user *)arg);
-+		break;
- 	default:
- 		ret = -ENOIOCTLCMD;
- 		break;
--- 
-2.20.1
-
+/Jarkko
