@@ -2,74 +2,80 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 819D8EEB66
-	for <lists+linux-security-module@lfdr.de>; Mon,  4 Nov 2019 22:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBAAEF02B
+	for <lists+linux-security-module@lfdr.de>; Mon,  4 Nov 2019 23:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728940AbfKDVrj (ORCPT
+        id S1730286AbfKDW0T (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 4 Nov 2019 16:47:39 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39797 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729661AbfKDVrj (ORCPT
+        Mon, 4 Nov 2019 17:26:19 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42018 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730490AbfKDVvX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 4 Nov 2019 16:47:39 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x28so10199681pfo.6
-        for <linux-security-module@vger.kernel.org>; Mon, 04 Nov 2019 13:47:38 -0800 (PST)
+        Mon, 4 Nov 2019 16:51:23 -0500
+Received: by mail-pf1-f194.google.com with SMTP id s5so5171603pfh.9
+        for <linux-security-module@vger.kernel.org>; Mon, 04 Nov 2019 13:51:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=android.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=jVdp7lHPSLMEIaA4b3xI6KcYYdtPyzFWzQ17PK3XP4Q=;
-        b=RhUkrzOZU4hM75KmE1n1Xc+DqHEZwOMbC9p2Q8ZftFTVxMW4fh94I9YTuMmh1r+s0K
-         vqVvfX2hwsNckCL2SDa7gbc9eULatsKkcOLZGR21BQ9KrbfQYOEFc1Bc9PfnOINJbpqG
-         H/6rVmaSvYgq1CiuduCzFZX4G+DZBQq90WHuR0JAW6vnKULq10QgCN/+afABpB5+3o+R
-         t+Jy6OzwuqoB+e0xXeTS105YJdChtbZtKwR/I7TBDgGdg0pWennWIgMxMYdRIYfJeYBY
-         8Q7/GZS6lMcWQPGCMfz1pJzgyaHSbiju6+nJCIPuWM9tGH3WS6vZYfPoq4MWgNUsEKIE
-         CYRw==
+        bh=bHzFpby5nBvLQoa1A3N45Iv5pE3sE4p/UO4W7iuituU=;
+        b=Pp8aTcTc4J8HQHJfK7XYOvTKX+0OBvRsnX5l3y4u4g4MM3j86RHYT5E3CyfwGjTx4M
+         OY4am3V6P04tfgMJdWaiBA4U4MVXNNXBLNBBKKsjLvm6Py+danTKFeA58zni2EwrZJ4a
+         LNM/Y81H3MGNqRtK9pfeV0H03aM+7nND2Zei+zqEbD1s4PqBPprHUisrBeteBubsbwSy
+         TVQ544cT0wpbyLgolGEW1xWW2VpX+SzNMXEAx14Fcr5iUkFTIem+fgkabRMzppRp0uwa
+         f1TaCzq6xMl1AGXBK5nQcB2Aq9iUTjOhumPtO956o84HKT+keZUKHTeZ+X7Z6JqxV9xJ
+         DqlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=jVdp7lHPSLMEIaA4b3xI6KcYYdtPyzFWzQ17PK3XP4Q=;
-        b=cd5sixShBrVMTNYd649FnsZveootwGZBxhhZC12Yz9i7wPAI6UkwXsOL2BfM2H/ViZ
-         GNV1YqDwoLHWIZaI9da8mF/ILEzYA8QTz9/n5N/Ya5cGRZkSy11BaJzPYZ+QerjOuizX
-         SHt4FrcwhHPgrdXC6G4l9kZAxQ89FhtyI2/gz1Srnm/vJc4qMf8P8+8mL3YTcYiefbpt
-         +kHRydMOo+gMjGYSfcOPAPS0wsXrSDYhWwCnPM/jZRlQyBeH4n0wWInPDQ57f2a74gKl
-         2o9kYejERs7P8demHxB1Z5sGXAL9wGfDPHhw5PPtratU91dsW17BdRZZ0tCTmqT2AAcd
-         0TaA==
-X-Gm-Message-State: APjAAAXo2jEa7hrBe0S/iTpEtFBqP6qVHTzD1IRZUkbSAtRcLL3gmNeE
-        Wcuk/oteiLFkz68JoPSnBqIR2bei5ZRb1g==
-X-Google-Smtp-Source: APXvYqyQKx8i/Q7YGG64yTbpKjKN6h7zLFv2aq2ytfgVLXAtoelPCLRRO87DQvTXmY0yUIF75hMztg==
-X-Received: by 2002:a17:90a:34c1:: with SMTP id m1mr1677748pjf.89.1572904057340;
-        Mon, 04 Nov 2019 13:47:37 -0800 (PST)
+        bh=bHzFpby5nBvLQoa1A3N45Iv5pE3sE4p/UO4W7iuituU=;
+        b=VOpviKU3MjHfEi4kWOIMFvRGmKHeCWQ4NzSwsRHn345ip21xwhlViFQw+3vdbu4auw
+         zWWSi3ivOJ1Atq7H8OG0SLolIhyqxuotX40MxFwur9alvzjuEqCMbsRJNRyq6oJMW1xS
+         4po7QDzEkVAUi0f5+9j/IPof+kyGifNGEK2/TastTKSL0HPyTEUhUIF+e3cp3vrxRUby
+         UmHws9dbnhXWMd8/yBkQPS8Z02OfmJY9Bv4BOwcOmsLniW48JvBjcm3ZG7iGY6OEpR9w
+         eSrczbN6SYCILOB3bv+RIaHmqxJxXGChfG54Ui6Kq1/2eWNLvPYNZ24nTjKrA0C+RJ4+
+         H0xA==
+X-Gm-Message-State: APjAAAX/qKSjcntuBA1Vv91L/asdZAMFuI7C8kzzcBpcL3eG3YXAIyjx
+        V0sRvWER7RypMCTWPMERBDdyLA==
+X-Google-Smtp-Source: APXvYqy8cbQrcNS2YZCm15LNXj84RCWobmcY3Yi0AKiVBFlHOjV+tLdHj1XjjIBLQcnlWN3fV+awgw==
+X-Received: by 2002:a63:dc45:: with SMTP id f5mr32464004pgj.250.1572904282035;
+        Mon, 04 Nov 2019 13:51:22 -0800 (PST)
 Received: from nebulus.mtv.corp.google.com ([2620:15c:211:200:5404:91ba:59dc:9400])
-        by smtp.googlemail.com with ESMTPSA id m2sm16526943pff.154.2019.11.04.13.47.36
+        by smtp.googlemail.com with ESMTPSA id z7sm10567610pgk.10.2019.11.04.13.51.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2019 13:47:36 -0800 (PST)
-Subject: Re: [PATCH v14 4/5] overlayfs: internal getxattr operations without
- sepolicy checking
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-team@android.com, Miklos Szeredi <miklos@szeredi.hu>,
+        Mon, 04 Nov 2019 13:51:21 -0800 (PST)
+Subject: Re: [PATCH v14 1/5] Add flags option to get xattr method paired to
+ __vfs_getxattr
+To:     Amir Goldstein <amir73il@gmail.com>,
+        Andreas Dilger <adilger@dilger.ca>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, CIFS <linux-cifs@vger.kernel.org>,
+        kernel-team@android.com, selinux@vger.kernel.org,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
         Stephen Smalley <sds@tycho.nsa.gov>,
         overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        ecryptfs@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
 References: <20191022204453.97058-1-salyzyn@android.com>
- <20191022204453.97058-5-salyzyn@android.com>
- <CAOQ4uxgWOmV_x5gRZ9tR+u86GE6JoXn-MSxKkvi87e9owMApZw@mail.gmail.com>
+ <20191022204453.97058-2-salyzyn@android.com>
+ <8CE5B6E8-DCB7-4F0B-91C1-48030947F585@dilger.ca>
+ <CAOQ4uxis-oQSjKrtBDi-8BQ2M3ve3w8o-YVGRwWLnq+5JLUttA@mail.gmail.com>
 From:   Mark Salyzyn <salyzyn@android.com>
-Message-ID: <bc508a5b-13f5-7de3-7146-f17b232df9d5@android.com>
-Date:   Mon, 4 Nov 2019 13:47:35 -0800
+Message-ID: <7b5f2964-10ce-021b-01f7-6b662bf0c09a@android.com>
+Date:   Mon, 4 Nov 2019 13:51:20 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAOQ4uxgWOmV_x5gRZ9tR+u86GE6JoXn-MSxKkvi87e9owMApZw@mail.gmail.com>
+In-Reply-To: <CAOQ4uxis-oQSjKrtBDi-8BQ2M3ve3w8o-YVGRwWLnq+5JLUttA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-GB
@@ -77,44 +83,85 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 10/22/19 11:39 PM, Amir Goldstein wrote:
-> On Tue, Oct 22, 2019 at 11:46 PM Mark Salyzyn <salyzyn@android.com> wrote:
->> Check impure, opaque, origin & meta xattr with no sepolicy audit
->> (using __vfs_getxattr) since these operations are internal to
->> overlayfs operations and do not disclose any data.  This became
->> an issue for credential override off since sys_admin would have
->> been required by the caller; whereas would have been inherently
->> present for the creator since it performed the mount.
->>
->> This is a change in operations since we do not check in the new
->> ovl_do_vfs_getxattr function if the credential override is off or
->> not.  Reasoning is that the sepolicy check is unnecessary overhead,
->> especially since the check can be expensive.
->>
->> Because for override credentials off, this affects _everyone_ that
->> underneath performs private xattr calls without the appropriate
->> sepolicy permissions and sys_admin capability.  Providing blanket
->> support for sys_admin would be bad for all possible callers.
->>
->> For the override credentials on, this will affect only the mounter,
->> should it lack sepolicy permissions. Not considered a security
->> problem since mounting by definition has sys_admin capabilities,
->> but sepolicy contexts would still need to be crafted.
->>
-> It sounds reasonable to me, but I am not a "security person".
+On 10/23/19 9:57 PM, Amir Goldstein wrote:
+> [excessive CC list reduced]
 >
->> It should be noted that there is precedence, __vfs_getxattr is used
->> in other filesystems for their own internal trusted xattr management.
+> On Wed, Oct 23, 2019 at 11:07 AM Andreas Dilger via samba-technical
+> <samba-technical@lists.samba.org> wrote:
 >>
-> Urgh! "other" filesystems meaning ecryptfs_getxattr()?
-> That looks like a loop hole to read any trusted xattr without any
-> security checks. Not sure its a good example...
+>> On Oct 22, 2019, at 2:44 PM, Mark Salyzyn <salyzyn@android.com> wrote:
+>>> Replace arguments for get and set xattr methods, and __vfs_getxattr
+>>> and __vfs_setaxtr functions with a reference to the following now
+>>> common argument structure:
+>>>
+>>> struct xattr_gs_args {
+>>>        struct dentry *dentry;
+>>>        struct inode *inode;
+>>>        const char *name;
+>>>        union {
+>>>                void *buffer;
+>>>                const void *value;
+>>>        };
+>>>        size_t size;
+>>>        int flags;
+>>> };
+>>> Mark,
+>>>
+>>> I do not see the first patch on fsdevel
+>>> and I am confused from all the suggested APIs
+>>> I recall Christoph's comment on v8 for not using xattr_gs_args
+>>> and just adding flags to existing get() method.
+>>> I agree to that comment.
+>> As already responded, third (?) patch version was like that,
+> The problem is that because of the waaay too long CC list, most revisions
+> of the patch and discussion were bounced from fsdevel, most emails
+> I did not get and cannot find in archives, so the discussion around
+> them is not productive.
+>
+> Please resend patch to fsdevel discarding the auto added CC list
+> of all fs maintainers.
 
-Yes. But it also makes sense since ecryptfs_getxattr is performed inside 
-a layer where the security check is done above by the filesystem that 
-called it (AFAIK)? This is used by the filesystem, or the security 
-layers to pull the actual sepolicy, rather than getting an EPERM and no 
-data. The xattr 'data' is needed by the internal layers.
+git send-email is not my friend :-(
 
--- Mark
+>> gregkh@
+>> said it passed the limit for number of arguments, is looking a bit silly
+> Well, you just matched get() to set() args list, so this is not a strong
+> argument IMO.
+>
+>> (my paraphrase), and that it should be passed as a structure. Two others
+>> agreed. We gained because both set and get use the same structure after
+>> this change (this allows a simplified read-modify-write cycle).
+> That sounds like a nice benefit if this was user API, but are there any
+> kernel users that intend to make use of that read-modify-write cycle?
+> I don't think so.
+(one user)
+>
+>> We will need a quorum on this, 3 (structure) to 2 (flag) now (but really
+>> basically between Greg and Christoph?). Coding style issue: Add a flag,
+>> or switch to a common xattr argument  structure?
+>>
+> IIRC, Christoph was asking why the silly struct and not simply add flags
+> (as did I). He probably did not see Greg's comments due to the list bounce
+> issue. If I read your second hand description of Greg's reaction correctly,
+> it doesn't sound so strong opinionated as well.
+> Me, I can live with flags or struct - I don't care, but...
+>
+> Be prepared that if you are going ahead with struct you are going to
+> suffer from bike shedding, which has already started and you will be
+> instructed (just now) to also fix all the relevant and missing Documentation.
+> If, on the other hand, you can get Greg and the rest to concede to adding
+> flags arg and match get() arg list to set() arg list, you will have a much
+> easier job and the patch line count, especially in fs code will be *much*
+> smaller - just saying.
+
+Respining back to the v4 version of the series incorporating some of the 
+fixes on the way.
+
+Automated testing in kernel not yet handled and will be noted in the 
+respin.
+
+> Thanks,
+> Amir.
+
+Mark
 
