@@ -2,133 +2,280 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C10DF1C43
-	for <lists+linux-security-module@lfdr.de>; Wed,  6 Nov 2019 18:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59593F1DF5
+	for <lists+linux-security-module@lfdr.de>; Wed,  6 Nov 2019 20:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732340AbfKFRSb (ORCPT
+        id S1732315AbfKFTB2 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 6 Nov 2019 12:18:31 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41265 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732330AbfKFRSa (ORCPT
+        Wed, 6 Nov 2019 14:01:28 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36116 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbfKFTB2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 6 Nov 2019 12:18:30 -0500
-Received: by mail-pg1-f196.google.com with SMTP id l3so17571208pgr.8
-        for <linux-security-module@vger.kernel.org>; Wed, 06 Nov 2019 09:18:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kqep8XBz+ob9m9HgLeaELks6sa5oaorHLu84jPUpdI0=;
-        b=Tfm+AIKzVLe4DKvn7S7UE7TTNFzSpLQpGOJ0dbBICYYiDkzHHhPep0L3G96Vp0HLkn
-         3iFEtU69J8jfFGl/vrroJ5cmlLPPZ/jEFJYPh5Iiuzsg9xZmv+vWYtIEUnvnADfAz+O0
-         6EHPI8OypMmHrVeVHx6LKUwBIdRVeHrA8kypc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kqep8XBz+ob9m9HgLeaELks6sa5oaorHLu84jPUpdI0=;
-        b=poHJ+JcNqv/rzttDcz4d0oz6jeozClhxLwrVKm/McZmbssUj7Btk0npyQ0i1ohnRjk
-         M5zplMB4MghUsrZQX4zW/b0IbWG5/S5uc4CIqgAPOAz1jfwyhTKe8/q8ulG1mJgyPJoZ
-         /tlicfY+uIfmcBIr4dh5BQvvl9Eq7YT5r07SsVFBhD5bM+sf2wZA3LsIwc+fVeEYXX8m
-         8TrqT9jpMO9vHWZbcDUAPNWVhgiUdeIRjgGSz83XwpE+mV7mmBjJxIxzD9ZKVbh76fwb
-         mkMK8e/payNqwxaJ0kxDk2wZhahDK6rKsbIVOthwnzsLFsixqvimdVXxLfxVt6F1xFk2
-         d7+Q==
-X-Gm-Message-State: APjAAAW14yFOUJ+6QVeE/4x8mtnWqUy8nYONBEjqCNsfBNua3bTH8hkW
-        u8lI10x6zRXeYk3zhjU8Zh7+3g==
-X-Google-Smtp-Source: APXvYqyZHHZJMCCOAUO2Q7fAPKf5j8qTcabKvqS3xUm4Nyrs58kWQPudNMOakH9O8x+5MrgTLl1e+w==
-X-Received: by 2002:a63:d452:: with SMTP id i18mr4222869pgj.76.1573060709773;
-        Wed, 06 Nov 2019 09:18:29 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s5sm3084844pjn.24.2019.11.06.09.18.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2019 09:18:28 -0800 (PST)
-Date:   Wed, 6 Nov 2019 09:18:27 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     shuah@kernel.org, john.johansen@canonical.com, jmorris@namei.org,
-        serge@hallyn.com, alan.maguire@oracle.com, yzaikin@google.com,
-        davidgow@google.com, mcgrof@kernel.org, tytso@mit.edu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Mike Salvatore <mike.salvatore@canonical.com>
-Subject: Re: [PATCH linux-kselftest/test v2] apparmor: add AppArmor KUnit
- tests for policy unpack
-Message-ID: <201911060916.AC9E14B@keescook>
-References: <20191106004329.16991-1-brendanhiggins@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191106004329.16991-1-brendanhiggins@google.com>
+        Wed, 6 Nov 2019 14:01:28 -0500
+Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 55D9420B7192;
+        Wed,  6 Nov 2019 11:01:26 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 55D9420B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1573066886;
+        bh=y4hINiEqf27PplR2nfCCwx467m2AezG+yzsIu5aKkpI=;
+        h=From:To:Subject:Date:From;
+        b=bQUjVsuYjTme9sOl0oVVRsFFViQS8XmH6bFN2c32JkYTUBXCbRfKGx2sDfzy2JP3R
+         FT+gwqOY0uP0qAvBzr41LzBkrVsfrLW3HOUcxiQo4nP5ZsaYdaPUgIWtys6+O7wUTv
+         HoKb612HO7V2HWD4/u9wItZlgDbKgjKBzNaX33Js=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, dhowells@redhat.com,
+        matthewgarrett@google.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/10] KEYS: Measure keys when they are created or updated
+Date:   Wed,  6 Nov 2019 11:01:06 -0800
+Message-Id: <20191106190116.2578-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Nov 05, 2019 at 04:43:29PM -0800, Brendan Higgins wrote:
-> From: Mike Salvatore <mike.salvatore@canonical.com>
-> 
-> Add KUnit tests to test AppArmor unpacking of userspace policies.
-> AppArmor uses a serialized binary format for loading policies. To find
-> policy format documentation see
-> Documentation/admin-guide/LSM/apparmor.rst.
-> 
-> In order to write the tests against the policy unpacking code, some
-> static functions needed to be exposed for testing purposes. One of the
-> goals of this patch is to establish a pattern for which testing these
-> kinds of functions should be done in the future.
-> 
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: Mike Salvatore <mike.salvatore@canonical.com>
-> ---
->  security/apparmor/Kconfig              |  16 +
->  security/apparmor/policy_unpack.c      |   4 +
->  security/apparmor/policy_unpack_test.c | 607 +++++++++++++++++++++++++
->  3 files changed, 627 insertions(+)
->  create mode 100644 security/apparmor/policy_unpack_test.c
-> 
-> diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-> index d8b1a360a6368..78a33ccac2574 100644
-> --- a/security/apparmor/Kconfig
-> +++ b/security/apparmor/Kconfig
-> @@ -66,3 +66,19 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
->  	  Set the default value of the apparmor.debug kernel parameter.
->  	  When enabled, various debug messages will be logged to
->  	  the kernel message buffer.
-> +
-> +config SECURITY_APPARMOR_KUNIT_TEST
-> +	bool "Build KUnit tests for policy_unpack.c"
-> +	depends on KUNIT && SECURITY_APPARMOR
-> +	help
-> +	  This builds the AppArmor KUnit tests.
-> +
-> +	  KUnit tests run during boot and output the results to the debug log
-> +	  in TAP format (http://testanything.org/). Only useful for kernel devs
-> +	  running KUnit test harness and are not for inclusion into a
-> +	  production build.
-> +
-> +	  For more information on KUnit and unit tests in general please refer
-> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +	  If unsure, say N.
-> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-> index 8cfc9493eefc7..37c1dd3178fc0 100644
-> --- a/security/apparmor/policy_unpack.c
-> +++ b/security/apparmor/policy_unpack.c
-> @@ -1120,3 +1120,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
->  
->  	return error;
->  }
-> +
-> +#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
-> +#include "policy_unpack_test.c"
-> +#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
+Problem Statement:
 
-To make this even LESS intrusive, the ifdefs could live in ..._test.c.
+Keys created or updated in the system are currently not being measured.
+Therefore an attestation service, for instance, would not be able to
+attest whether or not the trusted keys keyring(s), for instance, contain
+only known good (trusted) keys.
 
-Also, while I *think* the kernel build system will correctly track this
-dependency, can you double-check that changes to ..._test.c correctly
-trigger a recompile of policy_unpack.c?
+IMA measures system files, command line arguments passed to kexec,
+boot aggregate, etc. It can be used to measure keys as well.
+But there is no mechanism available in the kernel for IMA to
+know when a key is created or updated.
+
+This change aims to address measuring keys created or updated
+in the system.
+
+To achieve the above the following changes have been made:
+
+ - Added a new IMA hook namely, ima_post_key_create_or_update, which
+   measures the key. This IMA hook is called from key_create_or_update
+   function. The key measurement can be controlled through IMA policy.
+
+   In this change set a new IMA policy function KEYRING_CHECK has been
+   added to measure keys. The policy can optionally specify a set of
+   keyrings to measure. By default all keyrings are included in
+   the measurement when KEYRING_CHECK policy is specified.
+
+   # measure all keys
+   measure func=KEYRING_CHECK
+
+   # measure keys on the IMA keyring
+   measure func=KEYRING_CHECK keyring=".ima"
+
+   # measure keys on the BUILTIN and IMA keyrings into a different PCR
+   measure func=KEYRING_CHECK keyring=".builtin_trusted_keys|.ima" pcr=11
+
+Testing performed:
+
+  * Booted the kernel with this change.
+  * Executed keyctl tests from the Linux Test Project (LTP)
+  * All keys are measured when only KEYRING_CHECK is set.
+  * Only keys added to the given keyrings are measured
+    when keyrings option is set.
+  * Keys are not measured when KEYRING_CHECK is not set.
+  * Key is queued for measurement if IMA is not yet initialized
+    and processed when IMA is initialized.
+  * Key is measured rightaway when IMA is initialized.
+  * Added a new key to a keyring and verified "key create" code path.
+    => In this case added a key to .ima keyring.
+  * Added the same key again and verified "key update" code path.
+    => Add the same key to .ima keyring.
+
+Change Log:
+
+  v4:
+
+  => Rebased the changes to v5.4-rc3
+  => Applied the following dependent patch set first
+     and then added new changes.
+  https://lore.kernel.org/linux-integrity/1572492694-6520-1-git-send-email-zohar@linux.ibm.com
+  => Refactored the patch set to separate out changes related to
+     func KEYRING_CHECK and options keyrings into different patches.
+  => Moved the functions to queue and dequeue keys for measurement
+     from ima_queue.c to a new file ima_asymmetric_keys.c.
+  => Added a new config namely CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+     to enable asymmetric key measurement. When this config option is
+     enabled ima_asymmetric_keys.c is compiled.
+
+  v3:
+
+  => Added KEYRING_CHECK for measuring keys. This can optionally specify
+     keyrings to measure.
+  => Updated ima_get_action() and related functions to return
+     the keyrings if specified in the policy.
+  => process_buffer_measurement() function is updated to take keyring
+     as a parameter. The key will be measured if the policy includes
+     the keyring in the list of measured keyrings. If the policy does not
+     specify any keyrings then all keys are measured.
+
+  v2:
+
+  => Per suggestion from Mimi reordered the patch set to first
+     enable measuring keys added or updated in the system.
+     And, then scope the measurement to keys added to 
+     builtin_trusted_keys keyring through ima policy.
+  => Removed security_key_create_or_update function and instead
+     call ima hook, to measure the key, directly from 
+     key_create_or_update function.
+
+  v1:
+
+  => LSM function for key_create_or_update. It calls ima.
+  => Added ima hook for measuring keys
+  => ima measures keys based on ima policy.
+
+  v0:
+
+  => Added LSM hook for key_create_or_update.
+  => Measure keys added to builtin or secondary trusted keys keyring.
+
+Background:
+
+Currently ima measures file hashes and .ima signatures. ima signatures
+are validated against keys in the ".ima" keyring. If the kernel is built
+with CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY enabled,
+then all keys in ".ima" keyring must be signed by a key in
+".builtin_trusted_keys" or ".secondary_trusted_keys" keyrings.
+
+Although ima supports the above configuration, not having an insight
+into what keys are present in these trusted keys keyrings would prevent
+an attestation service from validating a client machine.
+ 
+On systems with CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+enabled, measuring keys in the  ".builtin_trusted_keys" keyring provides
+a mechanism to attest that the client's system binaries are indeed signed
+by signers that chain to known trusted keys.
+
+Without this change, to attest the clients one needs to maintain
+an "allowed list" of file hashes of all versions of all client binaries
+that are deployed on the clients in the enterprise. That is a huge
+operational challenge in a large scale environment of clients with
+heterogenous builds. This also limits scalability and agility of
+rolling out frequent client binary updates.
+
+Questions and concerns raised by reviewers on this patch set:
+
+Question 1:
+Is "Signed with a trusted key" equal to "Trusted file"?
+Doesn't the service need the hashes of the system files to determine
+whether a file is trusted or not?
+"Signed with a trusted key" does not equal "Trusted"
+
+Answer:
+Agree "Signed with a trusted key" may not equal "Trusted".
+To address this, the attesting service can maintain a small
+manageable set of bad hashes (a "Blocked list") and a list of
+trusted keys expected in client's .builtin_trusted_keys" keyring.
+Using this data, the service can detect the presence of
+"Disallowed (untrusted) version of client binaries".
+
+Question 2:
+Providing more data to the service (such as ".builtin_trusted_keys"),
+empowers the service  to deny access to clients (block clients).
+IMA walks a fine line in enforcing and measuring file integrity.
+This patchset breaches that fine line and in doing so brings back
+the fears of trusted computing.
+
+Answer:
+Any new measurement we add in IMA will provide more data to service
+and can enable it to deny access to clients. It is not clear why this patch
+set would breach the fine line between measuring and enforcing.
+Since this patch set is disabled by default and enabled through
+CONFIG_IMA_MEASURE_TRUSTED_KEYS, only those enterprises that
+require this new measurement can opt-in for it. Since it is disabled
+by default, it does not restrict the autonomy of independent users
+who are unaffected by attestation.
+
+Question 3:
+IMA log already contains a pointer to the IMA keys used for signature
+verification. Why does the service need to care what keys were used
+to sign (install) the IMA keys? What is gained by measuring the keys
+in the ".builtin_trusted_keys"
+
+
+Answer:
+To attest the clients using the current IMA log, service needs to maintain
+hashes of all the deployed versions of all the system binaries for their
+enterprise. This will introduce a very high operational overhead in
+a large scale environment of clients with heterogenous builds.
+This limits scalability and agility of rolling out frequent client
+binary updates.
+
+
+On the other hand, with the current patch set, we will have IMA
+validate the file signature on the clients and the service validate
+that the IMA keys were installed using trusted keys.
+
+
+This provides a chain of trust:
+    => IMA Key validates file signature on the client
+    => Built-In trusted key attests IMA key on the client
+    => Attestation service attests the Built-In trusted keys
+         reported by the client in the IMA log
+
+
+This approach, therefore, would require the service to maintain
+a manageble set of trusted keys that it receives from a trusted source.
+And, verify if the clients only have keys from that set of trusted keys.
+
+Question 4:
+Where will the attestation service receive the keys to validate against?
+
+Answer:
+Attestation service will receive the keys from a trusted source such as
+the enterprise build services that provides the client builds.
+The service will use this set of keys to verify that the keys reported by
+the clients in the IMA log contains only keys from this trusted list.
+
+
+Question 5:
+What is changing in the IMA log through this patch set?
+
+Answer:
+This patch set does not remove any data that is currently included
+in the IMA log. It only adds more data to the IMA log - the data on
+".builtin_trusted_keys"
+
+Lakshmi Ramasubramanian (10):
+  KEYS: Defined an IMA hook and a func to measure keys on key create or
+    update
+  KEYS: Added KEYRING_CHECK func in IMA policy to measure keys
+  KEYS: Added keyrings= option in IMA policy to only measure keys added
+    to the specified keyrings.
+  KEYS: Read keyrings= option from the IMA policy into ima_rule_entry
+  KEYS: Updated IMA policy functions to return keyrings option read from
+    the policy
+  KEYS: Measure key if the IMA policy allows measurement for the keyring
+    to which the key is linked to
+  KEYS: Added a boolean flag to track IMA initialization status
+  KEYS: Defined functions to queue and dequeue keys for measurement
+  KEYS: Call queue and dequeue functions to measure keys
+  KEYS: Call the IMA hook to measure key when a new key is created or an
+    existing key is updated
+
+ Documentation/ABI/testing/ima_policy         |  16 ++-
+ include/linux/ima.h                          |   8 ++
+ security/integrity/ima/Kconfig               |  14 ++
+ security/integrity/ima/Makefile              |   1 +
+ security/integrity/ima/ima.h                 |  34 ++++-
+ security/integrity/ima/ima_api.c             |   8 +-
+ security/integrity/ima/ima_appraise.c        |   4 +-
+ security/integrity/ima/ima_asymmetric_keys.c | 136 +++++++++++++++++++
+ security/integrity/ima/ima_init.c            |  10 +-
+ security/integrity/ima/ima_main.c            |  47 ++++++-
+ security/integrity/ima/ima_policy.c          |  39 +++++-
+ security/keys/key.c                          |   9 ++
+ 12 files changed, 309 insertions(+), 17 deletions(-)
+ create mode 100644 security/integrity/ima/ima_asymmetric_keys.c
 
 -- 
-Kees Cook
+2.17.1
+
