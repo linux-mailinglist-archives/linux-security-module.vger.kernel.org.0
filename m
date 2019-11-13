@@ -2,197 +2,272 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4519FB744
-	for <lists+linux-security-module@lfdr.de>; Wed, 13 Nov 2019 19:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC28FB74E
+	for <lists+linux-security-module@lfdr.de>; Wed, 13 Nov 2019 19:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728231AbfKMSU7 (ORCPT
+        id S1728313AbfKMSZP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 13 Nov 2019 13:20:59 -0500
-Received: from sonic315-26.consmr.mail.ne1.yahoo.com ([66.163.190.152]:44805
-        "EHLO sonic315-26.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728343AbfKMSU7 (ORCPT
+        Wed, 13 Nov 2019 13:25:15 -0500
+Received: from sonic313-15.consmr.mail.ne1.yahoo.com ([66.163.185.38]:37752
+        "EHLO sonic313-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728259AbfKMSZP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 13 Nov 2019 13:20:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1573669257; bh=lhTgPrS1AxEQQsS/aZNag9ZpvOFAt3OZRx3VSKnEQPU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=Nep02QOtYXw0OgCyBPiCHdUSAZi6fCkCiCu42bKbFDrNE8AhO/64DGw//9TZuFtqBkbLZqdNh6WxaxVJ4FBvnx25R5DwtThZXUXWuUyx21E85PD7zEcgekhqEDo/v5Bmd7jCt8ssNJxs9qG1d1dxOhc4fmSBXB3tYemS30Tss4Rd+NI6o+AzEbx+UFfBVKjBNSSc0sa8gdLdzFFeU6ZRP/xuSpkGZQ6lJGtPyJmPAWPYaGxI3og3qpHFCiDiCuGF9eDk/MCICCx5+UnoLMhjRWfHFRo0SHU2dp4CDMGOPFXZ4+wD51i3aaMrLhNcEP+2vvYURTaUa0ZNmbTjX/22rA==
-X-YMail-OSG: FsqOttIVM1n.ILOAJeOCF3Ki9Pq_OhnEA597J85Ft75uAxnMrsAdkPMplmyDSbH
- KxoGnECw2M8buHz5gRMKNsrIVHYCreBq1fmkymkS7vzwb65G0zFnd7dRnNkAKMO23mEet2orOflL
- 62rqSAmddbE2st2nKCd6xLfaWY0JyTJzHoXVoWtu.TckHY4YDE1wb72_BNYe1QfieoyIMn9R88jn
- iFVuQqil_N971qRFzZKjtQ7FwFTN7d8Yxmp0DNKHHWQodS6AngKgZD83eYt7_7wTC3A_8t1worxc
- ApqbafmAlVpq5vgqoSK4QXNIpvISwnP4Ikca3QYQFSx6o89MkUqTCi1m2W_Tx.yxpvaVYiRhvF7i
- 7lX3t4wO1uJ6cQg0vd3_BZYWBZrd5hqgHdt6NpRIBpxpvajBgUqUAqC0SYIdPYy14aXiuIXz03dp
- 9h5iIlOVwhWssOq2DaTDdB6gUBuHu2Pdv7ZCAD0pez12d_KEYVlYUzBY.Dw61aHVmsR16Xfg8LYM
- C0ydbvt39tvqje.d_kLB6V1Rqh1hOIx3NunAe1nTLYXcg_oBv8ORNxHRM1r_F.iyjgtMw1iW5hDh
- 1DfRJ2Q4PzTetzz.SRcdmDs2A3GQMaYmDPt98CnDYvjuFF7_xvVpcWtW9PClT.oXbm8EMpkflpYc
- QUjd93Rw2IIVTPY9TcSL0MhV4hUatDEs4db0O1agjhEZCwLO.9oLlMG6fQ5w9hAe57Hgf1nqQ3sY
- .ZK0o.G7jsJOg_eQ0ASn1CIDTzygcXn7c5d_JvvQns1xaT9X8jT6SLdHGwE051V9xkuMX9UayRfB
- ZGpPtyayGebaZ0ULvS8d0BflzjnrdBdIjWmAO5K_YZ43GTNKWWAsywn4rQSrO6Xw8lV7VqPHorPH
- Rgbe188nJtOfgv5QK5R0vEkiX.Jkg7AEdyXW8ojsrMgyo33QwO3M14G7NR4yn18g54ll.uOHIoN6
- cVyG8KQkbxXw8S_O3GhDQyepLfa2cx1RLmIolYvpyriaNUrZ8VYqAhKX0pSmu9O0zskTtD3N2Wop
- daGagXhEIneEe8O6jBqFhMP4XuRMScxjzjVT12RmEvx2jZzb_kgzm0o2R.Ih3C3WoLNf.pJA0MDk
- ndf39cMZdkts2f.2SEepRyefurS0doozFKDvkOIh9sVC0lA.dYAcvCSzXCWmpbOgx8IbEIxCMWmv
- 778HDA2OXJnJZu58LBs.NUhtEoloXdGJkgJ1ohVeeZMz3QHajP4VL1UZOz5MSM3s7dKwau4C8gCA
- 1sHGB55O.i020cgm.jvytjZ75tiqyPqTje_pUBDyjNInFzi5Ype7ENv0AUWS6pIMe_EmIFmjQ7Wv
- dK0cfoSdt83dGg.gyulkB512.U5MhbCmChrmZq3CnrYflyF6jclJoPcq6MWRcZJwstGW3b.glXoi
- ljYjK7W.5bSL6s4r6RArQwh15_yZ82Tvq9rMOY2PHFYhD2GhXLishQQdCbvAER7optcQ-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Wed, 13 Nov 2019 18:20:57 +0000
-Received: by smtp405.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 2a1c85ac4bdbf5da4ba3fd738885b7e0;
-          Wed, 13 Nov 2019 18:20:53 +0000 (UTC)
+        Wed, 13 Nov 2019 13:25:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1573669513; bh=+jMDN/0Mbjuefu930+uG3c/ulrKPHp+vUvk0u1habcw=; h=From:To:Cc:Subject:Date:References:From:Subject; b=Dj/jOLrB3ZSmBC5Z2RfoRYtn5Vw8twEscn0KfI+zhIHdvM2sw/dnCKg6LZIGLBq5RRcpOcArnghV20B2hwjMBB/F9bVLxixZt7hXytanWyQW/5lxnguqG2vEL3WwzCqx7wDMABpQsNsf/L/rg1c8WUCb65Z0RTqJPf1WjmvFEVODtz6e63hwoUHYc8P0tzOqlER1JqaRmAr6L5lNc1GtPuOkAmRa4D3Hqf5cfcuHQdk39km1Q/rFZSoPcNiJikajhW9+quTmXc0OoqJvJyrXhNZuSnIYqUTZSuz62h3dwr0WWrJJU3yN7Y5QIkfWiXCftC33cJSjaS5Y1Q/GP7r+TA==
+X-YMail-OSG: hGjiW68VM1lix_YbMFWj1FRV93ZDLafkcy3Ka2z0h0Cueew0ODbTMU5iMEHXtLK
+ _4zRB1Ctj60FZYUulOGS7O9rClaSjPDTAAXc_m2o6adXU6wvO4iACo42kDBQgs45Dag7uCHD8MrO
+ bb.Gfs8aJnxNTLDzT3V9nTwYl_FA2bmXsWwO4Fd7kmI18IlBDrsyFSToVortwtGL44cCKOC2Q78S
+ DINehTKPhjk6oAq43Sw9DYYn6QtINfmween_FgHkoEYZmOf9NtK8n0f_xCvB8d.SeVdxCM5QD7_0
+ m2DzpsKv0A3pO4FAxuT1.pD1zGIAKZCiH2z8zt_iNs2Z133a1qWCLvVyJOUoPww78Ma8Ou0VxDxR
+ mP3yO2ZDRQDsIhIoj4g4mmlQD2FIkGQRXrW27nKHSLCJEqxHJTL7MEo20glxc9AqqBU.hp5cfw7J
+ 7yyKxYFnHEpHyBQU1i5bJ7uqJirqek4PKEFU9ZijYr0CelQ89Z0pAfGb6KitrqT2jFhoVgeljUEU
+ b3e4IgJwX8kfcFpsAzabSW7lQqIXvQh7FygwflR2zy6.jhISeM7qJAjyXk8h5bi8XRDUFF9o1iQZ
+ Hlb9QnxcPxYgIffV6e4UDgkBU9dc_ztN45Uq_VGTR6zalHNGeOxHByE8tTXgFr_gfoYzKN6jVmgM
+ IQLy0XPfCtNKlhPObFherIMwjFU5A2NzrK18fiH1akNXgCb0XUFzaSKFpEo41d9Kf_c4o4UwyDAm
+ V7u41HQ_L5AOpk1YBAZQt3PSD86P8JH8mQ.28Yf5k3fQhZ2UEAtSuMQT_rVf_2M5yCehEYvvarln
+ gYjNG7ARbNvyY2bBA39LimIQ6JDYxL9HPJOA3B6cEg1ltmi7FSyg3iC2jasyyGGWDy1tMMOTSAWB
+ u_Q_SJ0mudEB.4nRcYQuIs64EdwTriVG_wH4KHIlb6XMvxrxIGYr5.f2rk4RSJgQK5.VhlU8rNIG
+ mmorwbJ.kl4x5QNs351Ia8ADiNTMpuXU4B50cERCc3HMDpimcICNxRYFXqyVoRrQkBY0M5GO6UIF
+ NyCaMdawHdjw8CfYSbOzPzq9ttRXwx.sHMe.4VWTHNm1RS1fjCsmrt0Nwz9X_t_oGciLTMLFsQjW
+ X7Q6zuTwh9jWRMI365x5AZ2Gp5jlzDhJHcpTTr1jchFIwoYyZygy1QRHaP1iZGkUaZW87a38Lu_z
+ YZIDdr2wSH246iG6F6akxZfFsNF.P6Fkd.nM9SRoSOjE4LjC7qqNNLW64Km4Ma7UMUloZjVCsOEB
+ E990n2rggkoYX3iW.hmxFkn4BlwWJ1vFPzw1M9G8Ujt_nkUfjnAG.DGOVxEGYpav4.eS.WAQFSN0
+ Q4BNZs.J6w5R9JLK9nMxKq_MXO5ZYuWN44PO5TjFbEqV.F0rMthOLDvvkZzId_ApNCUr7FttaJ4R
+ bQnwoJpJeYwRCacKoCi8T4IaXOEA1qDp6ooG_HQKmWsVG
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Wed, 13 Nov 2019 18:25:13 +0000
+Received: by smtp406.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID ff0a2ef488dab9126fe07248878e2ba7;
+          Wed, 13 Nov 2019 18:25:09 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     keescook@chromium.org, john.johansen@canonical.com,
         penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
         sds@tycho.nsa.gov
-Subject: [PATCH v11 17/25] LSM: Use lsmcontext in security_inode_getsecctx
-Date:   Wed, 13 Nov 2019 10:19:17 -0800
-Message-Id: <20191113181925.2437-18-casey@schaufler-ca.com>
+Subject: [PATCH v11 00/25] LSM: Module stacking for AppArmor
+Date:   Wed, 13 Nov 2019 10:24:58 -0800
+Message-Id: <20191113182506.2580-1-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113181925.2437-1-casey@schaufler-ca.com>
-References: <20191113181925.2437-1-casey@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+References: <20191113182506.2580-1-casey.ref@schaufler-ca.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Change the security_inode_getsecctx() interface to fill
-a lsmcontext structure instead of data and length pointers.
-This provides the information about which LSM created the
-context so that security_release_secctx() can use the
-correct hook.
+Apologies for the multiple copies. Issues on the ISP end.
+
+This patchset provides the changes required for
+the AppArmor security module to stack safely with any other.
+
+v11: Rebase to 5.4-rc6
+     Incorporate feedback from v10
+     - Disambiguate reading /proc/.../attr/display by restricting
+       all use of the interface to the current process.
+     - Fix a merge error in AppArmor's display attribute check
+
+v10: Ask the security modules if the display can be changed.
+
+v9: There is no version 9
+
+v8: Incorporate feedback from v7
+    - Minor clean-up in display value management
+    - refactor "compound" context creation to use a common
+      append_ctx() function.
+
+v7: Incorporate feedback from v6
+    - Make setting the display a privileged operation. The
+      availability of compound contexts reduces the need for
+      setting the display.
+
+v6: Incorporate feedback from v5
+    - Add subj_<lsm>= and obj_<lsm>= fields to audit records
+    - Add /proc/.../attr/context to get the full context in
+      lsmname\0value\0... format as suggested by Simon McVittie
+    - Add SO_PEERCONTEXT for getsockopt() to get the full context
+      in the same format, also suggested by Simon McVittie.
+    - Add /sys/kernel/security/lsm_display_default to provide
+      the display default value.
+
+v5: Incorporate feedback from v4
+    - Initialize the lsmcontext in security_secid_to_secctx()
+    - Clear the lsmcontext in all security_release_secctx() cases
+    - Don't use the "display" on strictly internal context
+      interfaces.
+    - The SELinux binder hooks check for cases where the context
+      "display" isn't compatible with SELinux.
+
+v4: Incorporate feedback from v3
+    - Mark new lsm_<blob>_alloc functions static
+    - Replace the lsm and slot fields of the security_hook_list
+      with a pointer to a LSM allocated lsm_id structure. The
+      LSM identifies if it needs a slot explicitly. Use the
+      lsm_id rather than make security_add_hooks return the
+      slot value.
+    - Validate slot values used in security.c
+    - Reworked the "display" process attribute handling so that
+      it works right and doesn't use goofy list processing.
+    - fix display value check in dentry_init_security
+    - Replace audit_log of secids with '?' instead of deleting
+      the audit log
+
+v3: Incorporate feedback from v2
+    - Make lsmblob parameter and variable names more
+      meaningful, changing "le" and "l" to "blob".
+    - Improve consistency of constant naming.
+    - Do more sanity checking during LSM initialization.
+    - Be a bit clearer about what is temporary scaffolding.
+    - Rather than clutter security_getpeersec_dgram with
+      otherwise unnecessary checks remove the apparmor
+      stub, which does nothing useful.
+
+Patche 0001 moves management of the sock security blob from the individual
+modules to the infrastructure.
+
+Patches 0002-0012 replace system use of a "secid" with
+a structure "lsmblob" containing information from the
+security modules to be held and reused later. At this
+point lsmblob contains an array of u32 secids, one "slot"
+for each of the security modules compiled into the
+kernel that used secids. A "slot" is allocated when
+a security module requests one.
+The infrastructure is changed to use the slot number
+to pass the correct secid to or from the security module
+hooks.
+
+It is important that the lsmblob be a fixed size entity
+that does not have to be allocated. Several of the places
+where it is used would have performance and/or locking
+issues with dynamic allocation.
+
+Patch 0013 provides a mechanism for a process to
+identify which security module's hooks should be used
+when displaying or converting a security context string.
+A new interface /proc/self/attr/display contains the name
+of the security module to show. Reading from this file
+will present the name of the module, while writing to
+it will set the value. Only names of active security
+modules are accepted. Internally, the name is translated
+to the appropriate "slot" number for the module which
+is then stored in the task security blob. Setting the
+display requires that all modules using the /proc interfaces
+allow the transition. The "display" of other processess
+can be neither read nor written. All suggested cases
+for reading the display of a different process have race
+conditions.
+
+Patch 0014 Starts the process of changing how a security
+context is represented. Since it is possible for a
+security context to have been generated by more than one
+security module it is now necessary to note which module
+created a security context so that the correct "release"
+hook can be called. There are several places where the
+module that created a security context cannot be inferred.
+
+This is achieved by introducing a "lsmcontext" structure
+which contains the context string, its length and the
+"slot" number of the security module that created it.
+The security_release_secctx() interface is changed,
+replacing the (string,len) pointer pair with a lsmcontext
+pointer.
+
+Patches 0015-0017 convert the security interfaces from
+(string,len) pointer pairs to a lsmcontext pointer.
+The slot number identifying the creating module is
+added by the infrastructure. Where the security context
+is stored for extended periods the data type is changed.
+
+The Netlabel code is converted to save lsmblob structures
+instead of secids in Patches 0018-0019.
+
+Patch 0020 adds checks to the binder hooks which verify
+that if both ends of a transaction use the same "display".
+
+Patches 0021-0022 add addition data to the audit records
+to identify the LSM specific data for all active modules.
+
+Patches 0023-0024 add new interfaces for getting the
+compound security contexts.
+
+Finally, with all interference on the AppArmor hooks
+removed, Patch 0025 removes the exclusive bit from
+AppArmor. An unnecessary stub hook was also removed.
+
+The Ubuntu project is using an earlier version of
+this patchset in their distribution to enable stacking
+for containers.
+
+Performance measurements to date have the change
+within the "noise". The sockperf and dbench results
+are on the order of 0.2% to 0.8% difference, with
+better performance being as common as worse. The
+benchmarks were run with AppArmor and Smack on Ubuntu.
+
+https://github.com/cschaufler/lsm-stacking.git#stack-5.4-rc6-v11-apparmor
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- fs/nfsd/nfs4xdr.c        | 23 +++++++++--------------
- include/linux/security.h |  5 +++--
- security/security.c      | 13 +++++++++++--
- 3 files changed, 23 insertions(+), 18 deletions(-)
-
-diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
-index b17aad082bde..3e90d7c55c74 100644
---- a/fs/nfsd/nfs4xdr.c
-+++ b/fs/nfsd/nfs4xdr.c
-@@ -2304,11 +2304,11 @@ nfsd4_encode_layout_types(struct xdr_stream *xdr, u32 layout_types)
- #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
- static inline __be32
- nfsd4_encode_security_label(struct xdr_stream *xdr, struct svc_rqst *rqstp,
--			    void *context, int len)
-+			    struct lsmcontext *context)
- {
- 	__be32 *p;
- 
--	p = xdr_reserve_space(xdr, len + 4 + 4 + 4);
-+	p = xdr_reserve_space(xdr, context->len + 4 + 4 + 4);
- 	if (!p)
- 		return nfserr_resource;
- 
-@@ -2318,13 +2318,13 @@ nfsd4_encode_security_label(struct xdr_stream *xdr, struct svc_rqst *rqstp,
- 	 */
- 	*p++ = cpu_to_be32(0); /* lfs */
- 	*p++ = cpu_to_be32(0); /* pi */
--	p = xdr_encode_opaque(p, context, len);
-+	p = xdr_encode_opaque(p, context->context, context->len);
- 	return 0;
- }
- #else
- static inline __be32
- nfsd4_encode_security_label(struct xdr_stream *xdr, struct svc_rqst *rqstp,
--			    void *context, int len)
-+			    struct lsmcontext *context)
- { return 0; }
- #endif
- 
-@@ -2421,9 +2421,7 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
- 	int err;
- 	struct nfs4_acl *acl = NULL;
- #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
--	struct lsmcontext scaff; /* scaffolding */
--	void *context = NULL;
--	int contextlen;
-+	struct lsmcontext context = { };
- #endif
- 	bool contextsupport = false;
- 	struct nfsd4_compoundres *resp = rqstp->rq_resp;
-@@ -2481,7 +2479,7 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
- 	     bmval0 & FATTR4_WORD0_SUPPORTED_ATTRS) {
- 		if (exp->ex_flags & NFSEXP_SECURITY_LABEL)
- 			err = security_inode_getsecctx(d_inode(dentry),
--						&context, &contextlen);
-+						       &context);
- 		else
- 			err = -EOPNOTSUPP;
- 		contextsupport = (err == 0);
-@@ -2911,8 +2909,7 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
- 
- #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
- 	if (bmval2 & FATTR4_WORD2_SECURITY_LABEL) {
--		status = nfsd4_encode_security_label(xdr, rqstp, context,
--								contextlen);
-+		status = nfsd4_encode_security_label(xdr, rqstp, &context);
- 		if (status)
- 			goto out;
- 	}
-@@ -2924,10 +2921,8 @@ nfsd4_encode_fattr(struct xdr_stream *xdr, struct svc_fh *fhp,
- 
- out:
- #ifdef CONFIG_NFSD_V4_SECURITY_LABEL
--	if (context) {
--		lsmcontext_init(&scaff, context, contextlen, 0); /*scaffolding*/
--		security_release_secctx(&scaff);
--	}
-+	if (context.context)
-+		security_release_secctx(&context);
- #endif /* CONFIG_NFSD_V4_SECURITY_LABEL */
- 	kfree(acl);
- 	if (tempfh) {
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 3e333104720d..5da16f97f2be 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -535,7 +535,7 @@ void security_release_secctx(struct lsmcontext *cp);
- void security_inode_invalidate_secctx(struct inode *inode);
- int security_inode_notifysecctx(struct inode *inode, void *ctx, u32 ctxlen);
- int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen);
--int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen);
-+int security_inode_getsecctx(struct inode *inode, struct lsmcontext *cp);
- int security_locked_down(enum lockdown_reason what);
- #else /* CONFIG_SECURITY */
- 
-@@ -1360,7 +1360,8 @@ static inline int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32
- {
- 	return -EOPNOTSUPP;
- }
--static inline int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
-+static inline int security_inode_getsecctx(struct inode *inode,
-+					   struct lsmcontext *cp)
- {
- 	return -EOPNOTSUPP;
- }
-diff --git a/security/security.c b/security/security.c
-index 6f43dafe1249..101063b00aeb 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -2207,9 +2207,18 @@ int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen)
- }
- EXPORT_SYMBOL(security_inode_setsecctx);
- 
--int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
-+int security_inode_getsecctx(struct inode *inode, struct lsmcontext *cp)
- {
--	return call_int_hook(inode_getsecctx, -EOPNOTSUPP, inode, ctx, ctxlen);
-+	struct security_hook_list *hp;
-+
-+	memset(cp, 0, sizeof(*cp));
-+
-+	hlist_for_each_entry(hp, &security_hook_heads.inode_getsecctx, list) {
-+		cp->slot = hp->lsmid->slot;
-+		return hp->hook.inode_getsecctx(inode, (void **)&cp->context,
-+						&cp->len);
-+	}
-+	return -EOPNOTSUPP;
- }
- EXPORT_SYMBOL(security_inode_getsecctx);
- 
--- 
-2.20.1
-
+ arch/alpha/include/uapi/asm/socket.h    |   1 +
+ arch/mips/include/uapi/asm/socket.h     |   1 +
+ arch/parisc/include/uapi/asm/socket.h   |   1 +
+ arch/sparc/include/uapi/asm/socket.h    |   1 +
+ drivers/android/binder.c                |  26 +-
+ fs/ceph/xattr.c                         |   6 +-
+ fs/nfs/nfs4proc.c                       |  22 +-
+ fs/nfsd/nfs4xdr.c                       |  20 +-
+ fs/proc/base.c                          |   2 +
+ include/linux/audit.h                   |   1 +
+ include/linux/cred.h                    |   3 +-
+ include/linux/lsm_hooks.h               |  37 +-
+ include/linux/security.h                | 175 ++++++++--
+ include/net/af_unix.h                   |   2 +-
+ include/net/netlabel.h                  |   8 +-
+ include/net/scm.h                       |  15 +-
+ include/uapi/asm-generic/socket.h       |   1 +
+ kernel/audit.c                          |  72 +++-
+ kernel/audit.h                          |   9 +-
+ kernel/audit_fsnotify.c                 |   1 +
+ kernel/auditfilter.c                    |  10 +-
+ kernel/auditsc.c                        | 127 ++++---
+ kernel/cred.c                           |  12 +-
+ net/core/sock.c                         |   7 +-
+ net/ipv4/cipso_ipv4.c                   |   6 +-
+ net/ipv4/ip_sockglue.c                  |  12 +-
+ net/netfilter/nf_conntrack_netlink.c    |  20 +-
+ net/netfilter/nf_conntrack_standalone.c |  11 +-
+ net/netfilter/nfnetlink_queue.c         |  26 +-
+ net/netfilter/nft_meta.c                |  13 +-
+ net/netfilter/xt_SECMARK.c              |   5 +-
+ net/netlabel/netlabel_kapi.c            |   6 +-
+ net/netlabel/netlabel_unlabeled.c       |  97 +++---
+ net/netlabel/netlabel_unlabeled.h       |   2 +-
+ net/netlabel/netlabel_user.c            |  13 +-
+ net/netlabel/netlabel_user.h            |   6 +-
+ net/unix/af_unix.c                      |   6 +-
+ net/xfrm/xfrm_policy.c                  |   2 +
+ net/xfrm/xfrm_state.c                   |   2 +
+ security/apparmor/include/apparmor.h    |   3 +-
+ security/apparmor/include/net.h         |   6 +-
+ security/apparmor/lsm.c                 | 117 +++----
+ security/commoncap.c                    |   7 +-
+ security/integrity/ima/ima.h            |  15 +-
+ security/integrity/ima/ima_api.c        |  11 +-
+ security/integrity/ima/ima_appraise.c   |   6 +-
+ security/integrity/ima/ima_main.c       |  49 +--
+ security/integrity/ima/ima_policy.c     |  19 +-
+ security/integrity/integrity_audit.c    |   1 +
+ security/loadpin/loadpin.c              |   8 +-
+ security/safesetid/lsm.c                |   8 +-
+ security/security.c                     | 593 +++++++++++++++++++++++++++++---
+ security/selinux/hooks.c                | 109 +++---
+ security/selinux/include/classmap.h     |   2 +-
+ security/selinux/include/objsec.h       |   5 +
+ security/selinux/include/security.h     |   1 +
+ security/selinux/netlabel.c             |  25 +-
+ security/selinux/ss/services.c          |   4 +-
+ security/smack/smack.h                  |   6 +
+ security/smack/smack_lsm.c              | 124 ++++---
+ security/smack/smack_netfilter.c        |   8 +-
+ security/smack/smackfs.c                |  10 +-
+ security/tomoyo/tomoyo.c                |   8 +-
+ security/yama/yama_lsm.c                |   7 +-
+ 64 files changed, 1376 insertions(+), 563 deletions(-)
