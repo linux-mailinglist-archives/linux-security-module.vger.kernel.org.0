@@ -2,119 +2,159 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BE9FB768
-	for <lists+linux-security-module@lfdr.de>; Wed, 13 Nov 2019 19:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F97FB7F0
+	for <lists+linux-security-module@lfdr.de>; Wed, 13 Nov 2019 19:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728617AbfKMSZy (ORCPT
+        id S1727527AbfKMSrE (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 13 Nov 2019 13:25:54 -0500
-Received: from sonic313-15.consmr.mail.ne1.yahoo.com ([66.163.185.38]:44463
-        "EHLO sonic313-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728594AbfKMSZy (ORCPT
+        Wed, 13 Nov 2019 13:47:04 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:43324 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726300AbfKMSrD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 13 Nov 2019 13:25:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1573669553; bh=AnMCoo8whYMS9LxrvVzuREBP07j0k39Hd31LTpE/YIQ=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=Adnssr8iK3YXDQYPDX6rC2otdc5XzFOeFCFzWy6h4ABBDTbW7XRper1ezXcsdA+KMPp34dlZw8vF8L2cEw1DWYyzuVB7PnGkynws+9nh5+smLrYgDR1YC+pF8bDVMDQiUq7NE6HMRGF6hRk7tLeyyKTmvCzuGLS3duHSIHNau39qPD4GK8jmkMNcBD/wcou8LmthKW8+RmaLYBLt6IpjHd20quU2h2nBrSWxIcD4St1C+I4fgcnulHScHwjIsPam3GhpvBeGccLsXhoyrxUpQKA9B1x1eibPr14fyl7O/uSPOSesy/zhV2sL2w5c8yiQ1OzAZLKsdJA4fQwUoLkdpA==
-X-YMail-OSG: 53uCqrwVM1mhMcS06j6g2oiTL8JMdtt5jo_LmBeCRdmWyEMJPkudko88zpmSgzT
- 9WPCKQFT3.mpuWWaMu.IDhDy0cSvBL4wEhujY.hx4bvPNuUJxBUA81dDuVPToBkTTR1LsWpc4ucQ
- 9olv1OCHCWZrts63Z34vMUtLGqb4j8eiu74FpIG32heGzyYJs0K5RITCby6e7QJ2P.nz2oC3Zv_f
- _OkrQ.AhS4YyqTKSMPn048jsraleOkrzzcwS7Qp1HAvK2wIudquTq.PXWt8bpnakqKM8WHW4XqW.
- W60QkMZ3G5N_aHFtjd70tOIYd3ihymjcC2Ma9SNDwOUo120UUz6vqEh75TeUBC1Ltn1UlzKOI.WA
- iuDgshM_4qAPh52cRVwDeHLtepkDs89eD3ZfXsmVaG7HL7Zn_MZlh1SW.y0H35IgsQvnxEoT8F5a
- lWIA.uFDOvhRoGcBUmkRDJE7ssOeNUnvUMj7FeI.zCjEk7noNVIistxF0oO9boE3uHTNL6oV7ptR
- 8u5hlO95wA3.ueu.cu8rRw9IaBIe6sHfcfvxnWphqaFs1Sd97wuNPFwPuHgNFFl1VtSMkVAKhvJh
- WahFhuJWY9TjBj4qF9qxgpr1AHV0OJbj8apLoCKky1c30oz6zzJ.GjFZi4u_y6Veu4JosUwTghzJ
- B7H1__AdkvDL_CjJyRtP1welsO4EF4ca00H.2nQSZd7uiRx6EgOXQ662WkDVClFQqxmM.YhuaLgB
- iNdcFPY06Pe.w_IJexjZNFXxr6nzbjPPKtnPaU_pJiocBuB84RoeH3y7h6AGaBuQhfqBgNBmL.kU
- c4ec.9L9LGZlqK9Thsv_N_CVO_J6xqVNt7bw45KKbnO15wT8IPp5akU9F_mor5Lln0JAOC6dlesk
- aPVCP3X1AMUzoj0T0Rb7uUoLTkgOynFbC2r9SpqONFa.u_a_o2DccUnlfKr74hTNaeu4oEG8Ac8s
- HhyOl86Tkbb_hxOq__wz7fYS9Ke8LO0KHW9Njr3Rjp_Jx1XNZSlWA60qS3ldShI7KjsCmjg6ASge
- Kx8jcuGTjn7Rrgu2vhsOjZbxS00gocIDSQQ4TksJ8u9PcAYal.HWrGTgfh_pZqGlPG3rBiXgkKQn
- jRXRiw4vmZ5E6Et6jmcTRMrARgtXfXtSW1Ii8g414pJsOSupOxgdu0Kb16UU36uTsl.yunuw6NXP
- emLXoV2sQC1EZ0jDTTvFWYEiRCTP7fXrSZgQhGTjAh0vQMtegBYgYKEDFumINdybWbEDKMs2XnaI
- U8t_Oj6viIcWiWgWC51CKwTIot739fLV2o3Sr0Kf8zw9m78FzTXoPJxxfp4NHmvm4oCOC1btCBX4
- 6m7NloYLpoqBgkbQVlHSw92y6DvLRRTzpIQOCwAclE44p2lEYfn.8roewdCXF1_bzRFhwWXbjigN
- Ag5DqNadqYMlRSZLLBk1k_jxhiO0K3_Zl6zOgHKxnx39Q9AKqpOgWrMjuprdul.jMfGRR0eLWvg-
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Wed, 13 Nov 2019 18:25:53 +0000
-Received: by smtp428.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 12d4900c069877a28331491f4321a926;
-          Wed, 13 Nov 2019 18:25:48 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        sds@tycho.nsa.gov
-Subject: [PATCH v11 25/25] AppArmor: Remove the exclusive flag
-Date:   Wed, 13 Nov 2019 10:25:06 -0800
-Message-Id: <20191113182506.2580-9-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113182506.2580-1-casey@schaufler-ca.com>
-References: <20191113182506.2580-1-casey@schaufler-ca.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 13 Nov 2019 13:47:03 -0500
+Received: from nramas-ThinkStation-P520.corp.microsoft.com (unknown [131.107.174.108])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9FF6020B4901;
+        Wed, 13 Nov 2019 10:47:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9FF6020B4901
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1573670822;
+        bh=VpCKoF921kDCvJLHf7GSVgqIIG8sIgGF5r2hC+zcLSU=;
+        h=From:To:Subject:Date:From;
+        b=Puq1wUqRgpA4PzgWPN65axKtm/Ikho0pn3rVfP6IOqBGoLmdtK0Ypq4hZhvz1k/Vq
+         pZnexm5Sh7zlAKnK2B+uFd/x3OnpGI5YivFCR2hx+onD0xrITMEue1/1jJlMHUCpjH
+         OUfwZZhcN5U9F/4O7RZZp6zD8c68dlb/Tzs6MIk8=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, dhowells@redhat.com,
+        matthewgarrett@google.com, sashal@kernel.org,
+        jamorris@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/3] KEYS: Measure keys when they are created or updated
+Date:   Wed, 13 Nov 2019 10:46:55 -0800
+Message-Id: <20191113184658.2862-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the inclusion of the "display" process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+Keys created or updated in the system are currently not measured.
+Therefore an attestation service, for instance, would not be able to
+attest whether or not the trusted keys keyring(s), for instance, contain
+only known good (trusted) keys.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+IMA measures system files, command line arguments passed to kexec,
+boot aggregate, etc. It can be used to measure keys as well.
+But there is no mechanism available in the kernel for IMA to
+know when a key is created or updated.
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index b4c964fdc2f9..81bc4f773429 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1099,22 +1099,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock, char **optval,
- 	return error;
- }
- 
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1218,8 +1202,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1777,7 +1759,7 @@ static int __init apparmor_init(void)
- 
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
+This change aims to address measuring keys created or updated
+in the system:
+
+To achieve the above the following changes have been made:
+
+ - Added a new IMA hook namely, ima_post_key_create_or_update, which
+   measures the key. This IMA hook is called from key_create_or_update
+   function. The key measurement can be controlled through IMA policy.
+
+   A new IMA policy function KEY_CHECK has been added to measure keys.
+
+   # measure keys loaded onto any keyring
+   measure func=KEY_CHECK
+
+Testing performed:
+
+  * Booted the kernel with this change.
+  * When KEY_CHECK policy is set IMA measures keys loaded
+    onto any keyring.
+  * Keys are not measured when KEY_CHECK is not set.
+  * Added a new key to a keyring.
+    => Added keys to .ima and .evm keyrings.
+  * Added the same key again.
+    => Add the same key to .ima and .evm keyrings.
+
+Change Log:
+
+  v6:
+
+  => Rebased the changes to v5.4-rc7
+  => Renamed KEYRING_CHECK to KEY_CHECK per Mimi's suggestion.
+  => Excluded the patches that add support for limiting key
+     measurement to specific keyrings ("keyrings=" option
+     for "measure func=KEY_CHECK" in the IMA policy).
+     Also, excluded the patches that add support for deferred
+     processing of keys (queue support).
+     These patches will be added in separate patch sets later.
+
+  v5:
+
+  => Reorganized the patches to add measurement of keys through
+     the IMA hook without any queuing and then added queuing support.
+  => Updated the queuing functions to minimize code executed inside mutex.
+  => Process queued keys after custom IMA policies have been applied.
+
+  v4:
+
+  => Rebased the changes to v5.4-rc3
+  => Applied the following dependent patch set first
+     and then added new changes.
+  https://lore.kernel.org/linux-integrity/1572492694-6520-1-git-send-email-zohar@linux.ibm.com
+  => Refactored the patch set to separate out changes related to
+     func KEYRING_CHECK and options keyrings into different patches.
+  => Moved the functions to queue and dequeue keys for measurement
+     from ima_queue.c to a new file ima_asymmetric_keys.c.
+  => Added a new config namely CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+     to compile ima_asymmetric_keys.c
+
+  v3:
+
+  => Added KEYRING_CHECK for measuring keys. This can optionally specify
+     keyrings to measure.
+  => Updated ima_get_action() and related functions to return
+     the keyrings if specified in the policy.
+  => process_buffer_measurement() function is updated to take keyring
+     as a parameter. The key will be measured if the policy includes
+     the keyring in the list of measured keyrings. If the policy does not
+     specify any keyrings then all keys are measured.
+
+  v2:
+
+  => Per suggestion from Mimi reordered the patch set to first
+     enable measuring keys added or updated in the system.
+     And, then scope the measurement to keys added to 
+     builtin_trusted_keys keyring through ima policy.
+  => Removed security_key_create_or_update function and instead
+     call ima hook, to measure the key, directly from 
+     key_create_or_update function.
+
+  v1:
+
+  => LSM function for key_create_or_update. It calls ima.
+  => Added ima hook for measuring keys
+  => ima measures keys based on ima policy.
+
+  v0:
+
+  => Added LSM hook for key_create_or_update.
+  => Measure keys added to builtin or secondary trusted keys keyring.
+
+Lakshmi Ramasubramanian (3):
+  IMA: Add KEY_CHECK func to measure keys
+  IMA: Define an IMA hook to measure keys
+  KEYS: Call the IMA hook to measure keys
+
+ Documentation/ABI/testing/ima_policy         |  6 ++-
+ include/linux/ima.h                          | 13 +++++
+ security/integrity/ima/Kconfig               | 14 ++++++
+ security/integrity/ima/Makefile              |  1 +
+ security/integrity/ima/ima.h                 |  1 +
+ security/integrity/ima/ima_asymmetric_keys.c | 51 ++++++++++++++++++++
+ security/integrity/ima/ima_main.c            |  7 +++
+ security/integrity/ima/ima_policy.c          |  4 +-
+ security/keys/key.c                          |  9 ++++
+ 9 files changed, 104 insertions(+), 2 deletions(-)
+ create mode 100644 security/integrity/ima/ima_asymmetric_keys.c
+
 -- 
-2.20.1
+2.17.1
 
