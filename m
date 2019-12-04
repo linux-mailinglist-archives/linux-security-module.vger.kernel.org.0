@@ -2,111 +2,99 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C137112B4C
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2019 13:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343F7112C0E
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2019 13:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbfLDMWS (ORCPT
+        id S1727779AbfLDMuz (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 4 Dec 2019 07:22:18 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:33851 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727775AbfLDMWS (ORCPT
+        Wed, 4 Dec 2019 07:50:55 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:52492 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727446AbfLDMuz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 4 Dec 2019 07:22:18 -0500
-Received: by mail-ed1-f65.google.com with SMTP id cx19so6485909edb.1
-        for <linux-security-module@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
-         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
-         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
-         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
-         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
-         4SHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=pP0z7kHeatnIKxzi0T4z743odNx33Uaun1hUMVaEHOaCRFiluTW2tOy4fqFdI/SmJ5
-         PjcUmoZkxuHWNM6KeWTIPMCPp0nvTtti2Ytar8B9xXuQ/IikhimZ3ta5pOohZ7udH7WT
-         Qe0ZVdRdJSOy3T4aNKZs8WWEM34EohHmyWyko2hKpvAm9bmKfH/Sa3N+Di3ZnVdBIM74
-         TOjC3yFg4Z0kVyP0HxcUKQH9ymo0zUjuYZaszRuZ6IQ8AE8w1zkhZn25wZk05cakx50u
-         ren98YZfJVRSP43NZSqWNJlx2+KVjTCKyAUWOr0DWYiqYoerWDzhv/cOATm9e9c3cZPh
-         pf8g==
-X-Gm-Message-State: APjAAAUKJ1ZKW2NSUnChBqMjdD3lJQyGubwHvmv8rvCvnwMHs08R0/oK
-        jG+vHQ6tupGTN3TWpQdy5nIrkVeIg3bBelSJYEc=
-X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
-X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
- Wed, 04 Dec 2019 04:22:16 -0800 (PST)
+        Wed, 4 Dec 2019 07:50:55 -0500
+Received: from fsav401.sakura.ne.jp (fsav401.sakura.ne.jp [133.242.250.100])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id xB4Cogn6080765;
+        Wed, 4 Dec 2019 21:50:42 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav401.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav401.sakura.ne.jp);
+ Wed, 04 Dec 2019 21:50:42 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav401.sakura.ne.jp)
+Received: from [192.168.1.9] (softbank126040062084.bbtec.net [126.40.62.84])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id xB4CoYgJ080585
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NO);
+        Wed, 4 Dec 2019 21:50:42 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH v2] tomoyo: Don't check open/getattr permission on
+ sockets.
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+To:     James Morris <jmorris@namei.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-security-module@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <0000000000004f43fa058a97f4d3@google.com>
+ <1b5722cc-adbc-035d-5ca1-9aa56e70d312@I-love.SAKURA.ne.jp>
+ <a4ed1778-8b73-49d1-0ff0-59d9c6ac0af8@I-love.SAKURA.ne.jp>
+ <20190618204933.GE17978@ZenIV.linux.org.uk>
+ <8f874b03-b129-205f-5f05-125479701275@i-love.sakura.ne.jp>
+ <bc146372-764d-93a9-af27-666d73ed3af5@i-love.sakura.ne.jp>
+ <alpine.LRH.2.21.1907061944050.2662@namei.org>
+ <alpine.LRH.2.21.1907061949040.2662@namei.org>
+ <289ebc65-8444-37e3-e54e-21b55d2c9192@i-love.sakura.ne.jp>
+ <a28f2680-bafc-5e23-4eea-6b432f561cd4@i-love.sakura.ne.jp>
+ <A9CE5147-4047-4C42-B772-F0ED510FA283@canb.auug.org.au>
+ <36906718-d2ae-3514-c6b2-371037c98da5@i-love.sakura.ne.jp>
+ <20191003082543.5e1e25dd@canb.auug.org.au>
+ <b175f451-4e76-84aa-48fa-e3ee9490c579@i-love.sakura.ne.jp>
+ <d5cbd24b-531d-e9d0-f784-e6447129741d@i-love.sakura.ne.jp>
+ <alpine.LRH.2.21.1911211818320.3625@namei.org>
+ <cba33548-91dc-42b4-ef96-43642ebc3427@i-love.sakura.ne.jp>
+ <b7263da2-d56d-0f27-a7e5-03541ff8a0c1@i-love.sakura.ne.jp>
+Message-ID: <579b10bb-990f-ae4c-8098-b39e56a4c475@i-love.sakura.ne.jp>
+Date:   Wed, 4 Dec 2019 21:50:34 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
- -0800 (PST)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
-Date:   Wed, 4 Dec 2019 13:22:15 +0100
-Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
-Subject: God has remembered your prayers I have already sent you Money Gram
- payment of $5000.00 today, MG 1029-8096
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <b7263da2-d56d-0f27-a7e5-03541ff8a0c1@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Attn, dear Beneficiary.
+On 2019/11/21 22:59, Tetsuo Handa wrote:
+> On 2019/11/21 19:18, Tetsuo Handa wrote:
+>> On 2019/11/21 16:21, James Morris wrote:
+>>> On Wed, 13 Nov 2019, Tetsuo Handa wrote:
+>>>
+>>>> Hello, Andrew and James.
+>>>>
+>>>> I have difficulty setting up environments for sending pull request to linux.git
+>>>> (nobody around me knows Linux kernel maintainer's workflow at the command line level).
+>>>> Can you pick up the following commit via mmotm or linux-security.git tree?
+>>>
+>>> Not sure if your fix is complete.
+>>>
+>>> Are there other potential paths to trigger this via tomoyo_path_perm() ?
+>>>
+>>> e.g. call unlink(2) on /proc/pid/fd/sockfd
+>>
+>> I think they are safe. For example, unlink(2) checks that
+>> inode is valid before calling security_path_unlink().
+> 
+> Hmm, since unlink(2) locks parent's inode instead of inode to be removed itself,
+> there is indeed possibility that tomoyo_path_perm() races with __sock_release().
+> We need another patch...
+> 
 
-God has remembered your prayers
-I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
-This is because we have finally concluded to effect your transfer
-funds of $4.8,000.000usd
-through MONEY GRAM International Fund transfer Service
-Each payment will be sending to you by $5000.00 daily until the
-($4.8,000.000usd) is completely transferred
-we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
-So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
+I decided to drop tomoyo_get_socket_name(). Will you pick up the following commit?
 
-Contact person Mrs. Alan Ude
-Dir. MONEY GRAM Service,Benin
-Phone number: +229 98856728
-E-mail: moneygram.1820@outlook.fr
+commit c39593ab0500fcd6db290b311c120349927ddc04
+Author: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Date:   Mon Nov 25 10:46:51 2019 +0900
 
-Ask him to give you the complete mtcn, sender name, question and
-answer to enable you
-pick up the $5000.00 sent today,
-Also you are instructed to re-confirm your information's
-to Mrs.Alan Ude as listed below to avoid wrong transactions.
-
-(1Your Full name:............................................
-(2 Phone number.....................................................
-(3 Contact address:.....................................
-(4 Age:..................................................................
-(5 Country..............................................
-(6) Sex .................................................................
-(7) your occupation...........................................
-
-(8)Passport/By Attach or Drivers License Number:
-Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
-Note please: I have paid service fees for you but the only money you
-are required
-to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
-pick up your transfer today.
-
-Send it to via Money Gram
-Receiver's Name-----Alan Ude
-Country----------Benin
-Address-----------Cotonou
-Quest--------Honest
-Ans-----------Trust
-
-I done all my best for you to receive your transfer now ok.
-We need your urgent reply
-Best Regards
-Rev.Dr Emmanuel Okoye
-CEO Ecobank-benin
-
-If we did not receive it urgent from you today,
-I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
-representative.
+    tomoyo: Don't use nifty names on sockets.
