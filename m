@@ -2,251 +2,111 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5771126CC
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2019 10:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C137112B4C
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2019 13:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbfLDJPl (ORCPT
+        id S1727842AbfLDMWS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 4 Dec 2019 04:15:41 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:43944 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726166AbfLDJPk (ORCPT
+        Wed, 4 Dec 2019 07:22:18 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:33851 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727775AbfLDMWS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 4 Dec 2019 04:15:40 -0500
-Received: by mail-ot1-f66.google.com with SMTP id p8so5658999oth.10
-        for <linux-security-module@vger.kernel.org>; Wed, 04 Dec 2019 01:15:39 -0800 (PST)
+        Wed, 4 Dec 2019 07:22:18 -0500
+Received: by mail-ed1-f65.google.com with SMTP id cx19so6485909edb.1
+        for <linux-security-module@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kbkpGLkL0yrq3ltKSzyFrHQi1/pqNXq+Qh0OZ6abB+I=;
-        b=XS/OczIRTKx2gis4efj9n4PJqnrXXOzdlxfVGIuoxii4M5FuldJ2UxjGI/uTm2mVlr
-         iDilqY2Yx/0yPC8LKfZjXtBUU1w+F1cLGcuARUcoXHUWOLGQ4Z1M5R+32l22QxeMiGrN
-         oiSsMeCCjpVMu66KOCGP0WxjZ96Z7O6WqY+9g=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
+         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
+         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
+         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
+         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
+         4SHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kbkpGLkL0yrq3ltKSzyFrHQi1/pqNXq+Qh0OZ6abB+I=;
-        b=cxYZmrJ0dbX/nuZqB90eID2AmyPcCFB8w8PP9QOwhu0/h6EBa4aI5DxLAAwzzAJ/gm
-         enXoavB3YB91Kxl+m3WpEKfS4Uy/ElOSIthdnZkWMLIL3LASbB5NAGdBj44kRuPOPogD
-         idKdaGyO6/P4TZGm0kavjockGG1o2jgB2p5MfiQ6BFBzbWN5k5USZMCga5a7V+0RSfiW
-         Ci0wTJAoEE0D1GuLHX39gQ8+Rl1m0umrF/wDqjpJIIe9i79NPtd2Rdy0MYlXRoi9ZYbM
-         mvqTZxU1r5EMubxf8ucjfi6sqUU+/3TgYI2T1r8yNZ1WNWSasTZ8K7exlwdZs8Nu3ZgQ
-         5JhA==
-X-Gm-Message-State: APjAAAUW6WAQQfYvIcxqQSmSZofsM8++cmi+ul9Mp8YLtGxobHBB99/Q
-        6u/sjmlnkbEUOt84WcA/K5aVykxNEzJPkH+nP+CehA==
-X-Google-Smtp-Source: APXvYqwigkG2RkEu7H6A8TRkX1xQOSs2iOfkgqcan8LwWE3honUjU5nirjQ0f42/pUC9lJ32pXDkKwGqhXNt2ezlEEs=
-X-Received: by 2002:a05:6830:4d1:: with SMTP id s17mr1810455otd.188.1575450938604;
- Wed, 04 Dec 2019 01:15:38 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=pP0z7kHeatnIKxzi0T4z743odNx33Uaun1hUMVaEHOaCRFiluTW2tOy4fqFdI/SmJ5
+         PjcUmoZkxuHWNM6KeWTIPMCPp0nvTtti2Ytar8B9xXuQ/IikhimZ3ta5pOohZ7udH7WT
+         Qe0ZVdRdJSOy3T4aNKZs8WWEM34EohHmyWyko2hKpvAm9bmKfH/Sa3N+Di3ZnVdBIM74
+         TOjC3yFg4Z0kVyP0HxcUKQH9ymo0zUjuYZaszRuZ6IQ8AE8w1zkhZn25wZk05cakx50u
+         ren98YZfJVRSP43NZSqWNJlx2+KVjTCKyAUWOr0DWYiqYoerWDzhv/cOATm9e9c3cZPh
+         pf8g==
+X-Gm-Message-State: APjAAAUKJ1ZKW2NSUnChBqMjdD3lJQyGubwHvmv8rvCvnwMHs08R0/oK
+        jG+vHQ6tupGTN3TWpQdy5nIrkVeIg3bBelSJYEc=
+X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
+X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
+ Wed, 04 Dec 2019 04:22:16 -0800 (PST)
 MIME-Version: 1.0
-References: <0000000000002cfc3a0598d42b70@google.com> <CAKMK7uFAfw4M6B8WaHx6FBkYDmUBTQ6t3D8RE5BbMt=_5vyp9A@mail.gmail.com>
- <CACT4Y+aV9vzJ6gs9r2RAQP+dQ_vkOc5H6hWu-prF1ECruAE_5w@mail.gmail.com>
-In-Reply-To: <CACT4Y+aV9vzJ6gs9r2RAQP+dQ_vkOc5H6hWu-prF1ECruAE_5w@mail.gmail.com>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Wed, 4 Dec 2019 10:15:27 +0100
-Message-ID: <CAKMK7uHo9cQ56-xUV8KJfvmS94JMVVu+fZ+7uPX85bWruUGzEw@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in fbcon_get_font
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     kasan-dev <kasan-dev@googlegroups.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        syzbot <syzbot+4455ca3b3291de891abc@syzkaller.appspotmail.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>, ghalat@redhat.com,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
+ -0800 (PST)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
+Date:   Wed, 4 Dec 2019 13:22:15 +0100
+Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
+Subject: God has remembered your prayers I have already sent you Money Gram
+ payment of $5000.00 today, MG 1029-8096
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Dec 4, 2019 at 7:33 AM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Tue, Dec 3, 2019 at 11:37 PM Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
-> >
-> > On Tue, Dec 3, 2019 at 11:25 PM syzbot
-> > <syzbot+4455ca3b3291de891abc@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following crash on:
-> > >
-> > > HEAD commit:    76bb8b05 Merge tag 'kbuild-v5.5' of git://git.kernel.org/p..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10bfe282e00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=dd226651cb0f364b
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=4455ca3b3291de891abc
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11181edae00000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105cbb7ae00000
-> > >
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+4455ca3b3291de891abc@syzkaller.appspotmail.com
-> > >
-> > > ==================================================================
-> > > BUG: KASAN: slab-out-of-bounds in memcpy include/linux/string.h:380 [inline]
-> > > BUG: KASAN: slab-out-of-bounds in fbcon_get_font+0x2b2/0x5e0
-> > > drivers/video/fbdev/core/fbcon.c:2465
-> > > Read of size 16 at addr ffff888094b0aa10 by task syz-executor414/9999
-> >
-> > So fbcon allocates some memory, security/tomoyo goes around and frees
-> > it, fbcon goes boom because the memory is gone. I'm kinda leaning
-> > towards "not an fbcon bug". Adding relevant security folks and mailing
-> > lists.
-> >
-> > But from a very quick look in tomoyo it loosk more like "machine on
-> > fire, random corruption all over". No idea what's going on here.
->
-> Hi Daniel,
->
-> This is an out-of-bounds access, not use-after-free.
-> I don't know why we print the free stack at all (maybe +Andrey knows),
-> but that's what KASAN did from day one. I filed
-> https://bugzilla.kernel.org/show_bug.cgi?id=198425 which I think is a
-> good idea, I will add your confusion as a data point :)
-> Re this bug, free stack is irrelevant, I guess it's when the heap
-> block was freed before it was reallocated by console. So it's plain
-> out-of-bounds in fbcon_get_font, which looks sane and consistent to me
-> and reproducible on top.
+Attn, dear Beneficiary.
 
-Ugh, that's indeed very confusing, thanks for explaining.
--Daniel
+God has remembered your prayers
+I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
+This is because we have finally concluded to effect your transfer
+funds of $4.8,000.000usd
+through MONEY GRAM International Fund transfer Service
+Each payment will be sending to you by $5000.00 daily until the
+($4.8,000.000usd) is completely transferred
+we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
+So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
 
->
->
-> > > CPU: 0 PID: 9999 Comm: syz-executor414 Not tainted 5.4.0-syzkaller #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > > Google 01/01/2011
-> > > Call Trace:
-> > >   __dump_stack lib/dump_stack.c:77 [inline]
-> > >   dump_stack+0x197/0x210 lib/dump_stack.c:118
-> > >   print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c:374
-> > >   __kasan_report.cold+0x1b/0x41 mm/kasan/report.c:506
-> > >   kasan_report+0x12/0x20 mm/kasan/common.c:638
-> > >   check_memory_region_inline mm/kasan/generic.c:185 [inline]
-> > >   check_memory_region+0x134/0x1a0 mm/kasan/generic.c:192
-> > >   memcpy+0x24/0x50 mm/kasan/common.c:124
-> > >   memcpy include/linux/string.h:380 [inline]
-> > >   fbcon_get_font+0x2b2/0x5e0 drivers/video/fbdev/core/fbcon.c:2465
-> > >   con_font_get drivers/tty/vt/vt.c:4446 [inline]
-> > >   con_font_op+0x20b/0x1250 drivers/tty/vt/vt.c:4605
-> > >   vt_ioctl+0x181a/0x26d0 drivers/tty/vt/vt_ioctl.c:965
-> > >   tty_ioctl+0xa37/0x14f0 drivers/tty/tty_io.c:2658
-> > >   vfs_ioctl fs/ioctl.c:47 [inline]
-> > >   file_ioctl fs/ioctl.c:545 [inline]
-> > >   do_vfs_ioctl+0x977/0x14e0 fs/ioctl.c:732
-> > >   ksys_ioctl+0xab/0xd0 fs/ioctl.c:749
-> > >   __do_sys_ioctl fs/ioctl.c:756 [inline]
-> > >   __se_sys_ioctl fs/ioctl.c:754 [inline]
-> > >   __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:754
-> > >   do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
-> > >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > > RIP: 0033:0x4444d9
-> > > Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7
-> > > 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
-> > > ff 0f 83 7b d8 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> > > RSP: 002b:00007fff6f4393b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > > RAX: ffffffffffffffda RBX: 00007fff6f4393c0 RCX: 00000000004444d9
-> > > RDX: 0000000020000440 RSI: 0000000000004b72 RDI: 0000000000000005
-> > > RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000400da0
-> > > R10: 00007fff6f438f00 R11: 0000000000000246 R12: 00000000004021e0
-> > > R13: 0000000000402270 R14: 0000000000000000 R15: 0000000000000000
-> > >
-> > > Allocated by task 9999:
-> > >   save_stack+0x23/0x90 mm/kasan/common.c:71
-> > >   set_track mm/kasan/common.c:79 [inline]
-> > >   __kasan_kmalloc mm/kasan/common.c:512 [inline]
-> > >   __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:485
-> > >   kasan_kmalloc+0x9/0x10 mm/kasan/common.c:526
-> > >   __do_kmalloc mm/slab.c:3656 [inline]
-> > >   __kmalloc+0x163/0x770 mm/slab.c:3665
-> > >   kmalloc include/linux/slab.h:561 [inline]
-> > >   fbcon_set_font+0x32d/0x860 drivers/video/fbdev/core/fbcon.c:2663
-> > >   con_font_set drivers/tty/vt/vt.c:4538 [inline]
-> > >   con_font_op+0xe18/0x1250 drivers/tty/vt/vt.c:4603
-> > >   vt_ioctl+0xd2e/0x26d0 drivers/tty/vt/vt_ioctl.c:913
-> > >   tty_ioctl+0xa37/0x14f0 drivers/tty/tty_io.c:2658
-> > >   vfs_ioctl fs/ioctl.c:47 [inline]
-> > >   file_ioctl fs/ioctl.c:545 [inline]
-> > >   do_vfs_ioctl+0x977/0x14e0 fs/ioctl.c:732
-> > >   ksys_ioctl+0xab/0xd0 fs/ioctl.c:749
-> > >   __do_sys_ioctl fs/ioctl.c:756 [inline]
-> > >   __se_sys_ioctl fs/ioctl.c:754 [inline]
-> > >   __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:754
-> > >   do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
-> > >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > >
-> > > Freed by task 9771:
-> > >   save_stack+0x23/0x90 mm/kasan/common.c:71
-> > >   set_track mm/kasan/common.c:79 [inline]
-> > >   kasan_set_free_info mm/kasan/common.c:334 [inline]
-> > >   __kasan_slab_free+0x102/0x150 mm/kasan/common.c:473
-> > >   kasan_slab_free+0xe/0x10 mm/kasan/common.c:482
-> > >   __cache_free mm/slab.c:3426 [inline]
-> > >   kfree+0x10a/0x2c0 mm/slab.c:3757
-> > >   tomoyo_init_log+0x15c1/0x2070 security/tomoyo/audit.c:294
-> > >   tomoyo_supervisor+0x33f/0xef0 security/tomoyo/common.c:2095
-> > >   tomoyo_audit_env_log security/tomoyo/environ.c:36 [inline]
-> > >   tomoyo_env_perm+0x18e/0x210 security/tomoyo/environ.c:63
-> > >   tomoyo_environ security/tomoyo/domain.c:670 [inline]
-> > >   tomoyo_find_next_domain+0x1354/0x1f6c security/tomoyo/domain.c:876
-> > >   tomoyo_bprm_check_security security/tomoyo/tomoyo.c:107 [inline]
-> > >   tomoyo_bprm_check_security+0x124/0x1a0 security/tomoyo/tomoyo.c:97
-> > >   security_bprm_check+0x63/0xb0 security/security.c:784
-> > >   search_binary_handler+0x71/0x570 fs/exec.c:1645
-> > >   exec_binprm fs/exec.c:1701 [inline]
-> > >   __do_execve_file.isra.0+0x1329/0x22b0 fs/exec.c:1821
-> > >   do_execveat_common fs/exec.c:1867 [inline]
-> > >   do_execve fs/exec.c:1884 [inline]
-> > >   __do_sys_execve fs/exec.c:1960 [inline]
-> > >   __se_sys_execve fs/exec.c:1955 [inline]
-> > >   __x64_sys_execve+0x8f/0xc0 fs/exec.c:1955
-> > >   do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
-> > >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > >
-> > > The buggy address belongs to the object at ffff888094b0a000
-> > >   which belongs to the cache kmalloc-4k of size 4096
-> > > The buggy address is located 2576 bytes inside of
-> > >   4096-byte region [ffff888094b0a000, ffff888094b0b000)
-> > > The buggy address belongs to the page:
-> > > page:ffffea000252c280 refcount:1 mapcount:0 mapping:ffff8880aa402000
-> > > index:0x0 compound_mapcount: 0
-> > > raw: 00fffe0000010200 ffffea0002a3ae08 ffffea0002a6aa88 ffff8880aa402000
-> > > raw: 0000000000000000 ffff888094b0a000 0000000100000001 0000000000000000
-> > > page dumped because: kasan: bad access detected
-> > >
-> > > Memory state around the buggy address:
-> > >   ffff888094b0a900: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >   ffff888094b0a980: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > > ffff888094b0aa00: 00 00 fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > >                           ^
-> > >   ffff888094b0aa80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > >   ffff888094b0ab00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > > ==================================================================
-> > >
-> > >
-> > > ---
-> > > This bug is generated by a bot. It may contain errors.
-> > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > >
-> > > syzbot will keep track of this bug report. See:
-> > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > syzbot can test patches for this bug, for details see:
-> > > https://goo.gl/tpsmEJ#testing-patches
+Contact person Mrs. Alan Ude
+Dir. MONEY GRAM Service,Benin
+Phone number: +229 98856728
+E-mail: moneygram.1820@outlook.fr
 
+Ask him to give you the complete mtcn, sender name, question and
+answer to enable you
+pick up the $5000.00 sent today,
+Also you are instructed to re-confirm your information's
+to Mrs.Alan Ude as listed below to avoid wrong transactions.
 
+(1Your Full name:............................................
+(2 Phone number.....................................................
+(3 Contact address:.....................................
+(4 Age:..................................................................
+(5 Country..............................................
+(6) Sex .................................................................
+(7) your occupation...........................................
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+(8)Passport/By Attach or Drivers License Number:
+Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
+Note please: I have paid service fees for you but the only money you
+are required
+to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
+pick up your transfer today.
+
+Send it to via Money Gram
+Receiver's Name-----Alan Ude
+Country----------Benin
+Address-----------Cotonou
+Quest--------Honest
+Ans-----------Trust
+
+I done all my best for you to receive your transfer now ok.
+We need your urgent reply
+Best Regards
+Rev.Dr Emmanuel Okoye
+CEO Ecobank-benin
+
+If we did not receive it urgent from you today,
+I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
+representative.
