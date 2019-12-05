@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F521143D1
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 Dec 2019 16:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6753C114498
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Dec 2019 17:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729022AbfLEPlQ (ORCPT
+        id S1729656AbfLEQPo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 5 Dec 2019 10:41:16 -0500
-Received: from mga18.intel.com ([134.134.136.126]:17497 "EHLO mga18.intel.com"
+        Thu, 5 Dec 2019 11:15:44 -0500
+Received: from mga14.intel.com ([192.55.52.115]:65475 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726028AbfLEPlQ (ORCPT
+        id S1729290AbfLEQPo (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 5 Dec 2019 10:41:16 -0500
+        Thu, 5 Dec 2019 11:15:44 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Dec 2019 07:41:14 -0800
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Dec 2019 08:15:43 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,281,1571727600"; 
-   d="scan'208";a="214212412"
+   d="scan'208";a="205816133"
 Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 05 Dec 2019 07:41:14 -0800
+  by orsmga008.jf.intel.com with ESMTP; 05 Dec 2019 08:15:43 -0800
 Received: from [10.125.252.254] (abudanko-mobl.ccr.corp.intel.com [10.125.252.254])
-        by linux.intel.com (Postfix) with ESMTP id 7E83C580418;
-        Thu,  5 Dec 2019 07:41:09 -0800 (PST)
+        by linux.intel.com (Postfix) with ESMTP id 145AD5804A0;
+        Thu,  5 Dec 2019 08:15:39 -0800 (PST)
 From:   Alexey Budankov <alexey.budankov@linux.intel.com>
 Subject: [PATCH v1 0/3] Introduce CAP_SYS_PERFMON capability for secure Perf
  users groups
@@ -39,10 +39,10 @@ Cc:     Jiri Olsa <jolsa@redhat.com>, Andi Kleen <ak@linux.intel.com>,
         Stephane Eranian <eranian@google.com>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel-owner@vger.kernel.org
+        linux-kernel <linux-kernel@vger.kernel.org>
 Organization: Intel Corp.
-Message-ID: <a5c64571-64a8-eace-dc3c-36283dda4af6@linux.intel.com>
-Date:   Thu, 5 Dec 2019 18:41:08 +0300
+Message-ID: <283f09a5-33bd-eac3-bdfd-83d775045bf9@linux.intel.com>
+Date:   Thu, 5 Dec 2019 19:15:38 +0300
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.1
 MIME-Version: 1.0
