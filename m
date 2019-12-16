@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D75E112111B
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Dec 2019 18:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C06121164
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Dec 2019 18:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbfLPRIr (ORCPT
+        id S1726191AbfLPRMO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 16 Dec 2019 12:08:47 -0500
-Received: from mga14.intel.com ([192.55.52.115]:59257 "EHLO mga14.intel.com"
+        Mon, 16 Dec 2019 12:12:14 -0500
+Received: from mga17.intel.com ([192.55.52.151]:35213 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727788AbfLPRIm (ORCPT
+        id S1726368AbfLPRMO (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 16 Dec 2019 12:08:42 -0500
+        Mon, 16 Dec 2019 12:12:14 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 08:33:58 -0800
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 09:12:13 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,322,1571727600"; 
-   d="scan'208";a="240090657"
+   d="scan'208";a="415144339"
 Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Dec 2019 08:33:57 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 16 Dec 2019 09:12:12 -0800
 Received: from [10.251.95.214] (abudanko-mobl.ccr.corp.intel.com [10.251.95.214])
-        by linux.intel.com (Postfix) with ESMTP id 52C38580458;
-        Mon, 16 Dec 2019 08:33:49 -0800 (PST)
+        by linux.intel.com (Postfix) with ESMTP id 30029580342;
+        Mon, 16 Dec 2019 09:12:03 -0800 (PST)
 Subject: Re: [PATCH v2 2/7] perf/core: open access for CAP_SYS_PERFMON
  privileged process
 To:     "Lubashev, Igor" <ilubashe@akamai.com>,
@@ -65,8 +65,8 @@ References: <26101427-c0a3-db9f-39e9-9e5f4ddd009c@linux.intel.com>
  <9316a1ab21f6441eb2b421acb818a2a1@ustx2ex-dag1mb6.msg.corp.akamai.com>
 From:   Alexey Budankov <alexey.budankov@linux.intel.com>
 Organization: Intel Corp.
-Message-ID: <3f2ac76c-6108-7769-4b99-a7a2da31af3d@linux.intel.com>
-Date:   Mon, 16 Dec 2019 19:33:48 +0300
+Message-ID: <c471a28b-6620-9b0a-4b6e-43f4956202cd@linux.intel.com>
+Date:   Mon, 16 Dec 2019 20:12:02 +0300
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.1
 MIME-Version: 1.0
@@ -77,6 +77,7 @@ Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
+
 
 On 16.12.2019 19:12, Lubashev, Igor wrote:
 > On Mon, Dec 16, 2019 at 2:15 AM, Alexey Budankov <alexey.budankov@linux.intel.com> wrote:
@@ -133,10 +134,9 @@ On 16.12.2019 19:12, Lubashev, Igor wrote:
 > 
 > I see a lot of "(capable(CAP_SYS_PERFMON) || capable(CAP_SYS_ADMIN)" constructs now.  Maybe wrapping it in an " inline bool perfmon_capable()" defined somewhere (like in /include/linux/capability.h)?
 
-Yes, it makes sense.
+Sounds reasonable, thanks!
 
-Thanks,
-Alexey
+~Alexey
 
 > 
 > - Igor
