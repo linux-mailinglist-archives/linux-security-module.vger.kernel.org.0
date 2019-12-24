@@ -2,59 +2,101 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89353129F63
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Dec 2019 09:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86DE12A2FC
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Dec 2019 16:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726264AbfLXIrO (ORCPT
+        id S1726178AbfLXPf3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 24 Dec 2019 03:47:14 -0500
-Received: from mail-qv1-f68.google.com ([209.85.219.68]:44168 "EHLO
-        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726193AbfLXIrN (ORCPT
+        Tue, 24 Dec 2019 10:35:29 -0500
+Received: from mail-qv1-f67.google.com ([209.85.219.67]:39988 "EHLO
+        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726168AbfLXPf3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 24 Dec 2019 03:47:13 -0500
-Received: by mail-qv1-f68.google.com with SMTP id n8so7236709qvg.11
-        for <linux-security-module@vger.kernel.org>; Tue, 24 Dec 2019 00:47:12 -0800 (PST)
+        Tue, 24 Dec 2019 10:35:29 -0500
+Received: by mail-qv1-f67.google.com with SMTP id dp13so7571823qvb.7;
+        Tue, 24 Dec 2019 07:35:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=PQC8SYLCXx+8aDuDCLCwJgk2oQh3fLzHmMXwhB5xY3bef3Vo9nrhk4Yg6HHmflz15A
-         odr7sEsXszk5IefLinD2h+1zq4e88FBObg36SZAuPRqSewet3Ta9S7nYrpgVd56Fd7Nn
-         pF4UOpFqHS/vFlCYHvNiKKET749oMuh6ba4SGm84XHPjlJH1jZ6bNkVeqECOxLVvUm4D
-         QLX5/qOjMF+sSc2kOy8uf2Xg/YtEl3CfJAdSFbQYNBLHe5VpSisBe2Vhsy7I7HtuscWQ
-         RrXf3skZb21QSlq2mtaYGqsirOIfAXY2wSc5lCy61V/R0NEOho5Faf+a1vRLR5TL05Tc
-         J2BQ==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=24Mou9rUEJOpcYmYKS0Hm/+2PJ8APwN2cqEy3AtA8oM=;
+        b=Lnio4XvLe4Jy8BQW1CAkxzUqavo6W+k6TFl0+FA0Q33WAWTOLQI8ov1IAFnVyxL5tq
+         AFNog7IaeeK54CVJME3kGDxLzWCs9TlX590QO6MGiwznpdAtIqQ04JmPxMC7y4uZKTEp
+         3NHH0RyGaeiX6ZfSl6GhtmwMSlzR6sIzaTbUFGkzV4fs5DLGHOeiahNWQ7pkyIiO8YFX
+         pDTGBDC+HHEt2xTilsnPC4x0g8WijHN4d5CbuGcP4WzykWFhkg57krXotZyhRz20MXdk
+         8aKyHqVp8bSHD8KUDdasPijse2MoQCmAOSpK/me/7Xsu8IdzyEFvciWvwx9IZKtl57q6
+         atdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=U14bPsT1k7apHMEngORbj/BVs70ssi7WWt0/qXFu0m0/kwjMqiOaiDBynRv6SyrfL0
-         NdxJMXKLTwqfO34ELiOf1Pf8zfv/2kbljdh7TwPajIXAruoJac7P0AonCZyFPf4NhEHC
-         zz7/K94BNUc6hbpJRW0OmPqJW8hI4Xd0m4bRnCxT0gtdhf/U3FS99AuJR3oD45jvaOVV
-         nVGaSeWD1rQsPnMCY40u6cQzwb+QAgkLrv6XUtFLz7pVa8ArZLaCXJFHnXvtmYobKCwR
-         TX7lhIuryrrYDAeHa7gbNnN6EJXH1A1dKWjyweYauVWdlpQ/IXQXlxmG4TvVooQnEVP9
-         S1sA==
-X-Gm-Message-State: APjAAAVZGy1w3V5uSv96186yuyme5Dhb2hkkYW0X8od31QLcNp5YISwn
-        wm/1OmKthEbrG9spODOKKwasVytZAhvQuFsx+bY=
-X-Google-Smtp-Source: APXvYqzaLbNYw7chXTk9TUUPs6B60DWqUF5k2s4P095bxLhv0swSj+2PMPeIkcEn8uNvF34hBR2yK95ka1103zSo7Q4=
-X-Received: by 2002:a0c:f24a:: with SMTP id z10mr28100861qvl.33.1577177231005;
- Tue, 24 Dec 2019 00:47:11 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 00:47:10
- -0800 (PST)
-Reply-To: bethnatividad9@gmail.com
-From:   Beth Nat <anthonymoore105@gmail.com>
-Date:   Tue, 24 Dec 2019 08:47:10 +0000
-Message-ID: <CAKqrdYCjdg7tKr1Bgbtcoo-HGDCypDL8xnV8R2ZpiJxfRimm-A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=24Mou9rUEJOpcYmYKS0Hm/+2PJ8APwN2cqEy3AtA8oM=;
+        b=NeecQjOY5VDIsP2TlLmVMGETXQaXPRc6zM0uLzGZH2kXH5TEjcalhnC7aTPw1eAqx5
+         E4qPy9zUK2Ge67NkHH1+ldXrUF9PCqJ/29DGA38nT4g19EknBpmB/uq7Q10/wto1U3MV
+         jVkZko6KOJ0FHAeIRLF/tsD9EHvKdXA7Hc23rw13x+3M+aqIrNBmDUfQNbAzRKbwH3kw
+         ptcFljKMPKl8VJTpjmkChnNDJ3kLMWYM6yHdASOpvtV7+QAJxRjw1Jkt0aQ0gB76/Cug
+         ab9xLWTATIM1rtOLSkLi9kQ5is4SFT16JqHmQ5miAnzEUF+nvXA1sZZHV1bhHyVr4NvN
+         /RQg==
+X-Gm-Message-State: APjAAAWsi+jYan/Dn4fxcV3BULH55qBefOJXuc/NF9N7TbM4i4t6b9Ij
+        nAvrxE8nExtdQq+KoCUy5oE=
+X-Google-Smtp-Source: APXvYqzbxxJxY0BT4hrLYTEkyPoRqSgjX3ZZrSZXSNxN9WfjJts0mH5/vQd/T6nEQuCdMtTBiH3lfQ==
+X-Received: by 2002:a0c:e80e:: with SMTP id y14mr29392065qvn.139.1577201726654;
+        Tue, 24 Dec 2019 07:35:26 -0800 (PST)
+Received: from localhost.localdomain (pool-100-37-119-75.nycmny.fios.verizon.net. [100.37.119.75])
+        by smtp.gmail.com with ESMTPSA id 65sm3689290qtf.95.2019.12.24.07.35.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Dec 2019 07:35:25 -0800 (PST)
+Message-ID: <f2bc130034b6e1ca66c3f18dfa3a4fa68fcbc82a.camel@gmail.com>
+Subject: Re: [PATCH v1 - RFC] ima: export the measurement list when needed
+From:   david.safford@gmail.com
+To:     Janne Karhunen <janne.karhunen@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Ken Goldman <kgold@linux.ibm.com>, monty.wiseman@ge.com
+Date:   Tue, 24 Dec 2019 10:35:24 -0500
+In-Reply-To: <CAE=NcrZUyLe1Ftk5wOuEMJBPnw+DBx9LACbk1JPJcpg8VdDiJQ@mail.gmail.com>
+References: <20191220074929.8191-1-janne.karhunen@gmail.com>
+         <1576850665.5241.52.camel@linux.ibm.com>
+         <CAE=NcrZUyLe1Ftk5wOuEMJBPnw+DBx9LACbk1JPJcpg8VdDiJQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.2 (3.34.2-1.fc31) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-How are you today my dear? i saw your profile and it interests me, i
-am a Military nurse from USA. Can we be friend? I want to know more
-about you.
+On Sat, 2019-12-21 at 12:41 +0200, Janne Karhunen wrote:
+> On Fri, Dec 20, 2019 at 4:04 PM Mimi Zohar <zohar@linux.ibm.com>
+> wrote:
+> 
+> > Should the kernel be involved in writing the IMA measurement list
+> > to a
+> > file or, as Dave suggested, this should be delegated to a userspace
+> > application?
+> 
+> That is a good question. I went this way as it did not feel right to
+> me that the kernel would depend on periodic, reliable userspace
+> functionality to stay running (we would have a circular dependency).
+> The thing is, once the kernel starts to run low on memory, it may
+> kill
+> that periodic daemon flushing the data for reasons unrelated to IMA.
+> 
+
+I'm happy with either way (kernel writing, or userspace reading) the
+data, but with the v1 patch, there is no way for userspace to force
+that the list be flushed - it only flushes on full. I think it is 
+important for userspace to be able to trigger a flush, such as just
+prior to a kexec, or prior to an attestation. 
+
+Perhaps you could simply remove the length test in ima_export_list(),
+and export anytime the filename is provided? This could simplify
+attestation clients, which could ask for different files each time
+(list.1, list.2...), for automatic log maintenance. Since the template
+format does not have sequence numbers, this would also help keep
+track which records have already been seen.
+
+dave
+
+
