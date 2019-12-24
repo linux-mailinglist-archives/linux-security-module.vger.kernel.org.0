@@ -2,133 +2,59 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B646129E42
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Dec 2019 07:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89353129F63
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Dec 2019 09:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbfLXGwA (ORCPT
+        id S1726264AbfLXIrO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 24 Dec 2019 01:52:00 -0500
-Received: from mail-qv1-f68.google.com ([209.85.219.68]:41505 "EHLO
+        Tue, 24 Dec 2019 03:47:14 -0500
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:44168 "EHLO
         mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbfLXGwA (ORCPT
+        with ESMTP id S1726193AbfLXIrN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 24 Dec 2019 01:52:00 -0500
-Received: by mail-qv1-f68.google.com with SMTP id x1so7165943qvr.8;
-        Mon, 23 Dec 2019 22:52:00 -0800 (PST)
+        Tue, 24 Dec 2019 03:47:13 -0500
+Received: by mail-qv1-f68.google.com with SMTP id n8so7236709qvg.11
+        for <linux-security-module@vger.kernel.org>; Tue, 24 Dec 2019 00:47:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2FiFs5c//TsPMpAtCEnFYceuoC6j/d/tXyUmG5GN0MI=;
-        b=RJSWRglUT8sjanJ6gOTOiSGTeN28TU8bhPDg44fzSvrbSNTeNQRCUltg6gXVCJHEDB
-         PaXMWRk/kd6CVUfS6bhL35GSDTFn/z6xiZ69kqT9Bt31JBELPNbiesGmrBRltEmqyFwl
-         GnGbPAhIyrWIgiPc5aBj5wGk1tSEdmLJklHE09mY7q4tDCFo8vZ2xgO8gxwEoaT4Q0Ac
-         6THgzf1HXYVM4KtKNVsbpCSyKLJ38MppiqgMvx69i57kSm2PLglHyDWfU/LR+QhXfjfN
-         UA/UL7xVLxA9yNDGkexyv5Gm+77k807l8sYR9/95dX2GKG8HhWaF5GD8khF2605AsSRu
-         HKTQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=PQC8SYLCXx+8aDuDCLCwJgk2oQh3fLzHmMXwhB5xY3bef3Vo9nrhk4Yg6HHmflz15A
+         odr7sEsXszk5IefLinD2h+1zq4e88FBObg36SZAuPRqSewet3Ta9S7nYrpgVd56Fd7Nn
+         pF4UOpFqHS/vFlCYHvNiKKET749oMuh6ba4SGm84XHPjlJH1jZ6bNkVeqECOxLVvUm4D
+         QLX5/qOjMF+sSc2kOy8uf2Xg/YtEl3CfJAdSFbQYNBLHe5VpSisBe2Vhsy7I7HtuscWQ
+         RrXf3skZb21QSlq2mtaYGqsirOIfAXY2wSc5lCy61V/R0NEOho5Faf+a1vRLR5TL05Tc
+         J2BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2FiFs5c//TsPMpAtCEnFYceuoC6j/d/tXyUmG5GN0MI=;
-        b=LWfJKa6nc02uhrNt8nPSfSU8Y/AbYYsHZMDRGT4w8djfLwMCLGKZjyKkq98LXZi6Mz
-         +o+Q3a5ypV2uHbKL0XHP9g6T9lL06FTDiqepXwhCcbZZaz3LdY54E4TASe9phmrX3yBc
-         gZwH4B9KTuIhCbHgOWMlKyE4R+pOp6iFFjGj4ZjNvTs+gL1tKJx8JsnF+Tb7TzL+VVeh
-         0fPbWfhotqu9JyCsxieU0ax30RmXS/bROldCLmw8L+vDDCebXh6LqY+z36/5XDiZNlHF
-         YGvvfOyjSrY8Vio9xcEnF/zGavwzk8ltctXvU4Mc8I5g2R5FLT3ji518Fd9zAHQH1+Fc
-         HYMQ==
-X-Gm-Message-State: APjAAAWrElITEVZsjdaDx3+jSHGYHra22nP2p2zImSozBE98lEu99kfn
-        Yit3ywQAgaUWhD51ngZUvhl++TL584sVOGEMsjg=
-X-Google-Smtp-Source: APXvYqxLV+P+/PLkhwN2nIhsav78E8rWy2Nk3RBdEOJrEJa5lB2tOH8SP21hDONloLtiK778n0nM49S9sbc3W2eXjYg=
-X-Received: by 2002:a05:6214:38c:: with SMTP id l12mr27595725qvy.224.1577170319418;
- Mon, 23 Dec 2019 22:51:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=U14bPsT1k7apHMEngORbj/BVs70ssi7WWt0/qXFu0m0/kwjMqiOaiDBynRv6SyrfL0
+         NdxJMXKLTwqfO34ELiOf1Pf8zfv/2kbljdh7TwPajIXAruoJac7P0AonCZyFPf4NhEHC
+         zz7/K94BNUc6hbpJRW0OmPqJW8hI4Xd0m4bRnCxT0gtdhf/U3FS99AuJR3oD45jvaOVV
+         nVGaSeWD1rQsPnMCY40u6cQzwb+QAgkLrv6XUtFLz7pVa8ArZLaCXJFHnXvtmYobKCwR
+         TX7lhIuryrrYDAeHa7gbNnN6EJXH1A1dKWjyweYauVWdlpQ/IXQXlxmG4TvVooQnEVP9
+         S1sA==
+X-Gm-Message-State: APjAAAVZGy1w3V5uSv96186yuyme5Dhb2hkkYW0X8od31QLcNp5YISwn
+        wm/1OmKthEbrG9spODOKKwasVytZAhvQuFsx+bY=
+X-Google-Smtp-Source: APXvYqzaLbNYw7chXTk9TUUPs6B60DWqUF5k2s4P095bxLhv0swSj+2PMPeIkcEn8uNvF34hBR2yK95ka1103zSo7Q4=
+X-Received: by 2002:a0c:f24a:: with SMTP id z10mr28100861qvl.33.1577177231005;
+ Tue, 24 Dec 2019 00:47:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20191220154208.15895-1-kpsingh@chromium.org>
-In-Reply-To: <20191220154208.15895-1-kpsingh@chromium.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 23 Dec 2019 22:51:48 -0800
-Message-ID: <CAEf4BzYiUZtSJKh-UBL0jwyo6d=Cne2YtEyGU8ONykmSUSsuNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 00/13] MAC and Audit policy using eBPF (KRSI)
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-security-module@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
+Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 00:47:10
+ -0800 (PST)
+Reply-To: bethnatividad9@gmail.com
+From:   Beth Nat <anthonymoore105@gmail.com>
+Date:   Tue, 24 Dec 2019 08:47:10 +0000
+Message-ID: <CAKqrdYCjdg7tKr1Bgbtcoo-HGDCypDL8xnV8R2ZpiJxfRimm-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Dec 20, 2019 at 7:42 AM KP Singh <kpsingh@chromium.org> wrote:
->
-> From: KP Singh <kpsingh@google.com>
->
-> This patch series is a continuation of the KRSI RFC
-> (https://lore.kernel.org/bpf/20190910115527.5235-1-kpsingh@chromium.org/)
->
-
-[...]
-
-> # Usage Examples
->
-> A simple example and some documentation is included in the patchset.
->
-> In order to better illustrate the capabilities of the framework some
-> more advanced prototype code has also been published separately:
->
-> * Logging execution events (including environment variables and arguments):
-> https://github.com/sinkap/linux-krsi/blob/patch/v1/examples/samples/bpf/lsm_audit_env.c
-> * Detecting deletion of running executables:
-> https://github.com/sinkap/linux-krsi/blob/patch/v1/examples/samples/bpf/lsm_detect_exec_unlink.c
-> * Detection of writes to /proc/<pid>/mem:
-> https://github.com/sinkap/linux-krsi/blob/patch/v1/examples/samples/bpf/lsm_audit_env.c
-
-Are you planning on submitting these examples for inclusion into
-samples/bpf or selftests/bpf? It would be great to have more examples
-and we can review and suggest nicer ways to go about writing them
-(e.g., BPF skeleton and global data Alexei mentioned earlier).
-
->
-> We have updated Google's internal telemetry infrastructure and have
-> started deploying this LSM on our Linux Workstations. This gives us more
-> confidence in the real-world applications of such a system.
->
-> KP Singh (13):
->   bpf: Refactor BPF_EVENT context macros to its own header.
->   bpf: lsm: Add a skeleton and config options
->   bpf: lsm: Introduce types for eBPF based LSM
->   bpf: lsm: Allow btf_id based attachment for LSM hooks
->   tools/libbpf: Add support in libbpf for BPF_PROG_TYPE_LSM
->   bpf: lsm: Init Hooks and create files in securityfs
->   bpf: lsm: Implement attach, detach and execution.
->   bpf: lsm: Show attached program names in hook read handler.
->   bpf: lsm: Add a helper function bpf_lsm_event_output
->   bpf: lsm: Handle attachment of the same program
->   tools/libbpf: Add bpf_program__attach_lsm
->   bpf: lsm: Add selftests for BPF_PROG_TYPE_LSM
->   bpf: lsm: Add Documentation
->
-
-[...]
+How are you today my dear? i saw your profile and it interests me, i
+am a Military nurse from USA. Can we be friend? I want to know more
+about you.
