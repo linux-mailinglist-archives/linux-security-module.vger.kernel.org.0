@@ -2,118 +2,84 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7FA12A4FC
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Dec 2019 01:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8441312A6CA
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Dec 2019 09:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfLYADi (ORCPT
+        id S1726395AbfLYIdF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 24 Dec 2019 19:03:38 -0500
-Received: from sonic306-28.consmr.mail.ne1.yahoo.com ([66.163.189.90]:37905
-        "EHLO sonic306-28.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726314AbfLYADi (ORCPT
+        Wed, 25 Dec 2019 03:33:05 -0500
+Received: from mail01.vodafone.es ([217.130.24.71]:15864 "EHLO
+        mail01.vodafone.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbfLYIdF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 24 Dec 2019 19:03:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1577232216; bh=DJkcoXBN6Len1rmT8hLxo+7iFFtGC2LMsJjtLAQzYm4=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=ozV36MQy3nbURJ+vSUM4YaPcEI/J78Fw3e2eH3zwnp60j3mMWMNNpdumpibfOhl8gqP4cOsvH2DzrX8csOT7dwnrLJEm339TeMiUAoEQXuKwI5chQ49lG8yMvWoQdAp8JnXNZzaqI0JcBAVH8mj91s7H3rM2tVyH5HYPl4CGuuvOE5GYI8EBlzr/dItTGw2HSILJ9phGw17+UqllFL58AVmhPFESwVXu+z7j5PeHPu4XtiNFvObQrx7bEQVE6EDsFR+rT3aX5gi+8WoKhcR7O7TAZBE1ZqmI/0gbGK+rjncgS0Y9STMciTEFM078PQx6o2vofwNYTiqQ6kf07cbopA==
-X-YMail-OSG: IisLKjMVM1nOvtvdaOys5xFvjHyf3EjVCoAFFJOx.5H9m6RONMTKoNueE3yvQkY
- g4Jn34scv3HF5Ai5TokwvMPXvAhLfy.8gQF1S7uFbVcNtrfqwdBMNah4eb05hXnemZGPHJ4TaBz0
- nom_G68bOA160zRIi4zZZIjIcGlJGm9Z7yFVIUYMbc1uIPhqLTB9_jp20PHggikOYEjF4GU0BqJJ
- oFHHZKEGN3gWgSDD1PiPuNBRvy83dBwRYL6J.T7_tm3HMCzwydSixL2_BzxhGBzlU6w3RM99LKdx
- Q7gPu5dL3812BlEYyROGrolZedUv4xxfYn900dAoCbbJwUaAtDzGjucKLIfO8rYcVUOUJFR033xE
- 93IydRcC8Svm5XFb8U4N5Q7DXUBNQCAnab.1SInzqOrEOuSGqYeSj9n0JdYWxXNsnr8Z8L0EdyDS
- CQT429pN6.nXZgt.0BQY.anx2fAQmpcocvObxRzAnhD0kwMQkq.DQAt1j2PCpjMpMI.Jw2koAadH
- jSg4LVOpcCBbTBLFKpOop0J9b_KRYfBC_RuF78VgexGY14PcZ69ogpCEVnAVzCaVgXKN9yNw64Mt
- VlBY.9UZ1OCDagdsMN_Wh.jmfUkoHQJeGYDNfvHjitfb9wIc31HI5ATb9ZKv0yOl29LKHfLwaKkj
- Rk8xpld5gJgqe.tr0WKYHs._BWUzWzVaWQf7N4_oNsdZLaCKE9dYhXCLcI_SuRkExIgngcChbSZo
- XRy92.Et.uSrXl3O5A.Jh28qYwcdB5V7BAQ1xnynxGhC5rz3r1ZFPJJaJ9soOuK0VJtMxJawn4As
- nJ4H5soj_rWXDyVp.aBJOOE1iXlPT9ycqQ9yn7Ibw0fsxBwT6pBc8sDZFYEe85T0538mXz1mYD3d
- etPcKn2wCVsBgEjJGvct2ayk5LEEhh4cP02Yb.fcJ6frb5majJZCpdnEj_rI2Qv234FvgipYmfGH
- TkypbsCp_.F2ChPL4lO0mQyh_.S0PL9dcqVrUsRQcMmfeCSnJn_0oGIGYetP2I.LNjt_ess8Iq5Q
- dvefjoFB.wFczP0AYLNXSbf.dPewp..Dg_dvesPCx1Z9bwJOedYWAOUF1_XHDdu.hQkNrvD2to_P
- 5TCXUvRV5mMwJoImaIyyr8G6O.Y.JmldZeK56OYLvreX4UIUjRnqRd3WkxLJXTjOX6OrxJl98uIB
- zrh0ccw5fKDjZc2BeuQi_L0QoIrb_qMCNVXV7GoiX7Dvab.LAgpu8fJlmcJrCpuy6A1cKpUMc0T0
- UpZRiCFV62tkFYD83z9iw8sPIVH9yJJCcLd.VpNhtgEh9Xu9l9Y9nLWiz4O8cu9rlSQvOGiV3jnx
- ysFN_nhRu4K3R0gvNOW8VqjipNMA3NAFwHokufdx92tW72xqDqLSkJLmlr28Gx_rKZ._AXbhMvTD
- wNlzNApSbenIxwdofkF0NtBuLZlrOvHPe8a9M0ZFuedCpygYc24oSogOQ7YrQbZLBV_GxXA--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Wed, 25 Dec 2019 00:03:36 +0000
-Received: by smtp427.mail.bf1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 2faa463e998922261a55e476f3a40c8f;
-          Wed, 25 Dec 2019 00:03:33 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     casey@schaufler-ca.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH v13 25/25] AppArmor: Remove the exclusive flag
-Date:   Tue, 24 Dec 2019 15:59:39 -0800
-Message-Id: <20191224235939.7483-26-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191224235939.7483-1-casey@schaufler-ca.com>
-References: <20191224235939.7483-1-casey@schaufler-ca.com>
+        Wed, 25 Dec 2019 03:33:05 -0500
+X-Greylist: delayed 304 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Dec 2019 03:33:03 EST
+IronPort-SDR: Pc1hBoKRqziBmeq3P5Fxjfb6P9Q+q1ykDf7F69ICE1cFP1c6KwVktUNnpmJQFznlarwXIW2y10
+ Z2HN4an8S2Nw==
+IronPort-PHdr: =?us-ascii?q?9a23=3AMA0mehdAFNntY6KN940q7DUylGMj4u6mDksu8p?=
+ =?us-ascii?q?Mizoh2WeGdxcS+YB7h7PlgxGXEQZ/co6odzbaP6Oa6AzdLvszJmUtBWaQEbw?=
+ =?us-ascii?q?UCh8QSkl5oK+++Imq/EsTXaTcnFt9JTl5v8iLzG0FUHMHjew+a+SXqvnYdFR?=
+ =?us-ascii?q?rlKAV6OPn+FJLMgMSrzeCy/IDYbxlViDanbr5+MRu7oR/PusUIj4ZuJaQ8xg?=
+ =?us-ascii?q?XUqXZUZupawn9lK0iOlBjm/Mew+5Bj8yVUu/0/8sNLTLv3caclQ7FGFToqK2?=
+ =?us-ascii?q?866tHluhnFVguP+2ATUn4KnRpSAgjK9w/1U5HsuSbnrOV92S2aPcrrTbAoXD?=
+ =?us-ascii?q?mp8qlmRAP0hCoBKjU09nzchM5tg6JBuB+vqRxxw5TKbo+WKfRxcb/Sc9wBSG?=
+ =?us-ascii?q?pdXMteSzBNDp+gY4cRCecKIOZWr5P6p1sLtRawAxOjD/71xD9Sh3/22Kw60/?=
+ =?us-ascii?q?ggEQHYxgMrAtUDsGjJrNXxKKgSUP26w7PTzTjYavNZwzb96IzSfhA9v/6MWa?=
+ =?us-ascii?q?x/cdLLxkYzDQ/FlkmQpJXjMjiI1eoNq3CW4/R9We+tkWIrtg98riS1yssyhY?=
+ =?us-ascii?q?TFnIwYx1DC+C5k2og6P8e4R1R+YdO8FZtQsDyVOJVuT8M5RmFopD46yrobuZ?=
+ =?us-ascii?q?6nZCQKyIooxxrYa/GfdoiH+BPjVOKLIThmgHJpZL2yiwys8Uin1+LzTMe00F?=
+ =?us-ascii?q?FMriVbiNXDqGsN2wTS6siBVPR94l+s1SiS2w3R8O1IPE45mbbBJ5I/zbM8jJ?=
+ =?us-ascii?q?QevETbEi/zgkr2jauWdks++uiv7uTqeqnmpoKYN4BoiwHxL74hmtekDOQ9KA?=
+ =?us-ascii?q?cOXmyb9f6g1LL9+U32Xq1KgecqnaXDqJDaOdwXprSlDA9NzoYj9xG/Ai+i0N?=
+ =?us-ascii?q?QZm3kHMV1EdAucj4f3J17OPer4Dfajg1WsiTtrwvfGMaD8ApXJMHfOi6nhfb?=
+ =?us-ascii?q?lj5E5G0gYzzs5Q54hSCr4fJPL/QEjxtMbXDkxxDwvhx+fhFcU4zY4VRHiOHr?=
+ =?us-ascii?q?7cNaTerFuFzvwgLvPKZ4IPvjv5bf8/6K3UgGc9iGMaKI2glaMNaXW5AvV4Kg?=
+ =?us-ascii?q?3NZXP0mNYEEHsLoAMzV8T4j12FVDdSYzC/QvRvyCs8DdeCBM/7XIGogaCAwi?=
+ =?us-ascii?q?7zSoFLYmtHBlmXOXLhdoHCR/oIZTqbKYl5jmpXBvCaV4Y92ET250fBwL19I7?=
+ =?us-ascii?q?+M9w=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2GTKgAeHQNemCMYgtllgkQBGAEBgns?=
+ =?us-ascii?q?3GyASk0JUBnUdihKFM4N8FYYaDIFbDQEBAQEBNQIBAYRAgiIkOBMCAw0BAQU?=
+ =?us-ascii?q?BAQEBAQUEAQECEAEBAQEBCAsLBimFSkIBDAGBayKEF4EDgSyDA4JTKa0WGgK?=
+ =?us-ascii?q?FI4R1gTYBjBgaeYEHgUSCMoUCARIBbIUhBI1FIYhLYZd+gj4EljANgikBjDg?=
+ =?us-ascii?q?DglSJEacigjdVgQuBCnFNOIFyGYEdTxgNjSyOLUCBFhACT4VAh1yCMgEB?=
+X-IPAS-Result: =?us-ascii?q?A2GTKgAeHQNemCMYgtllgkQBGAEBgns3GyASk0JUBnUdi?=
+ =?us-ascii?q?hKFM4N8FYYaDIFbDQEBAQEBNQIBAYRAgiIkOBMCAw0BAQUBAQEBAQUEAQECE?=
+ =?us-ascii?q?AEBAQEBCAsLBimFSkIBDAGBayKEF4EDgSyDA4JTKa0WGgKFI4R1gTYBjBgae?=
+ =?us-ascii?q?YEHgUSCMoUCARIBbIUhBI1FIYhLYZd+gj4EljANgikBjDgDglSJEacigjdVg?=
+ =?us-ascii?q?QuBCnFNOIFyGYEdTxgNjSyOLUCBFhACT4VAh1yCMgEB?=
+X-IronPort-AV: E=Sophos;i="5.69,353,1571695200"; 
+   d="scan'208";a="298603249"
+Received: from mailrel04.vodafone.es ([217.130.24.35])
+  by mail01.vodafone.es with ESMTP; 25 Dec 2019 09:27:58 +0100
+Received: (qmail 32294 invoked from network); 25 Dec 2019 04:33:52 -0000
+Received: from unknown (HELO 192.168.1.88) (seigo@[217.217.179.17])
+          (envelope-sender <tulcidas@mail.telepac.pt>)
+          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
+          for <linux-security-module@vger.kernel.org>; 25 Dec 2019 04:33:52 -0000
+Date:   Wed, 25 Dec 2019 05:33:43 +0100 (CET)
+From:   La Primitiva <tulcidas@mail.telepac.pt>
+Reply-To: La Primitiva <laprimitivaes@zohomail.eu>
+To:     linux-security-module@vger.kernel.org
+Message-ID: <2080041.259406.1577248423654.JavaMail.javamailuser@localhost>
+Subject: Take home 750,000 Euros this end of year
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the inclusion of the "display" process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+Attn: Email User,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+You have won, you are to reply back with your name and phone number for
+claim.
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 34edfd29c32f..402a919190fd 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1112,22 +1112,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock, char **optval,
- 	return error;
- }
- 
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1231,8 +1215,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1901,7 +1883,7 @@ static int __init apparmor_init(void)
- 
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
--- 
-2.20.1
+La Primitiva
+
+
+
+
+----------------------------------------------------
+This email was sent by the shareware version of Postman Professional.
 
