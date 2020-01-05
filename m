@@ -2,107 +2,80 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5404E130554
-	for <lists+linux-security-module@lfdr.de>; Sun,  5 Jan 2020 02:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 162CB130571
+	for <lists+linux-security-module@lfdr.de>; Sun,  5 Jan 2020 02:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbgAEBT1 (ORCPT
+        id S1726264AbgAEBgw (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 4 Jan 2020 20:19:27 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:33483 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbgAEBT1 (ORCPT
+        Sat, 4 Jan 2020 20:36:52 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34574 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgAEBgw (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 4 Jan 2020 20:19:27 -0500
-Received: by mail-ot1-f68.google.com with SMTP id b18so44681727otp.0;
-        Sat, 04 Jan 2020 17:19:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rjpqbK93O/iu5o//OmgzmyGJYgPRsECTez5RhFbPj4o=;
-        b=Hqpa6/nFMt1k6Gacb/LNwp7rvTpRgL96QMH2uL2Mvi2jOAk1KerRRAvklfHVZvReYD
-         91VPWQLdhtrbwEw10Mg0bO3VH9jI7Sk9vhp4Qh8YKHQx+wU/rVwfrrzhekSIVl+GJ4MW
-         ET8Vv/SmK6dxspqTTZR8JPpr3Li1VFK8p54X3xa6ucd23uiJlW8TCvXE8h4EJMeplk7z
-         jQARTTMTedqp+AREiD/XcaUjKVk72yu90lWgxzUWoyt8c46jYSvvmZQBy7hizMz6/4rt
-         fuXdHhIkcAihhYErtRKj993KME6Ci+shJVKflL5hiAYDcJ0mTYCc3ev+GvbVkOlXerTW
-         v0cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rjpqbK93O/iu5o//OmgzmyGJYgPRsECTez5RhFbPj4o=;
-        b=rfV5sYzqAbE1a/jtkhRe4GScWpVqjIJcnpBa6gExZVb3xisD6P3HRXl/BV+e5FLVks
-         9HevBcV+8qsyFTFxGrm/eyhhC4mvQIOttdLQS3vG4qnixKdjsZYExq922uUMHvBINDTk
-         MX36mVeWL1bMJePGQpNEuIYd4XS2d529Ykv7W9QgILyNz9B9R3g5/KKu3XqSXCST2w7Z
-         WgrhV+yGg52OPveWMgs/wkTSfwuEGAAF+dpCUWYWbfFD+rtE+LUQTcX2tqYAJl8qm1fi
-         gCQ/LQIbaEjZArz+p0iD+F7l98RTT8riXJNZC0vQqS+mFVC3+/q8F50RhCprbUO7RxN9
-         6CbA==
-X-Gm-Message-State: APjAAAXZspQbUyst6OHgBluq/42CFYA1AYWR7BgCayYKjUH036+5v/yZ
-        0adEicJw8l5KZhh0W8fVVKOD1Oi8jqCtbKmStTE=
-X-Google-Smtp-Source: APXvYqwP+k+lkGBdLKIyu1Aozce9RaFYCdw7nnPyhgRnq8iNFacAvNb58GSAazI6o1ej8726b6Y9SX3w9f4jODeLw/M=
-X-Received: by 2002:a9d:6c92:: with SMTP id c18mr92355757otr.157.1578187166437;
- Sat, 04 Jan 2020 17:19:26 -0800 (PST)
+        Sat, 4 Jan 2020 20:36:52 -0500
+Received: from static-50-53-33-191.bvtn.or.frontiernet.net ([50.53.33.191] helo=[192.168.192.153])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <john.johansen@canonical.com>)
+        id 1inuqY-000172-Jo; Sun, 05 Jan 2020 01:36:50 +0000
+From:   John Johansen <john.johansen@canonical.com>
+Subject: [GIT PULL] apparmor bug fixes for v5.5-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKLM <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Organization: Canonical
+Message-ID: <cbec7335-39b8-6b7d-402b-a6dd467b492b@canonical.com>
+Date:   Sat, 4 Jan 2020 17:36:48 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-References: <20200103234725.22846-1-kpsingh@chromium.org> <F25C9071-A7A7-4221-BC49-A769E1677EE1@amacapital.net>
-In-Reply-To: <F25C9071-A7A7-4221-BC49-A769E1677EE1@amacapital.net>
-From:   Justin Capella <justincapella@gmail.com>
-Date:   Sat, 4 Jan 2020 17:19:14 -0800
-Message-ID: <CAMrEMU-8KizWmgmYHzu8B++HOyfvC-2LF4KP7ibZki_q-_JrxA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Make trampolines W^X
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        x86@kernel.org, linux-security-module@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Michael Halcrow <mhalcrow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-I'm guessing 2 pages are used to allow for different protections? Does
-only the first page's protections need to be changed? Is that
-"old_image"?
+Hi Linus,
 
-+       set_memory_nx((unsigned long)image, 1);
-+       set_memory_rw((unsigned long)image, 1);
+Can you please pull the following bug fixes for apparmor
 
-+       set_memory_ro((unsigned long)new_image, 1);
-+       set_memory_x((unsigned long)new_image, 1);
+Thanks!
 
-Because
-
-+       void *old_image =3D tr->image + ((tr->selector + 1) & 1) * PAGE_SIZ=
-E;
-+       void *new_image =3D tr->image + (tr->selector & 1) * PAGE_SIZE
+- John
 
 
-> > - Mark the memory as read-only (set_memory_ro)
-> > - Mark the memory as executable (set_memory_x)
->
-> No, thanks. There=E2=80=99s very little excuse for doing two IPI flushes =
-when one would suffice.
+The following changes since commit fd6988496e79a6a4bdb514a4655d2920209eb85d:
 
-If there were checks between these steps to verify the trampoline
-wasn't tampered with while the page was writable it would make sense
-to do so before enabling execution.
+  Linux 5.5-rc4 (2019-12-29 15:29:16 -0800)
 
-Could some of these int's be unsigned to be extra cautious?
+are available in the Git repository at:
 
-One last thought, if the extra checks are implemented, maybe comparing
-against the old image prior to setting rw would be worthwhile?
+  git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-pr-2020-01-04
+
+for you to fetch changes up to 8c62ed27a12c00e3db1c9f04bc0f272bdbb06734:
+
+  apparmor: fix aa_xattrs_match() may sleep while holding a RCU lock (2020-01-04 15:56:44 -0800)
+
+----------------------------------------------------------------
++ Bug fixes
+  - performance regression: only get a label reference if the fast
+    path check fails
+  - fix aa_xattrs_match() may sleep while holding a RCU lock
+  - fix bind mounts aborting with -ENOMEM
+
+----------------------------------------------------------------
+John Johansen (2):
+      apparmor: only get a label reference if the fast path check fails
+      apparmor: fix aa_xattrs_match() may sleep while holding a RCU lock
+
+Patrick Steinhardt (1):
+      apparmor: fix bind mounts aborting with -ENOMEM
+
+ security/apparmor/apparmorfs.c |  2 +-
+ security/apparmor/domain.c     | 82 ++++++++++++++++++++++--------------------
+ security/apparmor/file.c       | 12 ++++---
+ security/apparmor/mount.c      |  2 +-
+ security/apparmor/policy.c     |  4 +--
+ 5 files changed, 55 insertions(+), 47 deletions(-)
