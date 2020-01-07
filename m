@@ -2,79 +2,120 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 095F0132FE3
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jan 2020 20:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677B8133033
+	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jan 2020 21:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728652AbgAGTyV (ORCPT
+        id S1728364AbgAGUAC (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 7 Jan 2020 14:54:21 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:35023 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728440AbgAGTyU (ORCPT
+        Tue, 7 Jan 2020 15:00:02 -0500
+Received: from namei.org ([65.99.196.166]:55824 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728358AbgAGUAB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 7 Jan 2020 14:54:20 -0500
-Received: by mail-ed1-f66.google.com with SMTP id f8so645291edv.2
-        for <linux-security-module@vger.kernel.org>; Tue, 07 Jan 2020 11:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
-         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
-         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
-         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
-         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
-         86YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
-        b=qNVwdqJ6POcM0W82GAZ5BKd+CVD+C5657qHLTAGywLs0E+5LZ8uFJooinqGu6sxDcw
-         7Jodnz0pCHXQMRjX/qjb5LVQWc7pQcpwxTD7w4QPEOC56jIgJnn6ONdYouYFCJEqvv/A
-         VtzBzTBl0//taHxva7KsMvNjAIyhoHLOUuSHFKY9ERRcuJCeRP+F4E62s4Jc3zBlmXJG
-         ACvaXDPXBkDbc0y2eVuR1JAUrm5HIbewlAy8IqlBGlisI0Zk791r5Rnk1+QZEIQdR7ug
-         YH/HrtKxkHh7PE1CRAt64D7AH9t38nBKdtJHxuqJRbt5xeIW79qicwNOwCjbzr7WLJTy
-         VFyg==
-X-Gm-Message-State: APjAAAVnhhtlqIj+MishX231OriBmOKKdYd4S+oBIcKjaFY7xyDD5AW2
-        cPKFaUXDM8mDoVn/llV3DJPHjQ10m7CLdrPUm+0=
-X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
-X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
- Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+        Tue, 7 Jan 2020 15:00:01 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 007Jxmfk001686;
+        Tue, 7 Jan 2020 19:59:48 GMT
+Date:   Wed, 8 Jan 2020 06:59:48 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+cc:     linux-security-module@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        selinux@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        John Johansen <john.johansen@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Micah Morton <mortonm@chromium.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: Re: [PATCH 2/2] security,selinux: get rid of
+ security_delete_hooks()
+In-Reply-To: <20200107133154.588958-3-omosnace@redhat.com>
+Message-ID: <alpine.LRH.2.21.2001080653220.575@namei.org>
+References: <20200107133154.588958-1-omosnace@redhat.com> <20200107133154.588958-3-omosnace@redhat.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
- -0800 (PST)
-Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
-From:   "Dr. William Johnson" <currency1000000@gmail.com>
-Date:   Tue, 7 Jan 2020 20:54:18 +0100
-Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
-Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
- worth $15.8Million US DOLLARS now.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-ATTN Dear Beneficiary.
-Goodnews
-I have Registered your Prepaid ATM Master Card
-worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
-to you today.
-So contact Dhl office New York to receive your Prepaid ATM Master Card
-worth $15.8Million US DOLLARS now.
-Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
-Email. dhlexpresscouriercompany.nyusa@gmail.com
-Call the office +(202) 890-8752
-Rec-Confirmed your mailing address to the office as I listed below.
-Your Full Name--------------
-House Address-----------
-Your working Phone Number----------------
-ID copy-------------------------
-Sex-----------------------------
-Note,delivery fee to your address is only $50.00. send it to this
-company urgent on itunes card today so that DHL will deliver this
-Prepaid ATM Master Card to you today according to our finally
-agreement.
-Thanks for coperations,
-Dr. William Johnson
+On Tue, 7 Jan 2020, Ondrej Mosnacek wrote:
+
+> The only user is SELinux, which is hereby converted to check the
+> disabled flag in each hook instead of removing the hooks from the list.
+> 
+> The __lsm_ro_after_init macro is now removed and replaced with
+> __ro_after_init directly.
+> 
+> This fixes a race condition in SELinux runtime disable, which was
+> introduced with the switch to hook lists in b1d9e6b0646d ("LSM: Switch
+> to lists of hooks").
+> 
+> Suggested-by: Stephen Smalley <sds@tycho.nsa.gov>
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+>  include/linux/lsm_hooks.h    |  31 --
+>  security/Kconfig             |   5 -
+>  security/apparmor/lsm.c      |   6 +-
+>  security/commoncap.c         |   2 +-
+>  security/loadpin/loadpin.c   |   2 +-
+>  security/lockdown/lockdown.c |   2 +-
+>  security/security.c          |   5 +-
+>  security/selinux/Kconfig     |   6 -
+>  security/selinux/hooks.c     | 742 ++++++++++++++++++++++++++++++-----
+>  security/smack/smack_lsm.c   |   4 +-
+>  security/tomoyo/tomoyo.c     |   6 +-
+>  security/yama/yama_lsm.c     |   2 +-
+>  12 files changed, 654 insertions(+), 159 deletions(-)
+
+Please separate the changes for each LSM into separate patches (the 
+__lsm_ro_after_init removal patch can be last).
+
+>  config SECURITY_SELINUX_DEVELOP
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 47ad4db925cf..9ac2b6b69ff9 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -650,13 +650,15 @@ static int selinux_set_mnt_opts(struct super_block *sb,
+>  {
+>  	const struct cred *cred = current_cred();
+>  	struct superblock_security_struct *sbsec = sb->s_security;
+> -	struct dentry *root = sbsec->sb->s_root;
+>  	struct selinux_mnt_opts *opts = mnt_opts;
+
+Seems like there are a bunch of unrelated cleanups mixed in here.
+
+> -	int set_fscontext =	(oldsbsec->flags & FSCONTEXT_MNT);
+> -	int set_context =	(oldsbsec->flags & CONTEXT_MNT);
+> -	int set_rootcontext =	(oldsbsec->flags & ROOTCONTEXT_MNT);
+> +	set_fscontext =		(oldsbsec->flags & FSCONTEXT_MNT);
+> +	set_context =		(oldsbsec->flags & CONTEXT_MNT);
+> +	set_rootcontext =	(oldsbsec->flags & ROOTCONTEXT_MNT);
+>  
+
+...
+
+>  static int selinux_binder_set_context_mgr(struct task_struct *mgr)
+>  {
+> -	u32 mysid = current_sid();
+> -	u32 mgrsid = task_sid(mgr);
+> +	if (selinux_disabled(&selinux_state))
+> +		return 0;
+>  
+>  	return avc_has_perm(&selinux_state,
+> -			    mysid, mgrsid, SECCLASS_BINDER,
+> +			    current_sid(), task_sid(mgr), SECCLASS_BINDER,
+>  			    BINDER__SET_CONTEXT_MGR, NULL);
+>  }
+>  
+
+Ditto, etc.
+
+Please don't do this.
+
+
+-- 
+James Morris
+<jmorris@namei.org>
+
