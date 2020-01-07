@@ -2,21 +2,21 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4491334B1
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jan 2020 22:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932321334D7
+	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jan 2020 22:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728274AbgAGV1a (ORCPT
+        id S1727197AbgAGV3J (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 7 Jan 2020 16:27:30 -0500
-Received: from namei.org ([65.99.196.166]:55932 "EHLO namei.org"
+        Tue, 7 Jan 2020 16:29:09 -0500
+Received: from namei.org ([65.99.196.166]:55964 "EHLO namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728090AbgAGV13 (ORCPT
+        id S1726820AbgAGV3J (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:27:29 -0500
+        Tue, 7 Jan 2020 16:29:09 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 007LR08Z015152;
-        Tue, 7 Jan 2020 21:27:00 GMT
-Date:   Wed, 8 Jan 2020 08:27:00 +1100 (AEDT)
+        by namei.org (8.14.4/8.14.4) with ESMTP id 007LS3RZ015407;
+        Tue, 7 Jan 2020 21:28:03 GMT
+Date:   Wed, 8 Jan 2020 08:28:03 +1100 (AEDT)
 From:   James Morris <jmorris@namei.org>
 To:     KP Singh <kpsingh@chromium.org>
 cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
@@ -44,11 +44,11 @@ cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         Stanislav Fomichev <sdf@google.com>,
         Quentin Monnet <quentin.monnet@netronome.com>,
         Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: Re: [PATCH bpf-next v1 07/13] bpf: lsm: Implement attach, detach
- and execution.
-In-Reply-To: <20191220154208.15895-8-kpsingh@chromium.org>
-Message-ID: <alpine.LRH.2.21.2001080824240.9683@namei.org>
-References: <20191220154208.15895-1-kpsingh@chromium.org> <20191220154208.15895-8-kpsingh@chromium.org>
+Subject: Re: [PATCH bpf-next v1 08/13] bpf: lsm: Show attached program names
+ in hook read handler.
+In-Reply-To: <20191220154208.15895-9-kpsingh@chromium.org>
+Message-ID: <alpine.LRH.2.21.2001080827480.9683@namei.org>
+References: <20191220154208.15895-1-kpsingh@chromium.org> <20191220154208.15895-9-kpsingh@chromium.org>
 User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,13 +58,15 @@ List-ID: <linux-security-module.vger.kernel.org>
 
 On Fri, 20 Dec 2019, KP Singh wrote:
 
->  
-> -	h_dentry = securityfs_create_file(h->name, 0600, parent,
-> -			NULL, &hook_ops);
-> +	h_dentry = securityfs_create_file(h->name, 0600,
-> +					  parent, NULL, &hook_ops);
-
-Minor thing to fix for the next version.
+> From: KP Singh <kpsingh@google.com>
+> 
+> For inspectability the system administrator should be able to view the
+> list of active KRSI programs:
+> 
+>    bash # cat /sys/kernel/security/bpf/bprm_check_security
+>    bpf_prog1
+> 
+> Signed-off-by: KP Singh <kpsingh@google.com>
 
 
 Reviewed-by: James Morris <jamorris@linux.microsoft.com>
