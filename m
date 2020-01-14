@@ -2,65 +2,86 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB40A1395B6
-	for <lists+linux-security-module@lfdr.de>; Mon, 13 Jan 2020 17:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F076A139F6A
+	for <lists+linux-security-module@lfdr.de>; Tue, 14 Jan 2020 03:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728831AbgAMQWX (ORCPT
+        id S1729211AbgANCTJ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 13 Jan 2020 11:22:23 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:33498 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728824AbgAMQWX (ORCPT
+        Mon, 13 Jan 2020 21:19:09 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38737 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728931AbgANCTI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 13 Jan 2020 11:22:23 -0500
-Received: by mail-oi1-f196.google.com with SMTP id v140so8805127oie.0
-        for <linux-security-module@vger.kernel.org>; Mon, 13 Jan 2020 08:22:22 -0800 (PST)
+        Mon, 13 Jan 2020 21:19:08 -0500
+Received: by mail-pl1-f193.google.com with SMTP id f20so4591905plj.5
+        for <linux-security-module@vger.kernel.org>; Mon, 13 Jan 2020 18:19:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=XpTxTKPtBT+Nqvx/G+T/EX/Ex7qtAtXUan1F+Ou5AaU=;
-        b=jew6pjB115uflGMdVoUhrQfGirNScNaByLv6zEM0QkiS1fkVURN1uoaqu+QvIRlLwE
-         tJLjdEWE6AmqtrD055UYcZ3iNyZak6BoFpS9C/zPQ+DL94Sgg3QeITM7g1syBjlnaFSa
-         blOAFjBZ7erzl4iqiBY0MhhuFgbNaEbFY7Ov5KEvfBOPTTFjckCH3PPfOxwMprWXK8/f
-         AajuP5gwvLLtAuPaMoS7PSe5CRJUBU6nTnk5NlTeKtO/b99GB+ZCtXzyCDZ11n0f5vHP
-         MfY7N9fj9z6QhV+dvfLayGRGU6/pQTgka5Yl2S+p/mUuZMUf3hnxLF5KKgb6gqj1zj9b
-         uBEQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I7aN7Y1nzik1KbsNshiwY6nugyBpWzW8lv7vF97PZQM=;
+        b=C5RRpqXMfZpMtG14RRkraQFn1Sb5pbDBSB3Cb3uaNQfi/0xa0jM56TSKBtGYYLNo6n
+         tWVPwTFEsCdF+47l7vtn4Fr1RnA6OJhuyLBDUrjWxQQ45xqZS4KPsPekcWf7md5BWqqN
+         y4mtINZx/zEAi+nLD+ji9BLOfL2uI46y8ZAOK7cfFJuLd4mjK04x4Ln4RILVBD7LUPxu
+         67aj+1E82N427JNXgL467Ozglj20XYvWOSxrkp7QD/dF1/C6tlpKrtB0oay4HWoY6h1l
+         6powEnAq0H5y3mvCQXt1bNGGmpkQwichArkoOF08BCpu76t8xY9MMH04iAcDzbD1ZFQ0
+         +4oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=XpTxTKPtBT+Nqvx/G+T/EX/Ex7qtAtXUan1F+Ou5AaU=;
-        b=AZreG4Mapptr3FEYa+S2kBKDelEPmxWome/FeKLXDY3Xb3bCzIg0bvbg2gtg9l4syD
-         VJfUWmzeUuhhxka97ZCgKXtQ+8zIP74gcRUf5DziQRH/WYbgLVK2VZIlSoeuerNCAIda
-         sB87nAATdKZt6ijh+W59+pP51IdXVIbivMqwXpJMVNKxHAlNSTQiMq63g1vdiBYJq3yT
-         E9k2yYYw8XBjpGMyiHYaYtkhTLED2LRlMFHxcQaP4XXW2hUsuLYz31eq7pikdVJeNQCY
-         aNrnRPBxwcjZVR5XWcUPxb0mYsEk7qR8PEYQGkmnJKTplCFafQKv9pX5JmK7yQ7uxk71
-         j+9g==
-X-Gm-Message-State: APjAAAUNeiXn4UhJI8Pz+0D9Hmo4Y4X+ApO+ZXONgCYld04HseySFR0r
-        2hD46F2OMZUGwFkbF5jVm3YcLBPy7WHwLciK3WM=
-X-Google-Smtp-Source: APXvYqwt6uDw9SA1bDGFDNtFHAigN4CWes3zwYK3cP5+KqtCtR7MLre5a2X7pO1Ibb3UgL9gSCmEpHw26cI3sA1/GhA=
-X-Received: by 2002:a05:6808:6c5:: with SMTP id m5mr12576279oih.106.1578932542720;
- Mon, 13 Jan 2020 08:22:22 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I7aN7Y1nzik1KbsNshiwY6nugyBpWzW8lv7vF97PZQM=;
+        b=sgNipvlmYJjECcA/dDyXEtKwEcyOuzTIWr2EUC2iulBRlWS2nHbR+IXlgjMx+hvLTM
+         z2FmFdLuBz1CeUUERrQWT1Lbf25P/LMrsczBqN9EmsdHNGkeNlnqrMFCI3yaosp6LVKh
+         xcEZieGAxN4fg2oSd/SF9i2t4HgnBZmOCe5BhcSkY1gkXcKz+FHDmCrmLA43bME5Xg12
+         mz0h8qHy3/OyWI0a/iUZT8j0ADW4Fk1zW9kJr0PRbUp7xWUVUJJwE7nJc6KUyzALyQPJ
+         cM/GklkZ9kfJn0i0VQCajN1cX4Fx74caUf4SfbE29yr6zbnutAE8MURWQ8poge7AM6uF
+         7M7w==
+X-Gm-Message-State: APjAAAXagpVO3Zz415GS1pFa3aAui03d7uSOu6fFJPQGLQ83imFriu66
+        E+e3JGNd5V9KnvZlN2LN4fl6Ww6+rsVaM2gvmnZfxA==
+X-Google-Smtp-Source: APXvYqz+9AZOJJpTU34QiSXSYDhA2HUFGP93xod3rAKylUqbvfH/Pmt8P197RInxMERv7NI/gqMqrsXBuTOaZAiTkLM=
+X-Received: by 2002:a17:902:fe8d:: with SMTP id x13mr17804616plm.232.1578968347761;
+ Mon, 13 Jan 2020 18:19:07 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a9d:6491:0:0:0:0:0 with HTTP; Mon, 13 Jan 2020 08:22:22
- -0800 (PST)
-Reply-To: miraclegod913@gmail.com
-In-Reply-To: <CAO5FVPc19H+2mL5z9yHM+W=dEoRnUySty_+QN577u_Kk21ZXMQ@mail.gmail.com>
-References: <CAO5FVPeEU2cUcYkfZVKYcy_CR1G63=-FGEKD07hsS+bkKGbBEg@mail.gmail.com>
- <CAO5FVPc19H+2mL5z9yHM+W=dEoRnUySty_+QN577u_Kk21ZXMQ@mail.gmail.com>
-From:   Christy Ruth Walton <miraclegod13@gmail.com>
-Date:   Mon, 13 Jan 2020 08:22:22 -0800
-Message-ID: <CAO5FVPd8ApE+f_B9rES7MSKztmq-EViN3Uiog62=L55tVLBxnQ@mail.gmail.com>
-Subject: Fwd: Christy from America.
-To:     undisclosed-recipients:;
+References: <1578656965-2993-1-git-send-email-alan.maguire@oracle.com> <bb27a03b-1c3d-567b-caf3-7b0e4a039f6d@linuxfoundation.org>
+In-Reply-To: <bb27a03b-1c3d-567b-caf3-7b0e4a039f6d@linuxfoundation.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 13 Jan 2020 18:18:56 -0800
+Message-ID: <CAFd5g45qfWtB9yp=MZ=79hR7Z+c7r7nsfMeofxzF0WAbzkvxag@mail.gmail.com>
+Subject: Re: [PATCH kunit] kunit: building kunit as a module breaks allmodconfig
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>, rafael@kernel.org,
+        jmorris@namei.org, serge@hallyn.com,
+        Knut Omang <knut.omang@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-I want to open Charity Foundation in your country on your behalf is it okay?
+On Fri, Jan 10, 2020 at 1:39 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> Hi Alan,
+>
+> On 1/10/20 4:49 AM, Alan Maguire wrote:
+> > kunit tests that do not support module build should depend
+> > on KUNIT=y rather than just KUNIT in Kconfig, otherwise
+> > they will trigger compilation errors for "make allmodconfig"
+> > builds.
+> >
+> > Fixes: 9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
+> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>
+> Thanks for fixing this quickly. For future reference, Signed-off-by
+> should be last. I fixed it and applied the patch.
 
-My Regards,
+Thanks everyone for taking care of this so quickly in my absence!
 
-Christy Ruth Walton from America.
+Cheers
