@@ -2,153 +2,81 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 359ED13F757
-	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jan 2020 20:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D41513F9A4
+	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jan 2020 20:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387730AbgAPTLL (ORCPT
+        id S1730323AbgAPThc (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 16 Jan 2020 14:11:11 -0500
-Received: from mail-qv1-f68.google.com ([209.85.219.68]:40069 "EHLO
-        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437423AbgAPTLK (ORCPT
+        Thu, 16 Jan 2020 14:37:32 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:33400 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729345AbgAPThc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 16 Jan 2020 14:11:10 -0500
-Received: by mail-qv1-f68.google.com with SMTP id dp13so9590853qvb.7;
-        Thu, 16 Jan 2020 11:11:08 -0800 (PST)
+        Thu, 16 Jan 2020 14:37:32 -0500
+Received: by mail-lj1-f194.google.com with SMTP id y6so23942186lji.0
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Jan 2020 11:37:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3OEZx2MjoszDi5bRMEvk6at9kqk898GlGBhsPS60YZE=;
-        b=oAu9qaet49v37A1VgP0LaeMPw44TNjd+84DuWb1JRGRrE+ukvBC3pxHmRLEd9/cHlT
-         DNiDww2RsL5wRM9Pah171TlZcCeGVVQh42LFK10TVFblyeHmSeu9P/z06XX2gy+UBiSb
-         eFJF2CJfbOD2fWQK/Wg+I79B3/+W8MA2ruE2Bo5AfdR+le6U1yjWROe0+k5Kph9vB/yR
-         3OjJu+9TPR2me7OzueGwlEqPFXT+mgE3fGrk2kgeT6DiIwyFgZHgzn2If1rs/Fk/WT//
-         q9DTjBW0P8MLUenVyMzJKX8iq/BMb9s9iIMhF+uoDtcfi9AlvQCWx5QSO/1OW4lhMcmf
-         ji8Q==
+        bh=J/6nixoSIoKE6eZ+cJNMdmi8y/6oky8cFSXcKfYMtxQ=;
+        b=lQeRJkmRDyrHLNcLnxExOdsvsc6kYdTstdedfLJdxBc2Hb3NbgtxdXq880Yfcy82zG
+         +B+Vj80m+NtyaXkPaj1oRCBWHZw+GQgQ30H1LhlD5+Kga/+5lKOt7WrVHgEFRKopB44a
+         RFWPlwiohqMayaO3MO4ek0DoQ9Ff1EfnmeIyaoDhopImoqVNumyuBCo9PDfxM1ouTBsY
+         DWUVkhfv5yaDU08IGVaS+B0+gdsSWikaE2NGLkHrZDFpqeqVJ+l8SQOT1CzlM+6bJ+Ym
+         K8Gxs5sKXmBofKEQrueCfPV/lt1FSA0dU8fbsE/pFEJOEhaTyAqPZHacl3xhe+JttXvx
+         cCxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3OEZx2MjoszDi5bRMEvk6at9kqk898GlGBhsPS60YZE=;
-        b=r8slrELBPZawiYrBSQRHUk2jaRRpAxbAoBRvlFOQtqDk0ILNHYzz1kzc+pXm17aabL
-         uY4e0FWXKVfpNMYpPZVow7VBKMe53TmgZB8RvnExEp/oSWCSFUF201Pn5uA5SIcQ7Xym
-         e9+SMpo9TX/ZPugUQblepRkL3+dS0aVoJtbm2+0Iz6C9EyajveOKayNj870XO3SxzTg1
-         MTqLlBPe8sgf4zKWkb3aOZp1YFu3XkUjfnSakapyvsv8/cEtCnmAJqaXn0yBUzbYcxdD
-         E+kTRStXAHuLLJIxYWlrwWSIItGCrzTDAJRBdfFaODoTVeDcnWRtuuirL47AHD5hL+te
-         T4GQ==
-X-Gm-Message-State: APjAAAUe6WwtDnutuLXDiuKD+UhXNpYv4j63pBzviJ3VJ3PSD3V4qqmA
-        YC/V3vtkuClR/V+PoDOxOE3IzLATFrroelbErKA=
-X-Google-Smtp-Source: APXvYqw9FIgttSCmKhfwxg+gCy9NRY9si3en5ZFJS6VWOz3YlihoKUoN8mv6ZMAfLxb1JV1nrGcclF7WKhszpNDXPE8=
-X-Received: by 2002:ad4:514e:: with SMTP id g14mr4208129qvq.196.1579201868349;
- Thu, 16 Jan 2020 11:11:08 -0800 (PST)
+        bh=J/6nixoSIoKE6eZ+cJNMdmi8y/6oky8cFSXcKfYMtxQ=;
+        b=osLx264aG+vl328/HWbLEXLWujCVHs9RQYv7LzSS8rmXPqtZm1rMBSyaQEZxsBTsDI
+         e/idg536NMeShls7SVDRLRzZaXjEBN3eOo6Uql2woMOrqzknmVBTHia0nyRc7XZo4z+l
+         r/JRq0Dz0lRpzTypK8FbP/NPhZxVCmy3cdAB2dV+vOCpV91nEicUoW6SYdHfpPDjsGmi
+         OkEd1EMnrHy7bUe4yYXy2/Ypx4VEpdQ2fcqU3GORNJMl9XfIa/EPdhy1CKoCIhr0Wy7S
+         3fMdo9duJVSb6VZGl5w/bE02ObXSaHlIRfWSrjf+vfr9BHQTRFiaYyitZm/SM6Du3Crs
+         4qLA==
+X-Gm-Message-State: APjAAAXag3txpWfBQ04JixDZuxiWS0b7vtMq+QyBKwlwVcKuJYOaj1qU
+        rEFSr1S/sNWbQFXiEfTSOArsQXnppmBwl2RyqNiY
+X-Google-Smtp-Source: APXvYqwKAWhKu2+URonvJ2ikEe5O/sYBlf20qhEgS2M6oEN/BhsztPpWGHIRzliVuWewDjHKHrmByY0zmqg+gZCZzlw=
+X-Received: by 2002:a2e:870b:: with SMTP id m11mr3313585lji.93.1579203450159;
+ Thu, 16 Jan 2020 11:37:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20200115171333.28811-1-kpsingh@chromium.org> <20200115171333.28811-9-kpsingh@chromium.org>
- <CAEf4BzZodr3LKJuM7QwD38BiEH02Cc1UbtnGpVkCJ00Mf+V_Qg@mail.gmail.com> <20200116124955.GD240584@google.com>
-In-Reply-To: <20200116124955.GD240584@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 16 Jan 2020 11:10:57 -0800
-Message-ID: <CAEf4BzYa+m0OCZXqnNsab+q3+HLboL45eRdBrGdZD+6Z4CRSiQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 08/10] tools/libbpf: Add support for BPF_PROG_TYPE_LSM
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-security-module@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+References: <20200113150331.34108-1-yehs2007@zoho.com>
+In-Reply-To: <20200113150331.34108-1-yehs2007@zoho.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 16 Jan 2020 14:37:19 -0500
+Message-ID: <CAHC9VhQTa9VcO9Yq4e36zd8ZAVNDb3_tA-uSgmH_aMX2p5QXLA@mail.gmail.com>
+Subject: Re: [PATCH v2] selinux: remove redundant selinux_nlmsg_perm
+To:     Huaisheng Ye <yehs2007@zoho.com>
+Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
+        Eric Paris <eparis@parisplace.org>,
         James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
+        Serge Hallyn <serge@hallyn.com>, tyu1@lenovo.com,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Huaisheng Ye <yehs1@lenovo.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Jan 16, 2020 at 4:49 AM KP Singh <kpsingh@chromium.org> wrote:
+On Mon, Jan 13, 2020 at 10:05 AM Huaisheng Ye <yehs2007@zoho.com> wrote:
+> From: Huaisheng Ye <yehs1@lenovo.com>
 >
-> Thanks for the review Andrii!
+> selinux_nlmsg_perm is used for only by selinux_netlink_send. Remove
+> the redundant function to simplify the code.
 >
-> I will incorporate the fixes in the next revision.
+> Fix a typo by suggestion from Stephen.
 >
-> On 15-Jan 13:19, Andrii Nakryiko wrote:
-> > On Wed, Jan 15, 2020 at 9:13 AM KP Singh <kpsingh@chromium.org> wrote:
-> > >
-> > > From: KP Singh <kpsingh@google.com>
-> > >
-> > > * Add functionality in libbpf to attach eBPF program to LSM hooks
-> > > * Lookup the index of the LSM hook in security_hook_heads and pass it in
-> > >   attr->lsm_hook_index
-> > >
-> > > Signed-off-by: KP Singh <kpsingh@google.com>
-> > > ---
-> > >  tools/lib/bpf/bpf.c      |   6 +-
-> > >  tools/lib/bpf/bpf.h      |   1 +
-> > >  tools/lib/bpf/libbpf.c   | 143 ++++++++++++++++++++++++++++++++++-----
-> > >  tools/lib/bpf/libbpf.h   |   4 ++
-> > >  tools/lib/bpf/libbpf.map |   3 +
-> > >  5 files changed, 138 insertions(+), 19 deletions(-)
-> > >
+> Signed-off-by: Huaisheng Ye <yehs1@lenovo.com>
+> Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
+> ---
+>  security/selinux/hooks.c | 73 ++++++++++++++++++++++--------------------------
+>  1 file changed, 34 insertions(+), 39 deletions(-)
 
-[...]
+Merged into selinux/next, thanks!
 
-> >
-> > > +{
-> > > +       struct btf *btf = bpf_find_kernel_btf();
-> >
-> > ok, it's probably time to do this right. Let's ensure we load kernel
-> > BTF just once, keep it inside bpf_object while we need it and then
-> > release it after successful load. We are at the point where all the
-> > new types of program is loading/releasing kernel BTF for every section
-> > and it starts to feel very wasteful.
->
-> Sure, will give it a shot in v3.
-
-thanks!
-
-[...]
-
-> >
-> > > +               if (!strcmp(btf__name_by_offset(btf, m->name_off), name))
-> > > +                       return j + 1;
-> >
-> > I looked briefly through kernel-side patch introducing lsm_hook_index,
-> > but it didn't seem to explain why this index needs to be (unnaturally)
-> > 1-based. So asking here first as I'm looking through libbpf changes?
->
-> The lsm_hook_idx is one-based as it makes it easy to validate the
-> input. If we make it zero-based it's hard to check if the user
-> intended to attach to the LSM hook at index 0 or did not set it.
-
-Think about providing FDs. 0 is a valid, though rarely
-intended/correct value. Yet we don't make all FD arguments
-artificially 1-based, right? This extra +1/-1 translation just makes
-for more confusing interface, IMO. If user "accidentally" guessed type
-signature of very first hook, well, so be it... If not, BPF verifier
-will politely refuse. Seems like enough protection.
-
->
-> We are then up to the verifier to reject the loaded program which
-> may or may not match the signature of the hook at lsm_hook_idx = 0.
->
-> I will clarify this in the commit log as well.
->
-
-[...]
+-- 
+paul moore
+www.paul-moore.com
