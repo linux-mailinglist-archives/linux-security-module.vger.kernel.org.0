@@ -2,300 +2,215 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C868146CA8
-	for <lists+linux-security-module@lfdr.de>; Thu, 23 Jan 2020 16:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0542E146D31
+	for <lists+linux-security-module@lfdr.de>; Thu, 23 Jan 2020 16:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729235AbgAWPZ2 (ORCPT
+        id S1726231AbgAWPpo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 23 Jan 2020 10:25:28 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:46607 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729094AbgAWPZ2 (ORCPT
+        Thu, 23 Jan 2020 10:45:44 -0500
+Received: from UHIL19PA37.eemsg.mail.mil ([214.24.21.196]:8243 "EHLO
+        UHIL19PA37.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728927AbgAWPpn (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 23 Jan 2020 10:25:28 -0500
-Received: by mail-pl1-f194.google.com with SMTP id y8so1471125pll.13
-        for <linux-security-module@vger.kernel.org>; Thu, 23 Jan 2020 07:25:27 -0800 (PST)
+        Thu, 23 Jan 2020 10:45:43 -0500
+X-EEMSG-check-017: 69023795|UHIL19PA37_ESA_OUT03.csd.disa.mil
+X-IronPort-AV: E=Sophos;i="5.70,354,1574121600"; 
+   d="scan'208";a="69023795"
+Received: from emsm-gh1-uea10.ncsc.mil ([214.29.60.2])
+  by UHIL19PA37.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 23 Jan 2020 15:45:39 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Pm/qlmTwoj9xBcfQ8i56kTmB4d7npYdmRJjtPZEldNU=;
-        b=iJEdOkp9cfyjO+r1ZPhPq6BQfndRotjgj/AyZ0IhQeZma1zlDm/prxLGkjAKuq+jSU
-         VztkFXcfqQkIMMMmA3H7Axqgt6SbVjtCev+ZGBxXYncrDmU/p91nVIJTSoeuAWaZGDAE
-         6+2R/e6AnUFN1R8KiKWai1QheA4mdgjx45spw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Pm/qlmTwoj9xBcfQ8i56kTmB4d7npYdmRJjtPZEldNU=;
-        b=prlqBx5obtZGcXabGyNbGblVkzjfpigwjUauwnw5NvUQsXBeOcXCIwhikt5VB+6puW
-         hjzRzsDNHeaElHtkyKHZ3jm3NyDp4SpxrkpfKHcBg6r4olc0R6vfKAHIQUBBZO2yVOG0
-         wpgAtszkvIXe7VcSDzlUqxqj0Bks9OZFXN/KKNm2Ulx6E8KH+YuuBdb4+ipiBtAr5dFB
-         41eOFq65o9krGesItD4DATlh+KtV2tZhIwncoJX9Q91IkxMzByNGf52snxZueCiNFZ1+
-         gjdK/x7m7wikKcsc7wpNqThPuVmAFjWfJ9l+A3NYiOS9IFxnSJ1iHv3YQUIJCdGY+zxQ
-         JfQQ==
-X-Gm-Message-State: APjAAAVM6eTAOX0u9D09BlPxzGnLi2pBtpHueDgHv8apbJfaQ0FHAkWa
-        Nsl94oFddbPvVYuEzCOMX9SA9w==
-X-Google-Smtp-Source: APXvYqwl+g5hqZiMHHCFU7voGkQ+34EMfRPBhV+Dei2UW4tlPjN55vZe/zGM4x3WKAYiWZHQOxQUnQ==
-X-Received: by 2002:a17:902:524:: with SMTP id 33mr17242642plf.241.1579793127216;
-        Thu, 23 Jan 2020 07:25:27 -0800 (PST)
-Received: from kpsingh-kernel.localdomain ([2a00:79e1:abc:122:bd8d:3f7b:87f7:16d1])
-        by smtp.gmail.com with ESMTPSA id v5sm3108118pfn.122.2020.01.23.07.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 07:25:26 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Brendan Jackman <jackmanb@google.com>,
-        Florent Revest <revest@google.com>,
-        Thomas Garnier <thgarnie@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Michael Halcrow <mhalcrow@google.com>,
-        Paul Turner <pjt@google.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Andrey Ignatov <rdna@fb.com>, Joe Stringer <joe@wand.net.nz>
-Subject: [PATCH bpf-next v3 10/10] bpf: lsm: Add Documentation
-Date:   Thu, 23 Jan 2020 07:24:40 -0800
-Message-Id: <20200123152440.28956-11-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200123152440.28956-1-kpsingh@chromium.org>
-References: <20200123152440.28956-1-kpsingh@chromium.org>
+  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
+  s=tycho.nsa.gov; t=1579794339; x=1611330339;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=drKQCENr0Kbe/HhOd4zAwQrBmEXx0ecJBZBdpVLXjO4=;
+  b=iDRa+VGM2A/6B+/HfdQzdiCRspv2JiHmD/3+jxPkQuky7e08PrL6bfj9
+   lv4rfSbnb8e2qDP0r0i6XWRnhy3q17o9WmmxNJTy4MbgWCGRSN0tpuPAJ
+   2N7aFpCn/cb+GA8v68g8FMSX8UhHSnT1NeJwjZaoKY9fJsrL4Wkb2rraf
+   wkq16DFF3gbU+GV/sXOG2WKSatKarjy/I548ItEcduBsnL7gRr6Qsy7pu
+   3XklsuPmbraHA6OiEmgDQ0oiTKFViOqLOoWm5U+MwHnwI5QKfbRJ6G6dk
+   oscXrbITS1K/cLpETu460juEwc4jKUDmQge+xnb91cN+v96iBqXWGDaaK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.70,354,1574121600"; 
+   d="scan'208";a="32254759"
+IronPort-PHdr: =?us-ascii?q?9a23=3ALf4G2R3ezVxBiWOusmDT+DRfVm0co7zxezQtwd?=
+ =?us-ascii?q?8ZsesUL//xwZ3uMQTl6Ol3ixeRBMOHsq4C0bCd7/6oGTRZp8rY6zZaKN0Efi?=
+ =?us-ascii?q?RGoP1epxYnDs+BBB+zB9/RRAt+Iv5/UkR49WqwK0lfFZW2TVTTpnqv8WxaQU?=
+ =?us-ascii?q?2nZkJ6KevvB4Hdkdm82fys9J3PeQVIgye2ba9vIBmsogjdq8YbjZF8JqovxR?=
+ =?us-ascii?q?fErXpFcPlSyW90OF6fhRnx6tq+8ZJ57yhcp/ct/NNcXKvneKg1UaZWByk8PW?=
+ =?us-ascii?q?Av483ruxjDTQ+R6XYZT24bjBlGDRXb4R/jRpv+vTf0ueR72CmBIM35Vqs0Vi?=
+ =?us-ascii?q?i476dqUxDnliEKPCMk/W7Ni8xwiKVboA+9pxF63oXZbp2ZOOZ4c6jAZt4RW3?=
+ =?us-ascii?q?ZPUdhNWCxAGoO8bpUAD+wdPeZDsoLxo0ICoQaiCQWwAe/izDFHhmXy3aYnze?=
+ =?us-ascii?q?ovFw/I1xEkE94XvnnZqND5OaEPWu630abI1y3OYe5I1zfz6IbGcR4vrv+DUr?=
+ =?us-ascii?q?1ybcXfxlIiFx/Hg1iKtYDpIz2Y2+YLvmOG7+RgT+Wvi2s/pg9svjig2N8sio?=
+ =?us-ascii?q?nXiYIT11vK6CB5z5wxJd28VkF6YcOvHZxLty6HLIt7Wd8iQmF0tyY6zb0Ko5?=
+ =?us-ascii?q?i7fDMQx5g9yB7fbOKHfpGO7xn+WuiRJjJ4i2hkeLK5nxuy8lavyvf6Vsaq1F?=
+ =?us-ascii?q?ZGtC1FksPDtn0Lyhfd6dCHR+Ng8kqu1juDzQDe5vxeLUwqmqfXNYQtzqM2m5?=
+ =?us-ascii?q?EOq0rMBDX2l1/zjKKOc0Uk/fWn5Pr/b7X9o5+cK5d0igbjMqQygsC/Afo3Mg?=
+ =?us-ascii?q?wJX2WD5eSzzqfj/UzkQLVRlPE2k6/ZsJ7dJcQAuKG2HxVZ0poj6hmjDzem18?=
+ =?us-ascii?q?4UnX8bI1JeZB2LlY3pO1DKIPzgDPe/hUqjkCtzyvzbMbDsDY/BI3jenLv7Y7?=
+ =?us-ascii?q?pw5FBQxBAuwdxH4pJbELABIPb9Wk/rs9zYCwc0MxepzOb8E9h9yoMfVn6PAq?=
+ =?us-ascii?q?+eKq/St0SI6fg1L+mDY48Vpi7xK+I56P72kX85hVgdcLG00psXb3C5EOppI0?=
+ =?us-ascii?q?GdYXr3mdoBC3kFsRc+TOPwlF2OSyJcZ3G3X6gk/DE0FJqmDZvfRoCqmLGBxi?=
+ =?us-ascii?q?a7EYFWZm9cEFCDDG/neJmcVPcMci2SI8lhnSIfVbW6UIAhyRCutAnmy7V5NO?=
+ =?us-ascii?q?rU/DMXtY752Ndp4O3TkAk49SZoAMSFz2GNU2Z0k3sLRzAo3KF/u019ylGM0a?=
+ =?us-ascii?q?hjmPFYC9NT6O1TUgsgNp7T0fZ6C9bsVQLFZNuJT0ymQtq+CzErUt0x28MOY1?=
+ =?us-ascii?q?p6G9i6lRDMwS6qA74Tl7yWC5056bzc33fvKMZn0XrG17cuj0MgQsRRMW2qnK?=
+ =?us-ascii?q?l/9xLcB4TRiUWWi76qdbgA3C7K7GqDyWuOvEdFUA9/SKnFRm4QaVfLrdTj50?=
+ =?us-ascii?q?PCU7+vBa0iMgtG1MGCN69KZcPygFVYS/fsJs7eb3iym2iuHxaIwK2DbI7wd2?=
+ =?us-ascii?q?UaxiXdB1AOkxoP8naeKQg+GiChrnraDDxvE1Lvfkzt/fB9qHylVE80yR+Fb0?=
+ =?us-ascii?q?l62rqr9R4am+acR+kQ3r0aoichrSt7HFKn09LREdqAqFkpQKIJTdoj4VsP9W?=
+ =?us-ascii?q?XGugh5JdT0I6BlmVMadx9fpU7i1xxrTI5HlJ55gmktyV9JNa+A0F5HPwid1J?=
+ =?us-ascii?q?T0N6yffnL+5zizeqXW3RfYy9/Q9aARvqdr427/tR2kQxJxu05s1MNYhj7Fvc?=
+ =?us-ascii?q?TH?=
+X-IPAS-Result: =?us-ascii?q?A2BsBQA0vyle/wHyM5BmHgELHIN4gRhVIBIqhBKJA4Z0B?=
+ =?us-ascii?q?oE3iW+PYoFnCQEBAQEBAQEBAS0KAQGEQAKCQjgTAhABAQEEAQEBAQEFAwEBb?=
+ =?us-ascii?q?IU3DII7KQGCeQEBAQECASMEEUEFCwsOCgICJgICVwYNBgIBAYJjPwGCVgUgD?=
+ =?us-ascii?q?6tTdX8zhDUBgRSDNoE4BoEOKowxeYEHgREnD4IvLj6CSxkEGoEvgyiCXgSHX?=
+ =?us-ascii?q?YYliTJGepZggkOCS4R1hUOJKwYbmneXQJQ3IjeBISsIAhgIIQ+DKBI9GA2IC?=
+ =?us-ascii?q?AUXiGSFXSMDMgEBizUqgTpfAQE?=
+Received: from tarius.tycho.ncsc.mil (HELO tarius.infosec.tycho.ncsc.mil) ([144.51.242.1])
+  by EMSM-GH1-UEA10.NCSC.MIL with ESMTP; 23 Jan 2020 15:45:38 +0000
+Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto [192.168.25.131])
+        by tarius.infosec.tycho.ncsc.mil (8.14.7/8.14.4) with ESMTP id 00NFiurh108692;
+        Thu, 23 Jan 2020 10:44:56 -0500
+Subject: Re: SELinux: How to split permissions for keys?
+To:     David Howells <dhowells@redhat.com>
+Cc:     Richard Haines <richard_c_haines@btinternet.com>,
+        keyrings@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <8ee40192da117d9cdf4eab1e63ab5f77b359801c.camel@btinternet.com>
+ <4057700.1579792320@warthog.procyon.org.uk>
+From:   Stephen Smalley <sds@tycho.nsa.gov>
+Message-ID: <de2c5cda-567b-d310-42f7-46a2c20969c4@tycho.nsa.gov>
+Date:   Thu, 23 Jan 2020 10:46:30 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <4057700.1579792320@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: KP Singh <kpsingh@google.com>
+On 1/23/20 10:12 AM, David Howells wrote:
+> Hi Stephen,
+> 
+> I have patches to split the permissions that are used for keys to make them a
+> bit finer grained and easier to use - and also to move to ACLs rather than
+> fixed masks.  See patch "keys: Replace uid/gid/perm permissions checking with
+> an ACL" here:
+> 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-acl
+> 
+> However, I may not have managed the permission mask transformation inside
+> SELinux correctly.  Could you lend an eyeball?  The change to the permissions
+> model is as follows:
+> 
+>      The SETATTR permission is split to create two new permissions:
+>      
+>       (1) SET_SECURITY - which allows the key's owner, group and ACL to be
+>           changed and a restriction to be placed on a keyring.
+>      
+>       (2) REVOKE - which allows a key to be revoked.
+>      
+>      The SEARCH permission is split to create:
+>      
+>       (1) SEARCH - which allows a keyring to be search and a key to be found.
+>      
+>       (2) JOIN - which allows a keyring to be joined as a session keyring.
+>      
+>       (3) INVAL - which allows a key to be invalidated.
+>      
+>      The WRITE permission is also split to create:
+>      
+>       (1) WRITE - which allows a key's content to be altered and links to be
+>           added, removed and replaced in a keyring.
+>      
+>       (2) CLEAR - which allows a keyring to be cleared completely.  This is
+>           split out to make it possible to give just this to an administrator.
+>      
+>       (3) REVOKE - see above.
+> 
+> The change to SELinux is attached below.
+> 
+> Should the split be pushed down into the SELinux policy rather than trying to
+> calculate it?
 
-Document how eBPF programs (BPF_PROG_TYPE_LSM) can be loaded and
-attached (BPF_LSM_MAC) to the LSM hooks.
+My understanding is that you must provide full backward compatibility 
+with existing policies; hence, you must ensure that you always check the 
+same SELinux permission(s) for the same operation when using an existing 
+policy.
 
-Signed-off-by: KP Singh <kpsingh@google.com>
-Reviewed-by: Brendan Jackman <jackmanb@google.com>
-Reviewed-by: Florent Revest <revest@google.com>
-Reviewed-by: Thomas Garnier <thgarnie@google.com>
----
- Documentation/security/bpf.rst   | 165 +++++++++++++++++++++++++++++++
- Documentation/security/index.rst |   1 +
- MAINTAINERS                      |   1 +
- 3 files changed, 167 insertions(+)
- create mode 100644 Documentation/security/bpf.rst
+In order to support finer-grained distinctions in SELinux with future 
+policies, you can define a new SELinux policy capability along with the 
+new permissions, and if the policy capability is enabled in the policy, 
+check the new permissions rather than the old ones. A recent example of 
+adding a new policy capability and using it can be seen in:
+https://lore.kernel.org/selinux/20200116194530.8696-1-jeffv@google.com/T/#u
+although that patch was rejected for other reasons.
 
-diff --git a/Documentation/security/bpf.rst b/Documentation/security/bpf.rst
-new file mode 100644
-index 000000000000..ec7d147c83b2
---- /dev/null
-+++ b/Documentation/security/bpf.rst
-@@ -0,0 +1,165 @@
-+.. SPDX-License-Identifier: GPL-2.0+
-+.. Copyright 2019 Google LLC.
-+
-+==========================
-+eBPF Linux Security Module
-+==========================
-+
-+This LSM allows runtime instrumentation of the LSM hooks by privileged users to
-+implement system-wide MAC (Mandatory Access Control) and Audit policies using
-+eBPF. The LSM is privileged and stackable and requires both ``CAP_SYS_ADMIN``
-+and ``CAP_MAC_ADMIN`` for the loading of BPF programs and modification of MAC
-+policies respectively.
-+
-+eBPF Programs
-+==============
-+
-+`eBPF (extended BPF) <https://cilium.readthedocs.io/en/latest/bpf>`_ is a
-+virtual machine-like construct in the Linux Kernel allowing the execution of
-+verifiable, just-in-time compiled byte code at various points in the Kernel.
-+
-+The eBPF LSM adds a new type, ``BPF_PROG_TYPE_LSM``, of eBPF programs which
-+have the following characteristics:
-+
-+   * Multiple eBPF programs can be attached to the same LSM hook
-+   * The programs are always run after the static hooks (i.e. the ones
-+     registered by SELinux, AppArmor, Smack etc.)
-+   * LSM hooks can return an ``-EPERM`` to indicate the decision of the
-+     MAC policy being enforced (``CONFIG_SECURITY_BPF_ENFORCE``) or
-+     simply be used for auditing.
-+   * If ``CONFIG_SECURITY_BPF_ENFORCE`` is enabled and a non-zero error
-+     code is returned from the BPF program, no further BPF programs for
-+     the hook are executed
-+   * Allowing the eBPF programs to be attached to all the LSM hooks by
-+     making :doc:`/bpf/btf` type information available for all LSM hooks
-+     and allowing the BPF verifier to perform runtime relocations and
-+     validation on the programs
-+
-+Structure
-+---------
-+
-+The example shows an eBPF program that can be attached to the ``file_mprotect``
-+LSM hook:
-+
-+.. c:function:: int file_mprotect(struct vm_area_struct *vma, unsigned long reqprot, unsigned long prot);
-+
-+eBPF programs that use :doc:`/bpf/btf` do not need to include kernel headers
-+for accessing information from the attached eBPF program's context. They can
-+simply declare the structures in the eBPF program and only specify the fields
-+that need to be accessed.
-+
-+.. code-block:: c
-+
-+	struct mm_struct {
-+		unsigned long start_brk, brk, start_stack;
-+	} __attribute__((preserve_access_index));
-+
-+	struct vm_area_struct {
-+		unsigned long start_brk, brk, start_stack;
-+		unsigned long vm_start, vm_end;
-+		struct mm_struct *vm_mm;
-+	} __attribute__((preserve_access_index));
-+
-+
-+.. note:: Only the size and the names of the fields must match the type in the
-+	  kernel and the order of the fields is irrelevant.
-+
-+This can be further simplified (if one has access to the BTF information at
-+build time) by generating the ``vmlinux.h`` with:
-+
-+.. code-block:: console
-+
-+        # bpftool dump file <path-to-btf-vmlinux> format c > vmlinux.h
-+
-+.. note:: ``path-to-btf-vmlinux`` can be ``/sys/kernel/btf/vmlinux`` if the
-+	  build environment matches the environment the BPF programs are
-+	  deployed in.
-+
-+The ``vmlinux.h`` can then simply be included in the BPF programs wihtout
-+requiring the definition of the the types.
-+
-+The eBPF programs can be declared using the``BPF_PROG``
-+macros defined in `tools/testing/selftests/bpf/bpf_trace_helpers.h`_. In this
-+example:
-+
-+	* ``"lsm/file_mprotect"`` indicates the LSM hook that the program must
-+	  be attached to
-+	* ``mprotect_audit`` is the name of the eBPF program
-+
-+.. code-block:: c
-+
-+        SEC("lsm/file_mprotect")
-+        int BPF_PROG(mprotect_audit, struct vm_area_struct *vma,
-+                     unsigned long reqprot, unsigned long prot)
-+	{
-+		int is_heap;
-+
-+		is_heap = (vma->vm_start >= vma->vm_mm->start_brk &&
-+			   vma->vm_end <= vma->vm_mm->brk);
-+
-+		/*
-+		 * Return an -EPERM or write information to the perf events buffer
-+		 * for auditing
-+		 */
-+	}
-+
-+The ``__attribute__((preserve_access_index))`` is a clang feature that allows
-+the BPF verifier to update the offsets for the access at runtime using the
-+:doc:`/bpf/btf` information. Since the BPF verifier is aware of the types, it
-+also validates all the accesses made to the various types in the eBPF program.
-+
-+Loading
-+-------
-+
-+eBPP programs can be loaded with the :manpage:`bpf(2)` syscall's
-+``BPF_PROG_LOAD`` operation or more simply by using the the libbpf helper
-+``bpf_prog_load_xattr``:
-+
-+
-+.. code-block:: c
-+
-+	struct bpf_prog_load_attr attr = {
-+		.file = "./prog.o",
-+	};
-+	struct bpf_object *prog_obj;
-+	struct bpf_program *prog;
-+	int prog_fd;
-+
-+	bpf_prog_load_xattr(&attr, &prog_obj, &prog_fd);
-+
-+Attachment to LSM Hooks
-+-----------------------
-+
-+The LSM allows attachment of eBPF programs as LSM hooks using :manpage:`bpf(2)`
-+syscall's ``BPF_PROG_ATTACH`` operation or more simply by
-+using the libbpf helper ``bpf_program__attach_lsm``. In the code shown below
-+``prog`` is the eBPF program loaded using ``BPF_PROG_LOAD``:
-+
-+.. code-block:: c
-+
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach_lsm(prog);
-+
-+The program can be detached from the LSM hook by *destroying* the ``link``
-+link returned by ``bpf_program__attach_lsm``:
-+
-+.. code-block:: c
-+
-+	link->destroy();
-+
-+Examples
-+--------
-+
-+An example eBPF program can be found in
-+`tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c`_ and the corresponding
-+userspace code in
-+`tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c`_
-+
-+.. Links
-+.. _tools/testing/selftests/bpf/bpf_trace_helpers.h:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/selftests/bpf/bpf_trace_helpers.h
-+.. _tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c
-+.. _tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index fc503dd689a7..844463df4547 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -5,6 +5,7 @@ Security Documentation
- .. toctree::
-    :maxdepth: 1
- 
-+   bpf
-    credentials
-    IMA-templates
-    keys/index
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32236d89d00b..e1de1a345205 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3213,6 +3213,7 @@ F:	include/linux/bpf_lsm.h
- F:	tools/testing/selftests/bpf/lsm_helpers.h
- F:	tools/testing/selftests/bpf/progs/lsm_mprotect_audit.c
- F:	tools/testing/selftests/bpf/prog_tests/lsm_mprotect_audit.c
-+F:	Documentation/security/bpf.rst
- 
- BROADCOM B44 10/100 ETHERNET DRIVER
- M:	Michael Chan <michael.chan@broadcom.com>
--- 
-2.20.1
+Another example was when we introduced fine-grained distinctions for all 
+network address families, commit da69a5306ab92e07224da54aafee8b1dccf024f6.
+
+The new policy capability also needs to be defined in libsepol for use 
+by the policy compiler; an example can be seen in:
+https://lore.kernel.org/selinux/20170714164801.6346-1-sds@tycho.nsa.gov/
+
+Then future policies can declare the policy capability when they are 
+ready to start using the new permissions instead of the old.
+
+> 
+> Thanks,
+> David
+> ---
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 116b4d644f68..c8db5235b01f 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -6556,6 +6556,7 @@ static int selinux_key_permission(key_ref_t key_ref,
+>   {
+>   	struct key *key;
+>   	struct key_security_struct *ksec;
+> +	unsigned oldstyle_perm;
+>   	u32 sid;
+>   
+>   	/* if no specific permissions are requested, we skip the
+> @@ -6564,13 +6565,26 @@ static int selinux_key_permission(key_ref_t key_ref,
+>   	if (perm == 0)
+>   		return 0;
+>   
+> +	oldstyle_perm = perm & (KEY_NEED_VIEW | KEY_NEED_READ | KEY_NEED_WRITE |
+> +				KEY_NEED_SEARCH | KEY_NEED_LINK);
+> +	if (perm & KEY_NEED_SETSEC)
+> +		oldstyle_perm |= OLD_KEY_NEED_SETATTR;
+> +	if (perm & KEY_NEED_INVAL)
+> +		oldstyle_perm |= KEY_NEED_SEARCH;
+> +	if (perm & KEY_NEED_REVOKE && !(perm & OLD_KEY_NEED_SETATTR))
+> +		oldstyle_perm |= KEY_NEED_WRITE;
+> +	if (perm & KEY_NEED_JOIN)
+> +		oldstyle_perm |= KEY_NEED_SEARCH;
+> +	if (perm & KEY_NEED_CLEAR)
+> +		oldstyle_perm |= KEY_NEED_WRITE;
+> +
+
+I don't know offhand if this ensures that the same SELinux permission is 
+always checked as it would have been previously for the same 
+operation+arguments.  That's what you have to preserve for existing 
+policies.
+
+>   	sid = cred_sid(cred);
+>   
+>   	key = key_ref_to_ptr(key_ref);
+>   	ksec = key->security;
+>   
+>   	return avc_has_perm(&selinux_state,
+> -			    sid, ksec->sid, SECCLASS_KEY, perm, NULL);
+> +			    sid, ksec->sid, SECCLASS_KEY, oldstyle_perm, NULL);
+>   }
+>   
+>   static int selinux_key_getsecurity(struct key *key, char **_buffer)
+> 
 
