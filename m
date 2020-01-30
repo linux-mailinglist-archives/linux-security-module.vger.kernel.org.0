@@ -2,188 +2,124 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EB714D513
-	for <lists+linux-security-module@lfdr.de>; Thu, 30 Jan 2020 03:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D974014D559
+	for <lists+linux-security-module@lfdr.de>; Thu, 30 Jan 2020 04:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726774AbgA3CBd (ORCPT
+        id S1726719AbgA3DRh (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 29 Jan 2020 21:01:33 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:45594 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726632AbgA3CBd (ORCPT
+        Wed, 29 Jan 2020 22:17:37 -0500
+Received: from smtprelay0073.hostedemail.com ([216.40.44.73]:33128 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726485AbgA3DRg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 29 Jan 2020 21:01:33 -0500
-Received: by mail-io1-f65.google.com with SMTP id i11so2109616ioi.12
-        for <linux-security-module@vger.kernel.org>; Wed, 29 Jan 2020 18:01:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SLLmNga7Fg92j7Wp0mHpBfgEy1+qMj+VIGuo+fS2/qk=;
-        b=a+JuYJP7DExfh7Xj7D1MP+WDtc/4pqFZPRUg5vQnLk8/ZyMguwk24cOHfvPd/+sGjo
-         h/Bex96QHbUA/Do6IBNm3aQUtZ0/MIKqTX6OzyaprNtd5rcC2BwqmSEmVBo/H2cKZlIX
-         UwRdkikLwwWO0ZxE/cPRXFdIK2yswvPPSnjfk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SLLmNga7Fg92j7Wp0mHpBfgEy1+qMj+VIGuo+fS2/qk=;
-        b=GTgdrEyF2IvIdMo9qbjBaBifnjtCbe+tMS9YJrHNvtoLH5EDXbydghZ4Fe9qYJAZEi
-         BYH2q3jUj9NMvkUHo8jlIgSst5pzdjEqlF5FuiQCUR5hs7xXwnjFnSzDMVU2tmtRn4m1
-         /dv1hc6TiHq40tADrP55/qCEQl4CYeECRLsQ08NSOIFr0fuPeqMJw+sU7VAsSXO5EG3E
-         OG440tNLgvNjdT7/bwkEr9CFOXK71zJQkhm3ZAY6AzM1iB4cK8+6UPBOzrbiIdgyc+lV
-         O0PGaVQduEuuecnYHC+EQD8MQ9Rbk6kOSAz3OOS3xlrvP4gCXVJQpnw9KUUsrwuYqzRq
-         pLFQ==
-X-Gm-Message-State: APjAAAVtt33kc5ArbybgWDKIJkcNZnbBco4fBRMn7XSORrJ8IonKLiYU
-        IUL5dDbcf7YsVt6JKDfiyTcB3Q==
-X-Google-Smtp-Source: APXvYqwIZP1v3iiH4xKUKmxt616Y3bG9d/QnCJDyKghwbYBWw8lWb+GqRRh4rI20P6dDFb83B1oLRQ==
-X-Received: by 2002:a6b:c742:: with SMTP id x63mr2231819iof.162.1580349692648;
-        Wed, 29 Jan 2020 18:01:32 -0800 (PST)
-Received: from localhost.localdomain (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id n17sm1306437ile.68.2020.01.29.18.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2020 18:01:31 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     jmorris@namei.org, serge@hallyn.com, mpe@ellerman.id.au,
-        zohar@linux.ibm.com, erichte@linux.ibm.com, nayna@linux.ibm.com,
-        yuehaibing@huawei.com
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] security/integrity: Include __func__ in messages for easier debug
-Date:   Wed, 29 Jan 2020 19:01:29 -0700
-Message-Id: <20200130020129.15328-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        Wed, 29 Jan 2020 22:17:36 -0500
+X-Greylist: delayed 491 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Jan 2020 22:17:35 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id 8FFFE182D3EBF
+        for <linux-security-module@vger.kernel.org>; Thu, 30 Jan 2020 03:09:25 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 0B627100E7B42;
+        Thu, 30 Jan 2020 03:09:24 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:2892:2894:3138:3139:3140:3141:3142:3353:3622:3865:3867:3868:3871:3872:4250:4321:4605:5007:6119:7875:7903:8603:8957:9010:10004:10400:11232:11657:11658:11914:12043:12048:12297:12555:12740:12760:12895:12986:13095:13439:14096:14097:14181:14659:14721:21080:21212:21220:21433:21451:21627:30054:30070:30075:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: bell00_6ef0b4c9d2c14
+X-Filterd-Recvd-Size: 3866
+Received: from XPS-9350.home (unknown [47.151.135.224])
+        (Authenticated sender: joe@perches.com)
+        by omf18.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 30 Jan 2020 03:09:22 +0000 (UTC)
+Message-ID: <ab2e19123cc15e3f8039b0d36e6ebae385db700e.camel@perches.com>
+Subject: Re: [PATCH] security/integrity: Include __func__ in messages for
+ easier debug
+From:   Joe Perches <joe@perches.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>, jmorris@namei.org,
+        serge@hallyn.com, mpe@ellerman.id.au, zohar@linux.ibm.com,
+        erichte@linux.ibm.com, nayna@linux.ibm.com, yuehaibing@huawei.com
+Cc:     linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 29 Jan 2020 19:08:15 -0800
+In-Reply-To: <20200130020129.15328-1-skhan@linuxfoundation.org>
+References: <20200130020129.15328-1-skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Change messages to messages to make it easier to debug. The following
-error message isn't informative enough to figure out what failed.
+On Wed, 2020-01-29 at 19:01 -0700, Shuah Khan wrote:
+> Change messages to messages to make it easier to debug. The following
+> error message isn't informative enough to figure out what failed.
+> Change messages to include function information.
+> 
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  .../integrity/platform_certs/load_powerpc.c     | 14 ++++++++------
+>  security/integrity/platform_certs/load_uefi.c   | 17 ++++++++++-------
+>  2 files changed, 18 insertions(+), 13 deletions(-)
+> 
+> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
 
-Couldn't get size: 0x800000000000000e
+perhaps instead add #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+so all the pr_<level> logging is more specific.
 
-Change messages to include function information.
+This would prefix all pr_<level> output with "integrity: "
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+3integrity: Couldn't get size: 0x%lx
+3integrity: Error reading db var: 0x%lx
+3integrity: MODSIGN: Couldn't get UEFI db list
+3integrity: Couldn't parse db signatures: %d
+6integrity: Couldn't get UEFI MokListRT
+3integrity: Couldn't parse MokListRT signatures: %d
+6integrity: Couldn't get UEFI dbx list
+3integrity: Couldn't parse dbx signatures: %d
+
+5integrity: Platform Keyring initialized
+6integrity: Error adding keys to platform keyring %s
+
 ---
- .../integrity/platform_certs/load_powerpc.c     | 14 ++++++++------
- security/integrity/platform_certs/load_uefi.c   | 17 ++++++++++-------
- 2 files changed, 18 insertions(+), 13 deletions(-)
+ security/integrity/platform_certs/load_powerpc.c     | 3 +++
+ security/integrity/platform_certs/load_uefi.c        | 2 ++
+ security/integrity/platform_certs/platform_keyring.c | 2 ++
+ 3 files changed, 7 insertions(+)
 
 diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-index a2900cb85357..621454148fbc 100644
+index a2900c..5cfbd0 100644
 --- a/security/integrity/platform_certs/load_powerpc.c
 +++ b/security/integrity/platform_certs/load_powerpc.c
-@@ -25,7 +25,7 @@ static __init void *get_cert_list(u8 *key, unsigned long keylen, uint64_t *size)
- 
- 	rc = secvar_ops->get(key, keylen, NULL, size);
- 	if (rc) {
--		pr_err("Couldn't get size: %d\n", rc);
-+		pr_err("%s: Couldn't get size: %d\n", __func__, rc);
- 		return NULL;
- 	}
- 
-@@ -36,7 +36,7 @@ static __init void *get_cert_list(u8 *key, unsigned long keylen, uint64_t *size)
- 	rc = secvar_ops->get(key, keylen, db, size);
- 	if (rc) {
- 		kfree(db);
--		pr_err("Error reading %s var: %d\n", key, rc);
-+		pr_err("%s: Error reading %s var: %d\n", __func__, key, rc);
- 		return NULL;
- 	}
- 
-@@ -69,23 +69,25 @@ static int __init load_powerpc_certs(void)
- 	 */
- 	db = get_cert_list("db", 3, &dbsize);
- 	if (!db) {
--		pr_err("Couldn't get db list from firmware\n");
-+		pr_err("%s: Couldn't get db list from firmware\n", __func__);
- 	} else {
- 		rc = parse_efi_signature_list("powerpc:db", db, dbsize,
- 					      get_handler_for_db);
- 		if (rc)
--			pr_err("Couldn't parse db signatures: %d\n", rc);
-+			pr_err("%s: Couldn't parse db signatures: %d\n",
-+				__func__, rc);
- 		kfree(db);
- 	}
- 
- 	dbx = get_cert_list("dbx", 4,  &dbxsize);
- 	if (!dbx) {
--		pr_info("Couldn't get dbx list from firmware\n");
-+		pr_info("%s: Couldn't get dbx list from firmware\n", __func__);
- 	} else {
- 		rc = parse_efi_signature_list("powerpc:dbx", dbx, dbxsize,
- 					      get_handler_for_dbx);
- 		if (rc)
--			pr_err("Couldn't parse dbx signatures: %d\n", rc);
-+			pr_err("%s: Couldn't parse dbx signatures: %d\n",
-+				__func__, rc);
- 		kfree(dbx);
- 	}
- 
+@@ -5,6 +5,9 @@
+  *
+  *      - loads keys and hashes stored and controlled by the firmware.
+  */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
+ #include <linux/kernel.h>
+ #include <linux/sched.h>
+ #include <linux/cred.h>
 diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
-index 111898aad56e..c3cf6575abc1 100644
+index 111898a..480450a 100644
 --- a/security/integrity/platform_certs/load_uefi.c
 +++ b/security/integrity/platform_certs/load_uefi.c
-@@ -44,7 +44,7 @@ static __init void *get_cert_list(efi_char16_t *name, efi_guid_t *guid,
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
  
- 	status = efi.get_variable(name, guid, NULL, &lsize, &tmpdb);
- 	if (status != EFI_BUFFER_TOO_SMALL) {
--		pr_err("Couldn't get size: 0x%lx\n", status);
-+		pr_err("%s: Couldn't get size: 0x%lx\n", __func__, status);
- 		return NULL;
- 	}
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
+ #include <linux/kernel.h>
+ #include <linux/sched.h>
+ #include <linux/cred.h>
+diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
+index 7646e35..9bd2846 100644
+--- a/security/integrity/platform_certs/platform_keyring.c
++++ b/security/integrity/platform_certs/platform_keyring.c
+@@ -6,6 +6,8 @@
+  * Author(s): Nayna Jain <nayna@linux.ibm.com>
+  */
  
-@@ -55,7 +55,7 @@ static __init void *get_cert_list(efi_char16_t *name, efi_guid_t *guid,
- 	status = efi.get_variable(name, guid, NULL, &lsize, db);
- 	if (status != EFI_SUCCESS) {
- 		kfree(db);
--		pr_err("Error reading db var: 0x%lx\n", status);
-+		pr_err("%s: Error reading db var: 0x%lx\n", __func__, status);
- 		return NULL;
- 	}
- 
-@@ -85,13 +85,14 @@ static int __init load_uefi_certs(void)
- 	if (!uefi_check_ignore_db()) {
- 		db = get_cert_list(L"db", &secure_var, &dbsize);
- 		if (!db) {
--			pr_err("MODSIGN: Couldn't get UEFI db list\n");
-+			pr_err("%s: MODSIGN: Couldn't get UEFI db list\n",
-+				__func__);
- 		} else {
- 			rc = parse_efi_signature_list("UEFI:db",
- 					db, dbsize, get_handler_for_db);
- 			if (rc)
--				pr_err("Couldn't parse db signatures: %d\n",
--				       rc);
-+				pr_err("%s: Couldn't parse db signatures: %d\n",
-+				       __func__, rc);
- 			kfree(db);
- 		}
- 	}
-@@ -103,7 +104,8 @@ static int __init load_uefi_certs(void)
- 		rc = parse_efi_signature_list("UEFI:MokListRT",
- 					      mok, moksize, get_handler_for_db);
- 		if (rc)
--			pr_err("Couldn't parse MokListRT signatures: %d\n", rc);
-+			pr_err("%s: Couldn't parse MokListRT signatures: %d\n",
-+				__func__, rc);
- 		kfree(mok);
- 	}
- 
-@@ -115,7 +117,8 @@ static int __init load_uefi_certs(void)
- 					      dbx, dbxsize,
- 					      get_handler_for_dbx);
- 		if (rc)
--			pr_err("Couldn't parse dbx signatures: %d\n", rc);
-+			pr_err("%s: Couldn't parse dbx signatures: %d\n",
-+				__func__, rc);
- 		kfree(dbx);
- 	}
- 
--- 
-2.20.1
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
+ #include <linux/export.h>
+ #include <linux/kernel.h>
+ #include <linux/sched.h>
 
