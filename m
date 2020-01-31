@@ -2,78 +2,68 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5C614F131
-	for <lists+linux-security-module@lfdr.de>; Fri, 31 Jan 2020 18:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9940214F15B
+	for <lists+linux-security-module@lfdr.de>; Fri, 31 Jan 2020 18:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbgAaRTz (ORCPT
+        id S1726749AbgAaRf1 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 31 Jan 2020 12:19:55 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:58945 "EHLO
+        Fri, 31 Jan 2020 12:35:27 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:21023 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726139AbgAaRTz (ORCPT
+        by vger.kernel.org with ESMTP id S1726869AbgAaRf1 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 31 Jan 2020 12:19:55 -0500
+        Fri, 31 Jan 2020 12:35:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580491194;
+        s=mimecast20190719; t=1580492126;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=PJ6ZXnCZlySRaLqFHO5kcXQrkfWEiHgSHgDYrdwchj8=;
-        b=dD2Ua07iXw0BAUmWXsddrqv2OQ70slHTynLg/6W12nVBhkT/iH2R4mo7KvBKlw8rHE40Ah
-        SuQ5rMp+oWU6wokcLq1tXY/F5jnaeET69mgZR4dMcfmkuPXrQshPCcN/cynfDy6L5Y0rWB
-        ZX2Q+h6FqzKZCHa3bOksJCHSOc5LFhE=
+        bh=a+dgvjmZL1Am8SwTNXtC3xi/4UF0VAsvDkpYJZdr/1w=;
+        b=ICNfGwLe+/uNXjSxCO8nsSR8QS8ybRNixtDR8J+/LendKec5aOkEJCRvUwUoLxgfEZX5Iw
+        XBGlgGqP1L1pd112uaA/qaWwVQWrX/SdPDEAtygwC1AbDaYpreNk9WF3+oMGlrHEotPu1d
+        mtiwfXWP2ReHuD/g1qC97oWYUPLx674=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-139-2qhknmQBO7i3fxsuzot7rg-1; Fri, 31 Jan 2020 12:19:44 -0500
-X-MC-Unique: 2qhknmQBO7i3fxsuzot7rg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-44-zBt8VshqNJmmOhFbxUnxBw-1; Fri, 31 Jan 2020 12:35:13 -0500
+X-MC-Unique: zBt8VshqNJmmOhFbxUnxBw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6F52F100550E;
-        Fri, 31 Jan 2020 17:19:41 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B480A8017CC;
+        Fri, 31 Jan 2020 17:35:11 +0000 (UTC)
 Received: from warthog.procyon.org.uk (ovpn-120-218.rdu2.redhat.com [10.10.120.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EF305DD64;
-        Fri, 31 Jan 2020 17:19:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28F8160BE0;
+        Fri, 31 Jan 2020 17:35:10 +0000 (UTC)
 Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
         Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
         Kingdom.
         Registered in England and Wales under Company Registration No. 3798903
 From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <22307ecd-3254-6077-8bc7-02693338b586@virtuozzo.com>
-References: <22307ecd-3254-6077-8bc7-02693338b586@virtuozzo.com> <eaacb0b2-fd0d-480e-1868-0a1284c20185@virtuozzo.com>
-To:     Vasily Averin <vvs@virtuozzo.com>
-Cc:     dhowells@redhat.com, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH v2] keys: proc_keys_next should increase position index
+In-Reply-To: <3ac1c817-b310-c8f8-6990-1602db540106@schaufler-ca.com>
+References: <3ac1c817-b310-c8f8-6990-1602db540106@schaufler-ca.com> <20200129155431.76bd7f25@canb.auug.org.au> <e66a563e-b612-c5b6-7bdd-b55113a9b822@infradead.org>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     dhowells@redhat.com, Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Subject: Re: linux-next: Tree for Jan 29 (security/smack/)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <265150.1580491178.1@warthog.procyon.org.uk>
-Date:   Fri, 31 Jan 2020 17:19:38 +0000
-Message-ID: <265151.1580491178@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-ID: <266824.1580492109.1@warthog.procyon.org.uk>
+Date:   Fri, 31 Jan 2020 17:35:09 +0000
+Message-ID: <266825.1580492109@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Vasily Averin <vvs@virtuozzo.com> wrote:
+Casey Schaufler <casey@schaufler-ca.com> wrote:
 
-> If seq_file .next fuction does not change position index,
+> This keeps coming up. It's in David Howells' watch queue changes.
+> David, could you please fix this?
 
-"function"
-
->    <<<< and whole last lien again
-
-"line"
-
-I can fix these up for you.
-
-> https://bugzilla.kernel.org/show_bug.cgi?id=206283
-
-I wonder if this should have a tag - it looks kind of out of place without
-one, but I can't find one suggested.
+That should be fixed now in my keys-next branch.
 
 David
 
