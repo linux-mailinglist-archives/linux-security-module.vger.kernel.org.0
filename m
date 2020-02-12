@@ -2,66 +2,22 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5597C15B1F0
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 Feb 2020 21:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D4B15B1FA
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 Feb 2020 21:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbgBLUf1 (ORCPT
+        id S1728554AbgBLUik (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 12 Feb 2020 15:35:27 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:33382 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727692AbgBLUf1 (ORCPT
+        Wed, 12 Feb 2020 15:38:40 -0500
+Received: from zeniv.linux.org.uk ([195.92.253.2]:43838 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727692AbgBLUik (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 12 Feb 2020 15:35:27 -0500
-Received: by mail-lf1-f65.google.com with SMTP id n25so2591205lfl.0
-        for <linux-security-module@vger.kernel.org>; Wed, 12 Feb 2020 12:35:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bqyVLATGO6MwZ1NPxpHKDD7nGLBCP8OMxbpMcz0c8xI=;
-        b=IgiKGasrvpx5KEqTjK3uSOaiUPZJr6oQaxEeiUKRSC7Mzut+kfrtuMYf7JfgJYo2j9
-         r6YHIpl0Oomh/U1TMzjQtQYQDvEFopln06zrn/G9JdYxAN1cr+G4MM7V+yIgIdgHmkT5
-         mB2IAKAHrGr3Dq04+09yh6iga9CCs4Dv6Lzfk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bqyVLATGO6MwZ1NPxpHKDD7nGLBCP8OMxbpMcz0c8xI=;
-        b=iWbkkvlhfqppJQ6VdXBhqNHawTIji1Y+/umMjRzyG5lJA5HZTadRi1oVsedD5uR5lN
-         6xx0RQhZnMz2KThB73J7EpROemubtRB8zEYAp/bCDpYZtxdjAnuWqgpFCeB74Yi/kmDE
-         +fWP9AxwoYSUF96ZyVHHgDDZaagof9CogXMZ62Eupys13wMuIJidkut5Tsq2wtFE4h95
-         3PmRaucIrI/Z1WE+fr364b931Y2QZsfqaNZXzf3iy3BvUDbe1YdxqbB3+D9o/OWkcaGK
-         rcMLzDemfueOSWsrRO/BOblas1zZigC5EFMNSLdrzVuDcmODrz0ipvTAnFWsv/vPyUnY
-         ITYg==
-X-Gm-Message-State: APjAAAWo1sXk3LiAN+WLTl2cPlE5A4Yil2u/ZVJ8EPn/Qx4JPQOI8/mZ
-        yoU29Ejkp4JUv1amJ0XDEiN9o/ERsBM=
-X-Google-Smtp-Source: APXvYqxN2L0DWRLwxbqHZs+6nEP6NgHnD95JLHhM2t3DRMjkNL+tvi+TwLRD8VyyR5wHS/BCZ/ryYg==
-X-Received: by 2002:a19:f00d:: with SMTP id p13mr7451739lfc.37.1581539723504;
-        Wed, 12 Feb 2020 12:35:23 -0800 (PST)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
-        by smtp.gmail.com with ESMTPSA id d4sm103709lfn.42.2020.02.12.12.35.21
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2020 12:35:21 -0800 (PST)
-Received: by mail-lj1-f182.google.com with SMTP id q8so3921064ljb.2
-        for <linux-security-module@vger.kernel.org>; Wed, 12 Feb 2020 12:35:21 -0800 (PST)
-X-Received: by 2002:a2e:9d92:: with SMTP id c18mr9321452ljj.265.1581539720898;
- Wed, 12 Feb 2020 12:35:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20200210150519.538333-1-gladkov.alexey@gmail.com>
- <20200210150519.538333-8-gladkov.alexey@gmail.com> <87v9odlxbr.fsf@x220.int.ebiederm.org>
- <20200212144921.sykucj4mekcziicz@comp-core-i7-2640m-0182e6>
- <87tv3vkg1a.fsf@x220.int.ebiederm.org> <CAHk-=wg52stFtUxMOxs3afkwDWmWn1JXC7RJ7dPsTrJbnxpZVg@mail.gmail.com>
- <87v9obipk9.fsf@x220.int.ebiederm.org> <CAHk-=wgwmu4jpmOqW0+Lz0dcem1Fub=ThLHvmLobf_WqCq7bwg@mail.gmail.com>
- <20200212200335.GO23230@ZenIV.linux.org.uk>
-In-Reply-To: <20200212200335.GO23230@ZenIV.linux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 12 Feb 2020 12:35:04 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi+1CPShMFvJNPfnrJ8DD8uVKUOQ5TQzQUNGLUkeoahkg@mail.gmail.com>
-Message-ID: <CAHk-=wi+1CPShMFvJNPfnrJ8DD8uVKUOQ5TQzQUNGLUkeoahkg@mail.gmail.com>
-Subject: Re: [PATCH v8 07/11] proc: flush task dcache entries from all procfs instances
-To:     Al Viro <viro@zeniv.linux.org.uk>
+        Wed, 12 Feb 2020 15:38:40 -0500
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j1ymH-00BamE-5t; Wed, 12 Feb 2020 20:38:33 +0000
+Date:   Wed, 12 Feb 2020 20:38:33 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>,
@@ -83,25 +39,43 @@ Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Kees Cook <keescook@chromium.org>,
         Oleg Nesterov <oleg@redhat.com>,
         Solar Designer <solar@openwall.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v8 07/11] proc: flush task dcache entries from all procfs
+ instances
+Message-ID: <20200212203833.GQ23230@ZenIV.linux.org.uk>
+References: <20200210150519.538333-1-gladkov.alexey@gmail.com>
+ <20200210150519.538333-8-gladkov.alexey@gmail.com>
+ <87v9odlxbr.fsf@x220.int.ebiederm.org>
+ <20200212144921.sykucj4mekcziicz@comp-core-i7-2640m-0182e6>
+ <87tv3vkg1a.fsf@x220.int.ebiederm.org>
+ <CAHk-=wg52stFtUxMOxs3afkwDWmWn1JXC7RJ7dPsTrJbnxpZVg@mail.gmail.com>
+ <87v9obipk9.fsf@x220.int.ebiederm.org>
+ <CAHk-=wgwmu4jpmOqW0+Lz0dcem1Fub=ThLHvmLobf_WqCq7bwg@mail.gmail.com>
+ <20200212200335.GO23230@ZenIV.linux.org.uk>
+ <CAHk-=wi+1CPShMFvJNPfnrJ8DD8uVKUOQ5TQzQUNGLUkeoahkg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi+1CPShMFvJNPfnrJ8DD8uVKUOQ5TQzQUNGLUkeoahkg@mail.gmail.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Feb 12, 2020 at 12:03 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> What's to prevent racing with fs shutdown while you are doing the second part?
+On Wed, Feb 12, 2020 at 12:35:04PM -0800, Linus Torvalds wrote:
+> On Wed, Feb 12, 2020 at 12:03 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > What's to prevent racing with fs shutdown while you are doing the second part?
+> 
+> I was thinking that only the proc_flush_task() code would do this.
+> 
+> And that holds a ref to the vfsmount through upid->ns.
+> 
+> So I wasn't suggesting doing this in general - just splitting up the
+> implementation of d_invalidate() so that proc_flush_task_mnt() could
+> delay the complex part to after having traversed the RCU-protected
+> list.
+> 
+> But hey - I missed this part of the problem originally, so maybe I'm
+> just missing something else this time. Wouldn't be the first time.
 
-I was thinking that only the proc_flush_task() code would do this.
-
-And that holds a ref to the vfsmount through upid->ns.
-
-So I wasn't suggesting doing this in general - just splitting up the
-implementation of d_invalidate() so that proc_flush_task_mnt() could
-delay the complex part to after having traversed the RCU-protected
-list.
-
-But hey - I missed this part of the problem originally, so maybe I'm
-just missing something else this time. Wouldn't be the first time.
-
-               Linus
+Wait, I thought the whole point of that had been to allow multiple
+procfs instances for the same userns?  Confused...
