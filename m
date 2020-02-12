@@ -2,17 +2,17 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE6415AC62
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 Feb 2020 16:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3FA15AC5D
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 Feb 2020 16:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728514AbgBLPwT (ORCPT
+        id S1728052AbgBLPwP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 12 Feb 2020 10:52:19 -0500
-Received: from sonic307-15.consmr.mail.ne1.yahoo.com ([66.163.190.38]:43323
-        "EHLO sonic307-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728544AbgBLPwP (ORCPT
-        <rfc822;linux-security-module@vger.kernel.org>);
         Wed, 12 Feb 2020 10:52:15 -0500
+Received: from sonic307-15.consmr.mail.ne1.yahoo.com ([66.163.190.38]:33783
+        "EHLO sonic307-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728410AbgBLPwO (ORCPT
+        <rfc822;linux-security-module@vger.kernel.org>);
+        Wed, 12 Feb 2020 10:52:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581522732; bh=4bDYcDU7Mlh6f5S31FmwUTk/wsFQm+13ahLvA0T7G9M=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=sT/NjdFVI2M2HYotcKH5LgV8HpQBwFK3oN7BjP4LSbhqb/ESgr0O8K7rY3K28GLDwcoIoz7bihE/r/ZBHxzXfQn/D60TamWEvv0xKW0l9wXDSURP/icO155r2bwhwRR1ZFyKIo4At0pRpdV7Ig/DG9bAQXe64Xxc+7BtPUTI+BZLTANbafpvc/5ervpbKpONnwr+0C40UPd7qOd+c833IW0uvPmarsBuPYOrMD2SCJciC2UJtTqLS+Sp4sGpDPG5vs7Bv6o1kJ7gmtlzKKwa9IoYpJDlnLt3m8ZRt6CLIci0saPvGK3XpJqmV1P/Zi1leuaSiRDrUGoDmDAql4IszA==
 X-YMail-OSG: MZ6b8JMVM1mj8C6.wZxAxcY5SEAf488LG6hoWbNqHvNT9NEAaRUGiBHXwUqQ.7P
  Ss31bOxqex0COunhZwX3mppFFpAsZuyIJh8nJEFWZj3Ha7020xjesUAx.poNJ7wh9S.utwPru6NP
