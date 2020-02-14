@@ -2,101 +2,92 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AE815F5D5
-	for <lists+linux-security-module@lfdr.de>; Fri, 14 Feb 2020 19:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF5215F655
+	for <lists+linux-security-module@lfdr.de>; Fri, 14 Feb 2020 20:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730561AbgBNSkC (ORCPT
+        id S1729479AbgBNTDX (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 14 Feb 2020 13:40:02 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:33798 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729781AbgBNSkB (ORCPT
+        Fri, 14 Feb 2020 14:03:23 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:37415 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729075AbgBNTDU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 14 Feb 2020 13:40:01 -0500
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1j2fqp-0000uO-PK; Fri, 14 Feb 2020 18:38:07 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        Fri, 14 Feb 2020 14:03:20 -0500
+Received: by mail-pj1-f67.google.com with SMTP id m13so4306021pjb.2
+        for <linux-security-module@vger.kernel.org>; Fri, 14 Feb 2020 11:03:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tycho-ws.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=X67Mr7JHgMW0MtPbY5RUDBc6idW8KEYPReWaSuRnXh4=;
+        b=v0JLbJHanSqJgxnGB542gdGMsejEY6woNkilQ94b+P9gJ+YAMQgsu9ur6JPedZ9A3Y
+         F2taOjVCszau/FtGTE4KIYWb00umSwqDTMoeIGGck0H4ZjPOUWqry7S8K5Fh6x28E6iF
+         SmB56gTFYXn3LYMGEXqJsCBWipK43wSQa3ZDgo9lFxdMW4DVx4MCAFdqH4uMq98UCSIy
+         c/9MmVX/DzPYfTZvGTwAJ5SMGNPcSMRjI7NG0ecOjiyy9p2kZXVm4ZJcMAnPZQlkGSPK
+         XMzeJo/tveLYVOhGY1FueG8X0zp7bDjMGTcFGvf/espDzfHyJ5pmJJVFdkWZzoJOr9qB
+         0RLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=X67Mr7JHgMW0MtPbY5RUDBc6idW8KEYPReWaSuRnXh4=;
+        b=TGymTxulGwiUVf7iIzQXY5JMwUmJ61lzYrCTWF4cZOUZ+gHgcc+848ZwVpWOSo6W/z
+         zMXsmPUenD+tVKkoWcZNGcpM9+IgOwBNKpnIzrlJKq+nlUteQf6Wai+AZkqUXKWsm3pF
+         b2vJCn0CFFQ7wtzRBz4E0n/4iX3fFPAZynsRa0EtqDCQkjZsr5TksBYcEuEwooT2M/Qo
+         cRdkT3QtIUMHuDhtOCbiCcWvbmS9M+mRPtgPGr8qZL9CMydfUjgD5iJdXTtsxqf0S6PQ
+         R6UJx24cC+p775L/e9KwCCXLpjaIhjF7GInojTxAiN72lrHe7jra3tfZn25VwpCKKnxx
+         5OGQ==
+X-Gm-Message-State: APjAAAWTLFQXu3c88UqLjIeKkYn3qB5nOcaL8eDdQd+wwvTtLAqZXoxr
+        GImcQjYZuanoZ/tZpw7Tizb5YA==
+X-Google-Smtp-Source: APXvYqwcwuUZwJSa7Do9y4rRp+P0PvJ6ZLvjFhDsEpfTEuG614CCQQrcH1qgYMDHXD8v2yUJD9C+uQ==
+X-Received: by 2002:a17:90a:fe02:: with SMTP id ck2mr5267083pjb.10.1581706997875;
+        Fri, 14 Feb 2020 11:03:17 -0800 (PST)
+Received: from cisco ([2001:420:c0c8:1005::22c])
+        by smtp.gmail.com with ESMTPSA id r6sm7877667pfh.91.2020.02.14.11.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2020 11:03:17 -0800 (PST)
+Date:   Fri, 14 Feb 2020 12:03:14 -0700
+From:   Tycho Andersen <tycho@tycho.ws>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
-        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>
-Cc:     smbarber@chromium.org, Seth Forshee <seth.forshee@canonical.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>,
+        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
         Kees Cook <keescook@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Phil Estes <estesp@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v2 28/28] devpts: handle fsid mappings
-Date:   Fri, 14 Feb 2020 19:35:54 +0100
-Message-Id: <20200214183554.1133805-29-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200214183554.1133805-1-christian.brauner@ubuntu.com>
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        containers@lists.linux-foundation.org, smbarber@chromium.org,
+        Seth Forshee <seth.forshee@canonical.com>,
+        linux-security-module@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Alexey Dobriyan <adobriyan@gmail.com>
+Subject: Re: [PATCH v2 19/28] stat: handle fsid mappings
+Message-ID: <20200214190314.GD22883@cisco>
 References: <20200214183554.1133805-1-christian.brauner@ubuntu.com>
+ <20200214183554.1133805-20-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200214183554.1133805-20-christian.brauner@ubuntu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-When a uid or gid mount option is specified with devpts have it lookup the
-corresponding kfsids in the fsid mappings. If no fsid mappings are setup the
-behavior is unchanged, i.e. fsids are looked up in the id mappings.
+On Fri, Feb 14, 2020 at 07:35:45PM +0100, Christian Brauner wrote:
+> @@ -471,8 +484,13 @@ static long cp_new_stat64(struct kstat *stat, struct stat64 __user *statbuf)
+>  #endif
+>  	tmp.st_mode = stat->mode;
+>  	tmp.st_nlink = stat->nlink;
+> -	tmp.st_uid = from_kuid_munged(current_user_ns(), stat->uid);
+> -	tmp.st_gid = from_kgid_munged(current_user_ns(), stat->gid);
+> +	if (stat->userns_visible) {
+> +		tmp.st_uid, from_kuid_munged(current_user_ns(), stat->uid);
+> +		tmp.st_gid, from_kgid_munged(current_user_ns(), stat->gid);
+> +	} else {
+> +		tmp.st_uid, from_kfsuid_munged(current_user_ns(), stat->uid);
+> +		tmp.st_gid, from_kfsgid_munged(current_user_ns(), stat->gid);
+> +	}
 
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v2 */
-unchanged
----
- fs/devpts/inode.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+I suppose this should be = ?
 
-diff --git a/fs/devpts/inode.c b/fs/devpts/inode.c
-index 42e5a766d33c..139958892572 100644
---- a/fs/devpts/inode.c
-+++ b/fs/devpts/inode.c
-@@ -24,6 +24,7 @@
- #include <linux/parser.h>
- #include <linux/fsnotify.h>
- #include <linux/seq_file.h>
-+#include <linux/fsuidgid.h>
- 
- #define DEVPTS_DEFAULT_MODE 0600
- /*
-@@ -277,7 +278,7 @@ static int parse_mount_options(char *data, int op, struct pts_mount_opts *opts)
- 		case Opt_uid:
- 			if (match_int(&args[0], &option))
- 				return -EINVAL;
--			uid = make_kuid(current_user_ns(), option);
-+			uid = make_kfsuid(current_user_ns(), option);
- 			if (!uid_valid(uid))
- 				return -EINVAL;
- 			opts->uid = uid;
-@@ -286,7 +287,7 @@ static int parse_mount_options(char *data, int op, struct pts_mount_opts *opts)
- 		case Opt_gid:
- 			if (match_int(&args[0], &option))
- 				return -EINVAL;
--			gid = make_kgid(current_user_ns(), option);
-+			gid = make_kfsgid(current_user_ns(), option);
- 			if (!gid_valid(gid))
- 				return -EINVAL;
- 			opts->gid = gid;
-@@ -410,7 +411,7 @@ static int devpts_show_options(struct seq_file *seq, struct dentry *root)
- 			   from_kuid_munged(&init_user_ns, opts->uid));
- 	if (opts->setgid)
- 		seq_printf(seq, ",gid=%u",
--			   from_kgid_munged(&init_user_ns, opts->gid));
-+			   from_kfsgid_munged(&init_user_ns, opts->gid));
- 	seq_printf(seq, ",mode=%03o", opts->mode);
- 	seq_printf(seq, ",ptmxmode=%03o", opts->ptmxmode);
- 	if (opts->max < NR_UNIX98_PTY_MAX)
--- 
-2.25.0
-
+Tycho
