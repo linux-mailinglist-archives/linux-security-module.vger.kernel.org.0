@@ -2,111 +2,127 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B9C15CE48
-	for <lists+linux-security-module@lfdr.de>; Thu, 13 Feb 2020 23:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A4615D082
+	for <lists+linux-security-module@lfdr.de>; Fri, 14 Feb 2020 04:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727595AbgBMWsJ (ORCPT
+        id S1728725AbgBND1W (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 13 Feb 2020 17:48:09 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45005 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726780AbgBMWsJ (ORCPT
+        Thu, 13 Feb 2020 22:27:22 -0500
+Received: from mail-pj1-f73.google.com ([209.85.216.73]:37498 "EHLO
+        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728486AbgBND04 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 13 Feb 2020 17:48:09 -0500
-Received: by mail-lj1-f196.google.com with SMTP id q8so8478994ljj.11
-        for <linux-security-module@vger.kernel.org>; Thu, 13 Feb 2020 14:48:07 -0800 (PST)
+        Thu, 13 Feb 2020 22:26:56 -0500
+Received: by mail-pj1-f73.google.com with SMTP id dw15so4892703pjb.2
+        for <linux-security-module@vger.kernel.org>; Thu, 13 Feb 2020 19:26:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=rVdHJ1r/9FxJmwhDqRkVHSIn1Ry+lO3z+KpnaUuqwYk=;
-        b=dRYW8MemR37cE0uru6NTUES5Od7vEqzfZmb/KMY93QEjURoq6DE5QcXLZ6JJL9HB8V
-         KfvM/ZKQbYsF7Zy+x1PnUgqdmV3x1lbxpWU+BFmhJglL6UqALgYvF3IltbUH8c3PxzFq
-         KRLtkM5e8bHrUc0004IuGa/Hy6940Rjrv4zzw=
+        bh=0WYp+nOc4W1ueTL6njcvhwE6Wrya56t+7LdjPX2+2/g=;
+        b=d7u2FkhwK0FN7IXYD8paZmQSKyhKm96rk0yh6wSPXStrq+ZyUe0RBJ0cSR/kkVrTZ7
+         yyAcca7EmJ6rSMeEPPDmRMQPnPyEsl8d+DvxOEmq0DTwgrwmiGE7SqOajaQIzDeOuqcf
+         Dup93fAzq0KZymXZwZ+fiEXw7p7pZvYsz9Sd3yWE6XW47saWou3JDaduJwLGhI/6aCvr
+         jXEAo8CTJA5tMyHfa2LpOlraU1cl+g4iI3Mmkp15BOF9zeBzfcEkhcK1YsPI+ryUiGy1
+         60g7n05mvI2V1MgGUXg5cFf4vvol75AtiWxiV1xP9EDlQm2jLHIy74/BgTZiK6/Tk6+T
+         /DFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rVdHJ1r/9FxJmwhDqRkVHSIn1Ry+lO3z+KpnaUuqwYk=;
-        b=OEPms+TqZnzw3d3rULhR9EDWsLMz8zt4E4E3jv5OgjIg9nDViGQHQ9OF0U4MJRFD+x
-         mjclTUfMAceFd8NgxVsoMaPioOIjYmqWg0JNahH4zX3rTc7j00tqFac3QN5LcbEI4M8q
-         WKdVLoIge0As2OxyZ45DnqXbdt3BfEA7FkYSCQjFB95bxYOdoDXEh+fXKrmJFjjtI60s
-         lHGb2voIedYACo77TRZ9ex59WCp8uq5SuHzeXrBKVGaklLPU0Q9H1DTUBQJI+3FI6U6R
-         A0K/B2ucgS2GqdfuwBaXsErqi4k8kJ0zC7mGy+FmYCbjsMlJUK1rbMZq+OgCuo9kPcPT
-         11tA==
-X-Gm-Message-State: APjAAAVAz8tLd8ehLRPN1PUGmnB9ypeN49RQWL8Cki53i+lIuLgL1SH7
-        w3WR4eiYD+7HFviEg5sfrQGX/i1OYRM=
-X-Google-Smtp-Source: APXvYqy96pFmQvECmMm+k1q0Y2MnLOclpQqkmBI6a6/s/PkfNxywDewSfGid2+ayvAlMQo4P5nzKDQ==
-X-Received: by 2002:a2e:6815:: with SMTP id c21mr57285lja.10.1581634086771;
-        Thu, 13 Feb 2020 14:48:06 -0800 (PST)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id c22sm1960333lfc.93.2020.02.13.14.48.05
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Feb 2020 14:48:05 -0800 (PST)
-Received: by mail-lj1-f179.google.com with SMTP id o15so8515591ljg.6
-        for <linux-security-module@vger.kernel.org>; Thu, 13 Feb 2020 14:48:05 -0800 (PST)
-X-Received: by 2002:a2e:88c5:: with SMTP id a5mr35496ljk.201.1581634084790;
- Thu, 13 Feb 2020 14:48:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20200212200335.GO23230@ZenIV.linux.org.uk> <CAHk-=wi+1CPShMFvJNPfnrJ8DD8uVKUOQ5TQzQUNGLUkeoahkg@mail.gmail.com>
- <20200212203833.GQ23230@ZenIV.linux.org.uk> <20200212204124.GR23230@ZenIV.linux.org.uk>
- <CAHk-=wi5FOGV_3tALK3n6E2fK3Oa_yCYkYQtCSaXLSEm2DUCKg@mail.gmail.com>
- <87lfp7h422.fsf@x220.int.ebiederm.org> <CAHk-=wgmn9Qds0VznyphouSZW6e42GWDT5H1dpZg8pyGDGN+=w@mail.gmail.com>
- <87pnejf6fz.fsf@x220.int.ebiederm.org> <20200213055527.GS23230@ZenIV.linux.org.uk>
- <CAHk-=wgQnNHYxV7-SyRP=g9vTHyNAK9g1juLLB=eho4=DHVZEQ@mail.gmail.com> <20200213222350.GU23230@ZenIV.linux.org.uk>
-In-Reply-To: <20200213222350.GU23230@ZenIV.linux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 13 Feb 2020 14:47:48 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjePLiQqUfQGCrNb0wp+EtgRddQbcK-pHH=6rxbdYNNOA@mail.gmail.com>
-Message-ID: <CAHk-=wjePLiQqUfQGCrNb0wp+EtgRddQbcK-pHH=6rxbdYNNOA@mail.gmail.com>
-Subject: Re: [PATCH v8 07/11] proc: flush task dcache entries from all procfs instances
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Security Module <linux-security-module@vger.kernel.org>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Djalal Harouni <tixxdz@gmail.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@poochiereds.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Solar Designer <solar@openwall.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=0WYp+nOc4W1ueTL6njcvhwE6Wrya56t+7LdjPX2+2/g=;
+        b=Nq7tHMxV/5ocKVOI+3f/+F4Uoxla7i8iRkYlmSods/8A0oiSNga6BvabJmM7nZqpIc
+         UW90sLqQHrIlBhHA0N98aRzaCUWwWT/GRybL3RUxPIzGHIwSsVRHA2dHsjcDHk2grEKJ
+         9U9u+/Eif+aQsnpPUkCrTnmBaddcMkjqxcJ7qDpUtKoR4wmy50XG+DuWtFtqUlKccu35
+         IhaIQhtonfJu3cWr3hdy1I/uR+gTFL2CGD6ykVWusyMcLFwntkhgtPuHvO65aPrDgvzq
+         t5i6KU3HWipoeEE9ZVMULJ3kf1EnEyUALXdCkT7UpLjHuWrxhkA92a+F3SCJCFBu5Dt3
+         0l6Q==
+X-Gm-Message-State: APjAAAWT+IkMRuOaHkhvE+01u89uUuIMZVAeWHC1mDZhjoou7ffcqWh3
+        TKu++TKJ8ysUDGSBzKaDF2/6FNrv+1M=
+X-Google-Smtp-Source: APXvYqycI2BpuraXCc3IrQ2spptnq0wpysgGaSnKRL3VQeWA2X/FZ9eFhD8j0BwJp3nlWxw33egBUz7gUsU=
+X-Received: by 2002:a63:5a11:: with SMTP id o17mr1256158pgb.60.1581650815604;
+ Thu, 13 Feb 2020 19:26:55 -0800 (PST)
+Date:   Thu, 13 Feb 2020 19:26:32 -0800
+In-Reply-To: <20200211225547.235083-1-dancol@google.com>
+Message-Id: <20200214032635.75434-1-dancol@google.com>
+Mime-Version: 1.0
+References: <20200211225547.235083-1-dancol@google.com>
+X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
+Subject: [PATCH 0/3] SELinux support for anonymous inodes and UFFD
+From:   Daniel Colascione <dancol@google.com>
+To:     timmurray@google.com, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, viro@zeniv.linux.org.uk, paul@paul-moore.com,
+        nnk@google.com, sds@tycho.nsa.gov, lokeshgidra@google.com
+Cc:     Daniel Colascione <dancol@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Feb 13, 2020 at 2:23 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> I'd been thinking of ->d_fsdata pointing to a structure with list_head
-> and a (non-counting) task_struct pointer for those guys.  Allocated
-> on lookup, of course (as well as readdir ;-/) and put on the list
-> at the same time.
+Userfaultfd in unprivileged contexts could be potentially very
+useful. We'd like to harden userfaultfd to make such unprivileged use
+less risky. This patch series allows SELinux to manage userfaultfd
+file descriptors and in the future, other kinds of
+anonymous-inode-based file descriptor.  SELinux policy authors can
+apply policy types to anonymous inodes by providing name-based
+transition rules keyed off the anonymous inode internal name (
+"[userfaultfd]" in the case of userfaultfd(2) file descriptors) and
+applying policy to the new SIDs thus produced.
 
-Hmm. That smells like potentially a lot of small allocations, and
-making readdir() even nastier.
+Inside the kernel, a pair of new anon_inodes interface,
+anon_inode_getfile_secure and anon_inode_getfd_secure, allow callers
+to opt into this SELinux management. In this new "secure" mode,
+anon_inodes creates new ephemeral inodes for anonymous file objects
+instead of reusing the normal anon_inodes singleton dummy inode. A new
+LSM hook gives security modules an opportunity to configure and veto
+these ephemeral inodes.
 
-Do we really want to create the dentries at readdir time? We do now
-(with proc_fill_cache()) but do we actually _need_ to?
+This patch series is one of two fork of [1] and is an
+alternative to [2].
 
-I guess a lot of readdir users end up doing a stat on it immediately
-afterwards. I think right now we do it to get the inode number, and
-maybe that is a basic requirement (even if I don't think it's really
-stable - an inode could be evicted and then the ino changes, no?)
+The primary difference between the two patch series is that this
+partch series creates a unique inode for each "secure" anonymous
+inode, while the other patch series ([2]) continues using the
+singleton dummy anonymous inode and adds a way to attach SELinux
+security information directly to file objects.
 
-Ho humm. This all doesn't make me happy. But I guess the proof is in
-the pudding - and if you come up with a good patch, I won't complain.
+I prefer the approach in this patch series because 1) it's a smaller
+patch than [2], and 2) it produces a more regular security
+architecture: in this patch series, secure anonymous inodes aren't
+S_PRIVATE and they maintain the SELinux property that the label for a
+file is in its inode. We do need an additional inode per anonymous
+file, but per-struct-file inode creation doesn't seem to be a problem
+for pipes and sockets.
 
-              Linus
+The previous version of this feature ([1]) created a new SELinux
+security class for userfaultfd file descriptors. This version adopts
+the generic transition-based approach of [2].
+
+This patch series also differs from [2] in that it doesn't affect all
+anonymous inodes right away --- instead requiring anon_inodes callers
+to opt in --- but this difference isn't one of basic approach. The
+important question to resolve is whether we should be creating new
+inodes or enhancing per-file data.
+
+[1] https://lore.kernel.org/lkml/20200211225547.235083-1-dancol@google.com/
+[2] https://lore.kernel.org/linux-fsdevel/20200213194157.5877-1-sds@tycho.nsa.gov/
+
+Daniel Colascione (3):
+  Add a new LSM-supporting anonymous inode interface
+  Teach SELinux about anonymous inodes
+  Wire UFFD up to SELinux
+
+ fs/anon_inodes.c            | 196 ++++++++++++++++++++++++++++--------
+ fs/userfaultfd.c            |  34 +++++--
+ include/linux/anon_inodes.h |  13 +++
+ include/linux/lsm_hooks.h   |   9 ++
+ include/linux/security.h    |   4 +
+ security/security.c         |  10 ++
+ security/selinux/hooks.c    |  57 +++++++++++
+ 7 files changed, 274 insertions(+), 49 deletions(-)
+
+-- 
+2.25.0.265.gbab2e86ba0-goog
+
