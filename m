@@ -2,101 +2,83 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEA815F007
-	for <lists+linux-security-module@lfdr.de>; Fri, 14 Feb 2020 18:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B4815F32E
+	for <lists+linux-security-module@lfdr.de>; Fri, 14 Feb 2020 19:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388840AbgBNRwO (ORCPT
+        id S1731197AbgBNPxQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 14 Feb 2020 12:52:14 -0500
-Received: from mga01.intel.com ([192.55.52.88]:14459 "EHLO mga01.intel.com"
+        Fri, 14 Feb 2020 10:53:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388300AbgBNRwN (ORCPT
+        id S1731196AbgBNPxQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 14 Feb 2020 12:52:13 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Feb 2020 09:52:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,441,1574150400"; 
-   d="scan'208";a="238425267"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2020 09:52:11 -0800
-Date:   Fri, 14 Feb 2020 09:52:11 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Jethro Beekman <jethro@fortanix.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-sgx@vger.kernel.org, akpm@linux-foundation.org,
-        dave.hansen@intel.com, nhorman@redhat.com, npmccallum@redhat.com,
-        haitao.huang@intel.com, andriy.shevchenko@linux.intel.com,
-        tglx@linutronix.de, kai.svahn@intel.com, bp@alien8.de,
-        josh@joshtriplett.org, luto@kernel.org, kai.huang@intel.com,
-        rientjes@google.com, cedric.xing@intel.com, puiterwijk@redhat.com,
-        linux-security-module@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>
-Subject: Re: [PATCH v26 10/22] x86/sgx: Linux Enclave Driver
-Message-ID: <20200214175211.GE20690@linux.intel.com>
-References: <20200214171146.GD20690@linux.intel.com>
- <D18DD438-2458-4264-9D56-A05EB84BB545@amacapital.net>
+        Fri, 14 Feb 2020 10:53:16 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2D6522465D;
+        Fri, 14 Feb 2020 15:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581695596;
+        bh=Ni2uE3UrzUOKeHuUBp47BRf/YTw6+RTDvh2UjhiuMWU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zetdz+kUT07mO63PLzYlGX2wN4GNXUulW6SWAtDPO50seA1/1XBUnhpd4jv96BG7s
+         uYK+pEK85v2lxS3E+JsC3PumYW0J8xJusI+wAGYr0PyfKGdGkt7WBO13+RVLkGRH7R
+         mu/tNg3fNa/EmIFTkA///vpPivNYJ+NT0bx0SWnA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 201/542] IMA: Check IMA policy flag
+Date:   Fri, 14 Feb 2020 10:43:13 -0500
+Message-Id: <20200214154854.6746-201-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <D18DD438-2458-4264-9D56-A05EB84BB545@amacapital.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Feb 14, 2020 at 09:40:00AM -0800, Andy Lutomirski wrote:
-> 
-> 
-> > On Feb 14, 2020, at 9:11 AM, Sean Christopherson <sean.j.christopherson@intel.com> wrote:
-> > 
-> > ﻿On Fri, Feb 14, 2020 at 10:24:10AM +0100, Jethro Beekman wrote:
-> >>> On 2020-02-13 19:07, Sean Christopherson wrote:
-> >>> On Thu, Feb 13, 2020 at 02:59:52PM +0100, Jethro Beekman wrote:
-> >>>> On 2020-02-09 22:25, Jarkko Sakkinen wrote:
-> >>>>> +/**
-> >>>>> + * struct sgx_enclave_add_pages - parameter structure for the
-> >>>>> + *                                %SGX_IOC_ENCLAVE_ADD_PAGE ioctl
-> >>>>> + * @src:    start address for the page data
-> >>>>> + * @offset:    starting page offset
-> >>>>> + * @length:    length of the data (multiple of the page size)
-> >>>>> + * @secinfo:    address for the SECINFO data
-> >>>>> + * @flags:    page control flags
-> >>>>> + * @count:    number of bytes added (multiple of the page size)
-> >>>>> + */
-> >>>>> +struct sgx_enclave_add_pages {
-> >>>>> +    __u64    src;
-> >>>>> +    __u64    offset;
-> >>>>> +    __u64    length;
-> >>>>> +    __u64    secinfo;
-> >>>>> +    __u64    flags;
-> >>>>> +    __u64    count;
-> >>>>> +};
-> >>>> 
-> >>>> Compared to the last time I looked at the patch set, this API removes the
-> >>>> ability to measure individual pages chunks. That is not acceptable.
-> >>> 
-> >>> Why is it not acceptable?  E.g. what specific use case do you have that
-> >>> _requires_ on measuring partial 4k pages of an enclave?
-> >> 
-> >> The use case is someone gives me an enclave and I want to load it. If I don't
-> >> load it exactly as the enclave author specified, the enclave hash will be
-> >> different, and it won't work.
-> > 
-> > And if our ABI says "thou shall measure in 4k chunks", then it's an invalid
-> > enclave if its author generated MRENCLAVE using a different granularity.
-> 
-> ISTM, unless there’s a particularly compelling reason, if an enclave is
-> valid, we should be able to load it.
+From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-That means we have to have a separate ioctl() for EEXTEND, otherwise we
-can't handle EADD[0]->EADD[1]->EADD[2]->EEXTEND[0]->EEXTEND[1]->EEXTEND[2].
+[ Upstream commit c5563bad88e07017e08cce1142903e501598c80c ]
 
-I think we'd still want to keep the MEASURE flag for SGX_IOC_ENCLAVE_ADD_PAGE
-so that we can optimize EADD[0]->EEXTEND[0]->EADD[1]->EEXTEND[1].
+process_buffer_measurement() may be called prior to IMA being
+initialized (for instance, when the IMA hook is called when
+a key is added to the .builtin_trusted_keys keyring), which
+would result in a kernel panic.
+
+This patch adds the check in process_buffer_measurement()
+to return immediately if IMA is not initialized yet.
+
+Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ security/integrity/ima/ima_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index d7e987baf1274..9b35db2fc777a 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -655,6 +655,9 @@ void process_buffer_measurement(const void *buf, int size,
+ 	int action = 0;
+ 	u32 secid;
+ 
++	if (!ima_policy_flag)
++		return;
++
+ 	/*
+ 	 * Both LSM hooks and auxilary based buffer measurements are
+ 	 * based on policy.  To avoid code duplication, differentiate
+-- 
+2.20.1
+
