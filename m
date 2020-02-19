@@ -2,98 +2,60 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF02163FE6
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2020 10:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3AF164380
+	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2020 12:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgBSJCf (ORCPT
+        id S1726270AbgBSLgG (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 19 Feb 2020 04:02:35 -0500
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:41403 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgBSJCf (ORCPT
+        Wed, 19 Feb 2020 06:36:06 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:44659 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726484AbgBSLgG (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 19 Feb 2020 04:02:35 -0500
-Received: by mail-vs1-f67.google.com with SMTP id k188so14600110vsc.8;
-        Wed, 19 Feb 2020 01:02:34 -0800 (PST)
+        Wed, 19 Feb 2020 06:36:06 -0500
+Received: by mail-il1-f196.google.com with SMTP id s85so20252185ill.11
+        for <linux-security-module@vger.kernel.org>; Wed, 19 Feb 2020 03:36:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=TSVyOEZZlUXcItl/vOCqMLuW1ofkxTSLhKQ7okp+WUw=;
-        b=W+MvosDDNezGY0Xz11wcWD5F1iPFX3ljmRkbHSfE1anrFuYDdb5UEvX8Fd8FSEH9fK
-         g8XNmermebanajz8wUzJv6E7+Lpo9m7pUKQ8ZjMH8YxkLRrPGILV6HWQ4eHw5XDZ53IT
-         JtSiHbAegJIwYSLSM1i75JFwskZoZYZmkoHBZr3guFZvzpisQLR5P/3OZjhatToz49LT
-         W008XH5uN98RYQ5w1FVVPIiAj2mk8Kqji8aeT4695uKAsTwWkkJCOIw992VqU97Pyepv
-         JZaJ0Dnq2IVvJ2db4U3xYnlHdTyVasQ1eT9IhbblNbuRuTspOSdoXH7PKohvp1PxIh0S
-         FggA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9hPUHkH+GfA0RvEZgzN9Jr3GKxrN75Ufj8aA2szxe8A=;
+        b=d0gI+pZvEYY39V6yfkQwCeffiEAM1S7KnERIybC096HIk4+9fXg59Jzxj5TmPU+6cY
+         coXJvtAFqKBCzq0TruUR7dylEoPDJ9JV7gux24qv2iRY6rjWeg4G0nLbH2KET15HNfCs
+         avS09QbYUix47KXQu7c0BpdQEP6moQ0qK/fp5A9CiwoPkcxM/e6QZ8iDU8EtexNPXCNv
+         j0tqdSMaMqwaqbVuVJHdTMok0LAarWo1/AGFffr8OXJck6/QtvBvSYz8EICqvlUcgBWP
+         AeqLVt77Y0i5/5F/KXs00cGSi/VDSdCK0ADcjbbN9AhbZTUGUG6XMJo6pLTT8wyUf3q4
+         K2Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=TSVyOEZZlUXcItl/vOCqMLuW1ofkxTSLhKQ7okp+WUw=;
-        b=TlmEhK8ARvxQkU8jlX5bg7aNkDbWxL8i/WnNwIFGPnh9Ib+TD7y4dsaKre2HRsHSkV
-         V7+V+exlO+8l9wXqaKTpWC2HaXLWnqUSJ99gI/lnMcGsd4esdyX7qhE6w+LG06Llh7Pa
-         xJ/C3rmCgEACwpdDS8K1bLfDCCOIO8psOn8Z9NdbQFzhyS3BnTlfvmFES2exo44yb6+x
-         cHH0KxP57XLuJLiW77fcwPCv3UcXXXUXTooMN3pbPL+39NZoQkfcj91BGbXina/FpZ38
-         iavDo8OMjhh/+rJdxK6zJNAqUm1C1HFAILdpfVQyJ24S3H6t+DFjlURbjKHdmeyf1vom
-         GukA==
-X-Gm-Message-State: APjAAAUP+NucwGvTHrsMpGC4Ubmc6J8JFKXDwmB30EyRVrvESFjVeuK+
-        zcGUmP/J4ON01HMxKQmF42nYF4rQ4lFstlbf3uk=
-X-Google-Smtp-Source: APXvYqyYPlXGS2nEIB0nWEpd2b1ixbT/+c7Z/cOCKib+7XtifVu0NFO4zmvfJR/Et/9/RC0y/ZQ/vXXzv9FEqzt3KWQ=
-X-Received: by 2002:a67:eac5:: with SMTP id s5mr13315040vso.148.1582102954243;
- Wed, 19 Feb 2020 01:02:34 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9hPUHkH+GfA0RvEZgzN9Jr3GKxrN75Ufj8aA2szxe8A=;
+        b=mpG53Nu/mqBoicKBfVWmA6Og9M2VsuVGErX60pBw1kOQJhFKVLjBAmddvuvBYGbvHB
+         N0V6Od3xt5z5tB+ddgr/gkjBILiY3uPp8f8vXEGK2jwLa/MbcfE5PawEMVVEeYwYs+CJ
+         NFWcKA9B/uy1oE9zkxxoJCrntRAgNRiL9DvlevgGCSQCZdrMJi6qhr5aE0mPO/aQBBRZ
+         Ic+vbUOMrGO9FCkfCV8grm5aQnrlDQyfeHrAT9MzmZ7QKbRNEMgqnc5YNDC9tSTeJC0n
+         Ge3BauM8vV4NSkFlAQzj+/2KdLTgXuK3hru7LQaUNxfboMpwRuT0dfp+FHpRmrKmKccz
+         CsjA==
+X-Gm-Message-State: APjAAAVwokfi9CD6nbdKVohsVm1aRVeN/2CvpvhRm0a0+OCbOI4XUhaG
+        yr72NmBlDumLUJ8aZzYnAZlLkoNv7q4BdXrZ3vg=
+X-Google-Smtp-Source: APXvYqzp2sbjkLSeE51XBzNz1WHz16FufDbWB0hOscRobTHo/EQLsuCaHikcfT5/siCYHdmUPf00KvEuffRcw+TdWfE=
+X-Received: by 2002:a92:8307:: with SMTP id f7mr22772018ild.183.1582112165331;
+ Wed, 19 Feb 2020 03:36:05 -0800 (PST)
 MIME-Version: 1.0
-From:   Martin Haass <vvvrrooomm@gmail.com>
-Date:   Wed, 19 Feb 2020 10:02:17 +0100
-Message-ID: <CAH3oDPzeu_bzYa3fOUpcjQk4HJ5K2Rx+Qf+qbqxSrmTdrWHm5g@mail.gmail.com>
-Subject: [PATCH] module support: during lockdown, log name of unsigned module
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-modules@vger.kernel.org
+Received: by 2002:a02:9405:0:0:0:0:0 with HTTP; Wed, 19 Feb 2020 03:36:05
+ -0800 (PST)
+Reply-To: cyeden1@gmail.com
+From:   Cynthia E <www0.union2@gmail.com>
+Date:   Wed, 19 Feb 2020 11:36:05 +0000
+Message-ID: <CAGp4paV8s6KeahBOeCkK8M55MT+92Jj03HBeavTA5+haYe1ghA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-during lockdown loading of unsigned modules is restricted to signed
-modules only. The old error message does not show which module misses
-the signature, making it very difficult for a user to determine which
-module is at fault.
-This patch adds a line to the logs which additionally contains the
-module name that caused the error message. The old message cannot
-be replaced as it is generated by lockdown_is_locked_down
----
- kernel/module.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/module.c b/kernel/module.c
-index 33569a01d6e..6dcb28139a0 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2807,7 +2807,8 @@ static int module_sig_check(struct load_info *info,
-int flags)
-  const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
-  const char *reason;
-  const void *mod = info->hdr;
--
-+ int is_locked = -EPERM;
-+
-  /*
-  * Require flags == 0, as a module with version information
-  * removed is no longer the module that was signed
-@@ -2843,7 +2844,12 @@ static int module_sig_check(struct load_info *info,
-int flags)
-  return -EKEYREJECTED;
-  }
-
-- return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-+ is_locked = security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-+ if (is_locked == -EPERM) {
-+ pr_notice("Lockdown: %s: rejected module '%s' cause: %s",
-+ current->comm, info->name, reason);
-+ }
-+ return is_locked;
-
-  /* All other errors are fatal, including nomem, unparseable
-  * signatures and signature check failures - even if signatures
--- 
-2.25.0
+Hello dear,
+I have an important informations from (United Nations) for you kindly
+get back to me for more informations
+Cynthia
