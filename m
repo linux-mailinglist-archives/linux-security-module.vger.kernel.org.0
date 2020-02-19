@@ -2,60 +2,70 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3AF164380
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2020 12:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAF31643DF
+	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2020 13:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgBSLgG (ORCPT
+        id S1726671AbgBSMGY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 19 Feb 2020 06:36:06 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:44659 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726484AbgBSLgG (ORCPT
+        Wed, 19 Feb 2020 07:06:24 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:57574 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbgBSMGY (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 19 Feb 2020 06:36:06 -0500
-Received: by mail-il1-f196.google.com with SMTP id s85so20252185ill.11
-        for <linux-security-module@vger.kernel.org>; Wed, 19 Feb 2020 03:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9hPUHkH+GfA0RvEZgzN9Jr3GKxrN75Ufj8aA2szxe8A=;
-        b=d0gI+pZvEYY39V6yfkQwCeffiEAM1S7KnERIybC096HIk4+9fXg59Jzxj5TmPU+6cY
-         coXJvtAFqKBCzq0TruUR7dylEoPDJ9JV7gux24qv2iRY6rjWeg4G0nLbH2KET15HNfCs
-         avS09QbYUix47KXQu7c0BpdQEP6moQ0qK/fp5A9CiwoPkcxM/e6QZ8iDU8EtexNPXCNv
-         j0tqdSMaMqwaqbVuVJHdTMok0LAarWo1/AGFffr8OXJck6/QtvBvSYz8EICqvlUcgBWP
-         AeqLVt77Y0i5/5F/KXs00cGSi/VDSdCK0ADcjbbN9AhbZTUGUG6XMJo6pLTT8wyUf3q4
-         K2Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9hPUHkH+GfA0RvEZgzN9Jr3GKxrN75Ufj8aA2szxe8A=;
-        b=mpG53Nu/mqBoicKBfVWmA6Og9M2VsuVGErX60pBw1kOQJhFKVLjBAmddvuvBYGbvHB
-         N0V6Od3xt5z5tB+ddgr/gkjBILiY3uPp8f8vXEGK2jwLa/MbcfE5PawEMVVEeYwYs+CJ
-         NFWcKA9B/uy1oE9zkxxoJCrntRAgNRiL9DvlevgGCSQCZdrMJi6qhr5aE0mPO/aQBBRZ
-         Ic+vbUOMrGO9FCkfCV8grm5aQnrlDQyfeHrAT9MzmZ7QKbRNEMgqnc5YNDC9tSTeJC0n
-         Ge3BauM8vV4NSkFlAQzj+/2KdLTgXuK3hru7LQaUNxfboMpwRuT0dfp+FHpRmrKmKccz
-         CsjA==
-X-Gm-Message-State: APjAAAVwokfi9CD6nbdKVohsVm1aRVeN/2CvpvhRm0a0+OCbOI4XUhaG
-        yr72NmBlDumLUJ8aZzYnAZlLkoNv7q4BdXrZ3vg=
-X-Google-Smtp-Source: APXvYqzp2sbjkLSeE51XBzNz1WHz16FufDbWB0hOscRobTHo/EQLsuCaHikcfT5/siCYHdmUPf00KvEuffRcw+TdWfE=
-X-Received: by 2002:a92:8307:: with SMTP id f7mr22772018ild.183.1582112165331;
- Wed, 19 Feb 2020 03:36:05 -0800 (PST)
+        Wed, 19 Feb 2020 07:06:24 -0500
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1j4O7B-0002If-8k; Wed, 19 Feb 2020 12:06:05 +0000
+Date:   Wed, 19 Feb 2020 13:06:04 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
+        smbarber@chromium.org, Seth Forshee <seth.forshee@canonical.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Phil Estes <estesp@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: [PATCH v3 09/25] fs: add is_userns_visible() helper
+Message-ID: <20200219120604.vqudwaeppebvisco@wittgenstein>
+References: <20200218143411.2389182-1-christian.brauner@ubuntu.com>
+ <20200218143411.2389182-10-christian.brauner@ubuntu.com>
+ <20200219024233.GA19334@mail.hallyn.com>
 MIME-Version: 1.0
-Received: by 2002:a02:9405:0:0:0:0:0 with HTTP; Wed, 19 Feb 2020 03:36:05
- -0800 (PST)
-Reply-To: cyeden1@gmail.com
-From:   Cynthia E <www0.union2@gmail.com>
-Date:   Wed, 19 Feb 2020 11:36:05 +0000
-Message-ID: <CAGp4paV8s6KeahBOeCkK8M55MT+92Jj03HBeavTA5+haYe1ghA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200219024233.GA19334@mail.hallyn.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello dear,
-I have an important informations from (United Nations) for you kindly
-get back to me for more informations
-Cynthia
+On Tue, Feb 18, 2020 at 08:42:33PM -0600, Serge Hallyn wrote:
+> On Tue, Feb 18, 2020 at 03:33:55PM +0100, Christian Brauner wrote:
+> > Introduce a helper which makes it possible to detect fileystems whose
+> > superblock is visible in multiple user namespace. This currently only
+> > means proc and sys. Such filesystems usually have special semantics so their
+> > behavior will not be changed with the introduction of fsid mappings.
+> 
+> Hi,
+> 
+> I'm afraid I've got a bit of a hangup about the terminology here.  I
+> *think* what you mean is that SB_I_USERNS_VISIBLE is an fs whose uids are
+> always translated per the id mappings, not fsid mappings.  But when I see
+
+Correct!
+
+> the name it seems to imply that !SB_I_USERNS_VISIBLE filesystems can't
+> be seen by other namespaces at all.
+> 
+> Am I right in my first interpretation?  If so, can we talk about the
+> naming?
+
+Yep, your first interpretation is right. What about: wants_idmaps()
