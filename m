@@ -2,101 +2,37 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2961690B1
-	for <lists+linux-security-module@lfdr.de>; Sat, 22 Feb 2020 18:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671E31690CF
+	for <lists+linux-security-module@lfdr.de>; Sat, 22 Feb 2020 18:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgBVRUT (ORCPT
+        id S1727040AbgBVRtk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 22 Feb 2020 12:20:19 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37313 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726198AbgBVRUT (ORCPT
+        Sat, 22 Feb 2020 12:49:40 -0500
+Received: from [167.172.150.84] ([167.172.150.84]:36150 "EHLO
+        centos-s-1vcpu-2gb-nyc1-01.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726707AbgBVRti (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 22 Feb 2020 12:20:19 -0500
-Received: by mail-pl1-f195.google.com with SMTP id c23so2219593plz.4;
-        Sat, 22 Feb 2020 09:20:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=76mGlpp6BFJSmPDHJW6kprv/8C2HQ3fa7ORMT87pipU=;
-        b=AhvXtgXr8v/7hcsVNalXOtAMxUQGg+OE/SI9/59KpjrJJKTzdFu6gUOq/LuJRpqBY0
-         FYwSgXktGDhXnxJhU2U90NIxa+7RN66/jwTwRNLQhjLZWDu4ngBO04tPrP5ZGeqWwsa4
-         Sby6zAhTXe+ZJh0Ro82a7S+HR0pUgR6wT4d0onSlnyKCWfcSG35Jr22+4olJ7iiexMQx
-         qFkGQxPKNG65rZfE0ngObnTGSx4jRB2mrHaLqMMerAIcn3pm+dOIofsrj0NE5RO03RW+
-         OcXxr6GO++1LxMqSozC0UQxPEgpBW2CNB/gtyo6QKlW3lwjmFII7A9faa5wJet69n5lo
-         6yGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=76mGlpp6BFJSmPDHJW6kprv/8C2HQ3fa7ORMT87pipU=;
-        b=pxUqQU732q/sBAfmZlkz8aFi0n2B6ybFB35k/PFbCKVKq3l3qnNAeFQAX8NPf7N398
-         gn1/+TB7d+rEb7Zn1nvK6uPstK++8H2V1LjiY1xIGzgX+0Oi7FlauEpK7mifwyAuS3gS
-         iAWkJpJMrv0Y4cxZsWQgN1R9EoZgEVp3r27sosQ4fxNdGPMwGvd8kV6P3YP9xeghz40k
-         nkk/VDdmPU6baywDc3zLHqdZbyo+O5EpsW5t8d3Ug3IL/DRd6exfs6xGmP+0vInd77XV
-         Q1pHGKI+QgrFEgS5+Mq1MXaKeAvf9NebhKUCEZPD8zrI+r1q/aerSkwOE0u6kuD3OMgL
-         h1dw==
-X-Gm-Message-State: APjAAAWisnf889QnUEpsFEvHHthIg50IftdwPkZ0Y56EBkyVvz2LApw5
-        Bh8R6/EFXxvZAInb6MQkzYT8xzn+0N4=
-X-Google-Smtp-Source: APXvYqw9ScUK576eJpHRzjT0V+dYpENY1q/4Limxa/EmkHyr08VAeeRcRXsUX3jm2jzFKbuhC3jelw==
-X-Received: by 2002:a17:90a:ca12:: with SMTP id x18mr10118744pjt.66.1582392018775;
-        Sat, 22 Feb 2020 09:20:18 -0800 (PST)
-Received: from localhost.localdomain ([103.87.57.201])
-        by smtp.googlemail.com with ESMTPSA id o19sm10305622pjr.2.2020.02.22.09.20.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Feb 2020 09:20:18 -0800 (PST)
-From:   Amol Grover <frextrite@gmail.com>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-security-module@vger.kernel.org,
-        Amol Grover <frextrite@gmail.com>
-Subject: [PATCH] device_cgroup: Fix RCU list debugging warning
-Date:   Sat, 22 Feb 2020 22:49:39 +0530
-Message-Id: <20200222171938.14339-1-frextrite@gmail.com>
-X-Mailer: git-send-email 2.24.1
+        Sat, 22 Feb 2020 12:49:38 -0500
+Received: from localhost (centos-s-1vcpu-2gb-nyc1-01 [127.0.0.1])
+        by centos-s-1vcpu-2gb-nyc1-01.localdomain (Postfix) with SMTP id 81F0017732;
+        Fri, 21 Feb 2020 16:50:47 +0000 (UTC)
+Received: from [51.7.194.114] by localhost with ESMTP id 61145412 for <linda_278@centurytel.net>; Fri, 21 Feb 2020 21:47:38 +0500
+Message-ID: <qo$48v09x4c2--5-$f9@r5u1c0kgq>
+From:   "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
+Reply-To: "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
+To:     linda_278@centurytel.net
+Subject: RECEIVE MONEY IN BANK ACCOUNT REPLY TO fta447447@gmail.com
+Date:   Fri, 21 Feb 20 21:47:38 GMT
+X-Mailer: AOL 7.0 for Windows US sub 118
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/alternative;
+        boundary="A..C8.._3321CEA_"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-exceptions may be traversed using list_for_each_entry_rcu()
-outside of an RCU read side critical section BUT under the
-protection of decgroup_mutex. Hence add the corresponding
-lockdep expression to fix the following false-positive
-warning:
 
-[    2.304417] =============================
-[    2.304418] WARNING: suspicious RCU usage
-[    2.304420] 5.5.4-stable #17 Tainted: G            E
-[    2.304422] -----------------------------
-[    2.304424] security/device_cgroup.c:355 RCU-list traversed in non-reader section!!
-
-Signed-off-by: Amol Grover <frextrite@gmail.com>
----
- security/device_cgroup.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index 7d0f8f7431ff..b7da9e0970d9 100644
---- a/security/device_cgroup.c
-+++ b/security/device_cgroup.c
-@@ -352,7 +352,8 @@ static bool match_exception_partial(struct list_head *exceptions, short type,
- {
- 	struct dev_exception_item *ex;
- 
--	list_for_each_entry_rcu(ex, exceptions, list) {
-+	list_for_each_entry_rcu(ex, exceptions, list,
-+				lockdep_is_held(&devcgroup_mutex)) {
- 		if ((type & DEVCG_DEV_BLOCK) && !(ex->type & DEVCG_DEV_BLOCK))
- 			continue;
- 		if ((type & DEVCG_DEV_CHAR) && !(ex->type & DEVCG_DEV_CHAR))
--- 
-2.24.1
+--A..C8.._3321CEA_--
 
