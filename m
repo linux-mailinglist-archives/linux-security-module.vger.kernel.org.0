@@ -2,37 +2,52 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 671E31690CF
-	for <lists+linux-security-module@lfdr.de>; Sat, 22 Feb 2020 18:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558B4169655
+	for <lists+linux-security-module@lfdr.de>; Sun, 23 Feb 2020 06:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbgBVRtk (ORCPT
+        id S1726057AbgBWFrL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 22 Feb 2020 12:49:40 -0500
-Received: from [167.172.150.84] ([167.172.150.84]:36150 "EHLO
-        centos-s-1vcpu-2gb-nyc1-01.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726707AbgBVRti (ORCPT
+        Sun, 23 Feb 2020 00:47:11 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:52106 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbgBWFrL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 22 Feb 2020 12:49:38 -0500
-Received: from localhost (centos-s-1vcpu-2gb-nyc1-01 [127.0.0.1])
-        by centos-s-1vcpu-2gb-nyc1-01.localdomain (Postfix) with SMTP id 81F0017732;
-        Fri, 21 Feb 2020 16:50:47 +0000 (UTC)
-Received: from [51.7.194.114] by localhost with ESMTP id 61145412 for <linda_278@centurytel.net>; Fri, 21 Feb 2020 21:47:38 +0500
-Message-ID: <qo$48v09x4c2--5-$f9@r5u1c0kgq>
-From:   "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
-Reply-To: "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
-To:     linda_278@centurytel.net
-Subject: RECEIVE MONEY IN BANK ACCOUNT REPLY TO fta447447@gmail.com
-Date:   Fri, 21 Feb 20 21:47:38 GMT
-X-Mailer: AOL 7.0 for Windows US sub 118
-MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="A..C8.._3321CEA_"
-X-Priority: 3
-X-MSMail-Priority: Normal
+        Sun, 23 Feb 2020 00:47:11 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::f0c])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 45E1E141C8A68;
+        Sat, 22 Feb 2020 21:47:10 -0800 (PST)
+Date:   Sat, 22 Feb 2020 21:47:09 -0800 (PST)
+Message-Id: <20200222.214709.1503060992928233323.davem@davemloft.net>
+To:     mcroce@redhat.com
+Cc:     netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com,
+        kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org, kuba@kernel.org,
+        gnault@redhat.com, eric.dumazet@gmail.com
+Subject: Re: [PATCH net] ipv4: ensure rcu_read_lock() in cipso_v4_error()
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200221112838.11324-1-mcroce@redhat.com>
+References: <20200221112838.11324-1-mcroce@redhat.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 22 Feb 2020 21:47:10 -0800 (PST)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+From: Matteo Croce <mcroce@redhat.com>
+Date: Fri, 21 Feb 2020 12:28:38 +0100
 
---A..C8.._3321CEA_--
+> Similarly to commit c543cb4a5f07 ("ipv4: ensure rcu_read_lock() in
+> ipv4_link_failure()"), __ip_options_compile() must be called under rcu
+> protection.
+> 
+> Fixes: 3da1ed7ac398 ("net: avoid use IPCB in cipso_v4_error")
+> Suggested-by: Guillaume Nault <gnault@redhat.com>
+> Signed-off-by: Matteo Croce <mcroce@redhat.com>
 
+Applied and queued up for -stable, thanks.
