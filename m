@@ -2,216 +2,153 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 445C816AAC0
-	for <lists+linux-security-module@lfdr.de>; Mon, 24 Feb 2020 17:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D1516AB54
+	for <lists+linux-security-module@lfdr.de>; Mon, 24 Feb 2020 17:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727448AbgBXQJj (ORCPT
+        id S1727804AbgBXQ1X (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 24 Feb 2020 11:09:39 -0500
-Received: from sonic315-26.consmr.mail.ne1.yahoo.com ([66.163.190.152]:40609
-        "EHLO sonic315-26.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727160AbgBXQJj (ORCPT
+        Mon, 24 Feb 2020 11:27:23 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:48850 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727160AbgBXQ1X (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 24 Feb 2020 11:09:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1582560578; bh=ViOIOXczxT6z0pFkg2K3ireeWowQ0T+MQDPd9bJgqKQ=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=o+hVr4UfG8lBy/Vp66je1o07PZLIsdJVjGAs1tZ1dxgkBtZlyAunCHrnztISNdrS/6zi/7LB0AZgK17yZJanpRbi88Hw/59dfarzRsy2mZGgR07IF9XTTLboYP1n2MvwJsErg9l50AJ75ElEsiK5YuI2nsyFap/ZGXT41QMQP83r936ycEBKkhHcQpHlASki9w5r0mhD1DVxwTnUinmVnhP15+OdSGzP7clVaT7jtX5Jpq/wRNFkn9lJpqXOOB8tYD6rIYVCcU3HstwcalolX8DNC5MdjI7Vj+BVcAqZPgoax1Y66+o/drHz64jGfSDyfVBLG751Ivp8usVMoM0I6A==
-X-YMail-OSG: cD8JWZsVM1m1ELLWFgf2fJiQCcYP9wwOSA35dKRCFnIhJPUycPknGMD.JyGKlfe
- 99pkk0CG3jCAzaA2SCBd3SfNx2GOuxPIOeBNy7fz0W.8VEad8o8IjCz_4GpQi.rr2v4j8CBwIfdx
- q_Ic9svuGRvbxb944og9T.x0K.CzDiqHL8eOq2fpcYU_K20jOkRDQwx1.5GBmvMI1iakAn2TmcOG
- gurkfrMXK4P9uwF_A_h5U8KV9d93FG0N8QEFSEx9sV66gUsj_JlZAF3CDtRqIkT587TfaNfl8qrt
- 2gy3ZOOMeCNUzz1bLPyJ7G59jzcLA0k3uG.ib9VfdY15220W5SKMettLnu1kxElcH97ywvrY.p3L
- k5D0VXuxV8vmlXj6.GTPYtVVvKTNL6fVqY_xc8.0x_a38k.PNqU0D3QQOz.pfWyLjtMczYEshPdl
- iOzSVDqeY3C7vdS091qF7ypRbj3QWL8Bfuomixg9O9iHUnfFwUPRC.GnnMkXH8vtZlD8esw3E_3o
- 67B7LBdAkmagnl1nzgP6wedcxtgooR4r_HbKD6AJZdzf.lGTZsbyl0VP3K5sfgfMdY20V1kfpVfL
- .cNKz7LvcLJLvyOYK5Crnh9JmdtDKo6u9fF8A1Ir9hM.3Gsix_uzYOsaebJHI2Dbw3ndyx_2639N
- dhSO00XJQ6wLYlH2HewAU2QCUOzkvrOTXroz96h7VBJOTUI.5gkdNNsK.RdILBhYIKUSDohANZI.
- dj4EwwBgBHsYwNCFeYP4MAK5K.DQn4mVfoXA3ac0ivrPn0ExvNXpUr30lCQcGiaGJm9lr7uqb.Oi
- PdlplXK8RuZgbuyXnwc16uBx6FgMUe9xZqH5XjlWx11oGSmWq1R6ekoGNQjHRqamC26V29L7R.na
- 7cRvzFnRdX8nTL3dXZBVfsCJ5aNJBqQBMYEZcT6VZStJX.U_jZmk5u7r1C8i87Keb7WofPKbB.kZ
- jGsPj2_nn8mdvIerwu.A2AqjK7XF_JxaIsf2b5vk.RwBfesq_A80VAFb_8kiZnTEaXQPHDRTGO9e
- zp6fQysdAVBA6TVSv2db0hwf3AH0g4AtwAp9VINYBpQ_pvqaOw0W9SFR2Jt7oO8c4Yx0_9THTfeJ
- pjh0Zhubakhcar6hP_PvCk_RN88wEvWl5aNkkJ6jvmO86NEyvqAUCtj1p3BATdasCoBYiHdRpPah
- XZgA4ahcQEfX.X6TjyDrsUq2bMfOP9xY0V2_GSJ.OMyeksmlm4r1y9g1h_0hNIwAv39BjKUNAdCr
- EITZA36oFlWHt6CC29pMPfzOZsRy2sO6RVcdzJNmijC070q4x6NSPe2CXtioqRZ31yvek7BcvEBx
- sqZV0HN0FfYo82Y0SGP0miOdEF.RzUTFyx6vjEQNaC5OAm4vtqNr1ARE1He0E5.bk9INYUmGVrlA
- lhKPA3s2_Op6Hs7FpLznOtKdOYPQ_bb8ss6b2
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Mon, 24 Feb 2020 16:09:38 +0000
-Received: by smtp425.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 04f8dc3ff9fac56c2e4b74fff34b2533;
-          Mon, 24 Feb 2020 16:09:36 +0000 (UTC)
-Subject: Re: [PATCH bpf-next v4 3/8] bpf: lsm: provide attachment points for
- BPF LSM programs
-To:     Kees Cook <keescook@chromium.org>
-Cc:     KP Singh <kpsingh@chromium.org>,
+        Mon, 24 Feb 2020 11:27:23 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1j6GZk-0004Dy-PN; Mon, 24 Feb 2020 09:27:20 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1j6GZk-0007ND-2p; Mon, 24 Feb 2020 09:27:20 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20200220175250.10795-1-kpsingh@chromium.org>
- <20200220175250.10795-4-kpsingh@chromium.org>
- <0ef26943-9619-3736-4452-fec536a8d169@schaufler-ca.com>
- <202002211946.A23A987@keescook>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Autocrypt: addr=casey@schaufler-ca.com; keydata=
- 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
- abzjfg==
-Message-ID: <fd599cd6-c571-f19f-cd38-58777beb7a38@schaufler-ca.com>
-Date:   Mon, 24 Feb 2020 08:09:35 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux Security Module <linux-security-module@vger.kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Jeff Layton <jlayton@poochiereds.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Solar Designer <solar@openwall.com>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>
+References: <20200210150519.538333-8-gladkov.alexey@gmail.com>
+        <87v9odlxbr.fsf@x220.int.ebiederm.org>
+        <20200212144921.sykucj4mekcziicz@comp-core-i7-2640m-0182e6>
+        <87tv3vkg1a.fsf@x220.int.ebiederm.org>
+        <CAHk-=wg52stFtUxMOxs3afkwDWmWn1JXC7RJ7dPsTrJbnxpZVg@mail.gmail.com>
+        <87v9obipk9.fsf@x220.int.ebiederm.org>
+        <CAHk-=wgwmu4jpmOqW0+Lz0dcem1Fub=ThLHvmLobf_WqCq7bwg@mail.gmail.com>
+        <20200212200335.GO23230@ZenIV.linux.org.uk>
+        <CAHk-=wi+1CPShMFvJNPfnrJ8DD8uVKUOQ5TQzQUNGLUkeoahkg@mail.gmail.com>
+        <20200212203833.GQ23230@ZenIV.linux.org.uk>
+        <20200212204124.GR23230@ZenIV.linux.org.uk>
+        <CAHk-=wi5FOGV_3tALK3n6E2fK3Oa_yCYkYQtCSaXLSEm2DUCKg@mail.gmail.com>
+        <87lfp7h422.fsf@x220.int.ebiederm.org>
+        <CAHk-=wgmn9Qds0VznyphouSZW6e42GWDT5H1dpZg8pyGDGN+=w@mail.gmail.com>
+        <87pnejf6fz.fsf@x220.int.ebiederm.org>
+        <871rqpaswu.fsf_-_@x220.int.ebiederm.org>
+Date:   Mon, 24 Feb 2020 10:25:16 -0600
+In-Reply-To: <871rqpaswu.fsf_-_@x220.int.ebiederm.org> (Eric W. Biederman's
+        message of "Thu, 20 Feb 2020 14:46:25 -0600")
+Message-ID: <871rqk2brn.fsf_-_@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <202002211946.A23A987@keescook>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Mailer: WebService/1.1.15199 hermes Apache-HttpAsyncClient/4.1.4 (Java/1.8.0_241)
+Content-Type: text/plain
+X-XM-SPF: eid=1j6GZk-0007ND-2p;;;mid=<871rqk2brn.fsf_-_@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18r19JNQj7E6kX0G2mdhpQOxD8W+HrcR10=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=8.0 tests=ALL_TRUSTED,BAYES_40,
+        DCC_CHECK_NEGATIVE,T_TooManySym_01 autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+        *      [score: 0.3245]
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 312 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 2.4 (0.8%), b_tie_ro: 1.64 (0.5%), parse: 1.06
+        (0.3%), extract_message_metadata: 3.2 (1.0%), get_uri_detail_list:
+        1.25 (0.4%), tests_pri_-1000: 6 (1.9%), tests_pri_-950: 1.43 (0.5%),
+        tests_pri_-900: 1.15 (0.4%), tests_pri_-90: 29 (9.1%), check_bayes: 27
+        (8.6%), b_tokenize: 10 (3.3%), b_tok_get_all: 8 (2.6%), b_comp_prob:
+        2.8 (0.9%), b_tok_touch_all: 3.3 (1.0%), b_finish: 0.60 (0.2%),
+        tests_pri_0: 251 (80.4%), check_dkim_signature: 0.59 (0.2%),
+        check_dkim_adsp: 2.7 (0.8%), poll_dns_idle: 0.91 (0.3%), tests_pri_10:
+        2.5 (0.8%), tests_pri_500: 6 (1.9%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH v2 0/6] proc: Dentry flushing without proc_mnt
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2/21/2020 8:22 PM, Kees Cook wrote:
-> On Thu, Feb 20, 2020 at 03:49:05PM -0800, Casey Schaufler wrote:
->> On 2/20/2020 9:52 AM, KP Singh wrote:
->>> From: KP Singh <kpsingh@google.com>
->> Sorry about the heavy list pruning - the original set
->> blows thunderbird up.
-> (I've added some people back; I had to dig this thread back out of lkml=
 
-> since I didn't get a direct copy...)
->
->>> The BPF LSM programs are implemented as fexit trampolines to avoid th=
-e
->>> overhead of retpolines. These programs cannot be attached to security=
-_*
->>> wrappers as there are quite a few security_* functions that do more t=
-han
->>> just calling the LSM callbacks.
->>>
->>> This was discussed on the lists in:
->>>
->>>   https://lore.kernel.org/bpf/20200123152440.28956-1-kpsingh@chromium=
-=2Eorg/T/#m068becce588a0cdf01913f368a97aea4c62d8266
->>>
->>> Adding a NOP callback after all the static LSM callbacks are called h=
-as
->>> the following benefits:
->>>
->>> - The BPF programs run at the right stage of the security_* wrappers.=
+I have addressed all of the review comments as I understand them,
+and fixed the small oversight the kernel test robot was able to
+find. (I had failed to initialize the new field pid->inodes).
 
->>> - They run after all the static LSM hooks allowed the operation,
->>>   therefore cannot allow an action that was already denied.
->> I still say that the special call-out to BPF is unnecessary.
->> I remain unconvinced by the arguments. You aren't doing anything
->> so special that the general mechanism won't work.
-> If I'm understanding this correctly, there are two issues:
->
-> 1- BPF needs to be run last due to fexit trampolines (?)
+I did not hear any concerns from the 10,000 foot level last time
+so I am assuming this set of changes (baring bugs) is good to go.
 
-That's my understanding. As you mention below, there are many
-ways to skin that cat.
+Unless some new issues appear my plan is to put this in my tree
+and get this into linux-next.  Which will give Alexey something
+to build his changes on.
 
-> 2- BPF hooks don't know what may be attached at any given time, so
->    ALL LSM hooks need to be universally hooked.
 
-Right. But that's exactly what we had before we switched to
-the hook lists for stacking. It was perfectly acceptable, and
-was accepted that way, for years. People even objected to it
-being changed.
+I tested this set of changes by running:
+ (while ls -1 -f /proc > /dev/null ; do :; done ) &
+And monitoring the amount of free memory.
 
->  THIS turns out to create
->    a measurable performance problem in that the cost of the indirect ca=
-ll
->    on the (mostly/usually) empty BPF policy is too high.
+With the flushing disabled I saw the used memory in the system grow by
+20M before the shrinker would bring it back down to where it started.
+With the patch applied I saw the memory usage stay essentially fixed.
 
-Right. Except that it was deemed acceptable back before stacking.
-What has changed?=20
+So flushing definitely keeps things working better.
 
->
-> "1" can be solved a lot of ways, and doesn't seem to be a debated part
-> of this series.
->
-> "2" is interesting -- it creates a performance problem for EVERYONE tha=
-t
-> builds in this kernel feature, regardless of them using it. Excepting
-> SELinux, "traditional" LSMs tends to be relatively sparse in their hook=
-ing:
->
-> $ grep '^      struct hlist_head' include/linux/lsm_hooks.h | wc -l
-> 230
-> $ for i in apparmor loadpin lockdown safesetid selinux smack tomoyo yam=
-a ; \
->   do echo -n "$i " && (cd $i && git grep LSM_HOOK_INIT | wc -l) ; done
-> apparmor   68
-> loadpin     3
-> lockdown    1
-> safesetid   2
-> selinux   202
-> smack     108
-> tomoyo     28
-> yama        4
->
-> So, trying to avoid the indirect calls is, as you say, an optimization,=
 
-> but it might be a needed one due to the other limitations.
->
-> To me, some questions present themselves:
->
-> a) What, exactly, are the performance characteristics of:
-> 	"before"
-> 	"with indirect calls"
-> 	"with static keys optimization"
->
-> b) Would there actually be a global benefit to using the static keys
->    optimization for other LSMs? (Especially given that they're already
->    sparsely populated and policy likely determines utility -- all the
->    LSMs would just turn ON all their static keys or turn off ALL their
->    static keys depending on having policy loaded.)
->
-> If static keys are justified for KRSI (by "a") then it seems the approa=
-ch
-> here should stand. If "b" is also true, then we need an additional
-> series to apply this optimization for the other LSMs (but that seems
-> distinctly separate from THIS series).
->
+If anyone sees any problems with this code please let me know.
+
+Thank you,
+
+Eric W. Biederman (6):
+      proc: Rename in proc_inode rename sysctl_inodes sibling_inodes
+      proc: Generalize proc_sys_prune_dcache into proc_prune_siblings_dcache
+      proc: In proc_prune_siblings_dcache cache an aquired super block
+      proc: Use d_invalidate in proc_prune_siblings_dcache
+      proc: Clear the pieces of proc_inode that proc_evict_inode cares about
+      proc: Use a list of inodes to flush from proc
+
+ fs/proc/base.c          | 111 ++++++++++++++++--------------------------------
+ fs/proc/inode.c         |  73 ++++++++++++++++++++++++++++---
+ fs/proc/internal.h      |   4 +-
+ fs/proc/proc_sysctl.c   |  45 +++-----------------
+ include/linux/pid.h     |   1 +
+ include/linux/proc_fs.h |   4 +-
+ kernel/exit.c           |   4 +-
+ kernel/pid.c            |   1 +
+ 8 files changed, 120 insertions(+), 123 deletions(-)
 
