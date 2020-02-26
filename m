@@ -2,582 +2,217 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 621B916F090
-	for <lists+linux-security-module@lfdr.de>; Tue, 25 Feb 2020 21:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0413816F446
+	for <lists+linux-security-module@lfdr.de>; Wed, 26 Feb 2020 01:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728217AbgBYUu2 (ORCPT
+        id S1729429AbgBZAap (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 25 Feb 2020 15:50:28 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:35115 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726764AbgBYUu0 (ORCPT
+        Tue, 25 Feb 2020 19:30:45 -0500
+Received: from sonic315-27.consmr.mail.ne1.yahoo.com ([66.163.190.153]:34441
+        "EHLO sonic315-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728756AbgBZAao (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 25 Feb 2020 15:50:26 -0500
-Received: by mail-ot1-f65.google.com with SMTP id r16so867200otd.2
-        for <linux-security-module@vger.kernel.org>; Tue, 25 Feb 2020 12:50:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cN7Q4dVydT4xYlRzhXk1sRwtrE826VFs1l2/vxQJcvQ=;
-        b=ltEi9IHcymn8kA5Bo4Q/bznz0r5VMTRacX6R3LcY9xUZ3gClNFcfJIRVk3gRVpQkQX
-         +VE9xCNeUAfxtq5wIkeG95u3mhdPhLQCtHsvHgfRsLVZXjMSAKQOj1cVLFCftpXMsOGS
-         z+FMROp6M+Q7DxtzA7btZo0irkZY/QhK2N2jz/FDvywurbv2KAbuQZVZPahVmp25r5MG
-         qt/hViiWH/XAcpfyYzzQoL8JGKogorzR5nrIMCBxQiutr3g+WPUEHxHcmxRYa1moIpij
-         xyODtMiCAw0boQmMPJ4WOt9xZdnkN/vdbtHWxzmnnVjX/WCpVqWTlkzJUp6moh0ltyZo
-         /PQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cN7Q4dVydT4xYlRzhXk1sRwtrE826VFs1l2/vxQJcvQ=;
-        b=JLf5uV2dOlHM45CYl+aAvfspq5T+fpGPr2Jb3cAez++aZKeWuEUcfb+1hnkboJ1x+e
-         VZEP+3bnik/GMVAMMJp895qK12AGvBqH85MHvCtDM2cJRddzmChXbSoVysnD6/DIxCJK
-         9nPbA2DazuRwLkEWcGYLbplBiQFjmRhSFN/Mds1YgJaFm6oBXgPxyZ/8494MkLF9EjQ1
-         Mom4hrXWa0qAt2P5dBPSmpkCGp2ePZULtbE5WdAzBhDjx0AaRuMtcsjGf3REj+Vboy3c
-         SzvJOwnkvLCdUAi2r/+TRxcDc/zKuSbqpVGwGOwSr1kMnXZGPa8IZOIJgjjFMaPQoW+H
-         cniQ==
-X-Gm-Message-State: APjAAAXGXcicDHChp2PQ5yYtbgYzu9CEQa+ZYLqAKQpPtu6XwOMKP9dQ
-        CtKioRBBBnyg94YzYCMg0w7PN+l3eCVyIEjxvApXEg==
-X-Google-Smtp-Source: APXvYqy0mDp21Y+Hj6qrkPvHOelZCXjMBtpFN8Bj28fsPkz/lgS1es5GWIVnhOXNkqbFeOM6C9PbvDEEeYWXWEOuc/Y=
-X-Received: by 2002:a9d:5e8b:: with SMTP id f11mr381742otl.110.1582663823821;
- Tue, 25 Feb 2020 12:50:23 -0800 (PST)
+        Tue, 25 Feb 2020 19:30:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1582677043; bh=8RRtcuYum8ovdHNN06sxqW2J5odMVOW8xNFE4vMX4DA=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=soZ1hb4Br6OuS3IoJXPXQY76/nU8NjxFJoHjojsUeiM/1WOKxK4uR6/K07f3Q2smwitJ3B8YqhugKA4DVaYF4RGDF7bQRv3dLRmmW6IN/o882Hhn8EM11fioBLkuAvbW0PZh6ZaXElhE/QK9OpHawzOwwXRVGFATozb/0zAUBMJGWnSWeL5V5p4mYfP7vwUOdX15N8/MWYXqsm5UiV2iE599FcfhVMMTpnECg2GKRxMizYA0nERzfVi9MUGWJr/F+d53/btsafJNajOomZz+0Ez3dKwpdzSkvHAasKltLmOUO1xYyQoP/mjWkLAGuwWGKVWk7eHP1KGfMhv9yhGlvg==
+X-YMail-OSG: eZDYETgVM1kY8ZOHZprUzvTnIHDKLBO86FGQjgcrXb8KeSSxxhuCAyTMqrNmhtf
+ DxKxxC9wfxjClsyAxumzJaYYsBhooCwtNiibcg6oSlKknuizXRb.LGmyucLbG_bXndK2gl8JAVco
+ X8HO0_wNNtTrLs_ipvT8Q9TlZ0V59IalXsR353MwBiswIrdyM.oRuX2k5a20eA6MFtxIB3FCIIb7
+ 7YyKTql06AwsaQjx2M1OrfPP5XUlMpSXiW_NocIeyu.Qe89lbrCo6oJCF6fz4FttFmVFGlT5jbkt
+ 0Y_HpNqSopkzvGGMfcCTJA.ueEu_HaYbdMTWKqtxQqcmtPy2nFBj4k1t8gzarPMMkTvStEeF.z7.
+ fZskD9PT5FtUXOzcLLp7MBWe5O5tfKivhgNZPN6stzgsEZBVtWrf_r4h3.CcJZGIOq2ZrrI90xo5
+ 2plwjfYgTnhkilLd5vpMH6NVqD8Vaqpsd7Fa3nC3plm6PMcUA_q.XB8otnFdcoRsRFlWnPYSgfzq
+ tDLhw_ZJWU8iNDFIxE6Q8nkysCxc1sxflOGNbIbf.Nm7uVtLVn0roteDC4O__vBlTD_jD1CUS2zf
+ 7_M4lP3BwgH6riDMIrdMiN7ZmLGas4a.hAhcGbVH33kfmL6ZA7WlAIMbGI8HVB.CAdrmdgshuZRY
+ c4js066k1zkTMyH2_fIF2n_nTFCG4Y4su8n83Ir538f1oX32P4WJiq4rVoLFaKw5WBdgCwc1ygWD
+ PnEW1taX9akdGMZyQDetcXnkfxE9OEF4KbnBUl7U6ZD8albEukd7x7wj39fWMa8DRoUvbUoNU8e7
+ ujqaV4GrFHnrVGx9ZbufZITTt1KrBMyT7OMgeJhryPB8XxdIy0KNdwJIi65J9JRQfI.C6DcvQCRj
+ FLYNS1quSM8a.C4HEYUw0KhHqxQJnSULw5VRfjE3Q_DsGs5hVcr5kTz7WfuWGiMrI1KZtXXhVswS
+ EpUUr7wFJLnYoULWI0zsAo6OjzBzm5F0LC7pomCBv4Pv_vUvHevYUbBbuqJcuyyh28OT0yMaRC16
+ CvY_CX2QfetyFtwMKq26xADxGMLqnaWfnm0cU9njp1QbarB6Njjkm8zTwwVvZ.9KOmdPzjCt5bLH
+ zq3.rf9drLCAGt.Aiz52ZITyR30t.3bOt6O.PWs3ZOXQ4VjcrX7NQwM.eyUpPtvzYAV4TkyylFtb
+ CNyTdtXnSbVF9QfZpBL6vvPkrWCH2GxEn3CdkbyfHUTcGRIycimW.iEHZbw0zz9dfQJ0m.jAcExQ
+ MBgBgYUu_.Vq6G6iExqPAA1aUlnvg7Kzrfb.Ie4n9dFdlQm60uYViY6ZDjraFoiUVvGuM_475HGA
+ opF3iOododssDi4xi0aooaQUZvYWYEUwshz0EwaUHgnmm8o5suwN1ZX7elsHYo5_ZVOGVAemZdOa
+ ryvQrck62PxrO5cPpgsfIGwHzw5oauK5xINB0Et1nAWiJReV684Gkws_ObH7UnxvgfcbkRADnUK7
+ 1dJ73DpFre.6_lH5TAKyiY7GjXiMzaSdIll9lAk_sPVODaOU77blQRzPCDys-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Wed, 26 Feb 2020 00:30:43 +0000
+Received: by smtp404.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID bf027b62544540883a33b875121270dc;
+          Wed, 26 Feb 2020 00:30:42 +0000 (UTC)
+Subject: Re: [PATCH bpf-next v4 3/8] bpf: lsm: provide attachment points for
+ BPF LSM programs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     KP Singh <kpsingh@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        James Morris <jmorris@namei.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20200220175250.10795-1-kpsingh@chromium.org>
+ <20200220175250.10795-4-kpsingh@chromium.org>
+ <0ef26943-9619-3736-4452-fec536a8d169@schaufler-ca.com>
+ <202002211946.A23A987@keescook> <20200223220833.wdhonzvven7payaw@ast-mbp>
+ <c5c67ece-e5c1-9e8f-3a2b-60d8d002c894@schaufler-ca.com>
+ <20200224171305.GA21886@chromium.org>
+ <00c216e1-bcfd-b7b1-5444-2a2dfa69190b@schaufler-ca.com>
+ <202002241136.C4F9F7DFF@keescook> <20200225054125.dttrc3fvllzu4mx5@ast-mbp>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Autocrypt: addr=casey@schaufler-ca.com; keydata=
+ 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
+ abzjfg==
+Message-ID: <4b56177f-8148-177b-e1e5-c98da86b3b01@schaufler-ca.com>
+Date:   Tue, 25 Feb 2020 16:30:42 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <20200224160215.4136-1-mic@digikod.net> <20200224160215.4136-2-mic@digikod.net>
-In-Reply-To: <20200224160215.4136-2-mic@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 25 Feb 2020 21:49:57 +0100
-Message-ID: <CAG48ez1FN0B05r35c-EDuQNoW=5ZTy1iBzksbkt+toqs+_tdqg@mail.gmail.com>
-Subject: Re: [RFC PATCH v14 01/10] landlock: Add object and rule management
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200225054125.dttrc3fvllzu4mx5@ast-mbp>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Mailer: WebService/1.1.15302 hermes Apache-HttpAsyncClient/4.1.4 (Java/1.8.0_241)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Feb 24, 2020 at 5:05 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> A Landlock object enables to identify a kernel object (e.g. an inode).
-> A Landlock rule is a set of access rights allowed on an object.  Rules
-> are grouped in rulesets that may be tied to a set of processes (i.e.
-> subjects) to enforce a scoped access-control (i.e. a domain).
+On 2/24/2020 9:41 PM, Alexei Starovoitov wrote:
+> On Mon, Feb 24, 2020 at 01:41:19PM -0800, Kees Cook wrote:
+>> But the LSM subsystem doesn't want special cases (Casey has worked ver=
+y
+>> hard to generalize everything there for stacking). It is really hard t=
+o
+>> accept adding a new special case when there are still special cases ye=
+t
+>> to be worked out even in the LSM code itself[2].
+>> [2] Casey's work to generalize the LSM interfaces continues and it qui=
+te
+>> complex:
+>> https://lore.kernel.org/linux-security-module/20200214234203.7086-1-ca=
+sey@schaufler-ca.com/
+> I think the key mistake we made is that we classified KRSI as LSM.
+> LSM stacking, lsmblobs that the above set is trying to do are not neces=
+sary for KRSI.
+> I don't see anything in LSM infra that KRSI can reuse.
+> The only thing BPF needs is a function to attach to.
+> It can be a nop function or any other.
+> security_*() functions are interesting from that angle only.
+> Hence I propose to reconsider what I was suggesting earlier.
+> No changes to secruity/ directory.
+> Attach to security_*() funcs via bpf trampoline.
+> The key observation vs what I was saying earlier is KRSI and LSM are wr=
+ong names.
+> I think "security" is also loaded word that should be avoided.
+
+No argument there.
+
+> I'm proposing to rename BPF_PROG_TYPE_LSM into BPF_PROG_TYPE_OVERRIDE_R=
+ETURN.
 >
-> Because Landlock's goal is to empower any process (especially
-> unprivileged ones) to sandbox themselves, we can't rely on a system-wide
-> object identification such as file extended attributes.  Indeed, we need
-> innocuous, composable and modular access-controls.
+>> So, unless James is going to take this over Casey's objections, the pa=
+th
+>> forward I see here is:
+>>
+>> - land a "slow" KRSI (i.e. one that hooks every hook with a stub).
+>> - optimize calling for all LSMs
+> I'm very much surprised how 'slow' KRSI is an option at all.
+> 'slow' KRSI means that CONFIG_SECURITY_KRSI=3Dy adds indirect calls to =
+nop
+> functions for every place in the kernel that calls security_*().
+> This is not an acceptable overhead. Even w/o retpoline
+> this is not something datacenter servers can use.
+
+In the universe I live in data centers will disable hyper-threading,
+reducing performance substantially, in the face of hypothetical security
+exploits. That's a massively greater performance impact than the handful
+of instructions required to do indirect calls. Not to mention the impact
+of the BPF programs that have been included. Have you ever looked at what=
+
+happens to system performance when polkitd is enabled?
+
+
 >
-> The main challenge with this constraints is to identify kernel objects
-> while this identification is useful (i.e. when a security policy makes
-> use of this object).  But this identification data should be freed once
-> no policy is using it.  This ephemeral tagging should not and may not be
-> written in the filesystem.  We then need to manage the lifetime of a
-> rule according to the lifetime of its object.  To avoid a global lock,
-> this implementation make use of RCU and counters to safely reference
-> objects.
+> Another option is to do this:
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 64b19f050343..7887ce636fb1 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -240,7 +240,7 @@ static inline const char *kernel_load_data_id_str(e=
+num kernel_load_data_id id)
+>         return kernel_load_data_str[id];
+>  }
 >
-> A following commit uses this generic object management for inodes.
-[...]
-> diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
-> new file mode 100644
-> index 000000000000..4a321d5b3f67
-> --- /dev/null
-> +++ b/security/landlock/Kconfig
-> @@ -0,0 +1,15 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +config SECURITY_LANDLOCK
-> +       bool "Landlock support"
-> +       depends on SECURITY
-> +       default n
+> -#ifdef CONFIG_SECURITY
+> +#if defined(CONFIG_SECURITY) || defined(CONFIG_BPF_OVERRIDE_RETURN)
+>
+> Single line change to security.h and new file kernel/bpf/override_secur=
+ity.c
+> that will look like:
+> int security_binder_set_context_mgr(struct task_struct *mgr)
+> {
+>         return 0;
+> }
+>
+> int security_binder_transaction(struct task_struct *from,
+>                                 struct task_struct *to)
+> {
+>         return 0;
+> }
+> Essentially it will provide BPF side with a set of nop functions.
+> CONFIG_SECURITY is off. It may seem as a downside that it will force a =
+choice
+> on kernel users. Either they build the kernel with CONFIG_SECURITY and =
+their
+> choice of LSMs or build the kernel with CONFIG_BPF_OVERRIDE_RETURN and =
+use
+> BPF_PROG_TYPE_OVERRIDE_RETURN programs to enforce any kind of policy. I=
+ think
+> it's a pro not a con.
 
-(I think "default n" is implicit?)
+Err, no. All distros use an LSM or two. Unless you can re-implement SELin=
+ux
+in BPF (good luck with state transitions) you've built a warp drive witho=
+ut
+ever having mined dilithium crystals.
 
-> +       help
-> +         This selects Landlock, a safe sandboxing mechanism.  It enables=
- to
-> +         restrict processes on the fly (i.e. enforce an access control p=
-olicy),
-> +         which can complement seccomp-bpf.  The security policy is a set=
- of access
-> +         rights tied to an object, which could be a file, a socket or a =
-process.
-> +
-> +         See Documentation/security/landlock/ for further information.
-> +
-> +         If you are unsure how to answer this question, answer N.
-[...]
-> diff --git a/security/landlock/object.c b/security/landlock/object.c
-> new file mode 100644
-> index 000000000000..38fbbb108120
-> --- /dev/null
-> +++ b/security/landlock/object.c
-> @@ -0,0 +1,339 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Landlock LSM - Object and rule management
-> + *
-> + * Copyright =C2=A9 2016-2020 Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
-> + * Copyright =C2=A9 2018-2020 ANSSI
-> + *
-> + * Principles and constraints of the object and rule management:
-> + * - Do not leak memory.
-> + * - Try as much as possible to free a memory allocation as soon as it i=
-s
-> + *   unused.
-> + * - Do not use global lock.
-> + * - Do not charge processes other than the one requesting a Landlock
-> + *   operation.
-> + */
-> +
-> +#include <linux/bug.h>
-> +#include <linux/compiler.h>
-> +#include <linux/compiler_types.h>
-> +#include <linux/err.h>
-> +#include <linux/errno.h>
-> +#include <linux/fs.h>
-> +#include <linux/kernel.h>
-> +#include <linux/list.h>
-> +#include <linux/rbtree.h>
-> +#include <linux/rcupdate.h>
-> +#include <linux/refcount.h>
-> +#include <linux/slab.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/workqueue.h>
-> +
-> +#include "object.h"
-> +
-> +struct landlock_object *landlock_create_object(
-> +               const enum landlock_object_type type, void *underlying_ob=
-ject)
-> +{
-> +       struct landlock_object *object;
-> +
-> +       if (WARN_ON_ONCE(!underlying_object))
-> +               return NULL;
-> +       object =3D kzalloc(sizeof(*object), GFP_KERNEL);
-> +       if (!object)
-> +               return NULL;
-> +       refcount_set(&object->usage, 1);
-> +       refcount_set(&object->cleaners, 1);
-> +       spin_lock_init(&object->lock);
-> +       INIT_LIST_HEAD(&object->rules);
-> +       object->type =3D type;
-> +       WRITE_ONCE(object->underlying_object, underlying_object);
 
-`object` is not globally visible at this point, so WRITE_ONCE() is unnecess=
-ary.
-
-> +       return object;
-> +}
-> +
-> +struct landlock_object *landlock_get_object(struct landlock_object *obje=
-ct)
-> +       __acquires(object->usage)
-> +{
-> +       __acquire(object->usage);
-> +       /*
-> +        * If @object->usage equal 0, then it will be ignored by writers,=
- and
-> +        * underlying_object->object may be replaced, but this is not an =
-issue
-> +        * for release_object().
-> +        */
-> +       if (object && refcount_inc_not_zero(&object->usage)) {
-> +               /*
-> +                * It should not be possible to get a reference to an obj=
-ect if
-> +                * its underlying object is being terminated (e.g. with
-> +                * landlock_release_object()), because an object is only
-> +                * modifiable through such underlying object.  This is no=
-t the
-> +                * case with landlock_get_object_cleaner().
-> +                */
-> +               WARN_ON_ONCE(!READ_ONCE(object->underlying_object));
-> +               return object;
-> +       }
-> +       return NULL;
-> +}
-> +
-> +static struct landlock_object *get_object_cleaner(
-> +               struct landlock_object *object)
-> +       __acquires(object->cleaners)
-> +{
-> +       __acquire(object->cleaners);
-> +       if (object && refcount_inc_not_zero(&object->cleaners))
-> +               return object;
-> +       return NULL;
-> +}
-
-I don't get this whole "cleaners" thing. Can you give a quick
-description of why this is necessary, and what benefits it has over a
-standard refcounting+RCU scheme? I don't immediately see anything that
-requires this.
-
-> +/*
-> + * There is two cases when an object should be free and the reference to=
- the
-> + * underlying object should be put:
-> + * - when the last rule tied to this object is removed, which is handled=
- by
-> + *   landlock_put_rule() and then release_object();
-> + * - when the object is being terminated (e.g. no more reference to an i=
-node),
-> + *   which is handled by landlock_put_object().
-> + */
-> +static void put_object_free(struct landlock_object *object)
-> +       __releases(object->cleaners)
-> +{
-> +       __release(object->cleaners);
-> +       if (!refcount_dec_and_test(&object->cleaners))
-> +               return;
-> +       WARN_ON_ONCE(refcount_read(&object->usage));
-> +       /*
-> +        * Ensures a safe use of @object in the RCU block from
-> +        * landlock_put_rule().
-> +        */
-> +       kfree_rcu(object, rcu_free);
-> +}
-> +
-> +/*
-> + * Destroys a newly created and useless object.
-> + */
-> +void landlock_drop_object(struct landlock_object *object)
-> +{
-> +       if (WARN_ON_ONCE(!refcount_dec_and_test(&object->usage)))
-> +               return;
-> +       __acquire(object->cleaners);
-> +       put_object_free(object);
-> +}
-> +
-> +/*
-> + * Puts the underlying object (e.g. inode) if it is the first request to
-> + * release @object, without calling landlock_put_object().
-> + *
-> + * Return true if this call effectively marks @object as released, false
-> + * otherwise.
-> + */
-> +static bool release_object(struct landlock_object *object)
-> +       __releases(&object->lock)
-> +{
-> +       void *underlying_object;
-> +
-> +       lockdep_assert_held(&object->lock);
-> +
-> +       underlying_object =3D xchg(&object->underlying_object, NULL);
-> +       spin_unlock(&object->lock);
-> +       might_sleep();
-> +       if (!underlying_object)
-> +               return false;
-> +
-> +       switch (object->type) {
-> +       case LANDLOCK_OBJECT_INODE:
-> +               break;
-> +       default:
-> +               WARN_ON_ONCE(1);
-> +       }
-> +       return true;
-> +}
-> +
-> +static void put_object_cleaner(struct landlock_object *object)
-> +       __releases(object->cleaners)
-> +{
-> +       /* Let's try an early lockless check. */
-> +       if (list_empty(&object->rules) &&
-> +                       READ_ONCE(object->underlying_object)) {
-> +               /*
-> +                * Puts @object if there is no rule tied to it and the
-> +                * remaining user is the underlying object.  This check i=
-s
-> +                * atomic because @object->rules and @object->underlying_=
-object
-> +                * are protected by @object->lock.
-> +                */
-> +               spin_lock(&object->lock);
-> +               if (list_empty(&object->rules) &&
-> +                               READ_ONCE(object->underlying_object) &&
-> +                               refcount_dec_if_one(&object->usage)) {
-> +                       /*
-> +                        * Releases @object, in place of
-> +                        * landlock_release_object().
-> +                        *
-> +                        * @object is already empty, implying that all it=
-s
-> +                        * previous rules are already disabled.
-> +                        *
-> +                        * Unbalance the @object->cleaners counter to ref=
-lect
-> +                        * the underlying object release.
-> +                        */
-> +                       if (!WARN_ON_ONCE(!release_object(object))) {
-> +                               __acquire(object->cleaners);
-> +                               put_object_free(object);
-> +                       }
-> +               } else {
-> +                       spin_unlock(&object->lock);
-> +               }
-> +       }
-> +       put_object_free(object);
-> +}
-> +
-> +/*
-> + * Putting an object is easy when the object is being terminated, but it=
- is
-> + * much more tricky when the reason is that there is no more rule tied t=
-o this
-> + * object.  Indeed, new rules could be added at the same time.
-> + */
-> +void landlock_put_object(struct landlock_object *object)
-> +       __releases(object->usage)
-> +{
-> +       struct landlock_object *object_cleaner;
-> +
-> +       __release(object->usage);
-> +       might_sleep();
-> +       if (!object)
-> +               return;
-> +       /*
-> +        * Guards against concurrent termination to be able to terminate
-> +        * @object if it is empty and not referenced by another rule-appe=
-nder
-> +        * other than the underlying object.
-> +        */
-> +       object_cleaner =3D get_object_cleaner(object);
-> +       if (WARN_ON_ONCE(!object_cleaner)) {
-> +               __release(object->cleaners);
-> +               return;
-> +       }
-> +       /*
-> +        * Decrements @object->usage and if it reach zero, also decrement
-> +        * @object->cleaners.  If both reach zero, then release and free
-> +        * @object.
-> +        */
-> +       if (refcount_dec_and_test(&object->usage)) {
-> +               struct landlock_rule *rule_walker, *rule_walker2;
-> +
-> +               spin_lock(&object->lock);
-> +               /*
-> +                * Disables all the rules tied to @object when it is forb=
-idden
-> +                * to add new rule but still allowed to remove them with
-> +                * landlock_put_rule().  This is crucial to be able to sa=
-fely
-> +                * free a rule according to landlock_rule_is_disabled().
-> +                */
-> +               list_for_each_entry_safe(rule_walker, rule_walker2,
-> +                               &object->rules, list)
-> +                       list_del_rcu(&rule_walker->list);
-> +
-> +               /*
-> +                * Releases @object if it is not already released (e.g. w=
-ith
-> +                * landlock_release_object()).
-> +                */
-> +               release_object(object);
-> +               /*
-> +                * Unbalances the @object->cleaners counter to reflect th=
-e
-> +                * underlying object release.
-> +                */
-> +               __acquire(object->cleaners);
-> +               put_object_free(object);
-> +       }
-> +       put_object_cleaner(object_cleaner);
-> +}
-> +
-> +void landlock_put_rule(struct landlock_object *object,
-> +               struct landlock_rule *rule)
-> +{
-> +       if (!rule)
-> +               return;
-> +       WARN_ON_ONCE(!object);
-> +       /*
-> +        * Guards against a concurrent @object self-destruction with
-> +        * landlock_put_object() or put_object_cleaner().
-> +        */
-> +       rcu_read_lock();
-> +       if (landlock_rule_is_disabled(rule)) {
-> +               rcu_read_unlock();
-> +               if (refcount_dec_and_test(&rule->usage))
-> +                       kfree_rcu(rule, rcu_free);
-> +               return;
-> +       }
-> +       if (refcount_dec_and_test(&rule->usage)) {
-> +               struct landlock_object *safe_object;
-> +
-> +               /*
-> +                * Now, @rule may still be enabled, or in the process of =
-being
-> +                * untied to @object by put_object_cleaner().  However, w=
-e know
-> +                * that @object will not be freed until rcu_read_unlock()=
- and
-> +                * until @object->cleaners reach zero.  Furthermore, we m=
-ay not
-> +                * be the only one willing to free a @rule linked with @o=
-bject.
-> +                * If we succeed to hold @object with get_object_cleaner(=
-), we
-> +                * know that until put_object_cleaner(), we can safely us=
-e
-> +                * @object to remove @rule.
-> +                */
-> +               safe_object =3D get_object_cleaner(object);
-> +               rcu_read_unlock();
-> +               if (!safe_object) {
-> +                       __release(safe_object->cleaners);
-> +                       /*
-> +                        * We can safely free @rule because it is already
-> +                        * removed from @object's list.
-> +                        */
-> +                       WARN_ON_ONCE(!landlock_rule_is_disabled(rule));
-> +                       kfree_rcu(rule, rcu_free);
-> +               } else {
-> +                       spin_lock(&safe_object->lock);
-> +                       if (!landlock_rule_is_disabled(rule))
-> +                               list_del(&rule->list);
-> +                       spin_unlock(&safe_object->lock);
-> +                       kfree_rcu(rule, rcu_free);
-> +                       put_object_cleaner(safe_object);
-> +               }
-> +       } else {
-> +               rcu_read_unlock();
-> +       }
-> +       /*
-> +        * put_object_cleaner() might sleep, but it is only reachable if
-> +        * !landlock_rule_is_disabled().  Therefore, clean_ref() can not =
-sleep.
-> +        */
-> +       might_sleep();
-> +}
-> +
-> +void landlock_release_object(struct landlock_object __rcu *rcu_object)
-> +{
-> +       struct landlock_object *object;
-> +
-> +       if (!rcu_object)
-> +               return;
-> +       rcu_read_lock();
-> +       object =3D get_object_cleaner(rcu_dereference(rcu_object));
-
-This is not how RCU works. You need the rcu annotation on the access
-to the data structure member (or global variable) that's actually
-being accessed. A "struct foo __rcu *foo" argument is essentially
-always wrong.
-
-> +struct landlock_rule {
-> +       struct landlock_access access;
-> +       /*
-> +        * @list: Linked list with other rules tied to the same object, w=
-hich
-> +        * enable to manage their lifetimes.  This is also used to identi=
-fy if
-> +        * a rule is still valid, thanks to landlock_rule_is_disabled(), =
-which
-> +        * is important in the matching process because the original obje=
-ct
-> +        * address might have been recycled.
-> +        */
-> +       struct list_head list;
-> +       union {
-> +               /*
-> +                * @usage: Number of rulesets pointing to this rule.  Thi=
-s
-> +                * field is never used by RCU readers.
-> +                */
-> +               refcount_t usage;
-> +               struct rcu_head rcu_free;
-> +       };
-> +};
-
-An object that is subject to RCU but whose refcount must not be
-accessed from RCU context? That seems a weird.
-
-> +enum landlock_object_type {
-> +       LANDLOCK_OBJECT_INODE =3D 1,
-> +};
-> +
-> +struct landlock_object {
-> +       /*
-> +        * @usage: Main usage counter, used to tie an object to it's unde=
-rlying
-> +        * object (i.e. create a lifetime) and potentially add new rules.
-
-I can't really follow this by reading this patch on its own. As one
-suggestion to make things at least a bit better, how about documenting
-here that `usage` always reaches zero before `cleaners` does?
-
-> +        */
-> +       refcount_t usage;
-> +       /*
-> +        * @cleaners: Usage counter used to free a rule from @rules (than=
-ks to
-> +        * put_rule()).  Enables to get a reference to this object until =
-it
-> +        * really become freed.  Cf. put_object().
-
-Maybe add: @usage being non-zero counts as one reference to @cleaners.
-Once @cleaners has become zero, the object is freed after an RCU grace
-period.
-
-> +        */
-> +       refcount_t cleaners;
-> +       union {
-> +               /*
-> +                * The use of this struct is controlled by @usage and
-> +                * @cleaners, which makes it safe to union it with @rcu_f=
-ree.
-> +                */
-[...]
-> +               struct rcu_head rcu_free;
-> +       };
-> +};
-[...]
-> +static inline bool landlock_rule_is_disabled(
-> +               struct landlock_rule *rule)
-> +{
-> +       /*
-> +        * Disabling (i.e. unlinking) a landlock_rule is a one-way operat=
-ion.
-> +        * It is not possible to re-enable such a rule, then there is no =
-need
-> +        * for smp_load_acquire().
-> +        *
-> +        * LIST_POISON2 is set by list_del() and list_del_rcu().
-> +        */
-> +       return !rule || READ_ONCE(rule->list.prev) =3D=3D LIST_POISON2;
-
-You're not allowed to do this, the comment above list_del() states:
-
- * Note: list_empty() on entry does not return true after this, the entry i=
-s
- * in an undefined state.
-
-If you want to be able to test whether the element is on a list
-afterwards, use stuff like list_del_init().
-
-> +}
