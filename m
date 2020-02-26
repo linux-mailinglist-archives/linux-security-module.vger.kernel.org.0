@@ -2,17 +2,17 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0413816F446
-	for <lists+linux-security-module@lfdr.de>; Wed, 26 Feb 2020 01:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F37A16F44B
+	for <lists+linux-security-module@lfdr.de>; Wed, 26 Feb 2020 01:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729429AbgBZAap (ORCPT
+        id S1729646AbgBZAaq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 25 Feb 2020 19:30:45 -0500
-Received: from sonic315-27.consmr.mail.ne1.yahoo.com ([66.163.190.153]:34441
+        Tue, 25 Feb 2020 19:30:46 -0500
+Received: from sonic315-27.consmr.mail.ne1.yahoo.com ([66.163.190.153]:35750
         "EHLO sonic315-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728756AbgBZAao (ORCPT
+        by vger.kernel.org with ESMTP id S1728865AbgBZAap (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 25 Feb 2020 19:30:44 -0500
+        Tue, 25 Feb 2020 19:30:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1582677043; bh=8RRtcuYum8ovdHNN06sxqW2J5odMVOW8xNFE4vMX4DA=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=soZ1hb4Br6OuS3IoJXPXQY76/nU8NjxFJoHjojsUeiM/1WOKxK4uR6/K07f3Q2smwitJ3B8YqhugKA4DVaYF4RGDF7bQRv3dLRmmW6IN/o882Hhn8EM11fioBLkuAvbW0PZh6ZaXElhE/QK9OpHawzOwwXRVGFATozb/0zAUBMJGWnSWeL5V5p4mYfP7vwUOdX15N8/MWYXqsm5UiV2iE599FcfhVMMTpnECg2GKRxMizYA0nERzfVi9MUGWJr/F+d53/btsafJNajOomZz+0Ez3dKwpdzSkvHAasKltLmOUO1xYyQoP/mjWkLAGuwWGKVWk7eHP1KGfMhv9yhGlvg==
 X-YMail-OSG: eZDYETgVM1kY8ZOHZprUzvTnIHDKLBO86FGQjgcrXb8KeSSxxhuCAyTMqrNmhtf
  DxKxxC9wfxjClsyAxumzJaYYsBhooCwtNiibcg6oSlKknuizXRb.LGmyucLbG_bXndK2gl8JAVco
