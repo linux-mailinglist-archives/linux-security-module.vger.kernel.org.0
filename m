@@ -2,63 +2,76 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F114172CEF
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 Feb 2020 01:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6065F172E71
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 Feb 2020 02:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730059AbgB1AT6 (ORCPT
+        id S1730346AbgB1Bw0 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 27 Feb 2020 19:19:58 -0500
-Received: from mail-ed1-f49.google.com ([209.85.208.49]:38462 "EHLO
-        mail-ed1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730028AbgB1AT6 (ORCPT
+        Thu, 27 Feb 2020 20:52:26 -0500
+Received: from sonic308-3.consmr.mail.bf2.yahoo.com ([74.6.130.42]:45189 "EHLO
+        sonic308-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730504AbgB1Bw0 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 27 Feb 2020 19:19:58 -0500
-Received: by mail-ed1-f49.google.com with SMTP id e25so1250290edq.5
-        for <linux-security-module@vger.kernel.org>; Thu, 27 Feb 2020 16:19:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=2d3j7s2zGq88eGCYYBgoxbarV4Ni/c3HRBevGkEtC+E=;
-        b=Yfz/dwe7hdNdhDYtvkTgelMe69ujfFAX85cYWLUJYU53XqlSN+ZZIVO/aB0DCnAgFL
-         yogQ88Kns2oMaE++fd1ioc2N2YA3rhSIWGxUPQVNwUUwaZJ94WvZaToYjjsAJl2WtSg+
-         Vd0ddzcgg2vRzQUJqJ7nyQ9A2mXOxxhOtl4M11RG5iqseFWr7LbBeUkZTJmYhrNuOXMK
-         AB05ktDQXHyDMMmWM0k+KUUpk8vzLGtL/VytNgjXAAHrp6/sPyeIuJbSV4jmQW710DQo
-         F+u24b0n1W1duGvwDZrzJjxGZ2T4VDsyEWfvhKbpvcgQJCqD0NDB/icLPmra5QwK4NtW
-         CwxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=2d3j7s2zGq88eGCYYBgoxbarV4Ni/c3HRBevGkEtC+E=;
-        b=FFusTMfIzoXgf890Oa2PXtI+d3rhEXKLRwOPn8B5pKIUcifjyC6ojGL4+UgbeuludT
-         8TW9gC2n/HL2qRJFQ7VFuB5uN3z4lQDUVe6DUQkIIYbwnDLRKU1wSMjcUfjaZdHL5Brf
-         xaOzcOHQMzwnP1nAJvzB7b0ifJDXBl9tiyjM7qO2h0auSCmeIO/lhLufOSW/cdtD1r/b
-         shv6Nar6Wu7rilADI1uq2dljWut9kcjRp82W6s0dm7XMQMZLDQ9M9Pdu2ov+inackTgy
-         UkKzJa/4cWTOyGeY/TtOnNH/DDZY5jBKPgWW8fyEpPZF0SqcwPmrnnjH9Tr+FGQCKgIW
-         n6Rg==
-X-Gm-Message-State: APjAAAU2cnd3nTqNGv+uZ5ozrs29wbgfoobtj2f+IaWycbEJbXJLQFrM
-        IobQC3Ea5cKg8Ee121+NsKiebc0vIXwStqx5C5jg
-X-Google-Smtp-Source: APXvYqycdKQhyyKfJtxSH8zFdmErASq74BrOhKNx/usCq0ra+pIFWn/buWSihr6hm/uLdvEdOyGT0fgoOOVh5OJlINY=
-X-Received: by 2002:a50:e108:: with SMTP id h8mr1057844edl.196.1582849195142;
- Thu, 27 Feb 2020 16:19:55 -0800 (PST)
+        Thu, 27 Feb 2020 20:52:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1582854744; bh=5G2Xm0QSWKBGGZcml8rVsjkCJF9JjLl6j5seXrKrOew=; h=Date:From:Reply-To:Subject:References:From:Subject; b=AJr/GGM+j+U4wpsmp3JmNK1cWOjbKoao9Rf3b0FiXAataY6iAXPWk/701+VWSQW084ElRUSl0Sn39V9hl3m/L8pbQAVeSzuFBY0LO4zQSw6/NKtidpF6Gq5hjMZRdht1yAjWeD1llOlsD03SPcSy3H5MmI3vf0NEW1jTnSd8LZcQgKOwE9DrxEoEpPOVvYxLP29zTvpFjjOPndD8mSzyZRtJBm1ekM7mEbsSv+zj/bBnhMr3YcX3n7n+/RB+ItZWPrfeP4om1s4SibGDCUXQ2tPBgAYAHJuXrEk/gsB3XKtcfeL/3XKyGIZNRRiUeFikJUV0+HZL/V7NDSI+gw+qWg==
+X-YMail-OSG: i2rou84VM1nAxI0RAU5ugkjdzadhTCAZZtteq0bZDsdElC0q9YvyOINrjUnf5_j
+ J6O2a9yRWI7YgkYrup1U5MQLNHRdj3U.nYHHkyPxBQ3wfFjBf1awRPVP8R.J7ASpQXTqYEMCKv.g
+ OoVAESh38AxyyN1FfXnjDc0AroDpY9soKLukzegDg6FxwEsKnwHOFc9gQEDW_CETzOIBuSiQPLRb
+ jrCvrtsJP0keDL1SqAmvwJV7yZjvxsczNoDhc05zjcn.bxqHCx4tZuNRq2y1MdvvZ22uADOI7J8O
+ .e.P.eJZh4.TnMp8KVSbpM12NuJjk0mK84MV8LtNXm5BCV6sUEMpvAmAEI84SdgHF0UCfrC5lCyX
+ l1bCq04XLcJC9rin4FOSu9qZ66ro11Ewxkoi_0qJFJsKxuUng6swZa8JmGodrU2ET0jkC1SM6qAe
+ rYGxmdUsxFkfky7l8_giiVkIG3ArgNgO_ZGOPKGmHfKOzzn.V1SGf3SfDKhAmDx8KfycZi9BvhZv
+ nKzXbnQPsZRrWpzVepdaAigdzYH7pK2aR4sHLhYtHeBbhb2hAhs42ypQP6KjJOIeCYN1qsG3nhab
+ V_U3JaZ8jN8thZsxAFF_vWhbagyaVzSGlXJJ2hNRrwANpv1._nEc3ikFXQN_1UbYhY63K_gxLr7u
+ iwWHC.aSI2rHAVJ8SvQFDGeRlJIUqHrI7QTO12lCn6QlHiat05VlAQ2SjgclRcN4yW6Ev7QsHxen
+ hueEthZg84CnU9nQyYYzCbF8wNKT_if48bqG6ZQidNd8opV_fU1eeijUsEnvy1tEgteJRCT4CX2_
+ .F4CiuoYmjlqelKLOtY.67bqfAz0vKNsNF_qxW4QW0tu3aCokgpkCSgRPxDWWGgtZdz97LeMvbmh
+ P3fnF44GHZOtzvouY8fgffT1xYAPDtVceCz7RhyxdtiFrjtyTnU.ouSuMEwBsPKaceBAP2oHA0ql
+ JCw4DZM5vU4q.3qAcypETQZfQKxKgTnX3CIiFwujF0jwMzKLG0FARrn4jgCkU6pfMheZL_XEdoVl
+ 0CM9nSGpxLxAIqRM6u68XdWHDKllgtfnzlBW8t5d1DO0OFPxkBSHz6cRHVe5MSFOrbPI5Hq.B767
+ x_U9TP4KDpNnfi5lf4yKhOIM5p1WS0VrbuWYHVane3QxxRfcF6aaK5xEuHkZjw5CztRIxr9szLKm
+ viGVUUvOT6U2pCNNo5.ZDCJblNixhfgavcN3iqrhV10zFVSVjbcPg.DNbZQeB9JvlCuKZHokQtnr
+ 1bFaKmV3Zd3pPwprANgnxZjAq87pax4DRqLrEwUdFLRy0HLGPvG2Xpa6LBSbZEeQOZM4DUWyYSNg
+ 2qbAPy1dotUlvk8CeYW3HLCD91IS3kIA-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.bf2.yahoo.com with HTTP; Fri, 28 Feb 2020 01:52:24 +0000
+Date:   Fri, 28 Feb 2020 01:52:24 +0000 (UTC)
+From:   "MRS AMINA KADI." <mrsamina.kadi12345@gmail.com>
+Reply-To: mrsamina.kadi33@gmail.com
+Message-ID: <1060441909.1224054.1582854744331@mail.yahoo.com>
+Subject:  COMPLEMENT OF THE DAY TO YOU DEAR FRIEND.
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 27 Feb 2020 19:19:43 -0500
-Message-ID: <CAHC9VhQ=W4R2LGCxaKzVEx4J31m4-F7mDo2BOMTqso2JdScHzw@mail.gmail.com>
-Subject: Please revert SELinux/keys patches from the keys linux-next branch
-To:     dhowells@redhat.com
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1060441909.1224054.1582854744331.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15302 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi David,
 
-For some reason we haven't been able to get your attention on the
-related SELinux mailing list threads, but we need you to revert commit
-f981a85690dc ("security/selinux: Add support for new key permissions")
-from your linux-next branch.  Can you please do that?
 
--- 
-paul moore
-www.paul-moore.com
+
+
+
+
+
+
+COMPLEMENT OF THE DAY TO YOU DEAR FRIEND.
+
+ I am MRS AMINA KADI. i want your assisstant to transfer the sum of 5.5USD into your account, I will give you more details when i hear positive responesd from you,
+
+ Please contact me with your below information to proceed for more details awaitin your positive response.
+
+1::Your full name::
+2::Your home address::
+3::Current occupation::
+4::Age::
+5::Your Country::
+6::Your current telephone number/mobile phone
+
+ contact me with this my private emails I.D (mrsamina.kadi33@gmail.com)
+
+From
+
+MRS AMINA KADI.
