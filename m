@@ -2,61 +2,109 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1835E1753E5
-	for <lists+linux-security-module@lfdr.de>; Mon,  2 Mar 2020 07:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAA51755FF
+	for <lists+linux-security-module@lfdr.de>; Mon,  2 Mar 2020 09:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgCBGk3 (ORCPT
+        id S1727107AbgCBI3B (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 2 Mar 2020 01:40:29 -0500
-Received: from mail.dsns.gov.ua ([194.0.148.101]:33306 "EHLO mail.dsns.gov.ua"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726204AbgCBGk2 (ORCPT
+        Mon, 2 Mar 2020 03:29:01 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:53498 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727060AbgCBI3B (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 2 Mar 2020 01:40:28 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id A8C511FC7E1F;
-        Sun,  1 Mar 2020 22:36:01 +0200 (EET)
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id JsHPPEjz2xg0; Sun,  1 Mar 2020 22:36:01 +0200 (EET)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id CD10F1FA362A;
-        Sun,  1 Mar 2020 22:05:46 +0200 (EET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua CD10F1FA362A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
-        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1583093147;
-        bh=njlCkWFc0hcw8eBX6ul4CN7Q0eDgIqGtksJn7ge99kc=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=hms9C6GPLlRlQNCYtQ2toMs3ClMiPzgkk/mR4WQxcYU6tpVKdY3Cw7EaB57TqROvw
-         8SIc4n9OiA40i7EkONZT8k1HjH49riZnDMqDjXA7dxLJ4Bo/IUY7CHP0+UbaivDTqe
-         ccD71usHFlOBfwsHssDZ2mIShswGr7Ervvvr2OnvhBN8CTjKGPz4MnyGDA3WS8vQA6
-         +8xNfcp9T7uiXsHicG+8sxahcsXnx9c1cHpHbEWReL/P4sce+9DJ93gTeecW5kpmZM
-         IvGPV1YmVNwjkxushITIqo0qsYdmr8djfBV/b+doYzRxEeJq4Ie3cxmxzJYi4i1FZy
-         ZNF4u2o3b4huw==
-X-Virus-Scanned: amavisd-new at dsns.gov.ua
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BJbF3S7QcyPh; Sun,  1 Mar 2020 22:05:46 +0200 (EET)
-Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id B0F9B1FC4E95;
-        Sun,  1 Mar 2020 21:59:48 +0200 (EET)
-Date:   Sun, 1 Mar 2020 21:59:48 +0200 (EET)
-From:   Peter Wong <sport08@dsns.gov.ua>
-Reply-To: petrwong@hotmail.com
-Message-ID: <1314446558.3674585.1583092788690.JavaMail.zimbra@dsns.gov.ua>
-Subject: Hello
+        Mon, 2 Mar 2020 03:29:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583137740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S7SFRPLr3XQ/yGKMtmqHYUaXpbtaCS+K42ZRD+xBPoU=;
+        b=CnAD/dpBkq8RAStRRPzwKAP0NMuuxNYVi/OvLO/RNacsM6Ii4j2/PC4nORMWgf9G4VivSJ
+        4J1JDODHrwhIQHDazzW6/TyVfMC0EiauS+nNY6IFwDKdPECaeJvnROxR0ONA4kPxHiar9U
+        bMzALnXPGXt5w2ZA/x/W5YuVYStnNHk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-270-czq4hj2UPdCfjl2o7yOhzg-1; Mon, 02 Mar 2020 03:28:56 -0500
+X-MC-Unique: czq4hj2UPdCfjl2o7yOhzg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9D74DB21;
+        Mon,  2 Mar 2020 08:28:54 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-182.rdu2.redhat.com [10.10.120.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 74E2C60BF3;
+        Mon,  2 Mar 2020 08:28:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200218211259.GA19673@linux.intel.com>
+References: <20200218211259.GA19673@linux.intel.com> <000000000000f4bf93059db8b081@google.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     dhowells@redhat.com, jmorris@namei.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com
+Subject: Re: kernel BUG at lib/assoc_array.c:LINE!
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [5.154.174.49, 172.68.102.151]
-X-Mailer: Zimbra 8.8.15_GA_3899 (zclient/8.8.15_GA_3899)
-Thread-Index: QDiGNMxb89tOxY1vOzGfXokne4cQUg==
-Thread-Topic: Hello
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <538779.1583137732.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 02 Mar 2020 08:28:52 +0000
+Message-ID: <538780.1583137732@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
 
+> The arguments for request_key_and_link() are fairly constrained:
+> =
 
-Can we talk now?
+> type =3D=3D &key_type_dns_resolver
+> description =3D=3D "afsdb:<cell name>"
+> domain_tag =3D=3D net->key_domain
+> callout_info =3D=3D "srv=3D1"
+> callout_len =3D=3D 5
+> aux =3D=3D NULL
+> dest_keyring =3D=3D NULL
+> flags =3D=3D KEY_ALLOC_IN_QUOTA
+> =
+
+> (manually resolved)
+> =
+
+> The only obvious moving part I see is the key type implementatio i.e.
+> net/dns_resolver/dns_key.c.
+
+It shouldn't matter what the payload of the key is going to be, but it mig=
+ht
+matter what the cell name is.  Looking in the log, I see this:
+
+mount(&(0x7f0000000000)=3DANY=3D[@ANYBLOB=3D"25dc545df1e34ab2e26e2f5034c85=
+b3a"], &(0x7f0000000140)=3D'./file0\x00', &(0x7f0000000180)=3D'afs\x00', 0=
+x0, 0x0)
+
+The:
+
+	@ANYBLOB=3D"25dc545df1e34ab2e26e2f5034c85b3a"
+
+is the source, i.e.:
+
+	%\xdcT]\xf1\xe3J\xb2\xe2n/P4\xc8[':
+
+This is in the form "[%#][<cellname>:]<volumename>", which comports with t=
+he
+log:
+
+[  621.627412][ T6728] kAFS: unable to lookup cell '?T]??J??n/P4?['
+
+This is a bit odd, since the version allegedly being tested includes a pat=
+ch
+to prohibit AFS cell names that contain unprintable chars.  It should erro=
+r
+out in afs_alloc_cell(), way before it tries to do a DNS lookup.
+
+David
+
