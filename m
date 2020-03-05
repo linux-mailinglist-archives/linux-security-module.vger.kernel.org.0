@@ -2,112 +2,87 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F56B179BA0
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Mar 2020 23:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F59D17A3E3
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Mar 2020 12:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388026AbgCDWRf (ORCPT
+        id S1727403AbgCELQS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 4 Mar 2020 17:17:35 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:46609 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387931AbgCDWRf (ORCPT
+        Thu, 5 Mar 2020 06:16:18 -0500
+Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:47754 "EHLO
+        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725880AbgCELQQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 4 Mar 2020 17:17:35 -0500
-Received: by mail-pg1-f193.google.com with SMTP id y30so1655683pga.13;
-        Wed, 04 Mar 2020 14:17:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SeLK1u6XZQiNjm/hVW01wDa1blPflVVcyrMnhEyc6lQ=;
-        b=NMU2vjdlKGiHucUtsyG5rog2PzW9dzSnvDzdLKNICZRP2PNr8ScfWCQFerCD8Ahp2u
-         vcUeFNhQG8fPfXQ0gGiJdVRFNTvcogp34MrK6zryQm4gwiI6JQQpIdQ70ZDrOevveruT
-         BUe+wIukIMUlRudvg0bo9jOQ3aE/yM6Xt5AGi8DirwFPvk4bGYJWgAZuvsYum+0rAKHn
-         6GnluaBJFp+g3s93SOqNX9+N5XBSJLxrHLxBFvm02VytTQBXtJyyR6sG/XdfxLCZJaZ9
-         qnywdqfsF0Xw5akcQdU3OnELDza+MQ0cDUe8rlVoEcm/uz//hHG87CAd4sSMiWCxa6F3
-         2hOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SeLK1u6XZQiNjm/hVW01wDa1blPflVVcyrMnhEyc6lQ=;
-        b=bG6M4Ut0DGtIAS90bJTpz/Q8MVcZiNfptw0jOjs2FTmHIERtv1RcTL8D29YO67gED2
-         rnZafOBPhPi3Wt2c4EGfDaGeYbOotQZzBIPv5jasu9n+Gjc5vjb/8OxvOYukUNNUgLIz
-         WQWp863ZQEMqzw9o5JVqQjztEuCkXbYNW9CIKqou1ceMHSQaRGc3UharcA6T0BCpwVpj
-         hrg0GqBaw6wVpZ/KAU+61KZMcX98nxjlB3w5q7RD1OWySSc+NqK9aBW7HmwGzERLD/IE
-         09encumyvcLVEYWELgwq0PwXtEjNNN2vDJ2pEqEcofgh9cVSjp7sMG+Wcttc6S76ObaE
-         ezhg==
-X-Gm-Message-State: ANhLgQ1GqPhZe8dNnHqU3nC2LcFbw72aGvr3fpSRVu6mx19XNRjPH3z4
-        qM3ukmgBYHMHgucfYv3H4zTOTTzA
-X-Google-Smtp-Source: ADFU+vvKbQM5v+o2ycE8rww55wXTCIhFEwn13T6g0O69i6FRGcqst85HQWxGYDGPUnt5gDi8TljC5Q==
-X-Received: by 2002:a63:2323:: with SMTP id j35mr4466654pgj.440.1583360253961;
-        Wed, 04 Mar 2020 14:17:33 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:500::4:c694])
-        by smtp.gmail.com with ESMTPSA id d186sm11160532pfc.8.2020.03.04.14.17.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Mar 2020 14:17:33 -0800 (PST)
-Date:   Wed, 4 Mar 2020 14:17:31 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Subject: Re: [PATCH bpf-next v4 0/7] Introduce BPF_MODIFY_RET tracing progs
-Message-ID: <20200304221729.d6omw6tltqhbw5xr@ast-mbp>
-References: <20200304191853.1529-1-kpsingh@chromium.org>
+        Thu, 5 Mar 2020 06:16:16 -0500
+X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:06 EST
+Received: from webmail.pagasa.dost.int ([10.10.11.8])
+        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AseSK006737-025AseSM006737
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 5 Mar 2020 18:54:40 +0800
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2FB4F2981A90;
+        Thu,  5 Mar 2020 18:46:49 +0800 (PST)
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id r7J1A0N3aHYl; Thu,  5 Mar 2020 18:46:48 +0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2232C2981A4C;
+        Thu,  5 Mar 2020 18:46:48 +0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 2232C2981A4C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
+        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583405208;
+        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=vwxX3L8Z7uHnDJPZBIix9IBQi0XMBiY4sLQTc/9+h6pT2FHeTz61v6B+3f3w6WhXh
+         jUdnW3+FuZCvkf1pcG3LkjpsYvCQO7zO587a10BanpMqFFL6zPGTaTUsrqnCnsqpAd
+         CtN8Atz3iXBEFHZeiXsfNfnWSfk0n7tqEffbmBy8=
+X-Virus-Scanned: amavisd-new at pagasa.dost.int
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id WT2tTJV-1oie; Thu,  5 Mar 2020 18:46:47 +0800 (PST)
+Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5119729819D2;
+        Thu,  5 Mar 2020 18:46:46 +0800 (PST)
+Date:   Thu, 5 Mar 2020 18:46:46 +0800 (PST)
+From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
+Message-ID: <1980644409.3575157.1583405206290.JavaMail.zimbra@pagasa.dost.gov.ph>
+Subject: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200304191853.1529-1-kpsingh@chromium.org>
-User-Agent: NeoMutt/20180223
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
+Thread-Index: lWYDQbv6QI/eIWKrWUD3NPCXqIIr9A==
+Thread-Topic: 
+X-FEAS-DKIM: Valid
+Authentication-Results: mailgw.pagasa.dost.gov.ph;
+        dkim=pass header.i=@pagasa.dost.gov.ph
+To:     unlisted-recipients:; (no To-header on input)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Mar 04, 2020 at 08:18:46PM +0100, KP Singh wrote:
-> 
-> Here is an example of how a fmod_ret program behaves:
-> 
-> int func_to_be_attached(int a, int b)
-V> {  <--- do_fentry
-> 
-> do_fmod_ret:
->    <update ret by calling fmod_ret>
->    if (ret != 0)
->         goto do_fexit;
-> 
-> original_function:
-> 
->     <side_effects_happen_here>
-> 
-> }  <--- do_fexit
-> 
-> ALLOW_ERROR_INJECTION(func_to_be_attached, ERRNO)
-> 
-> The fmod_ret program attached to this function can be defined as:
-> 
-> SEC("fmod_ret/func_to_be_attached")
-> int BPF_PROG(func_name, int a, int b, int ret)
-> {
->         // This will skip the original function logic.
->         return -1;
-> }
 
-Applied to bpf-next. Thanks.
 
-I think it sets up a great base to parallelize further work.
-
-1. I'm rebasing my sleepable BPF patches on top.
-It's necessary to read enviroment variables without the
-'opportunistic copy before hand' hack I saw in your github tree
-to do bpf_get_env_var() helper.
-
-2. please continue on LSM_HOOK patches to go via security tree.
-
-3. we need a volunteer to generalize bpf_sk_storage to task and inode structs.
-This work will be super useful for all bpf tracing too.
-Sleepable progs are useful for tracing as well.
+Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
+ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
+ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
+rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
+nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
+ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
+=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
+Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
+en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
+o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
+inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
+tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
+eptisch sind
+Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
+f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
+ YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
+ ) gesendet werden, damit wir das k=C3=B6nnen
+Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
+obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
+Powerball Jackpot Gewinner
