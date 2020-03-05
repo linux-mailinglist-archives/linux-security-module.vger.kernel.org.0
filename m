@@ -2,87 +2,122 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F59D17A3E3
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 Mar 2020 12:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789AF17A693
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Mar 2020 14:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbgCELQS (ORCPT
+        id S1725991AbgCENl7 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 5 Mar 2020 06:16:18 -0500
-Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:47754 "EHLO
-        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725880AbgCELQQ (ORCPT
+        Thu, 5 Mar 2020 08:41:59 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:36062 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbgCENl7 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 5 Mar 2020 06:16:16 -0500
-X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:06 EST
-Received: from webmail.pagasa.dost.int ([10.10.11.8])
-        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AseSK006737-025AseSM006737
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 5 Mar 2020 18:54:40 +0800
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2FB4F2981A90;
-        Thu,  5 Mar 2020 18:46:49 +0800 (PST)
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id r7J1A0N3aHYl; Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2232C2981A4C;
-        Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 2232C2981A4C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
-        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583405208;
-        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=vwxX3L8Z7uHnDJPZBIix9IBQi0XMBiY4sLQTc/9+h6pT2FHeTz61v6B+3f3w6WhXh
-         jUdnW3+FuZCvkf1pcG3LkjpsYvCQO7zO587a10BanpMqFFL6zPGTaTUsrqnCnsqpAd
-         CtN8Atz3iXBEFHZeiXsfNfnWSfk0n7tqEffbmBy8=
-X-Virus-Scanned: amavisd-new at pagasa.dost.int
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WT2tTJV-1oie; Thu,  5 Mar 2020 18:46:47 +0800 (PST)
-Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5119729819D2;
-        Thu,  5 Mar 2020 18:46:46 +0800 (PST)
-Date:   Thu, 5 Mar 2020 18:46:46 +0800 (PST)
-From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
-Message-ID: <1980644409.3575157.1583405206290.JavaMail.zimbra@pagasa.dost.gov.ph>
-Subject: 
+        Thu, 5 Mar 2020 08:41:59 -0500
+Received: by mail-oi1-f194.google.com with SMTP id t24so5993062oij.3;
+        Thu, 05 Mar 2020 05:41:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Eg8qOXXxTZFH+avf9eVy3dxxHHbyWn0g+mO5XgLQ+LM=;
+        b=FmtSTEvH4JMkzvU0rV87l8dSnNd84J4k4OZljnkIKeA+JdbhSP2k3UYVQHAj/RdzZo
+         3X0XIgdmwfssLPelrx2aDyIQUJYesIXKOkcKZNCtmXlc89vmsPXqkm+yQXN3ygynVjbx
+         kA/QSQ/XlzuAL3x3oTPFD5Kkb7hT2/DZcQumspk3pMO31H0x5RSlrPF2krNULhOMuRRs
+         7gHmKFAPVWUPnfWSCSlJLvyV4AYkbm+vUQVwHSMiCzuwiIG2lHJFWjrz/R6fMGO+g2PT
+         JIXFfICm6nMqSzkHWrXGgBrbUtNWAFrx7Ld2iLBooTpGfVfsdKb0XRNnsuhaqmnGm5Wr
+         r19w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Eg8qOXXxTZFH+avf9eVy3dxxHHbyWn0g+mO5XgLQ+LM=;
+        b=C91yfvNHiKvlUR5jUaZAWKFMaW/lhjwACwHYsQwIhpTgpa8BRH3fD3pPRZD4Ph6Cg5
+         2Ri+7b+2dal7Vm6CD/h2Z51HdfPnVgDfAn80eELCu14/ErlK9GtiUObqYFP4ojagSax2
+         /4BV8sEVV+vpCYpB8giSYQ3BDJ0oUuwBjoGnXel3uKi/p20o0UsjB6emfnyN7Sn9ZFVU
+         mgenznFSeoyHv7zG184cQ8rNbLN0RgAGFh30nxzPVeLd4+zEdgNHk7cpzMWxgZK+mShy
+         w/UshD8Fy9ebxxSrKG+UNNLOUaOqac+ymGlqm4xFcee6v/Khe58JDexTNwiFoYsWur0u
+         auaw==
+X-Gm-Message-State: ANhLgQ3p3X7aZDuDXP7Hns2onQMMAOkuxvi/KmehvXO+C49nSsjykGaj
+        Q3eCh4NoIo7aIufiNudLCSyN9INXDJPkiJFpBYI=
+X-Google-Smtp-Source: ADFU+vvtxT5hJ8HqcW7oErtibqc8cObhOkR6SqqTz7pQJCUcRgKfjJTnBK7VFvyHTTwWd+9UuWVXYTEiLpwYZAjhOD4=
+X-Received: by 2002:aca:3544:: with SMTP id c65mr5466604oia.160.1583415718336;
+ Thu, 05 Mar 2020 05:41:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
-Thread-Index: lWYDQbv6QI/eIWKrWUD3NPCXqIIr9A==
-Thread-Topic: 
-X-FEAS-DKIM: Valid
-Authentication-Results: mailgw.pagasa.dost.gov.ph;
-        dkim=pass header.i=@pagasa.dost.gov.ph
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200304191853.1529-1-kpsingh@chromium.org> <20200304191853.1529-5-kpsingh@chromium.org>
+In-Reply-To: <20200304191853.1529-5-kpsingh@chromium.org>
+From:   Stephen Smalley <stephen.smalley.work@gmail.com>
+Date:   Thu, 5 Mar 2020 08:43:11 -0500
+Message-ID: <CAEjxPJ4G4sp5_zHXxhe+crafNGV-oZZZ2YYbbMb61BZx0F_ujw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 4/7] bpf: Attachment verification for BPF_MODIFY_RETURN
+To:     KP Singh <kpsingh@chromium.org>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>, jmorris@namei.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Wed, Mar 4, 2020 at 2:20 PM KP Singh <kpsingh@chromium.org> wrote:
+>
+> From: KP Singh <kpsingh@google.com>
+>
+> - Allow BPF_MODIFY_RETURN attachment only to functions that are:
+>
+>     * Whitelisted for error injection by checking
+>       within_error_injection_list. Similar discussions happened for the
+>       bpf_override_return helper.
+>
+>     * security hooks, this is expected to be cleaned up with the LSM
+>       changes after the KRSI patches introduce the LSM_HOOK macro:
+>
+>         https://lore.kernel.org/bpf/20200220175250.10795-1-kpsingh@chromium.org/
+>
+> - The attachment is currently limited to functions that return an int.
+>   This can be extended later other types (e.g. PTR).
+>
+> Signed-off-by: KP Singh <kpsingh@google.com>
+> Acked-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2460c8e6b5be..ae32517d4ccd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9800,6 +9801,33 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
+>
+>         return 0;
+>  }
+> +#define SECURITY_PREFIX "security_"
+> +
+> +static int check_attach_modify_return(struct bpf_verifier_env *env)
+> +{
+> +       struct bpf_prog *prog = env->prog;
+> +       unsigned long addr = (unsigned long) prog->aux->trampoline->func.addr;
+> +
+> +       if (within_error_injection_list(addr))
+> +               return 0;
+> +
+> +       /* This is expected to be cleaned up in the future with the KRSI effort
+> +        * introducing the LSM_HOOK macro for cleaning up lsm_hooks.h.
+> +        */
+> +       if (!strncmp(SECURITY_PREFIX, prog->aux->attach_func_name,
+> +                    sizeof(SECURITY_PREFIX) - 1)) {
+> +
+> +               if (!capable(CAP_MAC_ADMIN))
+> +                       return -EPERM;
 
-
-Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
-ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
-ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
-rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
-nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
-ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
-=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
-Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
-en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
-o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
-inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
-tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
-eptisch sind
-Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
-f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
- YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
- ) gesendet werden, damit wir das k=C3=B6nnen
-Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
-obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
-Powerball Jackpot Gewinner
+CAP_MAC_ADMIN was originally introduced for Smack and is not
+all-powerful wrt SELinux, so this is not a sufficient check for
+SELinux.
+We would want an actual security hook called here so we can implement
+a specific check over userspace
+being able to attach BPF progs to LSM hooks.  CAP_MAC_ADMIN has other
+connotations to SELinux (presently the
+ability to set/get file security labels that are not known to the
+currently loaded policy).
