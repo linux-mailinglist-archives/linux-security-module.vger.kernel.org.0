@@ -2,111 +2,70 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A70E184EB8
-	for <lists+linux-security-module@lfdr.de>; Fri, 13 Mar 2020 19:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D9F1857F9
+	for <lists+linux-security-module@lfdr.de>; Sun, 15 Mar 2020 02:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727525AbgCMSfP (ORCPT
+        id S1726970AbgCOBwo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 13 Mar 2020 14:35:15 -0400
-Received: from hr2.samba.org ([144.76.82.148]:59188 "EHLO hr2.samba.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727295AbgCMSfO (ORCPT
+        Sat, 14 Mar 2020 21:52:44 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:35608 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726771AbgCOBwo (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 13 Mar 2020 14:35:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-         s=42; h=Message-ID:Cc:To:From:Date;
-        bh=WW96sv0//Vhg79QaiYlSOEgUUQBStmetDMf4TONIc6M=; b=kIlHxupkrQOi9TzlSzfbE4/bDL
-        uXCSnq22mxKKsPp4wsY2SjwgRHrGGUjd5PkshA6/Ij7StaJi+8cCOXa+2uy4ujPSwXlu4A9n3fflf
-        XkyYa3DkycxsDmAzUHRsrhw/lk4UQEuZG4SUx77yN3+V1HapwvdE+wEtw1OqGFv2+0PFrzzEuTaf/
-        UILafbWfwJ6SVlMnnuB2/AhboOh8yg4LEOd40ctbA5s+rP3kSe79DPDaQA93TxktwMI4ekakTqtcG
-        6UsWH3CbrSZH8DYC3XwCombBEVbF1GH+zILxk/YiipBOVfVlGS6LpdTFyGanweoKoy2YO/1N0o8Q9
-        RhjdcWajNX5yyJ0vVHYm3FrfIeucAWOay4dqo9PauHbqEoCHY1eujrUgDXPg4HMaIlFtRVnOC6Q4E
-        1KLWYGQz1OmRlsyhTOvvjXdzI88D+i+MKn2RMug3oipCgs+yrtta2s96ODrrQVXqGTHTk2wQZX736
-        ghOoK4n2imWOy9qW7TdbFV1f;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_RSA_CHACHA20_POLY1305:256)
-        (Exim)
-        id 1jCp9J-00029j-FH; Fri, 13 Mar 2020 18:35:09 +0000
-Date:   Fri, 13 Mar 2020 11:35:03 -0700
-From:   Jeremy Allison <jra@samba.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Ian Kent <raven@themaw.net>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Christian Brauner <christian@brauner.io>,
-        Jann Horn <jannh@google.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Karel Zak <kzak@redhat.com>, jlayton@redhat.com,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ralph =?iso-8859-1?Q?B=F6hme?= <slow@samba.org>,
-        Volker Lendecke <vl@sernet.de>
-Subject: Re: [PATCH 01/14] VFS: Add additional RESOLVE_* flags [ver #18]
-Message-ID: <20200313183503.GA29092@jeremy-acer>
-Reply-To: Jeremy Allison <jra@samba.org>
-References: <158376245699.344135.7522994074747336376.stgit@warthog.procyon.org.uk>
- <20200310005549.adrn3yf4mbljc5f6@yavin>
- <CAHk-=wiEBNFJ0_riJnpuUXTO7+_HByVo-R3pGoB_84qv3LzHxA@mail.gmail.com>
- <580352.1583825105@warthog.procyon.org.uk>
- <CAHk-=wiaL6zznNtCHKg6+MJuCqDxO=yVfms3qR9A0czjKuSSiA@mail.gmail.com>
- <3d209e29-e73d-23a6-5c6f-0267b1e669b6@samba.org>
- <CAHk-=wgu3Wo_xcjXnwski7JZTwQFaMmKD0hoTZ=hqQv3-YojSg@mail.gmail.com>
- <8d24e9f6-8e90-96bb-6e98-035127af0327@samba.org>
- <20200313095901.tdv4vl7envypgqfz@yavin>
- <20200313182844.GO23230@ZenIV.linux.org.uk>
+        Sat, 14 Mar 2020 21:52:44 -0400
+Received: by mail-il1-f196.google.com with SMTP id v6so1895351ilq.2
+        for <linux-security-module@vger.kernel.org>; Sat, 14 Mar 2020 18:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
+        b=jrPbbCp1Aqhk0erIU97BhIZuezndM9viPGwfXu8xo5JLpltjW0qiLa+U3ESl5iC7dk
+         C529axGQ36pk0oZ80egIpuZZuwUKWcsvPwwWLqOBLfxMLydyw8lqKnLRCccFuYF3iNh/
+         T+udtuOOZRJth7X0c7D8i1zVJBcYqCfL2ynwlQhRgbvxul/N/mS27hHFZp83z1BIUQde
+         /8++78PuyvE8R6fBgvnYtkUsWagyAv748u9comZIJtdCfMvgqTXBRrOMesZkLLuA8tVm
+         XpT34COUDXmh2IBfXR5WV8PjRc0U38vL5stEeE8GE7tMw3dq+K+pbIVCuSeBs3es3kHr
+         PiRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
+        b=sUm/JCG31VF1rtr4mJEaN31v68LWsNwC3gYeNP7RsN9OqY/OjqGogopgGv62HYR58R
+         ijU3+8Q9snbi4EpJhD7fx7ChqbJ1u5eKn1iE61dAFgyvAg0+S6lsHauW2h3Hw1+02a8B
+         JbDT47yri4Ph6nd1M2tVZR8RrZpSUY9ub5EdtTlV/LHlyXDl3Os4/Hh1rj1yYy+ypeo8
+         iIh97wUMQyFhaCYDDZq57NN8o/bSR1PupIV4yeqz/MXAwf2ZppSRWXXGlVtQGjEiw4LL
+         So7YOkAU4s6lrVwwtQpkcWcot3M0FtuNOv3dtgxcdQ9W0JxO/70SOQ/JeGnI6j5APZQn
+         nl8Q==
+X-Gm-Message-State: ANhLgQ2oZfV+ImmrHBjensJqeqJYy8eMjMiwvBpUvMmEaqTHW9gBb7II
+        BNiuWsrR2hOhCizPjXvR6H1t3P6p/LoAIYy3GvVahNLb
+X-Google-Smtp-Source: ADFU+vtxRdtwVht/Mkb9QECSJWNszHZglubjHm4U7I5nCb08c9DHapS4iQIsrKtizdsmgCJ75Khf4k4SMycpuMCh0rk=
+X-Received: by 2002:a05:6e02:e94:: with SMTP id t20mr19315519ilj.20.1584205653230;
+ Sat, 14 Mar 2020 10:07:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200313182844.GO23230@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a4f:4447:0:0:0:0:0 with HTTP; Sat, 14 Mar 2020 10:07:32
+ -0700 (PDT)
+From:   Omar Ousman <omarousman25@gmail.com>
+Date:   Sat, 14 Mar 2020 18:07:32 +0100
+X-Google-Sender-Auth: cGVV9OJB_HHlsiNgTf52teuZ8aU
+Message-ID: <CAAai1fy6d-m5QVz4H4X2Rj36XryVN7LYec12XAxh0ScM-m=QLA@mail.gmail.com>
+Subject: You received my last mail,,,,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Mar 13, 2020 at 06:28:44PM +0000, Al Viro wrote:
-> On Fri, Mar 13, 2020 at 08:59:01PM +1100, Aleksa Sarai wrote:
-> > On 2020-03-12, Stefan Metzmacher <metze@samba.org> wrote:
-> > > Am 12.03.20 um 17:24 schrieb Linus Torvalds:
-> > > > But yes, if we have a major package like samba use it, then by all
-> > > > means let's add linkat2(). How many things are we talking about? We
-> > > > have a number of system calls that do *not* take flags, but do do
-> > > > pathname walking. I'm thinking things like "mkdirat()"?)
-> > > 
-> > > I haven't looked them up in detail yet.
-> > > Jeremy can you provide a list?
-> > > 
-> > > Do you think we could route some of them like mkdirat() and mknodat()
-> > > via openat2() instead of creating new syscalls?
-> > 
-> > I have heard some folks asking for a way to create a directory and get a
-> > handle to it atomically -- so arguably this is something that could be
-> > inside openat2()'s feature set (O_MKDIR?). But I'm not sure how popular
-> > of an idea this is.
-> 
-> For fuck sake, *NO*!
-> 
-> We don't need any more multiplexors from hell.  mkdir() and open() have
-> deeply different interpretation of pathnames (and anyone who asks for
-> e.g. traversals of dangling symlinks on mkdir() is insane).  Don't try to
-> mix those; even O_TMPFILE had been a mistake.
-> 
-> Folks, we'd paid very dearly for the atomic_open() merge.  We are _still_
-> paying for it - and keep finding bugs induced by the convoluted horrors
-> in that thing (see yesterday pull from vfs.git#fixes for the latest crop).
-> I hope to get into more or less sane shape (part - this cycle, with
-> followups in the next one), but the last thing we need is more complexity
-> in the area.
+I am Mr.Omar Ousman, a regional managing director (CORIS BANK
+INTERNATIONAL) Ouagadougou Burkina Faso, in my department we have
+US$9,500.0000 million united state dollars, to transfer into your
+account as a dormant fund.If you are interested to use this fund to
+help the orphans around the world contact and send me your personal
+information for more details to my email omarousman25@gmail.com
 
-Can we disentangle the laudable desire to keep kernel internals
-simple (which I completely agree with :-) from the desire to
-keep user-space interfaces simple ?
+Your full names..........
+Your country of origin..........
+Your occupation..........
+Your Age..........
+Your Mobile Number..........
 
-Having some way of doing a mkdir() that returns an open fd
-on the new directory *is* a very useful thing for many applications,
-but I really don't care how the kernel implements it. We have so much
-Linux-specific code already that one more thing won't matter :-).
+Best Regards,
