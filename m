@@ -2,256 +2,181 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D66B619415E
-	for <lists+linux-security-module@lfdr.de>; Thu, 26 Mar 2020 15:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CEC19458D
+	for <lists+linux-security-module@lfdr.de>; Thu, 26 Mar 2020 18:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbgCZO2r (ORCPT
+        id S1728326AbgCZRhe (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 26 Mar 2020 10:28:47 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:37623 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728248AbgCZO2r (ORCPT
+        Thu, 26 Mar 2020 13:37:34 -0400
+Received: from USAT19PA20.eemsg.mail.mil ([214.24.22.194]:23802 "EHLO
+        USAT19PA20.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726163AbgCZRhd (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 26 Mar 2020 10:28:47 -0400
-Received: by mail-wm1-f65.google.com with SMTP id d1so7243085wmb.2
-        for <linux-security-module@vger.kernel.org>; Thu, 26 Mar 2020 07:28:44 -0700 (PDT)
+        Thu, 26 Mar 2020 13:37:33 -0400
+X-EEMSG-check-017: 93888031|USAT19PA20_ESA_OUT01.csd.disa.mil
+X-IronPort-AV: E=Sophos;i="5.72,309,1580774400"; 
+   d="scan'208";a="93888031"
+Received: from emsm-gh1-uea10.ncsc.mil ([214.29.60.2])
+  by USAT19PA20.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 26 Mar 2020 17:36:41 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=W5Ff7Fn5bZi7i9uBczexSq34+wj8TN4wlXIgFvQuXvM=;
-        b=jUN78QlK1G4YyVDyrmrvjDleFBmsR6d6nESaJYDRYFSLHcDfq/imq26Gaqgao6QV8q
-         l9gC9uAsQvY68rUOoR7xf81WyogRP2hg2qA2D/xV9rDsRSpRHRe7CKcqqIob5dV/ENJM
-         ogmbBIKmkvBn4MsaQ/UE0igYWjby2rKWlf2bI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W5Ff7Fn5bZi7i9uBczexSq34+wj8TN4wlXIgFvQuXvM=;
-        b=mte9mY2TZtxfcquZdGjKWC57fv/AeWLUi7GZHisjlDBQpyRSLEq8euCQdEDQs5/JpC
-         YXzh9EYZZ8T2FenQqrQBHCuCcI9Fg/SyNFUY07XvT7G2KpSYYpsnzcbXB7E4HoSsGgVC
-         tecM8NsyK5OATB5IOxb7X6R3JQbtsUoWe4e0FulmTrO+JvZ3mPSNXY4FPsOHu0UOicGR
-         59yjD2OHj/ENVuAPvAYTGUFdrZj5/FwPrqTYqwcDZX0CkMwcQVXG4mEwluxEXKC27JsY
-         5ycca6n6LzeviydbOuFSHXdgoAhC+Bee3O3UxldumS/+30ummGGUxAwoVPh3Yaxc+pyA
-         ThZw==
-X-Gm-Message-State: ANhLgQ0yqILpMc1J5sSh1mq2bZOj2rCGHy0GlIi/e5GIt25yGxtYHITx
-        /xVwmfP0aIcv6IALk3stZztDXA==
-X-Google-Smtp-Source: ADFU+vvt623pdVGLa4tSnvVuUBz4uO2AQOo0BPKA3e1gQU7O41ZRqUIPW5OQRA+Lo9JpGl1YnooR/Q==
-X-Received: by 2002:a1c:9e97:: with SMTP id h145mr205280wme.61.1585232924119;
-        Thu, 26 Mar 2020 07:28:44 -0700 (PDT)
-Received: from kpsingh-kernel.localdomain (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id q3sm3643971wru.87.2020.03.26.07.28.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2020 07:28:43 -0700 (PDT)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Brendan Jackman <jackmanb@google.com>,
-        Florent Revest <revest@google.com>,
-        Thomas Garnier <thgarnie@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH bpf-next v7 8/8] bpf: lsm: Add Documentation
-Date:   Thu, 26 Mar 2020 15:28:23 +0100
-Message-Id: <20200326142823.26277-9-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200326142823.26277-1-kpsingh@chromium.org>
-References: <20200326142823.26277-1-kpsingh@chromium.org>
+  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
+  s=tycho.nsa.gov; t=1585244201; x=1616780201;
+  h=subject:to:references:from:message-id:date:mime-version:
+   in-reply-to:content-transfer-encoding;
+  bh=4btUFkjZphQF2UdhZnXwDJJ8A/TabzXpxKrmQP1Nhwc=;
+  b=M9sVOfTNm3W1Xx1nQoEDacgCYJ97K4U2NzzCI6OpQUKXL+Y1AHi0IIJn
+   SralracjvE/QBOe0zzf4FaCRWNuaPYgqzzaUJJ6MHijxKnnkUXcF4B/0d
+   ujYUpDig1U8AZEHoCNhKlr3LUmjIKpKoC/SwOhAS/8KvNWsmnuLN4uZrZ
+   YHVJT5JUM1Cd74hdGXESojkbtRfkKRXltpWwVsHmHKa9IeNG3Y5UnpCR2
+   KOJCyWBOxMd6+TFiJRmqHcujqvXww1x0O6V5vNiCpCfR6NAh7f5f3VNhz
+   oxt4TM8I6wqzTS6VYYlP5Eg8PDUC4zvF0nvIYxbfC1SVt8bZ+iQ11MUN5
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.72,309,1580774400"; 
+   d="scan'208";a="34644859"
+IronPort-PHdr: =?us-ascii?q?9a23=3ARN2Bwhfdok8C1OGOSHEDiy9nlGMj4u6mDksu8p?=
+ =?us-ascii?q?Mizoh2WeGdxc28bB2N2/xhgRfzUJnB7Loc0qyK6vymADFfqs3e+Fk5M7VyFD?=
+ =?us-ascii?q?Y9wf0MmAIhBMPXQWbaF9XNKxIAIcJZSVV+9Gu6O0UGUOz3ZlnVv2HgpWVKQk?=
+ =?us-ascii?q?a3OgV6PPn6FZDPhMqrye+y54fTYwJVjzahfL9+Nhq7oRjeu8UMnIdvKqQ8xh?=
+ =?us-ascii?q?THr3ZKZu9b2X5mKVWPkhnz4cu94IRt+DlKtfI78M5AX6T6f6AmQrFdET8rLW?=
+ =?us-ascii?q?M76tD1uBfaVQeA6WcSXWsQkhpTHgjK9wr6UYvrsiv7reVyxi+XNtDrQL8uWD?=
+ =?us-ascii?q?Si66BrSAL0iCoCKjU0/n3bhtB2galGux+quQBxzJDIb4GULPp+f73SfdUGRW?=
+ =?us-ascii?q?paQ81dUzVNDp6gY4cTCuYMO+hXr5P5p1ATsxWwAweiD/7rxjNRiHL72ag23u?=
+ =?us-ascii?q?I8Gg/EwQMgBcoDvmnKotX7NKkcUu67w6fHwjrBc/xY1izw6JTKfx07vf2AQb?=
+ =?us-ascii?q?x9fMjXxEIyFw3FlFKQqYn9Mj2IyuQCrXCb7+p+WuKplmUptgRxrSKrxscolI?=
+ =?us-ascii?q?bIhp8ex1ff9Spk24Y4PsG4SU5nbt6kF5tcrSeaN5BsTc84TGFovzg6x6QAtJ?=
+ =?us-ascii?q?WmfyYK0IwqywPQZvGIaYSF4g/vWPyPLTp3mn5pYq+zihCv+ka60OL8TNO70F?=
+ =?us-ascii?q?NSoypAldnDq24C2gTI6siCVvt95kCh2SuT1wzL6uFLP0Q0la3DJp492LEwjJ?=
+ =?us-ascii?q?sTsVnYHiPshEX3jLOZdkUj+uSy7eTofq7mqYOGO49xiwH+Nrwims25AesmLg?=
+ =?us-ascii?q?gDR3WX9Ouz2bH5/UD1Xa9GguM5n6XHqpzWONwXpqujDA9U1oYj5Qy/DzCj0N?=
+ =?us-ascii?q?kAhnkIMUlFdQmbj4npJ17OIPf4Ae25g1S3ijhn3f/GPrr/ApnVNHjMjK/hfa?=
+ =?us-ascii?q?ph605b0Ac80MpQ55RIBbEGJPL+QUDxtNvfDh82Nwy73fzrB8l61oMbQWiPGL?=
+ =?us-ascii?q?OWMLvOsV+U4eIiO/WMZI4QuDb4Nvgl/eTugmU5mFIGcqmp2pwXaH+8Hvt4OU?=
+ =?us-ascii?q?mWfX3sgtIZG2cQogU+VPDqiEGFUTNLfHa9QaY85jA9CIK7AobOXZ6tgLOf0y?=
+ =?us-ascii?q?ehBJFWZX5JCkqKEXj2c4WIQfAMaDidIsV5iDwLSaChS5M91RGprAL6z7tnLu?=
+ =?us-ascii?q?zJ+iwXrJ7jz8Z66PHOlREo9Dx0E8Sc33iIT2Fzg2wIWjs2075krExjxVeMz7?=
+ =?us-ascii?q?J4j+ZbFdNN/fNJVBk1NZrGw+x9EdDyVRrLfs2VR1a+XtWmHTYxQ8o1w98PZU?=
+ =?us-ascii?q?Z9BtqjggnN3yqxHrAaiaKLC4Iw8q/HwXjxKNhyy2zc2KkikVYmWM1POnOihq?=
+ =?us-ascii?q?Jl8AjTHYHJmV2Dl6m2baQcwDLN9GCbwGqKvUFYVhNwUKrcUXAceETWt9L56V?=
+ =?us-ascii?q?3GT7K1F7QnPRVOydSYJqtJdNLpl1NGS+nnONjEZGKxgWiwDw6SxryQdIrqZ3?=
+ =?us-ascii?q?kd3CLFBUgHjQAT+G2LNRYxBii/uWLSFj9uGkz1Y0Pq7+Z+rGm3TkguzwGFd0?=
+ =?us-ascii?q?dhzaa6+gYJhfyATPMexqwEuCY7qzVzB1u83szZC9yBpwp/ZqlcZdI94FFa1W?=
+ =?us-ascii?q?PWrQB9OYagL694il4DcAR9p1nu2AlvCoVcjcgqq2snzBJoJqKF1FNMbCuY0o?=
+ =?us-ascii?q?rtOr3TM2Xy+Reva6nM2l7AytqZ5qAP6PEgoVX5oA6pDlYi82lg09RN1Xuc4J?=
+ =?us-ascii?q?bKAREdUZL2VUY3+Bx6qK/AbiYh4IPU0GVmMbOovT/ax9IpGOwlxw6kf9dYM6?=
+ =?us-ascii?q?OLChTyE80VB8ivNeMqgUKmYwkLPOBV8640MMemeOWc1KG3O+ZgmWHusWMSzI?=
+ =?us-ascii?q?l700+IvwF7TufT1JcCxfzQigeOUTz7iH+utcf4nY0CbjYXSC731SnhAZNLfK?=
+ =?us-ascii?q?RjVYkMDmiqLou8wdA6z4XgX39e6U6LGVwLwomqdACUYli72hdfkQwToHq6iW?=
+ =?us-ascii?q?6jwjdpiTA1v++a2yDTx+nKahUKIChISXNkgFOqJpK7y5geXU61f00njxeo+0?=
+ =?us-ascii?q?v+77ZUqb45LGTJR0pMOS/sICUqVqq2q6rHYMNV7p4smTtYXf76Yl2ATLP55R?=
+ =?us-ascii?q?wA3GerHHVb7C40eivsuZjjmRF+zmWHIzI7snvDfuliyBHe+prYRPhMznwBXi?=
+ =?us-ascii?q?Y+lDqTTkC1It2B5dyJk9LGteekWiSqUZgXOS/tzquPsyy04WAsChq627i3nd?=
+ =?us-ascii?q?7qCgg10CPh3vFlUiLHqBu6aY7uhIqgNucyRVVlHF/x7YJBH4h6loYhzMUL1W?=
+ =?us-ascii?q?MymoSe/X1Bl3z6d9pcx/StPzI2WTcXzouNs0De00p5IyfMntmoWw=3D=3D?=
+X-IPAS-Result: =?us-ascii?q?A2DuAADi53xe/wHyM5BmHAEBAQEBBwEBEQEEBAEBgWoEA?=
+ =?us-ascii?q?QELAYF8LIFBMiqEGo5+VAaBN4l6kHYDVAoBAQEBAQEBAQE0AQIEAQGERAKCL?=
+ =?us-ascii?q?yQ3Bg4CEAEBAQUBAQEBAQUDAQFshWKCOykBgn8BBSMEEVELDgoCAiYCAlcGA?=
+ =?us-ascii?q?QwGAgEBgmM/glglrXp/M4VLg16BPoEOKgGMLhp5gQeBOA+CXj6ES4MRgl4El?=
+ =?us-ascii?q?w9xmFWCRoJWlC0GHZtfjxGeBSM3gSErCAIYCCEPgydQGA2OKReNbFUlAzCBB?=
+ =?us-ascii?q?gEBjh0BAQ?=
+Received: from tarius.tycho.ncsc.mil ([144.51.242.1])
+  by EMSM-GH1-UEA10.NCSC.MIL with ESMTP; 26 Mar 2020 17:36:24 +0000
+Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto.infosec.tycho.ncsc.mil [192.168.25.131])
+        by tarius.tycho.ncsc.mil (8.14.7/8.14.4) with ESMTP id 02QHaiqe158602;
+        Thu, 26 Mar 2020 13:36:44 -0400
+Subject: Re: [PATCH v2 2/3] Teach SELinux about anonymous inodes
+To:     Daniel Colascione <dancol@google.com>, timmurray@google.com,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, viro@zeniv.linux.org.uk, paul@paul-moore.com,
+        nnk@google.com, lokeshgidra@google.com
+References: <20200214032635.75434-1-dancol@google.com>
+ <20200325230245.184786-3-dancol@google.com>
+From:   Stephen Smalley <sds@tycho.nsa.gov>
+Message-ID: <3e098729-dc6d-68d0-46a6-7add4fd75b11@tycho.nsa.gov>
+Date:   Thu, 26 Mar 2020 13:37:36 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200325230245.184786-3-dancol@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: KP Singh <kpsingh@google.com>
+On 3/25/20 7:02 PM, Daniel Colascione wrote:
+> This change uses the anon_inodes and LSM infrastructure introduced in
+> the previous patch to give SELinux the ability to control
+> anonymous-inode files that are created using the new _secure()
+> anon_inodes functions.
+> 
+> A SELinux policy author detects and controls these anonymous inodes by
+> adding a name-based type_transition rule that assigns a new security
+> type to anonymous-inode files created in some domain. The name used
+> for the name-based transition is the name associated with the
+> anonymous inode for file listings --- e.g., "[userfaultfd]" or
+> "[perf_event]".
+> 
+> Example:
+> 
+> type uffd_t;
+> type_transition sysadm_t sysadm_t : file uffd_t "[userfaultfd]";
+> allow sysadm_t uffd_t:file { create };
 
-Document how eBPF programs (BPF_PROG_TYPE_LSM) can be loaded and
-attached (BPF_LSM_MAC) to the LSM hooks.
+These should use :anon_inode rather than :file since the class is no 
+longer file.
 
-Signed-off-by: KP Singh <kpsingh@google.com>
-Reviewed-by: Brendan Jackman <jackmanb@google.com>
-Reviewed-by: Florent Revest <revest@google.com>
-Reviewed-by: Thomas Garnier <thgarnie@google.com>
----
- Documentation/bpf/bpf_lsm.rst | 150 ++++++++++++++++++++++++++++++++++
- Documentation/bpf/index.rst   |   1 +
- 2 files changed, 151 insertions(+)
- create mode 100644 Documentation/bpf/bpf_lsm.rst
+> 
+> (The next patch in this series is necessary for making userfaultfd
+> support this new interface.  The example above is just
+> for exposition.)
+> 
+> Signed-off-by: Daniel Colascione <dancol@google.com>
+> ---
+>   security/selinux/hooks.c            | 54 +++++++++++++++++++++++++++++
+>   security/selinux/include/classmap.h |  2 ++
+>   2 files changed, 56 insertions(+)
+> 
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 1659b59fb5d7..b9eb45c2e4e5 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2915,6 +2915,59 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+>   	return 0;
+>   }
+>   
+> +static int selinux_inode_init_security_anon(struct inode *inode,
+> +					    const struct qstr *name,
+> +					    const struct file_operations *fops,
+> +					    const struct inode *context_inode)
+> +{
+> +	const struct task_security_struct *tsec = selinux_cred(current_cred());
+> +	struct common_audit_data ad;
+> +	struct inode_security_struct *isec;
+> +	int rc;
+> +
+> +	if (unlikely(!selinux_state.initialized))
+> +		return 0;
+> +
+> +	isec = selinux_inode(inode);
+> +
+> +	/*
+> +	 * We only get here once per ephemeral inode.  The inode has
+> +	 * been initialized via inode_alloc_security but is otherwise
+> +	 * untouched.
+> +	 */
+> +
+> +	if (context_inode) {
+> +		struct inode_security_struct *context_isec =
+> +			selinux_inode(context_inode);
+> +		isec->sclass = context_isec->sclass;
+> +		isec->sid = context_isec->sid;
+> +	} else {
+> +		isec->sclass = SECCLASS_ANON_INODE;
+> +		rc = security_transition_sid(
+> +			&selinux_state, tsec->sid, tsec->sid,
+> +			SECCLASS_FILE, name, &isec->sid);
 
-diff --git a/Documentation/bpf/bpf_lsm.rst b/Documentation/bpf/bpf_lsm.rst
-new file mode 100644
-index 000000000000..2a2c3b4a74d4
---- /dev/null
-+++ b/Documentation/bpf/bpf_lsm.rst
-@@ -0,0 +1,150 @@
-+.. SPDX-License-Identifier: GPL-2.0+
-+.. Copyright (C) 2020 Google LLC.
-+
-+================
-+LSM BPF Programs
-+================
-+
-+These BPF programs allow runtime instrumentation of the LSM hooks by privileged
-+users to implement system-wide MAC (Mandatory Access Control) and Audit
-+policies using eBPF. Since these program end up modifying the MAC policies of
-+the system, they require both ``CAP_MAC_ADMIN`` and also require
-+``CAP_SYS_ADMIN`` for the loading of BPF programs.
-+
-+Structure
-+---------
-+
-+The example shows an eBPF program that can be attached to the ``file_mprotect``
-+LSM hook:
-+
-+.. c:function:: int file_mprotect(struct vm_area_struct *vma, unsigned long reqprot, unsigned long prot);
-+
-+Other LSM hooks which can be instrumented can be found in
-+``include/linux/lsm_hooks.h``.
-+
-+eBPF programs that use :doc:`/bpf/btf` do not need to include kernel headers
-+for accessing information from the attached eBPF program's context. They can
-+simply declare the structures in the eBPF program and only specify the fields
-+that need to be accessed.
-+
-+.. code-block:: c
-+
-+	struct mm_struct {
-+		unsigned long start_brk, brk, start_stack;
-+	} __attribute__((preserve_access_index));
-+
-+	struct vm_area_struct {
-+		unsigned long start_brk, brk, start_stack;
-+		unsigned long vm_start, vm_end;
-+		struct mm_struct *vm_mm;
-+	} __attribute__((preserve_access_index));
-+
-+
-+.. note:: Only the size and the names of the fields must match the type in the
-+	  kernel and the order of the fields is irrelevant.
-+
-+This can be further simplified (if one has access to the BTF information at
-+build time) by generating the ``vmlinux.h`` with:
-+
-+.. code-block:: console
-+
-+        # bpftool dump file <path-to-btf-vmlinux> format c > vmlinux.h
-+
-+.. note:: ``path-to-btf-vmlinux`` can be ``/sys/kernel/btf/vmlinux`` if the
-+	  build environment matches the environment the BPF programs are
-+	  deployed in.
-+
-+The ``vmlinux.h`` can then simply be included in the BPF programs without
-+requiring the definition of the types.
-+
-+The eBPF programs can be declared using the``BPF_PROG``
-+macros defined in `tools/lib/bpf/bpf_tracing.h`_. In this
-+example:
-+
-+	* ``"lsm/file_mprotect"`` indicates the LSM hook that the program must
-+	  be attached to
-+	* ``mprotect_audit`` is the name of the eBPF program
-+
-+.. code-block:: c
-+
-+        SEC("lsm/file_mprotect")
-+        int BPF_PROG(mprotect_audit, struct vm_area_struct *vma,
-+                     unsigned long reqprot, unsigned long prot, int ret)
-+	{
-+                /* Ret is the return value from the previous BPF program
-+                 * or 0 if it's the first hook.
-+                 */
-+                if (ret != 0)
-+                        return ret;
-+
-+		int is_heap;
-+
-+		is_heap = (vma->vm_start >= vma->vm_mm->start_brk &&
-+			   vma->vm_end <= vma->vm_mm->brk);
-+
-+		/* Return an -EPERM or write information to the perf events buffer
-+		 * for auditing
-+		 */
-+	}
-+
-+The ``__attribute__((preserve_access_index))`` is a clang feature that allows
-+the BPF verifier to update the offsets for the access at runtime using the
-+:doc:`/bpf/btf` information. Since the BPF verifier is aware of the types, it
-+also validates all the accesses made to the various types in the eBPF program.
-+
-+Loading
-+-------
-+
-+eBPF programs can be loaded with the :manpage:`bpf(2)` syscall's
-+``BPF_PROG_LOAD`` operation or more simply by using the the libbpf helper
-+``bpf_prog_load_xattr``:
-+
-+
-+.. code-block:: c
-+
-+	struct bpf_prog_load_attr attr = {
-+		.file = "./prog.o",
-+	};
-+	struct bpf_object *prog_obj;
-+	struct bpf_program *prog;
-+	int prog_fd;
-+
-+	bpf_prog_load_xattr(&attr, &prog_obj, &prog_fd);
-+
-+Attachment to LSM Hooks
-+-----------------------
-+
-+The LSM allows attachment of eBPF programs as LSM hooks using :manpage:`bpf(2)`
-+syscall's ``BPF_PROG_ATTACH`` operation or more simply by
-+using the libbpf helper ``bpf_program__attach_lsm``. In the code shown below
-+``prog`` is the eBPF program loaded using ``BPF_PROG_LOAD``:
-+
-+.. code-block:: c
-+
-+	struct bpf_link *link;
-+
-+	link = bpf_program__attach_lsm(prog);
-+
-+The program can be detached from the LSM hook by *destroying* the ``link``
-+link returned by ``bpf_program__attach_lsm``:
-+
-+.. code-block:: c
-+
-+	link->destroy();
-+
-+Examples
-+--------
-+
-+An example eBPF programs can be found in
-+`tools/testing/selftests/bpf/progs/lsm.c`_ and the corresponding
-+userspace code in `tools/testing/selftests/bpf/prog_tests/test_lsm.c`_
-+
-+.. Links
-+.. _tools/lib/bpf/bpf_tracing.h:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/lib/bpf/bpf_tracing.h
-+.. _tools/testing/selftests/bpf/progs/lsm.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/progs/lsm.c
-+.. _tools/testing/selftests/bpf/progs/lsm_void_hook.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/progs/lsm_void_hook.c
-+.. _tools/testing/selftests/bpf/prog_tests/test_lsm.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index 7be43c5f2dcf..f99677f3572f 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -45,6 +45,7 @@ Program types
-    prog_cgroup_sockopt
-    prog_cgroup_sysctl
-    prog_flow_dissector
-+   bpf_lsm
- 
- 
- Testing and debugging BPF
--- 
-2.20.1
-
+You should use isec->sclass == SECCLASS_ANON_INODE instead of 
+SECCLASS_FILE here.
