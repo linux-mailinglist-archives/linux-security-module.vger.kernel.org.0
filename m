@@ -2,150 +2,141 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05394195CE7
-	for <lists+linux-security-module@lfdr.de>; Fri, 27 Mar 2020 18:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5AD195E00
+	for <lists+linux-security-module@lfdr.de>; Fri, 27 Mar 2020 19:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727725AbgC0Rbo (ORCPT
+        id S1726275AbgC0S7w (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 27 Mar 2020 13:31:44 -0400
-Received: from raptor.unsafe.ru ([5.9.43.93]:38834 "EHLO raptor.unsafe.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727593AbgC0Rbn (ORCPT
+        Fri, 27 Mar 2020 14:59:52 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:47023 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgC0S7w (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 27 Mar 2020 13:31:43 -0400
-Received: from comp-core-i7-2640m-0182e6.redhat.com (ip-89-102-33-211.net.upcbroadband.cz [89.102.33.211])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by raptor.unsafe.ru (Postfix) with ESMTPSA id 219CE20AB8;
-        Fri, 27 Mar 2020 17:24:02 +0000 (UTC)
-From:   Alexey Gladkov <gladkov.alexey@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Security Module <linux-security-module@vger.kernel.org>
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Djalal Harouni <tixxdz@gmail.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Fri, 27 Mar 2020 14:59:52 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q3so4904201pff.13
+        for <linux-security-module@vger.kernel.org>; Fri, 27 Mar 2020 11:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=twjYcQrRYpiw9NudM5mQXAf1fpDRg8b0hwUBq6FdQjU=;
+        b=BvMDA3FmKQtoeTxdP15PTNARGM9gHf3Feep8W5rjyaXMr3aZzhTYvlY1A9qlAuufld
+         im3+AVd7vDsI993CjrFNXXH3bYLxcmYeWbrURE8nGUcT0SoEKHX1wEkT1TX26MUDgfM8
+         1oR8E85XFrBCP7YHWhsudLUxOkUucgASTxyDM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=twjYcQrRYpiw9NudM5mQXAf1fpDRg8b0hwUBq6FdQjU=;
+        b=TGQPjQ3udNzkrSZ5ewpRumaZJUrMD3+eFEfsF9NXqYzJbW7cAbTTFMTesx4OIIfkQ/
+         xLlYrq9TtDbXT8jw+FSHJG022QNJqH6CvfUvO3r0m/RMxSOm1WC1LAkEyHdEmIzKNAV+
+         gEU/18GmepRkN9PINbhWMSi62AVQx5LZF97oo1saSp27mM4FgIXikgcz+vQ3Xtuq9GgT
+         Tppl2uTz3BPmm7uclkkbJ8BQSo09FFvh9ZshlI3W9VC88G5c9EtzQ4h55YBi4w1bWS33
+         BsKIh0ghEnAstvM46WN/twdHT4KJugeFPa9b4c+0Ed/SW9SrLrSUXyU40w1EOU/9khCf
+         34iQ==
+X-Gm-Message-State: ANhLgQ3HGVEATn05+vlyp1gYiVnVc+NHxG8jiuLdH72wi9dG8q5ahE7b
+        qlbtEkbRN9wNUzWOw90VwVegbQ==
+X-Google-Smtp-Source: ADFU+vtMRQfs9N4AjysrflNX5zG9vzYD/JPSw15rRMFH/Mx2OQ8LyX9qs1/Ulvgri4xT39OWOujRNQ==
+X-Received: by 2002:a63:c212:: with SMTP id b18mr722672pgd.92.1585335591118;
+        Fri, 27 Mar 2020 11:59:51 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e26sm4679920pfj.61.2020.03.27.11.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 11:59:50 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 11:59:48 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
+        KP Singh <kpsingh@chromium.org>,
+        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Brendan Jackman <jackmanb@google.com>,
+        Florent Revest <revest@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@poochiereds.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: [PATCH v10 9/9] proc: use named enums for better readability
-Date:   Fri, 27 Mar 2020 18:23:31 +0100
-Message-Id: <20200327172331.418878-10-gladkov.alexey@gmail.com>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200327172331.418878-1-gladkov.alexey@gmail.com>
-References: <20200327172331.418878-1-gladkov.alexey@gmail.com>
+        Paul Moore <paul@paul-moore.com>
+Subject: Re: [PATCH bpf-next v7 4/8] bpf: lsm: Implement attach, detach and
+ execution
+Message-ID: <202003271143.71E0C591C1@keescook>
+References: <20200326142823.26277-1-kpsingh@chromium.org>
+ <20200326142823.26277-5-kpsingh@chromium.org>
+ <alpine.LRH.2.21.2003271119420.17089@namei.org>
+ <2241c806-65c9-68f5-f822-9a245ecf7ba0@tycho.nsa.gov>
+ <20200327124115.GA8318@chromium.org>
+ <14ff822f-3ca5-7ebb-3df6-dd02249169d2@tycho.nsa.gov>
+ <a3f6d9f8-6425-af28-d472-fad642439b69@schaufler-ca.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.1 (raptor.unsafe.ru [5.9.43.93]); Fri, 27 Mar 2020 17:24:02 +0000 (UTC)
+In-Reply-To: <a3f6d9f8-6425-af28-d472-fad642439b69@schaufler-ca.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Alexey Gladkov <gladkov.alexey@gmail.com>
----
- fs/proc/base.c               | 2 +-
- fs/proc/inode.c              | 2 +-
- fs/proc/root.c               | 4 ++--
- include/linux/proc_fs.h      | 6 +++---
- include/uapi/linux/proc_fs.h | 2 +-
- 5 files changed, 8 insertions(+), 8 deletions(-)
+On Fri, Mar 27, 2020 at 09:36:15AM -0700, Casey Schaufler wrote:
+> On 3/27/2020 6:43 AM, Stephen Smalley wrote:
+> > On 3/27/20 8:41 AM, KP Singh wrote:
+> >> On 27-Mär 08:27, Stephen Smalley wrote:
+> >>> On 3/26/20 8:24 PM, James Morris wrote:
+> >>>> On Thu, 26 Mar 2020, KP Singh wrote:
+> >>>>
+> >>>>> +int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+> >>>>> +            const struct bpf_prog *prog)
+> >>>>> +{
+> >>>>> +    /* Only CAP_MAC_ADMIN users are allowed to make changes to LSM hooks
+> >>>>> +     */
+> >>>>> +    if (!capable(CAP_MAC_ADMIN))
+> >>>>> +        return -EPERM;
+> >>>>> +
+> >>>>
+> >>>> Stephen, can you confirm that your concerns around this are resolved
+> >>>> (IIRC, by SELinux implementing a bpf_prog callback) ?
+> >>>
+> >>> I guess the only residual concern I have is that CAP_MAC_ADMIN means
+> >>> something different to SELinux (ability to get/set file security contexts
+> >>> unknown to the currently loaded policy), so leaving the CAP_MAC_ADMIN check
+> >>> here (versus calling a new security hook here and checking CAP_MAC_ADMIN in
+> >>> the implementation of that hook for the modules that want that) conflates
+> >>> two very different things.  Prior to this patch, there are no users of
+> >>> CAP_MAC_ADMIN outside of individual security modules; it is only checked in
+> >>> module-specific logic within apparmor, safesetid, selinux, and smack, so the
+> >>> meaning was module-specific.
+> >>
+> >> As we had discussed, We do have a security hook as well:
+> >>
+> >> https://lore.kernel.org/bpf/20200324180652.GA11855@chromium.org/
+> >>
+> >> The bpf_prog hook which can check for BPF_PROG_TYPE_LSM and implement
+> >> module specific logic for LSM programs. I thougt that was okay?
+> >>
+> >> Kees was in favor of keeping the CAP_MAC_ADMIN check here:
+> >>
+> >> https://lore.kernel.org/bpf/202003241133.16C02BE5B@keescook
+> >>
+> >> If you feel strongly and Kees agrees, we can remove the CAP_MAC_ADMIN
+> >> check here, but given that we already have a security hook that meets
+> >> the requirements, we probably don't need another one.
+> >
+> > I would favor removing the CAP_MAC_ADMIN check here, and implementing it in a bpf_prog hook for Smack and AppArmor if they want that.  SELinux would implement its own check in its existing bpf_prog hook.
+> >
+> The whole notion of one security module calling into another for permission
+> to do something still gives me the heebee jeebees, but if more nimble minds
+> than mine think this is a good idea I won't nack it.
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 1ebe9eba48ea..2f2f7b36c947 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -699,7 +699,7 @@ int proc_setattr(struct dentry *dentry, struct iattr *attr)
-  */
- static bool has_pid_permissions(struct proc_fs_info *fs_info,
- 				 struct task_struct *task,
--				 int hide_pid_min)
-+				 enum proc_hidepid hide_pid_min)
- {
- 	/*
- 	 * If 'hidpid' mount option is set force a ptrace check,
-diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-index f01fb4bed75c..77128bc36a05 100644
---- a/fs/proc/inode.c
-+++ b/fs/proc/inode.c
-@@ -165,7 +165,7 @@ void proc_invalidate_siblings_dcache(struct hlist_head *inodes, spinlock_t *lock
- 		deactivate_super(old_sb);
- }
- 
--static inline const char *hidepid2str(int v)
-+static inline const char *hidepid2str(enum proc_hidepid v)
- {
- 	switch (v) {
- 		case HIDEPID_OFF: return "off";
-diff --git a/fs/proc/root.c b/fs/proc/root.c
-index ba782d6e6197..00f75d8ef32f 100644
---- a/fs/proc/root.c
-+++ b/fs/proc/root.c
-@@ -32,9 +32,9 @@
- struct proc_fs_context {
- 	struct proc_fs_info	*fs_info;
- 	unsigned int		mask;
--	int			hidepid;
-+	enum proc_hidepid	hidepid;
- 	int			gid;
--	int			pidonly;
-+	enum proc_pidonly	pidonly;
- };
- 
- enum proc_param {
-diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
-index d259817ec913..b9f7ecd7f61f 100644
---- a/include/linux/proc_fs.h
-+++ b/include/linux/proc_fs.h
-@@ -29,7 +29,7 @@ struct proc_ops {
- };
- 
- /* definitions for proc mount option pidonly */
--enum {
-+enum proc_pidonly {
- 	PROC_PIDONLY_OFF = 0,
- 	PROC_PIDONLY_ON  = 1,
- };
-@@ -39,8 +39,8 @@ struct proc_fs_info {
- 	struct dentry *proc_self;        /* For /proc/self */
- 	struct dentry *proc_thread_self; /* For /proc/thread-self */
- 	kgid_t pid_gid;
--	int hide_pid;
--	int pidonly;
-+	enum proc_hidepid hide_pid;
-+	enum proc_pidonly pidonly;
- };
- 
- static inline struct proc_fs_info *proc_sb_info(struct super_block *sb)
-diff --git a/include/uapi/linux/proc_fs.h b/include/uapi/linux/proc_fs.h
-index dc6d717aa6ec..f5fe0e8dcfe4 100644
---- a/include/uapi/linux/proc_fs.h
-+++ b/include/uapi/linux/proc_fs.h
-@@ -3,7 +3,7 @@
- #define _UAPI_PROC_FS_H
- 
- /* definitions for hide_pid field */
--enum {
-+enum proc_hidepid {
- 	HIDEPID_OFF            = 0,
- 	HIDEPID_NO_ACCESS      = 1,
- 	HIDEPID_INVISIBLE      = 2,
+Well, it's a hook into BPF prog creation, not the BPF LSM specifically,
+so that's why I think it's general enough control without it being
+directly weird. :)
+
+As far as dropping CAP_MAC_ADMIN, yeah, that should be fine. Creating LSM
+BPF programs already requires CAP_SYS_ADMIN, so for SELinux-less systems,
+that's likely fine. If we need to change the BPF program creation access
+control in the future we can revisit it then.
+
 -- 
-2.25.2
-
+Kees Cook
