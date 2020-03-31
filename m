@@ -2,61 +2,54 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8E419A1FE
-	for <lists+linux-security-module@lfdr.de>; Wed,  1 Apr 2020 00:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B2D19A22C
+	for <lists+linux-security-module@lfdr.de>; Wed,  1 Apr 2020 01:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728245AbgCaWio (ORCPT
+        id S1730589AbgCaXAO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 31 Mar 2020 18:38:44 -0400
-Received: from namei.org ([65.99.196.166]:44640 "EHLO namei.org"
+        Tue, 31 Mar 2020 19:00:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727955AbgCaWin (ORCPT
+        id S1729647AbgCaXAO (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 31 Mar 2020 18:38:43 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 02VMcaod016023;
-        Tue, 31 Mar 2020 22:38:36 GMT
-Date:   Wed, 1 Apr 2020 09:38:36 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Security subsystem updates for 5.7
-Message-ID: <alpine.LRH.2.21.2004010936310.15848@namei.org>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 31 Mar 2020 19:00:14 -0400
+Subject: Re: [GIT PULL] Security subsystem updates for 5.7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585695614;
+        bh=rQveBukJRrxsN9RgjHZvRoDCoJiJ5F6f61zIAiKMSBg=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=boPcL6j7jGTZgSINfKeYDbk8q1u99R3qHoc5c9hpLuSSve7llzFyBxZ8NvVlph4Yn
+         QvPBN14b7CExM8b7/tpSld/k7wfMhRItxCK4Ii7naAKU2pS4TvDMTDVkPokDye2j8C
+         oian9FO/tO61EFYSO7AI6GUfoOy4cNVP1X1fuyRs=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <alpine.LRH.2.21.2004010936310.15848@namei.org>
+References: <alpine.LRH.2.21.2004010936310.15848@namei.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <alpine.LRH.2.21.2004010936310.15848@namei.org>
+X-PR-Tracked-Remote: git://git.kernel.org:/pub/scm/linux/kernel/git/jmorris/linux-security
+ next-general
+X-PR-Tracked-Commit-Id: 3e27a33932df104f4f9ff811467b0b4ccebde773
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a16298439bd5469d89ec0e575e1c26e7b9a8178a
+Message-Id: <158569561414.19383.16918938223645880841.pr-tracker-bot@kernel.org>
+Date:   Tue, 31 Mar 2020 23:00:14 +0000
+To:     James Morris <jmorris@namei.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Two minor updates for the core security subsystem:
+The pull request you sent on Wed, 1 Apr 2020 09:38:36 +1100 (AEDT):
 
-- kernel-doc warning fixes from Randy Dunlap
-- header cleanup from YueHaibing
+> git://git.kernel.org:/pub/scm/linux/kernel/git/jmorris/linux-security next-general
 
-Please pull.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a16298439bd5469d89ec0e575e1c26e7b9a8178a
 
----
+Thank you!
 
-The following changes since commit 10c2d111c906599942efd13109061885631c4a0c:
-
-  security: remove EARLY_LSM_COUNT which never used (2020-01-27 11:19:41 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org:/pub/scm/linux/kernel/git/jmorris/linux-security next-general
-
-for you to fetch changes up to 3e27a33932df104f4f9ff811467b0b4ccebde773:
-
-  security: remove duplicated include from security.h (2020-02-21 08:53:48 -0800)
-
-----------------------------------------------------------------
-Randy Dunlap (1):
-      security: <linux/lsm_hooks.h>: fix all kernel-doc warnings
-
-YueHaibing (1):
-      security: remove duplicated include from security.h
-
- include/linux/lsm_hooks.h | 36 +++++++++++++++++++++++++++++++++++-
- include/linux/security.h  |  1 -
- 2 files changed, 35 insertions(+), 2 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
