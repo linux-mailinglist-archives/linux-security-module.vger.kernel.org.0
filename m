@@ -2,147 +2,278 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F25E619FF79
-	for <lists+linux-security-module@lfdr.de>; Mon,  6 Apr 2020 22:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D4F19FF8D
+	for <lists+linux-security-module@lfdr.de>; Mon,  6 Apr 2020 22:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbgDFUvv (ORCPT
+        id S1726437AbgDFUzQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 6 Apr 2020 16:51:51 -0400
-Received: from sonic313-15.consmr.mail.ne1.yahoo.com ([66.163.185.38]:46842
-        "EHLO sonic313-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725957AbgDFUvv (ORCPT
+        Mon, 6 Apr 2020 16:55:16 -0400
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com ([66.163.189.89]:44311
+        "EHLO sonic306-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726130AbgDFUzQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 6 Apr 2020 16:51:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1586206309; bh=MHI0IvzBXdpPtoeU8HsEweqySq5ScLxvKrqTpMcFywc=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=AGKOB20HHz9Ggh5LRyTFGMA6s/c04dP2fYCxYXjxDHpjqlUGXu3bt0gTsRusZKf4BawwrqKSpGQangcbRv431J/qAwaTfPVKYGa6Uit2TnQ32ZFFuMudl8fmE5gT4dGE/eCUT+HF8ImXNRJfLcQJP+MGknoJWfDnNrg045H7d28QPq6L2tiuvzkkh51C3brYOioZbU2YcHaFQMKK8Ak18xLavTL2KvbHje83iGIDpZYc+6UQQnY3qm3hnEwpRUN73/CfDlDQUySUU0x+a6U1iP09Wv5QDgUZvYg43I17Eb4dGgq6HQLt8r5dEK42aayNXx0jqdZd3oDo6f8I3bZ8VA==
-X-YMail-OSG: Mg81P.wVM1mtxKDY2jKIB_RAo71aLKkHiHB_FEAMknqhf86Pwsmf3nbsYOTbEbW
- Rn7CGBmnrEEPJBV8IcNInqWx5piZXzbOl64GKZ1TiMgerwgHLVbXXqVRus8wi0SS6XdxsgLVTKGb
- szDh.4QI4Bj3JDTTsFwORbppYT0W073zODx8F.vgxhwxGjA3vzxZN2zHioba8IO1AEHC0a5XCh.i
- n0.MYNbu2ZtSIyImWCsS_sbActfrafsA_c9PPWRwuLMq3ccgMTCbHeXAg5pFccXiPb1mw8lcNA6y
- PK1JtmRKqq31ViXNOMbilPWT1igi.x81UIdVApIIbfXSL0pAmEL6DEfQSh8dFqBX3FqqrOcfc62M
- 0aaDxpoWpdyLiVruY56YoBhrBeucvbNiCjMjYetsSjYXu9uDC9CuY.Gok3.a4Uhmyjm4cRWzkjJK
- e1oqWBRqXQGdlqe.brtDl.9lync4noSWvVm4sAlp_UWRzIFTQlLHIf2w0lOXQiNekcd4dF5RYV.e
- dFTDj2BGqNKcyga_o13qYhybwrnhVLK.kl.cS3GkgkXbYqFUBCXJdI1RiB1B8v6_ePZYMi0_JDP4
- HpaaWwesSmUl1ysqfRydnKxROX6hYrDCbS_D794FyqvNkTc9reKIgtJ6pNz7jR6h_TbYZSFT_1cP
- H18rzLPFzFyw1EjetN_.IzYK2FGAjW27bO6Ezcxl1IRq_ITHnkq9fZuoCaM8VUuEcErTrihn12Hn
- Vk2kn0kR2Kik74STg00a5.IcAGdPVdqUtvDMB4WBEF_jATeE6mGJAT1opEQoMekSvb7XSoGuyjiN
- A9jw3MFR0tc5gGafFNGcCQlCKImkKnW0kHxkmNUF8IQsJSgqUbCf6wDbFXc4ZvJ8bhYXZ.5I91N6
- oKIb7_ho7QNexN3g8D65xzbcWuK46j65Aw0o.ZRlz3IDUEIr6Isriztn_jGQbuEJd_vHzfQYn5GC
- mlZ7L4h8gxJ4C4oabGquY6rYErOGgYUrTQi9ZhqYqOhkWFAGZCbS5ySue2HEt4g1FqUGa3AtdRZl
- cyAYlTq_KxjBmP5PdFHWU8RBdcdqE8DTbekrpIclhC_DQPFZVBdbkYvgufiA.gU6omRFGoNyz2xt
- 8aYCUlqYjDnHyq4jNO5HLR7VtIJYK8jqETW0bscvI3jOybDVnA3Pe3Y3JrJgjdIqVQO8bPw2jWLf
- XbzP1KmAuk7YWqiXXivMto53PkJt_.PpTVShnmFtupv2D3GczCfQgp4p0FyiVlWze0kOEM2T8Dwi
- ngp2SwL5mbjtd5p4o0B6LKAnIdLqLcUf2Oxc6EWe..0fw9YwewtQqGtVq3kFq9RJT3onLqw5eHDk
- XQxIR8JW.2137RD.2BGIiIsPxZGAsU2Mqyc6MTZovT8eeDrr0tzHtXYDDdh8wvIzoCw7SChiOH8o
- 1KXyM0ySKFhU4xxAnUhnEbfgn9_hIYC7uSs2h.tUL72YYrUnCjBbXWPoDbc7rZKBIqDiG
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Mon, 6 Apr 2020 20:51:49 +0000
-Received: by smtp411.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 688ec332b345e5705db999f520c2653b;
-          Mon, 06 Apr 2020 20:51:45 +0000 (UTC)
+        Mon, 6 Apr 2020 16:55:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1586206514; bh=07RxbwAYxdKzaEWFrRtckoqoMx7n8almVlTczK2aHcA=; h=From:To:Cc:Subject:Date:References:From:Subject; b=t2MnCTsKKVhhNZHId1SrCjDOUs+oB8+R+LX0/nRGsZZCJt4YafZvaGZP4z683dpbAAy18JiMPspOfW+VZnJSV+1rhLOv3ThH6m011Ch4EFkuYV7MALouxJOdnsGKcWea5fbt1Hvn7tkPYD7iPs5sd1nK1U3qEWucHyJC253cVOeAstz4Wi4fxuyQYEII5i/Kk+202LVoYKyTuwb1YBdi8eIuYu0lPJj9fFlnwe5ThKcd/mfKOMXKwDJ3GbqkQM6NO13wkRc1K8zYka88dLaGjGf1Wvq4jRcSpsTMG6RtFpvl2BEIS3KP4bDvS6Yz+Q+Ho8Ct5umUImhyrGbvNk82FQ==
+X-YMail-OSG: _pu.UrsVM1katsrkCod8706FcEhfAnPSMehFBUgcbXyrFDvD2OdVLUQBeHJ6i4T
+ b6KA1by1PnYwp0kf3QiPbcKxdtNmss2yzCF8s.OMJAHOVrsoQN6JFHnwu8hXmorf9uYQD2N_MWeE
+ SvY_yttfcZ05SVoeoMqWhenp_rPp7vsnWKRYE5ol0sVgR4rqGtZnlq2U6.kkoI3_IjUP_tmb_sJp
+ MWNsQbnCEIN5Sz8V6UjF3LZtRjgLgjQE2ycxtoJ32k3ncrH4N8mboUL.4qV1xbvKfITpwjKvtgLI
+ m3FuTbmgQLQPp5YPyrDL1GRVj5hK6sWvMQ6EiUT5C3W56VhXj2a9RnnikRipASH5ni.N8IsECIg2
+ OLpCqEBMVn1K2uuliPKoa3URw5SyCbm507.gHi64.BmD1OOP7LRgedGo7gjyPZIp__11M.FHhHQ_
+ 7PxXNTt_GFRJp9oXYWkLg8qRn3Jg5gfAgnY70WaW7F.Kl3_gnTAA8RJGNpiKHfXIdk8o8Y__Tbi4
+ lj_x4P...v37Rgtt_PbIFiLyn3s9VpXw2S8jDcbBip0OOs4YxAPEr_Mgxu4JLy.CliuZz965uiaQ
+ IVTU2g_brVhT0l8tWxxTORg9UZJ.LsHCeoU_JRPstjWeotsIXK7LnejwQZZF817y8wS85R__l1ym
+ 6XQACYeWfVvYdyEDYzfEmeUC3OeQJLkJ57X58GzTHgxyltpCpkVRv5F72zz7WBUtVtXKzoEafRi.
+ ejpq0MKfsmC00Xe522AENC_GpUbBvT.ZWQ7vAR95aIjst_YjoMXruzyemKMBvKT1nsTDeek0eBcF
+ OMXTJNF.VBjaCdfO8CYlbNHAsJnkAzA3q1MY5HmcMyG2fvGugJM2qYZ_nlnuJs632sM1Foa4F3p7
+ W1VWw5wO9fWTvaqEZsXvLJd9VYGY4A1riP9WgaunB6kJ4cZOhFULow4gie0vgEEzyCZ33GgQYDyW
+ l9epzEuzjCNpSJb0QrrU.Lda6JOQAkAcAVZfRxA0xy.AjTgUL3fLoqETVZ1HoH7g.Na5lrOgZITZ
+ oiaNQX.6MMCTMvVjUKEWlLPoeL5V.7Lj7JIjbof_4aJIKZWly.DOMbxwVUhj.TqAeBAxkCgsn5MO
+ H9COPCa.Neya_OZZoAJ79ftuynUZkauLEARWIXQmJQBLw6VI48MKzhdBM27EtAXJziv7t9MGiI7O
+ P.Txm8TLGTpOYdV2CMVSlQdk7Cr6NYUoTTu.K_kghuYmLVsctCLQE7GSzaIHu9XnQ0CgQSsDddtU
+ Q.39q6dpIQem8yH3DmPHUlGvb5FFoVm1cJ9Sg71VROG7GuKVroc_WFKcB4DVU2jhv1SgTkdDNpz0
+ dk0qJCPq9gyQVLvIGgwxhbOrtb2BXWz61X6i6RUrUmCcZJkPqR_IxZfRVsfjLMBPRmMoGdA8UcpK
+ J61GHPdWTqJrBn1dWkPvPrsAZ6mH.WXDi6IEesKRVRhXpsG1Psio8nPvczAaIurvV1wtJfBqeXN_
+ m9A--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Mon, 6 Apr 2020 20:55:14 +0000
+Received: by smtp412.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 89779945e70b8c1369067cde677e7bf3;
+          Mon, 06 Apr 2020 20:55:11 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org
 Cc:     casey@schaufler-ca.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         paul@paul-moore.com, sds@tycho.nsa.gov
-Subject: [PATCH v16 08/23] LSM: Use lsmblob in security_ipc_getsecid
-Date:   Mon,  6 Apr 2020 13:50:08 -0700
-Message-Id: <20200406205023.42338-9-casey@schaufler-ca.com>
+Subject: [PATCH v15 00/23] LSM: Module stacking for AppArmor
+Date:   Mon,  6 Apr 2020 13:54:46 -0700
+Message-Id: <20200406205509.42473-1-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200406205023.42338-1-casey@schaufler-ca.com>
-References: <20200406205023.42338-1-casey@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+References: <20200406205509.42473-1-casey.ref@schaufler-ca.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-There may be more than one LSM that provides IPC data
-for auditing. Change security_ipc_getsecid() to fill in
-a lsmblob structure instead of the u32 secid. The
-audit data structure containing the secid will be updated
-later, so there is a bit of scaffolding here.
+This patchset provides the changes required for
+the AppArmor security module to stack safely with any other.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: John Johansen <john.johansen@canonical.com>
-Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
+v16: Rebase to 5.6
+     Incorporate feedback from v15 - Thanks Stephen, Mimi and Paul
+     - Generally improve commit messages WRT scaffolding
+     - Comment ima_lsm_isset() (patch 0002)
+     - Some question may remain on IMA warning (patch 0002)
+     - Mark lsm_slot as __lsm_ro_after_init not __init_data (patch 0002)
+     - Change name of lsmblob variable in ima_match_rules() (patch 0003)
+     - Instead of putting a struct lsmblob into the unix_skb_parms
+       structure put a pointer to an allocated instance. There is
+       currently only space for 5 u32's in unix_skb_parms and it is
+       likely to get even tighter. Fortunately, the lifecycle
+       management of the allocated lsmblob is simple. (patch 0005)
+     - Dropped Acks due to the above change (patch 0005)
+     - Improved commentary on secmark labeling scaffolding. (patch 0006)
+     - Reduced secmark related labeling scaffolding. (patch 0006)
+     - Replace use of the zeroth entry of an lsmblob in scaffolding
+       with a function lsmblob_value() to hopefully make it less
+       obscure. (patch 0006)
+     - Convert security_secmark_relabel_packet to use lsmblob as
+       this reduces much of the most contentious scaffolding. (patch 0006)
+     - Dropped Acks due to the above change (patch 0006)
+     - Added BUILD_BUG_ON() for CIPSO tag 6. (patch 0018)
+     - Reworked audit subject information. Instead of adding fields in
+       the middle of existing records add a new record to the event. When
+       a separate record is required use subj="?". (patch 0020)
+     - Dropped Acks due to the above change (patch 0020)
+     - Reworked audit object information. Instead of adding fields in
+       the middle of existing records add a new record to the event. When
+       a separate record is required use obj="?". (patch 0021)
+     - Dropped Acks due to the above change (patch 0021)
+     - Enhanced documentation (patch 0022)
+     - Removed unnecessary error code check in security_getprocattr()
+       (patch 0021)
+
+v15: Rebase to 5.6-rc1
+     - Revise IMA data use (patch 0002)
+     Incorporate feedback from v14
+     - Fix lockdown module registration naming (patch 0002)
+     - Revise how /proc/self/attr/context is gathered. (patch 0022)
+     - Revise access modes on /proc/self/attr/context. (patch 0022)
+     - Revise documentation on LSM external interfaces. (patch 0022)
+
+v14: Rebase to 5.5-rc5
+     Incorporate feedback from v13
+     - Use an array of audit rules (patch 0002)
+     - Significant change, removed Acks (patch 0002)
+     - Remove unneeded include (patch 0013)
+     - Use context.len correctly (patch 0015)
+     - Reorder code to be more sensible (patch 0016)
+     - Drop SO_PEERCONTEXT as it's not needed yet (patch 0023)
+
+v13: Rebase to 5.5-rc2
+     Incorporate feedback from v12
+     - Print lsmblob size with %z (Patch 0002)
+     - Convert lockdown LSM initialization. (Patch 0002)
+     - Restore error check in nft_secmark_compute_secid (Patch 0006)
+     - Correct blob scaffolding in ima_must_appraise() (Patch 0009)
+     - Make security_setprocattr() clearer (Patch 0013)
+     - Use lsm_task_display more widely (Patch 0013)
+     - Use passed size in lsmcontext_init() (Patch 0014)
+     - Don't add a smack_release_secctx() hook (Patch 0014)
+     - Don't print warning in security_release_secctx() (Patch 0014)
+     - Don't duplicate the label in nfs4_label_init_security() (Patch 0016)
+     - Remove reviewed-by as code has significant change (Patch 0016)
+     - Send the entire lsmblob for Tag 6 (Patch 0019)
+     - Fix description of socket_getpeersec_stream parameters (Patch 0023)
+     - Retain LSMBLOB_FIRST. What was I thinking? (Patch 0023)
+     - Add compound context to LSM documentation (Patch 0023)
+
+v12: Rebase to 5.5-rc1
+     Fixed a couple of incorrect contractions in the text.
+
+v11: Rebase to 5.4-rc6
+     Incorporate feedback from v10
+     - Disambiguate reading /proc/.../attr/display by restricting
+       all use of the interface to the current process.
+     - Fix a merge error in AppArmor's display attribute check
+
+v10: Ask the security modules if the display can be changed.
+
+v9: There is no version 9
+
+v8: Incorporate feedback from v7
+    - Minor clean-up in display value management
+    - refactor "compound" context creation to use a common
+      append_ctx() function.
+
+v7: Incorporate feedback from v6
+    - Make setting the display a privileged operation. The
+      availability of compound contexts reduces the need for
+      setting the display.
+
+v6: Incorporate feedback from v5
+    - Add subj_<lsm>= and obj_<lsm>= fields to audit records
+    - Add /proc/.../attr/context to get the full context in
+      lsmname\0value\0... format as suggested by Simon McVittie
+    - Add SO_PEERCONTEXT for getsockopt() to get the full context
+      in the same format, also suggested by Simon McVittie.
+    - Add /sys/kernel/security/lsm_display_default to provide
+      the display default value.
+
+v5: Incorporate feedback from v4
+    - Initialize the lsmcontext in security_secid_to_secctx()
+    - Clear the lsmcontext in all security_release_secctx() cases
+    - Don't use the "display" on strictly internal context
+      interfaces.
+    - The SELinux binder hooks check for cases where the context
+      "display" isn't compatible with SELinux.
+
+v4: Incorporate feedback from v3
+    - Mark new lsm_<blob>_alloc functions static
+    - Replace the lsm and slot fields of the security_hook_list
+      with a pointer to a LSM allocated lsm_id structure. The
+      LSM identifies if it needs a slot explicitly. Use the
+      lsm_id rather than make security_add_hooks return the
+      slot value.
+    - Validate slot values used in security.c
+    - Reworked the "display" process attribute handling so that
+      it works right and doesn't use goofy list processing.
+    - fix display value check in dentry_init_security
+    - Replace audit_log of secids with '?' instead of deleting
+      the audit log
+
+v3: Incorporate feedback from v2
+    - Make lsmblob parameter and variable names more
+      meaningful, changing "le" and "l" to "blob".
+    - Improve consistency of constant naming.
+    - Do more sanity checking during LSM initialization.
+    - Be a bit clearer about what is temporary scaffolding.
+    - Rather than clutter security_getpeersec_dgram with
+      otherwise unnecessary checks remove the apparmor
+      stub, which does nothing useful.
+
+Patch 0001 moves management of the sock security blob
+from the individual modules to the infrastructure.
+
+Patches 0002-0012 replace system use of a "secid" with
+a structure "lsmblob" containing information from the
+security modules to be held and reused later. At this
+point lsmblob contains an array of u32 secids, one "slot"
+for each of the security modules compiled into the
+kernel that used secids. A "slot" is allocated when
+a security module requests one.
+The infrastructure is changed to use the slot number
+to pass the correct secid to or from the security module
+hooks.
+
+It is important that the lsmblob be a fixed size entity
+that does not have to be allocated. Several of the places
+where it is used would have performance and/or locking
+issues with dynamic allocation.
+
+Patch 0013 provides a mechanism for a process to
+identify which security module's hooks should be used
+when displaying or converting a security context string.
+A new interface /proc/self/attr/display contains the name
+of the security module to show. Reading from this file
+will present the name of the module, while writing to
+it will set the value. Only names of active security
+modules are accepted. Internally, the name is translated
+to the appropriate "slot" number for the module which
+is then stored in the task security blob. Setting the
+display requires that all modules using the /proc interfaces
+allow the transition. The "display" of other processess
+can be neither read nor written. All suggested cases
+for reading the display of a different process have race
+conditions.
+
+Patch 0014 Starts the process of changing how a security
+context is represented. Since it is possible for a
+security context to have been generated by more than one
+security module it is now necessary to note which module
+created a security context so that the correct "release"
+hook can be called. There are several places where the
+module that created a security context cannot be inferred.
+
+This is achieved by introducing a "lsmcontext" structure
+which contains the context string, its length and the
+"slot" number of the security module that created it.
+The security_release_secctx() interface is changed,
+replacing the (string,len) pointer pair with a lsmcontext
+pointer.
+
+Patches 0015-0017 convert the security interfaces from
+(string,len) pointer pairs to a lsmcontext pointer.
+The slot number identifying the creating module is
+added by the infrastructure. Where the security context
+is stored for extended periods the data type is changed.
+
+The Netlabel code is converted to save lsmblob structures
+instead of secids in Patch 0018.
+
+Patch 0019 adds checks to the binder hooks which verify
+that if both ends of a transaction use the same "display".
+
+Patches 0020-0021 add addition audit records
+to identify the LSM specific data for all active modules.
+
+Patch 0022 adds a new interfaces for getting the
+compound security contexts.
+
+Finally, with all interference on the AppArmor hooks
+removed, Patch 0023 removes the exclusive bit from
+AppArmor. An unnecessary stub hook was also removed.
+
+The Ubuntu project is using an earlier version of
+this patchset in their distribution to enable stacking
+for containers.
+
+Performance measurements to date have the change
+within the "noise". The sockperf and dbench results
+are on the order of 0.2% to 0.8% difference, with
+better performance being as common as worse. The
+benchmarks were run with AppArmor and Smack on Ubuntu.
+
+https://github.com/cschaufler/lsm-stacking.git#stack-5.6-v16
+
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- include/linux/security.h |  7 ++++---
- kernel/auditsc.c         |  7 ++++++-
- security/security.c      | 12 +++++++++---
- 3 files changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 97921325b2e9..10c607a40057 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -489,7 +489,7 @@ int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
- 			unsigned long arg4, unsigned long arg5);
- void security_task_to_inode(struct task_struct *p, struct inode *inode);
- int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
--void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
-+void security_ipc_getsecid(struct kern_ipc_perm *ipcp, struct lsmblob *blob);
- int security_msg_msg_alloc(struct msg_msg *msg);
- void security_msg_msg_free(struct msg_msg *msg);
- int security_msg_queue_alloc(struct kern_ipc_perm *msq);
-@@ -1197,9 +1197,10 @@ static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
- 	return 0;
- }
- 
--static inline void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid)
-+static inline void security_ipc_getsecid(struct kern_ipc_perm *ipcp,
-+					 struct lsmblob *blob)
- {
--	*secid = 0;
-+	lsmblob_init(blob, 0);
- }
- 
- static inline int security_msg_msg_alloc(struct msg_msg *msg)
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 56cbb113975a..c5aa1f10e7cc 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2299,11 +2299,16 @@ void __audit_mq_getsetattr(mqd_t mqdes, struct mq_attr *mqstat)
- void __audit_ipc_obj(struct kern_ipc_perm *ipcp)
- {
- 	struct audit_context *context = audit_context();
-+	struct lsmblob blob;
- 	context->ipc.uid = ipcp->uid;
- 	context->ipc.gid = ipcp->gid;
- 	context->ipc.mode = ipcp->mode;
- 	context->ipc.has_perm = 0;
--	security_ipc_getsecid(ipcp, &context->ipc.osid);
-+	security_ipc_getsecid(ipcp, &blob);
-+	/* context->ipc.osid will be changed to a lsmblob later in
-+	 * the patch series. This will allow auditing of all the object
-+	 * labels associated with the ipc object. */
-+	context->ipc.osid = lsmblob_value(&blob);
- 	context->type = AUDIT_IPC;
- }
- 
-diff --git a/security/security.c b/security/security.c
-index 85751ebe8842..776f62291b9f 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1815,10 +1815,16 @@ int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
- 	return call_int_hook(ipc_permission, 0, ipcp, flag);
- }
- 
--void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid)
-+void security_ipc_getsecid(struct kern_ipc_perm *ipcp, struct lsmblob *blob)
- {
--	*secid = 0;
--	call_void_hook(ipc_getsecid, ipcp, secid);
-+	struct security_hook_list *hp;
-+
-+	lsmblob_init(blob, 0);
-+	hlist_for_each_entry(hp, &security_hook_heads.ipc_getsecid, list) {
-+		if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
-+			continue;
-+		hp->hook.ipc_getsecid(ipcp, &blob->secid[hp->lsmid->slot]);
-+	}
- }
- 
- int security_msg_msg_alloc(struct msg_msg *msg)
--- 
-2.24.1
-
