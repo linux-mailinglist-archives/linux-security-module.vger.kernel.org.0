@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5B319FCA1
-	for <lists+linux-security-module@lfdr.de>; Mon,  6 Apr 2020 20:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C029019FD48
+	for <lists+linux-security-module@lfdr.de>; Mon,  6 Apr 2020 20:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbgDFSLC (ORCPT
+        id S1726084AbgDFSgU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 6 Apr 2020 14:11:02 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:56246 "EHLO
+        Mon, 6 Apr 2020 14:36:20 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37184 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbgDFSLB (ORCPT
+        with ESMTP id S1725787AbgDFSgU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 6 Apr 2020 14:11:01 -0400
-Received: from dede-linux.corp.microsoft.com (unknown [131.107.147.242])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 11C5820A086B;
-        Mon,  6 Apr 2020 11:10:59 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 11C5820A086B
+        Mon, 6 Apr 2020 14:36:20 -0400
+Received: by linux.microsoft.com (Postfix, from userid 1033)
+        id 51D582072933; Mon,  6 Apr 2020 11:36:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 51D582072933
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1586196659;
-        bh=FoQEwrrWn/d3Fno/jqMS38zWmUVRke4mJOAaLbjRrY8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N54VUr8QkarQLgnFqyjAszG7YIJ6pUaN/Zr3lkmOBOUyIo9VdjQstIz+BAhoGBCF7
-         bW+v9GE1SXS+1DVVjiBi/GlhP9y025G9+KVwyd4SK3KyasY/xI7W3lzn4DXxINnmy2
-         8plzBNslMLxjaM+b1+zzxbxzigxOcdQEC6m4q0Bo=
-From:   deven.desai@linux.microsoft.com
+        s=default; t=1586198179;
+        bh=OEudVpLjqf3g5HvN9ndvJvlBTCIbEu5ziBVGQiVKHgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mjOaUnzZEyI7GxQRyFYX8vUHitCF4H6PoK7lk1pRlv++G6IrJNeTmOhb5EmVTDcpn
+         n4FZscaj5ktDqCf4NumeUWpz8LTOqGZ+AsgyYH9Oa+oNGv29ryXsRcZJ86GfLisr1p
+         aA1qDBBjfw5eGwWYF/LZ9c8SGFA/0qtV/TqlO1/U=
+Date:   Mon, 6 Apr 2020 11:36:19 -0700
+From:   Deven Bowers <deven.desai@linux.microsoft.com>
 To:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
         jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
         linux-integrity@vger.kernel.org,
@@ -33,85 +33,23 @@ To:     agk@redhat.com, axboe@kernel.dk, snitzer@redhat.com,
 Cc:     tyhicks@linux.microsoft.com, pasha.tatashin@soleen.com,
         sashal@kernel.org, jaskarankhurana@linux.microsoft.com,
         nramas@linux.microsoft.com, mdsakib@linux.microsoft.com
-Subject: [RESEND PATCH 11/11] cleanup: uapi/linux/audit.h
-Date:   Mon,  6 Apr 2020 11:10:45 -0700
-Message-Id: <20200406181045.1024164-12-deven.desai@linux.microsoft.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200406181045.1024164-1-deven.desai@linux.microsoft.com>
+Subject: Re: [RESEND PATCH 00/11] Integrity Policy Enforcement LSM (IPE)
+Message-ID: <20200406183619.GA77626@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 References: <20200406181045.1024164-1-deven.desai@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200406181045.1024164-1-deven.desai@linux.microsoft.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Deven Bowers <deven.desai@linux.microsoft.com>
 
-Remove trailing whitespaces and align the integrity #defines in
-linux/uapi/audit.h
 
-Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
----
- include/uapi/linux/audit.h | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+This was resent due to an incorrect domain for dm-devel (redhat.org vs redhat.com), and an email address
+that was bouncing.
 
-diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-index 4e0122a0ed0c..d642ade068b5 100644
---- a/include/uapi/linux/audit.h
-+++ b/include/uapi/linux/audit.h
-@@ -48,7 +48,7 @@
-  * 2500 - 2999 future user space (maybe integrity labels and related events)
-  *
-  * Messages from 1000-1199 are bi-directional. 1200-1299 & 2100 - 2999 are
-- * exclusively user space. 1300-2099 is kernel --> user space 
-+ * exclusively user space. 1300-2099 is kernel --> user space
-  * communication.
-  */
- #define AUDIT_GET		1000	/* Get status */
-@@ -78,7 +78,7 @@
- #define AUDIT_LAST_USER_MSG	1199
- #define AUDIT_FIRST_USER_MSG2	2100	/* More user space messages */
- #define AUDIT_LAST_USER_MSG2	2999
-- 
-+
- #define AUDIT_DAEMON_START      1200    /* Daemon startup record */
- #define AUDIT_DAEMON_END        1201    /* Daemon normal stop record */
- #define AUDIT_DAEMON_ABORT      1202    /* Daemon error stop record */
-@@ -139,20 +139,20 @@
- #define AUDIT_MAC_CALIPSO_ADD	1418	/* NetLabel: add CALIPSO DOI entry */
- #define AUDIT_MAC_CALIPSO_DEL	1419	/* NetLabel: del CALIPSO DOI entry */
- 
--#define AUDIT_FIRST_KERN_ANOM_MSG   1700
--#define AUDIT_LAST_KERN_ANOM_MSG    1799
--#define AUDIT_ANOM_PROMISCUOUS      1700 /* Device changed promiscuous mode */
--#define AUDIT_ANOM_ABEND            1701 /* Process ended abnormally */
--#define AUDIT_ANOM_LINK		    1702 /* Suspicious use of file links */
--#define AUDIT_ANOM_CREAT	    1703 /* Suspicious file creation */
--#define AUDIT_INTEGRITY_DATA	    1800 /* Data integrity verification */
--#define AUDIT_INTEGRITY_METADATA    1801 /* Metadata integrity verification */
--#define AUDIT_INTEGRITY_STATUS	    1802 /* Integrity enable status */
--#define AUDIT_INTEGRITY_HASH	    1803 /* Integrity HASH type */
--#define AUDIT_INTEGRITY_PCR	    1804 /* PCR invalidation msgs */
--#define AUDIT_INTEGRITY_RULE	    1805 /* policy rule */
--#define AUDIT_INTEGRITY_EVM_XATTR   1806 /* New EVM-covered xattr */
--#define AUDIT_INTEGRITY_POLICY_RULE 1807 /* IMA policy rules */
-+#define AUDIT_FIRST_KERN_ANOM_MSG	1700
-+#define AUDIT_LAST_KERN_ANOM_MSG	1799
-+#define AUDIT_ANOM_PROMISCUOUS		1700 /* Device changed promiscuous mode */
-+#define AUDIT_ANOM_ABEND		1701 /* Process ended abnormally */
-+#define AUDIT_ANOM_LINK			1702 /* Suspicious use of file links */
-+#define AUDIT_ANOM_CREAT		1703 /* Suspicious file creation */
-+#define AUDIT_INTEGRITY_DATA		1800 /* Data integrity verification */
-+#define AUDIT_INTEGRITY_METADATA	1801 /* Metadata integrity verification */
-+#define AUDIT_INTEGRITY_STATUS		1802 /* Integrity enable status */
-+#define AUDIT_INTEGRITY_HASH		1803 /* Integrity HASH type */
-+#define AUDIT_INTEGRITY_PCR		1804 /* PCR invalidation msgs */
-+#define AUDIT_INTEGRITY_RULE		1805 /* policy rule */
-+#define AUDIT_INTEGRITY_EVM_XATTR	1806 /* New EVM-covered xattr */
-+#define AUDIT_INTEGRITY_POLICY_RULE	1807 /* IMA policy rules */
- #define AUDIT_INTEGRITY_POLICY_LOAD	1808 /* IPE Policy Load */
- #define AUDIT_INTEGRITY_POLICY_ACTIVATE	1809 /* IPE Policy Activation */
- #define AUDIT_INTEGRITY_EVENT		1810 /* IPE Evaluation Event */
--- 
-2.26.0
+Additionally, this is an RFC, and this tag will be added in the next iteration.
 
+- Deven
