@@ -2,119 +2,81 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D201A03BF
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 Apr 2020 02:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489D51A0672
+	for <lists+linux-security-module@lfdr.de>; Tue,  7 Apr 2020 07:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbgDGA1U (ORCPT
+        id S1727072AbgDGFPW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 6 Apr 2020 20:27:20 -0400
-Received: from sonic311-31.consmr.mail.ne1.yahoo.com ([66.163.188.212]:43934
-        "EHLO sonic311-31.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726287AbgDGA1U (ORCPT
+        Tue, 7 Apr 2020 01:15:22 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:34810 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727049AbgDGFPP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 6 Apr 2020 20:27:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1586219238; bh=FbskZu1uJmt74RwlZaMCKCQ2JxCUUFNQy9qKTk6yMgg=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject; b=g4zJXlliYXtTilKF7g6zp+wAU8t2J1vAFDoSB9XK+Wo5av8DLJtYo5Z+wElC/cKzZY4i/3ZNuJdq4+a0Kb5Hn+h1UZPPfiu0Jv3X3KUcI/9W9xCTVDVoLfnuG625CAA9RZ5lNVGdDQp9VF34Cgq+gHCDTPSB7E9XGkTnwh21UCRG/S9GFtxmz998SQ9/FBmqriX+F1jp9scTWy2jFnlHrYKhAfM5MtCP+bOweB/RkgHcAZ0daV+7f/2bTqXuB0ZdEU8vW20h0Mf4QZAnvXXQfb8i1BhOE9zW9gIefVrxR7pAzDk37dhB8kj2Pey9+xhG45sldAobdWQlD1IlxqqARw==
-X-YMail-OSG: 2ZZ7EmoVM1m1RmrGzpha4baPQ1qzlWD8qhPSY9Vk2ct_OgnsNLIQOdZgRQDeJeu
- 8lrT2PflhdzlbFeIo6eXAmAEmatdrjElwpRPZqHtDxqJrrh9BSOTz_t.6QSASY__wtP94t5gBHF8
- Q8zlGA1dc.7L8NLQWtJ.hllDF3K8Yh.P6T2zR4.haIxWi_NIjffnr8TL6Yuq2nl342JfBTTqL.nq
- pszkvdmGKrHoPyyPYuAobg8_l4DL7i9R.xyqBXO2NgyRE6R5QowVXvZs6ldFQVinvVEpOnm1Mxni
- 4LzxkuaQqdr.MJJfRk2RNjrAz.jaSJavIRpTNZqFCCYHBkp1jeupur52R9N.0mnzttlTLmBxNiCv
- ScoHcwZhHrmgPsAGEK5UfqcZInpMLQIBZgfnCdsSW9geThX96QYCrBOfdGkrSiiSk7kbm3l8kxw1
- IlgC2xZ05M3KUFMnQY_d2rBbxh.wtQBd7wcPlHYvolGA6e03EBlp7F6jvJV2ie5qksYBWqmxKPT3
- ACx8X2_QELz99WROPeN1kjlaWYDmzMfelT1qSbqv6tYg6nH8DXVD8.gZrBRzOGejup0eHeWKiF8A
- uX2BwkLrmErxynDjcSp8EkUgnK5FReoMMYcZCdc49ZXZVr6ml7gpBNDG3QrepHGmT0SnMLfAb1JK
- TAkc4nGiXp40S4woqzgTdq59hogPFEaKK0HZ_U9Vv_5aaZzbcReDfaSvxePLI8zmG9faGgL4xJbn
- zdqocjRo0BWd.MikVi.st.kaFimXVinmY469Odt4wkqsQqaftA2gOvApNw8CiHr_ZDl6v5Df5fIk
- IYAksJhEbjdRWWAb8LDrxg8nN9vRbBQVKMA9238MdAaW.TC90fX4ECLzM_ntWyIy_QKafov7_i99
- v6DiZ.hdzcnX5ewkTG8RKztU5.bFbQPwcosPqu_ylTU9XGzfkztS2_ADFksS2QLoRgvSInDn.e7H
- zvPeBbdijzBszDc0Ln_aZGV5is_sw.n7bEL8sn1_Jo1zHHmyLF3Uhs.Pd1VJ.7b4aqJUmEuYz8UT
- J19bO3c5jn9WHJ5lbUsaxj5omaihpLo.W0iv5pscBgCnahGvs.SQC2F2pslKV62ei1ubsnenFeMJ
- KmeEevS55hoGQkOQHdFc9QnfFLyQn5lIo9Cu513uyg99AeZgpTwEgL4ZMmqHkNP56oyuLuuE1Gek
- 3OP4ANfHUf3nO6hoiRjsJ4l1rqmUBIJgWKykyK16KBJ3Q5qcfOnnQehT3fZLdGVjvCqr.j59IP6B
- Qhm5xdU1ygt6rrRcnIcQAXvfuhUHsLv4y6ZvtLVTiZ6iof1P6Yko.0zRzZd2H2etzW_efNvXRVid
- vpHGup.uRUcYs2s7ssNCpo4VgA9VM_Y56mBqBWk2jGGsZBreExzFY9MJx2XtnM0EDuINQwOnbvNl
- FuUd7En8vaEJr55muuYkNGAhRC4vXCSbYpFSjpxX4lGMe.qzRSJKX0ZTDfR1P
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Tue, 7 Apr 2020 00:27:18 +0000
-Received: by smtp431.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 7593e4dc8c01eb675fc5184df100ea11;
-          Tue, 07 Apr 2020 00:27:16 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     casey@schaufler-ca.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, sds@tycho.nsa.gov, linux-audit@redhat.com
-Subject: [PATCH v16 23/23] AppArmor: Remove the exclusive flag
-Date:   Mon,  6 Apr 2020 17:01:59 -0700
-Message-Id: <20200407000159.43602-24-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200407000159.43602-1-casey@schaufler-ca.com>
-References: <20200407000159.43602-1-casey@schaufler-ca.com>
+        Tue, 7 Apr 2020 01:15:15 -0400
+Received: by mail-vs1-f66.google.com with SMTP id b5so1447394vsb.1
+        for <linux-security-module@vger.kernel.org>; Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=MfHDvIBIt69xqysjTBYVVNc0kV20i2uh+5pM5bA0kgqzaY38Y8DWEj01Pvo2lprKBQ
+         GeMPmsDw8mI8JPS3USlc7fo909SxPcbTvuuO8fmlDj3Epr1eVDtR360WKQPQyhZWRFR1
+         e2AVs/X8xmnpyFeBVbEpWkW/7xUX6BkoKcBNjhVPYru9i1s3MQXqsGzojyz2OPT8Gzuk
+         eAsRgBBtJfCcoxVL23nq2mmza5GNfLtG1Vewilonxc/7to20Va10m3hSWyxvaqvjeUuq
+         +R1bw/nay987q2JQWtF8qmoAYape5iyXc2fGu9oueeJmEOdg+02io2ZWkJnJglNvfVbH
+         fVHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=KKfcpu0j+xN04cNgfQrbioBpFhnexfug1+XYkgocbMQsA/9GhwE+Ua/CPImmjDV6sT
+         Hr4yK2KUpSOuIX61few1W2IyF2NivimyKVnyfSzDfcwGy0RseUDzPFnFwxadywH/15Y6
+         tImkZQmkWbSKnlgcBJThOFYSWMENtSyWFtT8/Wdj7MFeNr07RU7sm8Tv0pxZv7REhAA5
+         lSseduClYcLkUbQnvV10Pwch062VBdMsA/fcY0cTmmTsXBfw49Ahfg7kQt/irwlEDosM
+         FZWbjQq1UJy9vv5+n4Zg2z/Tj53eVwJSGmZKKlLhGBPN+lKb2YKcMYtGfb+QEb3+q3hN
+         Wbtw==
+X-Gm-Message-State: AGi0Pua52JlEZR7OjmTpqS7ZV3vd58/L6z9bjvVza6xH8RfhLrfuwtLh
+        j/x6dxyL24Ra489/t879pgekn4kH5iG+gfJPIQs=
+X-Google-Smtp-Source: APiQypL+ArhsKP1HCJpJZSuqqOKzmqGe03VSBcvbyU5XLwMdkDIdNu0ELlIqojTyqMNnJA6AEodSyvd4rSFXD4DVz/E=
+X-Received: by 2002:a67:fa85:: with SMTP id f5mr495699vsq.65.1586236514277;
+ Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab0:254a:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:15:12 -0700 (PDT)
+From:   SANDRA DEWI <sdewisandra@gmail.com>
+Date:   Tue, 7 Apr 2020 05:15:12 +0000
+Message-ID: <CALe9-EdG2aBp2yBY=t79ZuBObzzfY6nuVfAsra6+wc2BAYMhcg@mail.gmail.com>
+Subject: whether this is your correct email address or not
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the inclusion of the "display" process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+Dear ,Pastor
 
-Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 02f305ab2c69..07729c28275e 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1124,22 +1124,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock,
- 	return error;
- }
- 
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1243,8 +1227,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1913,7 +1895,7 @@ static int __init apparmor_init(void)
- 
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
--- 
-2.24.1
 
+I have a client who is an oil business man and he made a fixed deposit
+of $26 million USD in my bank, where I am the director of the branch,
+My client died with his entire family in Jordanian
+
+50% of the fund will be for the church  for the work of God,the
+balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
+50% for me
+
+intervention in the Syrian Civil War 2014 leaving behind no next of
+kin. I Propose to present you as next of kin to claim the funds, if
+interested reply me for full details and how we are to
+
+
+
+proceed to close this deal.
+
+
+
+
+Mrs. Sandra Dewi
+
+
+
+Email  mrsdewi@gmx.com
