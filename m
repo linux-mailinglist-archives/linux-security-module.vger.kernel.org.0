@@ -2,145 +2,117 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A4B1A3423
-	for <lists+linux-security-module@lfdr.de>; Thu,  9 Apr 2020 14:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882631A345D
+	for <lists+linux-security-module@lfdr.de>; Thu,  9 Apr 2020 14:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgDIMiy (ORCPT
+        id S1726714AbgDIMt7 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 9 Apr 2020 08:38:54 -0400
-Received: from raptor.unsafe.ru ([5.9.43.93]:58672 "EHLO raptor.unsafe.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725970AbgDIMiu (ORCPT
+        Thu, 9 Apr 2020 08:49:59 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:36271 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726470AbgDIMt7 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 9 Apr 2020 08:38:50 -0400
-Received: from comp-core-i7-2640m-0182e6.redhat.com (ip-89-102-33-211.net.upcbroadband.cz [89.102.33.211])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by raptor.unsafe.ru (Postfix) with ESMTPSA id B4116209DC;
-        Thu,  9 Apr 2020 12:38:46 +0000 (UTC)
-From:   Alexey Gladkov <gladkov.alexey@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Security Module <linux-security-module@vger.kernel.org>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Djalal Harouni <tixxdz@gmail.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@poochiereds.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Howells <dhowells@redhat.com>
-Subject: [PATCH RESEND v11 8/8] proc: use named enums for better readability
-Date:   Thu,  9 Apr 2020 14:37:52 +0200
-Message-Id: <20200409123752.1070597-9-gladkov.alexey@gmail.com>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200409123752.1070597-1-gladkov.alexey@gmail.com>
-References: <20200409123752.1070597-1-gladkov.alexey@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.1 (raptor.unsafe.ru [5.9.43.93]); Thu, 09 Apr 2020 12:38:47 +0000 (UTC)
+        Thu, 9 Apr 2020 08:49:59 -0400
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200409124957epoutp028cfb4829741383337ad661fef922fc5e~EJ64c27DR2734727347epoutp02L
+        for <linux-security-module@vger.kernel.org>; Thu,  9 Apr 2020 12:49:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200409124957epoutp028cfb4829741383337ad661fef922fc5e~EJ64c27DR2734727347epoutp02L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1586436597;
+        bh=k127lAaemQMj/UxuaYJHqu26q7MPrNgzRaknKbgSsf0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=aH9lC/5sYSfdgu0FWppKJyeFctE7U9niFnQ5lD/3vYVSg2lg8F/TgO69aU3MPh7dy
+         xw6WUb2WG+aqtV77iACLwenOWc4q5v/mZ+w/4uDMkS4wNaDUKLJSBRZYlXs5tnCdcv
+         fA2ky4L/iXDZHy6l8FycjiF6QDylXZGM/mCzzAf4=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20200409124957epcas5p3dfbf7b1eda2f7fbb79cea1a1f234cfdf~EJ64IgjDX0948209482epcas5p3s;
+        Thu,  9 Apr 2020 12:49:57 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        69.E7.04736.5F91F8E5; Thu,  9 Apr 2020 21:49:57 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20200409124013epcas5p33036c008f30327378a6ff02050261626~EJyY8LLLP3207032070epcas5p3i;
+        Thu,  9 Apr 2020 12:40:13 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200409124013epsmtrp10b7baeb055849648c1ebca84be825506~EJyY7dqyu3224132241epsmtrp1J;
+        Thu,  9 Apr 2020 12:40:13 +0000 (GMT)
+X-AuditID: b6c32a4b-ae3ff70000001280-4a-5e8f19f5c79f
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        69.B3.04158.DA71F8E5; Thu,  9 Apr 2020 21:40:13 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.109.224.135]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200409124012epsmtip272daa145077cb78ee405e314a1f6a06a~EJyXWxDKh1242112421epsmtip2l;
+        Thu,  9 Apr 2020 12:40:12 +0000 (GMT)
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     casey@schaufler-ca.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, a.sahrawat@samsung.com,
+        v.narang@samsung.com, Maninder Singh <maninder1.s@samsung.com>
+Subject: [PATCH 1/1] smack: remove redundant structure variable from header.
+Date:   Thu,  9 Apr 2020 18:09:58 +0530
+Message-Id: <1586435998-18921-1-git-send-email-maninder1.s@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGIsWRmVeSWpSXmKPExsWy7bCmpu5Xyf44g+d7WCwu7k61uLftF5vF
+        uvWLmSwu75rDZvGh5xGbxeH5bSwW5y+cY7c4dHIuowOHx7XdkR4935M9+rasYvQ4un8Rm8fn
+        TXIBrFFcNimpOZllqUX6dglcGf3HIwsms1V07dvJ3sDYxNrFyMkhIWAi8ar7JksXIxeHkMBu
+        RonVy7axQjifGCX+tv9hB6kSEvjGKDGvWwam483cFVAdexklnn46CeV8ZZRYt2gjE0gVm4Ce
+        xKpde1hAbBEBe4nJ2++xgdjMAosZJd42KoDYwgI+Ejt/LgKq5+BgEVCV2HarGiTMK+Au8fr0
+        R2aIZXISN891MoPMlxDoYJNY2rWNESLhInHnWhM7hC0s8er4FihbSuJlfxs7REMzo8SnfWsZ
+        IZwpjBJLL36E+tpe4nVzA9hmZgFNifW79CHCshJTT61jgjiUT6L39xMmiDivxI55MLaqRMvN
+        DVBjpCU+f/zIAmF7SEza9hFspJBArMTsf6kTGGVnISxYwMi4ilEytaA4Nz212LTAOC+1XK84
+        Mbe4NC9dLzk/dxMjOPa1vHcwbjrnc4hRgINRiYe3g6k/Tog1say4MvcQowQHs5IIr3dTb5wQ
+        b0piZVVqUX58UWlOavEhRmkOFiVx3kmsV2OEBNITS1KzU1MLUotgskwcnFINjJ7th3IWlTvY
+        P97yIG+yu/+dt32T+Ca5lh0XTUz7IvWS6YPGob4HvvLaJ7K3RV22OZqh9v7xwvcHrG52Wtfq
+        Rax1r1l7NP5VUlLn7x+yCzuDbum+O/4mzjR7gs41YSHZr0acm4IXdTatV1m0Y292YGxEWbR+
+        M9OBdkkzm7AjNxXdJlTxzw68oMRSnJFoqMVcVJwIAH46SEf5AgAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphluLIzCtJLcpLzFFi42LZdlhJXneteH+cwf8rphYXd6da3Nv2i81i
+        3frFTBaXd81hs/jQ84jN4vD8NhaL8xfOsVscOjmX0YHD49ruSI+e78kefVtWMXoc3b+IzePz
+        JrkA1igum5TUnMyy1CJ9uwSujP7jkQWT2Sq69u1kb2BsYu1i5OSQEDCReDN3BUsXIxeHkMBu
+        RolD+94zQiSkJX7+e88CYQtLrPz3nB2i6DOjxPqfh8GK2AT0JFbt2gNUxMEhIuAs8Ws5M0gN
+        s8ByRomDxx6BbRAW8JHY+XMRE0gNi4CqxLZb1SBhXgF3idenPzJDzJeTuHmuk3kCI88CRoZV
+        jJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjBYaSltYPxxIn4Q4wCHIxKPLwGDP1xQqyJ
+        ZcWVuYcYJTiYlUR4vZt644R4UxIrq1KL8uOLSnNSiw8xSnOwKInzyucfixQSSE8sSc1OTS1I
+        LYLJMnFwSjUwys16bZCxzWfn3WmPpHQr8sysotY3BJR0LH3zpOLn7F93WxsXHRJ3qPtS/tak
+        +NQCoRszO9c+q9i4QOa9stXMPJuzzEz37m+RVp/J8s3229xFS8ubH7Dt2X0koZthJw9H7IUr
+        Sy4v/2cgbDljQtkUgYr5FbZXVFh3zIt8nZZ98ShzhNA8mY1dAUosxRmJhlrMRcWJAF/bcy8f
+        AgAA
+X-CMS-MailID: 20200409124013epcas5p33036c008f30327378a6ff02050261626
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200409124013epcas5p33036c008f30327378a6ff02050261626
+References: <CGME20200409124013epcas5p33036c008f30327378a6ff02050261626@epcas5p3.samsung.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Signed-off-by: Alexey Gladkov <gladkov.alexey@gmail.com>
-Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- fs/proc/base.c          | 2 +-
- fs/proc/inode.c         | 2 +-
- fs/proc/root.c          | 4 ++--
- include/linux/proc_fs.h | 8 ++++----
- 4 files changed, 8 insertions(+), 8 deletions(-)
+commit afb1cbe37440 ("LSM: Infrastructure management
+of the inode security") removed usage of smk_rcu,
+thus removing it from structure.
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 1ebe9eba48ea..2f2f7b36c947 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -699,7 +699,7 @@ int proc_setattr(struct dentry *dentry, struct iattr *attr)
-  */
- static bool has_pid_permissions(struct proc_fs_info *fs_info,
- 				 struct task_struct *task,
--				 int hide_pid_min)
-+				 enum proc_hidepid hide_pid_min)
- {
- 	/*
- 	 * If 'hidpid' mount option is set force a ptrace check,
-diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-index d38a9e592352..8f3681723108 100644
---- a/fs/proc/inode.c
-+++ b/fs/proc/inode.c
-@@ -166,7 +166,7 @@ void proc_invalidate_siblings_dcache(struct hlist_head *inodes, spinlock_t *lock
- 		deactivate_super(old_sb);
- }
- 
--static inline const char *hidepid2str(int v)
-+static inline const char *hidepid2str(enum proc_hidepid v)
- {
- 	switch (v) {
- 		case HIDEPID_OFF: return "off";
-diff --git a/fs/proc/root.c b/fs/proc/root.c
-index c6caae9e4308..9d6ce3710f4f 100644
---- a/fs/proc/root.c
-+++ b/fs/proc/root.c
-@@ -32,9 +32,9 @@
- struct proc_fs_context {
- 	struct proc_fs_info	*fs_info;
- 	unsigned int		mask;
--	int			hidepid;
-+	enum proc_hidepid	hidepid;
- 	int			gid;
--	int			pidonly;
-+	enum proc_pidonly	pidonly;
+Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+Signed-off-by: Vaneet Narang <v.narang@samsung.com>
+---
+ security/smack/smack.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/security/smack/smack.h b/security/smack/smack.h
+index 62529f3..5ebd0bb 100644
+--- a/security/smack/smack.h
++++ b/security/smack/smack.h
+@@ -111,7 +111,6 @@ struct inode_smack {
+ 	struct smack_known	*smk_mmap;	/* label of the mmap domain */
+ 	struct mutex		smk_lock;	/* initialization lock */
+ 	int			smk_flags;	/* smack inode flags */
+-	struct rcu_head         smk_rcu;	/* for freeing inode_smack */
  };
  
- enum proc_param {
-diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
-index afd38cae2339..3701f49eb299 100644
---- a/include/linux/proc_fs.h
-+++ b/include/linux/proc_fs.h
-@@ -28,7 +28,7 @@ struct proc_ops {
- };
- 
- /* definitions for hide_pid field */
--enum {
-+enum proc_hidepid {
- 	HIDEPID_OFF	  = 0,
- 	HIDEPID_NO_ACCESS = 1,
- 	HIDEPID_INVISIBLE = 2,
-@@ -36,7 +36,7 @@ enum {
- };
- 
- /* definitions for proc mount option pidonly */
--enum {
-+enum proc_pidonly {
- 	PROC_PIDONLY_OFF = 0,
- 	PROC_PIDONLY_ON  = 1,
- };
-@@ -46,8 +46,8 @@ struct proc_fs_info {
- 	struct dentry *proc_self;        /* For /proc/self */
- 	struct dentry *proc_thread_self; /* For /proc/thread-self */
- 	kgid_t pid_gid;
--	int hide_pid;
--	int pidonly;
-+	enum proc_hidepid hide_pid;
-+	enum proc_pidonly pidonly;
- };
- 
- static inline struct proc_fs_info *proc_sb_info(struct super_block *sb)
+ struct task_smack {
 -- 
-2.25.2
+1.9.1
 
