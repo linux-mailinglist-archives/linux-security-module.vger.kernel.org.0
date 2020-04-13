@@ -2,73 +2,190 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D84DD1A66F9
-	for <lists+linux-security-module@lfdr.de>; Mon, 13 Apr 2020 15:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190361A6A5B
+	for <lists+linux-security-module@lfdr.de>; Mon, 13 Apr 2020 18:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbgDMNah (ORCPT
+        id S1731878AbgDMQwj (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 13 Apr 2020 09:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729862AbgDMNa3 (ORCPT
+        Mon, 13 Apr 2020 12:52:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44160 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731870AbgDMQwh (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 13 Apr 2020 09:30:29 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA06C008769
-        for <linux-security-module@vger.kernel.org>; Mon, 13 Apr 2020 06:30:29 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id g14so813624otg.10
-        for <linux-security-module@vger.kernel.org>; Mon, 13 Apr 2020 06:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=6jXC2UTWF/SUxZW/pWxyCF4hxNCly+ey/YhKERzLlbQ=;
-        b=iP/ULyy8lWG1nhEGn0gppspS4F2JhILJ4nTAtiYGhdrZL51cxqVWhs6D3Y9wyc2ADf
-         A2rwUCP45WAPoWNbSBZGTGVFxJmmDPHe19L3gxm7+w8E5f22GKJOLIMHoMQQI7v3c5XY
-         DlMUV5+ZlbBmFxdLOO2VDbc7W9ESDWYt4QtLLqRZFkEOi9gTP3STkSTcSJo+WdBU2ZMP
-         cbKcszDV9RPwFi/D+lHgC6golJOLYJdAkURkw7hbGoqznT8eWbtFkjjpTaIqirsxJh7L
-         wdqYlNLP395ub4iQIUl47edMIk3+i+NAk1eC0wEHnaBVffHHOQq3Dv9hRllCWWuEG7fQ
-         v+/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=6jXC2UTWF/SUxZW/pWxyCF4hxNCly+ey/YhKERzLlbQ=;
-        b=c7nfL9hwhlanB7w0dg+f/RUj3ii9BWTpjq8bGGK+GMmEUkNcfUaZkJyPJih7+tco0s
-         30BNYGGvC7HbWZppI0DwqnMfsqnfQPcSM+MspFupS6J8yMwvhmKQ+e07O19gnI5NniSX
-         5p1Ha/LZlCAoMwJZC4cHH+0sI14fB3ZdV3tlAbjup5aB0cOXBipPJZlRvo82tVb4O+Zp
-         brjpJ9Eu9iGjkcnJKMdHt7Sd8n5hN4iFzvtHbvgi8e3dEVP1+p2pHFcIMg2dk2jhNFjJ
-         ivPS8HL4C3fhqLlhHtpFb6SSdpeRbKj+dC93vxuyUX/QixwqUKSO56MQQnGvXBEUW8Eg
-         xkFA==
-X-Gm-Message-State: AGi0Pub4HAXAcK4CyRR9EMK8eizOgv8Of9jPZIDgslS7BdqJBbrPrq2j
-        nSN9ybdoyO0WKC8iL7qd2DKHfM/NpwV26Dk5eGmp+iuAPSU=
-X-Google-Smtp-Source: APiQypLFU/9OTkw8I8yoSnsZBoCJl2kmbnPrqcYyRtFa4kS0eBylKtgliJY99Emg2IXzWabr7J0d9UY0bd1bcIemaS0=
-X-Received: by 2002:a4a:da55:: with SMTP id f21mr14363752oou.34.1586784627519;
- Mon, 13 Apr 2020 06:30:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200326200634.222009-1-dancol@google.com> <20200401213903.182112-1-dancol@google.com>
-In-Reply-To: <20200401213903.182112-1-dancol@google.com>
-From:   Daniel Colascione <dancol@google.com>
-Date:   Mon, 13 Apr 2020 06:29:50 -0700
-Message-ID: <CAKOZueuu=bGt4O0xjiV=9_PC_8Ey8pa3NjtJ7+O-nHCcYbLnEg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] SELinux support for anonymous inodes and UFFD
-To:     Tim Murray <timmurray@google.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Moore <paul@paul-moore.com>,
-        Nick Kralevich <nnk@google.com>,
+        Mon, 13 Apr 2020 12:52:37 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BDACE20857;
+        Mon, 13 Apr 2020 16:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586796756;
+        bh=bsha3xY0b0htxjAC74+rhyzPRn3pa6BRck29iTQylnQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vOyCN8Q/sTPseoZteALKxvDyyep46Pk//XGWf/kI2kc1EPeNnPoD4sOZfyN4nQwX1
+         hiZGsr9uPWoQ78JTlSCk/cJQxMKOJd1zwIEpqQ/A1Ez6Z+Y8kkcSIIyCuFOaxF7ekd
+         8hOgvv4ax+kGpDQmcHQE+8VVh6cuU6QrVP87kDNk=
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Song Liu <songliubraving@fb.com>,
         Stephen Smalley <sds@tycho.nsa.gov>,
-        Lokesh Gidra <lokeshgidra@google.com>, jmorris@namei.org
-Content-Type: text/plain; charset="UTF-8"
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Igor Lubashev <ilubashe@akamai.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        intel-gfx@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-man@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: [PATCH 05/26] capabilities: Introduce CAP_PERFMON to kernel and user space
+Date:   Mon, 13 Apr 2020 13:51:42 -0300
+Message-Id: <20200413165203.1816-6-acme@kernel.org>
+X-Mailer: git-send-email 2.21.1
+In-Reply-To: <20200413165203.1816-1-acme@kernel.org>
+References: <20200413165203.1816-1-acme@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Apr 1, 2020 at 2:39 PM Daniel Colascione <dancol@google.com> wrote:
->
-> Changes from the fourth version of the patch:
+From: Alexey Budankov <alexey.budankov@linux.intel.com>
 
+Introduce the CAP_PERFMON capability designed to secure system
+performance monitoring and observability operations so that CAP_PERFMON
+can assist CAP_SYS_ADMIN capability in its governing role for
+performance monitoring and observability subsystems.
 
-Is there anything else that needs to be done before merging this patch series?
+CAP_PERFMON hardens system security and integrity during performance
+monitoring and observability operations by decreasing attack surface that
+is available to a CAP_SYS_ADMIN privileged process [2]. Providing the access
+to system performance monitoring and observability operations under CAP_PERFMON
+capability singly, without the rest of CAP_SYS_ADMIN credentials, excludes
+chances to misuse the credentials and makes the operation more secure.
+
+Thus, CAP_PERFMON implements the principle of least privilege for
+performance monitoring and observability operations (POSIX IEEE 1003.1e:
+2.2.2.39 principle of least privilege: A security design principle that
+  states that a process or program be granted only those privileges
+(e.g., capabilities) necessary to accomplish its legitimate function,
+and only for the time that such privileges are actually required)
+
+CAP_PERFMON meets the demand to secure system performance monitoring and
+observability operations for adoption in security sensitive, restricted,
+multiuser production environments (e.g. HPC clusters, cloud and virtual compute
+environments), where root or CAP_SYS_ADMIN credentials are not available to
+mass users of a system, and securely unblocks applicability and scalability
+of system performance monitoring and observability operations beyond root
+and CAP_SYS_ADMIN use cases.
+
+CAP_PERFMON takes over CAP_SYS_ADMIN credentials related to system performance
+monitoring and observability operations and balances amount of CAP_SYS_ADMIN
+credentials following the recommendations in the capabilities man page [1]
+for CAP_SYS_ADMIN: "Note: this capability is overloaded; see Notes to kernel
+developers, below." For backward compatibility reasons access to system
+performance monitoring and observability subsystems of the kernel remains
+open for CAP_SYS_ADMIN privileged processes but CAP_SYS_ADMIN capability
+usage for secure system performance monitoring and observability operations
+is discouraged with respect to the designed CAP_PERFMON capability.
+
+Although the software running under CAP_PERFMON can not ensure avoidance
+of related hardware issues, the software can still mitigate these issues
+following the official hardware issues mitigation procedure [2]. The bugs
+in the software itself can be fixed following the standard kernel development
+process [3] to maintain and harden security of system performance monitoring
+and observability operations.
+
+[1] http://man7.org/linux/man-pages/man7/capabilities.7.html
+[2] https://www.kernel.org/doc/html/latest/process/embargoed-hardware-issues.html
+[3] https://www.kernel.org/doc/html/latest/admin-guide/security-bugs.html
+
+Signed-off-by: Alexey Budankov <alexey.budankov@linux.intel.com>
+Acked-by: James Morris <jamorris@linux.microsoft.com>
+Acked-by: Serge E. Hallyn <serge@hallyn.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
+Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Igor Lubashev <ilubashe@akamai.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-man@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Cc: selinux@vger.kernel.org
+Link: http://lore.kernel.org/lkml/5590d543-82c6-490a-6544-08e6a5517db0@linux.intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ include/linux/capability.h          | 4 ++++
+ include/uapi/linux/capability.h     | 8 +++++++-
+ security/selinux/include/classmap.h | 4 ++--
+ 3 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/capability.h b/include/linux/capability.h
+index ecce0f43c73a..027d7e4a853b 100644
+--- a/include/linux/capability.h
++++ b/include/linux/capability.h
+@@ -251,6 +251,10 @@ extern bool privileged_wrt_inode_uidgid(struct user_namespace *ns, const struct
+ extern bool capable_wrt_inode_uidgid(const struct inode *inode, int cap);
+ extern bool file_ns_capable(const struct file *file, struct user_namespace *ns, int cap);
+ extern bool ptracer_capable(struct task_struct *tsk, struct user_namespace *ns);
++static inline bool perfmon_capable(void)
++{
++	return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
++}
+ 
+ /* audit system wants to get cap info from files as well */
+ extern int get_vfs_caps_from_disk(const struct dentry *dentry, struct cpu_vfs_cap_data *cpu_caps);
+diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
+index 272dc69fa080..e58c9636741b 100644
+--- a/include/uapi/linux/capability.h
++++ b/include/uapi/linux/capability.h
+@@ -367,8 +367,14 @@ struct vfs_ns_cap_data {
+ 
+ #define CAP_AUDIT_READ		37
+ 
++/*
++ * Allow system performance and observability privileged operations
++ * using perf_events, i915_perf and other kernel subsystems
++ */
++
++#define CAP_PERFMON		38
+ 
+-#define CAP_LAST_CAP         CAP_AUDIT_READ
++#define CAP_LAST_CAP         CAP_PERFMON
+ 
+ #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+ 
+diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+index 986f3ac14282..d233ab3f1533 100644
+--- a/security/selinux/include/classmap.h
++++ b/security/selinux/include/classmap.h
+@@ -27,9 +27,9 @@
+ 	    "audit_control", "setfcap"
+ 
+ #define COMMON_CAP2_PERMS  "mac_override", "mac_admin", "syslog", \
+-		"wake_alarm", "block_suspend", "audit_read"
++		"wake_alarm", "block_suspend", "audit_read", "perfmon"
+ 
+-#if CAP_LAST_CAP > CAP_AUDIT_READ
++#if CAP_LAST_CAP > CAP_PERFMON
+ #error New capability defined, please update COMMON_CAP2_PERMS.
+ #endif
+ 
+-- 
+2.21.1
+
