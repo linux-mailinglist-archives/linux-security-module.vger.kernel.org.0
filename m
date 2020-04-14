@@ -2,76 +2,46 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E91C41A7867
-	for <lists+linux-security-module@lfdr.de>; Tue, 14 Apr 2020 12:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDFE1A7A0C
+	for <lists+linux-security-module@lfdr.de>; Tue, 14 Apr 2020 13:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438332AbgDNK3y (ORCPT
+        id S2439602AbgDNLtP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 14 Apr 2020 06:29:54 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:43032 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2438318AbgDNK3n (ORCPT
+        Tue, 14 Apr 2020 07:49:15 -0400
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:50580 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728473AbgDNLtN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 14 Apr 2020 06:29:43 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id E20FCF51D61FC81688AE;
-        Tue, 14 Apr 2020 18:29:11 +0800 (CST)
-Received: from linux-lmwb.huawei.com (10.175.103.112) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 14 Apr 2020 18:29:05 +0800
-From:   Zou Wei <zou_wei@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>,
-        <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zou Wei <zou_wei@huawei.com>
-Subject: [PATCH -next v2] IMA: fix memdup.cocci warnings
-Date:   Tue, 14 Apr 2020 18:35:28 +0800
-Message-ID: <1586860528-71897-1-git-send-email-zou_wei@huawei.com>
-X-Mailer: git-send-email 2.6.2
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.103.112]
-X-CFilter-Loop: Reflected
+        Tue, 14 Apr 2020 07:49:13 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01358;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0TvWiAKX_1586864931;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0TvWiAKX_1586864931)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 14 Apr 2020 19:48:51 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, zhangliguang@linux.alibaba.com,
+        zhang.jia@linux.alibaba.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tianjia.zhang@linux.alibaba.com
+Subject: [PATCH 0/2] Simplify the implementation of some functions in IMA
+Date:   Tue, 14 Apr 2020 19:48:48 +0800
+Message-Id: <20200414114850.98622-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Fixes coccicheck warning:
+Simplify the implementation of some functions in IMA.
 
-security/integrity/ima/ima_policy.c:272:10-17: WARNING opportunity for kmemdup
+Tianjia Zhang (2):
+  ima: simplify function ima_store_template
+  ima: simplify function process_buffer_measurement
 
-Use kmemdup rather than duplicating its implementation
+ security/integrity/ima/ima_api.c  |  3 +--
+ security/integrity/ima/ima_main.c | 12 ++++++------
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
----
- security/integrity/ima/ima_policy.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index c334e0d..185f8d7 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -269,7 +269,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	struct ima_rule_entry *nentry;
- 	int i;
- 
--	nentry = kmalloc(sizeof(*nentry), GFP_KERNEL);
-+	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
- 	if (!nentry)
- 		return NULL;
- 
-@@ -277,7 +277,6 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	 * Immutable elements are copied over as pointers and data; only
- 	 * lsm rules can change
- 	 */
--	memcpy(nentry, entry, sizeof(*nentry));
- 	memset(nentry->lsm, 0, sizeof_field(struct ima_rule_entry, lsm));
- 
- 	for (i = 0; i < MAX_LSM_RULES; i++) {
 -- 
-2.6.2
+2.17.1
 
