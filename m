@@ -2,99 +2,130 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2B81B3699
-	for <lists+linux-security-module@lfdr.de>; Wed, 22 Apr 2020 06:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E2F1B43DB
+	for <lists+linux-security-module@lfdr.de>; Wed, 22 Apr 2020 14:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726399AbgDVEv6 (ORCPT
+        id S1728169AbgDVMDO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 22 Apr 2020 00:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726082AbgDVEv6 (ORCPT
+        Wed, 22 Apr 2020 08:03:14 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:28182 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726835AbgDVMDN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 22 Apr 2020 00:51:58 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523C4C03C1AB
-        for <linux-security-module@vger.kernel.org>; Tue, 21 Apr 2020 21:51:57 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id y24so750705wma.4
-        for <linux-security-module@vger.kernel.org>; Tue, 21 Apr 2020 21:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=rbRuIjvtduoe5rDmx04RZeGHXBKwqWRmrOmSv68i/zh0G7dxA9cd5BhZoNzJ9N6B2q
-         5eB51NESGTz0lJfH+OoJDDpVTo+qxXxhbnSi124B4kpTazwydRIeem0V0Rn2Gpx5AgR0
-         91NEqcfa3WVqIpxag75NoGWW8q+uGkZGsCXD6y7KSAZw3zwUWhfcRtU5JwJdpyeFBvpu
-         I/eS/Go/9Ngzu8uFpI6/iAFe+GNKuK94+IhnnbCYE3ObU/zUMmMxc5hbM6bTP89gbhB1
-         2q5YYLgiH1QtRPLQDAJanaf5afhK9Zv47Sl7DZd7niBJkxSc7pNbN0D3ID5H+5HRDiKJ
-         B/CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=o0wMWq9s0UwcHIyAYz3wurb0W0am7Dej5x7EYIgt2ZNAlGpJfEOJ/VofhBQJkqmYQU
-         RR2FcTk4SuNgP4Zy/y8a/IPnbGOjzW/7lXkt3W4m+eyr+thLwWBUJGbP7pdCDVdRjiKE
-         0t+FzfjT5CVe3EMFwfujrqgQeDO6gWyIvTmXS5lRTIkvTcvgFwPZu4btL4KGUZfdExkX
-         wNl0MEl1zFq/9QRaFgewdDtrVesGNnw4fkakLr6P68SX+Kz8JB5iePmXnelvpyPHdykG
-         ZPzoGSBR4uwZ8eXTPyNuIUDRWG3ODuyIoPgTHWAy+j1nz1IbC5jiDKvTFsz2kp6ATVCa
-         dgJA==
-X-Gm-Message-State: AGi0PuapvOOqdrPXmiTONDZKS9482BS8VhCYmbNSZG+8CvNNAxfcedSy
-        6Vlqb6c7o9LcDzicsqeW6DiCdHqsrzlvw5RinhA=
-X-Google-Smtp-Source: APiQypL/2Y40sQ9V2EzHiDRLKrhgwszpYu1a0Q6bQA5MqdrYj1kOd9PP/XC5k6D0HMy42i7zfiwBpsCi7b09DZy6BRw=
-X-Received: by 2002:a1c:8106:: with SMTP id c6mr8259513wmd.88.1587531115600;
- Tue, 21 Apr 2020 21:51:55 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a5d:4f89:0:0:0:0:0 with HTTP; Tue, 21 Apr 2020 21:51:55
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <ayishagadafi1@gmail.com>
-Date:   Tue, 21 Apr 2020 21:51:55 -0700
-Message-ID: <CAKmdXwuFimH8EYAQwUEKONYSYPzAwag3nAxBnPDHNjfMK3VCwg@mail.gmail.com>
-Subject: Lieber Freund (Assalamu Alaikum),?
-To:     undisclosed-recipients:;
+        Wed, 22 Apr 2020 08:03:13 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03MC0gWa009079
+        for <linux-security-module@vger.kernel.org>; Wed, 22 Apr 2020 08:03:12 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30ghmdc8de-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Wed, 22 Apr 2020 08:03:12 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 22 Apr 2020 13:02:30 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 22 Apr 2020 13:02:27 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03MC32sU56033566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Apr 2020 12:03:02 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7758A11C054;
+        Wed, 22 Apr 2020 12:03:02 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 79CA111C050;
+        Wed, 22 Apr 2020 12:03:01 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.220.15])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Apr 2020 12:03:01 +0000 (GMT)
+Subject: Re: [PATCH 1/5] ima: Set file->f_mode instead of file->f_flags in
+ ima_calc_file_hash()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.struczynski@huawei.com,
+        silviu.vlasceanu@huawei.com, stable@vger.kernel.org,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>
+Date:   Wed, 22 Apr 2020 08:03:01 -0400
+In-Reply-To: <20200325161116.7082-1-roberto.sassu@huawei.com>
+References: <20200325161116.7082-1-roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20042212-0008-0000-0000-0000037558B1
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20042212-0009-0000-0000-00004A9721D8
+Message-Id: <1587556981.5738.7.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-22_03:2020-04-22,2020-04-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004220093
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
---=20
-Lieber Freund (Assalamu Alaikum),
+[CC'ing Goldwyn Rodrigues]
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
-Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
-Mutter und eine Witwe
-mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
-hen
-Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
+Hi Roberto,
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend
-United State Dollar ($ 27.500.000.00) und ich brauche eine
-vertrauensw=C3=BCrdige Investition
-Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
-jedoch
-M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
-von
-Investitionsprojekten in Ihrem Land
-Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
-bauen.
+On Wed, 2020-03-25 at 17:11 +0100, Roberto Sassu wrote:
+> Commit a408e4a86b36 ("ima: open a new file instance if no read
+> permissions") tries to create a new file descriptor to calculate a file
+> digest if the file has not been opened with O_RDONLY flag. However, if a
+> new file descriptor cannot be obtained, it sets the FMODE_READ flag to
+> file->f_flags instead of file->f_mode.
+> 
+> This patch fixes this issue by replacing f_flags with f_mode as it was
+> before that commit.
+> 
+> Cc: stable@vger.kernel.org # 4.20.x
+> Fixes: a408e4a86b36 ("ima: open a new file instance if no read permissions")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/ima/ima_crypto.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+> index 423c84f95a14..8ab17aa867dd 100644
+> --- a/security/integrity/ima/ima_crypto.c
+> +++ b/security/integrity/ima/ima_crypto.c
+> @@ -436,7 +436,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+>  			 */
 
-Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
-n und
-Unternehmensgewinn zu verhandeln
-Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+Thanks, Roberto.  The comment above here and the rest of the code
+refers to flags.  Both should be updated as well to reflect using
+f_mode.
 
-Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
-antworten Sie bitte dringend
-Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
-.
+>  			pr_info_ratelimited("Unable to reopen file for reading.\n");
+>  			f = file;
+> -			f->f_flags |= FMODE_READ;
+> +			f->f_mode |= FMODE_READ;
+>  			modified_flags = true;
 
-Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
-esse (
-ayishagddafio@mail.ru ) zur weiteren Diskussion.
+The variable should be changed to "modified_mode".
 
-Freundliche Gr=C3=BC=C3=9Fe
-Frau Aisha Al-Qaddafi
+thanks,
+
+Mimi
+
+>  		} else {
+>  			new_file_instance = true;
+> @@ -456,7 +456,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+>  	if (new_file_instance)
+>  		fput(f);
+>  	else if (modified_flags)
+> -		f->f_flags &= ~FMODE_READ;
+> +		f->f_mode &= ~FMODE_READ;
+>  	return rc;
+>  }
+>  
+
