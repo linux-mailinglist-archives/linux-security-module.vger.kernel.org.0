@@ -2,201 +2,127 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F9A1B4446
-	for <lists+linux-security-module@lfdr.de>; Wed, 22 Apr 2020 14:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F261B467B
+	for <lists+linux-security-module@lfdr.de>; Wed, 22 Apr 2020 15:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728952AbgDVMSl (ORCPT
+        id S1726880AbgDVNpL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 22 Apr 2020 08:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729194AbgDVMS1 (ORCPT
+        Wed, 22 Apr 2020 09:45:11 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61086 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725787AbgDVNpL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 22 Apr 2020 08:18:27 -0400
-Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF5CC03C1A8;
-        Wed, 22 Apr 2020 05:18:27 -0700 (PDT)
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1jREK1-0008Bc-Ng; Wed, 22 Apr 2020 14:17:45 +0200
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id ECFC61C0822;
-        Wed, 22 Apr 2020 14:17:37 +0200 (CEST)
-Date:   Wed, 22 Apr 2020 12:17:37 -0000
-From:   "tip-bot2 for Alexey Budankov" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] capabilities: Introduce CAP_PERFMON to kernel and user space
-Cc:     Alexey Budankov <alexey.budankov@linux.intel.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Song Liu <songliubraving@fb.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Igor Lubashev <ilubashe@akamai.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        intel-gfx@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-man@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, x86 <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-In-Reply-To: <5590d543-82c6-490a-6544-08e6a5517db0@linux.intel.com>
-References: <5590d543-82c6-490a-6544-08e6a5517db0@linux.intel.com>
-MIME-Version: 1.0
-Message-ID: <158755785749.28353.12235832076654598507.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+        Wed, 22 Apr 2020 09:45:11 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03MDWrV8120806
+        for <linux-security-module@vger.kernel.org>; Wed, 22 Apr 2020 09:45:10 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30ghmdfnjq-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Wed, 22 Apr 2020 09:45:09 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Wed, 22 Apr 2020 14:44:14 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 22 Apr 2020 14:44:11 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03MDj4OJ52691146
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Apr 2020 13:45:04 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11BA9AE065;
+        Wed, 22 Apr 2020 13:45:04 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30EBFAE059;
+        Wed, 22 Apr 2020 13:45:03 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.220.15])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Apr 2020 13:45:03 +0000 (GMT)
+Subject: Re: [PATCH 2/5] evm: Check also if *tfm is an error pointer in
+ init_desc()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.struczynski@huawei.com,
+        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
+Date:   Wed, 22 Apr 2020 09:45:02 -0400
+In-Reply-To: <20200325161116.7082-2-roberto.sassu@huawei.com>
+References: <20200325161116.7082-1-roberto.sassu@huawei.com>
+         <20200325161116.7082-2-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20042213-0020-0000-0000-000003CC8FC6
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20042213-0021-0000-0000-000022258C03
+Message-Id: <1587563102.5738.32.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-22_06:2020-04-22,2020-04-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004220104
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The following commit has been merged into the perf/core branch of tip:
+Hi Roberto, Krzysztof,
 
-Commit-ID:     980737282232b752bb14dab96d77665c15889c36
-Gitweb:        https://git.kernel.org/tip/980737282232b752bb14dab96d77665c15889c36
-Author:        Alexey Budankov <alexey.budankov@linux.intel.com>
-AuthorDate:    Thu, 02 Apr 2020 11:45:31 +03:00
-Committer:     Arnaldo Carvalho de Melo <acme@redhat.com>
-CommitterDate: Thu, 16 Apr 2020 12:19:06 -03:00
+On Wed, 2020-03-25 at 17:11 +0100, Roberto Sassu wrote:
+> The mutex in init_desc(), introduced by commit 97426f985729 ("evm: prevent
+> racing during tfm allocation") prevents two tasks to concurrently set *tfm.
+> However, checking if *tfm is NULL is not enough, as crypto_alloc_shash()
+> can return an error pointer. The following sequence can happen:
+> 
+> Task A: *tfm = crypto_alloc_shash() <= error pointer
+> Task B: if (*tfm == NULL) <= *tfm is not NULL, use it
+> Task B: rc = crypto_shash_init(desc) <= panic
+> Task A: *tfm = NULL
+> 
+> This patch uses the IS_ERR_OR_NULL macro to determine whether or not a new
+> crypto context must be created.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 97426f985729 ("evm: prevent racing during tfm allocation")
 
-capabilities: Introduce CAP_PERFMON to kernel and user space
+Thank you.  True, this commit introduced the mutex, but the actual
+problem is most likely the result of a crypto algorithm not being
+configured.  Depending on the kernel and which crypto algorithms are
+enabled, verifying an EVM signature might not be possible.  In the
+embedded environment, where the entire filesystem is updated, there
+shouldn't be any unknown EVM signature algorithms.
 
-Introduce the CAP_PERFMON capability designed to secure system
-performance monitoring and observability operations so that CAP_PERFMON
-can assist CAP_SYS_ADMIN capability in its governing role for
-performance monitoring and observability subsystems.
+In case Greg or Sasha decide this patch should be backported,
+including the context/motivation in the patch description (first
+paragraph) would be helpful.
 
-CAP_PERFMON hardens system security and integrity during performance
-monitoring and observability operations by decreasing attack surface that
-is available to a CAP_SYS_ADMIN privileged process [2]. Providing the access
-to system performance monitoring and observability operations under CAP_PERFMON
-capability singly, without the rest of CAP_SYS_ADMIN credentials, excludes
-chances to misuse the credentials and makes the operation more secure.
+Mimi
 
-Thus, CAP_PERFMON implements the principle of least privilege for
-performance monitoring and observability operations (POSIX IEEE 1003.1e:
-2.2.2.39 principle of least privilege: A security design principle that
-  states that a process or program be granted only those privileges
-(e.g., capabilities) necessary to accomplish its legitimate function,
-and only for the time that such privileges are actually required)
+> Co-developed-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
+> Signed-off-by: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/evm/evm_crypto.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> index 35682852ddea..77ad1e5a93e4 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -91,7 +91,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+>  		algo = hash_algo_name[hash_algo];
+>  	}
+>  
+> -	if (*tfm == NULL) {
+> +	if (IS_ERR_OR_NULL(*tfm)) {
+>  		mutex_lock(&mutex);
+>  		if (*tfm)
+>  			goto out;
 
-CAP_PERFMON meets the demand to secure system performance monitoring and
-observability operations for adoption in security sensitive, restricted,
-multiuser production environments (e.g. HPC clusters, cloud and virtual compute
-environments), where root or CAP_SYS_ADMIN credentials are not available to
-mass users of a system, and securely unblocks applicability and scalability
-of system performance monitoring and observability operations beyond root
-and CAP_SYS_ADMIN use cases.
-
-CAP_PERFMON takes over CAP_SYS_ADMIN credentials related to system performance
-monitoring and observability operations and balances amount of CAP_SYS_ADMIN
-credentials following the recommendations in the capabilities man page [1]
-for CAP_SYS_ADMIN: "Note: this capability is overloaded; see Notes to kernel
-developers, below." For backward compatibility reasons access to system
-performance monitoring and observability subsystems of the kernel remains
-open for CAP_SYS_ADMIN privileged processes but CAP_SYS_ADMIN capability
-usage for secure system performance monitoring and observability operations
-is discouraged with respect to the designed CAP_PERFMON capability.
-
-Although the software running under CAP_PERFMON can not ensure avoidance
-of related hardware issues, the software can still mitigate these issues
-following the official hardware issues mitigation procedure [2]. The bugs
-in the software itself can be fixed following the standard kernel development
-process [3] to maintain and harden security of system performance monitoring
-and observability operations.
-
-[1] http://man7.org/linux/man-pages/man7/capabilities.7.html
-[2] https://www.kernel.org/doc/html/latest/process/embargoed-hardware-issues.html
-[3] https://www.kernel.org/doc/html/latest/admin-guide/security-bugs.html
-
-Signed-off-by: Alexey Budankov <alexey.budankov@linux.intel.com>
-Acked-by: James Morris <jamorris@linux.microsoft.com>
-Acked-by: Serge E. Hallyn <serge@hallyn.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
-Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Igor Lubashev <ilubashe@akamai.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: intel-gfx@lists.freedesktop.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-man@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Cc: selinux@vger.kernel.org
-Link: http://lore.kernel.org/lkml/5590d543-82c6-490a-6544-08e6a5517db0@linux.intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- include/linux/capability.h          | 4 ++++
- include/uapi/linux/capability.h     | 8 +++++++-
- security/selinux/include/classmap.h | 4 ++--
- 3 files changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/capability.h b/include/linux/capability.h
-index ecce0f4..027d7e4 100644
---- a/include/linux/capability.h
-+++ b/include/linux/capability.h
-@@ -251,6 +251,10 @@ extern bool privileged_wrt_inode_uidgid(struct user_namespace *ns, const struct 
- extern bool capable_wrt_inode_uidgid(const struct inode *inode, int cap);
- extern bool file_ns_capable(const struct file *file, struct user_namespace *ns, int cap);
- extern bool ptracer_capable(struct task_struct *tsk, struct user_namespace *ns);
-+static inline bool perfmon_capable(void)
-+{
-+	return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
-+}
- 
- /* audit system wants to get cap info from files as well */
- extern int get_vfs_caps_from_disk(const struct dentry *dentry, struct cpu_vfs_cap_data *cpu_caps);
-diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
-index 272dc69..e58c963 100644
---- a/include/uapi/linux/capability.h
-+++ b/include/uapi/linux/capability.h
-@@ -367,8 +367,14 @@ struct vfs_ns_cap_data {
- 
- #define CAP_AUDIT_READ		37
- 
-+/*
-+ * Allow system performance and observability privileged operations
-+ * using perf_events, i915_perf and other kernel subsystems
-+ */
-+
-+#define CAP_PERFMON		38
- 
--#define CAP_LAST_CAP         CAP_AUDIT_READ
-+#define CAP_LAST_CAP         CAP_PERFMON
- 
- #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
- 
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index 986f3ac..d233ab3 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -27,9 +27,9 @@
- 	    "audit_control", "setfcap"
- 
- #define COMMON_CAP2_PERMS  "mac_override", "mac_admin", "syslog", \
--		"wake_alarm", "block_suspend", "audit_read"
-+		"wake_alarm", "block_suspend", "audit_read", "perfmon"
- 
--#if CAP_LAST_CAP > CAP_AUDIT_READ
-+#if CAP_LAST_CAP > CAP_PERFMON
- #error New capability defined, please update COMMON_CAP2_PERMS.
- #endif
- 
