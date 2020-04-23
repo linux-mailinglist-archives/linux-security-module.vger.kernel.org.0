@@ -2,92 +2,137 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B121B6387
-	for <lists+linux-security-module@lfdr.de>; Thu, 23 Apr 2020 20:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37191B6447
+	for <lists+linux-security-module@lfdr.de>; Thu, 23 Apr 2020 21:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730310AbgDWS1W (ORCPT
+        id S1727812AbgDWTKj (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 23 Apr 2020 14:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730394AbgDWS1Q (ORCPT
+        Thu, 23 Apr 2020 15:10:39 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2866 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726366AbgDWTKi (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 23 Apr 2020 14:27:16 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747C5C09B055
-        for <linux-security-module@vger.kernel.org>; Thu, 23 Apr 2020 11:27:14 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id b12so7491770ion.8
-        for <linux-security-module@vger.kernel.org>; Thu, 23 Apr 2020 11:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=G0MearUWJO2XoX5WFWCbOSBM0KnomNOcLxBMKb36E56Tk8IIyFbWO7z4INTed1WkRU
-         qeMi1eRR7YsA+BDT6DQvUAii78YnzCjvNMVBKy4slcZy3/gJbFRS56rTYb2i1ZQ8vqn/
-         EOaplCA4N/rSu1DPvHSaWXp+qBo2gCjTbf/vDHta9DawS0nUkV5FYws7CV/zXlK/VYiG
-         COL+ehFclZxGMjmnJCFdgQT7XS8eBs73XeZW6OQ9vAUq0KfaGK/YZHActLVD5NzSJiie
-         gXxsbNT9IQMnd4wAzDKDPSrX8AkY/tvkHFQgBX+60qxPigWKusZrEf/ce5VP7zRF3LJ+
-         eYhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=Hk/84OU8Uy8wmTMB/Mab0M4hLXOIlqC8dwj1RwVwtArM7WbxAFtKdfcKTXT9QGGkP1
-         h2jfNVkNY5IdMAR22AuXbreH4aTDy0+cUbJhcXiDwEffzSt3oWZcq7kDZAYRMCuVJf+I
-         wSYT9icG4vcjmTtUGkbevNyBNo0/pJVuG8fXaZjLtRwjkufQ/GtoY3fjQRsRAHC5j/rx
-         2mZIazj91a1jaEPhwyYplHA/mHdttahCLeJuJ/lU3Raz2QiqYvZKEoPHWKnZez4kTrNc
-         Et9KVUocdb/A701yqKSj6lLYDZX5fG6P4Fe3+eCYspjIAMNwyGMkUrJaeasG+Z+Jm/MK
-         WClw==
-X-Gm-Message-State: AGi0PuZwmX5Qxv9aQ8zmugjx5qItWk8BoTTloWbHzGbI1V5nOZ8dYeHN
-        PF1jbsuSF8yVLDwn1QpcFZb1zueiTM8bZMcA+g==
-X-Google-Smtp-Source: APiQypKOhu0Ivyzu1MQANRLgnSM6D7f6PDwmOyOGFsy7UwOOUt5tM1gVxevJ7CcMC29eb2aYcjzRxadXayX+T6slpNc=
-X-Received: by 2002:a05:6602:d:: with SMTP id b13mr5025673ioa.176.1587666433220;
- Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:27:12
- -0700 (PDT)
-Reply-To: boa.benin107@yahoo.com
-From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
-Date:   Thu, 23 Apr 2020 20:27:12 +0200
-Message-ID: <CABHzvrnzZLe4Z0E4acOdcsDJTPa3wvp-Oz12f_M4TQ03PAGZkw@mail.gmail.com>
-Subject: Contact Eco bank-Benin to receive your payment funds transfer amount
- of $12.800.000,00 Million USD,approved this morning by IMF.
-To:     undisclosed-recipients:;
+        Thu, 23 Apr 2020 15:10:38 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03NJ3QjZ002428
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Apr 2020 15:10:38 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30k09wy3ej-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Apr 2020 15:10:37 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 23 Apr 2020 20:09:48 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 23 Apr 2020 20:09:46 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03NJAWch58720378
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Apr 2020 19:10:32 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5EC5F11C0A7;
+        Thu, 23 Apr 2020 19:10:32 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47E0E11C09F;
+        Thu, 23 Apr 2020 19:10:31 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.178.107])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Apr 2020 19:10:31 +0000 (GMT)
+Subject: Re: [PATCH] ima: Fix return value of ima_write_policy()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Date:   Thu, 23 Apr 2020 15:10:30 -0400
+In-Reply-To: <baf2fd326f5043538390254304b85e41@huawei.com>
+References: <20200421090442.22693-1-roberto.sassu@huawei.com>
+         <1587609266.5165.58.camel@linux.ibm.com>
+         <baf2fd326f5043538390254304b85e41@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20042319-4275-0000-0000-000003C5753F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20042319-4276-0000-0000-000038DB00E0
+Message-Id: <1587669030.5610.43.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-23_13:2020-04-23,2020-04-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 adultscore=0 mlxlogscore=999
+ bulkscore=0 impostorscore=0 spamscore=0 mlxscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004230145
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Attn Dear.
-Contact Bank of Africa-Benin to receive your payment funds transfer amount =
-of
-$12.800.000,00 Million USD,approved this morning by IMF.
-Happy to inform you, we have finally deposited your payment funds
-$12.8 million us dollars with the Paying Bank of Africa-Benin
-to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
-Contact the bank immediately you receive this email now.
-Director Bank of Africa-Benin: Dr. Festus Obiara
-Email id:  boa.benin107@yahoo.com
-Tel/mobile, (229) 62819378
-BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
-Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
-Phone:(229) 62819378.
-2020 GROUPE BANK OF AFRICA
-Be advised to re-confirm your bank details to this bank as listed.
-Your account Holder's name----------------
-Bank Name----------------------------------------------------------
-Bank address----------------------------------------------
-Account Numbers---------------------------------------
-Rounting-----------------------------------------------------------------
-Your direct Phone Numbers----------------------------------------------
-Note,I have paid the deposit and insurance fees for you
-But the only money you are to send to this bank is $150.00 us dollars
-Been for the wire transfer fees of your funds
-Contact Him now to receive your transfer deposited this morning
-I wait for your reply upon confirmation
-Mrs. Angella Michelle
-Editor, Zenith Bank- Companies Benin
-mrsa9389@gmail.com
+On Thu, 2020-04-23 at 09:39 +0000, Roberto Sassu wrote:
+> > On Tue, 2020-04-21 at 11:04 +0200, Roberto Sassu wrote:
+> > > Return datalen instead of zero if there is a rule to appraise the policy
+> > > but that rule is not enforced.
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: 19f8a84713edc ("ima: measure and appraise the IMA policy itself")
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > ---
+> > >  security/integrity/ima/ima_fs.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/security/integrity/ima/ima_fs.c
+> > b/security/integrity/ima/ima_fs.c
+> > > index a71e822a6e92..2c2ea814b954 100644
+> > > --- a/security/integrity/ima/ima_fs.c
+> > > +++ b/security/integrity/ima/ima_fs.c
+> > > @@ -340,6 +340,8 @@ static ssize_t ima_write_policy(struct file *file,
+> > const char __user *buf,
+> > >  				    1, 0);
+> > >  		if (ima_appraise & IMA_APPRAISE_ENFORCE)
+> > >  			result = -EACCES;
+> > > +		else
+> > > +			result = datalen;
+> > 
+> > In all other cases, where the IMA_APPRAISE_ENFORCE is not enabled we
+> > allow the action.  Here we prevent loading the policy, but don't
+> > return an error.  One option, as you did, is return some indication
+> > that the policy was not loaded.  Another option would be to allow
+> > loading the policy in LOG or FIX mode, but I don't think that would be
+> > productive.  Perhaps differentiate between the LOG and FIX modes from
+> > the OFF mode.  For the LOG and FIX modes, perhaps return -EACCES as
+> > well.  For the OFF case, loading a policy with appraise rules should
+> > not be permitted.
+> 
+> In LOG or FIX mode, loading a policy with absolute path will succeed.
+
+Yes
+
+> Maybe we should just keep the same behavior also when the policy
+> is directly written to securityfs.
+
+The purpose of LOG mode is to learn about the filesystem behavior in
+order to label it properly.  FIX mode is for re-calculating and fixing
+existing file hashes.  If we permit directly writing the policy to
+securityfs, even if the existing policy requires the policy to be
+signed, then it is behaving differently than it would in enforcing
+mode.  I'm ok with that, as long as the error message is emitted.
+
+> Ok for the OFF mode, but probably this should be a separate patch.
+
+Agreed
+
+Mimi
+
+> 
+> > >  	} else {
+> > >  		result = ima_parse_add_rule(data);
+> > >  	}
+> 
+
