@@ -2,145 +2,143 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CE91B6503
-	for <lists+linux-security-module@lfdr.de>; Thu, 23 Apr 2020 22:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DA51B65C7
+	for <lists+linux-security-module@lfdr.de>; Thu, 23 Apr 2020 22:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbgDWUDz (ORCPT
+        id S1726287AbgDWUvv (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 23 Apr 2020 16:03:55 -0400
-Received: from raptor.unsafe.ru ([5.9.43.93]:48608 "EHLO raptor.unsafe.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726669AbgDWUDy (ORCPT
+        Thu, 23 Apr 2020 16:51:51 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24028 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726161AbgDWUvu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 23 Apr 2020 16:03:54 -0400
-Received: from comp-core-i7-2640m-0182e6.redhat.com (ip-89-102-33-211.net.upcbroadband.cz [89.102.33.211])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by raptor.unsafe.ru (Postfix) with ESMTPSA id 83BE120A0A;
-        Thu, 23 Apr 2020 20:03:47 +0000 (UTC)
-From:   Alexey Gladkov <gladkov.alexey@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Security Module <linux-security-module@vger.kernel.org>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Djalal Harouni <tixxdz@gmail.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@poochiereds.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Howells <dhowells@redhat.com>
-Subject: [PATCH v13 8/8] proc: use named enums for better readability
-Date:   Thu, 23 Apr 2020 22:03:16 +0200
-Message-Id: <20200423200316.164518-9-gladkov.alexey@gmail.com>
-X-Mailer: git-send-email 2.25.3
-In-Reply-To: <20200423200316.164518-1-gladkov.alexey@gmail.com>
-References: <20200423200316.164518-1-gladkov.alexey@gmail.com>
-MIME-Version: 1.0
+        Thu, 23 Apr 2020 16:51:50 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03NKWQxh009440
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Apr 2020 16:51:50 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30k7rcds6h-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Apr 2020 16:51:50 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-security-module@vger.kernel.org> from <zohar@linux.ibm.com>;
+        Thu, 23 Apr 2020 21:51:10 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 23 Apr 2020 21:51:07 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03NKpiSY61276258
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Apr 2020 20:51:44 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 314FCA4040;
+        Thu, 23 Apr 2020 20:51:44 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 65B82A4053;
+        Thu, 23 Apr 2020 20:51:43 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.178.107])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Apr 2020 20:51:43 +0000 (GMT)
+Subject: Re: [PATCH] ima: Allow imasig requirement to be satisfied by EVM
+ portable signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com
+Date:   Thu, 23 Apr 2020 16:51:42 -0400
+In-Reply-To: <20200421092418.25151-1-roberto.sassu@huawei.com>
+References: <20200421092418.25151-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.1 (raptor.unsafe.ru [5.9.43.93]); Thu, 23 Apr 2020 20:03:48 +0000 (UTC)
+X-TM-AS-GCONF: 00
+x-cbid: 20042320-0008-0000-0000-00000376466D
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20042320-0009-0000-0000-00004A9814D5
+Message-Id: <1587675102.5610.66.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-23_15:2020-04-23,2020-04-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=999 impostorscore=0
+ mlxscore=0 phishscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004230148
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Signed-off-by: Alexey Gladkov <gladkov.alexey@gmail.com>
-Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- fs/proc/base.c          | 2 +-
- fs/proc/inode.c         | 2 +-
- fs/proc/root.c          | 4 ++--
- include/linux/proc_fs.h | 8 ++++----
- 4 files changed, 8 insertions(+), 8 deletions(-)
+On Tue, 2020-04-21 at 11:24 +0200, Roberto Sassu wrote:
+> System administrators can require that all accessed files have a signature
+> by specifying appraise_type=imasig in a policy rule.
+> 
+> Currently, only IMA signatures satisfy this requirement. However, also EVM
+> portable signatures can satisfy it. Metadata, including security.ima, are
+> signed and cannot change.
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index a52a91e90c25..2868bff1a142 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -699,7 +699,7 @@ int proc_setattr(struct dentry *dentry, struct iattr *attr)
-  */
- static bool has_pid_permissions(struct proc_fs_info *fs_info,
- 				 struct task_struct *task,
--				 int hide_pid_min)
-+				 enum proc_hidepid hide_pid_min)
- {
- 	/*
- 	 * If 'hidpid' mount option is set force a ptrace check,
-diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-index cbacac2e892b..f40c2532c057 100644
---- a/fs/proc/inode.c
-+++ b/fs/proc/inode.c
-@@ -166,7 +166,7 @@ void proc_invalidate_siblings_dcache(struct hlist_head *inodes, spinlock_t *lock
- 		deactivate_super(old_sb);
- }
- 
--static inline const char *hidepid2str(int v)
-+static inline const char *hidepid2str(enum proc_hidepid v)
- {
- 	switch (v) {
- 		case HIDEPID_OFF: return "off";
-diff --git a/fs/proc/root.c b/fs/proc/root.c
-index 288093261b7f..ffebed1999e5 100644
---- a/fs/proc/root.c
-+++ b/fs/proc/root.c
-@@ -32,9 +32,9 @@
- struct proc_fs_context {
- 	struct pid_namespace	*pid_ns;
- 	unsigned int		mask;
--	int			hidepid;
-+	enum proc_hidepid	hidepid;
- 	int			gid;
--	int			pidonly;
-+	enum proc_pidonly	pidonly;
- };
- 
- enum proc_param {
-diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
-index 8bc31ba5cd9c..2cb424e6f36a 100644
---- a/include/linux/proc_fs.h
-+++ b/include/linux/proc_fs.h
-@@ -43,7 +43,7 @@ struct proc_ops {
- } __randomize_layout;
- 
- /* definitions for hide_pid field */
--enum {
-+enum proc_hidepid {
- 	HIDEPID_OFF	  = 0,
- 	HIDEPID_NO_ACCESS = 1,
- 	HIDEPID_INVISIBLE = 2,
-@@ -51,7 +51,7 @@ enum {
- };
- 
- /* definitions for proc mount option pidonly */
--enum {
-+enum proc_pidonly {
- 	PROC_PIDONLY_OFF = 0,
- 	PROC_PIDONLY_ON  = 1,
- };
-@@ -61,8 +61,8 @@ struct proc_fs_info {
- 	struct dentry *proc_self;        /* For /proc/self */
- 	struct dentry *proc_thread_self; /* For /proc/thread-self */
- 	kgid_t pid_gid;
--	int hide_pid;
--	int pidonly;
-+	enum proc_hidepid hide_pid;
-+	enum proc_pidonly pidonly;
- };
- 
- static inline struct proc_fs_info *proc_sb_info(struct super_block *sb)
--- 
-2.25.3
+Please expand this paragraph with a short comparison of the security
+guarantees provided by EVM immutable, portable signatures versus ima-
+sig.
+
+> 
+> This patch helps in the scenarios where system administrators want to
+> enforce this restriction but only EVM portable signatures are available.
+
+Yes, I agree it "helps", but we still need to address the ability of
+setting/removing security.ima, which isn't possible with an IMA
+signature.  This sounds like we need to define an immutable file hash.
+ What do you think?
+
+> The patch makes the following changes:
+> 
+> file xattr types:
+> security.ima: IMA_XATTR_DIGEST/IMA_XATTR_DIGEST_NG
+> security.evm: EVM_XATTR_PORTABLE_DIGSIG
+> 
+> execve(), mmap(), open() behavior (with appraise_type=imasig):
+> before: denied (file without IMA signature, imasig requirement not met)
+> after: allowed (file with EVM portable signature, imasig requirement met)
+> 
+> open(O_WRONLY) behavior (without appraise_type=imasig):
+> before: allowed (file without IMA signature, not immutable)
+> after: denied (file with EVM portable signature, immutable)
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/ima/ima_appraise.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index a9649b04b9f1..69a6a958f811 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -219,12 +219,16 @@ static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
+>  		hash_start = 1;
+>  		/* fall through */
+>  	case IMA_XATTR_DIGEST:
+> -		if (iint->flags & IMA_DIGSIG_REQUIRED) {
+> -			*cause = "IMA-signature-required";
+> -			*status = INTEGRITY_FAIL;
+> -			break;
+> +		if (*status != INTEGRITY_PASS_IMMUTABLE) {
+> +			if (iint->flags & IMA_DIGSIG_REQUIRED) {
+> +				*cause = "IMA-signature-required";
+> +				*status = INTEGRITY_FAIL;
+> +				break;
+> +			}
+> +			clear_bit(IMA_DIGSIG, &iint->atomic_flags);
+> +		} else {
+> +			set_bit(IMA_DIGSIG, &iint->atomic_flags);
+>  		}
+> -		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
+>  		if (xattr_len - sizeof(xattr_value->type) - hash_start >=
+>  				iint->ima_hash->length)
+>  			/*
+
+Nice!
+
+Mimi
 
