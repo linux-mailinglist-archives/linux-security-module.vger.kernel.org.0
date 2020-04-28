@@ -2,124 +2,158 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CCB1BC6FD
-	for <lists+linux-security-module@lfdr.de>; Tue, 28 Apr 2020 19:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050AF1BC71D
+	for <lists+linux-security-module@lfdr.de>; Tue, 28 Apr 2020 19:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728469AbgD1Rqv (ORCPT
+        id S1728623AbgD1Rvs (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 28 Apr 2020 13:46:51 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35190 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727074AbgD1Rqv (ORCPT
+        Tue, 28 Apr 2020 13:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728618AbgD1Rvq (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 28 Apr 2020 13:46:51 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03SHZ0T7018100;
-        Tue, 28 Apr 2020 13:46:44 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 30pjmjf4tq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Apr 2020 13:46:44 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03SHepiB028904;
-        Tue, 28 Apr 2020 17:46:42 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 30mcu592aa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Apr 2020 17:46:42 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03SHkeYk26280154
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Apr 2020 17:46:40 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B02811C06E;
-        Tue, 28 Apr 2020 17:46:40 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E9DBE11C05E;
-        Tue, 28 Apr 2020 17:46:38 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.80.198.90])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Apr 2020 17:46:38 +0000 (GMT)
-Message-ID: <1588095998.5195.49.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 6/6] ima: Fix return value of ima_write_policy()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-Cc:     linux-integrity@vger.kernel.org,
+        Tue, 28 Apr 2020 13:51:46 -0400
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389B4C03C1AD
+        for <linux-security-module@vger.kernel.org>; Tue, 28 Apr 2020 10:51:46 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49BTjS0sy2zlh9G9;
+        Tue, 28 Apr 2020 19:51:40 +0200 (CEST)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49BTjP5dXczmVZjD;
+        Tue, 28 Apr 2020 19:51:37 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
-        krzysztof.struczynski@huawei.com, stable@vger.kernel.org
-Date:   Tue, 28 Apr 2020 13:46:38 -0400
-In-Reply-To: <20200427103128.19229-1-roberto.sassu@huawei.com>
-References: <20200427102900.18887-1-roberto.sassu@huawei.com>
-         <20200427103128.19229-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v3 0/5] Add support for RESOLVE_MAYEXEC
+Date:   Tue, 28 Apr 2020 19:51:24 +0200
+Message-Id: <20200428175129.634352-1-mic@digikod.net>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-28_12:2020-04-28,2020-04-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- mlxscore=0 mlxlogscore=999 suspectscore=0 clxscore=1015 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004280130
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Roberto,
+Hi,
 
-On Mon, 2020-04-27 at 12:31 +0200, Roberto Sassu wrote:
-> This patch fixes the return value of ima_write_policy() when a new policy
-> is directly passed to IMA and the current policy requires appraisal of the
-> file containing the policy. Currently, if appraisal is not in ENFORCE mode,
-> ima_write_policy() returns 0 and leads user space applications to an
-> endless loop. Fix this issue by denying the operation regardless of the
-> appraisal mode.
-> 
-> Changelog
-> 
-> v1:
-> - deny the operation in all cases (suggested by Mimi, Krzysztof)
+The goal of this patch series is to enable to control script execution
+with interpreters help.  A new RESOLVE_MAYEXEC flag, usable through
+openat2(2), is added to enable userspace script interpreter to delegate
+to the kernel (and thus the system security policy) the permission to
+interpret/execute scripts or other files containing what can be seen as
+commands.
 
-Relatively recently, people have moved away from including the
-"Changelog" in the upstream commit. (I'm removing them now.)  
+This third patch series mainly differ from the previous one by relying
+on the new openat2(2) system call to get rid of the undefined behavior
+of the open(2) flags.  Thus, the previous O_MAYEXEC flag is now replaced
+with the new RESOLVE_MAYEXEC flag and benefits from the openat2(2)
+strict check of this kind of flags.
 
-> 
-> Cc: stable@vger.kernel.org # 4.10.x
-> Fixes: 19f8a84713edc ("ima: measure and appraise the IMA policy itself")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+A simple system-wide security policy can be enforced by the system
+administrator through a sysctl configuration consistent with the mount
+points or the file access rights.  The documentation patch explains the
+prerequisites.
 
-Without the Changelog, the only way of acknowledging people's
-contributions is by including their tags.  Krzysztof, did you want to
-add your "Reviewed-by" tag?
+Furthermore, the security policy can also be delegated to an LSM, either
+a MAC system or an integrity system.  For instance, the new kernel
+MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
+integrity gap by bringing the ability to check the use of scripts [1].
+Other uses are expected, such as for openat2(2) [2], SGX integration
+[3], bpffs [4] or IPE [5].
 
-> ---
+Userspace needs to adapt to take advantage of this new feature.  For
+example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
+extended with policy enforcement points related to code interpretation,
+which can be used to align with the PowerShell audit features.
+Additional Python security improvements (e.g. a limited interpreter
+withou -c, stdin piping of code) are on their way.
 
-People have started putting the Changelog or any comments immediately
-below the separator "---" here.
+The initial idea come from CLIP OS 4 and the original implementation has
+been used for more than 11 years:
+https://github.com/clipos-archive/clipos4_doc
 
-thanks,
+An introduction to O_MAYEXEC (original name of RESOLVE_MAYEXEC) was
+given at the Linux Security Summit Europe 2018 - Linux Kernel Security
+Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
 
-Mimi
+This patch series can be applied on top of v5.7-rc3.  This can be tested
+with CONFIG_SYSCTL.  I would really appreciate constructive comments on
+this patch series.
 
->  security/integrity/ima/ima_fs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 8b030a1c5e0d..e3fcad871861 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -338,8 +338,7 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
->  		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
->  				    "policy_update", "signed policy required",
->  				    1, 0);
-> -		if (ima_appraise & IMA_APPRAISE_ENFORCE)
-> -			result = -EACCES;
-> +		result = -EACCES;
->  	} else {
->  		result = ima_parse_add_rule(data);
->  	}
+Previous version:
+https://lore.kernel.org/lkml/20190906152455.22757-1-mic@digikod.net/
+
+
+[1] https://lore.kernel.org/lkml/1544647356.4028.105.camel@linux.ibm.com/
+[2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
+[3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
+[5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
+[6] https://www.python.org/dev/peps/pep-0578/
+
+Regards,
+
+Mickaël Salaün (5):
+  fs: Add support for a RESOLVE_MAYEXEC flag on openat2(2)
+  fs: Add a MAY_EXECMOUNT flag to infer the noexec mount property
+  fs: Enable to enforce noexec mounts or file exec through
+    RESOLVE_MAYEXEC
+  selftest/openat2: Add tests for RESOLVE_MAYEXEC enforcing
+  doc: Add documentation for the fs.open_mayexec_enforce sysctl
+
+ Documentation/admin-guide/sysctl/fs.rst       |  43 +++
+ fs/namei.c                                    |  74 +++-
+ fs/open.c                                     |   6 +
+ include/linux/fcntl.h                         |   2 +-
+ include/linux/fs.h                            |   7 +
+ include/uapi/linux/openat2.h                  |   6 +
+ kernel/sysctl.c                               |   7 +
+ tools/testing/selftests/kselftest_harness.h   |   3 +
+ tools/testing/selftests/openat2/Makefile      |   3 +-
+ tools/testing/selftests/openat2/config        |   1 +
+ tools/testing/selftests/openat2/helpers.h     |   3 +
+ .../testing/selftests/openat2/omayexec_test.c | 315 ++++++++++++++++++
+ 12 files changed, 467 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/openat2/config
+ create mode 100644 tools/testing/selftests/openat2/omayexec_test.c
+
+-- 
+2.26.2
 
