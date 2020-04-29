@@ -2,179 +2,144 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 779911BDE8D
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Apr 2020 15:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A081BE395
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Apr 2020 18:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728315AbgD2NjG (ORCPT
+        id S1726776AbgD2QRz (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 29 Apr 2020 09:39:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54112 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728309AbgD2NjF (ORCPT
+        Wed, 29 Apr 2020 12:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726773AbgD2QRw (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 29 Apr 2020 09:39:05 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03TDWSQZ066065;
-        Wed, 29 Apr 2020 09:39:01 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30mh9ptm4a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Apr 2020 09:39:00 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03TDXQGG070497;
-        Wed, 29 Apr 2020 09:39:00 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30mh9ptm2x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Apr 2020 09:39:00 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03TDU9O9003299;
-        Wed, 29 Apr 2020 13:38:58 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 30mcu8duh7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Apr 2020 13:38:57 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03TDbkmg63177042
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Apr 2020 13:37:47 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 683A3AE058;
-        Wed, 29 Apr 2020 13:38:55 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7DE48AE051;
-        Wed, 29 Apr 2020 13:38:54 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.162.91])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 29 Apr 2020 13:38:54 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Mickael Salaun <mic@digikod.net>,
-        Steve Grubb <sgrubb@redhat.com>, Jann Horn <jannh@google.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ima: add policy support for the new file open MAY_OPENEXEC flag
-Date:   Wed, 29 Apr 2020 09:38:43 -0400
-Message-Id: <1588167523-7866-3-git-send-email-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.7.5
-In-Reply-To: <1588167523-7866-1-git-send-email-zohar@linux.ibm.com>
-References: <1588167523-7866-1-git-send-email-zohar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-29_05:2020-04-29,2020-04-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- spamscore=0 malwarescore=0 adultscore=0 suspectscore=1 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004290110
+        Wed, 29 Apr 2020 12:17:52 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE69C035493
+        for <linux-security-module@vger.kernel.org>; Wed, 29 Apr 2020 09:17:52 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id z6so2668648wml.2
+        for <linux-security-module@vger.kernel.org>; Wed, 29 Apr 2020 09:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hC339AlYWIKjaIvmnsbzPnIvgC6f8npdAivdjP/WncE=;
+        b=duJ1CAR3oC0XJTSkov4YIS7U0gdKnijRTK0zU7OF120jvwnIAqXrOiZukp76t7gqEg
+         +sws3pAd0Fp715kcqIQUZ6ILybSDYsmpYBhd+d742FyzXAnETdeW6IOhAPErL4HwCrgM
+         462kB+7nxNLniPCRDs6WRnbW6aa9rbAFfqsEc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hC339AlYWIKjaIvmnsbzPnIvgC6f8npdAivdjP/WncE=;
+        b=anhw+in18zmCmS0mPSoInE9PFXejCI0So4TaF8jYEaG6uvXNINbiDZ3Qey/fNczmUI
+         /YtS/OSKcEjnCpCDTk/Cs0/0lohP4JxlMohvBaAYShWpFWytbyOHVd40lzf4o3UrIuV/
+         jEYWxJcFdFv9+BiHcDycRYdd6RD4yfuMmVilRyO2XZR/JuCqUPe1GHnG3nA0LoPIh+wr
+         1iehKciQXRKfEaxamaz469S547YHLX7TgI/2A81AhhbTNHl4/C263NpAUOopY9/qHk+o
+         QMd5gtwj9VhqX7QAcEOf8XBBroBXXlEXDikF5W3mDJLQRGjdtaALXCuqx346hm8anF3e
+         xwAg==
+X-Gm-Message-State: AGi0PubaJD8VscK8P5uecBsWxkNhQmjpxvI4NwKGZau+amicQSCCcQj4
+        T7rNTYtbOHmkgQ1E3H/Ol0VAMw==
+X-Google-Smtp-Source: APiQypKqSi/3QCJ/S4sT8BuxhRSzNwixocTEGZPtC0ytAcL+7Al93xW6am13M7Ws4l0ZyznfHMvcCQ==
+X-Received: by 2002:a1c:3dd6:: with SMTP id k205mr4139049wma.138.1588177071094;
+        Wed, 29 Apr 2020 09:17:51 -0700 (PDT)
+Received: from google.com ([81.6.44.51])
+        by smtp.gmail.com with ESMTPSA id d143sm8275651wmd.16.2020.04.29.09.17.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2020 09:17:50 -0700 (PDT)
+From:   KP Singh <kpsingh@chromium.org>
+X-Google-Original-From: KP Singh <kpsingh>
+Date:   Wed, 29 Apr 2020 18:17:47 +0200
+To:     Mikko Ylinen <mikko.ylinen@linux.intel.com>
+Cc:     KP Singh <kpsingh@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH bpf-next v9 0/8] MAC and Audit policy using eBPF (KRSI)
+Message-ID: <20200429161747.GA113900@google.com>
+References: <20200329004356.27286-1-kpsingh@chromium.org>
+ <0165887d-e9d0-c03e-18b9-72e74a0cbd59@linux.intel.com>
+ <CACYkzJ6XyHqr1W=LWV-5Z0txFBtvPCwRY-kczphy+pS7PEitqQ@mail.gmail.com>
+ <b5652508-f727-b936-79b5-f8da658395f5@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b5652508-f727-b936-79b5-f8da658395f5@linux.intel.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The kernel has no way of differentiating between a file containing data
-or code being opened by an interpreter.  The proposed RESOLVE_MAYEXEC
-openat2(2) flag bridges this gap by defining and enabling the MAY_OPENEXEC
-flag.
+So I was able to reproduce the issue and also fix it (will separately
+send a patch).
 
-This patch adds IMA policy support for the new MAY_OPENEXEC flag.
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 9cd4455528e5..1bdd027766d4 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -55,7 +55,7 @@ LSM_HOOK(void, LSM_RET_VOID, bprm_committing_creds, struct linux_binprm *bprm)
+ LSM_HOOK(void, LSM_RET_VOID, bprm_committed_creds, struct linux_binprm *bprm)
+ LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
+         struct fs_context *src_sc)
+-LSM_HOOK(int, 0, fs_context_parse_param, struct fs_context *fc,
++LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
+         struct fs_parameter *param)
+ LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
 
-Example:
-measure func=FILE_CHECK mask=^MAY_OPENEXEC
-appraise func=FILE_CHECK appraise_type=imasig mask=^MAY_OPENEXEC
+So what was happening was that:
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- Documentation/ABI/testing/ima_policy |  2 +-
- security/integrity/ima/ima_main.c    |  3 ++-
- security/integrity/ima/ima_policy.c  | 15 +++++++++++----
- 3 files changed, 14 insertions(+), 6 deletions(-)
+bpf_lsm hook for fs_context_parse_param was returning 0 which led this
+bit of logic to believe the parameter was parsed by the LSM.
 
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index a12e784cee31..aa8e4b6181e0 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -31,7 +31,7 @@ Description:
- 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
- 				[KEXEC_CMDLINE] [KEY_CHECK]
- 			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
--			       [[^]MAY_EXEC]
-+			       [[^]MAY_EXEC] [[^]MAY_OPENEXEC]
- 			mode:= [IXUGO]
- 			fsmagic:= hex value
- 			fsuuid:= file system UUID (e.g 8bcbe394-4f13-4144-be8e-5aa9ea2ce2f6)
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index f96f151294e6..b644eda68e9e 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -438,7 +438,8 @@ int ima_file_check(struct file *file, int mask)
- 
- 	security_task_getsecid(current, &secid);
- 	return process_measurement(file, current_cred(), secid, NULL, 0,
--				   mask & (MAY_READ | MAY_WRITE | MAY_EXEC |
-+				   mask & (MAY_READ | MAY_WRITE |
-+					   MAY_EXEC | MAY_OPENEXEC |
- 					   MAY_APPEND), FILE_CHECK);
- }
- EXPORT_SYMBOL_GPL(ima_file_check);
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 28b68e076638..8c29d1b01964 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -407,7 +407,8 @@ static bool ima_match_keyring(struct ima_rule_entry *rule,
-  * @cred: a pointer to a credentials structure for user validation
-  * @secid: the secid of the task to be validated
-  * @func: LIM hook identifier
-- * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC)
-+ * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC |
-+ *			    MAY_OPENEXEC)
-  * @keyring: keyring name to check in policy for KEY_CHECK func
-  *
-  * Returns true on rule match, false on failure.
-@@ -531,7 +532,8 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
-  *        being made
-  * @secid: LSM secid of the task to be validated
-  * @func: IMA hook identifier
-- * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC)
-+ * @mask: requested action (MAY_READ | MAY_WRITE | MAY_APPEND | MAY_EXEC |
-+ *			    MAY_OPENEXEC)
-  * @pcr: set the pcr to extend
-  * @template_desc: the template that should be used for this rule
-  * @keyring: the keyring name, if given, to be used to check in the policy.
-@@ -1097,6 +1099,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 				entry->mask = MAY_READ;
- 			else if (strcmp(from, "MAY_APPEND") == 0)
- 				entry->mask = MAY_APPEND;
-+			else if (strcmp(from, "MAY_OPENEXEC") == 0)
-+				entry->mask = MAY_OPENEXEC;
- 			else
- 				result = -EINVAL;
- 			if (!result)
-@@ -1434,14 +1438,15 @@ const char *const func_tokens[] = {
- 
- #ifdef	CONFIG_IMA_READ_POLICY
- enum {
--	mask_exec = 0, mask_write, mask_read, mask_append
-+	mask_exec = 0, mask_write, mask_read, mask_append, mask_openexec
- };
- 
- static const char *const mask_tokens[] = {
- 	"^MAY_EXEC",
- 	"^MAY_WRITE",
- 	"^MAY_READ",
--	"^MAY_APPEND"
-+	"^MAY_APPEND",
-+	"^MAY_OPENEXEC"
- };
- 
- void *ima_policy_start(struct seq_file *m, loff_t *pos)
-@@ -1530,6 +1535,8 @@ int ima_policy_show(struct seq_file *m, void *v)
- 			seq_printf(m, pt(Opt_mask), mt(mask_read) + offset);
- 		if (entry->mask & MAY_APPEND)
- 			seq_printf(m, pt(Opt_mask), mt(mask_append) + offset);
-+		if (entry->mask & MAY_OPENEXEC)
-+			seq_printf(m, pt(Opt_mask), mt(mask_openexec) + offset);
- 		seq_puts(m, " ");
- 	}
- 
--- 
-2.7.5
+int vfs_parse_fs_param(struct fs_context *fc, struct fs_parameter
+*param)
+{
 
+[...]
+        ret = security_fs_context_parse_param(fc, param);
+        if (ret != -ENOPARAM)
+                /* Param belongs to the LSM or is disallowed by the
+                 * LSM; so
+                 * don't pass to the FS.
+                 */
+                return ret;
+
+        if (fc->ops->parse_param) {
+                ret = fc->ops->parse_param(fc, param);
+                if (ret != -ENOPARAM)
+                        return ret;
+        }
+[...]
+
+This resulted in the fs_context->dev_name being NULL and the following
+chain to throw an -EINVAL resulting in unsuccessful mount of the root
+file-system:
+
+- do_mount_root -> do_mount -> do_new_mount -> vfs_get_tree ->
+-> fc->ops->get_tree -> legacy->get_tree -> fc->fs_type->mount ->
+ext4_mount -> mount_bdev -> blkdev_get_by_path -> lookup_bdev
+
+- KP
+
+
+On 29-Apr 15:45, Mikko Ylinen wrote:
+> 
+> 
+> On 29/04/2020 15:34, KP Singh wrote:
+> > Thanks for reporting this! Can you share your Kconfig please?
+> 
+> This is what I originally started with
+> https://raw.githubusercontent.com/clearlinux-pkgs/linux-mainline/master/config
+> 
+> but I also tried your _LSM_ settings found in this
+> https://lore.kernel.org/bpf/20200402040357.GA217889@google.com/
+> 
+> -- Regards, Mikko
