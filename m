@@ -2,182 +2,117 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F361BD650
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Apr 2020 09:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66541BD79B
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Apr 2020 10:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbgD2HmP (ORCPT
+        id S1726535AbgD2Iuy (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 29 Apr 2020 03:42:15 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2127 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726554AbgD2HmN (ORCPT
+        Wed, 29 Apr 2020 04:50:54 -0400
+Received: from smtp-42ae.mail.infomaniak.ch ([84.16.66.174]:56797 "EHLO
+        smtp-42ae.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726366AbgD2Iuy (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 29 Apr 2020 03:42:13 -0400
-Received: from lhreml707-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 4A1DB5F8236ABC6C97AB;
-        Wed, 29 Apr 2020 08:42:11 +0100 (IST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- lhreml707-chm.china.huawei.com (10.201.108.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Wed, 29 Apr 2020 08:42:10 +0100
-Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
- by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.1913.5; Wed, 29 Apr 2020 09:42:10 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <david.safford@gmail.com>,
-        <viro@zeniv.linux.org.uk>, <jmorris@namei.org>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 3/3] evm: Return -EAGAIN to ignore verification failures
-Date:   Wed, 29 Apr 2020 09:39:35 +0200
-Message-ID: <20200429073935.11913-3-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200429073935.11913-1-roberto.sassu@huawei.com>
-References: <20200429073935.11913-1-roberto.sassu@huawei.com>
+        Wed, 29 Apr 2020 04:50:54 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49BsfQ1WB6zlhqlx;
+        Wed, 29 Apr 2020 10:50:22 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49BsfM4z8bzmPw5b;
+        Wed, 29 Apr 2020 10:50:19 +0200 (CEST)
+Subject: Re: [PATCH v3 0/5] Add support for RESOLVE_MAYEXEC
+To:     Jann Horn <jannh@google.com>, Florian Weimer <fw@deneb.enyo.de>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+References: <20200428175129.634352-1-mic@digikod.net>
+ <CAG48ez1bKzh1YvbD_Lcg0AbMCH_cdZmrRRumU7UCJL=qPwNFpQ@mail.gmail.com>
+ <87blnb48a3.fsf@mid.deneb.enyo.de>
+ <CAG48ez2TphTj-VdDaSjvnr0Q8BhNmT3n86xYz4bF3wRJmAMsMw@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <ece281a5-8944-65fd-2a76-e4479a0cccaf@digikod.net>
+Date:   Wed, 29 Apr 2020 10:50:19 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.204.65.160]
-X-ClientProxiedBy: lhreml701-chm.china.huawei.com (10.201.108.50) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+In-Reply-To: <CAG48ez2TphTj-VdDaSjvnr0Q8BhNmT3n86xYz4bF3wRJmAMsMw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-By default, EVM maintains the same behavior as before hooks were moved
-outside the LSM infrastructure. When EVM returns -EPERM, callers stop their
-execution and return the error to user space.
 
-This patch introduces a new mode, called ignore, that changes the return
-value of the pre hooks from -EPERM to -EAGAIN. It also modifies the callers
-of pre and post hooks to continue the execution if -EAGAIN is returned. The
-error is then handled by the post hooks.
 
-The only error that is not ignored is when user space is trying to modify a
-portable signature. Once that signature has been validated with the current
-values of metadata, there is no valid reason to change them.
+On 29/04/2020 00:01, Jann Horn wrote:
+> On Tue, Apr 28, 2020 at 11:21 PM Florian Weimer <fw@deneb.enyo.de> wrote:
+>> * Jann Horn:
+>>
+>>> Just as a comment: You'd probably also have to use RESOLVE_MAYEXEC in
+>>> the dynamic linker.
+>>
+>> Absolutely.  In typical configurations, the kernel does not enforce
+>> that executable mappings must be backed by files which are executable.
+>> It's most obvious with using an explicit loader invocation to run
+>> executables on noexec mounts.  RESOLVE_MAYEXEC is much more useful
+>> than trying to reimplement the kernel permission checks (or what some
+>> believe they should be) in userspace.
 
-From user space perspective, operations on corrupted metadata are
-successfully performed but post hooks didn't update the HMAC. At the next
-IMA verification, when evm_verifyxattr() is called, corruption will be
-detected and access will be denied.
+Indeed it makes sense to use RESOLVE_MAYEXEC for the dynamic linker too.
+Only the noexec mount option is taken into account for mmap(2) with
+PROT_EXEC, and if you can trick the dynamic linker with JOP as Jann
+explained, it may enable to execute new code. However, a kernel which
+forbids remapping memory with PROT_EXEC still enables to implement a W^X
+policy. Any JOP/ROP still enables unexpected code execution though.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- fs/attr.c                         |  2 +-
- fs/xattr.c                        |  4 ++--
- security/integrity/evm/evm_main.c | 23 +++++++++++++++++------
- 3 files changed, 20 insertions(+), 9 deletions(-)
+> 
+> Oh, good point.
+> 
+> That actually seems like something Mickaël could add to his series? If
+> someone turns on that knob for "When an interpreter wants to execute
+> something, enforce that we have execute access to it", they probably
+> also don't want it to be possible to just map files as executable? So
+> perhaps when that flag is on, the kernel should either refuse to map
+> anything as executable if it wasn't opened with RESOLVE_MAYEXEC or
+> (less strict) if RESOLVE_MAYEXEC wasn't used, print a warning, then
+> check whether the file is executable and bail out if not?
+> 
+> A configuration where interpreters verify that scripts are executable,
+> but other things can just mmap executable pages, seems kinda
+> inconsistent...
 
-diff --git a/fs/attr.c b/fs/attr.c
-index 6ce60e1eba34..6370e2f3704d 100644
---- a/fs/attr.c
-+++ b/fs/attr.c
-@@ -329,7 +329,7 @@ int notify_change(struct dentry * dentry, struct iattr * attr, struct inode **de
- 	if (error)
- 		return error;
- 	evm_error = evm_inode_setattr(dentry, attr);
--	if (evm_error)
-+	if (evm_error && evm_error != -EAGAIN)
- 		return evm_error;
- 	error = try_break_deleg(inode, delegated_inode);
- 	if (error)
-diff --git a/fs/xattr.c b/fs/xattr.c
-index b1fd2aa481a8..73f0f3cd6c45 100644
---- a/fs/xattr.c
-+++ b/fs/xattr.c
-@@ -229,7 +229,7 @@ vfs_setxattr(struct dentry *dentry, const char *name, const void *value,
- 		goto out;
- 
- 	evm_error = evm_inode_setxattr(dentry, name, value, size);
--	if (evm_error) {
-+	if (evm_error && evm_error != -EAGAIN) {
- 		error = evm_error;
- 		goto out;
- 	}
-@@ -408,7 +408,7 @@ vfs_removexattr(struct dentry *dentry, const char *name)
- 		goto out;
- 
- 	evm_error = evm_inode_removexattr(dentry, name);
--	if (evm_error) {
-+	if (evm_error && evm_error != -EAGAIN) {
- 		error = evm_error;
- 		goto out;
- 	}
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index ca9eaef7058b..ef09caa3bbcf 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -54,11 +54,13 @@ static struct xattr_list evm_config_default_xattrnames[] = {
- 
- LIST_HEAD(evm_config_xattrnames);
- 
--static int evm_fixmode;
-+static int evm_fixmode, evm_ignoremode __ro_after_init;
- static int __init evm_set_fixmode(char *str)
- {
- 	if (strncmp(str, "fix", 3) == 0)
- 		evm_fixmode = 1;
-+	if (strncmp(str, "ignore", 6) == 0)
-+		evm_ignoremode = 1;
- 	return 0;
- }
- __setup("evm=", evm_set_fixmode);
-@@ -311,6 +313,7 @@ static int evm_protect_xattr(struct dentry *dentry, const char *xattr_name,
- 			     const void *xattr_value, size_t xattr_value_len)
- {
- 	enum integrity_status evm_status;
-+	int rc = -EPERM;
- 
- 	if (strcmp(xattr_name, XATTR_NAME_EVM) == 0) {
- 		if (!capable(CAP_SYS_ADMIN))
-@@ -345,12 +348,17 @@ static int evm_protect_xattr(struct dentry *dentry, const char *xattr_name,
- 				    -EPERM, 0);
- 	}
- out:
--	if (evm_status != INTEGRITY_PASS)
-+	if (evm_status != INTEGRITY_PASS) {
-+		if (evm_ignoremode && evm_status != INTEGRITY_PASS_IMMUTABLE)
-+			rc = -EAGAIN;
-+
- 		integrity_audit_msg(AUDIT_INTEGRITY_METADATA, d_backing_inode(dentry),
- 				    dentry->d_name.name, "appraise_metadata",
- 				    integrity_status_msg[evm_status],
--				    -EPERM, 0);
--	return evm_status == INTEGRITY_PASS ? 0 : -EPERM;
-+				    rc, 0);
-+	}
-+
-+	return evm_status == INTEGRITY_PASS ? 0 : rc;
- }
- 
- /**
-@@ -482,6 +490,7 @@ int evm_inode_setattr(struct dentry *dentry, struct iattr *attr)
- {
- 	unsigned int ia_valid = attr->ia_valid;
- 	enum integrity_status evm_status;
-+	int rc = -EPERM;
- 
- 	/* Policy permits modification of the protected attrs even though
- 	 * there's no HMAC key loaded
-@@ -495,10 +504,12 @@ int evm_inode_setattr(struct dentry *dentry, struct iattr *attr)
- 	if ((evm_status == INTEGRITY_PASS) ||
- 	    (evm_status == INTEGRITY_NOXATTRS))
- 		return 0;
-+	if (evm_ignoremode && evm_status != INTEGRITY_PASS_IMMUTABLE)
-+		rc = -EAGAIN;
- 	integrity_audit_msg(AUDIT_INTEGRITY_METADATA, d_backing_inode(dentry),
- 			    dentry->d_name.name, "appraise_metadata",
--			    integrity_status_msg[evm_status], -EPERM, 0);
--	return -EPERM;
-+			    integrity_status_msg[evm_status], rc, 0);
-+	return rc;
- }
- 
- /**
--- 
-2.17.1
-
+As it is written in the documentation patch, this RESOLVE_MAYEXEC
+feature is an important missing piece, but to implement a consistent
+security policy we need to enable other restrictions starting with a
+noexec mount point policy. The purpose of this patch series is not to
+bring a full-feature LSM with process states handling, but it brings
+what is needed for LSMs such as SELinux, IMA or IPE to extend their
+capabilities to reach what you would expect.
