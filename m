@@ -2,131 +2,155 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1911BF88D
-	for <lists+linux-security-module@lfdr.de>; Thu, 30 Apr 2020 14:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E80751BF95A
+	for <lists+linux-security-module@lfdr.de>; Thu, 30 Apr 2020 15:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbgD3MyU (ORCPT
+        id S1727124AbgD3NXu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 30 Apr 2020 08:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        Thu, 30 Apr 2020 09:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726127AbgD3MyT (ORCPT
+        by vger.kernel.org with ESMTP id S1727119AbgD3NXu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 30 Apr 2020 08:54:19 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D7C035494
-        for <linux-security-module@vger.kernel.org>; Thu, 30 Apr 2020 05:54:19 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id y3so1124276lfy.1
-        for <linux-security-module@vger.kernel.org>; Thu, 30 Apr 2020 05:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R0SUuLsn24f2309n0wIkjwplxg/5m4IRh5fBVPLi9fY=;
-        b=Kqg32G1LB2YZd5owVadHCkiAWCFc+nSZnpetLQyxKhTTxRQGQKqtjk02hnRKCiuFsd
-         LCxAoH5Xs8KjQ+pk7I/4hQJNJddRklZ9B7PxOKj2K+Oc4w/dUeaK218U25ap4+CHLExC
-         u+vMu4+Zca523G3kBQDKm0SYJkCJ70QPMnvlxETgO+UiBQGP9/zEJdxTtfmHXPD40j4M
-         YO7i9D70bVU/MTue57uQO8iKEbmKIx3tkqgt7WhkyZhsVgXHAOhEmbRgZtUipI/OKGsY
-         tthjSegS7x+QDd/7bcpDnsnTEQpkis1lWXnJoJiiqtceMBFqkOosMl+XMhTF81vy+Kmp
-         mWKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=R0SUuLsn24f2309n0wIkjwplxg/5m4IRh5fBVPLi9fY=;
-        b=YTE8smd3fRUajpOZKPQwX15rkKGPnZKljlweRLR/dDIAHfYEgZxtLjwPtTo6EngAXv
-         M/aHANNA+0X8zx9xRv8gij+iQI+DOQs+an9npjxoVzfLLY3CBqKgRCtoPt1PMGn7r+fy
-         ycv+TsN6a3VpWVsr5FESuREf3wsu1Q+ZoVU6T5/5VmNsnLC8AgtHZSeJuU9nL8IdWRlJ
-         K7jlUaTZk9oijkvYTrf5eCsvJPlIZi1+TnOPLBOZf97alI5vNM5Fj7qz9A6w89Oy6oS7
-         Ktapjwd06+8DlRC5b26NlU6OZEtACLVRTc/2pv2sc/Ortq25Zcwr8P7ObXrV/kWUQdvZ
-         zDYg==
-X-Gm-Message-State: AGi0PuYYxNhmAifcFg0GZhuY7WshbjNZsfy1EbLM35bsfxRu+VzijhOu
-        D1T5V+421nhGmEBFU2i+46RtttYVZf+YCVO+cN0=
-X-Google-Smtp-Source: APiQypIMn1iI+EE0CfLGtkBGF+3tK/OhpiKUaRcUujimt7X+i4oBdGjNgnLDHt6DPYpSfjBrGY/QfLRpSV/mCFN1I8Q=
-X-Received: by 2002:ac2:4853:: with SMTP id 19mr2012186lfy.171.1588251257356;
- Thu, 30 Apr 2020 05:54:17 -0700 (PDT)
+        Thu, 30 Apr 2020 09:23:50 -0400
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [IPv6:2001:1600:3:17::190b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF303C035494
+        for <linux-security-module@vger.kernel.org>; Thu, 30 Apr 2020 06:23:49 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49CbgJ5HK0zlhcc1;
+        Thu, 30 Apr 2020 15:23:40 +0200 (CEST)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49Cbfy6XdVzlpwgm;
+        Thu, 30 Apr 2020 15:23:22 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v4 0/5] Add support for O_MAYEXEC
+Date:   Thu, 30 Apr 2020 15:23:15 +0200
+Message-Id: <20200430132320.699508-1-mic@digikod.net>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Reply-To: colettekipkalya@gmail.com
-Received: by 2002:a2e:5cb:0:0:0:0:0 with HTTP; Thu, 30 Apr 2020 05:54:16 -0700 (PDT)
-From:   "Miss. Colette Kipkalya" <colettekipkalya@gmail.com>
-Date:   Thu, 30 Apr 2020 05:54:16 -0700
-X-Google-Sender-Auth: aU7aBZ0RkW1apnu3sWUOKHr7_xg
-Message-ID: <CAHgz3+4TYn479pV13=V+O3AGZ-8P8DyYZX1j=ugHL3x4UXa19Q@mail.gmail.com>
-Subject: My Dearest,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-My Dearest,
+Hi,
 
-I am writing this mail to you with tears and sorrow from my heart.With
-due respect, trust and humanity, i appeal to you to exercise a little
-patience and read through my letter i feel quite safe dealing with you
-in this important business having gone through your remarkable
-profile, honestly i am writing this email to you with pains, tears and
-sorrow from my heart, i will really like to have a good relationship
-with you and i have a special reason why I decided to contact you. I
-decided to contact you due to the urgency of my situation.
+The goal of this patch series is to enable to control script execution
+with interpreters help.  A new O_MAYEXEC flag, usable through
+openat2(2), is added to enable userspace script interpreter to delegate
+to the kernel (and thus the system security policy) the permission to
+interpret/execute scripts or other files containing what can be seen as
+commands.
 
-My name is Miss.Colette Kipkalya, 23yrs old female and i am from Kenya
-in East Africa. Light in complexion, single (never married) but
-presently i am residing here in Ouagadougou, Burkina Faso refugee
-camp. My father Late Dr Kipkalya Kones was the former Kenyan road
-Minister. He and Assistant Minister of Home Affairs Lorna Laboso had
-been on board the Cessna 210, which was headed to Kericho and crashed
-in a remote area called Kajong'a, in western Kenya. The plane crashed
-on the Tuesday 10th, June, 2008. You can read more about the crash
-through the belowsite:
-http://edition.cnn.com/2008/WORLD/africa/06/10/kenya.crash/index.html?iref=
-=3Dnextin
+This fourth patch series switch back from RESOLVE_MAYEXEC to O_MAYEXEC
+which is more appropriate.  However, this new flag is only taken into
+account by openat2(2), but not open(2) nor openat(2).
 
-After the burial of my father, my Fathers brother conspired and sold
-my father' s property to an Italian Expert rate which they shared the
-money among themselves and live nothing for me. One faithful morning,
-I opened my father's briefcase and found out the documents which he
-have deposited huge amount of money in one bank in Burkina Faso with
-my name as the next of kin because when he was alive he deposited some
-amount of money in a Bank in Burkina Faso which he used my name as the
-next of kin. The amount in question is $4.7Million.
+A simple system-wide security policy can be enforced by the system
+administrator through a sysctl configuration consistent with the mount
+points or the file access rights.  The documentation patch explains the
+prerequisites.
 
-I have informed the bank about claiming this money and the only thing
-they told me is to look for a foreign partner who will assist me in
-the transfer due to my refugee status here in Burkina Faso. God told
-me that you are the honest and reliable person who will help me and
-stand as my trustee so that I will present you to the Bank for
-transferring of my father=E2=80=99s money to your bank account in overseas.=
-I
-have chosen to contact you after my prayers and I believe that you
-will not betray my trust. But rather take me as your own biological
-sister or daughter which I will be coming to your country as soon as
-this money is transferred to your account.
+Furthermore, the security policy can also be delegated to an LSM, either
+a MAC system or an integrity system.  For instance, the new kernel
+MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
+integrity gap by bringing the ability to check the use of scripts [1].
+Other uses are expected, such as for openat2(2) [2], SGX integration
+[3], bpffs [4] or IPE [5].
 
-My dearest, things are very bad for me here in the refugee camp where
-i am living today. People are dying here day after day because of lack
-of food and poor medical treatment. Even one of us died last night and
-was buried this morning. I am afraid of what i am seeing here. I don't
-know who it will be her turn tomorrow, I was planning to read law in
-my life before the ugly incident that killed my parents that put me in
-this horrible place i found myself toady. This place is like a prison
-as we are only allowed to go out on Monday and Friday of the week as
-given
- by the united nation rules and regulation here in Burkina Faso.
-It=E2=80=99s in this refugee we are only allowed to go out two times in a w=
-eek
-it=E2=80=99s just like one staying in the prison and i hope by Gods grace i
-will come out here soon. I don' t have any relatives now whom i can go
-to and the only person i have now is Rev Isaac Ambrose who is the
-pastor of the (Christ for all Churches) here in the refugee he has
-been very nice to me since i came here but i am not living with him
-rather i am leaving in the women's hostel because the refugee have two
-hostels one for men the other for women, so you can always contact me
-through this my both email address here (colettekipkalya@gmail.com)
-thanks and am waiting for your reply. Please if you want to help me
-out of this situation respond back so that i will tell you more about
-me.
+Userspace needs to adapt to take advantage of this new feature.  For
+example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
+extended with policy enforcement points related to code interpretation,
+which can be used to align with the PowerShell audit features.
+Additional Python security improvements (e.g. a limited interpreter
+withou -c, stdin piping of code) are on their way.
 
-Yours faithful
-Miss. Colette Kipkalya
+The initial idea come from CLIP OS 4 and the original implementation has
+been used for more than 11 years:
+https://github.com/clipos-archive/clipos4_doc
+
+An introduction to O_MAYEXEC was given at the Linux Security Summit
+Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+
+This patch series can be applied on top of v5.7-rc3.  This can be tested
+with CONFIG_SYSCTL.  I would really appreciate constructive comments on
+this patch series.
+
+Previous version:
+https://lore.kernel.org/lkml/20200428175129.634352-1-mic@digikod.net/
+
+
+[1] https://lore.kernel.org/lkml/1544647356.4028.105.camel@linux.ibm.com/
+[2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
+[3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
+[5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
+[6] https://www.python.org/dev/peps/pep-0578/
+
+Regards,
+
+Mickaël Salaün (5):
+  fs: Add support for an O_MAYEXEC flag on openat2(2)
+  fs: Add a MAY_EXECMOUNT flag to infer the noexec mount property
+  fs: Enable to enforce noexec mounts or file exec through O_MAYEXEC
+  selftest/openat2: Add tests for O_MAYEXEC enforcing
+  doc: Add documentation for the fs.open_mayexec_enforce sysctl
+
+ Documentation/admin-guide/sysctl/fs.rst       |  44 +++
+ fs/fcntl.c                                    |   2 +-
+ fs/namei.c                                    |  74 +++-
+ fs/open.c                                     |   8 +
+ include/linux/fcntl.h                         |   2 +-
+ include/linux/fs.h                            |   7 +
+ include/uapi/asm-generic/fcntl.h              |   7 +
+ kernel/sysctl.c                               |   7 +
+ tools/testing/selftests/kselftest_harness.h   |   3 +
+ tools/testing/selftests/openat2/Makefile      |   3 +-
+ tools/testing/selftests/openat2/config        |   1 +
+ tools/testing/selftests/openat2/helpers.h     |   1 +
+ .../testing/selftests/openat2/omayexec_test.c | 330 ++++++++++++++++++
+ 13 files changed, 485 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/openat2/config
+ create mode 100644 tools/testing/selftests/openat2/omayexec_test.c
+
+-- 
+2.26.2
+
