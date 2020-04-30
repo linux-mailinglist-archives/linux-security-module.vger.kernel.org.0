@@ -2,129 +2,131 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AA21BF605
-	for <lists+linux-security-module@lfdr.de>; Thu, 30 Apr 2020 13:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1911BF88D
+	for <lists+linux-security-module@lfdr.de>; Thu, 30 Apr 2020 14:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbgD3LBe (ORCPT
+        id S1726852AbgD3MyU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 30 Apr 2020 07:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        Thu, 30 Apr 2020 08:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726413AbgD3LBd (ORCPT
+        by vger.kernel.org with ESMTP id S1726127AbgD3MyT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 30 Apr 2020 07:01:33 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59916C035494
-        for <linux-security-module@vger.kernel.org>; Thu, 30 Apr 2020 04:01:33 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id u16so1381196wmc.5
-        for <linux-security-module@vger.kernel.org>; Thu, 30 Apr 2020 04:01:33 -0700 (PDT)
+        Thu, 30 Apr 2020 08:54:19 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D7C035494
+        for <linux-security-module@vger.kernel.org>; Thu, 30 Apr 2020 05:54:19 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id y3so1124276lfy.1
+        for <linux-security-module@vger.kernel.org>; Thu, 30 Apr 2020 05:54:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lFFxK4DtytcE6RpAFl8YJiEBCoYUrJi5EC/p8/Y25iA=;
-        b=f5VuDmhyUjEspScUeszN5n8DPGcEiF/Kok9r2XQcaRe8HDfwuUTjWP4f00L9FgVpR6
-         NwrnkORD6lm6KvLluh5w59qQbKGxSAS44/NqciSnz039zIu/mHcI+vU5AHQsV+NmkfVr
-         2wk0iYhDyLiGTZFSRNC7xo8I9oxNI1yh7E8bUl9fe+UMfMfdBO5QFMqgwxpgtqJixBIJ
-         nzKHb0khXvNE1r3a2NF9Ib5NUDnWpC51UlhYpkPtdJXUcSg/2kdiJzqetXJ7v7YWlZr/
-         RRuw/gMakeQ5lAPHyVeiUFgbvw9ZfIwxNWNJ87QjflMf7FFzL6O7O7DWFFSgP58BUTAu
-         l+BA==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=R0SUuLsn24f2309n0wIkjwplxg/5m4IRh5fBVPLi9fY=;
+        b=Kqg32G1LB2YZd5owVadHCkiAWCFc+nSZnpetLQyxKhTTxRQGQKqtjk02hnRKCiuFsd
+         LCxAoH5Xs8KjQ+pk7I/4hQJNJddRklZ9B7PxOKj2K+Oc4w/dUeaK218U25ap4+CHLExC
+         u+vMu4+Zca523G3kBQDKm0SYJkCJ70QPMnvlxETgO+UiBQGP9/zEJdxTtfmHXPD40j4M
+         YO7i9D70bVU/MTue57uQO8iKEbmKIx3tkqgt7WhkyZhsVgXHAOhEmbRgZtUipI/OKGsY
+         tthjSegS7x+QDd/7bcpDnsnTEQpkis1lWXnJoJiiqtceMBFqkOosMl+XMhTF81vy+Kmp
+         mWKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lFFxK4DtytcE6RpAFl8YJiEBCoYUrJi5EC/p8/Y25iA=;
-        b=mrt88Z5gFkQYeEQClC2aNCzf1t2bnd9/gEDeiDQhb5rPhZJf0DelSM4NfRkVNKP668
-         VfQT1dlH3xLHUx421v+LBRU7FrJnOIvww1NV9rq0zFanEUwLztRpCc++0IvNKkr+Kn8X
-         FCLJnL2NQMQhZebZiaqTqb5cnhJANdb1FI1j9OpwvjtKUcELBIclXbIcxAiYF6VLNO+3
-         AFHDZmySnLJerPrh2Zdm+lNC7Nibr2etbVJHrtR7O9IXUMUg8RbY9qA/2X7zJgUmGij8
-         F3rwgS3HinLYHHCsyM2M7m6QbfiYfZT1bNcpg3G72YLF+xMoO0Cr99vKz9tfkf3ElBrj
-         dzXg==
-X-Gm-Message-State: AGi0PuZZTK3hhkqRR6/npvG3y8FSVl33g0hoG1USL+j8RJnoO+mUhzG7
-        R3yN3z9jay/byIS2LUviKu+tPlZGalLWXQijuHk=
-X-Google-Smtp-Source: APiQypLouP4lVbKqpnSX7OlYl+j6EOSiT1pw349EOnWeumTX5PjyI+H/ngeTt/eryzVdA1cq5n6/uYXQL49LzeEGesE=
-X-Received: by 2002:a1c:a512:: with SMTP id o18mr2301640wme.138.1588244491958;
- Thu, 30 Apr 2020 04:01:31 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=R0SUuLsn24f2309n0wIkjwplxg/5m4IRh5fBVPLi9fY=;
+        b=YTE8smd3fRUajpOZKPQwX15rkKGPnZKljlweRLR/dDIAHfYEgZxtLjwPtTo6EngAXv
+         M/aHANNA+0X8zx9xRv8gij+iQI+DOQs+an9npjxoVzfLLY3CBqKgRCtoPt1PMGn7r+fy
+         ycv+TsN6a3VpWVsr5FESuREf3wsu1Q+ZoVU6T5/5VmNsnLC8AgtHZSeJuU9nL8IdWRlJ
+         K7jlUaTZk9oijkvYTrf5eCsvJPlIZi1+TnOPLBOZf97alI5vNM5Fj7qz9A6w89Oy6oS7
+         Ktapjwd06+8DlRC5b26NlU6OZEtACLVRTc/2pv2sc/Ortq25Zcwr8P7ObXrV/kWUQdvZ
+         zDYg==
+X-Gm-Message-State: AGi0PuYYxNhmAifcFg0GZhuY7WshbjNZsfy1EbLM35bsfxRu+VzijhOu
+        D1T5V+421nhGmEBFU2i+46RtttYVZf+YCVO+cN0=
+X-Google-Smtp-Source: APiQypIMn1iI+EE0CfLGtkBGF+3tK/OhpiKUaRcUujimt7X+i4oBdGjNgnLDHt6DPYpSfjBrGY/QfLRpSV/mCFN1I8Q=
+X-Received: by 2002:ac2:4853:: with SMTP id 19mr2012186lfy.171.1588251257356;
+ Thu, 30 Apr 2020 05:54:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200428175129.634352-1-mic@digikod.net> <20200430015429.wuob7m5ofdewubui@yavin.dot.cyphar.com>
-In-Reply-To: <20200430015429.wuob7m5ofdewubui@yavin.dot.cyphar.com>
-From:   "Lev R. Oshvang ." <levonshe@gmail.com>
-Date:   Thu, 30 Apr 2020 14:01:21 +0300
-Message-ID: <CAP22eLE6DA5P+Cx6aVP=eq3tKRGz=+P+w8omk3CcEXVo0f1Nfg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] Add support for RESOLVE_MAYEXEC
-To:     Aleksa Sarai <cyphar@cyphar.com>, viro@zeniv.linux.org.uk
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Eric Chiang <ericchiang@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        kernel-hardening@lists.openwall.com,
-        LSM List <linux-security-module@vger.kernel.org>
+Reply-To: colettekipkalya@gmail.com
+Received: by 2002:a2e:5cb:0:0:0:0:0 with HTTP; Thu, 30 Apr 2020 05:54:16 -0700 (PDT)
+From:   "Miss. Colette Kipkalya" <colettekipkalya@gmail.com>
+Date:   Thu, 30 Apr 2020 05:54:16 -0700
+X-Google-Sender-Auth: aU7aBZ0RkW1apnu3sWUOKHr7_xg
+Message-ID: <CAHgz3+4TYn479pV13=V+O3AGZ-8P8DyYZX1j=ugHL3x4UXa19Q@mail.gmail.com>
+Subject: My Dearest,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Apr 30, 2020 at 4:55 AM Aleksa Sarai <cyphar@cyphar.com> wrote:
->
-> On 2020-04-28, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
-> > The goal of this patch series is to enable to control script execution
-> > with interpreters help.  A new RESOLVE_MAYEXEC flag, usable through
-> > openat2(2), is added to enable userspace script interpreter to delegate
-> > to the kernel (and thus the system security policy) the permission to
-> > interpret/execute scripts or other files containing what can be seen as
-> > commands.
-> >
-> > This third patch series mainly differ from the previous one by relying
-> > on the new openat2(2) system call to get rid of the undefined behavior
-> > of the open(2) flags.  Thus, the previous O_MAYEXEC flag is now replace=
-d
-> > with the new RESOLVE_MAYEXEC flag and benefits from the openat2(2)
-> > strict check of this kind of flags.
->
-> My only strong upfront objection is with this being a RESOLVE_ flag.
->
-> RESOLVE_ flags have a specific meaning (they generally apply to all
-> components, and affect the rules of path resolution). RESOLVE_MAYEXEC
-> does neither of these things and so seems out of place among the other
-> RESOLVE_ flags.
->
-> I would argue this should be an O_ flag, but not supported for the
-> old-style open(2). This is what the O_SPECIFIC_FD patchset does[1] and I
-> think it's a reasonable way of solving such problems.
->
-> --
-> Aleksa Sarai
-> Senior Software Engineer (Containers)
-> SUSE Linux GmbH
-> <https://www.cyphar.com/>
+My Dearest,
 
-I see that we discuss here the problem which was originated due to the
-lack of flags checks at open()
-As a newbie in kernel I want to propose maybe naive approach - add
-missing flag cheeks to open().
-In order to not break badly coded  application at once (applications
-hat pass full u32 number I propose to introduce
-2 new sysctls:
-fs.verify_open_flags =3D BITMASK of flags open() uses in this kernel,
-i.r O_CREAT||O_RDOBLY|O_RDWR,,
-fs.verify_open_flags_action =3D NONE|WARN
-1) fs.verify_open_flags  and flags_action  knobs will allow
-distributions and package maintainers to detect and fix bad code. On
-the other hand, it will allow to finally verify flags. passed to open
-2) It will show kernel ABI to libc
+I am writing this mail to you with tears and sorrow from my heart.With
+due respect, trust and humanity, i appeal to you to exercise a little
+patience and read through my letter i feel quite safe dealing with you
+in this important business having gone through your remarkable
+profile, honestly i am writing this email to you with pains, tears and
+sorrow from my heart, i will really like to have a good relationship
+with you and i have a special reason why I decided to contact you. I
+decided to contact you due to the urgency of my situation.
 
-3) The semantics of O_MAYEXEC is clear and is long waited for.
-I think that O_MAYEXEC pretty well describes the intention of
-application to treat the file as the source of actions, whether it is
-ELF or script or another format. (not necessary Posix permissions
-case)
-This intention is passed to the kernel and then to LSM, IMA.
+My name is Miss.Colette Kipkalya, 23yrs old female and i am from Kenya
+in East Africa. Light in complexion, single (never married) but
+presently i am residing here in Ouagadougou, Burkina Faso refugee
+camp. My father Late Dr Kipkalya Kones was the former Kenyan road
+Minister. He and Assistant Minister of Home Affairs Lorna Laboso had
+been on board the Cessna 210, which was headed to Kericho and crashed
+in a remote area called Kajong'a, in western Kenya. The plane crashed
+on the Tuesday 10th, June, 2008. You can read more about the crash
+through the belowsite:
+http://edition.cnn.com/2008/WORLD/africa/06/10/kenya.crash/index.html?iref=
+=3Dnextin
 
-4) since we need to rewrite interpretersin order to use this flag, we
-can also query fs.verify_open_flags to see whether it is available.
+After the burial of my father, my Fathers brother conspired and sold
+my father' s property to an Italian Expert rate which they shared the
+money among themselves and live nothing for me. One faithful morning,
+I opened my father's briefcase and found out the documents which he
+have deposited huge amount of money in one bank in Burkina Faso with
+my name as the next of kin because when he was alive he deposited some
+amount of money in a Bank in Burkina Faso which he used my name as the
+next of kin. The amount in question is $4.7Million.
 
-I hope I added my 2 cents.
+I have informed the bank about claiming this money and the only thing
+they told me is to look for a foreign partner who will assist me in
+the transfer due to my refugee status here in Burkina Faso. God told
+me that you are the honest and reliable person who will help me and
+stand as my trustee so that I will present you to the Bank for
+transferring of my father=E2=80=99s money to your bank account in overseas.=
+I
+have chosen to contact you after my prayers and I believe that you
+will not betray my trust. But rather take me as your own biological
+sister or daughter which I will be coming to your country as soon as
+this money is transferred to your account.
+
+My dearest, things are very bad for me here in the refugee camp where
+i am living today. People are dying here day after day because of lack
+of food and poor medical treatment. Even one of us died last night and
+was buried this morning. I am afraid of what i am seeing here. I don't
+know who it will be her turn tomorrow, I was planning to read law in
+my life before the ugly incident that killed my parents that put me in
+this horrible place i found myself toady. This place is like a prison
+as we are only allowed to go out on Monday and Friday of the week as
+given
+ by the united nation rules and regulation here in Burkina Faso.
+It=E2=80=99s in this refugee we are only allowed to go out two times in a w=
+eek
+it=E2=80=99s just like one staying in the prison and i hope by Gods grace i
+will come out here soon. I don' t have any relatives now whom i can go
+to and the only person i have now is Rev Isaac Ambrose who is the
+pastor of the (Christ for all Churches) here in the refugee he has
+been very nice to me since i came here but i am not living with him
+rather i am leaving in the women's hostel because the refugee have two
+hostels one for men the other for women, so you can always contact me
+through this my both email address here (colettekipkalya@gmail.com)
+thanks and am waiting for your reply. Please if you want to help me
+out of this situation respond back so that i will tell you more about
+me.
+
+Yours faithful
+Miss. Colette Kipkalya
