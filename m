@@ -2,157 +2,120 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DC01BF962
-	for <lists+linux-security-module@lfdr.de>; Thu, 30 Apr 2020 15:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FD61BF9C5
+	for <lists+linux-security-module@lfdr.de>; Thu, 30 Apr 2020 15:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbgD3NX7 (ORCPT
+        id S1726768AbgD3Nmx (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 30 Apr 2020 09:23:59 -0400
-Received: from smtp-8fab.mail.infomaniak.ch ([83.166.143.171]:48165 "EHLO
-        smtp-8fab.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727774AbgD3NXz (ORCPT
+        Thu, 30 Apr 2020 09:42:53 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63752 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726577AbgD3Nmx (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:23:55 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49CbgY0FJyzlhjXM;
-        Thu, 30 Apr 2020 15:23:53 +0200 (CEST)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49CbgX0Ysmzlln1b;
-        Thu, 30 Apr 2020 15:23:52 +0200 (CEST)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v4 5/5] doc: Add documentation for the fs.open_mayexec_enforce sysctl
-Date:   Thu, 30 Apr 2020 15:23:20 +0200
-Message-Id: <20200430132320.699508-6-mic@digikod.net>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200430132320.699508-1-mic@digikod.net>
-References: <20200430132320.699508-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 30 Apr 2020 09:42:53 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03UDabZW014329;
+        Thu, 30 Apr 2020 09:42:43 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30q7qjy82w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Apr 2020 09:42:43 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03UDad0e014593;
+        Thu, 30 Apr 2020 09:42:42 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30q7qjy81w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Apr 2020 09:42:42 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03UDf7E4017958;
+        Thu, 30 Apr 2020 13:42:40 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 30mcu5tn88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Apr 2020 13:42:40 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03UDgc4A64487508
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Apr 2020 13:42:38 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D476A405C;
+        Thu, 30 Apr 2020 13:42:38 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 12FE1A405B;
+        Thu, 30 Apr 2020 13:42:37 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.170.249])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Apr 2020 13:42:36 +0000 (GMT)
+Message-ID: <1588254156.5167.32.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/2] ima: add policy support for the new file open
+ MAY_OPENEXEC flag
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     kbuild test robot <lkp@intel.com>, linux-integrity@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Mickael Salaun <mic@digikod.net>,
+        Steve Grubb <sgrubb@redhat.com>, Jann Horn <jannh@google.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 30 Apr 2020 09:42:36 -0400
+In-Reply-To: <202004300526.H4rF1lW2%lkp@intel.com>
+References: <1588167523-7866-3-git-send-email-zohar@linux.ibm.com>
+         <202004300526.H4rF1lW2%lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-30_08:2020-04-30,2020-04-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 phishscore=0 adultscore=0
+ impostorscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2003020000 definitions=main-2004300111
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This sysctl enables to propagate executable permission to userspace
-thanks to the O_MAYEXEC flag.
+Hi Mickaël,
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-Cc: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Kees Cook <keescook@chromium.org>
----
+On Thu, 2020-04-30 at 05:24 +0800, kbuild test robot wrote:
+> Hi Mimi,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on integrity/next-integrity]
+> [also build test ERROR on linus/master v5.7-rc3 next-20200429]
+> [cannot apply to security/next-testing]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-Changes since v3:
-* Switch back to O_MAYEXEC and highlight that it is only taken into
-  account by openat2(2).
+To prevent this sort of message, in the future could you include this
+patch (2/2) with your patch set?  Please include the "Reviewed-by:
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com>" tag.
 
-Changes since v2:
-* Update documentation with the new RESOLVE_MAYEXEC.
-* Improve explanations, including concerns about LD_PRELOAD.
+thanks,
 
-Changes since v1:
-* Move from LSM/Yama to sysctl/fs .
----
- Documentation/admin-guide/sysctl/fs.rst | 44 +++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Mimi
 
-diff --git a/Documentation/admin-guide/sysctl/fs.rst b/Documentation/admin-guide/sysctl/fs.rst
-index 2a45119e3331..d55615c36772 100644
---- a/Documentation/admin-guide/sysctl/fs.rst
-+++ b/Documentation/admin-guide/sysctl/fs.rst
-@@ -37,6 +37,7 @@ Currently, these files are in /proc/sys/fs:
- - inode-nr
- - inode-state
- - nr_open
-+- open_mayexec_enforce
- - overflowuid
- - overflowgid
- - pipe-user-pages-hard
-@@ -165,6 +166,49 @@ system needs to prune the inode list instead of allocating
- more.
- 
- 
-+open_mayexec_enforce
-+--------------------
-+
-+While being ignored by :manpage:`open(2)` and :manpage:`openat(2)`, the
-+``O_MAYEXEC`` flag can be passed to :manpage:`openat2(2)` to only open regular
-+files that are expected to be executable.  If the file is not identified as
-+executable, then the syscall returns -EACCES.  This may allow a script
-+interpreter to check executable permission before reading commands from a file,
-+or a dynamic linker to only load executable shared objects.  One interesting
-+use case is to enforce a "write xor execute" policy through interpreters.
-+
-+The ability to restrict code execution must be thought as a system-wide policy,
-+which first starts by restricting mount points with the ``noexec`` option.
-+This option is also automatically applied to special filesystems such as /proc
-+.  This prevents files on such mount points to be directly executed by the
-+kernel or mapped as executable memory (e.g. libraries).  With script
-+interpreters using the ``O_MAYEXEC`` flag, the executable permission can then
-+be checked before reading commands from files. This makes it possible to
-+enforce the ``noexec`` at the interpreter level, and thus propagates this
-+security policy to scripts.  To be fully effective, these interpreters also
-+need to handle the other ways to execute code: command line parameters (e.g.,
-+option ``-e`` for Perl), module loading (e.g., option ``-m`` for Python),
-+stdin, file sourcing, environment variables, configuration files, etc.
-+According to the threat model, it may be acceptable to allow some script
-+interpreters (e.g. Bash) to interpret commands from stdin, may it be a TTY or a
-+pipe, because it may not be enough to (directly) perform syscalls.
-+
-+There are two complementary security policies: enforce the ``noexec`` mount
-+option, and enforce executable file permission.  These policies are handled by
-+the ``fs.open_mayexec_enforce`` sysctl (writable only with ``CAP_MAC_ADMIN``)
-+as a bitmask:
-+
-+1 - Mount restriction: checks that the mount options for the underlying VFS
-+    mount do not prevent execution.
-+
-+2 - File permission restriction: checks that the to-be-opened file is marked as
-+    executable for the current process (e.g., POSIX permissions).
-+
-+Code samples can be found in tools/testing/selftests/openat2/omayexec_test.c
-+and at
-+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC .
-+
-+
- overflowgid & overflowuid
- -------------------------
- 
--- 
-2.26.2
+> 
+> url:    https://github.com/0day-ci/linux/commits/Mimi-Zohar/ima-extending-IMA-policy-to-support-interpreters/20200430-030608
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+> config: arc-allyesconfig (attached as .config)
+> compiler: arc-elf-gcc (GCC) 9.3.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day GCC_VERSION=9.3.0 make.cross ARCH=arc 
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> All error/warnings (new ones prefixed by >>):
+> 
+>    security/integrity/ima/ima_main.c: In function 'ima_file_check':
+> >> security/integrity/ima/ima_main.c:442:20: error: 'MAY_OPENEXEC' undeclared (first use in this function); did you mean 'MAY_OPEN'?
+>      442 |         MAY_EXEC | MAY_OPENEXEC |
+>          |                    ^~~~~~~~~~~~
+>          |                    MAY_OPEN
 
