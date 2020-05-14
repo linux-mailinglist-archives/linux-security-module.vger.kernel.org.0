@@ -2,129 +2,96 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B8D1D3912
-	for <lists+linux-security-module@lfdr.de>; Thu, 14 May 2020 20:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA6D1D3952
+	for <lists+linux-security-module@lfdr.de>; Thu, 14 May 2020 20:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgENSYP (ORCPT
+        id S1727033AbgENSqp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 14 May 2020 14:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726075AbgENSYO (ORCPT
+        Thu, 14 May 2020 14:46:45 -0400
+Received: from smtp-190e.mail.infomaniak.ch ([185.125.25.14]:35881 "EHLO
+        smtp-190e.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726667AbgENSqp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 14 May 2020 14:24:14 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A031EC061A0C;
-        Thu, 14 May 2020 11:24:14 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id j21so1597636pgb.7;
-        Thu, 14 May 2020 11:24:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GXa6PnUFgbyMdN1EyBLqwHTz+uuzg6SBgnPWkS0r0LY=;
-        b=UjKhf5Pakj1PRT2NUS7T0x8Kgcqe78a2NffVX1sDTbpyleID7QctCe0xL3M1PwYVI+
-         zAtYsgoWZ+BVedXbsyLsbRowGEIlXg5ThyW9kwLH/SLYw+bk2dHUbTCPLeBNGQWBssrG
-         UPjunlYTOxPrA3Cs8ADgHno5puyVV+fVJmgiIqhX4/WrQjaUPNpQG8uYaEEBFSCOiKT2
-         9LsRek5xLBc5g+pxyRjj74BtsUh3d/mnqTbPj0QaxTUu6qf0pS6AMKcyeCMkOhoPB49z
-         UWxYETWuYgN9157+ikH2iilGAiuZa8Kk32VM9ACbJtlqpcbXPs8NShkV+j6c4Z9t0lZx
-         0C+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GXa6PnUFgbyMdN1EyBLqwHTz+uuzg6SBgnPWkS0r0LY=;
-        b=DQuHjspBqXZympN6glwLBetq7jSOX+nL2e3Ag1kEB785eWMfhWzxTh4ut8RPNCSf02
-         6Xq5GrrFfxj2Y3WUSUA7r+8wTeXWQBYmmdTB/o++p5QvJqkBaXBvh7tDt32dgd/K+wcA
-         KBvfvOao0Ejf8Vml73dh9QUXK6ZJySNeFS1pHWTR6Bt6aNg+c54KvSX9eIgcmRfu2RBL
-         UUkBX9smv4AvXwLQLas3ONU+zivl+PuDW2fQ60OUa7yUHLCorsw+Dxdus44pj6HFLYnR
-         34Dishy3visfR+P/UPjolfll5fp3Jj7epO0ZMNXLkUo4+HYQN7MojburR7v2d+b6jDUt
-         IM3g==
-X-Gm-Message-State: AOAM5329COQmuIORebOLHnSLFADpEccIBJdFZpKJ4t8E6vXn09blsuFt
-        ZOaCmMyxBX+N+nCr/bAOZOI=
-X-Google-Smtp-Source: ABdhPJzPQ03vkAOu8tmw3l1XdUBZ55aD3PqOv1MJlYavj27ZNUI11YU1DU52ijPUkQMTDSd+QF5MjQ==
-X-Received: by 2002:a63:3756:: with SMTP id g22mr5098342pgn.304.1589480654120;
-        Thu, 14 May 2020 11:24:14 -0700 (PDT)
-Received: from workstation-kernel-dev ([103.87.56.31])
-        by smtp.gmail.com with ESMTPSA id x185sm2863248pfx.155.2020.05.14.11.24.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 11:24:12 -0700 (PDT)
-Date:   Thu, 14 May 2020 23:54:06 +0530
-From:   Amol Grover <frextrite@gmail.com>
-To:     John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Armijn Hemel <armijn@tjaldur.nl>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: WARNING: suspicious RCU usage with PROVE_RCU_LIST=y
-Message-ID: <20200514182406.GA28808@workstation-kernel-dev>
-References: <20200406114134.GA1010@workstation-kernel-dev>
+        Thu, 14 May 2020 14:46:45 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49NL912MZTzlhTr0;
+        Thu, 14 May 2020 20:46:13 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49NL8x2tM0zljT02;
+        Thu, 14 May 2020 20:46:09 +0200 (CEST)
+Subject: Re: [PATCH v17 05/10] fs,landlock: Support filesystem access-control
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>
+Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200511192156.1618284-1-mic@digikod.net>
+ <20200511192156.1618284-6-mic@digikod.net>
+ <alpine.LRH.2.21.2005141335280.30052@namei.org>
+ <c159d845-6108-4b67-6527-405589fa5382@digikod.net>
+ <bcfa8f74-5bc9-b363-5372-b254ba2e88a7@schaufler-ca.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <2d781760-341e-2f7a-9586-558fcf41a097@digikod.net>
+Date:   Thu, 14 May 2020 20:46:08 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200406114134.GA1010@workstation-kernel-dev>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <bcfa8f74-5bc9-b363-5372-b254ba2e88a7@schaufler-ca.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Apr 06, 2020 at 05:11:34PM +0530, Amol Grover wrote:
-> Hello,
-> 
-> With respect to the patch https://lore.kernel.org/patchwork/patch/1202512/
-> I boot tested with CONFIG_PROVE_RCU_LIST=y and encountered a susppicious RCU
-> usage warning in "security/apparmor/include/lib.h". I thought of going forward
-> and fix it myself, however, while going through the stack trace and the actual
-> code, I found that the function (__lookupn_profile) is required to be called
-> with rcu_read_locK() but the splat proves it otherwise.
-> 
-> [   12.727582] =============================
-> [   12.727599] WARNING: suspicious RCU usage
-> [   12.727601] 5.5.4-stable #17 Tainted: G            E     
-> [   12.727602] -----------------------------
-> [   12.727604] security/apparmor/include/lib.h:191 RCU-list traversed in non-reader section!!
-> [   12.727605] 
->                other info that might help us debug this:
-> 
-> [   12.727606] 
->                rcu_scheduler_active = 2, debug_locks = 1 
-> [   12.727608] 2 locks held by apparmor_parser/506:
-> [   12.727609]  #0: ffff9f0687562490 (sb_writers#10){.+.+}, at: vfs_write+0x140/0x1a0
-> [   12.727614]  #1: ffff9f0687f09ca8 (&ns->lock){+.+.}, at: aa_replace_profiles+0x17a/0xdd0
-> [   12.727619] 
->                stack backtrace:
-> [   12.727621] CPU: 3 PID: 506 Comm: apparmor_parser Tainted: G            E     5.5.4-stable #17 
-> [   12.727622] Hardware name: Gigabyte Technology Co., Ltd. Z170-D3H/Z170-D3H-CF, BIOS F21 03/06/2017
-> [   12.727623] Call Trace:
-> [   12.727627]  dump_stack+0x8f/0xd0
-> [   12.727630]  __lookupn_profile+0x19c/0x1a0
-> [   12.727632]  ? aa_unpack+0x51b/0x580
-> [   12.727636]  __lookup_replace+0x34/0xc0
-> [   12.727640]  aa_replace_profiles+0x2a0/0xdd0
-> [   12.727649]  policy_update+0x106/0x370
-> [   12.727653]  profile_replace+0xa3/0x110
-> [   12.727657]  vfs_write+0xb9/0x1a0
-> [   12.727661]  ksys_write+0x68/0xe0
-> [   12.727666]  do_syscall_64+0x5c/0xe0
-> [   12.727669]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> [   12.727671] RIP: 0033:0x7ff83fec7f93
-> [   12.727673] Code: 75 05 48 83 c4 58 c3 e8 eb 41 ff ff 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 48 89 54 24 18
-> [   12.727674] RSP: 002b:00007ffcebb5c398 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> [   12.727676] RAX: ffffffffffffffda RBX: 0000000000007131 RCX: 00007ff83fec7f93
-> [   12.727677] RDX: 0000000000007131 RSI: 00005610fd804a40 RDI: 0000000000000006
-> [   12.727678] RBP: 00005610fd804a40 R08: 0000000000007131 R09: 00005610fd802f38
-> [   12.727680] R10: fffffffffffffa8a R11: 0000000000000246 R12: 0000000000000000
-> [   12.727681] R13: 0000000000000006 R14: 00005610fd7dd490 R15: 0000000000007131
-> 
-> Thanks
-> Amol
 
-Hello,
+On 14/05/2020 17:58, Casey Schaufler wrote:
+> On 5/14/2020 3:39 AM, Mickaël Salaün wrote:
+>> On 14/05/2020 05:37, James Morris wrote:
+>>> On Mon, 11 May 2020, Mickaël Salaün wrote:
+>>>
+>>>
+>>>> diff --git a/include/linux/fs.h b/include/linux/fs.h
+>>>> index 45cc10cdf6dd..2276642f8e05 100644
+>>>> --- a/include/linux/fs.h
+>>>> +++ b/include/linux/fs.h
+>>>> @@ -1517,6 +1517,11 @@ struct super_block {
+>>>>  	/* Pending fsnotify inode refs */
+>>>>  	atomic_long_t s_fsnotify_inode_refs;
+>>>>  
+>>>> +#ifdef CONFIG_SECURITY_LANDLOCK
+>>>> +	/* References to Landlock underlying objects */
+>>>> +	atomic_long_t s_landlock_inode_refs;
+>>>> +#endif
+>>>> +
+>>> This needs to be converted to the LSM API via superblock blob stacking.
+>>>
+>>> See Casey's old patch: 
+>>> https://lore.kernel.org/linux-security-module/20190829232935.7099-2-casey@schaufler-ca.com/
+>> s_landlock_inode_refs is quite similar to s_fsnotify_inode_refs, but I
+>> can do it once the superblock security blob patch is upstream. Is it a
+>> blocker for now? What is the current status of lbs_superblock?
+> 
+> As no currently stackable modules conflict over the superblock
+> (SELinux and Smack are the existing users) there has been no need
+> to move its management into the infrastructure. The active push for
+> stacking does not (yet) include everything needed for SELinux+Smack.
+> It includes what is needed for SELinux+AppArmor and Smack+AppArmor.
+> That does not include the superblock blob.
+> 
+> You can include a patch in the landlock set that provides infrastructure
+> management of the superblock blob. Feel free to glean it from my proposal.
 
-Just a friendly request to please go through the above _bug_.
-
-Thanks
-Amol
+OK, I'll add it to the next series.
