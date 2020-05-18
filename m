@@ -2,48 +2,48 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8781D7095
-	for <lists+linux-security-module@lfdr.de>; Mon, 18 May 2020 07:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7631D7089
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 May 2020 07:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726919AbgERFzR (ORCPT
+        id S1726658AbgERFzF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 18 May 2020 01:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        Mon, 18 May 2020 01:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726876AbgERFzH (ORCPT
+        with ESMTP id S1726180AbgERFzF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 18 May 2020 01:55:07 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1A6C05BD0E
-        for <linux-security-module@vger.kernel.org>; Sun, 17 May 2020 22:55:07 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id j21so4310492pgb.7
-        for <linux-security-module@vger.kernel.org>; Sun, 17 May 2020 22:55:07 -0700 (PDT)
+        Mon, 18 May 2020 01:55:05 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CAAC05BD0A
+        for <linux-security-module@vger.kernel.org>; Sun, 17 May 2020 22:55:04 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id f15so3786300plr.3
+        for <linux-security-module@vger.kernel.org>; Sun, 17 May 2020 22:55:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5Q1i6oRikNLeZklgvYSkpM1EVlw/CTM/4XamXlqlvKw=;
-        b=PmmADXwv4NMqpXwbOWvucRxbEW9uHuZYDIxA2TsDvioy03mFxkJduyC+qs3bYF9f9P
-         RvWd0e5uTz+r6q0dgzc030QSXDeIb2IuAljXkzaNUw6EKUgZTTBgPxbOHwMbML23cg7F
-         sB4mfaMCVqy2DoEsEuRAteyVH/1UNqIKq13s8=
+        bh=XqoAMRX7wxsSb3WRBfGTpx7Vdjfk1DDyWehVnZdqaPc=;
+        b=iPdCIuodVe5O6Y9ChtFIm2Hlao68lOyF+W/VygID/lC8nvKNzExgKWiDWDQYSfE6Ws
+         NXGXi57yli53j0OKI6sOLP5g4xEhQxBEicn/cVDGcrAVLtT6zS31eXoxEgtA9D9CkEDb
+         eTnreSfpze86cnK21joYmXHRajv47usyuyoV0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5Q1i6oRikNLeZklgvYSkpM1EVlw/CTM/4XamXlqlvKw=;
-        b=g4jjJiREW+2dzm/Ip8zms8tPj9XpPabj21r7S9F11tchK5oirc33NyweA50hsB9Vfv
-         EgLCrjen27fUaBU+exT58dEvbBz7kwHAzBjjOSWRmv7a0CFPiUVTaY+3gxQQ+NRTJSDX
-         EM8Xc9dAL5pUrM+zJF5rObIUMd00QP/HoWM82/hRYAh/VuWOpBaW2hcb5yqj2Rbl+arb
-         yeCQVAZUnxb/ZxTiWFzT5W8wHGWtfC7/F0akPGoxHcDqA+OU/JXedzqLkpMgsR3l3k1W
-         Y42dhphYcLybWivG+LcMCD6BO4Ta+eCYr8+9QKn5C1UiQzK5qWV2FOxty+Zd0FPKOqdP
-         stYw==
-X-Gm-Message-State: AOAM532nSwexjKvR+Q1gyIznN9nP4DdHiaE0kUFJwHSSgO1Mh1Wh2Caq
-        ONqIPlCWZPNdcaLNddZemAcaAQ==
-X-Google-Smtp-Source: ABdhPJwH6ud9V9wj2fVaRFrgEB2v7VP/Tc4l2Vb30aDG6ICq9TytrkA9z9Q8L1Shdn9DcbSlyL70DQ==
-X-Received: by 2002:a63:3c53:: with SMTP id i19mr13366855pgn.147.1589781306926;
-        Sun, 17 May 2020 22:55:06 -0700 (PDT)
+        bh=XqoAMRX7wxsSb3WRBfGTpx7Vdjfk1DDyWehVnZdqaPc=;
+        b=gKLW/WfngWeslB0XY2RHQTb0IVO8q/cQbUoxC59zv2HCzLqME8WTJfZdJY84KxFxbc
+         MOlFvion4E0OYYEV/240+MqEs58ioHqUNzFXBGtyk6ZLw0yHAPiBUU/pOU//apDRxigo
+         pj0V5YT5feXGoWjkDFdQx/vthsOS9MXwJ6NF3qycTSgIZz8/ougFip6ih0LwrDciPrdg
+         lSnvDSlwnbMGatVwL42ZJp2xnY5WLuu8tep/R6nnwXRubfCuoRBgvb8mdLGwECCVGlMB
+         CHuN6b+le4L+b6qn5LF8rnD9Zbw0zAOyZHDUsPuqxcRbO7q3y3dfKd7gQekKi+Z9E2ZD
+         AxVA==
+X-Gm-Message-State: AOAM531Rwml8hzY5FPgffGgtf+gcNFp2/EwYb3RBAQfWs34whA0lzuuQ
+        UBg/ANr1IgkHXinyV09ITiLsrQ==
+X-Google-Smtp-Source: ABdhPJzqFQpSdN+uRCCkWVuBHptM2WUFgXL9WcyP7kLck5t9EEsmWDqczZXvSl+XuOCzmITNCTsZrw==
+X-Received: by 2002:a17:90a:c695:: with SMTP id n21mr10496035pjt.30.1589781304301;
+        Sun, 17 May 2020 22:55:04 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t25sm4143998pgo.7.2020.05.17.22.55.03
+        by smtp.gmail.com with ESMTPSA id m18sm7591576pjl.14.2020.05.17.22.55.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 17 May 2020 22:55:03 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -56,9 +56,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-fsdevel@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] exec: Relocate S_ISREG() check
-Date:   Sun, 17 May 2020 22:54:55 -0700
-Message-Id: <20200518055457.12302-3-keescook@chromium.org>
+Subject: [PATCH 3/4] exec: Relocate path_noexec() check
+Date:   Sun, 17 May 2020 22:54:56 -0700
+Message-Id: <20200518055457.12302-4-keescook@chromium.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200518055457.12302-1-keescook@chromium.org>
 References: <20200518055457.12302-1-keescook@chromium.org>
@@ -68,19 +68,10 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The execve(2)/uselib(2) syscalls have always rejected non-regular
-files. Recently, it was noticed that a deadlock was introduced when trying
-to execute pipes, as the S_ISREG() test was happening too late. This was
-fixed in commit 73601ea5b7b1 ("fs/open.c: allow opening only regular files
-during execve()"), but it was added after inode_permission() had already
-run, which meant LSMs could see bogus attempts to execute non-regular
-files. Move the test earlier.
-
-Also include a comment with the redundant S_ISREG() checks at the end of
-execve(2)/uselib(2) to note that they are present to avoid any mistakes.
-
-Finally, instead of dereferencing the inode, use dcache for S_ISREG()
-test.
+The path_noexec() check, like the regular file check, was happening too
+late, letting LSMs see impossible execve()s. Check it earlier as well
+and collect the redundant fs/exec.c path_noexec() test under the same
+robustness comment as the S_ISREG() check.
 
 My notes on the call path, and related arguments, checks, etc:
 
@@ -92,81 +83,72 @@ do_open_execat()
             /* f_mode populated from open_flags in alloc_empty_file() */
             file = alloc_empty_file(open_flags, current_cred());
             do_open(nameidata, file, open_flags)
-		/* new location of FMODE_EXEC vs S_ISREG() test */
+                /* new location of FMODE_EXEC vs path_noexec() test */
                 may_open(path, acc_mode, open_flag)
                     inode_permission(inode, MAY_OPEN | acc_mode)
                         security_inode_permission(inode, acc_mode)
                 vfs_open(path, file)
                     do_dentry_open(file, path->dentry->d_inode, open)
-                        /* old location of FMODE_EXEC vs S_ISREG() test */
                         security_file_open(f)
                         open()
+    /* old location of path_noexec() test */
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- fs/exec.c  | 8 ++++++++
- fs/namei.c | 4 ++++
- fs/open.c  | 6 ------
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ fs/exec.c  | 6 ++----
+ fs/namei.c | 5 +++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/fs/exec.c b/fs/exec.c
-index 30735ce1dc0e..f0c80a8b9ccd 100644
+index f0c80a8b9ccd..a34093323aa1 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
-@@ -139,6 +139,10 @@ SYSCALL_DEFINE1(uselib, const char __user *, library)
- 	if (IS_ERR(file))
+@@ -140,13 +140,12 @@ SYSCALL_DEFINE1(uselib, const char __user *, library)
  		goto out;
  
-+	/*
-+	 * do_open() has already checked for this, but we can be extra
-+	 * cautious and check again at the very end too.
-+	 */
+ 	/*
+-	 * do_open() has already checked for this, but we can be extra
++	 * do_open() has already checked for these, but we can be extra
+ 	 * cautious and check again at the very end too.
+ 	 */
  	error = -EACCES;
  	if (!S_ISREG(file_inode(file)->i_mode))
  		goto exit;
-@@ -860,6 +864,10 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
- 	if (IS_ERR(file))
+-
+ 	if (path_noexec(&file->f_path))
+ 		goto exit;
+ 
+@@ -865,13 +864,12 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
  		goto out;
  
-+	/*
-+	 * do_open() has already checked for this, but we can be extra
-+	 * cautious and check again at the very end too.
-+	 */
+ 	/*
+-	 * do_open() has already checked for this, but we can be extra
++	 * do_open() has already checked for these, but we can be extra
+ 	 * cautious and check again at the very end too.
+ 	 */
  	err = -EACCES;
  	if (!S_ISREG(file_inode(file)->i_mode))
  		goto exit;
+-
+ 	if (path_noexec(&file->f_path))
+ 		goto exit;
+ 
 diff --git a/fs/namei.c b/fs/namei.c
-index a320371899cf..b9408aacaaa4 100644
+index b9408aacaaa4..6bb1b6624bad 100644
 --- a/fs/namei.c
 +++ b/fs/namei.c
-@@ -3212,6 +3212,10 @@ static int do_open(struct nameidata *nd,
+@@ -3212,8 +3212,9 @@ static int do_open(struct nameidata *nd,
  	if ((nd->flags & LOOKUP_DIRECTORY) && !d_can_lookup(nd->path.dentry))
  		return -ENOTDIR;
  
-+	/* Any file opened for execution has to be a regular file. */
-+	if ((file->f_flags & FMODE_EXEC) && !d_is_reg(nd->path.dentry))
-+		return -EACCES;
-+
- 	do_truncate = false;
- 	acc_mode = op->acc_mode;
- 	if (file->f_mode & FMODE_CREATED) {
-diff --git a/fs/open.c b/fs/open.c
-index 719b320ede52..bb16e4e3cd57 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -753,12 +753,6 @@ static int do_dentry_open(struct file *f,
- 		return 0;
- 	}
+-	/* Any file opened for execution has to be a regular file. */
+-	if ((file->f_flags & FMODE_EXEC) && !d_is_reg(nd->path.dentry))
++	/* Opening for execution requires a regular file on an exec mnt. */
++	if ((file->f_flags & FMODE_EXEC) && (!d_is_reg(nd->path.dentry) ||
++					     path_noexec(&nd->path)))
+ 		return -EACCES;
  
--	/* Any file opened for execve()/uselib() has to be a regular file. */
--	if (unlikely(f->f_flags & FMODE_EXEC && !S_ISREG(inode->i_mode))) {
--		error = -EACCES;
--		goto cleanup_file;
--	}
--
- 	if (f->f_mode & FMODE_WRITE && !special_file(inode->i_mode)) {
- 		error = get_write_access(inode);
- 		if (unlikely(error))
+ 	do_truncate = false;
 -- 
 2.20.1
 
