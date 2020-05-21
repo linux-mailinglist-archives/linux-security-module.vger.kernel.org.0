@@ -2,105 +2,115 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEC51DC57F
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 May 2020 05:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E08B1DCC79
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 May 2020 13:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727902AbgEUDNA (ORCPT
+        id S1729021AbgEUL51 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 20 May 2020 23:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727825AbgEUDNA (ORCPT
+        Thu, 21 May 2020 07:57:27 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:47184 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729002AbgEUL51 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 20 May 2020 23:13:00 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858BCC061A0E;
-        Wed, 20 May 2020 20:12:59 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id m12so4063094ljc.6;
-        Wed, 20 May 2020 20:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v4w0EkZBcNC3I1R8tbgMmRIZQyQCAyGziqLkw7YCEjc=;
-        b=gWnBYZb3onOFrzELuM1INXXs0nCvU8m+5CTkmIoEEz9dzfUaZz22FVdxFCFRJlwF9S
-         E7cLYf54O14YKC/OGnn8wcDpLT3KSunrgp7Uxn6j8FgU4N3vcLE3nQixkXDPx9yjC/OU
-         ZHgug6gAKpBPj+Wg+i3Ffj1GlARsGF6Jl+WLkittPFW7+/mJOWCBv9xSEzLdH0lauqgG
-         +pQ+2HE7r1vnJ6wYYJdO51yAWAZLS0IWNsW6NKouFCNkFNv2DD0nqFWAhI8zwg33JrqR
-         4fH+nCwyiUZ2XHVf9/Z2OkgI1NlOMBZrYS+OHpdvgCaMFyX3zsL/MYs5eWAidEN1qgk7
-         yYDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v4w0EkZBcNC3I1R8tbgMmRIZQyQCAyGziqLkw7YCEjc=;
-        b=nMQHG1PxmZjCOz+pI61gwsw7l404H2ho+pWzIWnpM/oJT1ayYLQFo5zReXpllx2JS8
-         hAhWHwCC8jUEWwJld2vdzJRd3tQL+iwmSER+7Z7BnsoR0OFTJ0NcjTIHRJahVJQdK0IK
-         8mQdTjS1kSI7jMnz99eCIILIzQdfA5RQMOX04a6Jw/vuV+5qDQqOWQdI2ScmaFXtFjUS
-         i+XhYghF7L9FkvMKulsiLjtyrcT5QtiBBEK2O8PQlQl3zj07nEXw8dIuijUL5wPVCiFV
-         R7cIsXskEttIGrfxZ6r1Co+uu+V6CxN/MAoy7AbM5xav6gT1N/+mdvj8yIN1zvycKyJJ
-         39nA==
-X-Gm-Message-State: AOAM530G6Hhf7M6ahyHLLZlKS6rtVA9Q8iycoygEjyyWht2JsqLjpcjk
-        ngFiAwK4sz1uZLpmHjw4UazI9MJau+Jouk6uBQo=
-X-Google-Smtp-Source: ABdhPJxLA2patLywIkWv3BWBro2GnAYR+4B7stOdBJVWlU/h2QfV+fKcWnOXSTMdOMdE+WFjadzsXFAFHXzQy0Ankj0=
-X-Received: by 2002:a05:651c:2de:: with SMTP id f30mr2024329ljo.450.1590030777589;
- Wed, 20 May 2020 20:12:57 -0700 (PDT)
+        Thu, 21 May 2020 07:57:27 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jbjpB-0002UN-NE; Thu, 21 May 2020 05:57:21 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jbjpA-00053F-6i; Thu, 21 May 2020 05:57:21 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>, Jann Horn <jannh@google.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Rob Landley <rob@landley.net>,
+        Bernd Edlinger <bernd.edlinger@hotmail.de>,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-security-module@vger.kernel.org,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andy Lutomirski <luto@amacapital.net>
+References: <87h7wujhmz.fsf@x220.int.ebiederm.org>
+        <87sgga6ze4.fsf@x220.int.ebiederm.org>
+        <87v9l4zyla.fsf_-_@x220.int.ebiederm.org>
+        <877dx822er.fsf_-_@x220.int.ebiederm.org>
+        <87d06ygssl.fsf@x220.int.ebiederm.org>
+        <202005201642.E1C6B4A457@keescook>
+Date:   Thu, 21 May 2020 06:53:36 -0500
+In-Reply-To: <202005201642.E1C6B4A457@keescook> (Kees Cook's message of "Wed,
+        20 May 2020 16:43:28 -0700")
+Message-ID: <875zcph5bz.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20200520125616.193765-1-kpsingh@chromium.org> <5f540fb8-93ec-aa6b-eb30-b3907f5791ff@schaufler-ca.com>
- <CAADnVQL_j3vGMTiQTfKWOZKhhuZxAQBQpU6W-BBeO+biTXrzSQ@mail.gmail.com> <alpine.LRH.2.21.2005211201410.2368@namei.org>
-In-Reply-To: <alpine.LRH.2.21.2005211201410.2368@namei.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 May 2020 20:12:46 -0700
-Message-ID: <CAADnVQLFhSTVQ_ArMaQdABD6A4goiw6wx-d_KyJUFJRfcSMC9A@mail.gmail.com>
-Subject: Re: [PATCH bpf] security: Fix hook iteration for secid_to_secctx
-To:     James Morris <jmorris@namei.org>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        KP Singh <kpsingh@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1jbjpA-00053F-6i;;;mid=<875zcph5bz.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+oiz5qlPjrQa2T3u47CbOQrej8gssp24I=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa05.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG autolearn=disabled
+        version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa05 0; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: ; sa05 0; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Kees Cook <keescook@chromium.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1127 ms - load_scoreonly_sql: 0.11 (0.0%),
+        signal_user_changed: 14 (1.2%), b_tie_ro: 12 (1.0%), parse: 1.66
+        (0.1%), extract_message_metadata: 19 (1.7%), get_uri_detail_list: 1.72
+        (0.2%), tests_pri_-1000: 8 (0.7%), tests_pri_-950: 1.81 (0.2%),
+        tests_pri_-900: 1.40 (0.1%), tests_pri_-90: 56 (5.0%), check_bayes: 54
+        (4.8%), b_tokenize: 9 (0.8%), b_tok_get_all: 7 (0.6%), b_comp_prob:
+        3.0 (0.3%), b_tok_touch_all: 31 (2.8%), b_finish: 1.17 (0.1%),
+        tests_pri_0: 1013 (89.8%), check_dkim_signature: 0.81 (0.1%),
+        check_dkim_adsp: 3.1 (0.3%), poll_dns_idle: 0.94 (0.1%), tests_pri_10:
+        2.0 (0.2%), tests_pri_500: 6 (0.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 0/8] exec: Control flow simplifications
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, May 20, 2020 at 7:02 PM James Morris <jmorris@namei.org> wrote:
->
-> On Wed, 20 May 2020, Alexei Starovoitov wrote:
->
-> > On Wed, May 20, 2020 at 8:15 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > >
-> > >
-> > > On 5/20/2020 5:56 AM, KP Singh wrote:
-> > > > From: KP Singh <kpsingh@google.com>
-> > > >
-> > > > secid_to_secctx is not stackable, and since the BPF LSM registers this
-> > > > hook by default, the call_int_hook logic is not suitable which
-> > > > "bails-on-fail" and casues issues when other LSMs register this hook and
-> > > > eventually breaks Audit.
-> > > >
-> > > > In order to fix this, directly iterate over the security hooks instead
-> > > > of using call_int_hook as suggested in:
-> > > >
-> > > > https: //lore.kernel.org/bpf/9d0eb6c6-803a-ff3a-5603-9ad6d9edfc00@schaufler-ca.com/#t
-> > > >
-> > > > Fixes: 98e828a0650f ("security: Refactor declaration of LSM hooks")
-> > > > Fixes: 625236ba3832 ("security: Fix the default value of secid_to_secctx hook"
-> > > > Reported-by: Alexei Starovoitov <ast@kernel.org>
-> > > > Signed-off-by: KP Singh <kpsingh@google.com>
-> > >
-> > > This looks fine.
-> >
-> > Tested. audit works now.
-> > I fixed missing ')' in the commit log
-> > and applied to bpf tree.
-> > It will be on the way to Linus tree soon.
->
-> Please add:
->
->
-> Acked-by: James Morris <jamorris@linux.microsoft.com>
+Kees Cook <keescook@chromium.org> writes:
 
-Thank you. Done.
+> On Wed, May 20, 2020 at 05:12:10PM -0500, Eric W. Biederman wrote:
+>> 
+>> I have pushed this out to:
+>> 
+>> git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git exec-next
+>> 
+>> I have collected up the acks and reviewed-by's, and fixed a couple of
+>> typos but that is it.
+>
+> Awesome!
+>
+>> If we need comment fixes or additional cleanups we can apply that on top
+>> of this series.   This way the code can sit in linux-next until the
+>> merge window opens.
+>> 
+>> Before I pushed this out I also tested this with Kees new test of
+>> binfmt_misc and did not find any problems.
+>
+> Did this mean to say binfmt_script? It'd be nice to get a binfmt_misc
+> test too, though.
+
+Yes.  Sorry.  I meant your binfmt_script test.
+
+Eric
