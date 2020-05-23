@@ -2,115 +2,66 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DF11DF4CD
-	for <lists+linux-security-module@lfdr.de>; Sat, 23 May 2020 06:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745B91DF9FA
+	for <lists+linux-security-module@lfdr.de>; Sat, 23 May 2020 20:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387416AbgEWE1y (ORCPT
+        id S1728798AbgEWSAp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 23 May 2020 00:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        Sat, 23 May 2020 14:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbgEWE1x (ORCPT
+        with ESMTP id S2388265AbgEWSAm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 23 May 2020 00:27:53 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B6CC061A0E;
-        Fri, 22 May 2020 21:27:52 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id q16so5222299plr.2;
-        Fri, 22 May 2020 21:27:52 -0700 (PDT)
+        Sat, 23 May 2020 14:00:42 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7017C02A19F
+        for <linux-security-module@vger.kernel.org>; Sat, 23 May 2020 11:00:39 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id 205so845966qkg.3
+        for <linux-security-module@vger.kernel.org>; Sat, 23 May 2020 11:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=C2oaJ/TeH9h/Ses/5flX0t0+2GPRsirL3Ix59rT/3uo=;
-        b=UhzY7J9+KCLeMXEB0x5/JYLsXcF2rLqnBYZsezjDmmaWeU2eXzSWAy7ExbfFinlt0h
-         oD+/yx2FqLMUx6oYlhZZ1nAx2okSnaBGN0taiOxwFduM44/t5yL1HcdNYJNPojgy84gK
-         tODEWzdeuhJi30XoaBQXn2nXsAVh7GLIA8aeEq98wBmbi31odtZj15cCH2VT3rnZvKcd
-         gJVl9dVYI+EN9c7Svpj145az+WB83+msRP9vP2ypIcYVcmOdoTjq80jUu0mkQlx4iDYD
-         JlssprdK89mPNrlVxz81XdkpvnHi+MqoPqYnP7WRkAPLA+mJg6SH3K8BQtlvRjI4RwuW
-         rvlA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=vhvRG4iP0p/cCM0/gHqK0xx0MaMNF3/azTtn5P0fCT1b4XLjGRAoR85FXgvwYtowP6
+         J1ev3dPiedOMtPyOzUYmKFEqsj6BkIi2lR8s0YRNLylOZ8MbeWQpwNTWDXPX57LUrKeO
+         FLL54WToKnc9WyFCTQNZdn8yjuqVF61dsdwJrbIWn1f8+mXNgwQXd1Xox425XdFJLCTr
+         UNYtD5Mkr7J8HytQpl125rrGiBWdOVTtdeDic18s2v1Ex5H4EMrCDseWe8z8QJUA2DPl
+         pMcmWf9nM5lni1dYRbVMyTKtLHSFCzrJM5oRvB7Hp9K31CMWsqtaG47ZQbJG6ZEre6uU
+         kwNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C2oaJ/TeH9h/Ses/5flX0t0+2GPRsirL3Ix59rT/3uo=;
-        b=pBLJcHycROc4kxIOtgBnyhBLx8ZAS+mupeaHQ7KGeiNQUgWJvA4gNTCiRcolX4/mRH
-         YuLHzKRR/a13F5XmUrz0dfYJ49a/Lbet/ov+RyfkREDeVVXiC7k+5yKngX17TfI1Qy9Q
-         m7aFo9P45FBkGO7YoputSdnTwsHjeHJ7+8ulXE7R6CUMot6a8iqzeR3DnXFgge0nIolv
-         7dGdpkKc9HxBoOyk0fBHp4SPF92uFyOj6alibcTXTNnUUiOHSy22QIr/2YKcG/iOWmEB
-         pRsX3srTGFbdjBnTbaQdRiAdB68UhxPP2mNMpFCUsvutAQ8iqBhcAXVdlO/oS7CXGAt7
-         8WVw==
-X-Gm-Message-State: AOAM530MZ2kixJwtGfT2OeKYTg3yibwi83HEUC7d00IJiUzNab08IQTA
-        nGzqSX8jLCFtygLZ6fXEBWsizXG7Q0eG1A==
-X-Google-Smtp-Source: ABdhPJzGiSZlqt61UixW5UamCs2yESeKusCKau2NIDepW0lVjbXdkbJjigi7aqwO/6tCOiqfG9A5+g==
-X-Received: by 2002:a17:902:848a:: with SMTP id c10mr17901055plo.124.1590208071913;
-        Fri, 22 May 2020 21:27:51 -0700 (PDT)
-Received: from gmail.com ([2601:600:817f:a132:df3e:521d:99d5:710d])
-        by smtp.gmail.com with ESMTPSA id t21sm7300922pgu.39.2020.05.22.21.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 21:27:51 -0700 (PDT)
-Date:   Fri, 22 May 2020 21:27:49 -0700
-From:   Andrei Vagin <avagin@gmail.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Adrian Reber <areber@redhat.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Nicolas Viennot <Nicolas.Viennot@twosigma.com>,
-        =?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>,
-        Kamil Yurtsever <kyurtsever@google.com>,
-        Dirk Petersen <dipeit@gmail.com>,
-        Christine Flood <chf@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Radostin Stoyanov <rstoyanov1@gmail.com>,
-        Cyrill Gorcunov <gorcunov@openvz.org>,
-        Serge Hallyn <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Aaron Goidel <acgoide@tycho.nsa.gov>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH] capabilities: Introduce CAP_RESTORE
-Message-ID: <20200523042749.GA19115@gmail.com>
-References: <20200522055350.806609-1-areber@redhat.com>
- <dc86dffb-c7f8-15bb-db4e-be135da650cc@schaufler-ca.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=cM7chS4NxZwjYlcADd5Kb2e8OttlWEWg1uLFD7t10arWnYFU/KlQWmi0Sh900KSCEf
+         PaJtz0UjuQBFxSzhybjNtoCawD/mi4KrALkqLfiGjvuMa90tdKXPqxF0pQB5ScV+Z/yr
+         6JjMB6NGQujcre4jXrC3K8lTB5RUIVCpJhOgIR8y6/hRibqWgH0ofh+h8iHmkwad2Ylv
+         TGMZLjL2pbyETfhDdYymom5HE7M88BxMDv7fKjau0UoUfTE91LJ/91FQT1Q3A+XPxZ4l
+         SbPKMErx1g0SSuihd1uWcny4Gy0nvvOG1OIPX/U4Ig2+faFNK3R1pUqklcmPuRjr24jU
+         TAfw==
+X-Gm-Message-State: AOAM530094jsygl2ic8L9pcWOG+wlQ/Kn9d8vmwMxA+TU6DW7GKtSqnn
+        AmqCabehSDrKvEGsInu43OMXcQ3ZOG9tqNF+3UJbPHdv
+X-Google-Smtp-Source: ABdhPJw4JSLl4s8hKmdikxPHOZTjp7LuShJQWo5DKJXfhdyHNpRWrWLXX1iWw/azZwGF2Nz0kU5bTrWvyq5YmK6naS0=
+X-Received: by 2002:ac8:1e16:: with SMTP id n22mr21502226qtl.78.1590256838401;
+ Sat, 23 May 2020 11:00:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <dc86dffb-c7f8-15bb-db4e-be135da650cc@schaufler-ca.com>
+Received: by 2002:a37:9fd3:0:0:0:0:0 with HTTP; Sat, 23 May 2020 11:00:37
+ -0700 (PDT)
+Reply-To: mrs.chantala2055@gmail.com
+From:   mrs chantal <mrs.chantalas1@gmail.com>
+Date:   Sat, 23 May 2020 18:00:37 +0000
+Message-ID: <CAMdkyyDY_0O7YgysHCjgRTJ=8-B7XurK7o1razRHDVOjgr2V2g@mail.gmail.com>
+Subject: jjCompliment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, May 22, 2020 at 09:40:37AM -0700, Casey Schaufler wrote:
-> On 5/21/2020 10:53 PM, Adrian Reber wrote:
-> > There are probably a few more things guarded by CAP_SYS_ADMIN required
-> > to run checkpoint/restore as non-root,
-> 
-> If you need CAP_SYS_ADMIN anyway you're not gaining anything by
-> separating out CAP_RESTORE.
-> 
-> >  but by applying this patch I can
-> > already checkpoint and restore processes as non-root. As there are
-> > already multiple workarounds I would prefer to do it correctly in the
-> > kernel to avoid that CRIU users are starting to invent more workarounds.
-> 
-> You've presented a couple of really inappropriate implementations
-> that would qualify as workarounds. But the other two are completely
-> appropriate within the system security policy. They don't "get around"
-> the problem, they use existing mechanisms as they are intended.
-> 
-
-With CAP_CHECKPOINT_RESTORE, we will need to use the same mechanisms.
-
-The problem is that CAP_SYS_ADMIN is too wide. If a process has
-CAP_SYS_ADMIN, it can do a lot of things and  the operation of forking a
-process with a specified pid isn't the most dangerous one in this case.
-Offten security policies don't allow to grant CAP_SYS_ADMIN to any
-third-party tools even in non-root user namespaces.
-
+     Compliment of the day to you. I am Mrs.CHANTAL I am sending this brief
+    letter to solicit your partnership to transfer $13.5 Million US
+    Dollars.I shall send you more information and procedures when I receive
+    positive response From you. Please send me a message in My private
+    email address is ( mrschantal066@gmail.com  )
+    Best Regards
+    MrS.Chantal
