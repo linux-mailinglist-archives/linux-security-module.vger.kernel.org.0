@@ -2,189 +2,231 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DEE1E3037
-	for <lists+linux-security-module@lfdr.de>; Tue, 26 May 2020 22:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE761E307A
+	for <lists+linux-security-module@lfdr.de>; Tue, 26 May 2020 22:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390624AbgEZUor (ORCPT
+        id S2391460AbgEZUyF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 26 May 2020 16:44:47 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:52886 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389486AbgEZUor (ORCPT
+        Tue, 26 May 2020 16:54:05 -0400
+Received: from smtp-8faa.mail.infomaniak.ch ([83.166.143.170]:46445 "EHLO
+        smtp-8faa.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391450AbgEZUyC (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 26 May 2020 16:44:47 -0400
-Received: by linux.microsoft.com (Postfix, from userid 1029)
-        id 2C25420B717B; Tue, 26 May 2020 13:44:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2C25420B717B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1590525885;
-        bh=bFXC2Zh5D+I68ggrZKLkI2DpVS0uyoI3IfAdnK2YDA0=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=olk2fkRfYTmHWVnOEJgWmvdb9kqKsOIxBirUKfxKOh2x/rNdAuN7objslotuhcg/F
-         tu+WrrTYUk1xit3OKtRtTRmj1/csitNlv+beFg1IIadF1sNipjQK5uyqqQ5mKp/18c
-         8Wiup0o53J2BhaLhCbWA24HTXQBBu3J6qLV3cPcI=
-Received: from localhost (localhost [127.0.0.1])
-        by linux.microsoft.com (Postfix) with ESMTP id 284A430705CE;
-        Tue, 26 May 2020 13:44:45 -0700 (PDT)
-Date:   Tue, 26 May 2020 13:44:45 -0700 (PDT)
-From:   Jaskaran Singh Khurana <jaskarankhurana@linux.microsoft.com>
-X-X-Sender: jaskarankhurana@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     Deven Bowers <deven.desai@linux.microsoft.com>, agk@redhat.com,
-        axboe@kernel.dk, snitzer@redhat.com, jmorris@namei.org,
-        serge@hallyn.com, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, jannh@google.com,
-        tyhicks@linux.microsoft.com, pasha.tatashin@soleen.com,
-        sashal@kernel.org, nramas@linux.microsoft.com,
-        mdsakib@linux.microsoft.com, linux-kernel@vger.kernel.org,
-        corbet@lwn.net
-Subject: Re: [RFC PATCH v3 00/12] Integrity Policy Enforcement LSM (IPE)
-In-Reply-To: <alpine.LRH.2.21.2005161420490.8455@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
-Message-ID: <alpine.LRH.2.21.2005261343540.83057@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
-References: <20200415162550.2324-1-deven.desai@linux.microsoft.com> <b07ac7e1-7cf5-92c9-81d0-64174c3d5024@digikod.net> <0001755a-6b2a-b13b-960c-eb0b065c8e3c@linux.microsoft.com> <8ba7b15f-de91-40f7-fc95-115228345fce@linux.microsoft.com>
- <44fb36ae-959d-4ff7-ed1f-ccfc2e292232@digikod.net> <alpine.LRH.2.21.2005161420490.8455@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Tue, 26 May 2020 16:54:02 -0400
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49WmQK1CNTzlhWZn;
+        Tue, 26 May 2020 22:53:29 +0200 (CEST)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49WmQH0DMHzlhLCS;
+        Tue, 26 May 2020 22:53:26 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v18 00/12] Landlock LSM
+Date:   Tue, 26 May 2020 22:53:10 +0200
+Message-Id: <20200526205322.23465-1-mic@digikod.net>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="656392-1229694672-1590525885=:83057"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi,
 
---656392-1229694672-1590525885=:83057
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 8BIT
+This new patch series mainly extend the LSM framework and fixes some
+issues:
+* Replace landlock_release_inodes() with a new LSM hook
+  security_sb_delete() which is called at superblock shutdown (before
+  unmount).
+* Replace struct super_block->s_landlock_inode_refs with the LSM
+  infrastructure management of the superblock: Casey Schaufler's work on
+  LSM stacking.
 
-Hello Mickael,
 
-Could you please share your thoughts for the below proposal.
+The SLOC count is 1304 for security/landlock/ and 1733 for
+tools/testing/selftest/landlock/ .  Test coverage for security/landlock/
+is 93.6% of lines.  The code not covered only deals with internal kernel
+errors (e.g. memory allocation) and race conditions.
 
-Regards,
-JK
+The compiled documentation is available here:
+https://landlock.io/linux-doc/landlock-v18/security/landlock/index.html
 
-On Sat, 16 May 2020, Jaskaran Singh Khurana wrote:
+This series can be applied on top of v5.7-rc7.  This can be tested with
+CONFIG_SECURITY_LANDLOCK and CONFIG_SAMPLE_LANDLOCK.  This patch series
+can be found in a Git repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v18
+I would really appreciate constructive comments on this patch series.
 
->
-> Hello Mickael,
->
-> On Thu, 14 May 2020, Mickaël Salaün wrote:
->
->>
->>  On 12/05/2020 22:46, Deven Bowers wrote:
->>> 
->>>
->>>  On 5/11/2020 11:03 AM, Deven Bowers wrote:
->>>> 
->>>>
->>>>  On 5/10/2020 2:28 AM, Mickaël Salaün wrote:
->>>>
->>>>  [...snip]
->>>> 
->>>>>>
->>>>>>  Additionally, rules are evaluated top-to-bottom. As a result, any
->>>>>>  revocation rules, or denies should be placed early in the file to
->>>>>>  ensure
->>>>>>  that these rules are evaluated before a rule with "action=ALLOW" is
->>>>>>  hit.
->>>>>>
->>>>>>  IPE policy is designed to be forward compatible and backwards
->>>>>>  compatible,
->>>>>>  thus any failure to parse a rule will result in the line being
->>>>>>  ignored,
->>>>>>  and a warning being emitted. If backwards compatibility is not
->>>>>>  required,
->>>>>>  the kernel commandline parameter and sysctl, ipe.strict_parse can be
->>>>>>  enabled, which will cause these warnings to be fatal.
->>>>>
->>>>>  Ignoring unknown command may lead to inconsistent beaviors. To achieve
->>>>>  forward compatibility, I think it would be better to never ignore
->>>>>  unknown rule but to give a way to userspace to known what is the
->>>>>  current
->>>>>  kernel ABI. This could be done with a securityfs file listing the
->>>>>  current policy grammar.
->>>>> 
->>>>
->>>>  That's a fair point. From a manual perspective, I think this is fine.
->>>>  A human-user can interpret a grammar successfully on their own when new
->>>>  syntax is introduced.
->>>>
->>>>   From a producing API perspective, I'd have to think about it a bit
->>>>  more. Ideally, the grammar would be structured in such a way that the
->>>>  userland
->>>>  interpreter of this grammar would not have to be updated once new syntax
->>>>  is introduced, avoiding the need to update the userland binary. To do so
->>>>  generically ("op=%s") is easy, but doesn't necessarily convey sufficient
->>>>  information (what happens when a new "op" token is introduced?). I think
->>>>  this may come down to regular expression representations of valid values
->>>>  for these tokens, which worries me as regular expressions are incredibly
->>>>  error-prone[1].
->>>>
->>>>  I'll see what I can come up with regarding this.
->>>
->>>  I have not found a way that I like to expose some kind of grammar
->>>  through securityfs that can be understood by usermode to parse the
->>>  policy. Here's what I propose as a compromise:
->>>
->>>      1. I remove the unknown command behavior. This address your
->>>  first point about inconsistent behaviors, and effectively removes the
->>>  strict_parse sysctl (as it is always enabled).
->>>
->>>      2. I introduce a versioning system for the properties
->>>  themselves. The valid set of properties and their versions
->>>  can be found in securityfs, under say, ipe/config in a key=value
->>>  format where `key` indicates the understood token, and `value`
->>>  indicates their current version. For example:
->>>
->>>      $ cat $SECURITYFS/ipe/config
->>>      op=1
->>>      action=1
->>>      policy_name=1
->>>      policy_version=1
->>>      dmverity_signature=1
->>>      dmverity_roothash=1
->>>      boot_verified=1
->>
->>  The name ipe/config sounds like a file to configure IPE. Maybe something
->>  like ipe/config_abi or ipe/config_grammar?
->> 
->>>
->>>  if new syntax is introduced, the version number is increased.
->>>
->>>      3. The format of those versions are documented as part of
->>>  the admin-guide around IPE. If user-mode at that point wants to rip
->>>  the documentation formats and correlate with the versioning, then
->>>  it fulfills the same functionality as above, with out the complexity
->>>  around exposing a parsing grammar and interpreting it on-the-fly.
->>>  Many of these are unlikely to move past version 1, however.
->>>
->>>  Thoughts?
->>> 
->>
->>  That seems reasonable.
->> 
->
-> There is a use case for not having strict parsing in the cloud world where 
-> there are multiple versions of OS deployed across a large number of systems 
-> say 100,000 nodes. An OS update can take weeks to complete across all the 
-> nodes, and we end up having a heterogeneous mix of OS versions.
->
-> Without non-strict parsing, to fix an issue in a policy we will need to 
-> update the various versions of the policy (one each for all OS versions
-> which have different IPE policy schema). We will lose the agility we need to 
-> fix and deploy something urgently in the policy, the nodes might be failing 
-> some critical workloads meanwhile. All the various versions of the policy 
-> will need to be changed and production signed then deployed etc. Further some 
-> versions might introduce newer issues and we will need to see what all 
-> versions of the policy have that bug.
->
-> I propose keeping the non-strict option as well to cater to this use case. 
-> Let me know your thoughts on this.
->
-> Regards,
-> JK
->
---656392-1229694672-1590525885=:83057--
+
+# Landlock LSM
+
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [2], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empowers any process, including unprivileged
+ones, to securely restrict themselves.
+
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
+
+
+Previous version:
+https://lore.kernel.org/lkml/20200511192156.1618284-1-mic@digikod.net/
+
+
+[1] https://lore.kernel.org/lkml/e07fe473-1801-01cc-12ae-b3167f95250e@digikod.net/
+[2] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+
+
+Casey Schaufler (1):
+  LSM: Infrastructure management of the superblock
+
+MickaÃ«l SalaÃ¼n (11):
+  landlock: Add object management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,security: Add sb_delete hook
+  landlock: Support filesystem access-control
+  landlock: Add syscall implementation
+  arch: Wire up landlock() syscall
+  selftests/landlock: Add initial tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
+
+ Documentation/security/index.rst              |    1 +
+ Documentation/security/landlock/index.rst     |   18 +
+ Documentation/security/landlock/kernel.rst    |   69 +
+ Documentation/security/landlock/user.rst      |  268 +++
+ MAINTAINERS                                   |   12 +
+ arch/Kconfig                                  |    7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    1 +
+ arch/arm/tools/syscall.tbl                    |    1 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    1 +
+ arch/um/Kconfig                               |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    1 +
+ fs/super.c                                    |    1 +
+ include/linux/lsm_hook_defs.h                 |    1 +
+ include/linux/lsm_hooks.h                     |    3 +
+ include/linux/security.h                      |    4 +
+ include/linux/syscalls.h                      |    3 +
+ include/uapi/asm-generic/unistd.h             |    4 +-
+ include/uapi/linux/landlock.h                 |  302 +++
+ kernel/sys_ni.c                               |    3 +
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 +
+ samples/landlock/.gitignore                   |    1 +
+ samples/landlock/Makefile                     |   15 +
+ samples/landlock/sandboxer.c                  |  228 +++
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    2 +
+ security/landlock/Kconfig                     |   18 +
+ security/landlock/Makefile                    |    4 +
+ security/landlock/common.h                    |   20 +
+ security/landlock/cred.c                      |   46 +
+ security/landlock/cred.h                      |   58 +
+ security/landlock/fs.c                        |  610 ++++++
+ security/landlock/fs.h                        |   60 +
+ security/landlock/object.c                    |   66 +
+ security/landlock/object.h                    |   91 +
+ security/landlock/ptrace.c                    |  120 ++
+ security/landlock/ptrace.h                    |   14 +
+ security/landlock/ruleset.c                   |  342 ++++
+ security/landlock/ruleset.h                   |  157 ++
+ security/landlock/setup.c                     |   40 +
+ security/landlock/setup.h                     |   18 +
+ security/landlock/syscall.c                   |  532 +++++
+ security/security.c                           |   51 +-
+ security/selinux/hooks.c                      |   58 +-
+ security/selinux/include/objsec.h             |    6 +
+ security/selinux/ss/services.c                |    3 +-
+ security/smack/smack.h                        |    6 +
+ security/smack/smack_lsm.c                    |   35 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/landlock/.gitignore   |    2 +
+ tools/testing/selftests/landlock/Makefile     |   29 +
+ tools/testing/selftests/landlock/base_test.c  |  163 ++
+ tools/testing/selftests/landlock/common.h     |  108 +
+ tools/testing/selftests/landlock/config       |    5 +
+ tools/testing/selftests/landlock/fs_test.c    | 1730 +++++++++++++++++
+ .../testing/selftests/landlock/ptrace_test.c  |  293 +++
+ tools/testing/selftests/landlock/true.c       |    5 +
+ 71 files changed, 5596 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/security/landlock/index.rst
+ create mode 100644 Documentation/security/landlock/kernel.rst
+ create mode 100644 Documentation/security/landlock/user.rst
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/common.h
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscall.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/base_test.c
+ create mode 100644 tools/testing/selftests/landlock/common.h
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/fs_test.c
+ create mode 100644 tools/testing/selftests/landlock/ptrace_test.c
+ create mode 100644 tools/testing/selftests/landlock/true.c
+
+-- 
+2.26.2
+
