@@ -2,49 +2,145 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA751E69FA
-	for <lists+linux-security-module@lfdr.de>; Thu, 28 May 2020 21:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F8F1E6A22
+	for <lists+linux-security-module@lfdr.de>; Thu, 28 May 2020 21:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406056AbgE1TD0 (ORCPT
+        id S2406222AbgE1TKa (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 28 May 2020 15:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        Thu, 28 May 2020 15:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405981AbgE1TD0 (ORCPT
+        with ESMTP id S2406096AbgE1TK3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 28 May 2020 15:03:26 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A990C08C5C6;
-        Thu, 28 May 2020 12:03:25 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.93 #3 (Red Hat Linux))
-        id 1jeNoD-00H4Wk-Ax; Thu, 28 May 2020 19:03:17 +0000
-Date:   Thu, 28 May 2020 20:03:17 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH 14/14] fs: don't change the address limit for ->read_iter
- in __kernel_read
-Message-ID: <20200528190317.GN23230@ZenIV.linux.org.uk>
-References: <20200528054043.621510-1-hch@lst.de>
- <20200528054043.621510-15-hch@lst.de>
+        Thu, 28 May 2020 15:10:29 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3101C08C5C6
+        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:10:28 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id be9so985483edb.2
+        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xmGmOOl5gLGli7OvUQS4McOy7NB6xPaIApbCKtCeXYk=;
+        b=f8/b3x4fYWIUj58vxbwcT1zj5CSOCsV5h++6plCNXoHkOlz5+HIWFBcJy1hj9Iocmy
+         Q6KvNGUaf7Ktx8T3H3MKSb0yiSTTXPOtIV4i3w5okfxXhRQn9jfimGy2D5TlehUTq6Ly
+         3gZ8euFDfy2U4nl63gvxc9icwAuOlc7jkm8dM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xmGmOOl5gLGli7OvUQS4McOy7NB6xPaIApbCKtCeXYk=;
+        b=Ubx076oVpBYyjZIrsqMqOgGfS+p2dDZItshhOhqwlqbnmUWcyK7pVjg+lnBpvKfRIa
+         Qz9Y46DOZHn6iYNKrJC9XNssqaBNIGCffo8tbdD+pHIYuxeOuhBA5u+x1XGHZgf3Erg/
+         w9TfgWtizlkxpnpMe3VieEtwr2BbLMkQJLwBH/8Y0aWzTweJAmHEOVZQySY2ouS9Qre7
+         Jbz3qILTptUgOIxTBmAoUUWMvK7E1eulbJbfJMbEPX4jUU1V2jrbe22iY1mPby49+TdC
+         zGY9HYIaoYXIIrnzHrLWW4Zlkj3lA9RNP19oPW8uVY8F0QqyPfi+8W+A8RqNOLX+ZzAp
+         qo4Q==
+X-Gm-Message-State: AOAM5326h51YID1xuIs/nnmUItdlJUu1GM1iaABGhbYr+LNK3uT+jPZq
+        tMJEY0ZQyN8R3HYCDW7Zd3m1/6XAEpw=
+X-Google-Smtp-Source: ABdhPJxKF6GPFEVgxmLlcZNP69nnBJ2G8E1VsxNtGrCedm+I7z2ShycovzNwyKtSW4irFtbLD2xDfQ==
+X-Received: by 2002:a05:6402:1481:: with SMTP id e1mr3034373edv.113.1590693027074;
+        Thu, 28 May 2020 12:10:27 -0700 (PDT)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
+        by smtp.gmail.com with ESMTPSA id s13sm2454308ejv.29.2020.05.28.12.10.26
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 May 2020 12:10:26 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id h21so1151301ejq.5
+        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:10:26 -0700 (PDT)
+X-Received: by 2002:ac2:5a4c:: with SMTP id r12mr2405859lfn.10.1590692668401;
+ Thu, 28 May 2020 12:04:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200528054043.621510-15-hch@lst.de>
+References: <87h7wujhmz.fsf@x220.int.ebiederm.org> <87sgga6ze4.fsf@x220.int.ebiederm.org>
+ <87v9l4zyla.fsf_-_@x220.int.ebiederm.org> <877dx822er.fsf_-_@x220.int.ebiederm.org>
+ <87k10wysqz.fsf_-_@x220.int.ebiederm.org> <87eer4ysm5.fsf_-_@x220.int.ebiederm.org>
+In-Reply-To: <87eer4ysm5.fsf_-_@x220.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 28 May 2020 12:04:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgQAgKnEX3V_vep3Ah392tjiekDspnu+y6kkx2oFZBV=g@mail.gmail.com>
+Message-ID: <CAHk-=wgQAgKnEX3V_vep3Ah392tjiekDspnu+y6kkx2oFZBV=g@mail.gmail.com>
+Subject: Re: [PATCH 01/11] exec: Reduce bprm->per_clear to a single bit
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Rob Landley <rob@landley.net>,
+        Bernd Edlinger <bernd.edlinger@hotmail.de>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andy Lutomirski <luto@amacapital.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, May 28, 2020 at 07:40:43AM +0200, Christoph Hellwig wrote:
-> If we read to a file that implements ->read_iter there is no need
-> to change the address limit if we send a kvec down.  Implement that
-> case, and prefer it over using plain ->read with a changed address
-> limit if available.
+On Thu, May 28, 2020 at 8:45 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+> -       me->personality &= ~bprm->per_clear;
+> +       if (bprm->per_clear)
+> +               me->personality &= ~PER_CLEAR_ON_SETID;\
 
-Ditto re never converting something that bails out on uaccess_kernel()
-in ->read() over to ->read_iter().
+My only problem with this patch is that I find that 'per_clear' thing
+to be a horrid horrid name,
+
+Obviously the name didn't change, but the use *did* change, and as
+such the name got worse. It used do do things like
+
+               bprm->per_clear |= PER_CLEAR_ON_SETID;
+
+and now it does
+
+               bprm->per_clear = 1;
+
+and honestly, there's a lot more semantic context in the old code that
+is now missing entirely. At least you used to be able to grep for
+PER_CLEAR_ON_SETID and it would make you go "Ahh.."
+
+Put another way, I can kind of see what a line like
+
+               bprm->per_clear |= PER_CLEAR_ON_SETID;
+
+does, simply because now it kind of hints at what is up.
+
+But what the heck does
+
+               bprm->per_clear = 1;
+
+mean? Nothing. You have to really know the code. "per_clear" makes no
+sense, and now it's a short line that doesn't need to be that short.
+
+I think "bprm->clear_personality_bits" would maybe describe what the
+_effect_ of that field is. It doesn't explain _why_, but it at least
+explains "what" much better than "per_clear", which just makes me go
+"per what?".
+
+Alternatively, "bprm->creds_changed" would describe what the bit
+conceptually is about, and code like
+
+          if (bprm->creds_changed)
+                  me->personality &= ~PER_CLEAR_ON_SETID;\
+
+looks sensible to me and kind of matches the comment about the
+PER_CLEAR_ON_SETID bits are.
+
+So I think that using a bitfield is fine, but I'd really like it to be
+named something much better.
+
+Plus changing the name means that you can't have any code that now
+mistakenly uses the new semantics but expects the old bitmask.
+Generally when something changes semantics that radically, you want to
+make sure the type changes sufficiently that any out-of-tree patch
+that hasn't been merged yet will get a clear warning or error if
+people don't realize.
+
+Please?
+
+           Linus
