@@ -2,108 +2,183 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4537F1E56BC
-	for <lists+linux-security-module@lfdr.de>; Thu, 28 May 2020 07:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A2A1E5C5F
+	for <lists+linux-security-module@lfdr.de>; Thu, 28 May 2020 11:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728143AbgE1Flc (ORCPT
+        id S1728449AbgE1JtI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 28 May 2020 01:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727105AbgE1Fl1 (ORCPT
+        Thu, 28 May 2020 05:49:08 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:46125 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728300AbgE1JtI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 28 May 2020 01:41:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17EFC05BD1E;
-        Wed, 27 May 2020 22:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=5X3G8p2gpeq1mWhpOrbRnLoYssjgaGtuSsqN+ape3Fw=; b=taesqRkSyAIu/2pRL+KOySjFhB
-        TtDF0spTbSsTcQcYEPzf2Xmk+u9SrWaeiUz7FKdnwI3eDaBkdhFATqSDy0i/tUSaWJbuVXaA81uFB
-        L5LMUM5VHRtiu+OmIVREgnc/f9BqnApHYE8W/M6wh296l/FsUV3pq5V7nkguM+uzMBgkvJ4+SDK4e
-        FX/KWuchAoMHUAePKpzWoNFOkusxGaycL3QI4w3QBVf4nAk5u7qZ4C58iQzb0UfuU4I5/aMKJ4TTu
-        qVqApMY1QvyibhhK6mE2aApD4C36fsXbEQbqFryR7NghXc/f2aowUTV0GCuZjZtOAWYlW02c+hGSK
-        q7BiKACg==;
-Received: from p4fdb1ad2.dip0.t-ipconnect.de ([79.219.26.210] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jeBIB-0002St-VR; Thu, 28 May 2020 05:41:24 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: [PATCH 14/14] fs: don't change the address limit for ->read_iter in __kernel_read
-Date:   Thu, 28 May 2020 07:40:43 +0200
-Message-Id: <20200528054043.621510-15-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200528054043.621510-1-hch@lst.de>
-References: <20200528054043.621510-1-hch@lst.de>
+        Thu, 28 May 2020 05:49:08 -0400
+Received: from ip5f5af183.dynamic.kabel-deutschland.de ([95.90.241.131] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jeF9V-0002NQ-9d; Thu, 28 May 2020 09:48:41 +0000
+Date:   Thu, 28 May 2020 11:48:39 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Nicolas Viennot <Nicolas.Viennot@twosigma.com>
+Cc:     Adrian Reber <areber@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Pavel Emelyanov <ovzxemul@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        =?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>,
+        Kamil Yurtsever <kyurtsever@google.com>,
+        Dirk Petersen <dipeit@gmail.com>,
+        Christine Flood <chf@redhat.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Radostin Stoyanov <rstoyanov1@gmail.com>,
+        Cyrill Gorcunov <gorcunov@openvz.org>,
+        Serge Hallyn <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        Eric Paris <eparis@parisplace.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH] capabilities: Introduce CAP_RESTORE
+Message-ID: <20200528094839.gw7aqd3xs3kix273@wittgenstein>
+References: <20200522055350.806609-1-areber@redhat.com>
+ <dc86dffb-c7f8-15bb-db4e-be135da650cc@schaufler-ca.com>
+ <20200525080541.GF104922@dcbz.redhat.com>
+ <877dwybxvi.fsf@x220.int.ebiederm.org>
+ <20200527141403.GC250149@dcbz.redhat.com>
+ <20200527152955.jbbipgb6icb4nwgv@wittgenstein>
+ <d5ecde0c94014a4fad090e44377e9852@EXMBDFT11.ad.twosigma.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d5ecde0c94014a4fad090e44377e9852@EXMBDFT11.ad.twosigma.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-If we read to a file that implements ->read_iter there is no need
-to change the address limit if we send a kvec down.  Implement that
-case, and prefer it over using plain ->read with a changed address
-limit if available.
+On Wed, May 27, 2020 at 06:05:55PM +0000, Nicolas Viennot wrote:
+> > > Also in this thread Kamil mentioned that they also need calling prctl 
+> > > with PR_SET_MM during restore in their production setup.
+> >
+> > We're using that as well but it really feels like this:
+> >
+> >	prctl_map = (struct prctl_mm_map){
+> >	    .start_code = start_code,
+> >	    .end_code = end_code,
+> >	    .start_stack = start_stack,
+> >	    .start_data = start_data,
+> >	    .end_data = end_data,
+> >	    .start_brk = start_brk,
+> >	    .brk = brk_val,
+> >	    .arg_start = arg_start,
+> >	    .arg_end = arg_end,
+> >	    .env_start = env_start,
+> >	    .env_end = env_end,
+> >	    .auxv = NULL,
+> >	    .auxv_size = 0,
+> >	    .exe_fd = -1,
+> >	};
+> >
+> > should belong under ns_capable(CAP_SYS_ADMIN). Why is that necessary to relax?
+> 
+> When the prctl(PR_SET_MM_MAP...), the only privileged operation is to change the symlink of /proc/self/exe via set_mm_exe_file().
+> See https://github.com/torvalds/linux/blob/444fc5cde64330661bf59944c43844e7d4c2ccd8/kernel/sys.c#L2001-L2004
+> It needs CAP_SYS_ADMIN of the current namespace.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/read_write.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+This already has been relaxed before (see commit below) and why I'm at
+least symbolically pushing back is that I'm getting worried that we're
+just removing restrictions left and right and making kernel interfaces
+available to fully unprivileged user that very much seem to belong into
+the realm of local cap_sys_admin.
 
-diff --git a/fs/read_write.c b/fs/read_write.c
-index 46ddfce17e839..c93acbd8bf5a3 100644
---- a/fs/read_write.c
-+++ b/fs/read_write.c
-@@ -421,7 +421,6 @@ static ssize_t new_sync_read(struct file *filp, char __user *buf, size_t len, lo
- 
- ssize_t __kernel_read(struct file *file, void *buf, size_t count, loff_t *pos)
- {
--	mm_segment_t old_fs = get_fs();
- 	ssize_t ret;
- 
- 	if (!(file->f_mode & FMODE_CAN_READ))
-@@ -429,14 +428,25 @@ ssize_t __kernel_read(struct file *file, void *buf, size_t count, loff_t *pos)
- 
- 	if (count > MAX_RW_COUNT)
- 		count =  MAX_RW_COUNT;
--	set_fs(KERNEL_DS);
--	if (file->f_op->read)
-+	if (file->f_op->read_iter) {
-+		struct kvec iov = { .iov_base = buf, .iov_len = count };
-+		struct kiocb kiocb;
-+		struct iov_iter iter;
-+
-+		init_sync_kiocb(&kiocb, file);
-+		kiocb.ki_pos = *pos;
-+		iov_iter_kvec(&iter, READ, &iov, 1, count);
-+		ret = file->f_op->read_iter(&kiocb, &iter);
-+		*pos = kiocb.ki_pos;
-+	} else if (file->f_op->read) {
-+		mm_segment_t old_fs = get_fs();
-+
-+		set_fs(KERNEL_DS);
- 		ret = file->f_op->read(file, (void __user *)buf, count, pos);
--	else if (file->f_op->read_iter)
--		ret = new_sync_read(file, (void __user *)buf, count, pos);
--	else
-+		set_fs(old_fs);
-+	} else {
- 		ret = -EINVAL;
--	set_fs(old_fs);
-+	}
- 	if (ret > 0) {
- 		fsnotify_access(file);
- 		add_rchar(current, ret);
--- 
-2.26.2
+    prctl: Allow local CAP_SYS_ADMIN changing exe_file
 
+    During checkpointing and restore of userspace tasks
+    we bumped into the situation, that it's not possible
+    to restore the tasks, which user namespace does not
+    have uid 0 or gid 0 mapped.
+
+    People create user namespace mappings like they want,
+    and there is no a limitation on obligatory uid and gid
+    "must be mapped". So, if there is no uid 0 or gid 0
+    in the mapping, it's impossible to restore mm->exe_file
+    of the processes belonging to this user namespace.
+
+    Also, there is no a workaround. It's impossible
+    to create a temporary uid/gid mapping, because
+    only one write to /proc/[pid]/uid_map and gid_map
+    is allowed during a namespace lifetime.
+    If there is an entry, then no more mapings can't be
+    written. If there isn't an entry, we can't write
+    there too, otherwise user task won't be able
+    to do that in the future.
+
+    The patch changes the check, and looks for CAP_SYS_ADMIN
+    instead of zero uid and gid. This allows to restore
+    a task independently of its user namespace mappings.
+
+> 
+> I would argue that setting the current process exe file check should just be reduced to a "can you ptrace a children" check.
+> Here's why: any process can masquerade into another executable with ptrace.
+> One can fork a child, ptrace it, have the child execve("target_exe"), then replace its memory content with an arbitrary program.
+
+Then it should probably be relaxed to CAP_SYS_PTRACE in the user
+namespace and not CAP_CHECKPOINT_RESTORE. (But apparently you also have
+a way of achieving what you want anyway. Imho, it's not necessarily
+wrong to require a bit more work when you want something like fully
+unprivileged c/r that's a rather special interest group.)
+
+> With CRIU's libcompel parasite mechanism (https://criu.org/Compel) this is fairly easy to implement.
+> In fact, we could modify CRIU to do just that (but with a fair amount of efforts due to the way CRIU is written),
+> and not rely on being able to SET_MM_EXE_FILE via prctl(). In turn, that would give an easy way to masquerade any process
+> into another one, provided that one can ptrace a child.
+> 
+> When not using PR_SET_MM_MAP, but using SET_MM_EXE_FILE, the CAP_RESOURCES at the root namespace level is required:
+> https://github.com/torvalds/linux/blob/444fc5cde64330661bf59944c43844e7d4c2ccd8/kernel/sys.c#L2109
+> This seems inconsistent. Also for some reason changing auxv is not privileged if using prctl via the MM_MAP mechanism, but is privileged otherwise.
+
+Fwiw, it always helps if people take the time to dig through the history
+of specifc changes. That usually helps explain why things ended up as
+confusing as they are now:
+
+	commit f606b77f1a9e362451aca8f81d8f36a3a112139e
+	Author: Cyrill Gorcunov <gorcunov@openvz.org>
+	Date:   Thu Oct 9 15:27:37 2014 -0700
+	
+	    prctl: PR_SET_MM -- introduce PR_SET_MM_MAP operation
+	
+	    During development of c/r we've noticed that in case if we need to support
+	    user namespaces we face a problem with capabilities in prctl(PR_SET_MM,
+	    ...) call, in particular once new user namespace is created
+	    capable(CAP_SYS_RESOURCE) no longer passes.
+	
+	    A approach is to eliminate CAP_SYS_RESOURCE check but pass all new values
+	    in one bundle, which would allow the kernel to make more intensive test
+
+[snip]
+
+	Still note that updating exe-file link now doesn't require sys-resource
+    	capability anymore, after all there is no much profit in preventing setup
+    	own file link (there are a number of ways to execute own code -- ptrace,
+    	ld-preload, so that the only reliable way to find which exactly code is
+    	executed is to inspect running program memory).  Still we require the
+    	caller to be at least user-namespace root user.
+
+    	I believe the old interface should be deprecated and ripped off in a
+    	couple of kernel releases if no one against.
+
+Sine you already have an interface that works and the argument for the
+new interface is that it let's the kernel do better validation if all
+arguments be passed at once I don't see the point in removing the
+CAP_SYS_RESOURCE restricting from the old interface possible introducing
+more maintenance burden or bugs when changing this. It would also
+encourage users to use an interface that even c/r people seemed to have
+viewed as being deprecated.
+
+Christian
