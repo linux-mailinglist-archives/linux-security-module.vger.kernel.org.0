@@ -2,145 +2,79 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F8F1E6A22
-	for <lists+linux-security-module@lfdr.de>; Thu, 28 May 2020 21:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E031E6A01
+	for <lists+linux-security-module@lfdr.de>; Thu, 28 May 2020 21:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406222AbgE1TKa (ORCPT
+        id S2406097AbgE1TFO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 28 May 2020 15:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        Thu, 28 May 2020 15:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406096AbgE1TK3 (ORCPT
+        with ESMTP id S2406049AbgE1TFI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 28 May 2020 15:10:29 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3101C08C5C6
-        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:10:28 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id be9so985483edb.2
-        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:10:28 -0700 (PDT)
+        Thu, 28 May 2020 15:05:08 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CDBC08C5C9
+        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:05:08 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id t16so11971268plo.7
+        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:05:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xmGmOOl5gLGli7OvUQS4McOy7NB6xPaIApbCKtCeXYk=;
-        b=f8/b3x4fYWIUj58vxbwcT1zj5CSOCsV5h++6plCNXoHkOlz5+HIWFBcJy1hj9Iocmy
-         Q6KvNGUaf7Ktx8T3H3MKSb0yiSTTXPOtIV4i3w5okfxXhRQn9jfimGy2D5TlehUTq6Ly
-         3gZ8euFDfy2U4nl63gvxc9icwAuOlc7jkm8dM=
+        bh=0J8Ym+kzod0znonchBb67O6GEq+arSkfzWAx+2kx7IA=;
+        b=a8nA3Uvc1XNWqllXPWq50YCm6GC9JIOys9XsXoIOt75s4dnRClATn64VHORczX9nz6
+         36TiE/XIWNy4AlmxWJnXDOjgvsdfvmvpVnaO2spx11lRLFhR2wUwUrM6twTgijFZSMqE
+         wlhBeYKIjt+aSvFkHgat+EnhmlS08Lj8cQdcmDa8DdOVCnGQfzYhxtphaTNntW39TuoY
+         NXWldrR4iHGI2FL0D3sITI0vFDewIHKpEGHL2qvhCcHfj0ZL8ZpDSHixbKyv8jWakGKz
+         hMtXp+VhiNXwFMwKe+la2CyE3Cj0X/v83o5EewZSH0f1rn80z/ge1nhoKL5BqoZMw6XH
+         lzTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xmGmOOl5gLGli7OvUQS4McOy7NB6xPaIApbCKtCeXYk=;
-        b=Ubx076oVpBYyjZIrsqMqOgGfS+p2dDZItshhOhqwlqbnmUWcyK7pVjg+lnBpvKfRIa
-         Qz9Y46DOZHn6iYNKrJC9XNssqaBNIGCffo8tbdD+pHIYuxeOuhBA5u+x1XGHZgf3Erg/
-         w9TfgWtizlkxpnpMe3VieEtwr2BbLMkQJLwBH/8Y0aWzTweJAmHEOVZQySY2ouS9Qre7
-         Jbz3qILTptUgOIxTBmAoUUWMvK7E1eulbJbfJMbEPX4jUU1V2jrbe22iY1mPby49+TdC
-         zGY9HYIaoYXIIrnzHrLWW4Zlkj3lA9RNP19oPW8uVY8F0QqyPfi+8W+A8RqNOLX+ZzAp
-         qo4Q==
-X-Gm-Message-State: AOAM5326h51YID1xuIs/nnmUItdlJUu1GM1iaABGhbYr+LNK3uT+jPZq
-        tMJEY0ZQyN8R3HYCDW7Zd3m1/6XAEpw=
-X-Google-Smtp-Source: ABdhPJxKF6GPFEVgxmLlcZNP69nnBJ2G8E1VsxNtGrCedm+I7z2ShycovzNwyKtSW4irFtbLD2xDfQ==
-X-Received: by 2002:a05:6402:1481:: with SMTP id e1mr3034373edv.113.1590693027074;
-        Thu, 28 May 2020 12:10:27 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id s13sm2454308ejv.29.2020.05.28.12.10.26
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 May 2020 12:10:26 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id h21so1151301ejq.5
-        for <linux-security-module@vger.kernel.org>; Thu, 28 May 2020 12:10:26 -0700 (PDT)
-X-Received: by 2002:ac2:5a4c:: with SMTP id r12mr2405859lfn.10.1590692668401;
- Thu, 28 May 2020 12:04:28 -0700 (PDT)
+        bh=0J8Ym+kzod0znonchBb67O6GEq+arSkfzWAx+2kx7IA=;
+        b=ApKbfxroe7/cX68y3hyZXkmhMIUxagCNEyZb1S7iMWsAWhBwIac3o8bRUbGHCwfR6b
+         H1PLHPSaG9bddGhECknHskJ58pebuJqnRTE2tq9xGr5HB2Q4P0u+djV/Qm4Eam3S27pU
+         fBDzZf6+hgt/XVqlW7/tuyAxSi5oxrQHFohNUKjdf8I6lxEjNUsqMEhkDQlLVVpaerll
+         YE4SG6uFV5rBx3P6+UTGDW71yaw8M0xI927HItfKS6NP4rajakMkpsdVBKEzpjsOrvQ4
+         uvvp2PH1W/mo+6UlJwLHzrq/BbXIGZ/yNG9IGTFYRfVyAeIiKHMmPnAuyTCqpIGrBpzo
+         pGzA==
+X-Gm-Message-State: AOAM5321hzoYXISRkMFJkiN8Mq3HIoTJ1B4pd6S/p0FDzeaFFK5nYOzU
+        /vA21Jii/N6Fy7WBda21kyGfVygglgckuBQ49PDT8Q==
+X-Google-Smtp-Source: ABdhPJyGks+NLInlB7CGn8AvdNxpH+2UCTLT9jhDTHdhJNdwc1bWKpa0P/I3v5HG+9H3eFYcbh9Z67/5AufG661dnwA=
+X-Received: by 2002:a17:90a:17ed:: with SMTP id q100mr4941782pja.80.1590692707555;
+ Thu, 28 May 2020 12:05:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <87h7wujhmz.fsf@x220.int.ebiederm.org> <87sgga6ze4.fsf@x220.int.ebiederm.org>
- <87v9l4zyla.fsf_-_@x220.int.ebiederm.org> <877dx822er.fsf_-_@x220.int.ebiederm.org>
- <87k10wysqz.fsf_-_@x220.int.ebiederm.org> <87eer4ysm5.fsf_-_@x220.int.ebiederm.org>
-In-Reply-To: <87eer4ysm5.fsf_-_@x220.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 May 2020 12:04:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgQAgKnEX3V_vep3Ah392tjiekDspnu+y6kkx2oFZBV=g@mail.gmail.com>
-Message-ID: <CAHk-=wgQAgKnEX3V_vep3Ah392tjiekDspnu+y6kkx2oFZBV=g@mail.gmail.com>
-Subject: Re: [PATCH 01/11] exec: Reduce bprm->per_clear to a single bit
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Rob Landley <rob@landley.net>,
-        Bernd Edlinger <bernd.edlinger@hotmail.de>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
+References: <20200511131420.29758-1-anders.roxell@linaro.org>
+In-Reply-To: <20200511131420.29758-1-anders.roxell@linaro.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 28 May 2020 12:04:57 -0700
+Message-ID: <CAFd5g458j=VXttzbJUtD-HQR4k5T7us44oQOB6EPL09rgVr4LA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] kunit: Kconfig: enable a KUNIT_ALL_TESTS fragment
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com, "Theodore Ts'o" <tytso@mit.edu>,
+        adilger.kernel@dilger.ca, Greg KH <gregkh@linuxfoundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andy Lutomirski <luto@amacapital.net>
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Marco Elver <elver@google.com>, David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, May 28, 2020 at 8:45 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+On Mon, May 11, 2020 at 6:14 AM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-> -       me->personality &= ~bprm->per_clear;
-> +       if (bprm->per_clear)
-> +               me->personality &= ~PER_CLEAR_ON_SETID;\
+> Make it easier to enable all KUnit fragments.  This is useful for kernel
+> devs or testers, so its easy to get all KUnit tests enabled and if new
+> gets added they will be enabled as well.  Fragments that has to be
+> builtin will be missed if CONFIG_KUNIT_ALL_TESTS is set as a module.
+>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-My only problem with this patch is that I find that 'per_clear' thing
-to be a horrid horrid name,
-
-Obviously the name didn't change, but the use *did* change, and as
-such the name got worse. It used do do things like
-
-               bprm->per_clear |= PER_CLEAR_ON_SETID;
-
-and now it does
-
-               bprm->per_clear = 1;
-
-and honestly, there's a lot more semantic context in the old code that
-is now missing entirely. At least you used to be able to grep for
-PER_CLEAR_ON_SETID and it would make you go "Ahh.."
-
-Put another way, I can kind of see what a line like
-
-               bprm->per_clear |= PER_CLEAR_ON_SETID;
-
-does, simply because now it kind of hints at what is up.
-
-But what the heck does
-
-               bprm->per_clear = 1;
-
-mean? Nothing. You have to really know the code. "per_clear" makes no
-sense, and now it's a short line that doesn't need to be that short.
-
-I think "bprm->clear_personality_bits" would maybe describe what the
-_effect_ of that field is. It doesn't explain _why_, but it at least
-explains "what" much better than "per_clear", which just makes me go
-"per what?".
-
-Alternatively, "bprm->creds_changed" would describe what the bit
-conceptually is about, and code like
-
-          if (bprm->creds_changed)
-                  me->personality &= ~PER_CLEAR_ON_SETID;\
-
-looks sensible to me and kind of matches the comment about the
-PER_CLEAR_ON_SETID bits are.
-
-So I think that using a bitfield is fine, but I'd really like it to be
-named something much better.
-
-Plus changing the name means that you can't have any code that now
-mistakenly uses the new semantics but expects the old bitmask.
-Generally when something changes semantics that radically, you want to
-make sure the type changes sufficiently that any out-of-tree patch
-that hasn't been merged yet will get a clear warning or error if
-people don't realize.
-
-Please?
-
-           Linus
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
