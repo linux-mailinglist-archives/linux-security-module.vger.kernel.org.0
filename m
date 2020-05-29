@@ -2,45 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE971E6F22
-	for <lists+linux-security-module@lfdr.de>; Fri, 29 May 2020 00:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69951E75A1
+	for <lists+linux-security-module@lfdr.de>; Fri, 29 May 2020 07:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437221AbgE1WeI convert rfc822-to-8bit (ORCPT
+        id S1725817AbgE2Fvf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 28 May 2020 18:34:08 -0400
-Received: from mail.bnv.gob.ve ([201.249.200.115]:35496 "EHLO
-        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2437219AbgE1WeG (ORCPT
+        Fri, 29 May 2020 01:51:35 -0400
+Received: from verein.lst.de ([213.95.11.211]:59701 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725808AbgE2Fvf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 28 May 2020 18:34:06 -0400
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 78E8238E1634;
-        Thu, 28 May 2020 13:47:14 -0400 (-04)
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id U6dsUst17YfV; Thu, 28 May 2020 13:47:14 -0400 (-04)
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 5BCEE38E28A5;
-        Thu, 28 May 2020 12:46:30 -0400 (-04)
-X-Virus-Scanned: amavisd-new at bnv.gob.ve
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SmZQlhpTHqkc; Thu, 28 May 2020 12:46:30 -0400 (-04)
-Received: from [10.19.23.127] (unknown [105.0.4.230])
-        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 5582238E0A19;
-        Thu, 28 May 2020 12:30:06 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 29 May 2020 01:51:35 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A423568BFE; Fri, 29 May 2020 07:51:31 +0200 (CEST)
+Date:   Fri, 29 May 2020 07:51:31 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH 06/14] fs: remove the call_{read,write}_iter functions
+Message-ID: <20200529055131.GA6788@lst.de>
+References: <20200528054043.621510-1-hch@lst.de> <20200528054043.621510-7-hch@lst.de> <20200528185643.GL23230@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Spende von 2.000.000,00 Euro
-To:     Recipients <manuel@info.com>
-From:   "manuel franco" <manuel@info.com>
-Date:   Thu, 28 May 2020 18:29:55 +0200
-Reply-To: manuelfrancospende11@gmail.com
-Message-Id: <20200528163007.5582238E0A19@correo.bnv.gob.ve>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200528185643.GL23230@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Ich bin Manuel Franco, ich spende Ihnen 2.000.000,00 Euro. Nehmen Sie jetzt Kontakt mit mir auf, damit wir fortfahren können.
+On Thu, May 28, 2020 at 07:56:43PM +0100, Al Viro wrote:
+> On Thu, May 28, 2020 at 07:40:35AM +0200, Christoph Hellwig wrote:
+> > Just open coding the methods calls is a lot easier to follow.
+> 
+> Not sure about this one, TBH - it's harder to grep that way, since
+> you get all the initializers for read_iter/write_iter thrown into
+> the mix.  Sure, you can do something like '\->[ 	]*read_iter\>',
+> but it's a PITA.
+
+Which you have to do anyway as not all calls go through these weird
+helpers.
