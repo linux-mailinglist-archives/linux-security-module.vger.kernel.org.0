@@ -2,102 +2,101 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A62291ED13B
-	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jun 2020 15:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150711ED314
+	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jun 2020 17:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgFCNs7 (ORCPT
+        id S1726214AbgFCPLy (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 3 Jun 2020 09:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgFCNsy (ORCPT
+        Wed, 3 Jun 2020 11:11:54 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2272 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726061AbgFCPLx (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 3 Jun 2020 09:48:54 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352A4C0085CD
-        for <linux-security-module@vger.kernel.org>; Wed,  3 Jun 2020 06:48:50 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id q19so2235404eja.7
-        for <linux-security-module@vger.kernel.org>; Wed, 03 Jun 2020 06:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
-        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
-         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
-         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
-         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
-         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
-         iC3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
-        b=Bf/QetRRHV+C6v05h84rRtHSOqGIaJ+1akLz98rUdSjFdBR4tfQWTKJqAJioda6y2y
-         txqYW7fVnwD+4oqxjZibCvXVkxoluYoempFYkSrgh1G63auKgAABTNqwz0vND0aD+rsH
-         yGcMJ1UFssqITCVjAoSSprrkp63lGR1jDaUuzK6+rdCjKdCX+FKa3FWBWtnbp+FlVkpI
-         AkyWKPXoUskl9X0kixq+BMugbkpGFSMj8mML8YK9vZu+ZFxL1oXXV42BJi3GBTcMYGJn
-         3iKc7dPp+F5E/zxL6nAjnigUaNveuKcstDb2LXzNU/bSF/qoueiFkbrHXzuJpjALJzeA
-         gMuA==
-X-Gm-Message-State: AOAM5335fd+9v1GqA3R/qr8fXQGIBK3rgpxmfh0LJtyCggMB9rlxGbCu
-        fDaE1num/x2vVjXciRDGnGVZq1fpvlVNM6dR9tV9I/tROkg=
-X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
-X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
- Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
+        Wed, 3 Jun 2020 11:11:53 -0400
+Received: from lhreml737-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 601BD6C039D8EF1A0077;
+        Wed,  3 Jun 2020 16:11:50 +0100 (IST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ lhreml737-chm.china.huawei.com (10.201.108.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 3 Jun 2020 16:11:50 +0100
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.160)
+ by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 3 Jun 2020 17:11:49 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <tiwai@suse.de>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH 1/2] ima: Directly assign the ima_default_policy pointer to ima_rules
+Date:   Wed, 3 Jun 2020 17:08:20 +0200
+Message-ID: <20200603150821.8607-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Reply-To: susanjones.wife@gmail.com
-Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
-From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
-Date:   Wed, 3 Jun 2020 14:48:46 +0100
-X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
-Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
-Subject: HELLO: I AM MRS SUSAN JONES
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.204.65.160]
+X-ClientProxiedBy: lhreml719-chm.china.huawei.com (10.201.108.70) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+This patch prevents the following oops:
+
+[   10.771813] BUG: kernel NULL pointer dereference, address: 0000000000000
+[...]
+[   10.779790] RIP: 0010:ima_match_policy+0xf7/0xb80
+[...]
+[   10.798576] Call Trace:
+[   10.798993]  ? ima_lsm_policy_change+0x2b0/0x2b0
+[   10.799753]  ? inode_init_owner+0x1a0/0x1a0
+[   10.800484]  ? _raw_spin_lock+0x7a/0xd0
+[   10.801592]  ima_must_appraise.part.0+0xb6/0xf0
+[   10.802313]  ? ima_fix_xattr.isra.0+0xd0/0xd0
+[   10.803167]  ima_must_appraise+0x4f/0x70
+[   10.804004]  ima_post_path_mknod+0x2e/0x80
+[   10.804800]  do_mknodat+0x396/0x3c0
+
+It occurs when there is a failure during IMA initialization, and
+ima_init_policy() is not called. IMA hooks still call ima_match_policy()
+but ima_rules is NULL. This patch prevents the crash by directly assigning
+the ima_default_policy pointer to ima_rules when ima_rules is defined. This
+wouldn't alter the existing behavior, as ima_rules is always set at the end
+of ima_init_policy().
+
+Cc: stable@vger.kernel.org # 3.7.x
+Fixes: 07f6a79415d7d ("ima: add appraise action keywords and default rules")
+Reported-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_policy.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index ef7f68cc935e..e493063a3c34 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -204,7 +204,7 @@ static struct ima_rule_entry *arch_policy_entry __ro_after_init;
+ static LIST_HEAD(ima_default_rules);
+ static LIST_HEAD(ima_policy_rules);
+ static LIST_HEAD(ima_temp_rules);
+-static struct list_head *ima_rules;
++static struct list_head *ima_rules = &ima_default_rules;
+ 
+ /* Pre-allocated buffer used for matching keyrings. */
+ static char *ima_keyrings;
+@@ -768,7 +768,6 @@ void __init ima_init_policy(void)
+ 			  ARRAY_SIZE(default_appraise_rules),
+ 			  IMA_DEFAULT_POLICY);
+ 
+-	ima_rules = &ima_default_rules;
+ 	ima_update_policy_flag();
+ }
+ 
 -- 
-OUR GOLDEN OPPORTUNITY
+2.17.1
 
-Hello Dear Friend,
-
-Complement of the day, i hope you are doing great today. However, I am
-Mrs.Susan Jones, an auditor with one of the new generation banks here
-in Burkina Faso.
-
-I am writing you this letter based on the latest development at my
-Department. i discovered some abandoned huge amount of money, Ten
-Million, Five hundred thousand  United States Dollars.($10.500.000).
-Now I am only contacting you as a foreigner because this money cannot
-be approved to a local bank account here, but can only be approved to
-any foreign account and foreign beneficiary because the money is in US
-dollars
-
-This will be  a legitimate transaction once you accept to build trust
-with me and follow simple instruction doing the transfer process,
-until the total sum transfer out of the bank here to your own bank
-account any where in the world, and I agreed to share the total money
-50/50 with you once you successful confirmed it in your bank account.
-But any expenses doing the transfer process will be deduct from the
-amount before sharing, If you are interested to work with me and
-provide a good receiving bank account, get back to me as soon as
-possible with the following details below.
-
-Your full name
-Your Profession
-Your direct mobile phone number
-Your Scanned International passport or any of your identity
-
-NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
-AVOID TIME WASTED.
-
-As soon as I receive these data's, I will forward to you the
-application form which you will send to the bank for the claim and
-transfer of the fund into your bank account as the  new beneficial.
-
-I am waiting to hear from you soon
-
-Yours
-Mrs.Susan Jones
