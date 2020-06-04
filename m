@@ -2,80 +2,91 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4DE1EE347
-	for <lists+linux-security-module@lfdr.de>; Thu,  4 Jun 2020 13:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E13E1EE4B9
+	for <lists+linux-security-module@lfdr.de>; Thu,  4 Jun 2020 14:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726288AbgFDLUU (ORCPT
+        id S1726228AbgFDMpr (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 4 Jun 2020 07:20:20 -0400
-Received: from mga07.intel.com ([134.134.136.100]:32304 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726151AbgFDLUU (ORCPT
+        Thu, 4 Jun 2020 08:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725926AbgFDMpr (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 4 Jun 2020 07:20:20 -0400
-IronPort-SDR: t+sgTUGZTmQHux6hBWo/IwiFYtBDdljw1kRnhmUP2Xkx8QZvr/C91XqnaGzAAa9okraogtpRcp
- 2fyVmkb0fUzQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2020 04:20:19 -0700
-IronPort-SDR: xwGMOFwSLoNMMZIEQHcZFveL7oqKpTVhA5pLXLU3fKJDOH8t6wI1RGR9qGOOQzw1bohg4J7TL2
- VQQ5FHfNB9og==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,472,1583222400"; 
-   d="scan'208";a="304881765"
-Received: from lkp-server01.sh.intel.com (HELO 54ff842e15fb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jun 2020 04:20:18 -0700
-Received: from kbuild by 54ff842e15fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jgnuz-00001K-Tg; Thu, 04 Jun 2020 11:20:17 +0000
-Date:   Thu, 4 Jun 2020 19:19:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Daniel, Colascione," <dancol@google.com>
-Cc:     kbuild-all@lists.01.org, linux-security-module@vger.kernel.org,
-        James Morris <jmorris@namei.org>
-Subject: [PATCH] fix err_cast.cocci warnings
-Message-ID: <20200604111949.GA29219@9fd72810d846>
-References: <202006041944.AJeCfZpC%lkp@intel.com>
+        Thu, 4 Jun 2020 08:45:47 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43946C08C5C0;
+        Thu,  4 Jun 2020 05:45:46 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id b8so4959298oic.1;
+        Thu, 04 Jun 2020 05:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0FyB/2FD/Wz2mQVyCXr4z+abWPutppIDhAG7xkBlOto=;
+        b=aPUH5x7vYLnuwZPM+GLvDsTg0raj6TtTBQwqXmnV6iE2TVlqx0i7PfPuwCnwNbxgbE
+         p3N/ZYPseFZsnYRXSDb+s7RBbYobAZt/8TgjVzNkCIWpRa3rhOmJq0VVMW1zfNWy/HZF
+         Puk2Ded4vmnJrYNtUtk8eRuFw5hyxLzOEpCDhVcXAtNpRSyiyNgF7VjJMXTxxJGyFHgY
+         bmBmZRcmGs/pV1+7riS4hQ3a/gxwLnJksnB5HWRVesLWCEP/gIW/5qYhLIByFmMDFR8R
+         pm43x1jD/BxHoIBF7kaWVtwzutOWi7f8ZDghPBJWDqH3qu7/htVNBzsZyM0CCR45aK5u
+         k7jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0FyB/2FD/Wz2mQVyCXr4z+abWPutppIDhAG7xkBlOto=;
+        b=FlF76FH7Gk8fezj5SgpszJNoY3TyL5Iy0pIIQOL/j4GEFhlKXZHXFlN1kAzgBIhD2I
+         d6oKaJ2/OfUiBsZfW7nRVOAHSmT6WtPjxvEnLEup6RBEdhDHz7z2Bclx4xgHXogTiOSW
+         narv3yyvV5EFdBea0uMn8Pyz+LnO8wikJVLgF9arEYOgRozDo1rmlqYOXUrTzJ6jJt2w
+         8ODidT+rdVFLsp4ReexAHFh6exNwoHwj+GN/Lybr7BjA61Fn0rNyRtFFqNbg2n25r/Yn
+         Frd4QOSfDTyUlwEzoJNRB4VvKiwbyO4lUFUGK5BzwGHqQ4ue9mq4cQxrwoLuXOTnGAky
+         MhkQ==
+X-Gm-Message-State: AOAM533g3IUQUKsP+Ko0jUcREEvd+TSDz2OA6VrpupOfBujY/eMbnPeO
+        XbV+fQwPeBJ8HX9vJFs9GIfNFAImM72czH6r3gVbbVOW
+X-Google-Smtp-Source: ABdhPJwfSS/2FE0F6fA/+WceOtzebYj4zrpQypLEK8cWqk6QR1F5yYab4Yu5K3BvyQiHWxguSs6LIUlLlrihhv3bPAE=
+X-Received: by 2002:aca:3d09:: with SMTP id k9mr2786702oia.160.1591274745732;
+ Thu, 04 Jun 2020 05:45:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202006041944.AJeCfZpC%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAHC9VhTX8gkUui6AiTJMJgcohXa=TOqdO==rEDk=Mquz9sCNKA@mail.gmail.com>
+ <CAHk-=wiAVfqtJbZ=Ti1oxSvunUvsQ_CsOL5oFJL3mwhqKTeoNw@mail.gmail.com>
+ <290017a8-d943-570f-1f90-acecf1c075a1@schaufler-ca.com> <alpine.LRH.2.21.2006040809280.6050@namei.org>
+ <761f5d15-3422-1834-7be5-8f3276d10172@schaufler-ca.com>
+In-Reply-To: <761f5d15-3422-1834-7be5-8f3276d10172@schaufler-ca.com>
+From:   Stephen Smalley <stephen.smalley.work@gmail.com>
+Date:   Thu, 4 Jun 2020 08:45:34 -0400
+Message-ID: <CAEjxPJ49ownvc=3OnvkaMD-oYm-aUta98kKs4LDTJTnm65RD=Q@mail.gmail.com>
+Subject: Re: [GIT PULL] SELinux patches for v5.8
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     James Morris <jmorris@namei.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: kernel test robot <lkp@intel.com>
+On Wed, Jun 3, 2020 at 6:39 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> On 6/3/2020 3:12 PM, James Morris wrote:
+> > On Wed, 3 Jun 2020, Casey Schaufler wrote:
+> >
+> >> The use of security modules was expected to be rare.
+> > This is not correct. Capabilities were ported to LSM and stacked from the
+> > beginning, and several major distros worked on LSM so they could ship
+> > their own security modules.
+>
+> Capabilities has always been a special case.
+> Until Android adopted SELinux the actual use of LSMs was rare.
 
-fs/anon_inodes.c:92:10-17: WARNING: ERR_CAST can be used with inode
-
-
- Use ERR_CAST inlined function instead of ERR_PTR(PTR_ERR(...))
-
-Generated by: scripts/coccinelle/api/err_cast.cocci
-
-Fixes: 2749d3f84a70 ("Add a new LSM-supporting anonymous inode interface")
-CC: Daniel Colascione <dancol@google.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git secure_uffd_v5.9
-head:   d08ac70b1e0dc71ac2315007bcc3efb283b2eae4
-commit: 2749d3f84a708110ed0359579be0eddd2c4036da [1/3] Add a new LSM-supporting anonymous inode interface
-
- anon_inodes.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/fs/anon_inodes.c
-+++ b/fs/anon_inodes.c
-@@ -89,7 +89,7 @@ struct file *_anon_inode_getfile(const c
- 		inode =	anon_inode_make_secure_inode(
- 			name, context_inode);
- 		if (IS_ERR(inode))
--			return ERR_PTR(PTR_ERR(inode));
-+			return ERR_CAST(inode);
- 	} else {
- 		inode =	anon_inode_inode;
- 		if (IS_ERR(inode))
+I don't think that is correct.  Fedora/RHEL were enabling SELinux by
+default since around 2004/2005 and for a while Fedora was tracking
+SELinux status as part of their "smolt" hardware profiling project and
+SELinux enablement was trending above 80% IIRC before they
+de-commissioned smolt. SuSE/SLES and Ubuntu were enabling AppArmor by
+default for quite some time too prior to SE Android.  It is certainly
+true that Android's adoption of SELinux massively increased the size
+of the SELinux install base (and was the first to make SELinux usage
+mandatory, not just default-enabled) but I don't think it is accurate
+to say that LSM usage was rare prior to that.
