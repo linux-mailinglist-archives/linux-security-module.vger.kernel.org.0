@@ -2,49 +2,48 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DCE1F0334
-	for <lists+linux-security-module@lfdr.de>; Sat,  6 Jun 2020 01:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282651F0337
+	for <lists+linux-security-module@lfdr.de>; Sat,  6 Jun 2020 01:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728517AbgFEXA2 (ORCPT
+        id S1728283AbgFEXAL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 5 Jun 2020 19:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        Fri, 5 Jun 2020 19:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728533AbgFEXA1 (ORCPT
+        with ESMTP id S1728316AbgFEXAK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 5 Jun 2020 19:00:27 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033CDC08C5D1
-        for <linux-security-module@vger.kernel.org>; Fri,  5 Jun 2020 16:00:27 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id v24so4266236plo.6
-        for <linux-security-module@vger.kernel.org>; Fri, 05 Jun 2020 16:00:26 -0700 (PDT)
+        Fri, 5 Jun 2020 19:00:10 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A149CC08C5C5
+        for <linux-security-module@vger.kernel.org>; Fri,  5 Jun 2020 16:00:10 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id w20so5838955pga.6
+        for <linux-security-module@vger.kernel.org>; Fri, 05 Jun 2020 16:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qz7MuNPVCvdbh+ZgEThp7mjF9Pplt5mjBACsV2Ifvtc=;
-        b=N2VTGCAxLShf+NltxaRrg0tDyugL5y/JZISwomOE1XhWz9pQJ1r367lpz8y+mcTMa1
-         mw+bGsSyVNJhVfCFWfwawobM0sydx8CrYnqY//22mp072eTfdnRZc+o70JJOyjgwARCw
-         qa0T30qb5yYf/I6iIszbk99K5lW/H1oZAP7mU=
+        h=from:to:cc:subject:date:message-id;
+        bh=aFt/anDS7nzNEkZvhj5E9jn5B6aPNRUTEUXG6gw+rMw=;
+        b=Py6p74DfoglbZqlPUm+YTvpOKViQG5W31OSdRj5ooXbxZ7v9F5LHL7MtsfOWDDDU9c
+         1esc8ikGjD2AI5glOmFX+wit2+4KpFX+kgu15NT5UPlYNYjQAsZu1PjPC6igT5y2TO5y
+         B7EDpj9FWNU37TDEyMNM6XGZU8GVHZZgD7Qvk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=qz7MuNPVCvdbh+ZgEThp7mjF9Pplt5mjBACsV2Ifvtc=;
-        b=NC8EQTo4BzCRy43YCfB8XSAlwEv/0MhhUax7sm54ZeqZHPJpthiZju4yeaKjvmO27I
-         UDUt8LKdTIt/FYbcmH8YC7EebK6cF3QOWjTWYKbidUaPw2UcEmKnQ5NKvLLyfJVeMcFV
-         cOz1JdgHb5Ppfs/FiNmVQ5vEiCGd0+XYzP4Xyy9yUnJuAKRZWgoR54FjID1BmdgepN5n
-         Rmo1h+TCoopjgGRQWEP8829DPBe7WyRxQ4db8BEuf36USFt0iEOls8jZ70P0wZSWY+fa
-         AWRcdcYOUh+sNBZtbTcEh917ny193PHNTSa4U/VRifc8DdqpMxp2l5amBJGKZqv9pdR2
-         e11Q==
-X-Gm-Message-State: AOAM5303j70xbzNcscIKX0d+qYPGb80Bh3dwO/ZvJZiQ0mEmLk2totSd
-        4uLpAI4RzNjV9JUfzaY+hmlT3Q==
-X-Google-Smtp-Source: ABdhPJzOswhG9A2QWB1Ol1+irts8PB8Cjsm2B2FxeurNfMtbYK9/loEAEddbKhTB1BEwbVX1PMMH1g==
-X-Received: by 2002:a17:90a:df98:: with SMTP id p24mr5442938pjv.135.1591398026312;
-        Fri, 05 Jun 2020 16:00:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=aFt/anDS7nzNEkZvhj5E9jn5B6aPNRUTEUXG6gw+rMw=;
+        b=Dk7vzVUN7P0VcfZo91+4yR5dhG/bX/dt8YMW5EM0nJ+dX4XBsirkDw+qWN/3Cv5YD/
+         aCKevx/1wQKtEJSs+Y0Ee3FEYy1+1QzSHobshcnxHQksA5VG+lqsL0siY2PSLnArfktr
+         jqmk3+GCWIA+7J4YXfoOUAx3/xcQzPCrIXhXmvsc/byshuKfhC4OCLsRF59DgJSq/I9G
+         ItPLeoEN/Exf9ndzl2nayXF0FQgCb0owxFBVEKfisUY95wi/WSAffHmlptJF7rlh0cud
+         HHFHAW/l3loqTA61Jsv76b6ZEejMTNLac4qDEVKU0P1vC++LlmtNlpYPBkWh5r7JiSZ6
+         oc9A==
+X-Gm-Message-State: AOAM5330w5AQUusPC8HE1wcG/FbnQba02WwuQhCg5DpOyo5PeAkkLMoi
+        8yjB7jqCNca9DaeXGf0NJgl9pw==
+X-Google-Smtp-Source: ABdhPJx5c+3Xg5qF+vGQ769wR5tgBUCXJFBzPtw7IvPiy2SjtCdYHnvg1mO9ySVZ+HFM95K2Zb1MqQ==
+X-Received: by 2002:a63:1c42:: with SMTP id c2mr10937728pgm.296.1591398009780;
+        Fri, 05 Jun 2020 16:00:09 -0700 (PDT)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id b140sm568974pfb.119.2020.06.05.16.00.23
+        by smtp.gmail.com with ESMTPSA id b140sm568974pfb.119.2020.06.05.16.00.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2020 16:00:25 -0700 (PDT)
+        Fri, 05 Jun 2020 16:00:08 -0700 (PDT)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,129 +67,95 @@ Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v6 5/8] bcm-vk: add bcm_vk UAPI
-Date:   Fri,  5 Jun 2020 15:59:56 -0700
-Message-Id: <20200605225959.12424-6-scott.branden@broadcom.com>
+Subject: [PATCH v6 0/8] firmware: add partial read support in request_firmware_into_buf
+Date:   Fri,  5 Jun 2020 15:59:51 -0700
+Message-Id: <20200605225959.12424-1-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200605225959.12424-1-scott.branden@broadcom.com>
-References: <20200605225959.12424-1-scott.branden@broadcom.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add user space api for bcm-vk driver.
+This patch series adds partial read support in request_firmware_into_buf.
+In order to accept the enhanced API it has been requested that kernel
+selftests and upstreamed driver utilize the API enhancement and so
+are included in this patch series.
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
----
- include/uapi/linux/misc/bcm_vk.h | 99 ++++++++++++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
+Also in this patch series is the addition of a new Broadcom VK driver
+utilizing the new request_firmware_into_buf enhanced API.
+
+Further comment followed to add IMA support of the partial reads
+originating from request_firmware_into_buf calls.
+
+Changes from v5:
+ - add IMA FIRMWARE_PARTIAL_READ support
+ - change kernel pread flags to enum
+ - removed legacy support from driver
+ - driver fixes
+Changes from v4:
+ - handle reset issues if card crashes
+ - allow driver to have min required msix
+ - add card utilization information
+Changes from v3:
+ - fix sparse warnings
+ - fix printf format specifiers for size_t
+ - fix 32-bit cross-compiling reports 32-bit shifts
+ - use readl/writel,_relaxed to access pci ioremap memory,
+  removed memory barriers and volatile keyword with such change
+ - driver optimizations for interrupt/poll functionalities
+Changes from v2:
+ - remove unnecessary code and mutex locks in lib/test_firmware.c
+ - remove VK_IOCTL_ACCESS_BAR support from driver and use pci sysfs instead
+ - remove bitfields
+ - remove Kconfig default m
+ - adjust formatting and some naming based on feedback
+ - fix error handling conditions
+ - use appropriate return codes
+ - use memcpy_toio instead of direct access to PCIE bar
+
+Scott Branden (8):
+  fs: introduce kernel_pread_file* support
+  firmware: add offset to request_firmware_into_buf
+  test_firmware: add partial read support for request_firmware_into_buf
+  firmware: test partial file reads of request_firmware_into_buf
+  bcm-vk: add bcm_vk UAPI
+  misc: bcm-vk: add Broadcom VK driver
+  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
+  ima: add FIRMWARE_PARTIAL_READ support
+
+ MAINTAINERS                                   |    7 +
+ drivers/base/firmware_loader/firmware.h       |    5 +
+ drivers/base/firmware_loader/main.c           |   59 +-
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/bcm-vk/Kconfig                   |   29 +
+ drivers/misc/bcm-vk/Makefile                  |   11 +
+ drivers/misc/bcm-vk/bcm_vk.h                  |  408 +++++
+ drivers/misc/bcm-vk/bcm_vk_dev.c              | 1312 +++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.c              | 1438 +++++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.h              |  201 +++
+ drivers/misc/bcm-vk/bcm_vk_sg.c               |  271 ++++
+ drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
+ drivers/misc/bcm-vk/bcm_vk_tty.c              |  352 ++++
+ drivers/soc/qcom/mdt_loader.c                 |    7 +-
+ fs/exec.c                                     |  101 +-
+ include/linux/firmware.h                      |    8 +-
+ include/linux/fs.h                            |   30 +
+ include/uapi/linux/misc/bcm_vk.h              |   99 ++
+ lib/test_firmware.c                           |  144 +-
+ security/integrity/ima/ima_main.c             |   24 +-
+ .../selftests/firmware/fw_filesystem.sh       |   80 +
+ 22 files changed, 4595 insertions(+), 53 deletions(-)
+ create mode 100644 drivers/misc/bcm-vk/Kconfig
+ create mode 100644 drivers/misc/bcm-vk/Makefile
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
  create mode 100644 include/uapi/linux/misc/bcm_vk.h
 
-diff --git a/include/uapi/linux/misc/bcm_vk.h b/include/uapi/linux/misc/bcm_vk.h
-new file mode 100644
-index 000000000000..783087b7c31f
---- /dev/null
-+++ b/include/uapi/linux/misc/bcm_vk.h
-@@ -0,0 +1,99 @@
-+/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-2-Clause) */
-+/*
-+ * Copyright 2018-2020 Broadcom.
-+ */
-+
-+#ifndef __UAPI_LINUX_MISC_BCM_VK_H
-+#define __UAPI_LINUX_MISC_BCM_VK_H
-+
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
-+
-+#define BCM_VK_MAX_FILENAME 64
-+
-+struct vk_image {
-+	__u32 type; /* Type of image */
-+#define VK_IMAGE_TYPE_BOOT1 1 /* 1st stage (load to SRAM) */
-+#define VK_IMAGE_TYPE_BOOT2 2 /* 2nd stage (load to DDR) */
-+	char filename[BCM_VK_MAX_FILENAME]; /* Filename of image */
-+};
-+
-+struct vk_reset {
-+	__u32 arg1;
-+	__u32 arg2;
-+};
-+
-+#define VK_MAGIC		0x5e
-+
-+/* Load image to Valkyrie */
-+#define VK_IOCTL_LOAD_IMAGE	_IOW(VK_MAGIC, 0x2, struct vk_image)
-+
-+/* Send Reset to Valkyrie */
-+#define VK_IOCTL_RESET		_IOW(VK_MAGIC, 0x4, struct vk_reset)
-+
-+/*
-+ * message block - basic unit in the message where a message's size is always
-+ *		   N x sizeof(basic_block)
-+ */
-+struct vk_msg_blk {
-+	__u8 function_id;
-+#define VK_FID_TRANS_BUF	5
-+#define VK_FID_SHUTDOWN		8
-+	__u8 size;
-+	__u16 trans_id; /* transport id, queue & msg_id */
-+	__u32 context_id;
-+	__u32 args[2];
-+#define VK_CMD_PLANES_MASK	0x000f /* number of planes to up/download */
-+#define VK_CMD_UPLOAD		0x0400 /* memory transfer to vk */
-+#define VK_CMD_DOWNLOAD		0x0500 /* memory transfer from vk */
-+#define VK_CMD_MASK		0x0f00 /* command mask */
-+};
-+
-+#define VK_BAR_FWSTS			0x41c
-+#define VK_BAR_COP_FWSTS		0x428
-+/* VK_FWSTS definitions */
-+#define VK_FWSTS_RELOCATION_ENTRY	BIT(0)
-+#define VK_FWSTS_RELOCATION_EXIT	BIT(1)
-+#define VK_FWSTS_INIT_START		BIT(2)
-+#define VK_FWSTS_ARCH_INIT_DONE		BIT(3)
-+#define VK_FWSTS_PRE_KNL1_INIT_DONE	BIT(4)
-+#define VK_FWSTS_PRE_KNL2_INIT_DONE	BIT(5)
-+#define VK_FWSTS_POST_KNL_INIT_DONE	BIT(6)
-+#define VK_FWSTS_INIT_DONE		BIT(7)
-+#define VK_FWSTS_APP_INIT_START		BIT(8)
-+#define VK_FWSTS_APP_INIT_DONE		BIT(9)
-+#define VK_FWSTS_MASK			0xffffffff
-+#define VK_FWSTS_READY			(VK_FWSTS_INIT_START | \
-+					 VK_FWSTS_ARCH_INIT_DONE | \
-+					 VK_FWSTS_PRE_KNL1_INIT_DONE | \
-+					 VK_FWSTS_PRE_KNL2_INIT_DONE | \
-+					 VK_FWSTS_POST_KNL_INIT_DONE | \
-+					 VK_FWSTS_INIT_DONE | \
-+					 VK_FWSTS_APP_INIT_START | \
-+					 VK_FWSTS_APP_INIT_DONE)
-+/* Deinit */
-+#define VK_FWSTS_APP_DEINIT_START	BIT(23)
-+#define VK_FWSTS_APP_DEINIT_DONE	BIT(24)
-+#define VK_FWSTS_DRV_DEINIT_START	BIT(25)
-+#define VK_FWSTS_DRV_DEINIT_DONE	BIT(26)
-+#define VK_FWSTS_RESET_DONE		BIT(27)
-+#define VK_FWSTS_DEINIT_TRIGGERED	(VK_FWSTS_APP_DEINIT_START | \
-+					 VK_FWSTS_APP_DEINIT_DONE  | \
-+					 VK_FWSTS_DRV_DEINIT_START | \
-+					 VK_FWSTS_DRV_DEINIT_DONE)
-+/* Last nibble for reboot reason */
-+#define VK_FWSTS_RESET_REASON_SHIFT	28
-+#define VK_FWSTS_RESET_REASON_MASK	(0xf << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_SYS_PWRUP	(0x0 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_MBOX_DB		(0x1 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_M7_WDOG		(0x2 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_TEMP		(0x3 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_PCI_FLR		(0x4 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_PCI_HOT		(0x5 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_PCI_WARM		(0x6 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_PCI_COLD		(0x7 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_L1		(0x8 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_L0		(0x9 << VK_FWSTS_RESET_REASON_SHIFT)
-+#define VK_FWSTS_RESET_UNKNOWN		(0xf << VK_FWSTS_RESET_REASON_SHIFT)
-+
-+#endif /* __UAPI_LINUX_MISC_BCM_VK_H */
 -- 
 2.17.1
 
