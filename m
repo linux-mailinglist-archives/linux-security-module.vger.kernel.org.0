@@ -2,42 +2,42 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ECB1F2D48
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jun 2020 02:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3819F1F3110
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jun 2020 03:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733035AbgFIAcG (ORCPT
+        id S1727825AbgFHXHN (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 8 Jun 2020 20:32:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36160 "EHLO mail.kernel.org"
+        Mon, 8 Jun 2020 19:07:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728805AbgFHXPR (ORCPT
+        id S1727809AbgFHXHI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:15:17 -0400
+        Mon, 8 Jun 2020 19:07:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C7D742068D;
-        Mon,  8 Jun 2020 23:15:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E230E20820;
+        Mon,  8 Jun 2020 23:07:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658117;
-        bh=RIaJwXAv2CIPY/0FDHuz4E1BrCH0mzjtH5iCXkOJkoI=;
+        s=default; t=1591657627;
+        bh=xww3ha3RV/sRMp/8nxc5RDnUU7jjFcQdrVOpE9QJWXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AjwWNXoMZKjYf98c456Ce2Ewf8zo+umypbZTMXzBKfyiQ2gC5Vj5ELWuolMICNn8L
-         +ysvti6pqY+o5yw9MWOUK2vN+cuPaJrIWLbdUITy6ZT43RlYJC/8cPjR6CP75eO8G6
-         ynlEMYx3oJW6he7IdbBYtYcpVzyQeg0hp2kCsh4Y=
+        b=EvyKP7PP36r1tHKLVdgkpW/otyMeNLX0oplZZ6vPn4TqeM11xoB7AgVjJr2RuSKET
+         P7eanSnH6ZyD/cP2tVWJ2TzcdoKnV0H+ucJ5Atqxczoh+qMnKZ4WxQEZeCUpXgB22t
+         pHrvBQMPqyMemO7lGtD67gT0W1diaiS77g8Opft4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Jeremy Cline <jcline@redhat.com>,
+        "Frank Ch . Eigler" <fche@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 155/606] apparmor: Fix aa_label refcnt leak in policy_update
-Date:   Mon,  8 Jun 2020 19:04:40 -0400
-Message-Id: <20200608231211.3363633-155-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 047/274] lockdown: Allow unprivileged users to see lockdown status
+Date:   Mon,  8 Jun 2020 19:02:20 -0400
+Message-Id: <20200608230607.3361041-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
+In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
+References: <20200608230607.3361041-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,55 +46,38 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+From: Jeremy Cline <jcline@redhat.com>
 
-commit c6b39f070722ea9963ffe756bfe94e89218c5e63 upstream.
+[ Upstream commit 60cf7c5ed5f7087c4de87a7676b8c82d96fd166c ]
 
-policy_update() invokes begin_current_label_crit_section(), which
-returns a reference of the updated aa_label object to "label" with
-increased refcount.
+A number of userspace tools, such as systemtap, need a way to see the
+current lockdown state so they can gracefully deal with the kernel being
+locked down. The state is already exposed in
+/sys/kernel/security/lockdown, but is only readable by root. Adjust the
+permissions so unprivileged users can read the state.
 
-When policy_update() returns, "label" becomes invalid, so the refcount
-should be decreased to keep refcount balanced.
-
-The reference counting issue happens in one exception handling path of
-policy_update(). When aa_may_manage_policy() returns not NULL, the
-refcnt increased by begin_current_label_crit_section() is not decreased,
-causing a refcnt leak.
-
-Fix this issue by jumping to "end_section" label when
-aa_may_manage_policy() returns not NULL.
-
-Fixes: 5ac8c355ae00 ("apparmor: allow introspecting the loaded policy pre internal transform")
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 000d388ed3bb ("security: Add a static lockdown policy LSM")
+Cc: Frank Ch. Eigler <fche@redhat.com>
+Signed-off-by: Jeremy Cline <jcline@redhat.com>
+Signed-off-by: James Morris <jmorris@namei.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/apparmor/apparmorfs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ security/lockdown/lockdown.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorfs.c
-index 280741fc0f5f..f6a3ecfadf80 100644
---- a/security/apparmor/apparmorfs.c
-+++ b/security/apparmor/apparmorfs.c
-@@ -454,7 +454,7 @@ static ssize_t policy_update(u32 mask, const char __user *buf, size_t size,
- 	 */
- 	error = aa_may_manage_policy(label, ns, mask);
- 	if (error)
--		return error;
-+		goto end_section;
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 5a952617a0eb..87cbdc64d272 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -150,7 +150,7 @@ static int __init lockdown_secfs_init(void)
+ {
+ 	struct dentry *dentry;
  
- 	data = aa_simple_write_to_buffer(buf, size, size, pos);
- 	error = PTR_ERR(data);
-@@ -462,6 +462,7 @@ static ssize_t policy_update(u32 mask, const char __user *buf, size_t size,
- 		error = aa_replace_profiles(ns, label, mask, data);
- 		aa_put_loaddata(data);
- 	}
-+end_section:
- 	end_current_label_crit_section(label);
- 
- 	return error;
+-	dentry = securityfs_create_file("lockdown", 0600, NULL, NULL,
++	dentry = securityfs_create_file("lockdown", 0644, NULL, NULL,
+ 					&lockdown_ops);
+ 	return PTR_ERR_OR_ZERO(dentry);
+ }
 -- 
 2.25.1
 
