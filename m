@@ -2,214 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 387D71F21D9
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jun 2020 00:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177FF1F2BB3
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jun 2020 02:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgFHW3p (ORCPT
+        id S1730817AbgFIASO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 8 Jun 2020 18:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726782AbgFHW3k (ORCPT
+        Mon, 8 Jun 2020 20:18:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40992 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730672AbgFHXSl (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 8 Jun 2020 18:29:40 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA17C08C5C7
-        for <linux-security-module@vger.kernel.org>; Mon,  8 Jun 2020 15:29:39 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id bh7so7207297plb.11
-        for <linux-security-module@vger.kernel.org>; Mon, 08 Jun 2020 15:29:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=Ivfzr79vmJM2ezUGqOHZFSzxnQToj12hwiva2AjxDYk=;
-        b=YsGDe0JsHjrhCdZfhLSt+zXND+h5/vcEmVjSaGonV8inAFYY2m6YDRobjI4HRJ16kW
-         LxARXowlzaNoerKwRoTiT7xgryv5CVO4/qugFUasKxbLS7jXkvbjS9gkuSalDnBUvniq
-         ixYgSQ7tGlOF8FSM/PVKb4CbMYUkHpy8rntWk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Ivfzr79vmJM2ezUGqOHZFSzxnQToj12hwiva2AjxDYk=;
-        b=gmHePyzoKAcC9IZYdMvCZgu5C5XYHzT6mSzVspxcf85ERvVuTfNqRLav4g/uNlp5PT
-         R1A+1TGZ3h06HJ9obNaLV8mo9BwlkdBeKaoDtjya8sKnKOVy7FCcY+2B3trkxFiHx3nh
-         rxBUilx0AqzEiTFIIJBonpW+f0yH7ND+wKWEcTnp4nlSkeSOTZOTtlcFiaexJHyaENe2
-         4PWFzZxyVLv5mixI0bW7zGDirNjbJ4S18ORFJvQslt/1XhclBApAyMyQi81j62hWCc9F
-         Va/4xdGMEdGixK1EBwK7VFgSXEpHo8XIPr1Pyht9GZO4t73CjqpJrHVNFphDfM8Sjjce
-         s8mg==
-X-Gm-Message-State: AOAM533LOO8sXnGZIC8hiCLfxCmXbTO4v6jjbPe4+nL8W5enxDjecYGZ
-        WXdzwpowJtqYmczf6qduTNUDUg==
-X-Google-Smtp-Source: ABdhPJwKi2BxlrETO2znZc4aO5UDzp8kr5PBqQNwoJ+QnwSe4jXBo2gq9ETf+gqzDgFASjIn4X+7Ow==
-X-Received: by 2002:a17:902:7c8f:: with SMTP id y15mr739497pll.95.1591655378632;
-        Mon, 08 Jun 2020 15:29:38 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id a14sm7807017pfc.133.2020.06.08.15.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jun 2020 15:29:37 -0700 (PDT)
-Subject: Re: [PATCH v7 1/8] fs: introduce kernel_pread_file* support
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>
-References: <20200606050458.17281-1-scott.branden@broadcom.com>
- <20200606050458.17281-2-scott.branden@broadcom.com>
- <20200606155216.GP19604@bombadil.infradead.org>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <ea16c19e-bd60-82ec-4825-05e233667f9f@broadcom.com>
-Date:   Mon, 8 Jun 2020 15:29:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Mon, 8 Jun 2020 19:18:41 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8E6FD2085B;
+        Mon,  8 Jun 2020 23:18:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591658321;
+        bh=Yn3ATB0DMOTHJ/cc/Ku3BysKcjUHDwZ0Jtkt8knF+ZA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AbuI8FThWZbs8AdoWSbhYfSZQ3x75Lr+f7zXe5eXFyTeoChwtddO6HrSpwN0JAkMe
+         /YcLOvv3lQWfgKj5Tna//KVpHd2ef9mOeFHtUsmMWn2ZJKnUb02z1oGjWKL57D/9o/
+         nMCi9dx0FFHP2S7CR2l8TaUxs0+GiY7p9lLYWPZI=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 321/606] exec: Always set cap_ambient in cap_bprm_set_creds
+Date:   Mon,  8 Jun 2020 19:07:26 -0400
+Message-Id: <20200608231211.3363633-321-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
+References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200606155216.GP19604@bombadil.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Matthew,
+From: "Eric W. Biederman" <ebiederm@xmission.com>
 
-I am requesting the experts in the filesystem subsystem to come to a 
-consensus here.
-This is not my area of expertise at all but every time I have addressed 
-all of the
-outstanding concerns someone else comes along and raises another one.
+[ Upstream commit a4ae32c71fe90794127b32d26d7ad795813b502e ]
 
-Please see me comments below.
+An invariant of cap_bprm_set_creds is that every field in the new cred
+structure that cap_bprm_set_creds might set, needs to be set every
+time to ensure the fields does not get a stale value.
 
-On 2020-06-06 8:52 a.m., Matthew Wilcox wrote:
-> On Fri, Jun 05, 2020 at 10:04:51PM -0700, Scott Branden wrote:
->> -int kernel_read_file(struct file *file, void **buf, loff_t *size,
->> -		     loff_t max_size, enum kernel_read_file_id id)
->> -{
->> -	loff_t i_size, pos;
-Please note that how checkpatch generated the diff here.  The code 
-modifications
-below are for a new function kernel_pread_file, they do not modify the 
-existing API
-kernel_read_file.  kernel_read_file requests the ENTIRE file is read.  
-So we need to be
-able to differentiate whether it is ok to read just a portion of the 
-file or not.
->> +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
->> +		      loff_t pos, loff_t max_size,
->> +		      enum kernel_pread_opt opt,
->> +		      enum kernel_read_file_id id)
-So, to share common code a new kernel_pread_opt needed to be added in 
-order to specify whether
-it was ok to read a partial file or not, and provide an offset into the 
-file where to begin reading.
-The meaning of parameters doesn't change in the bonkers API. max_size 
-still means max size, etc.
-These options are needed so common code can be shared with 
-kernel_read_file api.
+The field cap_ambient is not set every time cap_bprm_set_creds is
+called, which means that if there is a suid or sgid script with an
+interpreter that has neither the suid nor the sgid bits set the
+interpreter should be able to accept ambient credentials.
+Unfortuantely because cap_ambient is not reset to it's original value
+the interpreter can not accept ambient credentials.
 
-The partial read option is then needed further in the depths of the 
-kernel read for IMA operation as IMA does
-things differently for optimization of whether it is OK to do a partial 
-read of the file or not.
->> +{
->> +	loff_t alloc_size;
->> +	loff_t buf_pos;
->> +	loff_t read_end;
->> +	loff_t i_size;
->>   	ssize_t bytes = 0;
->>   	int ret;
->>   
-> Look, it's not your fault, but this is a great example of how we end
-> up with atrocious interfaces.  Someone comes along and implements a
-> simple DWIM interface that solves their problem.  Then somebody else
-> adds a slight variant that solves their problem, and so on and so on,
-> and we end up with this bonkers API where the arguments literally change
-> meaning depending on other arguments.
-I don't see what arguments are changing meaning.  Please explain what is 
-changing meaning.
-The diff below is for kernel_pread_file, not kernel_read_file. Perhaps 
-that is where your confusion is.
->
->> @@ -950,21 +955,31 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
->>   		ret = -EINVAL;
->>   		goto out;
->>   	}
->> -	if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
->> +
->> +	/* Default read to end of file */
->> +	read_end = i_size;
->> +
->> +	/* Allow reading partial portion of file */
->> +	if ((opt == KERNEL_PREAD_PART) &&
->> +	    (i_size > (pos + max_size)))
->> +		read_end = pos + max_size;
->> +
->> +	alloc_size = read_end - pos;
->> +	if (i_size > SIZE_MAX || (max_size > 0 && alloc_size > max_size)) {
->>   		ret = -EFBIG;
->>   		goto out;
-> ... like that.
-like what?  We need to determine how much of the file to read based on 
-size of file, position in file, and max size we can read.
->
-> I think what we actually want is:
->
-> ssize_t vmap_file_range(struct file *, loff_t start, loff_t end, void **bufp);
-> void vunmap_file_range(struct file *, void *buf);
->
-> If end > i_size, limit the allocation to i_size.  Returns the number
-> of bytes allocated, or a negative errno.  Writes the pointer allocated
-> to *bufp.  Internally, it should use the page cache to read in the pages
-> (taking appropriate reference counts).  Then it maps them using vmap()
-> instead of copying them to a private vmalloc() array.
-> kernel_read_file() can be converted to use this API.  The users will
-> need to be changed to call kernel_read_end(struct file *file, void *buf)
-> instead of vfree() so it can call allow_write_access() for them.
->
-> vmap_file_range() has a lot of potential uses.  I'm surprised we don't
-> have it already, to be honest.
-Such a change sounds like it could be done in a later patch series.
-It's an incomplete solution.  It would work for some of the needed 
-operations but not others.
-For kernel_read_file, I don't see how in your new API it indicates if 
-the end of the file was reached or not.
-Also, please note that buffers may be preallocated  and shouldn't be 
-freed by the kernel in some cases and
-allocated and freed by the kernel in others.
+Given that the ambient capability set is expected to be controlled by
+the caller, I don't think this is particularly serious.  But it is
+definitely worth fixing so the code works correctly.
 
-Your proposed change doesn't exist and is not simple as it sounds or 
-meet all the needs of the existing kernel_read_file
-function, IMA, and new partial kernel_pread_file?
+I have tested to verify my reading of the code is correct and the
+interpreter of a sgid can receive ambient capabilities with this
+change and cannot receive ambient capabilities without this change.
 
-Patch v7 does not break existing functions or rearchitect things in a 
-dramatic way.  They fit into existing code,
-will not break the existing codepaths (which some didn't even have a 
-test case until I added one), and can
-be improved upon as need with your vmap_file_range or others once those 
-have been developed, tested, and
-proven by someone.
+Cc: stable@vger.kernel.org
+Cc: Andy Lutomirski <luto@kernel.org>
+Fixes: 58319057b784 ("capabilities: ambient capabilities")
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ security/commoncap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I would like the experts here to decide on what needs to be done so we 
-can move forward
-and get kernel_pread_file support added soon.
-Thanks,
-Scott
+diff --git a/security/commoncap.c b/security/commoncap.c
+index f4ee0ae106b2..0ca31c8bc0b1 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -812,6 +812,7 @@ int cap_bprm_set_creds(struct linux_binprm *bprm)
+ 	int ret;
+ 	kuid_t root_uid;
+ 
++	new->cap_ambient = old->cap_ambient;
+ 	if (WARN_ON(!cap_ambient_invariant_ok(old)))
+ 		return -EPERM;
+ 
+-- 
+2.25.1
+
