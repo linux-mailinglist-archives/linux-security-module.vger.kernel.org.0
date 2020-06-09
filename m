@@ -2,163 +2,141 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 284E61F3C35
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jun 2020 15:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2051F3D2F
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jun 2020 15:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728694AbgFINWA (ORCPT
+        id S1730221AbgFINtG (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 9 Jun 2020 09:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728082AbgFINV6 (ORCPT
+        Tue, 9 Jun 2020 09:49:06 -0400
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:41404 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729779AbgFINtF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 9 Jun 2020 09:21:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C464AC05BD1E;
-        Tue,  9 Jun 2020 06:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=V3d421xQlXEJCML3wEa7LbtDgAd0pPCbPZf0itcOVZ8=; b=VuQsL7ABDfE4mueZRE489uDo1M
-        eM4Y9jTz9gyCzJYdzmiTdSNVyu5pjPS5CXs09Wknm2mH5UOFrqyk0xrX5l9H/cklBqVT9ykRBV7C3
-        IWhoIkgrYD2Z19w9mu1XA81RLZNh9R5A+ECNnKPjJWWE+fQRDKjuGbRrTxpYH+4fXq/APDQPul2fj
-        K1xei6kJzZlH8DNagtemxgNhvyzuKJnGcBjbP4gos3FLszISbop9vUZMawb8rdI6f8W5+bWJT+8xT
-        ss0Xmb5GpKQ8vqysTU1ndMnkyw5LHcveHtKtKWo9pu6wtW3oiqIr3oyHD91t8ghef9wbBg0O+qxaY
-        GeHEHHEg==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jieCN-0007n5-3Y; Tue, 09 Jun 2020 13:21:51 +0000
-Date:   Tue, 9 Jun 2020 06:21:51 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v7 1/8] fs: introduce kernel_pread_file* support
-Message-ID: <20200609132151.GC19604@bombadil.infradead.org>
-References: <20200606050458.17281-1-scott.branden@broadcom.com>
- <20200606050458.17281-2-scott.branden@broadcom.com>
- <20200606155216.GP19604@bombadil.infradead.org>
- <ea16c19e-bd60-82ec-4825-05e233667f9f@broadcom.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ea16c19e-bd60-82ec-4825-05e233667f9f@broadcom.com>
+        Tue, 9 Jun 2020 09:49:05 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01419;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0U.6GXtb_1591710536;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U.6GXtb_1591710536)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 09 Jun 2020 21:48:56 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dhowells@redhat.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, jmorris@namei.org, serge@hallyn.com,
+        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com,
+        zohar@linux.ibm.com, gilad@benyossef.com, pvanleeuwen@rambus.com
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-security-module@vger.kernel.org, zhang.jia@linux.alibaba.com,
+        tianjia.zhang@linux.alibaba.com
+Subject: [PATCH v3 0/8] crpyto: introduce OSCCA certificate and SM2 asymmetric algorithm 
+Date:   Tue,  9 Jun 2020 21:48:47 +0800
+Message-Id: <20200609134855.21431-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Jun 08, 2020 at 03:29:22PM -0700, Scott Branden wrote:
-> Hi Matthew,
-> 
-> I am requesting the experts in the filesystem subsystem to come to a
-> consensus here.
-> This is not my area of expertise at all but every time I have addressed all
-> of the
-> outstanding concerns someone else comes along and raises another one.
+Hello all,
 
-I appreciate it's frustrating for you, but this is the nature of
-patch review.  I haven't even read the first five or so submissions.
-I can see them in my inbox and they look like long threads.  I'm not
-particularly inclined to read them.  I happened to read v6, and reacted
-to the API being ugly.
+This new module implement the OSCCA certificate and SM2 public key
+algorithm. It was published by State Encryption Management Bureau, China.
+List of specifications for OSCCA certificate and SM2 elliptic curve
+public key cryptography:
 
-> Please see me comments below.
-> 
-> On 2020-06-06 8:52 a.m., Matthew Wilcox wrote:
-> > On Fri, Jun 05, 2020 at 10:04:51PM -0700, Scott Branden wrote:
-> > > -int kernel_read_file(struct file *file, void **buf, loff_t *size,
-> > > -		     loff_t max_size, enum kernel_read_file_id id)
-> > > -{
-> > > -	loff_t i_size, pos;
-> Please note that how checkpatch generated the diff here.  The code
-> modifications
-> below are for a new function kernel_pread_file, they do not modify the
-> existing API
-> kernel_read_file.  kernel_read_file requests the ENTIRE file is read.  So we
-> need to be
-> able to differentiate whether it is ok to read just a portion of the file or
-> not.
+* GM/T 0003.1-2012
+* GM/T 0003.2-2012
+* GM/T 0003.3-2012
+* GM/T 0003.4-2012
+* GM/T 0003.5-2012
+* GM/T 0015-2012
+* GM/T 0009-2012 
 
-You've gone about this in entirely the wrong way though.  This enum to
-read the entire file or a partial is just bad design.
+IETF: https://tools.ietf.org/html/draft-shen-sm2-ecdsa-02
+oscca: http://www.oscca.gov.cn/sca/xxgk/2010-12/17/content_1002386.shtml
+scctc: http://www.gmbz.org.cn/main/bzlb.html
 
-> > > +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
-> > > +		      loff_t pos, loff_t max_size,
-> > > +		      enum kernel_pread_opt opt,
-> > > +		      enum kernel_read_file_id id)
-> So, to share common code a new kernel_pread_opt needed to be added in order
-> to specify whether
-> it was ok to read a partial file or not, and provide an offset into the file
-> where to begin reading.
-> The meaning of parameters doesn't change in the bonkers API. max_size still
-> means max size, etc.
-> These options are needed so common code can be shared with kernel_read_file
-> api.
+These patchs add the OID object identifier defined by OSCCA. The
+x509 certificate supports sm2-with-sm3 type certificate parsing
+and verification.
 
-Does pread() in userspace take seven parameters?  No.  It takes four.
-What you're doing is taking all the complexity of all of the interfaces
-and stuffing it all down into the bottom function instead of handling
-some of the complexity in the wrapper functions.  For example, you
-could support the functionality of 'max_size' in kernel_read_file()
-and leave it out of the kernel_pread_file() interface.
+The sm2 algorithm is based on libgcrypt's mpi implementation, and has
+made some additions to the kernel's original mpi library, and added the
+implementation of ec to better support elliptic curve-like algorithms.
 
-> > I think what we actually want is:
-> > 
-> > ssize_t vmap_file_range(struct file *, loff_t start, loff_t end, void **bufp);
-> > void vunmap_file_range(struct file *, void *buf);
-> > 
-> > If end > i_size, limit the allocation to i_size.  Returns the number
-> > of bytes allocated, or a negative errno.  Writes the pointer allocated
-> > to *bufp.  Internally, it should use the page cache to read in the pages
-> > (taking appropriate reference counts).  Then it maps them using vmap()
-> > instead of copying them to a private vmalloc() array.
-> > kernel_read_file() can be converted to use this API.  The users will
-> > need to be changed to call kernel_read_end(struct file *file, void *buf)
-> > instead of vfree() so it can call allow_write_access() for them.
-> > 
-> > vmap_file_range() has a lot of potential uses.  I'm surprised we don't
-> > have it already, to be honest.
-> Such a change sounds like it could be done in a later patch series.
-> It's an incomplete solution.  It would work for some of the needed
-> operations but not others.
-> For kernel_read_file, I don't see how in your new API it indicates if the
-> end of the file was reached or not.
+sm2 has good support in both openssl and gnupg projects, and sm3 and sm4
+of the OSCCA algorithm family have also been implemented in the kernel.
 
-That's the point.  It doesn't.  If a caller needs that, then they can
-figure that out themselves.
+Among them, sm3 and sm4 have been well implemented in the kernel.
+This group of patches has newly introduced sm2. In order to implement
+sm2 more perfectly, I expanded the mpi library and introduced the
+ec implementation of the mpi library as the basic algorithm. Compared
+to the kernel's crypto/ecc.c, the implementation of mpi/ec.c is more
+complete and elegant, sm2 is implemented based on these algorithms.
 
-> Also, please note that buffers may be preallocated  and shouldn't be freed
-> by the kernel in some cases and
-> allocated and freed by the kernel in others.
+---
+v3 changes:
+  1. integrity asymmetric digsig support sm2-with-sm3 algorithm.
+  2. remove unused sm2_set_priv_key().
+  3. rebase on mainline.
 
-You're trying to build the swiss army knife of functions.  Swiss army
-knives are useful, but they're no good for carving a steak.
+v2 changes:
+  1. simplify the sm2 algorithm and only retain the verify function.
+  2. extract the sm2 certificate code into a separate file.
 
-> I would like the experts here to decide on what needs to be done so we can
-> move forward
-> and get kernel_pread_file support added soon.
+Tianjia Zhang (8):
+  crypto: sm3 - export crypto_sm3_final function
+  lib/mpi: Extend the MPI library
+  lib/mpi: Introduce ec implementation to MPI library
+  crypto: sm2 - introduce OSCCA SM2 asymmetric cipher algorithm
+  crypto: testmgr - support test with different ciphertext per
+    encryption
+  X.509: support OSCCA certificate parse
+  X.509: support OSCCA sm2-with-sm3 certificate verification
+  integrity: Asymmetric digsig supports SM2-with-SM3 algorithm
 
-You know, you haven't even said _why_ you want this.  The cover letter
-just says "I want this", and doesn't say why it's needed.
+ crypto/Kconfig                            |   17 +
+ crypto/Makefile                           |    8 +
+ crypto/asymmetric_keys/Makefile           |    1 +
+ crypto/asymmetric_keys/public_key.c       |    6 +
+ crypto/asymmetric_keys/public_key_sm2.c   |   59 +
+ crypto/asymmetric_keys/x509_cert_parser.c |   14 +-
+ crypto/asymmetric_keys/x509_public_key.c  |    2 +
+ crypto/sm2.c                              |  473 +++++++
+ crypto/sm2signature.asn1                  |    4 +
+ crypto/sm3_generic.c                      |    7 +-
+ crypto/testmgr.c                          |    7 +-
+ include/crypto/public_key.h               |   14 +
+ include/crypto/sm2.h                      |   25 +
+ include/crypto/sm3.h                      |    2 +
+ include/linux/mpi.h                       |  193 +++
+ include/linux/oid_registry.h              |    6 +
+ lib/mpi/Makefile                          |    6 +
+ lib/mpi/ec.c                              | 1538 +++++++++++++++++++++
+ lib/mpi/mpi-add.c                         |  207 +++
+ lib/mpi/mpi-bit.c                         |  251 ++++
+ lib/mpi/mpi-cmp.c                         |   46 +-
+ lib/mpi/mpi-div.c                         |  259 ++++
+ lib/mpi/mpi-internal.h                    |   53 +
+ lib/mpi/mpi-inv.c                         |  143 ++
+ lib/mpi/mpi-mod.c                         |  155 +++
+ lib/mpi/mpi-mul.c                         |  166 +++
+ lib/mpi/mpicoder.c                        |  336 +++++
+ lib/mpi/mpih-div.c                        |  294 ++++
+ lib/mpi/mpih-mul.c                        |   25 +
+ lib/mpi/mpiutil.c                         |  204 +++
+ security/integrity/digsig_asymmetric.c    |   14 +-
+ 31 files changed, 4517 insertions(+), 18 deletions(-)
+ create mode 100644 crypto/asymmetric_keys/public_key_sm2.c
+ create mode 100644 crypto/sm2.c
+ create mode 100644 crypto/sm2signature.asn1
+ create mode 100644 include/crypto/sm2.h
+ create mode 100644 lib/mpi/ec.c
+ create mode 100644 lib/mpi/mpi-add.c
+ create mode 100644 lib/mpi/mpi-div.c
+ create mode 100644 lib/mpi/mpi-inv.c
+ create mode 100644 lib/mpi/mpi-mod.c
+ create mode 100644 lib/mpi/mpi-mul.c
+
+-- 
+2.17.1
+
