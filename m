@@ -2,96 +2,70 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1474D1F7DE1
-	for <lists+linux-security-module@lfdr.de>; Fri, 12 Jun 2020 22:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C3D1F7E22
+	for <lists+linux-security-module@lfdr.de>; Fri, 12 Jun 2020 22:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgFLUB2 (ORCPT
+        id S1726302AbgFLUlK (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 12 Jun 2020 16:01:28 -0400
-Received: from sonic303-3.consmr.mail.bf2.yahoo.com ([74.6.131.42]:44339 "EHLO
-        sonic303-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726283AbgFLUB2 (ORCPT
+        Fri, 12 Jun 2020 16:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgFLUlK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 12 Jun 2020 16:01:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1591992086; bh=DPYuw2gUpgtMJzJhlH/AVmRGu2wSKCY1C+f8nOCoxu0=; h=Date:From:Reply-To:Subject:References:From:Subject; b=q+znbJK1eSXC89TjW4vze6yMkD4TmtgXNY3JPQZwyrzduMH9B12FXuy8C4enxt/vl/6VRHQ6d1OjqjDJ1ahRoK3VRSCkkoSMDAKwJY3zzziNSxgcSTo8M3xfgQFCR1Kv7fymyKzXEBBvESwZGrTRuY91ymsNOXhEUV84jTI4DU0UxLRESI5Enn0ONGEJ9qR6SFCwCvhsIBJRvqv93kS3a1Addm2C74m+4tV9RHt/puyV9mZGX1zJniyuH6fLCw9zxXHmQgzPnAtwaFE2CJ9iZvu2ufqsBiR2FrakTD3TNWLpF+/8Q2L5354Nz/s7NkqYlzZaJxAVpArJYq5NNRhLXg==
-X-YMail-OSG: nak9_PMVM1mydD3CQ727VQTAjSvhAKaBitm.EZlksSeIiOchakzKxXoc_.20l6g
- epmjlvWIGEQUdLbswW7LuKMc8xoale5vDMrNX8Y0cfW6wq5ihfEkUSo0V_5L0mKfiKkk_ZdVTHw2
- 2IRNFd0L3OoqiCfWSsgElTWFlGp5j70C4mmZi70KCWkyexfBBMEaw2PhRL4npZandLa9MJ7Gd01G
- Y53cs_NBr4P7AAkd75DsoDbO9H7q0lblkM9kMir6FIatWR9sdgDMyLiAZVm2ysxj2IvVhUsH.9w5
- EGP27XRGybwmfiGivSEleQTQl0WWIxObnq7CB2MaMJtmoRXe9Qf0kk7_Nj0y5OMcQDvJ.9ONzxg0
- bPBuQnDEwMGwkEQ4q.GxtBy.i.EMN8tAikWL3DJJRHXxbsx2riApN83jqI2JbPd0QYfNLrqDleWB
- PN93WMk1zNEKKW3gGLL9MKzMyU_G1CYF0iG6T44dWP0XFaKHZAuYSlBK1xkw59ZKfxgrt0igzKVt
- w6olxQuEJZ8gYoXCysjBFdUPspHUKoN3pGOpE0XZANhzcbrOKx1g70wkoH91Zg8xYh9ETI2UferD
- TJZjUT7Yh124TLDSrWEcrEr1K12tv.ZgM1D_hhIUVzUVcIPGsIyg9cVxKCi.yv0gWg0C08bAtKV2
- 3yikT5vt2oz6MiXO4n5xJ6j96xH1c2vzX95v4b5TQmrbtZuk1EG6AIj5kdn89tziM0i0HSjt8JI5
- bYiBrZt5Z12.vphAwq01bRYgdAcvMGo0cKkK55rpTXkuPihw19y0QL9NCj8Rp1b4TCDG_7oPSvm2
- RvEJYAogwq82Ld7gFwveueYtK7KyA85nhnj3H16GyA5rVLjhoPovTOWLWruXNUZQubgARbbGtxqa
- G9Mez6D086ue4yY7_qydQDA.l_D9yZJ7HKtYjBMuXxCNzKspEiKrSkPNpCBOckQSxOlZ9q7YPqYG
- bqmGoChqX6MB8Ddvy9U9lXRFoBBfKUzm0MvzhPFqnUfvjY4JgrPK5gibS0O8u7ogeQRONaTCKR9W
- P7LgWsX7UcZxnNCKJgKpST6l2p2nZ86jjitVE7zEkhfyBWOsNhu6gYeK3u1y6YkNOHB.VqpuDo9M
- 56ClA4ZG3aiTcGWEW3FZ7WqNN_2O55cIs_P8Qk9PSvE3.7q696KLE2OK4UGCW4fmJ0MEA5uRXZOc
- G9cn15asgUlUSJU63G4BxAWhg0NcsarmAFuFeKRfsi1eikv1CQxFHU_lv4PqfMUdE5MLgPTzpDs3
- iICpfqNyRppJuOBd08x5X9d.8WQMKRSmahXvu8HT4gGedzEVR63e8m7wm0a1t3bam.uyOMgNFQBQ
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Fri, 12 Jun 2020 20:01:26 +0000
-Date:   Fri, 12 Jun 2020 20:01:23 +0000 (UTC)
-From:   "Mrs. Mina A. Brunel" <brunelminaa@gmail.com>
-Reply-To: mrsminaabrunel63@gmail.com
-Message-ID: <1724622544.36850.1591992083216@mail.yahoo.com>
-Subject: My Dear in the lord
+        Fri, 12 Jun 2020 16:41:10 -0400
+X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 Jun 2020 13:41:09 PDT
+Received: from sw.superlogical.ch (sw.superlogical.ch [IPv6:2a03:4000:9:189::4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BEFC03E96F;
+        Fri, 12 Jun 2020 13:41:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 66A2FC22FD;
+        Fri, 12 Jun 2020 22:34:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hb9fxq.ch; s=default;
+        t=1591994095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wROdf8HBRYGjci+FcVWPhwOc9p6yIiBON7n20xZn4+Y=;
+        b=m6WTNBfxbZa77BWcHve2lgxpX6gH/O36ljv05GMeame+CGhnmyQ7qNjEn6I0zt5maQJxI9
+        Bf+FtO0GTf7I+WknbOS8G65oAl4zfWZahZU61J4RQGXR7b5Yyj1N7ZBOvVGslYzl6ZRT3b
+        3MvrS7J0wZ808pcBzhKMH+VD+HINYbOqslPtLKt4neshNH8ppZ3xesVrza1ogwYXL6TT8d
+        dQGv09gVoZ3zLbkr7JiWNME5GikfbWxH1fbJuTbcwRKedCrfDhcDOjXEEzxkGb3cqT2V2H
+        1ZTgWjU1PyWW/X/TA5F5macxWFiWq6az8A51h1PiVOYDxg9mWBtut5wJ49S24Q==
+From:   Frank Werner-Krippendorf <mail@hb9fxq.ch>
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Frank Werner-Krippendorf <mail@hb9fxq.ch>
+Subject: [PATCH] dh key: Missing a blank line after declarations
+Date:   Fri, 12 Jun 2020 22:34:58 +0200
+Message-Id: <20200612203458.13517-1-mail@hb9fxq.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <1724622544.36850.1591992083216.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16119 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+This patch fixes a "WARNING: Missing a blank line after declarations" issue found by checkpatch.pl
 
+Signed-off-by: Frank Werner-Krippendorf <mail@hb9fxq.ch>
+---
+ security/keys/dh.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-My Dear in the lord
+diff --git a/security/keys/dh.c b/security/keys/dh.c
+index c4c629bb1c03..5515f51e62db 100644
+--- a/security/keys/dh.c
++++ b/security/keys/dh.c
+@@ -161,6 +161,7 @@ static int kdf_ctr(struct kdf_sdesc *sdesc, const u8 *src, unsigned int slen,
+ 		if (zlen && h) {
+ 			u8 tmpbuffer[32];
+ 			size_t chunk = min_t(size_t, zlen, sizeof(tmpbuffer));
++
+ 			memset(tmpbuffer, 0, chunk);
+ 
+ 			do {
+-- 
+2.20.1
 
-
-My name is Mrs. Mina A. Brunel I am a Norway Citizen who is living in Burki=
-na Faso, I am married to Mr. Brunel Patrice, a politicians who owns a small=
- gold company in Burkina Faso; He died of Leprosy and Radesyge, in year Feb=
-ruary 2010, During his lifetime he deposited the sum of =E2=82=AC 8.5 Milli=
-on Euro) Eight million, Five hundred thousand Euros in a bank in Ouagadougo=
-u the capital city of of Burkina in West Africa. The money was from the sal=
-e of his company and death benefits payment and entitlements of my deceased=
- husband by his company.
-
-I am sending you this message with heavy tears in my eyes and great sorrow =
-in my heart, and also praying that it will reach you in good health because=
- I am not in good health, I sleep every night without knowing if I may be a=
-live to see the next day. I am suffering from long time cancer and presentl=
-y I am partially suffering from Leprosy, which has become difficult for me =
-to move around. I was married to my late husband for more than 6 years with=
-out having a child and my doctor confided that I have less chance to live, =
-having to know when the cup of death will come, I decided to contact you to=
- claim the fund since I don't have any relation I grew up from an orphanage=
- home.
-
-I have decided to donate this money for the support of helping Motherless b=
-abies/Less privileged/Widows and churches also to build the house of God be=
-cause I am dying and diagnosed with cancer for about 3 years ago. I have de=
-cided to donate from what I have inherited from my late husband to you for =
-the good work of Almighty God; I will be going in for an operation surgery =
-soon.
-
-Now I want you to stand as my next of kin to claim the funds for charity pu=
-rposes. Because of this money remains unclaimed after my death, the bank ex=
-ecutives or the government will take the money as unclaimed fund and maybe =
-use it for selfishness and worthless ventures, I need a very honest person =
-who can claim this money and use it for Charity works, for orphanages, wido=
-ws and also build schools and churches for less privilege that will be name=
-d after my late husband and my name.
-
-I need your urgent answer to know if you will be able to execute this proje=
-ct, and I will give you more information on how the fund will be transferre=
-d to your bank account or online banking.
-
-Thanks
-Mrs. Mina A. Brunel
