@@ -2,227 +2,209 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 057211FAA6D
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jun 2020 09:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041191FAB5A
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jun 2020 10:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbgFPHuH (ORCPT
+        id S1726496AbgFPIel (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 16 Jun 2020 03:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        Tue, 16 Jun 2020 04:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726950AbgFPHt6 (ORCPT
+        with ESMTP id S1727004AbgFPIek (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 16 Jun 2020 03:49:58 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F746C008630
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 00:49:50 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id n9so8031540plk.1
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 00:49:50 -0700 (PDT)
+        Tue, 16 Jun 2020 04:34:40 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C82C05BD43
+        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 01:34:39 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e20so24060766ybc.23
+        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 01:34:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UXEYLD7af7LJOjB8xnPNTPrt+WaWXkTb11rPY8DaG9o=;
-        b=h2BrY8BKMYCkCsU3ZiGHQqvWYu+MzqkLnnp8a6bzu9p+/NEaFXUfSdN4wBcE1aqXeV
-         LA1oJJ0czwCl5t+MiPZRo6sJHzWOJHE16oztLq7Xpft20dvdV3hag8ApW2Y4RoJ5MLKb
-         wvY/4ueFcil/Y8V4OtWUc2a6E2mKkX2HP0OWs=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=f/PPs0Qkdb+BNDNosh43dX0cUVZrsnfYgReHGzPsZME=;
+        b=vBPAH5XYqmqw/nfOiQ2N/eNs2dfNqyYLNkJigMCwwwXy/LWQVSBVb8sNZ8214EfIRV
+         W1h6VtbG7KnXERJ5Sgj+J5ylSVXvKKNIXRq5cEZ3TPgJxYWBDADcCgCcXRaGLzfdjfz2
+         92bYgZJGsyXtdLVnbpzwsmPrWU0Rbxv3oP0jjseZfzwM+TTJVecwpdyvn+LtrllQJWIY
+         g4wNP39drrUvbrKGNb66HuobcNO3f0Yj03JV+ta38+tpSueXCLB4byqjel10T5luL2jc
+         dFD7Sap2u9Hj2sA7ACxphCFux2cU1zWN0ipZBFxCl73uRfKgmgRsN0sIyPBa6HQXlBBt
+         WOJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UXEYLD7af7LJOjB8xnPNTPrt+WaWXkTb11rPY8DaG9o=;
-        b=TH9O2T2gdVsiYXJP31iKWdXfBl6MV846nvM2d3wZGBFc6WUXDqCjTOUtiIdb6460qI
-         tF/AhUaYrqOAHCkQ4MqCFVNnXV6n+raULODlXDhGIryfPdov67CcxG5T1qQ1eXPpfHlL
-         ek3meCuWXZSWVr7Vyat1GpV7/kp459D6MxJoBC4mezO5cyic7xdjCK5Pxd8UsMeuee9U
-         pb+234p4TijmahWMF5QZCC2Tq43jQibiQ7KgLn9gJTokezgaxOrDUqPv/V5ohDeLd58O
-         AQUXVpoj1GxfgIwwycEL6TheaPJ651aWqyElpfAkrrdnYrpNs1FMcnxgHSb1fFlJQ/rm
-         AwwQ==
-X-Gm-Message-State: AOAM533vigwcGL5t2eo/cyxC/rBOhOWIqikkop4Wgr+4cNY1CgtnjUkF
-        jadYfnchVg6FAx1S08znNDGzbQ==
-X-Google-Smtp-Source: ABdhPJws+IxzhfQqZ/B7NKXZPC6tuHYhP5yRNSlhuhhCXbsMlnjbimxI9zgc2yJDjJa4JxGBDknPEA==
-X-Received: by 2002:a17:902:aa92:: with SMTP id d18mr1033453plr.210.1592293789983;
-        Tue, 16 Jun 2020 00:49:49 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x8sm1650796pje.31.2020.06.16.00.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2020 00:49:46 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Tycho Andersen <tycho@tycho.ws>, Jann Horn <jannh@google.com>,
-        "zhujianwei (C)" <zhujianwei7@huawei.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Matt Denton <mpdenton@google.com>,
-        Chris Palmer <palmer@google.com>,
-        Jeffrey Vander Stoep <jeffv@google.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Hehuazhen <hehuazhen@huawei.com>, x86@kernel.org,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org
-Subject: [PATCH 8/8] [DEBUG] seccomp: Report bitmap coverage ranges
-Date:   Tue, 16 Jun 2020 00:49:34 -0700
-Message-Id: <20200616074934.1600036-9-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200616074934.1600036-1-keescook@chromium.org>
-References: <20200616074934.1600036-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=f/PPs0Qkdb+BNDNosh43dX0cUVZrsnfYgReHGzPsZME=;
+        b=UfcQ091rlbV6OB6nr2iqvPuag2T+Cmk8s1l1Tka5j0TxJI3MKr1dXvtPBA0NG4VWJZ
+         3aAJ5NbK3FitVVAz1gDcByqzaqpwrPj5Pr/e/4C+7iMCFS+AAKr6rqrqLiKA4Ev62K72
+         3DvvwIdjtD0VmXKF0ZgEH/2QoY1xYER+O2GZujzZ8+mf9mNanylGYFKdd0e7NmV6z3bv
+         Y8LKKPP0KVv9KxuclZWUeYIczLyhpto1H+cPuyIjfRwuWqHePmtqzjqkscWnLUP9CJpl
+         Z62U6Su53X9UvII/+6acGz0pqcx2viLjXix5ZWp7HmXIJO342oeVo6ZLgKwWUXr7WaSV
+         42tw==
+X-Gm-Message-State: AOAM533vGCkb07+sf+9vt8Pc4H6taAsQcmEhf26i8+C2Sft32je7libq
+        J26hFfbweiygEHeD541L9ulHbLyWQq4=
+X-Google-Smtp-Source: ABdhPJxZFc4yfRMtSwmjvZSiJAl5T7nMmVObUX/IyCtAeq0iAufq3ykXEn7SrCLy7nTiDtruY1aYBMt/1ek=
+X-Received: by 2002:a25:14d5:: with SMTP id 204mr2534608ybu.446.1592296478781;
+ Tue, 16 Jun 2020 01:34:38 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 10:34:35 +0200
+Message-Id: <20200616083435.223038-1-glider@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.290.gba653c62da-goog
+Subject: [PATCH v2] [RFC] security: allow using Clang's zero initialization
+ for stack variables
+From:   glider@google.com
+To:     yamada.masahiro@socionext.com, keescook@chromium.org,
+        jmorris@namei.org
+Cc:     maze@google.com, ndesaulniers@google.com,
+        gregkh@linuxfoundation.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This is what I've been using to explore actual bitmap results for
-real-world filters.
+In addition to -ftrivial-auto-var-init=pattern (used by
+CONFIG_INIT_STACK_ALL now) Clang also supports zero initialization for
+locals enabled by -ftrivial-auto-var-init=zero.
+The future of this flag is still being debated, see
+https://bugs.llvm.org/show_bug.cgi?id=45497
+Right now it is guarded by another flag,
+-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang,
+which means it may not be supported by future Clang releases.
+Another possible resolution is that -ftrivial-auto-var-init=zero will
+persist (as certain users have already started depending on it), but the
+name of the guard flag will change.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
+In the meantime, zero initialization has proven itself as a good
+production mitigation measure against uninitialized locals. Unlike
+pattern initialization, which has a higher chance of triggering existing
+bugs, zero initialization provides safe defaults for strings, pointers,
+indexes, and sizes. On the other hand, pattern initialization remains
+safer for return values.
+Performance-wise, the difference between pattern and zero initialization
+is usually negligible, although the generated code for zero
+initialization is more compact.
+
+This patch renames CONFIG_INIT_STACK_ALL to
+CONFIG_INIT_STACK_ALL_PATTERN and introduces another config option,
+CONFIG_INIT_STACK_ALL_ZERO, that enables zero initialization for locals
+if the corresponding flags are supported by Clang.
+
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Alexander Potapenko <glider@google.com>
+
+--
+v2:
+ - as suggested by Kees Cook, make CONFIG_INIT_STACK_ALL_PATTERN and
+   CONFIG_INIT_STACK_ALL_ZERO separate options.
 ---
- kernel/seccomp.c | 107 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 107 insertions(+)
+ Makefile                   | 12 ++++++++++--
+ init/main.c                |  6 ++++--
+ security/Kconfig.hardening | 29 +++++++++++++++++++++++++----
+ 3 files changed, 39 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 2fbe7d2260f7..370b7ed9273b 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -715,6 +715,85 @@ static void seccomp_update_bitmap(struct seccomp_filter *filter,
- 	}
- }
+diff --git a/Makefile b/Makefile
+index fd31992bf918..fa739995ee12 100644
+--- a/Makefile
++++ b/Makefile
+@@ -802,11 +802,19 @@ KBUILD_CFLAGS	+= -fomit-frame-pointer
+ endif
+ endif
  
-+static void __report_bitmap(const char *arch, u32 ret, int start, int finish)
-+{
-+	int gap;
-+	char *name;
+-# Initialize all stack variables with a pattern, if desired.
+-ifdef CONFIG_INIT_STACK_ALL
++# Initialize all stack variables with a 0xAA pattern.
++ifdef CONFIG_INIT_STACK_ALL_PATTERN
+ KBUILD_CFLAGS	+= -ftrivial-auto-var-init=pattern
+ endif
+ 
++# Initialize all stack variables with a zero pattern.
++ifdef CONFIG_INIT_STACK_ALL_ZERO
++# Future support for zero initialization is still being debated, see
++# https://bugs.llvm.org/show_bug.cgi?id=45497. These flags are subject to being
++# renamed or dropped.
++KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
++endif
 +
-+	if (finish == -1)
-+		return;
-+
-+	switch (ret) {
-+	case UINT_MAX:
-+		name = "filter";
-+		break;
-+	case SECCOMP_RET_ALLOW:
-+		name = "SECCOMP_RET_ALLOW";
-+		break;
-+	case SECCOMP_RET_KILL_PROCESS:
-+		name = "SECCOMP_RET_KILL_PROCESS";
-+		break;
-+	case SECCOMP_RET_KILL_THREAD:
-+		name = "SECCOMP_RET_KILL_THREAD";
-+		break;
-+	default:
-+		WARN_ON_ONCE(1);
-+		name = "unknown";
-+		break;
-+	}
-+
-+	gap = 0;
-+	if (start < 100)
-+		gap++;
-+	if (start < 10)
-+		gap++;
-+	if (finish < 100)
-+		gap++;
-+	if (finish < 10)
-+		gap++;
-+
-+	if (start == finish)
-+		pr_info("%s     %3d: %s\n", arch, start, name);
-+	else if (start + 1 == finish)
-+		pr_info("%s %*s%d,%d: %s\n", arch, gap, "", start, finish, name);
-+	else
-+		pr_info("%s %*s%d-%d: %s\n", arch, gap, "", start, finish, name);
-+}
-+
-+static void report_bitmap(struct seccomp_bitmaps *bitmaps, const char *arch)
-+{
-+	u32 nr;
-+	int start = 0, finish = -1;
-+	u32 ret = UINT_MAX;
-+	struct report_states {
-+		unsigned long *bitmap;
-+		u32 ret;
-+	} states[] = {
-+		{ .bitmap = bitmaps->allow,	   .ret = SECCOMP_RET_ALLOW, },
-+		{ .bitmap = bitmaps->kill_process, .ret = SECCOMP_RET_KILL_PROCESS, },
-+		{ .bitmap = bitmaps->kill_thread,  .ret = SECCOMP_RET_KILL_THREAD, },
-+		{ .bitmap = NULL,		   .ret = UINT_MAX, },
-+	};
-+
-+	for (nr = 0; nr < NR_syscalls; nr++) {
-+		int i;
-+
-+		for (i = 0; i < ARRAY_SIZE(states); i++) {
-+			if (!states[i].bitmap || test_bit(nr, states[i].bitmap)) {
-+				if (ret != states[i].ret) {
-+					__report_bitmap(arch, ret, start, finish);
-+					ret = states[i].ret;
-+					start = nr;
-+				}
-+				finish = nr;
-+				break;
-+			}
-+		}
-+	}
-+	if (start != nr)
-+		__report_bitmap(arch, ret, start, finish);
-+}
-+
- static void seccomp_update_bitmaps(struct seccomp_filter *filter,
- 				   void *pagepair)
+ DEBUG_CFLAGS	:= $(call cc-option, -fno-var-tracking-assignments)
+ 
+ ifdef CONFIG_DEBUG_INFO
+diff --git a/init/main.c b/init/main.c
+index 0ead83e86b5a..ee08cef4aa1a 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -779,8 +779,10 @@ static void __init report_meminit(void)
  {
-@@ -724,6 +803,20 @@ static void seccomp_update_bitmaps(struct seccomp_filter *filter,
- 	seccomp_update_bitmap(filter, pagepair, SECCOMP_ARCH_COMPAT,
- 			      &current->seccomp.compat);
- #endif
-+	if (strncmp(current->comm, "test-", 5) == 0 ||
-+	    strcmp(current->comm, "seccomp_bpf") == 0 ||
-+	    /*
-+	     * Why are systemd's process names head-truncated to 8 bytes
-+	     * and wrapped in parens!?
-+	     */
-+	    (current->comm[0] == '(' && strrchr(current->comm, ')') != NULL)) {
-+		pr_info("reporting syscall bitmap usage for %d (%s):\n",
-+			task_pid_nr(current), current->comm);
-+		report_bitmap(&current->seccomp.native, "native");
-+#ifdef CONFIG_COMPAT
-+		report_bitmap(&current->seccomp.compat, "compat");
-+#endif
-+	}
- }
- #else
- static void seccomp_update_bitmaps(struct seccomp_filter *filter,
-@@ -783,6 +876,10 @@ static long seccomp_attach_filter(unsigned int flags,
- 	filter->prev = current->seccomp.filter;
- 	current->seccomp.filter = filter;
- 	atomic_inc(&current->seccomp.filter_count);
-+	if (atomic_read(&current->seccomp.filter_count) > 10)
-+		pr_info("%d filters: %d (%s)\n",
-+			atomic_read(&current->seccomp.filter_count),
-+			task_pid_nr(current), current->comm);
+ 	const char *stack;
  
- 	/* Evaluate filter for new known-outcome syscalls */
- 	seccomp_update_bitmaps(filter, pagepair);
-@@ -2131,6 +2228,16 @@ static int __init seccomp_sysctl_init(void)
- 		pr_warn("sysctl registration failed\n");
- 	else
- 		kmemleak_not_leak(hdr);
-+#ifndef CONFIG_HAVE_ARCH_SECCOMP_BITMAP
-+	pr_info("arch lacks support for constant action bitmaps\n");
-+#else
-+	pr_info("NR_syscalls: %d\n", NR_syscalls);
-+	pr_info("arch: 0x%x\n", SECCOMP_ARCH);
-+#ifdef CONFIG_COMPAT
-+	pr_info("compat arch: 0x%x\n", SECCOMP_ARCH_COMPAT);
-+#endif
-+#endif
-+	pr_info("sizeof(struct seccomp_bitmaps): %zu\n", sizeof(struct seccomp_bitmaps));
+-	if (IS_ENABLED(CONFIG_INIT_STACK_ALL))
+-		stack = "all";
++	if (IS_ENABLED(CONFIG_INIT_STACK_ALL_PATTERN))
++		stack = "all (pattern)";
++	else if (IS_ENABLED(CONFIG_INIT_STACK_ALL_ZERO))
++		stack = "all (zero)";
+ 	else if (IS_ENABLED(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL))
+ 		stack = "byref_all";
+ 	else if (IS_ENABLED(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF))
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index af4c979b38ee..7b705611ccaa 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -19,13 +19,16 @@ config GCC_PLUGIN_STRUCTLEAK
  
- 	return 0;
- }
+ menu "Memory initialization"
+ 
+-config CC_HAS_AUTO_VAR_INIT
++config CC_HAS_AUTO_VAR_INIT_PATTERN
+ 	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
+ 
++config CC_HAS_AUTO_VAR_INIT_ZERO
++	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
++
+ choice
+ 	prompt "Initialize kernel stack variables at function entry"
+ 	default GCC_PLUGIN_STRUCTLEAK_BYREF_ALL if COMPILE_TEST && GCC_PLUGINS
+-	default INIT_STACK_ALL if COMPILE_TEST && CC_HAS_AUTO_VAR_INIT
++	default INIT_STACK_ALL_PATTERN if COMPILE_TEST && CC_HAS_AUTO_VAR_INIT_PATTERN
+ 	default INIT_STACK_NONE
+ 	help
+ 	  This option enables initialization of stack variables at
+@@ -88,15 +91,33 @@ choice
+ 		  of uninitialized stack variable exploits and information
+ 		  exposures.
+ 
+-	config INIT_STACK_ALL
++	config INIT_STACK_ALL_PATTERN
+ 		bool "0xAA-init everything on the stack (strongest)"
+-		depends on CC_HAS_AUTO_VAR_INIT
++		depends on CC_HAS_AUTO_VAR_INIT_PATTERN
+ 		help
+ 		  Initializes everything on the stack with a 0xAA
+ 		  pattern. This is intended to eliminate all classes
+ 		  of uninitialized stack variable exploits and information
+ 		  exposures, even variables that were warned to have been
+ 		  left uninitialized.
++		  Pattern initialization is known to provoke many existing bugs
++		  related to uninitialized locals, e.g. pointers receive
++		  non-NULL values, buffer sizes and indices are very big.
++
++	config INIT_STACK_ALL_ZERO
++		bool "zero-init everything on the stack (strongest and safest)"
++		depends on CC_HAS_AUTO_VAR_INIT_ZERO
++		help
++		  Initializes everything on the stack with a zero
++		  pattern. This is intended to eliminate all classes
++		  of uninitialized stack variable exploits and information
++		  exposures, even variables that were warned to have been
++		  left uninitialized.
++		  Zero initialization provides safe defaults for strings,
++		  pointers, indices and sizes, and is therefore more suitable as
++		  a security mitigation measure.
++		  The corresponding flag isn't officially supported by Clang and
++		  may sooner or later go away or get renamed.
+ 
+ endchoice
+ 
 -- 
-2.25.1
+2.27.0.290.gba653c62da-goog
 
