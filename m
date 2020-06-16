@@ -2,105 +2,112 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 479551FBA3A
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jun 2020 18:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE53E1FBB45
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jun 2020 18:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732805AbgFPQJk (ORCPT
+        id S1732376AbgFPQSO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 16 Jun 2020 12:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+        Tue, 16 Jun 2020 12:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732662AbgFPQJj (ORCPT
+        with ESMTP id S1731646AbgFPQSK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 16 Jun 2020 12:09:39 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BF0C06174E
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:09:32 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id a127so9710284pfa.12
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:09:32 -0700 (PDT)
+        Tue, 16 Jun 2020 12:18:10 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA84C061573
+        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:18:10 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 10so9722589pfx.8
+        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=Qr6LU5AJyvXIew1juXMAoqiI4cF7kmvmZdA39adClnc=;
-        b=Rkw9rZaVLXXtIQ0m20+mYgJQ4gcuayp8YvWp0pVNnyS2Ud5bvdUdx69IRXMW08dI+y
-         pzV/H7bWfkwsJ9crKNCDPM1q0WUffbNtBokPP+PZDWzzEdUIZWHq9M86Wqe0z1bOibJL
-         0kj7zDc/gs1pT2s4SL4bLi137RE65s/ZSVNpo=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VPiig07nxQc9lwVFwfYIH3T1ET4UEo+E1D0Wd8u+hBk=;
+        b=XjCEbPGQUfD9AjE8Hevx52b4HKLCh8oQsGbdC1PHF3Q3QbQn9Ygd51hLvkzVjxG3RX
+         UtN728e+HKmcQcP8keX/4Kwc+Ht/ZOiBd+tejEg6vDoXtD7HbPCgbRcKvY43gkmThxUy
+         bNcZxPwfyTV9TOAjM5Nf8FXt7R7jq7FXYA3UM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Qr6LU5AJyvXIew1juXMAoqiI4cF7kmvmZdA39adClnc=;
-        b=cm32DK4+cXFUlVowNeM5LAHFN0f4XnGdTKzicJ8YvLd+j1NtlI3ijqeUTvVWLJdwj/
-         3bzBrf7krzXFPajU2c+FuPqcdm+M9w70T1iCsW9lK9te/lwRquPe48uYkhHU8DtmA0pq
-         U4FqNhkoGVDNhLS5w+mulTuWyAkqQlulCpfuzjAaaH9EgpdiQZtz4tkVm2W1LAibi92z
-         vgoFcPSche3hxEggBV/OSumrEsY2/za0lVis+GftZboTA6a/nw2uXZePzCpAUiumAnVx
-         u320l/ssFZLVWIO5Ftp5vC+VrpcR+HCzokEiC4FeX4xXnWkjQBROmsSxRUeBaxsc2CMw
-         1Rbw==
-X-Gm-Message-State: AOAM532/WvmBx/EjZnVr/qe+3DrI5IwgNaj2pS2XKYZCtkwlGpD+deTm
-        8v4rGZHAoEUA2dTd7/LYf0aJ68h6tSzFloRkAN7w0/Jur9zwEyAqjow6MkIgk4IxVOZZrRUAC4p
-        gUx82sW7vH5x6PZiTYdn62sQdGSzTuhRc02fAb+siAVcnXdlgzEGqKsreEK+kTt2IqCjlbqD1c4
-        ItYepdWLNF1F/sYjXf55egKAE=
-X-Google-Smtp-Source: ABdhPJw0IGP4wrEgB7iuDlwGXE4MMae76XZ2NoGZ/467ZGcMrf6sY2DenPwGzgjt24xH+kDh+E9WqA==
-X-Received: by 2002:a62:9242:: with SMTP id o63mr2821188pfd.310.1592323771469;
-        Tue, 16 Jun 2020 09:09:31 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id p8sm14999992pgs.29.2020.06.16.09.09.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2020 09:09:30 -0700 (PDT)
-Subject: Re: [PATCH v9 1/8] fs: introduce kernel_pread_file* support
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20200615194151.7011-1-scott.branden@broadcom.com>
- <20200615194151.7011-2-scott.branden@broadcom.com>
- <20200616073423.GC30385@infradead.org>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <b89a3f0f-51b9-7705-3a23-26196ae7716e@broadcom.com>
-Date:   Tue, 16 Jun 2020 09:09:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VPiig07nxQc9lwVFwfYIH3T1ET4UEo+E1D0Wd8u+hBk=;
+        b=jRDrZ9VSIQYoaqlC5A7Z7mUgomOPPIFB+1G8Gd4NuGt0pFcT3sobpjLjSDFNAEvSU/
+         7VCFsEH/D+UDeBJZiAiihxLMaHVrno5HmTTvsVIi+qgbezSI8jZkGml/RlnIoP8YHIif
+         OENWqyG2JU9kUiwlOAKPKyuVC4ABdHdsmhC6SBVxUwjoCwKTcuLRlO83gJxKwcu4Davx
+         9UiempFhVTu0c18eVB8q/TF1tc/SrYxtp+ir20pGPWfcSKusdkOWSwJNgYU/M7U3WPNY
+         pc3Iny3YJvv1G/WfaLQ0WfsMZ1hIk7TGxOtjSXQ5/gNAkbRZ0GmjZcKpT/z8AiV9KFED
+         ifZw==
+X-Gm-Message-State: AOAM532zHiAXe/6o0ftgr7TY0wK00nsR/5K8lavTCosAapOsliXtOjUd
+        Bcbmh36wsxcmzKb63lA8kMvEtQ==
+X-Google-Smtp-Source: ABdhPJyXAmJNtObOlU+rzC52vUgZGrV4mSFDLUt84VwfrotzrnZ8vPKhz8hCE9vZvCTtbLg7XCtYDQ==
+X-Received: by 2002:a65:484c:: with SMTP id i12mr2637328pgs.267.1592324290000;
+        Tue, 16 Jun 2020 09:18:10 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w6sm2996602pjy.15.2020.06.16.09.18.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 09:18:08 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 09:18:07 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        James Morris <jmorris@namei.org>,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] [RFC] security: allow using Clang's zero
+ initialization for stack variables
+Message-ID: <202006160911.BD403B5@keescook>
+References: <20200616083435.223038-1-glider@google.com>
+ <20200616100309.GA2614426@kroah.com>
+ <CAG_fn=VYN6ynu2bnW96-p-QRi77NstHC6DXS+AN0r0bm5K2j7w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200616073423.GC30385@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=VYN6ynu2bnW96-p-QRi77NstHC6DXS+AN0r0bm5K2j7w@mail.gmail.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Christoph,
+On Tue, Jun 16, 2020 at 02:15:52PM +0200, Alexander Potapenko wrote:
+> > > +KBUILD_CFLAGS        += -ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+> > > +endif
+> >
+> > Gotta love the name...
+> 
+> This is basically the reason why we've been hesitating to add it to
+> the kernel from the very beginning.
+> 
+> > Anyway, if this is enabled, and clang changes the flag or drops it, does
+> > the build suddenly break?
+> 
+> My original intention (see v1 of this patch) was to make
+> zero-initialization a secondary option of INIT_STACK_ALL, so that
+> nothing changes for the existing users.
+> But I agree with Kees that these options should be made distinct, as
+> people may want to use them for different purposes (think debug vs.
+> release builds).
 
-On 2020-06-16 12:34 a.m., Christoph Hellwig wrote:
-> Seriously, no more additions to fs.h for this interface please.  As
-> requested before as the very first thing move it out of this header
-> used by just about every file in the kernel.  That is in addition
-> to all the other issues with the interface.
-I can add such to the start of this patch series. I'm guessing from:
-#define __kernel_read_file_id(id) \
-to
-extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
-                     enum kernel_read_file_id);
+Yeah, and if the flag changes again, we can adapt. But at this point,
+it's getting used downstream, so we need to land the config in the
+kernel.
 
+> We could make INIT_STACK_ALL_ZERO fall back to INIT_STACK_ALL_PATTERN
+> if the compiler flag goes away - does this make sense?
 
+I don't like this idea -- I'm very hesitant to make security options do
+something different than what they document. It means the end user can't
+reason about how their kernel is built when looking at their CONFIGs.
+
+> > And does gcc have something like this as well, or does that have to come
+> > in a compiler plugin?
+> 
+> Kees mentioned someone's plans to implement that in GCC, but I don't
+> think they have done it already.
+
+I've had some GCC folks reach about about these features, but I haven't
+seen any public discussion yet.
+
+-- 
+Kees Cook
