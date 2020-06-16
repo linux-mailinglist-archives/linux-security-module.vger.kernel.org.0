@@ -2,169 +2,105 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4851FB936
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jun 2020 18:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479551FBA3A
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jun 2020 18:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732347AbgFPQBw (ORCPT
+        id S1732805AbgFPQJk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 16 Jun 2020 12:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        Tue, 16 Jun 2020 12:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733170AbgFPQBt (ORCPT
+        with ESMTP id S1732662AbgFPQJj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 16 Jun 2020 12:01:49 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8833AC061573
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:01:49 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x207so9714854pfc.5
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:01:49 -0700 (PDT)
+        Tue, 16 Jun 2020 12:09:39 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BF0C06174E
+        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:09:32 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id a127so9710284pfa.12
+        for <linux-security-module@vger.kernel.org>; Tue, 16 Jun 2020 09:09:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=C2Y4BhWefKmP9iji9eylvkFo4/M9jmgkj2BXKFGkoJE=;
-        b=aJ8p70Y5LnowTS4d6Nvq5WyEu93YaLiozLfkw0uDW6dYUF3xQNCbIJvKarTK5Ed9iD
-         m7i0zsBqFI1pIpAyIluoSmBT0Risms7oI2Pp32JEbx7n0H5pqbwQtOkP1/KHECdDu/FT
-         ltBtg48/YKabACQ+Epr94E4U9IQIdRDp/x9Fs=
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=Qr6LU5AJyvXIew1juXMAoqiI4cF7kmvmZdA39adClnc=;
+        b=Rkw9rZaVLXXtIQ0m20+mYgJQ4gcuayp8YvWp0pVNnyS2Ud5bvdUdx69IRXMW08dI+y
+         pzV/H7bWfkwsJ9crKNCDPM1q0WUffbNtBokPP+PZDWzzEdUIZWHq9M86Wqe0z1bOibJL
+         0kj7zDc/gs1pT2s4SL4bLi137RE65s/ZSVNpo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C2Y4BhWefKmP9iji9eylvkFo4/M9jmgkj2BXKFGkoJE=;
-        b=qFHDX2pHBhLy+r+mbi3QYtYdXrS/1hO+Y9thZ0xjXwUfFTWoC6aC40FnbiYsZAg3fu
-         LRCu/6BrFDvpcpBi7U89QKKPlxzhE2/YmTJCJpd3/3MMxUKu/l+hAR2B9/DIL6qJHFAF
-         Wljew4KaS1GXt2daRdylNtkuMGfd/Be893P+kMaYEFWx8tE8eh0YYWSnE/RxXQCQOV/S
-         Au4NZJFTqYp9+XUxi7Wi9e+lPnSV2gCL/CFQzGP4r0/IKWlh7rMgfUA1zKTOy33NxS+k
-         4wF30dm/+O0GO0dz8jgM+manTmbaCUlA48/tY8MsYby61VVe3ICtpkBQ1tv2derp/x54
-         qoRg==
-X-Gm-Message-State: AOAM530amCW3kePLyE/scxibH8KJgkPoSff6Ab9ETKGpeGMVz5Frp3d9
-        G4VJ72Pameot4QcUfSRScFoMhA==
-X-Google-Smtp-Source: ABdhPJxZYUpPJAibIwbYuU5zDTSd1Kb3np/+gOul4WD0kGGfyZGJ7hHLOe/iwa9+dycWyfSgo2noGQ==
-X-Received: by 2002:a63:5307:: with SMTP id h7mr2625624pgb.28.1592323309057;
-        Tue, 16 Jun 2020 09:01:49 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id iq19sm2942471pjb.48.2020.06.16.09.01.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2020 09:01:48 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 09:01:46 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Tycho Andersen <tycho@tycho.ws>, Jann Horn <jannh@google.com>,
-        "zhujianwei (C)" <zhujianwei7@huawei.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Matt Denton <mpdenton@google.com>,
-        Chris Palmer <palmer@google.com>,
-        Jeffrey Vander Stoep <jeffv@google.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Hehuazhen <hehuazhen@huawei.com>, x86@kernel.org,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org
-Subject: Re: [PATCH 4/8] seccomp: Implement constant action bitmaps
-Message-ID: <202006160851.E8F9928AAB@keescook>
-References: <20200616074934.1600036-1-keescook@chromium.org>
- <20200616074934.1600036-5-keescook@chromium.org>
- <fc0c14cd-bcf0-c94c-6cba-d0ce1844e93c@intel.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=Qr6LU5AJyvXIew1juXMAoqiI4cF7kmvmZdA39adClnc=;
+        b=cm32DK4+cXFUlVowNeM5LAHFN0f4XnGdTKzicJ8YvLd+j1NtlI3ijqeUTvVWLJdwj/
+         3bzBrf7krzXFPajU2c+FuPqcdm+M9w70T1iCsW9lK9te/lwRquPe48uYkhHU8DtmA0pq
+         U4FqNhkoGVDNhLS5w+mulTuWyAkqQlulCpfuzjAaaH9EgpdiQZtz4tkVm2W1LAibi92z
+         vgoFcPSche3hxEggBV/OSumrEsY2/za0lVis+GftZboTA6a/nw2uXZePzCpAUiumAnVx
+         u320l/ssFZLVWIO5Ftp5vC+VrpcR+HCzokEiC4FeX4xXnWkjQBROmsSxRUeBaxsc2CMw
+         1Rbw==
+X-Gm-Message-State: AOAM532/WvmBx/EjZnVr/qe+3DrI5IwgNaj2pS2XKYZCtkwlGpD+deTm
+        8v4rGZHAoEUA2dTd7/LYf0aJ68h6tSzFloRkAN7w0/Jur9zwEyAqjow6MkIgk4IxVOZZrRUAC4p
+        gUx82sW7vH5x6PZiTYdn62sQdGSzTuhRc02fAb+siAVcnXdlgzEGqKsreEK+kTt2IqCjlbqD1c4
+        ItYepdWLNF1F/sYjXf55egKAE=
+X-Google-Smtp-Source: ABdhPJw0IGP4wrEgB7iuDlwGXE4MMae76XZ2NoGZ/467ZGcMrf6sY2DenPwGzgjt24xH+kDh+E9WqA==
+X-Received: by 2002:a62:9242:: with SMTP id o63mr2821188pfd.310.1592323771469;
+        Tue, 16 Jun 2020 09:09:31 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id p8sm14999992pgs.29.2020.06.16.09.09.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2020 09:09:30 -0700 (PDT)
+Subject: Re: [PATCH v9 1/8] fs: introduce kernel_pread_file* support
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20200615194151.7011-1-scott.branden@broadcom.com>
+ <20200615194151.7011-2-scott.branden@broadcom.com>
+ <20200616073423.GC30385@infradead.org>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <b89a3f0f-51b9-7705-3a23-26196ae7716e@broadcom.com>
+Date:   Tue, 16 Jun 2020 09:09:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fc0c14cd-bcf0-c94c-6cba-d0ce1844e93c@intel.com>
+In-Reply-To: <20200616073423.GC30385@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jun 16, 2020 at 07:40:17AM -0700, Dave Hansen wrote:
-> On 6/16/20 12:49 AM, Kees Cook wrote:
-> > +	/* Mark the second page as untouched (i.e. "old") */
-> > +	preempt_disable();
-> > +	set_pte_at(&init_mm, vaddr, ptep, pte_mkold(*(READ_ONCE(ptep))));
-> > +	local_flush_tlb_kernel_range(vaddr, vaddr + PAGE_SIZE);
-> > +	preempt_enable();
-> 
-> If you can, I'd wrap that nugget up in a helper.  I'd also suggest being
-> very explicit in a comment about what it is trying to do: ensure no TLB
-> entries exist so that a future access will always set the Accessed bit.
+Hi Christoph,
 
-Yeah, good idea!
+On 2020-06-16 12:34 a.m., Christoph Hellwig wrote:
+> Seriously, no more additions to fs.h for this interface please.  As
+> requested before as the very first thing move it out of this header
+> used by just about every file in the kernel.  That is in addition
+> to all the other issues with the interface.
+I can add such to the start of this patch series. I'm guessing from:
+#define __kernel_read_file_id(id) \
+to
+extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
+                     enum kernel_read_file_id);
 
-> 
-> > +	/* Make sure the PTE agrees that it is untouched. */
-> > +	if (WARN_ON_ONCE(sd_touched(ptep)))
-> > +		return;
-> > +	/* Read a portion of struct seccomp_data from the second page. */
-> > +	check = sd->instruction_pointer;
-> > +	/* First, verify the contents are zero from vzalloc(). */
-> > +	if (WARN_ON_ONCE(check))
-> > +		return;
-> > +	/* Now make sure the ACCESSED bit has been set after the read. */
-> > +	if (!sd_touched(ptep)) {
-> > +		/*
-> > +		 * If autodetection fails, fall back to standard beahavior by
-> > +		 * clearing the entire "allow" bitmap.
-> > +		 */
-> > +		pr_warn_once("seccomp: cannot build automatic syscall filters\n");
-> > +		bitmap_zero(bitmaps->allow, NR_syscalls);
-> > +		return;
-> > +	}
-> 
-> I can't find any big holes with this.  It's the kind of code that makes
-> me nervous, but mostly because it's pretty different that anything else
-> we have in the kernel.
-> 
-> It's also clear to me here that you probably have a slightly different
-> expectation of what the PTE accessed flag means versus the hardware
-> guys.  What you are looking for it to mean is roughly: "a retired
-> instruction touched this page".
-> 
-> The hardware guys would probably say it's closer to "a TLB entry was
-> established for this page."  Remember that TLB entries can be
-> established speculatively or from things like prefetchers.  While I
-> don't know of anything microarchitectural today which would trip this
-> mechanism, it's entirely possible that something in the future might.
-> Accessing close to the page boundary is the exact kind of place folks
-> might want to optimize.
 
-Yeah, and to that end, going the cBPF emulator route removes this kind
-of "weird" behavior.
-
-> 
-> *But*, at least it would err in the direction of being conservative.  It
-> would say "somebody touched the page!" more often than it should, but
-> never _less_ often than it should.
-
-Right -- I made sure to design the bitmaps and the direction of the
-checking to fail towards running the filter instead of bypassing it.
-
-> One thing about the implementation (which is roughly):
-> 
-> 	// Touch the data:
-> 	check = sd->instruction_pointer;
-> 	// Examine the PTE mapping that data:
-> 	if (!sd_touched(ptep)) {
-> 		// something
-> 	}
-> 
-> There aren't any barriers in there, which could lead to the sd_touched()
-> check being ordered before the data touch.  I think a rmb() will
-> suffice.  You could even do it inside sd_touched().
-
-Ah yeah, I had convinced myself that READ_ONCE() gained me that
-coverage, but I guess that's not actually true here.
-
-> Was there a reason you chose to export a ranged TLB flush?  I probably
-> would have just used the single-page flush_tlb_one_kernel() for this
-> purpose if I were working in arch-specific code.
-
-No particular reason -- it just seemed easiest to make available given
-the interfaces. I could do the single-page version instead, if this way
-of doing things survives review. ;)
-
-Thanks for looking at it!
-
--- 
-Kees Cook
