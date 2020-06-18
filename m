@@ -2,165 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BE51FE825
-	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 04:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7261FEBA1
+	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 08:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728580AbgFRCqe (ORCPT
+        id S1726940AbgFRGm5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 17 Jun 2020 22:46:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728545AbgFRBKg (ORCPT
+        Thu, 18 Jun 2020 02:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727853AbgFRGm4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:10:36 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34D12221EA;
-        Thu, 18 Jun 2020 01:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442635;
-        bh=z3TApV2sXDsdLnRKDBfmzrWUPYKbt+3FMoXHkR5RR4Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Idx70aDqfovYNJvbt/7yv3i/ZjLTmL0ZWV4V5NF9bK34LGZk5mU2zlHF4+O3vuaoe
-         I01Zfc+zGXPCVZaXEDl8rbkYvobtEvN16eAWAjJD2iAQpNTkwEB3twTnZ+LryfI4eT
-         zrZHMUBDhrY8oH4IK52SAmwqzhRZyGvTWHzYiStM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Johansen <john.johansen@canonical.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 112/388] apparmor: fix nnp subset test for unconfined
-Date:   Wed, 17 Jun 2020 21:03:29 -0400
-Message-Id: <20200618010805.600873-112-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
+        Thu, 18 Jun 2020 02:42:56 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBF3C0613EE
+        for <linux-security-module@vger.kernel.org>; Wed, 17 Jun 2020 23:42:54 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id d21so712837lfb.6
+        for <linux-security-module@vger.kernel.org>; Wed, 17 Jun 2020 23:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K6hCnmc25bPhM8Zds15z3T5k2ctR9P+E0kmH5eedao4=;
+        b=LvLtQrHK+FRlk5/sD/8n+NvY5OlKXKDXtDGMvGAWEV8LStu+H5SMcJeof/D1Bi311E
+         iG2SVk2aU8L6UtTvMM8QqgfobAoSZA/4MszA+QHc6H9+WyoduT5HIfL3NiYOClb4mgyQ
+         sWSi05++HNZSaCzaYuMbRzFE/0UM0074HyCLCvUzrlUKp9M2DFy94o8jLGFyaPfQRSRB
+         vUi6H6KpwDixktHDOVJdezLiS2MP8TfPZ1UtIASSqww607WvpGLOrH5fk+dmANcJlVEi
+         LblDqZh3z5oDKbVxry/Q7EUNdmW19cHib1w0FFgAFPAmFzAtBbVtvd2OsQMdNed0x+IO
+         CTaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K6hCnmc25bPhM8Zds15z3T5k2ctR9P+E0kmH5eedao4=;
+        b=dTUdptZAcaXJhQ0KLP03ZXK0gGGBJnC5cZHCapuv2L8FgatSYKXO5xYV/aY751+vjF
+         J+WF3VaZgljREswM7hIsEZLBn43ESnfilbwmjsCEW0dm5KTZVRdsbhdqa404QdQM6SNj
+         uZZEnjF6sglGBxtyP//eGYmQvCXfS81Q41zMNv/3uEIQ5MGnNdc2ObRxseVjPEvpiK7U
+         acD/b3qtkKVqswSub9KFiVS57a7oXuqI9XR+ukI+vTiyv2SiJ2qvWyOCZR8X/eX58MgT
+         R/vawI4xn6+gXL7TjWMk5IQVLxa7GiOS3BNYftIwRZX+KpHi7r8eBad+M8B89Aiak/fP
+         +Zsw==
+X-Gm-Message-State: AOAM531XAGy5MDOnMNM3frz3ogTQprR3CkO6638PbkI4AZPzQGRzYS1Y
+        In9tq8Uh1bH+KJByrA7IaNV2tKpvHEftnXJzYypSAw==
+X-Google-Smtp-Source: ABdhPJx4QxcHzkbgPAk3c9tXd5/s0nYZNRG6j8i+HfERTJzJ+F0FGPMbAipjRTc9ukWM5DOXoFi2vtfz2V+2oSbLHwA=
+X-Received: by 2002:ac2:41d4:: with SMTP id d20mr1489555lfi.204.1592462573264;
+ Wed, 17 Jun 2020 23:42:53 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <1591107505-6030-1-git-send-email-sumit.garg@linaro.org>
+ <1591107505-6030-2-git-send-email-sumit.garg@linaro.org> <20200615182457.GB5416@linux.intel.com>
+ <CAFA6WYNEnXm5FOGHGAg4XB-+GXD=C+YMh+6t976=pStU0WshAA@mail.gmail.com> <20200617231429.GD62794@linux.intel.com>
+In-Reply-To: <20200617231429.GD62794@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 18 Jun 2020 12:12:41 +0530
+Message-ID: <CAFA6WYOdtwnewqY0ASnMf7fyw3s_hQx0+oWJRhT3CpkkkxYpDA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] KEYS: trusted: Add generic trusted keys framework
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org,
+        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
+        Luke Hinds <lhinds@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: John Johansen <john.johansen@canonical.com>
+On Thu, 18 Jun 2020 at 04:44, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Tue, Jun 16, 2020 at 07:02:37PM +0530, Sumit Garg wrote:
+> > + Luke
+> >
+> > Hi Jarkko,
+> >
+> > Prior to addressing your comments below which seems to show your
+> > preference for compile time selection of trust source (TPM or TEE), I
+> > would just like to hear the reasons for this preference especially if
+> > it makes distro vendor's life difficult [1] to make opinionated
+> > selection which could rather be achieved dynamically based on platform
+> > capability.
+> >
+> > [1] https://lkml.org/lkml/2020/6/3/405
+> >
+> > -Sumit
+>
+> Hmm... I do get the distribution kernel point. OK, lets revert to
+> dynamic then. Thanks for the remark.
+>
+> /Jarkko
 
-[ Upstream commit 3ed4aaa94fc07db3cd0c91be95e3e1b9782a2710 ]
+Thanks, will revert to dynamic mode in v6.
 
-The subset test is not taking into account the unconfined exception
-which will cause profile transitions in the stacked confinement
-case to fail when no_new_privs is applied.
-
-This fixes a regression introduced in the fix for
-https://bugs.launchpad.net/bugs/1839037
-
-BugLink: https://bugs.launchpad.net/bugs/1844186
-Signed-off-by: John Johansen <john.johansen@canonical.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- security/apparmor/domain.c        |  9 +++++----
- security/apparmor/include/label.h |  1 +
- security/apparmor/label.c         | 33 +++++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+), 4 deletions(-)
-
-diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
-index a84ef030fbd7..4cfa58c07778 100644
---- a/security/apparmor/domain.c
-+++ b/security/apparmor/domain.c
-@@ -929,7 +929,8 @@ int apparmor_bprm_set_creds(struct linux_binprm *bprm)
- 	 * aways results in a further reduction of permissions.
- 	 */
- 	if ((bprm->unsafe & LSM_UNSAFE_NO_NEW_PRIVS) &&
--	    !unconfined(label) && !aa_label_is_subset(new, ctx->nnp)) {
-+	    !unconfined(label) &&
-+	    !aa_label_is_unconfined_subset(new, ctx->nnp)) {
- 		error = -EPERM;
- 		info = "no new privs";
- 		goto audit;
-@@ -1207,7 +1208,7 @@ int aa_change_hat(const char *hats[], int count, u64 token, int flags)
- 		 * reduce restrictions.
- 		 */
- 		if (task_no_new_privs(current) && !unconfined(label) &&
--		    !aa_label_is_subset(new, ctx->nnp)) {
-+		    !aa_label_is_unconfined_subset(new, ctx->nnp)) {
- 			/* not an apparmor denial per se, so don't log it */
- 			AA_DEBUG("no_new_privs - change_hat denied");
- 			error = -EPERM;
-@@ -1228,7 +1229,7 @@ int aa_change_hat(const char *hats[], int count, u64 token, int flags)
- 		 * reduce restrictions.
- 		 */
- 		if (task_no_new_privs(current) && !unconfined(label) &&
--		    !aa_label_is_subset(previous, ctx->nnp)) {
-+		    !aa_label_is_unconfined_subset(previous, ctx->nnp)) {
- 			/* not an apparmor denial per se, so don't log it */
- 			AA_DEBUG("no_new_privs - change_hat denied");
- 			error = -EPERM;
-@@ -1423,7 +1424,7 @@ int aa_change_profile(const char *fqname, int flags)
- 		 * reduce restrictions.
- 		 */
- 		if (task_no_new_privs(current) && !unconfined(label) &&
--		    !aa_label_is_subset(new, ctx->nnp)) {
-+		    !aa_label_is_unconfined_subset(new, ctx->nnp)) {
- 			/* not an apparmor denial per se, so don't log it */
- 			AA_DEBUG("no_new_privs - change_hat denied");
- 			error = -EPERM;
-diff --git a/security/apparmor/include/label.h b/security/apparmor/include/label.h
-index 47942c4ba7ca..255764ab06e2 100644
---- a/security/apparmor/include/label.h
-+++ b/security/apparmor/include/label.h
-@@ -281,6 +281,7 @@ bool aa_label_init(struct aa_label *label, int size, gfp_t gfp);
- struct aa_label *aa_label_alloc(int size, struct aa_proxy *proxy, gfp_t gfp);
- 
- bool aa_label_is_subset(struct aa_label *set, struct aa_label *sub);
-+bool aa_label_is_unconfined_subset(struct aa_label *set, struct aa_label *sub);
- struct aa_profile *__aa_label_next_not_in_set(struct label_it *I,
- 					     struct aa_label *set,
- 					     struct aa_label *sub);
-diff --git a/security/apparmor/label.c b/security/apparmor/label.c
-index 6c3acae701ef..5f324d63ceaa 100644
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -550,6 +550,39 @@ bool aa_label_is_subset(struct aa_label *set, struct aa_label *sub)
- 	return __aa_label_next_not_in_set(&i, set, sub) == NULL;
- }
- 
-+/**
-+ * aa_label_is_unconfined_subset - test if @sub is a subset of @set
-+ * @set: label to test against
-+ * @sub: label to test if is subset of @set
-+ *
-+ * This checks for subset but taking into account unconfined. IF
-+ * @sub contains an unconfined profile that does not have a matching
-+ * unconfined in @set then this will not cause the test to fail.
-+ * Conversely we don't care about an unconfined in @set that is not in
-+ * @sub
-+ *
-+ * Returns: true if @sub is special_subset of @set
-+ *     else false
-+ */
-+bool aa_label_is_unconfined_subset(struct aa_label *set, struct aa_label *sub)
-+{
-+	struct label_it i = { };
-+	struct aa_profile *p;
-+
-+	AA_BUG(!set);
-+	AA_BUG(!sub);
-+
-+	if (sub == set)
-+		return true;
-+
-+	do {
-+		p = __aa_label_next_not_in_set(&i, set, sub);
-+		if (p && !profile_unconfined(p))
-+			break;
-+	} while (p);
-+
-+	return p == NULL;
-+}
- 
- 
- /**
--- 
-2.25.1
-
+-Sumit
