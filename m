@@ -2,40 +2,42 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D09B1FE4F9
-	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 04:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FA21FE304
+	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 04:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727048AbgFRCWS (ORCPT
+        id S1732384AbgFRCFm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 17 Jun 2020 22:22:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49812 "EHLO mail.kernel.org"
+        Wed, 17 Jun 2020 22:05:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729918AbgFRBSZ (ORCPT
+        id S1730808AbgFRBWk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:18:25 -0400
+        Wed, 17 Jun 2020 21:22:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8AA2321D79;
-        Thu, 18 Jun 2020 01:18:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 92DA520776;
+        Thu, 18 Jun 2020 01:22:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443105;
-        bh=5qGN6dzuL3fsRWR3ykBWFKMB/NJDXPlMGCELXXfLV/w=;
+        s=default; t=1592443360;
+        bh=zBzG+XQLAb/qyuKQzJ5OOYujuxtJFnwnJn8P+8Fyby0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2TOAEfzqsBIbDMNCjqsJgJjwX92UfmOzTDDitlM7iS1Z0WGwZSjEkwLdkNwaKWkrC
-         Q0Dc6ZRDh4vNI4ijBIFQ5fsoGOMJOoO6ErLLYLVwO+zA+V1PYlXpINFvLJ7EOcB3Z9
-         Fod5gAfX4r1jcKQnRBKr5BvXwMmAphDC9UXv3qzY=
+        b=lazXY993v/5q06mZ5Wo8JO6wRbg/Rl/TnmalHVxOQytqOlKSZXC9HXYTfRbSW5E69
+         qLoLdeRHQ9gY0yqhtXcFZBISk09EA0hkcWOVtRRrt1zpVwJ+phT750U13i9Fk4xIsy
+         J9bI0BhRZwk3ej6FqDZZW4LVSYne6+7QCMBpAVWI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Johansen <john.johansen@canonical.com>,
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot+bfdd4a2f07be52351350@syzkaller.appspotmail.com,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 083/266] apparmor: fix nnp subset test for unconfined
-Date:   Wed, 17 Jun 2020 21:13:28 -0400
-Message-Id: <20200618011631.604574-83-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 017/172] Smack: slab-out-of-bounds in vsscanf
+Date:   Wed, 17 Jun 2020 21:19:43 -0400
+Message-Id: <20200618012218.607130-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
-References: <20200618011631.604574-1-sashal@kernel.org>
+In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
+References: <20200618012218.607130-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,123 +46,47 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: John Johansen <john.johansen@canonical.com>
+From: Casey Schaufler <casey@schaufler-ca.com>
 
-[ Upstream commit 3ed4aaa94fc07db3cd0c91be95e3e1b9782a2710 ]
+[ Upstream commit 84e99e58e8d1e26f04c097f4266e431a33987f36 ]
 
-The subset test is not taking into account the unconfined exception
-which will cause profile transitions in the stacked confinement
-case to fail when no_new_privs is applied.
+Add barrier to soob. Return -EOVERFLOW if the buffer
+is exceeded.
 
-This fixes a regression introduced in the fix for
-https://bugs.launchpad.net/bugs/1839037
-
-BugLink: https://bugs.launchpad.net/bugs/1844186
-Signed-off-by: John Johansen <john.johansen@canonical.com>
+Suggested-by: Hillf Danton <hdanton@sina.com>
+Reported-by: syzbot+bfdd4a2f07be52351350@syzkaller.appspotmail.com
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/apparmor/domain.c        |  9 +++++----
- security/apparmor/include/label.h |  1 +
- security/apparmor/label.c         | 33 +++++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+), 4 deletions(-)
+ security/smack/smackfs.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
-index 5dedc0173b02..1a33f490e667 100644
---- a/security/apparmor/domain.c
-+++ b/security/apparmor/domain.c
-@@ -935,7 +935,8 @@ int apparmor_bprm_set_creds(struct linux_binprm *bprm)
- 	 * aways results in a further reduction of permissions.
- 	 */
- 	if ((bprm->unsafe & LSM_UNSAFE_NO_NEW_PRIVS) &&
--	    !unconfined(label) && !aa_label_is_subset(new, ctx->nnp)) {
-+	    !unconfined(label) &&
-+	    !aa_label_is_unconfined_subset(new, ctx->nnp)) {
- 		error = -EPERM;
- 		info = "no new privs";
- 		goto audit;
-@@ -1213,7 +1214,7 @@ int aa_change_hat(const char *hats[], int count, u64 token, int flags)
- 		 * reduce restrictions.
- 		 */
- 		if (task_no_new_privs(current) && !unconfined(label) &&
--		    !aa_label_is_subset(new, ctx->nnp)) {
-+		    !aa_label_is_unconfined_subset(new, ctx->nnp)) {
- 			/* not an apparmor denial per se, so don't log it */
- 			AA_DEBUG("no_new_privs - change_hat denied");
- 			error = -EPERM;
-@@ -1234,7 +1235,7 @@ int aa_change_hat(const char *hats[], int count, u64 token, int flags)
- 		 * reduce restrictions.
- 		 */
- 		if (task_no_new_privs(current) && !unconfined(label) &&
--		    !aa_label_is_subset(previous, ctx->nnp)) {
-+		    !aa_label_is_unconfined_subset(previous, ctx->nnp)) {
- 			/* not an apparmor denial per se, so don't log it */
- 			AA_DEBUG("no_new_privs - change_hat denied");
- 			error = -EPERM;
-@@ -1429,7 +1430,7 @@ int aa_change_profile(const char *fqname, int flags)
- 		 * reduce restrictions.
- 		 */
- 		if (task_no_new_privs(current) && !unconfined(label) &&
--		    !aa_label_is_subset(new, ctx->nnp)) {
-+		    !aa_label_is_unconfined_subset(new, ctx->nnp)) {
- 			/* not an apparmor denial per se, so don't log it */
- 			AA_DEBUG("no_new_privs - change_hat denied");
- 			error = -EPERM;
-diff --git a/security/apparmor/include/label.h b/security/apparmor/include/label.h
-index 47942c4ba7ca..255764ab06e2 100644
---- a/security/apparmor/include/label.h
-+++ b/security/apparmor/include/label.h
-@@ -281,6 +281,7 @@ bool aa_label_init(struct aa_label *label, int size, gfp_t gfp);
- struct aa_label *aa_label_alloc(int size, struct aa_proxy *proxy, gfp_t gfp);
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index f6482e53d55a..371ae368da35 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -906,11 +906,21 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+ 	else
+ 		rule += strlen(skp->smk_known) + 1;
  
- bool aa_label_is_subset(struct aa_label *set, struct aa_label *sub);
-+bool aa_label_is_unconfined_subset(struct aa_label *set, struct aa_label *sub);
- struct aa_profile *__aa_label_next_not_in_set(struct label_it *I,
- 					     struct aa_label *set,
- 					     struct aa_label *sub);
-diff --git a/security/apparmor/label.c b/security/apparmor/label.c
-index 6c3acae701ef..5f324d63ceaa 100644
---- a/security/apparmor/label.c
-+++ b/security/apparmor/label.c
-@@ -550,6 +550,39 @@ bool aa_label_is_subset(struct aa_label *set, struct aa_label *sub)
- 	return __aa_label_next_not_in_set(&i, set, sub) == NULL;
- }
++	if (rule > data + count) {
++		rc = -EOVERFLOW;
++		goto out;
++	}
++
+ 	ret = sscanf(rule, "%d", &maplevel);
+ 	if (ret != 1 || maplevel > SMACK_CIPSO_MAXLEVEL)
+ 		goto out;
  
-+/**
-+ * aa_label_is_unconfined_subset - test if @sub is a subset of @set
-+ * @set: label to test against
-+ * @sub: label to test if is subset of @set
-+ *
-+ * This checks for subset but taking into account unconfined. IF
-+ * @sub contains an unconfined profile that does not have a matching
-+ * unconfined in @set then this will not cause the test to fail.
-+ * Conversely we don't care about an unconfined in @set that is not in
-+ * @sub
-+ *
-+ * Returns: true if @sub is special_subset of @set
-+ *     else false
-+ */
-+bool aa_label_is_unconfined_subset(struct aa_label *set, struct aa_label *sub)
-+{
-+	struct label_it i = { };
-+	struct aa_profile *p;
+ 	rule += SMK_DIGITLEN;
++	if (rule > data + count) {
++		rc = -EOVERFLOW;
++		goto out;
++	}
 +
-+	AA_BUG(!set);
-+	AA_BUG(!sub);
-+
-+	if (sub == set)
-+		return true;
-+
-+	do {
-+		p = __aa_label_next_not_in_set(&i, set, sub);
-+		if (p && !profile_unconfined(p))
-+			break;
-+	} while (p);
-+
-+	return p == NULL;
-+}
- 
- 
- /**
+ 	ret = sscanf(rule, "%d", &catlen);
+ 	if (ret != 1 || catlen > SMACK_CIPSO_MAXCATNUM)
+ 		goto out;
 -- 
 2.25.1
 
