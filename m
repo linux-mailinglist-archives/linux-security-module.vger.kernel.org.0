@@ -2,108 +2,111 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7261FEBA1
-	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 08:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0531FEBFA
+	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 09:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726940AbgFRGm5 (ORCPT
+        id S1728010AbgFRHLK (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 18 Jun 2020 02:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727853AbgFRGm4 (ORCPT
+        Thu, 18 Jun 2020 03:11:10 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:60552 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727979AbgFRHLK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 18 Jun 2020 02:42:56 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBF3C0613EE
-        for <linux-security-module@vger.kernel.org>; Wed, 17 Jun 2020 23:42:54 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id d21so712837lfb.6
-        for <linux-security-module@vger.kernel.org>; Wed, 17 Jun 2020 23:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K6hCnmc25bPhM8Zds15z3T5k2ctR9P+E0kmH5eedao4=;
-        b=LvLtQrHK+FRlk5/sD/8n+NvY5OlKXKDXtDGMvGAWEV8LStu+H5SMcJeof/D1Bi311E
-         iG2SVk2aU8L6UtTvMM8QqgfobAoSZA/4MszA+QHc6H9+WyoduT5HIfL3NiYOClb4mgyQ
-         sWSi05++HNZSaCzaYuMbRzFE/0UM0074HyCLCvUzrlUKp9M2DFy94o8jLGFyaPfQRSRB
-         vUi6H6KpwDixktHDOVJdezLiS2MP8TfPZ1UtIASSqww607WvpGLOrH5fk+dmANcJlVEi
-         LblDqZh3z5oDKbVxry/Q7EUNdmW19cHib1w0FFgAFPAmFzAtBbVtvd2OsQMdNed0x+IO
-         CTaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K6hCnmc25bPhM8Zds15z3T5k2ctR9P+E0kmH5eedao4=;
-        b=dTUdptZAcaXJhQ0KLP03ZXK0gGGBJnC5cZHCapuv2L8FgatSYKXO5xYV/aY751+vjF
-         J+WF3VaZgljREswM7hIsEZLBn43ESnfilbwmjsCEW0dm5KTZVRdsbhdqa404QdQM6SNj
-         uZZEnjF6sglGBxtyP//eGYmQvCXfS81Q41zMNv/3uEIQ5MGnNdc2ObRxseVjPEvpiK7U
-         acD/b3qtkKVqswSub9KFiVS57a7oXuqI9XR+ukI+vTiyv2SiJ2qvWyOCZR8X/eX58MgT
-         R/vawI4xn6+gXL7TjWMk5IQVLxa7GiOS3BNYftIwRZX+KpHi7r8eBad+M8B89Aiak/fP
-         +Zsw==
-X-Gm-Message-State: AOAM531XAGy5MDOnMNM3frz3ogTQprR3CkO6638PbkI4AZPzQGRzYS1Y
-        In9tq8Uh1bH+KJByrA7IaNV2tKpvHEftnXJzYypSAw==
-X-Google-Smtp-Source: ABdhPJx4QxcHzkbgPAk3c9tXd5/s0nYZNRG6j8i+HfERTJzJ+F0FGPMbAipjRTc9ukWM5DOXoFi2vtfz2V+2oSbLHwA=
-X-Received: by 2002:ac2:41d4:: with SMTP id d20mr1489555lfi.204.1592462573264;
- Wed, 17 Jun 2020 23:42:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <1591107505-6030-1-git-send-email-sumit.garg@linaro.org>
- <1591107505-6030-2-git-send-email-sumit.garg@linaro.org> <20200615182457.GB5416@linux.intel.com>
- <CAFA6WYNEnXm5FOGHGAg4XB-+GXD=C+YMh+6t976=pStU0WshAA@mail.gmail.com> <20200617231429.GD62794@linux.intel.com>
-In-Reply-To: <20200617231429.GD62794@linux.intel.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 18 Jun 2020 12:12:41 +0530
-Message-ID: <CAFA6WYOdtwnewqY0ASnMf7fyw3s_hQx0+oWJRhT3CpkkkxYpDA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] KEYS: trusted: Add generic trusted keys framework
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Markus Wamser <Markus.Wamser@mixed-mode.de>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        Thu, 18 Jun 2020 03:11:10 -0400
+Received: from prsriva-linux.hsd1.wa.comcast.net (c-24-19-135-168.hsd1.wa.comcast.net [24.19.135.168])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8918F20B4781;
+        Thu, 18 Jun 2020 00:11:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8918F20B4781
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1592464269;
+        bh=lDSc0jJUTA/sW6q8KjNuhbmPa1VR7NZJ8pXu5G8PT78=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aG83qxYXRNhqUmLDNYpbm33MDP2wZSL6QKrD2jzlLiNColOuwrb8FqAsVDhwxeIUj
+         F6PyyYZeZsLvmO03Jk+E0IfjD1E+TJlD0wQIkfoT4XYzNzULxLkKcEFezwju6U+yNW
+         CQB9TkUkQuhmLmJNPl9ot4OJOFtVYYPbjejsJWrw=
+From:   Prakhar Srivastava <prsriva@linux.microsoft.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        op-tee@lists.trustedfirmware.org,
-        "tee-dev @ lists . linaro . org" <tee-dev@lists.linaro.org>,
-        Luke Hinds <lhinds@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-security-module@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, robh+dt@kernel.org,
+        frowand.list@gmail.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, james.morse@arm.com,
+        bhsharma@redhat.com, mbrugger@suse.com, hsinyi@chromium.org,
+        tao.li@vivo.com, christophe.leroy@c-s.fr,
+        gregkh@linuxfoundation.org, nramas@linux.microsoft.com,
+        prsriva@linux.microsoft.com, tusharsu@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [V2 PATCH 0/3] Adding support for carrying IMA measurement logs
+Date:   Thu, 18 Jun 2020 00:10:42 -0700
+Message-Id: <20200618071045.471131-1-prsriva@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 18 Jun 2020 at 04:44, Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Tue, Jun 16, 2020 at 07:02:37PM +0530, Sumit Garg wrote:
-> > + Luke
-> >
-> > Hi Jarkko,
-> >
-> > Prior to addressing your comments below which seems to show your
-> > preference for compile time selection of trust source (TPM or TEE), I
-> > would just like to hear the reasons for this preference especially if
-> > it makes distro vendor's life difficult [1] to make opinionated
-> > selection which could rather be achieved dynamically based on platform
-> > capability.
-> >
-> > [1] https://lkml.org/lkml/2020/6/3/405
-> >
-> > -Sumit
->
-> Hmm... I do get the distribution kernel point. OK, lets revert to
-> dynamic then. Thanks for the remark.
->
-> /Jarkko
+Integrgity Measurement Architecture(IMA) during kexec(kexec file load)
+verifies the kernel signature and measures the signature of the kernel.
 
-Thanks, will revert to dynamic mode in v6.
+The signature in the measuremnt logs is used to verfiy the 
+authenticity of the kernel in the subsequent kexec'd session, however in
+the current implementation IMA measurement logs are not carried over thus
+remote attesation cannot verify the signature of the running kernel.
 
--Sumit
+Adding support to arm64 to carry over the IMA measurement logs over kexec.
+
+Add a new chosen node entry linux,ima-kexec-buffer to hold the address and
+the size of the memory reserved to carry the IMA measurement log.
+Refactor existing powerpc code to be used by amr64 as well.  
+
+Changelog:
+
+v2:
+  Break patches into separate patches.
+  - Powerpc related Refactoring
+  - Updating the docuemntation for chosen node
+  - Updating arm64 to support IMA buffer pass
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+Prakhar Srivastava (3):
+  Refactoring powerpc code for carrying over IMA measurement logs, to
+    move non architecture specific code to security/ima.
+  dt-bindings: chosen: Document ima-kexec-buffer carrying over IMA
+    measuremnt logs over kexec.
+  Add support for arm64 to carry over IMA measurement logs
+
+ Documentation/devicetree/bindings/chosen.txt |  17 +++
+ arch/arm64/Kconfig                           |   1 +
+ arch/arm64/include/asm/ima.h                 |  17 +++
+ arch/arm64/include/asm/kexec.h               |   3 +
+ arch/arm64/kernel/machine_kexec_file.c       |  47 +++++--
+ arch/powerpc/include/asm/ima.h               |  10 --
+ arch/powerpc/kexec/ima.c                     | 126 ++-----------------
+ security/integrity/ima/ima_kexec.c           | 116 +++++++++++++++++
+ 8 files changed, 201 insertions(+), 136 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+
+-- 
+2.25.1
+
