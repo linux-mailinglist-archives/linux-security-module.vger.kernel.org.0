@@ -2,120 +2,91 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5346B1FDABD
-	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 03:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426D11FE14D
+	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 03:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbgFRBIA (ORCPT
+        id S1730912AbgFRBx2 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 17 Jun 2020 21:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726854AbgFRBH7 (ORCPT
+        Wed, 17 Jun 2020 21:53:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33728 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731637AbgFRB0R (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:07:59 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEC3C06174E;
-        Wed, 17 Jun 2020 18:07:59 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id h95so1890060pje.4;
-        Wed, 17 Jun 2020 18:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p8zZSp1JCwgW3Vq7GmDNUsJ1DjWL0wX5Tz/OMp52IbU=;
-        b=e5IIWXRLgjqZTK6J7/0VNYrgTtEawRgKaNEk7veP7AqZIZppaTcRhyQjz0DrkCe4Gb
-         shFHrcMuP0nGsK5m/2Fv5R8bheLLpkpsfFzwZqRaYnjZpMpIqzY4Lar9tCWoYuQuP2QY
-         MFvdXNFBzOTH2om8HExE/LLkGCpFZlys00yb6165/SyNgHLuVfjzODUNoY6z1ozZMWyq
-         AQVj4qb3QBjptEV5e6jKO0oZRyd7Wc+aRY05hohUtd5IQtaENxWw1ECs3vvAWFdXI1qW
-         J5m0LnMMKU6dudrXzeK5iBTQeGdnPsW1TwVtXN1Xazp5XZXUGGC7KYuG03JxmVM9boxR
-         oIBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p8zZSp1JCwgW3Vq7GmDNUsJ1DjWL0wX5Tz/OMp52IbU=;
-        b=ZfGt3llIp+TU1yGVyPuO0tvtkrnAXHa5LtjTCNHGJQVPWVI15t4uZPnqoOA2A3dcsA
-         41u+mRJAU402LsMNHICIVSFMt9zV9FQ/GA5l6ZRHGpZ+SJKg5odnCnyUJCsL4Gl5hl/X
-         STAHPWG/3EThNv7sjogS+Vc/NlBkanlrmSykDVdLONZLvgUZtzb/Kz+j0kE6tCKcKSi+
-         JMLKZPKG4fCGVdoXakW9fHIlUvF+JQkYvVRlZiY5Xfa4Me3FPT+P3chubV0+As1nvVv1
-         sXzRNsMximoccAb4pW+Kr4XmNpmrYzqP6Sqize1PZSGakXMKGPNNxFts0V/4ZQkVRRYP
-         oHpQ==
-X-Gm-Message-State: AOAM530RjPHmJMNUeg89oRETBEVHU5KHwDrIFW+1dxJmI2orSX0Mwzmw
-        r5O+XCpFjWJSnP1WkDkSX4o=
-X-Google-Smtp-Source: ABdhPJwN7DQgI7nrMDLPd/GYGorlEDR6mr3A0sUpRNCut1O2FOtvx/aSXKVU1ny/mwbxjbZhRjLiLA==
-X-Received: by 2002:a17:90a:30a5:: with SMTP id h34mr1827522pjb.36.1592442479076;
-        Wed, 17 Jun 2020 18:07:59 -0700 (PDT)
-Received: from localhost.localdomain (c-107-3-165-39.hsd1.ca.comcast.net. [107.3.165.39])
-        by smtp.gmail.com with ESMTPSA id gb4sm661555pjb.6.2020.06.17.18.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 18:07:58 -0700 (PDT)
-From:   Pranith Kumar <bobby.prani@gmail.com>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [RFC PATCH] security: Add a config option to disable security mitigations
-Date:   Wed, 17 Jun 2020 18:07:54 -0700
-Message-Id: <20200618010755.4179-1-bobby.prani@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 17 Jun 2020 21:26:17 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8CB052088E;
+        Thu, 18 Jun 2020 01:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592443577;
+        bh=zBzG+XQLAb/qyuKQzJ5OOYujuxtJFnwnJn8P+8Fyby0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DYzqLJvoa/GoeuUAzWUQxp0JkurlxjUlTMTh8l5LnEUwdF089xiPvY/L7Qa2VLSGg
+         AN/gqQZXsKOaggIxxpuoCWzLzeBCa1BMbkqJMrFzLvSmOXDug8B5IKQqJ5/2HKwj7E
+         DC3T/GVKlXCbiv9tpetAFa8hW9FroT/m7WKC2S34=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot+bfdd4a2f07be52351350@syzkaller.appspotmail.com,
+        Sasha Levin <sashal@kernel.org>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 013/108] Smack: slab-out-of-bounds in vsscanf
+Date:   Wed, 17 Jun 2020 21:24:25 -0400
+Message-Id: <20200618012600.608744-13-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200618012600.608744-1-sashal@kernel.org>
+References: <20200618012600.608744-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Instead of having to pass 'mitigations=off' on the kernel command line,
-add a config option that has a similar effect.
+From: Casey Schaufler <casey@schaufler-ca.com>
 
-Adding this makes it easier to disable mitigations in scenarios where
-you cannot modify the command line or are unable to pass a command line
-while booting.
+[ Upstream commit 84e99e58e8d1e26f04c097f4266e431a33987f36 ]
 
-Signed-off-by: Pranith Kumar <bobby.prani@gmail.com>
+Add barrier to soob. Return -EOVERFLOW if the buffer
+is exceeded.
+
+Suggested-by: Hillf Danton <hdanton@sina.com>
+Reported-by: syzbot+bfdd4a2f07be52351350@syzkaller.appspotmail.com
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cpu.c     | 2 +-
- security/Kconfig | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ security/smack/smackfs.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6ff2578ecf17..584eb39585d6 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2542,7 +2542,7 @@ early_param("mitigations", mitigations_parse_cmdline);
- /* mitigations=off */
- bool cpu_mitigations_off(void)
- {
--	return cpu_mitigations == CPU_MITIGATIONS_OFF;
-+	return cpu_mitigations == CPU_MITIGATIONS_OFF || IS_ENABLED(CONFIG_DISABLE_MITIGATIONS);
- }
- EXPORT_SYMBOL_GPL(cpu_mitigations_off);
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index f6482e53d55a..371ae368da35 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -906,11 +906,21 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+ 	else
+ 		rule += strlen(skp->smk_known) + 1;
  
-diff --git a/security/Kconfig b/security/Kconfig
-index cd3cc7da3a55..90b8e9c89a6d 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -65,6 +65,14 @@ config PAGE_TABLE_ISOLATION
- 
- 	  See Documentation/x86/pti.rst for more details.
- 
-+config DISABLE_MITIGATIONS
-+	bool "Disable kernel security mitigations"
-+	default n
-+	help
-+	  This turns off the kernel security mitigations. This is
-+	  equivalent to passing 'mitigations=off' on the kernel
-+	  command line.
++	if (rule > data + count) {
++		rc = -EOVERFLOW;
++		goto out;
++	}
 +
- config SECURITY_INFINIBAND
- 	bool "Infiniband Security Hooks"
- 	depends on SECURITY && INFINIBAND
+ 	ret = sscanf(rule, "%d", &maplevel);
+ 	if (ret != 1 || maplevel > SMACK_CIPSO_MAXLEVEL)
+ 		goto out;
+ 
+ 	rule += SMK_DIGITLEN;
++	if (rule > data + count) {
++		rc = -EOVERFLOW;
++		goto out;
++	}
++
+ 	ret = sscanf(rule, "%d", &catlen);
+ 	if (ret != 1 || catlen > SMACK_CIPSO_MAXCATNUM)
+ 		goto out;
 -- 
-2.27.0
+2.25.1
 
