@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFE41FE029
-	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 03:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7891FDF32
+	for <lists+linux-security-module@lfdr.de>; Thu, 18 Jun 2020 03:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728383AbgFRBqI (ORCPT
+        id S1732508AbgFRBjm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 17 Jun 2020 21:46:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37302 "EHLO mail.kernel.org"
+        Wed, 17 Jun 2020 21:39:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732107AbgFRB2c (ORCPT
+        id S1732479AbgFRBaN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:28:32 -0400
+        Wed, 17 Jun 2020 21:30:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A325F2220F;
-        Thu, 18 Jun 2020 01:28:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6668D22249;
+        Thu, 18 Jun 2020 01:30:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443712;
-        bh=3s0XwS/Il4BAewk92qDCbzVQej2QngsS9+LwdC2JKxk=;
+        s=default; t=1592443813;
+        bh=fFv7fo6a1L6c+RK8pKBEMyJdQYdRkqXdh2FoasDeI24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4h4xfq93GrGQjAvQ1ZNSZBY8ulqU3AyMO4npPDeG4WqfPVMYzfg0ROShXU576Po5
-         Q4STJoaFR9gzDHQWgyTNUu0aEr1NOO4uxXC9cDkSGD4Rx1+3I/AAgFPOXv2IOYyAPz
-         noJyzyFK3T3O1W1Nr9S9PVMF65Q9ZNiTT9duvEYY=
+        b=aGrPDeoChFCa9pnkQ9NrKYH9SExqU+acExY07dhz9zCwUJ29DV4qT/zlmHGNzVDcz
+         F0nwq6szwzme6E6I6ltuTj6j9/YRjHjiNHM6wgHvlXqz11A+eOL71RYACgJGz+A01G
+         +pGVfxAVwUl5zPQ9Otj5l2vxv1urmOiEkhMfxpAI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Casey Schaufler <casey@schaufler-ca.com>,
@@ -32,12 +32,12 @@ Cc:     Casey Schaufler <casey@schaufler-ca.com>,
         syzbot+bfdd4a2f07be52351350@syzkaller.appspotmail.com,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 10/80] Smack: slab-out-of-bounds in vsscanf
-Date:   Wed, 17 Jun 2020 21:27:09 -0400
-Message-Id: <20200618012819.609778-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 06/60] Smack: slab-out-of-bounds in vsscanf
+Date:   Wed, 17 Jun 2020 21:29:10 -0400
+Message-Id: <20200618013004.610532-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012819.609778-1-sashal@kernel.org>
-References: <20200618012819.609778-1-sashal@kernel.org>
+In-Reply-To: <20200618013004.610532-1-sashal@kernel.org>
+References: <20200618013004.610532-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 10 insertions(+)
 
 diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index 6492fe96cae4..3397b216bc6c 100644
+index 94bd9e41c9ec..d186d24ac649 100644
 --- a/security/smack/smackfs.c
 +++ b/security/smack/smackfs.c
-@@ -901,11 +901,21 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+@@ -912,11 +912,21 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
  	else
  		rule += strlen(skp->smk_known) + 1;
  
