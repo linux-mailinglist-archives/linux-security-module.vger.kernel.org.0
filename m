@@ -2,110 +2,72 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45533206892
-	for <lists+linux-security-module@lfdr.de>; Wed, 24 Jun 2020 01:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E07B2068FD
+	for <lists+linux-security-module@lfdr.de>; Wed, 24 Jun 2020 02:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387717AbgFWXlA (ORCPT
+        id S2387829AbgFXAXw (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 23 Jun 2020 19:41:00 -0400
-Received: from namei.org ([65.99.196.166]:40328 "EHLO namei.org"
+        Tue, 23 Jun 2020 20:23:52 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:47142 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387651AbgFWXlA (ORCPT
+        id S2387764AbgFXAXv (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 23 Jun 2020 19:41:00 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 05NNee89008693;
-        Tue, 23 Jun 2020 23:40:40 GMT
-Date:   Wed, 24 Jun 2020 09:40:40 +1000 (AEST)
-From:   James Morris <jmorris@namei.org>
-To:     KP Singh <kpsingh@chromium.org>
-cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jann Horn <jannh@google.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] security: Fix hook iteration and default value for
- inode_copy_up_xattr
-In-Reply-To: <20200621222135.9136-1-kpsingh@chromium.org>
-Message-ID: <alpine.LRH.2.21.2006240940080.8534@namei.org>
-References: <20200621222135.9136-1-kpsingh@chromium.org>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Tue, 23 Jun 2020 20:23:51 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1jntCR-0007XQ-Sx; Wed, 24 Jun 2020 10:23:36 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 24 Jun 2020 10:23:35 +1000
+Date:   Wed, 24 Jun 2020 10:23:35 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        LTP List <ltp@lists.linux.it>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        lkft-triage@lists.linaro.org, linux-crypto@vger.kernel.org,
+        Jan Stancek <jstancek@redhat.com>, chrubis <chrubis@suse.cz>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: LTP: crypto: af_alg02 regression on linux-next 20200621 tag
+Message-ID: <20200624002335.GC12716@gondor.apana.org.au>
+References: <CA+G9fYvHFs5Yx8TnT6VavtfjMN8QLPuXg6us-dXVJqUUt68adA@mail.gmail.com>
+ <20200622224920.GA4332@42.do-not-panic.com>
+ <CA+G9fYsXDZUspc5OyfqrGZn=k=2uRiGzWY_aPePK2C_kZ+dYGQ@mail.gmail.com>
+ <20200623064056.GA8121@gondor.apana.org.au>
+ <20200623170217.GB150582@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200623170217.GB150582@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, 22 Jun 2020, KP Singh wrote:
+On Tue, Jun 23, 2020 at 10:02:17AM -0700, Eric Biggers wrote:
+>
+> The source code for the two failing AF_ALG tests is here:
+> 
+> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/crypto/af_alg02.c
+> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/crypto/af_alg05.c
+> 
+> They use read() and write(), not send() and recv().
+> 
+> af_alg02 uses read() to read from a "salsa20" request socket without writing
+> anything to it.  It is expected that this returns 0, i.e. that behaves like
+> encrypting an empty message.
+> 
+> af_alg05 uses write() to write 15 bytes to a "cbc(aes-generic)" request socket,
+> then read() to read 15 bytes.  It is expected that this fails with EINVAL, since
+> the length is not aligned to the AES block size (16 bytes).
 
-> From: KP Singh <kpsingh@google.com>
-> 
-> inode_copy_up_xattr returns 0 to indicate the acceptance of the xattr
-> and 1 to reject it. If the LSM does not know about the xattr, it's
-> expected to return -EOPNOTSUPP, which is the correct default value for
-> this hook. BPF LSM, currently, uses 0 as the default value and thereby
-> falsely allows all overlay fs xattributes to be copied up.
-> 
-> The iteration logic is also updated from the "bail-on-fail"
-> call_int_hook to continue on the non-decisive -EOPNOTSUPP and bail out
-> on other values.
-> 
-> Fixes: 98e828a0650f ("security: Refactor declaration of LSM hooks")
-> Signed-off-by: KP Singh <kpsingh@google.com>
-
-Applied to
-git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git fixes-v5.8
-
-> ---
->  include/linux/lsm_hook_defs.h |  2 +-
->  security/security.c           | 17 ++++++++++++++++-
->  2 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index 6791813cd439..f4b2e54162ae 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -150,7 +150,7 @@ LSM_HOOK(int, 0, inode_listsecurity, struct inode *inode, char *buffer,
->  	 size_t buffer_size)
->  LSM_HOOK(void, LSM_RET_VOID, inode_getsecid, struct inode *inode, u32 *secid)
->  LSM_HOOK(int, 0, inode_copy_up, struct dentry *src, struct cred **new)
-> -LSM_HOOK(int, 0, inode_copy_up_xattr, const char *name)
-> +LSM_HOOK(int, -EOPNOTSUPP, inode_copy_up_xattr, const char *name)
->  LSM_HOOK(int, 0, kernfs_init_security, struct kernfs_node *kn_dir,
->  	 struct kernfs_node *kn)
->  LSM_HOOK(int, 0, file_permission, struct file *file, int mask)
-> diff --git a/security/security.c b/security/security.c
-> index 0ce3e73edd42..70a7ad357bc6 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1414,7 +1414,22 @@ EXPORT_SYMBOL(security_inode_copy_up);
->  
->  int security_inode_copy_up_xattr(const char *name)
->  {
-> -	return call_int_hook(inode_copy_up_xattr, -EOPNOTSUPP, name);
-> +	struct security_hook_list *hp;
-> +	int rc;
-> +
-> +	/*
-> +	 * The implementation can return 0 (accept the xattr), 1 (discard the
-> +	 * xattr), -EOPNOTSUPP if it does not know anything about the xattr or
-> +	 * any other error code incase of an error.
-> +	 */
-> +	hlist_for_each_entry(hp,
-> +		&security_hook_heads.inode_copy_up_xattr, list) {
-> +		rc = hp->hook.inode_copy_up_xattr(name);
-> +		if (rc != LSM_RET_DEFAULT(inode_copy_up_xattr))
-> +			return rc;
-> +	}
-> +
-> +	return LSM_RET_DEFAULT(inode_copy_up_xattr);
->  }
->  EXPORT_SYMBOL(security_inode_copy_up_xattr);
->  
-> 
-
+Thanks.  Sounds like it's my introduction of the init variable that
+broke this.  Let me investigate.
 -- 
-James Morris
-<jmorris@namei.org>
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
