@@ -2,91 +2,110 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133AA20B4BE
-	for <lists+linux-security-module@lfdr.de>; Fri, 26 Jun 2020 17:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10DC20B4E9
+	for <lists+linux-security-module@lfdr.de>; Fri, 26 Jun 2020 17:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbgFZPhI (ORCPT
+        id S1726948AbgFZPkF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 26 Jun 2020 11:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726909AbgFZPhH (ORCPT
+        Fri, 26 Jun 2020 11:40:05 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62622 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729807AbgFZPj6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 26 Jun 2020 11:37:07 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960E1C03E97A
-        for <linux-security-module@vger.kernel.org>; Fri, 26 Jun 2020 08:37:07 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id a14so235681pfi.2
-        for <linux-security-module@vger.kernel.org>; Fri, 26 Jun 2020 08:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6C2dkYripoUvFAkhVVBU46RoeX5yKqOT+wsgB4Jgk8E=;
-        b=SrKvBemio7EuFZusYOxZ/gtaKjJLh+SpEyc1HJor/6qvsc6RX7kfLlFMNEjQUMswv5
-         4mVNtVnj7vIKGo5kYtwB4d0eFniN/JAJMsksHnt/SZ+dNJFZzT3nKFoGrIcwej8696wG
-         iUoewk8KYwIkqJ91skI9+gMp9SKe2ZC4UVfyI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6C2dkYripoUvFAkhVVBU46RoeX5yKqOT+wsgB4Jgk8E=;
-        b=eqlb5VXA3BBgkZwJ5Yf4+K8ZD2SPctcEcnzAzSu1TBDc0gYoeTYF5DYH/CjLws5d4k
-         59eUJlWUm+nywVL2nHSNzf6xZxZU8dZAG/KJdnCViuu7JA+E+cVSN3YtSyJkEBrFs/xm
-         i9UqkYGi1XERMVhLhOzqD944WMnMGPfm9KrOp4Wwk9K0n9p+dWlrnVlkuziR/Japorkd
-         QVWooUY+2+JPZ4PCz4oiMThYbPglIZ+t2kG+VdjDLqQJ66Ad6/D8CKzcI6AWeMX8/ypp
-         nbqQpd8OxbN3VEI0l0nmh2CZuU2cXYNroi7WsVpinVzUoSF6Qtyw/evmHYZhKoVOgE3Y
-         qiyA==
-X-Gm-Message-State: AOAM532B0gMgCn8s100cWRqxrjx5cPw7Vxq5/w5JlJv6HIlMk9U8CmQP
-        bZ/jGptniD3sIZOi2SEJjm6FbQ==
-X-Google-Smtp-Source: ABdhPJzHo+CobTVdVc+jmkCGAZ9c+NGWMDI+A+QaB2uAWrNIdixaP529YRgNwp0CVxWTojrygH9RNA==
-X-Received: by 2002:aa7:98c1:: with SMTP id e1mr3488173pfm.318.1593185827209;
-        Fri, 26 Jun 2020 08:37:07 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 9sm10803045pfh.160.2020.06.26.08.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 08:37:06 -0700 (PDT)
-Date:   Fri, 26 Jun 2020 08:37:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Subject: Re: [PATCH 06/14] umd: For clarity rename umh_info umd_info
-Message-ID: <202006260836.FB867484@keescook>
-References: <20200625095725.GA3303921@kroah.com>
- <778297d2-512a-8361-cf05-42d9379e6977@i-love.sakura.ne.jp>
- <20200625120725.GA3493334@kroah.com>
- <20200625.123437.2219826613137938086.davem@davemloft.net>
- <CAHk-=whuTwGHEPjvtbBvneHHXeqJC=q5S09mbPnqb=Q+MSPMag@mail.gmail.com>
- <87pn9mgfc2.fsf_-_@x220.int.ebiederm.org>
- <87o8p6f0kw.fsf_-_@x220.int.ebiederm.org>
+        Fri, 26 Jun 2020 11:39:58 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05QFcRFq180282;
+        Fri, 26 Jun 2020 11:39:52 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31wkbg8u3k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Jun 2020 11:39:52 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05QFaGV0007822;
+        Fri, 26 Jun 2020 15:39:51 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma05wdc.us.ibm.com with ESMTP id 31uus1mwmr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Jun 2020 15:39:51 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05QFdoZS46858732
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 Jun 2020 15:39:50 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3AE0FBE053;
+        Fri, 26 Jun 2020 15:39:50 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B24B7BE051;
+        Fri, 26 Jun 2020 15:39:49 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 26 Jun 2020 15:39:49 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jarkko.sakkinen@linux.intel.com, linux-acpi@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v8 0/2] tpm2: Make TPM2 logs accessible for non-UEFI firmware
+Date:   Fri, 26 Jun 2020 11:39:46 -0400
+Message-Id: <20200626153948.2059251-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o8p6f0kw.fsf_-_@x220.int.ebiederm.org>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-26_08:2020-06-26,2020-06-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 spamscore=0 mlxlogscore=639 impostorscore=0
+ cotscore=-2147483648 clxscore=1015 malwarescore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006260106
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Jun 26, 2020 at 07:55:43AM -0500, Eric W. Biederman wrote:
-> This structure is only used for user mode drivers so change
-> the prefix from umh to umd to make that clear.
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-Should bpfilter_umh get renamed to bpfilter_umd at some point in this
-series too?
+This series of patches adds an optional extensions for the TPM2 ACPI table
+with additional fields found in the TPM2 TCG ACPI specification (reference
+is in the patch) that allow access to the log's address and its size. We
+then modify the code that so far only enables access to a TPM 1.2's log for
+a TPM2 as well. This then enables access to the TPM2's log on non-UEFI
+system that for example run SeaBIOS.
+
+   Stefan
+
+v7->v8:
+ - Added empty line.
+
+v6->v7:
+ - Added empty lines and R-b.
+
+v5->v6:
+ - Moved extensions of TPM2 table into acpi_tpm2_phy.
+
+v4->v5:
+ - Added R-bs and A-bs.
+
+v3->v4:
+  - Repost as one series
+
+v2->v3:
+  - Split the series into two separate patches
+  - Added comments to ACPI table fields
+  - Added check for null pointer to log area and zero log size
+
+v1->v2:
+  - Repost of the series
+
+
+Stefan Berger (2):
+  acpi: Extend TPM2 ACPI table with missing log fields
+  tpm: Add support for event log pointer found in TPM2 ACPI table
+
+ drivers/char/tpm/eventlog/acpi.c | 63 +++++++++++++++++++++-----------
+ include/acpi/actbl3.h            |  7 ++++
+ 2 files changed, 49 insertions(+), 21 deletions(-)
 
 -- 
-Kees Cook
+2.26.2
+
