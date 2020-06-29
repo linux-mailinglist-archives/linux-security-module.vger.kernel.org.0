@@ -2,73 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B04C20D55E
-	for <lists+linux-security-module@lfdr.de>; Mon, 29 Jun 2020 21:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9BE20D625
+	for <lists+linux-security-module@lfdr.de>; Mon, 29 Jun 2020 22:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731595AbgF2TQW (ORCPT
+        id S1730372AbgF2TSE (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 29 Jun 2020 15:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
+        Mon, 29 Jun 2020 15:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731901AbgF2TQJ (ORCPT
+        with ESMTP id S1730984AbgF2TRn (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:16:09 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2412DC08EACA
-        for <linux-security-module@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id c16so18379637ioi.9
-        for <linux-security-module@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
-         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
-         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
-         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
-         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
-         3NGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=VDKmsn7fGR8W+5toGzQjijWW38Rd7BIo0qkAEDjAUGCMQkNmWrh0Dp06KbHN9ybnsO
-         qamOSvwQyOkFfl4SC9hIBBOxZs6qDB0Ns+n8yBRh687UXGDTbon/FpSHQ1AZ3cannFH0
-         e5eb+syKBTDbSVIu3i5HsgbwCd0sVWncYO46Yd49s/Dpy8LlxUskUS2Hej8gkTd2Cm4T
-         h4FQR7Ww8LjZnxzMInt20YLdcLB89cx9MC8O3iiWanJ6oxpLVnP0FWEfMrvMhIoMvoRB
-         Bpe4lx6HqXay3LoJ7lnkKlzsiLZE2Zo3wxLa0BON4cnluh7eyZE1mVQPBP+Sm3EPYpxk
-         /hvQ==
-X-Gm-Message-State: AOAM530SFpHB7DjM37K/t18WCnm6kamgas3DSX+tceZJfCOK5+RLFMCm
-        Z0IBM5t9RVKu5QtVNRhXiIaD77QUfV/qzjQBX5Q=
-X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
-X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
- Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
+        Mon, 29 Jun 2020 15:17:43 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD63C03079B;
+        Mon, 29 Jun 2020 08:37:43 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f09280085fdc63970f65a73.dip0.t-ipconnect.de [IPv6:2003:ec:2f09:2800:85fd:c639:70f6:5a73])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8A1B31EC0281;
+        Mon, 29 Jun 2020 17:37:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1593445058;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=E2Vy1BjgpL7djeeIafMFG4u5IsZeMp6SGkzpkdddWqk=;
+        b=CBoXxLFoMIY5VXcvAjrKeGHkctJgQQ+mpYy95c4ccd0Z87tioA+Bk1XaGXpZgf608oRnP4
+        WbzG9rrLcBktAzNOsrOwzcQC8CIKp04tXZlgE2YypfyeekjI8h9hWQpyLus8riMgcX90WB
+        iXQ8njrtu3RsCR8dpQkSF0SD2QKnOWs=
+Date:   Mon, 29 Jun 2020 17:37:37 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Jethro Beekman <jethro@fortanix.com>,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Chunyang Hui <sanqian.hcy@antfin.com>,
+        Jordan Hand <jorhand@linux.microsoft.com>,
+        Nathaniel McCallum <npmccallum@redhat.com>,
+        Seth Moore <sethmo@google.com>,
+        Suresh Siddha <suresh.b.siddha@intel.com>,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        asapek@google.com, cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com,
+        josh@joshtriplett.org, kai.huang@intel.com, kai.svahn@intel.com,
+        kmoy@google.com, ludloff@google.com, luto@kernel.org,
+        nhorman@redhat.com, puiterwijk@redhat.com, rientjes@google.com,
+        tglx@linutronix.de, yaozhangx@google.com
+Subject: Re: [PATCH v33 11/21] x86/sgx: Linux Enclave Driver
+Message-ID: <20200629153737.GA32176@zn.tnic>
+References: <20200617220844.57423-1-jarkko.sakkinen@linux.intel.com>
+ <20200617220844.57423-12-jarkko.sakkinen@linux.intel.com>
+ <20200627174335.GC15585@zn.tnic>
+ <20200629152718.GA12312@linux.intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
- -0700 (PDT)
-Reply-To: mrs.victoria.alexander2@gmail.com
-From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
-Date:   Mon, 29 Jun 2020 12:15:58 -0700
-Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200629152718.GA12312@linux.intel.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dear friend,
+On Mon, Jun 29, 2020 at 08:27:19AM -0700, Sean Christopherson wrote:
+> Hmm, I was going to say that SGX_ENCL_INITIALIZED can't be checked until
+> encl->lock is held, but that's not true for this path as mutual exclusion
+> is provided by the SGX_ENCL_IOCTL flag.  So yeah, this can be checked at
+> the same time as SGX_ENCL_CREATED in sgx_ioc_enclave_init().
 
+Right, so my point is to have state checks for flags which make sense in
+all ioctl entry points, in order to catch a misuse early. But we're on
+the same page.
 
-I have a business container transaction what that some of( $13million dollars)
+> ENCLS[EINIT] is interruptible because it has such a high latency, e.g. 50k+
+> cycles on success.  If an IRQ/NMI/SMI becomes pending, EINIT may fail with
+> SGX_UNMASKED_EVENT so that the event can be serviced.
+>
+> The idea behind the double loop is to try EINIT in a tight loop, then back
+> off and sleep for a while before retrying that tight inner loop.
 
- I would like to discuss with you. If you are interested, please
-contact my email
+That gist of that kinda wants to be in a comment over that double-loop for
+future on-lookers.
 
-address (mrs.victoria.alexander2@gmail.com)
+Thx.
 
-My WhatsApp number but only message (+19293737780)
+-- 
+Regards/Gruss,
+    Boris.
 
-Please do not reply if you are not ready
-Thanks
+https://people.kernel.org/tglx/notes-about-netiquette
