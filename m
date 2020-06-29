@@ -2,203 +2,182 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8B620D379
-	for <lists+linux-security-module@lfdr.de>; Mon, 29 Jun 2020 21:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEBE20D498
+	for <lists+linux-security-module@lfdr.de>; Mon, 29 Jun 2020 21:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729891AbgF2S7O (ORCPT
+        id S1730924AbgF2TJ4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 29 Jun 2020 14:59:14 -0400
-Received: from mga09.intel.com ([134.134.136.24]:65096 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730167AbgF2S6y (ORCPT
+        Mon, 29 Jun 2020 15:09:56 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:50382 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730932AbgF2TJy (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:58:54 -0400
-IronPort-SDR: RWeeJ/8RlA8iam6h8rbkXQySlJPKg8Z8etXIA2PTHkj4OQbn5OXZrrwy1WPNeaYMZIpLnY12r3
- SoN2lGVZg+wg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="147540174"
-X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
-   d="scan'208";a="147540174"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2020 08:27:19 -0700
-IronPort-SDR: rGBMpfACiG1z4qkmaDQmtluftmaItl/SFgyVE8IlcTxjEYsTQkMzUpPHkLlLoyg+bUyRjEZRro
- RXKZLVmhfq9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,295,1589266800"; 
-   d="scan'208";a="318245592"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2020 08:27:19 -0700
-Date:   Mon, 29 Jun 2020 08:27:19 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mon, 29 Jun 2020 15:09:54 -0400
+Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 328C820B4904;
+        Mon, 29 Jun 2020 08:31:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 328C820B4904
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1593444672;
+        bh=6ZAZLRdiVmhJSotXumflMugZiteYC6hE4wK0N2IMWYQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iE6FwL5pkqNJ+D5EKPLuBSJ6t2EamXVQtIgimYH3NTz+/m6iAqvPMKibVX9huKOhS
+         bwF9HbBeqw6gTxc45Xiy6vfBhPGmjSnqofkv6Un+Q5APCtuUITSWlzpD5dFSbCvb5s
+         51vbIlpPIX5UoiCkEcK7RGLA88jityVKynrVKvbg=
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        Jethro Beekman <jethro@fortanix.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Chunyang Hui <sanqian.hcy@antfin.com>,
-        Jordan Hand <jorhand@linux.microsoft.com>,
-        Nathaniel McCallum <npmccallum@redhat.com>,
-        Seth Moore <sethmo@google.com>,
-        Suresh Siddha <suresh.b.siddha@intel.com>,
-        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
-        asapek@google.com, cedric.xing@intel.com, chenalexchen@google.com,
-        conradparker@google.com, cyhanish@google.com,
-        dave.hansen@intel.com, haitao.huang@intel.com,
-        josh@joshtriplett.org, kai.huang@intel.com, kai.svahn@intel.com,
-        kmoy@google.com, ludloff@google.com, luto@kernel.org,
-        nhorman@redhat.com, puiterwijk@redhat.com, rientjes@google.com,
-        tglx@linutronix.de, yaozhangx@google.com
-Subject: Re: [PATCH v33 11/21] x86/sgx: Linux Enclave Driver
-Message-ID: <20200629152718.GA12312@linux.intel.com>
-References: <20200617220844.57423-1-jarkko.sakkinen@linux.intel.com>
- <20200617220844.57423-12-jarkko.sakkinen@linux.intel.com>
- <20200627174335.GC15585@zn.tnic>
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: [PATCH] ima: Rename internal audit rule functions
+Date:   Mon, 29 Jun 2020 10:30:37 -0500
+Message-Id: <20200629153037.337349-1-tyhicks@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200627174335.GC15585@zn.tnic>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sat, Jun 27, 2020 at 07:43:35PM +0200, Borislav Petkov wrote:
-> On Thu, Jun 18, 2020 at 01:08:33AM +0300, Jarkko Sakkinen wrote:
-> > +static int sgx_encl_init(struct sgx_encl *encl, struct sgx_sigstruct *sigstruct,
-> > +			 void *token)
-> > +{
-> > +	u64 mrsigner[4];
-> > +	int ret;
-> > +	int i;
-> > +	int j;
-> > +
-> > +	/* Check that the required attributes have been authorized. */
-> > +	if (encl->secs_attributes & ~encl->allowed_attributes)
-> > +		return -EACCES;
-> > +
-> > +	ret = sgx_get_key_hash(sigstruct->modulus, mrsigner);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	mutex_lock(&encl->lock);
-> > +
-> > +	if (atomic_read(&encl->flags) & SGX_ENCL_INITIALIZED) {
-> > +		ret = -EFAULT;
-> > +		goto err_out;
-> > +	}
-> 
-> That test should be the first thing this function or its caller does.
+Rename IMA's internal audit rule functions from security_filter_rule_*()
+to ima_audit_rule_*(). This avoids polluting the security_* namespace,
+which is typically reserved for general security subsystem
+infrastructure, and better aligns the IMA function names with the names
+of the LSM hooks.
 
-Hmm, I was going to say that SGX_ENCL_INITIALIZED can't be checked until
-encl->lock is held, but that's not true for this path as mutual exclusion
-is provided by the SGX_ENCL_IOCTL flag.  So yeah, this can be checked at
-the same time as SGX_ENCL_CREATED in sgx_ioc_enclave_init().
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
+---
 
-> > +	for (i = 0; i < SGX_EINIT_SLEEP_COUNT; i++) {
-> > +		for (j = 0; j < SGX_EINIT_SPIN_COUNT; j++) {
-> 
-> Ew, what's that double-loop for?
-> 
-> It tries to init an enclave a bunch of times. Why does it need to init
-> more than once?
+Developed on top of next-integrity-testing, commit cd1d8603df60 ("IMA:
+Add audit log for failure conditions"), plus this patch series:
 
-ENCLS[EINIT] is interruptible because it has such a high latency, e.g. 50k+
-cycles on success.  If an IRQ/NMI/SMI becomes pending, EINIT may fail with
-SGX_UNMASKED_EVENT so that the event can be serviced.
+ [PATCH v2 00/11] ima: Fix rule parsing bugs and extend KEXEC_CMDLINE rule support
+ https://lore.kernel.org/linux-integrity/20200626223900.253615-1-tyhicks@linux.microsoft.com/T/#t
 
-The idea behind the double loop is to try EINIT in a tight loop, then back
-off and sleep for a while before retrying that tight inner loop.
+This patch has dependencies on the above patch series.
 
-> > +			ret = sgx_einit(sigstruct, token, encl->secs.epc_page,
-> > +					mrsigner);
-> > +			if (ret == SGX_UNMASKED_EVENT)
-> > +				continue;
-> > +			else
-> > +				break;
-> > +		}
-> > +
-> > +		if (ret != SGX_UNMASKED_EVENT)
-> > +			break;
-> > +
-> > +		msleep_interruptible(SGX_EINIT_SLEEP_TIME);
-> > +
-> > +		if (signal_pending(current)) {
-> > +			ret = -ERESTARTSYS;
-> > +			goto err_out;
-> > +		}
-> > +	}
-> > +
-> > +	if (ret & ENCLS_FAULT_FLAG) {
-> > +		if (encls_failed(ret))
-> > +			ENCLS_WARN(ret, "EINIT");
-> > +
-> > +		sgx_encl_destroy(encl);
-> > +		ret = -EFAULT;
-> > +	} else if (ret) {
-> > +		pr_debug("EINIT returned %d\n", ret);
-> > +		ret = -EPERM;
-> > +	} else {
-> > +		atomic_or(SGX_ENCL_INITIALIZED, &encl->flags);
-> > +	}
-> > +
-> > +err_out:
-> > +	mutex_unlock(&encl->lock);
-> > +	return ret;
-> > +}
-> > +
-> > +/**
-> > + * sgx_ioc_enclave_init - handler for %SGX_IOC_ENCLAVE_INIT
-> > + *
-> > + * @filep:	open file to /dev/sgx
-> 
-> @encl:       pointer to an enclave instance (via ioctl() file pointer)
-> 
-> > + * @arg:	userspace pointer to a struct sgx_enclave_init instance
-> > + *
-> > + * Flush any outstanding enqueued EADD operations and perform EINIT.  The
-> > + * Launch Enclave Public Key Hash MSRs are rewritten as necessary to match
-> > + * the enclave's MRSIGNER, which is caculated from the provided sigstruct.
-> > + *
-> > + * Return:
-> > + *   0 on success,
-> > + *   SGX error code on EINIT failure,
-> > + *   -errno otherwise
-> > + */
-> > +static long sgx_ioc_enclave_init(struct sgx_encl *encl, void __user *arg)
-> > +{
-> > +	struct sgx_sigstruct *sigstruct;
-> > +	struct sgx_enclave_init einit;
-> > +	struct page *initp_page;
-> > +	void *token;
-> > +	int ret;
-> > +
-> > +	if (!(atomic_read(&encl->flags) & SGX_ENCL_CREATED))
-> 
-> Might just as well check the other flags: doing EINIT on an already
-> initialized enclave - SGX_ENCL_INITIALIZED - is perhaps a nono or
-> similarly on a SGX_ENCL_DEAD enclave.
-> 
-> And you could do similar sanity checks in the other ioctl functions.
+Tested with and without CONFIG_IMA_LSM_RULES enabled by attempting to
+load IMA policy with rules containing the subj_role=foo conditional.
+Build logs are clean in both configurations. The IMA policy was first
+loaded without and then with a valid AppArmor profile named "foo". The
+behavior is the same before and after this patch is applied:
 
-Ya, as above, SGX_ENCL_INITIALIZED can be checked here.
+                  | CONFIG_IMA_LSM_RULES=n   | CONFIG_IMA_LSM_RULES=y
+-----------------------------------------------------------------------
+ Without Profile  |  IMA policy load fails   | IMA policy load fails
+ With Profile     |  IMA policy load fails   | IMA policy load succeeds
 
-SGX_ENCL_DEAD is actually already checked in in the top level sgx_ioctl(),
-i.e. the check in sgx_encl_add_page() can technically be flat out dropped.
+ security/integrity/ima/ima.h        | 16 +++++++--------
+ security/integrity/ima/ima_policy.c | 30 +++++++++++++----------------
+ 2 files changed, 21 insertions(+), 25 deletions(-)
 
-I say "technically" because I'm a bit torn over SGX_ENCL_DEAD; encl->lock
-must be held to SGX_ENCL_DEAD (the page fault and reclaim flows rely on
-this), but as it stands today only ioctl() paths (guarded by SGX_ENCL_IOCTL)
-and sgx_release() (makes the ioctls() unreachable) set SGX_ENCL_DEAD.
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index ff2bf57ff0c7..5d62ee8319f4 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -419,24 +419,24 @@ static inline void ima_free_modsig(struct modsig *modsig)
+ /* LSM based policy rules require audit */
+ #ifdef CONFIG_IMA_LSM_RULES
+ 
+-#define security_filter_rule_init security_audit_rule_init
+-#define security_filter_rule_free security_audit_rule_free
+-#define security_filter_rule_match security_audit_rule_match
++#define ima_audit_rule_init security_audit_rule_init
++#define ima_audit_rule_free security_audit_rule_free
++#define ima_audit_rule_match security_audit_rule_match
+ 
+ #else
+ 
+-static inline int security_filter_rule_init(u32 field, u32 op, char *rulestr,
+-					    void **lsmrule)
++static inline int ima_audit_rule_init(u32 field, u32 op, char *rulestr,
++				      void **lsmrule)
+ {
+ 	return -EINVAL;
+ }
+ 
+-static inline void security_filter_rule_free(void *lsmrule)
++static inline void ima_audit_rule_free(void *lsmrule)
+ {
+ }
+ 
+-static inline int security_filter_rule_match(u32 secid, u32 field, u32 op,
+-					     void *lsmrule)
++static inline int ima_audit_rule_match(u32 secid, u32 field, u32 op,
++				       void *lsmrule)
+ {
+ 	return -EINVAL;
+ }
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 294323b36d06..60894656a4b7 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -258,7 +258,7 @@ static void ima_lsm_free_rule(struct ima_rule_entry *entry)
+ 	int i;
+ 
+ 	for (i = 0; i < MAX_LSM_RULES; i++) {
+-		security_filter_rule_free(entry->lsm[i].rule);
++		ima_audit_rule_free(entry->lsm[i].rule);
+ 		kfree(entry->lsm[i].args_p);
+ 	}
+ }
+@@ -308,10 +308,9 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+ 		 */
+ 		entry->lsm[i].args_p = NULL;
+ 
+-		security_filter_rule_init(nentry->lsm[i].type,
+-					  Audit_equal,
+-					  nentry->lsm[i].args_p,
+-					  &nentry->lsm[i].rule);
++		ima_audit_rule_init(nentry->lsm[i].type, Audit_equal,
++				    nentry->lsm[i].args_p,
++				    &nentry->lsm[i].rule);
+ 		if (!nentry->lsm[i].rule)
+ 			pr_warn("rule for LSM \'%s\' is undefined\n",
+ 				entry->lsm[i].args_p);
+@@ -495,18 +494,16 @@ static bool ima_match_rules(struct ima_rule_entry *rule, struct inode *inode,
+ 		case LSM_OBJ_ROLE:
+ 		case LSM_OBJ_TYPE:
+ 			security_inode_getsecid(inode, &osid);
+-			rc = security_filter_rule_match(osid,
+-							rule->lsm[i].type,
+-							Audit_equal,
+-							rule->lsm[i].rule);
++			rc = ima_audit_rule_match(osid, rule->lsm[i].type,
++						  Audit_equal,
++						  rule->lsm[i].rule);
+ 			break;
+ 		case LSM_SUBJ_USER:
+ 		case LSM_SUBJ_ROLE:
+ 		case LSM_SUBJ_TYPE:
+-			rc = security_filter_rule_match(secid,
+-							rule->lsm[i].type,
+-							Audit_equal,
+-							rule->lsm[i].rule);
++			rc = ima_audit_rule_match(secid, rule->lsm[i].type,
++						  Audit_equal,
++						  rule->lsm[i].rule);
+ 		default:
+ 			break;
+ 		}
+@@ -901,10 +898,9 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
+ 		return -ENOMEM;
+ 
+ 	entry->lsm[lsm_rule].type = audit_type;
+-	result = security_filter_rule_init(entry->lsm[lsm_rule].type,
+-					   Audit_equal,
+-					   entry->lsm[lsm_rule].args_p,
+-					   &entry->lsm[lsm_rule].rule);
++	result = ima_audit_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
++				     entry->lsm[lsm_rule].args_p,
++				     &entry->lsm[lsm_rule].rule);
+ 	if (!entry->lsm[lsm_rule].rule) {
+ 		pr_warn("rule for LSM \'%s\' is undefined\n",
+ 			entry->lsm[lsm_rule].args_p);
+-- 
+2.25.1
 
-So it's safe to check SGX_ENCL_DEAD from ioctl() context without holding
-encl->lock, at least in the current code base, but it feels weird/sketchy.
-
-In the end I don't think I have a strong opinion.  Removing the technically
-unnecessary DEAD check in sgx_encl_add_page() is the simplest change, so it
-may make sense to do that and nothing more for initial upstreaming.  Long
-term, I fully expect we'll add paths that set SGX_ENCL_DEAD outside of
-ioctl() context, e.g. to handle EPC OOM, but it wouldn't be a bad thing to
-have a standalone commit in a future series to add DEAD checks (under
-encl->lock) in the ADD and INIT flows.
