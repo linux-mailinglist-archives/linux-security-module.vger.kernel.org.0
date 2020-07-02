@@ -2,142 +2,170 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A069B212A47
-	for <lists+linux-security-module@lfdr.de>; Thu,  2 Jul 2020 18:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B35212D51
+	for <lists+linux-security-module@lfdr.de>; Thu,  2 Jul 2020 21:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbgGBQsi (ORCPT
+        id S1726122AbgGBTrB (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 2 Jul 2020 12:48:38 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:35290 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726721AbgGBQsh (ORCPT
+        Thu, 2 Jul 2020 15:47:01 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40886 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725994AbgGBTrA (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 2 Jul 2020 12:48:37 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out02.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jr2O4-0007e6-OQ; Thu, 02 Jul 2020 10:48:36 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1jr2Nx-0007up-Jp; Thu, 02 Jul 2020 10:48:30 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, bpf <bpf@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Gary Lin <GLin@suse.com>, Bruno Meneguele <bmeneg@redhat.com>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Thu,  2 Jul 2020 11:41:40 -0500
-Message-Id: <20200702164140.4468-16-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
-References: <87y2o1swee.fsf_-_@x220.int.ebiederm.org>
+        Thu, 2 Jul 2020 15:47:00 -0400
+Received: by mail-pl1-f195.google.com with SMTP id x11so11697603plo.7;
+        Thu, 02 Jul 2020 12:46:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OHFXCZoREfl1GMwKik+5lcCUbnGDc+wlkQ8rGpzOHJY=;
+        b=FkPhG6A9U0NVwzmsAT98qHKnNfxcOIO4csmQAuQS+Huj3cN7OUZojfDthIOyqkg+cn
+         tQ8sBz63yiKWxLdjBGol4JEk4K0ZRkCdmiZ2MI79q7UGAb0tP2EmpFKIjA4oTmsTXw7H
+         AAsfYv8dMIkOtjkF/JwzP1d+q3YxNtULohv7BJNvIpYSVSNkNA+XR/Qew2olbDMA44kT
+         eym0Y6ysfnXPbqQO+Qel1NeD3LFrBA4WKNMzuOX+TJnDJmpZJCOkRzqGJVVbKZ9P8I8W
+         L1kl3JsKcrs6mosc7N4ImANeT+hfsloxy+o3CNFDohZIzM3rIUq+UbqReWBL0AjTuNoz
+         yBHA==
+X-Gm-Message-State: AOAM532MQcCPbJ5AwLGsnvWxX7yPB5OzlnQj9L41VQSkrKF73G5VJReq
+        xLS6tEb7x0b9kdpx3fy1F0I=
+X-Google-Smtp-Source: ABdhPJzZRZZnyTT/LL8zshMzqSe4q6iWh/bqF3eI60b4K/yHnYqIox4lLP9gZCWSkU96CYlxNiNA6Q==
+X-Received: by 2002:a17:90a:b38b:: with SMTP id e11mr15548657pjr.120.1593719219005;
+        Thu, 02 Jul 2020 12:46:59 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id n18sm10014912pfd.99.2020.07.02.12.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2020 12:46:57 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 695BF403DC; Thu,  2 Jul 2020 19:46:56 +0000 (UTC)
+Date:   Thu, 2 Jul 2020 19:46:56 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        David Howells <dhowells@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, ast@kernel.org,
+        axboe@kernel.dk, bfields@fieldses.org,
+        bridge@lists.linux-foundation.org, chainsaw@gentoo.org,
+        christian.brauner@ubuntu.com, chuck.lever@oracle.com,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        jarkko.sakkinen@linux.intel.com, jmorris@namei.org,
+        josh@joshtriplett.org, keescook@chromium.org,
+        keyrings@vger.kernel.org, kuba@kernel.org,
+        lars.ellenberg@linbit.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, nikolay@cumulusnetworks.com,
+        philipp.reisner@linbit.com, ravenexp@gmail.com,
+        roopa@cumulusnetworks.com, serge@hallyn.com, slyfox@gentoo.org,
+        viro@zeniv.linux.org.uk, yangtiezhu@loongson.cn,
+        netdev@vger.kernel.org, markward@linux.ibm.com,
+        linux-s390 <linux-s390@vger.kernel.org>
+Subject: Re: linux-next: umh: fix processed error when UMH_WAIT_PROC is used
+ seems to break linux bridge on s390x (bisected)
+Message-ID: <20200702194656.GV4332@42.do-not-panic.com>
+References: <4d8fbcea-a892-3453-091f-d57c03f9aa90@de.ibm.com>
+ <1263e370-7cee-24d8-b98c-117bf7c90a83@de.ibm.com>
+ <20200626025410.GJ4332@42.do-not-panic.com>
+ <20200630175704.GO13911@42.do-not-panic.com>
+ <b24d8dae-1872-ba2c-acd4-ed46c0781317@de.ibm.com>
+ <a6792135-3285-0861-014e-3db85ea251dc@i-love.sakura.ne.jp>
+ <20200701135324.GS4332@42.do-not-panic.com>
+ <8d714a23-bac4-7631-e5fc-f97c20a46083@i-love.sakura.ne.jp>
+ <20200701153859.GT4332@42.do-not-panic.com>
+ <e3f3e501-2cb7-b683-4b85-2002b7603244@i-love.sakura.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1jr2Nx-0007up-Jp;;;mid=<20200702164140.4468-16-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18OB1SGxTOeo4/dzJbPeWbHPytle+s5LkM=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01
-        autolearn=disabled version=3.4.2
-X-Spam-Virus: No
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa02 0; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: ; sa02 0; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 396 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.5 (1.1%), b_tie_ro: 3.1 (0.8%), parse: 1.17
-        (0.3%), extract_message_metadata: 12 (3.0%), get_uri_detail_list: 1.63
-        (0.4%), tests_pri_-1000: 11 (2.9%), tests_pri_-950: 1.04 (0.3%),
-        tests_pri_-900: 0.84 (0.2%), tests_pri_-90: 160 (40.5%), check_bayes:
-        159 (40.1%), b_tokenize: 6 (1.5%), b_tok_get_all: 6 (1.6%),
-        b_comp_prob: 1.84 (0.5%), b_tok_touch_all: 142 (35.7%), b_finish: 0.79
-        (0.2%), tests_pri_0: 192 (48.6%), check_dkim_signature: 0.40 (0.1%),
-        check_dkim_adsp: 2.4 (0.6%), poll_dns_idle: 0.96 (0.2%), tests_pri_10:
-        2.5 (0.6%), tests_pri_500: 7 (1.8%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH v3 16/16] umd: Stop using split_argv
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e3f3e501-2cb7-b683-4b85-2002b7603244@i-love.sakura.ne.jp>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-There is exactly one argument so there is nothing to split.  All
-split_argv does now is cause confusion and avoid the need for a cast
-when passing a "const char *" string to call_usermodehelper_setup.
+On Thu, Jul 02, 2020 at 01:26:53PM +0900, Tetsuo Handa wrote:
+> On 2020/07/02 0:38, Luis Chamberlain wrote:
+> > @@ -156,6 +156,18 @@ static void call_usermodehelper_exec_sync(struct subprocess_info *sub_info)
+> >  		 */
+> >  		if (KWIFEXITED(ret))
+> >  			sub_info->retval = KWEXITSTATUS(ret);
+> > +		/*
+> > +		 * Do we really want to be passing the signal, or do we pass
+> > +		 * a single error code for all cases?
+> > +		 */
+> > +		else if (KWIFSIGNALED(ret))
+> > +			sub_info->retval = KWTERMSIG(ret);
+> 
+> No, this is bad. Caller of usermode helper is unable to distinguish exit(9)
+> and e.g. SIGKILL'ed by the OOM-killer.
 
-So avoid confusion and the possibility of an odd driver name causing
-problems by just using a fixed argv array with a cast in the call to
-call_usermodehelper_setup.
+Right, the question is: do we care?
 
-v1: https://lkml.kernel.org/r/87sged3a9n.fsf_-_@x220.int.ebiederm.org
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- kernel/usermode_driver.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+> Please pass raw exit status value.
+> 
+> I feel that caller of usermode helper should not use exit status value.
+> For example, call_sbin_request_key() is checking
+> 
+>   test_bit(KEY_FLAG_USER_CONSTRUCT, &key->flags) || key_validate(key) < 0
+> 
+> condition (if usermode helper was invoked) in order to "ignore any errors from
+> userspace if the key was instantiated".
 
-diff --git a/kernel/usermode_driver.c b/kernel/usermode_driver.c
-index cd136f86f799..0b35212ffc3d 100644
---- a/kernel/usermode_driver.c
-+++ b/kernel/usermode_driver.c
-@@ -160,27 +160,21 @@ static void umd_cleanup(struct subprocess_info *info)
- int fork_usermode_driver(struct umd_info *info)
- {
- 	struct subprocess_info *sub_info;
--	char **argv = NULL;
-+	const char *argv[] = { info->driver_name, NULL };
- 	int err;
- 
- 	if (WARN_ON_ONCE(info->tgid))
- 		return -EBUSY;
- 
- 	err = -ENOMEM;
--	argv = argv_split(GFP_KERNEL, info->driver_name, NULL);
--	if (!argv)
--		goto out;
--
--	sub_info = call_usermodehelper_setup(info->driver_name, argv, NULL,
--					     GFP_KERNEL,
-+	sub_info = call_usermodehelper_setup(info->driver_name,
-+					     (char **)argv, NULL, GFP_KERNEL,
- 					     umd_setup, umd_cleanup, info);
- 	if (!sub_info)
- 		goto out;
- 
- 	err = call_usermodehelper_exec(sub_info, UMH_WAIT_EXEC);
- out:
--	if (argv)
--		argv_free(argv);
- 	return err;
- }
- EXPORT_SYMBOL_GPL(fork_usermode_driver);
--- 
-2.25.0
+For those not familiar with this code path, or if you cannot decipher
+the above, the code path in question was:
 
+static int call_sbin_request_key(struct key *authkey, void *aux)                
+{
+	...
+	/* do it */                                                             
+	ret = call_usermodehelper_keys(request_key, argv, envp, keyring,        
+				       UMH_WAIT_PROC);
+	kdebug("usermode -> 0x%x", ret);
+	if (ret >= 0) {
+		/* ret is the exit/wait code */
+		if (test_bit(KEY_FLAG_USER_CONSTRUCT, &key->flags) ||
+		    key_validate(key) < 0)
+		    ret = -ENOKEY;
+		/* ignore any errors from userspace if the key was      
+		 * instantiated */  
+		 ret = 0;
+	}
+	...
+}
+
+And the umh patch "umh: fix processed error when UMH_WAIT_PROC is used"
+changed this to:
+
+-       if (ret >= 0) {
++       if (ret != 0) {
+
+Prior to the patch negative return values from userspace were still
+being captured, and likewise signals, but the error value was not
+raw, not the actual value. After the patch, since we check for ret != 0
+we still upkeep the sanity check for any error, correct the error value,
+but as you noted signals were ignored as I made the wrong assumption
+we would ignore them. The umh sub_info->retval is set after my original
+patch only if KWIFSIGNALED(ret)), and ignored signals, and so that
+would be now capitured with the additional KWIFSIGNALED(ret)) check.
+
+The question still stands:
+
+Do we want to open code all these checks or simply wrap them up in
+the umh. If we do the later, as you note exit(9) and a SIGKILL will
+be the same to the inspector in the kernel. But do we care?
+
+Do we really want umh callers differntiatin between signals and exit values?
+
+The alternative to making a compromise is using generic wrappers for
+things which make sense and letting the callers use those.
+
+  Luis
+
+> > +		/* Same here */
+> > +		else if (KWIFSTOPPED((ret)))
+> > +			sub_info->retval = KWSTOPSIG(ret);
+> > +		/* And are we really sure we want this? */
+> > +		else if (KWIFCONTINUED((ret)))
+> > +			sub_info->retval = 0;
+> >  	}
+> >  
+> >  	/* Restore default kernel sig handler */
+> > 
+> 
