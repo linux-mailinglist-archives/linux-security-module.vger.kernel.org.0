@@ -2,85 +2,212 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9745214845
-	for <lists+linux-security-module@lfdr.de>; Sat,  4 Jul 2020 20:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AEA214FEB
+	for <lists+linux-security-module@lfdr.de>; Sun,  5 Jul 2020 23:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgGDS7k (ORCPT
+        id S1728528AbgGEVp2 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 4 Jul 2020 14:59:40 -0400
-Received: from sonic301-22.consmr.mail.ir2.yahoo.com ([77.238.176.99]:33187
-        "EHLO sonic301-22.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726669AbgGDS7g (ORCPT
+        Sun, 5 Jul 2020 17:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728047AbgGEVp1 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 4 Jul 2020 14:59:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1593889173; bh=ZWeDLwf4cGlLDzTwCuOen1zTINlp5j+f2ywobrqBR9o=; h=Date:From:Reply-To:Subject:References:From:Subject; b=ntJ3spp+PoyEufaAOy2iW+jZu8FjLflwsAbkW49Qn/h6B+G4jpxCm2Q7yTkHlwmj1+djSm4jourWfpaVKO+z3eKjTAeRgqAX+3ePyVMePYODmzex4gAxs2vkpeyX9Q9o6PenuPgxZvo/JDGqw6S/H3ggH6feTVsrrEksa5WHxo9nDzK9m/UsRx3Ecwwl+MwCKjtrrlYHVmM71soyds9gHUzg3lfxWRQ5TwGQOohgGKQAEYs37LFlzt0GoW2QVI677ic17Q8DbUXUV+PdmjiuBBivQrVYzDtGFfrDge39KeuqNXDi30fHLO1Xj9VPPnpxoXsR3xZ81RPmDZJcYj1lNg==
-X-YMail-OSG: IEXMUeAVM1m1gPtltFK.fyn.DxvmXyKwB4p72nQRIEpIBUINTRsbraNT_NxPQj0
- 5DRBSoij_Pj6y6dGMJPIMCI.RKchAVBEhdeA.3Xhkllqho0W6t5WEubdtOtqxn6lcwOZMTSHAB54
- aPqsiAG9YwGDHoigR7gj1PrRVsR7ImQIcuPOyHn81qTVWFm4DXqi4Tm8mXYqdLN.DITlW1wmexaL
- PZp6vj9YP2p_SlToPg.0D5GCUOX008lrZis7ubQqtPz9VO.1EwFDpRm2Gv6N.nvmUl5wJHOreagz
- vMoAfblCzDzUej4rQhLxJbBv_7haeT7BpOFMvtcyX43OCbZHTFETn5ojAjQShP7fwFik4S_6Cyft
- ASvjVes9FBdPLMpvQs1NSk8TlTUMsshDAPkGEui1A.XlzsVJrURRdMBm0Fmnr2xQlrSQqd5oAsp3
- .Nm.IGHrSMzWNuh.3Re39dAh41jJYhQKHqqA8Ftx925Z3IDrT8ZurUzLKZsr2GL.2aivMGFvg32p
- eS8Uw43r4Ip3GT3xJSmKkEAq8rqJ_up.gvl7qvofFGw0CFyKf8uVCjqiUV1j1hlwPBiTwYSXMrwJ
- 53oYa3ZsoxTjD2Cilkcujz4pfzcuh80MBQYUFPt3AITD.xhLov_1_QJL3pIsseJCTcW9XqJA.42p
- nquUKQUQ.8OvlZCOZfygX.Ociwo5YoEq1hpMri.O7TpxI2jvcKp0wnZAm8XWIhQyjnWAUb2Ooy_i
- bFlrRPIOrB9kJnB1dFcHyJhGDEP2syFAO8Usi5NJvKnF16QSGWzuN_kJyasDnHEyDXTiHqkhaC1P
- 5qVJ3L..jirVyLSb5fVnCNqyY3eGep8yfLhjAgmAlZ6UM2QJ3Nv8RO2n5CpmMf7Dsx6TtzjxvK.z
- uI3X7EIIU.9ENINcSsPLpvfUMCarvbjYQHuKWHP.WUFwU_9wwZU8iwqrzishROiPWT4h1tBBQw.V
- _y2Fnm1VmvYqOsO_j1ZvMgA5bJ8IbMuY8H0ub64ZaMXOR6gY7vYuW74whzROrbhPQnNRifncTqiy
- TuLgBAY68zL3J90BvLcNbmE7UxH4rtvm9uqy.9fpxKmu0C.edDz1aQs3GLsM8f2Ss0FBb9xHKvD1
- B293W_SxVy9OyyQ9OSDZrgcq.JGQp0qfxNP5wAg4iBmLQgBSzW4jX6atrYU.V_QSRsniM7QAY5Jj
- MBJJp9vIlpU3BJXuREpbeYP7D6giGBqoTTaStb7fj6EPSlGdOs1nEl22CdoSkXV7xkecmNPiKy1R
- YGZAvAquBLm3PUPfOK7y2JuBI4dSQsGp2txWkRmoFFLbGN6DUVGFDBbiZoZ91Tl.LDRI9sYituqW
- w
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Sat, 4 Jul 2020 18:59:33 +0000
-Date:   Sat, 4 Jul 2020 18:59:30 +0000 (UTC)
-From:   Theresa Han <serena@lantermo.it>
-Reply-To: theresahan21@hotmail.com
-Message-ID: <1469227910.4479605.1593889170815@mail.yahoo.com>
-Subject: =?UTF-8?Q?Ich_gr=C3=BC=C3=9Fe_dich_im_Namen_des_Herrn?=
+        Sun, 5 Jul 2020 17:45:27 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB2FC061794;
+        Sun,  5 Jul 2020 14:45:27 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id E4833BC127;
+        Sun,  5 Jul 2020 21:45:23 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     jmorris@namei.org, serge@hallyn.com, john.johansen@canonical.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        dhowells@redhat.com, jarkko.sakkinen@linux.intel.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] Replace HTTP links with HTTPS ones: security
+Date:   Sun,  5 Jul 2020 23:45:12 +0200
+Message-Id: <20200705214512.28498-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <1469227910.4479605.1593889170815.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16197 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++++++
+X-Spam-Level: ******
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+X-Spam: Yes
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Ich gr=C3=BC=C3=9Fe dich im Namen des Herrn
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-Ich kann mir nicht vorstellen wie du dich f=C3=BChlen wirst Sie einen pl=C3=
-=B6tzlichen Brief aus einem abgelegenen Land in der fernen Elfenbeink=C3=BC=
-ste erhalten werden und wahrscheinlich von jemandem, mit dem Sie nicht gut =
-verwandt sind. Ich appelliere an Sie, etwas Geduld zu =C3=BCben und meinen =
-Brief zu lesen Umgang mit Ihnen in dieser wichtigen Transaktion
-=20
-Ich bin Frau Theresa Han, 65 Jahre alt, in der Elfenbeink=C3=BCste, an Kreb=
-sleiden leidend. Ich war mit Herrn Johnson Han verheiratet, der bei der Reg=
-ierung von Elfenbeink=C3=BCste als Auftragnehmer t=C3=A4tig war, bevor er n=
-ach einigen Tagen im Krankenhaus starb
-=20
-Mein verstorbener Ehemann hat die Summe von US$2,5 Millionen (zwei Millione=
-n f=C3=BCnfhunderttausend USD) bei einer Bank in der Elfenbeink=C3=BCste hi=
-nterlegt. Ich habe an Krebs gelitten. K=C3=BCrzlich sagte mir mein Arzt, da=
-ss ich aufgrund der Krebserkrankungen, an denen ich leide, nur noch begrenz=
-te Lebenstage habe. Ich m=C3=B6chte wissen, ob ich Ihnen vertrauen kann, di=
-ese Mittel f=C3=BCr Wohlt=C3=A4tigkeit / Waisenhaus zu verwenden, und 20 Pr=
-ozent werden f=C3=BCr Sie als Entsch=C3=A4digung sein
-=20
-Ich habe diese Entscheidung getroffen, weil ich kein Kind habe, das dieses =
-Geld erben w=C3=BCrde, und mein Ehemann Verwandte sind b=C3=BCrgerliche und=
- sehr wohlhabende Personen und ich m=C3=B6chte nicht, dass mein Ehemann har=
-t verdientes Geld missbraucht wird
-=20
-Bitte nehmen Sie Kontakt mit mir auf, damit ich Ihnen weitere Einzelheiten =
-mitteilen kann und jede Verz=C3=B6gerung Ihrer Antwort mir Raum geben wird,=
- eine weitere gute Person f=C3=BCr diesen Zweck zu gewinnen
-=20
-Warten auf Ihre dringende Antwort Mit Gott sind alle Dinge m=C3=B6glich
-=20
-Deine Schwester in Christus
-=20
-Frau Theresa Han
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+          If both the HTTP and HTTPS versions
+          return 200 OK and serve the same content:
+            Replace HTTP with HTTPS.
+
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+---
+ Continuing my work started at 93431e0607e5.
+
+ If there are any URLs to be removed completely or at least not HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See https://lkml.org/lkml/2020/6/26/837
+
+ security/Kconfig                                 | 2 +-
+ security/apparmor/Kconfig                        | 2 +-
+ security/integrity/ima/Kconfig                   | 2 +-
+ security/integrity/ima/ima_template.c            | 2 +-
+ security/integrity/ima/ima_template_lib.c        | 2 +-
+ security/integrity/ima/ima_template_lib.h        | 2 +-
+ security/keys/encrypted-keys/ecryptfs_format.c   | 2 +-
+ security/keys/encrypted-keys/ecryptfs_format.h   | 2 +-
+ security/keys/encrypted-keys/encrypted.c         | 2 +-
+ security/keys/encrypted-keys/masterkey_trusted.c | 2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/security/Kconfig b/security/Kconfig
+index cd3cc7da3a55..7561f6f99f1d 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -118,7 +118,7 @@ config INTEL_TXT
+ 	  it was configured with, especially since they may be responsible for
+ 	  providing such assurances to VMs and services running on it.
+ 
+-	  See <http://www.intel.com/technology/security/> for more information
++	  See <https://www.intel.com/technology/security/> for more information
+ 	  about Intel(R) TXT.
+ 	  See <http://tboot.sourceforge.net> for more information about tboot.
+ 	  See Documentation/x86/intel_txt.rst for a description of how to enable
+diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
+index 03fae1bd48a6..348ed6cfa08a 100644
+--- a/security/apparmor/Kconfig
++++ b/security/apparmor/Kconfig
+@@ -77,7 +77,7 @@ config SECURITY_APPARMOR_KUNIT_TEST
+ 	  This builds the AppArmor KUnit tests.
+ 
+ 	  KUnit tests run during boot and output the results to the debug log
+-	  in TAP format (http://testanything.org/). Only useful for kernel devs
++	  in TAP format (https://testanything.org/). Only useful for kernel devs
+ 	  running KUnit test harness and are not for inclusion into a
+ 	  production build.
+ 
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index edde88dbe576..6a5e4a77601b 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -26,7 +26,7 @@ config IMA
+ 	  an aggregate integrity value over this list inside the
+ 	  TPM hardware, so that the TPM can prove to a third party
+ 	  whether or not critical system files have been modified.
+-	  Read <http://www.usenix.org/events/sec04/tech/sailer.html>
++	  Read <https://www.usenix.org/events/sec04/tech/sailer.html>
+ 	  to learn more about IMA.
+ 	  If unsure, say N.
+ 
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 5a2def40a733..1e89e2d3851f 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+  * Copyright (C) 2013 Politecnico di Torino, Italy
+- *                    TORSEC group -- http://security.polito.it
++ *                    TORSEC group -- https://security.polito.it
+  *
+  * Author: Roberto Sassu <roberto.sassu@polito.it>
+  *
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 635c6ac05050..41a5f435b793 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+  * Copyright (C) 2013 Politecnico di Torino, Italy
+- *                    TORSEC group -- http://security.polito.it
++ *                    TORSEC group -- https://security.polito.it
+  *
+  * Author: Roberto Sassu <roberto.sassu@polito.it>
+  *
+diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
+index 9a88c79a7a61..6b3b880637a0 100644
+--- a/security/integrity/ima/ima_template_lib.h
++++ b/security/integrity/ima/ima_template_lib.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+ /*
+  * Copyright (C) 2013 Politecnico di Torino, Italy
+- *                    TORSEC group -- http://security.polito.it
++ *                    TORSEC group -- https://security.polito.it
+  *
+  * Author: Roberto Sassu <roberto.sassu@polito.it>
+  *
+diff --git a/security/keys/encrypted-keys/ecryptfs_format.c b/security/keys/encrypted-keys/ecryptfs_format.c
+index a7339d4de811..8fdd76105ce3 100644
+--- a/security/keys/encrypted-keys/ecryptfs_format.c
++++ b/security/keys/encrypted-keys/ecryptfs_format.c
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (C) 2006 International Business Machines Corp.
+  * Copyright (C) 2010 Politecnico di Torino, Italy
+- *                    TORSEC group -- http://security.polito.it
++ *                    TORSEC group -- https://security.polito.it
+  *
+  * Authors:
+  * Michael A. Halcrow <mahalcro@us.ibm.com>
+diff --git a/security/keys/encrypted-keys/ecryptfs_format.h b/security/keys/encrypted-keys/ecryptfs_format.h
+index 939621d870e4..ed8466578616 100644
+--- a/security/keys/encrypted-keys/ecryptfs_format.h
++++ b/security/keys/encrypted-keys/ecryptfs_format.h
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (C) 2006 International Business Machines Corp.
+  * Copyright (C) 2010 Politecnico di Torino, Italy
+- *                    TORSEC group -- http://security.polito.it
++ *                    TORSEC group -- https://security.polito.it
+  *
+  * Authors:
+  * Michael A. Halcrow <mahalcro@us.ibm.com>
+diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+index 14cf81d1a30b..20075b1308aa 100644
+--- a/security/keys/encrypted-keys/encrypted.c
++++ b/security/keys/encrypted-keys/encrypted.c
+@@ -2,7 +2,7 @@
+ /*
+  * Copyright (C) 2010 IBM Corporation
+  * Copyright (C) 2010 Politecnico di Torino, Italy
+- *                    TORSEC group -- http://security.polito.it
++ *                    TORSEC group -- https://security.polito.it
+  *
+  * Authors:
+  * Mimi Zohar <zohar@us.ibm.com>
+diff --git a/security/keys/encrypted-keys/masterkey_trusted.c b/security/keys/encrypted-keys/masterkey_trusted.c
+index c68528aa49c6..e6d22ce77e98 100644
+--- a/security/keys/encrypted-keys/masterkey_trusted.c
++++ b/security/keys/encrypted-keys/masterkey_trusted.c
+@@ -2,7 +2,7 @@
+ /*
+  * Copyright (C) 2010 IBM Corporation
+  * Copyright (C) 2010 Politecnico di Torino, Italy
+- *                    TORSEC group -- http://security.polito.it
++ *                    TORSEC group -- https://security.polito.it
+  *
+  * Authors:
+  * Mimi Zohar <zohar@us.ibm.com>
+-- 
+2.27.0
+
