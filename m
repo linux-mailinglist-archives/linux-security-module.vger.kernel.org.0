@@ -2,86 +2,128 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3686216581
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jul 2020 06:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7405216830
+	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jul 2020 10:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726889AbgGGEq2 (ORCPT
+        id S1727936AbgGGITd (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 7 Jul 2020 00:46:28 -0400
-Received: from mga18.intel.com ([134.134.136.126]:25277 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726805AbgGGEq1 (ORCPT
+        Tue, 7 Jul 2020 04:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727942AbgGGITc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 7 Jul 2020 00:46:27 -0400
-IronPort-SDR: S92ZUWu7XgTteUrdwK5CKYaOhuadAtgJnah22YuhyvTcZSSjSSlEi2HVJI9jVqJy6Y5A7i3UbR
- ZXInuMfroRoQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="135003756"
-X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
-   d="scan'208";a="135003756"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 21:46:26 -0700
-IronPort-SDR: w1b9Him4wF924ynVOVfX3FzeCVWWZZd2W8yiIgjwYBmic5wh/uZEBbDVcQfs9t3XfDpcfurZCp
- U0yapIVw6r2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
-   d="scan'208";a="456970927"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
-  by orsmga005.jf.intel.com with ESMTP; 06 Jul 2020 21:46:26 -0700
-Date:   Mon, 6 Jul 2020 21:46:26 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-mm@kvack.org,
+        Tue, 7 Jul 2020 04:19:32 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDFEC08C5E1
+        for <linux-security-module@vger.kernel.org>; Tue,  7 Jul 2020 01:19:32 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id t11so13252262pfq.11
+        for <linux-security-module@vger.kernel.org>; Tue, 07 Jul 2020 01:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0pw/almlOM0nvvqI+5nYmAdy2Yj1U7UMDcdD61C+qaQ=;
+        b=LGKeNNtTd/zC9lyBS5S1OkdT3sNaE+OZVMRG3YUkLIM//s1udvtMwGfcRKkICTDfwX
+         ciRh8xDXHRSFwSI2d++7iFZs2KTVOZj83GEv3CXcpx2PnvTMoeW3qj/VyUi3VUXCJMRk
+         BZDk4YDxdLaSu4NokEYhbyiGlmhzlQzseg27I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0pw/almlOM0nvvqI+5nYmAdy2Yj1U7UMDcdD61C+qaQ=;
+        b=PPzuWFQaP4JEZLCrLOIbha07RN8Mz5MYmjfX4D5FB6iIOcNOQLQAHaNAwPQOxn5gfs
+         rZQYCkX3oO9d97cczRSBubA02wxS/Ts0WtzBBu6CyRXUYnZfIigt/hn/1Ua0O9//PviC
+         SLXe239YYJxO+3ccOgQi4muPouogZznBaS3wd3RCW1QdIsyw4K8l+6Ylle7+efqjKtvI
+         NIwImnvMuPKIAdIVj22kevyYq9asmSpAGM1dk9+e4GNfewLPdkFp4xKNGG5K3Pe4GlJv
+         ls3T4UpywL3Ti523rfU/xZg2DtXmexhkyooW2AlCBEjJDFwu1gwE/MlqhQVcf8sgIr6g
+         /yrA==
+X-Gm-Message-State: AOAM532OYDJZm3vL/2H82X4AyVK3GM1nF/9ohiuyDLyw64CPaO3rlR7R
+        9uoVG+7ymTm/PsDudnyaMA171w==
+X-Google-Smtp-Source: ABdhPJxa9aMEUJ/Mjzn5aqtaRqYpVKuj1envkrNds6yTMeT1CX3sElLVK5gBWNoqrM4QS8Ru/kca3w==
+X-Received: by 2002:a63:2d44:: with SMTP id t65mr33902187pgt.257.1594109971610;
+        Tue, 07 Jul 2020 01:19:31 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 186sm15400415pfe.1.2020.07.07.01.19.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 01:19:30 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     James Morris <jmorris@namei.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jessica Yu <jeyu@kernel.org>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        KP Singh <kpsingh@google.com>, Dave Olsthoorn <dave@bewaar.me>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Chunyang Hui <sanqian.hcy@antfin.com>,
-        Jordan Hand <jorhand@linux.microsoft.com>,
-        Nathaniel McCallum <npmccallum@redhat.com>,
-        Seth Moore <sethmo@google.com>,
-        Suresh Siddha <suresh.b.siddha@intel.com>,
-        andriy.shevchenko@linux.intel.com, asapek@google.com, bp@alien8.de,
-        cedric.xing@intel.com, chenalexchen@google.com,
-        conradparker@google.com, cyhanish@google.com,
-        dave.hansen@intel.com, haitao.huang@intel.com,
-        josh@joshtriplett.org, kai.huang@intel.com, kai.svahn@intel.com,
-        kmoy@google.com, ludloff@google.com, luto@kernel.org,
-        nhorman@redhat.com, puiterwijk@redhat.com, rientjes@google.com,
-        tglx@linutronix.de, yaozhangx@google.com
-Subject: Re: [PATCH v34 11/24] x86/sgx: Add SGX enclave driver
-Message-ID: <20200707044626.GE5208@linux.intel.com>
-References: <20200707030204.126021-1-jarkko.sakkinen@linux.intel.com>
- <20200707030204.126021-12-jarkko.sakkinen@linux.intel.com>
- <20200707033617.GF25523@casper.infradead.org>
- <20200707041151.GE143804@linux.intel.com>
- <20200707042904.GD5208@linux.intel.com>
- <20200707043904.GJ25523@casper.infradead.org>
+        Stephen Boyd <stephen.boyd@linaro.org>,
+        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 0/4] Fix misused kernel_read_file() enums
+Date:   Tue,  7 Jul 2020 01:19:22 -0700
+Message-Id: <20200707081926.3688096-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200707043904.GJ25523@casper.infradead.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jul 07, 2020 at 05:39:04AM +0100, Matthew Wilcox wrote:
-> although I think you have a simpler task.
-> 
-> 	XA_STATE(xas, ..., start_index);
-> 
-> 	for (;;) {
-> 		struct page *page = xas_next(&xas);
-> 
-> 		if (!page || (~page->vm_max_prot_bits & vm_prot_bits))
-> 			return -EACCES;
-> 	}
-> 
-> 	return 0;
-> 
-> should do the trick, I think.
+Hi,
 
-Ah, neato.  Thanks!
+In looking for closely at the additions that got made to the
+kernel_read_file() enums, I noticed that FIRMWARE_PREALLOC_BUFFER
+and FIRMWARE_EFI_EMBEDDED were added, but they are not appropriate
+*kinds* of files for the LSM to reason about. They are a "how" and
+"where", respectively. Remove these improper aliases and refactor the
+code to adapt to the changes.
+
+Additionally adds in missing calls to security_kernel_post_read_file()
+in the platform firmware fallback path (to match the sysfs firmware
+fallback path) and in module loading. I considered entirely removing
+security_kernel_post_read_file() hook since it is technically unused,
+but IMA probably wants to be able to measure EFI-stored firmware images,
+so I wired it up and matched it for modules, in case anyone wants to
+move the module signature checks out of the module core and into an LSM
+to avoid the current layering violations.
+
+This touches several trees, and I suspect it would be best to go through
+James's LSM tree.
+
+Thanks!
+
+-Kees
+
+Kees Cook (4):
+  firmware_loader: EFI firmware loader must handle pre-allocated buffer
+  fs: Remove FIRMWARE_PREALLOC_BUFFER from kernel_read_file() enums
+  fs: Remove FIRMWARE_EFI_EMBEDDED from kernel_read_file() enums
+  module: Add hook for security_kernel_post_read_file()
+
+ drivers/base/firmware_loader/fallback_platform.c | 12 ++++++++++--
+ drivers/base/firmware_loader/main.c              |  5 ++---
+ fs/exec.c                                        |  7 ++++---
+ include/linux/fs.h                               |  3 +--
+ include/linux/lsm_hooks.h                        |  6 +++++-
+ kernel/module.c                                  |  7 ++++++-
+ security/integrity/ima/ima_main.c                |  6 ++----
+ 7 files changed, 30 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
+
