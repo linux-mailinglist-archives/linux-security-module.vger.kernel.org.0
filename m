@@ -2,154 +2,202 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C5121F870
-	for <lists+linux-security-module@lfdr.de>; Tue, 14 Jul 2020 19:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFF721F907
+	for <lists+linux-security-module@lfdr.de>; Tue, 14 Jul 2020 20:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729060AbgGNRoN (ORCPT
+        id S1729248AbgGNSRS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 14 Jul 2020 13:44:13 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:55900 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725951AbgGNRoN (ORCPT
+        Tue, 14 Jul 2020 14:17:18 -0400
+Received: from smtp-bc0c.mail.infomaniak.ch ([45.157.188.12]:48465 "EHLO
+        smtp-bc0c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729251AbgGNSRS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 14 Jul 2020 13:44:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594748651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fRu/5iacxmutQ7kMDS7dLLg3NGipwsCDb2mhidsZLDQ=;
-        b=SdLC+hRjGbawbjMWTFzuTQ/PqMmZ0MyUKz0BM3SA7Ly50U7OP/acWB5LquJhv/HwR/aVYi
-        Ch+ldf8ziGWJdcDoEXDw1H84Q6rFEXjQcoxyhQO34LXZdpztKHsJq21RLKZkpUOB/PRWiu
-        qleJFYHRzRW1mCaREC317+4B1PT/N9k=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-164--oAd_irlPMmMGcwJY665gQ-1; Tue, 14 Jul 2020 13:44:05 -0400
-X-MC-Unique: -oAd_irlPMmMGcwJY665gQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 741CF100CCC4;
-        Tue, 14 Jul 2020 17:44:04 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.10.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B9E786FEDF;
-        Tue, 14 Jul 2020 17:43:56 +0000 (UTC)
-Date:   Tue, 14 Jul 2020 13:43:53 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Eric Paris <eparis@parisplace.org>, john.johansen@canonical.com
-Subject: Re: [PATCH ghak84 v4] audit: purge audit_log_string from the
- intra-kernel audit API
-Message-ID: <20200714174353.ds7lj3iisy67t2zu@madcap2.tricolour.ca>
-References: <6effbbd4574407d6af21162e57d9102d5f8b02ed.1594664015.git.rgb@redhat.com>
- <CAHC9VhSyq7yKQqwvHL5syU9+TFki6-__WfCrvqewbnU3xpND4Q@mail.gmail.com>
+        Tue, 14 Jul 2020 14:17:18 -0400
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B5pct40bVzlhYQ4;
+        Tue, 14 Jul 2020 20:16:46 +0200 (CEST)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4B5pcp2QS6zlh8TC;
+        Tue, 14 Jul 2020 20:16:42 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v6 0/7] Add support for O_MAYEXEC
+Date:   Tue, 14 Jul 2020 20:16:31 +0200
+Message-Id: <20200714181638.45751-1-mic@digikod.net>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhSyq7yKQqwvHL5syU9+TFki6-__WfCrvqewbnU3xpND4Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2020-07-14 12:21, Paul Moore wrote:
-> On Mon, Jul 13, 2020 at 3:52 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> >
-> > audit_log_string() was inteded to be an internal audit function and
-> > since there are only two internal uses, remove them.  Purge all external
-> > uses of it by restructuring code to use an existing audit_log_format()
-> > or using audit_log_format().
-> >
-> > Please see the upstream issue
-> > https://github.com/linux-audit/audit-kernel/issues/84
-> >
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > ---
-> > Passes audit-testsuite.
-> >
-> > Changelog:
-> > v4
-> > - use double quotes in all replaced audit_log_string() calls
-> >
-> > v3
-> > - fix two warning: non-void function does not return a value in all control paths
-> >         Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > v2
-> > - restructure to piggyback on existing audit_log_format() calls, checking quoting needs for each.
-> >
-> > v1 Vlad Dronov
-> > - https://github.com/nefigtut/audit-kernel/commit/dbbcba46335a002f44b05874153a85b9cc18aebf
-> >
-> >  include/linux/audit.h     |  5 -----
-> >  kernel/audit.c            |  4 ++--
-> >  security/apparmor/audit.c | 10 ++++------
-> >  security/apparmor/file.c  | 25 +++++++------------------
-> >  security/apparmor/ipc.c   | 46 +++++++++++++++++++++++-----------------------
-> >  security/apparmor/net.c   | 14 ++++++++------
-> >  security/lsm_audit.c      |  4 ++--
-> >  7 files changed, 46 insertions(+), 62 deletions(-)
-> 
-> Thanks for restoring the quotes, just one question below ...
-> 
-> > diff --git a/security/apparmor/ipc.c b/security/apparmor/ipc.c
-> > index 4ecedffbdd33..fe36d112aad9 100644
-> > --- a/security/apparmor/ipc.c
-> > +++ b/security/apparmor/ipc.c
-> > @@ -20,25 +20,23 @@
-> >
-> >  /**
-> >   * audit_ptrace_mask - convert mask to permission string
-> > - * @buffer: buffer to write string to (NOT NULL)
-> >   * @mask: permission mask to convert
-> > + *
-> > + * Returns: pointer to static string
-> >   */
-> > -static void audit_ptrace_mask(struct audit_buffer *ab, u32 mask)
-> > +static const char *audit_ptrace_mask(u32 mask)
-> >  {
-> >         switch (mask) {
-> >         case MAY_READ:
-> > -               audit_log_string(ab, "read");
-> > -               break;
-> > +               return "read";
-> >         case MAY_WRITE:
-> > -               audit_log_string(ab, "trace");
-> > -               break;
-> > +               return "trace";
-> >         case AA_MAY_BE_READ:
-> > -               audit_log_string(ab, "readby");
-> > -               break;
-> > +               return "readby";
-> >         case AA_MAY_BE_TRACED:
-> > -               audit_log_string(ab, "tracedby");
-> > -               break;
-> > +               return "tracedby";
-> >         }
-> > +       return "";
-> 
-> Are we okay with this returning an empty string ("") in this case?
-> Should it be a question mark ("?")?
-> 
-> My guess is that userspace parsing should be okay since it still has
-> quotes, I'm just not sure if we wanted to use a question mark as we do
-> in other cases where the field value is empty/unknown.
+Hi,
 
-Previously, it would have been an empty value, not even double quotes.
-"?" might be an improvement.
+This sixth patch series mainly adds Kees Cook's file permission check
+relocations which help to simplify and generalize the previous series.
+I removed the MAY_EXECMOUNT flag patch which is not useful anymore with
+this refactoring.  I also removed the static enforcement configuration
+through Kconfig to make this series simpler and because it works in pair
+with mount configurations (i.e. requires the same capability:
+CAP_SYS_ADMIN).
 
-> paul moore
+As requested by Mimi Zohar, I completed the series with one of her
+patches for IMA.  I also picked Kees Cook's patches to consolidate exec
+permission checking into do_filp_open()'s flow:
+https://lore.kernel.org/lkml/20200605160013.3954297-1-keescook@chromium.org/
 
-- RGB
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
+# Goal of O_MAYEXEC
+
+The goal of this patch series is to enable to control script execution
+with interpreters help.  A new O_MAYEXEC flag, usable through
+openat2(2), is added to enable userspace script interpreters to delegate
+to the kernel (and thus the system security policy) the permission to
+interpret/execute scripts or other files containing what can be seen as
+commands.
+
+A simple system-wide security policy can be enforced by the system
+administrator through a sysctl configuration consistent with the mount
+points or the file access rights.  The documentation patch explains the
+prerequisites.
+
+Furthermore, the security policy can also be delegated to an LSM, either
+a MAC system or an integrity system.  For instance, the new kernel
+MAY_OPENEXEC flag closes a major IMA measurement/appraisal interpreter
+integrity gap by bringing the ability to check the use of scripts [1].
+Other uses are expected, such as for magic-links [2], SGX integration
+[3], bpffs [4] or IPE [5].
+
+
+# Prerequisite of its use
+
+Userspace needs to adapt to take advantage of this new feature.  For
+example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
+extended with policy enforcement points related to code interpretation,
+which can be used to align with the PowerShell audit features.
+Additional Python security improvements (e.g. a limited interpreter
+withou -c, stdin piping of code) are on their way [7].
+
+
+# Examples
+
+The initial idea comes from CLIP OS 4 and the original implementation
+has been used for more than 12 years:
+https://github.com/clipos-archive/clipos4_doc
+Chrome OS has a similar approach:
+https://chromium.googlesource.com/chromiumos/docs/+/master/security/noexec_shell_scripts.md
+
+Userland patches can be found here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+Actually, there is more than the O_MAYEXEC changes (which matches this search)
+e.g., to prevent Python interactive execution. There are patches for
+Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
+also some related patches which do not directly rely on O_MAYEXEC but
+which restrict the use of browser plugins and extensions, which may be
+seen as scripts too:
+https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
+
+An introduction to O_MAYEXEC was given at the Linux Security Summit
+Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+See also an overview article: https://lwn.net/Articles/820000/
+
+
+This patch series can be applied on top of v5.8-rc5 .  This can be tested
+with CONFIG_SYSCTL.  I would really appreciate constructive comments on
+this patch series.
+
+Previous version:
+https://lore.kernel.org/lkml/20200505153156.925111-1-mic@digikod.net/
+
+
+[1] https://lore.kernel.org/lkml/1544647356.4028.105.camel@linux.ibm.com/
+[2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
+[3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
+[5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
+[6] https://www.python.org/dev/peps/pep-0578/
+[7] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
+
+Regards,
+
+Kees Cook (3):
+  exec: Change uselib(2) IS_SREG() failure to EACCES
+  exec: Move S_ISREG() check earlier
+  exec: Move path_noexec() check earlier
+
+Mickaël Salaün (3):
+  fs: Introduce O_MAYEXEC flag for openat2(2)
+  fs,doc: Enable to enforce noexec mounts or file exec through O_MAYEXEC
+  selftest/openat2: Add tests for O_MAYEXEC enforcing
+
+Mimi Zohar (1):
+  ima: add policy support for the new file open MAY_OPENEXEC flag
+
+ Documentation/ABI/testing/ima_policy          |   2 +-
+ Documentation/admin-guide/sysctl/fs.rst       |  45 +++
+ fs/exec.c                                     |  23 +-
+ fs/fcntl.c                                    |   2 +-
+ fs/namei.c                                    |  31 ++-
+ fs/open.c                                     |  14 +-
+ include/linux/fcntl.h                         |   2 +-
+ include/linux/fs.h                            |   3 +
+ include/uapi/asm-generic/fcntl.h              |   7 +
+ kernel/sysctl.c                               |  12 +-
+ security/integrity/ima/ima_main.c             |   3 +-
+ security/integrity/ima/ima_policy.c           |  15 +-
+ tools/testing/selftests/kselftest_harness.h   |   3 +
+ tools/testing/selftests/openat2/Makefile      |   3 +-
+ tools/testing/selftests/openat2/config        |   1 +
+ tools/testing/selftests/openat2/helpers.h     |   1 +
+ .../testing/selftests/openat2/omayexec_test.c | 262 ++++++++++++++++++
+ 17 files changed, 400 insertions(+), 29 deletions(-)
+ create mode 100644 tools/testing/selftests/openat2/config
+ create mode 100644 tools/testing/selftests/openat2/omayexec_test.c
+
+-- 
+2.27.0
 
