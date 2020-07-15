@@ -2,120 +2,138 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF46E2211AD
-	for <lists+linux-security-module@lfdr.de>; Wed, 15 Jul 2020 17:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6336E2212E6
+	for <lists+linux-security-module@lfdr.de>; Wed, 15 Jul 2020 18:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgGOPuA (ORCPT
+        id S1726768AbgGOQqu convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 15 Jul 2020 11:50:00 -0400
-Received: from mxo1.nje.dmz.twosigma.com ([208.77.214.160]:33369 "EHLO
-        mxo1.nje.dmz.twosigma.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbgGOPt7 (ORCPT
+        Wed, 15 Jul 2020 12:46:50 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:48612 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726758AbgGOQqt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 15 Jul 2020 11:49:59 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mxo1.nje.dmz.twosigma.com (Postfix) with ESMTP id 4B6MK15sZ8z8snW;
-        Wed, 15 Jul 2020 15:49:57 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at twosigma.com
-Received: from mxo1.nje.dmz.twosigma.com ([127.0.0.1])
-        by localhost (mxo1.nje.dmz.twosigma.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id oLC619_nSHwc; Wed, 15 Jul 2020 15:49:57 +0000 (UTC)
-Received: from exmbdft6.ad.twosigma.com (exmbdft6.ad.twosigma.com [172.22.1.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxo1.nje.dmz.twosigma.com (Postfix) with ESMTPS id 4B6MK15CHXz8snK;
-        Wed, 15 Jul 2020 15:49:57 +0000 (UTC)
-Received: from EXMBDFT10.ad.twosigma.com (172.23.127.159) by
- exmbdft6.ad.twosigma.com (172.22.1.5) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 15 Jul 2020 15:49:57 +0000
-Received: from EXMBDFT11.ad.twosigma.com (172.23.162.14) by
- EXMBDFT10.ad.twosigma.com (172.23.127.159) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 15 Jul 2020 15:49:57 +0000
-Received: from EXMBDFT11.ad.twosigma.com ([fe80::8d66:2326:5416:86a9]) by
- EXMBDFT11.ad.twosigma.com ([fe80::8d66:2326:5416:86a9%19]) with mapi id
- 15.00.1497.000; Wed, 15 Jul 2020 15:49:57 +0000
-From:   Nicolas Viennot <Nicolas.Viennot@twosigma.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Adrian Reber <areber@redhat.com>
-CC:     Eric Biederman <ebiederm@xmission.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        =?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>,
-        "Kamil Yurtsever" <kyurtsever@google.com>,
-        Dirk Petersen <dipeit@gmail.com>,
-        Christine Flood <chf@redhat.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Radostin Stoyanov <rstoyanov1@gmail.com>,
-        Cyrill Gorcunov <gorcunov@openvz.org>,
-        Serge Hallyn <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Wed, 15 Jul 2020 12:46:49 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-52-I5MfYmGMN8WVVlleqrOfeQ-1; Wed, 15 Jul 2020 17:46:45 +0100
+X-MC-Unique: I5MfYmGMN8WVVlleqrOfeQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 15 Jul 2020 17:46:44 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 15 Jul 2020 17:46:44 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>
+CC:     'Christoph Hellwig' <hch@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        Eric Paris <eparis@parisplace.org>,
-        Jann Horn <jannh@google.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: RE: [PATCH v5 5/6] prctl: Allow checkpoint/restore capable processes
- to change exe link
-Thread-Topic: [PATCH v5 5/6] prctl: Allow checkpoint/restore capable processes
- to change exe link
-Thread-Index: AQHWWrd9MS4DKBjnuUS3UVyYGQIobKkIwW2AgAAGAfA=
-Date:   Wed, 15 Jul 2020 15:49:57 +0000
-Message-ID: <ba55d8b160e541429dc0c823d3240eb3@EXMBDFT11.ad.twosigma.com>
-References: <20200715144954.1387760-1-areber@redhat.com>
- <20200715144954.1387760-6-areber@redhat.com>
- <20200715152011.whdeysy3ztqrnocn@wittgenstein>
-In-Reply-To: <20200715152011.whdeysy3ztqrnocn@wittgenstein>
-Accept-Language: en-US
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "John Johansen" <john.johansen@canonical.com>
+Subject: RE: [PATCH 7/7] exec: Implement kernel_execve
+Thread-Topic: [PATCH 7/7] exec: Implement kernel_execve
+Thread-Index: AQHWWnMrd4ih7YlzG0aqMJfp5omyT6kIuIaQ///1mACAACJpAA==
+Date:   Wed, 15 Jul 2020 16:46:44 +0000
+Message-ID: <dc8371b7e05d4aa49eefcfd402b3fa1e@AcuMS.aculab.com>
+References: <871rle8bw2.fsf@x220.int.ebiederm.org>
+ <87wo365ikj.fsf@x220.int.ebiederm.org> <202007141446.A72A4437C@keescook>
+ <20200715064248.GH32470@infradead.org>
+ <d6d204c4427b49f6b24ac24bf1082fa4@AcuMS.aculab.com>
+ <202007150801.27B6690@keescook>
+In-Reply-To: <202007150801.27B6690@keescook>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [192.168.118.104]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-PiBPbiBXZWQsIEp1bCAxNSwgMjAyMCBhdCAwNDo0OTo1M1BNICswMjAwLCBBZHJpYW4gUmViZXIg
-d3JvdGU6DQo+ID4gRnJvbTogTmljb2xhcyBWaWVubm90IDxOaWNvbGFzLlZpZW5ub3RAdHdvc2ln
-bWEuY29tPg0KPiA+IA0KPiA+IEFsbG93IENBUF9DSEVDS1BPSU5UX1JFU1RPUkUgY2FwYWJsZSB1
-c2VycyB0byBjaGFuZ2UgL3Byb2Mvc2VsZi9leGUuDQo+ID4gDQo+ID4gVGhpcyBjb21taXQgYWxz
-byBjaGFuZ2VzIHRoZSBwZXJtaXNzaW9uIGVycm9yIGNvZGUgZnJvbSAtRUlOVkFMIHRvIA0KPiA+
-IC1FUEVSTSBmb3IgY29uc2lzdGVuY3kgd2l0aCB0aGUgcmVzdCBvZiB0aGUgcHJjdGwoKSBzeXNj
-YWxsIHdoZW4gDQo+ID4gY2hlY2tpbmcgY2FwYWJpbGl0aWVzLg0KPiBJIGFncmVlIHRoYXQgRUlO
-VkFMIHNlZW1zIHdlaXJkIGhlcmUgYnV0IHRoaXMgaXMgYSBwb3RlbnRpYWxseSB1c2VyIHZpc2li
-bGUgY2hhbmdlLiBNaWdodCBiZSBuaWNlIHRvIGhhdmUgdGhlIEVJTlZBTC0+RVBFUk0gY2hhbmdl
-IGJlIGFuIGFkZGl0aW9uYWwgcGF0Y2ggb24gdG9wIGFmdGVyIHRoaXMgb25lIHNvIHdlIGNhbiBy
-ZXZlcnQgaXQgaW4gY2FzZSBpdCBicmVha3Mgc29tZW9uZSAodW5saWtlbHkgdGhvdWdoKS4gSSBj
-YW4gc3BsaXQgdGhpcyBvdXQgbXlzZWxmIHRob3VnaCBzbyBubyBuZWVkIHRvIHJlc2VuZCBmb3Ig
-dGhhdCBhbG9uZS4NCj4gV2hhdCBJIHdvdWxkIGFsc28gcHJlZmVyIGlzIHRvIGhhdmUgc29tZSBo
-aXN0b3J5IGluIHRoZSBjb21taXQgbWVzc2FnZSB0YmguIFRoZSByZWFzb24gaXMgdGhhdCB3aGVu
-IHdlIHN0YXJ0ZWQgZGlzY3Vzc2luZyB0aGF0IHNwZWNpZmljIGNoYW5nZSBJIGhhZCB0byBodW50
-IGRvd24gdGhlIGhpc3Rvcnkgb2YgY2hhbmdpbmcgL3Byb2Mvc2VsZi9leGUgYW5kIGhhZCB0byBk
-aWcgdXAgYW5kIHJlYWQgdGhyb3VnaCBhbmNpZW50IHRocmVhZHMgb24gbG9yZSB0byBjb21lIHVw
-IHdpdGggdGhlIGV4cGxhbmF0aW9uIHdoeSB0aGlzIGlzIHBsYWNlZCB1bmRlciBhIGNhcGFiaWxp
-dHkuIFRoZSBjb21taXQgbWVzc2FnZSBzaG91bGQgdGhlbiBhbHNvIG1lbnRpb24gdGhhdCB0aGVy
-ZSBhcmUgb3RoZXIgd2F5cyB0byBjaGFuZ2UgdGhlIC9wcm9jL3NlbGYvZXhlIGxpbmsgdGhhdCBk
-b24ndCByZXF1aXJlIGNhcGFiaWxpdGllcyBhbmQgdGhhdCAvcHJvYy9zZWxmL2V4ZSBpdHNlbGYg
-aXMgbm90IHNvbWV0aGluZyB1c2Vyc3BhY2Ugc2hvdWxkIHJlbHkgb24gZm9yIHNlY3VyaXR5LiBN
-YWlubHkgc28gdGhhdCBpbiBhIGZldyBtb250aHMveWVhcnMgd2UgY2FuIHJlYWQgdGhyb3VnaCB0
-aGF0IGNvbW1pdCBtZXNzYWdlIGFuZCBnbyAiV2VpcmQsIGJ1dCBvay4iLiA6KQ0KPiBCdXQgbWF5
-YmUgSSBjYW4ganVzdCByZXdyaXRlIHRoaXMgbXlzZWxmIHNvIHlvdSBkb24ndCBoYXZlIHRvIGdv
-IHRocm91Z2ggdGhlIHRyb3VibGUuIFRoaXMgaXMgcmVhbGx5IG5vdCBwZWRhbnRyeSBpdCdzIGp1
-c3QgdGhhdCBpdCdzIGEgbG90IG9mIHdvcmsgZGlnZ2luZyB1cCB0aGUgcmVhc29ucyBmb3IgYSBw
-aWVjZSBvZiBjb2RlIGV4aXN0aW5nIHdoZW4gaXQncyByZWFsbHkgbm90IG9idmlvdXMuIDopDQoN
-CkhlbGxvIENocmlzdGlhbiwNCg0KSSBhZ3JlZS4NClRoYW5rIHlvdSBmb3Igc3VnZ2VzdGluZyBk
-b2luZyB0aGUgd29yaywgYnV0IHlvdSd2ZSBkb25lIHBsZW50eSBhbHJlYWR5LiBTbyB3ZSdsbCBj
-b21lIGJhY2sgdG8geW91IHdpdGg6DQoxKSBBIHNlcGFyYXRlIGNvbW1pdCBmb3IgRUlOVkFMLT5F
-UEVSTQ0KMikgQSBmdWxsIGhpc3Rvcnkgb2YgZGlzY3Vzc2lvbnMgaW4gdGhlIGNvbW1pdCBtZXNz
-YWdlIHJlbGF0ZWQgdG8gL3Byb2Mvc2VsZi9leGUgY2FwYWJpbGl0eSBjaGVjaw0KDQpUaGFua3Ms
-DQpOaWNvDQo=
+From: Kees Cook <keescook@chromium.org>
+> Sent: 15 July 2020 16:09
+> 
+> On Wed, Jul 15, 2020 at 02:55:50PM +0000, David Laight wrote:
+> > From: Christoph Hellwig
+> > > Sent: 15 July 2020 07:43
+> > > Subject: Re: [PATCH 7/7] exec: Implement kernel_execve
+> > >
+> > > On Tue, Jul 14, 2020 at 02:49:23PM -0700, Kees Cook wrote:
+> > > > On Tue, Jul 14, 2020 at 08:31:40AM -0500, Eric W. Biederman wrote:
+> > > > > +static int count_strings_kernel(const char *const *argv)
+> > > > > +{
+> > > > > +	int i;
+> > > > > +
+> > > > > +	if (!argv)
+> > > > > +		return 0;
+> > > > > +
+> > > > > +	for (i = 0; argv[i]; ++i) {
+> > > > > +		if (i >= MAX_ARG_STRINGS)
+> > > > > +			return -E2BIG;
+> > > > > +		if (fatal_signal_pending(current))
+> > > > > +			return -ERESTARTNOHAND;
+> > > > > +		cond_resched();
+> > > > > +	}
+> > > > > +	return i;
+> > > > > +}
+> > > >
+> > > > I notice count() is only ever called with MAX_ARG_STRINGS. Perhaps
+> > > > refactor that too? (And maybe rename it to count_strings_user()?)
+> >
+> > Thinks....
+> > If you setup env[] and argv[] on the new user stack early in exec processing
+> > then you may not need any limits at all - except the size of the user stack.
+> > Even the get_user() loop will hit an invalid address before the counter
+> > wraps (provided it is unsigned long).
+> 
+> *grumpy noises* Yes, but not in practice (if I'm understanding what you
+> mean). The expectations of a number of execution environments can be
+> really odd-ball. I've tried to collect the notes from over the years in
+> prepare_arg_pages()'s comments, and it mostly boils down to "there has
+> to be enough room for the exec to start" otherwise the exec ends up in a
+> hard-to-debug failure state (i.e. past the "point of no return", where you
+> get no useful information about the cause of the SEGV). So the point has
+> been to move as many of the setup checks as early as possible and report
+> about them if they fail. The argv processing is already very early, but
+> it needs to do the limit checks otherwise it'll just break after the exec
+> is underway and the process will just SEGV. (And ... some environments
+> will attempt to dynamically check the size of the argv space by growing
+> until it sees E2BIG, so we can't just remove it and let those hit SEGV.)
+
+Yes - I bet the code is horrid.
+I guess the real problem is that you'd need access to the old process's
+user addresses and the new process's stack area at the same time.
+Unless there is a suitable hole in the old process's address map
+any attempted trick will fall foul of cache aliasing on some
+architectures - like anything else that does page-loaning.
+
+I'm sure there are hair-brained schemes that might work.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
