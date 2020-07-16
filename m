@@ -2,59 +2,59 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C1022206F
-	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jul 2020 12:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE27222070
+	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jul 2020 12:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbgGPKS4 (ORCPT
+        id S1726812AbgGPKTA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 16 Jul 2020 06:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        Thu, 16 Jul 2020 06:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgGPKSz (ORCPT
+        with ESMTP id S1726075AbgGPKS7 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 16 Jul 2020 06:18:55 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A0DC061755
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Jul 2020 03:18:54 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id k6so6493737wrn.3
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Jul 2020 03:18:54 -0700 (PDT)
+        Thu, 16 Jul 2020 06:18:59 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A24FC061755
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Jul 2020 03:18:59 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z13so6479744wrw.5
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Jul 2020 03:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tYLFK9MQZoeCsCBrEsDxeXYg5eoqikO7agT9zmA5iGo=;
-        b=du/YJfgsgNK8OcMXijZiALrc1JcULNiUHq1xNF+AAKjVy+QyuNoOVLIH3loEKUFCN1
-         3xxjOeC5315pFA+FL0rAHI3mQJ2XPtde0Ew++Mwbn+3B5UkLarI2Wx6IUeIGE8ieqz3A
-         Afslo7cjqHzYGRT6vtBX0xqXdhZrE+OIqbOFwwGqPqAPawGJVnQLDcMed5B9yL6Cm7I0
-         4QwJnJuZoypbNXb6tcWpxF7Rk8z7wXHFJM0RHjnIOB3SBEg6D2pBmyIEdvxyndBPD4Uo
-         Z5ca83HEYyktq32tV0qh6GP+Vpt3bavwr6D3nT740hYq3kBTu2c7PWl4mB0gCI59phuN
-         0Nig==
+        bh=CQc5oYthyIHgrA0b+wGSIPuxi+870IhMLwsMYznbmq8=;
+        b=iO9eReihmr0Vz8A6cWVI3bxL6d0Uc7G6BuA0+hJvm+gKXgWeHecVpjDkq9n+SE5RjU
+         /28b8ub5d7TRZIc/QHZVpy+NBxs23EVP7DRIpnTHA1mG38J/nTqCjh1Xk0l4vJpoTEh9
+         YJzhqaytJpMdYTbhdNY7Lnpqefn7IxzG7jOmqj8DR48f/i6KxHD6cEHWCpHnYEcXTKnA
+         nLDJrlY+LQHmz4JYze5/OY/jyVzvzha0dV4rfetUJBY4MU4ITbuNpMJb2jiclYfw+bjh
+         MJPaCA8GEFlOhq66YAtJnUcqpW4xPfsWWwNX6seO1Nce3PLcmfYd0iC8jiquY2oXnUb8
+         qCag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tYLFK9MQZoeCsCBrEsDxeXYg5eoqikO7agT9zmA5iGo=;
-        b=Chw+HiNK/q6wz30Lja4j1iI3Zyca8WJnrHsA+jHDauaetS9+V6iH7gjr83c5yYmVCC
-         tckGf1yLSAqdSI2n2x01d/KXHIZXWBrPLaEILJu+0DRcx/f/985djraI/u3FhwzFLZGA
-         BQRGVQ1jjR/fHgU5EiCXwwCG3n4iXfE6gXJtEAHoQ30+lpWGwSaN7NCLa1zYpjjMeQgo
-         r/GfH4y6LU2PZpbadWqyZ4oPJ86CyC2X6cRsiA4F5oMCjRu9CAOsi8op3WkI3J6w5sZO
-         MWeyqz4DajRd7muN4JdjM6TV0N1ru6qWv88rn8iA6U11225uxLWeLmZRJCFlVRIdykCz
-         2awQ==
-X-Gm-Message-State: AOAM533Cwarqk0Neflx3GkYeZFlMdVg7xtPugjsBNGF61726UoAADjxn
-        36BRtTdM0uBV2tJhuFJfnHg=
-X-Google-Smtp-Source: ABdhPJw547dM2c50d8Kr50B+XXMI/Dw+vfXDBpacFtpZlmzQ08FXXOLc1TJ8eoEaZ4E0duiBSvGzfA==
-X-Received: by 2002:adf:ec88:: with SMTP id z8mr4329877wrn.395.1594894732751;
-        Thu, 16 Jul 2020 03:18:52 -0700 (PDT)
+        bh=CQc5oYthyIHgrA0b+wGSIPuxi+870IhMLwsMYznbmq8=;
+        b=Db8Pqd7KeIO6BRdcXpBFri52TAHqHc2XQH9Ko952S049OcHW1nOPjKuxEhN6AaxFay
+         Kkf4eU2gND+QUtMJjkaKfMIOn0pDg3pHjwnQpoNlFUdsY+2tTfSWqtnupqku0WtEkKJK
+         KpKYNOdOOtpm9Q7DjPcSfEduHE3ucnM488f1Y/ceeyrEcwbCaY1H2b6RbN/aLn0zDoiQ
+         7e/yQg6xi8a1CYKpaYj0st+dLh7J8DUsb9F/9RLZxPf9ZY8/wADQRjKlXIjwhZwoopLT
+         zQqxsfE4tmg0i3Q3Qn2c+s3M67IqDTCTuKgKFhvOKFG12sGyP28AXTUHzQH5xmFyUf1X
+         UuGQ==
+X-Gm-Message-State: AOAM5307PK9x+BBHiBRNAS6yK7l9eaxg8hUaQYs9usGRtziup7cZ9q74
+        Nf74f3ah2btmkueaw6WTjNzqpR9f
+X-Google-Smtp-Source: ABdhPJzGHDKwFRtA+//gDaNgPPqZT4FL7Jra49snIMTYTZP9vobti3jf5nPBBZTHJQihHlab9a6D8w==
+X-Received: by 2002:a5d:5647:: with SMTP id j7mr4254917wrw.242.1594894738240;
+        Thu, 16 Jul 2020 03:18:58 -0700 (PDT)
 Received: from bienne.fritz.box ([2001:a61:3adb:8201:9649:88f:51f8:6a21])
-        by smtp.gmail.com with ESMTPSA id j75sm9036150wrj.22.2020.07.16.03.18.51
+        by smtp.gmail.com with ESMTPSA id b23sm8598210wmd.37.2020.07.16.03.18.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 03:18:52 -0700 (PDT)
+        Thu, 16 Jul 2020 03:18:57 -0700 (PDT)
 From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
 To:     mtk.manpages@gmail.com, "Andrew G . Morgan" <morgan@kernel.org>
 Cc:     linux-security-module@vger.kernel.org
-Subject: [PATCH 06/16] Manual pages: cap_get_file.3: Remove stray macros that have no effect
-Date:   Thu, 16 Jul 2020 12:18:17 +0200
-Message-Id: <20200716101827.162793-6-mtk.manpages@gmail.com>
+Subject: [PATCH 07/16] Manual pages: cap_get_proc.3: s/UNCERTAIN/CAP_MODE_UNCERTAIN/
+Date:   Thu, 16 Jul 2020 12:18:18 +0200
+Message-Id: <20200716101827.162793-7-mtk.manpages@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200716101827.162793-1-mtk.manpages@gmail.com>
 References: <20200716101827.162793-1-mtk.manpages@gmail.com>
@@ -64,26 +64,26 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-These macros give warnings from 'mandoc -T lint'.
+Use the proper name of the constant in DESCRIPTION.
 
 Signed-off-by: Michael Kerrisk (man-pages) <mtk.manpages@gmail.com>
 ---
- doc/cap_get_file.3 | 2 --
- 1 file changed, 2 deletions(-)
+ doc/cap_get_proc.3 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/doc/cap_get_file.3 b/doc/cap_get_file.3
-index 42255ee..c028148 100644
---- a/doc/cap_get_file.3
-+++ b/doc/cap_get_file.3
-@@ -6,8 +6,6 @@
- cap_get_file, cap_set_file, cap_get_fd, cap_set_fd \- capability
- manipulation on files
- .SH SYNOPSIS
--.B
--.sp
- .B #include <sys/capability.h>
- .sp
- .BI "cap_t cap_get_file(const char *" path_p );
+diff --git a/doc/cap_get_proc.3 b/doc/cap_get_proc.3
+index b0a61d1..ded1491 100644
+--- a/doc/cap_get_proc.3
++++ b/doc/cap_get_proc.3
+@@ -168,7 +168,7 @@ returns
+ which
+ .BR cap_get_name ()
+ declares as
+-.IR "UNCERTAIN" .
++.BR CAP_MODE_UNCERTAIN .
+ Supported modes are:
+ .BR CAP_MODE_NOPRIV ", " CAP_MODE_PURE1E_INIT " and " CAP_MODE_PURE1E .
+ .PP
 -- 
 2.26.2
 
