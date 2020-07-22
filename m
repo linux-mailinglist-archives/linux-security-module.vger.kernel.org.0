@@ -2,113 +2,80 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F45F22A083
-	for <lists+linux-security-module@lfdr.de>; Wed, 22 Jul 2020 22:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898C222A0A8
+	for <lists+linux-security-module@lfdr.de>; Wed, 22 Jul 2020 22:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbgGVULD (ORCPT
+        id S1728263AbgGVUUF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 22 Jul 2020 16:11:03 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:31095 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726535AbgGVULD (ORCPT
+        Wed, 22 Jul 2020 16:20:05 -0400
+Received: from smtprelay0162.hostedemail.com ([216.40.44.162]:37558 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726841AbgGVUUE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 22 Jul 2020 16:11:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595448661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+z8Sjy8ZptOYQPBj+H820e2EKukutEsqDOT5iiJ3PDM=;
-        b=YFI/F6onfTPy859uWiW4y+mYExQ6TcfQmCBeorkF4J6L6xqj70gQxQGv9n0DtlZVxTSuHp
-        r1auikkcfi1FnatLezCbA2zDZZ299eGayp3hbuqTloxS11NQeqLJLFpsiWX5cfHMR75R8z
-        +gaY6Ol1gx640keM/pPKpat4KZnG8C0=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-198-o0INDGM_Mk-Uegr0A5ioug-1; Wed, 22 Jul 2020 16:11:00 -0400
-X-MC-Unique: o0INDGM_Mk-Uegr0A5ioug-1
-Received: by mail-qk1-f197.google.com with SMTP id v16so2213493qka.18
-        for <linux-security-module@vger.kernel.org>; Wed, 22 Jul 2020 13:11:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=+z8Sjy8ZptOYQPBj+H820e2EKukutEsqDOT5iiJ3PDM=;
-        b=kS0phuzYNj/1lB3s0aeXn1oIErTciR4UuXn5/+quwLvbBmMajtfnc2TbxJfKmxD+LS
-         gAxupVHFbtE46TRm3ATqvJ9e8MOFXxW55xLR8TS8zYVkrYrmAvKBlDXXDQYBWBuz+XAo
-         QfgZ97zIxqrY8DoPnrPy3J/aRykuknnl7FS+cNJYN40MNoiWS3KBkkKWRvR8X6In520M
-         RTdVEahd9oxoHo61JTk1Fk5xTa7keJoZqOE5S8x/oltcoWtravqHQjV+LXe/uMwc9tGd
-         DbRn4TTdpX89GHd2B5Zlxpi6uJFjGumbaqUnJaLppv6keJxpmgll2HX62cGG+Odpt263
-         QAfA==
-X-Gm-Message-State: AOAM530ALt2fH+ACOtb+zkf5WER6M4kPldnWNdUI/MiZWJ4r7CRKYB8D
-        J4HyjmpXfrMKkLRbkg30bwdcaT7oMIQ8YGwigGNVvHhd7MWg1zJJ74xlbVGkvpyWdop205zyMif
-        xFfDbsT/jZMXyCjXG1Jwhfd842bb3DcwHVvjn
-X-Received: by 2002:a05:620a:230:: with SMTP id u16mr1636731qkm.387.1595448659273;
-        Wed, 22 Jul 2020 13:10:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzh0P/cdl6d05hqmcebLmXrq3sWiqikrcPUldQ6BQFsWF/cpmfObT/Kf16aCA1SldNDaH+SmQ==
-X-Received: by 2002:a05:620a:230:: with SMTP id u16mr1636711qkm.387.1595448659017;
-        Wed, 22 Jul 2020 13:10:59 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id o2sm743539qkh.102.2020.07.22.13.10.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2020 13:10:58 -0700 (PDT)
+        Wed, 22 Jul 2020 16:20:04 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id A061C1810988C;
+        Wed, 22 Jul 2020 20:20:03 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1434:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3873:4321:5007:7576:9108:10004:10400:10848:11026:11232:11658:11914:12043:12048:12296:12297:12438:12679:12740:12760:12895:13019:13069:13200:13229:13311:13357:13439:14181:14659:14721:21080:21451:21611:21627:30012:30054:30080:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: goat25_55034d926f38
+X-Filterd-Recvd-Size: 2322
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf02.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 22 Jul 2020 20:20:01 +0000 (UTC)
+Message-ID: <b60f9b3e07b86d0f8631f6990f61b5172c43841f.camel@perches.com>
 Subject: Re: [PATCH v2] KEYS: remove redundant memset
-To:     Joe Perches <joe@perches.com>, dhowells@redhat.com,
+From:   Joe Perches <joe@perches.com>
+To:     Tom Rix <trix@redhat.com>, dhowells@redhat.com,
         jarkko.sakkinen@linux.intel.com, jmorris@namei.org,
         serge@hallyn.com, denkenz@gmail.com, marcel@holtmann.org
 Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Date:   Wed, 22 Jul 2020 13:20:00 -0700
+In-Reply-To: <e36c364e-22f4-c520-04da-ca1196fec049@redhat.com>
 References: <20200722134610.31947-1-trix@redhat.com>
- <2bdd6b8ec731d180023d593b679afc66def19b4f.camel@perches.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <e36c364e-22f4-c520-04da-ca1196fec049@redhat.com>
-Date:   Wed, 22 Jul 2020 13:10:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+         <2bdd6b8ec731d180023d593b679afc66def19b4f.camel@perches.com>
+         <e36c364e-22f4-c520-04da-ca1196fec049@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <2bdd6b8ec731d180023d593b679afc66def19b4f.camel@perches.com>
-Content-Language: en-US
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Wed, 2020-07-22 at 13:10 -0700, Tom Rix wrote:
+> On 7/22/20 1:02 PM, Joe Perches wrote:
+> > On Wed, 2020-07-22 at 06:46 -0700, trix@redhat.com wrote:
+> > > From: Tom Rix <trix@redhat.com>
+> > > 
+> > > Reviewing use of memset in keyctrl_pkey.c
+> > > 
+> > > keyctl_pkey_params_get prologue code to set params up
+> > > 
+> > > 	memset(params, 0, sizeof(*params));
+> > > 	params->encoding = "raw";
+> > > 
+> > > keyctl_pkey_query has the same prologue
+> > > and calls keyctl_pkey_params_get.
+> > > 
+> > > So remove the prologue.
+> > > 
+> > > Fixes: 00d60fd3b932 ("KEYS: Provide keyctls to drive the new key type ops for asymmetric keys [ver #2]")
+> > At best, this is a micro optimization.
+> Yes
+> > How is this appropriate for a Fixes: line?
+> Removing unneeded code is not a fix?
 
-On 7/22/20 1:02 PM, Joe Perches wrote:
-> On Wed, 2020-07-22 at 06:46 -0700, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> Reviewing use of memset in keyctrl_pkey.c
->>
->> keyctl_pkey_params_get prologue code to set params up
->>
->> 	memset(params, 0, sizeof(*params));
->> 	params->encoding = "raw";
->>
->> keyctl_pkey_query has the same prologue
->> and calls keyctl_pkey_params_get.
->>
->> So remove the prologue.
->>
->> Fixes: 00d60fd3b932 ("KEYS: Provide keyctls to drive the new key type ops for asymmetric keys [ver #2]")
-> At best, this is a micro optimization.
-Yes
-> How is this appropriate for a Fixes: line?
-Removing unneeded code is not a fix?
->
->> diff --git a/security/keys/keyctl_pkey.c b/security/keys/keyctl_pkey.c
-> []
->> @@ -166,8 +166,6 @@ long keyctl_pkey_query(key_serial_t id,
->>  	struct kernel_pkey_query res;
->>  	long ret;
->>  
->> -	memset(&params, 0, sizeof(params));
->> -
->>  	ret = keyctl_pkey_params_get(id, _info, &params);
->>  	if (ret < 0)
->>  		goto error;
+IMO: there's no "bug" here.
+
+It's not a logic defect causing some unintended outcome.
+It doesn't need backporting to stable branches.
+
+Documentation/process/submitting-patches.rst-If your patch fixes a bug in a specific commit, e.g. you found an issue using
+Documentation/process/submitting-patches.rst:``git bisect``, please use the 'Fixes:' tag with the first 12 characters of
+Documentation/process/submitting-patches.rst-the SHA-1 ID, and the one line summary.
+
+
 
