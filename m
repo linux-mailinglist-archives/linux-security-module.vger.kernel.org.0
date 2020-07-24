@@ -2,78 +2,157 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E23A22CFB8
-	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jul 2020 22:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F260622D122
+	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jul 2020 23:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgGXUpb (ORCPT
+        id S1727959AbgGXVir (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 24 Jul 2020 16:45:31 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36671 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726704AbgGXUpb (ORCPT
+        Fri, 24 Jul 2020 17:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726769AbgGXVgp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 24 Jul 2020 16:45:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595623530;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kwT/4oEvxYJQDv2IZFEDIJXwGO9sAIOeOt3vIk0tEEY=;
-        b=RXxX6n+ZtMjXwQD7wwVpD/ymVuelWirP/TJmx2G2FF0wEGI359fd8/YvfSY/n4dusUGWE1
-        pPwSbHwytIHHXI0XHgHmuBomfybBP0ylbYdjwCXVOx9EnEeX7c48ydfdQqNbUz+l2H9/PC
-        o6dKr9Mvy0doFiId5TVWFRjp9VZPUPA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-142-ETpAItGKNG2mbe9j92zNNQ-1; Fri, 24 Jul 2020 16:45:24 -0400
-X-MC-Unique: ETpAItGKNG2mbe9j92zNNQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9EA14100A8E7;
-        Fri, 24 Jul 2020 20:45:22 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-112-32.rdu2.redhat.com [10.10.112.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 134F7726A9;
-        Fri, 24 Jul 2020 20:45:19 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wgWNpzCuHyyFwhR2fq49yxB9tKiH2t2y-O-8V6Gh0TFdw@mail.gmail.com>
-References: <CAHk-=wgWNpzCuHyyFwhR2fq49yxB9tKiH2t2y-O-8V6Gh0TFdw@mail.gmail.com> <159559628247.2141315.2107013106060144287.stgit@warthog.procyon.org.uk> <159559630912.2141315.16186899692832741137.stgit@warthog.procyon.org.uk> <CAHk-=wjnQArU_BewVKQgYHy2mQD6LNKC5kkKXOm7GpNkJCapQg@mail.gmail.com> <2189056.1595620785@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Ian Kent <raven@themaw.net>,
-        Christian Brauner <christian@brauner.io>,
-        Jeff Layton <jlayton@redhat.com>, Karel Zak <kzak@redhat.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] watch_queue: Implement mount topology and attribute change notifications
+        Fri, 24 Jul 2020 17:36:45 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DDAC0619E5
+        for <linux-security-module@vger.kernel.org>; Fri, 24 Jul 2020 14:36:45 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id w2so6121907pgg.10
+        for <linux-security-module@vger.kernel.org>; Fri, 24 Jul 2020 14:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QuSR5OKebfZG9zBTcnsVSNOUx+p1wthou5r7P45Dqng=;
+        b=e2g/T7ESZvOK2o3dhi05Vn3Jsik1P7GtuHpRHV97nJhR9chmHD3goRnMyfoRIvXkpJ
+         NotPjBIoK9R7ayTLCq5EVGqMimLDdpJZE8JgRudIQ2sj3I259P0AVctQODLLRz2Z1kAe
+         FBmH2mq4JZ0WMzHPmHsazvYGXFK3T17zub/5o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QuSR5OKebfZG9zBTcnsVSNOUx+p1wthou5r7P45Dqng=;
+        b=nrHGjAPHnEKwGfSEmGIZFTYsJpt7hwcMdBmD5WcU1Ui2ecbH/MbqO65e3JyUOX+kW+
+         19p6fGCDI06EaI04IP4lUIVYLlN5xfxYC6Hp4JEi7heYJBqM7C7Id1SXEtxySmNss3ZL
+         /OWVoQBv8RoOYOu9zMAlD0pg94qLG2fab9tuhaHB0fB/nhiaVuCekmuXXAlJFG5WlvjX
+         6Qk7GQnODH9g2aem7IThtLRGDbSXDiMBDvM9mlYDsI2x9rDpZBnwjDeecVHqDbRI0oIL
+         2474g2Pg9E+hQ/HAuKyPuuQJaXqWG69IHehfty56JePK0OK3NxtJWGM/OvGA16HL3Y6+
+         7plg==
+X-Gm-Message-State: AOAM531xTRl4LNxUCCqbLpdgFJ3cETnDpZdrsUSmkDXMiOqamgZYkmSj
+        z+LPCUUd72ulx9AWBn/Ge+a/jw==
+X-Google-Smtp-Source: ABdhPJxK435CF+iz91hGK+5NgHvqqee3eWSsmt07ckHJqnxWEFT9dhACW0dihJg65rKzTr+cdKdf2g==
+X-Received: by 2002:a65:6119:: with SMTP id z25mr10602187pgu.52.1595626605323;
+        Fri, 24 Jul 2020 14:36:45 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 19sm7331534pfy.193.2020.07.24.14.36.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2020 14:36:43 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/19] Introduce partial kernel_read_file() support
+Date:   Fri, 24 Jul 2020 14:36:21 -0700
+Message-Id: <20200724213640.389191-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2195927.1595623519.1@warthog.procyon.org.uk>
-Date:   Fri, 24 Jul 2020 21:45:19 +0100
-Message-ID: <2195928.1595623519@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+v3:
+- add reviews/acks
+- add "IMA: Add support for file reads without contents" patch
+- trim CC list, in case that's why vger ignored v2
+v2: [missing from lkml archives! (CC list too long?) repeating changes here]
+- fix issues in firmware test suite
+- add firmware partial read patches
+- various bug fixes/cleanups
+v1: https://lore.kernel.org/lkml/20200717174309.1164575-1-keescook@chromium.org/
 
-> I'd count them per user, and maybe start out saying "you can have as
-> many watches as you can have files" and just re-use RLIMIT_NOFILE as
-> the limit for them.
-> 
-> And if that causes problems, let's re-visit. How does that sound?
+Hi,
 
-I can try that for now.
+Here's my tree for adding partial read support in kernel_read_file(),
+which fixes a number of issues along the way. It's got Scott's firmware
+and IMA patches ported and everything tests cleanly for me (even with
+CONFIG_IMA_APPRAISE=y).
 
-David
+I think the intention is for this to go via Greg's tree since Scott's
+driver code will depend on it?
+
+Thanks,
+
+-Kees
+
+
+Kees Cook (15):
+  test_firmware: Test platform fw loading on non-EFI systems
+  selftest/firmware: Add selftest timeout in settings
+  firmware_loader: EFI firmware loader must handle pre-allocated buffer
+  fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER enum
+  fs/kernel_read_file: Remove FIRMWARE_EFI_EMBEDDED enum
+  fs/kernel_read_file: Split into separate source file
+  fs/kernel_read_file: Remove redundant size argument
+  fs/kernel_read_file: Switch buffer size arg to size_t
+  fs/kernel_read_file: Add file_size output argument
+  LSM: Introduce kernel_post_load_data() hook
+  firmware_loader: Use security_post_load_data()
+  module: Call security_kernel_post_load_data()
+  LSM: Add "contents" flag to kernel_read_file hook
+  fs/kernel_file_read: Add "offset" arg for partial reads
+  firmware: Store opt_flags in fw_priv
+
+Scott Branden (4):
+  fs/kernel_read_file: Split into separate include file
+  IMA: Add support for file reads without contents
+  firmware: Add request_partial_firmware_into_buf()
+  test_firmware: Test partial read support
+
+ drivers/base/firmware_loader/fallback.c       |  19 +-
+ drivers/base/firmware_loader/fallback.h       |   5 +-
+ .../base/firmware_loader/fallback_platform.c  |  16 +-
+ drivers/base/firmware_loader/firmware.h       |   7 +-
+ drivers/base/firmware_loader/main.c           | 143 ++++++++++---
+ drivers/firmware/efi/embedded-firmware.c      |  21 +-
+ drivers/firmware/efi/embedded-firmware.h      |  19 ++
+ fs/Makefile                                   |   3 +-
+ fs/exec.c                                     | 132 +-----------
+ fs/kernel_read_file.c                         | 189 ++++++++++++++++++
+ include/linux/efi_embedded_fw.h               |  13 --
+ include/linux/firmware.h                      |  12 ++
+ include/linux/fs.h                            |  39 ----
+ include/linux/ima.h                           |  19 +-
+ include/linux/kernel_read_file.h              |  55 +++++
+ include/linux/lsm_hook_defs.h                 |   6 +-
+ include/linux/lsm_hooks.h                     |  12 ++
+ include/linux/security.h                      |  19 +-
+ kernel/kexec.c                                |   2 +-
+ kernel/kexec_file.c                           |  19 +-
+ kernel/module.c                               |  24 ++-
+ lib/test_firmware.c                           | 159 +++++++++++++--
+ security/integrity/digsig.c                   |   8 +-
+ security/integrity/ima/ima_fs.c               |  10 +-
+ security/integrity/ima/ima_main.c             |  70 +++++--
+ security/integrity/ima/ima_policy.c           |   1 +
+ security/loadpin/loadpin.c                    |  17 +-
+ security/security.c                           |  26 ++-
+ security/selinux/hooks.c                      |   8 +-
+ .../selftests/firmware/fw_filesystem.sh       |  91 +++++++++
+ tools/testing/selftests/firmware/settings     |   8 +
+ tools/testing/selftests/kselftest/runner.sh   |   6 +-
+ 32 files changed, 860 insertions(+), 318 deletions(-)
+ create mode 100644 drivers/firmware/efi/embedded-firmware.h
+ create mode 100644 fs/kernel_read_file.c
+ create mode 100644 include/linux/kernel_read_file.h
+ create mode 100644 tools/testing/selftests/firmware/settings
+
+-- 
+2.25.1
 
