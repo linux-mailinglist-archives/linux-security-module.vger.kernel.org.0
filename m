@@ -2,59 +2,112 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB49522D7E9
-	for <lists+linux-security-module@lfdr.de>; Sat, 25 Jul 2020 15:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C8C22D883
+	for <lists+linux-security-module@lfdr.de>; Sat, 25 Jul 2020 17:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbgGYNs5 (ORCPT
+        id S1726694AbgGYPsY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 25 Jul 2020 09:48:57 -0400
-Received: from 62-210-113-150.rev.poneytelecom.eu ([62.210.113.150]:45952 "EHLO
-        62-210-113-150.rev.poneytelecom.eu" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726639AbgGYNs5 (ORCPT
+        Sat, 25 Jul 2020 11:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726842AbgGYPsX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 25 Jul 2020 09:48:57 -0400
-X-Greylist: delayed 22061 seconds by postgrey-1.27 at vger.kernel.org; Sat, 25 Jul 2020 09:48:56 EDT
-Received: from tefalevo by sd-60908.synalabs.hosting with local (Exim 4.93)
-        (envelope-from <ftdrt1235@gmail.com>)
-        id 1jzEnx-0006tm-Dk
-        for linux-security-module@vger.kernel.org; Sat, 25 Jul 2020 09:41:13 +0200
-To:     linux-security-module@vger.kernel.org
-Subject: PROJECT FINANCING / CAPITAL INVESTMENT.
-X-PHP-Script: www.tefal.agence-evolve.com/ede/awl.php for 105.112.72.50
-X-PHP-Originating-Script: 1068:awl.php
-Date:   Sat, 25 Jul 2020 07:41:13 +0000
-From:   "Engr. Issah Ahmed" <ftdrt1235@gmail.com>
-Reply-To: engr.ahmedissah0010@gmail.com
-Message-ID: <yrh1qYoxbnk5XznqSN5mqoBLI4zN7caYQx26WJceoA@www.tefal.agence-evolve.com>
-X-Mailer: PHPMailer 6.0.7
+        Sat, 25 Jul 2020 11:48:23 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EA3C08C5DB
+        for <linux-security-module@vger.kernel.org>; Sat, 25 Jul 2020 08:48:23 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id t11so6826893pfq.11
+        for <linux-security-module@vger.kernel.org>; Sat, 25 Jul 2020 08:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/1vt+B3DVDrdrfR+H/x+bcPYzBM3lx1EeYwS9nHXkv0=;
+        b=LLuknkdOV2ZtuQPqqojqyvetQWZyKdeY9d3pGLpBMsgkaZgVvKIy/AOCpwPfbYes5B
+         H/o0kCTLgkAjS3VbyKJPiw8PQtoBi3SFOF2kTEMS3QjeeRaS8iowUPs0nb2cE46QURNP
+         7+NdSyvlQQugboxyBYham2MUGFHTQgh4+wzjg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/1vt+B3DVDrdrfR+H/x+bcPYzBM3lx1EeYwS9nHXkv0=;
+        b=WnT789D/OyZGVlyIgpcBxyRfthJJ/3UPY2EFGbJNufYIoiKirFqcVwvPYh/ayMcbUQ
+         mvVJrLpdct9Wf8NlzvTcAFRSOiYxALOpR1OyJFc8P/madYFdB2sFQ0//zf6qlfsx1z1E
+         ViI92LqzEpzicV/8ngkhDVKhPEqT8hkBW7SkA42PFYLHOiGG16c3AAykc9k9IXiRXsrI
+         f6qsDBri7FdW5CB9N2n8Lzvn8tZFqeJsWkECf0OYTuvP/RT0h9oEuxqCkCajhKwVeSdX
+         8zUsOiqj8czTi7zb6nbVOHJmTQAQFg3Hv7MuDvRMrg7MGjePekcdcMZyBXhBFEtkprPn
+         8eWQ==
+X-Gm-Message-State: AOAM532LQwyjeq8+rHOu8CbyB8yblMbuGOP/UaIjwe7XgYb6uDAjOKsu
+        BWGfYAsI4In3TDihb5HNSLr9SQ==
+X-Google-Smtp-Source: ABdhPJyxdaNUWfD+EhFI99UZ6LC/JVNqOP8wI3FHvEU/crZf7bnX4W1waM+OsXoJToUlv6T15nEktw==
+X-Received: by 2002:a63:7d16:: with SMTP id y22mr12268714pgc.136.1595692102486;
+        Sat, 25 Jul 2020 08:48:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j10sm9458042pgh.28.2020.07.25.08.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jul 2020 08:48:21 -0700 (PDT)
+Date:   Sat, 25 Jul 2020 08:48:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/19] Introduce partial kernel_read_file() support
+Message-ID: <202007250843.534DE3DB48@keescook>
+References: <20200724213640.389191-1-keescook@chromium.org>
+ <20200725100555.GA1073708@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - sd-60908.synalabs.hosting
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [1068 992] / [47 12]
-X-AntiAbuse: Sender Address Domain - gmail.com
-X-Get-Message-Sender-Via: sd-60908.synalabs.hosting: authenticated_id: tefalevo/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: sd-60908.synalabs.hosting: tefalevo
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200725100555.GA1073708@kroah.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dear Sir,
+On Sat, Jul 25, 2020 at 12:05:55PM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jul 24, 2020 at 02:36:21PM -0700, Kees Cook wrote:
+> > v3:
+> > - add reviews/acks
+> > - add "IMA: Add support for file reads without contents" patch
+> > - trim CC list, in case that's why vger ignored v2
+> > v2: [missing from lkml archives! (CC list too long?) repeating changes here]
+> > - fix issues in firmware test suite
+> > - add firmware partial read patches
+> > - various bug fixes/cleanups
+> > v1: https://lore.kernel.org/lkml/20200717174309.1164575-1-keescook@chromium.org/
+> > 
+> > Hi,
+> > 
+> > Here's my tree for adding partial read support in kernel_read_file(),
+> > which fixes a number of issues along the way. It's got Scott's firmware
+> > and IMA patches ported and everything tests cleanly for me (even with
+> > CONFIG_IMA_APPRAISE=y).
+> > 
+> > I think the intention is for this to go via Greg's tree since Scott's
+> > driver code will depend on it?
+> 
+> I've applied the first 3 now, as I think I need some acks/reviewed-by
+> from the subsystem owners of the other patches before I can take them.
 
-My Name is Engr. Issah Ahmed , I was a top official in the former government of Late Muammar Gaddafi of Libya. My late master Muammar Gaddafi, the deposed leader of our country, died on 20 October 2011 during the Battle of Sirte. Gaddafi was found hiding in a culvert west of Sirte and captured by National Transitional Council forces. He was killed shortly afterwards.
+Sounds good; thanks!
 
-We the official members continued with war till the early year 2017 due to the painful death and forceful removal of our Late Master Muammar Gaddafi, our country was totally destabilized because we refused to another government.
+(I would argue 4 and 5 are also bug fixes, 6 is already Acked by hch and
+you, and 7 is a logical follow-up to 6, but I get your point.)
 
-In year 2019 all we the officials in the former Gaddafi government are being arrested, persecuted and imprisoned by the new wicked government. Libya is presently not safe at the moment, therefore we all moving our money out of Libya.
+James, Luis, Mimi, and Jessica, the bulk of these patches are LSM,
+firmware, IMA, and modules. How does this all look to you? And KP,
+you'd mentioned privately that you were interested in being able to
+use the new kernel_post_load_data LSM hook for better visibility into
+non-file-backed blob loading.
 
-I want you to quickly help me receive and keep the sum US $75 Million to your country for safety. I have agreed you take 40% of the said money for your assistance, 5% for expenses while I have 55%.
+Thanks!
 
-It is very urgent and Please reply me urgently If you can be trustful to help. I will be waiting to hear from you as soon as possible.
+-Kees
 
-Regards,
-Engr. Issah Ahmed
-
+-- 
+Kees Cook
