@@ -2,214 +2,59 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B51322D798
-	for <lists+linux-security-module@lfdr.de>; Sat, 25 Jul 2020 14:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB49522D7E9
+	for <lists+linux-security-module@lfdr.de>; Sat, 25 Jul 2020 15:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726639AbgGYM6H (ORCPT
+        id S1727085AbgGYNs5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 25 Jul 2020 08:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726613AbgGYM6H (ORCPT
+        Sat, 25 Jul 2020 09:48:57 -0400
+Received: from 62-210-113-150.rev.poneytelecom.eu ([62.210.113.150]:45952 "EHLO
+        62-210-113-150.rev.poneytelecom.eu" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726639AbgGYNs5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 25 Jul 2020 08:58:07 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F37C0619D3
-        for <linux-security-module@vger.kernel.org>; Sat, 25 Jul 2020 05:58:06 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d1so5926395plr.8
-        for <linux-security-module@vger.kernel.org>; Sat, 25 Jul 2020 05:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pesu-pes-edu.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=SwS3zgXQ3VF1ku0vh+GhUZF3XJKChL/epyFRXUYVq+4=;
-        b=NceLZ+ua0PPfIRWokKyauHOh7Af4knLiqKQp/3Y9NaqHulcSSqy71sJWfPnLza0sbJ
-         wcJXKcKueYYtVMGDkCBg72YInZ7DJyXC/SNxI37zppwO6A1itXhVhf7jz2apvEh23uEw
-         0CW9CIZ2vdD3yj+lRkqNbwRT5fVALfDiqTIfXA2nt4EMs6qfvVhnc5MDioppDkiEtHNN
-         m+4+nmvIyVGMsqdKHj6+eaWMW2METt43xmwzbP9gj3titAMDxmZs8ztCflkK4Zmg8+T+
-         ErnLoviHhmBxJdt9Y6EfZfOhTS7upDmHTGuj7b64pONSsVjeI5TC5d1nrsvQABv+fmBx
-         vo3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=SwS3zgXQ3VF1ku0vh+GhUZF3XJKChL/epyFRXUYVq+4=;
-        b=ihMnl9sxHs4ozHW9+WPJfe/cdY9keDEdcY19WMHb4AbGvGO40yywv5ZvJ6sV0gaANJ
-         UlAOgLXkYKxChcjJOny7fQ7cE0Oq8sF//N9QBMKwom4bxS5HwHjJUcCsBgKUQddUrN2S
-         YZ2aJNI3CscqDV37oLkR4YYGdvbJeFbOVOsp2iK8IVod01fWDoTE9gVHuq02eJiKp/wg
-         R0tO+lSLVp73NyuVzs4Kq0wXPJXeCpPnn4T9FfTCt/s+jCISPiBGe0tG4xOW6+X6j0WI
-         7xr8zCyX+NTmQZSt3ziegZUNjHiAlT5OpS61MDoWnvew5AqXVrmzcume1mhfhQHEJQ80
-         6baQ==
-X-Gm-Message-State: AOAM532j3i9RtTNDliUP9tplHxc1DRFhQMcgtUekPPQspYbFzHYE6JVD
-        4Au8nlk8z4/6HiImT8kXv9xNpQ==
-X-Google-Smtp-Source: ABdhPJw16TRDmlVEQgK4HcUILzDMnSsPkejzs81OA3L3csUA6UNAi0IarBKU6v/mAw1sbsVUzOJchw==
-X-Received: by 2002:a17:902:a708:: with SMTP id w8mr12476442plq.128.1595681886088;
-        Sat, 25 Jul 2020 05:58:06 -0700 (PDT)
-Received: from localhost ([2406:7400:73:5836:d1f0:826d:1814:b78e])
-        by smtp.gmail.com with ESMTPSA id y10sm9267128pfn.121.2020.07.25.05.58.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jul 2020 05:58:04 -0700 (PDT)
-Date:   Sat, 25 Jul 2020 18:28:00 +0530
-From:   B K Karthik <bkkarthik@pesu.pes.edu>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        skhan@linuxfoundation.org, syzkaller-bugs@googlegroups.com
-Subject: [PATCH] smack: fix slab-out-of-bounds by checking for overflow
-Message-ID: <20200725125800.vahdiagxilinzoqw@pesu.pes.edu>
+        Sat, 25 Jul 2020 09:48:57 -0400
+X-Greylist: delayed 22061 seconds by postgrey-1.27 at vger.kernel.org; Sat, 25 Jul 2020 09:48:56 EDT
+Received: from tefalevo by sd-60908.synalabs.hosting with local (Exim 4.93)
+        (envelope-from <ftdrt1235@gmail.com>)
+        id 1jzEnx-0006tm-Dk
+        for linux-security-module@vger.kernel.org; Sat, 25 Jul 2020 09:41:13 +0200
+To:     linux-security-module@vger.kernel.org
+Subject: PROJECT FINANCING / CAPITAL INVESTMENT.
+X-PHP-Script: www.tefal.agence-evolve.com/ede/awl.php for 105.112.72.50
+X-PHP-Originating-Script: 1068:awl.php
+Date:   Sat, 25 Jul 2020 07:41:13 +0000
+From:   "Engr. Issah Ahmed" <ftdrt1235@gmail.com>
+Reply-To: engr.ahmedissah0010@gmail.com
+Message-ID: <yrh1qYoxbnk5XznqSN5mqoBLI4zN7caYQx26WJceoA@www.tefal.agence-evolve.com>
+X-Mailer: PHPMailer 6.0.7
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fkaeosqzhfpzibgi"
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - sd-60908.synalabs.hosting
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [1068 992] / [47 12]
+X-AntiAbuse: Sender Address Domain - gmail.com
+X-Get-Message-Sender-Via: sd-60908.synalabs.hosting: authenticated_id: tefalevo/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: sd-60908.synalabs.hosting: tefalevo
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Dear Sir,
 
---fkaeosqzhfpzibgi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+My Name is Engr. Issah Ahmed , I was a top official in the former government of Late Muammar Gaddafi of Libya. My late master Muammar Gaddafi, the deposed leader of our country, died on 20 October 2011 during the Battle of Sirte. Gaddafi was found hiding in a culvert west of Sirte and captured by National Transitional Council forces. He was killed shortly afterwards.
 
-add a barrier to smk_set_cipso() to check for overflow
+We the official members continued with war till the early year 2017 due to the painful death and forceful removal of our Late Master Muammar Gaddafi, our country was totally destabilized because we refused to another government.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-BUG: KASAN: slab-out-of-bounds in vsscanf+0x2666/0x2ef0 lib/vsprintf.c:3321
-Read of size 1 at addr ffff888097d682b8 by task syz-executor980/6804
+In year 2019 all we the officials in the former Gaddafi government are being arrested, persecuted and imprisoned by the new wicked government. Libya is presently not safe at the moment, therefore we all moving our money out of Libya.
 
-CPU: 0 PID: 6804 Comm: syz-executor980 Not tainted 5.8.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Goo=
-gle 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x1f0/0x31e lib/dump_stack.c:118
- print_address_description+0x66/0x5a0 mm/kasan/report.c:383
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report+0x132/0x1d0 mm/kasan/report.c:530
- vsscanf+0x2666/0x2ef0 lib/vsprintf.c:3321
- sscanf+0x6c/0x90 lib/vsprintf.c:3527
- smk_set_cipso+0x374/0x6c0 security/smack/smackfs.c:908
- vfs_write+0x2dd/0xc70 fs/read_write.c:576
- ksys_write+0x11b/0x220 fs/read_write.c:631
- do_syscall_64+0x73/0xe0 arch/x86/entry/common.c:384
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x4402d9
-Code: Bad RIP value.
-RSP: 002b:00007ffe89010db8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 00000000004402d9
-RDX: 0000000000000037 RSI: 0000000020000040 RDI: 0000000000000003
-RBP: 00000000006ca018 R08: 0000000000000014 R09: 00000000004002c8
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000401ae0
-R13: 0000000000401b70 R14: 0000000000000000 R15: 0000000000000000
+I want you to quickly help me receive and keep the sum US $75 Million to your country for safety. I have agreed you take 40% of the said money for your assistance, 5% for expenses while I have 55%.
 
-Allocated by task 6804:
- save_stack mm/kasan/common.c:48 [inline]
- set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc+0x103/0x140 mm/kasan/common.c:494
- __do_kmalloc mm/slab.c:3656 [inline]
- __kmalloc_track_caller+0x249/0x320 mm/slab.c:3671
- memdup_user_nul+0x26/0xf0 mm/util.c:259
- smk_set_cipso+0xff/0x6c0 security/smack/smackfs.c:859
- vfs_write+0x2dd/0xc70 fs/read_write.c:576
- ksys_write+0x11b/0x220 fs/read_write.c:631
- do_syscall_64+0x73/0xe0 arch/x86/entry/common.c:384
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
+It is very urgent and Please reply me urgently If you can be trustful to help. I will be waiting to hear from you as soon as possible.
 
-Freed by task 4906:
- save_stack mm/kasan/common.c:48 [inline]
- set_track mm/kasan/common.c:56 [inline]
- kasan_set_free_info mm/kasan/common.c:316 [inline]
- __kasan_slab_free+0x114/0x170 mm/kasan/common.c:455
- __cache_free mm/slab.c:3426 [inline]
- kfree+0x10a/0x220 mm/slab.c:3757
- tomoyo_path_number_perm+0x525/0x690 security/tomoyo/file.c:736
- tomoyo_path_mknod+0x128/0x150 security/tomoyo/tomoyo.c:240
- security_path_mknod+0xdc/0x160 security/security.c:1077
- may_o_create fs/namei.c:2919 [inline]
- lookup_open fs/namei.c:3060 [inline]
- open_last_lookups fs/namei.c:3169 [inline]
- path_openat+0xbe8/0x37f0 fs/namei.c:3357
- do_filp_open+0x191/0x3a0 fs/namei.c:3387
- do_sys_openat2+0x463/0x770 fs/open.c:1179
- do_sys_open fs/open.c:1195 [inline]
- ksys_open include/linux/syscalls.h:1388 [inline]
- __do_sys_open fs/open.c:1201 [inline]
- __se_sys_open fs/open.c:1199 [inline]
- __x64_sys_open+0x1af/0x1e0 fs/open.c:1199
- do_syscall_64+0x73/0xe0 arch/x86/entry/common.c:384
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
+Regards,
+Engr. Issah Ahmed
 
-The buggy address belongs to the object at ffff888097d68280
- which belongs to the cache kmalloc-64 of size 64
-The buggy address is located 56 bytes inside of
- 64-byte region [ffff888097d68280, ffff888097d682c0)
-The buggy address belongs to the page:
-page:ffffea00025f5a00 refcount:1 mapcount:0 mapping:0000000000000000 index:=
-0xffff888097d68c80
-flags: 0xfffe0000000200(slab)
-raw: 00fffe0000000200 ffffea000288fe08 ffffea00026f38c8 ffff8880aa400380
-raw: ffff888097d68c80 ffff888097d68000 000000010000001e 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff888097d68180: 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc fc
- ffff888097d68200: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->ffff888097d68280: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
-                                        ^
- ffff888097d68300: 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc fc
- ffff888097d68380: 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc fc
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Reported-and-testedby: syzbot+a22c6092d003d6fe1122@syzkaller.appspotmail.com
-Signed-off-by: B K Karthik <bkkarthik@pesu.pes.edu>
----
- security/smack/smackfs.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index 58d3f43cc8bb..17809310d046 100644
---- a/security/smack/smackfs.c
-+++ b/security/smack/smackfs.c
-@@ -905,6 +905,11 @@ static ssize_t smk_set_cipso(struct file *file, const =
-char __user *buf,
-=20
- 	for (i =3D 0; i < catlen; i++) {
- 		rule +=3D SMK_DIGITLEN;
-+		if (rule > data + count) {
-+			rc =3D -EOVERFLOW;
-+			goto out;
-+		}
-+
- 		ret =3D sscanf(rule, "%u", &cat);
- 		if (ret !=3D 1 || cat > SMACK_CIPSO_MAXCATNUM)
- 			goto out;
---=20
-2.20.1
-
-
---fkaeosqzhfpzibgi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAEBCgAdFiEEIF+jd5Z5uS7xKTfpQZdt+T1HgiEFAl8cLFcACgkQQZdt+T1H
-giEhDgv9EbHm+1veIws3uVSi24CoK33afWoI2l2KVRmc+HeKPhuQSWe0hb0Xvo4p
-ehdOp9zxZHrCxlPt4uTYrRJV4V3NqoJ0v1en+LV7uNFnnXqJexsYanOJI/wotoig
-0WPR9yOflyptic2u3142qTUJeo3fcp6/WCGIzcODZIFeg2QbCuhuwa0O0lIVPsvl
-JpFxPdPvlWgj2zb38Tdlrw9OtEFr1/n2l27ipp0lzD+G/NuNgZZG0bniuQaMQ446
-B1gQLjww437jcBA9lnZanoJcc13qxkSUK6/QcrroNM577pdw+7oLzVoTwGo1qt9x
-RKEB+6QrZI6pRqoOmSKa9PcdbR1rmVvOLve2EWNcBjTQjBFJNGHzGcWFkmOO1IZ6
-E7dGkDMRkCHi5i0DcEnSTvojrRMp1DAnofxWz0fQMBKaY2RmW6d0qiNUL5Mh2BvZ
-fBFUNLPrtCU9HCsrkJChOLAZH8WYxL0dzrOl6Hn8Ui50zKpxMZlu58FfgBbI6TWB
-FtoJrCu9
-=2wOc
------END PGP SIGNATURE-----
-
---fkaeosqzhfpzibgi--
