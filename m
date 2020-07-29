@@ -2,65 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 218562323F6
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jul 2020 19:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C25232446
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jul 2020 20:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727951AbgG2R7Z (ORCPT
+        id S1726535AbgG2SAb (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 29 Jul 2020 13:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
+        Wed, 29 Jul 2020 14:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727942AbgG2R7I (ORCPT
+        with ESMTP id S1727067AbgG2R6z (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 29 Jul 2020 13:59:08 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDF3C08C5DC
-        for <linux-security-module@vger.kernel.org>; Wed, 29 Jul 2020 10:59:07 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 74so5066123pfx.13
-        for <linux-security-module@vger.kernel.org>; Wed, 29 Jul 2020 10:59:07 -0700 (PDT)
+        Wed, 29 Jul 2020 13:58:55 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F19FC0619D7
+        for <linux-security-module@vger.kernel.org>; Wed, 29 Jul 2020 10:58:55 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id p3so14672708pgh.3
+        for <linux-security-module@vger.kernel.org>; Wed, 29 Jul 2020 10:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+NaGsZ6LkqLP7N90n/8Avv/y2oDkj/LqGy0xmUe3sQI=;
-        b=hp7mbpgpzEbT4hmsg/0VefWpKjWuMD8517bITA0szXsxyzLErrtYxEne3GSIfYyf1a
-         TbEZZ3NQ3QLjzbI0vCoMwVy4hBW0R6Gd9ppCmdX5jDyH5QP8CHt+Ed6X8dJ6iSEQDMqP
-         qZ+HawSNZSCQwfzbfxd8luxWK5q5OVS5vXT1o=
+        bh=DgMrXVVefzee5XLvUUvLofSlFR2vFY36qKFP1IS3s/M=;
+        b=ecnAksZk8u482WqjHzXgmErEsJOgZFCFls0F0FtO7QmdHTAAGDaWiu+nlxfcYYLD/d
+         vOqlPliWbWinlSxtuqmjAy7Ruxwd6be6qQHWGBiByabdvGPPs65frNOVSJCZRjLZGs7F
+         RFwB+vTeBV8v3277ad97fHgeSGQl8zzdLnaqs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+NaGsZ6LkqLP7N90n/8Avv/y2oDkj/LqGy0xmUe3sQI=;
-        b=CNyoMU3QFhWVRIGgpTT7AmWYedcNOmXSf5mhlKUn0oKkwZ6dtC6vPgROmWIZ8Xzxal
-         4AG9E9pNe3P/peAI/mSmEjaHzCMFJ4u7JD3pPCzIGDlRnrhqYo8yo34o11mF7CcqnU4e
-         iWUsPWA4c/NEH/vSnpKVyX/dqoGmMAigVvQJTG8dbp585v4rdIkk3OGqJx9qsRBY9KwB
-         sP9uHWImK4EdYRmAVj79TExPPBqrmllNNvkRh3kuFttXGox/TK6bhUDgDOcchSyGau39
-         hXxmevBz866XwE3Y6emS95zgqy6WVboyu5YcNUxaDETZjDLBKMN48rEK9QMkDToMUetI
-         o+WQ==
-X-Gm-Message-State: AOAM530bprUqo9O441bo7nqqxjRuHvyB+0BDHKqVTpW/uwcBYD6AuNSS
-        ycVHne5zf2ayxUE0cfDsBNFMMQ==
-X-Google-Smtp-Source: ABdhPJxyBV4lMmdEC9afNAeBvnS7qOJJXJuf2R/sr7FyvukYVdfczUkitscrueNwT/Og6LWrh8CU+g==
-X-Received: by 2002:a62:7705:: with SMTP id s5mr12985932pfc.52.1596045546921;
-        Wed, 29 Jul 2020 10:59:06 -0700 (PDT)
+        bh=DgMrXVVefzee5XLvUUvLofSlFR2vFY36qKFP1IS3s/M=;
+        b=lF1/69bR7d24b32WO3EI90tp2/rgrzcb+xsEHuq1N38IHBhzzXhRYn9HYuOohHAz3m
+         20WeO8i/6w3gVeT6CgLYg+gthGtUBOUpa8marMiez6wiAIJWHUBizeDIxQlQU4+MO69c
+         3NXsHxKIF22jfJfQEzVmM4zIfr/zvOaX9h3GCfD6PWUYt6WrIzTQYFEbBmTZc+62af2R
+         AaQ07il17R5dKACS+3XPsxgANGcO2hErAqFlLjbeTD/HDLK2xwm/9ecgKOO/O0RftVfS
+         xdHPUwmxBUBUPi1t+f6eHT8tW2eh1PMoXIIZoR/d9r6pVNNcn6JwyPvFGjcbYzHnMdPb
+         +O+A==
+X-Gm-Message-State: AOAM530F3HCSq6hCG6LLNxjVj1ugqZ6UQflNqdv58YvWiBUsdDDxwSyz
+        8aIGLxtylBwkCwyZCqREEsU+JQ==
+X-Google-Smtp-Source: ABdhPJxhdO2MgDtr62Uppf9UbFVzy8Bb9dXdsSesClNEHtIm2RElCtl0XV+rgMZUKEUflFVUEOGjEg==
+X-Received: by 2002:a63:5349:: with SMTP id t9mr2901760pgl.204.1596045534650;
+        Wed, 29 Jul 2020 10:58:54 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s125sm1247882pfc.63.2020.07.29.10.59.00
+        by smtp.gmail.com with ESMTPSA id b82sm3185975pfb.215.2020.07.29.10.58.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2020 10:59:04 -0700 (PDT)
+        Wed, 29 Jul 2020 10:58:53 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
         Scott Branden <scott.branden@broadcom.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>, Jessica Yu <jeyu@kernel.org>,
-        SeongJae Park <sjpark@amazon.de>,
+        Mimi Zohar <zohar@linux.ibm.com>, Takashi Iwai <tiwai@suse.de>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
         KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 16/17] firmware: Add request_partial_firmware_into_buf()
-Date:   Wed, 29 Jul 2020 10:58:44 -0700
-Message-Id: <20200729175845.1745471-17-keescook@chromium.org>
+Subject: [PATCH v4 01/17] test_firmware: Test platform fw loading on non-EFI systems
+Date:   Wed, 29 Jul 2020 10:58:29 -0700
+Message-Id: <20200729175845.1745471-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200729175845.1745471-1-keescook@chromium.org>
 References: <20200729175845.1745471-1-keescook@chromium.org>
@@ -70,330 +69,160 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Scott Branden <scott.branden@broadcom.com>
+On non-EFI systems, it wasn't possible to test the platform firmware
+loader because it will have never set "checked_fw" during __init.
+Instead, allow the test code to override this check. Additionally split
+the declarations into a private header file so it there is greater
+enforcement of the symbol visibility.
 
-Add request_partial_firmware_into_buf() to allow for portions of a
-firmware file to be read into a buffer. This is needed when large firmware
-must be loaded in portions from a file on memory constrained systems.
-
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-Co-developed-by: Kees Cook <keescook@chromium.org>
+Fixes: 548193cba2a7 ("test_firmware: add support for firmware_request_platform")
+Cc: stable@vger.kernel.org
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/base/firmware_loader/firmware.h |   4 +
- drivers/base/firmware_loader/main.c     | 101 +++++++++++++++++++-----
- include/linux/firmware.h                |  12 +++
- 3 files changed, 99 insertions(+), 18 deletions(-)
+ drivers/firmware/efi/embedded-firmware.c | 21 ++++++++++++++++-----
+ drivers/firmware/efi/embedded-firmware.h | 21 +++++++++++++++++++++
+ include/linux/efi_embedded_fw.h          | 13 -------------
+ lib/test_firmware.c                      |  5 +++++
+ 4 files changed, 42 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/firmware/efi/embedded-firmware.h
 
-diff --git a/drivers/base/firmware_loader/firmware.h b/drivers/base/firmware_loader/firmware.h
-index 7ad5fe52bc72..3f6eda46b3a2 100644
---- a/drivers/base/firmware_loader/firmware.h
-+++ b/drivers/base/firmware_loader/firmware.h
-@@ -32,6 +32,8 @@
-  * @FW_OPT_FALLBACK_PLATFORM: Enable fallback to device fw copy embedded in
-  *	the platform's main firmware. If both this fallback and the sysfs
-  *      fallback are enabled, then this fallback will be tried first.
-+ * @FW_OPT_PARTIAL: Allow partial read of firmware instead of needing to read
-+ *	entire file.
-  */
- enum fw_opt {
- 	FW_OPT_UEVENT			= BIT(0),
-@@ -41,6 +43,7 @@ enum fw_opt {
- 	FW_OPT_NOCACHE			= BIT(4),
- 	FW_OPT_NOFALLBACK_SYSFS		= BIT(5),
- 	FW_OPT_FALLBACK_PLATFORM	= BIT(6),
-+	FW_OPT_PARTIAL			= BIT(7),
- };
+diff --git a/drivers/firmware/efi/embedded-firmware.c b/drivers/firmware/efi/embedded-firmware.c
+index a1b199de9006..0fb03cd0a5a2 100644
+--- a/drivers/firmware/efi/embedded-firmware.c
++++ b/drivers/firmware/efi/embedded-firmware.c
+@@ -14,11 +14,22 @@
+ #include <linux/vmalloc.h>
+ #include <crypto/sha.h>
  
- enum fw_status {
-@@ -68,6 +71,7 @@ struct fw_priv {
- 	void *data;
- 	size_t size;
- 	size_t allocated_size;
-+	size_t offset;
- 	u32 opt_flags;
- #ifdef CONFIG_FW_LOADER_PAGED_BUF
- 	bool is_paged_buf;
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 67d8afa91ae0..54c5d57b6327 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -170,10 +170,19 @@ static struct fw_priv *__allocate_fw_priv(const char *fw_name,
- 					  struct firmware_cache *fwc,
- 					  void *dbuf,
- 					  size_t size,
-+					  size_t offset,
- 					  u32 opt_flags)
- {
- 	struct fw_priv *fw_priv;
- 
-+	/* For a partial read, the buffer must be preallocated. */
-+	if ((opt_flags & FW_OPT_PARTIAL) && !dbuf)
-+		return NULL;
++#include "embedded-firmware.h"
 +
-+	/* Only partial reads are allowed to use an offset. */
-+	if (offset != 0 && !(opt_flags & FW_OPT_PARTIAL))
-+		return NULL;
++#ifdef CONFIG_TEST_FIRMWARE
++# define EFI_EMBEDDED_FW_VISIBILITY
++#else
++# define EFI_EMBEDDED_FW_VISIBILITY static
++#endif
 +
- 	fw_priv = kzalloc(sizeof(*fw_priv), GFP_ATOMIC);
- 	if (!fw_priv)
- 		return NULL;
-@@ -188,6 +197,7 @@ static struct fw_priv *__allocate_fw_priv(const char *fw_name,
- 	fw_priv->fwc = fwc;
- 	fw_priv->data = dbuf;
- 	fw_priv->allocated_size = size;
-+	fw_priv->offset = offset;
- 	fw_priv->opt_flags = opt_flags;
- 	fw_state_init(fw_priv);
- #ifdef CONFIG_FW_LOADER_USER_HELPER
-@@ -216,12 +226,17 @@ static int alloc_lookup_fw_priv(const char *fw_name,
- 				struct fw_priv **fw_priv,
- 				void *dbuf,
- 				size_t size,
-+				size_t offset,
- 				u32 opt_flags)
- {
- 	struct fw_priv *tmp;
++EFI_EMBEDDED_FW_VISIBILITY LIST_HEAD(efi_embedded_fw_list);
++EFI_EMBEDDED_FW_VISIBILITY bool efi_embedded_fw_checked;
++
+ /* Exported for use by lib/test_firmware.c only */
+-LIST_HEAD(efi_embedded_fw_list);
++#ifdef CONFIG_TEST_FIRMWARE
+ EXPORT_SYMBOL_GPL(efi_embedded_fw_list);
+-
+-static bool checked_for_fw;
++EXPORT_SYMBOL_GPL(efi_embedded_fw_checked);
++#endif
  
- 	spin_lock(&fwc->lock);
--	if (!(opt_flags & FW_OPT_NOCACHE)) {
-+	/*
-+	 * Do not merge requests that are marked to be non-cached or
-+	 * are performing partial reads.
-+	 */
-+	if (!(opt_flags & (FW_OPT_NOCACHE | FW_OPT_PARTIAL))) {
- 		tmp = __lookup_fw_priv(fw_name);
- 		if (tmp) {
- 			kref_get(&tmp->ref);
-@@ -232,7 +247,7 @@ static int alloc_lookup_fw_priv(const char *fw_name,
+ static const struct dmi_system_id * const embedded_fw_table[] = {
+ #ifdef CONFIG_TOUCHSCREEN_DMI
+@@ -119,14 +130,14 @@ void __init efi_check_for_embedded_firmwares(void)
  		}
  	}
  
--	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size, opt_flags);
-+	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size, offset, opt_flags);
- 	if (tmp) {
- 		INIT_LIST_HEAD(&tmp->list);
- 		if (!(opt_flags & FW_OPT_NOCACHE))
-@@ -485,6 +500,9 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 		return -ENOMEM;
- 
- 	for (i = 0; i < ARRAY_SIZE(fw_path); i++) {
-+		size_t file_size = 0;
-+		size_t *file_size_ptr = NULL;
-+
- 		/* skip the unset customized path */
- 		if (!fw_path[i][0])
- 			continue;
-@@ -498,9 +516,18 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 
- 		fw_priv->size = 0;
- 
-+		/*
-+		 * The total file size is only examined when doing a partial
-+		 * read; the "full read" case needs to fail if the whole
-+		 * firmware was not completely loaded.
-+		 */
-+		if ((fw_priv->opt_flags & FW_OPT_PARTIAL) && buffer)
-+			file_size_ptr = &file_size;
-+
- 		/* load firmware files from the mount namespace of init */
--		rc = kernel_read_file_from_path_initns(path, 0, &buffer, msize,
--						       NULL,
-+		rc = kernel_read_file_from_path_initns(path, fw_priv->offset,
-+						       &buffer, msize,
-+						       file_size_ptr,
- 						       READING_FIRMWARE);
- 		if (rc < 0) {
- 			if (rc != -ENOENT)
-@@ -691,7 +718,7 @@ int assign_fw(struct firmware *fw, struct device *device)
- static int
- _request_firmware_prepare(struct firmware **firmware_p, const char *name,
- 			  struct device *device, void *dbuf, size_t size,
--			  u32 opt_flags)
-+			  size_t offset, u32 opt_flags)
- {
- 	struct firmware *firmware;
- 	struct fw_priv *fw_priv;
-@@ -710,7 +737,7 @@ _request_firmware_prepare(struct firmware **firmware_p, const char *name,
- 	}
- 
- 	ret = alloc_lookup_fw_priv(name, &fw_cache, &fw_priv, dbuf, size,
--				  opt_flags);
-+				   offset, opt_flags);
- 
- 	/*
- 	 * bind with 'priv' now to avoid warning in failure path
-@@ -757,9 +784,10 @@ static void fw_abort_batch_reqs(struct firmware *fw)
- static int
- _request_firmware(const struct firmware **firmware_p, const char *name,
- 		  struct device *device, void *buf, size_t size,
--		  u32 opt_flags)
-+		  size_t offset, u32 opt_flags)
- {
- 	struct firmware *fw = NULL;
-+	bool nondirect = false;
- 	int ret;
- 
- 	if (!firmware_p)
-@@ -771,18 +799,22 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 	}
- 
- 	ret = _request_firmware_prepare(&fw, name, device, buf, size,
--					opt_flags);
-+					offset, opt_flags);
- 	if (ret <= 0) /* error or already assigned */
- 		goto out;
- 
- 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
-+
-+	/* Only full reads can support decompression, platform, and sysfs. */
-+	if (!(opt_flags & FW_OPT_PARTIAL))
-+		nondirect = true;
-+
- #ifdef CONFIG_FW_LOADER_COMPRESS
--	if (ret == -ENOENT)
-+	if (ret == -ENOENT && nondirect)
- 		ret = fw_get_filesystem_firmware(device, fw->priv, ".xz",
- 						 fw_decompress_xz);
- #endif
--
--	if (ret == -ENOENT)
-+	if (ret == -ENOENT && nondirect)
- 		ret = firmware_fallback_platform(fw->priv);
- 
- 	if (ret) {
-@@ -790,7 +822,9 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 			dev_warn(device,
- 				 "Direct firmware load for %s failed with error %d\n",
- 				 name, ret);
--		ret = firmware_fallback_sysfs(fw, name, device, opt_flags, ret);
-+		if (nondirect)
-+			ret = firmware_fallback_sysfs(fw, name, device,
-+						      opt_flags, ret);
- 	} else
- 		ret = assign_fw(fw, device);
- 
-@@ -833,7 +867,7 @@ request_firmware(const struct firmware **firmware_p, const char *name,
- 
- 	/* Need to pin this module until return */
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware_p, name, device, NULL, 0,
-+	ret = _request_firmware(firmware_p, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT);
- 	module_put(THIS_MODULE);
- 	return ret;
-@@ -860,7 +894,7 @@ int firmware_request_nowarn(const struct firmware **firmware, const char *name,
- 
- 	/* Need to pin this module until return */
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware, name, device, NULL, 0,
-+	ret = _request_firmware(firmware, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT | FW_OPT_NO_WARN);
- 	module_put(THIS_MODULE);
- 	return ret;
-@@ -884,7 +918,7 @@ int request_firmware_direct(const struct firmware **firmware_p,
- 	int ret;
- 
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware_p, name, device, NULL, 0,
-+	ret = _request_firmware(firmware_p, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT | FW_OPT_NO_WARN |
- 				FW_OPT_NOFALLBACK_SYSFS);
- 	module_put(THIS_MODULE);
-@@ -909,7 +943,7 @@ int firmware_request_platform(const struct firmware **firmware,
- 
- 	/* Need to pin this module until return */
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware, name, device, NULL, 0,
-+	ret = _request_firmware(firmware, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT | FW_OPT_FALLBACK_PLATFORM);
- 	module_put(THIS_MODULE);
- 	return ret;
-@@ -965,13 +999,44 @@ request_firmware_into_buf(const struct firmware **firmware_p, const char *name,
- 		return -EOPNOTSUPP;
- 
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware_p, name, device, buf, size,
-+	ret = _request_firmware(firmware_p, name, device, buf, size, 0,
- 				FW_OPT_UEVENT | FW_OPT_NOCACHE);
- 	module_put(THIS_MODULE);
- 	return ret;
+-	checked_for_fw = true;
++	efi_embedded_fw_checked = true;
  }
- EXPORT_SYMBOL(request_firmware_into_buf);
  
-+/**
-+ * request_partial_firmware_into_buf() - load partial firmware into a previously allocated buffer
-+ * @firmware_p: pointer to firmware image
-+ * @name: name of firmware file
-+ * @device: device for which firmware is being loaded and DMA region allocated
-+ * @buf: address of buffer to load firmware into
-+ * @size: size of buffer
-+ * @offset: offset into file to read
-+ *
-+ * This function works pretty much like request_firmware_into_buf except
-+ * it allows a partial read of the file.
+ int efi_get_embedded_fw(const char *name, const u8 **data, size_t *size)
+ {
+ 	struct efi_embedded_fw *iter, *fw = NULL;
+ 
+-	if (!checked_for_fw) {
++	if (!efi_embedded_fw_checked) {
+ 		pr_warn("Warning %s called while we did not check for embedded fw\n",
+ 			__func__);
+ 		return -ENOENT;
+diff --git a/drivers/firmware/efi/embedded-firmware.h b/drivers/firmware/efi/embedded-firmware.h
+new file mode 100644
+index 000000000000..bb894eae0906
+--- /dev/null
++++ b/drivers/firmware/efi/embedded-firmware.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _EFI_EMBEDDED_FW_INTERNAL_H_
++#define _EFI_EMBEDDED_FW_INTERNAL_H_
++
++/*
++ * This struct and efi_embedded_fw_list are private to the efi-embedded fw
++ * implementation they only in separate header for use by lib/test_firmware.c.
 + */
-+int
-+request_partial_firmware_into_buf(const struct firmware **firmware_p,
-+				  const char *name, struct device *device,
-+				  void *buf, size_t size, size_t offset)
-+{
-+	int ret;
++struct efi_embedded_fw {
++	struct list_head list;
++	const char *name;
++	const u8 *data;
++	size_t length;
++};
 +
-+	if (fw_cache_is_setup(device, name))
-+		return -EOPNOTSUPP;
++#ifdef CONFIG_TEST_FIRMWARE
++extern struct list_head efi_embedded_fw_list;
++extern bool efi_embedded_fw_checked;
++#endif
 +
-+	__module_get(THIS_MODULE);
-+	ret = _request_firmware(firmware_p, name, device, buf, size, offset,
-+				FW_OPT_UEVENT | FW_OPT_NOCACHE |
-+				FW_OPT_PARTIAL);
-+	module_put(THIS_MODULE);
-+	return ret;
-+}
-+EXPORT_SYMBOL(request_partial_firmware_into_buf);
-+
++#endif /* _EFI_EMBEDDED_FW_INTERNAL_H_ */
+diff --git a/include/linux/efi_embedded_fw.h b/include/linux/efi_embedded_fw.h
+index 57eac5241303..4ad5db9f5312 100644
+--- a/include/linux/efi_embedded_fw.h
++++ b/include/linux/efi_embedded_fw.h
+@@ -7,19 +7,6 @@
+ 
+ #define EFI_EMBEDDED_FW_PREFIX_LEN		8
+ 
+-/*
+- * This struct and efi_embedded_fw_list are private to the efi-embedded fw
+- * implementation they are in this header for use by lib/test_firmware.c only!
+- */
+-struct efi_embedded_fw {
+-	struct list_head list;
+-	const char *name;
+-	const u8 *data;
+-	size_t length;
+-};
+-
+-extern struct list_head efi_embedded_fw_list;
+-
  /**
-  * release_firmware() - release the resource associated with a firmware image
-  * @fw: firmware resource to release
-@@ -1004,7 +1069,7 @@ static void request_firmware_work_func(struct work_struct *work)
+  * struct efi_embedded_fw_desc - This struct is used by the EFI embedded-fw
+  *                               code to search for embedded firmwares.
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 9fee2b93a8d1..62af792e151c 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -489,6 +489,7 @@ static ssize_t trigger_request_store(struct device *dev,
+ static DEVICE_ATTR_WO(trigger_request);
  
- 	fw_work = container_of(work, struct firmware_work, work);
+ #ifdef CONFIG_EFI_EMBEDDED_FIRMWARE
++#include "../drivers/firmware/efi/embedded-firmware.h"
+ static ssize_t trigger_request_platform_store(struct device *dev,
+ 					      struct device_attribute *attr,
+ 					      const char *buf, size_t count)
+@@ -501,6 +502,7 @@ static ssize_t trigger_request_platform_store(struct device *dev,
+ 	};
+ 	struct efi_embedded_fw efi_embedded_fw;
+ 	const struct firmware *firmware = NULL;
++	bool saved_efi_embedded_fw_checked;
+ 	char *name;
+ 	int rc;
  
--	_request_firmware(&fw, fw_work->name, fw_work->device, NULL, 0,
-+	_request_firmware(&fw, fw_work->name, fw_work->device, NULL, 0, 0,
- 			  fw_work->opt_flags);
- 	fw_work->cont(fw, fw_work->context);
- 	put_device(fw_work->device); /* taken in request_firmware_nowait() */
-diff --git a/include/linux/firmware.h b/include/linux/firmware.h
-index cb3e2c06ed8a..c15acadc6cf4 100644
---- a/include/linux/firmware.h
-+++ b/include/linux/firmware.h
-@@ -53,6 +53,9 @@ int request_firmware_direct(const struct firmware **fw, const char *name,
- 			    struct device *device);
- int request_firmware_into_buf(const struct firmware **firmware_p,
- 	const char *name, struct device *device, void *buf, size_t size);
-+int request_partial_firmware_into_buf(const struct firmware **firmware_p,
-+				      const char *name, struct device *device,
-+				      void *buf, size_t size, size_t offset);
+@@ -513,6 +515,8 @@ static ssize_t trigger_request_platform_store(struct device *dev,
+ 	efi_embedded_fw.data = (void *)test_data;
+ 	efi_embedded_fw.length = sizeof(test_data);
+ 	list_add(&efi_embedded_fw.list, &efi_embedded_fw_list);
++	saved_efi_embedded_fw_checked = efi_embedded_fw_checked;
++	efi_embedded_fw_checked = true;
  
- void release_firmware(const struct firmware *fw);
- #else
-@@ -102,6 +105,15 @@ static inline int request_firmware_into_buf(const struct firmware **firmware_p,
- 	return -EINVAL;
- }
+ 	pr_info("loading '%s'\n", name);
+ 	rc = firmware_request_platform(&firmware, name, dev);
+@@ -530,6 +534,7 @@ static ssize_t trigger_request_platform_store(struct device *dev,
+ 	rc = count;
  
-+static inline int request_partial_firmware_into_buf
-+					(const struct firmware **firmware_p,
-+					 const char *name,
-+					 struct device *device,
-+					 void *buf, size_t size, size_t offset)
-+{
-+	return -EINVAL;
-+}
-+
- #endif
- 
- int firmware_request_cache(struct device *device, const char *name);
+ out:
++	efi_embedded_fw_checked = saved_efi_embedded_fw_checked;
+ 	release_firmware(firmware);
+ 	list_del(&efi_embedded_fw.list);
+ 	kfree(name);
 -- 
 2.25.1
 
