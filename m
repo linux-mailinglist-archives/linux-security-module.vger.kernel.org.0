@@ -2,309 +2,91 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7442C23AACF
-	for <lists+linux-security-module@lfdr.de>; Mon,  3 Aug 2020 18:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A906223AB0A
+	for <lists+linux-security-module@lfdr.de>; Mon,  3 Aug 2020 18:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727079AbgHCQrV (ORCPT
+        id S1727895AbgHCQ5w (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 3 Aug 2020 12:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727828AbgHCQrJ (ORCPT
+        Mon, 3 Aug 2020 12:57:52 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:37001 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726806AbgHCQ5v (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 3 Aug 2020 12:47:09 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9A5C061756
-        for <linux-security-module@vger.kernel.org>; Mon,  3 Aug 2020 09:47:09 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id bs17so8964561edb.1
-        for <linux-security-module@vger.kernel.org>; Mon, 03 Aug 2020 09:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tAvQqYLNqENG5P4WF9eHdtOffvT73vophgktB3OBGIM=;
-        b=PX7Mq3EN1wryjiLANo3RjZxhLhS55ghqlm92TTh3gQ/N9nBt2PSelbQMckStTdB+h2
-         6HLbgVPbwqpZTAZ5SWTlSxe3F+siSmoQnPsU97uoReh1IzYpqIHbTwImVcGNbg/SO5Ib
-         aGu5S5P4W+ZUCD/dmqz2PH0PR8FhSTXqb+WYs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tAvQqYLNqENG5P4WF9eHdtOffvT73vophgktB3OBGIM=;
-        b=l592V6xhWPJbYsvaX0yJnMMmjaisbUvNWRSi9sVeZDKpGL6WuWf/m2BpkODdVSzIZI
-         BE4xSRrz7jFpQKN/ETMjRfURpXiSYm1unDuaNhPwiooLwhnsvp29fgAw9bHIb6es13Vg
-         xVm/5dL5mFBa8RK+v1H6kVCc2BKdwfwGHL9R/O3FC2sa/OiyyZNZ6pasWtfnI/hta3PB
-         uq0pS6S/GVqTfcyUwk4fYxgk7LE94W/BeeWtiVRohBK1XM+mirShwvMj5djMITSFmT7V
-         Ibai8zl1tlg4U6mpm4ljPgHXn1Nuf+F8pd2x2C8Q4z4HGK/rvokb/oYFnGFrN8+C7mPA
-         jBlA==
-X-Gm-Message-State: AOAM5319jD1PUfaGD2VIngu8zd8Gn7k8RFzrlJyZ5E5Z7aTNJDW9Rp83
-        B+qdme9xgh1Bws3OWwZgChCWAw==
-X-Google-Smtp-Source: ABdhPJwMiFnfI7HZsOWG0ZIqgM01s7Am7ys35hjDSRyU/f6Tw31TGEtjXT0uZnXNI3/JfrvaSUmvvQ==
-X-Received: by 2002:a50:9e6f:: with SMTP id z102mr16959862ede.300.1596473227622;
-        Mon, 03 Aug 2020 09:47:07 -0700 (PDT)
-Received: from kpsingh.zrh.corp.google.com ([81.6.44.51])
-        by smtp.gmail.com with ESMTPSA id j7sm16385654ejb.64.2020.08.03.09.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2020 09:47:06 -0700 (PDT)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>
-Subject: [PATCH bpf-next v8 7/7] bpf: Add selftests for local_storage
-Date:   Mon,  3 Aug 2020 18:46:55 +0200
-Message-Id: <20200803164655.1924498-8-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.28.0.163.g6104cc2f0b6-goog
-In-Reply-To: <20200803164655.1924498-1-kpsingh@chromium.org>
-References: <20200803164655.1924498-1-kpsingh@chromium.org>
+        Mon, 3 Aug 2020 12:57:51 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-167-AfxWu5hnN66AhufCIfqZ2Q-1; Mon, 03 Aug 2020 17:57:48 +0100
+X-MC-Unique: AfxWu5hnN66AhufCIfqZ2Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 3 Aug 2020 17:57:47 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 3 Aug 2020 17:57:47 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Madhavan T. Venkataraman'" <madvenka@linux.microsoft.com>,
+        "'Mark Rutland'" <mark.rutland@arm.com>
+CC:     Andy Lutomirski <luto@kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "LSM List" <linux-security-module@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>, X86 ML <x86@kernel.org>
+Subject: RE: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+Thread-Topic: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
+Thread-Index: AQHWZ2jYT+e4gDrzGEmP/30MMvDTCqkmD9qggABvyICAAB4gEA==
+Date:   Mon, 3 Aug 2020 16:57:47 +0000
+Message-ID: <f87f84e466a041fbabd2bba84f4592a5@AcuMS.aculab.com>
+References: <20200728131050.24443-1-madvenka@linux.microsoft.com>
+ <CALCETrVy5OMuUx04-wWk9FJbSxkrT2vMfN_kANinudrDwC4Cig@mail.gmail.com>
+ <6540b4b7-3f70-adbf-c922-43886599713a@linux.microsoft.com>
+ <CALCETrWnNR5v3ZCLfBVQGYK8M0jAvQMaAc9uuO05kfZuh-4d6w@mail.gmail.com>
+ <46a1adef-65f0-bd5e-0b17-54856fb7e7ee@linux.microsoft.com>
+ <20200731183146.GD67415@C02TD0UTHF1T.local>
+ <a3068e3126a942c7a3e7ac115499deb1@AcuMS.aculab.com>
+ <7fdc102e-75ea-6d91-d2a3-7fe8c91802ce@linux.microsoft.com>
+In-Reply-To: <7fdc102e-75ea-6d91-d2a3-7fe8c91802ce@linux.microsoft.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: KP Singh <kpsingh@google.com>
-
-inode_local_storage:
-
-* Hook to the file_open and inode_unlink LSM hooks.
-* Create and unlink a temporary file.
-* Store some information in the inode's bpf_local_storage during
-  file_open.
-* Verify that this information exists when the file is unlinked.
-
-sk_local_storage:
-
-* Hook to the socket_post_create and socket_bind LSM hooks.
-* Open and bind a socket and set the sk_storage in the
-  socket_post_create hook using the start_server helper.
-* Verify if the information is set in the socket_bind hook.
-
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- .../bpf/prog_tests/test_local_storage.c       |  60 ++++++++
- .../selftests/bpf/progs/local_storage.c       | 140 ++++++++++++++++++
- 2 files changed, 200 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_local_storage.c
- create mode 100644 tools/testing/selftests/bpf/progs/local_storage.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_local_storage.c b/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
-new file mode 100644
-index 000000000000..91cd6f357246
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2020 Google LLC.
-+ */
-+
-+#include <test_progs.h>
-+#include <linux/limits.h>
-+
-+#include "local_storage.skel.h"
-+#include "network_helpers.h"
-+
-+int create_and_unlink_file(void)
-+{
-+	char fname[PATH_MAX] = "/tmp/fileXXXXXX";
-+	int fd;
-+
-+	fd = mkstemp(fname);
-+	if (fd < 0)
-+		return fd;
-+
-+	close(fd);
-+	unlink(fname);
-+	return 0;
-+}
-+
-+void test_test_local_storage(void)
-+{
-+	struct local_storage *skel = NULL;
-+	int err, duration = 0, serv_sk = -1;
-+
-+	skel = local_storage__open_and_load();
-+	if (CHECK(!skel, "skel_load", "lsm skeleton failed\n"))
-+		goto close_prog;
-+
-+	err = local_storage__attach(skel);
-+	if (CHECK(err, "attach", "lsm attach failed: %d\n", err))
-+		goto close_prog;
-+
-+	skel->bss->monitored_pid = getpid();
-+
-+	err = create_and_unlink_file();
-+	if (CHECK(err < 0, "exec_cmd", "err %d errno %d\n", err, errno))
-+		goto close_prog;
-+
-+	CHECK(skel->data->inode_storage_result != 0, "inode_storage_result",
-+	      "inode_local_storage not set\n");
-+
-+	serv_sk = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (CHECK(serv_sk < 0, "start_server", "failed to start server\n"))
-+		goto close_prog;
-+
-+	CHECK(skel->data->sk_storage_result != 0, "sk_storage_result",
-+	      "sk_local_storage not set\n");
-+
-+	close(serv_sk);
-+
-+close_prog:
-+	local_storage__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/local_storage.c b/tools/testing/selftests/bpf/progs/local_storage.c
-new file mode 100644
-index 000000000000..0758ba229ae0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/local_storage.c
-@@ -0,0 +1,140 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright 2020 Google LLC.
-+ */
-+
-+#include <errno.h>
-+#include <linux/bpf.h>
-+#include <stdbool.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define DUMMY_STORAGE_VALUE 0xdeadbeef
-+
-+int monitored_pid = 0;
-+int inode_storage_result = -1;
-+int sk_storage_result = -1;
-+
-+struct dummy_storage {
-+	__u32 value;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_INODE_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct dummy_storage);
-+} inode_storage_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC | BPF_F_CLONE);
-+	__type(key, int);
-+	__type(value, struct dummy_storage);
-+} sk_storage_map SEC(".maps");
-+
-+/* TODO Use vmlinux.h once BTF pruning for embedded types is fixed.
-+ */
-+struct sock {} __attribute__((preserve_access_index));
-+struct sockaddr {} __attribute__((preserve_access_index));
-+struct socket {
-+	struct sock *sk;
-+} __attribute__((preserve_access_index));
-+
-+struct inode {} __attribute__((preserve_access_index));
-+struct dentry {
-+	struct inode *d_inode;
-+} __attribute__((preserve_access_index));
-+struct file {
-+	struct inode *f_inode;
-+} __attribute__((preserve_access_index));
-+
-+
-+SEC("lsm/inode_unlink")
-+int BPF_PROG(unlink_hook, struct inode *dir, struct dentry *victim)
-+{
-+	__u32 pid = bpf_get_current_pid_tgid() >> 32;
-+	struct dummy_storage *storage;
-+
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	storage = bpf_inode_storage_get(&inode_storage_map, victim->d_inode, 0,
-+				     BPF_SK_STORAGE_GET_F_CREATE);
-+	if (!storage)
-+		return 0;
-+
-+	if (storage->value == DUMMY_STORAGE_VALUE)
-+		inode_storage_result = -1;
-+
-+	inode_storage_result =
-+		bpf_inode_storage_delete(&inode_storage_map, victim->d_inode);
-+
-+	return 0;
-+}
-+
-+SEC("lsm/socket_bind")
-+int BPF_PROG(socket_bind, struct socket *sock, struct sockaddr *address,
-+	     int addrlen)
-+{
-+	__u32 pid = bpf_get_current_pid_tgid() >> 32;
-+	struct dummy_storage *storage;
-+
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	storage = bpf_sk_storage_get(&sk_storage_map, sock->sk, 0,
-+				     BPF_SK_STORAGE_GET_F_CREATE);
-+	if (!storage)
-+		return 0;
-+
-+	if (storage->value == DUMMY_STORAGE_VALUE)
-+		sk_storage_result = -1;
-+
-+	sk_storage_result = bpf_sk_storage_delete(&sk_storage_map, sock->sk);
-+	return 0;
-+}
-+
-+SEC("lsm/socket_post_create")
-+int BPF_PROG(socket_post_create, struct socket *sock, int family, int type,
-+	     int protocol, int kern)
-+{
-+	__u32 pid = bpf_get_current_pid_tgid() >> 32;
-+	struct dummy_storage *storage;
-+
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	storage = bpf_sk_storage_get(&sk_storage_map, sock->sk, 0,
-+				     BPF_SK_STORAGE_GET_F_CREATE);
-+	if (!storage)
-+		return 0;
-+
-+	storage->value = DUMMY_STORAGE_VALUE;
-+
-+	return 0;
-+}
-+
-+SEC("lsm/file_open")
-+int BPF_PROG(file_open, struct file *file)
-+{
-+	__u32 pid = bpf_get_current_pid_tgid() >> 32;
-+	struct dummy_storage *storage;
-+
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	if (!file->f_inode)
-+		return 0;
-+
-+	storage = bpf_inode_storage_get(&inode_storage_map, file->f_inode, 0,
-+				     BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!storage)
-+		return 0;
-+
-+	storage->value = DUMMY_STORAGE_VALUE;
-+	return 0;
-+}
--- 
-2.28.0.163.g6104cc2f0b6-goog
+RnJvbTogTWFkaGF2YW4gVC4gVmVua2F0YXJhbWFuDQo+IFNlbnQ6IDAzIEF1Z3VzdCAyMDIwIDE3
+OjAzDQo+IA0KPiBPbiA4LzMvMjAgMzoyNyBBTSwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+IEZy
+b206IE1hcmsgUnV0bGFuZA0KPiA+PiBTZW50OiAzMSBKdWx5IDIwMjAgMTk6MzINCj4gPiAuLi4N
+Cj4gPj4+IEl0IHJlcXVpcmVzIFBDLXJlbGF0aXZlIGRhdGEgcmVmZXJlbmNlcy4gSSBoYXZlIG5v
+dCB3b3JrZWQgb24gYWxsIGFyY2hpdGVjdHVyZXMuDQo+ID4+PiBTbywgSSBuZWVkIHRvIHN0dWR5
+IHRoaXMuIEJ1dCBkbyBhbGwgSVNBcyBzdXBwb3J0IFBDLXJlbGF0aXZlIGRhdGEgcmVmZXJlbmNl
+cz8NCj4gPj4gTm90IGFsbCBkbywgYnV0IHByZXR0eSBtdWNoIGFueSByZWNlbnQgSVNBIHdpbGwg
+YXMgaXQncyBhIHByYWN0aWNhbA0KPiA+PiBuZWNlc3NpdHkgZm9yIGZhc3QgcG9zaXRpb24taW5k
+ZXBlbmRlbnQgY29kZS4NCj4gPiBpMzg2IGhhcyBuZWl0aGVyIFBDLXJlbGF0aXZlIGFkZHJlc3Np
+bmcgbm9yIG1vdmVzIGZyb20gJXBjLg0KPiA+IFRoZSBjcHUgYXJjaGl0ZWN0dXJlIGtub3dzIHRo
+YXQgdGhlIHNlcXVlbmNlOg0KPiA+IAljYWxsCTFmDQo+ID4gMToJcG9wCSVyZWcNCj4gPiBpcyB1
+c2VkIHRvIGdldCB0aGUgJXBjIHZhbHVlIHNvIGlzIHRyZWF0ZWQgc3BlY2lhbGx5IHNvIHRoYXQN
+Cj4gPiBpdCBkb2Vzbid0ICd0cmFzaCcgdGhlIHJldHVybiBzdGFjay4NCj4gPg0KPiA+IFNvIFBJ
+QyBjb2RlIGlzbid0IHRvbyBiYWQsIGJ1dCB5b3UgaGF2ZSB0byB1c2UgdGhlIGNvcnJlY3QNCj4g
+PiBzZXF1ZW5jZS4NCj4gDQo+IElzIHRoYXQgdHJ1ZSBvbmx5IGZvciAzMi1iaXQgc3lzdGVtcyBv
+bmx5PyBJIHRob3VnaHQgUklQLXJlbGF0aXZlIGFkZHJlc3Npbmcgd2FzDQo+IGludHJvZHVjZWQg
+aW4gNjQtYml0IG1vZGUuIFBsZWFzZSBjb25maXJtLg0KDQpJIHNhaWQgaTM4NiBub3QgYW1kNjQg
+b3IgeDg2LTY0Lg0KDQpTbyB5ZXMsIDY0Yml0IGNvZGUgaGFzIFBDLXJlbGF0aXZlIGFkZHJlc3Np
+bmcuDQpCdXQgSSdtIHByZXR0eSBzdXJlIGl0IGhhcyBubyBvdGhlciB3YXkgdG8gZ2V0IHRoZSBQ
+QyBpdHNlbGYNCmV4Y2VwdCB1c2luZyBjYWxsIC0gY2VydGFpbmx5IG5vdGhpbmcgaW4gdGhlICd1
+c3VhbCcgaW5zdHJ1Y3Rpb25zLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
+a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
+IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
