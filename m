@@ -2,95 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD2023CFE2
-	for <lists+linux-security-module@lfdr.de>; Wed,  5 Aug 2020 21:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308C323CFB6
+	for <lists+linux-security-module@lfdr.de>; Wed,  5 Aug 2020 21:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728798AbgHET0K (ORCPT
+        id S1728448AbgHER0j (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 5 Aug 2020 15:26:10 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:56948 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728680AbgHERN7 (ORCPT
+        Wed, 5 Aug 2020 13:26:39 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:51984 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728734AbgHERZm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:13:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596647638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yTnFp3FGNnUMIV+drG+EiP28NPY1kzNtc5gU15VKTgg=;
-        b=EPFQ+szwIY5F62w8zr2I2fjpdpckbH7cE/mKO500e5Z2FY5u5l5us7dqhV/PNScv64ZY6+
-        ryH4fDs8xkJtta7Mc3G0sHwUiK85UkV78lhlGTuOH/bcpT7ceLV5jMIUag0rRkkD0ihpXO
-        vqY9RXcf5GpJyr7QAFBrplc0ttcqEHE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-404-CVKT19CpOAaHFqv9tWctXA-1; Wed, 05 Aug 2020 13:13:57 -0400
-X-MC-Unique: CVKT19CpOAaHFqv9tWctXA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3CC2D80183C;
-        Wed,  5 Aug 2020 17:13:55 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-112-32.rdu2.redhat.com [10.10.112.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 089C25D9DC;
-        Wed,  5 Aug 2020 17:13:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <1596555579.10158.23.camel@HansenPartnership.com>
-References: <1596555579.10158.23.camel@HansenPartnership.com> <159646178122.1784947.11705396571718464082.stgit@warthog.procyon.org.uk>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-ext4@vger.kernel.org,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-api@vger.kernel.org, torvalds@linux-foundation.org,
-        raven@themaw.net, mszeredi@redhat.com, christian@brauner.io,
-        jannh@google.com, kzak@redhat.com, jlayton@redhat.com,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/18] VFS: Filesystem information [ver #21]
+        Wed, 5 Aug 2020 13:25:42 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 996E520B4908;
+        Wed,  5 Aug 2020 10:25:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 996E520B4908
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1596648341;
+        bh=+M6ltu7sGUQlnHNTsNp9mZLiIc2hQZ8PeYQpqVYXFYM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=aq120tI83eo/0ZfotJa85eOXCSF6WK2VaEKe3K2eI2Z1BqmcHcv5/LO7pbV8P3+cS
+         mDeBH4cFuU3GixNGpG6yad9UkomydJTxgRnnBfA7TMacP+M+eS8KMn5BgrBUhTrVqj
+         Tf4oYsXQu+N4S/h0nRw7ASxCAi5FIzFChV3/3c+Q=
+Subject: Re: [PATCH v6 0/4] LSM: Measure security module data
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Cc:     stephen.smalley.work@gmail.com, sashal@kernel.org,
+        jmorris@namei.org, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200805004331.20652-1-nramas@linux.microsoft.com>
+ <f3971f35-309d-c3e5-9126-69add7ad4c11@schaufler-ca.com>
+ <50587a3e-bcb5-c68e-c16c-41baf68b4d4a@linux.microsoft.com>
+ <c7c168f2-e30b-d2c5-abcb-1b6919197474@schaufler-ca.com>
+ <20200805154504.GB4365@sequoia>
+ <69810007161e689ac817099fb1c6df21962963e4.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <9ad079ff-1bd4-1302-e6fb-25a7396ef12f@linux.microsoft.com>
+Date:   Wed, 5 Aug 2020 10:25:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2329128.1596647628.1@warthog.procyon.org.uk>
-Date:   Wed, 05 Aug 2020 18:13:48 +0100
-Message-ID: <2329129.1596647628@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <69810007161e689ac817099fb1c6df21962963e4.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
+On 8/5/20 10:03 AM, Mimi Zohar wrote:
+> On Wed, 2020-08-05 at 10:45 -0500, Tyler Hicks wrote:
+> 
+>> In addition to SELINUX_STATE and SELINUX_POLICY, we should also consider
+>> the proposed LSM_STATE and LSM_POLICY func values but require an "lsm"
+>> rule conditional.
+>>
+>> So the current proposed rules:
+>>
+>>   measure func=LSM_STATE
+>>   measure func=LSM_POLICY
+>>
+>> Would become:
+>>
+>>   measure func=LSM_STATE lsm=selinux
+>>   measure func=LSM_POLICY lsm=selinux
+>>
+>> The following rules would be rejected:
+>>
+>>   measure func=LSM_STATE
+>>   measure func=LSM_POLICY
+>>   measure func=LSM_STATE lsm=apparmor
+>>   measure func=LSM_POLICY lsm=smack
+> 
+> Kees is cleaning up the firmware code which differentiated between how
+> firmware was loaded.   There will be a single firmware enumeration.
+> 
+> Similarly, the new IMA hook to measure critical state may be placed in
+> multiple places.  Is there really a need from a policy perspective for
+> differentiating the source of the critical state being measurind?   The
+> data being measured should include some identifying information.
 
-> It sort of petered out into a long winding thread about why not use
-> sysfs instead, which really doesn't look like a good idea to me.
+Yes Mimi - SELinux is including the identifying information in the 
+"event name" field. Please see a sample measurement of STATE and POLICY 
+for SELinux below:
 
-It seemed to turn into a set of procfs symlinks that pointed at a bunch of
-sysfs stuff - or possibly some special filesystem.
+10 e32e...5ac3 ima-buf sha256:86e8...4594 
+selinux-state-1595389364:287899386 
+696e697469616c697a65643d313b656e61626c65643d313b656e666f7263696e673d303b636865636b72657170726f743d313b6e6574776f726b5f706565725f636f6e74726f6c733d313b6f70656e5f7065726d733d313b657874656e6465645f736f636b65745f636c6173733d313b616c776179735f636865636b5f6e6574776f726b3d303b6367726f75705f7365636c6162656c3d313b6e6e705f6e6f737569645f7472616e736974696f6e3d313b67656e66735f7365636c6162656c5f73796d6c696e6b733d303
 
-> Could I make a suggestion about how this should be done in a way that
-> doesn't actually require the fsinfo syscall at all: it could just be
-> done with fsconfig.
+10 f4a7...9408 ima-ng sha256:8d1d...1834 
+selinux-policy-hash-1595389353:863934271
 
-I'd prefer to keep it separate.  The interface for fsconfig() is intended to
-move stuff into the kernel, not out of it.  Better to add a parallel syscall
-to go the other way (kind of like we have setxattr/getxattr, sendmsg/recvmsg).
+> 
+> I think moving away from the idea that measuring "critical" data should
+> be limited to LSMs, will clarify this.
+> 
 
-Further, fsinfo() can refer directly to a file/fd/mount/whatever, but
-fsconfig() doesn't do that.  You have to use fspick() to get a context before
-you can use fsconfig().  Now, that's fine if you want to gather several pieces
-of information from a particular object, but it's not so good if you want to
-get one piece of information from each of several objects.
+Are you suggesting that instead of calling the hooks LSM_STATE and 
+LSM_POLICY, we should keep it more generic so that it can be utilized by 
+any subsystem to measure their "critical data"?
 
-> ... make it table configured...
+I think that is a good idea.
 
-I did, kind of (though I didn't call it that).  Al rewrote the code to get rid
-of it.
-
-David
-
+  -lakshmi
