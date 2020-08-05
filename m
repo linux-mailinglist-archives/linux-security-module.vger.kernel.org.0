@@ -2,136 +2,184 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED06123CC33
-	for <lists+linux-security-module@lfdr.de>; Wed,  5 Aug 2020 18:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0227E23CBE4
+	for <lists+linux-security-module@lfdr.de>; Wed,  5 Aug 2020 18:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgHEQ3N (ORCPT
+        id S1725999AbgHEP7h (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 5 Aug 2020 12:29:13 -0400
-Received: from sonic307-15.consmr.mail.ne1.yahoo.com ([66.163.190.38]:36873
-        "EHLO sonic307-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727003AbgHEQ03 (ORCPT
+        Wed, 5 Aug 2020 11:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726071AbgHEPti (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 5 Aug 2020 12:26:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1596644748; bh=1cU3wjJlOPvRuw2818Qutqs4mQWnaGRISNeePAjFogU=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=HeJ8bZXaFWiKJIzzL3gho1AU0tgiQ1e+Kb08in02P1pufoU7rhEns/aCYmNdCZAHT4DQBoS4Cr3I8K9oxvyjxLE9gG2ed/JjWYEyiJcFEpUziw0XGGP0cuWqHvVvdTHKUoko0LrzjqtZtH8Dd7J57tZ4BodEutf0BKR6TYcd90I/3lBq5Rj6w1NLuNAzhFQm3Yn74yb/YdsG3vN1Z+OpIsg9ISa+Qc71AQS0ZkVNA2cDmJOefm7AuBtmrDG7LjBtVg4RCoaD+T0jWWAysaCkUdueq68berw3vBnA7mcncCyJhYXYz6L1cY67fKjYgZQqdaR+qzmPmR/1XMeuMozf3g==
-X-YMail-OSG: iMtRnVsVM1nBFaQ4NlnavoaLZ.x_8bBSps_sPqYvR6j1jlYcZJRhJZp65eLXgdE
- q9ApMJrEobSvGXllUAQTERK4waFhlfC6Mw18jWRv3d4F3t_mwWDayC8PJA1Aj8dUzUjY.G1iHHsr
- E5PU7woRCZ25BLBBFU_fCg21.oa.KU6.xTeDQsUOPd0R38DzROYXZai7oGC8j7RfILJodifwka4a
- 9.DH1xziHMKmGpcT1UA4RkuIPvCXwQYmDqcE1JzzWD3.IiMX.tGfAnfROeYFRooiuQnG1K4BVioT
- Tpgnv0eB4m76wEOdOnrhNMk.Yjb9swgY74lxanI5peFxYoTo2BywAn4zsR0ukS2eseA3nTQdSLLF
- lLafs4oEPPUwKKCFesH1XAzOEUH2TFiDCnPIHGi9_6MT9rN1FNN_cwJ__4VSbt8tQOpeQ3w3sHwX
- FaLPA7A_UtFPgw46T8PahKmjre0uyB2vklwCgwIanUt0GzDLCjYPkzoBkkj0tjnaYEXybt_nevxn
- xrh1L9Usez8iRMlr_O0hD.D5qulo.Dp5r3ry2UQ_Z2m1S6M.g5tsbAaoms3XhMkW6JEmdN2UpD2V
- QMDaiBQSIjE8tEIpk6gsZplzC5Z0EnIaPhcOxxJYfhr7f1KvSBOdqNW.aFnUR7JEyXkTzm3dHR.K
- M45tNrYI2FWF4fcfLDswyAoM82xogimHXTsnvN3eDQ7EVitTcSn4DcWlWy1zhs_VORG1oiYw8K6B
- 66NkLqxPZqAhep4hRanKfuGSXjeYsS4funYv80RXiqEyYCXFuTHXi4kVqzoS9Ao.51miCllCOLbs
- W8IZKld99Ngl4NxhQ6yiihJRJE.3r4nyXMVrKxJ17WncVYJRm_Olq4GWGlC_odAqZ096jFP1adYp
- 0eruq27ZgLFCqO0SG.cUnyximRlQPkETs6VvApCn9knzzt.cnpL94y2HeYYUsmhbnC4d1fLwLRr9
- itaS6XiJsbwKiXz0rJmJ1FYUUbRLRALK5AOLNHQ9zIzs7KiiPY6Mrf2LwhFOnqw2ZRcaCAtfq1wD
- L6Gzi36AkigAhdhYsma7_4Y7hG2JkN6k9_n9rggASFmj0DIFEMwBzyMR9HyeSc2VHDUNx3avC1a0
- ZAmtg2kAdPOIhb4jxJvHZRuMYBcGKhiqmpsnCwSA3YlMFnH8Neq82OO_Y7yMtNxhnQzBABRIBlVk
- UIyvHfLpuWx0X6cvEHrZB1MSQCM74nc3dLUkNAGExhF5JyLLB8eEeqyuDECr5jm50itdW0Gx1eaw
- yliYZaSh2ALhZNFHOdo1Jv3S.9k6bFq39_YTMU1K.VzS2b7ThUAFaWbbNiYHkNQKZQ6jFzG.B0bm
- JvjuabJA.mNyuekH95nCF46Y6YV2sWp4cQzG0g2sv21s9IlM5iyXoNtqsuA--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Wed, 5 Aug 2020 16:25:48 +0000
-Received: by smtp417.mail.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 05f98be0901e51aef2f5e5eae571f525;
-          Wed, 05 Aug 2020 15:36:40 +0000 (UTC)
-Subject: Re: [PATCH v6 0/4] LSM: Measure security module data
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        zohar@linux.ibm.com, stephen.smalley.work@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
+        Wed, 5 Aug 2020 11:49:38 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D48C001FC5;
+        Wed,  5 Aug 2020 08:43:48 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id x6so15102211qvr.8;
+        Wed, 05 Aug 2020 08:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=czjIYKIMqrKx6NztO4qHKv0Vt37ieCFKeMG2O/uHiYg=;
+        b=JmbYr8IuLilXgfVziMkJJADX+seDHRIXyosFHEnEGxvzY7/FkcqApH7N3pvh+5shjk
+         Q9+bbS8dSq1gjKMskj0yJMF+TGs8ar6xTV30rGxjAP/fH9ccGRnUkkHYZKIAL0kTz8bv
+         4RsWkIposRJM9gxUZwrqGEjaFBs+3WCd2Z4rlDquUdCvagBjUsK8TCIKG4nhszIgTF7C
+         /+RIvsj8Z8xsySpriyn8IQ8s5w+Y35UKJkcnJ/w9nmh+P7la7XV3+BCAKjqiP5xoY/uL
+         Hd7atbVYYzxGQwPODP/fNVBOyjhWPGBcxO5ffP2utZDHNe4ks5lQ1hir+ZTN6OoWcist
+         rcUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=czjIYKIMqrKx6NztO4qHKv0Vt37ieCFKeMG2O/uHiYg=;
+        b=tOddIAlZs1QtERZCJT2irykS6q537sY9OA9SP8r2WEGx5v3cyrYmJcDKs379VZ9DbV
+         bmydf3S8uFXWmA2MxirzWcYfuZGIWjDLAEv4vFIrkH7Au7AVnSd0zuUIudmblGBhXigl
+         n9k3Ne41Fia9K7cCqL9S5MiCxm9vmaP9Ye/U8fVjCjr2Asxwt1fnPMAR0k+VqFddvLiN
+         doYXG9ldx/FRq56MhlfMgrI+iP108Sb1WU+bPWZH8XBKVLzqWDA5IXfu6HlP6xDXWp+d
+         avc/bpHIan3JOGA3BK4AWiYsIo8c0axVqukpu7bFCX1QB7UZYAcw+VSHjLH3RWHL+WTW
+         VfXA==
+X-Gm-Message-State: AOAM5325q1TWjZD7WWDprLoLk9ABGQ02TGN9QHn2hgonKFPbhb5+5PNF
+        HG64m1LBcOAxvh5xiBKV+bU=
+X-Google-Smtp-Source: ABdhPJyHjyZcUS4lx3kYJlGYbr+5Wv7FvFmaR0g2jYyml05P+PoihEVt8BPlIURWZmvmF7jy8xr56g==
+X-Received: by 2002:a0c:b604:: with SMTP id f4mr4418696qve.68.1596642224148;
+        Wed, 05 Aug 2020 08:43:44 -0700 (PDT)
+Received: from [192.168.1.190] (pool-71-244-252-199.bltmmd.fios.verizon.net. [71.244.252.199])
+        by smtp.gmail.com with ESMTPSA id k48sm2611318qtk.44.2020.08.05.08.43.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Aug 2020 08:43:43 -0700 (PDT)
+Subject: Re: [PATCH v6 1/4] IMA: Add func to measure LSM state and policy
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Casey Schaufler <casey@schaufler-ca.com>, sashal@kernel.org,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        John Johansen <john.johansen@canonical.com>
 References: <20200805004331.20652-1-nramas@linux.microsoft.com>
- <f3971f35-309d-c3e5-9126-69add7ad4c11@schaufler-ca.com>
- <50587a3e-bcb5-c68e-c16c-41baf68b4d4a@linux.microsoft.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Message-ID: <c7c168f2-e30b-d2c5-abcb-1b6919197474@schaufler-ca.com>
-Date:   Wed, 5 Aug 2020 08:36:40 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+ <20200805004331.20652-2-nramas@linux.microsoft.com>
+ <4b9d2715d3ef3c8f915ef03867cfb1a39c0abc54.camel@linux.ibm.com>
+ <f88bf25e-37ef-7f00-6162-215838961bb0@gmail.com>
+ <31d00876438d2652890ab8bf6ba2e80f554ca7a4.camel@linux.ibm.com>
+ <CAEjxPJ6X+Cqd5QtZBmNm2cujwbg-STfRF7_8i=Ny8yuc6z9BwQ@mail.gmail.com>
+ <b7df114e8e0d276e66575b6970a1e459d1dd4196.camel@linux.ibm.com>
+ <CAEjxPJ7d1yg659OCU6diXXGqegc_jSzO4ZPhkRqQtJnRn-kC0g@mail.gmail.com>
+ <20200805150732.GA4365@sequoia>
+From:   Stephen Smalley <stephen.smalley.work@gmail.com>
+Message-ID: <39390a53-51df-12f0-5451-e677ccca581a@gmail.com>
+Date:   Wed, 5 Aug 2020 11:43:42 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <50587a3e-bcb5-c68e-c16c-41baf68b4d4a@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200805150732.GA4365@sequoia>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-X-Mailer: WebService/1.1.16436 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.7)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 8/4/2020 6:14 PM, Lakshmi Ramasubramanian wrote:
-> On 8/4/20 6:04 PM, Casey Schaufler wrote:
->> On 8/4/2020 5:43 PM, Lakshmi Ramasubramanian wrote:
->>> Critical data structures of security modules are currently not measured.
->>> Therefore an attestation service, for instance, would not be able to
->>> attest whether the security modules are always operating with the policies
->>> and configuration that the system administrator had setup. The policies
->>> and configuration for the security modules could be tampered with by
->>> malware by exploiting kernel vulnerabilities or modified through some
->>> inadvertent actions on the system. Measuring such critical data would
->>> enable an attestation service to better assess the state of the system.
->>
->> I still wonder why you're calling this an LSM change/feature when
->> all the change is in IMA and SELinux. You're not putting anything
->> into the LSM infrastructure, not are you using the LSM infrastructure
->> to achieve your ends. Sure, you *could* support other security modules
->> using this scheme, but you have a configuration dependency on
->> SELinux, so that's at best going to be messy. If you want this to
->> be an LSM "feature" you need to use the LSM hooking mechanism.
->
->>
->> I'm not objecting to the feature. It adds value. But as you've
->> implemented it it is either an IMA extension to SELinux, or an
->> SELiux extension to IMA. Could AppArmor add hooks for this without
->> changing the IMA code? It doesn't look like it to me.
->
-> The check in IMA to allow the new IMA hook func LSM_STATE and LSM_POLICY when SELinux is enabled is just because SELinux is the only security module using these hooks now.
->
-> To enable AppArmor, for instance, to use the new IMA hooks to measure state and policy would just require adding the check for CONFIG_SECURITY_APPARMOR. Other than that, there are no IMA changes needed to support AppArmor or other such security modules.
+On 8/5/20 11:07 AM, Tyler Hicks wrote:
 
-This is exactly what I'm objecting to. What if a system has both SELinux
-and AppArmor compiled in? What if it has both enabled?
+> On 2020-08-05 10:27:43, Stephen Smalley wrote:
+>> On Wed, Aug 5, 2020 at 9:20 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>> On Wed, 2020-08-05 at 09:03 -0400, Stephen Smalley wrote:
+>>>> On Wed, Aug 5, 2020 at 8:57 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>>>> On Wed, 2020-08-05 at 08:46 -0400, Stephen Smalley wrote:
+>>>>>> On 8/4/20 11:25 PM, Mimi Zohar wrote:
+>>>>>>
+>>>>>>> Hi Lakshmi,
+>>>>>>>
+>>>>>>> There's still  a number of other patch sets needing to be reviewed
+>>>>>>> before my getting to this one.  The comment below is from a high level.
+>>>>>>>
+>>>>>>> On Tue, 2020-08-04 at 17:43 -0700, Lakshmi Ramasubramanian wrote:
+>>>>>>>> Critical data structures of security modules need to be measured to
+>>>>>>>> enable an attestation service to verify if the configuration and
+>>>>>>>> policies for the security modules have been setup correctly and
+>>>>>>>> that they haven't been tampered with at runtime. A new IMA policy is
+>>>>>>>> required for handling this measurement.
+>>>>>>>>
+>>>>>>>> Define two new IMA policy func namely LSM_STATE and LSM_POLICY to
+>>>>>>>> measure the state and the policy provided by the security modules.
+>>>>>>>> Update ima_match_rules() and ima_validate_rule() to check for
+>>>>>>>> the new func and ima_parse_rule() to handle the new func.
+>>>>>>> I can understand wanting to measure the in kernel LSM memory state to
+>>>>>>> make sure it hasn't changed, but policies are stored as files.  Buffer
+>>>>>>> measurements should be limited  to those things that are not files.
+>>>>>>>
+>>>>>>> Changing how data is passed to the kernel has been happening for a
+>>>>>>> while.  For example, instead of passing the kernel module or kernel
+>>>>>>> image in a buffer, the new syscalls - finit_module, kexec_file_load -
+>>>>>>> pass an open file descriptor.  Similarly, instead of loading the IMA
+>>>>>>> policy data, a pathname may be provided.
+>>>>>>>
+>>>>>>> Pre and post security hooks already exist for reading files.   Instead
+>>>>>>> of adding IMA support for measuring the policy file data, update the
+>>>>>>> mechanism for loading the LSM policy.  Then not only will you be able
+>>>>>>> to measure the policy, you'll also be able to require the policy be
+>>>>>>> signed.
+>>>>>> To clarify, the policy being measured by this patch series is a
+>>>>>> serialized representation of the in-memory policy data structures being
+>>>>>> enforced by SELinux.  Not the file that was loaded.  Hence, this
+>>>>>> measurement would detect tampering with the in-memory policy data
+>>>>>> structures after the policy has been loaded.  In the case of SELinux,
+>>>>>> one can read this serialized representation via /sys/fs/selinux/policy.
+>>>>>> The result is not byte-for-byte identical to the policy file that was
+>>>>>> loaded but can be semantically compared via sediff and other tools to
+>>>>>> determine whether it is equivalent.
+>>>>> Thank you for the clarification.   Could the policy hash be included
+>>>>> with the other critical data?  Does it really need to be measured
+>>>>> independently?
+>>>> They were split into two separate functions because we wanted to be
+>>>> able to support using different templates for them (ima-buf for the
+>>>> state variables so that the measurement includes the original buffer,
+>>>> which is small and relatively fixed-size, and ima-ng for the policy
+>>>> because it is large and we just want to capture the hash for later
+>>>> comparison against known-good).  Also, the state variables are
+>>>> available for measurement always from early initialization, whereas
+>>>> the policy is only available for measurement once we have loaded an
+>>>> initial policy.
+>>> Ok, measuring the policy separately from other critical data makes
+>>> sense.  Instead of measuring the policy, which is large, measure the
+>>> policy hash.
+>> I think that was the original approach.  However, I had concerns with
+>> adding code to SELinux to compute a hash over the policy versus
+>> leaving that to IMA's existing policy and mechanism.  If that's
+>> preferred I guess we can do it that way but seems less flexible and
+>> duplicative.
+> In AppArmor, we store the sha1 of the raw policy as the policy is
+> loaded. The hash is exposed to userspace in apparmorfs. See commit
+> 5ac8c355ae00 ("apparmor: allow introspecting the loaded policy pre
+> internal transform").
+>
+> It has proved useful as a mechanism for debugging as sometimes the
+> on-disk policy doesn't match the loaded policy and this can be a good
+> way to check that while providing support to users. John also mentions
+> checkpoint/restore in the commit message and I could certainly see how
+> the policy hashes would be useful in that scenario.
+>
+> When thinking through how Lakshmi's series could be extended for
+> AppArmor support, I was thinking that the AppArmor policy measurement
+> would be a measurement of these hashes that we already have in place.
+>
+> Perhaps there's some general usefulness in storing/exposing an SELinux
+> policy hash rather than only seeing it as duplicative property required
+> this measurement series?
 
->
-> Please see Patch 1/4
->
-> +            else if (IS_ENABLED(CONFIG_SECURITY_SELINUX) &&
-> +                 strcmp(args[0].from, "LSM_STATE") == 0)
-> +                entry->func = LSM_STATE;
-> +            else if (IS_ENABLED(CONFIG_SECURITY_SELINUX) &&
-> +                 strcmp(args[0].from, "LSM_POLICY") == 0)
-> +                entry->func = LSM_POLICY;
->
-> And, if early boot measurement is needed for AppArmor the following change in IMA's Kconfig
->
-> Patch 4/4
->
-> +config IMA_QUEUE_EARLY_BOOT_DATA
->      bool
-> +    depends on SECURITY_SELINUX || (IMA_MEASURE_ASYMMETRIC_KEYS && SYSTEM_TRUSTED_KEYRING)
->      default y
->
-> If you think calling this an "LSM feature" is not appropriate, please suggest a better phrase.
+That would be a hash of the policy file that was last loaded via the 
+selinuxfs interface for loading policy, not a hash of the in-memory 
+policy data structures at the time of measurement (which is what this 
+patch series is implementing).  The duplicative part is with respect to 
+selecting a hash algorithm and hashing the in-memory policy as part of 
+the SELinux code rather than just passing the policy buffer to IMA for 
+measurement like any other buffer.  Userspace can already hash the 
+in-memory policy data itself by running sha256sum or whatever on 
+/sys/fs/selinux/policy, so we don't need to save or expose that separately.
 
-In the code above you are under CONFIG_SECURITY_SELINUX.
-I would suggest that it's an SELinux feature, so you should
-be using SELINUX_STATE and SELINUX_POLICY, as I suggested
-before. Just because SELinux has state and policy to measure
-doesn't mean that a different module might not have other data,
-such as history, that should be covered as well.
 
-I realize that IMA already has compile time dependencies to
-determine which xattrs to measure. There's no reason that
-the xattr list couldn't be determined at boot time, with
-each security module providing the XATTR_NAME values it
-uses.
-
->
-> But like I said above, with minimal change in IMA other security modules can be supported to measure STATE and POLICY data.
->
->  -lakshmi
->
->
