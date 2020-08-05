@@ -2,87 +2,101 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D6523CD5C
-	for <lists+linux-security-module@lfdr.de>; Wed,  5 Aug 2020 19:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1AB23CCCC
+	for <lists+linux-security-module@lfdr.de>; Wed,  5 Aug 2020 19:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728768AbgHERZs (ORCPT
+        id S1728160AbgHERBT (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 5 Aug 2020 13:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728745AbgHERZQ (ORCPT
+        Wed, 5 Aug 2020 13:01:19 -0400
+Received: from namei.org ([65.99.196.166]:57602 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728217AbgHERAT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:25:16 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6A5C0086A7
-        for <linux-security-module@vger.kernel.org>; Wed,  5 Aug 2020 07:46:44 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id a14so15763669edx.7
-        for <linux-security-module@vger.kernel.org>; Wed, 05 Aug 2020 07:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3edvsdiBJ+dMkVwgYQe5b56g/OTwtECyNQldn00sS/k=;
-        b=pIV877Jp9EOP/kj6De7JQRLtf8VLarGd/I50CrlfCnVlTSEvY4ZesiGKNPAJkMSA9S
-         1xuBLUfpu8+qhUlXVyP6XOQ6q0sRV7EwvIwaXpVhCVUJTjQCjAneENJ37v5t/IG4dAAS
-         5v+E0LKx1h0Z1Z/D73XVOhVsAP6a9wsqDzKnw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3edvsdiBJ+dMkVwgYQe5b56g/OTwtECyNQldn00sS/k=;
-        b=Wiii0VUnvlsltxX9qYa4REbA0+Vwk5x5vYdhYgzcBO/eIaDobALJZq8yExNT9Zgx4j
-         gup6XHHxlWhy60dw/ULIJ5GbYtxwoizI4A9N9IzmfNmVzrMeeTI9FubH2NBY9wj1ZgZp
-         Tol3qhHX2+c5Ws4EcjSkP2UB4fEDK5mW/aKHlcOn2h495mRY2btleY5acSWVbIZ6h44B
-         OCZpHOWfgnJrrl6z9sYXPclTkbzJkk0waMjJDdVWTTUc1N0t+isqkkPUWX9/quffTbx1
-         Vp+Gcw8FH4rmYy1R/VWad+Z1qKYQu6J6WxYirtEob73NAzXx4rSXLSVZjvdL2sh2HU9g
-         vPZw==
-X-Gm-Message-State: AOAM5316D9QzT1i0pa2mf2+WNsNFJqqLzTeKpZyzmm3XfKIGEJaukEQ0
-        ud1l3Oe6ZcGzIuaDmPeJbn0U9ugxfMxAt0IA5kEJ1A==
-X-Google-Smtp-Source: ABdhPJy96Yk1HJK8pmfb/tsUqlvWao5KdebzpybEXlIErIo0+XHeGRmkn8IkxZto7tV3EPeU3amgjnjkLpPlXf7haIA=
-X-Received: by 2002:a05:6402:13d4:: with SMTP id a20mr3180723edx.161.1596638802798;
- Wed, 05 Aug 2020 07:46:42 -0700 (PDT)
+        Wed, 5 Aug 2020 13:00:19 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 075Gxe6x030131;
+        Wed, 5 Aug 2020 16:59:42 GMT
+Date:   Wed, 5 Aug 2020 09:59:40 -0700 (PDT)
+From:   James Morris <jmorris@namei.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+cc:     Deven Bowers <deven.desai@linux.microsoft.com>,
+        Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
+        snitzer@redhat.com, zohar@linux.ibm.com, dm-devel@redhat.com,
+        tyhicks@linux.microsoft.com, agk@redhat.com, paul@paul-moore.com,
+        corbet@lwn.net, nramas@linux.microsoft.com, serge@hallyn.com,
+        pasha.tatashin@soleen.com, jannh@google.com,
+        linux-block@vger.kernel.org, viro@zeniv.linux.org.uk,
+        axboe@kernel.dk, mdsakib@microsoft.com,
+        linux-kernel@vger.kernel.org, eparis@redhat.com,
+        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jaskarankhurana@linux.microsoft.com
+Subject: Re: [dm-devel] [RFC PATCH v5 00/11] Integrity Policy Enforcement
+ LSM (IPE)
+In-Reply-To: <1596639689.3457.17.camel@HansenPartnership.com>
+Message-ID: <alpine.LRH.2.21.2008050934060.28225@namei.org>
+References: <20200728213614.586312-1-deven.desai@linux.microsoft.com>  <20200802115545.GA1162@bug> <20200802140300.GA2975990@sasha-vm>  <20200802143143.GB20261@amd>  <1596386606.4087.20.camel@HansenPartnership.com>  <fb35a1f7-7633-a678-3f0f-17cf83032d2b@linux.microsoft.com>
+ <1596639689.3457.17.camel@HansenPartnership.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-References: <159646178122.1784947.11705396571718464082.stgit@warthog.procyon.org.uk>
- <159646183662.1784947.5709738540440380373.stgit@warthog.procyon.org.uk>
- <20200804104108.GC32719@miu.piliscsaba.redhat.com> <2306029.1596636828@warthog.procyon.org.uk>
-In-Reply-To: <2306029.1596636828@warthog.procyon.org.uk>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 5 Aug 2020 16:46:31 +0200
-Message-ID: <CAJfpegtOguKOGWxv-sA_C9eSWG_3Srnj_k=oW-wSHNprCipFVg@mail.gmail.com>
-Subject: Re: [PATCH 06/18] fsinfo: Add a uniquifier ID to struct mount [ver #21]
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ian Kent <raven@themaw.net>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Christian Brauner <christian@brauner.io>,
-        Jann Horn <jannh@google.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Karel Zak <kzak@redhat.com>, Jeff Layton <jlayton@redhat.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        LSM <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Aug 5, 2020 at 4:14 PM David Howells <dhowells@redhat.com> wrote:
+On Wed, 5 Aug 2020, James Bottomley wrote:
 
-> However, looking up that identifier requires some sort of structure for doing
-> this and it's kind of worst case for the IDR tree as the keys are gradually
-> going to spread out, causing it to eat more memory.  It may be a tradeoff
-> worth making, and the memory consumption might not be that bad - or we could
-> use some other data structure such as an rbtree.
+> I'll leave Mimi to answer, but really this is exactly the question that
+> should have been asked before writing IPE.  However, since we have the
+> cart before the horse, let me break the above down into two specific
+> questions.
 
-idr_alloc_cyclic() seems to be a good template for doing the lower
-32bit allocation, and we can add code to increment the high 32bit on
-wraparound.
+The question is valid and it was asked. We decided to first prototype what 
+we needed and then evaluate if it should be integrated with IMA. We 
+discussed this plan in person with Mimi (at LSS-NA in 2019), and presented 
+a more mature version of IPE to LSS-NA in 2020, with the expectation that 
+such a discussion may come up (it did not).
 
-Lots of code uses idr_alloc_cyclic() so I guess it shouldn't be too
-bad in terms of memory use or performance.
+These patches are still part of this process and 'RFC' status.
 
-Thanks,
-Miklos
+>    1. Could we implement IPE in IMA (as in would extensions to IMA cover
+>       everything).  I think the answers above indicate this is a "yes".
+
+It could be done, if needed.
+
+>    2. Should we extend IMA to implement it?  This is really whether from a
+>       usability standpoint two seperate LSMs would make sense to cover the
+>       different use cases.
+
+One issue here is that IMA is fundamentally a measurement & appraisal 
+scheme which has been extended to include integrity enforcement. IPE was 
+designed from scratch to only perform integrity enforcement. As such, it 
+is a cleaner design -- "do one thing and do it well" is a good design 
+pattern.
+
+In our use-case, we utilize _both_ IMA and IPE, for attestation and code 
+integrity respectively. It is useful to be able to separate these 
+concepts. They really are different:
+
+- Code integrity enforcement ensures that code running locally is of known 
+provenance and has not been modified prior to execution.
+
+- Attestation is about measuring the health of a system and having that 
+measurement validated by a remote system. (Local attestation is useless).
+
+I'm not sure there is value in continuing to shoe-horn both of these into 
+IMA.
+
+
+>  I've got to say the least attractive thing
+>       about separation is the fact that you now both have a policy parser.
+>        You've tried to differentiate yours by making it more Kconfig
+>       based, but policy has a way of becoming user space supplied because
+>       the distros hate config options, so I think you're going to end up
+>       with a policy parser very like IMAs.
+
+
+-- 
+James Morris
+<jmorris@namei.org>
+
