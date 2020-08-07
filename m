@@ -2,21 +2,20 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D6E23EF96
-	for <lists+linux-security-module@lfdr.de>; Fri,  7 Aug 2020 16:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AD023F0AD
+	for <lists+linux-security-module@lfdr.de>; Fri,  7 Aug 2020 18:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726688AbgHGOwk convert rfc822-to-8bit (ORCPT
+        id S1726825AbgHGQKr convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 7 Aug 2020 10:52:40 -0400
-Received: from mail.furshetcrimea.ru ([193.27.243.220]:51882 "EHLO
+        Fri, 7 Aug 2020 12:10:47 -0400
+Received: from mail.furshetcrimea.ru ([193.27.243.220]:40572 "EHLO
         furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726956AbgHGOwk (ORCPT
+        with ESMTP id S1726773AbgHGQKp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 7 Aug 2020 10:52:40 -0400
-X-Greylist: delayed 5015 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 10:51:24 EDT
+        Fri, 7 Aug 2020 12:10:45 -0400
 Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
   by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
-  with ESMTPA id 11132992; Fri, 07 Aug 2020 17:58:13 +0300
+  with ESMTPA id 11168866; Fri, 07 Aug 2020 19:21:51 +0300
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
@@ -24,11 +23,11 @@ Content-Description: Mail message body
 Subject: Bei Interesse antworten.
 To:     Recipients <info@furshetcrimea.ru>
 From:   info@furshetcrimea.ru
-Date:   Fri, 07 Aug 2020 15:45:36 +0100
+Date:   Fri, 07 Aug 2020 17:09:14 +0100
 Reply-To: mattiassjoborg751@gmail.com
 X-Antivirus: Avast (VPS 200807-2, 08/07/2020), Outbound message
 X-Antivirus-Status: Clean
-Message-ID: <auto-000011132992@furshetcrimea.ru>
+Message-ID: <auto-000011168866@furshetcrimea.ru>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
