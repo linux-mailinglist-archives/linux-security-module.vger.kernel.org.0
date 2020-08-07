@@ -2,57 +2,118 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AD023F0AD
-	for <lists+linux-security-module@lfdr.de>; Fri,  7 Aug 2020 18:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF20623F0C6
+	for <lists+linux-security-module@lfdr.de>; Fri,  7 Aug 2020 18:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgHGQKr convert rfc822-to-8bit (ORCPT
+        id S1726094AbgHGQOi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 7 Aug 2020 12:10:47 -0400
-Received: from mail.furshetcrimea.ru ([193.27.243.220]:40572 "EHLO
-        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726773AbgHGQKp (ORCPT
+        Fri, 7 Aug 2020 12:14:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38746 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725934AbgHGQOh (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 7 Aug 2020 12:10:45 -0400
-Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
-  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
-  with ESMTPA id 11168866; Fri, 07 Aug 2020 19:21:51 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 7 Aug 2020 12:14:37 -0400
+Received: from ebiggers-linuxstation.mtv.corp.google.com (unknown [104.132.1.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2407D2065E;
+        Fri,  7 Aug 2020 16:14:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596816877;
+        bh=EZ95wbeqbSW+QwR189FPk2U69kerKfYvd/9xSyu+Sno=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ga++VxnuNCskNN1HQQSS4pc61zB7Vj/mM5/VmS3eULFKjXXQ6O72cPImAFw2iMeyp
+         cKXL9lc+bsNdRhI1V/NMwAqwEwRJ0kJ0r54K3m7kg4TUv3u6zjuYV6NDLYvNgTd2dk
+         L+ool0q9jfGxrYQbUtkxdWpRJ/9DBALtx/xhqwts=
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     stable@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org,
+        syzbot+e6416dabb497a650da40@syzkaller.appspotmail.com,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: [PATCH 4.19/4.14/4.9/4.4] Smack: fix use-after-free in smk_write_relabel_self()
+Date:   Fri,  7 Aug 2020 09:13:24 -0700
+Message-Id: <20200807161324.1690303-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Bei Interesse antworten.
-To:     Recipients <info@furshetcrimea.ru>
-From:   info@furshetcrimea.ru
-Date:   Fri, 07 Aug 2020 17:09:14 +0100
-Reply-To: mattiassjoborg751@gmail.com
-X-Antivirus: Avast (VPS 200807-2, 08/07/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <auto-000011168866@furshetcrimea.ru>
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Schöne Grüße,
+From: Eric Biggers <ebiggers@google.com>
 
-Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
+commit beb4ee6770a89646659e6a2178538d2b13e2654e upstream.
 
-Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
+smk_write_relabel_self() frees memory from the task's credentials with
+no locking, which can easily cause a use-after-free because multiple
+tasks can share the same credentials structure.
 
-Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
+Fix this by using prepare_creds() and commit_creds() to correctly modify
+the task's credentials.
 
-www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
+Reproducer for "BUG: KASAN: use-after-free in smk_write_relabel_self":
 
-Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
+	#include <fcntl.h>
+	#include <pthread.h>
+	#include <unistd.h>
 
-Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
+	static void *thrproc(void *arg)
+	{
+		int fd = open("/sys/fs/smackfs/relabel-self", O_WRONLY);
+		for (;;) write(fd, "foo", 3);
+	}
 
-Freundliche Grüße,
-Mr.Mattias Sjoborg
-(Vorsitzender des Vergütungs- und Nominierungsausschusses)
-Tethys Petroleum.
-London, England
+	int main()
+	{
+		pthread_t t;
+		pthread_create(&t, NULL, thrproc, NULL);
+		thrproc(NULL);
+	}
 
+Reported-by: syzbot+e6416dabb497a650da40@syzkaller.appspotmail.com
+Fixes: 38416e53936e ("Smack: limited capability for changing process label")
+Cc: <stable@vger.kernel.org> # v4.4+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+---
+ security/smack/smackfs.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index 371ae368da35..10ee51d04492 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -2746,7 +2746,6 @@ static int smk_open_relabel_self(struct inode *inode, struct file *file)
+ static ssize_t smk_write_relabel_self(struct file *file, const char __user *buf,
+ 				size_t count, loff_t *ppos)
+ {
+-	struct task_smack *tsp = current_security();
+ 	char *data;
+ 	int rc;
+ 	LIST_HEAD(list_tmp);
+@@ -2771,11 +2770,21 @@ static ssize_t smk_write_relabel_self(struct file *file, const char __user *buf,
+ 	kfree(data);
+ 
+ 	if (!rc || (rc == -EINVAL && list_empty(&list_tmp))) {
++		struct cred *new;
++		struct task_smack *tsp;
++
++		new = prepare_creds();
++		if (!new) {
++			rc = -ENOMEM;
++			goto out;
++		}
++		tsp = new->security;
+ 		smk_destroy_label_list(&tsp->smk_relabel);
+ 		list_splice(&list_tmp, &tsp->smk_relabel);
++		commit_creds(new);
+ 		return count;
+ 	}
+-
++out:
+ 	smk_destroy_label_list(&list_tmp);
+ 	return rc;
+ }
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+2.28.0.236.gb10cc79966-goog
 
