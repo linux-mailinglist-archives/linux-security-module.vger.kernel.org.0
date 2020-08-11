@@ -2,68 +2,59 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45640241D1C
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Aug 2020 17:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D8F241D28
+	for <lists+linux-security-module@lfdr.de>; Tue, 11 Aug 2020 17:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728917AbgHKPZs (ORCPT
+        id S1728907AbgHKPas (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 11 Aug 2020 11:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
+        Tue, 11 Aug 2020 11:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728851AbgHKPZr (ORCPT
+        with ESMTP id S1728833AbgHKPap (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 11 Aug 2020 11:25:47 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACD6C06174A
-        for <linux-security-module@vger.kernel.org>; Tue, 11 Aug 2020 08:25:46 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id i80so6862586lfi.13
-        for <linux-security-module@vger.kernel.org>; Tue, 11 Aug 2020 08:25:46 -0700 (PDT)
+        Tue, 11 Aug 2020 11:30:45 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68B8C061787
+        for <linux-security-module@vger.kernel.org>; Tue, 11 Aug 2020 08:30:44 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id m22so13537710eje.10
+        for <linux-security-module@vger.kernel.org>; Tue, 11 Aug 2020 08:30:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=szeredi.hu; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bx6crtxCZeThOx4D4bD3ehsUEC/VPmmXSGnr3LbBSBM=;
-        b=fuVOZ6VXbzk9u1owlS5IWY/26dqpjDl8Zn92+ZwUfu1Iht5ylUjVdvAnr4KRzCh7VV
-         901ieKbmeI/uj2OiDMkFTEr6IDlawY4EVR5ym128Z6kvWcI5hAIhMBgVCcgpeT57dS6W
-         FJmGAlO9FQumMVHcvcBKzUuxybYBj4tt5eXdQ=
+        bh=2+Iq2qCHUHVaNAKHuF0ZSvBIxw9aZEr5eRrwEH0pyDM=;
+        b=UHuiqJr7X2atxIGSHLT+svSK5gdNsubwckkEdoLhXVa0P5T2fMneByo6aZKzG8LldX
+         T1q+WwMY0FUEt+jhdI91DgqUpJ4E3NQyPft4lnwP2z3OP679ywggUOEnwc9ZpPQSZeqm
+         UJZcOolg7KSv4Nk5wS9SsRafbH+gx/jq+8o2c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bx6crtxCZeThOx4D4bD3ehsUEC/VPmmXSGnr3LbBSBM=;
-        b=PeOJvwMc4V2/7NpmJAi1Lyr+VTXyRE6hPXoHRv1//BLKYdzZrSOFCBOZZf3UCBHRDJ
-         XAioKpvP+PLWoCTsjRi+vAuRrIBfrgvKiu2vbar03LY8oIZAKRUa48v0Dcz1XMAbMaq8
-         Q/LGNrcGgI4dYGXAh4Z13F/dUen6YcuiEvRD00QS4W8sx9LFYsJiyerS76uypfbFMKuV
-         oJEn1agKWiDTqebOR5eBjtHfKXnlvgyAh9kpzpz+3q68xzMMBIz2Hp9FR/V8Q43Ddt7g
-         luH0IG9V6fSYawAI1mFVYYyCb5HpRX0t1B1NYbYZcF6OTbxoB45CmScJg8OTK/+96OKv
-         7oeA==
-X-Gm-Message-State: AOAM533PdOLkWAGPX7OFIazxU4F/OXbvIjcuSn4rFNPgyAd7s97npBS5
-        qFSegTie6M234J3X6k2hLP+i65Z7TZQ=
-X-Google-Smtp-Source: ABdhPJwIghWIAH+WZawmltsIVTkQpJUyisrZSCOz+2KmRVeZMtxbq+1xim+StletYezrFj+GIBWDCg==
-X-Received: by 2002:a19:9149:: with SMTP id y9mr3590772lfj.81.1597159544401;
-        Tue, 11 Aug 2020 08:25:44 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id e4sm10129311ljo.77.2020.08.11.08.25.43
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Aug 2020 08:25:44 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id h19so13954690ljg.13
-        for <linux-security-module@vger.kernel.org>; Tue, 11 Aug 2020 08:25:43 -0700 (PDT)
-X-Received: by 2002:a2e:545:: with SMTP id 66mr3363842ljf.285.1597159240486;
- Tue, 11 Aug 2020 08:20:40 -0700 (PDT)
+        bh=2+Iq2qCHUHVaNAKHuF0ZSvBIxw9aZEr5eRrwEH0pyDM=;
+        b=nd6bs2RH6p+TmOHZOQgG1XNXop0QY8hGuYA78F8BVdpJ3NJR++mj5/Liue50Y6QT0y
+         xbGQPtdV1xPBEhmMtmBBi6x0C5viR0FcxTzukR93h3Ncc8sNi8DTK2JNUVK6HD+Eqy5q
+         UHUSYIiXrhH3lZk/NETfufsU4cex35PB7P9gym1Hpgc5L2m/xz+eYETougnsquEYa5jV
+         AKitZbsIQtRMLW6yCr4dY6rUY2me+xeGMDRbwNM6LFWCrm3XrfKvfbEmTyJWf7U4mwEI
+         bZDlI/1Vntqbz24yiZDJBTSd2mGoLGY4tt/TlMhHc9hoGkTUSSKyNJmgJOlP+kC0hg1B
+         CLJA==
+X-Gm-Message-State: AOAM530CnY5lVskWZorLalNg8m1EbKZ7VgUX/Orj8qThMPrrv1LjNZvr
+        tMogQppckdc7GvMSWf/BiJwKx+IEQ0x7E/iW/T18TA==
+X-Google-Smtp-Source: ABdhPJzBzum8mnm+vTGkWQzIaTCUoEszBkoemTUzdbDb+99lWLtwfHPa77uVvxYBE8u6HRWpehJ7Yt8BQd5fvoZKDLs=
+X-Received: by 2002:a17:907:94ca:: with SMTP id dn10mr26676759ejc.110.1597159843363;
+ Tue, 11 Aug 2020 08:30:43 -0700 (PDT)
 MIME-Version: 1.0
 References: <1842689.1596468469@warthog.procyon.org.uk> <1845353.1596469795@warthog.procyon.org.uk>
  <CAJfpegunY3fuxh486x9ysKtXbhTE0745ZCVHcaqs9Gww9RV2CQ@mail.gmail.com>
  <ac1f5e3406abc0af4cd08d818fe920a202a67586.camel@themaw.net>
  <CAJfpegu8omNZ613tLgUY7ukLV131tt7owR+JJ346Kombt79N0A@mail.gmail.com>
- <CAJfpegtNP8rQSS4Z14Ja4x-TOnejdhDRTsmmDD-Cccy2pkfVVw@mail.gmail.com> <20200811135419.GA1263716@miu.piliscsaba.redhat.com>
-In-Reply-To: <20200811135419.GA1263716@miu.piliscsaba.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 11 Aug 2020 08:20:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjzLmMRf=QG-n+1HnxWCx4KTQn9+OhVvUSJ=ZCQd6Y1WA@mail.gmail.com>
-Message-ID: <CAHk-=wjzLmMRf=QG-n+1HnxWCx4KTQn9+OhVvUSJ=ZCQd6Y1WA@mail.gmail.com>
+ <CAJfpegtNP8rQSS4Z14Ja4x-TOnejdhDRTsmmDD-Cccy2pkfVVw@mail.gmail.com>
+ <20200811135419.GA1263716@miu.piliscsaba.redhat.com> <CAHk-=wjzLmMRf=QG-n+1HnxWCx4KTQn9+OhVvUSJ=ZCQd6Y1WA@mail.gmail.com>
+In-Reply-To: <CAHk-=wjzLmMRf=QG-n+1HnxWCx4KTQn9+OhVvUSJ=ZCQd6Y1WA@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 11 Aug 2020 17:30:32 +0200
+Message-ID: <CAJfpegtWai+5Tzxi1_G+R2wEZz0q66uaOFndNE0YEQSDjq0f_A@mail.gmail.com>
 Subject: Re: file metadata via fs API (was: [GIT PULL] Filesystem Information)
-To:     Miklos Szeredi <miklos@szeredi.hu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         David Howells <dhowells@redhat.com>,
         Al Viro <viro@zeniv.linux.org.uk>, Karel Zak <kzak@redhat.com>,
@@ -81,53 +72,41 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-[ I missed the beginning of this discussion, so maybe this was already
-suggested ]
-
-On Tue, Aug 11, 2020 at 6:54 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
+On Tue, Aug 11, 2020 at 5:20 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
+> [ I missed the beginning of this discussion, so maybe this was already
+> suggested ]
+>
+> On Tue, Aug 11, 2020 at 6:54 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
 > >
-> > E.g.
-> >   openat(AT_FDCWD, "foo/bar//mnt/info", O_RDONLY | O_ALT);
+> > >
+> > > E.g.
+> > >   openat(AT_FDCWD, "foo/bar//mnt/info", O_RDONLY | O_ALT);
+> >
+> > Proof of concept patch and test program below.
 >
-> Proof of concept patch and test program below.
+> I don't think this works for the reasons Al says, but a slight
+> modification might.
+>
+> IOW, if you do something more along the lines of
+>
+>        fd = open(""foo/bar", O_PATH);
+>        metadatafd = openat(fd, "metadataname", O_ALT);
+>
+> it might be workable.
 
-I don't think this works for the reasons Al says, but a slight
-modification might.
+That would have been my backup suggestion, in case the unified
+namespace doesn't work out.
 
-IOW, if you do something more along the lines of
+I wouldn't think the normal lookup rules really get in the way if we
+explicitly enable alternative path lookup with a flag.  The rules just
+need to be documented.
 
-       fd = open(""foo/bar", O_PATH);
-       metadatafd = openat(fd, "metadataname", O_ALT);
+What's the disadvantage of doing it with a single lookup WITH an enabling flag?
 
-it might be workable.
+It's definitely not going to break anything, so no backward
+compatibility issues whatsoever.
 
-So you couldn't do it with _one_ pathname, because that is always
-fundamentally going to hit pathname lookup rules.
-
-But if you start a new path lookup with new rules, that's fine.
-
-This is what I think xattrs should always have done, because they are
-broken garbage.
-
-In fact, if we do it right, I think we could have "getxattr()" be 100%
-equivalent to (modulo all the error handling that this doesn't do, of
-course):
-
-  ssize_t getxattr(const char *path, const char *name,
-                        void *value, size_t size)
-  {
-     int fd, attrfd;
-
-     fd = open(path, O_PATH);
-     attrfd = openat(fd, name, O_ALT);
-     close(fd);
-     read(attrfd, value, size);
-     close(attrfd);
-  }
-
-and you'd still use getxattr() and friends as a shorthand (and for
-POSIX compatibility), but internally in the kernel we'd have a
-interface around that "xattrs are just file handles" model.
-
-               Linus
+Thanks,
+Miklos
