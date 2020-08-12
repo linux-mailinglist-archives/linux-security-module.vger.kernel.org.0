@@ -2,195 +2,137 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B37242F4A
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 Aug 2020 21:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4F8242F67
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 Aug 2020 21:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726727AbgHLTbP (ORCPT
+        id S1726768AbgHLTea (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 12 Aug 2020 15:31:15 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:51194 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726685AbgHLTbN (ORCPT
+        Wed, 12 Aug 2020 15:34:30 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:56387 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726567AbgHLTe2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 12 Aug 2020 15:31:13 -0400
-Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id AFB8F20B490F;
-        Wed, 12 Aug 2020 12:31:12 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AFB8F20B490F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1597260673;
-        bh=dl4AP1i8JV+YnqMmI4cnuYcfwZNhDk56gzoeOIvJWD4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DrpNiLGuE7CfnVRD0Etx2OffpwQ6uf7ETRYGWnRz9wmyl+EKPrMpQvdpJPz3+5xvk
-         cdiuFpj/5KprQQGoCD0uWHKDlYBGFtjLuM5wN//i07/Lkxz7EndIorYaveZ3tuAV5X
-         sZsaQHtFC62E+fQyxHj6/jUG0bEOIID/5sSFCC9Q=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        nramas@linux.microsoft.com
-Subject: [PATCH 3/3] IMA: define IMA hook to measure critical data from kernel components
-Date:   Wed, 12 Aug 2020 12:31:02 -0700
-Message-Id: <20200812193102.18636-4-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200812193102.18636-1-tusharsu@linux.microsoft.com>
-References: <20200812193102.18636-1-tusharsu@linux.microsoft.com>
+        Wed, 12 Aug 2020 15:34:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597260866;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9pSEoniKEkFNSbD4TVkJ4Otoswkj5jDImE3i/ppi82o=;
+        b=XzEheugoQtlYzcbFfnnod43CgVF2mWOJpalaOEUxK3g4qw1aIxdwyNUjylFSg6SfLh7CQL
+        /pqYKVFNw3SYlGWlkz9+MJfTiO+8FQ5cDP/3RsfzwQ7Qnti5UnZ995C0oTFG4kwcS8ImcL
+        pCo4h9En890oxqdIb7vYMlwsXe8e7aY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-394-PsWf2ViBP-2ePLGug1Gcog-1; Wed, 12 Aug 2020 15:34:23 -0400
+X-MC-Unique: PsWf2ViBP-2ePLGug1Gcog-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B39E61902EB3;
+        Wed, 12 Aug 2020 19:34:20 +0000 (UTC)
+Received: from fogou.chygwyn.com (unknown [10.33.36.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 239A3100AE52;
+        Wed, 12 Aug 2020 19:34:13 +0000 (UTC)
+Subject: Re: file metadata via fs API
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Karel Zak <kzak@redhat.com>,
+        Jeff Layton <jlayton@redhat.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Christian Brauner <christian@brauner.io>,
+        Lennart Poettering <lennart@poettering.net>,
+        Linux API <linux-api@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1842689.1596468469@warthog.procyon.org.uk>
+ <1845353.1596469795@warthog.procyon.org.uk>
+ <CAJfpegunY3fuxh486x9ysKtXbhTE0745ZCVHcaqs9Gww9RV2CQ@mail.gmail.com>
+ <ac1f5e3406abc0af4cd08d818fe920a202a67586.camel@themaw.net>
+ <CAJfpegu8omNZ613tLgUY7ukLV131tt7owR+JJ346Kombt79N0A@mail.gmail.com>
+ <CAJfpegtNP8rQSS4Z14Ja4x-TOnejdhDRTsmmDD-Cccy2pkfVVw@mail.gmail.com>
+ <20200811135419.GA1263716@miu.piliscsaba.redhat.com>
+ <CAHk-=wjzLmMRf=QG-n+1HnxWCx4KTQn9+OhVvUSJ=ZCQd6Y1WA@mail.gmail.com>
+ <52483.1597190733@warthog.procyon.org.uk>
+ <CAHk-=wiPx0UJ6Q1X=azwz32xrSeKnTJcH8enySwuuwnGKkHoPA@mail.gmail.com>
+From:   Steven Whitehouse <swhiteho@redhat.com>
+Message-ID: <066f9aaf-ee97-46db-022f-5d007f9e6edb@redhat.com>
+Date:   Wed, 12 Aug 2020 20:34:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAHk-=wiPx0UJ6Q1X=azwz32xrSeKnTJcH8enySwuuwnGKkHoPA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Currently, IMA does not provide a generic function to kernel components
-to measure their data. A generic function provided by IMA would
-enable various parts of the kernel with easier and faster on-boarding to
-use IMA infrastructure, would avoid code duplication, and consistent
-usage of IMA policy CRITICAL_DATA+data_sources across the kernel.
+Hi,
 
-Define a generic IMA function ima_measure_critical_data() to measure
-data from various kernel components. Limit the measurement to the
-components that are specified in the IMA policy - 
-CRITICAL_DATA+data_sources.
-Update process_buffer_measurement() to return the status code of the
-operation.
+On 12/08/2020 19:18, Linus Torvalds wrote:
+> On Tue, Aug 11, 2020 at 5:05 PM David Howells <dhowells@redhat.com> wrote:
+>> Well, the start of it was my proposal of an fsinfo() system call.
+> Ugh. Ok, it's that thing.
+>
+> This all seems *WAY* over-designed - both your fsinfo and Miklos' version.
+>
+> What's wrong with fstatfs()? All the extra magic metadata seems to not
+> really be anything people really care about.
+>
+> What people are actually asking for seems to be some unique mount ID,
+> and we have 16 bytes of spare information in 'struct statfs64'.
+>
+> All the other fancy fsinfo stuff seems to be "just because", and like
+> complete overdesign.
+>
+> Let's not add system calls just because we can.
+>
+>               Linus
+>
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
----
- include/linux/ima.h               |  9 ++++++++
- security/integrity/ima/ima.h      |  8 +++----
- security/integrity/ima/ima_main.c | 37 ++++++++++++++++++++++++-------
- 3 files changed, 42 insertions(+), 12 deletions(-)
+The point of this is to give us the ability to monitor mounts from 
+userspace. The original inspiration was rtnetlink, in that we need a 
+"dump" operation to give us a snapshot of the current mount state, plus 
+then a stream of events which allow us to keep that state updated. The 
+tricky question is what happens in case of overflow of the events queue, 
+and just like netlink, that needs a resync of the current state to fix 
+that, since we can't block mounts, of course.
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index d15100de6cdd..865332ecedcb 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -26,6 +26,9 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- extern void ima_post_path_mknod(struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
-+extern int ima_measure_critical_data(const char *event_name,
-+				     const char *event_data_source,
-+				     const void *buf, int buf_len);
- 
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
-@@ -104,6 +107,12 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
- }
- 
- static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
-+static inline int ima_measure_critical_data(const char *event_name,
-+					    const char *event_data_source,
-+					    const void *buf, int buf_len)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /* CONFIG_IMA */
- 
- #ifndef CONFIG_IMA_KEXEC
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 99773dfa2541..e65ab067e700 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -266,10 +266,10 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
- 			   struct evm_ima_xattr_data *xattr_value,
- 			   int xattr_len, const struct modsig *modsig, int pcr,
- 			   struct ima_template_desc *template_desc);
--void process_buffer_measurement(struct inode *inode, const void *buf,
--				int buf_len, const char *eventname,
--				enum ima_hooks func, int pcr,
--				const char *func_data);
-+int process_buffer_measurement(struct inode *inode, const void *buf,
-+			       int buf_len, const char *eventname,
-+			       enum ima_hooks func, int pcr,
-+			       const char *func_data);
- void ima_audit_measurement(struct integrity_iint_cache *iint,
- 			   const unsigned char *filename);
- int ima_alloc_init_template(struct ima_event_data *event_data,
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index a8740b7ea417..129bcaaf13e2 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -736,10 +736,11 @@ int ima_load_data(enum kernel_load_data_id id)
-  *
-  * Based on policy, the buffer is measured into the ima log.
-  */
--void process_buffer_measurement(struct inode *inode, const void *buf,
--				int buf_len, const char *eventname,
--				enum ima_hooks func, int pcr,
--				const char *func_data)
-+
-+int process_buffer_measurement(struct inode *inode, const void *buf,
-+			       int buf_len, const char *eventname,
-+			       enum ima_hooks func, int pcr,
-+			       const char *func_data)
- {
- 	int ret = 0;
- 	const char *audit_cause = "ENOMEM";
-@@ -759,7 +760,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf,
- 	u32 secid;
- 
- 	if (!ima_policy_flag)
--		return;
-+		return 0;
- 
- 	/*
- 	 * Both LSM hooks and auxilary based buffer measurements are
-@@ -773,7 +774,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf,
- 		action = ima_get_action(inode, current_cred(), secid, 0, func,
- 					&pcr, &template, func_data);
- 		if (!(action & IMA_MEASURE))
--			return;
-+			return 0;
- 	}
- 
- 	if (!pcr)
-@@ -788,7 +789,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf,
- 			pr_err("template %s init failed, result: %d\n",
- 			       (strlen(template->name) ?
- 				template->name : template->fmt), ret);
--			return;
-+			return ret;
- 		}
- 	}
- 
-@@ -820,7 +821,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf,
- 					func_measure_str(func),
- 					audit_cause, ret, 0, ret);
- 
--	return;
-+	return ret;
- }
- 
- /**
-@@ -847,6 +848,26 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
- 	fdput(f);
- }
- 
-+/**
-+ * ima_measure_critical_data - measure critical data
-+ * @event_name: name for the given data
-+ * @event_data_source: name of the event data source
-+ * @buf: pointer to buffer containing data to measure
-+ * @size: Number of bytes in buf
-+ *
-+ * Buffers can only be measured, not appraised.
-+ */
-+int ima_measure_critical_data(const char *event_name,
-+			      const char *event_data_source,
-+			      const void *buf, int buf_len)
-+{
-+	if (!event_name || !event_data_source || !buf || !buf_len)
-+		return -EINVAL;
-+
-+	return process_buffer_measurement(NULL, buf, buf_len, event_name,
-+					  CRITICAL_DATA, 0, event_data_source);
-+}
-+
- static int __init init_ima(void)
- {
- 	int error;
--- 
-2.17.1
+The fsinfo syscall was designed to be the "dump" operation in this 
+system. David's other patch set provides the stream of events. So the 
+two are designed to work together. We had the discussion on using 
+netlink, of whatever form a while back, and there are a number of 
+reasons why that doesn't work (namespace being one).
+
+I think fstatfs might also suffer from the issue of not being easy to 
+call on things for which you have no path (e.g. over-mounted mounts) 
+Plus we need to know which paths to query, which is why we need to 
+enumerate the mounts in the first place - how would we get the fds for 
+each mount? It might give you some sb info, but it doesn't tell you the 
+options that the sb is mounted with, and it doesn't tell you where it is 
+mounted either.
+
+The overall aim is to solve some issues relating to scaling to large 
+numbers of mount in systemd and autofs, and also to provide a 
+generically useful interface that other tools may use to monitor mounts 
+in due course too. Currently parsing /proc/mounts is the only option, 
+and that tends to be slow and is certainly not atomic. Extension to 
+other sb related messages is a future goal, quota being one possible 
+application for the notifications.
+
+If there is a simpler way to get to that goal, then thats all to the 
+good, and we should definitely consider it,
+
+Steve.
+
+
+
 
