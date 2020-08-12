@@ -2,88 +2,60 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6C524307B
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 Aug 2020 23:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E54E243113
+	for <lists+linux-security-module@lfdr.de>; Thu, 13 Aug 2020 00:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgHLVa6 (ORCPT
+        id S1726523AbgHLWpX (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 12 Aug 2020 17:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbgHLVa6 (ORCPT
+        Wed, 12 Aug 2020 18:45:23 -0400
+Received: from mx1.activ.net ([80.96.1.5]:37848 "EHLO mx1.activ.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726485AbgHLWpX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 12 Aug 2020 17:30:58 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F36C061383;
-        Wed, 12 Aug 2020 14:30:58 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k5yKX-00EISw-Ml; Wed, 12 Aug 2020 21:30:41 +0000
-Date:   Wed, 12 Aug 2020 22:30:41 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Karel Zak <kzak@redhat.com>, Jeff Layton <jlayton@redhat.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Christian Brauner <christian@brauner.io>,
-        Lennart Poettering <lennart@poettering.net>,
-        Linux API <linux-api@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: file metadata via fs API (was: [GIT PULL] Filesystem Information)
-Message-ID: <20200812213041.GV1236603@ZenIV.linux.org.uk>
-References: <CAHk-=whE42mFLi8CfNcdB6Jc40tXsG3sR+ThWAFihhBwfUbczA@mail.gmail.com>
- <CAJfpegtXtj2Q1wsR-3eUNA0S=_skzHF0CEmcK_Krd8dtKkWkGA@mail.gmail.com>
- <20200812143957.GQ1236603@ZenIV.linux.org.uk>
- <CAJfpegvFBdp3v9VcCp-wNDjZnQF3q6cufb-8PJieaGDz14sbBg@mail.gmail.com>
- <20200812150807.GR1236603@ZenIV.linux.org.uk>
- <CAJfpegsQF1aN4XJ_8j977rnQESxc=Kcn7Z2C+LnVDWXo4PKhTQ@mail.gmail.com>
- <20200812163347.GS1236603@ZenIV.linux.org.uk>
- <CAJfpegv8MTnO9YAiFUJPjr3ryeT82=KWHUpLFmgRNOcQfeS17w@mail.gmail.com>
- <20200812173911.GT1236603@ZenIV.linux.org.uk>
- <20200812183326.GU1236603@ZenIV.linux.org.uk>
+        Wed, 12 Aug 2020 18:45:23 -0400
+X-Greylist: delayed 415 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Aug 2020 18:45:22 EDT
+Received: from mx1.activ.net (localhost.localdomain [127.0.0.1])
+        by mx1.activ.net (Proxmox) with ESMTP id 668C73CEF;
+        Thu, 13 Aug 2020 01:38:18 +0300 (EEST)
+Received: from mail.activnet.info (mail.activnet.info [82.208.154.171])
+        by mx1.activ.net (Proxmox) with ESMTP id 5AA833CEB;
+        Thu, 13 Aug 2020 01:38:18 +0300 (EEST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.activnet.info (Postfix) with ESMTP id 353A3802FAA;
+        Thu, 13 Aug 2020 01:38:19 +0300 (EEST)
+X-Virus-Scanned: amavisd-new at chance.ro
+Received: from mail.activnet.info ([127.0.0.1])
+        by localhost (mail.activnet.info [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pxE89JkHpKCG; Thu, 13 Aug 2020 01:38:18 +0300 (EEST)
+Received: from newmail.uav.ro (cp3.activ.net [80.96.1.3])
+        (using TLSv1 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: stiinte.exacte@uav.ro)
+        by mail.activnet.info (Postfix) with ESMTP id 196F5802FA2;
+        Thu, 13 Aug 2020 01:38:14 +0300 (EEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200812183326.GU1236603@ZenIV.linux.org.uk>
+Date:   Thu, 13 Aug 2020 00:38:10 +0200
+From:   Mavis <stiinte.exacte@uav.ro>
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?=E8=89=AF=E3=81=84=E3=83=8B=E3=83=A5=E3=83=BC=E3=82=B9?=
+Reply-To: maviswanczykbest@gmail.com
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <1aaaa214553d747e5ba0c6bdcfde89b9@uav.ro>
+X-Sender: stiinte.exacte@uav.ro
+Organization: Mavis
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Aug 12, 2020 at 07:33:26PM +0100, Al Viro wrote:
+こんにちは
 
-> BTW, what would such opened files look like from /proc/*/fd/* POV?  And
-> what would happen if you walk _through_ that symlink, with e.g. ".."
-> following it?  Or with names of those attributes, for that matter...
-> What about a normal open() of such a sucker?  It won't know where to
-> look for your ->private_data...
-> 
-> FWIW, you keep refering to regularity of this stuff from the syscall
-> POV, but it looks like you have no real idea of what subset of the
-> things available for normal descriptors will be available for those.
+758.7ドルの巨額の受賞者であるMavis Wanczykです。メガ·ミリオンズ
+Jackpotと私が直接あなたに200万ドル寄付します。
 
-Another question: what should happen with that sucker on umount of
-the filesystem holding the underlying object?  Should it be counted
-as pinning that fs?
+フルネームと携帯電話番号で返信する
 
-Who controls what's in that tree?  If we plan to have xattrs there,
-will they be in a flat tree, or should it mirror the hierarchy of
-xattrs?  When is it populated?  open() time?  What happens if we
-add/remove an xattr after that point?
+Mavis Wanczyk
 
-If we open the same file several times, what should we get?  A full
-copy of the tree every time, with all coherency being up to whatever's
-putting attributes there?
-
-What are the permissions needed to do lookups in that thing?
-
-All of that is about semantics and the answers are needed before we
-start looking into implementations.  "Whatever my implementation
-does" is _not_ a good way to go, especially since that'll be cast
-in stone as soon as API becomes exposed to userland...
