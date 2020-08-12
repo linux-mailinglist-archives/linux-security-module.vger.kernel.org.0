@@ -2,62 +2,25 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F94242DEC
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 Aug 2020 19:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF48242E19
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 Aug 2020 19:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgHLRQv (ORCPT
+        id S1726394AbgHLRj3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 12 Aug 2020 13:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        Wed, 12 Aug 2020 13:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726456AbgHLRQu (ORCPT
+        with ESMTP id S1725993AbgHLRj2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 12 Aug 2020 13:16:50 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26077C061386
-        for <linux-security-module@vger.kernel.org>; Wed, 12 Aug 2020 10:16:50 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id l23so2099916edv.11
-        for <linux-security-module@vger.kernel.org>; Wed, 12 Aug 2020 10:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l2X1UTNYtxtD9AqiCPxyGHdXjAbLFgoKechHodwc0Uo=;
-        b=nAulnfLe5uw3GGbI4m3Tum5zj3laHAl5lzMTlbg9w0RQxUXyfMRVW0PUksH7Rp6ZFN
-         Yq1nSYnweoNegqNGWk3syhijVezp9QgoP5+S2Di2gSfqAOOXVBABYvP7X+VVxFs5wL3L
-         ah3L2fnd4E2PFbne2qLQvAQDr2nPtHrCw32E8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l2X1UTNYtxtD9AqiCPxyGHdXjAbLFgoKechHodwc0Uo=;
-        b=UM5NCijQrxWX7cjGYhjKw/hgluAQClXVOTEFrwRqim3fjxPugvkfMNtliTC2jjBd03
-         bzfXbYZ0nSq1QI7bTfcBONGKA3TFuR4uOSNelMKnyz28TgO0g6P54JfGBqg9mGNfVrQi
-         g08J0rX1jtVrbDY5/zOD3FH58p//JPVa8bhc+xWSI5zwUA9jk6j9Ug3dhvOdFKyBrt1J
-         yTCdkZpyHZS/hXlRqyZZvt1aa81P/3Hsfh6AkmHPcPgZH978LgYVDiFMgcCC2/VtK+uo
-         nAnXZEdMMUfHzanUTRLJ0QK3TFToEnBhLGapYCBILErdYJZF67gLuFqOHbDxRx0EXolN
-         F22g==
-X-Gm-Message-State: AOAM5313qtZQC3ziYhN6jHEBYIVxuYMOeDhViB4hSUhJf0Mv6/zCciIS
-        26QW1hEhr9wqKKHc9oQz1uH/qBMJ0tf6GQAxmKpQgA==
-X-Google-Smtp-Source: ABdhPJxug2NLkyVDrt4SDzElrjaxLcJAHADPULDoz4hIsy0nzQPyH+wfb4erX3M7q+SBR4y2ScqFzLhktBpqx/PV0jA=
-X-Received: by 2002:a05:6402:12c4:: with SMTP id k4mr905858edx.358.1597252608671;
- Wed, 12 Aug 2020 10:16:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <a6cd01ed-918a-0ed7-aa87-0585db7b6852@schaufler-ca.com>
- <CAJfpegvUBpb+C2Ab=CLAwWffOaeCedr-b7ZZKZnKvF4ph1nJrw@mail.gmail.com>
- <CAG48ez3Li+HjJ6-wJwN-A84WT2MFE131Dt+6YiU96s+7NO5wkQ@mail.gmail.com>
- <CAJfpeguh5VaDBdVkV3FJtRsMAvXHWUcBfEpQrYPEuX9wYzg9dA@mail.gmail.com>
- <CAHk-=whE42mFLi8CfNcdB6Jc40tXsG3sR+ThWAFihhBwfUbczA@mail.gmail.com>
- <CAJfpegtXtj2Q1wsR-3eUNA0S=_skzHF0CEmcK_Krd8dtKkWkGA@mail.gmail.com>
- <20200812143957.GQ1236603@ZenIV.linux.org.uk> <CAJfpegvFBdp3v9VcCp-wNDjZnQF3q6cufb-8PJieaGDz14sbBg@mail.gmail.com>
- <20200812150807.GR1236603@ZenIV.linux.org.uk> <CAJfpegsQF1aN4XJ_8j977rnQESxc=Kcn7Z2C+LnVDWXo4PKhTQ@mail.gmail.com>
- <20200812163347.GS1236603@ZenIV.linux.org.uk>
-In-Reply-To: <20200812163347.GS1236603@ZenIV.linux.org.uk>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 12 Aug 2020 19:16:37 +0200
-Message-ID: <CAJfpegv8MTnO9YAiFUJPjr3ryeT82=KWHUpLFmgRNOcQfeS17w@mail.gmail.com>
-Subject: Re: file metadata via fs API (was: [GIT PULL] Filesystem Information)
-To:     Al Viro <viro@zeniv.linux.org.uk>
+        Wed, 12 Aug 2020 13:39:28 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CFAC061383;
+        Wed, 12 Aug 2020 10:39:26 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k5uiV-00ECnX-Nd; Wed, 12 Aug 2020 17:39:12 +0000
+Date:   Wed, 12 Aug 2020 18:39:11 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Miklos Szeredi <miklos@szeredi.hu>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Jann Horn <jannh@google.com>,
         Casey Schaufler <casey@schaufler-ca.com>,
@@ -73,34 +36,59 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Ian Kent <raven@themaw.net>,
         LSM <linux-security-module@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: file metadata via fs API (was: [GIT PULL] Filesystem Information)
+Message-ID: <20200812173911.GT1236603@ZenIV.linux.org.uk>
+References: <CAG48ez3Li+HjJ6-wJwN-A84WT2MFE131Dt+6YiU96s+7NO5wkQ@mail.gmail.com>
+ <CAJfpeguh5VaDBdVkV3FJtRsMAvXHWUcBfEpQrYPEuX9wYzg9dA@mail.gmail.com>
+ <CAHk-=whE42mFLi8CfNcdB6Jc40tXsG3sR+ThWAFihhBwfUbczA@mail.gmail.com>
+ <CAJfpegtXtj2Q1wsR-3eUNA0S=_skzHF0CEmcK_Krd8dtKkWkGA@mail.gmail.com>
+ <20200812143957.GQ1236603@ZenIV.linux.org.uk>
+ <CAJfpegvFBdp3v9VcCp-wNDjZnQF3q6cufb-8PJieaGDz14sbBg@mail.gmail.com>
+ <20200812150807.GR1236603@ZenIV.linux.org.uk>
+ <CAJfpegsQF1aN4XJ_8j977rnQESxc=Kcn7Z2C+LnVDWXo4PKhTQ@mail.gmail.com>
+ <20200812163347.GS1236603@ZenIV.linux.org.uk>
+ <CAJfpegv8MTnO9YAiFUJPjr3ryeT82=KWHUpLFmgRNOcQfeS17w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegv8MTnO9YAiFUJPjr3ryeT82=KWHUpLFmgRNOcQfeS17w@mail.gmail.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Aug 12, 2020 at 6:33 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Wed, Aug 12, 2020 at 05:13:14PM +0200, Miklos Szeredi wrote:
+On Wed, Aug 12, 2020 at 07:16:37PM +0200, Miklos Szeredi wrote:
+> On Wed, Aug 12, 2020 at 6:33 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > On Wed, Aug 12, 2020 at 05:13:14PM +0200, Miklos Szeredi wrote:
+> 
+> > > Why does it have to have a struct mount?  It does not have to use
+> > > dentry/mount based path lookup.
+> >
+> > What the fuck?  So we suddenly get an additional class of objects
+> > serving as kinda-sorta analogues of dentries *AND* now struct file
+> > might refer to that instead of a dentry/mount pair - all on the VFS
+> > level?  And so do all the syscalls you want to allow for such "pathnames"?
+> 
+> The only syscall I'd want to allow is open, everything else would be
+> on the open files themselves.
+> 
+> file->f_path can refer to an anon mount/inode, the real object is
+> referred to by file->private_data.
+> 
+> The change to namei.c would be on the order of ~10 lines.  No other
+> parts of the VFS would be affected.
 
-> > Why does it have to have a struct mount?  It does not have to use
-> > dentry/mount based path lookup.
->
-> What the fuck?  So we suddenly get an additional class of objects
-> serving as kinda-sorta analogues of dentries *AND* now struct file
-> might refer to that instead of a dentry/mount pair - all on the VFS
-> level?  And so do all the syscalls you want to allow for such "pathnames"?
+If some of the things you open are directories (and you *have* said that
+directories will be among those just upthread, and used references to
+readdir() as argument in favour of your approach elsewhere in the thread),
+you will have to do something about fchdir().  And that's the least of
+the issues.
 
-The only syscall I'd want to allow is open, everything else would be
-on the open files themselves.
+>   Maybe I'm optimistic; we'll
+> see...
 
-file->f_path can refer to an anon mount/inode, the real object is
-referred to by file->private_data.
 
-The change to namei.c would be on the order of ~10 lines.  No other
-parts of the VFS would be affected.   Maybe I'm optimistic; we'll
-see...
+> Now off to something completely different.  Back on Tuesday.
 
-Now off to something completely different.  Back on Tuesday.
-
-Thanks,
-Miklos
+... after the window closes.  You know, it's really starting to look
+like rather nasty tactical games...
