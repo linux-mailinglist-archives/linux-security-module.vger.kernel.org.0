@@ -2,117 +2,97 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4DE244D5F
-	for <lists+linux-security-module@lfdr.de>; Fri, 14 Aug 2020 19:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0EA245816
+	for <lists+linux-security-module@lfdr.de>; Sun, 16 Aug 2020 16:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbgHNRM4 (ORCPT
+        id S1726904AbgHPObu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 14 Aug 2020 13:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        Sun, 16 Aug 2020 10:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727894AbgHNRMz (ORCPT
+        with ESMTP id S1729476AbgHPO3y (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 14 Aug 2020 13:12:55 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087D3C061384
-        for <linux-security-module@vger.kernel.org>; Fri, 14 Aug 2020 10:12:55 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id c16so10654568ejx.12
-        for <linux-security-module@vger.kernel.org>; Fri, 14 Aug 2020 10:12:54 -0700 (PDT)
+        Sun, 16 Aug 2020 10:29:54 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F03C06136C
+        for <linux-security-module@vger.kernel.org>; Sun, 16 Aug 2020 07:28:37 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id g8so11268985wmk.3
+        for <linux-security-module@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qYuJ9NHHO+qnoSaHW0PlHI0fiXCW7zDlZFu/ah5uFho=;
-        b=QZC+eNnnLcPaczh2E7Iym7nx2PQpiiDURT50bzxJZUsdtO86YlDCUBTiiWPJAXsWnA
-         U49+U2ao8O1Ymle/LvRAFOmnKYrXWnRy0koTc1q4uPH3YiU1H0Bu0Wp5Fx58rMDOEorn
-         lZP3mAReqkIBPzLDybNfptRtvd5sif7WdrmnA=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
+         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
+         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
+         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
+         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
+         yMKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qYuJ9NHHO+qnoSaHW0PlHI0fiXCW7zDlZFu/ah5uFho=;
-        b=DC5us9Iy+ulpijuXbImoyDWBudrDu6BUwrmb+5msxAepQ7RDDDbjKABOjV8UBtUA7u
-         Aq0+HCiSzpcrBY7tmVmECQOci94kuctZRjE+7dYX+gH7A6lDl6hr7ZXaPmiEm3PwGdTk
-         PR8SDNCNmoNR36ecBTed2fle93ZQbqpM5fochvT3JCEARXsVrMXcCVydGp2cXXyN+M3D
-         +A59O438ZQLvuW246DrDyKFzYec0D6IlgCeIFxK4OInSmMfYIp83ON4+canhzXNW0Sz0
-         AvVzfY+Xt+DJAxKDEnHoDjvcwl1h6DKzNVmsxEf3jCJGiRZUcq2d5mBh9w+h5vqyTlzT
-         C4Tg==
-X-Gm-Message-State: AOAM532jqJZ00FXaSzrccBStt9XVcK+yNOq15S6natFfTWw0lWplWLYu
-        ovM0hFKzQxLMk9KrjVEmXbbLKRhV/Nlcwg==
-X-Google-Smtp-Source: ABdhPJwKVQvuJGfY+swwmK2810FNVNrO033r90cLo+SkOSRlGqMBLJIvhcvMSvJamYuMkbaZlQyY4w==
-X-Received: by 2002:a17:906:36c2:: with SMTP id b2mr3258484ejc.238.1597425173470;
-        Fri, 14 Aug 2020 10:12:53 -0700 (PDT)
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
-        by smtp.gmail.com with ESMTPSA id v20sm6941282ejr.12.2020.08.14.10.12.52
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Aug 2020 10:12:52 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id m22so10637849eje.10
-        for <linux-security-module@vger.kernel.org>; Fri, 14 Aug 2020 10:12:52 -0700 (PDT)
-X-Received: by 2002:a2e:9a11:: with SMTP id o17mr1629608lji.314.1597424726058;
- Fri, 14 Aug 2020 10:05:26 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=lzCT2F3GWqEgvTSigGxFzIqeTktWT8MBLcFRE+ymZwkldCc3z0CkopdHrL+Pw0rTUh
+         A8sxkPKPAm/uydKBRFlaV57v6C6uXHghazZ1mT57zry6ZmhAOEhj/nqOBNqUJJeShWyo
+         vsaPwD2KjKReQeUi9gpmFLzM0gAdqtsgcR6Rr/sYyVsY7z5A6BC9e7f8yS1Vtn5Ijmjw
+         pN6UQ0xrGuEBZK76cSM6bgcPcy4yAJ6Tx32SIbb27/vlO+1N3vfwTYMnthpEGMHVKNDF
+         Qpiv9qQSgMLrBi1IiYCkQTeXMBpkvGoI9dfR2Ro709j4MA1RLOP0kuJe/gc3/01mZyfA
+         XRgg==
+X-Gm-Message-State: AOAM533eptK1LL/hTIwCvfAfjhGcTjDXtE3eFYmQJxlUjDj0vEmGS9qQ
+        RYfPdsc3379/OgGNz5cx1E244jGyLFdBqTEibcs=
+X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
+X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
+ Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <1842689.1596468469@warthog.procyon.org.uk> <1845353.1596469795@warthog.procyon.org.uk>
- <CAJfpegunY3fuxh486x9ysKtXbhTE0745ZCVHcaqs9Gww9RV2CQ@mail.gmail.com>
- <ac1f5e3406abc0af4cd08d818fe920a202a67586.camel@themaw.net>
- <CAJfpegu8omNZ613tLgUY7ukLV131tt7owR+JJ346Kombt79N0A@mail.gmail.com>
- <CAJfpegtNP8rQSS4Z14Ja4x-TOnejdhDRTsmmDD-Cccy2pkfVVw@mail.gmail.com>
- <20200811135419.GA1263716@miu.piliscsaba.redhat.com> <CAHk-=wjzLmMRf=QG-n+1HnxWCx4KTQn9+OhVvUSJ=ZCQd6Y1WA@mail.gmail.com>
- <52483.1597190733@warthog.procyon.org.uk> <CAHk-=wiPx0UJ6Q1X=azwz32xrSeKnTJcH8enySwuuwnGKkHoPA@mail.gmail.com>
- <679456f1-5867-4017-b1d6-95197d2fa81b@auristor.com>
-In-Reply-To: <679456f1-5867-4017-b1d6-95197d2fa81b@auristor.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 14 Aug 2020 10:05:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whLhwum2E+qperD=TypGHXxoBtXOu-HHDd9L9_XFFyiaA@mail.gmail.com>
-Message-ID: <CAHk-=whLhwum2E+qperD=TypGHXxoBtXOu-HHDd9L9_XFFyiaA@mail.gmail.com>
-Subject: Re: file metadata via fs API (was: [GIT PULL] Filesystem Information)
-To:     Jeffrey E Altman <jaltman@auristor.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Karel Zak <kzak@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Christian Brauner <christian@brauner.io>,
-        Lennart Poettering <lennart@poettering.net>,
-        Linux API <linux-api@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
+ -0700 (PDT)
+Reply-To: sctnld11170@tlen.pl
+From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
+Date:   Sun, 16 Aug 2020 07:28:30 -0700
+Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
+Subject: Hello, Please
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Aug 12, 2020 at 8:53 PM Jeffrey E Altman <jaltman@auristor.com> wrote:
->
-> For the AFS community, fsinfo offers a method of exposing some server
-> and volume properties that are obtained via "path ioctls" in OpenAFS and
-> AuriStorFS.  Some example of properties that might be exposed include
-> answers to questions such as:
+--=20
+Dear Friend,
 
-Note that several of the questions you ask aren't necessarily
-mount-related at all.
+I'm Mr. Scott Donald a Successful businessMan dealing with
+Exportation, I got your mail contact through search to let you know my
+intension and my Ugly Situation Am a dying Man here in Los Angeles
+California Hospital Bed in (USA), I Lost my Wife and my only Daughter
+for Covid-19 and I also have a problem in my Health and I can die
+anytime I Know,
 
-Doing it by mount ends up being completely the wrong thing.
+I have a project that I am about to hand over to you. and I already
+instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
+of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
+able you
+to give 50% of this fund to Charitable Home in your State and take 50%
+don't think otherwise and why would anybody send someone you barely
+know to help you deliver a message, help me do this for the happiness
+of my soul and for God to mercy me and my Family and give Us a good
+place.
 
-For example, at a minimum, these guys may well be per-directory (or
-even possibly per-file):
+please, do as I said there was someone from your State that I deeply
+love so very very much and I miss her so badly I have no means to
+reach any Charitable Home there. that is why I go for a personal
+search of the Country and State and I got your mail contact through
+search to let you know my Bitterness and please, help me is getting
+Dark I ask my Doctor to help me keep you notice failure for me to
+reach you in person Your urgent Response, here is my Doctor Whats-app
+Number for urgent notice +13019692737
 
->  * where is a mounted volume hosted? which fileservers, named by uuid
->  * what is the block size? 1K, 4K, ...
->  * are directories just-send-8, case-sensitive, case-preserving, or
->    case-insensitive?
->  * if not just-send-8, what character set is used?
->  * if Unicode, what normalization rules? etc.
->  * what volume security policy (authn, integ, priv) is assigned, if any?
->  * what is the replication policy, if any?
->  * what is the volume encryption policy, if any?
+Hope To Hear From You. I'm sending this email to you for the second
+time yet no response from you.
 
-and trying to solve this with some kind of "mount info" is pure garbage.
+My Regards.
 
-Honestly, I really think you may want an extended [f]statfs(), not
-some mount tracking.
-
-                 Linus
+Mr. Scott Donald
+CEO
