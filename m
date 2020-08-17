@@ -2,97 +2,143 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0EA245816
-	for <lists+linux-security-module@lfdr.de>; Sun, 16 Aug 2020 16:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389BB245A9C
+	for <lists+linux-security-module@lfdr.de>; Mon, 17 Aug 2020 04:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgHPObu (ORCPT
+        id S1726417AbgHQCHo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 16 Aug 2020 10:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        Sun, 16 Aug 2020 22:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729476AbgHPO3y (ORCPT
+        with ESMTP id S1726340AbgHQCHm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 16 Aug 2020 10:29:54 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F03C06136C
-        for <linux-security-module@vger.kernel.org>; Sun, 16 Aug 2020 07:28:37 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id g8so11268985wmk.3
-        for <linux-security-module@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
-         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
-         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
-         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
-         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
-         yMKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=lzCT2F3GWqEgvTSigGxFzIqeTktWT8MBLcFRE+ymZwkldCc3z0CkopdHrL+Pw0rTUh
-         A8sxkPKPAm/uydKBRFlaV57v6C6uXHghazZ1mT57zry6ZmhAOEhj/nqOBNqUJJeShWyo
-         vsaPwD2KjKReQeUi9gpmFLzM0gAdqtsgcR6Rr/sYyVsY7z5A6BC9e7f8yS1Vtn5Ijmjw
-         pN6UQ0xrGuEBZK76cSM6bgcPcy4yAJ6Tx32SIbb27/vlO+1N3vfwTYMnthpEGMHVKNDF
-         Qpiv9qQSgMLrBi1IiYCkQTeXMBpkvGoI9dfR2Ro709j4MA1RLOP0kuJe/gc3/01mZyfA
-         XRgg==
-X-Gm-Message-State: AOAM533eptK1LL/hTIwCvfAfjhGcTjDXtE3eFYmQJxlUjDj0vEmGS9qQ
-        RYfPdsc3379/OgGNz5cx1E244jGyLFdBqTEibcs=
-X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
-X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
- Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
+        Sun, 16 Aug 2020 22:07:42 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06BAC061786;
+        Sun, 16 Aug 2020 19:07:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BVHVt2tgsz9sTK;
+        Mon, 17 Aug 2020 12:07:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1597630055;
+        bh=NUVL7wCS3C8AjNkO2+T076Su0229oneQ8GpXoq1sVvU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y5P7UBdUOrLfq15c3+yrX4hNJWlKwBdrKEbO8tlxw0ZVi2cZFHtIr+yJ4e8YPwmzR
+         g46Pt4KUM4u7jB+Mv9FqHIDw1vwRlBY7kasTmjYHk0L5KQRHDJz/qG1FQh+pDLwZ6D
+         W6aVMYc/yWy9CLPsDlep0dlgdut718OAA4BgbZqLhKZ3y/CNVKrH0/hZ/nxdGf/v25
+         qBIJqNXV+/Y254JsnPQD0UU8KReuWTA5iQ4icYxTxEsyWRrtleh0QpEVOFpDKdUnG3
+         H2IIqDFGIVPF8tlY6sUHJFalhjnD3/cImvI4GJNx2bwyDYu9tPq4IoXediWbO4L4y1
+         N97kpC0IJMJJQ==
+Date:   Mon, 17 Aug 2020 12:07:31 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Amol Grover <frextrite@gmail.com>, James Morris <jmorris@namei.org>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH RESEND] device_cgroup: Fix RCU list debugging warning
+Message-ID: <20200817120731.218e1bc5@canb.auug.org.au>
+In-Reply-To: <20200608041734.GA10911@mail.hallyn.com>
+References: <20200406105950.GA2285@workstation-kernel-dev>
+        <20200607062340.7be7e8d5@canb.auug.org.au>
+        <20200607190840.GG4455@paulmck-ThinkPad-P72>
+        <20200608041734.GA10911@mail.hallyn.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
- -0700 (PDT)
-Reply-To: sctnld11170@tlen.pl
-From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
-Date:   Sun, 16 Aug 2020 07:28:30 -0700
-Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
-Subject: Hello, Please
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_//6LbZg5fP0ZKmOnWMaIHeAu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+--Sig_//6LbZg5fP0ZKmOnWMaIHeAu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Sun, 7 Jun 2020 23:17:34 -0500 "Serge E. Hallyn" <serge@hallyn.com> wrot=
+e:
+> On Sun, Jun 07, 2020 at 12:08:40PM -0700, Paul E. McKenney wrote:
+> > On Sun, Jun 07, 2020 at 06:23:40AM +1000, Stephen Rothwell wrote: =20
+> > >=20
+> > > On Mon, 6 Apr 2020 16:29:50 +0530 Amol Grover <frextrite@gmail.com> w=
+rote: =20
+> > > >
+> > > > exceptions may be traversed using list_for_each_entry_rcu()
+> > > > outside of an RCU read side critical section BUT under the
+> > > > protection of decgroup_mutex. Hence add the corresponding
+> > > > lockdep expression to fix the following false-positive
+> > > > warning:
+> > > >=20
+> > > > [    2.304417] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > [    2.304418] WARNING: suspicious RCU usage
+> > > > [    2.304420] 5.5.4-stable #17 Tainted: G            E
+> > > > [    2.304422] -----------------------------
+> > > > [    2.304424] security/device_cgroup.c:355 RCU-list traversed in n=
+on-reader section!!
+> > > >=20
+> > > > Signed-off-by: Amol Grover <frextrite@gmail.com>
+> > > > ---
+> > > >  security/device_cgroup.c | 3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > >=20
+> > > > diff --git a/security/device_cgroup.c b/security/device_cgroup.c
+> > > > index 7d0f8f7431ff..b7da9e0970d9 100644
+> > > > --- a/security/device_cgroup.c
+> > > > +++ b/security/device_cgroup.c
+> > > > @@ -352,7 +352,8 @@ static bool match_exception_partial(struct list=
+_head *exceptions, short type,
+> > > >  {
+> > > >  	struct dev_exception_item *ex;
+> > > > =20
+> > > > -	list_for_each_entry_rcu(ex, exceptions, list) {
+> > > > +	list_for_each_entry_rcu(ex, exceptions, list,
+> > > > +				lockdep_is_held(&devcgroup_mutex)) {
+> > > >  		if ((type & DEVCG_DEV_BLOCK) && !(ex->type & DEVCG_DEV_BLOCK))
+> > > >  			continue;
+> > > >  		if ((type & DEVCG_DEV_CHAR) && !(ex->type & DEVCG_DEV_CHAR))
+> > >=20
+> > > I have been carrying the above patch in linux-next for some time now.
+> > > I have been carrying it because it fixes problems for syzbot (see the
+> > > third warning in
+> > > https://lore.kernel.org/linux-next/CACT4Y+YnjK+kq0pfb5fe-q1bqe2T1jq_m=
+vKHf--Z80Z3wkyK1Q@mail.gmail.com/).
+> > > Is there some reason it has not been applied to some tree? =20
+> >=20
+> > The RCU changes on which this patch depends have long since made it to
+> > mainline, so it can go up any tree.  I can take it if no one else will,
+> > but it might be better going in via the security tree.
+>=20
+> James, do you mind pulling it in?
+
+I am still carrying this patch.  Has it been superceded, or is it still
+necessary?
+
 --=20
-Dear Friend,
+Cheers,
+Stephen Rothwell
 
-I'm Mr. Scott Donald a Successful businessMan dealing with
-Exportation, I got your mail contact through search to let you know my
-intension and my Ugly Situation Am a dying Man here in Los Angeles
-California Hospital Bed in (USA), I Lost my Wife and my only Daughter
-for Covid-19 and I also have a problem in my Health and I can die
-anytime I Know,
+--Sig_//6LbZg5fP0ZKmOnWMaIHeAu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-I have a project that I am about to hand over to you. and I already
-instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
-of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
-able you
-to give 50% of this fund to Charitable Home in your State and take 50%
-don't think otherwise and why would anybody send someone you barely
-know to help you deliver a message, help me do this for the happiness
-of my soul and for God to mercy me and my Family and give Us a good
-place.
+-----BEGIN PGP SIGNATURE-----
 
-please, do as I said there was someone from your State that I deeply
-love so very very much and I miss her so badly I have no means to
-reach any Charitable Home there. that is why I go for a personal
-search of the Country and State and I got your mail contact through
-search to let you know my Bitterness and please, help me is getting
-Dark I ask my Doctor to help me keep you notice failure for me to
-reach you in person Your urgent Response, here is my Doctor Whats-app
-Number for urgent notice +13019692737
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl855mMACgkQAVBC80lX
+0Gz3+Qf7B8fFdkNeo/Cqcxhz3GWuAnNd4IeG9m8dsl67F77sOJ7U8WNnX95ZsmAw
+TWCTwMDVm07rUAoqBu6uz3GxgpYTpP8lM/j4Q37kSuR3xVb6spXMyIM4J3hHC2Tz
+J9pHZyBomsYrRdcAMIY2WumPPo2euve4S1MesruCJLvcA7kRrgsO3VMtPMdY72LC
+5xFffg3NVRvkrJb4njqABLk9SgQObnMzBQdXYpKEy3b2XTGtQHb0T8JMc101xrnA
+PxlA2JQP2T7h/HEDuK4+Nm2PbeNonAviErZjnTvRpAP6krQ9YM0wdxPVmfaFjoa3
+5X0NEOx5ikRI+XktkfuPmLUeiAzmYQ==
+=Nz8C
+-----END PGP SIGNATURE-----
 
-Hope To Hear From You. I'm sending this email to you for the second
-time yet no response from you.
-
-My Regards.
-
-Mr. Scott Donald
-CEO
+--Sig_//6LbZg5fP0ZKmOnWMaIHeAu--
