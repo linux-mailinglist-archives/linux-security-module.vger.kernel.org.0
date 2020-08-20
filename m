@@ -2,35 +2,56 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 009A724C54F
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Aug 2020 20:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97E824C5AA
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Aug 2020 20:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbgHTS25 (ORCPT
+        id S1727110AbgHTSgr (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 20 Aug 2020 14:28:57 -0400
-Received: from namei.org ([65.99.196.166]:60258 "EHLO namei.org"
+        Thu, 20 Aug 2020 14:36:47 -0400
+Received: from namei.org ([65.99.196.166]:60306 "EHLO namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726977AbgHTS24 (ORCPT
+        id S1726701AbgHTSgq (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 20 Aug 2020 14:28:56 -0400
+        Thu, 20 Aug 2020 14:36:46 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 07KISY9J029978;
-        Thu, 20 Aug 2020 18:28:35 GMT
-Date:   Fri, 21 Aug 2020 04:28:34 +1000 (AEST)
+        by namei.org (8.14.4/8.14.4) with ESMTP id 07KIZcXA030350;
+        Thu, 20 Aug 2020 18:35:38 GMT
+Date:   Fri, 21 Aug 2020 04:35:38 +1000 (AEST)
 From:   James Morris <jmorris@namei.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-cc:     Amol Grover <frextrite@gmail.com>,
+To:     Lokesh Gidra <lokeshgidra@google.com>
+cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Eric Biggers <ebiggers@kernel.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH RESEND] device_cgroup: Fix RCU list debugging warning
-In-Reply-To: <20200817120731.218e1bc5@canb.auug.org.au>
-Message-ID: <alpine.LRH.2.21.2008210427590.29407@namei.org>
-References: <20200406105950.GA2285@workstation-kernel-dev> <20200607062340.7be7e8d5@canb.auug.org.au> <20200607190840.GG4455@paulmck-ThinkPad-P72> <20200608041734.GA10911@mail.hallyn.com> <20200817120731.218e1bc5@canb.auug.org.au>
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Daniel Colascione <dancol@dancol.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        KP Singh <kpsingh@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Aaron Goidel <acgoide@tycho.nsa.gov>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Adrian Reber <areber@redhat.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        kaleshsingh@google.com, calin@google.com, surenb@google.com,
+        nnk@google.com, jeffv@google.com, kernel-team@android.com
+Subject: Re: [PATCH v6 0/3] SELinux support for anonymous inodes and UFFD
+In-Reply-To: <20200807224941.3440722-1-lokeshgidra@google.com>
+Message-ID: <alpine.LRH.2.21.2008210433591.29407@namei.org>
+References: <20200807224941.3440722-1-lokeshgidra@google.com>
 User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -38,20 +59,20 @@ Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, 17 Aug 2020, Stephen Rothwell wrote:
+On Fri, 7 Aug 2020, Lokesh Gidra wrote:
 
-> > > mainline, so it can go up any tree.  I can take it if no one else will,
-> > > but it might be better going in via the security tree.
-> > 
-> > James, do you mind pulling it in?
-> 
-> I am still carrying this patch.  Has it been superceded, or is it still
-> necessary?
+> Userfaultfd in unprivileged contexts could be potentially very
+> useful. We'd like to harden userfaultfd to make such unprivileged use
+> less risky. This patch series allows SELinux to manage userfaultfd
+> file descriptors and in the future, other kinds of
+> anonymous-inode-based file descriptor.  SELinux policy authors can
+> apply policy types to anonymous inodes by providing name-based
+> transition rules keyed off the anonymous inode internal name (
+> "[userfaultfd]" in the case of userfaultfd(2) file descriptors) and
+> applying policy to the new SIDs thus produced.
 
-It appears to be necessary.
+Can you expand more on why this would be useful, e.g. use-cases?
 
-Applied to
-git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git fixes-v5.9
 
 -- 
 James Morris
