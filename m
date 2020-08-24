@@ -2,106 +2,92 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C2A24FE6E
-	for <lists+linux-security-module@lfdr.de>; Mon, 24 Aug 2020 15:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CFC24FE8D
+	for <lists+linux-security-module@lfdr.de>; Mon, 24 Aug 2020 15:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbgHXNCm (ORCPT
+        id S1726578AbgHXNHu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 24 Aug 2020 09:02:42 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57318 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726189AbgHXNCm (ORCPT
+        Mon, 24 Aug 2020 09:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726581AbgHXNHt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 24 Aug 2020 09:02:42 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07OCYq1w141833;
-        Mon, 24 Aug 2020 09:02:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=fIp8RUpwJMp0o6RgRzKqxD/GxlQSQy5lvqbrxwtLA8w=;
- b=WY+72C9l25B0HRlffPVL3R0LB8VlovEYorcNtb9R/Pnhb5+95jLsn2TGv29Uq5F8Pp+u
- TfLfYT88+GS9wWL/ElHZ4+E5n/3cJnWsF+319YBe4GX4iBqWKldPpryASzqtNsEMFYtB
- 71IUZQXXiGQHeAL5S/Bw57m7q/DQqqyNHAUgxiI++EbKioARAIjHa6z8ep8nsJCRYmyd
- +Ea7wHIP83DjZhdJ2lf9ak7KdnmAYlrd4qwlJtOTY9ZLePveKAsxGaS7cA7RbcOHEPUs
- xLLVyyZ8vjhzQyT33Q7PwBdQYub3sAeSAB+HG4Ag7tKVWNc6o7yhvyig7iRIFZY94fNr 2g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3349q90h4f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 09:02:35 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07OCap6U152042;
-        Mon, 24 Aug 2020 09:02:30 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3349q90h2j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 09:02:30 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07OCwKCs008721;
-        Mon, 24 Aug 2020 13:02:27 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 332uk6acgs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Aug 2020 13:02:27 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07OD2P3b32702740
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Aug 2020 13:02:25 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2503D4C058;
-        Mon, 24 Aug 2020 13:02:25 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 924614C050;
-        Mon, 24 Aug 2020 13:02:23 +0000 (GMT)
-Received: from sig-9-65-254-31.ibm.com (unknown [9.65.254.31])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Aug 2020 13:02:23 +0000 (GMT)
-Message-ID: <ccf18096bf715d0eb8f68899c324452a4b044124.camel@linux.ibm.com>
-Subject: Re: [PATCH 10/11] ima: Don't ignore errors from
- crypto_shash_update()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
-        stable@vger.kernel.org
-Date:   Mon, 24 Aug 2020 09:02:22 -0400
-In-Reply-To: <20200618160458.1579-10-roberto.sassu@huawei.com>
-References: <20200618160329.1263-2-roberto.sassu@huawei.com>
-         <20200618160458.1579-10-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-24_11:2020-08-24,2020-08-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 malwarescore=0
- adultscore=0 bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=3
- phishscore=0 mlxlogscore=909 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008240099
+        Mon, 24 Aug 2020 09:07:49 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6E0C061574
+        for <linux-security-module@vger.kernel.org>; Mon, 24 Aug 2020 06:07:48 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id ba10so7969123edb.3
+        for <linux-security-module@vger.kernel.org>; Mon, 24 Aug 2020 06:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=++wVUAAL3FCIdU3Q7RBNPjfei0JC7QKDqs3d4gqLkD8=;
+        b=PuPOlDaS3kto3atocjIDkePSCIXXIRpoKpPyuqY5As+lkPNxkYEIQAP9a/Nn2cf/ec
+         zaFf5NNaSgVhzUZzGa4jT0EjXhrn3xTBWwhYneS2DFlEwstp+iof/WuOGObTgk2w8lW+
+         cljb0Y9Qi3MmisyXxw2zwe8hcu0J00jevDGQsZ5Vec6b3SmGNOhiu0mujwKUpkoDGR87
+         Sl5LHDc7XtsFWO/JUWqiA0gGgJ3A7tljnA1y0ltBpKiAg22PHAD56l8cejbAXvw9RAOK
+         dwRkIuhsCAcYD0Rjth+QWS9fNGlDwFJlPb3RtgULuRw46wLEZ5oJELovinbtoaNvIcT4
+         xZ7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=++wVUAAL3FCIdU3Q7RBNPjfei0JC7QKDqs3d4gqLkD8=;
+        b=SOjDxsv+LR/Tylgj1SBGKCycW6owWoYB7bh5Djj3lNt7GtaTV5QJN//uISM/s+UYAm
+         xq8lTRl2M1XJWMF2MJ7bN8pebdCZS9MWLz685IQbnPPpWQ4NwDYHVLOQBf59Qjkaw7i2
+         Ubc1Xbj3HZcs9UOzxBptWzJT7x6v5zjZF4pC5e8XnPSAeZrw1aRHebUYouk3e8SaB5ql
+         Jrgb3bSAhi2kMs1lWwHSUy8OA1jDe7yS9ve9P9CGDj7klhA5AiN63HJy8RLMHs8zyeUp
+         XRb9ZG2S53VE1CjH9s7JnJM3YDy9LlY7ej3ez1vJ8Mm8pgBmMpABpVM4aaRXDzApENVO
+         MAuQ==
+X-Gm-Message-State: AOAM530Jm0EIAK1iC1KHfwOEqipWEJYomvsJ+NRQuChzXopKyxt1SDtZ
+        nnEXZ2h7+hPcdxGWq0Cty8KdYfVQy99yvmwAbi7e
+X-Google-Smtp-Source: ABdhPJwvkn1F/xNYp0KGduUPe7dAvQCo8OrTtHv27xZTH9XHSiNh4240+VtyTkIu/D5pi9/aoxporbUNR2gCrGL2wZ4=
+X-Received: by 2002:aa7:ca46:: with SMTP id j6mr2684340edt.128.1598274467311;
+ Mon, 24 Aug 2020 06:07:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200807165134.3913-1-rdunlap@infradead.org> <CAHC9VhQW-8pem59QHQctx9UNhMNLEAjNwDiOU1ODz9wX5B_tdQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhQW-8pem59QHQctx9UNhMNLEAjNwDiOU1ODz9wX5B_tdQ@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 24 Aug 2020 09:07:36 -0400
+Message-ID: <CAHC9VhT4EG3qs76=nfQ7sLW9t9V-jXymmczV9Ygq+9T+Qz4Pfg@mail.gmail.com>
+Subject: Re: [PATCH] security: selinux: delete repeated words in comments
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 2020-06-18 at 18:04 +0200, Roberto Sassu wrote:
-> Errors returned by crypto_shash_update() are not checked in
-> ima_calc_boot_aggregate_tfm() and thus can be overwritten at the next
-> iteration of the loop. This patch adds a check after calling
-> crypto_shash_update() and returns immediately if the result is not zero.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 3323eec921efd ("integrity: IMA as an integrity service provider")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri, Aug 7, 2020 at 2:09 PM Paul Moore <paul@paul-moore.com> wrote:
+> On Fri, Aug 7, 2020 at 12:51 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> >
+> > Drop a repeated word in comments.
+> > {open, is, then}
+> >
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+> > Cc: Eric Paris <eparis@parisplace.org>
+> > Cc: selinux@vger.kernel.org
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: linux-security-module@vger.kernel.org
+> > ---
+> >  security/selinux/hooks.c |    6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> This obviously looks fine, but it will need to wait until after the
+> merge window closes.  I'll send another reply once it is merged.
 
-Verification of the boot_aggregate will fail, but yes this should be
-fixed.  This patch  and the next should be moved up front to the
-beginning of the patch set.
+Hi Randy, this got buried a bit due to vacations and other patches but
+I just merged it into selinux/next.  Thanks for your patience.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
-thanks,
-
-Mimi
-
+-- 
+paul moore
+www.paul-moore.com
