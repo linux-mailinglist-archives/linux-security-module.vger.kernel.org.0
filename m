@@ -2,124 +2,102 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBA72552C3
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 Aug 2020 03:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBC0255BC0
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 Aug 2020 15:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgH1B5Y (ORCPT
+        id S1726436AbgH1N41 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 27 Aug 2020 21:57:24 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:38500 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728353AbgH1B5V (ORCPT
+        Fri, 28 Aug 2020 09:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726579AbgH1N4T (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 27 Aug 2020 21:57:21 -0400
-Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5BEF120C27C5;
-        Thu, 27 Aug 2020 18:57:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5BEF120C27C5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1598579840;
-        bh=/oNkgUW9zSIuVV9hzhJDu+lqIFChEKC0BuHbXmW5m3Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cyz/YHC3WltXaOC2W1Hu7dvdzMKlVlrik0OyrAKvc3bYjiBOWarXk/sMLKG5Rg302
-         fbDJaPYrLp1qHtc2FhixkEyPt5aRcJ9BDsKfLQZuW7svV2PjA1czuY27qzJ0eRdFwn
-         TEcJ+5giT+ILXTcXHTRG3KaEqEnPdHzOp8Y6cqDM=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH v3 6/6] IMA: validate supported kernel data sources before measurement
-Date:   Thu, 27 Aug 2020 18:57:04 -0700
-Message-Id: <20200828015704.6629-7-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
-References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
+        Fri, 28 Aug 2020 09:56:19 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA019C061264;
+        Fri, 28 Aug 2020 06:56:18 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id o4so1410808wrn.0;
+        Fri, 28 Aug 2020 06:56:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tNnC4MJvn0YjQrnjipXsey8gWX0l8zpkvsFTkYPZMtw=;
+        b=DFvfG+CV/NabXSoKc7HsspXMZviwC0JAjzPglV9m/Z7tQZwz2Mm32FnFtmXnTecyQ7
+         y4DbbKRszeuKs6Olk3lbgPsOrFYiBX70UBisAn41m4r5NXiKpxbKyBJ2IGqyBltVMDcy
+         SQDebQmU0xzznWVNqklhsKDg177XCldRwVQbj/Yc7MVrAgJEeCUHXafE1um6q13Esu7q
+         Dv01Cst5L424ZexQCWPzONb9ZehitJJ5WvMjG+1uJcbKoFC1+ph42iBwiDqO3E4qTyRK
+         Ava4Tl+KdmwmSJ9QJFMDHhNiqTSo35zKZFwmp+fNU3iE2RkkiV1wC3HBWWLsAl4Ah8qh
+         jhgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tNnC4MJvn0YjQrnjipXsey8gWX0l8zpkvsFTkYPZMtw=;
+        b=bHwyH/6IDkW4/u3Uo+UGh68kAv6JJED7p7r9gyig3VUVAunWiPhhyjVLTXBVYkonl1
+         JgKI0zeXTzrbASElbooWk7rGDy5s3RBiKATTA9+rKjnRBlB/9LwS/yAPFE5JQbPxYiRh
+         r9JsxZVfCm6Iry6TqVckHhVqbCzbdCOr2dkL1xc6E0TrTK2YDkLKlATykXeQRTA5D3jZ
+         +r7xvv3X9cEJR9SGTykDFpAFlBPd6Kmahtubev7Z28Sa7741Kw1muwANCM6AgDUn4agH
+         2dpkc3C8HHLyekjjXiWXA153dOmFrSGandA7+OqYSdMV0l9asGlXcfU5EIX7u5BCd+QK
+         JD7g==
+X-Gm-Message-State: AOAM5328p6aRqprxH0UeoN7+6yrvQXRa1Z4sIvc1Dww4JNVibucv7bip
+        p1KLViFEOq4LSL8Bc2NesTU=
+X-Google-Smtp-Source: ABdhPJzOs7Ukf3vzvCE+JHO212o3YOfnaw8XSZwGBL6HLr2/Z+gFDcduI5jRVM3FYHa4X3MXC5gSUw==
+X-Received: by 2002:adf:fec6:: with SMTP id q6mr1651248wrs.59.1598622977484;
+        Fri, 28 Aug 2020 06:56:17 -0700 (PDT)
+Received: from lenovo-laptop.home ([2a00:23c4:4b87:b300:cc3a:c411:9a4b:dba6])
+        by smtp.gmail.com with ESMTPSA id v11sm2046865wrr.10.2020.08.28.06.56.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Aug 2020 06:56:16 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+Cc:     Alex Dewar <alex.dewar90@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] netlabel: remove unused param from audit_log_format()
+Date:   Fri, 28 Aug 2020 14:55:23 +0100
+Message-Id: <20200828135523.12867-1-alex.dewar90@gmail.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <CAHC9VhRtTykJVze_93ed+n+v14Ai9J5Mbre9nGEc2rkqbqKc_g@mail.gmail.com>
+References: <CAHC9VhRtTykJVze_93ed+n+v14Ai9J5Mbre9nGEc2rkqbqKc_g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Currently, IMA does not restrict random data sources from measuring their
-data using ima_measure_critical_data(). Any kernel data source can call
-the function, and it's data will get measured as long as the input
-event_data_source is part of the IMA policy -
-CRITICAL_DATA+critical_kernel_data_sources. This may result in IMA log
-getting bloated by random data sources. Supporting random data sources
-at run-time may also impact the reliability of the system. 
+Commit d3b990b7f327 ("netlabel: fix problems with mapping removal")
+added a check to return an error if ret_val != 0, before ret_val is
+later used in a log message. Now it will unconditionally print "...
+res=1". So just drop the check.
 
-To ensure that only data from supported sources are measured, the kernel
-component needs to be added to a compile-time list of supported sources
-(an "allowed list of components") in ima.h. IMA then validates the input
-parameter - event_data_source passed to ima_measure_critical_data()
-against this allowed list at run-time.
-
-Provide an infrastructure for kernel data sources to be added to
-the supported data sources list at compile-time. Update
-ima_measure_critical_data() to validate, at run-time, that the data
-source is supported before measuring the data.
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Addresses-Coverity: ("Dead code")
+Fixes: d3b990b7f327 ("netlabel: fix problems with mapping removal")
+Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
 ---
- security/integrity/ima/ima.h      | 29 +++++++++++++++++++++++++++++
- security/integrity/ima/ima_main.c |  3 +++
- 2 files changed, 32 insertions(+)
+v2: Still print the res field, because it's useful (Paul)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 00b84052c8f1..ecb0a1e7378f 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -228,6 +228,35 @@ extern const char *const func_tokens[];
+ net/netlabel/netlabel_domainhash.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/net/netlabel/netlabel_domainhash.c b/net/netlabel/netlabel_domainhash.c
+index f73a8382c275e..dc8c39f51f7d3 100644
+--- a/net/netlabel/netlabel_domainhash.c
++++ b/net/netlabel/netlabel_domainhash.c
+@@ -612,9 +612,8 @@ int netlbl_domhsh_remove_entry(struct netlbl_dom_map *entry,
+ 	audit_buf = netlbl_audit_start_common(AUDIT_MAC_MAP_DEL, audit_info);
+ 	if (audit_buf != NULL) {
+ 		audit_log_format(audit_buf,
+-				 " nlbl_domain=%s res=%u",
+-				 entry->domain ? entry->domain : "(default)",
+-				 ret_val == 0 ? 1 : 0);
++				 " nlbl_domain=%s res=1",
++				 entry->domain ? entry->domain : "(default)");
+ 		audit_log_end(audit_buf);
+ 	}
  
- struct modsig;
- 
-+#define __ima_supported_kernel_data_sources(source)	\
-+	source(MIN_SOURCE, min_source)			\
-+	source(MAX_SOURCE, max_source)
-+
-+#define __ima_enum_stringify(ENUM, str) (#str),
-+
-+enum ima_supported_kernel_data_sources {
-+	__ima_supported_kernel_data_sources(__ima_hook_enumify)
-+};
-+
-+static const char * const ima_supported_kernel_data_sources_str[] = {
-+	__ima_supported_kernel_data_sources(__ima_enum_stringify)
-+};
-+
-+static inline bool ima_kernel_data_source_is_supported(const char *source)
-+{
-+	int i;
-+
-+	if (!source)
-+		return false;
-+
-+	for (i = MIN_SOURCE + 1; i < MAX_SOURCE; i++) {
-+		if (!strcmp(ima_supported_kernel_data_sources_str[i], source))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- #ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS
- /*
-  * To track keys that need to be measured.
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index a889bf40cb7e..41be4d1d839e 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -888,6 +888,9 @@ int ima_measure_critical_data(const char *event_name,
- 	if (!event_name || !event_data_source || !buf || !buf_len)
- 		return -EINVAL;
- 
-+	if (!ima_kernel_data_source_is_supported(event_data_source))
-+		return -EPERM;
-+
- 	return process_buffer_measurement(NULL, buf, buf_len, event_name,
- 					  CRITICAL_DATA, 0, event_data_source,
- 					  measure_buf_hash);
 -- 
-2.17.1
+2.28.0
 
