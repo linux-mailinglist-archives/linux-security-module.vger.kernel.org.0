@@ -2,86 +2,58 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2A9255E5F
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 Aug 2020 18:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AAC255E96
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 Aug 2020 18:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728372AbgH1QAq (ORCPT
+        id S1726460AbgH1QJO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 28 Aug 2020 12:00:46 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44760 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728358AbgH1QAe (ORCPT
+        Fri, 28 Aug 2020 12:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726033AbgH1QJO (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 28 Aug 2020 12:00:34 -0400
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2023D20B36E7;
-        Fri, 28 Aug 2020 09:00:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2023D20B36E7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1598630433;
-        bh=rFS7E9EDFK2NArtUO3BlDUuIRiMcxaSWtbaQ0LSrhHI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KzpF/wd+aA6rwHO+q6X+ytLf4Zit/tOWra0KBylE8WuFSrDJsCGifaBLh+1RUbbTl
-         FBPLmMJ/ckkMURFTfM3isJnTZi4vEDBjKHrjqiNxN13CtDifFool7ToFXkHLE1kKlS
-         c46W67h1IpWckpArWJXeeeHxMcFXc7L8tLQCqu1U=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com
-Cc:     tyhicks@linux.microsoft.com, tusharsu@linux.microsoft.com,
-        sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        Fri, 28 Aug 2020 12:09:14 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63CC061264;
+        Fri, 28 Aug 2020 09:09:14 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 7FE321287C095;
+        Fri, 28 Aug 2020 08:52:26 -0700 (PDT)
+Date:   Fri, 28 Aug 2020 09:09:12 -0700 (PDT)
+Message-Id: <20200828.090912.720183995781297697.davem@davemloft.net>
+To:     alex.dewar90@gmail.com
+Cc:     paul@paul-moore.com, kuba@kernel.org, netdev@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] IMA: Support early boot measurement of critical data
-Date:   Fri, 28 Aug 2020 09:00:21 -0700
-Message-Id: <20200828160021.11537-4-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200828160021.11537-1-nramas@linux.microsoft.com>
-References: <20200828160021.11537-1-nramas@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] netlabel: remove unused param from
+ audit_log_format()
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200828135523.12867-1-alex.dewar90@gmail.com>
+References: <CAHC9VhRtTykJVze_93ed+n+v14Ai9J5Mbre9nGEc2rkqbqKc_g@mail.gmail.com>
+        <20200828135523.12867-1-alex.dewar90@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 28 Aug 2020 08:52:26 -0700 (PDT)
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The IMA hook, namely ima_measure_critical_data(), to measure kernel
-critical data requires a custom IMA policy to be loaded.
+From: Alex Dewar <alex.dewar90@gmail.com>
+Date: Fri, 28 Aug 2020 14:55:23 +0100
 
-Update ima_measure_critical_data() to utilize early boot measurement
-support to defer processing data if a custom IMA policy is not yet
-loaded.
+> Commit d3b990b7f327 ("netlabel: fix problems with mapping removal")
+> added a check to return an error if ret_val != 0, before ret_val is
+> later used in a log message. Now it will unconditionally print "...
+> res=1". So just drop the check.
+> 
+> Addresses-Coverity: ("Dead code")
+> Fixes: d3b990b7f327 ("netlabel: fix problems with mapping removal")
+> Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
+> ---
+> v2: Still print the res field, because it's useful (Paul)
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- security/integrity/ima/ima_main.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 41be4d1d839e..ce0ef310c575 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -885,12 +885,22 @@ int ima_measure_critical_data(const char *event_name,
- 			      const void *buf, int buf_len,
- 			      bool measure_buf_hash)
- {
-+	bool queued = false;
-+
- 	if (!event_name || !event_data_source || !buf || !buf_len)
- 		return -EINVAL;
- 
- 	if (!ima_kernel_data_source_is_supported(event_data_source))
- 		return -EPERM;
- 
-+	if (ima_should_queue_data())
-+		queued = ima_queue_data(event_name, buf, buf_len,
-+					event_data_source, CRITICAL_DATA,
-+					measure_buf_hash);
-+
-+	if (queued)
-+		return 0;
-+
- 	return process_buffer_measurement(NULL, buf, buf_len, event_name,
- 					  CRITICAL_DATA, 0, event_data_source,
- 					  measure_buf_hash);
--- 
-2.28.0
-
+Applied to net-next, thank you.
