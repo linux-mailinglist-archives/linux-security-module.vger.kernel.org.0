@@ -2,122 +2,195 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E3B258D8B
-	for <lists+linux-security-module@lfdr.de>; Tue,  1 Sep 2020 13:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6B3258E5E
+	for <lists+linux-security-module@lfdr.de>; Tue,  1 Sep 2020 14:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727058AbgIALmj convert rfc822-to-8bit (ORCPT
+        id S1727949AbgIAMmd (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 1 Sep 2020 07:42:39 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2724 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726928AbgIALl7 (ORCPT
+        Tue, 1 Sep 2020 08:42:33 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:47044 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728031AbgIAMmb (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 1 Sep 2020 07:41:59 -0400
-Received: from lhreml726-chm.china.huawei.com (unknown [172.18.7.106])
-        by Forcepoint Email with ESMTP id F168EDFA3E5FEAFFAA85;
-        Tue,  1 Sep 2020 12:41:57 +0100 (IST)
-Received: from fraeml706-chm.china.huawei.com (10.206.15.55) by
- lhreml726-chm.china.huawei.com (10.201.108.77) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.1913.5; Tue, 1 Sep 2020 12:41:57 +0100
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Tue, 1 Sep 2020 13:41:56 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
- Tue, 1 Sep 2020 13:41:56 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "mjg59@google.com" <mjg59@google.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH 07/11] evm: Set IMA_CHANGE_XATTR/ATTR bit if
- EVM_ALLOW_METADATA_WRITES is set
-Thread-Topic: [PATCH 07/11] evm: Set IMA_CHANGE_XATTR/ATTR bit if
- EVM_ALLOW_METADATA_WRITES is set
-Thread-Index: AQHWRYqWnNLPRhTOMk2ID5bSdlZ6YalHdJUAgAx1KTCAAAkjgIAAJpbA
-Date:   Tue, 1 Sep 2020 11:41:56 +0000
-Message-ID: <7f3dd815639a44ba9b0fb532c217bd21@huawei.com>
-References: <20200618160329.1263-2-roberto.sassu@huawei.com>
-         <20200618160458.1579-7-roberto.sassu@huawei.com>
-         <67cafcf63daf8e418871eb5302e7327ba851e253.camel@linux.ibm.com>
-         <a5e6a5acf2274a6d844b275dacfbabb8@huawei.com>
- <ae06c113ec91442e293f2466cae3dd1b81f241eb.camel@linux.ibm.com>
-In-Reply-To: <ae06c113ec91442e293f2466cae3dd1b81f241eb.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.193.114]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 1 Sep 2020 08:42:31 -0400
+Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kD5bW-0002LN-Fa; Tue, 01 Sep 2020 12:41:38 +0000
+Date:   Tue, 1 Sep 2020 14:41:36 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Lokesh Gidra <lokeshgidra@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        James Morris <jmorris@namei.org>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Daniel Colascione <dancol@dancol.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        KP Singh <kpsingh@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Aaron Goidel <acgoide@tycho.nsa.gov>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Adrian Reber <areber@redhat.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        kaleshsingh@google.com, calin@google.com, surenb@google.com,
+        nnk@google.com, jeffv@google.com, kernel-team@android.com,
+        Daniel Colascione <dancol@google.com>, jannh@google.com
+Subject: Re: [PATCH v8 1/3] Add a new LSM-supporting anonymous inode interface
+Message-ID: <20200901124136.r3krb2p23343licq@wittgenstein>
+References: <20200827063522.2563293-1-lokeshgidra@google.com>
+ <20200827063522.2563293-2-lokeshgidra@google.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200827063522.2563293-2-lokeshgidra@google.com>
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> Sent: Tuesday, September 1, 2020 1:05 PM
-> On Tue, 2020-09-01 at 09:08 +0000, Roberto Sassu wrote:
-> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > > Sent: Monday, August 24, 2020 2:18 PM
-> > > On Thu, 2020-06-18 at 18:04 +0200, Roberto Sassu wrote:
-> > > > When EVM_ALLOW_METADATA_WRITES is set, EVM allows any
-> operation
-> > > on
-> > > > metadata. Its main purpose is to allow users to freely set metadata
-> when
-> > > > they are protected by a portable signature, until the HMAC key is
-> loaded.
-> > > >
-> > > > However, IMA is not notified about metadata changes and, after the
-> first
-> > > > appraisal, always allows access to the files without checking metadata
-> > > > again.
-> > >
-> > > ^after the first successful appraisal
-> > > >
-> > > > This patch checks in evm_reset_status() if EVM_ALLOW_METADATA
-> > > WRITES is
-> > > > enabled and if it is, sets the IMA_CHANGE_XATTR/ATTR bits
-> depending on
-> > > the
-> > > > operation performed. At the next appraisal, metadata are revalidated.
-> > >
-> > > EVM modifying IMA bits crosses the boundary between EVM and IMA.
-> > > There
-> > > is already an IMA post_setattr hook.  IMA could reset its own bit
-> > > there.  If necessary EVM could export as a function it's status info.
-> >
-> > I wouldn't try to guess in IMA when EVM resets its status. We would have
-> > to duplicate the logic to check if an EVM key is loaded, if the passed xattr
-> > is a POSIX ACL, ...
+On Wed, Aug 26, 2020 at 11:35:20PM -0700, Lokesh Gidra wrote:
+> From: Daniel Colascione <dancol@google.com>
 > 
-> Agreed, but IMA could call an EVM function.
+> This change adds a new function, anon_inode_getfd_secure, that creates
+> anonymous-node file with individual non-S_PRIVATE inode to which security
+> modules can apply policy. Existing callers continue using the original
+> singleton-inode kind of anonymous-inode file. We can transition anonymous
+> inode users to the new kind of anonymous inode in individual patches for
+> the sake of bisection and review.
 > 
-> >
-> > I think it is better to set a flag, maybe a new one, directly in EVM, to notify
-> > the integrity subsystem that iint->evm_status is no longer valid.
-> >
-> > If the EVM flag is set, IMA would reset the appraisal flags, as it uses
-> > iint->evm_status for appraisal. We can consider to reset also the measure
-> > flags when we have a template that includes file metadata.
+> The new function accepts an optional context_inode parameter that
+> callers can use to provide additional contextual information to
+> security modules for granting/denying permission to create an anon inode
+> of the same type.
 > 
-> When would IMA read the EVM flag?   Who would reset the flag?  At what
-> point would it be reset?   Just as EVM shouldn't be resetting the IMA
-> flag, IMA shouldn't be resetting the EVM flag.
+> For example, in case of userfaultfd, the created inode is a
+> 'logical child' of the context_inode (userfaultfd inode of the
+> parent process) in the sense that it provides the security context
+> required during creation of the child process' userfaultfd inode.
+> 
+> Signed-off-by: Daniel Colascione <dancol@google.com>
+> 
+> [Fix comment documenting return values of inode_init_security_anon()]
+> [Add context_inode description in comments to anon_inode_getfd_secure()]
+> [Remove definition of anon_inode_getfile_secure() as there are no callers]
+> [Make _anon_inode_getfile() static]
+> [Use correct error cast in _anon_inode_getfile()]
+> [Fix error handling in _anon_inode_getfile()]
+> 
+> Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
+> ---
+>  fs/anon_inodes.c              | 147 +++++++++++++++++++++++++---------
+>  include/linux/anon_inodes.h   |   8 ++
+>  include/linux/lsm_hook_defs.h |   2 +
+>  include/linux/lsm_hooks.h     |   9 +++
+>  include/linux/security.h      |  10 +++
+>  security/security.c           |   8 ++
+>  6 files changed, 144 insertions(+), 40 deletions(-)
+> 
+> diff --git a/fs/anon_inodes.c b/fs/anon_inodes.c
+> index 89714308c25b..c3f16deda211 100644
+> --- a/fs/anon_inodes.c
+> +++ b/fs/anon_inodes.c
+> @@ -55,61 +55,79 @@ static struct file_system_type anon_inode_fs_type = {
+>  	.kill_sb	= kill_anon_super,
+>  };
+>  
+> -/**
+> - * anon_inode_getfile - creates a new file instance by hooking it up to an
+> - *                      anonymous inode, and a dentry that describe the "class"
+> - *                      of the file
+> - *
+> - * @name:    [in]    name of the "class" of the new file
+> - * @fops:    [in]    file operations for the new file
+> - * @priv:    [in]    private data for the new file (will be file's private_data)
+> - * @flags:   [in]    flags
+> - *
+> - * Creates a new file by hooking it on a single inode. This is useful for files
+> - * that do not need to have a full-fledged inode in order to operate correctly.
+> - * All the files created with anon_inode_getfile() will share a single inode,
+> - * hence saving memory and avoiding code duplication for the file/inode/dentry
+> - * setup.  Returns the newly created file* or an error pointer.
+> - */
+> -struct file *anon_inode_getfile(const char *name,
+> -				const struct file_operations *fops,
+> -				void *priv, int flags)
+> +static struct inode *anon_inode_make_secure_inode(
+> +	const char *name,
+> +	const struct inode *context_inode)
+>  {
+> -	struct file *file;
+> +	struct inode *inode;
+> +	const struct qstr qname = QSTR_INIT(name, strlen(name));
+> +	int error;
+> +
+> +	inode = alloc_anon_inode(anon_inode_mnt->mnt_sb);
+> +	if (IS_ERR(inode))
+> +		return inode;
+> +	inode->i_flags &= ~S_PRIVATE;
+> +	error =	security_inode_init_security_anon(inode, &qname, context_inode);
+> +	if (error) {
+> +		iput(inode);
+> +		return ERR_PTR(error);
+> +	}
+> +	return inode;
+> +}
 
-IMA would read the flag in process_measurement() and behave similarly
-to when it processes IMA_CHANGE_ATTR. The flag would be reset by
-evm_verify_hmac().
+Hey,
 
-Roberto
+Iiuc, this makes each newly created anon inode fd correspond to a unique
+file and to a unique inode:
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+fd1 -> file1 -> inode1
+fd2 -> file2 -> inode2
+
+Whereas before we had every anon inode fd correspond to a unique file
+but all files map to the _same_ inode:
+
+fd1 -> file1 -> inode
+fd2 -> file2 -> inode
+
+The old behavior of hooking up a each anon inode fd to the same inode
+prevented having an evict method attached to the inode. Because it was
+shared that wasn't possible but also simply because that inode never got
+evicted anyway. That surely was intended but it's a bummer to some
+extent.
+With the new model you also can't have an evict method because now you
+have a separate inode for each file.
+
+I'm probably going to get killed for suggesting this but:
+If we're going to expand the anonymous inode infrastructure anyway is
+there a way we can make it so that we have a way to allocate a single
+inode for multiple anonymous inode fds and have callers opt-in to this
+behavior. We'd need a way to find this inode again, obviously.
+
+This would allow for some features on top of anonymous inode fds that
+can refer to the same object, i.e. anonymous inode fds that currently
+stash away the same object in f->private_data.
+In such a model we could allow such anonymous inode fds to stash away
+objects in inode->i_private instead of f->private_data and attach an
+evict method to it. This would e.g. allow a process to be killed when
+the last pidfd to it is closed or a seccomp notifier fd to notify when
+the filter is released without having to do separate reference counting.
+
+This would need a way to lookup that inode by the object that is stashed
+away in it of course which could probably be done by an idr or an
+xarray or something cleverer. It would obviously only affect a subset of
+anonymous inode fds so any other anonymous inode fds wouldn't be
+impacted since they can still use the single-anon-inode interface.
+
+Christian
