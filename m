@@ -2,284 +2,459 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA57F25EEDC
-	for <lists+linux-security-module@lfdr.de>; Sun,  6 Sep 2020 17:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C734F25EF23
+	for <lists+linux-security-module@lfdr.de>; Sun,  6 Sep 2020 18:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728910AbgIFPrt (ORCPT
+        id S1726211AbgIFQcd (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 6 Sep 2020 11:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        Sun, 6 Sep 2020 12:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728932AbgIFPha (ORCPT
+        with ESMTP id S1726209AbgIFQcZ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 6 Sep 2020 11:37:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36A8C061575;
-        Sun,  6 Sep 2020 08:37:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Resent-To:Resent-Message-ID:Resent-Date:
-        Resent-From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        In-Reply-To:References; bh=/u0+yrSlw03aBtAYCusgZd8I7ARa19CGm1otMTTspw0=; b=N6
-        iE7zMwzDHtR87N3toXZeISABN9RMyEko3UXEinJBb9CrEcERuqvtMhVt66RHkyAZ3ZOWXvjfYEx+6
-        eK3x8bJfCVTMIOmEelmx4GGAyHgZjbZCX314Ht+Kehbe2vW29HYru4BNoGFhpCfQJ20QWz+kum9Qg
-        JEVW6+ZMNbJ3U5ZECWgm1zmg2EQ2mJXwlX7vLGrLx8vjOsijxmXXxi1ijcvB58hA9gRNzCoUYejl5
-        ylgG/sTj5yvZb40eIkEO/MZ/ZS7PVaIHjCzN8/HL22MSaES0JQg5rnkgavR8sadk0LUcKnX1syEYl
-        20PDa3X/5CcR193tcKKNA4mLdy+waEcA==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kEwjG-00010C-Hv; Sun, 06 Sep 2020 15:37:18 +0000
-Received: from merlin.infradead.org ([2001:8b0:10b:1231::1])
-        by casper.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kEwWx-0000CM-8o
-        for willy@casper.infradead.org; Sun, 06 Sep 2020 15:24:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=/u0+yrSlw03aBtAYCusgZd8I7ARa19CGm1otMTTspw0=; b=jHdrNayA+D0+l3TsROlqvEngbU
-        hhhOYtZcw+hNeSQGFBo7oVYykFLUCi3zXdviK/z559iiv9B34eCDWuy/r8gVGuNF6UkPgyNz9Uv8z
-        4slgUBNC5rvKyVW0st5lSkincFgyV+6KwjP/KMSN0FgG9jmWEQq++H/JTCAD75Lvs3PH3BkS6/CMF
-        wIxqiHmDldo3slS3TlkoIriWRePv6lzUncIzzM2miMyC/ff+HCYTa97x3ozzLHLvfZEA89LCs+gz8
-        uwOWwcn3AP1+O0iVJkxPhMSanoaO2XLPriKpJ3ZTwBtVaU0t/vdSuAhhdf7fh2a6yog1Wj2nuG6DD
-        StOuEDZw==;
-Received: from mout.gmx.net ([212.227.15.19])
-        by merlin.infradead.org with esmtps (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kEwWv-0005h9-DM
-        for willy@infradead.org; Sun, 06 Sep 2020 15:24:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1599405872;
-        bh=FGUtm7UcaPXHO1b8O1ignGpXik1HpzO5bGlUoqXvgqQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=GQBAQka9GqYlQb18RoC4xepBLLtdIfIEWARSBCiDa6U566emMfgWg+uJH0gXX9b4K
-         Pv9RjjwdHMQp9PkDgK7Y+M8rBOe6YzUBEMLohqKRxhoP+ZVXMspMJc8LmQMT74l5Sq
-         Esvm9IBqBCk5A7rTsixN8BUA9oq/P9tWNnmNW6I8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([79.150.73.70]) by mail.gmx.com
- (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1Ml6mE-1kxr7k07Ei-00lSsJ; Sun, 06 Sep 2020 17:24:32 +0200
-From:   John Wood <john.wood@gmx.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     John Wood <john.wood@gmx.com>
-Subject: [RFC PATCH 6/9] security/fbfam: Mitigate a fork brute force attack
-Date:   Sun,  6 Sep 2020 17:24:19 +0200
-Message-Id: <20200906152419.7313-1-john.wood@gmx.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 6 Sep 2020 12:32:25 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A66C061574
+        for <linux-security-module@vger.kernel.org>; Sun,  6 Sep 2020 09:32:24 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id ay8so10356791edb.8
+        for <linux-security-module@vger.kernel.org>; Sun, 06 Sep 2020 09:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F8tC2QXpOtOzE45Xjl3tUVikGMUOC2Eduj5EJAiJGFs=;
+        b=i24VfLQ06hw0VDQf1ep/EZvafCeqBfFkXD+dz5B9N3V2rq5niU4zgtYZayrwLlF0UO
+         FV2udODAghE0uLJNMq/RMBETY4gEIGxeMk1raY7CULmO50GIBMSTPq9+SbYqWYN6vlVs
+         6Cg42/uc/C5BaRozeGFdHKWRsdjB3dPUYOpB88nzP63awJHbS8HqkCickiS5XUbb6KL+
+         9KcKu7/hpKiUxYqtgrxRE9yumFMoB54m7/l4K1mFFUK9Dbon/WHSXEZmW5qC2BAXOrng
+         WD+sKeK7fqUrbBBsW+Wq0NKzXkq/krjvMcb2qWmiY8ceLiI7DHUUCZTGnIesTqMkCI3t
+         kd2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F8tC2QXpOtOzE45Xjl3tUVikGMUOC2Eduj5EJAiJGFs=;
+        b=KxNWVaA6N3G0V4VzbqSyuUQ/hiDOOC1aMAgpiuNM6hL8xtEy/+CdXxllAADlylFsWH
+         ATw9ERoh6erFmjJGsz9CX3+U3Jfl6p6qGNQYSXoB2FiUkgb8Kc0542d02q+8u6x2WGVH
+         2HJOoDHVffP0ShevxbvpmDJ9mGXoFBWQIjJi2t7fMBlI4WDgYyRwNKq4PiJ8JXKo63M+
+         f6qt4QlrWh30A0vKdlqd6YjCfpfRl2dBinZjqHknu3OyM76IujAF+wPJE3ZZeNYW5m8/
+         5em7VWjvbnvogMG8w8MP9VBb19QL3GLGfcqbjRbRQW+QS+fmuJihyVU42B0JQ+hWQ/Tt
+         DqZA==
+X-Gm-Message-State: AOAM5335R5xGGQV/NHvJzrJZCV3PaHF+L0hlaLJB95CEzjhXhXU3Fd0N
+        12Lnryqy9QNhDjZeoDNiRfHJxWOKFtkNXopiGWn3
+X-Google-Smtp-Source: ABdhPJxA2P0MiIO4fTvXotn6GhscbUi8Qbr5zuEbipYxjJsWhM1nbn7UTn7R01spZPsVUiNmW6RUjNXznAyv95ea3/c=
+X-Received: by 2002:aa7:de8f:: with SMTP id j15mr17517368edv.135.1599409940338;
+ Sun, 06 Sep 2020 09:32:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CWSxwusOyPimutvXHB158vpVFv4Ki0ydyrkpH0mlS9pJ3Ew2sds
- dXaet9nquVcKEfdgC3lVUbJ9laiwsvcBwR2RWY+RJTwhQx689k0tIqq7okI6ubG8eZoJIYy
- jgZnaq59cZ96/Cw0Fj9GLzUxA8YKnjHFA+xDYDD7US/anfPfWt1U50MxQ7o91+Qt7djzfDm
- ldPlNhljTAUuM8y/p9+Lg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CHkubrO+3ek=:wHfRzU0dt2zIbkMp8pYQqw
- MB/Z/K+9PCGdVftPoVytsQDjXHNFoVPGUQEohybAq8XeFODkbIw5xLYGrOP3pWBxjkcDP5Ksy
- Ve3Q3TcRm3pwESSUjDq23+iZHjdLeaO9/RXqmybZj+HqOuqzyEbr8yI0dqHTMqwz3H41OweE9
- j6x3l1DyxewM3t2cMGnCG5mpHx8+NyMiaNjwAGuhxFTVXaErkazCKW7QYqBfQSagtevaqQEcg
- PwiokvxbdkI07QMSetZOx58RCy7718c3kQIhyiJJyNltjc+uAUrV+TzrCCyYE8NT7w38lX+yt
- Bde9hHGWEDlwAAg6Ai/uK0fchm7UjO0vmDS9ZS4rwsjA/7zHx/Eh1BdzmPCd/AGYrhbYsQ7fu
- 0Ssfla7ZOjkCaE5xrdLOCwCtAnKymoIn6CIflGgq4i3hhqKZedcxmdeYAGpwqLUnVaEQbx61O
- kbIZlkqRynFvlcrJ3ogllMzuvoFyyTg9Zf+O9FAi5w6UP6K/TUGPeBFU9Fm+Zfrau+QCkgJQ1
- iXp8rMUTJgT2d9i0AeHZEU5G53nzDDhwzLwJ81y7ampcJrQbZNFomqUIWs6vBg4jKswMIGy/D
- eejpACotpeoI/85Q6UdsdQ7/yM6/PQ2fEM+xoOwXfNynt7UGB/6ILXfkj/sRWkF6G/ow7Judv
- wQR1CFlxdjNgKSCE6i+1BjGgGFBQvqTZEILvIAdV3g0YNo1IRv1E4q7qHbGUWIzAY5XBQ8QxH
- Ttgu92Gm41urcgD9bEChfdekIOejJm2G4DuFEDkE/ss86vfWp6IqJvuIIBq5FVcj26XX9tRJP
- ebop0NXreSJAg27lQyp7XtZd9c8T8RxJgAJSjqoK47jrGhlU2F93ggP+BC1fTJsz247ToZPOg
- 2aAm27iEvPaOgMiMuuZ2DINMGttTBfXXFz381n23bO5k1u1T3MGqKoJS4/Oxk1oLwIBkxTzqt
- gVdS3204IGRFCeuHrZCkQcnVxtiNXReegsF5bF8ziDOpoSWDEoN0U36WBGAkyu50eF7tEqNN3
- fvXwFYSfoYM9cQLcSv64mm/tTmm8x+agQgqUUgRiUqst7DYUGT0pIym6RbazJMCiKnI9lvM7j
- Y98beh4/mGgs08Dv2c2UKCScZK0BiekmY6LenGSfU2Bkl372Lqvk4BYCWBQrRJ+2GkGASCJ1J
- UsKT+WjcjLHPhFJbABqTAtnZsavRnXuFmO8aRqdwkc720x5vKwa+dsojZR+Gnu/xoZ8DCiI+1
- 7UuxcDhJ/rcvWbqHiZz+5n9tTMHMVopUxWsPpUQ==
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20200906_112433_668709_02F8DBC4 
-X-CRM114-Status: GOOD (  21.35  )
-X-Spam-Score: -0.7 (/)
-X-Spam-Report: SpamAssassin version 3.4.4 on merlin.infradead.org summary:
- Content analysis details:   (-0.7 points)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -0.7 RCVD_IN_DNSWL_LOW      RBL: Sender listed at https://www.dnswl.org/,
-                             low trust
-                             [212.227.15.19 listed in list.dnswl.org]
-  0.0 FREEMAIL_FROM          Sender email is commonly abused enduser mail
-                             provider
-                             [john.wood[at]gmx.com]
-  0.0 SPF_HELO_NONE          SPF: HELO does not publish an SPF Record
- -0.0 SPF_PASS               SPF: sender matches SPF record
- -0.0 RCVD_IN_MSPIKE_H2      RBL: Average reputation (+2)
-                             [212.227.15.19 listed in wl.mailspike.net]
-  0.1 DKIM_SIGNED            Message has a DKIM or DK signature, not necessarily
-                             valid
- -0.1 DKIM_VALID             Message has at least one valid DKIM or DK signature
+References: <20200826145247.10029-1-casey@schaufler-ca.com> <20200826145247.10029-21-casey@schaufler-ca.com>
+In-Reply-To: <20200826145247.10029-21-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 6 Sep 2020 12:32:09 -0400
+Message-ID: <CAHC9VhThrFdTuy=+LWxBtUgtOsst6UpxK49V6DO6VSTh8zu9wA@mail.gmail.com>
+Subject: Re: [PATCH v20 20/23] Audit: Add new record for multiple process LSM attributes
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, James Morris <jmorris@namei.org>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        Stephen Smalley <sds@tycho.nsa.gov>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-In order to mitigate a fork brute force attack it is necessary to kill
-all the offending tasks. This tasks are all the ones that share the
-statistical data with the current task (the task that has crashed).
+On Wed, Aug 26, 2020 at 11:23 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> Create a new audit record type to contain the subject information
+> when there are multiple security modules that require such data.
+> This record is linked with the same timestamp and serial number.
+> The record is produced only in cases where there is more than one
+> security module with a process "context".
+>
+> Before this change the only audit events that required multiple
+> records were syscall events. Several non-syscall events include
+> subject contexts, so the use of audit_context data has been expanded
+> as necessary.
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> Cc: linux-audit@redhat.com
+> ---
+>  drivers/android/binder.c                |  2 +-
+>  include/linux/audit.h                   | 13 +++-
+>  include/linux/security.h                | 18 ++++-
+>  include/net/netlabel.h                  |  2 +-
+>  include/net/scm.h                       |  3 +-
+>  include/net/xfrm.h                      |  4 +-
+>  include/uapi/linux/audit.h              |  1 +
+>  kernel/audit.c                          | 89 ++++++++++++++++++-------
+>  kernel/auditfilter.c                    |  2 +-
+>  kernel/auditsc.c                        | 87 ++++++++++++++++++++++--
+>  net/ipv4/ip_sockglue.c                  |  2 +-
+>  net/netfilter/nf_conntrack_netlink.c    |  4 +-
+>  net/netfilter/nf_conntrack_standalone.c |  2 +-
+>  net/netfilter/nfnetlink_queue.c         |  2 +-
+>  net/netlabel/netlabel_unlabeled.c       | 16 ++---
+>  net/netlabel/netlabel_user.c            | 12 ++--
+>  net/netlabel/netlabel_user.h            |  6 +-
+>  security/integrity/integrity_audit.c    |  2 +-
+>  security/security.c                     | 73 +++++++++++++++-----
+>  security/smack/smackfs.c                |  3 +-
+>  20 files changed, 259 insertions(+), 84 deletions(-)
 
-Since the attack detection is done in the function fbfam_handle_attack()
-that is called every time a core dump is triggered, only is needed to
-kill the others tasks that share the same statistical data, not the
-current one as this is in the path to be killed.
+Regardless of the code, the audit folks generally ask for an example
+of the new audit record in the commit description; it make it easier
+for the people not familiar with the kernel to review the record
+format/information.
 
-When the SIGKILL signal is sent to the offending tasks from the function
-fbfam_kill_tasks(), this one will be called again during the core dump
-due to the shared statistical data shows a quickly crashing rate. So, to
-avoid kill again the same tasks due to a recursive call of this
-function, it is necessary to disable the attack detection.
+I've also been requiring that a test is added to the audit test suite
+for new features added to the kernel.  I recognize this is a big ask
+for something like this, but it is something we have been doing for
+several years now and I think the benefits far outweigh the costs.
 
-To disable this attack detection, add a condition in the function
-fbfam_handle_attack() to not compute the crashing rate when the jiffies
-stored in the statistical data are set to zero.
+* https://github.com/linux-audit/audit-testsuite
 
-Signed-off-by: John Wood <john.wood@gmx.com>
-=2D--
- security/fbfam/fbfam.c | 76 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 71 insertions(+), 5 deletions(-)
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index ba1cd38d601b..fe027df0d9a8 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -186,7 +186,9 @@ extern void             audit_log_path_denied(int type,
+>                                                   const char *operation);
+>  extern void                audit_log_lost(const char *message);
+>
+> -extern int audit_log_task_context(struct audit_buffer *ab);
+> +extern void audit_log_lsm(struct lsmblob *blob, bool exiting);
+> +extern int audit_log_task_context(struct audit_buffer *ab,
+> +                                 struct lsmblob *blob);
 
-diff --git a/security/fbfam/fbfam.c b/security/fbfam/fbfam.c
-index 3aa669e4ea51..173a6122390f 100644
-=2D-- a/security/fbfam/fbfam.c
-+++ b/security/fbfam/fbfam.c
-@@ -4,8 +4,11 @@
- #include <linux/errno.h>
- #include <linux/gfp.h>
- #include <linux/jiffies.h>
-+#include <linux/pid.h>
- #include <linux/printk.h>
-+#include <linux/rcupdate.h>
- #include <linux/refcount.h>
-+#include <linux/sched/signal.h>
- #include <linux/signal.h>
- #include <linux/slab.h>
+The audit functions tend to get abused, and this is mostly due to a
+rather poor design, so I'd prefer to see audit_log_task_context()
+remain with just a single argument: the audit buffer.  I believe this
+covers the vast majority of the cases and should remain the preferred
+option for callers.  This should help shrink the patch and focus it a
+bit more.
 
-@@ -24,7 +27,8 @@ unsigned long sysctl_crashing_rate_threshold =3D 30000;
-  * struct fbfam_stats - Fork brute force attack mitigation statistics.
-  * @refc: Reference counter.
-  * @faults: Number of crashes since jiffies.
-- * @jiffies: First fork or execve timestamp.
-+ * @jiffies: First fork or execve timestamp. If zero, the attack detectio=
-n is
-+ *           disabled.
-  *
-  * The purpose of this structure is to manage all the necessary informati=
-on to
-  * compute the crashing rate of an application. So, it holds a first fork=
- or
-@@ -175,13 +179,69 @@ int fbfam_exit(void)
- }
+For the handful of callers that do need to specify a separate task
+context, you can create a __audit_log_task_context(ab, blob) that
+allows the caller to specify the blob (and obviously you can write
+audit_log_task_context() as a one line wrapper around this function).
 
- /**
-- * fbfam_handle_attack() - Fork brute force attack detection.
-+ * fbfam_kill_tasks() - Kill the offending tasks
-+ *
-+ * When a fork brute force attack is detected it is necessary to kill all=
- the
-+ * offending tasks. Since this function is called from fbfam_handle_attac=
-k(),
-+ * and so, every time a core dump is triggered, only is needed to kill th=
-e
-+ * others tasks that share the same statistical data, not the current one=
- as
-+ * this is in the path to be killed.
-+ *
-+ * When the SIGKILL signal is sent to the offending tasks, this function =
-will be
-+ * called again during the core dump due to the shared statistical data s=
-hows a
-+ * quickly crashing rate. So, to avoid kill again the same tasks due to a
-+ * recursive call of this function, it is necessary to disable the attack
-+ * detection setting the jiffies to zero.
-+ *
-+ * To improve the for_each_process loop it is possible to end it when all=
- the
-+ * tasks that shared the same statistics are found.
-+ *
-+ * Return: -EFAULT if the current task doesn't have statistical data. Zer=
-o
-+ *         otherwise.
-+ */
-+static int fbfam_kill_tasks(void)
-+{
-+	struct fbfam_stats *stats =3D current->fbfam_stats;
-+	struct task_struct *p;
-+	unsigned int to_kill, killed =3D 0;
-+
-+	if (!stats)
-+		return -EFAULT;
-+
-+	to_kill =3D refcount_read(&stats->refc) - 1;
-+	if (!to_kill)
-+		return 0;
-+
-+	/* Disable the attack detection */
-+	stats->jiffies =3D 0;
-+	rcu_read_lock();
-+
-+	for_each_process(p) {
-+		if (p =3D=3D current || p->fbfam_stats !=3D stats)
-+			continue;
-+
-+		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_PID);
-+		pr_warn("fbfam: Offending process with PID %d killed\n",
-+			p->pid);
-+
-+		killed +=3D 1;
-+		if (killed >=3D to_kill)
-+			break;
-+	}
-+
-+	rcu_read_unlock();
-+	return 0;
-+}
-+
-+/**
-+ * fbfam_handle_attack() - Fork brute force attack detection and mitigati=
-on.
-  * @signal: Signal number that causes the core dump.
-  *
-  * The crashing rate of an application is computed in milliseconds per fa=
-ult in
-  * each crash. So, if this rate goes under a certain threshold there is a=
- clear
-  * signal that the application is crashing quickly. At this moment, a for=
-k brute
-- * force attack is happening.
-+ * force attack is happening. Under this scenario it is necessary to kill=
- all
-+ * the offending tasks in order to mitigate the attack.
-  *
-  * Return: -EFAULT if the current task doesn't have statistical data. Zer=
-o
-  *         otherwise.
-@@ -195,6 +255,10 @@ int fbfam_handle_attack(int signal)
- 	if (!stats)
- 		return -EFAULT;
+> diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+> index 2737d24ec244..9e8cac6228b4 100644
+> --- a/include/net/xfrm.h
+> +++ b/include/net/xfrm.h
+> @@ -675,11 +675,13 @@ static inline struct audit_buffer *xfrm_audit_start(const char *op)
+>
+>         if (audit_enabled == AUDIT_OFF)
+>                 return NULL;
+> +       audit_stamp_context(audit_context());
+>         audit_buf = audit_log_start(audit_context(), GFP_ATOMIC,
+>                                     AUDIT_MAC_IPSEC_EVENT);
 
-+	/* The attack detection is disabled */
-+	if (!stats->jiffies)
-+		return 0;
-+
- 	if (!(signal =3D=3D SIGILL || signal =3D=3D SIGBUS || signal =3D=3D SIGK=
-ILL ||
- 	      signal =3D=3D SIGSEGV || signal =3D=3D SIGSYS))
- 		return 0;
-@@ -205,9 +269,11 @@ int fbfam_handle_attack(int signal)
- 	delta_time =3D jiffies64_to_msecs(delta_jiffies);
- 	crashing_rate =3D delta_time / (u64)stats->faults;
+Is audit_stamp_context() necessary here?  Generally if the first
+argument to audit_log_start() is not NULL then you shouldn't need to
+create a "local" audit context.
 
--	if (crashing_rate < (u64)sysctl_crashing_rate_threshold)
--		pr_warn("fbfam: Fork brute force attack detected\n");
-+	if (crashing_rate >=3D (u64)sysctl_crashing_rate_threshold)
-+		return 0;
+I wonder if you might be getting mixed up in testing by not having
+audit properly enabled (see link below)?  Make sure you don't have any
+audit disable rules loaded into the kernel, and you can even add
+"audit=1" to the kernel command line.
 
-+	pr_warn("fbfam: Fork brute force attack detected\n");
-+	fbfam_kill_tasks();
- 	return 0;
- }
+https://github.com/linux-audit/audit-documentation/wiki/HOWTO-Fedora-Enable-Auditing
 
-=2D-
-2.25.1
+>         if (audit_buf == NULL)
+>                 return NULL;
+>         audit_log_format(audit_buf, "op=%s", op);
+> +       audit_log_lsm(NULL, false);
+>         return audit_buf;
+>  }
 
+...
+
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 594b42fc88ff..0e7831c9f321 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -1070,13 +1071,31 @@ static void audit_log_common_recv_msg(struct audit_context *context,
+>                 return;
+>         audit_log_format(*ab, "pid=%d uid=%u ", pid, uid);
+>         audit_log_session_info(*ab);
+> -       audit_log_task_context(*ab);
+> +       audit_log_task_context(*ab, NULL);
+>  }
+>
+>  static inline void audit_log_user_recv_msg(struct audit_buffer **ab,
+>                                            u16 msg_type)
+>  {
+> -       audit_log_common_recv_msg(NULL, ab, msg_type);
+> +       struct audit_context *context;
+> +
+> +       if (!lsm_multiple_contexts()) {
+> +               audit_log_common_recv_msg(NULL, ab, msg_type);
+> +               return;
+> +       }
+> +
+> +       context = audit_context();
+> +       if (context) {
+> +               if (!context->in_syscall)
+> +                       audit_stamp_context(context);
+> +               audit_log_common_recv_msg(context, ab, msg_type);
+> +               return;
+> +       }
+> +
+> +       audit_alloc(current);
+> +       context = audit_context();
+> +
+> +       audit_log_common_recv_msg(context, ab, msg_type);
+>  }
+
+Hmm.  Take a look at Richard's patch for adding the audit container ID
+record to audit user records, it should give you a better idea of how
+to approach this.  The above changes in audit_log_user_recv_msg() are
+not really what we want.
+
+https://lore.kernel.org/linux-audit/4a5019ed3cfab416aeb6549b791ac6d8cc9fb8b7.1593198710.git.rgb@redhat.com
+
+> @@ -1869,6 +1889,10 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
+>         }
+>
+>         audit_get_stamp(ab->ctx, &t, &serial);
+> +       if (type == AUDIT_MAC_TASK_CONTEXTS && ab->ctx->serial == 0) {
+> +               audit_stamp_context(ab->ctx);
+> +               audit_get_stamp(ab->ctx, &t, &serial);
+> +       }
+>         audit_log_format(ab, "audit(%llu.%03lu:%u): ",
+>                          (unsigned long long)t.tv_sec, t.tv_nsec/1000000, serial);
+
+Can you walk me through what you are trying to do here?  This doesn't
+seem right to me, but I'm sure you put it here for a reason.
+
+> @@ -2126,30 +2150,47 @@ void audit_log_key(struct audit_buffer *ab, char *key)
+>                 audit_log_format(ab, "(null)");
+>  }
+>
+> -int audit_log_task_context(struct audit_buffer *ab)
+> +int audit_log_task_context(struct audit_buffer *ab, struct lsmblob *blob)
+>  {
+> +       int i;
+>         int error;
+> -       struct lsmblob blob;
+> -       struct lsmcontext context;
+> +       struct lsmblob localblob;
+> +       struct lsmcontext lsmdata;
+>
+> -       security_task_getsecid(current, &blob);
+> -       if (!lsmblob_is_set(&blob))
+> +       /*
+> +        * If there is more than one security module that has a
+> +        * subject "context" it's necessary to put the subject data
+> +        * into a separate record to maintain compatibility.
+> +        */
+> +       if (lsm_multiple_contexts()) {
+> +               audit_log_format(ab, " subj=?");
+>                 return 0;
+> +       }
+>
+> -       error = security_secid_to_secctx(&blob, &context);
+> -       if (error) {
+> -               if (error != -EINVAL)
+> -                       goto error_path;
+> -               return 0;
+> +       if (blob == NULL) {
+> +               security_task_getsecid(current, &localblob);
+
+Why is localblob necessary?  You know blob is NULL here, just use it
+directly and skip the assignment later in this code block.
+
+> +               if (!lsmblob_is_set(&localblob)) {
+> +                       audit_log_format(ab, " subj=?");
+> +                       return 0;
+> +               }
+> +               blob = &localblob;
+>         }
+>
+> -       audit_log_format(ab, " subj=%s", context.context);
+> -       security_release_secctx(&context);
+> -       return 0;
+> +       for (i = 0; i < LSMBLOB_ENTRIES; i++) {
+> +               if (blob->secid[i] == 0)
+> +                       continue;
+> +               error = security_secid_to_secctx(blob, &lsmdata, i);
+> +               if (error && error != -EINVAL) {
+> +                       audit_panic("error in audit_log_task_context");
+> +                       return error;
+> +               }
+>
+> -error_path:
+> -       audit_panic("error in audit_log_task_context");
+> -       return error;
+> +               audit_log_format(ab, " subj=%s", lsmdata.context);
+> +               security_release_secctx(&lsmdata);
+> +               break;
+> +       }
+> +
+> +       return 0;
+>  }
+>  EXPORT_SYMBOL(audit_log_task_context);
+
+...
+
+> @@ -2279,6 +2320,7 @@ static void audit_log_set_loginuid(kuid_t koldloginuid, kuid_t kloginuid,
+>         if (!audit_enabled)
+>                 return;
+>
+> +       audit_stamp_context(audit_context());
+>         ab = audit_log_start(audit_context(), GFP_KERNEL, AUDIT_LOGIN);
+>         if (!ab)
+>                 return;
+
+Similar to above, I'm not sure audit_stamp_context() is what we want here.
+
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 4af5861bcb9a..cf5dbd0e3a3d 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -962,10 +962,12 @@ int audit_alloc(struct task_struct *tsk)
+>                 return 0; /* Return if not auditing. */
+>
+>         state = audit_filter_task(tsk, &key);
+> -       if (state == AUDIT_DISABLED) {
+> +       if (!lsm_multiple_contexts() && state == AUDIT_DISABLED) {
+>                 clear_tsk_thread_flag(tsk, TIF_SYSCALL_AUDIT);
+>                 return 0;
+>         }
+> +       if (state == AUDIT_DISABLED)
+> +               clear_tsk_thread_flag(tsk, TIF_SYSCALL_AUDIT);
+
+Hmmm.  I think we've hit critical mass on the amount of hacks in the
+audit subsystem for this code ... Let's back up a bit and start with
+some basic requirements (correct me if I'm wrong on any of these):
+
+1. This patch only deals with LSM process/task/subject contexts.
+2. Multiple LSMs may, or may not exist; audit logs and behavior should
+remain unchanged in the single LSM case.
+3. If multiple LSMs are present, the subject field in existing records
+should take the form of "subj=?" and a new audit record is created
+containing fields of the format "subj_<LSM>=<context>".
+
+Assuming all of that is true, why not simply keep the basic logic in
+audit_log_task_context(), but also stash a lsmblob struct in the
+audit_context for later use by audit_log_exit()?  Stashing of the
+lsmblob would really only be necessary to handle the few cases where
+the current task is not the proper subject.
+
+> @@ -1483,6 +1486,52 @@ static void audit_log_proctitle(void)
+>         audit_log_end(ab);
+>  }
+>
+> +void audit_log_lsm(struct lsmblob *blob, bool exiting)
+> +{
+> +       struct audit_context *context = audit_context();
+> +       struct lsmcontext lsmdata;
+> +       struct audit_buffer *ab;
+> +       struct lsmblob localblob;
+> +       bool sep = false;
+> +       int error;
+> +       int i;
+> +
+> +       if (!lsm_multiple_contexts())
+> +               return;
+> +
+> +       if (context && context->in_syscall && !exiting)
+> +               return;
+
+I think the "!lsm_multiple_contexts()" and "!exiting" checks fit well
+with my comments about generating the AUDIT_MAC_TASK_CONTEXT record in
+audit_log_exit.  This code needs a rethink.
+
+> +       ab = audit_log_start(context, GFP_ATOMIC, AUDIT_MAC_TASK_CONTEXTS);
+> +       if (!ab)
+> +               return; /* audit_panic or being filtered */
+> +
+> +       if (blob == NULL) {
+> +               security_task_getsecid(current, &localblob);
+> +               if (!lsmblob_is_set(&localblob))
+> +                       return;
+> +               blob = &localblob;
+> +       }
+> +
+> +       for (i = 0; i < LSMBLOB_ENTRIES; i++) {
+> +               if (blob->secid[i] == 0)
+> +                       continue;
+> +               error = security_secid_to_secctx(blob, &lsmdata, i);
+> +               if (error && error != -EINVAL) {
+> +                       audit_panic("error in audit_log_lsm");
+> +                       return; fits well with a
+> +               }
+> +
+> +               audit_log_format(ab, "%ssubj_%s=%s", sep ? " " : "",
+> +                                security_lsm_slot_name(i), lsmdata.context);
+> +               sep = true;
+> +
+> +               security_release_secctx(&lsmdata);
+> +       }
+> +
+> +       audit_log_end(ab);
+> +}
+
+...
+
+> @@ -2217,6 +2267,21 @@ void __audit_inode_child(struct inode *parent,
+>  }
+>  EXPORT_SYMBOL_GPL(__audit_inode_child);
+>
+> +/**
+> + * audit_stamp_context - set the timestamp+serial in an audit context
+> + * @ctx: audit_context to set
+> + */
+> +void audit_stamp_context(struct audit_context *ctx)
+> +{
+> +       /* ctx will be NULL unless lsm_multiple_contexts() is true */
+> +       if (!ctx)
+> +               return;
+> +
+> +       ktime_get_coarse_real_ts64(&ctx->ctime);
+> +       ctx->serial = audit_serial();
+> +       ctx->current_state = AUDIT_BUILD_CONTEXT;
+> +}
+
+Based on previous discussions and what I *think* you are trying to do
+in this patchset, I believe Richard's audit_alloc_local()
+implementation (link below) is a better and cleaner solution.  His
+latest revisions needs some minor tweaks (see my feeback), but I think
+you could probably work with him to pull that single patch into your
+patchset.
+
+To be clear, I'm talking about just that one patch; I'm a firm
+believer that tying the LSM stacking and audit container ID patches
+beyond this would be a disaster.  I can deal with any merge conflicts
+that arise whenever the different patchsets land.
+
+* Richard's audit_alloc_local() patch (07/13 of the latest audit
+container ID patchset)
+https://lore.kernel.org/linux-audit/21e6c4e1ac179c8dcf35803e603899ccfc69300a.1593198710.git.rgb@redhat.com
+
+> diff --git a/net/netlabel/netlabel_user.c b/net/netlabel/netlabel_user.c
+> index 951ba0639d20..4e9064754b5f 100644
+> --- a/net/netlabel/netlabel_user.c
+> +++ b/net/netlabel/netlabel_user.c
+> @@ -84,12 +84,12 @@ struct audit_buffer *netlbl_audit_start_common(int type,
+>                                                struct netlbl_audit *audit_info)
+>  {
+>         struct audit_buffer *audit_buf;
+> -       struct lsmcontext context;
+> -       struct lsmblob blob;
+>
+>         if (audit_enabled == AUDIT_OFF)
+>                 return NULL;
+>
+> +       audit_stamp_context(audit_context());
+
+Another one.
+
+>         audit_buf = audit_log_start(audit_context(), GFP_ATOMIC, type);
+>         if (audit_buf == NULL)
+>                 return NULL;
+
+-- 
+paul moore
+www.paul-moore.com
