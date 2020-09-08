@@ -2,81 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B50261AFA
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Sep 2020 20:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5887F261CA9
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Sep 2020 21:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731463AbgIHSvo (ORCPT
+        id S1731639AbgIHTXl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Sep 2020 14:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731211AbgIHSvK (ORCPT
+        Tue, 8 Sep 2020 15:23:41 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:10848 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731098AbgIHQBZ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Sep 2020 14:51:10 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D900C061573;
-        Tue,  8 Sep 2020 11:51:10 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kFihG-00CnM8-KF; Tue, 08 Sep 2020 18:50:26 +0000
-Date:   Tue, 8 Sep 2020 19:50:26 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH v8 0/3] Add support for AT_INTERPRETED (was O_MAYEXEC)
-Message-ID: <20200908185026.GU1236603@ZenIV.linux.org.uk>
-References: <20200908075956.1069018-1-mic@digikod.net>
+        Tue, 8 Sep 2020 12:01:25 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 391D41D57D88F13E8D13;
+        Tue,  8 Sep 2020 22:02:04 +0800 (CST)
+Received: from huawei.com (10.175.113.133) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.487.0; Tue, 8 Sep 2020
+ 22:01:56 +0800
+From:   Wang Hai <wanghai38@huawei.com>
+To:     <paul@paul-moore.com>, <davem@davemloft.net>,
+        <kuznet@ms2.inr.ac.ru>, <yoshfuji@linux-ipv6.org>,
+        <kuba@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>
+Subject: [PATCH net-next] cipso: fix 'audit_secid' kernel-doc warning in cipso_ipv4.c
+Date:   Tue, 8 Sep 2020 21:59:15 +0800
+Message-ID: <20200908135915.22039-1-wanghai38@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200908075956.1069018-1-mic@digikod.net>
+Content-Type: text/plain
+X-Originating-IP: [10.175.113.133]
+X-CFilter-Loop: Reflected
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Sep 08, 2020 at 09:59:53AM +0200, Mickaël Salaün wrote:
-> Hi,
-> 
-> This height patch series rework the previous O_MAYEXEC series by not
-> adding a new flag to openat2(2) but to faccessat2(2) instead.  As
-> suggested, this enables to perform the access check on a file descriptor
-> instead of on a file path (while opening it).  This may require two
-> checks (one on open and then with faccessat2) but it is a more generic
-> approach [8].
+Fixes the following W=1 kernel build warning(s):
 
-Again, why is that folded into lookup/open/whatnot, rather than being
-an operation applied to a file (e.g. O_PATH one)?
+net/ipv4/cipso_ipv4.c:510: warning: Excess function parameter 'audit_secid' description in 'cipso_v4_doi_remove'
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+---
+ net/ipv4/cipso_ipv4.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/ipv4/cipso_ipv4.c b/net/ipv4/cipso_ipv4.c
+index 2eb71579f4d2..471d33a0d095 100644
+--- a/net/ipv4/cipso_ipv4.c
++++ b/net/ipv4/cipso_ipv4.c
+@@ -498,7 +498,7 @@ static void cipso_v4_doi_free_rcu(struct rcu_head *entry)
+ /**
+  * cipso_v4_doi_remove - Remove an existing DOI from the CIPSO protocol engine
+  * @doi: the DOI value
+- * @audit_secid: the LSM secid to use in the audit message
++ * @audit_info: NetLabel audit information
+  *
+  * Description:
+  * Removes a DOI definition from the CIPSO engine.  The NetLabel routines will
+-- 
+2.17.1
+
