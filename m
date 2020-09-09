@@ -2,87 +2,105 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B092634D1
-	for <lists+linux-security-module@lfdr.de>; Wed,  9 Sep 2020 19:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCDF26351F
+	for <lists+linux-security-module@lfdr.de>; Wed,  9 Sep 2020 19:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728643AbgIIRkp (ORCPT
+        id S1727782AbgIIR4U (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 9 Sep 2020 13:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbgIIRkn (ORCPT
+        Wed, 9 Sep 2020 13:56:20 -0400
+Received: from smtp-42a8.mail.infomaniak.ch ([84.16.66.168]:35631 "EHLO
+        smtp-42a8.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726408AbgIIR4T (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 9 Sep 2020 13:40:43 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B11C061573;
-        Wed,  9 Sep 2020 10:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=F/gEpRM7m8NWklb0InYkX+du0rIZvQsNzkrx+mVaWlE=; b=oPmvedGzIxQBZ3rnKe8D1Y6vTO
-        1tLYLnag/oyEbVQcUvwtz36qZGRLITwasdjpLx/XfllI8gE/k60CKZSDEqmC5WURfx5XlHmY3Uwdu
-        gCXtFIE9XKQqo8+5eaZdBedAkghqtIMHnoev9G46IrQIj013y5d18Ijut+SgzZGpb16dA2ENuOkjJ
-        SrIuFYb+T/020R2q3hpZhidadMgTcjwDSC6a8kx5Y3ayMZ1ip0oWyuFNYjicVO1Fnk4rSKdHcvMec
-        +qPOPETy/dEgIqt2emXjNRZJp3+sIGgoymlBcO9qwWOswesNebV+zD4VeNMd4/YtWwQRQpNKKVwIh
-        gXfNIJpg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kG45D-00025N-Jz; Wed, 09 Sep 2020 17:40:35 +0000
-Subject: Re: [PATCH v2] certs: Add EFI_CERT_X509_GUID support for dbx entries
-To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, jarkko.sakkinen@linux.intel.com
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        zohar@linux.ibm.com, erichte@linux.ibm.com, mpe@ellerman.id.au,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20200909172736.73003-1-eric.snowberg@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <5074bc5c-8dd4-16d7-2760-3e657b90bfa2@infradead.org>
-Date:   Wed, 9 Sep 2020 10:40:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        Wed, 9 Sep 2020 13:56:19 -0400
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BmqSL5vl0zlhLB1;
+        Wed,  9 Sep 2020 19:55:46 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4BmqSH5cwXzlh8TF;
+        Wed,  9 Sep 2020 19:55:43 +0200 (CEST)
+Subject: Re: [RFC PATCH v8 0/3] Add support for AT_INTERPRETED (was O_MAYEXEC)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200908075956.1069018-1-mic@digikod.net>
+ <20200908185026.GU1236603@ZenIV.linux.org.uk>
+ <e3223b50-0d00-3b64-1e09-cfb1b9648b02@digikod.net>
+ <20200909170851.GL6583@casper.infradead.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <3e83b98e-a99d-2e7d-a205-aa83ce94f3fe@digikod.net>
+Date:   Wed, 9 Sep 2020 19:55:48 +0200
+User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <20200909172736.73003-1-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200909170851.GL6583@casper.infradead.org>
+Content-Type: text/plain; charset=iso-8859-15
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 9/9/20 10:27 AM, Eric Snowberg wrote:
-> diff --git a/include/crypto/pkcs7.h b/include/crypto/pkcs7.h
-> index 38ec7f5f9041..d8f2e0fdfbf4 100644
-> --- a/include/crypto/pkcs7.h
-> +++ b/include/crypto/pkcs7.h
-> @@ -26,11 +26,19 @@ extern int pkcs7_get_content_data(const struct pkcs7_message *pkcs7,
->  				  const void **_data, size_t *_datalen,
->  				  size_t *_headerlen);
->  
-> +#ifdef CONFIG_PKCS7_MESSAGE_PARSER
->  /*
->   * pkcs7_trust.c
->   */
->  extern int pkcs7_validate_trust(struct pkcs7_message *pkcs7,
->  				struct key *trust_keyring);
-> +#else
-> +static inline int pkcs7_validate_trust(struct pkcs7_message *pkcs7,
-> +				       struct key *trust_keyring)
-> +{
-> +	return -ENOKEY;
-> +}
-> +#endif
-
-Just to be clear, you want to do the #else block when
-CONFIG_PKCS7_MESSAGE_PARSER=m.  Is that correct?
-
-If so, it might be clearer to use
-
-#if IS_BUILTIN(CONFIG_PKCS7_MESSAGE_PARSER)
 
 
--- 
-~Randy
+On 09/09/2020 19:08, Matthew Wilcox wrote:
+> On Wed, Sep 09, 2020 at 09:19:11AM +0200, Mickaël Salaün wrote:
+>>
+>> On 08/09/2020 20:50, Al Viro wrote:
+>>> On Tue, Sep 08, 2020 at 09:59:53AM +0200, Mickaël Salaün wrote:
+>>>> Hi,
+>>>>
+>>>> This height patch series rework the previous O_MAYEXEC series by not
+>>>> adding a new flag to openat2(2) but to faccessat2(2) instead.  As
+>>>> suggested, this enables to perform the access check on a file descriptor
+>>>> instead of on a file path (while opening it).  This may require two
+>>>> checks (one on open and then with faccessat2) but it is a more generic
+>>>> approach [8].
+>>>
+>>> Again, why is that folded into lookup/open/whatnot, rather than being
+>>> an operation applied to a file (e.g. O_PATH one)?
+>>
+>> I don't understand your question. AT_INTERPRETED can and should be used
+>> with AT_EMPTY_PATH. The two checks I wrote about was for IMA.
+> 
+> Al is saying you should add a new syscall, not try to fold it into
+> some existing syscall.
+> 
+> I agree with him.  Add a new syscall, just like you were told to do it
+> last time.
+> 
 
+OK, but I didn't receive a response for my proposition to extend
+faccessat2(2).
