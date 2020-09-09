@@ -2,100 +2,80 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D912266734
-	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 19:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DB026683A
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 20:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbgIKRik (ORCPT
+        id S1725911AbgIKSYN convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 11 Sep 2020 13:38:40 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:41546 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726360AbgIKRic (ORCPT
+        Fri, 11 Sep 2020 14:24:13 -0400
+Received: from mail.flex.co.jp ([211.8.82.123]:56702 "EHLO www.flex.co.jp"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725901AbgIKSYN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 11 Sep 2020 13:38:32 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D2ECC20D4DAB;
-        Fri, 11 Sep 2020 10:38:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D2ECC20D4DAB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1599845911;
-        bh=ToCW8sjoCQG57z0ML1xQpe4B6MTvl/nMxQSKeRgbf68=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=qHC0tsWAXIQgNPeFgerE6o77naJdkZW7gYDTFSIG+WakHTScTnuv5PEBYj4dgUFJ7
-         l1PuCuNjD8PXh+1m3iFvLwiL6yjb+PDQ0o2nDHAU0a7wUzh9jpYgA4VJZJGBpN3sih
-         Ndn6kLYwMdpMAu38Fh/gG4YnpsU5zof7drq1Oqho=
-Subject: Re: [PATCH v3 5/6] IMA: add hook to measure critical data from kernel
- components
-To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
- <20200828015704.6629-6-tusharsu@linux.microsoft.com>
- <6c80bdad49c72fa58b5a9fb7ce2d20c8cabe1324.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <01f5ea67-447e-c1c2-9c47-49fd3f6c16ec@linux.microsoft.com>
-Date:   Fri, 11 Sep 2020 10:38:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 11 Sep 2020 14:24:13 -0400
+Received: from live.com.mx ([103.89.89.225])
+        (authenticated bits=0)
+        by www.flex.co.jp (MTA) with ESMTP id 0898nrjE009772
+        for <linux-security-module@vger.kernel.org>; Wed, 9 Sep 2020 17:49:56 +0900
+Reply-To: powerinthewords@yahoo.co.jp
+From:   piyin.crhe@live.com.mx
+To:     linux-security-module@vger.kernel.org
+Subject: =?utf-8?Q?=5BSpam=5D?=
+ We are still waiting for your email...
+Date:   09 Sep 2020 01:49:54 -0700
+Message-ID: <20200909014954.DDFCBAD158BE8BF9@live.com.mx>
 MIME-Version: 1.0
-In-Reply-To: <6c80bdad49c72fa58b5a9fb7ce2d20c8cabe1324.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Dear Beneficiary,
 
+We wish to inform you that a power of attorney was forwarded to 
+our office  by two gentlemen regarding your unclaimed fund of $56 
+Million Dollar. One of them is an American citizen named Mr. 
+Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
+citizen.We have be waiting for you to contact us since last year.
 
-On 2020-08-31 11:23 a.m., Mimi Zohar wrote:
->> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
->> index 52cbbc1f7ea2..a889bf40cb7e 100644
->> --- a/security/integrity/ima/ima_main.c
->> +++ b/security/integrity/ima/ima_main.c
->> @@ -869,6 +869,30 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
->>   	fdput(f);
->>   }
->>   
->> +/**
->> + * ima_measure_critical_data - measure critical data
->> + * @event_name: name for the given data
->> + * @event_data_source: name of the event data source
->> + * @buf: pointer to buffer containing data to measure
->> + * @buf_len: length of buffer(in bytes)
->> + * @measure_buf_hash: if set to true - will measure hash of the buf,
->> + *                    instead of buf
->> + *
->> + * Buffers can only be measured, not appraised.
->> + */
->> +int ima_measure_critical_data(const char *event_name,
->> +			      const char *event_data_source,
->> +			      const void *buf, int buf_len,
->> +			      bool measure_buf_hash)
->> +{
->> +	if (!event_name || !event_data_source || !buf || !buf_len)
->> +		return -EINVAL;
->> +
->> +	return process_buffer_measurement(NULL, buf, buf_len, event_name,
->> +					  CRITICAL_DATA, 0, event_data_source,
->> +					  measure_buf_hash);
-> 
-> This is exactly what I'm concerned about.  Failure to measure data may
-> be audited, but should never fail.
-> 
-> Mimi
-> 
-As I responded in patch 2, I can ignore the result of 
-process_buffer_measurement() in ima_measure_critical_data(), and make
-ima_measure_critical_data() return type as "void".
+The document claims these gentlemen to be your authorized 
+representatives, and the power of attorney states that you are 
+already deceased.  It further states that your death was due to 
+lung cancer, with your date of death being January 27th, 2020.
 
-But that’s the only place where the results of p_b_m() are being used.
-So I might as well just revert the return type of p_b_m() to the
-original "void".
+They have now submitted a new account to replace the receiving 
+account that was in the original claim of funds. These funds have 
+remained unclaimed for quite some time and the need for 
+resolution is pressing. Below is the new account they have 
+submitted.
 
->> +}
-> 
+Account Name's :  Robert Porter /Wilhelm Berg
+Account: 5007-29 438 66
+IBAN-nr: SE4150000000050072943866
+Bic-kod: ESSESESS
+Skandinaviska Enskilda Banken. (SEB :)
+SWEDEN .
+
+In the event that you are in fact still alive, we ask that you 
+confirm your existence by responding to this email. You are to 
+view this as a matter requiring immediate attention and response. 
+We have 48 hr monitoring of all activities within Federal Reserve 
+Bank.On this regard,you will be directed to any of our office 
+center that you will go in person to sign the final papers,
+because we have our payment center in Europe,Asia,America and 
+Canada.You will go to any of the office that you will be directed 
+to with the copy of the documents of your fund.
+
+We have contacted the bank in the Sweden asking them to wait for 
+further directives from Federal Reserve Bank, prior to 
+authorizing any withdrawals in any form.  Our request is based 
+entirely on our attempt to verify that you are in fact deceased, 
+before money is wrongly disbursed.
+
+Your in Service,
+
+Robert Steven Kaplan
+2200 N Pearl St, Dallas, TX 75201, United States
