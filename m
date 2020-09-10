@@ -2,93 +2,209 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78531264D74
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Sep 2020 20:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968B7264FC7
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Sep 2020 21:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbgIJSlR (ORCPT
+        id S1726935AbgIJTvV (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 10 Sep 2020 14:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbgIJSkq (ORCPT
+        Thu, 10 Sep 2020 15:51:21 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:52697 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731235AbgIJPEW (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 10 Sep 2020 14:40:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD032C061573;
-        Thu, 10 Sep 2020 11:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=SVMzvLSxHR4YQ7P25QME/n/EPljnU8bFV5nCGi/Qx44=; b=nuYXudjIOEKrlWaHHeZyFkpQS2
-        wwcSZk0K6RlZlYBKUfyyPTDC6keEIXtAj5sR8cW6zZPcdJenYgtUpeSbsI/A6IqqzX7UwTm3cLU54
-        7NZMZ6oZ/ZnahlBszJVIHI9ljDrIk4+VtqAzRV0N6OKnwAuaXO690x5NJgJOP3DQUNmKZAKgzJFs3
-        oOAuecoKw+/7+aDwFjfO1p5WdkwiGcJj2QfkXDILLlWhYQbcDm5GVAFw3XMqEGiWENVP58kACpBub
-        AqdkMeObcGfzgvZvocq6uoEzPznHnpjFWZBJFcgewoWlHp6VxFSUUTNnxJtmcgtpnGt38QNE919lg
-        kgp2qS6Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kGRUn-0005ky-72; Thu, 10 Sep 2020 18:40:33 +0000
-Date:   Thu, 10 Sep 2020 19:40:33 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
-Message-ID: <20200910184033.GX6583@casper.infradead.org>
-References: <20200910164612.114215-1-mic@digikod.net>
- <20200910170424.GU6583@casper.infradead.org>
- <f6e2358c-8e5e-e688-3e66-2cdd943e360e@digikod.net>
- <a48145770780d36e90f28f1526805a7292eb74f6.camel@linux.ibm.com>
- <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
+        Thu, 10 Sep 2020 11:04:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599750234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=c93RPNenWSa8Q8zrhsnxgdtparF1pzVAsKmNQNMwnlE=;
+        b=ayHty/H869bUyNDDHGsAdH5tQGUf2LYCsthgC23JZczuxYzK8ei6XoMyu5HxICXWH1ACeW
+        E9riwKYBLzPxwEHKBE88seOm7eErWEIC+jM3Bz6YqmbtetTdk0CQcocfiDSsRVrWmtmvCY
+        BDrNODOBs4TFLgTFoThXtXbcAphAcw0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-595-F9eqrIHzNAKH37HHqBySfg-1; Thu, 10 Sep 2020 11:03:44 -0400
+X-MC-Unique: F9eqrIHzNAKH37HHqBySfg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1859488EF2E;
+        Thu, 10 Sep 2020 15:02:41 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.10.110.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0CA3719C66;
+        Thu, 10 Sep 2020 15:02:38 +0000 (UTC)
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>
+Cc:     Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>
+Subject: [[PATCH V4]] audit: trigger accompanying records when no rules present
+Date:   Thu, 10 Sep 2020 11:01:54 -0400
+Message-Id: <35f2b8c69b4b9abbc076dd55a6f0f52cf20abad7.1599687447.git.rgb@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Sep 10, 2020 at 08:38:21PM +0200, Mickaël Salaün wrote:
-> There is also the use case of noexec mounts and file permissions. From
-> user space point of view, it doesn't matter which kernel component is in
-> charge of defining the policy. The syscall should then not be tied with
-> a verification/integrity/signature/appraisal vocabulary, but simply an
-> access control one.
+When there are no audit rules registered, mandatory records (config,
+etc.) are missing their accompanying records (syscall, proctitle, etc.).
 
-permission()?
+This is due to audit context dummy set on syscall entry based on absence
+of rules that signals that no other records are to be printed.
+
+Clear the dummy bit if any record is generated.
+
+The proctitle context and dummy checks are pointless since the
+proctitle record will not be printed if no syscall records are printed.
+
+The fds array is reset to -1 after the first syscall to indicate it
+isn't valid any more, but was never set to -1 when the context was
+allocated to indicate it wasn't yet valid.
+
+The audit_inode* functions can be called without going through
+getname_flags() or getname_kernel() that sets audit_names and cwd, so
+set the cwd if it has not already been done so due to audit_names being
+valid.
+
+The LSM dump_common_audit_data() LSM_AUDIT_DATA_NET:AF_UNIX case was
+missed with the ghak96 patch, so add that case here.
+
+Thanks to bauen1 <j2468h@googlemail.com> for reporting LSM situations in
+which context->cwd is not valid, inadvertantly fixed by the ghak96 patch.
+
+Please see upstream github issue
+https://github.com/linux-audit/audit-kernel/issues/120
+This is also related to upstream github issue
+https://github.com/linux-audit/audit-kernel/issues/96
+
+Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+---
+Passes audit-testsuite.
+
+Chagelog:
+v4:
+- rebase on audit/next v5.9-rc1
+- squash v2+v3fix
+- add pwd NULL check in audit_log_name()
+- resubmit after revert
+
+v3:
+- initialize fds[0] to -1
+- init cwd for ghak96 LSM_AUDIT_DATA_NET:AF_UNIX case
+- init cwd for audit_inode{,_child}
+
+v2:
+- unconditionally clear dummy
+- create audit_clear_dummy accessor function
+- remove proctitle context and dummy checks
+
+ kernel/audit.c       |  1 +
+ kernel/audit.h       |  8 ++++++++
+ kernel/auditsc.c     | 11 +++++++----
+ security/lsm_audit.c |  1 +
+ 4 files changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 68cee3bc8cfe..8604eccb348f 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -1865,6 +1865,7 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
+ 	}
+ 
+ 	audit_get_stamp(ab->ctx, &t, &serial);
++	audit_clear_dummy(ab->ctx);
+ 	audit_log_format(ab, "audit(%llu.%03lu:%u): ",
+ 			 (unsigned long long)t.tv_sec, t.tv_nsec/1000000, serial);
+ 
+diff --git a/kernel/audit.h b/kernel/audit.h
+index 3b9c0945225a..abcfef58435b 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -290,6 +290,13 @@ extern int audit_signal_info_syscall(struct task_struct *t);
+ extern void audit_filter_inodes(struct task_struct *tsk,
+ 				struct audit_context *ctx);
+ extern struct list_head *audit_killed_trees(void);
++
++static inline void audit_clear_dummy(struct audit_context *ctx)
++{
++	if (ctx)
++		ctx->dummy = 0;
++}
++
+ #else /* CONFIG_AUDITSYSCALL */
+ #define auditsc_get_stamp(c, t, s) 0
+ #define audit_put_watch(w) {}
+@@ -323,6 +330,7 @@ static inline int audit_signal_info_syscall(struct task_struct *t)
+ }
+ 
+ #define audit_filter_inodes(t, c) AUDIT_DISABLED
++#define audit_clear_dummy(c) {}
+ #endif /* CONFIG_AUDITSYSCALL */
+ 
+ extern char *audit_unpack_string(void **bufp, size_t *remain, size_t len);
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 8dba8f0983b5..9d2de93f40b3 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -929,6 +929,7 @@ static inline struct audit_context *audit_alloc_context(enum audit_state state)
+ 	context->prio = state == AUDIT_RECORD_CONTEXT ? ~0ULL : 0;
+ 	INIT_LIST_HEAD(&context->killed_trees);
+ 	INIT_LIST_HEAD(&context->names_list);
++	context->fds[0] = -1;
+ 	return context;
+ }
+ 
+@@ -1367,7 +1368,10 @@ static void audit_log_name(struct audit_context *context, struct audit_names *n,
+ 			/* name was specified as a relative path and the
+ 			 * directory component is the cwd
+ 			 */
+-			audit_log_d_path(ab, " name=", &context->pwd);
++			if (&context->pwd)
++				audit_log_d_path(ab, " name=", &context->pwd);
++			else
++				audit_log_format(ab, " name=(null)");
+ 			break;
+ 		default:
+ 			/* log the name's directory component */
+@@ -1435,9 +1439,6 @@ static void audit_log_proctitle(void)
+ 	struct audit_context *context = audit_context();
+ 	struct audit_buffer *ab;
+ 
+-	if (!context || context->dummy)
+-		return;
+-
+ 	ab = audit_log_start(context, GFP_KERNEL, AUDIT_PROCTITLE);
+ 	if (!ab)
+ 		return;	/* audit_panic or being filtered */
+@@ -2079,6 +2080,7 @@ void __audit_inode(struct filename *name, const struct dentry *dentry,
+ 	}
+ 	handle_path(dentry);
+ 	audit_copy_inode(n, dentry, inode, flags & AUDIT_INODE_NOEVAL);
++	_audit_getcwd(context);
+ }
+ 
+ void __audit_file(const struct file *file)
+@@ -2197,6 +2199,7 @@ void __audit_inode_child(struct inode *parent,
+ 		audit_copy_inode(found_child, dentry, inode, 0);
+ 	else
+ 		found_child->ino = AUDIT_INO_UNSET;
++	_audit_getcwd(context);
+ }
+ EXPORT_SYMBOL_GPL(__audit_inode_child);
+ 
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 53d0d183db8f..e93077612246 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -369,6 +369,7 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 					audit_log_untrustedstring(ab, p);
+ 				else
+ 					audit_log_n_hex(ab, p, len);
++				audit_getcwd();
+ 				break;
+ 			}
+ 		}
+-- 
+2.18.4
+
