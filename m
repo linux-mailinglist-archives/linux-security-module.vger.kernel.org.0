@@ -2,89 +2,149 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F0D2652AE
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Sep 2020 23:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DA62651CC
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Sep 2020 23:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726539AbgIJVWf (ORCPT
+        id S1725971AbgIJVCO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 10 Sep 2020 17:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        Thu, 10 Sep 2020 17:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731085AbgIJOXu (ORCPT
+        with ESMTP id S1727980AbgIJVBz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 10 Sep 2020 10:23:50 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB96DC0617A4
-        for <linux-security-module@vger.kernel.org>; Thu, 10 Sep 2020 07:11:25 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id ay8so6449453edb.8
-        for <linux-security-module@vger.kernel.org>; Thu, 10 Sep 2020 07:11:25 -0700 (PDT)
+        Thu, 10 Sep 2020 17:01:55 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11126C061756;
+        Thu, 10 Sep 2020 14:01:52 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id p4so7624053qkf.0;
+        Thu, 10 Sep 2020 14:01:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JqER1n/S/bVapO+RyrM1xxWOQKbNzVguXbfv8iwgPWk=;
-        b=mj1ksRYlYZoHO7kIpCwr5VKl8QULoy2ghTj3LYS/kfji3j2CawjoMCGn42zS79XNRh
-         WnAI5fHo5s/8DNoLXqOv92dWpYX5paf1rXOWMU60tkmXsWATdO6Pw4W7TVAV2Tt6gLBw
-         fMahCQYUhQ0eGLb3crDNL0DixDC2fR/N9X7QyM/1+bRWkSC1gO1vqbsQMv+cIL/bd5Zk
-         UxjIAtIySJgzO8XbV+0+BGxHgqrGrETxylsz7OmcMjO7wbExWp2bcEV97VSNj80I5Vyz
-         Bqdvy09ZzA21IET4hSfY4IoRwccGy8h8N4SBVhYpRHEEd0rl8X1PS/VgM+Tlx/+Uf7z+
-         /PWw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qj+bF6JHAiKUykX77NiGv2uVk1sGIJT54ofxqXbZgR4=;
+        b=CNOzJABtDEmZY6gFwgUpGwuAig4xQxjZutndog6nXBEkfkWAt9oQjMk0y0rArt5yzj
+         6w8mOJwIzmQcGG6QJC/eXM4pdsn+4vYY1ZIBK797L4dbXCrqrGCOj/LevtX0SLMsXscb
+         Xn7LLmE99m1EOg/WWgIQrnOM1wN8AT9WBfUtK+DenHHZWEXiBGDpiqj0Hs4GPDryJrve
+         9FkKmt/7NLKhczHZsUsDWn+QAUJlMqJJP4/KCGD/kJNMS5NA0gm5h7Kwb3zNAZx48Ynw
+         vve6TpP9tIWpf9r9opVGITGYI8gNQ9LqygPVjRcbcqa5Wf3lubUzBU/aVlLK3WKewxUq
+         dr7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JqER1n/S/bVapO+RyrM1xxWOQKbNzVguXbfv8iwgPWk=;
-        b=pcHTlARDltIfNjCvtFORXAdSkMia7Kmu+9MvChSmCO34utWpJBWEUB2PNdCi7KPrO1
-         afI2seAdzju9IQdxhOQSflYq2Jw2iIjsXgIhQMJlxnzs5F3N745xsZZv5jxzS0Wuenj9
-         zvY9XcCPs2OYyudz0vWuE7KgOdf85Sj7R9bGiTNEApRuQIB2k3vUPl2gW1e+PMMQ3Lgp
-         RG+bIvbNDTDz/3obwXb2PmYNE7Ik0S7xeQjZk/0qMoRJNSGKyFToMYpLGyro6UjNSI03
-         PdnN/sqjG4T3TXuXSLyalWec0a4PmCB6YJiLo0re7ipbszAeGdLllNmaAWsSD61K9BLy
-         xE5A==
-X-Gm-Message-State: AOAM530Mk3XHU8m0SJuL2SFon7tmb86yDYzL80IOsxmBngGfTWQlVQqP
-        IHlDqLBytOw7nTGxbsCDdtNiMYO/BoSICwHy6c1m
-X-Google-Smtp-Source: ABdhPJy1FTJ7DXFJo05WoW+t4O9pZDdDoW4TpXiv609ezJYlL+41ua8D4GnLvm80oWsYted6RRcGfRiYYQPB685hrWg=
-X-Received: by 2002:a05:6402:1805:: with SMTP id g5mr9107156edy.135.1599747084327;
- Thu, 10 Sep 2020 07:11:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qj+bF6JHAiKUykX77NiGv2uVk1sGIJT54ofxqXbZgR4=;
+        b=kprPMUF+LTx3bNRpr0PpS2jVBuYJkLoAXIf+85g44DYArRvlrV/kZpQ10DH60ZqS8N
+         sdEgicjLuutamsDdYNc6AvnskUpRww4OsE0xuH3Y3ZupTOkBfz8L88UBALX4OX+MoOqB
+         DiWS/fwmDVzbyPmYZXLTrz5URbjDIjBo1wHGPWT7RtEAqkJha1sFrDuZDR6fKlwAVp2k
+         dzS8kB+WQfZyxYSIA+KvSG5AKVQd45Tg3wEM/f3h6YGSJICygLr09Kmw3GKg1YrzG0zJ
+         XLKBWeYQN5ibYH6e4kv/Jzr1sCJG+CCD2H4vpLlTmIBROrhwt6giI3as8t1Xk3ndhaVp
+         odFg==
+X-Gm-Message-State: AOAM5325WOeDEgajtR5DGNaYiyKbr9kjBuYtM2glCiO7L2JUwU6c4f3S
+        7SKOI/cnQ3ufJxQxq5ygmRE=
+X-Google-Smtp-Source: ABdhPJw9OCeXPquFymYHBaZYRTytzOzHjznm/e9LSivf+IcVTn/OufvciOc7XaKg+oW4v7pnzMkXLA==
+X-Received: by 2002:ae9:e8c5:: with SMTP id a188mr9966875qkg.204.1599771710554;
+        Thu, 10 Sep 2020 14:01:50 -0700 (PDT)
+Received: from puritycontrol.fios-router.home (pool-68-134-6-11.bltmmd.fios.verizon.net. [68.134.6.11])
+        by smtp.gmail.com with ESMTPSA id g12sm153604qke.90.2020.09.10.14.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 14:01:50 -0700 (PDT)
+From:   Stephen Smalley <stephen.smalley.work@gmail.com>
+To:     mtk.manpages@gmail.com
+Cc:     linux-man@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: [PATCH] socket.7,unix.7: add initial description for SO_PEERSEC
+Date:   Thu, 10 Sep 2020 17:00:59 -0400
+Message-Id: <20200910210059.34759-1-stephen.smalley.work@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20200826145247.10029-1-casey@schaufler-ca.com>
- <20200826145247.10029-6-casey@schaufler-ca.com> <CAHC9VhSh=r4w_3mZOUwmKN0UxCMxPNGKd=_vr_iGV06rvCNbSA@mail.gmail.com>
- <1eeef766-405f-3800-c0cf-3eb008f9673e@schaufler-ca.com> <CAHC9VhSf8RWUnRPYLR6LLzbn-cvNg8J0wnZGwTOAe=dOqkvd0g@mail.gmail.com>
- <ef6a049a-c6b9-370b-c521-4594aa73e403@schaufler-ca.com> <CAHC9VhSu4qqKWsutm3=GF_pihUKpwjAtc9gAhfjGsGtKfz-Azw@mail.gmail.com>
- <585600d7-70fb-0982-1e6b-ffd7b7c33e32@schaufler-ca.com> <9a58d14c-eaff-3acf-4689-925cf08ba406@canonical.com>
- <CAEjxPJ7i5Ruy=NZ+sq3qCm8ux+sZXY5+XX_zJu3+OqFq3d_SLQ@mail.gmail.com>
- <CAEjxPJ5KudgTjhmXBNdCO_ctvioy5UA5PXcoKX4zc19NYKgHZA@mail.gmail.com>
- <c5bef71e-6d78-2058-bcaa-8497c76d7375@schaufler-ca.com> <b320f0f6-02db-95a5-acc5-cadd5dbb57dc@canonical.com>
- <CAEjxPJ6wFJz935RR_1u+-EjAw3VMv4nabo-Za_OqkZGJuNS5Sg@mail.gmail.com> <b67799e2-fa22-2890-698d-f410913b0c8a@canonical.com>
-In-Reply-To: <b67799e2-fa22-2890-698d-f410913b0c8a@canonical.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 10 Sep 2020 10:11:13 -0400
-Message-ID: <CAHC9VhRMubBNRNRKSLWrQw9nGZFX1G96+8EZzaG69OHWvZaJoQ@mail.gmail.com>
-Subject: Re: [PATCH v20 05/23] net: Prepare UDS for security module stacking
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Casey Schaufler <casey.schaufler@intel.com>,
-        James Morris <jmorris@namei.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>, linux-audit@redhat.com,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Stephen Smalley <sds@tycho.nsa.gov>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Sep 9, 2020 at 2:47 PM John Johansen
-<john.johansen@canonical.com> wrote:
-> ... For now Casey can drop it from this series.
+SO_PEERSEC was introduced for AF_UNIX stream sockets connected via
+connect(2) in Linux 2.6.2 and later augmented to support AF_UNIX stream
+and datagram sockets created via socketpair(2) in Linux 4.18.  Document
+SO_PEERSEC in the socket.7 and unix.7 man pages following the example
+of the existing SO_PEERCRED descriptions.  SO_PEERSEC is also supported
+on AF_INET sockets when using labeled IPSEC or NetLabel but defer
+adding a description of that support to a separate patch.
 
-As long as that whenever it reappears there is at the very least some
-note of the limits in the commit description and the code (via
-comments in the struct).  Of course that assumes we can't find an
-alternate solution that we can all agree on which doesn't have these
-stacking limits.
+Signed-off-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+---
+ man7/socket.7 |  5 +++++
+ man7/unix.7   | 40 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
 
+diff --git a/man7/socket.7 b/man7/socket.7
+index 21e891791..c3635f95b 100644
+--- a/man7/socket.7
++++ b/man7/socket.7
+@@ -690,6 +690,11 @@ Return the credentials of the peer process connected to this socket.
+ For further details, see
+ .BR unix (7).
+ .TP
++.BR SO_PEERSEC " (since Linux 2.6.2)"
++Return the security context of the peer socket connected to this socket.
++For further details, see
++.BR unix (7).
++.TP
+ .B SO_PRIORITY
+ Set the protocol-defined priority for all packets to be sent on
+ this socket.
+diff --git a/man7/unix.7 b/man7/unix.7
+index f61b51424..1032c0aa1 100644
+--- a/man7/unix.7
++++ b/man7/unix.7
+@@ -349,6 +349,46 @@ stream sockets and for
+ .B AF_UNIX
+ stream and datagram socket pairs created using
+ .BR socketpair (2).
++.TP
++.B SO_PEERSEC
++This read-only socket option returns the
++security context of the peer socket connected to this socket.
++By default, this will be the same as the security context of
++the process that created the peer socket unless overridden
++by the policy or by a process with the required permissions.
++.IP
++The argument to
++.BR getsockopt (2)
++is a pointer to a
++buffer of the specified length in bytes
++into which the security context string will be copied.
++If the buffer length is less than the length of the security
++context string, then
++.BR getsockopt (2)
++will return the required length
++via
++.I optlen
++and return \-1 and sets
++.I errno
++to
++.BR ERANGE .
++The caller should allocate at least
++.BR NAME_MAX
++bytes for the buffer initially although this is not guaranteed
++to be sufficient.  Resizing the buffer to the returned length
++and retrying may be necessary.
++.IP
++For SELinux, the security context string is a null-terminated
++string and the returned length includes the terminating null.
++Other security modules may differ.
++.IP
++The use of this option for sockets in the
++.B AF_UNIX
++address family
++is supported since Linux 2.6.2 for connected stream sockets and
++since Linux 4.18, also for stream and datagram socket pairs created
++using
++.BR socketpair (2).
+ .\"
+ .SS Autobind feature
+ If a
 -- 
-paul moore
-www.paul-moore.com
+2.25.1
+
