@@ -2,168 +2,89 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81582651A9
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Sep 2020 22:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F0D2652AE
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Sep 2020 23:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725864AbgIJU7L (ORCPT
+        id S1726539AbgIJVWf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 10 Sep 2020 16:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        Thu, 10 Sep 2020 17:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727908AbgIJUzj (ORCPT
+        with ESMTP id S1731085AbgIJOXu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 10 Sep 2020 16:55:39 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8212C061757
-        for <linux-security-module@vger.kernel.org>; Thu, 10 Sep 2020 13:55:38 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id gr14so10798335ejb.1
-        for <linux-security-module@vger.kernel.org>; Thu, 10 Sep 2020 13:55:38 -0700 (PDT)
+        Thu, 10 Sep 2020 10:23:50 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB96DC0617A4
+        for <linux-security-module@vger.kernel.org>; Thu, 10 Sep 2020 07:11:25 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id ay8so6449453edb.8
+        for <linux-security-module@vger.kernel.org>; Thu, 10 Sep 2020 07:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6WIiEBg2V+e3hARqFde0aiNR5ScO14X3JJL78bMDSrs=;
-        b=L1fFI0y0Pe7czKsJuyVbxrmCDK0BnWq+6Kvh94sOd+r3i7msl/xLwLjzzzL9c28sAK
-         rR/+QnQaVicDMJJygLh0QwtQZRBvwqQJ5B/ajnk1a5e6wni2BRpk21gKHUzsEjqhdZlC
-         iNnidHCMLR8KiKmhBg9yFZO8/CrMLJAzGj7kfuVVeFwgzG8EdxWJtB4hNNKdRY4VNRNi
-         4fsNcbKzW3Vus8t+CEXPUuK+1etDhZqfaf5eNc0V+gczmE2YOW+pKG3W/Ot9ScdzAV9L
-         5xA17qxbjuoEpJU1m/PvmZL3DAYqeFNX1Tief9l5wRZX2ahMJBmPCcBHUhzF2E/mTgnd
-         rd8w==
+        bh=JqER1n/S/bVapO+RyrM1xxWOQKbNzVguXbfv8iwgPWk=;
+        b=mj1ksRYlYZoHO7kIpCwr5VKl8QULoy2ghTj3LYS/kfji3j2CawjoMCGn42zS79XNRh
+         WnAI5fHo5s/8DNoLXqOv92dWpYX5paf1rXOWMU60tkmXsWATdO6Pw4W7TVAV2Tt6gLBw
+         fMahCQYUhQ0eGLb3crDNL0DixDC2fR/N9X7QyM/1+bRWkSC1gO1vqbsQMv+cIL/bd5Zk
+         UxjIAtIySJgzO8XbV+0+BGxHgqrGrETxylsz7OmcMjO7wbExWp2bcEV97VSNj80I5Vyz
+         Bqdvy09ZzA21IET4hSfY4IoRwccGy8h8N4SBVhYpRHEEd0rl8X1PS/VgM+Tlx/+Uf7z+
+         /PWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6WIiEBg2V+e3hARqFde0aiNR5ScO14X3JJL78bMDSrs=;
-        b=AlWYAZmr5ycJFgqoGV2vfMIzbcmoD5cnshCIxAbPCNC1r4c2+6RhSn1XphSE3I9HZx
-         RTBV5VIUJ+JsGyEp28ea1WkpnX8+jKZAPNhCKQpAiToL+v2+jcLKVoPn8LLQi+HNaF8L
-         KGPk8iNWupgwL7xWkTgDqg95igVdo1m0bdtq/0tK5lq1sZWTEJ1r9nNl4k7ICivYoVGg
-         7c0Gfv8/Pgw1n4u2XiyWLil1oJ9fSElka0u13gGs+cpcFt8dZ2Hjq2MNl79IxltfCUvl
-         1elphSuibfOr89HYh3eqCBZ7jjv+cY2vmLid4MnRXhxD8T1KE0fTjt/We/VwjJ7Q9fRY
-         jG3g==
-X-Gm-Message-State: AOAM532YJLjETxBn36IuLWBLw/u9ISc/0WNkHTaWIKccu8IIXu1dgcus
-        CaCPTtjwcLezfjZAj0pBogFp+88Djh55M1Ic2SEjbw==
-X-Google-Smtp-Source: ABdhPJz2fcbh8Swae5gqu3WCfXH+VoeuT8fBYorB0A9IvemCCzCy2a8aXjwcmpKuCfugC/8/pRR1MEGeVzo0AYRbaxo=
-X-Received: by 2002:a17:906:1513:: with SMTP id b19mr11068344ejd.537.1599771337075;
- Thu, 10 Sep 2020 13:55:37 -0700 (PDT)
+        bh=JqER1n/S/bVapO+RyrM1xxWOQKbNzVguXbfv8iwgPWk=;
+        b=pcHTlARDltIfNjCvtFORXAdSkMia7Kmu+9MvChSmCO34utWpJBWEUB2PNdCi7KPrO1
+         afI2seAdzju9IQdxhOQSflYq2Jw2iIjsXgIhQMJlxnzs5F3N745xsZZv5jxzS0Wuenj9
+         zvY9XcCPs2OYyudz0vWuE7KgOdf85Sj7R9bGiTNEApRuQIB2k3vUPl2gW1e+PMMQ3Lgp
+         RG+bIvbNDTDz/3obwXb2PmYNE7Ik0S7xeQjZk/0qMoRJNSGKyFToMYpLGyro6UjNSI03
+         PdnN/sqjG4T3TXuXSLyalWec0a4PmCB6YJiLo0re7ipbszAeGdLllNmaAWsSD61K9BLy
+         xE5A==
+X-Gm-Message-State: AOAM530Mk3XHU8m0SJuL2SFon7tmb86yDYzL80IOsxmBngGfTWQlVQqP
+        IHlDqLBytOw7nTGxbsCDdtNiMYO/BoSICwHy6c1m
+X-Google-Smtp-Source: ABdhPJy1FTJ7DXFJo05WoW+t4O9pZDdDoW4TpXiv609ezJYlL+41ua8D4GnLvm80oWsYted6RRcGfRiYYQPB685hrWg=
+X-Received: by 2002:a05:6402:1805:: with SMTP id g5mr9107156edy.135.1599747084327;
+ Thu, 10 Sep 2020 07:11:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200910202107.3799376-1-keescook@chromium.org> <20200910202107.3799376-7-keescook@chromium.org>
-In-Reply-To: <20200910202107.3799376-7-keescook@chromium.org>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 10 Sep 2020 22:55:11 +0200
-Message-ID: <CAG48ez0boPBDm=Uh5xHXAxTj0BTRGyGp4uCgPgw7PkOCo47Hdg@mail.gmail.com>
-Subject: Re: [RFC PATCH 6/6] security/fbfam: Mitigate a fork brute force attack
-To:     Kees Cook <keescook@chromium.org>, John Wood <john.wood@gmx.com>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
+References: <20200826145247.10029-1-casey@schaufler-ca.com>
+ <20200826145247.10029-6-casey@schaufler-ca.com> <CAHC9VhSh=r4w_3mZOUwmKN0UxCMxPNGKd=_vr_iGV06rvCNbSA@mail.gmail.com>
+ <1eeef766-405f-3800-c0cf-3eb008f9673e@schaufler-ca.com> <CAHC9VhSf8RWUnRPYLR6LLzbn-cvNg8J0wnZGwTOAe=dOqkvd0g@mail.gmail.com>
+ <ef6a049a-c6b9-370b-c521-4594aa73e403@schaufler-ca.com> <CAHC9VhSu4qqKWsutm3=GF_pihUKpwjAtc9gAhfjGsGtKfz-Azw@mail.gmail.com>
+ <585600d7-70fb-0982-1e6b-ffd7b7c33e32@schaufler-ca.com> <9a58d14c-eaff-3acf-4689-925cf08ba406@canonical.com>
+ <CAEjxPJ7i5Ruy=NZ+sq3qCm8ux+sZXY5+XX_zJu3+OqFq3d_SLQ@mail.gmail.com>
+ <CAEjxPJ5KudgTjhmXBNdCO_ctvioy5UA5PXcoKX4zc19NYKgHZA@mail.gmail.com>
+ <c5bef71e-6d78-2058-bcaa-8497c76d7375@schaufler-ca.com> <b320f0f6-02db-95a5-acc5-cadd5dbb57dc@canonical.com>
+ <CAEjxPJ6wFJz935RR_1u+-EjAw3VMv4nabo-Za_OqkZGJuNS5Sg@mail.gmail.com> <b67799e2-fa22-2890-698d-f410913b0c8a@canonical.com>
+In-Reply-To: <b67799e2-fa22-2890-698d-f410913b0c8a@canonical.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 10 Sep 2020 10:11:13 -0400
+Message-ID: <CAHC9VhRMubBNRNRKSLWrQw9nGZFX1G96+8EZzaG69OHWvZaJoQ@mail.gmail.com>
+Subject: Re: [PATCH v20 05/23] net: Prepare UDS for security module stacking
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Casey Schaufler <casey.schaufler@intel.com>,
         James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-doc@vger.kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
+        LSM List <linux-security-module@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>, linux-audit@redhat.com,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Stephen Smalley <sds@tycho.nsa.gov>
 Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Sep 10, 2020 at 10:22 PM Kees Cook <keescook@chromium.org> wrote:
-> In order to mitigate a fork brute force attack it is necessary to kill
-> all the offending tasks. This tasks are all the ones that share the
-> statistical data with the current task (the task that has crashed).
->
-> Since the attack detection is done in the function fbfam_handle_attack()
-> that is called every time a core dump is triggered, only is needed to
-> kill the others tasks that share the same statistical data, not the
-> current one as this is in the path to be killed.
->
-> When the SIGKILL signal is sent to the offending tasks from the function
-> fbfam_kill_tasks(), this one will be called again during the core dump
-> due to the shared statistical data shows a quickly crashing rate. So, to
-> avoid kill again the same tasks due to a recursive call of this
-> function, it is necessary to disable the attack detection.
->
-> To disable this attack detection, add a condition in the function
-> fbfam_handle_attack() to not compute the crashing rate when the jiffies
-> stored in the statistical data are set to zero.
-[...]
->  /**
-> - * fbfam_handle_attack() - Fork brute force attack detection.
-> + * fbfam_kill_tasks() - Kill the offending tasks
-> + *
-> + * When a fork brute force attack is detected it is necessary to kill all the
-> + * offending tasks. Since this function is called from fbfam_handle_attack(),
-> + * and so, every time a core dump is triggered, only is needed to kill the
-> + * others tasks that share the same statistical data, not the current one as
-> + * this is in the path to be killed.
-> + *
-> + * When the SIGKILL signal is sent to the offending tasks, this function will be
-> + * called again during the core dump due to the shared statistical data shows a
-> + * quickly crashing rate. So, to avoid kill again the same tasks due to a
-> + * recursive call of this function, it is necessary to disable the attack
-> + * detection setting the jiffies to zero.
-> + *
-> + * To improve the for_each_process loop it is possible to end it when all the
-> + * tasks that shared the same statistics are found.
+On Wed, Sep 9, 2020 at 2:47 PM John Johansen
+<john.johansen@canonical.com> wrote:
+> ... For now Casey can drop it from this series.
 
-This is not a fastpath, there's no need to be clever and optimize
-things here, please get rid of that optimization. Especially since
-that fastpath looks racy against concurrent execve().
+As long as that whenever it reappears there is at the very least some
+note of the limits in the commit description and the code (via
+comments in the struct).  Of course that assumes we can't find an
+alternate solution that we can all agree on which doesn't have these
+stacking limits.
 
-> + * Return: -EFAULT if the current task doesn't have statistical data. Zero
-> + *         otherwise.
-> + */
-> +static int fbfam_kill_tasks(void)
-> +{
-> +       struct fbfam_stats *stats = current->fbfam_stats;
-> +       struct task_struct *p;
-> +       unsigned int to_kill, killed = 0;
-> +
-> +       if (!stats)
-> +               return -EFAULT;
-> +
-> +       to_kill = refcount_read(&stats->refc) - 1;
-> +       if (!to_kill)
-> +               return 0;
-> +
-> +       /* Disable the attack detection */
-> +       stats->jiffies = 0;
-> +       rcu_read_lock();
-> +
-> +       for_each_process(p) {
-> +               if (p == current || p->fbfam_stats != stats)
-
-p->fbfam_stats could change concurrently, you should at least use
-READ_ONCE() here.
-
-Also, if this codepath is hit by a non-leader thread, "p == current"
-will always be false, and you'll end up killing the caller, too. You
-may want to compare with current->group_leader instead.
-
-
-> +                       continue;
-> +
-> +               do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_PID);
-> +               pr_warn("fbfam: Offending process with PID %d killed\n",
-> +                       p->pid);
-
-Normally pr_*() messages about tasks mention not just the pid, but
-also the ->comm name of the task.
-
-> +               killed += 1;
-> +               if (killed >= to_kill)
-> +                       break;
-> +       }
-> +
-> +       rcu_read_unlock();
-> +       return 0;
-> +}
+-- 
+paul moore
+www.paul-moore.com
