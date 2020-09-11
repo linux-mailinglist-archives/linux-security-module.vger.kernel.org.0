@@ -2,102 +2,175 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9E12662C7
-	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 18:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA5B2662F1
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 18:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726228AbgIKQAm (ORCPT
+        id S1726501AbgIKQHh (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 11 Sep 2020 12:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726584AbgIKQAT (ORCPT
+        Fri, 11 Sep 2020 12:07:37 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25952 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726546AbgIKQFY (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 11 Sep 2020 12:00:19 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC96EC061757;
-        Fri, 11 Sep 2020 09:00:12 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id o5so11935664wrn.13;
-        Fri, 11 Sep 2020 09:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hEkzMObtlMCjl5OEUQI4JjhybRui5jJdjA+tfo7mycI=;
-        b=LSMifRT1kg+usml3PAv79ANoIxBDJRqAoGNiI6Mq8IPk82w7BxifHlH4UcVtAutAch
-         yIV0jMswvurJWUTn/9ybFmA9yX+AFk83n7Z04v8sLZlsqUPyQuGGGtP5NDWsfM4H7Ql4
-         W0ukiCcAQRlSeTs9NlrYYH7VgqPMrP1XfLVwQE/Tz0rIQVPDMZ+FtNxUiiGluZmIEPp1
-         Omk0BMpU1JDC5vwHr9X1Vk+eZBmeu4jMwm6KINVWDLTrXpXnwimpSHLs6I8uoO7wDVLi
-         oFLSMNluuDc8SBvg6uQrhzL3+NekyIUkEDneLbQATvWEGTHpOSZ5xBZgsYK5jymUCdxl
-         G38w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hEkzMObtlMCjl5OEUQI4JjhybRui5jJdjA+tfo7mycI=;
-        b=siStZd3Nnc3FvcykoStcVvjDMhDvT356SvLdLjmzdoS5Vw52G/ZNvkQElLDr5lQv4X
-         HjOGOLJAjNaN7iK6k9z6uQsrkUu1L9B732NKxHGESmJvwrpfrdBxULVatCBhhq5q5x+Y
-         dOR/KBn9mgRbHiM5s/VCHRZH8h3ateFNIx7ji+p4aUFlpKSrcyquLD2WegJM5h6nsiIv
-         Dnu02klKdA9279TIPQHwhbE9DCTML91WIulqVQ/FSv5N0zm/G9Gx/Um1NiqUXLKmD6Zt
-         P7/L+3Vl83ZgNJxYEuQ8qBzwwRF580kPjZNBQjVM0wHhymDVySIOYslWH5hTMlbIWt6v
-         IZfQ==
-X-Gm-Message-State: AOAM530rk9Silw8aO1tbT5cN3xjlPcmDJpGaLO0G2yNrujT4mcD3R7Dt
-        BQ1KF/BmvqwVk5abXyANHH0=
-X-Google-Smtp-Source: ABdhPJxu0LW3DrbznN/sdzLJi1Fi0CjGquTIOvBpI/QIUkHmDPzdFiiFMk4owJLxlRsg5Mw9cpOloA==
-X-Received: by 2002:a5d:62c2:: with SMTP id o2mr2675691wrv.418.1599840011391;
-        Fri, 11 Sep 2020 09:00:11 -0700 (PDT)
-Received: from lenovo-laptop (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
-        by smtp.gmail.com with ESMTPSA id t1sm4843370wmi.16.2020.09.11.09.00.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2020 09:00:10 -0700 (PDT)
-From:   Alex Dewar <alex.dewar90@gmail.com>
-X-Google-Original-From: Alex Dewar <alex.dewar@gmx.co.uk>
-Date:   Fri, 11 Sep 2020 17:00:09 +0100
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Alex Dewar <alex.dewar90@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] security: keys: Use kvfree_sensitive in a few places
-Message-ID: <20200911160009.n2drvcjpzrsloxcj@lenovo-laptop>
-References: <20200911114400.82207-1-alex.dewar90@gmail.com>
- <1599836664.4041.21.camel@HansenPartnership.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599836664.4041.21.camel@HansenPartnership.com>
+        Fri, 11 Sep 2020 12:05:24 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08BG3rwa141691;
+        Fri, 11 Sep 2020 12:05:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=YJcSNsfJmDfN2POnRfQ8iV1tWua9L62iukE8JEYPFwM=;
+ b=JiTOlVd9zXNwEJsSPw2KmFeHYudqDBBgeAx9zpaTeT2w9G9+Ap9x8GYuUjJPcqpIF0Op
+ hxCl5JxpzC5pnSbWBTcrngV2LIMzZqO6kILYC7yZ/buQkCXf6+IYAnerrE/ulau9AiV/
+ aUTUztHAy/1iZ9SzfC+nCkSIYdklIuIOcWZIOrUjmaqI4HQOWqG53U6FUpDGVUofJVGc
+ DbvKEUhc3CqqWvtXg+B8AK46Iz8+QK86EjyzU+1uhV6JvwU2IuotdlSyV5NAOumMcDP6
+ VTxe27KdfkbH4oVFB64RCBxTFHnNwHZnvC3+agEpjvrESaI3Ec2gNJJHiTBhffuQW2K7 Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33gc3p0h0q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Sep 2020 12:05:17 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08BG5GA4149160;
+        Fri, 11 Sep 2020 12:05:16 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33gc3p0ehj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Sep 2020 12:05:16 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08BFwUJw015347;
+        Fri, 11 Sep 2020 16:01:17 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 33f91w924c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Sep 2020 16:01:17 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08BG1FGH35914100
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Sep 2020 16:01:15 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 251DA4204C;
+        Fri, 11 Sep 2020 16:01:15 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81DA442042;
+        Fri, 11 Sep 2020 16:01:12 +0000 (GMT)
+Received: from sig-9-65-251-51.ibm.com (unknown [9.65.251.51])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 11 Sep 2020 16:01:12 +0000 (GMT)
+Message-ID: <434085a28e9291dd799c1adbf08f003b7e5eb53d.camel@linux.ibm.com>
+Subject: Re: [PATCH V2 0/3] integrity: Load certs from EFI MOK config table
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Lenny Szubowicz <lszubowi@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        linux-security-module@vger.kernel.org, andy.shevchenko@gmail.com,
+        James Morris <jmorris@namei.org>, serge@hallyn.com,
+        Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Jones <pjones@redhat.com>,
+        David Howells <dhowells@redhat.com>, prarit@redhat.com
+Date:   Fri, 11 Sep 2020 12:01:11 -0400
+In-Reply-To: <CAMj1kXHOcGiwOT_sNTQRA=G7GCQSKLk2HSNoS2vEQYPzQpn0nw@mail.gmail.com>
+References: <20200905013107.10457-1-lszubowi@redhat.com>
+         <CAMj1kXHOcGiwOT_sNTQRA=G7GCQSKLk2HSNoS2vEQYPzQpn0nw@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-11_08:2020-09-10,2020-09-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=999 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 phishscore=0 clxscore=1015 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009110127
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Sep 11, 2020 at 08:04:24AM -0700, James Bottomley wrote:
-> On Fri, 2020-09-11 at 12:44 +0100, Alex Dewar wrote:
-> > In big_key.c, there are a few places where memzero_explicit + kvfree
-> > is used. It is better to use kvfree_sensitive instead, which is more
-> > readable and also prevents the compiler from eliding the call to
-> > memzero_explicit. Fix this.
+On Fri, 2020-09-11 at 18:17 +0300, Ard Biesheuvel wrote:
+> On Sat, 5 Sep 2020 at 04:31, Lenny Szubowicz <lszubowi@redhat.com> wrote:
+> >
+> > Because of system-specific EFI firmware limitations, EFI volatile
+> > variables may not be capable of holding the required contents of
+> > the Machine Owner Key (MOK) certificate store when the certificate
+> > list grows above some size. Therefore, an EFI boot loader may pass
+> > the MOK certs via a EFI configuration table created specifically for
+> > this purpose to avoid this firmware limitation.
+> >
+> > An EFI configuration table is a simpler and more robust mechanism
+> > compared to EFI variables and is well suited for one-way passage
+> > of static information from a pre-OS environment to the kernel.
+> >
+> > Entries in the MOK variable configuration table are named key/value
+> > pairs. Therefore the shim boot loader can create a MokListRT named
+> > entry in the MOK configuration table that contains exactly the same
+> > data as the MokListRT UEFI variable does or would otherwise contain.
+> > As such, the kernel can load certs from the data in the MokListRT
+> > configuration table entry data in the same way that it loads certs
+> > from the data returned by the EFI GetVariable() runtime call for the
+> > MokListRT variable.
+> >
+> > This patch set does not remove the support for loading certs from the
+> > EFI MOK variables into the platform key ring. However, if both the EFI
+> > MOK configuration table and corresponding EFI MOK variables are present,
+> > the MOK table is used as the source of MOK certs.
+> >
+> > The contents of the individual named MOK config table entries are
+> > made available to user space as individual sysfs binary files,
+> > which are read-only to root, under:
+> >
+> >         /sys/firmware/efi/mok-variables/
+> >
+> > This enables an updated mokutil to provide support for:
+> >
+> >         mokutil --list-enrolled
+> >
+> > such that it can provide accurate information regardless of whether
+> > the MOK configuration table or MOK EFI variables were the source
+> > for certs. Note that all modifications of MOK related state are still
+> > initiated by mokutil via EFI variables.
+> >
+> > V2: Incorporate feedback from V1
+> >   Patch 01: efi: Support for MOK variable config table
+> >   - Minor update to change log; no code changes
+> >   Patch 02: integrity: Move import of MokListRT certs to a separate routine
+> >   - Clean up code flow in code moved to load_moklist_certs()
+> >   - Remove some unnecessary initialization of variables
+> >   Patch 03: integrity: Load certs from the EFI MOK config table
+> >   - Update required due to changes in patch 02.
+> >   - Remove unnecessary init of mokvar_entry in load_moklist_certs()
+> >
+> > V1:
+> >   https://lore.kernel.org/lkml/20200826034455.28707-1-lszubowi@redhat.com/
+> >
+> > Lenny Szubowicz (3):
+> >   efi: Support for MOK variable config table
+> >   integrity: Move import of MokListRT certs to a separate routine
+> >   integrity: Load certs from the EFI MOK config table
+> >
+> >  arch/x86/kernel/setup.c                       |   1 +
+> >  arch/x86/platform/efi/efi.c                   |   3 +
+> >  drivers/firmware/efi/Makefile                 |   1 +
+> >  drivers/firmware/efi/arm-init.c               |   1 +
+> >  drivers/firmware/efi/efi.c                    |   6 +
+> >  drivers/firmware/efi/mokvar-table.c           | 360 ++++++++++++++++++
+> >  include/linux/efi.h                           |  34 ++
+> >  security/integrity/platform_certs/load_uefi.c |  85 ++++-
+> >  8 files changed, 472 insertions(+), 19 deletions(-)
+> >  create mode 100644 drivers/firmware/efi/mokvar-table.c
+> >
 > 
-> That last bit is untrue: the compiler can't elide memzero_explicit ...
-> that's why it has the explicit suffix.
+> Thanks. I have tentatively queued these up in efi/next.
 > 
-> The original problem was a lot of people do memset(.., 0, ..); kfree()
-> which the compiler can elide if it understands the memory is going out
-> of scope.  Or the even more problematic memset(..., 0, ...) on a stack
-> variable before it goes out of scope.
-> 
-> We can argue about readability but there's no secret leak here.
+> Mimi, please let me know if you have any thoughts on 3/3, and whether
+> your R-b on 2/3 [v1] implies that you are ok with the series going
+> through the EFI tree.
 
-Ahh, my mistake. Thanks for the explanation.
+Yes, Ard, that was the intent.  I haven't reviewed the most recent
+version.
 
-I'll send a v2 with an updated commit message. I think it would still
-make sense to use kfree_sensitive here as on next-20200911 this is the
-last use of kzfree in the tree and it would be nice to excise it
-altogether.
+Mimi
 
-Best,
-Alex
-
-> 
-> James
-> 
