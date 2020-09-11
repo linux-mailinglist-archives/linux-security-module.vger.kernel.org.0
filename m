@@ -2,134 +2,179 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDF22664CE
-	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 18:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE4F26654C
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 18:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbgIKQpq (ORCPT
+        id S1726177AbgIKQ6P (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 11 Sep 2020 12:45:46 -0400
-Received: from mout.gmx.net ([212.227.17.22]:42089 "EHLO mout.gmx.net"
+        Fri, 11 Sep 2020 12:58:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46078 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725899AbgIKPIL (ORCPT
+        id S1726188AbgIKPE1 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 11 Sep 2020 11:08:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1599836889;
-        bh=G9EeG684OMdUFlLwG1fKDDjwAUDvW1fU+fIQtdRyrqw=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=FmLtj3P9nVtYk8D8IP76Gmfsm2buRmLyiyQJRp6MZsa3iShB8zigqcBT44hnkwwmI
-         5eecR7w0LtVhaWsKRupn9EeksxPPL9VTw28MtVNl8121pp7XS3x+cRXEyTL0CGpuyd
-         cGWKI8GJa90QBOf3N1GGz5xXp1s9a9uDFnCWqZjY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([79.150.73.70]) by mail.gmx.com (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MDhlf-1kPqko2S7L-00ApMA; Fri, 11
- Sep 2020 16:48:25 +0200
-Date:   Fri, 11 Sep 2020 16:48:06 +0200
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>
-Cc:     John Wood <john.wood@gmx.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [RESEND][RFC PATCH 0/6] Fork brute force attack mitigation
- (fbfam)
-Message-ID: <20200911144806.GA4128@ubuntu>
-References: <20200910202107.3799376-1-keescook@chromium.org>
- <202009101656.FB68C6A@keescook>
+        Fri, 11 Sep 2020 11:04:27 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7CFB7223BD;
+        Fri, 11 Sep 2020 15:02:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599836562;
+        bh=6nL6VORoOL0XE1BB6SwMAH9ldlMzieej9aulUv5ApCU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VxvX7lXdShMpWUUnXfTtcj9IvJa72g4/FGW8OseJYt0DbFmq4GGZDgTBQJkfrmLPz
+         GGAV0wbezdq+tR210aKWkXdicHLdFVA9brSAM/CbsGHjjCLuY2UI/VMiGkt98AiLPd
+         OftjZDFmAWc1SWtzHwa6NUWqubaF54my5DB2yVBU=
+Received: by mail-ot1-f41.google.com with SMTP id o8so892311otl.4;
+        Fri, 11 Sep 2020 08:02:42 -0700 (PDT)
+X-Gm-Message-State: AOAM531a0dHCcTj/pIDE6fBFPaXvv36nL+7qNSEqp+JUKNLORspKaI8s
+        0peRTFsYMa4nAaDXHDQmU+djZtMlxTYPCtwKGcs=
+X-Google-Smtp-Source: ABdhPJw07czxiY1a68IYlOpS8V9p84gFMT12gE8YbqAz3XuZxMaBeP7+1oa02tUZjq4T/SCm2P4T+6GhCfFPI6RBSNU=
+X-Received: by 2002:a9d:6193:: with SMTP id g19mr1430262otk.108.1599836561839;
+ Fri, 11 Sep 2020 08:02:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202009101656.FB68C6A@keescook>
-X-Provags-ID: V03:K1:lN2qV3qD2XYCvHt1VuPq2YwfnHEhZEnQJ2uck8HViBxO+Ey5Oty
- ATL+/5H8I/zUYXvMP33JfPDWFPyE23DM1AJqhd6s4wpWmgJrYDZrA175xylTSlrpm8qP0yc
- MSG8/CNOMmjcRYHet6fxq6oZmbbmZ58JhxOdd6qmCTLg2Q6zBO3VPwETDll1RoQlo/eNtDY
- 3q5yWEZTjUslSuNBTCm+w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zfZog7YqfRo=:zP6dF4Pc4v/zEQ0GrAlY32
- Vj1gyg+5Zzktg+BOyx9VBIKDtXxN6/44JOf5S6QodMzC0O6bZnz56stqlFuHiqRFENmvuTpWs
- jTIro+BUEm7IxLqcLcO+e6JaPVjJqb4yvIOWzyCWZ2CqeZLCiaeYQg60JvfwKGblRBQlM3+5y
- K6aDRFSOB+2iQWd8D8GUh0xXnXGW60BDtdfn7UPLiCbuJsPx45odycKDWexWKFBPevcMTkmAu
- EKwmT3OX8I6/mqz3wZVsImCi9ty5ZNK7sHgh63aOJyZ/sm9T2POA2YYqRMkBDQHHbkRniLE/f
- a9RZBVuO0I1NMh823pz1vDUpUr0ALGilVxPTvpdAi3nvVb2x9zldJuUHKX3dFvnAq4OPlPWd4
- k6NwXXX68I8nPyDQDrcWnm8XtBc6PdgKsjR0Ub9GvfQAXqUCkS/DajD178gxlrQHLtN5PjaAx
- NqVt44EyMA5CP+UKjc+/0igPCELzV4+YvXRDAw4J8NalCapZnCK+bJbnt6RLnagKeQvQJX07n
- TZEDg9wKJMG9iLl5ncSZsftRjNtsT1CpD6BRDXeSFw49oZJkQbZkc9BsBS33qvtWqiKR7i0tu
- cTJziIT8fJj55RVQTCsscqKRnu6vJhkg9Meko3pN1KczigZiUbAPfgMYcQOwMfxct/reeK5Zx
- Erx2mEHwYuym2JEPYL9jn/HavbsIP2LweKcoRcDPBy7VcW2K1hw/MxY7tw9nnpOkUI46FixR5
- Gw+IR+8Of7cge5x4+zId8DOxdGTKps+R8sVC5Xr5p4/2YlpMksyTN35w7nO9uslZjLkGsn0L3
- uETGqa5VEs/VdiXJUt9/lqpaVTnoKcVeSmwov/qjxaRr+P8reu9vIEZnyO5EC+hw0mS5AYrvC
- ZttVKe1SSdmsBaynS9OyLpfkwOi+vV+Tl+XPzISzfU5xlpF3dzZMz+6Rjs6Z2AJtCbFasuKDk
- BfgHosBBg20NjSkI26DtyKjL57QWhQdD2VLTqJUyppaUY9uVHj9nnyf/lf1icm/BX7LD+3P5v
- ZK7I0p6jZCkcQDUPtpEITx71pOnpz4qe8CpmItQqPD1kqdR/cosFJvycw70mkLIVVFVFwpb9p
- zDM5i5gu2NckEjBKXtK33o08FEjtEGCES/vhygf8XzOboN7KopApFhD0heCwLotVp4Q0YIlQ1
- C0hiiA+J6T15UZPuGYByLV5B2mKXEvdqvhLsxk+oNVznW2J4AngtOKse6t7AfF4lqqnZWasMe
- NKXE6fbDSTJk/Uh6URk44hZGrKuzuq7+SsZFdZg==
-Content-Transfer-Encoding: quoted-printable
+References: <20200905013107.10457-1-lszubowi@redhat.com> <20200905013107.10457-3-lszubowi@redhat.com>
+In-Reply-To: <20200905013107.10457-3-lszubowi@redhat.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 11 Sep 2020 18:02:27 +0300
+X-Gmail-Original-Message-ID: <CAMj1kXEdkdeE8VSZqEzhd__Kb7_ZmG2af6iBpbY3=nsj1-phYw@mail.gmail.com>
+Message-ID: <CAMj1kXEdkdeE8VSZqEzhd__Kb7_ZmG2af6iBpbY3=nsj1-phYw@mail.gmail.com>
+Subject: Re: [PATCH V2 2/3] integrity: Move import of MokListRT certs to a
+ separate routine
+To:     Lenny Szubowicz <lszubowi@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        linux-security-module@vger.kernel.org, andy.shevchenko@gmail.com,
+        James Morris <jmorris@namei.org>, serge@hallyn.com,
+        Kees Cook <keescook@chromium.org>, zohar@linux.ibm.com,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Jones <pjones@redhat.com>,
+        David Howells <dhowells@redhat.com>, prarit@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi,
-
-On Thu, Sep 10, 2020 at 04:58:29PM -0700, Kees Cook wrote:
-> On Thu, Sep 10, 2020 at 01:21:01PM -0700, Kees Cook wrote:
-> > From: John Wood <john.wood@gmx.com>
-> >
-> > The goal of this patch serie is to detect and mitigate a fork brute fo=
-rce
-> > attack.
+On Sat, 5 Sep 2020 at 04:31, Lenny Szubowicz <lszubowi@redhat.com> wrote:
 >
-> Thanks for this RFC! I'm excited to get this problem finally handled in
-> the kernel. Hopefully the feedback is useful. :)
+> Move the loading of certs from the UEFI MokListRT into a separate
+> routine to facilitate additional MokList functionality.
+>
+> There is no visible functional change as a result of this patch.
+> Although the UEFI dbx certs are now loaded before the MokList certs,
+> they are loaded onto different key rings. So the order of the keys
+> on their respective key rings is the same.
+>
+> Signed-off-by: Lenny Szubowicz <lszubowi@redhat.com>
 
-Kees and Jann,
+Why did you drop Mimi's reviewed-by from this patch?
 
-Thank you very much for your comments and advices. I'm a newbie in the
-linux kernel development and this is my first attempt. So, I would prefer
-to study all your comments before to reply since a big amount of terms
-you expose are unknown to me.
-
-In other words, a late reply to this serie comments is not a lack of
-interest. Moreover, I think it would be better that I try to understand an=
-d
-to implement your ideas before anything else.
-
-My original patch serie is composed of 9 patches, so the 3 lasts are lost.
-Kees: Have you removed them for some reason? Can you send them for review?
-
-security/fbfam: Add two new prctls to enable and disable the fbfam feature
-https://github.com/johwood/linux/commit/8a36399847213e7eb7b45b853568a53666=
-bd0083
-
-Documentation/security: Add documentation for the fbfam feature
-https://github.com/johwood/linux/commit/fb46804541f5c0915f3f48acefbe6dc998=
-815609
-
-MAINTAINERS: Add a new entry for the fbfam feature
-https://github.com/johwood/linux/commit/4303bc8935334136c6ef47b5e50b87cd2c=
-472c1f
-
-Is there a problem if I ask for some guidance (replying to this thread)
-during the process to do my second patch series?
-
-My goal is to learn as much as possible doing something useful for the
-linux kernel.
-
-Thanks a lot,
-John Wood
-
+> ---
+>  security/integrity/platform_certs/load_uefi.c | 63 +++++++++++++------
+>  1 file changed, 44 insertions(+), 19 deletions(-)
+>
+> diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
+> index 253fb9a7fc98..c1c622b4dc78 100644
+> --- a/security/integrity/platform_certs/load_uefi.c
+> +++ b/security/integrity/platform_certs/load_uefi.c
+> @@ -66,6 +66,43 @@ static __init void *get_cert_list(efi_char16_t *name, efi_guid_t *guid,
+>  }
+>
+>  /*
+> + * load_moklist_certs() - Load MokList certs
+> + *
+> + * Load the certs contained in the UEFI MokListRT database into the
+> + * platform trusted keyring.
+> + *
+> + * Return:     Status
+> + */
+> +static int __init load_moklist_certs(void)
+> +{
+> +       efi_guid_t mok_var = EFI_SHIM_LOCK_GUID;
+> +       void *mok;
+> +       unsigned long moksize;
+> +       efi_status_t status;
+> +       int rc;
+> +
+> +       /* Get MokListRT. It might not exist, so it isn't an error
+> +        * if we can't get it.
+> +        */
+> +       mok = get_cert_list(L"MokListRT", &mok_var, &moksize, &status);
+> +       if (mok) {
+> +               rc = parse_efi_signature_list("UEFI:MokListRT",
+> +                                             mok, moksize, get_handler_for_db);
+> +               kfree(mok);
+> +               if (rc)
+> +                       pr_err("Couldn't parse MokListRT signatures: %d\n", rc);
+> +               return rc;
+> +       }
+> +       if (status == EFI_NOT_FOUND)
+> +               pr_debug("MokListRT variable wasn't found\n");
+> +       else
+> +               pr_info("Couldn't get UEFI MokListRT\n");
+> +       return 0;
+> +}
+> +
+> +/*
+> + * load_uefi_certs() - Load certs from UEFI sources
+> + *
+>   * Load the certs contained in the UEFI databases into the platform trusted
+>   * keyring and the UEFI blacklisted X.509 cert SHA256 hashes into the blacklist
+>   * keyring.
+> @@ -73,17 +110,16 @@ static __init void *get_cert_list(efi_char16_t *name, efi_guid_t *guid,
+>  static int __init load_uefi_certs(void)
+>  {
+>         efi_guid_t secure_var = EFI_IMAGE_SECURITY_DATABASE_GUID;
+> -       efi_guid_t mok_var = EFI_SHIM_LOCK_GUID;
+> -       void *db = NULL, *dbx = NULL, *mok = NULL;
+> -       unsigned long dbsize = 0, dbxsize = 0, moksize = 0;
+> +       void *db = NULL, *dbx = NULL;
+> +       unsigned long dbsize = 0, dbxsize = 0;
+>         efi_status_t status;
+>         int rc = 0;
+>
+>         if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
+>                 return false;
+>
+> -       /* Get db, MokListRT, and dbx.  They might not exist, so it isn't
+> -        * an error if we can't get them.
+> +       /* Get db and dbx.  They might not exist, so it isn't an error
+> +        * if we can't get them.
+>          */
+>         if (!uefi_check_ignore_db()) {
+>                 db = get_cert_list(L"db", &secure_var, &dbsize, &status);
+> @@ -102,20 +138,6 @@ static int __init load_uefi_certs(void)
+>                 }
+>         }
+>
+> -       mok = get_cert_list(L"MokListRT", &mok_var, &moksize, &status);
+> -       if (!mok) {
+> -               if (status == EFI_NOT_FOUND)
+> -                       pr_debug("MokListRT variable wasn't found\n");
+> -               else
+> -                       pr_info("Couldn't get UEFI MokListRT\n");
+> -       } else {
+> -               rc = parse_efi_signature_list("UEFI:MokListRT",
+> -                                             mok, moksize, get_handler_for_db);
+> -               if (rc)
+> -                       pr_err("Couldn't parse MokListRT signatures: %d\n", rc);
+> -               kfree(mok);
+> -       }
+> -
+>         dbx = get_cert_list(L"dbx", &secure_var, &dbxsize, &status);
+>         if (!dbx) {
+>                 if (status == EFI_NOT_FOUND)
+> @@ -131,6 +153,9 @@ static int __init load_uefi_certs(void)
+>                 kfree(dbx);
+>         }
+>
+> +       /* Load the MokListRT certs */
+> +       rc = load_moklist_certs();
+> +
+>         return rc;
+>  }
+>  late_initcall(load_uefi_certs);
 > --
-> Kees Cook
+> 2.27.0
+>
