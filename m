@@ -2,183 +2,118 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7C32664BD
-	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 18:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842892665F3
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 19:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbgIKQpN (ORCPT
+        id S1726277AbgIKRSp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 11 Sep 2020 12:45:13 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:34266 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726456AbgIKQpD (ORCPT
+        Fri, 11 Sep 2020 13:18:45 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:20594 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726247AbgIKRSo (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 11 Sep 2020 12:45:03 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 955D820716FC;
-        Fri, 11 Sep 2020 09:44:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 955D820716FC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1599842698;
-        bh=gUgZlvI7DrDjGZFf44Vxy3S7MO/Bh6is8wlbtbN++JI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KhjO3g9XgCN1StTC8gEIDZ9q1vanpS1N5gzlJBhXdjraAawoMc1QD8CpdbbG9iUei
-         D208weHnfgrxqfq0FzSPHSb6XXxC12bumrdbj9oLuxBUC79lIc7W5d2Gt28Bqv1wOt
-         eTcNAtP3r0/DVsSWa/WT2wzgjURxo8n4mUcekG0Y=
-Subject: Re: [PATCH v3 3/6] IMA: update process_buffer_measurement to measure
- buffer hash
-To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
- <20200828015704.6629-4-tusharsu@linux.microsoft.com>
- <f11dbfc1382e60c04fdd519ce5122239fa0cab8b.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <c932ae94-d7c3-5d23-2bb4-95517f712ceb@linux.microsoft.com>
-Date:   Fri, 11 Sep 2020 09:44:57 -0700
+        Fri, 11 Sep 2020 13:18:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599844722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUZ4F9VBNeDOexQ4ImvdIONeNb+COlnwiJ6I4shsy2Q=;
+        b=DGBcsiVIS5SppKeGM+tEZFuL5BHWVlALpjMKWHiZnsjVWQ4sA6bTXRU+HbI2vwgmYHYEOe
+        cJXBj7x937T83oNsa5Pfhn+AEQ22LVP1cf5+MeACXBm2YUMHbOIKFf+tvc6fZvgZQFoVt7
+        IornEuy67lOKWNw83aVUfxsQO1SIc6o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-297-Yrhrg5z2Nv6BretARpwOBA-1; Fri, 11 Sep 2020 13:18:38 -0400
+X-MC-Unique: Yrhrg5z2Nv6BretARpwOBA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 67899393B6;
+        Fri, 11 Sep 2020 17:18:36 +0000 (UTC)
+Received: from [10.10.110.42] (unknown [10.10.110.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 477E45C1BD;
+        Fri, 11 Sep 2020 17:18:33 +0000 (UTC)
+Subject: Re: [PATCH V2 2/3] integrity: Move import of MokListRT certs to a
+ separate routine
+To:     Mimi Zohar <zohar@linux.ibm.com>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        linux-security-module@vger.kernel.org, andy.shevchenko@gmail.com,
+        James Morris <jmorris@namei.org>, serge@hallyn.com,
+        Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Jones <pjones@redhat.com>,
+        David Howells <dhowells@redhat.com>, prarit@redhat.com
+References: <20200905013107.10457-1-lszubowi@redhat.com>
+ <20200905013107.10457-3-lszubowi@redhat.com>
+ <CAMj1kXEdkdeE8VSZqEzhd__Kb7_ZmG2af6iBpbY3=nsj1-phYw@mail.gmail.com>
+ <f0a079b1-5f02-8618-fdfe-aea2278113c9@redhat.com>
+ <cb8b4ebaa35d79eba65b011d042d20a991adf540.camel@linux.ibm.com>
+From:   Lenny Szubowicz <lszubowi@redhat.com>
+Message-ID: <394190b9-59bd-5cb3-317e-736852f190f4@redhat.com>
+Date:   Fri, 11 Sep 2020 13:18:32 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <f11dbfc1382e60c04fdd519ce5122239fa0cab8b.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <cb8b4ebaa35d79eba65b011d042d20a991adf540.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-
-
-On 2020-08-31 10:02 a.m., Mimi Zohar wrote:
-> On Thu, 2020-08-27 at 18:57 -0700, Tushar Sugandhi wrote:
->> process_buffer_measurement() currently only measures the input buffer.
->> When the buffer being measured is too large, it may result in bloated
->> IMA logs.
+On 9/11/20 11:59 AM, Mimi Zohar wrote:
+> On Fri, 2020-09-11 at 11:54 -0400, Lenny Szubowicz wrote:
+>> On 9/11/20 11:02 AM, Ard Biesheuvel wrote:
+>>> On Sat, 5 Sep 2020 at 04:31, Lenny Szubowicz <lszubowi@redhat.com> wrote:
+>>>>
+>>>> Move the loading of certs from the UEFI MokListRT into a separate
+>>>> routine to facilitate additional MokList functionality.
+>>>>
+>>>> There is no visible functional change as a result of this patch.
+>>>> Although the UEFI dbx certs are now loaded before the MokList certs,
+>>>> they are loaded onto different key rings. So the order of the keys
+>>>> on their respective key rings is the same.
+>>>>
+>>>> Signed-off-by: Lenny Szubowicz <lszubowi@redhat.com>
+>>>
+>>> Why did you drop Mimi's reviewed-by from this patch?
+>>
+>> It was not intentional. I was just not aware that I needed to propagate
+>> Mimi Zohar's reviewed-by from V1 of the patch to V2.
+>>
+>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>>
+>> V2 includes changes in that patch to incorporate suggestions from
+>> Andy Shevchenko. My assumption was that the maintainer would
+>> gather up the reviewed-by and add any signed-off-by as appropriate,
+>> but it sounds like my assumption was incorrect. In retrospect, I
+>> could see that having the maintainer dig through prior versions
+>> of a patch set for prior reviewed-by tags could be burdensome.
 > 
-> The subject of  this sentence refers to an individual record, while
-> "bloated" refers to the measurement list.  A "bloated" measurement list
-> would contain too many or unnecessary records.  Your concern seems to
-> be with the size of the individual record, not the number of
-> measurement list entries.
+> As much as possible moving code should be done without making changes,
+> simpler for code review.   Then as a separate patch you make changes.
+> That way you could also have retained my Reviewed-by.
 > 
-The intent behind that description was twofold. One, as you mentioned,
-the individual record size being large; and two, multiple large-sized
-individual records will eventually bloat the measurement list too.
+> Mimi
 
-It can happen in SeLinux case as we discovered. The SeLinux policy
-(which can be a few MBs) can change from 'foo', to 'bar', back to 'foo'.
-And the requirement from SeLinux is that 'foo' should be measured the
-second time too. When 'foo' and 'bar' are large, the individual records
-in the ima log will be large, which will also result in measurement list
-being bloated.
+If you or Ard think I should, I can do a V3 with:
 
-But I understand your concern with the current wording. I will update 
-the patch description accordingly.
+   Patch V3 01: Unchanged from V2
+   Patch V3 02: Goes back to V1 of patch 02 that Mimi reviewed
+   Patch V3 03: New. Has Andy's cleanup suggestions separated from patch 02
+   Patch V3 04: This would most probably just be the V2 of patch 03 with no changes
 
-> Measuring the hash of the buffer data is similar to measuring the file
-> data.  In the case of the file data, however, the attestation server
-> may rely on a white list manifest/DB or the file signature to verify
-> the file data hash.  For buffer measurements, how will the attestation
-> server ascertain what is a valid buffer hash?
-The client and the server implementation will go hand in hand. The
-client/kernel would know what data is measured as-is
-(e.g. KEXEC_CMDLINE), and what data has it’s hash measured
-(e.g. SeLinux Policy). And the attestation server would verify data/hash
-accordingly.
+                  -Lenny.
 
-Just like the data being measured in other cases, the attestation server 
-will know what are possible values of the large buffers being measured. 
-It will have to maintain the hash of those buffer values.
-> 
-> Hint:  I assume, correct me if I'm wrong, the measurement list record
-> template data is not meant to be verified, but used to detect if the "critical data" changed.
-> 
-As mentioned above, the use case for this feature is in-memory loaded 
-SeLinux policy, which can be quite large (several MBs) – that's why this 
-functionality. The data is meant to be verified by the attestation server.
-
-> Please update the patch description accordingly.
-I will update the patch description to clarify all this.
 > 
 >>
->> Introduce a boolean parameter measure_buf_hash to support measuring
->> hash of a buffer, which would be much smaller, instead of the buffer
->> itself.
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> ---
+>> Advice on the expected handling of this would be appreciated.
 > 
-> <snip>
 > 
->> +++ b/security/integrity/ima/ima_main.c
->> @@ -733,17 +733,21 @@ int ima_load_data(enum kernel_load_data_id id)
->>    * @func: IMA hook
->>    * @pcr: pcr to extend the measurement
->>    * @func_data: private data specific to @func, can be NULL.
->> + * @measure_buf_hash: if set to true - will measure hash of the buf,
->> + *                    instead of buf
->>    *
->>    * Based on policy, the buffer is measured into the ima log.
->>    */
->>   int process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   			       const char *eventname, enum ima_hooks func,
->> -			       int pcr, const char *func_data)
->> +			       int pcr, const char *func_data,
->> +			       bool measure_buf_hash)
->>   {
->>   	int ret = 0;
->>   	const char *audit_cause = "ENOMEM";
->>   	struct ima_template_entry *entry = NULL;
->>   	struct integrity_iint_cache iint = {};
->> +	struct integrity_iint_cache digest_iint = {};
->>   	struct ima_event_data event_data = {.iint = &iint,
->>   					    .filename = eventname,
->>   					    .buf = buf,
->> @@ -752,7 +756,7 @@ int process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   	struct {
->>   		struct ima_digest_data hdr;
->>   		char digest[IMA_MAX_DIGEST_SIZE];
->> -	} hash = {};
->> +	} hash = {}, digest_hash = {};
->>   	int violation = 0;
->>   	int action = 0;
->>   	u32 secid;
->> @@ -801,6 +805,24 @@ int process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   		goto out;
->>   	}
->>   
->> +	if (measure_buf_hash) {
->> +		digest_iint.ima_hash = &digest_hash.hdr;
->> +		digest_iint.ima_hash->algo = ima_hash_algo;
->> +		digest_iint.ima_hash->length = hash_digest_size[ima_hash_algo];
->> +
->> +		ret = ima_calc_buffer_hash(hash.hdr.digest,
->> +					   iint.ima_hash->length,
->> +					   digest_iint.ima_hash);
->> +		if (ret < 0) {
->> +			audit_cause = "digest_hashing_error";
->> +			goto out;
->> +		}
->> +
->> +		event_data.iint = &digest_iint;
->> +		event_data.buf = hash.hdr.digest;
->> +		event_data.buf_len = iint.ima_hash->length;
->> +	}
->> +
-> 
-> There seems to be some code and variable duplication by doing it this
-> way.  Copying the caluclated buffer data hash to a temporary buffer
-> might eliminate it.
-> 
-With the way ima_calc_buffer_hash() is implemented, I was convinced that
-the variable duplication was needed. I didn't want to write a helper 
-function in order to minimize the unnecessary code churn in p_b_m().
-But I will revisit this to see how I can reduce the code and variable 
-duplication.
 
-Thanks for the feedback.
->>   	ret = ima_alloc_init_template(&event_data, &entry, template);
->>   	if (ret < 0) {
->>   		audit_cause = "alloc_entry";
