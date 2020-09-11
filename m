@@ -2,80 +2,107 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DB026683A
-	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 20:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7F026682A
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Sep 2020 20:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbgIKSYN convert rfc822-to-8bit (ORCPT
+        id S1725856AbgIKSRH (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 11 Sep 2020 14:24:13 -0400
-Received: from mail.flex.co.jp ([211.8.82.123]:56702 "EHLO www.flex.co.jp"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725901AbgIKSYN (ORCPT
+        Fri, 11 Sep 2020 14:17:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55176 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725730AbgIKSRD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 11 Sep 2020 14:24:13 -0400
-Received: from live.com.mx ([103.89.89.225])
-        (authenticated bits=0)
-        by www.flex.co.jp (MTA) with ESMTP id 0898nrjE009772
-        for <linux-security-module@vger.kernel.org>; Wed, 9 Sep 2020 17:49:56 +0900
-Reply-To: powerinthewords@yahoo.co.jp
-From:   piyin.crhe@live.com.mx
-To:     linux-security-module@vger.kernel.org
-Subject: =?utf-8?Q?=5BSpam=5D?=
- We are still waiting for your email...
-Date:   09 Sep 2020 01:49:54 -0700
-Message-ID: <20200909014954.DDFCBAD158BE8BF9@live.com.mx>
+        Fri, 11 Sep 2020 14:17:03 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E21121D79;
+        Fri, 11 Sep 2020 18:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599848222;
+        bh=u8/mPrVURYhPqdDyFTV/A2D8Sgo7S+0VEGhgujlLGjg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Yw2QzwBKV1KqPoZf8Ei2GtXzn4V9U7IT3oemiHPGZmKrN1okBSsbOFZpjTqbRRRSn
+         UWyGKJBWppRXdbU9wNH6JjNEA0KAqvoJzTkqr9Dy5/iCTqBcyhVdrTAd7JRkszq3Mm
+         8QubACqXP4q9KuQr2vlYn3+OrT40fdCkTSYUBKJM=
+Received: by mail-ot1-f53.google.com with SMTP id 60so9117216otw.3;
+        Fri, 11 Sep 2020 11:17:02 -0700 (PDT)
+X-Gm-Message-State: AOAM530OWSk5puoZ5i9EwuvnYaVwUBDQk+EAlXGkwiI91mtFK6pqQDom
+        O+VkNoDy2xp8SvmRM3kwvOIOMndlsjbrqV6CcjI=
+X-Google-Smtp-Source: ABdhPJwtLMTM9vEIWrzMubKwSTEJ8uvh7kjUufPCPqKEc5oc2KztzVNpmf1BlFnttv+vj/fKFZDRvMMYjoTBPJFwYa4=
+X-Received: by 2002:a9d:6250:: with SMTP id i16mr2081474otk.77.1599848221567;
+ Fri, 11 Sep 2020 11:17:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
+References: <20200905013107.10457-1-lszubowi@redhat.com> <20200905013107.10457-3-lszubowi@redhat.com>
+ <CAMj1kXEdkdeE8VSZqEzhd__Kb7_ZmG2af6iBpbY3=nsj1-phYw@mail.gmail.com>
+ <f0a079b1-5f02-8618-fdfe-aea2278113c9@redhat.com> <cb8b4ebaa35d79eba65b011d042d20a991adf540.camel@linux.ibm.com>
+ <394190b9-59bd-5cb3-317e-736852f190f4@redhat.com>
+In-Reply-To: <394190b9-59bd-5cb3-317e-736852f190f4@redhat.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 11 Sep 2020 21:16:50 +0300
+X-Gmail-Original-Message-ID: <CAMj1kXEz8y+X6KjqWWFD=38dDowqXDBvnPbgeh30+o83KpmKrg@mail.gmail.com>
+Message-ID: <CAMj1kXEz8y+X6KjqWWFD=38dDowqXDBvnPbgeh30+o83KpmKrg@mail.gmail.com>
+Subject: Re: [PATCH V2 2/3] integrity: Move import of MokListRT certs to a
+ separate routine
+To:     Lenny Szubowicz <lszubowi@redhat.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        linux-security-module@vger.kernel.org, andy.shevchenko@gmail.com,
+        James Morris <jmorris@namei.org>, serge@hallyn.com,
+        Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Jones <pjones@redhat.com>,
+        David Howells <dhowells@redhat.com>, prarit@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dear Beneficiary,
+On Fri, 11 Sep 2020 at 20:18, Lenny Szubowicz <lszubowi@redhat.com> wrote:
+>
+> On 9/11/20 11:59 AM, Mimi Zohar wrote:
+> > On Fri, 2020-09-11 at 11:54 -0400, Lenny Szubowicz wrote:
+> >> On 9/11/20 11:02 AM, Ard Biesheuvel wrote:
+> >>> On Sat, 5 Sep 2020 at 04:31, Lenny Szubowicz <lszubowi@redhat.com> wrote:
+> >>>>
+> >>>> Move the loading of certs from the UEFI MokListRT into a separate
+> >>>> routine to facilitate additional MokList functionality.
+> >>>>
+> >>>> There is no visible functional change as a result of this patch.
+> >>>> Although the UEFI dbx certs are now loaded before the MokList certs,
+> >>>> they are loaded onto different key rings. So the order of the keys
+> >>>> on their respective key rings is the same.
+> >>>>
+> >>>> Signed-off-by: Lenny Szubowicz <lszubowi@redhat.com>
+> >>>
+> >>> Why did you drop Mimi's reviewed-by from this patch?
+> >>
+> >> It was not intentional. I was just not aware that I needed to propagate
+> >> Mimi Zohar's reviewed-by from V1 of the patch to V2.
+> >>
+> >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> >>
+> >> V2 includes changes in that patch to incorporate suggestions from
+> >> Andy Shevchenko. My assumption was that the maintainer would
+> >> gather up the reviewed-by and add any signed-off-by as appropriate,
+> >> but it sounds like my assumption was incorrect. In retrospect, I
+> >> could see that having the maintainer dig through prior versions
+> >> of a patch set for prior reviewed-by tags could be burdensome.
+> >
+> > As much as possible moving code should be done without making changes,
+> > simpler for code review.   Then as a separate patch you make changes.
+> > That way you could also have retained my Reviewed-by.
+> >
+> > Mimi
+>
+> If you or Ard think I should, I can do a V3 with:
+>
+>    Patch V3 01: Unchanged from V2
+>    Patch V3 02: Goes back to V1 of patch 02 that Mimi reviewed
+>    Patch V3 03: New. Has Andy's cleanup suggestions separated from patch 02
+>    Patch V3 04: This would most probably just be the V2 of patch 03 with no changes
+>
 
-We wish to inform you that a power of attorney was forwarded to 
-our office  by two gentlemen regarding your unclaimed fund of $56 
-Million Dollar. One of them is an American citizen named Mr. 
-Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
-citizen.We have be waiting for you to contact us since last year.
-
-The document claims these gentlemen to be your authorized 
-representatives, and the power of attorney states that you are 
-already deceased.  It further states that your death was due to 
-lung cancer, with your date of death being January 27th, 2020.
-
-They have now submitted a new account to replace the receiving 
-account that was in the original claim of funds. These funds have 
-remained unclaimed for quite some time and the need for 
-resolution is pressing. Below is the new account they have 
-submitted.
-
-Account Name's :  Robert Porter /Wilhelm Berg
-Account: 5007-29 438 66
-IBAN-nr: SE4150000000050072943866
-Bic-kod: ESSESESS
-Skandinaviska Enskilda Banken. (SEB :)
-SWEDEN .
-
-In the event that you are in fact still alive, we ask that you 
-confirm your existence by responding to this email. You are to 
-view this as a matter requiring immediate attention and response. 
-We have 48 hr monitoring of all activities within Federal Reserve 
-Bank.On this regard,you will be directed to any of our office 
-center that you will go in person to sign the final papers,
-because we have our payment center in Europe,Asia,America and 
-Canada.You will go to any of the office that you will be directed 
-to with the copy of the documents of your fund.
-
-We have contacted the bank in the Sweden asking them to wait for 
-further directives from Federal Reserve Bank, prior to 
-authorizing any withdrawals in any form.  Our request is based 
-entirely on our attempt to verify that you are in fact deceased, 
-before money is wrongly disbursed.
-
-Your in Service,
-
-Robert Steven Kaplan
-2200 N Pearl St, Dallas, TX 75201, United States
+I think we can just merge the patches as they are, with Mimi's R-b carried over.
