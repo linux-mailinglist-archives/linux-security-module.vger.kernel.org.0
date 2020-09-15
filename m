@@ -2,37 +2,38 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB83A26B8CC
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 02:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707A626B8E8
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 02:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgIPAuT (ORCPT
+        id S1726599AbgIPAwG (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 15 Sep 2020 20:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
+        Tue, 15 Sep 2020 20:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726249AbgIOLk5 (ORCPT
+        with ESMTP id S1726336AbgIOLdC (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 15 Sep 2020 07:40:57 -0400
+        Tue, 15 Sep 2020 07:33:02 -0400
+X-Greylist: delayed 1399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Sep 2020 04:29:03 PDT
 Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F399C06174A;
-        Tue, 15 Sep 2020 04:40:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4E4C061221;
+        Tue, 15 Sep 2020 04:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
          s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=G3A4Jd8qyp8Y8V5S/z3YXPCAvuIvwnUirfp88s6hSlY=; b=E3bsT6FX8fxqP7P2Yl8CtNaZ05
-        KzGGS8m2pmlC1q1NJzfiJq/Jo+LoGcdlnixvX1xku36cIwcavXJ+Hzb8Lq9uP5G5wlInCiofIPZeX
-        fOaZEc8jn6IMwbetj4RHb78sR9fIboQMM9tRy5pGOAoOQ84nU3yV1FCk3PhYEblpqYEIHPA+0Wx7U
-        qw9op7KsiDhakXnn0XD4wPsrqiPMO5aUb7MJeNZuphIVbHNVlvojXYcDP1cp7vOYclDHDd+yIIPLO
-        I1RjOgEvjUScLNKZvCpTmgfaMbKsiXl8finDH7FyO1MkvXeMdiwM6UBSkJxgJNamECPZylcI0FCGq
-        NPeY8dsA==;
+        bh=G3A4Jd8qyp8Y8V5S/z3YXPCAvuIvwnUirfp88s6hSlY=; b=fZUtviWbrQ51ZnPK4cFHf8vNWI
+        mtH58aGBtUAl8kAwIqdh5Aebenf/CY7vMdQybflOjQi8IDUDF2wTJkR1sGzM9ZQoqwqSF96dvKcDY
+        b9hBY9KKho+JvjLTWzSeUj6eSs4N1CZ36wVVHI+fr2zVbuCCbGFMDjVlLJS6PwD+pCDfXaWI0fH/2
+        Jeg1opH8poRfDNTGl6ORcZ2JQSQ9ys3+P48lraG5Ll6cDKrGGb2dHKfmBMNHtCDyqKYOKSi7Zjkux
+        Ev6xHsAqe6h07rgnH5+Ozoci2hKDcbq+P47bGCFsk1gC/ZWts109o8EWwmuDvYcSN+xWsgtEggWSH
+        x6XBj9qQ==;
 Received: from 83-245-197-237.elisa-laajakaista.fi ([83.245.197.237] helo=localhost)
         by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
-        (envelope-from <jarkko.sakkinen@linux.intel.com>)
-        id 1kI8mC-0005wI-70; Tue, 15 Sep 2020 14:05:32 +0300
+        (envelope-from <jjs@kapsi.fi>)
+        id 1kI98k-0000jq-HK; Tue, 15 Sep 2020 14:28:50 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     x86@kernel.org, linux-sgx@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -58,15 +59,15 @@ Cc:     linux-kernel@vger.kernel.org,
         nhorman@redhat.com, puiterwijk@redhat.com, rientjes@google.com,
         tglx@linutronix.de, yaozhangx@google.com
 Subject: [PATCH v38 11/24] x86/sgx: Add SGX enclave driver
-Date:   Tue, 15 Sep 2020 14:05:09 +0300
-Message-Id: <20200915110522.893152-12-jarkko.sakkinen@linux.intel.com>
+Date:   Tue, 15 Sep 2020 14:28:29 +0300
+Message-Id: <20200915112842.897265-12-jarkko.sakkinen@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200915110522.893152-1-jarkko.sakkinen@linux.intel.com>
-References: <20200915110522.893152-1-jarkko.sakkinen@linux.intel.com>
+In-Reply-To: <20200915112842.897265-1-jarkko.sakkinen@linux.intel.com>
+References: <20200915112842.897265-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 83.245.197.237
-X-SA-Exim-Mail-From: jarkko.sakkinen@linux.intel.com
+X-SA-Exim-Mail-From: jjs@kapsi.fi
 X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
