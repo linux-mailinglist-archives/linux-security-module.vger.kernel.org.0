@@ -2,174 +2,175 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C5A26B088
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 00:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446E026B264
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 00:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727527AbgIOWNZ (ORCPT
+        id S1727735AbgIOWqx (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 15 Sep 2020 18:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727743AbgIOQkN (ORCPT
+        Tue, 15 Sep 2020 18:46:53 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:48738 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727490AbgIOPpH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 15 Sep 2020 12:40:13 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879A2C06174A;
-        Tue, 15 Sep 2020 09:40:12 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id 19so3692131qtp.1;
-        Tue, 15 Sep 2020 09:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U5qBWD/Pi0YOP8OO3FMwldARNgB9cZIIn6+Wxa36CQY=;
-        b=E6lqfbQkfG5cw1N/zZndHc9MDrrZlnZBINXTqhxJacElStwMCdApV/IGKoLPc7JKvo
-         ls1jmd613FgEYWRtp2i7AvOKWYeRCHc32Cx7psWDd/XND3OeGlb34spPddQXCPoubtbZ
-         FhVetIW/5sSw3g6TmYnndob5PzwfNKAKDjQsG3Di3fF3cM/L10qkKOLpArjOAQPEH5pM
-         q5ouIAFYI3ics2jvYIbehRLimcljUO+GeToQRHJW9WoRhfFwSogSfSnTwh/uTNH8gmeJ
-         EHKelxBDFcoFNoxwwrHSqt45Od+BBSQRo5T2bx0ohuTGz9tyeAfr1cTqS+2zpufPwCPy
-         a6+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U5qBWD/Pi0YOP8OO3FMwldARNgB9cZIIn6+Wxa36CQY=;
-        b=fYWRRrRzPSP2ySyJJCcccPtatQ3O/tnDk7MthaMZH5FHfwLwlwXjmBgd9cdrFusxZx
-         KcL6XYmkely/RfKJze/92VTwixBV8a5UldMuVIq7kv9y9XSgcgQwnrTHgMbN8lDbrgnG
-         E8CRq7g0aLAWRkS6kc8if3s+zBJ8Szz9JLe2N2B+9HFlYWHc909UpwABqPOLvtQZJOht
-         5imrDre3AXCaO+ysIQmIzLPP3ct7wRBqRAxqOEIpsZTKVNPxdt+nHUl3zavxY/7TK/ze
-         vTqnyki2XwuqsCIrejgd5Vy1jcOal8bKZE7t/ySWznr12lFJ0LvrH+u1CNE/CnXSN2lQ
-         9BeQ==
-X-Gm-Message-State: AOAM5334Btbd262e0UXVPIy/aOMMwUASfH3In9j3n0LKU4iR6fKCPBgH
-        jItKjRsF95PsbEtSxz+/Edw=
-X-Google-Smtp-Source: ABdhPJwueNIF6/j3D1/WkJFmXEjp48g8rttDimycmnaHu3TGo4GNviuYN1Rnl3JKAC8BKAmtlLdogQ==
-X-Received: by 2002:ac8:2942:: with SMTP id z2mr19342171qtz.376.1600188011702;
-        Tue, 15 Sep 2020 09:40:11 -0700 (PDT)
-Received: from puritycontrol.fios-router.home (pool-96-234-167-227.bltmmd.fios.verizon.net. [96.234.167.227])
-        by smtp.gmail.com with ESMTPSA id 71sm17162340qki.85.2020.09.15.09.40.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 09:40:11 -0700 (PDT)
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-To:     mtk.manpages@gmail.com
-Cc:     linux-man@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, smcv@collabora.com, jmorris@namei.org,
-        serge@hallyn.com, paul@paul-moore.com,
-        Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: [PATCH] socket.7,ip.7: Document SO_PEERSEC for AF_INET sockets
-Date:   Tue, 15 Sep 2020 12:39:59 -0400
-Message-Id: <20200915163959.25334-1-stephen.smalley.work@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 15 Sep 2020 11:45:07 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FFP3ca146660;
+        Tue, 15 Sep 2020 15:44:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=dtTmhZe5n21zVdQpTOTAtBeFkVA42Abq50W1Y+Hydlc=;
+ b=OprU6tm8Pf4j3FOvGuBH51uVcE2dGBc9k0MwnaLrDqBQCLrURlJNlqWziuCTfnbk4Z7F
+ qHn24Yd4VFJjk8SX6+USk320Gh0QowSG/Ybhe/eXGv0E/LjcwhgrsHNulUbwxbh3B028
+ 8YhbegIF1sYOwt9YScVT8Y+ukRsj8mE4XnuHfODlKLRlXSRfJsWt5IzT/BdHjW0Y/BlO
+ 4nlL4AdKVN1as2QX2ae/nXhWTgxLXwDChJwCwWPnCvst5Kvhnje9b3kOHbBfJyIKbQnp
+ cVBi586AVkx4Ij/22PY89PVqyI1pm9PIvwilhHZYY2ITh4S+OxT7ZGIKK87pzf0ZMdaL Rg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 33gp9m5x17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Sep 2020 15:44:40 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FFJxKU017009;
+        Tue, 15 Sep 2020 15:42:39 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 33h7wpadr9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Sep 2020 15:42:39 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08FFgVH5017794;
+        Tue, 15 Sep 2020 15:42:33 GMT
+Received: from dhcp-10-65-178-159.vpn.oracle.com (/10.65.178.159)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 15 Sep 2020 15:42:30 +0000
+Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH v3] certs: Add EFI_CERT_X509_GUID support for dbx entries
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+In-Reply-To: <20200914181227.GF9369@linux.intel.com>
+Date:   Tue, 15 Sep 2020 09:42:27 -0600
+Cc:     dhowells@redhat.com, dwmw2@infradead.org, jmorris@namei.org,
+        serge@hallyn.com, nayna@linux.ibm.com, erichte@linux.ibm.com,
+        mpe@ellerman.id.au, zohar@linux.ibm.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, rdunlap@infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F25F6F0E-7E13-4C9D-A7BA-33CDEF7074F2@oracle.com>
+References: <20200911182230.62266-1-eric.snowberg@oracle.com>
+ <20200914181227.GF9369@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+X-Mailer: Apple Mail (2.3273)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
+ adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150128
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 suspectscore=3 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009150128
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Augment the description of SO_PEERSEC to cover AF_INET sockets
-in addition to the prior description for AF_UNIX.
 
-SO_PEERSEC for TCP sockets was introduced in Linux 2.6.17 [1], and
-SO_PEERSEC for SCTP sockets was introduced in Linux 4.17 [2].
+> On Sep 14, 2020, at 12:12 PM, Jarkko Sakkinen =
+<jarkko.sakkinen@linux.intel.com> wrote:
+>=20
+> On Fri, Sep 11, 2020 at 02:22:30PM -0400, Eric Snowberg wrote:
+>> The Secure Boot Forbidden Signature Database, dbx, contains a list of =
+now
+>> revoked signatures and keys previously approved to boot with UEFI =
+Secure
+>> Boot enabled.  The dbx is capable of containing any number of
+>> EFI_CERT_X509_SHA256_GUID, EFI_CERT_SHA256_GUID, and =
+EFI_CERT_X509_GUID
+>> entries.
+>>=20
+>> Currently when EFI_CERT_X509_GUID are contained in the dbx, the =
+entries are
+>> skipped.
+>>=20
+>> Add support for EFI_CERT_X509_GUID dbx entries. When a =
+EFI_CERT_X509_GUID
+>> is found, it is added as an asymmetrical key to the .blacklist =
+keyring.
+>> Anytime the .platform keyring is used, the keys in the .blacklist =
+keyring
+>> are referenced, if a matching key is found, the key will be rejected.
+>>=20
+>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+>> ---
+>> v3:
+>> Fixed an issue when CONFIG_PKCS7_MESSAGE_PARSER is not builtin and =
+defined
+>> as a module instead, pointed out by Randy Dunlap
+>>=20
+>> v2:=20
+>> Fixed build issue reported by kernel test robot <lkp@intel.com>
+>> Commit message update (suggested by Jarkko Sakkinen)
+>> ---
+>> certs/blacklist.c                             | 33 =
++++++++++++++++++++
+>> certs/blacklist.h                             | 12 +++++++
+>> certs/system_keyring.c                        |  6 ++++
+>> include/keys/system_keyring.h                 | 11 +++++++
+>> .../platform_certs/keyring_handler.c          | 11 +++++++
+>> 5 files changed, 73 insertions(+)
+>>=20
+>> diff --git a/certs/blacklist.c b/certs/blacklist.c
+>> index 6514f9ebc943..3d1514ba5d47 100644
+>> --- a/certs/blacklist.c
+>> +++ b/certs/blacklist.c
+>> @@ -100,6 +100,39 @@ int mark_hash_blacklisted(const char *hash)
+>> 	return 0;
+>> }
+>>=20
+>> +int mark_key_revocationlisted(const char *data, size_t size)
+>> +{
+>> +	key_ref_t key;
+>> +
+>> +	key =3D key_create_or_update(make_key_ref(blacklist_keyring, =
+true),
+>> +				   "asymmetric",
+>> +				   NULL,
+>> +				   data,
+>> +				   size,
+>> +				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) | =
+KEY_USR_VIEW),
+>> +				   KEY_ALLOC_NOT_IN_QUOTA | =
+KEY_ALLOC_BUILT_IN);
+>> +
+>> +	if (IS_ERR(key)) {
+>> +		pr_err("Problem with revocation key (%ld)\n", =
+PTR_ERR(key));
+>> +		return PTR_ERR(key);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +int is_key_revocationlisted(struct pkcs7_message *pkcs7)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret =3D validate_trust(pkcs7, blacklist_keyring);
+>> +
+>> +	if (ret =3D=3D 0)
+>> +		return -EKEYREJECTED;
+>> +
+>> +	return -ENOKEY;
+>> +}
+>> +EXPORT_SYMBOL_GPL(is_key_revocationlisted);
+>=20
+> Hmm... ignore my previous comment about this. Export symbol is called
+> only by system keyring code.
+>=20
+> Would be best if the commit message would explicitly reason new =
+exports.
 
-This does not cover usage of SCM_SECURITY for UDP sockets, which
-was also introduced in the same commit for 2.6.17.
-
-Examples of the necessary labeled IPSEC and NetLabel configurations
-to enable use of SO_PEERSEC for TCP and SCTP sockets can be found in
-the SELinux Notebook [3] and the selinux-testsuite [4].
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c7946a7bf45ae86736ab3b43d0085e43947945c
-
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d452930fd3b9031e59abfeddb2fa383f1403d61a
-
-[3] https://github.com/SELinuxProject/selinux-notebook
-
-[4] https://github.com/SELinuxProject/selinux-testsuite
----
- man7/ip.7     | 56 +++++++++++++++++++++++++++++++++++++++++++++++++++
- man7/socket.7 |  2 +-
- 2 files changed, 57 insertions(+), 1 deletion(-)
-
-diff --git a/man7/ip.7 b/man7/ip.7
-index c522b219c..03a9f3f7c 100644
---- a/man7/ip.7
-+++ b/man7/ip.7
-@@ -979,6 +979,62 @@ Argument is an
- .I ip_mreq_source
- structure as described under
- .BR IP_ADD_SOURCE_MEMBERSHIP .
-+.TP
-+.BR SO_PEERSEC " (since Linux 2.6.17)"
-+If labeled IPSEC or NetLabel is configured on both the sending and
-+receiving hosts, this read-only socket option returns the security
-+context of the peer socket connected to this socket.  By default, this
-+will be the same as the security context of the process that created
-+the peer socket unless overridden by the policy or by a process with
-+the required permissions.
-+.IP
-+The argument to
-+.BR getsockopt (2)
-+is a pointer to a
-+buffer of the specified length in bytes
-+into which the security context string will be copied.
-+If the buffer length is less than the length of the security
-+context string, then
-+.BR getsockopt (2)
-+will return the required length
-+via
-+.I optlen
-+and return \-1 and sets
-+.I errno
-+to
-+.BR ERANGE .
-+The caller should allocate at least
-+.BR NAME_MAX
-+bytes for the buffer initially although this is not guaranteed
-+to be sufficient.  Resizing the buffer to the returned length
-+and retrying may be necessary.
-+.IP
-+The security context string may include a terminating null character
-+in the returned length, but is not guaranteed to do so: a security
-+context "foo" might be represented as either {'f','o','o'} of length 3
-+or {'f','o','o','\\0'} of length 4, which are considered to be
-+interchangeable. It is printable, does not contain non-terminating
-+null characters, and is in an unspecified encoding (in particular it
-+is not guaranteed to be ASCII or UTF-8).
-+.IP
-+The use of this option for sockets in the
-+.B AF_INET
-+address family
-+is supported since Linux 2.6.17
-+.\" commit 2c7946a7bf45ae86736ab3b43d0085e43947945c
-+for TCP sockets and since Linux
-+4.17
-+.\" commit d452930fd3b9031e59abfeddb2fa383f1403d61a
-+for SCTP sockets.
-+.IP
-+For SELinux, NetLabel only conveys the MLS portion of the security
-+context of the peer across the wire, defaulting the rest of the
-+security context to the values defined in the policy for the
-+netmsg initial security identifier (SID). However, NetLabel can
-+be configured to pass full security contexts over loopback.  Labeled
-+IPSEC always passes full security contexts as part of establishing
-+the security association (SA) and looks them up based on the association
-+for each packet.
- .SS /proc interfaces
- The IP protocol
- supports a set of
-diff --git a/man7/socket.7 b/man7/socket.7
-index c3635f95b..2f9039333 100644
---- a/man7/socket.7
-+++ b/man7/socket.7
-@@ -693,7 +693,7 @@ For further details, see
- .BR SO_PEERSEC " (since Linux 2.6.2)"
- Return the security context of the peer socket connected to this socket.
- For further details, see
--.BR unix (7).
-+.BR unix (7) and ip(7).
- .TP
- .B SO_PRIORITY
- Set the protocol-defined priority for all packets to be sent on
--- 
-2.25.1
+I don=E2=80=99t see a good reason to keep the export now, I=E2=80=99ll =
+remove it from the
+next version.  Thanks.
 
