@@ -2,72 +2,141 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF7326C6EA
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 20:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B75426C7EE
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 20:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727808AbgIPSJt (ORCPT
+        id S1728041AbgIPSgm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 16 Sep 2020 14:09:49 -0400
-Received: from mga11.intel.com ([192.55.52.93]:12675 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727789AbgIPSJ1 (ORCPT
+        Wed, 16 Sep 2020 14:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728083AbgIPS3N (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 16 Sep 2020 14:09:27 -0400
-IronPort-SDR: RK2LhpBUQ4k9/QnPeyOfkvhKPoTzvUvn47D+OXMWlEd24lVwmsueadaMCzgJ2GudD/1XKFsQdx
- qX0GoOBd0gRQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="156944438"
-X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
-   d="scan'208";a="156944438"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 11:09:18 -0700
-IronPort-SDR: c2YZaBfwpgZg0IVWD0z4A32XdPWZkRYKKQ+iJXz1rQh07lGfQ3w0KAyYXU00i8ZDUN/ekyqVN7
- +73tVOwYNbhQ==
-X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
-   d="scan'208";a="483411840"
-Received: from scusackx-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.45.87])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 11:09:11 -0700
-Date:   Wed, 16 Sep 2020 21:09:08 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
-        zohar@linux.ibm.com, erichte@linux.ibm.com, mpe@ellerman.id.au,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4] certs: Add EFI_CERT_X509_GUID support for dbx entries
-Message-ID: <20200916180908.GG21026@linux.intel.com>
-References: <20200916004927.64276-1-eric.snowberg@oracle.com>
+        Wed, 16 Sep 2020 14:29:13 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC67C0A888D
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Sep 2020 05:48:00 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id q9so2667172wmj.2
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Sep 2020 05:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0Ak62nesCbOREDTTzpc8X9wLA7URHRevPKbppowyS5I=;
+        b=F+8NDuo/1RWe7wgG2WhonViKgW4VIrYKG0fuQMdu+s7s5fBfnou/S/twaeShYbWsMb
+         SpuEoGcFcKnM/hRqmfdKUbO45bKl7Q1S7ixO2QN1hVzhYdN/ZC6KlkmpSJBXli3nrJC4
+         C8wZha5ZkpFJr1yLUzyj/IveBKWMSQSs7Tpis=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0Ak62nesCbOREDTTzpc8X9wLA7URHRevPKbppowyS5I=;
+        b=pIoSLtrSmyEKB/ulPTnpLQ53+JATwZqfg/1XaNpn4w49JkipNthQaFdC/74qMiVrZO
+         Fd4MECOgzG3/csmS7B1dICTzubMtg/7/gzCOifZGZbgt+SEk1SFs/G4wlpodUMx/RgJJ
+         phDFiiTo06vucGaNduSaoCKX57fCaxhpMMrgm/NVUBlDoLqlaBnkwwOERpn+aWEIrb13
+         ISAstg+XjrZRy3bgSrQ3Mbgd1JvwBmosWVdm0eEJThqPKWIVF428a0OzGGWBfglspmbX
+         1b8BJD5va1QDnPhhjADEGIoTsuBWwupTeaLrxuwH+PbvB0glSkjO2jQBBYlWnzSXlatL
+         lLgQ==
+X-Gm-Message-State: AOAM530IZkzz5TfyNJKphFb2yJKQgIGJXooImmhn8ZH8+ZynuFEVZAGW
+        f62OaHhOpQbZJMIL83efiuGWkgzAX1ZCE1YMFur8Ow==
+X-Google-Smtp-Source: ABdhPJw7+Ll62XVAkpr+sbPg39fiPYa0S/X4E49SjQZq1wnxbE/A4/IKrdERM2HSi8OlQ4BlpjNN0mLfNxPL88VRoi0=
+X-Received: by 2002:a1c:1902:: with SMTP id 2mr4874239wmz.26.1600260478858;
+ Wed, 16 Sep 2020 05:47:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200916004927.64276-1-eric.snowberg@oracle.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200916120548.364892-1-kpsingh@chromium.org> <5ab256148e8ad5f9882e888dac809bc72cd3fe66.camel@chromium.org>
+In-Reply-To: <5ab256148e8ad5f9882e888dac809bc72cd3fe66.camel@chromium.org>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Wed, 16 Sep 2020 14:47:48 +0200
+Message-ID: <CACYkzJ7dZuOL9NhzaMmpvGqE3TWYHV=AicNmjgs1aD81TctR0Q@mail.gmail.com>
+Subject: Re: [PATCH] ima: Fix NULL pointer dereference in ima_file_hash
+To:     Florent Revest <revest@chromium.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Jann Horn <jannh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Sep 15, 2020 at 08:49:27PM -0400, Eric Snowberg wrote:
-> The Secure Boot Forbidden Signature Database, dbx, contains a list of now
-> revoked signatures and keys previously approved to boot with UEFI Secure
-> Boot enabled.  The dbx is capable of containing any number of
-> EFI_CERT_X509_SHA256_GUID, EFI_CERT_SHA256_GUID, and EFI_CERT_X509_GUID
-> entries.
-> 
-> Currently when EFI_CERT_X509_GUID are contained in the dbx, the entries are
-> skipped.
-> 
-> Add support for EFI_CERT_X509_GUID dbx entries. When a EFI_CERT_X509_GUID
-> is found, it is added as an asymmetrical key to the .blacklist keyring.
-> Anytime the .platform keyring is used, the keys in the .blacklist keyring
-> are referenced, if a matching key is found, the key will be rejected.
-> 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+Somehow this patch does not seem to have been picked up by any of the
+mailing list archives and I am not sure if this was delivered to the
+lists. I will send a v2 and add Florent's Reviewed-by tag.
 
-Looks good to me.
-
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-
-/Jarkko
+On Wed, Sep 16, 2020 at 2:41 PM Florent Revest <revest@chromium.org> wrote:
+>
+> Reviewed-by: Florent Revest <revest@chromium.org>
+>
+> On Wed, 2020-09-16 at 12:05 +0000, KP Singh wrote:
+> > From: KP Singh <kpsingh@google.com>
+> >
+> > ima_file_hash can be called when there is no iint->ima_hash available
+> > even though the inode exists in the integrity cache.
+> >
+> > An example where this can happen (suggested by Jann Horn):
+> >
+> > Process A does:
+> >
+> >       while(1) {
+> >               unlink("/tmp/imafoo");
+> >               fd = open("/tmp/imafoo", O_RDWR|O_CREAT|O_TRUNC, 0700);
+> >               if (fd == -1) {
+> >                       perror("open");
+> >                       continue;
+> >               }
+> >               write(fd, "A", 1);
+> >               close(fd);
+> >       }
+> >
+> > and Process B does:
+> >
+> >       while (1) {
+> >               int fd = open("/tmp/imafoo", O_RDONLY);
+> >               if (fd == -1)
+> >                       continue;
+> >               char *mapping = mmap(NULL, 0x1000, PROT_READ|PROT_EXEC,
+> >                                    MAP_PRIVATE, fd, 0);
+> >               if (mapping != MAP_FAILED)
+> >                       munmap(mapping, 0x1000);
+> >               close(fd);
+> >       }
+> >
+> > Due to the race to get the iint->mutex between ima_file_hash and
+> > process_measurement iint->ima_hash could still be NULL.
+> >
+> > Fixes: 6beea7afcc72 ("ima: add the ability to query the cached hash
+> > of a given file")
+> > Signed-off-by: KP Singh <kpsingh@google.com>
+> > ---
+> >  security/integrity/ima/ima_main.c | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/security/integrity/ima/ima_main.c
+> > b/security/integrity/ima/ima_main.c
+> > index 8a91711ca79b..4c86cd4eece0 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -531,6 +531,16 @@ int ima_file_hash(struct file *file, char *buf,
+> > size_t buf_size)
+> >               return -EOPNOTSUPP;
+> >
+> >       mutex_lock(&iint->mutex);
+> > +
+> > +     /*
+> > +      * ima_file_hash can be called when ima_collect_measurement has
+> > still
+> > +      * not been called, we might not always have a hash.
+> > +      */
+> > +     if (!iint->ima_hash) {
+> > +             mutex_unlock(&iint->mutex);
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> >       if (buf) {
+> >               size_t copied_size;
+> >
+>
