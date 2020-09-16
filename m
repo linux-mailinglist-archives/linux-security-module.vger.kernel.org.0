@@ -2,246 +2,144 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5B826C790
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 20:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2AC26C6C7
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 20:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbgIPSag (ORCPT
+        id S1727498AbgIPSD2 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 16 Sep 2020 14:30:36 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37872 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728094AbgIPSaE (ORCPT
+        Wed, 16 Sep 2020 14:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727752AbgIPSCt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 16 Sep 2020 14:30:04 -0400
-Received: from localhost.localdomain (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 169662074C90;
-        Wed, 16 Sep 2020 08:08:37 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 169662074C90
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1600268917;
-        bh=b+dZfSYt921SZbqVi9d6jmG8B2GKXdUDhoo8NhJxV+k=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Ujz+S1OqtosPp/8L9N3unu6wuJGss69KS6W/GHWBWqM4qfdWcRG/EKRgUKJbOEORc
-         x+qd/TTcA8Trl1XdmvODaLvWIGzELcQgFeVjLlgZi8uYhTVxlKm7dCUF532grSOPqk
-         Po96nXGPIm2UK+uUyzCR1OmHS74BMY4y3GHpUvus=
-From:   madvenka@linux.microsoft.com
-To:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org, madvenka@linux.microsoft.com
-Subject: [PATCH v2 4/4] [RFC] arm/trampfd: Provide support for the trampoline file descriptor
-Date:   Wed, 16 Sep 2020 10:08:26 -0500
-Message-Id: <20200916150826.5990-5-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200916150826.5990-1-madvenka@linux.microsoft.com>
-References: <210d7cd762d5307c2aa1676705b392bd445f1baa>
- <20200916150826.5990-1-madvenka@linux.microsoft.com>
+        Wed, 16 Sep 2020 14:02:49 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA98FC06174A
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Sep 2020 11:02:47 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id y15so3987963wmi.0
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Sep 2020 11:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RPwhusTWYDQ4QjD+ev8+QjSTTu6T0Fu2+n0uxDZxjos=;
+        b=VyjLGizpCp6P2PFqz82TtrO43roEou9wcLjw9UHR3RZ+XQ0Jgur0rvXmT4ZVZBFMef
+         SceMXRAdAgYQ4Py0eZcOdoBSnRsQScHAH1e65lTujVJGlW1AzE4AweL06S5/wx1oUhec
+         vRHL13BNVcF1qAcUApaT2VrpOQNS+9LTYNZHI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RPwhusTWYDQ4QjD+ev8+QjSTTu6T0Fu2+n0uxDZxjos=;
+        b=sf77/6gVzjckJvGoD3BlQiDq3BJpx7sxfQe7BwZRfsAkXoz9evk5WBUXtIfzCvJ+nx
+         /1ZY7wFv4EPIXWhLjgpnUvEJh0kruzix75dXU4htN5dRnQXbjq4P/KUFwfp7s01G8x2s
+         1taBRmTgK62efPi8Bb9KTQ9a/EjgZRQ1fMM24ksLxeAqQKwkIgUxB3BUZfIBkjxQX5fr
+         6xcfl0USGXhqFJOK26W6fC+7wwh7Wx3mtzY+Jc6PwTQI1McDVK5tzrC+waE9IC2WzLjD
+         /nlSte1q1Tp4mO2pFzHFabAjEuSWtKfia0G0kMwpS1jsYxtYip5ZTtjkcCIuJPR2Qk97
+         4lBw==
+X-Gm-Message-State: AOAM533miFu5R44BT+LuMMsQXQ22FAPxlNyqqAdxNfFwcdY2kc4JthqA
+        yxUrLXPz3bFFlGLozKYD98aOpg==
+X-Google-Smtp-Source: ABdhPJwVNH/jhFaJjqOw4YY09k+qaa4JgESdF9XioxXnqexJSIWHzIQiPqBw2Ugj/jiIFesx3LvRnA==
+X-Received: by 2002:a05:600c:210c:: with SMTP id u12mr6434238wml.185.1600279366269;
+        Wed, 16 Sep 2020 11:02:46 -0700 (PDT)
+Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
+        by smtp.gmail.com with ESMTPSA id v17sm36702944wrc.23.2020.09.16.11.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2020 11:02:45 -0700 (PDT)
+From:   KP Singh <kpsingh@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Cc:     Florent Revest <revest@chromium.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH v3] ima: Fix NULL pointer dereference in ima_file_hash
+Date:   Wed, 16 Sep 2020 18:02:42 +0000
+Message-Id: <20200916180242.430668-1-kpsingh@chromium.org>
+X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+From: KP Singh <kpsingh@google.com>
 
-	- Define architecture specific register names
-	- Architecture specific functions for:
-		- system call init
-		- code descriptor check
-		- data descriptor check
-	- Fill a page with a trampoline table,
+ima_file_hash can be called when there is no iint->ima_hash available
+even though the inode exists in the integrity cache. It is fairly
+common for a file to not have a hash. (e.g. an mknodat, prior to the
+file being closed).
 
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+Another example where this can happen (suggested by Jann Horn):
+
+Process A does:
+
+	while(1) {
+		unlink("/tmp/imafoo");
+		fd = open("/tmp/imafoo", O_RDWR|O_CREAT|O_TRUNC, 0700);
+		if (fd == -1) {
+			perror("open");
+			continue;
+		}
+		write(fd, "A", 1);
+		close(fd);
+	}
+
+and Process B does:
+
+	while (1) {
+		int fd = open("/tmp/imafoo", O_RDONLY);
+		if (fd == -1)
+			continue;
+    		char *mapping = mmap(NULL, 0x1000, PROT_READ|PROT_EXEC,
+			 	     MAP_PRIVATE, fd, 0);
+		if (mapping != MAP_FAILED)
+			munmap(mapping, 0x1000);
+		close(fd);
+  	}
+
+Due to the race to get the iint->mutex between ima_file_hash and
+process_measurement iint->ima_hash could still be NULL.
+
+Fixes: 6beea7afcc72 ("ima: add the ability to query the cached hash of a given file")
+Signed-off-by: KP Singh <kpsingh@google.com>
+Reviewed-by: Florent Revest <revest@chromium.org>
 ---
- arch/arm/include/uapi/asm/ptrace.h |  21 +++++
- arch/arm/kernel/Makefile           |   1 +
- arch/arm/kernel/trampfd.c          | 124 +++++++++++++++++++++++++++++
- arch/arm/tools/syscall.tbl         |   1 +
- 4 files changed, 147 insertions(+)
- create mode 100644 arch/arm/kernel/trampfd.c
+ security/integrity/ima/ima_main.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm/include/uapi/asm/ptrace.h b/arch/arm/include/uapi/asm/ptrace.h
-index e61c65b4018d..598047768f9b 100644
---- a/arch/arm/include/uapi/asm/ptrace.h
-+++ b/arch/arm/include/uapi/asm/ptrace.h
-@@ -151,6 +151,27 @@ struct pt_regs {
- #define ARM_r0		uregs[0]
- #define ARM_ORIG_r0	uregs[17]
+Changelog:
+
+v2 -> v3
+
+- Updated commit description.
+
+v1 -> v2
+
+- Added Review Tags, attempt to get the patch on the lists somehow.
+
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 8a91711ca79b..4c86cd4eece0 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -531,6 +531,16 @@ int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+ 		return -EOPNOTSUPP;
  
-+/*
-+ * These register names are to be used by 32-bit applications.
-+ */
-+enum reg_32_name {
-+	arm_min,
-+	arm_r0 = arm_min,
-+	arm_r1,
-+	arm_r2,
-+	arm_r3,
-+	arm_r4,
-+	arm_r5,
-+	arm_r6,
-+	arm_r7,
-+	arm_r8,
-+	arm_r9,
-+	arm_r10,
-+	arm_r11,
-+	arm_r12,
-+	arm_max,
-+};
+ 	mutex_lock(&iint->mutex);
 +
- /*
-  * The size of the user-visible VFP state as seen by PTRACE_GET/SETVFPREGS
-  * and core dumps.
-diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
-index 89e5d864e923..652c54c2f19a 100644
---- a/arch/arm/kernel/Makefile
-+++ b/arch/arm/kernel/Makefile
-@@ -105,5 +105,6 @@ obj-$(CONFIG_SMP)		+= psci_smp.o
- endif
- 
- obj-$(CONFIG_HAVE_ARM_SMCCC)	+= smccc-call.o
-+obj-$(CONFIG_TRAMPFD)		+= trampfd.o
- 
- extra-y := $(head-y) vmlinux.lds
-diff --git a/arch/arm/kernel/trampfd.c b/arch/arm/kernel/trampfd.c
-new file mode 100644
-index 000000000000..45146ed489e8
---- /dev/null
-+++ b/arch/arm/kernel/trampfd.c
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Trampoline FD - ARM support.
-+ *
-+ * Author: Madhavan T. Venkataraman (madvenka@linux.microsoft.com)
-+ *
-+ * Copyright (c) 2020, Microsoft Corporation.
-+ */
-+
-+#include <linux/thread_info.h>
-+#include <linux/trampfd.h>
-+
-+#define TRAMPFD_CODE_SIZE		28
-+
-+/*
-+ * trampfd syscall.
-+ */
-+void trampfd_arch(struct trampfd_info *info)
-+{
-+	info->code_size = TRAMPFD_CODE_SIZE;
-+	info->ntrampolines = PAGE_SIZE / info->code_size;
-+	info->code_offset = TRAMPFD_CODE_PGOFF << PAGE_SHIFT;
-+	info->reserved = 0;
-+}
-+
-+/*
-+ * trampfd code descriptor check.
-+ */
-+int trampfd_code_arch(struct trampfd_code *code)
-+{
-+	int	ntrampolines;
-+	int	min, max;
-+
-+	min = arm_min;
-+	max = arm_max;
-+	ntrampolines = PAGE_SIZE / TRAMPFD_CODE_SIZE;
-+
-+	if (code->reg < min || code->reg >= max)
-+		return -EINVAL;
-+
-+	if (!code->ntrampolines || code->ntrampolines > ntrampolines)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+/*
-+ * trampfd data descriptor check.
-+ */
-+int trampfd_data_arch(struct trampfd_data *data)
-+{
-+	int	min, max;
-+
-+	min = arm_min;
-+	max = arm_max;
-+
-+	if (data->reg < min || data->reg >= max)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+#define MOVW(ins, reg, imm32)						\
-+{									\
-+	u16	*_imm16 = (u16 *) &(imm32);	/* little endian */	\
-+	int	_hw, _opcode;						\
-+									\
-+	for (_hw = 0; _hw < 2; _hw++) {					\
-+		/* movw or movt */					\
-+		_opcode = _hw ? 0xe3400000 : 0xe3000000;		\
-+		*ins++ = _opcode | (_imm16[_hw] >> 12) << 16 |		\
-+			 (reg) << 12 | (_imm16[_hw] & 0xFFF);		\
-+	}								\
-+}
-+
-+#define LDR(ins, reg)							\
-+{									\
-+	*ins++ = 0xe5900000 | (reg) << 16 | (reg) << 12;		\
-+}
-+
-+#define BX(ins, reg)							\
-+{									\
-+	*ins++ = 0xe12fff10 | (reg);					\
-+}
-+
-+void trampfd_code_fill(struct trampfd *trampfd, char *addr)
-+{
-+	char		*eaddr = addr + PAGE_SIZE;
-+	int		creg = trampfd->code_reg - arm_min;
-+	int		dreg = trampfd->data_reg - arm_min;
-+	u32		*code = trampfd->code;
-+	u32		*data = trampfd->data;
-+	u32		*instruction = (u32 *) addr;
-+	int		i;
-+
-+	for (i = 0; i < trampfd->ntrampolines; i++, code++, data++) {
-+		/*
-+		 * movw creg, code & 0xFFFF
-+		 * movt creg, code >> 16
-+		 */
-+		MOVW(instruction, creg, code);
-+
-+		/*
-+		 * ldr	creg, [creg]
-+		 */
-+		LDR(instruction, creg);
-+
-+		/*
-+		 * movw dreg, data & 0xFFFF
-+		 * movt dreg, data >> 16
-+		 */
-+		MOVW(instruction, dreg, data);
-+
-+		/*
-+		 * ldr	dreg, [dreg]
-+		 */
-+		LDR(instruction, dreg);
-+
-+		/*
-+		 * bx	creg
-+		 */
-+		BX(instruction, creg);
++	/*
++	 * ima_file_hash can be called when ima_collect_measurement has still
++	 * not been called, we might not always have a hash.
++	 */
++	if (!iint->ima_hash) {
++		mutex_unlock(&iint->mutex);
++		return -EOPNOTSUPP;
 +	}
-+	addr = (char *) instruction;
-+	memset(addr, 0, eaddr - addr);
-+}
-diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-index d5cae5ffede0..85dcbc9e08ee 100644
---- a/arch/arm/tools/syscall.tbl
-+++ b/arch/arm/tools/syscall.tbl
-@@ -452,3 +452,4 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+440	common	trampfd				sys_trampfd
++
+ 	if (buf) {
+ 		size_t copied_size;
+ 
 -- 
-2.17.1
+2.28.0.618.gf4bc123cb7-goog
 
