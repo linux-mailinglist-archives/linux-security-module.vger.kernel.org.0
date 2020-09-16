@@ -2,164 +2,73 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C93D26CD49
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 22:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B030026CDC2
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Sep 2020 23:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728519AbgIPU5C (ORCPT
+        id S1726570AbgIPVE5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 16 Sep 2020 16:57:02 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29568 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726328AbgIPQwh (ORCPT
+        Wed, 16 Sep 2020 17:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726389AbgIPQPB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 16 Sep 2020 12:52:37 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08GFmeJI113957;
-        Wed, 16 Sep 2020 12:00:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=oR2/YwL1liHbE41SOzBmZTcOtgNASTFaWbA+0ZtZrX8=;
- b=ZC3DBNecdsCrKlYL0jMJVJI+qkE9QrjhaE9TkmnM+IAPH1OuyFde0M8I4sKTVT8KASK7
- cSynfxx8wogcj1UBc2xpQVGJB/tEqdV5SYr37Ct9j7f5vYwVVq5OM9UaDBd1vFP9Vde9
- cGGEckclxtrx+qbHHfYhkl6a47ONLsTzhtLg7SWhJ/y0Ky7Dpx/FsclcvXoh1tW2dIij
- i1BZm6hBylaNTc8MeHqemhC1ctGBGq2sLI8a/W2FRJK/7BRcsyS161CssbI4UXLiWW4I
- pFhTRXSNEPKJSvGyz43Xglv9zud72DosstaPj3NcbAe3HZt/kVxCQLNxB9BXx2MSisvR TA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33knp3ga9d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Sep 2020 12:00:18 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08GFnZb4120125;
-        Wed, 16 Sep 2020 12:00:18 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33knp3ga7d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Sep 2020 12:00:18 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08GFwsMY012798;
-        Wed, 16 Sep 2020 16:00:16 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 33k6esgt3q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Sep 2020 16:00:15 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08GG0DYF9372018
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Sep 2020 16:00:13 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EA56A4066;
-        Wed, 16 Sep 2020 16:00:13 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93DA4A4062;
-        Wed, 16 Sep 2020 16:00:11 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.9])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Sep 2020 16:00:11 +0000 (GMT)
-Message-ID: <8cee070eed5b8a3dc9f373fc9db8d99a70b7d75a.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] ima: Fix NULL pointer dereference in ima_file_hash
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     KP Singh <kpsingh@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     Florent Revest <revest@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Jann Horn <jannh@google.com>
-Date:   Wed, 16 Sep 2020 12:00:10 -0400
-In-Reply-To: <20200916124931.1254990-1-kpsingh@chromium.org>
-References: <20200916124931.1254990-1-kpsingh@chromium.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-16_10:2020-09-16,2020-09-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- bulkscore=0 suspectscore=0 spamscore=0 priorityscore=1501 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009160113
+        Wed, 16 Sep 2020 12:15:01 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101DEC0D9419
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Sep 2020 07:52:06 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id o5so7173083wrn.13
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Sep 2020 07:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Jprj3Ljb1hJqVas03n8biEIlmZI1CNLC20MekGwZ6qM=;
+        b=AZNeyeOMfnv1iw6EUbZxwoPYMEiCX84IG2zN8hU26Bn77jdCTqA4AnlrrvQj5LSZoH
+         Xw0/DwrzjcgpzUOhzGqZiLEU07teqHaVbZelkyFe0jmVlJiYh2xNrTWb6M8qYbW8xPHC
+         8vZ5C/bAiUZA87xhIrHQSpggRDb+fASpYhozE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Jprj3Ljb1hJqVas03n8biEIlmZI1CNLC20MekGwZ6qM=;
+        b=TtSXl8qQF2GkhwHGAoV5a//UjLzaGWbkzs3tJr1NXKvOfeK3yqlN+XFwmYu22Cuywn
+         CQ/WUar1uC0Cyc8y4XVVWEHOgc1wo7Rh4+GZ1WlZW5IMlTsV1fiose1usaf5ZYbW8jex
+         GCpnESvwaQ/a7m4gy4vM97zb0bbRhlHUNIenxKoobrthPtpwjhapbZ15QfbXxxzh4eBh
+         25DVnYEwa7NZpqpzGMGVF6+wVvAbs1LS9J8X++5apk8l8Wtma6yMMM467oqd4hQy6Peh
+         vUpxRgklETZV8f8rDWOGwdgJ7B5VqEQJ+t+RtxLXQQIRxjy6OaIBa2H7E0lxahDb2lto
+         aZIA==
+X-Gm-Message-State: AOAM532pf6h4AlyGmZ0XxIjrcticsTDYkIg3AaILWkWXDK/8okiLUfZy
+        27h916Mt4GUa70yrB4+ivVIRBb+JIBcPXZkk3iL/M7A/yrGRekiv
+X-Google-Smtp-Source: ABdhPJzs4OEsf1kM0ZNCGKyUVbO+v3o4OUzHCNsOvXaX4m5BYp7TOLc7AQVnFz3jjb00B8Zr0J0N8RKNgx+x8wr0R/w=
+X-Received: by 2002:a5d:43cf:: with SMTP id v15mr27884370wrr.269.1600267923353;
+ Wed, 16 Sep 2020 07:52:03 -0700 (PDT)
+MIME-Version: 1.0
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Wed, 16 Sep 2020 16:51:52 +0200
+Message-ID: <CACYkzJ6fVfQOEztvsbMHXg7y3OkSUUdZ+dkg7pQAPb0GDcUxJg@mail.gmail.com>
+Subject: [TEST]: Patches not making it to the lists
+To:     Linux Security Module list <linux-security-module@vger.kernel.org>
+Cc:     James Morris <jmorris@namei.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: owner-linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, 2020-09-16 at 14:49 +0200, KP Singh wrote:
-> From: KP Singh <kpsingh@google.com>
-> 
-> ima_file_hash can be called when there is no iint->ima_hash available
-> even though the inode exists in the integrity cache.
-> 
-> An example where this can happen (suggested by Jann Horn):
-> 
-> Process A does:
-> 
-> 	while(1) {
-> 		unlink("/tmp/imafoo");
-> 		fd = open("/tmp/imafoo", O_RDWR|O_CREAT|O_TRUNC, 0700);
-> 		if (fd == -1) {
-> 			perror("open");
-> 			continue;
-> 		}
-> 		write(fd, "A", 1);
-> 		close(fd);
-> 	}
-> 
-> and Process B does:
-> 
-> 	while (1) {
-> 		int fd = open("/tmp/imafoo", O_RDONLY);
-> 		if (fd == -1)
-> 			continue;
->     		char *mapping = mmap(NULL, 0x1000, PROT_READ|PROT_EXEC,
-> 			 	     MAP_PRIVATE, fd, 0);
-> 		if (mapping != MAP_FAILED)
-> 			munmap(mapping, 0x1000);
-> 		close(fd);
->   	}
-> 
-> Due to the race to get the iint->mutex between ima_file_hash and
-> process_measurement iint->ima_hash could still be NULL.
-> 
-> Fixes: 6beea7afcc72 ("ima: add the ability to query the cached hash of a given file")
-> Signed-off-by: KP Singh <kpsingh@google.com>
-> Reviewed-by: Florent Revest <revest@chromium.org>
-> ---
->  security/integrity/ima/ima_main.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 8a91711ca79b..4c86cd4eece0 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -531,6 +531,16 @@ int ima_file_hash(struct file *file, char *buf, size_t buf_size)
->  		return -EOPNOTSUPP;
->  
->  	mutex_lock(&iint->mutex);
-> +
-> +	/*
-> +	 * ima_file_hash can be called when ima_collect_measurement has still
-> +	 * not been called, we might not always have a hash.
-> +	 */
-> +	if (!iint->ima_hash) {
-> +		mutex_unlock(&iint->mutex);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
+The mailing lists seem to be silently dropping my patches. it gets
+delivered to the CC'ed folks but does not appear any archives or
+delivered to the subscribers. The patch is not in HTML and was sent
+using git send-email.
 
-Not having a file hash is rather common (e.g. mknodat, prior to the
-file being closed).  Before appraising the integrity of a file, it
-checks whether it is a new file (eg. IMA_NEW_FILE), but, unfortunately,
-the flag is only set for those files in the appraise policy.
+I don't get a bounce back either and replying-all does not help (my
+colleague tried it as well and it did not appear on the list)
 
-The patch looks fine, but you might want to reflect not having a file
-hash is common in the patch description.
+I can think of two possibilities:
 
-Mimi
+- My email is triggering a spam filter. In which case this email won't
+be delivered either.
+- The body of the patch is causing something to crash on the mailserver.
 
->  	if (buf) {
->  		size_t copied_size;
->  
+Here's the patch ("ima: Fix NULL pointer dereference in
+ima_file_hash") on a github gist for your reference:
 
+https://gist.githubusercontent.com/sinkap/6dd3829a8259343a6b178cef3f59342b/raw/2b3152a48d77b1c65d0e1b5b8b2e8b6ae6d04ec5/ima.patch
 
+- KP
