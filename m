@@ -2,100 +2,167 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3903926DDEE
-	for <lists+linux-security-module@lfdr.de>; Thu, 17 Sep 2020 16:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E288B26DE88
+	for <lists+linux-security-module@lfdr.de>; Thu, 17 Sep 2020 16:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727251AbgIQOMt (ORCPT
+        id S1727407AbgIQO1f (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 17 Sep 2020 10:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727249AbgIQN6l (ORCPT
+        Thu, 17 Sep 2020 10:27:35 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20102 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727470AbgIQOZs (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 17 Sep 2020 09:58:41 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD55FC0610D6
-        for <linux-security-module@vger.kernel.org>; Thu, 17 Sep 2020 06:47:44 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d19so1174017pld.0
-        for <linux-security-module@vger.kernel.org>; Thu, 17 Sep 2020 06:47:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=+R0CfwNbMgOaTG4ScznT7OJX0b8ugIojVEfeSnnqNTc=;
-        b=zfzwax3PpdhSOHwd1Dziyh/EVuvLFMJgWgUyuNomMMIfOy+ltMgttpjv2PkG0QUrMg
-         VQ4tkC9yB0StxHOspic8lBEaytG89CvgXfNpG01BM65wRcafv1kgrlPLj2GCQY94wTgE
-         zMNTKBDl6YPTGmySD1a74bYQ5eCzuSljS+Xze4jq2M4G23zm2MM6oTyfwCwJdDnwWzFS
-         hSRNWA3rzc6ZJT5GuNLKkUue9ferEZlkW82DuXD+E8Su8oaJCTy5uj93w/vR2eM1e+LZ
-         OdZsqPF0JYLGzk0yeFhD0uDG4zhhs/QSWomdvTcDXSvQQtWEbM9IysNVgavJZt0qoVNB
-         SByQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=+R0CfwNbMgOaTG4ScznT7OJX0b8ugIojVEfeSnnqNTc=;
-        b=VjqigLlDFllLPNGKWvbsva+FRcVLy/r70mfTyq7w0eQ3tLIUJcoDwzc6zifEZzfhKN
-         m+XQh9pPotnNfPoWOtcO0CqSLkpbzRKayMrxsiSscIkVc89KWoY2bo7fV4xbo+nGPd+u
-         oYuEw+BkE5exA6AOpy0J2UZNlhk5ftV0UjWhKAz75xMq4/8TBRog7FRBOVuR6kce5HbK
-         MIw7DIAbGNafNikFugG05Djd3hi2qpHxccJ0HgdJPFX1h35qTwYwYhm0couBHx3XFVx1
-         bNW5SzPEZKj+0C/4klHzFnIN7GKGPoI6PC+BKmjOdbx3S/mD+/OBYe72WeIZCEUIiY4T
-         Tx7w==
-X-Gm-Message-State: AOAM5302e1rJPqm5zLw0yna1UPgWz4xwWHzI4HaHbrV1CQswaQtr6yiN
-        47MlDlDx4//GHUQUJVDFSVT+eg==
-X-Google-Smtp-Source: ABdhPJyvy8jjWm23ZilkLS4jB5OQY9gVJSrgQpws0JzwxO3vK5veKrElGyPGUmVKb+AhTbMGL/UX9g==
-X-Received: by 2002:a17:902:8305:b029:d1:cbfc:79b7 with SMTP id bd5-20020a1709028305b02900d1cbfc79b7mr17679996plb.33.1600350464395;
-        Thu, 17 Sep 2020 06:47:44 -0700 (PDT)
-Received: from localhost.localdomain ([117.252.66.163])
-        by smtp.gmail.com with ESMTPSA id i73sm6821120pfe.67.2020.09.17.06.47.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Sep 2020 06:47:43 -0700 (PDT)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
-        jejb@linux.ibm.com
-Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
-        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
-        janne.karhunen@gmail.com, daniel.thompson@linaro.org,
-        Markus.Wamser@mixed-mode.de, lhinds@redhat.com,
-        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH v6 4/4] MAINTAINERS: Add entry for TEE based Trusted Keys
-Date:   Thu, 17 Sep 2020 19:16:38 +0530
-Message-Id: <1600350398-4813-5-git-send-email-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1600350398-4813-1-git-send-email-sumit.garg@linaro.org>
-References: <1600350398-4813-1-git-send-email-sumit.garg@linaro.org>
+        Thu, 17 Sep 2020 10:25:48 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08HEKOow088363;
+        Thu, 17 Sep 2020 10:25:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=6ux8W4aMaDCbaNX+eSW+989K6Uhm9qqViIHvfk7gyPE=;
+ b=R9MCMKO/d+GBH3F9fKieIvs7PSFjlbMZq9knUd51rzHjx0Unhg0VR4zutu4G/AEQAUlR
+ dhq7Cto+6JagzepUzUZqypRZm7GnRoSykhi7S70x7pKnAmwtV//d0SfoG1rI8JnwBJoR
+ uFxySYVQKrUlZJxD3V9mMA4Ks6rAK7MkTQgdoQ+0feock7lFGWgA37Zv0Vm79dqb/GsT
+ KEAnc65fq8imr2RI6LZqI5vOJtqz3eDAnlCDFqscx5vW6SS7aAHHrHg6SxhByMntkiur
+ In7Uo55bBpquaPRb7kMRDS5VIgZ4rIddgSaI/7kAQNrK20shIloBoe3YyyPWfWx0QP6v Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33m9fmr3g2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Sep 2020 10:25:16 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08HEKZo1089837;
+        Thu, 17 Sep 2020 10:25:16 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33m9fmr3ex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Sep 2020 10:25:16 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08HEHZZ9015305;
+        Thu, 17 Sep 2020 14:25:13 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 33k6f2h4jd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Sep 2020 14:25:13 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08HEPBpW23790008
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Sep 2020 14:25:11 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2D074C059;
+        Thu, 17 Sep 2020 14:25:10 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B10144C04A;
+        Thu, 17 Sep 2020 14:25:09 +0000 (GMT)
+Received: from sig-9-65-208-105.ibm.com (unknown [9.65.208.105])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Sep 2020 14:25:09 +0000 (GMT)
+Message-ID: <c8d3c70e74e607a4b73239bef1e9db0d304200fc.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 11/12] ima: Introduce template field evmsig and write
+ to field sig as fallback
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com
+Date:   Thu, 17 Sep 2020 10:25:08 -0400
+In-Reply-To: <20200904092643.20013-7-roberto.sassu@huawei.com>
+References: <20200904092339.19598-1-roberto.sassu@huawei.com>
+         <20200904092643.20013-7-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-17_09:2020-09-16,2020-09-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ malwarescore=0 suspectscore=3 priorityscore=1501 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009170104
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add MAINTAINERS entry for TEE based Trusted Keys framework.
+Hi Roberto,
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Fri, 2020-09-04 at 11:26 +0200, Roberto Sassu wrote:
+> With the patch to accept EVM portable signatures when the
+> appraise_type=imasig requirement is specified in the policy, appraisal can
+> be successfully done even if the file does not have an IMA signature.
+> 
+> However, remote attestation would not see that a different signature type
+> was used, as only IMA signatures can be included in the measurement list.
+> This patch solves the issue by introducing the new template field 'evmsig'
+> to show EVM portable signatures and by including its value in the existing
+> field 'sig' if the IMA signature is not found.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0d0862b..0a913ba 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9668,6 +9668,14 @@ F:	include/keys/trusted-type.h
- F:	include/keys/trusted_tpm.h
- F:	security/keys/trusted-keys/
- 
-+KEYS-TRUSTED-TEE
-+M:	Sumit Garg <sumit.garg@linaro.org>
-+L:	linux-integrity@vger.kernel.org
-+L:	keyrings@vger.kernel.org
-+S:	Supported
-+F:	include/keys/trusted_tee.h
-+F:	security/keys/trusted-keys/trusted_tee.c
-+
- KEYS/KEYRINGS
- M:	David Howells <dhowells@redhat.com>
- M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
--- 
-2.7.4
+Thank you!   Just a minor comment below.
+
+<snip>
+
+> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+> index c022ee9e2a4e..2c596c2a89cc 100644
+> --- a/security/integrity/ima/ima_template_lib.c
+> +++ b/security/integrity/ima/ima_template_lib.c
+> 
+> @@ -438,7 +439,7 @@ int ima_eventsig_init(struct ima_event_data *event_data,
+>  	struct evm_ima_xattr_data *xattr_value = event_data->xattr_value;
+>  
+>  	if ((!xattr_value) || (xattr_value->type != EVM_IMA_XATTR_DIGSIG))
+> -		return 0;
+> +		return ima_eventevmsig_init(event_data, field_data);
+>  
+>  	return ima_write_template_field_data(xattr_value, event_data->xattr_len,
+>  					     DATA_FMT_HEX, field_data);
+> @@ -484,3 +485,39 @@ int ima_eventmodsig_init(struct ima_event_data *event_data,
+>  	return ima_write_template_field_data(data, data_len, DATA_FMT_HEX,
+>  					     field_data);
+>  }
+> +
+> +/*
+> + *  ima_eventevmsig_init - include the EVM portable signature as part of the
+> + *  template data
+> + */
+> +int ima_eventevmsig_init(struct ima_event_data *event_data,
+> +			 struct ima_field_data *field_data)
+> +{
+> +	struct evm_ima_xattr_data *xattr_data = NULL;
+> +	int rc = 0;
+> +
+> +	if (!event_data->file)
+> +		return 0;
+> +
+> +	if (!(file_inode(event_data->file)->i_opflags & IOP_XATTR))
+> +		return 0;
+> +
+> +	rc = vfs_getxattr_alloc(file_dentry(event_data->file), XATTR_NAME_EVM,
+> +				(char **)&xattr_data, 0, GFP_NOFS);
+> +	if (rc <= 0) {
+> +		if (!rc || rc == -ENODATA)
+> +			return 0;
+> +
+> +		return rc;
+
+We're including the EVM signature on a best effort basis to help with
+attestation.  Do we really care why it failed?   Are we going to act on
+it?
+
+Mimi
+
+> +	}
+> +
+> +	if (xattr_data->type != EVM_XATTR_PORTABLE_DIGSIG) {
+> +		kfree(xattr_data);
+> +		return 0;
+> +	}
+> +
+> +	rc = ima_write_template_field_data((char *)xattr_data, rc, DATA_FMT_HEX,
+> +					   field_data);
+> +	kfree(xattr_data);
+> +	return rc;
+> +}
+
 
