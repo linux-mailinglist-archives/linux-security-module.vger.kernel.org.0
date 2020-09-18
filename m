@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E29526ECDF
-	for <lists+linux-security-module@lfdr.de>; Fri, 18 Sep 2020 04:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D869D26ED29
+	for <lists+linux-security-module@lfdr.de>; Fri, 18 Sep 2020 04:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729274AbgIRCPk (ORCPT
+        id S1729524AbgIRCR2 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 17 Sep 2020 22:15:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44648 "EHLO mail.kernel.org"
+        Thu, 17 Sep 2020 22:17:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728540AbgIRCPj (ORCPT
+        id S1729177AbgIRCRP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:15:39 -0400
+        Thu, 17 Sep 2020 22:17:15 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6860238A0;
-        Fri, 18 Sep 2020 02:15:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 24EFD238A0;
+        Fri, 18 Sep 2020 02:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395338;
-        bh=R0qJl8cpdipNiLHHrTKFMp6DOFeRLJGND6qxED8fQE0=;
+        s=default; t=1600395435;
+        bh=VdfvPI2L/8LAtm8y6SS7utxBrVk3AbiPhArVErrYgOA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XbhFUspmtErsytcoLku1vNYaZ4lEf1uoW3gvt5e0dDhZZFbQJVePMVJUiHDXJ/4Lb
-         3ah+g5vZ2kWfG7Y+OJYrC4GNxag1YKFkQeeYr6xWQF1d6FbrTtWzzmU9l1ibuRHI6y
-         zGlIoCyaYb1l+YVTYsSalfw+OAFrJtRrupXe97x0=
+        b=OWrVXKEDTm+O4FpGXpolkXrKaNdDXrhrlrMHa0mJ9KbzACSd1s8UCEQFibcbakhVT
+         mrvpNP2d8L67AUOrhY7hEj27s9qwIHnJyWqdb2+t3u49iByYG0x1vMNjfDiEMwnkgK
+         CkhwgPwWT7HB6Gs77Nm7O/xPcRWEUEe0LwhEziTI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vasily Averin <vvs@virtuozzo.com>,
@@ -32,12 +32,12 @@ Cc:     Vasily Averin <vvs@virtuozzo.com>,
         Paul Moore <paul@paul-moore.com>,
         Sasha Levin <sashal@kernel.org>, selinux@tycho.nsa.gov,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 35/90] selinux: sel_avc_get_stat_idx should increase position index
-Date:   Thu, 17 Sep 2020 22:14:00 -0400
-Message-Id: <20200918021455.2067301-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 25/64] selinux: sel_avc_get_stat_idx should increase position index
+Date:   Thu, 17 Sep 2020 22:16:04 -0400
+Message-Id: <20200918021643.2067895-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918021455.2067301-1-sashal@kernel.org>
-References: <20200918021455.2067301-1-sashal@kernel.org>
+In-Reply-To: <20200918021643.2067895-1-sashal@kernel.org>
+References: <20200918021643.2067895-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -90,10 +90,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 72c145dd799f1..ef1226c1c3add 100644
+index c02da25d7b631..7778e28cce9d7 100644
 --- a/security/selinux/selinuxfs.c
 +++ b/security/selinux/selinuxfs.c
-@@ -1416,6 +1416,7 @@ static struct avc_cache_stats *sel_avc_get_stat_idx(loff_t *idx)
+@@ -1370,6 +1370,7 @@ static struct avc_cache_stats *sel_avc_get_stat_idx(loff_t *idx)
  		*idx = cpu + 1;
  		return &per_cpu(avc_cache_stats, cpu);
  	}
