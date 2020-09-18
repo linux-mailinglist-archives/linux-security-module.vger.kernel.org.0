@@ -2,40 +2,42 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C349126F1A9
-	for <lists+linux-security-module@lfdr.de>; Fri, 18 Sep 2020 04:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D0926F0F6
+	for <lists+linux-security-module@lfdr.de>; Fri, 18 Sep 2020 04:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727652AbgIRCw5 (ORCPT
+        id S1726326AbgIRCri (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 17 Sep 2020 22:52:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58982 "EHLO mail.kernel.org"
+        Thu, 17 Sep 2020 22:47:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33286 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727381AbgIRCIF (ORCPT
+        id S1727445AbgIRCJc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:08:05 -0400
+        Thu, 17 Sep 2020 22:09:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 075A423770;
-        Fri, 18 Sep 2020 02:08:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 212DE2311A;
+        Fri, 18 Sep 2020 02:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394884;
-        bh=Ck6fc4SttpI6j9QYpn6//UUfsHchD6fGEC7acmbMEqY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=INXt6hFkJ8Gikce6p7QV+rtyyW08RNMjZlLzIP47yvljFax+dqTm9ThzJjTtuI+7H
-         RkHl+cUlwZSQUa2fb2DZSMu2uqBfNcnYAOSQgyDqR6O7nl8iOrNThj5wKNLupG4A/C
-         2pKys7vZffLNBRQISGqxMu7UsE5EVIK2UyROeGlE=
+        s=default; t=1600394972;
+        bh=i1ZgjExRvDCjhGcCJkiP8I89j+dferq7go6VHY189IY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vRHGAjNQM4Kq7SX/wXL4F2iYhwgLtYI2H7lbSmbRlGeN38EkZ8F/7NG91pr3AMbav
+         Q0Iu9ihUviY7ZAQSbEeUS4xF/BcsWFUjvNVEHZ2KZOxr7ozXiyj0jx5iKFy0ZbaXEb
+         IAIPkCtPgczdSxxSNmGVZoBdmXLJhz+FMbLXlKus=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jonathan Lebon <jlebon@redhat.com>,
-        Victor Kamensky <kamensky@cisco.com>,
+Cc:     Vasily Averin <vvs@virtuozzo.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
         Paul Moore <paul@paul-moore.com>,
         Sasha Levin <sashal@kernel.org>, selinux@tycho.nsa.gov,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 001/206] selinux: allow labeling before policy is loaded
-Date:   Thu, 17 Sep 2020 22:04:37 -0400
-Message-Id: <20200918020802.2065198-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 073/206] selinux: sel_avc_get_stat_idx should increase position index
+Date:   Thu, 17 Sep 2020 22:05:49 -0400
+Message-Id: <20200918020802.2065198-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200918020802.2065198-1-sashal@kernel.org>
+References: <20200918020802.2065198-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,84 +45,62 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Jonathan Lebon <jlebon@redhat.com>
+From: Vasily Averin <vvs@virtuozzo.com>
 
-[ Upstream commit 3e3e24b42043eceb97ed834102c2d094dfd7aaa6 ]
+[ Upstream commit 8d269a8e2a8f0bca89022f4ec98de460acb90365 ]
 
-Currently, the SELinux LSM prevents one from setting the
-`security.selinux` xattr on an inode without a policy first being
-loaded. However, this restriction is problematic: it makes it impossible
-to have newly created files with the correct label before actually
-loading the policy.
+If seq_file .next function does not change position index,
+read after some lseek can generate unexpected output.
 
-This is relevant in distributions like Fedora, where the policy is
-loaded by systemd shortly after pivoting out of the initrd. In such
-instances, all files created prior to pivoting will be unlabeled. One
-then has to relabel them after pivoting, an operation which inherently
-races with other processes trying to access those same files.
+$ dd if=/sys/fs/selinux/avc/cache_stats # usual output
+lookups hits misses allocations reclaims frees
+817223 810034 7189 7189 6992 7037
+1934894 1926896 7998 7998 7632 7683
+1322812 1317176 5636 5636 5456 5507
+1560571 1551548 9023 9023 9056 9115
+0+1 records in
+0+1 records out
+189 bytes copied, 5,1564e-05 s, 3,7 MB/s
 
-Going further, there are use cases for creating the entire root
-filesystem on first boot from the initrd (e.g. Container Linux supports
-this today[1], and we'd like to support it in Fedora CoreOS as well[2]).
-One can imagine doing this in two ways: at the block device level (e.g.
-laying down a disk image), or at the filesystem level. In the former,
-labeling can simply be part of the image. But even in the latter
-scenario, one still really wants to be able to set the right labels when
-populating the new filesystem.
+$# read after lseek to midle of last line
+$ dd if=/sys/fs/selinux/avc/cache_stats bs=180 skip=1
+dd: /sys/fs/selinux/avc/cache_stats: cannot skip to specified offset
+056 9115   <<<< end of last line
+1560571 1551548 9023 9023 9056 9115  <<< whole last line once again
+0+1 records in
+0+1 records out
+45 bytes copied, 8,7221e-05 s, 516 kB/s
 
-This patch enables this by changing behaviour in the following two ways:
-1. allow `setxattr` if we're not initialized
-2. don't try to set the in-core inode SID if we're not initialized;
-   instead leave it as `LABEL_INVALID` so that revalidation may be
-   attempted at a later time
+$# read after lseek beyond  end of of file
+$ dd if=/sys/fs/selinux/avc/cache_stats bs=1000 skip=1
+dd: /sys/fs/selinux/avc/cache_stats: cannot skip to specified offset
+1560571 1551548 9023 9023 9056 9115  <<<< generates whole last line
+0+1 records in
+0+1 records out
+36 bytes copied, 9,0934e-05 s, 396 kB/s
 
-Note the first hunk of this patch is mostly the same as a previously
-discussed one[3], though it was part of a larger series which wasn't
-accepted.
+https://bugzilla.kernel.org/show_bug.cgi?id=206283
 
-[1] https://coreos.com/os/docs/latest/root-filesystem-placement.html
-[2] https://github.com/coreos/fedora-coreos-tracker/issues/94
-[3] https://www.spinics.net/lists/linux-initramfs/msg04593.html
-
-Co-developed-by: Victor Kamensky <kamensky@cisco.com>
-Signed-off-by: Victor Kamensky <kamensky@cisco.com>
-Signed-off-by: Jonathan Lebon <jlebon@redhat.com>
+Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
+Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/selinux/hooks.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ security/selinux/selinuxfs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 452254fd89f87..250b725f5754c 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3304,6 +3304,9 @@ static int selinux_inode_setxattr(struct dentry *dentry, const char *name,
- 		return dentry_has_perm(current_cred(), dentry, FILE__SETATTR);
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index f3a5a138a096d..60b3f16bb5c7b 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -1509,6 +1509,7 @@ static struct avc_cache_stats *sel_avc_get_stat_idx(loff_t *idx)
+ 		*idx = cpu + 1;
+ 		return &per_cpu(avc_cache_stats, cpu);
  	}
++	(*idx)++;
+ 	return NULL;
+ }
  
-+	if (!selinux_state.initialized)
-+		return (inode_owner_or_capable(inode) ? 0 : -EPERM);
-+
- 	sbsec = inode->i_sb->s_security;
- 	if (!(sbsec->flags & SBLABEL_MNT))
- 		return -EOPNOTSUPP;
-@@ -3387,6 +3390,15 @@ static void selinux_inode_post_setxattr(struct dentry *dentry, const char *name,
- 		return;
- 	}
- 
-+	if (!selinux_state.initialized) {
-+		/* If we haven't even been initialized, then we can't validate
-+		 * against a policy, so leave the label as invalid. It may
-+		 * resolve to a valid label on the next revalidation try if
-+		 * we've since initialized.
-+		 */
-+		return;
-+	}
-+
- 	rc = security_context_to_sid_force(&selinux_state, value, size,
- 					   &newsid);
- 	if (rc) {
 -- 
 2.25.1
 
