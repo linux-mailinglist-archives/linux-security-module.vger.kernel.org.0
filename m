@@ -2,88 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F47270E75
-	for <lists+linux-security-module@lfdr.de>; Sat, 19 Sep 2020 16:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28490270E96
+	for <lists+linux-security-module@lfdr.de>; Sat, 19 Sep 2020 16:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgISORG (ORCPT
+        id S1726520AbgISObG convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 19 Sep 2020 10:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgISORG (ORCPT
+        Sat, 19 Sep 2020 10:31:06 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:21698 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726486AbgISObG (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 19 Sep 2020 10:17:06 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F6BC0613CE
-        for <linux-security-module@vger.kernel.org>; Sat, 19 Sep 2020 07:17:06 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id k2so6609819ybp.7
-        for <linux-security-module@vger.kernel.org>; Sat, 19 Sep 2020 07:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=/3RcM/ddnT/37a1xoaix+O0OaDezTF9OfIKEw4GOnMU=;
-        b=gJMuxHY750bdUDS4Me3FCgBSpy28gthbgmU4mEPWjiuHSRgMbuv5e+RTr8DkITw2hI
-         Eq7QgUaCZ5YYNtVtO0v8ldrLkBFet0gFVYbNYFBS1UxSsTYFR0Yc/oemK2Ek2dpKxEvO
-         usmnvUrbA/PWqM3w53TXQ8O8mjcWh4wTTi/ysDTmxREY/lj8QJczBdPrjxmYU2oAagk8
-         Oce84xl2NHO9Tz1nf3gncCNRAmFA42TDPpHXAP8zpaLMlRbfiY8XOwNEw1iJnPd0t04a
-         IBMEWRsOwuMOSXBLxbNXxIpcf7WEYSK493x8BEKiLC0nVlNjNy8DVXR4AQinxsoLzGtc
-         yy8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=/3RcM/ddnT/37a1xoaix+O0OaDezTF9OfIKEw4GOnMU=;
-        b=GquL8A/jy0dZO8jjlsK3NQbGZ9f5nhppFTmN7sz304p9YTncyJmjjP/jSlWKQjKv27
-         JOyyHJeCYbAnIhbbMdnws1TB2wxsBWSns2wm2Cy3zM1m7PriJcQLYbLZ/s82ft1UNjnG
-         CBAvJsLUnL2CMxPYgrxx4nNUUsHr53F/a6U5q1dsCJZxzHh9PjrqoaZG5MlBuoSBCzT/
-         nzU19Nk4s9F/BGps316NwJQ71s7SHAWyWrxOvEccrUVvvYzsCd7lPaP4mCoaJBlFM7IM
-         M18B/shWGQbKtJi0ExPEr8NqXd+pW4Udd5j35RviRes5U9oUG09Jv4BEYYObHw0M5LxC
-         vsEQ==
-X-Gm-Message-State: AOAM533oCWNgyK+o3xlEMvjAyaPUvJNM16h68VUHlQNYqk/FZ62EAZrN
-        YzyJqXzquJfYDPZLWoVGIHmLzSpPE6ojcIEpeoQ=
-X-Google-Smtp-Source: ABdhPJzn+p1uEqtsb9KPaw37Pq5dl3zjp4QCs2zUNBPEIFZ5LEdWazDQpYtJ50ci8/SnPtVLTc4HPCCror7EQ26ztWs=
-X-Received: by 2002:a25:200a:: with SMTP id g10mr31526882ybg.458.1600525024974;
- Sat, 19 Sep 2020 07:17:04 -0700 (PDT)
+        Sat, 19 Sep 2020 10:31:06 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-281-bAjbsE6rN1eTAY15huzJqA-1; Sat, 19 Sep 2020 15:24:11 +0100
+X-MC-Unique: bAjbsE6rN1eTAY15huzJqA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Sat, 19 Sep 2020 15:24:10 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Sat, 19 Sep 2020 15:24:10 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: let import_iovec deal with compat_iovecs as well
+Thread-Topic: let import_iovec deal with compat_iovecs as well
+Thread-Index: AQHWjbnKEn35LxofhEeT1lmdzdUiWqlwBNiw
+Date:   Sat, 19 Sep 2020 14:24:10 +0000
+Message-ID: <2c7bf42ee4314484ae0177280cd8f5f3@AcuMS.aculab.com>
+References: <20200918124533.3487701-1-hch@lst.de>
+In-Reply-To: <20200918124533.3487701-1-hch@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Reply-To: trclttljhn@gmail.com
-Sender: zioephrem@gmail.com
-Received: by 2002:a05:7108:4349:0:0:0:0 with HTTP; Sat, 19 Sep 2020 07:17:04
- -0700 (PDT)
-From:   Tracy Littlejohn <tljn11110@gmail.com>
-Date:   Sat, 19 Sep 2020 07:17:04 -0700
-X-Google-Sender-Auth: a2ifRNDgYAw_3fYiN9LJc27fu3s
-Message-ID: <CABMFBqtJrR=P5cSujzkmuA=p3UigyPjWp+NHpbXJCTGQgkBmNw@mail.gmail.com>
-Subject: Good Day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Good Day, I am glad to contact you through this medium I=E2=80=99m Sgt Trac=
-y
-Littlejohn am from united state, 28 years old single I am the only
-surviving child of my late parents, I am America female soldier
-presently in Afghanistan for the training, advising the Afghan forces
-and also helping in stabilizing the country against security
-challenges, am Actually seeking your assistance to evacuate the sum of
-$3.5 million, This money I got it as my reward in service by
-Afghanistan government to support me for my Good job in their land.
-Right now, I want you to stand as my beneficiary and receive the fund
-my certificate of deposit from the Bank where this fund deposited and
-my authorization letter is with me now.My contact with you is not by
-my power but it is divinely made for God's purpose to be fulfilled in
-our lives. I want you to be rest assured that this transaction is
-legitimate and a 100% risk free involvement, all you have to do is to
-keep it secret and confidential to yourself , this transaction will
-not take more than 7 working banking days for the money to get into
-your account based on your sincerity and cooperation. i want you to
-take 40% Percent of the total money for your personal use While 20%
-Percent of the money will go to charity, people in the street and
-helping the orphanage the remaining 40% percent of the total money
-.you will assist me to invest it in a good profitable Venture or you
-keep it for me until I arrive your country. If you=E2=80=99re willing to
-assist me contact me through my email address =E2=80=9C
+From: Christoph Hellwig
+> Sent: 18 September 2020 13:45
+> 
+> this series changes import_iovec to transparently deal with comat iovec
+> structures, and then cleanups up a lot of code dupliation.  But to get
+> there it first has to fix the pre-existing bug that io_uring compat
+> contexts don't trigger the in_compat_syscall() check.  This has so far
+> been relatively harmless as very little code callable from io_uring used
+> the check, and even that code that could be called usually wasn't.
 
-Sgt Tracy Littlejohn
+I thought about that change while writing my import_iovec() => iovec_import()
+patch - and thought that the io_uring code would (as usual) cause grief.
+
+Christoph - did you see those patches?
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
