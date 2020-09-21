@@ -2,94 +2,78 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA95272C30
-	for <lists+linux-security-module@lfdr.de>; Mon, 21 Sep 2020 18:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78C2272C50
+	for <lists+linux-security-module@lfdr.de>; Mon, 21 Sep 2020 18:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728356AbgIUQ2G (ORCPT
+        id S1726886AbgIUQaS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 21 Sep 2020 12:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
+        Mon, 21 Sep 2020 12:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727323AbgIUQ2F (ORCPT
+        with ESMTP id S1726430AbgIUQaS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 21 Sep 2020 12:28:05 -0400
+        Mon, 21 Sep 2020 12:30:18 -0400
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC5CC061755;
-        Mon, 21 Sep 2020 09:28:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673BBC061755;
+        Mon, 21 Sep 2020 09:30:18 -0700 (PDT)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kKOfR-003EDr-FT; Mon, 21 Sep 2020 16:27:53 +0000
-Date:   Mon, 21 Sep 2020 17:27:53 +0100
+        id 1kKOhf-003EJQ-10; Mon, 21 Sep 2020 16:30:11 +0000
+Date:   Mon, 21 Sep 2020 17:30:11 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH 02/11] mm: call import_iovec() instead of
- rw_copy_check_uvector() in process_vm_rw()
-Message-ID: <20200921162753.GY3421308@ZenIV.linux.org.uk>
-References: <20200921143434.707844-1-hch@lst.de>
- <20200921143434.707844-3-hch@lst.de>
- <20200921150211.GS3421308@ZenIV.linux.org.uk>
- <ef67787edb2f48548d69caaaff6997ba@AcuMS.aculab.com>
- <20200921152937.GX3421308@ZenIV.linux.org.uk>
- <226e03bf941844eba4d64af31633c177@AcuMS.aculab.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>, Ian Kent <raven@themaw.net>,
+        autofs@vger.kernel.org,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Zdenek Pytela <zpytela@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: Commit 13c164b1a186 - regression for LSMs/SELinux?
+Message-ID: <20200921163011.GZ3421308@ZenIV.linux.org.uk>
+References: <CAFqZXNsoXr1eA4C8==Nvujs5ONpRnuSqaOQQ0n78R=Dbm-EFGA@mail.gmail.com>
+ <20200921160922.GA23870@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <226e03bf941844eba4d64af31633c177@AcuMS.aculab.com>
+In-Reply-To: <20200921160922.GA23870@lst.de>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Sep 21, 2020 at 03:44:00PM +0000, David Laight wrote:
-> From: Al Viro
-> > Sent: 21 September 2020 16:30
-> > 
-> > On Mon, Sep 21, 2020 at 03:21:35PM +0000, David Laight wrote:
-> > 
-> > > You really don't want to be looping through the array twice.
-> > 
-> > Profiles, please.
+On Mon, Sep 21, 2020 at 06:09:22PM +0200, Christoph Hellwig wrote:
+> [adding Linus and Al]
 > 
-> I did some profiling of send() v sendmsg() much earlier in the year.
-> I can't remember the exact details but the extra cost of sendmsg()
-> is far more than you might expect.
-> (I was timing sending fully built IPv4 UDP packets using a raw socket.)
+> On Mon, Sep 21, 2020 at 04:51:35PM +0200, Ondrej Mosnacek wrote:
+> > Hi folks,
+> > 
+> > It seems that after commit 13c164b1a186 ("autofs: switch to
+> > kernel_write") there is now an extra LSM permission required (for the
+> > current task to write to the automount pipe) for processes accessing
+> > some yet-to-to-be mounted directory on which an autofs mount is set
+> > up. The call chain is:
+> > [...]
+> > autofs_wait() ->
+> > autofs_notify_daemon() ->
+> > autofs_write() ->
+> > kernel_write() ->
+> > rw_verify_area() ->
+> > security_file_permission()
+> > 
+> > The bug report that led me to this commit is at [1].
+> > 
+> > Technically, this is a regression for LSM users, since this is a
+> > kernel-internal operation and an LSM permission for the current task
+> > shouldn't be required. Can this patch be reverted? Perhaps
+> > __kernel_{read|write}() could instead be renamed to kernel_*_nocheck()
+> > so that the name is more descriptive?
 > 
-> About half the difference does away if you change the
-> copy_from_user() to __copy_from_user() when reading the struct msghdr
-> and iov[] from userspace (user copy hardening is expensive).
-
-Wha...?  So the difference is within 4 times the overhead of the
-hardening checks done for one call of copy_from_user()?
-
-> The rest is just code path, my gut feeling is that a lot of that
-> is in import_iovec().
+> So we obviously should not break existing user space and need to fix
+> this ASAP.  The trivial "fix" would be to export __kernel_write again
+> and switch autofs to use it.  The other option would be a FMODE flag
+> to bypass security checks, only to be set if the callers ensures
+> they've been valided (i.e. in autofs_prepare_pipe).
 > 
-> Remember semdmsg() is likely to be called with an iov count of 1.
+> Any opinions?
 
-... which makes that loop unlikely to be noticable in the entire
-mess, whether you pass it once or twice.  IOW, unless you can show
-profiles where that loop is sufficiently hot or if you can show
-the timings change from splitting it in two, I'll remain very
-sceptical about that assertion.
+Reexport for now.  Incidentally, what is LSM doing rejecting writes
+into a pipe?
