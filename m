@@ -2,88 +2,96 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 986692734DD
-	for <lists+linux-security-module@lfdr.de>; Mon, 21 Sep 2020 23:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7043273655
+	for <lists+linux-security-module@lfdr.de>; Tue, 22 Sep 2020 01:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727340AbgIUV0r (ORCPT
+        id S1728817AbgIUXLc (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 21 Sep 2020 17:26:47 -0400
-Received: from mga18.intel.com ([134.134.136.126]:27497 "EHLO mga18.intel.com"
+        Mon, 21 Sep 2020 19:11:32 -0400
+Received: from mail.rusoil.net ([188.128.114.25]:57383 "EHLO mail.rusoil.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726497AbgIUV0r (ORCPT
+        id S1726457AbgIUXLb (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 21 Sep 2020 17:26:47 -0400
-IronPort-SDR: td84sAxeDzTxHcb/38PT2hEV4d94fiOp5+NT3mLkqFn8kiFzwddddwNN+bJdy8t0RnK9td0haI
- IX/Lt0fCT8WA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="148236530"
-X-IronPort-AV: E=Sophos;i="5.77,288,1596524400"; 
-   d="scan'208";a="148236530"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 14:26:46 -0700
-IronPort-SDR: 8hTzxnHAWYHcALgtM6rYikOTI+yHRcM5M8fwXePA/kS0QmDiDwK/qbnrk83Lzd2gwyKPbLEKdp
- VkZTjrJzvgXQ==
-X-IronPort-AV: E=Sophos;i="5.77,288,1596524400"; 
-   d="scan'208";a="485671677"
-Received: from kofels-mobl.ger.corp.intel.com (HELO localhost) ([10.249.45.179])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 14:26:40 -0700
-Date:   Tue, 22 Sep 2020 00:26:38 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-sgx@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Jethro Beekman <jethro@fortanix.com>,
-        Darren Kenny <darren.kenny@oracle.com>,
-        Andy Lutomirski <luto@kernel.org>, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, asapek@google.com,
-        cedric.xing@intel.com, chenalexchen@google.com,
-        conradparker@google.com, cyhanish@google.com,
-        dave.hansen@intel.com, haitao.huang@intel.com,
-        josh@joshtriplett.org, kai.huang@intel.com, kai.svahn@intel.com,
-        kmoy@google.com, ludloff@google.com, nhorman@redhat.com,
-        npmccallum@redhat.com, puiterwijk@redhat.com, rientjes@google.com,
-        sean.j.christopherson@intel.com, tglx@linutronix.de,
-        yaozhangx@google.com
-Subject: Re: [PATCH v38 15/24] x86/sgx: Enable provisioning for remote
- attestation
-Message-ID: <20200921212638.GB59547@linux.intel.com>
-References: <20200915112842.897265-1-jarkko.sakkinen@linux.intel.com>
- <20200915112842.897265-16-jarkko.sakkinen@linux.intel.com>
- <20200921180728.GJ5901@zn.tnic>
- <20200921192706.GD53597@linux.intel.com>
- <20200921194156.GM5901@zn.tnic>
+        Mon, 21 Sep 2020 19:11:31 -0400
+X-Greylist: delayed 374 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:11:22 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.rusoil.net (Postfix) with ESMTP id 3CFBD40D5B;
+        Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
+Received: from mail.rusoil.net ([127.0.0.1])
+        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id EV4tl_rVLSS7; Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.rusoil.net (Postfix) with ESMTP id 2C0DD40CEA;
+        Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 2C0DD40CEA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
+        s=maildkim; t=1600729693;
+        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=Vnjy6nBVnSTcINEW6kER3ugTxQ4KBYKS36YiGFr6YA3B4INc+KiGVhbak8MS9Qjs4
+         d1hbAool1vpcT5tqzIahdEndE3qiAPgBOX6jsmCcvHSMZhz19GFDJ1aQySn107enqY
+         lwxWqbZRY2a+BQ8VxoJh3Rpje7MgA+/fhr9SupmU=
+X-Virus-Scanned: amavisd-new at mail.rusoil.net
+Received: from mail.rusoil.net ([127.0.0.1])
+        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id K7O08Fi_YWVd; Tue, 22 Sep 2020 04:08:12 +0500 (YEKT)
+Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
+        by mail.rusoil.net (Postfix) with ESMTP id 6147940C07;
+        Tue, 22 Sep 2020 04:08:10 +0500 (YEKT)
+Date:   Tue, 22 Sep 2020 04:08:09 +0500 (YEKT)
+From:   Blue Oak Mortgage and Loans <em@rusoil.net>
+Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
+Message-ID: <2020026523.907101.1600729689731.JavaMail.zimbra@rusoil.net>
+Subject: Wir finanzieren Projekte und Unternehmen
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200921194156.GM5901@zn.tnic>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.210.183.69]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
+Thread-Index: IhGK+mMcCqn+S/Et9t28g8ApaUDaLg==
+Thread-Topic: Wir finanzieren Projekte und Unternehmen
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Sep 21, 2020 at 09:41:56PM +0200, Borislav Petkov wrote:
-> On Mon, Sep 21, 2020 at 10:27:06PM +0300, Jarkko Sakkinen wrote:
-> > 'sgx_dev_enclave' is successfully register whenever that happens. Am I
-> > missing something here?
-> 
-> No, I was missing the fact that you have *two* misc devices and you're
-> deregistering the first one in the error path of the second.
-> 
-> Forget what I said. ;-\
 
-Ok, great.
 
-BTW, probably would make sense to rewrite the short summary as:
+Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
+ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
 
-"x86/sgx: Add SGX_IOC_ENCLAVE_PROVISION"
 
-for the sake of consistency with the three precursoring patches.
+Eine kurze Einf=C3=BChrung.
 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
+eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
+ Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
+n 2% pro Jahr.
 
-/Jarkko
+
+Darlehensverfahren
+
+1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
+dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
+
+2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
+nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
+ vorlegen.
+
+3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
+antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
+erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
+ den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
+he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
+ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
+
+4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
+nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
+m NC-Darlehensvertragsformular aufgef=C3=BChrt.
+
+Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
+App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
+re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
+n.
+
+WhatsApp: + 90-552-365-3483
+E-Mail: info@bluelmtg.net
