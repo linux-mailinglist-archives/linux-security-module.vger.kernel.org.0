@@ -2,129 +2,211 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CFF2760EF
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Sep 2020 21:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91B9276116
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Sep 2020 21:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgIWTU2 (ORCPT
+        id S1726627AbgIWTd3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 23 Sep 2020 15:20:28 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47440 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbgIWTUX (ORCPT
+        Wed, 23 Sep 2020 15:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726466AbgIWTd3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 23 Sep 2020 15:20:23 -0400
-Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E0E2420C27C2;
-        Wed, 23 Sep 2020 12:20:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E0E2420C27C2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1600888822;
-        bh=reBEdoxabfOCKhw3FcEkYrdBVaobSeguzwc4Zi2Mc64=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aRdqgvrmqBjuiB3g/c60qJg38PSNvNZ4PCtZEjWIYURSuE+hJl29EJIseL8lZ4KWh
-         Ibt5qhQSG9RI8msrtVoGbqto9S+XOIvkSgj+obdGErDc+956zeTqYN0NIjqIV/O9bi
-         /LyHtbTduC5tCb0jkDy5+J4TqTZsJIeb3i5WrY0c=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH v4 6/6] IMA: validate supported kernel data sources before measurement
-Date:   Wed, 23 Sep 2020 12:20:11 -0700
-Message-Id: <20200923192011.5293-7-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200923192011.5293-1-tusharsu@linux.microsoft.com>
-References: <20200923192011.5293-1-tusharsu@linux.microsoft.com>
+        Wed, 23 Sep 2020 15:33:29 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB5AC0613D3
+        for <linux-security-module@vger.kernel.org>; Wed, 23 Sep 2020 12:33:29 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 140so713231ybf.2
+        for <linux-security-module@vger.kernel.org>; Wed, 23 Sep 2020 12:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=WVSvTUrYOLntpcfEv21un6OtJaYezAF3iVaHLu7hkAE=;
+        b=ArKXeABL055dP9UaAHA02G3C5k50VagybqYti7opUKzF6LQsQaVxD/h8N2sNItDgDp
+         OHUaKhz9LSLg+YtA+c+ZTJUIs4uXRIN19skiynV6k3oxFeub8TU9UmYcGOqfR1X46ms/
+         v/XOqLRTnY5rTaEuS9iRqMJu+Y4Bb+j+ejblZdFt8TzjW2i8rwY/nogh8o41FBCauhR9
+         ZRkh5efI5RaAWXVhsEwTjdCNCs4kbCUPg6oGwBFfPFfjasSbiEY1jKM9VAJnyrVNvudF
+         rAmisW6mZUGAbLlCQo/PSlpoR/3N4FPTPOT/oWLnQEpCf/uM4mpee1MTLbWbNSb1T+WQ
+         wKcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=WVSvTUrYOLntpcfEv21un6OtJaYezAF3iVaHLu7hkAE=;
+        b=fQqn24uxxH2e+x/JOpKkFXhakQPnEG+GnV2SRuPNQQGxAvCuGD0kZ4KwT7p9LquIeR
+         S3IiATn2BfiHgonxWsiO7F4HdaDvRln/plYdDngBJ+McI3H2jQFRCvM9IC1wDI6+YnXa
+         vQklzxryobnuyMTKvv4V4fX2DfXKKvdMg/wLsg1bvUPJU8GOAarWQZxLYhxHjLXqv+0r
+         psi5/0NJ7hb5eBveN2kySCmgVGuSFVHCrNwkEssOFmojViM2EGKO3wLMdWz5W9rR1IRo
+         u4V6nux+i8IHtE5X0mlU92Aau9i150GF7I0RaeKLo58wMM3/1YsIPz5fHP09z8kFZoeQ
+         YjuQ==
+X-Gm-Message-State: AOAM530nINJXvFPwHZGa9v6QhiUu6SLk+0xbx5mwDMC7Z8bo8+0S0N10
+        MfD1K/T/bsfp5DAXS0EobM2bjOzZr0/yyG/Z4A==
+X-Google-Smtp-Source: ABdhPJxwWhdQE8FL1xGbEa/t7GC9wDt3JQqUARq0x5zA68UzAR5KMkKne7LxCP0in38Ahq4E7JgWQD1GuFZHOd0a3A==
+Sender: "lokeshgidra via sendgmr" <lokeshgidra@lg.mtv.corp.google.com>
+X-Received: from lg.mtv.corp.google.com ([2620:15c:211:202:f693:9fff:fef4:29dd])
+ (user=lokeshgidra job=sendgmr) by 2002:a25:ae90:: with SMTP id
+ b16mr2522880ybj.128.1600889608275; Wed, 23 Sep 2020 12:33:28 -0700 (PDT)
+Date:   Wed, 23 Sep 2020 12:33:21 -0700
+Message-Id: <20200923193324.3090160-1-lokeshgidra@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+Subject: [PATCH v9 0/3] SELinux support for anonymous inodes and UFFD
+From:   Lokesh Gidra <lokeshgidra@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        James Morris <jmorris@namei.org>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Daniel Colascione <dancol@dancol.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        KP Singh <kpsingh@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Thomas Cedeno <thomascedeno@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Aaron Goidel <acgoide@tycho.nsa.gov>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        Adrian Reber <areber@redhat.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        kaleshsingh@google.com, calin@google.com, surenb@google.com,
+        nnk@google.com, jeffv@google.com, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Currently, IMA does not restrict random data sources from measuring
-their data using ima_measure_critical_data(). Any kernel data source can
-call the function, and it's data will get measured as long as the input
-event_data_source is part of the IMA policy - RITICAL_DATA+data_sources.
-Supporting random data sources at run-time may impact the reliability of
-the system.
+Userfaultfd in unprivileged contexts could be potentially very
+useful. We'd like to harden userfaultfd to make such unprivileged use
+less risky. This patch series allows SELinux to manage userfaultfd
+file descriptors and in the future, other kinds of
+anonymous-inode-based file descriptor.  SELinux policy authors can
+apply policy types to anonymous inodes by providing name-based
+transition rules keyed off the anonymous inode internal name (
+"[userfaultfd]" in the case of userfaultfd(2) file descriptors) and
+applying policy to the new SIDs thus produced.
 
-To ensure that only data from supported sources are measured, the kernel
-component needs to be added to a compile-time list of supported sources
-(an "allowed list of components"). IMA then validates the input
-parameter - "event_data_source" passed to ima_measure_critical_data()
-against this allowed list at run-time.
+With SELinux managed userfaultfd, an admin can control creation and
+movement of the file descriptors. In particular, handling of
+a userfaultfd descriptor by a different process is essentially a
+ptrace access into the process, without any of the corresponding
+security_ptrace_access_check() checks. For privacy, the admin may
+want to deny such accesses, which is possible with SELinux support.
 
-This compile time list must be updated when kernel components are
-updated to measure their data using IMA.
+Inside the kernel, a new anon_inode interface, anon_inode_getfd_secure,
+allows callers to opt into this SELinux management. In this new "secure"
+mode, anon_inodes create new ephemeral inodes for anonymous file objects
+instead of reusing the normal anon_inodes singleton dummy inode. A new
+LSM hook gives security modules an opportunity to configure and veto
+these ephemeral inodes.
 
-Provide an infrastructure for kernel data sources to be added to
-IMA's supported data sources list at compile-time. Update
-ima_measure_critical_data() to validate, at run-time, that the data
-source is supported before measuring the data coming from that source.
+This patch series is one of two fork of [1] and is an
+alternative to [2].
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
----
- security/integrity/ima/ima.h      | 29 +++++++++++++++++++++++++++++
- security/integrity/ima/ima_main.c |  6 ++++++
- 2 files changed, 35 insertions(+)
+The primary difference between the two patch series is that this
+partch series creates a unique inode for each "secure" anonymous
+inode, while the other patch series ([2]) continues using the
+singleton dummy anonymous inode and adds a way to attach SELinux
+security information directly to file objects.
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index c1acf88e1b5d..4a35db010d91 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -228,6 +228,35 @@ extern const char *const func_tokens[];
- 
- struct modsig;
- 
-+#define __ima_supported_kernel_data_sources(source)	\
-+	source(MIN_SOURCE, min_source)			\
-+	source(MAX_SOURCE, max_source)
-+
-+#define __ima_enum_stringify(ENUM, str) (#str),
-+
-+enum ima_supported_kernel_data_sources {
-+	__ima_supported_kernel_data_sources(__ima_hook_enumify)
-+};
-+
-+static const char * const ima_supported_kernel_data_sources_str[] = {
-+	__ima_supported_kernel_data_sources(__ima_enum_stringify)
-+};
-+
-+static inline bool ima_kernel_data_source_is_supported(const char *source)
-+{
-+	int i;
-+
-+	if (!source)
-+		return false;
-+
-+	for (i = MIN_SOURCE + 1; i < MAX_SOURCE; i++) {
-+		if (!strcmp(ima_supported_kernel_data_sources_str[i], source))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- #ifdef CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS
- /*
-  * To track keys that need to be measured.
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index d55896f28790..61f9642747a8 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -888,6 +888,12 @@ void ima_measure_critical_data(const char *event_name,
- 		return;
- 	}
- 
-+	if (!ima_kernel_data_source_is_supported(event_data_source)) {
-+		pr_err("measuring data source %s is not permitted",
-+		       event_data_source);
-+		return;
-+	}
-+
- 	process_buffer_measurement(NULL, buf, buf_len, event_name,
- 				   CRITICAL_DATA, 0, event_data_source,
- 				   measure_buf_hash);
+I prefer the approach in this patch series because 1) it's a smaller
+patch than [2], and 2) it produces a more regular security
+architecture: in this patch series, secure anonymous inodes aren't
+S_PRIVATE and they maintain the SELinux property that the label for a
+file is in its inode. We do need an additional inode per anonymous
+file, but per-struct-file inode creation doesn't seem to be a problem
+for pipes and sockets.
+
+The previous version of this feature ([1]) created a new SELinux
+security class for userfaultfd file descriptors. This version adopts
+the generic transition-based approach of [2].
+
+This patch series also differs from [2] in that it doesn't affect all
+anonymous inodes right away --- instead requiring anon_inodes callers
+to opt in --- but this difference isn't one of basic approach. The
+important question to resolve is whether we should be creating new
+inodes or enhancing per-file data.
+
+Changes from the first version of the patch:
+
+  - Removed some error checks
+  - Defined a new anon_inode SELinux class to resolve the
+    ambiguity in [3]
+  - Inherit sclass as well as descriptor from context inode
+
+Changes from the second version of the patch:
+
+  - Fixed example policy in the commit message to reflect the use of
+    the new anon_inode class.
+
+Changes from the third version of the patch:
+
+  - Dropped the fops parameter to the LSM hook
+  - Documented hook parameters
+  - Fixed incorrect class used for SELinux transition
+  - Removed stray UFFD changed early in the series
+  - Removed a redundant ERR_PTR(PTR_ERR())
+
+Changes from the fourth version of the patch:
+
+  - Removed an unused parameter from an internal function
+  - Fixed function documentation
+
+Changes from the fifth version of the patch:
+
+  - Fixed function documentation in fs/anon_inodes.c and
+    include/linux/lsm_hooks.h
+  - Used anon_inode_getfd_secure() in userfaultfd() syscall and removed
+    owner from userfaultfd_ctx.
+
+Changes from the sixth version of the patch:
+
+  - Removed definition of anon_inode_getfile_secure() as there are no
+    callers.
+  - Simplified function description of anon_inode_getfd_secure().
+  - Elaborated more on the purpose of 'context_inode' in commit message.
+
+Changes from the seventh version of the patch:
+
+  - Fixed error handling in _anon_inode_getfile().
+  - Fixed minor comment and indentation related issues.
+
+Changes from the eighth version of the patch:
+
+  - Replaced selinux_state.initialized with selinux_state.initialized
+
+
+[1] https://lore.kernel.org/lkml/20200211225547.235083-1-dancol@google.com/
+[2] https://lore.kernel.org/linux-fsdevel/20200213194157.5877-1-sds@tycho.nsa.gov/
+[3] https://lore.kernel.org/lkml/23f725ca-5b5a-5938-fcc8-5bbbfc9ba9bc@tycho.nsa.gov/
+
+Daniel Colascione (3):
+  Add a new LSM-supporting anonymous inode interface
+  Teach SELinux about anonymous inodes
+  Wire UFFD up to SELinux
+
+ fs/anon_inodes.c                    | 147 ++++++++++++++++++++--------
+ fs/userfaultfd.c                    |  19 ++--
+ include/linux/anon_inodes.h         |   8 ++
+ include/linux/lsm_hook_defs.h       |   2 +
+ include/linux/lsm_hooks.h           |   9 ++
+ include/linux/security.h            |  10 ++
+ security/security.c                 |   8 ++
+ security/selinux/hooks.c            |  53 ++++++++++
+ security/selinux/include/classmap.h |   2 +
+ 9 files changed, 209 insertions(+), 49 deletions(-)
+
 -- 
-2.17.1
+2.28.0.681.g6f77f65b4e-goog
 
