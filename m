@@ -2,94 +2,126 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7E5282E83
-	for <lists+linux-security-module@lfdr.de>; Mon,  5 Oct 2020 02:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C02282EA3
+	for <lists+linux-security-module@lfdr.de>; Mon,  5 Oct 2020 03:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725898AbgJEA1q (ORCPT
+        id S1725849AbgJEBbF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 4 Oct 2020 20:27:46 -0400
-Received: from mga11.intel.com ([192.55.52.93]:46349 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725836AbgJEA1n (ORCPT
+        Sun, 4 Oct 2020 21:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbgJEBbF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 4 Oct 2020 20:27:43 -0400
-IronPort-SDR: 1rTxfn4k4Lwv1WYAqlsO10MHJDQumc/NeyUqS+vNJJrOkJelwxnEAjXtzwJzzW3A7vJb6Scw6w
- +O8tZzMyutow==
-X-IronPort-AV: E=McAfee;i="6000,8403,9764"; a="160621767"
-X-IronPort-AV: E=Sophos;i="5.77,337,1596524400"; 
-   d="scan'208";a="160621767"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2020 17:27:42 -0700
-IronPort-SDR: bJlezUSr9fAtWaVse6tafAfa6qM+MGJZAPyY2+UtpZOG+hmVsswAEvu+9aVm/5YSFcOYjrNh/M
- NmDlE3Xx1fkg==
-X-IronPort-AV: E=Sophos;i="5.77,337,1596524400"; 
-   d="scan'208";a="295931163"
-Received: from avahldie-mobl.amr.corp.intel.com (HELO localhost) ([10.249.32.74])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2020 17:27:39 -0700
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        stable@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        David Safford <safford@watson.ibm.com>,
-        keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
-        linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] KEYS: trusted: Fix migratable=1 failing
-Date:   Mon,  5 Oct 2020 03:26:59 +0300
-Message-Id: <20201005002659.81588-4-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201005002659.81588-1-jarkko.sakkinen@linux.intel.com>
-References: <20201005002659.81588-1-jarkko.sakkinen@linux.intel.com>
+        Sun, 4 Oct 2020 21:31:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76957C0613CE;
+        Sun,  4 Oct 2020 18:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0qSk/poAAlh1rgBkhNlRg8Se+ak0sbI4FbkVJHltdr8=; b=mLsD6Ikb8fCqRb4wFjxC2fwp7H
+        6AZNCciLtFbL3K6A/wkL/KkLBPZy63j6xad5I+eGexCvUSzAawRSWB0tAdmZ7ZjYWVMF3u1f4beLl
+        EbuXu14fMeGwt9DUP7PyljNUqC8MBZec4xbzRZSYz6ZN6GG5dYcqh1bJlJrWFT9cDzBmtFSPtlLJu
+        kIIBNzWc4yqOVkAo8+t3bFu9lVqUhmSdJJ+4WqfNVlVt1NZqh73O8P6aEucOpbm07TzfjFJ9w15hx
+        OCTIdqdw4YvYD+7ySVKJ8qdr7E4U+75LrjQl9Q7jSF/VaWMm5twQhGbPE9SWxKPX6+Og1NAIGU/Az
+        +viEtQWA==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kPFL3-00023F-T2; Mon, 05 Oct 2020 01:30:54 +0000
+Date:   Mon, 5 Oct 2020 02:30:53 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     x86@kernel.org, linux-sgx@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Chunyang Hui <sanqian.hcy@antfin.com>,
+        Jordan Hand <jorhand@linux.microsoft.com>,
+        Nathaniel McCallum <npmccallum@redhat.com>,
+        Seth Moore <sethmo@google.com>,
+        Darren Kenny <darren.kenny@oracle.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Suresh Siddha <suresh.b.siddha@intel.com>,
+        andriy.shevchenko@linux.intel.com, asapek@google.com, bp@alien8.de,
+        cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
+        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
+        luto@kernel.org, nhorman@redhat.com, puiterwijk@redhat.com,
+        rientjes@google.com, tglx@linutronix.de, yaozhangx@google.com,
+        mikko.ylinen@intel.com
+Subject: Re: [PATCH v39 11/24] x86/sgx: Add SGX enclave driver
+Message-ID: <20201005013053.GJ20115@casper.infradead.org>
+References: <20201003045059.665934-1-jarkko.sakkinen@linux.intel.com>
+ <20201003045059.665934-12-jarkko.sakkinen@linux.intel.com>
+ <20201003195440.GD20115@casper.infradead.org>
+ <20201004215049.GA43926@linux.intel.com>
+ <20201004222750.GI20115@casper.infradead.org>
+ <20201004234153.GA49415@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201004234153.GA49415@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Consider the following transcript:
+On Mon, Oct 05, 2020 at 02:41:53AM +0300, Jarkko Sakkinen wrote:
+> On Sun, Oct 04, 2020 at 11:27:50PM +0100, Matthew Wilcox wrote:
+> > 	int ret = 0;
+> > 
+> > 	mutex_lock(&encl->lock);
+> > 	rcu_read_lock();
+> 
+> Right, so xa_*() take RCU lock implicitly and xas_* do not.
 
-$ keyctl add trusted kmk "new 32 blobauth=helloworld keyhandle=80000000 migratable=1" @u
-add_key: Invalid argument
+Not necessarily the RCU lock ... I did document all this in xarray.rst:
 
-The documentation has the following description:
+https://www.kernel.org/doc/html/latest/core-api/xarray.html
 
-  migratable=   0|1 indicating permission to reseal to new PCR values,
-                default 1 (resealing allowed)
+> > 	while (xas.index < idx_end) {
+> > 		page = xas_next(&xas);
+> 
+> It should iterate through every possible page index within the range,
+> even the ones that do not have an entry, i.e. this loop also checks
+> that there are no empty slots.
+> 
+> Does xas_next() go through every possible index, or skip the non-empty
+> ones?
 
-The consequence is that "migratable=1" should succeed. Fix this by
-allowing this condition to pass instead of return -EINVAL.
+xas_next(), as its documentation says, will move to the next array
+index:
 
-[*] Documentation/security/keys/trusted-encrypted.rst
+https://www.kernel.org/doc/html/latest/core-api/xarray.html#c.xas_next
 
-Cc: stable@vger.kernel.org
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: David Howells <dhowells@redhat.com>
-Fixes: d00a1c72f7f4 ("keys: add new trusted key-type")
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- security/keys/trusted-keys/trusted_tpm1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > 		if (!page || (~page->vm_max_prot_bits & vm_prot_bits))
+> > 			ret = -EACCESS;
+> > 			break;
+> > 		}
+> > 	}
+> > 	rcu_read_unlock();
+> > 	mutex_unlock(&encl->lock);
+> 
+> In my Geminilake NUC the maximum size of the address space is 64GB for
+> an enclave, and it is not fixed but can grow in microarchitectures
+> beyond that.
+> 
+> That means that in (*artificial*) worst case the locks would be kept for
+> 64*1024*1024*1024/4096 = 16777216 iterations.
 
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index c1dfc32c780b..20ca18e17437 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -801,7 +801,7 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 		case Opt_migratable:
- 			if (*args[0].from == '0')
- 				pay->migratable = 0;
--			else
-+			else if (*args[0].from != '1')
- 				return -EINVAL;
- 			break;
- 		case Opt_pcrlock:
--- 
-2.25.1
+Oh, there's support for that on the XArray API too.
+
+        xas_lock_irq(&xas);
+        xas_for_each_marked(&xas, page, end, PAGECACHE_TAG_DIRTY) {
+                xas_set_mark(&xas, PAGECACHE_TAG_TOWRITE);
+                if (++tagged % XA_CHECK_SCHED)
+                        continue;
+
+                xas_pause(&xas);
+                xas_unlock_irq(&xas);
+                cond_resched();
+                xas_lock_irq(&xas);
+        }
+        xas_unlock_irq(&xas);
 
