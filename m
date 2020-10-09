@@ -2,126 +2,63 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDD1288810
-	for <lists+linux-security-module@lfdr.de>; Fri,  9 Oct 2020 13:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9ECD2889B2
+	for <lists+linux-security-module@lfdr.de>; Fri,  9 Oct 2020 15:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388226AbgJILte (ORCPT
+        id S2388405AbgJINYf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 9 Oct 2020 07:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732520AbgJILtd (ORCPT
+        Fri, 9 Oct 2020 09:24:35 -0400
+Received: from sonic305-20.consmr.mail.ir2.yahoo.com ([77.238.177.82]:40216
+        "EHLO sonic305-20.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388407AbgJINYe (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 9 Oct 2020 07:49:33 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6EC0613D2;
-        Fri,  9 Oct 2020 04:49:33 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id qp15so12652010ejb.3;
-        Fri, 09 Oct 2020 04:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8pT8vQashcbJSEQIERb420Ltn8jcbZ9+zc3sDEilK40=;
-        b=rsm45zT2E4nAZ0tunm4wqkaPwDISBch1FKQvZgOt9lSh5Rgp76SfZG4iLGiUC9mdIk
-         aUeV1oj1jrcBvC7yNKxrATvQ5XbSpWjqXcJWGBc4kGBA3TTWQGO8wx39R45bJqzvcZoy
-         pD/S6VHPOzx/p82JtxmiaHpIgNFp+X1J8cPljnsrTOQdAfJ8uMN0ZPf5X3f6vZxGu1i/
-         +/wZ78ySkh5Vl3SF7zeFNSS+J/vAnuJMI8joywot8U9oehLx/s+lUfJgfN7VTzG79T45
-         nTAMuNVe6MHAPPTpXU/e5wGX2M05K7ZqnpmK3qGQh3FF540s0vvmvjjqkdwRUq3Njg5e
-         f96w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8pT8vQashcbJSEQIERb420Ltn8jcbZ9+zc3sDEilK40=;
-        b=JJ9itY69Q8Nycqlu5dME3obHbVPFLS5GFOX/24n4JlO190ybRaGKvz7rDmdqNCcx69
-         Nq5zlP+5mMGYsdqBxejGMeomrkhYQAgn5X17BP4RETumQpWuL2obIyxz5L3XSnJ9uK1C
-         DCZ0AwCHFMkqs9dA98FdXpTpUJICpT84WAhYW4Rn7GNH5rqgzL75U4PPQvMxw+MTc53l
-         WPD6PFC5UaqgFs/wNE+cxdm7JvLim5M8T9a4J5jgl8ihtcOk6e1twedndhA8nNmkl3s9
-         WJ4GeQD0ohL6/r8Vgk932ZLfvKZIzLw2cd9O21ouITlD7H7qQ8CI30AGS16yzHRMBKIi
-         bhsg==
-X-Gm-Message-State: AOAM5313vTw7lWOAPeWn64A15u8lNVbpeOAaW2uj2xcqTs9HvUTMo9u0
-        F9YH+C7PEKOfE1Z7q/sv8ZVSN9Hh4hVOywoHo0s=
-X-Google-Smtp-Source: ABdhPJwA4yTGf1UKUCfiRzsWMruM2d5SWZcLas+ZWR6jJZ/9DKKq8qvE7hPeiJg84hV67aHxlES4xjOBYTWQyn9ERSw=
-X-Received: by 2002:a17:906:c015:: with SMTP id e21mr13533313ejz.432.1602244172064;
- Fri, 09 Oct 2020 04:49:32 -0700 (PDT)
+        Fri, 9 Oct 2020 09:24:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602249872; bh=hhYdV+RvZ5cQalrM5qsGc9GvgTW3zJDtVTOtIyZ6u/w=; h=Date:From:Reply-To:Subject:References:From:Subject; b=U1pti9/FFMM2M012u4txGT74kkaBxb7PWRHesjXOs/MP6FotiYXjK8DCnD79p7X99kk6wnTQkhbx6ea8wjt+8g0gFpnI+yEAM1OuhIDnvkRUJfiLMaUgDE41lFXF1XHNAUpyniHv96h8k2ezsSR9x8sjs7nPu838dH/EmshoylXsnLhVCE9gIvTgDEA41Otrj9KxvI9FqTVcopIt8jpAurUAiWSPyVm4GZYZuO4xgLX2qAd5oX2ze8RgmZoZ9LyC4a5cReB+DgT+q7ar53qLso9j7ILCCxK2uABxNcyUGcIs6o2FZfci789YgkRwKJbxlduhENmlHtauSb3+biUZVQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602249872; bh=wQr4QK2zrGvY4wRPuCI0flQOnxXWZC2csHYu1A5LSBZ=; h=Date:From:Subject; b=Fc7YoykgTPLfmUXHFGZ4ovqSuhvDJugrQU4xfkQ/RPhIgvySC8NA4LJkzGLB8SOZMWjmY/axWHmBoE0ZSRRuaEOloW3NLouXYcpY/q8oiY8tSYzpuhfiWkJs+R47oxERaselmF0Biqii37n17rV5OKT0zQHxZo6sJ4vou9IevUtC3rnfaJ4avJLAA65bxybUUR+0WNAkwIToztTQVW/QhD+Nl7uUxZhBZBUravsJOGWPYd1S0YMVTpONvcph3h7kBaSco4IX0yAIecqteitH2Lg7Ic5Nz7fxyATq0nLDcR7q0CcjJ9/RHjTfgbS6U+4FXZqXspfDViWQ5gTvsMyrgg==
+X-YMail-OSG: 5Naz1hkVM1nzglpK_TeRTR0EZkvaokQcBLuugPm8T4dxUJG9JgNmDFtdxHISmLi
+ m2cR8CI5g3k2y1e7f68RRbPp2G_p6SN6kpxsoCWM6Ilao6mHtlqI6JU80y3l4Cmu6z7zCKWf1vLi
+ 1YJgdvS6Q7o5OYtyQVr0XPx2wOrQVY3eABYdUSG4kqcGf3lmPoye7avkb7mHnpVOY0yMiHvgh5ku
+ 5VF_0QWIMMIIRherS8GYmPWD9vphOUxzbAR_c.eagieDMjh3rpXcj_AS3bAb072n_MuJLcOrurq8
+ vSu_.KDFA6n0wOc7.024V73AqNRX8HWUIGPPxQKhkJgdfecVkcAWZ8cPlpY0SoM5J8yYw055utRV
+ xnTzd2.GGb4rNJf9tRkcXUOFh9LsKtPQYSEvO05NM7ScSjEOjjwSgIhx5u_a743nL.GWTFEk6uEZ
+ aP.Q39zMknDk4qJSfKRiAFuoRKjmxOt03qZYVhfb0WiRwy.YvvmNHh9P60hOJITpTmERzGC5W3qD
+ Qdhw9pqSIkHjWIexuNY.QGHp0HhPfbjMmri9hYyTlgKpo9asxKSiPXpDiR.r.MqOMyrgJ_degwQx
+ 0G9UQ9VOVfwjRq38gl2iwabboMVZNnYsFaCklNjGsRm.OnzmDG.jwHTYUwDeDPeNyPfEpbbHoDkE
+ TVFcpxLPkBNXWYjWgZPQKbtaRDaKNCqM9V0o8X5GzMpI2tn1k9FDp30DSlvWCeMhXuIN5JXEr_TZ
+ _E7C6Qfu54rG0j_sdbcBnw75Zi8_HGmJ0TPhwxCup8EUaJ.9RkLUBAmIhM.fORenfZjqvtbsxlNJ
+ zRkXq3DsWlTn14TwenNzjvuma.JfDrLa_xFoJ99IH32QYNtpeCSJMBD8GhWDtlKvkTTs3QkKSLcI
+ pO5KGLpXwi7WVKrnwD7Mcv_GpQM.tXamQSMEzW.Eb31zyc8hqFv_P5uPNQxWw6Rnm_stGky4K4oU
+ KctfBPSH98Q6P7vNizchJTn1glCYda1Y61OUaYspD8b.noz2bGz7ZU0gQqd4Z84qZy7R.ltbjUba
+ 5d2ym5E_6ouHtnDTLwnZAJWd30lksC8cL2EiEjLZezON1D9wIf3WsHAt1MLXu1dWBtIPeo6g1k.J
+ PQJMWLuk31R8I_koNh1w5DhX8uTl2asShty0PYYPUVNX_AvLGYK4dD35U3PenrAPIf2lb8k.bZ0P
+ qSpN0XliB8fWS00jd5QWEGOh_s_cQlDe8CA02Tf9e4n.5uFONJ9lM1chscLNwzEPJNSbVnTTGRrG
+ nOmNrIAyk81u3g5SF.71o_g461jDsNjSN8lM04lFLseHC4YHEI4vD0rMwUNG2qOGxN464OFc2vUZ
+ udkEx6E71O4MlAdNJaZKJKs9EyqSZFR6.7aGdYFNpPx0IVjpJ02pFI6GcGenAnBCWg9p1Ho3qsOn
+ Dzv_uMpkiEQrR2xIEGUp0tfzI4f98TEt8OyaJespuAo3fNOU-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ir2.yahoo.com with HTTP; Fri, 9 Oct 2020 13:24:32 +0000
+Date:   Fri, 9 Oct 2020 13:24:27 +0000 (UTC)
+From:   Ibrahim Bello <mribrahimbello3@gmail.com>
+Reply-To: ibrahimbello749@gmail.com
+Message-ID: <1531445888.1775168.1602249867917@mail.yahoo.com>
+Subject: GREETINGS
 MIME-Version: 1.0
-References: <CAN-5tyETQWVphrgqWjcPrtTzHHyz5DGrRz741yPYRS9Byyd=3Q@mail.gmail.com>
- <CAHC9VhRP2iJqLWiBg46zPKUqxzZoUOuaA6FPigxOw7qubophdw@mail.gmail.com>
- <CAN-5tyFq775PeOOzqskFexdbCgK3Gk_XB2Yy80SRYSc7Pdj=CA@mail.gmail.com> <CAHC9VhTzO1z6NmYz6cOLg5OvJiyQXdH_VmLh4=+h1MrGXx36JQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhTzO1z6NmYz6cOLg5OvJiyQXdH_VmLh4=+h1MrGXx36JQ@mail.gmail.com>
-From:   Olga Kornievskaia <aglo@umich.edu>
-Date:   Fri, 9 Oct 2020 07:49:21 -0400
-Message-ID: <CAN-5tyGJxUZb5QdJ=fh+L-6rc2B-MhQbDcDkTZNAZAAJm9Q8YQ@mail.gmail.com>
-Subject: Re: selinux: how to query if selinux is enabled
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Chuck Lever <chucklever@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1531445888.1775168.1602249867917.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 5.1; rv:47.0) Gecko/20100101 Firefox/47.0
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Oct 8, 2020 at 9:03 PM Paul Moore <paul@paul-moore.com> wrote:
->
-> ->On Thu, Oct 8, 2020 at 9:50 AM Olga Kornievskaia <aglo@umich.edu> wrote:
-> > On Wed, Oct 7, 2020 at 9:07 PM Paul Moore <paul@paul-moore.com> wrote:
-> > > On Wed, Oct 7, 2020 at 8:41 PM Olga Kornievskaia <aglo@umich.edu> wrote:
-> > > > Hi folks,
-> > > >
-> > > > From some linux kernel module, is it possible to query and find out
-> > > > whether or not selinux is currently enabled or not?
-> > > >
-> > > > Thank you.
-> > >
-> > > [NOTE: CC'ing the SELinux list as it's probably a bit more relevant
-> > > that the LSM list]
-> > >
-> > > In general most parts of the kernel shouldn't need to worry about what
-> > > LSMs are active and/or enabled; the simply interact with the LSM(s)
-> > > via the interfaces defined in include/linux/security.h (there are some
-> > > helpful comments in include/linux/lsm_hooks.h).  Can you elaborate a
-> > > bit more on what you are trying to accomplish?
-> >
-> > Hi Paul,
-> >
-> > Thank you for the response. What I'm trying to accomplish is the
-> > following. Within a file system (NFS), typically any queries for
-> > security labels are triggered by the SElinux (or I guess an LSM in
-> > general) (thru the xattr_handler hooks). However, when the VFS is
-> > calling to get directory entries NFS will always get the labels
-> > (baring server not supporting it). However this is useless and affects
-> > performance (ie., this makes servers do extra work  and adds to the
-> > network traffic) when selinux is disabled. It would be useful if NFS
-> > can check if there is anything that requires those labels, if SElinux
-> > is enabled or disabled.
->
-> [Adding Chuck Lever to the CC line as I believe he has the most recent
-> LSM experience from the NFS side - sorry Chuck :)]
->
-> I'll need to ask your patience on this as I am far from a NFS expert.
->
-> Looking through the NFS readdir/getdents code this evening, I was
-> wondering if the solution in the readdir case is to simply tell the
-> server you are not interested in the security label by masking out
-> FATTR4_WORD2_SECURITY_LABEL in the nfs4_readdir_arg->bitmask in
-> _nfs4_proc_readdir()?  Of course this assumes that the security label
-> genuinely isn't needed in this case (and not requesting it doesn't
-> bypass access controls or break something on the server side), and we
-> don't screw up some NFS client side cache by *not* fetching the
-> security label attribute.
->
-> Is this remotely close to workable, or am I missing something fundamental?
->
+Greetings,
 
-No this is not going to work, as NFS requires labels when labels are
-indeed needed by the LSM. What I'm looking for is an optimization.
-What we have is functionality correct but performance might suffer for
-the standard case of NFSv4.2 seclabel enabled server and clients that
-don't care about seclabels.
+I know that this mail will come to you as a surprise as we have never met before, but need not to worry as I am contacting you independently of my investigation and no one is informed of this communication. I need your urgent assistance in transferring the sum of $11,300,000.00 USD immediately to your private account.The money has been here in our Bank lying dormant for years now without anybody coming for the claim of it.
 
+I want to release the money to you as the relative to our deceased customer (the account owner) who died a long with his supposed NEXT OF KIN since 16th October 2005. The Banking laws here does not allow such money to stay more than 14 years, because the money will be recalled to the Bank treasury account as unclaimed fund.
 
-> --
-> paul moore
-> www.paul-moore.com
+By indicating your interest I will send you the full details on how the business will be executed.
+
+Please respond urgently and delete if you are not interested.
+
+Best Regards,
+Mr.Ibrahim Bello
