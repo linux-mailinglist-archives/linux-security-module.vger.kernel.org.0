@@ -2,80 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D69CD28ECD9
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 Oct 2020 07:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E522128E3AD
+	for <lists+linux-security-module@lfdr.de>; Wed, 14 Oct 2020 17:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbgJOFu0 (ORCPT
+        id S1726201AbgJNP5P (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 15 Oct 2020 01:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
+        Wed, 14 Oct 2020 11:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728794AbgJOFuZ (ORCPT
+        with ESMTP id S1727876AbgJNP5P (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 15 Oct 2020 01:50:25 -0400
-X-Greylist: delayed 15785 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Oct 2020 22:50:25 PDT
-Received: from mail.dulcetgames.com (unknown [IPv6:2600:3c03::f03c:92ff:fe47:1569])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE9EC061755
-        for <linux-security-module@vger.kernel.org>; Wed, 14 Oct 2020 22:50:25 -0700 (PDT)
-Received: by mail.dulcetgames.com (Postfix, from userid 1001)
-        id 447DC27814B; Wed, 14 Oct 2020 16:13:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dulcetgames.com;
-        s=202010; t=1602706200;
-        bh=deuCOxtctY0h+AKAXOgz5KmT1nRatI7I+5lctkoEZw4=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=KYRNhceJBsMs3B7hDRaOXxZnYPz2XU5i+ixyoCJj8rIMW3QkYspitAVSy5W2Q6QJN
-         UHL1hFV/zdvaVW8qxUfpA/i+E5yuHErvDxlXAfWjhuSl5XmcoLg36Rlx7MM+cOkpBO
-         N5baIArcbKSLAecltPxmPec227PetqFbPtUh/bvPZSs+RbLjdX4zUFPVfVRCdM8ILP
-         6e5CAry6zjDXyqkMsUZ2CZi2e6Mvqg66B6DxFStfH8IpZee9CV346/ApzwihnDbWc2
-         +yPl9hWEbqfpVZZeOTn/pUbn/L26hlWGefUjfpF+60u7mEWWJKrNxn/Im4Ylp9Gxal
-         OwiqafzbfJoSw==
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on localhost
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=5.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,LOTS_OF_MONEY,
-        MISSING_MID,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.2
-Received: from [194.33.45.64] (unknown [194.33.45.64])
-        by mail.dulcetgames.com (Postfix) with ESMTPSA id CC5656953A;
-        Wed, 14 Oct 2020 15:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dulcetgames.com;
-        s=202010; t=1602689582;
-        bh=deuCOxtctY0h+AKAXOgz5KmT1nRatI7I+5lctkoEZw4=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=NZlDyXaqeTtPvWCqVu8xZnuxTAKSoylw6GCwWGzEHWsQcGMLGBbtjWu6LpH2ohMLx
-         /WsqwO6FSEsEQO46S8eq9p2LUxHX1zIgFjOaZO3R7VUFf8Hq5uIdHB67tgNyDIge54
-         kCFtGsRFI0nKkCArHSA50tc2N9/Q25k+wUNh48vk9OfqjHjremaAaPgkjeML0LU6yo
-         INVD0sWX7GJivVtNQi57strJJeDGjjqrSE5yCZesw1ON+PGOkk9x8rbCvf+BC8gWYf
-         lImd17EmX3ODIdzywGlf0BL0LZAjn2WAEfbpkAAy2LJfwtt8IcASByNAnH6KwVE9cJ
-         zDl/IaaEl3Y3g==
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 14 Oct 2020 11:57:15 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFA2C0613D3
+        for <linux-security-module@vger.kernel.org>; Wed, 14 Oct 2020 08:57:15 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id lw21so5555940ejb.6
+        for <linux-security-module@vger.kernel.org>; Wed, 14 Oct 2020 08:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zJ9svnL+bIyQpL58kb4K7T70FT1JnpLdYsmwMcHg1/w=;
+        b=Q5kkJ74Cv+iavEtPAxTTHN9hJgCXQ6bm1YixT0M5cgcGk/dtu8FDMG4Ii1niKWoZD5
+         0YaeRxjmeDD9mekxm33OGrfN8h6zduehpE/9C3v3TFNTI7C9ZQ1/0gzYwL/4AXN6yVIc
+         7r2VBgffR7yqZckVA9VjfcJhYMrYOuy4DbBYjVZwpqbuAmidILWOf+63rqvIsQDhLP3B
+         fXWZIG0UzAWfTyoArGXOWRhC+YHzFXjlWkOXsoR8gw9g2/vEHgD4N7NZO8SfYrr1JPaZ
+         6j6E2NMYYPvPIW4vo2VH4rtGQP73lou/jbaZYQuxY37v8/ufpo+gncCjTbShNvRnCviw
+         D95A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zJ9svnL+bIyQpL58kb4K7T70FT1JnpLdYsmwMcHg1/w=;
+        b=SMgjxCcUR3VAgvN+D6dp/CTbAa4dCjD1Zq4e03NewI9Al6uFtIkI4FqXgqODf+wbUk
+         mdZEt4UcvlFYaos7WQTxJHXKrDvjzyU7Les26hoaUSnWyqeM3mfjsPWjvgc1Dvbc1E09
+         o29dTPW+dTPTSKcb4ctdoeR+s83HfZk8HubnH9h+yT0uSxuBPUh8A7hoUfc2utXe8eIf
+         TWTVNG21TXiUTmfqPdTy3ZIG1V7Ma7ZKGGWG1HLnQ0hYip2yWbzja6LqdbIeBXWS4VND
+         UTmMyu8EaYyrZckOttbZKYVg3wiJqlOwr2RVvEbhDsehaDc5R8R09iEkbmEj/KodbKJr
+         dwKA==
+X-Gm-Message-State: AOAM533yXZ7tFyvdfqHJg7zyTYYAQju7Malg5NcWUu/uFPg0S+FDIJWu
+        0SHVdFhmEmUv0LPLlCnZHy57YyL4kgPeA/FG8NSj
+X-Google-Smtp-Source: ABdhPJxsmGBsREPTKogvHYAHeiycG4bnzhChPImSAe1eGy1Tu/Boa8yPQA/rYh5g4df7a+OJR70eGm7SGEHQ6JHwvEg=
+X-Received: by 2002:a17:906:4811:: with SMTP id w17mr5714111ejq.431.1602691033661;
+ Wed, 14 Oct 2020 08:57:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: DARLEHEN
-To:     Recipients <no-reply@dulcetgames.com>
-From:   "Obrist Nicolas" <no-reply@dulcetgames.com>
-Date:   Wed, 14 Oct 2020 17:32:57 +0200
-Reply-To: li63claudiaa@gmail.com
-Message-Id: <20201014201000.447DC27814B@mail.dulcetgames.com>
+References: <CAN-5tyETQWVphrgqWjcPrtTzHHyz5DGrRz741yPYRS9Byyd=3Q@mail.gmail.com>
+ <CAHC9VhRP2iJqLWiBg46zPKUqxzZoUOuaA6FPigxOw7qubophdw@mail.gmail.com>
+ <CAN-5tyFq775PeOOzqskFexdbCgK3Gk_XB2Yy80SRYSc7Pdj=CA@mail.gmail.com>
+ <CAHC9VhTzO1z6NmYz6cOLg5OvJiyQXdH_VmLh4=+h1MrGXx36JQ@mail.gmail.com>
+ <CAN-5tyGJxUZb5QdJ=fh+L-6rc2B-MhQbDcDkTZNAZAAJm9Q8YQ@mail.gmail.com>
+ <FB6C74CE-5D9F-4469-A49B-93CC8A51D7D5@gmail.com> <CAN-5tyFQbfkiuno07C6Azc7RcF3z3qF3PP0FutFMD3raBgnQmA@mail.gmail.com>
+ <CAEjxPJ7PoAG6f+gVdodx=6X8+_Z_WCFXAuxnpB8WmC1gTF4iQQ@mail.gmail.com> <CAN-5tyEy57xoqEbZAThZKHriJywx-5DMKBD5tsXwo5ccGwuctw@mail.gmail.com>
+In-Reply-To: <CAN-5tyEy57xoqEbZAThZKHriJywx-5DMKBD5tsXwo5ccGwuctw@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 14 Oct 2020 11:57:02 -0400
+Message-ID: <CAHC9VhQpCXFySZY42==KR57hfAkVLdS6mSAcp2UHn-GWjEfVLg@mail.gmail.com>
+Subject: Re: selinux: how to query if selinux is enabled
+To:     Olga Kornievskaia <aglo@umich.edu>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Chuck Lever <chucklever@gmail.com>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Sehr geehrte Damen und Herren,
+On Wed, Oct 14, 2020 at 10:37 AM Olga Kornievskaia <aglo@umich.edu> wrote:
+> On Tue, Oct 13, 2020 at 7:51 PM Stephen Smalley wrote:
+> > I would suggest either introducing a new hook for your purpose, or
+> > altering the existing one to support a form of query that isn't based
+> > on a particular xattr name but rather just checking whether the module
+> > supports/uses MAC labels at all.  Options: 1) NULL argument to the
+> > existing hook indicates a general query (could hide a bug in the
+> > caller, so not optimal), 2) Add a new bool argument to the existing
+> > hook to indicate whether the name should be used, or 3) Add a new hook
+> > that doesn't take any arguments.
+>
+> Hi Stephen,
+>
+> Yes it seems like current api lacks the needed functionality and what
+> you are suggesting is needed. Thank you for confirming it.
 
-Sie brauchen Geld? Sie sind auf der suche nach einem Darlehen? Seri=F6s
-und unkompliziert?
-Dann sind Sie hier bei uns genau richtig.
-Durch unsere jahrelange Erfahrung und kompetente Beratung sind wir
-Europaweit t=E4tig.
+To add my two cents at this point, I would be in favor of a new LSM
+hook rather than hijacking security_ismaclabel().  It seems that every
+few years someone comes along and asks for a way to detect various LSM
+capabilities, this might be the right time to introduce a LSM API for
+this.
 
-Wir bieten jedem ein G=DCNSTIGES Darlehen zu TOP Konditionen an.
-Darlehnen zwischen 5000 CHF/Euro bis zu 20 Millionen CHF/Euro m=F6glich.
-Wir erheben dazu 2% Zinssatz.
+My only concern about adding such an API is it could get complicated
+very quickly.  One nice thing we have going for us is that this is a
+kernel internal API so we don't have to worry about kernel/userspace
+ABI promises, if we decide we need to change the API at some point in
+the future we can do so without problem.  For that reason I'm going to
+suggest we do something relatively simple with the understanding that
+we can change it if/when the number of users grow.
 
-Lassen Sie sich von unserem kompetenten Team beraten.
-Z=F6gern Sie nicht und kontaktieren Sie mich unter f=FCr weitere Infos &
-Anfragen unter der eingeblendeten Email Adresse.
+To start the discussion I might suggest the following:
 
-Ich freue mich von Ihnen zu h=F6ren.
+#define LSM_FQUERY_VFS_NONE     0x00000000
+#define LSM_FQUERY_VFS_XATTRS   0x00000001
+int security_func_query_vfs(unsigned int flags);
 
-Obrist Nicolas
+... with an example SELinux implementation looks like this:
+
+int selinux_func_query_vfs(unsigned int flags)
+{
+    return !!(flags & LSM_FQUERY_VFS_XATTRS);
+}
+
+-- 
+paul moore
+www.paul-moore.com
