@@ -2,96 +2,144 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B5828E80B
-	for <lists+linux-security-module@lfdr.de>; Wed, 14 Oct 2020 22:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A953E28EA1A
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 Oct 2020 03:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389241AbgJNUrJ (ORCPT
+        id S2388862AbgJOBag (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 14 Oct 2020 16:47:09 -0400
-Received: from namei.org ([65.99.196.166]:35652 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387909AbgJNUrJ (ORCPT
+        Wed, 14 Oct 2020 21:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732220AbgJOB3i (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 14 Oct 2020 16:47:09 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 09EKkLrU004034;
-        Wed, 14 Oct 2020 20:46:21 GMT
-Date:   Thu, 15 Oct 2020 07:46:21 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     linux-kernel@vger.kernel.org,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Richard Weinberger <richard@nod.at>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v21 07/12] landlock: Support filesystem access-control
-In-Reply-To: <b311a2a6-5290-5c50-3a9c-4d5b54b6b406@digikod.net>
-Message-ID: <alpine.LRH.2.21.2010150746120.4000@namei.org>
-References: <20201008153103.1155388-1-mic@digikod.net> <20201008153103.1155388-8-mic@digikod.net> <alpine.LRH.2.21.2010150504360.26012@namei.org> <77ea263c-4200-eb74-24b2-9a8155aff9b5@digikod.net> <b311a2a6-5290-5c50-3a9c-4d5b54b6b406@digikod.net>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Wed, 14 Oct 2020 21:29:38 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDC0C002166
+        for <linux-security-module@vger.kernel.org>; Wed, 14 Oct 2020 17:11:43 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id h24so1006639ejg.9
+        for <linux-security-module@vger.kernel.org>; Wed, 14 Oct 2020 17:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YhQAlU/O3+F66rAF0SQgGMOn0AEmbnJlAAn0mVQDbwM=;
+        b=Q44mY8DePq2cnsfSybdLzUthzmNa6k+3rKBSFTkb2+l8A449A3ZDmYomgU6jLgWkNJ
+         51gMoRY1+agdTxuSDyZ27B83AAdRgm9Y472hwvjuYYyF+dFjwh2PNw+EiD7ObnluTE4l
+         OOu1QXUf/hxS3FGd2SsC0rHhvhfIS9jR5xQ7elvP4iwSguusTEtWHxO6H9l9ESoXujgX
+         35VGD/lUt5HdJxTE0HEU38DWmnnDlg06uHTBFwGymgyjhhsjBrsKJQ79/Geg8yJ8QbUZ
+         ZrqGL9m5+fqzBGK5hpKaYsZ3Q/LiP8SaAl5Bh/DMw7juVHzhHQgzbWq7Kc9jUNr7aTOQ
+         s3qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YhQAlU/O3+F66rAF0SQgGMOn0AEmbnJlAAn0mVQDbwM=;
+        b=ujePI61KKKGQ+nCNlfm9D8Nmmz6UNQ9JE8K09TjHZIY01qy0tK+1DvJ/azHJC4dGWd
+         QD6/kmE94E9v08sPlRnRWjsuIQttAUiMDH67by8JK9NGh05Oe7TkCwINAkwa5IonIYwz
+         8A8HerDOjzROByaLtTsaIT6ECk85UiUvC5UpPpBoL6RJ1Oqrs9NvsToDNViOBlLaQsKi
+         Na6f5VDZ9XD5T8pALDhVzAuzntV3BNspx0FN28h+HpOMGZH79+j9hFlI3NxOcP0Qw4Iy
+         AJ6aAW3BLZ1lBvzPlkVKkcpmlprQoMo/uDY1ahxXErVZQXoentRm80o+pb0PdkvX/PVZ
+         JdyQ==
+X-Gm-Message-State: AOAM531D6wM0gNf+cCqGKzv9EDgXMSj590lQCEjX8YV/5q7RSIwrpSLW
+        kZRzC9MVYbQwBBuJ2xI36dBEG2xw+lGrI5FPkMUEc+Udww==
+X-Google-Smtp-Source: ABdhPJy7ph8qHGox7X42/Eb6A+rX5E52y/8i06JWpsLLAOjnzVUUNczwHGNT6zRvxevXGWy7WdUKonvXDU5CUzagekc=
+X-Received: by 2002:a17:906:c444:: with SMTP id ck4mr1608332ejb.398.1602720701798;
+ Wed, 14 Oct 2020 17:11:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-1392177967-1602708383=:4000"
+References: <CAN-5tyETQWVphrgqWjcPrtTzHHyz5DGrRz741yPYRS9Byyd=3Q@mail.gmail.com>
+ <CAHC9VhRP2iJqLWiBg46zPKUqxzZoUOuaA6FPigxOw7qubophdw@mail.gmail.com>
+ <CAN-5tyFq775PeOOzqskFexdbCgK3Gk_XB2Yy80SRYSc7Pdj=CA@mail.gmail.com>
+ <CAHC9VhTzO1z6NmYz6cOLg5OvJiyQXdH_VmLh4=+h1MrGXx36JQ@mail.gmail.com>
+ <CAN-5tyGJxUZb5QdJ=fh+L-6rc2B-MhQbDcDkTZNAZAAJm9Q8YQ@mail.gmail.com>
+ <FB6C74CE-5D9F-4469-A49B-93CC8A51D7D5@gmail.com> <CAN-5tyFQbfkiuno07C6Azc7RcF3z3qF3PP0FutFMD3raBgnQmA@mail.gmail.com>
+ <CAEjxPJ7PoAG6f+gVdodx=6X8+_Z_WCFXAuxnpB8WmC1gTF4iQQ@mail.gmail.com>
+ <CAN-5tyEy57xoqEbZAThZKHriJywx-5DMKBD5tsXwo5ccGwuctw@mail.gmail.com>
+ <CAHC9VhQpCXFySZY42==KR57hfAkVLdS6mSAcp2UHn-GWjEfVLg@mail.gmail.com> <bc766b2b-d1f1-d767-579c-02e10ae32a9a@schaufler-ca.com>
+In-Reply-To: <bc766b2b-d1f1-d767-579c-02e10ae32a9a@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 14 Oct 2020 20:11:30 -0400
+Message-ID: <CAHC9VhS7UeCX9BXPrHNH90_sLHKGxTbbtjdm6GBOgDM9=T05FA@mail.gmail.com>
+Subject: Re: selinux: how to query if selinux is enabled
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Olga Kornievskaia <aglo@umich.edu>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Chuck Lever <chucklever@gmail.com>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---1665246916-1392177967-1602708383=:4000
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 14 Oct 2020, Mickaël Salaün wrote:
-
-> 
-> On 14/10/2020 20:52, Mickaël Salaün wrote:
-> > 
-> > On 14/10/2020 20:07, James Morris wrote:
-> >> On Thu, 8 Oct 2020, Mickaël Salaün wrote:
+On Wed, Oct 14, 2020 at 12:31 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> On 10/14/2020 8:57 AM, Paul Moore wrote:
+> > On Wed, Oct 14, 2020 at 10:37 AM Olga Kornievskaia <aglo@umich.edu> wrote:
+> >> On Tue, Oct 13, 2020 at 7:51 PM Stephen Smalley wrote:
+> >>> I would suggest either introducing a new hook for your purpose, or
+> >>> altering the existing one to support a form of query that isn't based
+> >>> on a particular xattr name but rather just checking whether the module
+> >>> supports/uses MAC labels at all.  Options: 1) NULL argument to the
+> >>> existing hook indicates a general query (could hide a bug in the
+> >>> caller, so not optimal), 2) Add a new bool argument to the existing
+> >>> hook to indicate whether the name should be used, or 3) Add a new hook
+> >>> that doesn't take any arguments.
+> >> Hi Stephen,
 > >>
-> >>> +config ARCH_EPHEMERAL_STATES
-> >>> +	def_bool n
-> >>> +	help
-> >>> +	  An arch should select this symbol if it does not keep an internal kernel
-> >>> +	  state for kernel objects such as inodes, but instead relies on something
-> >>> +	  else (e.g. the host kernel for an UML kernel).
-> >>> +
-> >>
-> >> This is used to disable Landlock for UML, correct?
-> > 
-> > Yes
-> > 
-> >> I wonder if it could be 
-> >> more specific: "ephemeral states" is a very broad term.
-> >>
-> >> How about something like ARCH_OWN_INODES ?
-> > 
-> > Sounds good. We may need add new ones (e.g. for network socket, UID,
-> > etc.) in the future though.
-> > 
-> 
-> Because UML is the exception here, it would be more convenient to keep
-> the inverted semantic. What about ARCH_NO_OWN_INODES or
-> ARCH_EPHEMERAL_INODES?
+> >> Yes it seems like current api lacks the needed functionality and what
+> >> you are suggesting is needed. Thank you for confirming it.
+> > To add my two cents at this point, I would be in favor of a new LSM
+> > hook rather than hijacking security_ismaclabel().  It seems that every
+> > few years someone comes along and asks for a way to detect various LSM
+> > capabilities, this might be the right time to introduce a LSM API for
+> > this.
+> >
+> > My only concern about adding such an API is it could get complicated
+> > very quickly.  One nice thing we have going for us is that this is a
+> > kernel internal API so we don't have to worry about kernel/userspace
+> > ABI promises, if we decide we need to change the API at some point in
+> > the future we can do so without problem.  For that reason I'm going to
+> > suggest we do something relatively simple with the understanding that
+> > we can change it if/when the number of users grow.
+> >
+> > To start the discussion I might suggest the following:
+> >
+> > #define LSM_FQUERY_VFS_NONE     0x00000000
+> > #define LSM_FQUERY_VFS_XATTRS   0x00000001
+> > int security_func_query_vfs(unsigned int flags);
+> >
+> > ... with an example SELinux implementation looks like this:
+> >
+> > int selinux_func_query_vfs(unsigned int flags)
+> > {
+> >     return !!(flags & LSM_FQUERY_VFS_XATTRS);
+> > }
+>
+> Not a bad start, but I see optimizations and issues.
+>
+> It would be really easy to collect the LSM features at module
+> initialization by adding the feature flags to struct lsm_info.
+> We could maintain a variable lsm_features in security.c that
+> has the cumulative feature set. Rather than have an LSM hook for
+> func_query_vfs we'd get
+>
+> int security_func_query_vfs(void)
+> {
+>         return !!(lsm_features & LSM_FQUERY_VFS_XATTRS);
+> }
 
-The latter seems good.
+Works for me.
+
+> In either case there could be confusion in the case where more
+> than one security module provides the feature. NFS, for example,
+> cares about the SELinux "selinux" attribute, but probably not
+> about the Smack "SMACK64EXEC" attribute. It's entirely possible
+> that a bit isn't enough information to check about a "feature".
+
+In the LSM stacking world that shouldn't matter to callers, right?  Or
+perhaps more correctly, if it matters to the caller which individual
+LSM supports what feature then the caller is doing it wrong, right?
 
 -- 
-James Morris
-<jmorris@namei.org>
-
---1665246916-1392177967-1602708383=:4000--
+paul moore
+www.paul-moore.com
