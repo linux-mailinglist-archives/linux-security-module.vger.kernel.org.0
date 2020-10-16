@@ -2,65 +2,76 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD6029052F
-	for <lists+linux-security-module@lfdr.de>; Fri, 16 Oct 2020 14:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9402228FEC7
+	for <lists+linux-security-module@lfdr.de>; Fri, 16 Oct 2020 09:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407635AbgJPMhc (ORCPT
+        id S2404332AbgJPHAg (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 16 Oct 2020 08:37:32 -0400
-Received: from cpanel.giganet.cl ([190.96.78.139]:39766 "EHLO
-        cpanel.giganet.cl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407562AbgJPMhY (ORCPT
+        Fri, 16 Oct 2020 03:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404330AbgJPHAg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 16 Oct 2020 08:37:24 -0400
-X-Greylist: delayed 20782 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Oct 2020 08:37:10 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=dplgrout.cl
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:Reply-To:
-        Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=TrgUs68YRs3neP+PfrvGhLoeMXh3YzKv5z9oCWPJ0m4=; b=m/ABHCVvyLYD2QkkwOjuWUgGFG
-        i9BJXsIic9wHOFEzjhXFPbcsR2XTWptcrmKLSqDrJOV7hGJM6za5nSEFhd4CC/+eaHHsgS48/E2jM
-        qvMpEeazlOlIrwSs4xM+Zdf/REorOK5GVU6ZAJUjCzQuCMv9dTVBPKuexZxj1Qoi2hPLiQ576Ik0L
-        XzwzerIXphINfmlVQ0r0UMIuChB1Vcn201QVmD2skB/Nh9D/yp0E95Av9ZMQq7ln6H0uEUnu/2/5Y
-        /CHuMEs39xrrgaYDtG7jTh3PfukIIcCJEs3b52/mZokA1w+tDL1dp0MaV2Z+qYj+Bzs13o0ru0vv/
-        Mq733mMw==;
-Received: from [::1] (port=55048 helo=cpanel.giganet.cl)
-        by cpanel.giganet.cl with esmtpa (Exim 4.93)
-        (envelope-from <info@controlypotencia.com>)
-        id 1kTJ7f-0009vt-N3; Fri, 16 Oct 2020 03:21:51 -0300
+        Fri, 16 Oct 2020 03:00:36 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330B1C061755;
+        Fri, 16 Oct 2020 00:00:36 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id u19so2557997ion.3;
+        Fri, 16 Oct 2020 00:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jLX4tjetRKA0PHysqPRRicfLzPtIoW91Ix3UaAsDkAQ=;
+        b=lM2A1SkJeHKn/589JN7Rcy6DLmtQ22uuUWp7ZKgzrST+0Ay3G5BLs68yMx8YTLxVdD
+         ksoUhGKLlbAdV370+mkh2N4C42rWKHKH57UOgXNyiqCOLbX4B7vKQCLKBXJCqaj2Pd/+
+         LIkp+D0Ly+DDN0UN/qg4HRlFX/A9ukomIqWLvkilCLg6jtJJOe4xbtEjPZJ3ckcu43uG
+         vd+W2+2+H30W3qAZ5xFVPbFd713k1DprkJZ0dvuDKwvyMK8v9Tx9cOMUWjax6VkuDpM1
+         S3oLs0l8+TEeKPbn6RroedX9CTS5yzqjMXU4hNLRQSD+uDdZMzuxS97REkO/cF3DNzvT
+         4jVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jLX4tjetRKA0PHysqPRRicfLzPtIoW91Ix3UaAsDkAQ=;
+        b=ndc1zJdX3PGo4fIhzw32tTbsC3crYmBbKM9oNdJPXVlDHY49bsVm6HrDg9D/+BZokS
+         GbYHTrsW6OKEDD0UkR22SPjNjcGLrLwEnzmNR2lRxE2NgRWZuWxclNiVsmLNZAAthSJ6
+         j+ce8J2F3zi0LRbaTJuKE0sv8LNFRmLrMQn4VSxNX04svtCIMp6++CaDCA8SNpNUGVnm
+         Kdp+DNAYUbvRYuVBie0yBtKRtjyNUXea6ki5va2IfKf5XxEUoDgf6+PoK+R+JF0lpYhG
+         PuUDSdImH/XKu260n1RAWnyBHgL7QYU/hFi+Q1BvCf/jmUY1V+Ywc7mVYG/VY17+TVGS
+         EKig==
+X-Gm-Message-State: AOAM533P2cPkDz8rP/EC78II9Po7nuMSUv4nkwi9UaK0jgWaSVCLuQS8
+        Em6V13dEjHv9upASAuIpU8z2yGTSS+9VBjPOPKg=
+X-Google-Smtp-Source: ABdhPJyC+ZT0LhfpxJkVNKRfWURve8qq2+TPFnG/9acZvbeoYoUUWhR0dm1V+hqHw6E97nrueuLJ/rWyk1/AOl2WuBc=
+X-Received: by 2002:a5d:8487:: with SMTP id t7mr1402987iom.35.1602831635544;
+ Fri, 16 Oct 2020 00:00:35 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Fri, 16 Oct 2020 03:21:50 -0300
-From:   Ying Chongan <info@controlypotencia.com>
-To:     undisclosed-recipients:;
-Subject: Investment opportunity
-Reply-To: yingchongan@zohomail.com
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <e70e5a6e462f92c7f06eea146a612430@controlypotencia.com>
-X-Sender: info@controlypotencia.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.giganet.cl
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - controlypotencia.com
-X-Get-Message-Sender-Via: cpanel.giganet.cl: authenticated_id: mariapaz.lopez@dplgrout.cl
-X-Authenticated-Sender: cpanel.giganet.cl: mariapaz.lopez@dplgrout.cl
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+References: <20201015104649.2104432-1-a.nogikh@gmail.com> <20201015104649.2104432-2-a.nogikh@gmail.com>
+ <20201015153009.GA26517@mail.hallyn.com>
+In-Reply-To: <20201015153009.GA26517@mail.hallyn.com>
+From:   Aleksandr Nogikh <a.nogikh@gmail.com>
+Date:   Fri, 16 Oct 2020 10:00:25 +0300
+Message-ID: <CADpXja-oWx7K4Zcsv57boUhg08-JhxzSYiVpWSNh9DfpxKTXjA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] security: add fault injection capability
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     jmorris@namei.org, akinobu.mita@gmail.com,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Kees Cook <keescook@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Aleksandr Nogikh <nogikh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Greetings,
+On Thu, 15 Oct 2020 at 18:30, Serge E. Hallyn <serge@hallyn.com> wrote:
+[...]
+> seeing 'should_fail' here, kind of out of context, would be confusing to
+> thousands of ppl reading the code and wondering why it should fail.  maybe
+> "inject_fail_lsm_hook()" ?
 
-This email is for an opportunity to invest in any lucrative business in 
-your country.
-
-We offer a quick loan at low interest rate, if you are interested, 
-please reply to yingchongan@gmail.com for more details.
-
-Sincerely: Ying Chongan
+Sounds reasonable, thank you for the suggestion. I'll rename this
+function in v2.
