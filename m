@@ -2,110 +2,79 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFD4294FCD
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Oct 2020 17:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BC9295079
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Oct 2020 18:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502349AbgJUPT7 (ORCPT
+        id S2502887AbgJUQMY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 21 Oct 2020 11:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502344AbgJUPT6 (ORCPT
+        Wed, 21 Oct 2020 12:12:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2502871AbgJUQMX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 21 Oct 2020 11:19:58 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3B9C0613CE
-        for <linux-security-module@vger.kernel.org>; Wed, 21 Oct 2020 08:19:58 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id l2so1289959pjt.5
-        for <linux-security-module@vger.kernel.org>; Wed, 21 Oct 2020 08:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5hmO+mhbzoYH/GVwbytgH/sAwdgqzz47G17aTAhhRQ8=;
-        b=Lg4SyFJrAGKmMg6tKEON5sq5UQvRWRT9njDtU86HrhpkL0D0RdFN95O/iD+u7kC/4r
-         ahEy6DJB22RvhcXOWtpd4G1oxyqNVqToJqGqqUs1YqCpH2pXiY1c5d/0pzhbzSnYT69M
-         nqknNaLQF80VCLDCS9BeJ3heSe/9QtMbQljDx+DCvH0VNLMd/6p9Qqsw79r2qTLa69LX
-         R/bAIsTRcvhLiUbCjOhNRPhWsBrblxRy6nLLJDIlIAzaR7RQCmbvWYcaM06CO7pnHIQI
-         4XcufkDp9mMo7ZlREAiInwPH2LB+50E15mLIPFIh/Q71X2Y7y1PHShJVIl54u4zodyis
-         BSGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5hmO+mhbzoYH/GVwbytgH/sAwdgqzz47G17aTAhhRQ8=;
-        b=UjDc333GCJZZ7DQ7LSfjJuE8AStR6BNd8wGoIAxklNfUPtQSoObkSn1g1THpiX/pGP
-         1aQHcnGUTZkk7syRjoKT+EAMJAUQLgfZg1corgOAzEz99lbOjjPBzJwnAYw/2b5Cg1ee
-         C53jYOgrWH2smGE+lpPQ6bf4TTjeBHnV+F+dAJXrBNIH/+GkgKz8cPYUm2KXUhYQ79+K
-         AGrObdpNo8q19F/jyE4ObwnilPJ9bn/MpqAeNgHrCPFJLu12cnYfZgtoyyCTz9D/eDhu
-         Epla/0y5mjEwTKG+yPDNGRI6dk5fNF/fseRP9oXQL8DnFSP1vqSE1r18x8/b2H8sG0eP
-         Gc6w==
-X-Gm-Message-State: AOAM532wCLcd9c/5HoQU6ao5+OroJImEeyCb6xi4eV8JboWRPwkTexID
-        hR7vTDtrNWv9idSP/TPNNI0SsA==
-X-Google-Smtp-Source: ABdhPJz/qcBUTmMYFz604l9m4rFbwcPGK6tFrbID3W5xqQgE0s1q2+B4QDvOzg5odG59Fj+FHRoowg==
-X-Received: by 2002:a17:902:c24b:b029:d3:f3e6:1915 with SMTP id 11-20020a170902c24bb02900d3f3e61915mr4132119plg.56.1603293598087;
-        Wed, 21 Oct 2020 08:19:58 -0700 (PDT)
-Received: from nebulus.mtv.corp.google.com ([2620:15c:211:200:4a0f:cfff:fe35:d61b])
-        by smtp.gmail.com with ESMTPSA id s10sm2409646pji.7.2020.10.21.08.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 08:19:57 -0700 (PDT)
-From:   Mark Salyzyn <salyzyn@android.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, John Stultz <john.stultz@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Subject: [RESEND PATCH v18 4/4] overlayfs: inode_owner_or_capable called during execv
-Date:   Wed, 21 Oct 2020 08:19:03 -0700
-Message-Id: <20201021151903.652827-5-salyzyn@android.com>
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-In-Reply-To: <20201021151903.652827-1-salyzyn@android.com>
-References: <20201021151903.652827-1-salyzyn@android.com>
+        Wed, 21 Oct 2020 12:12:23 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 77C932087D;
+        Wed, 21 Oct 2020 16:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603296742;
+        bh=Skv4VHOsxkbjExqgUALTljS6pv/j0ztelpvS9+0CtRw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SY2cnni/yKiqNX2D+MolwtBJkJZ25el2hwQIqa11SFtDmBTq22ksfzgjhnYpbguzD
+         uBJI7QL3KluS3eIdXrPW4GsEYXfXh8wZGwW2M5LAz2S2HyPezXFwhGB9FXwsuwf6Qg
+         XKD6E/hfwsCovIhfz5qaKfu2Q5NHx6cNpzquq6Po=
+Date:   Wed, 21 Oct 2020 18:13:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>, kernel-team@android.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-aio@kvack.org, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Message-ID: <20201021161301.GA1196312@kroah.com>
+References: <20200925045146.1283714-1-hch@lst.de>
+ <20200925045146.1283714-3-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200925045146.1283714-3-hch@lst.de>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: John Stultz <john.stultz@linaro.org>
+On Fri, Sep 25, 2020 at 06:51:39AM +0200, Christoph Hellwig wrote:
+> From: David Laight <David.Laight@ACULAB.COM>
+> 
+> This lets the compiler inline it into import_iovec() generating
+> much better code.
+> 
+> Signed-off-by: David Laight <david.laight@aculab.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  fs/read_write.c | 179 ------------------------------------------------
+>  lib/iov_iter.c  | 176 +++++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 176 insertions(+), 179 deletions(-)
 
-Using old_creds as an indication that we are not overriding the
-credentials, bypass call to inode_owner_or_capable.  This solves
-a problem with all execv calls being blocked when using the caller's
-credentials.
+Strangely, this commit causes a regression in Linus's tree right now.
 
-Signed-off-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Mark Salyzyn <salyzyn@android.com>
-Fixes: 05acefb4872da ("ovl: check permission to open real file")
-C: linux-fsdevel@vger.kernel.org
-C: linux-unionfs@vger.kernel.org
-Cc: Stephen Smalley <sds@tycho.nsa.gov>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Cc: kernel-team@android.com
-Cc: selinux@vger.kernel.org
+I can't really figure out what the regression is, only that this commit
+triggers a "large Android system binary" from working properly.  There's
+no kernel log messages anywhere, and I don't have any way to strace the
+thing in the testing framework, so any hints that people can provide
+would be most appreciated.
 
-v18 - rebase
+thanks,
 
-v17 - rebase
-
-v16 - introduced fix over rebased series
----
- fs/overlayfs/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
-index b1357bb067d9..9ab9663b02d8 100644
---- a/fs/overlayfs/file.c
-+++ b/fs/overlayfs/file.c
-@@ -53,7 +53,7 @@ static struct file *ovl_open_realfile(const struct file *file,
- 	err = inode_permission(realinode, MAY_OPEN | acc_mode);
- 	if (err) {
- 		realfile = ERR_PTR(err);
--	} else if (!inode_owner_or_capable(realinode)) {
-+	} else if (old_cred && !inode_owner_or_capable(realinode)) {
- 		realfile = ERR_PTR(-EPERM);
- 	} else {
- 		realfile = open_with_fake_path(&file->f_path, flags, realinode,
--- 
-2.29.0.rc1.297.gfa9743e501-goog
-
+greg k-h
