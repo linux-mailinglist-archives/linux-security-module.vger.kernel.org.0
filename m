@@ -2,181 +2,249 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BE9298249
-	for <lists+linux-security-module@lfdr.de>; Sun, 25 Oct 2020 16:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EEF29827D
+	for <lists+linux-security-module@lfdr.de>; Sun, 25 Oct 2020 17:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1417001AbgJYPer (ORCPT
+        id S1417145AbgJYQ1J (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 25 Oct 2020 11:34:47 -0400
-Received: from wind.enjellic.com ([76.10.64.91]:58280 "EHLO wind.enjellic.com"
+        Sun, 25 Oct 2020 12:27:09 -0400
+Received: from mout.gmx.net ([212.227.17.20]:43621 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1416999AbgJYPer (ORCPT
+        id S1417124AbgJYQ1J (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 25 Oct 2020 11:34:47 -0400
-X-Greylist: delayed 1988 seconds by postgrey-1.27 at vger.kernel.org; Sun, 25 Oct 2020 11:34:46 EDT
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 09PF0ZYl023036;
-        Sun, 25 Oct 2020 10:00:35 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 09PF0Wg7023035;
-        Sun, 25 Oct 2020 10:00:32 -0500
-Date:   Sun, 25 Oct 2020 10:00:32 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
-        "sunyuqiong1988@gmail.com" <sunyuqiong1988@gmail.com>,
-        "mkayaalp@cs.binghamton.edu" <mkayaalp@cs.binghamton.edu>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sun, 25 Oct 2020 12:27:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1603643204;
+        bh=pNENR6NYpvtez0wq6byw3Bmq32UAhJHvRjyV0Y2UrCw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Nf18DFPn1FJtAhUjcCn9Myacw3Ib7PWLI1PH/jkfN9J+q9kWo+6ADefF0fhpZ2pKV
+         rFDx7pNMtfAEuyNjRZVL4jBc/ADnzd2xVxPefyn4SPF8qEpy+KYrWfgW3O3+AgR098
+         bKABUvh1zpHrNUdcXfjqSJ+zItP41th/vo7sODc4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([83.52.231.59]) by mail.gmx.com
+ (mrgmx105 [212.227.17.174]) with ESMTPSA (Nemesis) id
+ 1Mv31c-1kF3Tf3PEG-00qyN1; Sun, 25 Oct 2020 17:26:43 +0100
+From:   John Wood <john.wood@gmx.com>
+To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>
+Cc:     John Wood <john.wood@gmx.com>, Jonathan Corbet <corbet@lwn.net>,
         James Morris <jmorris@namei.org>,
-        "christian@brauner.io" <christian@brauner.io>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "luto@amacapital.net" <luto@amacapital.net>,
-        "jannh@google.com" <jannh@google.com>,
-        Luke Hinds <lhinds@redhat.com>
-Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
-Message-ID: <20201025150031.GA23011@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20200818152037.11869-1-krzysztof.struczynski@huawei.com> <20200818164943.va3um7toztazcfud@wittgenstein> <d77a6cd783319702fddd06783cb84fdeb86210a6.camel@linux.ibm.com> <20200906171413.GA8305@wind.enjellic.com> <CAKrSGQR3Pw=Rad2RgUuCHqr0r2Nc6x2nLoo2cVAkD+_8Vbmd7A@mail.gmail.com> <d405bab0d262b32fd16e85444791b6c49d820aa2.camel@linux.ibm.com> <a75a6541991d4f8dbaa30e0af517b829@huawei.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a75a6541991d4f8dbaa30e0af517b829@huawei.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Sun, 25 Oct 2020 10:00:35 -0500 (CDT)
+        "Serge E. Hallyn" <serge@hallyn.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: [PATCH v2 4/8] security/brute: Detect a fork brute force attack
+Date:   Sun, 25 Oct 2020 14:45:36 +0100
+Message-Id: <20201025134540.3770-5-john.wood@gmx.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201025134540.3770-1-john.wood@gmx.com>
+References: <20201025134540.3770-1-john.wood@gmx.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jpDULrgTFkzvRL5MdNbDprGG+7NOjPXmtdh02SKJ/gibuend0zu
+ 4FpzOT6e517C6yk6mpkDK5zei6S+mowxi3z8/XZLVMRF+SCI9NLVVW308BINp9aOwL11bnm
+ GGjKkNzTDqhcTjSA6oZTLTsTRCHa2Tzfa08wIZatg80wkAAMYfXLKS+dKySQcJDQ4GEV6EZ
+ qE8Gtl25sCH5YHq3cx5OQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wZBrcUl8kvA=:NnjH4p8YLrCWYMo+aDWE0E
+ a13no4H61b/h3tkI6THq0QraQmfKXpzJxOLL8cZGl58ociWuQ/jrAKbJ68gyLiMWVabs9RLC7
+ OKPJgTyr5NMHtTGf39WBqn2i5SDoti5fhXq7FW7syccRZNOMIQB8PT7dVBTyp2knaAY/aJrjS
+ 2nLFZgy46qwzkewLjoMp9PFnc7vsB7LBDgMEObNtYvS4+d7sS0mTkR6j+UPOcexwkxu7whk1T
+ rO4/NZIeRVoEyrPsLiBhSj5BiQe6VxkGT/jYIXVALluh9ncqcSxT7AZiZ7mcOHthuK9SDYJuJ
+ rH/LknJBZS2vBSI3DueTKCv31vMphq3DN87teMlbC+z1+KKW6s9NXU92aAT9nO3u946aOpEBx
+ JqXItebzpQ3enyVaLLjo8K9dDvsSED/5sXA6ItNi0sNSX8CPWgKo5Ue4sbF8msaslx0zqcaJr
+ sDZNsQesD73hi26icj/kT+a7ggWX41NKvwIiIyHjfCa73qygqsJyKHgOGMqkGeIH/HmdL3Efc
+ 9FicgxJQyRCrNAW9FFb34VlcZTpQ63ulxHLggD3oG2/y8OCYUinU5jKDpYYySIpTZhO+A5d2t
+ AksmbPeyr8LSbMAD+nzqc2H7DfnkU4dGhu+N/FHIiFvqzx72uU0UczeX7dKA1aOo195cmz23m
+ KUfodjC7RYpdz6wOd7ivozh3zoaZkiCu78Hc/yyBnbSU94z3KedTBSDscZtGtBiMAqPNaGE5t
+ 2dToidE3hJe+rE50vFsvRI6VGSaL02wYu+7wffC3g8H9YTFK6FxpgieO+3mNnyIb0iGZzgU3R
+ ed7ZK+M8ptVn6miIunqVtGU+1V4vTYUwmZNjKEi0Q+d7KVb5gMqghoqZy1m11LrFYr1GwwClR
+ EEGFjubBkxpO1jqUHhIw==
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Oct 19, 2020 at 09:30:27AM +0000, Krzysztof Struczynski wrote:
+To detect a fork brute force attack is necessary that the list that
+holds the last crashes timestamps be updated in every fatal crash. To do
+so, use the "task_fatal_signal" LSM hook added in a previous step.
 
-Good morning, I hope this note finds the weekend going well for
-everyone.
+Then, an only when this list is large enough, the application crash
+period can be computed as the difference between the newest crash
+timestamp and the oldest one divided by the size of the list. This way,
+the scenario where an application crashes few times in a short period of
+time due to reasons unrelated to a real attack is avoided.
 
-> > The concept of the IMA namespace as a separate namespace, not
-> > attached to the user or mount namespace, remains the same as in
-> > the last set of Stefan's patches. The creation and configuration
-> > mechanism changed, partially because of the changes in the
-> > upstream kernel like extension of the CLONE_ flags, that
-> > facilitated other solutions. The main inspiration in this regard
-> > was the new time namespace.
-> >
-> > The implemented mechanism is intended to make the configuration of
-> > the IMA namespace as similar as possible to the upstream IMA
-> > implementation and allows to configure the new IMA namespace
-> > before any process enters that namespace, so the very first
-> > actions can be measured/appraised/audited.
-> >
-> > In this implementation many design points formulated by Stefan
-> > still stand.  The significant difference in the presented design
-> > is the threat model.  The actions of the host's root and any other
-> > user within the container are measured/appraised/audited according
-> > to the container's policy. However, every action that affects
-> > objects in the root namespace, is detected when processes from the
-> > root namespace access them.
+Finally, an application crash period that falls under the defined
+threshold shows that the application is crashing quickly and there is a
+clear signal that an attack is happening.
 
-> Do you think that the above proposal addresses the aforementioned
-> "IMA namespacing" issue? If it doesn't, would you please clarify
-> what are the main, outstanding problems?
+Signed-off-by: John Wood <john.wood@gmx.com>
+=2D--
+ security/brute/brute.c | 130 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 130 insertions(+)
 
-From our perspective, a significant objective of the namespacing
-discussion needs to be considerations regarding how additional growth
-and sophistication of IMA as a sub-system will occur.
+diff --git a/security/brute/brute.c b/security/brute/brute.c
+index 29835fe2f141..223a18c2084a 100644
+=2D-- a/security/brute/brute.c
++++ b/security/brute/brute.c
+@@ -339,6 +339,135 @@ static void brute_task_free(struct task_struct *task=
+)
+ 		spin_unlock(&(*stats)->lock);
+ }
 
-IMA, if taken to its limit, resolves into the notion of modeling the
-behavior of a hardware platform, its operating system and the
-supported application stack.  We believe the most important issue with
-respect to namespacing is to provide an opportunity to allow more
-sophisticated and capable models to be developed and implemented,
-without having the process unduely constrained by the realities of
-kernel development.
++/**
++ * brute_add_timestamp() - Add a new entry to the last crashes timestamps=
+ list.
++ * @stats: Statistics that hold the last crashes timestamps list.
++ * @new_entry: New timestamp to add to the list.
++ *
++ * The statistics that hold the last crashes timestamps list cannot be NU=
+LL. The
++ * new timestamp to add to the list cannot be NULL.
++ *
++ * Context: Must be called with stats->lock held.
++ */
++static void brute_add_timestamp(struct brute_stats *stats,
++				struct brute_timestamp *new_entry)
++{
++	list_add_tail(&new_entry->node, &stats->timestamps);
++	stats->timestamps_size +=3D 1;
++}
++
++/**
++ * brute_old_timestamp_entry() - Get the oldest timestamp entry.
++ * @head: Last crashes timestamps list.
++ *
++ * Context: Must be called with stats->lock held.
++ * Return: The oldest entry added to the last crashes timestamps list.
++ */
++#define brute_old_timestamp_entry(head) \
++	list_first_entry(head, struct brute_timestamp, node)
++
++/**
++ * brute_update_timestamps_list() - Update the last crashes timestamps li=
+st.
++ * @stats: Statistics that hold the last crashes timestamps list.
++ * @new_entry: New timestamp to update the list.
++ *
++ * Add a new timestamp structure to the list if this one has not reached =
+the
++ * maximum size yet. Replace the oldest timestamp entry otherwise.
++ *
++ * The statistics that hold the last crashes timestamps list cannot be NU=
+LL. The
++ * new timestamp to update the list cannot be NULL.
++ *
++ * Context: Must be called with stats->lock held.
++ * Return: The oldest timestamp that has been replaced. NULL otherwise.
++ */
++static struct brute_timestamp *
++brute_update_timestamps_list(struct brute_stats *stats,
++			     struct brute_timestamp *new_entry)
++{
++	unsigned int list_size;
++	struct brute_timestamp *old_entry;
++
++	list_size =3D (unsigned int)stats->timestamps_size;
++	if (list_size < brute_timestamps_list_size) {
++		brute_add_timestamp(stats, new_entry);
++		return NULL;
++	}
++
++	old_entry =3D brute_old_timestamp_entry(&stats->timestamps);
++	list_replace(&old_entry->node, &new_entry->node);
++	list_rotate_left(&stats->timestamps);
++
++	return old_entry;
++}
++
++/**
++ * brute_get_crash_period() - Get the application crash period.
++ * @new_entry: New timestamp added to the last crashes timestamps list.
++ * @old_entry: Old timestamp replaced in the last crashes timestamps list=
+.
++ *
++ * The application crash period is computed as the difference between the=
+ newest
++ * crash timestamp and the oldest one divided by the size of the list. Th=
+is way,
++ * the scenario where an application crashes few times in a short period =
+of time
++ * due to reasons unrelated to a real attack is avoided.
++ *
++ * The new and old timestamp cannot be NULL.
++ *
++ * Context: Must be called with stats->lock held.
++ * Return: The application crash period in milliseconds.
++ */
++static u64 brute_get_crash_period(struct brute_timestamp *new_entry,
++				  struct brute_timestamp *old_entry)
++{
++	u64 jiffies;
++
++	jiffies =3D new_entry->jiffies - old_entry->jiffies;
++	jiffies /=3D (u64)brute_timestamps_list_size;
++
++	return jiffies64_to_msecs(jiffies);
++}
++
++/**
++ * brute_task_fatal_signal() - Target for the task_fatal_signal hook.
++ * @siginfo: Contains the signal information.
++ *
++ * To detect a fork brute force attack is necessary that the list that ho=
+lds the
++ * last crashes timestamps be updated in every fatal crash. Then, an only=
+ when
++ * this list is large enough, the application crash period can be compute=
+d an
++ * compared with the defined threshold.
++ *
++ * It's mandatory to disable interrupts before acquiring the lock since t=
+he
++ * task_free hook can be called from an IRQ context during the execution =
+of the
++ * task_fatal_signal hook.
++ */
++static void brute_task_fatal_signal(const kernel_siginfo_t *siginfo)
++{
++	struct brute_stats **stats;
++	struct brute_timestamp *new_entry, *old_entry;
++	unsigned long flags;
++	u64 crash_period;
++
++	stats =3D brute_stats_ptr(current);
++	if (WARN(!*stats, "No statistical data\n"))
++		return;
++
++	new_entry =3D brute_new_timestamp();
++	if (WARN(!new_entry, "Cannot allocate last crash timestamp\n"))
++		return;
++
++	spin_lock_irqsave(&(*stats)->lock, flags);
++	old_entry =3D brute_update_timestamps_list(*stats, new_entry);
++
++	if (old_entry) {
++		crash_period =3D brute_get_crash_period(new_entry, old_entry);
++		kfree(old_entry);
++
++		if (crash_period < (u64)brute_crash_period_threshold)
++			pr_warn("Fork brute force attack detected\n");
++	}
++
++	spin_unlock_irqrestore(&(*stats)->lock, flags);
++}
++
+ /**
+  * brute_hooks - Targets for the LSM's hooks.
+  */
+@@ -346,6 +475,7 @@ static struct security_hook_list brute_hooks[] __lsm_r=
+o_after_init =3D {
+ 	LSM_HOOK_INIT(task_alloc, brute_task_alloc),
+ 	LSM_HOOK_INIT(bprm_committing_creds, brute_task_execve),
+ 	LSM_HOOK_INIT(task_free, brute_task_free),
++	LSM_HOOK_INIT(task_fatal_signal, brute_task_fatal_signal),
+ };
 
-Coupled with this issue is the fact that it doesn't seem reasonable to
-believe that TPM's are going to be the venue or root of trust for this
-modeling, for a variety of reasons, perhaps most principally the fact
-that they are a 'blackbox' that have not enjoyed universal trust.
-This is perhaps particularly relevant now that they are being
-implemented in firmware rather then actual hardware.
+ #ifdef CONFIG_SYSCTL
+=2D-
+2.25.1
 
-The sophistication and security capabilities of micro-controllers that
-are being developed for the IOT security space make a case for
-developing open-source/architecture security co-processors that
-implement the modeling and root of trust for independent modeling/IMA
-namespaces.
-
-TPM's also implicitly constrain the modeling to be a function based on
-linear extension summing.  It seems pretty clear that stochastic as
-well as deterministic models will be needed, particularly for more
-dynamic systems.
-
-So the optimum approach would seem to be for the namespace to have the
-option of implementing its own policy or to provide a mechanism for
-forwarding all of the Turing event characteristics to an entity that
-can implement the desired integrity or model policy.
-
-All of this would also seem to be consistent with the direction of the
-mobile market, which appears to be moving toward a model of an
-operating system that binds together multiple co-processors or
-functional units.  IMA, in this model, is a separate functional entity
-resonsible for interpreting and disciplining kernel behavior.
-
-> > > Definitely, let's have this discussion.
-
-> Shall we continue the discussion here, or in addition use a format similar
-> to the Stefan's "drawing board":
-> https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
-
-It has always been said that code speaks louder then words.  So we are
-working through the process of cleaning up our implementation of the
-approach described above so that people can at least take a look at
-the architecture we are proposing.
-
-We don't have any belief that it would be suitable to survive the
-gauntlet of the kernel development process but we will offer it as a
-proof of concept of where we think all of this will, can and needs to
-end up going.
-
-We were able to bolt all of this on top of standard IMA in a
-reasonably straight forward fashion.  Our initial implementation of an
-external modeling engine was based on SGX, which was remarkably useful
-for this purpose, albeit not well understood.
-
-Given the trajectory that technology has been placed on, we now have
-an implementation based on an ARM micro-controller as the external
-modeling/policy engine.  While not quite as flexible as the SGX based
-approach it has a number of its own advantages, most principally
-ubiquity of implementation.  Both approaches required no modification
-of the namespaced IMA implementation which we believe speaks to the
-flexibility of the approach.
-
-> Best regards,
-> Krzysztof Struczynski
-
-Hopefully the above reflections are helpful in steering progress of
-discussions, if not the price was certainly right.
-
-Best wishes for a productive week to everyone.
-
-Dr. Greg
-
-As always,
-Dr. Greg Wettstein, Ph.D, Worker      Autonomously self-defensive
-Enjellic Systems Development, LLC     IOT platforms and edge devices.
-4206 N. 19th Ave.
-Fargo, ND  58102
-PH: 701-281-1686                      EMAIL: greg@enjellic.com
-------------------------------------------------------------------------------
-"Attendants at a service station in Eunice, Louisiana, handed more than
- $100 to a naked man who claimed to have a gun in his pocket."
-                                -- Unknown
