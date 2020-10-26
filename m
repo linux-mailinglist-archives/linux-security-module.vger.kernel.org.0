@@ -2,92 +2,140 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D00A29834D
-	for <lists+linux-security-module@lfdr.de>; Sun, 25 Oct 2020 20:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7689298D41
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Oct 2020 13:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1418415AbgJYTHQ (ORCPT
+        id S1775673AbgJZMwk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 25 Oct 2020 15:07:16 -0400
-Received: from mout.gmx.net ([212.227.17.20]:57935 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732698AbgJYTHQ (ORCPT
+        Mon, 26 Oct 2020 08:52:40 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35169 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1775666AbgJZMwj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 25 Oct 2020 15:07:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1603652816;
-        bh=OzBPTWP4HniyfRVhLuAvnT82ocK2l9QTQfTuhozWfks=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=iKiHad+oFYBEo2S4MDbobe8L98THGorbfMtWMACwPoO8Dw97vLJaBmG9OLmlgSKQx
-         +ghSM309QDA31mODmy4e7gatEmuMovE9YgK0nGPM/C5QHQFBTv5Bw6ACD1yrVjOkhr
-         10iBRZXuDykHriiTPgyDwBRisAB3xWd9BXeSaA6A=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([83.52.231.59]) by mail.gmx.com
- (mrgmx105 [212.227.17.174]) with ESMTPSA (Nemesis) id
- 1N8ofO-1kIr973kgg-015ob9; Sun, 25 Oct 2020 20:06:56 +0100
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>
-Cc:     John Wood <john.wood@gmx.com>, Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-doc@vger.kernel.org,
+        Mon, 26 Oct 2020 08:52:39 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n15so12398330wrq.2;
+        Mon, 26 Oct 2020 05:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SJHGLhZvy94WcA+VjI8D5ZopjjY0MdjndnUVjDz37Ks=;
+        b=m1rGedWjIF9HoBQqqiH7KLY5qBc8rEQeUZEYUoyrc+ygUe//E3I5sUBhfLyz6ztlyN
+         SKzIgnDeEhY3w2YL7gCxwMQMWxkdN+VWTWJRUDLMxgtiQLjWFRGq4iStfWbw4b/iEwe9
+         QXtK+UfRzuyv2+y1en+F4KCgKYv2+2cgv+1WOiwluCfiZVI8rIZ2cYRWX0o+istIXGQM
+         ILisTSl3ceMD62AKOYT0jHXs8Ws6y/+HLBgVJCSaP3tJNaPJyN+YjYPnGik5k1uQK3y5
+         pBvZ0t3wGBrqKcIZOh6CzHOS36eFTWcR+Db+q7wCziGjd0HZoy9fNi+HBGekhADOPt8J
+         OJsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SJHGLhZvy94WcA+VjI8D5ZopjjY0MdjndnUVjDz37Ks=;
+        b=BjqURpjHvLs2A5TLBCcwKCv2sxPl8P7aIxy/JyI03fiIsHSoEBxf8kvKFBRKjaKddJ
+         CBnP/gMxnLktTJinZd9DTSiMgjgceD8imngTpZHA4eBgk9/VxYalTlqt2X4NYQDSRj0K
+         FgTWNzS4Zl/5sYfe+i02MjplEdQR2opnyd3pfkoJlcYGPPhovCyYDoW8pa3rvQRE0DtM
+         RjidDaO8ZCTZRNwDswR1rAVmjv5XRrh8tx/fKmSVYbS69jGXtNhkEXrjGqz2hAHsy8VI
+         F7uVwvJVp8MtEedyeF3Th9OwT4Mc0HIXEtMfVqcdTdDgLUWW4gmlrV+G/YllVH4TX62N
+         ekfw==
+X-Gm-Message-State: AOAM531LAs5twBYGhZ7UU4JuCnxwJ0RNFq5pZc5YqxTyqwxOX+Tfnytt
+        MeNYGlJ99RRinZ1v0JLaRhc=
+X-Google-Smtp-Source: ABdhPJxAt2n2wH+0DloibyeWjgzXrU0ZFO9u6R9k74Gz2/tBKHlrJJvBW7lC0ohi3KEWpDCp/YO8fg==
+X-Received: by 2002:adf:fe48:: with SMTP id m8mr17520787wrs.127.1603716757123;
+        Mon, 26 Oct 2020 05:52:37 -0700 (PDT)
+Received: from nogikh.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
+        by smtp.gmail.com with ESMTPSA id a3sm23551139wrh.94.2020.10.26.05.52.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2020 05:52:36 -0700 (PDT)
+From:   Aleksandr Nogikh <a.nogikh@gmail.com>
+To:     jmorris@namei.org, serge@hallyn.com, akinobu.mita@gmail.com
+Cc:     andreyknvl@google.com, dvyukov@google.com, elver@google.com,
+        glider@google.com, keescook@google.com,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: [PATCH v2 8/8] MAINTAINERS: Add a new entry for the Brute LSM
-Date:   Sun, 25 Oct 2020 14:45:40 +0100
-Message-Id: <20201025134540.3770-9-john.wood@gmx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201025134540.3770-1-john.wood@gmx.com>
-References: <20201025134540.3770-1-john.wood@gmx.com>
+        Aleksandr Nogikh <nogikh@google.com>
+Subject: [RFC PATCH v2 0/2] security: add fault injection to LSM hooks
+Date:   Mon, 26 Oct 2020 12:52:25 +0000
+Message-Id: <20201026125227.54520-1-a.nogikh@gmail.com>
+X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XIkBc5Sdz3SQJ6bMKfEKk7IVGMhrkpkVRcigKF7B9QVK89FXQOG
- 0OXXB3iAd6TG2csWcgUkrut1+4mdxqWBqpFO83i3YUtRy96voZE6A9FMgIZ/yQDRvxXmkRS
- HGMpll8CeJps9oY3WGx9ISJlW5QCpU/dGSm4rYvOqqTUX4F+l8LfJhR8dyAGu9J0DIlpxTP
- plBlxnkMnCnQWNLeICoig==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ads6fhSOCR4=:3aznbMalMEe0vjYLyMH/EA
- E/VnASCMh9PuPYgko4bSmr76hG594GPyUWhJC+LzestMxYRLMtE5a9kbL8Erdz/4Zz7nJlgVA
- D+D70QFEDrWD00lU69ZZawkE6jw2uVm8/4KQlbWzdYgNRP7WXqIIbzdiiMxhj3T8ErTBGf/eP
- VZXhTzu1HXkdBCrwVh8tN3D7RYYXFTxoktpmCT0HX6n8AmvVViHKW2Mk8INbwdY34LMNc5iEO
- s8do4oXXxrXhGoa+yAor7VK8nLsVxPKT66j65Hq8JGnRSAXgXNJbxJ/Pew/DtUr/BgcYf4vfg
- O3nZzwxJLw28X+TuoBSLFdE+67SIzxxb5dLzKqTKMgLQvYKrz7FNeWAYxAOLyA+JvHn+Cfp5K
- gF43XgJBwrOxQcUWP4cccUAG6B8J5pmNpVAzapUZtLBLPn+GLiqFcep1PFPDfMUz+2ZaAGi59
- A/yCVU8MKPpqd3ZdzMBENw3/++klckQt7h5Dqp2/BhgIRLtHhGcsS2J4DsE1N6arr42SuNoIB
- ng7PiDh+No/qMh+xNIDCAnIxFQu5mjqczemIAvpifbYrtnou6t2qpZ1SJvsmVmfkzOXWWEJ2J
- tUzySvpoIIurMlxr4Pbb3JRleKUtzdKHjQJCxEfl/1+Hqe72y82JiwcFtriR5FZnF+GR4SWfv
- pP1HOxunDZf4Hq/nL8rFKjnz5vAv3tJDaBtIxZVrXQx33r5IvUH1R4TQIF3FahULszB0kglJX
- VRM2IoZWPfwMwaos8aDNWV0A9ifg4J2EP9+g9SxqDaSvqIvYX4jyyEesKpMfkgRl95fcyoR1C
- fqWANcuXVvbzyT8k3K0vCNXxe4VnbjlIbXpxjf4iYG0s4wTEq2mwXadK8+2eJBTRWwgCVAdLz
- hL46VgBWfWhB2DKAvZxA==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-In order to maintain the code for the Brute LSM add a new entry to the
-maintainers list.
+From: Aleksandr Nogikh <nogikh@google.com>
 
-Signed-off-by: John Wood <john.wood@gmx.com>
-=2D--
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Fault injection capabilities[Documentation/fault-injection/fault-injection.rst]
+facilitate testing of the stability of the Linux kernel by providing
+means to force a number of kernel interfaces to return error
+codes. This RFC proposes adding such fault injection capability into
+LSM hooks.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 867157311dc8..3d3b34f87913 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3734,6 +3734,13 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/ethernet/brocade/bna/
+The intent is to make it possible to test whether the existing kernel
+code properly handles negative return values of LSM hooks. Syzbot
+[https://github.com/google/syzkaller/blob/master/docs/syzbot.md] will
+automatically do that with the aid of instrumentation tools once these
+changes are merged.
 
-+BRUTE SECURITY MODULE
-+M:	John Wood <john.wood@gmx.com>
-+S:	Maintained
-+F:	Documentation/admin-guide/LSM/Brute.rst
-+F:	include/brute/
-+F:	security/brute/
-+
- BSG (block layer generic sg v4 driver)
- M:	FUJITA Tomonori <fujita.tomonori@lab.ntt.co.jp>
- L:	linux-scsi@vger.kernel.org
-=2D-
-2.25.1
+Is the attached implementation consistent with the ideas behind LSM
+stacking in its current state? In particular, is it reasonable to
+expect the existing LSMs to operate normally when they are active and
+such fault injection happens?
+
+Local fuzzing of a Linux kernel with this patch has almost instantly
+led to two crashes. I'm not sure whether they correspond to actual
+issues as the LSM fault injection implementation (and the concept
+itself) can be wrong. Here they are:
+
+1. "general protection fault in selinux_inode_free_security". This is
+caused by executing security_inode_free() when a fault was injected to
+inode_alloc_security() and therefore selinux_inode_alloc_security()
+was not executed. In this case, the subsequent inode_free_security()
+call executes list_del_init() on an uninitialized list. Theoretically,
+this may happen if some other LSM precedes selinux in the hooks list
+and its inode_alloc_security hook fails.
+
+A fault was injected to this call_int_hook():
+https://elixir.bootlin.com/linux/v5.9/source/security/security.c#L975
+
+Below you can find a call trace for the subsequent crash.
+__list_del_entry include/linux/list.h:132 [inline]
+list_del_init include/linux/list.h:204 [inline]
+inode_free_security security/selinux/hooks.c:337 [inline]
+selinux_inode_free_security+0xf0/0x290 security/selinux/hooks.c:2839
+security_inode_free+0x46/0xc0 security/security.c:1042
+security_inode_alloc+0x161/0x1a0 security/security.c:1027
+inode_init_always+0x5a7/0xd10 fs/inode.c:171
+alloc_inode+0x82/0x230 fs/inode.c:239
+new_inode_pseudo+0x14/0xe0 fs/inode.c:928
+sock_alloc+0x3c/0x260 net/socket.c:573
+__sock_create+0xb9/0x780 net/socket.c:1391
+sock_create net/socket.c:1478 [inline]
+__sys_socket+0xef/0x200 net/socket.c:1520
+__do_sys_socket net/socket.c:1529 [inline]
+__se_sys_socket net/socket.c:1527 [inline]
+__x64_sys_socket+0x6f/0xb0 net/socket.c:1527
+do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+2. BUG_ON inside security_skb_classify_flow(). Why is it needed there?
+https://elixir.bootlin.com/linux/v5.9/source/security/security.c#L2426
+
+---
+v2:
+* Renamed should_fail_lsm_hook() to should_fail_lsm_hook().
+* Extended the documentation.
+
+Aleksandr Nogikh (2):
+  security: add fault injection capability
+  docs: add fail_lsm_hooks info to fault-injection.rst
+
+ .../fault-injection/fault-injection.rst       |  6 +++
+ lib/Kconfig.debug                             |  6 +++
+ security/security.c                           | 53 +++++++++++++++++--
+ 3 files changed, 62 insertions(+), 3 deletions(-)
+
+
+base-commit: 2ef991b5fdbe828dc8fb8af473dab160729570ed
+-- 
+2.29.0.rc1.297.gfa9743e501-goog
 
