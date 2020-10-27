@@ -2,119 +2,118 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBD129AB80
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Oct 2020 13:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC1329AC82
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Oct 2020 13:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439121AbgJ0MLp (ORCPT
+        id S1751552AbgJ0MwE (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 27 Oct 2020 08:11:45 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45256 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394605AbgJ0MLo (ORCPT
+        Tue, 27 Oct 2020 08:52:04 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:34844 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1751532AbgJ0MwB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 27 Oct 2020 08:11:44 -0400
-Received: by mail-wr1-f65.google.com with SMTP id e17so1587734wru.12;
-        Tue, 27 Oct 2020 05:11:43 -0700 (PDT)
+        Tue, 27 Oct 2020 08:52:01 -0400
+Received: by mail-lj1-f194.google.com with SMTP id x16so1640803ljh.2
+        for <linux-security-module@vger.kernel.org>; Tue, 27 Oct 2020 05:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=WfciDPKN3LS+3fOztqseVE/Ebmzl7FBW7LNzYYpXqog=;
-        b=eWMO7qNTnXXgGw3wGXJy8KkpHRnOwdRP+98W6uAvyCmZq7MHAsh9popALGKipDuLcy
-         n/kmkElNghrsNILJyP73nR5vTMkeTD9a4CcQdYssDcOm6GtYdN/ZOotXVMIAj0MyfzHc
-         2VrCHE8Fwnda40RiKnjRoCnuLOS0OHfuZ4by+BWPx8QudAXxl+/U+aESzHSj5Z/dvG9G
-         ZUsGYWFaM0JeKkbjoLHN/e4rKROPicWwm8DSZqwwGOnoA7SbIpax/+Ma6vZcMhqkFVBy
-         zvYbXz2kTLrZ9Umi/ebXtZXsnfTnnxvU3+nsrtVca1hb8da6oBk+nPayaYkQ0AOKl/nH
-         cscA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VdLy/kUakjSURD5xQ/YFBTUhQyiMJ2S037Fpg6j6Zn8=;
+        b=WVLjvL+8dqcJznCqZnu75mvjazgE1nMYXHTx7zirRvSptOBgkQ1vHrdTfvB48AmPQb
+         LYXyA+izaR+l/1zC5h/2bTn2dkLukQJBb55K/VELvkpSe3MzRuj16dNkX6SKe9aoTnRg
+         kdYm2i6MXROyrqVbw2ZFU1y/ca1sepsH0WK7o8N5Ln5R6zdNyAHsl488z5E4YgPgCwoh
+         Q+sGKejzoi5/x/3tw5764pxu7ZackNaNEgXIcJCS1qiD1E0/9qK7Dkd81j4y0UWlt2kp
+         sJhe0hX9CDFvhkcWyboTxD8r5cS960E1TaF6ETWOf7doZoc9wDKvcwTSrXdd4dfmLu5r
+         ok/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=WfciDPKN3LS+3fOztqseVE/Ebmzl7FBW7LNzYYpXqog=;
-        b=GLR5Fex8l2ks0xDBp60Xp4vw3kEHjuCmpX3pyh8QFAcRW6N866O25POAxz9uRBm/qn
-         Fmj6SWk5z/K0z8v+qUIqHx5K05KbASIPmp7FzymdfU+WA7XibGTIQ8eIXgG9oxZ+tbtS
-         J0wZR5sMvcaL4F673OPbyV/9iHlRgiwdzRTUj85hCZKBbIcnkES83wpKNirqfgjiJpSS
-         IhzbPUHCymkYcqkChPFrg7aYqeXpXCjOYhL2hvW5ZaIx9VRjiebHAOcaFs/DC9w39Xgo
-         5aAzXt2AAVBvb1iQhVVwn1FFhwcCzshTrCEqi19pkhfDXW9CQcIdLZqmWjLW9b8/3fY+
-         r88w==
-X-Gm-Message-State: AOAM531VrUFFQdxNRtlfVXNp2tOyQi8s/y5D+7DvSbdEFQUzn7we5s+V
-        Hkjtf037z1RNmPB4UE4qLPA=
-X-Google-Smtp-Source: ABdhPJzIlhGIx25MEU/hlO0DPNQ+2cBOBpYzJV+/20u3dGqkeKP1T2ri/PpypOFJqs7wwJtvmn7TMw==
-X-Received: by 2002:adf:e443:: with SMTP id t3mr2555760wrm.14.1603800702246;
-        Tue, 27 Oct 2020 05:11:42 -0700 (PDT)
-Received: from ?IPv6:2001:a61:245a:d801:2e74:88ad:ef9:5218? ([2001:a61:245a:d801:2e74:88ad:ef9:5218])
-        by smtp.gmail.com with ESMTPSA id p11sm1829840wrm.44.2020.10.27.05.11.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 05:11:41 -0700 (PDT)
-Cc:     mtk.manpages@gmail.com, Oleg Nesterov <oleg@redhat.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VdLy/kUakjSURD5xQ/YFBTUhQyiMJ2S037Fpg6j6Zn8=;
+        b=JzKCfS+W1OWI81CpuLL6GwByUkWgSdGIfPVKhRdr8gAvvWaxUKwpMpslJ8t5EKXtVN
+         zd/EiCLP0ZG4dwuI0fSi0pneHFMEYbdxfAWP3kDK29PfhpTqOEbvfXTrtEF5zM7Q7Pss
+         WMMDon1ZEnm+al7e4VufycJtuAeoAkotX7LNMxiDthujayws6hZDUmYryp8L2RNoSqPe
+         nhXio97IENaLpDpiIF6LH2Fx1BdOa2KIj3beVYUNeVxv9Z3JRNXJokpWo3lx6cLvr9Yf
+         W4lJjZTJ3jwVbnNlUFB/9r7IWzyQS6/OCKL3Na1I13OX7q3wpMTfxCp2MjzzkQ2iUdFA
+         wBQA==
+X-Gm-Message-State: AOAM531S+q9l9uM+/cj1YUGgq/ys9XMKtyWLGZuMOsh4bliOiU7cLX2s
+        mJ1ofAyF4IY/BXXH7kLhDfomCO+tvzpYAsUy6+K2ZQ==
+X-Google-Smtp-Source: ABdhPJz3olMufunQq6vfQc+LmVGcVzAz76YcwmxRuMttF8WGEr/yPG8VUpfphjXft+tYlyjdNUvF7dwhGCr4tMX/q7w=
+X-Received: by 2002:a05:651c:1313:: with SMTP id u19mr1028801lja.47.1603803116472;
+ Tue, 27 Oct 2020 05:51:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <7655a573-544f-05a4-36dc-0c84c73ac9ee@gmail.com>
+In-Reply-To: <7655a573-544f-05a4-36dc-0c84c73ac9ee@gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 27 Oct 2020 13:51:30 +0100
+Message-ID: <CAG48ez2W+p2RuAPMyxE+hggNtHsVx3-NHCawk18_F5tonX20LQ@mail.gmail.com>
+Subject: Re: Inconsistent capability requirements for prctl_set_mm_exe_file()
+To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Cc:     Nicolas Viennot <Nicolas.Viennot@twosigma.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Adrian Reber <areber@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Oleg Nesterov <oleg@redhat.com>,
         Pavel Emelyanov <ovzxemul@gmail.com>,
         Kees Cook <keescook@chromium.org>,
         Casey Schaufler <casey@schaufler-ca.com>,
         lkml <linux-kernel@vger.kernel.org>,
         linux-security-module <linux-security-module@vger.kernel.org>,
-        Jann Horn <jannh@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Andrei Vagin <avagin@gmail.com>,
         Dmitry Safonov <0x7f454c46@gmail.com>
-To:     Nicolas Viennot <Nicolas.Viennot@twosigma.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Adrian Reber <areber@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Subject: Inconsistent capability requirements for prctl_set_mm_exe_file()
-Message-ID: <7655a573-544f-05a4-36dc-0c84c73ac9ee@gmail.com>
-Date:   Tue, 27 Oct 2020 13:11:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello Nicolas, Cyrill, and others,
+On Tue, Oct 27, 2020 at 1:11 PM Michael Kerrisk (man-pages)
+<mtk.manpages@gmail.com> wrote:
+> @Nicolas, your commit ebd6de6812387a changed the capability
+> requirements for the prctl_set_mm_exe_file() operation from
+>
+>     ns_capable(CAP_SYS_ADMIN)
+>
+> to
+>
+>     ns_capable(CAP_SYS_ADMIN) || ns_capable(CAP_CHECKPOINT_RESTORE).
+>
+> That's fine I guess, but while looking at that change, I found
+> an anomaly.
+>
+> The same prctl_set_mm_exe_file() functionality is also available
+> via the prctl() PR_SET_MM_EXE_FILE operation, which was added
+> by Cyrill's commit b32dfe377102ce668. However, there the
+> prctl_set_mm_exe_file() operation is guarded by a check
+>
+>     capable(CAP_SYS_RESOURCE).
+>
+> There are two things I note:
+>
+> * The capability requirements are different in the two cases.
+> * In one case the checks are with ns_capable(), while in the
+>   other case the check is with capable().
+>
+> In both cases, the inconsistencies predate Nicolas's patch,
+> and appear to have been introduced in Kirill Tkhai's commit
+> 4d28df6152aa3ff.
+>
+> I'm not sure what is right, but those inconsistencies seem
+> seem odd, and presumably unintended. Similarly, I'm not
+> sure what fix, if any, should be applied. However, I thought
+> it worth mentioning these details, since the situation is odd
+> and surprising.
 
-@Nicolas, your commit ebd6de6812387a changed the capability 
-requirements for the prctl_set_mm_exe_file() operation from
+FWIW, as a bit of context here: I believe that these checks are more
+driven by "what capabilitiies do we think a typical caller will have"
+than by a proper security design of "what capabilities do we have to
+require to establish certain security guarantees". As people have
+noted elsewhere, on a system without LSMs, a process can point
+/proc/self/exe to almost any executable file of its choice anyway (by
+executing that file and then replacing the executable code of the
+resulting process).
 
-    ns_capable(CAP_SYS_ADMIN)
-
-to
-
-    ns_capable(CAP_SYS_ADMIN) || ns_capable(CAP_CHECKPOINT_RESTORE).
-
-That's fine I guess, but while looking at that change, I found
-an anomaly.
-
-The same prctl_set_mm_exe_file() functionality is also available
-via the prctl() PR_SET_MM_EXE_FILE operation, which was added
-by Cyrill's commit b32dfe377102ce668. However, there the 
-prctl_set_mm_exe_file() operation is guarded by a check
-
-    capable(CAP_SYS_RESOURCE).
-
-There are two things I note:
-
-* The capability requirements are different in the two cases.
-* In one case the checks are with ns_capable(), while in the 
-  other case the check is with capable().
-
-In both cases, the inconsistencies predate Nicolas's patch,
-and appear to have been introduced in Kirill Tkhai's commit
-4d28df6152aa3ff.
-
-I'm not sure what is right, but those inconsistencies seem
-seem odd, and presumably unintended. Similarly, I'm not
-sure what fix, if any, should be applied. However, I thought
-it worth mentioning these details, since the situation is odd
-and surprising.
-
-Thanks,
-
-Michael
-
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+The properly engineered solution would probably be to let LSMs hook
+these APIs (if they care) and then remove the capable()/ns_capable()
+checks.
