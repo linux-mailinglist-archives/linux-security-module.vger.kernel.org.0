@@ -2,132 +2,106 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 869F629AC7E
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Oct 2020 13:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A1029B4AE
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Oct 2020 16:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1751529AbgJ0Mvy (ORCPT
+        id S1789769AbgJ0PCu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 27 Oct 2020 08:51:54 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42927 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1751532AbgJ0Mvy (ORCPT
+        Tue, 27 Oct 2020 11:02:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:49272 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1789756AbgJ0PCr (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 27 Oct 2020 08:51:54 -0400
-Received: by mail-lj1-f194.google.com with SMTP id h20so1605153lji.9;
-        Tue, 27 Oct 2020 05:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ftk1EYAFLOBR6UlEa4OpWRTYRPIM3tkKJGAeflcbmic=;
-        b=NvEOlY46HtypZNbSAOEr4+nLo2M2E1I8caU/D754l2qRDHg9QLSDC3V/cxFRuef+5X
-         G8M/irG2x4w68zuSfLEsrtWb6SxbvPjLi4FLqAswQR+KYk2XsXklHpsEh6LJX9ZW/T2j
-         W3ZPw/wux6ErhTCiRC8dWfmjauAc/ceWmLAkaQ53HJrXSr870Afs9doQP4NfgRzz/Afz
-         0z1kldssWecLJaKBbkrBMNaU75xuwTjJQa/5F1YzQtQo7qbD/BoAuPIg61uTQtJ6uQhT
-         euiJziC/JcI5DtN422sWeFz5GXQEJTSLU1XDtevAmcKLYZ9MshwuFZj1qepKZ1cSebRi
-         tNPg==
+        Tue, 27 Oct 2020 11:02:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603810965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=paen6LPJGadxGKzJ4bKtPZoQTiF+OV5vFNTGlE5DdVM=;
+        b=B0TrLbANdmPEhORFMesDYwhYXcJyXTwFUYkRzi/WOtmrx4qPMsrmz1mmT9Nk4o8h/UJjOQ
+        zMgKcqzjK426JfT9Eq6EIimPAKGAoPbp/O39Gx1ASl7jYVIeMWkl+nt8DhinPBEixEWlk/
+        1nYjECM9IU/WeTo9lVa3pvL+vAFVNHk=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-16-WJK3YFVVNV6MUahTYzwXRw-1; Tue, 27 Oct 2020 11:02:44 -0400
+X-MC-Unique: WJK3YFVVNV6MUahTYzwXRw-1
+Received: by mail-lj1-f198.google.com with SMTP id i3so906067lja.15
+        for <linux-security-module@vger.kernel.org>; Tue, 27 Oct 2020 08:02:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ftk1EYAFLOBR6UlEa4OpWRTYRPIM3tkKJGAeflcbmic=;
-        b=WQ+hvX8wqdsufT5keVDd+w1P0U9Qo3CL8K9nAthYHXT031Lt47T5GI8AKEQuWyOdXH
-         BXrRqt5cJ4dvDypS/zQpS51DHxh7j3G67x4xmdVi08FFzEtm64ukdfom7hTN0i8R0kFV
-         TDAwvDOj5/uUsWV8mmqFeo4E32sKNT9a4Ut9LBTdzjad8mHLFT0PUhXfDpcbt8AEEvDq
-         zu2RNdFM2PatqSU1knrw8C7P14M46JE/2ZNjP3RiSA3n/mdRh3GtWOX5lkbWYtrjFYDx
-         BGfGHb75h2vQv8LIOB1x4qMscuDOOwRVldHsz9+mqOHS9tEIws/0437FFG61w0XFRO5N
-         O5kg==
-X-Gm-Message-State: AOAM5313raAK1xl011rC7sqQ/w6ljm3FtzlKsgXnkonzWkV53/Fe88k1
-        7coaComFaFBx4kgZk6ihF8M=
-X-Google-Smtp-Source: ABdhPJyWESS0V1Yw/BaoR3MKB+XrkvfG7YRHUTkgWdpMoFr0aLGE6RrhP2frUetzQwiPGCcFS6R7kA==
-X-Received: by 2002:a2e:3112:: with SMTP id x18mr1050673ljx.149.1603803110624;
-        Tue, 27 Oct 2020 05:51:50 -0700 (PDT)
-Received: from grain.localdomain ([5.18.91.94])
-        by smtp.gmail.com with ESMTPSA id 21sm166406lfd.272.2020.10.27.05.51.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 05:51:49 -0700 (PDT)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 2ABF41A0078; Tue, 27 Oct 2020 15:51:48 +0300 (MSK)
-Date:   Tue, 27 Oct 2020 15:51:48 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Cc:     Nicolas Viennot <Nicolas.Viennot@twosigma.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Adrian Reber <areber@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Jann Horn <jannh@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: Re: Inconsistent capability requirements for prctl_set_mm_exe_file()
-Message-ID: <20201027125148.GA2093@grain>
-References: <7655a573-544f-05a4-36dc-0c84c73ac9ee@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=paen6LPJGadxGKzJ4bKtPZoQTiF+OV5vFNTGlE5DdVM=;
+        b=mJbF9n9FT3w26wx/PwT5m/f1OMe4jGx0EGky4mo9Y5t79ip6/fwi0q+LpD8/YIKcXf
+         iR1Qezai19ImiTQ+N7dBnjjMmzTV6HCidXz3hsVvS6F78TMJl2Yx/6NEtRf/fB2B2Aip
+         Yv7e06gppFRQtlu/s54P1PKngBObe8dJ3Z/vNTNE14K8EYYXIiWJh7guwJJL6LRtn7vX
+         DRABp5fk4lIJhqhlD+FPEuXCbLmb1NGLWkhE88P/1J7JNF66HGrWnR7g9tKO3zDJTpiE
+         y3qiuRXV5ve844oKcoXPrCZbjPbf0vQtpOjo+iP5pkfAI63F/TnRoaOdCNXLHDvPDF11
+         q6jg==
+X-Gm-Message-State: AOAM531fPIfrJVUOXFAA2qARc+aOgDfSiHDGEWNazsSbZgcYYf6IWH5/
+        WjAuh5jOG9CQxAE1kruS/usggMnKLn2lmlW1vn3YFebRunGKOAZn7fbDxP7qssiUFx07hMeSHbg
+        RWwm00b3CvjNM4joyr/viO2er+iTQFu5oleYAuIlP8ENE+LqpzckZ
+X-Received: by 2002:a2e:b009:: with SMTP id y9mr1206385ljk.372.1603810962055;
+        Tue, 27 Oct 2020 08:02:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxFvqOD3Heb3NCRwRiAz2iNqSNeAiu1gIc5JBoJ/41Vgt6E94zgbiX1KwTzhjAxzXa7ronlij8Qi/FGd9k9/Nk=
+X-Received: by 2002:a2e:b009:: with SMTP id y9mr1206372ljk.372.1603810961798;
+ Tue, 27 Oct 2020 08:02:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7655a573-544f-05a4-36dc-0c84c73ac9ee@gmail.com>
-User-Agent: Mutt/1.14.6 (2020-07-11)
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+Date:   Tue, 27 Oct 2020 16:02:31 +0100
+Message-ID: <CAFqZXNuy+Q1F9rT8NJKX+Wgnp2JEROHwCdzu0pmOuWdeRe1iDg@mail.gmail.com>
+Subject: selinux_file_permission() on pipes/pseudo-files - performance issue
+To:     SElinux list <selinux@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        linux-fsdevel@vger.kernel.org
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Oct 27, 2020 at 01:11:40PM +0100, Michael Kerrisk (man-pages) wrote:
-> Hello Nicolas, Cyrill, and others,
-> 
-> @Nicolas, your commit ebd6de6812387a changed the capability 
-> requirements for the prctl_set_mm_exe_file() operation from
-> 
->     ns_capable(CAP_SYS_ADMIN)
-> 
-> to
-> 
->     ns_capable(CAP_SYS_ADMIN) || ns_capable(CAP_CHECKPOINT_RESTORE).
-> 
-> That's fine I guess, but while looking at that change, I found
-> an anomaly.
-> 
-> The same prctl_set_mm_exe_file() functionality is also available
-> via the prctl() PR_SET_MM_EXE_FILE operation, which was added
-> by Cyrill's commit b32dfe377102ce668. However, there the 
-> prctl_set_mm_exe_file() operation is guarded by a check
-> 
->     capable(CAP_SYS_RESOURCE).
-> 
-> There are two things I note:
-> 
-> * The capability requirements are different in the two cases.
-> * In one case the checks are with ns_capable(), while in the 
->   other case the check is with capable().
-> 
-> In both cases, the inconsistencies predate Nicolas's patch,
-> and appear to have been introduced in Kirill Tkhai's commit
-> 4d28df6152aa3ff.
-> 
-> I'm not sure what is right, but those inconsistencies seem
-> seem odd, and presumably unintended. Similarly, I'm not
-> sure what fix, if any, should be applied. However, I thought
-> it worth mentioning these details, since the situation is odd
-> and surprising.
+Hello,
 
-Hi Michael! This is more likely due to historical reasons:
-the initial version of prctl(PR_SET_MM, ...) been operating
-with individual fields and this was very unsafe. Because of
-this we left it under CAP_SYS_RESOURCE (because you must have
-enough rights to change such deep fields). Later we switched
-to PR_SET_MM_MAP which is a safe version and allows to modify
-memory map as a "whole" so we can do a precise check. And this
-allowed us to relax requirements.
+It has been reported to me that read/write syscalls on a pipe created
+via the pipe(2) family of syscalls spend a large percentage of time in
+avc_lookup() via selinux_file_permission(). This is specific to pipes
+(and also accept(2)'d sockets, I think) because these pipe fds are
+created using alloc_file_pseudo() as opposed to do_dentry_open(),
+which means that the security_file_open() hook is never called on
+them.
 
-As to me the old PR_SET_MM should be deprecated and finally
-removed from the kernel, but since it is a part of API we
-can't do such thing easily.
+In SELinux, this means that in selinux_file_permission() the
+read/write permission is always revalidated, leading to suboptimal
+performance, because SELinux re-checks the read/write perms of an open
+file only if the subject/target label or policy is different from when
+these permissions were checked during selinux_file_open().
 
-Same time current PR_SET_MM internally is rather an alias
-for PR_SET_MM_MAP because we create a temporary map and
-pass it to the verification procedure so it looks like
-we can relax requirements here to match the PR_SET_MM_MAP
-call. But need to think maybe I miss something obvious here.
+So I decided to try and see what would happen if I add a
+security_file_open() call to alloc_file(). This worked well for pipes
+- all domains that call pipe(2) seem to already have the necessary
+permissions to pass the open check, at least in Fedora policy - but I
+got lots of denials from accept(2), which also calls alloc_file()
+under the hood to create the new socket fd. The problem there is that
+programs usually call only recvmsg(2)/sendmsg(2) on fds returned by
+accept(2), thereby avoiding read/write checks on sock_file, which
+means that the domains don't normally have such permissions. Only
+programs that open actual socket files on the filesystem would
+unavoidably need read/write (or so I think), yet they wouldn't need
+them for the subsequent recvmsg(2)/sendmsg(2) calls.
+
+So I'm wondering if anyone has any idea how this could be fixed
+(optimized) without introducing regressions or awkward exceptions in
+the code. At this point, I don't see any way to do it regression-free
+without either adding a new hook or changing security_file_open() to
+distinguish between do_dentry_open() and alloc_file() + calling it
+from both places...
+
+-- 
+Ondrej Mosnacek
+Software Engineer, Platform Security - SELinux kernel
+Red Hat, Inc.
+
