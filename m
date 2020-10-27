@@ -2,110 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B18929C641
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Oct 2020 19:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D60F29C911
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Oct 2020 20:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1826005AbgJ0SPH (ORCPT
+        id S1808758AbgJ0TiB (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 27 Oct 2020 14:15:07 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:41087 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1825966AbgJ0SO5 (ORCPT
+        Tue, 27 Oct 2020 15:38:01 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:43238 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504319AbgJ0TiA (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 27 Oct 2020 14:14:57 -0400
-Received: by mail-oo1-f67.google.com with SMTP id n2so551687ooo.8;
-        Tue, 27 Oct 2020 11:14:57 -0700 (PDT)
+        Tue, 27 Oct 2020 15:38:00 -0400
+Received: by mail-lf1-f67.google.com with SMTP id l28so3822246lfp.10;
+        Tue, 27 Oct 2020 12:37:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yMJ8Y1/qT3nPE/qUQDD1UxaPPEXuSovGtgYNPCUSSwM=;
-        b=XkcWS4YWNm9Q4KpE5ShotbOLiXVfteFBmuCYv0GBmd6KFKdVwLVzeg8yyU+LSGQQSp
-         qL3NpEinnWWbFnTkdLX43q59sP28hp9AVKuSH0rWje9zzbL2jo8BUUzDJGdpnsktPfR+
-         4gACda/JrvqXaWDzlh4YfANdM/G+XckORgjZoLXfrw1RM/wab/kGYVTuSJv2FDptCju+
-         2UInxX/NNX3iLLiyRjWcXmPQf7ZkvESydMf0e49ysAjaRzgBl9N7luhxVSmS6cxDWJSP
-         o0SHVndQQDwEVuKaykbQrxTPGJ2BVudTq5Csl1n2oWb155hw1J9hTEca+jIxWOIaE06h
-         bogQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=EGjFU2HtewWIYk+zR7rYt/gKEi0EZXYQo9cL0+1N+xo=;
+        b=ivZMUEdnYEBDd80AhRKTUWJgS4p4iCRMDZFOLZHKm+H3TCpxxUFatS/SgnwPTmfgTa
+         pgDf04IgmX1gwano/QCWjk0cp9PCX06AklXGi7ibrFBHs7Tr2QB4T569o7J3wi2wE5ly
+         wsUTwr7JnvowxRO+zXhOV1NdbPDq+9zEbsF2SUwAakenfYbf8zCCmiTfp9elGNcThSN7
+         w9HZ4HiGRjPnUI7XzBvMzpuciQlhh3O0lGtWPAaprIOtwRX6AE7PrQfC2ipne9GD2Pgw
+         sJq7I3zVBzRkvwxSURNEb/Nd8uX/+1CtvE31klVPwq/NmTKyvH2gkq80XwUNvOz2+wWE
+         JXGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yMJ8Y1/qT3nPE/qUQDD1UxaPPEXuSovGtgYNPCUSSwM=;
-        b=kpt70y3GHVKFkIz/KFwHUeryXeV5rOXdQvyMOPCaOc269GCzSZIV/eaMWV2jfrLyDr
-         +/auEJZ3Z0ceaI6jDWVbHZMC8mIxhwfiyTDbmj/n+YTjyigCDqkuPfcqPbb2RAMbkkiY
-         MtjB/iC9OKdJSLLHs2K96xWygUbW+hNa/Hk/i2UBFK/v/wpWYQVA05OGBCL8dGa27LwF
-         nNkF4HuvVaJLs2+EWzrweHTGoHuc4CP9kTxysCAJO2I12q5mkGCSLYy01TlFs/KJVfDY
-         3PQ2thCuT5awEl9n1LTIGgTaczaaFrVa/FvcPohx83cjFAITxBj6NP+qHoqicSm29SX7
-         sGKQ==
-X-Gm-Message-State: AOAM531mwvQwNqZmUWuiceBbiUQO/HFSJBOT4I6MI5yjVKPYHpjayu6F
-        AKIeN4Om2vLL49i0aFb50jHltsGfSw8inSZJcTgjHMUXTwM=
-X-Google-Smtp-Source: ABdhPJwvO6DHnUVTV1Fm+Pi62zWuspDXcYpgHcTw80dT0DZdafDAVACytkN6V8bY9IVXDjBupAuSIeXlL7BF2EEkFAc=
-X-Received: by 2002:a4a:a447:: with SMTP id w7mr2749245ool.42.1603822496311;
- Tue, 27 Oct 2020 11:14:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EGjFU2HtewWIYk+zR7rYt/gKEi0EZXYQo9cL0+1N+xo=;
+        b=MGEX0Y7HkGUjgFWpGFSfhBBVvozO8WpvGjQZJpdGK7XL6COcWp7owlv9DsJkGN/37r
+         8SraDZIy2ALL+OY4tZD1eKAESNjeprgSmLKegoNkkoLgcp3j05WIv29fuwMBj3b61R2/
+         SWFKa8iXwLEPvelpVuTF4m/C1oSmnNGBCy32A52Ls2pgAR2FxiDkhSqFk4WxLAOGQVcK
+         tMk/iVL1Sj7cSZ2O7SgIFAnM3HZJqh1z+3J6Vjtk4Ivde8QM8uTiPZgnutEnFfUJKy1w
+         Bryw0vWN5IMTTDHsNFewfB7xWBGhUSUgG2pUtPI4gsajZGGs1wzfxvk2zefhPuV8hLu+
+         5z4A==
+X-Gm-Message-State: AOAM530VJaG7gnJ6jpV1fu/LsmmZ7iDkzKztBrbzF1W7Hbx0OYmIzHKT
+        LRH3MC4H2W+FzZlcvEj0Z/k=
+X-Google-Smtp-Source: ABdhPJydCbe7yUTRQC0vVGJG0xMUcN5lcjTDUhWqbzfV41X7tcQRe3JMGjY5cpoLSUOHE95B+KtH2w==
+X-Received: by 2002:a19:7710:: with SMTP id s16mr1238315lfc.293.1603827477365;
+        Tue, 27 Oct 2020 12:37:57 -0700 (PDT)
+Received: from grain.localdomain ([5.18.91.94])
+        by smtp.gmail.com with ESMTPSA id t80sm271413lff.72.2020.10.27.12.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 12:37:56 -0700 (PDT)
+Received: by grain.localdomain (Postfix, from userid 1000)
+        id 8EA5D1A0078; Tue, 27 Oct 2020 22:37:55 +0300 (MSK)
+Date:   Tue, 27 Oct 2020 22:37:55 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     Kirill Tkhai <ktkhai@virtuozzo.com>
+Cc:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
+        Nicolas Viennot <Nicolas.Viennot@twosigma.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Adrian Reber <areber@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Pavel Emelyanov <ovzxemul@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Jann Horn <jannh@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+Subject: Re: Inconsistent capability requirements for prctl_set_mm_exe_file()
+Message-ID: <20201027193755.GB2093@grain>
+References: <7655a573-544f-05a4-36dc-0c84c73ac9ee@gmail.com>
+ <2b66ac32-adfd-de1b-499b-8ba4f7b9bea4@virtuozzo.com>
 MIME-Version: 1.0
-References: <CAFqZXNuy+Q1F9rT8NJKX+Wgnp2JEROHwCdzu0pmOuWdeRe1iDg@mail.gmail.com>
-In-Reply-To: <CAFqZXNuy+Q1F9rT8NJKX+Wgnp2JEROHwCdzu0pmOuWdeRe1iDg@mail.gmail.com>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Tue, 27 Oct 2020 14:14:45 -0400
-Message-ID: <CAEjxPJ4jJDwBiDS0Sv_3e2N3kFBP=oH3-mkry0PFsphhtZw9AA@mail.gmail.com>
-Subject: Re: selinux_file_permission() on pipes/pseudo-files - performance issue
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     SElinux list <selinux@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2b66ac32-adfd-de1b-499b-8ba4f7b9bea4@virtuozzo.com>
+User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Oct 27, 2020 at 11:02 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> Hello,
->
-> It has been reported to me that read/write syscalls on a pipe created
-> via the pipe(2) family of syscalls spend a large percentage of time in
-> avc_lookup() via selinux_file_permission(). This is specific to pipes
-> (and also accept(2)'d sockets, I think) because these pipe fds are
-> created using alloc_file_pseudo() as opposed to do_dentry_open(),
-> which means that the security_file_open() hook is never called on
-> them.
->
-> In SELinux, this means that in selinux_file_permission() the
-> read/write permission is always revalidated, leading to suboptimal
-> performance, because SELinux re-checks the read/write perms of an open
-> file only if the subject/target label or policy is different from when
-> these permissions were checked during selinux_file_open().
->
-> So I decided to try and see what would happen if I add a
-> security_file_open() call to alloc_file(). This worked well for pipes
-> - all domains that call pipe(2) seem to already have the necessary
-> permissions to pass the open check, at least in Fedora policy - but I
-> got lots of denials from accept(2), which also calls alloc_file()
-> under the hood to create the new socket fd. The problem there is that
-> programs usually call only recvmsg(2)/sendmsg(2) on fds returned by
-> accept(2), thereby avoiding read/write checks on sock_file, which
-> means that the domains don't normally have such permissions. Only
-> programs that open actual socket files on the filesystem would
-> unavoidably need read/write (or so I think), yet they wouldn't need
-> them for the subsequent recvmsg(2)/sendmsg(2) calls.
->
-> So I'm wondering if anyone has any idea how this could be fixed
-> (optimized) without introducing regressions or awkward exceptions in
-> the code. At this point, I don't see any way to do it regression-free
-> without either adding a new hook or changing security_file_open() to
-> distinguish between do_dentry_open() and alloc_file() + calling it
-> from both places...
+On Tue, Oct 27, 2020 at 08:22:11PM +0300, Kirill Tkhai wrote:
+> 1)Before my commit there also were different checks
+> 
+>         !capable(CAP_SYS_RESOURCE))
+> and
+> 	uid_eq(cred->uid, make_kuid(ns, 0)) && gid_eq(cred->gid, make_kgid(ns, 0))
+> 
+> so it is not the initial reason. The commit even decreased the checks difference
+> and it made both the checks are about capability().
+> 
+> 2)As I understand new PR_SET_MM_MAP interface differs in the way, that it allows to batch
+> a setup of prctl_mm_map parameters. So, instead of 14 prlctl calls with different arguments:
+> PR_SET_MM_START_CODE, PR_SET_MM_END_CODE, PR_SET_MM_START_DATA, .., PR_SET_MM_ENV_END,
+> we set then all at once and the performance is better.
+> 
+> The second advantage is that the new interface is more comfortable in case of we set all
+> of 14 parameters. Old interface requires special order of calls: sometimes you have to
+> set PR_SET_MM_START_CODE first and then PR_SET_MM_END_CODE second, some times it is vice
+> versa. Otherwise __prctl_check_order() in validate_prctl_map() will fail.
 
-I don't think you want to reuse security_file_open() here.
-There is an existing security_file_alloc() hook called on
-__alloc_file(), but we have no inode information there so it cannot
-cache the inode SID or perform any check on it.  You could potentially
-lift that hook to all of the callers after the file has been
-populated, or introduce a new hook in alloc_file() as you said.
-Wondering though why this has never come up before if it is a
-significant overhead in real workloads.  Earlier concerns about the
-overhead on open files led to commit
-788e7dd4c22e6f41b3a118fd8c291f831f6fddbb which introduced what later
-became security_file_open().  But seemingly pipes/sockets weren't a
-concern there.
+Since I've been the person who introduced the former PR_SET_MM_X interface I already
+explained that the PR_SET_MM_X is simply shitty and better be vanished and forgotten.
+Which we simply can't do :/ In turn PR_SET_MM_MAP is the only right way to verify
+all fields in a one pass not only because of speed but otherwise the validation
+of parameters is not even associative and in result (as you mentioned) _order_ of
+calls does matter for start_code/end_code.
+
+> 3)For me it looks like any combinations of parameters acceptable to be set by both interfaces
+> are the same (in case of we don't see on permissions checks). In case of we can assign a set of
+> parameters {A} using old interface, we can assign it from new interface and vice versa.
+> Isn't this so?! If so, we should use the same permissions check.
+
+Yup, if only I'm not missing something obvious we could drop cap(sys-resource) here
+because internally after this check we jump into traditional verification procedure
+where the map is filled from runtime data.
+
+I'm quite sceptic that LSM hook Jann mentioned gonna be better. It might be an
+addition but not the replacement. Moreover if we add it here someone from CRIU
+camp have to verify that it won't break current CRIU tests.
