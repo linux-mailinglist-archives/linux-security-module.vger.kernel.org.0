@@ -2,94 +2,91 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6251229DAE6
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Oct 2020 00:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEAA29DECF
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Oct 2020 01:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725979AbgJ1Xil (ORCPT
+        id S1727934AbgJ2A4u (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 28 Oct 2020 19:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390565AbgJ1Xhi (ORCPT
+        Wed, 28 Oct 2020 20:56:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60544 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731627AbgJ1WRg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 28 Oct 2020 19:37:38 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9C6C0613CF
-        for <linux-security-module@vger.kernel.org>; Wed, 28 Oct 2020 16:37:38 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id b18so630902qkc.9
-        for <linux-security-module@vger.kernel.org>; Wed, 28 Oct 2020 16:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a6vE6h4Lrq3PfD6ZhI4bffn/VCoz5p+kVa9GnDZBqBg=;
-        b=K1alOVg7BbsaWoIzM3EPt/XFxBj6CfPzSYGObFnKmJp7VbMWXtUo2wEub9s1GDaGHk
-         lxopwSHtCrI5rbwcViDOKa7z7exOSdV8ylieshQIkI490N7n3HqHk5KCpFK6JRRNHLB9
-         56qGofT5bOcT1aUgH4aQIAILIIM3qjkChzQL7xSefwfbrA/5wrlPyn/zyWV6NgJcMrqq
-         c4gxYGkhThcN0gedsthpRzw7BxnfOcilw1snStWwIkeoRHuF7DEzT3zEC4pNAYOnL5tg
-         hRSNj6YRCY3J7n/iMsCrY78y942DN0Wi6x+DA1NUcEmjlov4n9/PkkaC+g1wFrR6A3ge
-         sjJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a6vE6h4Lrq3PfD6ZhI4bffn/VCoz5p+kVa9GnDZBqBg=;
-        b=N6O7tW5YjEgbxY2idgz5JEVbuEgFgbJ9vyr94qFxhx/JypblC2WcQHDprYgpxWwX18
-         9DKsqp9TpahzKK2dcmHe2HHZ04GbfDt1QZJDzaEKVpKfOPLxZmVvy/OamaG7BuYROt78
-         qRJ7xoSdQA1TNGtzgJIjUhmSUn239BXSkPgI9JlFTtPTc7VnuIAMwgdyiXR04RQOGjy1
-         CWXx71jp/fsF3Yk8MXe9z85HsU/eBLsu0xkXiuFHI6y/qKnVmdGqWPi/eIE8Akjb1ELJ
-         B+Yvs6lXxnktnjwL8zwR1kbQPppAgQ+wOzSyDmvuiTrtVWoga9b5xaioIHU/PDSxlMc1
-         gKvA==
-X-Gm-Message-State: AOAM532uYkRxJLMbMLh0LCQx0mhKagmCnPvdz3ik+IyCV25BA/5sy9XO
-        HRmo17jaKHT9Mip8/XpqU1FYBcr765OTzktEmHzIfrMSBvVFAw==
-X-Google-Smtp-Source: ABdhPJzGlSt5aAv1ZLGB7xNjiUUvxmmxT2DKA0N0WRSAio1BCjdgbKuaIweZa1+5o4vyE+PoaK/loQrgkpTt4gNbQmg=
-X-Received: by 2002:ac8:6c54:: with SMTP id z20mr5877605qtu.337.1603878075857;
- Wed, 28 Oct 2020 02:41:15 -0700 (PDT)
+        Wed, 28 Oct 2020 18:17:36 -0400
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7FDBF2474C
+        for <linux-security-module@vger.kernel.org>; Wed, 28 Oct 2020 13:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603893460;
+        bh=+ZdDzdBNKbaHfui4MuF5O6NTQjMZGthQqlXfYWR4DRQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=wdnXqCAbX7zR57S749UE30A8dxHypmCw4XE+OuWGovBeUDLiWy0rm+1lEVWzJT2zx
+         b2Fi/aWJYJSVWPXn8432nKy8Kt//Z17OulKjp9112UoaEgi/LYYgcazYcq2z2hPiMM
+         xMy89iHMWLOW4A1DpiIp0+dvQ6MuRXLxAQmYpl4o=
+Received: by mail-lf1-f49.google.com with SMTP id i6so2415558lfd.1
+        for <linux-security-module@vger.kernel.org>; Wed, 28 Oct 2020 06:57:40 -0700 (PDT)
+X-Gm-Message-State: AOAM5310yvNV+TzeaWDMQhWHIn6R0JYJqauD86YucqNwC0WgpKPp3Vkj
+        a/En5yokBUNnTetqkeH9fplPUB5yD+7DJId7YsU=
+X-Google-Smtp-Source: ABdhPJyvfULNd0KJ+iC88tvCmHLYU3hvDB4IoOkcvqBjEqXu5oPDU9JBhOHo+u9AfQvAXWM7FKZxbkRDYbXqQces/sk=
+X-Received: by 2002:a19:4006:: with SMTP id n6mr2688309lfa.28.1603893458043;
+ Wed, 28 Oct 2020 06:57:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201026125227.54520-1-a.nogikh@gmail.com> <20201026125227.54520-3-a.nogikh@gmail.com>
- <CAC5umyjZn+gtO=u8GhptVggzodbY-vnk9NNTOqyZyUW2up2ASQ@mail.gmail.com> <CANp29Y7sDaxrw+0wEVU0vo56AhKFRvbQSGeRc168gs6S8iK_-g@mail.gmail.com>
-In-Reply-To: <CANp29Y7sDaxrw+0wEVU0vo56AhKFRvbQSGeRc168gs6S8iK_-g@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 28 Oct 2020 10:41:04 +0100
-Message-ID: <CACT4Y+ZX=FjO0Ohoxnyjb3RqaTdGDpYs-Z4pJyiTo2TYY_ROqQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/2] docs: add fail_lsm_hooks info to fault-injection.rst
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Aleksandr Nogikh <a.nogikh@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Kees Cook <keescook@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
+References: <20201026215236.3894200-1-arnd@kernel.org> <7bb56fd2-ffe2-2985-19d0-31b42bc9e7e8@i-love.sakura.ne.jp>
+In-Reply-To: <7bb56fd2-ffe2-2985-19d0-31b42bc9e7e8@i-love.sakura.ne.jp>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 28 Oct 2020 14:57:21 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3id-zGLfdvo1m=ct_E=EKkf6Xwkrz5LQdgNsvfgbMcZw@mail.gmail.com>
+Message-ID: <CAK8P3a3id-zGLfdvo1m=ct_E=EKkf6Xwkrz5LQdgNsvfgbMcZw@mail.gmail.com>
+Subject: Re: [PATCH] tomoyo: fix clang pointer arithmetic warning
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     LSM List <linux-security-module@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Oct 27, 2020 at 6:34 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> [...]
-> > In addition to this global one, what do you think about per-hook fault
-> > injection,
-> > i.e. /sys/kernel/debug/fail_lsm_hooks/<FUNC>/retval ?
+On Wed, Oct 28, 2020 at 2:22 PM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
 >
-> I was thinking about this, but decided to begin with a simple version
-> that could definitely be useful in practice (for syzbot/syzkaller it is just
-> necessary to have a fault injection capability that will be triggered via
-> fail-nth). If per-hook fault injection can also be useful to someone, I
-> can try to add it as well.
-
-Yes, before we add it, it would be useful to have a clear use case
-(otherwise we can add an unused thing, or implement it in a way that
-slightly misses the use case).
-Note that fail-nth allows to fail a single concrete site for testing,
-though it's not super convenient for this as one would need to figure
-out the right N first. But as a one-off test it should do.
-
-
-> > In this case, we need a fault_attr for each hook. (Maybe, we can use the same
-> > technique that is used to define security_hook_heads).
+> Thank you for a patch. I have two questions.
 >
-> Yes, that technique should help to implement the feature in a very concise
-> way. Thanks for the suggestion.
+> On 2020/10/27 6:52, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > clang warns about additions on NULL pointers being undefined in C:
+> >
+> > security/tomoyo/securityfs_if.c:226:59: warning: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Wnull-pointer-arithmetic]
+> >         securityfs_create_file(name, mode, parent, ((u8 *) NULL) + key,
+> >
+> > Change the code to instead use a cast through uintptr_t to avoid
+> > the warning.
+> >
+>
+> > -     securityfs_create_file(name, mode, parent, ((u8 *) NULL) + key,
+> > +     securityfs_create_file(name, mode, parent, (u8 *)(uintptr_t)key,
+> >                              &tomoyo_operations);
+>
+> (1) Does clang warn if "(void *)key" is used instead of "(u8 *)(uintptr_t)key" ?
+
+Yes, both clang and gcc warn when you cast between a pointer and
+an integer of a different size.
+
+> (2) tomoyo_open() has
+>
+>         const int key = ((u8 *) file_inode(file)->i_private) - ((u8 *) NULL);
+>
+>     which decodes the "u8 key" passed to tomoyo_create_entry(). For symmetry,
+>     I'd like to remove NULL from tomoyo_open() as well. Does clang warn if
+>
+>         const int key = (u8) (file_inode(file)->i_private);
+>
+>     is used?
+
+Yes, same thing, but
+
+   const int key = (uintptr_t)file_inode(file)->i_private;
+
+works without warnings and seems clearer.
+
+       Arnd
