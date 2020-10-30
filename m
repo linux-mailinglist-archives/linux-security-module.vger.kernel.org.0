@@ -2,111 +2,83 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 010112A0620
-	for <lists+linux-security-module@lfdr.de>; Fri, 30 Oct 2020 14:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4F02A08C9
+	for <lists+linux-security-module@lfdr.de>; Fri, 30 Oct 2020 16:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbgJ3NCf (ORCPT
+        id S1726955AbgJ3PAi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 30 Oct 2020 09:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        Fri, 30 Oct 2020 11:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbgJ3NCf (ORCPT
+        with ESMTP id S1726957AbgJ3PAb (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 30 Oct 2020 09:02:35 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3D9C0613D4
-        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 06:02:34 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id z10so1448524vkn.0
-        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 06:02:34 -0700 (PDT)
+        Fri, 30 Oct 2020 11:00:31 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F7DC0613BB
+        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id dn5so6935037edb.10
+        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hfUp6uvT0mNo9qOvWz4kadVZif4hwG0EcrIPidc71AU=;
-        b=c/0np4r5fnnReVFjWkDWXo8hF0To3ovSOoxgoL/QWs9VxL86iqjKdadij03d378/T5
-         B7rjoCbR258EwTEX+UW+6QMPF65hDWZsco0RfSUG9stFDcsd6ZZkDH+4oFGIQiro7Wrf
-         /VUafL5CtS83KydlI6lpgD86QMrk86JITh21I=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
+         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
+         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
+         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
+         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
+         Sb9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hfUp6uvT0mNo9qOvWz4kadVZif4hwG0EcrIPidc71AU=;
-        b=dsKpz+1jQbeF2Ni5PLD4C6U/xNUTHyfS7he43qwmY1i2VrOJlosjhplPFmfgkFnkSk
-         50U8Z0rY9grJW7JffzjZkJKEzZ3G6Rn8u/zWET7M9aNrJAaicLrsOklTnWHD+gwgXVDW
-         EIr3oJD1O0HDS638REEn52vvKRhbTUocizZxwIEX+CLlKob6DNVJc91MUA+5+jIOAZqC
-         yWJH44MWRojdgnBrzgLGIXqkG+RP2kFyVJsZWhQwJ8z7AQuFuqCy0CFOeoffWFaNTiJG
-         kxTarsbVrxG89Zu+WNtW/K/mZXPDGC/rWHI2lWaZdAqgna5DtRIqDIQoZsjtmNXRTV2H
-         Wntw==
-X-Gm-Message-State: AOAM5337uIdfNxGGAehY8cJ9Q+upxY/HMY4fQRGyWX4JsnbEz//T2MU8
-        bHDb1L3AEjkqv+2+nyGXntPPHdfQnWGqgDAFKT79cw==
-X-Google-Smtp-Source: ABdhPJxPa9+zamc48OrPbKG+5+YeIbGDLouPEl6taVV7SKI2yGqJZrMzqI/DHpB0Je2VEJI3rTxbB6w6g9+fXjI8Kns=
-X-Received: by 2002:a1f:23d0:: with SMTP id j199mr6640364vkj.11.1604062953264;
- Fri, 30 Oct 2020 06:02:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=foMI/QRLhFw4RN335Cg2InVJXMNM+Ty+EsUR3QEyk9pjk2YFmnuUjkGLSGmEQACOh1
+         G/0BU9dxzG5NQa5L35seRTCzQeYCioOkOnwt5iQ4P0rVd52UlOVFAI7Tzp9A0aWHXDb0
+         h0Lt64zItBP7bEPjRgzwQogNN0WQjmFSP5yyg0HEbTVc0P5aOPFVe0VY0zTy3pVJG8jV
+         FDt09gr7j44lhIZ8X5pW13MUOOTTvmCX8jumdgvdTV5l8AhvDzCBD5Aipk1GPaTIeP8A
+         kvl82xJGYnfy6iZemXNO6W57g/OfQwDS0lVFbFKN6XihTvMV8cQ+ysB9t+23VPhsuuQE
+         oWuQ==
+X-Gm-Message-State: AOAM533vQ28Ahz/9Ot8Qnqq4O0iv0wX965V0A++w/tHTro3dkZD/dNK7
+        qYzyq48oXXUQJSV9SOWzfE+mYLiQFgncKZCfK7JG5ZjiYw==
+X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
+X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
+ Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000008caae305ab9a5318@google.com> <000000000000a726a405ada4b6cf@google.com>
- <CAFqZXNvQcjp201ahjLBhYJJCuYqZrYLGDA-wE3hXiJpRNgbTKg@mail.gmail.com>
-In-Reply-To: <CAFqZXNvQcjp201ahjLBhYJJCuYqZrYLGDA-wE3hXiJpRNgbTKg@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Fri, 30 Oct 2020 14:02:22 +0100
-Message-ID: <CAJfpegtzQB09ind8tkYzaiu6ODJvhMKj3myxVS75vbjTcOxU8g@mail.gmail.com>
-Subject: Re: general protection fault in security_inode_getattr
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     syzbot <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com>,
-        andriin@fb.com, Alexei Starovoitov <ast@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>, john.fastabend@gmail.com,
-        kafai@fb.com, KP Singh <kpsingh@chromium.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>, yhs@fb.com,
-        linux-fsdevel@vger.kernel.org,
-        overlayfs <linux-unionfs@vger.kernel.org>
+Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
+ -0700 (PDT)
+Reply-To: li.anable85@gmail.com
+From:   Liliane Abel <k.griest04@gmail.com>
+Date:   Fri, 30 Oct 2020 15:59:34 +0100
+Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Aug 24, 2020 at 11:00 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> On Mon, Aug 24, 2020 at 9:37 PM syzbot
-> <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com> wrote:
-> > syzbot has found a reproducer for the following issue on:
->
-> Looping in fsdevel and OverlayFS maintainers, as this seems to be
-> FS/OverlayFS related...
+Dearest
 
-Hmm, the oopsing code is always something like:
+Greeting my dear, I am Liliane Abel by name, The only daughter of late
+Mr.Benson Abel. My father is one of the top Politician in our country
+and my mother is a farmers and cocoa merchant when they were both
+alive. After the death of my mother, long ago, my father was
+controlling their business until he was poisoned by his business
+associates which he suffered and died.
 
-All code
-========
-   0: 1b fe                sbb    %esi,%edi
-   2: 49 8d 5e 08          lea    0x8(%r14),%rbx
-   6: 48 89 d8              mov    %rbx,%rax
-   9: 48 c1 e8 03          shr    $0x3,%rax
-   d: 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1)
-  12: 74 08                je     0x1c
-  14: 48 89 df              mov    %rbx,%rdi
-  17: e8 bc b4 5b fe        callq  0xfffffffffe5bb4d8
-  1c: 48 8b 1b              mov    (%rbx),%rbx
-  1f: 48 83 c3 68          add    $0x68,%rbx
-  23: 48 89 d8              mov    %rbx,%rax
-  26: 48 c1 e8 03          shr    $0x3,%rax
-  2a:* 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
-  2f: 74 08                je     0x39
-  31: 48 89 df              mov    %rbx,%rdi
-  34: e8 9f b4 5b fe        callq  0xfffffffffe5bb4d8
-  39: 48 8b 1b              mov    (%rbx),%rbx
-  3c: 48 83 c3 0c          add    $0xc,%rbx
-
-
-And that looks (to me) like the unrolled loop in call_int_hook().  I
-don't see how that could be related to overlayfs, though it's
-definitely interesting why it only triggers from
-overlay->vfs_getattr()->security_inode_getattr()...
-
-Thanks,
-Miklos
+Before the death of my father, He told me about (two million five
+hundred thousand united states dollars) which he deposited in the bank
+in Lome-Togo, It was the money he intended to transfer overseas for
+investment before he was poisoned. He also instructed me that I should
+seek for foreign partners in any country of my choice who will assist
+me transfer this money in overseas account where the money will be
+wisely invested.
+I am seeking for your kind assistance in the following ways:  (1) to
+provide a safe bank account into where the money will be transferred
+for investment. (2) To serve as a guardian of this fund since I am a
+girl of 19 years old. (3) To make arrangement for me to come over to
+your country to further my education. This is my reason for writing to
+you. Please if you are willing to assist me I will offer you 25% of
+the total money. Reply if  you are interested
+Best regards.
+Liliane Abel.
