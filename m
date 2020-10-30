@@ -2,83 +2,126 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4F02A08C9
-	for <lists+linux-security-module@lfdr.de>; Fri, 30 Oct 2020 16:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AAE2A0934
+	for <lists+linux-security-module@lfdr.de>; Fri, 30 Oct 2020 16:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgJ3PAi (ORCPT
+        id S1726772AbgJ3PHN (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 30 Oct 2020 11:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        Fri, 30 Oct 2020 11:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726957AbgJ3PAb (ORCPT
+        with ESMTP id S1726642AbgJ3PHN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 30 Oct 2020 11:00:31 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F7DC0613BB
-        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id dn5so6935037edb.10
-        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 07:59:36 -0700 (PDT)
+        Fri, 30 Oct 2020 11:07:13 -0400
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9ECC0613CF
+        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 08:07:12 -0700 (PDT)
+Received: by mail-vk1-xa42.google.com with SMTP id s144so1526450vkb.1
+        for <linux-security-module@vger.kernel.org>; Fri, 30 Oct 2020 08:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
-         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
-         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
-         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
-         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
-         Sb9g==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qezUIHlvY9fFOmo2+xA2K+Ux6IJAtG5C7ju4HZIADck=;
+        b=FDk8YZ+1U0Xp/Ygw40EpV0XeoQqT33eCNWvzOPeOzuhtVGoPz8+inv5IWSqFU5QEQb
+         fbZH8kjd/7GZgBHweJS80LprkSJvRuThB5A2PYwcRJ19ifGSQ+mXOsFOxCp0TrHprMN8
+         Ow0nVKYl2sgjqAIi19jAw5kAX//XFX1+xWk6o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=foMI/QRLhFw4RN335Cg2InVJXMNM+Ty+EsUR3QEyk9pjk2YFmnuUjkGLSGmEQACOh1
-         G/0BU9dxzG5NQa5L35seRTCzQeYCioOkOnwt5iQ4P0rVd52UlOVFAI7Tzp9A0aWHXDb0
-         h0Lt64zItBP7bEPjRgzwQogNN0WQjmFSP5yyg0HEbTVc0P5aOPFVe0VY0zTy3pVJG8jV
-         FDt09gr7j44lhIZ8X5pW13MUOOTTvmCX8jumdgvdTV5l8AhvDzCBD5Aipk1GPaTIeP8A
-         kvl82xJGYnfy6iZemXNO6W57g/OfQwDS0lVFbFKN6XihTvMV8cQ+ysB9t+23VPhsuuQE
-         oWuQ==
-X-Gm-Message-State: AOAM533vQ28Ahz/9Ot8Qnqq4O0iv0wX965V0A++w/tHTro3dkZD/dNK7
-        qYzyq48oXXUQJSV9SOWzfE+mYLiQFgncKZCfK7JG5ZjiYw==
-X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
-X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
- Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qezUIHlvY9fFOmo2+xA2K+Ux6IJAtG5C7ju4HZIADck=;
+        b=bQ6a53HNX/Udu6w/bU4bj8Dcbm1TEb8tWV20JBCoa3JxgA/v1ULPK1w8CUfa7axZTa
+         TnmY+lPKwv0ucg0EIse45BXRWNYpolW3c2R0Gt9m86dEj7l44LcGPdDPG3TR8GXIXCsG
+         7Y7u6esGgDuyHo/JZS/8E+uACI3cKCov9b2/aVFbFuHCq39dL596UFlAHtvbRtIyOg1b
+         rqxjxCK0EtwI9GTSjrvnSAJRQI11NCNRIgkfqKx5PSPzWbmbr6K8urJHQOnd97wauSbx
+         jarMMRF3R0TzhW9IL4P+mLMsf65BSYGYQkNdef/XwvT2plsciEIXRuLm2UCFgs9x2Gr1
+         gMGw==
+X-Gm-Message-State: AOAM533YmMX+V3O9vj7qGnZI4cfPMddafsZl6ZhMfNn7hDxFBC+XoDF+
+        HRp5XCHEQnG16Cci5Aix8UVaJD2l2GaUrg7mgLqtyAW7S5o=
+X-Google-Smtp-Source: ABdhPJw6zBNZsPXoxIh2VrRKYWDLkA+cMVV5G3SLLuH30LfxgNrHG7rsMDRqvHz08mcMwgVJkAuegVhMmIf8qGqUmJE=
+X-Received: by 2002:ac5:c80e:: with SMTP id y14mr7299032vkl.3.1604070430985;
+ Fri, 30 Oct 2020 08:07:10 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
- -0700 (PDT)
-Reply-To: li.anable85@gmail.com
-From:   Liliane Abel <k.griest04@gmail.com>
-Date:   Fri, 30 Oct 2020 15:59:34 +0100
-Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20201021151903.652827-1-salyzyn@android.com> <20201021151903.652827-3-salyzyn@android.com>
+In-Reply-To: <20201021151903.652827-3-salyzyn@android.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Fri, 30 Oct 2020 16:07:00 +0100
+Message-ID: <CAJfpegtMoD85j5namV592sJD23QeUMD=+tq4SvFDqjVxsAszYQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v18 2/4] overlayfs: handle XATTR_NOSECURITY flag
+ for get xattr method
+To:     Mark Salyzyn <salyzyn@android.com>
+Cc:     linux-kernel@vger.kernel.org,
+        kernel-team <kernel-team@android.com>,
+        linux-fsdevel@vger.kernel.org,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Amir Goldstein <amir73il@gmail.com>, linux-doc@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dearest
+On Wed, Oct 21, 2020 at 5:19 PM Mark Salyzyn <salyzyn@android.com> wrote:
+>
+> Because of the overlayfs getxattr recursion, the incoming inode fails
+> to update the selinux sid resulting in avc denials being reported
+> against a target context of u:object_r:unlabeled:s0.
+>
+> Solution is to respond to the XATTR_NOSECURITY flag in get xattr
+> method that calls the __vfs_getxattr handler instead so that the
+> context can be read in, rather than being denied with an -EACCES
+> when vfs_getxattr handler is called.
+>
+> For the use case where access is to be blocked by the security layer.
+>
+> The path then would be security(dentry) ->
+> __vfs_getxattr({dentry...XATTR_NOSECURITY}) ->
+> handler->get({dentry...XATTR_NOSECURITY}) ->
+> __vfs_getxattr({realdentry...XATTR_NOSECURITY}) ->
+> lower_handler->get({realdentry...XATTR_NOSECURITY}) which
+> would report back through the chain data and success as expected,
+> the logging security layer at the top would have the data to
+> determine the access permissions and report back to the logs and
+> the caller that the target context was blocked.
+>
+> For selinux this would solve the cosmetic issue of the selinux log
+> and allow audit2allow to correctly report the rule needed to address
+> the access problem.
+>
+> Check impure, opaque, origin & meta xattr with no sepolicy audit
+> (using __vfs_getxattr) since these operations are internal to
+> overlayfs operations and do not disclose any data.  This became
+> an issue for credential override off since sys_admin would have
+> been required by the caller; whereas would have been inherently
+> present for the creator since it performed the mount.
+>
+> This is a change in operations since we do not check in the new
+> ovl_do_getxattr function if the credential override is off or not.
+> Reasoning is that the sepolicy check is unnecessary overhead,
+> especially since the check can be expensive.
+>
+> Because for override credentials off, this affects _everyone_ that
+> underneath performs private xattr calls without the appropriate
+> sepolicy permissions and sys_admin capability.  Providing blanket
+> support for sys_admin would be bad for all possible callers.
+>
+> For the override credentials on, this will affect only the mounter,
+> should it lack sepolicy permissions. Not considered a security
+> problem since mounting by definition has sys_admin capabilities,
+> but sepolicy contexts would still need to be crafted.
 
-Greeting my dear, I am Liliane Abel by name, The only daughter of late
-Mr.Benson Abel. My father is one of the top Politician in our country
-and my mother is a farmers and cocoa merchant when they were both
-alive. After the death of my mother, long ago, my father was
-controlling their business until he was poisoned by his business
-associates which he suffered and died.
+This would be a problem when unprivileged mounting of overlay is
+introduced.  I'd really like to avoid weakening the current security
+model.
 
-Before the death of my father, He told me about (two million five
-hundred thousand united states dollars) which he deposited in the bank
-in Lome-Togo, It was the money he intended to transfer overseas for
-investment before he was poisoned. He also instructed me that I should
-seek for foreign partners in any country of my choice who will assist
-me transfer this money in overseas account where the money will be
-wisely invested.
-I am seeking for your kind assistance in the following ways:  (1) to
-provide a safe bank account into where the money will be transferred
-for investment. (2) To serve as a guardian of this fund since I am a
-girl of 19 years old. (3) To make arrangement for me to come over to
-your country to further my education. This is my reason for writing to
-you. Please if you are willing to assist me I will offer you 25% of
-the total money. Reply if  you are interested
-Best regards.
-Liliane Abel.
+The big API churn in the 1/4 patch also seems excessive considering
+that this seems to be mostly a cosmetic issue for android.  Am I
+missing something?
+
+Thanks,
+Miklos
