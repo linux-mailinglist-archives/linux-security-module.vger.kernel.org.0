@@ -2,26 +2,26 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3EC2AFA70
-	for <lists+linux-security-module@lfdr.de>; Wed, 11 Nov 2020 22:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB5D2AFA8D
+	for <lists+linux-security-module@lfdr.de>; Wed, 11 Nov 2020 22:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbgKKVew (ORCPT
+        id S1727702AbgKKVfZ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 11 Nov 2020 16:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        Wed, 11 Nov 2020 16:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727095AbgKKVev (ORCPT
+        with ESMTP id S1727122AbgKKVev (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
         Wed, 11 Nov 2020 16:34:51 -0500
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A55C0613D1
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F96C0617A7
         for <linux-security-module@vger.kernel.org>; Wed, 11 Nov 2020 13:34:50 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdKx0gBtzlhGL9;
-        Wed, 11 Nov 2020 22:34:45 +0100 (CET)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdKy1kKxzlhQ42;
+        Wed, 11 Nov 2020 22:34:46 +0100 (CET)
 Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdKw4jtzzlh8T5;
-        Wed, 11 Nov 2020 22:34:44 +0100 (CET)
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdKx6wm5zlh8T4;
+        Wed, 11 Nov 2020 22:34:45 +0100 (CET)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
         "Serge E . Hallyn" <serge@hallyn.com>
@@ -31,51 +31,86 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v1 0/9] Landlock fixes
-Date:   Wed, 11 Nov 2020 22:34:33 +0100
-Message-Id: <20201111213442.434639-1-mic@digikod.net>
+Subject: [PATCH v1 1/9] landlock: Fix memory allocation error handling
+Date:   Wed, 11 Nov 2020 22:34:34 +0100
+Message-Id: <20201111213442.434639-2-mic@digikod.net>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201111213442.434639-1-mic@digikod.net>
+References: <20201111213442.434639-1-mic@digikod.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi,
+Handle memory allocation errors in landlock_create_object() call.  This
+prevent to inadvertently hold an inode.  Also, make get_inode_object()
+more readable.
 
-This patch series fixes some issues and makes the Landlock filesystem
-access-control more consistent and deterministic when stacking multiple
-rulesets.  This is checked by current and new tests.  I also extended
-documentation and example to help users.
+Cc: James Morris <jmorris@namei.org>
+Cc: Jann Horn <jannh@google.com>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ security/landlock/fs.c     | 5 +++++
+ security/landlock/object.c | 5 +++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-This series can be applied on top of
-https://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git/log/?h=landlock_lsm
-
-Regards,
-
-Mickaël Salaün (9):
-  landlock: Fix memory allocation error handling
-  landlock: Cosmetic fixes for filesystem management
-  landlock: Enforce deterministic interleaved path rules
-  landlock: Always intersect access rights
-  landlock: Add extra checks when inserting a rule
-  selftests/landlock: Extend layout1.inherit_superset
-  landlock: Clean up get_ruleset_from_fd()
-  landlock: Add help to enable Landlock as a stacked LSM
-  landlock: Extend documentation about limitations
-
- Documentation/userspace-api/landlock.rst   |  17 +++
- samples/landlock/sandboxer.c               |  21 +++-
- security/landlock/Kconfig                  |   4 +-
- security/landlock/fs.c                     |  67 +++++-----
- security/landlock/object.c                 |   5 +-
- security/landlock/ruleset.c                |  34 ++---
- security/landlock/syscall.c                |  24 ++--
- tools/testing/selftests/landlock/fs_test.c | 140 +++++++++++++++++++--
- 8 files changed, 239 insertions(+), 73 deletions(-)
-
-
-base-commit: 96b3198c4025c11347651700b77e45a686d78553
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index d8c5d19ac2af..b67c821bb40b 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -9,6 +9,7 @@
+ #include <linux/atomic.h>
+ #include <linux/compiler_types.h>
+ #include <linux/dcache.h>
++#include <linux/err.h>
+ #include <linux/fs.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+@@ -98,6 +99,8 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
+ 	 * holding any locks).
+ 	 */
+ 	new_object = landlock_create_object(&landlock_fs_underops, inode);
++	if (IS_ERR(new_object))
++		return new_object;
+ 
+ 	spin_lock(&inode->i_lock);
+ 	object = rcu_dereference_protected(inode_sec->object,
+@@ -145,6 +148,8 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+ 	access_rights |= _LANDLOCK_ACCESS_FS_MASK & ~ruleset->fs_access_mask;
+ 	rule.access = access_rights;
+ 	rule.object = get_inode_object(d_backing_inode(path->dentry));
++	if (IS_ERR(rule.object))
++		return PTR_ERR(rule.object);
+ 	mutex_lock(&ruleset->lock);
+ 	err = landlock_insert_rule(ruleset, &rule, false);
+ 	mutex_unlock(&ruleset->lock);
+diff --git a/security/landlock/object.c b/security/landlock/object.c
+index a71644ee72a7..54ba0327002a 100644
+--- a/security/landlock/object.c
++++ b/security/landlock/object.c
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/bug.h>
+ #include <linux/compiler_types.h>
++#include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/rcupdate.h>
+ #include <linux/refcount.h>
+@@ -23,10 +24,10 @@ struct landlock_object *landlock_create_object(
+ 	struct landlock_object *new_object;
+ 
+ 	if (WARN_ON_ONCE(!underops || !underobj))
+-		return NULL;
++		return ERR_PTR(-ENOENT);
+ 	new_object = kzalloc(sizeof(*new_object), GFP_KERNEL_ACCOUNT);
+ 	if (!new_object)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 	refcount_set(&new_object->usage, 1);
+ 	spin_lock_init(&new_object->lock);
+ 	new_object->underops = underops;
 -- 
 2.29.2
 
