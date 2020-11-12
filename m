@@ -2,252 +2,138 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D3C2B10E9
-	for <lists+linux-security-module@lfdr.de>; Thu, 12 Nov 2020 23:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 892D62B10D9
+	for <lists+linux-security-module@lfdr.de>; Thu, 12 Nov 2020 23:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727745AbgKLWDZ (ORCPT
+        id S1727557AbgKLWCf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 12 Nov 2020 17:03:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727736AbgKLWDX (ORCPT
+        Thu, 12 Nov 2020 17:02:35 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:55396 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727464AbgKLWCd (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 12 Nov 2020 17:03:23 -0500
-Received: from suppilovahvero.lan (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E08D322246;
-        Thu, 12 Nov 2020 22:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605218602;
-        bh=Bi4QfkXjBDOdgaWCQU/fAvGSk3toJ8Fb2yNcpnwhkmI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rKxd7ejfP3R/yz6966PdQivUQMWkwGW/pHpRD4eik1FXaHtKeO7VRtD5h8P5siJvM
-         eoN0TV8IJYY5WOk3/uiugqsrzO78C5aFiJDhnk98BI/JtgjsBeQqoKbFS7rqURmp0X
-         xHDOJ6XDQLF5OIaGrr5UIwqn23J80lK6JrjUDAno=
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     x86@kernel.org, linux-sgx@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-security-module@vger.kernel.org,
-        Andy Lutomirski <luto@kernel.org>, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, asapek@google.com, bp@alien8.de,
-        cedric.xing@intel.com, chenalexchen@google.com,
-        conradparker@google.com, cyhanish@google.com,
-        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
-        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
-        nhorman@redhat.com, npmccallum@redhat.com, puiterwijk@redhat.com,
-        rientjes@google.com, sean.j.christopherson@intel.com,
-        tglx@linutronix.de, yaozhangx@google.com, mikko.ylinen@intel.com
-Subject: [PATCH v41 15/24] x86/sgx: Add SGX_IOC_ENCLAVE_PROVISION
-Date:   Fri, 13 Nov 2020 00:01:26 +0200
-Message-Id: <20201112220135.165028-16-jarkko@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201112220135.165028-1-jarkko@kernel.org>
-References: <20201112220135.165028-1-jarkko@kernel.org>
+        Thu, 12 Nov 2020 17:02:33 -0500
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D983D20C2875;
+        Thu, 12 Nov 2020 14:02:31 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D983D20C2875
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1605218552;
+        bh=Ui0Z5VOxxbDH95DXw+QwzLwhD9FGbOnNfr2u9UFPUWs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=M4vlqCsWFk+Lh0PKybpm0DXA18/IQYNEZP5h+9daCmSuD+MYHjbMKh4IfOE7raUPo
+         Fg6YGjEd+U9W5nRvDtDVAlWOgSD3OMXphj1fZOMY8p41hIuK4pyE6mNqRCh8Z+MeCB
+         Xr787by8OmFEWD6B9B9pGI8skRaa8rfikhCi62S8=
+Subject: Re: [PATCH v5 4/7] IMA: add policy to measure critical data
+To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
+ <20201101222626.6111-5-tusharsu@linux.microsoft.com>
+ <6d835878af2f11c837633510775742e57a1506eb.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <85f392a2-7c81-a744-0bd2-ed97fbc7f66e@linux.microsoft.com>
+Date:   Thu, 12 Nov 2020 14:02:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <6d835878af2f11c837633510775742e57a1506eb.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The whole point of SGX is to create a hardware protected place to do
-“stuff”.  But, before someone is willing to hand the keys to the castle
-over, an enclave must often prove that it is running on an SGX-protected
-processor.  Provisioning enclaves play a key role in providing proof.
 
-There are actually three different enclaves in play in order to make this
-happen:
 
-1. The application enclave.  The familiar one we know and love that runs
-   the actual code that’s doing real work.  There can be many of these on
-   a single system, or even in a single application.
-2. The quoting enclave  (QE).  The QE is mentioned in lots of silly
-   whitepapers, but, for the purposes of kernel enabling, just pretend they
-   do not exist.
-3. The provisioning enclave.  There is typically only one of these
-   enclaves per system.  Provisioning enclaves have access to a special
-   hardware key.
+On 2020-11-06 5:43 a.m., Mimi Zohar wrote:
+> Hi Tushar,
+> 
+> On Sun, 2020-11-01 at 14:26 -0800, Tushar Sugandhi wrote:
+>> System administrators should be able to choose which kernel subsystems
+>> they want to measure the critical data for. To enable that, an IMA policy
+>> option to choose specific kernel subsystems is needed. This policy option
+>> would constrain the measurement of the critical data to the given kernel
+>> subsystems.
+> 
+> Measuring critical data should not be dependent on the source of the
+> critical data.   This patch needs to be split up.  The "data sources"
+> should be move to it's own separate patch.  This patch should be
+> limited to adding the policy code needed for measuring criticial data.
+> Limiting critical data sources should be the last patch in this series.
+> 
+> thanks,
+> 
+> Mimi
+> 
+Thanks Mimi.
 
-   They can use this key to help to generate certificates which serve as
-   proof that enclaves are running on trusted SGX hardware.  These
-   certificates can be passed around without revealing the special key.
+Ok. I will split the patches as you suggested.
+Patch #1 (this patch) will have the policy code needed for measuring
+critical data.
+patch #2 Limiting the critical “data_sources”.
 
-Any user which can create a provisioning enclave can access the
-processor-unique Provisioning Certificate Key which has privacy and
-fingerprinting implications.  Even if a user is permitted to create normal
-application enclaves (via /dev/sgx_enclave), they should not be able to
-create provisioning enclaves.  That means a separate permissions scheme is
-needed to control provisioning enclave privileges.
+*Question 1*
+Since you said patch #2 should be the last patch in this series, do you 
+mean merging patch #2 with the SeLinux patch? (patch 7/7 of this series)
+Or a separate patch before 7/7?
 
-Implement a separate device file (/dev/sgx_provision) which permits
-creating provisioning enclaves.  This device will typically have more
-strict permissions than the plain enclave device.
+*Question 2*
+If I understand it correctly, the following code should be moved from 
+this patch to patch #2. Did I miss anything?
 
-The actual device “driver” is an empty stub.  Open file descriptors for
-this device will represent a token which allows provisioning enclave duty.
-This file descriptor can be passed around and ultimately given as an
-argument to the /dev/sgx_enclave driver ioctl().
+  static const match_table_t policy_tokens = {
+@@ -957,6 +971,7 @@ static const match_table_t policy_tokens = {
+  	{Opt_pcr, "pcr=%s"},
+  	{Opt_template, "template=%s"},
+  	{Opt_keyrings, "keyrings=%s"},
++	{Opt_data_sources, "data_sources=%s"},
+  	{Opt_err, NULL}
+  };
 
-Cc: linux-security-module@vger.kernel.org
-Suggested-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-Changes from v39:
-* Rename /dev/sgx/provision as /dev/sgx_provision.
 
- arch/x86/include/uapi/asm/sgx.h  | 11 ++++++++++
- arch/x86/kernel/cpu/sgx/driver.c | 24 ++++++++++++++++++++-
- arch/x86/kernel/cpu/sgx/driver.h |  2 ++
- arch/x86/kernel/cpu/sgx/ioctl.c  | 37 ++++++++++++++++++++++++++++++++
- 4 files changed, 73 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
-index 66f2d32cb4d7..c32210235bf5 100644
---- a/arch/x86/include/uapi/asm/sgx.h
-+++ b/arch/x86/include/uapi/asm/sgx.h
-@@ -25,6 +25,8 @@ enum sgx_page_flags {
- 	_IOWR(SGX_MAGIC, 0x01, struct sgx_enclave_add_pages)
- #define SGX_IOC_ENCLAVE_INIT \
- 	_IOW(SGX_MAGIC, 0x02, struct sgx_enclave_init)
-+#define SGX_IOC_ENCLAVE_PROVISION \
-+	_IOW(SGX_MAGIC, 0x03, struct sgx_enclave_provision)
- 
- /**
-  * struct sgx_enclave_create - parameter structure for the
-@@ -63,4 +65,13 @@ struct sgx_enclave_init {
- 	__u64 sigstruct;
- };
- 
-+/**
-+ * struct sgx_enclave_provision - parameter structure for the
-+ *				  %SGX_IOC_ENCLAVE_PROVISION ioctl
-+ * @fd:		file handle of /dev/sgx_provision
-+ */
-+struct sgx_enclave_provision {
-+	__u64 fd;
-+};
++		case Opt_data_sources:
++			ima_log_string(ab, "data_sources",
++				       args[0].from);
 +
- #endif /* _UAPI_ASM_X86_SGX_H */
-diff --git a/arch/x86/kernel/cpu/sgx/driver.c b/arch/x86/kernel/cpu/sgx/driver.c
-index ef14abbb67e1..f618a04c4224 100644
---- a/arch/x86/kernel/cpu/sgx/driver.c
-+++ b/arch/x86/kernel/cpu/sgx/driver.c
-@@ -112,6 +112,10 @@ static const struct file_operations sgx_encl_fops = {
- 	.get_unmapped_area	= sgx_get_unmapped_area,
- };
- 
-+const struct file_operations sgx_provision_fops = {
-+	.owner			= THIS_MODULE,
-+};
++			if (entry->data_sources) {
++				result = -EINVAL;
++				break;
++			}
 +
- static struct miscdevice sgx_dev_enclave = {
- 	.minor = MISC_DYNAMIC_MINOR,
- 	.name = "sgx_enclave",
-@@ -119,11 +123,19 @@ static struct miscdevice sgx_dev_enclave = {
- 	.fops = &sgx_encl_fops,
- };
- 
-+static struct miscdevice sgx_dev_provision = {
-+	.minor = MISC_DYNAMIC_MINOR,
-+	.name = "sgx_provision",
-+	.nodename = "sgx_provision",
-+	.fops = &sgx_provision_fops,
-+};
++			entry->data_sources = ima_alloc_rule_opt_list(args);
++			if (IS_ERR(entry->data_sources)) {
++				result = PTR_ERR(entry->data_sources);
++				entry->data_sources = NULL;
++				break;
++			}
 +
- int __init sgx_drv_init(void)
- {
- 	unsigned int eax, ebx, ecx, edx;
- 	u64 attr_mask;
- 	u64 xfrm_mask;
-+	int ret;
- 
- 	if (!cpu_feature_enabled(X86_FEATURE_SGX_LC))
- 		return -ENODEV;
-@@ -147,5 +159,15 @@ int __init sgx_drv_init(void)
- 		sgx_xfrm_reserved_mask = ~xfrm_mask;
- 	}
- 
--	return misc_register(&sgx_dev_enclave);
-+	ret = misc_register(&sgx_dev_enclave);
-+	if (ret)
-+		return ret;
-+
-+	ret = misc_register(&sgx_dev_provision);
-+	if (ret) {
-+		misc_deregister(&sgx_dev_enclave);
-+		return ret;
++			entry->flags |= IMA_DATA_SOURCES;
++			break;
+
++	if (entry->flags & IMA_DATA_SOURCES) {
++		seq_puts(m, "data_sources=");
++		ima_show_rule_opt_list(m, entry->data_sources);
++		seq_puts(m, " ");
 +	}
 +
-+	return 0;
- }
-diff --git a/arch/x86/kernel/cpu/sgx/driver.h b/arch/x86/kernel/cpu/sgx/driver.h
-index 6b0063221659..4eddb4d571ef 100644
---- a/arch/x86/kernel/cpu/sgx/driver.h
-+++ b/arch/x86/kernel/cpu/sgx/driver.h
-@@ -20,6 +20,8 @@ extern u64 sgx_attributes_reserved_mask;
- extern u64 sgx_xfrm_reserved_mask;
- extern u32 sgx_misc_reserved_mask;
- 
-+extern const struct file_operations sgx_provision_fops;
-+
- long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg);
- 
- int sgx_drv_init(void);
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index e036819ea5c1..0ba0e670e2f0 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -569,6 +569,40 @@ static long sgx_ioc_enclave_init(struct sgx_encl *encl, void __user *arg)
- 	return ret;
- }
- 
-+/**
-+ * sgx_ioc_enclave_provision() - handler for %SGX_IOC_ENCLAVE_PROVISION
-+ * @enclave:	an enclave pointer
-+ * @arg:	userspace pointer to a struct sgx_enclave_provision instance
-+ *
-+ * Allow ATTRIBUTE.PROVISION_KEY for an enclave by providing a file handle to
-+ * /dev/sgx_provision.
-+ *
-+ * Return:
-+ * - 0:		Success.
-+ * - -errno:	Otherwise.
-+ */
-+static long sgx_ioc_enclave_provision(struct sgx_encl *encl, void __user *arg)
-+{
-+	struct sgx_enclave_provision params;
-+	struct file *file;
-+
-+	if (copy_from_user(&params, arg, sizeof(params)))
-+		return -EFAULT;
-+
-+	file = fget(params.fd);
-+	if (!file)
-+		return -EINVAL;
-+
-+	if (file->f_op != &sgx_provision_fops) {
-+		fput(file);
-+		return -EINVAL;
-+	}
-+
-+	encl->attributes_mask |= SGX_ATTR_PROVISIONKEY;
-+
-+	fput(file);
-+	return 0;
-+}
- 
- long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- {
-@@ -588,6 +622,9 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	case SGX_IOC_ENCLAVE_INIT:
- 		ret = sgx_ioc_enclave_init(encl, (void __user *)arg);
- 		break;
-+	case SGX_IOC_ENCLAVE_PROVISION:
-+		ret = sgx_ioc_enclave_provision(encl, (void __user *)arg);
-+		break;
- 	default:
- 		ret = -ENOIOCTLCMD;
- 		break;
--- 
-2.27.0
 
+~Tushar
+
+>>
+>> Add a new IMA policy option - "data_sources:=" to the IMA func
+>> CRITICAL_DATA to allow measurement of various kernel subsystems. This
+>> policy option would enable the system administrators to limit the
+>> measurement to the subsystems listed in "data_sources:=", if the
+>> subsystem measures its data by calling ima_measure_critical_data().
+>>
+>> Limit the measurement to the subsystems that are specified in the IMA
+>> policy - CRITICAL_DATA+"data_sources:=". If "data_sources:=" is not
+>> provided with the func CRITICAL_DATA, measure the data from all the
+>> supported kernel subsystems.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
