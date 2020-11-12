@@ -2,204 +2,503 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2982B10BF
-	for <lists+linux-security-module@lfdr.de>; Thu, 12 Nov 2020 22:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54862B10E1
+	for <lists+linux-security-module@lfdr.de>; Thu, 12 Nov 2020 23:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbgKLV5Y (ORCPT
+        id S1727657AbgKLWDA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 12 Nov 2020 16:57:24 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:54722 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727043AbgKLV5Y (ORCPT
+        Thu, 12 Nov 2020 17:03:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51152 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727633AbgKLWC7 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 12 Nov 2020 16:57:24 -0500
-Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CBA5920C2872;
-        Thu, 12 Nov 2020 13:57:22 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CBA5920C2872
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1605218243;
-        bh=PkdjkruNANX8wdTbYPq9U2AHzVXQRRmafd7bWjQQQ9Y=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=pb5+ds9Y1dHnrmNkg9sdbhb7z8gLlGW/fGr6/SoubR2iPOSlWiXvd8Cuj8JRaXBJ+
-         zCz4CA7hkVKQ/Jxg4W1xa03C7v0iARqYKG8lptnRBYBhctzmlh2naTTJrP/2HwfMVd
-         WM5cawaRS7G50Pc3DbXOkRnm7IH9v2F2XoizC3WY=
-Subject: Re: [PATCH v5 3/7] IMA: add hook to measure critical data
-To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, paul@paul-moore.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
- <20201101222626.6111-4-tusharsu@linux.microsoft.com>
- <1f83ec246cb6356c340b379ab00e43f0b5bba0ae.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <25622ca6-359d-fa97-c5e6-e314cba51306@linux.microsoft.com>
-Date:   Thu, 12 Nov 2020 13:57:22 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 12 Nov 2020 17:02:59 -0500
+Received: from suppilovahvero.lan (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 69DA922241;
+        Thu, 12 Nov 2020 22:02:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605218578;
+        bh=yVgndefqtR/1td76lmvXOkKFH5pxkUAaxXl2DA3iKBE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=n5FnTwOYB88mzgBFAEDOnnCeGX+u6WKXcm8DKoa8gQcqS+3wFCXmWT8XdwT9AXTI1
+         Qerq4fV0dhzXNgwNflzs7/hm+7cNHeFboEvTgy/FTzGiEe2zXhFWe3M9TiodDFbNH7
+         fMfeD7MdL0eTCXrAeS2ilIbL/4jCuvu4aE0yDsQ0=
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     x86@kernel.org, linux-sgx@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-security-module@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        andriy.shevchenko@linux.intel.com, asapek@google.com, bp@alien8.de,
+        cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
+        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
+        luto@kernel.org, nhorman@redhat.com, npmccallum@redhat.com,
+        puiterwijk@redhat.com, rientjes@google.com,
+        sean.j.christopherson@intel.com, tglx@linutronix.de,
+        yaozhangx@google.com, mikko.ylinen@intel.com
+Subject: [PATCH v41 11/24] x86/sgx: Add SGX misc driver interface
+Date:   Fri, 13 Nov 2020 00:01:22 +0200
+Message-Id: <20201112220135.165028-12-jarkko@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201112220135.165028-1-jarkko@kernel.org>
+References: <20201112220135.165028-1-jarkko@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1f83ec246cb6356c340b379ab00e43f0b5bba0ae.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Intel(R) SGX is new hardware functionality that can be used by applications
+to set aside private regions of code and data called enclaves. New hardware
+protects enclave code and data from outside access and modification.
 
+Add a driver that presents a device file and ioctl API to build and manage
+enclaves.  Subsequent patches will expend the ioctl()’s functionality.
 
-On 2020-11-06 5:24 a.m., Mimi Zohar wrote:
-> Hi Tushar,
-> 
-> On Sun, 2020-11-01 at 14:26 -0800, Tushar Sugandhi wrote:
->> Currently, IMA does not provide a generic function for kernel subsystems
->> to measure their critical data. Examples of critical data in this context
->> could be kernel in-memory r/o structures, hash of the memory structures,
->> or data that represents a linux kernel subsystem state change. The
->> critical data, if accidentally or maliciously altered, can compromise
->> the integrity of the system.
-> 
-> Start out with what IMA does do (e.g. measures files and more recently
-> buffer data).  Afterwards continue with kernel integrity critical data
-> should also be measured.  Please include a definition of kernel
-> integrity critical data here, as well as in the cover letter.
-> 
-Yes, will do. I will also describe what kernel integrity critical data
-is – by providing a definition, and not by example -  as you suggested.
-(here and in the cover letter)
+Cc: linux-security-module@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Tested-by: Jethro Beekman <jethro@fortanix.com> # v40
+# Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
+# Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+Changes from v40:
+* Do not check !page in sgx_encl_may_map() while iterating.
+* Do not check !vm_private_data in sgx_encl_find(), as the enclave is
+  created at VFS open.
 
->>
->> A generic function provided by IMA to measure critical data would enable
->> various subsystems with easier and faster on-boarding to use IMA
->> infrastructure and would also avoid code duplication.
-> 
-> By definition LSM and IMA hooks are generic with callers in appropriate
-> places in the kernel.   This paragraph is redundant.
-> 
-Sounds good. I will remove this paragraph.
->>
->> Add a new IMA func CRITICAL_DATA and a corresponding IMA hook
->> ima_measure_critical_data() to support measuring critical data for
->> various kernel subsystems.
-> 
-> Instead of using the word "add", it would be more appropriate to use
-> the word "define".   Define a new IMA hook named
-> ima_measure_critical_data to measure kernel integrity critical data.
-> Please also update the Subject line as well.  "ima: define an IMA hook
-> to measure kernel integrity critical data".
-> 
-Sounds good. Will do.
->>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> ---
->>
->> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
->> index 4485d87c0aa5..6e1b11dcba53 100644
->> --- a/security/integrity/ima/ima_main.c
->> +++ b/security/integrity/ima/ima_main.c
->> @@ -921,6 +921,44 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
->>   	fdput(f);
->>   }
->>   
->> +/**
->> + * ima_measure_critical_data - measure kernel subsystem data
->> + * critical to integrity of the kernel
-> 
-> Please change this to "measure kernel integrity critical data".
-> 
-*Question*
-Thanks Mimi. Do you want us just to update the description, or do you
-want us to update the function name too?
+Changes from v39:
+* Rename /dev/sgx/enclave as /dev/sgx_enclave.
+* In the page fault handler, do not check for SGX_ENCL_DEAD. This allows
+  to do forensics to the memory of debug enclaves.
 
-I believe you meant just description, but still want to clarify.
+ arch/x86/kernel/cpu/sgx/Makefile |   2 +
+ arch/x86/kernel/cpu/sgx/driver.c | 112 ++++++++++++++++++++++++
+ arch/x86/kernel/cpu/sgx/driver.h |  16 ++++
+ arch/x86/kernel/cpu/sgx/encl.c   | 146 +++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/sgx/encl.h   |  60 +++++++++++++
+ arch/x86/kernel/cpu/sgx/main.c   |  12 ++-
+ 6 files changed, 347 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/kernel/cpu/sgx/driver.c
+ create mode 100644 arch/x86/kernel/cpu/sgx/driver.h
+ create mode 100644 arch/x86/kernel/cpu/sgx/encl.c
+ create mode 100644 arch/x86/kernel/cpu/sgx/encl.h
 
-ima_measure_kernel_integrity_critical_data() would be too long.
-Maybe ima_measure_integrity_critical_data()?
+diff --git a/arch/x86/kernel/cpu/sgx/Makefile b/arch/x86/kernel/cpu/sgx/Makefile
+index 79510ce01b3b..3fc451120735 100644
+--- a/arch/x86/kernel/cpu/sgx/Makefile
++++ b/arch/x86/kernel/cpu/sgx/Makefile
+@@ -1,2 +1,4 @@
+ obj-y += \
++	driver.o \
++	encl.o \
+ 	main.o
+diff --git a/arch/x86/kernel/cpu/sgx/driver.c b/arch/x86/kernel/cpu/sgx/driver.c
+new file mode 100644
+index 000000000000..248213dea78e
+--- /dev/null
++++ b/arch/x86/kernel/cpu/sgx/driver.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0
++/*  Copyright(c) 2016-20 Intel Corporation. */
++
++#include <linux/acpi.h>
++#include <linux/miscdevice.h>
++#include <linux/mman.h>
++#include <linux/security.h>
++#include <linux/suspend.h>
++#include <asm/traps.h>
++#include "driver.h"
++#include "encl.h"
++
++static int sgx_open(struct inode *inode, struct file *file)
++{
++	struct sgx_encl *encl;
++
++	encl = kzalloc(sizeof(*encl), GFP_KERNEL);
++	if (!encl)
++		return -ENOMEM;
++
++	xa_init(&encl->page_array);
++	mutex_init(&encl->lock);
++
++	file->private_data = encl;
++
++	return 0;
++}
++
++static int sgx_release(struct inode *inode, struct file *file)
++{
++	struct sgx_encl *encl = file->private_data;
++	struct sgx_encl_page *entry;
++	unsigned long index;
++
++	xa_for_each(&encl->page_array, index, entry) {
++		if (entry->epc_page) {
++			sgx_free_epc_page(entry->epc_page);
++			encl->secs_child_cnt--;
++			entry->epc_page = NULL;
++		}
++
++		kfree(entry);
++	}
++
++	xa_destroy(&encl->page_array);
++
++	if (!encl->secs_child_cnt && encl->secs.epc_page) {
++		sgx_free_epc_page(encl->secs.epc_page);
++		encl->secs.epc_page = NULL;
++	}
++
++	/* Detect EPC page leak's. */
++	WARN_ON_ONCE(encl->secs_child_cnt);
++	WARN_ON_ONCE(encl->secs.epc_page);
++
++	kfree(encl);
++	return 0;
++}
++
++static int sgx_mmap(struct file *file, struct vm_area_struct *vma)
++{
++	struct sgx_encl *encl = file->private_data;
++	int ret;
++
++	ret = sgx_encl_may_map(encl, vma->vm_start, vma->vm_end, vma->vm_flags);
++	if (ret)
++		return ret;
++
++	vma->vm_ops = &sgx_vm_ops;
++	vma->vm_flags |= VM_PFNMAP | VM_DONTEXPAND | VM_DONTDUMP | VM_IO;
++	vma->vm_private_data = encl;
++
++	return 0;
++}
++
++static unsigned long sgx_get_unmapped_area(struct file *file,
++					   unsigned long addr,
++					   unsigned long len,
++					   unsigned long pgoff,
++					   unsigned long flags)
++{
++	if ((flags & MAP_TYPE) == MAP_PRIVATE)
++		return -EINVAL;
++
++	if (flags & MAP_FIXED)
++		return addr;
++
++	return current->mm->get_unmapped_area(file, addr, len, pgoff, flags);
++}
++
++static const struct file_operations sgx_encl_fops = {
++	.owner			= THIS_MODULE,
++	.open			= sgx_open,
++	.release		= sgx_release,
++	.mmap			= sgx_mmap,
++	.get_unmapped_area	= sgx_get_unmapped_area,
++};
++
++static struct miscdevice sgx_dev_enclave = {
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "sgx_enclave",
++	.nodename = "sgx_enclave",
++	.fops = &sgx_encl_fops,
++};
++
++int __init sgx_drv_init(void)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_SGX_LC))
++		return -ENODEV;
++
++	return misc_register(&sgx_dev_enclave);
++}
+diff --git a/arch/x86/kernel/cpu/sgx/driver.h b/arch/x86/kernel/cpu/sgx/driver.h
+new file mode 100644
+index 000000000000..cda9c43b7543
+--- /dev/null
++++ b/arch/x86/kernel/cpu/sgx/driver.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ARCH_SGX_DRIVER_H__
++#define __ARCH_SGX_DRIVER_H__
++
++#include <crypto/hash.h>
++#include <linux/kref.h>
++#include <linux/mmu_notifier.h>
++#include <linux/radix-tree.h>
++#include <linux/rwsem.h>
++#include <linux/sched.h>
++#include <linux/workqueue.h>
++#include "sgx.h"
++
++int sgx_drv_init(void);
++
++#endif /* __ARCH_X86_SGX_DRIVER_H__ */
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+new file mode 100644
+index 000000000000..848b17a3a028
+--- /dev/null
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -0,0 +1,146 @@
++// SPDX-License-Identifier: GPL-2.0
++/*  Copyright(c) 2016-20 Intel Corporation. */
++
++#include <linux/lockdep.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/shmem_fs.h>
++#include <linux/suspend.h>
++#include <linux/sched/mm.h>
++#include "arch.h"
++#include "encl.h"
++#include "encls.h"
++#include "sgx.h"
++
++static struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
++						unsigned long addr,
++						unsigned long vm_flags)
++{
++	unsigned long vm_prot_bits = vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
++	struct sgx_encl_page *entry;
++
++	entry = xa_load(&encl->page_array, PFN_DOWN(addr));
++	if (!entry)
++		return ERR_PTR(-EFAULT);
++
++	/*
++	 * Verify that the faulted page has equal or higher build time
++	 * permissions than the VMA permissions (i.e. the subset of {VM_READ,
++	 * VM_WRITE, VM_EXECUTE} in vma->vm_flags).
++	 */
++	if ((entry->vm_max_prot_bits & vm_prot_bits) != vm_prot_bits)
++		return ERR_PTR(-EFAULT);
++
++	/* No page found. */
++	if (!entry->epc_page)
++		return ERR_PTR(-EFAULT);
++
++	/* Entry successfully located. */
++	return entry;
++}
++
++static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
++{
++	unsigned long addr = (unsigned long)vmf->address;
++	struct vm_area_struct *vma = vmf->vma;
++	struct sgx_encl_page *entry;
++	unsigned long phys_addr;
++	struct sgx_encl *encl;
++	vm_fault_t ret;
++
++	encl = vma->vm_private_data;
++
++	mutex_lock(&encl->lock);
++
++	entry = sgx_encl_load_page(encl, addr, vma->vm_flags);
++	if (IS_ERR(entry)) {
++		mutex_unlock(&encl->lock);
++
++		return VM_FAULT_SIGBUS;
++	}
++
++	phys_addr = sgx_get_epc_phys_addr(entry->epc_page);
++
++	ret = vmf_insert_pfn(vma, addr, PFN_DOWN(phys_addr));
++	if (ret != VM_FAULT_NOPAGE) {
++		mutex_unlock(&encl->lock);
++
++		return VM_FAULT_SIGBUS;
++	}
++
++	mutex_unlock(&encl->lock);
++
++	return VM_FAULT_NOPAGE;
++}
++
++/**
++ * sgx_encl_may_map() - Check if a requested VMA mapping is allowed
++ * @encl:		an enclave pointer
++ * @start:		lower bound of the address range, inclusive
++ * @end:		upper bound of the address range, exclusive
++ * @vm_flags:		VMA flags
++ *
++ * Iterate through the enclave pages contained within [@start, @end) to verify
++ * that the permissions requested by a subset of {VM_READ, VM_WRITE, VM_EXEC}
++ * does not contain any permissions that are not contained in the build time
++ * permissions of any of the enclave pages within the given address range.
++ *
++ * An enclave creator must declare the strongest permissions that will be
++ * needed for each enclave page  This ensures that mappings  have the identical
++ * or weaker permissions that the earlier declared permissions.
++ *
++ * Return: 0 on success, -EACCES otherwise
++ */
++int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
++		     unsigned long end, unsigned long vm_flags)
++{
++	unsigned long vm_prot_bits = vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
++	struct sgx_encl_page *page;
++	unsigned long count = 0;
++	int ret = 0;
++
++	XA_STATE(xas, &encl->page_array, PFN_DOWN(start));
++
++	/*
++	 * Disallow READ_IMPLIES_EXEC tasks as their VMA permissions might
++	 * conflict with the enclave page permissions.
++	 */
++	if (current->personality & READ_IMPLIES_EXEC)
++		return -EACCES;
++
++	mutex_lock(&encl->lock);
++	xas_lock(&xas);
++	xas_for_each(&xas, page, PFN_DOWN(end - 1)) {
++		if (~page->vm_max_prot_bits & vm_prot_bits) {
++			ret = -EACCES;
++			break;
++		}
++
++		/* Reschedule on every XA_CHECK_SCHED iteration. */
++		if (!(++count % XA_CHECK_SCHED)) {
++			xas_pause(&xas);
++			xas_unlock(&xas);
++			mutex_unlock(&encl->lock);
++
++			cond_resched();
++
++			mutex_lock(&encl->lock);
++			xas_lock(&xas);
++		}
++	}
++	xas_unlock(&xas);
++	mutex_unlock(&encl->lock);
++
++	return ret;
++}
++
++static int sgx_vma_mprotect(struct vm_area_struct *vma, unsigned long start,
++			    unsigned long end, unsigned long newflags)
++{
++	return sgx_encl_may_map(vma->vm_private_data, start, end, newflags);
++}
++
++const struct vm_operations_struct sgx_vm_ops = {
++	.fault = sgx_vma_fault,
++	.mprotect = sgx_vma_mprotect,
++};
+diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+new file mode 100644
+index 000000000000..b7e02eab5868
+--- /dev/null
++++ b/arch/x86/kernel/cpu/sgx/encl.h
+@@ -0,0 +1,60 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/**
++ * Copyright(c) 2016-20 Intel Corporation.
++ *
++ * Contains the software defined data structures for enclaves.
++ */
++#ifndef _X86_ENCL_H
++#define _X86_ENCL_H
++
++#include <linux/cpumask.h>
++#include <linux/kref.h>
++#include <linux/list.h>
++#include <linux/mm_types.h>
++#include <linux/mmu_notifier.h>
++#include <linux/mutex.h>
++#include <linux/notifier.h>
++#include <linux/srcu.h>
++#include <linux/workqueue.h>
++#include <linux/xarray.h>
++#include "sgx.h"
++
++struct sgx_encl_page {
++	unsigned long desc;
++	unsigned long vm_max_prot_bits;
++	struct sgx_epc_page *epc_page;
++	struct sgx_encl *encl;
++};
++
++struct sgx_encl {
++	unsigned long base;
++	unsigned long size;
++	unsigned int page_cnt;
++	unsigned int secs_child_cnt;
++	struct mutex lock;
++	struct xarray page_array;
++	struct sgx_encl_page secs;
++};
++
++extern const struct vm_operations_struct sgx_vm_ops;
++
++static inline int sgx_encl_find(struct mm_struct *mm, unsigned long addr,
++				struct vm_area_struct **vma)
++{
++	struct vm_area_struct *result;
++	struct sgx_encl *encl;
++
++	result = find_vma(mm, addr);
++	if (!result || result->vm_ops != &sgx_vm_ops || addr < result->vm_start)
++		return -EINVAL;
++
++	encl = result->vm_private_data;
++	*vma = result;
++
++	return 0;
++}
++
++int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
++		     unsigned long end, unsigned long vm_flags);
++
++#endif /* _X86_ENCL_H */
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 2e53afc288a4..38f2e80cc31a 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -9,6 +9,8 @@
+ #include <linux/sched/mm.h>
+ #include <linux/sched/signal.h>
+ #include <linux/slab.h>
++#include "driver.h"
++#include "encl.h"
+ #include "encls.h"
+ 
+ struct sgx_epc_section sgx_epc_sections[SGX_MAX_EPC_SECTIONS];
+@@ -232,9 +234,10 @@ static bool __init sgx_page_cache_init(void)
+ 
+ static void __init sgx_init(void)
+ {
++	int ret;
+ 	int i;
+ 
+-	if (!boot_cpu_has(X86_FEATURE_SGX))
++	if (!cpu_feature_enabled(X86_FEATURE_SGX))
+ 		return;
+ 
+ 	if (!sgx_page_cache_init())
+@@ -243,8 +246,15 @@ static void __init sgx_init(void)
+ 	if (!sgx_page_reclaimer_init())
+ 		goto err_page_cache;
+ 
++	ret = sgx_drv_init();
++	if (ret)
++		goto err_kthread;
++
+ 	return;
+ 
++err_kthread:
++	kthread_stop(ksgxd_tsk);
++
+ err_page_cache:
+ 	for (i = 0; i < sgx_nr_epc_sections; i++) {
+ 		vfree(sgx_epc_sections[i].pages);
+-- 
+2.27.0
 
-Or do you want us to keep the existing ima_measure_critical_data()?
-Could you please let us know?
-
->> + * @event_data_source: name of the data source being measured;
->> + * typically it should be the name of the kernel subsystem that is sending
->> + * the data for measurement
-> 
-> Including "data_source" here isn't quite right.  "data source" should
-> only be added in the first patch which uses it, not here.   When adding
-> it please shorten the field description to "kernel data source".   The
-> longer explanation can be included in the longer function description.
-> 
-*Question*
-Do you mean the parameter @event_data_source should be removed from this
-patch? And then later added in patch 7/7 – where SeLinux uses it?
-
-But ima_measure_critical_data() calls process_buffer_measurement(), and
-p_b_m() accepts it as part of the param @func_data.
-
-What should we pass to p_b_m() @func_data in this patch, if we remove
-@event_data_source from this patch?
-
->> + * @event_name: name of an event from the kernel subsystem that is sending
->> + * the data for measurement
-> 
-> As this is being passed to process_buffer_measurement(), this should be
-> the same or similar to the existing definition.
-> 
-Ok. I will change this to @eventname to be consistemt with p_b_m().
-
->> + * @buf: pointer to buffer containing data to measure
->> + * @buf_len: length of buffer(in bytes)
->> + * @measure_buf_hash: if set to true - will measure hash of the buf,
->> + *                    instead of buf
-> 
->   kernel doc requires a single line.  In this case, please shorten the
-> argument definition to "measure buffer data or buffer data hash".   The
-> details can be included in the longer function description.
-> 
-Sounds good. Will do.
->> + *
->> + * A given kernel subsystem (event_data_source) may send
->> + * data (buf) to be measured when the data or the subsystem state changes.
->> + * The state/data change can be described by event_name.
->> + * Examples of critical data (buf) could be kernel in-memory r/o structures,
->> + * hash of the memory structures, or data that represents subsystem
->> + * state change.
->> + * measure_buf_hash can be used to save space, if the data being measured
->> + * is too large.
->> + * The data (buf) can only be measured, not appraised.
->> + */
-> 
-> Please remove this longer function description, replacing it something
-> more appropriate.  The subsequent patch that introduces the "data
-> source" parameter would expand the description.
-> 
-> thanks,
-> 
-> Mimi
-> 
-*Question*
-Hi Mimi, will do.
-Do you want the data_source to be part of SeLinux patch? (patch 7/7 of
-this series).
-Or a separate patch before it?
-~Tushar
-
->> +void ima_measure_critical_data(const char *event_data_source,
->> +			       const char *event_name,
->> +			       const void *buf, int buf_len,
->> +			       bool measure_buf_hash)
->> +{
->> +	if (!event_name || !event_data_source || !buf || !buf_len) {
->> +		pr_err("Invalid arguments passed to %s().\n", __func__);
->> +		return;
->> +	}
->> +
->> +	process_buffer_measurement(NULL, buf, buf_len, event_name,
->> +				   CRITICAL_DATA, 0, event_data_source,
->> +				   measure_buf_hash);
->> +}
->> +
->>   static int __init init_ima(void)
->>   {
->>   	int error;
