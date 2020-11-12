@@ -2,92 +2,100 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEFB2AFE71
-	for <lists+linux-security-module@lfdr.de>; Thu, 12 Nov 2020 06:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B65F2B0999
+	for <lists+linux-security-module@lfdr.de>; Thu, 12 Nov 2020 17:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729070AbgKLFiM (ORCPT
+        id S1728757AbgKLQLf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 12 Nov 2020 00:38:12 -0500
-Received: from namei.org ([65.99.196.166]:52612 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729185AbgKLFAH (ORCPT
+        Thu, 12 Nov 2020 11:11:35 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2096 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728426AbgKLQLf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 12 Nov 2020 00:00:07 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 0AC4xj4d005412;
-        Thu, 12 Nov 2020 04:59:45 GMT
-Date:   Thu, 12 Nov 2020 15:59:45 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v1 0/9] Landlock fixes
-In-Reply-To: <20201111213442.434639-1-mic@digikod.net>
-Message-ID: <alpine.LRH.2.21.2011121559140.5257@namei.org>
-References: <20201111213442.434639-1-mic@digikod.net>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Thu, 12 Nov 2020 11:11:35 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CX64K1xg2z67Ks4;
+        Fri, 13 Nov 2020 00:09:37 +0800 (CST)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.161)
+ by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Thu, 12 Nov 2020 17:11:33 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH] ima: Set and clear FMODE_CAN_READ in ima_calc_file_hash()
+Date:   Thu, 12 Nov 2020 17:10:05 +0100
+Message-ID: <20201112161005.6192-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.27.GIT
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-1592972126-1605157185=:5257"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.65.161]
+X-ClientProxiedBy: lhreml715-chm.china.huawei.com (10.201.108.66) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Commit a1f9b1c0439db ("integrity/ima: switch to using __kernel_read")
+replaced the __vfs_read() call in integrity_kernel_read() with
+__kernel_read(), a new helper introduced by commit 61a707c543e2a ("fs: add
+a __kernel_read helper").
 
---1665246916-1592972126-1605157185=:5257
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Since the new helper requires that also the FMODE_CAN_READ flag is set in
+file->f_mode, this patch saves the original f_mode and sets the flag if the
+file descriptor has the necessary file operation. Lastly, it restores the
+original f_mode at the end of ima_calc_file_hash().
 
-On Wed, 11 Nov 2020, Mickaël Salaün wrote:
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_crypto.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> Hi,
-> 
-> This patch series fixes some issues and makes the Landlock filesystem
-> access-control more consistent and deterministic when stacking multiple
-> rulesets.  This is checked by current and new tests.  I also extended
-> documentation and example to help users.
-> 
-> This series can be applied on top of
-> https://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git/log/?h=landlock_lsm
-
-Actually, given the number of fixes here, please respin so we get a 
-cleaner initial PR for Linus.
-
-> 
-> Regards,
-> 
-> Mickaël Salaün (9):
->   landlock: Fix memory allocation error handling
->   landlock: Cosmetic fixes for filesystem management
->   landlock: Enforce deterministic interleaved path rules
->   landlock: Always intersect access rights
->   landlock: Add extra checks when inserting a rule
->   selftests/landlock: Extend layout1.inherit_superset
->   landlock: Clean up get_ruleset_from_fd()
->   landlock: Add help to enable Landlock as a stacked LSM
->   landlock: Extend documentation about limitations
-> 
->  Documentation/userspace-api/landlock.rst   |  17 +++
->  samples/landlock/sandboxer.c               |  21 +++-
->  security/landlock/Kconfig                  |   4 +-
->  security/landlock/fs.c                     |  67 +++++-----
->  security/landlock/object.c                 |   5 +-
->  security/landlock/ruleset.c                |  34 ++---
->  security/landlock/syscall.c                |  24 ++--
->  tools/testing/selftests/landlock/fs_test.c | 140 +++++++++++++++++++--
->  8 files changed, 239 insertions(+), 73 deletions(-)
-> 
-> 
-> base-commit: 96b3198c4025c11347651700b77e45a686d78553
-> 
-
+diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+index 21989fa0c107..22ed86a0c964 100644
+--- a/security/integrity/ima/ima_crypto.c
++++ b/security/integrity/ima/ima_crypto.c
+@@ -537,6 +537,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 	loff_t i_size;
+ 	int rc;
+ 	struct file *f = file;
++	fmode_t saved_mode;
+ 	bool new_file_instance = false, modified_mode = false;
+ 
+ 	/*
+@@ -550,7 +551,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 	}
+ 
+ 	/* Open a new file instance in O_RDONLY if we cannot read */
+-	if (!(file->f_mode & FMODE_READ)) {
++	if (!(file->f_mode & FMODE_READ) || !(file->f_mode & FMODE_CAN_READ)) {
+ 		int flags = file->f_flags & ~(O_WRONLY | O_APPEND |
+ 				O_TRUNC | O_CREAT | O_NOCTTY | O_EXCL);
+ 		flags |= O_RDONLY;
+@@ -562,7 +563,10 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 			 */
+ 			pr_info_ratelimited("Unable to reopen file for reading.\n");
+ 			f = file;
++			saved_mode = f->f_mode;
+ 			f->f_mode |= FMODE_READ;
++			if (likely(file->f_op->read || file->f_op->read_iter))
++				f->f_mode |= FMODE_CAN_READ;
+ 			modified_mode = true;
+ 		} else {
+ 			new_file_instance = true;
+@@ -582,7 +586,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 	if (new_file_instance)
+ 		fput(f);
+ 	else if (modified_mode)
+-		f->f_mode &= ~FMODE_READ;
++		f->f_mode = saved_mode;
+ 	return rc;
+ }
+ 
 -- 
-James Morris
-<jmorris@namei.org>
+2.27.GIT
 
---1665246916-1592972126-1605157185=:5257--
