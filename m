@@ -2,179 +2,168 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3A92BAAF2
-	for <lists+linux-security-module@lfdr.de>; Fri, 20 Nov 2020 14:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E412BABE1
+	for <lists+linux-security-module@lfdr.de>; Fri, 20 Nov 2020 15:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727709AbgKTNRP (ORCPT
+        id S1727801AbgKTOaS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 20 Nov 2020 08:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727677AbgKTNRO (ORCPT
+        Fri, 20 Nov 2020 09:30:18 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53254 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727740AbgKTOaR (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 20 Nov 2020 08:17:14 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C47C061A04
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 05:17:14 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id u12so10060045wrt.0
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 05:17:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KobsDfLvvwwoQBJaQpY6EUfIO/NscqTe50uGy1eW/88=;
-        b=XkdruCUCJy0vVXiI0GdwzPsjTOtz+tLforHPSGq48dki799F2HBzUYbMZEaoQGkyz8
-         NyLIqjENSc/9cf89Uo7YA/4fY7/UCK6qyp7hCF1l9+4whOJmqJrj2iOR7teHYo98Eb9i
-         IJ3UiZWpp1zl/QGGMJ3snJvt4i9Q0ShVd9O0s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KobsDfLvvwwoQBJaQpY6EUfIO/NscqTe50uGy1eW/88=;
-        b=IImZA7Zzjb8va7n84Ylc6Zn9WqPEWH7UWs91QK50jHl0bcq3Us3wnGi0D1XGGmt9m/
-         Mopo6izsBf9zlsUcmIu4QzPaxp1cvG5jC8pQDb6yyDTerkvpG/B2BrfPkRg/vLOgbF3X
-         RNk6yiilNwWp4VSQngaergDVwBhuVrNg4/1Xfky04qNDREMg0dgtoLlQx3VBm7KIAk11
-         3EdHGEWZ3arZKngQD7I/Dl19hkyhCo1lunLSusjW2LORR2yefTeQHCXmMcIEVV9VA/s8
-         R/hHlnec6tEgXNLmCeHa1/02jV40S05vEevzNuOJBOnSUKWw3P1IbzlocZFscW6YSJBv
-         Agqw==
-X-Gm-Message-State: AOAM531CTWskHJ5nk3CYkjTouWu84+iYWlZw+syd4Kofu6YuAKBbi8Nf
-        8UTs+eQlhjIqRoKMSzQDp7XH9w==
-X-Google-Smtp-Source: ABdhPJzUiKdrYOVWCnJTxkk/+DH44xU6PKfkwEBAAvSc9pFneQYoKimqm1y1FMfpgOt5H2pwz7MT3A==
-X-Received: by 2002:adf:f246:: with SMTP id b6mr15269927wrp.238.1605878232682;
-        Fri, 20 Nov 2020 05:17:12 -0800 (PST)
-Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
-        by smtp.gmail.com with ESMTPSA id u203sm4260197wme.32.2020.11.20.05.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 05:17:12 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH bpf-next 3/3] bpf: Update LSM selftests for bpf_ima_inode_hash
-Date:   Fri, 20 Nov 2020 13:17:08 +0000
-Message-Id: <20201120131708.3237864-3-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-In-Reply-To: <20201120131708.3237864-1-kpsingh@chromium.org>
-References: <20201120131708.3237864-1-kpsingh@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 20 Nov 2020 09:30:17 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AKE3U9B040412;
+        Fri, 20 Nov 2020 09:30:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=JZPHYx+6W4w8WOG3lRJPtgP3mZ8e+VXBMIW7EBpKJSQ=;
+ b=rDaBKqueYW8UgRgk+ixhhk0btgA1A8TcGdpJvgn6VFAuXA1mvVp+VgATbJ6ZHsrYLPUV
+ n/abyS+USjWjB6XT6OQxj9KaNYW2uVbTS2TPCs0yFDzdFck5U6S1szXvF8zCncdY6TS+
+ CtAwArd2PQy8mJZckd33i+82dXtxvrxhxOufItIY6ZaRRgmbMDPmJT0khYia7hg8Kv0v
+ uInFPC0lKAD+c+D+DMcEhY9GttnM88ndznX+7kmkXYz9igRpdhcjHU7uo6souKoRTEDw
+ peOFNZCk72RJpK9JrQO2Xs7PgVYFpnhV6axa9SME8l8SPCoZD8daADXOhS0k2O7kUpaB jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34xe6b37fb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Nov 2020 09:30:11 -0500
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0AKE3mQu045247;
+        Fri, 20 Nov 2020 09:30:11 -0500
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34xe6b37dc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Nov 2020 09:30:11 -0500
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AKESVLD021127;
+        Fri, 20 Nov 2020 14:30:08 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 34t6ghba1b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Nov 2020 14:30:08 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AKEU6sv44368354
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 Nov 2020 14:30:06 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3414A42049;
+        Fri, 20 Nov 2020 14:30:06 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D55F4204C;
+        Fri, 20 Nov 2020 14:30:03 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.96.125])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 20 Nov 2020 14:30:03 +0000 (GMT)
+Message-ID: <e151e67e0749766c1b501ecc54dbeb0450c0cea2.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 7/8] IMA: add a built-in policy rule for critical
+ data measurement
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Date:   Fri, 20 Nov 2020 09:30:02 -0500
+In-Reply-To: <20201119232611.30114-8-tusharsu@linux.microsoft.com>
+References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
+         <20201119232611.30114-8-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-20_07:2020-11-20,2020-11-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011200096
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: KP Singh <kpsingh@google.com>
+Hi Lakshmi,
 
-- Update the IMA policy before executing the test binary (this is not an
-  override of the policy, just an append that ensures that hashes are
-  calculated on executions).
+On Thu, 2020-11-19 at 15:26 -0800, Tushar Sugandhi wrote:
+> From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> 
+> The IMA hook to measure kernel critical data, namely
+> ima_measure_critical_data(), could be called before a custom IMA policy
+> is loaded.
+> Define a new critical data builtin policy to allow measuring
+> early kernel integrity critical data before a custom IMA policy is
+> loaded.
 
-- Call the bpf_ima_inode_hash in the bprm_committed_creds hook and check
-  if the call succeeded and a hash was calculated.
+Everything needing to be said seems to be included in the second
+sentence.  Does the first sentence add anything?  "Define a new
+critical data builtin policy" makes for a good Subject line.
 
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- tools/testing/selftests/bpf/config            |  3 ++
- .../selftests/bpf/prog_tests/test_lsm.c       | 32 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/lsm.c       |  7 +++-
- 3 files changed, 41 insertions(+), 1 deletion(-)
+> 
+> Add critical data to built-in IMA rules if the kernel command line
+> contains "ima_policy=critical_data".
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 2118e23ac07a..4b5764031368 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -39,3 +39,6 @@ CONFIG_BPF_JIT=y
- CONFIG_BPF_LSM=y
- CONFIG_SECURITY=y
- CONFIG_LIRC=y
-+CONFIG_IMA=y
-+CONFIG_IMA_WRITE_POLICY=y
-+CONFIG_IMA_READ_POLICY=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index 6ab29226c99b..3f5d64adb233 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -52,6 +52,28 @@ int exec_cmd(int *monitored_pid)
- 	return -EINVAL;
- }
- 
-+#define IMA_POLICY "measure func=BPRM_CHECK"
-+
-+/* This does not override the policy, IMA policy updates are
-+ * append only, so this just ensures that "measure func=BPRM_CHECK"
-+ * is in the policy. IMA does not allow us to remove this line once
-+ * it is added.
-+ */
-+static int update_ima_policy(void)
-+{
-+	int fd, ret = 0;
-+
-+	fd = open("/sys/kernel/security/ima/policy", O_WRONLY);
-+	if (fd < 0)
-+		return -errno;
-+
-+	if (write(fd, IMA_POLICY, sizeof(IMA_POLICY)) == -1)
-+		ret = -errno;
-+
-+	close(fd);
-+	return ret;
-+}
-+
- void test_test_lsm(void)
- {
- 	struct lsm *skel = NULL;
-@@ -66,6 +88,10 @@ void test_test_lsm(void)
- 	if (CHECK(err, "attach", "lsm attach failed: %d\n", err))
- 		goto close_prog;
- 
-+	err = update_ima_policy();
-+	if (CHECK(err != 0, "update_ima_policy", "error = %d\n", err))
-+		goto close_prog;
-+
- 	err = exec_cmd(&skel->bss->monitored_pid);
- 	if (CHECK(err < 0, "exec_cmd", "err %d errno %d\n", err, errno))
- 		goto close_prog;
-@@ -83,6 +109,12 @@ void test_test_lsm(void)
- 	CHECK(skel->bss->mprotect_count != 1, "mprotect_count",
- 	      "mprotect_count = %d\n", skel->bss->mprotect_count);
- 
-+	CHECK(skel->data->ima_hash_ret < 0, "ima_hash_ret",
-+	      "ima_hash_ret = %d\n", skel->data->ima_hash_ret);
-+
-+	CHECK(skel->bss->ima_hash == 0, "ima_hash",
-+	      "ima_hash = %lu\n", skel->bss->ima_hash);
-+
- 	syscall(__NR_setdomainname, &buf, -2L);
- 	syscall(__NR_setdomainname, 0, -3L);
- 	syscall(__NR_setdomainname, ~0L, -4L);
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index ff4d343b94b5..b0f9639e4b0a 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -35,6 +35,8 @@ char _license[] SEC("license") = "GPL";
- int monitored_pid = 0;
- int mprotect_count = 0;
- int bprm_count = 0;
-+int ima_hash_ret = -1;
-+u64 ima_hash = 0;
- 
- SEC("lsm/file_mprotect")
- int BPF_PROG(test_int_hook, struct vm_area_struct *vma,
-@@ -65,8 +67,11 @@ int BPF_PROG(test_void_hook, struct linux_binprm *bprm)
- 	__u32 key = 0;
- 	__u64 *value;
- 
--	if (monitored_pid == pid)
-+	if (monitored_pid == pid) {
- 		bprm_count++;
-+		ima_hash_ret = bpf_ima_inode_hash(bprm->file->f_inode,
-+						  &ima_hash, sizeof(ima_hash));
-+	}
- 
- 	bpf_copy_from_user(args, sizeof(args), (void *)bprm->vma->vm_mm->arg_start);
- 	bpf_copy_from_user(args, sizeof(args), (void *)bprm->mm->arg_start);
--- 
-2.29.2.454.gaff20da3a2-goog
+The boot command line parameters are defined in Documentation/admin-
+guide/kernel-parameters.txt.  Please update "ima_policy".
+
+> 
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> ---
+>  security/integrity/ima/ima_policy.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index c9e52dab0638..119604a3efa0 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -206,6 +206,10 @@ static struct ima_rule_entry secure_boot_rules[] __ro_after_init = {
+>  	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED},
+>  };
+> 
+> +static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
+> +	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
+> +};
+> +
+>  /* An array of architecture specific rules */
+>  static struct ima_rule_entry *arch_policy_entry __ro_after_init;
+>  
+> @@ -228,6 +232,7 @@ __setup("ima_tcb", default_measure_policy_setup);
+>  
+>  static bool ima_use_appraise_tcb __initdata;
+>  static bool ima_use_secure_boot __initdata;
+> +static bool ima_use_critical_data __ro_after_init;
+
+Unlike ima_fail_unverifiable_sigs, ima_use_critical_data is only used
+during __init.  Please change "__ro_after_init" to "__initdata".  (The
+critical data policy itself is defined properly as __ro_after_init.)
+
+>  static bool ima_fail_unverifiable_sigs __ro_after_init;
+>  static int __init policy_setup(char *str)
+>  {
+> @@ -242,6 +247,8 @@ static int __init policy_setup(char *str)
+>  			ima_use_appraise_tcb = true;
+>  		else if (strcmp(p, "secure_boot") == 0)
+>  			ima_use_secure_boot = true;
+> +		else if (strcmp(p, "critical_data") == 0)
+> +			ima_use_critical_data = true;
+>  		else if (strcmp(p, "fail_securely") == 0)
+>  			ima_fail_unverifiable_sigs = true;
+>  		else
+> @@ -875,6 +882,11 @@ void __init ima_init_policy(void)
+>  			  ARRAY_SIZE(default_appraise_rules),
+>  			  IMA_DEFAULT_POLICY);
+>  
+> +	if (ima_use_critical_data)
+> +		add_rules(critical_data_rules,
+> +			  ARRAY_SIZE(critical_data_rules),
+> +			  IMA_DEFAULT_POLICY);
+> +
+>  	ima_update_policy_flag();
+>  }
+>  
+
 
