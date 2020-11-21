@@ -2,56 +2,56 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EBC2BBD9C
-	for <lists+linux-security-module@lfdr.de>; Sat, 21 Nov 2020 08:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C792BBDBC
+	for <lists+linux-security-module@lfdr.de>; Sat, 21 Nov 2020 08:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbgKUHA2 (ORCPT
+        id S1727229AbgKUHBh (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 21 Nov 2020 02:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
+        Sat, 21 Nov 2020 02:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726684AbgKUHA1 (ORCPT
+        with ESMTP id S1727164AbgKUHBg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 21 Nov 2020 02:00:27 -0500
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51216C061A4D
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 23:00:27 -0800 (PST)
-Received: by mail-lj1-x244.google.com with SMTP id l10so12433765lji.4
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 23:00:27 -0800 (PST)
+        Sat, 21 Nov 2020 02:01:36 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D1AC061A49
+        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 23:01:35 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id 74so16634157lfo.5
+        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 23:01:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=P7RjcsAj6PX+UJP0fflQn8MvjwEMgqrgy1hcrPo11aE=;
-        b=CqqdXLzD4RSHdi1Ar3pP94BnBGH2/7bkpPzT9SZ3UVxCKNiRlNpe2RQapzql1gIm0T
-         am2xz+0cm1WQPK4hE+ua1jVGF9VC83UFcIaMXQypAw6jE5utgWdZxOUYUFylOjfHEs4k
-         cbp452z2BIJGzCSR/2hAGhsY0QSIsJEbDk4heZBZkmBlDwTtBd/AS/iCd8874yBuTf5T
-         QD+koJXBJ9jZQb3KOZ/bZx4j7vb4L3rrLTabgKItYXXLtwSGDtDG7O0HsRGP6T2iCLK+
-         GNND4eZIvTwEJpJW7cZw1UxpXIjICH63bduH7dU7mXrLoZSkTtgZZS91V8myLILWnfZq
-         nenA==
+        bh=3f33ZbSviSsNDuxIsWsq/8c0yuXyzvCPrqPtP0RGi80=;
+        b=QTrvEtnWrrcbOEs5U2zsXrELZY0joXKYt35ttFIfE3ljFGqVTsE2HaDPetDIzNV0Z+
+         SNm0nIBKP392yJ/12exSP2lHAsN3IW99XL9OvKJShdVvhx6hWk5FMgqMLPmf5TLsXGFG
+         +iHnXGnR267ovUqsrTD7TknzGTTVMN0JBhDcMHYa6hy9vumiKnlHEoByxwYUqFCeOJcH
+         8ci6aX3IWWZAS35E7ZUq2QiVC5E+16bSvaDHHgcz3hRf5R5Sqdh41qyVdf7c65t3ii9K
+         kE9FBm0MLZ2YAKu0t3JfnrIMbZ8lpvjGGU8/1aoQSH1X5Qz/sPTU1Mx00P4k2W69USLS
+         xiIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P7RjcsAj6PX+UJP0fflQn8MvjwEMgqrgy1hcrPo11aE=;
-        b=IhhVo7qbqweQx+lJCZahz7hDNWwhMY3eoAPiypi8S9m5UHe7FxcvKBvoQL4ga0lwFO
-         bQYrBPv2BMFjcXY6fnVbyCvHY4iiglp/mSjCgqRjM0nLs+W1hfJ8Ml/UJ5A58Vh6qLHJ
-         Xb6qpARiQZmtZsgAMoiB83EFwCVMv3ADAlHPUGuGUJNl4PfGL1wM9ETngNIefcYvoWUR
-         drbRKX7khkj60ksvpFJ44jdAZJwMVv3qsNtOMbfA84oOOjR8e8DiVfbvw5NMAf6Enw6E
-         xjDMmZ/lHxJsfOSJqI8aQd8nq7Vcf3l518GRb7tzQQ57xu3WJ7tBlPJnHbGHVWIlK/cn
-         4W2g==
-X-Gm-Message-State: AOAM533qaWKTcxHTmalPR/0nUfyNMAjdXhj+UUCAqVph155OZP9lMDx3
-        U3Mi3eVmjCUMEBaB3KNlAgGdV+4dNqgUM6vEb6n3kw==
-X-Google-Smtp-Source: ABdhPJye0kUCNabvyYI/kru6Sk+gDfuo1c3+OQCYedsONLwptjC7PC4GO6R82FjXNTZ0iHwPOIZ11/4ebb/ZeEYyrjQ=
-X-Received: by 2002:a2e:8891:: with SMTP id k17mr8949700lji.326.1605942025591;
- Fri, 20 Nov 2020 23:00:25 -0800 (PST)
+        bh=3f33ZbSviSsNDuxIsWsq/8c0yuXyzvCPrqPtP0RGi80=;
+        b=qxqu0ys6zxHwssyMC4+09lbnMF1PnvKZwW4WcWNnlFHEZOcAxEko4YeNbEqL+9o5Vr
+         ZStXEQ3oQPW08u/h6KhkMJnNDC5RciQnM33fsB5S0b2EcOsetQ464yH/fAQ1spXdZK6O
+         RGhP8BQMFbpSVI/1MSmNmcs4P2fArfbZRlLFX1VGmpyVL1noy0AN6+e3hqGXUFrrS0y4
+         Zil74MwqLwqumueuYaKIs21FfKk+VLUV7sCen2s0bSLH501QW22GeLBHQyEw3d1+tiHi
+         +Bb/ymWcNXm9r2Rn5vpPnNMZcgHS3bmLaQX7DXBSxBpmHQtJwp7XQ8+BZ/rn5A37jKF0
+         s16Q==
+X-Gm-Message-State: AOAM5333dswJE022wvs7Mw9p2qCsBVhmIH9KW3TMDMs2DEXs+wiEPf1J
+        2uICdAxLTjZlgNsrpteDl0EjsewBr0fkzTajSzC/rQ==
+X-Google-Smtp-Source: ABdhPJyH6REifnL9YUZNnFhyFBr7a5RSsJd6XuGMTDWn4PlB6riGiZRNf+nR+kcYWzMs0Zs7hbAeG+15z4SfiIciuC8=
+X-Received: by 2002:a19:4b48:: with SMTP id y69mr9985268lfa.576.1605942093292;
+ Fri, 20 Nov 2020 23:01:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-9-mic@digikod.net>
-In-Reply-To: <20201112205141.775752-9-mic@digikod.net>
+References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-3-mic@digikod.net>
+In-Reply-To: <20201112205141.775752-3-mic@digikod.net>
 From:   Jann Horn <jannh@google.com>
 Date:   Sat, 21 Nov 2020 08:00:00 +0100
-Message-ID: <CAG48ez28mn2YH65D67sr22Ur25kdNUchDbfuph+0TJ4iPwwvwg@mail.gmail.com>
-Subject: Re: [PATCH v24 08/12] landlock: Add syscall implementations
+Message-ID: <CAG48ez2RE6S7jKQY3iyoNRM5vV67W4S7OwJ0gmNGy+MB8F56vg@mail.gmail.com>
+Subject: Re: [PATCH v24 02/12] landlock: Add ruleset and domain management
 To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
 Cc:     James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
@@ -83,44 +83,51 @@ Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Nov 12, 2020 at 9:52 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+On Thu, Nov 12, 2020 at 9:51 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
 wrote:
-> These 3 system calls are designed to be used by unprivileged processes
-> to sandbox themselves:
-> * landlock_create_ruleset(2): Creates a ruleset and returns its file
->   descriptor.
-> * landlock_add_rule(2): Adds a rule (e.g. file hierarchy access) to a
->   ruleset, identified by the dedicated file descriptor.
-> * landlock_enforce_ruleset_current(2): Enforces a ruleset on the current
->   thread and its future children (similar to seccomp).  This syscall has
->   the same usage restrictions as seccomp(2): the caller must have the
->   no_new_privs attribute set or have CAP_SYS_ADMIN in the current user
->   namespace.
+> A Landlock ruleset is mainly a red-black tree with Landlock rules as
+> nodes.  This enables quick update and lookup to match a requested
+> access, e.g. to a file.  A ruleset is usable through a dedicated file
+> descriptor (cf. following commit implementing syscalls) which enables a
+> process to create and populate a ruleset with new rules.
 >
-> All these syscalls have a "flags" argument (not currently used) to
-> enable extensibility.
+> A domain is a ruleset tied to a set of processes.  This group of rules
+> defines the security policy enforced on these processes and their future
+> children.  A domain can transition to a new domain which is the
+> intersection of all its constraints and those of a ruleset provided by
+> the current process.  This modification only impact the current process.
+> This means that a process can only gain more constraints (i.e. lose
+> accesses) over time.
 >
-> Here are the motivations for these new syscalls:
-> * A sandboxed process may not have access to file systems, including
->   /dev, /sys or /proc, but it should still be able to add more
->   restrictions to itself.
-> * Neither prctl(2) nor seccomp(2) (which was used in a previous version)
->   fit well with the current definition of a Landlock security policy.
->
-> All passed structs (attributes) are checked at build time to ensure that
-> they don't contain holes and that they are aligned the same way for each
-> architecture.
->
-> See the user and kernel documentation for more details (provided by a
-> following commit):
-> * Documentation/userspace-api/landlock.rst
-> * Documentation/security/landlock.rst
->
-> Cc: Arnd Bergmann <arnd@arndb.de>
 > Cc: James Morris <jmorris@namei.org>
 > Cc: Jann Horn <jannh@google.com>
 > Cc: Kees Cook <keescook@chromium.org>
 > Cc: Serge E. Hallyn <serge@hallyn.com>
 > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> ---
+>
+> Changes since v23:
+> * Always intersect access rights.  Following the filesystem change
+>   logic, make ruleset updates more consistent by always intersecting
+>   access rights (boolean AND) instead of combining them (boolean OR) for
+>   the same layer.
 
-Reviewed-by: Jann Horn <jannh@google.com>
+This seems wrong to me. If some software e.g. builds a policy that
+allows it to execute specific libraries and to open input files
+specified on the command line, and the user then specifies a library
+as an input file, this change will make that fail unless the software
+explicitly deduplicates the rules.
+Userspace will be forced to add extra complexity to work around this.
+
+>   This defensive approach could also help avoid user
+>   space to inadvertently allow multiple access rights for the same
+>   object (e.g.  write and execute access on a path hierarchy) instead of
+>   dealing with such inconsistency.  This can happen when there is no
+>   deduplication of objects (e.g. paths and underlying inodes) whereas
+>   they get different access rights with landlock_add_rule(2).
+
+I don't see why that's an issue. If userspace wants to be able to
+access the same object in different ways for different purposes, it
+should be able to do that, no?
+
+I liked the semantics from the previous version.
