@@ -2,180 +2,58 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35522BBB4A
-	for <lists+linux-security-module@lfdr.de>; Sat, 21 Nov 2020 01:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9AA2BBC21
+	for <lists+linux-security-module@lfdr.de>; Sat, 21 Nov 2020 03:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728410AbgKUAvB (ORCPT
+        id S1726636AbgKUCFf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 20 Nov 2020 19:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728305AbgKUAvA (ORCPT
+        Fri, 20 Nov 2020 21:05:35 -0500
+Received: from namei.org ([65.99.196.166]:54684 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726562AbgKUCFf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 20 Nov 2020 19:51:00 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CBDC0613CF
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 16:50:59 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id 1so12151314wme.3
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Nov 2020 16:50:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gNfZ0xa6JKwNNxWqj03/KjB0EjaVfS36YlA9F8Reu1w=;
-        b=j4P5Gesa95dGfyRNG4KWRAmUesbt1qCEz9MZcVyRRZef5a9//bkVESKcmemK1Qa5Mf
-         2EY2QipBVW6g9Ez/hC9CGBFw2H2k2caM6kxJ+wYI4lk8K1y7bvToESGzEOApAKO2P7Lz
-         Ncgxb38t4RITuRIkWHXNj+ySXUuvDplVn5niI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gNfZ0xa6JKwNNxWqj03/KjB0EjaVfS36YlA9F8Reu1w=;
-        b=EC09mSnEAojOvYVk7MU4JO1Wrqr6xFMhhha+uPnvRAnuD1/WobeNo1wLAIxrDxyKjE
-         o2An9e/GIm9cjX1E6M5GZ7QtX2z2XJpc+lmj01ncms51JO3oesbLNxkkqy2LtAB2In+w
-         rQF8di9hDGK/+am80omeJZtYenld/q0fOZw6VluoVnKqnmhMcHXRO4ko1pMk/ixTAoKJ
-         x7PMpw2v1e5vsbS2CM03F8bjzDZroomTvw9KlRpv/5mzF3MYlCNP6jA4N0nIRSDMK2gG
-         C5F8Pja0Dywad1u9kuN2r1ho7IHcuZyD+8faoZvRjyHu6jFS9F+LVRgrRKPpNJHyKYs1
-         HxaA==
-X-Gm-Message-State: AOAM533HYMCLKJVWOVQ6RWK8vahIMWz4PqI1i3vqF5l6jpi4pjH88CV1
-        dXZS4X+0NOAXOaA6hzRrPflPxg==
-X-Google-Smtp-Source: ABdhPJwE901Pq8K1Dg2K7dhF6+5tXg1xc7YKa4Hla328PUHTL3fxH0K1hjO6sPaGQs9wHxvOjssF5Q==
-X-Received: by 2002:a1c:f20e:: with SMTP id s14mr12139150wmc.126.1605919858004;
-        Fri, 20 Nov 2020 16:50:58 -0800 (PST)
-Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
-        by smtp.gmail.com with ESMTPSA id s8sm7133607wrn.33.2020.11.20.16.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 16:50:57 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH bpf-next v2 3/3] bpf: Update LSM selftests for bpf_ima_inode_hash
-Date:   Sat, 21 Nov 2020 00:50:54 +0000
-Message-Id: <20201121005054.3467947-3-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-In-Reply-To: <20201121005054.3467947-1-kpsingh@chromium.org>
-References: <20201121005054.3467947-1-kpsingh@chromium.org>
+        Fri, 20 Nov 2020 21:05:35 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 0AL25Nup018866;
+        Sat, 21 Nov 2020 02:05:23 GMT
+Date:   Sat, 21 Nov 2020 13:05:23 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
+cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com,
+        tyhicks@linux.microsoft.com, sashal@kernel.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Subject: Re: [PATCH v6 8/8] selinux: measure state and hash of the policy
+ using IMA
+In-Reply-To: <20201119232611.30114-9-tusharsu@linux.microsoft.com>
+Message-ID: <alpine.LRH.2.21.2011211301340.18334@namei.org>
+References: <20201119232611.30114-1-tusharsu@linux.microsoft.com> <20201119232611.30114-9-tusharsu@linux.microsoft.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: KP Singh <kpsingh@google.com>
+On Thu, 19 Nov 2020, Tushar Sugandhi wrote:
 
-- Update the IMA policy before executing the test binary (this is not an
-  override of the policy, just an append that ensures that hashes are
-  calculated on executions).
+> an impact on the security guarantees provided by SELinux. Measuring
+> such in-memory data structures through IMA subsystem provides a secure
+> way for a remote attestation service to know the state of the system
+> and also the runtime changes in the state of the system.
 
-- Call the bpf_ima_inode_hash in the bprm_committed_creds hook and check
-  if the call succeeded and a hash was calculated.
+I think we need better clarity on the security model here than just "a 
+secure way...".  Secure how and against what threats?
 
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- tools/testing/selftests/bpf/config            |  3 ++
- .../selftests/bpf/prog_tests/test_lsm.c       | 32 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/lsm.c       |  7 +++-
- 3 files changed, 41 insertions(+), 1 deletion(-)
+This looks to me like configuration assurance, i.e. you just want to know 
+that systems have been configured correctly, not to detect a competent 
+attack. Is that correct?
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 2118e23ac07a..4b5764031368 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -39,3 +39,6 @@ CONFIG_BPF_JIT=y
- CONFIG_BPF_LSM=y
- CONFIG_SECURITY=y
- CONFIG_LIRC=y
-+CONFIG_IMA=y
-+CONFIG_IMA_WRITE_POLICY=y
-+CONFIG_IMA_READ_POLICY=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index 6ab29226c99b..bcb050a296a4 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -52,6 +52,28 @@ int exec_cmd(int *monitored_pid)
- 	return -EINVAL;
- }
- 
-+#define IMA_POLICY "measure func=BPRM_CHECK"
-+
-+/* This does not override the policy, IMA policy updates are
-+ * append only, so this just ensures that "measure func=BPRM_CHECK"
-+ * is in the policy. IMA does not allow us to remove this line once
-+ * it is added.
-+ */
-+static int update_ima_policy(void)
-+{
-+	int fd, ret = 0;
-+
-+	fd = open("/sys/kernel/security/ima/policy", O_WRONLY);
-+	if (fd < 0)
-+		return -errno;
-+
-+	if (write(fd, IMA_POLICY, sizeof(IMA_POLICY)) == -1)
-+		ret = -errno;
-+
-+	close(fd);
-+	return ret;
-+}
-+
- void test_test_lsm(void)
- {
- 	struct lsm *skel = NULL;
-@@ -66,6 +88,10 @@ void test_test_lsm(void)
- 	if (CHECK(err, "attach", "lsm attach failed: %d\n", err))
- 		goto close_prog;
- 
-+	err = update_ima_policy();
-+	if (CHECK(err, "update_ima_policy", "err %d\n", err))
-+		goto close_prog;
-+
- 	err = exec_cmd(&skel->bss->monitored_pid);
- 	if (CHECK(err < 0, "exec_cmd", "err %d errno %d\n", err, errno))
- 		goto close_prog;
-@@ -83,6 +109,12 @@ void test_test_lsm(void)
- 	CHECK(skel->bss->mprotect_count != 1, "mprotect_count",
- 	      "mprotect_count = %d\n", skel->bss->mprotect_count);
- 
-+	CHECK(skel->data->ima_hash_ret < 0, "ima_hash_ret",
-+	      "ima_hash_ret = %ld\n", skel->data->ima_hash_ret);
-+
-+	CHECK(skel->bss->ima_hash == 0, "ima_hash",
-+	      "ima_hash = %lu\n", skel->bss->ima_hash);
-+
- 	syscall(__NR_setdomainname, &buf, -2L);
- 	syscall(__NR_setdomainname, 0, -3L);
- 	syscall(__NR_setdomainname, ~0L, -4L);
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index ff4d343b94b5..5adc193e414d 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -35,6 +35,8 @@ char _license[] SEC("license") = "GPL";
- int monitored_pid = 0;
- int mprotect_count = 0;
- int bprm_count = 0;
-+long ima_hash_ret = -1;
-+u64 ima_hash = 0;
- 
- SEC("lsm/file_mprotect")
- int BPF_PROG(test_int_hook, struct vm_area_struct *vma,
-@@ -65,8 +67,11 @@ int BPF_PROG(test_void_hook, struct linux_binprm *bprm)
- 	__u32 key = 0;
- 	__u64 *value;
- 
--	if (monitored_pid == pid)
-+	if (monitored_pid == pid) {
- 		bprm_count++;
-+		ima_hash_ret = bpf_ima_inode_hash(bprm->file->f_inode,
-+						  &ima_hash, sizeof(ima_hash));
-+	}
- 
- 	bpf_copy_from_user(args, sizeof(args), (void *)bprm->vma->vm_mm->arg_start);
- 	bpf_copy_from_user(args, sizeof(args), (void *)bprm->mm->arg_start);
+
+
 -- 
-2.29.2.454.gaff20da3a2-goog
+James Morris
+<jmorris@namei.org>
 
