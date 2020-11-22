@@ -2,171 +2,69 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661FE2BC98A
-	for <lists+linux-security-module@lfdr.de>; Sun, 22 Nov 2020 22:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F2C2BFB14
+	for <lists+linux-security-module@lfdr.de>; Sun, 22 Nov 2020 22:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbgKVVTK (ORCPT
+        id S1726162AbgKVVxU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 22 Nov 2020 16:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        Sun, 22 Nov 2020 16:53:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbgKVVTK (ORCPT
+        with ESMTP id S1726020AbgKVVxU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 22 Nov 2020 16:19:10 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F29DC061A4A
-        for <linux-security-module@vger.kernel.org>; Sun, 22 Nov 2020 13:19:08 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id r22so6425717edw.6
-        for <linux-security-module@vger.kernel.org>; Sun, 22 Nov 2020 13:19:08 -0800 (PST)
+        Sun, 22 Nov 2020 16:53:20 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BAEC0613CF;
+        Sun, 22 Nov 2020 13:53:18 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id oq3so20605306ejb.7;
+        Sun, 22 Nov 2020 13:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TnYAfYzK9z2CU6n9f6EQEQr3kUIpHz74aN1sscdy0dE=;
-        b=SbzxRegB0eYgWQjrzVNZhGj7xGAuKSyhCYUAI+WyaPpWKWhEN6iqWX+bEcJKbYoB0L
-         e+h2FSiOvFHziiUa44whQFraYTHOU8p50iPMrz8231dDk9fhDLvFKe/Cjby4M/d+4U6r
-         W07v+9gVUkUhjxH3Geo4u+yVOo02UkCH74LdJNvQKI4YCSBilG3kHI2Y62XjETJSZ/uX
-         MlbS32EkSSCU1n+fb8kYyduz0/3kWYDqvMuc0IaCRimx25Yqqx0UR7QjDDjbfQt8oUSD
-         2DZTJmGkdogVeaLOCgp12rxjJJwbqtgcnvKaMV8RD8yIeQUYlTY9lypDDNNSf4zLZOfd
-         JgQQ==
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
+        b=nXyoeLb4XY21hYy+ahTK85f7xZ6LDdhe4prUB8qw5LZcggKO9+QO2OWcgDW9e0sShl
+         6fD7SdA6iVEVQEHrQgqLul2vtKvgUy4B/WY2HSe/JklxChi1pbI7+oCDbP55eu2Q8kTV
+         s9O/ShVnSNwuO0uiDzLPV5IpkGfgWloTQKkG6UCEqpH5gcUgHhTU03epDsGYakO0qu09
+         z3ySM2AOQ6d0ZP8nB6x8rqsmDAZNzzWBiNz/u9cm5nOOXpNA0gTiMSqcnJV1Lx4hQRyX
+         y4MtZ0Q93IHs9m1IE0wNKuDY5rTL4jloPsoRdQbQltjEqzydKAfuFYvR8r9X2L1cmxzN
+         2vDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TnYAfYzK9z2CU6n9f6EQEQr3kUIpHz74aN1sscdy0dE=;
-        b=LgK7FtMQiHR5a9DTCfiAqbgbbP1TXZDQp0kT7qFiREa3wwTt2/mKFWPefk/nYVMiVk
-         SWr2H6Q0ybqf5Swy+I/eRQMDjZFtchtsk9mfrua5us2U8nIqSHp1ogysWmJcaG9zI7mQ
-         iK12SsGQycLQJKESXLVd9+esdKfIbvY/GOmx8EfrWtG12q8whFAxo1t6Ewutib/IHEM0
-         wezkxoy2QLqv3BO5Zvtz3PLidp3YntI8mu0/B2wWAQueunfmMkyjwl0LfmJxaLiOlr25
-         Kh2AkdcdOto3CLLCnxD+3RrNpN74hgXAbOx/KjPydt0k7oBd0xv9V6EvacP+ADrEsByR
-         ahYA==
-X-Gm-Message-State: AOAM531ZgFVAhQpECAnYnb1eIhiijFMfZmPaSiELfR+1xw3TLJePEpgD
-        MAbiXFrbVdg/6n2PnPDquooZMplS1vOHJmVa00bX
-X-Google-Smtp-Source: ABdhPJxWDVFzpcLiB/ip+VH1A679zZkgv5lzs7PTKex+TlERHeuhuyes1CoTwmWTuMvWpYfUdNgQEs+SrGqG31WGjjs=
-X-Received: by 2002:aa7:de01:: with SMTP id h1mr44059484edv.269.1606079946987;
- Sun, 22 Nov 2020 13:19:06 -0800 (PST)
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
+        b=Og+CFYUQkEjZukaY50FGYBvL0Ll3PqV6AlT4lFMsGpiO8KzFFzfHL9yTTkR3DLi63l
+         Wv9JaAJeSYcGL6Vt6eCn3EMAF5Adzqh01o8YAxXf+/CZc+h9gJCvjY4Uw0y2gi7MnQSq
+         EGN/WJyhlpfmHT95qtOYxhRf2G5+SOLS/0zGZZyRtBQnc1CsRAKsCirNr1BLHfiSsK8H
+         zhQX1ae/MzxjUNorgjvylBWaxHv6/9KSte84uL5KibeQpi73j+otexVijlua/cZ/58Nw
+         VFhyqStiEt7TjIW2N6K4vcoDgYxvsBIXhk5T6ybZ3LMbK9dzG79HMN5qRu1j0xMCH4s7
+         QnQA==
+X-Gm-Message-State: AOAM532PkUc/NWgMrFajA/ySWygMl3Ai9vpjaiK9E3AnmwZZirtO4TmO
+        EFDkXSXlXxeYpXCApEA0LDE=
+X-Google-Smtp-Source: ABdhPJyPhWChDMkZLxOKRZERKJgdbi38gVJ/Tr5whuWchPR1LnUsz9NloqO03x7/XiI8LcukHn0cow==
+X-Received: by 2002:a17:906:7e55:: with SMTP id z21mr40757724ejr.154.1606081997456;
+        Sun, 22 Nov 2020 13:53:17 -0800 (PST)
+Received: from [192.168.43.48] ([197.210.35.67])
+        by smtp.gmail.com with ESMTPSA id i19sm3978482ejz.71.2020.11.22.13.53.11
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sun, 22 Nov 2020 13:53:16 -0800 (PST)
+Message-ID: <5fbaddcc.1c69fb81.9b3f2.1044@mx.google.com>
+Sender: Lena Torres <ad482289@gmail.com>
+From:   Adelina Zeuki <anglicaramose@gmail.com>
+X-Google-Original-From: "Adelina Zeuki" <  adelinazeuki@gmail.comm >
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20201115103718.298186-1-christian.brauner@ubuntu.com> <20201115103718.298186-15-christian.brauner@ubuntu.com>
-In-Reply-To: <20201115103718.298186-15-christian.brauner@ubuntu.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sun, 22 Nov 2020 16:18:55 -0500
-Message-ID: <CAHC9VhRqk1WMXyHTsrLcJnpxMPgJs_CxeG2uCaaBGgHqK_jj=g@mail.gmail.com>
-Subject: Re: [PATCH v2 14/39] commoncap: handle idmapped mounts
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jann Horn <jannh@google.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-audit@redhat.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hello !!
+To:     Recipients <adelinazeuki@gmail.comm>
+Date:   Sun, 22 Nov 2020 21:53:05 +0000
+Reply-To: adelinazeuki@gmail.com
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sun, Nov 15, 2020 at 5:39 AM Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
-> When interacting with user namespace and non-user namespace aware
-> filesystem capabilities the vfs will perform various security checks to
-> determine whether or not the filesystem capabilities can be used by the
-> caller (e.g. during exec), or even whether they need to be removed. The
-> main infrastructure for this resides in the capability codepaths but they
-> are called through the LSM security infrastructure even though they are not
-> technically an LSM or optional. This extends the existing security hooks
-> security_inode_removexattr(), security_inode_killpriv(),
-> security_inode_getsecurity() to pass down the mount's user namespace and
-> makes them aware of idmapped mounts.
-> In order to actually get filesystem capabilities from disk the capability
-> infrastructure exposes the get_vfs_caps_from_disk() helper. For user
-> namespace aware filesystem capabilities a root uid is stored alongside the
-> capabilities.
-> In order to determine whether the caller can make use of the filesystem
-> capability or whether it needs to be ignored it is translated according to
-> the superblock's user namespace. If it can be translated to uid 0 according
-> to that id mapping the caller can use the filesystem capabilities stored on
-> disk. If we are accessing the inode that holds the filesystem capabilities
-> through an idmapped mount we need to map the root uid according to the
-> mount's user namespace.
-> Afterwards the checks are identical to non-idmapped mounts. Reading
-> filesystem caps from disk enforces that the root uid associated with the
-> filesystem capability must have a mapping in the superblock's user
-> namespace and that the caller is either in the same user namespace or is a
-> descendant of the superblock's user namespace. For filesystems that are
-> mountable inside user namespace the container can just mount the filesystem
-> and won't usually need to idmap it. If it does create an idmapped mount it
-> can mark it with a user namespace it has created and which is therefore a
-> descendant of the s_user_ns. For filesystems that are not mountable inside
-> user namespaces the descendant rule is trivially true because the s_user_ns
-> will be the initial user namespace.
->
-> If the initial user namespace is passed all operations are a nop so
-> non-idmapped mounts will not see a change in behavior and will also not see
-> any performance impact.
->
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: linux-fsdevel@vger.kernel.org
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Hi dear,
 
-...
-
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 8dba8f0983b5..ddb9213a3e81 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -1944,7 +1944,7 @@ static inline int audit_copy_fcaps(struct audit_names *name,
->         if (!dentry)
->                 return 0;
->
-> -       rc = get_vfs_caps_from_disk(dentry, &caps);
-> +       rc = get_vfs_caps_from_disk(&init_user_ns, dentry, &caps);
->         if (rc)
->                 return rc;
->
-> @@ -2495,7 +2495,8 @@ int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
->         ax->d.next = context->aux;
->         context->aux = (void *)ax;
->
-> -       get_vfs_caps_from_disk(bprm->file->f_path.dentry, &vcaps);
-> +       get_vfs_caps_from_disk(mnt_user_ns(bprm->file->f_path.mnt),
-> +                              bprm->file->f_path.dentry, &vcaps);
-
-As audit currently records information in the context of the
-initial/host namespace I'm guessing we don't want the mnt_user_ns()
-call above; it seems like &init_user_ns would be the right choice
-(similar to audit_copy_fcaps()), yes?
-
->         ax->fcap.permitted = vcaps.permitted;
->         ax->fcap.inheritable = vcaps.inheritable;
-
--- 
-paul moore
-www.paul-moore.com
+Can i talk with you ?
