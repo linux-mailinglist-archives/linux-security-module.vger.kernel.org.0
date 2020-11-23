@@ -2,78 +2,81 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB082C18FC
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Nov 2020 23:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC792C1992
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Nov 2020 00:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733150AbgKWWyN (ORCPT
+        id S1727550AbgKWXrc (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 23 Nov 2020 17:54:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51918 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730934AbgKWWyM (ORCPT
+        Mon, 23 Nov 2020 18:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727520AbgKWXra (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 23 Nov 2020 17:54:12 -0500
-Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B681C206D8;
-        Mon, 23 Nov 2020 22:54:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606172047;
-        bh=+BBk3iGC+2qwwaaHgNAESYMgTGbDRHe2BLTFvkhPgJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c60T0I6eeXT5yKk4DzJfhe8iWPUazZw8AvrvYXspVuviyDYwM53Uysi+mFwsKsGt6
-         5JX3MPZCrapPTBIR+FHqQFJZMCBBkgOenCc1ytNKvkMlu/bo7LN27vg4AEnVzqcRJQ
-         4J7vn8jUr4Iqri/LZ1v4xdXNMQhsXSe3wT9x8904=
-Date:   Tue, 24 Nov 2020 00:54:02 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 052/141] security: keys: Fix fall-through warnings for
- Clang
-Message-ID: <20201123225402.GB19839@kernel.org>
-References: <cover.1605896059.git.gustavoars@kernel.org>
- <412e11590b667712c03c1e4d4c7573fda3a4b1cb.1605896059.git.gustavoars@kernel.org>
+        Mon, 23 Nov 2020 18:47:30 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0260EC061A4E
+        for <linux-security-module@vger.kernel.org>; Mon, 23 Nov 2020 15:47:29 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id i19so25816447ejx.9
+        for <linux-security-module@vger.kernel.org>; Mon, 23 Nov 2020 15:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M2tH0J5FjG3CWEJAM78SzCWVNgxFS8dPSbJZXIrz8eA=;
+        b=bahMHd+33ExZBCoE/oR5FMEwH44L39inSA9W3/K3d6bGAEZkB7v1ob5roD/5eVpdJ0
+         R+d0XQDrBNNwKmyj7FajR++y38fX39bQnAMu70cGakDlYcC/tW05dSTKflWZ2uAoQW9m
+         2xCdSEgInNLrNTxIFKbecjjgDab/K6ZMjJKwyzFIhhQORgKViMZWnZTGdz20711EZ5ci
+         U2ly/ZtfiZq+0PY0skLkv4AYzqD+mof+cpmMKy3FSM3JxLk/gPf8GN2BxGNVXsoFg84t
+         6g1MHkNlmtLw9gyrB0EbPGvW8Ijj9ZPRVocIwgwJMvyatG/WkP6v3iQP7tU7LfrtZ+GZ
+         47zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M2tH0J5FjG3CWEJAM78SzCWVNgxFS8dPSbJZXIrz8eA=;
+        b=KxgX8YH51/wjA5b0Rrvxfva3YxGDMs7g/1p4jqcwonj433xlGM3TN1w+3/hsPV0NRe
+         4WhPxCDswcC8x5VTsVwi1y4lcaVe++qcrDY5+orPgSTTiEwsMTYa1t+3uKbKaEpghYND
+         bzVVEYcyoA7JpDHYpqKJDqnJNFMf6eY9jy2lcdOch0PgelPWcqWqsFjluD+OUdpQTh7I
+         u9M0t+3gHb7jXs48EifZwHJm8TTCRimjtjjgKMRzXVwFl1aUhDYO1JWCxNovE5idP5O1
+         LhKFvLtpixfXH6DaDZ0A/AIgB4bxfXJr16OBdMDtY6v/ExkHSkEM3reOguz6Sr3pszur
+         pr/w==
+X-Gm-Message-State: AOAM531VkJeXc8iLD7TBW+CCqIVUanIxXhUQAJIN+O8gysXc8bPXIeJk
+        pgaz5z5zY7yabbnwM5AhIy2BYecI75fvTFL53mhgdYH7BRKBMRc=
+X-Google-Smtp-Source: ABdhPJz1cUzeMfwEdEEYptfkLKXDQKCaDHJLy6k80ocYA5tN4wZuhgjNHiuJKbzQ6wUqWl7pFgW3ifxoIkY/SNwNlKM=
+X-Received: by 2002:a17:906:46d6:: with SMTP id k22mr1808743ejs.542.1606175248555;
+ Mon, 23 Nov 2020 15:47:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <412e11590b667712c03c1e4d4c7573fda3a4b1cb.1605896059.git.gustavoars@kernel.org>
+References: <160581265397.2575.2287441525647057669.stgit@sifl> <alpine.LRH.2.21.2011201401570.20132@namei.org>
+In-Reply-To: <alpine.LRH.2.21.2011201401570.20132@namei.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 23 Nov 2020 18:47:17 -0500
+Message-ID: <CAHC9VhStm9LXL1cG3ATS0Z=EkJSbZ7GPLWfRwb=ZiQMJc2e8qQ@mail.gmail.com>
+Subject: Re: [PATCH] lsm,selinux: pass flowi_common instead of flowi to the
+ LSM hooks
+To:     James Morris <jmorris@namei.org>
+Cc:     linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        selinux@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Nov 20, 2020 at 12:32:20PM -0600, Gustavo A. R. Silva wrote:
-> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
-> by explicitly adding a break statement instead of letting the code fall
-> through to the next case.
-> 
-> Link: https://github.com/KSPP/linux/issues/115
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  security/keys/process_keys.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/security/keys/process_keys.c b/security/keys/process_keys.c
-> index 1fe8b934f656..e3d79a7b6db6 100644
-> --- a/security/keys/process_keys.c
-> +++ b/security/keys/process_keys.c
-> @@ -783,6 +783,7 @@ key_ref_t lookup_user_key(key_serial_t id, unsigned long lflags,
->  				if (need_perm != KEY_AUTHTOKEN_OVERRIDE &&
->  				    need_perm != KEY_DEFER_PERM_CHECK)
->  					goto invalid_key;
-> +				break;
->  			case 0:
->  				break;
->  			}
-> -- 
-> 2.27.0
-> 
-> 
+On Thu, Nov 19, 2020 at 10:02 PM James Morris <jmorris@namei.org> wrote:
+> On Thu, 19 Nov 2020, Paul Moore wrote:
+> > As pointed out by Herbert in a recent related patch, the LSM hooks do
+> > not have the necessary address family information to use the flowi
+> > struct safely.  As none of the LSMs currently use any of the protocol
+> > specific flowi information, replace the flowi pointers with pointers
+> > to the address family independent flowi_common struct.
+> >
+> > Reported-by: Herbert Xu <herbert@gondor.apana.org.au>
+> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+>
+> Acked-by: James Morris <jamorris@linux.microsoft.com>
 
+Thanks.  Seeing no further comments or objections, and given the
+discussion in the previous draft of the patch, I've gone again and
+merged this into selinux/next.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-/Jarkko
+-- 
+paul moore
+www.paul-moore.com
