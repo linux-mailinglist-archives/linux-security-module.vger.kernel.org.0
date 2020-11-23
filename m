@@ -2,149 +2,98 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF0A2C00CF
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Nov 2020 08:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A272C09EB
+	for <lists+linux-security-module@lfdr.de>; Mon, 23 Nov 2020 14:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbgKWHpM (ORCPT
+        id S1731732AbgKWNOI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 23 Nov 2020 02:45:12 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:33563 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725320AbgKWHpM (ORCPT
+        Mon, 23 Nov 2020 08:14:08 -0500
+Received: from a.mx.secunet.com ([62.96.220.36]:48974 "EHLO a.mx.secunet.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388559AbgKWNOH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 23 Nov 2020 02:45:12 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kh6X5-0007Jl-9M; Mon, 23 Nov 2020 07:45:07 +0000
-Date:   Mon, 23 Nov 2020 08:45:05 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jann Horn <jannh@google.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-audit@redhat.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v2 14/39] commoncap: handle idmapped mounts
-Message-ID: <20201123074505.ds5hpqo5kgyvjksb@wittgenstein>
-References: <20201115103718.298186-1-christian.brauner@ubuntu.com>
- <20201115103718.298186-15-christian.brauner@ubuntu.com>
- <CAHC9VhRqk1WMXyHTsrLcJnpxMPgJs_CxeG2uCaaBGgHqK_jj=g@mail.gmail.com>
+        Mon, 23 Nov 2020 08:14:07 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 52ECD20501;
+        Mon, 23 Nov 2020 14:14:02 +0100 (CET)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HfJRb24I4Lvz; Mon, 23 Nov 2020 14:14:01 +0100 (CET)
+Received: from mail-essen-01.secunet.de (unknown [10.53.40.204])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id D322D20322;
+        Mon, 23 Nov 2020 14:14:01 +0100 (CET)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ mail-essen-01.secunet.de (10.53.40.204) with Microsoft SMTP Server (TLS) id
+ 14.3.487.0; Mon, 23 Nov 2020 14:14:01 +0100
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2044.4; Mon, 23 Nov
+ 2020 14:14:01 +0100
+Received: by gauss2.secunet.de (Postfix, from userid 1000)      id 8E45D3180619;
+ Mon, 23 Nov 2020 07:42:57 +0100 (CET)
+Date:   Mon, 23 Nov 2020 07:42:57 +0100
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Antony Antony <antony.antony@secunet.com>
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        "Antony Antony" <antony@phenome.org>,
+        Stephan Mueller <smueller@chronox.de>
+Subject: Re: [PATCH ipsec-next v5] xfrm: redact SA secret with lockdown
+ confidentiality
+Message-ID: <20201123064257.GF15658@gauss3.secunet.de>
+References: <20201016133352.GA2338@moon.secunet.de>
+ <20201117164723.GA3868@moon.secunet.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhRqk1WMXyHTsrLcJnpxMPgJs_CxeG2uCaaBGgHqK_jj=g@mail.gmail.com>
+In-Reply-To: <20201117164723.GA3868@moon.secunet.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sun, Nov 22, 2020 at 04:18:55PM -0500, Paul Moore wrote:
-> On Sun, Nov 15, 2020 at 5:39 AM Christian Brauner
-> <christian.brauner@ubuntu.com> wrote:
-> > When interacting with user namespace and non-user namespace aware
-> > filesystem capabilities the vfs will perform various security checks to
-> > determine whether or not the filesystem capabilities can be used by the
-> > caller (e.g. during exec), or even whether they need to be removed. The
-> > main infrastructure for this resides in the capability codepaths but they
-> > are called through the LSM security infrastructure even though they are not
-> > technically an LSM or optional. This extends the existing security hooks
-> > security_inode_removexattr(), security_inode_killpriv(),
-> > security_inode_getsecurity() to pass down the mount's user namespace and
-> > makes them aware of idmapped mounts.
-> > In order to actually get filesystem capabilities from disk the capability
-> > infrastructure exposes the get_vfs_caps_from_disk() helper. For user
-> > namespace aware filesystem capabilities a root uid is stored alongside the
-> > capabilities.
-> > In order to determine whether the caller can make use of the filesystem
-> > capability or whether it needs to be ignored it is translated according to
-> > the superblock's user namespace. If it can be translated to uid 0 according
-> > to that id mapping the caller can use the filesystem capabilities stored on
-> > disk. If we are accessing the inode that holds the filesystem capabilities
-> > through an idmapped mount we need to map the root uid according to the
-> > mount's user namespace.
-> > Afterwards the checks are identical to non-idmapped mounts. Reading
-> > filesystem caps from disk enforces that the root uid associated with the
-> > filesystem capability must have a mapping in the superblock's user
-> > namespace and that the caller is either in the same user namespace or is a
-> > descendant of the superblock's user namespace. For filesystems that are
-> > mountable inside user namespace the container can just mount the filesystem
-> > and won't usually need to idmap it. If it does create an idmapped mount it
-> > can mark it with a user namespace it has created and which is therefore a
-> > descendant of the s_user_ns. For filesystems that are not mountable inside
-> > user namespaces the descendant rule is trivially true because the s_user_ns
-> > will be the initial user namespace.
-> >
-> > If the initial user namespace is passed all operations are a nop so
-> > non-idmapped mounts will not see a change in behavior and will also not see
-> > any performance impact.
-> >
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: David Howells <dhowells@redhat.com>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Cc: linux-fsdevel@vger.kernel.org
-> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+On Tue, Nov 17, 2020 at 05:47:23PM +0100, Antony Antony wrote:
+> redact XFRM SA secret in the netlink response to xfrm_get_sa()
+> or dumpall sa.
+> Enable lockdown, confidentiality mode, at boot or at run time.
 > 
-> ...
+> e.g. when enabled:
+> cat /sys/kernel/security/lockdown
+> none integrity [confidentiality]
 > 
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index 8dba8f0983b5..ddb9213a3e81 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -1944,7 +1944,7 @@ static inline int audit_copy_fcaps(struct audit_names *name,
-> >         if (!dentry)
-> >                 return 0;
-> >
-> > -       rc = get_vfs_caps_from_disk(dentry, &caps);
-> > +       rc = get_vfs_caps_from_disk(&init_user_ns, dentry, &caps);
-> >         if (rc)
-> >                 return rc;
-> >
-> > @@ -2495,7 +2495,8 @@ int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
-> >         ax->d.next = context->aux;
-> >         context->aux = (void *)ax;
-> >
-> > -       get_vfs_caps_from_disk(bprm->file->f_path.dentry, &vcaps);
-> > +       get_vfs_caps_from_disk(mnt_user_ns(bprm->file->f_path.mnt),
-> > +                              bprm->file->f_path.dentry, &vcaps);
+> ip xfrm state
+> src 172.16.1.200 dst 172.16.1.100
+> 	proto esp spi 0x00000002 reqid 2 mode tunnel
+> 	replay-window 0
+> 	aead rfc4106(gcm(aes)) 0x0000000000000000000000000000000000000000 96
 > 
-> As audit currently records information in the context of the
-> initial/host namespace I'm guessing we don't want the mnt_user_ns()
-> call above; it seems like &init_user_ns would be the right choice
-> (similar to audit_copy_fcaps()), yes?
+> note: the aead secret is redacted.
+> Redacting secret is also a FIPS 140-2 requirement.
+> 
+> v1->v2
+>  - add size checks before memset calls
+> v2->v3
+>  - replace spaces with tabs for consistency
+> v3->v4
+>  - use kernel lockdown instead of a /proc setting
+> v4->v5
+>  - remove kconfig option
+> 
+> Reviewed-by: Stephan Mueller <smueller@chronox.de>
+> Signed-off-by: Antony Antony <antony.antony@secunet.com>
+> ---
+>  include/linux/security.h |  1 +
+>  net/xfrm/xfrm_user.c     | 74 ++++++++++++++++++++++++++++++++++++----
+>  security/security.c      |  1 +
+>  3 files changed, 69 insertions(+), 7 deletions(-)
 
-Ok, sounds good. It also makes the patchset simpler.
-Note that I'm currently not on the audit mailing list so this is likely
-not going to show up there.
+I'm ok with this and I plan to apply it to ipsec-next if I do not see
+objections from the LSM people.
 
-(Fwiw, I responded to you in your other mail too.)
-
-Christian
