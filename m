@@ -2,174 +2,98 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 433FA2C8834
-	for <lists+linux-security-module@lfdr.de>; Mon, 30 Nov 2020 16:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18F02C8A90
+	for <lists+linux-security-module@lfdr.de>; Mon, 30 Nov 2020 18:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbgK3Phi (ORCPT
+        id S1729287AbgK3RNp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 30 Nov 2020 10:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728159AbgK3Phi (ORCPT
+        Mon, 30 Nov 2020 12:13:45 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44914 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725955AbgK3RNo (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 30 Nov 2020 10:37:38 -0500
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B11C0613D4;
-        Mon, 30 Nov 2020 07:36:57 -0800 (PST)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@breakpoint.cc>)
-        id 1kjlEV-000205-K8; Mon, 30 Nov 2020 16:36:55 +0100
-From:   Florian Westphal <fw@strlen.de>
-To:     <netdev@vger.kernel.org>
-Cc:     mptcp@lists.01.org, linux-security-module@vger.kernel.org,
-        Florian Westphal <fw@strlen.de>
-Subject: [PATCH net-next 3/3] mptcp: emit tcp reset when a join request fails
-Date:   Mon, 30 Nov 2020 16:36:31 +0100
-Message-Id: <20201130153631.21872-4-fw@strlen.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201130153631.21872-1-fw@strlen.de>
-References: <20201130153631.21872-1-fw@strlen.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 30 Nov 2020 12:13:44 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AUH2RHc053140;
+        Mon, 30 Nov 2020 12:11:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=168R89ch6P3dB9j/wazTes6DaxYIGhAQ6T7t5kbp4MQ=;
+ b=qhPwJIYcZXU47BNp07tNDQm9pXD36oQ7FQuBK/VsCUe9YitOoQNmYB9V6MrG2LCgXy6Z
+ 6oZ1l3blyrK5R4Oz54ctrU727UdWY2Udikbi//rtQbJCGaxvn5lOaWKQcqtYrYauO1N7
+ /pmbruqaLjecxziXYE5soua9qf+xw8cuO2r/ku270iDwxd9SHW+zclNXq6KA/DxkMwuQ
+ aLilHCAV0RBbK582tYx0ijCQpaugQfPQLgS8f6KSOlSX7iMcLB5DPvZPTvgFUg/hfM4A
+ fg3xn6fzZqmCuMv5A9LIE0Uwm4tuFiemdNl87rQqjSB6qXVBh7fWp2u8CUhLrsqRawQ2 OQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35549m9c73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Nov 2020 12:11:06 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AUH7q8t030175;
+        Mon, 30 Nov 2020 17:11:04 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 353e6828ej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Nov 2020 17:11:04 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AUHB23Z40698358
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Nov 2020 17:11:02 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EED7AE05A;
+        Mon, 30 Nov 2020 17:11:02 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 37B60AE04D;
+        Mon, 30 Nov 2020 17:11:00 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.59.46])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 30 Nov 2020 17:10:59 +0000 (GMT)
+Message-ID: <855fe20ed05ea1aba21da3c9c05fcb025fc51763.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Don't modify file descriptor mode on the fly
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        torvalds@linux-foundation.org, hch@infradead.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
+        stable@vger.kernel.org
+Date:   Mon, 30 Nov 2020 12:10:59 -0500
+In-Reply-To: <20201126103456.15167-1-roberto.sassu@huawei.com>
+References: <20201126103456.15167-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-30_06:2020-11-30,2020-11-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ phishscore=0 clxscore=1015 mlxscore=0 mlxlogscore=789 lowpriorityscore=0
+ adultscore=0 spamscore=0 impostorscore=0 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011300106
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-RFC 8684 says:
- If the token is unknown or the host wants to refuse subflow establishment
- (for example, due to a limit on the number of subflows it will permit),
- the receiver will send back a reset (RST) signal, analogous to an unknown
- port in TCP, containing an MP_TCPRST option (Section 3.6) with an
- "MPTCP specific error" reason code.
+On Thu, 2020-11-26 at 11:34 +0100, Roberto Sassu wrote:
+> Commit a408e4a86b36b ("ima: open a new file instance if no read
+> permissions") already introduced a second open to measure a file when the
+> original file descriptor does not allow it. However, it didn't remove the
+> existing method of changing the mode of the original file descriptor, which
+> is still necessary if the current process does not have enough privileges
+> to open a new one.
+> 
+> Changing the mode isn't really an option, as the filesystem might need to
+> do preliminary steps to make the read possible. Thus, this patch removes
+> the code and keeps the second open as the only option to measure a file
+> when it is unreadable with the original file descriptor.
+> 
+> Cc: <stable@vger.kernel.org> # 4.20.x: 0014cc04e8ec0 ima: Set file->f_mode
+> Fixes: 2fe5d6def1672 ("ima: integrity appraisal extension")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-mptcp-next doesn't support MP_TCPRST yet, this can be added in another
-change.
+Thanks, Roberto, Christoph.  The patch is now queued in next-integrity.
 
-Signed-off-by: Florian Westphal <fw@strlen.de>
----
- net/mptcp/subflow.c | 47 ++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 36 insertions(+), 11 deletions(-)
-
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index c55b8f176746..5a8005746bc8 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -112,9 +112,14 @@ static int __subflow_init_req(struct request_sock *req, const struct sock *sk_li
- 	return 0;
- }
- 
--static void subflow_init_req(struct request_sock *req,
--			     const struct sock *sk_listener,
--			     struct sk_buff *skb)
-+/* Init mptcp request socket.
-+ *
-+ * Returns an error code if a JOIN has failed and a TCP reset
-+ * should be sent.
-+ */
-+static int subflow_init_req(struct request_sock *req,
-+			    const struct sock *sk_listener,
-+			    struct sk_buff *skb)
- {
- 	struct mptcp_subflow_context *listener = mptcp_subflow_ctx(sk_listener);
- 	struct mptcp_subflow_request_sock *subflow_req = mptcp_subflow_rsk(req);
-@@ -125,7 +130,7 @@ static void subflow_init_req(struct request_sock *req,
- 
- 	ret = __subflow_init_req(req, sk_listener);
- 	if (ret)
--		return;
-+		return 0;
- 
- 	mptcp_get_options(skb, &mp_opt);
- 
-@@ -133,7 +138,7 @@ static void subflow_init_req(struct request_sock *req,
- 		SUBFLOW_REQ_INC_STATS(req, MPTCP_MIB_MPCAPABLEPASSIVE);
- 
- 		if (mp_opt.mp_join)
--			return;
-+			return 0;
- 	} else if (mp_opt.mp_join) {
- 		SUBFLOW_REQ_INC_STATS(req, MPTCP_MIB_JOINSYNRX);
- 	}
-@@ -157,7 +162,7 @@ static void subflow_init_req(struct request_sock *req,
- 			} else {
- 				subflow_req->mp_capable = 1;
- 			}
--			return;
-+			return 0;
- 		}
- 
- 		err = mptcp_token_new_request(req);
-@@ -175,7 +180,11 @@ static void subflow_init_req(struct request_sock *req,
- 		subflow_req->remote_nonce = mp_opt.nonce;
- 		subflow_req->msk = subflow_token_join_request(req, skb);
- 
--		if (unlikely(req->syncookie) && subflow_req->msk) {
-+		/* Can't fall back to TCP in this case. */
-+		if (!subflow_req->msk)
-+			return -EPERM;
-+
-+		if (unlikely(req->syncookie)) {
- 			if (mptcp_can_accept_new_subflow(subflow_req->msk))
- 				subflow_init_req_cookie_join_save(subflow_req, skb);
- 		}
-@@ -183,6 +192,8 @@ static void subflow_init_req(struct request_sock *req,
- 		pr_debug("token=%u, remote_nonce=%u msk=%p", subflow_req->token,
- 			 subflow_req->remote_nonce, subflow_req->msk);
- 	}
-+
-+	return 0;
- }
- 
- int mptcp_subflow_init_cookie_req(struct request_sock *req,
-@@ -234,6 +245,7 @@ static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- 					      struct request_sock *req)
- {
- 	struct dst_entry *dst;
-+	int err;
- 
- 	tcp_rsk(req)->is_mptcp = 1;
- 
-@@ -241,8 +253,14 @@ static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- 	if (!dst)
- 		return NULL;
- 
--	subflow_init_req(req, sk, skb);
--	return dst;
-+	err = subflow_init_req(req, sk, skb);
-+	if (err == 0)
-+		return dst;
-+
-+	dst_release(dst);
-+	if (!req->syncookie)
-+		tcp_request_sock_ops.send_reset(sk, skb);
-+	return NULL;
- }
- 
- #if IS_ENABLED(CONFIG_MPTCP_IPV6)
-@@ -252,6 +270,7 @@ static struct dst_entry *subflow_v6_route_req(const struct sock *sk,
- 					      struct request_sock *req)
- {
- 	struct dst_entry *dst;
-+	int err;
- 
- 	tcp_rsk(req)->is_mptcp = 1;
- 
-@@ -259,8 +278,14 @@ static struct dst_entry *subflow_v6_route_req(const struct sock *sk,
- 	if (!dst)
- 		return NULL;
- 
--	subflow_init_req(req, sk, skb);
--	return dst;
-+	err = subflow_init_req(req, sk, skb);
-+	if (err == 0)
-+		return dst;
-+
-+	dst_release(dst);
-+	if (!req->syncookie)
-+		tcp6_request_sock_ops.send_reset(sk, skb);
-+	return NULL;
- }
- #endif
- 
--- 
-2.26.2
+Mimi
 
