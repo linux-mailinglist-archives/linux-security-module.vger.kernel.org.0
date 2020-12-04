@@ -2,601 +2,193 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BD12CE418
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Dec 2020 01:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130052CE3E6
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Dec 2020 01:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730868AbgLDAKh (ORCPT
+        id S2389485AbgLDAHD (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 3 Dec 2020 19:10:37 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:42817 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726619AbgLDAKg (ORCPT
+        Thu, 3 Dec 2020 19:07:03 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:53776 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbgLDAHD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 3 Dec 2020 19:10:36 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kkyYL-0007ka-VQ; Fri, 04 Dec 2020 00:02:26 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     John Johansen <john.johansen@canonical.com>,
+        Thu, 3 Dec 2020 19:07:03 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B4061lG123363;
+        Fri, 4 Dec 2020 00:06:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2020-01-29; bh=M6YpxecNsswGuGNsYFeS11pXzHFa54HvZeVouPfIfQY=;
+ b=HBfnQBxC4mFr98tz4VwTBw9johloCCEbAGPaZ+Og9sM5zXwJLhT5FsLkPFOR9cInuYeB
+ rp/pYDrztZpKe0dr0P5Ozkj8gJ0GsVvPV8VFEtp+ESDmTIy6aEqIFxEMCO69XemKxnJM
+ RPuH4iB6Yaur/X9N8Qt50zL1KrhTdtZaQcNIRrr0aXet0CVu2dmv1MRm1KxJ5Ug6fYdp
+ AdaqCrHacx8CxSc2Ah8jbjzuSfnG3gfJNTeV/PAZTTZhqKERWqAVVSSPSNBF9mmNl43t
+ JH3XLfZgNqIzTsHeGu+X8O3DD81VgY5pB+SZtzUWLT9+qKHUCU+HmbULl8qcmOHeKeGR rg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 353dyr0vc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 04 Dec 2020 00:06:00 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B3NuDhY118763;
+        Fri, 4 Dec 2020 00:04:00 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 3540f2k2ka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 04 Dec 2020 00:03:59 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B403sjG017376;
+        Fri, 4 Dec 2020 00:03:55 GMT
+Received: from localhost (/10.159.156.169)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 03 Dec 2020 16:03:54 -0800
+From:   Stephen Brennan <stephen.s.brennan@oracle.com>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
         James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
         Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
         Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v4 39/40] tests: extend mount_setattr tests
-Date:   Fri,  4 Dec 2020 00:57:35 +0100
-Message-Id: <20201203235736.3528991-40-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201203235736.3528991-1-christian.brauner@ubuntu.com>
-References: <20201203235736.3528991-1-christian.brauner@ubuntu.com>
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH v2] proc: Allow pid_revalidate() during LOOKUP_RCU
+Date:   Thu,  3 Dec 2020 16:02:12 -0800
+Message-Id: <20201204000212.773032-1-stephen.s.brennan@oracle.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9824 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012030132
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9824 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012030133
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Extend the mount_setattr test-suite to include tests for idmapped
-mounts. Note, the main test-suite ist part of xfstests and is pretty
-huge. These tests here just make sure that the syscalls bits work
-correctly.
+The pid_revalidate() function requires dropping from RCU into REF lookup
+mode. When many threads are resolving paths within /proc in parallel,
+this can result in heavy spinlock contention as each thread tries to
+grab a reference to the /proc dentry lock (and drop it shortly
+thereafter).
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Allow the pid_revalidate() function to execute under LOOKUP_RCU. When
+updates must be made to the inode due to the owning task performing
+setuid(), drop out of RCU and into REF mode. Remove the call to
+security_task_to_inode(), since we can rely on the call from
+proc_pid_make_inode().
+
+Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
 ---
-/* v2 */
-patch introduced
+I'd like to use this patch as an RFC on this approach for reducing spinlock
+contention during many parallel path lookups in the /proc filesystem. The
+contention can be triggered by, for example, running ~100 parallel instances of
+"TZ=/etc/localtime ps -fe >/dev/null" on a 100CPU machine. The %sys utilization
+in such a case reaches around 90%, and profiles show two code paths with high
+utilization:
 
-/* v3 */
-- Christoph Hellwig <hch@lst.de>, Darrick J. Wong <darrick.wong@oracle.com>:
-  - Port main test-suite to xfstests.
+    walk_component
+      lookup_fast
+        unlazy_child
+          legitimize_root
+            __legitimize_path
+              lockref_get_not_dead
 
-/* v4 */
-unchanged
----
- .../mount_setattr/mount_setattr_test.c        | 483 ++++++++++++++++++
- 1 file changed, 483 insertions(+)
+    terminate_walk
+      dput
+        dput
 
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-index 32fdb192629c..17986a0ca1dc 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -108,15 +108,57 @@ struct mount_attr {
- 	__u64 attr_set;
- 	__u64 attr_clr;
- 	__u64 propagation;
-+	__u64 userns_fd;
- };
- #endif
- 
-+#ifndef __NR_open_tree
-+	#if defined __alpha__
-+		#define __NR_open_tree 538
-+	#elif defined _MIPS_SIM
-+		#if _MIPS_SIM == _MIPS_SIM_ABI32	/* o32 */
-+			#define __NR_open_tree 4428
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_NABI32	/* n32 */
-+			#define __NR_open_tree 6428
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
-+			#define __NR_open_tree 5428
-+		#endif
-+	#elif defined __ia64__
-+		#define __NR_open_tree (428 + 1024)
-+	#else
-+		#define __NR_open_tree 428
-+	#endif
-+#endif
-+
-+#ifndef MOUNT_ATTR_IDMAP
-+#define MOUNT_ATTR_IDMAP 0x00100000
-+#endif
-+
- static inline int sys_mount_setattr(int dfd, const char *path, unsigned int flags,
- 				    struct mount_attr *attr, size_t size)
+By applying this patch, %sys utilization falls to around 60% under the same
+workload. Although this particular workload is a bit contrived, we have seen
+some monitoring scripts which produced high %sys time due to this contention.
+
+Changes from v2:
+- Remove get_pid_task_rcu_user() and get_proc_task_rcu(), since they were
+  unnecessary.
+- Remove the call to security_task_to_inode().
+
+ fs/proc/base.c | 47 +++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index ebea9501afb8..833d55a59e20 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1813,12 +1813,28 @@ int pid_getattr(const struct path *path, struct kstat *stat,
+ /*
+  * Set <pid>/... inode ownership (can change due to setuid(), etc.)
+  */
+-void pid_update_inode(struct task_struct *task, struct inode *inode)
++static int do_pid_update_inode(struct task_struct *task, struct inode *inode,
++			       unsigned int flags)
  {
- 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
+-	task_dump_owner(task, inode->i_mode, &inode->i_uid, &inode->i_gid);
++	kuid_t uid;
++	kgid_t gid;
++
++	task_dump_owner(task, inode->i_mode, &uid, &gid);
++	if (uid_eq(uid, inode->i_uid) && gid_eq(gid, inode->i_gid) &&
++			!(inode->i_mode & (S_ISUID | S_ISGID)))
++		return 1;
++	if (flags & LOOKUP_RCU)
++		return -ECHILD;
+ 
++	inode->i_uid = uid;
++	inode->i_gid = gid;
+ 	inode->i_mode &= ~(S_ISUID | S_ISGID);
+-	security_task_to_inode(task, inode);
++	return 1;
++}
++
++void pid_update_inode(struct task_struct *task, struct inode *inode)
++{
++	do_pid_update_inode(task, inode, 0);
  }
  
-+#ifndef OPEN_TREE_CLONE
-+#define OPEN_TREE_CLONE 1
-+#endif
-+
-+#ifndef OPEN_TREE_CLOEXEC
-+#define OPEN_TREE_CLOEXEC O_CLOEXEC
-+#endif
-+
-+#ifndef AT_RECURSIVE
-+#define AT_RECURSIVE 0x8000 /* Apply to the entire subtree */
-+#endif
-+
-+static inline int sys_open_tree(int dfd, const char *filename, unsigned int flags)
-+{
-+	return syscall(__NR_open_tree, dfd, filename, flags);
-+}
-+
- static ssize_t write_nointr(int fd, const void *buf, size_t count)
+ /*
+@@ -1830,19 +1846,22 @@ static int pid_revalidate(struct dentry *dentry, unsigned int flags)
  {
- 	ssize_t ret;
-@@ -938,4 +980,445 @@ TEST_F(mount_setattr, wrong_mount_namespace)
- 	ASSERT_EQ(errno, EINVAL);
+ 	struct inode *inode;
+ 	struct task_struct *task;
++	int rv = 0;
+ 
+-	if (flags & LOOKUP_RCU)
+-		return -ECHILD;
+-
+-	inode = d_inode(dentry);
+-	task = get_proc_task(inode);
+-
+-	if (task) {
+-		pid_update_inode(task, inode);
+-		put_task_struct(task);
+-		return 1;
++	if (flags & LOOKUP_RCU) {
++		inode = d_inode_rcu(dentry);
++		task = pid_task(proc_pid(inode), PIDTYPE_PID);
++		if (task)
++			rv = do_pid_update_inode(task, inode, flags);
++	} else {
++		inode = d_inode(dentry);
++		task = get_proc_task(inode);
++		if (task) {
++			rv = do_pid_update_inode(task, inode, flags);
++			put_task_struct(task);
++		}
+ 	}
+-	return 0;
++	return rv;
  }
  
-+FIXTURE(mount_setattr_idmapped) {
-+};
-+
-+FIXTURE_SETUP(mount_setattr_idmapped)
-+{
-+	int img_fd = -EBADF;
-+
-+	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
-+
-+	ASSERT_EQ(mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0), 0);
-+
-+	(void)umount2("/mnt", MNT_DETACH);
-+	(void)umount2("/tmp", MNT_DETACH);
-+
-+	ASSERT_EQ(mount("testing", "/tmp", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/tmp/B", 0777), 0);
-+	ASSERT_EQ(mknodat(-EBADF, "/tmp/B/b", S_IFREG | 0644, 0), 0);
-+	ASSERT_EQ(chown("/tmp/B/b", 0, 0), 0);
-+
-+	ASSERT_EQ(mount("testing", "/tmp/B", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/tmp/B/BB", 0777), 0);
-+	ASSERT_EQ(mknodat(-EBADF, "/tmp/B/BB/b", S_IFREG | 0644, 0), 0);
-+	ASSERT_EQ(chown("/tmp/B/BB/b", 0, 0), 0);
-+
-+	ASSERT_EQ(mount("testing", "/tmp/B/BB", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mount("testing", "/mnt", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/A", 0777), 0);
-+
-+	ASSERT_EQ(mount("testing", "/mnt/A", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/A/AA", 0777), 0);
-+
-+	ASSERT_EQ(mount("/tmp", "/mnt/A/AA", NULL, MS_BIND | MS_REC, NULL), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/B", 0777), 0);
-+
-+	ASSERT_EQ(mount("testing", "/mnt/B", "ramfs",
-+			MS_NOATIME | MS_NODEV | MS_NOSUID, 0), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/B/BB", 0777), 0);
-+
-+	ASSERT_EQ(mount("testing", "/tmp/B/BB", "devpts",
-+			MS_RELATIME | MS_NOEXEC | MS_RDONLY, 0), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/C", 0777), 0);
-+	ASSERT_EQ(mkdir("/mnt/D", 0777), 0);
-+	img_fd = openat(-EBADF, "/mnt/C/ext4.img", O_CREAT | O_WRONLY, 0600);
-+	ASSERT_GE(img_fd, 0);
-+	ASSERT_EQ(ftruncate(img_fd, 1024 * 2048), 0);
-+	ASSERT_EQ(system("mkfs.ext4 -q /mnt/C/ext4.img"), 0);
-+	ASSERT_EQ(system("mount -o loop -t ext4 /mnt/C/ext4.img /mnt/D/"), 0);
-+	ASSERT_EQ(close(img_fd), 0);
-+}
-+
-+FIXTURE_TEARDOWN(mount_setattr_idmapped)
-+{
-+	(void)umount2("/mnt/A", MNT_DETACH);
-+	(void)umount2("/tmp", MNT_DETACH);
-+}
-+
-+/**
-+ * Validate that negative fd values are rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_negative)
-+{
-+	struct mount_attr attr = {
-+		.attr_set	= MOUNT_ATTR_IDMAP,
-+		.userns_fd	= -EBADF,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	ASSERT_NE(sys_mount_setattr(-1, "/", 0, &attr, sizeof(attr)), 0) {
-+		TH_LOG("failure: created idmapped mount with negative fd");
-+	}
-+}
-+
-+/**
-+ * Validate that excessively large fd values are rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_large)
-+{
-+	struct mount_attr attr = {
-+		.attr_set	= MOUNT_ATTR_IDMAP,
-+		.userns_fd	= INT64_MAX,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	ASSERT_NE(sys_mount_setattr(-1, "/", 0, &attr, sizeof(attr)), 0) {
-+		TH_LOG("failure: created idmapped mount with too large fd value");
-+	}
-+}
-+
-+/**
-+ * Validate that closed fd values are rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_closed)
-+{
-+	int fd;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_GE(close(fd), 0);
-+
-+	attr.userns_fd = fd;
-+	ASSERT_NE(sys_mount_setattr(-1, "/", 0, &attr, sizeof(attr)), 0) {
-+		TH_LOG("failure: created idmapped mount with closed fd");
-+	}
-+}
-+
-+/**
-+ * Validate that the initial user namespace is rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_initial_userns)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC | OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd = open("/proc/1/ns/user", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(errno, EPERM);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+static int map_ids(pid_t pid, unsigned long nsid, unsigned long hostid,
-+		   unsigned long range)
-+{
-+	char map[100], procfile[256];
-+
-+	snprintf(procfile, sizeof(procfile), "/proc/%d/uid_map", pid);
-+	snprintf(map, sizeof(map), "%lu %lu %lu", nsid, hostid, range);
-+	if (write_file(procfile, map, strlen(map)))
-+		return -1;
-+
-+
-+	snprintf(procfile, sizeof(procfile), "/proc/%d/gid_map", pid);
-+	snprintf(map, sizeof(map), "%lu %lu %lu", nsid, hostid, range);
-+	if (write_file(procfile, map, strlen(map)))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+#define __STACK_SIZE (8 * 1024 * 1024)
-+static pid_t do_clone(int (*fn)(void *), void *arg, int flags)
-+{
-+	void *stack;
-+
-+	stack = malloc(__STACK_SIZE);
-+	if (!stack)
-+		return -ENOMEM;
-+
-+#ifdef __ia64__
-+	return __clone2(fn, stack, __STACK_SIZE, flags | SIGCHLD, arg, NULL);
-+#else
-+	return clone(fn, stack + __STACK_SIZE, flags | SIGCHLD, arg, NULL);
-+#endif
-+}
-+
-+static int get_userns_fd_cb(void *data)
-+{
-+	return kill(getpid(), SIGSTOP);
-+}
-+
-+static int wait_for_pid(pid_t pid)
-+{
-+	int status, ret;
-+
-+again:
-+	ret = waitpid(pid, &status, 0);
-+	if (ret == -1) {
-+		if (errno == EINTR)
-+			goto again;
-+
-+		return -1;
-+	}
-+
-+	if (!WIFEXITED(status))
-+		return -1;
-+
-+	return WEXITSTATUS(status);
-+}
-+
-+static int get_userns_fd(unsigned long nsid, unsigned long hostid, unsigned long range)
-+{
-+	int ret;
-+	pid_t pid;
-+	char path[256];
-+
-+	pid = do_clone(get_userns_fd_cb, NULL, CLONE_NEWUSER);
-+	if (pid < 0)
-+		return -errno;
-+
-+	ret = map_ids(pid, nsid, hostid, range);
-+	if (ret < 0)
-+		return ret;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/ns/user", pid);
-+	ret = open(path, O_RDONLY | O_CLOEXEC);
-+	kill(pid, SIGKILL);
-+	wait_for_pid(pid);
-+	return ret;
-+}
-+
-+/**
-+ * Validate that an attached mount in our mount namespace can be idmapped.
-+ * (The kernel enforces that the mount's mount namespace and the caller's mount
-+ *  namespace match.)
-+ */
-+TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that idmapping a mount is rejected if the mount's mount namespace
-+ * and our mount namespace don't match.
-+ * (The kernel enforces that the mount's mount namespace and the caller's mount
-+ *  namespace match.)
-+ */
-+TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr,
-+				    sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that an attached mount in our mount namespace can be idmapped.
-+ */
-+TEST_F(mount_setattr_idmapped, detached_mount_inside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	/* Changing mount properties on a detached mount. */
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "",
-+				    AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that a detached mount not in our mount namespace can be idmapped.
-+ */
-+TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
-+
-+	/* Changing mount properties on a detached mount. */
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "",
-+				    AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that currently changing the idmapping of an idmapped mount fails.
-+ */
-+TEST_F(mount_setattr_idmapped, change_idmapping)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "",
-+				    AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+
-+	/* Change idmapping on a detached mount that is already idmapped. */
-+	attr.userns_fd	= get_userns_fd(0, 20000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+static bool expected_uid_gid(int dfd, const char *path, int flags,
-+			     uid_t expected_uid, gid_t expected_gid)
-+{
-+	int ret;
-+	struct stat st;
-+
-+	ret = fstatat(dfd, path, &st, flags);
-+	if (ret < 0)
-+		return false;
-+
-+	return st.st_uid == expected_uid && st.st_gid == expected_gid;
-+}
-+
-+TEST_F(mount_setattr_idmapped, idmap_mount_tree_invalid)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/BB/b", 0, 0, 0), 0);
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/A",
-+				     AT_RECURSIVE |
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/BB/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(open_tree_fd, "B/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(open_tree_fd, "B/BB/b", 0, 0, 0), 0);
-+}
-+
- TEST_HARNESS_MAIN
+ static inline bool proc_inode_is_dead(struct inode *inode)
 -- 
-2.29.2
+2.25.1
 
