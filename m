@@ -2,101 +2,66 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FA72D1641
-	for <lists+linux-security-module@lfdr.de>; Mon,  7 Dec 2020 17:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E472D172D
+	for <lists+linux-security-module@lfdr.de>; Mon,  7 Dec 2020 18:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727827AbgLGQeo (ORCPT
+        id S1727373AbgLGRJl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 7 Dec 2020 11:34:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36673 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727786AbgLGQen (ORCPT
+        Mon, 7 Dec 2020 12:09:41 -0500
+Received: from verein.lst.de ([213.95.11.211]:42778 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725822AbgLGRJl (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607358797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RE0m3vgq1/OaRAwZjvKOK2ey/mE38mR/q+wtN6wib9s=;
-        b=Qzytzw8vjJDV98dN0C5Eu/5I1z/cNMLl4F+ISK6FIXPx9cHutqMZ6vmbdF9M7HGL0u4MwC
-        kfgiZuUse3Ndn1yiunTqjkFesgchdVEcK6EXinrTYlMzQ9+rRLEVh+ZWZZKSroOjeJgo/N
-        5gEZXpzKezYeozmqp0qAv7CsfykxCjs=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-389-xB9HqcBQP2GXFBLO3A54zA-1; Mon, 07 Dec 2020 11:33:16 -0500
-X-MC-Unique: xB9HqcBQP2GXFBLO3A54zA-1
-Received: by mail-ed1-f69.google.com with SMTP id ca7so6045946edb.12
-        for <linux-security-module@vger.kernel.org>; Mon, 07 Dec 2020 08:33:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RE0m3vgq1/OaRAwZjvKOK2ey/mE38mR/q+wtN6wib9s=;
-        b=mV20PZk1bb0qbLIL05S9l/Uj7KaKwYqAdu/BZ+/uKLjkPfe0E1pH2CRSP7Q1SNaBKe
-         2yvUnU/oE1yIf5OIEpccg2wBWnT2HRX0zmc1Z4bJstek1JmfmB0M6xx2D09SC9iGVZHa
-         NhPyxpzLXI+CPI2jr7kvA7zheHjt4m9m1yBkYK7hgiFDtfcGm/G4twJ/Px4il3zxGEQZ
-         jdJhgmO9klZAuqGQx0lOhzbfQVnNlYoCQRZmhSMzGUOCJ3ltQQVtp+bktRZcoKdraGjI
-         3yD/PmWkV2JXb4ceHTwBuflmJEOz5+rwtXoT7EKAoaj0d0MzuW5k1WSvRxzDjY3WQ+4B
-         gfzA==
-X-Gm-Message-State: AOAM532uW7hZEpqgFaYFlc8by12+bDwCu/L9ibsMEiI+KVvK2LX2qPHr
-        gsJuamfT1rQqEvDtQ+T5neyenw/l26z/agrn3yRANpwugwtkCnv4x5eyGklolB1TO2UmU5JTOMT
-        3utzuoqGZ0G1WuTypdMWpkZFPFiKUfTWv6P/r
-X-Received: by 2002:a50:d74c:: with SMTP id i12mr20512777edj.236.1607358793437;
-        Mon, 07 Dec 2020 08:33:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZo9cLo2B/sr3LytBzOfhCP7NvepbgDDGPqp8OuSqAKVtWfqlfy6nWwFOViRsEnP4mLzJm9A==
-X-Received: by 2002:a50:d74c:: with SMTP id i12mr20512764edj.236.1607358793260;
-        Mon, 07 Dec 2020 08:33:13 -0800 (PST)
-Received: from miu.piliscsaba.redhat.com (catv-86-101-169-67.catv.broadband.hu. [86.101.169.67])
-        by smtp.gmail.com with ESMTPSA id op5sm12801964ejb.43.2020.12.07.08.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 08:33:12 -0800 (PST)
-From:   Miklos Szeredi <mszeredi@redhat.com>
-To:     "Eric W . Biederman" <ebiederm@xmission.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/10] ovl: unprivieged mounts
-Date:   Mon,  7 Dec 2020 17:32:55 +0100
-Message-Id: <20201207163255.564116-11-mszeredi@redhat.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201207163255.564116-1-mszeredi@redhat.com>
-References: <20201207163255.564116-1-mszeredi@redhat.com>
+        Mon, 7 Dec 2020 12:09:41 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 94B8F67373; Mon,  7 Dec 2020 18:08:53 +0100 (CET)
+Date:   Mon, 7 Dec 2020 18:08:53 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v4 04/40] fs: split out functions to hold writers
+Message-ID: <20201207170853.GA13614@lst.de>
+References: <20201203235736.3528991-1-christian.brauner@ubuntu.com> <20201203235736.3528991-5-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mszeredi@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201203235736.3528991-5-christian.brauner@ubuntu.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Enable unprivileged user namespace mounts of overlayfs.  Overlayfs's
-permission model (*) ensures that the mounter itself cannot gain additional
-privileges by the act of creating an overlayfs mount.
+Looks good,
 
-This feature request is coming from the "rootless" container crowd.
-
-(*) Documentation/filesystems/overlayfs.txt#Permission model
-
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
----
- fs/overlayfs/super.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-index 189380b946be..019e6f1834b0 100644
---- a/fs/overlayfs/super.c
-+++ b/fs/overlayfs/super.c
-@@ -2073,6 +2073,7 @@ static struct dentry *ovl_mount(struct file_system_type *fs_type, int flags,
- static struct file_system_type ovl_fs_type = {
- 	.owner		= THIS_MODULE,
- 	.name		= "overlay",
-+	.fs_flags	= FS_USERNS_MOUNT,
- 	.mount		= ovl_mount,
- 	.kill_sb	= kill_anon_super,
- };
--- 
-2.26.2
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>
