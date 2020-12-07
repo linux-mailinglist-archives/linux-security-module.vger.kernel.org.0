@@ -2,63 +2,63 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96802D1651
-	for <lists+linux-security-module@lfdr.de>; Mon,  7 Dec 2020 17:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43EF2D163A
+	for <lists+linux-security-module@lfdr.de>; Mon,  7 Dec 2020 17:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727885AbgLGQfB (ORCPT
+        id S1727805AbgLGQel (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 7 Dec 2020 11:35:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36601 "EHLO
+        Mon, 7 Dec 2020 11:34:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28290 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727704AbgLGQei (ORCPT
+        by vger.kernel.org with ESMTP id S1727783AbgLGQek (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:38 -0500
+        Mon, 7 Dec 2020 11:34:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607358792;
+        s=mimecast20190719; t=1607358794;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WrWD39vQ5236vo/77WTHcclMwYYEe2kMnOzynaA/vIg=;
-        b=WiJfPFuvP82BTfFLYWTgoyT2hsXFJczhgll13eCieVipEmC6ny+An0ekNfoblKbYVTECZZ
-        D5MK2OPrMZpoXxSmd5lW14e9w/UwfCFEIqbWEfOCW/W9buaneMYClx7vsMGBVh4+EFxBM2
-        qQ6llKkMrMGmAxtOLal+TU7V7w3/rJ4=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-573-IGCgKdClPTGEnYt-ViIvZA-1; Mon, 07 Dec 2020 11:33:10 -0500
-X-MC-Unique: IGCgKdClPTGEnYt-ViIvZA-1
-Received: by mail-ed1-f69.google.com with SMTP id l24so5980117edt.16
-        for <linux-security-module@vger.kernel.org>; Mon, 07 Dec 2020 08:33:10 -0800 (PST)
+        bh=q1fH8U2k617dM0XyiEykpCNbr+LOxy6e2jOJ7NB6sW0=;
+        b=T0+2xB3iqqlQO38Ocx5wf702KoWyIEkSaz4NqibfUOM754sLBuAxr27ebjZ3z1VMESArMn
+        gCLgRL4iiNjdh2G59bnuoKgT0IYuQeAnYFCoRhN2f+Gq7pecu0FYToZFRMwtUmc56t7K/1
+        enfN7gory8SOJB40GLEHAmtrGtL50YY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-43-Y_ccCjLIM6ywqbUnY5ktbw-1; Mon, 07 Dec 2020 11:33:12 -0500
+X-MC-Unique: Y_ccCjLIM6ywqbUnY5ktbw-1
+Received: by mail-ed1-f70.google.com with SMTP id cq17so2500395edb.17
+        for <linux-security-module@vger.kernel.org>; Mon, 07 Dec 2020 08:33:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WrWD39vQ5236vo/77WTHcclMwYYEe2kMnOzynaA/vIg=;
-        b=szs41aCQnEvufJUOCPQOdiHihhpFtrX2xPChDaqqHTsxHJE4nCwwVAqNDyUO45WTpb
-         NwO22E0m440JKLg1l0B2y1Qh2fhm5d9s4+COpUJFTadTiUrGU2d8mRPdEt9q3Z0xRxcD
-         C9DaM+ubgJrKq0OvKJ9xjXoDsSJsgDIK8nt69EHPblomtGeKyw0uZjz8cDps68nfKtdF
-         23ZnIUa5yXj0x3h7/kHOtbphdixTvlqUopYbMq2JipNcHj/tBBUGw3o+YI3k039NLczC
-         kV1NTaz5dYQvZJKw9HkIkvAmptkV3xwApsajTzHbGlIite10UZ1MEwxTaVgUUuL81vh/
-         ZvsA==
-X-Gm-Message-State: AOAM533YbDDIB0xvKSK+V1W4HjXSTaoxF3hmRRNxoo9D/izmTLHSfkIq
-        l77cQwlehTezl5rnCRx3ePlXFV8XSP54MmGMgZqEmanusMY3d+fr1SBCuMxzYxE4lZyzUT6QwOL
-        AEQed6LstGY7qO+O9fqgox346NafvRJ/rLQbs
-X-Received: by 2002:a05:6402:b57:: with SMTP id bx23mr20433024edb.191.1607358789300;
-        Mon, 07 Dec 2020 08:33:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyDZ8PBOMTmy7Viq25/DAuAax7RMDShGdfStsG7a9V/Uv4Vpsy2gyL1w0kDb+e0n297b859wQ==
-X-Received: by 2002:a05:6402:b57:: with SMTP id bx23mr20433017edb.191.1607358789148;
-        Mon, 07 Dec 2020 08:33:09 -0800 (PST)
+        bh=q1fH8U2k617dM0XyiEykpCNbr+LOxy6e2jOJ7NB6sW0=;
+        b=GC/z+tjRrjgth0QpfkEBxQugHRpPnkD9PJy16CurcagHlflgmRGu3bD5vB309Szy8y
+         WDq3gRzueyNE3V7UtHyOoCZhzc+z9QFzQ9GpgWsWk7X0pjZdDG+CDp2EAbqdtyJG5fTm
+         QVq9oM2M7W+wbEgtmb2w4mpORW32AV+d58w/vuFLYcqksQFmV2XK9TxCQOPtvg/+vBtr
+         0pXkvTIss/rImaQOsBIiJJ9smkRw+h5/h0lip9OrKE0z58VenGShdi7+aIy39UIN1JTP
+         opCAc9LA4JvAEgNJF/ZJLTzCGpzLkj/1gf7VHQfuMx8JJqboT0a+WTZF6pEd155VEn3n
+         Ihew==
+X-Gm-Message-State: AOAM532krvaMnZwGdDzh7uTq1MEdRrFPYo0ZuF8QlB8OFtWT8yDDeeKf
+        +ypmZNNpY8UY2c6FY2AME+ZJhK51b0Zt+tEvnZShNRO4gDsst66a/LZaal9/RKqX6MctiEngn2h
+        ZwDv9K4qx7B8de2kuHPfltme8+05qOxN1PgjX
+X-Received: by 2002:a17:906:a2d0:: with SMTP id by16mr19156479ejb.207.1607358790895;
+        Mon, 07 Dec 2020 08:33:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJweaIFgMC09TO4pnW1Q9E6ePGnwgJZA2DaWMFT2e+UPWDLsluzpW5Ef28/5k5tUJJKQ0PR7fA==
+X-Received: by 2002:a17:906:a2d0:: with SMTP id by16mr19156470ejb.207.1607358790718;
+        Mon, 07 Dec 2020 08:33:10 -0800 (PST)
 Received: from miu.piliscsaba.redhat.com (catv-86-101-169-67.catv.broadband.hu. [86.101.169.67])
-        by smtp.gmail.com with ESMTPSA id op5sm12801964ejb.43.2020.12.07.08.33.07
+        by smtp.gmail.com with ESMTPSA id op5sm12801964ejb.43.2020.12.07.08.33.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 08:33:08 -0800 (PST)
+        Mon, 07 Dec 2020 08:33:10 -0800 (PST)
 From:   Miklos Szeredi <mszeredi@redhat.com>
 To:     "Eric W . Biederman" <ebiederm@xmission.com>
 Cc:     linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 07/10] ovl: do not fail when setting origin xattr
-Date:   Mon,  7 Dec 2020 17:32:52 +0100
-Message-Id: <20201207163255.564116-8-mszeredi@redhat.com>
+Subject: [PATCH v2 08/10] ovl: do not fail because of O_NOATIME
+Date:   Mon,  7 Dec 2020 17:32:53 +0100
+Message-Id: <20201207163255.564116-9-mszeredi@redhat.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201207163255.564116-1-mszeredi@redhat.com>
 References: <20201207163255.564116-1-mszeredi@redhat.com>
@@ -72,32 +72,31 @@ Content-Type: text/plain; charset="US-ASCII"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Comment above call already says this, but only EOPNOTSUPP is ignored, other
-failures are not.
-
-For example setting "user.*" will fail with EPERM on symlink/special.
-
-Ignore this error as well.
+In case the file cannot be opened with O_NOATIME because of lack of
+capabilities, then clear O_NOATIME instead of failing.
 
 Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
 ---
- fs/overlayfs/copy_up.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/overlayfs/file.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
-index 955ecd4030f0..8a7ef40d98f8 100644
---- a/fs/overlayfs/copy_up.c
-+++ b/fs/overlayfs/copy_up.c
-@@ -352,7 +352,8 @@ int ovl_set_origin(struct dentry *dentry, struct dentry *lower,
- 				 fh ? fh->fb.len : 0, 0);
- 	kfree(fh);
- 
--	return err;
-+	/* Ignore -EPERM from setting "user.*" on symlink/special */
-+	return err == -EPERM ? 0 : err;
- }
- 
- /* Store file handle of @upper dir in @index dir entry */
+diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+index dc767034d37b..d6ac7ac66410 100644
+--- a/fs/overlayfs/file.c
++++ b/fs/overlayfs/file.c
+@@ -53,9 +53,10 @@ static struct file *ovl_open_realfile(const struct file *file,
+ 	err = inode_permission(realinode, MAY_OPEN | acc_mode);
+ 	if (err) {
+ 		realfile = ERR_PTR(err);
+-	} else if (!inode_owner_or_capable(realinode)) {
+-		realfile = ERR_PTR(-EPERM);
+ 	} else {
++		if (!inode_owner_or_capable(realinode))
++			flags &= ~O_NOATIME;
++
+ 		realfile = open_with_fake_path(&file->f_path, flags, realinode,
+ 					       current_cred());
+ 	}
 -- 
 2.26.2
 
