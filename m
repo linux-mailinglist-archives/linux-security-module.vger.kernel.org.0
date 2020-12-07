@@ -2,66 +2,66 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF432D1629
-	for <lists+linux-security-module@lfdr.de>; Mon,  7 Dec 2020 17:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F7D2D162D
+	for <lists+linux-security-module@lfdr.de>; Mon,  7 Dec 2020 17:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727663AbgLGQeb (ORCPT
+        id S1727721AbgLGQee (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 7 Dec 2020 11:34:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57601 "EHLO
+        Mon, 7 Dec 2020 11:34:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34738 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727589AbgLGQe2 (ORCPT
+        by vger.kernel.org with ESMTP id S1727685AbgLGQed (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:28 -0500
+        Mon, 7 Dec 2020 11:34:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607358782;
+        s=mimecast20190719; t=1607358786;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=5e7kjkHucInmY6VdK0kaV1CkQzCu8JkZBTGnROzaxRs=;
-        b=efO5smXbSmGkDHPtHdXGDxi7xQ0d2oYYka3vzlPsFBfs7zPRbg6BqHDVANyqhN/XH3Cdps
-        3vKokKRWC/nqlkcLIxjNK8+027qpyrA/3W9HRABFt1B1YQk1aydsqvBFDBzPgPhdQ96Dpn
-        W/h546rP6+w5izFCAB/0tIwYzXYaXqI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-525-eCqcMezTO1aGlx3U6fy91A-1; Mon, 07 Dec 2020 11:33:00 -0500
-X-MC-Unique: eCqcMezTO1aGlx3U6fy91A-1
-Received: by mail-ed1-f70.google.com with SMTP id c24so6004967edx.2
-        for <linux-security-module@vger.kernel.org>; Mon, 07 Dec 2020 08:33:00 -0800 (PST)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wrGV7hqd0sY6Ndza0dri1YXg1lEmApvh0CGfKm2LK30=;
+        b=FmO1iiLFgEBHI4OcONPXghQKl2A+ulevuWOeC0cq/5BhuYgEyUUPArObSz4lKpUlamlnNj
+        ZmNpq0hbeACegyfQdkF7AHiwGYbcx+zlry2T5AjoM+HP7/za+UQcJ6+uu/FHkVQ+X5uw6i
+        nhLy8ffpcfyjSjDVIiMvCfnjwaDbfbk=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-11-K9FKU42NMyCZdirj6UtyyA-1; Mon, 07 Dec 2020 11:33:02 -0500
+X-MC-Unique: K9FKU42NMyCZdirj6UtyyA-1
+Received: by mail-ej1-f71.google.com with SMTP id n17so4051704eja.23
+        for <linux-security-module@vger.kernel.org>; Mon, 07 Dec 2020 08:33:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5e7kjkHucInmY6VdK0kaV1CkQzCu8JkZBTGnROzaxRs=;
-        b=opOslxVuy6dUiusdZCMhb1f85kkohGyZVYXdde0YrFVkwR4Wrs/H5SCn6JfzLcPJ4I
-         cPBOZdS3LQcusiNdmYdDAx4WHynpFN7uHbaug6J5UvRI+Mn78EJsojk2+8XORGOpXE75
-         5iNxfxkYPiCkBrujhzXyDgRMf2jFDFeOeoaUBpegplT7+7gv9h0sLJQZV+cwdafcKOhY
-         +v0bILSLfhyKA8CxDChrjTGAbyCRi/bSWIyiS/LO6XRL/otjR/fzuq37+ZyGMVRxPsAO
-         qHTCWX9VB7qcvdG1WsDEgSzh8oEXqNo0FU+EMY5Dwom/zrFI8G9wi6imvToOaQaovPI6
-         Q6Xw==
-X-Gm-Message-State: AOAM533cu6G5s4f5z/b5/QdxdXDClgy8H9eAAbuWgb3wPMFSYz6nLk2J
-        dfdDSZacg19RIWW3aJA+9QuWMyS3brlwJwbuhY6sLOfHkqsOX69pZpTUGqK6U2xTqkT1dM22/Ph
-        KPwp/AW5S/YunnHB7o/5R/NAnDqUD6jJj9B1U
-X-Received: by 2002:a50:9991:: with SMTP id m17mr20534897edb.48.1607358779668;
-        Mon, 07 Dec 2020 08:32:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxyiWs/rTwHaBsh/+l8c/SlsiYGPKleuSTJhMPZmdQ1Awha2DjwFfkQcPHng6uKbXr0raglUg==
-X-Received: by 2002:a50:9991:: with SMTP id m17mr20534881edb.48.1607358779439;
-        Mon, 07 Dec 2020 08:32:59 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wrGV7hqd0sY6Ndza0dri1YXg1lEmApvh0CGfKm2LK30=;
+        b=l/wY4u2evm5X9e3H9TgUuBGQB7diL7iK+QLxR2+GWAInAeNoHg8Nx3gGb4CQeDrkbl
+         affBNgwcuE2EzmnQSTmc17uVst5QQmCQQgrbnfG0ecrjD7o3S7b+ZDUMNHMhd/hFjmqd
+         PbwNmaX1uGqZw7JFvl2hbs+WVf7+ErlXdhMUwXsE2QgPQgKlUReIyLWzUtEZCmyAcBng
+         ob6zhQAXAQtUTaslf6o8ehJXgDNf74Ushgl+3M1H+ofGUXRZ5FTANnIxkh/wNKlNCvWJ
+         h1yl+77OfHeiWi84kd6lXOgHYj78D6ZOc9XmrjlaBPWgWTHWmkXmfbE54rIMoCQ10Q5/
+         ofvQ==
+X-Gm-Message-State: AOAM530GnbfjDe0F9BGoBFTUbp1Cee9rNm1j1WUeN0kfyhWE2ii/HGvf
+        fdGx0UXZ8e7ALb1ImYSxH15HCbOWO90kOalNjU34TAxn8fvhvL5aQCj2trdgWmxY4FK8g7oPLS9
+        Lqoy0uBWNoLYitIuEPWIpcgT+9SsSLN098kaX
+X-Received: by 2002:a50:a694:: with SMTP id e20mr20629150edc.261.1607358781219;
+        Mon, 07 Dec 2020 08:33:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzacwDTqVI9lhkLtXTTX/Z6WL5s00t1gChOyqFQ1tlVS8dmeqyNuXCDk11RK7mg8BFu3gh98Q==
+X-Received: by 2002:a50:a694:: with SMTP id e20mr20629136edc.261.1607358781059;
+        Mon, 07 Dec 2020 08:33:01 -0800 (PST)
 Received: from miu.piliscsaba.redhat.com (catv-86-101-169-67.catv.broadband.hu. [86.101.169.67])
-        by smtp.gmail.com with ESMTPSA id op5sm12801964ejb.43.2020.12.07.08.32.57
+        by smtp.gmail.com with ESMTPSA id op5sm12801964ejb.43.2020.12.07.08.32.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 08:32:58 -0800 (PST)
+        Mon, 07 Dec 2020 08:33:00 -0800 (PST)
 From:   Miklos Szeredi <mszeredi@redhat.com>
 To:     "Eric W . Biederman" <ebiederm@xmission.com>
 Cc:     linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH v2 00/10] allow unprivileged overlay mounts
-Date:   Mon,  7 Dec 2020 17:32:45 +0100
-Message-Id: <20201207163255.564116-1-mszeredi@redhat.com>
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 01/10] vfs: move cap_convert_nscap() call into vfs_setxattr()
+Date:   Mon,  7 Dec 2020 17:32:46 +0100
+Message-Id: <20201207163255.564116-2-mszeredi@redhat.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20201207163255.564116-1-mszeredi@redhat.com>
+References: <20201207163255.564116-1-mszeredi@redhat.com>
 MIME-Version: 1.0
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mszeredi@redhat.com
@@ -72,58 +72,96 @@ Content-Type: text/plain; charset="US-ASCII"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-I've done some more work to verify that unprivileged mount of overlayfs is
-safe.
+cap_convert_nscap() does permission checking as well as conversion of the
+xattr value conditionally based on fs's user-ns.
 
-One thing I did is to basically audit all function calls made by overlayfs
-to see if it's normally called with any checks and whether overlayfs calls
-it with the same (permission and other) checks.
+This is needed by overlayfs and probably other layered fs (ecryptfs) and is
+what vfs_foo() is supposed to do anyway.
 
-Some of this work has already made it into 5.8 and this series contains
-more fixes.
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+---
+ fs/xattr.c                 | 17 +++++++++++------
+ include/linux/capability.h |  2 +-
+ security/commoncap.c       |  3 +--
+ 3 files changed, 13 insertions(+), 9 deletions(-)
 
-A general observation is that overlayfs does not call security_path_*()
-hooks on the underlying fs.  I don't see this as a problem, because a
-simple bind mount done inside a private mount namespace also defeats the
-path based security checks.  Maybe I'm missing something here, so I'm
-interested in comments from AppArmor and Tomoyo developers.
-
-Eric, do you have thought about what to look for with respect to
-unprivileged mount safety and whether you think this is ready for upstream?
-
-Git tree:
-  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs.git#ovl-unpriv-v2
-
-Thanks,
-Miklos
-
-
-Miklos Szeredi (10):
-  vfs: move cap_convert_nscap() call into vfs_setxattr()
-  vfs: verify source area in vfs_dedupe_file_range_one()
-  ovl: check privs before decoding file handle
-  ovl: make ioctl() safe
-  ovl: simplify file splice
-  ovl: user xattr
-  ovl: do not fail when setting origin xattr
-  ovl: do not fail because of O_NOATIME
-  ovl: do not get metacopy for userxattr
-  ovl: unprivieged mounts
-
- fs/overlayfs/copy_up.c     |   3 +-
- fs/overlayfs/file.c        | 126 +++----------------------------------
- fs/overlayfs/inode.c       |  10 ++-
- fs/overlayfs/namei.c       |   3 +
- fs/overlayfs/overlayfs.h   |   8 ++-
- fs/overlayfs/ovl_entry.h   |   1 +
- fs/overlayfs/super.c       |  56 +++++++++++++++--
- fs/overlayfs/util.c        |  12 +++-
- fs/remap_range.c           |  10 ++-
- fs/xattr.c                 |  17 +++--
- include/linux/capability.h |   2 +-
- security/commoncap.c       |   3 +-
- 12 files changed, 110 insertions(+), 141 deletions(-)
-
+diff --git a/fs/xattr.c b/fs/xattr.c
+index cd7a563e8bcd..fd57153b1f61 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -276,8 +276,16 @@ vfs_setxattr(struct dentry *dentry, const char *name, const void *value,
+ {
+ 	struct inode *inode = dentry->d_inode;
+ 	struct inode *delegated_inode = NULL;
++	const void  *orig_value = value;
+ 	int error;
+ 
++	if (size && strcmp(name, XATTR_NAME_CAPS) == 0) {
++		error = cap_convert_nscap(dentry, &value, size);
++		if (error < 0)
++			return error;
++		size = error;
++	}
++
+ retry_deleg:
+ 	inode_lock(inode);
+ 	error = __vfs_setxattr_locked(dentry, name, value, size, flags,
+@@ -289,6 +297,9 @@ vfs_setxattr(struct dentry *dentry, const char *name, const void *value,
+ 		if (!error)
+ 			goto retry_deleg;
+ 	}
++	if (value != orig_value)
++		kfree(value);
++
+ 	return error;
+ }
+ EXPORT_SYMBOL_GPL(vfs_setxattr);
+@@ -537,12 +548,6 @@ setxattr(struct dentry *d, const char __user *name, const void __user *value,
+ 		if ((strcmp(kname, XATTR_NAME_POSIX_ACL_ACCESS) == 0) ||
+ 		    (strcmp(kname, XATTR_NAME_POSIX_ACL_DEFAULT) == 0))
+ 			posix_acl_fix_xattr_from_user(kvalue, size);
+-		else if (strcmp(kname, XATTR_NAME_CAPS) == 0) {
+-			error = cap_convert_nscap(d, &kvalue, size);
+-			if (error < 0)
+-				goto out;
+-			size = error;
+-		}
+ 	}
+ 
+ 	error = vfs_setxattr(d, kname, kvalue, size, flags);
+diff --git a/include/linux/capability.h b/include/linux/capability.h
+index 1e7fe311cabe..b2f698915c0f 100644
+--- a/include/linux/capability.h
++++ b/include/linux/capability.h
+@@ -270,6 +270,6 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+ /* audit system wants to get cap info from files as well */
+ extern int get_vfs_caps_from_disk(const struct dentry *dentry, struct cpu_vfs_cap_data *cpu_caps);
+ 
+-extern int cap_convert_nscap(struct dentry *dentry, void **ivalue, size_t size);
++extern int cap_convert_nscap(struct dentry *dentry, const void **ivalue, size_t size);
+ 
+ #endif /* !_LINUX_CAPABILITY_H */
+diff --git a/security/commoncap.c b/security/commoncap.c
+index 59bf3c1674c8..bacc1111d871 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -473,7 +473,7 @@ static bool validheader(size_t size, const struct vfs_cap_data *cap)
+  *
+  * If all is ok, we return the new size, on error return < 0.
+  */
+-int cap_convert_nscap(struct dentry *dentry, void **ivalue, size_t size)
++int cap_convert_nscap(struct dentry *dentry, const void **ivalue, size_t size)
+ {
+ 	struct vfs_ns_cap_data *nscap;
+ 	uid_t nsrootid;
+@@ -516,7 +516,6 @@ int cap_convert_nscap(struct dentry *dentry, void **ivalue, size_t size)
+ 	nscap->magic_etc = cpu_to_le32(nsmagic);
+ 	memcpy(&nscap->data, &cap->data, sizeof(__le32) * 2 * VFS_CAP_U32);
+ 
+-	kvfree(*ivalue);
+ 	*ivalue = nscap;
+ 	return newsize;
+ }
 -- 
 2.26.2
 
