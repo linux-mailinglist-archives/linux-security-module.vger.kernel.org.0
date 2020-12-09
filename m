@@ -2,115 +2,76 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 610D62D4210
-	for <lists+linux-security-module@lfdr.de>; Wed,  9 Dec 2020 13:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00D12D46A3
+	for <lists+linux-security-module@lfdr.de>; Wed,  9 Dec 2020 17:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731065AbgLIMU5 (ORCPT
+        id S1731338AbgLIQVi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 9 Dec 2020 07:20:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36848 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731426AbgLIMQo (ORCPT
+        Wed, 9 Dec 2020 11:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727024AbgLIQVf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 9 Dec 2020 07:16:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607516118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/mvd3i8Iisj3of36p/MCFCEO3iZ3VRAoJPd3yylzh6w=;
-        b=iLn744BOqKzGJIwOWSJ7PnaxCSjVxoBmGX7Nh4qKy7uc0so179U382PT29SrfnxBLp3n2J
-        MlDF10LYJGp/9atd7OKHdIWkMZBHCZDrnOXag7XXOUQQnt59TE0PoJ7yqa+inWDarrVwEo
-        2n/DMsxV9HZ++37ZSQyZbd4JDNJD4wc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-257-9cqO1hUXOkmEWPtLscZjoA-1; Wed, 09 Dec 2020 07:15:15 -0500
-X-MC-Unique: 9cqO1hUXOkmEWPtLscZjoA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ECB49107ACE3;
-        Wed,  9 Dec 2020 12:15:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-116-67.rdu2.redhat.com [10.10.116.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 136096E521;
-        Wed,  9 Dec 2020 12:15:11 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 06/18] security: keys: delete repeated words in comments
-From:   David Howells <dhowells@redhat.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, keyrings@vger.kernel.org,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, dhowells@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 09 Dec 2020 12:15:11 +0000
-Message-ID: <160751611127.1238376.11653059698742959354.stgit@warthog.procyon.org.uk>
-In-Reply-To: <160751606428.1238376.14935502103503420781.stgit@warthog.procyon.org.uk>
-References: <160751606428.1238376.14935502103503420781.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        Wed, 9 Dec 2020 11:21:35 -0500
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2773C0613D6
+        for <linux-security-module@vger.kernel.org>; Wed,  9 Dec 2020 08:20:54 -0800 (PST)
+Received: by mail-vs1-xe43.google.com with SMTP id u7so1173366vsg.11
+        for <linux-security-module@vger.kernel.org>; Wed, 09 Dec 2020 08:20:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ftrjIMacRnCDUW60B5wDdWIgLtC6j6ITMAxZ0z4dcsk=;
+        b=HgrvSW72NUDBACx2rcJOdsk9j2ywqmTiRhxzfml2ObmeS9/p68ApjmmEUiVuFFixel
+         U8V/3sWV/jT/RnYtuN76/jqqa0beH35lqx0GkOdrSQB8kmGRwv6xH/mpxgBW9stqYh98
+         TB1KeZ8zKUBTeHyC8I0eCxJ7EFkcfOUQYVVWk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ftrjIMacRnCDUW60B5wDdWIgLtC6j6ITMAxZ0z4dcsk=;
+        b=hOTEgdi1w7shkhU+g1K9DxRPNdT2hvWd2mm9WQd3OmCF1KvpZ9CvPcKqBqCOb9sNnB
+         mzmQ4fBNTh60t5oQKZGIXr3Cuz9UrrCHk/Pomsl5XcNs3aJN73zfB9fMZMo9GQpP/wgp
+         G+43Y6G3cq+m0253vE2LCvYe+Hr7kSlygQrUl5+ZVnjh+q6CYnJkWyHfNV7ZK2Bsk6SP
+         MuFvAheMXbPeIRp+SY5YWFpqTv1B/Or0YUnqVFSz6Wr1li1a0xcJa8sebwDyPmVxC6JP
+         nHRHMxnQ033IYs6F700TXPoIBjCpVbVTn9sYtY4peeJGZRNiShIv2DiMQBB3qlDK3i6z
+         XhbQ==
+X-Gm-Message-State: AOAM530qp4ZTxaVL5dqXywDqOsWvPaKu+KOqBbAMGLmrFgAWqtLXnMSE
+        6c5JfxZMmypyCxSMPeyO1eFRYwlNM1Cb9Qj5Bvim/w==
+X-Google-Smtp-Source: ABdhPJzZZ3IkQz7rOL8NyykGCELcBs/amTcJ+Xv2OgUQT+RVIeDoKVuHGvs38tWdvxSIhPXmjhSG0BuRFZBayhnap/U=
+X-Received: by 2002:a67:ed57:: with SMTP id m23mr2755029vsp.7.1607530854236;
+ Wed, 09 Dec 2020 08:20:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20201207163255.564116-1-mszeredi@redhat.com> <20201207163255.564116-4-mszeredi@redhat.com>
+ <CAOQ4uxhti+COYB3GhfMcPFwpfBRYQvr98oCO9wwS029W5e0A5g@mail.gmail.com> <CAJfpegsGpS=cym2NpnS6H-uMyLMKdbLpE1QxiDz4GQU1s-dYfg@mail.gmail.com>
+In-Reply-To: <CAJfpegsGpS=cym2NpnS6H-uMyLMKdbLpE1QxiDz4GQU1s-dYfg@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 9 Dec 2020 17:20:43 +0100
+Message-ID: <CAJfpeguvt-Mia9YmT55q3R9tSFocpgq7FzjDKJgnaOEQsaBNVA@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] ovl: check privs before decoding file handle
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Miklos Szeredi <mszeredi@redhat.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Wed, Dec 9, 2020 at 11:13 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
 
-Drop repeated words in comments.
-{to, will, the}
+> Hard link indexing should work without fh decoding, since it is only
+> encoding the file handle to search for the index entry, and encoding
+> is not privileged.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: keyrings@vger.kernel.org
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-security-module@vger.kernel.org
----
+Tested this a bit and while hard link indexing does work,  inode
+lookup is broken since it uses the origin inode as a key (which is not
+available) instead of using the origin value directly.  This is
+fixable, but needs a fair amount of restructuring, so let's just
+postpone this and disable index for now, as you suggested.
 
- security/keys/keyctl.c  |    2 +-
- security/keys/keyring.c |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-index 61a614c21b9b..96a92a645216 100644
---- a/security/keys/keyctl.c
-+++ b/security/keys/keyctl.c
-@@ -506,7 +506,7 @@ long keyctl_keyring_clear(key_serial_t ringid)
-  * keyring, otherwise replace the link to the matching key with a link to the
-  * new key.
-  *
-- * The key must grant the caller Link permission and the the keyring must grant
-+ * The key must grant the caller Link permission and the keyring must grant
-  * the caller Write permission.  Furthermore, if an additional link is created,
-  * the keyring's quota will be extended.
-  *
-diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-index 977066208387..5e6a90760753 100644
---- a/security/keys/keyring.c
-+++ b/security/keys/keyring.c
-@@ -881,7 +881,7 @@ static bool search_nested_keyrings(struct key *keyring,
-  *
-  * Keys are matched to the type provided and are then filtered by the match
-  * function, which is given the description to use in any way it sees fit.  The
-- * match function may use any attributes of a key that it wishes to to
-+ * match function may use any attributes of a key that it wishes to
-  * determine the match.  Normally the match function from the key type would be
-  * used.
-  *
-@@ -1204,7 +1204,7 @@ static int keyring_detect_cycle_iterator(const void *object,
- }
- 
- /*
-- * See if a cycle will will be created by inserting acyclic tree B in acyclic
-+ * See if a cycle will be created by inserting acyclic tree B in acyclic
-  * tree A at the topmost level (ie: as a direct child of A).
-  *
-  * Since we are adding B to A at the top level, checking for cycles should just
-
-
+Thanks,
+Miklos
