@@ -2,79 +2,70 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45CD2D8ECE
-	for <lists+linux-security-module@lfdr.de>; Sun, 13 Dec 2020 17:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E6B2D90D9
+	for <lists+linux-security-module@lfdr.de>; Sun, 13 Dec 2020 23:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437048AbgLMQda (ORCPT
+        id S1729343AbgLMWKa (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 13 Dec 2020 11:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436880AbgLMQdV (ORCPT
+        Sun, 13 Dec 2020 17:10:30 -0500
+Received: from zimbra075-ind.megavelocity.net ([103.25.128.75]:53112 "EHLO
+        zimbra075-ind.megavelocity.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729851AbgLMWKa (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 13 Dec 2020 11:33:21 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F35CC0613CF;
-        Sun, 13 Dec 2020 08:32:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sCN3Anbx+iYXLIlE4A4UXTtS9kAtcNY8aLxN+VneAf8=; b=I3BbV0LSx7uI2niy5L1Su8dLD0
-        i5YBup/v+QJYhopBj+HcOxL44MnIcBtzJIyRBhqk4aeT+r+jgb1F4i9aAwVMesN1PQbbGZiVpkNz7
-        oHITJBL/WSkVs7xF6Q/NuuG0zxmZZjRnwb/L93fruFuwQ4clJmU/9SGdp+jY06HO+GVOHinPJqTed
-        BvqY2ppmvKLmvuQrmWMzBKyj8qEKBrfL4LMXFD7CDj0eYKxSES5pYhrB1x+H35279h+agrv4UTA+t
-        Om4qw96P4IIDHimr0Gv2qC3I/hvvMjcbd8sZzPY+1FU1oBKabGIA2G+PcFM1DTY8+uMJJABbexYUS
-        oQjqtF5Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1koUIU-0004KX-5T; Sun, 13 Dec 2020 16:32:34 +0000
-Date:   Sun, 13 Dec 2020 16:32:34 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] proc: Allow pid_revalidate() during LOOKUP_RCU
-Message-ID: <20201213163234.GH2443@casper.infradead.org>
-References: <20201204000212.773032-1-stephen.s.brennan@oracle.com>
- <87tusplqwf.fsf@x220.int.ebiederm.org>
+        Sun, 13 Dec 2020 17:10:30 -0500
+X-Greylist: delayed 381 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Dec 2020 17:10:28 EST
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra075-ind.megavelocity.net (Postfix) with ESMTP id 0AF6934A450E;
+        Mon, 14 Dec 2020 03:02:47 +0530 (IST)
+Received: from zimbra075-ind.megavelocity.net ([127.0.0.1])
+        by localhost (zimbra075-ind.megavelocity.net [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id rrpvjqEp9g1V; Mon, 14 Dec 2020 03:02:46 +0530 (IST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra075-ind.megavelocity.net (Postfix) with ESMTP id DBC1934A3982;
+        Mon, 14 Dec 2020 02:55:07 +0530 (IST)
+DKIM-Filter: OpenDKIM Filter v2.8.0 zimbra075-ind.megavelocity.net DBC1934A3982
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crmnext.in;
+        s=4B12D1DA-3836-11EA-A266-A5DD67D1B816; t=1607894707;
+        bh=xddQeDzgMep4VGg/bW+kw9CRpAjmHetKOlTAQP14cp0=;
+        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
+         From:Date:Reply-To:Message-Id;
+        b=ju9y2cRaUVUOX3XA8wZyirJoJgCMRoHy4Xl7hfpVDTp2rOyXRJI5x8PiH/3GkEgKH
+         k29KvAcgQET/JLZaHaKS4iOLnVi0K+udE97GHkrkUf1nRKQR58nRue1y1n7ZFHWNMw
+         hYRb91td4t3f1dxPy5ZADI6w927nwvavGtipoF+U=
+X-Virus-Scanned: amavisd-new at zimbra075-ind.megavelocity.net
+Received: from zimbra075-ind.megavelocity.net ([127.0.0.1])
+        by localhost (zimbra075-ind.megavelocity.net [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1G0UaXgDOkfP; Mon, 14 Dec 2020 02:55:07 +0530 (IST)
+Received: from [192.168.8.104] (unknown [197.185.97.40])
+        by zimbra075-ind.megavelocity.net (Postfix) with ESMTPSA id C1FD221CD08B;
+        Mon, 14 Dec 2020 02:49:34 +0530 (IST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tusplqwf.fsf@x220.int.ebiederm.org>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: $18,991,674 USD...
+To:     Recipients <vikas.vishwakarma@crmnext.in>
+From:   vikas.vishwakarma@crmnext.in
+Date:   Sun, 13 Dec 2020 23:50:04 +0200
+Reply-To: chenchun230@gmail.com
+Message-Id: <20201213211934.C1FD221CD08B@zimbra075-ind.megavelocity.net>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sun, Dec 13, 2020 at 08:30:40AM -0600, Eric W. Biederman wrote:
-> Stephen Brennan <stephen.s.brennan@oracle.com> writes:
-> 
-> > The pid_revalidate() function requires dropping from RCU into REF lookup
-> > mode. When many threads are resolving paths within /proc in parallel,
-> > this can result in heavy spinlock contention as each thread tries to
-> > grab a reference to the /proc dentry lock (and drop it shortly
-> > thereafter).
-> 
-> I am feeling dense at the moment.  Which lock specifically are you
-> referring to?  The only locks I can thinking of are sleeping locks,
-> not spinlocks.
+Sehr geehrter Herr
 
-Stephen may have a better answer than this, but our mutex implementation
-spins if the owner is still running, so he may have misspoken slightly.
-He's testing on a giant system with hundreds of CPUs, so a mutex is
-going to behave like a spinlock for him.
+Mein Name ist Chen Chung, ein Finanzberater von Diego Slazar, einem Multimi=
+llion=E4r. Kann ich Ihnen bei der =DCberweisung von 18.991.674 USD VERTRAUE=
+N? Kontaktieren Sie mich ohne Probleme f=FCr weitere Informationen bitte: c=
+henchun230@gmail.com
 
-> Why do we need to test flags here at all?
-> Why can't the code simply take an rcu_read_lock unconditionally and just
-> pass flags into do_pid_update_inode?
+Um ehrlich zu sein, brauche ich bei dieser Transaktion Vertrauen und Respek=
+t zueinander und ich verspreche Ihnen, dass Sie es nicht bereuen werden, di=
+ese Transaktion mit mir durchgef=FChrt zu haben.
 
-Hah!  I was thinking about that possibility this morning, and I was
-going to ask you that question.
+Als Antwort auf Ihr Interesse, diesen Deal zu unterst=FCtzen und mit mir zu=
+sammenzuarbeiten, werde ich Ihnen die vollst=E4ndigen Details und die Vorge=
+hensweise weiterleiten.
 
+Freundliche Gr=FC=DFe
+Chen Chung
