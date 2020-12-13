@@ -2,70 +2,124 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E6B2D90D9
-	for <lists+linux-security-module@lfdr.de>; Sun, 13 Dec 2020 23:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187FC2D9112
+	for <lists+linux-security-module@lfdr.de>; Mon, 14 Dec 2020 00:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729343AbgLMWKa (ORCPT
+        id S2406890AbgLMXBB (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 13 Dec 2020 17:10:30 -0500
-Received: from zimbra075-ind.megavelocity.net ([103.25.128.75]:53112 "EHLO
-        zimbra075-ind.megavelocity.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729851AbgLMWKa (ORCPT
+        Sun, 13 Dec 2020 18:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730613AbgLMXAy (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 13 Dec 2020 17:10:30 -0500
-X-Greylist: delayed 381 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Dec 2020 17:10:28 EST
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra075-ind.megavelocity.net (Postfix) with ESMTP id 0AF6934A450E;
-        Mon, 14 Dec 2020 03:02:47 +0530 (IST)
-Received: from zimbra075-ind.megavelocity.net ([127.0.0.1])
-        by localhost (zimbra075-ind.megavelocity.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id rrpvjqEp9g1V; Mon, 14 Dec 2020 03:02:46 +0530 (IST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra075-ind.megavelocity.net (Postfix) with ESMTP id DBC1934A3982;
-        Mon, 14 Dec 2020 02:55:07 +0530 (IST)
-DKIM-Filter: OpenDKIM Filter v2.8.0 zimbra075-ind.megavelocity.net DBC1934A3982
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crmnext.in;
-        s=4B12D1DA-3836-11EA-A266-A5DD67D1B816; t=1607894707;
-        bh=xddQeDzgMep4VGg/bW+kw9CRpAjmHetKOlTAQP14cp0=;
-        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
-         From:Date:Reply-To:Message-Id;
-        b=ju9y2cRaUVUOX3XA8wZyirJoJgCMRoHy4Xl7hfpVDTp2rOyXRJI5x8PiH/3GkEgKH
-         k29KvAcgQET/JLZaHaKS4iOLnVi0K+udE97GHkrkUf1nRKQR58nRue1y1n7ZFHWNMw
-         hYRb91td4t3f1dxPy5ZADI6w927nwvavGtipoF+U=
-X-Virus-Scanned: amavisd-new at zimbra075-ind.megavelocity.net
-Received: from zimbra075-ind.megavelocity.net ([127.0.0.1])
-        by localhost (zimbra075-ind.megavelocity.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1G0UaXgDOkfP; Mon, 14 Dec 2020 02:55:07 +0530 (IST)
-Received: from [192.168.8.104] (unknown [197.185.97.40])
-        by zimbra075-ind.megavelocity.net (Postfix) with ESMTPSA id C1FD221CD08B;
-        Mon, 14 Dec 2020 02:49:34 +0530 (IST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Sun, 13 Dec 2020 18:00:54 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74568C0613CF
+        for <linux-security-module@vger.kernel.org>; Sun, 13 Dec 2020 15:00:14 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id b73so15205851edf.13
+        for <linux-security-module@vger.kernel.org>; Sun, 13 Dec 2020 15:00:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e7XlCtFnQpWXdPLq8hdrC5r7fY/5pa4RVHpiXnxDixo=;
+        b=phMwJHB9hrJuAPuoWHUETTAUr+ZXE5D8Ao7Ty3wpgc050dKNUUBoMKAXf1O7pY4AG2
+         Xvk00py2QBa9gKDfoXui8tEcs2y9V79MuOSXo2ruf2ygLpdH+K/6J3L+CFCPs0Cd06zx
+         LAdvXdZSbvPFKX0IuziZEm33XyeJTEhaVAT2EK+UaWO3UBeLYiHhD78GWArvt2zk4FoX
+         l7qJQSQDN7srZVbqa+aqHAuVxDfPYDCfIRzSwdlyzoPLpEfHAqcRsAWKhVNvlKucQDeK
+         JlCh88udcetwhUsaJi2ehJ6eQQFhsvVPgEAZCxNW+2ydC6oZD2RqcKbJKXkh/EFIFMKt
+         3fbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e7XlCtFnQpWXdPLq8hdrC5r7fY/5pa4RVHpiXnxDixo=;
+        b=e5kCjVTNdNrJOaQGVO7U1gTETE4+71e9tiCAo8g5X7rqrz235vZ31X8gVHZRrlNfh+
+         OnD12u0ckgLBXovK5QiLOEFGzKPUvvJX6hHwi7zCH59ZypPb/8qOrfpYChutcDO1ebyI
+         Xg/+X45MyFgDTwEJnqDDJLJlOiiDT7oqT0m3imGxycMKtMJER/F7tVdEH9W4i/LTyz8C
+         M9xpny6NAr/gHgXqg6vwRqZFWL9KrLMu9fbmnrdNJf5FJcqFZBCFkOTuvj4BeeWSWIKX
+         kd0JH1v/CqBsoHGonF0HqGk86APY+GD1khYXFNjZXGBniI81Edqgf3rMY32UPv60B1Qj
+         GC9Q==
+X-Gm-Message-State: AOAM533Rg00eUMLFxMQeoxUPTJHG45Gyww3qULgY+2CDdSD5vpRgTYjb
+        WKuuiA3OXt8TxT37nzDuaZScsFpIojTo770rkYLw
+X-Google-Smtp-Source: ABdhPJyT8YEFTOyPKj1YPFnMWE+J+xwjmaptRDMSvik5afJSTQCXwpVgWI9ImeHlYLjJ2Ma1kD7KLF+btWLmDE7O+p4=
+X-Received: by 2002:aa7:d7d8:: with SMTP id e24mr21950323eds.135.1607900413041;
+ Sun, 13 Dec 2020 15:00:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: $18,991,674 USD...
-To:     Recipients <vikas.vishwakarma@crmnext.in>
-From:   vikas.vishwakarma@crmnext.in
-Date:   Sun, 13 Dec 2020 23:50:04 +0200
-Reply-To: chenchun230@gmail.com
-Message-Id: <20201213211934.C1FD221CD08B@zimbra075-ind.megavelocity.net>
+References: <20201204000212.773032-1-stephen.s.brennan@oracle.com>
+ <20201212205522.GF2443@casper.infradead.org> <877dpln5uf.fsf@x220.int.ebiederm.org>
+ <20201213162941.GG2443@casper.infradead.org>
+In-Reply-To: <20201213162941.GG2443@casper.infradead.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 13 Dec 2020 18:00:01 -0500
+Message-ID: <CAHC9VhSytjTGPhaKFC7Cq1qotps7oyFjU7vN4oLYSxXrruTfAQ@mail.gmail.com>
+Subject: Re: [PATCH v2] proc: Allow pid_revalidate() during LOOKUP_RCU
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Sehr geehrter Herr
+On Sun, Dec 13, 2020 at 11:30 AM Matthew Wilcox <willy@infradead.org> wrote:
+> On Sun, Dec 13, 2020 at 08:22:32AM -0600, Eric W. Biederman wrote:
+> > Matthew Wilcox <willy@infradead.org> writes:
+> >
+> > > On Thu, Dec 03, 2020 at 04:02:12PM -0800, Stephen Brennan wrote:
+> > >> -void pid_update_inode(struct task_struct *task, struct inode *inode)
+> > >> +static int do_pid_update_inode(struct task_struct *task, struct inode *inode,
+> > >> +                         unsigned int flags)
+> > >
+> > > I'm really nitpicking here, but this function only _updates_ the inode
+> > > if flags says it should.  So I was thinking something like this
+> > > (compile tested only).
+> > >
+> > > I'd really appreocate feedback from someone like Casey or Stephen on
+> > > what they need for their security modules.
+> >
+> > Just so we don't have security module questions confusing things
+> > can we please make this a 2 patch series?  With the first
+> > patch removing security_task_to_inode?
+> >
+> > The justification for the removal is that all security_task_to_inode
+> > appears to care about is the file type bits in inode->i_mode.  Something
+> > that never changes.  Having this in a separate patch would make that
+> > logical change easier to verify.
+>
+> I don't think that's right, which is why I keep asking Stephen & Casey
+> for their thoughts.
 
-Mein Name ist Chen Chung, ein Finanzberater von Diego Slazar, einem Multimi=
-llion=E4r. Kann ich Ihnen bei der =DCberweisung von 18.991.674 USD VERTRAUE=
-N? Kontaktieren Sie mich ohne Probleme f=FCr weitere Informationen bitte: c=
-henchun230@gmail.com
+The SELinux security_task_to_inode() implementation only cares about
+inode->i_mode S_IFMT bits from the inode so that we can set the object
+class correctly.  The inode's SELinux label is taken from the
+associated task.
 
-Um ehrlich zu sein, brauche ich bei dieser Transaktion Vertrauen und Respek=
-t zueinander und ich verspreche Ihnen, dass Sie es nicht bereuen werden, di=
-ese Transaktion mit mir durchgef=FChrt zu haben.
+Casey would need to comment on Smack's needs.
 
-Als Antwort auf Ihr Interesse, diesen Deal zu unterst=FCtzen und mit mir zu=
-sammenzuarbeiten, werde ich Ihnen die vollst=E4ndigen Details und die Vorge=
-hensweise weiterleiten.
+> For example,
+>
+>  * Sets the smack pointer in the inode security blob
+>  */
+> static void smack_task_to_inode(struct task_struct *p, struct inode *inode)
+> {
+>         struct inode_smack *isp = smack_inode(inode);
+>         struct smack_known *skp = smk_of_task_struct(p);
+>
+>         isp->smk_inode = skp;
+>         isp->smk_flags |= SMK_INODE_INSTANT;
+> }
+>
+> That seems to do rather more than checking the file type bits.
 
-Freundliche Gr=FC=DFe
-Chen Chung
+-- 
+paul moore
+www.paul-moore.com
