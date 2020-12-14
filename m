@@ -2,95 +2,150 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26EAB2DA249
-	for <lists+linux-security-module@lfdr.de>; Mon, 14 Dec 2020 22:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784E72DA27B
+	for <lists+linux-security-module@lfdr.de>; Mon, 14 Dec 2020 22:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503415AbgLNVHm (ORCPT
+        id S2503592AbgLNVUu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 14 Dec 2020 16:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503647AbgLNVGp (ORCPT
+        Mon, 14 Dec 2020 16:20:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55266 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2503571AbgLNVUk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 14 Dec 2020 16:06:45 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D7AC061794
-        for <linux-security-module@vger.kernel.org>; Mon, 14 Dec 2020 13:06:05 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id n9so6197326ili.0
-        for <linux-security-module@vger.kernel.org>; Mon, 14 Dec 2020 13:06:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GXujo8M1so58bu1bHJQMzIvaxoMCcR2JFvMI6/2SYtw=;
-        b=Ea8790/9aGUTS3HYnA37Ah+oEr7UrpiyR0ngkh/QYf0ZRftPH562cxiHxag9HS8/i2
-         giw4L8vm132D1ebFROpXaGlMMUVtdircMRE5oFvR8DcuYKDeR1xdxvUfDS8EZoIt621J
-         lKbiko7pwfVFv3AMwuX/XFhqzS1c+K+QbyYqA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GXujo8M1so58bu1bHJQMzIvaxoMCcR2JFvMI6/2SYtw=;
-        b=D9xEoqxSpJNTP7vBtcj173d17GsjQpxQPKaMNLdjXdFjIwOaGyrDWSia3RHWxXfILU
-         HP/c/bZP6ce7PMn4xg9NOR3biJZRd4Ma8PARPcoYsQBFH6AkvPLUlfRbew8iDWIae+3H
-         3T+Hnkwa7h5AqcrDXM/5SBUQLj95ZVsWw9RotbzdOA0AvvoH6A2pQc8s4HyCOijEpUSw
-         tM5b+H3+dZtLyeUK1Wbq+jhtNWT4ViIuEd+LydPJaTsx1izh6wHeNxcmpwa0klu4SZjJ
-         1Utif7nhd3muiotOE4VN6vPE1MjoORsMK1KNFhZ2fW7SX3lOCQ7r3jEIg5CCSkPNOZQw
-         h3Ag==
-X-Gm-Message-State: AOAM532qtOffGaK7HPq7eGwvUWiuZHURIqDC0GqS7coQlY+Q+rmRIxZd
-        RmW3kwnhUkCyj+CUuFOLrteAphbhOENjQb5HoNT0oQ==
-X-Google-Smtp-Source: ABdhPJwoiN0Mha/65j9rHwzmflBt6XppkjGZGKXum/T1dG5G7vZg9uMrfm4crnB+SAOnguAMBC0VLe5qrVC6/YKh2kk=
-X-Received: by 2002:a92:dc03:: with SMTP id t3mr37104802iln.215.1607979962323;
- Mon, 14 Dec 2020 13:06:02 -0800 (PST)
+        Mon, 14 Dec 2020 16:20:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607980752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kCwhYTgPmmce18TYeNVDm64FKjEsl3Uj/IWWxXne59A=;
+        b=cuywHD1IA+8bl+ECKHUJsNTwC2A2D3ygEiOLXZ3LkaBxzY5f23YTxC68v5NLUvaCk8v9V0
+        yQeYkiV9p3nLPdZ7p+dYzmGxuszCzfFWQn/HckiiFqCUgKdStOiCgvYj1xm/X4IyzY9rVc
+        PkAnlvEuPjdA/VxAG6co68PtZSsI734=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-448-sPOru02hPbG18SVrLnASRw-1; Mon, 14 Dec 2020 16:19:08 -0500
+X-MC-Unique: sPOru02hPbG18SVrLnASRw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E44D459;
+        Mon, 14 Dec 2020 21:19:06 +0000 (UTC)
+Received: from [10.10.64.194] (ovpn-64-194.rdu2.redhat.com [10.10.64.194])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A55E6A8E4;
+        Mon, 14 Dec 2020 21:19:05 +0000 (UTC)
+Subject: Re: MOK variable config table: Kernel Panic in SEV-enabled VMs
+To:     "Hyunwook (Wooky) Baek" <baekhw@google.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     pjones@redhat.com, dhowells@redhat.com, prarit@redhat.com,
+        Peter Gonda <pgonda@google.com>,
+        Rachit Mathur <rachitmathur@google.com>,
+        Zach Marano <zmarano@google.com>,
+        Jianxiong Gao <jxgao@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        David Rientjes <rientjes@google.com>, keescook@chromium.org
+References: <CABMWKFCCd=DiruUr3W8DGGozexW-gmeFWVEg2OmuJLuTJXFr_g@mail.gmail.com>
+From:   Lenny Szubowicz <lszubowi@redhat.com>
+Message-ID: <e4fec86d-204b-9ea9-f48e-8b918f4159d3@redhat.com>
+Date:   Mon, 14 Dec 2020 16:19:05 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-References: <2659836.1607940186@warthog.procyon.org.uk> <CAHk-=wido5stGfFtRzmW19bB1w2XQAuY8oxUtFN2ZWdk2Grq-w@mail.gmail.com>
-In-Reply-To: <CAHk-=wido5stGfFtRzmW19bB1w2XQAuY8oxUtFN2ZWdk2Grq-w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Dec 2020 13:05:51 -0800
-Message-ID: <CAADWXX83JC0oSVoDxOwsLE1DPm8r6JLWcAsP0UyCLO_X544pkQ@mail.gmail.com>
-Subject: Re: [GIT PULL] keys: Collected minor fixes and cleanups
-To:     David Howells <dhowells@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        Ben Boeckel <mathstuf@gmail.com>,
-        Denis Efremov <efremov@linux.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Jann Horn <jannh@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Tom Rix <trix@redhat.com>, YueHaibing <yuehaibing@huawei.com>,
-        keyrings@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CABMWKFCCd=DiruUr3W8DGGozexW-gmeFWVEg2OmuJLuTJXFr_g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Dec 14, 2020 at 12:49 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I suspect the fix is trivial (change the "," to "|"), but I will not
-> be pulling this - or anything else that hasn't been in linux-next -
-> from you this merge window.
+On 12/14/20 3:52 PM, Hyunwook (Wooky) Baek wrote:
+> Hello,
+> 
+> We found SEV-enabled VMs crash with the latest CentOS and Rhel images in Google
+> Cloud (centos-8-v20201112 and rhel-8-v20201112), because the MOK var table patch
+> (https://lkml.org/lkml/2020/8/25/1344) is making a #GP with SEV-enabled VMs,
+> but the patch is backported to those images. It looks like the patch
+> is also included in
+> the v5.10 release candidate.
+> 
+> The SEV-enabled VMs work fine with the previous Rhel-8 and Centos-8 images
+> (centos-8-v20201014 and rhel-8-v20201014).
+> 
+> The following is the kernel log messages that show the VM crashes while
+> running efi_mokvar_sysfs_init() with the rhel image (the centos kernel log is
+> almost identical):
+> 
+> [    1.720049] EFI Variables Facility v0.08 2004-May-17
+> [    1.943612] input: AT Translated Set 2 keyboard as
+> /devices/platform/i8042/serio0/input/input2
+> [    2.480607] general protection fault: 0000 [#1] SMP NOPTI
+> [    2.481549] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+> 4.18.0-193.28.1.el8_2.x86_64 #1
+> [    2.481549] Hardware name: Google Google Compute Engine/Google
+> Compute Engine, BIOS Google 01/01/2011
+> [    2.481549] RIP: 0010:efi_mokvar_sysfs_init+0xa9/0x19d
+> [    2.481549] Code: 4b 00 48 85 c0 0f 85 be 00 00 00 48 c7 c7 d8 a8
+> 12 9b bd f4 ff ff ff e8 a4 ba 73 fe e9 f0 00 00 00 48 85 d2 0f 85 b1
+> 00 00 00 <41> 80 3c 24 00 0f 84 bf 00 00 00 4d 85 e4 0f 84 b6 00 00 00
+> 48 8b
+> [    2.481549] RSP: 0018:ffffa6d7c0c67df8 EFLAGS: 00010282
+> [    2.481549] RAX: 0df68117d0b79f0b RBX: ffff96fe32837720 RCX: 0000000000000000
+> [    2.481549] RDX: ffffa6d7c0c81000 RSI: ffffffff9b3934c0 RDI: ffff96fe32837758
+> [    2.481549] RBP: ffffffff9b3934c0 R08: ffffffff9b3934c0 R09: 0000000000000228
+> [    2.481549] R10: 0000000000000007 R11: 0000000000000008 R12: 0df627ef917fb013
+> [    2.481549] R13: ffffffff9b3934c0 R14: ffffffff9a6b3da0 R15: ffff96fe32837758
+> [    2.481549] FS:  0000000000000000(0000) GS:ffff96fe37b00000(0000)
+> knlGS:0000000000000000
+> [    2.481549] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    2.481549] CR2: 00007f0508d7c000 CR3: 0000800232ff8000 CR4: 0000000000340ee0
+> [    2.481549] Call Trace:
+> [    2.481549]  ? efi_rci2_sysfs_init+0x26d/0x26d
+> [    2.481549]  ? do_early_param+0x91/0x91
+> [    2.481549]  do_one_initcall+0x46/0x1c3
+> [    2.481549]  ? do_early_param+0x91/0x91
+> [    2.481549]  kernel_init_freeable+0x1af/0x258
+> [    2.481549]  ? rest_init+0xaa/0xaa
+> [    2.481549]  kernel_init+0xa/0xff
+> [    2.481549]  ret_from_fork+0x22/0x40
+> [    2.481549] Modules linked in:
+> [    2.511520] ---[ end trace 24709f23c20e9cd9 ]---
+> [    2.512376] RIP: 0010:efi_mokvar_sysfs_init+0xa9/0x19d
+> [    2.513249] Code: 4b 00 48 85 c0 0f 85 be 00 00 00 48 c7 c7 d8 a8
+> 12 9b bd f4 ff ff ff e8 a4 ba 73 fe e9 f0 00 00 00 48 85 d2 0f 85 b1
+> 00 00 00 <41> 80 3c 24 00 0f 84 bf 00 00 00 4d 85 e4 0f 84 b6 00 00 00
+> 48 8b
+> [    2.516876] RSP: 0018:ffffa6d7c0c67df8 EFLAGS: 00010282
+> [    2.517844] RAX: 0df68117d0b79f0b RBX: ffff96fe32837720 RCX: 0000000000000000
+> [    2.519128] RDX: ffffa6d7c0c81000 RSI: ffffffff9b3934c0 RDI: ffff96fe32837758
+> [    2.520328] RBP: ffffffff9b3934c0 R08: ffffffff9b3934c0 R09: 0000000000000228
+> [    2.521771] R10: 0000000000000007 R11: 0000000000000008 R12: 0df627ef917fb013
+> [    2.523025] R13: ffffffff9b3934c0 R14: ffffffff9a6b3da0 R15: ffff96fe32837758
+> [    2.524218] FS:  0000000000000000(0000) GS:ffff96fe37b00000(0000)
+> knlGS:0000000000000000
+> [    2.525591] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    2.528401] CR2: 00007f0508d7c000 CR3: 0000800232ff8000 CR4: 0000000000340ee0
+> [    2.530155] Kernel panic - not syncing: Fatal exception
+> [    2.531145] Kernel Offset: 0x19000000 from 0xffffffff81000000
+> (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [    2.531145] ---[ end Kernel panic - not syncing: Fatal exception ]---
+> 
+> Regards,
+> Wooky
+> 
 
-It looks like Stephen Rothwell saw it in next yesterday, and fixed it
-up there in his merge.
+First off, this problem does not exist in the upstream kernel because of
+the prior commit:
 
-So somebody was aware of the problem. But unlike Stephen, I don't take
-broken code and just silently fix it up in the merge.
+985e537a4082 x86/ioremap: Map EFI runtime services data as encrypted for SEV
 
-I suspect Stephen might have thought it was a merge conflict fix,
-rather than just a broken branch.
+Unfortunately, that upstream commit is not included in the RHEL 8.3 kernel.
+We did not detect the necessity of this commit in time to include it in RHEL 8.3.
+However, I expect that it will be included a future bug fix release.
 
-Stephen: that makes linux-next test coverage kind of pointless, if you
-just fix bugs in the branches you merge. You should reject things more
-aggressively, rather than make them "pass" in Linux-next.
+                                -Lenny.
 
-              Linus
+
