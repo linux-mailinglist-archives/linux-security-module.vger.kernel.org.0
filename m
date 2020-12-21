@@ -2,44 +2,72 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E3D2DF290
-	for <lists+linux-security-module@lfdr.de>; Sun, 20 Dec 2020 02:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E94E2DF811
+	for <lists+linux-security-module@lfdr.de>; Mon, 21 Dec 2020 04:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726996AbgLTBPy convert rfc822-to-8bit (ORCPT
+        id S1725826AbgLUDrU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 19 Dec 2020 20:15:54 -0500
-Received: from mail.univ-alger.dz ([193.194.83.97]:58374 "EHLO
-        mail.univ-alger.dz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726989AbgLTBPy (ORCPT
+        Sun, 20 Dec 2020 22:47:20 -0500
+Received: from casper.infradead.org ([90.155.50.34]:38478 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725308AbgLUDrT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 19 Dec 2020 20:15:54 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.univ-alger.dz (Postfix) with ESMTP id A4A584E61B0A;
-        Sat, 19 Dec 2020 21:10:37 +0100 (CET)
-Received: from mail.univ-alger.dz ([127.0.0.1])
-        by localhost (mail.univ-alger.dz [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id SXSNCpFbdDoT; Sat, 19 Dec 2020 21:10:37 +0100 (CET)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.univ-alger.dz (Postfix) with ESMTP id B9DCC4E062E5;
-        Sat, 19 Dec 2020 19:19:53 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mail.univ-alger.dz
-Received: from mail.univ-alger.dz ([127.0.0.1])
-        by localhost (mail.univ-alger.dz [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SSfDDvfJoVAv; Sat, 19 Dec 2020 19:19:53 +0100 (CET)
-Received: from MACBOOK341C.localdomain (unknown [45.132.227.75])
-        by mail.univ-alger.dz (Postfix) with ESMTPSA id 371854E03D7E;
-        Sat, 19 Dec 2020 16:15:41 +0100 (CET)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 20 Dec 2020 22:47:19 -0500
+X-Greylist: delayed 1143 seconds by postgrey-1.27 at vger.kernel.org; Sun, 20 Dec 2020 22:47:19 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=1wn+qnkPDAZUCQEYEI3B57TLhs2MEwZtEb8Tmd7HIcY=; b=XMTNKkqIkf5IAPiefdOzcpLDuC
+        +rabIa4lNXH/SKOP2FeRyquZlDiM2Q7iodYJsu/hRxoI9tmuImIZjb8Fmsf/EAg4G7FZsRGKZzao0
+        q+t7cmDDuc/qtgoR8kJYRGaIx7EvlvGwkZ8uXAuNIKmDa5bsbXCEXLccT1oZNQ73f5xvBxopPTcgI
+        7K0GFihJ5wWUSL91pDPnRA4KcBHNhG7pFevmMnjdOZDIM01uGRU+xFA5LiXOYsrdWTg/uIJ/T/JBw
+        Knuc0phLeB1gnuqyse+L+n81twh2HI+G3ipTnO3GKdpjPp9M/e4zPJ9wJ2gYedQn6C9WpLhLskuOy
+        BSSwDGtA==;
+Received: from [2601:1c0:6280:3f0::64ea] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1krBr4-0007Fx-KH; Mon, 21 Dec 2020 03:27:27 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2] security: ima: delete a repeated word in comments
+Date:   Sun, 20 Dec 2020 19:27:20 -0800
+Message-Id: <20201221032720.11325-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Sie_haben_eine_Spende_von_=E2=82=AC_5=2E800=2E000=2C00=2E?=
-To:     Recipients <z.benamor@univ-alger.dz>
-From:   "Mrs. Mavis" <z.benamor@univ-alger.dz>
-Date:   Sat, 19 Dec 2020 07:15:25 -0800
-Reply-To: wanczykm61@gmail.com
-Message-Id: <20201219151542.371854E03D7E@mail.univ-alger.dz>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Sie haben eine Spende von € 5.800.000,00. von Mavis Wanczyk antworten Sie mit diesem Code [MW530342019], um die Spende zu erhalten
+Drop a repeated word in comments.
+{the}
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-security-module@vger.kernel.org
+---
+v2: rebase
+
+ security/integrity/ima/ima_policy.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- linux-next-20201218.orig/security/integrity/ima/ima_policy.c
++++ linux-next-20201218/security/integrity/ima/ima_policy.c
+@@ -781,7 +781,7 @@ static int __init ima_init_arch_policy(v
+  * ima_init_policy - initialize the default measure rules.
+  *
+  * ima_rules points to either the ima_default_rules or the
+- * the new ima_policy_rules.
++ * new ima_policy_rules.
+  */
+ void __init ima_init_policy(void)
+ {
