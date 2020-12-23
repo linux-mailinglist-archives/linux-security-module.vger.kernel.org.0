@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 985BF2E1370
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Dec 2020 03:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C113B2E17A4
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Dec 2020 04:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729737AbgLWCaJ (ORCPT
+        id S1727435AbgLWCRw (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 22 Dec 2020 21:30:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54312 "EHLO mail.kernel.org"
+        Tue, 22 Dec 2020 21:17:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730540AbgLWCZf (ORCPT
+        id S1727360AbgLWCRv (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:25:35 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FAAB2313F;
-        Wed, 23 Dec 2020 02:25:19 +0000 (UTC)
+        Tue, 22 Dec 2020 21:17:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D5D822256F;
+        Wed, 23 Dec 2020 02:16:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690320;
-        bh=dgoLXAAdcQbHhpRGNFEm//O45/57BGHrz1JH3GoEqEo=;
+        s=k20201202; t=1608689797;
+        bh=x5PIUwxH5WbhePd4i2PbNKAofydYlihwur288ZNn9Ck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ovb4JvWrX8AatjWXkD1fNRj6WQI5PaocxW9GQ1wAGXEVW4wzT9PUXXFmfh+4RC51P
-         KoGEvol6pHtpcAYF589aO4W8gKISfF8Jte/7uuui9RWF/2uwFjcOZDyObpqUt0c6u4
-         E/R/MfuEi8EkU4qPvNW2hAeJ02lA551jG21VP15g5PDnklnY1pUhrlaI7t9i7xmJLH
-         drpdfXqD8FQSxeYgFNU+NGQkwXzomtVVBQ72ydd6bklOV3zTtcqrVGNP7RQEcXA7q4
-         K4mvQlUr6kDbH0h/XomQe22CDFr3TjH4KtVqUjZ5p221lFn1ANFcRhmc/oHAcPPdQ/
-         twEwLGZQNuPQA==
+        b=H5AHmza8EQqndwxYNZCrksCyz1I8FL1aftAt4yR0j4JQPA8b4GweWKDDuXQ0UvvCw
+         dbSi/KLPduvooc6yl7JeRGNB/BwIjjM65G3riayW42QmR6jKrVqs3ZK76zuhBpC9v1
+         1VGM0scFD7svDYNHgAtnw/FFaHdEnOAkfctwgwDJ1n3lXJVp5kblvuTWJClr1LC36Q
+         eGsQ6k8eM6I5BnANG0XOUmfKWSRDykvBCq+JmI+2n17+gA3TDDCWAPv7InAABghn1B
+         Gpg/qsaPjYrlOJCxUJfc5NXJJEI8y9W6ruOgs9TPWZMOdPkgRMsJ/WLTd/OhG15cGL
+         h0rGJXsmZzp1Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -32,12 +32,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.4 02/38] tomoyo: fix clang pointer arithmetic warning
-Date:   Tue, 22 Dec 2020 21:24:40 -0500
-Message-Id: <20201223022516.2794471-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 008/217] tomoyo: fix clang pointer arithmetic warning
+Date:   Tue, 22 Dec 2020 21:12:57 -0500
+Message-Id: <20201223021626.2790791-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022516.2794471-1-sashal@kernel.org>
-References: <20201223022516.2794471-1-sashal@kernel.org>
+In-Reply-To: <20201223021626.2790791-1-sashal@kernel.org>
+References: <20201223021626.2790791-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/security/tomoyo/securityfs_if.c b/security/tomoyo/securityfs_if.c
-index 179a955b319df..1e6a4ed5ae54d 100644
+index 546281c5b233a..065f4941c4d8c 100644
 --- a/security/tomoyo/securityfs_if.c
 +++ b/security/tomoyo/securityfs_if.c
-@@ -135,8 +135,8 @@ static const struct file_operations tomoyo_self_operations = {
+@@ -131,8 +131,8 @@ static const struct file_operations tomoyo_self_operations = {
   */
  static int tomoyo_open(struct inode *inode, struct file *file)
  {
@@ -79,7 +79,7 @@ index 179a955b319df..1e6a4ed5ae54d 100644
  	return tomoyo_open_control(key, file);
  }
  
-@@ -227,7 +227,7 @@ static const struct file_operations tomoyo_operations = {
+@@ -223,7 +223,7 @@ static const struct file_operations tomoyo_operations = {
  static void __init tomoyo_create_entry(const char *name, const umode_t mode,
  				       struct dentry *parent, const u8 key)
  {
