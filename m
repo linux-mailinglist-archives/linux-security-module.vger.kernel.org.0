@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FBC2E1566
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Dec 2020 03:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C01A62E14B0
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Dec 2020 03:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729322AbgLWCVX (ORCPT
+        id S1730204AbgLWCmR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 22 Dec 2020 21:21:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49830 "EHLO mail.kernel.org"
+        Tue, 22 Dec 2020 21:42:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50890 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727757AbgLWCVW (ORCPT
+        id S1728850AbgLWCXS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:21:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EC3EF2256F;
-        Wed, 23 Dec 2020 02:21:05 +0000 (UTC)
+        Tue, 22 Dec 2020 21:23:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5701122573;
+        Wed, 23 Dec 2020 02:22:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690066;
-        bh=SlXT8szZKSZsLWWHMYmsFWGBamP8ytWKV+iCTXyRrX8=;
+        s=k20201202; t=1608690176;
+        bh=Nn9LclMCcw0UUENslgl/frSUmzlmcUtrLKpSJTmK2Ls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rKpzl2HErxIsxoml3y+TJwD46yo+P4j4NnxCeLAQipNk0QlCj2Qpj3rSP7FGHHwLG
-         LDmmbq8X9rmCgMCyJKT7zRy5U4sAmRAf7mx4Jrs6C1aA59QU1OiqzUHV8KPOWyuOJl
-         daXhoa/IGs3tPo2wiSngEe9W5yDt/BFIbq+EQBXe2jYTD79kNThTqsvqEVHhdB3Atw
-         qBmUsMHyXppRv6dIIa6Lx+iVTmyuF4fYUHEVnQcjv8xu1h6A4xLCS77wE3yiasVXv3
-         YFI69qnb5MVPm7w/GSXgJLGgMWU7umtdPWgFaITxBAezFwPhlxH2ieeP3phSrxNUBs
-         YuC79y3DPdkQA==
+        b=kdRKUsQYkFbr3yI1F8xU5Q/5SEgo3mjQgCmpVDe8w+9yJxdpzb8rR68Waful2DVu7
+         xV5yxQFRynMSg0ueQf/fVEgbNlD1vXQz4BBmezrB9IAHy7OQA/AKdgcC3SCxOTVLjt
+         eGVrvxr8HmZ9U20V8OpFyUzfsRZDxN4SacPcFM9Vut7U4XSy1UQrq6F74VA4R8HSQ8
+         c422cb+S0XWZKq7lZq11Af5w8PG/NkP0sHscE11iULhpDwBFVPkCJl+nh8LV6iL0oz
+         SmQDrvEEZ75c/uJSyXYjr5Bb0wJ2awfv39MuT5IdbOr7Zvhps+oQCbBlXFbeeac1Jd
+         cN5Sqshn06GeQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -32,12 +32,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.19 02/87] tomoyo: fix clang pointer arithmetic warning
-Date:   Tue, 22 Dec 2020 21:19:38 -0500
-Message-Id: <20201223022103.2792705-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 02/66] tomoyo: fix clang pointer arithmetic warning
+Date:   Tue, 22 Dec 2020 21:21:48 -0500
+Message-Id: <20201223022253.2793452-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022103.2792705-1-sashal@kernel.org>
-References: <20201223022103.2792705-1-sashal@kernel.org>
+In-Reply-To: <20201223022253.2793452-1-sashal@kernel.org>
+References: <20201223022253.2793452-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,7 +65,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/security/tomoyo/securityfs_if.c b/security/tomoyo/securityfs_if.c
-index 1d3d7e7a1f055..6f1161f4e613d 100644
+index 49393c2a3f8bc..9c7c8ec87de2a 100644
 --- a/security/tomoyo/securityfs_if.c
 +++ b/security/tomoyo/securityfs_if.c
 @@ -131,8 +131,8 @@ static const struct file_operations tomoyo_self_operations = {
