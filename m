@@ -2,115 +2,164 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D282E6A7B
-	for <lists+linux-security-module@lfdr.de>; Mon, 28 Dec 2020 20:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E39992E6BFE
+	for <lists+linux-security-module@lfdr.de>; Tue, 29 Dec 2020 00:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729124AbgL1T3Z (ORCPT
+        id S1729359AbgL1Wzs (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 28 Dec 2020 14:29:25 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57422 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728025AbgL1T3Z (ORCPT
+        Mon, 28 Dec 2020 17:55:48 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30740 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729325AbgL1To4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 28 Dec 2020 14:29:25 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BSJ2Je4093091;
-        Mon, 28 Dec 2020 14:28:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Rpn4lp3SUOk2YDd86lH3fnWtn2BSZNIwtJDTL4FJsaE=;
- b=h5F0QAKrFAED+I59GtQ/Zv8B18CbkY/hJGSMx9ROPZu3RDTdLjm+jk1bUrMu2Q7T3jVI
- 9e76Y67b/r5Fu19ShN+vuFv8GvSKWf0NsxGBgWKdLs0qy2qgkTnv7BKRNS1+sz3+wHOk
- 6DTrzBF9TfdTcZEKezGVZjZmwok5oYfkLxWtmVfF8UjiIlFmr5rQSdSULgiyBDqESQy7
- KAfCVxbdWtDyhmJfpqc4WpN7PHegr2m/Dtu5F1Vo7afkGb1iGskHfWl2/rEfO5LKUuFA
- 7wkIp9/lSBaee8eXpxJaVtf/ED4qKGlorEBvjJ42Shz4zmEnUnFxVFU4iKdAs9ekhPiQ TQ== 
+        Mon, 28 Dec 2020 14:44:56 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BSJWmXV087244;
+        Mon, 28 Dec 2020 14:44:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=FFC1pIh9Jx3Vm1rVMfDgprQvk4esrJQ88xEvb228pWQ=;
+ b=PKh5KhiUgozAkhHVNi5TelmKS12GtPwEaDTPwKrjGvOgHezPVk2urrt1tw3z0c2Jq1tP
+ G0HeIK1bYzBsPaAM4tWTEtpEuyDRKXy963HKP3Xa09WB904J7+QxSudjGfSVKuvzqODk
+ 6+ilTvqlLdoIHPipsRIxYwNWsjKCQ1/1PGKuCbcJRIrCSHmPHLdjFJPtv3B5sCmfVevY
+ 5wMHiHwnvBIUVMwVfMRT9GUCVVLCP9V1UaGglnETD42dcjZ3npVUWvR1eXRopxG9KbHQ
+ iBKZ1XOlVwD8hKNttAik6gIh/vmu1alIa4I3igY157wxngxG2lfsjhTybLAeaM1bSLd5 Wg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35qm69hn29-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35qmwts065-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Dec 2020 14:28:41 -0500
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BSJRXSA174570;
-        Mon, 28 Dec 2020 14:28:41 -0500
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35qm69hn21-1
+        Mon, 28 Dec 2020 14:44:04 -0500
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BSJWmJj087289;
+        Mon, 28 Dec 2020 14:44:03 -0500
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35qmwts05k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Dec 2020 14:28:41 -0500
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BSJSaZI007668;
-        Mon, 28 Dec 2020 19:28:40 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma03wdc.us.ibm.com with ESMTP id 35qkjg8nvw-1
+        Mon, 28 Dec 2020 14:44:03 -0500
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BSJfdFM019890;
+        Mon, 28 Dec 2020 19:44:02 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 35nvt895fp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Dec 2020 19:28:40 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BSJSd7j23790032
+        Mon, 28 Dec 2020 19:44:02 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BSJhv9X28639742
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Dec 2020 19:28:39 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97A342805A;
-        Mon, 28 Dec 2020 19:28:39 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 546A728058;
-        Mon, 28 Dec 2020 19:28:39 +0000 (GMT)
-Received: from [9.80.236.243] (unknown [9.80.236.243])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Dec 2020 19:28:39 +0000 (GMT)
-Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with kernel
- measurements
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Maurizio Drocco <maurizio.drocco@ibm.com>,
-        Bruno Meneguele <bmeneg@redhat.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20200708154116.3199728-1-sashal@kernel.org>
- <20200708154116.3199728-3-sashal@kernel.org>
- <1594224793.23056.251.camel@linux.ibm.com>
- <20200709012735.GX2722994@sasha-vm>
- <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
- <20201211031008.GN489768@sequoia>
- <659c09673affe9637a5d1391c12af3aa710ba78a.camel@linux.ibm.com>
- <76710d8ec58c440ed7a7b446696b8659f694d0db.camel@HansenPartnership.com>
- <05266e520f62276b07e76aab177ea6db47916a7f.camel@linux.ibm.com>
-From:   Ken Goldman <kgold@linux.ibm.com>
-Message-ID: <fccbb614-3a73-651d-b2f4-fb98ff4022f5@linux.ibm.com>
-Date:   Mon, 28 Dec 2020 14:28:38 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <05266e520f62276b07e76aab177ea6db47916a7f.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
+        Mon, 28 Dec 2020 19:43:57 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA7C7A405C;
+        Mon, 28 Dec 2020 19:43:59 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9390A405F;
+        Mon, 28 Dec 2020 19:43:56 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.72.172])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Dec 2020 19:43:56 +0000 (GMT)
+Message-ID: <564953d7ffb847365236a37639b81cbb7bca2aa6.camel@linux.ibm.com>
+Subject: Re: [PATCH v23 02/23] LSM: Create and manage the lsmblob data
+ structure.
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com, sds@tycho.nsa.gov,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Date:   Mon, 28 Dec 2020 14:43:55 -0500
+In-Reply-To: <c88bc01f-3b65-f320-b42b-5ecde3e29448@schaufler-ca.com>
+References: <20201120201507.11993-1-casey@schaufler-ca.com>
+         <20201120201507.11993-3-casey@schaufler-ca.com>
+         <903c37e9036d167958165ab700e646c1622a9c40.camel@linux.ibm.com>
+         <c88bc01f-3b65-f320-b42b-5ecde3e29448@schaufler-ca.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-28_17:2020-12-28,2020-12-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- spamscore=0 adultscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1031 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012280113
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ adultscore=0 clxscore=1015 mlxscore=0 suspectscore=0 impostorscore=0
+ spamscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012280115
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 12/12/2020 9:22 PM, Mimi Zohar wrote:
-> Ok.   Going forward, it sounds like we need to define a new
-> "boot_aggregate" record.  One that contains a version number and PCR
-> mask.
+On Mon, 2020-12-28 at 11:22 -0800, Casey Schaufler wrote:
+> On 12/28/2020 9:54 AM, Mimi Zohar wrote:
+> > Hi Casey,
+> >
+> > On Fri, 2020-11-20 at 12:14 -0800, Casey Schaufler wrote:
+> >> When more than one security module is exporting data to
+> >> audit and networking sub-systems a single 32 bit integer
+> >> is no longer sufficient to represent the data. Add a
+> >> structure to be used instead.
+> >>
+> >> The lsmblob structure is currently an array of
+> >> u32 "secids". There is an entry for each of the
+> >> security modules built into the system that would
+> >> use secids if active. The system assigns the module
+> >> a "slot" when it registers hooks. If modules are
+> >> compiled in but not registered there will be unused
+> >> slots.
+> >>
+> >> A new lsm_id structure, which contains the name
+> >> of the LSM and its slot number, is created. There
+> >> is an instance for each LSM, which assigns the name
+> >> and passes it to the infrastructure to set the slot.
+> >>
+> >> The audit rules data is expanded to use an array of
+> >> security module data rather than a single instance.
+> >> Because IMA uses the audit rule functions it is
+> >> affected as well.
+> > This patch is quite large, even without the audit rule change.  I would
+> > limit this patch to the new lsm_id structure changes.  The audit rule
+> > change should be broken out as a separate patch so that the audit
+> > changes aren't hidden.
+> 
+> Breaking up the patch in any meaningful way would require
+> scaffolding code that is as extensive and invasive as the
+> final change. I can do that if you really need it, but it
+> won't be any easier to read.
 
-Just BTW, there is a TCG standard for a TPM 2.0 PCR mask that works
-well.
+Hidden in this patch is the new behavior of security_audit_rule_init(),
+security_audit_rule_free(), and security_audit_rule_match().  My
+concern is with label collision.  Details are in a subsequent post. 
+Can an LSM prevent label collision?
 
-There is also a standard for an event log version number.  It is
-the first event of a TPM 2.0 event log.  It is strange.
+> 
+> > In addition, here are a few high level nits:
+> > - The (patch description) body of the explanation, line wrapped at 75
+> > columns, which will be copied to the permanent changelog to describe
+> > this patch. (Refer  Documentation/process/submitting-patches.rst.)
+> 
+> Will fix.
+> 
+> > - The brief kernel-doc descriptions should not have a trailing period. 
+> > Nor should kernel-doc variable definitions have a trailing period. 
+> > Example(s) inline below.  (The existing kernel-doc is mostly correct.)
+> 
+> Will fix.
+> 
+> > - For some reason existing comments that span multiple lines aren't
+> > formatted properly.   In those cases, where there is another change,
+> > please fix the comment and function description.
+> 
+> Can you give an example? There are multiple comment styles
+> used in the various components.
 
-One useful field, though, is a mapping between the algorithm ID (e.g.,
-sha256 is 0x000b) and the digest size (e.g., 32 bytes).  This permits
-a parser to parse a log even when it encounters an unknown digest
-algorithm.
+Never mind.  All three examples are in tomoyo.
 
+> I don't see any comments on the ima code changes. I really
+> don't want to spin a new patch set that does nothing but change
+> two periods in comments only to find out two months from now
+> that the code changes are completely borked. I really don't
+> want to go through the process of breaking up the patch that has
+> been widely Acked if there's no reason to expect it would require
+> significant work otherwise.
 
+Understood.
 
