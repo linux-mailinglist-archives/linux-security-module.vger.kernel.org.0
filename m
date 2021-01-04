@@ -2,72 +2,53 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFBA2E8947
-	for <lists+linux-security-module@lfdr.de>; Sun,  3 Jan 2021 00:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6254E2E92D3
+	for <lists+linux-security-module@lfdr.de>; Mon,  4 Jan 2021 10:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbhABXIw (ORCPT
+        id S1726648AbhADJv1 convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 2 Jan 2021 18:08:52 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:47821 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726904AbhABXIs (ORCPT
+        Mon, 4 Jan 2021 04:51:27 -0500
+Received: from post.dks.ru ([194.226.89.161]:53178 "EHLO post.dks.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726236AbhADJv1 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 2 Jan 2021 18:08:48 -0500
-Received: by mail-io1-f71.google.com with SMTP id q21so9686393ios.14
-        for <linux-security-module@vger.kernel.org>; Sat, 02 Jan 2021 15:08:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=xiEz0zPMyUpnKzLhYUnlv16mJTBk47GYHjbMemvYGag=;
-        b=pDhY9Csw1+x3tsIbYlAmHalRUh/S3erBlv6RBwJLLshbKg4dVwZMHJ+WvqdyPsj+Ff
-         B+vr8oNEEIh7dETGffi4T/yHgqIPPCEnyogV7laVpoxd7EmePtZO/kKbB0CojfQigWKS
-         YFbg9SeBPhYGbU8RrSldox3pnZasNTQgaFpGq2QLVwdXcI3R6tndbxTI0dftzt4NE3zE
-         YXnKtuNNbCR0WTzqSghGaTTTYVTPjyOSPTO/Y62FezCpzIV+RiDKEWXBhPVYbnZ7ehwg
-         YVpzxOacRdXxYMv+TWbmyweWOrO0+yKDks3m24JMQ0Jv6UFQMUlTbXomARXPxAl9m7rS
-         pP4Q==
-X-Gm-Message-State: AOAM533n+HL3ghviR2Nx4W7k2LtsCE+g7Zan3378+7n2yJPiiC/j+7MA
-        0WTSD8sJ6MNgPYQxCYMUgea16+IgPABfeNclBlvDKepxoUwe
-X-Google-Smtp-Source: ABdhPJw5aPB63tv+UKyWH6P3GLw1/joSnocDf9Va4zkVn9W6ovN0OmH9m4h5GDMUABDOGXo/PpQv9dQg0Tviuv4SPWoyM7fs5DD8
+        Mon, 4 Jan 2021 04:51:27 -0500
+Received: from ksmg.dks.lan (unknown [172.17.112.11])
+        by post.dks.ru (Postfix) with ESMTP id 94328270863;
+        Mon,  4 Jan 2021 12:21:42 +0300 (MSK)
+Received: from [192.168.88.237] (unknown [212.154.23.124])
+        (Authenticated sender: zapros@dks.ru)
+        by post.dks.ru (Postfix) with ESMTP id 955CF26F446;
+        Mon,  4 Jan 2021 12:21:36 +0300 (MSK)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-Received: by 2002:a92:1508:: with SMTP id v8mr37962807ilk.162.1609628887224;
- Sat, 02 Jan 2021 15:08:07 -0800 (PST)
-Date:   Sat, 02 Jan 2021 15:08:07 -0800
-In-Reply-To: <000000000000880dcc0598bcfac9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000b157705b7f2eefd@google.com>
-Subject: Re: possible deadlock in process_measurement (2)
-From:   syzbot <syzbot+18a1619cceea30ed45af@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bhe@redhat.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, mike.kravetz@oracle.com,
-        richard.weiyang@linux.alibaba.com, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: YOUR URGENT RESPONSE !!!!
+To:     Recipients <zapros@dks.ru>
+From:   "Mr. Kim Leang" <zapros@dks.ru>
+Date:   Mon, 04 Jan 2021 01:22:02 -0800
+Reply-To: kimleang575@yahoo.com
+Message-Id: <20210104092136.955CF26F446@post.dks.ru>
+X-KLMS-Rule-ID: 7
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Status: not scanned, disabled by settings
+X-KLMS-AntiSpam-Interceptor-Info: not scanned
+X-KLMS-AntiPhishing: Clean, bases: 2021/01/04 08:40:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2021/01/04 05:34:00 #16008269
+X-KLMS-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-syzbot suspects this issue was fixed by commit:
+Greeting!
 
-commit 15a8d68e9dc23dc9def4bd7e9563db60f4f86580
-Author: Wei Yang <richard.weiyang@linux.alibaba.com>
-Date:   Tue Oct 13 23:56:33 2020 +0000
+I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
 
-    mm/hugetlb: a page from buddy is not on any list
+I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13612350d00000
-start commit:   1590a2e1 Merge tag 'acpi-5.8-rc3' of git://git.kernel.org/..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bf3aec367b9ab569
-dashboard link: https://syzkaller.appspot.com/bug?extid=18a1619cceea30ed45af
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c79dbb100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=169bba3d100000
+The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
 
-#syz fix: mm/hugetlb: a page from buddy is not on any list
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Thanks and have a nice day,
+Mr. Kim Leang
