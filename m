@@ -2,59 +2,58 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36FD2EC8DA
-	for <lists+linux-security-module@lfdr.de>; Thu,  7 Jan 2021 04:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0A32EC93B
+	for <lists+linux-security-module@lfdr.de>; Thu,  7 Jan 2021 04:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbhAGDJH (ORCPT
+        id S1726370AbhAGD4S (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 6 Jan 2021 22:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        Wed, 6 Jan 2021 22:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725792AbhAGDJG (ORCPT
+        with ESMTP id S1726482AbhAGD4S (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 6 Jan 2021 22:09:06 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A54CC0612EF
-        for <linux-security-module@vger.kernel.org>; Wed,  6 Jan 2021 19:08:26 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id y24so6309137edt.10
-        for <linux-security-module@vger.kernel.org>; Wed, 06 Jan 2021 19:08:26 -0800 (PST)
+        Wed, 6 Jan 2021 22:56:18 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3372C0612F3
+        for <linux-security-module@vger.kernel.org>; Wed,  6 Jan 2021 19:55:37 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id g24so6380387edw.9
+        for <linux-security-module@vger.kernel.org>; Wed, 06 Jan 2021 19:55:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wszMA77g4rkAzda5NnDRLoVKFBxWJonjIWdOwjgn+kc=;
-        b=FMdvxIT9BIQB3ceg24vI0A6nt9XWJUbDt4ADfKbXNXlIc8+rpsppokAQtPldxOXBhL
-         TqH7HKRBeqZoxftlvBgBck+/wClLVb61JUjXvJ/BnecoBfjhdr3U+ePYKkiV91wVMNt1
-         FAAxEO9zdwGGYtiMCAiqr4FHhk1T2i7/cxovVBEEjzgSVag5zXO2IJSJ/r2T+CQEyWTW
-         7HrFaV5n+PBazmh/BRr0byz9nw30qvWCJePz0OG8lx/KoDeoiJic94IN0SegvDQVIkUH
-         KrFKgIvuFBxENpTUzGp8t3BlDn6DRLHfZ8Ym2nOF9uFvnbgheqbrIavAOUo69SZp8ASM
-         la7Q==
+        bh=ArfZUeS2ElfFd5UopeF/y2SL/kE9hAKyfvJ+CrxktOY=;
+        b=OMyfG8W1rQr2h6/oLmLv+ytkpXZbK+A0pav47xabiQJCKB96+5iD4rooJBTG+qQ/dh
+         9u0Qg6R0IRfRshQlJGwdQAmnkOQT72eqhxk9oErD5oQL9RiqdCZw0n+MVCxfbwfhpC89
+         F+ex8TSUqpa8Dpvmsi1K2QGu8ku/ARuy+iOvra/UqtI3y3h4r6a/KWmRLaA8KvukFDeO
+         VagKNaCQkNe/8U89AAKBPYds39cnECSVvOYWRjois2iehgx5lxO+if32MDRcWUYvkSmp
+         +9n2M7gl9AAiws/+5ahLs1LIg2bCyjCdXy2Chuk7BqbqNQqt301IDVWNA+JrtG37WzRL
+         Cwtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wszMA77g4rkAzda5NnDRLoVKFBxWJonjIWdOwjgn+kc=;
-        b=ctuorzHSQnCgWEnLE8iVjZm+hMATaMBAhpkirgnBfCdUr6+mpU0l/iDBjqMjEbAuxq
-         ZRxz80iFP5gSUYDw/vTF3vR985BeT6oshNm140LAC8VpS6ivSrNl2D850Kjs0L/55euO
-         zH3CrWWUV85cqpPFKvb3ykdyHv4UI/DpeDeHAYEbjJIDi37NjTO8Z4Rsuvcma8SDMtKa
-         BVM83dFd4BtdxSF4j816D4bkTkthlohBiPxFXhU21H4FyzZQ5K5Hj5COLEOGxYwUUiMu
-         QuzLah86Pixi1+aj8kMrXfqXQDhwdfTHv+HGGzJFe9W14zLbHO9HcS8Ukw5uWyP0/r5t
-         pu7g==
-X-Gm-Message-State: AOAM530A8W9sHUwgSvOisJi3vrufPDBs3pPxm6WJk9jjInY2o0ZgL1/f
-        ltKwepiRdYyW2lXFhaCbK/3zquvqoZNDE9018s5D
-X-Google-Smtp-Source: ABdhPJwbPcMUXvCDqoq1//tWbym4M7BDR4jwDkslBeDZnJaZiKtcepOwWJPg2O/6NWanRIPEd4xbTQWT+K8aluV5/oA=
-X-Received: by 2002:aa7:c0d6:: with SMTP id j22mr80950edp.31.1609988905108;
- Wed, 06 Jan 2021 19:08:25 -0800 (PST)
+        bh=ArfZUeS2ElfFd5UopeF/y2SL/kE9hAKyfvJ+CrxktOY=;
+        b=Ih90PHFyoLOGz5zvqMFMaAMfy3zCnLdjRqc8MozXNZXP7lNqKxt0gAaSHbrqPJttD/
+         bj46uriseM1b8P94pNp4j6nv8k0qyzFL1IZ0vDpoxPZXSmoDhV01Qvuj8Yli6UN5Rm7b
+         i56IMe4cC2Zyhy9K+j12T93LftxV/FzKMPONBcit9SpJlFE2PVfEjFcPYZIm3eCFPs0a
+         IERrEdxVaUPEwiuygh4vQWzS30n0zd7RQUc0lzeRv4ZehRdz/KbCEWfbnS4GK49vC0pm
+         5fw+XU+7/SdrqZrhDAsO2cNg72irU7v1/+Vv2GW1XJ968cz1QrCKZ/ExwYKgq3IbNt/f
+         74fA==
+X-Gm-Message-State: AOAM531nUMGIIWXm4UKfgrcnEnOTJVyiMJHnPunTs2wr7VbRzgzTi60O
+        KJ5Y59JkaLlWxaAb2P8qQHPPK1cXMyV6fqlymrElOQ==
+X-Google-Smtp-Source: ABdhPJyORx0sAbAODd8CGeISVo0MbK0W4eoAnMRxbU/9RBvPBR5EHlcWJhHewQFctKMuOIIq9ZOYtptNP4Cvp4t4fuo=
+X-Received: by 2002:a05:6402:2cd:: with SMTP id b13mr187485edx.199.1609991736272;
+ Wed, 06 Jan 2021 19:55:36 -0800 (PST)
 MIME-Version: 1.0
 References: <20201112015359.1103333-1-lokeshgidra@google.com>
- <20201112015359.1103333-3-lokeshgidra@google.com> <CAHC9VhScpFVtxzU_nUDUc4zGT7+EZKFRpYAm+Ps5vd2AjKkaMQ@mail.gmail.com>
- <CA+EESO7nFwaeSA2xC_FH=O6MtCuORcHPrihwRdt9ecWWLgkBsg@mail.gmail.com>
-In-Reply-To: <CA+EESO7nFwaeSA2xC_FH=O6MtCuORcHPrihwRdt9ecWWLgkBsg@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 6 Jan 2021 22:08:13 -0500
-Message-ID: <CAHC9VhRm-JR2Tt2NQdsVMo2oQZR=KtHkSnJj+GmRvkcF9GqK4w@mail.gmail.com>
-Subject: Re: [PATCH v13 2/4] fs: add LSM-supporting anon-inode interface
-To:     Lokesh Gidra <lokeshgidra@google.com>
+ <20201112015359.1103333-4-lokeshgidra@google.com> <CAHC9VhS2WNXn2cVAUcAY5AmmBv+=XsthCevofNNuEOU3=jtLrg@mail.gmail.com>
+In-Reply-To: <CAHC9VhS2WNXn2cVAUcAY5AmmBv+=XsthCevofNNuEOU3=jtLrg@mail.gmail.com>
+From:   Lokesh Gidra <lokeshgidra@google.com>
+Date:   Wed, 6 Jan 2021 19:55:25 -0800
+Message-ID: <CA+EESO5wXubeutVOdbp_LamfP5TyG0r7BO-qnWV=wkd9zWqJ4w@mail.gmail.com>
+Subject: Re: [PATCH v13 3/4] selinux: teach SELinux about anonymous inodes
+To:     Paul Moore <paul@paul-moore.com>
 Cc:     Andrea Arcangeli <aarcange@redhat.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         James Morris <jmorris@namei.org>,
@@ -71,13 +70,11 @@ Cc:     Andrea Arcangeli <aarcange@redhat.com>,
         Anders Roxell <anders.roxell@linaro.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Matthew Garrett <matthewgarrett@google.com>,
-        Aaron Goidel <acgoide@tycho.nsa.gov>,
         Randy Dunlap <rdunlap@infradead.org>,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         YueHaibing <yuehaibing@huawei.com>,
         Christian Brauner <christian.brauner@ubuntu.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Alexey Budankov <alexey.budankov@linux.intel.com>,
         Adrian Reber <areber@redhat.com>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Linux FS Devel <linux-fsdevel@vger.kernel.org>,
@@ -90,83 +87,140 @@ Cc:     Andrea Arcangeli <aarcange@redhat.com>,
         Jeffrey Vander Stoep <jeffv@google.com>,
         "Cc: Android Kernel" <kernel-team@android.com>,
         "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>, hch@infradead.org,
-        Daniel Colascione <dancol@google.com>,
-        Eric Biggers <ebiggers@google.com>
+        Andrew Morton <akpm@linux-foundation.org>, hch@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Jan 6, 2021 at 9:44 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
-> On Wed, Jan 6, 2021 at 6:10 PM Paul Moore <paul@paul-moore.com> wrote:
-> >
-> > On Wed, Nov 11, 2020 at 8:54 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
-> > > From: Daniel Colascione <dancol@google.com>
-> > >
-> > > This change adds a new function, anon_inode_getfd_secure, that creates
-> > > anonymous-node file with individual non-S_PRIVATE inode to which security
-> > > modules can apply policy. Existing callers continue using the original
-> > > singleton-inode kind of anonymous-inode file. We can transition anonymous
-> > > inode users to the new kind of anonymous inode in individual patches for
-> > > the sake of bisection and review.
-> > >
-> > > The new function accepts an optional context_inode parameter that callers
-> > > can use to provide additional contextual information to security modules.
-> > > For example, in case of userfaultfd, the created inode is a 'logical child'
-> > > of the context_inode (userfaultfd inode of the parent process) in the sense
-> > > that it provides the security context required during creation of the child
-> > > process' userfaultfd inode.
-> > >
-> > > Signed-off-by: Daniel Colascione <dancol@google.com>
-> > >
-> > > [Delete obsolete comments to alloc_anon_inode()]
-> > > [Add context_inode description in comments to anon_inode_getfd_secure()]
-> > > [Remove definition of anon_inode_getfile_secure() as there are no callers]
-> > > [Make __anon_inode_getfile() static]
-> > > [Use correct error cast in __anon_inode_getfile()]
-> > > [Fix error handling in __anon_inode_getfile()]
-> >
-> > Lokesh, I'm assuming you made the changes in the brackets above?  If
-> > so they should include your initials or some other means of
-> > attributing them to you, e.g. "[LG: Fix error ...]".
+On Wed, Jan 6, 2021 at 7:03 PM Paul Moore <paul@paul-moore.com> wrote:
 >
-> Thanks for reviewing the patch. Sorry for missing this. If it's
-> critical then I can upload another version of the patches to fix this.
-> Kindly let me know.
-
-Normally that is something I could fix during a merge with your
-approval, but see my comments to patch 3/4; I think this patchset
-still needs some work.
-
-> > > Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
-> > > Reviewed-by: Eric Biggers <ebiggers@google.com>
-> > > ---
-> > >  fs/anon_inodes.c            | 150 ++++++++++++++++++++++++++----------
-> > >  fs/libfs.c                  |   5 --
-> > >  include/linux/anon_inodes.h |   5 ++
-> > >  3 files changed, 115 insertions(+), 45 deletions(-)
-
-...
-
-> > > +static struct file *__anon_inode_getfile(const char *name,
-> > > +                                        const struct file_operations *fops,
-> > > +                                        void *priv, int flags,
-> > > +                                        const struct inode *context_inode,
-> > > +                                        bool secure)
+> On Wed, Nov 11, 2020 at 8:54 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
+> > From: Daniel Colascione <dancol@google.com>
 > >
-> > Is it necessary to pass both the context_inode pointer and the secure
-> > boolean?  It seems like if context_inode is non-NULL then one could
-> > assume that a secure anonymous inode was requested; is there ever
-> > going to be a case where this is not true?
+> > This change uses the anon_inodes and LSM infrastructure introduced in
+> > the previous patches to give SELinux the ability to control
+> > anonymous-inode files that are created using the new
+> > anon_inode_getfd_secure() function.
+> >
+> > A SELinux policy author detects and controls these anonymous inodes by
+> > adding a name-based type_transition rule that assigns a new security
+> > type to anonymous-inode files created in some domain. The name used
+> > for the name-based transition is the name associated with the
+> > anonymous inode for file listings --- e.g., "[userfaultfd]" or
+> > "[perf_event]".
+> >
+> > Example:
+> >
+> > type uffd_t;
+> > type_transition sysadm_t sysadm_t : anon_inode uffd_t "[userfaultfd]";
+> > allow sysadm_t uffd_t:anon_inode { create };
+> >
+> > (The next patch in this series is necessary for making userfaultfd
+> > support this new interface.  The example above is just
+> > for exposition.)
+> >
+> > Signed-off-by: Daniel Colascione <dancol@google.com>
+> > Signed-off-by: Lokesh Gidra <lokeshgidra@google.com>
+> > ---
+> >  security/selinux/hooks.c            | 56 +++++++++++++++++++++++++++++
+> >  security/selinux/include/classmap.h |  2 ++
+> >  2 files changed, 58 insertions(+)
+> >
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index 6b1826fc3658..d092aa512868 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -2927,6 +2927,61 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+> >         return 0;
+> >  }
+> >
+> > +static int selinux_inode_init_security_anon(struct inode *inode,
+> > +                                           const struct qstr *name,
+> > +                                           const struct inode *context_inode)
+> > +{
+> > +       const struct task_security_struct *tsec = selinux_cred(current_cred());
+> > +       struct common_audit_data ad;
+> > +       struct inode_security_struct *isec;
+> > +       int rc;
+> > +
+> > +       if (unlikely(!selinux_initialized(&selinux_state)))
+> > +               return 0;
+> > +
+> > +       isec = selinux_inode(inode);
+> > +
+> > +       /*
+> > +        * We only get here once per ephemeral inode.  The inode has
+> > +        * been initialized via inode_alloc_security but is otherwise
+> > +        * untouched.
+> > +        */
+> > +
+> > +       if (context_inode) {
+> > +               struct inode_security_struct *context_isec =
+> > +                       selinux_inode(context_inode);
+> > +               if (context_isec->initialized != LABEL_INITIALIZED)
+> > +                       return -EACCES;
+> > +
+> > +               isec->sclass = context_isec->sclass;
 >
-> Yes, it is necessary as there are scenarios where a secure anon-inode
-> is to be created but there is no context_inode available. For
-> instance, in patch 4/4 of this series you'll see that when a secure
-> anon-inode is created in the userfaultfd syscall, context_inode isn't
-> available.
+> Taking the object class directly from the context_inode is
+> interesting, and I suspect problematic.  In the case below where no
+> context_inode is supplied the object class is set to
+> SECCLASS_ANON_INODE, which is correct, but when a context_inode is
+> supplied there is no guarantee that the object class will be set to
+> SECCLASS_ANON_INODE.  This could both pose a problem for policy
+> writers (how do you distinguish the anon inode from other normal file
+> inodes in this case?) as well as an outright fault later in this
+> function when we try to check the ANON_INODE__CREATE on an object
+> other than a SECCLASS_ANON_INODE object.
+>
+Thanks for catching this. I'll initialize 'sclass' unconditionally to
+SECCLASS_ANON_INODE in the next version. Also, do you think I should
+add a check that context_inode's sclass must be SECCLASS_ANON_INODE to
+confirm that we never receive a regular inode as context_inode?
 
-My mistake, I didn't realize this until I got further in the patchset.
+> It works in the userfaultfd case because the context_inode is
+> originally created with this function so the object class is correctly
+> set to SECCLASS_ANON_INODE, but can we always guarantee that to be the
+> case?  Do we ever need or want to support using a context_inode that
+> is not SECCLASS_ANON_INODE?
+>
 
--- 
-paul moore
-www.paul-moore.com
+I don't think there is any requirement of supporting context_inode
+which isn't anon-inode. And even if there is, as you described
+earlier, for ANON_INODE__CREATE to work the sclass has to be
+SECCLASS_ANON_INODE. I'll appreciate comments on this from others,
+particularly Daniel and Stephen who originally discussed and
+implemented this patch.
+
+
+> > +               isec->sid = context_isec->sid;
+> > +       } else {
+> > +               isec->sclass = SECCLASS_ANON_INODE;
+> > +               rc = security_transition_sid(
+> > +                       &selinux_state, tsec->sid, tsec->sid,
+> > +                       isec->sclass, name, &isec->sid);
+> > +               if (rc)
+> > +                       return rc;
+> > +       }
+> > +
+> > +       isec->initialized = LABEL_INITIALIZED;
+> > +
+> > +       /*
+> > +        * Now that we've initialized security, check whether we're
+> > +        * allowed to actually create this type of anonymous inode.
+> > +        */
+> > +
+> > +       ad.type = LSM_AUDIT_DATA_INODE;
+> > +       ad.u.inode = inode;
+> > +
+> > +       return avc_has_perm(&selinux_state,
+> > +                           tsec->sid,
+> > +                           isec->sid,
+> > +                           isec->sclass,
+> > +                           ANON_INODE__CREATE,
+> > +                           &ad);
+> > +}
+>
+> --
+> paul moore
+> www.paul-moore.com
