@@ -2,164 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2E12F57F5
-	for <lists+linux-security-module@lfdr.de>; Thu, 14 Jan 2021 04:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59662F57C4
+	for <lists+linux-security-module@lfdr.de>; Thu, 14 Jan 2021 04:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730008AbhANCLn (ORCPT
+        id S1726448AbhANCGW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 13 Jan 2021 21:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729263AbhAMWLL (ORCPT
+        Wed, 13 Jan 2021 21:06:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42588 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729109AbhANCGT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 13 Jan 2021 17:11:11 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71835C061795
-        for <linux-security-module@vger.kernel.org>; Wed, 13 Jan 2021 14:10:31 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id b9so5372171ejy.0
-        for <linux-security-module@vger.kernel.org>; Wed, 13 Jan 2021 14:10:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cHpWTw6lcPxz7z8H8yQJbwdU01y9cP5VFlHIAcOYlIE=;
-        b=B2jvRWZJURQ5oLNMwvJfonm7dSdUz89Ple+ZJuYOXcXZ7dhHpGH7Q7+w3X36ZBWmKC
-         SZVY4kP8zTNT+/eQZiiqp5eK+9C6x1UFd4NdwG8nWK0baXnQTowRKcF6x3D5gHX0yQcF
-         sfgeCszX8SGM2ryM3QdOT+nct7lR9nxs0DCnMjPMr4wOp7Lk/zuDSxlnHLC4M0d3KB1V
-         ExMz9YrKyBAlaH3WiDJZkFL6Usft206o7TZMgfl2/anU6vg/vQUQ3YUElFP3jasCt8PG
-         Di8oWLX2naDdKMFQpSipQdpaWBSpYJ41I7KJ+HQLM0ttURYXt111lDa6pMOpcLdOH5yD
-         jMBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cHpWTw6lcPxz7z8H8yQJbwdU01y9cP5VFlHIAcOYlIE=;
-        b=Zc6lAXZznfXNIxOl5vnyNtrDdk4oo624V8QYEASReG/tRNWfKOQ3+h13JJDKbawtRD
-         TuIte8ZdGxwqPtxWJ6eNIqipKIooJdMPQoapsVmmukEJSv/KhcW7lKCIlKoG4a23hnCo
-         9p9tgDRKiknK2nz2Rk9BnOAg5yynPf13jUcFVKIbTzhAcfE4gzwQxj+YidRORtGCEupa
-         eXdAioxuEndkPeO1mQgHkQSuCPBeVc4zTng7v5x8wE7wzx0E4OnlnwuLinKKxWQoe0hL
-         3CTLYzbVy6ycY5xC0H9FHdvjV6MBt6YPYv0VEJN0npj3qvTrxG4tmXPI9yNeIG4zT+9j
-         5x7w==
-X-Gm-Message-State: AOAM530j6U/ihMrFMZ2VDHAlgarEWgzEvRWfYodLMRFIo8VOOqou0GqQ
-        HuCIVjvCknBv+V4wTO1YK6xKptetgLrA5jwrzj4P
-X-Google-Smtp-Source: ABdhPJyQ+Tv7FzDHXgquLSuHzkUCDHhbnr+LMfzfd+uUbDk6LddmjJQuH97q0w+D3HgxnXmUDLfKkBaytbA3dCAnK58=
-X-Received: by 2002:a17:906:3712:: with SMTP id d18mr3206433ejc.178.1610575829813;
- Wed, 13 Jan 2021 14:10:29 -0800 (PST)
+        Wed, 13 Jan 2021 21:06:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C0C9223442;
+        Thu, 14 Jan 2021 02:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610589938;
+        bh=NNgK5BZvTtLVTBZUqJP4R8eSarXLcVpD1VeEm8Vu678=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uEbV8/lm9F6iat9HimlHsiyPyU7AtTod+Gg+fJNZtrdkgZzZFz+9JsAWD2RYgolAy
+         zd23Qdv8WM3G/NHSLsEIu07x7B8V0NS0KLE2Cq6nAhkI1a2G7lDOnpvCG7UfwpERtY
+         YSAfuut5osfYLOXLZjDF6T/hbMCAB1kUSspXmMpxzmH0DDX0fSf55dZKV3bBFkThsY
+         AAUY/7Mz8S1jU4JIZahoaTywyTn/kTlM1YPf+vCrPm59ZUvORuNPcy/OlzXnc7K8at
+         qj3qmvqCUzX0XG7wNxM+Csrb3WyJBgHr4QRrdYADo3S7lpxoyTGZPyjinLwkQsZEkz
+         LINZx0hO334Bg==
+Date:   Thu, 14 Jan 2021 04:05:31 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        Luke Hinds <lhinds@redhat.com>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org
+Subject: Re: [PATCH v8 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
+Message-ID: <X/+m6+m2/snYj9Vc@kernel.org>
+References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
+ <1604419306-26105-3-git-send-email-sumit.garg@linaro.org>
+ <X/x+N0fgrzIZTeNi@kernel.org>
+ <CAFA6WYOUvWAZtYfR4q8beZFkX-CtdxqwJaRQM+GHNMDfQiEWOA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
- <20210108040708.8389-9-tusharsu@linux.microsoft.com> <CAHC9VhSJk0wG=WzO3bwsueiy19mMi9m6MamTrQfH8C=gXUtvGw@mail.gmail.com>
- <97328fc71687a0e1c327f6821548be9ba35bb193.camel@linux.ibm.com>
- <CAHC9VhTzaQ_q8gJ0oeok_yJ54XLETNvOuhhKnyRwgqsqvpBLCw@mail.gmail.com> <71cddb6c8676ccd63c89364d805cfca76d32cb6e.camel@linux.ibm.com>
-In-Reply-To: <71cddb6c8676ccd63c89364d805cfca76d32cb6e.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 13 Jan 2021 17:10:18 -0500
-Message-ID: <CAHC9VhRhYWEcK7TepZ=LK1m=9Zn_gtOZyAYfamP-TFU3rRH+zw@mail.gmail.com>
-Subject: Re: [PATCH v10 8/8] selinux: include a consumer of the new IMA
- critical data hook
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, tyhicks@linux.microsoft.com,
-        sashal@kernel.org, James Morris <jmorris@namei.org>,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYOUvWAZtYfR4q8beZFkX-CtdxqwJaRQM+GHNMDfQiEWOA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Jan 13, 2021 at 4:11 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> On Wed, 2021-01-13 at 14:19 -0500, Paul Moore wrote:
-> > On Wed, Jan 13, 2021 at 2:13 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > On Tue, 2021-01-12 at 11:27 -0500, Paul Moore wrote:
-> > > > On Thu, Jan 7, 2021 at 11:07 PM Tushar Sugandhi
-> > > > <tusharsu@linux.microsoft.com> wrote:
-> > > > > From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> > > > >
-> > > > > SELinux stores the active policy in memory, so the changes to this data
-> > > > > at runtime would have an impact on the security guarantees provided
-> > > > > by SELinux.  Measuring in-memory SELinux policy through IMA subsystem
-> > > > > provides a secure way for the attestation service to remotely validate
-> > > > > the policy contents at runtime.
-> > > > >
-> > > > > Measure the hash of the loaded policy by calling the IMA hook
-> > > > > ima_measure_critical_data().  Since the size of the loaded policy
-> > > > > can be large (several MB), measure the hash of the policy instead of
-> > > > > the entire policy to avoid bloating the IMA log entry.
-> > > > >
-> > > > > To enable SELinux data measurement, the following steps are required:
-> > > > >
-> > > > > 1, Add "ima_policy=critical_data" to the kernel command line arguments
-> > > > >    to enable measuring SELinux data at boot time.
-> > > > > For example,
-> > > > >   BOOT_IMAGE=/boot/vmlinuz-5.10.0-rc1+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
-> > > > >
-> > > > > 2, Add the following rule to /etc/ima/ima-policy
-> > > > >    measure func=CRITICAL_DATA label=selinux
-> > > > >
-> > > > > Sample measurement of the hash of SELinux policy:
-> > > > >
-> > > > > To verify the measured data with the current SELinux policy run
-> > > > > the following commands and verify the output hash values match.
-> > > > >
-> > > > >   sha256sum /sys/fs/selinux/policy | cut -d' ' -f 1
-> > > > >
-> > > > >   grep "selinux-policy-hash" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6
-> > > > >
-> > > > > Note that the actual verification of SELinux policy would require loading
-> > > > > the expected policy into an identical kernel on a pristine/known-safe
-> > > > > system and run the sha256sum /sys/kernel/selinux/policy there to get
-> > > > > the expected hash.
-> > > > >
-> > > > > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> > > > > Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> > > > > Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > > > > ---
-> > > > >  Documentation/ABI/testing/ima_policy |  3 +-
-> > > > >  security/selinux/Makefile            |  2 +
-> > > > >  security/selinux/ima.c               | 64 ++++++++++++++++++++++++++++
-> > > > >  security/selinux/include/ima.h       | 24 +++++++++++
-> > > > >  security/selinux/include/security.h  |  3 +-
-> > > > >  security/selinux/ss/services.c       | 64 ++++++++++++++++++++++++----
-> > > > >  6 files changed, 149 insertions(+), 11 deletions(-)
-> > > > >  create mode 100644 security/selinux/ima.c
-> > > > >  create mode 100644 security/selinux/include/ima.h
-> > > >
-> > > > I remain concerned about the possibility of bypassing a measurement by
-> > > > tampering with the time, but I appear to be the only one who is
-> > > > worried about this so I'm not going to block this patch on those
-> > > > grounds.
-> > > >
-> > > > Acked-by: Paul Moore <paul@paul-moore.com>
-> > >
-> > > Thanks, Paul.
-> > >
-> > > Including any unique string would cause the buffer hash to change,
-> > > forcing a new measurement.  Perhaps they were concerned with
-> > > overflowing a counter.
+On Wed, Jan 13, 2021 at 04:47:00PM +0530, Sumit Garg wrote:
+> Hi Jarkko,
+> 
+> On Mon, 11 Jan 2021 at 22:05, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 > >
-> > My understanding is that Lakshmi wanted to force a new measurement
-> > each time and felt using a timestamp would be the best way to do that.
-> > A counter, even if it wraps, would have a different value each time
-> > whereas a timestamp is vulnerable to time adjustments.  While a
-> > properly controlled and audited system could be configured and
-> > monitored to detect such an event (I *think*), why rely on that if it
-> > isn't necessary?
->
-> Why are you saying that even if the counter wraps a new measurement is
-> guaranteed.   I agree with the rest of what you said.
+> > On Tue, Nov 03, 2020 at 09:31:44PM +0530, Sumit Garg wrote:
+> > > Add support for TEE based trusted keys where TEE provides the functionality
+> > > to seal and unseal trusted keys using hardware unique key.
+> > >
+> > > Refer to Documentation/tee.txt for detailed information about TEE.
+> > >
+> > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> >
+> > I haven't yet got QEMU environment working with aarch64, this produces
+> > just a blank screen:
+> >
+> > ./output/host/usr/bin/qemu-system-aarch64 -M virt -cpu cortex-a53 -smp 1 -kernel output/images/Image -initrd output/images/rootfs.cpio -serial stdio
+> >
+> > My BuildRoot fork for TPM and keyring testing is located over here:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/buildroot-tpmdd.git/
+> >
+> > The "ARM version" is at this point in aarch64 branch. Over time I will
+> > define tpmdd-x86_64 and tpmdd-aarch64 boards and everything will be then
+> > in the master branch.
+> >
+> > To create identical images you just need to
+> >
+> > $ make tpmdd_defconfig && make
+> >
+> > Can you check if you see anything obviously wrong? I'm eager to test this
+> > patch set, and in bigger picture I really need to have ready to run
+> > aarch64 environment available.
+> 
+> I would rather suggest you to follow steps listed here [1] as to test
+> this feature on Qemu aarch64 we need to build firmwares such as TF-A,
+> OP-TEE, UEFI etc. which are all integrated into OP-TEE Qemu build
+> system [2]. And then it would be easier to migrate them to your
+> buildroot environment as well.
+> 
+> [1] https://lists.trustedfirmware.org/pipermail/op-tee/2020-May/000027.html
+> [2] https://optee.readthedocs.io/en/latest/building/devices/qemu.html#qemu-v8
+> 
+> -Sumit
 
-I was assuming that the IMA code simply compares the passed
-"policy_event_name" value to the previous value, if they are different
-a new measurement is taken, if they are the same the measurement
-request is ignored.  If this is the case the counter value is only
-important in as much as that it is different from the previous value,
-even simply toggling a single bit back and forth would suffice in this
-case.  IMA doesn't keep a record of every previous "policy_event_name"
-value does it?  Am I misunderstanding how
-ima_measure_critical_data(...) works?
+Can you provide 'keyctl_change'? Otherwise, the steps are easy to follow.
 
--- 
-paul moore
-www.paul-moore.com
+After I've successfully tested 2/4, I'd suggest that you roll out one more
+version and CC the documentation patch to Elaine and Mini, and clearly
+remark in the commit message that TEE is a standard, with a link to the
+specification.
+
+/Jarkko
