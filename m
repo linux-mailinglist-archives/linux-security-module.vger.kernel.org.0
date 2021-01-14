@@ -2,181 +2,118 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 252692F6466
-	for <lists+linux-security-module@lfdr.de>; Thu, 14 Jan 2021 16:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B4A2F6596
+	for <lists+linux-security-module@lfdr.de>; Thu, 14 Jan 2021 17:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729620AbhANPVX (ORCPT
+        id S1726236AbhANQRP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 14 Jan 2021 10:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727562AbhANPVX (ORCPT
+        Thu, 14 Jan 2021 11:17:15 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:54871 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725982AbhANQQ7 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 14 Jan 2021 10:21:23 -0500
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6DFC06179C
-        for <linux-security-module@vger.kernel.org>; Thu, 14 Jan 2021 07:19:18 -0800 (PST)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DGnz91BD1zMpv3g;
-        Thu, 14 Jan 2021 16:19:17 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4DGnz85r23zlppyg;
-        Thu, 14 Jan 2021 16:19:16 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [PATCH v3 10/10] tools/certs: Add print-cert-tbs-hash.sh
-Date:   Thu, 14 Jan 2021 16:19:09 +0100
-Message-Id: <20210114151909.2344974-11-mic@digikod.net>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210114151909.2344974-1-mic@digikod.net>
-References: <20210114151909.2344974-1-mic@digikod.net>
+        Thu, 14 Jan 2021 11:16:59 -0500
+Received: by mail-io1-f72.google.com with SMTP id w26so9133195iox.21
+        for <linux-security-module@vger.kernel.org>; Thu, 14 Jan 2021 08:16:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=oKRYaFHIzRW8a/LJ+hEDSk8C4TL34dpHsdSSXCrYJqM=;
+        b=TQDM81lPf1qGe8Cmc2E46QXj4HW3zKuT+/9r1va573GnwI71tCuYlWKK5sLreEVW7K
+         bGp3MjZl4MImnfkYPGQuMWqpI5fIW6cjbYe5KDleMzv/CJMT2bLfXKBBgbR6ylVVrvsd
+         VSkIFW9gnD2zqQ+hAbgK1mJMlldukLOldehZsm7yrKdyW+OAn08ksuUNIIsQEUiRXQ6u
+         3gQb99lns7EIe8qb7RUj2qrSE3n9h4bFI9wBPOvvroXj86HOD4MoRv3DONAxepEmkbHW
+         jKWRiHJ9WhGDRf0rghm3S8vu6j6HBRnc/k2j969TFI3ig6oMYLwlCAgqqzHsp3npuf+6
+         q61w==
+X-Gm-Message-State: AOAM532wJIyJj0CqYHSFJRe8n3sQ2b/ygmp2iq+cqvcXFf8Jm4wnuqCZ
+        aC19kkC0rHlrivfNXPvvbidoSElsNQyq58UbkagQCGpCDddT
+X-Google-Smtp-Source: ABdhPJwFgQUDEYptyv9C5bMTwmhL12kGkEqXWKfEycMBsRaDBwnoBSsVNR137Kal0X2WXL9XGIeq9+RCgM0S0J6CBCks/h6yQW4t
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a02:a88a:: with SMTP id l10mr6992659jam.95.1610640978402;
+ Thu, 14 Jan 2021 08:16:18 -0800 (PST)
+Date:   Thu, 14 Jan 2021 08:16:18 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000060e1fe05b8de93e5@google.com>
+Subject: WARNING in memdup_user_nul
+From:   syzbot <syzbot+a71a442385a0b2815497@syzkaller.appspotmail.com>
+To:     casey@schaufler-ca.com, jmorris@namei.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+Hello,
 
-Add a new helper print-cert-tbs-hash.sh to generate a TBSCertificate
-hash from a given certificate.  This is useful to generate a blacklist
-key description used to forbid loading a specific certificate in a
-keyring, or to invalidate a certificate provided by a PKCS#7 file.
+syzbot found the following issue on:
 
-Cc: David Howells <dhowells@redhat.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+HEAD commit:    65f0d241 Merge tag 'sound-5.11-rc4' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11753ee0d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ee2266946ed36986
+dashboard link: https://syzkaller.appspot.com/bug?extid=a71a442385a0b2815497
+compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=152fba3f500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176728e7500000
+
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12cf2548d00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11cf2548d00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16cf2548d00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a71a442385a0b2815497@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 8449 at mm/page_alloc.c:4976 __alloc_pages_nodemask+0x4e5/0x5a0 mm/page_alloc.c:5020
+Modules linked in:
+CPU: 0 PID: 8449 Comm: syz-executor564 Not tainted 5.11.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__alloc_pages_nodemask+0x4e5/0x5a0 mm/page_alloc.c:5020
+Code: aa 09 00 e9 dd fd ff ff 44 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c eb fd ff ff 4c 89 ef e8 54 aa 09 00 8b 74 24 18 e9 da fd ff ff <0f> 0b e9 f3 fd ff ff a9 00 00 08 00 75 16 8b 4c 24 1c 89 cb 81 e3
+RSP: 0018:ffffc90000ebfa60 EFLAGS: 00010246
+RAX: ffffc90000ebfae0 RBX: ffffc90000ebfae0 RCX: 0000000000000000
+RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90000ebfb08
+RBP: ffffc90000ebfba0 R08: dffffc0000000000 R09: ffffc90000ebfae0
+R10: fffff520001d7f61 R11: 0000000000000000 R12: dffffc0000000000
+R13: 0000000000000012 R14: 1ffff920001d7f58 R15: 0000000000040cc0
+FS:  0000000002595880(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000040 CR3: 0000000015a93000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ alloc_pages include/linux/gfp.h:547 [inline]
+ kmalloc_order+0x40/0x130 mm/slab_common.c:837
+ kmalloc_order_trace+0x15/0x70 mm/slab_common.c:853
+ kmalloc_large include/linux/slab.h:481 [inline]
+ __kmalloc_track_caller+0x246/0x330 mm/slub.c:4457
+ memdup_user_nul+0x26/0xf0 mm/util.c:260
+ smk_write_syslog+0x29/0x90 security/smack/smackfs.c:2651
+ vfs_write+0x289/0xc90 fs/read_write.c:603
+ ksys_write+0x171/0x2a0 fs/read_write.c:658
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x440289
+Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fffe1057358 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440289
+RDX: 00000000200000cb RSI: 00000000200000c0 RDI: 0000000000000003
+RBP: 00000000006ca018 R08: 0000000000000000 R09: 00000000004002c8
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000401a90
+R13: 0000000000401b20 R14: 0000000000000000 R15: 0000000000000000
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Changes since v1:
-* Fix typo.
-* Use "if" block instead of "||" .
----
- MAINTAINERS                        |  1 +
- tools/certs/print-cert-tbs-hash.sh | 91 ++++++++++++++++++++++++++++++
- 2 files changed, 92 insertions(+)
- create mode 100755 tools/certs/print-cert-tbs-hash.sh
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bda31ccbfad0..c7bad1354531 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4123,6 +4123,7 @@ F:	certs/
- F:	scripts/check-blacklist-hashes.awk
- F:	scripts/extract-cert.c
- F:	scripts/sign-file.c
-+F:	tools/certs/
- 
- CFAG12864B LCD DRIVER
- M:	Miguel Ojeda Sandonis <miguel.ojeda.sandonis@gmail.com>
-diff --git a/tools/certs/print-cert-tbs-hash.sh b/tools/certs/print-cert-tbs-hash.sh
-new file mode 100755
-index 000000000000..c93df5387ec9
---- /dev/null
-+++ b/tools/certs/print-cert-tbs-hash.sh
-@@ -0,0 +1,91 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright © 2020, Microsoft Corporation. All rights reserved.
-+#
-+# Author: Mickaël Salaün <mic@linux.microsoft.com>
-+#
-+# Compute and print the To Be Signed (TBS) hash of a certificate.  This is used
-+# as description of keys in the blacklist keyring to identify certificates.
-+# This output should be redirected, without newline, in a file (hash0.txt) and
-+# signed to create a PKCS#7 file (hash0.p7s).  Both of these files can then be
-+# loaded in the kernel with.
-+#
-+# Exemple on a workstation:
-+# ./print-cert-tbs-hash.sh certificate-to-invalidate.pem > hash0.txt
-+# openssl smime -sign -in hash0.txt -inkey builtin-private-key.pem \
-+#               -signer builtin-certificate.pem -certfile certificate-chain.pem \
-+#               -noattr -binary -outform DER -out hash0.p7s
-+#
-+# Exemple on a managed system:
-+# keyctl padd blacklist "$(< hash0.txt)" %:.blacklist < hash0.p7s
-+
-+set -u -e -o pipefail
-+
-+CERT="${1:-}"
-+BASENAME="$(basename -- "${BASH_SOURCE[0]}")"
-+
-+if [ $# -ne 1 ] || [ ! -f "${CERT}" ]; then
-+	echo "usage: ${BASENAME} <certificate>" >&2
-+	exit 1
-+fi
-+
-+# Checks that it is indeed a certificate (PEM or DER encoded) and exclude the
-+# optional PEM text header.
-+if ! PEM="$(openssl x509 -inform DER -in "${CERT}" 2>/dev/null || openssl x509 -in "${CERT}")"; then
-+	echo "ERROR: Failed to parse certificate" >&2
-+	exit 1
-+fi
-+
-+# TBSCertificate starts at the second entry.
-+# Cf. https://tools.ietf.org/html/rfc3280#section-4.1
-+#
-+# Exemple of first lines printed by openssl asn1parse:
-+#    0:d=0  hl=4 l= 763 cons: SEQUENCE
-+#    4:d=1  hl=4 l= 483 cons: SEQUENCE
-+#    8:d=2  hl=2 l=   3 cons: cont [ 0 ]
-+#   10:d=3  hl=2 l=   1 prim: INTEGER           :02
-+#   13:d=2  hl=2 l=  20 prim: INTEGER           :3CEB2CB8818D968AC00EEFE195F0DF9665328B7B
-+#   35:d=2  hl=2 l=  13 cons: SEQUENCE
-+#   37:d=3  hl=2 l=   9 prim: OBJECT            :sha256WithRSAEncryption
-+RANGE_AND_DIGEST_RE='
-+2s/^\s*\([0-9]\+\):d=\s*[0-9]\+\s\+hl=\s*[0-9]\+\s\+l=\s*\([0-9]\+\)\s\+cons:\s*SEQUENCE\s*$/\1 \2/p;
-+7s/^\s*[0-9]\+:d=\s*[0-9]\+\s\+hl=\s*[0-9]\+\s\+l=\s*[0-9]\+\s\+prim:\s*OBJECT\s*:\(.*\)$/\1/p;
-+'
-+
-+RANGE_AND_DIGEST=($(echo "${PEM}" | \
-+	openssl asn1parse -in - | \
-+	sed -n -e "${RANGE_AND_DIGEST_RE}"))
-+
-+if [ "${#RANGE_AND_DIGEST[@]}" != 3 ]; then
-+	echo "ERROR: Failed to parse TBSCertificate." >&2
-+	exit 1
-+fi
-+
-+OFFSET="${RANGE_AND_DIGEST[0]}"
-+END="$(( OFFSET + RANGE_AND_DIGEST[1] ))"
-+DIGEST="${RANGE_AND_DIGEST[2]}"
-+
-+# The signature hash algorithm is used by Linux to blacklist certificates.
-+# Cf. crypto/asymmetric_keys/x509_cert_parser.c:x509_note_pkey_algo()
-+DIGEST_MATCH=""
-+while read -r DIGEST_ITEM; do
-+	if [ -z "${DIGEST_ITEM}" ]; then
-+		break
-+	fi
-+	if echo "${DIGEST}" | grep -qiF "${DIGEST_ITEM}"; then
-+		DIGEST_MATCH="${DIGEST_ITEM}"
-+		break
-+	fi
-+done < <(openssl list -digest-commands | tr ' ' '\n' | sort -ur)
-+
-+if [ -z "${DIGEST_MATCH}" ]; then
-+	echo "ERROR: Unknown digest algorithm: ${DIGEST}" >&2
-+	exit 1
-+fi
-+
-+echo "${PEM}" | \
-+	openssl x509 -in - -outform DER | \
-+	dd "bs=1" "skip=${OFFSET}" "count=${END}" "status=none" | \
-+	openssl dgst "-${DIGEST_MATCH}" - | \
-+	awk '{printf "tbs:" $2}'
--- 
-2.30.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
