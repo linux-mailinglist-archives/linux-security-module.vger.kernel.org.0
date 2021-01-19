@@ -2,75 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0DB2FB965
-	for <lists+linux-security-module@lfdr.de>; Tue, 19 Jan 2021 15:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2242FBC68
+	for <lists+linux-security-module@lfdr.de>; Tue, 19 Jan 2021 17:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732455AbhASO3y (ORCPT
+        id S1727967AbhASQ2T (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 19 Jan 2021 09:29:54 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:57716 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391918AbhASLtU (ORCPT
+        Tue, 19 Jan 2021 11:28:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43366 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731461AbhASQXl (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 19 Jan 2021 06:49:20 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l1pQY-0005xg-BD; Tue, 19 Jan 2021 11:44:02 +0000
-Date:   Tue, 19 Jan 2021 12:43:57 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        St??phane Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Mauricio V??squez Bernal <mauricio@kinvolk.io>
-Subject: Re: [PATCH v5 40/42] fs: introduce MOUNT_ATTR_IDMAP
-Message-ID: <20210119114357.w553czxsnelyph6g@wittgenstein>
-References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
- <20210112220124.837960-41-christian.brauner@ubuntu.com>
- <20210119094750.GQ3364550@infradead.org>
+        Tue, 19 Jan 2021 11:23:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611073331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u9Q4y96bo6R543WF3WIb9gh7PSMWrwFibDeVZ11baSM=;
+        b=YpZskEslwcC1ql+JBHlrIdF4dVhhIyTG83eZVGtaXpZYmvuQKxP+s1QD72BKReQERkNXrd
+        TafFgMNO/01gZxvyYDlH3eduEMrcyAU0EDZhF5Aq6q26zy9Vr5+9enFHtR0WUaiRJlgWep
+        zSmKuY6X3/Fzlu/YNYm07BHjCSqbsD4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-559-Me7Zukm2PmG1Vmle86dbZQ-1; Tue, 19 Jan 2021 11:22:09 -0500
+X-MC-Unique: Me7Zukm2PmG1Vmle86dbZQ-1
+Received: by mail-ed1-f71.google.com with SMTP id g14so9699407edt.12
+        for <linux-security-module@vger.kernel.org>; Tue, 19 Jan 2021 08:22:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u9Q4y96bo6R543WF3WIb9gh7PSMWrwFibDeVZ11baSM=;
+        b=SJKaudGdRB+vxJGusUGn34Y6OFCbBccoX7ezq7TLxV/bOHm6tkbbQ2imBga1n0mqFA
+         iCx67eWihpKqFTW+VojKuANE41vISrvrSOCHnUPji5Ec0YjY/PZU4+vZoxmwiV27hfrR
+         c/GyE08Yhs4FxJzjSPdtlIBtoYsz7Gy9E16e63VBIh/nc5crNjYXfOZPbDmrGHvoxNP6
+         lzRhlujFVy7YPf4QTwclvAVUk3naYlOLlmDp/Qk0rwuaJH8kXxjXywEJyUWaAGPrJ81Z
+         e03286Sv1+2+mQnQJBr5PvbUilWV8CdsEQSzvhPImD1O6JzeTe0YZmKpyjmmznbWImPY
+         ktXA==
+X-Gm-Message-State: AOAM532NRlZtNkYPmAuDGSFLMXlMAp2aT6g4Jqdx2czrYA/86k27fCfu
+        tMyad7A1XaXn2anE6BpWAXOZPY1fYD48viFCbN6H0k6MOrZ9GFKOSKYSkFI39CtLYjcHpw/2JyU
+        Cp3+KFFyva5oDGT0t6mUcSG9JUbd+B2NFvNsl
+X-Received: by 2002:a17:906:b055:: with SMTP id bj21mr3576257ejb.355.1611073328352;
+        Tue, 19 Jan 2021 08:22:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzcHzUnJ7YyoKIR+WDesoLPvRjoftwu+C8P2YCi0ehF8psSXAN/K0sAcoG8KXYJcSh2tch14w==
+X-Received: by 2002:a17:906:b055:: with SMTP id bj21mr3576247ejb.355.1611073328141;
+        Tue, 19 Jan 2021 08:22:08 -0800 (PST)
+Received: from miu.piliscsaba.redhat.com (catv-86-101-169-67.catv.broadband.hu. [86.101.169.67])
+        by smtp.gmail.com with ESMTPSA id f22sm2168066eje.34.2021.01.19.08.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 08:22:07 -0800 (PST)
+From:   Miklos Szeredi <mszeredi@redhat.com>
+To:     "Eric W . Biederman" <ebiederm@xmission.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <code@tyhicks.com>
+Subject: [PATCH 0/2] capability conversion fixes
+Date:   Tue, 19 Jan 2021 17:22:02 +0100
+Message-Id: <20210119162204.2081137-1-mszeredi@redhat.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210119094750.GQ3364550@infradead.org>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mszeredi@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jan 19, 2021 at 09:47:50AM +0000, Christoph Hellwig wrote:
-> Generally looks good, but wouldn't it make sense to introduce the
-> userns_fd in version 0 of the mount_attr structure instead of having
-> two versions from the start?
+It turns out overlayfs is actually okay wrt. mutliple conversions, because
+it uses the right context for lower operations.  I.e. before calling
+vfs_{set,get}xattr() on underlying fs, it overrides creds with that of the
+mounter, so the current user ns will now match that of
+overlay_sb->s_user_ns, meaning that the caps will be converted to just the
+right format for the next layer
 
-I agree.
+OTOH ecryptfs, which is the only other one affected by commit 7c03e2cda4a5
+("vfs: move cap_convert_nscap() call into vfs_setxattr()") needs to be
+fixed up, since it doesn't do the cap override thing that overlayfs does.
+
+I don't have an ecryptfs setup, so untested, but it's a fairly trivial
+change.
+
+My other observation was that cap_inode_getsecurity() messes up conversion
+of caps in more than one case.  This is independent of the overlayfs user
+ns enablement but affects it as well.
+
+Maybe we can revisit the infrastructure improvements we discussed, but I
+think these fixes are more appropriate for the current cycle.
+
+Thanks,
+Miklos
+
+Miklos Szeredi (2):
+  ecryptfs: fix uid translation for setxattr on security.capability
+  security.capability: fix conversions on getxattr
+
+ fs/ecryptfs/inode.c  | 10 +++++--
+ security/commoncap.c | 67 ++++++++++++++++++++++++++++----------------
+ 2 files changed, 50 insertions(+), 27 deletions(-)
+
+-- 
+2.26.2
+
