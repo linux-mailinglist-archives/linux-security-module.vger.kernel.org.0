@@ -2,69 +2,49 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A4B2FCA3D
-	for <lists+linux-security-module@lfdr.de>; Wed, 20 Jan 2021 06:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFF42FCA57
+	for <lists+linux-security-module@lfdr.de>; Wed, 20 Jan 2021 06:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729214AbhATFAP (ORCPT
+        id S1725786AbhATFKL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 20 Jan 2021 00:00:15 -0500
-Received: from namei.org ([65.99.196.166]:50792 "EHLO mail.namei.org"
+        Wed, 20 Jan 2021 00:10:11 -0500
+Received: from namei.org ([65.99.196.166]:50812 "EHLO mail.namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729027AbhATE7p (ORCPT
+        id S1729291AbhATFCm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 19 Jan 2021 23:59:45 -0500
+        Wed, 20 Jan 2021 00:02:42 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.namei.org (Postfix) with ESMTPS id 6BA181BC;
-        Wed, 20 Jan 2021 04:57:56 +0000 (UTC)
-Date:   Wed, 20 Jan 2021 15:57:56 +1100 (AEDT)
+        by mail.namei.org (Postfix) with ESMTPS id 964A8751;
+        Wed, 20 Jan 2021 05:01:13 +0000 (UTC)
+Date:   Wed, 20 Jan 2021 16:01:13 +1100 (AEDT)
 From:   James Morris <jmorris@namei.org>
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-cc:     linux-nfs@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        David Quigley <dpquigl@davequigley.com>
-Subject: Re: [PATCH] NFSv4.2: fix return value of
- _nfs4_get_security_label()
-In-Reply-To: <20210115174356.408688-1-omosnace@redhat.com>
-Message-ID: <2d85fd54-5c4d-391e-f01b-1537017aafa@namei.org>
-References: <20210115174356.408688-1-omosnace@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>, jannh@google.com,
+        Kees Cook <keescook@chromium.org>, jeffv@google.com,
+        minchan@kernel.org, mhocko@suse.com, shakeelb@google.com,
+        rientjes@google.com, edgararriaga@google.com, timmurray@google.com,
+        linux-mm@kvack.org, selinux@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] mm/madvise: replace ptrace attach requirement
+ for process_madvise
+In-Reply-To: <20210111170622.2613577-1-surenb@google.com>
+Message-ID: <c586aa93-52d7-bd6c-3d5-77be4ed4afae@namei.org>
+References: <20210111170622.2613577-1-surenb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, 15 Jan 2021, Ondrej Mosnacek wrote:
+On Mon, 11 Jan 2021, Suren Baghdasaryan wrote:
 
-> An xattr 'get' handler is expected to return the length of the value on
-> success, yet _nfs4_get_security_label() (and consequently also
-> nfs4_xattr_get_nfs4_label(), which is used as an xattr handler) returns
-> just 0 on success.
-> 
-> Fix this by returning label.len instead, which contains the length of
-> the result.
-> 
-> Fixes: aa9c2669626c ("NFS: Client implementation of Labeled-NFS")
-> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-> ---
->  fs/nfs/nfs4proc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-> index 2f4679a62712a..28465d8aada64 100644
-> --- a/fs/nfs/nfs4proc.c
-> +++ b/fs/nfs/nfs4proc.c
-> @@ -5971,7 +5971,7 @@ static int _nfs4_get_security_label(struct inode *inode, void *buf,
->  		return ret;
->  	if (!(fattr.valid & NFS_ATTR_FATTR_V4_SECURITY_LABEL))
->  		return -ENOENT;
-> -	return 0;
-> +	return label.len;
->  }
+> Replace PTRACE_MODE_ATTACH with a combination of PTRACE_MODE_READ
+> and CAP_SYS_NICE. PTRACE_MODE_READ to prevent leaking ASLR metadata
+> and CAP_SYS_NICE for influencing process performance.
 
 
-Reviewed-by: James Morris <jamorris@linux.microsoft.com>
-
+Almost missed these -- please cc the LSM mailing list when modifying 
+capabilities or other LSM-related things.
 
 -- 
 James Morris
