@@ -2,51 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFF42FCA57
-	for <lists+linux-security-module@lfdr.de>; Wed, 20 Jan 2021 06:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BA92FCAA8
+	for <lists+linux-security-module@lfdr.de>; Wed, 20 Jan 2021 06:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725786AbhATFKL (ORCPT
+        id S1726861AbhATFUR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 20 Jan 2021 00:10:11 -0500
-Received: from namei.org ([65.99.196.166]:50812 "EHLO mail.namei.org"
+        Wed, 20 Jan 2021 00:20:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60040 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729291AbhATFCm (ORCPT
+        id S1729206AbhATFQR (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 20 Jan 2021 00:02:42 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.namei.org (Postfix) with ESMTPS id 964A8751;
-        Wed, 20 Jan 2021 05:01:13 +0000 (UTC)
-Date:   Wed, 20 Jan 2021 16:01:13 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-cc:     Andrew Morton <akpm@linux-foundation.org>, jannh@google.com,
-        Kees Cook <keescook@chromium.org>, jeffv@google.com,
-        minchan@kernel.org, mhocko@suse.com, shakeelb@google.com,
-        rientjes@google.com, edgararriaga@google.com, timmurray@google.com,
-        linux-mm@kvack.org, selinux@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] mm/madvise: replace ptrace attach requirement
- for process_madvise
-In-Reply-To: <20210111170622.2613577-1-surenb@google.com>
-Message-ID: <c586aa93-52d7-bd6c-3d5-77be4ed4afae@namei.org>
-References: <20210111170622.2613577-1-surenb@google.com>
+        Wed, 20 Jan 2021 00:16:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C69A2311C;
+        Wed, 20 Jan 2021 05:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611119736;
+        bh=0v5dSZdhQ0dpp0/V5fqVpZyRRfvlSjz+9GhAku29pu8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YT/KcKBPZdtcxBxmCbPP+rcGEqthJpNc7NBg5K6OlkGkfF5rUonooybJv5j2vrzB7
+         72UKHnp1uAQK4N6eR99+Say0AjEKKiDLPM+7Vmq8/3plY6zA9yOIyi/mja9W739DAE
+         mMiM+pZ1FYTJ8jakaTTQyP1Xa/YbHGC0GNWZk00m/g4hlyg+eEXlII84Z2YEm7Dwr4
+         Zzp2Pqbr45dnOKach/X9hAvPRqx2I60U8sdq1iGGNWpVYzga8R5nVPcJ8qFAbmX6bS
+         grbZCOvdJD+HOFkZ78ZMwkvsvY49pG5+7aGAxwYgSwIgPZKyCq3BGrbI7lSvqp+amS
+         DGBJG+DQpLxXA==
+Date:   Wed, 20 Jan 2021 07:15:30 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 05/10] certs: Replace K{U,G}IDT_INIT() with
+ GLOBAL_ROOT_{U,G}ID
+Message-ID: <YAe8cr7bS2Dn0RRn@kernel.org>
+References: <20210114151909.2344974-1-mic@digikod.net>
+ <20210114151909.2344974-6-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210114151909.2344974-6-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, 11 Jan 2021, Suren Baghdasaryan wrote:
+On Thu, Jan 14, 2021 at 04:19:04PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> Align with the new macros and add appropriate include files.
+> 
+> Cc: David Woodhouse <dwmw2@infradead.org>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
 
-> Replace PTRACE_MODE_ATTACH with a combination of PTRACE_MODE_READ
-> and CAP_SYS_NICE. PTRACE_MODE_READ to prevent leaking ASLR metadata
-> and CAP_SYS_NICE for influencing process performance.
+The commit message makes no sense. What you new macros?
 
-
-Almost missed these -- please cc the LSM mailing list when modifying 
-capabilities or other LSM-related things.
-
--- 
-James Morris
-<jmorris@namei.org>
-
+/Jarkko
