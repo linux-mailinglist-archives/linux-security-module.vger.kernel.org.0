@@ -2,239 +2,257 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427B72FF395
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 19:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A81B2FF560
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 21:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726560AbhAUSvc (ORCPT
+        id S1726672AbhAUUFo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Jan 2021 13:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727960AbhAUIpC (ORCPT
+        Thu, 21 Jan 2021 15:05:44 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:48386 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbhAUUDf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Jan 2021 03:45:02 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEDBC0613C1
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Jan 2021 00:44:10 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id m2so714098wmm.1
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Jan 2021 00:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=forissier-org.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=kgJUPk7yGIqf40Sm4lEU2xSQtX0D2PZzSJBu2XCc1vs=;
-        b=FxlBHJlxjd52tYAdKf9oTYV9VYZwGruEu05v4yJMcLP8gQiJVQ6i8eOQeXjxB5cmWN
-         +wcmHIEr5yjchNi1k/67498+IMHAgV5E82BjyXeiIYiOlrE1z5cHf+1WavGv9pJ9Bgq1
-         yl2jMT6SXnzTr1lEk+19/9zbOjqInOofljkyTlVT3HNJhyRoevT1ROC8qeHTThyVTpuJ
-         ObG8NK/4/AwPsFFM6f7XWb1Zm7DdKklaRgYX6nt3rUVF655FZl0TpUyRO63t5HBkPqK0
-         onycRq2aCZDtrmdhVAL7F5Q8Harj47nK8nEjSSPhIc15pEITkaYIdF+2nyroPMmMnXSl
-         HmhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kgJUPk7yGIqf40Sm4lEU2xSQtX0D2PZzSJBu2XCc1vs=;
-        b=XGIaZ285fIyRQIiEsSZOFPTREXh+WEOU68EikLSD9hfrCoO3Kc9pnQuEfGrOIK3rPj
-         ffmMAsVvopLvxT8cU+KpLNU1kGNU8tV+P8oyyHM9WB2JnYX3OBQ/yj7XtWKq7XwIdEtX
-         omO0rSLYfIE4v3fhRT+5di0bRMXcOy9lFlytW01qNPGAD3DV0odoZLjw3J6YknpWovOV
-         JrxBIyqH5kG/buAxTxqAzZ4c4LkCLSkJN6hbbYDkoPp15h4HU5zhv450MQuXxFcWMp+M
-         /Dl/QQFoFkaWpcOrFv9KNEjH53Z3kTLYh1iWSp5rLgcyovBwRiUJDDR4mflVdpD8kD9f
-         8s8A==
-X-Gm-Message-State: AOAM533GltRDw0eUVFUPHStkobcHGEYlls5DGPW6jhMzJwkQIiFF+mNv
-        eZs38T30mpCbKWlw+XddXlENjg==
-X-Google-Smtp-Source: ABdhPJxlLNcwPh4OqaGK271yrHw0l1fiON8DIKNpcWGeLGHLjLHsYuz02u3YZuLXPyJg9CqcY4WXGA==
-X-Received: by 2002:a1c:1f11:: with SMTP id f17mr7663241wmf.67.1611218649434;
-        Thu, 21 Jan 2021 00:44:09 -0800 (PST)
-Received: from ?IPv6:2a01:e0a:3cb:7bb0:75c0:d9d5:7529:414c? ([2a01:e0a:3cb:7bb0:75c0:d9d5:7529:414c])
-        by smtp.gmail.com with ESMTPSA id 9sm7818374wmb.14.2021.01.21.00.44.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jan 2021 00:44:08 -0800 (PST)
-Subject: Re: [PATCH v8 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>
-Cc:     "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        op-tee@lists.trustedfirmware.org, Jonathan Corbet <corbet@lwn.net>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Luke Hinds <lhinds@redhat.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-integrity@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
- <1604419306-26105-3-git-send-email-sumit.garg@linaro.org>
- <X/x+N0fgrzIZTeNi@kernel.org>
- <CAFA6WYOUvWAZtYfR4q8beZFkX-CtdxqwJaRQM+GHNMDfQiEWOA@mail.gmail.com>
- <X/+m6+m2/snYj9Vc@kernel.org>
- <CAFA6WYNyirit_AFhoE+XR9PHw=OjRgEdXDqz1uanj_SN2NXeMw@mail.gmail.com>
- <YAa0ys4YJcZtKdfF@kernel.org> <YAeH2pb8szQyjusL@kernel.org>
- <CAFA6WYP5G6NfGk96ePOC+2kpD6B+4hz9nywyUM9Nh=dJDYMiuA@mail.gmail.com>
- <01000177223f74d3-1eef7685-4a19-40d2-ace6-d4cd7f35579d-000000@email.amazonses.com>
-From:   Jerome Forissier <jerome@forissier.org>
-Message-ID: <dc3979e8-6bf0-adb7-164d-d50e805a048f@forissier.org>
-Date:   Thu, 21 Jan 2021 09:44:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 21 Jan 2021 15:03:35 -0500
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id ACB1020B7192;
+        Thu, 21 Jan 2021 12:02:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ACB1020B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1611259373;
+        bh=84PuZ9THBM7C7BDS14/NZVcdEbnd3n4d/+WYQmnI1Zs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qWKNVGNflSXeaqnZItzC9Kf+2PWvra2B0D9jjxUV752yTPtKq/Sq9ecrhgSy3VEY/
+         UTYZ7teXoiuOZg1YiJppGvVM+GClnb7hrs8am/dMv3hVl9eJzenu4++VncOKJe+R0a
+         YioPeElPfJz32laPhxjbamqRmrIpWwMsVVst5dIw=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, tusharsu@linux.microsoft.com
+Cc:     tyhicks@linux.microsoft.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        sashal@kernel.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selinux: measure state and policy capabilities
+Date:   Thu, 21 Jan 2021 12:01:50 -0800
+Message-Id: <20210121200150.2448-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <01000177223f74d3-1eef7685-4a19-40d2-ace6-d4cd7f35579d-000000@email.amazonses.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+SELinux stores the configuration state and the policy capabilities
+in kernel memory.  Changes to this data at runtime would have an impact
+on the security guarantees provided by SELinux.  Measuring SELinux
+configuration state and policy capabilities through IMA subsystem
+provides a tamper-resistant way for an attestation service to remotely
+validate the runtime state.
 
+Measure the configuration state and policy capabilities by calling
+the IMA hook ima_measure_critical_data().
 
-On 1/21/21 1:02 AM, Jarkko Sakkinen via OP-TEE wrote:
-> On Wed, Jan 20, 2021 at 12:53:28PM +0530, Sumit Garg wrote:
->> On Wed, 20 Jan 2021 at 07:01, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->>>
->>> On Tue, Jan 19, 2021 at 12:30:42PM +0200, Jarkko Sakkinen wrote:
->>>> On Fri, Jan 15, 2021 at 11:32:31AM +0530, Sumit Garg wrote:
->>>>> On Thu, 14 Jan 2021 at 07:35, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->>>>>>
->>>>>> On Wed, Jan 13, 2021 at 04:47:00PM +0530, Sumit Garg wrote:
->>>>>>> Hi Jarkko,
->>>>>>>
->>>>>>> On Mon, 11 Jan 2021 at 22:05, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->>>>>>>>
->>>>>>>> On Tue, Nov 03, 2020 at 09:31:44PM +0530, Sumit Garg wrote:
->>>>>>>>> Add support for TEE based trusted keys where TEE provides the functionality
->>>>>>>>> to seal and unseal trusted keys using hardware unique key.
->>>>>>>>>
->>>>>>>>> Refer to Documentation/tee.txt for detailed information about TEE.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
->>>>>>>>
->>>>>>>> I haven't yet got QEMU environment working with aarch64, this produces
->>>>>>>> just a blank screen:
->>>>>>>>
->>>>>>>> ./output/host/usr/bin/qemu-system-aarch64 -M virt -cpu cortex-a53 -smp 1 -kernel output/images/Image -initrd output/images/rootfs.cpio -serial stdio
->>>>>>>>
->>>>>>>> My BuildRoot fork for TPM and keyring testing is located over here:
->>>>>>>>
->>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/buildroot-tpmdd.git/
->>>>>>>>
->>>>>>>> The "ARM version" is at this point in aarch64 branch. Over time I will
->>>>>>>> define tpmdd-x86_64 and tpmdd-aarch64 boards and everything will be then
->>>>>>>> in the master branch.
->>>>>>>>
->>>>>>>> To create identical images you just need to
->>>>>>>>
->>>>>>>> $ make tpmdd_defconfig && make
->>>>>>>>
->>>>>>>> Can you check if you see anything obviously wrong? I'm eager to test this
->>>>>>>> patch set, and in bigger picture I really need to have ready to run
->>>>>>>> aarch64 environment available.
->>>>>>>
->>>>>>> I would rather suggest you to follow steps listed here [1] as to test
->>>>>>> this feature on Qemu aarch64 we need to build firmwares such as TF-A,
->>>>>>> OP-TEE, UEFI etc. which are all integrated into OP-TEE Qemu build
->>>>>>> system [2]. And then it would be easier to migrate them to your
->>>>>>> buildroot environment as well.
->>>>>>>
->>>>>>> [1] https://lists.trustedfirmware.org/pipermail/op-tee/2020-May/000027.html
->>>>>>> [2] https://optee.readthedocs.io/en/latest/building/devices/qemu.html#qemu-v8
->>>>>>>
->>>>>>> -Sumit
->>>>>>
->>>>>> Can you provide 'keyctl_change'? Otherwise, the steps are easy to follow.
->>>>>>
->>>>>
->>>>> $ cat keyctl_change
->>>>> diff --git a/common.mk b/common.mk
->>>>> index aeb7b41..663e528 100644
->>>>> --- a/common.mk
->>>>> +++ b/common.mk
->>>>> @@ -229,6 +229,7 @@ BR2_PACKAGE_OPTEE_TEST_SDK ?= $(OPTEE_OS_TA_DEV_KIT_DIR)
->>>>>  BR2_PACKAGE_OPTEE_TEST_SITE ?= $(OPTEE_TEST_PATH)
->>>>>  BR2_PACKAGE_STRACE ?= y
->>>>>  BR2_TARGET_GENERIC_GETTY_PORT ?= $(if
->>>>> $(CFG_NW_CONSOLE_UART),ttyAMA$(CFG_NW_CONSOLE_UART),ttyAMA0)
->>>>> +BR2_PACKAGE_KEYUTILS := y
->>>>>
->>>>>  # All BR2_* variables from the makefile or the environment are appended to
->>>>>  # ../out-br/extra.conf. All values are quoted "..." except y and n.
->>>>> diff --git a/kconfigs/qemu.conf b/kconfigs/qemu.conf
->>>>> index 368c18a..832ab74 100644
->>>>> --- a/kconfigs/qemu.conf
->>>>> +++ b/kconfigs/qemu.conf
->>>>> @@ -20,3 +20,5 @@ CONFIG_9P_FS=y
->>>>>  CONFIG_9P_FS_POSIX_ACL=y
->>>>>  CONFIG_HW_RANDOM=y
->>>>>  CONFIG_HW_RANDOM_VIRTIO=y
->>>>> +CONFIG_TRUSTED_KEYS=y
->>>>> +CONFIG_ENCRYPTED_KEYS=y
->>>>>
->>>>>> After I've successfully tested 2/4, I'd suggest that you roll out one more
->>>>>> version and CC the documentation patch to Elaine and Mini, and clearly
->>>>>> remark in the commit message that TEE is a standard, with a link to the
->>>>>> specification.
->>>>>>
->>>>>
->>>>> Sure, I will roll out the next version after your testing.
->>>>
->>>> Thanks, I'll try this at instant, and give my feedback.
->>>
->>> I bump into this:
->>>
->>> $ make run-only
->>> ln -sf /home/jarkko/devel/tpm/optee/build/../out-br/images/rootfs.cpio.gz /home/jarkko/devel/tpm/optee/build/../out/bin/
->>> ln: failed to create symbolic link '/home/jarkko/devel/tpm/optee/build/../out/bin/': No such file or directory
->>> make: *** [Makefile:194: run-only] Error 1
->>>
->>
->> Could you check if the following directory tree is built after
->> executing the below command?
->>
->> $ make -j`nproc`
->> CFG_IN_TREE_EARLY_TAS=trusted_keys/f04a0fe7-1f5d-4b9b-abf7-619b85b4ce8c
->>
->> $ tree out/bin/
->> out/bin/
->> ├── bl1.bin -> /home/sumit/build/optee/build/../trusted-firmware-a/build/qemu/release/bl1.bin
->> ├── bl2.bin -> /home/sumit/build/optee/build/../trusted-firmware-a/build/qemu/release/bl2.bin
->> ├── bl31.bin ->
->> /home/sumit/build/optee/build/../trusted-firmware-a/build/qemu/release/bl31.bin
->> ├── bl32.bin ->
->> /home/sumit/build/optee/build/../optee_os/out/arm/core/tee-header_v2.bin
->> ├── bl32_extra1.bin ->
->> /home/sumit/build/optee/build/../optee_os/out/arm/core/tee-pager_v2.bin
->> ├── bl32_extra2.bin ->
->> /home/sumit/build/optee/build/../optee_os/out/arm/core/tee-pageable_v2.bin
->> ├── bl33.bin ->
->> /home/sumit/build/optee/build/../edk2/Build/ArmVirtQemuKernel-AARCH64/RELEASE_GCC49/FV/QEMU_EFI.fd
->> ├── Image -> /home/sumit/build/optee/build/../linux/arch/arm64/boot/Image
->> └── rootfs.cpio.gz ->
->> /home/sumit/build/optee/build/../out-br/images/rootfs.cpio.gz
->>
->> 0 directories, 9 files
->>
->> -Sumit
-> 
-> I actually spotted a build error that was unnoticed last time:
-> 
-> make[2]: Entering directory '/home/jarkko/devel/tpm/optee/edk2/BaseTools/Tests'
-> /bin/sh: 1: python: not found
-> 
-> I'd prefer not to install Python2. It has been EOL over a year.
+To enable SELinux data measurement, the following steps are required:
 
-AFAIK, everything should build fine with Python3. On my Ubuntu 20.04
-machine, this is accomplished by installing package "python-is-python3"
-(after uninstalling "python-is-python2" if need be).
+ 1, Add "ima_policy=critical_data" to the kernel command line arguments
+    to enable measuring SELinux data at boot time.
+    For example,
+      BOOT_IMAGE=/boot/vmlinuz-5.11.0-rc3+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
 
-$ ls -l /usr/bin/python
-lrwxrwxrwx 1 root root 7 Apr 15  2020 /usr/bin/python -> python3
+ 2, Add the following rule to /etc/ima/ima-policy
+       measure func=CRITICAL_DATA label=selinux
 
+Sample measurement of SELinux state and policy capabilities:
+
+10 2122...65d8 ima-buf sha256:13c2...1292 selinux-state 696e...303b
+
+To verify the measurement check the following:
+
+Execute the following command to extract the measured data
+from the IMA log for SELinux configuration (selinux-state).
+
+  grep "selinux-state" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6 | xxd -r -p
+
+The output should be a list of key-value pairs. For example,
+ initialized=1;enabled=1;enforcing=0;checkreqprot=1;network_peer_controls=1;open_perms=1;extended_socket_class=1;always_check_network=0;cgroup_seclabel=1;nnp_nosuid_transition=1;genfs_seclabel_symlinks=0;
+
+To verify the measured data with the current SELinux state:
+
+ => enabled should be set to 1 if /sys/fs/selinux folder exists,
+    0 otherwise
+
+For other entries, compare the integer value in the files
+ => /sys/fs/selinux/enforce
+ => /sys/fs/selinux/checkreqprot
+And, each of the policy capabilities files under
+ => /sys/fs/selinux/policy_capabilities
+
+Note that the actual verification would be against an expected state
+and done on a system other than the measured system, typically
+requiring "initialized=1; enabled=1;enforcing=1;checkreqprot=0;" for
+a secure state and then whatever policy capabilities are actually set
+in the expected policy (which can be extracted from the policy itself
+via seinfo, for example).
+
+Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+---
+This patch is based on
+commit e58bb688f2e4 "Merge branch 'measure-critical-data' into next-integrity"
+in "next-integrity-testing" branch
+
+ security/selinux/hooks.c     |  5 +++
+ security/selinux/ima.c       | 68 ++++++++++++++++++++++++++++++++++++
+ security/selinux/selinuxfs.c | 10 ++++++
+ 3 files changed, 83 insertions(+)
+
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 644b17ec9e63..879a0d90615d 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -103,6 +103,7 @@
+ #include "netlabel.h"
+ #include "audit.h"
+ #include "avc_ss.h"
++#include "ima.h"
+ 
+ struct selinux_state selinux_state;
+ 
+@@ -7407,6 +7408,10 @@ int selinux_disable(struct selinux_state *state)
+ 
+ 	selinux_mark_disabled(state);
+ 
++	mutex_lock(&state->policy_mutex);
++	selinux_ima_measure_state(state);
++	mutex_unlock(&state->policy_mutex);
++
+ 	pr_info("SELinux:  Disabled at runtime.\n");
+ 
+ 	/*
+diff --git a/security/selinux/ima.c b/security/selinux/ima.c
+index 03715893ff97..e65d462d2d30 100644
+--- a/security/selinux/ima.c
++++ b/security/selinux/ima.c
+@@ -12,6 +12,60 @@
+ #include "security.h"
+ #include "ima.h"
+ 
++/*
++ * read_selinux_state - Read selinux configuration settings
++ *
++ * @state_str: Return the configuration settings.
++ * @state_str_len: Size of the configuration settings string
++ * @state: selinux_state
++ *
++ * Return 0 on success, error code on failure
++ */
++static int read_selinux_state(char **state_str, int *state_str_len,
++			      struct selinux_state *state)
++{
++	char *buf;
++	int i, buf_len, curr;
++	bool initialized = selinux_initialized(state);
++	bool enabled = !selinux_disabled(state);
++	bool enforcing = enforcing_enabled(state);
++	bool checkreqprot = checkreqprot_get(state);
++
++	buf_len = snprintf(NULL, 0, "%s=%d;%s=%d;%s=%d;%s=%d;",
++			   "initialized", initialized,
++			   "enabled", enabled,
++			   "enforcing", enforcing,
++			   "checkreqprot", checkreqprot);
++
++	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
++		buf_len += snprintf(NULL, 0, "%s=%d;",
++				    selinux_policycap_names[i],
++				    state->policycap[i]);
++	}
++	++buf_len;
++
++	buf = kzalloc(buf_len, GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
++
++	curr = scnprintf(buf, buf_len, "%s=%d;%s=%d;%s=%d;%s=%d;",
++			 "initialized", initialized,
++			 "enabled", enabled,
++			 "enforcing", enforcing,
++			 "checkreqprot", checkreqprot);
++
++	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
++		curr += scnprintf((buf + curr), (buf_len - curr), "%s=%d;",
++				  selinux_policycap_names[i],
++				  state->policycap[i]);
++	}
++
++	*state_str = buf;
++	*state_str_len = curr;
++
++	return 0;
++}
++
+ /*
+  * selinux_ima_measure_state - Measure hash of the SELinux policy
+  *
+@@ -21,10 +75,24 @@
+  */
+ void selinux_ima_measure_state(struct selinux_state *state)
+ {
++	char *state_str = NULL;
++	int state_str_len;
+ 	void *policy = NULL;
+ 	size_t policy_len;
+ 	int rc = 0;
+ 
++	rc = read_selinux_state(&state_str, &state_str_len, state);
++	if (rc) {
++		pr_err("SELinux: %s: failed to read state %d.\n",
++			__func__, rc);
++		return;
++	}
++
++	ima_measure_critical_data("selinux", "selinux-state",
++				  state_str, state_str_len, false);
++
++	kfree(state_str);
++
+ 	/*
+ 	 * Measure SELinux policy only after initialization is completed.
+ 	 */
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index 4bde570d56a2..8b561e1c2caa 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -41,6 +41,7 @@
+ #include "security.h"
+ #include "objsec.h"
+ #include "conditional.h"
++#include "ima.h"
+ 
+ enum sel_inos {
+ 	SEL_ROOT_INO = 2,
+@@ -182,6 +183,10 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
+ 		selinux_status_update_setenforce(state, new_value);
+ 		if (!new_value)
+ 			call_blocking_lsm_notifier(LSM_POLICY_CHANGE, NULL);
++
++		mutex_lock(&state->policy_mutex);
++		selinux_ima_measure_state(state);
++		mutex_unlock(&state->policy_mutex);
+ 	}
+ 	length = count;
+ out:
+@@ -762,6 +767,11 @@ static ssize_t sel_write_checkreqprot(struct file *file, const char __user *buf,
+ 
+ 	checkreqprot_set(fsi->state, (new_value ? 1 : 0));
+ 	length = count;
++
++	mutex_lock(&fsi->state->policy_mutex);
++	selinux_ima_measure_state(fsi->state);
++	mutex_unlock(&fsi->state->policy_mutex);
++
+ out:
+ 	kfree(page);
+ 	return length;
 -- 
-Jerome
+2.30.0
+
