@@ -2,267 +2,229 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A8F2FF0E8
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 17:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541B82FF280
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 18:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732565AbhAUQsf (ORCPT
+        id S1733289AbhAUPn5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Jan 2021 11:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732418AbhAUP6j (ORCPT
+        Thu, 21 Jan 2021 10:43:57 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:53776 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731806AbhAUNVZ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Jan 2021 10:58:39 -0500
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B727BC06121E;
-        Thu, 21 Jan 2021 07:55:39 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DM6Rt3tfRzMr6Zf;
-        Thu, 21 Jan 2021 16:55:38 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DM6Rs17JVzlh8Tg;
-        Thu, 21 Jan 2021 16:55:37 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thu, 21 Jan 2021 08:21:25 -0500
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1l2Zsu-0005g7-3f; Thu, 21 Jan 2021 13:20:24 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
+Cc:     John Johansen <john.johansen@canonical.com>,
         James Morris <jmorris@namei.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v4 10/10] certs: Allow root user to append signed hashes to the blacklist keyring
-Date:   Thu, 21 Jan 2021 16:55:13 +0100
-Message-Id: <20210121155513.539519-11-mic@digikod.net>
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH v6 01/40] mount: attach mappings to mounts
+Date:   Thu, 21 Jan 2021 14:19:20 +0100
+Message-Id: <20210121131959.646623-2-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210121155513.539519-1-mic@digikod.net>
-References: <20210121155513.539519-1-mic@digikod.net>
+In-Reply-To: <20210121131959.646623-1-christian.brauner@ubuntu.com>
+References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=RNdtgoKaLGCMkof4zQAU3N/xXjoHA/9IvgBRCO94lyQ=; m=v4JeDPlKw7+HRf6GkILParxKrCZxHiToEIxl1JpzBMc=; p=n8aTDgNwQFcuOq2vzScaJKTjpeZYHL89d0mK14Ql03I=; g=10886b981fa37e8daf7d1a3ab0dff6047323eaad
+X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9owAKCRCRxhvAZXjcoqEbAPwK333 ZnYjG/GuxGlrHWLqoKgSkX3uNx9F5O46VJfzTkAEAnmq+k+saVqcfu1A7GYLfR7gJVnb+J+yKtVd1 w115xwQ=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+In order to support per-mount idmappings vfsmounts are marked with user
+namespaces. The idmapping of the user namespace will be used to map the
+ids of vfs objects when they are accessed through that mount. By default
+all vfsmounts are marked with the initial user namespace. The initial
+user namespace is used to indicate that a mount is not idmapped. All
+operations behave as before.
 
-Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
-to dynamically add new keys to the blacklist keyring.  This enables to
-invalidate new certificates, either from being loaded in a keyring, or
-from being trusted in a PKCS#7 certificate chain.  This also enables to
-add new file hashes to be denied by the integrity infrastructure.
+Based on prior discussions we want to attach the whole user namespace
+and not just a dedicated idmapping struct. This allows us to reuse all
+the helpers that already exist for dealing with idmappings instead of
+introducing a whole new range of helpers. In addition, if we decide in
+the future that we are confident enough to enable unprivileged users to
+setup idmapped mounts the permission checking can take into account
+whether the caller is privileged in the user namespace the mount is
+currently marked with.
+Later patches enforce that once a mount has been idmapped it can't be
+remapped. This keeps permission checking and life-cycle management
+simple. Users wanting to change the idmapped can always create a new
+detached mount with a different idmapping.
 
-Being able to untrust a certificate which could have normaly been
-trusted is a sensitive operation.  This is why adding new hashes to the
-blacklist keyring is only allowed when these hashes are signed and
-vouched by the builtin trusted keyring.  A blacklist hash is stored as a
-key description.  The PKCS#7 signature of this description must be
-provided as the key payload.
+Add a new mnt_userns member to vfsmount and two simple helpers to
+retrieve the mnt_userns from vfsmounts and files.
 
-Marking a certificate as untrusted should be enforced while the system
-is running.  It is then forbiden to remove such blacklist keys.
+The idea to attach user namespaces to vfsmounts has been floated around
+in various forms at Linux Plumbers in ~2018 with the original idea
+tracing back to a discussion in 2017 at a conference in St. Petersburg
+between Christoph, Tycho, and myself.
 
-Update blacklist keyring and blacklist key access rights:
-* allows the root user to search for a specific blacklisted hash, which
-  make sense because the descriptions are already viewable;
-* forbids key update;
-* restricts kernel rights on the blacklist keyring to align with the
-  root user rights.
-
-See help in tools/certs/print-cert-tbs-hash.sh .
-
+Link: https://lore.kernel.org/r/20210112220124.837960-10-christian.brauner@ubuntu.com
+Cc: Christoph Hellwig <hch@lst.de>
 Cc: David Howells <dhowells@redhat.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
+/* v2 */
+patch introduced
+- Christoph Hellwig <hch@lst.de>:
+  - Split internal implementation into separate patch and move syscall
+    implementation later.
 
-Changes since v3:
-* Update commit message for print-cert-tbs-hash.sh .
+/* v3 */
+- David Howells <dhowells@redhat.com>:
+  - Remove MNT_IDMAPPED flag. We can simply check the pointer and use
+    smp_load_acquire() in later patches.
 
-Changes since v2:
-* Add comment for blacklist_key_instantiate().
+- Tycho Andersen <tycho@tycho.pizza>:
+  - Use READ_ONCE() in mnt_user_ns().
+
+/* v4 */
+- Serge Hallyn <serge@hallyn.com>:
+  - Use "mnt_userns" to refer to a vfsmount's userns everywhere to make
+    terminology consistent.
+
+- Christoph Hellwig <hch@lst.de>:
+  - Drop the READ_ONCE() from this patch. At this point in the series we
+    don't allowing changing the vfsmount's userns. The infra to do that
+    is only introduced as almost the last patch in the series and there
+    we immediately use smp_load_acquire() and smp_store_release().
+
+/* v5 */
+unchanged
+base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
+
+/* v6 */
+base-commit: 19c329f6808995b142b3966301f217c831e7cf31
+
+- Christoph Hellwig <hch@lst.de>:
+  - Move file_mnt_user_ns() helper into this patch.
 ---
- certs/Kconfig     | 10 ++++++
- certs/blacklist.c | 90 +++++++++++++++++++++++++++++++++++++----------
- 2 files changed, 81 insertions(+), 19 deletions(-)
+ fs/namespace.c        | 9 +++++++++
+ include/linux/fs.h    | 6 ++++++
+ include/linux/mount.h | 6 ++++++
+ 3 files changed, 21 insertions(+)
 
-diff --git a/certs/Kconfig b/certs/Kconfig
-index 6d09dec4a9e3..16003ce65b0a 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -86,4 +86,14 @@ config SYSTEM_BLACKLIST_HASH_LIST
- 	  Certificate hashes can be generated with
- 	  tools/certs/print-cert-tbs-hash.sh .
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 9d33909d0f9e..ecdc63ef881c 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -210,6 +210,7 @@ static struct mount *alloc_vfsmnt(const char *name)
+ 		INIT_HLIST_NODE(&mnt->mnt_mp_list);
+ 		INIT_LIST_HEAD(&mnt->mnt_umounting);
+ 		INIT_HLIST_HEAD(&mnt->mnt_stuck_children);
++		mnt->mnt.mnt_userns = &init_user_ns;
+ 	}
+ 	return mnt;
  
-+config SYSTEM_BLACKLIST_AUTH_UPDATE
-+	bool "Allow root to add signed blacklist keys"
-+	depends on SYSTEM_BLACKLIST_KEYRING
-+	depends on SYSTEM_DATA_VERIFICATION
-+	help
-+	  If set, provide the ability to load new blacklist keys at run time if
-+	  they are signed and vouched by a certificate from the builtin trusted
-+	  keyring.  The PKCS#7 signature of the description is set in the key
-+	  payload.  Blacklist keys cannot be removed.
-+
- endmenu
-diff --git a/certs/blacklist.c b/certs/blacklist.c
-index 1e63971bea94..07c592ae5307 100644
---- a/certs/blacklist.c
-+++ b/certs/blacklist.c
-@@ -15,6 +15,7 @@
- #include <linux/err.h>
- #include <linux/seq_file.h>
- #include <linux/uidgid.h>
-+#include <linux/verification.h>
- #include <keys/system_keyring.h>
- #include "blacklist.h"
+@@ -547,6 +548,11 @@ int sb_prepare_remount_readonly(struct super_block *sb)
  
-@@ -25,6 +26,9 @@
-  */
- #define MAX_HASH_LEN	128
- 
-+#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
-+			    KEY_USR_SEARCH | KEY_USR_VIEW)
-+
- static const char tbs_prefix[] = "tbs";
- static const char bin_prefix[] = "bin";
- 
-@@ -74,19 +78,51 @@ static int blacklist_vet_description(const char *desc)
- 	return 0;
- }
- 
--/*
-- * The hash to be blacklisted is expected to be in the description.  There will
-- * be no payload.
-- */
--static int blacklist_preparse(struct key_preparsed_payload *prep)
-+static int blacklist_key_instantiate(struct key *key,
-+		struct key_preparsed_payload *prep)
+ static void free_vfsmnt(struct mount *mnt)
  {
--	if (prep->datalen > 0)
--		return -EINVAL;
--	return 0;
-+#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
-+	int err;
-+#endif
++	struct user_namespace *mnt_userns;
 +
-+	/* Sets safe default permissions for keys loaded by user space. */
-+	key->perm = BLACKLIST_KEY_PERM;
-+
-+	/*
-+	 * Skips the authentication step for builtin hashes, they are not
-+	 * signed but still trusted.
-+	 */
-+	if (key->flags & (1 << KEY_FLAG_BUILTIN))
-+		goto out;
-+
-+#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
-+	/*
-+	 * Verifies the description's PKCS#7 signature against the builtin
-+	 * trusted keyring.
-+	 */
-+	err = verify_pkcs7_signature(key->description,
-+			strlen(key->description), prep->data, prep->datalen,
-+			NULL, VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-+	if (err)
-+		return err;
-+#else
-+	/*
-+	 * It should not be possible to come here because the keyring doesn't
-+	 * have KEY_USR_WRITE and the only other way to call this function is
-+	 * for builtin hashes.
-+	 */
-+	WARN_ON_ONCE(1);
-+	return -EPERM;
-+#endif
-+
-+out:
-+	return generic_key_instantiate(key, prep);
- }
++	mnt_userns = mnt_user_ns(&mnt->mnt);
++	if (mnt_userns != &init_user_ns)
++		put_user_ns(mnt_userns);
+ 	kfree_const(mnt->mnt_devname);
+ #ifdef CONFIG_SMP
+ 	free_percpu(mnt->mnt_pcp);
+@@ -1055,6 +1061,9 @@ static struct mount *clone_mnt(struct mount *old, struct dentry *root,
+ 	mnt->mnt.mnt_flags &= ~(MNT_WRITE_HOLD|MNT_MARKED|MNT_INTERNAL);
  
--static void blacklist_free_preparse(struct key_preparsed_payload *prep)
-+static int blacklist_key_update(struct key *key,
-+		struct key_preparsed_payload *prep)
- {
-+	return -EPERM;
- }
+ 	atomic_inc(&sb->s_active);
++	mnt->mnt.mnt_userns = mnt_user_ns(&old->mnt);
++	if (mnt->mnt.mnt_userns != &init_user_ns)
++		mnt->mnt.mnt_userns = get_user_ns(mnt->mnt.mnt_userns);
+ 	mnt->mnt.mnt_sb = sb;
+ 	mnt->mnt.mnt_root = dget(root);
+ 	mnt->mnt_mountpoint = mnt->mnt.mnt_root;
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index fd47deea7c17..fd0b80e6361d 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -39,6 +39,7 @@
+ #include <linux/fs_types.h>
+ #include <linux/build_bug.h>
+ #include <linux/stddef.h>
++#include <linux/mount.h>
  
- static void blacklist_describe(const struct key *key, struct seq_file *m)
-@@ -97,9 +133,8 @@ static void blacklist_describe(const struct key *key, struct seq_file *m)
- static struct key_type key_type_blacklist = {
- 	.name			= "blacklist",
- 	.vet_description	= blacklist_vet_description,
--	.preparse		= blacklist_preparse,
--	.free_preparse		= blacklist_free_preparse,
--	.instantiate		= generic_key_instantiate,
-+	.instantiate		= blacklist_key_instantiate,
-+	.update			= blacklist_key_update,
- 	.describe		= blacklist_describe,
+ #include <asm/byteorder.h>
+ #include <uapi/linux/fs.h>
+@@ -2231,6 +2232,7 @@ struct file_system_type {
+ #define FS_HAS_SUBTYPE		4
+ #define FS_USERNS_MOUNT		8	/* Can be mounted by userns root */
+ #define FS_DISALLOW_NOTIFY_PERM	16	/* Disable fanotify permission events */
++#define FS_ALLOW_IDMAP         32      /* FS has been updated to handle vfs idmappings. */
+ #define FS_THP_SUPPORT		8192	/* Remove once all fs converted */
+ #define FS_RENAME_DOES_D_MOVE	32768	/* FS will handle d_move() during rename() internally. */
+ 	int (*init_fs_context)(struct fs_context *);
+@@ -2517,6 +2519,10 @@ struct filename {
  };
+ static_assert(offsetof(struct filename, iname) % sizeof(long) == 0);
  
-@@ -148,8 +183,7 @@ static int mark_raw_hash_blacklisted(const char *hash)
- 				   hash,
- 				   NULL,
- 				   0,
--				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
--				    KEY_USR_VIEW),
-+				   BLACKLIST_KEY_PERM,
- 				   KEY_ALLOC_NOT_IN_QUOTA |
- 				   KEY_ALLOC_BUILT_IN);
- 	if (IS_ERR(key)) {
-@@ -208,25 +242,43 @@ int is_binary_blacklisted(const u8 *hash, size_t hash_len)
- }
- EXPORT_SYMBOL_GPL(is_binary_blacklisted);
- 
-+static int restrict_link_for_blacklist(struct key *dest_keyring,
-+		const struct key_type *type, const union key_payload *payload,
-+		struct key *restrict_key)
++static inline struct user_namespace *file_mnt_user_ns(struct file *file)
 +{
-+	if (type != &key_type_blacklist)
-+		return -EPERM;
-+	return 0;
++	return mnt_user_ns(file->f_path.mnt);
++}
+ extern long vfs_truncate(const struct path *, loff_t);
+ extern int do_truncate(struct dentry *, loff_t start, unsigned int time_attrs,
+ 		       struct file *filp);
+diff --git a/include/linux/mount.h b/include/linux/mount.h
+index aaf343b38671..52de25e08319 100644
+--- a/include/linux/mount.h
++++ b/include/linux/mount.h
+@@ -72,8 +72,14 @@ struct vfsmount {
+ 	struct dentry *mnt_root;	/* root of the mounted tree */
+ 	struct super_block *mnt_sb;	/* pointer to superblock */
+ 	int mnt_flags;
++	struct user_namespace *mnt_userns;
+ } __randomize_layout;
+ 
++static inline struct user_namespace *mnt_user_ns(const struct vfsmount *mnt)
++{
++	return mnt->mnt_userns;
 +}
 +
- /*
-  * Initialise the blacklist
-  */
- static int __init blacklist_init(void)
- {
- 	const char *const *bl;
-+	struct key_restriction *restriction;
- 
- 	if (register_key_type(&key_type_blacklist) < 0)
- 		panic("Can't allocate system blacklist key type\n");
- 
-+	restriction = kzalloc(sizeof(*restriction), GFP_KERNEL);
-+	if (!restriction)
-+		panic("Can't allocate blacklist keyring restriction\n");
-+	restriction->check = restrict_link_for_blacklist;
-+
- 	blacklist_keyring =
- 		keyring_alloc(".blacklist",
- 			      GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
--			      (KEY_POS_ALL & ~KEY_POS_SETATTR) |
--			      KEY_USR_VIEW | KEY_USR_READ |
--			      KEY_USR_SEARCH,
--			      KEY_ALLOC_NOT_IN_QUOTA |
-+			      KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH |
-+			      KEY_POS_WRITE |
-+			      KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH
-+#ifdef CONFIG_SYSTEM_BLACKLIST_AUTH_UPDATE
-+			      | KEY_USR_WRITE
-+#endif
-+			      , KEY_ALLOC_NOT_IN_QUOTA |
- 			      KEY_ALLOC_SET_KEEP,
--			      NULL, NULL);
-+			      restriction, NULL);
- 	if (IS_ERR(blacklist_keyring))
- 		panic("Can't allocate system blacklist keyring\n");
+ struct file; /* forward dec */
+ struct path;
  
 -- 
 2.30.0
