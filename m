@@ -2,22 +2,22 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C02FEC9A
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 15:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7B52FED83
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 15:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732497AbhAUNfc (ORCPT
+        id S1731690AbhAUOvl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Jan 2021 08:35:32 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:55324 "EHLO
+        Thu, 21 Jan 2021 09:51:41 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:55443 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732314AbhAUNdo (ORCPT
+        with ESMTP id S1732415AbhAUNen (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:33:44 -0500
+        Thu, 21 Jan 2021 08:34:43 -0500
 Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l2ZuM-0005g7-Ag; Thu, 21 Jan 2021 13:21:54 +0000
+        id 1l2ZuE-0005g7-1n; Thu, 21 Jan 2021 13:21:46 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
@@ -53,29 +53,24 @@ Cc:     John Johansen <john.johansen@canonical.com>,
         linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v6 23/40] exec: handle idmapped mounts
-Date:   Thu, 21 Jan 2021 14:19:42 +0100
-Message-Id: <20210121131959.646623-24-christian.brauner@ubuntu.com>
+Subject: [PATCH v6 21/40] ioctl: handle idmapped mounts
+Date:   Thu, 21 Jan 2021 14:19:40 +0100
+Message-Id: <20210121131959.646623-22-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; i=z3V1fTqinwXFXuBPT/F1/hXfgz5+RFdSDv1+bqcElO4=; m=pa7oyqjV6cs0De7RkFUKqnoILUWsjrd+GGkDcRnF7e4=; p=e3JlF/8T1cdyjaEUPbrFI9rl6HdxUVBqTEYS22fNFZk=; g=96f8f9f670a40251c9d649d880221f3c3f943146
-X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pQAKCRCRxhvAZXjconUpAQCTIZQ 8C3ba4lje18NvrTHsReci/Ovd9qdOQRTBQ2jEdwD/YSyNacQTQKobAyIgKGa8ALgMZ7LbpDA6GlTv S/f8HQw=
+X-Patch-Hashes: v=1; h=sha256; i=kAwitCaU5Zsp+82CuxVVPm6U8xXlPPtQ0Z0Dh6WXu44=; m=UpfceT5PbXKo01hKHANNfX4pv3prk2UbtbeKFcGNyNE=; p=y//6XjR+zTD631rX6/gWz3LAiLcFvTajhF27PIxpIdA=; g=5e16b077c672ef24b7f183b0ccacbaa0635cf469
+X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pQAKCRCRxhvAZXjcoiCtAP4zbuF Pr97jUAmAEgwFyFaqCOgEAAlveG4nc9eQ6WkxKwEAm9NBL+olb3bocl29AH+ZFzzGApRcmiIIQ2hh +n1ZcQQ=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-When executing a setuid binary the kernel will verify in bprm_fill_uid()
-that the inode has a mapping in the caller's user namespace before
-setting the callers uid and gid. Let bprm_fill_uid() handle idmapped
-mounts. If the inode is accessed through an idmapped mount it is mapped
-according to the mount's user namespace. Afterwards the checks are
-identical to non-idmapped mounts. If the initial user namespace is
-passed nothing changes so non-idmapped mounts will see identical
-behavior as before.
+Enable generic ioctls to handle idmapped mounts by passing down the
+mount's user namespace. If the initial user namespace is passed nothing
+changes so non-idmapped mounts will see identical behavior as before.
 
-Link: https://lore.kernel.org/r/20210112220124.837960-32-christian.brauner@ubuntu.com
+Link: https://lore.kernel.org/r/20210112220124.837960-30-christian.brauner@ubuntu.com
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: David Howells <dhowells@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -84,7 +79,7 @@ Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
 /* v2 */
-unchanged
+patch introduced
 
 /* v3 */
 unchanged
@@ -98,45 +93,41 @@ unchanged
 unchanged
 base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
 
+- Christoph Hellwig <hch@lst.de>:
+  - Use new file_mnt_user_ns() helper.
+
 /* v6 */
 base-commit: 19c329f6808995b142b3966301f217c831e7cf31
 
 - Christoph Hellwig <hch@lst.de>:
-  - Use new file_mnt_user_ns() helper.
+  - Make use of file_permission() helper.
 ---
- fs/exec.c | 7 +++++--
+ fs/remap_range.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index d803227805f6..48d1e8b1610b 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1580,6 +1580,7 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
- static void bprm_fill_uid(struct linux_binprm *bprm, struct file *file)
+diff --git a/fs/remap_range.c b/fs/remap_range.c
+index 29a4a4dbfe12..e4a5fdd7ad7b 100644
+--- a/fs/remap_range.c
++++ b/fs/remap_range.c
+@@ -432,13 +432,16 @@ EXPORT_SYMBOL(vfs_clone_file_range);
+ /* Check whether we are allowed to dedupe the destination file */
+ static bool allow_file_dedupe(struct file *file)
  {
- 	/* Handle suid and sgid on files */
-+	struct user_namespace *mnt_userns;
- 	struct inode *inode;
- 	unsigned int mode;
- 	kuid_t uid;
-@@ -1596,13 +1597,15 @@ static void bprm_fill_uid(struct linux_binprm *bprm, struct file *file)
- 	if (!(mode & (S_ISUID|S_ISGID)))
- 		return;
- 
-+	mnt_userns = file_mnt_user_ns(file);
++	struct user_namespace *mnt_userns = file_mnt_user_ns(file);
++	struct inode *inode = file_inode(file);
 +
- 	/* Be careful if suid/sgid is set */
- 	inode_lock(inode);
- 
- 	/* reload atomically mode/uid/gid now that lock held */
- 	mode = inode->i_mode;
--	uid = inode->i_uid;
--	gid = inode->i_gid;
-+	uid = i_uid_into_mnt(mnt_userns, inode);
-+	gid = i_gid_into_mnt(mnt_userns, inode);
- 	inode_unlock(inode);
- 
- 	/* We ignore suid/sgid if there are no mappings for them in the ns */
+ 	if (capable(CAP_SYS_ADMIN))
+ 		return true;
+ 	if (file->f_mode & FMODE_WRITE)
+ 		return true;
+-	if (uid_eq(current_fsuid(), file_inode(file)->i_uid))
++	if (uid_eq(current_fsuid(), i_uid_into_mnt(mnt_userns, inode)))
+ 		return true;
+-	if (!inode_permission(&init_user_ns, file_inode(file), MAY_WRITE))
++	if (!inode_permission(mnt_userns, inode, MAY_WRITE))
+ 		return true;
+ 	return false;
+ }
 -- 
 2.30.0
 
