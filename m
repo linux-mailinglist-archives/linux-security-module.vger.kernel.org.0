@@ -2,22 +2,22 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD162FEBCF
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 14:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5EC2FEC0F
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Jan 2021 14:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729227AbhAUN2O (ORCPT
+        id S1732494AbhAUNfa (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Jan 2021 08:28:14 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:54757 "EHLO
+        Thu, 21 Jan 2021 08:35:30 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:55317 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730332AbhAUN1u (ORCPT
+        with ESMTP id S1732304AbhAUNdj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:27:50 -0500
+        Thu, 21 Jan 2021 08:33:39 -0500
 Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l2Zuf-0005g7-IE; Thu, 21 Jan 2021 13:22:13 +0000
+        id 1l2ZuI-0005g7-8p; Thu, 21 Jan 2021 13:21:50 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
@@ -53,68 +53,81 @@ Cc:     John Johansen <john.johansen@canonical.com>,
         linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v6 27/40] ecryptfs: do not mount on top of idmapped mounts
-Date:   Thu, 21 Jan 2021 14:19:46 +0100
-Message-Id: <20210121131959.646623-28-christian.brauner@ubuntu.com>
+Subject: [PATCH v6 22/40] would_dump: handle idmapped mounts
+Date:   Thu, 21 Jan 2021 14:19:41 +0100
+Message-Id: <20210121131959.646623-23-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; i=ghv/kMxBjWVz72L+xFuQBh/xSmPaVl07FCNHzoGv4Rk=; m=NFmehRD0KNcILFBxE6aGR1OjIupR+5WFeLoiP5ShJC4=; p=y+aaA7asfnKesPwKpXtBf+Gzv/rdSr5LpwUc8kyT8VY=; g=c814c6483a8755fc91bca27ebabaa2b2beaaec75
-X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pgAKCRCRxhvAZXjcosHXAQC9eu2 YlnUeZViKQgWoqQtKdNJ5+dgu/eVlDpuwEWnwqwD9Eh8WEYpaxdL1+PELrTM+92+OxqtiAKKXSCAU ul1tOw4=
+X-Patch-Hashes: v=1; h=sha256; i=A/nf/Qaib9/w6oGQlkS9dYx6cw1KsGe6yuBPNJQbdMM=; m=5fDX5uz0YnC3GH96qex7V+5TwhlVI48wrMLhtmDIkl8=; p=QepK7fKjTZuoI1u3TlKmBwlnbcyQSzJL+R6j/ywgVPc=; g=4190fea7306895f3e77ebfd677e8257c1f573c61
+X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pQAKCRCRxhvAZXjcokbCAP9K3z3 CreUyBktYJ8SjXaIHJXRbCwIFFhlpN72GXHM7cgEA72Za1OgttnSBIi5PswjJIk6RpEFXF+qFrzcs uz9ZrAk=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Prevent ecryptfs from being mounted on top of idmapped mounts.
-Stacking filesystems need to be prevented from being mounted on top of
-idmapped mounts until they have have been converted to handle this.
+When determining whether or not to create a coredump the vfs will verify
+that the caller is privileged over the inode. Make the would_dump()
+helper handle idmapped mounts by passing down the mount's user namespace
+of the exec file. If the initial user namespace is passed nothing
+changes so non-idmapped mounts will see identical behavior as before.
 
-Link: https://lore.kernel.org/r/20210112220124.837960-39-christian.brauner@ubuntu.com
+Link: https://lore.kernel.org/r/20210112220124.837960-31-christian.brauner@ubuntu.com
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: David Howells <dhowells@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
 Cc: linux-fsdevel@vger.kernel.org
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
 /* v2 */
-patch introduced
+unchanged
 
 /* v3 */
-- David Howells <dhowells@redhat.com>:
-  - Adapt check after removing mnt_idmapped() helper.
+unchanged
 
 /* v4 */
-unchanged
+- Serge Hallyn <serge@hallyn.com>:
+  - Use "mnt_userns" to refer to a vfsmount's userns everywhere to make
+    terminology consistent.
 
 /* v5 */
 unchanged
 base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
 
+- Christoph Hellwig <hch@lst.de>:
+  - Use new file_mnt_user_ns() helper.
+
 /* v6 */
 unchanged
 base-commit: 19c329f6808995b142b3966301f217c831e7cf31
 ---
- fs/ecryptfs/main.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/exec.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/ecryptfs/main.c b/fs/ecryptfs/main.c
-index e63259fdef28..cdf40a54a35d 100644
---- a/fs/ecryptfs/main.c
-+++ b/fs/ecryptfs/main.c
-@@ -531,6 +531,12 @@ static struct dentry *ecryptfs_mount(struct file_system_type *fs_type, int flags
- 		goto out_free;
- 	}
+diff --git a/fs/exec.c b/fs/exec.c
+index a8ec371cd3cd..d803227805f6 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1404,15 +1404,15 @@ EXPORT_SYMBOL(begin_new_exec);
+ void would_dump(struct linux_binprm *bprm, struct file *file)
+ {
+ 	struct inode *inode = file_inode(file);
+-	if (inode_permission(&init_user_ns, inode, MAY_READ) < 0) {
++	struct user_namespace *mnt_userns = file_mnt_user_ns(file);
++	if (inode_permission(mnt_userns, inode, MAY_READ) < 0) {
+ 		struct user_namespace *old, *user_ns;
+ 		bprm->interp_flags |= BINPRM_FLAGS_ENFORCE_NONDUMP;
  
-+	if (mnt_user_ns(path.mnt) != &init_user_ns) {
-+		rc = -EINVAL;
-+		printk(KERN_ERR "Mounting on idmapped mounts currently disallowed\n");
-+		goto out_free;
-+	}
-+
- 	if (check_ruid && !uid_eq(d_inode(path.dentry)->i_uid, current_uid())) {
- 		rc = -EPERM;
- 		printk(KERN_ERR "Mount of device (uid: %d) not owned by "
+ 		/* Ensure mm->user_ns contains the executable */
+ 		user_ns = old = bprm->mm->user_ns;
+ 		while ((user_ns != &init_user_ns) &&
+-		       !privileged_wrt_inode_uidgid(user_ns, &init_user_ns,
+-						    inode))
++		       !privileged_wrt_inode_uidgid(user_ns, mnt_userns, inode))
+ 			user_ns = user_ns->parent;
+ 
+ 		if (old != user_ns) {
 -- 
 2.30.0
 
