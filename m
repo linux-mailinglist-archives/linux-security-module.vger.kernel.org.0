@@ -2,21 +2,21 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2730C2FFBC6
-	for <lists+linux-security-module@lfdr.de>; Fri, 22 Jan 2021 05:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE702FFBD1
+	for <lists+linux-security-module@lfdr.de>; Fri, 22 Jan 2021 05:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbhAVEfU (ORCPT
+        id S1726851AbhAVEhI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Jan 2021 23:35:20 -0500
-Received: from namei.org ([65.99.196.166]:53082 "EHLO mail.namei.org"
+        Thu, 21 Jan 2021 23:37:08 -0500
+Received: from namei.org ([65.99.196.166]:53148 "EHLO mail.namei.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbhAVEfR (ORCPT
+        id S1725943AbhAVEhH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Jan 2021 23:35:17 -0500
+        Thu, 21 Jan 2021 23:37:07 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.namei.org (Postfix) with ESMTPS id 143EE1BC;
-        Fri, 22 Jan 2021 04:33:44 +0000 (UTC)
-Date:   Fri, 22 Jan 2021 15:33:43 +1100 (AEDT)
+        by mail.namei.org (Postfix) with ESMTPS id 2A83F1BC;
+        Fri, 22 Jan 2021 04:35:34 +0000 (UTC)
+Date:   Fri, 22 Jan 2021 15:35:34 +1100 (AEDT)
 From:   James Morris <jmorris@namei.org>
 To:     Christian Brauner <christian.brauner@ubuntu.com>
 cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -51,10 +51,10 @@ cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
         linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v6 21/40] ioctl: handle idmapped mounts
-In-Reply-To: <20210121131959.646623-22-christian.brauner@ubuntu.com>
-Message-ID: <f4129122-cc1f-ed12-e35-d3cebc73aba2@namei.org>
-References: <20210121131959.646623-1-christian.brauner@ubuntu.com> <20210121131959.646623-22-christian.brauner@ubuntu.com>
+Subject: Re: [PATCH v6 23/40] exec: handle idmapped mounts
+In-Reply-To: <20210121131959.646623-24-christian.brauner@ubuntu.com>
+Message-ID: <48878557-bda5-b5e5-a6a9-f737ccc357b9@namei.org>
+References: <20210121131959.646623-1-christian.brauner@ubuntu.com> <20210121131959.646623-24-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
@@ -62,11 +62,16 @@ List-ID: <linux-security-module.vger.kernel.org>
 
 On Thu, 21 Jan 2021, Christian Brauner wrote:
 
-> Enable generic ioctls to handle idmapped mounts by passing down the
-> mount's user namespace. If the initial user namespace is passed nothing
-> changes so non-idmapped mounts will see identical behavior as before.
+> When executing a setuid binary the kernel will verify in bprm_fill_uid()
+> that the inode has a mapping in the caller's user namespace before
+> setting the callers uid and gid. Let bprm_fill_uid() handle idmapped
+> mounts. If the inode is accessed through an idmapped mount it is mapped
+> according to the mount's user namespace. Afterwards the checks are
+> identical to non-idmapped mounts. If the initial user namespace is
+> passed nothing changes so non-idmapped mounts will see identical
+> behavior as before.
 > 
-> Link: https://lore.kernel.org/r/20210112220124.837960-30-christian.brauner@ubuntu.com
+> Link: https://lore.kernel.org/r/20210112220124.837960-32-christian.brauner@ubuntu.com
 > Cc: Christoph Hellwig <hch@lst.de>
 > Cc: David Howells <dhowells@redhat.com>
 > Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -76,6 +81,7 @@ On Thu, 21 Jan 2021, Christian Brauner wrote:
 
 
 Reviewed-by: James Morris <jamorris@linux.microsoft.com>
+
 
 -- 
 James Morris
