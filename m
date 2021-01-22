@@ -2,129 +2,127 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A619D300B71
-	for <lists+linux-security-module@lfdr.de>; Fri, 22 Jan 2021 19:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71887300C5C
+	for <lists+linux-security-module@lfdr.de>; Fri, 22 Jan 2021 20:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728590AbhAVSgj (ORCPT
+        id S1729271AbhAVTUN (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 22 Jan 2021 13:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        Fri, 22 Jan 2021 14:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729194AbhAVScY (ORCPT
+        with ESMTP id S1730221AbhAVTDB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 22 Jan 2021 13:32:24 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F012C061788
-        for <linux-security-module@vger.kernel.org>; Fri, 22 Jan 2021 10:31:44 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id q3so1634243oog.4
-        for <linux-security-module@vger.kernel.org>; Fri, 22 Jan 2021 10:31:44 -0800 (PST)
+        Fri, 22 Jan 2021 14:03:01 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8581C061788
+        for <linux-security-module@vger.kernel.org>; Fri, 22 Jan 2021 11:02:14 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id c6so7794172ede.0
+        for <linux-security-module@vger.kernel.org>; Fri, 22 Jan 2021 11:02:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tyhicks-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6Ab9R3Beg3K2SiC0qANgEYUJGr8eAMXRzKvwtlr3avY=;
-        b=nasFTn+Wbf6+mLFLGP8W5Ujy6BYP5L2cegwclttCFnekEXAOkDDrvQu9YItuVGUqYZ
-         KHew29S8kFItmdEKeX795fWRGhMVHexN8B+hmtTwKNd1mopSb58bSd3I9ZqxjBoNXSm/
-         xYfxCLQpYYbd6kAnIKn9JBg4Pa3xpH/h5cjEW25nlNW62cfvCFaxWtz2X7fUkiKVL30c
-         3aj3OmGZk1i/CBH0WT4fQlOsj13gCXgLRNy3s8yrXgm5XwcXd0PPn7ji/TlF8hfVpCYB
-         k4bSiEC6DoNK0a0PtWTOCv5AgjGzFRHvM2E17zUau5K2Wem2O1Dw7Et+vzouOWJesWvT
-         /OvA==
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qPqGO6M1vE9fTgLsRl9bBFWNchSGQjZBiwtyORRYmOw=;
+        b=o58fKMZc0SW8ioL1vMvt2Z7+b0CWkZQOxJRGU8u50uBf8nPbYrVYUhNF2P3euFPH00
+         D8qpuqGUMuC+T5W4OJVi6GCYHAhBpg8w2q20dQaZSbz4KMquOAnFY91xxezIUWF0foJE
+         Mb5d4I1CUyFumjcUe8Du5EhpLaqvAPKuEHhv84V9tysxpLLsW5C+fKTboj8M6+rn+8ix
+         s34HadJxWvdc3mgB+jol0DG9OFlYkgX3FJULGNMuxDsUSP7AXlXj8inDG2t97kSlzOtO
+         delXHVrTW1I4DMakYYIprXzjv0cklUsl6p2xIwTM15gpltaLTA1qHNbVCE1w+Sx8xtBm
+         mS2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6Ab9R3Beg3K2SiC0qANgEYUJGr8eAMXRzKvwtlr3avY=;
-        b=JGfcQyqWBhhsK0RPc/jxgwNPtlu298zTJvjkWU61t+9nm1t1UZhPZ4BdRuuFuOL3wo
-         8EuMQ/BNmCImspwzW0jKxEGfd3VQsFntwTHu+W+EpKcWL++JBFOV3AqwTa6BwFMF9ZVt
-         PNedG8XHCMOwrZrX51X58p5xryxDFjxMFwVkQ5+0i33NTpfiK1LWZyr7HYfo+NQiKQbG
-         mAo9Px8/6VeRNcU3/w9E88wqvfC9GgpqYLaRNlfM9E/RWXPWOE4ivCHz/Nj4vUAGcLgC
-         LHH3wCnyilUHOKxilk8DneakmGwVeqklnYq4tdvqd7ER2zn1tDv7ehx+g90lNdeFVUGn
-         jM2g==
-X-Gm-Message-State: AOAM530jG02ucqPTPsZ1C2HkPn9LAXeA1iBgpwS2400ZOM/RV3caoCYp
-        Gvt3d6dX7jOfcxwpnLOpDLezQRmQXKk8uJH1
-X-Google-Smtp-Source: ABdhPJz0jtCdpEjEMrPjsrQ4MNKqxVFzLEirJ6qP9Bb8ZCzO4bpHVBR4tHp1tIKbz9Klj8hQkCd1XA==
-X-Received: by 2002:a4a:6c45:: with SMTP id u5mr4749495oof.61.1611340303740;
-        Fri, 22 Jan 2021 10:31:43 -0800 (PST)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net. [162.237.133.238])
-        by smtp.gmail.com with ESMTPSA id x9sm1825985ota.23.2021.01.22.10.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 10:31:43 -0800 (PST)
-Date:   Fri, 22 Jan 2021 12:31:41 -0600
-From:   Tyler Hicks <code@tyhicks.com>
-To:     Miklos Szeredi <mszeredi@redhat.com>
-Cc:     "Eric W . Biederman" <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Serge E . Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH 1/2] ecryptfs: fix uid translation for setxattr on
- security.capability
-Message-ID: <20210122183141.GB81247@sequoia>
-References: <20210119162204.2081137-1-mszeredi@redhat.com>
- <20210119162204.2081137-2-mszeredi@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qPqGO6M1vE9fTgLsRl9bBFWNchSGQjZBiwtyORRYmOw=;
+        b=Gyr9nmYjc7TGgDKTex/EwzPcb3WlkiNLEKxUPGdYFAfchjww8VtZJOPoqTw470D0mn
+         lqctPwUOnWyw99foRhdRPOb/7HQTA3rzJkeW30gNzrkmoydSvUvtYxODH69VBj8rao7y
+         QldOW4tin2S6uQkbfZ8ScC03C6zze3ullxbujoD7/ox2QsS2gTmEHXJQlqbjJjZ/HiNv
+         UxeTfDUKrECdEO0Q+5TIMF11D+y0lOfH/2aiOqx5tuvx2tQxerPwGea5q4f1y19ZR3J1
+         oExdRY0NQQmHs1jGRI4D6nZy2dj4S87kk1hqMc6SiMb6rbGUUiVgXOhl6fvAqDyjlY9o
+         Oeww==
+X-Gm-Message-State: AOAM532zgSFRRFbFgN65fsJCP9J9Zoaduln5DJvRW2EteEHoVMTNcf6+
+        Gpk8roi4WCs3JD1qCupoY7fxI4xWhb/57EnoBF6J
+X-Google-Smtp-Source: ABdhPJx1YTmDwNPYfPyKObR51spE6ojhAa+xAEqR1QPnxEJCdxSNRMw77YHFEBJ+gVjTLkqinG2WKLYlySwUWvIXmsg=
+X-Received: by 2002:a05:6402:54d:: with SMTP id i13mr4361901edx.12.1611342133436;
+ Fri, 22 Jan 2021 11:02:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210119162204.2081137-2-mszeredi@redhat.com>
+References: <CAJ+F1CKqVX6L7HGqiRGqxxTgyhrLAGbCSMvcv4NrBR_3C-Q93w@mail.gmail.com>
+ <CAHC9VhSCmhkcRgWtGQNhSr8SQueHWtw3qW9SEtNnEgC=AyzVZg@mail.gmail.com> <3b5a02e0-1361-6fe5-9a2e-2a9113e99d2b@schaufler-ca.com>
+In-Reply-To: <3b5a02e0-1361-6fe5-9a2e-2a9113e99d2b@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 22 Jan 2021 14:02:02 -0500
+Message-ID: <CAHC9VhQk3ZJ8yKoy3nVEABPMCG7Q_F4SJBvTvFqUEBGSkjmjPA@mail.gmail.com>
+Subject: Re: VSOCK & getpeercon()
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     =?UTF-8?B?TWFyYy1BbmRyw6kgTHVyZWF1?= <marcandre.lureau@gmail.com>,
+        selinux@vger.kernel.org, Gerd Hoffmann <kraxel@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2021-01-19 17:22:03, Miklos Szeredi wrote:
-> Prior to commit 7c03e2cda4a5 ("vfs: move cap_convert_nscap() call into
-> vfs_setxattr()") the translation of nscap->rootid did not take stacked
-> filesystems (overlayfs and ecryptfs) into account.
-> 
-> That patch fixed the overlay case, but made the ecryptfs case worse.
+On Fri, Jan 22, 2021 at 12:13 PM Casey Schaufler <casey@schaufler-ca.com> w=
+rote:
+> On 1/22/2021 8:27 AM, Paul Moore wrote:
+> > On Sat, Jan 16, 2021 at 7:48 AM Marc-Andr=C3=A9 Lureau
+> > <marcandre.lureau@gmail.com> wrote:
+> >> Hi,
+> >>
+> >> getpeercon() isn't implemented for VSOCK. Note, I am not very familiar
+> >> with SELinux, but I was porting some applications that uses AF_UNIX to
+> >> AF_VSOCK and reached that point.
+> >>
+> >> I found some previous discussions about VSOCK & LSM from 2013, but the
+> >> reasons it was abandoned don't seem so clear or valid to me:
+> >> https://lore.kernel.org/selinux/1803195.0cVPJuGAEx@sifl/
+> > Hi, my apologies for the slow reply.
+> >
+> > The SELinux/LSM VSOCK support wasn't abandoned due to any significant
+> > roadblocks, it was simply a matter of time - I seemed to be the only
+> > one who was interested in working on it, and I couldn't find enough
+> > time to work on it ;)
+> >
+> > If you are interested in spending some time on adding proper
+> > LSM/SELinux VSOCK support my gut feeling is that it would still be a
+> > good thing.  However, I would suggest spending some time investigating
+> > the current state of things, while you may get lucky, I believe it is
+> > safer to assume that anything from 2013 is horribly out of date.
+>
+> That's a pretty safe statement. You really have four options at
+> this point:
+>
+> - netfilter to set the secmark
+> - CIPSO/CALIPSO if the protocol supports or can support options
+> - examining the peer process as is done with AF_UNIX
+> - eBPF *I think* but you never really know with something that new
 
-Thanks for sending a fix!
+I don't believe CIPSO, CALIPSO, labeled IPsec and other IP-based
+labeling protocols aren't really options here since VSOCK doesn't rely
+on IP.  I vaguely recall thinking it was much more analogous to
+UNIX/LOCAL sockets, but it has been ~seven years since I thought about
+this last.
 
-I know that you don't have an eCryptfs setup to test with but I'm at a
-loss about how to test this from the userns/fscaps side of things. Do
-you have a sequence of unshare/setcap/getcap commands that I can run on
-a file inside of an eCryptfs mount to verify that the bug exists after
-7c03e2cda4a5 and then again to verify that this patch fixes the bug?
+The use of secmark could be interesting assuming there are useful
+labeling points for VSOCK and netfilter (secmark'ing a packet doesn't
+rely on IP so it should be okay from that perspective).
 
-Tyler
+Of course eBPF support would be interesting, but that is like saying
+SELinux, Smack, and AppArmor support would be interesting.  I think
+the important part is making sure the important objects include the
+necessary opaque security blobs (we are probably okay there already),
+and making sure we have the LSM hooks in the right places in the code
+(also, we *may* be okay there).  Once those things are done, it's a
+matter of adding the necessary support to each LSM.
 
-> 
-> Restore old the behavior for ecryptfs that existed before the overlayfs
-> fix.  This does not fix ecryptfs's handling of complex user namespace
-> setups, but it does make sure existing setups don't regress.
-> 
-> Reported-by: Eric W. Biederman <ebiederm@xmission.com>
-> Cc: Tyler Hicks <code@tyhicks.com>
-> Fixes: 7c03e2cda4a5 ("vfs: move cap_convert_nscap() call into vfs_setxattr()")
-> Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
-> ---
->  fs/ecryptfs/inode.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/ecryptfs/inode.c b/fs/ecryptfs/inode.c
-> index e23752d9a79f..58d0f7187997 100644
-> --- a/fs/ecryptfs/inode.c
-> +++ b/fs/ecryptfs/inode.c
-> @@ -1016,15 +1016,19 @@ ecryptfs_setxattr(struct dentry *dentry, struct inode *inode,
->  {
->  	int rc;
->  	struct dentry *lower_dentry;
-> +	struct inode *lower_inode;
->  
->  	lower_dentry = ecryptfs_dentry_to_lower(dentry);
-> -	if (!(d_inode(lower_dentry)->i_opflags & IOP_XATTR)) {
-> +	lower_inode = d_inode(lower_dentry);
-> +	if (!(lower_inode->i_opflags & IOP_XATTR)) {
->  		rc = -EOPNOTSUPP;
->  		goto out;
->  	}
-> -	rc = vfs_setxattr(lower_dentry, name, value, size, flags);
-> +	inode_lock(lower_inode);
-> +	rc = __vfs_setxattr_locked(lower_dentry, name, value, size, flags, NULL);
-> +	inode_unlock(lower_inode);
->  	if (!rc && inode)
-> -		fsstack_copy_attr_all(inode, d_inode(lower_dentry));
-> +		fsstack_copy_attr_all(inode, lower_inode);
->  out:
->  	return rc;
->  }
-> -- 
-> 2.26.2
-> 
+> There may be something else out there that hasn't gobsmacked me
+> in the stacking work, so that I wouldn't know about it.
+>
+> BTW: Please include the (CCed) Linux Security Module list
+> <linux-security-module@vger.kernel.org> in discussions like this.
+
+--=20
+paul moore
+www.paul-moore.com
