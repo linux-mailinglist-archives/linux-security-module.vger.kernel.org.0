@@ -2,132 +2,169 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C99303F5D
-	for <lists+linux-security-module@lfdr.de>; Tue, 26 Jan 2021 14:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EC3304542
+	for <lists+linux-security-module@lfdr.de>; Tue, 26 Jan 2021 18:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405322AbhAZNxq (ORCPT
+        id S1727201AbhAZR0V (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 26 Jan 2021 08:53:46 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51562 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405524AbhAZNxo (ORCPT
+        Tue, 26 Jan 2021 12:26:21 -0500
+Received: from sonic302-27.consmr.mail.ne1.yahoo.com ([66.163.186.153]:42820
+        "EHLO sonic302-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730097AbhAZQz5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 26 Jan 2021 08:53:44 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611669176; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Eq0eIxGFaOAtL0zlId1JHPNVaLrojruOSnd68XSBtBQ=;
-        b=CyfrVNC7X2pzMVUtodZD8Q54ECXgj72/vBxcKX6o/p/ycRnIOVXjr9PY7SVSh2qANeS7X8
-        tkNB7fGLi3QHWICIfDRlqoCG22/m9GfM9TnKGLTAXs6AKQerEbtX3eSn2ePgE87q5qKOvg
-        a5PlvteXw8R4Jgyq8X/1YK/mMJkFWkQ=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 72D54AEAC;
-        Tue, 26 Jan 2021 13:52:56 +0000 (UTC)
-Date:   Tue, 26 Jan 2021 14:52:54 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jeffrey Vander Stoep <jeffv@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Edgar Arriaga =?iso-8859-1?Q?Garc=EDa?= 
-        <edgararriaga@google.com>, Tim Murray <timmurray@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] mm/madvise: replace ptrace attach requirement for
- process_madvise
-Message-ID: <20210126135254.GP827@dhcp22.suse.cz>
-References: <20210111170622.2613577-1-surenb@google.com>
- <20210112074629.GG22493@dhcp22.suse.cz>
- <20210112174507.GA23780@redhat.com>
- <CAJuCfpFQz=x-LvONO3c4iqjKP4NKJMgUuiYc8HACKHAv1Omu0w@mail.gmail.com>
- <20210113142202.GC22493@dhcp22.suse.cz>
- <CAG48ez0=QSzuj96+5oVQ2qWqfjedv3oKtfEFzw--C8bzfvj7EQ@mail.gmail.com>
+        Tue, 26 Jan 2021 11:55:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611680111; bh=QhZ83QJyQqzSmvmwZ8sIhqHvRsC5fnat22jXhctKw2g=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=qq7Q7j1Qc0Ylj86dsdk1enXsBl/u/j3Sg245aFQfUHbfBkXnCN1nDQGW+ikcJokhul1nh9RDrH/sgrp6nCKmUY6xNvRLQ90eAfdECSLqjDdQ/xCcsa5yzlJZD1OLjTgCR6aeTopSOVpni6GWPtf1fKRWdbp10ayzv1N4cI7X5JyFJolhx41tPVpJVzSnc/CneDMeCvo5DlvbNslw2CVJJqiF3rYGtFObUU9ydofilhmlg9cwRE0uF0plPlhOE8PyzDZVZaJPWorXo5CMpnpa7fWE9uaMegmwKCNDwpO+xrZwIdr/I2xDysbP2pVsaXkvHR1TnY+lvOu+FvcgkvXeOQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611680111; bh=01VN54ZC+bLrDLWC5kRRCsi0JucTycjNn8jKuVd+PXh=; h=From:To:Subject:Date:From:Subject:Reply-To; b=NSj49T2d6Rbn1LQIQcz0pbhCUlRDZUcXdvk3cSzU4tWywKWW2NLbRJwiGkR6lb4Xp8tjC5BkR5vwG1I9Oayor2mvGxoyBLbjMTv2XuUrFai4cptESODlNi6iW1wtU13426ZyacpBTvZqznRjmL8yVPVn0fXgxa08b5u4kUY0BDaW0Q78EnZNS6NyTSfNOBHqG3WIcXjtEBHTDWcCd2eJ9ktygsD5EP6YA9sd7gPy7jT9LXSBI1bjv/wz9uKvVwNykE5UvUb9Vrhz3fA+yCmdFBHnlhTMTyLKt2Wwq2edsKy/7Vu7sVB2xCaNp4MiUo7wj6M/DnVRSFphWcfDsclzWQ==
+X-YMail-OSG: NC79Fv0VM1lH9HNO2chcdPJNBBpM.6GyJ8GW_0Li_hNMjxLy19W6Y6UyOHU3_m3
+ HYHiGBx38UTfa_Dqc1hS8H7X0UfopaUJsfTMTcLRyN5W_DZjU1O8TNdgBQzoVt3kedxJg4S1zXef
+ YAUak0p0A5yyWuemHn6fS1Ek5bzOLlKW50pM2zXtAKIyxYqt28tYIztHxEA2X44OXF63T0uwPGy1
+ DYqkjDrAEfAe2toUcx_fvxv8_qCB93nyU2LxZvcXfExlfHfxTAPdph61b.ZYhGw_AApy.gKj3bw6
+ 9PqNlGskzwuUuJwB9PMLZdAny0yJwKKWU4bHDN0n4iu9yu6t_N_v9qFqFSgrVKRYDs4DZ7gHoize
+ UOGxIV0gnjBovHA5RlyZEBph.g7zbZcIyiKKQrxoWNI3uICSUz1fkpd9tG_.GuH7_m3x_P7zBw_G
+ tCdyLSdlt90pG.liiXm3f8dzTK0oqofO3opG_CznEXud_ShwNbggH5OCMvrnrn0ekr3dn_IfOxkk
+ 8arBaN.wuR604LetDn9sA1l8SUVjzD3qFvChydwf4uyP9Fr4FzGJpnuC.TH.q1Uo6XFG.OAqfu4Z
+ zOW9XTH7hijwkL29LE8LEH8Dbk2Z7jRC9dGrfeys8ROFuBKD0FVYj9DRwNpKTznH01INyzHudyGN
+ K1m2ZIKRCdoJsLAHBlXxMud5VEZrNi6WjGD31pjD65wpNS_fBGYAnwK_ACkC89jmulQ_vdzGlEcK
+ RYuCtlBowX9c.3oPVfgHnO_QMSZev16saqmtBdSPrZQF_dW1.PlsHSJvdngP5W.dzOLruhkP2DsQ
+ DCj8Ob6CvClD_EJgP3ZYaH8nPqWeKj_7lvsWF0u_E5Ft2.yAGpZ6Nz4Dptgz5B8HM.vc7a1KQOhZ
+ 4z0DnhH_rhUghyhR8SMWeBU4Y8vbEDfQN6lsKohqdDHAxOWqOJkB1OIHCfmhGXxiUmdWC1c0d7x7
+ Cg0VEaLvY997MUG4u8r2bP7voqQutrfUCmRzO8nm7l3L9gxN7JFWhwor9I53QWwzBvy_rV6qKwsd
+ BXc02uzrfFwm4nVm.GJFfuEbMsfGIGVi2idD2_S4uUA3oAVaI3FHlStXnKmiuvCQpe_UF.UGzc7Q
+ .88yQrmpXaJsd4ayY87EzdZa9q1Sj7xs8H8MUQ19A4Ab7E3kX4PCx8Tgd3BoHmSE7Mx33JbVXtrC
+ Wd26b.e5OEtcU.kXzvPUPqHHW3637stwhuq.reoUZ6xnKnRW2kgygmxLN3MHC7ffKuyWaOk8M.tz
+ X2duwed11aoVMU2BLndgm3rbkznhpkBoB7HOT0e84An0lhEOLxWg1t3emKnMOgGb0HHgn9XQxYbW
+ uBxhGSfk7XSrnhCOsjhldLTZKAsji5JOIXkRgdIyPGDkPwV2bFd9yPsRMRMvJwLXa.gSZBnkKjQO
+ ZHj37HtfU7I.DMUPHVKO.mDDTwbMIHi_jpey8JMYXQvX_NE_y.3DPxlWOFFj8gkjej4itur_N8TE
+ SSEKYHUyeYcdxLXvwQKP8aPynCl_SaJl7h4gaufmUfEz.lhVdtf.aC70ZA_7pPtSMfx2Q0EPm9..
+ d6WisVM9xQGcQ57HRwBIFzxrLAUG9nZ61WFDyEFQ8l3w7pfwoT6EwgbTD7vxcsSCgWANDliYAEnz
+ e8peTIoo6g9XXOo78y6.9ebgR.g6J1B6MCD5pjjB.r65wO_m0cdwb.BZSQjl2eYcZNBkwHjsvEDm
+ BsFBEVWEGAbX..8VjKSI74HqB9jeNvbcHY9Y46d5bWmxXQtBUt9jieaKkY0_wkQ.0e3GU7xaSdid
+ 4EA.fZpQhJNu.vRLpJtbATNrGDG7w7YskJoeyem1pr2t9FliNDA8953gvDKcGH12r.eJJ.ybK_4c
+ AWjXEIlAzkFZWJf8BNcwoFnWKM_b44cH6KouOkrfDpxmifAS2JJwyKhaPEKRR1FCilVlTm.0jD8F
+ XKbTVxE3HZyXpxU6YKOKTWHt79w4ynlZkP4I49vkwQyD.rvL.kVCjUyhurFR8girXVnYIfmS6Uj1
+ rt9lJJXNd4uGf1q9LFK1VjK2F8flLhgkI.Im9CMP3e2ymUNxcKchBqaOTR37Qo7.YRhIe57tyb6l
+ TgOGEL7Chw_1T2zsaQFA9c4oQkkG9vfW6pHcYTtoOBD.HtFgBJB_LaIEPqDayQ8cfxijZd6URzLz
+ wbZBQ7N15j47GHqroyC0QUWkayfQdYgGab_QQSgzdAXG7mCTkrFR27vbPNmW2kGT9qVL9nrOdpBS
+ fQExJCHay9OdJk8qHD8QCTaFhtrZMr1gHUQWeUS9tqADYO9h4InL6.o.zCMFfndQ3OCNixCRbVsc
+ 8moTfH65PhUDgmUqToyB1Xk.uQfYRwOb0It2uaFJezYmSUmC9sVcpUhn3iEfadyfNwrF_B22JGC1
+ Ha5Qb7S1BB7J_3Ste5zmxd7GYdPDAUcMR9Yzh.jNph9TfdU0EMpK9zD9dcfraANqlpa5hjxFhsHK
+ VcL3dJej2PAHMVg_wtps4ZGf1i7yAxoUPLCd_FSqchzqcSyrIZpks4WEj3AReNJhMARBDQHjHrg0
+ dEIaRmanFFoeoNbwJ3PoLOMjX7.8t1qEReGHBhGqbf58MW8UBHiCiNyDm078_587xWaJiV27DyJ7
+ 9t4nZxJA9Y8v3bJ0o7qCt9zf4I5XNAZjA5lb0CyfbhuPTt1MUsInxkufbL6ftFRjL4b4sd0mSW7b
+ MxNQCXo0hRh4vkO5fct_fDulMtXt7_LSZCr0_r4qaBkQhQosvky65DjTQJWtYslI3O6FGrEs0mJD
+ J4j8r2EpK4UyWfq8BtvEiTMn3ctLoHNqn3TtiDsYPtHQPItcGqGgoEINUjkcr6bF4SDVBd_.ITSJ
+ j6gWT8.0OU_NlOqN938J2NiRmpTraMkOtm7.YD77KCeO8RwUs8jvL.K3F6.OKD7iMAZIw2zOwdbH
+ 51X0VOu1xSV9LJm_lvhUDX7oy776hMARSdiRrT58wIzSMkheaBUSc2TnvskK7CwFkismwCb45rC1
+ ZRIQy11vRjv2Zv7LmoSWuvyCJ2NM6P5vy5t_0189IntzXJr_1FzZepvJ3WKshCeSXMENtu4_10r1
+ ehjNvSjWOkS5DbZzOGgWY4JFX_0yb6g--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 26 Jan 2021 16:55:11 +0000
+Received: by smtp419.mail.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 013cd3b533e951467ad2ef403e668437;
+          Tue, 26 Jan 2021 16:44:36 +0000 (UTC)
+From:   Casey Schaufler <casey@schaufler-ca.com>
+To:     casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     casey@schaufler-ca.com, linux-audit@redhat.com,
+        keescook@chromium.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
+        sds@tycho.nsa.gov, linux-kernel@vger.kernel.org
+Subject: [PATCH v24 03/25] LSM: provide lsm name and id slot mappings
+Date:   Tue, 26 Jan 2021 08:40:46 -0800
+Message-Id: <20210126164108.1958-4-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20210126164108.1958-1-casey@schaufler-ca.com>
+References: <20210126164108.1958-1-casey@schaufler-ca.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG48ez0=QSzuj96+5oVQ2qWqfjedv3oKtfEFzw--C8bzfvj7EQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed 20-01-21 14:17:39, Jann Horn wrote:
-> On Wed, Jan 13, 2021 at 3:22 PM Michal Hocko <mhocko@suse.com> wrote:
-> > On Tue 12-01-21 09:51:24, Suren Baghdasaryan wrote:
-> > > On Tue, Jan 12, 2021 at 9:45 AM Oleg Nesterov <oleg@redhat.com> wrote:
-> > > >
-> > > > On 01/12, Michal Hocko wrote:
-> > > > >
-> > > > > On Mon 11-01-21 09:06:22, Suren Baghdasaryan wrote:
-> > > > >
-> > > > > > What we want is the ability for one process to influence another process
-> > > > > > in order to optimize performance across the entire system while leaving
-> > > > > > the security boundary intact.
-> > > > > > Replace PTRACE_MODE_ATTACH with a combination of PTRACE_MODE_READ
-> > > > > > and CAP_SYS_NICE. PTRACE_MODE_READ to prevent leaking ASLR metadata
-> > > > > > and CAP_SYS_NICE for influencing process performance.
-> > > > >
-> > > > > I have to say that ptrace modes are rather obscure to me. So I cannot
-> > > > > really judge whether MODE_READ is sufficient. My understanding has
-> > > > > always been that this is requred to RO access to the address space. But
-> > > > > this operation clearly has a visible side effect. Do we have any actual
-> > > > > documentation for the existing modes?
-> > > > >
-> > > > > I would be really curious to hear from Jann and Oleg (now Cced).
-> > > >
-> > > > Can't comment, sorry. I never understood these security checks and never tried.
-> > > > IIUC only selinux/etc can treat ATTACH/READ differently and I have no idea what
-> > > > is the difference.
-> 
-> Yama in particular only does its checks on ATTACH and ignores READ,
-> that's the difference you're probably most likely to encounter on a
-> normal desktop system, since some distros turn Yama on by default.
-> Basically the idea there is that running "gdb -p $pid" or "strace -p
-> $pid" as a normal user will usually fail, but reading /proc/$pid/maps
-> still works; so you can see things like detailed memory usage
-> information and such, but you're not supposed to be able to directly
-> peek into a running SSH client and inject data into the existing SSH
-> connection, or steal the cryptographic keys for the current
-> connection, or something like that.
-> 
-> > > I haven't seen a written explanation on ptrace modes but when I
-> > > consulted Jann his explanation was:
-> > >
-> > > PTRACE_MODE_READ means you can inspect metadata about processes with
-> > > the specified domain, across UID boundaries.
-> > > PTRACE_MODE_ATTACH means you can fully impersonate processes with the
-> > > specified domain, across UID boundaries.
-> >
-> > Maybe this would be a good start to document expectations. Some more
-> > practical examples where the difference is visible would be great as
-> > well.
-> 
-> Before documenting the behavior, it would be a good idea to figure out
-> what to do with perf_event_open(). That one's weird in that it only
-> requires PTRACE_MODE_READ, but actually allows you to sample stuff
-> like userspace stack and register contents (if perf_event_paranoid is
-> 1 or 2). Maybe for SELinux things (and maybe also for Yama), there
-> should be a level in between that allows fully inspecting the process
-> (for purposes like profiling) but without the ability to corrupt its
-> memory or registers or things like that. Or maybe perf_event_open()
-> should just use the ATTACH mode.
+Provide interfaces to map LSM slot numbers and LSM names.
+Update the LSM registration code to save this information.
 
-Thanks for the clarification. I still cannot say I would have a good
-mental picture. Having something in Documentation/core-api/ sounds
-really needed. Wrt to perf_event_open it sounds really odd it can do
-more than other places restrict indeed. Something for the respective
-maintainer but I strongly suspect people simply copy the pattern from
-other places because the expected semantic is not really clear.
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+---
+ include/linux/security.h |  4 ++++
+ security/security.c      | 45 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 4a109092a8d7..a99a4307176f 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -192,6 +192,10 @@ static inline bool lsmblob_equal(struct lsmblob *bloba, struct lsmblob *blobb)
+ 	return !memcmp(bloba, blobb, sizeof(*bloba));
+ }
+ 
++/* Map lsm names to blob slot numbers */
++extern int lsm_name_to_slot(char *name);
++extern const char *lsm_slot_to_name(int slot);
++
+ /* These functions are in security/commoncap.c */
+ extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
+ 		       int cap, unsigned int opts);
+diff --git a/security/security.c b/security/security.c
+index 39dce9eb3bcd..05ce02ae7c46 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -474,6 +474,50 @@ static int lsm_append(const char *new, char **result)
+  * Current index to use while initializing the lsmblob secid list.
+  */
+ static int lsm_slot __lsm_ro_after_init;
++static struct lsm_id *lsm_slotlist[LSMBLOB_ENTRIES] __lsm_ro_after_init;
++
++/**
++ * lsm_name_to_slot - Report the slot number for a security module
++ * @name: name of the security module
++ *
++ * Look up the slot number for the named security module.
++ * Returns the slot number or LSMBLOB_INVALID if @name is not
++ * a registered security module name.
++ */
++int lsm_name_to_slot(char *name)
++{
++	int i;
++
++	for (i = 0; i < lsm_slot; i++)
++		if (strcmp(lsm_slotlist[i]->lsm, name) == 0)
++			return i;
++
++	return LSMBLOB_INVALID;
++}
++
++/**
++ * lsm_slot_to_name - Get the name of the security module in a slot
++ * @slot: index into the interface LSM slot list.
++ *
++ * Provide the name of the security module associated with
++ * a interface LSM slot.
++ *
++ * If @slot is LSMBLOB_INVALID return the value
++ * for slot 0 if it has been set, otherwise NULL.
++ *
++ * Returns a pointer to the name string or NULL.
++ */
++const char *lsm_slot_to_name(int slot)
++{
++	if (slot == LSMBLOB_INVALID)
++		slot = 0;
++	else if (slot >= LSMBLOB_ENTRIES || slot < 0)
++		return NULL;
++
++	if (lsm_slotlist[slot] == NULL)
++		return NULL;
++	return lsm_slotlist[slot]->lsm;
++}
+ 
+ /**
+  * security_add_hooks - Add a modules hooks to the hook lists.
+@@ -493,6 +537,7 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+ 	if (lsmid->slot == LSMBLOB_NEEDED) {
+ 		if (lsm_slot >= LSMBLOB_ENTRIES)
+ 			panic("%s Too many LSMs registered.\n", __func__);
++		lsm_slotlist[lsm_slot] = lsmid;
+ 		lsmid->slot = lsm_slot++;
+ 		init_debug("%s assigned lsmblob slot %d\n", lsmid->lsm,
+ 			   lsmid->slot);
 -- 
-Michal Hocko
-SUSE Labs
+2.25.4
+
