@@ -2,19 +2,19 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2A3305413
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Jan 2021 08:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C32305403
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Jan 2021 08:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S317531AbhA0ApZ (ORCPT
+        id S317802AbhA0AwL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 26 Jan 2021 19:45:25 -0500
-Received: from sonic314-26.consmr.mail.ne1.yahoo.com ([66.163.189.152]:38904
+        Tue, 26 Jan 2021 19:52:11 -0500
+Received: from sonic314-26.consmr.mail.ne1.yahoo.com ([66.163.189.152]:42950
         "EHLO sonic314-26.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727869AbhAZRBI (ORCPT
+        by vger.kernel.org with ESMTP id S2389100AbhAZRNx (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 26 Jan 2021 12:01:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611680421; bh=BDpZa6uDYOE05u5pBk0jLHUArgaNqV9t7H74QtOFt6Q=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=RhxVG8a+ZS5PU9/n8iklHD91rU1KyZEsb6FoToJkyjBvhC6FCEaCmtK9eNevdMlXRXhlfpT6rw8HI6srCO1fdqJtScRXpCZB0nkMMR3QMIAmKUBfbPXWN61BifKxN6JithI+bb9kgJmUBCNpl+wi5wbkIuT/UsHSyHXWwwQI0hVl92tzhwGTISovSkdtJsj4TTpaO2e9fKz71T1MNhBVkTs97LRm/ObwUkMkipsEDfwBu/ibLjUOu09dNpMdcQKCH6amck38O9imqdVZrHmvla69XWPj3ztvHY8qKpv3NQjZK1cHvockoIRAQOV7xzVVWh/h2MBtP9n/5FRbg8xyxw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611680421; bh=gwNOCaEy6yt0WOFccZALi7eVruQJp7eZE72TWotB/iV=; h=From:To:Subject:Date:From:Subject:Reply-To; b=sWJhDg1ncVxvrbKBzQWHWvNcrHCm20z4Ni4cvcBd9nq0J2wLAcwlp80hXP9lzRCCoREheCAGMJKMaFQ2DeHaLporGstFl0knxLTr4Ew9jJo3e1NgEQ3D48hTxfmL4hCDA9vxgMXG+Nr5DuAjpi1T6ck8bRp7Yq4JIToNoDjPkJ9Cnay7xaQkDIBFEA2jFcsqLXbfcqZrhrOHWvGJNgXYlTqRPVMFad5b7dKxpi5pkZ0UdrinFKdEMhMASqasDD4k+xYENzPiZQhcGuOiCnaGcWywq+cGJmMsSlEZ0VmhPbIFsFEnjmj5SrkJN3JDp4TihzNwmFH8hd9LzSzJwkRRQg==
+        Tue, 26 Jan 2021 12:13:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611681186; bh=BDpZa6uDYOE05u5pBk0jLHUArgaNqV9t7H74QtOFt6Q=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=t3Iy5aSLPQcvGThkoFGRNq8eysuUfLusX1Wufam1X4wyFAmRDHh9Q46cRFQJSEIu4+qTPpRtf95DfPu2yIFshLGvJtr77awSPbnDJe6YLHVII2Z7gYoA/8KVDLOAeL9f3xOfoXinfslsQaH3sl9u5dhiMQCglZCmhlmdTs3pcduEKuIV/KbxCYAvQUqMbAgoIlNUebOatt5IoIXaszvwKa4mb4gh0rCM9rO9aRSYm6KwKuG4fabZDc8OF63CLnYCuh2CUWv+9gSjcnzHgo0gmYdmXsnMVPFc+ozGW/t8NuSPFwEFr2PM5jEebJLszfqNFbS09lPzBuAodT4P6s/ihA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611681186; bh=Bm7rmsPvWs6dH3nGD/6fCPzCr692XpPHrzbFszD2DE0=; h=From:To:Subject:Date:From:Subject:Reply-To; b=rgJyHmySr8Td06L4ZrhA9YhP478IMEIkpsrsDwdWuoECOx02+xrt/emIVdAOGf+iyHk3sGFWWAwV0ceJ4tbJLhRmkMI/ph4w4DoIxPDz4NDOPz8gNGCqhUEtumtYVJXToqrIzm9EI5MpOojSkQXA7lSw4Sv6AK+RNAgaUFGJNZIPvt4tu8CUnRUmQrKvuX2nMb++tQt4U/IOfPoW1o+/mAyXprsML/0S7yhUp/bW1OcZolS1u08xpJ/gBHuEDZA6WhIQ059D7Y81FnP6vyd0SW9+FdBSzzT9FR09PlhgcxktYPDIa3rIztzOpakchgw9O5ZY2tdk7nBV1DIxqaYJzg==
 X-YMail-OSG: VLVKbmgVM1m01P9Y9_afw3QuK9jJDTtjs6eCjC0NpBsEYrjrV2bosNpmZMLMLFe
  VK_a0Tz5QVMI8MerDRHZPI6iKBA83_yQhncoOa6sEkwvMf8GavV1WgxjiPzvLBGwCqzLgTptlKID
  i.C9EIVZ_4G8Kc0I5QN6VuGegQtCi5UJJXWVw.M.Ns1jdaT8_EfZltKodKBwkFQy4w4MmKeHhp8V
@@ -58,7 +58,7 @@ X-YMail-OSG: VLVKbmgVM1m01P9Y9_afw3QuK9jJDTtjs6eCjC0NpBsEYrjrV2bosNpmZMLMLFe
  x8VSKb4G8GnvGLzL3Zyqm1nUcSQ8rbN9_esmztUTxa.lCQ4o5BVFVSTqMHGzT21JUMmlc4lLVf_Q
  932dtNBrucGSHdTPTIlWGBeqNVs8KeiBnlUY7kIEe0NqNq8BArlEMDIeAGqs3QxGRgcX4z007IL6
  jgA295Y7T_8oq2y4bmYV0jK1HadMYTXKd2Wg-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Tue, 26 Jan 2021 17:00:21 +0000
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Tue, 26 Jan 2021 17:13:06 +0000
 Received: by smtp416.mail.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 65f04a03bde3b39170d266c6e909c123;
           Tue, 26 Jan 2021 17:00:15 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
