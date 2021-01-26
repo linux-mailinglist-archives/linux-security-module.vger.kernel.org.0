@@ -2,19 +2,19 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C72304EC0
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Jan 2021 02:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E423304EC1
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Jan 2021 02:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404666AbhA0Axy (ORCPT
+        id S2404672AbhA0AyE (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 26 Jan 2021 19:53:54 -0500
-Received: from sonic314-27.consmr.mail.ne1.yahoo.com ([66.163.189.153]:43340
-        "EHLO sonic314-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392818AbhAZS7B (ORCPT
+        Tue, 26 Jan 2021 19:54:04 -0500
+Received: from sonic302-28.consmr.mail.ne1.yahoo.com ([66.163.186.154]:46730
+        "EHLO sonic302-28.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2395205AbhAZTLr (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 26 Jan 2021 13:59:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611687493; bh=kX8MhTLSLqWaybog46em+I2fGY6S98kXDDJnONF4/Ow=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=hB5IiROf/6oo6bRQHXmkKdVNCyyNP13EkIOHEzzQw0fZjTrPKOYIbGIt7IFYPxNgwErdq23M3nBMqvtd6l+A5/55SA5tPfqQYngO/H7RnD12qiYMuVzd5lIgJe0wfggtrauKD2BV7CL0j70XnNhzUafZtqYm3mAe7jE+IPXc7QBRmgElNGjLlb7tOJXMzIAaWIX71BFbLikBYKJqT4YOciK2KnMJEuOjganBMIglmMZxOHIuNsbirpOvgNYAMXCd6yDpmQRx3WRPOOFtIPtt3qrdy77k6MEmMPYag0JS3ChBO0uU2rmpKcrUI7rwdF+aJRaA4um6SRpYxmYZf7My0g==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611687493; bh=Orev5EAT6w/J3/85Z3/7AfZ/D21lHL92m6TVz7GRDH9=; h=Subject:To:From:Date:From:Subject:Reply-To; b=t3zXFkCAzr4Jm7L1fbwmqaXP6nr+u+LShzf7sK/4njF7+LmVjlG1Fqt6n7uCJRchz2JTdRw3tGaJgbxdDRsUokTKhhAT5/OH/RA1uAMK87qXuEbXzFhnyPlNDs+4sYiLGwzPphadaimYeAJQKwq82PCo6SyFNmQbmWBwxqG725fAm/Coq7nBqV6w/SjwSyn9LNzlJs8P6Dk8VE8y5jAEN6rySCHJR0LcmV+gAeESWcSueLPRLo/DgVnn8bVQ2zp35CwYsRcmKHL6PENOl+2M1u5ZoqvXIfTmHWUxwfjj+tYeCQ7Dly8DNR9s5VnpFY68Su+KP/kJ/5L1LYVQSM+QAw==
+        Tue, 26 Jan 2021 14:11:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611688260; bh=kX8MhTLSLqWaybog46em+I2fGY6S98kXDDJnONF4/Ow=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=WOZI8G3rneeHBYA0LEoc1hjKWnz77bsnRWSirwoycTjULkSb7IMyJAMxWFbtYLubp3TXRvV2Ej+vvewCt1HO8gBuSm0aTnmSHaTUYIwZZhvnk49K0G//rGQgNZggk5Jyk5IdqiCZ3fS++I+q4DE0UJVUFdqtgARQCh46DJ5YeiIK0iPn5v8XJiPlZaShgIBMLNwY/EUz0JyFwYGmNIozoVo2HTdUwQ/hEELFmwAlAF1EEHJR21tm5L/oaHgSUvrmXDYqBej/VaqIBJs1Ppxt7g0aDJaGr9v8HwRh+q5gZQAzLZ/e9HsJ1itHqx0EMT9XHkdK4kPORNVyzJoHQ/Ouyw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1611688260; bh=3FyGqUgOTFHvbBm5/xiV/0MINHJI4/oDh7+adjaN5zf=; h=Subject:To:From:Date:From:Subject:Reply-To; b=NypryuBel7AGlyZ1tuSU7qwCGs17COUr2Hz6HMz7lKMyX+GjPD0xWIIH+ZorcqWnrRlBvBthOwmj4gkzH77k0xu7G1OP3WcP/7ZVf9xlGnk82oQi/LU5nMv9D9Swzm+EWmhUQXdi1O14puxDzIOVKk05EeYQ1VYnwEUdV8+vvglyIlZIxZ93KcITI+c6LrTZfOdbhiebW64D9e0B6Nc+C+PslQk5CI3x5ztf+qqiMgdoW/YtyFt/aBiYzAeOdOBoQJGb8OLqOYT5Qy7eWaePyUgO4BPPU2dMQWpVvqUevkKg/GSYcWo+rG7B3pe2A7vkqMRjdG4fNlCiAhT5Gg1xwA==
 X-YMail-OSG: 9CQPUtgVM1lBFwLgCMWeCV_rkyfX7dJoWgtr6pJGFtCtfFfXlhumLp1D31EGlRE
  0MmdOGdvbUFI0MsQI8suhRUl7yw5Rup3DFau47BelsgzCawoavo9cTHeyC17c9btaL0RakIrXp0m
  laPp8r1O_dB7x9S9Vdl..sIfvZhk33QbBHvOuk7vydJJBYyJa0cuAPuAuSgfSoKavOAol1D4npK2
@@ -59,7 +59,7 @@ X-YMail-OSG: 9CQPUtgVM1lBFwLgCMWeCV_rkyfX7dJoWgtr6pJGFtCtfFfXlhumLp1D31EGlRE
  QHwUwO5737120cWpiqVpYun2cuZiI9iUxDrOlUhaB1gKWVe7Er52zBQF1mcovNdznZazReizZala
  ukonpaxRlSZp2fNmwjl6kQOWesVB47CidybaCrercSnH5JSi3Gy2ly0ti.cJ6ew5Sk.XPVu66eg.
  XPBpSCMzucrRL3MMUoPPj7bGbtFPPBU1zvbqyIT6IoG2VIYwcQQw2PEh_uRE9vTDVFDoHzQ--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Tue, 26 Jan 2021 18:58:13 +0000
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 26 Jan 2021 19:11:00 +0000
 Received: by smtp410.mail.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID e1bae85a7ff10632e9e39fc038bb2e7c;
           Tue, 26 Jan 2021 18:58:09 +0000 (UTC)
 Subject: Re: [PATCH v24 21/25] audit: add support for non-syscall auxiliary
