@@ -2,92 +2,109 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEAD30940C
-	for <lists+linux-security-module@lfdr.de>; Sat, 30 Jan 2021 11:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205B730947A
+	for <lists+linux-security-module@lfdr.de>; Sat, 30 Jan 2021 11:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbhA3KJb (ORCPT
+        id S231863AbhA3KZ3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 30 Jan 2021 05:09:31 -0500
-Received: from mail.hallyn.com ([178.63.66.53]:45820 "EHLO mail.hallyn.com"
+        Sat, 30 Jan 2021 05:25:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51148 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231765AbhA3CJD (ORCPT
+        id S232199AbhA3KZ0 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 29 Jan 2021 21:09:03 -0500
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id D174C9AC; Fri, 29 Jan 2021 20:06:52 -0600 (CST)
-Date:   Fri, 29 Jan 2021 20:06:52 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        Sat, 30 Jan 2021 05:25:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0488964E05;
+        Sat, 30 Jan 2021 10:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612002285;
+        bh=JnBJ9yEVn7P1tBZKCOw6J2eaiEK2+XU3s7XI7eKmziI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RVQ6JqkYHMUPHoFe/qjI3k5FhKYLINAdkkZru1LeotSaLIitfKzlBcCYlcbSe3u03
+         jUnGlWulA31u9bfPAwef9yCP8w6sEJg+vdpTfibNqYG6c4Y1t3uQsni/Dqt8XFcn4h
+         Dp5Q+4ub3EDyBo/ReZArE3N6q7ejXCdHxOT36anGLM/jAQ/gluLR88BbGqua8NxAgR
+         6iGdWCGljP3YaKFBlnQkg6c+VcoPGsJOH/OQo4tSBRajxAgbIc7DNX7d62crk2Qrq5
+         +ObWQZLLPtiZzJAa/6CaqUly0AehC+ti4B070xMhezW7pQV3nHMI1A6Iax/09AjFmO
+         Mfo6jR9t++dMA==
+Date:   Sat, 30 Jan 2021 12:24:40 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jmorris@namei.org, serge@hallyn.com,
+        nayna@linux.ibm.com, erichte@linux.ibm.com, mpe@ellerman.id.au,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: Re: [PATCH 2/2] security.capability: fix conversions on getxattr
-Message-ID: <20210130020652.GB7163@mail.hallyn.com>
-References: <20210119162204.2081137-1-mszeredi@redhat.com>
- <20210119162204.2081137-3-mszeredi@redhat.com>
- <8735yw8k7a.fsf@x220.int.ebiederm.org>
- <20210128165852.GA20974@mail.hallyn.com>
- <87o8h8x1a6.fsf@x220.int.ebiederm.org>
- <20210129154839.GC1130@mail.hallyn.com>
- <87im7fuzdq.fsf@x220.int.ebiederm.org>
+        James.Bottomley@hansenpartnership.com
+Subject: Re: [PATCH v4] certs: Add EFI_CERT_X509_GUID support for dbx entries
+Message-ID: <YBUz6Cbx/ckG8Zjj@kernel.org>
+References: <2442460.1610463459@warthog.procyon.org.uk>
+ <X/9a8naM8p4tT5sO@linux.intel.com>
+ <A05E3573-B1AF-474B-94A5-779E69E5880A@oracle.com>
+ <YAFdNiYZSWpB9vOw@kernel.org>
+ <CFBF6AEC-2832-44F7-9D7F-F20489498C33@oracle.com>
+ <YAgTawk3EENF/P6j@kernel.org>
+ <D9F5E0BD-E2FC-428F-91B3-35D2750493A0@oracle.com>
+ <3063834.1611747971@warthog.procyon.org.uk>
+ <61a0420790250807837b5a701bb52f3d63ff0c84.camel@linux.ibm.com>
+ <86CE3924-E36F-44FD-A259-3CC7E69D3EAC@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87im7fuzdq.fsf@x220.int.ebiederm.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <86CE3924-E36F-44FD-A259-3CC7E69D3EAC@oracle.com>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Jan 29, 2021 at 04:55:29PM -0600, Eric W. Biederman wrote:
-> "Serge E. Hallyn" <serge@hallyn.com> writes:
+On Wed, Jan 27, 2021 at 08:41:29AM -0700, Eric Snowberg wrote:
 > 
-> > On Thu, Jan 28, 2021 at 02:19:13PM -0600, Eric W. Biederman wrote:
-> >> "Serge E. Hallyn" <serge@hallyn.com> writes:
+> > On Jan 27, 2021, at 7:03 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > 
+> > [Cc'ing linux-integrity]
+> > 
+> > On Wed, 2021-01-27 at 11:46 +0000, David Howells wrote:
+> >> Jarkko Sakkinen <jarkko@kernel.org> wrote:
 > >> 
-> >> > On Tue, Jan 19, 2021 at 07:34:49PM -0600, Eric W. Biederman wrote:
-> >> >> Miklos Szeredi <mszeredi@redhat.com> writes:
-> >> >> 
-> >> >> > If a capability is stored on disk in v2 format cap_inode_getsecurity() will
-> >> >> > currently return in v2 format unconditionally.
-> >> >> >
-> >> >> > This is wrong: v2 cap should be equivalent to a v3 cap with zero rootid,
-> >> >> > and so the same conversions performed on it.
-> >> >> >
-> >> >> > If the rootid cannot be mapped v3 is returned unconverted.  Fix this so
-> >> >> > that both v2 and v3 return -EOVERFLOW if the rootid (or the owner of the fs
-> >> >> > user namespace in case of v2) cannot be mapped in the current user
-> >> >> > namespace.
-> >> >> 
-> >> >> This looks like a good cleanup.
-> >> >
-> >> > Sorry, I'm not following.  Why is this a good cleanup?  Why should
-> >> > the xattr be shown as faked v3 in this case?
+> >>>> I suppose a user space tool could be created. But wouldn’t what is
+> >>>> currently done in the kernel in this area need to be removed?
+> >>> 
+> >>> Right. I don't think this was a great idea in the first place to
+> >>> do to the kernel but since it exists, I guess the patch does make
+> >>> sense.
 > >> 
-> >> If the reader is in &init_user_ns.  If the filesystem was mounted in a
-> >> user namespace.   Then the reader looses the information that the
-> >
-> > Can you be more precise about "filesystem was mounted in a user namespace"?
-> > Is this a FUSE thing, the fs is marked as being mounted in a non-init userns?
-> > If that's a possible case, then yes that must be represented as v3.  Using
-> > is_v2header() may be the simpler way to check for that, but the more accurate
-> > check would be "is it v2 header and mounted by init_user_ns".
+> >> This information needs to be loaded from the UEFI tables before the system
+> >> starts loading any kernel modules or running any programs (if we do
+> >> verification of such, which I think IMA can do).
+> > 
+> > There needs to a clear distinction between the pre-boot and post-boot
+> > keys.  UEFI has its own trust model, which should be limited to UEFI. 
+> > The .platform keyring was upstreamed and limited to verifying the kexec
+> > kernel image.   Any other usage of the .platform keyring keys is
+> > abusing its intended purpose.
+> > 
+> > The cover letter says,   "Anytime the .platform keyring is used, the
+> > keys in the .blacklist keyring are referenced, if a matching key is
+> > found, the key will be rejected."   I don't have a problem with loading
+> > the UEFI X509 dbx entries as long as its usage is limited to verifying
+> > the kexec kernel image.
 > 
-> I think the filesystems current relevant are fuse,overlayfs,ramfs,tmpfs.
+> Correct, with my patch, when EFI_CERT_X509_GUID entries are found in the
+> dbx, they will only be used during kexec.  I believe the latest dbx file on 
+> uefi.org contains three of these entires.
 > 
-> > Basically yes, in as many cases as possible we want to just give a v2
-> > cap because more userspace knows what to do with that, but a non-init-userns
-> > mounted fs which provides a v2 fscap should have it represented as v3 cap
-> > with rootid being the kuid that owns the userns.
+> Based on my understanding of why the platform keyring was introduced, 
+> I intentionally only used these for kexec.  I do question the current 
+> upstream mainline code though.  Currently, when EFI_CERT_X509_SHA256_GUID
+> or EFI_CERT_SHA256_GUID entries are found in the dbx, they are applied 
+> everywhere.  It seems like there should be a dbx revocation keyring 
+> equivalent to the current platform keyring that is only used for pre-boot. 
 > 
-> That is the case we that is being fixed in the patch.
-> 
-> > Or am I still thinking wrongly?  Wouldn't be entirely surprised :)
-> 
-> No you got it.
+> If that is a direction you would like to see this go in the future, let
+> me know, I’d be happy to work on it.
 
-So then can we make faking a v3 gated on whether
-    sb->s_user_ns != &init_user_ns ?
+I would tend to agree with this.
 
+/Jarkko
