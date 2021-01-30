@@ -2,114 +2,76 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D37309383
-	for <lists+linux-security-module@lfdr.de>; Sat, 30 Jan 2021 10:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4D6309447
+	for <lists+linux-security-module@lfdr.de>; Sat, 30 Jan 2021 11:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbhA3Jh7 (ORCPT
+        id S230112AbhA3KSa (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 30 Jan 2021 04:37:59 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:56219 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbhA3DKA (ORCPT
+        Sat, 30 Jan 2021 05:18:30 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:58276 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232160AbhA3Arn (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 29 Jan 2021 22:10:00 -0500
-Received: from fsav301.sakura.ne.jp (fsav301.sakura.ne.jp [153.120.85.132])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 10U2PK6q001042;
-        Sat, 30 Jan 2021 11:25:20 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav301.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav301.sakura.ne.jp);
- Sat, 30 Jan 2021 11:25:20 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav301.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 10U2PJX8001039
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 30 Jan 2021 11:25:20 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: general protection fault in tomoyo_socket_sendmsg_permission
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+95ce4b142579611ef0a9@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzkaller-bugs@googlegroups.com
-References: <000000000000647eff05b3f7e0d4@google.com>
- <20201113120055.11748-1-hdanton@sina.com>
- <5f71e0c1-d387-6d72-d8e4-edb11cf57f72@linuxfoundation.org>
- <ea4028b7-53f2-aeaf-76e7-69874efcdec5@I-love.SAKURA.ne.jp>
- <2b70d360-a293-4acb-ea6c-2badda5e8b8b@linuxfoundation.org>
- <9bdd3f10-bddb-bd87-d7ad-b4b706477006@i-love.sakura.ne.jp>
- <6b8da36f-a994-7604-77f4-52e29434605f@linuxfoundation.org>
- <5f9ec159-77d8-ffba-21d1-2810e059f998@i-love.sakura.ne.jp>
- <a06093f1-22b3-7d72-bc6c-f99f4e0d0de9@linuxfoundation.org>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <40617d66-1334-13a0-de9b-bd7cc1155ce5@i-love.sakura.ne.jp>
-Date:   Sat, 30 Jan 2021 11:25:20 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <a06093f1-22b3-7d72-bc6c-f99f4e0d0de9@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Fri, 29 Jan 2021 19:47:43 -0500
+Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6CA4C20B7192;
+        Fri, 29 Jan 2021 16:45:27 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6CA4C20B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1611967528;
+        bh=op5LjItHRUfPUox9OsELY1x2Al+yZ2A++LNqhTcTBoc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RUWvjxV/i144TnYQuhCikj+0Zvb0VvhCZH7VRCa3SNsiSUKEdSjHBqZhL7P2uPx3s
+         9EQGRRkcsFRISQHBEqkeA+8z27MYnqfgHmo1pP+gEgZ6M54hS9YpZViTP4ZTLUn/fZ
+         nit3Ee+z+fu76B3ifaGmmRhBnBJ4wXx8Ldyobppg=
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Subject: [PATCH 0/3] support for duplicate measurement of integrity critical data
+Date:   Fri, 29 Jan 2021 16:45:16 -0800
+Message-Id: <20210130004519.25106-1-tusharsu@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2021/01/30 6:18, Shuah Khan wrote:
-> In this console log:
+IMA does not measure duplicate buffer data since TPM extend is a very
+expensive operation.  However, in some cases for integrity critical
+data, the measurement of duplicate data is necessary to accurately
+determine the current state of the system.  Eg, SELinux state changing
+from 'audit', to 'enforcing', and back to 'audit' again.  In this
+example, currently, IMA will not measure the last state change to
+'audit'.  This limits the ability of attestation services to accurately
+determine the current state of the integrity critical data on the
+system.
 
-It seems "this console log" refers to https://syzkaller.appspot.com/x/log.txt?x=10453034500000 .
+This series addresses this gap by providing the ability to measure
+duplicate entries for integrity critical data, driven by policy.
 
-> 
-> 06:57:50 executing program 1:
-> socketpair$tipc(0x1e, 0x2, 0x0, &(0x7f00000000c0)={<r0=>0xffffffffffffffff})
-> sendmsg$BATADV_CMD_GET_TRANSTABLE_LOCAL(r0, &(0x7f00000002c0)={&(0x7f00000001c0), 0xc, &(0x7f0000000280)={0x0, 0xd001010000000000}}, 0x0)
-> 
-> [ 1151.090883][T23361] vhci_hcd vhci_hcd.0: pdev(4) rhport(0) sockfd(4)
-> [ 1151.097445][T23361] vhci_hcd vhci_hcd.0: devid(0) speed(1) speed_str(low-speed)
-> 06:57:50 executing program 0:
-> r0 = syz_open_dev$binderN(&(0x7f0000000680)='/dev/binder#\x00', 0x0, 0x0)
-> ioctl$BINDER_WRITE_READ(r0, 0xc0306201, &(0x7f0000000cc0)={0x88, 0x0, &(0x7f0000000b80)=[@transaction={0x40406300, {0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}}, @transaction={0x40406300, {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}}], 0x0, 0x0, 0x0})
-> 
-> [ 1151.164402][T23363] vhci_hcd: connection closed
-> [ 1151.167346][  T240] vhci_hcd: stop threads
-> 
-> 
-> [ 1151.178329][T26761] usb 17-1: new low-speed USB device number 2 using vhci_hcd
-> 
-> 
-> SK: Looking at the console log, it looks like while connection is being
->     torn down,
+This series is based on the following repo/branch/commit:
+ repo: https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+ branch: next-integrity-testing
+ commit b3f82afc1041 ("IMA: Measure kernel version in early boot") 
 
-Excuse me, but it looks like (what comes here) while connection is being torn down ?
-I'm not familiar with driver code.
+Tushar Sugandhi (3):
+  IMA: add policy condition to measure duplicate critical data
+  IMA: update functions to read allow_dup policy condition
+  IMA: add support to measure duplicate buffer for critical data hook
 
-> 
-> 
-> [ 1151.181245][  T240] vhci_hcd: release socket
-> 
-> 
-> Can you share your your test code for this program:
-> "executing program 1"
+ Documentation/ABI/testing/ima_policy  |  4 +++-
+ security/integrity/ima/ima.h          |  8 +++----
+ security/integrity/ima/ima_api.c      | 15 +++++++------
+ security/integrity/ima/ima_appraise.c |  2 +-
+ security/integrity/ima/ima_init.c     |  2 +-
+ security/integrity/ima/ima_main.c     |  9 ++++----
+ security/integrity/ima/ima_policy.c   | 31 ++++++++++++++++++++++++---
+ security/integrity/ima/ima_queue.c    |  5 +++--
+ 8 files changed, 54 insertions(+), 22 deletions(-)
 
-I don't think program 1 is relevant. I think program 4
+-- 
+2.17.1
 
-  06:57:50 executing program 4:
-  r0 = socket$tipc(0x1e, 0x2, 0x0)
-  syz_usbip_server_init(0x1)
-  close_range(r0, 0xffffffffffffffff, 0x0)
-
-which calls syz_usbip_server_init() as with other duplicates is relevant.
-
-> 
-> Also your setup? Do you run usbip_host and vhci_hcd both?
-
-Who are you referring to with "you/your" ? I'm not running syzkaller in my setup
-and I don't have test code.
-
-I'm just proposing printing more messages in order to confirm the ordering of
-events and member values in structures.
