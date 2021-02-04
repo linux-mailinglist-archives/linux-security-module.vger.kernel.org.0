@@ -2,116 +2,91 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B74F30EE8E
-	for <lists+linux-security-module@lfdr.de>; Thu,  4 Feb 2021 09:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9577730EF6B
+	for <lists+linux-security-module@lfdr.de>; Thu,  4 Feb 2021 10:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234769AbhBDIfI (ORCPT
+        id S232685AbhBDJNy (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 4 Feb 2021 03:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbhBDIfH (ORCPT
+        Thu, 4 Feb 2021 04:13:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20428 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235098AbhBDJNO (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 4 Feb 2021 03:35:07 -0500
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EB0C061573
-        for <linux-security-module@vger.kernel.org>; Thu,  4 Feb 2021 00:34:27 -0800 (PST)
-Received: by mail-vs1-xe42.google.com with SMTP id m13so1359102vsr.2
-        for <linux-security-module@vger.kernel.org>; Thu, 04 Feb 2021 00:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=eTBJwr8tsinj2I2NW8uWcwLDY0aur4Pwo6rPplMY2Ls=;
-        b=aNtEX1V4kRZrOaCdUzuhd5zAl7TYmlYp12+XGjPhygfXCdLlzCtEhHnh/ABW5MdpNx
-         3ip627PXwOAl+2xSAdux6UhWOYOtbPaQoe5Vvz29ojMuYu7cnKe9Y5dR2pYTzn3Z/CwJ
-         9ED0Jesvau3DH2YtEuvp7ACAPItFvtVNbqJ/T2cORG7v36jtjgBFdp4EPHsM6nzDQ26h
-         hTryILT5hMbqIzDXZimM1af+rm/MRLt/bIBE9WOh/roqH09+DjnpGLBtTF4uCKk6V8Z9
-         PybUQxjduUvOlWt0vHwZgvctfWViLcqs/okSxjFUBnSoeVKFqV7YiY5whrG5xf844Zzp
-         PRUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=eTBJwr8tsinj2I2NW8uWcwLDY0aur4Pwo6rPplMY2Ls=;
-        b=Ki8RBQlDk3qXL5AnaSh8Sfy/YimIEHo2sW3KmQA8uBXHGb6HTZ+bZNxSKWpxDlfYFr
-         QO6rMxrez+SWVyNOip4FtOnsr2CfYs/DN7ByaNTCzx1tHG8LjcxcbqF0WClHlTAcejea
-         kOjrSPMA0mJR0PIG+nGBON6UdJbz9a858GkBj2qJbGYW8UdZzumWVmofxuqcDywudQwi
-         z29kIAwIbEcMARf/lpWAJ4CkIUaOXna8ezZRX9UFo2POthtrPonxNK0y8zeiN1oAC2ZK
-         ZDkIvpFwnaTVYV1ySrY/YUhW2aPCDI13R2ahm4njNpSd4tM3F4TL6TWHEDnZ6u9VW/tQ
-         HgFA==
-X-Gm-Message-State: AOAM533qxxjYUkBaIhENDH0WxBTd7OdA3b+SpNqvLJlnMFhBJwKkJfoA
-        3wuD+F3+Z9x8nlW1Begv9t6jsTN66KWIRW3nGvg=
-X-Google-Smtp-Source: ABdhPJwFqGEFe4126MQCV0vF/ZW5MS8uPGFi638uP7M/y6mXLyWhvGBiFjZT2CqbfwH9eyDZ0cfSrn2oS51Y8dUwHDg=
-X-Received: by 2002:a67:3292:: with SMTP id y140mr4295747vsy.56.1612427666294;
- Thu, 04 Feb 2021 00:34:26 -0800 (PST)
+        Thu, 4 Feb 2021 04:13:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612429907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=83YswTIVs8A+BvG5Cq0qVYxzgxFpUOkWSz7G7FevllY=;
+        b=IG1zvvL1JQ87DuPmWExMtlgsBiCTWFWXx61rZAi2LlOY8izKGih+X5T7jha02vfWq4ARP9
+        d3oPUDqooLgmc91SAFQkkWAt7/+B7LO7CxR2bh2vlCLyYTO5c1REl4lwP4/WIS1btASj2j
+        MlfEfM+PZKnegy41kJpRsoKkXcvu/ok=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-247-DN2S4fUUNAmCJnuiVqh5Kw-1; Thu, 04 Feb 2021 04:11:45 -0500
+X-MC-Unique: DN2S4fUUNAmCJnuiVqh5Kw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AABC95B364;
+        Thu,  4 Feb 2021 09:11:42 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-115-23.rdu2.redhat.com [10.10.115.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 771C171C9D;
+        Thu,  4 Feb 2021 09:11:36 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <A5B5DEC0-E47A-4C3D-8E79-AF37B6C2E565@oracle.com>
+References: <A5B5DEC0-E47A-4C3D-8E79-AF37B6C2E565@oracle.com> <20210122181054.32635-1-eric.snowberg@oracle.com> <1103491.1612369600@warthog.procyon.org.uk> <10e6616e-0598-9f33-2de9-4a5268bba586@digikod.net>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dhowells@redhat.com,
+        =?us-ascii?Q?=3D=3Futf-8=3FQ=3FMicka=3DC3=3DABl?=
+         =?us-ascii?Q?=5FSala=3DC3=3DBCn=3F=3D?= <mic@digikod.net>,
+        dwmw2@infradead.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        James.Bottomley@HansenPartnership.com, masahiroy@kernel.org,
+        michal.lkml@markovi.net, jmorris@namei.org, serge@hallyn.com,
+        ardb@kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        lszubowi@redhat.com, javierm@redhat.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Subject: Re: Re: Conflict with =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn's?=
+ blacklist patches [was [PATCH v5 0/4] Add EFI_CERT_X509_GUID support for
+ dbx/mokx entries]
 MIME-Version: 1.0
-Received: by 2002:ab0:6e8e:0:0:0:0:0 with HTTP; Thu, 4 Feb 2021 00:34:25 -0800 (PST)
-Reply-To: michelsorgho73@gmail.com
-From:   Mr Michel Sorgho <mr.sohalarfan.latif009@gmail.com>
-Date:   Thu, 4 Feb 2021 09:34:25 +0100
-Message-ID: <CAMutEFES6ofxEGhVvuiA3kj8fq_tMdSWv6RsurCjkJ6t6scGjg@mail.gmail.com>
-Subject: VERY URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 04 Feb 2021 09:11:35 +0000
+Message-ID: <1352221.1612429895@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dear Friend,
+Eric Snowberg <eric.snowberg@oracle.com> wrote:
 
-I Mr.Michel Sorgho, With due respect, I have decided to contact you
-on a business transaction  that will be beneficial to both of us. At
-the bank last account and  auditing evaluation, my staffs came across
-an old account which was being maintained by a foreign client who we
-learn was among the deceased passengers of motor accident on
-November.2003, the deceased was unable to run this account since his
-death. The account has  remained dormant without the knowledge of his
-family since it was put in a  safe deposit account in the bank for
-future investment by the client.
+> > On Feb 3, 2021, at 11:49 AM, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
+ wrote:
+> >=20
+> > This looks good to me, and it still works for my use case. Eric's
+> > patchset only looks for asymmetric keys in the blacklist keyring, so
+> > even if we use the same keyring we don't look for the same key types. My
+> > patchset only allows blacklist keys (i.e. hashes, not asymmetric keys)
+> > to be added by user space (if authenticated), but because Eric's
+> > asymmetric keys are loaded with KEY_ALLOC_BYPASS_RESTRICTION, it should
+> > be OK for his use case.  There should be no interference between the two
+> > new features, but I find it a bit confusing to have such distinct use of
+> > keys from the same keyring depending on their type.
+>=20
+> I agree, it is a bit confusing.  What is the thought of having a dbx=20
+> keyring, similar to how the platform keyring works?
+>=20
+> https://www.spinics.net/lists/linux-security-module/msg40262.html
 
-Since his demise, even the members of his family haven't applied for
-claims over this fund and it has been in the safe deposit account
-until I discovered that it cannot be claimed since our client
-is a foreign national and we are sure that he has no next of kin here to
-file claims over the money. As the director of the department, this
-discovery was brought to my office so as to decide what is to be done.I
-decided to seek ways through which to transfer this money out of the
-bank and out of the country too.
+That would be fine by me.
 
-The total amount in the account is USD $18.6 million with my positions
-as staffs of the bank,I am handicapped because I cannot operate
-foreign accounts and cannot lay bonafide claim over this money. The
-client was a foreign  national and you will only be asked to act as
-his next of kin and I will supply you with all the necessary
-information and bank data to assist you in being able to transfer this
-money to any bank of your  choice where this money could be
-transferred into.The total sum will be shared as follows: 50% for me,
-50% for you and expenses incidental occur  during the transfer will be
-incur by both of us. The transfer is risk free on both sides hence you
-are going to follow my instruction till the fund  transfer to your
-account. Since I work in this bank that is why you should  be
-confident in the success of this transaction because you will be
-updated with information as at when desired.
+David
 
-I will wish you to keep this transaction secret and confidential as I
-am hoping to retire with my share of this money at the end of
-transaction  which will be when this money is safety in your account.I
-will then come over to your country for sharing according to the
-previously agreed percentages. You might even have to advise me on
-possibilities of investment in your country or elsewhere of our
-choice. May  God help you to help me to a restive retirement, Amen. And
-You have to  contact me through my private e-mail
-at(michelsorgho73@gmail.com)Please for further information and inquires
-feel free to contact me back immediately for more explanation and
-better understanding I want you to assure me your capability of
-handling this  project with trust by providing me your following
-information details such as:
-
-(1)NAME..............
-(2)AGE:................
-(3)SEX:.....................
-(4)PHONE NUMBER:.................
-(5)OCCUPATION:.....................
-(6)YOUR COUNTRY:.....................
-
-Yours sincerely,
-Mr.Michel  Sorgho
