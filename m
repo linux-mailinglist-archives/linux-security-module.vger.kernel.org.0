@@ -2,68 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6228310357
-	for <lists+linux-security-module@lfdr.de>; Fri,  5 Feb 2021 04:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4146A3106A0
+	for <lists+linux-security-module@lfdr.de>; Fri,  5 Feb 2021 09:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbhBEDKC (ORCPT
+        id S229713AbhBEI1V (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 4 Feb 2021 22:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhBEDJ5 (ORCPT
+        Fri, 5 Feb 2021 03:27:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:22334 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229691AbhBEI1I (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 4 Feb 2021 22:09:57 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1BDC061797;
-        Thu,  4 Feb 2021 19:08:41 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m13so5939544wro.12;
-        Thu, 04 Feb 2021 19:08:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:sender:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
-        b=NRTh4M0Jcl6GH1vZx6tfehzdSRsMQorZISNOE9gHFCDnJ9pKqRA7GWrfGPHC6OgQqp
-         BRNYtYsNO5JT0lD1kYg6TcwP7Z8niz0b3VHWG8eQNg7Gc20C/neX86SKnRyzJOmIJrgJ
-         kB5eKRBOfoFLXDnIFwo/XdUtkMV34RBU3+TE/cotaoXGm7XnE6fg74/ybaXKyAQrS3qY
-         KYCwxSEiM6aUEaumxUCFfOeSc9ZItOxax77yIHpPnuIcGyYnAlYjctLHt3xL8zjfdYOc
-         sI13F+PxWTL2rp7sbp/7MJQs+zHp2JuW8LQkwb22UVWHPnAHhrkt9vKPACdqHBDoQIWh
-         Nbaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:sender:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
-        b=NVCuMvsxLp7BVimjV0Z44wx+FECULNFIqMQwdZcE6UEl5/Hm8BvbggKj0WlwfYBuz1
-         Mlef7ZRLVx4u7l1cjzamBrkto5GB4BYFT8m9ZRWzfqtOoIjBRpWnxojss1VqHv6ifk9z
-         FxKv/uWLIZ27L4WV8Oqyyj1MawOp+lQWhgbgVKwrhENmw8fDcXxQYPK3RDh4SyqQo78v
-         oKIe4p9FoYWs0+lqERDR5mM5J+uf84a2N2xySHT+5MU3wfc8IFEN9ul8DXe4OucTw+1H
-         OAQwAu7BykzxcOMMNTdgviY4kgG7jp0slY5xfCshlz/EXyb7yDis9nonYuLPIugI3TtV
-         Bn+g==
-X-Gm-Message-State: AOAM531w+Vh5R5NeEdnHoOFbbruK9yQu4KYVVVbM11FsFGt+MwZvU+KF
-        J1njTpmimMzmwzo/FOtvcwmF+2FYWlHhGw==
-X-Google-Smtp-Source: ABdhPJyPEO5lhPU5Ki3tYUdHo7/A48MpSbIv/4vddJ3dvYDTD5o8YUiYoljvt6TQN6lCHXJY1Pc/sQ==
-X-Received: by 2002:adf:9f54:: with SMTP id f20mr2470551wrg.362.1612494519670;
-        Thu, 04 Feb 2021 19:08:39 -0800 (PST)
-Received: from [192.168.1.6] ([154.124.28.35])
-        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.35
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Thu, 04 Feb 2021 19:08:38 -0800 (PST)
-Message-ID: <601cb6b6.1c69fb81.5ea54.2ead@mx.google.com>
-Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
-From:   calantha camara <sgt.andersonskylar0@gmail.com>
-X-Google-Original-From: calantha camara
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 5 Feb 2021 03:27:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612513542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LxANOstSwBXrn0OC3M8r/TM5reax6AnMqz1DHOK0g18=;
+        b=d9RTDFg7RRBjm4pOOU94WtvZ2CEH1CPazpCXEs7xy0XfACKF9ACcE8Eu+N6ufuX8ui0bO4
+        qlqNVnbdIIvYZz12+hTgwWwdGBCaG5lisFBQQLNzvpuknNz/vYMu3xxGd8w4i8/cLx02PD
+        iwMSAI7wTkZrUVNe0nUsfEJHgo2pE4g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-98-Aund-JwENnm_luJEaMImoA-1; Fri, 05 Feb 2021 03:25:40 -0500
+X-MC-Unique: Aund-JwENnm_luJEaMImoA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AAAB81800D50;
+        Fri,  5 Feb 2021 08:25:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-115-23.rdu2.redhat.com [10.10.115.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B582D1970A;
+        Fri,  5 Feb 2021 08:25:36 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <YByxkDi0Ruhb0AA8@kernel.org>
+References: <YByxkDi0Ruhb0AA8@kernel.org> <161246085160.1990927.13137391845549674518.stgit@warthog.procyon.org.uk> <161246085966.1990927.2555272056564793056.stgit@warthog.procyon.org.uk>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     dhowells@redhat.com, sprabhu@redhat.com, christian@brauner.io,
+        selinux@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, containers@lists.linux-foundation.org
+Subject: Re: [PATCH 1/2] Add namespace tags that can be used for matching without pinning a ns
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: hi dear
-To:     Recipients <calantha@vger.kernel.org>
-Date:   Fri, 05 Feb 2021 03:08:31 +0000
-Reply-To: calanthac20@gmail.com
-X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2094923.1612513535.1@warthog.procyon.org.uk>
+Date:   Fri, 05 Feb 2021 08:25:35 +0000
+Message-ID: <2094924.1612513535@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-do you speak Eglish
+Jarkko Sakkinen <jarkko@kernel.org> wrote:
+
+> > + * init_ns_common - Initialise the common part of a namespace
+> 
+> Nit: init_ns_common()
+
+Interesting.  The majority of code doesn't put the brackets in.
+
+> I've used lately (e.g. arch/x86/kernel/cpu/sgx/ioctl.c) along the lines:
+> 
+> * Return:
+> * - 0:          Initialization was successful.
+> * - -ENOMEM:    Out of memory.
+
+Actually, looking at kernel-doc.rst, this isn't necessarily the recommended
+approach as it will much everything into one line, complete with dashes, and
+can't handle splitting over lines.  You probably meant:
+
+      * Return:
+      * * 0		- OK to runtime suspend the device
+      * * -EBUSY	- Device should not be runtime suspended
+
+> * Return:
+> * - 0:          Initialization was successful.
+> * - -ENOMEM:    Out of memory.
+> 
+> Looking at the implementation, I guess this is a complete representation of
+> what it can return?
+
+It isn't.  It can return at least -ENOSPC as well, but it's awkward detailing
+the errors from functions it calls since they can change and then the
+description here is wrong.  I'm not sure there's a perfect answer to that.
+
+David
+
