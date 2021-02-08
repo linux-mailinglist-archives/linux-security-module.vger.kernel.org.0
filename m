@@ -2,41 +2,41 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB84313CA8
-	for <lists+linux-security-module@lfdr.de>; Mon,  8 Feb 2021 19:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485E7313CAE
+	for <lists+linux-security-module@lfdr.de>; Mon,  8 Feb 2021 19:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbhBHSIa (ORCPT
+        id S234660AbhBHSIe (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 8 Feb 2021 13:08:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46602 "EHLO mail.kernel.org"
+        Mon, 8 Feb 2021 13:08:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235029AbhBHSDf (ORCPT
+        id S235194AbhBHSEP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 8 Feb 2021 13:03:35 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 950A264EF6;
-        Mon,  8 Feb 2021 17:59:32 +0000 (UTC)
+        Mon, 8 Feb 2021 13:04:15 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 46D4964EF1;
+        Mon,  8 Feb 2021 17:59:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612807173;
-        bh=rVJgB9uoEMske98CMdEnJ6XPfiY1kyWyMRA678gkH4k=;
+        s=k20201202; t=1612807194;
+        bh=OVfDDobJYiOrWYtuDrBEP6uAl6IYNloJlro+QdTzcAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uwx5WuD06ppaAUZmlQdPgnbspP6E75C4fboJdMUxCQO3jsdXXE2NwyU6ZevRYxRaq
-         d8ISXrtXq3sZIdBzwlrSnxoVCaaGea74/4SZGrkiAgLoxWU//hepvu8WVctpnwYdg/
-         mUuas1NZq0UVbURRN19kujqHWsmfpZy7Xh0IqflAmNFeg4b956hmk3hEpGvyA1+0b5
-         hTmdFFgt9sE4DUwg88vdOQmN0uVQ6GjoTKx1tqiOxIZh9jNYk9Ckg+K/7H+t0UOA8K
-         0RgUVaxiWn2YsjVRTGbfa0sZ3wZqg4zeRIaUmvMhZrE0WoY30T1d5tJ/vIKJdrMxUr
-         NFAyLLg5wR6Rg==
+        b=gg0OkGnUbquPguTZlVwQmGYwjb/qZmXI9YLQ34+QFcSSDYWUbSsj633QUoSwe5KqA
+         2uVsnYrcDkIzV2yAd6n0vwnHt4xmdaA7tDHrVVvnjZhLSmZ7i5eUm3MctE7RRxZErb
+         aOMJck0A4J55Oi9v2a2X9XAL1D1kpmXArKZ4i/gKLVXWGYwpoo22VC5OaCiCmC0POv
+         z8nbchiRuYAgCvgTSWBUbe+odR5yXUx0DFTqU7rdECtUIWCYrGlpCVLsZZhPwXXEXl
+         5xp+mMwkLU5UeKseXwdS+H1k8hBQ1FCP2wUq5/7rkiNAaqVerA4RfsDvZw6+HuzTet
+         SXORQF1H7Q+Bg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Miklos Szeredi <mszeredi@redhat.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 05/14] cap: fix conversions on getxattr
-Date:   Mon,  8 Feb 2021 12:59:17 -0500
-Message-Id: <20210208175926.2092211-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 5/9] cap: fix conversions on getxattr
+Date:   Mon,  8 Feb 2021 12:59:42 -0500
+Message-Id: <20210208175946.2092374-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210208175926.2092211-1-sashal@kernel.org>
-References: <20210208175926.2092211-1-sashal@kernel.org>
+In-Reply-To: <20210208175946.2092374-1-sashal@kernel.org>
+References: <20210208175946.2092374-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 43 insertions(+), 24 deletions(-)
 
 diff --git a/security/commoncap.c b/security/commoncap.c
-index f86557a8e43f6..a1dee0ab345a2 100644
+index ac031fa391908..bf689d61b293c 100644
 --- a/security/commoncap.c
 +++ b/security/commoncap.c
-@@ -377,10 +377,11 @@ int cap_inode_getsecurity(struct inode *inode, const char *name, void **buffer,
+@@ -378,10 +378,11 @@ int cap_inode_getsecurity(struct inode *inode, const char *name, void **buffer,
  {
  	int size, ret;
  	kuid_t kroot;
@@ -83,7 +83,7 @@ index f86557a8e43f6..a1dee0ab345a2 100644
  	struct dentry *dentry;
  	struct user_namespace *fs_ns;
  
-@@ -402,46 +403,61 @@ int cap_inode_getsecurity(struct inode *inode, const char *name, void **buffer,
+@@ -403,46 +404,61 @@ int cap_inode_getsecurity(struct inode *inode, const char *name, void **buffer,
  	fs_ns = inode->i_sb->s_user_ns;
  	cap = (struct vfs_cap_data *) tmpbuf;
  	if (is_v2header((size_t) ret, cap)) {
@@ -167,7 +167,7 @@ index f86557a8e43f6..a1dee0ab345a2 100644
  			magic = VFS_CAP_REVISION_2;
  			nsmagic = le32_to_cpu(nscap->magic_etc);
  			if (nsmagic & VFS_CAP_FLAGS_EFFECTIVE)
-@@ -449,9 +465,12 @@ int cap_inode_getsecurity(struct inode *inode, const char *name, void **buffer,
+@@ -450,9 +466,12 @@ int cap_inode_getsecurity(struct inode *inode, const char *name, void **buffer,
  			memcpy(&cap->data, &nscap->data, sizeof(__le32) * 2 * VFS_CAP_U32);
  			cap->magic_etc = cpu_to_le32(magic);
  		} else {
