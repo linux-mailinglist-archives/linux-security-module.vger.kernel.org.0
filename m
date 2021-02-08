@@ -2,106 +2,67 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793F9312877
-	for <lists+linux-security-module@lfdr.de>; Mon,  8 Feb 2021 00:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21129312E6B
+	for <lists+linux-security-module@lfdr.de>; Mon,  8 Feb 2021 11:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbhBGX4j (ORCPT
+        id S231871AbhBHKBW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 7 Feb 2021 18:56:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39002 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229564AbhBGX4i (ORCPT
+        Mon, 8 Feb 2021 05:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231883AbhBHJzV (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 7 Feb 2021 18:56:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 662B664E2E;
-        Sun,  7 Feb 2021 23:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612742157;
-        bh=HWyvZKJfjuWNmgzJfzyCnofu5H0oIg85cEfM9lGL4SU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IdpTmVHY3NCYvqqLAz9bhRn3sTzyMPSe6DYyrkHOfhhowSOUmukC7P28nIR4vIyiK
-         17VlzLCWpG66x8KpzLyEK28MH41sWFm2H6cvjLdICIQbeu80wsOO7zskgPYuepPCyw
-         LvflBy5gwoq/9amDk3wwq+SOXKH4nZuWXi4hHoXIsDD5ECuenkJ8k9s3k0HcUrvFo8
-         yhoj2MocnwOC+DsYVeqk4m6i3bp2AEkRFzbkeBEALvxZzVgXE3dOD2z5ac4WCZn3kg
-         3WOBmwnXIWs4Ud9Fj6ynXAYEWt5KWqO9hCEUlprK/wF86eYS2TZ504QR7lUs5boYGO
-         uZuMezGm13kXA==
-Date:   Mon, 8 Feb 2021 01:55:49 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     David Howells <dhowells@redhat.com>, mchehab+huawei@kernel.org
-Cc:     sprabhu@redhat.com, christian@brauner.io, selinux@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, containers@lists.linux-foundation.org
-Subject: Re: [PATCH 1/2] Add namespace tags that can be used for matching
- without pinning a ns
-Message-ID: <YCB+BRp7WIa8YoO3@kernel.org>
-References: <YByxkDi0Ruhb0AA8@kernel.org>
- <161246085160.1990927.13137391845549674518.stgit@warthog.procyon.org.uk>
- <161246085966.1990927.2555272056564793056.stgit@warthog.procyon.org.uk>
- <2094924.1612513535@warthog.procyon.org.uk>
+        Mon, 8 Feb 2021 04:55:21 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F8EC0698DF
+        for <linux-security-module@vger.kernel.org>; Mon,  8 Feb 2021 01:46:30 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id r38so9823191pgk.13
+        for <linux-security-module@vger.kernel.org>; Mon, 08 Feb 2021 01:46:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
+        b=EBAN8kT/RdDTitIJIwHViEDhHzNJv4CIWk9rs6YltTkWZ458GA493YyOdSoiZ3kf2I
+         cdNbMkg2fZDvPvkuycg7WSARNJ/puPrDyOFIWKtgjChKMEIfkIP2Q2XVpBk+DA9Lhucn
+         6XQlMQaKQZVW2ZyZN5QBK8n9vbP0QwsOuCEl8YnAfifh/FxrfAzpfX38semmARrCGxh8
+         WFi+25A8lhFcplpes37lwhh0IayXXJWFPkoQ+knUplL4fyj/9WvmsAavsN2O11FqYU0q
+         sXGcgyuoksh1FLpl3IVpUWra/8A8W9zD+TSlCF6rCGoTQRx8E8R9VquYNvg3vN5bAAWe
+         XSXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
+        b=h1WG62LEDJBrGNb2zcrNVqJh1n+Ry8nX99lMCSF5QSksfyuEpQrDsuguly6SGec7E3
+         ddyePp713W4BpJK68TxSiNlDRaus3g6PnwwX7o5RQuEFP6nEss082xqm1B/OZbg1j6YY
+         NO3WGMvE7v+D7LVdd4La/us+MZIlrJ2TrlD2EQJcSO3eyEwEnQVKi9Q62WuDGN8wShUs
+         EurP3vQEx5YXlxULXRXBQx0EtIFbZe7qpFH9LYajdl3mFETyW6TbX/VBOiPMkssfCuXS
+         kakIys2t8TAAi5UZLrapyK/68VI794BzaGnWki8p4yYuo/pk0TE5biHapv7o1ukNNEBU
+         ZgaQ==
+X-Gm-Message-State: AOAM531LAx4qgcbuV3r4iLSFJNpkwSlXwwxzrGO0/NbaBdRapFa/JNy7
+        gliNv0fNBuHgtbg/aXCiqzJJQhkUZq/pDFKqZ0s=
+X-Google-Smtp-Source: ABdhPJybDL+KhCvXPDIs57vnx74bKnUW7LRfIk9mtYaX6Td3ETIAJUIor6BltYlrl2tm2rDxnhIvTg/8Y9D/vq+/hVc=
+X-Received: by 2002:a63:c84a:: with SMTP id l10mr16253996pgi.159.1612777589348;
+ Mon, 08 Feb 2021 01:46:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2094924.1612513535@warthog.procyon.org.uk>
+Received: by 2002:a17:90a:5d0a:0:0:0:0 with HTTP; Mon, 8 Feb 2021 01:46:29
+ -0800 (PST)
+Reply-To: richadtomm@qq.com
+From:   "Mr.Richard Thomas" <tommiirrrch@gmail.com>
+Date:   Mon, 8 Feb 2021 01:46:29 -0800
+Message-ID: <CAGbSTZMAc0EF+BT96=ag5apRs+Aauw-A-2pin2QX1dEQy+tMew@mail.gmail.com>
+Subject: Re Thanks.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Feb 05, 2021 at 08:25:35AM +0000, David Howells wrote:
-> Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> 
-> > > + * init_ns_common - Initialise the common part of a namespace
-> > 
-> > Nit: init_ns_common()
-> 
-> Interesting.  The majority of code doesn't put the brackets in.
-> 
-> > I've used lately (e.g. arch/x86/kernel/cpu/sgx/ioctl.c) along the lines:
-> > 
-> > * Return:
-> > * - 0:          Initialization was successful.
-> > * - -ENOMEM:    Out of memory.
-> 
-> Actually, looking at kernel-doc.rst, this isn't necessarily the recommended
-> approach as it will much everything into one line, complete with dashes, and
-> can't handle splitting over lines.  You probably meant:
-> 
->       * Return:
->       * * 0		- OK to runtime suspend the device
->       * * -EBUSY	- Device should not be runtime suspended
+Dear Friend,
+I will be pleased if you can allow me to invest $104M Dollars in
+Estate Management,in your company or any area you best that will be
+of good profit to both of us
 
-A line beginning with dash, lines up just as well, as one beginning with
-an asterisk. I've also tested this with "make htmldocs".
+Please do well to respond including your information for more details.
 
-This is Mauro's response to my recent patch:
-
-https://lore.kernel.org/lkml/20210125105353.5c695d42@coco.lan/
-
-So, what I can make up from this is that they are equally good
-alternatives.
-
-What I'm not still fully registering is the dash after the return value.
-
-I mean double comma is used after parameter. Why this weird dash syntax
-is used after return value I have no idea, and the kernel-doc.rst does
-not provide any explanation.
-
-> 
-> > * Return:
-> > * - 0:          Initialization was successful.
-> > * - -ENOMEM:    Out of memory.
-> > 
-> > Looking at the implementation, I guess this is a complete representation of
-> > what it can return?
-> 
-> It isn't.  It can return at least -ENOSPC as well, but it's awkward detailing
-> the errors from functions it calls since they can change and then the
-> description here is wrong.  I'm not sure there's a perfect answer to that.
-> 
-> David
-
-What if you just add this as the last entry:
-
-* * -errno:     Otherwise.
-
-/Jarkko
+Thanks.
+Mr.Richard Thomas
