@@ -2,73 +2,95 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE4231606C
-	for <lists+linux-security-module@lfdr.de>; Wed, 10 Feb 2021 08:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB09316609
+	for <lists+linux-security-module@lfdr.de>; Wed, 10 Feb 2021 13:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbhBJHyK (ORCPT
+        id S231148AbhBJMHU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 10 Feb 2021 02:54:10 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12506 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbhBJHxr (ORCPT
+        Wed, 10 Feb 2021 07:07:20 -0500
+Received: from smtp-42af.mail.infomaniak.ch ([84.16.66.175]:59845 "EHLO
+        smtp-42af.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230049AbhBJMFD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 10 Feb 2021 02:53:47 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DbBmF55xJzjGtw;
-        Wed, 10 Feb 2021 15:51:41 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 10 Feb 2021 15:52:58 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Hulk Robot <hulkci@huawei.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wed, 10 Feb 2021 07:05:03 -0500
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DbJM90QZBzMqW88;
+        Wed, 10 Feb 2021 13:03:49 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DbJM65mq6zlh8Tk;
+        Wed, 10 Feb 2021 13:03:46 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        <linux-security-module@vger.kernel.org>
-Subject: [PATCH -next] integrity: Make function integrity_add_key() static
-Date:   Wed, 10 Feb 2021 08:01:31 +0000
-Message-ID: <20210210080131.1209889-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v6 0/5] Enable root to update the blacklist keyring
+Date:   Wed, 10 Feb 2021 13:04:05 +0100
+Message-Id: <20210210120410.471693-1-mic@digikod.net>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.102.38]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The sparse tool complains as follows:
+This new patch series is a rebase on David Howells's keys-misc branch.
+This mainly fixes UEFI DBX and the new Eric Snowberg's feature to import
+asymmetric keys to the blacklist keyring.
+I successfully tested this patch series with the 186 entries from
+https://uefi.org/sites/default/files/resources/dbxupdate_x64.bin (184
+binary hashes and 2 certificates).
 
-security/integrity/digsig.c:146:12: warning:
- symbol 'integrity_add_key' was not declared. Should it be static?
+The goal of these patches is to add a new configuration option to enable the
+root user to load signed keys in the blacklist keyring.  This keyring is useful
+to "untrust" certificates or files.  Enabling to safely update this keyring
+without recompiling the kernel makes it more usable.
 
-This function is not used outside of digsig.c, so this
-commit marks it static.
+This can be applied on top of David Howells's keys-next branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-next
+Git commits can be found in https://github.com/l0kod/linux branch
+dyn-auth-blacklist-v6 commit fcf976b74ffcd4551683e6b70dbf5fb102cf9906 .
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- security/integrity/digsig.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Previous patch series:
+https://lore.kernel.org/lkml/20210128191705.3568820-1-mic@digikod.net/
 
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index 0f518dcfde05..250fb0836156 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -143,8 +143,8 @@ int __init integrity_init_keyring(const unsigned int id)
- 	return __integrity_init_keyring(id, perm, restriction);
- }
- 
--int __init integrity_add_key(const unsigned int id, const void *data,
--			     off_t size, key_perm_t perm)
-+static int __init integrity_add_key(const unsigned int id, const void *data,
-+				    off_t size, key_perm_t perm)
- {
- 	key_ref_t key;
- 	int rc = 0;
+Regards,
+
+Mickaël Salaün (5):
+  tools/certs: Add print-cert-tbs-hash.sh
+  certs: Check that builtin blacklist hashes are valid
+  certs: Make blacklist_vet_description() more strict
+  certs: Factor out the blacklist hash creation
+  certs: Allow root user to append signed hashes to the blacklist
+    keyring
+
+ MAINTAINERS                                   |   2 +
+ certs/.gitignore                              |   1 +
+ certs/Kconfig                                 |  17 +-
+ certs/Makefile                                |  17 +-
+ certs/blacklist.c                             | 218 ++++++++++++++----
+ crypto/asymmetric_keys/x509_public_key.c      |   3 +-
+ include/keys/system_keyring.h                 |  14 +-
+ scripts/check-blacklist-hashes.awk            |  37 +++
+ .../platform_certs/keyring_handler.c          |  26 +--
+ tools/certs/print-cert-tbs-hash.sh            |  91 ++++++++
+ 10 files changed, 346 insertions(+), 80 deletions(-)
+ create mode 100755 scripts/check-blacklist-hashes.awk
+ create mode 100755 tools/certs/print-cert-tbs-hash.sh
+
+
+base-commit: 5bcd72358a7d7794ade0452ed12919b8c4d6ffc7
+-- 
+2.30.0
 
