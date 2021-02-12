@@ -2,160 +2,208 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BCA31A5A9
-	for <lists+linux-security-module@lfdr.de>; Fri, 12 Feb 2021 20:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B206831A6BF
+	for <lists+linux-security-module@lfdr.de>; Fri, 12 Feb 2021 22:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbhBLTxt (ORCPT
+        id S232054AbhBLVUv (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 12 Feb 2021 14:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        Fri, 12 Feb 2021 16:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbhBLTxk (ORCPT
+        with ESMTP id S232035AbhBLVUl (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 12 Feb 2021 14:53:40 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E889C0613D6
-        for <linux-security-module@vger.kernel.org>; Fri, 12 Feb 2021 11:53:00 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id me5so710955pjb.0
-        for <linux-security-module@vger.kernel.org>; Fri, 12 Feb 2021 11:53:00 -0800 (PST)
+        Fri, 12 Feb 2021 16:20:41 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B19BC061574;
+        Fri, 12 Feb 2021 13:20:01 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id g9so500968ilc.3;
+        Fri, 12 Feb 2021 13:20:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:cc;
-        bh=i9bXYkYkNrS/myxp10YTd6xQPzarqSevtONWXeGJPlg=;
-        b=CEPFGAAZTn1YBSHByUfgpcddUlDuB43hOXZpOdPUc+0zn3cxDCWnpYIBMPOElNPPLW
-         cIPJ2hF4x195i6fCSs1CWIpOMlYYJx0hpXRU4Y1ennrFKXBMgYS/5gSl11abA8hXM3Uj
-         WvhElyaTAr+5YhBuMjzBs5fMk+8yHPmuKFDhw7ZoQ0GrBmRAI5pj7oW8bwI6ARh0Kn1/
-         v5VwKf+p3vFo+qcUs9UykjlqnA56+Ki4Oczm93zCXA2zfa7ovKXRoJjTaAWyyLCs75x8
-         2ZgJ7qMogVu4vu8BBfJUCJ7YD/G5dEJuhNLufGQQAyJG/8STZNwx0DCPBUl+WixZl4le
-         yh4A==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=0Y3RJK3vxi+QhNIpzjNBegnGJj+h/AGZkLMsaZUQL3o=;
+        b=iig/5IGXEtufIDVHhOxGQDevi3GZk8c1kwaI4Ysh/5rMsTUxqckm8zEm0DSTW6iBDd
+         aM8irtmQsmQc4BSeupA2Q0MjCb+xJfrhtG5HRpkacjt0swLzEEzXUGxIT+QaPvmVO6/0
+         fzbCf4QSTw0siT6wjK2+A/k/Cq1BBUIkHk7hdNenz/Bz+wtIc63CkNKAx6AcH4CDE/d6
+         UCYQJKdHFh582piBR01C+mhih8qIVhLx18kpiRMPHYvqhKjK9X78QfKXLUjdb0yNXsMG
+         Z5Q3VMvFNKzJxXM11Hqf16Bb+Mpj8fnhHhOAHgBTQ7U+mI/7jffWq5HCA+ncCZkGOTUv
+         hD+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc;
-        bh=i9bXYkYkNrS/myxp10YTd6xQPzarqSevtONWXeGJPlg=;
-        b=EzAhyZ9+okpFKOQVe++ISdaIPEWw56hVyFhe8TxBE+UgqSUvvF78nC6ekemE4gfsTE
-         5Z7B/1hPCFN2GTJpjfTAm0YxTJiQqEMU2MrXtfm6RnrTkWZIxgUlXG0ApmWlogNIXBSU
-         IYKoqSZPLSfQTytV2QG2XqKaKoYh28bQJc0ek7j87/7Dh3ttCsQNnskSfvxnAI8tMGqM
-         iiw2aGlAxoGEPVJi1sdJlOuq+YW7Boujw4y2uIHj54e5hSXDHIm3g1+iv+w2xUlu7h/D
-         pNDwNjI7CKcbJaU2RS8BS3sMNvATvWpFg8Axr9hHuUyAg5aoYsuOMPz7Uy2UOgRdS2IZ
-         VzaA==
-X-Gm-Message-State: AOAM532WSBNtcrL6JsnXHSE69hoLWJv4V/fOCasGOf81kNqvVtnigiWU
-        6jBCLH4TMuDrt4bgv2icTDM/mo/1xpQr
-X-Google-Smtp-Source: ABdhPJzcLNW+FrrZp7ZKnrKVr8H5UQftS7u7Nn5TK/9khzHO3nQj/KyeiMBomoDzHkeCk9/NPtm2JLlrp5NX
-Sender: "jiancai via sendgmr" <jiancai@jiancai.svl.corp.google.com>
-X-Received: from jiancai.svl.corp.google.com ([2620:15c:2ce:0:8cad:e5dd:2b3c:2e84])
- (user=jiancai job=sendgmr) by 2002:a62:3852:0:b029:1da:7238:1cb1 with SMTP id
- f79-20020a6238520000b02901da72381cb1mr4445517pfa.11.1613159579252; Fri, 12
- Feb 2021 11:52:59 -0800 (PST)
-Date:   Fri, 12 Feb 2021 11:52:53 -0800
-In-Reply-To: <3f61af0eee9b495e8e8c032902d033c5@AcuMS.aculab.com>
-Message-Id: <20210212195255.1321544-1-jiancai@google.com>
-Mime-Version: 1.0
-References: <3f61af0eee9b495e8e8c032902d033c5@AcuMS.aculab.com>
-X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v2] ARM: Implement Clang's SLS mitigation
-From:   Jian Cai <jiancai@google.com>
-Cc:     ndesaulniers@google.com, manojgupta@google.com, llozano@google.com,
-        clang-built-linux@googlegroups.com, Jian Cai <jiancai@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "=?UTF-8?q?Andreas=20F=C3=A4rber?=" <afaerber@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0Y3RJK3vxi+QhNIpzjNBegnGJj+h/AGZkLMsaZUQL3o=;
+        b=Yf6+TcbGYPQ+5G+MZlHbFFujApR5sbpFBAUcmeWKDxejqCLGTGyRCxKwBAdkzhGkts
+         3V524YXZOOg8InEUoi85WQZt2+P4Sfeiy7xtZ338L1Ai2KWUp3l4EFCgfufCybjYmcW9
+         iOsWeAyTocLhveUbhSfLelqnZm82x8qRtU6oePD78Zymia7h8BSDc1S1YnKBIOcZUnEP
+         BXnaoi4vDCHTvb+ABUKbHu2oacBCDS2wEQlDGJ+FWTnyCpbZ/kiljIhmpE86MKjVFlOr
+         7tNdrdd3koRJGPtLLtjClOVYtWspxbW9gzLI7A8+50d6rPVP2OhjtbOpuC1JA0bZnMA3
+         w9Xg==
+X-Gm-Message-State: AOAM5306aHAtuoP6XUOY1i6fBZ2B+qj4KeTf01AFa2cwCEA0uRXNR23N
+        hhZ43xfr6rtnSLfBbqjgq2xgYjbQTaeh8w==
+X-Google-Smtp-Source: ABdhPJx6/LwfGstOn9Ozmrb0FJGjAxVPAeNmwhx6imbh78LeKd7jSGl1RkQctVKo4ldRnX673XkG8Q==
+X-Received: by 2002:a92:b011:: with SMTP id x17mr3844690ilh.179.1613164800672;
+        Fri, 12 Feb 2021 13:20:00 -0800 (PST)
+Received: from Olgas-MBP-444.attlocal.net (172-10-226-31.lightspeed.livnmi.sbcglobal.net. [172.10.226.31])
+        by smtp.gmail.com with ESMTPSA id k11sm4685570iop.45.2021.02.12.13.19.59
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Fri, 12 Feb 2021 13:19:59 -0800 (PST)
+From:   Olga Kornievskaia <olga.kornievskaia@gmail.com>
+To:     trond.myklebust@hammerspace.com, anna.schumaker@netapp.com
+Cc:     linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: [PATCH 1/2] [security] Add new hook to compare new mount to an existing mount
+Date:   Fri, 12 Feb 2021 16:19:54 -0500
+Message-Id: <20210212211955.11239-1-olga.kornievskaia@gmail.com>
+X-Mailer: git-send-email 2.10.1 (Apple Git-78)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This patch adds CONFIG_HARDEN_SLS_ALL that can be used to turn on
--mharden-sls=all, which mitigates the straight-line speculation
-vulnerability, speculative execution of the instruction following some
-unconditional jumps. Notice -mharden-sls= has other options as below,
-and this config turns on the strongest option.
+From: Olga Kornievskaia <kolga@netapp.com>
 
-all: enable all mitigations against Straight Line Speculation that are implemented.
-none: disable all mitigations against Straight Line Speculation.
-retbr: enable the mitigation against Straight Line Speculation for RET and BR instructions.
-blr: enable the mitigation against Straight Line Speculation for BLR instructions.
+Add a new hook that takes an existing super block and a new mount
+with new options and determines if new options confict with an
+existing mount or not.
 
-Link: https://reviews.llvm.org/D93221
-Link: https://reviews.llvm.org/D81404
-Link: https://developer.arm.com/support/arm-security-updates/speculative-processor-vulnerability/downloads/straight-line-speculation
-https://developer.arm.com/support/arm-security-updates/speculative-processor-vulnerability/frequently-asked-questions#SLS2
-
-Suggested-by: Manoj Gupta <manojgupta@google.com>
-Suggested-by: Nathan Chancellor  <nathan@kernel.org>
-Suggested-by: David Laight <David.Laight@aculab.com>
-Signed-off-by: Jian Cai <jiancai@google.com>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
 ---
+ include/linux/lsm_hook_defs.h |  1 +
+ include/linux/lsm_hooks.h     |  6 ++++
+ include/linux/security.h      |  1 +
+ security/security.c           |  7 +++++
+ security/selinux/hooks.c      | 54 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 69 insertions(+)
 
-Changes v1 -> v2:
- Update the description and patch based on Nathan and David's comments. 
-
- arch/arm/Makefile          | 4 ++++
- arch/arm64/Makefile        | 4 ++++
- security/Kconfig.hardening | 7 +++++++
- 3 files changed, 15 insertions(+)
-
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 4aaec9599e8a..11d89ef32da9 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -48,6 +48,10 @@ CHECKFLAGS	+= -D__ARMEL__
- KBUILD_LDFLAGS	+= -EL
- endif
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 7aaa753b8608..fbfc07d0b3d5 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -62,6 +62,7 @@ LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_free_mnt_opts, void *mnt_opts)
+ LSM_HOOK(int, 0, sb_eat_lsm_opts, char *orig, void **mnt_opts)
++LSM_HOOK(int, 0, sb_do_mnt_opts_match, struct super_block *sb, void *mnt_opts)
+ LSM_HOOK(int, 0, sb_remount, struct super_block *sb, void *mnt_opts)
+ LSM_HOOK(int, 0, sb_kern_mount, struct super_block *sb)
+ LSM_HOOK(int, 0, sb_show_options, struct seq_file *m, struct super_block *sb)
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index a19adef1f088..a11b062c1847 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -142,6 +142,12 @@
+  *	@orig the original mount data copied from userspace.
+  *	@copy copied data which will be passed to the security module.
+  *	Returns 0 if the copy was successful.
++ * @sb_do_mnt_opts_match:
++ *	Determine if the existing mount options are compatible with the new
++ *	mount options being used.
++ *	@sb superblock being compared
++ *	@mnt_opts new mount options
++ *	Return 1 if options are the same.
+  * @sb_remount:
+  *	Extracts security system specific mount options and verifies no changes
+  *	are being made to those options.
+diff --git a/include/linux/security.h b/include/linux/security.h
+index c35ea0ffccd9..07026db7304d 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -291,6 +291,7 @@ int security_sb_alloc(struct super_block *sb);
+ void security_sb_free(struct super_block *sb);
+ void security_free_mnt_opts(void **mnt_opts);
+ int security_sb_eat_lsm_opts(char *options, void **mnt_opts);
++int security_sb_do_mnt_opts_match(struct super_block *sb, void *mnt_opts);
+ int security_sb_remount(struct super_block *sb, void *mnt_opts);
+ int security_sb_kern_mount(struct super_block *sb);
+ int security_sb_show_options(struct seq_file *m, struct super_block *sb);
+diff --git a/security/security.c b/security/security.c
+index 7b09cfbae94f..dae380916c6a 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -890,6 +890,13 @@ int security_sb_eat_lsm_opts(char *options, void **mnt_opts)
+ }
+ EXPORT_SYMBOL(security_sb_eat_lsm_opts);
  
-+ifeq ($(CONFIG_HARDEN_SLS_ALL), y)
-+KBUILD_CFLAGS  += -mharden-sls=all
-+endif
++int security_sb_do_mnt_opts_match(struct super_block *sb,
++				 void *mnt_opts)
++{
++	return call_int_hook(sb_do_mnt_opts_match, 0, sb, mnt_opts);
++}
++EXPORT_SYMBOL(security_sb_do_mnt_opts_match);
 +
- #
- # The Scalar Replacement of Aggregates (SRA) optimization pass in GCC 4.9 and
- # later may result in code being generated that handles signed short and signed
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 90309208bb28..ca7299b356a9 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -34,6 +34,10 @@ $(warning LSE atomics not supported by binutils)
-   endif
- endif
+ int security_sb_remount(struct super_block *sb,
+ 			void *mnt_opts)
+ {
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 644b17ec9e63..aaa3a725da94 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2656,6 +2656,59 @@ static int selinux_sb_eat_lsm_opts(char *options, void **mnt_opts)
+ 	return rc;
+ }
  
-+ifeq ($(CONFIG_HARDEN_SLS_ALL), y)
-+KBUILD_CFLAGS  += -mharden-sls=all
-+endif
++static int selinux_sb_do_mnt_opts_match(struct super_block *sb, void *mnt_opts)
++{
++	struct selinux_mnt_opts *opts = mnt_opts;
++	struct superblock_security_struct *sbsec = sb->s_security;
++	u32 sid;
++	int rc;
 +
- cc_has_k_constraint := $(call try-run,echo				\
- 	'int main(void) {						\
- 		asm volatile("and w0, w0, %w0" :: "K" (4294967295));	\
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index 269967c4fc1b..9266d8d1f78f 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -121,6 +121,13 @@ choice
- 
- endchoice
- 
-+config HARDEN_SLS_ALL
-+	bool "enable SLS vulnerability hardening"
-+	def_bool $(cc-option,-mharden-sls=all)
-+        help
-+          Enables straight-line speculation vulnerability hardening
-+	  at highest level.
++	/* superblock not initialized (i.e. no options) - reject if any
++	 * options specified, otherwise accept
++	 */
++	if (!(sbsec->flags & SE_SBINITIALIZED))
++		return opts ? 0 : 1;
 +
- config GCC_PLUGIN_STRUCTLEAK_VERBOSE
- 	bool "Report forcefully initialized variables"
- 	depends on GCC_PLUGIN_STRUCTLEAK
++	/* superblock initialized and no options specified - reject if
++	 * superblock has any options set, otherwise accept
++	 */
++	if (!opts)
++		return (sbsec->flags & SE_MNTMASK) ? 0 : 1;
++
++	if (opts->fscontext) {
++		rc = parse_sid(sb, opts->fscontext, &sid);
++		if (rc)
++			return 0;
++		if (bad_option(sbsec, FSCONTEXT_MNT, sbsec->sid, sid))
++			return 0;
++	}
++	if (opts->context) {
++		rc = parse_sid(sb, opts->context, &sid);
++		if (rc)
++			return 0;
++		if (bad_option(sbsec, CONTEXT_MNT, sbsec->mntpoint_sid, sid))
++			return 0;
++	}
++	if (opts->rootcontext) {
++		struct inode_security_struct *root_isec;
++
++		root_isec = backing_inode_security(sb->s_root);
++		rc = parse_sid(sb, opts->rootcontext, &sid);
++		if (rc)
++			return 0;
++		if (bad_option(sbsec, ROOTCONTEXT_MNT, root_isec->sid, sid))
++			return 0;
++	}
++	if (opts->defcontext) {
++		rc = parse_sid(sb, opts->defcontext, &sid);
++		if (rc)
++			return 0;
++		if (bad_option(sbsec, DEFCONTEXT_MNT, sbsec->def_sid, sid))
++			return 0;
++	}
++	return 1;
++}
++
+ static int selinux_sb_remount(struct super_block *sb, void *mnt_opts)
+ {
+ 	struct selinux_mnt_opts *opts = mnt_opts;
+@@ -6984,6 +7037,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+ 
+ 	LSM_HOOK_INIT(sb_free_security, selinux_sb_free_security),
+ 	LSM_HOOK_INIT(sb_free_mnt_opts, selinux_free_mnt_opts),
++	LSM_HOOK_INIT(sb_do_mnt_opts_match, selinux_sb_do_mnt_opts_match),
+ 	LSM_HOOK_INIT(sb_remount, selinux_sb_remount),
+ 	LSM_HOOK_INIT(sb_kern_mount, selinux_sb_kern_mount),
+ 	LSM_HOOK_INIT(sb_show_options, selinux_sb_show_options),
 -- 
-2.30.0.478.g8a0d178c01-goog
+2.27.0
 
