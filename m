@@ -2,276 +2,192 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B5231A2E4
-	for <lists+linux-security-module@lfdr.de>; Fri, 12 Feb 2021 17:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C4931A4F1
+	for <lists+linux-security-module@lfdr.de>; Fri, 12 Feb 2021 20:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbhBLQj4 (ORCPT
+        id S231348AbhBLTFi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 12 Feb 2021 11:39:56 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:33330 "EHLO
+        Fri, 12 Feb 2021 14:05:38 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:51530 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbhBLQh7 (ORCPT
+        with ESMTP id S229980AbhBLTFf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 12 Feb 2021 11:37:59 -0500
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 976E120B6C40;
-        Fri, 12 Feb 2021 08:37:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 976E120B6C40
+        Fri, 12 Feb 2021 14:05:35 -0500
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 608BF20B6C40;
+        Fri, 12 Feb 2021 11:04:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 608BF20B6C40
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1613147835;
-        bh=4dYjaGkqbmN5KWpdXHTWdgYhxKJ8p+ZKniaAve3eISc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c8KR/MyefO0xSn/gK0vb9c5lXr2Y2Fc2bUVYRAa5E5hQNMqtTze1Fo4KWaMtHVLwz
-         qwmWJhWVQ6MEpeCmbVVkoi4fBBOriTYmL7N1fyKHvX6RAE5u+AXIA26HO+0QoOL2gE
-         oMW3pw71C16b0UncxaJLzAMMzgJkPjr1Bit+1Bak=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com
-Cc:     tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selinux: measure state and policy capabilities
-Date:   Fri, 12 Feb 2021 08:37:09 -0800
-Message-Id: <20210212163709.3139-1-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.30.0
+        s=default; t=1613156693;
+        bh=6YnCV6liH82sConSeIcoMvSWdbV+LrQaalBNmKqtnLk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GITEbyMOWmtO06swLLyzbqAndCL6qYoJwEmT2XhJyRqxT/lw3xpO8LZVsa6FeEhyy
+         Zla+9UCM9aT2VCn9g+XvrcPOq6hrKkSXzExsDCw+BNm3xfc6aB/ucA30hTk8Gslh4D
+         mf9uScKCuHbQdzAFC0IQnNVnowxrfhjH6wwp5mJA=
+Date:   Fri, 12 Feb 2021 13:04:50 -0600
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mark Salyzyn <salyzyn@android.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-kernel@vger.kernel.org,
+        kernel-team <kernel-team@android.com>,
+        linux-fsdevel@vger.kernel.org,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Amir Goldstein <amir73il@gmail.com>, linux-doc@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        James Morris <jmorris@namei.org>
+Subject: Re: [RESEND PATCH v18 2/4] overlayfs: handle XATTR_NOSECURITY flag
+ for get xattr method
+Message-ID: <20210212190450.GB56839@sequoia>
+References: <20201021151903.652827-1-salyzyn@android.com>
+ <20201021151903.652827-3-salyzyn@android.com>
+ <CAJfpegtMoD85j5namV592sJD23QeUMD=+tq4SvFDqjVxsAszYQ@mail.gmail.com>
+ <2fd64e4f-c573-c841-abb6-ec0908f78cdd@android.com>
+ <20210205180131.GA648953@sequoia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210205180131.GA648953@sequoia>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-SELinux stores the configuration state and the policy capabilities
-in kernel memory.  Changes to this data at runtime would have an impact
-on the security guarantees provided by SELinux.  Measuring this data
-through IMA subsystem provides a tamper-resistant way for
-an attestation service to remotely validate it at runtime.
+On 2021-02-05 12:01:55, Tyler Hicks wrote:
+> On 2020-10-30 09:00:35, Mark Salyzyn wrote:
+> > On 10/30/20 8:07 AM, Miklos Szeredi wrote:
+> > > On Wed, Oct 21, 2020 at 5:19 PM Mark Salyzyn <salyzyn@android.com> wrote:
+> > > > Because of the overlayfs getxattr recursion, the incoming inode fails
+> > > > to update the selinux sid resulting in avc denials being reported
+> > > > against a target context of u:object_r:unlabeled:s0.
+> > > > 
+> > > > Solution is to respond to the XATTR_NOSECURITY flag in get xattr
+> > > > method that calls the __vfs_getxattr handler instead so that the
+> > > > context can be read in, rather than being denied with an -EACCES
+> > > > when vfs_getxattr handler is called.
+> > > > 
+> > > > For the use case where access is to be blocked by the security layer.
+> > > > 
+> > > > The path then would be security(dentry) ->
+> > > > __vfs_getxattr({dentry...XATTR_NOSECURITY}) ->
+> > > > handler->get({dentry...XATTR_NOSECURITY}) ->
+> > > > __vfs_getxattr({realdentry...XATTR_NOSECURITY}) ->
+> > > > lower_handler->get({realdentry...XATTR_NOSECURITY}) which
+> > > > would report back through the chain data and success as expected,
+> > > > the logging security layer at the top would have the data to
+> > > > determine the access permissions and report back to the logs and
+> > > > the caller that the target context was blocked.
+> > > > 
+> > > > For selinux this would solve the cosmetic issue of the selinux log
+> > > > and allow audit2allow to correctly report the rule needed to address
+> > > > the access problem.
+> > > > 
+> > > > Check impure, opaque, origin & meta xattr with no sepolicy audit
+> > > > (using __vfs_getxattr) since these operations are internal to
+> > > > overlayfs operations and do not disclose any data.  This became
+> > > > an issue for credential override off since sys_admin would have
+> > > > been required by the caller; whereas would have been inherently
+> > > > present for the creator since it performed the mount.
+> > > > 
+> > > > This is a change in operations since we do not check in the new
+> > > > ovl_do_getxattr function if the credential override is off or not.
+> > > > Reasoning is that the sepolicy check is unnecessary overhead,
+> > > > especially since the check can be expensive.
+> > > > 
+> > > > Because for override credentials off, this affects _everyone_ that
+> > > > underneath performs private xattr calls without the appropriate
+> > > > sepolicy permissions and sys_admin capability.  Providing blanket
+> > > > support for sys_admin would be bad for all possible callers.
+> > > > 
+> > > > For the override credentials on, this will affect only the mounter,
+> > > > should it lack sepolicy permissions. Not considered a security
+> > > > problem since mounting by definition has sys_admin capabilities,
+> > > > but sepolicy contexts would still need to be crafted.
+> > > This would be a problem when unprivileged mounting of overlay is
+> > > introduced.  I'd really like to avoid weakening the current security
+> > > model.
+> > 
+> > The current security model does not deal with non-overlapping security
+> > contexts between init (which on android has MAC permissions only when
+> > necessary, only enough permissions to perform the mount and other mundane
+> > operations, missing exec and read permissions in key spots) and user calls.
+> > 
+> > We are only weakening (that is actually an incorrect statement, security is
+> > there, just not double security of both mounter and caller) the security
+> > around calls that retrieve the xattr for administrative and internal
+> > purposes. No data is exposed to the caller that it would not otherwise have
+> > permissions for.
+> 
+> We've ran into the same issues that Mark is trying to solve with this
+> series. I came across Mark's series while searching around before I
+> wrote up a similar patch to Mark's patch #3.
+> 
+> We have a confined process that sets up Overlayfs mounts, then that process
+> starts a service confined by another security context, then that service
+> may execute binaries that run under a third security context. In this
+> case, I'm talking about SELinux security contexts but it could be
+> AppArmor or anything else that you use to separate out
+> privileges/permissions at fine-grained detail.
+> 
+> We don't want to grant all the privileges/permissions required by the
+> service (and its helper utilities) to the process that sets up the
+> Overlayfs mounts because we've been very careful in separating them
+> apart with security policy. However, we want to make use of Overlayfs
+> and adding a mount option to bypass the check on the mounter's cred
+> seems like a safe way of using Overlayfs without violating our principle
+> of least privilege.
 
-Measure the configuration state and policy capabilities by calling
-the IMA hook ima_measure_critical_data().
+I just realized that I missed one noteworthy aspect of our use case. We
+would be alright if this functionality to bypass the mounter's cred
+checks (conditional, based on a mount option) was only allowed for
+read-only overlays[1].
 
-To enable SELinux data measurement, the following steps are required:
+I'm not sure if that would meet the needs of Android. Can you comment on
+that, Mark?
 
- 1, Add "ima_policy=critical_data" to the kernel command line arguments
-    to enable measuring SELinux data at boot time.
-    For example,
-      BOOT_IMAGE=/boot/vmlinuz-5.11.0-rc3+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
+Miklos, would that restriction make this series any more acceptable to
+you?
 
- 2, Add the following rule to /etc/ima/ima-policy
-       measure func=CRITICAL_DATA label=selinux
+Thanks!
 
-Sample measurement of SELinux state and policy capabilities:
+Tyler
 
-10 2122...65d8 ima-buf sha256:13c2...1292 selinux-state 696e...303b
+[1] https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#multiple-lower-layers
 
-Execute the following command to extract the measured data
-from the IMA's runtime measurements list:
-
-  grep "selinux-state" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6 | xxd -r -p
-
-The output should be a list of key-value pairs. For example,
- initialized=1;enforcing=0;checkreqprot=1;network_peer_controls=1;open_perms=1;extended_socket_class=1;always_check_network=0;cgroup_seclabel=1;nnp_nosuid_transition=1;genfs_seclabel_symlinks=0;
-
-To verify the measurement is consistent with the current SELinux state
-reported on the system, compare the integer values in the following
-files with those set in the IMA measurement (using the following commands):
-
- - cat /sys/fs/selinux/enforce
- - cat /sys/fs/selinux/checkreqprot
- - cat /sys/fs/selinux/policy_capabilities/[capability_file]
-
-Note that the actual verification would be against an expected state
-and done on a separate system (likely an attestation server) requiring
-"initialized=1;enforcing=1;checkreqprot=0;"
-for a secure state and then whatever policy capabilities are actually
-set in the expected policy (which can be extracted from the policy
-itself via seinfo, for example).
-
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Suggested-by: Paul Moore <paul@paul-moore.com>
----
- security/selinux/ima.c         | 87 ++++++++++++++++++++++++++++++++--
- security/selinux/include/ima.h |  6 +++
- security/selinux/selinuxfs.c   |  6 +++
- security/selinux/ss/services.c |  2 +-
- 4 files changed, 96 insertions(+), 5 deletions(-)
-
-diff --git a/security/selinux/ima.c b/security/selinux/ima.c
-index 03715893ff97..34d421861bfc 100644
---- a/security/selinux/ima.c
-+++ b/security/selinux/ima.c
-@@ -13,18 +13,83 @@
- #include "ima.h"
- 
- /*
-- * selinux_ima_measure_state - Measure hash of the SELinux policy
-+ * selinux_ima_collect_state - Read selinux configuration settings
-  *
-- * @state: selinux state struct
-+ * @state: selinux_state
-  *
-- * NOTE: This function must be called with policy_mutex held.
-+ * On success returns the configuration settings string.
-+ * On error, returns NULL.
-  */
--void selinux_ima_measure_state(struct selinux_state *state)
-+static char *selinux_ima_collect_state(struct selinux_state *state)
- {
-+	const char *on = "=1;", *off = "=0;";
-+	char *buf;
-+	int buf_len, len, i, rc;
-+
-+	buf_len = strlen("initialized=0;enforcing=0;checkreqprot=0;") + 1;
-+
-+	len = strlen(on);
-+	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++)
-+		buf_len += strlen(selinux_policycap_names[i]) + len;
-+
-+	buf = kzalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
-+		return NULL;
-+
-+	rc = strscpy(buf, "initialized", buf_len);
-+	WARN_ON(rc < 0);
-+
-+	rc = strlcat(buf, selinux_initialized(state) ? on : off, buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, "enforcing", buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, enforcing_enabled(state) ? on : off, buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, "checkreqprot", buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, checkreqprot_get(state) ? on : off, buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
-+		rc = strlcat(buf, selinux_policycap_names[i], buf_len);
-+		WARN_ON(rc >= buf_len);
-+
-+		rc = strlcat(buf, state->policycap[i] ? on : off, buf_len);
-+		WARN_ON(rc >= buf_len);
-+	}
-+
-+	return buf;
-+}
-+
-+/*
-+ * selinux_ima_measure_state_locked - Measure SELinux state and hash of policy
-+ *
-+ * @state: selinux state struct
-+ */
-+void selinux_ima_measure_state_locked(struct selinux_state *state)
-+{
-+	char *state_str = NULL;
- 	void *policy = NULL;
- 	size_t policy_len;
- 	int rc = 0;
- 
-+	WARN_ON(!mutex_is_locked(&state->policy_mutex));
-+
-+	state_str = selinux_ima_collect_state(state);
-+	if (!state_str) {
-+		pr_err("SELinux: %s: failed to read state.\n", __func__);
-+		return;
-+	}
-+
-+	ima_measure_critical_data("selinux", "selinux-state",
-+				  state_str, strlen(state_str), false);
-+
-+	kfree(state_str);
-+
- 	/*
- 	 * Measure SELinux policy only after initialization is completed.
- 	 */
-@@ -42,3 +107,17 @@ void selinux_ima_measure_state(struct selinux_state *state)
- 
- 	vfree(policy);
- }
-+
-+/*
-+ * selinux_ima_measure_state - Measure SELinux state and hash of policy
-+ *
-+ * @state: selinux state struct
-+ */
-+void selinux_ima_measure_state(struct selinux_state *state)
-+{
-+	WARN_ON(mutex_is_locked(&state->policy_mutex));
-+
-+	mutex_lock(&state->policy_mutex);
-+	selinux_ima_measure_state_locked(state);
-+	mutex_unlock(&state->policy_mutex);
-+}
-diff --git a/security/selinux/include/ima.h b/security/selinux/include/ima.h
-index d69c36611423..75ca92b4a462 100644
---- a/security/selinux/include/ima.h
-+++ b/security/selinux/include/ima.h
-@@ -15,10 +15,16 @@
- 
- #ifdef CONFIG_IMA
- extern void selinux_ima_measure_state(struct selinux_state *selinux_state);
-+extern void selinux_ima_measure_state_locked(
-+			struct selinux_state *selinux_state);
- #else
- static inline void selinux_ima_measure_state(struct selinux_state *selinux_state)
- {
- }
-+static inline void selinux_ima_measure_state_locked(
-+			struct selinux_state *selinux_state)
-+{
-+}
- #endif
- 
- #endif	/* _SELINUX_IMA_H_ */
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 4bde570d56a2..26ec58593ba1 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -41,6 +41,7 @@
- #include "security.h"
- #include "objsec.h"
- #include "conditional.h"
-+#include "ima.h"
- 
- enum sel_inos {
- 	SEL_ROOT_INO = 2,
-@@ -182,6 +183,8 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
- 		selinux_status_update_setenforce(state, new_value);
- 		if (!new_value)
- 			call_blocking_lsm_notifier(LSM_POLICY_CHANGE, NULL);
-+
-+		selinux_ima_measure_state(state);
- 	}
- 	length = count;
- out:
-@@ -762,6 +765,9 @@ static ssize_t sel_write_checkreqprot(struct file *file, const char __user *buf,
- 
- 	checkreqprot_set(fsi->state, (new_value ? 1 : 0));
- 	length = count;
-+
-+	selinux_ima_measure_state(fsi->state);
-+
- out:
- 	kfree(page);
- 	return length;
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index 2106b5d383e7..cb2866489363 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -2179,7 +2179,7 @@ static void selinux_notify_policy_change(struct selinux_state *state,
- 	selinux_status_update_policyload(state, seqno);
- 	selinux_netlbl_cache_invalidate();
- 	selinux_xfrm_notify_policyload();
--	selinux_ima_measure_state(state);
-+	selinux_ima_measure_state_locked(state);
- }
- 
- void selinux_policy_commit(struct selinux_state *state,
--- 
-2.30.0
-
+> 
+> Tyler
+> 
+> > 
+> > This patch becomes necessary when matched with the PATCH v18 3/4 of the
+> > series which fixes the user space break introduced in ~4.6 that formerly
+> > used the callers credentials for all accesses in all places. Security is
+> > weakened already as-is in overlayfs with all the overriding of the
+> > credentials for internal accesses to overlayfs mechanics based on the
+> > mounter credentials. Using the mounter credentials as a wider security hole
+> > is the problem, at least with PATCH v18 3/4 of the series we go back
+> > optionally to only using the caller's credentials to perform the operations.
+> > Admittedly some of the internal operations like mknod are privileged, but at
+> > least in Android's use case we are not using them with callers without the
+> > necessary credentials.
+> > 
+> > Android does not give the mounter more credentials than the callers, there
+> > is very little overlap in the MAC security.
+> > 
+> > > The big API churn in the 1/4 patch also seems excessive considering
+> > > that this seems to be mostly a cosmetic issue for android.  Am I
+> > > missing something?
+> > 
+> > Breaks sepolicy, it no longer has access to the context data at the
+> > overlayfs security boundary.
+> > 
+> > unknown is a symptom of being denied based on the denial to xattr data from
+> > the underlying filesystem layer. Being denied the security context of the
+> > target is not a good thing within the sepolicy security layer.
+> > 
+> > > 
+> > > Thanks,
+> > > Miklos
+> > 
+> > 
