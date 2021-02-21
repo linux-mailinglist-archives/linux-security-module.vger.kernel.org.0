@@ -2,83 +2,173 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF8B3205CF
-	for <lists+linux-security-module@lfdr.de>; Sat, 20 Feb 2021 15:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A9A320945
+	for <lists+linux-security-module@lfdr.de>; Sun, 21 Feb 2021 09:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbhBTOvS (ORCPT
+        id S229502AbhBUI7W (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 20 Feb 2021 09:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbhBTOvP (ORCPT
+        Sun, 21 Feb 2021 03:59:22 -0500
+Received: from condef-02.nifty.com ([202.248.20.67]:55319 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229588AbhBUI7Q (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 20 Feb 2021 09:51:15 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E68C061786
-        for <linux-security-module@vger.kernel.org>; Sat, 20 Feb 2021 06:50:33 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id h10so15887129edl.6
-        for <linux-security-module@vger.kernel.org>; Sat, 20 Feb 2021 06:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g9x+oRQ4dxdX/Lcd7XzVC8mAPWvFSQ3BbpYDOmT75qU=;
-        b=i1GvJWnnZAmMYuZbNa5SxOkH0LNxxBrMyouPhWfS2CgRWKPx1K1SsgK/q4TcmiLgaz
-         XM8jCX60i599PSPWcd2ecI6TxjeeF7LlcymqdkKntxfLjq5gYh4+S6W7qEURIROkL3m0
-         JwM+2iQzu4ecyYXjddKkeCkV6ZuBx9/BSFMOc8c8AN3rvqwLAy/BCjD2hLQf412U1Tpu
-         L2vWHeTAZeGCYrluhzIm9MAziLEFqq/wdC9nRxtpQRLFwBi/djVoxC3rSsv6umkZzB9W
-         u3msz0I5d7i74DZao+ZbUQ7ee13P3y/wDkc5cs+xcnmqgT2p9ogCWRR4DSlt8J+deGmk
-         OlzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g9x+oRQ4dxdX/Lcd7XzVC8mAPWvFSQ3BbpYDOmT75qU=;
-        b=kp9ZxhPrRqdLgi3cVojfekrIvapM/hc0v5ubU/kDl82rakQ5m6TptaNKRM+XCHlZUQ
-         89xpuYtvf8svP3L+jPHv0PnrKv2uEzcXKJyOTKt+sSPvWcfX4hfSKwen/847/sCgmv2R
-         Dw0vYTtiC3oXFdZLCap3UH8ijD1XUi2JvDA92hfbGAoCXICWya1CoccPAFilkmNkof2f
-         kkcQgZ2K2sgdhUNfqYb7ufe6WhyHfeDjPM57t1rqvG242Nyh/5j1Ei8iwAyISWbOhoV+
-         6QeodOOdIXTJbGtepri8wQ05WgAzsShejDsDQ+RtMPsBipjfs/SuGjqiqJ8y44cAN3YM
-         Z3sA==
-X-Gm-Message-State: AOAM533LjhJWyLwQK25JMQgej0haQRntQPzAmy1s9BIIoIPbSyKq7cdH
-        T4DDbbABLqTe99crgwgVhzVc5amPTck4vc+XP/IsSlpNU/K+
-X-Google-Smtp-Source: ABdhPJxDoQDl1riak88nhmzRFC5m+4Ns2U3daQUcXKO4UHBPAml5XfjQwYfQDJVh7yqcBX+pQqn608ufvJbf4pPLn4Y=
-X-Received: by 2002:a05:6402:438d:: with SMTP id o13mr14030563edc.135.1613832632309;
- Sat, 20 Feb 2021 06:50:32 -0800 (PST)
+        Sun, 21 Feb 2021 03:59:16 -0500
+X-Greylist: delayed 440 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Feb 2021 03:59:14 EST
+Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-02.nifty.com with ESMTP id 11L8mjuO001141
+        for <linux-security-module@vger.kernel.org>; Sun, 21 Feb 2021 17:48:45 +0900
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 11L8loiM000725;
+        Sun, 21 Feb 2021 17:47:50 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 11L8loiM000725
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1613897270;
+        bh=BSS3eTDyWT62pmJg+UVM56P/z1CrT+hpZLIdyuBm+wQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=j52JnoT5lZSElu5nDxytNVEn5XtetIjD9OGyZf9zm+uhgvvi3wm93mKIzORDkfgqq
+         18qcnVzCaJJKLa6D9hzvikzb54L6job8erIgBhuWor5xrQhj8V0UG1qb3akKqLmQpr
+         4mHeixYXbawguhPOYMmlyfrw8tuxBkgS174Gl2lQSMlfS/fPByIQ5Eno02cNGcPSbC
+         Uqk4sPMOt0vjqA6BLuVqbounFQDda79UfFaTB2BXA2Xk7psi0ZNcUqN0ndokpS2FD7
+         OUBrS6V27W3AszszTtcOQHnHbczeoDBv4SrIoJIaCID/9a2DwZVc7W4uZiS9R038kP
+         dEeuTOY+SKngw==
+X-Nifty-SrcIP: [209.85.210.170]
+Received: by mail-pf1-f170.google.com with SMTP id t29so4680272pfg.11;
+        Sun, 21 Feb 2021 00:47:50 -0800 (PST)
+X-Gm-Message-State: AOAM533PFAh4eaRxUJzatmyQ3YO6JfYSAPGkqlhC5GeoMpsSkzmJwOwU
+        fEJAZWpJguubOJZYIbwqCv4NpT5Zzz2r8NkE9p8=
+X-Google-Smtp-Source: ABdhPJxRKKiy9YhFkAfJpv7h4IxQUBo8J1lripgDyCT+Wqo7p8qegE1QQmUhLvaeyGip+oHGvEB6IkfMyLLApjs0yDM=
+X-Received: by 2002:a63:cc4f:: with SMTP id q15mr617682pgi.47.1613897269658;
+ Sun, 21 Feb 2021 00:47:49 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHC9VhSiq5gqY1bfouia4GwYsE9MGGXnUOqwEtHi2u0-1=8aZQ@mail.gmail.com>
- <67cacc61-4d6a-39d5-f2c0-5530e8d1e39@namei.org>
-In-Reply-To: <67cacc61-4d6a-39d5-f2c0-5530e8d1e39@namei.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 20 Feb 2021 09:50:21 -0500
-Message-ID: <CAHC9VhRmFFqiF8oW_K_Rm3cKS9iEE97pjHeiTDcnYxR-HrpbeQ@mail.gmail.com>
-Subject: Re: security_task_getsecid() and subjective vs objective task creds
-To:     James Morris <jmorris@namei.org>
-Cc:     linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com
+References: <20210215181511.2840674-1-mic@digikod.net> <20210215181511.2840674-3-mic@digikod.net>
+In-Reply-To: <20210215181511.2840674-3-mic@digikod.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 21 Feb 2021 17:47:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS54Zw7d8Lp5BNs1JVktSLTFx0dNbLMA7W0U_sH2712_A@mail.gmail.com>
+Message-ID: <CAK7LNAS54Zw7d8Lp5BNs1JVktSLTFx0dNbLMA7W0U_sH2712_A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] kconfig: Ask user if string needs to be changed
+ when dependency changed
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Nicolas Iooss <nicolas.iooss@m4x.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Feb 19, 2021 at 9:55 PM James Morris <jmorris@namei.org> wrote:
-> On Thu, 18 Feb 2021, Paul Moore wrote:
+On Tue, Feb 16, 2021 at 3:14 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
 >
-> > Hi all,
-> >
-> > When looking into a problem I noticed that audit was recording the
-> > wrong subject label for a process.
+> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
 >
-> Is this a public bug? It would be good to know what the extent of this
-> issue may be and whether it warrants a CVE.
+> Content of string configuration may depend on related kernel
+> configurations.  Modify oldconfig and syncconfig to inform users about
+> possible required configuration update and give them the opportunity to
+> update it:
+> * if dependencies of this string has changed (e.g. enabled or disabled),
+> * and if the current value of this string is different than the (new)
+>   default one.
+>
+> This is particularly relevant for CONFIG_LSM which contains a list of
+> LSMs enabled at boot, but users will not have a chance to update this
+> list with a make oldconfig.
 
-Let me rephrase, "When looking into a problem with some new patches
-that I am working on I noticed ...".
+If CONFIG_LSM already exists in the .config,
+oldconfig does not show a prompt.
+This is the expected behavior.
 
-I am not aware of any public bugs relating to this subj/obj confusion,
-this was simply something I noticed while doing some new work.  I
-would post those patches now, but they are still incomplete.
-Regardless, this subj/obj confusion is something we should resolve.
+You are trying to fix your problem in a wrong way.
+NACK.
 
--- 
-paul moore
-www.paul-moore.com
+
+
+>
+> Cc: Casey Schaufler <casey@schaufler-ca.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20210215181511.2840674-3-mic@digikod.net
+> ---
+>  scripts/kconfig/conf.c | 37 ++++++++++++++++++++++++++++++++++---
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+>
+> diff --git a/scripts/kconfig/conf.c b/scripts/kconfig/conf.c
+> index 18a233d27a8d..8633dacd39a9 100644
+> --- a/scripts/kconfig/conf.c
+> +++ b/scripts/kconfig/conf.c
+> @@ -82,6 +82,26 @@ static void xfgets(char *str, int size, FILE *in)
+>                 printf("%s", str);
+>  }
+>
+> +static bool may_need_string_update(struct symbol *sym, const char *def)
+> +{
+> +       const struct symbol *dep_sym;
+> +       const struct expr *e;
+> +
+> +       if (sym->type !=3D S_STRING)
+> +               return false;
+> +       if (strcmp(def, sym_get_string_default(sym)) =3D=3D 0)
+> +               return false;
+> +       /*
+> +        * The user may want to synchronize the content of a string relat=
+ed to
+> +        * changed dependencies (e.g. CONFIG_LSM).
+> +        */
+> +       expr_list_for_each_sym(sym->dir_dep.expr, e, dep_sym) {
+> +               if (dep_sym->flags & SYMBOL_CHANGED)
+> +                       return true;
+> +       }
+> +       return false;
+> +}
+> +
+>  static int conf_askvalue(struct symbol *sym, const char *def)
+>  {
+>         enum symbol_type type =3D sym_get_type(sym);
+> @@ -102,7 +122,7 @@ static int conf_askvalue(struct symbol *sym, const ch=
+ar *def)
+>         switch (input_mode) {
+>         case oldconfig:
+>         case syncconfig:
+> -               if (sym_has_value(sym)) {
+> +               if (sym_has_value(sym) && !may_need_string_update(sym, de=
+f)) {
+>                         printf("%s\n", def);
+>                         return 0;
+>                 }
+> @@ -137,8 +157,19 @@ static int conf_string(struct menu *menu)
+>                 printf("%*s%s ", indent - 1, "", menu->prompt->text);
+>                 printf("(%s) ", sym->name);
+>                 def =3D sym_get_string_value(sym);
+> -               if (def)
+> -                       printf("[%s] ", def);
+> +               if (def) {
+> +                       if (may_need_string_update(sym, def)) {
+> +                               indent +=3D 2;
+> +                               printf("\n%*sDefault value is [%s]\n",
+> +                                               indent - 1, "",
+> +                                               sym_get_string_default(sy=
+m));
+> +                               printf("%*sCurrent value is [%s] ",
+> +                                               indent - 1, "", def);
+> +                               indent -=3D 2;
+> +                       } else {
+> +                               printf("[%s] ", def);
+> +                       }
+> +               }
+>                 if (!conf_askvalue(sym, def))
+>                         return 0;
+>                 switch (line[0]) {
+> --
+> 2.30.0
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
