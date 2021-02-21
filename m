@@ -2,101 +2,106 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B416320941
-	for <lists+linux-security-module@lfdr.de>; Sun, 21 Feb 2021 09:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D871320995
+	for <lists+linux-security-module@lfdr.de>; Sun, 21 Feb 2021 11:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhBUIyZ (ORCPT
+        id S229879AbhBUKOX (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 21 Feb 2021 03:54:25 -0500
-Received: from conssluserg-06.nifty.com ([210.131.2.91]:51096 "EHLO
-        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbhBUIyV (ORCPT
+        Sun, 21 Feb 2021 05:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhBUKOW (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 21 Feb 2021 03:54:21 -0500
-X-Greylist: delayed 335 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Feb 2021 03:54:20 EST
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 11L8r0CO004841;
-        Sun, 21 Feb 2021 17:53:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 11L8r0CO004841
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1613897581;
-        bh=u37K3+qAwR0sUTzWOWIwPsO25Vh/vdCNmym9gGt+TM0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1MzDHxMDnrEeNiUTmrhliQTe/oiWbM2HjMxw/DI2Ti3IvBcL0nuRrQNTYE4d0rgop
-         GSrGJvilNhN8AWbCGTAY+5XFNRdSWzLAKVl60IxKDsFxxeoEPgsyFw+uScDy82NUxY
-         WiRvcFLva5T9VsaXpPVKVpMjsqpm+WjLTy1HGQSRrZGetoHCyRcjbNWfwgidFR2nEe
-         J/L3nD1jl7taB11DAHShYbLZ/RiTXP5NDpsKVwLADEsyF9Pf6ObPkZvzNQoFsH57SJ
-         zP4ShjjIL5rzp8qmL5zA0c0XvrCTBIqnCMGp9t3SQgRuNAEFpt9I5KUNPSYpu5wQlK
-         n+x6S2XcME8Uw==
-X-Nifty-SrcIP: [209.85.215.175]
-Received: by mail-pg1-f175.google.com with SMTP id n10so8181090pgl.10;
-        Sun, 21 Feb 2021 00:53:01 -0800 (PST)
-X-Gm-Message-State: AOAM530ID7HFA/k7EgdGKeqayy1Ak52D/+Bcon2xwjuG6TuGaFJIxBE8
-        IPs3n9DX34eqZCSPA7DfFtwigOm5EpDYcjt8+L0=
-X-Google-Smtp-Source: ABdhPJwCYDuoHAzYbJO1A2ugunCCef/tJuG6TpI0QILuNu4F4QtCv7Swfe+SSXIg/Yyz3udjxxuF6swSgyd6RWcHhZ0=
-X-Received: by 2002:a63:34c9:: with SMTP id b192mr15845885pga.175.1613897580356;
- Sun, 21 Feb 2021 00:53:00 -0800 (PST)
+        Sun, 21 Feb 2021 05:14:22 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D61C061574;
+        Sun, 21 Feb 2021 02:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=hcq3wt5qS99lFcdtQEki70DkgteFRHHdLhomfjlqf0A=; b=d9BmVzeMt89rCXwVLeKlwPtHG
+        2BNk+iWh/L0CsP42TqedSeGrmfDsxu4ckY9qOc6ml4YSXe7ocS2VmYqTdpsflYZ5KXY61rBG+Rd3C
+        ak55BBcZmcE3iw7hxjb6nDM/coJQH9po0P6r+Vq70oEVXerNc+lLm2VWZ4J6ijxQddMUw7x2oycoW
+        ushzuWhMycc9J5pOfsJXQSIBZHmkGfB70a2jKKEZSQaDdtUJlvxCPR+pQ6t8neNP+u62ehJLQW2qa
+        dPt5YWVNsfvbKX0YaqpEI7RhM+jpVkWItrx1qgHUKOzxrfQuCkUBUXwO8GMmoFhCGDUwtK8FMk8wZ
+        Av6+zio3g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46232)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1lDljt-0005aH-Cr; Sun, 21 Feb 2021 10:13:21 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1lDljp-00012f-NP; Sun, 21 Feb 2021 10:13:17 +0000
+Date:   Sun, 21 Feb 2021 10:13:17 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Jian Cai <jiancai@google.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        James Morris <jmorris@namei.org>, manojgupta@google.com,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        clang-built-linux@googlegroups.com, llozano@google.com,
+        David Brazdil <dbrazdil@google.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, ndesaulniers@google.com,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        David Laight <David.Laight@aculab.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH v4] ARM: Implement SLS mitigation
+Message-ID: <20210221101317.GN1463@shell.armlinux.org.uk>
+References: <20210219201852.3213914-1-jiancai@google.com>
+ <20210219230841.875875-1-jiancai@google.com>
 MIME-Version: 1.0
-References: <20210215181511.2840674-1-mic@digikod.net> <20210215181511.2840674-2-mic@digikod.net>
-In-Reply-To: <20210215181511.2840674-2-mic@digikod.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 21 Feb 2021 17:52:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR+vDUg-_9LiasvpuJi2BqkNOz+ufNFErHL-nQrFTixeg@mail.gmail.com>
-Message-ID: <CAK7LNAR+vDUg-_9LiasvpuJi2BqkNOz+ufNFErHL-nQrFTixeg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kconfig: Remove duplicate call to sym_get_string_value()
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Nicolas Iooss <nicolas.iooss@m4x.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210219230841.875875-1-jiancai@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Feb 16, 2021 at 3:15 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
->
-> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
->
-> Use the saved returned value of sym_get_string_value() instead of
-> calling it twice.
->
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> Link: https://lore.kernel.org/r/20210215181511.2840674-2-mic@digikod.net
-> ---
+On Fri, Feb 19, 2021 at 03:08:13PM -0800, Jian Cai wrote:
+> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+> index 269967c4fc1b..146b75a79d9e 100644
+> --- a/security/Kconfig.hardening
+> +++ b/security/Kconfig.hardening
+> @@ -121,6 +121,16 @@ choice
+>  
+>  endchoice
+>  
+> +config HARDEN_SLS_ALL
+> +	bool "enable SLS vulnerability hardening"
+> +	default n
 
+Please get rid of this useless "default n"
 
-Applied to linux-kbuild. Thanks.
+> +	depends on $(cc-option,-mharden-sls=all)
+> +	help
+> +	  Enables straight-line speculation vulnerability hardening on ARM and ARM64
+> +	  architectures. It inserts speculation barrier sequences (SB or DSB+ISB
+> +	  depending on the target architecture) after RET and BR, and replacing
+> +	  BLR with BL+BR sequence.
 
+Given that this is in an architecture independent Kconfig file, and it
+detects support in CC for this feature, why should this help text be
+written to be specific to a couple of architectures? Will this feature
+only ever be available on these two architectures? What if someone adds
+support for another architecture?
 
-
->  scripts/kconfig/conf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/kconfig/conf.c b/scripts/kconfig/conf.c
-> index db03e2f45de4..18a233d27a8d 100644
-> --- a/scripts/kconfig/conf.c
-> +++ b/scripts/kconfig/conf.c
-> @@ -137,7 +137,7 @@ static int conf_string(struct menu *menu)
->                 printf("%*s%s ", indent - 1, "", menu->prompt->text);
->                 printf("(%s) ", sym->name);
->                 def =3D sym_get_string_value(sym);
-> -               if (sym_get_string_value(sym))
-> +               if (def)
->                         printf("[%s] ", def);
->                 if (!conf_askvalue(sym, def))
->                         return 0;
-> --
-> 2.30.0
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
