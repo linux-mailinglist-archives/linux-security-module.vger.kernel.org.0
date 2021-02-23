@@ -2,66 +2,143 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 440343226E4
-	for <lists+linux-security-module@lfdr.de>; Tue, 23 Feb 2021 09:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE970322889
+	for <lists+linux-security-module@lfdr.de>; Tue, 23 Feb 2021 11:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbhBWIIs (ORCPT
+        id S230386AbhBWKFo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 23 Feb 2021 03:08:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbhBWIHa (ORCPT
+        Tue, 23 Feb 2021 05:05:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55162 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230142AbhBWKFm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 23 Feb 2021 03:07:30 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B369FC06121E
-        for <linux-security-module@vger.kernel.org>; Tue, 23 Feb 2021 00:06:00 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id b15so1290772pjb.0
-        for <linux-security-module@vger.kernel.org>; Tue, 23 Feb 2021 00:06:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=rjFLgW1OULBXQlh3JS0FsFrrUu6RfNW+e5SQFjA5Djs=;
-        b=m9GlBnix8rT0CGVWTqw3LJc5ak7PX3fp/nKfnNSrsuDs0LhHsEMQRfOVdjVEFmHts9
-         exZ4jIcAyu+ITkynCVmLNYCb3eoyqaJyaXVXcSATXP9LXgyPkWcICf4KrxE8HvBv72ey
-         tUH4CgyK2cLX1uTkClOQnoRY5gflHaxqy1GVSzi1V7mG0ThYf5hxqz6GENGxu2My8I7+
-         24PwMVXvI8321mOmNihgW1KCzwAQGCEi5JzlpV+Zk0O342yw7Kwa8yzI+0UAGvofRLb+
-         pHlkqVZjiH/PpS9zJA9pym8NcDJZ6KVpUq4wazeXjwOaGEL1If0rRgZHR+Ra5pyyBprB
-         Q2pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=rjFLgW1OULBXQlh3JS0FsFrrUu6RfNW+e5SQFjA5Djs=;
-        b=SpwyXVd5eD6bJlPD4fDi5OAFJLfWb09o1B8Knws2l8NhEvSvMv8/94WARujbNpzPDj
-         vEPKaP+TdrI1D2JV6s0Rct4tg4ASujshwlUUYe25XOeNwnPmNOoWxY54810wlMIGpEir
-         O002abaASzSscc5h8rFs473YaBQCsX3OZA2bSphOe2IoW8+uJCMKIa3wRjm7y+ITZMtT
-         eyixwsDbeYAY2DiqhbLzgWPkMGUFqMzRDy9UnNK+VQZOo1RxyQ6fk4PoZzk6dLsajl54
-         49zwFwPN1xQpxDcq3tdp6R6XjeS3vruNG1EH/8Sxg7Zbjb0hJevMHBTxQwAKlv90ku8/
-         TSbw==
-X-Gm-Message-State: AOAM533KXXkHA82qtTWEGcDZBivtkHY0F5Pu2WUtalpPGMCldlGZ+V2j
-        7HkZtArapbVu57DGh9oyIGoCWNC43elRJOEMV24=
-X-Google-Smtp-Source: ABdhPJyx6EoHnEBYvJlBofPoagwYHx+1M677wa3Y0G081C+c8TzUMk5XUb3v1Pqax+FyhYdvrU3AVAdIDPQlSHKOC+k=
-X-Received: by 2002:a17:902:b941:b029:e3:1628:97b7 with SMTP id
- h1-20020a170902b941b02900e3162897b7mr26318331pls.60.1614067560345; Tue, 23
- Feb 2021 00:06:00 -0800 (PST)
+        Tue, 23 Feb 2021 05:05:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 389EE64E22;
+        Tue, 23 Feb 2021 10:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614074701;
+        bh=Wei69MTAw3cAoHZzehtkt6nVDExu19SQg53rlhzIYkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WZOqzYAfqkinjCDFARp7S1HJXXBR9/a5BpaM0vR+ODhDKzZDPfF/ye7XjKQMUez35
+         gNYf4tHz2dZXzh6zzeOdB4V3qV1z9r5sgXIXTCI0aO5M02BEsGDwODUFLCu1Lt0bOf
+         0DK9G68zNyFKRYC1hCUEsoWO6316kYRolzd+VXquDUZT8xx0YR4ZC9pYlEAwapnwSR
+         iFZl+6xr5ZixbyOTXA4xJh9vWEFM0si3FfsI5NrErO2BOcvcjSnsbqxWi1qJke/gga
+         uJI0eyUbRiuqihtgi0hZ2CyAWZ72G2AC/8FGKqtO9r7yqQCxJpGGZu4aJGwqnQT86v
+         k3LlYOeONI6cg==
+Date:   Tue, 23 Feb 2021 10:04:53 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Jian Cai <jiancai@google.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Manoj Gupta <manojgupta@google.com>,
+        Luis Lozano <llozano@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        David Brazdil <dbrazdil@google.com>,
+        James Morse <james.morse@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4] ARM: Implement SLS mitigation
+Message-ID: <20210223100453.GB10254@willie-the-truck>
+References: <20210219201852.3213914-1-jiancai@google.com>
+ <20210219230841.875875-1-jiancai@google.com>
+ <20210222115816.GA8605@willie-the-truck>
+ <CA+SOCLJVGJSn67VU24wPDdsOVeHhGe+KO5ekOCusano=bhn1Mg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:4753:0:0:0:0 with HTTP; Tue, 23 Feb 2021 00:05:59
- -0800 (PST)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   AbdWabbo Maddah <ffoundationcoca@gmail.com>
-Date:   Tue, 23 Feb 2021 09:05:59 +0100
-Message-ID: <CAJHqv60eoXVSPOQK6+DpWywMjNpiHRuQnkrO-qscO3QNHdCWmQ@mail.gmail.com>
-Subject: DID YOU RECEIVE MY MAIL?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+SOCLJVGJSn67VU24wPDdsOVeHhGe+KO5ekOCusano=bhn1Mg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
+On Mon, Feb 22, 2021 at 01:50:06PM -0800, Jian Cai wrote:
+> Please see my comments inlined below.
+> 
+> Thanks,
+> Jian
+> 
+> On Mon, Feb 22, 2021 at 3:58 AM Will Deacon <will@kernel.org> wrote:
+> >
+> > On Fri, Feb 19, 2021 at 03:08:13PM -0800, Jian Cai wrote:
+> > > This patch adds CONFIG_HARDEN_SLS_ALL that can be used to turn on
+> > > -mharden-sls=all, which mitigates the straight-line speculation
+> > > vulnerability, speculative execution of the instruction following some
+> > > unconditional jumps. Notice -mharden-sls= has other options as below,
+> > > and this config turns on the strongest option.
+> > >
+> > > all: enable all mitigations against Straight Line Speculation that are implemented.
+> > > none: disable all mitigations against Straight Line Speculation.
+> > > retbr: enable the mitigation against Straight Line Speculation for RET and BR instructions.
+> > > blr: enable the mitigation against Straight Line Speculation for BLR instructions.
+> > >
+> > > Links:
+> > > https://reviews.llvm.org/D93221
+> > > https://reviews.llvm.org/D81404
+> > > https://developer.arm.com/support/arm-security-updates/speculative-processor-vulnerability/downloads/straight-line-speculation
+> > > https://developer.arm.com/support/arm-security-updates/speculative-processor-vulnerability/frequently-asked-questions#SLS2
+> > >
+> > > Suggested-by: Manoj Gupta <manojgupta@google.com>
+> > > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > Suggested-by: Nathan Chancellor  <nathan@kernel.org>
+> > > Suggested-by: David Laight <David.Laight@aculab.com>
+> > > Suggested-by: Will Deacon <will@kernel.org>
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > > Signed-off-by: Jian Cai <jiancai@google.com>
+> > > ---
+> >
+> > Please can you reply to my previous questions?
+> >
+> > https://lore.kernel.org/linux-arm-kernel/20210217094859.GA3706@willie-the-truck/
+> >
+> > (apologies if you did, but I don't see them in the archive or my inbox)
+> 
+> I should have clarified the suggested-by tag was in regard to the
+> Kconfig text change. Regarding your earlier questions, please see my
+> comments below.
+> 
+> > So I think that either we enable this unconditionally, or we don't enable it
+> > at all (and people can hack their CFLAGS themselves if they want to).
+> 
+> Not sure if this answers your question but this config should provide
+> a way for people to turn on the mitigation at their own risk.
 
-AbdWabbo Maddah
+I'm not sure I see the point; either it's needed or its not. I wonder if
+there's a plan to fix this in future CPUs (another question for the Arm
+folks).
+
+> > It would be helpful for one of the Arm folks to chime in, as I'm yet to see any
+> > evidence that this is actually exploitable. Is it any worse that Spectre-v1,
+> > where we _don't_ have a compiler mitigation?
+> 
+> > Finally, do we have to worry about our assembly code?
+> 
+> I am not sure if there are any plans to protect assembly code and I
+> will leave it to the Arm folks since they know a whole lot better. But
+> even without that part, we should still have better protection,
+> especially when overhead does not look too bad: I did some preliminary
+> experiments on ChromeOS, code size of vmlinux increased 3%, and there
+> were no noticeable changes to run-time performance of the benchmarks I
+> used.
+
+If the mitigation is required, I'm not sure I see a lot of point in only
+doing a half-baked job of it. It feels a bit like a box-ticking exercise,
+in which case any overhead is too much.
+
+Will
