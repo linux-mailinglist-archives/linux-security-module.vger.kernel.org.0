@@ -2,197 +2,201 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B050D32B2B5
-	for <lists+linux-security-module@lfdr.de>; Wed,  3 Mar 2021 04:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 399F632B2BA
+	for <lists+linux-security-module@lfdr.de>; Wed,  3 Mar 2021 04:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244173AbhCCCzA (ORCPT
+        id S245316AbhCCCz3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 2 Mar 2021 21:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        Tue, 2 Mar 2021 21:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835854AbhCBT3r (ORCPT
+        with ESMTP id S233631AbhCBXyn (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 2 Mar 2021 14:29:47 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAA1C06178C
-        for <linux-security-module@vger.kernel.org>; Tue,  2 Mar 2021 11:29:06 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id s17so5920549qvr.12
-        for <linux-security-module@vger.kernel.org>; Tue, 02 Mar 2021 11:29:06 -0800 (PST)
+        Tue, 2 Mar 2021 18:54:43 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D1DC061356
+        for <linux-security-module@vger.kernel.org>; Tue,  2 Mar 2021 15:53:51 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id b10so22597173ybn.3
+        for <linux-security-module@vger.kernel.org>; Tue, 02 Mar 2021 15:53:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fd9/APoGQtTfas/dKgFLja/a3BqoaTx3hi3xwYUCPiM=;
-        b=aHeWWu3HqCGWpDQNu1TFQoCKAdW+aAHDuoqTWx58TAp0Y2AffryAc8cKL+2hJN+QJv
-         cj6w2GUBciMdWxpqwToIOrKZboKhZjekzZGrGE3e6DX1n9r86zUpOyuhg3N+2lN1ahu/
-         bhOorS14+wpWOr6zPnZ9rW9mGw/bFPHbOzuKQVOurvn+BQMrq2USJDKHZy8NMyTOAcr/
-         JY9gK7BBZ8CiQZFieCoMbhPAJJjGD0+kkXcnGidUAhVpHUQRmqByVAU2PNo2RyBffVnj
-         MxcphCDL/FfmP03emshAzNUx+3GHRk3IL23GF0GOWKnQu/aY4AQaFvyQh2X+uWuJAOUJ
-         3svA==
+        bh=bil8NB7FtyMQm2LWvHudKINIt601VCCkCAtNfJdlFqs=;
+        b=EZ95T+rNXENXimY3pzATLXSNLha9hbHpdO3IWfbrrXDxmRhX0t0UT20WlzRGlBerOk
+         mq1NCpaPbKg1hTYF2hKaXxT5G0ERcltjSoANnaSWufp95sXwyhd/GI244y4LkMUoCUHZ
+         Z19jUkS8cd148IrrUXF66k4R8S6+4popTpoYvji5vTjm5y4B+aq5ZgLuBPp5voboqZ+s
+         Io/ahydOa4fmHqkxp/oM2uJ657wsmEB5Hqu4va7hQGmTclSDZj5rI7Can4zlSACYE9L4
+         BuXEF6JeOOAB3qJ1Y17e2EYxh23ouR9mmUQ8t+Sp1as6Nspiq+yKmrxKEJ5XBspw+hIi
+         Ti8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fd9/APoGQtTfas/dKgFLja/a3BqoaTx3hi3xwYUCPiM=;
-        b=Kv/acvz/Rb1O76uaMSA9WgJCo0lOMZC0RO6KNG2oa2nlcHhasSikFu3umMGdQ9bWm0
-         czYHBPesnbRBL4FYf+Hn779Pd6slgKEnJXy1TmySnBSdeX87mNV4BelVdgUV6fWIXK/y
-         LxpczmnvsZUROy5ce/Pq8O30vUkW63eapORAjHxZfBdhEFOYL3QpSY3Ed/H4rJGWzK4J
-         Fw0Ll+W5e97X2VQd7p96udVg2QbCbuXAceD9B6ftDc/vRkoOqLXDi8e/9+q92DueuMSd
-         6tGYUaKvfuvflTXNLfV7227goXT1L+cL5RwgHwV3faaG8x/x/e8wSP0ytWnC/Gbv3Huz
-         Y8WA==
-X-Gm-Message-State: AOAM533V4vmxW9bt9Uzyjikbt7KHC7GmXHJOIyKXZMWpbIUKr+YVV+AA
-        exVNL6nLYcIeJpa1gw1rMg0QAMex1Ja3BJV6dIYxqQ==
-X-Google-Smtp-Source: ABdhPJxbGBO6Y8c2yo+s1WsCO2jZqiMKZBHDetZj0tfn18QFIs7XoPdxDj4eCQymdU53+d4sqcVHJi8MCFnlhW3pvHI=
-X-Received: by 2002:a0c:8304:: with SMTP id j4mr5030219qva.18.1614713345287;
- Tue, 02 Mar 2021 11:29:05 -0800 (PST)
+        bh=bil8NB7FtyMQm2LWvHudKINIt601VCCkCAtNfJdlFqs=;
+        b=gYqmqMey/d+uE2+3WPZ4Fo17txR3DwkWRD6vigaw3gMgCszao9FDIkibnHkPzpgSD0
+         XBjJu0oJ4dGd6SV9wEzxEggKi9gR52LP417K+Hi+yFCJEpwzyKNfCE7GzYhXUME50lgL
+         s5ENKR7bwJKC1qrrXqsNR4tDvomYGHneHbiNdjmk4Hq0o9ReSBmqcoxZNofCu5O8lPBD
+         +eQH9ybfm8CmQlYxiHnq9OE1qVp1V/E015kKs4wxjCOeCBbAw42pEkxCqLHMEKELJx27
+         OOS33igJT562o5mf12IR4OoNHYbTZkPisJRoJQFfn4T2RxJZE5XFy6OWEahQQ9DPOe4v
+         lr7w==
+X-Gm-Message-State: AOAM532+guAMfgihLHU1SpbyJb9+HSc6+WItYacyLwJc/ajGQXdNvkNZ
+        sKzgfkBOBGJ9+HDN0bIoRecr3Uh21Wh45ZwpdXPQIQ==
+X-Google-Smtp-Source: ABdhPJyPySea+4ZAWR4FCDlNGShhv6ZqZfVIbq+FwDY0XtpNacbMtnX9ErF6UqxXj8O2Gl4NQDcqnTDjJgXoxKMbDrU=
+X-Received: by 2002:a5b:751:: with SMTP id s17mr34290248ybq.111.1614729230287;
+ Tue, 02 Mar 2021 15:53:50 -0800 (PST)
 MIME-Version: 1.0
-References: <0000000000006305c005bc8ba7f0@google.com> <000000000000d1747205bc92b14c@google.com>
-In-Reply-To: <000000000000d1747205bc92b14c@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 2 Mar 2021 20:28:54 +0100
-Message-ID: <CACT4Y+aqJzZGP8q0F0eiCjm2CHcKSX_y2wzfrJvqcXSpnwQy=g@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in cipso_v4_genopt
-To:     syzbot <syzbot+9ec037722d2603a9f52e@syzkaller.appspotmail.com>
-Cc:     David Miller <davem@davemloft.net>, dsahern@kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
+References: <20210111170622.2613577-1-surenb@google.com> <20210112074629.GG22493@dhcp22.suse.cz>
+ <20210112174507.GA23780@redhat.com> <CAJuCfpFQz=x-LvONO3c4iqjKP4NKJMgUuiYc8HACKHAv1Omu0w@mail.gmail.com>
+ <20210113142202.GC22493@dhcp22.suse.cz> <CAG48ez0=QSzuj96+5oVQ2qWqfjedv3oKtfEFzw--C8bzfvj7EQ@mail.gmail.com>
+ <20210126135254.GP827@dhcp22.suse.cz> <CAJuCfpEnMyo9XAnoF+q1j9EkC0okZfUxxdAFhzhPJi+adJYqjw@mail.gmail.com>
+ <CAJuCfpF861zhp8yR_pYx8gb+WMrORAZ0tbzcKtKxaj7L=jzw+Q@mail.gmail.com> <CAJuCfpFzxiBXp1rdY=H=bX+eOAVGOe72_FxwC-NTWF4fhUO26g@mail.gmail.com>
+In-Reply-To: <CAJuCfpFzxiBXp1rdY=H=bX+eOAVGOe72_FxwC-NTWF4fhUO26g@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 2 Mar 2021 15:53:39 -0800
+Message-ID: <CAJuCfpEOE8=L1fT4FSauy65cS82M_kW3EzTgH89ewE9HudL=VA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] mm/madvise: replace ptrace attach requirement for process_madvise
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jeffrey Vander Stoep <jeffv@google.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        David Rientjes <rientjes@google.com>,
+        =?UTF-8?Q?Edgar_Arriaga_Garc=C3=ADa?= <edgararriaga@google.com>,
+        Tim Murray <timmurray@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
         linux-security-module <linux-security-module@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+        stable <stable@vger.kernel.org>, Michal Hocko <mhocko@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Mar 2, 2021 at 8:25 PM syzbot
-<syzbot+9ec037722d2603a9f52e@syzkaller.appspotmail.com> wrote:
+On Mon, Feb 1, 2021 at 9:34 PM Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> syzbot has found a reproducer for the following issue on:
+> On Thu, Jan 28, 2021 at 11:08 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Thu, Jan 28, 2021 at 11:51 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > On Tue, Jan 26, 2021 at 5:52 AM 'Michal Hocko' via kernel-team
+> > > <kernel-team@android.com> wrote:
+> > > >
+> > > > On Wed 20-01-21 14:17:39, Jann Horn wrote:
+> > > > > On Wed, Jan 13, 2021 at 3:22 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > > On Tue 12-01-21 09:51:24, Suren Baghdasaryan wrote:
+> > > > > > > On Tue, Jan 12, 2021 at 9:45 AM Oleg Nesterov <oleg@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On 01/12, Michal Hocko wrote:
+> > > > > > > > >
+> > > > > > > > > On Mon 11-01-21 09:06:22, Suren Baghdasaryan wrote:
+> > > > > > > > >
+> > > > > > > > > > What we want is the ability for one process to influence another process
+> > > > > > > > > > in order to optimize performance across the entire system while leaving
+> > > > > > > > > > the security boundary intact.
+> > > > > > > > > > Replace PTRACE_MODE_ATTACH with a combination of PTRACE_MODE_READ
+> > > > > > > > > > and CAP_SYS_NICE. PTRACE_MODE_READ to prevent leaking ASLR metadata
+> > > > > > > > > > and CAP_SYS_NICE for influencing process performance.
+> > > > > > > > >
+> > > > > > > > > I have to say that ptrace modes are rather obscure to me. So I cannot
+> > > > > > > > > really judge whether MODE_READ is sufficient. My understanding has
+> > > > > > > > > always been that this is requred to RO access to the address space. But
+> > > > > > > > > this operation clearly has a visible side effect. Do we have any actual
+> > > > > > > > > documentation for the existing modes?
+> > > > > > > > >
+> > > > > > > > > I would be really curious to hear from Jann and Oleg (now Cced).
+> > > > > > > >
+> > > > > > > > Can't comment, sorry. I never understood these security checks and never tried.
+> > > > > > > > IIUC only selinux/etc can treat ATTACH/READ differently and I have no idea what
+> > > > > > > > is the difference.
+> > > > >
+> > > > > Yama in particular only does its checks on ATTACH and ignores READ,
+> > > > > that's the difference you're probably most likely to encounter on a
+> > > > > normal desktop system, since some distros turn Yama on by default.
+> > > > > Basically the idea there is that running "gdb -p $pid" or "strace -p
+> > > > > $pid" as a normal user will usually fail, but reading /proc/$pid/maps
+> > > > > still works; so you can see things like detailed memory usage
+> > > > > information and such, but you're not supposed to be able to directly
+> > > > > peek into a running SSH client and inject data into the existing SSH
+> > > > > connection, or steal the cryptographic keys for the current
+> > > > > connection, or something like that.
+> > > > >
+> > > > > > > I haven't seen a written explanation on ptrace modes but when I
+> > > > > > > consulted Jann his explanation was:
+> > > > > > >
+> > > > > > > PTRACE_MODE_READ means you can inspect metadata about processes with
+> > > > > > > the specified domain, across UID boundaries.
+> > > > > > > PTRACE_MODE_ATTACH means you can fully impersonate processes with the
+> > > > > > > specified domain, across UID boundaries.
+> > > > > >
+> > > > > > Maybe this would be a good start to document expectations. Some more
+> > > > > > practical examples where the difference is visible would be great as
+> > > > > > well.
+> > > > >
+> > > > > Before documenting the behavior, it would be a good idea to figure out
+> > > > > what to do with perf_event_open(). That one's weird in that it only
+> > > > > requires PTRACE_MODE_READ, but actually allows you to sample stuff
+> > > > > like userspace stack and register contents (if perf_event_paranoid is
+> > > > > 1 or 2). Maybe for SELinux things (and maybe also for Yama), there
+> > > > > should be a level in between that allows fully inspecting the process
+> > > > > (for purposes like profiling) but without the ability to corrupt its
+> > > > > memory or registers or things like that. Or maybe perf_event_open()
+> > > > > should just use the ATTACH mode.
+> > > >
+> > > > Thanks for the clarification. I still cannot say I would have a good
+> > > > mental picture. Having something in Documentation/core-api/ sounds
+> > > > really needed. Wrt to perf_event_open it sounds really odd it can do
+> > > > more than other places restrict indeed. Something for the respective
+> > > > maintainer but I strongly suspect people simply copy the pattern from
+> > > > other places because the expected semantic is not really clear.
+> > > >
+> > >
+> > > Sorry, back to the matters of this patch. Are there any actionable
+> > > items for me to take care of before it can be accepted? The only
+> > > request from Andrew to write a man page is being worked on at
+> > > https://lore.kernel.org/linux-mm/20210120202337.1481402-1-surenb@google.com/
+> > > and I'll follow up with the next version. I also CC'ed stable@ for
+> > > this to be included into 5.10 per Andrew's request. That CC was lost
+> > > at some point, so CC'ing again.
+> > >
+> > > I do not see anything else on this patch to fix. Please chime in if
+> > > there are any more concerns, otherwise I would ask Andrew to take it
+> > > into mm-tree and stable@ to apply it to 5.10.
+> > > Thanks!
+> >
+> > process_madvise man page V2 is posted at:
+> > https://lore.kernel.org/linux-mm/20210129070340.566340-1-surenb@google.com/
 >
-> HEAD commit:    7a7fd0de Merge branch 'kmap-conversion-for-5.12' of git://..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13693866d00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=779a2568b654c1c6
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9ec037722d2603a9f52e
-> compiler:       Debian clang version 11.0.1-2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1576737ad00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=107bdcead00000
+> process_madvise man page V3 is posted at:
+> https://lore.kernel.org/linux-mm/20210202053046.1653012-1-surenb@google.com/
+>
 
-This wasn't arranged :)
-But the reproducer indeed contains NLBL_CIPSOV4_C_REMOVE and is
-repeated in a loop...
+Hi Andrew,
+A friendly reminder to please include this patch into mm tree.
+There seem to be no more questions or objections.
+The man page you requested is accepted here:
+https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?id=a144f458bad476a3358e3a45023789cb7bb9f993
+stable is CC'ed and this patch should go into 5.10 and later kernels
+The patch has been:
+Acked-by: Minchan Kim <minchan@kernel.org>
+Acked-by: David Rientjes <rientjes@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+If you want me to resend it, please let me know.
+Thanks,
+Suren.
 
 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+9ec037722d2603a9f52e@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: use-after-free in cipso_v4_genopt+0x1078/0x1700 net/ipv4/cipso_ipv4.c:1784
-> Read of size 1 at addr ffff8881437d5710 by task syz-executor557/8392
->
-> CPU: 1 PID: 8392 Comm: syz-executor557 Not tainted 5.12.0-rc1-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  __dump_stack lib/dump_stack.c:79 [inline]
->  dump_stack+0x125/0x19e lib/dump_stack.c:120
->  print_address_description+0x5f/0x3a0 mm/kasan/report.c:232
->  __kasan_report mm/kasan/report.c:399 [inline]
->  kasan_report+0x15e/0x210 mm/kasan/report.c:416
->  cipso_v4_genopt+0x1078/0x1700 net/ipv4/cipso_ipv4.c:1784
->  cipso_v4_sock_setattr+0x7c/0x460 net/ipv4/cipso_ipv4.c:1866
->  netlbl_sock_setattr+0x28e/0x2f0 net/netlabel/netlabel_kapi.c:995
->  smack_netlbl_add security/smack/smack_lsm.c:2404 [inline]
->  smack_socket_post_create+0x13b/0x280 security/smack/smack_lsm.c:2774
->  security_socket_post_create+0x6f/0xd0 security/security.c:2122
->  __sock_create+0x62f/0x8c0 net/socket.c:1424
->  sock_create net/socket.c:1459 [inline]
->  __sys_socket+0xde/0x2d0 net/socket.c:1501
->  __do_sys_socket net/socket.c:1510 [inline]
->  __se_sys_socket net/socket.c:1508 [inline]
->  __x64_sys_socket+0x76/0x80 net/socket.c:1508
->  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x440999
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffcfe002d48 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
-> RAX: ffffffffffffffda RBX: 000000000000b3fc RCX: 0000000000440999
-> RDX: 0000000000000002 RSI: 0000000000000003 RDI: 0000040000000002
-> RBP: 0000000000000000 R08: 00007ffcfe002ee8 R09: 00007ffcfe002ee8
-> R10: 0000000000000012 R11: 0000000000000246 R12: 00007ffcfe002d5c
-> R13: 431bde82d7b634db R14: 00000000004ae018 R15: 00000000004004a0
->
-> Allocated by task 1:
->  kasan_save_stack mm/kasan/common.c:38 [inline]
->  kasan_set_track mm/kasan/common.c:46 [inline]
->  set_alloc_info mm/kasan/common.c:427 [inline]
->  ____kasan_kmalloc+0xc2/0xf0 mm/kasan/common.c:506
->  kasan_kmalloc include/linux/kasan.h:233 [inline]
->  kmem_cache_alloc_trace+0x21b/0x340 mm/slub.c:2934
->  kmalloc include/linux/slab.h:554 [inline]
->  smk_cipso_doi+0x1af/0x4e0 security/smack/smackfs.c:696
->  init_smk_fs+0xe2/0x24e security/smack/smackfs.c:3010
->  do_one_initcall+0x12b/0x310 init/main.c:1226
->  do_initcall_level+0x14a/0x1f5 init/main.c:1299
->  do_initcalls+0x4b/0x8c init/main.c:1315
->  kernel_init_freeable+0x2e3/0x406 init/main.c:1537
->  kernel_init+0xd/0x290 init/main.c:1424
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
->
-> Freed by task 0:
->  kasan_save_stack mm/kasan/common.c:38 [inline]
->  kasan_set_track+0x3d/0x70 mm/kasan/common.c:46
->  kasan_set_free_info+0x1f/0x40 mm/kasan/generic.c:357
->  ____kasan_slab_free+0x100/0x140 mm/kasan/common.c:360
->  kasan_slab_free include/linux/kasan.h:199 [inline]
->  slab_free_hook mm/slub.c:1562 [inline]
->  slab_free_freelist_hook+0x13a/0x200 mm/slub.c:1600
->  slab_free mm/slub.c:3161 [inline]
->  kfree+0xcf/0x2b0 mm/slub.c:4213
->  rcu_do_batch kernel/rcu/tree.c:2559 [inline]
->  rcu_core+0x7a0/0x1220 kernel/rcu/tree.c:2794
->  __do_softirq+0x318/0x714 kernel/softirq.c:345
->
-> Last potentially related work creation:
->  kasan_save_stack+0x27/0x50 mm/kasan/common.c:38
->  kasan_record_aux_stack+0xee/0x120 mm/kasan/generic.c:345
->  __call_rcu kernel/rcu/tree.c:3039 [inline]
->  call_rcu+0x12f/0x8a0 kernel/rcu/tree.c:3114
->  cipso_v4_doi_remove+0x2e2/0x310 net/ipv4/cipso_ipv4.c:531
->  netlbl_cipsov4_remove+0x219/0x390 net/netlabel/netlabel_cipso_v4.c:715
->  genl_family_rcv_msg_doit net/netlink/genetlink.c:739 [inline]
->  genl_family_rcv_msg net/netlink/genetlink.c:783 [inline]
->  genl_rcv_msg+0xe4e/0x1280 net/netlink/genetlink.c:800
->  netlink_rcv_skb+0x190/0x3a0 net/netlink/af_netlink.c:2502
->  genl_rcv+0x24/0x40 net/netlink/genetlink.c:811
->  netlink_unicast_kernel net/netlink/af_netlink.c:1312 [inline]
->  netlink_unicast+0x786/0x940 net/netlink/af_netlink.c:1338
->  netlink_sendmsg+0x9ae/0xd50 net/netlink/af_netlink.c:1927
->  sock_sendmsg_nosec net/socket.c:654 [inline]
->  sock_sendmsg net/socket.c:674 [inline]
->  ____sys_sendmsg+0x519/0x800 net/socket.c:2350
->  ___sys_sendmsg net/socket.c:2404 [inline]
->  __sys_sendmsg+0x2bf/0x370 net/socket.c:2433
->  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
->
-> The buggy address belongs to the object at ffff8881437d5700
->  which belongs to the cache kmalloc-64 of size 64
-> The buggy address is located 16 bytes inside of
->  64-byte region [ffff8881437d5700, ffff8881437d5740)
-> The buggy address belongs to the page:
-> page:000000003e519aab refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8881437d5b00 pfn:0x1437d5
-> flags: 0x57ff00000000200(slab)
-> raw: 057ff00000000200 ffffea000511ff88 ffffea00051d0a48 ffff888010841640
-> raw: ffff8881437d5b00 0000000000200019 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->  ffff8881437d5600: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
->  ffff8881437d5680: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
-> >ffff8881437d5700: fa fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->                          ^
->  ffff8881437d5780: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
->  ffff8881437d5800: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
-> ==================================================================
->
+> >
+> > >
+> > >
+> > > > --
+> > > > Michal Hocko
+> > > > SUSE Labs
+> > > >
+> > > > --
+> > > > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> > > >
