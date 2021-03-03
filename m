@@ -2,31 +2,61 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B7732C320
-	for <lists+linux-security-module@lfdr.de>; Thu,  4 Mar 2021 01:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1656932C322
+	for <lists+linux-security-module@lfdr.de>; Thu,  4 Mar 2021 01:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbhCCX7s (ORCPT
+        id S231556AbhCCX7s (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
         Wed, 3 Mar 2021 18:59:48 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:27937 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379852AbhCCPbz (ORCPT
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383656AbhCCPdD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 3 Mar 2021 10:31:55 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-129-p7FEIIrCNG6cb_3HeC64uw-1; Wed, 03 Mar 2021 15:29:45 +0000
-X-MC-Unique: p7FEIIrCNG6cb_3HeC64uw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 3 Mar 2021 15:29:37 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 3 Mar 2021 15:29:37 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Walleij' <linus.walleij@linaro.org>,
-        Will Deacon <will@kernel.org>
-CC:     Jian Cai <jiancai@google.com>,
+        Wed, 3 Mar 2021 10:33:03 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3745DC06175F
+        for <linux-security-module@vger.kernel.org>; Wed,  3 Mar 2021 07:31:55 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id y12so16288631ljj.12
+        for <linux-security-module@vger.kernel.org>; Wed, 03 Mar 2021 07:31:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q7aMRHBSl7NHJrCVQqtGWHia3CjmS5YDu6hw58y3144=;
+        b=hkdy5FBkaxL7oFI9pp6BeMVjXk1o2Zt23WsIuuhAsSqtfX/Lkdh5QXZgzfKaUqS23u
+         K1jHi7CUCZWk0Tkq6ilWcqzhkppJcMDQOoYIxXUmwHI2+IaLdiUHbPxeswfkA7qqhSpS
+         pKYdrnKYGY5zt2oWiN6416OdUPfJu0fiXi//jCyntJwgs/F1zHyBTUmwr/An0H1g3sMV
+         oJZt/kEFBbGvwmrsSdX3jRgJWTFiUjUTu25FSHX53XSGUD5hVjhAwZSTTuH+ALJIyY0M
+         cN/yOfXiA+5ZEUP7GtBNG6upTHFbP7F3jvQDN5n5C09CWxqFX03vtp9XWckYZv0S1u+e
+         aPaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q7aMRHBSl7NHJrCVQqtGWHia3CjmS5YDu6hw58y3144=;
+        b=WTlYCP1z9ncztyhhTGvqCQuCKz3ikxn6lzsu/u/RHyR/ZSTt7eJbS1k61AemDkiKpX
+         4ub54ACTfB9M0oOC5i3gB+HjVOVC6Zrs9ciLvgxtcZfbIuNrsVuvbXWodK9URp4cAHNO
+         b05Jk+6zIgAHBjHl5h01kNLvX3+Y9EzLsyuxxgrhmakmlwXnQO6wP6MEsMMQXpU4CEEv
+         0YfJ6o1wMRsf1+Y14a0vlQuP+eFJHvFEv52zRBWJq3olJnUQ7s/+2Iw3XnFC100+zb43
+         X/3Mae0la7lahx/erPMN5V99uQJT+kOayUrMUAGHo1O3txo9JKP0TKzcHLIYle2S8e7U
+         dUhA==
+X-Gm-Message-State: AOAM5304+WpKJ1pwrYeV7utLt+/Opr1W0hue0H0BTd8GsX4ALPMetPjv
+        rCoYhfl3tBxv31DvE6M3asDAB97X7xel+aGi9qiggg==
+X-Google-Smtp-Source: ABdhPJzAav+i0MnJO4TXhlAbYWsXCSj1Sqlgf1GE1KDm/iMLl0vYd0ihsE6lM2OO6Q6m4gLeLJTMLiHnS0JztKnAFus=
+X-Received: by 2002:a2e:864a:: with SMTP id i10mr14866199ljj.467.1614785512273;
+ Wed, 03 Mar 2021 07:31:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20210219201852.3213914-1-jiancai@google.com> <20210219230841.875875-1-jiancai@google.com>
+ <20210222115816.GA8605@willie-the-truck> <CA+SOCLJVGJSn67VU24wPDdsOVeHhGe+KO5ekOCusano=bhn1Mg@mail.gmail.com>
+ <20210223100453.GB10254@willie-the-truck> <CACRpkdYaSEb8bAztR-s_K17K+Zqusiofwa_dSjz-cwM2+N=57A@mail.gmail.com>
+ <49e8725f29ab4ecda6d669e9216bca29@AcuMS.aculab.com>
+In-Reply-To: <49e8725f29ab4ecda6d669e9216bca29@AcuMS.aculab.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 3 Mar 2021 16:31:41 +0100
+Message-ID: <CACRpkdYM3x6pJU3Vi+EEHtC3wD1DkrtVbGDd3PFHWL0fxjSA9g@mail.gmail.com>
+Subject: Re: [PATCH v4] ARM: Implement SLS mitigation
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Will Deacon <will@kernel.org>, Jian Cai <jiancai@google.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Manoj Gupta <manojgupta@google.com>,
         Luis Lozano <llozano@google.com>,
@@ -40,8 +70,8 @@ CC:     Jian Cai <jiancai@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Ard Biesheuvel <ardb@kernel.org>,
-        =?utf-8?B?QW5kcmVhcyBGw6RyYmVy?= <afaerber@suse.de>,
-        "Ingo Molnar" <mingo@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Ingo Molnar <mingo@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mike Rapoport <rppt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -51,56 +81,29 @@ CC:     Jian Cai <jiancai@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>
-Subject: RE: [PATCH v4] ARM: Implement SLS mitigation
-Thread-Topic: [PATCH v4] ARM: Implement SLS mitigation
-Thread-Index: AQHXEECBQRoTQnOC90iuKvtWWC/yz6pyYx/A
-Date:   Wed, 3 Mar 2021 15:29:37 +0000
-Message-ID: <49e8725f29ab4ecda6d669e9216bca29@AcuMS.aculab.com>
-References: <20210219201852.3213914-1-jiancai@google.com>
- <20210219230841.875875-1-jiancai@google.com>
- <20210222115816.GA8605@willie-the-truck>
- <CA+SOCLJVGJSn67VU24wPDdsOVeHhGe+KO5ekOCusano=bhn1Mg@mail.gmail.com>
- <20210223100453.GB10254@willie-the-truck>
- <CACRpkdYaSEb8bAztR-s_K17K+Zqusiofwa_dSjz-cwM2+N=57A@mail.gmail.com>
-In-Reply-To: <CACRpkdYaSEb8bAztR-s_K17K+Zqusiofwa_dSjz-cwM2+N=57A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-RnJvbTogTGludXMgV2FsbGVpag0KPiBTZW50OiAwMyBNYXJjaCAyMDIxIDE1OjE5DQo+IA0KPiBP
-biBUdWUsIEZlYiAyMywgMjAyMSBhdCAxMTowNSBBTSBXaWxsIERlYWNvbiA8d2lsbEBrZXJuZWwu
-b3JnPiB3cm90ZToNCj4gPiBPbiBNb24sIEZlYiAyMiwgMjAyMSBhdCAwMTo1MDowNlBNIC0wODAw
-LCBKaWFuIENhaSB3cm90ZToNCj4gPiA+IEkgYW0gbm90IHN1cmUgaWYgdGhlcmUgYXJlIGFueSBw
-bGFucyB0byBwcm90ZWN0IGFzc2VtYmx5IGNvZGUgYW5kIEkNCj4gPiA+IHdpbGwgbGVhdmUgaXQg
-dG8gdGhlIEFybSBmb2xrcyBzaW5jZSB0aGV5IGtub3cgYSB3aG9sZSBsb3QgYmV0dGVyLiBCdXQN
-Cj4gPiA+IGV2ZW4gd2l0aG91dCB0aGF0IHBhcnQsIHdlIHNob3VsZCBzdGlsbCBoYXZlIGJldHRl
-ciBwcm90ZWN0aW9uLA0KPiA+ID4gZXNwZWNpYWxseSB3aGVuIG92ZXJoZWFkIGRvZXMgbm90IGxv
-b2sgdG9vIGJhZDogSSBkaWQgc29tZSBwcmVsaW1pbmFyeQ0KPiA+ID4gZXhwZXJpbWVudHMgb24g
-Q2hyb21lT1MsIGNvZGUgc2l6ZSBvZiB2bWxpbnV4IGluY3JlYXNlZCAzJSwgYW5kIHRoZXJlDQo+
-ID4gPiB3ZXJlIG5vIG5vdGljZWFibGUgY2hhbmdlcyB0byBydW4tdGltZSBwZXJmb3JtYW5jZSBv
-ZiB0aGUgYmVuY2htYXJrcyBJDQo+ID4gPiB1c2VkLg0KPiA+DQo+ID4gSWYgdGhlIG1pdGlnYXRp
-b24gaXMgcmVxdWlyZWQsIEknbSBub3Qgc3VyZSBJIHNlZSBhIGxvdCBvZiBwb2ludCBpbiBvbmx5
-DQo+ID4gZG9pbmcgYSBoYWxmLWJha2VkIGpvYiBvZiBpdC4gSXQgZmVlbHMgYSBiaXQgbGlrZSBh
-IGJveC10aWNraW5nIGV4ZXJjaXNlLA0KPiA+IGluIHdoaWNoIGNhc2UgYW55IG92ZXJoZWFkIGlz
-IHRvbyBtdWNoLg0KPiANCj4gSSB3cm90ZSBzb21lIHN1Z2dlc3Rpb25zIG9uIGZvbGxvdy11cHMg
-aW4gbXkgcmVwbHksIGFuZCBJIGNhbg0KPiBoZWxwIG91dCBkb2luZyBzb21lIG9mIHRoZSBwYXRj
-aGVzLCBJIHRoaW5rLg0KPiANCj4gU2luY2UgQVJNMzIgUkVUIGlzIG1vdiBwYywgPD4NCj4gZ2l0
-IGdyZXAgJ21vdi4qcGMsJyB8IHdjIC1sIGdpdmVzIDkzIHNpdGVzIGluIGFyY2gvYXJtLg0KPiBJ
-IHN1cHBvc2UgdGhlc2UgbmVlZCB0byBjb21lIG91dDoNCj4gDQo+IG1vdiBwYywgbHINCj4gZHNi
-KG5zaCk7DQo+IGlzYigpOw0KDQpXb24ndCB0aGF0IGdvIGhvcnJpYmx5IHdyb25nIGZvciBjb25k
-aXRpb25hbCByZXR1cm5zPw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
-aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
-DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Wed, Mar 3, 2021 at 4:29 PM David Laight <David.Laight@aculab.com> wrote:
+> > On Tue, Feb 23, 2021 at 11:05 AM Will Deacon <will@kernel.org> wrote:
 
+> > I wrote some suggestions on follow-ups in my reply, and I can
+> > help out doing some of the patches, I think.
+> >
+> > Since ARM32 RET is mov pc, <>
+> > git grep 'mov.*pc,' | wc -l gives 93 sites in arch/arm.
+> > I suppose these need to come out:
+> >
+> > mov pc, lr
+> > dsb(nsh);
+> > isb();
+>
+> Won't that go horribly wrong for conditional returns?
+
+It will so I would not insert it after those. It has to be
+on a case-by-base basis, I am not planning any
+search and replace operations.
+
+Yours,
+Linus Walleij
