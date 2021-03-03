@@ -2,121 +2,145 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4094A32C3CE
-	for <lists+linux-security-module@lfdr.de>; Thu,  4 Mar 2021 01:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F8832C8F6
+	for <lists+linux-security-module@lfdr.de>; Thu,  4 Mar 2021 02:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbhCCX7r (ORCPT
+        id S232281AbhCDA7j (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 3 Mar 2021 18:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        Wed, 3 Mar 2021 19:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347434AbhCCPTn (ORCPT
+        with ESMTP id S1352948AbhCDACq (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 3 Mar 2021 10:19:43 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51A9C061763
-        for <linux-security-module@vger.kernel.org>; Wed,  3 Mar 2021 07:18:45 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id v5so37637848lft.13
-        for <linux-security-module@vger.kernel.org>; Wed, 03 Mar 2021 07:18:45 -0800 (PST)
+        Wed, 3 Mar 2021 19:02:46 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4005AC0613DA
+        for <linux-security-module@vger.kernel.org>; Wed,  3 Mar 2021 15:17:46 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id u4so39984581lfs.0
+        for <linux-security-module@vger.kernel.org>; Wed, 03 Mar 2021 15:17:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=c1EgmR4iNgHLIiSmovii//tHLOrgOuYElC0B+L466FE=;
-        b=MeXdy5ELJ8KysVIcMymUJ6XoMIVkBzMk/q9/3VqZ9qXhae+QwDzQD6/d6JAYsLZiKg
-         Im7F7MfmsqLrmn+e/eoDa/PWyQqlsSlWGOfe4WYjNTxocdmJA3Z9RDkOQVlReDlMdiIH
-         zrDGzNjqqgB/3ihvoEhRlQMEV+3Q87FFBsqe2IuvBH95gSru/Lq/aexiN6BjshpEHRl2
-         7P0qttdG7VTVNmtPtOR5baaYS1vZp7PAKYPWag4ascvIh4+NgjbGxVCFMckDz0nxvZqv
-         cAbUfMr/ejIBgtC83hLMGHP5TfstRhDcjbRtdyDtRaFqEZ6vAevN2vgRDLDGM4Cifqyd
-         ubYQ==
+        bh=bJioWY2SyxYVyQ6HbJCASiO240osNAH7hbvsbBMN9q8=;
+        b=FoRQIWOrOSWpnQbeeOXEI0flZTsv0PV0p6wcI8b93AXHcM1gZ9aSnR1JoGSQ7lgbr2
+         kqVLxVWd6pXmGnnj6l3QenA5IzsbN0UptJpSd2tLC9BrhNhfIQJZg9nB5Uj2nGB1bY8D
+         eDxdv3YfhpMCGKxTMQbxtC6iSYy0t+VepEzieFcHY/2yYJ2YLCgecFfgiDt0F9Hm0jk9
+         O7MVXDHKDSSsq0dj8J/OQcQNe0x8KFa6yLZ2DYMjQDjsp728TzXjhJkTby2uUZRcUhTv
+         EFhOCncRRxDkD4iVeoGMRenftxA9y/iA12zP7+x7Bgg9/08hogDFwBNfHnJQEFzROPTL
+         41KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=c1EgmR4iNgHLIiSmovii//tHLOrgOuYElC0B+L466FE=;
-        b=PNDiG2Q6I/680XnCQYqCgqSVa4ea3QyaBmH0Thkkm/w2T0dzK83lClj2j1Dc4HDmPt
-         ssWOcdNHyMkCJjs4VMSpu35Cnnm9wIZ0IcVEXvnDSke0BViZs/7I2GP3PRbjK143+tz1
-         KH98c9sB2GJKE8wjxdSwhoecVDJOtXz1boPbqlHS3t/qO+BDUdbe7tZflol9Vg2I8hiZ
-         P2FYR/+i04MvALwH/B1Gq/e6XUqFLY6jpUJkwHZXEXY452Nsbrk996Idb5VcbQ5+1up9
-         SmZjbUOvF2JaKdM1ywtHD1B6z7XolK2Ss3RROZUAG8VQUC9LQd23cv/uAr+W1+77qmhv
-         e9ug==
-X-Gm-Message-State: AOAM532aHdjGkuEAKzeBeqlOpwqAKgnf33aYGqgUcX1kwpLAMaQkBRco
-        Aymo6IrKILuKK4Tw+qpVEJaig6XBrJ1comD+HZT12w==
-X-Google-Smtp-Source: ABdhPJxWs0EKhEU3+cXlcQKVKJwnoA45aO7AE9vyg48ZK4GwVXG4V6ruO9zr58sUevEavcdfJhR6bEvR0hrBBVCLWxw=
-X-Received: by 2002:a19:548:: with SMTP id 69mr13152043lff.465.1614784724064;
- Wed, 03 Mar 2021 07:18:44 -0800 (PST)
+        bh=bJioWY2SyxYVyQ6HbJCASiO240osNAH7hbvsbBMN9q8=;
+        b=Zhr+B2epy7Apjep/hTAwGfL6sGWcSbrbbpVtVaHUPVGRI9lSWHsaM2CRZJBDhZtlRg
+         KHLmXUl9mz9xwXPjryuee0zoKaUIrUM6iTMSIzpXRcB8sgkeyP47EFXxKVfH06RiVK+V
+         6MmUk/1uqnnaG8YvDoRdhlziLXdBYqlpUWuXqfBtxv5VTAIoxtocaTgfxQo+b5tyUtcH
+         769F/vGo8pqSVU3EoB+mMBhU5ZVgjC+Ps9zkKA751cLY2a9gMoYcEisnm9DtnzUr7F27
+         D4flE/nBw5zDmNo4JX6Jr6R6y38LgCpje43JqbKxP1s0uQjlfSXrDCt+0aaaiYVaYQYm
+         s6LA==
+X-Gm-Message-State: AOAM532xDbRIKEgyszfunupMFamadp++UL/cI0p3PJYzkjCTYhB6vzGj
+        8t+J0eLSa/7Jq9SgylvH2+Dwc2n9PNbrM20HOH2Q2g==
+X-Google-Smtp-Source: ABdhPJwSap1Hmdo4W6UsN9k0+5d5TjS6UvplVqmtOBVMz5oOgVSyMr6q/AHiggxT/mVjyVJIN+BjMLUH/Vf8V/n18TQ=
+X-Received: by 2002:a05:6512:10c8:: with SMTP id k8mr587955lfg.299.1614813464307;
+ Wed, 03 Mar 2021 15:17:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20210219201852.3213914-1-jiancai@google.com> <20210219230841.875875-1-jiancai@google.com>
- <20210222115816.GA8605@willie-the-truck> <CA+SOCLJVGJSn67VU24wPDdsOVeHhGe+KO5ekOCusano=bhn1Mg@mail.gmail.com>
- <20210223100453.GB10254@willie-the-truck>
-In-Reply-To: <20210223100453.GB10254@willie-the-truck>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 3 Mar 2021 16:18:32 +0100
-Message-ID: <CACRpkdYaSEb8bAztR-s_K17K+Zqusiofwa_dSjz-cwM2+N=57A@mail.gmail.com>
-Subject: Re: [PATCH v4] ARM: Implement SLS mitigation
-To:     Will Deacon <will@kernel.org>
-Cc:     Jian Cai <jiancai@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Manoj Gupta <manojgupta@google.com>,
-        Luis Lozano <llozano@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Ingo Molnar <mingo@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        David Brazdil <dbrazdil@google.com>,
-        James Morse <james.morse@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
+References: <20210303185807.2160264-1-surenb@google.com>
+In-Reply-To: <20210303185807.2160264-1-surenb@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 3 Mar 2021 15:17:30 -0800
+Message-ID: <CALvZod73Uem8jzP3QQdQ6waXbx80UUOTJQS7WBwnmaCdq++8xw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] mm/madvise: replace ptrace attach requirement for process_madvise
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, jeffv@google.com,
+        Minchan Kim <minchan@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        David Rientjes <rientjes@google.com>, edgararriaga@google.com,
+        Tim Murray <timmurray@google.com>, fweimer@redhat.com,
+        oleg@redhat.com, jmorris@namei.org, Linux MM <linux-mm@kvack.org>,
+        selinux@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org, stable@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Feb 23, 2021 at 11:05 AM Will Deacon <will@kernel.org> wrote:
-> On Mon, Feb 22, 2021 at 01:50:06PM -0800, Jian Cai wrote:
-> > I am not sure if there are any plans to protect assembly code and I
-> > will leave it to the Arm folks since they know a whole lot better. But
-> > even without that part, we should still have better protection,
-> > especially when overhead does not look too bad: I did some preliminary
-> > experiments on ChromeOS, code size of vmlinux increased 3%, and there
-> > were no noticeable changes to run-time performance of the benchmarks I
-> > used.
+On Wed, Mar 3, 2021 at 10:58 AM Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> If the mitigation is required, I'm not sure I see a lot of point in only
-> doing a half-baked job of it. It feels a bit like a box-ticking exercise,
-> in which case any overhead is too much.
+> process_madvise currently requires ptrace attach capability.
+> PTRACE_MODE_ATTACH gives one process complete control over another
+> process. It effectively removes the security boundary between the
+> two processes (in one direction). Granting ptrace attach capability
+> even to a system process is considered dangerous since it creates an
+> attack surface. This severely limits the usage of this API.
+> The operations process_madvise can perform do not affect the correctness
+> of the operation of the target process; they only affect where the data
+> is physically located (and therefore, how fast it can be accessed).
+> What we want is the ability for one process to influence another process
+> in order to optimize performance across the entire system while leaving
+> the security boundary intact.
+> Replace PTRACE_MODE_ATTACH with a combination of PTRACE_MODE_READ
+> and CAP_SYS_NICE. PTRACE_MODE_READ to prevent leaking ASLR metadata
+> and CAP_SYS_NICE for influencing process performance.
+>
+> Cc: stable@vger.kernel.org # 5.10+
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Minchan Kim <minchan@kernel.org>
+> Acked-by: David Rientjes <rientjes@google.com>
+> ---
+> changes in v3
+> - Added Reviewed-by: Kees Cook <keescook@chromium.org>
+> - Created man page for process_madvise per Andrew's request: https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/commit/?id=a144f458bad476a3358e3a45023789cb7bb9f993
+> - cc'ed stable@vger.kernel.org # 5.10+ per Andrew's request
+> - cc'ed linux-security-module@vger.kernel.org per James Morris's request
+>
+>  mm/madvise.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index df692d2e35d4..01fef79ac761 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1198,12 +1198,22 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+>                 goto release_task;
+>         }
+>
+> -       mm = mm_access(task, PTRACE_MODE_ATTACH_FSCREDS);
+> +       /* Require PTRACE_MODE_READ to avoid leaking ASLR metadata. */
+> +       mm = mm_access(task, PTRACE_MODE_READ_FSCREDS);
+>         if (IS_ERR_OR_NULL(mm)) {
+>                 ret = IS_ERR(mm) ? PTR_ERR(mm) : -ESRCH;
+>                 goto release_task;
+>         }
+>
+> +       /*
+> +        * Require CAP_SYS_NICE for influencing process performance. Note that
+> +        * only non-destructive hints are currently supported.
 
-I wrote some suggestions on follow-ups in my reply, and I can
-help out doing some of the patches, I think.
+How is non-destructive defined? Is MADV_DONTNEED non-destructive?
 
-Since ARM32 RET is mov pc, <>
-git grep 'mov.*pc,' | wc -l gives 93 sites in arch/arm.
-I suppose these need to come out:
-
-mov pc, lr
-dsb(nsh);
-isb();
-
-As ARM32 doesn't have sb my idea is to make a macro
-"sb" that resolves to dsb/isb when this is enabled and then
-we could start patching all the assembly users with that as
-well. I need the Kconfig symbol from this patch though.
-
-I also suggest selecting this mitigation as part of
-HARDEN_BRANCH_PREDICTOR, by the token that either
-you want all of them or none of them.
-
-Yours,
-Linus Walleij
+> +        */
+> +       if (!capable(CAP_SYS_NICE)) {
+> +               ret = -EPERM;
+> +               goto release_mm;
+> +       }
+> +
+>         total_len = iov_iter_count(&iter);
+>
+>         while (iov_iter_count(&iter)) {
+> @@ -1218,6 +1228,7 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+>         if (ret == 0)
+>                 ret = total_len - iov_iter_count(&iter);
+>
+> +release_mm:
+>         mmput(mm);
+>  release_task:
+>         put_task_struct(task);
+> --
+> 2.30.1.766.gb4fecdf3b7-goog
+>
