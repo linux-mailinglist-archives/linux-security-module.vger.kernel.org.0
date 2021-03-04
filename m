@@ -2,101 +2,97 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD9132C8FA
-	for <lists+linux-security-module@lfdr.de>; Thu,  4 Mar 2021 02:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F81A32C8F7
+	for <lists+linux-security-module@lfdr.de>; Thu,  4 Mar 2021 02:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234441AbhCDA7l (ORCPT
+        id S232127AbhCDA7p (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 3 Mar 2021 19:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        Wed, 3 Mar 2021 19:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453092AbhCDApc (ORCPT
+        with ESMTP id S1453128AbhCDArs (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 3 Mar 2021 19:45:32 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2305CC061756
-        for <linux-security-module@vger.kernel.org>; Wed,  3 Mar 2021 16:44:52 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id jt13so46049368ejb.0
-        for <linux-security-module@vger.kernel.org>; Wed, 03 Mar 2021 16:44:52 -0800 (PST)
+        Wed, 3 Mar 2021 19:47:48 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4DCC06175F
+        for <linux-security-module@vger.kernel.org>; Wed,  3 Mar 2021 16:47:07 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id mj10so25905320ejb.5
+        for <linux-security-module@vger.kernel.org>; Wed, 03 Mar 2021 16:47:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g2lURl+ATX2YUjr5q4pNGyS+/f3qF3dd8poyz9I0yIQ=;
-        b=Xyfk5/Fcb12V6kDmD7W7v+gn0U2UIIxqZUvsgdHMsg9weJrveD11LiLFqGMLnoZAWY
-         d797V0gSBEPNHGBPm3H/ZWJ5iwWaCboHKbBlrJC5HEG54LhvHpzrbloG7JmQDSjtB5+3
-         1ho7voJZ0VyS6Vai5CSjlx4B23Xn6866mmeta+7073sgM6V++JYt0Wu3zCwHfAs9JFTg
-         dfgzqFT4qD9gtde4ET4GgARvqYmuKCq692BfAzL17C7BSaoH5TNYBEkQnz++yuWfWKl5
-         9Qbo8ohGynx4Kl42iGMw5p5hc38c0bysHCCVqvGarWTEeN/5g1xptbxCKikxkWa6zxHA
-         8Eaw==
+        bh=mq1f8KTtZiYItxqJI2LgJatX0epQhRAFbaIZi+expz0=;
+        b=Oc+SWz8n0ufa9QRdQhnxQIklG0y9oh4rsTE9dlLij8ea41tPx5uxpQJaw88Sfq8u+l
+         OvxCF5/vojxFgl9UzAyv+YY7eOT3ys9T+CDt0ZnW7n0xjDCmukQgzrsCSca5JuuPnOBB
+         DHgTIHYpsmpCDvb5x0uVoI191R/WOFrBBwFNFe4Y/oZX/liilPeDD5ZWZ9BD9tTk7DT2
+         vopxtWv9nCoCnKLpTkaTYy9Wk7LJ6jWx/zpgvW3gAU8NxnTrNVRTl1/pbSmzhfDYaFq9
+         HBYCPSbLi6gBizNJ86dVk/WaoxjL6P5H0LTQziJSRqLu/dOue8cTTDiqFrAkNSl2DYiw
+         rKnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g2lURl+ATX2YUjr5q4pNGyS+/f3qF3dd8poyz9I0yIQ=;
-        b=DrMz0mtCr18rnFUFla+tvq08LH+8m/R+Yjj3Rd6pvyJhbvY4XcTwM/wrWbstfDXd5h
-         MDejvNn6OcfeEsrQuEFcQ8XNqWABHZ4Wil+GU455O3JleKPKEhC+S7P2bki6Q23pfvgU
-         g1z81asParjnQE2z/WOlivkX4ud19eWtuBFMr0WaXDuEp9r38ercpmuP12eQCIu6qwng
-         TBkvisexXHdgFOnxc2EkoWbNG/vZTlvN1Ureg644j5iRNz2rbgNYdZPEWdWtOI/teTmP
-         ebHYf0TzCHQpal0sJOA2mMVrL8LJHdshApEgc+fzmuvY6WpsewNG6/1twDASZ2zPUpFX
-         jmcw==
-X-Gm-Message-State: AOAM533zMcI9gDZgahArWtGbwfuCzHodenjhgKvmEEz6XxSEkkpFJvJE
-        vtxRknorb/wmSGxq4+Y6seaLyuOYKTeM7YMwJdt6
-X-Google-Smtp-Source: ABdhPJwMWPIfRXVxIBCOjcbnyugYHup2arm1/+oo2mo11V8E1LS5uXyCS7vTs7sOAcv3T7QPJc0OjZwXwqq4GYlQLJs=
-X-Received: by 2002:a17:906:a443:: with SMTP id cb3mr1388093ejb.542.1614818690832;
- Wed, 03 Mar 2021 16:44:50 -0800 (PST)
+        bh=mq1f8KTtZiYItxqJI2LgJatX0epQhRAFbaIZi+expz0=;
+        b=D1TW8XN7KyWdustQMgOBJGv/G6da19QBvZKhcgHmcMSx6AS+xT5THu4ntcpjwRlYLF
+         gTibIXso56QQtjhYk094dTb/DPWUsRYmfvz8/qOnJ9jKDlS32s6l4Fr+2amgaXHVEzME
+         TsKw6P4SCPBBiMVQF/J9Ag5dJJwpURN74VySvKM5NXNzCZuoMFz6GFJzSOL95DU8jRez
+         Jr9RYyL/jfT1WgAWpq1AyyDYNOfHIgaCDDCzuS6uf6Re8G3NRaGfNuUiihp0PyQGKb7R
+         v2YHzHR1ysiAYDn4e5TSOsVk9ycw9ouykwYruPrdPQV75paCptA8tQafJ5fEl19hzdGX
+         IKHg==
+X-Gm-Message-State: AOAM531uqZzNBqnuJH/5vxpQ0aWwDQJ97rdfgdqN1qlGWB+gytqtqOFt
+        2Ma2C/+8IPplKFGyTylv+vtE2q9/5MmHRuDDxX9q
+X-Google-Smtp-Source: ABdhPJzFReVQqWcB51YCLgOXcJ77lmnHR8e1TAPj9TL5+P31gZuqxQKpNr0xnGinbrwwT44eCfFHsDbq+b0OdR4h3Fw=
+X-Received: by 2002:a17:906:e116:: with SMTP id gj22mr1386315ejb.398.1614818826560;
+ Wed, 03 Mar 2021 16:47:06 -0800 (PST)
 MIME-Version: 1.0
 References: <161377712068.87807.12246856567527156637.stgit@sifl>
- <161377734508.87807.8537642254664217815.stgit@sifl> <b2f85cf5-a110-68ae-47b6-276dd8062be7@canonical.com>
-In-Reply-To: <b2f85cf5-a110-68ae-47b6-276dd8062be7@canonical.com>
+ <9ea5259b-fd84-e176-c042-c52a1c4fcc27@schaufler-ca.com> <CAHC9VhQBbep2WkD6JkCemtcXFLq7j5=AQeM9vVJ4_gmvi7hPQA@mail.gmail.com>
+ <1ab6d635-53af-6dd9-fc29-482723c80c6a@schaufler-ca.com>
+In-Reply-To: <1ab6d635-53af-6dd9-fc29-482723c80c6a@schaufler-ca.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 3 Mar 2021 19:44:40 -0500
-Message-ID: <CAHC9VhTn33cSX=n7a6kr-5=TKeEx8iRbTY8-2XGxG0YC+GhvaA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] lsm: separate security_task_getsecid() into
- subjective and objective variants
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+Date:   Wed, 3 Mar 2021 19:46:55 -0500
+Message-ID: <CAHC9VhR3=dNpxHXSo7TgJD6bCezgzfS-iT32f-jAZJgzCsNA3w@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] Split security_task_getsecid() into subj and obj variants
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     John Johansen <john.johansen@canonical.com>,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com
+        linux-audit@redhat.com, Mimi Zohar <zohar@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sun, Feb 21, 2021 at 7:51 AM John Johansen
-<john.johansen@canonical.com> wrote:
-> On 2/19/21 3:29 PM, Paul Moore wrote:
-> > Of the three LSMs that implement the security_task_getsecid() LSM
-> > hook, all three LSMs provide the task's objective security
-> > credentials.  This turns out to be unfortunate as most of the hook's
-> > callers seem to expect the task's subjective credentials, although
-> > a small handful of callers do correctly expect the objective
-> > credentials.
-> >
-> > This patch is the first step towards fixing the problem: it splits
-> > the existing security_task_getsecid() hook into two variants, one
-> > for the subjective creds, one for the objective creds.
-> >
-> >   void security_task_getsecid_subj(struct task_struct *p,
-> >                                  u32 *secid);
-> >   void security_task_getsecid_obj(struct task_struct *p,
-> >                                 u32 *secid);
-> >
-> > While this patch does fix all of the callers to use the correct
-> > variant, in order to keep this patch focused on the callers and to
-> > ease review, the LSMs continue to use the same implementation for
-> > both hooks.  The net effect is that this patch should not change
-> > the behavior of the kernel in any way, it will be up to the latter
-> > LSM specific patches in this series to change the hook
-> > implementations and return the correct credentials.
-> >
-> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+On Mon, Feb 22, 2021 at 6:59 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> On 2/20/2021 6:41 AM, Paul Moore wrote:
+> > On Fri, Feb 19, 2021 at 8:49 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> >> On 2/19/2021 3:28 PM, Paul Moore wrote:
+> >>> As discussed briefly on the list (lore link below), we are a little
+> >>> sloppy when it comes to using task credentials, mixing both the
+> >>> subjective and object credentials.  This patch set attempts to fix
+> >>> this by replacing security_task_getsecid() with two new hooks that
+> >>> return either the subjective (_subj) or objective (_obj) credentials.
+> >>>
+> >>> https://lore.kernel.org/linux-security-module/806848326.0ifERbkFSE@x2/T/
+> >>>
+> >>> Casey and John, I made a quick pass through the Smack and AppArmor
+> >>> code in an effort to try and do the right thing, but I will admit
+> >>> that I haven't tested those changes, just the SELinux code.  I
+> >>> would really appreciate your help in reviewing those changes.  If
+> >>> you find it easier, feel free to wholesale replace my Smack/AppArmor
+> >>> patch with one of your own.
+> >> A quick test pass didn't show up anything obviously
+> >> amiss with the Smack changes. I have will do some more
+> >> through inspection, but they look fine so far.
+> > Thanks for testing it out and giving it a look.  Beyond the Smack
+> > specific changes, I'm also interested in making sure all the hook
+> > callers are correct; I believe I made the correct substitutions, but a
+> > second (or third (or fourth ...)) set of eyes is never a bad idea.
 >
-> So far this looks good. I want to take another stab at it and give
-> it some testing
+> I'm still not seeing anything that looks wrong. I'd suggest that Mimi
+> have a look at the IMA bits.
 
-Checking in as I know you said you needed to fix/release the AppArmor
-patch in this series ... is this patch still looking okay to you?  If
-so, can I get an ACK at least on this patch?
+Assuming you are still good with these changes Casey, any chance I can
+get an ACK on the LSM and Smack patches?
 
 -- 
 paul moore
