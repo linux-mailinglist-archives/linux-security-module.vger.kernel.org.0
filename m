@@ -2,104 +2,130 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC0632E557
-	for <lists+linux-security-module@lfdr.de>; Fri,  5 Mar 2021 10:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF2132EE6E
+	for <lists+linux-security-module@lfdr.de>; Fri,  5 Mar 2021 16:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbhCEJxi (ORCPT
+        id S230405AbhCEPUi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 5 Mar 2021 04:53:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43412 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229611AbhCEJxG (ORCPT
+        Fri, 5 Mar 2021 10:20:38 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2623 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230109AbhCEPUE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 5 Mar 2021 04:53:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F75A64FF0;
-        Fri,  5 Mar 2021 09:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614937985;
-        bh=HISQ8FVK1FEQR2uPQffgIVaQdAag9fQWCstT9nYNRR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ROvsjQ369W4Mti4eFRR1Wc1FOLTKKFKDEmwei6CFzaQJ6Qz9XT2wuHNZm6UJ42/Wq
-         mswZpqhpLsCDqTifukAomcs2qL1z4XIMdjcBZZM7Wjbm48ywRY6plez2k5ozqzGN6W
-         D3VlwYCsFcbXFXY6lSs6p/h6jvgiebLp+/iyQEFkvAKLED4VKfA9g5+J8lNWwOiO1V
-         X4eqtyYUhRI5GSk8s/r3nXkcn58FKOIvEYxyu1IxhWaEviTywIQHxMLqCRsNsNJUCc
-         2hEA6hswMuFWi6efEqyoq0eVdEwptFb7eTf8f7HTG1XX63xQuAE4gu7x2Rv4uYt3QD
-         17AhWxXZziwpg==
-Date:   Fri, 5 Mar 2021 09:52:56 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Jian Cai <jiancai@google.com>
-Cc:     ndesaulniers@google.com, manojgupta@google.com, llozano@google.com,
-        clang-built-linux@googlegroups.com,
-        Nathan Chancellor <nathan@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        David Brazdil <dbrazdil@google.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v6] ARM: Implement SLS mitigation
-Message-ID: <20210305095256.GA22536@willie-the-truck>
-References: <20210223023542.2287529-1-jiancai@google.com>
- <20210305005327.405365-1-jiancai@google.com>
+        Fri, 5 Mar 2021 10:20:04 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4DsWV73FxLz67vx9;
+        Fri,  5 Mar 2021 23:14:07 +0800 (CST)
+Received: from fraphisprd00473.huawei.com (7.182.8.141) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2106.2; Fri, 5 Mar 2021 16:19:54 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@google.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v4 00/11] evm: Improve usability of portable signatures
+Date:   Fri, 5 Mar 2021 16:19:12 +0100
+Message-ID: <20210305151923.29039-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210305005327.405365-1-jiancai@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [7.182.8.141]
+X-ClientProxiedBy: lhreml707-chm.china.huawei.com (10.201.108.56) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Mar 04, 2021 at 04:53:18PM -0800, Jian Cai wrote:
-> This patch adds CONFIG_HARDEN_SLS_ALL that can be used to turn on
-> -mharden-sls=all, which mitigates the straight-line speculation
-> vulnerability, speculative execution of the instruction following some
-> unconditional jumps. Notice -mharden-sls= has other options as below,
-> and this config turns on the strongest option.
-> 
-> all: enable all mitigations against Straight Line Speculation that are implemented.
-> none: disable all mitigations against Straight Line Speculation.
-> retbr: enable the mitigation against Straight Line Speculation for RET and BR instructions.
-> blr: enable the mitigation against Straight Line Speculation for BLR instructions.
-> 
-> Links:
-> https://reviews.llvm.org/D93221
-> https://reviews.llvm.org/D81404
-> https://developer.arm.com/support/arm-security-updates/speculative-processor-vulnerability/downloads/straight-line-speculation
-> https://developer.arm.com/support/arm-security-updates/speculative-processor-vulnerability/frequently-asked-questions#SLS2
-> 
-> Suggested-by: Manoj Gupta <manojgupta@google.com>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: David Laight <David.Laight@aculab.com>
-> Suggested-by: Will Deacon <will@kernel.org>
+EVM portable signatures are particularly suitable for the protection of
+metadata of immutable files where metadata is signed by a software vendor.
+They can be used for example in conjunction with an IMA policy that
+appraises only executed and memory mapped files.
 
-I'm still reasonably opposed to this patch, so please don't add my
-"Suggested-by" here as, if I were to suggest anything, it would be not
-to apply this patch :)
+However, some usability issues are still unsolved, especially when EVM is
+used without loading an HMAC key. This patch set attempts to fix the open
+issues.
 
-I still don't see why SLS is worth a compiler mitigation which will affect
-all CPUs that run the kernel binary, but Spectre-v1 is not. In other words,
-the big thing missing from this is a justification as to why SLS is a
-problem worth working around for general C code.
+Patch 1 allows EVM to be used without loading an HMAC key. Patch 2 avoids
+appraisal verification of public keys (they are already verified by the key
+subsystem).
 
-Will
+Patches 3-5 allow metadata verification to be turned off when no HMAC key
+is loaded and to use this mode in a safe way (by ensuring that IMA
+revalidates metadata when there is a change).
+
+Patches 6-8 make portable signatures more usable if metadata verification
+is not turned off, by ignoring the INTEGRITY_NOLABEL and INTEGRITY_NOXATTS
+errors when possible, by accepting any metadata modification until
+signature verification succeeds (useful when xattrs/attrs are copied
+sequentially from a source) and by allowing operations that don't change
+metadata.
+
+Patch 9 makes it possible to use portable signatures when the IMA policy
+requires file signatures and patch 10 shows portable signatures in the
+measurement list when the ima-sig template is selected.
+
+Lastly, patch 11 avoids undesired removal of security.ima when a file is
+not selected by the IMA policy.
+
+Changelog
+
+v3:
+- introduce evm_ignore_error_safe() to correctly ignore INTEGRITY_NOLABEL
+  and INTEGRITY_NOXATTRS errors
+- fix an error in evm_xattr_acl_change()
+- replace #ifndef with !IS_ENABLED() in integrity_load_keys()
+- reintroduce ima_inode_removexattr()
+- adapt patches to apply on top of the idmapped mounts patch set
+
+v2:
+- replace EVM_RESET_STATUS flag with evm_status_revalidate()
+- introduce IMA post hooks ima_inode_post_setxattr() and
+  ima_inode_post_removexattr()
+- remove ima_inode_removexattr()
+- ignore INTEGRITY_NOLABEL error if the HMAC key is not loaded
+
+v1:
+- introduce EVM_RESET_STATUS integrity flag instead of clearing IMA flag
+- introduce new template field evmsig
+- add description of evm_xattr_acl_change() and evm_xattr_change()
+
+Roberto Sassu (11):
+  evm: Execute evm_inode_init_security() only when an HMAC key is loaded
+  evm: Load EVM key in ima_load_x509() to avoid appraisal
+  evm: Refuse EVM_ALLOW_METADATA_WRITES only if an HMAC key is loaded
+  ima: Move ima_reset_appraise_flags() call to post hooks
+  evm: Introduce evm_status_revalidate()
+  evm: Ignore INTEGRITY_NOLABEL/INTEGRITY_NOXATTRS if conditions are
+    safe
+  evm: Allow xattr/attr operations for portable signatures
+  evm: Allow setxattr() and setattr() for unmodified metadata
+  ima: Allow imasig requirement to be satisfied by EVM portable
+    signatures
+  ima: Introduce template field evmsig and write to field sig as
+    fallback
+  ima: Don't remove security.ima if file must not be appraised
+
+ Documentation/ABI/testing/evm             |   5 +-
+ Documentation/security/IMA-templates.rst  |   4 +-
+ fs/xattr.c                                |   2 +
+ include/linux/evm.h                       |   6 +
+ include/linux/ima.h                       |  18 +++
+ include/linux/integrity.h                 |   1 +
+ security/integrity/evm/evm_main.c         | 188 ++++++++++++++++++++--
+ security/integrity/evm/evm_secfs.c        |   4 +-
+ security/integrity/iint.c                 |   4 +-
+ security/integrity/ima/ima_appraise.c     |  55 +++++--
+ security/integrity/ima/ima_init.c         |   4 +
+ security/integrity/ima/ima_template.c     |   2 +
+ security/integrity/ima/ima_template_lib.c |  33 +++-
+ security/integrity/ima/ima_template_lib.h |   2 +
+ security/security.c                       |   1 +
+ 15 files changed, 297 insertions(+), 32 deletions(-)
+
+-- 
+2.26.2
+
