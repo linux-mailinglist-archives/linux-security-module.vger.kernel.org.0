@@ -2,126 +2,84 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DE33326A9
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Mar 2021 14:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649343328F3
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Mar 2021 15:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbhCINV3 (ORCPT
+        id S230325AbhCIOql (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 9 Mar 2021 08:21:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:21902 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231359AbhCINVX (ORCPT
+        Tue, 9 Mar 2021 09:46:41 -0500
+Received: from mailomta13-sa.btinternet.com ([213.120.69.19]:57856 "EHLO
+        sa-prd-fep-041.btinternet.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231596AbhCIOqO (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 9 Mar 2021 08:21:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615296082;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CEm+z0J80FwRzKm4ZgJ4wMa9yHtW6K/S9JzBKuRxp+8=;
-        b=FLIkSqTQ1oAFfkOWT1+WmqhFciDTjVUs87Us1sJISuphoUvpgZa8+6Qc/pRroQdWESym6E
-        Y2ev7W+8Mm0pxzODVGUzxLfy9FL/VQaH47OzwbfMMAsv7LRaXhmXoKITvWRFPBDiTM4Etk
-        33zth3HZLjJTx5GXsx9S7ubTyC2znQY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-135-hbYGuUPQOrCAwoBqYriWnA-1; Tue, 09 Mar 2021 08:21:18 -0500
-X-MC-Unique: hbYGuUPQOrCAwoBqYriWnA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C8959801503;
-        Tue,  9 Mar 2021 13:21:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-118-152.rdu2.redhat.com [10.10.118.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CEAA10016F9;
-        Tue,  9 Mar 2021 13:21:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 4/4] integrity: Load mokx variables into the blacklist
- keyring
-From:   David Howells <dhowells@redhat.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        dhowells@redhat.com, Jarkko Sakkinen <jarkko@kernel.org>,
-        =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 09 Mar 2021 13:21:14 +0000
-Message-ID: <161529607422.163428.13530426573612578854.stgit@warthog.procyon.org.uk>
-In-Reply-To: <161529604216.163428.4905283330048991183.stgit@warthog.procyon.org.uk>
-References: <161529604216.163428.4905283330048991183.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        Tue, 9 Mar 2021 09:46:14 -0500
+Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
+          by sa-prd-fep-040.btinternet.com with ESMTP
+          id <20210309144002.DMPA32153.sa-prd-fep-040.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
+          Tue, 9 Mar 2021 14:40:02 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1615300802; 
+        bh=n2nmFWy/2P5LgAC5TNi1QDq/XzLB5HbajAyu+dTZSdM=;
+        h=From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version;
+        b=Nz6bePhWX7oWhRKhW5fih4RqHdynQixWNBnsWxop7LjgbIEnoLBCpnsbUKwIXepppsxW/60P9f0pjRsC5rmLqcp8umsDCEMNeygx31BqukWwVBrHk7uWqP3o2WyjOQxmorxGxGZq7UY805fyf6Wq4b6QQ1sNjOR1Eqq79hoPBkgrxKulHSfUzV6NTxFvJGjV21A2RenaDVNG8zW3MrGpKqCpYrFFI2+pHB2Qvx7n7mmOaVn7EoqhchhvUUTcfw8331TACxZssBHjgHCeJ6aHt0jue1SpplCBTux9iPy1jvTi0/rP4FE0aNB/XGsX6EjqCxll0qijGwqJ0OzyrQht9Q==
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=richard_c_haines@btinternet.com
+X-SNCR-Rigid: 6038718301A65373
+X-Originating-IP: [86.133.207.84]
+X-OWM-Source-IP: 86.133.207.84 (GB)
+X-OWM-Env-Sender: richard_c_haines@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduledrudduiedgieejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeftihgthhgrrhguucfjrghinhgvshcuoehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmqeenucggtffrrghtthgvrhhnpeelteffgeevveejheevhfetgfeuveduteetuddtffdvjeekieetgeehveefjedtfeenucfkphepkeeirddufeefrddvtdejrdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddufeefrddvtdejrdekgedpmhgrihhlfhhrohhmpeeorhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomheqpdhrtghpthhtohepoegtrghsvgihsehstghhrghufhhlvghrqdgtrgdrtghomheqpdhrtghpthhtohepoegtohhrsggvtheslhifnhdrnhgvtheqpdhrtghpthhtohepoehjmhhorhhrihhssehnrghmvghirdhorhhgqedprhgtphhtthhopeeolhhinhhugidqughotgesvhhgvghrrdhkvghrnhgvlhdrohhrgheqpdhrtghpthhtohepoehlihhnuhigqdhsvggtuhhrihhthidqmhhoughulhgvsehvghgvrhdrkhgvrhhnvghl
+        rdhorhhgqedprhgtphhtthhopeeophgruhhlsehprghulhdqmhhoohhrvgdrtghomheqpdhrtghpthhtohepoehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmqecuqfftvefrvfeprhhftgekvddvnehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhrtghpthhtohepoehsvghrghgvsehhrghllhihnhdrtghomheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-SNCR-hdrdom: btinternet.com
+Received: from localhost.localdomain (86.133.207.84) by sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as richard_c_haines@btinternet.com)
+        id 6038718301A65373; Tue, 9 Mar 2021 14:40:02 +0000
+From:   Richard Haines <richard_c_haines@btinternet.com>
+To:     linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, casey@schaufler-ca.com,
+        Richard Haines <richard_c_haines@btinternet.com>
+Subject: [RFC PATCH 0/3] LSM Documentation - Render lsm_hooks.h for kernel_docs
+Date:   Tue,  9 Mar 2021 14:39:50 +0000
+Message-Id: <20210309143953.142341-1-richard_c_haines@btinternet.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Eric Snowberg <eric.snowberg@oracle.com>
+This patch series updates the LSM hook text defined in the comments
+section of inlcude/linux/lsm_hooks.h. This enables the hook functions to
+be rendered in kernel_docs html or pdf format.
 
-During boot the Secure Boot Forbidden Signature Database, dbx,
-is loaded into the blacklist keyring.  Systems booted with shim
-have an equivalent Forbidden Signature Database called mokx.
-Currently mokx is only used by shim and grub, the contents are
-ignored by the kernel.
+Note that no text has been changed in lsm_hooks.h, only formatting
+to render the text.
 
-Add the ability to load mokx into the blacklist keyring during boot.
+To get the correct rendering some lines have exceeded checkpatch limits and
+therefore has a moan. The function statements seem to need being a
+continuous line. The others can be split, but decided not to.
+Any better ideas ??
 
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-cc: keyrings@vger.kernel.org
-Link: https://lore.kernel.org/r/20210122181054.32635-5-eric.snowberg@oracle.com/ # v5
-Link: https://lore.kernel.org/r/c33c8e3839a41e9654f41cc92c7231104931b1d7.camel@HansenPartnership.com/
-Link: https://lore.kernel.org/r/161428674320.677100.12637282414018170743.stgit@warthog.procyon.org.uk/
-Link: https://lore.kernel.org/r/161433313205.902181.2502803393898221637.stgit@warthog.procyon.org.uk/ # v2
----
+The hook functions render in HTML ok, however in PDF format the only issue
+is that the long function definitions do not wrap and therefore truncated.
+Check the 'int sb_mount(const char *dev_name' entry in:
+Documentation/output/pdf/security.pdf
 
- security/integrity/platform_certs/load_uefi.c |   20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+For reference two hooks have been marked as deprecated: sb_copy_data() and
+sb_parse_opts_str()
 
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
-index ee4b4c666854..f290f78c3f30 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -132,8 +132,9 @@ static int __init load_moklist_certs(void)
- static int __init load_uefi_certs(void)
- {
- 	efi_guid_t secure_var = EFI_IMAGE_SECURITY_DATABASE_GUID;
--	void *db = NULL, *dbx = NULL;
--	unsigned long dbsize = 0, dbxsize = 0;
-+	efi_guid_t mok_var = EFI_SHIM_LOCK_GUID;
-+	void *db = NULL, *dbx = NULL, *mokx = NULL;
-+	unsigned long dbsize = 0, dbxsize = 0, mokxsize = 0;
- 	efi_status_t status;
- 	int rc = 0;
- 
-@@ -175,6 +176,21 @@ static int __init load_uefi_certs(void)
- 		kfree(dbx);
- 	}
- 
-+	mokx = get_cert_list(L"MokListXRT", &mok_var, &mokxsize, &status);
-+	if (!mokx) {
-+		if (status == EFI_NOT_FOUND)
-+			pr_debug("mokx variable wasn't found\n");
-+		else
-+			pr_info("Couldn't get mokx list\n");
-+	} else {
-+		rc = parse_efi_signature_list("UEFI:MokListXRT",
-+					      mokx, mokxsize,
-+					      get_handler_for_dbx);
-+		if (rc)
-+			pr_err("Couldn't parse mokx signatures %d\n", rc);
-+		kfree(mokx);
-+	}
-+
- 	/* Load the MokListRT certs */
- 	rc = load_moklist_certs();
- 
+Tested using 'make pdfdocs' and 'make htmldocs'
 
+Richard Haines (3):
+  Documentation/security: Update LSM security hook text
+  include/linux: Update LSM hook text part1
+  include/linux: Update LSM hook text part2
+
+ Documentation/security/lsm-development.rst |    5 +-
+ include/linux/lsm_hooks.h                  | 2365 +++++++++++---------
+ 2 files changed, 1364 insertions(+), 1006 deletions(-)
+
+-- 
+2.29.2
 
