@@ -2,72 +2,100 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34293332F43
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Mar 2021 20:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D7E333249
+	for <lists+linux-security-module@lfdr.de>; Wed, 10 Mar 2021 01:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbhCITq5 (ORCPT
+        id S230320AbhCJAXu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 9 Mar 2021 14:46:57 -0500
-Received: from mga04.intel.com ([192.55.52.120]:27368 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231161AbhCITqr (ORCPT
+        Tue, 9 Mar 2021 19:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230183AbhCJAXe (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 9 Mar 2021 14:46:47 -0500
-IronPort-SDR: My+JZ5CeGu8Om2lbp7pbUom4/BJncPt6OBMIhS8wo+S07HZwePKL7nzGi6aldOvuLYde2T6ZcA
- 22Ht76FDk4Dg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9917"; a="185929818"
-X-IronPort-AV: E=Sophos;i="5.81,236,1610438400"; 
-   d="scan'208";a="185929818"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2021 11:46:42 -0800
-IronPort-SDR: AxQyp0CSpeKmjgegg1rRi7DDWn6V4RWA8fjoj0nsPvsFR5cfR1AJbzJTiTqRDuVHhAVOvBQYfZ
- 3uKC2BXCQ8qg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,236,1610438400"; 
-   d="scan'208";a="588558665"
-Received: from lkp-server01.sh.intel.com (HELO 3e992a48ca98) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Mar 2021 11:46:39 -0800
-Received: from kbuild by 3e992a48ca98 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lJiJT-0001n3-4t; Tue, 09 Mar 2021 19:46:39 +0000
-Date:   Wed, 10 Mar 2021 03:46:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com
-Subject: [RFC PATCH] LSM: audit_sig_lsm can be static
-Message-ID: <20210309194632.GA104254@1cfea093ef28>
-References: <20210309144243.12519-13-casey@schaufler-ca.com>
+        Tue, 9 Mar 2021 19:23:34 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086D7C06174A
+        for <linux-security-module@vger.kernel.org>; Tue,  9 Mar 2021 16:23:34 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id lr13so33395841ejb.8
+        for <linux-security-module@vger.kernel.org>; Tue, 09 Mar 2021 16:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mGJKH5Nan57Lb0mYe8qLU+a35AfEmCmHaoAdvSVrNjs=;
+        b=lrLi1E0+RNryuYxTa0WH5+lVNkr+E1o7dG9oLEXBhHjnUOdzCZ/ebBWiSsnNk3E/cS
+         sz9tNopTLdknwV6DnuHhoDx1hYhTmDiGF3po1G5zP1Em8nwa7HOub1hipaON5H4GWsHf
+         6qfisZlkjZqEo59L7w6QAVUqgQHIDSPASetMfHhs7V2Ib47vCDgcnvMw+TLF4wi/dxmR
+         OGLHTWS0R7I4D5UUVps+g8BXZj9tLt9jxgm1LKNaMAdWzZvU6KQlWWk7cKKBsHhFNM21
+         fx84u/dnbQTrdOCezEGQoqJ9Nd64FI4esnNKsu0PWzEg2MXXc1CHwqqTtqzS8RDFsPFP
+         F5AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mGJKH5Nan57Lb0mYe8qLU+a35AfEmCmHaoAdvSVrNjs=;
+        b=TzpSO+rmbkTencLQd16dP20I7MUdy5uGOT2EM1aawZq9qTFu+9CSnwA+EOPdcomAVX
+         jG4disQWj/Q7769RLx/7c1L7fh+axVbFGt3ZmTq6vAoRA50EYbaaoqSe7OR4+4b+5GMO
+         uAhy57lazOGfApFtZTew4+ehs1UagxE1XDCh7W6atYRhj52ZtehhR8qzDWuT8/ns02/3
+         sVGXRWIPT+rEnjhoYNPtG5ISFn28MYLv05m4tpvqKcFwI3G/gIMlvZd3v01Lq9m7jllz
+         a62ueHdzAE7kmNPSBBMKzqE7eVGQ3aldGO8O/jXyYSIyp5+wEm3OIAURFcndSpNYXBJS
+         uG2A==
+X-Gm-Message-State: AOAM530xnrsVInBOye14NH/OW0prMs3+34ppvxsDdUScbKtkhmVJFm9R
+        xJa1Q0mwTrfmNBAztEWtaw7QMw5LMGffpIr+51gtExs3h9i4
+X-Google-Smtp-Source: ABdhPJwewkchC/561Qkcxt5+GUOEDDdtdYmovXavaPjjsS4wklRjuMtlYLZeVhTPRiH1C9bajE5N7jzr553wewMP674=
+X-Received: by 2002:a17:906:2314:: with SMTP id l20mr717555eja.178.1615335812584;
+ Tue, 09 Mar 2021 16:23:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210309144243.12519-13-casey@schaufler-ca.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <161377712068.87807.12246856567527156637.stgit@sifl>
+ <161377734508.87807.8537642254664217815.stgit@sifl> <20210308192529.GY2015948@madcap2.tricolour.ca>
+In-Reply-To: <20210308192529.GY2015948@madcap2.tricolour.ca>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 9 Mar 2021 19:23:21 -0500
+Message-ID: <CAHC9VhQYhH+jJzSx-A8Lm8wnRwZGpUedY8ByEdOh63nGnmJkJw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/4] lsm: separate security_task_getsecid() into
+ subjective and objective variants
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-audit@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Mon, Mar 8, 2021 at 2:25 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> On 2021-02-19 18:29, Paul Moore wrote:
+> > Of the three LSMs that implement the security_task_getsecid() LSM
+> > hook, all three LSMs provide the task's objective security
+> > credentials.  This turns out to be unfortunate as most of the hook's
+> > callers seem to expect the task's subjective credentials, although
+> > a small handful of callers do correctly expect the objective
+> > credentials.
+> >
+> > This patch is the first step towards fixing the problem: it splits
+> > the existing security_task_getsecid() hook into two variants, one
+> > for the subjective creds, one for the objective creds.
+> >
+> >   void security_task_getsecid_subj(struct task_struct *p,
+> >                                  u32 *secid);
+> >   void security_task_getsecid_obj(struct task_struct *p,
+> >                                 u32 *secid);
+> >
+> > While this patch does fix all of the callers to use the correct
+> > variant, in order to keep this patch focused on the callers and to
+> > ease review, the LSMs continue to use the same implementation for
+> > both hooks.  The net effect is that this patch should not change
+> > the behavior of the kernel in any way, it will be up to the latter
+> > LSM specific patches in this series to change the hook
+> > implementations and return the correct credentials.
+> >
+> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+>
+> Audit: Acked-by: Richard Guy Briggs <rgb@redhat.com>
+> Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
- audit.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks Richard, I added your review tag to the LSM, SELinux, and Smack patches.
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index c061331046956..c32df242a3726 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -125,7 +125,7 @@ static u32	audit_backlog_wait_time = AUDIT_BACKLOG_WAIT_TIME;
- /* The identity of the user shutting down the audit system. */
- static kuid_t		audit_sig_uid = INVALID_UID;
- static pid_t		audit_sig_pid = -1;
--struct lsmblob		audit_sig_lsm;
-+static struct lsmblob		audit_sig_lsm;
- 
- /* Records can be lost in several ways:
-    0) [suppressed in audit_alloc]
+-- 
+paul moore
+www.paul-moore.com
