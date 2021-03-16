@@ -2,205 +2,157 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCC533DA15
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Mar 2021 18:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCB833DB09
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Mar 2021 18:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237145AbhCPRCV (ORCPT
+        id S229559AbhCPRct (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 16 Mar 2021 13:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237252AbhCPRBo (ORCPT
+        Tue, 16 Mar 2021 13:32:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48550 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238794AbhCPRcc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 16 Mar 2021 13:01:44 -0400
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [IPv6:2001:1600:3:17::190f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48122C06175F
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Mar 2021 10:01:43 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F0KM94sN1zMqKRj;
-        Tue, 16 Mar 2021 18:01:41 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4F0KM9254Gzlh8TH;
-        Tue, 16 Mar 2021 18:01:41 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        James Morris <jmorris@namei.org>,
-        Serge Hallyn <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christoph Hellwig <hch@lst.de>,
-        David Howells <dhowells@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        kernel-hardening@lists.openwall.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v4 1/1] fs: Allow no_new_privs tasks to call chroot(2)
-Date:   Tue, 16 Mar 2021 18:01:35 +0100
-Message-Id: <20210316170135.226381-2-mic@digikod.net>
+        Tue, 16 Mar 2021 13:32:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615915951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5AId5vG2TVOeo8m549ZwO+E0JsBnovD7rLmlFTc7A5s=;
+        b=Y23PPJ703Tw8r6zHod5MO65J9hrsGHmYzHvfehJ5YIS8xhl8HrIhVvjWOG/Lxvet0apufa
+        vzf8CzZAegp8t4K7IW4T+l/nZXJLEJBf7HV+/tl6cVMxkCo+lOK8h8oN4p/QzkdW3e3GpA
+        Uo7iI5XFLYXfr8pVwC3BO0IXUDoPb68=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-537-vqM_UV6jOGi4HMLVUdQejQ-1; Tue, 16 Mar 2021 13:32:30 -0400
+X-MC-Unique: vqM_UV6jOGi4HMLVUdQejQ-1
+Received: by mail-ed1-f72.google.com with SMTP id y10so5679155edr.20
+        for <linux-security-module@vger.kernel.org>; Tue, 16 Mar 2021 10:32:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5AId5vG2TVOeo8m549ZwO+E0JsBnovD7rLmlFTc7A5s=;
+        b=oLdtMRjk3qc8BE29m2HM0i8uByfT6U7oRTmWnPMBj63xazCtCHGYXt0D+HlQiDLr+D
+         P7t1LPjRjQ5ShSBkHYKNnafoA3fmafT1GfDctq2654orr2GzjYUaY89WYqF6mGwESsTb
+         UEFOPQJdnamCCpWxS9TShUIIswiuSW7rNNEqQQyYoFUah2nlNWwOxzvr+etfMz6JB8aT
+         mcsbokuARaA2X+Gv5zQY6xVhHeOYsyBqyRY55ebzbhtgVrI/Lk5RTDYIDTmyhZj9FJe0
+         ibWgHIzyK+Q7geJNAYrpnwcRDq6S6kQuGReL1S5b+GLyZYdCZ/MqmXiSYJe9Hj+tBJe/
+         uokA==
+X-Gm-Message-State: AOAM532ft2IkMQVORxPknmivDRoAIrOweoxXuWOr/bHNN3KtCDazY1Yi
+        7Row81n+6kQNsyjO+qGNNtzBJ8/qFjd0VRmnP+TLF9k4VUiLz0JFbYmfjxPn6efZdnFeyv3LZRO
+        ZBoz8t1WPlzF8YHqcHoa8F8KSeyF5zmC0Z/rF
+X-Received: by 2002:a17:906:4107:: with SMTP id j7mr14812376ejk.185.1615915948780;
+        Tue, 16 Mar 2021 10:32:28 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxy72OaCt395g1j1vbcWykD2mZ7XNXhxeIpmOZq445d0B0Zjj/QF98NlqH/ld16pJ+Jex7WpA==
+X-Received: by 2002:a17:906:4107:: with SMTP id j7mr14812361ejk.185.1615915948621;
+        Tue, 16 Mar 2021 10:32:28 -0700 (PDT)
+Received: from omos.redhat.com ([2a02:8308:b105:dd00:277b:6436:24db:9466])
+        by smtp.gmail.com with ESMTPSA id bt14sm11175862edb.92.2021.03.16.10.32.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 10:32:28 -0700 (PDT)
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+To:     "Darrick J . Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Subject: [PATCH] xfs: use has_capability_noaudit() instead of capable() where appropriate
+Date:   Tue, 16 Mar 2021 18:32:26 +0100
+Message-Id: <20210316173226.2220046-1-omosnace@redhat.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210316170135.226381-1-mic@digikod.net>
-References: <20210316170135.226381-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+In cases when a negative result of a capability check doesn't lead to an
+immediate, user-visible error, only a subtle difference in behavior, it
+is better to use has_capability_noaudit(current, ...), so that LSMs
+(e.g. SELinux) don't generate a denial record in the audit log each time
+the capability status is queried. This patch should cover all such cases
+in fs/xfs/.
 
-Being able to easily change root directories enables to ease some
-development workflow and can be used as a tool to strengthen
-unprivileged security sandboxes.  chroot(2) is not an access-control
-mechanism per se, but it can be used to limit the absolute view of the
-filesystem, and then limit ways to access data and kernel interfaces
-(e.g. /proc, /sys, /dev, etc.).
+Note that I kept the capable(CAP_FSETID) checks, since these will only
+be executed if the user explicitly tries to set the SUID/SGID bit, and
+it likely makes sense to log such attempts even if the syscall doesn't
+fail and just ignores the bits.
 
-Users may not wish to expose namespace complexity to potentially
-malicious processes, or limit their use because of limited resources.
-The chroot feature is much more simple (and limited) than the mount
-namespace, but can still be useful.  As for containers, users of
-chroot(2) should take care of file descriptors or data accessible by
-other means (e.g. current working directory, leaked FDs, passed FDs,
-devices, mount points, etc.).  There is a lot of literature that discuss
-the limitations of chroot, and users of this feature should be aware of
-the multiple ways to bypass it.  Using chroot(2) for security purposes
-can make sense if it is combined with other features (e.g. dedicated
-user, seccomp, LSM access-controls, etc.).
-
-One could argue that chroot(2) is useless without a properly populated
-root hierarchy (i.e. without /dev and /proc).  However, there are
-multiple use cases that don't require the chrooting process to create
-file hierarchies with special files nor mount points, e.g.:
-* A process sandboxing itself, once all its libraries are loaded, may
-  not need files other than regular files, or even no file at all.
-* Some pre-populated root hierarchies could be used to chroot into,
-  provided for instance by development environments or tailored
-  distributions.
-* Processes executed in a chroot may not require access to these special
-  files (e.g. with minimal runtimes, or by emulating some special files
-  with a LD_PRELOADed library or seccomp).
-
-Unprivileged chroot is especially interesting for userspace developers
-wishing to harden their applications.  For instance, chroot(2) and Yama
-enable to build a capability-based security (i.e. remove filesystem
-ambient accesses) by calling chroot/chdir with an empty directory and
-accessing data through dedicated file descriptors obtained with
-openat2(2) and RESOLVE_BENEATH/RESOLVE_IN_ROOT/RESOLVE_NO_MAGICLINKS.
-
-Allowing a task to change its own root directory is not a threat to the
-system if we can prevent confused deputy attacks, which could be
-performed through execution of SUID-like binaries.  This can be
-prevented if the calling task sets PR_SET_NO_NEW_PRIVS on itself with
-prctl(2).  To only affect this task, its filesystem information must not
-be shared with other tasks, which can be achieved by not passing
-CLONE_FS to clone(2).  A similar no_new_privs check is already used by
-seccomp to avoid the same kind of security issues.  Furthermore, because
-of its security use and to avoid giving a new way for attackers to get
-out of a chroot (e.g. using /proc/<pid>/root, or chroot/chdir), an
-unprivileged chroot is only allowed if the calling process is not
-already chrooted.  This limitation is the same as for creating user
-namespaces.
-
-This change may not impact systems relying on other permission models
-than POSIX capabilities (e.g. Tomoyo).  Being able to use chroot(2) on
-such systems may require to update their security policies.
-
-Only the chroot system call is relaxed with this no_new_privs check; the
-init_chroot() helper doesn't require such change.
-
-Allowing unprivileged users to use chroot(2) is one of the initial
-objectives of no_new_privs:
-https://www.kernel.org/doc/html/latest/userspace-api/no_new_privs.html
-This patch is a follow-up of a previous one sent by Andy Lutomirski:
-https://lore.kernel.org/lkml/0e2f0f54e19bff53a3739ecfddb4ffa9a6dbde4d.1327858005.git.luto@amacapital.net/
-
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: John Johansen <john.johansen@canonical.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-Cc: Serge Hallyn <serge@hallyn.com>
-Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20210316170135.226381-2-mic@digikod.net
+Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
 ---
+ fs/xfs/xfs_fsmap.c | 4 ++--
+ fs/xfs/xfs_ioctl.c | 5 ++++-
+ fs/xfs/xfs_iops.c  | 6 ++++--
+ fs/xfs/xfs_xattr.c | 2 +-
+ 4 files changed, 11 insertions(+), 6 deletions(-)
 
-Changes since v3:
-* Move the new permission checks to a dedicated helper
-  current_chroot_allowed() to make the code easier to read and align
-  with user_path_at(), path_permission() and security_path_chroot()
-  calls (suggested by Kees Cook).
-* Remove now useless included file.
-* Extend commit description.
-* Rebase on v5.12-rc3 .
-
-Changes since v2:
-* Replace path_is_under() check with current_chrooted() to gain the same
-  protection as create_user_ns() (suggested by Jann Horn). See commit
-  3151527ee007 ("userns:  Don't allow creation if the user is chrooted")
-
-Changes since v1:
-* Replace custom is_path_beneath() with existing path_is_under().
----
- fs/open.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
-
-diff --git a/fs/open.c b/fs/open.c
-index e53af13b5835..da46eb28a3a6 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -532,6 +532,24 @@ SYSCALL_DEFINE1(fchdir, unsigned int, fd)
- 	return error;
- }
+diff --git a/fs/xfs/xfs_fsmap.c b/fs/xfs/xfs_fsmap.c
+index 9ce5e7d5bf8f..14672e7ee535 100644
+--- a/fs/xfs/xfs_fsmap.c
++++ b/fs/xfs/xfs_fsmap.c
+@@ -842,8 +842,8 @@ xfs_getfsmap(
+ 	    !xfs_getfsmap_is_valid_device(mp, &head->fmh_keys[1]))
+ 		return -EINVAL;
  
-+static inline int current_chroot_allowed(void)
-+{
-+	/*
-+	 * Changing the root directory for the calling task (and its future
-+	 * children) requires that this task has CAP_SYS_CHROOT in its
-+	 * namespace, or be running with no_new_privs and not sharing its
-+	 * fs_struct and not escaping its current root (cf. create_user_ns()).
-+	 * As for seccomp, checking no_new_privs avoids scenarios where
-+	 * unprivileged tasks can affect the behavior of privileged children.
-+	 */
-+	if (task_no_new_privs(current) && current->fs->users == 1 &&
-+			!current_chrooted())
-+		return 0;
-+	if (ns_capable(current_user_ns(), CAP_SYS_CHROOT))
-+		return 0;
-+	return -EPERM;
-+}
-+
- SYSCALL_DEFINE1(chroot, const char __user *, filename)
- {
- 	struct path path;
-@@ -546,9 +564,10 @@ SYSCALL_DEFINE1(chroot, const char __user *, filename)
- 	if (error)
- 		goto dput_and_out;
+-	use_rmap = capable(CAP_SYS_ADMIN) &&
+-		   xfs_sb_version_hasrmapbt(&mp->m_sb);
++	use_rmap = xfs_sb_version_hasrmapbt(&mp->m_sb) &&
++		   has_capability_noaudit(current, CAP_SYS_ADMIN);
+ 	head->fmh_entries = 0;
  
--	error = -EPERM;
--	if (!ns_capable(current_user_ns(), CAP_SYS_CHROOT))
-+	error = current_chroot_allowed();
-+	if (error)
- 		goto dput_and_out;
+ 	/* Set up our device handlers. */
+diff --git a/fs/xfs/xfs_ioctl.c b/fs/xfs/xfs_ioctl.c
+index 3fbd98f61ea5..3cfc1a25069c 100644
+--- a/fs/xfs/xfs_ioctl.c
++++ b/fs/xfs/xfs_ioctl.c
+@@ -1470,8 +1470,11 @@ xfs_ioctl_setattr(
+ 
+ 	if (XFS_IS_QUOTA_RUNNING(mp) && XFS_IS_PQUOTA_ON(mp) &&
+ 	    ip->i_d.di_projid != fa->fsx_projid) {
++		int flags = has_capability_noaudit(current, CAP_FOWNER) ?
++			XFS_QMOPT_FORCE_RES : 0;
 +
- 	error = security_path_chroot(&path);
- 	if (error)
- 		goto dput_and_out;
+ 		code = xfs_qm_vop_chown_reserve(tp, ip, NULL, NULL, pdqp,
+-				capable(CAP_FOWNER) ?  XFS_QMOPT_FORCE_RES : 0);
++				flags);
+ 		if (code)	/* out of quota */
+ 			goto error_trans_cancel;
+ 	}
+diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
+index 67c8dc9de8aa..abbb417c4fbd 100644
+--- a/fs/xfs/xfs_iops.c
++++ b/fs/xfs/xfs_iops.c
+@@ -729,10 +729,12 @@ xfs_setattr_nonsize(
+ 		if (XFS_IS_QUOTA_RUNNING(mp) &&
+ 		    ((XFS_IS_UQUOTA_ON(mp) && !uid_eq(iuid, uid)) ||
+ 		     (XFS_IS_GQUOTA_ON(mp) && !gid_eq(igid, gid)))) {
++			int flags = has_capability_noaudit(current, CAP_FOWNER) ?
++				XFS_QMOPT_FORCE_RES : 0;
++
+ 			ASSERT(tp);
+ 			error = xfs_qm_vop_chown_reserve(tp, ip, udqp, gdqp,
+-						NULL, capable(CAP_FOWNER) ?
+-						XFS_QMOPT_FORCE_RES : 0);
++						NULL, flags);
+ 			if (error)	/* out of quota */
+ 				goto out_cancel;
+ 		}
+diff --git a/fs/xfs/xfs_xattr.c b/fs/xfs/xfs_xattr.c
+index bca48b308c02..a99d19c2c11f 100644
+--- a/fs/xfs/xfs_xattr.c
++++ b/fs/xfs/xfs_xattr.c
+@@ -164,7 +164,7 @@ xfs_xattr_put_listent(
+ 		 * Only show root namespace entries if we are actually allowed to
+ 		 * see them.
+ 		 */
+-		if (!capable(CAP_SYS_ADMIN))
++		if (!has_capability_noaudit(current, CAP_SYS_ADMIN))
+ 			return;
+ 
+ 		prefix = XATTR_TRUSTED_PREFIX;
 -- 
 2.30.2
 
