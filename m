@@ -2,582 +2,184 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FA533DF5C
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Mar 2021 21:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DD933E012
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Mar 2021 22:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbhCPUn5 (ORCPT
+        id S232905AbhCPVKY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 16 Mar 2021 16:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbhCPUnR (ORCPT
+        Tue, 16 Mar 2021 17:10:24 -0400
+Received: from mail108.syd.optusnet.com.au ([211.29.132.59]:50587 "EHLO
+        mail108.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232758AbhCPVJR (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 16 Mar 2021 16:43:17 -0400
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fa8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE5BC0613DC
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Mar 2021 13:43:14 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F0QGn14frzMq1dN;
-        Tue, 16 Mar 2021 21:43:13 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4F0QGm4xsfzlh8T9;
-        Tue, 16 Mar 2021 21:43:12 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v30 12/12] landlock: Add user and kernel documentation
-Date:   Tue, 16 Mar 2021 21:42:52 +0100
-Message-Id: <20210316204252.427806-13-mic@digikod.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210316204252.427806-1-mic@digikod.net>
-References: <20210316204252.427806-1-mic@digikod.net>
+        Tue, 16 Mar 2021 17:09:17 -0400
+X-Greylist: delayed 1140 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Mar 2021 17:09:16 EDT
+Received: from dread.disaster.area (pa49-181-239-12.pa.nsw.optusnet.com.au [49.181.239.12])
+        by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id 3A42F1AE113;
+        Wed, 17 Mar 2021 07:50:14 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1lMGdm-003JC5-RA; Wed, 17 Mar 2021 07:50:10 +1100
+Date:   Wed, 17 Mar 2021 07:50:10 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     "Darrick J . Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH] xfs: use has_capability_noaudit() instead of capable()
+ where appropriate
+Message-ID: <20210316205010.GN63242@dread.disaster.area>
+References: <20210316173226.2220046-1-omosnace@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210316173226.2220046-1-omosnace@redhat.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.3 cv=F8MpiZpN c=1 sm=1 tr=0 cx=a_idp_d
+        a=gO82wUwQTSpaJfP49aMSow==:117 a=gO82wUwQTSpaJfP49aMSow==:17
+        a=kj9zAlcOel0A:10 a=dESyimp9J3IA:10 a=20KFwNOVAAAA:8 a=7-415B0cAAAA:8
+        a=2x_0iWG2yc6BsuJkHo8A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+On Tue, Mar 16, 2021 at 06:32:26PM +0100, Ondrej Mosnacek wrote:
+> In cases when a negative result of a capability check doesn't lead to an
+> immediate, user-visible error, only a subtle difference in behavior, it
+> is better to use has_capability_noaudit(current, ...), so that LSMs
+> (e.g. SELinux) don't generate a denial record in the audit log each time
+> the capability status is queried. This patch should cover all such cases
+> in fs/xfs/.
 
-This documentation can be built with the Sphinx framework.
+Is this something new? I only see 4 calls to
+has_capability_noaudit() in 5.12-rc3...
 
-Cc: James Morris <jmorris@namei.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
-Link: https://lore.kernel.org/r/20210316204252.427806-13-mic@digikod.net
----
+Also, has_capability_noaudit() is an awful name. capable_noaudit()
+would actually be self explanatory to anyone who is used to doing
+capability checks via capable(), ns_capable(), ns_capable_noaudit(),
+inode_owner_or_capable(), capable_wrt_inode_uidgid(), etc...
 
-Changes since v28:
-* Reorder subsections by importance in the "Current limitations"
-  section.
+Please fix the name of this function to be consistent with the
+existing capability APIs before propagating it further into the
+kernel.
 
-Changes since v27:
-* Update landlock_restrict_self(2).
-* Update date and copyright.
+> Note that I kept the capable(CAP_FSETID) checks, since these will only
+> be executed if the user explicitly tries to set the SUID/SGID bit, and
+> it likely makes sense to log such attempts even if the syscall doesn't
+> fail and just ignores the bits.
 
-Changes since v25:
-* Explain the behavior of layered access rights.
-* Explain how bind mounts and overayfs mounts are handled by Landlock:
-  merged overlayfs mount points have their own inodes, which makes these
-  hierarchies independent from its upper and lower layers, unlike bind
-  mounts which share the same inodes between the source hierarchy and
-  the mount point hierarchy.
-  New overlayfs mount and bind mount tests check these behaviors.
-* Synchronize with the new syscalls.c file and update syscall names.
-* Fix spelling.
-* Remove Reviewed-by Jann Horn because of the above changes.
+So how on earth are we supposed to maintain this code correctly?
+These are undocumented rules that seemingly are applied to random
+subsystems and to seemingly random capable() calls in those
+subsystems. ANd you don't even document it in this code where there
+are other capable(...) checks that will generate audit records...
 
-Changes since v24:
-* Add Reviewed-by Jann Horn.
-* Add a paragraph to explain how the ruleset layers work.
-* Bump date.
+How are we supposed to know when an audit record should be emitted
+or not by some unknown LSM when we do a capability check?
+Capabilities are already an awful nightmare maze of similar but
+slightly different capability checks, and this doesn't improve the
+situation at all.
 
-Changes since v23:
-* Explain limitations for the maximum number of stacked ruleset, and the
-  memory usage restrictions.
+Please make this easier to get right iand maintain correctly (an
+absolute, non-negotiable requirement for anything security related)
+before you spray yet another poorly documented capability function
+into the wider kernel.
 
-Changes since v22:
-* Fix spelling and remove obsolete sentence (spotted by Jann Horn).
-* Bump date.
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+>  fs/xfs/xfs_fsmap.c | 4 ++--
+>  fs/xfs/xfs_ioctl.c | 5 ++++-
+>  fs/xfs/xfs_iops.c  | 6 ++++--
+>  fs/xfs/xfs_xattr.c | 2 +-
+>  4 files changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/xfs/xfs_fsmap.c b/fs/xfs/xfs_fsmap.c
+> index 9ce5e7d5bf8f..14672e7ee535 100644
+> --- a/fs/xfs/xfs_fsmap.c
+> +++ b/fs/xfs/xfs_fsmap.c
+> @@ -842,8 +842,8 @@ xfs_getfsmap(
+>  	    !xfs_getfsmap_is_valid_device(mp, &head->fmh_keys[1]))
+>  		return -EINVAL;
+>  
+> -	use_rmap = capable(CAP_SYS_ADMIN) &&
+> -		   xfs_sb_version_hasrmapbt(&mp->m_sb);
+> +	use_rmap = xfs_sb_version_hasrmapbt(&mp->m_sb) &&
+> +		   has_capability_noaudit(current, CAP_SYS_ADMIN);
+>  	head->fmh_entries = 0;
+>  
+>  	/* Set up our device handlers. */
+> diff --git a/fs/xfs/xfs_ioctl.c b/fs/xfs/xfs_ioctl.c
+> index 3fbd98f61ea5..3cfc1a25069c 100644
+> --- a/fs/xfs/xfs_ioctl.c
+> +++ b/fs/xfs/xfs_ioctl.c
+> @@ -1470,8 +1470,11 @@ xfs_ioctl_setattr(
+>  
+>  	if (XFS_IS_QUOTA_RUNNING(mp) && XFS_IS_PQUOTA_ON(mp) &&
+>  	    ip->i_d.di_projid != fa->fsx_projid) {
+> +		int flags = has_capability_noaudit(current, CAP_FOWNER) ?
+> +			XFS_QMOPT_FORCE_RES : 0;
+> +
+>  		code = xfs_qm_vop_chown_reserve(tp, ip, NULL, NULL, pdqp,
+> -				capable(CAP_FOWNER) ?  XFS_QMOPT_FORCE_RES : 0);
+> +				flags);
+>  		if (code)	/* out of quota */
+>  			goto error_trans_cancel;
+>  	}
 
-Changes since v21:
-* Move the user space documentation to userspace-api/landlock.rst and
-  the kernel documentation to security/landlock.rst .
-* Add license headers.
-* Add last update dates.
-* Update MAINTAINERS file.
-* Add (back) links to git.kernel.org .
-* Fix spelling.
+You missed a capable() call here - see the call to
+xfs_trans_alloc_ichange( ... capabale(CAP_FOWNER), ...); in
+xfs_ioctl_setattr_get_trans().
 
-Changes since v20:
-* Update examples and documentation with the new syscalls.
+> diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
+> index 67c8dc9de8aa..abbb417c4fbd 100644
+> --- a/fs/xfs/xfs_iops.c
+> +++ b/fs/xfs/xfs_iops.c
+> @@ -729,10 +729,12 @@ xfs_setattr_nonsize(
+>  		if (XFS_IS_QUOTA_RUNNING(mp) &&
+>  		    ((XFS_IS_UQUOTA_ON(mp) && !uid_eq(iuid, uid)) ||
+>  		     (XFS_IS_GQUOTA_ON(mp) && !gid_eq(igid, gid)))) {
+> +			int flags = has_capability_noaudit(current, CAP_FOWNER) ?
+> +				XFS_QMOPT_FORCE_RES : 0;
+> +
+>  			ASSERT(tp);
+>  			error = xfs_qm_vop_chown_reserve(tp, ip, udqp, gdqp,
+> -						NULL, capable(CAP_FOWNER) ?
+> -						XFS_QMOPT_FORCE_RES : 0);
+> +						NULL, flags);
+>  			if (error)	/* out of quota */
+>  				goto out_cancel;
+>  		}
 
-Changes since v19:
-* Update examples and documentation with the new syscalls.
+You missed a capable() call here - see the call to
+xfs_trans_alloc_ichange( ... capabale(CAP_FOWNER), ...); in this
+function.
 
-Changes since v15:
-* Add current limitations.
+I think this demonstrates just how fragile and hard to maintain the
+approach being taken here is.
 
-Changes since v14:
-* Fix spelling (contributed by Randy Dunlap).
-* Extend documentation about inheritance and explain layer levels.
-* Remove the use of now-removed access rights.
-* Use GitHub links.
-* Improve kernel documentation.
-* Add section for tests.
-* Update example.
+> diff --git a/fs/xfs/xfs_xattr.c b/fs/xfs/xfs_xattr.c
+> index bca48b308c02..a99d19c2c11f 100644
+> --- a/fs/xfs/xfs_xattr.c
+> +++ b/fs/xfs/xfs_xattr.c
+> @@ -164,7 +164,7 @@ xfs_xattr_put_listent(
+>  		 * Only show root namespace entries if we are actually allowed to
+>  		 * see them.
+>  		 */
+> -		if (!capable(CAP_SYS_ADMIN))
+> +		if (!has_capability_noaudit(current, CAP_SYS_ADMIN))
+>  			return;
+>  
+>  		prefix = XATTR_TRUSTED_PREFIX;
 
-Changes since v13:
-* Rewrote the documentation according to the major revamp.
+This one should absolutely report a denial - someone has tried to
+read the trusted xattr namespace without permission to do so. That's
+exactly the sort of thing I'd want to see in an audit log - just
+because we just elide the xattrs rather than return an error doesn't
+mean we should not leave an audit trail from the attempted access
+of kernel trusted attributes...
 
-Previous changes:
-https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
----
- Documentation/security/index.rst         |   1 +
- Documentation/security/landlock.rst      |  79 ++++++
- Documentation/userspace-api/index.rst    |   1 +
- Documentation/userspace-api/landlock.rst | 307 +++++++++++++++++++++++
- MAINTAINERS                              |   2 +
- 5 files changed, 390 insertions(+)
- create mode 100644 Documentation/security/landlock.rst
- create mode 100644 Documentation/userspace-api/landlock.rst
+Cheers,
 
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 8129405eb2cc..16335de04e8c 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -16,3 +16,4 @@ Security Documentation
-    siphash
-    tpm/index
-    digsig
-+   landlock
-diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
-new file mode 100644
-index 000000000000..ff145a661abd
---- /dev/null
-+++ b/Documentation/security/landlock.rst
-@@ -0,0 +1,79 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-+.. Copyright © 2019-2020 ANSSI
-+
-+==================================
-+Landlock LSM: kernel documentation
-+==================================
-+
-+:Author: Mickaël Salaün
-+:Date: February 2021
-+
-+Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
-+harden a whole system, this feature should be available to any process,
-+including unprivileged ones.  Because such process may be compromised or
-+backdoored (i.e. untrusted), Landlock's features must be safe to use from the
-+kernel and other processes point of view.  Landlock's interface must therefore
-+expose a minimal attack surface.
-+
-+Landlock is designed to be usable by unprivileged processes while following the
-+system security policy enforced by other access control mechanisms (e.g. DAC,
-+LSM).  Indeed, a Landlock rule shall not interfere with other access-controls
-+enforced on the system, only add more restrictions.
-+
-+Any user can enforce Landlock rulesets on their processes.  They are merged and
-+evaluated according to the inherited ones in a way that ensures that only more
-+constraints can be added.
-+
-+User space documentation can be found here: :doc:`/userspace-api/landlock`.
-+
-+Guiding principles for safe access controls
-+===========================================
-+
-+* A Landlock rule shall be focused on access control on kernel objects instead
-+  of syscall filtering (i.e. syscall arguments), which is the purpose of
-+  seccomp-bpf.
-+* To avoid multiple kinds of side-channel attacks (e.g. leak of security
-+  policies, CPU-based attacks), Landlock rules shall not be able to
-+  programmatically communicate with user space.
-+* Kernel access check shall not slow down access request from unsandboxed
-+  processes.
-+* Computation related to Landlock operations (e.g. enforcing a ruleset) shall
-+  only impact the processes requesting them.
-+
-+Tests
-+=====
-+
-+Userspace tests for backward compatibility, ptrace restrictions and filesystem
-+support can be found here: `tools/testing/selftests/landlock/`_.
-+
-+Kernel structures
-+=================
-+
-+Object
-+------
-+
-+.. kernel-doc:: security/landlock/object.h
-+    :identifiers:
-+
-+Ruleset and domain
-+------------------
-+
-+A domain is a read-only ruleset tied to a set of subjects (i.e. tasks'
-+credentials).  Each time a ruleset is enforced on a task, the current domain is
-+duplicated and the ruleset is imported as a new layer of rules in the new
-+domain.  Indeed, once in a domain, each rule is tied to a layer level.  To
-+grant access to an object, at least one rule of each layer must allow the
-+requested action on the object.  A task can then only transit to a new domain
-+that is the intersection of the constraints from the current domain and those
-+of a ruleset provided by the task.
-+
-+The definition of a subject is implicit for a task sandboxing itself, which
-+makes the reasoning much easier and helps avoid pitfalls.
-+
-+.. kernel-doc:: security/landlock/ruleset.h
-+    :identifiers:
-+
-+.. Links
-+.. _tools/testing/selftests/landlock/:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/landlock/
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index d29b020e5622..744c6491610c 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -18,6 +18,7 @@ place where this information is gathered.
- 
-    no_new_privs
-    seccomp_filter
-+   landlock
-    unshare
-    spec_ctrl
-    accelerators/ocxl
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-new file mode 100644
-index 000000000000..affe8b1d9c6e
---- /dev/null
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -0,0 +1,307 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-+.. Copyright © 2019-2020 ANSSI
-+.. Copyright © 2021 Microsoft Corporation
-+
-+=====================================
-+Landlock: unprivileged access control
-+=====================================
-+
-+:Author: Mickaël Salaün
-+:Date: February 2021
-+
-+The goal of Landlock is to enable to restrict ambient rights (e.g. global
-+filesystem access) for a set of processes.  Because Landlock is a stackable
-+LSM, it makes possible to create safe security sandboxes as new security layers
-+in addition to the existing system-wide access-controls. This kind of sandbox
-+is expected to help mitigate the security impact of bugs or
-+unexpected/malicious behaviors in user space applications.  Landlock empowers
-+any process, including unprivileged ones, to securely restrict themselves.
-+
-+Landlock rules
-+==============
-+
-+A Landlock rule describes an action on an object.  An object is currently a
-+file hierarchy, and the related filesystem actions are defined in `Access
-+rights`_.  A set of rules is aggregated in a ruleset, which can then restrict
-+the thread enforcing it, and its future children.
-+
-+Defining and enforcing a security policy
-+----------------------------------------
-+
-+We first need to create the ruleset that will contain our rules.  For this
-+example, the ruleset will contain rules that only allow read actions, but write
-+actions will be denied.  The ruleset then needs to handle both of these kind of
-+actions.
-+
-+.. code-block:: c
-+
-+    int ruleset_fd;
-+    struct landlock_ruleset_attr ruleset_attr = {
-+        .handled_access_fs =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_WRITE_FILE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_FILE |
-+            LANDLOCK_ACCESS_FS_MAKE_CHAR |
-+            LANDLOCK_ACCESS_FS_MAKE_DIR |
-+            LANDLOCK_ACCESS_FS_MAKE_REG |
-+            LANDLOCK_ACCESS_FS_MAKE_SOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_FIFO |
-+            LANDLOCK_ACCESS_FS_MAKE_BLOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_SYM,
-+    };
-+
-+    ruleset_fd = landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
-+    if (ruleset_fd < 0) {
-+        perror("Failed to create a ruleset");
-+        return 1;
-+    }
-+
-+We can now add a new rule to this ruleset thanks to the returned file
-+descriptor referring to this ruleset.  The rule will only allow reading the
-+file hierarchy ``/usr``.  Without another rule, write actions would then be
-+denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with the
-+``O_PATH`` flag and fill the &struct landlock_path_beneath_attr with this file
-+descriptor.
-+
-+.. code-block:: c
-+
-+    int err;
-+    struct landlock_path_beneath_attr path_beneath = {
-+        .allowed_access =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR,
-+    };
-+
-+    path_beneath.parent_fd = open("/usr", O_PATH | O_CLOEXEC);
-+    if (path_beneath.parent_fd < 0) {
-+        perror("Failed to open file");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
-+                            &path_beneath, 0);
-+    close(path_beneath.parent_fd);
-+    if (err) {
-+        perror("Failed to update ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+We now have a ruleset with one rule allowing read access to ``/usr`` while
-+denying all other handled accesses for the filesystem.  The next step is to
-+restrict the current thread from gaining more privileges (e.g. thanks to a SUID
-+binary).
-+
-+.. code-block:: c
-+
-+    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+        perror("Failed to restrict privileges");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+The current thread is now ready to sandbox itself with the ruleset.
-+
-+.. code-block:: c
-+
-+    if (landlock_restrict_self(ruleset_fd, 0)) {
-+        perror("Failed to enforce ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    close(ruleset_fd);
-+
-+If the `landlock_restrict_self` system call succeeds, the current thread is now
-+restricted and this policy will be enforced on all its subsequently created
-+children as well.  Once a thread is landlocked, there is no way to remove its
-+security policy; only adding more restrictions is allowed.  These threads are
-+now in a new Landlock domain, merge of their parent one (if any) with the new
-+ruleset.
-+
-+Full working code can be found in `samples/landlock/sandboxer.c`_.
-+
-+Layers of file path access rights
-+---------------------------------
-+
-+Each time a thread enforces a ruleset on itself, it updates its Landlock domain
-+with a new layer of policy.  Indeed, this complementary policy is stacked with
-+the potentially other rulesets already restricting this thread.  A sandboxed
-+thread can then safely add more constraints to itself with a new enforced
-+ruleset.
-+
-+One policy layer grants access to a file path if at least one of its rules
-+encountered on the path grants the access.  A sandboxed thread can only access
-+a file path if all its enforced policy layers grant the access as well as all
-+the other system access controls (e.g. filesystem DAC, other LSM policies,
-+etc.).
-+
-+Bind mounts and OverlayFS
-+-------------------------
-+
-+Landlock enables to restrict access to file hierarchies, which means that these
-+access rights can be propagated with bind mounts (cf.
-+:doc:`/filesystems/sharedsubtree`) but not with :doc:`/filesystems/overlayfs`.
-+
-+A bind mount mirrors a source file hierarchy to a destination.  The destination
-+hierarchy is then composed of the exact same files, on which Landlock rules can
-+be tied, either via the source or the destination path.  These rules restrict
-+access when they are encountered on a path, which means that they can restrict
-+access to multiple file hierarchies at the same time, whether these hierarchies
-+are the result of bind mounts or not.
-+
-+An OverlayFS mount point consists of upper and lower layers.  These layers are
-+combined in a merge directory, result of the mount point.  This merge hierarchy
-+may include files from the upper and lower layers, but modifications performed
-+on the merge hierarchy only reflects on the upper layer.  From a Landlock
-+policy point of view, each OverlayFS layers and merge hierarchies are
-+standalone and contains their own set of files and directories, which is
-+different from bind mounts.  A policy restricting an OverlayFS layer will not
-+restrict the resulted merged hierarchy, and vice versa.
-+
-+Inheritance
-+-----------
-+
-+Every new thread resulting from a :manpage:`clone(2)` inherits Landlock domain
-+restrictions from its parent.  This is similar to the seccomp inheritance (cf.
-+:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task's
-+:manpage:`credentials(7)`.  For instance, one process's thread may apply
-+Landlock rules to itself, but they will not be automatically applied to other
-+sibling threads (unlike POSIX thread credential changes, cf.
-+:manpage:`nptl(7)`).
-+
-+When a thread sandboxes itself, we have the guarantee that the related security
-+policy will stay enforced on all this thread's descendants.  This allows
-+creating standalone and modular security policies per application, which will
-+automatically be composed between themselves according to their runtime parent
-+policies.
-+
-+Ptrace restrictions
-+-------------------
-+
-+A sandboxed process has less privileges than a non-sandboxed process and must
-+then be subject to additional restrictions when manipulating another process.
-+To be allowed to use :manpage:`ptrace(2)` and related syscalls on a target
-+process, a sandboxed process should have a subset of the target process rules,
-+which means the tracee must be in a sub-domain of the tracer.
-+
-+Kernel interface
-+================
-+
-+Access rights
-+-------------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: fs_access
-+
-+Creating a new ruleset
-+----------------------
-+
-+.. kernel-doc:: security/landlock/syscalls.c
-+    :identifiers: sys_landlock_create_ruleset
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_ruleset_attr
-+
-+Extending a ruleset
-+-------------------
-+
-+.. kernel-doc:: security/landlock/syscalls.c
-+    :identifiers: sys_landlock_add_rule
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_rule_type landlock_path_beneath_attr
-+
-+Enforcing a ruleset
-+-------------------
-+
-+.. kernel-doc:: security/landlock/syscalls.c
-+    :identifiers: sys_landlock_restrict_self
-+
-+Current limitations
-+===================
-+
-+File renaming and linking
-+-------------------------
-+
-+Because Landlock targets unprivileged access controls, it is needed to properly
-+handle composition of rules.  Such property also implies rules nesting.
-+Properly handling multiple layers of ruleset, each one of them able to restrict
-+access to files, also implies to inherit the ruleset restrictions from a parent
-+to its hierarchy.  Because files are identified and restricted by their
-+hierarchy, moving or linking a file from one directory to another implies to
-+propagate the hierarchy constraints.  To protect against privilege escalations
-+through renaming or linking, and for the sack of simplicity, Landlock currently
-+limits linking and renaming to the same directory.  Future Landlock evolutions
-+will enable more flexibility for renaming and linking, with dedicated ruleset
-+flags.
-+
-+Filesystem layout modification
-+------------------------------
-+
-+As for file renaming and linking, a sandboxed thread cannot modify its
-+filesystem layout, whether via :manpage:`mount(2)` or :manpage:`pivot_root(2)`.
-+However, :manpage:`chroot(2)` calls are not denied.
-+
-+Special filesystems
-+-------------------
-+
-+Access to regular files and directories can be restricted by Landlock,
-+according to the handled accesses of a ruleset.  However, files that do not
-+come from a user-visible filesystem (e.g. pipe, socket), but can still be
-+accessed through /proc/self/fd/, cannot currently be restricted.  Likewise,
-+some special kernel filesystems such as nsfs, which can be accessed through
-+/proc/self/ns/, cannot currently be restricted.  For now, these kind of special
-+paths are then always allowed.  Future Landlock evolutions will enable to
-+restrict such paths with dedicated ruleset flags.
-+
-+Ruleset layers
-+--------------
-+
-+There is a limit of 64 layers of stacked rulesets.  This can be an issue for a
-+task willing to enforce a new ruleset in complement to its 64 inherited
-+rulesets.  Once this limit is reached, sys_landlock_restrict_self() returns
-+E2BIG.  It is then strongly suggested to carefully build rulesets once in the
-+life of a thread, especially for applications able to launch other applications
-+that may also want to sandbox themselves (e.g. shells, container managers,
-+etc.).
-+
-+Memory usage
-+------------
-+
-+Kernel memory allocated to create rulesets is accounted and can be restricted
-+by the :doc:`/admin-guide/cgroup-v1/memory`.
-+
-+Questions and answers
-+=====================
-+
-+What about user space sandbox managers?
-+---------------------------------------
-+
-+Using user space process to enforce restrictions on kernel resources can lead
-+to race conditions or inconsistent evaluations (i.e. `Incorrect mirroring of
-+the OS code and state
-+<https://www.ndss-symposium.org/ndss2003/traps-and-pitfalls-practical-problems-system-call-interposition-based-security-tools/>`_).
-+
-+What about namespaces and containers?
-+-------------------------------------
-+
-+Namespaces can help create sandboxes but they are not designed for
-+access-control and then miss useful features for such use case (e.g. no
-+fine-grained restrictions).  Moreover, their complexity can lead to security
-+issues, especially when untrusted processes can manipulate them (cf.
-+`Controlling access to user namespaces <https://lwn.net/Articles/673597/>`_).
-+
-+Additional documentation
-+========================
-+
-+* :doc:`/security/landlock`
-+* https://landlock.io
-+
-+.. Links
-+.. _samples/landlock/sandboxer.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/samples/landlock/sandboxer.c
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 88175ed1f315..7b0c6de5946a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10003,6 +10003,8 @@ L:	linux-security-module@vger.kernel.org
- S:	Supported
- W:	https://landlock.io
- T:	git https://github.com/landlock-lsm/linux.git
-+F:	Documentation/security/landlock.rst
-+F:	Documentation/userspace-api/landlock.rst
- F:	include/uapi/linux/landlock.h
- F:	samples/landlock/
- F:	security/landlock/
+Dave.
 -- 
-2.30.2
-
+Dave Chinner
+david@fromorbit.com
