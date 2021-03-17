@@ -2,255 +2,206 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E51233F3AE
-	for <lists+linux-security-module@lfdr.de>; Wed, 17 Mar 2021 15:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BD833F4A6
+	for <lists+linux-security-module@lfdr.de>; Wed, 17 Mar 2021 16:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbhCQOtD (ORCPT
+        id S230397AbhCQPxA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 17 Mar 2021 10:49:03 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:38896 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbhCQOs6 (ORCPT
+        Wed, 17 Mar 2021 11:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232359AbhCQPwp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 17 Mar 2021 10:48:58 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12HEmATW046038;
-        Wed, 17 Mar 2021 14:48:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- subject : from : in-reply-to : date : cc : content-transfer-encoding :
- message-id : references : to : mime-version; s=corp-2020-01-29;
- bh=H80uWJ85hSUk/gfcf4mEvpDUHB+7aV5CzVURGW2W5h4=;
- b=B3S6S6rhOHImHDxkr2OFQH5w1rO65c1+dNNeocTp19rUsjcgW4arte6TJ44TgMp7p7iy
- nVhqbx2+OYO81GxEoRx2/VSqDMxQBOhBDaEddEjpFJY2EtjM81EMftWXxmmT9cX8/BjW
- TqTY5x2qgPt46m9opC4qq/GI2RUNLpN+eYDUEFa2/QszHASzsNtIDts+5dy7iJNB60SA
- 1ix2UpBQ8erJAOX2RxGQ+8FRqzrBIVozxr1c3uCnPfiOVkmkfcU+C0Lyp2Nr7JBpIR1o
- YFoQAIvnfPWVMbhZXWPpXVq47p2Xt5hqVYOb71o3IoAnWMaD1kLQ+t6DLLIokGccWdVd MA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 378jwbmdmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Mar 2021 14:48:17 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 12HEQjqG028670;
-        Wed, 17 Mar 2021 14:48:17 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
-        by aserp3030.oracle.com with ESMTP id 3796yuwyra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Mar 2021 14:48:16 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fklojk6W/vHFduyY1ATSWaOPvHWNTQ8+38iL2haV+yGOwz5sZkBFRaCoMw0xxZVu8CCoUH2LkvgrZGxCb38YwYhKYnAMnVKp3Syo9GDgYxS4cKlJAj7bIVasTOhPJnDUeOhx1accmBI3gxcychHRn0vSh9s6EIn7cvLMTSnC62bjmGq2YylG/yqJFike7hku9vgeyFGUhA4bWHoPjzIYEwbsI+qzUYRENTu6cSq25E3l2SFjuSUo0ICcAlvkXsem7NIczkYeNez+pbauY+LR028BEjzr2EXleqqouh9S6Ca7sSZeL8NNjyFr2ZqxvtbEeqP4ttkaDU2wpq+MDrV5XA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H80uWJ85hSUk/gfcf4mEvpDUHB+7aV5CzVURGW2W5h4=;
- b=UubbqyLflUZhXPhj2Xoab+SpH9eWQjPbYU7BtvHWH76wMfFHCRpVdHKG3Pf2BwEN5/Ri8Y246u2RSqFCf+xcphbj4zxNqUDLqr6nmCBdkn+MEcsYmxW2ye76UOCy9HyuiCBQqVRrlRXnwbEAkFgXk0g6c0/IoZ0YmdGuFtXHnJHHw3crjX8aBcWyE5Aad236+yiuwwMA71bHA12BFAGacD7MbPNcTl7R4MP/KNkz+KPZroMevTCfrU66XGzVlVjdQBY+xQSqhEfywsQOXxG2P/c/CfTXRjCZrDhIOiXt1rK7EzX2VAT+l+7rBYHTBIIdTFTm/n1btmg/ybBtKoP5VA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 17 Mar 2021 11:52:45 -0400
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7229C06174A
+        for <linux-security-module@vger.kernel.org>; Wed, 17 Mar 2021 08:52:44 -0700 (PDT)
+Received: by mail-wm1-x349.google.com with SMTP id b20so5191161wmj.3
+        for <linux-security-module@vger.kernel.org>; Wed, 17 Mar 2021 08:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H80uWJ85hSUk/gfcf4mEvpDUHB+7aV5CzVURGW2W5h4=;
- b=sjgaCO4XAS3YkDnzHm3PGIlaeZ0F3zGEqUKgdwQyqKfcf6LQT4OgZpbkjvkm/gCDCJdnc+HKP/HF6xGVSK3OPUbXYIQMeEo63GwKNG/dptXpv6NXO4hd449V6gziUw9iTtKCpQlg+LpyXlrCvCNEKyBxz7RsdmC5mDXH7ieY/JM=
-Authentication-Results: digikod.net; dkim=none (message not signed)
- header.d=none;digikod.net; dmarc=none action=none header.from=oracle.com;
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by CH0PR10MB5180.namprd10.prod.outlook.com (2603:10b6:610:db::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18; Wed, 17 Mar
- 2021 14:48:14 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::95df:950e:af4c:a5df]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::95df:950e:af4c:a5df%9]) with mapi id 15.20.3933.032; Wed, 17 Mar 2021
- 14:48:14 +0000
-Content-Type: text/plain; charset=utf-8
-Subject: Re: [PATCH v7 5/5] certs: Allow root user to append signed hashes to
- the blacklist keyring
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-In-Reply-To: <bd28dd0b-b183-44bd-1928-59e3e1274045@digikod.net>
-Date:   Wed, 17 Mar 2021 08:48:11 -0600
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=eZ0IaSrEKtqBhBUO7kHmyEE/SbgsMqZRhisBRsFJTV8=;
+        b=V7xt+yDM9UTZWAWIMbyOEfzgodCexInv09lKBQeNYN2aA78GKy7WIK53kbxOX9B23W
+         WxTx6CZLYLVA6LkesJXPxaGgrXwZimaNJ4dsPBZ5QceNimMaXO+P00UEq1sMsn3jxo9x
+         wjR98ct7z+GYONYBiOibp11AaMMk/icEbxM5To7snSBEvfrEHtNmRzfQjkj9EDvYrO1i
+         OlMipoxsiKGPvjTRGHJJkvTlSLMvx34p3FU+1gMB0mkED+TO64NxyuoSlaCsmTdUsGiF
+         BUa2vKUl8YWz2AQIBJ9Ildoiw6Mxb0mVxtArWBdkhxNsUAX6urwDA1nEifC7tCCb2FrV
+         hTeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=eZ0IaSrEKtqBhBUO7kHmyEE/SbgsMqZRhisBRsFJTV8=;
+        b=gBfB20o2YacyqhRzs1I9Wez1jEPhEsZ6ZXTyn7PMmsD/kSSjNG6XG8LJu3nva9rXPx
+         5SaO5yg6S1nsaNk/RKgQoDkJFxYMrGoe9afET0GOp8zIiijl50TqSBgt205I/ErCIlC0
+         79AGWd3nemxdDNtrs3fY2GPeh66PczOtxAYF/KJPldP8xJfmSnvi6rudFKJunwDOgb2a
+         dP8sD8NLqda+uY9cWu0GaB7bWluLS6ozW7bC+4mKeQUF0TdD+4rteqWfXTnSDvQyUuUj
+         qiiUK0YJ1rK0z65whqkH3f1DPQpGrJHztQQE8WavJMiwrxDwcPFFXKL6Vrd8yv1+REKu
+         1+Gg==
+X-Gm-Message-State: AOAM532j5ZViZtQ9dQwgCaLb7bQJkFFajpN6daPSEt7idQTN+1x6FMvM
+        P6Sj7f/FV/TkDJ6aJGWrlXNhBwxKZHM+OQ==
+X-Google-Smtp-Source: ABdhPJyAihfXcNLMxfLmDlNAy51x1RvGzXsVoVv2S0gp0kZBj642cmMzEdhuNg+IZnCFBE0gBLfzQVJ5F/cmeA==
+X-Received: from dbrazdil.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:7f9b])
+ (user=dbrazdil job=sendgmr) by 2002:a7b:cb89:: with SMTP id
+ m9mr4267737wmi.27.1615995892631; Wed, 17 Mar 2021 08:44:52 -0700 (PDT)
+Date:   Wed, 17 Mar 2021 15:44:48 +0000
+Message-Id: <20210317154448.1034471-1-dbrazdil@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
+Subject: [PATCH] selinux: vsock: Set SID for socket returned by accept()
+From:   David Brazdil <dbrazdil@google.com>
+To:     selinux@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
         "David S . Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jakub Kicinski <kuba@kernel.org>,
         James Morris <jmorris@namei.org>,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
         "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5111D396-9910-48E9-8D91-6433E719EDB5@oracle.com>
-References: <20210312171232.2681989-1-mic@digikod.net>
- <20210312171232.2681989-6-mic@digikod.net>
- <A4CD568A-6D8E-4043-971B-8E79FFB58709@oracle.com>
- <bd28dd0b-b183-44bd-1928-59e3e1274045@digikod.net>
-To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-X-Mailer: Apple Mail (2.3273)
-X-Originating-IP: [24.52.35.144]
-X-ClientProxiedBy: SJ0PR05CA0154.namprd05.prod.outlook.com
- (2603:10b6:a03:339::9) To CH2PR10MB4150.namprd10.prod.outlook.com
- (2603:10b6:610:ac::13)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [172.16.177.128] (24.52.35.144) by SJ0PR05CA0154.namprd05.prod.outlook.com (2603:10b6:a03:339::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.9 via Frontend Transport; Wed, 17 Mar 2021 14:48:12 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14650e86-42a3-4284-2e66-08d8e953b1a3
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5180:
-X-Microsoft-Antispam-PRVS: <CH0PR10MB5180DA44D5672A4B73A1FB75876A9@CH0PR10MB5180.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jK7P5S7fWMp7OcSMuWheab5wpMBCNr+A6nHJEjoPQBZPyaZHKHz7e2OHqabwgx/Ci6/SK1GDxDn1fJ0iVut4ZAomH0hJVebJtKsDSKGf2YSAlrO81sbjboCOnlNC+npyXMiHRn4TrjDTmH482GsH5domU9CbyP8mWIegQDceYmrVh0JBGKpMA3y8JheAIq0UcZKSmSEUU14a1Is5b2lGAe59ZXnEo0ZESoQ2qyhzI0pSu/JVkaLWZmT6ujx2etustJelgLcoYtPuFHzaY2zq4b4PLg55L7LVeOXCi9M1S7F/DsJZJlhxL9exQebwTxX0HVF/QwTY1N5nZLySMyZB+e51UVWwlVvGKyqnN9FAQWgGPYLSnZoZtjI9UsnvQsXzt7lzoAIhqi6ZVp1sQy3YFQYJzznDM+0Zw12HAZrwmilGGVC+9LoQYnYszRxLTykvecJmwAycKnStCdAf2t1E2D5xJ9EbITP3/PjUGquUf89mnSHmUAyUI3bAz5et/LtB7XGO163xJn+vtOIG93Wk0pEYYVsfMjdAQy5Gd0aFR60dp15ixCSj2uQT14LohZICRg4if23bjmeEOpqQsZoELlZ8C7xz7z05HQxnX4jY/9PUI8SiT7z4tHdr9/Ou6KiElL6ByzPS8jQrtiWIAUwiX78Dxi8FZ6WnW9qYQwokA604FR5F6yVEIKb8x/VCqXHS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(376002)(39860400002)(136003)(346002)(316002)(36756003)(44832011)(5660300002)(16576012)(6916009)(6486002)(52116002)(66946007)(66556008)(66476007)(54906003)(53546011)(2616005)(956004)(8676002)(2906002)(7416002)(66574015)(8936002)(26005)(4326008)(16526019)(186003)(86362001)(33656002)(966005)(83380400001)(478600001)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?eExSbnA4NDdOUG5KN25zUEhQa1NuUXEwUEhTN2ZpSVhrWlo0NVFJZ29TOEo3?=
- =?utf-8?B?b2RENVdkcTZoUHFzRk9HU2F1WU9KUjVVUlgxYWNGN0FacnM4VStya2lhUU1U?=
- =?utf-8?B?Y0cvR0FLSHBhSmNKeGhSS3I3bVg1OENwMVd2Z3lSM2Q2Qmo0eFp3UVIrYlFk?=
- =?utf-8?B?aHdKL21HUFdXNS8xdnBRZUJTOWpBWnVEYk1qVTZjSUVXblM3dmViZnZlMTlt?=
- =?utf-8?B?UzcydHVkRnRwQkU0YXN1ZkVabzRVNFNRZzVDL2FrZWZ1NVVhWkg2Z2tZcno1?=
- =?utf-8?B?c3orU2s0TFdGOFJuaUZMWG1WNWROd2tJLzNWYXZOU3l5NEVqLzRzZjdNLzYw?=
- =?utf-8?B?U0NjWVJKTXdzbVQybk14M0ZlZDZuUTA1cVZXRHBPZlJlZWxjcVV1K0pBY0ZO?=
- =?utf-8?B?eHBLN25YRGMxSGpxYlFvL2g5ZkhaRnNDTWluWnZTSHRGRzRuVURSRFR6a0lT?=
- =?utf-8?B?TzgvVnJEWDh4UjJMVDN5ZEFKSUhlQklmOTl4WS9YODdVSjJacEM3KzQrV1lH?=
- =?utf-8?B?b1o4YUxxWktKZnRrRVBucjJjMndtdG5Wd0xwRjdDZzdqNFNMbXo1UVhDRWtM?=
- =?utf-8?B?aHk0SE1pWmZlNTZXSzhKMmowbVhacVIwVE1RU1FDK0pwcWR2UHdqSGh5Mk1n?=
- =?utf-8?B?K0xYR0RKVEQrUHRzdlk5M1ZxWGpINEFUdnhxVU5EZEx1b3Z1KzNWVVhsN01F?=
- =?utf-8?B?eFFRUlpkb1M1K1lJNDZYSEwyUEludFNhRVdlL0FSUERDMUxpNEhVOThoZWxI?=
- =?utf-8?B?N1VxT2w1dVZxMFgrdTNCbExHdmliWVJmdFN6RnVXelVOYTl3cjIxbWFLcjBV?=
- =?utf-8?B?TWpOaFB1ZU1sRDBHV1AvdjF4ZEJqK1FxTnVXY05zRHFQZlV1Tzg3RWQrZzFy?=
- =?utf-8?B?cnV6cmVpYms0N1BVZFBTYm91alk1dVB5ZGRQcFhvQzZGM2YyMEM2NGJYSkM1?=
- =?utf-8?B?bTlIbFExNkJXMHpTSS95ZnRjd2lFUHM1UHEvaG1TT25PNzNCelE3TjNrWmsr?=
- =?utf-8?B?VmtZSlAvbUMzWkViWjRtWlliS0k3VHdtVnY5SVhJZ3VML1E5WmNYdmloQ1pF?=
- =?utf-8?B?WTNabVRJZjFheERiV2JYRHEzYWhlV1ZaVTFPZ0FLY1BKMGdJYWYveHBQVjdx?=
- =?utf-8?B?T1VLaFZpQ0lKaTNYZlpQSGRCNG9SUjJXRTZrRFJjbmQ4RythRFRqRC9haVJF?=
- =?utf-8?B?ZmFJbHYzRDlFUjFtdmtxcEJ0QllFa1QvYXhGNGdNU1E2dnVlV2MzaE9QL2NX?=
- =?utf-8?B?Tml0Wm9EakdRcS91VkRGeXBMMS9odk9BZVNPbFFNWVMzSHpzWlAxQkp0YktO?=
- =?utf-8?B?dG9BcGtrekdJamt1RklnRDNmQnNOQ01ZczBiQ1dZVWVkYzdhVzJhR08vVS9o?=
- =?utf-8?B?dmdYRndCWUkyLzZpOVl3V0xGT0w5a2RzUGJtU2UwV2luMFNPZ0dxQldPRkRS?=
- =?utf-8?B?Yy9BUHlNUFNlUjVaQmQyUzU0SG5UUXRtZk01eXhvWmlObkxXcmtUMjBhb1B1?=
- =?utf-8?B?aGlkVzY4MHpkWVZSa281eTBBVm1lYTFqSFVmaFMrdlhFNFZ6b1dNQnFQUXBn?=
- =?utf-8?B?S3VLQzBKUkx2cXR6RDFvdllUZzlnMzZRRkVSVWF0aCtIdWlsQ3AvbXc2ZXBD?=
- =?utf-8?B?L0h2YkhwbGJ6akJ5dC9JZkx2ZkRWd0hHMTNRdHpOYzlXdEx1REVxQ1BsaTBy?=
- =?utf-8?B?WFhaTWw4SjFhYVRWWFRSOVhjODhvZkxiUHVmQUp4eENjU3RXZld4cEJha3ZN?=
- =?utf-8?Q?XOYnZU8N7ThSV2N8RcZOHL+6y0LyedbDkKqCefr?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14650e86-42a3-4284-2e66-08d8e953b1a3
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2021 14:48:14.6984
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jeFky3Qd8hAflBaUCAWqwcSua0FPf9SPl8r8Uu6ZYiP7FBHdRXbhdB6tflKnspMHiYPLpY935/BPLmAy42jG6JUl1UL2dXhXiFJiTAQpGCo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5180
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9926 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 spamscore=0
- bulkscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2103170109
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9926 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 adultscore=0 phishscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2103170110
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jeff Vander Stoep <jeffv@google.com>,
+        Alistair Delva <adelva@google.com>,
+        David Brazdil <dbrazdil@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+For AF_VSOCK, accept() currently returns sockets that are unlabelled.
+Other socket families derive the child's SID from the SID of the parent
+and the SID of the incoming packet. This is typically done as the
+connected socket is placed in the queue that accept() removes from.
 
-> On Mar 15, 2021, at 12:01 PM, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
->=20
->=20
-> On 15/03/2021 17:59, Eric Snowberg wrote:
->>=20
->>> On Mar 12, 2021, at 10:12 AM, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net=
-> wrote:
->>>=20
->>> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
->>>=20
->>> Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root use=
-r
->>> to dynamically add new keys to the blacklist keyring.  This enables to
->>> invalidate new certificates, either from being loaded in a keyring, or
->>> from being trusted in a PKCS#7 certificate chain.  This also enables to
->>> add new file hashes to be denied by the integrity infrastructure.
->>>=20
->>> Being able to untrust a certificate which could have normaly been
->>> trusted is a sensitive operation.  This is why adding new hashes to the
->>> blacklist keyring is only allowed when these hashes are signed and
->>> vouched by the builtin trusted keyring.  A blacklist hash is stored as =
-a
->>> key description.  The PKCS#7 signature of this description must be
->>> provided as the key payload.
->>>=20
->>> Marking a certificate as untrusted should be enforced while the system
->>> is running.  It is then forbiden to remove such blacklist keys.
->>>=20
->>> Update blacklist keyring, blacklist key and revoked certificate access =
-rights:
->>> * allows the root user to search for a specific blacklisted hash, which
->>> make sense because the descriptions are already viewable;
->>> * forbids key update (blacklist and asymmetric ones);
->>> * restricts kernel rights on the blacklist keyring to align with the
->>> root user rights.
->>>=20
->>> See help in tools/certs/print-cert-tbs-hash.sh .
->>>=20
->>> Cc: David Howells <dhowells@redhat.com>
->>> Cc: David Woodhouse <dwmw2@infradead.org>
->>> Cc: Eric Snowberg <eric.snowberg@oracle.com>
->>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->>> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
->>> Link: https://lore.kernel.org/r/20210312171232.2681989-6-mic@digikod.ne=
-t
->>=20
->> I tried testing this, it doesn=E2=80=99t work as I would expect. =20
->> Here is my test setup:
->>=20
->> Kernel built with two keys compiled into the builtin_trusted_keys keyrin=
-g
->>=20
->> Generated a tbs cert from one of the keys and signed it with the other k=
-ey
->>=20
->> As root, added the tbs cert hash to the blacklist keyring
->>=20
->> Verified the tbs hash is in the blacklist keyring
->>=20
->> Enabled lockdown to enforce kernel module signature checking
->>=20
->> Signed a kernel module with the key I just blacklisted
->>=20
->> Load the kernel module=20
->>=20
->> I=E2=80=99m seeing the kernel module load, I would expect this to fail, =
-since the=20
->> key is now blacklisted.  Or is this change just supposed to prevent new =
-keys=20
->> from being added in the future?
->=20
-> This is the expected behavior and the way the blacklist keyring is
-> currently used, as explained in the commit message:
-> "This enables to invalidate new certificates, either from being loaded
-> in a keyring, or from being trusted in a PKCS#7 certificate chain."
->=20
-> If you want a (trusted root) key to be untrusted, you need to remove it
-> from the keyring, which is not allowed for the builtin trusted keyring.
+Implement an LSM hook 'vsock_sk_clone' that takes the parent (server)
+and child (connection) struct socks, and assigns the parent SID to the
+child. There is no packet SID in this case.
 
-Is there a non technical reason why this can not be changed to also apply t=
-o
-builtin trusted keys? If a user had the same tbs cert hash in their dbx and=
-=20
-soon mokx, the hash would show up in the .blacklist keyring and invalidate=
-=20
-any key in the builtin_trusted_keys keyring. After adding the same hash wit=
-h=20
-this series, it shows up in the .blacklist_keyring but the value is ignored=
-=20
-by operations using the builtin_trusted_keys keyring.  It just seems=20
-incomplete to me, or did I miss an earlier discussion on this topic?
+Signed-off-by: David Brazdil <dbrazdil@google.com>
+---
+This is my first patch in this part of the kernel so please comment if I
+missed anything, specifically whether there is a packet SID that should
+be mixed into the child SID.
+
+Tested on Android.
+
+ include/linux/lsm_hook_defs.h |  1 +
+ include/linux/lsm_hooks.h     |  7 +++++++
+ include/linux/security.h      |  5 +++++
+ net/vmw_vsock/af_vsock.c      |  1 +
+ security/security.c           |  5 +++++
+ security/selinux/hooks.c      | 10 ++++++++++
+ 6 files changed, 29 insertions(+)
+
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 477a597db013..f35e422b2b5c 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -329,6 +329,7 @@ LSM_HOOK(int, 0, sctp_bind_connect, struct sock *sk, int optname,
+ 	 struct sockaddr *address, int addrlen)
+ LSM_HOOK(void, LSM_RET_VOID, sctp_sk_clone, struct sctp_endpoint *ep,
+ 	 struct sock *sk, struct sock *newsk)
++LSM_HOOK(void, LSM_RET_VOID, vsock_sk_clone, struct sock *sock, struct sock *newsk)
+ #endif /* CONFIG_SECURITY_NETWORK */
+ 
+ #ifdef CONFIG_SECURITY_INFINIBAND
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index fb7f3193753d..1b4e92990401 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -1033,6 +1033,13 @@
+  *	@sk pointer to current sock structure.
+  *	@sk pointer to new sock structure.
+  *
++ * Security hooks for vSockets
++ *
++ * @vsock_sk_clone:
++ *	Clone SID from the server socket to a newly connected child socket.
++ *	@sock contains the sock structure.
++ *	@newsk contains the new sock structure.
++ *
+  * Security hooks for Infiniband
+  *
+  * @ib_pkey_access:
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 8aeebd6646dc..ffac67058355 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -1404,6 +1404,7 @@ int security_sctp_bind_connect(struct sock *sk, int optname,
+ 			       struct sockaddr *address, int addrlen);
+ void security_sctp_sk_clone(struct sctp_endpoint *ep, struct sock *sk,
+ 			    struct sock *newsk);
++void security_vsock_sk_clone(struct sock *sock, struct sock *newsk);
+ 
+ #else	/* CONFIG_SECURITY_NETWORK */
+ static inline int security_unix_stream_connect(struct sock *sock,
+@@ -1623,6 +1624,10 @@ static inline void security_sctp_sk_clone(struct sctp_endpoint *ep,
+ 					  struct sock *newsk)
+ {
+ }
++
++static inline void security_vsock_sk_clone(struct sock *sock, struct sock *newsk)
++{
++}
+ #endif	/* CONFIG_SECURITY_NETWORK */
+ 
+ #ifdef CONFIG_SECURITY_INFINIBAND
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 5546710d8ac1..a9bf3b90cb2f 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -755,6 +755,7 @@ static struct sock *__vsock_create(struct net *net,
+ 		vsk->buffer_size = psk->buffer_size;
+ 		vsk->buffer_min_size = psk->buffer_min_size;
+ 		vsk->buffer_max_size = psk->buffer_max_size;
++		security_vsock_sk_clone(parent, sk);
+ 	} else {
+ 		vsk->trusted = ns_capable_noaudit(&init_user_ns, CAP_NET_ADMIN);
+ 		vsk->owner = get_current_cred();
+diff --git a/security/security.c b/security/security.c
+index 5ac96b16f8fa..050b653405e0 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -2335,6 +2335,11 @@ void security_sctp_sk_clone(struct sctp_endpoint *ep, struct sock *sk,
+ }
+ EXPORT_SYMBOL(security_sctp_sk_clone);
+ 
++void security_vsock_sk_clone(struct sock *sock, struct sock *newsk)
++{
++	call_void_hook(vsock_sk_clone, sock, newsk);
++}
++EXPORT_SYMBOL(security_vsock_sk_clone);
+ #endif	/* CONFIG_SECURITY_NETWORK */
+ 
+ #ifdef CONFIG_SECURITY_INFINIBAND
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index ddd097790d47..7b92d6f2e0fd 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -5616,6 +5616,15 @@ static int selinux_tun_dev_open(void *security)
+ 	return 0;
+ }
+ 
++static void selinux_socket_vsock_sk_clone(struct sock *sock, struct sock *newsk)
++{
++	struct sk_security_struct *sksec_sock = sock->sk_security;
++	struct sk_security_struct *sksec_new = newsk->sk_security;
++
++	/* Always returns 0 when packet SID is SECSID_NULL. */
++	WARN_ON_ONCE(selinux_conn_sid(sksec_sock->sid, SECSID_NULL, &sksec_new->sid));
++}
++
+ #ifdef CONFIG_NETFILTER
+ 
+ static unsigned int selinux_ip_forward(struct sk_buff *skb,
+@@ -7228,6 +7237,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
+ 	LSM_HOOK_INIT(tun_dev_attach_queue, selinux_tun_dev_attach_queue),
+ 	LSM_HOOK_INIT(tun_dev_attach, selinux_tun_dev_attach),
+ 	LSM_HOOK_INIT(tun_dev_open, selinux_tun_dev_open),
++	LSM_HOOK_INIT(vsock_sk_clone, selinux_socket_vsock_sk_clone),
+ #ifdef CONFIG_SECURITY_INFINIBAND
+ 	LSM_HOOK_INIT(ib_pkey_access, selinux_ib_pkey_access),
+ 	LSM_HOOK_INIT(ib_endport_manage_subnet,
+-- 
+2.31.0.rc2.261.g7f71774620-goog
 
