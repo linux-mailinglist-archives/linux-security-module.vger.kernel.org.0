@@ -2,144 +2,147 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA6333F438
-	for <lists+linux-security-module@lfdr.de>; Wed, 17 Mar 2021 16:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B7133F9D7
+	for <lists+linux-security-module@lfdr.de>; Wed, 17 Mar 2021 21:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbhCQPsn (ORCPT
+        id S233357AbhCQURK (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 17 Mar 2021 11:48:43 -0400
-Received: from smtp-bc08.mail.infomaniak.ch ([45.157.188.8]:35555 "EHLO
-        smtp-bc08.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232478AbhCQPsM (ORCPT
+        Wed, 17 Mar 2021 16:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233271AbhCQUQk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 17 Mar 2021 11:48:12 -0400
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F0vcV0fJ8zMpyqM;
-        Wed, 17 Mar 2021 16:45:14 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4F0vcR1dBNzlh8TS;
-        Wed, 17 Mar 2021 16:45:11 +0100 (CET)
-Subject: Re: [PATCH v7 5/5] certs: Allow root user to append signed hashes to
- the blacklist keyring
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20210312171232.2681989-1-mic@digikod.net>
- <20210312171232.2681989-6-mic@digikod.net>
- <A4CD568A-6D8E-4043-971B-8E79FFB58709@oracle.com>
- <bd28dd0b-b183-44bd-1928-59e3e1274045@digikod.net>
- <5111D396-9910-48E9-8D91-6433E719EDB5@oracle.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <1ad221c1-d540-1c7c-27cb-d90a94f46aab@digikod.net>
-Date:   Wed, 17 Mar 2021 16:45:18 +0100
-User-Agent: 
+        Wed, 17 Mar 2021 16:16:40 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A8AC061760
+        for <linux-security-module@vger.kernel.org>; Wed, 17 Mar 2021 13:16:39 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id b9so360770ejc.11
+        for <linux-security-module@vger.kernel.org>; Wed, 17 Mar 2021 13:16:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QEOloMvNgoHGwfPYaOtLBZt1tGk9z+wArHjNJYI6x+w=;
+        b=UlaIdchIMdvi/d1HMbomidYmolKkRGGG72Ut18zENfsjoTbv1aDeRsouser7JUEzqI
+         9lCfZ7qjup3e1vRK9Xu4o1tkavKruWXdMzBIVvgZal+Sm/7RZ+YYYUzbnmauXGdHEywk
+         I19g8U3fx1gLO92it6EU+oyJESyO6EXh+KbyjkioJePZ9Kqq/wWEi8iEyX6Igae83hqB
+         HZtVJ4mDbZNtS8YUXFkoIdVC8+WhOuUJ6SBduQUGWkIOoA49zXdj4peBD3woqzUj/UbP
+         Mspw7LEf+mD+R+O1Nox5CYoU5VBRR5beWYwRY4Mbzdpf8B7qKfNpkuVfYZlEL43hYOrp
+         u6gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QEOloMvNgoHGwfPYaOtLBZt1tGk9z+wArHjNJYI6x+w=;
+        b=FuvUW1Ihqda0kSRKUU2IGWYdMBPRafvM50+tae4+APbABK6+N69sxKy1mf4d/XWXBI
+         pt2RBnjJ7I3ho5pCVLJQ8mZGQzIvNxSmu9ifc0IVJWgeJAO5OnDOWsovbUsD3wkaAkCI
+         QQg3FN7RPlvihgprqoaVE7uPbTUBAsNF+AgvQp/AYSDOx6iJOEIPu1iKNcZIHZTTCMFT
+         6Zf+TlXMPocrK39PovuHIF+pvLtVhY4V3H8BiwADdKbxA8HBK5xB+SoCrUvlpegEagw/
+         i6u/G1g6JlhA0siqn8mX9IQyLnAm4T+Hr6CAHIEhxKL1RBUGp6x1CNVMmmRgSPdvQBKz
+         b7Ew==
+X-Gm-Message-State: AOAM530yLMxBLboI4fEb15WUMj/Q8FZ/KfaFwnH2x3ZQTh0/XPdC9aPY
+        98dEMJZrE2YQGvX1l9LkXETd6xoFb+g/1s8ZWjha
+X-Google-Smtp-Source: ABdhPJwZ5eSoUqpbSZ2mwR7prPozBZU8LbvUD8YDCFfZ7b2tNkNEe3pbPcW7reGnL8Oxx4SZD9jMOJn1Hk6ZwhQ9R2s=
+X-Received: by 2002:a17:906:3ac3:: with SMTP id z3mr37990797ejd.106.1616012197980;
+ Wed, 17 Mar 2021 13:16:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5111D396-9910-48E9-8D91-6433E719EDB5@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210317154448.1034471-1-dbrazdil@google.com>
+In-Reply-To: <20210317154448.1034471-1-dbrazdil@google.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 17 Mar 2021 16:16:27 -0400
+Message-ID: <CAHC9VhT_+i9V9N7NAdCCUgO5xBZpffvVPeh=jK8weZr3WzZ4Bw@mail.gmail.com>
+Subject: Re: [PATCH] selinux: vsock: Set SID for socket returned by accept()
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jeff Vander Stoep <jeffv@google.com>,
+        Alistair Delva <adelva@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Wed, Mar 17, 2021 at 11:44 AM David Brazdil <dbrazdil@google.com> wrote:
+>
+> For AF_VSOCK, accept() currently returns sockets that are unlabelled.
+> Other socket families derive the child's SID from the SID of the parent
+> and the SID of the incoming packet. This is typically done as the
+> connected socket is placed in the queue that accept() removes from.
+>
+> Implement an LSM hook 'vsock_sk_clone' that takes the parent (server)
+> and child (connection) struct socks, and assigns the parent SID to the
+> child. There is no packet SID in this case.
+>
+> Signed-off-by: David Brazdil <dbrazdil@google.com>
+> ---
+> This is my first patch in this part of the kernel so please comment if I
+> missed anything, specifically whether there is a packet SID that should
+> be mixed into the child SID.
+>
+> Tested on Android.
+>
+>  include/linux/lsm_hook_defs.h |  1 +
+>  include/linux/lsm_hooks.h     |  7 +++++++
+>  include/linux/security.h      |  5 +++++
+>  net/vmw_vsock/af_vsock.c      |  1 +
+>  security/security.c           |  5 +++++
+>  security/selinux/hooks.c      | 10 ++++++++++
+>  6 files changed, 29 insertions(+)
 
-On 17/03/2021 15:48, Eric Snowberg wrote:
-> 
->> On Mar 15, 2021, at 12:01 PM, Mickaël Salaün <mic@digikod.net> wrote:
->>
->>
->> On 15/03/2021 17:59, Eric Snowberg wrote:
->>>
->>>> On Mar 12, 2021, at 10:12 AM, Mickaël Salaün <mic@digikod.net> wrote:
->>>>
->>>> From: Mickaël Salaün <mic@linux.microsoft.com>
->>>>
->>>> Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
->>>> to dynamically add new keys to the blacklist keyring.  This enables to
->>>> invalidate new certificates, either from being loaded in a keyring, or
->>>> from being trusted in a PKCS#7 certificate chain.  This also enables to
->>>> add new file hashes to be denied by the integrity infrastructure.
->>>>
->>>> Being able to untrust a certificate which could have normaly been
->>>> trusted is a sensitive operation.  This is why adding new hashes to the
->>>> blacklist keyring is only allowed when these hashes are signed and
->>>> vouched by the builtin trusted keyring.  A blacklist hash is stored as a
->>>> key description.  The PKCS#7 signature of this description must be
->>>> provided as the key payload.
->>>>
->>>> Marking a certificate as untrusted should be enforced while the system
->>>> is running.  It is then forbiden to remove such blacklist keys.
->>>>
->>>> Update blacklist keyring, blacklist key and revoked certificate access rights:
->>>> * allows the root user to search for a specific blacklisted hash, which
->>>> make sense because the descriptions are already viewable;
->>>> * forbids key update (blacklist and asymmetric ones);
->>>> * restricts kernel rights on the blacklist keyring to align with the
->>>> root user rights.
->>>>
->>>> See help in tools/certs/print-cert-tbs-hash.sh .
->>>>
->>>> Cc: David Howells <dhowells@redhat.com>
->>>> Cc: David Woodhouse <dwmw2@infradead.org>
->>>> Cc: Eric Snowberg <eric.snowberg@oracle.com>
->>>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->>>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->>>> Link: https://lore.kernel.org/r/20210312171232.2681989-6-mic@digikod.net
->>>
->>> I tried testing this, it doesn’t work as I would expect.  
->>> Here is my test setup:
->>>
->>> Kernel built with two keys compiled into the builtin_trusted_keys keyring
->>>
->>> Generated a tbs cert from one of the keys and signed it with the other key
->>>
->>> As root, added the tbs cert hash to the blacklist keyring
->>>
->>> Verified the tbs hash is in the blacklist keyring
->>>
->>> Enabled lockdown to enforce kernel module signature checking
->>>
->>> Signed a kernel module with the key I just blacklisted
->>>
->>> Load the kernel module 
->>>
->>> I’m seeing the kernel module load, I would expect this to fail, since the 
->>> key is now blacklisted.  Or is this change just supposed to prevent new keys 
->>> from being added in the future?
->>
->> This is the expected behavior and the way the blacklist keyring is
->> currently used, as explained in the commit message:
->> "This enables to invalidate new certificates, either from being loaded
->> in a keyring, or from being trusted in a PKCS#7 certificate chain."
->>
->> If you want a (trusted root) key to be untrusted, you need to remove it
->> from the keyring, which is not allowed for the builtin trusted keyring.
-> 
-> Is there a non technical reason why this can not be changed to also apply to
-> builtin trusted keys? If a user had the same tbs cert hash in their dbx and 
-> soon mokx, the hash would show up in the .blacklist keyring and invalidate 
-> any key in the builtin_trusted_keys keyring. After adding the same hash with 
-> this series, it shows up in the .blacklist_keyring but the value is ignored 
-> by operations using the builtin_trusted_keys keyring.  It just seems 
-> incomplete to me, or did I miss an earlier discussion on this topic?
+Additional comments below, but I think it would be a good idea for you
+to test your patches on a more traditional Linux distribution as well
+as Android.
 
-The purpose of the blacklist keyring is to block new keys from being
-loaded in the kernel. For builtin and dbx/mokx hashes, they are loaded
-in the blacklist keyring before builtin certificates are loaded in the
-trusted builtin keyring, which can reject them if there is a match. I
-think that being able to load a blocked hash at run time should not
-change the semantic of the blacklist keyring, which is to block the
-loading of certificates. If someone wants to change this semantic, I
-think it should be configurable. Indeed, we should keep in mind the
-temporal dimension and the hierarchy of trust: dbx/mokx -> builtin
-hashes -> run time hashes.
+> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> index 5546710d8ac1..a9bf3b90cb2f 100644
+> --- a/net/vmw_vsock/af_vsock.c
+> +++ b/net/vmw_vsock/af_vsock.c
+> @@ -755,6 +755,7 @@ static struct sock *__vsock_create(struct net *net,
+>                 vsk->buffer_size = psk->buffer_size;
+>                 vsk->buffer_min_size = psk->buffer_min_size;
+>                 vsk->buffer_max_size = psk->buffer_max_size;
+> +               security_vsock_sk_clone(parent, sk);
+
+Did you try calling the existing security_sk_clone() hook here?  I
+would be curious to hear why it doesn't work in this case.
+
+Feel free to educate me on AF_VSOCK, it's entirely possible I'm
+misunderstanding something here :)
+
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index ddd097790d47..7b92d6f2e0fd 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -5616,6 +5616,15 @@ static int selinux_tun_dev_open(void *security)
+>         return 0;
+>  }
+>
+> +static void selinux_socket_vsock_sk_clone(struct sock *sock, struct sock *newsk)
+> +{
+> +       struct sk_security_struct *sksec_sock = sock->sk_security;
+> +       struct sk_security_struct *sksec_new = newsk->sk_security;
+> +
+> +       /* Always returns 0 when packet SID is SECSID_NULL. */
+> +       WARN_ON_ONCE(selinux_conn_sid(sksec_sock->sid, SECSID_NULL, &sksec_new->sid));
+> +}
+
+If you are using selinux_conn_sid() with the second argument always
+SECSID_NULL it probably isn't the best choice; it ends up doing a
+simple "sksec_new->sid = sksec_sock->sid" ... which gets us back to
+this function looking like a reimplementation of
+selinux_sk_clone_security(), minus the peer_sid and sclass
+initializations (which should be important things to have).
+
+I strongly suggest you try making use of the existing
+security_sk_clone() hook in the vsock code, it seems like a better way
+to solve this problem.
+
+-- 
+paul moore
+www.paul-moore.com
