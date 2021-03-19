@@ -2,226 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6298D342607
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Mar 2021 20:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED93E34269F
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Mar 2021 21:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbhCSTUS (ORCPT
+        id S230219AbhCSUE5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 19 Mar 2021 15:20:18 -0400
-Received: from smtp-8fab.mail.infomaniak.ch ([83.166.143.171]:41915 "EHLO
-        smtp-8fab.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230281AbhCSTTk (ORCPT
+        Fri, 19 Mar 2021 16:04:57 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8612 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229912AbhCSUEW (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 19 Mar 2021 15:19:40 -0400
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F2DGy5XxbzMqdQq;
-        Fri, 19 Mar 2021 20:19:38 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4F2DGt2NL9zlh8T2;
-        Fri, 19 Mar 2021 20:19:34 +0100 (CET)
-Subject: Re: [PATCH v30 07/12] landlock: Support filesystem access-control
-To:     Kees Cook <keescook@chromium.org>
-Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Fri, 19 Mar 2021 16:04:22 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12JK3PbM088662;
+        Fri, 19 Mar 2021 16:04:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=bK+JXs12xOWgzRK2d9NUjHcvEDRCeXPN3ChdaM5lhbk=;
+ b=o/xZU6JNTXhqHix71J5GadNCkDfIWrN5yMZOl63XQu27mcYCGyNOWCU63/WUQtOSJFmF
+ MPsZvY6v/POJmM06tK8CwJ4Ib1i3uOPWfKIqPjaNa1sTid1oEVCwc+zW5Mfu62eA3a/5
+ 1xUjWlKkbXGgAWL5raMU3jvzT9emZPg1f6tvspq/ZeLcE71AKJRJtChNvs2FRfNI9MWa
+ Bexgb22V1m2rWNkX8QdogcN8RXaKVHGlPVKY/7qFAAK4Lk915zaBxLPixRLR0anxGqNi
+ H1KrHw4ODV0Bikm/b0UH5DA/SBSLgsN19gK6UpET5xpkv8VChIKPQENg+/mmpKzjXIa5 iQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37c2vqnq3k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Mar 2021 16:04:12 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12JK4BEm091537;
+        Fri, 19 Mar 2021 16:04:11 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37c2vqnq30-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Mar 2021 16:04:11 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12JJwPAh016089;
+        Fri, 19 Mar 2021 20:04:09 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 378n18b6gh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Mar 2021 20:04:09 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12JK47Ex328356
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Mar 2021 20:04:07 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01E645204F;
+        Fri, 19 Mar 2021 20:04:07 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.ibmuc.com (unknown [9.211.66.110])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 6164B52051;
+        Fri, 19 Mar 2021 20:04:04 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     linux-integrity@vger.kernel.org, Test <test@localhost.localdomain>,
+        James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20210316204252.427806-1-mic@digikod.net>
- <20210316204252.427806-8-mic@digikod.net> <202103191148.6E819426D@keescook>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <f705f7e8-3ee3-bae9-c283-174fab41629a@digikod.net>
-Date:   Fri, 19 Mar 2021 20:19:50 +0100
-User-Agent: 
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [RFC PATCH 1/2] ima: don't access a file's integrity status before an IMA policy is loaded
+Date:   Fri, 19 Mar 2021 16:03:57 -0400
+Message-Id: <20210319200358.22816-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <202103191148.6E819426D@keescook>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-19_10:2021-03-19,2021-03-19 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ bulkscore=0 suspectscore=0 spamscore=0 clxscore=1015 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103190135
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+From: Test <test@localhost.localdomain>
 
-On 19/03/2021 19:57, Kees Cook wrote:
-> On Tue, Mar 16, 2021 at 09:42:47PM +0100, Mickaël Salaün wrote:
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> Using Landlock objects and ruleset, it is possible to tag inodes
->> according to a process's domain.  To enable an unprivileged process to
->> express a file hierarchy, it first needs to open a directory (or a file)
->> and pass this file descriptor to the kernel through
->> landlock_add_rule(2).  When checking if a file access request is
->> allowed, we walk from the requested dentry to the real root, following
->> the different mount layers.  The access to each "tagged" inodes are
->> collected according to their rule layer level, and ANDed to create
->> access to the requested file hierarchy.  This makes possible to identify
->> a lot of files without tagging every inodes nor modifying the
->> filesystem, while still following the view and understanding the user
->> has from the filesystem.
->>
->> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
->> keep the same struct inodes for the same inodes whereas these inodes are
->> in use.
->>
->> This commit adds a minimal set of supported filesystem access-control
->> which doesn't enable to restrict all file-related actions.  This is the
->> result of multiple discussions to minimize the code of Landlock to ease
->> review.  Thanks to the Landlock design, extending this access-control
->> without breaking user space will not be a problem.  Moreover, seccomp
->> filters can be used to restrict the use of syscall families which may
->> not be currently handled by Landlock.
->>
->> Cc: Al Viro <viro@zeniv.linux.org.uk>
->> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
->> Cc: James Morris <jmorris@namei.org>
->> Cc: Jann Horn <jannh@google.com>
->> Cc: Jeff Dike <jdike@addtoit.com>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Richard Weinberger <richard@nod.at>
->> Cc: Serge E. Hallyn <serge@hallyn.com>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Link: https://lore.kernel.org/r/20210316204252.427806-8-mic@digikod.net
->> [...]
->> +	spin_lock(&sb->s_inode_list_lock);
->> +	list_for_each_entry(inode, &sb->s_inodes, i_sb_list) {
->> +		struct landlock_object *object;
->> +
->> +		/* Only handles referenced inodes. */
->> +		if (!atomic_read(&inode->i_count))
->> +			continue;
->> +
->> +		/*
->> +		 * Checks I_FREEING and I_WILL_FREE  to protect against a race
->> +		 * condition when release_inode() just called iput(), which
->> +		 * could lead to a NULL dereference of inode->security or a
->> +		 * second call to iput() for the same Landlock object.  Also
->> +		 * checks I_NEW because such inode cannot be tied to an object.
->> +		 */
->> +		spin_lock(&inode->i_lock);
->> +		if (inode->i_state & (I_FREEING | I_WILL_FREE | I_NEW)) {
->> +			spin_unlock(&inode->i_lock);
->> +			continue;
->> +		}
-> 
-> This (and elsewhere here) seems like a lot of inode internals getting
-> exposed. Can any of this be repurposed into helpers? I see this test
-> scattered around the kernel a fair bit:
-> 
-> $ git grep I_FREEING | grep I_WILL_FREE | grep I_NEW | wc -l
-> 9
+Only after an IMA policy is loaded, check, save, or update the cached
+file's integrity status.
 
-Dealing with the filesystem is complex. Some helpers could probably be
-added, but with a series dedicated to the filesystem. I can work on that
-once this series is merged.
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/ima/ima_main.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> 
->> +static inline u32 get_mode_access(const umode_t mode)
->> +{
->> +	switch (mode & S_IFMT) {
->> +	case S_IFLNK:
->> +		return LANDLOCK_ACCESS_FS_MAKE_SYM;
->> +	case 0:
->> +		/* A zero mode translates to S_IFREG. */
->> +	case S_IFREG:
->> +		return LANDLOCK_ACCESS_FS_MAKE_REG;
->> +	case S_IFDIR:
->> +		return LANDLOCK_ACCESS_FS_MAKE_DIR;
->> +	case S_IFCHR:
->> +		return LANDLOCK_ACCESS_FS_MAKE_CHAR;
->> +	case S_IFBLK:
->> +		return LANDLOCK_ACCESS_FS_MAKE_BLOCK;
->> +	case S_IFIFO:
->> +		return LANDLOCK_ACCESS_FS_MAKE_FIFO;
->> +	case S_IFSOCK:
->> +		return LANDLOCK_ACCESS_FS_MAKE_SOCK;
->> +	default:
->> +		WARN_ON_ONCE(1);
->> +		return 0;
->> +	}
-> 
-> I'm assuming this won't be reachable from userspace.
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 9ef748ea829f..9d1196f712e1 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -606,6 +606,9 @@ void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+ 	struct integrity_iint_cache *iint;
+ 	int must_appraise;
+ 
++	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
++		return;
++
+ 	must_appraise = ima_must_appraise(mnt_userns, inode, MAY_ACCESS,
+ 					  FILE_CHECK);
+ 	if (!must_appraise)
+@@ -636,6 +639,9 @@ void ima_post_path_mknod(struct user_namespace *mnt_userns,
+ 	struct inode *inode = dentry->d_inode;
+ 	int must_appraise;
+ 
++	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
++		return;
++
+ 	must_appraise = ima_must_appraise(mnt_userns, inode, MAY_ACCESS,
+ 					  FILE_CHECK);
+ 	if (!must_appraise)
+-- 
+2.27.0
 
-It should not, only a bogus kernel code could.
-
-> 
->> [...]
->> index a5d6ef334991..f8e8e980454c 100644
->> --- a/security/landlock/setup.c
->> +++ b/security/landlock/setup.c
->> @@ -11,17 +11,24 @@
->>  
->>  #include "common.h"
->>  #include "cred.h"
->> +#include "fs.h"
->>  #include "ptrace.h"
->>  #include "setup.h"
->>  
->> +bool landlock_initialized __lsm_ro_after_init = false;
->> +
->>  struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
->>  	.lbs_cred = sizeof(struct landlock_cred_security),
->> +	.lbs_inode = sizeof(struct landlock_inode_security),
->> +	.lbs_superblock = sizeof(struct landlock_superblock_security),
->>  };
->>  
->>  static int __init landlock_init(void)
->>  {
->>  	landlock_add_cred_hooks();
->>  	landlock_add_ptrace_hooks();
->> +	landlock_add_fs_hooks();
->> +	landlock_initialized = true;
-> 
-> I think this landlock_initialized is logically separate from the optional
-> DEFINE_LSM "enabled" variable, but I thought I'd double check. :)
-
-An LSM can be marked as enabled (at boot) but not yet initialized.
-
-> 
-> It seems like it's used here to avoid releasing superblocks before
-> landlock_init() is called? What is the scenario where that happens?
-
-It is a condition for LSM hooks, syscalls and superblock management.
-
-> 
->>  	pr_info("Up and running.\n");
->>  	return 0;
->>  }
->> diff --git a/security/landlock/setup.h b/security/landlock/setup.h
->> index 9fdbf33fcc33..1daffab1ab4b 100644
->> --- a/security/landlock/setup.h
->> +++ b/security/landlock/setup.h
->> @@ -11,6 +11,8 @@
->>  
->>  #include <linux/lsm_hooks.h>
->>  
->> +extern bool landlock_initialized;
->> +
->>  extern struct lsm_blob_sizes landlock_blob_sizes;
->>  
->>  #endif /* _SECURITY_LANDLOCK_SETUP_H */
->> -- 
->> 2.30.2
->>
-> 
-> The locking and inode semantics are pretty complex, but since, again,
-> it's got significant test and syzkaller coverage, it looks good to me.
-> 
-> With the inode helper cleanup:
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
