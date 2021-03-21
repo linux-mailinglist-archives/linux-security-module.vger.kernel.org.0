@@ -2,92 +2,94 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A833430CF
-	for <lists+linux-security-module@lfdr.de>; Sun, 21 Mar 2021 05:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76275343176
+	for <lists+linux-security-module@lfdr.de>; Sun, 21 Mar 2021 06:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhCUEKD (ORCPT
+        id S229903AbhCUFrq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 21 Mar 2021 00:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        Sun, 21 Mar 2021 01:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbhCUEKD (ORCPT
+        with ESMTP id S229894AbhCUFr1 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 21 Mar 2021 00:10:03 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B248C061574;
-        Sat, 20 Mar 2021 21:10:03 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id r14so9945268qtt.7;
-        Sat, 20 Mar 2021 21:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gB06eIi+AHoV6u6Rh5CWH8MdVE/5WSskFA6H59FSDO4=;
-        b=u3yhtY/yum6Lz+WhbrEJnbfw1x5kkUu+VAjI7e+OifspeOYATcX6b0W0AlLJoDnF7L
-         DnryCqzQkPPiAE2400DaC1WRYzyTEMJ8OBN4DX6cOtMPZC/qsntodq4j5s43g+ccMiRL
-         Y4ITEdDAaEScFs5u/qq5AtH9giIy8eK+I4VC4CNVIOXr5DRrlTt1OFvD6IC/qz6G7sIh
-         bIGUbRDE77TIUov30/YwkZmXYE8bun9JM6T2radnBh5CG5eSMhkMH1EHeUKeAhQbwTxj
-         UFT+fCkOlwOEW03P5JCZXeLN6euI7HnoBo1PQR2/JFWqF523pSIM5kx7/qw3ZBgTrqdY
-         cZiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gB06eIi+AHoV6u6Rh5CWH8MdVE/5WSskFA6H59FSDO4=;
-        b=U+3PtT1GzUrRDpzDCyij47rv0oAP+CXssqBch1QNPyE11rTDeTSBRRAJ7RyOG7yfaA
-         i+g4MWuEh9dIR9NbZ7awGXmZdc5KuO8XERRTPRBxoyndPQbvHdKSyfHxQaIDszkK+eFB
-         TYpfMxG4Mvx4iFn4tW/GOBDU4mL36FLQ2tcn5vvaR+77p5M6kzzUvYg5thJkFFQQ4lws
-         2r432bft17a61ygAtlrN2J8gl3lq8MaPAxjL8wYUmOn4gUpzj8jIS24KUjOa/jlCJVlk
-         X+98q7NwXF8Vr9kUFEKs0OZer9zm8C5TcgCsqExvSJpjazahNxs564JEiwJB4zYJGa8Z
-         qG1w==
-X-Gm-Message-State: AOAM530UpIH/ZQ3/PufEyKW+YuT46MACMXgNp3hAX7jdl49dfna4Nxzq
-        1mpGtl75/owagaAuQEupkR5+6WxnLnkFfj4/
-X-Google-Smtp-Source: ABdhPJxLz0Nit66lTrXnzQ5G3P4RCFORCXatYUJT2mmTACAS6nkXrfMn3Z1gcVexiDXxr8n3IKfvjA==
-X-Received: by 2002:ac8:7fc1:: with SMTP id b1mr4907122qtk.363.1616299802311;
-        Sat, 20 Mar 2021 21:10:02 -0700 (PDT)
-Received: from localhost.localdomain ([156.146.54.26])
-        by smtp.gmail.com with ESMTPSA id 18sm8323882qkr.90.2021.03.20.21.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Mar 2021 21:10:01 -0700 (PDT)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     jmorris@namei.org, serge@hallyn.com,
+        Sun, 21 Mar 2021 01:47:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A63C061574;
+        Sat, 20 Mar 2021 22:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+        References:Message-ID:In-Reply-To:Subject:cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2rYY5m91Uk0WpY8ivu01sa3Z6BkSgmUTA+3bdWhH+cA=; b=zqSX3zxAC+R45kNnjXAceCvsNx
+        9JSetYSeBm9xwcD5HoLGW2qR/gxLt/StPV0wCcj28cXsKODtB5h/nVIxGY/MlY+sHzHSPyLL6twcU
+        ledKGXVUAULqTKIy+9MEky7k/RIo3xSQAyjeJKGMJrCtJlymDdspgHuGWduQfVmNdZiMy96PpUlf/
+        uhtXu7kA1ttG3R0s2Rs1G+ncPRG4TfeUhB5qOk+RjmOLr18pxWzyXE7WM7pWPEh85sOSIGuQzCIef
+        5bWSKGFZuBC1ZYf4cuw87RYTlQiM5ZEfBH8MM3EiDLVgmyCee58o+zCqof3xlNocsjV+Q5HgEi1pW
+        vMgRW02g==;
+Received: from rdunlap (helo=localhost)
+        by bombadil.infradead.org with local-esmtp (Exim 4.94 #2 (Red Hat Linux))
+        id 1lNqvj-002BWW-7Q; Sun, 21 Mar 2021 05:47:16 +0000
+Date:   Sat, 20 Mar 2021 22:47:15 -0700 (PDT)
+From:   Randy Dunlap <rdunlap@bombadil.infradead.org>
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
+cc:     jmorris@namei.org, serge@hallyn.com,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Subject: [PATCH V2] device_cgroup: A typo fix
-Date:   Sun, 21 Mar 2021 09:39:41 +0530
-Message-Id: <20210321040941.31973-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH] security: A typo fix
+In-Reply-To: <20210321033845.13735-1-unixbhaskar@gmail.com>
+Message-ID: <1bc3b0b4-667b-399c-9ada-cea689101d5d@bombadil.infradead.org>
+References: <20210321033845.13735-1-unixbhaskar@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+Sender: Randy Dunlap <rdunlap@infradead.org>
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
+X-CRM114-CacheID: sfid-20210320_224715_291244_D5CFB8B1 
+X-CRM114-Status: GOOD (  11.44  )
+X-Spam-Score: -0.0 (/)
+X-Spam-Report: Spam detection software, running on the system "bombadil.infradead.org",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ Content preview:  On Sun, 21 Mar 2021, Bhaskar Chowdhury wrote: > > s/programers/programmers/
+    > > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com> Acked-by: Randy
+    Dunlap <rdunlap@infradead.org> 
+ Content analysis details:   (-0.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -0.0 NO_RELAYS              Informational: message was not relayed via SMTP
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
 
-s/acessed/accessed/
+
+On Sun, 21 Mar 2021, Bhaskar Chowdhury wrote:
+
+>
+> s/programers/programmers/
+>
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- Changes from V1:
-  Getting rid of unwanted comment delimeter addition
-  Subject line missed propper commit subject labeling
-
- security/device_cgroup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index 04375df52fc9..30b3083276df 100644
---- a/security/device_cgroup.c
-+++ b/security/device_cgroup.c
-@@ -409,7 +409,7 @@ static bool verify_new_ex(struct dev_cgroup *dev_cgroup,
- 		} else {
- 			/*
- 			 * new exception in the child will add more devices
--			 * that can be acessed, so it can't match any of
-+			 * that can be accessed, so it can't match any of
- 			 * parent's exceptions, even slightly
- 			 */
- 			match = match_exception_partial(&dev_cgroup->exceptions,
---
-2.20.1
-
+> ---
+> security/lsm_audit.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+> index 82ce14933513..ddcf572105be 100644
+> --- a/security/lsm_audit.c
+> +++ b/security/lsm_audit.c
+> @@ -212,7 +212,7 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+> 	char comm[sizeof(current->comm)];
+>
+> 	/*
+> -	 * To keep stack sizes in check force programers to notice if they
+> +	 * To keep stack sizes in check force programmers to notice if they
+> 	 * start making this union too large!  See struct lsm_network_audit
+> 	 * as an example of how to deal with large data.
+> 	 */
+> --
+> 2.20.1
+>
+>
