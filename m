@@ -2,177 +2,128 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE89344975
-	for <lists+linux-security-module@lfdr.de>; Mon, 22 Mar 2021 16:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA43A344A37
+	for <lists+linux-security-module@lfdr.de>; Mon, 22 Mar 2021 17:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbhCVPnL (ORCPT
+        id S231551AbhCVQD2 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 22 Mar 2021 11:43:11 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39466 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230340AbhCVPmq (ORCPT
+        Mon, 22 Mar 2021 12:03:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51622 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231493AbhCVQDB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 22 Mar 2021 11:42:46 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12MFXJkO087703;
-        Mon, 22 Mar 2021 11:42:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Be/8jzfNAsAOvRtIz1Gjl8IbLBAyHccy2qh9qtGmq6Y=;
- b=HJtNAlJxQ4hPgwpJYlupyaszhvX8L1z0opXunLxgeRxaEETsVBgQ5bVrrghmb0JxTFWv
- L3xr5tMhADnTsUo55SbBzlT+vN4NV0NMhHq6uPj9bFW8fdpVlw4KJwyVdA8GJf620jwj
- +73Vmly/kDMHlJJbBVDC5DnsyIUde8JX1O5Z+Ndt8IN8+KO+gcO/p8DR0bO+C9tVQxyb
- XHmEXV6ta2PujUVNye2tqwrYcZvY3cMDNqKp/N3ikPf0IfbMxt7RW2tf8LFvW9BdMZJT
- wEKRA3dNKtyfJJCSsqpZL2X63SzAoDzezfyo1jg3AhNRkug61jZnWzIV5NxNvlOzvkBz NA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37eb1pha7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Mar 2021 11:42:36 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12MFXqiO089234;
-        Mon, 22 Mar 2021 11:42:35 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37eb1pha6v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Mar 2021 11:42:35 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12MFdDU0015798;
-        Mon, 22 Mar 2021 15:42:34 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03fra.de.ibm.com with ESMTP id 37d9bps9sn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Mar 2021 15:42:33 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12MFgV4w11272578
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Mar 2021 15:42:31 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A3C1F4C046;
-        Mon, 22 Mar 2021 15:42:31 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 65B034C044;
-        Mon, 22 Mar 2021 15:42:29 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.ibmuc.com (unknown [9.211.152.56])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Mar 2021 15:42:29 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 2/2] integrity: double check iint_cache was initialized
-Date:   Mon, 22 Mar 2021 11:42:07 -0400
-Message-Id: <20210322154207.6802-2-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210322154207.6802-1-zohar@linux.ibm.com>
-References: <20210322154207.6802-1-zohar@linux.ibm.com>
-MIME-Version: 1.0
+        Mon, 22 Mar 2021 12:03:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B49F619A1;
+        Mon, 22 Mar 2021 16:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616428980;
+        bh=443r2a53XZrLPy3VFDNzKFCONnuuJaVZhGXWFTRxMGo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wm1CETPpBfKZZ3lkNCemLWeIZGtbFVmw4nKK+xzlHh6SjshNPJfKJvKmWNXvf1K/F
+         5o2Ww58tt6oERHDBipAS4BwOz2CJOvMh/uBNklODZ0dsfVzZt5cj7OrnLB7U+iYnI+
+         V9LYQbKfb8Z/fsl+P+r2cUIk2R08rZtGx280ke6EJyn8vt+7YkwV0naEM1o/sQwiUN
+         Si9atqBgkFPNOL0NiRMLIEOjWWQ3UF2GIm92tB+iawDYiaDCLVZNub5gpWn3V4pP25
+         Ov3hZNHbzywOnT474a9kxX7y+Z8vSF7APRLbZu9IopXbelGoOeiLfQvjhYZz099ogD
+         8vEYHTLGBXuSg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-kernel@vger.kernel.org, Martin Sebor <msebor@gcc.gnu.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        Ning Sun <ning.sun@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Simon Kelley <simon@thekelleys.org.uk>,
+        James Smart <james.smart@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Anders Larsen <al@alarsen.net>, Tejun Heo <tj@kernel.org>,
+        Serge Hallyn <serge@hallyn.com>,
+        Imre Deak <imre.deak@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        tboot-devel@lists.sourceforge.net, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 00/11] treewide: address gcc-11 -Wstringop-overread warnings
+Date:   Mon, 22 Mar 2021 17:02:38 +0100
+Message-Id: <20210322160253.4032422-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-22_07:2021-03-22,2021-03-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=834 lowpriorityscore=0 clxscore=1015 priorityscore=1501
- phishscore=0 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103220111
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The kernel may be built with multiple LSMs, but only a subset may be
-enabled on the boot command line by specifying "lsm=".  Not including
-"integrity" on the ordered LSM list may result in a NULL deref.
+From: Arnd Bergmann <arnd@arndb.de>
 
-As reported by Dmitry Vyukov:
-in qemu:
-qemu-system-x86_64       -enable-kvm     -machine q35,nvdimm -cpu
-max,migratable=off -smp 4       -m 4G,slots=4,maxmem=16G        -hda
-wheezy.img      -kernel arch/x86/boot/bzImage   -nographic -vga std
- -soundhw all     -usb -usbdevice tablet  -bt hci -bt device:keyboard
-   -net user,host=10.0.2.10,hostfwd=tcp::10022-:22 -net
-nic,model=virtio-net-pci   -object
-memory-backend-file,id=pmem1,share=off,mem-path=/dev/zero,size=64M
-  -device nvdimm,id=nvdimm1,memdev=pmem1  -append "console=ttyS0
-root=/dev/sda earlyprintk=serial rodata=n oops=panic panic_on_warn=1
-panic=86400 lsm=smack numa=fake=2 nopcid dummy_hcd.num=8"   -pidfile
-vm_pid -m 2G -cpu host
+The coming gcc release introduces a new warning for string operations
+reading beyond the end of a fixed-length object. After testing
+randconfig kernels for a while, think I have patches for any such
+warnings that came up on x86, arm and arm64.
 
-But it crashes on NULL deref in integrity_inode_get during boot:
+Most of these warnings are false-positive ones, either gcc warning
+about something that is entirely correct, or about something that
+looks suspicious but turns out to be correct after all.
 
-Run /sbin/init as init process
-BUG: kernel NULL pointer dereference, address: 000000000000001c
-PGD 0 P4D 0
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.12.0-rc2+ #97
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
-rel-1.13.0-44-g88ab0c15525c-prebuilt.qemu.org 04/01/2014
-RIP: 0010:kmem_cache_alloc+0x2b/0x370 mm/slub.c:2920
-Code: 57 41 56 41 55 41 54 41 89 f4 55 48 89 fd 53 48 83 ec 10 44 8b
-3d d9 1f 90 0b 65 48 8b 04 25 28 00 00 00 48 89 44 24 08 31 c0 <8b> 5f
-1c 4cf
-RSP: 0000:ffffc9000032f9d8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff888017fc4f00 RCX: 0000000000000000
-RDX: ffff888040220000 RSI: 0000000000000c40 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffff888019263627
-R10: ffffffff83937cd1 R11: 0000000000000000 R12: 0000000000000c40
-R13: ffff888019263538 R14: 0000000000000000 R15: 0000000000ffffff
-FS:  0000000000000000(0000) GS:ffff88802d180000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000000001c CR3: 000000000b48e000 CR4: 0000000000750ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-PKRU: 55555554
-Call Trace:
- integrity_inode_get+0x47/0x260 security/integrity/iint.c:105
- process_measurement+0x33d/0x17e0 security/integrity/ima/ima_main.c:237
- ima_bprm_check+0xde/0x210 security/integrity/ima/ima_main.c:474
- security_bprm_check+0x7d/0xa0 security/security.c:845
- search_binary_handler fs/exec.c:1708 [inline]
- exec_binprm fs/exec.c:1761 [inline]
- bprm_execve fs/exec.c:1830 [inline]
- bprm_execve+0x764/0x19a0 fs/exec.c:1792
- kernel_execve+0x370/0x460 fs/exec.c:1973
- try_to_run_init_process+0x14/0x4e init/main.c:1366
- kernel_init+0x11d/0x1b8 init/main.c:1477
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-Modules linked in:
-CR2: 000000000000001c
----[ end trace 22d601a500de7d79 ]---
+The two patches for the i915 driver look like something that might
+be actual bugs, but I am not sure about those either.
 
-Since LSMs and IMA may be configured at build time, but not enabled at
-run time, panic the system if "integrity" was not initialized before use.
+We probably want some combination of workaround like the ones I
+post here and changes to gcc to have fewer false positives in the
+release. I'm posting the entire set of workaround that give me
+a cleanly building kernel for reference here.
 
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
-Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- security/integrity/iint.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+        Arnd
 
-diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-index 1d20003243c3..0ba01847e836 100644
---- a/security/integrity/iint.c
-+++ b/security/integrity/iint.c
-@@ -98,6 +98,14 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
- 	struct rb_node *node, *parent = NULL;
- 	struct integrity_iint_cache *iint, *test_iint;
- 
-+	/*
-+	 * The integrity's "iint_cache" is initialized at security_init(),
-+	 * unless it is not included in the ordered list of LSMs enabled
-+	 * on the boot command line.
-+	 */
-+	if (!iint_cache)
-+		panic("%s: lsm=integrity required.\n", __func__);
-+
- 	iint = integrity_iint_find(inode);
- 	if (iint)
- 		return iint;
+Arnd Bergmann (11):
+  x86: compressed: avoid gcc-11 -Wstringop-overread warning
+  x86: tboot: avoid Wstringop-overread-warning
+  security: commoncap: fix -Wstringop-overread warning
+  ath11: Wstringop-overread warning
+  qnx: avoid -Wstringop-overread warning
+  cgroup: fix -Wzero-length-bounds warnings
+  ARM: sharpsl_param: work around -Wstringop-overread warning
+  atmel: avoid gcc -Wstringop-overflow warning
+  scsi: lpfc: fix gcc -Wstringop-overread warning
+  drm/i915: avoid stringop-overread warning on pri_latency
+  [RFC] drm/i915/dp: fix array overflow warning
+
+ arch/arm/common/sharpsl_param.c         |  4 ++-
+ arch/x86/boot/compressed/misc.c         |  2 --
+ arch/x86/kernel/tboot.c                 | 44 +++++++++++++++----------
+ drivers/gpu/drm/i915/display/intel_dp.c |  2 +-
+ drivers/gpu/drm/i915/i915_drv.h         |  6 ++--
+ drivers/net/wireless/ath/ath11k/mac.c   |  2 +-
+ drivers/net/wireless/atmel/atmel.c      | 25 ++++++++------
+ drivers/scsi/lpfc/lpfc_attr.c           |  6 ++--
+ fs/qnx4/dir.c                           | 11 +++----
+ kernel/cgroup/cgroup.c                  | 15 +++++++--
+ security/commoncap.c                    |  2 +-
+ 11 files changed, 69 insertions(+), 50 deletions(-)
+
+Cc: x86@kernel.org
+Cc: Ning Sun <ning.sun@intel.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: Simon Kelley <simon@thekelleys.org.uk>
+Cc: James Smart <james.smart@broadcom.com>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: Anders Larsen <al@alarsen.net>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Serge Hallyn <serge@hallyn.com>
+Cc: Imre Deak <imre.deak@intel.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: tboot-devel@lists.sourceforge.net
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: ath11k@lists.infradead.org
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: cgroups@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+
+
 -- 
-2.27.0
+2.29.2
 
