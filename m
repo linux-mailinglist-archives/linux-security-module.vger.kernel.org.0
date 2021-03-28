@@ -2,54 +2,63 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3FD034B904
-	for <lists+linux-security-module@lfdr.de>; Sat, 27 Mar 2021 19:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF6934BE21
+	for <lists+linux-security-module@lfdr.de>; Sun, 28 Mar 2021 20:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhC0S4A (ORCPT
+        id S231548AbhC1SIB (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 27 Mar 2021 14:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbhC0Szo (ORCPT
+        Sun, 28 Mar 2021 14:08:01 -0400
+Received: from mail.hanoi.gov.vn ([113.160.32.33]:32049 "EHLO
+        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231492AbhC1SHi (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 27 Mar 2021 14:55:44 -0400
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E30C0613B2
-        for <linux-security-module@vger.kernel.org>; Sat, 27 Mar 2021 11:55:40 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4F77MW1TjMzMptWs;
-        Sat, 27 Mar 2021 19:55:35 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4F77MV4KsDzlh8T9;
-        Sat, 27 Mar 2021 19:55:34 +0100 (CET)
-Subject: Re: [PATCH v5 1/1] fs: Allow no_new_privs tasks to call chroot(2)
-To:     Askar Safin <safinaskar@mail.ru>
-References: <1616800362.522029786@f737.i.mail.ru>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Cc:     kernel-hardening@lists.openwall.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Message-ID: <7d9c2a08-89da-14ea-6550-527a3f2c9c9e@digikod.net>
-Date:   Sat, 27 Mar 2021 19:56:23 +0100
-User-Agent: 
+        Sun, 28 Mar 2021 14:07:38 -0400
+X-Greylist: delayed 483 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:32 EDT
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B597EC3DB;
+        Mon, 29 Mar 2021 00:58:07 +0700 (+07)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
+        s=default; t=1616954288;
+        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
+        b=MnJpubbCOoNzrGbdl4opA9pGiqD1qL1TzNpy60QO4II5VnNpsotVl818lYgRa6I3d
+         Omzy1cLH1+oH7hvhrvWFGEjWO4Du7emM//yWycfTmkwXhJBSFfgFLpRpJNgbPUcm37
+         IfeanaeGGyboioiPWx6i9EzzU+DQGarsjKQF0WLA=
+X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 713EBEC3DD;
+        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
+        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
+Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 7EB1F7F41B5D;
+        Mon, 29 Mar 2021 00:57:59 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 9F9587F41B42;
+        Mon, 29 Mar 2021 00:57:56 +0700 (+07)
+Received: from mail.hanoi.gov.vn ([127.0.0.1])
+        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5aziPsZZzTJX; Mon, 29 Mar 2021 00:57:52 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 923357F41B59;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Date:   Mon, 29 Mar 2021 00:57:49 +0700 (ICT)
+From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
+Reply-To: Mackenzie Scott <propack@propck.net>
+Message-ID: <338153864.25920933.1616954269522.JavaMail.zimbra@hanoi.gov.vn>
+Subject: Congratulations ($ 100,800,000.00)
 MIME-Version: 1.0
-In-Reply-To: <1616800362.522029786@f737.i.mail.ru>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [185.107.80.217]
+X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
+Thread-Index: /8qcKB84H/IsUnGyWvfkptZHVH6P1Q==
+Thread-Topic: Congratulations ($ 100,800,000.00)
+To:     undisclosed-recipients:;
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
 
-On 27/03/2021 00:12, Askar Safin wrote:
-> Hi. Unprivileged users already can do chroot. He should simply create userns and then call "chroot" inside. As an LWN commenter noted, you can simply run 
-> "unshare -r /usr/sbin/chroot some-dir". (I recommend reading all comments: https://lwn.net/Articles/849125/ .)
 
-We know that userns can be use to get the required capability in a new
-namespace, but this patch is to not require to use this namespace, as
-explained in the commit message. I already added some comments in the
-LWN article though.
-
-> 
-> Also: if you need chroot for path resolving only, consider openat2 with RESOLVE_IN_ROOT ( https://lwn.net/Articles/796868/ ).
-
-openat2 was also discussed in previous versions of this patch.
+Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
