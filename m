@@ -2,110 +2,133 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A714C351460
-	for <lists+linux-security-module@lfdr.de>; Thu,  1 Apr 2021 13:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEDF351764
+	for <lists+linux-security-module@lfdr.de>; Thu,  1 Apr 2021 19:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbhDALN6 (ORCPT
+        id S235075AbhDARmL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 1 Apr 2021 07:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        Thu, 1 Apr 2021 13:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbhDALN0 (ORCPT
+        with ESMTP id S234547AbhDARh6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 1 Apr 2021 07:13:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044E9C061788
-        for <linux-security-module@vger.kernel.org>; Thu,  1 Apr 2021 04:13:26 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1lRvGO-0001R7-F8; Thu, 01 Apr 2021 13:13:24 +0200
-Subject: Re: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        horia geanta <horia.geanta@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        aymen sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        davem <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>,
-        kernel <kernel@pengutronix.de>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        david <david@sigma-star.at>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        "open list, ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>
-References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
- <ca2a7c17-3ed0-e52f-2e2f-c0f8bbe10323@pengutronix.de>
- <CAFLxGvyj1aZ_3MuxJC6onejchV_6A8WbNR1vTLpSBF5QTxvLyQ@mail.gmail.com>
- <897df7dd-83a1-3e3e-1d9f-5a1adfd5b2fb@pengutronix.de>
- <1263763932.139584.1617272457698.JavaMail.zimbra@nod.at>
- <27d7d3fa-5df8-1880-df21-200de31cc629@pengutronix.de>
- <717795270.139671.1617274418087.JavaMail.zimbra@nod.at>
- <c72f93be-04e8-bb52-7252-4b4131648100@pengutronix.de>
- <1713376107.139705.1617275134320.JavaMail.zimbra@nod.at>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <638717a5-a456-24a7-b0ab-9f71adb13687@pengutronix.de>
-Date:   Thu, 1 Apr 2021 13:13:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Thu, 1 Apr 2021 13:37:58 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFCAC0613BC
+        for <linux-security-module@vger.kernel.org>; Thu,  1 Apr 2021 05:19:35 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id h7so1286415qtx.3
+        for <linux-security-module@vger.kernel.org>; Thu, 01 Apr 2021 05:19:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Vgr/Zl3BDXRnrq2J6EE+e/3R7mQgt/D2Dsj5nuE2w0M=;
+        b=JpAs1vzPTjz4W8rdx9Lqz6nBqd13qCgN3+erq91mh4WGoo/LZS5fEquo+DACiJnKkX
+         QrRXi051hfgjTbJbWkb4DYzvsW7dd5nBrV1B7iZhANXyvf9JPdE2B/K8FL9e62txVK7G
+         0X/gpOxbofNzmLf0GAqzpX8sBfJtZmAM5AgY6NsA+fMjUnX+sBbt/uAKoHA8hXKR3thw
+         I4MqU09EK54ap9j94WYb6DERRr6dM1RBsJqJQLblOPlbmso1274vL9Xp0KegLKnMSTTI
+         OwoDTz18mnTz8i5OKZzE0CwVDjue/qX8moZSc4OPC55MzH1GtPpdWvMfTcPBykbbhtQ4
+         E5jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Vgr/Zl3BDXRnrq2J6EE+e/3R7mQgt/D2Dsj5nuE2w0M=;
+        b=OlpHISt45ZsQ7/3tBrAABA1IcitlZdZUj8oXNkh6v9FWsOhjYUuUYl70c1dxO5xu+b
+         EuZJRF8upp0uVsubZRAi5y9k4EIVRDgig57+hRNk9CtgHrnVY/nuj45DLtF0/OuSNtqK
+         o4kArLyvszS3xVE1WRpmjWcL0glwMFnZm72OGVSoF2aOxTqVT83Ov1joD/clXjYfo3W+
+         s5zfi2YOZY0yNZKH84510NnShoB9YnrPdMzG/3QZaYtdq/tN+4Qbl4caUaGKMeNb4k29
+         uf0ZZ277jRMgcJNT8WEaZGUoyQC9M8cqDMW5R0fyHEDKHdKrjqJQGzHvVdfbXOdFCll/
+         Y95w==
+X-Gm-Message-State: AOAM53033/0IJO5XFW6qVRLNZtBoNM/uYoKll4lPfPp29QLNTzThv2nF
+        20bGQn+ExiZxedjklaaAX4//SQ==
+X-Google-Smtp-Source: ABdhPJz6ns0s4EMUeoQopcXj71hOMnL0XWBbKVYAuaGM2OabeF39OGOUzeq0Rc+BHh/xNK4055cz0A==
+X-Received: by 2002:ac8:7f52:: with SMTP id g18mr6906607qtk.250.1617279574765;
+        Thu, 01 Apr 2021 05:19:34 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
+        by smtp.gmail.com with ESMTPSA id s28sm3807098qkj.73.2021.04.01.05.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 05:19:34 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1lRwIP-006jdH-LT; Thu, 01 Apr 2021 09:19:33 -0300
+Date:   Thu, 1 Apr 2021 09:19:33 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        syzbot <syzbot+015dd7cdbbbc2c180c65@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, bp@alien8.de, daniel.vetter@ffwll.ch,
+        daniel.vetter@intel.com, hpa@zytor.com, jmattson@google.com,
+        jmorris@namei.org, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+        m.szyprowski@samsung.com, mchehab@kernel.org, mingo@redhat.com,
+        seanjc@google.com, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com, tfiga@chromium.org,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Subject: Re: [syzbot] WARNING in unsafe_follow_pfn
+Message-ID: <20210401121933.GA2710221@ziepe.ca>
+References: <000000000000ca9a6005bec29ebe@google.com>
+ <2db3c803-6a94-9345-261a-a2bb74370c02@redhat.com>
+ <20210331042922.GE2065@kadam>
 MIME-Version: 1.0
-In-Reply-To: <1713376107.139705.1617275134320.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210331042922.GE2065@kadam>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello Richard,
-
-On 01.04.21 13:05, Richard Weinberger wrote:
-> Ahmad,
+On Wed, Mar 31, 2021 at 07:29:22AM +0300, Dan Carpenter wrote:
+> On Tue, Mar 30, 2021 at 07:04:30PM +0200, Paolo Bonzini wrote:
+> > On 30/03/21 17:26, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following issue on:
+> > > 
+> > > HEAD commit:    93129492 Add linux-next specific files for 20210326
+> > > git tree:       linux-next
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=169ab21ad00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=6f2f73285ea94c45
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=015dd7cdbbbc2c180c65
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=119b8d06d00000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=112e978ad00000
+> > > 
+> > > The issue was bisected to:
+> > > 
+> > > commit d40b9fdee6dc819d8fc35f70c345cbe0394cde4c
+> > > Author: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > > Date:   Tue Mar 16 15:33:01 2021 +0000
+> > > 
+> > >      mm: Add unsafe_follow_pfn
+> > > 
+> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=122d2016d00000
+> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=112d2016d00000
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=162d2016d00000
+> > > 
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+015dd7cdbbbc2c180c65@syzkaller.appspotmail.com
+> > > Fixes: d40b9fdee6dc ("mm: Add unsafe_follow_pfn")
+> > 
+> > This is basically intentional because get_vaddr_frames is broken, isn't it?
+> > I think it needs to be ignored in syzkaller.
 > 
-> ----- Ursprüngliche Mail -----
->> Von: "Ahmad Fatoum" <a.fatoum@pengutronix.de>
->>> I don't want you to force to use cryptsetup.
->>
->> I'd love to use cryptsetup with LUKS and trusted keys eventually. I'll take
+> What?
 > 
-> But using LUKS would mean that cryptsetup has access to the plain disc encryption key material?
-> This would be a no-go for many systems out there, key material must not accessible to userspace.
-> I know, distrusting userspace root is not easy, but doable. :)
-
-The LUKS2 format supports tokens. I see no reason why the encrypted blob
-couldn't be stored there along with the usual metadata. cryptsetup would
-then load it as kernel trusted key and use it for dmcrypt decryption.
-
-This will mean we have to part ways with features such as having multiple
-keys, but I think it's worth it to have a plug and play solution for
-trusted keys.
-
-Of course, someone needs to implement this first ^^.
-
-Cheers,
-Ahmad
-
+> The bisect is wrong (because it's blaming the commit which added the
+> warning instead of the commit which added the buggy caller) but the
+> warning is correct.
 > 
-> Thanks,
-> //richard
-> 
+> Plus users are going to be seeing this as well.  According to the commit
+> message for 69bacee7f9ad ("mm: Add unsafe_follow_pfn") "Unfortunately
+> there's some users where this is not fixable (like v4l userptr of iomem
+> mappings)".  It sort of seems crazy to dump this giant splat and then
+> tell users to ignore it forever because it can't be fixed...  0_0
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I think the discussion conclusion was that this interface should not
+be used by userspace anymore, it is obsolete by some new interface?
+
+It should be protected by some kconfig and the kconfig should be
+turned off for syzkaller runs.
+
+Jason
