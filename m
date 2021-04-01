@@ -2,190 +2,94 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 040E7351767
-	for <lists+linux-security-module@lfdr.de>; Thu,  1 Apr 2021 19:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDBE35195A
+	for <lists+linux-security-module@lfdr.de>; Thu,  1 Apr 2021 20:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbhDARmN (ORCPT
+        id S235335AbhDARw7 convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 1 Apr 2021 13:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234728AbhDARj2 (ORCPT
+        Thu, 1 Apr 2021 13:52:59 -0400
+Received: from lithops.sigma-star.at ([195.201.40.130]:40600 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235561AbhDARrI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 1 Apr 2021 13:39:28 -0400
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3D3C03117C
-        for <linux-security-module@vger.kernel.org>; Thu,  1 Apr 2021 10:11:06 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FB8pb136rzMqMD8;
-        Thu,  1 Apr 2021 19:11:03 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4FB8pQ6Nzrzlh8TN;
-        Thu,  1 Apr 2021 19:10:54 +0200 (CEST)
-Subject: Re: [PATCH v31 07/12] landlock: Support filesystem access-control
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
+        Thu, 1 Apr 2021 13:47:08 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 0D0C5606BA22;
+        Thu,  1 Apr 2021 13:16:55 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id g4O_tLTycO8a; Thu,  1 Apr 2021 13:16:54 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 9AA6F606BA25;
+        Thu,  1 Apr 2021 13:16:54 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2cdZCkDK2XPn; Thu,  1 Apr 2021 13:16:54 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 30F67606BA22;
+        Thu,  1 Apr 2021 13:16:54 +0200 (CEST)
+Date:   Thu, 1 Apr 2021 13:16:54 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        horia geanta <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        aymen sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        davem <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>,
+        kernel <kernel@pengutronix.de>,
         David Howells <dhowells@redhat.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
         James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-References: <20210324191520.125779-1-mic@digikod.net>
- <20210324191520.125779-8-mic@digikod.net>
- <d2764451-8970-6cbd-e2bf-254a42244ffc@digikod.net>
- <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <84e1cd29-0f09-1ed4-c680-65ca8c6988a3@digikod.net>
-Date:   Thu, 1 Apr 2021 19:12:05 +0200
-User-Agent: 
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Udit Agarwal <udit.agarwal@nxp.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        david <david@sigma-star.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list, ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>
+Message-ID: <1465227062.139734.1617275814134.JavaMail.zimbra@nod.at>
+In-Reply-To: <638717a5-a456-24a7-b0ab-9f71adb13687@pengutronix.de>
+References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de> <897df7dd-83a1-3e3e-1d9f-5a1adfd5b2fb@pengutronix.de> <1263763932.139584.1617272457698.JavaMail.zimbra@nod.at> <27d7d3fa-5df8-1880-df21-200de31cc629@pengutronix.de> <717795270.139671.1617274418087.JavaMail.zimbra@nod.at> <c72f93be-04e8-bb52-7252-4b4131648100@pengutronix.de> <1713376107.139705.1617275134320.JavaMail.zimbra@nod.at> <638717a5-a456-24a7-b0ab-9f71adb13687@pengutronix.de>
+Subject: Re: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
 MIME-Version: 1.0
-In-Reply-To: <YGUslUPwp85Zrp4t@zeniv-ca.linux.org.uk>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF78 (Linux)/8.8.12_GA_3809)
+Thread-Topic: KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+Thread-Index: mqcZxSDGQ+2iXRHRM0FbHdiOFBs5eA==
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Ahmad,
 
-On 01/04/2021 04:14, Al Viro wrote:
-> On Wed, Mar 31, 2021 at 07:33:50PM +0200, Mickaël Salaün wrote:
+----- UrsprÃ¼ngliche Mail -----
+> Von: "Ahmad Fatoum" <a.fatoum@pengutronix.de>
+>> But using LUKS would mean that cryptsetup has access to the plain disc
+>> encryption key material?
+>> This would be a no-go for many systems out there, key material must not
+>> accessible to userspace.
+>> I know, distrusting userspace root is not easy, but doable. :)
 > 
->>> +static inline u64 unmask_layers(
->>> +		const struct landlock_ruleset *const domain,
->>> +		const struct path *const path, const u32 access_request,
->>> +		u64 layer_mask)
->>> +{
->>> +	const struct landlock_rule *rule;
->>> +	const struct inode *inode;
->>> +	size_t i;
->>> +
->>> +	if (d_is_negative(path->dentry))
->>> +		/* Continues to walk while there is no mapped inode. */
-> 				     ^^^^^
-> Odd comment, that...
+> The LUKS2 format supports tokens. I see no reason why the encrypted blob
+> couldn't be stored there along with the usual metadata. cryptsetup would
+> then load it as kernel trusted key and use it for dmcrypt decryption.
+> 
+> This will mean we have to part ways with features such as having multiple
+> keys, but I think it's worth it to have a plug and play solution for
+> trusted keys.
 
-I'll replace that with something more appropriate, e.g. "Ignore
-nonexistent leafs".
+Ah, now I can follow your thoughts!
+Yes, that would be nice to have. :)
 
-> 
->>> +static int check_access_path(const struct landlock_ruleset *const domain,
->>> +		const struct path *const path, u32 access_request)
->>> +{
-> 
->>> +	walker_path = *path;
->>> +	path_get(&walker_path);
-> 
->>> +	while (true) {
->>> +		struct dentry *parent_dentry;
->>> +
->>> +		layer_mask = unmask_layers(domain, &walker_path,
->>> +				access_request, layer_mask);
->>> +		if (layer_mask == 0) {
->>> +			/* Stops when a rule from each layer grants access. */
->>> +			allowed = true;
->>> +			break;
->>> +		}
->>> +
->>> +jump_up:
->>> +		if (walker_path.dentry == walker_path.mnt->mnt_root) {
->>> +			if (follow_up(&walker_path)) {
->>> +				/* Ignores hidden mount points. */
->>> +				goto jump_up;
->>> +			} else {
->>> +				/*
->>> +				 * Stops at the real root.  Denies access
->>> +				 * because not all layers have granted access.
->>> +				 */
->>> +				allowed = false;
->>> +				break;
->>> +			}
->>> +		}
->>> +		if (unlikely(IS_ROOT(walker_path.dentry))) {
->>> +			/*
->>> +			 * Stops at disconnected root directories.  Only allows
->>> +			 * access to internal filesystems (e.g. nsfs, which is
->>> +			 * reachable through /proc/<pid>/ns/<namespace>).
->>> +			 */
->>> +			allowed = !!(walker_path.mnt->mnt_flags & MNT_INTERNAL);
->>> +			break;
->>> +		}
->>> +		parent_dentry = dget_parent(walker_path.dentry);
->>> +		dput(walker_path.dentry);
->>> +		walker_path.dentry = parent_dentry;
->>> +	}
->>> +	path_put(&walker_path);
->>> +	return allowed ? 0 : -EACCES;
-> 
-> That's a whole lot of grabbing/dropping references...  I realize that it's
-> an utterly tactless question, but... how costly it is?  IOW, do you have
-> profiling data?
+I kind of assumed you want to use LUKS with passphrases and CAAM blobs.
 
-It looks like a legitimate question.
-
-First, Landlock may not be appropriate for every workloads. The
-check_access_path()'s complexity is now linear, which is a consequence
-of the "unprivileged" target (i.e. multiple layers of file hierarchies).
-Adding caching should help a lot to improve performance (i.e. limit the
-path walking), but it will come with future improvements.
-
-I profiled a "find" loop on the linux-5.12-rc3 source tree in a tmpfs
-(and with cached entries): openat(2) calls spend ~30% of their time in
-check_access_path() with a base directory of one parent (/linux) and
-~45% with a base directory of ten parents (/1/2/3/4/5/6/7/8/9/linux).
-Overall, the performance impact is between 3.0% (with a minimum depth of
-1) and 5.4% (with a minimum depth of 10) of the full execution time of
-these worse case scenarios, which are ~4800 openat(2) calls. This is not
-a surprise and doesn't seem so bad without optimization.
-
-
-> 
->>> +/*
->>> + * pivot_root(2), like mount(2), changes the current mount namespace.  It must
->>> + * then be forbidden for a landlocked process.
-> 
-> ... and cross-directory rename(2) can change the tree topology.  Do you ban that
-> as well?
-> 
-> [snip]
-> 
->>> +static int hook_path_rename(const struct path *const old_dir,
->>> +		struct dentry *const old_dentry,
->>> +		const struct path *const new_dir,
->>> +		struct dentry *const new_dentry)
->>> +{
->>> +	const struct landlock_ruleset *const dom =
->>> +		landlock_get_current_domain();
->>> +
->>> +	if (!dom)
->>> +		return 0;
->>> +	/* The mount points are the same for old and new paths, cf. EXDEV. */
->>> +	if (old_dir->dentry != new_dir->dentry)
->>> +		/* For now, forbids reparenting. */
->>> +		return -EACCES;
-> 
-> You do, apparently, and not in a way that would have the userland fall
-> back to copy+unlink.  Lovely...  Does e.g. git survive such restriction?
-> Same question for your average package build...
-
-As explained in the documentation, there is some limitations that make
-this first step not appropriate for all use cases. I'll use EXDEV to
-gracefully forbid reparenting, which gives a chance to userspace to deal
-with that. It may not be enough for package management though. I plan to
-address such limitation with future evolutions.
-
-Thanks for these suggestions.
+Thanks,
+//richard
