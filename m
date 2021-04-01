@@ -2,37 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B222351C65
-	for <lists+linux-security-module@lfdr.de>; Thu,  1 Apr 2021 20:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7C8351C6A
+	for <lists+linux-security-module@lfdr.de>; Thu,  1 Apr 2021 20:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbhDASRG convert rfc822-to-8bit (ORCPT
+        id S236057AbhDASR1 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 1 Apr 2021 14:17:06 -0400
-Received: from lithops.sigma-star.at ([195.201.40.130]:41070 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbhDASGq (ORCPT
+        Thu, 1 Apr 2021 14:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238723AbhDASO4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:06:46 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 4FD18606BA25;
-        Thu,  1 Apr 2021 15:17:46 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id bJBE-i7eTNS0; Thu,  1 Apr 2021 15:17:45 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id D512A606BA2C;
-        Thu,  1 Apr 2021 15:17:45 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id tRm9oOfPG5bU; Thu,  1 Apr 2021 15:17:45 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 99E80606BA25;
-        Thu,  1 Apr 2021 15:17:45 +0200 (CEST)
-Date:   Thu, 1 Apr 2021 15:17:45 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
+        Thu, 1 Apr 2021 14:14:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123D6C08EA77
+        for <linux-security-module@vger.kernel.org>; Thu,  1 Apr 2021 06:30:34 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1lRxP6-0007mM-Fy; Thu, 01 Apr 2021 15:30:32 +0200
+Subject: Re: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+To:     Richard Weinberger <richard@nod.at>,
+        Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         horia geanta <horia.geanta@nxp.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         aymen sghaier <aymen.sghaier@nxp.com>,
@@ -53,38 +45,59 @@ Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
         Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         LSM <linux-security-module@vger.kernel.org>
-Message-ID: <1666035815.140054.1617283065549.JavaMail.zimbra@nod.at>
-In-Reply-To: <CAFA6WYO29o73nSg4ikU9cyaOr0kpaXFJpcGLGmFLgjKQWchcEg@mail.gmail.com>
-References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de> <CAFLxGvzWLje+_HFeb+hKNch4U1f5uypVUOuP=QrEPn_JNM+scg@mail.gmail.com> <ca2a7c17-3ed0-e52f-2e2f-c0f8bbe10323@pengutronix.de> <CAFLxGvwNomKOo3mQLMxYGDA8T8zN=Szpo2q5jrp4D1CaMHydWA@mail.gmail.com> <CAFA6WYO29o73nSg4ikU9cyaOr0kpaXFJpcGLGmFLgjKQWchcEg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
+References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
+ <CAFLxGvzWLje+_HFeb+hKNch4U1f5uypVUOuP=QrEPn_JNM+scg@mail.gmail.com>
+ <ca2a7c17-3ed0-e52f-2e2f-c0f8bbe10323@pengutronix.de>
+ <CAFLxGvwNomKOo3mQLMxYGDA8T8zN=Szpo2q5jrp4D1CaMHydWA@mail.gmail.com>
+ <CAFA6WYO29o73nSg4ikU9cyaOr0kpaXFJpcGLGmFLgjKQWchcEg@mail.gmail.com>
+ <1666035815.140054.1617283065549.JavaMail.zimbra@nod.at>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <ea261e53-8f5d-ac52-f3b9-7f2db4532244@pengutronix.de>
+Date:   Thu, 1 Apr 2021 15:30:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
+In-Reply-To: <1666035815.140054.1617283065549.JavaMail.zimbra@nod.at>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF78 (Linux)/8.8.12_GA_3809)
-Thread-Topic: KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-Thread-Index: b36oPlTcuCXRSzXZSqikRqY0W9mM2w==
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Sumit,
+Hello Richard, Sumit,
 
------ Ursprüngliche Mail -----
-> Von: "Sumit Garg" <sumit.garg@linaro.org>
-> IIUC, this would require support for multiple trusted keys backends at
-> runtime but currently the trusted keys subsystem only supports a
-> single backend which is selected via kernel module parameter during
-> boot.
+On 01.04.21 15:17, Richard Weinberger wrote:
+> Sumit,
 > 
-> So the trusted keys framework needs to evolve to support multiple
-> trust sources at runtime but I would like to understand the use-cases
-> first. IMO, selecting the best trust source available on a platform
-> for trusted keys should be a one time operation, so why do we need to
-> have other backends available at runtime as well?
+> ----- Ursprüngliche Mail -----
+>> Von: "Sumit Garg" <sumit.garg@linaro.org>
+>> IIUC, this would require support for multiple trusted keys backends at
+>> runtime but currently the trusted keys subsystem only supports a
+>> single backend which is selected via kernel module parameter during
+>> boot.
+>>
+>> So the trusted keys framework needs to evolve to support multiple
+>> trust sources at runtime but I would like to understand the use-cases
+>> first. IMO, selecting the best trust source available on a platform
+>> for trusted keys should be a one time operation, so why do we need to
+>> have other backends available at runtime as well?
+> 
+> I thought about devices with a TPM-Chip and CAAM.
+> IMHO allowing only one backend at the same time is a little over simplified. 
 
-I thought about devices with a TPM-Chip and CAAM.
-IMHO allowing only one backend at the same time is a little over simplified. 
+It is, but I'd rather leave this until it's actually needed.
+What can be done now is adopting a format for the exported keys that would
+make this extension seamless in future.
 
-Thanks,
-//richard
+Cheers,
+Ahmad
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
