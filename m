@@ -2,139 +2,82 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A4E359CD2
-	for <lists+linux-security-module@lfdr.de>; Fri,  9 Apr 2021 13:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8AF359D9F
+	for <lists+linux-security-module@lfdr.de>; Fri,  9 Apr 2021 13:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbhDILNX (ORCPT
+        id S232837AbhDILn6 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 9 Apr 2021 07:13:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27085 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233899AbhDILNR (ORCPT
+        Fri, 9 Apr 2021 07:43:58 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2818 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231370AbhDILn5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:13:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617966784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m9DLwVwuEa/TUYn9CBVZYDMdn9III6hdDzVPKN/l5PE=;
-        b=TNbu4hSgwSHyroeNGFXCAN0DgVkj5cj/YhmaRSzMSds4QH+CbNWghCdpfuRua5DBVe/7IU
-        wAzbXhDckHUX9Vx9KGhyk38togowdDdVVuH7f8aoDFgXYSXqBiaJw6JpWHXMqzcXB5UKvb
-        xk4E5orWNlSRzulWrGL6hWwXkd/6GY8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-312-2TA2j7daNc291PvZ0muIaQ-1; Fri, 09 Apr 2021 07:13:03 -0400
-X-MC-Unique: 2TA2j7daNc291PvZ0muIaQ-1
-Received: by mail-ed1-f69.google.com with SMTP id bo11so2471969edb.21
-        for <linux-security-module@vger.kernel.org>; Fri, 09 Apr 2021 04:13:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=m9DLwVwuEa/TUYn9CBVZYDMdn9III6hdDzVPKN/l5PE=;
-        b=Ap2/gyBzHKLfwPcOhFI0h7/H/nyTWlxDsdYZSmvjtvFvHOJ2YcjlvYOweO3niO89gX
-         7sLozWxtW7dBPMwRLhT9Ij/3/5iSI8YggiLb34lkslHxbDrHbNKk2s4L4YHx0OT9UUZp
-         FKFL8riFvFzDSAY8bhmZErQLRTV75Jh13C/9Kk3PRLrXuRfTSJ5BmT3tCVSPQWZ79EGp
-         QIpLbYIUClvCvIKLdjEETKv1qvSfZ5Q7Gef2e2u4SlM82qD8fBw4OO49mEUZ1/KtCtya
-         n+T3fd+b+G64x7wpJ9BAYKuw2v71uWn6A0IFdA52s+zpQtZ0x9yLJZTyolQW45FRt7/G
-         UBAg==
-X-Gm-Message-State: AOAM5321wNTpl99+PqGsxUn0na9MuHWjhBmS/SjlEzvC/xIEJjOTFB4F
-        xfrPB3mNczsa574MkUktYIiLLD600vbbtzqgmTk+rtZKNSiuUITEGF3Fwby0BHdBX7CfNXY8FPE
-        Bk+uTQr6QUR4dw3UyxJkfjGWXIvoI1lBwSdILL/aEjYw2jCJ6XDYA+N036q/6wIAWw3UkTUpCUq
-        Rzbz+IvOwVIhwE
-X-Received: by 2002:a17:906:fcc4:: with SMTP id qx4mr6751977ejb.42.1617966781403;
-        Fri, 09 Apr 2021 04:13:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyN01aC0ArployKcFNzWC+455t509jtFprEos2SXUsaUxRWFCvmE9PBB5j0Mfpph1bCkHvNIw==
-X-Received: by 2002:a17:906:fcc4:: with SMTP id qx4mr6751940ejb.42.1617966781061;
-        Fri, 09 Apr 2021 04:13:01 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:8308:b105:dd00:277b:6436:24db:9466])
-        by smtp.gmail.com with ESMTPSA id w18sm1046854ejq.58.2021.04.09.04.12.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 04:13:00 -0700 (PDT)
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-To:     linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
-        Olga Kornievskaia <aglo@umich.edu>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: [PATCH 2/2] selinux: fix SECURITY_LSM_NATIVE_LABELS flag handling on double mount
-Date:   Fri,  9 Apr 2021 13:12:54 +0200
-Message-Id: <20210409111254.271800-3-omosnace@redhat.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210409111254.271800-1-omosnace@redhat.com>
-References: <20210409111254.271800-1-omosnace@redhat.com>
+        Fri, 9 Apr 2021 07:43:57 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FGx1305h1z687PM;
+        Fri,  9 Apr 2021 19:36:39 +0800 (CST)
+Received: from fraphisprd00473.huawei.com (7.182.8.141) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Fri, 9 Apr 2021 13:43:42 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/7] ima/evm: Small enhancements
+Date:   Fri, 9 Apr 2021 13:43:06 +0200
+Message-ID: <20210409114313.4073-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [7.182.8.141]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-When mounting an NFS export that is a mountpoint on the host, doing the
-same mount a second time leads to a security_sb_set_mnt_opts() call on
-an already intialized superblock, which leaves the
-SECURITY_LSM_NATIVE_LABELS flag unset even if it's provided by the FS.
-NFS then obediently clears NFS_CAP_SECURITY_LABEL from its server
-capability set, leading to any newly created inodes for this superblock
-to end up without labels.
+This patch set provides some small enhancements for IMA and EVM.
 
-To fix this, make sure to return the SECURITY_LSM_NATIVE_LABELS flag
-when security_sb_set_mnt_opts() is called on an already initialized
-superblock with matching security options.
+Patch 1 avoids measurement and audit when access to the file will be denied
+by IMA itself.
 
-While there, also do a sanity check to ensure that
-SECURITY_LSM_NATIVE_LABELS is set in kflags if and only if
-sbsec->behavior == SECURITY_FS_USE_NATIVE.
+Patch 2 introduces a new policy keyword meta_immutable to protect the label
+transition during binary execution.
 
-Minimal reproducer:
-    # systemctl start nfs-server
-    # exportfs -o rw,no_root_squash,security_label localhost:/
-    # mount -t nfs -o "nfsvers=4.2" localhost:/etc /mnt
-    # mount -t nfs -o "nfsvers=4.2" localhost:/etc /mnt
-    # ls -lZ /mnt
-    [all labels are system_u:object_r:unlabeled_t:s0]
+Patch 3-5 add new hard-coded policies aiming at producing measurement or
+enforcing access to files that likely are provided by software vendors.
 
-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
----
- security/selinux/hooks.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Patch 6 increases the crypto resistance of EVM by allowing the choice of
+the hash algorithm for the HMAC.
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 1daf7bec4bb0..b8efb14a1d1a 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -741,7 +741,24 @@ static int selinux_set_mnt_opts(struct super_block *sb,
- 		/* previously mounted with options, but not on this attempt? */
- 		if ((sbsec->flags & SE_MNTMASK) && !opts)
- 			goto out_double_mount;
-+
-+		/*
-+		 * If we are checking an already initialized mount and the
-+		 * options match, make sure to return back the
-+		 * SECURITY_LSM_NATIVE_LABELS flag if applicable. If the
-+		 * superblock has the NATIVE behavior set and the FS is not
-+		 * signaling its support (or vice versa), then it is a
-+		 * programmer error, so emit a WARNING and return -EINVAL.
-+		 */
- 		rc = 0;
-+		if (sbsec->behavior == SECURITY_FS_USE_NATIVE) {
-+			if (WARN_ON(!(kern_flags & SECURITY_LSM_NATIVE_LABELS)))
-+				rc = -EINVAL;
-+			else
-+				*set_kern_flags |= SECURITY_LSM_NATIVE_LABELS;
-+		} else if (WARN_ON(kern_flags & SECURITY_LSM_NATIVE_LABELS)) {
-+			rc = -EINVAL;
-+		}
- 		goto out;
- 	}
- 
+Patch 7 adds two new values for the evm= option in the kernel command line
+to facilitate the setup of EVM.
+
+Roberto Sassu (7):
+  ima: Avoid measurement and audit if access to the file will be denied
+  ima: Add meta_immutable appraisal type
+  ima: Introduce exec_tcb and tmpfs policies
+  ima: Introduce appraise_exec_tcb and appraise_tmpfs policies
+  ima: Introduce appraise_exec_immutable policy
+  evm: Allow choice of hash algorithm for HMAC
+  evm: Extend evm= with allow_metadata_writes and complete values
+
+ Documentation/ABI/testing/ima_policy          |  2 +-
+ .../admin-guide/kernel-parameters.txt         | 36 +++++++-
+ security/integrity/evm/Kconfig                | 34 +++++++
+ security/integrity/evm/evm.h                  |  2 +
+ security/integrity/evm/evm_crypto.c           | 55 ++++++++++--
+ security/integrity/evm/evm_main.c             | 29 ++++--
+ security/integrity/ima/ima_appraise.c         |  9 ++
+ security/integrity/ima/ima_main.c             | 20 +++--
+ security/integrity/ima/ima_policy.c           | 90 ++++++++++++++-----
+ security/integrity/integrity.h                |  4 +-
+ 10 files changed, 232 insertions(+), 49 deletions(-)
+
 -- 
-2.30.2
+2.26.2
 
