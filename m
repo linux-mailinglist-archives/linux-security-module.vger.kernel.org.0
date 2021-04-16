@@ -2,43 +2,43 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7805B361D81
-	for <lists+linux-security-module@lfdr.de>; Fri, 16 Apr 2021 12:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534F9361DD3
+	for <lists+linux-security-module@lfdr.de>; Fri, 16 Apr 2021 12:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242274AbhDPJyV (ORCPT
+        id S240068AbhDPKNO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 16 Apr 2021 05:54:21 -0400
-Received: from m12-16.163.com ([220.181.12.16]:45333 "EHLO m12-16.163.com"
+        Fri, 16 Apr 2021 06:13:14 -0400
+Received: from m12-14.163.com ([220.181.12.14]:57070 "EHLO m12-14.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242273AbhDPJyV (ORCPT
+        id S239216AbhDPKNN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 16 Apr 2021 05:54:21 -0400
+        Fri, 16 Apr 2021 06:13:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=rfaZi
-        75ykphmZytDo8j3USUV+G9FAfZwR9DbVC9yRWs=; b=kSXeBUI1sRoSQ7QJHc0/p
-        h3ja45WotuY0RGleR+hU80oet1Oj6PUvcdzmyQHKT9rv56hmSpBANF1O/ntFeB/S
-        fnFVeKpsCdwV2P9HSlwx4ybSWx3P7dq3jM/KW/VwI2I3iaS6rCkkul1aWlai0QOu
-        8v7wZi6UkTItHdBHK/cBZg=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=DBxpB
+        nFi6nwZpjt7AR3toFc2XaJmljNpCiXZBY+5bG0=; b=mMWVVG6STYatFqvjcdvPM
+        NMD/z2k8MHlMoPtAMBIxuNGfh8gyR6LACkDrxFZcHlGKcYNhgdspCe1IAVeVVPLL
+        d5BbsOq0NIVV0GnB3vYwWjC/ZwdthxGNAN2Rbql0/JuN8yZoY+1DHLUBV86Pj1if
+        /HBOYNbprjtdyfilSMUyq4=
 Received: from localhost.localdomain (unknown [183.46.98.96])
-        by smtp12 (Coremail) with SMTP id EMCowAAnLRmLXnlgwwaZlw--.14718S2;
-        Fri, 16 Apr 2021 17:53:17 +0800 (CST)
+        by smtp10 (Coremail) with SMTP id DsCowADnkjAGY3lgfNzBDg--.11814S2;
+        Fri, 16 Apr 2021 18:12:24 +0800 (CST)
 From:   =?UTF-8?q?=C2=A0Zhongjun=20Tan?= <hbut_tan@163.com>
 To:     casey@schaufler-ca.com, jmorris@namei.org, serge@hallyn.com
 Cc:     linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, Zhongjun Tan <tanzhongjun@yulong.com>
-Subject: [PATCH] lsm:fix a missing-check bug in smack_sb_eat_lsm_opts()
-Date:   Fri, 16 Apr 2021 17:53:03 +0800
-Message-Id: <20210416095303.530-1-hbut_tan@163.com>
+Subject: [PATCH v2] lsm:fix a missing-check bug in smack_sb_eat_lsm_opts()
+Date:   Fri, 16 Apr 2021 18:12:10 +0800
+Message-Id: <20210416101210.1175-1-hbut_tan@163.com>
 X-Mailer: git-send-email 2.30.0.windows.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EMCowAAnLRmLXnlgwwaZlw--.14718S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr48Gw1DZFW8Kr1UAr4DCFg_yoW8Wr4rpr
-        sakFnxGr9YqFs2qa93GF1vqF4rGa1kKryUWrZF9w13X3W5X34kKFWqqFy3tF1xGFW8tr4a
-        9rs0vr4UWF1UAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jvFAJUUUUU=
+X-CM-TRANSID: DsCowADnkjAGY3lgfNzBDg--.11814S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr1DKF1xGry3tF47Xr4UCFg_yoW8Wrykpr
+        sakFnxGrnYqFs2qa93WF1vqF4rGa1kKr1UWrZF9w13J3WYq34kKrWqqFy3tF1xGFWrtr4a
+        9rs0vr45WF1UAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jPKsbUUUUU=
 X-Originating-IP: [183.46.98.96]
-X-CM-SenderInfo: xkex3sxwdqqiywtou0bp/xtbBXhN2xlaD6oBAYwABsg
+X-CM-SenderInfo: xkex3sxwdqqiywtou0bp/xtbBXgh2xlaD6oCNkAAAsE
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
@@ -50,11 +50,13 @@ should be freed when error.
 
 Signed-off-by: Zhongjun Tan <tanzhongjun@yulong.com>
 ---
+v2:fix brace error 
+
  security/smack/smack_lsm.c | 19 ++++++++++++++-----
  1 file changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 223a6da..0d5439f 100644
+index 223a6da..1e4c66f 100644
 --- a/security/smack/smack_lsm.c
 +++ b/security/smack/smack_lsm.c
 @@ -696,10 +696,11 @@ static int smack_sb_eat_lsm_opts(char *options, void **mnt_opts)
@@ -77,8 +79,8 @@ index 223a6da..0d5439f 100644
 +			if (!arg) {
 +				rc = -ENOMEM;
 +				goto free_mnt_opts;
- 			rc = smack_add_opt(token, arg, mnt_opts);
 +			}
+ 			rc = smack_add_opt(token, arg, mnt_opts);
  			if (unlikely(rc)) {
  				kfree(arg);
 -				if (*mnt_opts)
@@ -105,5 +107,4 @@ index 223a6da..0d5439f 100644
  /**
 -- 
 1.9.1
-
 
