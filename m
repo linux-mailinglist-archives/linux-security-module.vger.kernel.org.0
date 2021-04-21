@@ -2,225 +2,159 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7268367112
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Apr 2021 19:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9108B367139
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Apr 2021 19:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244497AbhDURPc (ORCPT
+        id S244710AbhDURWI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 21 Apr 2021 13:15:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39879 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242773AbhDURP2 (ORCPT
+        Wed, 21 Apr 2021 13:22:08 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29412 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244628AbhDURWH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 21 Apr 2021 13:15:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619025295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G0dqxk6aCIJwYIeIK7RlZfnhxumuA+fnJWxdgE7A8fI=;
-        b=T5uaXwUnxOF7Vb73rMfgE5OjfgLR14scQZtUREoJ7x2F5Y0Wn93UV8HpqWG+lIWwyaITSv
-        Vs8MaWrwqW8woNUKcjv9+GsVeTXpHWS/PpI9jk1VzAhrXSPzwIbkEvzUAFMhrvCBpdWCk1
-        10UKa1/6ib7LrmF9UB0V5dVppihkyrI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-143-QQWA2RO2MquzZdhpc3lw-w-1; Wed, 21 Apr 2021 13:14:53 -0400
-X-MC-Unique: QQWA2RO2MquzZdhpc3lw-w-1
-Received: by mail-ed1-f69.google.com with SMTP id r14-20020a50d68e0000b0290385504d6e4eso5467254edi.7
-        for <linux-security-module@vger.kernel.org>; Wed, 21 Apr 2021 10:14:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=G0dqxk6aCIJwYIeIK7RlZfnhxumuA+fnJWxdgE7A8fI=;
-        b=MoPkKanmLzDcYguzv1XTIbz7jUEHRIt9wdHBi4ZZRM2w660q62PxhCzcfIB4FVvj+G
-         liHFX7ysorhaMgNf5Gv1DKuh2b/3Grxr1Co2Iv/0Wb7MjmOoJro2gY0IXYLxFXt7GZTF
-         fSvhJ1DIY1WCiziZoAo5jFAs5P6CrOih4aSlXpF2bTjqF5tShieFAfG8FQ+WvfapeGew
-         DRzG0rVHcKhomF97quaMCvwxlNuoBD87moNHVvmHEnrgHVOdlx57Yh9klCfBbBynEkz/
-         dWADvVgy6+3NcEKE//CyTRorB1EgjKPlp6ywWD94riD5+Ot2p2Mp9Rz/kwQKaR2e40rg
-         wrxQ==
-X-Gm-Message-State: AOAM531j5QMlzMf0Ui8W11wY8E3qCrSv3tbs6YMdMQP7ONjg6jmBb7vL
-        E6k1RcnRi1nVhB9ifYkdcgw5GcNZPLrmvFuCg3+T2hGy1Gai9a9hiclaM+tCb1L3Iaaj8A42qcT
-        eY2IMBz5Y8FclgYphlOhPSY9oS58UQXKd+/LW
-X-Received: by 2002:aa7:c893:: with SMTP id p19mr32667741eds.256.1619025291742;
-        Wed, 21 Apr 2021 10:14:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyN2tOLiqStlOemoPihxz37Wt/OP+d1rIvEkhFqaa2GTQP9HkpW/vJH8NQfFid5RullHfwiDQ==
-X-Received: by 2002:aa7:c893:: with SMTP id p19mr32667724eds.256.1619025291553;
-        Wed, 21 Apr 2021 10:14:51 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:8308:b105:dd00:277b:6436:24db:9466])
-        by smtp.gmail.com with ESMTPSA id i1sm22905edt.33.2021.04.21.10.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Apr 2021 10:14:50 -0700 (PDT)
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-To:     selinux@vger.kernel.org, Paul Moore <paul@paul-moore.com>
-Cc:     linux-security-module@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: [RFC PATCH 2/2] selinux: add capability to map anon inode types to separate classes
-Date:   Wed, 21 Apr 2021 19:14:46 +0200
-Message-Id: <20210421171446.785507-3-omosnace@redhat.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210421171446.785507-1-omosnace@redhat.com>
-References: <20210421171446.785507-1-omosnace@redhat.com>
+        Wed, 21 Apr 2021 13:22:07 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13LH2g7M113466;
+        Wed, 21 Apr 2021 13:21:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=lstJpaHwPFkUUecS6me/y6hgIuRLr1B2Zik2vEOtV1I=;
+ b=d46kAqLLCLEbrPtCRsPmtm1U89QGxXVQSHqXIITTdg2OtAMICXksXzAHLA8llP/qoC60
+ 6/p0cc4NGLDpXpuBCdhhwGLdCp2fltGN5vmMYysSIBT4t7H28rDXiUkbAchScDz8PbeC
+ QIURB8kH0vGCzlQJNG9hjhMthuf+bpndktdEwfk9tdi1hY7327kwc+PBFB0YwD5tQq3P
+ Y4tAWMFmxWuQUIUP826vmWocwRXGBipqyTwmVRwhwqHrkejDzqtFxqmW0l7Ii02kxh9e
+ prYQeaNVgOWRWr3MO0YT4/NvQQeohRxxy/4FLDmE6opejJz4v/grRlJKEF9h16Z3edCN og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 382pqjm504-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Apr 2021 13:21:08 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13LH374m114846;
+        Wed, 21 Apr 2021 13:21:08 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 382pqjm4xw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Apr 2021 13:21:08 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13LHCZEJ012292;
+        Wed, 21 Apr 2021 17:21:06 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04wdc.us.ibm.com with ESMTP id 3813tav4qy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Apr 2021 17:21:06 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13LHL56629098260
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Apr 2021 17:21:05 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CD3D7805F;
+        Wed, 21 Apr 2021 17:21:04 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4DD4A78060;
+        Wed, 21 Apr 2021 17:21:00 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.85.203.222])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 21 Apr 2021 17:21:00 +0000 (GMT)
+Message-ID: <e7a91c8c09722afe1fb1ec3aa7b6544e713183af.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 1/4] KEYS: trusted: Add generic trusted keys framework
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        Luke Hinds <lhinds@redhat.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org
+Date:   Wed, 21 Apr 2021 10:20:59 -0700
+In-Reply-To: <CAFA6WYOzD-qhHrcnzvd9P7iFvEqWwf0NCKXrgrEgvnB5i_-SxQ@mail.gmail.com>
+References: <20210301131127.793707-1-sumit.garg@linaro.org>
+         <20210301131127.793707-2-sumit.garg@linaro.org>
+         <65dcc9fa28833e6beb1eadf98b0ed3402404d693.camel@linux.ibm.com>
+         <CAFA6WYOzD-qhHrcnzvd9P7iFvEqWwf0NCKXrgrEgvnB5i_-SxQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mF_mQJ94uIxxjn9pVwPv8BfLpLfMiGuW
+X-Proofpoint-GUID: 6unQ4mr8lhL0JY8r4cz4nOfNC94-vrI6
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-21_05:2021-04-21,2021-04-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 priorityscore=1501 adultscore=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104210122
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Unfortunately, the approach chosen in commit 29cd6591ab6f ("selinux:
-teach SELinux about anonymous inodes") to use a single class for all
-anon inodes and let the policy distinguish between them using named
-transitions turned out to have a rather unfortunate drawback.
+On Wed, 2021-04-21 at 16:38 +0530, Sumit Garg wrote:
+> Hi James,
+> 
+> On Wed, 21 Apr 2021 at 04:47, James Bottomley <jejb@linux.ibm.com>
+> wrote:
+> > On Mon, 2021-03-01 at 18:41 +0530, Sumit Garg wrote:
+> > > Current trusted keys framework is tightly coupled to use TPM
+> > > device as an underlying implementation which makes it difficult
+> > > for implementations like Trusted Execution Environment (TEE) etc.
+> > > to provide trusted keys support in case platform doesn't posses a
+> > > TPM device.
+> > > 
+> > > Add a generic trusted keys framework where underlying
+> > > implementations can be easily plugged in. Create struct
+> > > trusted_key_ops to achieve this, which contains necessary
+> > > functions of a backend.
+> > > 
+> > > Also, define a module parameter in order to select a particular
+> > > trust source in case a platform support multiple trust sources.
+> > > In case its not specified then implementation itetrates through
+> > > trust sources list starting with TPM and assign the first trust
+> > > source as a backend which has initiazed successfully during
+> > > iteration.
+> > > 
+> > > Note that current implementation only supports a single trust
+> > > source at runtime which is either selectable at compile time or
+> > > during boot via aforementioned module parameter.
+> > 
+> > You never actually tested this, did you?  I'm now getting EINVAL
+> > from all the trusted TPM key operations because of this patch.
+> > 
+> 
+> Unfortunately, I don't possess a development machine with a TPM
+> device. So mine testing was entirely based on TEE as a backend which
+> doesn't support any optional parameters. And that being the reason I
+> didn't catch this issue at first instance.
+> 
+> Is there any TPM emulation environment available that I can use for
+> testing?
 
-For example, suppose we have two types of anon inodes, "A" and "B", and
-we want to allow a set of domains (represented by an attribute "attr_x")
-certain set of permissions on anon inodes of type "A" that were created
-by the same domain, but at the same time disallow this set to access
-anon inodes of type "B" entirely. Since all inodes share the same class
-and we want to distinguish both the inode types and the domains that
-created them, we have no choice than to create separate types for the
-cartesian product of (domains that belong to attr_x) x ("A", "B") and
-add all the necessary allow and transition rules for each domain
-individually.
+Well use the same as we all use: A software TPM running in the host
+coupled with a virtual machine guest for the kernel:
 
-This makes it very impractical to write sane policies for anon inodes in
-the future, as more anon inode types are added. Therefore, this patch
-implements an alternative approach that assigns a separate class to each
-type of anon inode. This allows the example above to be implemented
-without any transition rules and with just a single allow rule:
+https://en.opensuse.org/Software_TPM_Emulator_For_QEMU
 
-allow attr_x self:A { ... };
+It doesn't catch interface issues (like TIS timeouts) but it does catch
+TPM operations problems like this patch had.
 
-In order to not break possible existing users of the already merged
-original approach, this patch also adds a new policy capability
-"extended_anon_inode_class" that needs to be set by the policy to enable
-the new behavior.
+James
 
-I decided to keep the named transition mechanism in the new variant,
-since there might eventually be some extra information in the anon inode
-name that could be used in transitions.
-
-One minor annoyance is that the kernel still expects the policy to
-provide both classes (anon_inode and userfaultfd) regardless of the
-capability setting and if one of them is not defined in the policy, the
-kernel will print a warning when loading the policy. However, it doesn't
-seem worth to work around that in the kernel, as the policy can provide
-just the definition of the unused class(es) (and permissions) to avoid
-this warning. Keeping the legacy anon_inode class with some fallback
-rules may also be desirable to keep the policy compatible with kernels
-that only support anon_inode.
-
-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
----
- security/selinux/hooks.c                   | 27 +++++++++++++++++++++-
- security/selinux/include/classmap.h        |  2 ++
- security/selinux/include/policycap.h       |  1 +
- security/selinux/include/policycap_names.h |  3 ++-
- security/selinux/include/security.h        |  7 ++++++
- 5 files changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index dc57ba21d8ff..20a8d7d17936 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3079,7 +3079,32 @@ static int selinux_inode_init_security_anon(struct inode *inode,
- 		isec->sclass = context_isec->sclass;
- 		isec->sid = context_isec->sid;
- 	} else {
--		isec->sclass = SECCLASS_ANON_INODE;
-+		/*
-+		 * If the check below fails:
-+		 *  1. Add the corresponding security class to
-+		 *     security/selinux/include/classmap.h
-+		 *  2. Map the new LSM_ANON_INODE_* value to the class in
-+		 *     the switch statement below.
-+		 *  3. Update the RHS of the comparison in the BUILD_BUG_ON().
-+		 *  4. CC selinux@vger.kernel.org and
-+		 *     linux-security-module@vger.kernel.org when submitting
-+		 *     the patch or in case of any questions.
-+		 */
-+		BUILD_BUG_ON(LSM_ANON_INODE_MAX > LSM_ANON_INODE_USERFAULTFD);
-+
-+		if (selinux_policycap_extended_anon_inode()) {
-+			switch (type) {
-+			case LSM_ANON_INODE_USERFAULTFD:
-+				isec->sclass = SECCLASS_USERFAULTFD;
-+				break;
-+			default:
-+				pr_err("SELinux:  got invalid anon inode type: %d",
-+				       (int)type);
-+				return -EINVAL;
-+			}
-+		} else {
-+			isec->sclass = SECCLASS_ANON_INODE;
-+		}
- 		rc = security_transition_sid(
- 			&selinux_state, tsec->sid, tsec->sid,
- 			isec->sclass, name, &isec->sid);
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index ba2e01a6955c..e4308cad6407 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -251,6 +251,8 @@ struct security_class_mapping secclass_map[] = {
- 	  { "integrity", "confidentiality", NULL } },
- 	{ "anon_inode",
- 	  { COMMON_FILE_PERMS, NULL } },
-+	{ "userfaultfd",
-+	  { COMMON_FILE_PERMS, NULL } },
- 	{ NULL }
-   };
- 
-diff --git a/security/selinux/include/policycap.h b/security/selinux/include/policycap.h
-index 2ec038efbb03..969804bd6dab 100644
---- a/security/selinux/include/policycap.h
-+++ b/security/selinux/include/policycap.h
-@@ -11,6 +11,7 @@ enum {
- 	POLICYDB_CAPABILITY_CGROUPSECLABEL,
- 	POLICYDB_CAPABILITY_NNP_NOSUID_TRANSITION,
- 	POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS,
-+	POLICYDB_CAPABILITY_EXTENDED_ANON_INODE_CLASS,
- 	__POLICYDB_CAPABILITY_MAX
- };
- #define POLICYDB_CAPABILITY_MAX (__POLICYDB_CAPABILITY_MAX - 1)
-diff --git a/security/selinux/include/policycap_names.h b/security/selinux/include/policycap_names.h
-index b89289f092c9..78651990425e 100644
---- a/security/selinux/include/policycap_names.h
-+++ b/security/selinux/include/policycap_names.h
-@@ -12,7 +12,8 @@ const char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
- 	"always_check_network",
- 	"cgroup_seclabel",
- 	"nnp_nosuid_transition",
--	"genfs_seclabel_symlinks"
-+	"genfs_seclabel_symlinks",
-+	"extended_anon_inode_class",
- };
- 
- #endif /* _SELINUX_POLICYCAP_NAMES_H_ */
-diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-index 7130c9648ad1..4fb75101aca4 100644
---- a/security/selinux/include/security.h
-+++ b/security/selinux/include/security.h
-@@ -219,6 +219,13 @@ static inline bool selinux_policycap_genfs_seclabel_symlinks(void)
- 	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS]);
- }
- 
-+static inline bool selinux_policycap_extended_anon_inode(void)
-+{
-+	struct selinux_state *state = &selinux_state;
-+
-+	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_EXTENDED_ANON_INODE_CLASS]);
-+}
-+
- int security_mls_enabled(struct selinux_state *state);
- int security_load_policy(struct selinux_state *state,
- 			void *data, size_t len,
--- 
-2.30.2
 
