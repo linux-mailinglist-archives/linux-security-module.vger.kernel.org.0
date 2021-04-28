@@ -2,29 +2,29 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFA936D629
-	for <lists+linux-security-module@lfdr.de>; Wed, 28 Apr 2021 13:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D143F36D630
+	for <lists+linux-security-module@lfdr.de>; Wed, 28 Apr 2021 13:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239646AbhD1LM2 (ORCPT
+        id S239684AbhD1LMk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 28 Apr 2021 07:12:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43008 "EHLO mail.kernel.org"
+        Wed, 28 Apr 2021 07:12:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44166 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239179AbhD1LMW (ORCPT
+        id S239656AbhD1LMb (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 28 Apr 2021 07:12:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BD22661428;
-        Wed, 28 Apr 2021 11:11:36 +0000 (UTC)
+        Wed, 28 Apr 2021 07:12:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A5716142F;
+        Wed, 28 Apr 2021 11:11:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619608298;
-        bh=6/5PSNK2l/2+czWBATeA3iJvrkGMvaqFUXikdMYh9aw=;
+        s=k20201202; t=1619608306;
+        bh=HvDLgNabGCOs+S5SagXeZ4aMTi+wJrhEtYPRjaSVkDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFoFD9KI05j4t+afcGcZE0E379iO9CVjzILDaBBKEYBweKZ0uldeV2QOICrqsKPSo
-         HCKKGzjJ69HCHsuG1FFqQPvW5E1nVFyohUi/5/pjzyBbxklA7Ge8lgHqKgAZNtI4CC
-         kd9jcCgrEhX15tbY6IzHn445fgneC6rRbFBgAaZevG/G8Vwl7Up7aHJxi3Nstp7FdI
-         etBpKC1nPgTXppClmQLxRDRUpo2y3dYBU+plXKn2B9ZddpOZS2PavqXRJ1yY9APCWA
-         McO6G7ZzBOjnuejzDfMaGDne225ztrHopeW+cCKi0+LTudHB66N8JiZmHg+FbOY5MG
-         EfBfLdEctJFDw==
+        b=o6wSB3EuE82HhSGkx4KVpcYVG0Ov42M9Lspez3WGXR90twVeL5rtTUH9W1qiPaxAM
+         h9ZgAYuR7Ctf1BPdAcj9HItjLQNQj11AaAJb1D2PLcq20aHGK+rIQnKgLR+HiSUH4s
+         qh2GLHpndmiAS30OHW0G+oQzol8pbgfyP4ucWWHeUmh8wZnNMyeTvCD+HAL1UgLY1r
+         eDOMfxfQBGlOxkd5eBf2fjOHkwHz2Vji8Ntcw9tvb7RSQSpLTl4wearu8/csI7SsU+
+         nzlS7nzLXgHJ0PmO4qG4tBRi1xW84BIYJ9ZWzkDaGzDCfhEBN10V43js9kKgXzc+eY
+         Gk9GNwlOuQcKw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
@@ -35,12 +35,12 @@ Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 2/4] capabilities: require CAP_SETFCAP to map uid 0
-Date:   Wed, 28 Apr 2021 07:11:31 -0400
-Message-Id: <20210428111133.1343210-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 2/4] capabilities: require CAP_SETFCAP to map uid 0
+Date:   Wed, 28 Apr 2021 07:11:39 -0400
+Message-Id: <20210428111141.1343299-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210428111133.1343210-1-sashal@kernel.org>
-References: <20210428111133.1343210-1-sashal@kernel.org>
+In-Reply-To: <20210428111141.1343299-1-sashal@kernel.org>
+References: <20210428111141.1343299-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -129,10 +129,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 67 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
-index 64cf8ebdc4ec..f6c5f784be5a 100644
+index 6ef1c7109fc4..7616c7bf4b24 100644
 --- a/include/linux/user_namespace.h
 +++ b/include/linux/user_namespace.h
-@@ -63,6 +63,9 @@ struct user_namespace {
+@@ -64,6 +64,9 @@ struct user_namespace {
  	kgid_t			group;
  	struct ns_common	ns;
  	unsigned long		flags;
@@ -157,7 +157,7 @@ index c6ca33034147..2ddb4226cd23 100644
  #define CAP_SETFCAP	     31
  
 diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-index af612945a4d0..9a4b980d695b 100644
+index e703d5d9cbe8..ce396ea4de60 100644
 --- a/kernel/user_namespace.c
 +++ b/kernel/user_namespace.c
 @@ -106,6 +106,7 @@ int create_user_ns(struct cred *new)
