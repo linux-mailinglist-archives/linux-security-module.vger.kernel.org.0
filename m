@@ -2,100 +2,172 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D7A373840
-	for <lists+linux-security-module@lfdr.de>; Wed,  5 May 2021 12:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427B337395A
+	for <lists+linux-security-module@lfdr.de>; Wed,  5 May 2021 13:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbhEEKCE (ORCPT
+        id S233050AbhEELbD (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 5 May 2021 06:02:04 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:47725 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbhEEKB6 (ORCPT
+        Wed, 5 May 2021 07:31:03 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3004 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230001AbhEELbB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 5 May 2021 06:01:58 -0400
-Received: from mail-ot1-f72.google.com ([209.85.210.72])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <dimitri.ledkov@canonical.com>)
-        id 1leEKx-0000tw-DI
-        for linux-security-module@vger.kernel.org; Wed, 05 May 2021 10:00:59 +0000
-Received: by mail-ot1-f72.google.com with SMTP id l10-20020a056830054ab0290241bf5f8c25so890127otb.11
-        for <linux-security-module@vger.kernel.org>; Wed, 05 May 2021 03:00:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hmv8ovZ+lzfrtpGUv4rzbEFq7f24tUyHf3OpammTdVs=;
-        b=OdaaORfBtFeWb26slhw4yZ1vUji4dHTnCkstDjcyZKZVKp+3p7JHyt4i2vcB4fLb8S
-         8ojGHJ5jUXpweCrD+sNyBpoCESgWwcGHyfjBW7V21rLobfGRN0EYebHF4afKC4lW6tZO
-         jERi8k9qejI/1M14VXCQSnNNaf6iap+2X4Mid4+ZDiamPJfGCfY2lL+fgHEWB56iNf7V
-         3QUGjtleyjyARsSKsJlfoSSo/oFQRB7jUINFOnWpsefkUp0ALD5W/Hq/xKSuqdFVfqKt
-         L5eL8wWh5ivfCiVhCle+DkFN45JF0dWXNoyujbPd1ITBE2YcuGN+3ErnSuwWoptOBhRS
-         MtyQ==
-X-Gm-Message-State: AOAM532Isn6+2dihVJrilmLb/FM0skZ9I+WYtUfvR3sKDO/+wGfqq2e4
-        9IfSgu+ILSw1Qp69yQcjX0K9pBpPOXzS/fFiXj/LiGdj7gq0DbgroiPiESSmWQL3xLOgRu8glaj
-        oQcEo6sC5t5UoQfB4qcPTCH7cQCJ686Gifl1qGinaGVQ2F/OcguPy1a0Pro5xts9WVi91HQ==
-X-Received: by 2002:aca:f008:: with SMTP id o8mr21310002oih.106.1620208858222;
-        Wed, 05 May 2021 03:00:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxpRAMGh4AS9JFPRCCBNyvlCeqrX9tgmlXqMVO13lCuk0UmTaaGw2kTzBqWRUd/WpjRXslgaBkTm9Kbc76fMKA=
-X-Received: by 2002:aca:f008:: with SMTP id o8mr21309979oih.106.1620208857795;
- Wed, 05 May 2021 03:00:57 -0700 (PDT)
+        Wed, 5 May 2021 07:31:01 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FZvVj5bCPz6yj77;
+        Wed,  5 May 2021 19:24:13 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 5 May 2021 13:30:01 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@google.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v6 00/11] evm: Improve usability of portable signatures
+Date:   Wed, 5 May 2021 13:29:24 +0200
+Message-ID: <20210505112935.1410679-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <337B72A8-C81A-4C53-A4D6-FFFD7FA66CEC@oracle.com>
- <161428671215.677100.6372209948022011988.stgit@warthog.procyon.org.uk>
- <161428674320.677100.12637282414018170743.stgit@warthog.procyon.org.uk>
- <4b275a33-28ac-78c2-e075-ea2eda4f13a8@canonical.com> <92182F5F-327E-4F1D-A7D9-42355625C84C@oracle.com>
- <b10f51dc-b9d7-e84d-3a52-438ebd358a7d@canonical.com> <2579343.1615623232@warthog.procyon.org.uk>
- <12AAB359-A315-490E-8B94-FF947997B30E@oracle.com>
-In-Reply-To: <12AAB359-A315-490E-8B94-FF947997B30E@oracle.com>
-From:   Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-Date:   Wed, 5 May 2021 11:00:21 +0100
-Message-ID: <CADWks+Z0xqDcJG_+VKKJYw2m1aG9DZ3pD9yoLCSSA5CUjJgsSA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] integrity: Load mokx variables into the blacklist keyring
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sat, Mar 13, 2021 at 2:40 PM Eric Snowberg <eric.snowberg@oracle.com> wrote:
->
->
-> > On Mar 13, 2021, at 1:13 AM, David Howells <dhowells@redhat.com> wrote:
-> >
-> > Eric Snowberg <eric.snowberg@oracle.com> wrote:
-> >
-> >> If MOKx will be available thru a config table in the next shim,
-> >> I'll prepare a follow on patch to add this support.
-> >
-> > Can this go separately, or would it be better rolled into the existing
-> > patchset?
->
-> IMHO, since you have already sent a pull request and this is not available
-> yet in shim, it seems save to have it go separately.  I should have time
-> to send something out next week to address this change.
->
+EVM portable signatures are particularly suitable for the protection of
+metadata of immutable files where metadata is signed by a software vendor.
+They can be used for example in conjunction with an IMA policy that
+appraises only executed and memory mapped files.
 
-I don't think that was correct to call it "not available yet in shim".
-Shim has always exported all the variables, it's just at the time most
-shims from most distros did not have any contents in MokX. And as
-usual with all EFI variables, empty ones do not exist.
+However, some usability issues are still unsolved, especially when EVM is
+used without loading an HMAC key. This patch set attempts to fix the open
+issues.
 
-The shim from Ubuntu which is now public contains 1 cert & 378 on
-x86_64 and 1 cert & 170 hashes. Thus it is likely to fail to be read
-by kernel correctly unless it uses efi_mokvar_entry_find(). These
-patches are tagged with CVE number which it does not address
-completely in some configurations. Are you working on a patch to add
-efi_mokvar_entry_find() or do you want me to write it / test it /
-submit it for review?
+Patch 1 allows EVM to be used without loading an HMAC key. Patch 2 avoids
+appraisal verification of public keys (they are already verified by the key
+subsystem).
 
+Patches 3-4 allow metadata verification to be turned off when no HMAC key
+is loaded and to use this mode in a safe way (by ensuring that IMA
+revalidates metadata when there is a change).
+
+Patches 5-8 make portable signatures more usable if metadata verification
+is not turned off, by ignoring the INTEGRITY_NOLABEL and INTEGRITY_NOXATTS
+errors when possible, by accepting any metadata modification until
+signature verification succeeds (useful when xattrs/attrs are copied
+sequentially from a source) and by allowing operations that don't change
+metadata.
+
+Patch 9 makes it possible to use portable signatures when the IMA policy
+requires file signatures and patch 10 shows portable signatures in the
+measurement list when the ima-sig template is selected.
+
+Lastly, patch 11 avoids undesired removal of security.ima when a file is
+not selected by the IMA policy.
+
+Test:
+https://github.com/robertosassu/ima-evm-utils/blob/ima-evm-fixes-v6-devel-v1/tests/portable_signatures.test
+
+Test results:
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/503096506
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/503096510
+
+
+Changelog
+
+v5:
+- remove IMA xattr post hooks and call evm_revalidate() from pre hooks
+  (suggested by Mimi)
+- rename evm_ignore_error_safe() to evm_hmac_disabled() and check the errors
+  inline (suggested by Mimi)
+- improve readability of error handling in evm_verify_hmac() (suggested by Mimi)
+- don't show an error message if the EVM status is INTEGRITY_PASS_IMMUTABLE
+  (suggested by Mimi)
+- check if CONFIG_FS_POSIX_ACL is defined in evm_xattr_acl_change() (reported
+  by kernel test robot)
+- fix return value of evm_xattr_change() (suggested by Christian Brauner)
+- simplify EVM_ALLOW_METADATA_WRITES check in evm_write_key() (suggested by
+  Mimi)
+
+v4:
+- add patch to pass mnt_userns to EVM inode set/remove xattr hooks
+  (suggested by Christian Brauner)
+- pass mnt_userns to posix_acl_update_mode()
+- use IS_ERR_OR_NULL() in evm_xattr_acl_change() (suggested by Mimi)
+
+v3:
+- introduce evm_ignore_error_safe() to correctly ignore INTEGRITY_NOLABEL
+  and INTEGRITY_NOXATTRS errors
+- fix an error in evm_xattr_acl_change()
+- replace #ifndef with !IS_ENABLED() in integrity_load_keys()
+- reintroduce ima_inode_removexattr()
+- adapt patches to apply on top of the idmapped mounts patch set
+
+v2:
+- replace EVM_RESET_STATUS flag with evm_status_revalidate()
+- introduce IMA post hooks ima_inode_post_setxattr() and
+  ima_inode_post_removexattr()
+- remove ima_inode_removexattr()
+- ignore INTEGRITY_NOLABEL error if the HMAC key is not loaded
+
+v1:
+- introduce EVM_RESET_STATUS integrity flag instead of clearing IMA flag
+- introduce new template field evmsig
+- add description of evm_xattr_acl_change() and evm_xattr_change()
+
+Roberto Sassu (11):
+  evm: Execute evm_inode_init_security() only when an HMAC key is loaded
+  evm: Load EVM key in ima_load_x509() to avoid appraisal
+  evm: Refuse EVM_ALLOW_METADATA_WRITES only if an HMAC key is loaded
+  evm: Introduce evm_status_revalidate()
+  evm: Introduce evm_hmac_disabled() to safely ignore verification
+    errors
+  evm: Allow xattr/attr operations for portable signatures
+  evm: Pass user namespace to set/remove xattr hooks
+  evm: Allow setxattr() and setattr() for unmodified metadata
+  ima: Allow imasig requirement to be satisfied by EVM portable
+    signatures
+  ima: Introduce template field evmsig and write to field sig as
+    fallback
+  ima: Don't remove security.ima if file must not be appraised
+
+Roberto Sassu (11):
+  evm: Execute evm_inode_init_security() only when an HMAC key is loaded
+  evm: Load EVM key in ima_load_x509() to avoid appraisal
+  evm: Refuse EVM_ALLOW_METADATA_WRITES only if an HMAC key is loaded
+  evm: Introduce evm_status_revalidate()
+  evm: Introduce evm_hmac_disabled() to safely ignore verification
+    errors
+  evm: Allow xattr/attr operations for portable signatures
+  evm: Pass user namespace to set/remove xattr hooks
+  evm: Allow setxattr() and setattr() for unmodified metadata
+  ima: Allow imasig requirement to be satisfied by EVM portable
+    signatures
+  ima: Introduce template field evmsig and write to field sig as
+    fallback
+  ima: Don't remove security.ima if file must not be appraised
+
+ Documentation/ABI/testing/evm             |   5 +-
+ Documentation/security/IMA-templates.rst  |   4 +-
+ include/linux/evm.h                       |  18 +-
+ include/linux/integrity.h                 |   1 +
+ security/integrity/evm/evm_main.c         | 227 ++++++++++++++++++++--
+ security/integrity/evm/evm_secfs.c        |   5 +-
+ security/integrity/iint.c                 |   4 +-
+ security/integrity/ima/ima_appraise.c     |  43 ++--
+ security/integrity/ima/ima_init.c         |   4 +
+ security/integrity/ima/ima_template.c     |   2 +
+ security/integrity/ima/ima_template_lib.c |  33 +++-
+ security/integrity/ima/ima_template_lib.h |   2 +
+ security/security.c                       |   4 +-
+ 13 files changed, 304 insertions(+), 48 deletions(-)
 
 -- 
-Regards,
+2.25.1
 
-Dimitri.
