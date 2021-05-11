@@ -2,80 +2,85 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2ED137B2AE
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 May 2021 01:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2FB37B2B2
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 May 2021 01:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbhEKXjl (ORCPT
+        id S229996AbhEKXkU (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 11 May 2021 19:39:41 -0400
-Received: from bosmailout06.eigbox.net ([66.96.185.6]:54961 "EHLO
-        bosmailout06.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhEKXjl (ORCPT
+        Tue, 11 May 2021 19:40:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57534 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229637AbhEKXkT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 11 May 2021 19:39:41 -0400
-X-Greylist: delayed 1819 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 May 2021 19:39:41 EDT
-Received: from bosmailscan03.eigbox.net ([10.20.15.3])
-        by bosmailout06.eigbox.net with esmtp (Exim)
-        id 1lgbU6-0007pZ-A4; Tue, 11 May 2021 19:08:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=loadcrop.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Cejx16tZa1zAFDXB4Sm5wS9QnxiDfGVcTo3rpqfWlQA=; b=sCF9vxSly5a51iHfrWOBg7tWlF
-        EAoRLNJ9LBYukFrIuGQGQ56QEb5b9Xv2VQQG49NHjaNwQfhc1JMwLTaLy2kPlwvL5IiRM1v/iQvDK
-        i5QdpRffTG7+IRfwf51K2bRvP1Cz3ojkOJK1m7577hQfksKrIyi2cYjTNXf5SqNtMVKWgGSPzmbux
-        3Rm2PEOPC0alagg3ZK0WccdYNvQ1mcZg0+itt4JvqEKMbMl4PomfMnSQyIwQqO2v5lnYwMm3KRRK8
-        fB/4UvUCKwQt0esI4Jcz01du631v6BdZC30jr/u2MePGzeuZt49a3UvQJgPFKdVGPRo34ZvLhDL0/
-        QSG+dOBQ==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan03.eigbox.net with esmtp (Exim)
-        id 1lgbU2-0003UF-Tu; Tue, 11 May 2021 19:08:10 -0400
-Received: from boswebmail05.eigbox.net ([10.20.16.5])
-        by bosimpout12 with 
-        id 3b812500q06ZEP601b88cB; Tue, 11 May 2021 19:08:10 -0400
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail05.eigbox.net with esmtp (Exim)
-        id 1lgbTx-0001dY-KR; Tue, 11 May 2021 19:08:05 -0400
-Received: from [41.138.102.229]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Tue, 11 May 2021 19:08:05 -0400
+        Tue, 11 May 2021 19:40:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 58A28616ED;
+        Tue, 11 May 2021 23:39:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620776352;
+        bh=opdv1vl7F9qgMxjqwo7kS8bgDqLanKuizbh/7bPX1d0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N3NSyN2UVXQiYlvizM1YqCinboJ8Wfii4PUN8SQhqD2QB0Xdnv7Ykj1YG8mKI7Cpf
+         gqfrvt2QHJN8Ujb8u7niKauxwRL0mVCx3tBXUXRMSb4TkETeZUY00rBLWwMa5AejPn
+         lRUxCviwZNMoyS78geR89xun0Oi6LkcYwVkK4L0kchVgOB7Em0xQPMoXYjF7F2m5OJ
+         NCRaol8+SGYnCe4+bFkSkhbX2Fis4hbFXVVlByLTCe9UazKq750ROu3np0ksNhWiYb
+         CJgjqTdVc74bnX/H/W2Oce8NWva5s3HorKX2DRFNGN5SbuCLZ9aebr0f2/b8UVYcUS
+         fE2bTwZsUkPfQ==
+Date:   Wed, 12 May 2021 02:39:10 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ben Boeckel <me@benboeckel.net>
+Cc:     keyrings@vger.kernel.org, Ben Boeckel <mathstuf@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH v2 1/1] trusted-keys: match tpm_get_ops on all return
+ paths
+Message-ID: <YJsVnjXYEokBC1N6@kernel.org>
+References: <20210429192156.770145-1-list.lkml.keyrings@me.benboeckel.net>
+ <20210429192156.770145-2-list.lkml.keyrings@me.benboeckel.net>
+ <YJmf4Q0l+MTFEaEo@erythro.dev.benboeckel.internal>
 MIME-Version: 1.0
-Date:   Wed, 12 May 2021 01:08:05 +0200
-From:   janete Moon <tomorrow@loadcrop.com>
-To:     undisclosed-recipients:;
-Subject: Partner with me
-Organization: financial institution
-Reply-To: janete.moon20@gmail.com
-Mail-Reply-To: janete.moon20@gmail.com
-Message-ID: <f05a6c6af4d8f52343c54511272fb0ae@loadcrop.com>
-X-Sender: tomorrow@loadcrop.com
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: tomorrow@loadcrop.com
-Sender:  janete Moon <tomorrow@loadcrop.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJmf4Q0l+MTFEaEo@erythro.dev.benboeckel.internal>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Mon, May 10, 2021 at 05:04:33PM -0400, Ben Boeckel wrote:
+> On Thu, Apr 29, 2021 at 15:21:56 -0400, Ben Boeckel wrote:
+> > From: Ben Boeckel <mathstuf@gmail.com>
+> > 
+> > The `tpm_get_ops` call at the beginning of the function is not paired
+> > with a `tpm_put_ops` on this return path.
+> > 
+> > Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
+> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+> > ---
+> >  security/keys/trusted-keys/trusted_tpm2.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> > index 617fabd4d913..0165da386289 100644
+> > --- a/security/keys/trusted-keys/trusted_tpm2.c
+> > +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> > @@ -336,9 +336,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+> >  			rc = -EPERM;
+> >  	}
+> >  	if (blob_len < 0)
+> > -		return blob_len;
+> > -
+> > -	payload->blob_len = blob_len;
+> > +		rc = blob_len;
+> > +	else
+> > +		payload->blob_len = blob_len;
+> >  
+> >  	tpm_put_ops(chip);
+> >  	return rc;
+> 
+> Ping? Is this going to make 5.13? This fixes an issue that is in
+> 5.13-rc1.
 
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Hello Dear Friend,
-
-Greetings and how are you today?
-
-I am Miss Janete Moon an Oprhan from Ivory Coast but currently residing 
-in Ouagadougou Burkina Faso for fear of reprisal attack from my uncles 
-who killed my parents.
-
-I have a business proposal for you involving the claim of $15.5Million 
-Dollars which my late parents kept in a finance house before their 
-demise.
-
-Regards
-
-Janete.
+/Jarkko
