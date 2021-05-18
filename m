@@ -2,215 +2,109 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C741E386D62
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 May 2021 00:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1422D387E9B
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 May 2021 19:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240267AbhEQW77 (ORCPT
+        id S243866AbhERRmD (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 17 May 2021 18:59:59 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:29136 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238861AbhEQW76 (ORCPT
+        Tue, 18 May 2021 13:42:03 -0400
+Received: from sonic307-15.consmr.mail.ne1.yahoo.com ([66.163.190.38]:38096
+        "EHLO sonic307-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243707AbhERRmC (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 17 May 2021 18:59:58 -0400
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14HMqf3E028377;
-        Mon, 17 May 2021 22:57:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2020-01-29;
- bh=vnx3UOOHlYy+LzdQrU4wLxAgWLrhunJvAtQvwd7t+I8=;
- b=qwG6YwFRVGH8yFZXJ/9Gk/10DrdHpaOkk4BY1D+X7PXtSNpBnekgmWw032hlOprHvbrq
- Taywn3I7BldxVhzkywZHrGX8bd9xnd3a5sk6iED9O0lE9AhbDWN2fscdCNhz8rH4Dv/1
- XFbvzrc+nccMZbm3dk5ctS2ReCxFs2huEgKN5SpARjZpW9/zdoweHG3MROhnJYhY+WRk
- 9AFnLBdg6FpQTyzfEpJJC4Vjz5UsKBPyE1xDutl4LRpJL3zU5u6Upe3XRjwrCpmSPjyN
- DexTbjDoKHzW8+Zuo+Y957sVi36hWknqOKaO+TDqhyQmC2GWoKpCw/uCffLpkRnOc/CF /A== 
-Received: from oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 38kh0h8cr6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 May 2021 22:57:54 +0000
-Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.podrdrct (8.16.0.36/8.16.0.36) with SMTP id 14HMvpIf154682;
-        Mon, 17 May 2021 22:57:53 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2174.outbound.protection.outlook.com [104.47.73.174])
-        by userp3030.oracle.com with ESMTP id 38j3dtss8w-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 May 2021 22:57:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GL7K333eBjZIANq9wt+amm3PqcBFcy6a/9LXBOwIHmzMMaQPDlyokJvlMy25eJNhOK0snz7y2nkTt6ftgPVvxFMgFMLy4b7Jf+Kf5vTLm+0HDN3gVZ1EPM7iZSLzWYogUH97AmTf/4PaTN/fEyfoWnC496GjVcmlcm/ugiAOMLFkyGOteWo4HqAifcrSThlGS3BWOCWzIHIbZRlOsxb8y9ip7RMavP+8rZXRjACiiuRBPIfz79MW9WsXrw7GEYeWL4Okq6Ynd33l0/6mVurCzDQ2cnA0V/tWRHdlffOu278m/tfIkfyZ2KOUr9BwaTv3HYR4ym45vc3wEK50ACYcjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vnx3UOOHlYy+LzdQrU4wLxAgWLrhunJvAtQvwd7t+I8=;
- b=Pki87/aErPT6BEraucjpGQh88sV5/e3YYg5rVMLKcg0oq3HPOWfGEvfd3gAqLilgAq/If36bPcpGgGuwz1wPKJKFxK6ICZ1AvLgJwsKNxm9VBYmO9BecPIi56zbTpcJ/JCVB17TSpmvTJf0BHRF3wILFUNCeg8zlGDugid3WUSoUeKFBBW6qRHCXP32qgnKgOC2b0EW3NQfThMYj0pLjrCKIENfRjxYQGoeXxbbBniiTe2YicYkOeF3s58CHM/+0Isy4bCqMkLXBtwgSGxUh4G3ad9D5dwl3tfBQkdKCYBWJRmRJt+RmksDtoEsIifirbQoCAIzVHxj8N09dpsvTuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vnx3UOOHlYy+LzdQrU4wLxAgWLrhunJvAtQvwd7t+I8=;
- b=wpkqDWZO5FquEH1fWK4DYIl4dswR+/ogev5mWtIcw0+yf/wUNxklkDbWaTgwkFsNsqmE5WqY1DoAciHkhHRQaVlV/9GqTUsQD5QvZ+UlHCSpPtggi4v7R3YFjpE5S9EPHD8FYIOQi1bxVaevPsmeIjImOFGpZACsTzawkupeL8w=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=oracle.com;
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by CH2PR10MB4328.namprd10.prod.outlook.com (2603:10b6:610:7e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.26; Mon, 17 May
- 2021 22:57:52 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::99fc:aabb:5cff:b177]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::99fc:aabb:5cff:b177%3]) with mapi id 15.20.4129.031; Mon, 17 May 2021
- 22:57:52 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        jmorris@namei.org, jarkko@kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, zohar@linux.ibm.com,
-        torvalds@linux-foundation.org, serge@hallyn.com,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        glin@suse.com
-Subject: [RFC PATCH 3/3] ima: Enable IMA SB Policy if MokIMAPolicy found
-Date:   Mon, 17 May 2021 18:57:14 -0400
-Message-Id: <20210517225714.498032-4-eric.snowberg@oracle.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20210517225714.498032-1-eric.snowberg@oracle.com>
-References: <20210517225714.498032-1-eric.snowberg@oracle.com>
-Content-Type: text/plain
-X-Originating-IP: [148.87.23.5]
-X-ClientProxiedBy: SN6PR16CA0059.namprd16.prod.outlook.com
- (2603:10b6:805:ca::36) To CH2PR10MB4150.namprd10.prod.outlook.com
- (2603:10b6:610:ac::13)
+        Tue, 18 May 2021 13:42:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1621359644; bh=OaRaXZ/TyLu+rceOhMWTshaqetdfiL84Ys2DWla4GaE=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=cHTfS16ouunxapRJtevME9XWI36OpoDesNx4owqyRVzDr5zO/XV147zh4mM9KUGB+IbiqsPq80svHsKVpnoi4QI+QE5/OIzY1DRzHP1YsIafFvyLawAqqDLiYdHq7H/07bGq8994kteeUd1QNAtxMEV/o9XRME81MpW6543QDfw/gLfr2/3F6HLnEEBUgfD6e6PLyYuZZxJ0InWP3AS0iUBqQf+JWY3wnf4802AGpePoFJ+5yJ71GMUsfh/fQpyiPq/WdUCg8MNzOMj/qo+gDXf2TsGvpi/KbymFnTX5DE5e2UihDZ9vZa5gWuT5mQMXMcDOlst3w+C8GNA+Od3AlA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1621359644; bh=6ETJSKxd/n3W0jylI8cVdKEYJ+mSomcdrAioFk+OZsc=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=KSSt12t9oPlrgbvqP8rtPOhnLVYIOE1s4dYCfzyRp77f/Q31DbNwDNPkGfcR2cE85a2oQVSvU4C2S6gxK7HYVlBJXMvOKOzlGpeeolJPqvvnJDA1X6fod9j5Fh2VcqRrWE5358tg3zBf2+DOsnoeGRLYiCA5SlV5kR9V5yI9XCd/ynrL+i5I4Y9VGkpghVybnnihmcCr7wuTvArEWjhubFe2AR9sEG9Nc6UD788rfs1ZvlhS1JrR/8kvHBPewji83hLyrgW8zRPBXcMBN4rrS+wcbjy0jrq/09PAnDN377KJUCV+G36+C0QaNFmeu4J7w7GBIQR5/uDUsZ/c+TRe/g==
+X-YMail-OSG: aLknHFcVM1kcOHo.Zowg.xsmp0F64c26Q7QDTmFUHtxtedz5WPL_brFC_GTpGBm
+ q2imlIui.k_R2.V.15gCJEZ2zrEB_Rm28YmahRkCIOLqxreLsxTW8jnb5Y2bR2GHjsELImC0Wanj
+ Oeu4EAo3ewHG2WnfzTkqP9j19L22DZi.VPXiTTzzgY_FnaJn_TmtDNHtZR4s3hNNlkLRDKT2k24S
+ z7vqI5KABqr2DKh9I6MuXFzrlEQBIEeZNqWfmE1H9AB7ctQLR3ni1JdfxbncB.wU2ly9J109wSd.
+ BzBHGjgK1Ddu2IrewLM1fbky9cJ9ogNb8BnzX1NzEDh7KR.J_pHB.o7uKPcst8imb_Mym779Ljqu
+ qHewhUdjU7iKG2pg4zmwnExPSCZZZu45uaqzGwXF_MDLwjrJKudvu0Wb9nQQNyDdziUd7NAe67bA
+ 5w2cpV8vwF8uc3hS2hqWx2fCMEfT8Eao9c27BiSGIJ5gnjxvV6cp6FFK6VB1pkln8qa2flAPbYBB
+ OQYj4pKaebqLkWgqb37ekyjSYa6VYOIE4w5CiLxNaXFSvgN_d7d79qa7eX9ASIHpGUO_aMJlwVTh
+ RuG4ChbfOJC_TYACvXSvrlLy2zuhD.3J44henbJykX9oBT.F9FWr4W5B0BhlSavTffyl1_nyhkJI
+ IqaXP9xBNWwu9sVTxUxpzixzAdh6kHEPLugnf.hxCS9WpekgV4qmuK5OjMW1G7LilPyeTVKeh.PB
+ ceQiBH3SV7N3JxQ_6klMq46PBhsW1fFBICQa7virIRfRXmiCZ7mEE0uCMBQLxCvG23qT2Vbgbg_t
+ nEb6D9pFqW4yafC4z1QeEophQJ4xapC.tgRuAGBlhVuT8rszSobqwUAQCnlUML5pmSRdnXllIV4V
+ 59bNirWhZWlSX.yedOZcT7C2aikl6XuJLjZQm93pZ1qH0GJ4cZJ_GnmzVLMH7S1WK0cDZMkj5D22
+ bNYx2yQPBbqR3t7tFn.ina8.ufq3Dtpe9FZdgFI1tpIcgvAW37mTgupHp0NrokWxZP17D4o3B9RP
+ 3FZBsRq4QMYipxCtIlJ0Q2LMc8Deirr4Yaz_f0els.5gj0Gp7ghANCmXqH4RrlPI38GIm.sbojVb
+ EbIveV4hDWI4lDmIhckJ6v3Rjbng8gVUsRmZIWzg9bWjodjXvNagTE5Cv.ORtuF7end6_NdCohPR
+ UKKq53kuU3e0jgkQRCwL42.WKHvTw5lMAVIm4aoAJz1SFPau74Zy1qX7ap0wxclcsMOmerZc.KL2
+ xn2AyG668s1RZk7CfHvQHTB2dtm3v1OjO_hTtF3wzvAy4iZjjbNt0kqA_Iiw0a5MLClBezzgy5on
+ odKpwlvgfj6q5KFVHQA.AosDYnV6MN8XKFfzxwdNd5OxDGOr5I6qIs_HjiOCF_jrSA7IxJJQ_apC
+ qPssGg6aLS2iZKzfhO3i7xE8YNNKUYIbfpDKHnXlU3rKoqyC8kLfidPzXTKZm3idF_l2bDqjTc9N
+ NZhYg3_zg2CXJBy2vApabji3GiFWiPPd1AYM4dEvBmt61jnGih2RFvo386asrO6X.7pXDBdPOHuv
+ TWWYeHByhb0UR9QTbZSmMqbymZAy.mIEbq1bKAD_yN.yqwOf.vPvi9zZ58IqzjjejQGxbQTh.7mv
+ ZPxuV8_XoUqyUalme1i4khl.l9P6dR5sx74W6YHWe_IvLCpmRJCsalMzjA76dAGNyt6S6AB.5eEi
+ UCnTgbr5aUv42yX0rMX5CBgeJH4BhrhWeii3EI8ypgMZwL2x5.4LIJaIRCYMO9W2Bsu.ydO5ltYY
+ b13CS.95VuZx_TX2n3Ea9Qa.zGYSZYZ8MRtM3mUveCcCpPDoqshWQjeFSIPV7Jd7Gb8c2rls3Ukx
+ svrTP5z9AU5SYnzj1BwSHnu7G6kFY_O380ovi7Uhq7WyoxRj4x65sYdO1hrNKNWIORscf36cmP_y
+ 42weCKNuvGLqZtNsDK57R35hxRpeBnnk65UlyN6_PbowaFLrt3g15WuOE0tGAg1ByILGZxAFJksg
+ RVte1TNLdf500nRA67WnZBcNpvIcBH7voyA6agZM3cRxyzxLneGVl2i7hOV5La01fHdouKIs9gl9
+ 5IOn81W6b9veAZhImxl99snaZHdT4oqqPR8VoZxRss5Kcj8pgGrRhOxEh0MQVonTZfmoBQ6Y1ePh
+ BnjTLUcYpSUN0Ryu57xCX.wj0u7r9NvWHu1pYJMtZFQESpDTgeQBHE6i2RIlnYUPysmEqvvDznmo
+ psZAz_W7x6xeUhNnHSEEugxaaTt.BQdZyrSJV5sCQflgLE9YCtVGOwzLckV.byK_W9PQWwGFmbdw
+ QGgTQaAh33D_4UalbrGHeqlR0GTh_BvBaWQG2DXNl2PU5vjVE8sJSCmNMbY6R3GSwOGN2m8oPbSl
+ vmXzi9RY91QWr_CXw7l4djV9WtGAVKKu8urKTKx9yd3oyQznzq9P2r8tl3LywprQa.2wN3DDKnEU
+ VTaNNlP31LIPI9yj4zvmz5L3F8fqqXmQk0x4IpMt9kfO08Y3GFvqd5HIjDL_ayQw5nA4ZH6uQfIE
+ dycvTrjj1bvhAyH3MCzUmXAL75j4nDIr0eb5rKZFj_YatwG39D6F_aeBa8.6G0nGvK516.UqiwQk
+ 7V_OS._.ieiO8wME.I0pm.nQZN9ak4WBIOgcOs9tQjq2cC9zGHjCb79Ju01sI5yPaNRTyexib_43
+ GYR6obqEqO4cWhNahpCjxstDGCG8VkaVioluV.A--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Tue, 18 May 2021 17:40:44 +0000
+Received: by kubenode546.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 6ed5589bd64c2f62052162e8342531d0;
+          Tue, 18 May 2021 17:40:40 +0000 (UTC)
+Subject: Re: [PATCH] Revert "Smack: Handle io_uring kernel thread privileges"
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-security-module@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <04c7c410-08e8-626a-795e-b77db6666804@kernel.dk>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <89593a3e-96dc-f14c-0925-4b62872ca42e@schaufler-ca.com>
+Date:   Tue, 18 May 2021 10:40:40 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.us.oracle.com (148.87.23.5) by SN6PR16CA0059.namprd16.prod.outlook.com (2603:10b6:805:ca::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25 via Frontend Transport; Mon, 17 May 2021 22:57:50 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4bc3856-3fb5-4edf-3257-08d919873356
-X-MS-TrafficTypeDiagnostic: CH2PR10MB4328:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CH2PR10MB4328F4438E7422DBE40FEDB3872D9@CH2PR10MB4328.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: koi6xIxI2ACTkEO1oecclzCMibPFtKoimHUH5gyJEtoTf5oTyvxWtfMujl4sYkdVjpd6pczzIFJZ+du/ZdgBjxIZpAIK1NYIN5KU7Xq7Sla7fYA80OASeSlbAGfbkj41yIhguZQmKTjAJKywrJIDa2dC47hCGNNB7f/4T5ikJPePHu3SBOOjVH4PeJ3b+zaH/E8KOanhoZk0GvcuMQarItpfMhgv7Nx+8w5iDjrKnp9n+Q9FaeRzMEDq0zwi+FGk+RV00Ce/NN8+V7rkEqNU5Dab1IJ6NwdHCjE9KoxAvCzlE3mCeHjDQHiafG1G1dQWyEz1fjSsEVa2GZY492biI5Wa8XXOiUu7+6pRyCL+B2iOxs57id3B3lzNfXZf7YzgoYaNs5embrpGtLFoYcoyLJ6keFJPIetLz2IXXXApiIA8RjXyHsr3hiTdSRpIW0U9gC4U3EOA64L164lAKcW1Gz32M18TirihyblK+dZAsNntx3ESTEO35qyWyyRT2B0lZre4TZz5fSRPdhySchM4Ud7l8EQyuaADBjLEnfPqJSsFKgHLN7XQZ2hzCK5pD/veaoJQuET5QD/C1BcVTUHhlLyMbulbqmbSgMOjZ999odWG9uaqqwbhHncrF9Gt6c/1TvZL5FWAEECQxNP9gnunWju7RpISqiKqOZpSKBck2Nk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39860400002)(376002)(366004)(136003)(396003)(52116002)(7696005)(66476007)(5660300002)(66556008)(316002)(36756003)(66946007)(86362001)(6666004)(8936002)(6486002)(38100700002)(2906002)(44832011)(38350700002)(26005)(186003)(4326008)(83380400001)(8676002)(1076003)(956004)(7416002)(2616005)(16526019)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?pEvPKj5rUQzdSC35A2u0GcJDj7KYuYtC8cEHS/tvd6TFhCVUXXQcA6tIXqMd?=
- =?us-ascii?Q?zZ7LQStLv9kcqeUIizGGZVeNY0+8L9AM769gPNhqzbKrsfVszjE/N00Cxdvs?=
- =?us-ascii?Q?4hFh6fPzUhuw8zuH2gxOB15limOkJTfHFizYSU1hCyPZqFlRjNi2yVkFGpk8?=
- =?us-ascii?Q?LSZN4UKD6boZaAlii6dXDJzLuvQJRevie8H80yatmx/Mh2VAxu/FVbVM/f9P?=
- =?us-ascii?Q?OrEdVBx6NIGO+fvrvGhrKv+gFnTCaoPnpaY8YsSTsD7KzKzBj3iZy5x7x3At?=
- =?us-ascii?Q?N2UDxlITOvjo9SB9UUQzWaDVja3hvzmGsBtPl/LPKFUQfHy7P5rduBesIvze?=
- =?us-ascii?Q?vsglrdriLKunsytfVjywmEGJV03ukuszaaEBmy53ClJTUlatTLdj6fWzuyPZ?=
- =?us-ascii?Q?zXyI1qB+DTbbbyjfmAKOn4p41GRVerrxyCou8irXGDnPrbzvcD02VvcBsbSx?=
- =?us-ascii?Q?P5rFa/1nzHMOTqL7o04Q2pTFPuFW1EqMfQV2kJE+Rl8SKIt1CRAD/WvDEHHv?=
- =?us-ascii?Q?x4uII7WbawCKbiMjD4SnUKD1VnDubtCuH+G53lWkxtc/WRwVUvmQSgUXKZiq?=
- =?us-ascii?Q?eLMRulirGgDGoYN8R/xIypFWI2SqyulBYsXBxt2lEuZvNeVNfmkscdxuJ+iy?=
- =?us-ascii?Q?UeBHqzZByF2dQv/xD8j7xXUG8XOs1UJmEOctPbnFaBr9OsICh4tby4UjMocI?=
- =?us-ascii?Q?tYGYg4lUqClgCkMMcTHfaLcwZYd7f7h50+TzwxrTeD14ExScTfbGfL6jT7gu?=
- =?us-ascii?Q?r4hjEEZSZyNxGjzAlQWEXwY5NqLL9p7821THZVb44r1JRi/tUTHTfR9NBf9T?=
- =?us-ascii?Q?4doKYee4ADiEzXhcf8kFXo8+rh4jgM3etEMfUY5Ga5XUSwWAeL3MkB3WDitc?=
- =?us-ascii?Q?ok0ksI8tGa2qBkcnKrDv4Hl6RUC9A5qdMZRXlb1h5krSuIjc4RAZpnPvZvQm?=
- =?us-ascii?Q?0dKngQOrXAbf097EOGPQtFshpWmEoA4CW9oKLzf0XWaMRuoLeuEbSooq6bZP?=
- =?us-ascii?Q?H8AIoUqAZU0+YDwKPajVDvSdkIfCmomuZTI4hB87kJvKA8LhKMYKxR6eKYzg?=
- =?us-ascii?Q?T57B+HEjgQpz5/CUpOQyIGAJ4QGMGMPW8P3eyhStZZQZxQwdegGbek9izSrG?=
- =?us-ascii?Q?EWK5ywgKkkCPBHkmXOrfztK2u8cTyvezaT0XiDiwaAkQ4bZxlBiiFzIGt/hA?=
- =?us-ascii?Q?qTTNVZ/YFinO7wYGaFEY1RUBNb0hpqwLIFcLLntj07mgOakgl14xIwj3DAL+?=
- =?us-ascii?Q?l2HAD775ulXl6rcOhl/V2rGl91FHr+3R9pihdFFyPiKot/MTR2i+XtqWjYvD?=
- =?us-ascii?Q?wFT3lCCubVAjLo6OKr1QJ4LD?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4bc3856-3fb5-4edf-3257-08d919873356
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2021 22:57:52.4442
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V2m0hTpUICCbm6qEcFM/N2Rlk4+yyqJZoPZMMZ002rq+L8kyP7sVWeGsATvTUwr86pDQUKfMQQ4dZoUozTkN3RjmP4B1tWNifDc7J5z8+U8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4328
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9987 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- mlxscore=0 adultscore=0 malwarescore=0 suspectscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2105170162
-X-Proofpoint-GUID: ytW35DfjSTaNPWkM807FsUGigHlePvoy
-X-Proofpoint-ORIG-GUID: ytW35DfjSTaNPWkM807FsUGigHlePvoy
+In-Reply-To: <04c7c410-08e8-626a-795e-b77db6666804@kernel.dk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Mailer: WebService/1.1.18291 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/16)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-A new MOK variable called MokIMAPolicy has been introduced in shim.
-When this UEFI variable is set, it indicates the end-user has made
-the decision that they wish to use the built-in kernel IMA architecture
-specific policy base on the run time secure boot flags.
+On 3/25/2021 5:42 PM, Jens Axboe wrote:
+> This reverts commit 942cb357ae7d9249088e3687ee6a00ed2745a0c7.
+>
+> The io_uring PF_IO_WORKER threads no longer have PF_KTHREAD set, so no
+> need to special case them for credential checks.
+>
+> Cc: Casey Schaufler <casey@schaufler-ca.com>
+> Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-By default, this new MOK variable is not defined.  This causes the
-IMA architecture specific secure boot policy to be disabled. Since
-this changes the current behavior, a new Kconfig option called
-IMA_UEFI_ARCH_POLICY has been added.
+I have added this to smack-next. Thank you.
 
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
----
- security/integrity/ima/Kconfig   |  8 ++++++++
- security/integrity/ima/ima_efi.c | 24 ++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
-
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 12e9250c1bec..3773d2d1ddc4 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -172,6 +172,14 @@ config IMA_ARCH_POLICY
-           This option enables loading an IMA architecture specific policy
-           based on run time secure boot flags.
- 
-+config IMA_UEFI_ARCH_POLICY
-+	bool "Enable IMA archecture specific policy thru a UEFI variable"
-+	depends on IMA_ARCH_POLICY
-+	default n
-+	help
-+	  This option allows the IMA archecture specific policy to be
-+	  enabled or disabled thru a UEFI variable setup thru the shim.
-+
- config IMA_APPRAISE_BUILD_POLICY
- 	bool "IMA build time configured policy rules"
- 	depends on IMA_APPRAISE && INTEGRITY_ASYMMETRIC_KEYS
-diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-index 71786d01946f..46873a94c934 100644
---- a/security/integrity/ima/ima_efi.c
-+++ b/security/integrity/ima/ima_efi.c
-@@ -62,8 +62,32 @@ static const char * const sb_arch_rules[] = {
- 	NULL
- };
- 
-+static __init int is_uefi_arch_policy_enabled(void)
-+{
-+	efi_status_t status;
-+	unsigned int enabled = 0;
-+	unsigned long size = sizeof(enabled);
-+	efi_guid_t guid = EFI_SHIM_LOCK_GUID;
-+	u32 attr;
-+
-+	status = efi.get_variable(L"MokIMAPolicy", &guid, &attr, &size, &enabled);
-+
-+	/*
-+	 * The EFI_VARIABLE_NON_VOLATILE check is to verify MokIMAPolicy
-+	 * was set thru the shim mirrioring and not by a user from the host os.
-+	 * According to the UEFI spec, once EBS is performed, only variables
-+	 * that have EFI_VARIABLE_RUNTIME_ACCESS & EFI_VARIABLE_NON_VOLATILE
-+	 * set can be set with SetVariable().
-+	 */
-+	return (status == EFI_SUCCESS && (!(attr & EFI_VARIABLE_NON_VOLATILE)));
-+}
-+
- const char * const *arch_get_ima_policy(void)
- {
-+	if (IS_ENABLED(CONFIG_IMA_UEFI_ARCH_POLICY))
-+		if (!is_uefi_arch_policy_enabled())
-+			return NULL;
-+
- 	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot()) {
- 		if (IS_ENABLED(CONFIG_MODULE_SIG))
- 			set_module_sig_enforced();
--- 
-2.18.4
-
+> ---
+>  security/smack/smack_access.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/security/smack/smack_access.c b/security/smack/smack_access.c
+> index 7eabb448acab..efe2406a3960 100644
+> --- a/security/smack/smack_access.c
+> +++ b/security/smack/smack_access.c
+> @@ -688,10 +688,9 @@ bool smack_privileged_cred(int cap, const struct cred *cred)
+>  bool smack_privileged(int cap)
+>  {
+>  	/*
+> -	 * Kernel threads may not have credentials we can use.
+> -	 * The io_uring kernel threads do have reliable credentials.
+> +	 * All kernel tasks are privileged
+>  	 */
+> -	if ((current->flags & (PF_KTHREAD | PF_IO_WORKER)) == PF_KTHREAD)
+> +	if (unlikely(current->flags & PF_KTHREAD))
+>  		return true;
+>  
+>  	return smack_privileged_cred(cap, current_cred());
