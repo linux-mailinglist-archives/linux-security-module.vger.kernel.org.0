@@ -2,191 +2,126 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C5838A04B
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 May 2021 10:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE7138A060
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 May 2021 10:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbhETI5m (ORCPT
+        id S231485AbhETI6x (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 20 May 2021 04:57:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45538 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229536AbhETI5m (ORCPT
+        Thu, 20 May 2021 04:58:53 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3087 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231415AbhETI6s (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 20 May 2021 04:57:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A1566124C;
-        Thu, 20 May 2021 08:56:15 +0000 (UTC)
-Date:   Thu, 20 May 2021 10:56:13 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Tianyin Xu <tyxu@illinois.edu>
-Cc:     Tycho Andersen <tycho@tycho.pizza>,
-        Andy Lutomirski <luto@kernel.org>,
-        YiFei Zhu <zhuyifei1999@gmail.com>,
-        "containers@lists.linux.dev" <containers@lists.linux.dev>,
-        bpf <bpf@vger.kernel.org>, "Zhu, YiFei" <yifeifz2@illinois.edu>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kuo, Hsuan-Chi" <hckuo2@illinois.edu>,
-        Claudio Canella <claudio.canella@iaik.tugraz.at>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        "Jia, Jinghao" <jinghao7@illinois.edu>,
-        "Torrellas, Josep" <torrella@illinois.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tom Hromatka <tom.hromatka@oracle.com>,
-        Will Drewry <wad@chromium.org>
-Subject: Re: [RFC PATCH bpf-next seccomp 00/12] eBPF seccomp filters
-Message-ID: <20210520085613.gvshk4jffmzggvsm@wittgenstein>
-References: <cover.1620499942.git.yifeifz2@illinois.edu>
- <CALCETrUQBonh5BC4eomTLpEOFHVcQSz9SPcfOqNFTf2TPht4-Q@mail.gmail.com>
- <CABqSeASYRXMwTQwLfm_Tapg45VUy9sPfV7BeeV8p7XJrDoLf+Q@mail.gmail.com>
- <fffbea8189794a8da539f6082af3de8e@DM5PR11MB1692.namprd11.prod.outlook.com>
- <CAGMVDEGzGB4+6gJPTw6Tdng5ur9Jua+mCbqwPoNZ16EFaDcmjA@mail.gmail.com>
- <108b4b9c2daa4123805d2b92cf51374b@DM5PR11MB1692.namprd11.prod.outlook.com>
- <CAGMVDEEkDeUBcJAswpBjcQNWk7QDcO8BZR=uvVfm-+qe714tYg@mail.gmail.com>
+        Thu, 20 May 2021 04:58:48 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Fm3LP4CsTz6wjc7;
+        Thu, 20 May 2021 16:48:45 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 20 May 2021 10:57:20 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@srcf.ucam.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/7] ima: Add template fields to verify EVM portable signatures
+Date:   Thu, 20 May 2021 10:56:54 +0200
+Message-ID: <20210520085701.465369-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGMVDEEkDeUBcJAswpBjcQNWk7QDcO8BZR=uvVfm-+qe714tYg@mail.gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, May 20, 2021 at 03:16:10AM -0500, Tianyin Xu wrote:
-> On Mon, May 17, 2021 at 10:40 AM Tycho Andersen <tycho@tycho.pizza> wrote:
-> >
-> > On Sun, May 16, 2021 at 03:38:00AM -0500, Tianyin Xu wrote:
-> > > On Sat, May 15, 2021 at 10:49 AM Andy Lutomirski <luto@kernel.org> wrote:
-> > > >
-> > > > On 5/10/21 10:21 PM, YiFei Zhu wrote:
-> > > > > On Mon, May 10, 2021 at 12:47 PM Andy Lutomirski <luto@kernel.org> wrote:
-> > > > >> On Mon, May 10, 2021 at 10:22 AM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> > > > >>>
-> > > > >>> From: YiFei Zhu <yifeifz2@illinois.edu>
-> > > > >>>
-> > > > >>> Based on: https://urldefense.com/v3/__https://lists.linux-foundation.org/pipermail/containers/2018-February/038571.html__;!!DZ3fjg!thbAoRgmCeWjlv0qPDndNZW1j6Y2Kl_huVyUffr4wVbISf-aUiULaWHwkKJrNJyo$
-> > > > >>>
-> > > > >>> This patchset enables seccomp filters to be written in eBPF.
-> > > > >>> Supporting eBPF filters has been proposed a few times in the past.
-> > > > >>> The main concerns were (1) use cases and (2) security. We have
-> > > > >>> identified many use cases that can benefit from advanced eBPF
-> > > > >>> filters, such as:
-> > > > >>
-> > > > >> I haven't reviewed this carefully, but I think we need to distinguish
-> > > > >> a few things:
-> > > > >>
-> > > > >> 1. Using the eBPF *language*.
-> > > > >>
-> > > > >> 2. Allowing the use of stateful / non-pure eBPF features.
-> > > > >>
-> > > > >> 3. Allowing the eBPF programs to read the target process' memory.
-> > > > >>
-> > > > >> I'm generally in favor of (1).  I'm not at all sure about (2), and I'm
-> > > > >> even less convinced by (3).
-> > > > >>
-> > > > >>>
-> > > > >>>   * exec-only-once filter / apply filter after exec
-> > > > >>
-> > > > >> This is (2).  I'm not sure it's a good idea.
-> > > > >
-> > > > > The basic idea is that for a container runtime it may wait to execute
-> > > > > a program in a container without that program being able to execve
-> > > > > another program, stopping any attack that involves loading another
-> > > > > binary. The container runtime can block any syscall but execve in the
-> > > > > exec-ed process by using only cBPF.
-> > > > >
-> > > > > The use case is suggested by Andrea Arcangeli and Giuseppe Scrivano.
-> > > > > @Andrea and @Giuseppe, could you clarify more in case I missed
-> > > > > something?
-> > > >
-> > > > We've discussed having a notifier-using filter be able to replace its
-> > > > filter.  This would allow this and other use cases without any
-> > > > additional eBPF or cBPF code.
-> > > >
-> > >
-> > > A notifier is not always a solution (even ignoring its perf overhead).
-> > >
-> > > One problem, pointed out by Andrea Arcangeli, is that notifiers need
-> > > userspace daemons. So, it can hardly be used by daemonless container
-> > > engines like Podman.
-> >
-> > I'm not sure I buy this argument. Podman already has a conmon instance
-> > for each container, this could be a child of that conmon process, or
-> > live inside conmon itself.
-> >
-> > Tycho
-> 
-> I checked with Andrea Arcangeli and Giuseppe Scrivano who are working on Podman.
-> 
-> You are right that Podman is not completely daemonless. However, “the
-> fact it's no entirely daemonless doesn't imply it's a good idea to
-> make it worse and to add complexity to the background conmon daemon or
-> to add more daemons.”
-> 
-> TL;DR. User notifiers are surely more flexible, but are also more
-> expensive and complex to implement, compared with ebpf filters. /*
-> I’ll reply to Sargun’s performance argument in a separate email */
-> 
-> I'm sure you know Podman well, but let me still move some jade from
-> Andrea and Giuseppe (all credits on podmon/crun are theirs) to
-> elaborate the point, for folks cced on the list who are not very
-> familiar with Podman.
-> 
-> Basically, the current order goes as follows:
-> 
->          podman -> conmon -> crun -> container_binary
->                                \
->                                 - seccomp done at crun level, not conmon
-> 
-> At runtime, what's left is:
-> 
->          conmon -> container_binary  /* podman disappears; crun disappears */
-> 
-> So, to go through and use seccomp notify to block `exec`, we can
-> either start the container_binary with a seccomp agent wrapper, or
-> bloat the common binary (as pointed out by Tycho).
-> 
-> If we go with the first approach, we will have:
-> 
->          podman -> conmon -> crun -> seccomp_agent -> container_binary
-> 
-> So, at runtime we'd be left with one more daemon:
-> 
->         conmon -> seccomp_agent -> container_binary
+The recent patch set 'evm: Improve usability of portable signatures' added
+the possibility to include EVM portable signatures in the IMA measurement
+list.
 
-That seems like a strawman. I don't see why this has to be out of
-process or a separate daemon. Conmon uses a regular event loop. Adding
-support for processing notifier syscall notifications is
-straightforward. Moving it to a plugin as you mentioned below is a
-design decision not a necessity.
+However, the information necessary to verify the signature were not
+included in the IMA measurement list. This patch set introduces new
+template fields to accomplish this goal:
 
-> 
-> Apparently, nobody likes one more daemon. So, the proposal from
+- 'iuid': the inode UID;
+- 'igid': the inode GID;
+- 'mntuidmap': the UID mappings of the idmapped mount (nr extents,
+  [ uid_gid_extent1 ] ... [ uid_gid_extentN ], all u32 in canonical
+  format);
+- 'mntgidmap': the GID mappings of the idmapped mount (same format as
+  'mntuidmap');
+- 'imode': the inode mode;
+- 'evmxattrs': the EVM protected xattrs (num xattrs (u32 in canonical
+   format), xattr names separated by \0, xattr lengths (u32 in canonical
+   format) and xattr values).
 
-I'm not sure such a blanket statements about an indeterminate group of
-people's alleged preferences constitutes a technical argument wny we
-need ebpf in seccomp.
+mntuidmap and mntgidmap are not empty only if the measurement is performed
+on an idmapped mount. In that case, the inode UID and GID need to be
+converted with the provided mappings.
 
-> Giuseppe was/is to use user notifiers as plugins (.so) loaded by
-> conmon:
-> https://github.com/containers/conmon/pull/190
-> https://github.com/containers/crun/pull/438
-> 
-> Now, with the ebpf filter support, one can implement the same thing
-> using an embarrassingly simple ebpf filter and, thanks to Giuseppe,
-> this is well supported by crun.
+Patches 1-4, 6 introduce new template fields. Patch 5 make it possible to
+verify EVM portable signatures which protect xattrs belonging to LSMs not
+enabled in the target platform. Patch 7 fixes a small issue in
+evm_write_xattrs() when audit is not enabled.
 
-So I think this is trying to jump the gun by saying "Look, the result
-might be simpler.". That may even be the case - though I'm not yet
-convinced - but Andy's point stands that this brings a slew of issues on
-the table that need clear answers. Bringing stateful ebpf features into
-seccomp is a pretty big step and especially around the
-privilege/security model it looks pretty handwavy right now.
+This patch set has been tested with:
 
-Christian
+https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v1-devel-v1/tests/verify_evmsig.test
+https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v1-devel-v1/tests/evm_hmac_non_enabled_xattrs.test
+
+The first test sets the IMA template format to:
+
+d-ng|n-ng|sig|evmxattrs|iuid|igid|imode|mntuidmap|mntgidmap
+
+Then, it creates a test file, sets some metadata and reads the file to
+generate a measurement entry. To verify that the information provided by
+IMA are correct, the test creates another file and sets the metadata
+obtained from the measurement list. Finally, it executes evmctl to verify
+the signature on the second file.
+
+The test is performed without and with an idmapped mount. evmctl has been
+extended to parse mntuidmap and mntgidmap (only one mapping), so that it
+can convert the mapped UID and GID from the measurement list to the
+original ones. In this way, the signature can be verified.
+
+The second test verifies that setting a non-enabled xattr does not change
+the HMAC.
+
+The test results are available at:
+
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/506431933
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/506431937
+
+This patch set has been also tested on s390x, with and without the
+canonical format enabled (the test results are not shown, as the UML kernel
+used in Travis is not available for this architecture).
+
+Roberto Sassu (7):
+  ima: Add ima_show_template_uint() template library function
+  ima: Introduce template fields iuid and igid
+  ima: Introduce template fields mntuidmap and mntgidmap
+  ima: Introduce template field imode
+  evm: Verify portable signatures against all protected xattrs
+  ima: Introduce template field evmxattrs
+  evm: Don't return an error in evm_write_xattrs() if audit is not
+    enabled
+
+ Documentation/security/IMA-templates.rst  |  10 +
+ include/linux/evm.h                       |   6 +
+ security/integrity/evm/evm.h              |   1 +
+ security/integrity/evm/evm_crypto.c       |   7 +
+ security/integrity/evm/evm_main.c         |  56 +++-
+ security/integrity/evm/evm_secfs.c        |  18 +-
+ security/integrity/ima/ima_template.c     |  14 +
+ security/integrity/ima/ima_template_lib.c | 322 +++++++++++++++++++++-
+ security/integrity/ima/ima_template_lib.h |  14 +
+ 9 files changed, 434 insertions(+), 14 deletions(-)
+
+-- 
+2.25.1
+
