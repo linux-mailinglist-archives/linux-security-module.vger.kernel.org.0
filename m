@@ -2,132 +2,169 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E43389FFA
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 May 2021 10:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDA038A01E
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 May 2021 10:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbhETIlG (ORCPT
+        id S231336AbhETIu0 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 20 May 2021 04:41:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45778 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230489AbhETIlF (ORCPT
+        Thu, 20 May 2021 04:50:26 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3081 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231327AbhETIuX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 20 May 2021 04:41:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621499977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YyK5ub/paPf5YnH0JrUsrIXNhGEnDH4sjj+bIncOVPg=;
-        b=YGW5f8ixLkxIfNDNlGM08cjjPgcw9XDHoWnnNgfsJehvH904X6PIJ7WSVPp3U/DBSp7uWH
-        wHH8Bh2IvufBJ4psVGxePZRoe50Bkwlp+outPdIY3VeuZ28gr8tOCK0QIqmvtvr6W7MdsP
-        4OCBFj1nqwyS91x+wEeMB8QBM+EOQeE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-478-SLnNQuYqPjyY1rEQ_Z2rBA-1; Thu, 20 May 2021 04:39:33 -0400
-X-MC-Unique: SLnNQuYqPjyY1rEQ_Z2rBA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 60A371A8A74;
-        Thu, 20 May 2021 08:39:24 +0000 (UTC)
-Received: from [10.36.110.30] (unknown [10.36.110.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A2EBF6A8E4;
-        Thu, 20 May 2021 08:38:53 +0000 (UTC)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     alex.williamson@redhat.com, jmorris@namei.org, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kvm@vger.kernel.org,
-        mjg59@srcf.ucam.org, cohuck@redhat.com
-References: <20210506091859.6961-1-maxime.coquelin@redhat.com>
- <202105101955.933F66A@keescook>
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-Subject: Re: [PATCH] vfio: Lock down no-IOMMU mode when kernel is locked down
-Message-ID: <d9138fab-4420-8c80-047d-b83c04eeed8e@redhat.com>
-Date:   Thu, 20 May 2021 10:38:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 20 May 2021 04:50:23 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Fm3CW4byTz6dtDl;
+        Thu, 20 May 2021 16:42:47 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 20 May 2021 10:48:58 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@srcf.ucam.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RESEND][PATCH 05/12] evm: Introduce evm_hmac_disabled() to safely ignore verification errors
+Date:   Thu, 20 May 2021 10:48:31 +0200
+Message-ID: <20210520084831.465058-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210514152753.982958-6-roberto.sassu@huawei.com>
+References: <20210514152753.982958-6-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <202105101955.933F66A@keescook>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+When a file is being created, LSMs can set the initial label with the
+inode_init_security hook. If no HMAC key is loaded, the new file will have
+LSM xattrs but not the HMAC. It is also possible that the file remains
+without protected xattrs after creation if no active LSM provided it, or
+because the filesystem does not support them.
 
+Unfortunately, EVM will deny any further metadata operation on new files,
+as evm_protect_xattr() will return the INTEGRITY_NOLABEL error if protected
+xattrs exist without security.evm, INTEGRITY_NOXATTRS if no protected
+xattrs exist or INTEGRITY_UNKNOWN if xattrs are not supported. This would
+limit the usability of EVM when only a public key is loaded, as commands
+such as cp or tar with the option to preserve xattrs won't work.
 
-On 5/11/21 4:58 AM, Kees Cook wrote:
-> On Thu, May 06, 2021 at 11:18:59AM +0200, Maxime Coquelin wrote:
->> When no-IOMMU mode is enabled, VFIO is as unsafe as accessing
->> the PCI BARs via the device's sysfs, which is locked down when
->> the kernel is locked down.
->>
->> Indeed, it is possible for an attacker to craft DMA requests
->> to modify kernel's code or leak secrets stored in the kernel,
->> since the device is not isolated by an IOMMU.
->>
->> This patch introduces a new integrity lockdown reason for the
->> unsafe VFIO no-iommu mode.
->>
->> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
->> ---
->>  drivers/vfio/vfio.c      | 13 +++++++++----
->>  include/linux/security.h |  1 +
->>  security/security.c      |  1 +
->>  3 files changed, 11 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
->> index 5e631c359ef2..fe466d6ea5d8 100644
->> --- a/drivers/vfio/vfio.c
->> +++ b/drivers/vfio/vfio.c
->> @@ -25,6 +25,7 @@
->>  #include <linux/pci.h>
->>  #include <linux/rwsem.h>
->>  #include <linux/sched.h>
->> +#include <linux/security.h>
->>  #include <linux/slab.h>
->>  #include <linux/stat.h>
->>  #include <linux/string.h>
->> @@ -165,7 +166,8 @@ static void *vfio_noiommu_open(unsigned long arg)
->>  {
->>  	if (arg != VFIO_NOIOMMU_IOMMU)
->>  		return ERR_PTR(-EINVAL);
->> -	if (!capable(CAP_SYS_RAWIO))
->> +	if (!capable(CAP_SYS_RAWIO) ||
->> +			security_locked_down(LOCKDOWN_VFIO_NOIOMMU))
-> 
-> The LSM hook check should come before the capable() check to avoid
-> setting PF_SUPERPRIV if capable() passes and the LSM doesn't.
+This patch introduces the evm_hmac_disabled() function to determine whether
+or not it is safe to ignore verification errors, based on the ability of
+EVM to calculate HMACs. If the HMAC key is not loaded, and it cannot be
+loaded in the future due to the EVM_SETUP_COMPLETE initialization flag,
+allowing an operation despite the attrs/xattrs being found invalid will not
+make them valid.
 
-OK, good to know, I'll swap in next revision.
+Since the post hooks can be executed even when the HMAC key is not loaded,
+this patch also ensures that the EVM_INIT_HMAC initialization flag is set
+before the post hooks call evm_update_evmxattr().
 
-BTW, it seems other places are doing the capable check before the LSM
-hook check, for example in ioport [0].
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/evm/evm_main.c | 39 ++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index 06f7c50ce77f..f29388180fab 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -120,6 +120,7 @@ enum lockdown_reason {
->>  	LOCKDOWN_MMIOTRACE,
->>  	LOCKDOWN_DEBUGFS,
->>  	LOCKDOWN_XMON_WR,
->> +	LOCKDOWN_VFIO_NOIOMMU,
->>  	LOCKDOWN_INTEGRITY_MAX,
->>  	LOCKDOWN_KCORE,
->>  	LOCKDOWN_KPROBES,
-> 
-> Is the security threat specific to VFIO? (i.e. could other interfaces
-> want a similar thing, such that naming this VFIO doesn't make sense?
-
-It could possibly in theory, maybe something like
-"LOCKDOWN_UNRESTRICTED_DMA" would be a better fit?
-
-Maxime
-
-[0]:
-https://elixir.bootlin.com/linux/v5.13-rc2/source/arch/x86/kernel/ioport.c#L73
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 782915117175..4206c7e492ae 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -90,6 +90,24 @@ static bool evm_key_loaded(void)
+ 	return (bool)(evm_initialized & EVM_KEY_MASK);
+ }
+ 
++/*
++ * This function determines whether or not it is safe to ignore verification
++ * errors, based on the ability of EVM to calculate HMACs. If the HMAC key
++ * is not loaded, and it cannot be loaded in the future due to the
++ * EVM_SETUP_COMPLETE initialization flag, allowing an operation despite the
++ * attrs/xattrs being found invalid will not make them valid.
++ */
++static bool evm_hmac_disabled(void)
++{
++	if (evm_initialized & EVM_INIT_HMAC)
++		return false;
++
++	if (!(evm_initialized & EVM_SETUP_COMPLETE))
++		return false;
++
++	return true;
++}
++
+ static int evm_find_protected_xattrs(struct dentry *dentry)
+ {
+ 	struct inode *inode = d_backing_inode(dentry);
+@@ -338,6 +356,10 @@ static int evm_protect_xattr(struct dentry *dentry, const char *xattr_name,
+ 	if (evm_status == INTEGRITY_NOXATTRS) {
+ 		struct integrity_iint_cache *iint;
+ 
++		/* Exception if the HMAC is not going to be calculated. */
++		if (evm_hmac_disabled())
++			return 0;
++
+ 		iint = integrity_iint_find(d_backing_inode(dentry));
+ 		if (iint && (iint->flags & IMA_NEW_FILE))
+ 			return 0;
+@@ -354,6 +376,10 @@ static int evm_protect_xattr(struct dentry *dentry, const char *xattr_name,
+ 				    -EPERM, 0);
+ 	}
+ out:
++	/* Exception if the HMAC is not going to be calculated. */
++	if (evm_hmac_disabled() && (evm_status == INTEGRITY_NOLABEL ||
++	    evm_status == INTEGRITY_UNKNOWN))
++		return 0;
+ 	if (evm_status != INTEGRITY_PASS)
+ 		integrity_audit_msg(AUDIT_INTEGRITY_METADATA, d_backing_inode(dentry),
+ 				    dentry->d_name.name, "appraise_metadata",
+@@ -474,6 +500,9 @@ void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
+ 	if (!strcmp(xattr_name, XATTR_NAME_EVM))
+ 		return;
+ 
++	if (!(evm_initialized & EVM_INIT_HMAC))
++		return;
++
+ 	evm_update_evmxattr(dentry, xattr_name, xattr_value, xattr_value_len);
+ }
+ 
+@@ -497,6 +526,9 @@ void evm_inode_post_removexattr(struct dentry *dentry, const char *xattr_name)
+ 	if (!strcmp(xattr_name, XATTR_NAME_EVM))
+ 		return;
+ 
++	if (!(evm_initialized & EVM_INIT_HMAC))
++		return;
++
+ 	evm_update_evmxattr(dentry, xattr_name, NULL, 0);
+ }
+ 
+@@ -522,7 +554,9 @@ int evm_inode_setattr(struct dentry *dentry, struct iattr *attr)
+ 		return 0;
+ 	evm_status = evm_verify_current_integrity(dentry);
+ 	if ((evm_status == INTEGRITY_PASS) ||
+-	    (evm_status == INTEGRITY_NOXATTRS))
++	    (evm_status == INTEGRITY_NOXATTRS) ||
++	    (evm_hmac_disabled() && (evm_status == INTEGRITY_NOLABEL ||
++	     evm_status == INTEGRITY_UNKNOWN)))
+ 		return 0;
+ 	integrity_audit_msg(AUDIT_INTEGRITY_METADATA, d_backing_inode(dentry),
+ 			    dentry->d_name.name, "appraise_metadata",
+@@ -548,6 +582,9 @@ void evm_inode_post_setattr(struct dentry *dentry, int ia_valid)
+ 
+ 	evm_reset_status(dentry->d_inode);
+ 
++	if (!(evm_initialized & EVM_INIT_HMAC))
++		return;
++
+ 	if (ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID))
+ 		evm_update_evmxattr(dentry, NULL, NULL, 0);
+ }
+-- 
+2.25.1
 
