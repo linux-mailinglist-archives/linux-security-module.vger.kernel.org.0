@@ -2,134 +2,282 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE30A38CC33
-	for <lists+linux-security-module@lfdr.de>; Fri, 21 May 2021 19:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AEC38CCE1
+	for <lists+linux-security-module@lfdr.de>; Fri, 21 May 2021 20:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbhEURd0 (ORCPT
+        id S238104AbhEUSGk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 21 May 2021 13:33:26 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58102 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233220AbhEURdZ (ORCPT
+        Fri, 21 May 2021 14:06:40 -0400
+Received: from mout.gmx.net ([212.227.15.15]:36933 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232931AbhEUSGj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 21 May 2021 13:33:25 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14LH47Iv033808;
-        Fri, 21 May 2021 13:31:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=L5aXyblV4MweJE7kliRjqe7BHKoS8cOQrVYDSV0UtSs=;
- b=n1/9CKvD0UU+OSGRXsf782Sb1jT//72bWMwiZ12djVIIYNjSu60Gi9qKbDE6HM1MweP6
- 8xwoSyuE9i9lKdK0Qe7hiBk0x+/F6K0OhP0XLBJwcjC1BHhu3uebKhoVESde/3dVtKsD
- fNnJAbV7ZCPERQXNvNWT+a30suHPYL55uLLts0xk13uau7+3GZBD4fZcYQVVT60SNThs
- nGVGXSwOWK/MjnlKuuhiUsi5lhhxFEPK02ls1QYpqW8Vh7qoSGdYjjuJR28/tgjrsiX0
- NwwapRaRM/9+Oq3yzZZlyOMlPzTjI3ZSfjYL5DZHgQfdD5FGgtLJeNbil3dU/B46bNTT Wg== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38pgwv0p9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 May 2021 13:31:52 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14LHSHXa006975;
-        Fri, 21 May 2021 17:31:51 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 38j5x8b96s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 May 2021 17:31:50 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14LHVm9933227098
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 May 2021 17:31:48 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 65CC811C058;
-        Fri, 21 May 2021 17:31:48 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1319F11C04C;
-        Fri, 21 May 2021 17:31:47 +0000 (GMT)
-Received: from sig-9-65-215-195.ibm.com (unknown [9.65.215.195])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 21 May 2021 17:31:46 +0000 (GMT)
-Message-ID: <7a52753c709499edbdf755abcd55a4ddf98503f1.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 00/12] evm: Improve usability of portable signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "mjg59@srcf.ucam.org" <mjg59@srcf.ucam.org>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Fri, 21 May 2021 13:31:46 -0400
-In-Reply-To: <a316bc5ec316446c8b07134c33b06d77@huawei.com>
-References: <20210514152753.982958-1-roberto.sassu@huawei.com>
-         <2804f10fa77b58b4992f56ea36a36d4f1e3f4b24.camel@linux.ibm.com>
-         <a316bc5ec316446c8b07134c33b06d77@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 59QOAR-obJ1YIk9sNTw3UuSxgGTKQjfG
-X-Proofpoint-GUID: 59QOAR-obJ1YIk9sNTw3UuSxgGTKQjfG
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 21 May 2021 14:06:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1621620287;
+        bh=FkAJBNlJfXLTD1aQ6QDAIzJgHaThVI5Z24R4aGMuUUA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=iAgVa/3bF5UaWLOS11qXVGUcBijLwHVI3/+lSKQlkeLKapq5Dx7E0Fv6Agx7eplAk
+         QqcMhEYoxsBVzVruTuvit1W6SlN0fgyMs1o10Y9vG2U8p9Y1Aj2+DKF9isTc+jUvqz
+         347CPGpNZVeywpzBFvg6f/8y3m10hHX+Rz1zh3no=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
+ (mrgmx005 [212.227.17.184]) with ESMTPSA (Nemesis) id
+ 1MUXtS-1lsqh52Nw8-00QT09; Fri, 21 May 2021 20:04:47 +0200
+From:   John Wood <john.wood@gmx.com>
+To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>
+Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
+        valdis.kletnieks@vt.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: [PATCH v7 4/7] security/brute: Mitigate a brute force attack
+Date:   Fri, 21 May 2021 19:24:11 +0200
+Message-Id: <20210521172414.69456-5-john.wood@gmx.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210521172414.69456-1-john.wood@gmx.com>
+References: <20210521172414.69456-1-john.wood@gmx.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-21_07:2021-05-20,2021-05-21 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105210090
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:zRoeZqE/E+sUnl6e4VWaC6n7LeLrOHxonXqERKe/uJW00GZSVOs
+ /qTH7j1end+WvQAikPGKqA7eYPxBZAacnNY4Z7LSY8JgL0DUdxdGwvww2bfxeeJMiJKsa5g
+ I0FyJHJblOkC78fn2a1iaqE6Q/N4uYoV+8/RwauYWwfX7+pr55UXVHCY5fzF+vSz3KI4VS7
+ 4MmMA6hglQ6HiDGXiFCbg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+WT2bkSS6RQ=:iSRmDYv2F2PmKlCpx+OmO9
+ 0EPhng9GnF779vkXZqS7J4ioH8QxVNOqjjhLq9ELRLP6vrCibK/oOkVkDoEEaUnPeWTlawszh
+ w5OMjp6wAlyx2CbCRQluGuxOnaGdWJzKooV+1GOrK9KVov/46JL8G/XXnjZHLoyEyIXc+ehQ/
+ Y4CAmEWzBYT2yVWABNO2x+jvjtZpWgIEGgL30gXZqlAggtoqIlqfnOCIfK238NH3h1A3RCM0W
+ O649kXkDjp3qJTIbHRIErEKGWMtvRW+uTx/lXqXRVAqw+HdTjAk0C6Z5er/YpxG41Zkq9JnyI
+ gP4yxbE/cIXo8dZMGYKu+mjIh/crnWf26eEnI3CVEdFHlZfJy8TBVD53LL4FdpER9EMzPX9NS
+ sfd1eLLBjw6hQGDYqSniavVe+P6GlwtrSRcAS4lyJi2Coh16rbHyX4dmRPi0sIbFzV+hMdGjW
+ vpW1FdPdUWyOIeomaEcLdYSMppRqgpwujqy/kERWvtUiQJafQPcR7L0SuHHzuW5+DQs8vlTIM
+ 8zFEXPoA+rjMs/2Np56J4qHF7qe3bDSJP2p3REJ1vCV29X8UO920FNomiUvj5FLwy3LQCeJwK
+ RUI5O3P+O/0ZhyEomm48oN/aeXzE6mcK9So6CXO020CuH1rVv9gI17YXX7i4x9wfUVoVny1EL
+ /Yayib2zjBzNQd0ttfxdnOg+vyFrqEUJivc5qQnIf5FulJ9icWESdmtFHz1qmhaAsbfQQIWHd
+ bCmKhwkY9Qp3f6W+nv5Hn3VmJXwlhneOwVfbGsPH2UHimdg3QcP5vfx9ZIM0txSNDtLv7Laou
+ k4T7xnWKA3XyBjUPalrOpjtoh5vkPERoCwvw/cC6TCsPJ5Tq93UFTstHGf5+cv8JSnKNWkmH/
+ dHluKoSWPLpBJLPTq62sQGMxMEi5hjsa6XPAlEahw/QJVEfM+Q91LT3vUdX5zfceFdOSKVscg
+ IKrU53PlZAZSyJ5Fv5u6+ARO/4ZLKKsyrA8uZ0Qu8hiFetV519WfDyBTLgAtK9XLFJo+vQSNh
+ MPzjgzoiprBMQs27z8z89Bujgly4zWYGiq/Ri55rkAwUgm4Bwc2kzPDgmdYHLM1UzXBkLu1I0
+ MnZTFy14YoFofmyfWXTVrQD58pgNERMVqK35sVGrrQo1hEkxvIgE1mhP32BCrkdd/3nkzzM9r
+ y9DjiniX+cHw0/faaHJn2JeyDcBxGbUAbGhyd//H9xS9Abc1QYiqzdBlydvWWsZwsTPDY=
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, 2021-05-21 at 07:07 +0000, Roberto Sassu wrote:
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Thursday, May 20, 2021 8:56 PM
-> > On Fri, 2021-05-14 at 17:27 +0200, Roberto Sassu wrote:
-> > > EVM portable signatures are particularly suitable for the protection of
-> > > metadata of immutable files where metadata is signed by a software vendor.
-> > > They can be used for example in conjunction with an IMA policy that
-> > > appraises only executed and memory mapped files.
-> > >
-> > > However, until now portable signatures can be properly installed only if
-> > > the EVM_ALLOW_METADATA_WRITES initialization flag is also set, which
-> > > disables metadata verification until an HMAC key is loaded. This will cause
-> > > metadata writes to be allowed even in the situations where they shouldn't
-> > > (metadata protected by a portable signature is immutable).
-> > >
-> > > The main reason why setting the flag is necessary is that the operations
-> > > necessary to install portable signatures and protected metadata would be
-> > > otherwise denied, despite being legitimate, due to the fact that the
-> > > decision logic has to avoid an unsafe recalculation of the HMAC that would
-> > > make the unsuccessfully verified metadata valid. However, the decision
-> > > logic is too coarse, and does not fully take into account all the possible
-> > > situations where metadata operations could be allowed.
-> > >
-> > > For example, if the HMAC key is not loaded and it cannot be loaded in the
-> > > future due the EVM_SETUP_COMPLETE flag being set, it wouldn't be a
-> > problem
-> > > to allow metadata operations, as they wouldn't result in an HMAC being
-> > > recalculated.
-> > >
-> > > This patch set extends the decision logic and adds the necessary exceptions
-> > > to use portable signatures without turning off metadata verification and
-> > > deprecates the EVM_ALLOW_METADATA_WRITES flag.
-> > 
-> > Thanks, Roberto.
-> > 
-> > Applied to: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
-> > integrity.git
-> > next-integrity-testing
-> 
-> Hi Mimi
-> 
-> could you please take the newer version of patch 5/12, which also adds
-> an exception for the INTEGRITY_UNKNOWN error (it occurs when xattrs
-> are not supported)?
+When a brute force attack is detected all the offending tasks involved
+in the attack must be killed. In other words, it is necessary to kill
+all the tasks that are executing the same file that is running during
+the brute force attack.
 
-Thank you for catching it.  I'd appreciate your checking once more. 
-FYI, get-lore-mbox.py moved "Cc: stable" to the end.
+Also, to prevent the executable involved in the attack from being
+respawned by a supervisor, and thus prevent a brute force attack from
+being started again, test the "not_allowed" flag and avoid the file
+execution based on this.
 
-thanks,
+Signed-off-by: John Wood <john.wood@gmx.com>
+=2D--
+ security/brute/brute.c | 113 +++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 102 insertions(+), 11 deletions(-)
 
-Mimi
+diff --git a/security/brute/brute.c b/security/brute/brute.c
+index 66db0dd0664d..7712dac888db 100644
+=2D-- a/security/brute/brute.c
++++ b/security/brute/brute.c
+@@ -233,6 +233,88 @@ static inline void brute_print_attack_running(void)
+ 		current->comm);
+ }
+
++/**
++ * brute_print_file_not_allowed() - Warn about a file not allowed.
++ * @dentry: The dentry of the file not allowed.
++ */
++static void brute_print_file_not_allowed(struct dentry *dentry)
++{
++	char *buf, *path;
++
++	buf =3D __getname();
++	if (WARN_ON_ONCE(!buf))
++		return;
++
++	path =3D dentry_path_raw(dentry, buf, PATH_MAX);
++	if (WARN_ON_ONCE(IS_ERR(path)))
++		goto free;
++
++	pr_warn_ratelimited("%s not allowed\n", path);
++free:
++	__putname(buf);
++}
++
++/**
++ * brute_is_same_file() - Test if two files are the same.
++ * @file1: First file to compare. Cannot be NULL.
++ * @file2: Second file to compare. Cannot be NULL.
++ *
++ * Two files are the same if they have the same inode number and the same=
+ block
++ * device.
++ *
++ * Return: True if the two files are the same. False otherwise.
++ */
++static inline bool brute_is_same_file(const struct file *file1,
++				      const struct file *file2)
++{
++	struct inode *inode1 =3D file_inode(file1);
++	struct inode *inode2 =3D file_inode(file2);
++
++	return inode1->i_ino =3D=3D inode2->i_ino &&
++		inode1->i_sb->s_dev =3D=3D inode2->i_sb->s_dev;
++}
++
++/**
++ * brute_kill_offending_tasks() - Kill the offending tasks.
++ * @file: The file executed during a brute force attack. Cannot be NULL.
++ *
++ * When a brute force attack is detected all the offending tasks involved=
+ in the
++ * attack must be killed. In other words, it is necessary to kill all the=
+ tasks
++ * that are executing the same file that is running during the brute forc=
+e
++ * attack. Moreover, the processes that have the same group_leader that t=
+he
++ * current task must be avoided since they are in the path to be killed.
++ *
++ * The for_each_process loop is protected by the tasklist_lock acquired i=
+n read
++ * mode instead of rcu_read_lock to avoid that the newly created processe=
+s
++ * escape this RCU read lock.
++ */
++static void brute_kill_offending_tasks(const struct file *file)
++{
++	struct task_struct *task;
++	struct file *exe_file;
++	bool is_same_file;
++
++	read_lock(&tasklist_lock);
++	for_each_process(task) {
++		if (task->group_leader =3D=3D current->group_leader)
++			continue;
++
++		exe_file =3D get_task_exe_file(task);
++		if (!exe_file)
++			continue;
++
++		is_same_file =3D brute_is_same_file(exe_file, file);
++		fput(exe_file);
++		if (!is_same_file)
++			continue;
++
++		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_PID);
++		pr_warn_ratelimited("Offending process %d [%s] killed\n",
++				    task->pid, task->comm);
++	}
++	read_unlock(&tasklist_lock);
++}
++
+ /**
+  * brute_get_xattr_stats() - Get the stats from an extended attribute.
+  * @dentry: The dentry of the file to get the extended attribute.
+@@ -295,6 +377,10 @@ static int brute_set_xattr_stats(struct dentry *dentr=
+y, struct inode *inode,
+  * created. This way, the scenario where an application has not crossed a=
+ny
+  * privilege boundary is avoided since the existence of the extended attr=
+ibute
+  * denotes the crossing of bounds.
++ *
++ * Also, do not update the statistics if the execution of the file is not
++ * allowed and kill all the offending tasks when a brute force attack is
++ * detected.
+  */
+ static void brute_update_xattr_stats(const struct file *file)
+ {
+@@ -306,7 +392,7 @@ static void brute_update_xattr_stats(const struct file=
+ *file)
+ 	inode_lock(inode);
+ 	rc =3D brute_get_xattr_stats(dentry, inode, &stats);
+ 	WARN_ON_ONCE(rc && rc !=3D -ENODATA);
+-	if (rc) {
++	if (rc || (!rc && stats.not_allowed)) {
+ 		inode_unlock(inode);
+ 		return;
+ 	}
+@@ -320,6 +406,9 @@ static void brute_update_xattr_stats(const struct file=
+ *file)
+ 	rc =3D brute_set_xattr_stats(dentry, inode, &stats);
+ 	WARN_ON_ONCE(rc);
+ 	inode_unlock(inode);
++
++	if (stats.not_allowed)
++		brute_kill_offending_tasks(file);
+ }
+
+ /**
+@@ -433,21 +522,17 @@ static void brute_task_fatal_signal(const kernel_sig=
+info_t *siginfo)
+  * @bprm: Contains the linux_binprm structure.
+  * @file: Binary that will be executed without an interpreter.
+  *
+- * This hook is useful to mark that a privilege boundary (setuid/setgid p=
+rocess)
+- * has been crossed. This is done based on the "secureexec" flag.
++ * If there are statistics, test the "not_allowed" flag and avoid the fil=
+e
++ * execution based on this. Also, this hook is useful to mark that a priv=
+ilege
++ * boundary (setuid/setgid process) has been crossed. This is done based =
+on the
++ * "secureexec" flag.
+  *
+  * To be defensive return an error code if it is not possible to get or s=
+et the
+  * stats using an extended attribute since this blocks the execution of t=
+he
+  * file. This scenario is treated as an attack.
+  *
+- * It is important to note that here the brute_new_xattr_stats function c=
+ould be
+- * used with a previous test of the secureexec flag. However it is better=
+ to use
+- * the basic xattr functions since in a future commit a test if the execu=
+tion is
+- * allowed (via the brute_stats::not_allowed flag) will be necessary. Thi=
+s way,
+- * the stats of the file will be get only once.
+- *
+- * Return: An error code if it is not possible to get or set the statisti=
+cal
+- *         data. Zero otherwise.
++ * Return: -EPERM if the execution of the file is not allowed. An error c=
+ode if
++ *         it is not possible to get or set the statistical data. Zero ot=
+herwise.
+  */
+ static int brute_task_execve(struct linux_binprm *bprm, struct file *file=
+)
+ {
+@@ -461,6 +546,12 @@ static int brute_task_execve(struct linux_binprm *bpr=
+m, struct file *file)
+ 	if (WARN_ON_ONCE(rc && rc !=3D -ENODATA))
+ 		goto unlock;
+
++	if (!rc && stats.not_allowed) {
++		brute_print_file_not_allowed(dentry);
++		rc =3D -EPERM;
++		goto unlock;
++	}
++
+ 	if (rc =3D=3D -ENODATA && bprm->secureexec) {
+ 		brute_reset_stats(&stats);
+ 		rc =3D brute_set_xattr_stats(dentry, inode, &stats);
+=2D-
+2.25.1
 
