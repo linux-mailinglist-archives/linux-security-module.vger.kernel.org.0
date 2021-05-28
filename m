@@ -2,194 +2,130 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E954393D79
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 May 2021 09:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695A3393E0A
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 May 2021 09:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbhE1HLh (ORCPT
+        id S236077AbhE1HkQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 28 May 2021 03:11:37 -0400
-Received: from www62.your-server.de ([213.133.104.62]:43568 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbhE1HLh (ORCPT
+        Fri, 28 May 2021 03:40:16 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3097 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229835AbhE1HkG (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 28 May 2021 03:11:37 -0400
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lmWd4-0004Br-Bp; Fri, 28 May 2021 09:09:58 +0200
-Received: from [85.7.101.30] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lmWd4-000WOo-1p; Fri, 28 May 2021 09:09:58 +0200
-Subject: Re: [PATCH v2] lockdown,selinux: avoid bogus SELinux lockdown
- permission checks
-To:     Paul Moore <paul@paul-moore.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     linux-security-module@vger.kernel.org,
-        James Morris <jmorris@namei.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        selinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>, jolsa@redhat.com
-References: <20210517092006.803332-1-omosnace@redhat.com>
- <CAHC9VhTasra0tU=bKwVqAwLRYaC+hYakirRz0Mn5jbVMuDkwrA@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <01135120-8bf7-df2e-cff0-1d73f1f841c3@iogearbox.net>
-Date:   Fri, 28 May 2021 09:09:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 28 May 2021 03:40:06 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FrxGG23y4z6N46l;
+        Fri, 28 May 2021 15:32:06 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 28 May 2021 09:38:28 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@srcf.ucam.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/7] ima: Add template fields to verify EVM portable signatures
+Date:   Fri, 28 May 2021 09:38:05 +0200
+Message-ID: <20210528073812.407936-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhTasra0tU=bKwVqAwLRYaC+hYakirRz0Mn5jbVMuDkwrA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26183/Thu May 27 13:07:49 2021)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 5/28/21 3:37 AM, Paul Moore wrote:
-> On Mon, May 17, 2021 at 5:22 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->>
->> Commit 59438b46471a ("security,lockdown,selinux: implement SELinux
->> lockdown") added an implementation of the locked_down LSM hook to
->> SELinux, with the aim to restrict which domains are allowed to perform
->> operations that would breach lockdown.
->>
->> However, in several places the security_locked_down() hook is called in
->> situations where the current task isn't doing any action that would
->> directly breach lockdown, leading to SELinux checks that are basically
->> bogus.
->>
->> Since in most of these situations converting the callers such that
->> security_locked_down() is called in a context where the current task
->> would be meaningful for SELinux is impossible or very non-trivial (and
->> could lead to TOCTOU issues for the classic Lockdown LSM
->> implementation), fix this by modifying the hook to accept a struct cred
->> pointer as argument, where NULL will be interpreted as a request for a
->> "global", task-independent lockdown decision only. Then modify SELinux
->> to ignore calls with cred == NULL.
-> 
-> I'm not overly excited about skipping the access check when cred is
-> NULL.  Based on the description and the little bit that I've dug into
-> thus far it looks like using SECINITSID_KERNEL as the subject would be
-> much more appropriate.  *Something* (the kernel in most of the
-> relevant cases it looks like) is requesting that a potentially
-> sensitive disclosure be made, and ignoring it seems like the wrong
-> thing to do.  Leaving the access control intact also provides a nice
-> avenue to audit these requests should users want to do that.
+The recent patch set 'evm: Improve usability of portable signatures' added
+the possibility to include EVM portable signatures in the IMA measurement
+list.
 
-I think the rationale/workaround for ignoring calls with cred == NULL (or the previous
-patch with the unimplemented hook) from Ondrej was two-fold, at least speaking for his
-seen tracing cases:
+However, the information necessary to verify the signature were not
+included in the IMA measurement list. This patch set introduces new
+template fields to accomplish this goal:
 
-   i) The audit events that are triggered due to calls to security_locked_down()
-      can OOM kill a machine, see below details [0].
+- 'iuid': the inode UID;
+- 'igid': the inode GID;
+- 'imode': the inode mode;
+- 'xattrnames': a list of xattr names (separated by |), only if the xattr is
+  present;
+- 'xattrlengths': a list of xattr lengths (u32), only if the xattr is present;
+- 'xattrvalues': a list of xattr values;
 
-  ii) It seems to be causing a deadlock via slow_avc_audit() -> audit_log_end()
-      when presumingly trying to wake up kauditd [1].
+Patch 1 adds an helper function to show integers in the measurement list.
+Patches 2, 3 and 5 introduce new template fields. Patch 4 make it possible
+to verify EVM portable signatures which protect xattrs belonging to LSMs
+not enabled in the target platform. Patch 6 introduces the new IMA template
+evm-sig. Patch 7 fixes a small issue in evm_write_xattrs() when audit is
+not enabled.
 
-How would your suggestion above solve both i) and ii)?
+This patch set has been tested with:
 
-[0] https://bugzilla.redhat.com/show_bug.cgi?id=1955585 :
+https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v2-devel-v5/tests/verify_evmsig.test
+https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v2-devel-v5/tests/evm_hmac_non_enabled_xattrs.test
 
-   I starting seeing this with F-34. When I run a container that is traced with eBPF
-   to record the syscalls it is doing, auditd is flooded with messages like:
+The first test aims at checking whether the EVM portable signature included
+in the measurement list can be verified with the information also in the
+measurement list.
 
-   type=AVC msg=audit(1619784520.593:282387): avc:  denied  { confidentiality } for
-    pid=476 comm="auditd" lockdown_reason="use of bpf to read kernel RAM"
-     scontext=system_u:system_r:auditd_t:s0 tcontext=system_u:system_r:auditd_t:s0 tclass=lockdown permissive=0
+It uses two methods for the verification: the first creates a copy of a
+measured file, sets metadata parsed from the measurement list to that copy
+and calls evmctl to verify the signature; the second lets evmctl verify the
+measurement list directly.
 
-   This seems to be leading to auditd running out of space in the backlog buffer and
-   eventually OOMs the machine.
+The test is performed without and with an idmapped mount. Given that IMA
+always provides the original UID and GID, no more actions are needed in the
+second case.
 
-   auditd running at 99% CPU presumably processing all the messages, eventually I get:
-   Apr 30 12:20:42 fedora kernel: audit: backlog limit exceeded
-   Apr 30 12:20:42 fedora kernel: audit: backlog limit exceeded
-   Apr 30 12:20:42 fedora kernel: audit: audit_backlog=2152579 > audit_backlog_limit=64
-   Apr 30 12:20:42 fedora kernel: audit: audit_backlog=2152626 > audit_backlog_limit=64
-   Apr 30 12:20:42 fedora kernel: audit: audit_backlog=2152694 > audit_backlog_limit=64
-   Apr 30 12:20:42 fedora kernel: audit: audit_lost=6878426 audit_rate_limit=0 audit_backlog_limit=64
-   Apr 30 12:20:45 fedora kernel: oci-seccomp-bpf invoked oom-killer: gfp_mask=0x100cca(GFP_HIGHUSER_MOVABLE), order=0, oom_score_adj=-1000
-   Apr 30 12:20:45 fedora kernel: CPU: 0 PID: 13284 Comm: oci-seccomp-bpf Not tainted 5.11.12-300.fc34.x86_64 #1
-   Apr 30 12:20:45 fedora kernel: Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-2.fc32 04/01/2014
+The second test verifies that setting a non-enabled xattr does not change
+the HMAC.
 
-[1] https://lore.kernel.org/linux-audit/CANYvDQN7H5tVp47fbYcRasv4XF07eUbsDwT_eDCHXJUj43J7jQ@mail.gmail.com/ :
+The test results are available at:
 
-   Upstream kernel 5.11.0-rc7 and later was found to deadlock during a bpf_probe_read_compat()
-   call within a sched_switch tracepoint. The problem is reproducible with the reg_alloc3
-   testcase from SystemTap's BPF backend testsuite on x86_64 as well as the runqlat,runqslower
-   tools from bcc on ppc64le. Example stack trace from [1]:
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/508604164
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/508604168
 
-   [  730.868702] stack backtrace:
-   [  730.869590] CPU: 1 PID: 701 Comm: in:imjournal Not tainted, 5.12.0-0.rc2.20210309git144c79ef3353.166.fc35.x86_64 #1
-   [  730.871605] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-2.fc32 04/01/2014
-   [  730.873278] Call Trace:
-   [  730.873770]  dump_stack+0x7f/0xa1
-   [  730.874433]  check_noncircular+0xdf/0x100
-   [  730.875232]  __lock_acquire+0x1202/0x1e10
-   [  730.876031]  ? __lock_acquire+0xfc0/0x1e10
-   [  730.876844]  lock_acquire+0xc2/0x3a0
-   [  730.877551]  ? __wake_up_common_lock+0x52/0x90
-   [  730.878434]  ? lock_acquire+0xc2/0x3a0
-   [  730.879186]  ? lock_is_held_type+0xa7/0x120
-   [  730.880044]  ? skb_queue_tail+0x1b/0x50
-   [  730.880800]  _raw_spin_lock_irqsave+0x4d/0x90
-   [  730.881656]  ? __wake_up_common_lock+0x52/0x90
-   [  730.882532]  __wake_up_common_lock+0x52/0x90
-   [  730.883375]  audit_log_end+0x5b/0x100
-   [  730.884104]  slow_avc_audit+0x69/0x90
-   [  730.884836]  avc_has_perm+0x8b/0xb0
-   [  730.885532]  selinux_lockdown+0xa5/0xd0
-   [  730.886297]  security_locked_down+0x20/0x40
-   [  730.887133]  bpf_probe_read_compat+0x66/0xd0
-   [  730.887983]  bpf_prog_250599c5469ac7b5+0x10f/0x820
-   [  730.888917]  trace_call_bpf+0xe9/0x240
-   [  730.889672]  perf_trace_run_bpf_submit+0x4d/0xc0
-   [  730.890579]  perf_trace_sched_switch+0x142/0x180
-   [  730.891485]  ? __schedule+0x6d8/0xb20
-   [  730.892209]  __schedule+0x6d8/0xb20
-   [  730.892899]  schedule+0x5b/0xc0
-   [  730.893522]  exit_to_user_mode_prepare+0x11d/0x240
-   [  730.894457]  syscall_exit_to_user_mode+0x27/0x70
-   [  730.895361]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+This patch set has been also tested on s390x, with and without the
+canonical format enabled (the test results are not shown, as the UML kernel
+used in Travis is not available for this architecture).
 
->> Since most callers will just want to pass current_cred() as the cred
->> parameter, rename the hook to security_cred_locked_down() and provide
->> the original security_locked_down() function as a simple wrapper around
->> the new hook.
-[...]
-> 
->> 3. kernel/trace/bpf_trace.c:bpf_probe_read_kernel{,_str}_common()
->>       Called when a BPF program calls a helper that could leak kernel
->>       memory. The task context is not relevant here, since the program
->>       may very well be run in the context of a different task than the
->>       consumer of the data.
->>       See: https://bugzilla.redhat.com/show_bug.cgi?id=1955585
-> 
-> The access control check isn't so much who is consuming the data, but
-> who is requesting a potential violation of a "lockdown", yes?  For
-> example, the SELinux policy rule for the current lockdown check looks
-> something like this:
-> 
->    allow <who> <who> : lockdown { <reason> };
-> 
-> It seems to me that the task context is relevant here and performing
-> the access control check based on the task's domain is correct.
-This doesn't make much sense to me, it's /not/ the task 'requesting a potential
-violation of a "lockdown"', but rather the running tracing program which is e.g.
-inspecting kernel data structures around the triggered event. If I understood
-you correctly, having an 'allow' check on, say, httpd would be rather odd since
-things like perf/bcc/bpftrace/systemtap/etc is installing the tracing probe instead.
+Changelog
 
-Meaning, if we would /not/ trace such events (like in the prior mentioned syscall
-example), then there is also no call to the security_locked_down() from that same/
-unmodified application.
+v1:
+- remove the mntuidmap and mntgidmap template fields and always display the
+  original inode UID and GID (suggested by Christian Brauner)
+- replace the evmxattrs template field with xattrnames, xattrlengths and
+  xattrvalues (suggested by Mimi)
+- introduce the new IMA template evm-sig (suggested by Mimi)
+- use only one variable in ima_eventinodedac_init_common() (suggested by
+  Mimi)
 
-Thanks,
-Daniel
+Roberto Sassu (7):
+  ima: Add ima_show_template_uint() template library function
+  ima: Define new template fields iuid and igid
+  ima: Define new template field imode
+  evm: Verify portable signatures against all protected xattrs
+  ima: Define new template fields xattrnames, xattrlengths and
+    xattrvalues
+  ima: Define new template evm-sig
+  evm: Don't return an error in evm_write_xattrs() if audit is not
+    enabled
+
+ Documentation/security/IMA-templates.rst  |   8 +
+ include/linux/evm.h                       |  16 ++
+ security/integrity/evm/evm.h              |   1 +
+ security/integrity/evm/evm_crypto.c       |   7 +
+ security/integrity/evm/evm_main.c         | 125 ++++++++++++++--
+ security/integrity/evm/evm_secfs.c        |  18 ++-
+ security/integrity/ima/ima_template.c     |  18 +++
+ security/integrity/ima/ima_template_lib.c | 169 +++++++++++++++++++++-
+ security/integrity/ima/ima_template_lib.h |  14 ++
+ 9 files changed, 362 insertions(+), 14 deletions(-)
+
+-- 
+2.25.1
+
