@@ -2,69 +2,167 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C5039F6BC
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Jun 2021 14:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC1339F729
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Jun 2021 14:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbhFHMeA (ORCPT
+        id S232717AbhFHM5R (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Jun 2021 08:34:00 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3170 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbhFHMd5 (ORCPT
+        Tue, 8 Jun 2021 08:57:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23140 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232719AbhFHM5R (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Jun 2021 08:33:57 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FzqFb3Cpsz6G7Sm;
-        Tue,  8 Jun 2021 20:25:23 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 8 Jun 2021 14:32:02 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <sfr@canb.auug.org.au>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-next@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 5/5] ima: Pass NULL instead of 0 to ima_get_action() in ima_file_mprotect()
-Date:   Tue, 8 Jun 2021 14:31:24 +0200
-Message-ID: <20210608123124.335868-5-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210608123124.335868-1-roberto.sassu@huawei.com>
-References: <20210608123124.335868-1-roberto.sassu@huawei.com>
+        Tue, 8 Jun 2021 08:57:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623156924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x+SsMma3Ar3rP8pZze2lcFu2xVDJbqONiUJxA3GUBLM=;
+        b=T6yOrHp9bupaim5rcfvPuH0mWy5yozA35WdbHkXPBZtBb7hKkjMcgO058xkpgh/OEvSjtC
+        RQMcOglHnzk9K0YIi4B5sxLL1svjmkk/JX3TkerM/wGtsZOZNaep3baqzrNOpvS2zuVFUF
+        dr1vG2aSBdrr10art5jWnTQFhTNQQMA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-544-THXSXa15OuConKqzS8b_Kw-1; Tue, 08 Jun 2021 08:55:20 -0400
+X-MC-Unique: THXSXa15OuConKqzS8b_Kw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 05E07107ACC7;
+        Tue,  8 Jun 2021 12:55:19 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.3.128.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D7DCC5C1D5;
+        Tue,  8 Jun 2021 12:55:07 +0000 (UTC)
+Date:   Tue, 8 Jun 2021 08:55:05 -0400
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 1/2] audit: add filtering for io_uring records, addendum
+Message-ID: <20210608125504.GA2268484@madcap2.tricolour.ca>
+References: <CAHC9VhTr_hw_RBPf5yGD16j-qV2tbjjPJkimMNNQZBHtrJDbuQ@mail.gmail.com>
+ <3a2903574a4d03f73230047866112b2dad9b4a9e.1622467740.git.rgb@redhat.com>
+ <CAHC9VhRa9dvCfPf5WHKYofrvQrGff7Lh+H4HMAhi_z3nK_rtoA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.62.217]
-X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRa9dvCfPf5WHKYofrvQrGff7Lh+H4HMAhi_z3nK_rtoA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This patch fixes the sparse warning:
+On 2021-06-07 19:15, Paul Moore wrote:
+> On Mon, May 31, 2021 at 9:45 AM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > The commit ("audit: add filtering for io_uring records") added support for
+> > filtering io_uring operations.
+> >
+> > Add checks to the audit io_uring filtering code for directory and path watches,
+> > and to keep the list counts consistent.
+> >
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> >  kernel/audit_tree.c  | 3 ++-
+> >  kernel/audit_watch.c | 3 ++-
+> >  kernel/auditfilter.c | 7 +++++--
+> >  3 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> Thanks for pointing these omissions out in the original patch.  When a
+> patch has obvious problems generally people just provide feedback and
+> the patch author incorporates the fixes; this helps ensure we don't
+> merge known broken patches, helping preserve `git bisect`.
+> 
+> Do you mind if I incorporate these suggestions, and the one in patch
+> 2/2, into the filtering patch in the original RFC patchset?  I'll add
+> a 'thank you' comment in the commit description as I did to the other
+> patch where you provided feedback.  I feel that is the proper way to
+> handle this.
 
-sparse: warning: Using plain integer as NULL pointer
+I should have been more explicit.  The intent was to have the fixes
+incorporated directly into your patches since they aren't committed in
+any public tree yet, exactly for bisect reasons.  I didn't add a
+"fixes:" tag because it had no public commit hash, but could/should have
+instead made a note about it or even used the "fixup:" subject tag.
+Posting using the thread as the "in-reply-to:" for this patchset was the
+simplest and clearest way to demonstrate the intent and check they were
+correct and I was too lazy to add a cover letter explaining that.  There
+is also a Co-developed-by: tag that could be used if you feel that is
+appropriate, now that you mention it, but that appears to imply a much
+stronger equal contribution.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
+> > index 6c91902f4f45..2be285c2f069 100644
+> > --- a/kernel/audit_tree.c
+> > +++ b/kernel/audit_tree.c
+> > @@ -727,7 +727,8 @@ int audit_make_tree(struct audit_krule *rule, char *pathname, u32 op)
+> >  {
+> >
+> >         if (pathname[0] != '/' ||
+> > -           rule->listnr != AUDIT_FILTER_EXIT ||
+> > +           (rule->listnr != AUDIT_FILTER_EXIT &&
+> > +            rule->listnr != AUDIT_FILTER_URING_EXIT) ||
+> >             op != Audit_equal ||
+> >             rule->inode_f || rule->watch || rule->tree)
+> >                 return -EINVAL;
+> > diff --git a/kernel/audit_watch.c b/kernel/audit_watch.c
+> > index 2acf7ca49154..698b62b4a2ec 100644
+> > --- a/kernel/audit_watch.c
+> > +++ b/kernel/audit_watch.c
+> > @@ -183,7 +183,8 @@ int audit_to_watch(struct audit_krule *krule, char *path, int len, u32 op)
+> >                 return -EOPNOTSUPP;
+> >
+> >         if (path[0] != '/' || path[len-1] == '/' ||
+> > -           krule->listnr != AUDIT_FILTER_EXIT ||
+> > +           (krule->listnr != AUDIT_FILTER_EXIT &&
+> > +            krule->listnr != AUDIT_FILTER_URING_EXIT) ||
+> >             op != Audit_equal ||
+> >             krule->inode_f || krule->watch || krule->tree)
+> >                 return -EINVAL;
+> > diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> > index c21119c00504..bcdedfd1088c 100644
+> > --- a/kernel/auditfilter.c
+> > +++ b/kernel/auditfilter.c
+> > @@ -153,7 +153,8 @@ char *audit_unpack_string(void **bufp, size_t *remain, size_t len)
+> >  static inline int audit_to_inode(struct audit_krule *krule,
+> >                                  struct audit_field *f)
+> >  {
+> > -       if (krule->listnr != AUDIT_FILTER_EXIT ||
+> > +       if ((krule->listnr != AUDIT_FILTER_EXIT &&
+> > +            krule->listnr != AUDIT_FILTER_URING_EXIT) ||
+> >             krule->inode_f || krule->watch || krule->tree ||
+> >             (f->op != Audit_equal && f->op != Audit_not_equal))
+> >                 return -EINVAL;
+> > @@ -250,6 +251,7 @@ static inline struct audit_entry *audit_to_entry_common(struct audit_rule_data *
+> >                 pr_err("AUDIT_FILTER_ENTRY is deprecated\n");
+> >                 goto exit_err;
+> >         case AUDIT_FILTER_EXIT:
+> > +       case AUDIT_FILTER_URING_EXIT:
+> >         case AUDIT_FILTER_TASK:
+> >  #endif
+> >         case AUDIT_FILTER_USER:
+> > @@ -982,7 +984,8 @@ static inline int audit_add_rule(struct audit_entry *entry)
+> >         }
+> >
+> >         entry->rule.prio = ~0ULL;
+> > -       if (entry->rule.listnr == AUDIT_FILTER_EXIT) {
+> > +       if (entry->rule.listnr == AUDIT_FILTER_EXIT ||
+> > +           entry->rule.listnr == AUDIT_FILTER_URING_EXIT) {
+> >                 if (entry->rule.flags & AUDIT_FILTER_PREPEND)
+> >                         entry->rule.prio = ++prio_high;
+> >                 else
+> 
+> paul moore
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 906c1d8e0b71..287b90509006 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -433,7 +433,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
- 	inode = file_inode(vma->vm_file);
- 	action = ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
- 				current_cred(), secid, MAY_EXEC, MMAP_CHECK,
--				&pcr, &template, 0);
-+				&pcr, &template, NULL);
- 
- 	/* Is the mmap'ed file in policy? */
- 	if (!(action & (IMA_MEASURE | IMA_APPRAISE_SUBMASK)))
--- 
-2.25.1
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
 
