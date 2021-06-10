@@ -2,292 +2,138 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9979C3A2B40
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Jun 2021 14:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE533A2C22
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Jun 2021 14:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhFJMSl (ORCPT
+        id S230361AbhFJM6e (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 10 Jun 2021 08:18:41 -0400
-Received: from mail-ej1-f49.google.com ([209.85.218.49]:42814 "EHLO
-        mail-ej1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbhFJMSj (ORCPT
+        Thu, 10 Jun 2021 08:58:34 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5418 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230230AbhFJM6d (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 10 Jun 2021 08:18:39 -0400
-Received: by mail-ej1-f49.google.com with SMTP id k25so38336434eja.9;
-        Thu, 10 Jun 2021 05:16:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w3+0JChAcpvoaCnj4IraBcQhrysENOwAy5Kr4swonKI=;
-        b=or60PY1gBx/+etuyHLULzJI/T9+GFKKfgPiLJtkPlR1C1r42UV9QniwXf6KX6hs2RV
-         CkCCvm3Dr0Rkmc3PLNexfZpQKnCF8acFTh66Y8YiFR9s7jpjVAyI7qa2D+kD/qmCz1Bu
-         8lMQq/9ME3ieyAy8mHdrdygd4YPWCf9Fg7CnEv923reRdU4iUuLpPzdVnI7n0dN/Yewx
-         3+Q/E4fqxPoYfIpPGE+mLMzF+kUxRaGl26rlESckYfYkS+da9qLUaxTGSC1bI3+Ba5gz
-         ClByifC6YFW5Ew85G1jISctlnJbPGji5lHoQwm1ZlgZi1vjR6zOItfS8v5Wd0V6loj1w
-         MY6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w3+0JChAcpvoaCnj4IraBcQhrysENOwAy5Kr4swonKI=;
-        b=jP+lYKq3pIsKQj+nH1TmTQ0iL7lhFiiXELzgpie3hNm31kNLmXIBySI8VxoAo1IwWb
-         HrJvQi+IQ8QcGWDqC+eKgX82YjyURFfnIwXQz9/o0QOarXC1COFDZuO1vBaPUC3OgB6L
-         gRkR1/IpuiqS2NJi4nLWE7zNB0onK/xABa/lTXlBguWvSDvCaeTcUasiR2mOGg5qDuC9
-         1Uj839/ktftW4g8qFhtPxpyxvId3cC05xy4IEun3Ncgdx9kI9vxAvkWz9E2guhvJS5t3
-         BSjgGo23PjJH6oNaRiuNm/WEp8Jral4054AI5qRKpLZMMxqRjc5FeH2rjw38bcZat8KP
-         qB+w==
-X-Gm-Message-State: AOAM531lA9SwhzrJq354hj/ydfAo8SIP/U1WIUHRQBUV0cFAYPFhCUV1
-        akEVtG98VYOgqfcU8xuLsh+QhHmuQiwCQretquU=
-X-Google-Smtp-Source: ABdhPJzBcuf3sxNFOiimKoRw4ReNNXUKHwUVmN40nhUvyvCb7rVJQapdsNM5BTWf5aYjhAoGJffVzI0CTZTEK1oSqRM=
-X-Received: by 2002:a17:906:3c44:: with SMTP id i4mr4196069ejg.135.1623327341370;
- Thu, 10 Jun 2021 05:15:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210610020108.1356361-1-liushixin2@huawei.com>
- <CAD-N9QWypyEa65-sz3rrtM2o5xzQd_5kJPyC4n+nK5JTviQvEQ@mail.gmail.com> <ea1c6878-94d4-63ba-5dea-1190c146581d@huawei.com>
-In-Reply-To: <ea1c6878-94d4-63ba-5dea-1190c146581d@huawei.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 10 Jun 2021 20:15:15 +0800
-Message-ID: <CAD-N9QUsM7sB9K49c_Vfq_D+zSYYU4VTLaRfnRiB1EfsmxihdQ@mail.gmail.com>
-Subject: Re: [PATCH -next] netlabel: Fix memory leak in netlbl_mgmt_add_common
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Thu, 10 Jun 2021 08:58:33 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15ACXH1P018120;
+        Thu, 10 Jun 2021 08:56:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=5x40kqRWwepV3BV+Cer52V1hRoTHTzXvBj4e9C41Z4s=;
+ b=plHqlt2TA35rmJQDIbOh2kA2aUMtRwqMCPkvj2wLU+qbZzu8LrKTkhQeq27KZ3ug2jZy
+ vwFFzpiFeTbkdJiSnC9NLgX5ABr3bjTZ2tHveBam9bV7xGwkWz9M5zQpd2zggMQtwbhP
+ WlBOs/LEXCGAraTd4FX9IqI+YtEfvlhrU3YtphzRC63X89SfL9hpCCEvuTwiQ/s/xtTa
+ eQXhTB8YrUTvvYFfe9Zz/nOjDu/nbyq2D3WvNEo4LBdJHemWJx3A2Xo6u0Cs0a/loSd7
+ EUMyhzVckIJiO2mN3HMZB/FIBM/iDH1HpEnW3kgUGdSUC4pe/g2eWrETO6fiQZhW0VNh FA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 393gujvffv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 08:56:32 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15ACY8Mv021142;
+        Thu, 10 Jun 2021 08:56:32 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 393gujvffc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 08:56:32 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15ACh39i018727;
+        Thu, 10 Jun 2021 12:56:30 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma01wdc.us.ibm.com with ESMTP id 3900w9g3ap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 12:56:30 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15ACuUHE36700534
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Jun 2021 12:56:30 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C0BB112065;
+        Thu, 10 Jun 2021 12:56:30 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E73E4112063;
+        Thu, 10 Jun 2021 12:56:29 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Jun 2021 12:56:29 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, zohar@linux.ibm.com, jarkko@kernel.org
+Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v6 0/4] Add support for ECDSA-signed kernel modules
+Date:   Thu, 10 Jun 2021 08:56:19 -0400
+Message-Id: <20210610125623.1553792-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1zgUTIvqevtXceP5emHJioNOfQ_A970s
+X-Proofpoint-ORIG-GUID: uqZih1eoH0XXgO7Mh3TqFkYUQvfRTdj6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-10_07:2021-06-10,2021-06-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106100081
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Jun 10, 2021 at 6:45 PM Liu Shixin <liushixin2@huawei.com> wrote:
->
-> On 2021/6/10 11:08, Dongliang Mu wrote:
-> > On Thu, Jun 10, 2021 at 9:31 AM Liu Shixin <liushixin2@huawei.com> wrote:
-> >> Hulk Robot reported memory leak in netlbl_mgmt_add_common.
-> >> The problem is non-freed map in case of netlbl_domhsh_add() failed.
-> >>
-> >> BUG: memory leak
-> >> unreferenced object 0xffff888100ab7080 (size 96):
-> >>   comm "syz-executor537", pid 360, jiffies 4294862456 (age 22.678s)
-> >>   hex dump (first 32 bytes):
-> >>     05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >>     fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01  ................
-> >>   backtrace:
-> >>     [<0000000008b40026>] netlbl_mgmt_add_common.isra.0+0xb2a/0x1b40
-> >>     [<000000003be10950>] netlbl_mgmt_add+0x271/0x3c0
-> >>     [<00000000c70487ed>] genl_family_rcv_msg_doit.isra.0+0x20e/0x320
-> >>     [<000000001f2ff614>] genl_rcv_msg+0x2bf/0x4f0
-> >>     [<0000000089045792>] netlink_rcv_skb+0x134/0x3d0
-> >>     [<0000000020e96fdd>] genl_rcv+0x24/0x40
-> >>     [<0000000042810c66>] netlink_unicast+0x4a0/0x6a0
-> >>     [<000000002e1659f0>] netlink_sendmsg+0x789/0xc70
-> >>     [<000000006e43415f>] sock_sendmsg+0x139/0x170
-> >>     [<00000000680a73d7>] ____sys_sendmsg+0x658/0x7d0
-> >>     [<0000000065cbb8af>] ___sys_sendmsg+0xf8/0x170
-> >>     [<0000000019932b6c>] __sys_sendmsg+0xd3/0x190
-> >>     [<00000000643ac172>] do_syscall_64+0x37/0x90
-> >>     [<000000009b79d6dc>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >>
-> >> Fixes: 63c416887437 ("netlabel: Add network address selectors to the NetLabel/LSM domain mapping")
-> >> Reported-by: Hulk Robot <hulkci@huawei.com>
-> >> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> >> ---
-> >>  net/netlabel/netlabel_mgmt.c | 20 ++++++++++++++++----
-> >>  1 file changed, 16 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/net/netlabel/netlabel_mgmt.c b/net/netlabel/netlabel_mgmt.c
-> >> index e664ab990941..e7f00c0f441e 100644
-> >> --- a/net/netlabel/netlabel_mgmt.c
-> >> +++ b/net/netlabel/netlabel_mgmt.c
-> >> @@ -191,6 +191,12 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-> >>                 entry->family = AF_INET;
-> >>                 entry->def.type = NETLBL_NLTYPE_ADDRSELECT;
-> >>                 entry->def.addrsel = addrmap;
-> >> +
-> >> +               ret_val = netlbl_domhsh_add(entry, audit_info);
-> >> +               if (ret_val != 0) {
-> >> +                       kfree(map);
-> >> +                       goto add_free_addrmap;
-> >> +               }
-> >>  #if IS_ENABLED(CONFIG_IPV6)
-> >>         } else if (info->attrs[NLBL_MGMT_A_IPV6ADDR]) {
-> >>                 struct in6_addr *addr;
-> >> @@ -243,13 +249,19 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-> >>                 entry->family = AF_INET6;
-> >>                 entry->def.type = NETLBL_NLTYPE_ADDRSELECT;
-> >>                 entry->def.addrsel = addrmap;
-> >> +
-> >> +               ret_val = netlbl_domhsh_add(entry, audit_info);
-> >> +               if (ret_val != 0) {
-> >> +                       kfree(map);
-> >> +                       goto add_free_addrmap;
-> >> +               }
-> >>  #endif /* IPv6 */
-> >> +       } else {
-> >> +               ret_val = netlbl_domhsh_add(entry, audit_info);
-> >> +               if (ret_val != 0)
-> >> +                       goto add_free_addrmap;
-> >>         }
-> >>
-> >> -       ret_val = netlbl_domhsh_add(entry, audit_info);
-> >> -       if (ret_val != 0)
-> >> -               goto add_free_addrmap;
-> >> -
-> > Hi Shixin,
-> >
-> > I have a small suggestion about this patch: you can move the variable
-> > map out of if/else if branches, like the following code snippet.
-> >
-> > Be aware to assign the variable map to NULL at first. Then kfree in
-> > the last else branch will do nothing.
-> >
-> > I don't test the following diff, if there are any issues, please let me know.
-> >
-> > diff --git a/net/netlabel/netlabel_mgmt.c b/net/netlabel/netlabel_mgmt.c
-> > index ca52f5085989..1824bcd2272b 100644
-> > --- a/net/netlabel/netlabel_mgmt.c
-> > +++ b/net/netlabel/netlabel_mgmt.c
-> > @@ -78,6 +78,7 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-> >  {
-> >         int ret_val = -EINVAL;
-> >         struct netlbl_domaddr_map *addrmap = NULL;
-> > +       struct netlbl_domaddr4_map *map = NULL;
-> >         struct cipso_v4_doi *cipsov4 = NULL;
-> >  #if IS_ENABLED(CONFIG_IPV6)
-> >         struct calipso_doi *calipso = NULL;
-> > @@ -147,7 +148,6 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-> >         if (info->attrs[NLBL_MGMT_A_IPV4ADDR]) {
-> >                 struct in_addr *addr;
-> >                 struct in_addr *mask;
-> > -               struct netlbl_domaddr4_map *map;
-> >
-> >                 addrmap = kzalloc(sizeof(*addrmap), GFP_KERNEL);
-> >                 if (addrmap == NULL) {
-> > @@ -195,7 +195,6 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-> >         } else if (info->attrs[NLBL_MGMT_A_IPV6ADDR]) {
-> >                 struct in6_addr *addr;
-> >                 struct in6_addr *mask;
-> > -               struct netlbl_domaddr6_map *map;
-> >
-> >                 addrmap = kzalloc(sizeof(*addrmap), GFP_KERNEL);
-> >                 if (addrmap == NULL) {
-> > @@ -247,8 +246,10 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-> >         }
-> >
-> >         ret_val = netlbl_domhsh_add(entry, audit_info);
-> > -       if (ret_val != 0)
-> > +       if (ret_val != 0) {
-> > +               kfree(map);
-> >                 goto add_free_addrmap;
-> > +       }
-> >
-> >         return 0;
-> >
-> The type of map can be struct netlbl_domaddr4_map or struct netlbl_domaddr6_map
-> under different conditions. It seems like I can't put them together simply.
->
+This series adds support for ECDSA-signed kernel modules. It also
+attempts to address a kbuild issue where a developer created an ECDSA
+key for signing kernel modules and then builds an older version of the
+kernel, when bisecting the kernel for example, that does not support
+ECDSA keys.
 
-Yes, you're right. It takes more code changes to handle different
-types. I choose to use the generic void * pointer.
+The first patch addresses the kbuild issue of needing to delete that
+ECDSA key if it is in certs/signing_key.pem and trigger the creation
+of an RSA key. However, for this to work this patch would have to be
+backported to previous versions of the kernel but would also only work
+for the developer if he/she used a stable version of the kernel to which
+this patch was applied. So whether this patch actually achieves the
+wanted effect is not always guaranteed.
 
-The advantage of the diff below is to improve its maintainability of
-error handling. I add one additional label: add_free_map to handle the
-deallocation of map.
+The 2nd patch adds the support for the ECSDA-signed kernel modules.
 
-Note that, I did not test this diff. It is only used for
-clarification. And maybe the compiler complains about the usage of
-void * pointer.
+This patch depends on the ECDSA support series currently queued here:
+https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git/log/?h=ecc
 
-diff --git a/net/netlabel/netlabel_mgmt.c b/net/netlabel/netlabel_mgmt.c
-index ca52f5085989..38edf170b109 100644
---- a/net/netlabel/netlabel_mgmt.c
-+++ b/net/netlabel/netlabel_mgmt.c
-@@ -78,6 +78,7 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
- {
-        int ret_val = -EINVAL;
-        struct netlbl_domaddr_map *addrmap = NULL;
-+       void *map = NULL;
-        struct cipso_v4_doi *cipsov4 = NULL;
- #if IS_ENABLED(CONFIG_IPV6)
-        struct calipso_doi *calipso = NULL;
-@@ -147,7 +148,6 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-        if (info->attrs[NLBL_MGMT_A_IPV4ADDR]) {
-                struct in_addr *addr;
-                struct in_addr *mask;
--               struct netlbl_domaddr4_map *map;
+  Stefan
 
-                addrmap = kzalloc(sizeof(*addrmap), GFP_KERNEL);
-                if (addrmap == NULL) {
-@@ -170,7 +170,7 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-                addr = nla_data(info->attrs[NLBL_MGMT_A_IPV4ADDR]);
-                mask = nla_data(info->attrs[NLBL_MGMT_A_IPV4MASK]);
+v6:
+  - Patch 2/4 is fixing V4's 1/2 and 4/4 is fixing V4's 2/2. Both fixup
+    patches to be squashed.
 
--               map = kzalloc(sizeof(*map), GFP_KERNEL);
-+               map = kzalloc(sizeof(struct netlbl_domaddr4_map), GFP_KERNEL);
-                if (map == NULL) {
-                        ret_val = -ENOMEM;
-                        goto add_free_addrmap;
-@@ -183,10 +183,8 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-                        map->def.cipso = cipsov4;
+v5:
+  - do not touch the key files if openssl is not installed; likely
+    addresses an issue pointed out by kernel test robot
 
-                ret_val = netlbl_af4list_add(&map->list, &addrmap->list4);
--               if (ret_val != 0) {
--                       kfree(map);
--                       goto add_free_addrmap;
--               }
-+               if (ret_val != 0)
-+                       goto add_free_map;
+v4:
+  - extending 'depends on' with MODULES to (IMA_APPRAISE_MODSIG && MODULES)
+  
+v3:
+  - added missing OIDs for ECDSA signed hashes to pkcs7_sig_note_pkey_algo
+  - added recommendation to use string hash to Kconfig help text
 
-                entry->family = AF_INET;
-                entry->def.type = NETLBL_NLTYPE_ADDRSELECT;
-@@ -218,7 +216,7 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-                addr = nla_data(info->attrs[NLBL_MGMT_A_IPV6ADDR]);
-                mask = nla_data(info->attrs[NLBL_MGMT_A_IPV6MASK]);
+v2:
+  - Adjustment to ECDSA key detector string in 2/2
+  - Rephrased cover letter and patch descriptions with Mimi
 
--               map = kzalloc(sizeof(*map), GFP_KERNEL);
-+               map = kzalloc(sizeof(struct netlbl_domaddr6_map), GFP_KERNEL);
-                if (map == NULL) {
-                        ret_val = -ENOMEM;
-                        goto add_free_addrmap;
-@@ -235,10 +233,8 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
-                        map->def.calipso = calipso;
 
-                ret_val = netlbl_af6list_add(&map->list, &addrmap->list6);
--               if (ret_val != 0) {
--                       kfree(map);
--                       goto add_free_addrmap;
--               }
-+               if (ret_val != 0)
-+                       goto add_free_map;
+Stefan Berger (4):
+  certs: Trigger creation of RSA module signing key if it's not an RSA
+    key
+  certs: Check whether openssl tool is available
+  certs: Add support for using elliptic curve keys for signing modules
+  certs: Adjustment due to 'Check whether openssl tool is available'
 
-                entry->family = AF_INET6;
-                entry->def.type = NETLBL_NLTYPE_ADDRSELECT;
-@@ -248,10 +244,12 @@ static int netlbl_mgmt_add_common(struct genl_info *info,
+ certs/Kconfig                         | 26 ++++++++++++++++++++++++++
+ certs/Makefile                        | 21 +++++++++++++++++++++
+ crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
+ 3 files changed, 55 insertions(+)
 
-        ret_val = netlbl_domhsh_add(entry, audit_info);
-        if (ret_val != 0)
--               goto add_free_addrmap;
-+               goto add_free_map;
+-- 
+2.29.2
 
-        return 0;
-
-+add_free_map:
-+       kfree(map);
- add_free_addrmap:
-        kfree(addrmap);
- add_doi_put_def:
-
-> Thanks,
-> >
-> >
-> >
-> >>         return 0;
-> >>
-> >>  add_free_addrmap:
-> >> --
-> >> 2.18.0.huawei.25
-> >>
-> > .
-> >
->
