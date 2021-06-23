@@ -2,104 +2,67 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAE23B1A2D
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Jun 2021 14:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAC13B1E18
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Jun 2021 17:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbhFWMbn (ORCPT
+        id S231490AbhFWP5A convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 23 Jun 2021 08:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbhFWMbf (ORCPT
+        Wed, 23 Jun 2021 11:57:00 -0400
+Received: from [183.90.58.236] ([183.90.58.236]:51774 "EHLO ns1.zackeruz.tk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231501AbhFWP46 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 23 Jun 2021 08:31:35 -0400
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4898DC035468
-        for <linux-security-module@vger.kernel.org>; Wed, 23 Jun 2021 05:26:55 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4G92ZP0TT1zMprpm;
-        Wed, 23 Jun 2021 14:26:53 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4G92ZN3lv2zlmrrs;
-        Wed, 23 Jun 2021 14:26:52 +0200 (CEST)
-Subject: Re: [PATCH v2 27/29] docs: userspace-api: landlock.rst: avoid using
- ReST :doc:`foo` markup
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <cover.1623824363.git.mchehab+huawei@kernel.org>
- <24888a9c5da3c505b2bc274fcd83be348dbaf972.1623824363.git.mchehab+huawei@kernel.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <7ebe5a4d-8835-6737-c006-3d065e50dc8a@digikod.net>
-Date:   Wed, 23 Jun 2021 14:26:43 +0200
-User-Agent: 
+        Wed, 23 Jun 2021 11:56:58 -0400
+Received: from johnlewis.com (unknown [192.168.20.1])
+        by ns1.zackeruz.tk (Postfix) with ESMTPSA id 432E3846308
+        for <linux-security-module@vger.kernel.org>; Wed, 23 Jun 2021 23:54:39 +0800 (+08)
+Reply-To: robert_turner@johnlewis-trading.com,
+          pippawicks.sales@johnlewis-trading.com
+From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
+To:     linux-security-module@vger.kernel.org
+Subject: 6/23/2021 Product Inquiry 
+Date:   23 Jun 2021 15:54:38 +0000
+Message-ID: <20210623094114.1D89F9437DE7B541@johnlewis.com>
 MIME-Version: 1.0
-In-Reply-To: <24888a9c5da3c505b2bc274fcd83be348dbaf972.1623824363.git.mchehab+huawei@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+DearÂ linux-security-module
 
-On 16/06/2021 08:27, Mauro Carvalho Chehab wrote:
-> The :doc:`foo` tag is auto-generated via automarkup.py.
-> So, use the filename at the sources, instead of :doc:`foo`.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/userspace-api/landlock.rst | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
+The famous brand John Lewis Partnership, is UK's largest multi-
+channel retailer with over 126 shops and multiple expansion in 
+Africa furnished by European/Asian/American products. We are 
+sourcing new products to attract new customers and also retain 
+our existing ones, create new partnerships with companies dealing 
+with different kinds of goods globally.
 
-Acked-by: Mickaël Salaün <mic@linux.microsoft.com>
+Your company's products are of interest to our market as we have 
+an amazing market for your products.
 
-Like others, I think it would be nice to explain the reason of this
-change in the commit message, and why it is better than the current way
-to do it.
+Provide us your current catalog through email to review more. We 
+hope to be able to order with you and start a long-term friendly,
+respectable and solid business partnership. Please we would 
+appreciate it if you could send us your stock availability via 
+email if any.
 
-> 
-> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-> index 62c9361a3c7f..f35552ff19ba 100644
-> --- a/Documentation/userspace-api/landlock.rst
-> +++ b/Documentation/userspace-api/landlock.rst
-> @@ -145,7 +145,8 @@ Bind mounts and OverlayFS
->  
->  Landlock enables to restrict access to file hierarchies, which means that these
->  access rights can be propagated with bind mounts (cf.
-> -:doc:`/filesystems/sharedsubtree`) but not with :doc:`/filesystems/overlayfs`.
-> +Documentation/filesystems/sharedsubtree.rst) but not with
-> +Documentation/filesystems/overlayfs.rst.
->  
->  A bind mount mirrors a source file hierarchy to a destination.  The destination
->  hierarchy is then composed of the exact same files, on which Landlock rules can
-> @@ -170,8 +171,8 @@ Inheritance
->  
->  Every new thread resulting from a :manpage:`clone(2)` inherits Landlock domain
->  restrictions from its parent.  This is similar to the seccomp inheritance (cf.
-> -:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task's
-> -:manpage:`credentials(7)`.  For instance, one process's thread may apply
-> +Documentation/userspace-api/seccomp_filter.rst) or any other LSM dealing with
-> +task's :manpage:`credentials(7)`.  For instance, one process's thread may apply
->  Landlock rules to itself, but they will not be automatically applied to other
->  sibling threads (unlike POSIX thread credential changes, cf.
->  :manpage:`nptl(7)`).
-> @@ -278,7 +279,7 @@ Memory usage
->  ------------
->  
->  Kernel memory allocated to create rulesets is accounted and can be restricted
-> -by the :doc:`/admin-guide/cgroup-v1/memory`.
-> +by the Documentation/admin-guide/cgroup-v1/memory.rst.
->  
->  Questions and answers
->  =====================
-> @@ -303,7 +304,7 @@ issues, especially when untrusted processes can manipulate them (cf.
->  Additional documentation
->  ========================
->  
-> -* :doc:`/security/landlock`
-> +* Documentation/security/landlock.rst
->  * https://landlock.io
->  
->  .. Links
-> 
+Our payment terms are 15 days net in Europe, 30 days Net in UK 
+and 30 days net in Asia/USA as we operate with over 5297 
+suppliers around the globe for the past 50 years now. For 
+immediate response Send your reply to robert_turner@johnlewis-
+trading.com for us to be able to 
+treat with care and urgency.
+
+
+Best Regards
+
+Rob Turner
+Head Of Procurement Operations
+John Lewis & Partners.
+robert_turner@johnlewis-trading.com
+Tel: +44-7451-274090
+WhatsApp: +447497483925
+www.johnlewis.com
+REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NNÂ 
