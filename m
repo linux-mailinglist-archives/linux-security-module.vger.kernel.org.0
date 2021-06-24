@@ -2,67 +2,126 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAC13B1E18
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Jun 2021 17:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455EA3B327D
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jun 2021 17:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbhFWP5A convert rfc822-to-8bit (ORCPT
+        id S232206AbhFXP1k (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 23 Jun 2021 11:57:00 -0400
-Received: from [183.90.58.236] ([183.90.58.236]:51774 "EHLO ns1.zackeruz.tk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231501AbhFWP46 (ORCPT
+        Thu, 24 Jun 2021 11:27:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45183 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231708AbhFXP1j (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 23 Jun 2021 11:56:58 -0400
-Received: from johnlewis.com (unknown [192.168.20.1])
-        by ns1.zackeruz.tk (Postfix) with ESMTPSA id 432E3846308
-        for <linux-security-module@vger.kernel.org>; Wed, 23 Jun 2021 23:54:39 +0800 (+08)
-Reply-To: robert_turner@johnlewis-trading.com,
-          pippawicks.sales@johnlewis-trading.com
-From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
-To:     linux-security-module@vger.kernel.org
-Subject: 6/23/2021 Product Inquiry 
-Date:   23 Jun 2021 15:54:38 +0000
-Message-ID: <20210623094114.1D89F9437DE7B541@johnlewis.com>
+        Thu, 24 Jun 2021 11:27:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624548320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yv7m1AvCn7O6dTH1q9vdjmlX/RhwF6AeGVa6Oa4+0Qw=;
+        b=MdWVBAv+FCDSXegECxJ/N0ebI1Ym4RXYnx2IggZwB1aHd71iqlMlp0fYIM0fWoabvdg+zA
+        Ni64SnfPS5i8P7kmIUAt2+IRaibbOy3oEUY28jY1seiAB/KG/twlHkeUffwowaVwKGp1vr
+        g0nT+j1q/xGUvQlqs6wx/Qw55BPNZ0o=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-154-2HeUnOc6Ml-xJ3pyjNUCBg-1; Thu, 24 Jun 2021 11:25:18 -0400
+X-MC-Unique: 2HeUnOc6Ml-xJ3pyjNUCBg-1
+Received: by mail-ej1-f72.google.com with SMTP id w13-20020a170906384db02903d9ad6b26d8so2166997ejc.0
+        for <linux-security-module@vger.kernel.org>; Thu, 24 Jun 2021 08:25:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yv7m1AvCn7O6dTH1q9vdjmlX/RhwF6AeGVa6Oa4+0Qw=;
+        b=EQjOyPsMIqV7zzKywVAs4QQoHxfcUxbFlma7N/tQ9JHQSM6+dvZnD8Jr1wdW0o06s9
+         sF+ccTnr04Z0F5+7QovL7ln08mYnIzOh8dOUWHMVscV7cuTw5qeTtUeDPPfMVB3YNIi4
+         0wzNLR0UJ6UR8AW6jhIZuw99cQUFO5AM8S9SihbYtkMfY5Fxf7k2e/G40VByLokVeXFl
+         kwtQmxoaez7UeEWTrSrrTO09b7SnZfp8IqxploRE8gpdFH4EcPqv3doWWt39IuYxfYzW
+         ndsCwPxA1exUTsKYz6BTb1Ju/Z9z1X5Zcn2ptZdRwNyNM0c82tHetLLVQ0pBDvv6/+g0
+         49ng==
+X-Gm-Message-State: AOAM533XZ94meTmg2Q17gJGriGZ1BabDf8aYIxQO8BeRdb6XooRoN0+m
+        4v76gT18H7ybOC/TeSlyEsV9bUSOjuH8NCfFt1Vmd00MYfG2UXcH9J5jNQPyvL96mO6lX97o1Q/
+        nIexZvaMJofNC5xJScvply88KcJXXyFl4wFQk
+X-Received: by 2002:a17:906:22c6:: with SMTP id q6mr5836129eja.275.1624548317667;
+        Thu, 24 Jun 2021 08:25:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxDFvu9eksuXynDzV/xksZCJe2btC6g1NOCWnVD/di1wd6CsF0Z7byzAfEPlhofKBrJp+8MwA==
+X-Received: by 2002:a17:906:22c6:: with SMTP id q6mr5836107eja.275.1624548317485;
+        Thu, 24 Jun 2021 08:25:17 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8308:b105:dd00:d067:83f0:d612:b70f])
+        by smtp.gmail.com with ESMTPSA id a2sm1399830ejp.1.2021.06.24.08.25.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 08:25:17 -0700 (PDT)
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Pavel Emelyanov <xemul@parallels.com>,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert O'Callahan <roc@ocallahan.org>
+Subject: [RFC PATCH] userfaultfd: open userfaultfds with O_RDONLY
+Date:   Thu, 24 Jun 2021 17:25:15 +0200
+Message-Id: <20210624152515.1844133-1-omosnace@redhat.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dear linux-security-module
+Since userfaultfd doesn't implement a write operation, it is more
+appropriate to open it read-only.
 
-The famous brand John Lewis Partnership, is UK's largest multi-
-channel retailer with over 126 shops and multiple expansion in 
-Africa furnished by European/Asian/American products. We are 
-sourcing new products to attract new customers and also retain 
-our existing ones, create new partnerships with companies dealing 
-with different kinds of goods globally.
+When userfaultfds are opened read-write like it is now, and such fd is
+passed from one process to another, SELinux will check both read and
+write permissions for the target process, even though it can't actually
+do any write operation on the fd later.
 
-Your company's products are of interest to our market as we have 
-an amazing market for your products.
+Inspired by the following bug report, which has hit the SELinux scenario
+described above:
+https://bugzilla.redhat.com/show_bug.cgi?id=1974559
 
-Provide us your current catalog through email to review more. We 
-hope to be able to order with you and start a long-term friendly,
-respectable and solid business partnership. Please we would 
-appreciate it if you could send us your stock availability via 
-email if any.
+Reported-by: Robert O'Callahan <roc@ocallahan.org>
+Fixes: 86039bd3b4e6 ("userfaultfd: add new syscall to provide memory externalization")
+Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+---
 
-Our payment terms are 15 days net in Europe, 30 days Net in UK 
-and 30 days net in Asia/USA as we operate with over 5297 
-suppliers around the globe for the past 50 years now. For 
-immediate response Send your reply to robert_turner@johnlewis-
-trading.com for us to be able to 
-treat with care and urgency.
+I marked this as RFC, because I'm not sure if this has any unwanted side
+effects. I only ran this patch through selinux-testsuite, which has a
+simple userfaultfd subtest, and a reproducer from the Bugzilla report.
 
+Please tell me whether this makes sense and/or if it passes any
+userfaultfd tests you guys might have.
 
-Best Regards
+ fs/userfaultfd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Rob Turner
-Head Of Procurement Operations
-John Lewis & Partners.
-robert_turner@johnlewis-trading.com
-Tel: +44-7451-274090
-WhatsApp: +447497483925
-www.johnlewis.com
-REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 14f92285d04f..24e14c36068f 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -986,7 +986,7 @@ static int resolve_userfault_fork(struct userfaultfd_ctx *new,
+ 	int fd;
+ 
+ 	fd = anon_inode_getfd_secure("[userfaultfd]", &userfaultfd_fops, new,
+-			O_RDWR | (new->flags & UFFD_SHARED_FCNTL_FLAGS), inode);
++			O_RDONLY | (new->flags & UFFD_SHARED_FCNTL_FLAGS), inode);
+ 	if (fd < 0)
+ 		return fd;
+ 
+@@ -2088,7 +2088,7 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+ 	mmgrab(ctx->mm);
+ 
+ 	fd = anon_inode_getfd_secure("[userfaultfd]", &userfaultfd_fops, ctx,
+-			O_RDWR | (flags & UFFD_SHARED_FCNTL_FLAGS), NULL);
++			O_RDONLY | (flags & UFFD_SHARED_FCNTL_FLAGS), NULL);
+ 	if (fd < 0) {
+ 		mmdrop(ctx->mm);
+ 		kmem_cache_free(userfaultfd_ctx_cachep, ctx);
+-- 
+2.31.1
+
