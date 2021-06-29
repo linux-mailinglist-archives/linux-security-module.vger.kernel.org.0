@@ -2,199 +2,144 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 619073B79E9
-	for <lists+linux-security-module@lfdr.de>; Tue, 29 Jun 2021 23:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FA73B79F3
+	for <lists+linux-security-module@lfdr.de>; Tue, 29 Jun 2021 23:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbhF2VhC (ORCPT
+        id S235640AbhF2Vim (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 29 Jun 2021 17:37:02 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16698 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235071AbhF2VhB (ORCPT
+        Tue, 29 Jun 2021 17:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235631AbhF2Vim (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 29 Jun 2021 17:37:01 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15TLX1mV050992;
-        Tue, 29 Jun 2021 17:34:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Q1lXpYraVtwjfvdbQr6ogMCgErTtRUfs0JYxQqtCkOk=;
- b=cb/olTXkv+o0gahsHLErs+bkR7aqKNw5m16Sl/nyPxoWPcTJeV6gPYX4mLdm3DBP+GFS
- x308wALo95PrRkYz0GM8RAyfZUhiVlRXdWwF/If/DsmmE6ktet9Qg7Lug4GjtKl60I3q
- aU9NejipOPux5xKNo+8jc+/61weNculsRYfvo19ynoF4zxM54mN+xP0YvJ8bslpViZJC
- dowiq8DJTTmCtatSWwBt2gR5iOWQPFPD7kAKbR0ofIUukrwS4zrQurDOljeye1JTEIqn
- XRJbmK5p1VX4Y/FsxIEed6+DxQ5yYezmh+FiwWh34lDI2yEu/Kc/3d2TmNdd/0ZgbbUA 6w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39g8nkch80-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 17:34:29 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15TLYTxT057646;
-        Tue, 29 Jun 2021 17:34:29 -0400
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39g8nkch7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 17:34:29 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15TLVNmU003540;
-        Tue, 29 Jun 2021 21:34:28 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01dal.us.ibm.com with ESMTP id 39duvdau3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 21:34:27 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15TLYR2j34931104
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Jun 2021 21:34:27 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 02AB0AC05B;
-        Tue, 29 Jun 2021 21:34:27 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBBC3AC068;
-        Tue, 29 Jun 2021 21:34:26 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.47.158.152])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Jun 2021 21:34:26 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        dwmw2@infradead.org, zohar@linux.ibm.com, jarkko@kernel.org
-Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v8 2/2] certs: Add support for using elliptic curve keys for signing modules
-Date:   Tue, 29 Jun 2021 17:34:21 -0400
-Message-Id: <20210629213421.60320-3-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210629213421.60320-1-stefanb@linux.vnet.ibm.com>
-References: <20210629213421.60320-1-stefanb@linux.vnet.ibm.com>
+        Tue, 29 Jun 2021 17:38:42 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84FCC061766
+        for <linux-security-module@vger.kernel.org>; Tue, 29 Jun 2021 14:36:13 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id s15so64466edt.13
+        for <linux-security-module@vger.kernel.org>; Tue, 29 Jun 2021 14:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=kVbXk/jGkX9FNNfyx7X6Mxyt8GqROWHeQ+D0oZ/1rWQ=;
+        b=CKkESIfcf8PxrA+EjyxdXfq/B8pdPyMMuQzo4iLBkBNAO+/4WefIuWjHuhMptM7CvA
+         E8zQicV5wwjKbD1D09KAfTx5xWZUjc7tSGATHt2tlTsRBGWcQbfIoiXzHlgVRgB+PhEb
+         ixtemYRI4pIsOmEdxuzy7ig+vVJ7n6bvqK6hjC3v1c7wnYpw8gbhzIBd+9++G4i1ZcUj
+         /XF8o9HILnUSDESr4I/EeOBN7JOj1xd25r+kTC7lImvpAJvlhjewqFs/vuCISC0puVVc
+         hqVM1uOvEYfJqH3j7VMTRpy0dPF6D0sxLuWdMFQoz4ojezvUOdh9wRj4VivXclaCcg3i
+         4gwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=kVbXk/jGkX9FNNfyx7X6Mxyt8GqROWHeQ+D0oZ/1rWQ=;
+        b=chpmKEEOl1V5X/o4kh6WPyxVnICz7gQltzWcsUslMp7ghadfqnrPovPiWGpKlorQwx
+         mQsgx2BnPSUrD6Rh8rYBJv6xzBLAG/Y4dnTChKM3bzHCZZ57JhB7ASnpxiDL0NRwji0G
+         NTGAsZIAFfPkOa0a5kX6kHra0GHFv6TjhGsQ8iMKksNZUo+Dem8FNpscZffhyorohh6l
+         wyo1HoZGuRKl1ihehDXhLnY7DdGUj51HBfSAg12D3kagyS43UTCvBhMkaRK2m/ihFc6P
+         aNFQv9noywpH7mYUkg3AwVp3G6MgopKwnGn5As0CZVH5UzN4t/6GK9bVHzK6UXOrPtxW
+         wd4g==
+X-Gm-Message-State: AOAM531fu9L64P04uK752ZC/FR13x1dFQd6ymdYa3d1db8dU7ArXqL8v
+        uaAzVWDBVPs6e+TeQxFFkFSfYoRiodNJgkrZeBHbFlTNE12r
+X-Google-Smtp-Source: ABdhPJzN1aqZZm7XMoJpKd6Ir0SHqTfq4WjM5AgSiiYOq+rtX1qeG1OUxTUxRqVSF3naE5Hk5Ki+h3+0gV9c4wgj22Y=
+X-Received: by 2002:a05:6402:1d17:: with SMTP id dg23mr42849509edb.128.1625002572146;
+ Tue, 29 Jun 2021 14:36:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dwcQcJfBWFPQKuYUqvfnpPFFbMd7i64F
-X-Proofpoint-ORIG-GUID: 4NNNhVFhaYsfCI1CZu5nip-u0a9hSDUv
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-29_14:2021-06-29,2021-06-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 spamscore=0
- adultscore=0 clxscore=1015 mlxlogscore=999 phishscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106290132
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 29 Jun 2021 17:36:01 -0400
+Message-ID: <CAHC9VhQb03J_9yWKViZb+wD=pMfFQb+FyYwHYndYZTfRdJ8oLg@mail.gmail.com>
+Subject: [GIT PULL] SELinux patches for v5.14
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+Hi Linus,
 
-Add support for using elliptic curve keys for signing modules. It uses
-a NIST P384 (secp384r1) key if the user chooses an elliptic curve key
-and will have ECDSA support built into the kernel.
+Here is the SELinux pull request for v5.14, the highlights are below:
 
-Note: A developer choosing an ECDSA key for signing modules should still
-delete the signing key (rm certs/signing_key.*) when building an older
-version of a kernel that only supports RSA keys. Unless kbuild automati-
-cally detects and generates a new kernel module key, ECDSA-signed kernel
-modules will fail signature verification.
+* The slow_avc_audit() function is now non-blocking so we can remove
+the AVC_NONBLOCKING tricks; this also includes the 'flags' variant of
+avc_has_perm().
 
-Cc: David Howells <dhowells@redhat.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- certs/Kconfig                         | 26 ++++++++++++++++++++++++++
- certs/Makefile                        | 13 +++++++++++++
- crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
- 3 files changed, 47 insertions(+)
+* Use kmemdup() instead of kcalloc()+copy when copying parts of the
+SELinux policydb.
 
-diff --git a/certs/Kconfig b/certs/Kconfig
-index f4e61116f94e..7d38d65e2128 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -15,6 +15,32 @@ config MODULE_SIG_KEY
-          then the kernel will automatically generate the private key and
-          certificate as described in Documentation/admin-guide/module-signing.rst
- 
-+choice
-+	prompt "Type of module signing key to be generated"
-+	default MODULE_SIG_KEY_TYPE_RSA
-+	help
-+	 The type of module signing key type to generate. This option
-+	 does not apply if a #PKCS11 URI is used.
-+
-+config MODULE_SIG_KEY_TYPE_RSA
-+	bool "RSA"
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an RSA key for module signing.
-+
-+config MODULE_SIG_KEY_TYPE_ECDSA
-+	bool "ECDSA"
-+	select CRYPTO_ECDSA
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an elliptic curve key (NIST P384) for module signing. Consider
-+	 using a strong hash like sha256 or sha384 for hashing modules.
-+
-+	 Note: Remove all ECDSA signing keys, e.g. certs/signing_key.pem,
-+	 when falling back to building Linux 5.13 and older kernels.
-+
-+endchoice
-+
- config SYSTEM_TRUSTED_KEYRING
- 	bool "Provide system-wide ring of trusted keys"
- 	depends on KEYS
-diff --git a/certs/Makefile b/certs/Makefile
-index f9344e52ecda..279433783b10 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -66,9 +66,21 @@ ifeq ($(CONFIG_MODULE_SIG_KEY),"certs/signing_key.pem")
- 
- ifeq ($(openssl_available),yes)
- X509TEXT=$(shell openssl x509 -in "certs/signing_key.pem" -text 2>/dev/null)
-+endif
- 
-+# Support user changing key type
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
-+keytype_openssl = -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
-+ifeq ($(openssl_available),yes)
-+$(if $(findstring id-ecPublicKey,$(X509TEXT)),,$(shell rm -f "certs/signing_key.pem"))
-+endif
-+endif # CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
-+
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_RSA
-+ifeq ($(openssl_available),yes)
- $(if $(findstring rsaEncryption,$(X509TEXT)),,$(shell rm -f "certs/signing_key.pem"))
- endif
-+endif # CONFIG_MODULE_SIG_KEY_TYPE_RSA
- 
- $(obj)/signing_key.pem: $(obj)/x509.genkey
- 	@$(kecho) "###"
-@@ -83,6 +95,7 @@ $(obj)/signing_key.pem: $(obj)/x509.genkey
- 		-batch -x509 -config $(obj)/x509.genkey \
- 		-outform PEM -out $(obj)/signing_key.pem \
- 		-keyout $(obj)/signing_key.pem \
-+		$(keytype_openssl) \
- 		$($(quiet)redirect_openssl)
- 	@$(kecho) "###"
- 	@$(kecho) "### Key pair generated."
-diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-index 967329e0a07b..6592279d839a 100644
---- a/crypto/asymmetric_keys/pkcs7_parser.c
-+++ b/crypto/asymmetric_keys/pkcs7_parser.c
-@@ -269,6 +269,14 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
- 		ctx->sinfo->sig->pkey_algo = "rsa";
- 		ctx->sinfo->sig->encoding = "pkcs1";
- 		break;
-+	case OID_id_ecdsa_with_sha1:
-+	case OID_id_ecdsa_with_sha224:
-+	case OID_id_ecdsa_with_sha256:
-+	case OID_id_ecdsa_with_sha384:
-+	case OID_id_ecdsa_with_sha512:
-+		ctx->sinfo->sig->pkey_algo = "ecdsa";
-+		ctx->sinfo->sig->encoding = "x962";
-+		break;
- 	default:
- 		printk("Unsupported pkey algo: %u\n", ctx->last_oid);
- 		return -ENOPKG;
+* The InfiniBand device name is now passed by reference when possible
+in the SELinux code, removing a strncpy().
+
+* Minor cleanups including: constification of avtab function args,
+removal of useless LSM/XFRM function args, SELinux kdoc fixes, and
+removal of redundant assignments.
+
+Everything has been tested against the selinux-testsuite and as of a
+few moments ago the tag applies cleanly to your tree; please merge
+this for v5.14.
+
+Thanks,
+-Paul
+
+--
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+
+ Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+
+are available in the Git repository at:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
+   tags/selinux-pr-20210629
+
+for you to fetch changes up to d99cf13f14200cdb5cbb704345774c9c0698612d:
+
+ selinux: kill 'flags' argument in avc_has_perm_flags() and avc_audit()
+   (2021-06-11 13:11:45 -0400)
+
+----------------------------------------------------------------
+selinux/stable-5.14 PR 20210629
+
+----------------------------------------------------------------
+Al Viro (2):
+     selinux: slow_avc_audit has become non-blocking
+     selinux: kill 'flags' argument in avc_has_perm_flags() and avc_audit()
+
+Jiapeng Chong (1):
+     selinux: Remove redundant assignment to rc
+
+Minchan Kim (1):
+     selinux: use __GFP_NOWARN with GFP_NOWAIT in the AVC
+
+Ondrej Mosnacek (3):
+     selinux: simplify duplicate_policydb_cond_list() by using kmemdup()
+     selinux: constify some avtab function arguments
+     lsm_audit,selinux: pass IB device name by reference
+
+Souptick Joarder (1):
+     selinux: Corrected comment to match kernel-doc comment
+
+Yang Li (1):
+     selinux: Fix kernel-doc
+
+Zhongjun Tan (1):
+     selinux: delete selinux_xfrm_policy_lookup() useless argument
+
+include/linux/lsm_audit.h         |  8 ++---
+include/linux/lsm_hook_defs.h     |  3 +-
+include/linux/security.h          |  4 +--
+net/xfrm/xfrm_policy.c            |  6 ++--
+security/security.c               |  4 +--
+security/selinux/avc.c            | 61 ++++++++--------------------------
+security/selinux/hooks.c          | 22 ++++----------
+security/selinux/include/avc.h    | 13 +--------
+security/selinux/include/xfrm.h   |  2 +-
+security/selinux/ss/avtab.c       | 28 +++++++++---------
+security/selinux/ss/avtab.h       | 16 +++++-----
+security/selinux/ss/conditional.c | 14 +++++----
+security/selinux/ss/policydb.c    |  1 -
+security/selinux/ss/services.c    | 27 +++++++++++++----
+security/selinux/xfrm.c           |  2 +-
+15 files changed, 90 insertions(+), 121 deletions(-)
+
 -- 
-2.31.1
-
+paul moore
+www.paul-moore.com
