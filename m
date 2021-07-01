@@ -2,129 +2,96 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3461E3B9190
-	for <lists+linux-security-module@lfdr.de>; Thu,  1 Jul 2021 14:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4F13B91E1
+	for <lists+linux-security-module@lfdr.de>; Thu,  1 Jul 2021 15:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbhGAMYP (ORCPT
+        id S236555AbhGAM6r (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 1 Jul 2021 08:24:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43925 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236306AbhGAMYP (ORCPT
+        Thu, 1 Jul 2021 08:58:47 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3338 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236535AbhGAM6o (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 1 Jul 2021 08:24:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625142104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mHPdWsmZjYMcOFxuAOaWqzMzWtt526mcpijNnuosC6g=;
-        b=BJQOyh8NeQN7EoYMDstn8kF7jLYVqNiMYg+bkAwgsCrmAcwrZACFOJTU+rEn8T0/vZfuR8
-        2bqugG48Lwl767x8Xmraz+itUmisfFGEPqKjc9TnJNGcEw+uC0SGROGNE31EZaB5R5jhrB
-        8QoxlFW5ZTOn22NJNudPwIq4NiHVAOI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-562-XQkEeQaKPiyVPK6UtYTz9Q-1; Thu, 01 Jul 2021 08:21:43 -0400
-X-MC-Unique: XQkEeQaKPiyVPK6UtYTz9Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DB8EC343CE;
-        Thu,  1 Jul 2021 12:21:41 +0000 (UTC)
-Received: from horse.redhat.com (ovpn-113-118.rdu2.redhat.com [10.10.113.118])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A9945DA61;
-        Thu,  1 Jul 2021 12:21:36 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 2EAC522054F; Thu,  1 Jul 2021 08:21:36 -0400 (EDT)
-Date:   Thu, 1 Jul 2021 08:21:36 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Daniel Walsh <dwalsh@redhat.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Schaufler, Casey" <casey.schaufler@intel.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "virtio-fs@redhat.com" <virtio-fs@redhat.com>,
-        "berrange@redhat.com" <berrange@redhat.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/1] xattr: Allow user.* xattr on symlink/special
- files if caller has CAP_SYS_RESOURCE
-Message-ID: <20210701122136.GA159380@redhat.com>
-References: <20210629152007.GC5231@redhat.com>
- <78663f5c-d2fd-747a-48e3-0c5fd8b40332@schaufler-ca.com>
- <20210629173530.GD5231@redhat.com>
- <f4992b3a-a939-5bc4-a5da-0ce8913bd569@redhat.com>
- <YNvvLIv16jY8mfP8@mit.edu>
- <YNwmXOqT7LgbeVPn@work-vm>
- <YNyECw/1FzDCW3G8@mit.edu>
- <YNyHVhGPe1bFAt+C@work-vm>
- <YNzNLTxflKbDi8W2@mit.edu>
- <YN2BYXv79PswrN2E@work-vm>
+        Thu, 1 Jul 2021 08:58:44 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GFycR2XlZz6L7Vn;
+        Thu,  1 Jul 2021 20:45:43 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Jul 2021 14:56:10 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <paul@paul-moore.com>
+CC:     <stephen.smalley.work@gmail.com>, <prsriva02@gmail.com>,
+        <tusharsu@linux.microsoft.com>, <nramas@linux.microsoft.com>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <selinux@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/3] ima: Provide more info about buffer measurement
+Date:   Thu, 1 Jul 2021 14:55:49 +0200
+Message-ID: <20210701125552.2958008-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YN2BYXv79PswrN2E@work-vm>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml749-chm.china.huawei.com (10.201.108.199) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Jul 01, 2021 at 09:48:33AM +0100, Dr. David Alan Gilbert wrote:
-> * Theodore Ts'o (tytso@mit.edu) wrote:
-> > On Wed, Jun 30, 2021 at 04:01:42PM +0100, Dr. David Alan Gilbert wrote:
-> > > 
-> > > Even if you fix symlinks, I don't think it fixes device nodes or
-> > > anything else where the permissions bitmap isn't purely used as the
-> > > permissions on the inode.
-> > 
-> > I think we're making a mountain out of a molehill.  Again, very few
-> > people are using quota these days.  And if you give someone write
-> > access to a 8TB disk, do you really care if they can "steal" 32k worth
-> > of space (which is the maximum size of an xattr, enforced by the VFS).
-> > 
-> > OK, but what about character mode devices?  First of all, most users
-> > don't have access to huge number of devices, but let's assume
-> > something absurd.  Let's say that a user has write access to *1024*
-> > devices.  (My /dev has 233 character mode devices, and I have write
-> > access to well under a dozen.)
-> > 
-> > An 8TB disk costs about $200.  So how much of the "stolen" quota space
-> > are we talking about, assuming the user has access to 1024 devices,
-> > and the file system actually supports a 32k xattr.
-> > 
-> >     32k * 1024 * $200 / 8TB / (1024*1024*1024) = $0.000763 = 0.0763 cents
-> > 
-> > A 2TB SSD is less around $180, so even if we calculate the prices
-> > based on SSD space, we're still talking about a quarter of a penny.
-> > 
-> > Why are we worrying about this?
-> 
-> I'm not worrying about storage cost, but we would need to define what
-> the rules are on who can write and change a user.* xattr on a device
-> node.  It doesn't feel sane to make it anyone who can write to the
-> device; then everyone can start leaving droppings on /dev/null.
+This patch set provides more information about buffer measurement.
 
-Looks like tmpfs/devtmpfs might not support setting user.* xattrs. So
-devices nodes there should not be a problem.
+First, it introduces the new function ima_get_current_hash_algo(), to
+obtain the algorithm used to calculate the buffer digest (patch 1).
 
-# touch /dev/foo.txt
-# setfattr -n "user.foo" -v "bar" /dev/foo.txt
-setfattr: /dev/foo.txt: Operation not supported
+Second, it changes the type of return value of ima_measure_critical_data()
+and process_buffer_measurement() from void to int, to signal to the callers
+whether or not the buffer has been measured, or just the digest has been
+calculated and written to the supplied location (patch 2).
 
-Vivek
+Lastly, it adds two new parameters to the functions above ('digest' and
+'digest_len'), so that those functions can write the buffer digest to the
+location supplied by the callers (patch 3).
 
-> 
-> The other evilness I can imagine, is if there's a 32k limit on xattrs on
-> a node, an evil user could write almost 32k of junk to the node
-> and then break the next login that tries to add an acl or breaks the
-> next relabel.
-> 
-> Dave
-> 
-> > 						- Ted
-> > 
-> -- 
-> Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
-> 
+This patch set replaces the patch 'ima: Add digest, algo, measured
+parameters to ima_measure_critical_data()' in:
+
+https://lore.kernel.org/linux-integrity/20210625165614.2284243-1-roberto.sassu@huawei.com/
+
+Changelog
+
+v1:
+- add digest_len parameter to ima_measure_critical_data() and
+  process_buffer_measurement() (suggested by Lakshmi)
+- fix doc formatting issues
+
+Huawei Digest Lists patch set:
+- introduce ima_get_current_hash_algo() (suggested by Mimi)
+- remove algo and measured parameters from ima_measure_critical_data() and
+  process_buffer_measurement() (suggested by Mimi)
+- return an integer from ima_measure_critical_data() and
+  process_buffer_measurement() (suggested by Mimi)
+- correctly check when process_buffer_measurement() should return earlier
+
+Roberto Sassu (3):
+  ima: Introduce ima_get_current_hash_algo()
+  ima: Return int in the functions to measure a buffer
+  ima: Add digest and digest_len params to the functions to measure a
+    buffer
+
+ include/linux/ima.h                          | 23 ++++--
+ security/integrity/ima/ima.h                 | 10 +--
+ security/integrity/ima/ima_appraise.c        |  6 +-
+ security/integrity/ima/ima_asymmetric_keys.c |  6 +-
+ security/integrity/ima/ima_init.c            |  6 +-
+ security/integrity/ima/ima_main.c            | 73 ++++++++++++++------
+ security/integrity/ima/ima_queue_keys.c      | 15 ++--
+ security/selinux/ima.c                       | 11 +--
+ 8 files changed, 100 insertions(+), 50 deletions(-)
+
+-- 
+2.25.1
 
