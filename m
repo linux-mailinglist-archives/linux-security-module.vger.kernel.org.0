@@ -2,134 +2,84 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F0F3C5F77
-	for <lists+linux-security-module@lfdr.de>; Mon, 12 Jul 2021 17:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178E13C5FE2
+	for <lists+linux-security-module@lfdr.de>; Mon, 12 Jul 2021 17:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbhGLPn5 (ORCPT
+        id S234208AbhGLQA0 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 12 Jul 2021 11:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        Mon, 12 Jul 2021 12:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235563AbhGLPn5 (ORCPT
+        with ESMTP id S230394AbhGLQAZ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 12 Jul 2021 11:43:57 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6C3C0613DD;
-        Mon, 12 Jul 2021 08:41:08 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id A55F76210; Mon, 12 Jul 2021 11:41:06 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org A55F76210
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1626104466;
-        bh=58qsbxGOldmXglP0XTIWP5zPM6bP3vD1mti24yWL6p4=;
-        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
-        b=b3KfNWYgyy+7ug+X4mtbJ0nB2zxIsoueTBluDdvJYz0EI9qtCIkfTUMMjALSXuG6g
-         XiLxIJUyUJ22hrnsxgWppVUz4b6S7c298HXKfUzu3VWtfh2+aWa3Uit6V1x6nKwiMq
-         CvCFga8AvZbqMbjlkCqsDKWZH3QGbznmDh5jMAPg=
-Date:   Mon, 12 Jul 2021 11:41:06 -0400
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Bruce Fields <bfields@redhat.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, virtio-fs@redhat.com, dwalsh@redhat.com,
-        dgilbert@redhat.com, casey.schaufler@intel.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        tytso@mit.edu, miklos@szeredi.hu, gscrivan@redhat.com,
-        jack@suse.cz, Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v2 1/1] xattr: Allow user.* xattr on symlink and special
- files
-Message-ID: <20210712154106.GB18679@fieldses.org>
-References: <20210708175738.360757-1-vgoyal@redhat.com>
- <20210708175738.360757-2-vgoyal@redhat.com>
- <20210709091915.2bd4snyfjndexw2b@wittgenstein>
- <20210709152737.GA398382@redhat.com>
- <710d1c6f-d477-384f-0cc1-8914258f1fb1@schaufler-ca.com>
- <20210709175947.GB398382@redhat.com>
- <CAPL3RVGKg4G5qiiHo7KYPcsWWgeoW=qNPOSQpd3Sv329jrWrLQ@mail.gmail.com>
- <20210712140247.GA486376@redhat.com>
+        Mon, 12 Jul 2021 12:00:25 -0400
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154FBC0613EF
+        for <linux-security-module@vger.kernel.org>; Mon, 12 Jul 2021 08:57:36 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4GNpLh21BnzMqJT9;
+        Mon, 12 Jul 2021 17:57:32 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4GNpLf6V3Lzlh8TP;
+        Mon, 12 Jul 2021 17:57:30 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        landlock@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-man@vger.kernel.org, linux-security-module@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH v2 0/4] Add Landlock man pages
+Date:   Mon, 12 Jul 2021 17:57:41 +0200
+Message-Id: <20210712155745.831580-1-mic@digikod.net>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210712140247.GA486376@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Jul 12, 2021 at 10:02:47AM -0400, Vivek Goyal wrote:
-> On Fri, Jul 09, 2021 at 04:10:16PM -0400, Bruce Fields wrote:
-> > On Fri, Jul 9, 2021 at 1:59 PM Vivek Goyal <vgoyal@redhat.com> wrote:
-> > > nfs seems to have some issues.
-> > 
-> > I'm not sure what the expected behavior is for nfs.  All I have for
-> > now is some generic troubleshooting ideas, sorry:
-> > 
-> > > - I can set user.foo xattr on symlink and query it back using xattr name.
-> > >
-> > >   getfattr -h -n user.foo foo-link.txt
-> > >
-> > >   But when I try to dump all xattrs on this file, user.foo is being
-> > >   filtered out it looks like. Not sure why.
-> > 
-> > Logging into the server and seeing what's set there could help confirm
-> > whether it's the client or server that's at fault.  (Or watching the
-> > traffic in wireshark; there are GET/SET/LISTXATTR ops that should be
-> > easy to spot.)
-> > 
-> > > - I can't set "user.foo" xattr on a device node on nfs and I get
-> > >   "Permission denied". I am assuming nfs server is returning this.
-> > 
-> > Wireshark should tell you whether it's the server or client doing that.
-> > 
-> > The RFC is https://datatracker.ietf.org/doc/html/rfc8276, and I don't
-> > see any explicit statement about what the server should do in the case
-> > of symlinks or device nodes, but I do see "Any regular file or
-> > directory may have a set of extended attributes", so that was clearly
-> > the assumption.  Also, NFS4ERR_WRONG_TYPE is listed as a possible
-> > error return for the xattr ops.  But on a quick skim I don't see any
-> > explicit checks in the nfsd code, so I *think* it's just relying on
-> > the vfs for any file type checks.
-> 
-> Hi Bruce,
-> 
-> Thanks for the response. I am just trying to do set a user.foo xattr on
-> a device node on nfs.
-> 
-> setfattr -n "user.foo" -v "bar" /mnt/nfs/test-dev
-> 
-> and I get -EACCESS.
-> 
-> I put some printk() statements and EACCESS is being returned from here.
-> 
-> nfs4_xattr_set_nfs4_user() {
->         if (!nfs_access_get_cached(inode, current_cred(), &cache, true)) {
->                 if (!(cache.mask & NFS_ACCESS_XAWRITE)) {
->                         return -EACCES;
->                 }
->         }
-> }
-> 
-> Value of cache.mask=0xd at the time of error.
+From: Mickaël Salaün <mic@linux.microsoft.com>
 
-Looks like 0xd is what the server returns to access on a device node
-with mode bits rw- for the caller.
+Hi,
 
-Commit c11d7fd1b317 "nfsd: take xattr bits into account for permission
-checks" added the ACCESS_X* bits for regular files and directories but
-not others.
+These four documents give a global overview of Landlock and explain each
+system calls.  This is mainly a formatting of the current kernel
+documentation with some new additional details.
 
-But you don't want to determine permission from the mode bits anyway,
-you want it to depend on the owner, so I guess we should be calling
-xattr_permission somewhere if we want that behavior.
+This second patch series slightly improves the content and fixes some
+syntax issues pointed out by Alejandro Colomar.
 
-The RFC assumes user xattrs are for regular files and directories,
-without, as far as I can tell, actually explicitly forbidding them on
-other objects.  We should also raise this with the working group if we
-want to increase the chances that you'll get the behavior you want on
-non-Linux servers.
+This patch series can be found in a Git repository:
+https://github.com/landlock-lsm/man-pages/commits/landlock-v2
 
-The "User extended attributes" section of the xattr(7) man page will
-need updating.
+Previous version:
+https://lore.kernel.org/linux-man/20210706182217.32338-1-mic@digikod.net/
 
---b.
+Regards,
+
+Mickaël Salaün (4):
+  landlock.7: Add a new page to introduce Landlock
+  landlock_create_ruleset.2: Document new syscall
+  landlock_add_rule.2: Document new syscall
+  landlock_restrict_self.2: Document new syscall
+
+ man2/landlock_add_rule.2       | 139 +++++++++++++
+ man2/landlock_create_ruleset.2 | 136 +++++++++++++
+ man2/landlock_restrict_self.2  | 130 ++++++++++++
+ man7/landlock.7                | 356 +++++++++++++++++++++++++++++++++
+ 4 files changed, 761 insertions(+)
+ create mode 100644 man2/landlock_add_rule.2
+ create mode 100644 man2/landlock_create_ruleset.2
+ create mode 100644 man2/landlock_restrict_self.2
+ create mode 100644 man7/landlock.7
+
+
+base-commit: 33248cfe50ebb8762208e7ef3264676dad71b016
+-- 
+2.32.0
+
