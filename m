@@ -2,131 +2,77 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B64F3CA13A
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jul 2021 17:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F72D3CA418
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jul 2021 19:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238173AbhGOPSO (ORCPT
+        id S235298AbhGOR2R (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 15 Jul 2021 11:18:14 -0400
-Received: from sonic317-38.consmr.mail.ne1.yahoo.com ([66.163.184.49]:35454
-        "EHLO sonic317-38.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231534AbhGOPSN (ORCPT
+        Thu, 15 Jul 2021 13:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235104AbhGOR2P (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 15 Jul 2021 11:18:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1626362120; bh=4CvhvD+YpkoeYCVkPbTAYLogsxR/Zf4NlBwQ9Vt1Ec0=; h=Subject:To:References:Cc:From:Date:In-Reply-To:From:Subject:Reply-To; b=mcN2cMwflq3Tai3TNSQOUbAHvOL93vwm/ipZ9FMhXs/y80/Ekg3aNKoI8YEw6gB17+2Sp46sBNm0BsN+kNo3QoS8cEDDv919rFUTQYP+75sgJ92+BpRjq97aWbpoHYpyQchwAfeWxkmKXnTKc4XzvJ7cMhPNwgt53MCKLPB3codLWcBaRRelhPsXmiRE7dHNoKDKcWcEcsAsJyfRjqkbtRRZ0A0Iv6AZ8hgSmd3EPokILDJnZUFcbTS+6sY6UmaLmVS9A/+URNScyvVt9olAONu8wLaqz2lGYYIN7eeZuX7Dlc0nCQWe9tzqAxiAlqLxwo7NVqc0vOBREuYTg2cHhQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1626362120; bh=XnMnr1JvSZAO4RBFToBbfW4G1oBjf69MwIUMKqJw11o=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=C0XT9cpdrOhfpcxzxZ4DQYySmO5G4Jci6yviEn0ACGPaBYF5lvk/aeNv4mEwETZKvmoKtaCrS/OKJPLrAYrWm/Sv5MpkM7enlMl7WWQ6NmWUQuXQ0fs2X/a0QNE1iWL1YwdtTo1/rPhJ8qbvHuyo9AFARn1aXw+fW8MRTGg0u28BJWOl2PSAs5dPgNfhl1IFssjIovYd2cPIHLIGEwWbGrYp4AavpJdK7f9l29SKh6Ucx9DZNbQXHvM6+W4K9z/6VL5W78hDt7mF894Au4vfH0zeoIn7tSUnXNBv6xD/i/nQxiqBtkhpY8zHD7co6r8FHxBSHe07GM4SXzqslKtypw==
-X-YMail-OSG: KI7wRBgVM1kt3.4PyMz7fMu4vy9lRtBlfI9uTxoeWZXJTUq1hGVwU_eExiBFcxC
- VysJzvbwGCVncFzw3J1ENZJJJ4l9EegUjz9H2Zud1VR9x_COVmUA1HZCHDtTEa5fZm4sH.n7zzpr
- nAb4n0S0IUuM.oKyjJdPd_qnXUd4Hw.AJF5oN3NSGnWihIpDo0ljz558EFbjmRsmivZXThjobJNu
- iv80at3tD3KsmkCRe0AkrkVXEKc9oqfmUF6BXQDsxoD35xBqigmj5VofFCguF8lqmGI3qkx3PUO9
- uS5FUSS1xj9HGW1IM._vQNu8t31rJOy2rIfvfpJG9x5_OuNS2iKoWq09M.9EcNQUKr_4gAeE5NhG
- dFvnPf4NApDG_GmVbsRlb.duUmY_KnEn7WtaGkNS57CJ.Jj7omw2kog_.k69GV_CywZhn8nDLOc.
- DWpQPFq2CYB.6NiQfwa5RpI.46usU7b7Fd0eGiCiaWju7DqVSpfhLsAJPVxhRFYBcNvH25ipIPw2
- YXqigcvjtbWSKdoQKeiaLm2e521_4y1cBHq8IhaC29xW4deC36.Fw_T09Xp8TnWMLa7pvYyagNh7
- JseHi3N_2V5YccSvz64a.c_jH6q8Ek5WWNEsCyxfoTuudPyL5saRNokwnNzBPFdcc9gEIg2A86YF
- ed7F4a1TGoJwHWoufdr_iZJnCPEhkzhncbcUlWJFFFNCrSHuRlvCkIu4W..mp4IiYmHXAkXMT1mz
- 5L_XdYALw9zYWyKyCFGKAsMsqT4.5zcFlwtCOQiGYPlmkwm1EAuqyvRa4lIN0rfnfhPcRPJTK.1s
- EjEQrY4W3CJJ9RSTr1bnONODAt9OISmLf1eX441fBqt8gqUfVEXPeqPb2TDwNX75FLtu3Kr7QMw7
- 8Z1yo4_wxR5YD8EKZocUerhA6g6VlDfNrL_sbP1m4WwYha2IctagfIb1wQ_nPu7A5LQ1jcAQtBbH
- TZEcKOT97Bb0QwTUM2g7aRqmlwNKR1ZaS50jCTNCbGpIj7pJUXQQHvmn4kCKy6dlq4cPIxj1pD.p
- vakYBQ5m0urysM61H8LckH4cLdq_U5a6FutNMRGC9k1ApPudRU4yb_NLZrx5Rk_0yI9XIdxn_qz9
- 4mnF2Vcr5diLY5kwdQnC_zP.8KOg6DZlCAjcg3Xj68eFPi2XddWvBwDFSR.Mqg5y8u7BY1AKS2l9
- fndrade_ZQXcocLTTeB3UsC7fy7JTi_LNNGNoY8nI5hRvg9_3QMuwS9Np2Zou4jNxkMq59TdiMqp
- jSiohvD0.5q1unOElgi0tvhEbc49QDQr6zCifTsSwLiv7eengx0wececzNS4yYqWU1VkeJBCrMtS
- swWuNa1ptz5RZP4w7awvMSUtOFVAeg4G0izNfyMeZKXZ5ohr1ow3wv76vvQYH5zmHjfezKlkms68
- qpECm2v7l5Tc1QNOssd8U6Rjscxcr6OnyVAnyHRGVsnmw_BL1wruwz884Zs32pqeJM6Dzyj9NsDq
- rLqJXRt9f1yc0JqpLYOk1apesYOTp0dEjDxRBsdynRsiHi6n1Aw3DQSWDEi_IbAfy9NlvAh4cf6h
- Kp8XQ7sPT9MEO3NlmIh7d9xSsZHe.CdB_nQIOCU2jnhnqv7XjB7fdv9X02FkiZDjkNAeK0dgXxwG
- aMiC8pR7GaBxcpnXgDBYRPcK24sGAjYHiZAvXLpivi5vyZ474wCCktS_EBSlGlbaGuATtmhvyKP5
- uRDup4p78oCF_bYb77CoGGada6NKBUhHeYR1akazUNKgZgaoGMDPg02nuEq4nHxYTNusZUfVXyyv
- nT64uoSjLrohdVNcQMVuzm2_GjwfgMsufq88wz0nFNX678zyWSA.6HIY8Sg9RUrXKMKg9bQzS7z5
- tepgpg1dVSReFQZzw_NEO8_YseEpcFlrmNb0W.cwnZWtSx2EHlVoT5PApUxJKFVsrJiDc_FUH3Sd
- Hj4Y3GO1aBSisOdxV6r17piQc3XWo5k_WL6z_JLkup8u3YCliQnz.9QcdqCO4_sOHZQbi8CtW8bl
- btYYTEunCAYTWIL4sMUM65J_fC1rbWohfKff94gDhNbBukECm4L83_Kt0ViiuSrAHqxXa7ICc3N4
- WVQNxGQEbGI2.uwexLIph9d4kaeOTpY.vpAkWV6TPsJHirAQaqsfATPSaVcCZrnK27LFcm4H5piY
- X0haObgOpJrFS0FTqrVNv860cj20v09.yx204_if9hwgPpqarwi58aMtoMjKlaS5kCwznTmGVatM
- .Jo6KUoNGpRO_3YH5d90lcQy3SHJHfz6YJyqrDYAmw5EH28.2AZHdqRrSefb4jJaEPu6HM2E39ce
- hTTA8i0w3r4e1hD4xFgupw0p_ahDslRqFQ77v5kf9mAOByk2lyo8F6K_82jPCRWi8_yD5Sai3qsv
- K80Xgfuyf9OEW4pmiyHUXrI1hPIIq30T6fBHDdUoM7s9NImsctgCiwDhAHILB5YgTaaQbjsm12fd
- ASp4Qy2obSMvj.8cEc9OT_FPVOpTJdqJWLOTjpv4Mkh65T8eFdYdoij4aVk9vmngkD4UY1iEKBtp
- jDtVAO42uhOoMTeFFjIqbuYjBSZpJiZYye4dCE05YJOnjq_d8_gC_kAQ0cFiDsgeTp6YUQcKKbu.
- xySofxhy.RyWpuK4XgD8nU5CUsWVSPbusW2mp5VO4VGVZRLRoTJXXTv4OFDpkNtRB_NbqPjA3OFk
- -
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Thu, 15 Jul 2021 15:15:20 +0000
-Received: by kubenode507.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID caafd5e4d794c8466d7f7d628a81ecbc;
-          Thu, 15 Jul 2021 15:15:14 +0000 (UTC)
-Subject: Re: [PATCH] Smack: Fix wrong semantics in smk_access_entry()
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210715091724.45768-1-tianjia.zhang@linux.alibaba.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Message-ID: <ae938c7b-2f7a-27ec-7077-ceeb517ba97f@schaufler-ca.com>
-Date:   Thu, 15 Jul 2021 08:15:12 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 15 Jul 2021 13:28:15 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA84C0613DE
+        for <linux-security-module@vger.kernel.org>; Thu, 15 Jul 2021 10:25:22 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id p202so5899913qka.12
+        for <linux-security-module@vger.kernel.org>; Thu, 15 Jul 2021 10:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=VEbievBeLXzXz2IFTCJlfsSW3SGnPx5BRLHAunZVXukgfJX3HSSAUxCtdiKf61hv/8
+         dEjk1vTJjxHihT0WA1OL/uEOLbisu+eOZ9QBM+pSgOr0g3iviST/L7UaXer3M8NeFmjI
+         cUcDXANijM5RzePSgHNEUg4tiAZJvw7xY2717+o5bCXGYbN3j0in5RSdJSiv5QmZpfXV
+         xJwXiiE0C1Gs4ldNfG+SItE+RoyPJtAgR4hB34JMXRrPZxzy82ifiVVChBVQnRUKYafC
+         pLvyRURLCMNCEs5zTTafGrQe1zI12ARsnWy7gNJNMcFCKTa1+89JJPFI0mohmLMeae0x
+         ASdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=pFJU+RPtdKF5gIJ19GkTJ4ZgTQqkOIddwWN9ZoxTLHWMX2G/WqndTXT1J+h8Rmqy5T
+         bU+iAYMJQjFTR0VPhYeVtbJJ4qZX7YKMQjUCihvhJ/JMlazbVbSL5ZEYdja1xYG6nVsz
+         +ac+ezlqUIHGA0YhbLASi9ak0loXG3T9HIOi6mJUTQdpgqEIhNAYzksbT8JbdVKAEhdj
+         Sdb4C+cocp2WVJgCN2kggquLzf26a0GBBx2atq/PzfDSRZS8L1TSeP17P4DcZUszBIG7
+         e9+O7/FVHPB9DD5TQwij+siEQoYlpYXz/FQxtH/0KLrSoFy+ZbxvhyCC1dJrUui6dgmv
+         v61Q==
+X-Gm-Message-State: AOAM531OepJwPjSQHvUxrJFfRaOcwFKerlHJNM3+X8jVi375+Xp87yK7
+        uxvrxeckoi3ygwqgYWcXd1WllTMiVUVJeicKiow=
+X-Google-Smtp-Source: ABdhPJyVA6gR/njuabWs2C2fW8gelCsYJFEl6/1qckwAKb5sFvak5SWUy5PHC6/Yk0GlmffBpcH6FQwcd62hdQoqBbA=
+X-Received: by 2002:a37:9947:: with SMTP id b68mr5263725qke.56.1626369920992;
+ Thu, 15 Jul 2021 10:25:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210715091724.45768-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Mailer: WebService/1.1.18469 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Received: by 2002:a0c:e502:0:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:20
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <steveokoh.fedexdeliveryagent@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:20 +0000
+Message-ID: <CAFKwDuBfMzCdHqoenSL2rqjnW5tE27dPjiWKbgxM_hjsa-G7pg@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 7/15/2021 2:17 AM, Tianjia Zhang wrote:
-> In the smk_access_entry() function, if no matching rule is found
-> in the rust_list, a negative error code will be used to perform bit
-> operations with the MAY_ enumeration value. This is semantically
-> wrong. This patch fixes this issue.
+Hello Dear,
 
-Indeed, the code as written is functioning correctly by
-sheer luck. I will take this patch. Thank you.
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
 
->
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  security/smack/smack_access.c | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
->
-> diff --git a/security/smack/smack_access.c b/security/smack/smack_acces=
-s.c
-> index 1f391f6a3d47..d2186e2757be 100644
-> --- a/security/smack/smack_access.c
-> +++ b/security/smack/smack_access.c
-> @@ -81,23 +81,22 @@ int log_policy =3D SMACK_AUDIT_DENIED;
->  int smk_access_entry(char *subject_label, char *object_label,
->  			struct list_head *rule_list)
->  {
-> -	int may =3D -ENOENT;
->  	struct smack_rule *srp;
-> =20
->  	list_for_each_entry_rcu(srp, rule_list, list) {
->  		if (srp->smk_object->smk_known =3D=3D object_label &&
->  		    srp->smk_subject->smk_known =3D=3D subject_label) {
-> -			may =3D srp->smk_access;
-> -			break;
-> +			int may =3D srp->smk_access;
-> +			/*
-> +			 * MAY_WRITE implies MAY_LOCK.
-> +			 */
-> +			if ((may & MAY_WRITE) =3D=3D MAY_WRITE)
-> +				may |=3D MAY_LOCK;
-> +			return may;
->  		}
->  	}
-> =20
-> -	/*
-> -	 * MAY_WRITE implies MAY_LOCK.
-> -	 */
-> -	if ((may & MAY_WRITE) =3D=3D MAY_WRITE)
-> -		may |=3D MAY_LOCK;
-> -	return may;
-> +	return -ENOENT;
->  }
-> =20
->  /**
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
 
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
+
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
