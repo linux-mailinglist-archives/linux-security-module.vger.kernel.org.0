@@ -2,77 +2,68 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F72D3CA418
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jul 2021 19:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D68C3CB41F
+	for <lists+linux-security-module@lfdr.de>; Fri, 16 Jul 2021 10:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbhGOR2R (ORCPT
+        id S237413AbhGPI1a (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 15 Jul 2021 13:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235104AbhGOR2P (ORCPT
+        Fri, 16 Jul 2021 04:27:30 -0400
+Received: from mx.h4ck.space ([159.69.146.50]:49866 "EHLO mx.h4ck.space"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237231AbhGPI13 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 15 Jul 2021 13:28:15 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA84C0613DE
-        for <linux-security-module@vger.kernel.org>; Thu, 15 Jul 2021 10:25:22 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id p202so5899913qka.12
-        for <linux-security-module@vger.kernel.org>; Thu, 15 Jul 2021 10:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=VEbievBeLXzXz2IFTCJlfsSW3SGnPx5BRLHAunZVXukgfJX3HSSAUxCtdiKf61hv/8
-         dEjk1vTJjxHihT0WA1OL/uEOLbisu+eOZ9QBM+pSgOr0g3iviST/L7UaXer3M8NeFmjI
-         cUcDXANijM5RzePSgHNEUg4tiAZJvw7xY2717+o5bCXGYbN3j0in5RSdJSiv5QmZpfXV
-         xJwXiiE0C1Gs4ldNfG+SItE+RoyPJtAgR4hB34JMXRrPZxzy82ifiVVChBVQnRUKYafC
-         pLvyRURLCMNCEs5zTTafGrQe1zI12ARsnWy7gNJNMcFCKTa1+89JJPFI0mohmLMeae0x
-         ASdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=pFJU+RPtdKF5gIJ19GkTJ4ZgTQqkOIddwWN9ZoxTLHWMX2G/WqndTXT1J+h8Rmqy5T
-         bU+iAYMJQjFTR0VPhYeVtbJJ4qZX7YKMQjUCihvhJ/JMlazbVbSL5ZEYdja1xYG6nVsz
-         +ac+ezlqUIHGA0YhbLASi9ak0loXG3T9HIOi6mJUTQdpgqEIhNAYzksbT8JbdVKAEhdj
-         Sdb4C+cocp2WVJgCN2kggquLzf26a0GBBx2atq/PzfDSRZS8L1TSeP17P4DcZUszBIG7
-         e9+O7/FVHPB9DD5TQwij+siEQoYlpYXz/FQxtH/0KLrSoFy+ZbxvhyCC1dJrUui6dgmv
-         v61Q==
-X-Gm-Message-State: AOAM531OepJwPjSQHvUxrJFfRaOcwFKerlHJNM3+X8jVi375+Xp87yK7
-        uxvrxeckoi3ygwqgYWcXd1WllTMiVUVJeicKiow=
-X-Google-Smtp-Source: ABdhPJyVA6gR/njuabWs2C2fW8gelCsYJFEl6/1qckwAKb5sFvak5SWUy5PHC6/Yk0GlmffBpcH6FQwcd62hdQoqBbA=
-X-Received: by 2002:a37:9947:: with SMTP id b68mr5263725qke.56.1626369920992;
- Thu, 15 Jul 2021 10:25:20 -0700 (PDT)
+        Fri, 16 Jul 2021 04:27:29 -0400
+X-Greylist: delayed 369 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Jul 2021 04:27:28 EDT
+From:   Andreas Rammhold <andreas@rammhold.de>
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Rammhold <andreas@rammhold.de>
+Subject: [PATCH] KEYS: trusted: Fix trusted key backends when building as module
+Date:   Fri, 16 Jul 2021 10:17:22 +0200
+Message-Id: <20210716081722.4130161-1-andreas@rammhold.de>
 MIME-Version: 1.0
-Received: by 2002:a0c:e502:0:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:20
- -0700 (PDT)
-Reply-To: faty.muhamad@gmail.com
-From:   Ms Fatima Muhammad <steveokoh.fedexdeliveryagent@gmail.com>
-Date:   Thu, 15 Jul 2021 17:25:20 +0000
-Message-ID: <CAFKwDuBfMzCdHqoenSL2rqjnW5tE27dPjiWKbgxM_hjsa-G7pg@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello Dear,
+Before this commit the kernel could end up with no trusted key sources
+even thought both of the currently supported backends (tpm & tee) were
+compoiled as modules. This manifested in the trusted key type not being
+registered at all.
 
-My name is Ms.Fatima Muhammad., Please forgive me for stressing you
-with my predicaments and I sorry to approach you through this media
-because is serves the fastest means of  my communication right now,
+When checking if a CONFIG_… preprocessor variable is defined we only
+test for the builtin (=y) case and not the module (=m) case. By using
+the IS_ENABLE(…) macro we to test for both cases.
 
-I came across your Email from my personal search and I decided to
-contact you believing you will be honest to fulfill my business
-proposal which I believe that will be a very good opportunity for both
-of us. Please it is my pleasure to contact you today for a business
-partnership investments projects worth $4.6 million USD which I intend
-to establish in your country..
+Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+---
+ security/keys/trusted-keys/trusted_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Pls If this business proposal offends your moral and ethic values do
-accept my apology. therefore kindly contact me immediately if you are
-interested for more details.
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index d5c891d8d353..fd640614b168 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+ 
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if defined(CONFIG_TCG_TPM)
++#if IS_ENABLED(CONFIG_TCG_TPM)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if defined(CONFIG_TEE)
++#if IS_ENABLED(CONFIG_TEE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
+-- 
+2.32.0
 
-Thank you for your wiliness to help me
-Yours Sincerely Fatima Muhammad
