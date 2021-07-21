@@ -2,452 +2,196 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB803D146F
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jul 2021 18:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A9A3D1485
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jul 2021 18:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbhGUQE5 (ORCPT
+        id S233554AbhGUQIv (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 21 Jul 2021 12:04:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40840 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235338AbhGUQE4 (ORCPT
+        Wed, 21 Jul 2021 12:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233471AbhGUQIu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 21 Jul 2021 12:04:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626885932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T+VSQANDtJEmceTdjzdkoW5CoFJtWgBn/llc4BbwYlA=;
-        b=KovYipDFdLE72zMhmx6O5NSdgKZppueEWZkzJseBiyWU4FZ3ocxptSxcQGr+heffu9dE3d
-        5UxF2Itl4HeZnyuNMFzTQp+OekZa9cNmnW+FjsQVVqqAOY12RcfhFPTqYPhZDOUX6TO7wP
-        js6ywVk1sfXRPGbAtN3h+9TZpngbtEA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-74-Ss2ZgFVJM_-NdQlcJEhKnQ-1; Wed, 21 Jul 2021 12:45:28 -0400
-X-MC-Unique: Ss2ZgFVJM_-NdQlcJEhKnQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7F2EA824F89;
-        Wed, 21 Jul 2021 16:45:27 +0000 (UTC)
-Received: from gerbillo.redhat.com (ovpn-114-219.ams2.redhat.com [10.36.114.219])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D10AA797CB;
-        Wed, 21 Jul 2021 16:45:25 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florian Westphal <fw@strlen.de>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Subject: [PATCH RFC 9/9] sk_buff: access secmark via getter/setter
-Date:   Wed, 21 Jul 2021 18:44:41 +0200
-Message-Id: <aa0d2603aeaf70ec4d40997e65a95520087792d3.1626882513.git.pabeni@redhat.com>
-In-Reply-To: <cover.1626882513.git.pabeni@redhat.com>
-References: <cover.1626882513.git.pabeni@redhat.com>
+        Wed, 21 Jul 2021 12:08:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFE5C061575
+        for <linux-security-module@vger.kernel.org>; Wed, 21 Jul 2021 09:49:27 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1m6FP7-0004wh-47; Wed, 21 Jul 2021 18:49:05 +0200
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1m6FP3-0003EK-UF; Wed, 21 Jul 2021 18:49:01 +0200
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     kernel@pengutronix.de, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Udit Agarwal <udit.agarwal@nxp.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 0/4] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+Date:   Wed, 21 Jul 2021 18:48:51 +0200
+Message-Id: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-So we can track the field status and move it after tail.
+Series applies on top of
+https://lore.kernel.org/linux-integrity/20210721160258.7024-1-a.fatoum@pengutronix.de/T/#u
 
-After this commit the skb lifecycle for simple cases (no ct, no secmark,
-no vlan, no UDP tunnel) uses 3 cacheline instead of 4 cachelines required
-before this series.
+v2 -> v3:
+ - Split off first Kconfig preparation patch. It fixes a regression,
+   so sent that out, so it can be applied separately (Sumit)
+ - Split off second key import patch. I'll send that out separately
+   as it's a development aid and not required within the CAAM series
+ - add MAINTAINERS entry
 
-e.g. GRO for non vlan traffic will consistently uses 3 cacheline for
-each packet.
+v1 -> v2:
+ - Added new commit to make trusted key Kconfig option independent
+   of TPM and added new Kconfig file for trusted keys
+ - Add new commit for importing existing key material
+ - Allow users to force use of kernel RNG (Jarkko)
+ - Enforce maximum keymod size (Horia)
+ - Use append_seq_(in|out)_ptr_intlen instead of append_seq_(in|out)_ptr
+   (Horia)
+ - Make blobifier handle private to CAAM glue code file (Horia)
+ - Extend trusted keys documentation for CAAM
+ - Rebased and updated original cover letter:
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key.
+
+There has been multiple discussions on how to represent this within the kernel:
+
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key. There has been multiple
+discussions on how to represent this within the kernel:
+
+ - [RFC] crypto: caam - add red blobifier
+   Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
+   best integrate the blob mechanism.
+   Mimi suggested that it could be used to implement trusted keys.
+   Trusted keys back then were a TPM-only feature.
+
+ - security/keys/secure_key: Adds the secure key support based on CAAM.
+   Udit added[2] a new "secure" key type with the CAAM as backend. The key
+   material stays within the kernel only.
+   Mimi and James agreed that this needs a generic interface, not specific
+   to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
+   basis for TEE-backed keys.
+
+ - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+   Franck added[3] a new "caam_tk" key type based on Udit's work. This time
+   it uses CAAM "black blobs" instead of "red blobs", so key material stays
+   within the CAAM and isn't exposed to kernel in plaintext.
+   James voiced the opinion that there should be just one user-facing generic
+   wrap/unwrap key type with multiple possible handlers.
+   David suggested trusted keys.
+
+ - Introduce TEE based Trusted Keys support
+   Sumit reworked[4] trusted keys to support multiple possible backends with
+   one chosen at boot time and added a new TEE backend along with TPM.
+   This now sits in Jarkko's master branch to be sent out for v5.13
+
+This patch series builds on top of Sumit's rework to have the CAAM as yet another
+trusted key backend.
+
+The CAAM bits are based on Steffen's initial patch from 2015. His work had been
+used in the field for some years now, so I preferred not to deviate too much from it.
+
+This series has been tested with dmcrypt[5] on an i.MX6DL.
+
+Looking forward to your feedback.
+
+Cheers,
+Ahmad
+
+ [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
+ [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
+ [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
+ [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
+ [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
+
 ---
- include/linux/skbuff.h           | 40 ++++++++++++++++++++++----------
- net/core/skbuff.c                |  7 +++---
- net/netfilter/nfnetlink_queue.c  |  6 +++--
- net/netfilter/nft_meta.c         |  6 ++---
- net/netfilter/xt_CONNSECMARK.c   |  8 +++----
- net/netfilter/xt_SECMARK.c       |  2 +-
- security/apparmor/lsm.c          | 15 +++++++-----
- security/selinux/hooks.c         | 10 ++++----
- security/smack/smack_lsm.c       |  4 ++--
- security/smack/smack_netfilter.c |  4 ++--
- 10 files changed, 62 insertions(+), 40 deletions(-)
+To: Jarkko Sakkinen <jarkko@kernel.org>
+To: "Horia Geantă" <horia.geanta@nxp.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+To: Aymen Sghaier <aymen.sghaier@nxp.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+To: "David S. Miller" <davem@davemloft.net>
+To: James Bottomley <jejb@linux.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc: Udit Agarwal <udit.agarwal@nxp.com>
+Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+Cc: David Gstir <david@sigma-star.at>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+Cc: Sumit Garg <sumit.garg@linaro.org>
+Cc: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 7acf2a203918..941c0f858c65 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -688,6 +688,7 @@ typedef unsigned char *sk_buff_data_t;
-  *		CHECKSUM_UNNECESSARY (max 3)
-  *	@dst_pending_confirm: need to confirm neighbour
-  *	@decrypted: Decrypted SKB
-+ *	@secmark_present: the secmark tag is present
-  *	@_state: bitmap reporting the presence of some skb state info
-  *	@has_nfct: @_state bit for nfct info
-  *	@has_dst: @_state bit for dst pointer
-@@ -695,7 +696,7 @@ typedef unsigned char *sk_buff_data_t;
-  *	@active_extensions: @_state bits for active extensions (skb_ext_id types)
-  *	@napi_id: id of the NAPI struct this skb came from
-  *	@sender_cpu: (aka @napi_id) source CPU in XPS
-- *	@secmark: security marking
-+ *	@_secmark: security marking
-  *	@mark: Generic packet mark
-  *	@reserved_tailroom: (aka @mark) number of bytes of free space available
-  *		at the tail of an sk_buff
-@@ -870,6 +871,9 @@ struct sk_buff {
- #endif
- #ifdef CONFIG_TLS_DEVICE
- 	__u8			decrypted:1;
-+#endif
-+#ifdef CONFIG_NETWORK_SECMARK
-+	__u8			secmark_present:1;
- #endif
- 	union {
- 		__u8		_state;		/* state of extended fields */
-@@ -903,9 +907,6 @@ struct sk_buff {
- 		unsigned int	sender_cpu;
- 	};
- #endif
--#ifdef CONFIG_NETWORK_SECMARK
--	__u32		secmark;
--#endif
- 
- 	union {
- 		__u32		mark;
-@@ -961,6 +962,9 @@ struct sk_buff {
- 		};
- 		__u32		vlan_info;
- 	};
-+#ifdef CONFIG_NETWORK_SECMARK
-+	__u32			_secmark;
-+#endif
- };
- 
- #ifdef __KERNEL__
-@@ -4228,6 +4232,23 @@ static inline void skb_remcsum_process(struct sk_buff *skb, void *ptr,
- 	skb->csum = csum_add(skb->csum, delta);
- }
- 
-+static inline __u32 skb_secmark(const struct sk_buff *skb)
-+{
-+#if IS_ENABLED(CONFIG_NETWORK_SECMARK)
-+	return skb->secmark_present ? skb->_secmark : 0;
-+#else
-+	return NULL;
-+#endif
-+}
-+
-+static inline void skb_set_secmark(struct sk_buff *skb, __u32 secmark)
-+{
-+#if IS_ENABLED(CONFIG_NETWORK_SECMARK)
-+	skb->secmark_present = 1;
-+	skb->_secmark = secmark;
-+#endif
-+}
-+
- static inline struct nf_conntrack *skb_nfct(const struct sk_buff *skb)
- {
- #if IS_ENABLED(CONFIG_NF_CONNTRACK)
-@@ -4414,19 +4435,14 @@ static inline void nf_copy(struct sk_buff *dst, const struct sk_buff *src)
- #ifdef CONFIG_NETWORK_SECMARK
- static inline void skb_copy_secmark(struct sk_buff *to, const struct sk_buff *from)
- {
--	to->secmark = from->secmark;
--}
--
--static inline void skb_init_secmark(struct sk_buff *skb)
--{
--	skb->secmark = 0;
-+	to->secmark_present = from->secmark_present;
-+	if (from->_secmark)
-+		to->_secmark = from->_secmark;
- }
- #else
- static inline void skb_copy_secmark(struct sk_buff *to, const struct sk_buff *from)
- { }
- 
--static inline void skb_init_secmark(struct sk_buff *skb)
--{ }
- #endif
- 
- static inline int secpath_exists(const struct sk_buff *skb)
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index c59e90db80d5..704aecbde60d 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -998,6 +998,10 @@ static void __copy_skb_header(struct sk_buff *new, const struct sk_buff *old)
- 	__skb_copy_inner_headers(new, old);
- 	if (old->vlan_present)
- 		new->vlan_info = old->vlan_info;
-+#ifdef CONFIG_NETWORK_SECMARK
-+	if (old->_secmark)
-+		new->_secmark = old->_secmark;
-+#endif
- 
- 	/* Note : this field could be in headers_start/headers_end section
- 	 * It is not yet because we do not want to have a 16 bit hole
-@@ -1019,9 +1023,6 @@ static void __copy_skb_header(struct sk_buff *new, const struct sk_buff *old)
- 	CHECK_SKB_FIELD(network_header);
- 	CHECK_SKB_FIELD(mac_header);
- 	CHECK_SKB_FIELD(mark);
--#ifdef CONFIG_NETWORK_SECMARK
--	CHECK_SKB_FIELD(secmark);
--#endif
- #ifdef CONFIG_NET_RX_BUSY_POLL
- 	CHECK_SKB_FIELD(napi_id);
- #endif
-diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
-index f774de0fc24f..cf00d4286187 100644
---- a/net/netfilter/nfnetlink_queue.c
-+++ b/net/netfilter/nfnetlink_queue.c
-@@ -304,14 +304,16 @@ static int nfqnl_put_sk_uidgid(struct sk_buff *skb, struct sock *sk)
- static u32 nfqnl_get_sk_secctx(struct sk_buff *skb, char **secdata)
- {
- 	u32 seclen = 0;
-+	u32 secmark;
- #if IS_ENABLED(CONFIG_NETWORK_SECMARK)
- 	if (!skb || !sk_fullsock(skb->sk))
- 		return 0;
- 
- 	read_lock_bh(&skb->sk->sk_callback_lock);
- 
--	if (skb->secmark)
--		security_secid_to_secctx(skb->secmark, secdata, &seclen);
-+	secmark = skb_secmark(skb);
-+	if (secmark)
-+		security_secid_to_secctx(secmark, secdata, &seclen);
- 
- 	read_unlock_bh(&skb->sk->sk_callback_lock);
- #endif
-diff --git a/net/netfilter/nft_meta.c b/net/netfilter/nft_meta.c
-index a7e01e9952f1..da4bc455d8bd 100644
---- a/net/netfilter/nft_meta.c
-+++ b/net/netfilter/nft_meta.c
-@@ -363,7 +363,7 @@ void nft_meta_get_eval(const struct nft_expr *expr,
- #endif
- #ifdef CONFIG_NETWORK_SECMARK
- 	case NFT_META_SECMARK:
--		*dest = skb->secmark;
-+		*dest = skb_secmark(skb);
- 		break;
- #endif
- 	case NFT_META_PKTTYPE:
-@@ -451,7 +451,7 @@ void nft_meta_set_eval(const struct nft_expr *expr,
- 		break;
- #ifdef CONFIG_NETWORK_SECMARK
- 	case NFT_META_SECMARK:
--		skb->secmark = value;
-+		skb_set_secmark(skb, value);
- 		break;
- #endif
- 	default:
-@@ -833,7 +833,7 @@ static void nft_secmark_obj_eval(struct nft_object *obj, struct nft_regs *regs,
- 	const struct nft_secmark *priv = nft_obj_data(obj);
- 	struct sk_buff *skb = pkt->skb;
- 
--	skb->secmark = priv->secid;
-+	skb_set_secmark(skb, priv->secid);
- }
- 
- static int nft_secmark_obj_init(const struct nft_ctx *ctx,
-diff --git a/net/netfilter/xt_CONNSECMARK.c b/net/netfilter/xt_CONNSECMARK.c
-index 76acecf3e757..26f4fbc04c0b 100644
---- a/net/netfilter/xt_CONNSECMARK.c
-+++ b/net/netfilter/xt_CONNSECMARK.c
-@@ -31,13 +31,13 @@ MODULE_ALIAS("ip6t_CONNSECMARK");
-  */
- static void secmark_save(const struct sk_buff *skb)
- {
--	if (skb->secmark) {
-+	if (skb_secmark(skb)) {
- 		struct nf_conn *ct;
- 		enum ip_conntrack_info ctinfo;
- 
- 		ct = nf_ct_get(skb, &ctinfo);
- 		if (ct && !ct->secmark) {
--			ct->secmark = skb->secmark;
-+			ct->secmark = skb_secmark(skb);
- 			nf_conntrack_event_cache(IPCT_SECMARK, ct);
- 		}
- 	}
-@@ -49,13 +49,13 @@ static void secmark_save(const struct sk_buff *skb)
-  */
- static void secmark_restore(struct sk_buff *skb)
- {
--	if (!skb->secmark) {
-+	if (!skb_secmark(skb)) {
- 		const struct nf_conn *ct;
- 		enum ip_conntrack_info ctinfo;
- 
- 		ct = nf_ct_get(skb, &ctinfo);
- 		if (ct && ct->secmark)
--			skb->secmark = ct->secmark;
-+			skb_set_secmark(skb, ct->secmark);
- 	}
- }
- 
-diff --git a/net/netfilter/xt_SECMARK.c b/net/netfilter/xt_SECMARK.c
-index 498a0bf6f044..bc383bc2bba9 100644
---- a/net/netfilter/xt_SECMARK.c
-+++ b/net/netfilter/xt_SECMARK.c
-@@ -36,7 +36,7 @@ secmark_tg(struct sk_buff *skb, const struct xt_secmark_target_info_v1 *info)
- 		BUG();
- 	}
- 
--	skb->secmark = secmark;
-+	skb_set_secmark(skb, secmark);
- 	return XT_CONTINUE;
- }
- 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index f72406fe1bf2..afbae187b920 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1053,12 +1053,13 @@ static int apparmor_socket_shutdown(struct socket *sock, int how)
- static int apparmor_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
- {
- 	struct aa_sk_ctx *ctx = SK_CTX(sk);
-+	u32 secmark = skb_secmark(skb);
- 
--	if (!skb->secmark)
-+	if (!secmark)
- 		return 0;
- 
- 	return apparmor_secmark_check(ctx->label, OP_RECVMSG, AA_MAY_RECEIVE,
--				      skb->secmark, sk);
-+				      secmark, sk);
- }
- #endif
- 
-@@ -1160,12 +1161,13 @@ static int apparmor_inet_conn_request(const struct sock *sk, struct sk_buff *skb
- 				      struct request_sock *req)
- {
- 	struct aa_sk_ctx *ctx = SK_CTX(sk);
-+	u32 secmark = skb_secmark(skb);
- 
--	if (!skb->secmark)
-+	if (!secmark)
- 		return 0;
- 
- 	return apparmor_secmark_check(ctx->label, OP_CONNECT, AA_MAY_CONNECT,
--				      skb->secmark, sk);
-+				      secmark, sk);
- }
- #endif
- 
-@@ -1754,10 +1756,11 @@ static unsigned int apparmor_ip_postroute(void *priv,
- 					  struct sk_buff *skb,
- 					  const struct nf_hook_state *state)
- {
-+	u32 secmark = skb_secmark(skb);
- 	struct aa_sk_ctx *ctx;
- 	struct sock *sk;
- 
--	if (!skb->secmark)
-+	if (!secmark)
- 		return NF_ACCEPT;
- 
- 	sk = skb_to_full_sk(skb);
-@@ -1766,7 +1769,7 @@ static unsigned int apparmor_ip_postroute(void *priv,
- 
- 	ctx = SK_CTX(sk);
- 	if (!apparmor_secmark_check(ctx->label, OP_SENDMSG, AA_MAY_SEND,
--				    skb->secmark, sk))
-+				    secmark, sk))
- 		return NF_ACCEPT;
- 
- 	return NF_DROP_ERR(-ECONNREFUSED);
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index b0032c42333e..898b81ba7566 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -5138,7 +5138,7 @@ static int selinux_sock_rcv_skb_compat(struct sock *sk, struct sk_buff *skb,
- 
- 	if (selinux_secmark_enabled()) {
- 		err = avc_has_perm(&selinux_state,
--				   sk_sid, skb->secmark, SECCLASS_PACKET,
-+				   sk_sid, skb_secmark(skb), SECCLASS_PACKET,
- 				   PACKET__RECV, &ad);
- 		if (err)
- 			return err;
-@@ -5214,7 +5214,7 @@ static int selinux_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
- 
- 	if (secmark_active) {
- 		err = avc_has_perm(&selinux_state,
--				   sk_sid, skb->secmark, SECCLASS_PACKET,
-+				   sk_sid, skb_secmark(skb), SECCLASS_PACKET,
- 				   PACKET__RECV, &ad);
- 		if (err)
- 			return err;
-@@ -5727,7 +5727,7 @@ static unsigned int selinux_ip_forward(struct sk_buff *skb,
- 
- 	if (secmark_active)
- 		if (avc_has_perm(&selinux_state,
--				 peer_sid, skb->secmark,
-+				 peer_sid, skb_secmark(skb),
- 				 SECCLASS_PACKET, PACKET__FORWARD_IN, &ad))
- 			return NF_DROP;
- 
-@@ -5840,7 +5840,7 @@ static unsigned int selinux_ip_postroute_compat(struct sk_buff *skb,
- 
- 	if (selinux_secmark_enabled())
- 		if (avc_has_perm(&selinux_state,
--				 sksec->sid, skb->secmark,
-+				 sksec->sid, skb_secmark(skb),
- 				 SECCLASS_PACKET, PACKET__SEND, &ad))
- 			return NF_DROP_ERR(-ECONNREFUSED);
- 
-@@ -5964,7 +5964,7 @@ static unsigned int selinux_ip_postroute(struct sk_buff *skb,
- 
- 	if (secmark_active)
- 		if (avc_has_perm(&selinux_state,
--				 peer_sid, skb->secmark,
-+				 peer_sid, skb_secmark(skb),
- 				 SECCLASS_PACKET, secmark_perm, &ad))
- 			return NF_DROP_ERR(-ECONNREFUSED);
- 
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 223a6da0e6dc..2ed19e2db66a 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -3840,10 +3840,10 @@ static int smk_skb_to_addr_ipv6(struct sk_buff *skb, struct sockaddr_in6 *sip)
- #ifdef CONFIG_NETWORK_SECMARK
- static struct smack_known *smack_from_skb(struct sk_buff *skb)
- {
--	if (skb == NULL || skb->secmark == 0)
-+	if (skb == NULL || skb_secmark(skb) == 0)
- 		return NULL;
- 
--	return smack_from_secid(skb->secmark);
-+	return smack_from_secid(skb_secmark(skb));
- }
- #else
- static inline struct smack_known *smack_from_skb(struct sk_buff *skb)
-diff --git a/security/smack/smack_netfilter.c b/security/smack/smack_netfilter.c
-index fc7399b45373..881143e62eb4 100644
---- a/security/smack/smack_netfilter.c
-+++ b/security/smack/smack_netfilter.c
-@@ -31,7 +31,7 @@ static unsigned int smack_ipv6_output(void *priv,
- 	if (sk && sk->sk_security) {
- 		ssp = sk->sk_security;
- 		skp = ssp->smk_out;
--		skb->secmark = skp->smk_secid;
-+		skb_set_secmark(skb, skp->smk_secid);
- 	}
- 
- 	return NF_ACCEPT;
-@@ -49,7 +49,7 @@ static unsigned int smack_ipv4_output(void *priv,
- 	if (sk && sk->sk_security) {
- 		ssp = sk->sk_security;
- 		skp = ssp->smk_out;
--		skb->secmark = skp->smk_secid;
-+		skb_set_secmark(skb, skp->smk_secid);
- 	}
- 
- 	return NF_ACCEPT;
+Ahmad Fatoum (4):
+  KEYS: trusted: allow users to use kernel RNG for key material
+  KEYS: trusted: allow trust sources to use kernel RNG for key material
+  crypto: caam - add in-kernel interface for blob generator
+  KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+
+ Documentation/admin-guide/kernel-parameters.txt   |   8 +-
+ Documentation/security/keys/trusted-encrypted.rst |  60 +++-
+ MAINTAINERS                                       |   9 +-
+ drivers/crypto/caam/Kconfig                       |   3 +-
+ drivers/crypto/caam/Makefile                      |   1 +-
+ drivers/crypto/caam/blob_gen.c                    | 230 +++++++++++++++-
+ include/keys/trusted-type.h                       |   2 +-
+ include/keys/trusted_caam.h                       |  11 +-
+ include/soc/fsl/caam-blob.h                       |  56 ++++-
+ security/keys/trusted-keys/Kconfig                |  11 +-
+ security/keys/trusted-keys/Makefile               |   2 +-
+ security/keys/trusted-keys/trusted_caam.c         |  74 +++++-
+ security/keys/trusted-keys/trusted_core.c         |  23 +-
+ 13 files changed, 477 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/crypto/caam/blob_gen.c
+ create mode 100644 include/keys/trusted_caam.h
+ create mode 100644 include/soc/fsl/caam-blob.h
+ create mode 100644 security/keys/trusted-keys/trusted_caam.c
+
+base-commit: 97408d81ed533b953326c580ff2c3f1948b3fcee
 -- 
-2.26.3
-
+git-series 0.9.1
