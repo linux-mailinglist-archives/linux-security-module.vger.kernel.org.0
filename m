@@ -2,75 +2,119 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 746CF3DCF7E
-	for <lists+linux-security-module@lfdr.de>; Mon,  2 Aug 2021 06:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D0C3DD1C8
+	for <lists+linux-security-module@lfdr.de>; Mon,  2 Aug 2021 10:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbhHBEYp (ORCPT
+        id S232678AbhHBIOc convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbhHBEYn (ORCPT
+        Mon, 2 Aug 2021 04:14:32 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3544 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232657AbhHBIOc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 2 Aug 2021 00:24:43 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0CDC0617A0
-        for <linux-security-module@vger.kernel.org>; Sun,  1 Aug 2021 21:24:33 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id yk17so21058570ejb.11
-        for <linux-security-module@vger.kernel.org>; Sun, 01 Aug 2021 21:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=WDq9P0bY1AsY9kO7VoQiuEkd/+xeN2uAzVka1J/B7YABFMMcv9zsRMDuUzGU3t7LVq
-         x60AdfwMQPfhhBT91CFmxmNgG6fRcK6BFaIDqx+Ms1vLOgOAYNOd4Xbt+10CNKTcRAMK
-         KeTYcmNC0bNtdVd3yLIRxS8Pr5sLxpts2NC88pKkxuGBDjkmUnJislac8lDy7dNnd85N
-         dz7rwNTEXx7I9NqC47E4asccGsO9/P6huztRZkI4lkvRJ5hB7XcOxioVdhTGqNDSXebW
-         Md0Dh2ya6SQXgvhbdFNsJy7D030uG2HCPIxJG2TxztPigkWx+ZXfNLX+hVWs0ri0sCK7
-         k48A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=IXmsIOsTH1kNrgHvNAq9JJ6R1OrhV7LWfb3iisC4VT6tEIDMTmwI5AgxvjDv3SQ3AF
-         BHp7/k6CpZ4bUH/v7JQNqRFZH1W9rsqHtBLsIAyKtcS9Ot07dRl1IbjNlHV1R21Q/Dyg
-         AsbGrB5txdRQWQtkebP25ZSxONdnMfVt0Rd4zAa3MhynYuosbrODcldI/ZAFZE60qqHP
-         Lwd8eoao5dVx9h1rq7GfDT1AsHnDd23r6svQ6l5hYsu6AAHt3K84xrE4wP4kloz2cqw5
-         xzquOfDFnwBOJdUEf/2FeyfRwIGUJGpoj1EPNp0TUxgkBEFr8IQmbefKFfQc0rUaMyHm
-         +0zw==
-X-Gm-Message-State: AOAM531GYbalK3F1ZgnZ6kVzL3B60gbtKFZCpTq9jpnjR09q0srcX1yk
-        XsglUEUIcYE2Toausyz1/cfXNg6h2BbLv6HFZtw=
-X-Google-Smtp-Source: ABdhPJyge6CE4/3PK9Ai4ltivb6MMxmm7LTQ2s8bjzS0dUrr9KzpIrZxfzN76q9x5Xx6YjpKdH1irFSuudYhIT6knzs=
-X-Received: by 2002:a17:906:3b87:: with SMTP id u7mr13818454ejf.66.1627878272087;
- Sun, 01 Aug 2021 21:24:32 -0700 (PDT)
+        Mon, 2 Aug 2021 04:14:32 -0400
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GdW4P1bP5z6F86J;
+        Mon,  2 Aug 2021 16:14:13 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Mon, 2 Aug 2021 10:14:20 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Mon, 2 Aug 2021 10:14:20 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Igor Stoppa <igor.stoppa@huawei.com>
+Subject: RE: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
+ digest_list_del
+Thread-Topic: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
+ digest_list_del
+Thread-Index: AQHXgjzPxJ6WuoGgH0KyG3D/y7w0xqtaWSsAgADBDpCAAD+ygIAAIhjQ///1QYCAACKD8IAETzLw
+Date:   Mon, 2 Aug 2021 08:14:20 +0000
+Message-ID: <96c7cd3d19254e84a6cb45b2a940e944@huawei.com>
+References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
+         <20210726163700.2092768-7-roberto.sassu@huawei.com>
+         <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
+         <ef7c85dcb096479e95c8c60ccda4d700@huawei.com>
+         <1ef95096bee13578b3f906dd9f708c6af9d6ff18.camel@linux.ibm.com>
+         <555bf01bee4b4ea7a9bee658366d535a@huawei.com>
+ <2c731f07bd08f01f2a3e032814bc65ae9a8494ad.camel@linux.ibm.com>
+ <bd0787e0ee4f47baa41abf47976e536c@huawei.com>
+In-Reply-To: <bd0787e0ee4f47baa41abf47976e536c@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:31
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:24:31 +0100
-Message-ID: <CAKwBCXtg5uyf7Jb2AAcE1ghxD-+sCDTGfZ6n10fsvHdbE918iA@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
-Dear Partner,
+> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> Sent: Friday, July 30, 2021 4:25 PM
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Friday, July 30, 2021 4:03 PM
+> > Hi Roberto,
+> >
+> > On Fri, 2021-07-30 at 13:16 +0000, Roberto Sassu wrote:
+> > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > > Sent: Friday, July 30, 2021 2:40 PM
+> >
+> > > > "critical data", in this context, should probably be used for verifying
+> > > > the in memory file digests and other state information haven't been
+> > > > compromised.
+> > >
+> > > Actually, this is what we are doing currently. To keep the
+> > > implementation simple, once the file or the buffer are uploaded
+> > > to the kernel, they will not be modified, just accessed through
+> > > the indexes.
+> >
+> > My main concern about digest lists is their integrity, from loading the
+> > digest lists to their being stored in memory.  A while back, there was
+> > some work on defining a write once memory allocator.  I don't recall
+> > whatever happened to it.  This would be a perfect usecase for that
+> > memory allocator.
+> 
+> Adding Igor in CC.
+> 
+> Regarding loading, everything uploaded to the kernel is carefully
+> evaluated. This should not be a concern. Regarding making them
+> read-only, probably if you can subvert digest lists you can also
+> remove the read-only protection (unless you use an hypervisor).
 
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
+I briefly talked with Igor. He also agreed with that, and added that
+it could make it more difficult for an attacker to also disable the
+protection. However, he is not planning to submit an update soon,
+so I wouldn't consider this an option for now.
 
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
+Thanks
 
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
+Roberto
 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
 
-Regards :  Abdoulahi Kazim
+> Thanks
+> 
+> Roberto
+> 
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Li Jian, Shi Yanli
+> 
+> > thanks,
+> >
+> > Mimi
+
