@@ -2,133 +2,62 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D694E3E0920
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Aug 2021 22:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE1A3E122E
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Aug 2021 12:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239510AbhHDUFA (ORCPT
+        id S240357AbhHEKJm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 4 Aug 2021 16:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
+        Thu, 5 Aug 2021 06:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbhHDUE6 (ORCPT
+        with ESMTP id S240360AbhHEKJj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 4 Aug 2021 16:04:58 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA83BC06179B
-        for <linux-security-module@vger.kernel.org>; Wed,  4 Aug 2021 13:04:44 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id n6so3917308ljp.9
-        for <linux-security-module@vger.kernel.org>; Wed, 04 Aug 2021 13:04:44 -0700 (PDT)
+        Thu, 5 Aug 2021 06:09:39 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863DAC06179B
+        for <linux-security-module@vger.kernel.org>; Thu,  5 Aug 2021 03:09:24 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k9so7550733edr.10
+        for <linux-security-module@vger.kernel.org>; Thu, 05 Aug 2021 03:09:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sahklOmuEWNKGHdHX0TfbNlW0MEZnmzRkOffEEIf8Zg=;
-        b=RBNOcGPiP0Tn2LCxIxQy3MCJV4xnMx2Bve+Q5ATjwz8evRElxC7yfTfdMiL2NXb2Iv
-         Ffx4IWqpeE13/vv/zz8Vlc0A1isK2sj4QhG0E+5tSga50RWMCXvu5U5ABqhbaIQyTtuB
-         RFVNLsQvbKmyRfVvkpKzIEGVm48rk5eJ5LI2s=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=n10iYXs1AptC2KvJm+JtSBDhlxmP7w+4FSSzJCGBzq744n00FbqUWvZZ1M3bZIKpMZ
+         47t3M6EWAmnRZF6k56QxknChoLO78dSaGiSlJbAqzjzueaaLLGpPQ3kFrT+txqh9UQPY
+         ckHJxwkcp9Sb+t5M3r6xElhq5Tv3kwreLwJ7h0PIV6g++T/NLgEsq3RUzTDxwVMWNudb
+         B23/XgMRR0KFyESIvsnqpAwJc00bgHroH7IdjmYgwt6LTT9l4eHOjIJs17dI9kANiK68
+         b7SkW3ma7hdPuV0RwtTRXLbBeqCyKXnkNrXjF0ByEpQ7Ioda+xBsHwM+DF7fSBt/H/Gl
+         v/7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sahklOmuEWNKGHdHX0TfbNlW0MEZnmzRkOffEEIf8Zg=;
-        b=FP96hM0oiXEF7wHqSIcOIH1agDWm5Wi0hTnrOFOzP6Tatd7yx6fsRr0LsHESA+E2Bi
-         wxWPUO1tw6b0bU8g3cnnl/Pz+8w11qYqH5L/DaeAWuL9TWVUJKp+j80fLiT37ny34B/H
-         YLcQq398XGUhvBFH79JRu493tSnx4iRxVr2svj/032qJLZ5Ldd38tIyC7CXOGdSxBfe2
-         fsXcbI94Ldev9MiwwZPpU4LuY/TXFPl7Dpm/tVLUapa7DpJZxoxPJjdw9Lk84u2KmSIl
-         C20YBr6ndMMKX8iI/HfSSoHd9PFkH24wSMZenQmqm/1mRKTi1P8q+CjJLG4tDQ9JCtJn
-         6J5g==
-X-Gm-Message-State: AOAM533VXCSWiGdhxiCWnX6wfsrV1PkF0xnMOQ4NZFw/CeFlm43gC/vM
-        Rav35wLUJmG6puu1CJW5iH4ipJ/nGPvCMIxJ
-X-Google-Smtp-Source: ABdhPJx/OQ7LW4izZkkCEv65DmuFLJdQPVl+J5N5Z3hTUvGeTQNwZHol6rWZaF4khyibclZzxU6ipg==
-X-Received: by 2002:a2e:9885:: with SMTP id b5mr704239ljj.25.1628107482197;
-        Wed, 04 Aug 2021 13:04:42 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id u7sm228383lja.58.2021.08.04.13.04.40
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Aug 2021 13:04:41 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id u13so3937709lje.5
-        for <linux-security-module@vger.kernel.org>; Wed, 04 Aug 2021 13:04:40 -0700 (PDT)
-X-Received: by 2002:a2e:84c7:: with SMTP id q7mr670782ljh.61.1628107480111;
- Wed, 04 Aug 2021 13:04:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=hHh7PiEMcu77E1YICENcuoFQ4kPMubAzT78dg7Y21M6jwjDYNTIHrT/sPOJ06SCIf3
+         Lglsd5OIrnHtbeR9o9mNalf4pOA2sG9Dh7LftCT3g94fbtDLwHx+bie6BPLAEKkdZb9X
+         URkHMmoOomJ35QW+3CnpcCEKVrIgi92vdau/9SG60Nspx3pzs80+pZUeG8n5HMS9Z9ah
+         cHrq0OuH4udZm4J0tQovxm+zs2h5hdFCPR/ZuWg3C362mLrOk8P6xGiNTvb3tLLmqlQG
+         rbfXdRYNTUVuu2avgBMSB2Ppp7EOrgFPa5e9F6MzmX48vXhkIIbbwRDU0aGw8LDoXKlF
+         /L+g==
+X-Gm-Message-State: AOAM530E6wT2GB0kGrZR6JRCzAgOU5lkQZ5Ax1+D0BFdwyS4n/3tRweh
+        e+Vl0rzR0AoVHCs7u8I/wPr68n+0G8S/LV7ffwI=
+X-Google-Smtp-Source: ABdhPJzuHjsBuIWS9qvNtJFp87n7oEYiWdxsYj88OckM/2Pcka357A6t48J28bM9KZMmF0BZhbTLriiZhGWd0NHcLJ4=
+X-Received: by 2002:a05:6402:49a:: with SMTP id k26mr5365440edv.279.1628158163011;
+ Thu, 05 Aug 2021 03:09:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <1628086770.5rn8p04n6j.none.ref@localhost> <1628086770.5rn8p04n6j.none@localhost>
- <CAHk-=wiLr55zHUWNzmp3DeoO0DUaYp7vAzQB5KUCni5FpwC7Uw@mail.gmail.com> <1628105897.vb3ko0vb06.none@localhost>
-In-Reply-To: <1628105897.vb3ko0vb06.none@localhost>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 Aug 2021 13:04:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wioi2+dfni1Sx2_Js_WmcgHKtzPUSDkhZ4uo0P6Qe0z+A@mail.gmail.com>
-Message-ID: <CAHk-=wioi2+dfni1Sx2_Js_WmcgHKtzPUSDkhZ4uo0P6Qe0z+A@mail.gmail.com>
-Subject: Re: [REGRESSION?] Simultaneous writes to a reader-less, non-full pipe
- can hang
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-Cc:     acrichton@mozilla.com, Christian Brauner <christian@brauner.io>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        keyrings@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ian Kent <raven@themaw.net>
+Received: by 2002:a05:6408:258c:b029:e3:fe5c:5c2d with HTTP; Thu, 5 Aug 2021
+ 03:09:20 -0700 (PDT)
+Reply-To: theresabangurah3333@yahoo.com
+From:   Theresa Bangurah <mariamabah77879@gmail.com>
+Date:   Thu, 5 Aug 2021 11:09:20 +0100
+Message-ID: <CAAi==jpsiLcjDaWg_=tyzCq6dfO42hxUrbAZW5hFC8u1MxcqiQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Aug 4, 2021 at 12:48 PM Alex Xu (Hello71) <alex_y_xu@yahoo.ca> wrote:
->
-> I agree that if this only affects programs which intentionally adjust
-> the pipe buffer size, then it is not a huge issue. The problem,
-> admittedly buried very close to the bottom of my email, is that the
-> kernel will silently provide one-page pipe buffers if the user has
-> exceeded 16384 (by default) pipe buffer pages allocated.
-
-That's a good point.
-
-That "fall back to a single buffer" case is meant to make things
-hobble along if the user has exhausted the pipe buffers, but you're
-right that we might want to make that minimum be two buffers.
-
-I didn't test this, but the obvious fix seems to be just increasing
-the '1' to '2'.
-
-  @@ -781,8 +784,8 @@ struct pipe_inode_info *alloc_pipe_info(void)
-          user_bufs = account_pipe_buffers(user, 0, pipe_bufs);
-
-          if (too_many_pipe_buffers_soft(user_bufs) &&
-pipe_is_unprivileged_user()) {
-  -               user_bufs = account_pipe_buffers(user, pipe_bufs, 1);
-  -               pipe_bufs = 1;
-  +               user_bufs = account_pipe_buffers(user, pipe_bufs, 2);
-  +               pipe_bufs = 2;
-          }
-
-          if (too_many_pipe_buffers_hard(user_bufs) &&
-pipe_is_unprivileged_user())
-
-although a real patch would need a comment about how a single buffer
-is problematic, and probably make the '2' be a #define to not just
-repeat the same magic constant silently.
-
-IOW, something like
-
-  /*
-   * The general pipe use case needs at least two buffers: one
-   * for data yet to be read, and one for new data
-   */
-  #define DEF_MIN_PIPE_BUFFERS 2
-
-to go with the existing PIPE_DEF_BUFFERS (although the
-DEF_MIN_PIPE_BUFFERS use would only be in fs/pipe.c, so I guess it
-doesn't actually need to be exposed to anybody else in the pipe.h
-header file).
-
-I'd take that patch with some proper testing and a commit message.
-
-Hint hint ;)
-
-                Linus
+-- 
+My name is Mrs.Theresa Bangurah,i am American citizen i have something
+important to tell you.Reply me immediately you get this message.God
+bless you.
