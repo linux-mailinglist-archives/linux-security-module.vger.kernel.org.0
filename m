@@ -2,114 +2,71 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 510753E2A5C
-	for <lists+linux-security-module@lfdr.de>; Fri,  6 Aug 2021 14:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C066D3E2C24
+	for <lists+linux-security-module@lfdr.de>; Fri,  6 Aug 2021 16:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343584AbhHFMJr (ORCPT
+        id S236560AbhHFOLD (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 6 Aug 2021 08:09:47 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18856 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243761AbhHFMJr (ORCPT
+        Fri, 6 Aug 2021 10:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236433AbhHFOLB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 6 Aug 2021 08:09:47 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 176C3JsU040130;
-        Fri, 6 Aug 2021 08:09:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=gp7o6nsUz02cEmUbe1aDvwX7ROQjyHwgHhxzlCBJ8iw=;
- b=ng1OBnph6HoyGSZT22pXtF+vHuITdsWlju0jNsFEsyTBjT25DBULjHIdKaFV40oPsY+a
- ogFS8NfbWdJq0k9J6y7t7sIoaoWxuMSheQO87Cdlnd7bsez//YyA4zFGwq8L49DOs7rf
- gX1c0wl9nHV5NxlkFZKHuJvbWIp1VXglzsf1odLoG5gaKTAq/uWLjmbB7oWfSNp1xkL8
- gqa/UQ5OIardZk5kh7JVRU4zCOmbG+Vu7rGJwjAgEQrx412P8dlRaEgAPKbBILpylziT
- QMCt/rwuFXs2wZQ1kicc+kX6CloMvn5IP7PrBNuFlLbDUaheEvAHkzgeIgIe+me+CoBm Cg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a9356u1ju-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Aug 2021 08:09:30 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 176C3cUK042272;
-        Fri, 6 Aug 2021 08:09:30 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a9356u1j4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Aug 2021 08:09:30 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 176C7HHm019801;
-        Fri, 6 Aug 2021 12:09:29 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma01wdc.us.ibm.com with ESMTP id 3a8gwu6cwu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Aug 2021 12:09:28 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 176C8SOX34210146
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 Aug 2021 12:08:28 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 00A71124058;
-        Fri,  6 Aug 2021 12:08:28 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C70F012405A;
-        Fri,  6 Aug 2021 12:08:27 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  6 Aug 2021 12:08:27 +0000 (GMT)
-Subject: Re: [PATCH v3 1/2] tpm: ibmvtpm: Rename tpm_process_cmd to tpm_status
- and define flag
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>
-References: <20210805215256.1293987-1-stefanb@linux.vnet.ibm.com>
- <20210805215256.1293987-2-stefanb@linux.vnet.ibm.com>
- <20210806112557.y7q2av6pk7r4xorm@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <cddf0b42-c69f-c110-9543-e16d30c9927a@linux.ibm.com>
-Date:   Fri, 6 Aug 2021 08:08:27 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 6 Aug 2021 10:11:01 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C39C0617A5
+        for <linux-security-module@vger.kernel.org>; Fri,  6 Aug 2021 07:10:43 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id n6so12080733ljp.9
+        for <linux-security-module@vger.kernel.org>; Fri, 06 Aug 2021 07:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
+        b=q3xyYt1HrVQnyL1KZndhIFKim0Z6RZXWCajZa6+jKaUt/xPBmWrU2b2TpwIqgxHoY3
+         6sUeXJPoUC3zz+xqx5Y/7bh16ON7BcCcP2liy5jl/yv+hyxVGmxIcBCDJXoapuOO0RIl
+         REN9Zv+ClhtVVEMybVDTEUTnyt+YraWqvgNO4CiPEvSNbjJp0ymaQzc4FwPALfOqM4La
+         f+KzIMXFoGuca5XlZdCXXnnqi+xUiOGsem/cV9JUjNFonSZWOzEGazowyEr2eG3dp5DR
+         pLBa7cN2FmOkeXw/dSFAaB7k29Eu0Yivashc8iQbXHlro4ZoI7aiyRP21+G8wGDlMmu6
+         HPDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
+        b=aNyl6G+qseWUN58z+RGCZmAo6kgxJzx6wUTbTM/4r+ytLdfps7fAlyS8z2IdNXsWiS
+         KK1RaXL54AqnEa7PWHlxvLKvFk+87XBKgBHIC/DYW/va3LD3EuPscEvAzrIbYxI0aM73
+         fn9ulkb+HflJBVugtNXsbmDRa4aBdkbImTAPV9rKf4KIB5CiJDJF8jr/XjWtyIk9XH8R
+         K5PxjfGWOLiP9ypQd9qKlh3M/Yzy7khAo5MYU4ArfqosfTUafM85YjNlw8f4VZDABv96
+         VOS1kZClkVJgyp/W5G/fhZ1Zllf1s015zG+hBbu45vZjrCCzAhBHhED7O0TCJXyxYqfi
+         TlJQ==
+X-Gm-Message-State: AOAM531kirySOUdRcbt/HGwC49iHrtd0sNJJIO8mHLvW1TeLWEiPtLQc
+        ij9/hFs98y8Wqg53tBJYLj6d7m5+IkdyzrTkVhFkScjDYdnckptBPA==
+X-Google-Smtp-Source: ABdhPJx229jhz+o+nQwdgIkoqR5HwLh3S4+JGHt0eG+5fB4X3WTmNmInTj1ZpuXDIVm9CYEhhFZzLyuZYbLrplGdX6A=
+X-Received: by 2002:a05:6402:3094:: with SMTP id de20mr13526197edb.272.1628259031175;
+ Fri, 06 Aug 2021 07:10:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210806112557.y7q2av6pk7r4xorm@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: npSS4fNHEm-p9shLGVI87GjUlCCjE5o8
-X-Proofpoint-GUID: UhUePdO4yOSxS7z4ffmMHClSqeZDp5IZ
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-06_04:2021-08-05,2021-08-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 spamscore=0 mlxscore=0
- phishscore=0 bulkscore=0 adultscore=0 suspectscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108060085
+Received: by 2002:a54:26cf:0:0:0:0:0 with HTTP; Fri, 6 Aug 2021 07:10:30 -0700 (PDT)
+Reply-To: mrmaxwellwatford@gmail.com
+From:   Maxwell Watford <orchowskiruthi@gmail.com>
+Date:   Fri, 6 Aug 2021 14:10:30 +0000
+Message-ID: <CA+q9Q6OJB6Z0+y=5_3MBDNGkAUG9rVxg7bZVma38uDOvJ+sOGw@mail.gmail.com>
+Subject: i need your reply
+To:     orchowskiruthi@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Greetings,
 
-On 8/6/21 7:25 AM, Jarkko Sakkinen wrote:
-> On Thu, Aug 05, 2021 at 05:52:55PM -0400, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Rename the field tpm_processing_cmd to tpm_status in ibmvtpm_dev and set
->> the TPM_STATUS_BUSY flag while the vTPM is busy processing a command.
->>
->> Fixes: 6674ff145eef ("tpm_ibmvtpm: properly handle interrupted packet receptions")
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Cc: Nayna Jain <nayna@linux.ibm.com>
->> Cc: George Wilson <gcwilson@linux.ibm.com>
-> Please put the bug fix first because otherwise it will be dependent of this
-> patch, which is bad thing when it comes to backporting.
+We are writing to you from Ecowas Finance Controller Office Lome Togo,
+because we have received a file from the Ministry of Finance Lome-
+Togo, concerning an Inherited Fund bearing your name on it, And after
+our verifications, we found out that the funds belong to you.
 
-Yes, and that's why I have this one here also with a Fix tag. I 
-basically don't want to logically '&' with the 'true' flag but want this 
-TPM_STATUS_BUSY flag first.
+It has been awarded and I will like to guide you to claim the funds.
+Please contact me at my private email address
+(mrmaxwellwatford@gmail.com) for more information and directive
 
-    Stefan
-
->
-> /Jarkko
+I am looking forward to your urgent reply,
+Best regards
+Mr Maxwell Watford
