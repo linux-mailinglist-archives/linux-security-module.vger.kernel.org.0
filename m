@@ -2,61 +2,129 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE733E9154
-	for <lists+linux-security-module@lfdr.de>; Wed, 11 Aug 2021 14:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B3B3E96A5
+	for <lists+linux-security-module@lfdr.de>; Wed, 11 Aug 2021 19:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbhHKMci (ORCPT
+        id S231316AbhHKRQg (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 11 Aug 2021 08:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbhHKMca (ORCPT
+        Wed, 11 Aug 2021 13:16:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57480 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231264AbhHKRQ3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 11 Aug 2021 08:32:30 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16358C035402
-        for <linux-security-module@vger.kernel.org>; Wed, 11 Aug 2021 05:30:34 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id h11so4383622oie.0
-        for <linux-security-module@vger.kernel.org>; Wed, 11 Aug 2021 05:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=nFX2iyV8Qzv5VsUpkp+XCZa2rMildRgp4rmfs3/i85r3diZKl8jKG090hSg6ULd5u0
-         wIUSHLA1AmXndyReLtv1chzdu754A+Ph1wh/vfIxRjmTWJBsEDXYNbyV2L9uurl7rygw
-         3BEum9dkaxKey+Q+UMRctjDwuKQ1YXcRTKc1UUkneSCjfxqWrboBTOfNkJIzK5BsdQWa
-         4ApOxxKRhIhdaQEWowgLF5+CTQczgHFusP4oeusQUd6ved7FHPiMHEi1ZA8iFV2rLfKi
-         fjv9vsAR1EzF12CgxEwzjmHIzUqCG96Sjm8KNwWILsHtKg9/nTHJHDOvwQ9NbYqFW4uy
-         uTIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=Q+d3e6xjcmJWuwISOwlPABoij9FxAOdmFfZCYZxkjPLRz9+gGILZsNFjKqSXoW83rF
-         vgp7GWHe+Rqjn3CijDeFRcBw6dRdgQeBfMUtLG7J5wG7gJwxET6tdyjrWgorhJFVJB8g
-         Ef7skBCrrzhCrfNJc3E4SKY4KgTfRHo3KqadK7zq0EgXGayDzJoFqFgYk8rE/nGI6unH
-         LUC5+6ElxNp+mk/CAYLX+wftWGAowTmF/4p4kpWPVXhTJs10K4cJT7+EdaHGvZaKnBU2
-         3FumJ4+yXYR0/6hkRswHlqhe4APdXu2yq9ZSz8RL36DQn1PRZ5B8UNWs2bRettj7dSdt
-         vmUA==
-X-Gm-Message-State: AOAM532y4Vic5Fr7NM9hr8vc4LEXAtd2CPay+3Q3pqpLrlvE+UrKozcJ
-        RDcwtwh8NFukmZrREERsqTW4+HBI15BoqkKr4u8=
-X-Google-Smtp-Source: ABdhPJxSi33xoEoIXQryMK7AlPvsXum9+Uhn2FA5SmsaT4s7SDGDeViE6wxc5zRdGly1PhBzYc0n/cZJtjhPnV2BKH4=
-X-Received: by 2002:aca:f306:: with SMTP id r6mr23008947oih.165.1628685033420;
- Wed, 11 Aug 2021 05:30:33 -0700 (PDT)
+        Wed, 11 Aug 2021 13:16:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A77F760720;
+        Wed, 11 Aug 2021 17:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628702165;
+        bh=9h03uKGoS94D5joA0oQ8vjBfh49XzjEF5chJiZqRUSM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R4lANRmD7F79aJk1QwsPA2lv4OQqEB1kpG2XjTPtoXxx6kuKdityhC7zcwKDhreDm
+         XsJtAmOJwSddjxQ448+ktoeI/eZG+BkVyc8KFEo9igVGQiUXZozh4ciYpL3BBkmy/C
+         MSYHY5jOe/mKDm+DeplA7idJPn7uEyxVgcHpr/tEE0XIP51hv1ElOHYW1uwu9jfjA+
+         5YH/uPw3qKgSzzl5x8Ds9Ib4uFTwfnJNyYHvdvJQ8gOhgKZnARoeLVfV4/WPn2nr8T
+         BtQn83YSoqFY/rAzopncT84KP1iFL+r8KclwjGHTrQL7ZQQK11C+VpuZ4WRpn9JLly
+         baVtflrGpwJlA==
+Date:   Wed, 11 Aug 2021 10:16:03 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, kernel@pengutronix.de,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] fscrypt: support trusted keys
+Message-ID: <YRQF09f8st95yrFZ@gmail.com>
+References: <20210806150928.27857-1-a.fatoum@pengutronix.de>
+ <20210809094408.4iqwsx77u64usfx6@kernel.org>
+ <YRGVcaquAJiuc8bp@gmail.com>
+ <20210810180636.vqwaeftv7alsodgn@kernel.org>
+ <YRLJmaafp941uOdA@gmail.com>
+ <20210810212140.sdq5dq2wy5uaj7h7@kernel.org>
+ <YRLvPJehAeMiYb2Z@gmail.com>
+ <20210811001743.ofzkwdwa6rcjsf4d@kernel.org>
+ <d4f5c2593380c82ceebae2c8782a1c440b35f165.camel@linux.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:32
- -0700 (PDT)
-Reply-To: rihabmanyang07@yahoo.com
-From:   Rihab Manyang <ndourandiogou1@gmail.com>
-Date:   Wed, 11 Aug 2021 13:30:32 +0100
-Message-ID: <CAP5_mB4O7JPQr86GPAep=Ynd-Yb8pks_-mRAKZxGu6O8ZzfAKA@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4f5c2593380c82ceebae2c8782a1c440b35f165.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
-How are you?I am miss.Rihab Manyang i will like to be your friend
-please write me back on my email for more details, Thanks.
+On Wed, Aug 11, 2021 at 07:34:18AM -0400, Mimi Zohar wrote:
+> On Wed, 2021-08-11 at 03:17 +0300, Jarkko Sakkinen wrote:
+> > On Tue, Aug 10, 2021 at 02:27:24PM -0700, Eric Biggers wrote:
+> > > On Wed, Aug 11, 2021 at 12:21:40AM +0300, Jarkko Sakkinen wrote:
+> > > > On Tue, Aug 10, 2021 at 11:46:49AM -0700, Eric Biggers wrote:
+> > > > > On Tue, Aug 10, 2021 at 09:06:36PM +0300, Jarkko Sakkinen wrote:
+> > > > > > > > 
+> > > > > > > > I don't think this is right, or at least it does not follow the pattern
+> > > > > > > > in [*]. I.e. you should rather use trusted key to seal your fscrypt key.
+> > > > > > > 
+> > > > > > > What's the benefit of the extra layer of indirection over just using a "trusted"
+> > > > > > > key directly?  The use case for "encrypted" keys is not at all clear to me.
+> > > > > > 
+> > > > > > Because it is more robust to be able to use small amount of trusted keys,
+> > > > > > which are not entirely software based.
+> > > > > > 
+> > > > > > And since it's also a pattern on existing kernel features utilizing trusted
+> > > > > > keys, the pressure here to explain why break the pattern, should be on the
+> > > > > > side of the one who breaks it.
+> > > > > 
+> > > > > This is a new feature, so it's on the person proposing the feature to explain
+> > > > > why it's useful.  The purpose of "encrypted" keys is not at all clear, and the
+> > > > > documentation for them is heavily misleading.  E.g.:
+> > > > > 
+> > > > >     "user space sees, stores, and loads only encrypted blobs"
+> > > > >     (Not necessarily true, as I've explained previously.)
+> > > > > 
+> > > > >     "Encrypted keys do not depend on a trust source" ...  "The main disadvantage
+> > > > >     of encrypted keys is that if they are not rooted in a trusted key"
+> > > > >     (Not necessarily true, and in fact it seems they're only useful when they
+> > > > >     *do* depend on a trust source.  At least that's the use case that is being
+> > > > >     proposed here, IIUC.)
+> > > > > 
+> > > > > I do see a possible use for the layer of indirection that "encrypted" keys are,
+> > > > > which is that it would reduce the overhead of having lots of keys be directly
+> > > > > encrypted by the TPM/TEE/CAAM.  Is this the use case?  If so, it needs to be
+> > > > > explained.
+> > > > 
+> > > > If trusted keys are used directly, it's an introduction of a bottleneck.
+> > > > If they are used indirectly, you can still choose to have one trusted
+> > > > key per fscrypt key.
+> > > > 
+> > > > Thus, it's obviously a bad idea to use them directly.
+> > > 
+> > > So actually explain that in the documentation.  It's not obvious at all.  And
+> > > does this imply that the support for trusted keys in dm-crypt is a mistake?
+> > 
+> > Looking at dm-crypt implementation, you can choose to use 'encrypted' key
+> > type, which you can seal with a trusted key.
+> > 
+> > Note: I have not been involved when the feature was added to dm-crypt.
+> 
+> At least for TPM 1.2,  "trusted" keys may be sealed to a PCR and then
+> extended to prevent subsequent usage.  For example, in the initramfs
+> all of the "encrypted" keys could be decrypted by a single "trusted"
+> key, before extending the PCR.
+> 
+> Mimi
+> 
+
+Neither of you actually answered my question, which is whether the support for
+trusted keys in dm-crypt is a mistake.  I think you're saying that it is?  That
+would imply that fscrypt shouldn't support trusted keys, but rather encrypted
+keys -- which conflicts with Ahmad's patch which is adding support for trusted
+keys.  Note that your reasoning for this is not documented at all in the
+trusted-encrypted keys documentation; it needs to be (email threads don't really
+matter), otherwise how would anyone know when/how to use this feature?
+
+- Eric
