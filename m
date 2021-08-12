@@ -2,172 +2,119 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B373E9A03
-	for <lists+linux-security-module@lfdr.de>; Wed, 11 Aug 2021 22:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE2E3E9BBC
+	for <lists+linux-security-module@lfdr.de>; Thu, 12 Aug 2021 02:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbhHKUt5 (ORCPT
+        id S233117AbhHLAzZ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 11 Aug 2021 16:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbhHKUtp (ORCPT
+        Wed, 11 Aug 2021 20:55:25 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58608 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232704AbhHLAzY (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 11 Aug 2021 16:49:45 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5DFC0617BF
-        for <linux-security-module@vger.kernel.org>; Wed, 11 Aug 2021 13:49:10 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d9so3185092qty.12
-        for <linux-security-module@vger.kernel.org>; Wed, 11 Aug 2021 13:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:from:to:date:message-id:in-reply-to:references:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=fjm5E8jlur4ZmhZQt8sIor5EdCTxd31hgJPvTT515QA=;
-        b=WcS9qkWmdAOR30pHBAqpZASMI8pexAv4ZejPT9DVJiSLOdCpb6K46er2oFtZiWlWtZ
-         tq4bSWMOL5wUt4qPVCQbF2pZmx4yGyzNLDQsnNno6BVCdeRutOVJ1sDICvxDuB08M/V8
-         yRfB0Gn7rgH9g0ZPGNVudaTXUlLLLyGv7HaeyLlC4gpjCbVfTSjOjGehTAPhz4DPwr40
-         RSjZmj7KleWkJj0WpLExiFfUouIIq4bQ8n1bimK6Fy+Ur9hGJOFdGOPKA4BgedtLR/Cy
-         2guxpNsjCQPbhpry68M4H+/rZiaVdjDsgTMf69KagspAyOExEVg/CRgpAWdGHGM8JucC
-         JlSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=fjm5E8jlur4ZmhZQt8sIor5EdCTxd31hgJPvTT515QA=;
-        b=MF3Xuvog4eMeogomFi/t4Wtl3hehpShTQY8cKcuhGVasbRFCtvgtxdzkgrU3rUAz1b
-         rhGiIqimKZDIpiZTpVvrwhKZk+UrM4sW0eKAHPsX4uvt03veBdgOB0oBric+99IzO6X4
-         PP9o7sKI5Fwa/mof7BvjGiF5Lu2+ILM8pzcONUZWHJnCt2OCytczk3GwYO5i+mWaPHIk
-         uisSdzOZyvwtQFmu3IhrzviWTwYviYzLkvEv4lof1MCvf4QafF+TAcj0tVXU49dZXEuj
-         pLFPIcUNKVuXzUW44EBe2qTDPQyNKRn+M0HeXKFpGZeLYj6ythKeql9138kABe35YXmZ
-         eyFQ==
-X-Gm-Message-State: AOAM532lP0MCpePENifhv1iqPT78PV4zfZsONESlCTfKRR+X89mJderN
-        u/5Y7U+IFVPB/C5fuTjopoEZHakUesKMhPw=
-X-Google-Smtp-Source: ABdhPJxvrwP5BSOOajTVuXk7Z63HlSzq+KFtGBCu4Il3OS/cOqfAvjfLAuqSVvNcYQqCWND161FvaA==
-X-Received: by 2002:ac8:7770:: with SMTP id h16mr613425qtu.144.1628714949098;
-        Wed, 11 Aug 2021 13:49:09 -0700 (PDT)
-Received: from localhost (pool-96-237-52-188.bstnma.fios.verizon.net. [96.237.52.188])
-        by smtp.gmail.com with ESMTPSA id a24sm190568qtj.43.2021.08.11.13.49.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 13:49:08 -0700 (PDT)
-Subject: [RFC PATCH v2 9/9] Smack: Brutalist io_uring support with debug
-From:   Paul Moore <paul@paul-moore.com>
-To:     linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com, io-uring@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Date:   Wed, 11 Aug 2021 16:49:07 -0400
-Message-ID: <162871494794.63873.18299137802334845525.stgit@olly>
-In-Reply-To: <162871480969.63873.9434591871437326374.stgit@olly>
-References: <162871480969.63873.9434591871437326374.stgit@olly>
-User-Agent: StGit/1.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Wed, 11 Aug 2021 20:55:24 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17C0Xi9q165976;
+        Wed, 11 Aug 2021 20:54:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ULNYVhyMXQ6SJqEPuIb/V3Ar+77kio3M9soDEn4mVZI=;
+ b=U7vzE5v9UZZ45xrsck6jEvH7LjuhW/AIlkt6QO9HWq+MXbMHBhVbx9UM/7w4YTX7vZhI
+ 4hmxgbN0JetK1AXkuD6WJFss+1KlN1J26QS7kLYBKNmySgYwpclRLyJuMN8+ZKogCRa3
+ 8EI1LO/kmK56Z0Rz6OYRBtA3PlSJZPSMhutitZ5A31s92IkbBYNe7BmqUls7tv2pK4Mm
+ HAIWQUQVTgSsUdDn5oH2Gzpzks4f5aJBQpzihj/AxFGmy5cCca+GtABs5NAPwTXgk+4J
+ VXLJFA9IfsPKywQeMx2YezCCHX+mEYJrAqNomrLXSE3dHNiyAppYi+KGDJejY6yWcm34 8Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3abk4rb3nn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Aug 2021 20:54:45 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17C0jLs3019800;
+        Wed, 11 Aug 2021 20:54:44 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3abk4rb3n0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Aug 2021 20:54:44 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17C0mr4b023293;
+        Thu, 12 Aug 2021 00:54:42 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3abaq4bpt9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 00:54:42 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17C0seAc57409946
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Aug 2021 00:54:40 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC8B64C058;
+        Thu, 12 Aug 2021 00:54:39 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF5AD4C044;
+        Thu, 12 Aug 2021 00:54:35 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.39.92])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Aug 2021 00:54:35 +0000 (GMT)
+Message-ID: <0e69a0aa394dd20347b06ae4e700aa17d52583ef.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] fscrypt: support trusted keys
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, kernel@pengutronix.de,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 11 Aug 2021 20:54:34 -0400
+In-Reply-To: <YRQF09f8st95yrFZ@gmail.com>
+References: <20210806150928.27857-1-a.fatoum@pengutronix.de>
+         <20210809094408.4iqwsx77u64usfx6@kernel.org> <YRGVcaquAJiuc8bp@gmail.com>
+         <20210810180636.vqwaeftv7alsodgn@kernel.org> <YRLJmaafp941uOdA@gmail.com>
+         <20210810212140.sdq5dq2wy5uaj7h7@kernel.org> <YRLvPJehAeMiYb2Z@gmail.com>
+         <20210811001743.ofzkwdwa6rcjsf4d@kernel.org>
+         <d4f5c2593380c82ceebae2c8782a1c440b35f165.camel@linux.ibm.com>
+         <YRQF09f8st95yrFZ@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Bw0BKgjnxSvjPERnFY5J8y3TGYn8Lb-u
+X-Proofpoint-GUID: nknNgAnVYtbwy3IFx8trALR_Z1mI68X2
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-11_08:2021-08-11,2021-08-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108120001
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Casey Schaufler <casey@schaufler-ca.com>
+On Wed, 2021-08-11 at 10:16 -0700, Eric Biggers wrote:
 
-Add Smack privilege checks for io_uring. Use CAP_MAC_OVERRIDE
-for the override_creds case and CAP_MAC_ADMIN for creating a
-polling thread. These choices are based on conjecture regarding
-the intent of the surrounding code.
+> Neither of you actually answered my question, which is whether the support for
+> trusted keys in dm-crypt is a mistake.  I think you're saying that it is?  That
+> would imply that fscrypt shouldn't support trusted keys, but rather encrypted
+> keys -- which conflicts with Ahmad's patch which is adding support for trusted
+> keys.  Note that your reasoning for this is not documented at all in the
+> trusted-encrypted keys documentation; it needs to be (email threads don't really
+> matter), otherwise how would anyone know when/how to use this feature?
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-[PM: make the smack_uring_* funcs static]
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+True, but all of the trusted-encrypted key examples in the
+documentation are "encrypted" type keys, encrypted/decrypted based on a
+"trusted" type key.  There are no examples of using the "trusted" key
+type directly.  Before claiming that adding "trusted" key support in
+dm-crypt was a mistake, we should ask Ahmad why he felt dm-crypt needed
+to directly support "trusted" type keys.
 
----
-v2:
-- made the smack_uring_* funcs static
-v1:
-- initial draft
----
- security/smack/smack_lsm.c |   64 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
-
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 223a6da0e6dc..7fb094098f38 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4691,6 +4691,66 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
- 	return 0;
- }
- 
-+#ifdef CONFIG_IO_URING
-+/**
-+ * smack_uring_override_creds - Is io_uring cred override allowed?
-+ * @new: the target creds
-+ *
-+ * Check to see if the current task is allowed to override it's credentials
-+ * to service an io_uring operation.
-+ */
-+static int smack_uring_override_creds(const struct cred *new)
-+{
-+	struct task_smack *tsp = smack_cred(current_cred());
-+	struct task_smack *nsp = smack_cred(new);
-+
-+#if 1
-+	if (tsp->smk_task == nsp->smk_task)
-+		pr_info("%s: Smack matches %s\n", __func__,
-+			tsp->smk_task->smk_known);
-+	else
-+		pr_info("%s: Smack override check %s to %s\n", __func__,
-+			tsp->smk_task->smk_known, nsp->smk_task->smk_known);
-+#endif
-+	/*
-+	 * Allow the degenerate case where the new Smack value is
-+	 * the same as the current Smack value.
-+	 */
-+	if (tsp->smk_task == nsp->smk_task)
-+		return 0;
-+
-+#if 1
-+	pr_info("%s: Smack sqpoll %s\n", __func__,
-+		smack_privileged_cred(CAP_MAC_OVERRIDE, current_cred()) ?
-+		"ok by Smack" : "disallowed (No CAP_MAC_OVERRIDE)");
-+#endif
-+	if (smack_privileged_cred(CAP_MAC_OVERRIDE, current_cred()))
-+		return 0;
-+
-+	return -EPERM;
-+}
-+
-+/**
-+ * smack_uring_sqpoll - check if a io_uring polling thread can be created
-+ *
-+ * Check to see if the current task is allowed to create a new io_uring
-+ * kernel polling thread.
-+ */
-+static int smack_uring_sqpoll(void)
-+{
-+#if 1
-+	pr_info("%s: Smack new ring %s\n", __func__,
-+		smack_privileged_cred(CAP_MAC_ADMIN, current_cred()) ?
-+		"ok by Smack" : "disallowed (No CAP_MAC_ADMIN)");
-+#endif
-+	if (smack_privileged_cred(CAP_MAC_ADMIN, current_cred()))
-+		return 0;
-+
-+	return -EPERM;
-+}
-+
-+#endif /* CONFIG_IO_URING */
-+
- struct lsm_blob_sizes smack_blob_sizes __lsm_ro_after_init = {
- 	.lbs_cred = sizeof(struct task_smack),
- 	.lbs_file = sizeof(struct smack_known *),
-@@ -4843,6 +4903,10 @@ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(inode_copy_up, smack_inode_copy_up),
- 	LSM_HOOK_INIT(inode_copy_up_xattr, smack_inode_copy_up_xattr),
- 	LSM_HOOK_INIT(dentry_create_files_as, smack_dentry_create_files_as),
-+#ifdef CONFIG_IO_URING
-+	LSM_HOOK_INIT(uring_override_creds, smack_uring_override_creds),
-+	LSM_HOOK_INIT(uring_sqpoll, smack_uring_sqpoll),
-+#endif
- };
- 
- 
+Mimi
 
