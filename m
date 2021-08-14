@@ -2,91 +2,99 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA913EBF9F
-	for <lists+linux-security-module@lfdr.de>; Sat, 14 Aug 2021 04:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F313EC158
+	for <lists+linux-security-module@lfdr.de>; Sat, 14 Aug 2021 10:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236602AbhHNCGq (ORCPT
+        id S237305AbhHNIPq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 13 Aug 2021 22:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        Sat, 14 Aug 2021 04:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbhHNCGp (ORCPT
+        with ESMTP id S237144AbhHNIPp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 13 Aug 2021 22:06:45 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6DCC0612A7
-        for <linux-security-module@vger.kernel.org>; Fri, 13 Aug 2021 19:06:16 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id h2so18385322lji.6
-        for <linux-security-module@vger.kernel.org>; Fri, 13 Aug 2021 19:06:16 -0700 (PDT)
+        Sat, 14 Aug 2021 04:15:45 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF450C06175F;
+        Sat, 14 Aug 2021 01:15:17 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id qe12-20020a17090b4f8c00b00179321cbae7so8838348pjb.2;
+        Sat, 14 Aug 2021 01:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
-        b=bMjFQnnAZpaPHPewg53a/655rlJcZF3F6tOCYZw1vRKDz/xIJdx97rNr27JLkW56nx
-         /iUhkVkrv2vt56YQtzEazhRgIPy/DINH4WyHeEexrKrG7liGbayL7Temc7NGvW0bB8Ad
-         jYLKY+nfNSoS1rYKoflW5LtIinkjSZBTTSJCtk74RyRz5/H1kPwLgMirqvm1jZ9Q2lvS
-         mysy6xLOxs0wYu9KWpVs3ZVzmyzuM6cY3iz+yVlGPkz3Lkb+v57sIQRRUb+ypy4gjifF
-         STYdF7upxk4m3MFQNQv0T7Zw+Yt5F/OYhuRsX60kpa6PLdNBh1LpNqMT51M2pasOSTPy
-         0wUQ==
+        bh=6noX9uXKVk5hFoN1uQIQSjPuZZZ+OHBTtkbl22yeANc=;
+        b=Oa2A9hv2Elf+HkRmqTAMYljW8O5HRS0gt+/6U83sNhr/OQaidzcfkxwlCGSy434lnZ
+         ARkEkZtzLwN/5tyrbd6tQsHqVJ7UwYWTD6S8pz94b6D3Dwf5ATu+MlbSkc1zYh4cID8r
+         r6NQJse1nXLBPfdMIW292/u87fRGzRSAMX4M9N5/p1iWCRy98Ibcsf8CvJ0zzql4befY
+         1Jh1NKCPqryFvZwlY6Q/AK1B0rZregUaS6ZejXGAGdPg4yJN3QfpXvg7kv8AxNCs/63W
+         hB0BRJ+Fz+q+cI7ItQg55AbXA2Y5YiwGpNEOOrEOhj6PYqcPMDd/hx6kySNqgNtAIrcW
+         qNcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
-        b=PTYpx2rNWrktGMglu5y/c1eiFNaC5RFNiEmo1omfdvHQakkpm8qQblya1b34n8ZAGn
-         GgE+C0iC2a8Kp4nZfoHbNFhIpraJ5xHSfICMSE8UOT8/j/JhfRZKsbW0z8rhbsvn00IC
-         LkSxtfyFfGF2qtiPIyeNlqU5JH8JA5q+hlNEZ1NSYZhk4yAxBauXucL7Dro4nP9B1Fmp
-         KYke+westZriO95pGdcvhP4dez5NWLX+GpvrSbWplEForzYYJCTxen3PMrlrSAKhyGFh
-         GuGSzB4oDLHVDMQ97vhe/dsSKELUnIkm1anPZIxTdqNPLVTKPBa2uvBXnLz/kyKFuMsN
-         k4PQ==
-X-Gm-Message-State: AOAM531mc93ZyJ3JpQKPGqHc6M7BcCpPYvPtuq5xKuVhlNAFFd4Nad80
-        xkJSQm8QXruFct8iR98bXuaf4aKnq5TIe8Wj43M=
-X-Google-Smtp-Source: ABdhPJynvegPmhEjUi/stm1v/NRwCcvEqe4+RCpcxOCwnF//w8aRyIcHmBxFidm29bl0vBPsC1zhmU0XtHDcktPhkc0=
-X-Received: by 2002:a2e:b1d3:: with SMTP id e19mr3920584lja.6.1628906774714;
- Fri, 13 Aug 2021 19:06:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6noX9uXKVk5hFoN1uQIQSjPuZZZ+OHBTtkbl22yeANc=;
+        b=V40pF79lzqXI16hARuk7Q6EBEh9cceLLovWYW29idUiYbheOtG5VBjmNj7KNksM1PQ
+         8AWRSsTvUzuFRAXIbkUT64hFU93m/r4tOBnPNa8mHkjssAXwwoS/YEYeDBsWFeLNCVts
+         9t5hyWCtgi7EHcx4QvH8SiOVuq2SCH8LIA0szuaRXV1pnnhabDEG/lGrVFBtLZlOl5SZ
+         yWCq6nWq7pldc61pYnkt2Npakfhoa1kJSu/YdSY05CbN0PmoLMUqO5k5zY26kza2inWy
+         C9tVJc6UsdRfRMzFy2YKMwQmWwjskKySl7RM1OtSFmxkSItBW0L10Oi2zsOTaY1p9LNR
+         HTcA==
+X-Gm-Message-State: AOAM5307uCZWVNwt111LmdFewxzciX9D8totJWhfxX/hpHMytcMkU54B
+        fvaI6382DIxb7+sMv2a8RP6kyroNEj/tTGkrU/k=
+X-Google-Smtp-Source: ABdhPJxRP51q25RwecxucYner1gqcbt7VbEth/W3X/c+f6GDp1pu20gfBcJIRn1+/U9PmgaWHdTYWg==
+X-Received: by 2002:a17:902:a710:b029:12b:9b9f:c461 with SMTP id w16-20020a170902a710b029012b9b9fc461mr5059043plq.59.1628928917259;
+        Sat, 14 Aug 2021 01:15:17 -0700 (PDT)
+Received: from localhost ([119.3.119.21])
+        by smtp.gmail.com with ESMTPSA id ca7sm3838142pjb.11.2021.08.14.01.15.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Aug 2021 01:15:16 -0700 (PDT)
+From:   Tianxing Zhang <anakinzhang96@gmail.com>
+To:     zohar@linux.ibm.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tianxing Zhang <anakinzhang96@gmail.com>
+Subject: [PATCH 0/1] ima: check control characters in policy path
+Date:   Sat, 14 Aug 2021 16:13:55 +0800
+Message-Id: <20210814081356.293-1-anakinzhang96@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6520:380d:b029:132:4f79:3ded with HTTP; Fri, 13 Aug 2021
- 19:06:14 -0700 (PDT)
-Reply-To: deedeepaul@yandex.com
-From:   Deedee Paul <deedeepaul212@gmail.com>
-Date:   Sat, 14 Aug 2021 02:06:14 +0000
-Message-ID: <CADS-zP8AceijWYuKjjfFaC4WB2nM3FQqvpU1ob6Xb=P4w5FpkA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Attention: Beneficiary,
+Hi,
 
-This is to officially inform you that we have been having meetings for
-the past weeks now which ended Two days ago with Mr. John W. Ashe,
-President of the 68th session of the UN General Assembly, Mr. David
-R.Malpass. the World Bank President and Hon. Mrs. Christine Laggard
-(IMF) Director General, in the meeting we talked about how to
-compensate Scam victim's people and all the people that were affected
-the most by this Coronavirus pandemic.
+IMA policy can be updated with /sys/kernel/security/ima/policy interface when
+CONFIG_IMA_WRITE_POLICY is set. However, kernel does not check the file path
+carefully. It only checks if the path has '/' prefix.
 
-Your email address was successfully selected for this donation with others.
+When a policy file path contains control characters like '\r' or '\b',
+invalid error messages can be printed to overwrite system messages.
 
-The United Nations have agreed to compensate you with the sum of
-($150,000.00) One hundred and fifty thousand United States Dollars. We
-have arranged your payment through WORLD ATM MASTERCARD which is the
-latest instruction from the World Bank Group.
+For example:
 
-For the collection of your WORLD ATM MASTERCARD contact our
-representative Rev. David Wood, send to him your contact address where
-you want your MASTERCARD to be sent to you, like
+$ echo -e "/\rtest invalid path: ddddddddddddddddddddd" > /sys/kernel/security/ima/policy
+$ dmesg
+test invalid path: ddddddddddddddddddddd (-2) 
 
-1. Your Full Name: .........
-2. Your Country and Your Delivery Home Address: ........
-3. Your Telephone: ..............
+After adding this patch, we'll be able to throw out error message:
 
-His e-mail address: (ddavidwood1@yandex.com) He is a Canadian (UN)
-representative Agent.
+$ echo -e "/\rtest invalid path: ddddddddddddddddddddd" > /sys/kernel/security/ima/policy
+-bash: echo: write error: Invalid argument
+$ dmesg
+[   11.684004] ima: invalid path (control characters are not allowed)
+[   11.684071] ima: policy update failed
 
-Thanks.
-Tel: 1 513 452 4352.
-Mr. Michael M=C3=B8ller Director-General of the United Nations Office
+Any suggestions would be appreciated, thank you.
+
+Tianxing Zhang (1):
+  ima: check control characters in policy file path
+
+ security/integrity/ima/ima_fs.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+-- 
+2.25.1
+
