@@ -2,107 +2,88 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9713EF9BB
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Aug 2021 06:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC663EFA8A
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Aug 2021 08:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237649AbhHREyY (ORCPT
+        id S237805AbhHRGCq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 18 Aug 2021 00:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        Wed, 18 Aug 2021 02:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237777AbhHREyW (ORCPT
+        with ESMTP id S238009AbhHRGCp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 18 Aug 2021 00:54:22 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956FAC061796
-        for <linux-security-module@vger.kernel.org>; Tue, 17 Aug 2021 21:53:48 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id i28so1928359lfl.2
-        for <linux-security-module@vger.kernel.org>; Tue, 17 Aug 2021 21:53:48 -0700 (PDT)
+        Wed, 18 Aug 2021 02:02:45 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34590C0613CF
+        for <linux-security-module@vger.kernel.org>; Tue, 17 Aug 2021 23:02:11 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id om1-20020a17090b3a8100b0017941c44ce4so8186674pjb.3
+        for <linux-security-module@vger.kernel.org>; Tue, 17 Aug 2021 23:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6K3+N3LYrTw7honvxshLdEmV5XuzaI7RIQ6phcsSuqs=;
-        b=PMOjOlGYA8htOgmQ85BkiqbjuX25YAO64oKb0lJyjDOWObdytQ/NuwquW22Q6SsImv
-         ONkEw7ASyg72uJzDI00etWlR005j4RuaerlWqgYid/lBgJhfWqroVyTGyfm+10YWt1RE
-         IhOCuqLYRFKOWzOs+njufqJUTl6tDAEAxqofqPejffXiZ4kjFF/tsFlgzoloc5SeeNAv
-         0EDtsmjT3KKbL2ryi8x4kTrCHl2l/RoOKeCnfj3yHwIxajrdmN+a3cmr/MKC+Q0PPqby
-         E7/AheMP1fCmnoSgjNMidl0ZorUNVAJktffOd7pmG++IaUrcvu3IW2pparCgKxal7wWw
-         +MDg==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=l8/06Pt7vp+QnEaozw4jU2IiSWTeFeipDK9alaB1bSQ=;
+        b=UJWk6KPwfxnvcfNg/0rqbxLQH9PCm1HvtRxYRLoFIcYVMZA2YW/2S88lTYXk0TsqWn
+         DjcL9tCRAwbEpVK9cNx/2snvfUao+aPJHaY61h9WmHcoVleZUBMrzRrqUvPaMUTwh39S
+         x1ViUcWqmz3qRbNSTYwVBlbYShRHewv+GCSs2BLE27hQ3QpV40SUqZugpEYrZ3hp/Ckh
+         +sUlNQIBaZ/PwqvDb+OsbrmGs46c67QEPNgeJ7noO8R9UfcGe4hV3XLLWBG5kzGrC+ID
+         XqKxxVIqcUGm5gScaQFfMjJZEQESUT7m0TLGCg6E/RjBKientZtDrcDF+cLCjFgtNll2
+         ud8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6K3+N3LYrTw7honvxshLdEmV5XuzaI7RIQ6phcsSuqs=;
-        b=m/ar7RGfLhHZ3o9lo7vhT6Dz2u0+jbvXf0vEvp+ipcXgkdPIoCgCeTbjk3n9mb1TkL
-         y5V55IOwU5qObp4kRke4T8TD/lPaKwuySrcEwHe5FeVmufqeUp2g6p9n0c/SfmiKM/Kn
-         /GfYspKd3XIdk0MmHzui21HQ4hAXaT8B3jrccXT42AlS1JA3g2I5Xsdxa2u4WiBZdlV/
-         n1LNMmI955JwZQcHHWwVCpS83uiL/x5U5UbE3CAHZ2qwneF56/jSYdKuShDwuyY1OpLR
-         lxYV/C06xI4fbCTj7Q+Bbt3D6xrCJV4aAQJOMEfFW0EdYLxlRoPJpBTPCpVJkUJq6lc/
-         hxvA==
-X-Gm-Message-State: AOAM531EbK9H+MB0nADbqwINhslCU3JU1yGKyvODk+pSOOzgyTZWnnVA
-        XWK80+0h/jBQxiHa0kGMk4DO7RsBzwlZiHEf3eNQSg==
-X-Google-Smtp-Source: ABdhPJzzVy3i/YL271hD0LPO7hSavfFPRoKZqMe7jV9Gv3YssPhhOr2s5XndnaUsuIYHNkYUWODkRVaV8/1DYvrjlH4=
-X-Received: by 2002:a05:6512:c24:: with SMTP id z36mr5140198lfu.194.1629262426962;
- Tue, 17 Aug 2021 21:53:46 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=l8/06Pt7vp+QnEaozw4jU2IiSWTeFeipDK9alaB1bSQ=;
+        b=iXs1I/QOLn71ctZ5d0c2aeBrXznqaOWCKnhTijO6BA8Q+W5vBwGX9FV3yi2QceOE/Y
+         XASWDsCrch/XpV2NwAc9BkY/itYopSvN4ZStyZlpr8WsnLSG7GmtaJpZTPBjuBRi5eou
+         975amgz4kELz/Ideukuxd2ebY38ubzipzqsNhMsx5q9iF8hG3IW5On1f+vO1y1/wHjrw
+         mNwv6lD/4SDEKbMzuLDlRTLP4j6mlRKfBkdyP9yzK+tgy6U/6qRwtU2QQxrUdZbiovX7
+         2TYp38KOrdwSNnk1vlTMxjAnL63SyIw9OqVsF+Tj+XEpa2uuT/YJtKxaGTb6F0t71DXO
+         2bQg==
+X-Gm-Message-State: AOAM533QpCLEVAAUdYqpgEcO6X0jEcZT01TLIzZ5R2SVunhMzB+UiWBp
+        EH7hfFjnSs5JbJn7a41h2otXebepqDmOcgP16+k=
+X-Google-Smtp-Source: ABdhPJzVb9Uwo0ZOH7RNxKMUu4C8UauNzAF6+VoiNlUbA0TvQq2t7Q+ChL5WO5GemDV+HCldsa/DUjjvMRS/NVN+1T4=
+X-Received: by 2002:a17:90a:c28d:: with SMTP id f13mr7553839pjt.73.1629266530513;
+ Tue, 17 Aug 2021 23:02:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210806150928.27857-1-a.fatoum@pengutronix.de>
- <20210809094408.4iqwsx77u64usfx6@kernel.org> <YRGVcaquAJiuc8bp@gmail.com>
- <20210810180636.vqwaeftv7alsodgn@kernel.org> <YRLJmaafp941uOdA@gmail.com>
- <20210810212140.sdq5dq2wy5uaj7h7@kernel.org> <YRLvPJehAeMiYb2Z@gmail.com>
- <20210811001743.ofzkwdwa6rcjsf4d@kernel.org> <d4f5c2593380c82ceebae2c8782a1c440b35f165.camel@linux.ibm.com>
- <YRQF09f8st95yrFZ@gmail.com> <0e69a0aa394dd20347b06ae4e700aa17d52583ef.camel@linux.ibm.com>
- <a6eb6f38-b9f4-c59c-4181-2049f181e67d@pengutronix.de> <285cb263d9c1c16f3918c98dd36074ef16568e6d.camel@linux.ibm.com>
- <b77836af-42a1-5aca-9363-d050352bd8aa@pengutronix.de> <f4264f0a83c1b080ad2a22d63ecf1fcca87dfebb.camel@linux.ibm.com>
-In-Reply-To: <f4264f0a83c1b080ad2a22d63ecf1fcca87dfebb.camel@linux.ibm.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 18 Aug 2021 10:23:35 +0530
-Message-ID: <CAFA6WYOgt9JYSSHL056ZBzCY93xHB8H=9BoN8YbqeFtevfDOpg@mail.gmail.com>
-Subject: Re: [PATCH v2] fscrypt: support trusted keys
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        kernel <kernel@pengutronix.de>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-fscrypt@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Reply-To: godwinppter@gmail.com
+Sender: sler002chry@gmail.com
+Received: by 2002:a17:90a:d812:0:0:0:0 with HTTP; Tue, 17 Aug 2021 23:02:09
+ -0700 (PDT)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Wed, 18 Aug 2021 08:02:09 +0200
+X-Google-Sender-Auth: Ib2rEpF_N-2Azu1fYCYV4LLKkro
+Message-ID: <CAD9ryRQYVQ1SaNOueemEfoNW8PUPKsux8J=a70cOWnEpCwkxzw@mail.gmail.com>
+Subject: For your information
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, 17 Aug 2021 at 19:54, Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Tue, 2021-08-17 at 16:13 +0200, Ahmad Fatoum wrote:
-> > On 17.08.21 15:55, Mimi Zohar wrote:
-> > > I have no opinion as to whether this is/isn't a valid usecase.
-> >
-> > So you'd be fine with merging trusted key support as is and leave encrypted
-> > key support to someone who has a valid use case and wants to argue
-> > in its favor?
->
-> That decision as to whether it makes sense to support trusted keys
-> directly, based on the new trust sources, is a decision left up to the
-> maintainer(s) of the new usecase and the new trust sources maintainer
-> Jarkko.
->
+Hi,
 
-I would be in favor of supporting the use of trusted keys directly
-when it comes to TEE as a trust source.
+I just want to use this little opportunity to inform you about my
+success towards the transfer. I'm currently in India for an investment
+with part of my share, after completing the transfer with an Indian
+business man. But i will visit your country, next year. After the
+completion of my project here in India. Please, contact my secretary
+to send you the (ATM) card which I've already credited with the sum of
+($500,000.00). Just contact her to help you in receiving the (ATM)
+card. I've explained everything to her before my trip to India. This
+is what I can do for you because, you couldn't help in the transfer,
+but for the fact that you're the person whom I've contacted initially,
+for the transfer. I decided to give this ($500,000.00) as a
+compensation for being contacted initially for the transfer. I always
+try to make the difference, in dealing with people any time I come in
+contact with them. I'm also trying to show that I'm quite a different
+person from others whose may have a different purpose within them. I
+believe that you will render some help to me when I, will visit your
+country, for another investment there. So contact my secretary for the
+card, Her contact are as follows,
 
--Sumit
+Full name: Mrs, Jovita Dumuije,
+Country: Burkina Faso
+Email: jovitadumuije@gmail.com
 
-> thanks,
->
-> Mimi
->
+Thanks, and hope for a good corporation with you in future.
+
+Godwin Peter,
