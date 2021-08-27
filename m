@@ -2,134 +2,73 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7763F91D6
-	for <lists+linux-security-module@lfdr.de>; Fri, 27 Aug 2021 03:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786EA3F92D0
+	for <lists+linux-security-module@lfdr.de>; Fri, 27 Aug 2021 05:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243929AbhH0BGS (ORCPT
+        id S244076AbhH0DRe (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 26 Aug 2021 21:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        Thu, 26 Aug 2021 23:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243853AbhH0BGS (ORCPT
+        with ESMTP id S244106AbhH0DR2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 26 Aug 2021 21:06:18 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2827C061757;
-        Thu, 26 Aug 2021 18:05:26 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id m4so2910412pll.0;
-        Thu, 26 Aug 2021 18:05:26 -0700 (PDT)
+        Thu, 26 Aug 2021 23:17:28 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEF0C0617A8
+        for <linux-security-module@vger.kernel.org>; Thu, 26 Aug 2021 20:16:37 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id f5so8106925wrm.13
+        for <linux-security-module@vger.kernel.org>; Thu, 26 Aug 2021 20:16:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CJoF4Bgpjmz+E7bVdWY2k+bvCattJTFOGcI1X+RlV2A=;
-        b=Xw8hi+ZNH78UlcZDWdCmX6NKyyAA3smvcVS5KjVJWrErrTcr2LmjJL6ARgqTOrR15v
-         xLy0egSMc7lZTlT1MQQcSlhOwRjK8gjy3Wttkew03DA4S6VY7ytzQD+R1mAOBTMJT4j9
-         Ev1bjV8bwfvL4zmjLxRvRBef42hH6yB0Zlp5q6sd+P8mFlKpMtJfg7KsamNxPeEi6zkO
-         4oGveSMKQI5drBkNvkLTgifODCE3tNJhbQtsdkxMq67l6/xznsY8tvS2Hi6iSFW+hlbT
-         9eu/ZPcIzTLPZe9QRNFWxOXwB5DDDYFVZquqRhz2CjFrumFhGlZctUuf43irUiHYr+66
-         1Zcg==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=CsW0Y/SHuWMiFtcpF6MZiEiUcENuNprVvRbnoWTSIuv9lg23KlvCRGB54LwD+ZmFFi
+         DluuztSFyq7H3WsFCGlLwy2GLHEY84veXAfFaTc+kTpmLZsiosLc/XMfjYVdm3I1Hs6D
+         YBt5IIKxetJJKTOcD5sGmURgxnhujG+HRYqRYWCncR4+bdfOe/yCvSkvZKe5uhvYcThH
+         8qjlV4CugtlOUhLITAHX5w8t/pAn7ge2doqcje40DQX2pTo152M2IoEtM0Y0kyn6xB3I
+         w8FlzfkESCbXhe3ZRSXtgtOFT7Qj5Bk7ikhUpRNq3bhxxYDsLkrrokaelf1gfWXU9XzL
+         oD8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CJoF4Bgpjmz+E7bVdWY2k+bvCattJTFOGcI1X+RlV2A=;
-        b=UQAC7w9tf534eDFcXrK56sH9avGIp8MhSk4mWmghio8vYft7rUlVKaERIEB9N7OIIv
-         GF+rkc+MyjDujaIj6o5gwUrfY6iUSZFrJKmAsGpp1b6KXV23IIWZGJpynP7V64/UAnRw
-         +ya00KF0uA6B4fCrA6jk1lmW4yjB8R/qYag4oSYpMoDC7eDwLqtqJGWk2O9EuE4Rw8+/
-         9M+nrUI6u4wxaWppac0TNLWZ1jzK/rhKUPQ31Os/KvZyqIQiBVK164sLA15e9VHNF5No
-         F4C1dWvomKOAEwurX6ZMTmIckYzFRSDClToeJTaTqad3J8KzFtzZ+289NQ8hRW9b6Oa/
-         iuKg==
-X-Gm-Message-State: AOAM5309E2P6veNUJDAfbbaySWom8oSSCPb6KYKaiNWXLkZ9UqQanH7Z
-        Ye/x9ukfCJyfYBcuYmTegVM=
-X-Google-Smtp-Source: ABdhPJxOah0eBvELAOjhdzUXVYmB2Z/tYt7nhdTqVkdviWdPsuvJZFJ1Ehtt6xtuHJlfJ23Nay0SJA==
-X-Received: by 2002:a17:90a:b785:: with SMTP id m5mr20286683pjr.213.1630026326070;
-        Thu, 26 Aug 2021 18:05:26 -0700 (PDT)
-Received: from localhost ([2405:201:6014:d820:9cc6:d37f:c2fd:dc6])
-        by smtp.gmail.com with ESMTPSA id c15sm3975021pjr.22.2021.08.26.18.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 18:05:25 -0700 (PDT)
-Date:   Fri, 27 Aug 2021 06:35:23 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Spencer Baugh <sbaugh@catern.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>,
-        Alexander Mihalicyn <alexander@mihalicyn.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/5] bpf: Implement file local storage
-Message-ID: <20210827010523.4mty6oqzeuvadaml@apollo.localdomain>
-References: <20210826133913.627361-1-memxor@gmail.com>
- <20210826133913.627361-2-memxor@gmail.com>
- <20210826222347.3bf5q5ehdfnrblir@ast-mbp.dhcp.thefacebook.com>
- <CACYkzJ6G-E6X2hxwQfwqJ6Hgm-CbiNnY6h+xZRhO1AuOUu0NJA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=A9S+1TKbgpWhRjptGxxKoRbQfFsVmnjdR7NL197l2p17k3rvgMC9G2Qb+9KRdiaQ/2
+         9Ihu5czbrSIGrWFrN6wP4AUs5jATTYgRZXpQdp/S5oEAc7bRcxGAwAEfYgbs4QcaLUDd
+         P7LlqSmQ0XJHnr4DicRARWf5q9GmjR8VFvoUjRz0Ij9Nq+79jFw2gRqCWWQ7MOFUl/Ac
+         Bw+VCArq8mBea2SIcqxjcBTCjJBRu7N7oy6IY+6q63cHTWtDzA71cYSmBdQ0exiZMfey
+         PSzheROush6m+64Qjgi2zl85Ngy882FtPo4/vVqx3vagYdYuC+Cj5EwDVdXsGsR4iGzb
+         SitA==
+X-Gm-Message-State: AOAM5317ioLtavLNOxabZK61HNnIk0DjFqyWKgqJHm5dd9HPjrAv3L7b
+        r7wjXkV3O/EwTWsAWvLvCyAhHv+1m9O87mPygDk=
+X-Google-Smtp-Source: ABdhPJxV0G3+3XIziQGinoR0YWe7KX/16sndknqNSx+8uxgpK67jJ9DSrW43CkFozbz3V9oQoY3+55xUJ4WtSnXVTDM=
+X-Received: by 2002:a5d:658e:: with SMTP id q14mr7531509wru.142.1630034196398;
+ Thu, 26 Aug 2021 20:16:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACYkzJ6G-E6X2hxwQfwqJ6Hgm-CbiNnY6h+xZRhO1AuOUu0NJA@mail.gmail.com>
+Received: by 2002:a1c:a341:0:0:0:0:0 with HTTP; Thu, 26 Aug 2021 20:16:36
+ -0700 (PDT)
+From:   johno williams <johnow614@gmail.com>
+Date:   Thu, 26 Aug 2021 15:16:36 -1200
+Message-ID: <CADzD+E2n+KfnveydG72ZQSwpi0w=a5Hbgw8NQd2+_JzCt1Mv_g@mail.gmail.com>
+Subject: CONFIRM YOUR DETAILS TO ENABLE US START,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Aug 27, 2021 at 05:43:41AM IST, KP Singh wrote:
-> On Fri, Aug 27, 2021 at 12:23 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Thu, Aug 26, 2021 at 07:09:09PM +0530, Kumar Kartikeya Dwivedi wrote:
-> > > +BPF_CALL_2(bpf_file_storage_delete, struct bpf_map *, map, struct file *, file)
-> > > +{
-> > > +     if (!file)
-> > > +             return -EINVAL;
-> > > +
-> > > +     return file_storage_delete(file, map);
-> > > +}
-> >
-> > It's exciting to see that file local storage is coming to life.
-> >
->
-> +1 Thanks for your work!
->
-> > What is the reason you've copy pasted inode_local_storage implementation,
-> > but didn't copy any comments?
-> > They were relevant there and just as relevant here.
-> > For example in the above *_storage_delete, the inode version would say:
-> >
-> > /* This helper must only called from where the inode is guaranteed
-> >  * to have a refcount and cannot be freed.
-> >  */
-> >
-> > That comment highlights the important restriction.
-> > The 'file' pointer should have similar restriction, right?
-> > But files are trickier than inodes in terms of refcnt.
-> > They are more similar to sockets,
-> > the socket_local_storage is doing refcount_inc_not_zero() in similar
->
-> Even the task_local_storage checks if the task is refcounted and going to
-> be around while we do a get / delete.
->
-> > case to make sure socket doesn't disappear.
-> >
->
-> Agreed, I would prefer if we also revisit inode_local_storage
-> in this respect pretty much because of what Alexei said.
-> One could end up with an inode (e.g. by walking pointers) in an LSM hook
-> whose life-cycle is not guaranteed in the current context.
->
-> This is generally not that big a deal with inodes because they are
-> not as ephemeral as tasks, sockets and files.
->
-> e.g. your userspace "_fd_" version of the helper does the right thing
-> by grabbing a
-> reference to the file and then dropping it once the storage is updated.
->
+Dear Beneficiary,
 
-Thank you both of you for the comments. I will revisit this and inode_storage
-and get back to you, soon.
+Following your pending fund for years and the delay you imposed in
+receiving it,We have called back your fund to this office as directed
+by the Finance Office and we will be paying you directly through the
+BANK OF AMERICA.(BOA) NEW YORK BRANCH AND ALL YOU NEED NOW IS TO
+RE-CONFIRM YOUR BANKING DETAILS FOR THE TRANSFER IMMEDIATELY WITHOUT
+ANY FURTHER DELAY.
 
---
-Kartikeya
+NOTE THAT WE WILL PAY ALL THE EXPENSES INVOLVED FOR YOU TO RECEIVE
+THIS FUND AND ALL WE NEED FROM YOU IS YOUR CO-OPERATION.
+
+Send your full details with Banking details to enable us commence the
+transfer process immediately through the BOA BANK IN NEW YORK,USA OR
+DO YOU WANT TO RECEIVE THIS FUND VIA ATM CARD ????????.
+
+John O.Williams.
