@@ -2,79 +2,61 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2743FCD9E
-	for <lists+linux-security-module@lfdr.de>; Tue, 31 Aug 2021 21:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C5E3FCE2B
+	for <lists+linux-security-module@lfdr.de>; Tue, 31 Aug 2021 22:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240378AbhHaTQu (ORCPT
+        id S234689AbhHaUHc (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 31 Aug 2021 15:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239694AbhHaTQq (ORCPT
+        Tue, 31 Aug 2021 16:07:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40308 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229476AbhHaUHc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 31 Aug 2021 15:16:46 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2491BC061575
-        for <linux-security-module@vger.kernel.org>; Tue, 31 Aug 2021 12:15:50 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id n27so1116112eja.5
-        for <linux-security-module@vger.kernel.org>; Tue, 31 Aug 2021 12:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LRu3w/aDjbu6nLXcWdhVb0x5w4DgW1rHwaWns4vHGkU=;
-        b=GrVqDCWJ47WFtA6A/pcjE82vFKjlsZc9KXICG7aYWtOShZDbJ0baMSf/Dlzk/7vlSI
-         0XBAix2NF04DaYHYtpYbMeILbThYSlInegJ90RrRM4zDkW/tTN+FPIF9W/l5y+xT1ew3
-         UhGcbua7lKtiqp73fOVxDaKyLsxBXleFr0wDw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LRu3w/aDjbu6nLXcWdhVb0x5w4DgW1rHwaWns4vHGkU=;
-        b=Y4SjhZ8XG+fZm6FKb9YPj1E70gFXVa+BnUCwaflBJiomMMIZJRxHaVBXkMNauhgTuj
-         lQpKeXp54wdJpaKuy/V1buWtTpWVgaUB113RVIKDLgQnoTIvmiJ2SlX+s9Fj0n6DW464
-         gkpDUT4lPfKUN34qTn6p/EQTMvOkPlx89UAhI5/WTFnmqicBwGzbVHRVvjqUxDBw/5fH
-         p4rqTpqLBFLs2E+dZ2taph0cberVbOkMYmXPF/7gAMGt+87A253YtmjnkPvJmni4DdtJ
-         6Nsp0B9qagcmAeXNYRhxFsT11L6dLcIGLWPOkGvzCsx92LCn14aT7qTHhH//XUmYgpG3
-         oQzQ==
-X-Gm-Message-State: AOAM53252mE6NtiF7lAVyoMrBjX0tYlu8ozR8x7d3LO0HzOnfLhltZxP
-        dilA8GTD0Zx9wagEntNGlqKgCgh8EASqmT7htTVc3JGsvwpldnKV
-X-Google-Smtp-Source: ABdhPJwDXEk0fhlWloCFjxuKx6dWx6wpwmrkENdBVL0IulLdcZuW7RYsFEQG72VCjSxfpqJiUVnqdLeDbkbx/CG//+Q=
-X-Received: by 2002:a17:906:5855:: with SMTP id h21mr31467671ejs.230.1630437348629;
- Tue, 31 Aug 2021 12:15:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <ff60d9aa-28b9-9c6d-f318-94dd51a95abd.ref@schaufler-ca.com> <ff60d9aa-28b9-9c6d-f318-94dd51a95abd@schaufler-ca.com>
-In-Reply-To: <ff60d9aa-28b9-9c6d-f318-94dd51a95abd@schaufler-ca.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 31 Aug 2021 12:15:37 -0700
-Message-ID: <CAADWXX9A-6R13VAekvzvWYGcy990nLxcyz1BiZyeBpKHivtCqg@mail.gmail.com>
-Subject: Re: [GIT PULL] Smack patches for v5.15
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Austin Kim <austindh.kim@gmail.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 31 Aug 2021 16:07:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 64D886054E;
+        Tue, 31 Aug 2021 20:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630440396;
+        bh=671R0W6BoCjcyUP/o/JoH6eMm1f7i+EfnB0Bg1vlmGM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=itRBkDwkaBRAuY7xkfKbKo30MXVU4KAa+v/i4/Fn3D60oxe271TD/OkKrRJCWEMBQ
+         csTS9vBqGWhpmin30dK51akwV92pdMu4BY2ZsJpgU5au0sItBqPzCbAU2EF93b62od
+         2F6fzCEbPaFmMNlIgT/IP/eKqNACi282LEbDMp4zAQTBA3yXsXLlNouePYQ/XYO38c
+         4C8Ovj+aXI4lrpdz+GosEP7iLA4Wl67XqPOeZ9VidspEZv1xiG0oyDyDrQE5A7Nv3E
+         AAJcsbkz8TYIcY7nhaWqfLZePHXIPotxkY5c6s4yAjXHJ9NO24GVtBwsNWNtcYkyPQ
+         y/nmZmfbHuuBw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 56C6C60A6F;
+        Tue, 31 Aug 2021 20:06:36 +0000 (UTC)
+Subject: Re: [GIT PULL] SELinux patches for v5.15
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAHC9VhQDQ2WF+gsRdC+3g6FLa19nvbka99zE0s_ZbupucpmJmQ@mail.gmail.com>
+References: <CAHC9VhQDQ2WF+gsRdC+3g6FLa19nvbka99zE0s_ZbupucpmJmQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAHC9VhQDQ2WF+gsRdC+3g6FLa19nvbka99zE0s_ZbupucpmJmQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20210830
+X-PR-Tracked-Commit-Id: 893c47d1964f5c9b00c5468f2cd1a1e9351fbb6a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: befa491ce6954adadb181c464d0318925f18e499
+Message-Id: <163044039629.15638.5361450733762426279.pr-tracker-bot@kernel.org>
+Date:   Tue, 31 Aug 2021 20:06:36 +0000
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Aug 31, 2021 at 11:53 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> Here is the Smack pull request for v5.15.
+The pull request you sent on Mon, 30 Aug 2021 12:36:41 -0400:
 
-Hmm. This went into my spambox.
+> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20210830
 
-I have no idea why. Everything looks ok as far as I can tell, although
-having a SPF record for the originating host might have helped.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/befa491ce6954adadb181c464d0318925f18e499
 
-It also doesn't look like you are doing anything new wrt your email
-setup, even if that yahoo web mail thing might be a bit unusual.
+Thank you!
 
-It *might* help to use "git://" instead of "https://" in case some
-spam logic thinks web links might be more suspicious, but who knows..
-
-Anyway, I've caught it and marked it not spam, but this is a note to
-let you know that something on the internet hates you and your emails.
-
-              Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
