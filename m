@@ -2,146 +2,92 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B9C3FDFED
-	for <lists+linux-security-module@lfdr.de>; Wed,  1 Sep 2021 18:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998933FE1FA
+	for <lists+linux-security-module@lfdr.de>; Wed,  1 Sep 2021 20:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245249AbhIAQ36 (ORCPT
+        id S1346833AbhIASM1 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 1 Sep 2021 12:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        Wed, 1 Sep 2021 14:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245215AbhIAQ35 (ORCPT
+        with ESMTP id S1346838AbhIASMX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 1 Sep 2021 12:29:57 -0400
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fa8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EA8C061575
-        for <linux-security-module@vger.kernel.org>; Wed,  1 Sep 2021 09:29:00 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4H08dP5cbkzMqtqB;
-        Wed,  1 Sep 2021 18:28:57 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4H08dP2QBMzlhH3V;
-        Wed,  1 Sep 2021 18:28:57 +0200 (CEST)
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Landlock news #1
-To:     landlock@lists.linux.dev
-Cc:     linux-security-module <linux-security-module@vger.kernel.org>
-Message-ID: <2df4887a-1710-bba2-f49c-cd5b785bb565@digikod.net>
-Date:   Wed, 1 Sep 2021 18:30:09 +0200
-User-Agent: 
+        Wed, 1 Sep 2021 14:12:23 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62211C0611BC
+        for <linux-security-module@vger.kernel.org>; Wed,  1 Sep 2021 11:11:23 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id s16so291470qvt.13
+        for <linux-security-module@vger.kernel.org>; Wed, 01 Sep 2021 11:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
+         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
+         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
+         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
+         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
+         0RlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=KQbveYbRckn8h1IBSxzrtPI8hhawjNWSMkXU5VWebNE8WTXWDHsZiR7FyJ+MqJzspT
+         FoIZRsENI77+USPMzCWBXI7Y+MDJddX6iysbCe9cyjRBbZVzPP+ryhsXXfxTfI/Oxsn2
+         dJQ7+K89G0kFzsIZaqRiTFEi3UjJh61hSGbhLOEVCiBZp6E/m5CUUomwbcDAbXBQYsoM
+         r+vGPPHRINOl7kJIiG3m9z2TqW+3y43lN94k0eNFZFoqF2H7VlwxdSc83br1YfSAyzP+
+         PZOhKo0NN0PHHtIX4M8Vm7M8lHJasjJscYhQsjcoCMHcb/1DGVMS03U4Z2XuDRkdfMxK
+         anHg==
+X-Gm-Message-State: AOAM532XQFpFhXjUDWyxemlUpWt+IRPRwMBqOGNHpOIuSWnzQX0/DX5S
+        xyzrVVA8sAPYUE1U0p4u7ieLVSRY4K1P+eQdMVgIBDWAlajTGA==
+X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
+X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
+ Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
+From:   CorisBank International <corisbankintlbf@gmail.com>
+Date:   Wed, 1 Sep 2021 11:11:10 -0700
+Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
+Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi,
+Att: Client
 
-Landlock landed in Linux 5.13 and here is an overview of the ongoing
-developments.
 
-User space
-----------
+CORISBANK INTERNATIONAL URGENT NOTIFICATION
 
-### Rust library
+Notification / Notification/ Notification
 
-This Rust library enables to manage Landlock in a best-effort way. It is
-still a work-in-progress, but we plan to release a new major version in
-the coming weeks, including documentation. Feedback is welcome!
-https://github.com/landlock-lsm/rust-landlock
+Note, We are writing to inform you officially that Finally the Central
+Bank Financial Authority have approved to transfer your $8.2Million
+which was signed by late Mrs Rose Banneth the COVID.19 victim to
+transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
+transfer her fund in our bank to you for Orphanage work before she
+died by the COVID.19
+and as it is now, you will receive your fund through our corresponding
+bank in Dubai [Emirate Investment Bank ] for security reason. Please
+you should reconfirm your details to receive the $8.2Million.
 
-### Go library
+Name, Country, Address, occupations, Age, Telephone number, account
+Details so that we can immediately forward to the World Bank to
+transfer the fund.
+You are advised to comply on timely manner to permit this esteem bank
+transfer your fund as scheduled.
 
-We are pleased to welcome Günther Noack and his Go library which enables
-to create sandboxes with Landlock. This will be useful for any projects
-developed in Go.
-https://github.com/landlock-lsm/go-landlock
+We look forward to serving you better
+Your Financial Comfort Is A Priority
+Thank you for choosing Corisbank International.
 
-### Open Container Initiative Runtime Specification
+Sincerely,
 
-This project is intended to be a shared specification amongst container
-runtimes (e.g. Docker/runc). Thanks to H. Vetinari for bringing the
-subject and to Kailun Qin, Günther Noack, Konstantin Meskhidze, Aleksa
-Sarai, Akihiro Suda for working on this and giving feedback!
-https://github.com/opencontainers/runtime-spec/pull/1111
+----
 
-### runc
-
-Bringing Landlock support to runc has started.
-https://github.com/opencontainers/runc/pull/3194
-
-### strace
-
-strace 5.13 (2021-07-19) now supports Landlock syscalls and especially
-their argument decoding. We can now easily debug programs using
-Landlock. Thanks to Eugene Syromyatnikov and Dmitry V. Levin!
-https://github.com/strace/strace/commit/7592a0eeab2588162c1741077053f8a052c8418f
-
-### glibc
-
-glibc 2.34 (2021-08-01) now includes Landlock system call IDs, which are
-required to properly use Landlock in C and C++ programs.
-https://sourceware.org/git/?p=glibc.git;a=commit;h=b1b4f7209ecaad4bf9a5d0d2ef1338409d364bac
-
-### musl libc
-
-A patch series is under review for musl libc to include Landlock system
-call IDs in this alternative libc.
-https://www.openwall.com/lists/musl/2021/07/10/12
-
-### Man Pages
-
-Four manual pages dedicated to Landlock are being reviewed by Alejandro
-Colomar and G. Branden Robinson. Thanks to them! This documentation is
-splitted into a general overview landlock(7) and one page per syscall.
-https://lore.kernel.org/linux-man/20210818155931.484070-1-mic@digikod.net/
-
-Conferences
------------
-
-I'm glad that two (complementary) Landlock talks have been accepted to
-the Open Source Summit and to the Linux Security Summit. I have given a
-few talks in the last years but Landlock has changed drastically since
-then (i.e. no more eBPF). These talks will unfortunately be virtual, but
-I'll still be available for questions. See you at the end of the month!
-
-### Open Source Summit 2021 - Sandboxing Applications with Landlock
-
-This talk focuses on the use of Landlock by user space, explaining the
-rationale behind the design, how backward and forward compatibility is
-handled, what features are currently available and what could come next.
-https://sched.co/lAVl
-
-### Linux Security Summit 2021 - Deep Dive into Landlock Internals
-
-This talk first explains the goal of Landlock and the related
-consequences. This will enable to explain the kernel implementation
-constraints, the choices that led to the current design, and the
-potential and limits of the current and future features.
-https://sched.co/ljRQ
-
-Roadmap (kernel-side)
----------------------
-
-Last but not least, here is an overview of the roadmap for Landlock.
-We'll add a proper dedicated page to the website soon: https://landlock.io
-
-Short term:
-* improve kernel performance for the current features;
-* add the ability to change the parent directory of files (see current
-Landlock limitations).
-
-Medium term:
-* add audit features to ease debugging;
-* extend filesystem access-control types to address the current limitations;
-* add the ability to follow a deny listing approach, which is required
-for some use cases.
-
-Long term:
-* add minimal network access-control types;
-* add the ability to create (file descriptor) capabilities compatible
-with Capsicum.
-
-Regards,
- Mickaël
+Mr Diakarya Ouattara
+Managing Director
+Bank Coris
+Burkina Faso
++226 556 163 37
+financial_bf_info@accountant.com
