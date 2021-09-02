@@ -2,149 +2,155 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB4E3FF000
-	for <lists+linux-security-module@lfdr.de>; Thu,  2 Sep 2021 17:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEFD3FF00F
+	for <lists+linux-security-module@lfdr.de>; Thu,  2 Sep 2021 17:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345764AbhIBPVR (ORCPT
+        id S1345781AbhIBPXq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 2 Sep 2021 11:21:17 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51184 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345698AbhIBPVO (ORCPT
+        Thu, 2 Sep 2021 11:23:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49909 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345775AbhIBPXp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 2 Sep 2021 11:21:14 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182F3fF0001892;
-        Thu, 2 Sep 2021 11:19:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=QbW4x9/Vy805LKx9h6xm30flkNXvZK4xKrhfq2rNVsM=;
- b=qDFtUTnOBAow20c+ML9I06QGddD08jvRtZAvSC152HkG2vxhVePGxTTQMz3r/8yZWsn7
- zVRfuHjo/IoToRA8mEtaoFa/zJave4+fktwcgLoaDxyq3dfD6gUYue6MmrhxntDXIscG
- zTKBoNo+7DV5tEptiNR0j2yLaTD6FF0nzgWCnVICLQYSc70NQhCTgPnoCdt7wWqsBuXh
- 5uSCiGwS7+6FSn3orWNg2HF9g4GEuPrI52zAnjgwOLoT39vASqoQotsYrq6cz1WxYLUF
- hY2RNfH9DIJ2DHz8WyFypNMISArR6a/YB/itw+f1KMsRDPvJO0zEC6HjvCROz4yah5Ww 5A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3au0dy26kh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Sep 2021 11:19:57 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 182F3gAC002344;
-        Thu, 2 Sep 2021 11:19:57 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3au0dy26jn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Sep 2021 11:19:57 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 182FIj8W002983;
-        Thu, 2 Sep 2021 15:19:55 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma02wdc.us.ibm.com with ESMTP id 3atdxc6ck8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Sep 2021 15:19:55 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 182FJsfd34603420
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Sep 2021 15:19:54 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F9D778068;
-        Thu,  2 Sep 2021 15:19:54 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8E6D978078;
-        Thu,  2 Sep 2021 15:19:52 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.89.117])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Sep 2021 15:19:52 +0000 (GMT)
-Message-ID: <6cb65cb3bd69ae69bde044f809525e478bdb8512.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/3] Allow access to confidential computing secret area
- in SEV guests
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Dov Murik <dovmurik@linux.ibm.com>, linux-efi@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>, linux-coco@lists.linux.dev,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 02 Sep 2021 08:19:51 -0700
-In-Reply-To: <YTDoS5XycY3gO4MM@kroah.com>
-References: <20210809190157.279332-1-dovmurik@linux.ibm.com>
-         <YTDKUe8rXrr0Zika@kroah.com>
-         <e6fb1d54605690cc1877d7140fc9346c22268111.camel@linux.ibm.com>
-         <YTDoS5XycY3gO4MM@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Thu, 2 Sep 2021 11:23:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630596166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QzUOsHXMIDWOAqPBo9u7M1z5IuvL3zXT1jeF9JdpLYg=;
+        b=Xqeuad+L/cjN0iSQtzqm9WmBnsFksd6Ek+CX7/GSsyO7B1S4c5pk/AsPHENKctA1LlZgmw
+        Ls4GM1mRW6T5G/+4Bc4oSx6MEOwEdSOnhe6V8zkC1imVtl9qOpc7SrtJ0JIgRIbpqOi5ab
+        rXn/39n1fvllrKaJSV1rzBmD/rdpRgU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-516-dbbv2vMKPXyQX_ZS3tISzA-1; Thu, 02 Sep 2021 11:22:45 -0400
+X-MC-Unique: dbbv2vMKPXyQX_ZS3tISzA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 61A48194092E;
+        Thu,  2 Sep 2021 15:22:43 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.8.149])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4485E5D6B1;
+        Thu,  2 Sep 2021 15:22:39 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id C6199220257; Thu,  2 Sep 2021 11:22:38 -0400 (EDT)
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtio-fs@redhat.com, dwalsh@redhat.com, dgilbert@redhat.com,
+        vgoyal@redhat.com, christian.brauner@ubuntu.com,
+        casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, tytso@mit.edu, miklos@szeredi.hu,
+        gscrivan@redhat.com, bfields@redhat.com,
+        stephen.smalley.work@gmail.com, agruenba@redhat.com,
+        david@fromorbit.com
+Subject: [PATCH v3 0/1] Relax restrictions on user.* xattr
+Date:   Thu,  2 Sep 2021 11:22:27 -0400
+Message-Id: <20210902152228.665959-1-vgoyal@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: X0BBfsUnrgBwFQKASWltwHcWwpPaUlmq
-X-Proofpoint-ORIG-GUID: av-NRex120oZ3yXsK5AxQ6f2yUdsz4KH
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-02_04:2021-09-02,2021-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
- mlxscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2108310000 definitions=main-2109020091
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 2021-09-02 at 17:05 +0200, Greg KH wrote:
-> On Thu, Sep 02, 2021 at 07:35:10AM -0700, James Bottomley wrote:
-> > On Thu, 2021-09-02 at 14:57 +0200, Greg KH wrote:
-> > [...]
-> > > Wait, why are you using securityfs for this?
-> > > 
-> > > securityfs is for LSMs to use. 
-> > 
-> > No it isn't ... at least not exclusively; we use it for non LSM
-> > security purposes as well, like for the TPM BIOS log and for
-> > IMA.  What makes you think we should start restricting securityfs
-> > to LSMs only?  That's not been the policy up to now.
-> 
-> Well that was the original intent of the filesystem when it was
-> created, but I guess it's really up to the LSM maintainers now what
-> they want it for.
-> 
-> > >  If you want your own filesystem to play around with stuff like
-> > > this, great, write your own, it's only 200 lines or less these
-> > > days.  We used to do it all the time until people realized they
-> > > should just use sysfs for driver stuff.
-> > 
-> > This is a security purpose (injected key retrieval), so securityfs
-> > seems to be the best choice.  It's certainly possible to create a
-> > new filesystem, but I really think things with a security purpose
-> > should use securityfs so people know where to look for them.
-> 
-> knowing where to look should not be an issue, as that should be
-> documented in Documentation/ABI/ anyway, right?
-> 
-> It's just the overlap / overreach of using an existing filesystem for
-> things that don't seem to be LSM-related that feels odd to me.
-> 
-> Why not just make a cocofs if those people want a filesystem
-> interface?
-> It's 200 lines or so these days, if not less, and that way you only
-> mount what you actually need for the system.
+Hi,
 
-Secrets transfer is actually broader than confidential computing,
-although confidential computing is a first proposed use, so I think
-cocofs would be too narrow.
+This is V3 of the patch. Previous versions were posted here.
 
-> Why force this into securityfs if it doesn't have to be?
+v2:
+https://lore.kernel.org/linux-fsdevel/20210708175738.360757-1-vgoyal@redhat.com/
+v1:
+https://lore.kernel.org/linux-fsdevel/20210625191229.1752531-1-vgoyal@redhat.co
++m/
 
-It's not being forced.  Secrets transfer is a security function in the
-same way the bios log is.
+Changes since v2
+----------------
+- Do not call inode_permission() for special files as file mode bits
+  on these files represent permissions to read/write from/to device
+  and not necessarily permission to read/write xattrs. In this case
+  now user.* extended xattrs can be read/written on special files
+  as long as caller is owner of file or has CAP_FOWNER.
+ 
+- Fixed "man xattr". Will post a patch in same thread little later. (J.
+  Bruce Fields)
 
-James
+- Fixed xfstest 062. Changed it to run only on older kernels where
+  user extended xattrs are not allowed on symlinks/special files. Added
+  a new replacement test 648 which does exactly what 062. Just that
+  it is supposed to run on newer kernels where user extended xattrs
+  are allowed on symlinks and special files. Will post patch in 
+  same thread (Ted Ts'o).
 
+Testing
+-------
+- Ran xfstest "./check -g auto" with and without patches and did not
+  notice any new failures.
+
+- Tested setting "user.*" xattr with ext4/xfs/btrfs/overlay/nfs
+  filesystems and it works.
+ 
+Description
+===========
+
+Right now we don't allow setting user.* xattrs on symlinks and special
+files at all. Initially I thought that real reason behind this
+restriction is quota limitations but from last conversation it seemed
+that real reason is that permission bits on symlink and special files
+are special and different from regular files and directories, hence
+this restriction is in place. (I tested with xfs user quota enabled and
+quota restrictions kicked in on symlink).
+
+This version of patch allows reading/writing user.* xattr on symlink and
+special files if caller is owner or priviliged (has CAP_FOWNER) w.r.t inode.
+
+Who wants to set user.* xattr on symlink/special files
+-----------------------------------------------------
+I have primarily two users at this point of time.
+
+- virtiofs daemon.
+
+- fuse-overlay. Giuseppe, seems to set user.* xattr attrs on unpriviliged
+  fuse-overlay as well and he ran into similar issue. So fuse-overlay
+  should benefit from this change as well.
+
+Why virtiofsd wants to set user.* xattr on symlink/special files
+----------------------------------------------------------------
+In virtiofs, actual file server is virtiosd daemon running on host.
+There we have a mode where xattrs can be remapped to something else.
+For example security.selinux can be remapped to
+user.virtiofsd.securit.selinux on the host.
+
+This remapping is useful when SELinux is enabled in guest and virtiofs
+as being used as rootfs. Guest and host SELinux policy might not match
+and host policy might deny security.selinux xattr setting by guest
+onto host. Or host might have SELinux disabled and in that case to
+be able to set security.selinux xattr, virtiofsd will need to have
+CAP_SYS_ADMIN (which we are trying to avoid). Being able to remap
+guest security.selinux (or other xattrs) on host to something else
+is also better from security point of view.
+
+But when we try this, we noticed that SELinux relabeling in guest
+is failing on some symlinks. When I debugged a little more, I
+came to know that "user.*" xattrs are not allowed on symlinks
+or special files.
+
+So if we allow owner (or CAP_FOWNER) to set user.* xattr, it will
+allow virtiofs to arbitrarily remap guests's xattrs to something
+else on host and that solves this SELinux issue nicely and provides
+two SELinux policies (host and guest) to co-exist nicely without
+interfering with each other.
+
+Thanks
+Vivek
+
+Vivek Goyal (1):
+  xattr: Allow user.* xattr on symlink and special files
+
+ fs/xattr.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
+
+-- 
+2.31.1
 
