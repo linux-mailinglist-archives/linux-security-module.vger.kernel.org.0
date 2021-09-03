@@ -2,118 +2,104 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 198933FF9FA
-	for <lists+linux-security-module@lfdr.de>; Fri,  3 Sep 2021 07:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 386F43FFA66
+	for <lists+linux-security-module@lfdr.de>; Fri,  3 Sep 2021 08:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbhICFV5 (ORCPT
+        id S1344368AbhICGcS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 3 Sep 2021 01:21:57 -0400
-Received: from mail108.syd.optusnet.com.au ([211.29.132.59]:38514 "EHLO
-        mail108.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236251AbhICFV5 (ORCPT
+        Fri, 3 Sep 2021 02:32:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35503 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345522AbhICGcQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 3 Sep 2021 01:21:57 -0400
-X-Greylist: delayed 1523 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Sep 2021 01:21:56 EDT
-Received: from dread.disaster.area (pa49-195-182-146.pa.nsw.optusnet.com.au [49.195.182.146])
-        by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id E598E1B70A0;
-        Fri,  3 Sep 2021 14:55:26 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1mM1EX-0085qb-Da; Fri, 03 Sep 2021 14:55:21 +1000
-Date:   Fri, 3 Sep 2021 14:55:21 +1000
-From:   Dave Chinner <david@fromorbit.com>
+        Fri, 3 Sep 2021 02:32:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630650677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YC/rlauU/F6bmxF77VH11Mgk4hV/IwCNeLbfbf9xP5Q=;
+        b=EHmwW6fcOI/wuEw2OYTKfHKaLTaDMBQaC33fCb4ExhoKeJa8v/4ieG7M2gR93KbCpDNf1e
+        9Dz/rRbBpkiYviiI14b8XRFUH2sFUqUSxH9JUtWXyxpn69yuDEO5nKXDx1XXXB1yMCCEPr
+        mfHbt0XJ7EvMWXqqI9sOHYhf/M0pTPI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-123-mqrHoYhhO86_rQ9ddyeG2Q-1; Fri, 03 Sep 2021 02:31:15 -0400
+X-MC-Unique: mqrHoYhhO86_rQ9ddyeG2Q-1
+Received: by mail-wm1-f71.google.com with SMTP id p29-20020a1c545d000000b002f88d28e1f1so589617wmi.7
+        for <linux-security-module@vger.kernel.org>; Thu, 02 Sep 2021 23:31:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YC/rlauU/F6bmxF77VH11Mgk4hV/IwCNeLbfbf9xP5Q=;
+        b=HchtJzYLza7kwKQORHBfVggOJIfIqLNc2WmzgVcLa47kL6zdl+nIMRtOA+TAhqwKtJ
+         jw5hL0STwAmWgbVzmtjq39POZnlbIfkHxiiOUbf+IOOyQ1JgxCBSrjIoTMFCmYFzOOga
+         zzTZonLmwWzW+krM/K+1WJZt6SJ15lDJLzR32IFOC9cYgqQgBnehteoKoUBymv2H+P1i
+         3P/XVaT96m5v2pRjtFKNqvT8qxfNsGmfD6QgvnPdaYzJm/z7MLCej8ZlcdKsWkRb6X1m
+         pzhWrmXY5i+YOTFKD/2pFgQDWWTae7Z+nCZI242vZBhBOiKUCfERkPH89asURWr/E0G/
+         9Xxw==
+X-Gm-Message-State: AOAM533/8Bek9c+FQcsvl532Cu905bXOj/jV2sb2LE/K3BP/h9SgvYx7
+        8WrKwpMlmwaY1EMHNXAR/BOQvEM6f6c3xKW4bXUh/72xdNrNhegS8+AqpncrVpaJ7gWK6ZZ3sKw
+        1WNDJvGkkkf7GYGFX8wQSdzreyM6UDeD/uePMH17eNeYwFXNAxfBQ
+X-Received: by 2002:adf:d193:: with SMTP id v19mr2009424wrc.377.1630650674676;
+        Thu, 02 Sep 2021 23:31:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwyPFJw9ZP/m1ileU46mEBJVAfh6Zf+O3xQQjDX0TV+sCc5/OMAl/XmaZX2RmznLFq2omumgxC7UK2vm0m9SxM=
+X-Received: by 2002:adf:d193:: with SMTP id v19mr2009383wrc.377.1630650674468;
+ Thu, 02 Sep 2021 23:31:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210902152228.665959-1-vgoyal@redhat.com> <YTDyE9wVQQBxS77r@redhat.com>
+In-Reply-To: <YTDyE9wVQQBxS77r@redhat.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Fri, 3 Sep 2021 08:31:03 +0200
+Message-ID: <CAHc6FU4ytU5eo4bmJcL6MW+qJZAtYTX0=wTZnv4myhDBv-qZHQ@mail.gmail.com>
+Subject: Re: [PATCH 3/1] xfstests: generic/062: Do not run on newer kernels
 To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     fstests@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, virtio-fs@redhat.com,
+Cc:     fstests <fstests@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, virtio-fs@redhat.com,
         dwalsh@redhat.com, dgilbert@redhat.com,
         christian.brauner@ubuntu.com, casey.schaufler@intel.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        tytso@mit.edu, miklos@szeredi.hu, gscrivan@redhat.com,
-        bfields@redhat.com, stephen.smalley.work@gmail.com,
-        agruenba@redhat.com, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH 3/1] xfstests: generic/062: Do not run on newer kernels
-Message-ID: <20210903045521.GD1756565@dread.disaster.area>
-References: <20210902152228.665959-1-vgoyal@redhat.com>
- <YTDyE9wVQQBxS77r@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YTDyE9wVQQBxS77r@redhat.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=YKPhNiOx c=1 sm=1 tr=0
-        a=QpfB3wCSrn/dqEBSktpwZQ==:117 a=QpfB3wCSrn/dqEBSktpwZQ==:17
-        a=kj9zAlcOel0A:10 a=7QKq2e-ADPsA:10 a=20KFwNOVAAAA:8 a=7-415B0cAAAA:8
-        a=-kbUXcvnShYF-Q782qsA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+        LSM <linux-security-module@vger.kernel.org>,
+        selinux@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Miklos Szeredi <miklos@szeredi.hu>, gscrivan@redhat.com,
+        "Fields, Bruce" <bfields@redhat.com>,
+        stephen.smalley.work@gmail.com, Dave Chinner <david@fromorbit.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=agruenba@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Sep 02, 2021 at 11:47:31AM -0400, Vivek Goyal wrote:
-> 
+On Thu, Sep 2, 2021 at 5:47 PM Vivek Goyal <vgoyal@redhat.com> wrote:
 > xfstests: generic/062: Do not run on newer kernels
-> 
+>
 > This test has been written with assumption that setting user.* xattrs will
 > fail on symlink and special files. When newer kernels support setting
 > user.* xattrs on symlink and special files, this test starts failing.
-> 
-> Found it hard to change test in such a way that it works on both type of
-> kernels. Primary problem is 062.out file which hardcodes the output and
-> output will be different on old and new kernels.
-> 
-> So instead, do not run this test if kernel is new and is expected to
-> exhibit new behavior. Next patch will create a new test and run that
-> test on new kernel.
-> 
-> IOW, on old kernels run 062 and on new kernels run new test.
-> 
-> This is a proposed patch. Will need to be fixed if corresponding
-> kernel changes are merged upstream.
-> 
-> Signed-off-by: Vivek Goyal <vgoyal@redhat.com>
-> ---
->  tests/generic/062 |   20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> Index: xfstests-dev/tests/generic/062
-> ===================================================================
-> --- xfstests-dev.orig/tests/generic/062	2021-08-31 15:51:08.160307982 -0400
-> +++ xfstests-dev/tests/generic/062	2021-08-31 16:27:41.678307982 -0400
-> @@ -55,6 +55,26 @@ _require_attrs
->  _require_symlinks
->  _require_mknod
->  
-> +user_xattr_allowed()
-> +{
-> +	local kernel_version kernel_patchlevel
-> +
-> +	kernel_version=`uname -r | awk -F. '{print $1}'`
-> +	kernel_patchlevel=`uname -r | awk -F. '{print $2}'`
-> +
-> +	# Kernel version 5.14 onwards allow user xattr on symlink/special files.
-> +	[ $kernel_version -lt 5 ] && return 1
-> +	[ $kernel_patchlevel -lt 14 ] && return 1
-> +	return 0;
-> +}
 
-We don't do this because code changes get backported to random
-kernels and so the kernel release is not a reliable indicator of
-feature support.
+It's actually a good thing that this test case triggers for the kernel
+change you're proposing; that change should never be merged. The
+user.* namespace is meant for data with the same access permissions as
+the file data, and it has been for many years. We may have
+applications that assume the existing behavior. In addition, this
+change would create backwards compatibility problems for things like
+backups.
 
-Probing the functionality is the only way to reliably detect what a
-kernel supports. That's what we don in all the _requires*()
-functions, which is what this should all be wrapped in.
+I'm not convinced that what you're actually proposing (mapping
+security.selinux to a different attribute name) actually makes sense,
+but that's a question for the selinux folks to decide. Mapping it to a
+user.* attribute is definitely wrong though. The modified behavior
+would affect anybody, not only users of selinux and/or virtiofs. If
+mapping attribute names is actually the right approach, then you need
+to look at trusted.* xattrs, which exist specifically for this kind of
+purpose. You've noted that trusted.* xattrs aren't supported over nfs.
+That's unfortunate, but not an acceptable excuse for messing up user.*
+xattrs.
 
-> +# Kernel version 5.14 onwards allow user xattr on symlink/special files.
-> +# Do not run this test on newer kernels. Instead run the new test
-> +# which has been written with the assumption that user.* xattr
-> +# will succeed on symlink and special files.
-> +user_xattr_allowed && _notrun "Kernel allows user.* xattrs on symlinks and special files. Skipping this test. Run newer test instead."
+Thanks,
+Andreas
 
-"run a newer test instead" is not a useful error message. Nor do you
-need "skipping this test" - that's exactly what "notrun" means.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
