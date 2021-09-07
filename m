@@ -2,77 +2,107 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D187401E7B
-	for <lists+linux-security-module@lfdr.de>; Mon,  6 Sep 2021 18:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6202F40295C
+	for <lists+linux-security-module@lfdr.de>; Tue,  7 Sep 2021 15:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244435AbhIFQeF (ORCPT
+        id S1344614AbhIGNIF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 6 Sep 2021 12:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        Tue, 7 Sep 2021 09:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244347AbhIFQeB (ORCPT
+        with ESMTP id S1344609AbhIGNIE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 6 Sep 2021 12:34:01 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DCBC0617AF
-        for <linux-security-module@vger.kernel.org>; Mon,  6 Sep 2021 09:32:53 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id b4so7310236ilr.11
-        for <linux-security-module@vger.kernel.org>; Mon, 06 Sep 2021 09:32:53 -0700 (PDT)
+        Tue, 7 Sep 2021 09:08:04 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D976C061575
+        for <linux-security-module@vger.kernel.org>; Tue,  7 Sep 2021 06:06:58 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bt14so19575195ejb.3
+        for <linux-security-module@vger.kernel.org>; Tue, 07 Sep 2021 06:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
-        b=AQXQzDCQYveoXX8TzTwuiAk/FEyR3wCuvC9VFUOgylxIOdg1EFZyjuPsYQnAcX6J45
-         hGQ/TLw/xoIRE4dR4duos/11L9nUC9pcUBl/RXv6WkJZOj9GF3K+dFgRBHNvOmD3hg/2
-         8aWexR+OCBkLd9FzUsmw6Mf2hXMKPJJYu5JOjAjvp1WIk7xCdh9mnYnLj+26R+tY7rgo
-         HJPLbs6wPd+nl87UvFskxFfDoXbe22pxgW1zf9L/3TdM0lyau7vB+LmM0EAyEmYoeoMO
-         ZhwZDLJwTAD2meT4nF7FnViJ3hJIW4496YAschcWJBrRRFI5yQJjoNMRwEQgQiqRwsUz
-         E0sQ==
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=L4oWWGov+bkftJWApz4guBbjvDk1FzTK4dXqUmqhsGo=;
+        b=rnSIxm8cJRcatY6H7Eo6xNBmKdAEFiSjwDRpe1p581pHp2njaMR21jCJhp4BSa6AF9
+         sdAlWMYna02+u2ELL6Dy9FN4vDBj1NbNoYRcvx7YrBG60NFQBZTkEkJkVB02YtmUl49u
+         GlpTMTsuwJOd3+A4KMoTcJQE2njez1aT+nZbbWyHy3rE+DzcGRsL1uChH1WXPA3vVecs
+         wpU53lPC5zPSWTm1g09vm2+9YVOWzWWPLoZh+1GyxgAox4HcOZudkDV2WBP6hHp75FVG
+         T1WQdjvUc/J8teTsE4S6db1q46Vn+Zvjzy9m6ghat29UvFjY9ZQI2hgX58E499q6xR7Q
+         1WRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
-        b=oQFa5C7shAdF0JL7WNxCnl1l8XVBAIARbcjNXU6wmeOZFvcU0hhqFvxhax6UXJjiVp
-         beT5T7iIMmYR5jN7ZSX6i14TTCaO93oeF7cZI6dXfyKKoYkE4/R8SG2F4MOlhvsihSoV
-         xkTg/OocRdnc6K7DByUwx8eUfmiapf0ezfKW5b7BzD9407O6XCGUJdxFKBl72KrN/Z0g
-         IjOHzwpnkTJq1a69qpIqc6OcfDah4OiQzSu2MMLIkVCq/KuBhu/aUAuCcIFiJc+a9Cgi
-         4zAQHy5ulFzwEvMdZToKf3oV/nNNWcDdxnujRxfpVKzW1KeIEV1D9BPN+7O31W7yCJ7o
-         emGg==
-X-Gm-Message-State: AOAM530M6Gge3jcwc3aB330D3aA5gkxeFIQ0BRSiNfvf7ImNrV7x7tn/
-        yiljDKCO2NZHB1NRgUPE0LA3STyVzGQS9cy0RQGQB1bCWaI=
-X-Google-Smtp-Source: ABdhPJyNYLbPp58BcQ7mI7j8eL1xi4DRM/CVSKmP+XLlKZnpaM0c4B2zxnkjBdrMYYyKOgNolLHbsclwr0lft4or1UU=
-X-Received: by 2002:a05:6e02:1ca6:: with SMTP id x6mr8854675ill.86.1630945961991;
- Mon, 06 Sep 2021 09:32:41 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=L4oWWGov+bkftJWApz4guBbjvDk1FzTK4dXqUmqhsGo=;
+        b=f79fEK5LQYkoErGoFTaf5gV7ejrFT81rE2XNJXhYnw/CgQNWi33FJgz4P/jQOHR5dm
+         y7pNKAGbSBBVOVGyjXjPM26yBmuGnlh4KtGrdP4GU0RR/Osz5QlUfnnOkjhYKzFq9M/j
+         xD/5us1aVyQqZZE1SybGG+FnmrmO6SfptM77XgQvaMDfMpsEIqHJUJ9LTDdItF7wieEn
+         NNxk+Fmkj2xPTNEB62d1vatfZb8NtYJKeO851iJqfSUSRGDkH5c76k7mNmoyP9NZKQ9R
+         rmjAFyBxu1CeFzLnMbWlm0dI7qWT/s+pmASZrwT8iGkW6CRm6klNSoRrwtU2DXMKfXCO
+         RbBg==
+X-Gm-Message-State: AOAM533BbpL2jXGm4SEev/kSKkdjJUWjmZyHGGqfYHeZmp3eH+KXPE8d
+        5ki9UgiyUw38VsTxIyn8ah2eA1iXh33fVoka8uxV
+X-Google-Smtp-Source: ABdhPJwDAmt2hGxT5ZkcZv9YGnSEohNbSITnIOxntCgMm5mnhtxhhGJHKQSwvGW7B6b8gVrXH65MjjesrNwq98dkGuI=
+X-Received: by 2002:a17:906:8cd:: with SMTP id o13mr18352630eje.341.1631020016659;
+ Tue, 07 Sep 2021 06:06:56 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1d86:0:0:0:0 with HTTP; Mon, 6 Sep 2021 09:32:41
- -0700 (PDT)
-Reply-To: suzara.wans2021@gmail.com
-From:   Mrs Suzara Maling Wan <mr.brueshands4world@gmail.com>
-Date:   Mon, 6 Sep 2021 09:32:41 -0700
-Message-ID: <CABvx5tpkSnzTGw2hd3awtMaYZ6SrrR=GwA3X22LN=2t5+bDtOw@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+References: <20210830115942.1017300-1-sashal@kernel.org> <20210830115942.1017300-13-sashal@kernel.org>
+ <CAD-N9QUXXjEMtdDniuqcNSAtaOhKtHE=hLMchtCJgbvxQXdABQ@mail.gmail.com>
+ <CAHC9VhTjFMw111-fyZsFaCSnN3b-TuQjqXcc1zVu2QTTekTohw@mail.gmail.com> <YTS96ql9DzxpYpnl@sashalap>
+In-Reply-To: <YTS96ql9DzxpYpnl@sashalap>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 7 Sep 2021 09:06:45 -0400
+Message-ID: <CAHC9VhR_eHxS9HFGx1QwRj9wqcmcg5794cCJ8QXKsbGA1+QELQ@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.13 13/14] net: fix NULL pointer reference in cipso_v4_doi_free
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, Abaci <abaci@linux.alibaba.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
-My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
-of the Philippine presently base in West Africa B/F, dealing with
-exportation of Gold, I was diagnose of blood Causal decease, and my
-doctor have announce to me that I have few days to leave due to the
-condition of my sickness.
+On Sun, Sep 5, 2021 at 8:54 AM Sasha Levin <sashal@kernel.org> wrote:
+> On Mon, Aug 30, 2021 at 10:20:22AM -0400, Paul Moore wrote:
+> >On Mon, Aug 30, 2021 at 8:42 AM Dongliang Mu <mudongliangabcd@gmail.com>=
+ wrote:
+> >>
+> >> On Mon, Aug 30, 2021 at 8:01 PM Sasha Levin <sashal@kernel.org> wrote:
+> >> >
+> >> > From: =E7=8E=8B=E8=B4=87 <yun.wang@linux.alibaba.com>
+> >> >
+> >> > [ Upstream commit 733c99ee8be9a1410287cdbb943887365e83b2d6 ]
+> >> >
+> >>
+> >> Hi Sasha,
+> >>
+> >> Michael Wang has sent a v2 patch [1] for this bug and it is merged
+> >> into netdev/net-next.git. However, the v1 patch is already in the
+> >> upstream tree.
+> >>
+> >> How do you guys handle such a issue?
+> >>
+> >> [1] https://lkml.org/lkml/2021/8/30/229
+> >
+> >Ugh.  Michael can you please work with netdev to fix this in the
+> >upstream, and hopefully -stable, kernels?  My guess is you will need
+> >to rebase your v2 patch on top of the v1 patch (basically what exists
+> >in upstream) and send that back out.
+>
+> I'm just going to drop this one for now (it never made it in). If there
+> is a follow-up you do want us to queue please let us know :)
 
-I have a desire to build an orphanage home in your country of which i
-cannot execute the project myself due to my present health condition,
-I am willing to hand over the project under your care for you to help
-me fulfill my dreams and desire of building an orphanage home in your
-country.
+Thanks Sasha.  The lore link below is the v2 version of the patch and
+it is worth merging as a fix into the older kernels.
 
-Reply in you are will to help so that I can direct you to my bank for
-the urgent transfer of the fund/money require for the project to your
-account as I have already made the fund/money available.
+* https://lore.kernel.org/linux-security-module/18f0171e-0cc8-6ae6-d04a-a69=
+a2a3c1a39@linux.alibaba.com
 
-With kind regards
-Mrs Suzara Maling Wan
+--=20
+paul moore
+www.paul-moore.com
