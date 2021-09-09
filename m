@@ -2,98 +2,100 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9970405697
-	for <lists+linux-security-module@lfdr.de>; Thu,  9 Sep 2021 15:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1939C40569F
+	for <lists+linux-security-module@lfdr.de>; Thu,  9 Sep 2021 15:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239649AbhIINUi (ORCPT
+        id S1354033AbhIINU6 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 9 Sep 2021 09:20:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54080 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 09:20:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35416 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358827AbhIINJo (ORCPT
+        id S1358502AbhIINLR (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:09:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8DD30632B9;
-        Thu,  9 Sep 2021 12:01:13 +0000 (UTC)
+        Thu, 9 Sep 2021 09:11:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C4057632D2;
+        Thu,  9 Sep 2021 12:01:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188874;
-        bh=szX6G5SkYjqrpSOViwJuOIG2sbRiHaH5KfPb32e85l0=;
+        s=k20201202; t=1631188884;
+        bh=7wZnqVtzCaieeirAr59OTc2qWcSAp87QUfatIxHr23g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RssiTH08SVxX1G+aPdtylFr3HW+Y6CeRlqv+1xrBTD7vqD+XZGS5sC5Yf903KuoX1
-         UE3+8Lcbbonmh0G5i77VCXHUyrlBlKGSslnoR9ZH6MBpGbChhMGl8424uRn9cLcimK
-         RZP7Vj4EGHDbtJtNzx6Mh2P3P2mPyTEINbK8IfbaVrLDLFOg1e8XfKsmZEPQ4AxWHk
-         YTWPRL8Sedt5L9rF+y5u1oUf2O3Jz7gHv17qSXlr8BjgnDMnnEZfiGPDQjXXwmTykj
-         xl8UTiv4f/YEpRTKuakhiVEkLTXWYLSb9sQCdcU7BEBSEJmsTZe+nxVN4A1RSSJAlx
-         G95NrlyfMK8Vw==
+        b=kBiQ14BxwkJ0mnE1Xv6vjZRtUl5sdREXGr78VrnJS7MKoLH6bBFVWTVN8X3a/ghmH
+         IZZA/6agNwt6aPsEUmEDDTgZCA6tx/Bg8zTaEMFrrb8XQUhj6rjprkwzwnnmGI+Mjz
+         3A/I/tmu+jB7z66zhaQDNwxHtdu4K/JNMGlXbNYw3AmKvjxxDW4DrrSDijE3eYfcLZ
+         jTCozuHxHiNhDTtU5PevsFTJSdYKNgaKfz17NlHXU9itGNgv2w7V8quxz55yJBZpt0
+         prVILBEDFsyYQjIhWGVwNgMz/yjrtGznzBlcQDnG631EZyidoRu1Yqpt1/zTieQp4I
+         IxotCI3m6OJvQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?=E7=8E=8B=E8=B4=87?= <yun.wang@linux.alibaba.com>,
-        Abaci <abaci@linux.alibaba.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Sasha Levin <sashal@kernel.org>,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 47/48] net: fix NULL pointer reference in cipso_v4_doi_free
-Date:   Thu,  9 Sep 2021 08:00:14 -0400
-Message-Id: <20210909120015.150411-47-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 06/35] Smack: Fix wrong semantics in smk_access_entry()
+Date:   Thu,  9 Sep 2021 08:00:47 -0400
+Message-Id: <20210909120116.150912-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909120015.150411-1-sashal@kernel.org>
-References: <20210909120015.150411-1-sashal@kernel.org>
+In-Reply-To: <20210909120116.150912-1-sashal@kernel.org>
+References: <20210909120116.150912-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: 王贇 <yun.wang@linux.alibaba.com>
+From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-[ Upstream commit 733c99ee8be9a1410287cdbb943887365e83b2d6 ]
+[ Upstream commit 6d14f5c7028eea70760df284057fe198ce7778dd ]
 
-In netlbl_cipsov4_add_std() when 'doi_def->map.std' alloc
-failed, we sometime observe panic:
+In the smk_access_entry() function, if no matching rule is found
+in the rust_list, a negative error code will be used to perform bit
+operations with the MAY_ enumeration value. This is semantically
+wrong. This patch fixes this issue.
 
-  BUG: kernel NULL pointer dereference, address:
-  ...
-  RIP: 0010:cipso_v4_doi_free+0x3a/0x80
-  ...
-  Call Trace:
-   netlbl_cipsov4_add_std+0xf4/0x8c0
-   netlbl_cipsov4_add+0x13f/0x1b0
-   genl_family_rcv_msg_doit.isra.15+0x132/0x170
-   genl_rcv_msg+0x125/0x240
-
-This is because in cipso_v4_doi_free() there is no check
-on 'doi_def->map.std' when 'doi_def->type' equal 1, which
-is possibe, since netlbl_cipsov4_add_std() haven't initialize
-it before alloc 'doi_def->map.std'.
-
-This patch just add the check to prevent panic happen for similar
-cases.
-
-Reported-by: Abaci <abaci@linux.alibaba.com>
-Signed-off-by: Michael Wang <yun.wang@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlabel/netlabel_cipso_v4.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ security/smack/smack_access.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/net/netlabel/netlabel_cipso_v4.c b/net/netlabel/netlabel_cipso_v4.c
-index 7fd1104ba900..d17a8f3d3387 100644
---- a/net/netlabel/netlabel_cipso_v4.c
-+++ b/net/netlabel/netlabel_cipso_v4.c
-@@ -163,8 +163,8 @@ static int netlbl_cipsov4_add_std(struct genl_info *info,
- 		return -ENOMEM;
- 	doi_def->map.std = kzalloc(sizeof(*doi_def->map.std), GFP_KERNEL);
- 	if (doi_def->map.std == NULL) {
--		ret_val = -ENOMEM;
--		goto add_std_failure;
-+		kfree(doi_def);
-+		return -ENOMEM;
- 	}
- 	doi_def->type = CIPSO_V4_MAP_TRANS;
+diff --git a/security/smack/smack_access.c b/security/smack/smack_access.c
+index 0df316c62005..84f38b694242 100644
+--- a/security/smack/smack_access.c
++++ b/security/smack/smack_access.c
+@@ -90,23 +90,22 @@ int log_policy = SMACK_AUDIT_DENIED;
+ int smk_access_entry(char *subject_label, char *object_label,
+ 			struct list_head *rule_list)
+ {
+-	int may = -ENOENT;
+ 	struct smack_rule *srp;
  
+ 	list_for_each_entry_rcu(srp, rule_list, list) {
+ 		if (srp->smk_object->smk_known == object_label &&
+ 		    srp->smk_subject->smk_known == subject_label) {
+-			may = srp->smk_access;
+-			break;
++			int may = srp->smk_access;
++			/*
++			 * MAY_WRITE implies MAY_LOCK.
++			 */
++			if ((may & MAY_WRITE) == MAY_WRITE)
++				may |= MAY_LOCK;
++			return may;
+ 		}
+ 	}
+ 
+-	/*
+-	 * MAY_WRITE implies MAY_LOCK.
+-	 */
+-	if ((may & MAY_WRITE) == MAY_WRITE)
+-		may |= MAY_LOCK;
+-	return may;
++	return -ENOENT;
+ }
+ 
+ /**
 -- 
 2.30.2
 
