@@ -2,143 +2,128 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6158B40A3D2
-	for <lists+linux-security-module@lfdr.de>; Tue, 14 Sep 2021 04:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882DD40A47A
+	for <lists+linux-security-module@lfdr.de>; Tue, 14 Sep 2021 05:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236208AbhINCvK (ORCPT
+        id S238786AbhINDe1 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 13 Sep 2021 22:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
+        Mon, 13 Sep 2021 23:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236171AbhINCvK (ORCPT
+        with ESMTP id S238756AbhINDeK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 13 Sep 2021 22:51:10 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCE3C061760
-        for <linux-security-module@vger.kernel.org>; Mon, 13 Sep 2021 19:49:53 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id h9so25487676ejs.4
-        for <linux-security-module@vger.kernel.org>; Mon, 13 Sep 2021 19:49:53 -0700 (PDT)
+        Mon, 13 Sep 2021 23:34:10 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18E8C061764
+        for <linux-security-module@vger.kernel.org>; Mon, 13 Sep 2021 20:32:53 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id u4so7585957qvb.6
+        for <linux-security-module@vger.kernel.org>; Mon, 13 Sep 2021 20:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aejjrEwv9A+FPcsJO+PLrw1/sXo77HGUim4vKB8A0UY=;
-        b=f+aGIr1i9uDO9K2p3Pu+ECfDcPuuEdkom0IueHSLkWgzWN/4++KG2va0YU7i7xb/FZ
-         2n3dbwoLE/H7PPFkICccW4GZ/JxkPhxPAxwMVN6IdDd69JL6GG8xtXbPuqd4ECfZvhdK
-         fGUqXN5q7SL0XuYkOR8oG6P96kfn71E3YSeYGAyRRjOr/PIPEQMoNmEBTRjHTers9coM
-         +7RYZ17mTqOyIG5y8IefVcKuuqCmrmzybehWchOYiBH3rAum9ISaZ7jEGI2pm14upzp4
-         y+O2tuYuEnUvkXcqHO1qbkVdAqhncNExwskSLHJ9QmQVRJ1SlV3cYLjXsgAkCdT8AYqO
-         LdVg==
+        h=subject:from:to:date:message-id:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=cTYGJOk0HtZnk34GmZSZev++L+Eu6A0VdG3w2gebSSk=;
+        b=LoFmGCHVXIJpBv7EjiyhFcYPZ1zeK88Rz3Z9xnlnacxicW2tmr8SpgAttK75HSDfkn
+         /REJpc2BwJrs4ES+R/Hh7JaSdYEvcBA9BLH9TcDG4EaN8H14Xeepi/tNZ6/0/BsRSb+E
+         BereThF6W/bzh0NSPxpLDFxM4AE739m5JdMOoAXLHj2LvAiOecrjVca4fC5sVSUPH5v+
+         oRyiWbTVVIWhDPq+V17NChY+SlhNtB18BUSaobsgQUD6u/OBVKS/x86Dl5i5F8ubsS6p
+         HheNME6zMoDJTEn2z6/O6dbtMKKCjFlwRuxa88ZIpqoEw0zhaH/aICwDLLrE4Sd7E+oc
+         jUEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aejjrEwv9A+FPcsJO+PLrw1/sXo77HGUim4vKB8A0UY=;
-        b=eSh33QSpBo+uuGA0WLHieqbW/QtLoTNs6Z/9fJRX7DM1PGeCxkkX0hzUmvI75kdnON
-         vfay2Nu6Xo5EWjhDZAvPecm9i6OivG6aK2ZOsyLoo4UhuYuQefnSkoHJkmRrJrDmOGR0
-         1/v/o59K0umFl+mcA5mpoHIoEZVpDLo2Afq9kLvGuVQugqCfpKQXjOSlLHdC8ullBHDY
-         Gxv5v4tX4u7u7nm3S96ojC0T+CxO4E+AnW1JJZD9Eix7ImtUyVdYUVto07ERIlSZ4ZSQ
-         CNxPfav9d/siZC6FlsbVYk41ipnc3HU0z7igO8g90n/3U5tf+XZSVGpHgtCw8f6mP3Yi
-         6OZQ==
-X-Gm-Message-State: AOAM531u/7/xj22417n/XJ8eSRpsPmpyK9FN575rukeSPNvm35+oSXjD
-        ey+QSm9hKOGvU0LFSG3fPDMtIXmOTq7tzQ3gpDOP
-X-Google-Smtp-Source: ABdhPJzGREiUiVKzvVPxM9sqNoXunURxF1kR0zzzJ//z122o5jvF5bA9S3XPoctVm87ri6rJSWdH2ONVnszgf1oYmh0=
-X-Received: by 2002:a17:906:6011:: with SMTP id o17mr15793102ejj.157.1631587791643;
- Mon, 13 Sep 2021 19:49:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210824205724.GB490529@madcap2.tricolour.ca> <20210826011639.GE490529@madcap2.tricolour.ca>
- <CAHC9VhSADQsudmD52hP8GQWWR4+=sJ7mvNkh9xDXuahS+iERVA@mail.gmail.com>
- <20210826163230.GF490529@madcap2.tricolour.ca> <CAHC9VhTkZ-tUdrFjhc2k1supzW1QJpY-15pf08mw6=ynU9yY5g@mail.gmail.com>
- <20210827133559.GG490529@madcap2.tricolour.ca> <CAHC9VhRqSO6+MVX+LYBWHqwzd3QYgbSz3Gd8E756J0QNEmmHdQ@mail.gmail.com>
- <20210828150356.GH490529@madcap2.tricolour.ca> <CAHC9VhRgc_Fhi4c6L__butuW7cmSFJxTMxb+BBn6P-8Yt0ck_w@mail.gmail.com>
- <CAHC9VhQD8hKekqosjGgWPxZFqS=EFy-_kQL5zAo1sg0MU=6n5A@mail.gmail.com>
- <20210910005858.GL490529@madcap2.tricolour.ca> <CAHC9VhSRJYW7oRq6iLCH_UYukeFfE0pEJ_wBLdr1mw2QGUPh-Q@mail.gmail.com>
- <CAHC9VhTrimTds_miuyRhhHjoG_Fhmk2vH7G3hKeeFWO3BdLpKw@mail.gmail.com>
-In-Reply-To: <CAHC9VhTrimTds_miuyRhhHjoG_Fhmk2vH7G3hKeeFWO3BdLpKw@mail.gmail.com>
+        h=x-gm-message-state:subject:from:to:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=cTYGJOk0HtZnk34GmZSZev++L+Eu6A0VdG3w2gebSSk=;
+        b=dLuSbll9n1MAqZ7Y5Ns+ygH+O24Ja+UgWFNradwUPo4TxU7SSMbmuWBV+i9/3zolIF
+         QjhDNk/lV1OwqBapAFpb0YmMr3JQwxHPrh4nSub8b1uoih61CN2gHrDp0dH7UpGTwxXC
+         I5IAwQ3w75UsgcooNT0H1Ka8l5FOjXLCxOf12RieGFtJPMqCn2uEvV6HnwCDdNcLX77q
+         n81XlnwlNToQyttmahPpge6hj0ZH9F+78h4MQ77CXO2BYosdXG7TYXLG19uetlDzWFYf
+         s8UkBLzkw6kEyXOMNGtVpeJ+eifnm4xphbcMksQm+w3dA7BegkJCqTsHT9UTuiLHuo6M
+         j7MA==
+X-Gm-Message-State: AOAM5309BdWeUJMkvOME+eltoOLZlfjaG1d3PfUhSgVQ6sVo5WomBhC+
+        z+1RktJ2cl2QJvcAdAoGxt5sNhVkkbQZ
+X-Google-Smtp-Source: ABdhPJw+SiTYfZXvJV4HBrp1gH+biruQ+EkihhZGcestyrwuN5RpAdbhg6etlOTa5sQB3RWIxy/v5A==
+X-Received: by 2002:ad4:470e:: with SMTP id k14mr3192394qvz.55.1631590372558;
+        Mon, 13 Sep 2021 20:32:52 -0700 (PDT)
+Received: from localhost (pool-96-237-52-188.bstnma.fios.verizon.net. [96.237.52.188])
+        by smtp.gmail.com with ESMTPSA id h68sm6975543qkf.126.2021.09.13.20.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Sep 2021 20:32:51 -0700 (PDT)
+Subject: [PATCH v3 0/8] Add LSM access controls and auditing to io_uring
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 13 Sep 2021 22:49:40 -0400
-Message-ID: <CAHC9VhTUKsijBVV-a3eHajYyOFYLQPWTTqxJ812NnB3_Y=UMeQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/9] Add LSM access controls and auditing to io_uring
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     sgrubb@redhat.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-audit@redhat.com,
-        io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, io-uring@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Mon, 13 Sep 2021 23:32:51 -0400
+Message-ID: <163159032713.470089.11728103630366176255.stgit@olly>
+User-Agent: StGit/1.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Sep 13, 2021 at 9:50 PM Paul Moore <paul@paul-moore.com> wrote:
-> On Mon, Sep 13, 2021 at 3:23 PM Paul Moore <paul@paul-moore.com> wrote:
-> > On Thu, Sep 9, 2021 at 8:59 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > > On 2021-09-01 15:21, Paul Moore wrote:
-> > > > On Sun, Aug 29, 2021 at 11:18 AM Paul Moore <paul@paul-moore.com> wrote:
-> > > > > On Sat, Aug 28, 2021 at 11:04 AM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > > > > > I did set a syscall filter for
-> > > > > >         -a exit,always -F arch=b64 -S io_uring_enter,io_uring_setup,io_uring_register -F key=iouringsyscall
-> > > > > > and that yielded some records with a couple of orphans that surprised me
-> > > > > > a bit.
-> > > > >
-> > > > > Without looking too closely at the log you sent, you can expect URING
-> > > > > records without an associated SYSCALL record when the uring op is
-> > > > > being processed in the io-wq or sqpoll context.  In the io-wq case the
-> > > > > processing is happening after the thread finished the syscall but
-> > > > > before the execution context returns to userspace and in the case of
-> > > > > sqpoll the processing is handled by a separate kernel thread with no
-> > > > > association to a process thread.
-> > > >
-> > > > I spent some time this morning/afternoon playing with the io_uring
-> > > > audit filtering capability and with your audit userspace
-> > > > ghau-iouring-filtering.v1.0 branch it appears to work correctly.  Yes,
-> > > > the userspace tooling isn't quite 100% yet (e.g. `auditctl -l` doesn't
-> > > > map the io_uring ops correctly), but I know you mentioned you have a
-> > > > number of fixes/improvements still as a work-in-progress there so I'm
-> > > > not too concerned.  The important part is that the kernel pieces look
-> > > > to be working correctly.
-> > >
-> > > Ok, I have squashed and pushed the audit userspace support for iouring:
-> > >         https://github.com/rgbriggs/audit-userspace/commit/e8bd8d2ea8adcaa758024cb9b8fa93895ae35eea
-> > >         https://github.com/linux-audit/audit-userspace/compare/master...rgbriggs:ghak-iouring-filtering.v2.1
-> > > There are test rpms for f35 here:
-> > >         http://people.redhat.com/~rbriggs/ghak-iouring/git-e8bd8d2-fc35/
-> > >
-> > > userspace v2 changelog:
-> > > - check for watch before adding perm
-> > > - update manpage to include filesystem filter
-> > > - update support for the uring filter list: doc, -U op, op names
-> > > - add support for the AUDIT_URINGOP record type
-> > > - add uringop support to ausearch
-> > > - add uringop support to aureport
-> > > - lots of bug fixes
-> > >
-> > > "auditctl -a uring,always -S ..." will now throw an error and require
-> > > "-U" instead.
-> >
-> > Thanks Richard.
-> >
-> > FYI, I rebased the io_uring/LSM/audit patchset on top of v5.15-rc1
-> > today and tested both with your v1.0 and with your v2.1 branch and the
-> > various combinations seemed to work just fine (of course the v2.1
-> > userspace branch was more polished, less warts, etc.).  I'm going to
-> > go over the patch set one more time to make sure everything is still
-> > looking good, write up an updated cover letter, and post a v3 revision
-> > later tonight with the hope of merging it into -next later this week.
->
-> Best laid plans of mice and men ...
->
-> It turns out the LSM hook macros are full of warnings-now-errors that
-> should likely be resolved before sending anything LSM related to
-> Linus.  I'll post v3 once I fix this, which may not be until tomorrow.
->
-> (To be clear, the warnings/errors aren't new to this patchset, I'm
-> likely just the first person to notice them.)
+As promised, here is revision #3 of the io_uring/LSM/audit patchset.
+The changes from revision #2 are minimal and noted in the individual
+patches; they are mostly focused on removing debug/dev code and
+scary "BEWARE, DEVELOPMENT PATCH!" language from the commit
+descriptions.
 
-Actually, scratch that ... I'm thinking that might just be an oddity
-of the Intel 0day test robot building for the xtensa arch.  I'll post
-the v3 patchset tonight.
+With plenty of good discussion happening on the initial RFC posting,
+and the second revision incorporating all the feedback garnering no
+objections, I plan to merge this patchset into the selinux/next tree
+later this week.  Jens, Pavel, it would nice if I could get your ACK
+on the io_uring patches before I merge them.
 
--- 
-paul moore
-www.paul-moore.com
+For those of you who may be seeing this for the first time, the
+second RFC revision of the patchset can be found in the archives at
+the link below:
+https://lore.kernel.org/linux-security-module/162871480969.63873.9434591871437326374.stgit@olly/
+
+... and the initial draft RFC can be found here:
+https://lore.kernel.org/linux-security-module/162163367115.8379.8459012634106035341.stgit@sifl/
+
+Those who would prefer to fetch these patches directly from git can
+do so using the tree/branch below:
+git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
+ (checkout branch "working-io_uring")
+
+-Paul
+
+---
+
+Casey Schaufler (1):
+      Smack: Brutalist io_uring support with debug
+
+Paul Moore (7):
+      audit: prepare audit_context for use in calling contexts beyond syscalls
+      audit,io_uring,io-wq: add some basic audit support to io_uring
+      audit: add filtering for io_uring records
+      fs: add anon_inode_getfile_secure() similar to anon_inode_getfd_secure()
+      io_uring: convert io_uring to the secure anon inode interface
+      lsm,io_uring: add LSM hooks to io_uring
+      selinux: add support for the io_uring access controls
+
+
+ fs/anon_inodes.c                    |  29 ++
+ fs/io-wq.c                          |   4 +
+ fs/io_uring.c                       |  69 +++-
+ include/linux/anon_inodes.h         |   4 +
+ include/linux/audit.h               |  26 ++
+ include/linux/lsm_hook_defs.h       |   5 +
+ include/linux/lsm_hooks.h           |  13 +
+ include/linux/security.h            |  16 +
+ include/uapi/linux/audit.h          |   4 +-
+ kernel/audit.h                      |   7 +-
+ kernel/audit_tree.c                 |   3 +-
+ kernel/audit_watch.c                |   3 +-
+ kernel/auditfilter.c                |  15 +-
+ kernel/auditsc.c                    | 477 ++++++++++++++++++++++------
+ security/security.c                 |  12 +
+ security/selinux/hooks.c            |  34 ++
+ security/selinux/include/classmap.h |   2 +
+ security/smack/smack_lsm.c          |  46 +++
+ 18 files changed, 654 insertions(+), 115 deletions(-)
+
