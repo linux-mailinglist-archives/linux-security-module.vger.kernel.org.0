@@ -2,94 +2,199 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA83340C725
-	for <lists+linux-security-module@lfdr.de>; Wed, 15 Sep 2021 16:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B0440CA2F
+	for <lists+linux-security-module@lfdr.de>; Wed, 15 Sep 2021 18:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237867AbhIOONv (ORCPT
+        id S229986AbhIOQeM (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 15 Sep 2021 10:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237830AbhIOONr (ORCPT
+        Wed, 15 Sep 2021 12:34:12 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3823 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229834AbhIOQeJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 15 Sep 2021 10:13:47 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E93C061575
-        for <linux-security-module@vger.kernel.org>; Wed, 15 Sep 2021 07:12:21 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id h9so6475316ejs.4
-        for <linux-security-module@vger.kernel.org>; Wed, 15 Sep 2021 07:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v0pohU1aHJ77epfHLj6ryM5BHHmhwa0qDe7dPwHtdd0=;
-        b=eR9PEA1KsnhcujiaSp4R8mWZA6mpDIsh7VwjmTZYtFbgFhGfhC2lDUVPNLsgqluhp1
-         ZuikeH6ISYHE0Hn7f+PMrZCFW44ut07bmJZ1SQKvFPC6gjbKsgOvLQZ9auK4V9BR8R8T
-         M2bLbsFY3FbDICQAhyIRjW6ppEhUxmEQVUaDKjMbU0nARv/4wsYZYt2AyqQQtAJZpdRY
-         5h+2cTsdVYZjWjc50/PPZAppcgb+L8yoY198lgv5cyCD/FGYpqYqoRkKbMWyBhI0bIsc
-         x6/KxbY5LcJYMtVQDTniz+9Z+fFHikG6d0ecHdSblx52D5SB7gvPkFyJ72x1ZdhpkNLb
-         NScQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v0pohU1aHJ77epfHLj6ryM5BHHmhwa0qDe7dPwHtdd0=;
-        b=kIwfJQf7utD9Q+jALI7rW5fY8Kc24dkbWrlWYtzuSeO9WR63XzNnKW/aVgGaoHn/b4
-         /Kq1zt7V+00Jl6iZIalzHoFhpJqAhpk2rdAgB8yPZCWRdua7xz2M9HAle8CMxhL/4Huo
-         tDpTia/q36veeMdGbEHQodyOvh+SUamLsnFJdDlU62YDNSKTefAHQOjFCNkr+gPSvZjo
-         YaRJkTG5kEs597NjgghAh6XVCgdiqpufysiH8RD+kzU4dbK/iixLss5F8G1+1ogzbAYS
-         /clgBy7vtImkrJPNPodCkxPOmTyMIUnUFmTjzOKqEPbnrCcJpzerD/o2lpiZYlehGwrf
-         Ok6A==
-X-Gm-Message-State: AOAM531PcSuwSRofwd9S36ElgmuwVELp3s3h1Ut3HrOMy2ab5c78HM6M
-        RzNgRP56EFsJFFiLrGXQiKV/k2JVbNy2Hn1SYDSnPLgFTYzI
-X-Google-Smtp-Source: ABdhPJwpk1md/Mu8TgFO2mVRBp4z/f1TQbOQxsU9h62w+09HhO3nxNPTIDXE3aB83Bt17saG3dLwywyDDJELQSMAYB8=
-X-Received: by 2002:a17:907:16ab:: with SMTP id hc43mr187667ejc.195.1631715139966;
- Wed, 15 Sep 2021 07:12:19 -0700 (PDT)
+        Wed, 15 Sep 2021 12:34:09 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m0q01TBz67jmn;
+        Thu, 16 Sep 2021 00:30:35 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Wed, 15 Sep 2021 18:32:46 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <mchehab+huawei@kernel.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 0/9] integrity: Introduce DIGLIM advanced features
+Date:   Wed, 15 Sep 2021 18:31:36 +0200
+Message-ID: <20210915163145.1046505-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAHC9VhTkZ-tUdrFjhc2k1supzW1QJpY-15pf08mw6=ynU9yY5g@mail.gmail.com>
- <20210827133559.GG490529@madcap2.tricolour.ca> <CAHC9VhRqSO6+MVX+LYBWHqwzd3QYgbSz3Gd8E756J0QNEmmHdQ@mail.gmail.com>
- <20210828150356.GH490529@madcap2.tricolour.ca> <CAHC9VhRgc_Fhi4c6L__butuW7cmSFJxTMxb+BBn6P-8Yt0ck_w@mail.gmail.com>
- <CAHC9VhQD8hKekqosjGgWPxZFqS=EFy-_kQL5zAo1sg0MU=6n5A@mail.gmail.com>
- <20210910005858.GL490529@madcap2.tricolour.ca> <CAHC9VhSRJYW7oRq6iLCH_UYukeFfE0pEJ_wBLdr1mw2QGUPh-Q@mail.gmail.com>
- <CAHC9VhTrimTds_miuyRhhHjoG_Fhmk2vH7G3hKeeFWO3BdLpKw@mail.gmail.com>
- <CAHC9VhTUKsijBVV-a3eHajYyOFYLQPWTTqxJ812NnB3_Y=UMeQ@mail.gmail.com> <20210915122907.GM490529@madcap2.tricolour.ca>
-In-Reply-To: <20210915122907.GM490529@madcap2.tricolour.ca>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 15 Sep 2021 10:12:08 -0400
-Message-ID: <CAHC9VhRWzizGXuMk3+qK8jcYSDFEqjj+MOtFhHKYH0mpnA52=w@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/9] Add LSM access controls and auditing to io_uring
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     sgrubb@redhat.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-audit@redhat.com,
-        io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Sep 15, 2021 at 8:29 AM Richard Guy Briggs <rgb@redhat.com> wrote:
-> I was in the middle of reviewing the v2 patchset to add my acks when I
-> forgot to add the comment that you still haven't convinced me that ses=
-> isn't needed or relevant if we are including auid=.
+Introduction
+============
 
-[Side note: v3 was posted on Monday, it would be more helpful to see
-the Reviewed-by tags on the v3 patchset.]
+This patch set depends on:
+- support for the euid policy keyword for critical data
+  (https://lore.kernel.org/linux-integrity/20210705115650.3373599-1-roberto.sassu@huawei.com/)
+- basic DIGLIM
+  (https://lore.kernel.org/linux-integrity/20210914163401.864635-1-roberto.sassu@huawei.com/)
 
-Ah, okay, it wasn't clear to me from your earlier comments that this
-was your concern.  It sounded as if you were arguing that both session
-ID and audit ID needed to be logged for every io_uring op, which
-doesn't make sense (as previously discussed).  However, I see your
-point, and in fact pulling the audit ID from @current in the
-audit_log_uring() function is just plain wrong ... likely a vestige of
-the original copy-n-paste or format matching, I'll drop that now.
-Thanks.
+Introduce the remaining features necessary to upload to the kernel
+reference values from RPM headers or digest lists in other formats.
 
-While a small code change, it is somewhat significant so I'll post an
-updated v4 patchset later today once it passes through a round of
-testing.
+Loader: it will automatically uploads digest lists from a directory
+        specified in the kernel configuration and will execute a user space
+        uploader to upload digest lists in a format that is not recognized
+        by the kernel;
+
+LSM: it identifies digest list parsers and monitor their activity for
+     integrity evaluation; it protects digest list parsers from other user
+     space processes considered as untrusted;
+
+Digest list generators: user space tools to generate digest lists from
+                        files (in the compact format) or from the RPM DB;
+
+Digest list uploader and parsers: user space tools responsible to upload to
+                                  the kernel digest lists not in the
+                                  compact format (e.g. those derived from
+                                  the RPM DB);
+
+Administration guide: it describes the steps necessary to upload to the
+                      kernel all the digests of an RPM-based Linux
+                      distribution, using a custom kernel with the DIGLIM
+                      patches applied.
+
+With these changes, DIGLIM is ready to be used by IMA for measurement and
+appraisal (this functionality will be added with a future patch set).
+
+DIGLIM already supports appended signatures, but at the moment they cannot
+be interpreted by IMA (unsupported ID PKEY_ID_PGP). Another patch set is
+necessary to load the PGP keys from the Linux distribution to the system
+keyring and to verify the PGP signatures of the RPM headers.
+
+With the patch sets above and the execution policies for IMA proposed some
+time ago, it will be possible to generate a measurement list with digest
+lists and unknown files, and enable IMA appraisal in enforcing mode.
+The kernel command line would be:
+
+ima_template=ima-modsig ima_policy="exec_tcb|tmpfs|digest_lists|appraise_exec_tcb|appraise_tmpfs|appraise_digest_lists"
+
+The effort required for Linux distribution vendors will be to generate and
+sign the digest lists for the digest list uploader and the RPM parser. This
+could be done for example in the kernel-tools package (or in a separate
+package). Existing package signatures are sufficient for remaining files.
+
+
+Issues/Questions
+================
+
+Lockdep (patch 2/9)
+-------------------
+
+I'm using iterate_dir() and file_open_root() to iterate and open files
+in a directory. Unfortunately, I get the following warning:
+
+============================================
+WARNING: possible recursive locking detected
+5.15.0-rc1-dont-use-00049-ga5a881519991 #134 Not tainted
+--------------------------------------------
+swapper/1 is trying to acquire lock:
+0000000066812898 (&sb->s_type->i_mutex_key#7){++++}-{4:4}, at: path_openat+0x75d/0xd20
+
+but task is already holding lock:
+0000000066812898 (&sb->s_type->i_mutex_key#7){++++}-{4:4}, at: iterate_dir+0x65/0x250
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&sb->s_type->i_mutex_key#7);
+  lock(&sb->s_type->i_mutex_key#7);
+
+ *** DEADLOCK ***
+
+
+due to the fact that path_openat() might be trying to lock the directory
+already locked by iterate_dir(). What it would be a good way to avoid it?
+
+
+Inode availability in security_file_free() (patch 3/9)
+------------------------------------------------------
+
+It seems that this hook is called when the last reference to a file is
+released. After enabling debugging, sometimes the kernel reported that the
+inode I was trying to access was already freed.
+
+To avoid this situation, I'm grabbing an additional reference of the inode
+in the security_file_open() hook, to ensure that the inode does not
+disappear, and I'm releasing it in the security_file_free() hook. Is this
+solution acceptable?
+
+Roberto Sassu (9):
+  ima: Introduce new hook DIGEST_LIST_CHECK
+  diglim: Loader
+  diglim: LSM
+  diglim: Tests - LSM
+  diglim: Compact digest list generator
+  diglim: RPM digest list generator
+  diglim: Digest list uploader
+  diglim: RPM parser
+  diglim: Admin guide
+
+ Documentation/admin-guide/diglim.rst          | 136 +++++
+ Documentation/admin-guide/index.rst           |   1 +
+ .../security/diglim/implementation.rst        |  16 +
+ Documentation/security/diglim/index.rst       |   1 +
+ Documentation/security/diglim/lsm.rst         |  65 +++
+ Documentation/security/diglim/tests.rst       |  18 +-
+ MAINTAINERS                                   |  10 +
+ security/integrity/diglim/Kconfig             |  14 +
+ security/integrity/diglim/Makefile            |   2 +-
+ security/integrity/diglim/diglim.h            |  27 +
+ security/integrity/diglim/fs.c                |   3 +
+ security/integrity/diglim/hooks.c             | 436 ++++++++++++++++
+ security/integrity/diglim/loader.c            |  92 ++++
+ security/integrity/iint.c                     |   1 +
+ security/integrity/ima/ima.h                  |   1 +
+ security/integrity/ima/ima_main.c             |   3 +-
+ security/integrity/ima/ima_policy.c           |   3 +
+ security/integrity/integrity.h                |   8 +
+ tools/diglim/Makefile                         |  27 +
+ tools/diglim/common.c                         |  79 +++
+ tools/diglim/common.h                         |  59 +++
+ tools/diglim/compact_gen.c                    | 349 +++++++++++++
+ tools/diglim/rpm_gen.c                        | 334 ++++++++++++
+ tools/diglim/rpm_parser.c                     | 483 ++++++++++++++++++
+ tools/diglim/upload_digest_lists.c            | 238 +++++++++
+ tools/testing/selftests/diglim/Makefile       |  12 +-
+ tools/testing/selftests/diglim/common.h       |   9 +
+ tools/testing/selftests/diglim/selftest.c     | 357 ++++++++++++-
+ 28 files changed, 2764 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/admin-guide/diglim.rst
+ create mode 100644 Documentation/security/diglim/lsm.rst
+ create mode 100644 security/integrity/diglim/hooks.c
+ create mode 100644 security/integrity/diglim/loader.c
+ create mode 100644 tools/diglim/Makefile
+ create mode 100644 tools/diglim/common.c
+ create mode 100644 tools/diglim/common.h
+ create mode 100644 tools/diglim/compact_gen.c
+ create mode 100644 tools/diglim/rpm_gen.c
+ create mode 100644 tools/diglim/rpm_parser.c
+ create mode 100644 tools/diglim/upload_digest_lists.c
 
 -- 
-paul moore
-www.paul-moore.com
+2.25.1
+
