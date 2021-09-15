@@ -2,139 +2,121 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0011D40CB51
-	for <lists+linux-security-module@lfdr.de>; Wed, 15 Sep 2021 19:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC7940CB07
+	for <lists+linux-security-module@lfdr.de>; Wed, 15 Sep 2021 18:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbhIORBQ (ORCPT
+        id S229715AbhIOQus (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 15 Sep 2021 13:01:16 -0400
-Received: from wind.enjellic.com ([76.10.64.91]:58928 "EHLO wind.enjellic.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229690AbhIORBQ (ORCPT
+        Wed, 15 Sep 2021 12:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229711AbhIOQuk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 15 Sep 2021 13:01:16 -0400
-X-Greylist: delayed 1542 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Sep 2021 13:01:15 EDT
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 18FGXT0I002910;
-        Wed, 15 Sep 2021 11:33:29 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 18FGXRgh002909;
-        Wed, 15 Sep 2021 11:33:27 -0500
-Date:   Wed, 15 Sep 2021 11:33:27 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Bruce Fields <bfields@redhat.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, virtio-fs@redhat.com,
-        Daniel Walsh <dwalsh@redhat.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Casey Schaufler <casey.schaufler@intel.com>,
-        LSM <linux-security-module@vger.kernel.org>,
-        selinux@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        stephen.smalley.work@gmail.com,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Dave Chinner <david@fromorbit.com>
-Subject: Re: [PATCH v3 0/1] Relax restrictions on user.* xattr
-Message-ID: <20210915163327.GA2324@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <YTEEPZJ3kxWkcM9x@redhat.com> <YTENEAv6dw9QoYcY@redhat.com> <3bca47d0-747d-dd49-a03f-e0fa98eaa2f7@schaufler-ca.com> <YTEur7h6fe4xBJRb@redhat.com> <1f33e6ef-e896-09ef-43b1-6c5fac40ba5f@schaufler-ca.com> <YTYr4MgWnOgf/SWY@work-vm> <496e92bf-bf9e-a56b-bd73-3c1d0994a064@schaufler-ca.com> <YUCa6pWpr5cjCNrU@redhat.com> <CAPL3RVHB=E_s1AW1sQMEgrLYJ8ADCdr=qaKsDrpYjVzW-Apq8w@mail.gmail.com> <YUCybaYK/0RLvY9J@redhat.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YUCybaYK/0RLvY9J@redhat.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 15 Sep 2021 11:33:29 -0500 (CDT)
+        Wed, 15 Sep 2021 12:50:40 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B8C061766
+        for <linux-security-module@vger.kernel.org>; Wed, 15 Sep 2021 09:49:21 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id g11so2291049qvd.2
+        for <linux-security-module@vger.kernel.org>; Wed, 15 Sep 2021 09:49:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:from:to:date:message-id:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=tZwBVZ5ivrPb6DCSmr/gfWXOF5H7MpGJkku89V1qfH0=;
+        b=GmYCadx8bMhGbpmSXQkaENi2AwpsDk4eicoMJAb8ftUwKq8x4RRfBTKM3YrGwJXIcK
+         LTK6/KOqdno7n7n/55XdVcVV23K7/9TedZipQAkrJVt9BcIZsNpl8JYvQOP7jTlkWoeS
+         IAmFraZ0WZGN9UOPi3qaJYgrE/bpl69T7juHgOdJBV+YMrSOGrQL5mY0nPqzlJKsHlgc
+         W/BkFiRcn58ZyCHY7Y7xVr20AzfPaXsL5J3W/BakFi4bUrDljf6RTA71kzPXXaoC+SAP
+         MWjc7HE3QZxgCn6M3Npq4lqaLjnXSGmIz5KB953JeZ90Cshp3gYGTGfKAu0Z2sGSNpnf
+         T+jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=tZwBVZ5ivrPb6DCSmr/gfWXOF5H7MpGJkku89V1qfH0=;
+        b=Rrn9EmHtdsr/RYdzQaSWQwVNABqnOfJcDXVaf99p3ORT+qIAITpZ5WG3oQ7u29foVV
+         iHyMZMUB+wAu7X/01pEw8lkm582qyZfx5vRquXcTCX8VngWROfoVYW/pSSZDGQbG/Fq0
+         a4J/muZqDF6UtGFnZTnLxw4K9e5Qju6ZuH1bUd9gBbHz971Z1zpFaLq5wsFTGfYrIRrT
+         HSENa/oYArreoGSP+sSaulsVDjK+y3RYWWrmKuT6AQWTKPY0YK+rBoaO4it+YV8VtKpp
+         1yWPOo0YXrCt4B7tCWBheI7u6EMCAEJc6Up4HGAmbcqRw1XzoLRrK0pS8Gcp/PKLCrKp
+         Nntw==
+X-Gm-Message-State: AOAM5300/OJ94vr/3tGGatOlrlQgQqyjQVDeQ0pUROhTJffWqEdcLPVt
+        PdIIjiAdw0a2FMgdLW2PQtnCcGXnHRQi
+X-Google-Smtp-Source: ABdhPJw8vf5IO3EobDwbYHe2XkhMkNPHww7tMzZRabrqUnjoI4PvPa3dInjX+UhLg8nS5HeMJcXDpA==
+X-Received: by 2002:ad4:55b3:: with SMTP id f19mr727008qvx.16.1631724560204;
+        Wed, 15 Sep 2021 09:49:20 -0700 (PDT)
+Received: from localhost (pool-96-237-52-188.bstnma.fios.verizon.net. [96.237.52.188])
+        by smtp.gmail.com with ESMTPSA id h9sm389334qkl.4.2021.09.15.09.49.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Sep 2021 09:49:19 -0700 (PDT)
+Subject: [PATCH v4 0/8] Add LSM access controls and auditing to io_uring
+From:   Paul Moore <paul@paul-moore.com>
+To:     linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, io-uring@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Wed, 15 Sep 2021 12:49:18 -0400
+Message-ID: <163172413301.88001.16054830862146685573.stgit@olly>
+User-Agent: StGit/1.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Sep 14, 2021 at 10:32:13AM -0400, Vivek Goyal wrote:
+A quick update to the v3 patchset with a small change to the audit
+record format (remove the audit login ID on io_uring records) and
+a subject line fix on the Smack patch.  I also caught a few minor
+things in the code comments and fixed those up.  All told, nothing
+significant but I really dislike merging patches that haven't hit
+the list so here ya go ...
 
-Good morning, I hope the day is going well for everyone.
+As a reminder, I'm planning to merge these in the selinux/next tree
+later this week and it would be *really* nice to get some ACKs from
+the io_uring folks; this patchset is implementing the ideas we all
+agreed to back in the v1 patchset so there shouldn't be anything
+surprising in here.
 
-> On Tue, Sep 14, 2021 at 09:59:19AM -0400, Bruce Fields wrote:
-> > On Tue, Sep 14, 2021 at 8:52 AM Vivek Goyal <vgoyal@redhat.com> wrote:
-> > > Same is the requirement for regular containers and that's why
-> > > podman (and possibly other container managers), make top level
-> > > storage directory only readable and searchable by root, so that
-> > > unpriveleged entities on host can not access container root filesystem
-> > > data.
-> > 
-> > Note--if that directory is on NFS, making it readable and searchable
-> > by root is very weak protection, since it's often possible for an
-> > attacker to guess filehandles and access objects without the need for
-> > directory lookups.
+For reference the v3 patchset can be found here:
+https://lore.kernel.org/linux-security-module/163159032713.470089.11728103630366176255.stgit@olly/T/#t
 
-> open_by_handle_at() requires CAP_DAC_READ_SEARCH. And if you have
-> CAP_DAC_READ_SEARCH, you don't need to even guess file handles. You
-> should be able to read/search through all directories, IIUC.
->
-> So how does one make sure that shared directory on host is not
-> accessible to unprivileged entities. If making directory accessible
-> to root only is weaker security, what are the options for stronger
-> security.
+Those who would prefer to fetch these patches directly from git can
+do so using the tree/branch below:
+git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
+ (checkout branch "working-io_uring")
 
-I've been watching this thread, with some interest, given what we have
-been working on with respect to providing a new security framework
-that merges IMA and LSM and external security co-processor technology.
+---
 
-Some observations based on those experiences and this thread.
+Casey Schaufler (1):
+      Smack: Brutalist io_uring support
 
-Casey is an expert on MAC and capability based security systems,
-unfortunately for our industry, particularly bog standard system
-administrators, a rarefied set of skills.  It may be helpful to
-consider his concerns and position on the issues involved in the
-framework of the number of systems that have, and blog posts that
-recommend, setting 'selinux=0' on the kernel command-line.
+Paul Moore (7):
+      audit: prepare audit_context for use in calling contexts beyond syscalls
+      audit,io_uring,io-wq: add some basic audit support to io_uring
+      audit: add filtering for io_uring records
+      fs: add anon_inode_getfile_secure() similar to anon_inode_getfd_secure()
+      io_uring: convert io_uring to the secure anon inode interface
+      lsm,io_uring: add LSM hooks to io_uring
+      selinux: add support for the io_uring access controls
 
-I believe the best summary of his position on this issue, is the
-notion that placing security labels, even in transitive form in user
-accessible attributes, subordinates the security of the guest system,
-regardless of the MAC policy it implements, to the DAC based policy on
-the host system.
 
-Given that, there are no legitimate security guarantees that are
-inferrable based on the guest MAC policy.
-
-A legitimate pundit, could and probably should question, in the face
-of container filesystems and virtual machine images, whether any type
-of inferrable security guarantees are possible, but that is a question
-and argument for another day.
-
-I didn't see any mention of EVM brought up in these discussions, which
-may provide some options to improve the security integrity state of
-the guest.
-
-The 800 pound gorilla in the corner in all of this, is that inferrable
-security guarantees in guests require a certifiable chain of trust
-from the creator of the object to the kernel context that is making
-the security gating decisions on the object.  A hard to implement and
-prove concept in bare metal trusted systems, let alone the myriad of
-edge cases lurking in namespaced and virtual environments.
-
-Which, in a nod to the other corner of the ring, may simply mean, with
-our current state of deployable technology, you pay your money and
-take your chances in these virtual environments.  Which would in turn
-support the notion of a minimum security, ie. DAC, based effort.
-
-> Vivek
-
-Have a good remainder of the week.
-
-Dr. Greg
-
-As always,
-Dr. Greg Wettstein, Ph.D, Worker      Autonomously self-defensive
-Enjellic Systems Development, LLC     IOT platforms and edge devices.
-4206 N. 19th Ave.
-Fargo, ND  58102
-PH: 701-281-1686                      EMAIL: dg@enjellic.com
-------------------------------------------------------------------------------
-"This place is so screwed up.  It's just like the Titanic, only
- we don't even have a band playing.
-                                -- Terrance George Wieland
-                                   Resurrection.
+ fs/anon_inodes.c                    |  29 ++
+ fs/io-wq.c                          |   4 +
+ fs/io_uring.c                       |  69 +++-
+ include/linux/anon_inodes.h         |   4 +
+ include/linux/audit.h               |  26 ++
+ include/linux/lsm_hook_defs.h       |   5 +
+ include/linux/lsm_hooks.h           |  13 +
+ include/linux/security.h            |  16 +
+ include/uapi/linux/audit.h          |   4 +-
+ kernel/audit.h                      |   7 +-
+ kernel/audit_tree.c                 |   3 +-
+ kernel/audit_watch.c                |   3 +-
+ kernel/auditfilter.c                |  15 +-
+ kernel/auditsc.c                    | 469 ++++++++++++++++++++++------
+ security/security.c                 |  12 +
+ security/selinux/hooks.c            |  34 ++
+ security/selinux/include/classmap.h |   2 +
+ security/smack/smack_lsm.c          |  46 +++
+ 18 files changed, 646 insertions(+), 115 deletions(-)
