@@ -2,231 +2,139 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2653C40CA4E
-	for <lists+linux-security-module@lfdr.de>; Wed, 15 Sep 2021 18:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0011D40CB51
+	for <lists+linux-security-module@lfdr.de>; Wed, 15 Sep 2021 19:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhIOQfk (ORCPT
+        id S229728AbhIORBQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 15 Sep 2021 12:35:40 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3832 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbhIOQfd (ORCPT
+        Wed, 15 Sep 2021 13:01:16 -0400
+Received: from wind.enjellic.com ([76.10.64.91]:58928 "EHLO wind.enjellic.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229690AbhIORBQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 15 Sep 2021 12:35:33 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m2B67JVz67vP9;
-        Thu, 16 Sep 2021 00:31:46 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 15 Sep 2021 18:34:10 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <mchehab+huawei@kernel.org>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 9/9] diglim: Admin guide
-Date:   Wed, 15 Sep 2021 18:31:45 +0200
-Message-ID: <20210915163145.1046505-10-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210915163145.1046505-1-roberto.sassu@huawei.com>
-References: <20210915163145.1046505-1-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+        Wed, 15 Sep 2021 13:01:16 -0400
+X-Greylist: delayed 1542 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Sep 2021 13:01:15 EDT
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 18FGXT0I002910;
+        Wed, 15 Sep 2021 11:33:29 -0500
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 18FGXRgh002909;
+        Wed, 15 Sep 2021 11:33:27 -0500
+Date:   Wed, 15 Sep 2021 11:33:27 -0500
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Bruce Fields <bfields@redhat.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, virtio-fs@redhat.com,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Casey Schaufler <casey.schaufler@intel.com>,
+        LSM <linux-security-module@vger.kernel.org>,
+        selinux@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        stephen.smalley.work@gmail.com,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCH v3 0/1] Relax restrictions on user.* xattr
+Message-ID: <20210915163327.GA2324@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <YTEEPZJ3kxWkcM9x@redhat.com> <YTENEAv6dw9QoYcY@redhat.com> <3bca47d0-747d-dd49-a03f-e0fa98eaa2f7@schaufler-ca.com> <YTEur7h6fe4xBJRb@redhat.com> <1f33e6ef-e896-09ef-43b1-6c5fac40ba5f@schaufler-ca.com> <YTYr4MgWnOgf/SWY@work-vm> <496e92bf-bf9e-a56b-bd73-3c1d0994a064@schaufler-ca.com> <YUCa6pWpr5cjCNrU@redhat.com> <CAPL3RVHB=E_s1AW1sQMEgrLYJ8ADCdr=qaKsDrpYjVzW-Apq8w@mail.gmail.com> <YUCybaYK/0RLvY9J@redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YUCybaYK/0RLvY9J@redhat.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 15 Sep 2021 11:33:29 -0500 (CDT)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Introduce a DIGLIM administration guide. Its main purpose is to help users
-to configure a system to load to the kernel all the digests of executable
-and firmware from the RPM DB, and kernel modules of a custom kernel and a
-temporary file mapped as executable as custom digest lists.
+On Tue, Sep 14, 2021 at 10:32:13AM -0400, Vivek Goyal wrote:
 
-With further patch sets, it will be possible to load an execution policy in
-IMA and create a measurement list only with digest lists and unknown files,
-and to perform secure boot at application level.
+Good morning, I hope the day is going well for everyone.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- Documentation/admin-guide/diglim.rst | 136 +++++++++++++++++++++++++++
- Documentation/admin-guide/index.rst  |   1 +
- MAINTAINERS                          |   1 +
- 3 files changed, 138 insertions(+)
- create mode 100644 Documentation/admin-guide/diglim.rst
+> On Tue, Sep 14, 2021 at 09:59:19AM -0400, Bruce Fields wrote:
+> > On Tue, Sep 14, 2021 at 8:52 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+> > > Same is the requirement for regular containers and that's why
+> > > podman (and possibly other container managers), make top level
+> > > storage directory only readable and searchable by root, so that
+> > > unpriveleged entities on host can not access container root filesystem
+> > > data.
+> > 
+> > Note--if that directory is on NFS, making it readable and searchable
+> > by root is very weak protection, since it's often possible for an
+> > attacker to guess filehandles and access objects without the need for
+> > directory lookups.
 
-diff --git a/Documentation/admin-guide/diglim.rst b/Documentation/admin-guide/diglim.rst
-new file mode 100644
-index 000000000000..886100cf5a62
---- /dev/null
-+++ b/Documentation/admin-guide/diglim.rst
-@@ -0,0 +1,136 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======
-+DIGLIM
-+======
-+
-+Digest Lists Integrity Module (DIGLIM) is an integrity extension aiming to
-+facilitate the deployment of remote attestation and secure boot solutions
-+based on Integrity Measurement Architecture (IMA).
-+
-+DIGLIM documentation can be retrieved at ``Documentation/security/diglim``.
-+
-+Kernel Configuration Options
-+============================
-+
-+DIGLIM can be enabled by setting ``CONFIG_DIGLIM=y`` in the kernel
-+configuration. Optionally, it is possible to set
-+``CONFIG_DIGLIM_DIGEST_LISTS_DIR`` with the directory digest lists are
-+taken from by a kernel loader executed at kernel initialization time.
-+Finally, with ``CONFIG_DIGLIM_UPLOADER_PATH`` it is possible to specify the
-+path of the digest list uploader, which will execute user space parsers to
-+process the digest lists in ``CONFIG_DIGLIM_DIGEST_LISTS_DIR`` that are not
-+in the format recognized by the kernel.
-+
-+
-+LSM
-+===
-+
-+DIGLIM includes an LSM to protect user space parsers from other processes,
-+when the parsers convert a digest list and uploads it to the kernel. As for
-+other LSMs, ``diglim`` should be added to the list of enabled LSMs,
-+provided with the ``lsm=`` kernel option. If DIGLIM LSM is not enabled,
-+digest lists uploaded by the parser will not be marked as processed by IMA
-+and will not be suitable for use.
-+
-+
-+Setup
-+=====
-+
-+Digest lists must be loaded as soon as possible, before files are accessed,
-+so that IMA finds the digest of those files with a query. More details on
-+the benefits of DIGLIM for IMA can be found in
-+``Documentation/security/diglim/introduction.rst``.
-+
-+
-+Digest List Generation
-+----------------------
-+
-+Digest lists can be generated with the tools provided in ``tools/diglim``
-+in the kernel sources. In order to compile the tools, it is necessary to
-+install the ``glibc-static`` and ``rpm-devel`` packages.
-+
-+``compact_gen`` can be used to generate digest lists in the compact format,
-+which can be directly uploaded to the kernel.
-+
-+In order to upload digests from the RPM database, it is necessary to
-+generate three digest lists: one for ``upload_digest_lists``, which is
-+responsible to execute the parsers for digest lists not in the compact
-+format; two for ``rpm_parser``, which actually loads the RPM digest lists.
-+
-+``rpm_parser`` requires two digest lists, one for identification by DIGLIM
-+LSM, and the other for measurement and appraisal with IMA. The commands
-+are::
-+
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /usr/libexec/diglim/rpm_parser -t parser
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /usr/libexec/diglim/rpm_parser -t file
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /usr/libexec/diglim/upload_digest_lists -t file
-+
-+Optionally, an appended signature can be added to the generated digest
-+lists, with the sign-file tool included in the kernel sources::
-+
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-parser_list-compact-rpm_parser
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-rpm_parser
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-upload_digest_lists
-+
-+With an appropriate policy, appended signatures can be seen in the
-+measurement, by selecting the ``ima-modsig`` template.
-+
-+Afterwards, digest lists can be generated from the RPM database with the
-+command::
-+
-+ # tools/diglim/rpm_gen -d /etc/digest_lists
-+
-+If a custom kernel is used, an additional digest list should be generated
-+for kernel modules::
-+
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /lib/modules/`uname -r` -t file
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-`uname -r`
-+
-+Finally, in Fedora there is an mmap with execution permission on a file
-+with 4K of zeros. A digest list can be generated by executing::
-+
-+ # dd if=/dev/zero of=/tmp/mmap bs=4096 count=1
-+ # tools/diglim/compact_gen -d /etc/digest_lists -i /tmp/mmap -f
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/0-file_list-compact-mmap
-+
-+
-+Initial Ram Disk
-+----------------
-+
-+Generated digest lists should be copied to the initial ram disk in the
-+``CONFIG_DIGLIM_DIGEST_LISTS_DIR`` directory. This can be accomplished,
-+with dracut, by adding in /etc/dracut.conf::
-+
-+ install_optional_items+=" /etc/digest_lists/* "
-+
-+if ``CONFIG_DIGLIM_DIGEST_LISTS_DIR=/etc/digest_lists``.
-+
-+``upload_digest_lists`` and ``rpm_parser`` can be also copied to the
-+initial ram disk by adding the following lines in /etc/dracut.conf::
-+
-+ install_optional_items+=" /usr/libexec/diglim/upload_digest_lists "
-+ install_optional_items+=" /usr/libexec/diglim/rpm_parser "
-+
-+assuming that the binaries are installed in /usr/libexec/diglim.
-+
-+Another important option is::
-+
-+ do_strip="no"
-+
-+This prevents dracut from stripping the symbols from binaries. If binaries
-+are altered, their digest will be different from the reference value and
-+will not be found in the DIGLIM hash table.
-+
-+
-+Boot and Digest List Upload
-+---------------------------
-+
-+After generating the initial ram disk and rebooting, digest lists should
-+have been added to the DIGLIM hash table. This can be checked by executing::
-+
-+ # cat /sys/kernel/security/integrity/diglim/digests_count
-+ Parser digests: 1
-+ File digests: 104273
-+ Metadata digests: 0
-+ Digest list digests: 2430
-diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
-index dc00afcabb95..1cc7d3b3e79c 100644
---- a/Documentation/admin-guide/index.rst
-+++ b/Documentation/admin-guide/index.rst
-@@ -79,6 +79,7 @@ configure specific aspects of kernel behavior to your liking.
-    cputopology
-    dell_rbu
-    device-mapper/index
-+   diglim
-    edid
-    efi-stub
-    ext4
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1efc1724376e..953c86915c49 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5507,6 +5507,7 @@ M:	Roberto Sassu <roberto.sassu@huawei.com>
- L:	linux-integrity@vger.kernel.org
- S:	Supported
- T:	git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-+F:	Documentation/admin-guide/diglim.rst
- F:	Documentation/security/diglim/architecture.rst
- F:	Documentation/security/diglim/implementation.rst
- F:	Documentation/security/diglim/index.rst
--- 
-2.25.1
+> open_by_handle_at() requires CAP_DAC_READ_SEARCH. And if you have
+> CAP_DAC_READ_SEARCH, you don't need to even guess file handles. You
+> should be able to read/search through all directories, IIUC.
+>
+> So how does one make sure that shared directory on host is not
+> accessible to unprivileged entities. If making directory accessible
+> to root only is weaker security, what are the options for stronger
+> security.
 
+I've been watching this thread, with some interest, given what we have
+been working on with respect to providing a new security framework
+that merges IMA and LSM and external security co-processor technology.
+
+Some observations based on those experiences and this thread.
+
+Casey is an expert on MAC and capability based security systems,
+unfortunately for our industry, particularly bog standard system
+administrators, a rarefied set of skills.  It may be helpful to
+consider his concerns and position on the issues involved in the
+framework of the number of systems that have, and blog posts that
+recommend, setting 'selinux=0' on the kernel command-line.
+
+I believe the best summary of his position on this issue, is the
+notion that placing security labels, even in transitive form in user
+accessible attributes, subordinates the security of the guest system,
+regardless of the MAC policy it implements, to the DAC based policy on
+the host system.
+
+Given that, there are no legitimate security guarantees that are
+inferrable based on the guest MAC policy.
+
+A legitimate pundit, could and probably should question, in the face
+of container filesystems and virtual machine images, whether any type
+of inferrable security guarantees are possible, but that is a question
+and argument for another day.
+
+I didn't see any mention of EVM brought up in these discussions, which
+may provide some options to improve the security integrity state of
+the guest.
+
+The 800 pound gorilla in the corner in all of this, is that inferrable
+security guarantees in guests require a certifiable chain of trust
+from the creator of the object to the kernel context that is making
+the security gating decisions on the object.  A hard to implement and
+prove concept in bare metal trusted systems, let alone the myriad of
+edge cases lurking in namespaced and virtual environments.
+
+Which, in a nod to the other corner of the ring, may simply mean, with
+our current state of deployable technology, you pay your money and
+take your chances in these virtual environments.  Which would in turn
+support the notion of a minimum security, ie. DAC, based effort.
+
+> Vivek
+
+Have a good remainder of the week.
+
+Dr. Greg
+
+As always,
+Dr. Greg Wettstein, Ph.D, Worker      Autonomously self-defensive
+Enjellic Systems Development, LLC     IOT platforms and edge devices.
+4206 N. 19th Ave.
+Fargo, ND  58102
+PH: 701-281-1686                      EMAIL: dg@enjellic.com
+------------------------------------------------------------------------------
+"This place is so screwed up.  It's just like the Titanic, only
+ we don't even have a band playing.
+                                -- Terrance George Wieland
+                                   Resurrection.
