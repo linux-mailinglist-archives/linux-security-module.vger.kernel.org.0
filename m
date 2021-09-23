@@ -2,137 +2,120 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F10FA416267
-	for <lists+linux-security-module@lfdr.de>; Thu, 23 Sep 2021 17:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A5A416281
+	for <lists+linux-security-module@lfdr.de>; Thu, 23 Sep 2021 17:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242221AbhIWPvI (ORCPT
+        id S242239AbhIWPzF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 23 Sep 2021 11:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        Thu, 23 Sep 2021 11:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242235AbhIWPuY (ORCPT
+        with ESMTP id S242221AbhIWPzE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 23 Sep 2021 11:50:24 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8CBC0613EF
-        for <linux-security-module@vger.kernel.org>; Thu, 23 Sep 2021 08:47:48 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id j13so6591209qtq.6
-        for <linux-security-module@vger.kernel.org>; Thu, 23 Sep 2021 08:47:48 -0700 (PDT)
+        Thu, 23 Sep 2021 11:55:04 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F934C061574
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Sep 2021 08:53:32 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id i4so28413142lfv.4
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Sep 2021 08:53:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:from:to:cc:date:message-id:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=eanBuwDkgOLZs3AUy1n+xC0OqqvkchufmO8SEsSq0R4=;
-        b=U6kusfQhFDPVN3HHPOiJ9H7kNIlTpfE+ijkhxf7HBluJA3lGuHlBqbrpQqTS6BVz03
-         oFegILOVRjlVHnsGd+RXoC5XrBXiZIugjqW/mF6CnkYyaJoH0foFW/5Ua+83PAg6Wbg/
-         umOCEddZW9F4M29qD2v8niTnvCnWCqyVXnTGYqsVLfBx97QYieKu8pvSkK/Qju8AVkh5
-         vO/xU+BURJfW+FqVtKULILjXBFzxSgV7LjKAFfCvilL+uy4sVwfVKwhWu9zLP2gWnHjl
-         FYhGk3UMKkmxCV5siHGsqdWdnaEl1cS2FvbhHKzbhKF3uAwhrDFrkvfFMDRST7k4m7kT
-         9QIA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lAIf9S9YD0oFbCvz8QEsqa7/B46ooiou6kW4WrW11es=;
+        b=edcnJ+kYTFajOV6YWgCkDRJ7tuME3jDCu388x+5IygYwj23a8bZILaBVzhLYkO588z
+         ljxnaGKMshQurnuGfYg4HBwiC3Ym6JVEffomTleMBklg9nYJ1H9ODcw++lFapFP+L7Zw
+         y7IPRTqhyiGYRNXvP5nhI306iiITGHRqHb9Nk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=eanBuwDkgOLZs3AUy1n+xC0OqqvkchufmO8SEsSq0R4=;
-        b=VPgw8mjiFpe0aLq59T+lOy86eYSQOsRQ9acR0NSYRsYbNaYyy03dLCNcLu+5wOiPy2
-         eGu1iNMXCLPGqmNn2sC1Iu8mWgjWxLjtiedU5hOjw6fUUItVCvkQ506+6DSJwfcIQnaM
-         v5LVWnMnTRwwWjDkAh0p6rSWbMdGu8afSpp9wH4YeocDWe8Jtlb+HytugwKmeIbqpSZa
-         We1dDivJpZneu/RCVm/nWMEn50vTIGlcqs2e1WmE/j+DZjL4XOFqpYI819x0HmFZ91TS
-         KMcKuialFuOoX+PqzlOy7QD0yMrVVA+tMr99+Ei28hXE9C3Dixw1df7L4L7URwuAFV7+
-         Mz4g==
-X-Gm-Message-State: AOAM532bVjNtJXPrj7UpPkAErlyBZ455k/XdmfNmSYu56YFenBLOv6MZ
-        eNiXUygnbddgrW2ARox2Brvm
-X-Google-Smtp-Source: ABdhPJyFKJzNhWMOvwK0AtGx03qKP4YsFJJ9MfZISiOWIWfu7AIY4PV1fipuIltFZ1S77yWb+c30aA==
-X-Received: by 2002:ac8:5ad5:: with SMTP id d21mr5558066qtd.345.1632412067337;
-        Thu, 23 Sep 2021 08:47:47 -0700 (PDT)
-Received: from localhost (pool-96-237-52-188.bstnma.fios.verizon.net. [96.237.52.188])
-        by smtp.gmail.com with ESMTPSA id m139sm4801445qke.18.2021.09.23.08.47.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 08:47:46 -0700 (PDT)
-Subject: [PATCH] selinux,smack: fix subjective/objective credential use mixups
-From:   Paul Moore <paul@paul-moore.com>
-To:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org
-Cc:     casey@schaufler-ca.com, jannh@google.com
-Date:   Thu, 23 Sep 2021 11:47:45 -0400
-Message-ID: <163241206546.71956.16494958077958683533.stgit@olly>
-User-Agent: StGit/1.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lAIf9S9YD0oFbCvz8QEsqa7/B46ooiou6kW4WrW11es=;
+        b=ZIOyGU2Q9uzFxc9WR9lpup1ioSrR04dbK/i3Dt7uc9J7MErZQHGLppaZsjgiipoghV
+         XE5bJ056bprArNtz8o5cLx69eCsdSjpr0f2F35S6ll3501GvcEsNRLBSjWgYMprEWLyO
+         uVO8I03+AtSet3SQIQOrVea2He9+ZjspL5v2+7emie2z5mpAIeYDvjDLmpgK9OOzmWfL
+         IUGebjw76l0USS+SlBhzgLFMRFQujfY1ZtrXebG+p6iBUt73d05CUY+s4wVngi0GdYKG
+         HugOAt0ctm0JYgRmTU2nbMjXTCZttzk3U+eohAF2QWcFVvsiHGBeqNZrPfRV8ycOQNxU
+         HOWA==
+X-Gm-Message-State: AOAM531Q1LTt0tolr+7uN2kjKDDRqM5j11Rl3nd7NAnRRrCUbQLWmmId
+        6AVazM/M3NNd4BEzd9qq31XwtJ8i7upsLewu74Q=
+X-Google-Smtp-Source: ABdhPJw2gc7kayHsMuUyI6Fc/ZKhM35aokq+RLCJuSoQbpxIXlk8yKhe5PArfFt0TM953BCtyueypA==
+X-Received: by 2002:ac2:4d35:: with SMTP id h21mr4757742lfk.237.1632412410002;
+        Thu, 23 Sep 2021 08:53:30 -0700 (PDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id r2sm490461lfm.78.2021.09.23.08.53.29
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Sep 2021 08:53:29 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id b36so153766ljr.6
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Sep 2021 08:53:28 -0700 (PDT)
+X-Received: by 2002:a2e:4e01:: with SMTP id c1mr5757554ljb.31.1632412408652;
+ Thu, 23 Sep 2021 08:53:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <CAHC9VhQcxm=Zhe2XEesx3UsBgr8H6H=BtJc92roqeF8o+DK+XQ@mail.gmail.com>
+ <CAHC9VhSu=ZWymS3RHa7jakQOU8gujGQ=PKO1BTcrNAM9-P4bmQ@mail.gmail.com>
+ <CAHk-=wj=ADdpVjsKGuOyKDT2eO2UwfgW+cGsKAkxvTkP7=1Osg@mail.gmail.com>
+ <CAHk-=winh0gLMqnQipt7VpbsxBL1frJQ-hJpRpe=kbR3U+DRHg@mail.gmail.com>
+ <CAHC9VhSZp1-Qi7ApoQHauaFXDgoNaFTwFEieEFFuBtdPqAtXQg@mail.gmail.com>
+ <CAHk-=whoExoB6xGD0as0kpfwr38B=W7GRkO2NXWDRW-tmQS6Qw@mail.gmail.com> <CAHC9VhTtz_aNY6MOCM6ypbz+SHvS30hx42PWjXJhG1Z=t5jpBw@mail.gmail.com>
+In-Reply-To: <CAHC9VhTtz_aNY6MOCM6ypbz+SHvS30hx42PWjXJhG1Z=t5jpBw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Sep 2021 08:53:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wivxthY49NPyPG0QG302dmH_hrioE7NdDKMR1Fus0GHow@mail.gmail.com>
+Message-ID: <CAHk-=wivxthY49NPyPG0QG302dmH_hrioE7NdDKMR1Fus0GHow@mail.gmail.com>
+Subject: Re: [GIT PULL] SELinux fixes for v5.15 (#1)
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Jann Horn reported a problem with commit eb1231f73c4d ("selinux:
-clarify task subjective and objective credentials") where some LSM
-hooks were attempting to access the subjective credentials of a task
-other than the current task.  Generally speaking, it is not safe to
-access another task's subjective credentials and doing so can cause
-a number of problems.
+On Thu, Sep 23, 2021 at 8:43 AM Paul Moore <paul@paul-moore.com> wrote:
+>
+> However, we have the LSM framework because there is never one way to
+> solve a problem,
 
-Further, while looking into the problem, I realized that Smack was
-suffering from a similar problem brought about by a similar commit
-1fb057dcde11 ("smack: differentiate between subjective and objective
-task credentials").
+The thing is, the lockdown patches were merged because they were allegedly sane.
 
-This patch addresses this problem by restoring the use of the task's
-objective credentials in those cases where the task is other than the
-current executing task.  Not only does this resolve the problem
-reported by Jann, it is arguably the correct thing to do in these
-cases.
+As far as I can tell, this is purely a SELinux internal bug.
 
-Cc: stable@vger.kernel.org
-Fixes: eb1231f73c4d ("selinux: clarify task subjective and objective credentials")
-Fixes: 1fb057dcde11 ("smack: differentiate between subjective and objective task credentials")
-Reported-by: Jann Horn <jannh@google.com>
-Acked-by: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
----
- security/selinux/hooks.c   |    4 ++--
- security/smack/smack_lsm.c |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+SELinux did something wrong. Stop doing it. Stop sending patches to
+then screw up the generic security layer, and violate the rules under
+which these patches were accepted.
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 6517f221d52c..e7ebd45ca345 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2157,7 +2157,7 @@ static int selinux_ptrace_access_check(struct task_struct *child,
- static int selinux_ptrace_traceme(struct task_struct *parent)
- {
- 	return avc_has_perm(&selinux_state,
--			    task_sid_subj(parent), task_sid_obj(current),
-+			    task_sid_obj(parent), task_sid_obj(current),
- 			    SECCLASS_PROCESS, PROCESS__PTRACE, NULL);
- }
- 
-@@ -6222,7 +6222,7 @@ static int selinux_msg_queue_msgrcv(struct kern_ipc_perm *msq, struct msg_msg *m
- 	struct ipc_security_struct *isec;
- 	struct msg_security_struct *msec;
- 	struct common_audit_data ad;
--	u32 sid = task_sid_subj(target);
-+	u32 sid = task_sid_obj(target);
- 	int rc;
- 
- 	isec = selinux_ipc(msq);
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index cacbe7518519..21a0e7c3b8de 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -2016,7 +2016,7 @@ static int smk_curacc_on_task(struct task_struct *p, int access,
- 				const char *caller)
- {
- 	struct smk_audit_info ad;
--	struct smack_known *skp = smk_of_task_struct_subj(p);
-+	struct smack_known *skp = smk_of_task_struct_obj(p);
- 	int rc;
- 
- 	smk_ad_init(&ad, caller, LSM_AUDIT_DATA_TASK);
-@@ -3480,7 +3480,7 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
-  */
- static int smack_getprocattr(struct task_struct *p, char *name, char **value)
- {
--	struct smack_known *skp = smk_of_task_struct_subj(p);
-+	struct smack_known *skp = smk_of_task_struct_obj(p);
- 	char *cp;
- 	int slen;
- 
+We have now this week have two discussions about the selinux doing
+completely invalid and incorrect things, and both were related to just
+thinking that it's ok to just randomly access thread data.
 
+At some point, you just have to look at the SELinux code and say
+:"this does something wrong".
+
+Instead of this kind of "no, everybody else is wrong, I will modify
+them to do what I mistakenly did".
+
+IOW, just make the patch be
+
+   diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+   index 6517f221d52c..4e93bf5dc8ef 100644
+   --- a/security/selinux/hooks.c
+   +++ b/security/selinux/hooks.c
+   @@ -7016,7 +7016,8 @@ static void selinux_bpf_prog_free(struct
+bpf_prog_aux *aux)
+    static int selinux_lockdown(enum lockdown_reason what)
+    {
+        struct common_audit_data ad;
+   -    u32 sid = current_sid();
+   +    /* Lockdown requests come in non-thread context, can't use
+'current_sid()' */
+   +    u32 sid = SECINITSID_UNLABELED;
+        int invalid_reason = (what <= LOCKDOWN_NONE) ||
+                             (what == LOCKDOWN_INTEGRITY_MAX) ||
+                             (what >= LOCKDOWN_CONFIDENTIALITY_MAX);
+
+and stop accessing random security ID's from random contexts.
+
+And stop thinking it's ok for SELinux to just do bad things.
+
+               Linus
