@@ -2,178 +2,151 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C9041D93D
-	for <lists+linux-security-module@lfdr.de>; Thu, 30 Sep 2021 13:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD4E41DF47
+	for <lists+linux-security-module@lfdr.de>; Thu, 30 Sep 2021 18:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350644AbhI3L6o (ORCPT
+        id S1352206AbhI3Qmk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 30 Sep 2021 07:58:44 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3902 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350691AbhI3L6n (ORCPT
+        Thu, 30 Sep 2021 12:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352100AbhI3Qmj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 30 Sep 2021 07:58:43 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HKs8X2nRYz685Yr;
-        Thu, 30 Sep 2021 19:53:48 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Thu, 30 Sep 2021 13:56:59 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <mchehab+huawei@kernel.org>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 7/7] ima: Add support for appraisal with digest lists
-Date:   Thu, 30 Sep 2021 13:55:33 +0200
-Message-ID: <20210930115533.878169-8-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210930115533.878169-1-roberto.sassu@huawei.com>
-References: <20210930115533.878169-1-roberto.sassu@huawei.com>
+        Thu, 30 Sep 2021 12:42:39 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A72C06176E
+        for <linux-security-module@vger.kernel.org>; Thu, 30 Sep 2021 09:40:56 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id p9so2668227vst.9
+        for <linux-security-module@vger.kernel.org>; Thu, 30 Sep 2021 09:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=FV+sR2jqeq3a30q0fwwes6WIJUL0Aly1jHDpEuRKN4E5hFr75A8Lw1Hf7FsKbd3IgX
+         Y0NETW3LIdrr+GfiFqDiRliDmaT3s6ks2SCzQ8xKiQWqtfryMEQxZRm/Ehnv8sx9IvZA
+         muPVzb5TbIR8gh03qrKvvPLKt+CWDdsXkBUBiZw2JG/VPZRXtjF2vQGNdWqMtE0+KYCn
+         puyxTyxmsl+RwXB2mIAoqF5n+/rz1oAVYvnPo9p/4N+LHs01uAkZKBx+0yd7aFh3bUHG
+         h/EeRqLYRyFYlkHNLt6EEQaizEMQ1XNxoB1ZM7qr+/WnP5xBCG7P4Ey4iY0NmkRmr8S1
+         mh4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=5W462wAQqcMpxevdEE4mcfcqtnE4QSdMRWAfzu3cRzok439uy9CakzACxQUUXFXFNL
+         +F5aJCgAzLtFc7TYYlRy+rjznuA5eNEw1Hj5u8rYZCU7YeUyIc+uHRfcOWpfEwRu6lYz
+         wC+H/4yyOGqp8VEwyhUrssQQ20sUzw6ZTeIlFDSZkxIzqexltXmPnDXnRQzsrjRwquwK
+         0drMCL3F8BJwPv1D3OlK1AA9eTKSF0281RpXVsuTJZQdpvCPkoHI/H6uqKfbHqFXAwjh
+         HlTIufifYzKG8kD33jrlXq9UahUNQKv5o3jjG+MCNiGpj+ZNIKgD+n0pbWAGMLsAAbYY
+         qCZA==
+X-Gm-Message-State: AOAM532hwz3J3CgI/1jTRDugNxiSJaLFqyZRjEa8Jh4bXzveuavMbySu
+        juAmMJ7JViAkrDnY5Cf4MugZH23/IoA+N9fF+Xw=
+X-Google-Smtp-Source: ABdhPJyrlzTC2MbiFYv9Onunj6ymT4OoDGeF1Rs8K96BASDJdMf5G8ZjaV568mQ5Ecmy8bt02e07EU6x/22RNi/kmb0=
+X-Received: by 2002:a67:ce14:: with SMTP id s20mr148117vsl.34.1633020056080;
+ Thu, 30 Sep 2021 09:40:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
+ 09:40:55 -0700 (PDT)
+Reply-To: irenezakari24@gmail.com
+From:   Irene zakari <irenezakari88@gmail.com>
+Date:   Thu, 30 Sep 2021 09:40:55 -0700
+Message-ID: <CAFT8PFEuTDyM7AWv4-LAqHpR0VFES6VrRn3W0Yw7s4vRmk+-jg@mail.gmail.com>
+Subject: PLEASE I NEED YOUR HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Introduce a new appraisal method based on the lookup of the file and
-metadata digest in the DIGLIM hash table, enabled with the use_diglim
-directive.
+Hello   ..
 
-First pass to ima_appraise_measurement() the actions performed on the
-digest lists containing the found digests.
+How do you do over there? I hope you are doing well?
 
-Then, consider the metadata verification as successful if EVM returned the
-status INTEGRITY_NOLABEL (no security.evm), if the metadata digest was
-found in the DIGLIM hash table and at least one digest list containing it
-was succefully appraised with a signature.
+My name is Irene. (24 years), i am single, from Gambia, the only child
+of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
+(Building Construction Company in The Gambia) also the CEO of Bernard
+Import and Export (GAMBIA).
 
-Finally, consider the file content verification as successful if there is
-no security.ima or appended signature, if the file or metadata digest
-(calculated with the actual file digest) were found in the DIGLIM hash
-table and at least one digest list containing it has a valid signature.
+As a matter of fact my mother died when i was barely 4 years old
+according to my late father and because of the type of love he had for
+my mother made him to remain UN-married till he left the ghost..
 
-Furthermore, mark the file as immutable if the COMPACT_MOD_IMMUTABLE
-modifier was set in the header of the digest lists containing the found
-digests.
+So after the death of my father as a result of assassinate, his brother (My
+Uncle) who is the purchasing and marketing sale manager of my late
+fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
+convert all the properties and resources of my late father into his
+which i quarreled with him and it made him to lay his anger on me to
+the extent of hiring an assassins to kill me but to God be the glory i
+succeeded by making a way to Burkina faso for my dear life.
+Honestly i do live a fearful life even here in Burkina faso because of
+those Assassins coming after me .
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima.h          |  4 ++-
- security/integrity/ima/ima_appraise.c | 37 +++++++++++++++++++++++----
- security/integrity/ima/ima_main.c     |  6 ++++-
- 3 files changed, 40 insertions(+), 7 deletions(-)
+I would want to live and study in your country for my better future.
+because my father same blood brother wanted to force me into undecided
+marriage, just for me to leave my father home and went and live with
+another man I never know as he want to occupied all my father home
+and maybe to sold it as my father no longer alive, I'm the only child
+daughter my father born, '' but he don't know that i am not
+interesting in any of my father properties or early marriage for now,
+because i still have future to think about and to focus on my studies
+first as i was doing my first year in the University before the death
+of my father.
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 550805b79984..631e9e4c343b 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -319,7 +319,9 @@ int ima_appraise_measurement(enum ima_hooks func,
- 			     struct integrity_iint_cache *iint,
- 			     struct file *file, const unsigned char *filename,
- 			     struct evm_ima_xattr_data *xattr_value,
--			     int xattr_len, const struct modsig *modsig);
-+			     int xattr_len, const struct modsig *modsig,
-+			     u16 file_modifiers, u8 file_actions,
-+			     u16 metadata_modifiers, u8 metadata_actions);
- int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
- 		      int mask, enum ima_hooks func);
- void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file);
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index e1b9a5bc4252..a0885272411e 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -377,7 +377,9 @@ int ima_appraise_measurement(enum ima_hooks func,
- 			     struct integrity_iint_cache *iint,
- 			     struct file *file, const unsigned char *filename,
- 			     struct evm_ima_xattr_data *xattr_value,
--			     int xattr_len, const struct modsig *modsig)
-+			     int xattr_len, const struct modsig *modsig,
-+			     u16 file_modifiers, u8 file_actions,
-+			     u16 metadata_modifiers, u8 metadata_actions)
- {
- 	static const char op[] = "appraise_data";
- 	const char *cause = "unknown";
-@@ -387,12 +389,26 @@ int ima_appraise_measurement(enum ima_hooks func,
- 	int rc = xattr_len;
- 	bool try_modsig = iint->flags & IMA_MODSIG_ALLOWED && modsig;
- 
--	/* If not appraising a modsig, we need an xattr. */
--	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig)
-+	/* We are interested only in appraisal-related flags. */
-+	file_actions &= COMPACT_ACTION_IMA_APPRAISED_DIGSIG;
-+	metadata_actions &= COMPACT_ACTION_IMA_APPRAISED_DIGSIG;
-+
-+	/* Disable DIGLIM method for appraisal if not enabled in the policy. */
-+	if (!(iint->flags & IMA_USE_DIGLIM_APPRAISE)) {
-+		file_actions = 0;
-+		metadata_actions = 0;
-+	}
-+
-+	/* If not appraising a modsig or using DIGLIM, we need an xattr. */
-+	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig &&
-+	    !file_actions && !metadata_actions)
- 		return INTEGRITY_UNKNOWN;
- 
--	/* If reading the xattr failed and there's no modsig, error out. */
--	if (rc <= 0 && !try_modsig) {
-+	/*
-+	 * If reading the xattr failed, there's no modsig and the DIGLIM
-+	 * appraisal method is not available, error out.
-+	 */
-+	if (rc <= 0 && !try_modsig && !file_actions && !metadata_actions) {
- 		if (rc && rc != -ENODATA)
- 			goto out;
- 
-@@ -420,6 +436,10 @@ int ima_appraise_measurement(enum ima_hooks func,
- 			break;
- 		fallthrough;
- 	case INTEGRITY_NOLABEL:		/* No security.evm xattr. */
-+		if (metadata_actions) {
-+			status = INTEGRITY_PASS_IMMUTABLE;
-+			break;
-+		}
- 		cause = "missing-HMAC";
- 		goto out;
- 	case INTEGRITY_FAIL_IMMUTABLE:
-@@ -455,6 +475,13 @@ int ima_appraise_measurement(enum ima_hooks func,
- 	     rc == -ENOKEY))
- 		rc = modsig_verify(func, modsig, &status, &cause);
- 
-+	if (!xattr_value && !try_modsig && (file_actions || metadata_actions)) {
-+		status = INTEGRITY_PASS;
-+
-+		if ((file_modifiers & (1 << COMPACT_MOD_IMMUTABLE)) ||
-+		    (metadata_modifiers & (1 << COMPACT_MOD_IMMUTABLE)))
-+			set_bit(IMA_DIGSIG, &iint->atomic_flags);
-+	}
- out:
- 	/*
- 	 * File signatures on some filesystems can not be properly verified.
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 7add0e70f67a..7a9a2392d49c 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -416,7 +416,11 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 			inode_lock(inode);
- 			rc = ima_appraise_measurement(func, iint, file,
- 						      pathname, xattr_value,
--						      xattr_len, modsig);
-+						      xattr_len, modsig,
-+						      file_modifiers,
-+						      file_actions,
-+						      metadata_modifiers,
-+						      metadata_actions);
- 			inode_unlock(inode);
- 		}
- 		if (!rc)
--- 
-2.32.0
+Actually what I want to discuss with you is about my personal issue
+concern funds my late father deposited in a bank outside my country,
+worth $4.5 million united state dollars. i need your assistance to
+receive and invest this funds in your country.
 
+Please help me, I am sincere to you and I want to be member of your
+family as well if you wouldn't mind to accept me and lead me to better
+future in your country.
+
+All the documents the bank issue to my father during time of deposit
+is with me now.
+I already notify the bank on phone about the death of my father and
+they are surprise for the news and accept that my father is their good
+customer.
+I will be happy if this money can be invested in any business of your
+choice and it will be under your control till i finished my education,
+also I'm assuring you good relationship and I am ready to discuss the
+amount of money to give you from this money for your help.
+
+Therefore, I shall give you the bank contact and other necessary
+information in my next email if you will only promise me that you will
+not/never betray and disclosed this matter to anybody, because, this
+money is the only hope i have for survival on earth since I have lost
+my parents.
+
+Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
+CERTIFICATE here with me, but before I give you further information, i
+will like to know your full data
+
+1. Full Name: ........................
+2. Address: ..................
+3. Nationality: ........... Sex................
+4. Age:........... Date of Birth:................
+5. Occupation:...................
+.....
+6. Phone: ........... Fax:.........................
+7. State of Origin: .......Country:..............
+8. Occupation:...................
+................
+9. Marital status........... E-mail address's: ............
+10. Scan copy of your ID card or Driving License/Photo:............
+DECLARATION:
+
+so that i will be fully sure that i am not trusting the wrong person.
+and it will also give me the mind to send you the bank contact for you
+to communicate with them for more verification about this money. and
+to know you more better.
+
+Meanwhile, you can reach me through my pastor,his name is Pastor Paul
+any time you call, tell him that you want to speak with me because
+right now i am living in the church here in Burkina faso and i don't
+want to stay here any longer,
+send for me to speak with you his phone number is this(+226 75213646)
+
+I will stop here and i will be waiting for your reply and feel free
+ask any thing you want to know about me.
+Please help me, I would be highly appreciated
+Have nice day.
+From Irene
