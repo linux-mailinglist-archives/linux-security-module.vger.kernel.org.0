@@ -2,72 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6068430B50
-	for <lists+linux-security-module@lfdr.de>; Sun, 17 Oct 2021 19:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9FC430DE5
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 Oct 2021 04:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241176AbhJQRz5 (ORCPT
+        id S243148AbhJRCkW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 17 Oct 2021 13:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbhJQRz4 (ORCPT
+        Sun, 17 Oct 2021 22:40:22 -0400
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:41685 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238675AbhJRCkU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 17 Oct 2021 13:55:56 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7A5C061765
-        for <linux-security-module@vger.kernel.org>; Sun, 17 Oct 2021 10:53:46 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id l7so13456148qkk.0
-        for <linux-security-module@vger.kernel.org>; Sun, 17 Oct 2021 10:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=fWbRtmwSvpw1bfC84j16Ls4FeCWDLyhXIFPNaloLQIk=;
-        b=Xg4B6OmLjSlQEg6NcRNZlWH20DlOOKx6JihSJ1qJj8dlCVGCA5H9rUkGWn4f1Ds7Pz
-         c663Y8NkZumHkC9pee4GSaaJ7BH13UyDMPEO+dMUPxGZ5ZA7vSteEmOk0wQvoCJrHyGx
-         KETPJDbGaHV40sIg//1v4GXHvi3Mp9tCcYDSfm9eKRwb0WERXGmEf5nK21CX4Nq+kGww
-         I72ahlIOM1mAdARjbVtSUCjFZajicSmFYHHKBykD2po8NXW8bUEuossQ4D8S55T/4CNf
-         e+omQUwozYW7C5BK9pl+dpJ8GAzsqltB+qfjls2S9+7Rrs76wBMyNVul8aI2Cl6kBI2H
-         kd+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=fWbRtmwSvpw1bfC84j16Ls4FeCWDLyhXIFPNaloLQIk=;
-        b=dYFws2hf1G0b+hgKsPNYT/IQtQ8fdIatAirEyrD1WEh/JlfwHO5U/u85dd7O1M5sVa
-         PfHWoM6Oc9mzD8Olt/EnrabHGyOJDPbTmk6mcgU0NcARRe5ITsxsDRSZw5TM4HkrZcSX
-         OwxGKXBKrX2CXY4l4e9/dXsHH3W8A7UcMYNZwy9JTl6sKNI7EULeC4tZshyMzhP+uP4V
-         Vf1ZGSiFWUBuP2hiTJq3Br+BCpItzKwaWF47HRuaud9cdw2zoNhrBDkrOyfGWCUNctGQ
-         kVEmJ1VFcISUNlrDy6StpHC+Y+dU7BwL4x3mwo4aPIRR2o7BH0wO9lf9IpmgSmpUPWir
-         hvcQ==
-X-Gm-Message-State: AOAM530vlO8FD2JbBPpOAugB0BCfhuqmF9GupxFc1OU+GmAG1urdxqwj
-        4WCaHLrfAgsJ3VQZn6Uhsl2XSExyJybkjBHpllE=
-X-Google-Smtp-Source: ABdhPJzHXLyJhVZSvpBhAesFHMD4XP/bNMDBO2B5FuZTaRJuSifsnbifmprH/g9irf7TlzjnBR9OexrgTWXseMG4N8o=
-X-Received: by 2002:a37:9781:: with SMTP id z123mr19073106qkd.140.1634493225664;
- Sun, 17 Oct 2021 10:53:45 -0700 (PDT)
+        Sun, 17 Oct 2021 22:40:20 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0UsUNe6S_1634524684;
+Received: from 30.240.100.200(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UsUNe6S_1634524684)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 18 Oct 2021 10:38:06 +0800
+Message-ID: <5b0bc02a-eeb5-9d86-852b-d3041f3c6286@linux.alibaba.com>
+Date:   Mon, 18 Oct 2021 10:37:56 +0800
 MIME-Version: 1.0
-Received: by 2002:a0c:ef82:0:0:0:0:0 with HTTP; Sun, 17 Oct 2021 10:53:45
- -0700 (PDT)
-Reply-To: mariehamidou0@gmail.com
-From:   MARIE Hamidou <koumbousilatifa@gmail.com>
-Date:   Sun, 17 Oct 2021 19:53:45 +0200
-Message-ID: <CAMp7NG0cWFrkVX2sgzLX4jNwsfm7K6OyD3zqHQa6nshPg-aTdg@mail.gmail.com>
-Subject: Urgent,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.0
+Subject: Re: [PATCH 2/2] tpm: use SM3 instead of SM3_256
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20211009130828.101396-1-tianjia.zhang@linux.alibaba.com>
+ <20211009130828.101396-3-tianjia.zhang@linux.alibaba.com>
+ <c6c2337ed83c237f70716cb4c62794d1d3da31f2.camel@kernel.org>
+ <5db32f21-1df7-c92e-42a1-a2a85b29dfbf@linux.alibaba.com>
+ <31d49f7785dd82fd2f0c1078c9a94153e3c389ac.camel@kernel.org>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <31d49f7785dd82fd2f0c1078c9a94153e3c389ac.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Urgent,
+Hi Jarkko,
 
-I need your assistance to validate your name in our Bank System to
-enable the Bank transfer the sum of $ 3.5 million Dollars, into your
-nominated bank account to your account for onward investment,
+On 10/15/21 11:19 PM, Jarkko Sakkinen wrote:
+> On Thu, 2021-10-14 at 17:46 +0800, Tianjia Zhang wrote:
+>> Hi Jarkko,
+>>
+>> On 10/12/21 11:21 PM, Jarkko Sakkinen wrote:
+>>> On Sat, 2021-10-09 at 21:08 +0800, Tianjia Zhang wrote:
+>>>> According to https://tools.ietf.org/id/draft-oscca-cfrg-sm3-01.html,
+>>>> SM3 always produces a 256-bit hash value and there are no plans for
+>>>> other length development, so there is no ambiguity in the name of sm3.
+>>>>
+>>>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>>>
+>>> This is not enough to make any changes because the commit message
+>>> does not describe what goes wrong if we keep it as it was.
+>>>
+>>> /Jarkko
+>>>
+>>
+>> This did not cause an error, just to use a more standard algorithm name.
+>> If it is possible to use the SM3 name instead of SM3_256 if it can be
+>> specified from the source, it is of course better. I have contacted the
+>> trustedcomputinggroup and have not yet received a reply.
+>>
+>> Best regards,
+>> Tianjia
+> 
+> Why don't you then create a patch set that fully removes SM3_256, if it
+> is incorrect?
+> 
+> This looks a bit half-baked patch set.
+> 
+> /Jarkko
+> 
 
-or any profitable business in your country and you will take 50% of
-the total  fund , for your assistance.To commence this transaction,  I
-require you to immediately indicate your interest by a return mail for
-more details,
+This series of patch is a complete replacement. Patch 1 is a replacement 
+of the crypto subsystem, and patch 2 is a replacement of the tpm driver.
 
-Thanks for your anticipated co-operation.
-Best regards.
-Ms.MARIE Hamidou
+Best regards,
+Tianjia
