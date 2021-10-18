@@ -2,109 +2,80 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FCD431E5F
-	for <lists+linux-security-module@lfdr.de>; Mon, 18 Oct 2021 15:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5689D432288
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 Oct 2021 17:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbhJROAj (ORCPT
+        id S232791AbhJRPT4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 18 Oct 2021 10:00:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38242 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234664AbhJRN63 (ORCPT
+        Mon, 18 Oct 2021 11:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232785AbhJRPTw (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 18 Oct 2021 09:58:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BAF7F61A40;
-        Mon, 18 Oct 2021 13:41:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634564489;
-        bh=iyQNCJw3F2btWylGkoSsJbiuAqzwxr7VZp84T8arEwk=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=Muk1xW0O5fPkNs1SObNldVoKqidRwndzDDCkNEC0B0lO2IyZKUCtY8K+mMfUuaYZd
-         cL0KbWMGwXTcZritJ7+AqX/i/Slq2vQ3TFT8qH4dnzifxwAlHnTB0R7fXbt/9Ydo6o
-         R6TW5vdR2I6vipcf13Wm9iIo7VWkS1eEmHIv3H14gJR2CmDKO2uFtJ4JYn5d5YXnpq
-         vEb7U3LYwRzjycvD69cavPuejBiYJODJwHhnF1zOLy2p7gCguIkj9PfbV2Ef/Rzk88
-         Ktx6XBGnB9cYIhgCbMozT4+fkladPBDQqNT0gUOFJuK42Tvn0S19FEBuRX06p0kTdR
-         7iRo20kZTREzw==
-Message-ID: <41aba1e1c5849b58f83108eb9f9f115d0cd5826f.camel@kernel.org>
-Subject: Re: [PATCH 1/2] crypto: use SM3 instead of SM3_256
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     jejb@linux.ibm.com,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Mon, 18 Oct 2021 16:41:26 +0300
-In-Reply-To: <af8c2098c4cfe23b941a191f7b4ec0e3a5251760.camel@linux.ibm.com>
-References: <20211009130828.101396-1-tianjia.zhang@linux.alibaba.com>
-         <20211009130828.101396-2-tianjia.zhang@linux.alibaba.com>
-         <7035153d58e220473fe3cd17c9f574f2d91c740b.camel@linux.ibm.com>
-         <dbac037710d711959d5ce0969f80ea0dd18a176e.camel@kernel.org>
-         <af8c2098c4cfe23b941a191f7b4ec0e3a5251760.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.40.0-1 
+        Mon, 18 Oct 2021 11:19:52 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B6EC06176A
+        for <linux-security-module@vger.kernel.org>; Mon, 18 Oct 2021 08:17:38 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id e2so4442682uax.7
+        for <linux-security-module@vger.kernel.org>; Mon, 18 Oct 2021 08:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=2Y8NayuLnfX3GwLkDMn7ZTyD7RtMsOyjIifS8+INynY=;
+        b=fIL3CMvlAAWryIgO72N8vNJvnlNFFagyPsEe2rwq4hFFSphyjCkzugTx5YWhjw0xvG
+         tkYmv/okVirY6EPKePKy8Zw97KG2cxt6wQTpLUHx2aQG8lHlaWI4exJaUzWixo/byOx8
+         tCZsV8RmZLPBAREZkJnGvo+97PbriWJHSDuAQjvclTx1Aqa1oaY3GAy75PAeDgcOiN+c
+         cUPBy/wZd6z58pPSY5CXK1VFPoQwIQITX5ST3C0ed6G4fDvu1Gb4ei+RtIsS18csG+p3
+         zMXZAsuLX+m8AtVV1TpKQe+pnfSfzsbwDRW1n37/1bHJE57FLEI1KMwPWX+7egQ5mOZK
+         ra7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=2Y8NayuLnfX3GwLkDMn7ZTyD7RtMsOyjIifS8+INynY=;
+        b=KUURs7SPSf4qbe+9p/pydL9BgRGuo+tDjDTno+QhVd0Yy62mm6Z8KC6S0QC58S/8Bs
+         Nab0ECfhli8LAYQIp9RL9HS7WJ8SFeIuFvlCnxjCKyBn+tcxoc9dFV/vAPqdIju939fE
+         kGJUii4RKaWb9dWtG22zOwp9BzBnaFjkSThNglCprSOlIIG3x5QFN+r/TcDCEzXFDLcI
+         +Rk/+WXIswZK8YAbUQq7TMhlqwCm/Qu3Zcln4LsIndx/3A1xWJCWsrAsgtSkm8e2fjLm
+         FfVFYgvaw+PQ/GZK+LsBa6rslKzH1xpU4XWBM4aWlT9YEdqdYX/5YVOGmCd4JCMiNk29
+         TRQw==
+X-Gm-Message-State: AOAM530jbWo4v7BrKaUNkXpFt+qfWgV3M8WijoRAoKADQD/24c9+2uA3
+        3gwFmuPs3ZPDQ+sWWa40p6A60eAEqBTGtLym3Ao=
+X-Google-Smtp-Source: ABdhPJyty9rbPv8UL46flq3Kn1OHrkADsnV0N5XREMQhdDhtHpie3+8B8e+wGUvDkU3cM3g4pR+NaD8oQgrbndLRw6I=
+X-Received: by 2002:a67:d38e:: with SMTP id b14mr28403750vsj.34.1634570257912;
+ Mon, 18 Oct 2021 08:17:37 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a67:cb08:0:0:0:0:0 with HTTP; Mon, 18 Oct 2021 08:17:37
+ -0700 (PDT)
+Reply-To: mrsaishag45@gmail.com
+From:   Mrs Aisha Al-Qaddafi <faridafarah924@gmail.com>
+Date:   Mon, 18 Oct 2021 08:17:37 -0700
+Message-ID: <CAJAEg+sp5YL5mUYnqF2rUVDS3gzsOTdY=wPsKp89nC3YRg-bMA@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, 2021-10-18 at 09:32 -0400, James Bottomley wrote:
-> On Mon, 2021-10-18 at 16:27 +0300, Jarkko Sakkinen wrote:
-> > On Mon, 2021-10-18 at 09:05 -0400, James Bottomley wrote:
-> > > On Sat, 2021-10-09 at 21:08 +0800, Tianjia Zhang wrote:
-> > > [...]
-> > > > diff --git a/include/uapi/linux/hash_info.h
-> > > > b/include/uapi/linux/hash_info.h
-> > > > index 74a8609fcb4d..1355525dd4aa 100644
-> > > > --- a/include/uapi/linux/hash_info.h
-> > > > +++ b/include/uapi/linux/hash_info.h
-> > > > @@ -32,7 +32,7 @@ enum hash_algo {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_TGR_128,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_TGR_160,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_TGR_192,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_SM3_256,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_SM3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_STREEBOG_256,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_STREEBOG_512,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO__LAST
-> > >=20
-> > > This is another one you can't do: all headers in UAPI are exports
-> > > to userspace and the definitions constitute an ABI.=C2=A0 If you simp=
-ly
-> > > do a rename, every userspace program that uses the current
-> > > definition will immediately break on compile.=C2=A0 You could add
-> > > HASH_ALGO_SM3, but you can't remove HASH_ALGO_SM3_256
-> > >=20
-> > > James
-> >=20
-> > So: shouldn't then also the old symbol continue to work also
-> > semantically?
->=20
-> Yes, that's the point: you can add a new definition ... in this case an
-> alias for the old one, but you can't remove a definition that's been
-> previously exported.
+Dear Friend,
 
-Thanks, this of course obvious :-) I forgot temporarily that crypto
-has uapi interface. Tianjia, this patch set break production systems,
-so no chance we would ever merge it in this form.
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children.
 
-Why not just do this:
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
 
-...
-HASH_ALGO_SM3_256,
-HASH_ALOG_SM3 =3D HASH_ALOG_SM_256,
-...
+I am willing to negotiate an investment/business profit sharing ratio
+with you based on the future investment earning profits.
 
-There is not good reason to mod the implementation because both symbols
-are kept.
-
-/Jarkko
+If you are willing to handle this project on my behalf kindly reply
+urgently to enable me to provide you more information about the
+investment funds.
+Best Regards
+Mrs Aisha Al-Qaddafi
