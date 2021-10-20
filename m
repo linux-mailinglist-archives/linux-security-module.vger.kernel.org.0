@@ -2,178 +2,100 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D405F434EA3
-	for <lists+linux-security-module@lfdr.de>; Wed, 20 Oct 2021 17:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A942435164
+	for <lists+linux-security-module@lfdr.de>; Wed, 20 Oct 2021 19:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbhJTPK5 (ORCPT
+        id S230440AbhJTRiN (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 20 Oct 2021 11:10:57 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4010 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbhJTPK4 (ORCPT
+        Wed, 20 Oct 2021 13:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230395AbhJTRiL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 20 Oct 2021 11:10:56 -0400
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HZDRj3tffz67Xsj;
-        Wed, 20 Oct 2021 23:04:49 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Wed, 20 Oct 2021 17:08:39 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.015;
- Wed, 20 Oct 2021 17:08:39 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: RE: [RFC PATCH v7 12/16] fsverity|security: add security hooks to
- fsverity digest and signature
-Thread-Topic: [RFC PATCH v7 12/16] fsverity|security: add security hooks to
- fsverity digest and signature
-Thread-Index: AQHXwGWUN6BqcPCg3Uma5jdt5usPz6vRLYAAgAMlHYCAAAy0gIAHoD6w
-Date:   Wed, 20 Oct 2021 15:08:39 +0000
-Message-ID: <5c1f800ba554485cb3659da689d2079a@huawei.com>
-References: <1634151995-16266-1-git-send-email-deven.desai@linux.microsoft.com>
- <1634151995-16266-13-git-send-email-deven.desai@linux.microsoft.com>
- <YWcyYBuNppjrVOe2@gmail.com>
- <9089bdb0-b28a-9fa0-c510-00fa275af621@linux.microsoft.com>
- <YWngaVdvMyWBlITZ@gmail.com>
-In-Reply-To: <YWngaVdvMyWBlITZ@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 20 Oct 2021 13:38:11 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E47C061765
+        for <linux-security-module@vger.kernel.org>; Wed, 20 Oct 2021 10:35:57 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so2947470pjb.4
+        for <linux-security-module@vger.kernel.org>; Wed, 20 Oct 2021 10:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZU0CzHjZqgy6QBSitXFMa80Tv4uRu9MQakGYwJwWt/U=;
+        b=c6/cMfcgmDu7wrlCQvkpDnTEMcB3eyHmy62eHknNhqrmqzlwOZwdWcXSX9tRwwE3op
+         fP2y06G96MaP2Ka2jb/Rn6u9NmzO7uLEN6qF27gCbesZmxDI2NHrgFQBks3jAUr/nZAu
+         JK4SGunKgL1rU6EcSiEGGAJZlSsVfQLBQ/tWM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZU0CzHjZqgy6QBSitXFMa80Tv4uRu9MQakGYwJwWt/U=;
+        b=7OQPW9viHomXLaRtb9b/0QAth+NGK+cbbbxvxK/lD0SAfB/pJg+22xm4L7yFvVOTRQ
+         hfBV7o9qbu2SYRNjzk2hiUoqsi3+y8/52U2+UE/6Lt/dGuqZra+e1OzAOUJel13Mw9CV
+         5SdbM5hlKNLL6kRg6jzISDMaYuAMw27iUx2dRyNPaZrISqNlU+dGP9aROWjrthFdjtzS
+         5FEp64oK/swkGYOg5EKTn4CLiQEoP/7XrmiMbdDnwXw/rsFDDFc/XGGqKKc6AM5wLYBe
+         9u+vCC2vLBaK5C9MzBnnu43sEdrr+8esYScztd1wVHXzSdBtcw2yY8bgRVD+qBAUAd1y
+         LxdQ==
+X-Gm-Message-State: AOAM532bcDF2hU88oObwB2QGAH71gQ6SI76yINsiiy1b0OCly9iLub29
+        i8kgB2jODn6mDbiOTg3h9wvwlA==
+X-Google-Smtp-Source: ABdhPJwxjmhxwtVVhnG5Cb8sIy1txSJ6l+QOFPga02mOtLur2dPGRmtusTkXH+R+HEi53dWe8AXdEg==
+X-Received: by 2002:a17:90b:193:: with SMTP id t19mr379663pjs.95.1634751356548;
+        Wed, 20 Oct 2021 10:35:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id np17sm7409475pjb.7.2021.10.20.10.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Oct 2021 10:35:56 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Dan Li <ashimida@linux.alibaba.com>, ardb@kernel.org,
+        ojeda@kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 0/2] gcc-plugins: Explicitly document purpose and deprecation schedule
+Date:   Wed, 20 Oct 2021 10:35:52 -0700
+Message-Id: <20211020173554.38122-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-Developer-Signature: v=1; a=openpgp-sha256; l=888; h=from:subject; bh=rdx4CuMikFQKdDYacNmYRAtQ562gbZptpLcWVVcwDAE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhcFN5/5kSB2NJMC2aEHhmi3yPJdBz+zDw+3m8KEeg m983EFKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYXBTeQAKCRCJcvTf3G3AJqwKD/ 9khEyOKqNaPmZpfVsYUuLt2y7ALxocah3HA2haUyFnlB81apI0SsajBZi6tgC082BM5qHGYqI8afAm Bg81+ba4xE49vEKcGRspCo6Ij9jeh3qQ6FcVd7dntdxA7LL0ekxsNoUAlA35Z3+OxIMf7TdJpJABf3 vFXZT7+1t+dLVniAlFofflTQm/XHHrtCQNR5fPXf2SODdkIf/x96d7bpN8i41dEskVhxkr5Kdv1qyZ tvn13GszbxhF2LXKCaMrFOR26zL+U10R3KIM/jJ6BeWrEXL9pnmJKwFubiRrM8KtcUZaE8w3er6AMe +Nh8V6KZYhrG1oDWiInARmtvNqXaxeegCVWj8OmwNgqAONjNd6W1hsb+8NFdpbA2zYplorO411l8rI 7HWi0FOrNKWCM1n3Y+JlXltxyhouc1ylTtAo0gWndrpaUnpBrkCato8gNL+9AQ602oIJGLhxLTfJwc tIq41BEDdUjXHnUp8r4mAl4H+GaEA5ob/aoZ0Eina3L58wnCbb4yKe8OmaF0y1qXxrxXUXKM89Hc6G cewD2LImYRLJ/oCcFEBnIRCu1GFnbcdlq5RY9gnCNfIQNQeutoZkLO7iYI2cB5sh/cBkGi99+RaxQ4 y76eOiibdFC6dmg0NuvgbQ1lLPH/6o/hseGJ49cqX6tC25gQpPQJawR5i2fA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-PiBGcm9tOiBFcmljIEJpZ2dlcnMgW21haWx0bzplYmlnZ2Vyc0BrZXJuZWwub3JnXQ0KPiBTZW50
-OiBGcmlkYXksIE9jdG9iZXIgMTUsIDIwMjEgMTA6MTEgUE0NCj4gT24gRnJpLCBPY3QgMTUsIDIw
-MjEgYXQgMTI6MjU6NTNQTSAtMDcwMCwgRGV2ZW4gQm93ZXJzIHdyb3RlOg0KPiA+DQo+ID4gT24g
-MTAvMTMvMjAyMSAxMjoyNCBQTSwgRXJpYyBCaWdnZXJzIHdyb3RlOg0KPiA+ID4gT24gV2VkLCBP
-Y3QgMTMsIDIwMjEgYXQgMTI6MDY6MzFQTSAtMDcwMCwNCj4gZGV2ZW4uZGVzYWlAbGludXgubWlj
-cm9zb2Z0LmNvbSB3cm90ZToNCj4gPiA+ID4gRnJvbTogRmFuIFd1IDx3dWZhbkBsaW51eC5taWNy
-b3NvZnQuY29tPg0KPiA+ID4gPg0KPiA+ID4gPiBBZGQgc2VjdXJpdHlfaW5vZGVfc2V0c2VjdXJp
-dHkgdG8gZnN2ZXJpdHkgc2lnbmF0dXJlIHZlcmlmaWNhdGlvbi4NCj4gPiA+ID4gVGhpcyBjYW4g
-bGV0IExTTXMgc2F2ZSB0aGUgc2lnbmF0dXJlIGRhdGEgYW5kIGRpZ2VzdCBoYXNoZXMgcHJvdmlk
-ZWQNCj4gPiA+ID4gYnkgZnN2ZXJpdHkuDQo+ID4gPiBDYW4geW91IGVsYWJvcmF0ZSBvbiB3aHkg
-TFNNcyBuZWVkIHRoaXMgaW5mb3JtYXRpb24/DQo+ID4NCj4gPiBUaGUgcHJvcG9zZWQgTFNNIChJ
-UEUpIG9mIHRoaXMgc2VyaWVzIHdpbGwgYmUgdGhlIG9ubHkgb25lIHRvIG5lZWQNCj4gPiB0aGlz
-IGluZm9ybWF0aW9uIGF0IHRoZcKgIG1vbWVudC4gSVBF4oCZcyBnb2FsIGlzIHRvIGhhdmUgcHJv
-dmlkZQ0KPiA+IHRydXN0LWJhc2VkIGFjY2VzcyBjb250cm9sLiBUcnVzdCBhbmQgSW50ZWdyaXR5
-IGFyZSB0aWVkIHRvZ2V0aGVyLA0KPiA+IGFzIHlvdSBjYW5ub3QgcHJvdmUgdHJ1c3Qgd2l0aG91
-dCBwcm92aW5nIGludGVncml0eS4NCj4gDQo+IEkgdGhpbmsgeW91IG1lYW4gYXV0aGVudGljaXR5
-LCBub3QgaW50ZWdyaXR5Pw0KPiANCj4gQWxzbyBob3cgZG9lcyB0aGlzIGRpZmZlciBmcm9tIElN
-QT8gIEkga25vdyB0aGF0IElNQSBkb2Vzbid0IHN1cHBvcnQgZnMtdmVyaXR5DQo+IGZpbGUgaGFz
-aGVzLCBidXQgdGhhdCBjb3VsZCBiZSBjaGFuZ2VkLiAgV2h5IG5vdCBleHRlbmQgSU1BIHRvIGNv
-dmVyIHlvdXIgdXNlDQo+IGNhc2Uocyk/DQo+IA0KPiA+IElQRSBuZWVkcyB0aGUgZGlnZXN0IGlu
-Zm9ybWF0aW9uIHRvIGJlIGFibGUgdG8gY29tcGFyZSBhIGRpZ2VzdA0KPiA+IHByb3ZpZGVkIGJ5
-IHRoZSBwb2xpY3kgYXV0aG9yLCBhZ2FpbnN0IHRoZSBkaWdlc3QgY2FsY3VsYXRlZCBieQ0KPiA+
-IGZzdmVyaXR5IHRvIG1ha2UgYSBkZWNpc2lvbiBvbiB3aGV0aGVyIHRoYXQgc3BlY2lmaWMgZmls
-ZSwgcmVwcmVzZW50ZWQNCj4gPiBieSB0aGUgZGlnZXN0IGlzIGF1dGhvcml6ZWQgZm9yIHRoZSBh
-Y3Rpb25zIHNwZWNpZmllZCBpbiB0aGUgcG9saWN5Lg0KPiA+DQo+ID4gQSBtb3JlIGNvbmNyZXRl
-IGV4YW1wbGUsIGlmIGFuIElQRSBwb2xpY3kgYXV0aG9yIHdyaXRlczoNCj4gPg0KPiA+IMKgwqDC
-oCBvcD1FWEVDVVRFIGZzdmVyaXR5X2RpZ2VzdD08SGV4RGlnZXN0ID4gYWN0aW9uPURFTlkNCj4g
-Pg0KPiA+IElQRSB0YWtlcyB0aGUgZGlnZXN0IHByb3ZpZGVkIGJ5IHRoaXMgc2VjdXJpdHkgaG9v
-aywgc3RvcmVzIGl0DQo+ID4gaW4gSVBFJ3Mgc2VjdXJpdHkgYmxvYiBvbiB0aGUgaW5vZGUuIElm
-IHRoaXMgZmlsZSBpcyBsYXRlcg0KPiA+IGV4ZWN1dGVkLCBJUEUgY29tcGFyZXMgdGhlIGRpZ2Vz
-dCBzdG9yZWQgaW4gdGhlIExTTSBibG9iLA0KPiA+IHByb3ZpZGVkIGJ5IHRoaXMgaG9vaywgYWdh
-aW5zdCA8SGV4RGlnZXN0PiBpbiB0aGUgcG9saWN5LCBpZg0KPiA+IGl0IG1hdGNoZXMsIGl0IGRl
-bmllcyB0aGUgYWNjZXNzLCBwZXJmb3JtaW5nIGEgcmV2b2NhdGlvbg0KPiA+IG9mIHRoYXQgZmls
-ZS4NCj4gDQo+IERvIHlvdSBoYXZlIGEgYmV0dGVyIGV4YW1wbGU/ICBUaGlzIG9uZSBpcyBwcmV0
-dHkgdXNlbGVzcyBzaW5jZSBvbmUgY2FuIGdldA0KPiBhcm91bmQgaXQganVzdCBieSBleGVjdXRp
-bmcgYSBmaWxlIHRoYXQgZG9lc24ndCBoYXZlIGZzLXZlcml0eSBlbmFibGVkLg0KDQpJIHdhcyB3
-b25kZXJpbmcgaWYgdGhlIGZvbGxvd2luZyB1c2UgY2FzZSBjYW4gYmUgc3VwcG9ydGVkOg0KYWxs
-b3cgdGhlIGV4ZWN1dGlvbiBvZiBmaWxlcyBwcm90ZWN0ZWQgd2l0aCBmc3Zlcml0eSBpZiB0aGUg
-cm9vdA0KZGlnZXN0IGlzIGZvdW5kIGFtb25nIHJlZmVyZW5jZSB2YWx1ZXMgKGluc3RlYWQgb2Yg
-cHJvdmlkaW5nDQp0aGVtIG9uZSBieSBvbmUgaW4gdGhlIHBvbGljeSkuDQoNClNvbWV0aGluZyBs
-aWtlOg0KDQpvcD1FWEVDVVRFIGZzdmVyaXR5X2RpZ2VzdD1kaWdsaW0gYWN0aW9uPUFMTE9XDQoN
-CkRJR0xJTSBpcyBhIGNvbXBvbmVudCBJJ20gd29ya2luZyBvbiB0aGF0IGdlbmVyaWNhbGx5DQpz
-dG9yZXMgZGlnZXN0cy4gVGhlIGN1cnJlbnQgdXNlIGNhc2UgaXMgdG8gc3RvcmUgZmlsZSBkaWdl
-c3RzDQpmcm9tIFJQTVRBR19GSUxFRElHRVNUUyBhbmQgdXNlIHRoZW0gd2l0aCBJTUEsIGJ1dA0K
-dGhlIGZzdmVyaXR5IHVzZSBjYXNlIGNvdWxkIGJlIGVhc2lseSBzdXBwb3J0ZWQgKGlmIHRoZSBy
-b290DQpkaWdlc3QgaXMgc3RvcmVkIGluIHRoZSBSUE0gaGVhZGVyKS4NCg0KRElHTElNIGFsc28g
-dGVsbHMgd2hldGhlciBvciBub3QgdGhlIHNpZ25hdHVyZSBvZiB0aGUgc291cmNlDQpjb250YWlu
-aW5nIGZpbGUgZGlnZXN0cyAob3IgZnN2ZXJpdHkgZGlnZXN0cykgaXMgdmFsaWQgKHRoZSBzaWdu
-YXR1cmUNCm9mIHRoZSBSUE0gaGVhZGVyIGlzIHRha2VuIGZyb20gUlBNVEFHX1JTQUhFQURFUiku
-DQoNClRoZSBtZW1vcnkgb2NjdXBhdGlvbiBpcyByZWxhdGl2ZWx5IHNtYWxsIGZvciBleGVjdXRh
-Ymxlcw0KYW5kIHNoYXJlZCBsaWJyYXJpZXMuIEkgcHVibGlzaGVkIGEgZGVtbyBmb3IgRmVkb3Jh
-IGFuZA0Kb3BlblNVU0Ugc29tZSB0aW1lIGFnbzoNCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
-bGludXgtaW50ZWdyaXR5LzQ4Y2Q3MzdjNTA0ZDQ1MjA4Mzc3ZGFhMjdkNjI1NTMxQGh1YXdlaS5j
-b20vDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRv
-cmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgWmhvbmcgUm9u
-Z2h1YQ0KDQo+ID4gVGhpcyBicmluZ3MgbWUgdG8geW91ciBuZXh0IGNvbW1lbnQ6DQo+ID4NCj4g
-PiA+IFRoZSBkaWdlc3QgaXNuJ3QgbWVhbmluZ2Z1bCB3aXRob3V0IGtub3dpbmcgdGhlIGhhc2gg
-YWxnb3JpdGhtIGl0IHVzZXMuDQo+ID4gSXQncyBhdmFpbGFibGUgaGVyZSwgYnV0IHlvdSBhcmVu
-J3QgcGFzc2luZyBpdCB0byB0aGlzIGZ1bmN0aW9uLg0KPiA+DQo+ID4gVGhlIGRpZ2VzdCBpcyBt
-ZWFuaW5nZnVsIHdpdGhvdXQgdGhlIGFsZ29yaXRobSBpbiB0aGlzIGNhc2UuDQo+IA0KPiBObywg
-aXQncyBub3QuDQo+IA0KPiBEaWdlc3RzIGFyZSBtZWFuaW5nbGVzcyB3aXRob3V0IGtub3dpbmcg
-d2hhdCBhbGdvcml0aG0gdGhleSB3ZXJlIGNyZWF0ZWQNCj4gd2l0aC4NCj4gDQo+IElmIHlvdXIg
-c2VjdXJpdHkgcG9saWN5IGlzIHNvbWV0aGluZyBsaWtlICJUcnVzdCB0aGUgZmlsZSB3aXRoIGRp
-Z2VzdCAkZm9vIiBhbmQNCj4gbXVsdGlwbGUgaGFzaCBhbGdvcml0aG1zIGFyZSBwb3NzaWJsZSwg
-dGhlbiB0aGUgYWxvcml0aG0gaW50ZW5kZWQgdG8gYmUgdXNlZA0KPiBuZWVkcyB0byBiZSBleHBs
-aWNpdGx5IHNwZWNpZmllZC4gIE90aGVyd2lzZSBhbnkgYWxnb3JpdGhtIHdpdGggdGhlIHNhbWUg
-bGVuZ3RoDQo+IGRpZ2VzdCB3aWxsIGJlIGFjY2VwdGVkLiAgVGhhdCdzIGEgZmF0YWwgZmxhdyBp
-ZiBhbnkgb2YgdGhlc2UgYWxnb3JpdGhtcyBpcw0KPiBjcnlwdG9ncmFwaGljYWxseSBicm9rZW4g
-b3Igd2FzIG5ldmVyIGludGVuZGVkIHRvIGJlIGEgY3J5cHRvZ3JhcGhpYyBhbGdvcml0aG0NCj4g
-aW4gdGhlIGZpcnN0IHBsYWNlIChlLmcuLCBhIG5vbi1jcnlwdG9ncmFwaGljIGNoZWNrc3VtKS4N
-Cj4gDQo+IENyeXB0b3N5c3RlbXMgYWx3YXlzIG5lZWQgdG8gc3BlY2lmeSB0aGUgY3J5cHRvIGFs
-Z29yaXRobShzKSB1c2VkOyB0aGUNCj4gYWR2ZXJzYXJ5DQo+IG11c3Qgbm90IGJlIGFsbG93ZWQg
-dG8gY2hvb3NlIHRoZSBhbGdvcml0aG1zLg0KPiANCj4gSSdtIG5vdCBzdXJlIGhvdyB0aGVzZSBw
-YXRjaGVzIGNhbiBiZSB0YWtlbiBzZXJpb3VzbHkgd2hlbiB0aGV5J3JlIGdldHRpbmcgdGhpcw0K
-PiBzb3J0IG9mIHRoaW5nIHdyb25nLg0KPiANCj4gPiA+ID4gKwkJCQkJRlNfVkVSSVRZX1NJR05B
-VFVSRV9TRUNfTkFNRSwNCj4gPiA+ID4gKwkJCQkJc2lnbmF0dXJlLCBzaWdfc2l6ZSwgMCk7DQo+
-ID4gPiBUaGlzIGlzIG9ubHkgZm9yIGZzLXZlcml0eSBidWlsdC1pbiBzaWduYXR1cmVzIHdoaWNo
-IGFyZW4ndCB0aGUgb25seSB3YXkgdG8gZG8NCj4gPiA+IHNpZ25hdHVyZXMgd2l0aCBmcy12ZXJp
-dHkuICBBcmUgeW91IHN1cmUgdGhpcyBpcyB3aGF0IHlvdSdyZSBsb29raW5nIGZvcj8NCj4gPg0K
-PiA+IENvdWxkIHlvdSBlbGFib3JhdGUgb24gdGhlIG90aGVyIHNpZ25hdHVyZSB0eXBlcyB0aGF0
-IGNhbiBiZSB1c2VkDQo+ID4gd2l0aCBmcy12ZXJpdHk/IEnigJltIDk5JSBzdXJlIHRoaXMgaXMg
-d2hhdCBJ4oCZbSBsb29raW5nIGZvciBhcyB0aGlzDQo+ID4gaXMgYSBzaWduYXR1cmUgdmFsaWRh
-dGVkIGluIHRoZSBrZXJuZWwgYWdhaW5zdCB0aGUgZnMtdmVyaXR5IGtleXJpbmcNCj4gPiBhcyBw
-YXJ0IG9mIHRoZSDigJxmc3Zlcml0eSBlbmFibGXigJ0gdXRpbGl0eS4NCj4gPg0KPiA+IEl0J3Mg
-aW1wb3J0YW50IHRoYXQgdGhlIHNpZ25hdHVyZSBpcyB2YWxpZGF0ZWQgaW4gdGhlIGtlcm5lbCwg
-YXMNCj4gPiB1c2Vyc3BhY2UgaXMgY29uc2lkZXJlZCB1bnRydXN0ZWQgdW50aWwgdGhlIHNpZ25h
-dHVyZSBpcyB2YWxpZGF0ZWQNCj4gPiBmb3IgdGhpcyBjYXNlLg0KPiA+DQo+ID4gPiBDYW4geW91
-IGVsYWJvcmF0ZSBvbiB5b3VyIHVzZSBjYXNlIGZvciBmcy12ZXJpdHkgYnVpbHQtaW4gc2lnbmF0
-dXJlcywNCj4gPiBTdXJlLCBzaWduYXR1cmVzLCBsaWtlIGRpZ2VzdHMsIGFsc28gcHJvdmlkZSBh
-IHdheSB0byBwcm92ZSBpbnRlZ3JpdHksDQo+ID4gYW5kIHRoZSB0cnVzdCBjb21wb25lbnQgY29t
-ZXMgZnJvbSB0aGUgdmFsaWRhdGlvbiBhZ2FpbnN0IHRoZSBrZXlyaW5nLA0KPiA+IGFzIG9wcG9z
-ZWQgdG8gYSBmaXhlZCB2YWx1ZSBpbiBJUEXigJlzIHBvbGljeS4gVGhlIHVzZSBjYXNlIGZvciBm
-cy12ZXJpdHkNCj4gPiBidWlsdC1pbiBzaWduYXR1cmVzIGlzIHRoYXQgd2UgaGF2ZSBhIHJ3IGV4
-dDQgZmlsZXN5c3RlbSB0aGF0IGhhcyBzb21lDQo+ID4gZXhlY3V0YWJsZSBmaWxlcywgYW5kIHdl
-IHdhbnQgdG8gaGF2ZSBhIGV4ZWN1dGlvbiBwb2xpY3kgKHRocm91Z2ggSVBFKQ0KPiA+IHRoYXQg
-b25seSBfdHJ1c3RlZF8gZXhlY3V0YWJsZXMgY2FuIHJ1bi4gUGVyZiBpcyBpbXBvcnRhbnQgaGVy
-ZSwgaGVuY2UNCj4gPiBmcy12ZXJpdHkuDQo+IA0KPiBNb3N0IHVzZXJzIG9mIGZzLXZlcml0eSBi
-dWlsdC1pbiBzaWduYXR1cmVzIGhhdmUgYWN0dWFsbHkgYmVlbiBlbmZvcmNpbmcgdGhlaXINCj4g
-c2VjdXJpdHkgcG9saWN5IGluIHVzZXJzcGFjZSwgYnkgY2hlY2tpbmcgd2hldGhlciBzcGVjaWZp
-YyBmaWxlcyBoYXZlIHRoZQ0KPiBmcy12ZXJpdHkgYml0IHNldCBvciBub3QuICBTdWNoIHVzZXJz
-IGNvdWxkIGp1c3Qgc3RvcmUgYW5kIHZlcmlmeSBzaWduYXR1cmVzIGluDQo+IHVzZXJzcGFjZSBp
-bnN0ZWFkLCB3aXRob3V0IGFueSBrZXJuZWwgaW52b2x2ZW1lbnQuICBTbyB0aGF0J3Mgd2hhdCBJ
-J3ZlIGJlZW4NCj4gcmVjb21tZW5kaW5nICh3aXRoIGxpbWl0ZWQgc3VjY2VzcywgdW5mb3J0dW5h
-dGVseSkuDQo+IA0KPiBJZiB5b3UgcmVhbGx5IGRvIG5lZWQgaW4ta2VybmVsIHNpZ25hdHVyZSB2
-ZXJpZmljYXRpb24sIHRoZW4gdGhhdCBtYXkgYmUgYQ0KPiBsZWdpdGltYXRlIHVzZSBjYXNlIGZv
-ciB0aGUgZnMtdmVyaXR5IGJ1aWx0LWluIHNpZ25hdHVyZXMsIGFsdGhvdWdoIEkgZG8gd29uZGVy
-DQo+IHdoeSB5b3UgYXJlbid0IHVzaW5nIElNQSBhbmQgaXRzIHNpZ25hdHVyZSBtZWNoYW5pc20g
-aW5zdGVhZC4NCj4gDQo+IC0gRXJpYw0K
+Hi,
+
+GCC plugins should only exist when some compiler feature needs to be
+proven but does not exist in either GCC nor Clang. For example, if a
+desired feature is already in Clang, it should be added to GCC upstream.
+Document this explicitly.
+
+I'll put this in -next unless there are objections. :)
+
+Thanks!
+
+-Kees
+
+
+Kees Cook (2):
+  gcc-plugins: Explicitly document purpose and deprecation schedule
+  gcc-plugins: Remove cyc_complexity
+
+ Documentation/kbuild/gcc-plugins.rst        | 28 ++++++++-
+ scripts/Makefile.gcc-plugins                |  2 -
+ scripts/gcc-plugins/Kconfig                 | 20 +-----
+ scripts/gcc-plugins/cyc_complexity_plugin.c | 69 ---------------------
+ security/Kconfig.hardening                  |  9 ++-
+ 5 files changed, 34 insertions(+), 94 deletions(-)
+ delete mode 100644 scripts/gcc-plugins/cyc_complexity_plugin.c
+
+-- 
+2.30.2
+
