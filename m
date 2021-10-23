@@ -2,108 +2,92 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FAB4381D8
-	for <lists+linux-security-module@lfdr.de>; Sat, 23 Oct 2021 06:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F86743841D
+	for <lists+linux-security-module@lfdr.de>; Sat, 23 Oct 2021 17:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhJWE1l (ORCPT
+        id S230388AbhJWPpS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 23 Oct 2021 00:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        Sat, 23 Oct 2021 11:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbhJWE1k (ORCPT
+        with ESMTP id S229901AbhJWPpM (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 23 Oct 2021 00:27:40 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363C6C061764;
-        Fri, 22 Oct 2021 21:25:22 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v17so322449wrv.9;
-        Fri, 22 Oct 2021 21:25:22 -0700 (PDT)
+        Sat, 23 Oct 2021 11:45:12 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE1BC06122B
+        for <linux-security-module@vger.kernel.org>; Sat, 23 Oct 2021 08:42:53 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id k7so1264813wrd.13
+        for <linux-security-module@vger.kernel.org>; Sat, 23 Oct 2021 08:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HsNjSpBddSv9tryQ9xzGDNEy8JXQU+rUy/MVLAwbRME=;
-        b=jy5ZcIvP57WomXcMW60VI6TFTDtn3urDh07JqJaXBpHRnZKyXvsmwWkyPhVxDXQD6H
-         7xThGP8oOCU6qLFUU2f0B0iQW/JBKsGbWQ0wKuaAZ12/2jWX7zu9I/EleWssjloJT8WL
-         RE3zOvqMW5p82/Fw5OP68+HQdyVUudVKJDIrKniJ8HMRc0WWVDFRTBDpKVkHEC3w3EA1
-         lTOy3f2DN+0/di7HKrW3zclOW3T0daInduw8dhXdxhCnex07CMzoKF/xEmX500Ar4vaP
-         MUuMMdvAr9gU0Iit/DmHD2kqXmkLZAoyfrpA/xTPL4PFoal2snHTcAt0LKDIoRzo0Qa7
-         3jyg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=AYtLHgTG+6uRU7+ihCnpuOHko6pqohXhhQkkijOFNs1K9R3uZtGzQ5Q1/HW70ikQOH
+         to4qY+MneU8Wp5m/9lAfflx+y719nabfpikWCEUlEWf4TV2mCVtwTqCiU9WBe0/PueVA
+         Ai5uemlRsLruanwKtfzO+GeDcAbGf94MhP9fVYsSthGmJThkp9aXQloZUCc7KpPJDIe5
+         ZDHZUIMzc7AFUI4sZuF8c0yufIwBcSuY8XEdvjlaOTWtthy6nwfYJOAMZizkpVyMjWcI
+         yYcYAJzSYs4KyL2X7l5KUECXBatU7ZxHLxcDM7wHj0/uSurwobyzbl1doBaHD0t2U4Ok
+         8KFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HsNjSpBddSv9tryQ9xzGDNEy8JXQU+rUy/MVLAwbRME=;
-        b=S5ix9MuE0qWTjeVpmufilVdCOt59kXEndQtXIxZczuo86JQNMjUCAuhFT2AGq3xlK1
-         js/BlrbwhpUF2iE91UQiyM4UTY03mSTgIB2VvU+SptOYVxGr82CXh4NLLVMARws7gBPU
-         BVKcZD7zhey7LwMtER77v9UASdsEmJUNV+ToC3EdybsvnO7vvIxVN+M+Wtjnby0kZzgF
-         ui/GmzE1erx1QBU0fs3Hang8tCE9/xYehbao9ZS4OkoodhcWFDE5ng7022DIkdqC+u+z
-         LWK/LjscajR+l41GyLMVpEvYPJssa21EeeqUfis93j5d0CEf+ecTu1Pkoh3gJcLTjfTz
-         UwDQ==
-X-Gm-Message-State: AOAM530KQ61Z8DRMh4S9ppdRTaLC810KSaYokDeXvVFV1lOghzbmxsHj
-        2VOv9+XOJfiyo+66/tLnf4qlNpID3Hn9AsGjWfU=
-X-Google-Smtp-Source: ABdhPJybFKyxWXp+82TksZjNTriAlUdnqoRsE7BuqJVQi3gzwFEvSAsE9jR882WUUQXM1dLVKNOmwNOxyELOUiIOM5U=
-X-Received: by 2002:adf:e689:: with SMTP id r9mr4916259wrm.426.1634963120548;
- Fri, 22 Oct 2021 21:25:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=Q64AQ3S6GhyPeg8BW6JlFQUrpvJ1iJoc4xGMNeJoWVvHPcxz3hjDsk61s2M8RI6KDB
+         5ZJ/6R/RkkRWLVPc3N0oHxYX+m54dFOWrJUf2TQ7sYtPfUzrb+8iS7ezFF11F+cBg12+
+         W7C8CELGmvOeBaSZV9ZeeMdGOfE+W0OCShitLJu2NAr+PjhBONiz6g1wc+JGg0ubUCh/
+         YE1NYnUrTcdC4N+oiAfze3rCF9tMgUAMZea5D5skUwHGdIRri/kWEzWwmrioIbzGpVFq
+         EYy+Rau2Bq+TBqkSUoh8zGtbtDwu2/bvzExyI3yJ1+I1MRxKLqViLeXpKeJsI24yoQMy
+         O1AA==
+X-Gm-Message-State: AOAM5314zwSswxYFfJSstC/FJ3GpVDxS4ymFIsxyNc0TWIrf+wG2au/n
+        7Xa2OYqwZZUkORdDUN72+FZzzFDfAnzEWWfnnX8=
+X-Google-Smtp-Source: ABdhPJxbHWCQaA22XVwQFJLeK97z9oroWNyFUNBz/3teSSfazwM0svrL6URXAe5PADGpGE0jjZn5M2av0IBmVyuOXKg=
+X-Received: by 2002:adf:a411:: with SMTP id d17mr3075552wra.232.1635003770995;
+ Sat, 23 Oct 2021 08:42:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1634884487.git.lucien.xin@gmail.com> <615570feca5b99958947a7fdb807bab1e82196ca.1634884487.git.lucien.xin@gmail.com>
- <20211022083558.5fce8039@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211022083558.5fce8039@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Sat, 23 Oct 2021 12:25:09 +0800
-Message-ID: <CADvbK_cx_sSSp9SOeQjh-yBrrui38Otr8EiXC9O5=0mc1-kF1g@mail.gmail.com>
-Subject: Re: [PATCH net 1/4] security: pass asoc to sctp_assoc_request and sctp_sk_clone
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     network dev <netdev@vger.kernel.org>, selinux@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        davem <davem@davemloft.net>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>
+Received: by 2002:a1c:a916:0:0:0:0:0 with HTTP; Sat, 23 Oct 2021 08:42:50
+ -0700 (PDT)
+Reply-To: martinafrancis01@gmail.com
+From:   martinafran42 <martinafran42@gmail.com>
+Date:   Sat, 23 Oct 2021 08:42:50 -0700
+Message-ID: <CAC1Op46rzf-95OpiL4YE=Lzvu2F7NstX11WdGagxm5dfjjFJ3w@mail.gmail.com>
+Subject: =?UTF-8?Q?Dobry_dzie=C5=84_moja_droga?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Oct 22, 2021 at 11:36 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 22 Oct 2021 02:36:09 -0400 Xin Long wrote:
-> > This patch is to move secid and peer_secid from endpoint to association,
-> > and pass asoc to sctp_assoc_request and sctp_sk_clone instead of ep. As
-> > ep is the local endpoint and asoc represents a connection, and in SCTP
-> > one sk/ep could have multiple asoc/connection, saving secid/peer_secid
-> > for new asoc will overwrite the old asoc's.
-> >
-> > Note that since asoc can be passed as NULL, security_sctp_assoc_request()
-> > is moved to the place right after the new_asoc is created in
-> > sctp_sf_do_5_1B_init() and sctp_sf_do_unexpected_init().
-> >
-> > Fixes: 72e89f50084c ("security: Add support for SCTP security hooks")
-> > Reported-by: Prashanth Prahlad <pprahlad@redhat.com>
-> > Signed-off-by: Xin Long <lucien.xin@gmail.com>
->
-> missed one?
->
-> security/selinux/netlabel.c:274: warning: Function parameter or member
-> 'asoc' not described in 'selinux_netlbl_sctp_assoc_request'
-> security/selinux/netlabel.c:274: warning: Excess function parameter 'ep' description in 'selinux_netlbl_sctp_assoc_request'
-Yup, the function description also needs fixing:
+--=20
+Dobry dzie=C5=84 moja droga
+Jak si=C4=99 masz i twoja rodzina.
+Jestem pani Martina Francis, chora wdowa pisz=C4=85ca ze szpitalnego =C5=82=
+=C3=B3=C5=BCka
+bez dziecka. Kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, aby=C5=9Bcie dowiedz=
+ieli si=C4=99 o moim
+pragnieniu przekazania sumy (2 700 000,00 USD MILION=C3=93W USD), kt=C3=B3r=
+=C4=85
+odziedziczy=C5=82am po moim zmar=C5=82ym m=C4=99=C5=BCu na cele charytatywn=
+e, obecnie
+fundusz jest nadal w banku. Niedawno m=C3=B3j lekarz powiedzia=C5=82 mi, =
+=C5=BCe mam
+powa=C5=BCn=C4=85 chorob=C4=99 nowotworow=C4=85 i moje =C5=BCycie nie jest =
+ju=C5=BC gwarantowane,
+dlatego podejmuj=C4=99 t=C4=99 decyzj=C4=99..
 
-@@ -260,11 +260,11 @@ int selinux_netlbl_skbuff_setsid(struct sk_buff *skb,
+Chc=C4=99, aby=C5=9Bcie skorzystali z tego funduszu dla ludzi ubogich,
+maltretowanych dzieci, mniej uprzywilejowanych, ko=C5=9Bcio=C5=82=C3=B3w, s=
+ieroci=C5=84c=C3=B3w
+i cierpi=C4=85cych wd=C3=B3w w spo=C5=82ecze=C5=84stwie.
 
- /**
-  * selinux_netlbl_sctp_assoc_request - Label an incoming sctp association.
-- * @ep: incoming association endpoint.
-+ * @asoc: incoming association.
-  * @skb: the packet.
-  *
-  * Description:
-- * A new incoming connection is represented by @ep, ......
-+ * A new incoming connection is represented by @asoc, ......
-  * Returns zero on success, negative values on failure.
-  *
-  */
+Prosz=C4=99, wr=C3=B3=C4=87 do mnie natychmiast po przeczytaniu tej wiadomo=
+=C5=9Bci, aby
+uzyska=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3w dotycz=C4=85cych tej age=
+ndy humanitarnej.
 
-Thanks.
+Niech B=C3=B3g ci=C4=99 b=C5=82ogos=C5=82awi, kiedy czekam na twoj=C4=85 od=
+powied=C5=BA.
+
+Twoja siostra.
+Pani Martina Francis.
