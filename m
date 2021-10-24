@@ -2,92 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F86743841D
-	for <lists+linux-security-module@lfdr.de>; Sat, 23 Oct 2021 17:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320F543893A
+	for <lists+linux-security-module@lfdr.de>; Sun, 24 Oct 2021 15:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbhJWPpS (ORCPT
+        id S230419AbhJXNvL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 23 Oct 2021 11:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbhJWPpM (ORCPT
+        Sun, 24 Oct 2021 09:51:11 -0400
+Received: from mailomta18-re.btinternet.com ([213.120.69.111]:32615 "EHLO
+        re-prd-fep-048.btinternet.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230021AbhJXNvK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 23 Oct 2021 11:45:12 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE1BC06122B
-        for <linux-security-module@vger.kernel.org>; Sat, 23 Oct 2021 08:42:53 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id k7so1264813wrd.13
-        for <linux-security-module@vger.kernel.org>; Sat, 23 Oct 2021 08:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
-        b=AYtLHgTG+6uRU7+ihCnpuOHko6pqohXhhQkkijOFNs1K9R3uZtGzQ5Q1/HW70ikQOH
-         to4qY+MneU8Wp5m/9lAfflx+y719nabfpikWCEUlEWf4TV2mCVtwTqCiU9WBe0/PueVA
-         Ai5uemlRsLruanwKtfzO+GeDcAbGf94MhP9fVYsSthGmJThkp9aXQloZUCc7KpPJDIe5
-         ZDHZUIMzc7AFUI4sZuF8c0yufIwBcSuY8XEdvjlaOTWtthy6nwfYJOAMZizkpVyMjWcI
-         yYcYAJzSYs4KyL2X7l5KUECXBatU7ZxHLxcDM7wHj0/uSurwobyzbl1doBaHD0t2U4Ok
-         8KFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
-        b=Q64AQ3S6GhyPeg8BW6JlFQUrpvJ1iJoc4xGMNeJoWVvHPcxz3hjDsk61s2M8RI6KDB
-         5ZJ/6R/RkkRWLVPc3N0oHxYX+m54dFOWrJUf2TQ7sYtPfUzrb+8iS7ezFF11F+cBg12+
-         W7C8CELGmvOeBaSZV9ZeeMdGOfE+W0OCShitLJu2NAr+PjhBONiz6g1wc+JGg0ubUCh/
-         YE1NYnUrTcdC4N+oiAfze3rCF9tMgUAMZea5D5skUwHGdIRri/kWEzWwmrioIbzGpVFq
-         EYy+Rau2Bq+TBqkSUoh8zGtbtDwu2/bvzExyI3yJ1+I1MRxKLqViLeXpKeJsI24yoQMy
-         O1AA==
-X-Gm-Message-State: AOAM5314zwSswxYFfJSstC/FJ3GpVDxS4ymFIsxyNc0TWIrf+wG2au/n
-        7Xa2OYqwZZUkORdDUN72+FZzzFDfAnzEWWfnnX8=
-X-Google-Smtp-Source: ABdhPJxbHWCQaA22XVwQFJLeK97z9oroWNyFUNBz/3teSSfazwM0svrL6URXAe5PADGpGE0jjZn5M2av0IBmVyuOXKg=
-X-Received: by 2002:adf:a411:: with SMTP id d17mr3075552wra.232.1635003770995;
- Sat, 23 Oct 2021 08:42:50 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a1c:a916:0:0:0:0:0 with HTTP; Sat, 23 Oct 2021 08:42:50
- -0700 (PDT)
-Reply-To: martinafrancis01@gmail.com
-From:   martinafran42 <martinafran42@gmail.com>
-Date:   Sat, 23 Oct 2021 08:42:50 -0700
-Message-ID: <CAC1Op46rzf-95OpiL4YE=Lzvu2F7NstX11WdGagxm5dfjjFJ3w@mail.gmail.com>
-Subject: =?UTF-8?Q?Dobry_dzie=C5=84_moja_droga?=
-To:     undisclosed-recipients:;
+        Sun, 24 Oct 2021 09:51:10 -0400
+X-Greylist: delayed 371 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Oct 2021 09:51:09 EDT
+Received: from re-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.54.8])
+          by re-prd-fep-044.btinternet.com with ESMTP
+          id <20211024134235.SENW13120.re-prd-fep-044.btinternet.com@re-prd-rgout-005.btmx-prd.synchronoss.net>;
+          Sun, 24 Oct 2021 14:42:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1635082955; 
+        bh=jtuRQ2KBnyuA0kJGUF9OfeUiQ3QdN3vCZph6XiwdLQQ=;
+        h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:MIME-Version;
+        b=AjIAIA43s7vKD7z9LJFVZvA+VOw1rOaOiLS/i/VmOcpfyU5pEaiaEucgQ677+TF8ht9YHGsL6BOGjQ9cqbRPNe40hRoKXG7UDkQVPEYJKzXV8ZaZKwD3KwoN+22M2zHrFOW+rU/rlCDsaoSrGdqKq/cLxR7UIl84mvKeDEZXFwB2aP3fi0fG4+mhl3tzVh7JVm+kOQHAKuzjRZ9wC4EErR728g0VEmU2EU01Gftc9jtAhcVse2tDuqhGnM8LLwR0mPvt64S3MbzzAscqZwkn5TcXSy1dXut0Fa2Op79lPzcG23sU6trGIm0xJc/tokmx9oP9a6G+YnK4CkQROyHBJw==
+Authentication-Results: btinternet.com;
+    auth=pass (LOGIN) smtp.auth=richard_c_haines@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 613A9124064D089C
+X-Originating-IP: [86.148.64.8]
+X-OWM-Source-IP: 86.148.64.8 (GB)
+X-OWM-Env-Sender: richard_c_haines@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvtddrvdeffedggedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkuffhvfffjghftggfggfgsehtkeertddtreejnecuhfhrohhmpeftihgthhgrrhguucfjrghinhgvshcuoehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmqeenucggtffrrghtthgvrhhnpeeuiedtgedtgedvffejteeffeefvdegvdetteffueeukeeujeekveekgfefffefudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhenucfkphepkeeirddugeekrdeigedrkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudelkegnpdhinhgvthepkeeirddugeekrdeigedrkedpmhgrihhlfhhrohhmpehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehjmhhorhhrihhssehnrghmvghirdhorhhgpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhstghtphesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
+        uhigqdhsvggtuhhrihhthidqmhhoughulhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhutghivghnrdigihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgrrhgtvghlohdrlhgvihhtnhgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehomhhoshhnrggtvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohepphgruhhlsehprghulhdqmhhoohhrvgdrtghomhdprhgtphhtthhopehsvghlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-SNCR-hdrdom: btinternet.com
+Received: from [192.168.1.198] (86.148.64.8) by re-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as richard_c_haines@btinternet.com)
+        id 613A9124064D089C; Sun, 24 Oct 2021 14:42:35 +0100
+Message-ID: <abf8607d35cf4b5de1cfb14de81f2c77b7a0c2f5.camel@btinternet.com>
+Subject: Re: [PATCH net 0/4] security: fixups for the security hooks in sctp
+From:   Richard Haines <richard_c_haines@btinternet.com>
+To:     Xin Long <lucien.xin@gmail.com>,
+        network dev <netdev@vger.kernel.org>, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-sctp@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>
+Date:   Sun, 24 Oct 2021 14:42:25 +0100
+In-Reply-To: <cover.1634884487.git.lucien.xin@gmail.com>
+References: <cover.1634884487.git.lucien.xin@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.0 (3.42.0-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
---=20
-Dobry dzie=C5=84 moja droga
-Jak si=C4=99 masz i twoja rodzina.
-Jestem pani Martina Francis, chora wdowa pisz=C4=85ca ze szpitalnego =C5=82=
-=C3=B3=C5=BCka
-bez dziecka. Kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, aby=C5=9Bcie dowiedz=
-ieli si=C4=99 o moim
-pragnieniu przekazania sumy (2 700 000,00 USD MILION=C3=93W USD), kt=C3=B3r=
-=C4=85
-odziedziczy=C5=82am po moim zmar=C5=82ym m=C4=99=C5=BCu na cele charytatywn=
-e, obecnie
-fundusz jest nadal w banku. Niedawno m=C3=B3j lekarz powiedzia=C5=82 mi, =
-=C5=BCe mam
-powa=C5=BCn=C4=85 chorob=C4=99 nowotworow=C4=85 i moje =C5=BCycie nie jest =
-ju=C5=BC gwarantowane,
-dlatego podejmuj=C4=99 t=C4=99 decyzj=C4=99..
+On Fri, 2021-10-22 at 02:36 -0400, Xin Long wrote:
+> There are a couple of problems in the currect security hooks in sctp:
+> 
+> 1. The hooks incorrectly treat sctp_endpoint in SCTP as request_sock in
+>    TCP, while it's in fact no more than an extension of the sock, and
+>    represents the local host. It is created when sock is created, not
+>    when a conn request comes. sctp_association is actually the correct
+>    one to represent the connection, and created when a conn request
+>    arrives.
+> 
+> 2. security_sctp_assoc_request() hook should also be called in
+> processing
+>    COOKIE ECHO, as that's the place where the real assoc is created and
+>    used in the future.
+> 
+> The problems above may cause accept sk, peeloff sk or client sk having
+> the incorrect security labels.
+> 
+> So this patchset is to change some hooks and pass asoc into them and
+> save
+> these secids into asoc, as well as add the missing sctp_assoc_request
+> hook into the COOKIE ECHO processing.
 
-Chc=C4=99, aby=C5=9Bcie skorzystali z tego funduszu dla ludzi ubogich,
-maltretowanych dzieci, mniej uprzywilejowanych, ko=C5=9Bcio=C5=82=C3=B3w, s=
-ieroci=C5=84c=C3=B3w
-i cierpi=C4=85cych wd=C3=B3w w spo=C5=82ecze=C5=84stwie.
+I've built this patchset on kernel 5.15-rc5 with no problems.
+I tested this using the SELinux testsuite with Ondrej's "[PATCH
+testsuite] tests/sctp: add client peeloff tests" [1] added. All SCTP
+tests ran with no errors. Also ran the sctp-tests from [2] with no
+errors.
 
-Prosz=C4=99, wr=C3=B3=C4=87 do mnie natychmiast po przeczytaniu tej wiadomo=
-=C5=9Bci, aby
-uzyska=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3w dotycz=C4=85cych tej age=
-ndy humanitarnej.
+[1]
+https://lore.kernel.org/selinux/20211021144543.740762-1-omosnace@redhat.com/
+[2] https://github.com/sctp/sctp-tests.git
 
-Niech B=C3=B3g ci=C4=99 b=C5=82ogos=C5=82awi, kiedy czekam na twoj=C4=85 od=
-powied=C5=BA.
+Reviewed-by: Richard Haines <richard_c_haines@btinternet.com>
+Tested-by: Richard Haines <richard_c_haines@btinternet.com>
 
-Twoja siostra.
-Pani Martina Francis.
+> 
+> Xin Long (4):
+>   security: pass asoc to sctp_assoc_request and sctp_sk_clone
+>   security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce
+>   security: add sctp_assoc_established hook
+>   security: implement sctp_assoc_established hook in selinux
+> 
+>  Documentation/security/SCTP.rst     | 65 +++++++++++++++--------------
+>  include/linux/lsm_hook_defs.h       |  6 ++-
+>  include/linux/lsm_hooks.h           | 13 ++++--
+>  include/linux/security.h            | 18 +++++---
+>  include/net/sctp/structs.h          | 20 ++++-----
+>  net/sctp/sm_statefuns.c             | 31 ++++++++------
+>  net/sctp/socket.c                   |  5 +--
+>  security/security.c                 | 15 +++++--
+>  security/selinux/hooks.c            | 36 +++++++++++-----
+>  security/selinux/include/netlabel.h |  4 +-
+>  security/selinux/netlabel.c         | 14 +++----
+>  11 files changed, 135 insertions(+), 92 deletions(-)
+> 
+
