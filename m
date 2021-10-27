@@ -2,92 +2,79 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC4643BD62
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Oct 2021 00:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC96643BF68
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Oct 2021 04:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240131AbhJZWq2 (ORCPT
+        id S238162AbhJ0CPz (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 26 Oct 2021 18:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        Tue, 26 Oct 2021 22:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbhJZWqY (ORCPT
+        with ESMTP id S238068AbhJ0CPy (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 26 Oct 2021 18:46:24 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806F4C061570;
-        Tue, 26 Oct 2021 15:44:00 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id fv3so581107pjb.3;
-        Tue, 26 Oct 2021 15:44:00 -0700 (PDT)
+        Tue, 26 Oct 2021 22:15:54 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458B3C061745
+        for <linux-security-module@vger.kernel.org>; Tue, 26 Oct 2021 19:13:30 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id n63so1387095oif.7
+        for <linux-security-module@vger.kernel.org>; Tue, 26 Oct 2021 19:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=pbwaXXHnvCbbtImOhR1XxTruqxYAB5oj9GgtPi3o/qo=;
-        b=pcOQ/l4LI49Ji38qwBDwa7GjQpZZqj2OgmqZFuUC/KFLdqqVPGcCXFoNnomAPoTvWt
-         BSfzgXyRnnR5SM0jXalC4QWYoJOOnQhrb1DzQuEC+x8xXGPIHef8aTGBCRLKzPeml0Ok
-         LjvOjU5Vg/oxQHkGeH3MUTphLHgVdEQnOS7am8QYacoQIseIrTAMzTU6KgboAxBllIfC
-         TfzRVqN+v6li6J4gvhCDvQr4T4p/FSK2USw1syAgw+0XwdhZ8+euUUQYgnWqL5wmScJ3
-         DTHk6tKDTsD0fki40O3UkIhi8Fq7OrahdCyub7R/l0TqU0ji8DK+9nY6PhZKJtmU/smu
-         docw==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
+        b=EG9Nsjl+Eip141PWF+gaBUl1KOWYkVWkt1OXOEZnqtckn0jrX24eTk8UDRzdanWsjC
+         9yBSsvsQJotknvFKA9EQtwg6TYbjKuB2B6TeA9FpEjuXwfev4spJrb1stelnldSVU05K
+         9gDfyUx9hxjQgXAvSoidRv5/L36SOUZnVcgUrTM9tbDStJSMOyaTK7co10bTYaslWL6G
+         KEMVQ2/UtsJj5Uhe9sAzIbF0NlCUlFDN4b2Grw7CXZCthk66H6QQ7cfpSD7pU+Ay2+Nj
+         Q0QsrrBll0HvZsVEqt8NPrW+XN3K+0FC+b/X0b9b+fJud88cD9kdaePkDe4cxFsTTvDp
+         HYfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=pbwaXXHnvCbbtImOhR1XxTruqxYAB5oj9GgtPi3o/qo=;
-        b=Kvz/wuw/iu03uggVqyaDkA1RP0ncXcyZttFY9fpeNMOB/3Ycuk2CWvctdK48/bPMhM
-         JOSYw/VNj+PGHEhbYSz3CbLeTl+aFV2rxk0Y1WXA+Ys5mODAXwl31UC9ZQVizszA5klk
-         CFxN739dpcCa801/L7DwdYUlLKxY25kMxMaFSXtpm7DFl6jhEe4zYUh6fSgg+dXg9hYz
-         Zf1C+1DTTKZQ0h+Xdq7/CRgFI4mRPQk8/J6GNBTLgsmUAVwZAQ6dW787Kk/yAnrnC3NH
-         YNdaR8yahzJNF378Jkhi5Yo/pCUo8zMi81q+irkfM92US7ry1pg5BfPv2M0mP/DH8Gb+
-         tBgQ==
-X-Gm-Message-State: AOAM531NODbMWydw4xr6OqGZk934C9r815EHiz7nzGc3oneb3KKdp73y
-        6OFwhX36ghxKcZ8lREveyAY=
-X-Google-Smtp-Source: ABdhPJzjvqg9bEk1OYk+nLzA4QYhy9hiPbv9hwBvX4gMCUsjynoDl4L9hvLJQ+cYPgZbFRES7ms54Q==
-X-Received: by 2002:a17:90a:7e93:: with SMTP id j19mr1824542pjl.172.1635288240053;
-        Tue, 26 Oct 2021 15:44:00 -0700 (PDT)
-Received: from raspberrypi ([49.166.114.232])
-        by smtp.gmail.com with ESMTPSA id d17sm11674985pfj.98.2021.10.26.15.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 15:43:59 -0700 (PDT)
-Date:   Tue, 26 Oct 2021 23:43:54 +0100
-From:   Austin Kim <austindh.kim@gmail.com>
-To:     zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, austin.kim@lge.com,
-        kernel-team@lge.com
-Subject: [PATCH] ima/evm: mark evm_fixmode as __ro_after_init
-Message-ID: <20211026224354.GA13009@raspberrypi>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
+        b=CecXqdxXHpNwkYhnmrJqV5T0d1r52QRZ8X67SXDU9iqrIsBAq373tAV27JO4buK0Xz
+         8ypXFBmOB6rlAs1jhhNbxaMXWPxzM/UZu/phmW7laffD49rIUwEZY3pRpAmJNNDpmN2Y
+         r62q2aoqRlvQBJTJpXHfZdz5eDh8M0c1T5SvjxoBduXDpM955li2krmvzWCz7wPSJByv
+         lPVd0v4mji9L0XY1G8cfTIRkCuMEJn9t5P9DkFrnZK31ezjwhjDD0ARWUl9TA9mvXPN+
+         bQmBhXK2MJllnSaGP/PwaVZLOxa8C4I2id5fVHABgnNCH4tPiI0RaVFz/dsxDjwpKofF
+         NSvw==
+X-Gm-Message-State: AOAM533E59zKp4M9u9GmTACwNpsY5MDpeWegKmIIyJ3zgUI3Hk+vPv7h
+        +OHaOM+HI5opknAcoACnfPUwZcSqUy5tEqOaf+dvqykFEidpxw==
+X-Google-Smtp-Source: ABdhPJzwOfSEFC+ZhBFJFbO7cJJvi3wx28mFQEmwNZmSp0wIuhE8auS2ZQZdxDxGrsxbdq14UKAhXuffjqSVAtd5Ev8=
+X-Received: by 2002:a17:90b:1c02:: with SMTP id oc2mr2782635pjb.52.1635300799308;
+ Tue, 26 Oct 2021 19:13:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: officedeskofgeneral0@gmail.com
+Received: by 2002:a17:90b:4c11:0:0:0:0 with HTTP; Tue, 26 Oct 2021 19:13:18
+ -0700 (PDT)
+From:   "Mr. Mustafa Ali." <muafalia@gmail.com>
+Date:   Wed, 27 Oct 2021 03:13:18 +0100
+X-Google-Sender-Auth: -ap4vRnh22PsKG1mBvTJWKrUl0o
+Message-ID: <CAL=mczUC43H-jvBwTepLgLaj-FOUBZcvw1kdD=RpB4-U2MPw0g@mail.gmail.com>
+Subject: Greetings Dear Friend.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Austin Kim <austin.kim@lge.com>
+Hello Friend,
 
-evm_fixmode global variable is never modified
-outside initcalls, so declaring it with __ro_after_init is better.
+This message might meet you in utmost surprise. However, It's just my
+urgent need for a foreign partner that made me contact you for this
+transaction. I assured you of honesty and reliability to champion this
+business opportunity. I am a banker by profession in Turkey, and
+currently holding the post of Auditor in Standard Chartered Bank.
 
-Signed-off-by: Austin Kim <austin.kim@lge.com>
----
- security/integrity/evm/evm_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I have the opportunity of transferring the leftover funds ($15 Million
+Dollars) of one of my clients who died along with his entire family in
+a crisis in Myanmar Asia. I am inviting you for a business deal where
+this money can be shared between us if you agree to my business
+proposal.
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 1c8435dfabee..08f907382c61 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -78,7 +78,7 @@ static struct xattr_list evm_config_default_xattrnames[] = {
- 
- LIST_HEAD(evm_config_xattrnames);
- 
--static int evm_fixmode;
-+static int evm_fixmode __ro_after_init;
- static int __init evm_set_fixmode(char *str)
- {
- 	if (strncmp(str, "fix", 3) == 0)
--- 
-2.20.1
+Further details of the transfer will be forwarded to you immediately
+after I receive your return letter.
 
+Best Regards,
+Mr. Mustafa Ali.
+mustafa.ali@rahroco.com
