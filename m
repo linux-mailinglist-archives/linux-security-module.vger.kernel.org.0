@@ -2,88 +2,105 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A63BE43CC84
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Oct 2021 16:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4644643D777
+	for <lists+linux-security-module@lfdr.de>; Thu, 28 Oct 2021 01:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbhJ0OoA (ORCPT
+        id S229474AbhJ0X0T (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 27 Oct 2021 10:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
+        Wed, 27 Oct 2021 19:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237894AbhJ0OoA (ORCPT
+        with ESMTP id S229469AbhJ0X0T (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 27 Oct 2021 10:44:00 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D3AC061348
-        for <linux-security-module@vger.kernel.org>; Wed, 27 Oct 2021 07:41:34 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id y12so11904769eda.4
-        for <linux-security-module@vger.kernel.org>; Wed, 27 Oct 2021 07:41:34 -0700 (PDT)
+        Wed, 27 Oct 2021 19:26:19 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BC2C061570
+        for <linux-security-module@vger.kernel.org>; Wed, 27 Oct 2021 16:23:53 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id q129so5805690oib.0
+        for <linux-security-module@vger.kernel.org>; Wed, 27 Oct 2021 16:23:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gaiy8iI3KoAyhwe4AaJugOjEos/PZdxnCB8V0KH1Dno=;
-        b=CBeBZwBdiZIUZVnM5Khw1ZEjGcdJVEay33Tiq5yOsocJpeWvvFEIKqxKdPJ9KE7dzF
-         pShXKIjs5jM0jO1kukrMSxHwPSkmN18a1+FZPMkqZrDgXruCgpnOQ1uXSQ/vzTQ8kLP9
-         OqkjFlT64D5zj44wOS1FzCSevHTBuT5V5kTmoDI0HQQQBao8DTa6CcgJBvxIieYDHVUZ
-         XX3JPmm+v89PawnpKqt84iEctdnp5mTneda198Y4CIerLDOntkfiq7N4TRk0sK60bTnE
-         hJStBgr73WTxL9sNHNg66vKLPDML0GOXTg4QWefV5bJevjkANoWgHqHflMZYNyGNkTFf
-         XEqg==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=VyoOlx1f4bY9qJ0WEn854eIaH9saJD/psl6FGa9mBmM=;
+        b=n2S8a7IbEg2hwPoXKPBil1BL8Ui2T51c+NOjZ3eMW02HnhHySkr5WrTaWJVnBhCu9B
+         IKJZzFwqQerlitsPT1qAiX0/XU8wACYnBk04ylSeCZWxfGZVCbtSCYbLJL3mCNUo5qcs
+         Cl8nPWVpWNbKcP6JOoADUJyobz/kpkKz22N7CXQas7tBSN8SzB2R0+X8V2IEIlxr06Hn
+         HuXOXQyp5tlKC3dC/9KQlsBsnJ0Ao+/V2VZg1FeSC9hUCNuI+zXimePVr83EzaqFaIn0
+         KPyIJ1ZJScNMhRmcX7UJyBsj20CkE3Af6j+gQVGwiXV2Fk0Mm6FUyPydx3MpxTJfqNuH
+         9FHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gaiy8iI3KoAyhwe4AaJugOjEos/PZdxnCB8V0KH1Dno=;
-        b=o6w5FCiaZ0w2JnGT9KXMpUTmms1rSRmKS5D6yTNAY4KP7AxFu1MegeT/7MdsqAj4RZ
-         EFlWVV1cYqSYTV4wFEyHrlt327GljQDUMpK4nIc2Qb01vQdm7x6o8++WJD8rzFayXmsa
-         ibdoot3c5DPk3X08Rv//DugRvDzIjOng4aI0ankzgr9NmicvEkLo/Mn9N3BmZGmu4l/w
-         U+sYBCfmquj3gRjZ5m1r6yMmiERmvTr5oMElJlcT4gpQgncGso/kSa2xi9+elJvK3Ig7
-         BM2cK2qcJK6sRH0kVfIknAv9SMiJF5zn9HTF7nEPmpJYH7Y/tbMoYRnwRhAibmmDfY3A
-         BpIw==
-X-Gm-Message-State: AOAM532Shw2Ujwo2QKGER+3tCNT9uF7C2PmjSkant4maXD60orEcVQYR
-        vYsvKpVPPKVq+UHLNZgtwKnOP3MIwSUQAKgeyddx
-X-Google-Smtp-Source: ABdhPJwvDV51df1jsbukGYi/QiG9zzLsCbuK6XTvcBu2DkK2prsxWu/++ORqQzcu3+tmw/SVuP3YMDt5c0Vmg4CFG5Q=
-X-Received: by 2002:a05:6402:22d6:: with SMTP id dm22mr45319307edb.209.1635345692764;
- Wed, 27 Oct 2021 07:41:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=VyoOlx1f4bY9qJ0WEn854eIaH9saJD/psl6FGa9mBmM=;
+        b=F7XQBthh1ZeaSJaXMZQigu4sZRCvDmzoifEFCIj7EseGR4ey3kKoYQ5WsZCSOodvfe
+         xYT7ltCzkR2hMz8wpouIz+PkzTfVxAw6rVS8bJ7fyjTAk/tp7fCOTdGb0pg47/yh0/TQ
+         aS393AV/fjOxFRPBKWYi2EWgNtoS8SK2lJCIHq7tUijvbB4AjaImtuktPGXm8Gd0YhCO
+         E/+cGwK5Fe8GzdfdoKQXqBAepwdmnl7tgpjE9rXMrHv8NFUVn4cKnPI+woRCQP/Lf4pI
+         OJ+ka6/ImKP06zspXfwDgQ+oZE6vFhFNjaV1lZy/1DgfWEgKdxJf7SDnu7EO5vnvs1If
+         6xaw==
+X-Gm-Message-State: AOAM5305Pj0VtQmO0Gl6sYKkCDEGWf9atNrtuE3Nxv5uz5PK/6n7kXDC
+        /K3tcTRtInxB8Hhlf//qH1nm1bN+DAweSp2M170=
+X-Google-Smtp-Source: ABdhPJxMG8gGk4vR1qNNEZkKcJmhgPVdCXLrHUI9YlF3+38dDuLz3zYKA2GKG5WOJfXOovQcsP6EHMUi0PxNPk7SF8A=
+X-Received: by 2002:aca:ba04:: with SMTP id k4mr453085oif.76.1635377032995;
+ Wed, 27 Oct 2021 16:23:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1634884487.git.lucien.xin@gmail.com> <53026dedd66beeaf18a4570437c4e6c9e760bb90.1634884487.git.lucien.xin@gmail.com>
- <CAFqZXNs89yGcoXumNwavLRQpYutfnLY-SM2qrHbvpjJxVtiniw@mail.gmail.com>
- <CADvbK_djVKxjfRaLS0EZRY2mkzWXTMnwvbe-b7cK-T3BR8jzKQ@mail.gmail.com>
- <CAFqZXNsnEwPcEXB-4O983bxGj5BfZVMB6sor7nZVkT-=uiZ2mw@mail.gmail.com>
- <CADvbK_eE9VhB2cWzHSk_LNm_VemEt9vm=FMMVYzo5eVH=zEhKw@mail.gmail.com>
- <CAHC9VhTfVmcLOG3NfgQ3Tjpe769XzPntG24fejzSCvnZt_XZ9A@mail.gmail.com>
- <CADvbK_dwLCOvS8YzFXcXoDF6F69_sc7voPbxn5Ov4ygBR_5FXw@mail.gmail.com>
- <CAHC9VhREfztHQ8mqA_WM6NF=jKf0fTFTSRp_D5XhOVxckckwzw@mail.gmail.com> <CADvbK_c0CosUo4mMrSYQs_AA2KbB4MdnX5aS0zS0pJBOJV2vUA@mail.gmail.com>
-In-Reply-To: <CADvbK_c0CosUo4mMrSYQs_AA2KbB4MdnX5aS0zS0pJBOJV2vUA@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 27 Oct 2021 10:41:21 -0400
-Message-ID: <CAHC9VhTYNkvqLWA+FXVz=1dL8QvF9AmV7UMgAzNOcj238yjVvw@mail.gmail.com>
-Subject: Re: [PATCH net 4/4] security: implement sctp_assoc_established hook
- in selinux
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>
+Sender: ericgloriapaul@gmail.com
+Received: by 2002:a9d:5184:0:0:0:0:0 with HTTP; Wed, 27 Oct 2021 16:23:52
+ -0700 (PDT)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Wed, 27 Oct 2021 23:23:52 +0000
+X-Google-Sender-Auth: anPoi4znCgJfClaJNMBm6AQjfgE
+Message-ID: <CAApFGfTAQChkQZ7VionUYyKsO3q0KdKWDC2N2hZFC5hfa_6WBw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Oct 27, 2021 at 12:00 AM Xin Long <lucien.xin@gmail.com> wrote:
-> OK, I think we are on the same page now, I will post v2.
+Hello my dear ,
 
-I'm not quite as confident we are on the same page just yet, but I
-agree that having a new revision is a good idea; if nothing else it
-will help reset the discussion to focus on updated patches - thanks!
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina Mckenna Howley., a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
--- 
-paul moore
-www.paul-moore.com
+I'm waiting for your immediate reply..
+
+May God Bless you,
+Mrs. Dina Mckenna..
