@@ -2,82 +2,150 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4201B4414C1
-	for <lists+linux-security-module@lfdr.de>; Mon,  1 Nov 2021 09:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C034A441E03
+	for <lists+linux-security-module@lfdr.de>; Mon,  1 Nov 2021 17:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbhKAIIR (ORCPT
+        id S232478AbhKAQX3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 1 Nov 2021 04:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        Mon, 1 Nov 2021 12:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbhKAIIP (ORCPT
+        with ESMTP id S232498AbhKAQX3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 1 Nov 2021 04:08:15 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF88C06120A
-        for <linux-security-module@vger.kernel.org>; Mon,  1 Nov 2021 01:05:42 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id i26so26181571ljg.7
-        for <linux-security-module@vger.kernel.org>; Mon, 01 Nov 2021 01:05:42 -0700 (PDT)
+        Mon, 1 Nov 2021 12:23:29 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB62C0613B9
+        for <linux-security-module@vger.kernel.org>; Mon,  1 Nov 2021 09:20:54 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id o6-20020a17090a0a0600b001a64b9a11aeso351185pjo.3
+        for <linux-security-module@vger.kernel.org>; Mon, 01 Nov 2021 09:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=V/IbKY0g2EmPf9Psw8/L5H/ix/AU0zvu2OUN3f6n4Fv6NgmpLlFSkK+umz4tcLa+rQ
-         KPHS/U/tha1vFbqZfuKiI6zDNVPEppLWjyRMC297y8Re0TE1J6EAlHSS5afwmMs11biY
-         h6h9pozx9oemeYr42hloFFZRds8Ya+2AP507sW/DcWz6BjqKrxv4hcir1uA1OXS1hEyB
-         w9XZ2qfq7a1kiIG9xUCGZ5ig/Y+IKbMB2fFHseYh6GvlAWlR1PaalxFQ2QVnq2fOdjHW
-         Eb6a7nGCdEyfObn3JBdFXKk3sCBeQVUP9+skggjMAA78OwbRWXloeHcIXoEQjELtBjiU
-         mUaQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=nOeoZHECPKNnAQytROjQG/8KfDcG2slvfmEJKCwImrQ=;
+        b=OHjfuxxdfClfMEvZDiRQncM/tj04Oc4zKUcJsre2fgbrUibg0OrOYtxJvVFbiYWF/V
+         QV1/1BkSOuYAiHB/7n6GnABT8PtXMjdF0q/3kN7tXSbbW0ibOXOrXBZIBg62Du0E12fR
+         r2TOG2W15LOqdfoteLKwfqdg6gxPX1atPhYAw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=suH3vILV5UhnkqZQEVrb0MHTSHttkMaLGUUftF26NFTWkYEehTD+WSehzfJ2bvOLc5
-         TvKLmevBGUaHpmikZ5Uaqeq36N7M29+f+LB7EPn7emZ6SzrZ0dTF2QNXurKeL9Ftn3CJ
-         lpfTH3fvM67HY7bG66Nbiiq3rGGfvq2GXgaw6pLfbfBflv1PlPQ9/FFS9qlukax/xSme
-         fywH49TCBxI2tGJajVcr2iRFH7GE9zh71mZhYs+rO7KLWeJb1Cm4M6S+OdXDmSi6ssFN
-         xau8NVNox5Ko3+9ifydEHPYTdpGa74JIOri3KhoN89PioyfID2BLVNV2whb6Epg5TNb4
-         +j+w==
-X-Gm-Message-State: AOAM532Wkg5DwqwnPItoF+I+uVDr7RjTz0lkJaIQFM/4L2QO9n6J0D7z
-        8kMZpfwxPsDv7hrkY6zok9j6OjicFIn8L2CwlPk=
-X-Google-Smtp-Source: ABdhPJxb2IUIUXhKKURBVeICoPrhviYGICVFrEZcryYbGqEFChPtB2pihWtXvX9AOYCQUaOuAHH1W7L8fo+ujk/IU2k=
-X-Received: by 2002:a05:651c:893:: with SMTP id d19mr30641059ljq.236.1635753940302;
- Mon, 01 Nov 2021 01:05:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=nOeoZHECPKNnAQytROjQG/8KfDcG2slvfmEJKCwImrQ=;
+        b=l4ZpV0+fu/TEKRNIQ8cDEficL8iqZFz+hSLkpaOuuYYl9i/VllFXBwDurGx7yQheNt
+         lcdmE8WA2wY374/sqHPQl696akvckRiOQI1AE1ZWcCEXyEgpiRsOVabg/3ECrKjNa/3l
+         5FbvyYCA6lHUBV6whzaILxTaQ5g7ubsvuBk4+2jdhVp/MzfKSxSPtlAsJ4xqhhJmyM+H
+         vPXAG814GfSdQXnX0jhEFUizfkB1JKtWOHobHup7k8X/jiGZsNCeo08mtmLKdAAYQnOZ
+         cnDNEhiZmUjSrKFvu2hecYaIFA1piI4cROQeH1H1DkO+cU66HdFSUY3ZrjT9oe179HAr
+         s4sA==
+X-Gm-Message-State: AOAM5336KCuubiQznkQ3F1cHku2Y22oMpqfmuGUkVN1uU/kSeXCq6BUn
+        I52VFwvOXqHa8wZ0Y5mmwsWiKw==
+X-Google-Smtp-Source: ABdhPJx8302mlq2+2oG33p1FJwabY8ZQ+cEyzVsGqRt9mxOuWC/f5cg60TkG3G0h376S22Pc08/BlA==
+X-Received: by 2002:a17:902:70c5:b0:13f:f941:9ad6 with SMTP id l5-20020a17090270c500b0013ff9419ad6mr26059732plt.28.1635783653857;
+        Mon, 01 Nov 2021 09:20:53 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p23sm18296772pjg.55.2021.11.01.09.20.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Nov 2021 09:20:53 -0700 (PDT)
+Date:   Mon, 1 Nov 2021 09:20:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>, "KE.LI" <like1@oppo.com>,
+        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kbuild@vger.kernel.org,
+        linux-security-module@vger.kernel.org, llvm@lists.linux.dev,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Will Deacon <will@kernel.org>,
+        Ye Guojin <ye.guojin@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [GIT PULL] hardening updates for v5.16-rc1
+Message-ID: <202111010917.75B96F4E@keescook>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:39
- -0700 (PDT)
-Reply-To: aisha.7d@yahoo.com
-From:   Aisha AG <rbx17058@gmail.com>
-Date:   Mon, 1 Nov 2021 00:05:39 -0800
-Message-ID: <CA+KbyydC86ZoU6svaPH_F8XsYFEfUDwRRCtAR6OV3qd_NN0kFw@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Hi Linus,
+
+Please pull these hardening updates for v5.16-rc1. These are various
+compiler-related hardening feature updates. Notable is the addition of an
+explicit limited rationale for, and deprecation schedule of, gcc-plugins.
+More details in the tag below.
+
+Thanks!
+
+-Kees
+
+The following changes since commit e4e737bb5c170df6135a127739a9e6148ee3da82:
+
+  Linux 5.15-rc2 (2021-09-19 17:28:22 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v5.16-rc1
+
+for you to fetch changes up to 6425392acf24b6d469932dd1b217dc7b20d6447f:
+
+  gcc-plugins: remove duplicate include in gcc-common.h (2021-10-21 08:41:51 -0700)
+
+----------------------------------------------------------------
+compiler hardening updates for v5.16-rc1
+
+This collects various compiler hardening feature related updates:
+
+- gcc-plugins:
+  - remove support for GCC 4.9 and older (Ard Biesheuvel)
+  - remove duplicate include in gcc-common.h (Ye Guojin)
+  - Explicitly document purpose and deprecation schedule (Kees Cook)
+  - Remove cyc_complexity (Kees Cook)
+
+- instrumentation:
+  - Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO (Kees Cook)
+
+- Clang LTO:
+  - kallsyms: strip LTO suffixes from static functions (Nick Desaulniers)
+
+----------------------------------------------------------------
+Ard Biesheuvel (1):
+      gcc-plugins: remove support for GCC 4.9 and older
+
+Kees Cook (3):
+      hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO
+      gcc-plugins: Explicitly document purpose and deprecation schedule
+      gcc-plugins: Remove cyc_complexity
+
+Nick Desaulniers (1):
+      kallsyms: strip LTO suffixes from static functions
+
+Ye Guojin (1):
+      gcc-plugins: remove duplicate include in gcc-common.h
+
+ Documentation/kbuild/gcc-plugins.rst               |  28 ++++-
+ Makefile                                           |   6 +-
+ kernel/kallsyms.c                                  |  46 +++++--
+ scripts/Makefile.gcc-plugins                       |   2 -
+ scripts/gcc-plugins/Kconfig                        |  20 +---
+ scripts/gcc-plugins/cyc_complexity_plugin.c        |  69 -----------
+ scripts/gcc-plugins/gcc-common.h                   | 132 +--------------------
+ scripts/gcc-plugins/gcc-generate-gimple-pass.h     |  19 ---
+ scripts/gcc-plugins/gcc-generate-ipa-pass.h        |  19 ---
+ scripts/gcc-plugins/gcc-generate-rtl-pass.h        |  19 ---
+ scripts/gcc-plugins/gcc-generate-simple_ipa-pass.h |  19 ---
+ scripts/gcc-plugins/structleak_plugin.c            |   2 -
+ security/Kconfig.hardening                         |  14 ++-
+ 13 files changed, 75 insertions(+), 320 deletions(-)
+ delete mode 100644 scripts/gcc-plugins/cyc_complexity_plugin.c
+
 -- 
-
-Hello Dear,
-
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
-Am a Widow and a single Mother with three Children.
-
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar $27.500.000.00, and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country,may be from there,we can build business relationship
-in the nearest future.
-
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply
-urgently to enable me to provide you more information about the
-investment funds.
-Best Regards
-Mrs Aisha Al-Qaddafi.
+Kees Cook
