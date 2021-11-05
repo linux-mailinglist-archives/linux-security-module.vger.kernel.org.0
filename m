@@ -2,80 +2,120 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77996446522
-	for <lists+linux-security-module@lfdr.de>; Fri,  5 Nov 2021 15:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8282446772
+	for <lists+linux-security-module@lfdr.de>; Fri,  5 Nov 2021 17:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbhKEOnA (ORCPT
+        id S233723AbhKERBa (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 5 Nov 2021 10:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        Fri, 5 Nov 2021 13:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbhKEOnA (ORCPT
+        with ESMTP id S229763AbhKERB3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 5 Nov 2021 10:43:00 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91794C06120A
-        for <linux-security-module@vger.kernel.org>; Fri,  5 Nov 2021 07:40:20 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 131so23293497ybc.7
-        for <linux-security-module@vger.kernel.org>; Fri, 05 Nov 2021 07:40:20 -0700 (PDT)
+        Fri, 5 Nov 2021 13:01:29 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A010C061714;
+        Fri,  5 Nov 2021 09:58:50 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id gn3so3462829pjb.0;
+        Fri, 05 Nov 2021 09:58:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=OcVKYMqD1OAPCy0gYs4jHd1iGD2P0eAuhSWYYDqPTRU=;
-        b=N1b3lJJtt5M01dNp8JbZ9wlxPEgavdHH7kOaEAEVfkbmSn74wy8b6CtEls49gMCxfh
-         oDGZ5S2CX5aqdtYS/rGJ8tdVLMloefoZ/CCMs69c5Kb3rKdKgY/JmI/wlQ7YVGSAo1Jp
-         5Qt1+k0XTxg8qqnZjudP9UAORBJ92sdLU0oIOua3DKAzZc88nDSmPYSD4mAu6mL5fz+A
-         fuhWIp6YLFhkUEgp8GwSRp/VpBCvhqCo9AmlKmC48JW3/NiESuiqszZq0mFPfTvkJwh4
-         riCGAZYjJ1QrH2zKvxrWUuE0yYwflu5v0OdhMQcrfBPvmhBMkbfhd95Vq43EqyQVkBZX
-         rfxA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Dm/tkXe8vrCYnsbfNrGgeQZgPuQ1rWi9SOlQuOERJiI=;
+        b=UlgE/YQSPQJWMfUCwYhCOqMFMyTOzpcRoFGeVLHrFwMjU1iG9rKTvQzHGlDVFkLOif
+         nz2oGZJ1mrmILyfc7DAGyBmoFpWLwE0snPV1E61vYv2HKle3i6L0B/nWriJgQhTwrmTl
+         TF0QAerEaUNMjLFqoXZRVALTfh9NDSHa1TYrtBzJrspT16kiXkysTx2ZbisaMpJ9RTSz
+         IImS8hwU48HL1JpMLXPxI1xKjNop82xMh9LoIIiFRHSnVNOtxVU++8lGU47O9fpN6Mtv
+         FVnrIkBVcs0aBL1B+y04O2oLdA70zx0tvk6GMz8LM1cIKWxAQa2O1KD6vDo15qloWAPN
+         zbXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=OcVKYMqD1OAPCy0gYs4jHd1iGD2P0eAuhSWYYDqPTRU=;
-        b=Zh2oGh2qpm46MnCyddW2Uk5j2e/aH3EIcYYlca5Y/s758A06R67KuHaBJKn4KZZ3Zz
-         Oo+euJDDqceLzulsDF1wntBwHoVM56Yoedwui9vX2KKxUXaLNHkY7V7IonRzSORHDNlv
-         V/soCqe+/pjHV+VwLnEGeFV2WkXNbkgrL3otpNiRifFa7BzRiSF2vO3ospZCbKjUXyla
-         eMoB5f2CexLn2kZUWUCWV/PH6I7TyxIR6aOzx/B0VjD7tvU/6qUoZmjSc9HItP33+RI9
-         efXHuuH4t6RGuL+QeldVKhBxU52UStTVTYOcqDanoC8gVNjlQfV0c57ECyYx4OMayi7Q
-         ptSA==
-X-Gm-Message-State: AOAM532iiZlhm0Qs2NU8GFiAmbDYTNmAAbDrk7sb4Gs1wq54LLd0KX6t
-        DCds2SOCg7GfU97BhfBJz1KpbyoIdjRkllsyWes=
-X-Google-Smtp-Source: ABdhPJw05kKL8b9ZWN/t4Jx2+EAfxvLQNsj/AomruN/WudIelbMWFCdLaw94VW6EpEG3ndoa9x4pKPvIAyjPoawLw4M=
-X-Received: by 2002:a05:6902:1503:: with SMTP id q3mr7369459ybu.90.1636123219455;
- Fri, 05 Nov 2021 07:40:19 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Dm/tkXe8vrCYnsbfNrGgeQZgPuQ1rWi9SOlQuOERJiI=;
+        b=otzEm1PISloyZN7zf0gwW2o00zcBBKQ+rs9y1NKaANJq8vIMtw/sGQ85tdkllsK/FH
+         i1Ha9ZD4+Gp8f5Nykx4yFX0PMSANHscXf9p+CpOMbrD1ZL43FTgX2Y5RvdQb7uxSL2Fm
+         A35CDhkE+5WJ+Xm96DV/LFFvS39mXpiVAHPzIlEEk/D8GWeNLo0hhh1pRe7TYTA8+zgM
+         4KACmPESBEiEh6y88DwceTHwInl+8P41a/0vS6Kfvjo88NkBNZYLMZmsszhWyFLmHqOU
+         PjWfyobFIGaJA0Y2yH78GvnHebJUK5pT7kOyrbd9VA7D2cbL+2rtWVw5I2iOzR1q8v1g
+         Hoyw==
+X-Gm-Message-State: AOAM531U1scfbZ03zT/FUHfQ45hUYGb7Rm79XpGbwuSDMFtlzWrIzxcA
+        aECn6px0cuKzLzxy59ONBxA=
+X-Google-Smtp-Source: ABdhPJxM2R0qJcfJqVo7o/snSZySDmo6F9vZuLLmqo8/DfMX02pan77bXrd9rpIJGITUbEsvFUv7iQ==
+X-Received: by 2002:a17:90b:4d84:: with SMTP id oj4mr26973402pjb.90.1636131529539;
+        Fri, 05 Nov 2021 09:58:49 -0700 (PDT)
+Received: from [192.168.1.194] ([50.39.237.102])
+        by smtp.gmail.com with ESMTPSA id mz7sm4659568pjb.7.2021.11.05.09.58.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Nov 2021 09:58:48 -0700 (PDT)
+Message-ID: <136709ac-1fbe-80d0-f49f-8a0399106ad8@gmail.com>
+Date:   Fri, 5 Nov 2021 09:58:47 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:7108:5153:0:0:0:0 with HTTP; Fri, 5 Nov 2021 07:40:19
- -0700 (PDT)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <farahfaridaa11@gmail.com>
-Date:   Fri, 5 Nov 2021 07:40:19 -0700
-Message-ID: <CA+kR5Kc+-A+VFQg9TByOPT+SRxRAWE6FGPNrjuyqzPi-j5iA0A@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH] landlock: Initialize kernel stack variables properly
+Content-Language: en-US
+To:     Austin Kim <austindh.kim@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211103071427.GA13854@raspberrypi>
+ <7a71215c-58f4-081b-6a2e-030073f2737e@digikod.net>
+ <CADLLry4zYn-NZBtC3pdQpb4c_3vvzNfc71rBrXc-oXqgSZNHaQ@mail.gmail.com>
+From:   J Freyensee <why2jjj.linux@gmail.com>
+In-Reply-To: <CADLLry4zYn-NZBtC3pdQpb4c_3vvzNfc71rBrXc-oXqgSZNHaQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Dear Friend,
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
 
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
-funds.
+On 11/4/21 4:41 AM, Austin Kim wrote:
+> 2021년 11월 3일 (수) 오후 9:14, Mickaël Salaün <mic@digikod.net>님이 작성:
+>> Hi Austin,
+>>
+>> On 03/11/2021 08:14, Austin Kim wrote:
+>>> In case kernel stack variables are not initialized properly, there might
+>>> be a little chance of kernel information disclosure. So it is better for
+>>> kernel stack variables to be initialized with null characters.
+>>>
+>>> Signed-off-by: Austin Kim <austindh.kim@gmail.com>
+>>> ---
+>>>   security/landlock/syscalls.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+>>> index 32396962f04d..50a6f7091428 100644
+>>> --- a/security/landlock/syscalls.c
+>>> +++ b/security/landlock/syscalls.c
+>>> @@ -320,6 +320,8 @@ SYSCALL_DEFINE4(landlock_add_rule,
+>>>        if (rule_type != LANDLOCK_RULE_PATH_BENEATH)
+>>>                return -EINVAL;
+>>>
+>>> +     memset(&path_beneath_attr, 0, sizeof(path_beneath_attr));
+>>> +
+>> This memset is already done with the copy_from_user() call just below.
+>>
+> It seems that memset() is done inside copy_from_user().
+> Thanks for feedback.
 
-Your Urgent Reply Will Be Appreciated
-Best Regards
-Mrs Aisha Al-Qaddafi
+If you are really sensitive of what information may be disclosed in this 
+case you can consider memzero_explicit() to use instead:
+
+https://www.kernel.org/doc/htmldocs/kernel-api/API-memzero-explicit.html
+
+Jay
+
+>
+> BR,
+> Austin Kim
+>
+>>>        /* Copies raw user space buffer, only one type for now. */
+>>>        res = copy_from_user(&path_beneath_attr, rule_attr,
+>>>                        sizeof(path_beneath_attr));
+>>>
+
