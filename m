@@ -2,43 +2,42 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0CA44A331
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Nov 2021 02:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5AB44A2B2
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Nov 2021 02:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242759AbhKIB0U (ORCPT
+        id S241943AbhKIBUW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 8 Nov 2021 20:26:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44378 "EHLO mail.kernel.org"
+        Mon, 8 Nov 2021 20:20:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243262AbhKIBPW (ORCPT
+        id S241154AbhKIBRS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:15:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B9C561AD2;
-        Tue,  9 Nov 2021 01:06:24 +0000 (UTC)
+        Mon, 8 Nov 2021 20:17:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F3D8961AFC;
+        Tue,  9 Nov 2021 01:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419985;
-        bh=8oDn/mKKwZW39jfc27elu3K7XvGSEnv0UEF+EV8qVY0=;
+        s=k20201202; t=1636420022;
+        bh=TslBu8qF10g5S/5SN3YoqK+yp13DOd4gZDb9BGhTW18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nBH+2tjL16WoCQYp709ua5F1r1WN2iaKWmPIqmc9P0gv0dvpXJTaaZQccKvz/5LcB
-         h6CUfhPOk9b2KDBMZg19QQmumjDfEuzg0xrZARuX9HgcfwE+oAiFKOo+ffiAP887SM
-         buXqdwKYUj7aF30P69Em8HKkntP8hoBLastDVvm0spNXpkUqa9Bu7YeoLQ+eQVVSA/
-         lqwhCWAT/Vuxrjy0ujSvI9wsZuj3mjQfNC+6vv0GTz+Pqc2SvTM3J6BjVojdjrmvTv
-         GdGpvlVYbRgfO7SJs6iiFUeFYX4gahIvvpF470LzROyXu59XR+8H6J0oSTNi9LIfoz
-         lb1IkU39QThhA==
+        b=ixVtRE7Mp8TNzkPpDe3Yo1d1CwJrh4pn93ua2MwaOnUAl0ZeNaKuaXOAVwp8BAhOC
+         RPaicERAAjSIUf0S1YxG4hFAqbpIsi3/eX237qViF4sECj/qHw2YyqOgApTTeuAsx5
+         j4tKSjZntU1lAuWfjSr3ZbGLFHID3GVh9+Ew1T5prp/5IHflhp/iAyu4IAEZpE5Ls/
+         7xsKPcSHTcz+YZqvVmbULDu7x6iP7ncgCHdEPHacFSjz5jdH3YmTc+DSwoxI8RUQxt
+         9vPKLdfCh+TaCYp92WEri4CjEmunhZXgSlHOK0QBzRRLIpIwOgavv+ntCklqgEh3OQ
+         U8Cv3IVCzEIjQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzbot <syzbot+89731ccb6fec15ce1c22@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        syzbot+3f91de0b813cc3d19a80@syzkaller.appspotmail.com,
         Casey Schaufler <casey@schaufler-ca.com>,
         Sasha Levin <sashal@kernel.org>, jmorris@namei.org,
         serge@hallyn.com, linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 37/47] smackfs: use __GFP_NOFAIL for smk_cipso_doi()
-Date:   Mon,  8 Nov 2021 12:50:21 -0500
-Message-Id: <20211108175031.1190422-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 07/39] smackfs: Fix use-after-free in netlbl_catmap_walk()
+Date:   Mon,  8 Nov 2021 20:06:17 -0500
+Message-Id: <20211109010649.1191041-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211108175031.1190422-1-sashal@kernel.org>
-References: <20211108175031.1190422-1-sashal@kernel.org>
+In-Reply-To: <20211109010649.1191041-1-sashal@kernel.org>
+References: <20211109010649.1191041-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,39 +45,53 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-[ Upstream commit f91488ee15bd3cac467e2d6a361fc2d34d1052ae ]
+[ Upstream commit 0817534ff9ea809fac1322c5c8c574be8483ea57 ]
 
-syzbot is reporting kernel panic at smk_cipso_doi() due to memory
-allocation fault injection [1]. The reason for need to use panic() was
-not explained. But since no fix was proposed for 18 months, for now
-let's use __GFP_NOFAIL for utilizing syzbot resource on other bugs.
+Syzkaller reported use-after-free bug as described in [1]. The bug is
+triggered when smk_set_cipso() tries to free stale category bitmaps
+while there are concurrent reader(s) using the same bitmaps.
 
-Link: https://syzkaller.appspot.com/bug?extid=89731ccb6fec15ce1c22 [1]
-Reported-by: syzbot <syzbot+89731ccb6fec15ce1c22@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Wait for RCU grace period to finish before freeing the category bitmaps
+in smk_set_cipso(). This makes sure that there are no more readers using
+the stale bitmaps and freeing them should be safe.
+
+[1] https://lore.kernel.org/netdev/000000000000a814c505ca657a4e@google.com/
+
+Reported-by: syzbot+3f91de0b813cc3d19a80@syzkaller.appspotmail.com
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/smack/smackfs.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ security/smack/smackfs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index 25705a72d31bc..9fdf404a318f9 100644
+index 009e83ee2d002..25705a72d31bc 100644
 --- a/security/smack/smackfs.c
 +++ b/security/smack/smackfs.c
-@@ -721,9 +721,7 @@ static void smk_cipso_doi(void)
- 		printk(KERN_WARNING "%s:%d remove rc = %d\n",
- 		       __func__, __LINE__, rc);
+@@ -859,6 +859,7 @@ static int smk_open_cipso(struct inode *inode, struct file *file)
+ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+ 				size_t count, loff_t *ppos, int format)
+ {
++	struct netlbl_lsm_catmap *old_cat;
+ 	struct smack_known *skp;
+ 	struct netlbl_lsm_secattr ncats;
+ 	char mapcatset[SMK_CIPSOLEN];
+@@ -948,9 +949,11 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
  
--	doip = kmalloc(sizeof(struct cipso_v4_doi), GFP_KERNEL);
--	if (doip == NULL)
--		panic("smack:  Failed to initialize cipso DOI.\n");
-+	doip = kmalloc(sizeof(struct cipso_v4_doi), GFP_KERNEL | __GFP_NOFAIL);
- 	doip->map.std = NULL;
- 	doip->doi = smk_cipso_doi_value;
- 	doip->type = CIPSO_V4_MAP_PASS;
+ 	rc = smk_netlbl_mls(maplevel, mapcatset, &ncats, SMK_CIPSOLEN);
+ 	if (rc >= 0) {
+-		netlbl_catmap_free(skp->smk_netlabel.attr.mls.cat);
++		old_cat = skp->smk_netlabel.attr.mls.cat;
+ 		skp->smk_netlabel.attr.mls.cat = ncats.attr.mls.cat;
+ 		skp->smk_netlabel.attr.mls.lvl = ncats.attr.mls.lvl;
++		synchronize_rcu();
++		netlbl_catmap_free(old_cat);
+ 		rc = count;
+ 	}
+ 
 -- 
 2.33.0
 
