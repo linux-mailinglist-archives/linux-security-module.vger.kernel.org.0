@@ -2,83 +2,86 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9925944A3EC
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Nov 2021 02:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA2644A45E
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Nov 2021 02:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242116AbhKIBcV (ORCPT
+        id S239341AbhKIB66 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 8 Nov 2021 20:32:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58406 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243156AbhKIB0y (ORCPT
+        Mon, 8 Nov 2021 20:58:58 -0500
+Received: from smtprelay0071.hostedemail.com ([216.40.44.71]:53056 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232875AbhKIB65 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:26:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3278361B51;
-        Tue,  9 Nov 2021 01:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420208;
-        bh=72ypZuCUMzT6BiLWCUpF5OO0s46E8zScmkNo2fVNvyY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IJfY/Re178Y7OQQ6DfUZVLvNoOyEEBArPP+9rzzE0IkpNOJuX+/Nlbe7K1B7TJLUl
-         iI2+xhmPUm0c/Qm8TTu5tf+InAr+gOchCSAewK7GG274O/M3NikmYFx6OMjrV1jVgh
-         j+8M+oYIT0GCblzt4mpRK6Pdfj9Bq6rtMgwKytEwxPCAJVUVf1GFRThZ6QQcNd51bN
-         cEjhfr2mlpmwsxrrh+TJ3btOY/Ig7GGny9WCrSx+erI8IVlgCDr9SPLnpaEs+ABYn1
-         dQq+XK9pH0Gs7UAf1HDm9D3fO8hj2UR3dKS3Cag18uaHudBNctNonueRsJtX2ZLk6A
-         K1NpQjm1B1riw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzbot <syzbot+89731ccb6fec15ce1c22@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Sasha Levin <sashal@kernel.org>, jmorris@namei.org,
-        serge@hallyn.com, linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 26/30] smackfs: use __GFP_NOFAIL for smk_cipso_doi()
-Date:   Mon,  8 Nov 2021 20:09:14 -0500
-Message-Id: <20211109010918.1192063-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109010918.1192063-1-sashal@kernel.org>
-References: <20211109010918.1192063-1-sashal@kernel.org>
+        Mon, 8 Nov 2021 20:58:57 -0500
+X-Greylist: delayed 425 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Nov 2021 20:58:57 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id C9C841812EF2A
+        for <linux-security-module@vger.kernel.org>; Tue,  9 Nov 2021 01:49:08 +0000 (UTC)
+Received: from omf11.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 26CB31802DA68;
+        Tue,  9 Nov 2021 01:49:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 9133F20A293;
+        Tue,  9 Nov 2021 01:49:05 +0000 (UTC)
+Message-ID: <f527316e1ea4017af37857dd6d3eeecffc3bbce0.camel@perches.com>
+Subject: Re: [PATCH AUTOSEL 4.19 10/47] NET: IPV4: fix error "do not
+ initialise globals to 0"
+From:   Joe Perches <joe@perches.com>
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     wangzhitong <wangzhitong@uniontech.com>,
+        "David S . Miller" <davem@davemloft.net>, paul@paul-moore.com,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Mon, 08 Nov 2021 17:49:04 -0800
+In-Reply-To: <20211108175031.1190422-10-sashal@kernel.org>
+References: <20211108175031.1190422-1-sashal@kernel.org>
+         <20211108175031.1190422-10-sashal@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.74
+X-Stat-Signature: ywfaopkbkekuqwjh9bmzy79m9yzhhabh
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 9133F20A293
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18A8nOBpRGzod+EATlk6xaJ0ABEZZMG0Mc=
+X-HE-Tag: 1636422545-143270
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+On Mon, 2021-11-08 at 12:49 -0500, Sasha Levin wrote:
+> From: wangzhitong <wangzhitong@uniontech.com>
+> 
+> [ Upstream commit db9c8e2b1e246fc2dc20828932949437793146cc ]
+> 
+> this patch fixes below Errors reported by checkpatch
+>     ERROR: do not initialise globals to 0
+>     +int cipso_v4_rbm_optfmt = 0;
+> 
+> Signed-off-by: wangzhitong <wangzhitong@uniontech.com>
+> Signed-off-by: David S. Miller <davem@davemloft.net>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  net/ipv4/cipso_ipv4.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/ipv4/cipso_ipv4.c b/net/ipv4/cipso_ipv4.c
+> index e8b8dd1cb1576..75908722de47a 100644
+> --- a/net/ipv4/cipso_ipv4.c
+> +++ b/net/ipv4/cipso_ipv4.c
+> @@ -87,7 +87,7 @@ struct cipso_v4_map_cache_entry {
+>  static struct cipso_v4_map_cache_bkt *cipso_v4_cache;
+>  
+>  /* Restricted bitmap (tag #1) flags */
+> -int cipso_v4_rbm_optfmt = 0;
+> +int cipso_v4_rbm_optfmt;
 
-[ Upstream commit f91488ee15bd3cac467e2d6a361fc2d34d1052ae ]
+I think this is a silly thing to backport unless it's required
+for some other patch.
 
-syzbot is reporting kernel panic at smk_cipso_doi() due to memory
-allocation fault injection [1]. The reason for need to use panic() was
-not explained. But since no fix was proposed for 18 months, for now
-let's use __GFP_NOFAIL for utilizing syzbot resource on other bugs.
+>  int cipso_v4_rbm_strictvalid = 1;
+>  
+>  /*
 
-Link: https://syzkaller.appspot.com/bug?extid=89731ccb6fec15ce1c22 [1]
-Reported-by: syzbot <syzbot+89731ccb6fec15ce1c22@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- security/smack/smackfs.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index 845ed464fb8cd..40c8b2b8a4722 100644
---- a/security/smack/smackfs.c
-+++ b/security/smack/smackfs.c
-@@ -721,9 +721,7 @@ static void smk_cipso_doi(void)
- 		printk(KERN_WARNING "%s:%d remove rc = %d\n",
- 		       __func__, __LINE__, rc);
- 
--	doip = kmalloc(sizeof(struct cipso_v4_doi), GFP_KERNEL);
--	if (doip == NULL)
--		panic("smack:  Failed to initialize cipso DOI.\n");
-+	doip = kmalloc(sizeof(struct cipso_v4_doi), GFP_KERNEL | __GFP_NOFAIL);
- 	doip->map.std = NULL;
- 	doip->doi = smk_cipso_doi_value;
- 	doip->type = CIPSO_V4_MAP_PASS;
--- 
-2.33.0
 
