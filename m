@@ -2,92 +2,261 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4DB45209C
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Nov 2021 01:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 392FA451DB8
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Nov 2021 01:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345159AbhKPAzv (ORCPT
+        id S1352972AbhKPAcj (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 15 Nov 2021 19:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        Mon, 15 Nov 2021 19:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343560AbhKOTVU (ORCPT
+        with ESMTP id S1345439AbhKOT20 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:21:20 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD403C03D78E
-        for <linux-security-module@vger.kernel.org>; Mon, 15 Nov 2021 10:17:43 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id v3so36666862uam.10
-        for <linux-security-module@vger.kernel.org>; Mon, 15 Nov 2021 10:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+a8ZktNn6ZKD5SR+F36fH6n6kb1h7BS7jd1Wp45NaFM=;
-        b=gKjpO0lLV7NAzCVw+nwCxA8yC44R21WAWD2XjYYi0XvHIj7m390XTLd0lEN5Nn7rcB
-         BuK4C1Cfgw1j9IVR5y4ccOOC9HnZhA9Q9ERm3Q22nj0xyYhHPPZ+IYpHX27qbjUCyDa9
-         FjBo+0o5USkN9WjUnl/bLBY+ePanR03FsUeaamVOMTsyk1ZuvITwcd6QcOScign6Qmun
-         u7WUTMpODzERw1+OGJLsaUtAupMXVPh3UXvanz5tAdren74UjX5wDmMwtt0tuKXcncWg
-         TUyJQc40cjABQb16NUrbV/xR8FV0L6K9gaV5knCQzF0+juocFBSz2mXCLAEddrjvWuAo
-         708w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+a8ZktNn6ZKD5SR+F36fH6n6kb1h7BS7jd1Wp45NaFM=;
-        b=yurLGhu/91PmpgoXOdHlI0Z9vxAhjotLclLEO1UCux7Iaa2wk+iA/KsmrXFnuRd7as
-         0XYV6zmZjbLvc8R6TdRV4se/mTu4RMZdGQfZ5RemMLdQSdUWVFlw8Nonbxh6VlWuOk6V
-         L1PtAJ6yb1pAamOxUuGdiLwQiT/Qdm0wItJSsmc8IGWSaNDTX2R3POsTT7XMtOHrU3R9
-         OXzrQgYXIVq3fA6juYcm2m850dtrWcTt/CDjuuwJ4YE0svCEjdv037LYzttAc0vAmk3i
-         XBnkIPu6b+Hm/lVNbCZLxXWKDALWOIDwl0Co6fsDjNvVEamgRi+oM5C8BLJUVGpK0zRJ
-         6F0A==
-X-Gm-Message-State: AOAM531v2vFj9eMNEVbrnc6jqAlqaUcMnzv9WfOw3MJc60pk+RE7krtS
-        CCZyUotUGVJnd9q7oS79UkHfuImn6Wssy8c34NdlSA==
-X-Google-Smtp-Source: ABdhPJya8J9a4P+RjZgEeXSNntVJy86MJNmzIPw9P4CUF+9L+z4wnWDoOasaaQi9RrdEFaJXT3F+c+2vxQUEakzHjTg=
-X-Received: by 2002:a67:df96:: with SMTP id x22mr46045260vsk.9.1637000262835;
- Mon, 15 Nov 2021 10:17:42 -0800 (PST)
+        Mon, 15 Nov 2021 14:28:26 -0500
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [IPv6:2001:1600:4:17::190c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513EBC04318F
+        for <linux-security-module@vger.kernel.org>; Mon, 15 Nov 2021 10:53:07 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HtJH46HvlzMpt42;
+        Mon, 15 Nov 2021 19:53:04 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4HtJH23jqRzlh8V4;
+        Mon, 15 Nov 2021 19:53:02 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
+Date:   Mon, 15 Nov 2021 19:53:01 +0100
+Message-Id: <20211115185304.198460-1-mic@digikod.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211115173850.3598768-1-adelva@google.com> <74179f08-3529-7502-db33-2ea18cab3f58@kernel.dk>
-In-Reply-To: <74179f08-3529-7502-db33-2ea18cab3f58@kernel.dk>
-From:   Alistair Delva <adelva@google.com>
-Date:   Mon, 15 Nov 2021 10:17:30 -0800
-Message-ID: <CANDihLE5oO2=MDiPtGmUzZgaPuzT2_X7da-vKe+ybBJkXgnsAQ@mail.gmail.com>
-Subject: Re: [PATCH] block: Check ADMIN before NICE for IOPRIO_CLASS_RT
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org,
-        Khazhismel Kumykov <khazhy@google.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Serge Hallyn <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kernel-team@android.com,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Nov 15, 2021 at 10:04 AM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 11/15/21 10:38 AM, Alistair Delva wrote:
-> > Booting to Android userspace on 5.14 or newer triggers the following
-> > SELinux denial:
-> >
-> > avc: denied { sys_nice } for comm="init" capability=23
-> >      scontext=u:r:init:s0 tcontext=u:r:init:s0 tclass=capability
-> >      permissive=0
-> >
-> > Init is PID 0 running as root, so it already has CAP_SYS_ADMIN. For
-> > better compatibility with older SEPolicy, check ADMIN before NICE.
->
-> Seems a bit wonky to me, but the end result is the same.
+Hi,
 
-No argument from me..
+This new patch series fix the syscall signature as suggested by
+Alejandro Colomar.  It applies on Linus's master branch (v5.16-rc1) and
+next-20211115.
 
-> In any case,
-> this warrants a comment above it detailing why the ordering is
-> seemingly important.
+Andrew, can you please consider to merge this into your tree?
 
-Sent v2.
+Overview
+========
 
-> --
-> Jens Axboe
->
+The final goal of this patch series is to enable the kernel to be a
+global policy manager by entrusting processes with access control at
+their level.  To reach this goal, two complementary parts are required:
+* user space needs to be able to know if it can trust some file
+  descriptor content for a specific usage;
+* and the kernel needs to make available some part of the policy
+  configured by the system administrator.
+
+Primary goal of trusted_for(2)
+==============================
+
+This new syscall enables user space to ask the kernel: is this file
+descriptor's content trusted to be used for this purpose?  The set of
+usage currently only contains execution, but other may follow (e.g.
+configuration, sensitive data).  If the kernel identifies the file
+descriptor as trustworthy for this usage, user space should then take
+this information into account.  The "execution" usage means that the
+content of the file descriptor is trusted according to the system policy
+to be executed by user space, which means that it interprets the content
+or (try to) maps it as executable memory.
+
+A simple system-wide security policy can be set by the system
+administrator through a sysctl configuration consistent with the mount
+points or the file access rights.  The documentation explains the
+prerequisites.
+
+It is important to note that this can only enable to extend access
+control managed by the kernel.  Hence it enables current access control
+mechanism to be extended and become a superset of what they can
+currently control.  Indeed, the security policy could also be delegated
+to an LSM, either a MAC system or an integrity system.  For instance,
+this is required to close a major IMA measurement/appraisal interpreter
+integrity gap by bringing the ability to check the use of scripts [1].
+Other uses are expected, such as for magic-links [2], SGX integration
+[3], bpffs [4].
+
+Complementary W^X protections can be brought by SELinux, IPE [5] and
+trampfd [6].
+
+System call description
+=======================
+
+trusted_for(int fd, enum trusted_for_usage usage, u32 flags);
+
+@fd is the file descriptor to check.
+
+@usage identifies the user space usage intended for @fd: only
+TRUSTED_FOR_EXECUTION for now, but trusted_for_usage could be extended
+to identify other usages (e.g. configuration, sensitive data).
+
+@flags must be 0 for now but it could be used in the future to do
+complementary checks (e.g. signature or integrity requirements, origin
+of the file).
+
+This system call returns 0 on success, or -EACCES if the kernel policy
+denies the specified usage (which should be enforced by the caller).
+
+The first patch contains the full syscall and sysctl documentation.
+
+Prerequisite of its use
+=======================
+
+User space needs to adapt to take advantage of this new feature.  For
+example, the PEP 578 [7] (Runtime Audit Hooks) enables Python 3.8 to be
+extended with policy enforcement points related to code interpretation,
+which can be used to align with the PowerShell audit features.
+Additional Python security improvements (e.g. a limited interpreter
+without -c, stdin piping of code) are on their way [8].
+
+Examples
+========
+
+The initial idea comes from CLIP OS 4 and the original implementation
+has been used for more than 13 years:
+https://github.com/clipos-archive/clipos4_doc
+Chrome OS has a similar approach:
+https://chromium.googlesource.com/chromiumos/docs/+/master/security/noexec_shell_scripts.md
+
+Userland patches can be found here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+Actually, there is more than the O_MAYEXEC changes (which matches this search)
+e.g., to prevent Python interactive execution. There are patches for
+Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
+also some related patches which do not directly rely on O_MAYEXEC but
+which restrict the use of browser plugins and extensions, which may be
+seen as scripts too:
+https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
+
+An introduction to O_MAYEXEC was given at the Linux Security Summit
+Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+See also a first LWN article about O_MAYEXEC and a new one about
+trusted_for(2) and its background:
+* https://lwn.net/Articles/820000/
+* https://lwn.net/Articles/832959/
+
+This can be tested with CONFIG_SYSCTL.  I would really appreciate
+constructive comments on this patch series.
+
+[1] https://lore.kernel.org/lkml/20211014130125.6991-1-zohar@linux.ibm.com/
+[2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
+[3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
+[5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
+[6] https://lore.kernel.org/lkml/20200922215326.4603-1-madvenka@linux.microsoft.com/
+[7] https://www.python.org/dev/peps/pep-0578/
+[8] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
+
+Previous versions:
+v16: https://lore.kernel.org/r/20211110190626.257017-1-mic@digikod.net/
+v15: https://lore.kernel.org/r/20211012192410.2356090-1-mic@digikod.net/
+v14: https://lore.kernel.org/r/20211008104840.1733385-1-mic@digikod.net/
+v13: https://lore.kernel.org/r/20211007182321.872075-1-mic@digikod.net/
+v12: https://lore.kernel.org/r/20201203173118.379271-1-mic@digikod.net/
+v11: https://lore.kernel.org/r/20201019164932.1430614-1-mic@digikod.net/
+v10: https://lore.kernel.org/r/20200924153228.387737-1-mic@digikod.net/
+v9: https://lore.kernel.org/r/20200910164612.114215-1-mic@digikod.net/
+v8: https://lore.kernel.org/r/20200908075956.1069018-1-mic@digikod.net/
+v7: https://lore.kernel.org/r/20200723171227.446711-1-mic@digikod.net/
+v6: https://lore.kernel.org/r/20200714181638.45751-1-mic@digikod.net/
+v5: https://lore.kernel.org/r/20200505153156.925111-1-mic@digikod.net/
+v4: https://lore.kernel.org/r/20200430132320.699508-1-mic@digikod.net/
+v3: https://lore.kernel.org/r/20200428175129.634352-1-mic@digikod.net/
+v2: https://lore.kernel.org/r/20190906152455.22757-1-mic@digikod.net/
+v1: https://lore.kernel.org/r/20181212081712.32347-1-mic@digikod.net/
+
+Regards,
+
+Mickaël Salaün (3):
+  fs: Add trusted_for(2) syscall implementation and related sysctl
+  arch: Wire up trusted_for(2)
+  selftest/interpreter: Add tests for trusted_for(2) policies
+
+ Documentation/admin-guide/sysctl/fs.rst       |  50 +++
+ arch/alpha/kernel/syscalls/syscall.tbl        |   2 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   2 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   2 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   2 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   2 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   2 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   2 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   2 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   2 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   2 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   2 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   2 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   2 +
+ fs/open.c                                     | 111 ++++++
+ include/linux/fs.h                            |   1 +
+ include/linux/syscalls.h                      |   1 +
+ include/uapi/asm-generic/unistd.h             |   4 +-
+ include/uapi/linux/trusted-for.h              |  18 +
+ kernel/sysctl.c                               |  12 +-
+ tools/testing/selftests/Makefile              |   1 +
+ .../testing/selftests/interpreter/.gitignore  |   2 +
+ tools/testing/selftests/interpreter/Makefile  |  21 +
+ tools/testing/selftests/interpreter/config    |   1 +
+ .../selftests/interpreter/trust_policy_test.c | 362 ++++++++++++++++++
+ 30 files changed, 613 insertions(+), 4 deletions(-)
+ create mode 100644 include/uapi/linux/trusted-for.h
+ create mode 100644 tools/testing/selftests/interpreter/.gitignore
+ create mode 100644 tools/testing/selftests/interpreter/Makefile
+ create mode 100644 tools/testing/selftests/interpreter/config
+ create mode 100644 tools/testing/selftests/interpreter/trust_policy_test.c
+
+
+base-commit: 8ab774587903771821b59471cc723bba6d893942
+-- 
+2.33.1
+
