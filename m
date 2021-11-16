@@ -2,68 +2,76 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F19453091
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Nov 2021 12:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649F44532F2
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Nov 2021 14:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbhKPLbh (ORCPT
+        id S236517AbhKPNj3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 16 Nov 2021 06:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234884AbhKPLbC (ORCPT
+        Tue, 16 Nov 2021 08:39:29 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:42656 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232201AbhKPNj3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 16 Nov 2021 06:31:02 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA8DC079787
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Nov 2021 03:26:59 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id b12so36912543wrh.4
-        for <linux-security-module@vger.kernel.org>; Tue, 16 Nov 2021 03:26:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=VPSdTQPJ5hxea0d4B/OGzopTdVjRnbFmJz+O0tAMBIW+kVpQPKiYwfvCdPxAiu9RO7
-         oe9kEcogTcLI4iYVrS1eOtN05ZsYHexXSFFQpbbx9c1Ayow9QIMNNWeK3yqQOqbV6uta
-         lYm4w6zcQWO4dqR/GNjN0aurI02r6lW3XO4xQxM/13UYVUY6ET4f0O8Iq4IG8IZUtkwp
-         NHbrha8XPUVMG3Xu1I5WAylPedohg9BtJHXmX/E5I/oVcL5vEd+kv9L+n5IA0SK5OUNr
-         Wzfz9JBOv9okjRvaOWABxHrvDpiLS87CruKZfKxQJvud8svtNp7BgBXzyICxaDFUC026
-         9ZZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=T/GX+ubeRpjqNwcQkIrZXs4jh5XIyQxPBDYp8bumrLpTBVPLwaPPtMK7GPqvUTCpVf
-         wqiY/9RuMY4X3K3BF0yAaiyhtMv/Cxc+sB+yWfcYCO3/p2NO67xVUTM8aIQaTAnEqUVM
-         9/emS6hMtN7LAb0/F1iHSvnKHxPPq3YItVbpXim2pMzbaAjhwYNDDMqauUBeAstz4gi5
-         EPqESGgmex5d460pQ1pGT3pyp2CzqXggqMnbsHbDig2o/Z8lYHyrMvpH/cQQqyRL+SQy
-         UJTj+0tVCU1+MYq1Uqjit1YMgzzJwzoMlbRUPXWmBVo7DpU3IjuwtNKY8Rlrne0sBAfh
-         jUkg==
-X-Gm-Message-State: AOAM531ldMAepi25GhLoVSDuVzs7sIH3sWmaZzng0A3QQkjnpGBek39v
-        kAFWtiT76HqAB4CQrB3VJrPjBlW9KRxUI9R7bcI=
-X-Google-Smtp-Source: ABdhPJx7V7Pzab1iLpC1tLfl5XTeFedl5ZB5PcVwW8xnRDThhRI1kD0wWb7jxJL13vcYZKWR942PRdG0Y0xdZFQs61A=
-X-Received: by 2002:a5d:4107:: with SMTP id l7mr8132229wrp.209.1637062018294;
- Tue, 16 Nov 2021 03:26:58 -0800 (PST)
+        Tue, 16 Nov 2021 08:39:29 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 8F708546; Tue, 16 Nov 2021 07:36:28 -0600 (CST)
+Date:   Tue, 16 Nov 2021 07:36:28 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Alistair Delva' <adelva@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        Khazhismel Kumykov <khazhy@google.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Serge Hallyn <serge@hallyn.com>, Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux Stable maillist <stable@vger.kernel.org>,
+        john.johansen@canonical.com, James Morris <jmorris@namei.org>,
+        Christian Brauner <christian@brauner.io>,
+        Tycho Andersen <tycho@tycho.ws>
+Subject: Re: [PATCH] block: Check ADMIN before NICE for IOPRIO_CLASS_RT
+Message-ID: <20211116133628.GA6728@mail.hallyn.com>
+References: <20211115173850.3598768-1-adelva@google.com>
+ <CAFqZXNvVHv8Oje-WV6MWMF96kpR6epTsbc-jv-JF+YJw=55i1w@mail.gmail.com>
+ <CANDihLEFZAz8DwkkMGiDJnDMjxiUuSCanYsJtkRwa9RoyruLFA@mail.gmail.com>
+ <43aeb7451621474ea0d7bee6b99039c3@AcuMS.aculab.com>
 MIME-Version: 1.0
-Received: by 2002:a05:600c:3b97:0:0:0:0 with HTTP; Tue, 16 Nov 2021 03:26:57
- -0800 (PST)
-Reply-To: ebodrdickson1020@gmail.com
-From:   "Dr.Dickson Ebo" <drdicksonelo1023@gmail.com>
-Date:   Tue, 16 Nov 2021 03:26:57 -0800
-Message-ID: <CABq-xD7ZFmUMjZ9aWbbAm9nEKVBK1nOq1MtQg6NNJHmUXBtxzg@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43aeb7451621474ea0d7bee6b99039c3@AcuMS.aculab.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Finance and Audit Department, Zenith Bank Plc.
+On Tue, Nov 16, 2021 at 09:30:12AM +0000, David Laight wrote:
+> From: Alistair Delva
+> > Sent: 15 November 2021 19:09
+> ...
+> > > > -                       if (!capable(CAP_SYS_NICE) && !capable(CAP_SYS_ADMIN))
+> > > > +                       if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_NICE))
+> > > >                                 return -EPERM;
+> 
+> Isn't the real problem that you actually want to test:
+> 		if (!capable(CAP_SYS_NICE | CAP_SYS_ADMIN))
+> 			return -EPERM;
+> so that you only get the fail 'splat' when neither is set.
+> 
+> This will be true whenever more than one capability enables something.
+> 
+> Possibly this needs something like:
+> int capabale_or(unsigned int, ...);
+> #define capabale_or(...) capabable_or(__VA_LIST__, ~0u)
+> 
+> 	David
 
-The President of the Federal Republic of Nigeria through the Zenith
-International Bank Nigeria PLC has released your
-Contract/Inheritance/Compensation Fund.
+Right, that's what i was suggesting yesterday.  We do this in other
+places, where we split off a more fine-grained version of a gross
+capability.  If we care enough about the audit messages, then we
+probably do need a new primitive.
 
-Kindly get back to us as soon as possible.
-
-Yours faithfully,
-Dr. Dickson Ebo.
+-serge
