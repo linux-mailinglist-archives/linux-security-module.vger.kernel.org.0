@@ -2,26 +2,26 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAEF45C5F3
-	for <lists+linux-security-module@lfdr.de>; Wed, 24 Nov 2021 15:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D1045C3B7
+	for <lists+linux-security-module@lfdr.de>; Wed, 24 Nov 2021 14:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351463AbhKXODD (ORCPT
+        id S1353393AbhKXNmF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 24 Nov 2021 09:03:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51224 "EHLO mail.kernel.org"
+        Wed, 24 Nov 2021 08:42:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32976 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350650AbhKXOA4 (ORCPT
+        id S1349075AbhKXNkE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 24 Nov 2021 09:00:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B640632F7;
-        Wed, 24 Nov 2021 13:09:44 +0000 (UTC)
+        Wed, 24 Nov 2021 08:40:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AAAF6187A;
+        Wed, 24 Nov 2021 12:57:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637759385;
+        s=korg; t=1637758623;
         bh=ma3+/MsV3dPimc2kWHKUSKOiOxAkRuw68gL41V3FpRE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dxG+sB4/Mi1Xzb7qI/Lw9pXSF+CVQtAk2Arul8MTdAiVEWNdjTMfVySwL644/bzZE
-         OO4qV4qH8G7X9pXc5Zo6p3HtspuiBttdft/6c/KKY0GwCNNITYGHrDl+aERTvolSMh
-         iYR68y1XohbD8Ub6YDrlSfqISamX+Va9vhBN+i+I=
+        b=V7c2s8lGRHhXx1GsyLgAbbHR4g1/PQ4rOhxHe3V+zMBzEahb4aiTzn6sK9QzaJtzL
+         xSTf9BlyQsgfXLseXGlUe1jZAjnNuRCj7y/EH4qgIlsEq1ma/nrk9EWlSAoxf8Mq6q
+         MTF2gKgEVq4abbPkj4QXq8Ue6Kn3CX3q+aY8TIfU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Serge Hallyn <serge@hallyn.com>, Jens Axboe <axboe@kernel.dk>,
         Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org,
         linux-security-module@vger.kernel.org, kernel-team@android.com
-Subject: [PATCH 5.15 222/279] block: Check ADMIN before NICE for IOPRIO_CLASS_RT
-Date:   Wed, 24 Nov 2021 12:58:29 +0100
-Message-Id: <20211124115726.409329172@linuxfoundation.org>
+Subject: [PATCH 5.10 130/154] block: Check ADMIN before NICE for IOPRIO_CLASS_RT
+Date:   Wed, 24 Nov 2021 12:58:46 +0100
+Message-Id: <20211124115706.507376250@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115718.776172708@linuxfoundation.org>
-References: <20211124115718.776172708@linuxfoundation.org>
+In-Reply-To: <20211124115702.361983534@linuxfoundation.org>
+References: <20211124115702.361983534@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
