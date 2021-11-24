@@ -2,247 +2,174 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EC845B382
-	for <lists+linux-security-module@lfdr.de>; Wed, 24 Nov 2021 05:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CE245B5BC
+	for <lists+linux-security-module@lfdr.de>; Wed, 24 Nov 2021 08:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241160AbhKXEqq (ORCPT
+        id S229961AbhKXHpx (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 23 Nov 2021 23:46:46 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:8262 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241174AbhKXEqM (ORCPT
+        Wed, 24 Nov 2021 02:45:53 -0500
+Received: from mga12.intel.com ([192.55.52.136]:64731 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229496AbhKXHpw (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 23 Nov 2021 23:46:12 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AO4RBpY006040;
-        Wed, 24 Nov 2021 04:42:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=qsSHdCnesWgw6P5qUtyD9ZQKk7kKRCyx+Xa4vy7iSOU=;
- b=ML1/HV4RgtM2UjOO8wOdUo94OGjjA4kXYIfURz6H8cHI84JC/l1A75ZrAsaTnchLTMCc
- qAiCeBUKwejaIRavTriAA3EGjjpXaJWP6m5OSnKX8B4MCoNl3q0mUVY29gXvz+ejmUH8
- qgF6GQk44y/191WWNon0zgwILwS6OhGRnWAMxv82YAEFSPs2euKnGWhmGriGt8ej48Ek
- mnk0iwQMPxM9xy9GvSZhfte8XXrZfsNPv6iYJ/VxDPMcZfURq1MWFYwE6yFKOGU+maHD
- 0mlPmMTEQqK1IcsCc+ulRO4hRG0ysF77mN8zyfWL5xXMK30DL8luTK1nG4hnQ6nIdkMq 5Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cg46fewk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Nov 2021 04:42:46 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AO4f4Kr025271;
-        Wed, 24 Nov 2021 04:42:46 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-        by aserp3020.oracle.com with ESMTP id 3ceru6amr0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Nov 2021 04:42:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cQuV2JRgWWOMlhXok/L5Ww+b+OrfLH81wUkMxhKF7JqLAcoLZs3UwIrdFp7JvCu6IX5skFvaVRJMkME8eSrGarVq6ypC8nG5j9xWqW2hXnfaaXHTlA6g0lC0EBvraBpFRKPvhdfbU+IAyHz7a12XfuKaQooZd4B76W1lSGuwoTv7nubZtwcikm7+DaFpP7KjJhyiMsMeiZiH0gMEg7ynxp2ZVFma3VqwWJdccxJ/FWnZgnoflHSZqGJoqBjTKIgliB3waAJJoTTefhPBPzXRE8w5fm8ODG51w4bEqPRLq5wls927Y0X9FHaxoAA0FTUWgBKj0EfokEZimQdL/HFhnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qsSHdCnesWgw6P5qUtyD9ZQKk7kKRCyx+Xa4vy7iSOU=;
- b=i4yTOWzSVs6Mtian+idS34lTcjWP9mKGcIuquRwG/pEaqHFOzVDFU+/rX6/W9qnxpoJIBktmky4Rm6PVH69vQD+X00qemkj1BczHxw6Vv7zRWgyQ82VsD0IkGrCxksLU/L5EQTjQvn7S9LS4rrbbIKCHol6InvnzWl1WgoB45ZI49QaHqVz0PgYh8IxNZ2FZ2PDCDipupjSAnw8b5TcCgXidfXaofRpLhe0kob6mmDFCFQgE6m4L+8mig6UYspnXbcbjca5GkJ0M/0TvHBrFhFeEcAbI2ioKELPX+OfG7En54EFxD1ikg8hqnHqSTkMRtvu9rxz91wMKrANMCDv/og==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qsSHdCnesWgw6P5qUtyD9ZQKk7kKRCyx+Xa4vy7iSOU=;
- b=vmRd+xJ3P/w8qDbyPyfbmcxTuHBZRInt3qbi7mKubwzTgnxRzGcI/SfufOS5cLjzcyA1cIxs6UQOTpjoZEuLDYHrDxY+rNIXFTrHBcm75+SbO33Y4Mg8lhISLQTFfBI//uWBqUjATZLUnl4HWssxM/c7UzQJ2upWuj+l8q1BgsM=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by CH2PR10MB3894.namprd10.prod.outlook.com (2603:10b6:610:8::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Wed, 24 Nov
- 2021 04:42:43 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::65b8:d8e7:e373:4896]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::65b8:d8e7:e373:4896%9]) with mapi id 15.20.4713.021; Wed, 24 Nov 2021
- 04:42:43 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jarkko@kernel.org, jmorris@namei.org, serge@hallyn.com
-Cc:     eric.snowberg@oracle.com, keescook@chromium.org,
-        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
-        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
-        nramas@linux.microsoft.com, lszubowi@redhat.com, jason@zx2c4.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: [PATCH v8 17/17] integrity: Only use machine keyring when uefi_check_trust_mok_keys is true
-Date:   Tue, 23 Nov 2021 23:41:24 -0500
-Message-Id: <20211124044124.998170-18-eric.snowberg@oracle.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20211124044124.998170-1-eric.snowberg@oracle.com>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SA9PR13CA0127.namprd13.prod.outlook.com
- (2603:10b6:806:27::12) To CH2PR10MB4150.namprd10.prod.outlook.com
- (2603:10b6:610:ac::13)
+        Wed, 24 Nov 2021 02:45:52 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="215251501"
+X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
+   d="scan'208";a="215251501"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 23:42:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
+   d="scan'208";a="475031664"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 23 Nov 2021 23:42:38 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mpmvN-0004TV-85; Wed, 24 Nov 2021 07:42:37 +0000
+Date:   Wed, 24 Nov 2021 15:41:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com
+Subject: Re: [PATCH v30 26/28] Audit: Add record for multiple object security
+ contexts
+Message-ID: <202111241506.7V9kCQCo-lkp@intel.com>
+References: <20211124014332.36128-27-casey@schaufler-ca.com>
 MIME-Version: 1.0
-Received: from ca-dev113.us.oracle.com (148.87.23.10) by SA9PR13CA0127.namprd13.prod.outlook.com (2603:10b6:806:27::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.12 via Frontend Transport; Wed, 24 Nov 2021 04:42:40 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fdebc47e-3ada-4ed0-3bbd-08d9af04dab8
-X-MS-TrafficTypeDiagnostic: CH2PR10MB3894:
-X-Microsoft-Antispam-PRVS: <CH2PR10MB3894C00CB68A109E3C4C767687619@CH2PR10MB3894.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +SmvSwZTgRn3wjtdQpHvBuO8QAPiFnYiXRKMmKNQAUo1b81rFspQm6tK7AJXRCrvUvRUAqoFOB7oJGSORVvww/wlpA6RJrdMOREQWM4HPmhv6F8N8d6zsUjpnm/gwuPh5fKWkHXWxC49+UwG9CQh6B/Fk244/eaqEE+JZs2As4DW05AhWgFJEq383BaEpQfpnrl7bNjvCP7q0iJJynmGI+z+lbNdBUoFQlQASZqpVm5NYvKrvZL9G2zVtDPC3myVxYeCj47klc2WBnYeT+VeoRy5b+IssFuUBvYFYWNQCoQXU7LWujbpRWfFCt/EuQRt8tb9MDrID1HWzyLP6TOuKdHafMXoEjhf9Qat+37MAaMk0lrugfw9Sx1xfHkRFhc847JkaEdv4WFHPk6w2m26cBfzgYXlAZxJ15nvw3JPjpPRv1wxfu4eUCuFFGpqvArTmuOymjV/c8UWigL2knXq8OrmMknlEZ2r1ljnL49zd941q2oG2BhCkpZmts1HsjCvRCjYN7EZSUlpqf5Cy0eCM0vjyZB2U0PiOz0uO9LBUNXqZHy8E6Au1cP+ISzmrFyD4kaKUAIK7/EvxS9hXGajKoCrZB+WngCwYwvsT2twHKd4TSZAzxqy0J7ka3+zhu6BXJPuGfwdnnjfKQHzmKVfF509Np+QD+LOrESuyq10YZkVvKW2t168XrL5Ql0cmDWMMTFEnakeV73UgvU8tZfY8V43diuUOgZWv3t3/frHuMY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(956004)(921005)(36756003)(86362001)(83380400001)(508600001)(5660300002)(4326008)(2616005)(6486002)(186003)(7696005)(44832011)(26005)(8936002)(66946007)(52116002)(8676002)(7416002)(2906002)(66556008)(66476007)(316002)(107886003)(38350700002)(38100700002)(6666004)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vDCXmJxa7v4fZMIRCTfFeomZWDWenyLsxe4QAAvte4BfnJqXRInr4V3rBpuT?=
- =?us-ascii?Q?XAz1Kfl08ssAdyjSZemqA4SFb7sTgtODhbRfdoqkWs6qRYkLdTBdlwraBmK1?=
- =?us-ascii?Q?Z8+96vxuGLRXMtM1rl9I50xyQQw902n0icNQQAXFczelbUBlIbeYft/9vuI+?=
- =?us-ascii?Q?Ap5s/W8kfj7ODS73gn2p7EqFqN+7WfkhxTuoi1l8MU4ge74WRLN4SNbE2NvF?=
- =?us-ascii?Q?mLKdBLubM31QmoLp7kX0N/63JP9UmmrqiF0frbctJswjhaSxIeBWhvqN4iT3?=
- =?us-ascii?Q?QT8u1IgQvj5mnuOg0iQjkuXdLJ0I8g+XIzT14LHrB2iVBcSGCLBIa0OB5rHM?=
- =?us-ascii?Q?rQiuJ38IXANvKHDzOXSWO93OsddGPFFkGPkq8c6dQgRBnn9ufhqw1bxu0Huq?=
- =?us-ascii?Q?BRNTjtIgmvbj3/ZZwSX9LAh8TktoOMdJcmwKR2bnsQjglN6JC2gWuy6xzyfi?=
- =?us-ascii?Q?47N9m9Fxc4z6tK/LbWi3ejFEPQU1c8dGBYpSKKjvfN7Uozr/Pu0PkRDi5a3F?=
- =?us-ascii?Q?SeOIUOhsHDO/W+Jo3H06l2CK6RLklZy4arbu8EP8+2JJAUGJDD6m7o51du1k?=
- =?us-ascii?Q?zGgciL+7DLipqaQjaXu2UMxNKjssYoFi3D92gKFXeqwXW87sCq8pWXeZyJPa?=
- =?us-ascii?Q?r9zSNkqjKSR8JnokZ4pDzuVWFIHu95r4+S5PzBwCW2Wh0NS0IB8Lm7XQFceu?=
- =?us-ascii?Q?9vZMixLpe0AgHV2+Il6z9Y3wDvpPIYGkCCrmap6YrQG1XgprjKAUDaYgrjU6?=
- =?us-ascii?Q?FNDjYwgCFWhw62TcXLio+w1nvZIVkTLChdsj2HiN4k5STSYBRzQY68BLJFRc?=
- =?us-ascii?Q?sS/qyXOizYlgRIkE+hlqxbK2LPAbpN8V8KRrBejIUr8ZgRRItGzr6ECzE3O+?=
- =?us-ascii?Q?tZO1aDTbtiDA6LvjRJPynmq2GStGAaylWDteqGLOVh6M4khV3AGC5L7Y56wK?=
- =?us-ascii?Q?lwCKmFej83TXCCdWfCPkuA5sedmdxrKKgjrzFM+2NPXZoBup2LHhxr81cuUm?=
- =?us-ascii?Q?uMk7aKSQOT5hQAvvBx+X1qM3twNG6/npiPMifdYUfDpp8y0MP6kRHuhqGJEZ?=
- =?us-ascii?Q?rcEvhrORroCaK6zQTOU3clFvIYj02F0GBcHb7R6g3ldHAA2BAb06F/+S2HAb?=
- =?us-ascii?Q?KkF8/sLQrZaLwhRZQUlZfQLH6lZyEwk7HOSwTrHDiriC64ShTBeZjNRa7PUC?=
- =?us-ascii?Q?zJ9QK6XqtkseQtx0yGeU6GPuM4drOOqjD1/MTBSwR8rFyKKz0yZ9KmN9tlvK?=
- =?us-ascii?Q?CiuJq84X41T5yLLU7pGsPHyv2E+E8TqguiGAQZBjuDUCCpqiWaY4DrOUHTUI?=
- =?us-ascii?Q?Rmz3zsYhw9/5dl2J18SK/VjESiJ0UlFO+9SnTU7ehnsMh6u41gUnRmBtdMXb?=
- =?us-ascii?Q?GBR/Yajn/vjSTp4Ae0l87+RCNTe1Ny8REGbh8Yw5gdqH/C28E6MSFdFsI3wk?=
- =?us-ascii?Q?hHPBmllZ486YCOtFLcIyfAnxQgaPds04mkECDQKYfNP5cYuFIJxk7i6kNfpE?=
- =?us-ascii?Q?3EZ/9xV8PCzdOXZ+oM2GCx97n153LETTC0FwGmlZMddhli4VjmKnborv+lPa?=
- =?us-ascii?Q?SJUhrrTPG61cASh/vQ63qc05MJNN/PZHlzANu1J23QwFNTjMStlO8nVc1Hz8?=
- =?us-ascii?Q?HZSPdBp+aop8rhgvFdcD3km61xInmdl6x3tz1JtVnME22bnKh4Ft/4gcHUva?=
- =?us-ascii?Q?gIBnKg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdebc47e-3ada-4ed0-3bbd-08d9af04dab8
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2021 04:42:43.6351
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EWnfESMjZMfRBXk5EN0euX7e7G6EC1c5tSAcHlvesaHRgikIuuVZdmOnZL7ZeCodv9jg1W8GfwaR+Z3wh+Dan3T/GhPbQOfmPVNoyS7ZNK4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB3894
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10177 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 phishscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111240026
-X-Proofpoint-GUID: j_A-TQTQxQGnAiGpyPclqzu6L4JtujUE
-X-Proofpoint-ORIG-GUID: j_A-TQTQxQGnAiGpyPclqzu6L4JtujUE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124014332.36128-27-casey@schaufler-ca.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the introduction of uefi_check_trust_mok_keys, it signifies the end-
-user wants to trust the machine keyring as trusted keys.  If they have
-chosen to trust the machine keyring, load the qualifying keys into it
-during boot, then link it to the secondary keyring .  If the user has not
-chosen to trust the machine keyring, it will be empty and not linked to
-the secondary keyring.
+Hi Casey,
 
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on nf-next/master]
+[also build test ERROR on nf/master linus/master v5.16-rc2]
+[cannot apply to pcmoore-audit/next next-20211124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20211124-104307
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf-next.git master
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20211124/202111241506.7V9kCQCo-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/3054c600afec9a016902ed6ed5de86c76d6b0105
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20211124-104307
+        git checkout 3054c600afec9a016902ed6ed5de86c76d6b0105
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from init/init_task.c:12:
+>> include/linux/audit.h:262:1: error: expected identifier or '(' before '{' token
+     262 | { }
+         | ^
+   include/linux/audit.h:260:20: warning: 'audit_log_object_context' declared 'static' but never defined [-Wunused-function]
+     260 | static inline void audit_log_object_context(struct audit_buffer *ab,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from kernel/exit.c:49:
+>> include/linux/audit.h:262:1: error: expected identifier or '(' before '{' token
+     262 | { }
+         | ^
+   kernel/exit.c:1817:13: warning: no previous prototype for 'abort' [-Wmissing-prototypes]
+    1817 | __weak void abort(void)
+         |             ^~~~~
+   In file included from kernel/exit.c:49:
+   include/linux/audit.h:260:20: warning: 'audit_log_object_context' declared 'static' but never defined [-Wunused-function]
+     260 | static inline void audit_log_object_context(struct audit_buffer *ab,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from fs/pipe.c:23:
+>> include/linux/audit.h:262:1: error: expected identifier or '(' before '{' token
+     262 | { }
+         | ^
+   fs/pipe.c:755:15: warning: no previous prototype for 'account_pipe_buffers' [-Wmissing-prototypes]
+     755 | unsigned long account_pipe_buffers(struct user_struct *user,
+         |               ^~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:761:6: warning: no previous prototype for 'too_many_pipe_buffers_soft' [-Wmissing-prototypes]
+     761 | bool too_many_pipe_buffers_soft(unsigned long user_bufs)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:768:6: warning: no previous prototype for 'too_many_pipe_buffers_hard' [-Wmissing-prototypes]
+     768 | bool too_many_pipe_buffers_hard(unsigned long user_bufs)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:775:6: warning: no previous prototype for 'pipe_is_unprivileged_user' [-Wmissing-prototypes]
+     775 | bool pipe_is_unprivileged_user(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:1245:5: warning: no previous prototype for 'pipe_resize_ring' [-Wmissing-prototypes]
+    1245 | int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+         |     ^~~~~~~~~~~~~~~~
+   In file included from fs/pipe.c:23:
+   include/linux/audit.h:260:20: warning: 'audit_log_object_context' declared 'static' but never defined [-Wunused-function]
+     260 | static inline void audit_log_object_context(struct audit_buffer *ab,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +262 include/linux/audit.h
+
+   220	
+   221	#else /* CONFIG_AUDIT */
+   222	static inline __printf(4, 5)
+   223	void audit_log(struct audit_context *ctx, gfp_t gfp_mask, int type,
+   224		       const char *fmt, ...)
+   225	{ }
+   226	static inline struct audit_buffer *audit_log_start(struct audit_context *ctx,
+   227							   gfp_t gfp_mask, int type)
+   228	{
+   229		return NULL;
+   230	}
+   231	static inline __printf(2, 3)
+   232	void audit_log_format(struct audit_buffer *ab, const char *fmt, ...)
+   233	{ }
+   234	static inline void audit_log_end(struct audit_buffer *ab)
+   235	{ }
+   236	static inline void audit_log_n_hex(struct audit_buffer *ab,
+   237					   const unsigned char *buf, size_t len)
+   238	{ }
+   239	static inline void audit_log_n_string(struct audit_buffer *ab,
+   240					      const char *buf, size_t n)
+   241	{ }
+   242	static inline void  audit_log_n_untrustedstring(struct audit_buffer *ab,
+   243							const char *string, size_t n)
+   244	{ }
+   245	static inline void audit_log_untrustedstring(struct audit_buffer *ab,
+   246						     const char *string)
+   247	{ }
+   248	static inline void audit_log_d_path(struct audit_buffer *ab,
+   249					    const char *prefix,
+   250					    const struct path *path)
+   251	{ }
+   252	static inline void audit_log_key(struct audit_buffer *ab, char *key)
+   253	{ }
+   254	static inline void audit_log_path_denied(int type, const char *operation)
+   255	{ }
+   256	static inline int audit_log_task_context(struct audit_buffer *ab)
+   257	{
+   258		return 0;
+   259	}
+   260	static inline void audit_log_object_context(struct audit_buffer *ab,
+   261						    struct lsmblob *blob);
+ > 262	{ }
+   263	static inline void audit_log_task_info(struct audit_buffer *ab)
+   264	{ }
+   265	
+
 ---
-v4: Initial version
-v5: Rename to machine keyring
-v6: Unmodified from v5
-v7: Made trust_mok static
-v8: Unmodified from v7
----
- security/integrity/digsig.c                      |  2 +-
- security/integrity/integrity.h                   |  5 +++++
- .../integrity/platform_certs/keyring_handler.c   |  2 +-
- .../integrity/platform_certs/machine_keyring.c   | 16 ++++++++++++++++
- 4 files changed, 23 insertions(+), 2 deletions(-)
-
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index 109b58840d45..1de09c7b5f93 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -116,7 +116,7 @@ static int __init __integrity_init_keyring(const unsigned int id,
- 	} else {
- 		if (id == INTEGRITY_KEYRING_PLATFORM)
- 			set_platform_trusted_keys(keyring[id]);
--		if (id == INTEGRITY_KEYRING_MACHINE)
-+		if (id == INTEGRITY_KEYRING_MACHINE && trust_moklist())
- 			set_machine_trusted_keys(keyring[id]);
- 		if (id == INTEGRITY_KEYRING_IMA)
- 			load_module_cert(keyring[id]);
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 730771eececd..2e214c761158 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -287,9 +287,14 @@ static inline void __init add_to_platform_keyring(const char *source,
- 
- #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
- void __init add_to_machine_keyring(const char *source, const void *data, size_t len);
-+bool __init trust_moklist(void);
- #else
- static inline void __init add_to_machine_keyring(const char *source,
- 						  const void *data, size_t len)
- {
- }
-+static inline bool __init trust_moklist(void)
-+{
-+	return false;
-+}
- #endif
-diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
-index 4872850d081f..1db4d3b4356d 100644
---- a/security/integrity/platform_certs/keyring_handler.c
-+++ b/security/integrity/platform_certs/keyring_handler.c
-@@ -83,7 +83,7 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
- __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
- {
- 	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0) {
--		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
-+		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && trust_moklist())
- 			return add_to_machine_keyring;
- 		else
- 			return add_to_platform_keyring;
-diff --git a/security/integrity/platform_certs/machine_keyring.c b/security/integrity/platform_certs/machine_keyring.c
-index 09fd8f20c756..7aaed7950b6e 100644
---- a/security/integrity/platform_certs/machine_keyring.c
-+++ b/security/integrity/platform_certs/machine_keyring.c
-@@ -8,6 +8,8 @@
- #include <linux/efi.h>
- #include "../integrity.h"
- 
-+static bool trust_mok;
-+
- static __init int machine_keyring_init(void)
- {
- 	int rc;
-@@ -59,3 +61,17 @@ static __init bool uefi_check_trust_mok_keys(void)
- 
- 	return false;
- }
-+
-+bool __init trust_moklist(void)
-+{
-+	static bool initialized;
-+
-+	if (!initialized) {
-+		initialized = true;
-+
-+		if (uefi_check_trust_mok_keys())
-+			trust_mok = true;
-+	}
-+
-+	return trust_mok;
-+}
--- 
-2.18.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
