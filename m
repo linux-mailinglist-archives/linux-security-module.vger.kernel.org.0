@@ -2,104 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32CE45F7AB
-	for <lists+linux-security-module@lfdr.de>; Sat, 27 Nov 2021 01:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841CD461024
+	for <lists+linux-security-module@lfdr.de>; Mon, 29 Nov 2021 09:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344058AbhK0Ayq (ORCPT
+        id S242861AbhK2Ibp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 26 Nov 2021 19:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        Mon, 29 Nov 2021 03:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344291AbhK0Awp (ORCPT
+        with ESMTP id S242876AbhK2I3o (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 26 Nov 2021 19:52:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40667C061759;
-        Fri, 26 Nov 2021 16:49:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3B1D623B7;
-        Sat, 27 Nov 2021 00:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC3F5C004E1;
-        Sat, 27 Nov 2021 00:49:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637974171;
-        bh=II20qEySVqkmsSffnQMR42gko5v15gO6v2AkIbhSHD0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=iCVlXX3jsDnAMRVtdTCa93IvYSoHXQ1jKDjJmY74JoFTchF1pI0dNgxsyM+btflf1
-         4EO4qkjoLzyXjtscLvrESNgsWCXwNshsULVAD3edlFTOGS7HH5rRGq0e0S+17SCl2Q
-         YDFc3JmqFu+Ot8/Cj4LtNcXQ0YCoT6Ia+qnVglBvpSoEf7t70CiL4K5YfyMjtRJJJK
-         CTwBqrqwBpCajd2b3UMDi/kov+PNaBLCK6TIAexpT2Pwf77JG+YXCFDMdmuyKsj9CV
-         r45llRMd6IkphpjK+sPl0srU3z3pQjBLDPocCCDT+Nl3tHkoSe/U48efMc+tUKTylb
-         FGt/rdmRXfjgQ==
-Message-ID: <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
-Subject: Re: [PATCH v8 09/17] KEYS: Rename
- get_builtin_and_secondary_restriction
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     keescook@chromium.org, torvalds@linux-foundation.org,
-        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
-        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
-        jason@zx2c4.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Date:   Sat, 27 Nov 2021 02:49:28 +0200
-In-Reply-To: <20211124044124.998170-10-eric.snowberg@oracle.com>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
-         <20211124044124.998170-10-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.40.4-1 
+        Mon, 29 Nov 2021 03:29:44 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B6EC06139B
+        for <linux-security-module@vger.kernel.org>; Mon, 29 Nov 2021 00:23:05 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id l7so32878756lja.2
+        for <linux-security-module@vger.kernel.org>; Mon, 29 Nov 2021 00:23:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=h5SGxromuDQtUoJTnxkhza7HXaouvO2qwEGMHxx3weM=;
+        b=TXPNJdC2r1iwoSZ/Y8M1XP+KzZCam0+qziJjQijxTu5aqUDFE6JJ5XRer9/5Z/weKl
+         rORkmJ++sjeg2i1Hs/e4qXTBGXFuyqZx8Eto8SzExPVFZPit/3uugPFSTfC/iRStp2dK
+         zTqkbs3TjOi/Mt/fUFQj0qyYvXesuYhHwPMnKaOCoi1bhK05rgj2Y7cIVdTMJ3lrAuVa
+         b/TnI3IHqUGTLOmN2hylhI2F6JGPG5YiMC6Ha0EJyd7y27iYMJmJAqJE0WPGc5hj05tR
+         7UHjb4JyMX+pzzs4clVFpy9qfb0LhrQnc8xAoy3dGMm+Z4lMEPyRiNH0ltaXklCgXiXR
+         E/qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=h5SGxromuDQtUoJTnxkhza7HXaouvO2qwEGMHxx3weM=;
+        b=ErMVlMCOyaIBpg/gAyWbRT8Gia/LsBgLxc479J5lfHaVplwtY5km85NLUyre/p0Znd
+         J5e316xogTcWzEYbDoefELDiyJciEtIOu8+UEQqCwEy4Fd+/vpS7oKVSGle2H2YhITD8
+         aPAMBJlTrZlweDK2F4CafqhcVnnppJNHjtA5p9T4WvC212hR524HOt20Nyd0PBSgSjTN
+         7NbkVbBATAJ+hbHbgEPNVpVzJoRRPBz+eNqGcMbmvYuEPjyyVYiAzv+Mg7VgvQCjlAcx
+         YCDlDsaqseeh5u9M/fb0dKniWIOfMmgCx3lSG8jihOPLxwQ/DCclSm+4G6FDfcBHeRIs
+         pd5A==
+X-Gm-Message-State: AOAM530JsHitmhc98Tcam1nqr3qk/pEONnx9VO4CEVIcMNOFpsJ6lqKE
+        spRLOql6F8x8WseDHO1vjZD+xo2mh2q++rgmxw==
+X-Google-Smtp-Source: ABdhPJz4zItSG/eUm7nkCJe5HruRiFSBp317oc5/jeAcc+fKYmc5q3XsdUdGc1yGDz5u04vm+2YL+vhHeLjaa7ACIcI=
+X-Received: by 2002:a2e:2a43:: with SMTP id q64mr47923476ljq.102.1638174183800;
+ Mon, 29 Nov 2021 00:23:03 -0800 (PST)
 MIME-Version: 1.0
+Received: by 2002:ab3:7796:0:0:0:0:0 with HTTP; Mon, 29 Nov 2021 00:23:03
+ -0800 (PST)
+Reply-To: evelyngaby76@gmail.com
+From:   Evelyn Gaby <evelyngaby313@gmail.com>
+Date:   Mon, 29 Nov 2021 08:23:03 +0000
+Message-ID: <CAA63f6y83iyLQjiOT2wVUYfXgSveYedA0FqnM8oZbkQt9TJucw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-T24gVHVlLCAyMDIxLTExLTIzIGF0IDIzOjQxIC0wNTAwLCBFcmljIFNub3diZXJnIHdyb3RlOgo+
-IEluIHByZXBhcmF0aW9uIGZvciByZXR1cm5pbmcgZWl0aGVyIHRoZSBleGlzdGluZwo+IHJlc3Ry
-aWN0X2xpbmtfYnlfYnVpbHRpbl9hbmRfc2Vjb25kYXJ5X3RydXN0ZWQgb3IgdGhlIHVwY29taW5n
-Cj4gcmVzdHJpY3Rpb24gdGhhdCBpbmNsdWRlcyB0aGUgdHJ1c3RlZCBidWlsdGluLCBzZWNvbmRh
-cnkgYW5kCj4gbWFjaGluZSBrZXlzLCB0byBpbXByb3ZlIGNsYXJpdHksIHJlbmFtZQo+IGdldF9i
-dWlsdGluX2FuZF9zZWNvbmRhcnlfcmVzdHJpY3Rpb24gdG8gZ2V0X3NlY29uZGFyeV9yZXN0cmlj
-dGlvbi4KPiAKPiBTdWdnZXN0ZWQtYnk6IE1pbWkgWm9oYXIgPHpvaGFyQGxpbnV4LmlibS5jb20+
-Cj4gU2lnbmVkLW9mZi1ieTogRXJpYyBTbm93YmVyZyA8ZXJpYy5zbm93YmVyZ0BvcmFjbGUuY29t
-Pgo+IFJldmlld2VkLWJ5OiBNaW1pIFpvaGFyIDx6b2hhckBsaW51eC5pYm0uY29tPgo+IC0tLQo+
-IHY2OiBJbml0aWFsIHZlcnNpb24KPiB2NzogVW5tb2RpZmllZCBmcm9tIHY3Cj4gdjg6IENvZGUg
-dW5tb2RpZmllZCBmcm9tIHY3LCBhZGRlZCBNaW1pJ3MgUmV2aWV3ZWQtYnkKPiAtLS0KPiDCoGNl
-cnRzL3N5c3RlbV9rZXlyaW5nLmMgfCA0ICsrLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
-dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2NlcnRzL3N5c3RlbV9r
-ZXlyaW5nLmMgYi9jZXJ0cy9zeXN0ZW1fa2V5cmluZy5jCj4gaW5kZXggNjkyMzY1ZGVlMmJkLi44
-ZjFmODc1Nzk4MTkgMTAwNjQ0Cj4gLS0tIGEvY2VydHMvc3lzdGVtX2tleXJpbmcuYwo+ICsrKyBi
-L2NlcnRzL3N5c3RlbV9rZXlyaW5nLmMKPiBAQCAtNzcsNyArNzcsNyBAQCBpbnQgcmVzdHJpY3Rf
-bGlua19ieV9idWlsdGluX2FuZF9zZWNvbmRhcnlfdHJ1c3RlZCgKPiDCoCAqIEFsbG9jYXRlIGEg
-c3RydWN0IGtleV9yZXN0cmljdGlvbiBmb3IgdGhlICJidWlsdGluIGFuZCBzZWNvbmRhcnkgdHJ1
-c3QiCj4gwqAgKiBrZXlyaW5nLiBPbmx5IGZvciB1c2UgaW4gc3lzdGVtX3RydXN0ZWRfa2V5cmlu
-Z19pbml0KCkuCj4gwqAgKi8KPiAtc3RhdGljIF9faW5pdCBzdHJ1Y3Qga2V5X3Jlc3RyaWN0aW9u
-ICpnZXRfYnVpbHRpbl9hbmRfc2Vjb25kYXJ5X3Jlc3RyaWN0aW9uKHZvaWQpCj4gK3N0YXRpYyBf
-X2luaXQgc3RydWN0IGtleV9yZXN0cmljdGlvbiAqZ2V0X3NlY29uZGFyeV9yZXN0cmljdGlvbih2
-b2lkKQo+IMKgewo+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga2V5X3Jlc3RyaWN0aW9uICpyZXN0
-cmljdGlvbjsKPiDCoAo+IEBAIC0xMTcsNyArMTE3LDcgQEAgc3RhdGljIF9faW5pdCBpbnQgc3lz
-dGVtX3RydXN0ZWRfa2V5cmluZ19pbml0KHZvaWQpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEtFWV9VU1JfVklFVyB8IEtFWV9V
-U1JfUkVBRCB8IEtFWV9VU1JfU0VBUkNIIHwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgS0VZX1VTUl9XUklURSksCj4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBLRVlf
-QUxMT0NfTk9UX0lOX1FVT1RBLAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnZXRfYnVpbHRpbl9hbmRfc2Vjb25kYXJ5X3Jlc3RyaWN0
-aW9uKCksCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIGdldF9zZWNvbmRhcnlfcmVzdHJpY3Rpb24oKSwKPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5VTEwpOwo+IMKgwqDC
-oMKgwqDCoMKgwqBpZiAoSVNfRVJSKHNlY29uZGFyeV90cnVzdGVkX2tleXMpKQo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGFuaWMoIkNhbid0IGFsbG9jYXRlIHNlY29uZGFyeSB0
-cnVzdGVkIGtleXJpbmdcbiIpOwoKVGhpcyBpcyB3cm9uZyBvcmRlci4KCllvdSBzaG91bGQgZmly
-c3QgZG8gdGhlIGNoYW5nZXMgdGhhdCBtYWtlIHRoZSBvbGQgbmFtZQpvYnNvbGV0ZSBhbmQgb25s
-eSBhZnRlciB0aGF0IGhhdmUgYSBwYXRjaCB0aGF0IGRvZXMgdGhlCnJlbmFtZS4gVW5mb3J0dW5h
-dGVseSwgdGhpcyBwYXRjaCBjYW5ub3QgcG9zc2libHkgYWNrZWQKd2l0aCB0aGUgY3VycmVudCBv
-cmRlci4KCgovSmFya2tvCg==
+.
+Please get back to me for more details,
+I like to disclose something very important to you,
 
+Regards.
+Mrs Evelyn Gaby.
