@@ -2,90 +2,78 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAB5464BEB
-	for <lists+linux-security-module@lfdr.de>; Wed,  1 Dec 2021 11:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 476EB464CDD
+	for <lists+linux-security-module@lfdr.de>; Wed,  1 Dec 2021 12:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348776AbhLAKui (ORCPT
+        id S1349033AbhLALhl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 1 Dec 2021 05:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        Wed, 1 Dec 2021 06:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348694AbhLAKuh (ORCPT
+        with ESMTP id S1348968AbhLALhf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:50:37 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375FBC061574
-        for <linux-security-module@vger.kernel.org>; Wed,  1 Dec 2021 02:47:17 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1msN8t-0006IR-KT; Wed, 01 Dec 2021 11:47:15 +0100
-Subject: Re: [PATCH v4] KEYS: trusted: Fix trusted key backends when building
- as module
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     andreas@rammhold.de, James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-References: <20211201095900.3009225-1-a.fatoum@pengutronix.de>
- <YadRAWbl2aiapf8l@iki.fi>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <98c8df77-22c4-ae83-eefd-f55fbb2891e8@pengutronix.de>
-Date:   Wed, 1 Dec 2021 11:47:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 1 Dec 2021 06:37:35 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78161C061763
+        for <linux-security-module@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id l24so48291822uak.2
+        for <linux-security-module@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
+         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
+         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
+         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
+         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
+         Af5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=NgCCreSjI6fWUrR4m+8TOxCl1kIUd8Hr2RkgiejFNc1JmLmHt2C4e5MiGCar0Zp57L
+         cQjWP5jXqYBPVvcoHOM4D29oYG8ouLPzU1wOQhHM1Sr37hfvBkLIha65/Wb4MRTGo7Vu
+         GQ5LmzbFuNE4Q+Y7OIzfZM7q6qJd93NiH1xPxfCecxvfxpNwogncA9IsSf/zTKYL72c5
+         MXMN1XQoij9xssx7PT1Qt5eHznxWZJsy2o7Zv67Ze2dT+NRIkMsQ1ly+P/6/nxXmZjuA
+         y/HiAYqRSOWizSjkwX/eGh88MHXgaT0Ar1VL6oG08pNO1odT1GEWtD7WVnEy23SaQ0SR
+         TcvA==
+X-Gm-Message-State: AOAM531FuwWSdIUkscYc9Avjrp9HV9ro+JNo7+HPaNYWip32IDrw1H0h
+        fwCbS7unxLNsLicTOzBUDv5Vd43H8KCGK4mc5q4XdwWtDRA=
+X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
+X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
+ Wed, 01 Dec 2021 03:33:59 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YadRAWbl2aiapf8l@iki.fi>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
+Sender: unitednationawardwinner@gmail.com
+Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 1 Dec 2021 03:33:58 -0800
+X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
+Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 01.12.21 11:40, Jarkko Sakkinen wrote:
-> On Wed, Dec 01, 2021 at 10:59:00AM +0100, Ahmad Fatoum wrote:
->> From: Andreas Rammhold <andreas@rammhold.de>
->>
->> Before this commit the kernel could end up with no trusted key sources
->> even though both of the currently supported backends (TPM and TEE) were
->> compiled as modules. This manifested in the trusted key type not being
->> registered at all.
->>
->> When checking if a CONFIG_… preprocessor variable is defined we only
->> test for the builtin (=y) case and not the module (=m) case. By using
->> the IS_REACHABLE() macro we do test for both cases.
->>
->> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
->> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->> Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
->> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
->> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
->> Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
->> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> 
-> Thank you, I picked this.
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
-Excellent. Could I know your opinion on my CAAM Trusted Keys series as well? :-)
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
 
-Thanks,
-Ahmad
+Your Names: |
+Address: |
 
-> 
-> /Jarkko
-> 
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
 
+Email: uba-bf@e-ubabf.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Regards.
+Mrs ORGIL BAATAR
