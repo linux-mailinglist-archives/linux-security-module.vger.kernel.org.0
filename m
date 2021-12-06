@@ -2,212 +2,81 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEFE46A2EC
-	for <lists+linux-security-module@lfdr.de>; Mon,  6 Dec 2021 18:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A458A46A4E9
+	for <lists+linux-security-module@lfdr.de>; Mon,  6 Dec 2021 19:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbhLFRa6 (ORCPT
+        id S1347537AbhLFSwe (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 6 Dec 2021 12:30:58 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28140 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240150AbhLFR34 (ORCPT
+        Mon, 6 Dec 2021 13:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhLFSw3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:29:56 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6HI46n004515;
-        Mon, 6 Dec 2021 17:26:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=hUFcvaWByJjpmi9wzWxytILgPSMVKkio1o87qlBWiwg=;
- b=Bu7cEvO7WdVoyQlozJMlO3QC2gr1Wzffpabixo0Qs0K58MGPMgzIM/0HkJicHcRsAh7t
- 5sIXskvKZvblT5Ns/WbXvL43vWevz94pZJonuLmrDdKPlb42Fi+rJaEGq4ZzqIXw2+lO
- oLg2GqMJ05o6O+sulCFhvNlO7Gi/EqXg0BcTa9UZBFFjk0oqZH0s/8GxfWJmGvbXxe05
- i6/Q8Ow83C0Da0opy+XDdA0JXPZzTj9A5XB0W3C9sWAVKd7F+xOrKg68FKM95ZmYyKC6
- 6CzwRqQ2M1yHH6+s38rfMGF7bgfTcAXyRYGq6arSBhW9zc9HDHvSL8+mSg0jiIwN5GXN Xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cspsur4ar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:26:12 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B6HJiUX011398;
-        Mon, 6 Dec 2021 17:26:12 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cspsur4a6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:26:12 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B6HDjU0029433;
-        Mon, 6 Dec 2021 17:26:11 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03dal.us.ibm.com with ESMTP id 3cqyya2myr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:26:11 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B6HQ9xB33161498
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Dec 2021 17:26:09 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E4572805C;
-        Mon,  6 Dec 2021 17:26:09 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5059E28066;
-        Mon,  6 Dec 2021 17:26:09 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Dec 2021 17:26:09 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v3 16/16] ima: Setup securityfs for IMA namespace
-Date:   Mon,  6 Dec 2021 12:26:00 -0500
-Message-Id: <20211206172600.1495968-17-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211206172600.1495968-1-stefanb@linux.ibm.com>
-References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
+        Mon, 6 Dec 2021 13:52:29 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80126C0613F8
+        for <linux-security-module@vger.kernel.org>; Mon,  6 Dec 2021 10:49:00 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id o20so46987507eds.10
+        for <linux-security-module@vger.kernel.org>; Mon, 06 Dec 2021 10:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gFNd9y7zjP1MZt+ih91bQ58I7tOdLaR33IaqrsbckfE=;
+        b=zYi/8H3h0HaydowF6DdzwRAt0sz/3H5Pq+cHBdGWCuTMKu7JSTORqS0A6zV3mPtJ2E
+         vRqUkbTs8Cg8eI677C2XlsG0/5FiKn+7Lb2/ihT6gY9EGRDaKjTBrIIh2N2y0TbfJ7o/
+         MJNtHdUyuYjRXPqOYV4ZvcteHTujspI17XREkjh5dlY7yaMfzHptTsYmkDw5MaEFGNd3
+         9J1ho+R+etgUcwdQNnEHvfMpLB9E2o4203w2/Q2uynX4RHURBgAjPXF96VYmK0ggVz+1
+         KRPIzB8cLSeysPfNlHWrNBlUqUyOiHMklYV2OP+ise3AeE+pt//Y7WxRBz81q9Jlf8N1
+         bWEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gFNd9y7zjP1MZt+ih91bQ58I7tOdLaR33IaqrsbckfE=;
+        b=u5yikqyTmHHuoFk1ANk2C4yLzfShHiwKl0+03A85AR1ERnfuIfjknBQDfL1dWQZ6m9
+         rKZImMwR6kcNGr6vEyho2WCRFefyfo2ShGrA8V2q7EZdkglkadi+Qwrq8AT8JWhl4TeU
+         A//r6+jXa0Bldl6kH9nt4tsSXGRMjm9/9iNHKoDoDK02qICK9xuFf861hSAnlxDoXc5B
+         0I7TqII4pJHODN5kHMyI/HEZRzcWbl7HK7BabjBHW9QcCNG0wMxx636LayIw2J18Brso
+         Rrz1WCko9x6pwyEuBXybNl1n3e89EzOuxiUFCW8Ky/jEPphCgHGdKS0kGYRXlG1pBazG
+         HpIg==
+X-Gm-Message-State: AOAM531JLNM0aU8W8m8+Vp4qlhMbnClqOb0k3l9D+7YSyjYTe5qVyPpI
+        9Lvk6J7MRTrh2ht6pyt8DFuODPB1x3QLi0Qu7ebnQ4h6lQ==
+X-Google-Smtp-Source: ABdhPJwliFX2CTvdqeiZsfHMs1CAYWPPZBKN2puXETpr9zGqcYUg+dPnOsqRPmLnQmc1k0vjyaRfj8WX054yJd0iuXg=
+X-Received: by 2002:a05:6402:12d3:: with SMTP id k19mr1275316edx.244.1638816538988;
+ Mon, 06 Dec 2021 10:48:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WQF4-a-BpyO5hdFJWtBH_ByznmN1DGmL
-X-Proofpoint-ORIG-GUID: wtya9TdK3wZsbyxMBJAdCeIJuB3CQkEk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_06,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 adultscore=0 mlxlogscore=999 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112060101
+References: <20211206132406.235872-1-omosnace@redhat.com>
+In-Reply-To: <20211206132406.235872-1-omosnace@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 6 Dec 2021 13:48:48 -0500
+Message-ID: <CAHC9VhQABwr1y09i6=KB8UjhvW0C8UwYMJpdatznTYDxFVhZLw@mail.gmail.com>
+Subject: Re: [PATCH] security,selinux: remove security_add_mnt_opt()
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Setup securityfs with symlinks, directories, and files for IMA
-namespacing support. The same directory structure that IMA uses on the
-host is also created for the namespacing case.
+On Mon, Dec 6, 2021 at 8:24 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+>
+> Its last user has been removed in commit f2aedb713c28 ("NFS: Add
+> fs_context support.").
+>
+> Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> ---
+>  include/linux/lsm_hook_defs.h |  2 --
+>  include/linux/lsm_hooks.h     |  2 --
+>  include/linux/security.h      |  8 -------
+>  security/security.c           |  8 -------
+>  security/selinux/hooks.c      | 39 -----------------------------------
+>  5 files changed, 59 deletions(-)
 
-The securityfs file and directory ownerships cannot be set when the
-IMA namespace is initialized. Therefore, delay the setup of the file
-system to a later point when securityfs initializes the fs_context.
-Use securityfs_register_ns_notifier() to register a notifier for
-populating the filsystem late.
+Good catch.  As this really only affects SELinux, I've merged this
+into the selinux/next tree.
 
-This filesystem can now be mounted as follows:
-
-mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
-
-The following directories, symlinks, and files are then available.
-
-$ ls -l sys/kernel/security/
-total 0
-lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
-drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
-
-$ ls -l sys/kernel/security/ima/
-total 0
--r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
--r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
--rw-------. 1 root root 0 Dec  2 00:18 policy
--r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
--r--r-----. 1 root root 0 Dec  2 00:18 violations
-
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- include/linux/ima.h             |  3 ++-
- security/integrity/ima/ima_fs.c | 46 ++++++++++++++++++++++++++++++---
- 2 files changed, 45 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index bfb978a7f8d5..cab5fc6caeb3 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -221,7 +221,8 @@ struct ima_h_table {
- };
- 
- enum {
--	IMAFS_DENTRY_DIR = 0,
-+	IMAFS_DENTRY_INTEGRITY_DIR = 0,
-+	IMAFS_DENTRY_DIR,
- 	IMAFS_DENTRY_SYMLINK,
- 	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
- 	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index c2a886c00ac2..c17a6b7eeb95 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -456,12 +456,25 @@ static void ima_fs_ns_free_dentries(struct ima_namespace *ns)
- 	memset(ns->dentry, 0, sizeof(ns->dentry));
- }
- 
--static int __init ima_fs_ns_init(struct user_namespace *user_ns)
-+static int ima_fs_ns_init(struct user_namespace *user_ns)
- {
- 	struct ima_namespace *ns = user_ns->ima_ns;
- 	struct dentry *ima_dir;
- 
--	ns->dentry[IMAFS_DENTRY_DIR] = securityfs_create_dir("ima", integrity_dir);
-+	/* already initialized? */
-+	if (ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR])
-+		return 0;
-+
-+	/* FIXME: update when evm and integrity are namespaced */
-+	if (user_ns != &init_user_ns)
-+		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] =
-+			securityfs_create_dir("integrity", NULL);
-+	else
-+		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] = integrity_dir;
-+
-+	ns->dentry[IMAFS_DENTRY_DIR] =
-+	    securityfs_create_dir("ima",
-+				  ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR]);
- 	if (IS_ERR(ns->dentry[IMAFS_DENTRY_DIR]))
- 		return -1;
- 	ima_dir = ns->dentry[IMAFS_DENTRY_DIR];
-@@ -511,7 +524,34 @@ static int __init ima_fs_ns_init(struct user_namespace *user_ns)
- 	return -1;
- }
- 
--int __init ima_fs_init(void)
-+static int ima_ns_notify(struct notifier_block *this, unsigned long msg,
-+			    void *data)
- {
-+	int rc = 0;
-+	struct user_namespace *user_ns = data;
-+
-+	switch (msg) {
-+	case SECURITYFS_NS_ADD:
-+		rc = ima_fs_ns_init(user_ns);
-+		break;
-+	case SECURITYFS_NS_REMOVE:
-+		ima_fs_ns_free_dentries(user_ns->ima_ns);
-+		break;
-+	}
-+	return rc;
-+}
-+
-+static struct notifier_block ima_ns_notifier = {
-+	.notifier_call = ima_ns_notify,
-+};
-+
-+int ima_fs_init()
-+{
-+	int rc;
-+
-+	rc = securityfs_register_ns_notifier(&ima_ns_notifier);
-+	if (rc)
-+		return rc;
-+
- 	return ima_fs_ns_init(&init_user_ns);
- }
 -- 
-2.31.1
-
+paul moore
+www.paul-moore.com
