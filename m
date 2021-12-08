@@ -2,292 +2,93 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4128246C488
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 Dec 2021 21:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE1A46CC12
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Dec 2021 05:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241515AbhLGU0f (ORCPT
+        id S231254AbhLHERA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 7 Dec 2021 15:26:35 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31504 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241304AbhLGU0S (ORCPT
+        Tue, 7 Dec 2021 23:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244171AbhLHEQv (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:26:18 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7Jbfb7027243;
-        Tue, 7 Dec 2021 20:22:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=JUuy3t+8HN+Piv8GDxJ6jewhg6X4npu2ObmOtAqQBVs=;
- b=ejSKBfkesazQ2q+FlsQ/lAozebF3lJPIM5CTElCaapVqPzAUmnEsdXMSgio9NKRHBCr3
- +5KBpYAVlJ0C3VwnCQgGc8QyRYw3xWh/4Wp6gWGppRKC9YjL1tb2wWs9XPdk2x9SFfRd
- m+onmxFzW2PHKZudDFzhrwJWoA/WjAHrrFErWzNoJmlsSdy7kb263RIhhRyJ36b/Vdte
- wJX8ecgvAmDuJaHnkis+imPPrW6YtUuDRWYX9lFix2UHWJsyRl+kevLawpUC7oGCCcrS
- y2IXNRN2kJR2WJxby1z4+SMQ6GIXO4eQlHTpCYJ1kIvTWSXfMxN0ECaKkG5JGfgSGG5j WQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct811j0aa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 20:22:38 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B7K9RPv027980;
-        Tue, 7 Dec 2021 20:22:38 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ct811j09y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 20:22:38 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B7K7pZd018282;
-        Tue, 7 Dec 2021 20:22:37 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03dal.us.ibm.com with ESMTP id 3cqyyb2dvx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Dec 2021 20:22:37 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B7KMZWD35979676
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Dec 2021 20:22:35 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C2CC6136055;
-        Tue,  7 Dec 2021 20:22:35 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34326136063;
-        Tue,  7 Dec 2021 20:22:33 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Dec 2021 20:22:33 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v4 16/16] ima: Setup securityfs for IMA namespace
-Date:   Tue,  7 Dec 2021 15:21:27 -0500
-Message-Id: <20211207202127.1508689-17-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211207202127.1508689-1-stefanb@linux.ibm.com>
-References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+        Tue, 7 Dec 2021 23:16:51 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44235C061A32
+        for <linux-security-module@vger.kernel.org>; Tue,  7 Dec 2021 20:13:20 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id j7so1022811ilk.13
+        for <linux-security-module@vger.kernel.org>; Tue, 07 Dec 2021 20:13:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=IhzYOc5TV5tRY8NA+oRQO6aAhcoLWjmDIiGp+agW0PuwWFWsW07ntJsVzV38I0OHqC
+         EzpNMp4ySTsTiHWjcoES1pDWfQa3hzEmTAjGEQsGKU00LGNUDJTNHWI4LldEus+S1mKT
+         dko5ukALMgi8bh7atGVs0Rt/fX7KXpplv23WbLhFzP1TfY2PPXBqFY9j53j/esPLibRX
+         1XRHyOwTiT/4tG9WZ3q4H7N/dOnVkB10wmKDHGYmk9qWEUW5JWqpdoVu6C7jO8de13Mw
+         Z0SLBzksJKYbu7/KIOlWOhfXUDnmMk6QWiigAfQd89OMRAg6NTmeD6n5AJpihkslyYUP
+         nSKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=dphH/zXpaIQYWPJgWDY8lghCRB4Tc07ooPyUhodQ6SfhzOJAC71d8+EzVRRUKo+MTk
+         ULkUnZqF42w/Pr5tpYZIoUiJQwBKkLeueM+GiYcxOwCEwiFPNbPc3AV/dUPlNpPwMlU+
+         pppPEyMl18jReY4DiXJE0wD2a+V6xs5M+Ktv1iAZ4fRFtiWq2ytH4tg5Fz/8saCJy3TX
+         uPSX1O35X91IYoJwuhj7fHuyfs+Wq2o/9Z+48clz19SLFZ9QcVT2p/n1/26j05Mpy+w9
+         qnONgptEnPq3/Vq+TqvgsuXuwT5d1vRJMlALJoS6KYUepobpWqNXUl+SMTbkzpgOt1G8
+         ntHA==
+X-Gm-Message-State: AOAM530grLvvrrfcE1nxGdzPl6v7PQLOOk0R9YROiYCDtRu6bdvJI/fm
+        X0S+2TNG47a74SfAPfNHN+9cfxTGq2umwRaPOYw=
+X-Google-Smtp-Source: ABdhPJyRa63HXlstQIFzLUqJGv8AYgt9EsJ312gy8TgYauJosfme9E4HgsWb4N3jUnNwnaOH3Nf1ZFtOzW3RJg9WBQw=
+X-Received: by 2002:a92:cdac:: with SMTP id g12mr3699225ild.204.1638936799717;
+ Tue, 07 Dec 2021 20:13:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: u5JWlByzX5ou1sDi1oDbOtGqTmc2uSwR
-X-Proofpoint-GUID: 8zMaXG6qlEx67FT8-zaOzXLNt8u15auB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-07_07,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112070122
+Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:19
+ -0800 (PST)
+Reply-To: dj0015639@gmail.com
+From:   David Jackson <enkenpaul@gmail.com>
+Date:   Wed, 8 Dec 2021 05:13:19 +0100
+Message-ID: <CAG7-cQ-YcFp0byqpLCXPRy0-4+-Zq7hzZMz6DzM5KzsbksYgog@mail.gmail.com>
+Subject: FEDERAL BUREAU OF INVESTIGATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Setup securityfs with symlinks, directories, and files for IMA
-namespacing support. The same directory structure that IMA uses on the
-host is also created for the namespacing case.
+Our Ref: RTB /SNT/STB
+To: Beneficiary
 
-The securityfs file and directory ownerships cannot be set when the
-IMA namespace is initialized. Therefore, delay the setup of the file
-system to a later point when securityfs is in securityfs_fill_super.
+This is FBI special agents, David Jackson. I was delegated along side
+others by the United Nations to investigate scammers who has been in
+the business of swindling foreigners especially those that has one
+form of transaction/contracts and another. Please be informed that in
+the course of our investigation, we detected that your name and
+details in our Scammed Monitoring Network. We also found out that you
+were scammed of a huge sum of money by scammers via Western union and
+MoneyGram. Be informed here that in a bid to alleviate the suffering
+of scammed victims, the United Nations initiated this compensation
+program and therefore, you are entitled to the sum of Five Million Two
+Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
+victim.
 
-This filesystem can now be mounted as follows:
+Note that the said fund will be transfer to you via the Citibank being
+the paying bank mandated by the United Nations officials.
 
-mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
+However, we have to inform you that we have been able to arrest some
+of the swindlers who has been in this illicit business and will all be
+prosecuted accordingly. Be informed as well that we have limited time
+to stay back here, so we will advice that you urgently respond to this
+message ASAP. And do not inform any of the people that collected money
+from you before now about this new development to avoid jeopardizing
+our investigation. All you need to do is to follow our instruction and
+receive your compensation accordingly as directed by the United
+Nations.
 
-The following directories, symlinks, and files are then available.
+We urgently wait to receive your response.
 
-$ ls -l sys/kernel/security/
-total 0
-lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
-drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
-
-$ ls -l sys/kernel/security/ima/
-total 0
--r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
--r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
--rw-------. 1 root root 0 Dec  2 00:18 policy
--r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
--r--r-----. 1 root root 0 Dec  2 00:18 violations
-
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- include/linux/ima.h             | 17 ++++++++++++++++-
- security/inode.c                | 12 +++++++++++-
- security/integrity/ima/ima_fs.c | 33 ++++++++++++++++++++++++++-------
- 3 files changed, 53 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index bfb978a7f8d5..a8017272d78d 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -66,6 +66,10 @@ static inline const char * const *arch_get_ima_policy(void)
- }
- #endif
- 
-+extern int ima_fs_ns_init(struct user_namespace *user_ns,
-+			  struct dentry *root);
-+extern void ima_fs_ns_free_dentries(struct user_namespace *user_ns);
-+
- #else
- static inline enum hash_algo ima_get_current_hash_algo(void)
- {
-@@ -154,6 +158,15 @@ static inline int ima_measure_critical_data(const char *event_label,
- 	return -ENOENT;
- }
- 
-+static inline int ima_fs_ns_init(struct user_namespace *ns, struct dentry *root)
-+{
-+	return 0;
-+}
-+
-+static inline void ima_fs_ns_free_dentries(struct user_namespace *user_ns)
-+{
-+}
-+
- #endif /* CONFIG_IMA */
- 
- #ifndef CONFIG_IMA_KEXEC
-@@ -221,7 +234,8 @@ struct ima_h_table {
- };
- 
- enum {
--	IMAFS_DENTRY_DIR = 0,
-+	IMAFS_DENTRY_INTEGRITY_DIR = 0,
-+	IMAFS_DENTRY_DIR,
- 	IMAFS_DENTRY_SYMLINK,
- 	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
- 	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
-@@ -333,6 +347,7 @@ static inline struct ima_namespace *get_current_ns(void)
- {
- 	return &init_ima_ns;
- }
-+
- #endif /* CONFIG_IMA_NS */
- 
- #if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-diff --git a/security/inode.c b/security/inode.c
-index 121ac1874dde..10ee20917f42 100644
---- a/security/inode.c
-+++ b/security/inode.c
-@@ -16,6 +16,7 @@
- #include <linux/fs_context.h>
- #include <linux/mount.h>
- #include <linux/pagemap.h>
-+#include <linux/ima.h>
- #include <linux/init.h>
- #include <linux/namei.h>
- #include <linux/security.h>
-@@ -41,6 +42,7 @@ static const struct super_operations securityfs_super_operations = {
- static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
- {
- 	static const struct tree_descr files[] = {{""}};
-+	struct user_namespace *ns = fc->user_ns;
- 	int error;
- 
- 	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
-@@ -49,7 +51,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_op = &securityfs_super_operations;
- 
--	return 0;
-+	if (ns != &init_user_ns)
-+		error = ima_fs_ns_init(ns, sb->s_root);
-+
-+	return error;
- }
- 
- static int securityfs_get_tree(struct fs_context *fc)
-@@ -69,6 +74,11 @@ static int securityfs_init_fs_context(struct fs_context *fc)
- 
- static void securityfs_kill_super(struct super_block *sb)
- {
-+	struct user_namespace *ns = sb->s_fs_info;
-+
-+	if (ns != &init_user_ns)
-+		ima_fs_ns_free_dentries(ns);
-+
- 	kill_litter_super(sb);
- }
- 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index e2cee1457aaa..ea366c8e68c6 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -447,8 +447,9 @@ static const struct file_operations ima_measure_policy_ops = {
- 	.llseek = generic_file_llseek,
- };
- 
--static void ima_fs_ns_free_dentries(struct ima_namespace *ns)
-+void ima_fs_ns_free_dentries(struct user_namespace *user_ns)
- {
-+	struct ima_namespace *ns = user_ns->ima_ns;
- 	int i;
- 
- 	for (i = IMAFS_DENTRY_LAST - 1; i >= 0; i--)
-@@ -457,18 +458,36 @@ static void ima_fs_ns_free_dentries(struct ima_namespace *ns)
- 	memset(ns->dentry, 0, sizeof(ns->dentry));
- }
- 
--static int __init ima_fs_ns_init(struct user_namespace *user_ns)
-+int ima_fs_ns_init(struct user_namespace *user_ns,
-+		   struct dentry *root)
- {
- 	struct ima_namespace *ns = user_ns->ima_ns;
- 	struct dentry *ima_dir;
- 
--	ns->dentry[IMAFS_DENTRY_DIR] = securityfs_create_dir("ima", integrity_dir);
-+	/* already initialized? */
-+	if (ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR])
-+		return 0;
-+
-+	/* FIXME: update when evm and integrity are namespaced */
-+	if (user_ns != &init_user_ns) {
-+		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] =
-+			securityfs_create_dir("integrity", root);
-+		if (IS_ERR(ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR])) {
-+			ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] = NULL;
-+			return -1;
-+		}
-+	} else
-+		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] = integrity_dir;
-+
-+	ns->dentry[IMAFS_DENTRY_DIR] =
-+	    securityfs_create_dir("ima",
-+				  ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR]);
- 	if (IS_ERR(ns->dentry[IMAFS_DENTRY_DIR]))
--		return -1;
-+		goto out;
- 	ima_dir = ns->dentry[IMAFS_DENTRY_DIR];
- 
- 	ns->dentry[IMAFS_DENTRY_SYMLINK] =
--	    securityfs_create_symlink("ima", NULL, "integrity/ima", NULL);
-+	    securityfs_create_symlink("ima", root, "integrity/ima", NULL);
- 	if (IS_ERR(ns->dentry[IMAFS_DENTRY_SYMLINK]))
- 		goto out;
- 
-@@ -508,11 +527,11 @@ static int __init ima_fs_ns_init(struct user_namespace *user_ns)
- 
- 	return 0;
- out:
--	ima_fs_ns_free_dentries(ns);
-+	ima_fs_ns_free_dentries(user_ns);
- 	return -1;
- }
- 
- int __init ima_fs_init(void)
- {
--	return ima_fs_ns_init(&init_user_ns);
-+	return ima_fs_ns_init(&init_user_ns, NULL);
- }
--- 
-2.31.1
-
+Regards,
+DAVID JACKSON
+FEDERAL BUREAU OF INVESTIGATION
+INVESTIGATION ON ALL ONLINE WIRE TRANSFER
