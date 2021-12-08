@@ -2,124 +2,462 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D26146D169
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Dec 2021 11:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C707B46D230
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Dec 2021 12:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbhLHLAF (ORCPT
+        id S229718AbhLHLdD (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 8 Dec 2021 06:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
+        Wed, 8 Dec 2021 06:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhLHLAE (ORCPT
+        with ESMTP id S229573AbhLHLdD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 8 Dec 2021 06:00:04 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C466C061746
-        for <linux-security-module@vger.kernel.org>; Wed,  8 Dec 2021 02:56:33 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id 188so1277668vku.8
-        for <linux-security-module@vger.kernel.org>; Wed, 08 Dec 2021 02:56:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=1H7l/DPRfnWzKIISSBKguEjOE3JeKBR02Cjb5zYBOLI=;
-        b=OWMhC3vmnuADMm5oR6A5wdgDip6jSbg/M6dpHi/GYXnkXQusKA33qQVSaqY9s7bM+0
-         6fsy1u+YvgIf7uY7subMwCr0YRtzv4vfrQUG1CHdMUnpE56HZbxrYm24TIOhcngoASQ9
-         PtLk3BV0mRS6uMfunS0Bs7EybCN/NkxxHSzQbZnGrWEhDcbe94T2piI2W2dpXrcLei9D
-         GiMpYvlc8nM89QLRjZxZIoZAvPm2iOsDN4dmE10Zw4+9o10k/uxa/R/ZV5++WDLh2bZW
-         G8tGfIK4Fh1niYW/ogTqflUDHsNSfx6c6LB89CoFjthWwXOCJZY/88uCGL85bgLbb7ij
-         yWOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=1H7l/DPRfnWzKIISSBKguEjOE3JeKBR02Cjb5zYBOLI=;
-        b=1Gcg4I/jHMGcnKYokMKwFDyADjSlnYkG83WeDHIkr3+UsGpAt3tuzxb18ql4HiKJ7W
-         piQJZpv9EJH3UhB6azu/UuSoTgvh6KQW69XXE3j7C6lQLvdWdPkUPCB8qE27wGcRMQeh
-         Ucsr2uPs2Ec7IvlXCKiwRPQ2wuecAIyIuh4gnIXjC0Gtr6y70vnVY6Baap37D11Gxm3Z
-         pUH8JH9X1ktIMze3KDG+uVRCWLcTUoH3PLARGDs++uz+wR4xLIgts8i/qi+j5V9sqke1
-         KhjY04wXrXrVisPccN7fiVTqdOVSoNGI6yH4tcnT9lmgVXtNOY5QC1ee/yw717hXvwbw
-         KBlQ==
-X-Gm-Message-State: AOAM533JnMTRdwxD+WP4iI3pp3ObKdvbiFI0yiz7lf8rTsYqp8OaHaZq
-        0roxM/7i8ti4OZJb8UBP+xEVTFIPEmDw/agv764=
-X-Google-Smtp-Source: ABdhPJzWLvErpbkBGyE4Lv+byB4ZuCX+dm37MOa3u86JG8XkW3N3hKjpQC+fi8fffKdxLz3SZfNqL/ws4fXMzRKhe5k=
-X-Received: by 2002:a1f:d903:: with SMTP id q3mr60380338vkg.38.1638960992118;
- Wed, 08 Dec 2021 02:56:32 -0800 (PST)
+        Wed, 8 Dec 2021 06:33:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE12C061746;
+        Wed,  8 Dec 2021 03:29:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 020D0B82015;
+        Wed,  8 Dec 2021 11:29:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68056C00446;
+        Wed,  8 Dec 2021 11:29:22 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 12:29:18 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v4 01/16] ima: Add IMA namespace support
+Message-ID: <20211208112918.oxyyplwbpitytyfc@wittgenstein>
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+ <20211207202127.1508689-2-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a59:9a42:0:b0:260:4419:c4cd with HTTP; Wed, 8 Dec 2021
- 02:56:31 -0800 (PST)
-Reply-To: cristinacampeell@outlook.com
-From:   "Mrs. Cristina Campbell" <smith76544@gmail.com>
-Date:   Wed, 8 Dec 2021 10:56:31 +0000
-Message-ID: <CAAYzYtNOLVXa0PG-Ds3Yz0EehjaQLoD68x7+W8Mrw3k9wkyi_Q@mail.gmail.com>
-Subject: Kannst du mir helfen?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211207202127.1508689-2-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Lieber geliebter,
+On Tue, Dec 07, 2021 at 03:21:12PM -0500, Stefan Berger wrote:
+> Implement an IMA namespace data structure that gets created alongside a
+> user namespace with CLONE_NEWUSER. This lays down the foundation for
+> namespacing the different aspects of IMA (eg. IMA-audit, IMA-measurement,
+> IMA-appraisal).
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> ---
+>  include/linux/ima.h                      | 59 +++++++++++++++++
+>  include/linux/user_namespace.h           |  4 ++
+>  init/Kconfig                             | 10 +++
+>  kernel/user.c                            |  9 ++-
+>  kernel/user_namespace.c                  | 16 +++++
+>  security/integrity/ima/Makefile          |  3 +-
+>  security/integrity/ima/ima.h             |  4 ++
+>  security/integrity/ima/ima_init.c        |  4 ++
+>  security/integrity/ima/ima_init_ima_ns.c | 32 +++++++++
+>  security/integrity/ima/ima_ns.c          | 82 ++++++++++++++++++++++++
+>  10 files changed, 221 insertions(+), 2 deletions(-)
+>  create mode 100644 security/integrity/ima/ima_init_ima_ns.c
+>  create mode 100644 security/integrity/ima/ima_ns.c
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index b6ab66a546ae..86d126b9ff2f 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -11,6 +11,7 @@
+>  #include <linux/fs.h>
+>  #include <linux/security.h>
+>  #include <linux/kexec.h>
+> +#include <linux/user_namespace.h>
+>  #include <crypto/hash_info.h>
+>  struct linux_binprm;
+>  
+> @@ -210,6 +211,64 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
+>  }
+>  #endif /* CONFIG_IMA_APPRAISE */
+>  
+> +struct ima_namespace {
+> +	struct kref kref;
+> +	struct user_namespace *user_ns;
+> +};
+> +
+> +extern struct ima_namespace init_ima_ns;
+> +
+> +#ifdef CONFIG_IMA_NS
+> +
+> +void free_ima_ns(struct kref *kref);
+> +
+> +static inline struct ima_namespace *get_ima_ns(struct ima_namespace *ns)
+> +{
+> +	if (ns)
+> +		kref_get(&ns->kref);
+> +
+> +	return ns;
+> +}
+> +
+> +static inline void put_ima_ns(struct ima_namespace *ns)
+> +{
+> +	if (ns) {
+> +		pr_debug("DEREF   ima_ns: 0x%p  ctr: %d\n", ns, kref_read(&ns->kref));
+> +		kref_put(&ns->kref, free_ima_ns);
+> +	}
+> +}
+> +
+> +struct ima_namespace *copy_ima_ns(struct ima_namespace *old_ns,
+> +				  struct user_namespace *user_ns);
+> +
+> +static inline struct ima_namespace *get_current_ns(void)
+> +{
+> +	return current_user_ns()->ima_ns;
+> +}
+> +
+> +#else
+> +
+> +static inline struct ima_namespace *get_ima_ns(struct ima_namespace *ns)
+> +{
+> +	return ns;
+> +}
+> +
+> +static inline void put_ima_ns(struct ima_namespace *ns)
+> +{
+> +}
+> +
+> +static inline struct ima_namespace *copy_ima_ns(struct ima_namespace *old_ns,
+> +						struct user_namespace *user_ns)
+> +{
+> +	return old_ns;
+> +}
+> +
+> +static inline struct ima_namespace *get_current_ns(void)
+> +{
+> +	return &init_ima_ns;
+> +}
+> +#endif /* CONFIG_IMA_NS */
+> +
+>  #if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
+>  extern bool ima_appraise_signature(enum kernel_read_file_id func);
+>  #else
+> diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+> index 33a4240e6a6f..5249db04d62b 100644
+> --- a/include/linux/user_namespace.h
+> +++ b/include/linux/user_namespace.h
+> @@ -36,6 +36,7 @@ struct uid_gid_map { /* 64 bytes -- 1 cache line */
+>  #define USERNS_INIT_FLAGS USERNS_SETGROUPS_ALLOWED
+>  
+>  struct ucounts;
+> +struct ima_namespace;
+>  
+>  enum ucount_type {
+>  	UCOUNT_USER_NAMESPACES,
+> @@ -99,6 +100,9 @@ struct user_namespace {
+>  #endif
+>  	struct ucounts		*ucounts;
+>  	long ucount_max[UCOUNT_COUNTS];
+> +#ifdef CONFIG_IMA
+> +	struct ima_namespace	*ima_ns;
+> +#endif
+>  } __randomize_layout;
+>  
+>  struct ucounts {
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 11f8a845f259..27890607e8cb 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1242,6 +1242,16 @@ config NET_NS
+>  	  Allow user space to create what appear to be multiple instances
+>  	  of the network stack.
+>  
+> +config IMA_NS
+> +	bool "IMA namespace"
+> +	depends on USER_NS
+> +	depends on IMA
+> +	default y
+> +	help
+> +	  Allow the creation of IMA namespaces for each user namespace.
+> +	  Namespaced IMA enables having IMA features work separately
+> +	  in each IMA namespace.
+> +
+>  endif # NAMESPACES
+>  
+>  config CHECKPOINT_RESTORE
+> diff --git a/kernel/user.c b/kernel/user.c
+> index e2cf8c22b539..b5dc803a033d 100644
+> --- a/kernel/user.c
+> +++ b/kernel/user.c
+> @@ -20,6 +20,10 @@
+>  #include <linux/user_namespace.h>
+>  #include <linux/proc_ns.h>
+>  
+> +#ifdef CONFIG_IMA
+> +extern struct ima_namespace init_ima_ns;
+> +#endif
+> +
+>  /*
+>   * userns count is 1 for root user, 1 for init_uts_ns,
+>   * and 1 for... ?
+> @@ -55,7 +59,7 @@ struct user_namespace init_user_ns = {
+>  			},
+>  		},
+>  	},
+> -	.ns.count = REFCOUNT_INIT(3),
+> +	.ns.count = REFCOUNT_INIT(4),
+>  	.owner = GLOBAL_ROOT_UID,
+>  	.group = GLOBAL_ROOT_GID,
+>  	.ns.inum = PROC_USER_INIT_INO,
+> @@ -67,6 +71,9 @@ struct user_namespace init_user_ns = {
+>  	.keyring_name_list = LIST_HEAD_INIT(init_user_ns.keyring_name_list),
+>  	.keyring_sem = __RWSEM_INITIALIZER(init_user_ns.keyring_sem),
+>  #endif
+> +#ifdef CONFIG_IMA
+> +	.ima_ns = &init_ima_ns,
+> +#endif
+>  };
+>  EXPORT_SYMBOL_GPL(init_user_ns);
+>  
+> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+> index 6b2e3ca7ee99..c26885343b19 100644
+> --- a/kernel/user_namespace.c
+> +++ b/kernel/user_namespace.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/fs_struct.h>
+>  #include <linux/bsearch.h>
+>  #include <linux/sort.h>
+> +#include <linux/ima.h>
+>  
+>  static struct kmem_cache *user_ns_cachep __read_mostly;
+>  static DEFINE_MUTEX(userns_state_mutex);
+> @@ -141,8 +142,20 @@ int create_user_ns(struct cred *new)
+>  	if (!setup_userns_sysctls(ns))
+>  		goto fail_keyring;
+>  
+> +#if CONFIG_IMA
+> +	ns->ima_ns = copy_ima_ns(parent_ns->ima_ns, ns);
+> +	if (IS_ERR(ns->ima_ns)) {
+> +		ret = PTR_ERR(ns->ima_ns);
+> +		goto fail_userns_sysctls;
+> +	}
+> +#endif
+> +
+>  	set_cred_user_ns(new, ns);
+>  	return 0;
+> +#if CONFIG_IMA
+> +fail_userns_sysctls:
+> +	retire_userns_sysctls(ns);
+> +#endif
+>  fail_keyring:
+>  #ifdef CONFIG_PERSISTENT_KEYRINGS
+>  	key_put(ns->persistent_keyring_register);
+> @@ -196,6 +209,9 @@ static void free_user_ns(struct work_struct *work)
+>  			kfree(ns->projid_map.forward);
+>  			kfree(ns->projid_map.reverse);
+>  		}
+> +#ifdef CONFIG_IMA
+> +		put_ima_ns(ns->ima_ns);
+> +#endif
+>  		retire_userns_sysctls(ns);
+>  		key_free_user_ns(ns);
+>  		ns_free_inum(&ns->ns);
+> diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
+> index 2499f2485c04..b86a35fbed60 100644
+> --- a/security/integrity/ima/Makefile
+> +++ b/security/integrity/ima/Makefile
+> @@ -7,13 +7,14 @@
+>  obj-$(CONFIG_IMA) += ima.o
+>  
+>  ima-y := ima_fs.o ima_queue.o ima_init.o ima_main.o ima_crypto.o ima_api.o \
+> -	 ima_policy.o ima_template.o ima_template_lib.o
+> +	 ima_policy.o ima_template.o ima_template_lib.o ima_init_ima_ns.o
+>  ima-$(CONFIG_IMA_APPRAISE) += ima_appraise.o
+>  ima-$(CONFIG_IMA_APPRAISE_MODSIG) += ima_modsig.o
+>  ima-$(CONFIG_HAVE_IMA_KEXEC) += ima_kexec.o
+>  ima-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
+>  ima-$(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) += ima_asymmetric_keys.o
+>  ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS) += ima_queue_keys.o
+> +ima-$(CONFIG_IMA_NS) += ima_ns.o
+>  
+>  ifeq ($(CONFIG_EFI),y)
+>  ima-$(CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT) += ima_efi.o
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index be965a8715e4..2f8adf383054 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -418,6 +418,10 @@ static inline void ima_free_modsig(struct modsig *modsig)
+>  }
+>  #endif /* CONFIG_IMA_APPRAISE_MODSIG */
+>  
+> +int ima_ns_init(void);
+> +struct ima_namespace;
+> +int ima_init_namespace(struct ima_namespace *ns);
+> +
+>  /* LSM based policy rules require audit */
+>  #ifdef CONFIG_IMA_LSM_RULES
+>  
+> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+> index b26fa67476b4..f6ae4557a0da 100644
+> --- a/security/integrity/ima/ima_init.c
+> +++ b/security/integrity/ima/ima_init.c
+> @@ -120,6 +120,10 @@ int __init ima_init(void)
+>  {
+>  	int rc;
+>  
+> +	rc = ima_ns_init();
+> +	if (rc)
+> +		return rc;
+> +
+>  	ima_tpm_chip = tpm_default_chip();
+>  	if (!ima_tpm_chip)
+>  		pr_info("No TPM chip found, activating TPM-bypass!\n");
+> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+> new file mode 100644
+> index 000000000000..12723d77fe17
+> --- /dev/null
+> +++ b/security/integrity/ima/ima_init_ima_ns.c
+> @@ -0,0 +1,32 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2016-2018 IBM Corporation
+> + * Author:
+> + *   Yuqiong Sun <suny@us.ibm.com>
+> + *   Stefan Berger <stefanb@linux.vnet.ibm.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation, version 2 of the License.
+> + */
+> +
+> +#include <linux/export.h>
+> +#include <linux/user_namespace.h>
+> +#include <linux/ima.h>
+> +#include <linux/proc_ns.h>
+> +
+> +int ima_init_namespace(struct ima_namespace *ns)
+> +{
+> +	return 0;
+> +}
+> +
+> +int __init ima_ns_init(void)
+> +{
+> +	return ima_init_namespace(&init_ima_ns);
+> +}
+> +
+> +struct ima_namespace init_ima_ns = {
+> +	.kref = KREF_INIT(1),
+> +	.user_ns = &init_user_ns,
+> +};
+> +EXPORT_SYMBOL(init_ima_ns);
+> diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+> new file mode 100644
+> index 000000000000..9a782c08c34e
+> --- /dev/null
+> +++ b/security/integrity/ima/ima_ns.c
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2016-2018 IBM Corporation
+> + * Author:
+> + *  Yuqiong Sun <suny@us.ibm.com>
+> + *  Stefan Berger <stefanb@linux.vnet.ibm.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation, version 2 of the License.
+> + */
+> +
+> +#include <linux/kref.h>
+> +#include <linux/slab.h>
+> +#include <linux/ima.h>
+> +#include <linux/mount.h>
+> +#include <linux/proc_ns.h>
+> +#include <linux/lsm_hooks.h>
+> +
+> +#include "ima.h"
+> +
+> +static struct kmem_cache *imans_cachep;
+> +
+> +static struct ima_namespace *create_ima_ns(struct user_namespace *user_ns)
+> +{
+> +	struct ima_namespace *ns;
+> +	int err;
+> +
+> +	ns = kmem_cache_zalloc(imans_cachep, GFP_KERNEL);
+> +	if (!ns)
+> +		return ERR_PTR(-ENOMEM);
+> +	pr_debug("NEW     ima_ns: 0x%p\n", ns);
+> +
+> +	kref_init(&ns->kref);
+> +	ns->user_ns = user_ns;
+> +
+> +	err = ima_init_namespace(ns);
+> +	if (err)
+> +		goto fail_free;
+> +
+> +	return ns;
+> +
+> +fail_free:
+> +	kmem_cache_free(imans_cachep, ns);
+> +
+> +	return ERR_PTR(err);
+> +}
+> +
+> +/**
+> + * Copy an ima namespace - create a new one
+> + *
+> + * @old_ns: old ima namespace to clone
+> + * @user_ns: User namespace
+> + */
+> +struct ima_namespace *copy_ima_ns(struct ima_namespace *old_ns,
+> +				  struct user_namespace *user_ns)
+> +{
+> +	return create_ima_ns(user_ns);
+> +}
 
-Bitte lesen Sie dies langsam und sorgf=C3=A4ltig durch, da es sich
-m=C3=B6glicherweise um eine der wichtigsten E-Mails handelt, die Sie jemals
-erhalten. Ich bin Mrs. Cristina Campbell, ich war mit dem verstorbenen
-Edward Campbell verheiratet. Er arbeitete fr=C3=BCher f=C3=BCr die Shell
-Petroleum Development Company London und war auch ein erfahrener
-Bauunternehmer in der Region Ostasien. Er starb am Montag, 31. Juli
-2003 in Paris. Wir waren sieben Jahre ohne Kind verheiratet.
+I'd just remove copy_ima_ns() completely and just leave create_ima_ns()
+if it's not used anywhere.
 
-W=C3=A4hrend Sie dies lesen, m=C3=B6chte ich nicht, dass Sie Mitleid mit mi=
-r
-haben, denn ich glaube, dass jeder eines Tages sterben wird. Bei mir
-wurde Speiser=C3=B6hrenkrebs diagnostiziert und mein Arzt sagte mir, dass
-ich aufgrund meiner komplizierten Gesundheitsprobleme nicht lange
-durchhalten w=C3=BCrde.
+> +
+> +static void destroy_ima_ns(struct ima_namespace *ns)
+> +{
+> +	pr_debug("DESTROY ima_ns: 0x%p\n", ns);
+> +	kmem_cache_free(imans_cachep, ns);
+> +}
+> +
+> +void free_ima_ns(struct kref *kref)
+> +{
+> +	struct ima_namespace *ns;
+> +
+> +	ns = container_of(kref, struct ima_namespace, kref);
+> +	BUG_ON(ns == &init_ima_ns);
 
-Ich m=C3=B6chte, dass Gott mir gegen=C3=BCber barmherzig ist und meine Seel=
-e
-akzeptiert, deshalb habe ich beschlossen, Almosen an
-Wohlt=C3=A4tigkeitsorganisationen/ Kirchen/ buddhistische Tempel/ Moscheen/
-mutterlose Babys/ weniger Privilegierte und Witwen zu geben, da ich
-m=C3=B6chte, dass dies eine der letzten guten Taten ist Ich tue es auf der
-Erde, bevor ich sterbe. Bisher habe ich Geld an einige
-Wohlt=C3=A4tigkeitsorganisationen in Schottland, Wales, Panama, Finnland
-und Griechenland verteilt. Jetzt, wo sich mein Gesundheitszustand so
-stark verschlechtert hat, kann ich das nicht mehr selbst machen.
+I'd not do that. Either
 
-Ich habe einmal Mitglieder meiner Familie gebeten, eines meiner Konten
-zu schlie=C3=9Fen und das Geld, das ich dort habe, an
-Wohlt=C3=A4tigkeitsorganisationen in =C3=96sterreich, Luxemburg, Deutschlan=
-d,
-Italien und der Schweiz zu verteilen, sie weigerten sich und behielten
-das Geld f=C3=BCr sich. Daher vertraue ich nicht sie nicht mehr, da sie
-anscheinend nicht mit dem zufrieden sind, was ich ihnen hinterlassen
-habe. Das letzte von meinem Geld, von dem niemand wei=C3=9F, ist die
-riesige Bareinzahlung von sechs Millionen US-Dollar $ 6.000.000,00,
-die ich bei einer Bank in Thailand habe, bei der ich den Fonds
-hinterlegt habe. Ich m=C3=B6chte, dass Sie diesen Fonds f=C3=BCr
-Wohlt=C3=A4tigkeitsprogramme verwenden und die Menschheit in Ihrem Land
-unterst=C3=BCtzen, wenn Sie nur aufrichtig sind.
+	if (ns != &init_ima_ns)
+		destroy_ima_ns(ns);
 
-Ich habe diese Entscheidung getroffen, weil ich kein Kind habe, das
-dieses Geld erben wird. Ich habe keine Angst vor dem Tod, daher wei=C3=9F
-ich, wohin ich gehe. Ich wei=C3=9F, dass ich im Scho=C3=9F des Herrn sein w=
-erde.
-Sobald ich Ihre Antwort erhalten habe, werde ich Ihnen den Kontakt der
-Bank mitteilen und Ihnen eine Vollmacht ausstellen, die Sie als
-urspr=C3=BCnglichen Beg=C3=BCnstigten dieses Fonds bevollm=C3=A4chtigt, die=
-ses
-Wohlt=C3=A4tigkeitsprogramm sofort in Ihrem Land zu beginnen.
+so it can be safely called on init_ima_ns or
 
-Nur ein Leben, das f=C3=BCr andere gelebt wird, ist ein lebenswertes Leben.
-Ich m=C3=B6chte, dass Sie immer f=C3=BCr mich beten. Jede Verz=C3=B6gerung =
-Ihrer
-Antwort wird mir Raum geben, eine andere Person zu diesem Zweck zu
-finden. Wenn Sie kein Interesse haben, bitte ich um Entschuldigung f=C3=BCr
-die Kontaktaufnahme. Du kannst mich mit meiner privaten E-Mail
-erreichen oder mir antworten: (cristinacampeell@outlook.com).
+if (WARN_ON(ns == &init_ima_ns))
+	return;
 
-Vielen Dank,
-Dein,
-Frau Cristina Campbell
-Email; cristinacampeell@outlook.com
+> +
+> +	destroy_ima_ns(ns);
+> +}
+> +
+> +static int __init imans_cache_init(void)
+> +{
+> +	imans_cachep = KMEM_CACHE(ima_namespace, SLAB_PANIC);
+> +	return 0;
+> +}
+> +subsys_initcall(imans_cache_init)
+> -- 
+> 2.31.1
+> 
+> 
