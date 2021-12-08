@@ -2,188 +2,124 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB94946D066
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Dec 2021 10:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D26146D169
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Dec 2021 11:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbhLHJ6t (ORCPT
+        id S229713AbhLHLAF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 8 Dec 2021 04:58:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48825 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231190AbhLHJ6t (ORCPT
+        Wed, 8 Dec 2021 06:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229448AbhLHLAE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:58:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638957317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RbXsax9ldMWCPX0huGTH/ykVh4lOIdMfM3HnOVtd9Sg=;
-        b=aIngM+RNlDJYqmFVsxxa/oDJnNiNn9DbRcV1bedZrbJoegN7HM4sl68oOoNS5OtMBiHZPZ
-        +9VnOhbTUpfLg+4+W7TaUhK5oWXD7mYxvh3Kf/s3RfcImuIz1SRGQWreGeFlFK94l7QSXV
-        38KpndJoC2fotNGC0rhLRX6MPZmDVTw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-MBArii7hOAGNVhEwT_QDGA-1; Wed, 08 Dec 2021 04:55:12 -0500
-X-MC-Unique: MBArii7hOAGNVhEwT_QDGA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8C4231023F4D;
-        Wed,  8 Dec 2021 09:55:07 +0000 (UTC)
-Received: from rhtmp (unknown [10.39.193.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1B142B178;
-        Wed,  8 Dec 2021 09:54:57 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 10:54:55 +0100
-From:   Philipp Rudo <prudo@redhat.com>
-To:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
-Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
-Message-ID: <20211208105455.00085532@rhtmp>
-In-Reply-To: <20211207173221.GM117207@kunlun.suse.cz>
-References: <cover.1637862358.git.msuchanek@suse.de>
-        <20211207171014.2cfc4a54@rhtmp>
-        <20211207173221.GM117207@kunlun.suse.cz>
-Organization: Red Hat inc.
+        Wed, 8 Dec 2021 06:00:04 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C466C061746
+        for <linux-security-module@vger.kernel.org>; Wed,  8 Dec 2021 02:56:33 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id 188so1277668vku.8
+        for <linux-security-module@vger.kernel.org>; Wed, 08 Dec 2021 02:56:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=1H7l/DPRfnWzKIISSBKguEjOE3JeKBR02Cjb5zYBOLI=;
+        b=OWMhC3vmnuADMm5oR6A5wdgDip6jSbg/M6dpHi/GYXnkXQusKA33qQVSaqY9s7bM+0
+         6fsy1u+YvgIf7uY7subMwCr0YRtzv4vfrQUG1CHdMUnpE56HZbxrYm24TIOhcngoASQ9
+         PtLk3BV0mRS6uMfunS0Bs7EybCN/NkxxHSzQbZnGrWEhDcbe94T2piI2W2dpXrcLei9D
+         GiMpYvlc8nM89QLRjZxZIoZAvPm2iOsDN4dmE10Zw4+9o10k/uxa/R/ZV5++WDLh2bZW
+         G8tGfIK4Fh1niYW/ogTqflUDHsNSfx6c6LB89CoFjthWwXOCJZY/88uCGL85bgLbb7ij
+         yWOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=1H7l/DPRfnWzKIISSBKguEjOE3JeKBR02Cjb5zYBOLI=;
+        b=1Gcg4I/jHMGcnKYokMKwFDyADjSlnYkG83WeDHIkr3+UsGpAt3tuzxb18ql4HiKJ7W
+         piQJZpv9EJH3UhB6azu/UuSoTgvh6KQW69XXE3j7C6lQLvdWdPkUPCB8qE27wGcRMQeh
+         Ucsr2uPs2Ec7IvlXCKiwRPQ2wuecAIyIuh4gnIXjC0Gtr6y70vnVY6Baap37D11Gxm3Z
+         pUH8JH9X1ktIMze3KDG+uVRCWLcTUoH3PLARGDs++uz+wR4xLIgts8i/qi+j5V9sqke1
+         KhjY04wXrXrVisPccN7fiVTqdOVSoNGI6yH4tcnT9lmgVXtNOY5QC1ee/yw717hXvwbw
+         KBlQ==
+X-Gm-Message-State: AOAM533JnMTRdwxD+WP4iI3pp3ObKdvbiFI0yiz7lf8rTsYqp8OaHaZq
+        0roxM/7i8ti4OZJb8UBP+xEVTFIPEmDw/agv764=
+X-Google-Smtp-Source: ABdhPJzWLvErpbkBGyE4Lv+byB4ZuCX+dm37MOa3u86JG8XkW3N3hKjpQC+fi8fffKdxLz3SZfNqL/ws4fXMzRKhe5k=
+X-Received: by 2002:a1f:d903:: with SMTP id q3mr60380338vkg.38.1638960992118;
+ Wed, 08 Dec 2021 02:56:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Received: by 2002:a59:9a42:0:b0:260:4419:c4cd with HTTP; Wed, 8 Dec 2021
+ 02:56:31 -0800 (PST)
+Reply-To: cristinacampeell@outlook.com
+From:   "Mrs. Cristina Campbell" <smith76544@gmail.com>
+Date:   Wed, 8 Dec 2021 10:56:31 +0000
+Message-ID: <CAAYzYtNOLVXa0PG-Ds3Yz0EehjaQLoD68x7+W8Mrw3k9wkyi_Q@mail.gmail.com>
+Subject: Kannst du mir helfen?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Michal,
+Lieber geliebter,
 
-On Tue, 7 Dec 2021 18:32:21 +0100
-Michal Such=C3=A1nek <msuchanek@suse.de> wrote:
+Bitte lesen Sie dies langsam und sorgf=C3=A4ltig durch, da es sich
+m=C3=B6glicherweise um eine der wichtigsten E-Mails handelt, die Sie jemals
+erhalten. Ich bin Mrs. Cristina Campbell, ich war mit dem verstorbenen
+Edward Campbell verheiratet. Er arbeitete fr=C3=BCher f=C3=BCr die Shell
+Petroleum Development Company London und war auch ein erfahrener
+Bauunternehmer in der Region Ostasien. Er starb am Montag, 31. Juli
+2003 in Paris. Wir waren sieben Jahre ohne Kind verheiratet.
 
-> On Tue, Dec 07, 2021 at 05:10:14PM +0100, Philipp Rudo wrote:
-> > Hi Michal,
-> >=20
-> > i finally had the time to take a closer look at the series. Except for
-> > the nit in patch 4 and my personal preference in patch 6 the code looks
-> > good to me.
-> >=20
-> > What I don't like are the commit messages on the first commits. In my
-> > opinion they are so short that they are almost useless. For example in
-> > patch 2 there is absolutely no explanation why you can simply copy the
-> > s390 over to ppc. =20
->=20
-> They use the same signature format. I suppose I can add a note saying
-> that.
+W=C3=A4hrend Sie dies lesen, m=C3=B6chte ich nicht, dass Sie Mitleid mit mi=
+r
+haben, denn ich glaube, dass jeder eines Tages sterben wird. Bei mir
+wurde Speiser=C3=B6hrenkrebs diagnostiziert und mein Arzt sagte mir, dass
+ich aufgrund meiner komplizierten Gesundheitsprobleme nicht lange
+durchhalten w=C3=BCrde.
 
-The note is what I was asking for. For me the commit message is an
-important piece of documentation for other developers (or yourself in a
-year). That's why in my opinion it's important to describe _why_ you do
-something in it as you cannot get the _why_ by reading the code.
+Ich m=C3=B6chte, dass Gott mir gegen=C3=BCber barmherzig ist und meine Seel=
+e
+akzeptiert, deshalb habe ich beschlossen, Almosen an
+Wohlt=C3=A4tigkeitsorganisationen/ Kirchen/ buddhistische Tempel/ Moscheen/
+mutterlose Babys/ weniger Privilegierte und Witwen zu geben, da ich
+m=C3=B6chte, dass dies eine der letzten guten Taten ist Ich tue es auf der
+Erde, bevor ich sterbe. Bisher habe ich Geld an einige
+Wohlt=C3=A4tigkeitsorganisationen in Schottland, Wales, Panama, Finnland
+und Griechenland verteilt. Jetzt, wo sich mein Gesundheitszustand so
+stark verschlechtert hat, kann ich das nicht mehr selbst machen.
 
-> > Or in patch 3 you are silently changing the error
-> > code in kexec from EKEYREJECT to ENODATA. So I would appreciate it if =
-=20
->=20
-> Not sure what I should do about this. The different implementations use
-> different random error codes, and when they are unified the error code
-> clearly changes for one or the other.
+Ich habe einmal Mitglieder meiner Familie gebeten, eines meiner Konten
+zu schlie=C3=9Fen und das Geld, das ich dort habe, an
+Wohlt=C3=A4tigkeitsorganisationen in =C3=96sterreich, Luxemburg, Deutschlan=
+d,
+Italien und der Schweiz zu verteilen, sie weigerten sich und behielten
+das Geld f=C3=BCr sich. Daher vertraue ich nicht sie nicht mehr, da sie
+anscheinend nicht mit dem zufrieden sind, was ich ihnen hinterlassen
+habe. Das letzte von meinem Geld, von dem niemand wei=C3=9F, ist die
+riesige Bareinzahlung von sechs Millionen US-Dollar $ 6.000.000,00,
+die ich bei einer Bank in Thailand habe, bei der ich den Fonds
+hinterlegt habe. Ich m=C3=B6chte, dass Sie diesen Fonds f=C3=BCr
+Wohlt=C3=A4tigkeitsprogramme verwenden und die Menschheit in Ihrem Land
+unterst=C3=BCtzen, wenn Sie nur aufrichtig sind.
 
-My complaint wasn't that you change the return code. There's no way to
-avoid choosing one over the other. It's again that you don't document
-the change in the commit message for others.
+Ich habe diese Entscheidung getroffen, weil ich kein Kind habe, das
+dieses Geld erben wird. Ich habe keine Angst vor dem Tod, daher wei=C3=9F
+ich, wohin ich gehe. Ich wei=C3=9F, dass ich im Scho=C3=9F des Herrn sein w=
+erde.
+Sobald ich Ihre Antwort erhalten habe, werde ich Ihnen den Kontakt der
+Bank mitteilen und Ihnen eine Vollmacht ausstellen, die Sie als
+urspr=C3=BCnglichen Beg=C3=BCnstigten dieses Fonds bevollm=C3=A4chtigt, die=
+ses
+Wohlt=C3=A4tigkeitsprogramm sofort in Ihrem Land zu beginnen.
 
-> Does anything depend on a particular error code returned?
+Nur ein Leben, das f=C3=BCr andere gelebt wird, ist ein lebenswertes Leben.
+Ich m=C3=B6chte, dass Sie immer f=C3=BCr mich beten. Jede Verz=C3=B6gerung =
+Ihrer
+Antwort wird mir Raum geben, eine andere Person zu diesem Zweck zu
+finden. Wenn Sie kein Interesse haben, bitte ich um Entschuldigung f=C3=BCr
+die Kontaktaufnahme. Du kannst mich mit meiner privaten E-Mail
+erreichen oder mir antworten: (cristinacampeell@outlook.com).
 
-Not that I know of. At least in the kexec-tools ENODATA and EKEYREJECT
-are handled the same way.
-
-Thanks
-Philipp
-
-
-> Thanks
->=20
-> Michal
->=20
-> > you could improve them a little.
-> >=20
-> > Thanks
-> > Philipp
-> >=20
-> > On Thu, 25 Nov 2021 19:02:38 +0100
-> > Michal Suchanek <msuchanek@suse.de> wrote:
-> >  =20
-> > > Hello,
-> > >=20
-> > > This is resend of the KEXEC_SIG patchset.
-> > >=20
-> > > The first patch is new because it'a a cleanup that does not require a=
-ny
-> > > change to the module verification code.
-> > >=20
-> > > The second patch is the only one that is intended to change any
-> > > functionality.
-> > >=20
-> > > The rest only deduplicates code but I did not receive any review on t=
-hat
-> > > part so I don't know if it's desirable as implemented.
-> > >=20
-> > > The first two patches can be applied separately without the rest.
-> > >=20
-> > > Thanks
-> > >=20
-> > > Michal
-> > >=20
-> > > Michal Suchanek (6):
-> > >   s390/kexec_file: Don't opencode appended signature check.
-> > >   powerpc/kexec_file: Add KEXEC_SIG support.
-> > >   kexec_file: Don't opencode appended signature verification.
-> > >   module: strip the signature marker in the verification function.
-> > >   module: Use key_being_used_for for log messages in
-> > >     verify_appended_signature
-> > >   module: Move duplicate mod_check_sig users code to mod_parse_sig
-> > >=20
-> > >  arch/powerpc/Kconfig                     | 11 +++++
-> > >  arch/powerpc/kexec/elf_64.c              | 14 ++++++
-> > >  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
-> > >  crypto/asymmetric_keys/asymmetric_type.c |  1 +
-> > >  include/linux/module_signature.h         |  1 +
-> > >  include/linux/verification.h             |  4 ++
-> > >  kernel/module-internal.h                 |  2 -
-> > >  kernel/module.c                          | 12 +++--
-> > >  kernel/module_signature.c                | 56 ++++++++++++++++++++++=
-+-
-> > >  kernel/module_signing.c                  | 33 +++++++-------
-> > >  security/integrity/ima/ima_modsig.c      | 22 ++--------
-> > >  11 files changed, 113 insertions(+), 85 deletions(-)
-> > >  =20
-> >  =20
->=20
-
+Vielen Dank,
+Dein,
+Frau Cristina Campbell
+Email; cristinacampeell@outlook.com
