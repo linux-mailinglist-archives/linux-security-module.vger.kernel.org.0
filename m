@@ -2,50 +2,50 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4AC470744
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 Dec 2021 18:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6140470747
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 Dec 2021 18:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244295AbhLJRhN (ORCPT
+        id S244673AbhLJRhQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 10 Dec 2021 12:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        Fri, 10 Dec 2021 12:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241448AbhLJRhH (ORCPT
+        with ESMTP id S241470AbhLJRhI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:37:07 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6517DC0617A2
-        for <linux-security-module@vger.kernel.org>; Fri, 10 Dec 2021 09:33:32 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so10320950otl.8
-        for <linux-security-module@vger.kernel.org>; Fri, 10 Dec 2021 09:33:32 -0800 (PST)
+        Fri, 10 Dec 2021 12:37:08 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D98BC061353
+        for <linux-security-module@vger.kernel.org>; Fri, 10 Dec 2021 09:33:33 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso10351645otj.1
+        for <linux-security-module@vger.kernel.org>; Fri, 10 Dec 2021 09:33:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WMqa61IMKQAN9nayBNaET9ogW/1IQBHwCkgxPK83A3s=;
-        b=ZiinzdUTAUE4pW3+MikJK5J7ul2KgoWPeStbJcIb4f+ObGuAEAF6SL+SMRMxnX95h2
-         iK95itksi/1uauaJqsD/x6K8C5VGuaLthvLoxR2o9n0klTF4wkcseELo0XrgDCp4GWPa
-         /qWqBFehtViF2vhi7zRNmscMQ1Z5b/aeYT60o=
+        bh=/nnwsniEu8uqYxjrwTyGxxsdhf651m9rl/Wv8zBibbw=;
+        b=SmXM3bXqM0gP1T/ezve3OJ9V/UwR0HRmCygo4+nqyzJjP1gF+zR7fge5vblTzlNrCX
+         w04iFxqxd77ZVX79QZ2Zt1uJoQN9tDojIGVstIdl1Ce1fS/SMZQYXDALiC1835irYpPi
+         EhPQEF96/sDzUgJbQgTPDroDn8RrRbvtb3geQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WMqa61IMKQAN9nayBNaET9ogW/1IQBHwCkgxPK83A3s=;
-        b=YvQFzLrZvvuA2Rq7Cv386El3PuxuTuH+XZE2Kzy6+888SJh6BZZ+tM9Mg8ZfHCSiZ1
-         34AqCkiAhScBog6po0HpyeNVubhx6qn5jqrrE7vsr7ZTK8NP7irl9X82B+e/AhuYMHIy
-         9CO/tFt0bWSAyP1aA5eRh6PSQjBqFaOwaWZ1b70dO726MRTae4iHDDOrPeLw3TNO9EU/
-         vNro8D6aZ9F1d0hFLGcqTaVoRG9k0AumADyNC0PU/ABm3sw10J7Si07+uMGe1VPQ6mQ8
-         oXUqk9sjo0bkTZvfKhHrc2NdeKcW60Wny015QhVetUTZIQSeoDghqfD9B8hykb+PFZSr
-         wLDw==
-X-Gm-Message-State: AOAM533IOMXJqsraEYiETNzPHhUt05EX770lVl/Ld+SoyHacHg8BKpZj
-        3lJi6bb9U0/B9FvgiFecQbh6EA==
-X-Google-Smtp-Source: ABdhPJxs5UyjzAwtor6CH4V3zYGHQWLFyg/yw499Ss2tuG45t4WeD25Up32eMNTOXvKpzS2SfYHVjw==
-X-Received: by 2002:a05:6830:1392:: with SMTP id d18mr11833207otq.374.1639157611625;
-        Fri, 10 Dec 2021 09:33:31 -0800 (PST)
+        bh=/nnwsniEu8uqYxjrwTyGxxsdhf651m9rl/Wv8zBibbw=;
+        b=Kb263nqZCFAl3meCuNL9vFeWFkofQYjDZGAIp6/MXpy6rSJPocqwSgNTOxAm6oulqq
+         IiolRg6kb+bACChsVSNVrgzg46FmYLPKAyVRjFV0a85h4g8mV3ASlxP4KxYCgtWPZB9y
+         1oM5DjcD5/8kHApuzUkoKuhs0P4otIxSsrMsoy7iM0SiuQqHWy0xKVPu/EVN5c8G5Tfy
+         TgUBCNcRGs28nf/l0PHvEdf0CyFIuba3lujrZGDwaLamTVX3OK4eszErBxMXszAgRcdA
+         reSaAep1QBv2P2p9lQUfkoGoH98dVt7wrwc22vvlzCbk8L+Qp+cYAegXwI4pHHDjOyCD
+         S4TQ==
+X-Gm-Message-State: AOAM532exS9Vga93OMKAp1nBkzKDcnvpMQcvQrWQNZ3uzuw/G6fuVnVp
+        hftRF+iO3pdRIJ+zFkKRTTeSog==
+X-Google-Smtp-Source: ABdhPJw9KMAr8iR7/gO1NKMOwvgOgpBIMplkuY0P/9SLX80+FALZ7l62v8z8IlRFbsoMk0FcxwUIOQ==
+X-Received: by 2002:a9d:ea6:: with SMTP id 35mr11764702otj.304.1639157612590;
+        Fri, 10 Dec 2021 09:33:32 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.30
+        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:33:31 -0800 (PST)
+        Fri, 10 Dec 2021 09:33:32 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
         keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
@@ -55,9 +55,9 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 06/12] selftests/landlock: remove ARRAY_SIZE define from common.h
-Date:   Fri, 10 Dec 2021 10:33:16 -0700
-Message-Id: <e86b9f3a050a919b90a41e42f369e8945210c2fb.1639156389.git.skhan@linuxfoundation.org>
+Subject: [PATCH 07/12] selftests/net: remove ARRAY_SIZE define from individual tests
+Date:   Fri, 10 Dec 2021 10:33:17 -0700
+Message-Id: <1356c830b8155ddd37a6330c1f5d4df7a1bdb86a.1639156389.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1639156389.git.skhan@linuxfoundation.org>
 References: <cover.1639156389.git.skhan@linuxfoundation.org>
@@ -71,29 +71,121 @@ individual test files and include header file for the define instead.
 ARRAY_SIZE define is added in a separate patch to prepare for this
 change.
 
-Remove ARRAY_SIZE from common.h and pickup the one defined in
+Remove ARRAY_SIZE from net tests and pickup the one defined in
 kselftest.h.
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/common.h | 4 ----
- 1 file changed, 4 deletions(-)
+ tools/testing/selftests/net/gro.c                     | 3 ++-
+ tools/testing/selftests/net/ipsec.c                   | 1 -
+ tools/testing/selftests/net/reuseport_bpf.c           | 4 +---
+ tools/testing/selftests/net/rxtimestamp.c             | 2 +-
+ tools/testing/selftests/net/socket.c                  | 3 ++-
+ tools/testing/selftests/net/tcp_fastopen_backup_key.c | 6 ++----
+ 6 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
-index 20e2a9286d71..183b7e8e1b95 100644
---- a/tools/testing/selftests/landlock/common.h
-+++ b/tools/testing/selftests/landlock/common.h
-@@ -17,10 +17,6 @@
+diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
+index cf37ce86b0fd..221525ccbe1d 100644
+--- a/tools/testing/selftests/net/gro.c
++++ b/tools/testing/selftests/net/gro.c
+@@ -57,10 +57,11 @@
+ #include <string.h>
+ #include <unistd.h>
  
- #include "../kselftest_harness.h"
++#include "../kselftest.h"
++
+ #define DPORT 8000
+ #define SPORT 1500
+ #define PAYLOAD_LEN 100
+-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+ #define NUM_PACKETS 4
+ #define START_SEQ 100
+ #define START_ACK 100
+diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+index 3d7dde2c321b..cc10c10c5ed9 100644
+--- a/tools/testing/selftests/net/ipsec.c
++++ b/tools/testing/selftests/net/ipsec.c
+@@ -41,7 +41,6 @@
+ 
+ #define pr_err(fmt, ...)	printk(fmt ": %m", ##__VA_ARGS__)
+ 
+-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+ #define BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2*!!(condition)]))
+ 
+ #define IPV4_STR_SZ	16	/* xxx.xxx.xxx.xxx is longest + \0 */
+diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
+index b5277106df1f..072d709c96b4 100644
+--- a/tools/testing/selftests/net/reuseport_bpf.c
++++ b/tools/testing/selftests/net/reuseport_bpf.c
+@@ -24,9 +24,7 @@
+ #include <sys/resource.h>
+ #include <unistd.h>
  
 -#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+-#endif
++#include "../kselftest.h"
+ 
+ struct test_params {
+ 	int recv_family;
+diff --git a/tools/testing/selftests/net/rxtimestamp.c b/tools/testing/selftests/net/rxtimestamp.c
+index e4613ce4ed69..9eb42570294d 100644
+--- a/tools/testing/selftests/net/rxtimestamp.c
++++ b/tools/testing/selftests/net/rxtimestamp.c
+@@ -18,7 +18,7 @@
+ #include <linux/net_tstamp.h>
+ #include <linux/errqueue.h>
+ 
+-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
++#include "../kselftest.h"
+ 
+ struct options {
+ 	int so_timestamp;
+diff --git a/tools/testing/selftests/net/socket.c b/tools/testing/selftests/net/socket.c
+index afca1ead677f..db1aeb8c5d1e 100644
+--- a/tools/testing/selftests/net/socket.c
++++ b/tools/testing/selftests/net/socket.c
+@@ -7,6 +7,8 @@
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ 
++#include "../kselftest.h"
++
+ struct socket_testcase {
+ 	int	domain;
+ 	int	type;
+@@ -31,7 +33,6 @@ static struct socket_testcase tests[] = {
+ 	{ AF_INET, SOCK_STREAM, IPPROTO_UDP, -EPROTONOSUPPORT, 1  },
+ };
+ 
+-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+ #define ERR_STRING_SZ	64
+ 
+ static int run_tests(void)
+diff --git a/tools/testing/selftests/net/tcp_fastopen_backup_key.c b/tools/testing/selftests/net/tcp_fastopen_backup_key.c
+index 9c55ec44fc43..c1cb0c75156a 100644
+--- a/tools/testing/selftests/net/tcp_fastopen_backup_key.c
++++ b/tools/testing/selftests/net/tcp_fastopen_backup_key.c
+@@ -26,6 +26,8 @@
+ #include <fcntl.h>
+ #include <time.h>
+ 
++#include "../kselftest.h"
++
+ #ifndef TCP_FASTOPEN_KEY
+ #define TCP_FASTOPEN_KEY 33
+ #endif
+@@ -34,10 +36,6 @@
+ #define PROC_FASTOPEN_KEY "/proc/sys/net/ipv4/tcp_fastopen_key"
+ #define KEY_LENGTH 16
+ 
+-#ifndef ARRAY_SIZE
+-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 -#endif
 -
- /*
-  * TEST_F_FORK() is useful when a test drop privileges but the corresponding
-  * FIXTURE_TEARDOWN() requires them (e.g. to remove files from a directory
+ static bool do_ipv6;
+ static bool do_sockopt;
+ static bool do_rotate;
 -- 
 2.32.0
 
