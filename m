@@ -2,78 +2,65 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A96247101D
-	for <lists+linux-security-module@lfdr.de>; Sat, 11 Dec 2021 03:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52349471110
+	for <lists+linux-security-module@lfdr.de>; Sat, 11 Dec 2021 04:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345648AbhLKCFO (ORCPT
+        id S235248AbhLKDHQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 10 Dec 2021 21:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        Fri, 10 Dec 2021 22:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236912AbhLKCFN (ORCPT
+        with ESMTP id S229886AbhLKDHP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:05:13 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B564CC061353
-        for <linux-security-module@vger.kernel.org>; Fri, 10 Dec 2021 18:01:37 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id m6so9333917lfu.1
-        for <linux-security-module@vger.kernel.org>; Fri, 10 Dec 2021 18:01:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=mz95yEd7wqF+xhUHtNPAXzDqdjYFScvN3EmOxAWd7Hh/o1vy+XqEivxP3kDofXPyLO
-         W5XYmQxuXpNI3d7FE6qlKbDJOmp94nfu+yejkZPeS8A+ZVAmw4cZ+M6yxC0QmeEf1OXV
-         PvDrRZYwPm6F8rgxNp9KyZWDTRe2X5+2LGXtbLKhD7Oa/8VkVmV/ger+T/AcpZOMY+Hr
-         pk6PIvsKN2RQ9T1Jd5CmaYlFRwzl33lR1Geg2MwN8uXRCax0hB6XBG9KhwPleIbxoFyA
-         9z1MohiiVn4QgqqC9HVrz8gzOxH9wawpDOURL7bzutAg2ChxVB0407dYfMeaU4eByX7U
-         kFyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=nH+zs5wzQnhfzoMBMi2CnkEGa5AxqPEL3A5POSSmyEaEqpUAt8Y+QYH3QvdtpvxoNL
-         Cr5039sgjtKlqBVwKPpw6yzN4DWWW9vTjalLLLESL53UL1WMtQtDV+aohQx9B24VWTP3
-         qW9TPEhxj5tgoYLbLANdW0CtefITiXjdlJ2Bo+/OOxb8Xhj3KorRWWQdif/WCyJ4VC4c
-         rDe8S5x1/lP6Qn+Z427uy4ZpLM1/9WrNWZUBavOJiU/7IeriCLWakzxZu1oK62KXH/Js
-         lKbS0GiSfWCTh4B49rO3M7vhCk8Y+dLyHBXb0pwdGrhpfmnCjqxfYwbkXWgeBB2bwmdv
-         aFGg==
-X-Gm-Message-State: AOAM531ON6CGCSUBS/rIjjUYRT4iHFCn5Sa9q3s7ftQd6lM16+Cg68QL
-        X+I0vrj5DDNfZ4YKg98VHYfcRcllYJ2KdMXLBEU=
-X-Google-Smtp-Source: ABdhPJzO1rWK98J/C4GWmBNNeA4TMusWwthEf445R0dRxZhfqtQs8WAeeSSG9+arglNkiB0I8dDFlCz1Qas71LQQq4Y=
-X-Received: by 2002:a05:6512:3f28:: with SMTP id y40mr15606868lfa.609.1639188095920;
- Fri, 10 Dec 2021 18:01:35 -0800 (PST)
+        Fri, 10 Dec 2021 22:07:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEF0C061714;
+        Fri, 10 Dec 2021 19:03:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C2F28CE2ECB;
+        Sat, 11 Dec 2021 03:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B12EC00446;
+        Sat, 11 Dec 2021 03:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639191815;
+        bh=fp05CQC7c8K6DRnfQlRipFz8HVpGJXQ/NNYXDb70RuQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Xeb6uzx5ksXMb6q4X4tethuk9B0yrexQjyYJZ5DabmZywp4yB72SM6AZvL5YJi9G5
+         LGmNW8Dnsud4tIWQmaq+p87HHzVhDXPU9aicHB85v30nH9bXjxqmj0ZffKkvBW5Ux5
+         AN81KpxKvfWBJ/+4PxP/aZLvVwHG6bm5gi5Yurp2i3nFGYw51GtFYB1xm7NMOVPNZE
+         /5egZKoGUFgJ59n73ID4EFHWMUqBmJSa8OmAVgb2TPZCNltiW2m4YF97cfl3/lKHfo
+         owAhjm8TSmd9M1zR4wxxbMKaWWZ9fqm83AVf2K2spBJeBasR9UPtTJmCILrjbA+Ry0
+         koo2JZAL91S5Q==
+Date:   Fri, 10 Dec 2021 19:03:34 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
+        peterz@infradead.org, paulmck@kernel.org, boqun.feng@gmail.com,
+        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 07/12] selftests/net: remove ARRAY_SIZE define from
+ individual tests
+Message-ID: <20211210190334.215795cc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1356c830b8155ddd37a6330c1f5d4df7a1bdb86a.1639156389.git.skhan@linuxfoundation.org>
+References: <cover.1639156389.git.skhan@linuxfoundation.org>
+        <1356c830b8155ddd37a6330c1f5d4df7a1bdb86a.1639156389.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:12c7:0:0:0:0 with HTTP; Fri, 10 Dec 2021 18:01:35
- -0800 (PST)
-Reply-To: internationallmonetary695@gmail.com
-From:   International Monetary fund <abubakarsadiq1297@gmail.com>
-Date:   Fri, 10 Dec 2021 18:01:35 -0800
-Message-ID: <CAHXNoSjzJGPbSRqufvG2p9+fDSLRA_m=x+GXMLdQjX8eJrF8EQ@mail.gmail.com>
-Subject: Dear Beneficiary,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
- I.M.F Head Office
-#1900 Pennsylvania Ave NW,
-Washington, DC 20431
-INTERNATIONAL MONETARY FUND.
-REF:-XVGNN82010
-internationallmonetary695@gmail.com
-Telephone : +12062785473
+On Fri, 10 Dec 2021 10:33:17 -0700 Shuah Khan wrote:
+> ARRAY_SIZE is defined in several selftests. Remove definitions from
+> individual test files and include header file for the define instead.
+> ARRAY_SIZE define is added in a separate patch to prepare for this
+> change.
+> 
+> Remove ARRAY_SIZE from net tests and pickup the one defined in
+> kselftest.h.
 
-This message is from International Monetary fund (IMF) I am Mr Bo Li
-deputy to  Kristalina Georgieva the current president of International
-  Monetary fund (IMF) We are aware of the stress you have been passing
-through and how you have lost your money trying to claim your fund ,
-you have to worry no more for the international monetary fund is fully
- in-charge of your fund now, contact  me for more info on how you will
-receive your fund( internationallmonetary695@gmail.com) or call me
-on-Telephone : +12062785473 for more info.
-
-Regards,
-Mr Bo Li
+Acked-by: Jakub Kicinski <kuba@kernel.org>
