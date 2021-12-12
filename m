@@ -2,97 +2,114 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D06471CBC
-	for <lists+linux-security-module@lfdr.de>; Sun, 12 Dec 2021 20:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C99B471D9E
+	for <lists+linux-security-module@lfdr.de>; Sun, 12 Dec 2021 22:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbhLLTjg (ORCPT
+        id S230204AbhLLVVp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 12 Dec 2021 14:39:36 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:35723 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbhLLTjg (ORCPT
+        Sun, 12 Dec 2021 16:21:45 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:32794 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229775AbhLLVVW (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 12 Dec 2021 14:39:36 -0500
-Received: by mail-qk1-f195.google.com with SMTP id m192so12403970qke.2
-        for <linux-security-module@vger.kernel.org>; Sun, 12 Dec 2021 11:39:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=J8FHTYjMz0bTtIqiHmg1Ibj69zb2lvH7MPDCrj4nZhs=;
-        b=AbU/pf6f6kcaF/f+43ZVwwtc1a4B/zqniToLTtqNFyXDWpPdeWNqnG+bUlexgKpoph
-         8JTsx73eMVsip0QVj+Gg7eeZe4X8Z6nVvAtjFK3knx3Qm+2QqrGVY5vfGztxIgjEUKEm
-         dwD9SK3XIYwHgxTWFq4miV75rFUhsBODk589/D043rxcXcElUHknDqX7EbG3L/FjhJod
-         kTy4GkbeyWGMQqSzBaZ7tY+eG/aQR9X31oTkia81802xCMUG59JFf30rVLc4U3ybw6XS
-         DTXOKzThC7r4MKeg/mxPIxLH0VXAoS2qkXn0IUOGigSTnN309dfchkNmGaVg3zrqK4hN
-         txQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=J8FHTYjMz0bTtIqiHmg1Ibj69zb2lvH7MPDCrj4nZhs=;
-        b=qYUBSghkynpjEaBMljjTaI6BhWdfdqfZ8erdGfqsJ9GJB5JFK57kHfMSh1adVleRmr
-         pA/7XQjHXb54vA95U3yqoHzGNNaUk5bPVu3zHlhWFXw/Z7VaY6s2JfsfkqRPo3+DZVsS
-         Hxi+aR/ksqmvF+1XZ6pBjw9DQndtbcWUo/6OP2UPeyIowsWOgoHbk1hFYFF1IimqfaVg
-         ex7GlGbZbOvaDJZYnZWAiSapeZBnY8b2eMnE2uSdeIue3k3G0vg+YaY35z+LtbpeUzUX
-         0waqaAMa1Yz+hsnj8sJRjtoeiWGObEz0u+0lhHsQfVkoHFFuvGQsvV3s1iLU+2bZwV6d
-         WnPw==
-X-Gm-Message-State: AOAM532yzlStsST+LM5eGtDFawRwyn/HuL7SAkuMYPJOP6kRRYJqqnTj
-        JwrNN97MXFgh+Gs+pRfaXctRU+G3OT/2+Emy4j8=
-X-Google-Smtp-Source: ABdhPJwiCQUAJFeqkLJSErQqyXKIVJF6pT2wOEW0ANKbHiO8ocoHoZB4OaZm8hPhoEx08HPM0YLSMLKf75PmaRYrIFQ=
-X-Received: by 2002:a05:620a:4712:: with SMTP id bs18mr29888394qkb.246.1639337915731;
- Sun, 12 Dec 2021 11:38:35 -0800 (PST)
+        Sun, 12 Dec 2021 16:21:22 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 6FF246B4; Sun, 12 Dec 2021 15:21:17 -0600 (CST)
+Date:   Sun, 12 Dec 2021 15:21:17 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
+ tpm2_key_encode()
+Message-ID: <20211212212117.GA5737@mail.hallyn.com>
+References: <20211212135403.59724-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6214:5015:0:0:0:0 with HTTP; Sun, 12 Dec 2021 11:38:35
- -0800 (PST)
-Reply-To: info@globaldevelopmentsgroup.org
-From:   CONGRATULATIONS <mrssulakfamily@gmail.com>
-Date:   Sun, 12 Dec 2021 20:38:35 +0100
-Message-ID: <CAH_G_7c5PO5gq+jkT_uiHNjtk7MEVuQ_WZq-3YyQG=RxGUAnRA@mail.gmail.com>
-Subject: Your e-mail WON US$10,000,000
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211212135403.59724-1-niejianglei2021@163.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
---=20
-(IFC) Accelerated Grant Support Funding!
+On Sun, Dec 12, 2021 at 09:54:03PM +0800, Jianglei Nie wrote:
+> Line 36 (#1) allocates a memory chunk for scratch by kmalloc(), but
+> it is never freed through the function, which will lead to a memory
+> leak.
+> 
+> We should kfree() scratch before the function returns (#2, #3 and #4).
+> 
+> 31 static int tpm2_key_encode(struct trusted_key_payload *payload,
+> 32			   struct trusted_key_options *options,
+> 33			   u8 *src, u32 len)
+> 34 {
+> 36	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+>       	// #1: kmalloc space
+> 37	u8 *work = scratch, *work1;
+> 50	if (!scratch)
+> 51		return -ENOMEM;
+> 
+> 56	if (options->blobauth_len == 0) {
+> 60		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+> 61			return PTR_ERR(w); // #2: missing kfree
+> 63	}
+> 
+> 71	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> 72		 "BUG: scratch buffer is too small"))
+> 73		return -EINVAL; // #3: missing kfree
+> 
+>   	// #4: missing kfree: scratch is never used afterwards.
+> 82	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+> 83		return PTR_ERR(work1);
+> 
+> 85	return work1 - payload->blob;
+> 86 }
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 
-We are pleased to inform you that your E-MAIL ADDRESS has been
-selected to receive the sum of $10,000,000.00 (Ten Million United
-States Dollars) in the IFC Global Development Funding Program. It has
-been agreed upon and has been signed by the International Finance
-Corporation (IFC) Management Team and the World Bank Group Board of
-Directors. Your file Reference Number is (IFC-060344_WG). All
-beneficiaries were selected through IFC global random integrated
-system drawn in 50 million Email addresses via the Internet and lucky
-beneficiaries do not have to purchase any ticket or apply to benefit
-in this IFC Global Development Funding Program. Forward your full
-details such as your name: Telephone Number: Age: Sex: Address and
-Your file Reference, for processing and payment of your IFC Global
-Development  Fund.
+I don't know that we need to keep the line by line recap in
+the full git log, but it def looks correct:
 
-Kindly forward your details to:
-Contact Person: Mrs. Anshula Kant.
-=3D=3D=3D=3D=3D=3D=3D Chief Financial Officer  (World Bank Group)=3D=3D=3D=
-=3D=3D=3D=3D
-E-mail: info@globaldevelopmentsgroup.org
-Tel: +1 (202) 473-1000
-+1 (915) 229-3392 ~WhatsApp
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
 
-We are hoping to hear from you as soon as you received your IFC Global
-Development Fund payment. For more details about IFC Global
-Development Funding Program, visit our website: www.ifc.org
+thanks,
+-serge
 
-Regards,
-Mr. Philippe Le Hou=C3=A9rou (Chief Executive Officer of IFC)
-CC: Mrs. Kristalina Georgieva (Chief Executive of the World Bank)
-CC: Mr. Christopher A. Wray (FBI, Director)
-***************************************************************************=
-*
-NOTE: If you received this message in your SPAM/BULK folder, that is
-because of the restrictions implemented by your Internet Service
-Provider, we (IFC Team) urge you to treat it genuinely.
-***************************************************************************=
-*
+> ---
+>  security/keys/trusted-keys/trusted_tpm2.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 0165da386289..3408a74c855f 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  		unsigned char bool[3], *w = bool;
+>  		/* tag 0 is emptyAuth */
+>  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+> -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+> +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
+> +			kfree(scratch);
+>  			return PTR_ERR(w);
+> +		}
+>  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+>  	}
+>  
+> @@ -69,9 +71,12 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  	 * trigger, so if it does there's something nefarious going on
+>  	 */
+>  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+> -		 "BUG: scratch buffer is too small"))
+> +		 "BUG: scratch buffer is too small")) {
+> +		kfree(scratch);
+>  		return -EINVAL;
+> +	}
+>  
+> +	kfree(scratch);
+>  	work = asn1_encode_integer(work, end_work, options->keyhandle);
+>  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+>  	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
+> -- 
+> 2.25.1
