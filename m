@@ -2,213 +2,156 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E872476865
-	for <lists+linux-security-module@lfdr.de>; Thu, 16 Dec 2021 03:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C584768DA
+	for <lists+linux-security-module@lfdr.de>; Thu, 16 Dec 2021 04:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbhLPCzq (ORCPT
+        id S233430AbhLPDxt (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 15 Dec 2021 21:55:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51912 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbhLPCzq (ORCPT
+        Wed, 15 Dec 2021 22:53:49 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:65254 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233429AbhLPDxt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:55:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 716CDB82294;
-        Thu, 16 Dec 2021 02:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57054C36AFE;
-        Thu, 16 Dec 2021 02:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639623343;
-        bh=YxjBxNV2YAEjL3Otuf0fLRGjWC0v4OV97wVEW+8DHIU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RRuP0CDN60MoeW2/tqT0uv6Adl6l8mH0wRjReH52felfjiUipyQ39pfE4ieMDmMas
-         u7sy85vUmuWZoC3/K7bUaB/V+/LmSac/VuyA2JhIRDAHtAh+f9h9xIIkyzJaeCO8e/
-         w7MMZo6ggUsr+JbWgAON4JKS1KXlehxYRfXqGY5FBcBb9LmwJ0RmFr+WnaV8gdcp+L
-         8oKbiGj1fNww+rfCt+7JaCyIt9wbtpCUD6N1Nj4n2GKRi4HITq8LqVuIwsar9jgEqQ
-         FDacedxEOUfD/HOOE/XDZ81KQ2EQmXw0GxBWBzb4RWy7amOu4Xd2ELfUMPEu8QlJk1
-         oIeYUcbcgXUeQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org
-Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Tejun Heo <tj@kernel.org>, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, rostedt@goodmis.org,
-        mingo@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        jmorris@namei.org, serge@hallyn.com, cgroups@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH bpf-next v5 2/3] add missing bpf-cgroup.h includes
-Date:   Wed, 15 Dec 2021 18:55:37 -0800
-Message-Id: <20211216025538.1649516-3-kuba@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211216025538.1649516-1-kuba@kernel.org>
-References: <20211216025538.1649516-1-kuba@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 15 Dec 2021 22:53:49 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BG2anlZ023412;
+        Thu, 16 Dec 2021 03:53:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Biu7Dla4iXeNIwuQAlBBrzK1AiPQVo5tAHAVQkn3vZY=;
+ b=bm2iXyRwafFUUxRmICsOR4Caq5PNs5cgkbOdH1uuSeyYOQmDXFnEhH10vUahMDSPxkru
+ o5AXYoyCczGwImwkM94ELun544srk5dmP1ZdhruuSeD7N96BNl9RFEnHNRsOrLLmCZSI
+ yiTK/ZfP/qQqvPKZV/4sUZUrBddS7vupKsu5gzabSNYXrvX3QEAEnOkRqfEVUzYHbObz
+ y1xJ4abyzsMTpeY/GVuLV/AJwYyeplB9wY5Qto7IiBEqbMByLiFoO1K4jsREF6G5Jv+0
+ pb2KpmR22YLmBodtHugfrjVeMfVy3Pp/3kEcXBGjg0JOL679OK8ptNpxhUnus5uyhzMU Yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cy2tqegm7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 03:53:35 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BG3eZ3x013227;
+        Thu, 16 Dec 2021 03:53:35 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cy2tqegkg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 03:53:35 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BG3ksfr004984;
+        Thu, 16 Dec 2021 03:53:32 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3cy7jr2kdb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 03:53:32 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BG3jS9x49414526
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Dec 2021 03:45:28 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E1BCA4060;
+        Thu, 16 Dec 2021 03:53:29 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E76D7A405F;
+        Thu, 16 Dec 2021 03:53:26 +0000 (GMT)
+Received: from sig-9-65-74-182.ibm.com (unknown [9.65.74.182])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 16 Dec 2021 03:53:26 +0000 (GMT)
+Message-ID: <7cd23e2c058752a97f04c23a4a5243a3471e2cd6.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 02/17] ima: Define ns_status for storing namespaced
+ iint data
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
+Date:   Wed, 15 Dec 2021 22:53:26 -0500
+In-Reply-To: <29381ebc-0bf7-59c5-6d16-16958e2dfcb1@linux.ibm.com>
+References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
+         <20211210194736.1538863-3-stefanb@linux.ibm.com>
+         <7586b43739f121041b294d9bea60bf9b1bd71f7c.camel@linux.ibm.com>
+         <29381ebc-0bf7-59c5-6d16-16958e2dfcb1@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TW7sgdOL6d5GYIKJ3rGKUTLpaiwDnybB
+X-Proofpoint-ORIG-GUID: i7nUz84qBMLmyS42mDxtLKSMWo1ExXLN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-16_01,2021-12-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ adultscore=0 bulkscore=0 mlxscore=0 suspectscore=0 malwarescore=0
+ phishscore=0 clxscore=1015 mlxlogscore=996 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112160018
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-We're about to break the cgroup-defs.h -> bpf-cgroup.h dependency,
-make sure those who actually need more than the definition of
-struct cgroup_bpf include bpf-cgroup.h explicitly.
+On Wed, 2021-12-15 at 21:37 -0500, Stefan Berger wrote:
+> On 12/15/21 16:12, Mimi Zohar wrote:
+> > Hi Stefan,
+> >
+> > On Fri, 2021-12-10 at 14:47 -0500, Stefan Berger wrote:
+> >> From: Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
+> >>
+> >> This patch adds an rbtree to the IMA namespace structure that stores a
+> >> namespaced version of iint->flags in ns_status struct. Similar to the
+> >> integrity_iint_cache, both the iint ns_struct are looked up using the
+> >> inode pointer value. The lookup, allocate, and insertion code is also
+> >> similar, except ns_struct is not free'd when the inode is free'd.
+> >> Instead, the lookup verifies the i_ino and i_generation fields are also a
+> >> match.
+> >>
+> >> Signed-off-by: Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
+> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Again, hopefully it isn't premature for generic comments:
+> >
+> > - Function/inline comments would be appreciated, especially when the
+> > code differs from the original code.  Example below.
+> >
+> >> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+> >> index f820686baf9f..08781a44f7bf 100644
+> >> --- a/security/integrity/ima/ima_init_ima_ns.c
+> >> +++ b/security/integrity/ima/ima_init_ima_ns.c
+> >> @@ -14,11 +14,18 @@
+> >>   #include <linux/user_namespace.h>
+> >>   #include <linux/ima.h>
+> >>   #include <linux/proc_ns.h>
+> >> +#include <linux/slab.h>
+> >>   
+> >>   #include "ima.h"
+> >>   
+> >>   int ima_init_namespace(struct ima_namespace *ns)
+> >>   {
+> >> +	ns->ns_status_tree = RB_ROOT;
+> >> +	rwlock_init(&ns->ns_status_lock);
+> >> +	ns->ns_status_cache = KMEM_CACHE(ns_status, SLAB_PANIC);
+> >> +	if (!ns->ns_status_cache)
+> >> +		return -ENOMEM;
+> >> +
+> > For example, using KMEM_CACHE() is probably correct here, at least for
+> > now, but it is different than the original code which uses
+> > kmem_cache_alloc() with init_once().  Memory cleanup is done on free,
 
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: ast@kernel.org
-CC: daniel@iogearbox.net
-CC: andrii@kernel.org
-CC: kafai@fb.com
-CC: songliubraving@fb.com
-CC: yhs@fb.com
-CC: john.fastabend@gmail.com
-CC: kpsingh@kernel.org
-CC: lizefan.x@bytedance.com
-CC: hannes@cmpxchg.org
-CC: rostedt@goodmis.org
-CC: mingo@redhat.com
-CC: yoshfuji@linux-ipv6.org
-CC: dsahern@kernel.org
-CC: jmorris@namei.org
-CC: serge@hallyn.com
-CC: bpf@vger.kernel.org
-CC: cgroups@vger.kernel.org
-CC: linux-security-module@vger.kernel.org
----
- kernel/bpf/helpers.c        | 1 +
- kernel/bpf/syscall.c        | 1 +
- kernel/bpf/verifier.c       | 1 +
- kernel/cgroup/cgroup.c      | 1 +
- kernel/trace/trace_kprobe.c | 1 +
- kernel/trace/trace_uprobe.c | 1 +
- net/ipv4/udp.c              | 1 +
- net/ipv6/udp.c              | 1 +
- net/socket.c                | 1 +
- security/device_cgroup.c    | 1 +
- 10 files changed, 10 insertions(+)
+^  kmem_cache_create() with init_once.
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 8babae03d30a..34d6f91dec1c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
-  */
- #include <linux/bpf.h>
-+#include <linux/bpf-cgroup.h>
- #include <linux/rcupdate.h>
- #include <linux/random.h>
- #include <linux/smp.h>
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ddd81d543203..da07bdf71697 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
-  */
- #include <linux/bpf.h>
-+#include <linux/bpf-cgroup.h>
- #include <linux/bpf_trace.h>
- #include <linux/bpf_lirc.h>
- #include <linux/bpf_verifier.h>
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d74e8a99412e..f0604796132f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2018 Covalent IO, Inc. http://covalent.io
-  */
- #include <uapi/linux/btf.h>
-+#include <linux/bpf-cgroup.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/slab.h>
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 919194de39c8..cd4c23f7e3df 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -30,6 +30,7 @@
- 
- #include "cgroup-internal.h"
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/cred.h>
- #include <linux/errno.h>
- #include <linux/init_task.h>
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 33272a7b6912..4e1257f50aa3 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -7,6 +7,7 @@
-  */
- #define pr_fmt(fmt)	"trace_kprobe: " fmt
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/security.h>
- #include <linux/module.h>
- #include <linux/uaccess.h>
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index f5f0039d31e5..4f35514a48f3 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -7,6 +7,7 @@
-  */
- #define pr_fmt(fmt)	"trace_uprobe: " fmt
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/security.h>
- #include <linux/ctype.h>
- #include <linux/module.h>
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 69d30053fed9..99536127650b 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -74,6 +74,7 @@
- 
- #define pr_fmt(fmt) "UDP: " fmt
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/uaccess.h>
- #include <asm/ioctls.h>
- #include <linux/memblock.h>
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 6a0e569f0bb8..ba8986d12413 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -17,6 +17,7 @@
-  *      YOSHIFUJI Hideaki @USAGI:	convert /proc/net/udp6 to seq_file.
-  */
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/errno.h>
- #include <linux/types.h>
- #include <linux/socket.h>
-diff --git a/net/socket.c b/net/socket.c
-index 7f64a6eccf63..721a5a1b1106 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -52,6 +52,7 @@
-  *	Based upon Swansea University Computer Society NET3.039
-  */
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/ethtool.h>
- #include <linux/mm.h>
- #include <linux/socket.h>
-diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index 04375df52fc9..842889f3dcb7 100644
---- a/security/device_cgroup.c
-+++ b/security/device_cgroup.c
-@@ -5,6 +5,7 @@
-  * Copyright 2007 IBM Corp
-  */
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/device_cgroup.h>
- #include <linux/cgroup.h>
- #include <linux/ctype.h>
--- 
-2.31.1
+> > before it is re-used.
+> 
+> KMEM_CACHE + kmem_cache_alloc/zalloc() are pretty common. What kind of 
+> comment would be helpful here?
+
+The original reason for using kmem_cache_create() with init_once and
+deferring memory cleanup to free was for performance.  Using
+KMEM_CACHE() and kmem_cache_zalloc() instead could be for simplicity. 
+The comment should note the change.
+
+Mimi
 
