@@ -2,216 +2,75 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B072480EA0
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Dec 2021 02:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 905FD481685
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Dec 2021 21:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238222AbhL2BeJ (ORCPT
+        id S231664AbhL2UCR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 28 Dec 2021 20:34:09 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44198 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbhL2BeF (ORCPT
+        Wed, 29 Dec 2021 15:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231663AbhL2UCR (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 28 Dec 2021 20:34:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18116B817AB;
-        Wed, 29 Dec 2021 01:34:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F737C36AE7;
-        Wed, 29 Dec 2021 01:34:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640741641;
-        bh=pMJjVDZPgM948/4+cn0RybmypKFSAOF2Qet+npnB0qI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BGV9teAEQtKzRouTQ7FIODF/sdbQus2tfZqaEYCeOyWoxLcNLOerT6/njmAfsZlgW
-         u8N1B5yAULEUHfmYSpNQhkkSWM6ZHyKNg7VTL+7XSHqC9AvZvGZ6pEbvBKtIKcn+gr
-         jArbzeGfK2VxHoUZMODPU4Prja+huMn1I+Y5VFUdUAeKvbar/8SjMr0tMOF/K1OqMK
-         K3u6fj0vy1DBPt87LB4yOApP1rZF5NXun8SccMIKmt6fC3PAA5e26QniGkEb2wDSNr
-         sJJ8DT3vhJ4NXLWhMCmkUinoFv82sAWJ34zcwCktGslpXsIWZwVPOJ24g5BgBwA7RY
-         /AxVns9mNF+hw==
-Date:   Wed, 29 Dec 2021 03:33:59 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nayna Jain <nayna@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me
-Subject: Re: [PATCH v6 3/3] integrity: support including firmware ".platform"
- keys at build time
-Message-ID: <Ycu7B2RLatUFphqm@iki.fi>
-References: <20211223013919.206273-1-nayna@linux.ibm.com>
- <20211223013919.206273-4-nayna@linux.ibm.com>
+        Wed, 29 Dec 2021 15:02:17 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A7FC061574
+        for <linux-security-module@vger.kernel.org>; Wed, 29 Dec 2021 12:02:17 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id i14so26479368ioj.12
+        for <linux-security-module@vger.kernel.org>; Wed, 29 Dec 2021 12:02:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=bzd9Pq84Vx5Fr+jab2uCiqkShd71Pjx7S7YBx5Q9pwo=;
+        b=kyi0usvT1v3szZKePpTHnlAEPb3sxRwqR1pjUYr+WQ3o0Rjhx4sZPzYkTKDB0hGevs
+         PMR57VdwOl4oiI/LTMxW4JL1Ejyzo8D3riHL83llgTmGZ9YLEAn7C1nI39Xn6dq14qic
+         7WC2vZfxQ7qqXVMl8/PpBpB/uS0+8ZIzRYSjBluK6EZOFgIbbCENJcQFow23mHH5T5lh
+         wQFrMT08ICM3IjMWX27y9912WCUOu6ozr34fduK7xFlgpqmzLwdi03Pq9+P0c1L5IWM4
+         FjzF7nWvxqsKe0GNI0DykZOTcCAPu/fNYTEnQhrRDy93VsFD44T6elMPHjbuaJ8lbqVR
+         Axyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=bzd9Pq84Vx5Fr+jab2uCiqkShd71Pjx7S7YBx5Q9pwo=;
+        b=Pu52BHlPYKQnVycNgaj8ZP1mjbH/dfTzxUdtxRSYh9VccaogRccVwGCxDz2ENYpvg3
+         nvFJLZJqcOm/Cx1/9WUDcBq7yioHqXZ6MX09mP609CzxPK9Ny6QJf88RZ5vIXlIeheof
+         ZR72nNx8UbThtBzO42/7uHux2dpAVtRA0ZIGbfWUxRKCNVdclHNCSDt6Giczs0yKbcm3
+         krVHnyu7ot39oAZ4tIJbxok2uZzzbnjC3Rl69hOG0IH7eiSXJg6cE8QDLj2m6v8Pd6wd
+         ac75DYs5kIWYhtFnhdze9EUv0DxaHx/w9cc4jKKNMSnVIsH00yWeX9jL1dpcrnYmcVOS
+         T2lA==
+X-Gm-Message-State: AOAM531LCK/4NaeVBCgx2cTB2T3/CWHN8n/3aMcODNOM2QmouOgI/DUP
+        qjhhx0YxfLe45iy7zniCvLdOTKGwVjHWxquLDuw=
+X-Google-Smtp-Source: ABdhPJwqPCZ8KzcM3Gt78w2gf+S5dw1ZGFBU6mNZ0LOYzS2dkrda5lh2zKB8jQfDw4cChxAnyxvVATsQ37quA+f7ywI=
+X-Received: by 2002:a5e:9709:: with SMTP id w9mr12687827ioj.86.1640808136476;
+ Wed, 29 Dec 2021 12:02:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211223013919.206273-4-nayna@linux.ibm.com>
+Received: by 2002:a05:6638:2653:0:0:0:0 with HTTP; Wed, 29 Dec 2021 12:02:15
+ -0800 (PST)
+From:   Microsoft Corporation <microsocorpss@gmail.com>
+Date:   Wed, 29 Dec 2021 20:02:15 +0000
+Message-ID: <CANeRhMiv5T1raSrgzzYMq0G3xP_++V-K1eijUvZ1z2v_jOSwbg@mail.gmail.com>
+Subject: Notification Email.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Dec 22, 2021 at 08:39:19PM -0500, Nayna Jain wrote:
-> Allow firmware keys to be embedded in the Linux kernel and loaded onto
-> the ".platform" keyring on boot.
-> 
-> The firmware keys can be specified in a file as a list of PEM encoded
-> certificates using new config INTEGRITY_PLATFORM_KEYS. The certificates
-> are embedded in the image by converting the PEM-formatted certificates
-> into DER(binary) and generating
-> security/integrity/platform_certs/platform_certificate_list file at
-> build time. On boot, the embedded certs from the image are loaded onto
-> the ".platform" keyring.
-> 
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> ---
->  security/integrity/Kconfig                    | 10 +++++++
->  security/integrity/Makefile                   | 17 +++++++++++-
->  .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
->  .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
->  4 files changed, 75 insertions(+), 1 deletion(-)
->  create mode 100644 security/integrity/platform_certs/platform_cert.S
-> 
-> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-> index 71f0177e8716..9fccf1368b8a 100644
-> --- a/security/integrity/Kconfig
-> +++ b/security/integrity/Kconfig
-> @@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
->           provided by the platform for verifying the kexec'ed kerned image
->           and, possibly, the initramfs signature.
->  
-> +config INTEGRITY_PLATFORM_KEYS
-> +        string "Builtin X.509 keys for .platform keyring"
-> +        depends on KEYS
-> +        depends on ASYMMETRIC_KEY_TYPE
-> +        depends on INTEGRITY_PLATFORM_KEYRING
-> +        help
-> +          If set, this option should be the filename of a PEM-formatted file
-> +          containing X.509 certificates to be loaded onto the ".platform"
-> +          keyring.
-> +
->  config LOAD_UEFI_KEYS
->         depends on INTEGRITY_PLATFORM_KEYRING
->         depends on EFI
-> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-> index 7ee39d66cf16..46629f5ef4f6 100644
-> --- a/security/integrity/Makefile
-> +++ b/security/integrity/Makefile
-> @@ -3,13 +3,18 @@
->  # Makefile for caching inode integrity data (iint)
->  #
->  
-> +quiet_cmd_extract_certs  = EXTRACT_CERTS   $(patsubst "%",%,$(2))
-> +      cmd_extract_certs  = scripts/extract-cert $(2) $@
-> +$(eval $(call config_filename,INTEGRITY_PLATFORM_KEYS))
-> +
->  obj-$(CONFIG_INTEGRITY) += integrity.o
->  
->  integrity-y := iint.o
->  integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
->  integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
->  integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
-> -integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
-> +integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
-> +						  platform_certs/platform_cert.o
->  integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
->  				      platform_certs/load_uefi.o \
->  				      platform_certs/keyring_handler.o
-> @@ -19,3 +24,13 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
->                                       platform_certs/keyring_handler.o
->  obj-$(CONFIG_IMA)			+= ima/
->  obj-$(CONFIG_EVM)			+= evm/
-> +
-> +
-> +$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_certificate_list
-> +
-> +targets += platform_certificate_list
-> +
-> +$(obj)/platform_certs/platform_certificate_list: scripts/extract-cert $(INTEGRITY_PLATFORM_KEYS_FILENAME) FORCE
-> +	$(call if_changed,extract_certs,$(CONFIG_INTEGRITY_PLATFORM_KEYS))
-> +
-> +clean-files := platform_certs/platform_certificate_list
-> diff --git a/security/integrity/platform_certs/platform_cert.S b/security/integrity/platform_certs/platform_cert.S
-> new file mode 100644
-> index 000000000000..20bccce5dc5a
-> --- /dev/null
-> +++ b/security/integrity/platform_certs/platform_cert.S
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <linux/export.h>
-> +#include <linux/init.h>
-> +
-> +	__INITRODATA
-> +
-> +	.align 8
-> +#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-> +	.globl platform_certificate_list
-> +platform_certificate_list:
-> +__cert_list_start:
-> +	.incbin "security/integrity/platform_certs/platform_certificate_list"
-> +__cert_list_end:
-> +#endif
-> +
-> +	.align 8
-> +	.globl platform_certificate_list_size
-> +platform_certificate_list_size:
-> +#ifdef CONFIG_64BIT
-> +	.quad __cert_list_end - __cert_list_start
-> +#else
-> +	.long __cert_list_end - __cert_list_start
-> +#endif
-> diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
-> index bcafd7387729..b45de142c5f5 100644
-> --- a/security/integrity/platform_certs/platform_keyring.c
-> +++ b/security/integrity/platform_certs/platform_keyring.c
-> @@ -12,8 +12,12 @@
->  #include <linux/cred.h>
->  #include <linux/err.h>
->  #include <linux/slab.h>
-> +#include <keys/system_keyring.h>
->  #include "../integrity.h"
->  
-> +extern __initconst const u8 platform_certificate_list[];
-> +extern __initconst const unsigned long platform_certificate_list_size;
-> +
->  /**
->   * add_to_platform_keyring - Add to platform keyring without validation.
->   * @source: Source of key
-> @@ -37,6 +41,28 @@ void __init add_to_platform_keyring(const char *source, const void *data,
->  		pr_info("Error adding keys to platform keyring %s\n", source);
->  }
->  
-> +static __init int load_platform_certificate_list(void)
-> +{
-> +	const u8 *p;
-> +	unsigned long size;
-> +	int rc;
-> +	struct key *keyring;
-> +
-> +	p = platform_certificate_list;
-> +	size = platform_certificate_list_size;
-> +
-> +	keyring = integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
-> +	if (IS_ERR(keyring))
-> +		return PTR_ERR(keyring);
-> +
-> +	rc = load_certificate_list(p, size, keyring);
-> +	if (rc)
-> +		pr_info("Error adding keys to platform keyring %d\n", rc);
-> +
-> +	return rc;
-> +}
-> +late_initcall(load_platform_certificate_list);
+Attn:
 
-Would not hurt to briefly explain the chosen initcall level in the commit
-message.
+Congratulation!!!
+Your e-mail address has won $2million for 2021 Microsoft Award. Serial
+numbers MDB/002 0869958/09 Contact (ADVOCATE FRANKLIN EDWARD)
+immediately; through his email address (franklinedward044@aol.com) or
+phone number +27736394004 and forward him your Winning
+No.(19-45-87-36-76-38(77), to redeem your winning prize, All
+participants were selected randomly from Worldwide Web site through
+computer draw system and extracted from over 100,000 email addresses
+of companies and Individuals.
 
-> +
->  /*
->   * Create the trusted keyrings.
->   */
-> -- 
-> 2.27.0
-> 
+Sincerely,
+Dr. Elizabeth Henning.
 
-/Jarkko
+ Copyright =C2=A9 2021 Microsoft! Inc. All rights reserved.
