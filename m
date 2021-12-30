@@ -2,58 +2,89 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D974819DD
-	for <lists+linux-security-module@lfdr.de>; Thu, 30 Dec 2021 06:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA36481A0C
+	for <lists+linux-security-module@lfdr.de>; Thu, 30 Dec 2021 07:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbhL3FzO (ORCPT
+        id S236660AbhL3Gxl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 30 Dec 2021 00:55:14 -0500
-Received: from sub0000539265.hmk-temp.com ([153.122.47.145]:53927 "EHLO
-        vps04.onion.jp.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbhL3FzN (ORCPT
+        Thu, 30 Dec 2021 01:53:41 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4329 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbhL3Gxk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 30 Dec 2021 00:55:13 -0500
-X-Greylist: delayed 503 seconds by postgrey-1.27 at vger.kernel.org; Thu, 30 Dec 2021 00:55:13 EST
-Received: by vps04.onion.jp.net (Postfix, from userid 10006)
-        id C54031D5CD0B; Thu, 30 Dec 2021 14:46:48 +0900 (JST)
-To:     linux-security-module@vger.kernel.org
-Subject: =?UTF-8?B?44CQ6Iqx6KaL5bed44K544Kk44Of44Oz44Kw44Kv44Op44OW44CR44GK5ZWP?=  =?UTF-8?B?44GE5ZCI44KP44Gb44Gu5Lu2?=
-X-PHP-Originating-Script: 10006:class-phpmailer.php
-Date:   Thu, 30 Dec 2021 05:46:48 +0000
-From:   =?UTF-8?B?6Iqx6KaL5bed44K544Kk44Of44Oz44Kw44Kv44Op44OW?= 
-        <info@kwgc.net>
-Message-ID: <6eca29e4bbd8805e2744c62cd30d9e16@hanamigawa-swim.jp>
-X-Priority: 3
-X-Mailer: PHPMailer 5.2.7 (https://github.com/PHPMailer/PHPMailer/)
+        Thu, 30 Dec 2021 01:53:40 -0500
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JPf7g4nhQz67KxR;
+        Thu, 30 Dec 2021 14:51:27 +0800 (CST)
+Received: from [10.122.132.241] (10.122.132.241) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Thu, 30 Dec 2021 07:53:37 +0100
+Message-ID: <ea95a881-c3c7-eba1-520d-992b680a6b49@huawei.com>
+Date:   Thu, 30 Dec 2021 09:53:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATCH 0/2] Landlock network PoC implementation
+Content-Language: ru
+To:     Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+CC:     <mic@digikod.net>, <linux-security-module@vger.kernel.org>,
+        <yusongping@huawei.com>, <artem.kuzin@huawei.com>
+References: <20211210072123.386713-1-konstantin.meskhidze@huawei.com>
+ <802be0d0-cb8c-7fda-dd4e-2eb83d228ead@schaufler-ca.com>
+ <CAHC9VhTcbE0MYeNGwBYmWrk3NY4FQkDk33gzJjQv=wt6n6dJdw@mail.gmail.com>
+From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+In-Reply-To: <CAHC9VhTcbE0MYeNGwBYmWrk3NY4FQkDk33gzJjQv=wt6n6dJdw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.122.132.241]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml704-chm.china.huawei.com (10.206.15.53)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-この度は、【花見川スイミングクラブ】へ
-お問い合わせを頂き、誠にありがとうございます。
+Hi, Paul
+Thanks for your comment.
 
-【花見川スイミングクラブ】宛てに、下記の内容で送信されました。
-内容を確認した上で、折り返しご連絡させて頂きますので、
-しばしお待ち頂きますよう、よろしくお願い申し上げます。
+12/11/2021 2:01 AM, Paul Moore wrote:
+> On Fri, Dec 10, 2021 at 11:57 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> As I think you've realized, *sockets are not objects*. There
+>> isn't a way to justify them as objects without introducing
+>> ethereal or magical subjects that don't exist. Sockets are
+>> part of a process. OK, it's not that simple, and it would be
+>> foolish to deny that a socket may have security relevant
+>> properties. But they aren't objects.
+>>
+>> I strongly recommend that you follow Smack's example and
+>> use the sending task and receiving task attributes to make
+>> the decision. You may find that storing that information
+>> in the socket security blob is convenient.
+>>
+>> BTW - not everyone agrees with me on this topic. I'll leave
+>> the misguided to make their own arguments. ;)
+> 
+> I'm running low on my lets-argue-on-the-internet motivation today, but
+> I feel like I'm being goaded into some sort of comment so I will
+> simply offer SELinux as a rebuttal to Casey's comments.  I think that
+> either approach can be acceptable, it depends on how your security
+> model works and your comfort level with the various tradeoffs
+> associated with each approach.  I personally prefer the approach
+> SELinux has taken (minus some of the compat cruft we are saddled with,
+> not to mention that restrictions handed to use from netdev), but I'll
+> admit a certain level of bias in this.
+> 
+I just tried to follow Landlock's implementation concept: attaching 
+policy rules to kernel objects.
+For filesystem "objects" are underlying inodes.
+For socket the same approach could be used - using sockets' inodes as 
+"object".
+I also read about this concept from some LSM papers:
+https://www.usenix.org/legacy/events/sec02/full_papers/wright/wright.pdf
+https://elinux.org/images/0/0a/ELC_Inside_LSM.pdf
 
---
-
-お名前：❤️ You have unread messages from Jenny (2)! Click Here: http://inx.lv/pIaX?y07yo ❤️
-フリガナ：9cujotq6
-性別：女性
-年齢：tdfobdjk歳
-ご希望のクラス：フリークラス
-
-住所：〒52192　x4kg20 nwdbsf
-メールアドレス：linux-security-module@vger.kernel.org
-電話番号：536015021951
-
-お問い合わせ内容：
-6vdx8m6c
-
---
-
-このメールは 花見川スイミングクラブ (http://hanamigawa-swim.jp) のお問い合わせフォームから送信されました
-
+> --
+> paul moore
+> www.paul-moore.com
+> .
