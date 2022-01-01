@@ -2,60 +2,97 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6DA482793
-	for <lists+linux-security-module@lfdr.de>; Sat,  1 Jan 2022 13:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59460482892
+	for <lists+linux-security-module@lfdr.de>; Sat,  1 Jan 2022 22:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiAAMVh (ORCPT
+        id S232720AbiAAVe6 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 1 Jan 2022 07:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        Sat, 1 Jan 2022 16:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiAAMVg (ORCPT
+        with ESMTP id S229961AbiAAVe6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 1 Jan 2022 07:21:36 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82728C06173E
-        for <linux-security-module@vger.kernel.org>; Sat,  1 Jan 2022 04:21:36 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id m19so68756588ybf.9
-        for <linux-security-module@vger.kernel.org>; Sat, 01 Jan 2022 04:21:36 -0800 (PST)
+        Sat, 1 Jan 2022 16:34:58 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A93C061574
+        for <linux-security-module@vger.kernel.org>; Sat,  1 Jan 2022 13:34:57 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id j6so120787372edw.12
+        for <linux-security-module@vger.kernel.org>; Sat, 01 Jan 2022 13:34:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=VS5pNjM+dtzy9PLwNcG+/sVOQHrdlQb2MUBNj5cMGEA=;
-        b=XcovfPYpj8B+gmJL+evuMdkKyntDSD6J9972raID5WdeBsVCVUbU/J0RDGouQH+F4X
-         7Ga4l6H3NayI5YfE90aZNMHRdpgOIQ4WbmCxSZNEMJ7KX8adA2qQyYt6yG6IVH6w9w2w
-         j7sYSxwjPtMP85GrNaNiOqvatlwEjg2Eyw59bqBeBPlNx9mDaIc7QBkgspyUnQGVyfTb
-         I2hxUY0+Q8c/Czcq3Pjp26LYq1/zwvKK+p0OedsDQRf+BnMbnQuVO+Pn2ZAcrtdvYGw7
-         24ibDZHRi7+WaffOIqNktcDzSCwguHXaZFOy4OPEKNdO0CZxjji3cj9zEOL1iZNGK+QI
-         6Vdg==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=vhGopR69jEW+7HJdT2nZ5Tv4novtr0LbKvTLFnKCVbE=;
+        b=NdPTq4rJM7x8G+2cSR0zQEg5m4/sLXYM/qmWR/8GIPpBbjJw9KOucXJUegCie4891Q
+         cLMkmuAA1xiSkkSN3DIdKMNzIDd0ufkjsScmDyB9vYUhqQUgVRsrGcdha262u/j+VlLV
+         GcBYSoLSherff7hLLDVbL7ZwCZMg1uyMn5mJp6DtJ0G4u6ZttZvErNZHQh7yMcKNX3RM
+         hYh8L5DPMC74AtrsILL83KYWe3/ZydcGZ6/6lTZ5twJZxCXk9NXvtCsQj/tfAxH6F8si
+         azTtNWVYRb3nRdPO/iI4CbDfnU2sx8CwaiQHdMHClvYuiKEDJQiBoS6uaZng9pKMuiS4
+         cMhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=VS5pNjM+dtzy9PLwNcG+/sVOQHrdlQb2MUBNj5cMGEA=;
-        b=62orhy2unh7sfy8w1s2Q13Xr+gjY56FYTlsFaYe5rKAmgFe0w6i6MRIsoJ7jKglgMr
-         HRp+Ad//6nge+fU8f5OPCxlvg+crkZ/6TE7HXdp3k0TwBKAwIn6U4uvzO2J8UTozIGEF
-         soQroVSuT8oQVBJTOGwge6akzI9acXg5zLrq4Q80hb2TwLBRZW4hOFqXD0AH0x3D4ibg
-         4NqjptAEKFDUbwoeIvh++MRl+nwtfVY7wbmHxCR7ABxaPAzACZJSyckpyDK/XVvP83Gn
-         pnOIEyONMbjxUYgy6JL7JAxH58/yVc8w5LZUjM0Uc35dft9haRS53WgY/qViulu7R49K
-         QR3A==
-X-Gm-Message-State: AOAM530Ll44y9WaX0OpiJHlL+03TalFLeOOQlUFTPPNo+sNs/x8TOg7s
-        7oIhgu0XMWA6we95+iyN/d1pq7FYngE/NkTtXHg=
-X-Google-Smtp-Source: ABdhPJxtuy81C2AJwWuFCGGdCTLgbC098urapuaFXmNf3GSnUWe+gcVorZ09NAXfesoDsh53AzDG9c+Ffn1Z461bRLc=
-X-Received: by 2002:a25:3716:: with SMTP id e22mr33489367yba.57.1641039695631;
- Sat, 01 Jan 2022 04:21:35 -0800 (PST)
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vhGopR69jEW+7HJdT2nZ5Tv4novtr0LbKvTLFnKCVbE=;
+        b=JNHB19SQUby23PzsJkEcTk1/739BzfNSNEv24L/eLqzt+C0WV1yjgaSkNrcs6/LZJI
+         EEQc/tFS77HlQLW9aZrwGTsU/daN4l7k/BP07ZoclkHDAm/QU3jsqrg18i37p1CTnWmB
+         kkpOFbaSAjQtRNcljsvr0nsBKQjjMvlfFHd5pm16t/jrpshUqv5QoSDnNdwQF9pu/cWH
+         RG8XhNCSZC3V6Hn8GcVsOeFV0OVSN9ZYM3m57bpfPMPSYUnbRfMlYaX7FPB1Hr+8gf3H
+         cdEvTiuDxWffyQJNOIgd0u0pGwFAnE2oetXhSxeiU0cVq9x+RaK6xsleQWQPX46D/0vn
+         gbrg==
+X-Gm-Message-State: AOAM531cToJkTU9rfN1ilViY70KnTo/B8NDtQJlMY4nE1y1F5wzhdx2g
+        CCPaxYyhgT2lyTsdhqaIkCHQkC1778c=
+X-Google-Smtp-Source: ABdhPJybJNXV+bvpCwRdQ3s/wC58Ukb6JZhRqVcFQJsR7UpT3Zl4JO6bOVc94cgeAilBGjWkuP4HMQ==
+X-Received: by 2002:a05:6402:26cd:: with SMTP id x13mr40017897edd.167.1641072895451;
+        Sat, 01 Jan 2022 13:34:55 -0800 (PST)
+Received: from [192.168.1.164] (i577BC9A6.versanet.de. [87.123.201.166])
+        by smtp.gmail.com with ESMTPSA id ht14sm9401980ejc.64.2022.01.01.13.34.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jan 2022 13:34:55 -0800 (PST)
+Subject: Re: SMACK: how are smack blobs getting into cred->security and
+ inode->i_security?
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        linux-security-module@vger.kernel.org
+References: <470651da-88da-8a9e-7ba1-c5f36066bf72@gmail.com>
+ <8cd68537-8ac4-625d-3416-3ce6eba938f1@schaufler-ca.com>
+From:   Denis Obrezkov <denisobrezkov@gmail.com>
+Message-ID: <eedaa146-c4a6-6761-8e9c-56fd038a8b27@gmail.com>
+Date:   Sat, 1 Jan 2022 22:34:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Received: by 2002:a0d:d48e:0:0:0:0:0 with HTTP; Sat, 1 Jan 2022 04:21:35 -0800 (PST)
-Reply-To: fionahill.usa@hotmail.com
-From:   Fiona Hill <mrs.isabellahelmreich@gmail.com>
-Date:   Sat, 1 Jan 2022 04:21:35 -0800
-Message-ID: <CAFwWomdCJQ1E8aMqNL2_xR7v5qZ5khmc0XrEU9Xu0qNd5Y1yEQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <8cd68537-8ac4-625d-3416-3ce6eba938f1@schaufler-ca.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
+> The LSM infrastructure (security/security.c) allocates cred and inode
+> security blobs. This allows multiple security modules to use them.
+> 
+>>   Also, when does it happen? (for a task and for a
+>> file)
+> 
+> security_cred_alloc() and security_inode_alloc().
+> 
+I mean how is information from SMACK64EXEC and SMACK64 getting into
+those blobs? Do I understand the sequence right:
 
-Happy new year to you. Please  did you receive my message i send to you?
+First, both labels (SMACK64EXEC and SMACK64) are installed in
+smack_inode_post_setxattr. Second, when we launch a program, there is a
+hook smack_bprm_creds_for_exec that installs a security label from the
+program file inode into the corresponding smack task structure. Third,
+when the program tries to access a file, it is caught in the
+smack_inode_permission.
+
+I am also not sure what is happening in security_inode_alloc. Does it
+just copy a pointer to a security structure of a current task?
+
+I also can't find where security_cred_alloc is used. I found
+security_cred_alloc_blank but it is called only from cred_alloc_blank
+from cred.c (and I can't find from where the latter is called).
+
+-- 
+Regards, Denis Obrezkov
