@@ -2,91 +2,95 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B86482564
-	for <lists+linux-security-module@lfdr.de>; Fri, 31 Dec 2021 18:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA8E482754
+	for <lists+linux-security-module@lfdr.de>; Sat,  1 Jan 2022 11:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbhLaRZv (ORCPT
+        id S232258AbiAAKln (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 31 Dec 2021 12:25:51 -0500
-Received: from sonic308-15.consmr.mail.ne1.yahoo.com ([66.163.187.38]:35050
-        "EHLO sonic308-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229690AbhLaRZv (ORCPT
+        Sat, 1 Jan 2022 05:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbiAAKlm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 31 Dec 2021 12:25:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1640971550; bh=AuOyBd6sE5f2x93HIKtxYbnETmd8fuEr2BsRaFsUoZc=; h=Date:Subject:To:References:Cc:From:In-Reply-To:From:Subject:Reply-To; b=X5LlbZcFRqWd6j3gn7mWAVdqW2BK5kjJyLyM/4OZZ+rmiFPw9a//J8tFqTpVvbGxEDGBprfZIFZmhBfKCRj6Gt8/7FsBxOoDaSwk1kohAn8RGGYLwdKWYV3NYn95q8c5SgTn93bgsPw7nilaIWR+YmNTqt2T2mcsd9Q+l9O/BkiWRK3bm2q6VlNKhusMEZZz/Jq6kmCsPwTUgW2lpE03FSNLHigMWU6w6ppn4Z0dOpEp35ZRrf5kDGBB6U/IHG7TArckzz2NKCTkx/KqchYuDRMqALUOrn4jNklJeaFdfsYoaDntSbUQI8h5r+vhTwYwO6OtIMqpP34cRs5KUYmUqQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1640971550; bh=JN0tlvKmMpQmGJ0LgGQciTCtZBEkQC+Rmw2e7DjcJd4=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Wzxrku/UXR0afyBWnIa4IhBLEFeyO0IcFOUylJnQ+748C2ajonRTk8+24Tc1yTMTv2DUWcyfnUyk2Xc5PXVwtaGTJcdjpoDozzLVc0N/yBmSpv8nJwBOsfcfc7gaBjJQdZ/+JvbcFgqPPibgqDZDbDat1jR6jpkewZ+ZSnclliKNQjAwkSE8Th9rE52Zm1sZG4Fqd28JdqWsvz5WAF2pijAFyOt+MbnaznKcbtZsc/R3cFI78wjd616qGINKb9pqJQIj1qrjBnDSmqoHM4uwFh+rlxCL/b9K47xNVTxM9hLw2jzPR1mOPmr+QFIAbVX5gsRBTCDV9douFwzYK7zvJw==
-X-YMail-OSG: Ues1wfgVM1lcShjcLtcSW6_Qs0ZEz6Cc8oN4jp8Fgo3LukYQbItffNSh_aXQMUB
- iLgNOLUiTjiVsPjxLnIuBAiKZQlRr3hfTOGijT_Rts1RCoXpI1GKoB2fFmxOqguz8xyGICIWf5wk
- Rev.HPyQWZUsmiQ30S4LAvdmoKFe.3pFLPOKrB3PmoFXyaExcEc9RQU_cgGtIo7n87UiGIighVNb
- QbAoEehaUqr9xdUJwhciIKfiVDzIQapR12Z6MTkw_OGd7OgQ.yXl4MTw5qpHoD8il0Q7OsybI9SD
- mcWKYHXD2PUzRJyxx4nQ9K0ydCx4.VX0VQRT0_b.Ab0OpHnEP7ovM2hiFZhwRadrOTOjSkVGKEF7
- nuSWCk1Rlrm8PASJz.gOXHPTXe_UwmajZKkAcZRCvsKrXCMYFjkZRcWTb1ZHZEW53vHvoSNoFenF
- hoCms.Vq4fy7HxlSO65abfTn2_mlAuXlSKGkQOVDhaQH8QkvX8dd8uUaKR8psS716bllRttpVh98
- mcU35HUAaMj35cm.5LYZaKHwXveVT0v1W1WvuBXQPDS8bx7laiN_k1WtPN2J6o9qkiBjWab9TQZx
- Lh6Nbmdhm_.7Gp3ML00KvVIcHbKsnsYTwkVJFU6asCFC5Adk8YvBsbe5YMzg0cLoEuYqP4YW.Zv7
- HF51VKea1DpCHRdoevelFuHTVRzUxcx77imGct6vu2RAcMUAbPIqnxx7NlBXLq7hS.wlpZ.cIgcn
- 3IjzJ2x.x8OGRMNo6oDOvJFuXObBZZs2lfv0pEGjset3j10fCSeyi6Ujm.ywOZ1btwGwqLNS8cui
- VUCXVezRsT6zqekjJkajkzwn4qyVuaOPgwBu8myxFX8jgMPBq.53yhzcL01yZe6jlqr0kN6QwUUy
- ayG7llifFCps_Zy0.ELwFjJfC55EFOwRmRf4SrQzynyyM9nT8vFH4ZBDEwohqZ.qFDuQszQp9z_k
- eW3wQsbb8gVzHtT2paKFMTngWsp6.ERilJqs.BN4ScTUOrpZHOs8rX9FFFcNRbq6FJx6P4ughPmV
- Q.lFDPnAG91B7Ux1PllO5sVyzNPesgkh31liqV7yNqp7kcUlUDSs.70VbH9WmlKopAwavG_ho3PY
- NVC3mBp7jZw3BHrBMguNmz91vIz6J6wTc_4UJv0nU7HhGGHOBXsT6AHUc8KUDGbYw3XMtGa9ceO.
- J9JPOWyZvmyRpV.JN8CKiKeP9HsKYNSiiNxM6ycUR17itiy_CgrnOo9zauQmBtnLLG.wsVOKOIGt
- uVpEBFQgpGsEI6ilVknSa.6ZUb4UX0.OlBBjg_INPtnlwI5t7L.lnQN10a6TYlBl4dmZU7Shy6Ru
- lc.qcss8tLCAI896cxN27Dkwl691q.vuYpYwjzaHegQs30ziC8x9jzap7kEpI4dXdTfSCdpIMK_4
- ROUQkbT5GIk0VBzsxJEY8WDimuvMMq4ZJP9DOWuG0dMdp3igtooN.64U_axLDC9.ORFfLoUTDC2U
- VwDKjGWGHZxoD_wYakkospTp76OVC9hg27uqitJg6BKiyuNkPTVO2aNxemnluRcUZUhSXv.HC2ww
- 8CaXvhZC679tisRQ4UR8Vov_PVkfzKi0iwDkVnJpMUZqhm4l87CGlrLXuYt5lf5QF7BuwcQvCkbr
- 10WNq3AwIajD4XXASQyjtKYEdgvbHu7QzffTyl7gvqjJnej6T8dPLs3z497BHDRbW1Xp7iZZXrHg
- Yn0_rRkexcAALOSpfb2b1ht631XsPQ.hOcqKjcBGuSwcjLNlziwIcTDpzy49Em2sTuG4vwDXq06u
- f_0CiBAu8kEhB0O3brp90YUJWTkOGNQM0GFtc3dsFlYjdrDDdsBrYxkB77t5fGPGhVgZ68c3APnG
- FROLb8uhyXxzOKYplRj_3gUicbea_.hJC3o4NnBBGTaaATcj2_h5nyaUmKQlv0WOcRVpW7ZYm0SH
- W9Ll2foWmQG5Xs5_2XON0rLIoTUOZIDKGJ25jCSKcyF5B2gzyxD2SWUcD_xRLCinV77rC.h9vDwS
- anhdeWVB_vhhXL3.IYJ9rFhqhQ4tS3FJM4zQamX.Nwy.cKiwjyQts2cYoVJBs3bkL5PVd8OOCrSL
- tu3k8BRNScGmXouoVA6gR5YMbULbGkBpt2wTbVUa_CM3FKrYixzSpsZLlEjdqA7uDYgZURNOHnoX
- AGrJ0jwqSNQO.g5Wuvv9Rwr2Lfl6JCqYbooPpBrW7LwqfefQ9a5I74ICPcEf4dZYd7MbZwO2QWaH
- q.yX6baZS0xqaShlhdc_ZYFz2zanI3Yh_Cb4GIyZKMcjg1AyxnCiFhswKv8ripbdPD5b1LUH8BQ-
- -
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Fri, 31 Dec 2021 17:25:50 +0000
-Received: by kubenode551.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 5abaac250302ef4f8b81d869c21de2d8;
-          Fri, 31 Dec 2021 17:25:47 +0000 (UTC)
-Message-ID: <8cd68537-8ac4-625d-3416-3ce6eba938f1@schaufler-ca.com>
-Date:   Fri, 31 Dec 2021 09:25:47 -0800
+        Sat, 1 Jan 2022 05:41:42 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A83CC061574;
+        Sat,  1 Jan 2022 02:41:42 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so27540488pjf.3;
+        Sat, 01 Jan 2022 02:41:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=Yt8vNYQAAK95dzSgvlKhcBmDDOtr4TluB8u8Suf0cAfKFGkIFSrcywDheRENkVtl1C
+         feMPrIST4BkRD3M3Jh+ivCTkwkvZntvSGK1nMHzccNJmEndN/X+4a+mCOlDMW/4mHlKP
+         gM50SyXCIbcfIaNgZseMM2vWVa/2VzSrJoKPKe3MoXX7qfu96Li1k5VwL8Q9ZPGWgAFp
+         1cPlXKOdKRpe1x0f6+eO00pvr2vgAWQ7g512jLwvrA1CGa2EeexywA7L6sSa7x03I2sD
+         CoDYQUQafVCG0qGsPQB6182eNNufA3EqbDckSaVEnDKCGtN2DOMAOtEWmafJ3RPe95u/
+         eIDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=MAn0Hev2ZxWTGLkY/7VmOePZOOOGPTHhnEFMWgudZ/8FAtWH5fK43mNHcLY0zK55NS
+         WY1/XX7Dd9G50zMZkIFp8kgZFp9JZfpWt/bh9Iw/9ntJIMIiwOSgDRzsatS8sa1eOGKC
+         iJe5J98euFVz+vQ4GIIYpP8LFsC5aAgxCK6t6+H5pRTu4LoPBzcLjPvqeCavKX8Pvc+w
+         ieNXvd0d2MN+adtlhwlc0ywW+pMg4t/5xEfwI+EsOeaZ9s0p96xIsBOoTRoM2xOzXANf
+         4vXe+FqhPHo9RFfIYNtXcp18J8kfhSACB2oDvYioOtoOJDYve71SBOsWMGCTg8jfNVT2
+         /SeA==
+X-Gm-Message-State: AOAM533VycrdEyouDl3AUbtshtwaQGQqbbLB9SdWWIR/TpbEnBGjenbM
+        lZ5jgL2TZZ2HYcP+hA32BIc=
+X-Google-Smtp-Source: ABdhPJwKFj6Gf9cfMCCy9natrauGoSUadaQ0dhQMb5jpbldxd0YnaG1stPeSGzsI8XGvIIK3waH7NA==
+X-Received: by 2002:a17:903:124f:b0:149:a740:d8bc with SMTP id u15-20020a170903124f00b00149a740d8bcmr9393324plh.79.1641033702226;
+        Sat, 01 Jan 2022 02:41:42 -0800 (PST)
+Received: from [192.168.0.153] ([143.244.48.136])
+        by smtp.gmail.com with ESMTPSA id m13sm27022455pgt.22.2022.01.01.02.41.34
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 01 Jan 2022 02:41:42 -0800 (PST)
+Message-ID: <61d02fe6.1c69fb81.1bc40.c0ed@mx.google.com>
+From:   hyaibe56@gmail.com
+X-Google-Original-From: suport.prilend@gmail.com
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: SMACK: how are smack blobs getting into cred->security and
- inode->i_security?
-Content-Language: en-US
-To:     Denis Obrezkov <denisobrezkov@gmail.com>,
-        linux-security-module@vger.kernel.org
-References: <470651da-88da-8a9e-7ba1-c5f36066bf72@gmail.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <470651da-88da-8a9e-7ba1-c5f36066bf72@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.19551 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE:
+To:     Recipients <suport.prilend@gmail.com>
+Date:   Sat, 01 Jan 2022 12:41:17 +0200
+Reply-To: andres.stemmet1@gmail.com
+X-Mailer: TurboMailer 2
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 12/31/2021 5:08 AM, Denis Obrezkov wrote:
-> Hello,
->
-> I am trying to understand how smack works (looking at
-> smack_inode_permission hook). I can see that that smack security
-> information is taken from  cred->security and inode->i_security but how
-> did they get in there?
+I want to confide in you to finalize this transaction of mutual benefits. I=
+t may seem strange to you, but it is real. This is a transaction that has n=
+o risk at all, due process shall be followed and it shall be carried out un=
+der the ambit of the financial laws. Being the Chief Financial Officer, BP =
+Plc. I want to trust and put in your care Eighteen Million British Pounds S=
+terling, The funds were acquired from an over-invoiced payment from a past =
+contract executed in one of my departments. I can't successfully achieve th=
+is transaction without presenting you as foreign contractor who will provid=
+e a bank account to receive the funds.
 
-The LSM infrastructure (security/security.c) allocates cred and inode
-security blobs. This allows multiple security modules to use them.
+Documentation for the claim of the funds will be legally processed and docu=
+mented, so I will need your full cooperation on this matter for our mutual =
+benefits. We will discuss details if you are interested to work with me to =
+secure this funds. I will appreciate your prompt response in every bit of o=
+ur communication. Stay Blessed and Stay Safe.
 
->   Also, when does it happen? (for a task and for a
-> file)
+Best Regards
 
-security_cred_alloc() and security_inode_alloc().
 
-I am the Smack maintainer. Feel free to ask anything you'd
-like here and to me directly.
+Tel: +44 7537 185910
+Andres  Stemmet
+Email: andres.stemmet1@gmail.com  =
+
+Chief financial officer
+BP Petroleum p.l.c.
+
+                                                                           =
+                        Copyright =A9 1996-2021
 
