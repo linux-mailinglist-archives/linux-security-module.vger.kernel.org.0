@@ -2,143 +2,111 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 835BD4836E6
-	for <lists+linux-security-module@lfdr.de>; Mon,  3 Jan 2022 19:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F96D48374B
+	for <lists+linux-security-module@lfdr.de>; Mon,  3 Jan 2022 19:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbiACSfA (ORCPT
+        id S235944AbiACS7N (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 3 Jan 2022 13:35:00 -0500
-Received: from drummond.us ([74.95.14.229]:40377 "EHLO
-        talisker.home.drummond.us" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235673AbiACSez (ORCPT
+        Mon, 3 Jan 2022 13:59:13 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:33200 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235933AbiACS7N (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:34:55 -0500
-X-Greylist: delayed 836 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 13:34:55 EST
-Received: from talisker.home.drummond.us (localhost [127.0.0.1])
-        by talisker.home.drummond.us (8.15.2/8.15.2/Debian-20) with ESMTP id 203IKXWJ983520;
-        Mon, 3 Jan 2022 10:20:33 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=home.drummond.us;
-        s=default; t=1641234033;
-        bh=cfkDVUC04N1/5TKLzChdaVzjxjk6gzgwbrbQoSLvShw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=3bO7fBxepM4+/51f0L5qyw/bOgsjQRd0fcDGjKx7c40y65UfrwqkoWMcaCES5BrN+
-         nKUb6uagsnHUTHJSULqwvRKsCgqW8BQWZINOK9KZcOlVzVOOcxk9pax4Xeml/9DZvT
-         0x29XgMTtXonYouglW8+Jearv13ejCZnKViYIIzsICH7kNq1p/nA+R+VO/fleXM9jM
-         NLDHVByAShijXnZLRxOBLlC4QnB/7SJBCrgGxHWHjkv2liiZMYy0VVqqqEINsP+j34
-         gyu9RYX96ayZW6dsA+FKzRMPlkU/qOGHtc9saAcEGyQonMqzGiG/z4oHRqhE1bbP0H
-         CEKRA26oxA4nw==
-Received: (from walt@localhost)
-        by talisker.home.drummond.us (8.15.2/8.15.2/Submit) id 203IKXpq983519;
-        Mon, 3 Jan 2022 10:20:33 -0800
-From:   Walt Drummond <walt@drummond.us>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        John Johansen <john.johansen@canonical.com>,
+        Mon, 3 Jan 2022 13:59:13 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 612F41F38A;
+        Mon,  3 Jan 2022 18:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641236351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TdDYxb7brFIwjLIMOPbmEZrjtTPyGQuN72CDxmaZLfg=;
+        b=dWmDaI2oEiMKNQ/h2pK0gxKOhJGVFjqcUfy5WlLeoTMbtoQQlT8wuOTfxE0x54/RsZa+VZ
+        /++EBkwRXtP2t7HGhnoqHczEUh9lk4s3e8BAYaec/1xND8s+vcu8XL+Ce07b2z3U/vd19h
+        El2EFPp6oC8CiFoxXn7gR0qjByjVfrU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641236351;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TdDYxb7brFIwjLIMOPbmEZrjtTPyGQuN72CDxmaZLfg=;
+        b=YY2KJsZYLgiXY7d81omY33Rcs8bANCVR9IR8Ege9ggRmiN7gbjvK84EFOydeMNM37fS8jH
+        d82mn+0A4voKtTAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D3F013B14;
+        Mon,  3 Jan 2022 18:59:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Yr13Dn9H02EBPQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 03 Jan 2022 18:59:11 +0000
+Date:   Mon, 3 Jan 2022 19:59:14 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Dov Murik <dovmurik@linux.ibm.com>
+Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-kernel@vger.kernel.org, Walt Drummond <walt@drummond.us>,
-        linux-security-module@vger.kernel.org
-Subject: [RFC PATCH 3/8] signals: Use a helper function to test if a signal is a real-time signal.
-Date:   Mon,  3 Jan 2022 10:19:51 -0800
-Message-Id: <20220103181956.983342-4-walt@drummond.us>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220103181956.983342-1-walt@drummond.us>
-References: <20220103181956.983342-1-walt@drummond.us>
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
+ secret area
+Message-ID: <YdNHgtuVoLofL4cW@zn.tnic>
+References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Rather than testing against SIGRTMIN/SIGRTMAX directly, use this
-helper to determine if a signal is a real-time signal.
+On Mon, Nov 29, 2021 at 11:42:46AM +0000, Dov Murik wrote:
+> As a usage example, consider a guest performing computations on
+> encrypted files.  The Guest Owner provides the decryption key (= secret)
+> using the secret injection mechanism.  The guest application reads the
+> secret from the efi_secret filesystem and proceeds to decrypt the files
+> into memory and then performs the needed computations on the content.
+> 
+> In this example, the host can't read the files from the disk image
+> because they are encrypted.  Host can't read the decryption key because
+> it is passed using the secret injection mechanism (= secure channel).
+> Host can't read the decrypted content from memory because it's a
+> confidential (memory-encrypted) guest.
 
-Signed-off-by: Walt Drummond <walt@drummond.us>
----
- include/linux/signal.h     | 8 ++++++++
- kernel/signal.c            | 6 +++---
- kernel/time/posix-timers.c | 3 ++-
- security/apparmor/ipc.c    | 4 ++--
- 4 files changed, 15 insertions(+), 6 deletions(-)
+So maybe I don't understand the example properly or something's missing
+but why can't the guest owner simply scp the secrets into the guest? Why
+is this special thing needed?
 
-diff --git a/include/linux/signal.h b/include/linux/signal.h
-index c66d4f520228..a730f3d4615e 100644
---- a/include/linux/signal.h
-+++ b/include/linux/signal.h
-@@ -53,6 +53,14 @@ enum siginfo_layout {
- 
- enum siginfo_layout siginfo_layout(unsigned sig, int si_code);
- 
-+/* Test if 'sig' is a realtime signal.  Use this instead of testing
-+ * SIGRTMIN/SIGRTMAX directly.
-+ */
-+static inline int realtime_signal(unsigned long sig)
-+{
-+	return (sig >= SIGRTMIN) && (sig <= SIGRTMAX);
-+}
-+
- /*
-  * Define some primitives to manipulate sigset_t.
-  */
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 94b1828ae973..a2f0e38ba934 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1065,7 +1065,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
- 
- static inline bool legacy_queue(struct sigpending *signals, int sig)
- {
--	return (sig < SIGRTMIN) && sigismember(&signals->signal, sig);
-+	return !realtime_signal(sig) && sigismember(&signals->signal, sig);
- }
- 
- static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
-@@ -1108,7 +1108,7 @@ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struc
- 	 * make sure at least one signal gets delivered and don't
- 	 * pass on the info struct.
- 	 */
--	if (sig < SIGRTMIN)
-+	if (!realtime_signal(sig))
- 		override_rlimit = (is_si_special(info) || info->si_code >= 0);
- 	else
- 		override_rlimit = 0;
-@@ -1144,7 +1144,7 @@ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struc
- 			break;
- 		}
- 	} else if (!is_si_special(info) &&
--		   sig >= SIGRTMIN && info->si_code != SI_USER) {
-+		   realtime_signal(sig) && info->si_code != SI_USER) {
- 		/*
- 		 * Queue overflow, abort.  We may abort if the
- 		 * signal was rt and sent by user using something
-diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 1cd10b102c51..6afb98eadd1d 100644
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -442,7 +442,8 @@ static struct pid *good_sigevent(sigevent_t * event)
- 		fallthrough;
- 	case SIGEV_SIGNAL:
- 	case SIGEV_THREAD:
--		if (event->sigev_signo <= 0 || event->sigev_signo > SIGRTMAX)
-+		/* Signal 0 is a valid signal, just not here. */
-+		if (!valid_signal(event->sigev_signo) || event->sigev_signo == 0)
- 			return NULL;
- 		fallthrough;
- 	case SIGEV_NONE:
-diff --git a/security/apparmor/ipc.c b/security/apparmor/ipc.c
-index fe36d112aad9..8149b989b665 100644
---- a/security/apparmor/ipc.c
-+++ b/security/apparmor/ipc.c
-@@ -130,9 +130,9 @@ int aa_may_ptrace(struct aa_label *tracer, struct aa_label *tracee,
- 
- static inline int map_signal_num(int sig)
- {
--	if (sig > SIGRTMAX)
-+	if (!valid_signal(sig))
- 		return SIGUNKNOWN;
--	else if (sig >= SIGRTMIN)
-+	else if (realtime_signal(sig))
- 		return sig - SIGRTMIN + SIGRT_BASE;
- 	else if (sig < MAXMAPPED_SIG)
- 		return sig_map[sig];
+The secret below says "...kata-secrets" so this sounds like
+something-automated-containers-thing where they'd profit from getting
+secrets automatically supplied to the guest. But I guess there you can
+scp too...
+
+So what am I missing?
+
+Thx.
+
 -- 
-2.30.2
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
