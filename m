@@ -2,158 +2,246 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2633E4831B4
-	for <lists+linux-security-module@lfdr.de>; Mon,  3 Jan 2022 15:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62A04836F9
+	for <lists+linux-security-module@lfdr.de>; Mon,  3 Jan 2022 19:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiACOKK (ORCPT
+        id S232470AbiACSf4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 3 Jan 2022 09:10:10 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5548 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232091AbiACOKK (ORCPT
+        Mon, 3 Jan 2022 13:35:56 -0500
+Received: from drummond.us ([74.95.14.229]:40377 "EHLO
+        talisker.home.drummond.us" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232526AbiACSf4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:10:10 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 203DDart028657;
-        Mon, 3 Jan 2022 14:09:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=v2ghILQ+1jhsJwkVkfQ4PDvXvqOTFTxfb49TgDMC0dg=;
- b=TVs7eLyhQ5pfpRACGjD2c0PDMReATd9YCt6ukUuudUKmv77UH65en0sx1yzLuEzThJ9P
- I6Lhkt3QccJfVhJK+7yVxJ6eQKzMtiaUq5AXSA4sYkwQDjbdLiHvuuJNzLrwp2XFjWEf
- ARgJntRz9jzI6ssBXv1wDQE+vnR80e1HCNAPmZiXPhIMyRG11EWPcNkp/IGM5lofg3lK
- 80T9xIPWYsfM2EIdfdxpOH7tFgo2EtqVtDy1uDZETfUgettaYqxz2EnYuPvF195ng2v6
- CdPE0CdD0sj8jD9OTtbqcVHkwg7Es0xB99fZZEkqf9WMapLefLdVBGDE579bZMCtvfz1 HA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dc1uf0vcj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jan 2022 14:09:44 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 203Dptg6011938;
-        Mon, 3 Jan 2022 14:09:43 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dc1uf0vcb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jan 2022 14:09:43 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 203E8G6X003424;
-        Mon, 3 Jan 2022 14:09:42 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04dal.us.ibm.com with ESMTP id 3daekahcch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jan 2022 14:09:42 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 203E9fdE36438500
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Jan 2022 14:09:41 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04E9E13605E;
-        Mon,  3 Jan 2022 14:09:41 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88F83136059;
-        Mon,  3 Jan 2022 14:09:38 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Jan 2022 14:09:38 +0000 (GMT)
-Message-ID: <0626de21-d22f-329c-fc64-ecd7eab1331a@linux.ibm.com>
-Date:   Mon, 3 Jan 2022 09:09:37 -0500
+        Mon, 3 Jan 2022 13:35:56 -0500
+X-Greylist: delayed 829 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 13:35:51 EST
+Received: from talisker.home.drummond.us (localhost [127.0.0.1])
+        by talisker.home.drummond.us (8.15.2/8.15.2/Debian-20) with ESMTP id 203IKUrZ983478;
+        Mon, 3 Jan 2022 10:20:30 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=home.drummond.us;
+        s=default; t=1641234030;
+        bh=E5fnl6UDJWZKDRpYiS+tfaqNC1+q8ROkLPZx/9dIiQE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zXbbImMEGQ9pUpv1DxfY2XmQttregvHgLm+qsl9EG8U8kPMhSbyKD5DQ25UYOdRzo
+         BfoL/P72aybwUNV/dOsh0KUrU+F+6X19Cgfu7MENmFok86fj7YBUHIKHTe6B3r/2l0
+         iFHFBcYB/awOvzTkhHjnaPiTR52hfe6PHcBRzY7m0xTugBKuJxGGgsr0nguKo8yqGW
+         0VW8sn37JwEbBrD9p0qZEb9YsC8UbN/YcXTbNbKSZNHo8cvcUPBLwqbV6LWX9tWvlN
+         QEeMhR0gHOFTcJtLQUs5HTxDDyu0MNDZscXnTgsu1kqViQK/ikejaInqcv0AX04Too
+         CMrZIYqUTCwPQ==
+Received: (from walt@localhost)
+        by talisker.home.drummond.us (8.15.2/8.15.2/Submit) id 203IKMj7983477;
+        Mon, 3 Jan 2022 10:20:22 -0800
+From:   Walt Drummond <walt@drummond.us>
+To:     aacraid@microsemi.com, viro@zeniv.linux.org.uk,
+        anna.schumaker@netapp.com, arnd@arndb.de, bsegall@google.com,
+        bp@alien8.de, chuck.lever@oracle.com, bristot@redhat.com,
+        dave.hansen@linux.intel.com, dwmw2@infradead.org,
+        dietmar.eggemann@arm.com, dinguyen@kernel.org,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
+        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
+        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
+        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
+        john.johansen@canonical.com, juri.lelli@redhat.com,
+        keescook@chromium.org, mcgrof@kernel.org,
+        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
+        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
+        rostedt@goodmis.org, tglx@linutronix.de,
+        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
+        x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Walt Drummond <walt@drummond.us>,
+        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [RFC PATCH 0/8] signals: Support more than 64 signals
+Date:   Mon,  3 Jan 2022 10:19:48 -0800
+Message-Id: <20220103181956.983342-1-walt@drummond.us>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v7 10/14] securityfs: Extend securityfs with namespacing
- support
-Content-Language: en-US
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
- <20211216054323.1707384-11-stefanb@linux.vnet.ibm.com>
- <20211216134027.33sprdmhol2tbctf@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211216134027.33sprdmhol2tbctf@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jsA1Gn0Zs6K0t0IbxU9x7rtF5PCW93Ws
-X-Proofpoint-ORIG-GUID: uXiAfUfvBh1c5O8bgcGxgWWeD9yraZ7d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-03_05,2022-01-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- phishscore=0 adultscore=0 spamscore=0 clxscore=1015 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201030096
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+This patch set expands the number of signals in Linux beyond the
+current cap of 64.  It sets a new cap at the somewhat arbitrary limit
+of 1024 signals, both because it’s what GLibc and MUSL support and
+because many architectures pad sigset_t or ucontext_t in the kernel to
+this cap.  This limit is not fixed and can be further expanded within
+reason.
 
-On 12/16/21 08:40, Christian Brauner wrote:
-> On Thu, Dec 16, 2021 at 12:43:19AM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Extend 'securityfs' for support of IMA namespacing so that each
->> IMA (user) namespace can have its own front-end for showing the currently
->> active policy, the measurement list, number of violations and so on.
->>
->> Drop the addition dentry reference to enable simple cleanup of dentries
->> upon umount.
->>
->> Prevent mounting of an instance of securityfs in another user namespace
->> than it belongs to. Also, prevent accesses to directories when another
->> user namespace is active than the one that the instance of securityfs
->> belongs to.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
->> ---
->>   security/inode.c | 37 ++++++++++++++++++++++++++++++++++---
->>   1 file changed, 34 insertions(+), 3 deletions(-)
->>
->> diff --git a/security/inode.c b/security/inode.c
->> index fee01ff4d831..a0d9f086e3d5 100644
->> --- a/security/inode.c
->> +++ b/security/inode.c
->> @@ -26,6 +26,29 @@
->>   static struct vfsmount *init_securityfs_mount;
->>   static int init_securityfs_mount_count;
->>   
->> +static int securityfs_permission(struct user_namespace *mnt_userns,
->> +				 struct inode *inode, int mask)
->> +{
->> +	int err;
->> +
->> +	err = generic_permission(&init_user_ns, inode, mask);
->> +	if (!err) {
->> +		if (inode->i_sb->s_user_ns != current_user_ns())
->> +			err = -EACCES;
-> I really think the correct semantics is to grant all callers access
-> whose user namespace is the same as or an ancestor of the securityfs
-> userns. It's weird to deny access to callers who are located in an
-> ancestor userns.
+Despite best efforts, there is some non-zero potential that this could
+break user space; I'd appreciate any comments, review and/or pointers
+to areas of concern.
 
-Ok, will be using current_in_userns() or the more explicit in_userns() 
-for the check.
+Basically, these changes entail:
 
+ - Make all system calls that accept sigset_t honor the existing
+   sigsetsize parameter for values between 8 and 128, and to return
+   sigsetsize bytes to user space.
 
->
-> For example, a privileged process on the host should be allowed to setns
-> to the userns of an unprivileged container and inspect its securityfs
-> instance.
->
-> We're mostly interested to block such as scenarios where two sibling
-> unprivileged containers are created in the initial userns and an fd
-> proxy or something funnels a file descriptor from one sibling container
-> to the another one and the receiving sibling container can use readdir()
-> or openat() on this fd. (I'm not even convinced that this is actually a
-> problem but stricter semantics at the beginning can't hurt. We can
-> always relax this later.)
+ - Add AT_SIGSET_SZ to the aux vector to signal to user space the
+   maximum size sigset_t the kernel can accept.
+
+ - Remove the sigmask() macro except in compatibility cases, change
+   the sigaddset()/sigdelset()/etc. to accept a comma separated list
+   of signal numbers.
+
+ - Change the _NSIG_WORDS calculation to round up when needed on
+   generic and x86.
+
+ - Place the complete sigmask in the real time signal frame (x86_64,
+   x32 and ia32).
+
+ - Various fixes where sigset_t size is assumed.
+
+ - Add BSD SIGINFO (and VSTATUS) as a test.
+
+The changes that have the most risk of breaking user space are the
+ones that put more than 8 bytes of sigset_t in the real time signal
+stack frame (Patches 2 & 6), and I should note that an earlier and
+incomplete version of patch 2 was NAK’ed by Al in
+https://lore.kernel.org/lkml/20201119221132.1515696-1-walt@drummond.us/.
+
+As far as I have been able to determine this patchset, and
+specifically changing the size of sigset_t, does not break user space.
+
+The two uses of sigset_t that pose the most user space risk are 1) as
+a member of ucontext_t passed as a parameter to the signal handler and
+2) when user space performs manual inspection of the real-time signal
+stack frame.
+
+In case (1), user space has definitions of both siget_t and ucontext_t
+that are independent of, and may differ from, the kernel (eg, sigset_t
+in uclibc-ng is 16 bytes, musl is 128 bytes, glibc is 128 bytes on all
+architectures except Arc, etc.).  User space will interpret the data
+on the signal stack through these definitions, and extensions to
+sigset_t will be opaque.  Other non-C runtimes are similarly
+independent from kernel sigset_t and ucontext_t and derive their
+definition of sigset_t from libc either directly or indirectly, and do
+not manually inspect the signal stack (specifically OpenJDK, Golang,
+Python3, Rust and Perl).
+
+The only instances I found of case (2), manually inspecting the signal
+stack frame, are in stack unwinders/backtracers (GDB, GCC, libunwind)
+and in GDB when recording program execution, and only on the i386,
+x86_64, s390 and powerpc architectures.  The GDB, GCC and libunwind
+behave consistently with and without this patchset.
+
+GDB's execution recording is somewhat more complicated.  It uses
+internally defined architecture specific constants to represent the
+total size of the signal frame, and will save that entire frame for
+later use.  I cannot confirm that the values for powerpc and s390 are
+correct, but for this purpose it doesn't matter as these architectures
+explicitly pad for an expanded uc_sigmask.  I can, however, confirm
+that the values for i386 and x86_64 are not correct, and that GDB is
+recording an incorrect amount of stack data.  This doesn’t appear to
+be an issue; while I cannot build a test case on x86_64 due to a known
+bug[1], a basic test on i386 shows that the stack is correctly being
+recorded, and forward and reverse replay seems to work just fine
+across signal handlers.
+
+There are other cases to consider if the number of signals and
+therefore the size of sigset_t changes:
+
+Impact on struct rt_sigframe member elements
+
+  The placement of ucontext_t in struct rt_sigframe has the potential
+  to move following member elements in ways that could break user
+  space if user space relied on the offsets of these elements.
+  However a review shows that any elements in rt_sigframe after
+  ucontext_t.uc_sigmask are either (1) unused or only used by the
+  kernel or (2) fall into the x86_64/i386 floating point state case
+  above.
+
+Kernel has new signals, user space does not
+
+  Any new bits in ucontext.uc_sigmask placed on the signal stack are
+  opaque to user space (except in cases where user space already has a
+  larger sigset_t, as in glibc).
+
+  There are no changes to the real-time signals system call semantics,
+  as the kernel will honor the hard-coded sigsetsize value of 8 in
+  libc and behave as it has before these changes.
+
+  Signal numbers larger than 64 cannot be blocked or caught until user
+  space is updated, however their default action will work as
+  expected.  This can cause one problem: a parent process that uses
+  the signal number a child exited with as an index into an array
+  without bounds checking can cause a crash.  I’ve seen exactly one
+  instance of this in tcsh, and is, I think, a bug in tcsh.
+
+User space has new signals, kernel does not
+
+  User space attempting to use a signal number not supported by the
+  kernel in system calls (eg, sigaction()) or other libc functions (eg,
+  sigaddset()) will result in EINVAL, as expected.
+
+  User space needs to know how to set the sigsetsize parameter to the
+  real time signal system calls and it can use getauxval(AT_SIGSET_SZ)
+  to determine this.  If it returns zero the sigsetsize must be 8,
+  otherwise the kernel will accept sigsetsize between 8 and the return
+  value.
+
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=23188
+
+Walt Drummond (8):
+  signals: Make the real-time signal system calls accept different sized
+    sigset_t from user space.
+  signals: Put the full signal mask on the signal stack for x86_64, X32
+    and ia32 compatibility mode
+  signals: Use a helper function to test if a signal is a real-time
+    signal.
+  signals: Remove sigmask() macro
+  signals: Better support cases where _NSIG_WORDS is greater than 2
+  signals: Round up _NSIG_WORDS
+  signals: Add signal debugging
+  signals: Support BSD VSTATUS, KERNINFO and SIGINFO
+
+ arch/alpha/kernel/signal.c          |   4 +-
+ arch/m68k/include/asm/signal.h      |   6 +-
+ arch/nios2/kernel/signal.c          |   2 -
+ arch/x86/ia32/ia32_signal.c         |   5 +-
+ arch/x86/include/asm/sighandling.h  |  34 +++
+ arch/x86/include/asm/signal.h       |  10 +-
+ arch/x86/include/uapi/asm/signal.h  |   4 +-
+ arch/x86/kernel/signal.c            |  11 +-
+ drivers/scsi/dpti.h                 |   2 -
+ drivers/tty/Makefile                |   2 +-
+ drivers/tty/n_tty.c                 |  21 ++
+ drivers/tty/tty_io.c                |  10 +-
+ drivers/tty/tty_ioctl.c             |   4 +
+ drivers/tty/tty_status.c            | 135 ++++++++++
+ fs/binfmt_elf.c                     |   1 +
+ fs/binfmt_elf_fdpic.c               |   1 +
+ fs/ceph/addr.c                      |   2 +-
+ fs/jffs2/background.c               |   2 +-
+ fs/lockd/svc.c                      |   1 -
+ fs/proc/array.c                     |  32 +--
+ fs/proc/base.c                      |  48 ++++
+ fs/signalfd.c                       |  26 +-
+ include/asm-generic/termios.h       |   4 +-
+ include/linux/compat.h              |  98 ++++++-
+ include/linux/sched.h               |  52 +++-
+ include/linux/signal.h              | 389 ++++++++++++++++++++--------
+ include/linux/tty.h                 |   8 +
+ include/uapi/asm-generic/ioctls.h   |   2 +
+ include/uapi/asm-generic/signal.h   |   8 +-
+ include/uapi/asm-generic/termbits.h |  34 +--
+ include/uapi/linux/auxvec.h         |   1 +
+ kernel/compat.c                     |  30 +--
+ kernel/fork.c                       |   2 +-
+ kernel/ptrace.c                     |  18 +-
+ kernel/signal.c                     | 288 ++++++++++----------
+ kernel/sysctl.c                     |  41 +++
+ kernel/time/posix-timers.c          |   3 +-
+ lib/Kconfig.debug                   |  10 +
+ security/apparmor/ipc.c             |   4 +-
+ virt/kvm/kvm_main.c                 |  18 +-
+ 40 files changed, 974 insertions(+), 399 deletions(-)
+ create mode 100644 drivers/tty/tty_status.c
+
+-- 
+2.30.2
+
