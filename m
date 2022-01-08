@@ -2,121 +2,68 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA65487D0A
-	for <lists+linux-security-module@lfdr.de>; Fri,  7 Jan 2022 20:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E264883D8
+	for <lists+linux-security-module@lfdr.de>; Sat,  8 Jan 2022 14:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbiAGTat (ORCPT
+        id S234277AbiAHNyj (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 7 Jan 2022 14:30:49 -0500
-Received: from mx.cs.msu.ru ([188.44.42.42]:53104 "EHLO mail.cs.msu.ru"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232106AbiAGTar (ORCPT
+        Sat, 8 Jan 2022 08:54:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38892 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229486AbiAHNyj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 7 Jan 2022 14:30:47 -0500
-X-Greylist: delayed 515 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jan 2022 14:30:44 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
-        s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=CAj6ZvCGsPU1I8LtRSp3RhetGGO18H0jd7c6GnJn/AI=; b=Tmtwzq882fuqOFkgczsh/hVTJV
-        vjYXVLuJSb3ebjGHUX/IMLewO/j7T7pru2BtNUWx1U0M9+uf4naJNbstc4a4hV627q9Fmvp2M8WVB
-        rrPobMbnO55k1E282B+ZDvv2xnqKt+6vi2dm/N58n2PoB9yvml12ZZi653qVVPbFvBrQ1N3Cb1Mlt
-        VpFJqmRvAKdp7QhJGXuWQmopkT9Zg4uypDmWsHhYSHIs2H59UUqr6Mb685+Z5ze6ULlPQQej9nGSV
-        Up77CfcM/pPZTa0PvLewaq5PkmdXAK939R648+o8vCCb1GgM/jYykm3sn1Pe3d2AL16FSeIumeX9/
-        Rgr2mlbw==;
-Received: from [37.204.119.143] (port=58124 helo=cello)
-        by mail.cs.msu.ru with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2 (FreeBSD))
-        (envelope-from <ar@cs.msu.ru>)
-        id 1n5uvJ-00092m-Js; Fri, 07 Jan 2022 22:29:15 +0300
-Date:   Fri, 7 Jan 2022 22:29:12 +0300
-From:   Arseny Maslennikov <ar@cs.msu.ru>
-To:     Walt Drummond <walt@drummond.us>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, aacraid@microsemi.com,
-        viro@zeniv.linux.org.uk, anna.schumaker@netapp.com, arnd@arndb.de,
-        bsegall@google.com, bp@alien8.de, chuck.lever@oracle.com,
-        bristot@redhat.com, dave.hansen@linux.intel.com,
-        dwmw2@infradead.org, dietmar.eggemann@arm.com, dinguyen@kernel.org,
-        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
-        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
-        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
-        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
-        john.johansen@canonical.com, juri.lelli@redhat.com,
-        keescook@chromium.org, mcgrof@kernel.org,
-        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
-        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
-        rostedt@goodmis.org, tglx@linutronix.de,
-        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
-Message-ID: <YdiUiHAhLyfgpvVY@cello>
-References: <20220103181956.983342-1-walt@drummond.us>
- <87iluzidod.fsf@email.froward.int.ebiederm.org>
- <YdSzjPbVDVGKT4km@mit.edu>
- <87pmp79mxl.fsf@email.froward.int.ebiederm.org>
- <YdTI16ZxFFNco7rH@mit.edu>
- <CADCN6nzT-Dw-AabtwWrfVRDd5HzMS3EOy8WkeomicJF07nQyoA@mail.gmail.com>
+        Sat, 8 Jan 2022 08:54:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A4560FE3;
+        Sat,  8 Jan 2022 13:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6763C36AE3;
+        Sat,  8 Jan 2022 13:54:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641650078;
+        bh=n5CeQCaLX9Mzw9S1NmoY2amBI7g7s0AkC2jF7xAlLyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K+ogBxxYTpdgBjcT/wO+UcZrBbhsRc09XQsPgGkIYjMUSlgcwixQW1+jEmJKLEFP7
+         KW514n95Nua1MGpXaoDBlTC0etUPA6Bq5uGuSVfeauyqlf/FXX9pfp7HAfgfeRISOr
+         7NgcO+ZJ72WMuS0ZN89gnzi2ZnLxoiUGkpN0qeSNaettUepL/v6ko+Ph1fSDbrg3yE
+         S71sladMHh4gz0Dmu/4VSmBTO7BIYZmEpRbRP8bMF/mj+hctdFcTATqekx1vBFQInZ
+         xS3D0PhOz3c1I++ya2Pl7zZtPYT3MU/5KYpMESsJ27H/IWr4iUi/KKfTPSaM+rsR6O
+         ujBoKniWx5hKA==
+Date:   Sat, 8 Jan 2022 15:54:29 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Nayna Jain <nayna@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        dhowells@redhat.com, zohar@linux.ibm.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v7 1/3] certs: export load_certificate_list() to be used
+ outside certs/
+Message-ID: <YdmXlUcsa+xRcwSN@iki.fi>
+References: <20220105175410.554444-1-nayna@linux.ibm.com>
+ <20220105175410.554444-2-nayna@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jM/2AY6iSqMbsk1G"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADCN6nzT-Dw-AabtwWrfVRDd5HzMS3EOy8WkeomicJF07nQyoA@mail.gmail.com>
-OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
-X-SA-Exim-Connect-IP: 37.204.119.143
-X-SA-Exim-Mail-From: ar@cs.msu.ru
-Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
-X-SA-Exim-Version: 4.2.1
-X-SA-Exim-Scanned: No (on mail.cs.msu.ru); Unknown failure
+In-Reply-To: <20220105175410.554444-2-nayna@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Wed, Jan 05, 2022 at 12:54:08PM -0500, Nayna Jain wrote:
+> load_certificate_list() parses certificates embedded in the kernel
+> image to load them onto the keyring.
+> 
+> Commit "2565ca7f5ec1 (certs: Move load_system_certificate_list to a common
+> function)" made load_certificate_list() a common function in the certs/
+> directory. Now, export load_certificate_list() outside certs/ to be used
+> by load_platform_certificate_list() which is added later in the patchset.
+> 
+> Reported-by: kernel test robot <lkp@intel.com> (auto build test ERROR)
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
 
---jM/2AY6iSqMbsk1G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This lacking fixes tag, if it is a bug, or "reported-by" needs to be
+completely removed.
 
-On Tue, Jan 04, 2022 at 02:31:44PM -0800, Walt Drummond wrote:
-> The only standard tools that support SIGINFO are sleep, dd and ping,
-> (and kill, for obvious reasons) so it's not like there's a vast hole
-> in the tooling or something, nor is there a large legacy software base
-> just waiting for SIGINFO to appear.   So while I very much enjoyed
-> figuring out how to make SIGINFO work ...
-
-As far as I recall, GNU make on *BSD does support SIGINFO (Not a
-standard tool, but obviously an established one).
-
-The developers of strace have expressed interest in SIGINFO support
-to print tracer status messages (unfortunately, not on a public list).
-Computational software can use this instead of stderr progress spam, if
-run in an interactive fashion on a terminal, as it frequently is. There
-is a user base, it's just not very vocal on kernel lists. :)
-
---jM/2AY6iSqMbsk1G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAmHYlIMACgkQ9dQjyAYL
-01A2JA/+L9JwmjJHTVt97zLB/gp/798jHIH5xpSIqAGns8OfFkzQ95dxlpb2U9vw
-QnNRixTQzfe+GISVL0FKMOQnAodV/FiSCGQU3ebudcPQXtrGtYHUT8Ijz9WL8+pR
-LEbZvDDW4JT2N8sGVcsiAtSER9kHRUpdNBPCdIxURmQf0Fgjj16cYV/cr3j8NQpw
-uXKAulKoHIWjD84jc1douEnwo6Eij7QA7nZ1N4PLesZ6cdPxLpKYMR7bWbf9r5Fd
-B6C8jKZKl+eETWJx7ECQ/z2BBeUNw1bwUK8F0MgF+Kb01V29ouGaB2eUP4JhBH1b
-zBhEM+N1dYjc3gzDDTJHURS0lm9Pzcg1Dj4nRYVEYbddU3wNd/kYPQIk+BmWoUH8
-h6xtMYCT3k+hL6Y59LVXra23PpktJljTFtMI8DXYmuJS+yy+dV7g1rn4Ui9FmF7B
-UmI4khTwZV2TQ1C0LsSuzwkBm71S27ziqmKVTci0hmzEFalls/Mr2rAP7dSwK4FE
-3kjQxOPKuiSgwV2+Odw4M6JQKChplAVOy6dzr8QIq3ULzaMoZ4LxX4JhvqvaK/0w
-vqRxoJ/OmC/pbHdVM/h7OnsS0t67UnlO8zJwuOAn03S7mpo67HZ/xKHCsJctF4Ca
-cwRnCVEeiYv1kjA2YEbjg9uohTtnfysNsoVA+rE7TNEqeWb4r1c=
-=ueZJ
------END PGP SIGNATURE-----
-
---jM/2AY6iSqMbsk1G--
+/Jarkko
