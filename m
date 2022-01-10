@@ -2,140 +2,121 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D56E348997A
-	for <lists+linux-security-module@lfdr.de>; Mon, 10 Jan 2022 14:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80E0489AA6
+	for <lists+linux-security-module@lfdr.de>; Mon, 10 Jan 2022 14:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiAJNL6 (ORCPT
+        id S233919AbiAJNuI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 10 Jan 2022 08:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbiAJNLr (ORCPT
+        Mon, 10 Jan 2022 08:50:08 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:33320 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230236AbiAJNuI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:11:47 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2119C034008
-        for <linux-security-module@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id t24so5550290edi.8
-        for <linux-security-module@vger.kernel.org>; Mon, 10 Jan 2022 05:11:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=Bgie3w5lZXcUpEJsNUNnYT9D80sz6831OKMgWSWMpAMR4c04HQM1hwHkoZ1AqHgJ5M
-         pQJfhFBsNTGc+jfMsWTuSDXhNBe5XPwJ8/UQZKbYcWTDQ68Eu4MBBVsHf0V3Baa+27Pp
-         IUJW/950IUGNsTto2NnsTW49/Cy4Vf+KfgzDT0+KZ2gcb/QkEKg3LEIj8qPJpiII0Qbk
-         buE3CbPl0T8T6omQLXT3KYJBxN98pPIrfxDam1Qs0diPFN43pWVugWbd8LU8WaIGviK3
-         O/t/NLMKhR03EdE8rMi5c8T5epCw09Yzc4YmAU5QrO9ZaREbayNwAtpm1SWYSR1IiBuY
-         5w9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=AKTHGTJjytwrttUfO4q+vT4Uhwff8/z+hdOOd2yRXx2BWAbE3MfVaSyJ/XF2ZcSDUE
-         1TdCiu0UasTPhP8bSaNuBUuGowBz2RH5lA1LwpgvewZXEiSqV+f+iJ6CE0+cYdPizQ98
-         KN8pVDEETvdsLP/DmF4n2Wt9gQvkYEIVhX6N6Y5gEHQEVlR+QR+G5BPYWfLU6859CeQV
-         w/YB9OenlEb8YCJXjBWD/uZ4EHWSdogUZYM+wYaCVITXJcNl1GJCtWr3oQJ1zD69IZqz
-         ytY+dmDzwEEet871AqC+rakMCgZGWc48t36gLgndw3sdJZiFB1c5ove3NYPCBiFbsj2P
-         IUyg==
-X-Gm-Message-State: AOAM533c8UB2CJl+5FCbYlRLXSkTw8h/332YArSQS9t+o3MqVQ7M6WYn
-        f1SAmVMri72kjfD19V5tmYJR0q+bLqCZG41l3C1OKx3BD2w=
-X-Google-Smtp-Source: ABdhPJyUuzfRq9+VAp3YIslVsNF7E8r6u+SDvjtiaFw6sfTA9uOxrmlrl9JDay/jDh10uqplhgk07a+YHTpM3Ge0znw=
-X-Received: by 2002:ac2:4c51:: with SMTP id o17mr60639917lfk.558.1641820293776;
- Mon, 10 Jan 2022 05:11:33 -0800 (PST)
+        Mon, 10 Jan 2022 08:50:08 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3CFF81F395;
+        Mon, 10 Jan 2022 13:50:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641822606; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=dsFwmuk0CX7ltVsRVZVwGSb46zqyAdrIjBZaVQwQYsw=;
+        b=Cxi4DKWB9qWnepRS9zf3XEXXuVPiwup7TAHvK+JLUGGtm0BerCUq/suWnWzntdzQYGF3vp
+        4A7gSVRUNwFiTa0Pn5a/y453sqAHJcRcsarbauzov8BOEh8AuFd4prI5YG3MIQrHAareCG
+        45Ry/WuimBqKLNFDp47Y0yZLBSubD2M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641822606;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=dsFwmuk0CX7ltVsRVZVwGSb46zqyAdrIjBZaVQwQYsw=;
+        b=M5mR11XFV1E1tlCtH8DkYBxALX63UOfVbEIwxOyXJ/UNwj3kNqIG/LUHUFY+E3Z4bsllSl
+        CmTHDgKRABSaB6AQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 28230A3B83;
+        Mon, 10 Jan 2022 13:50:03 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     Michal Suchanek <msuchanek@suse.de>, kexec@lists.infradead.org,
+        Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v4 0/6] KEXEC_SIG with appended signature
+Date:   Mon, 10 Jan 2022 14:49:52 +0100
+Message-Id: <cover.1641822505.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:a05:6504:15d1:0:0:0:0 with HTTP; Mon, 10 Jan 2022 05:11:32
- -0800 (PST)
-Reply-To: gtbank107@yahoo.com
-From:   Barr Robert Richter <westernunion.benin982@gmail.com>
-Date:   Mon, 10 Jan 2022 14:11:32 +0100
-Message-ID: <CAP=nHBK9zHzp_=-EVswWQiLxEoc+HV4oqddgtnEqf-9qYab_4Q@mail.gmail.com>
-Subject: Contact GT Bank-Benin to receive your transfer amount of $18.5m US Dollars.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Attn,Dear
-I need you to know that the fear of the LORD is
-the beginning of wisdom, and knowledge of the Holy One is
-understanding. As power of God Most High. And This is the confidence
-we have in approaching God, that if we ask anything according to his
-will, he hears us. I will make you know that Slow and steady wins the race.
-It is your turn to receive your overdue compensation funds total
-amount $18.5Milion  USD.
-I actualized that you will receive your transfer today without any more delay
-No More fee OK, Believe me , I am your Attorney standing here on your favor.
-I just concluded conversation with the Gt Bank Director, Mrs Mary Gate
-And She told me that your transfer is ready today
+Hello,
 
-So the Bank Asked you to contact them immediately by re-confirming
-your Bank details asap.
-Because this is the Only thing holding this transfer
-If you did not trust me and Mrs Mary Gate,Who Else will you Trust?
-For we are the ones trying to protect your funds here
-and make sure that your funds is secure.
-So Promisingly, I am here to assure you, that Grate Miracle is coming on
-your way, and this funds total amount of $18.500,000 is your
-compensation, entitlement inheritance overdue funds on your name.
-Which you cannot let anything delay you from receiving your funds now,
+This is a refresh of the KEXEC_SIG series.
 
-Finally i advised you to try your possible best and contact Gt Bank Benin
-once you get this message to receive your transfer $18.5 USD today.
-I know that a journey of thousand miles begins with a single step.
-Always put your best foot forward
-Try as hard as you can, God give you best.
-take my advice and follow the due process of your payment, the
-transfer will be released to
-you smoothly without any hitches or hindrance.
+This adds KEXEC_SIG support on powerpc and deduplicates the code dealing
+with appended signatures in the kernel.
 
-Contact DR.MRS MARY GATE, Director Gt bank-Benin to receive your
-transfer amount of $18.5m US Dollars
-It was deposited and registered to your name this morning.
-Contact the Bank now to know when they will transfer to your
-country today
+powerpc supports IMA_KEXEC but that's an exception rather than the norm.
+On the other hand, KEXEC_SIG is portable across platforms.
 
-Email id: gtbank107@yahoo.com
-Tel/mobile, +229 99069872
-Contact person, Mrs Mary Gate,Director Gt bank-Benin.
-Among the blind the one-eyed man is king
+For distributions to have uniform security features across platforms one
+option should be used on all platforms.
 
-As you sow, so you shall reap, i want you to receive your funds
-Best things in life are free
-Send to her your Bank Details as i listed here.
+Thanks
 
-Your account name-------------
-Your Bank Name----------------
-Account Number----------
-your Bank address----------
-Country-----------
-Your private phone number---------
-Routing Numbers-------------
-Swift Code-----------
+Michal
 
-Note, Your funds is %100 Percent ready for
-transfer.
-Everything you do remember that Good things come to those who wait.
-I have done this work for you with my personally effort, Honesty is
-the best policy.
-now your transfer is currently deposited with paying bank this morning.
-It is by the grace of God that I received Christ, having known the truth.
-I had no choice than to do what is lawful and justice in the
-sight of God for eternal life and in the sight of man for witness of
-God & His Mercies and glory upon my life.
+Previous revision: https://lore.kernel.org/linuxppc-dev/cover.1637862358.git.msuchanek@suse.de/
+Patched kernel tree: https://github.com/hramrach/kernel/tree/kexec_sig
 
-send this needed bank details to the bank today, so that you receive
-your transfer today as
-it is available for your confirmation today.
-Please do your best as a serious person and send the fee urgent, Note
-that this transfer of $18.500.000 M USD is a Gift from God to Bless
-you.
+Michal Suchanek (6):
+  s390/kexec_file: Don't opencode appended signature check.
+  powerpc/kexec_file: Add KEXEC_SIG support.
+  kexec_file: Don't opencode appended signature verification.
+  module: strip the signature marker in the verification function.
+  module: Use key_being_used_for for log messages in
+    verify_appended_signature
+  module: Move duplicate mod_check_sig users code to mod_parse_sig
 
-If you did not contact the bank urgent, finally the Bank will release
-your transfer of $18.500.000M USD to  Mr. David Bollen as your
-representative.
-So not allow another to claim your Money.
-Thanks For your Understanding.
+ arch/powerpc/Kconfig                     | 16 +++++++
+ arch/powerpc/kexec/elf_64.c              | 12 +++++
+ arch/s390/Kconfig                        |  2 +-
+ arch/s390/kernel/machine_kexec_file.c    | 41 +----------------
+ crypto/asymmetric_keys/asymmetric_type.c |  1 +
+ include/linux/module_signature.h         |  1 +
+ include/linux/verification.h             |  5 +++
+ kernel/module-internal.h                 |  2 -
+ kernel/module.c                          | 12 +++--
+ kernel/module_signature.c                | 56 +++++++++++++++++++++++-
+ kernel/module_signing.c                  | 34 +++++++-------
+ security/integrity/ima/ima_modsig.c      | 22 ++--------
+ 12 files changed, 116 insertions(+), 88 deletions(-)
 
-Barr Robert Richter, UN Attorney At Law Court-Benin
+-- 
+2.31.1
+
