@@ -2,77 +2,113 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AB349220B
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jan 2022 10:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9124924BF
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 Jan 2022 12:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345200AbiARJGn (ORCPT
+        id S235444AbiARLal (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 18 Jan 2022 04:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        Tue, 18 Jan 2022 06:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345217AbiARJGl (ORCPT
+        with ESMTP id S234741AbiARLak (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:06:41 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42DBC061755
-        for <linux-security-module@vger.kernel.org>; Tue, 18 Jan 2022 01:06:40 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id g12so1507597ybh.4
-        for <linux-security-module@vger.kernel.org>; Tue, 18 Jan 2022 01:06:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
-        b=Soz+QHT0dGLM8FndDi8+DmGrzF8Nand3R01M5J9drC3NXqHN7kmc4VY6l/NuWtUVfL
-         Pw1ipMH9eBCg/ZHqGLeAt2KZPu6XRfsWiJE2xzcq96Ba85LXlrKxOVNuY0HYvfKDfmKc
-         jAQ6EF695L6TTvaCdYqZtBN8gkAnqp1+r0RbNtIeu3qM6gm6h0M3GCKOMUuS25NPcq7T
-         m06EBwLGmWMwlcWjC1WtBCJ/c9tTXkQfsHougCLjPDZp39fgMD8pqVkLYWwbFdfOrAZL
-         FCMwtSnm8Hemf8tY2r2VyBfKOXtSL3AjGIsLn+yMreEST0ocUC4Xu0XEMGJmBV9pdbj2
-         rlHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
-        b=cNvItdQEWe+5kWwtAAaMOi9d/D80gixZPEuYvFQ4iTLrukJoGOl0GnjcLcaEgV/su7
-         Yf5xiHrYoldj06so/PcZvAD7KUARbLkkqiCjJ1DB3MhoA5CKkzwcgwwlxz9uYf04cAA9
-         2BV3iGPwahmlxTy0UywJ8eKw907ZzkJGbK1aEjPGEMwX4ZFMYqyhrEiImPyRPOfZA3tF
-         KygkHUjw+aYTt6XulCGhOMeB8FS/9JB/GpYdsdlFf44rPhEYa4h6WfZj4fDG+KQpaZGW
-         cId5rGj5TJCt24yQ+UVuYO4rcbdhWyJZC7MjVZTI2qkHpKHHuCp2u4+kPkC/a5Xxk190
-         mpYA==
-X-Gm-Message-State: AOAM530zGZIkxNMCfe1j4YpSbCcdBf4Ub9OhhtUuSRLf4F68mxPeWTmA
-        3QrHT7o8oHVQerOP+Rvk3zzCSGbBl+BOTF16xfE=
-X-Google-Smtp-Source: ABdhPJyw0yTCzDjS933NePR8DAFAXJuHa33nOCZujulUZ2idVfAerV+90UYpawy22l7XlVZmlrM9B7gLM03XAJNOkeI=
-X-Received: by 2002:a25:37c2:: with SMTP id e185mr32076301yba.333.1642496799696;
- Tue, 18 Jan 2022 01:06:39 -0800 (PST)
+        Tue, 18 Jan 2022 06:30:40 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E1CC061574;
+        Tue, 18 Jan 2022 03:30:39 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id AB34C1F43D80
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642505437;
+        bh=kufMAm/Wj7x6dHVgPDUeMEIq4cSzNUAHqpKv5RBtfqA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=C33nW21CxUr8A/lfefxHALgekm+lwm2zEx8Ka923Q5wBad9MKwb1Pt/OJnFd2+OuB
+         q+yY/27655wkmswBdVwEfZmhxhlUHW5rxIeIg/RrPGhNG8cBRVLzCxLDAXIY9X1+nb
+         S/v5i9xsCw+FWX909Qxv9be0n0/AcvdIAgf1COCymXW5VqMp5vDVcIs1GqPtwZG8HK
+         I3EL70KqLGNkhwGDpzGN5kOcT77gDWobyEAr4DtaN/NE5G4+4rAIAWDr0gcACuryfE
+         iZEzQjIPcd/ro4WInQOt+Vvm5aW6QtlLOd5NveR6EvNMvqAIfZfodbM7R4QxNnUVHt
+         6mUTXEk1gKFIg==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list),
+        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE (KVM)),
+        linux-security-module@vger.kernel.org (open list:LANDLOCK SECURITY
+        MODULE), netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        mptcp@lists.linux.dev (open list:NETWORKING [MPTCP]),
+        linux-mm@kvack.org (open list:MEMORY MANAGEMENT)
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH 00/10] selftests: Fix separate output directory builds
+Date:   Tue, 18 Jan 2022 16:28:59 +0500
+Message-Id: <20220118112909.1885705-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:06:38
- -0800 (PST)
-Reply-To: asil.ajwad@gmail.com
-From:   Asil Ajwad <graceyaogokamboule@gmail.com>
-Date:   Mon, 17 Jan 2022 21:06:38 -1200
-Message-ID: <CA+Yy_gDoLjOfusfXaCVeyK5wpATnnfHVgZ2fw-LqNg4nowYW8A@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Build of several selftests fail if separate output directory is
+specified by the following methods:
+1) make -C tools/testing/selftests O=<build_dir>
+2) export KBUILD_OUTPUT="build_dir"; make -C tools/testing/selftests
+
+Build fails because of several reasons:
+1) The kernel headers aren't found.
+2) The path of output objects is wrong and hence unaccessible.
+
+These problems can be solved by:
+1) Including the correct path of uapi header files
+2) By setting the BUILD variable correctly inside Makefile
+
+Following different build scnerios have been tested after making these
+changes:
+make -C tools/testing/selftests
+make -C tools/testing/selftests O=build
+make -C tools/testing/selftests o=/opt/build
+export KBUILD_OUTPUT="/opt/build"; make -C tools/testing/selftests
+export KBUILD_OUTPUT="build"; make -C tools/testing/selftests
+cd <any_dir>; make -C <src_path>/tools/testing/selftests
+cd <any_dir>; make -C <src_path>/tools/testing/selftests O=build
+
+Muhammad Usama Anjum (10):
+  selftests: set the BUILD variable to absolute path
+  selftests: Add and export a kernel uapi headers path
+  selftests: Correct the headers install path
+  selftests: futex: Add the uapi headers include variable
+  selftests: kvm: Add the uapi headers include variable
+  selftests: landlock: Add the uapi headers include variable
+  selftests: net: Add the uapi headers include variable
+  selftests: mptcp: Add the uapi headers include variable
+  selftests: vm: Add the uapi headers include variable
+  selftests: vm: remove dependecy from internal kernel macros
+
+ tools/testing/selftests/Makefile              | 32 +++++++++++++------
+ .../selftests/futex/functional/Makefile       |  5 ++-
+ tools/testing/selftests/kvm/Makefile          |  6 ++--
+ tools/testing/selftests/landlock/Makefile     | 11 ++-----
+ tools/testing/selftests/net/Makefile          |  2 +-
+ tools/testing/selftests/net/mptcp/Makefile    |  3 +-
+ tools/testing/selftests/vm/Makefile           |  2 +-
+ tools/testing/selftests/vm/userfaultfd.c      |  3 ++
+ 8 files changed, 35 insertions(+), 29 deletions(-)
+
 -- 
-Greetings,
+2.30.2
 
-I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
-an ATM Visa Card to withdraw money at, ATM Cash Machine in your
-country, if yes I want to transfer abounded fund the sum of $10.5million
-US-Dollars, to you from my country, this is part of the money that was
-abounded by our late old client a politician who unfortunately lost
-his life and was forced out of power Du to his greedy act, the bank will
-
-change the account details to your name, and apply for a Visa Card
-with your details, the Visa Card will be send to you, and you can be
-withdrawing money with it always, whatever any amount you withdraw
-daily, you will send 60% to me and you will take 40%, the Visa Card
-and the bank account will be on your name, I will be waiting for your
-response for more details, thanks to you a lot for giving me your time.
-
-regards,
-Mr.Asil Ajwad.
