@@ -2,244 +2,218 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E34D49C189
-	for <lists+linux-security-module@lfdr.de>; Wed, 26 Jan 2022 04:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACF649C368
+	for <lists+linux-security-module@lfdr.de>; Wed, 26 Jan 2022 07:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbiAZDAI (ORCPT
+        id S234414AbiAZGDW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 25 Jan 2022 22:00:08 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:38474 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236713AbiAZDAI (ORCPT
+        Wed, 26 Jan 2022 01:03:22 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:53574 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234275AbiAZGDW (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:00:08 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PMn0ao006704;
-        Wed, 26 Jan 2022 02:59:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=DX13d+PiMvfyMGWKE5ro69EtugCuC09WkcKuPazoMi0=;
- b=DIGUhdJi2OqJ4q++2pNL6JFMiYlWLxJCdXbPkha3IEkCwh96ZlROrkrS4+TEqhkBapXW
- Cd+f/1TaGxnZDytEKU394d2TGokJSO/WbHPKz7ecweT9xJKPtyj5q+SMHDgB6NvkSZvg
- 17ycbJTtgosU9bt+4XULW977vXZbA2+dW51C2JGJDCfJeP9NUZlGf9FC6ZfB3gowlSfE
- 04heSGGOSGwFRNjVikqqFLTlKLcXLVCIjdBZDkUgGyxNELThoRk4dkNDq1subfQOU+Pa
- DWrOub4JygMq9XVWY+999cGo/z6P8/nIwpcdBdJ+dF/Na25jB+uMH4SopMaJGhwKEabd AA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dsvmjdgrg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 02:59:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20Q2oSt1068412;
-        Wed, 26 Jan 2022 02:59:47 GMT
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2049.outbound.protection.outlook.com [104.47.74.49])
-        by userp3020.oracle.com with ESMTP id 3drbcq7vab-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 02:59:47 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Aw6kUkN/Ckqz2k9l2SQ3tSKXSSidrQEwv7Kh1E3L0ri++xYoD5dNC+OogOcZkt4PNjuGhBj5uVZCKtD86MWfshvC65Ax9j0V+lAj6hAiOQ76tQ6c5blEv2z8CwRzq45+syMzIJTWBCWPIf/tXwz7bJSaGB+wRPJnCCRxXQnW4YetbE4k+OmyhYcqhiYmaWjgKIMgQyaoXUK1s2lMPLsC+ZcopMrJHPobfhfkvPElrrH3PabZsDXwdwWyau+rOMNurvHFiwuXB0GCZy+BqW6hv6Pmryh/Tkd7yhSMuOXz1ctDaRz5vueYuMbdp4x5NZYUd2Th64OzStFXZYvjSKs4Lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DX13d+PiMvfyMGWKE5ro69EtugCuC09WkcKuPazoMi0=;
- b=Hfxl8wE7Sq5w4+sU0Kh7CLg8H0A7itm2jiBBcPZhaK69pQ9dgSTnQ5s7vV0BbcK8RjGYNi0T9BtlwfVG3k8VHDOF0TfTr9hDvMkm2vcLuMVPK31dHTUyBdD1Hjtpl1nQpGd+fshgJ6VTUYvcbRAAc3J0WuJyVaRfQH+qErXFp9zKwQzCEww04J8JbiwpvlaKxCdT3aKwLz00o7LdNRraXT1DDQ2OT43Fn5hms3wRXpinzwMpEkiDQUqGTWHZel9ucGZWkiMidE/lplyckPh3SeDGefU7TfNWS7hAIAXSWkG8a+IBvj7q3DxMvofDy3zgrECR+0yZxRtZ78SZ7mmFVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DX13d+PiMvfyMGWKE5ro69EtugCuC09WkcKuPazoMi0=;
- b=u2gpJMN04u61V82Z/XTDtY7WWjSbY2DbW5LH0USkzs/yw7sxdaelWlgDs9kzGAY0jmzKgMTOYYw5TWvRrFwo6721zUSrku8IUt75jBDOBU84ltNx3l4jz8yg9KpoumOyNEbQaIqKqqN/tseQ2CKS1YmyCFByt0NjZkvF5f/Jb1o=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by SJ0PR10MB4654.namprd10.prod.outlook.com (2603:10b6:a03:2d2::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Wed, 26 Jan
- 2022 02:59:45 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::cc63:ba5d:5d87:579a]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::cc63:ba5d:5d87:579a%5]) with mapi id 15.20.4909.017; Wed, 26 Jan 2022
- 02:59:45 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
-        jarkko@kernel.org
-Cc:     jmorris@namei.org, serge@hallyn.com, eric.snowberg@oracle.com,
-        nayna@linux.ibm.com, zohar@linux.ibm.com, keescook@chromium.org,
-        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        konrad.wilk@oracle.com
-Subject: [PATCH v10 8/8] integrity: Only use machine keyring when uefi_check_trust_mok_keys is true
-Date:   Tue, 25 Jan 2022 21:58:34 -0500
-Message-Id: <20220126025834.255493-9-eric.snowberg@oracle.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20220126025834.255493-1-eric.snowberg@oracle.com>
-References: <20220126025834.255493-1-eric.snowberg@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: CY4PR04CA0027.namprd04.prod.outlook.com
- (2603:10b6:903:c6::13) To CH2PR10MB4150.namprd10.prod.outlook.com
- (2603:10b6:610:ac::13)
+        Wed, 26 Jan 2022 01:03:22 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id A45EA866; Wed, 26 Jan 2022 00:03:20 -0600 (CST)
+Date:   Wed, 26 Jan 2022 00:03:20 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Stephen Muth <smuth4@gmail.com>, ceph-devel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        linux-security-module@vger.kernel.org
+Subject: Re: "kernel NULL pointer dereference" crash when attempting a write
+Message-ID: <20220126060320.GE21272@mail.hallyn.com>
+References: <CAHC9VhR1efuTR_zLLhmOyS4EHT1oHgA1d_StooKXmFf9WGODyA@mail.gmail.com>
+ <a77ca75bfb69f527272291b4e6556fc46c37f9df.camel@kernel.org>
+ <20220125111350.t2jgmqdvshgr7doi@wittgenstein>
+ <d5490a7c87b8c435b3c7bdb8d2c8edef2c2a576a.camel@kernel.org>
+ <20220125121213.ontt4fide32phuzl@wittgenstein>
+ <ab92b28e953601785467cdf8ca67dd5b0ef55105.camel@kernel.org>
+ <YfAdtAaUfz38xtmf@redhat.com>
+ <2f1c3741-df38-1179-5e3f-4cd1c4516e76@schaufler-ca.com>
+ <CAHC9VhRgKZDzyNOhd-0nmKxBdnzQW5FHRwg9hHjGrUEPMhqaDg@mail.gmail.com>
+ <YfCVesVeB0V++tok@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7d470f1c-e83c-4659-9281-08d9e077e853
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB4654:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB4654F54FD9465BE02B6E098A87209@SJ0PR10MB4654.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L0V4BHUUWFtNgkWsEGdHoIqyLmOYMhiAsymKY7l3Hf2WYvxoIkHPnSFvozjR9UGhAIBeFUHO2k3ByK/8Fjq9lU7t9vd/cwNF+hh1gBoXWoP++pzXEswoEE9+t3DkeDbDNqVmNix0lE+prKEUHzwTFtcim8ikcziOx/QDV1D1eQMEhl8/Z2QWA0rxBB5P4ntmDn/MzJpP68N37vyKaX3AxfJIGx/Fc9kvzN7CC2YYaD8nAIx0IYYVjOKVEzm+wV9nJWVEq9l53V3PWSY7Wrg80pFBxgGUcYPfRZzX4iNJoBHLpoYFBwXfCIjk0LComzx9495p7q6QfsTVJ05AqARvA5OgZbKCdgXPe31V2mZJ3fXDJ5WcSVblzobGXEge3JkdDJnqr2UY9E5MmF3qqR1I3lgDAgR0n4VCLXJ7aXM5oVjQ73aDa7q1KZ1/CNpAyI0siqj29PccUmeO0PCHh0Vy+HiqJM51ucPZcANPbHtrwpQ2OC4vaKupKe9XjUCP0sxafXJP7fuGE+ojUrFOOTBhjFhxuDXAIapCObgSUkNtRIEilYzRKM/+6tDmScpuFNdTYHr2oWiCsEb5NAV2hgR+QK/0bwueOfaiIo/5PWgaS25ELsHwTJk1siqCC4OKyiJw7DKEhz9gKM6FlbIg61s5XfpuzdmpFwM0Ly5hq8IS0/oTuhsaWhTMq2Iur70dT0MOFhwADvK5r8/42Ch1zE3p+w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(7416002)(6666004)(83380400001)(8936002)(8676002)(5660300002)(1076003)(66556008)(66476007)(52116002)(6486002)(66946007)(316002)(2616005)(2906002)(44832011)(86362001)(36756003)(4326008)(508600001)(186003)(6512007)(107886003)(26005)(6506007)(38350700002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6m1aX3joed9PmrLhUs5zlPmiGzH6NzuAfgBPARVuH+76f9okX8yRI5NfObV4?=
- =?us-ascii?Q?oVYdkm8vTIMLJKFNJOMC0B3FadR2tg485s+/kTnGMYMk1FRFBxPif5MsK6Ia?=
- =?us-ascii?Q?0bZ69e/KsngJ0FOCDSmqH9f4Jin27MXGDSXFRcZHmdCBSq/0BxXqj5T04kLR?=
- =?us-ascii?Q?9bcjnqLTkEzPaaLzJHKiOQ3FTIYfFxpuUZblEYSfmwBEWoPwSn9vv+GMPEK/?=
- =?us-ascii?Q?UaKVOQU9IARmFww7NIfG+FOIUh6hpyuX+kaPwnOYBqU7BXVQmnq3XITCJgow?=
- =?us-ascii?Q?GrIUnNYJzIk3wu1lABay/BgvXjuCR3c5ej0QLhJ4pWAlUDaHH0F47BaYq/qB?=
- =?us-ascii?Q?H5nLM7Fp3xuE9+BGcnkr2GpL37qXh+qxtQo5H4veELV8wmt6bv+dhWousXeY?=
- =?us-ascii?Q?NycLb2dGcZjsYYQN9EjqcZwa4xa0pMnKhOjn9ghodQ5CRMKWy+F9RN3erANI?=
- =?us-ascii?Q?Q2RjmHCytpdx/GggBsPxtPcFW/roDvC74vvFutT9dSpkMB5+7k9ixdKwfi3v?=
- =?us-ascii?Q?/Jxvmwrj/+8o8ayNdO1n8JLbbnOtvYPtunTkcORVC1o7h9h4eL/kdi7Htkc9?=
- =?us-ascii?Q?L3/LVE9ZpbdV5g2W6XgyEfSMaO/kRtt+um7mP0ah+pCPsBATeA0DswXjq1t4?=
- =?us-ascii?Q?4K+TCpPQF1NhI5B/gsBX9wkDpfTVt8c9bwrvp4x2tS5FpBiQVWo1X3twwB4s?=
- =?us-ascii?Q?5KTuaoCgg5ZIvgpQhsxLn0h1yg24S+cPSjkNEAjc6TdI/EiPyn1f2U41BHRw?=
- =?us-ascii?Q?drP47/uwmQHAUAkaV6gSOC4oBRRvCi0uZ+57TGbrRcC5WJPSD1mZZ0yq4J/I?=
- =?us-ascii?Q?ZrH9Pfk+ZAku2My1SiyAbvRlJLmg+t3n9D/G0rdKnlQmJn6A+cH4e+BQrxNr?=
- =?us-ascii?Q?zXGwZ2XVRFWzZC4yu2b1EHqeoGk63qIzRPFXvRqv/4mvR354j0CkdbfhleTJ?=
- =?us-ascii?Q?vYxHgwozeCOQ7w71B1SwNtWdEEBAQTrmXobApclBWNrTXZ5LU5XtnaxXq3jw?=
- =?us-ascii?Q?Ud+ZkwuLVd0hYO5m5XfIGgyJYArCcA0E8BV5/vY7JQdP022VSaBmnzpiuewr?=
- =?us-ascii?Q?Z48/x3Nix2p4oUFtEsoO42CdhktkdDkJC3QrI7XMDw6DTuhNm7xj22gIQTig?=
- =?us-ascii?Q?Mp/fo6PjpSvZ8BZX++q594HdsM9kZJKZRP3H+IF6hlHYLC7wlgkURnGjvxXL?=
- =?us-ascii?Q?V9AE+dSMr9yAs4Q+EBuWwzQnQww24saElzXi3n5YU40V0IYRz1otvVUMyMOQ?=
- =?us-ascii?Q?AvuFIR0g8Vx1hgNbfJKkWfhhBzvDudtadSByYMqf9kSEbfkqYPj10AwHpMYm?=
- =?us-ascii?Q?hq6LCcsuzU0lEqoSFJjryukz9n9wbq7pbFTzq2xpZo0lA1hByFk/qg2OGfLr?=
- =?us-ascii?Q?IGt04siCdmhonBQs2mu2KSOF6eMhFtoFFt2xgK8Lvj1XeJ/8oABY97UK+JLG?=
- =?us-ascii?Q?d0EM9wnz4KXRUkWH/rZSDss19czwy3eXeo+wa5ndXavzWDo/Ae8vZS6ex2n6?=
- =?us-ascii?Q?FfKdCyPCLVG+hQNLWRAqfkpIlQ9gRrwSljoV4nYPDU/goH3bcgvFQx51LKGf?=
- =?us-ascii?Q?s3YA/Aa9b7FEtrAHjRqdU/EfwAnEv6TfQB92IiLi0gosrzm5VtH20KZgi2/9?=
- =?us-ascii?Q?JaiTnob0MSVtiUvopEdv0i0QtBPOudAhsAZogD75wU/DGWnlySWWTLUippri?=
- =?us-ascii?Q?OALt+i38G1R0WzqwBN0ZVl0HMkc=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d470f1c-e83c-4659-9281-08d9e077e853
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2022 02:59:45.4406
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ET8OXapE9S/dKW7SZj94lAtVV1t5Zr/CHETcUWxO9oZ5xSGS4C3srETzq/mWHCKKLT4iIhHbCS6lvwrK4Lk+KnEKUn3S/HeYywkXYaDYN6o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4654
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10238 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 malwarescore=0
- spamscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201260011
-X-Proofpoint-GUID: AHqjLRdYUHiKVdhuz4W9ATjBDJpjW-3m
-X-Proofpoint-ORIG-GUID: AHqjLRdYUHiKVdhuz4W9ATjBDJpjW-3m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfCVesVeB0V++tok@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the introduction of uefi_check_trust_mok_keys, it signifies the end-
-user wants to trust the machine keyring as trusted keys.  If they have
-chosen to trust the machine keyring, load the qualifying keys into it
-during boot, then link it to the secondary keyring .  If the user has not
-chosen to trust the machine keyring, it will be empty and not linked to
-the secondary keyring.
+On Tue, Jan 25, 2022 at 07:27:38PM -0500, Vivek Goyal wrote:
+> On Tue, Jan 25, 2022 at 02:57:46PM -0500, Paul Moore wrote:
+> > 
+> > > > Looks like dentry_init_security() can't handle multiple LSMs. We probably
+> > > > should disallow all other LSMs to register a hook for this and only
+> > > > allow SELinux to register a hook.
+> > >
+> > > Not acceptable. The fix to dentry_init_security() is easy.
+> > 
+> > Sounds good to me, Vivek did you want to put together a patch for
+> > this?  If not, let me know and I'll put one together.
+> 
+> Ok, I have put together this test patch. Stephen Muth, can you please
+> test it and let us know if it solves your problem.
+> 
+> I enabled CONFIG_BPF_LSM=y but that itself does not seem to be sufficient
+> for BPF to register a hook for dentry_init_security. So I don't see
+> it being called in my testing. IOW, I have not been able to reproduce
+> the issue and will rely on testing from Stephen to know if it it indeed
+> solved the problem for him or not.
+> 
+> -------------------8<--------------------
+> 
+> Subject: lsm: dentry_init_security(): Deal with multiple LSMs registering hook
+> 
+> A ceph user has reported that ceph is crashing with kernel NULL pointer
+> dereference. Following is backtrace.
+> 
+> /proc/version: Linux version 5.16.2-arch1-1 (linux@archlinux) (gcc (GCC)
+> 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Thu, 20 Jan 2022
+> 16:18:29 +0000
+> distro / arch: Arch Linux / x86_64
+> SELinux is not enabled
+> ceph cluster version: 16.2.7 (dd0603118f56ab514f133c8d2e3adfc983942503)
+> 
+> relevant dmesg output:
+> [   30.947129] BUG: kernel NULL pointer dereference, address:
+> 0000000000000000
+> [   30.947206] #PF: supervisor read access in kernel mode
+> [   30.947258] #PF: error_code(0x0000) - not-present page
+> [   30.947310] PGD 0 P4D 0
+> [   30.947342] Oops: 0000 [#1] PREEMPT SMP PTI
+> [   30.947388] CPU: 5 PID: 778 Comm: touch Not tainted 5.16.2-arch1-1 #1
+> 86fbf2c313cc37a553d65deb81d98e9dcc2a3659
+> [   30.947486] Hardware name: Gigabyte Technology Co., Ltd. B365M
+> DS3H/B365M DS3H, BIOS F5 08/13/2019
+> [   30.947569] RIP: 0010:strlen+0x0/0x20
+> [   30.947616] Code: b6 07 38 d0 74 16 48 83 c7 01 84 c0 74 05 48 39 f7 75
+> ec 31 c0 31 d2 89 d6 89 d7 c3 48 89 f8 31 d2 89 d6 89 d7 c3 0
+> f 1f 40 00 <80> 3f 00 74 12 48 89 f8 48 83 c0 01 80 38 00 75 f7 48 29 f8 31
+> ff
+> [   30.947782] RSP: 0018:ffffa4ed80ffbbb8 EFLAGS: 00010246
+> [   30.947836] RAX: 0000000000000000 RBX: ffffa4ed80ffbc60 RCX:
+> 0000000000000000
+> [   30.947904] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+> 0000000000000000
+> [   30.947971] RBP: ffff94b0d15c0ae0 R08: 0000000000000000 R09:
+> 0000000000000000
+> [   30.948040] R10: 0000000000000000 R11: 0000000000000000 R12:
+> 0000000000000000
+> [   30.948106] R13: 0000000000000001 R14: ffffa4ed80ffbc60 R15:
+> 0000000000000000
+> [   30.948174] FS:  00007fc7520f0740(0000) GS:ffff94b7ced40000(0000)
+> knlGS:0000000000000000
+> [   30.948252] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   30.948308] CR2: 0000000000000000 CR3: 0000000104a40001 CR4:
+> 00000000003706e0
+> [   30.948376] Call Trace:
+> [   30.948404]  <TASK>
+> [   30.948431]  ceph_security_init_secctx+0x7b/0x240 [ceph
+> 49f9c4b9bf5be8760f19f1747e26da33920bce4b]
+> [   30.948582]  ceph_atomic_open+0x51e/0x8a0 [ceph
+> 49f9c4b9bf5be8760f19f1747e26da33920bce4b]
+> [   30.948708]  ? get_cached_acl+0x4d/0xa0
+> [   30.948759]  path_openat+0x60d/0x1030
+> [   30.948809]  do_filp_open+0xa5/0x150
+> [   30.948859]  do_sys_openat2+0xc4/0x190
+> [   30.948904]  __x64_sys_openat+0x53/0xa0
+> [   30.948948]  do_syscall_64+0x5c/0x90
+> [   30.948989]  ? exc_page_fault+0x72/0x180
+> [   30.949034]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [   30.949091] RIP: 0033:0x7fc7521e25bb
+> [   30.950849] Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 00
+> 00 00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 0
+> 0 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 91 00 00 00 48 8b 54 24 28 64 48 2b 14
+> 25
+> 
+> Core of the problem is that ceph checks for return code from
+> security_dentry_init_security() and if return code is 0, it assumes
+> everything is fine and continues to call strlen(name), which crashes.
+> 
+> Typically SELinux LSM returns 0 and sets name to "security.selinux" and
+> it is not a problem. Or if selinux is not compiled in or disabled, it
+> returns -EOPNOTSUP and ceph deals with it.
+> 
+> But somehow in this configuration, 0 is being returned and "name" is
+> not being initialized, and that's creating the problem.
+> 
+> Our suspicion is that BPF LSM is registering a hook for
+> dentry_init_security() and returns hook default of 0. I have not been
+> able to configure it that way so I am not 100% sure.
+> 
+> LSM_HOOK(int, 0, dentry_init_security, struct dentry *dentry,...)
+> 
+> dentry_init_security() is written in such a way that it expects only one
+> LSM to register the hook. Atleast that's the expectation with current code.
+> 
+> If another LSM returns a hook and returns default, it will simply return
+> 0 as of now and that will break ceph. 
+> 
+> Anyway, suggestion is that change semantics of this hook a bit. If there
+> are no LSMs or no LSM is taking ownership and initializing security context,
+> then return -EOPNOTSUP. Also allow at max one LSM to initialize security
+> context. This hook can't deal with multiple LSMs trying to init security
+> context. This patch implements this new behavior.
+> 
+> Reported-by: Stephen Muth <smuth4@gmail.com>
+> Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Yet-to-by-Signed-off-by: Vivek Goyal <vgoyal@redhat.com>
 
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v4: Initial version
-v5: Rename to machine keyring
-v6: Unmodified from v5
-v7: Made trust_mok static
-v8: Unmodified from v7
-v10: Added Jarkko's Reviewed-by
----
- security/integrity/digsig.c                      |  2 +-
- security/integrity/integrity.h                   |  5 +++++
- .../integrity/platform_certs/keyring_handler.c   |  2 +-
- .../integrity/platform_certs/machine_keyring.c   | 16 ++++++++++++++++
- 4 files changed, 23 insertions(+), 2 deletions(-)
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
 
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index 7b719aa76188..c8c8a4a4e7a0 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -112,7 +112,7 @@ static int __init __integrity_init_keyring(const unsigned int id,
- 	} else {
- 		if (id == INTEGRITY_KEYRING_PLATFORM)
- 			set_platform_trusted_keys(keyring[id]);
--		if (id == INTEGRITY_KEYRING_MACHINE)
-+		if (id == INTEGRITY_KEYRING_MACHINE && trust_moklist())
- 			set_machine_trusted_keys(keyring[id]);
- 		if (id == INTEGRITY_KEYRING_IMA)
- 			load_module_cert(keyring[id]);
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 730771eececd..2e214c761158 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -287,9 +287,14 @@ static inline void __init add_to_platform_keyring(const char *source,
- 
- #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
- void __init add_to_machine_keyring(const char *source, const void *data, size_t len);
-+bool __init trust_moklist(void);
- #else
- static inline void __init add_to_machine_keyring(const char *source,
- 						  const void *data, size_t len)
- {
- }
-+static inline bool __init trust_moklist(void)
-+{
-+	return false;
-+}
- #endif
-diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
-index 4872850d081f..1db4d3b4356d 100644
---- a/security/integrity/platform_certs/keyring_handler.c
-+++ b/security/integrity/platform_certs/keyring_handler.c
-@@ -83,7 +83,7 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
- __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
- {
- 	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0) {
--		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
-+		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && trust_moklist())
- 			return add_to_machine_keyring;
- 		else
- 			return add_to_platform_keyring;
-diff --git a/security/integrity/platform_certs/machine_keyring.c b/security/integrity/platform_certs/machine_keyring.c
-index 09fd8f20c756..7aaed7950b6e 100644
---- a/security/integrity/platform_certs/machine_keyring.c
-+++ b/security/integrity/platform_certs/machine_keyring.c
-@@ -8,6 +8,8 @@
- #include <linux/efi.h>
- #include "../integrity.h"
- 
-+static bool trust_mok;
-+
- static __init int machine_keyring_init(void)
- {
- 	int rc;
-@@ -59,3 +61,17 @@ static __init bool uefi_check_trust_mok_keys(void)
- 
- 	return false;
- }
-+
-+bool __init trust_moklist(void)
-+{
-+	static bool initialized;
-+
-+	if (!initialized) {
-+		initialized = true;
-+
-+		if (uefi_check_trust_mok_keys())
-+			trust_mok = true;
-+	}
-+
-+	return trust_mok;
-+}
--- 
-2.18.4
+Seems good, and indeed we can't have >1 such LSMS writing to the
+xattr.  Thanks.
 
+> ---
+>  include/linux/lsm_hook_defs.h |    2 +-
+>  security/security.c           |   15 +++++++++++++--
+>  2 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> Index: redhat-linux/include/linux/lsm_hook_defs.h
+> ===================================================================
+> --- redhat-linux.orig/include/linux/lsm_hook_defs.h	2022-01-24 14:56:14.338030140 -0500
+> +++ redhat-linux/include/linux/lsm_hook_defs.h	2022-01-25 18:48:46.917496696 -0500
+> @@ -80,7 +80,7 @@ LSM_HOOK(int, 0, sb_clone_mnt_opts, cons
+>  	 unsigned long *set_kern_flags)
+>  LSM_HOOK(int, 0, move_mount, const struct path *from_path,
+>  	 const struct path *to_path)
+> -LSM_HOOK(int, 0, dentry_init_security, struct dentry *dentry,
+> +LSM_HOOK(int, -EOPNOTSUPP, dentry_init_security, struct dentry *dentry,
+>  	 int mode, const struct qstr *name, const char **xattr_name,
+>  	 void **ctx, u32 *ctxlen)
+>  LSM_HOOK(int, 0, dentry_create_files_as, struct dentry *dentry, int mode,
+> Index: redhat-linux/security/security.c
+> ===================================================================
+> --- redhat-linux.orig/security/security.c	2022-01-25 18:46:59.166496696 -0500
+> +++ redhat-linux/security/security.c	2022-01-25 18:56:25.251496696 -0500
+> @@ -1048,8 +1048,19 @@ int security_dentry_init_security(struct
+>  				  const char **xattr_name, void **ctx,
+>  				  u32 *ctxlen)
+>  {
+> -	return call_int_hook(dentry_init_security, -EOPNOTSUPP, dentry, mode,
+> -				name, xattr_name, ctx, ctxlen);
+> +	struct security_hook_list *hp;
+> +	int rc;
+> +
+> +	/*
+> +	 * Only one module will provide a security context.
+> +	 */
+> +	hlist_for_each_entry(hp, &security_hook_heads.dentry_init_security, list) {
+> +		rc = hp->hook.dentry_init_security(dentry, mode, name,
+> +						   xattr_name, ctx, ctxlen);
+> +		if (rc != LSM_RET_DEFAULT(dentry_init_security))
+> +			return rc;
+> +	}
+> +	return LSM_RET_DEFAULT(dentry_init_security);
+>  }
+>  EXPORT_SYMBOL(security_dentry_init_security);
+>  
