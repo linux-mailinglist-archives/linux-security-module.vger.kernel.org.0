@@ -2,120 +2,67 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811BC4A32B9
-	for <lists+linux-security-module@lfdr.de>; Sun, 30 Jan 2022 01:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D2F4A33DD
+	for <lists+linux-security-module@lfdr.de>; Sun, 30 Jan 2022 05:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353479AbiA3ADI (ORCPT
+        id S1354190AbiA3E2j (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 29 Jan 2022 19:03:08 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:49772
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353476AbiA3ADH (ORCPT
+        Sat, 29 Jan 2022 23:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354215AbiA3E2a (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:03:07 -0500
-Received: from [192.168.192.153] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 4647D3F07C;
-        Sun, 30 Jan 2022 00:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643500986;
-        bh=7k+y7PJ3gcJlzXgorU2zNnjUpve3rlNlya9TVwYp4hk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=jENINqRqw3pqbJmZcbRC9FDajyZ8MAcWWeoUZJOf8ZlWcSzM3o6dXNdkxgL53QmtH
-         1coGNJop/zo/HWBCHCN4IkbM6FKfz/YsdWp43KqLKDfVGH668cEREXFKO4WSABTrIn
-         vYvuL3w5QlTrVm38J5bX/v6yXvverFoBmfFcIscq/lTwhIpJJUcfT1PmFMmkiJz+ge
-         +BEipTyTjA2LrxJe23wa79vmXMHfCcqKi7BZlFay+/E5oJf6gZdw4gMCeNw6Iappzb
-         iqRkDOintBf2DiavnqexfcmXbjY/iWYq6rhpiQ4LH5W00yGE8j3/rbG+N3JV5YP3/6
-         wknNkY6kYzWRQ==
-Message-ID: <9836f3d4-186f-7a6e-448d-8e94be5f634f@canonical.com>
-Date:   Sat, 29 Jan 2022 16:03:03 -0800
+        Sat, 29 Jan 2022 23:28:30 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709DEC0613E3
+        for <linux-security-module@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id w81so8171342ybg.12
+        for <linux-security-module@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
+         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
+         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
+         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
+         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
+         5U2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=fDydhnSQKO02unQ1URAzYsERUA9y9yNeDV8eE10r3MXgnbRYBV1gaBQrCckBllJM8E
+         iS7IKzMKQ+nng3XP9uICOf7zeRgClYSgL05nz4sPjIIV1mN8GE4rZwSrKmjbT4g5clqZ
+         jk15DgwqNNRcLZTpITUO300R9tCMnl+1dXbz9IRotzN/hBL/K3ssN39RtPMH4a/L7+3Y
+         Te57Iwu5OJR7O3LWZgOpjRq5s1Tz10XyJAgP2kcQns7ZHoGIdopDRD2gYGAki/mi5ZLY
+         bMRrk7VYNwRj0fIGH55j3wi7uaL+TiT8p0MK3Z+FEfc3Lxl+DsQhwvv3XrEn/4UMxcot
+         rLFA==
+X-Gm-Message-State: AOAM530Y0pxjDIv2MOTwFFgAXF5PGznWSejpcGOlcUMg8Ob3Qbo2gtLA
+        Sw0gTwFIq+Um/UeJLzoBS7XNVPgF27B3JGiduaX+hBe65Mk=
+X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
+X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
+ Sat, 29 Jan 2022 20:28:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next 3/3] apparmor: Fix some kernel-doc comments
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, serge@hallyn.com
-Cc:     jmorris@namei.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220129025229.39663-1-yang.lee@linux.alibaba.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20220129025229.39663-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
+ 20:28:13 -0800 (PST)
+Reply-To: mrs.bill.chantalone01@gmail.com
+From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
+Date:   Sun, 30 Jan 2022 05:28:13 +0100
+Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
+Subject: Hello....
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 1/28/22 18:52, Yang Li wrote:
-> Don't use /** for non-kernel-doc comments and change function name
-> aa_mangle_name to mangle_name in kernel-doc comment to Remove some
-> warnings found by running scripts/kernel-doc, which is caused by
-> using 'make W=1'.
-> 
-> security/apparmor/apparmorfs.c:1503: warning: Cannot understand  *
->  on line 1503 - I thought it was a doc line
-> security/apparmor/apparmorfs.c:1530: warning: Cannot understand  *
->  on line 1530 - I thought it was a doc line
-> security/apparmor/apparmorfs.c:1892: warning: Cannot understand  *
->  on line 1892 - I thought it was a doc line
-> security/apparmor/apparmorfs.c:108: warning: expecting prototype for
-> aa_mangle_name(). Prototype was for mangle_name() instead
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+You have been compensated with the sum of 9.5 million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number  + 1 6465853907  this my email.ID
+( mrs.bill.chantal.roland@gmail.com )  contact  me
 
-just for completeness (this is a dup of [PATCH 3/3] apparmor: Fix some kernel-doc comments)
+Thanks my
 
-Acked-by: John Johansen <john.johansen@canonical.com>
-
-I have pulled this into my tree
-
-> ---
->  security/apparmor/apparmorfs.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorfs.c
-> index 15efe4076fc4..4d7df859542d 100644
-> --- a/security/apparmor/apparmorfs.c
-> +++ b/security/apparmor/apparmorfs.c
-> @@ -98,7 +98,7 @@ static struct rawdata_f_data *rawdata_f_data_alloc(size_t size)
->  #endif
->  
->  /**
-> - * aa_mangle_name - mangle a profile name to std profile layout form
-> + * mangle_name - mangle a profile name to std profile layout form
->   * @name: profile name to mangle  (NOT NULL)
->   * @target: buffer to store mangled name, same length as @name (MAYBE NULL)
->   *
-> @@ -1499,7 +1499,7 @@ int __aa_fs_create_rawdata(struct aa_ns *ns, struct aa_loaddata *rawdata)
->  
->  /** fns to setup dynamic per profile/namespace files **/
->  
-> -/**
-> +/*
->   *
->   * Requires: @profile->ns->lock held
->   */
-> @@ -1526,7 +1526,7 @@ void __aafs_profile_rmdir(struct aa_profile *profile)
->  	}
->  }
->  
-> -/**
-> +/*
->   *
->   * Requires: @old->ns->lock held
->   */
-> @@ -1888,7 +1888,7 @@ static void __aa_fs_list_remove_rawdata(struct aa_ns *ns)
->  		__aa_fs_remove_rawdata(ent);
->  }
->  
-> -/**
-> +/*
->   *
->   * Requires: @ns->lock held
->   */
-
+mrs bill chantal
