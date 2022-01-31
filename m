@@ -2,91 +2,121 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC3C4A51B4
-	for <lists+linux-security-module@lfdr.de>; Mon, 31 Jan 2022 22:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6264A525D
+	for <lists+linux-security-module@lfdr.de>; Mon, 31 Jan 2022 23:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380682AbiAaVkt (ORCPT
+        id S231602AbiAaW3H (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 31 Jan 2022 16:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381224AbiAaVir (ORCPT
+        Mon, 31 Jan 2022 17:29:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56674 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230136AbiAaW3H (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 31 Jan 2022 16:38:47 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA4FC06176A
-        for <linux-security-module@vger.kernel.org>; Mon, 31 Jan 2022 13:38:20 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id b186so23219743oif.1
-        for <linux-security-module@vger.kernel.org>; Mon, 31 Jan 2022 13:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=dEuqzCa7Zlz6s4mRGbRbRWXXanD59qsT+xmKk7tBbCVL8shmNgt9pnuL3r3GZQALql
-         Y63DqHUGCnZO0yzAtzp7ZNS2CuC8pMKUMaMtNqE3s9gB45FDt9/C7CdeYDqwmv7HZJbj
-         h6fZit5aG7dGp8FvXKTscfcGshyIKAGZl/Y4NFvWe+GDkg5MDDBzPsbgzyvzZ7B1mfX4
-         ltlQ0tRJrdsWlCdvxMPpvS+PhwNDM1Zp7MYHnfnHzWMTP4bbhrhxbQSB0Xw9LPR0gSp/
-         L2Vas/DZH4ZiZyplfhihUfOHaOD2GjtH1tg3ZI6lVgxDcwRnl8d4U3qCI5tj+07J/ZXk
-         SzvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=5qcGrvaUIiubuXzAffeYKk6aXMf+HsHlSYzJxIERVLFVtlH+QdxnXsoP2G4TnLBX1a
-         zX44SSb1zoLRbw+v08bJaHY7/JxcWjen1IA1gKS/5zw8pt6TPPAs64oFWxHIHR5778Jk
-         mQ0CdgAt8eqGPdiK5l6lgBnCVUdJ6wR8G89Hp4XNWZH+GAh+ca0SHjyhyEoHD2WTrVtf
-         r0JVj2Pwu5PODfFRuteyY52wM/MpCgzQRjulLVy6DweQq2qvme26dC0A54V6bNbCB5MQ
-         o97VIu0JGporA+XTGzDOmKNWENY2aH4ZSOyHOFKeIFXDgab9w41CjNGJzXcksC5FZDxf
-         33hQ==
-X-Gm-Message-State: AOAM5322WJD5QpAWSQJvsXLrSwlzKqSZd3N0HWfVz4W3ZsIBAVYEhGaW
-        yQAIGFYX2ZscWdP6z3+KlGZNuX+EgnmFeIxG/hwyeU6R5p/4lw==
-X-Google-Smtp-Source: ABdhPJzjG4nHBnpm1YeRsvfpKVsM6nmNJIeFJaztEJrNHMe+iyJctx1iGavTAT23A2IhS4j6LtYbunRiUquAn1xj08o=
-X-Received: by 2002:a54:4490:: with SMTP id v16mr14818764oiv.157.1643665089421;
- Mon, 31 Jan 2022 13:38:09 -0800 (PST)
+        Mon, 31 Jan 2022 17:29:07 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VKbvEr009980;
+        Mon, 31 Jan 2022 22:28:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=4eXcaHmhWTiu+7oqk4vWOVXF3/bem6IjIMLlTy7RVY8=;
+ b=AoE+6hEBLHLmVHF3YKz/jH5VHmUpO3XjUjk3rPkQ9nfP7PcMpNfnFpCHTniEhLRPT4vZ
+ 8JSNw16Ld3w5w90LzLbS7Pu9wPJpD+GEYKsEd1Zd0wMBj8BPsefxu0HW5l6FUxmpYBqC
+ SSkurLuFaTmMHDwU2Hf+qgoMxiPncnsvrUM+1N71Lw6SdhQalf2g1TrunPFClkOmvC2F
+ Mdxf3hRivGpTs0bL6rkxVK39yFETpOZZxCYeqIKJjE9MRoIpGfRbXP5OmW2DGC6V9bOt
+ aZLRzFx/liTatG0tvVrEHw+CnZlCY12Aq7gZ1C7TgyENyRabemz7piKRofifua6N5Y1J /w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dxpm0ad4w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 22:28:46 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20VMPH6P032240;
+        Mon, 31 Jan 2022 22:28:46 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dxpm0ad4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 22:28:46 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20VMCMCt025889;
+        Mon, 31 Jan 2022 22:28:45 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma05wdc.us.ibm.com with ESMTP id 3dvw7ad1t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jan 2022 22:28:45 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20VMSi0I35651866
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jan 2022 22:28:45 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DCB9E2806A;
+        Mon, 31 Jan 2022 22:28:44 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B7B328067;
+        Mon, 31 Jan 2022 22:28:44 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Jan 2022 22:28:44 +0000 (GMT)
+Message-ID: <d31e8276-9303-fff8-427f-afc859131202@linux.ibm.com>
+Date:   Mon, 31 Jan 2022 17:28:44 -0500
 MIME-Version: 1.0
-Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:38:09
- -0800 (PST)
-Reply-To: westerunion909@gmail.com
-From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
-Date:   Mon, 31 Jan 2022 13:38:09 -0800
-Message-ID: <CAExPwBBpihjV-rv_-+hYqb1WD3wpSWx81B_Q3ES15U3TXSPsyw@mail.gmail.com>
-Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 04/23] securityfs: Extend securityfs with namespacing
+ support
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Christian Brauner <brauner@kernel.org>
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-5-stefanb@linux.vnet.ibm.com>
+ <dc60e85030ac6423fb2af7361d9e47b01f8c63f7.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <dc60e85030ac6423fb2af7361d9e47b01f8c63f7.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nFq2x2eitfspJ_HLSCAsg1WGApgokuHr
+X-Proofpoint-GUID: RsegNeuOqmQo1kOzNJWLj4jWZrjohNyU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-31_07,2022-01-31_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201310139
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dear Email ID Owner.
 
-The IMF is compensating all the email address that was funds as one of
-the ward win Victims and your email address and your name is among the
-listed one of approved to pay the sum of $3.6 million U.S Dollars. We
-have concluded to effect your own payment through Western Union Money
-Transfer for easy pick-up of those funds in good condition,$4000 twice
-daily,till the $3.6 million is completely transferred to you.We now
-need your information where we will be sending the funds,such
-as;Receiver name(Your full Name)address and phone number.Contact
-Western Union agent with this Email: ( westerunion995@gmail.com  ) for
-your payment fund.
+On 1/27/22 11:53, Mimi Zohar wrote:
+> On Tue, 2022-01-25 at 17:46 -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Enable multiple instances of securityfs by keying each instance with a
+>> pointer to the user namespace it belongs to.
+>>
+>> Since we do not need the pinning of the filesystem for the virtualization
+>> case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
+>> case when the init_user_ns is active. This simplifies the cleanup for the
+>> virtualization case where usage of securityfs_remove() to free dentries
+>> is not needed anymore.
+> Could you add a sentence here explaining why securityfs_remove() isn't
+> needed in the virtualization case?
 
-Ms.Maria Zatto
-E-mail:westerunion995@gmail.com
-Telephone: +229 682 97 169
+At this point the reason is that simple_pin_fs() is not used for the 
+virtualization case.
 
-Contact Ms.Maria,immediately you get this mail through western union
-email address above to enable her speed-up.your payment and release
-the $4000 dollars MTCN today for you to pick up the payment OK.
+Maybe it should say: ... to free dentries is *therefore* not needed anymore.
 
-You are expected to provide us with the details as prescribed below to
-enable safe and easy release of your funds today.
-
-(1)Your Full name:
-(2)Your Phone number:
-(3)Your Country:
-(4)Your Age:
-
-Thank you,
-Dr.Antonia Lloyd.
-Contact Dir.Western Union Money Transfer,
-Cotonou-Benin Republic.
+    Stefan
