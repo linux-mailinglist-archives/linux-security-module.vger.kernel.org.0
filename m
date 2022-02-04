@@ -2,104 +2,118 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41CF4A957E
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Feb 2022 09:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7174AA0E1
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Feb 2022 21:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346775AbiBDItr (ORCPT
+        id S238022AbiBDUGe (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 4 Feb 2022 03:49:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        Fri, 4 Feb 2022 15:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349222AbiBDItp (ORCPT
+        with ESMTP id S238347AbiBDUFm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 4 Feb 2022 03:49:45 -0500
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F7FC061744
-        for <linux-security-module@vger.kernel.org>; Fri,  4 Feb 2022 00:49:44 -0800 (PST)
-Received: by mail-ua1-x943.google.com with SMTP id c36so9616107uae.13
-        for <linux-security-module@vger.kernel.org>; Fri, 04 Feb 2022 00:49:44 -0800 (PST)
+        Fri, 4 Feb 2022 15:05:42 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E1C06136C;
+        Fri,  4 Feb 2022 12:03:59 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d1so6054481plh.10;
+        Fri, 04 Feb 2022 12:03:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
-        b=CDFSOFN0ES/B21wE3c/wSpquNkr793M5PFrOQdCJsxTevf9i4PDztomaGoFpyfgVno
-         bWMxeKABDqYZHlD1Rb2n/ylkqnXcckhO0jMWmg+nR8AEMovcxRNNZMK/E36Qm213NNhW
-         AzcrLxoc2uFKz4xLEd7UlwJNet939wgy0A8noSqeMah08kcZIViRrwE7OWm9OliMPH+1
-         cHLqFBGCgkfT6tBx4ZtIw30xfapxf++bMutcYO6jZ8GvdXuYdu+tTVlsGw+yiut20gu3
-         6s3l3XxmAORLWaKSTmlxPsCdYrxDWH0jCnbJz7wvXMtMuo4bGmmobtvUnCXmRHy++MJK
-         zaOw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+08pbFHIVqXtRgCRGwgS5N246tIcG+TXD3qRf9F36iw=;
+        b=bLChGjEp7XV+zCb/FoJ9GfumEeTQWfhFGQCoozOt3GnA1ZXGkTjabAXozjimyeJn1E
+         KN2x0h03YqXAJQmemhmLMK7okFXx4aG2gL5N6AWKYUDXP1Ib1G4nAU2XgE3FGJ+wsvjj
+         PGUfpzMeb1mb0aKI88uLnyw5CsZwBhyV0VrhBy5N1s0jJOHsPL2D2O8d7btnmdOFGqnB
+         fx6wlJdnJl1E7gOjFZ6GP52rdS/oQZQLapgi9XCzKIZnrA181p16a+chsTEUl9wSXTyx
+         ETGS8vKjjgZ8YX+HpnxaVfRPSf+gis1Dnajdx/0RKyGQUonpOIhQG957i7ifE5G+xoj1
+         gkHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
-        b=z4kYbGZOZlTcegZNRYqf/R7pzY2GaFK1cfMZKsVFho2jMAJfSGd6qaqr4QhN4TaVsP
-         B2Jf0vCIsxeDlmXkDMoN6PHqXhyIxegCy5WTU+H5i69oXrUpfTNRgijee/E3SElyMmrO
-         Sij2fqSzcw74jdg2XBMEnYDfsFX3Fs9BSnYdKavK7iNR4NHEzZBrKXd7bBW1g4IlaMBQ
-         Suj2V2uUL3xwG/P5Wcx5JFT8ZYeJ5ACvMDuyoguKi/eRCoix4FQ1Wx3kxbcqwBwggajf
-         jaT9Ol9rjHfmyK0TDHwA4xqmtcmkxgHGQiZOzUqgft6W69886+a5EuEbRPyqLGlhlXdP
-         3LUQ==
-X-Gm-Message-State: AOAM532IwG9Sobp0pvEqrcNbfJJSAiBtebvd084ehuzhTUE3S4VrZCH3
-        gl1OPmwDitx0wKgqht+sENwvwC1TleS/DNi8L/4UcGLu5VA=
-X-Google-Smtp-Source: ABdhPJzBgJIWkxUgthIez0XVIVkawXypuSIwGbHqkMZJABOuvTAWPPs+EiyrqGbcJvlvGhCi4Co1YsBkhVs8U601hYQ=
-X-Received: by 2002:a17:902:c206:: with SMTP id 6mr1947976pll.153.1643964573397;
- Fri, 04 Feb 2022 00:49:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+08pbFHIVqXtRgCRGwgS5N246tIcG+TXD3qRf9F36iw=;
+        b=DECZBPaF/I52tITQN8euI+K+lUzvWCmjwzOxaEpHL9Ivib970AUYGt385Ex6F+sFEH
+         XlPjB/3XPZ+KREes9/Bk1t4rArdyXQXjINXXF6SWJ5gxo6aErn4NMhT9aFt4yp0qTkUq
+         r8ybgR7fXFarN6dRWpEJgvfrkFVzLK9Bpo7JgGy/S01xduJdBInjpL+cswlAUQUBCxOV
+         GmAb6t1f1ptUJRFjM1vQSg2VWzthFoAJkU9Gy2RzNE+XTjOmbA3xYfeFORrQU+lzJ+FP
+         RELaCe4cdB3TQDdeQDyiBZI10OiMSjfckLKvxRmHE8+vmC0ZB0Y1WXocSQHZIC5Qe7no
+         sv+Q==
+X-Gm-Message-State: AOAM530RWTAaj9eJ8/44Z+J1JHw28QqeAcuK1+2W8ZLJO0E2HEgWClGs
+        5GtQSTT0rnLehFpsFDMlpbBFoJ1f5v8P5g==
+X-Google-Smtp-Source: ABdhPJxOMEo7JDvh78IhN7RDJ9a8jI4xihXjuwfJFEvaRs/On+QYsASo2DZPyYweZMIZSPRYqbB06A==
+X-Received: by 2002:a17:902:c209:: with SMTP id 9mr4714497pll.119.1644005039317;
+        Fri, 04 Feb 2022 12:03:59 -0800 (PST)
+Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
+        by smtp.googlemail.com with ESMTPSA id j18sm3782566pfj.13.2022.02.04.12.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 12:03:58 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tong Zhang <ztong0001@gmail.com>
+Subject: [PATCH] KEYS: trusted: fix crash when TPM/TEE are built as module
+Date:   Fri,  4 Feb 2022 12:03:42 -0800
+Message-Id: <20220204200342.48665-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: bankcoris7@gmail.com
-Received: by 2002:a05:6a10:8ecc:0:0:0:0 with HTTP; Fri, 4 Feb 2022 00:49:32
- -0800 (PST)
-From:   komi zongo <komizongo2020@gmail.com>
-Date:   Fri, 4 Feb 2022 08:49:32 +0000
-X-Google-Sender-Auth: DJ4IyUdVph8-23fUkF90YeQoGWo
-Message-ID: <CAF8uSvrUQL-7NJvmhBd5s-_YOWh6oBUNPdfHFBiSEKCB_vZFyw@mail.gmail.com>
-Subject: Very Very Urgent.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-I NEED TRUST.
+when TCG_TPM and TEE are built as module, trusted_key_sources will be an
+empty array, loading it won't do what it is supposed to do and unloading
+it will cause kernel crash.
 
-Hope you are in good health with your family.
+To reproduce:
+$ modprobe trusted
+$ modprobe -r trusted
 
-I am Mr.Komi Zongo.  I work as the Foreign Operations Manager with
-one of the international banks here in Burkina Faso. Although the
-world is a very small place and hard place to meet people because you
-don't know who to trust or believe, as I have developed trust in you
-after my fasting and praying,  I made up my mind to confide this
-confidential business suggestion to you.
+[  173.749423] Unable to handle kernel NULL pointer dereference at virtual address 00000000
+[  173.755268] Backtrace:
+[  173.755378]  cleanup_trusted [trusted] from sys_delete_module+0x15c/0x22c
+[  173.755589]  sys_delete_module from ret_fast_syscall+0x0/0x1c
 
-There is an overdue unclaimed sum of Ten Million Five Hundred Thousand
-United States Dollars ($10,500,000.00) in my bank, belonging to one of
-our dead foreign customers. There were no beneficiaries stated
-concerning these funds. Therefore, your request as a foreigner is
-necessary to apply for the claim and release of the fund smoothly into
-your reliable bank account  as the Foreign Business Partner to the
-deceased.
+To fix this issue, we also need to check CONFIG_TCG_TPM_MODULE and
+CONFIG_TEE_MODULE.
 
-On the transfer of this fund in your account, you will take 40% as
-your share from the total fund, 5% will be shared to Charitable
-Organizations while Motherless Babies homes, disabled helpless as the
-balance of 55% will be for me. If you are really sure of your
-integrity, trustworthy, and confidentiality, reply urgently and to
-prove that, include your particulars as follows.
+Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ security/keys/trusted-keys/trusted_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Please get back to me through this Email Address komizongo2020@gmail.com
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index d5c891d8d353..b3a3b2f2d4a4 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+ 
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if defined(CONFIG_TCG_TPM)
++#if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if defined(CONFIG_TEE)
++#if defined(CONFIG_TEE) || defined(CONFIG_TEE_MODULE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
+-- 
+2.25.1
 
-please fill in your personal information as indicated below and as
-soon as i receive this information below i will forward you a text of an
-application which you will fill and send to the bank for the claim of the
-fund as i will direct you on what to do.
-
-Your name in full.......................... ........
-Your country....................... ..................
-Your age........................... ....................
-Your cell phone......................... ...........
-Your occupation.................... ...............
-Your sex........................... ....................
-Your marital status........................ .......
-Your id card or passport...........................
-
-Best Regards,
-
-Mr.Komi Zongo.
