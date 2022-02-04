@@ -2,115 +2,104 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621DD4A93FC
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Feb 2022 07:28:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A41CF4A957E
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Feb 2022 09:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243423AbiBDG2b (ORCPT
+        id S1346775AbiBDItr (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 4 Feb 2022 01:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        Fri, 4 Feb 2022 03:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234257AbiBDG2a (ORCPT
+        with ESMTP id S1349222AbiBDItp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 4 Feb 2022 01:28:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEB8C061714;
-        Thu,  3 Feb 2022 22:28:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77903B82FF0;
-        Fri,  4 Feb 2022 06:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC95C004E1;
-        Fri,  4 Feb 2022 06:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643956107;
-        bh=QaFOZ+4F9bVAF26M1HaVC5kjbiVDzIfY69jkftb6Kao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b9ngHE683pVzCGLDEjg491rrD5f6vfgfZUE06M7/XMoPJEmYmGSHLSU9NmKeeAOtw
-         uyHttVx16YZbBlN9iAmOdfYLBCbstjpUytRpE6jy+BP8WAf6kzrDZKENykhFdNrFEM
-         j2xP2uhqLJyBld79JNy4sQzvZGhg4+h/uM8Jc9q56sHW7sSbd0SU/K+q5nBddJ19NE
-         aKCWCl7FrlSaqGYeC263P60on+RXOp9sRjfXBj5Egt7bMmrvn+Cch/R05SmqGuxGeL
-         joZglMI26btTOAKwxwTzpMfo5GmjefOEWnot7IusAJjMCei9lt6Peo1/BQ48k8dVou
-         PHMFm7gKDSSUg==
-Date:   Fri, 4 Feb 2022 08:27:59 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Yael Tiomkin <yaelt@google.com>
-Cc:     Martin Ross <mross@pobox.com>, corbet@lwn.net, dhowells@redhat.com,
-        jejb@linux.ibm.com, jmorris@namei.org, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        serge@hallyn.com, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-Message-ID: <YfzHb9K5wZciy5um@iki.fi>
-References: <CA++MVV3Jse4WZ-zr-SUWQz3Gk_dByU6JduVfUkvQNW+jgm9O4Q@mail.gmail.com>
- <YfFe9+XDPDIdSqF1@iki.fi>
- <YfFf8fvsDm8lQJgJ@iki.fi>
- <CAKoutNsaHNriobnsQ1X0Qfs=K+YN3JvfhTBnQqPL01AvjRm5EA@mail.gmail.com>
+        Fri, 4 Feb 2022 03:49:45 -0500
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F7FC061744
+        for <linux-security-module@vger.kernel.org>; Fri,  4 Feb 2022 00:49:44 -0800 (PST)
+Received: by mail-ua1-x943.google.com with SMTP id c36so9616107uae.13
+        for <linux-security-module@vger.kernel.org>; Fri, 04 Feb 2022 00:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=CDFSOFN0ES/B21wE3c/wSpquNkr793M5PFrOQdCJsxTevf9i4PDztomaGoFpyfgVno
+         bWMxeKABDqYZHlD1Rb2n/ylkqnXcckhO0jMWmg+nR8AEMovcxRNNZMK/E36Qm213NNhW
+         AzcrLxoc2uFKz4xLEd7UlwJNet939wgy0A8noSqeMah08kcZIViRrwE7OWm9OliMPH+1
+         cHLqFBGCgkfT6tBx4ZtIw30xfapxf++bMutcYO6jZ8GvdXuYdu+tTVlsGw+yiut20gu3
+         6s3l3XxmAORLWaKSTmlxPsCdYrxDWH0jCnbJz7wvXMtMuo4bGmmobtvUnCXmRHy++MJK
+         zaOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=z4kYbGZOZlTcegZNRYqf/R7pzY2GaFK1cfMZKsVFho2jMAJfSGd6qaqr4QhN4TaVsP
+         B2Jf0vCIsxeDlmXkDMoN6PHqXhyIxegCy5WTU+H5i69oXrUpfTNRgijee/E3SElyMmrO
+         Sij2fqSzcw74jdg2XBMEnYDfsFX3Fs9BSnYdKavK7iNR4NHEzZBrKXd7bBW1g4IlaMBQ
+         Suj2V2uUL3xwG/P5Wcx5JFT8ZYeJ5ACvMDuyoguKi/eRCoix4FQ1Wx3kxbcqwBwggajf
+         jaT9Ol9rjHfmyK0TDHwA4xqmtcmkxgHGQiZOzUqgft6W69886+a5EuEbRPyqLGlhlXdP
+         3LUQ==
+X-Gm-Message-State: AOAM532IwG9Sobp0pvEqrcNbfJJSAiBtebvd084ehuzhTUE3S4VrZCH3
+        gl1OPmwDitx0wKgqht+sENwvwC1TleS/DNi8L/4UcGLu5VA=
+X-Google-Smtp-Source: ABdhPJzBgJIWkxUgthIez0XVIVkawXypuSIwGbHqkMZJABOuvTAWPPs+EiyrqGbcJvlvGhCi4Co1YsBkhVs8U601hYQ=
+X-Received: by 2002:a17:902:c206:: with SMTP id 6mr1947976pll.153.1643964573397;
+ Fri, 04 Feb 2022 00:49:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKoutNsaHNriobnsQ1X0Qfs=K+YN3JvfhTBnQqPL01AvjRm5EA@mail.gmail.com>
+Sender: bankcoris7@gmail.com
+Received: by 2002:a05:6a10:8ecc:0:0:0:0 with HTTP; Fri, 4 Feb 2022 00:49:32
+ -0800 (PST)
+From:   komi zongo <komizongo2020@gmail.com>
+Date:   Fri, 4 Feb 2022 08:49:32 +0000
+X-Google-Sender-Auth: DJ4IyUdVph8-23fUkF90YeQoGWo
+Message-ID: <CAF8uSvrUQL-7NJvmhBd5s-_YOWh6oBUNPdfHFBiSEKCB_vZFyw@mail.gmail.com>
+Subject: Very Very Urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Jan 26, 2022 at 03:56:44PM -0500, Yael Tiomkin wrote:
-> On Wed, Jan 26, 2022 at 9:51 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Wed, Jan 26, 2022 at 04:47:22PM +0200, Jarkko Sakkinen wrote:
-> > > On Tue, Jan 18, 2022 at 01:26:05PM -0500, Martin Ross wrote:
-> > > > Hi Jarkko,
-> > > >
-> > > > I have been working with Yael on this project so I thought I might add
-> > > > a bit of background here around the use case that this series of
-> > > > patches is trying to address.
-> > > >
-> > > > At a high level we are trying to provide users of encryption that have
-> > > > key management hierarchies a better tradeoff between security and
-> > > > availability.  For available and performance reasons master keys often
-> > > > need to be released (or derived/wrapped keys created) outside of a KMS
-> > > > to clients (which may in turn further wrap those keys in a series of
-> > > > levels).  What we are trying to do is provide a mechanism where the
-> > > > wrapping/unwrapping of these keys is not dependent on a remote call at
-> > > > runtime.  e.g.  To unwrap a key if you are using AWS KMS or Google
-> > > > Service you need to make an RPC.  In practice to defend against
-> > > > availability or performance issues, designers end up building their
-> > > > own kms and effectively encrypting everything with a DEK.  The DEK
-> > > > encrypts same set as the master key thereby eliminating the security
-> > > > benefit of keeping the master key segregated in the first place.
-> >
-> > Mainly this part (would be enough to explain why it is there).
-> >
-> > BR, Jarkko
-> 
-> Hi Jarkko,
-> 
-> As for the commit message, WDYT about the following:
-> 
-> KEYS: encrypted: Instantiate key with user-provided decrypted data
-> 
-> For availability and performance reasons master keys often need to be
-> released outside of a KMS to clients. It would be beneficial to provide a
-> mechanism where the wrapping/unwrapping of DEKs is not dependent
-> on a remote call at runtime yet security is not (or only minimally) compromised.
-> Master keys could be securely stored in the Kernel and be used to wrap/unwrap
-> keys from userspace.
-> 
-> The encrypted.c class supports instantiation of encrypted keys with
-> either an already-encrypted key material, or by generating new key
-> material based on random numbers. This patch defines a new datablob
-> format: [<format>] <master-key name> <decrypted data length>
-> <decrypted data> that allows to inject and encrypt user-provided
-> decrypted data.
-> 
-> 
-> I want to make sure we're on the same page before publishing a new version.
-> 
-> Thanks,
-> Yael
+I NEED TRUST.
 
-It looks really good.
+Hope you are in good health with your family.
 
-/Jarkko
+I am Mr.Komi Zongo.  I work as the Foreign Operations Manager with
+one of the international banks here in Burkina Faso. Although the
+world is a very small place and hard place to meet people because you
+don't know who to trust or believe, as I have developed trust in you
+after my fasting and praying,  I made up my mind to confide this
+confidential business suggestion to you.
+
+There is an overdue unclaimed sum of Ten Million Five Hundred Thousand
+United States Dollars ($10,500,000.00) in my bank, belonging to one of
+our dead foreign customers. There were no beneficiaries stated
+concerning these funds. Therefore, your request as a foreigner is
+necessary to apply for the claim and release of the fund smoothly into
+your reliable bank account  as the Foreign Business Partner to the
+deceased.
+
+On the transfer of this fund in your account, you will take 40% as
+your share from the total fund, 5% will be shared to Charitable
+Organizations while Motherless Babies homes, disabled helpless as the
+balance of 55% will be for me. If you are really sure of your
+integrity, trustworthy, and confidentiality, reply urgently and to
+prove that, include your particulars as follows.
+
+Please get back to me through this Email Address komizongo2020@gmail.com
+
+please fill in your personal information as indicated below and as
+soon as i receive this information below i will forward you a text of an
+application which you will fill and send to the bank for the claim of the
+fund as i will direct you on what to do.
+
+Your name in full.......................... ........
+Your country....................... ..................
+Your age........................... ....................
+Your cell phone......................... ...........
+Your occupation.................... ...............
+Your sex........................... ....................
+Your marital status........................ .......
+Your id card or passport...........................
+
+Best Regards,
+
+Mr.Komi Zongo.
