@@ -1,158 +1,150 @@
 Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D654AE6EA
-	for <lists+linux-security-module@lfdr.de>; Wed,  9 Feb 2022 03:41:48 +0100 (CET)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id CC27E4AE7A8
+	for <lists+linux-security-module@lfdr.de>; Wed,  9 Feb 2022 04:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344307AbiBIClG (ORCPT
+        id S235669AbiBIDIY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Feb 2022 21:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        Tue, 8 Feb 2022 22:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239658AbiBIBmP (ORCPT
+        with ESMTP id S235988AbiBIDFJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Feb 2022 20:42:15 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ACFC06157B;
-        Tue,  8 Feb 2022 17:42:11 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JtjJ51574z9sWd;
-        Wed,  9 Feb 2022 09:40:37 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Feb 2022 09:42:08 +0800
-Message-ID: <248bf5e4-f171-0f18-90ec-f4be886cb35e@huawei.com>
-Date:   Wed, 9 Feb 2022 09:42:08 +0800
+        Tue, 8 Feb 2022 22:05:09 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F29C03E944;
+        Tue,  8 Feb 2022 19:04:02 -0800 (PST)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jtl3Z0bt8z682M0;
+        Wed,  9 Feb 2022 10:59:54 +0800 (CST)
+Received: from [10.122.132.241] (10.122.132.241) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 04:03:59 +0100
+Message-ID: <2aae376f-14df-2c69-204a-0de8e4b0dd74@huawei.com>
+Date:   Wed, 9 Feb 2022 06:03:58 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Problem with commit ccf11dbaa07b ("evm: Fix memleak in
- init_desc")
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>
-CC:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        wangweiyang <wangweiyang2@huawei.com>,
-        "xiujianfeng@huawei.com" <xiujianfeng@huawei.com>
-References: <e852660c-17fa-cd75-e361-45dd77b8884d@huawei.com>
- <ec4348e54b39811b727a29f3c23972eab616dcd3.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <ec4348e54b39811b727a29f3c23972eab616dcd3.camel@linux.ibm.com>
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATCH 2/2] landlock: selftests for bind and connect hooks
+Content-Language: ru
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+CC:     <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <netfilter@vger.kernel.org>, <yusongping@huawei.com>,
+        <artem.kuzin@huawei.com>
+References: <20220124080215.265538-1-konstantin.meskhidze@huawei.com>
+ <20220124080215.265538-3-konstantin.meskhidze@huawei.com>
+ <4d54e3a9-8a26-d393-3c81-b01389f76f09@digikod.net>
+ <ae5ca74d-ce5f-51e8-31c1-d02744ec92f8@huawei.com>
+ <ae0fcafa-3e8d-d6f2-26a8-ae74dda8371c@digikod.net>
+ <9a77fc40-4463-4344-34d0-184d427d32cf@huawei.com>
+ <d09ac689-b1bf-86fa-4da5-3a0ade7fd552@digikod.net>
+From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+In-Reply-To: <d09ac689-b1bf-86fa-4da5-3a0ade7fd552@digikod.net>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500024.china.huawei.com (7.185.36.203)
+X-Originating-IP: [10.122.132.241]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml704-chm.china.huawei.com (10.206.15.53)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2022/2/8 23:20, Mimi Zohar wrote:
-> On Tue, 2022-02-08 at 16:53 +0800, Guozihua (Scott) wrote:
->> Hi Mimi,
->>
->> I found an issue with commit ccf11dbaa07b ("evm: Fix memleak in init_desc").
->>
->> This commit tries to free variable "tmp_tfm" if something went wrong
->> after the "alloc" label in function init_desc, which would potentially
->> cause a user-after-free issue
->>
->> The codes are as follows:
->>
->>     1 static struct shash_desc *init_desc(char type, uint8_t hash_algo)
->>     2 {
->>     3 	long rc;
->>     4 	const char *algo;
->>     5 	struct crypto_shash **tfm, *tmp_tfm = NULL;
->>     6 	struct shash_desc *desc;
->>     7
->>     8 	if (type == EVM_XATTR_HMAC) {
->>     9 		if (!(evm_initialized & EVM_INIT_HMAC)) {
->>    10 			pr_err_once("HMAC key is not set\n");
->>    11 			return ERR_PTR(-ENOKEY);
->>    12 		}
->>    13 		tfm = &hmac_tfm;
->>    14 		algo = evm_hmac;
->>    15 	} else {
->>    16 		if (hash_algo >= HASH_ALGO__LAST)
->>    17 			return ERR_PTR(-EINVAL);
->>    18
->>    19 		tfm = &evm_tfm[hash_algo];
->>    20 		algo = hash_algo_name[hash_algo];
->>    21 	}
->>    22
->>    23 	if (*tfm)
->>    24 		goto alloc;
->>    25 	mutex_lock(&mutex);
->>    26 	if (*tfm)
->>    27 		goto unlock;
->>    28
->>    29 	tmp_tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
->>    30 	if (IS_ERR(tmp_tfm)) {
->>    31 		pr_err("Can not allocate %s (reason: %ld)\n", algo,
->>    32 		       PTR_ERR(tmp_tfm));
->>    33 		mutex_unlock(&mutex);
->>    34 		return ERR_CAST(tmp_tfm);
->>    35 	}
->>    36 	if (type == EVM_XATTR_HMAC) {
->>    37 		rc = crypto_shash_setkey(tmp_tfm, evmkey, evmkey_len);
->>    38 		if (rc) {
->>    39 			crypto_free_shash(tmp_tfm);
->>    40 			⋅mutex_unlock(&mutex);
->>    41 			return ERR_PTR(rc);
->>    42 		}
->>    43 	}
->>    44 	*tfm = tmp_tfm;
->>    45 unlock:
->>    46 	mutex_unlock(&mutex);
->>    47 alloc:
->>    48 	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
->>    49 			GFP_KERNEL);
->>    50 	if (!desc) {
->>    51 		crypto_free_shash(tmp_tfm);
->>    52 		return ERR_PTR(-ENOMEM);
->>    53 	}
->>    54
->>    55 	desc->tfm = *tfm;
->>    56
->>    57 	rc = crypto_shash_init(desc);
->>    58 	if (rc) {
->>    59 		crypto_free_shash(tmp_tfm);
->>    60 		kfree(desc);
->>    61 		return ERR_PTR(rc);
->>    62 	}
->>    63 	return desc;
->>    64 }
->>
->> As we can see, variable *tfm points to one of the two global variable
->> hmac_tfm or evm_tfm[hash_algo]. tmp_tfm is used as an intermediate
->> variable for initializing these global variables. Freeing tmp_tfm after
->> line 44 would invalidate these global variables and potentially cause a
->> user-after-free issue.
->>
->> I think this commit should be reverted.
->>
->> Reference: commit 843385694721 ("evm: Fix a small race in init_desc()")
+
+
+2/8/2022 3:17 PM, Mickaël Salaün пишет:
 > 
-> Why this one, as opposed to commit ccf11dbaa07b ("evm: Fix memleak in
-> init_desc")?
+> On 08/02/2022 04:01, Konstantin Meskhidze wrote:
+>>
+>>
+>> 2/7/2022 3:49 PM, Mickaël Salaün пишет:
 > 
+>>> [...]
+>>>
+>>>>>> +    /* Create a socket 3 */
+>>>>>> +    sockfd_3 = socket(AF_INET, SOCK_STREAM, 0);
+>>>>>> +    ASSERT_LE(0, sockfd_3);
+>>>>>> +    /* Allow reuse of local addresses */
+>>>>>> +    ASSERT_EQ(0, setsockopt(sockfd_3, SOL_SOCKET, SO_REUSEADDR, 
+>>>>>> &one, sizeof(one)));
+>>>>>> +
+>>>>>> +    /* Set socket 3 address parameters */
+>>>>>> +    addr_3.sin_family = AF_INET;
+>>>>>> +    addr_3.sin_port = htons(SOCK_PORT_3);
+>>>>>> +    addr_3.sin_addr.s_addr = inet_addr(IP_ADDRESS);
+>>>>>> +    memset(&(addr_3.sin_zero), '\0', 8);
+>>>>>> +    /* Bind the socket 3 to IP address */
+>>>>>> +    ASSERT_EQ(0, bind(sockfd_3, (struct sockaddr *)&addr_3, 
+>>>>>> sizeof(addr_3)));
+>>>>>
+>>>>> Why is it allowed to bind to SOCK_PORT_3 whereas net_service_3 
+>>>>> forbids it?
+>>>>
+>>>>    It's allowed cause net_service_3 has empty access field.
+>>>>
+>>>>     /* Empty allowed_access (i.e. deny rules) are ignored in network
+>>>>      *  actions for SOCK_PORT_3 socket "object"
+>>>>      */
+>>>>      ASSERT_EQ(-1, landlock_add_rule(ruleset_fd,
+>>>>                                      LANDLOCK_RULE_NET_SERVICE,
+>>>>                                      &net_service_3, 0));
+>>>>      ASSERT_EQ(ENOMSG, errno);
+>>>>
+>>>>    Applying this rule returns ENOMSG errno:
+>>>>
+>>>>    /* Informs about useless rule: empty allowed_access (i.e. deny 
+>>>> rules)
+>>>>     * are ignored in network actions
+>>>>     */
+>>>>          if (!net_service_attr.allowed_access) {
+>>>>              err = -ENOMSG;
+>>>>              goto out_put_ruleset;
+>>>>          }
+>>>>    This means binding socket 3 is not restricted.
+>>>>    For path_beneath_attr.allowed_access = 0 there is the same logic.
+>>>
+>>> I missed the ENOMSG check; the third rule has nothing to do with it. 
+>>> However, because the ruleset handles bind and connect actions, they 
+>>> must be denied by default. There is no rule allowing binding to 
+>>> SOCK_PORT_3. Why is it allowed?
+>>>
+>>> You can test with another SOCK_PORT_4, not covered by any rule. As 
+>>> for SOCK_PORT_3, it must be forbidden to bind on it.
+>>
+>>    Apllying the third rule (net_service_3.access is empty) returns ENOMSG
+>>    error. That means a process hasn't been restricted by the third rule,
+>>    cause during search  process in network rb_tree the process won't find
+>>    the third rule, so binding to SOCK_PORT_3 is allowed.
+> 
+> Landlock is designed to deny every access rights that are handled (by a 
+> ruleset) by default. All rules added to a ruleset are exceptions to 
+> allow a subset of the handled access rights on a specific object/port.
+> 
+> With the current networking code, a sandboxed process can still bind or 
+> connect to any port except, in this test, partially for two ports. This 
+> approach doesn't help to isolate a process from the network.
+   I got it. Thanks.
+> 
+>>
+>>    Maybe there is a misunderstanding here. You mean that if there is just
+>>    only one network rule for a particular port has been applied to a
+>>    process, other ports' networks actions are automatically restricted
+>>    until they will be added into landlock newtwork rb_tree?
+> 
+> Right! That is how it should be.
 
-Hi Mimi,
-
-I mean commit ccf11dbaa07b ("evm: Fix memleak in init_desc") should be 
-reverted. commit 843385694721 ("evm: Fix a small race in init_desc()") 
-is just for reference.
-
--- 
-Best
-GUO Zihua
+   So it possible to check network rb_tree for emptiness before
+   every rule search caused by bind/connect hooks.
+   Am I corrent that if there is a proccess with Landlcok restrictions
+   applied for the filesystem, but landlock networtk rb_tree is empty
+   that means the proccess is not isolated from the network? I suppose it
+   would be an additional test case.
+> .
