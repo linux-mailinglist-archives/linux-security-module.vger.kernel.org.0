@@ -2,123 +2,125 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E594B7760
-	for <lists+linux-security-module@lfdr.de>; Tue, 15 Feb 2022 21:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2F44B7904
+	for <lists+linux-security-module@lfdr.de>; Tue, 15 Feb 2022 21:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240021AbiBOUJF (ORCPT
+        id S237880AbiBOUro (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 15 Feb 2022 15:09:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41766 "EHLO
+        Tue, 15 Feb 2022 15:47:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236089AbiBOUJF (ORCPT
+        with ESMTP id S237521AbiBOUro (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 15 Feb 2022 15:09:05 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75E4B0C43
-        for <linux-security-module@vger.kernel.org>; Tue, 15 Feb 2022 12:08:54 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id p9so23804257ejd.6
-        for <linux-security-module@vger.kernel.org>; Tue, 15 Feb 2022 12:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BhJlt5ZCYoidBqqNJ5EsFOz8HUlOmyfI7AV8Vc3JkYk=;
-        b=ADoOeEn89ke3US6l0YM5nqedXSf+e9ChVnMnFsvfT7bO8qng9v6Ta1Rj8Ds/J4fnho
-         JC3kI6BGKVlJgdUYnf82vkkoyXm/N71P0w6DJKZrzd5Cu2zgnNl0NhFzos5niPdtMbSU
-         /MILDymIqGvkOWWPqa6cWe4U7kVCqXpjwmKgrV1zBUhAGK3e/8SCtoYhjzWpNOQT9g6n
-         hCMwtfdf6Zb5rSnDACVc3b0BhSXs8+Jbakg1KlxkGOFZ/8pexlNdDMUNwSWZeFvOqi/o
-         1rnk/qIn72rf6ybZ3U8mlqscNN1JRZYSq23BpzPUuDC9AQzkkxmqYrHEGoA5LH1Pr/2N
-         c60A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BhJlt5ZCYoidBqqNJ5EsFOz8HUlOmyfI7AV8Vc3JkYk=;
-        b=2sluNIqnqqyR5uM01fBFrhng/pgAaptJ3RKoIzfX1LQe5xz5XKc2rILDhUIAziRfVx
-         Jqxtp8nUlrcHnBmtrJANpJdfRqhjbQTfQbZSQBD0mS5CLsGWu3PJiZ3yhXxv4VKp7qkK
-         I6f7fBTbsXH5dm8fU5SFJSN/2vK0nBQgfqFK2x2JCqFnVKnA8Vr9TIGxTTWfPhbxXkzc
-         VeheVzhjstJPjnZ27dWRYe5If27Mf5oDoijfB04/gMUzgrS2gZIGc/3s9jMKLRNgD+FZ
-         02xttK62iC9iXiuvr4spzY0CaqVTP58LufV2ZUvua6elsoAvzkbNylzZBt759O+j7GOf
-         WPeQ==
-X-Gm-Message-State: AOAM530UG7eS7QNafmPChCyqkjw49p41kKJYMqLCBKJgvIw+96ZlTAMf
-        QbxnNpY4kQ6Ejupj9Q67XEZyBa6hEac9NSDlTv/s
-X-Google-Smtp-Source: ABdhPJwZfMoC74QO9F+UqNNbECHuXUN/j7hFbn1Broo/RJdOcztLDt/AZzopuLRcYVoSxv2IibHJvuduoX2biLV87Os=
-X-Received: by 2002:a17:906:6498:: with SMTP id e24mr639141ejm.12.1644955733109;
- Tue, 15 Feb 2022 12:08:53 -0800 (PST)
+        Tue, 15 Feb 2022 15:47:44 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD685FBF;
+        Tue, 15 Feb 2022 12:47:33 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C8A071F37B;
+        Tue, 15 Feb 2022 20:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644958051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FlfsyHCAs0rdIX//YatnIpiwimkoa18Lt0kLGHb4O7E=;
+        b=OARPnhmPW7qBVTlDY6oU/h/RXco0jkDnGZJwh7Qzb65K1gtp0B2Y2N4GnqEQYZj8Pp0sbN
+        AdWt2MzVAqrrwO2oUaXSeVgeRYwF7OkNORYRlp22XWtm7O3mKr6KnB4guXqUfnnJUu94GW
+        vPY36B6Jf3wxAgqmLYS26q1rp+O/vzs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644958051;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FlfsyHCAs0rdIX//YatnIpiwimkoa18Lt0kLGHb4O7E=;
+        b=J6eCNMY6o4jcfwtx/YyCr2tGzh12PjjFMaNcT6a8Lmgs3C8jzDsc69GNV/ct8k1n8uhUHY
+        wg2yBhsE/yKZ73Dw==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 83940A3B83;
+        Tue, 15 Feb 2022 20:47:31 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 21:47:30 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        James Morse <james.morse@arm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Kairui Song <kasong@redhat.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-modules@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@kernel.org, Eric Snowberg <eric.snowberg@oracle.com>
+Subject: Re: [PATCH 4/4] module, KEYS: Make use of platform keyring for
+ signature verification
+Message-ID: <20220215204730.GQ3113@kunlun.suse.cz>
+References: <cover.1644953683.git.msuchanek@suse.de>
+ <840433bc93a58d6dfc4d96c34c0c3b158a0e669d.1644953683.git.msuchanek@suse.de>
+ <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220212175922.665442-1-omosnace@redhat.com>
-In-Reply-To: <20220212175922.665442-1-omosnace@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 15 Feb 2022 15:08:42 -0500
-Message-ID: <CAHC9VhR3qjmq461HyO7OwgicmEmzDjgshdocSqvYEZMk_BfceQ@mail.gmail.com>
-Subject: Re: [PATCH net v3 0/2] security: fixups for the security hooks in sctp
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        selinux@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        linux-sctp@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sat, Feb 12, 2022 at 12:59 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> This is a third round of patches to fix the SCTP-SELinux interaction
-> w.r.t. client-side peeloff. The patches are a modified version of Xin
-> Long's patches posted previously, of which only a part was merged (the
-> rest was merged for a while, but was later reverted):
-> https://lore.kernel.org/selinux/cover.1635854268.git.lucien.xin@gmail.com/T/
->
-> In gist, these patches replace the call to
-> security_inet_conn_established() in SCTP with a new hook
-> security_sctp_assoc_established() and implement the new hook in SELinux
-> so that the client-side association labels are set correctly (which
-> matters in case the association eventually gets peeled off into a
-> separate socket).
->
-> Note that other LSMs than SELinux don't implement the SCTP hooks nor
-> inet_conn_established, so they shouldn't be affected by any of these
-> changes.
->
-> These patches were tested by selinux-testsuite [1] with an additional
-> patch [2] and by lksctp-tools func_tests [3].
->
-> Changes since v2:
-> - patches 1 and 2 dropped as they are already in mainline (not reverted)
-> - in patch 3, the return value of security_sctp_assoc_established() is
->   changed to int, the call is moved earlier in the function, and if the
->   hook returns an error value, the packet will now be discarded,
->   aborting the association
-> - patch 4 has been changed a lot - please see the patch description for
->   details on how the hook is now implemented and why
->
-> [1] https://github.com/SELinuxProject/selinux-testsuite/
-> [2] https://patchwork.kernel.org/project/selinux/patch/20211021144543.740762-1-omosnace@redhat.com/
-> [3] https://github.com/sctp/lksctp-tools/tree/master/src/func_tests
->
-> Ondrej Mosnacek (2):
->   security: add sctp_assoc_established hook
->   security: implement sctp_assoc_established hook in selinux
->
->  Documentation/security/SCTP.rst | 22 ++++----
->  include/linux/lsm_hook_defs.h   |  2 +
->  include/linux/lsm_hooks.h       |  5 ++
->  include/linux/security.h        |  8 +++
->  net/sctp/sm_statefuns.c         |  8 +--
->  security/security.c             |  7 +++
->  security/selinux/hooks.c        | 90 ++++++++++++++++++++++++---------
->  7 files changed, 103 insertions(+), 39 deletions(-)
+Hello,
 
-This patchset has been merged into selinux/next, thanks everyone!
+On Tue, Feb 15, 2022 at 03:08:18PM -0500, Mimi Zohar wrote:
+> [Cc'ing Eric Snowberg]
+> 
+> Hi Michal,
+> 
+> On Tue, 2022-02-15 at 20:39 +0100, Michal Suchanek wrote:
+> > Commit 278311e417be ("kexec, KEYS: Make use of platform keyring for signature verify")
+> > adds support for use of platform keyring in kexec verification but
+> > support for modules is missing.
+> > 
+> > Add support for verification of modules with keys from platform keyring
+> > as well.
+> 
+> Permission for loading the pre-OS keys onto the "platform" keyring and
+> using them is limited to verifying the kexec kernel image, nothing
+> else.
 
--- 
-paul-moore.com
+Why is the platform keyring limited to kexec, and nothing else?
+
+It should either be used for everything or for nothing. You have the
+option to compile it in and then it should be used, and the option to
+not compile it in and then it cannot be used.
+
+There are two basic use cases:
+
+(1) there is a vendor key which is very hard to use so you sign
+something small and simple like shim with the vendor key, and sign your
+kernel and modules with your own key that's typically enrolled with shim
+MOK, and built into the kernel.
+
+(2) you import your key into the firmware, and possibly disable the
+vendor key. You can load the kernel directly without shim, and then your
+signing key is typically in the platform keyring and built into the
+kernel.
+
+In neither case do I see any reason to use some keyrings for kexec and
+other keyrings for modules.
+
+Thanks
+
+Michal
