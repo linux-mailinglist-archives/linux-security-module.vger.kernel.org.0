@@ -2,279 +2,175 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CC94B883C
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Feb 2022 13:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC88F4B8BAD
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Feb 2022 15:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiBPMxg (ORCPT
+        id S235180AbiBPOmT (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 16 Feb 2022 07:53:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52208 "EHLO
+        Wed, 16 Feb 2022 09:42:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbiBPMx2 (ORCPT
+        with ESMTP id S235191AbiBPOmS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:53:28 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4282D222DD6;
-        Wed, 16 Feb 2022 04:52:31 -0800 (PST)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JzHmx5zjPz6GCv6;
-        Wed, 16 Feb 2022 20:48:01 +0800 (CST)
-Received: from lhreml725-chm.china.huawei.com (10.201.108.76) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 13:52:29 +0100
-Received: from centos7.huawei.com (10.122.133.3) by
- lhreml725-chm.china.huawei.com (10.201.108.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 12:52:28 +0000
-From:   Igor Baranov <igor.baranov@huawei.com>
-To:     <paul@paul-moore.com>
-CC:     <hw.likun@huawei.com>, <jamorris@linux.microsoft.com>,
-        <linux-security-module@vger.kernel.org>, <selinux@vger.kernel.org>,
-        <stephen.smalley.work@gmail.com>, <xiujianfeng@huawei.com>,
-        <alexander.kozhevnikov@huawei.com>, <yusongping@huawei.com>,
-        <artem.kuzin@huawei.com>, Igor Baranov <igor.baranov@huawei.com>
-Subject: [RFC PATCH 1/1] selinuxns: Replace state pointer with namespace id
-Date:   Wed, 16 Feb 2022 15:52:06 +0300
-Message-ID: <20220216125206.20975-2-igor.baranov@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220216125206.20975-1-igor.baranov@huawei.com>
-References: <CAHC9VhR3ZbcNM8awhJs9_NXmdUXHO4XoH8s2d3MjhMXwkgbh=Q@mail.gmail.com>
- <20220216125206.20975-1-igor.baranov@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.133.3]
-X-ClientProxiedBy: mscpeml100001.china.huawei.com (7.188.26.227) To
- lhreml725-chm.china.huawei.com (10.201.108.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Feb 2022 09:42:18 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE365A2518;
+        Wed, 16 Feb 2022 06:42:02 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GEetZj008916;
+        Wed, 16 Feb 2022 14:41:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ZPFyNUwqe0e7446wUJUu9M1/GNkHn2W792idSCSGZUQ=;
+ b=Xw30z5tqjw6ikX6DF0qgyxfAIgT9hDKnwNOH3cUa5XFLTUwaTaT3cm3vZfGAIosuqDFQ
+ mQeKMluQHQdWHCNndQCS8YmG3MT6eJUVHOJ5IJVOdVgetPPcCuHXA7GdNVVPsPfOJjR5
+ BCh16TsUQNTZySmoH+m6wWy4NuHKO1kKyRPJVS0urDkog6fbmRHTfr+4V7Mt09x5z3AI
+ l8Z0Yd4FyA0//f4AXsidZ+Mx4DsVaAe5vDvArLgucSAv5LhBRETngA91idmXs5txGAyc
+ 3yVB5m55B4PK727cVxXjkMFhf+dE5+DJydmp3bMMSKNQa93nPpyggeDB4pmWjd/uCtBC mQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e914sbdfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:30 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GEfU8g010073;
+        Wed, 16 Feb 2022 14:41:30 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e914sbdf5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:29 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GES87H014722;
+        Wed, 16 Feb 2022 14:41:27 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3e64ha03v7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:27 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GEfKfH39059870
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Feb 2022 14:41:20 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE9A8A405B;
+        Wed, 16 Feb 2022 14:41:20 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A55AA4051;
+        Wed, 16 Feb 2022 14:41:18 +0000 (GMT)
+Received: from sig-9-65-92-254.ibm.com (unknown [9.65.92.254])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Feb 2022 14:41:18 +0000 (GMT)
+Message-ID: <429010298df589687e1d1a09bac21e302d642c7e.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 05/27] ima: Define ima_namespace struct and start
+ moving variables into it
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>
+Date:   Wed, 16 Feb 2022 09:41:17 -0500
+In-Reply-To: <20220201203735.164593-6-stefanb@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-6-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3Y04efHf54EaZ2KiR04g70xp6LkUvVRJ
+X-Proofpoint-ORIG-GUID: huv53N5hBJFREyrTajk_mUMiB4UAtsaU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-16_07,2022-02-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 impostorscore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202160082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-All the objects which in the original patchset kept a pointer to their
-namespace now store its identifier. It's needed only to determine whether
-an object belongs to our (in the current context) namespace or not.
-The aim of this change is to reduce the height of the Babel tower of pointers.
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> Define the ima_namespace structure and the ima_namespace variable
+> init_ima_ns for the host's IMA namespace. Implement basic functions for
+> namespacing support.
 
-Signed-off-by: Igor Baranov <igor.baranov@huawei.com>
----
- security/selinux/hooks.c            | 29 ++++++++++++++++++++++++-----
- security/selinux/include/objsec.h   |  4 +++-
- security/selinux/include/security.h |  2 ++
- 3 files changed, 29 insertions(+), 6 deletions(-)
+Implement the basic functions - ima_ns_init()  and ima_init_namespace()
+- for namespacing support.
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index a1716ce534dd..69bc8a5fc5b4 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -106,6 +106,9 @@
- /* SECMARK reference count */
- static atomic_t selinux_secmark_refcount = ATOMIC_INIT(0);
- 
-+/* Sequential namespace id */
-+static atomic64_t selinux_namespace_id = ATOMIC_INIT(0);
-+
- #ifdef CONFIG_SECURITY_SELINUX_DEVELOP
- static int selinux_enforcing_boot __initdata;
- 
-@@ -812,6 +815,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
- 			goto out;
- 
- 		root_isec->sid = rootcontext_sid;
-+		root_isec->namespace_id = current_selinux_state->id;
- 		root_isec->initialized = LABEL_INITIALIZED;
- 	}
- 
-@@ -1556,6 +1560,7 @@ static int inode_doinit_with_dentry(struct inode *inode, struct dentry *opt_dent
- 
- 		isec->initialized = LABEL_INITIALIZED;
- 		isec->sid = sid;
-+		isec->namespace_id = current_selinux_state->id;
- 	}
- 
- out_unlock:
-@@ -2588,7 +2593,7 @@ sbsec_alloc(struct superblock_security_head *sbsech)
- 	sbsec->sid = SECINITSID_UNLABELED;
- 	sbsec->def_sid = SECINITSID_FILE;
- 	sbsec->mntpoint_sid = SECINITSID_UNLABELED;
--	sbsec->state = get_selinux_state(current_selinux_state);
-+	sbsec->namespace_id = current_selinux_state->id;
- 
- 	return sbsec;
- }
-@@ -2599,12 +2604,12 @@ find_sbsec(struct superblock_security_head *sbsech)
- 	struct superblock_security_struct *cur, *new;
- 
- 	cur = container_of(sbsech->head.next, struct superblock_security_struct, sbsec_list);
--	if (cur->state == current_selinux_state)
-+	if (cur->namespace_id == current_selinux_state->id)
- 		return cur;
- 
- 	spin_lock(&sbsech->lock);
- 	list_for_each_entry(cur, &sbsech->head, sbsec_list) {
--		if (cur->state == current_selinux_state)
-+		if (cur->namespace_id == current_selinux_state->id)
- 			goto unlock;
- 	}
- 	spin_unlock(&sbsech->lock);
-@@ -2617,7 +2622,7 @@ find_sbsec(struct superblock_security_head *sbsech)
- 
- 	spin_lock(&sbsech->lock);
- 	list_for_each_entry(cur, &sbsech->head, sbsec_list) {
--		if (cur->state == current_selinux_state)
-+		if (cur->namespace_id == current_selinux_state->id)
- 			goto unlock;
- 	}
- 	list_add(&new->sbsec_list, &sbsech->head);
-@@ -2649,7 +2654,6 @@ static void selinux_sb_free_security(struct super_block *sb)
- 	struct superblock_security_head *sbsech = selinux_head_of_superblock(sb);
- 
- 	list_for_each_entry_safe(entry, tmp, &sbsech->head, sbsec_list) {
--		put_selinux_state(entry->state);
- 		kfree(entry);
- 	}
- }
-@@ -2911,6 +2915,7 @@ static int selinux_inode_alloc_security(struct inode *inode)
- 	isec->sclass = SECCLASS_FILE;
- 	isec->task_sid = sid;
- 	isec->initialized = LABEL_INVALID;
-+	isec->namespace_id = current_selinux_state->id;
- 
- 	return 0;
- }
-@@ -2985,6 +2990,7 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
- 		struct inode_security_struct *isec = selinux_inode(inode);
- 		isec->sclass = inode_mode_to_security_class(inode->i_mode);
- 		isec->sid = newsid;
-+		isec->namespace_id = current_selinux_state->id;
- 		isec->initialized = LABEL_INITIALIZED;
- 	}
- 
-@@ -3320,6 +3326,7 @@ static void selinux_inode_post_setxattr(struct dentry *dentry, const char *name,
- 	spin_lock(&isec->lock);
- 	isec->sclass = inode_mode_to_security_class(inode->i_mode);
- 	isec->sid = newsid;
-+	isec->namespace_id = current_selinux_state->id;
- 	isec->initialized = LABEL_INITIALIZED;
- 	spin_unlock(&isec->lock);
- 
-@@ -3479,6 +3486,7 @@ static int selinux_inode_setsecurity(struct inode *inode, const char *name,
- 	spin_lock(&isec->lock);
- 	isec->sclass = inode_mode_to_security_class(inode->i_mode);
- 	isec->sid = newsid;
-+	isec->namespace_id = current_selinux_state->id;
- 	isec->initialized = LABEL_INITIALIZED;
- 	spin_unlock(&isec->lock);
- 	return 0;
-@@ -3636,6 +3644,7 @@ static int selinux_file_alloc_security(struct file *file)
- 
- 	fsec->sid = sid;
- 	fsec->fown_sid = sid;
-+	fsec->namespace_id = current_selinux_state->id;
- 
- 	return 0;
- }
-@@ -3950,6 +3959,7 @@ static int selinux_file_open(struct file *file)
- 	 */
- 	fsec->isid = isec->sid;
- 	fsec->pseqno = avc_policy_seqno(current_selinux_state);
-+	fsec->namespace_id = current_selinux_state->id;
- 	/*
- 	 * Since the inode label or policy seqno may have changed
- 	 * between the selinux_inode_permission check and the saving
-@@ -4268,6 +4278,7 @@ static void selinux_task_to_inode(struct task_struct *p,
- 	spin_lock(&isec->lock);
- 	isec->sclass = inode_mode_to_security_class(inode->i_mode);
- 	isec->sid = sid;
-+	isec->namespace_id = current_selinux_state->id;
- 	isec->initialized = LABEL_INITIALIZED;
- 	spin_unlock(&isec->lock);
- }
-@@ -4634,6 +4645,7 @@ static int selinux_socket_post_create(struct socket *sock, int family,
- 
- 	isec->sclass = sclass;
- 	isec->sid = sid;
-+	isec->namespace_id = current_selinux_state->id;
- 	isec->initialized = LABEL_INITIALIZED;
- 
- 	if (sock->sk) {
-@@ -4930,6 +4942,7 @@ static int selinux_socket_accept(struct socket *sock, struct socket *newsock)
- 	newisec = inode_security_novalidate(SOCK_INODE(newsock));
- 	newisec->sclass = sclass;
- 	newisec->sid = sid;
-+	newisec->namespace_id = current_selinux_state->id;
- 	newisec->initialized = LABEL_INITIALIZED;
- 
- 	return 0;
-@@ -7332,6 +7345,11 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 
- static void selinux_state_free(struct work_struct *work);
- 
-+u64 selinux_new_state_id(void)
-+{
-+	return atomic64_fetch_add(1, &selinux_namespace_id);
-+}
-+
- int selinux_state_create(struct selinux_state *parent, struct selinux_state **state)
- {
- 	struct selinux_state *newstate;
-@@ -7341,6 +7359,7 @@ int selinux_state_create(struct selinux_state *parent, struct selinux_state **st
- 	if (!newstate)
- 		return -ENOMEM;
- 
-+	newstate->id = selinux_new_state_id();
- 	refcount_set(&newstate->count, 1);
- 	INIT_WORK(&newstate->work, selinux_state_free);
- 
-diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
-index 6ad1db45b0d9..24ef0bc68eda 100644
---- a/security/selinux/include/objsec.h
-+++ b/security/selinux/include/objsec.h
-@@ -42,6 +42,7 @@ struct inode_security_struct {
- 	u16 sclass;		/* security class of this object */
- 	unsigned char initialized;	/* initialization flag */
- 	spinlock_t lock;
-+	u64 namespace_id;	/* pointer to selinux_state */
- };
- 
- struct file_security_struct {
-@@ -49,6 +50,7 @@ struct file_security_struct {
- 	u32 fown_sid;		/* SID of file owner (for SIGIO) */
- 	u32 isid;		/* SID of inode at the time of file open */
- 	u32 pseqno;		/* Policy seqno at the time of file open */
-+	u64 namespace_id;
- };
- 
- struct superblock_security_head {
-@@ -66,7 +68,7 @@ struct superblock_security_struct {
- 	struct mutex lock;
- 	struct list_head isec_head;
- 	spinlock_t isec_lock;
--	struct selinux_state *state;	/* pointer to selinux_state */
-+	u64 namespace_id;           /* id of selinux_state */
- 	struct list_head sbsec_list;
- };
- 
-diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-index a5b698aae38c..b80622770543 100644
---- a/security/selinux/include/security.h
-+++ b/security/selinux/include/security.h
-@@ -111,8 +111,10 @@ struct selinux_state {
- 	struct selinux_policy __rcu *policy;
- 	struct mutex policy_mutex;
- 	struct selinux_state *parent;
-+	u64 id;
- } __randomize_layout;
- 
-+u64 selinux_new_state_id(void);
- int selinux_state_create(struct selinux_state *parent, struct selinux_state **state);
- void __put_selinux_state(struct selinux_state *state);
- 
--- 
-2.34.1
+> 
+> Move variables related to the IMA policy into the ima_namespace. This way
+> the IMA policy of an IMA namespace can be set and displayed using a
+> front-end like securityfs.
+
+> Implement ima_ns_from_file() to get the IMA namespace via the user
+> namespace of the securityfs superblock that a file belongs to.
+
+Currently, ima_ns_from_file() doesn't exist in this patch.
+
+> 
+> To get the current ima_namespace use &init_ima_ns when a function
+> that is related to a policy rule is called.
+
+In preparation for IMA namespacing, update the existing functions to
+pass the ima_namespace struct.  For now, ...
+
+> 
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+
+After addressing the one inline comment,
+	Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> 
+> ---
+
+>  
+> @@ -119,6 +117,17 @@ struct ima_kexec_hdr {
+>  	u64 count;
+>  };
+>  
+> +struct ima_namespace {
+> +	/* policy rules */
+> +	struct list_head ima_default_rules;
+> +	struct list_head ima_policy_rules;
+> +	struct list_head ima_temp_rules;
+
+These local policy variables weren't previously commented, but with the
+move to a structure it would be good to add comments.  For example, the
+architecture policy rules persist even after a custom policy is loaded.
+
+ima_default_rules: /* Kconfig, builtin, & arch rules */
+ima_policy_rules:  /* arch & custom rules */
+
+> +
+> +	struct list_head __rcu *ima_rules;	/* current policy */
+
+/* Pointer to the current policy */.
+
+> +	int ima_policy_flag;
+> +} __randomize_layout;
+> +extern struct ima_namespace init_ima_ns;
+> +
+>  extern const int read_idmap[];
+>  
+>  #ifdef CONFIG_HAVE_IMA_KEXEC
+> 
+>  {
+> +	struct ima_namespace *ns = &init_ima_ns;
+>  	char *data;
+>  	ssize_t result;
+>  
 
