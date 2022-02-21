@@ -2,26 +2,26 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA3A4BEC56
-	for <lists+linux-security-module@lfdr.de>; Mon, 21 Feb 2022 22:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D174BEC58
+	for <lists+linux-security-module@lfdr.de>; Mon, 21 Feb 2022 22:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbiBUVQQ (ORCPT
+        id S234566AbiBUVQb (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 21 Feb 2022 16:16:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41096 "EHLO
+        Mon, 21 Feb 2022 16:16:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234388AbiBUVPs (ORCPT
+        with ESMTP id S234393AbiBUVPs (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
         Mon, 21 Feb 2022 16:15:48 -0500
-Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [83.166.143.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D3423BF6
+Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EF423BFA
         for <linux-security-module@vger.kernel.org>; Mon, 21 Feb 2022 13:15:18 -0800 (PST)
 Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2Znx0KrTzMqHj1;
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2Znx4FH4zMqHRq;
         Mon, 21 Feb 2022 22:15:17 +0100 (CET)
 Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2Znw5mBSzljTgD;
-        Mon, 21 Feb 2022 22:15:16 +0100 (CET)
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2Znx2S0HzljTgH;
+        Mon, 21 Feb 2022 22:15:17 +0100 (CET)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>
@@ -35,9 +35,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v1 10/11] landlock: Document good practices about filesystem policies
-Date:   Mon, 21 Feb 2022 22:25:21 +0100
-Message-Id: <20220221212522.320243-11-mic@digikod.net>
+Subject: [PATCH v1 11/11] landlock: Add design choices documentation for filesystem access rights
+Date:   Mon, 21 Feb 2022 22:25:22 +0100
+Message-Id: <20220221212522.320243-12-mic@digikod.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221212522.320243-1-mic@digikod.net>
 References: <20220221212522.320243-1-mic@digikod.net>
@@ -46,7 +46,8 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,42 +56,45 @@ List-ID: <linux-security-module.vger.kernel.org>
 From: Mickaël Salaün <mic@linux.microsoft.com>
 
 Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220221212522.320243-11-mic@digikod.net
+Link: https://lore.kernel.org/r/20220221212522.320243-12-mic@digikod.net
 ---
- Documentation/userspace-api/landlock.rst | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ Documentation/security/landlock.rst | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-index 97db09d36a5c..cc3b52f65f99 100644
---- a/Documentation/userspace-api/landlock.rst
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -156,6 +156,27 @@ ruleset.
+diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
+index 3df68cb1d10f..621b2c1ac514 100644
+--- a/Documentation/security/landlock.rst
++++ b/Documentation/security/landlock.rst
+@@ -7,7 +7,7 @@ Landlock LSM: kernel documentation
+ ==================================
  
- Full working code can be found in `samples/landlock/sandboxer.c`_.
+ :Author: Mickaël Salaün
+-:Date: March 2021
++:Date: February 2022
  
-+Good practices
-+--------------
+ Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
+ harden a whole system, this feature should be available to any process,
+@@ -42,6 +42,21 @@ Guiding principles for safe access controls
+ * Computation related to Landlock operations (e.g. enforcing a ruleset) shall
+   only impact the processes requesting them.
+ 
++Design choices
++==============
 +
-+It is recommended setting access rights to file hierarchy leaves as much as
-+possible.  For instance, it is better to be able to have ``~/doc/`` as a
-+read-only hierarchy and ``~/tmp/`` as a read-write hierarchy, compared to
-+``~/`` as a read-only hierarchy and ``~/tmp/`` as a read-write hierarchy.
-+Following this good practice leads to self-sufficient hierarchies that don't
-+depend on their location (i.e. parent directories).  This is particularly
-+relevant when we want to allow linking or renaming.  Indeed, having consistent
-+access rights per directory enables to change the location of such directory
-+without relying on the destination directory access rights (except those that
-+are required for this operation, see `LANDLOCK_ACCESS_FS_REFER` documentation).
-+Having self-sufficient hierarchies also helps to tighten the required access
-+rights to the minimal set of data.  This also helps avoid sinkhole directories,
-+i.e.  directories where data can be linked to but not linked from.  However,
-+this depends on data organization, which might not be controlled by developers.
-+In this case, granting read-write access to ``~/tmp/``, instead of write-only
-+access, would potentially allow to move ``~/tmp/`` to a non-readable directory
-+and still keep the ability to list the content of ``~/tmp/``.
++Filesystem access rights
++------------------------
 +
- Layers of file path access rights
- ---------------------------------
++All access rights are tied to an inode and what can be accessed through it.
++Reading the content of a directory doesn't imply to be allowed to read the
++content of a listed inode.  Indeed, a file name is local to its parent
++directory, and an inode can be referenced by multiple file names thanks to
++(hard) links.  Being able to unlink a file only has a direct impact on the
++directory, not the unlinked inode.  This is the reason why
++`LANDLOCK_ACCESS_FS_REMOVE_FILE` or `LANDLOCK_ACCESS_FS_REFER` are not allowed
++to be tied to files but only to directories.
++
+ Tests
+ =====
  
 -- 
 2.35.1
