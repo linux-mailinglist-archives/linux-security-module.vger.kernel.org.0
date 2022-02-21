@@ -2,93 +2,133 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7AD4BEBB3
-	for <lists+linux-security-module@lfdr.de>; Mon, 21 Feb 2022 21:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4514BEC4A
+	for <lists+linux-security-module@lfdr.de>; Mon, 21 Feb 2022 22:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbiBUUTD (ORCPT
+        id S234351AbiBUVPn (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 21 Feb 2022 15:19:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45504 "EHLO
+        Mon, 21 Feb 2022 16:15:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiBUUTC (ORCPT
+        with ESMTP id S234310AbiBUVPl (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:19:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07802E25;
-        Mon, 21 Feb 2022 12:18:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF3C8B81785;
-        Mon, 21 Feb 2022 20:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF0CC340E9;
-        Mon, 21 Feb 2022 20:18:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645474716;
-        bh=9TbUxu9ANLN8OJeZFahEkB+z9aXN3pXd7uUSAx+0lmg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aXcfKVPbCdm9aawIO2nH/n6q5QUuI6PfXTCH79dm7LfBqkiJKN+IkLamneBSlZFaD
-         aSQ8Ofr9/JXNn1u9v/8li2HB82LlDBJTvosi4lRwDx6cL0QICXFjdggP13STkdl1yA
-         VUWY+BSr49NuAU0LG1WUSypZTGsHbHV2MoZPs0h3ZKh6ZnsHaZ5YQS3tG9uc1YJF0x
-         FOf/apA519BibyAkiqztootyMT6fqtkK/yYxsFbGvZwOyNM5VFggN1M7zjXycCIfU+
-         IgdX8iXnzLnnqcoUt8DCTCRRUMBptQsrC/cuEZzOKw4GCLQ82AVHepEE8ojkWP0CMo
-         F5Z7NnlKEhTJA==
-Date:   Mon, 21 Feb 2022 21:19:12 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Yael Tzur <yaelt@google.com>, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, corbet@lwn.net, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mon, 21 Feb 2022 16:15:41 -0500
+X-Greylist: delayed 19910 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Feb 2022 13:15:12 PST
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D1923BF6;
+        Mon, 21 Feb 2022 13:15:12 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2Znp6nTfzMqFht;
+        Mon, 21 Feb 2022 22:15:10 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2Znp0FmxzljTg3;
+        Mon, 21 Feb 2022 22:15:09 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-Message-ID: <YhPzwOREseaU3RA5@iki.fi>
-References: <20220215141953.1557009-1-yaelt@google.com>
- <0aa47dfaada88f1cbd2162784f8b77f43566f626.camel@linux.ibm.com>
+Subject: [PATCH v1 00/11] Landlock: file linking and renaming support
+Date:   Mon, 21 Feb 2022 22:25:11 +0100
+Message-Id: <20220221212522.320243-1-mic@digikod.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0aa47dfaada88f1cbd2162784f8b77f43566f626.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Feb 21, 2022 at 12:11:22AM -0500, Mimi Zohar wrote:
-> On Tue, 2022-02-15 at 09:19 -0500, Yael Tzur wrote:
-> > For availability and performance reasons master keys often need to be
-> > released outside of a Key Management Service (KMS) to clients. It
-> > would be beneficial to provide a mechanism where the
-> > wrapping/unwrapping of data encryption keys (DEKs) is not dependent
-> > on a remote call at runtime yet security is not (or only minimally)
-> > compromised. Master keys could be securely stored in the Kernel and
-> > be used to wrap/unwrap keys from Userspace.
-> > 
-> > The encrypted.c class supports instantiation of encrypted keys with
-> > either an already-encrypted key material, or by generating new key
-> > material based on random numbers. This patch defines a new datablob
-> > format: [<format>] <master-key name> <decrypted data length>
-> > <decrypted data> that allows to inject and encrypt user-provided
-> > decrypted data. The decrypted data must be hex-ascii encoded.
-> > 
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Signed-off-by: Yael Tzur <yaelt@google.com>
-> 
-> Thanks,  Yael.
-> 
-> This patch is now queued in the #next-integrity-testing branch.
-> 
-> -- 
-> thanks,
-> 
-> Mimi
-> 
+Hi,
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+One of the most annoying limitations of Landlock is that sandboxed
+processes can only link and rename files to the same directory (i.e.
+file reparenting is always denied).  Indeed, because of the unprivileged
+nature of Landlock, file hierarchy are identified thanks to ephemeral
+inode tagging, which may cause arbitrary renaming and linking to change
+the security policy in an unexpected way.
 
-BR, Jarkko
+This patch series brings a new access right, LANDLOCK_ACCESS_FS_REFER,
+which enables to allow safe file linking and renaming.  In a nutshell,
+Landlock checks that the inherited access rights of a moved or renamed
+file cannot increase but only reduce.  Six new test suits cover file
+renaming and linking, which brings coverage for security/landlock/ from
+93.5% of lines to 94.4%.
+
+The documentation and the tutorial is extended with this new access
+right, along with more explanations about backward and forward
+compatibility, good practices, and a bit about the current access
+rights rational.
+
+While developing this new feature, I also found an issue with the
+current implementation of Landlock.  In some (rare) cases, sandboxed
+processes may be more restricted than intended.  Indeed, because of the
+current way to check file hierarchy access rights, composition of rules
+may be incomplete when requesting multiple accesses at the same time.
+This is fixed with a dedicated patch involving some refactoring.  A new
+test suite checks relevant new edge cases.
+
+As a side effect, and to limit the increased use of the stack, I reduced
+the number of Landlock nested domains from 64 to 16.  I think this
+should be more than enough for legitimate use cases, but feel free to
+challenge this decision with real and legitimate use cases.
+
+Because of the current path_rename security hook, Landlock cannot yet
+return consistent error codes with RENAME_EXCHANGE.  I plan to address
+this issue with a next series.
+
+This patch series was developed with some complementary new tests sent
+in a standalone patch series:
+https://lore.kernel.org/r/20220221155311.166278-1-mic@digikod.net
+
+Additionally, a new dedicated syzkaller test has been developed to cover
+new paths.
+
+Regards,
+
+Mickaël Salaün (11):
+  landlock: Define access_mask_t to enforce a consistent access mask
+    size
+  landlock: Reduce the maximum number of layers to 16
+  landlock: Create find_rule() from unmask_layers()
+  landlock: Fix same-layer rule unions
+  landlock: Move filesystem helpers and add a new one
+  landlock: Add support for file reparenting with
+    LANDLOCK_ACCESS_FS_REFER
+  selftest/landlock: Add 6 new test suites dedicated to file reparenting
+  samples/landlock: Add support for file reparenting
+  landlock: Document LANDLOCK_ACCESS_FS_REFER and ABI versioning
+  landlock: Document good practices about filesystem policies
+  landlock: Add design choices documentation for filesystem access
+    rights
+
+ Documentation/security/landlock.rst          |  17 +-
+ Documentation/userspace-api/landlock.rst     | 145 +++-
+ include/uapi/linux/landlock.h                |  27 +-
+ samples/landlock/sandboxer.c                 |  37 +-
+ security/landlock/fs.c                       | 721 +++++++++++++++----
+ security/landlock/fs.h                       |   2 +-
+ security/landlock/limits.h                   |   6 +-
+ security/landlock/ruleset.c                  |   6 +-
+ security/landlock/ruleset.h                  |  23 +-
+ security/landlock/syscalls.c                 |   2 +-
+ tools/testing/selftests/landlock/base_test.c |   2 +-
+ tools/testing/selftests/landlock/fs_test.c   | 634 +++++++++++++++-
+ 12 files changed, 1447 insertions(+), 175 deletions(-)
+
+
+base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507
+-- 
+2.35.1
+
