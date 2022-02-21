@@ -2,25 +2,25 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B964BEC47
-	for <lists+linux-security-module@lfdr.de>; Mon, 21 Feb 2022 22:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4494BEC49
+	for <lists+linux-security-module@lfdr.de>; Mon, 21 Feb 2022 22:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiBUVPm (ORCPT
+        id S234363AbiBUVPp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 21 Feb 2022 16:15:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41086 "EHLO
+        Mon, 21 Feb 2022 16:15:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbiBUVPl (ORCPT
+        with ESMTP id S234294AbiBUVPm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 21 Feb 2022 16:15:41 -0500
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D428923BE7
-        for <linux-security-module@vger.kernel.org>; Mon, 21 Feb 2022 13:15:13 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2Znr2D7BzMqK3b;
+        Mon, 21 Feb 2022 16:15:42 -0500
+Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fa9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADABD24084
+        for <linux-security-module@vger.kernel.org>; Mon, 21 Feb 2022 13:15:14 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2Znr6sSwzMqHjD;
         Mon, 21 Feb 2022 22:15:12 +0100 (CET)
 Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2Znr0TjLzlhPJX;
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2Znr4VDvzljTgK;
         Mon, 21 Feb 2022 22:15:12 +0100 (CET)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     James Morris <jmorris@namei.org>,
@@ -35,9 +35,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v1 02/11] landlock: Reduce the maximum number of layers to 16
-Date:   Mon, 21 Feb 2022 22:25:13 +0100
-Message-Id: <20220221212522.320243-3-mic@digikod.net>
+Subject: [PATCH v1 03/11] landlock: Create find_rule() from unmask_layers()
+Date:   Mon, 21 Feb 2022 22:25:14 +0100
+Message-Id: <20220221212522.320243-4-mic@digikod.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221212522.320243-1-mic@digikod.net>
 References: <20220221212522.320243-1-mic@digikod.net>
@@ -45,9 +45,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,112 +54,87 @@ List-ID: <linux-security-module.vger.kernel.org>
 
 From: Mickaël Salaün <mic@linux.microsoft.com>
 
-The maximum number of nested Landlock domains is currently 64.  Because
-of the following fix and to help reduce the stack size, let's reduce it
-to 16.  This seems large enough for a lot of use cases (e.g. sandboxed
-init service, spawning a sandboxed SSH service, in nested sandboxed
-containers).  Reducing the number of nested domains may also help to
-discover misuse of Landlock (e.g. creating a domain per rule).
-
-Add and use a dedicated layer_mask_t typedef to fit with the number of
-layers.  This might be useful when changing it and to keep it consistent
-with the maximum number of layers.
+This refactoring will be useful in a following commit.
 
 Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220221212522.320243-3-mic@digikod.net
+Link: https://lore.kernel.org/r/20220221212522.320243-4-mic@digikod.net
 ---
- security/landlock/fs.c                     | 13 +++++--------
- security/landlock/limits.h                 |  2 +-
- security/landlock/ruleset.h                |  4 ++++
- tools/testing/selftests/landlock/fs_test.c |  2 +-
- 4 files changed, 11 insertions(+), 10 deletions(-)
+ security/landlock/fs.c | 39 +++++++++++++++++++++++++++------------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
 
 diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 9de2a460a762..4048e3c04d75 100644
+index 4048e3c04d75..0bcb27f2360a 100644
 --- a/security/landlock/fs.c
 +++ b/security/landlock/fs.c
-@@ -180,10 +180,10 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+@@ -180,23 +180,36 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
  
  /* Access-control management */
  
--static inline u64 unmask_layers(
-+static inline layer_mask_t unmask_layers(
+-static inline layer_mask_t unmask_layers(
++/*
++ * The lifetime of the returned rule is tied to @domain.
++ *
++ * Returns NULL if no rule is found or if @dentry is negative.
++ */
++static inline const struct landlock_rule *find_rule(
  		const struct landlock_ruleset *const domain,
- 		const struct path *const path,
--		const access_mask_t access_request, u64 layer_mask)
-+		const access_mask_t access_request, layer_mask_t layer_mask)
+-		const struct path *const path,
+-		const access_mask_t access_request, layer_mask_t layer_mask)
++		const struct dentry *const dentry)
  {
  	const struct landlock_rule *rule;
  	const struct inode *inode;
-@@ -209,11 +209,11 @@ static inline u64 unmask_layers(
+-	size_t i;
+ 
+-	if (d_is_negative(path->dentry))
+-		/* Ignore nonexistent leafs. */
+-		return layer_mask;
+-	inode = d_backing_inode(path->dentry);
++	/* Ignores nonexistent leafs. */
++	if (d_is_negative(dentry))
++		return NULL;
++
++	inode = d_backing_inode(dentry);
+ 	rcu_read_lock();
+ 	rule = landlock_find_rule(domain,
+ 			rcu_dereference(landlock_inode(inode)->object));
+ 	rcu_read_unlock();
++	return rule;
++}
++
++static inline layer_mask_t unmask_layers(
++		const struct landlock_rule *const rule,
++		const access_mask_t access_request, layer_mask_t layer_mask)
++{
++	size_t layer_level;
++
+ 	if (!rule)
+ 		return layer_mask;
+ 
+@@ -207,8 +220,9 @@ static inline layer_mask_t unmask_layers(
+ 	 * the remaining layers for each inode, from the first added layer to
+ 	 * the last one.
  	 */
- 	for (i = 0; i < rule->num_layers; i++) {
- 		const struct landlock_layer *const layer = &rule->layers[i];
--		const u64 layer_level = BIT_ULL(layer->level - 1);
-+		const layer_mask_t layer_bit = BIT_ULL(layer->level - 1);
+-	for (i = 0; i < rule->num_layers; i++) {
+-		const struct landlock_layer *const layer = &rule->layers[i];
++	for (layer_level = 0; layer_level < rule->num_layers; layer_level++) {
++		const struct landlock_layer *const layer =
++			&rule->layers[layer_level];
+ 		const layer_mask_t layer_bit = BIT_ULL(layer->level - 1);
  
  		/* Checks that the layer grants access to the full request. */
- 		if ((layer->access & access_request) == access_request) {
--			layer_mask &= ~layer_level;
-+			layer_mask &= ~layer_bit;
+@@ -266,8 +280,9 @@ static int check_access_path(const struct landlock_ruleset *const domain,
+ 	while (true) {
+ 		struct dentry *parent_dentry;
  
- 			if (layer_mask == 0)
- 				return layer_mask;
-@@ -228,12 +228,9 @@ static int check_access_path(const struct landlock_ruleset *const domain,
- {
- 	bool allowed = false;
- 	struct path walker_path;
--	u64 layer_mask;
-+	layer_mask_t layer_mask;
- 	size_t i;
- 
--	/* Make sure all layers can be checked. */
--	BUILD_BUG_ON(BITS_PER_TYPE(layer_mask) < LANDLOCK_MAX_NUM_LAYERS);
--
- 	if (!access_request)
- 		return 0;
- 	if (WARN_ON_ONCE(!domain || !path))
-diff --git a/security/landlock/limits.h b/security/landlock/limits.h
-index 458d1de32ed5..126d1ec04d34 100644
---- a/security/landlock/limits.h
-+++ b/security/landlock/limits.h
-@@ -13,7 +13,7 @@
- #include <linux/limits.h>
- #include <uapi/linux/landlock.h>
- 
--#define LANDLOCK_MAX_NUM_LAYERS		64
-+#define LANDLOCK_MAX_NUM_LAYERS		16
- #define LANDLOCK_MAX_NUM_RULES		U32_MAX
- 
- #define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_MAKE_SYM
-diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
-index 7e7cac68e443..0128c56ee7ff 100644
---- a/security/landlock/ruleset.h
-+++ b/security/landlock/ruleset.h
-@@ -23,6 +23,10 @@ typedef u16 access_mask_t;
- /* Makes sure all filesystem access rights can be stored. */
- static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_FS);
- 
-+typedef u16 layer_mask_t;
-+/* Makes sure all layers can be checked. */
-+static_assert(BITS_PER_TYPE(layer_mask_t) >= LANDLOCK_MAX_NUM_LAYERS);
-+
- /**
-  * struct landlock_layer - Access rights for a given layer
-  */
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 10c9a1e4ebd9..99838cac970b 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -1080,7 +1080,7 @@ TEST_F_FORK(layout1, max_layers)
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
- 	ASSERT_LE(0, ruleset_fd);
--	for (i = 0; i < 64; i++)
-+	for (i = 0; i < 16; i++)
- 		enforce_ruleset(_metadata, ruleset_fd);
- 
- 	for (i = 0; i < 2; i++) {
+-		layer_mask = unmask_layers(domain, &walker_path,
+-				access_request, layer_mask);
++		layer_mask = unmask_layers(find_rule(domain,
++					walker_path.dentry), access_request,
++				layer_mask);
+ 		if (layer_mask == 0) {
+ 			/* Stops when a rule from each layer grants access. */
+ 			allowed = true;
 -- 
 2.35.1
 
