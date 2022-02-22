@@ -2,256 +2,228 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776804C004B
-	for <lists+linux-security-module@lfdr.de>; Tue, 22 Feb 2022 18:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B524C02A6
+	for <lists+linux-security-module@lfdr.de>; Tue, 22 Feb 2022 20:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbiBVRoC (ORCPT
+        id S235357AbiBVT7s (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 22 Feb 2022 12:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        Tue, 22 Feb 2022 14:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234446AbiBVRoB (ORCPT
+        with ESMTP id S235363AbiBVT7r (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 22 Feb 2022 12:44:01 -0500
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF42169201
-        for <linux-security-module@vger.kernel.org>; Tue, 22 Feb 2022 09:43:34 -0800 (PST)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K36375WxtzMqBYM;
-        Tue, 22 Feb 2022 18:43:31 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K363613G9zlhSML;
-        Tue, 22 Feb 2022 18:43:29 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [RFC PATCH v1] LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
-Date:   Tue, 22 Feb 2022 18:53:32 +0100
-Message-Id: <20220222175332.384545-1-mic@digikod.net>
-X-Mailer: git-send-email 2.35.1
+        Tue, 22 Feb 2022 14:59:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20633E98CF
+        for <linux-security-module@vger.kernel.org>; Tue, 22 Feb 2022 11:59:21 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nMbJF-00050T-2f; Tue, 22 Feb 2022 20:58:53 +0100
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nMbJC-009hyD-9M; Tue, 22 Feb 2022 20:58:50 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     kernel@pengutronix.de, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v5 0/5] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+Date:   Tue, 22 Feb 2022 20:58:14 +0100
+Message-Id: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+Series applies on top of current linux-tpmdd/master
 
-In order to be able to identify a file exchange with renameat2(2) and
-RENAME_EXCHANGE, which will be useful for Landlock [1], propagate the
-rename flags to LSMs.  This may also improve performance because of the
-switch from two set of LSM hook calls to only one, and because LSMs
-using this hook may optimize the double check (e.g. only one lock,
-reduce the number of path walks).
+v4 was here:
+https://lore.kernel.org/linux-integrity/cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de
 
-AppArmor, Landlock and Tomoyo are updated to leverage this change.  This
-should not change the current behavior (same check order), except
-(different level of) speed boosts.
+v4 -> v5:
+  - Collected Reviewed-by's and Tested-by's
+  - Changed trusted.kernel_rng bool option into a string trusted.rng option
+    (Jarkko)
+  - Changed modifier to SECURE_KEY for compatibility with linux-imx
+    (Matthias)
+  - Typo fix in commit message (Jarkko)
+  - Note in CAAM patch what CAAM is (Jarkko)
 
-[1] https://lore.kernel.org/r/20220221212522.320243-1-mic@digikod.net
+v3 -> v4:
+  - Collected Acked-by's, Reviewed-by's and Tested-by
+  - Fixed typo spotted by David
+  - Rebased on top of Andreas' regression fix and pulled Kconfig
+    inflexibility fix back into series
 
-Cc: James Morris <jmorris@namei.org>
-Cc: John Johansen <john.johansen@canonical.com>
-Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-Cc: Serge E. Hallyn <serge@hallyn.com>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220222175332.384545-1-mic@digikod.net
+v2 -> v3:
+ - Split off first Kconfig preparation patch. It fixes a regression,
+   so sent that out, so it can be applied separately (Sumit)
+ - Split off second key import patch. I'll send that out separately
+   as it's a development aid and not required within the CAAM series
+ - add MAINTAINERS entry
+
+v1 -> v2:
+ - Added new commit to make trusted key Kconfig option independent
+   of TPM and added new Kconfig file for trusted keys
+ - Add new commit for importing existing key material
+ - Allow users to force use of kernel RNG (Jarkko)
+ - Enforce maximum keymod size (Horia)
+ - Use append_seq_(in|out)_ptr_intlen instead of append_seq_(in|out)_ptr
+   (Horia)
+ - Make blobifier handle private to CAAM glue code file (Horia)
+ - Extend trusted keys documentation for CAAM
+ - Rebased and updated original cover letter:
+
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key.
+
+There has been multiple discussions on how to represent this within the kernel:
+
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key. There has been multiple
+discussions on how to represent this within the kernel:
+
+ - [RFC] crypto: caam - add red blobifier
+   Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
+   best integrate the blob mechanism.
+   Mimi suggested that it could be used to implement trusted keys.
+   Trusted keys back then were a TPM-only feature.
+
+ - security/keys/secure_key: Adds the secure key support based on CAAM.
+   Udit Agarwal added[2] a new "secure" key type with the CAAM as backend.
+   The key material stays within the kernel only.
+   Mimi and James agreed that this needs a generic interface, not specific
+   to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
+   basis for TEE-backed keys.
+
+ - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+   Franck added[3] a new "caam_tk" key type based on Udit's work. This time
+   it uses CAAM "black blobs" instead of "red blobs", so key material stays
+   within the CAAM and isn't exposed to kernel in plaintext.
+   James voiced the opinion that there should be just one user-facing generic
+   wrap/unwrap key type with multiple possible handlers.
+   David suggested trusted keys.
+
+ - Introduce TEE based Trusted Keys support
+   Sumit reworked[4] trusted keys to support multiple possible backends with
+   one chosen at boot time and added a new TEE backend along with TPM.
+   This now sits in Jarkko's master branch to be sent out for v5.13
+
+This patch series builds on top of Sumit's rework to have the CAAM as yet another
+trusted key backend.
+
+The CAAM bits are based on Steffen's initial patch from 2015. His work had been
+used in the field for some years now, so I preferred not to deviate too much from it.
+
+This series has been tested with dmcrypt[5] on an i.MX6DL.
+
+Looking forward to your feedback.
+
+Cheers,
+Ahmad
+
+ [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
+ [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
+ [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
+ [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
+ [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
+
 ---
- include/linux/lsm_hook_defs.h |  2 +-
- include/linux/lsm_hooks.h     |  1 +
- security/apparmor/lsm.c       | 30 +++++++++++++++++++++++++-----
- security/landlock/fs.c        | 12 ++++++++++--
- security/security.c           |  9 +--------
- security/tomoyo/tomoyo.c      | 11 ++++++++++-
- 6 files changed, 48 insertions(+), 17 deletions(-)
+To: Jarkko Sakkinen <jarkko@kernel.org>
+To: "Horia Geantă" <horia.geanta@nxp.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+To: Aymen Sghaier <aymen.sghaier@nxp.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+To: "David S. Miller" <davem@davemloft.net>
+To: James Bottomley <jejb@linux.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+Cc: David Gstir <david@sigma-star.at>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+Cc: Sumit Garg <sumit.garg@linaro.org>
+Cc: Andreas Rammhold <andreas@rammhold.de>
+Cc: Tim Harvey <tharvey@gateworks.com>
+Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+Cc: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 819ec92dc2a8..d8b49c9c3a8a 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -100,7 +100,7 @@ LSM_HOOK(int, 0, path_link, struct dentry *old_dentry,
- 	 const struct path *new_dir, struct dentry *new_dentry)
- LSM_HOOK(int, 0, path_rename, const struct path *old_dir,
- 	 struct dentry *old_dentry, const struct path *new_dir,
--	 struct dentry *new_dentry)
-+	 struct dentry *new_dentry, unsigned int flags)
- LSM_HOOK(int, 0, path_chmod, const struct path *path, umode_t mode)
- LSM_HOOK(int, 0, path_chown, const struct path *path, kuid_t uid, kgid_t gid)
- LSM_HOOK(int, 0, path_chroot, const struct path *path)
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 3bf5c658bc44..32cd2a7fe9fc 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -358,6 +358,7 @@
-  *	@old_dentry contains the dentry structure of the old link.
-  *	@new_dir contains the path structure for parent of the new link.
-  *	@new_dentry contains the dentry structure of the new link.
-+ *	@flags may contain rename options such as RENAME_EXCHANGE.
-  *	Return 0 if permission is granted.
-  * @path_chmod:
-  *	Check for permission to change a mode of the file @path. The new
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 4f0eecb67dde..900bc540656a 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -354,13 +354,16 @@ static int apparmor_path_link(struct dentry *old_dentry, const struct path *new_
- }
- 
- static int apparmor_path_rename(const struct path *old_dir, struct dentry *old_dentry,
--				const struct path *new_dir, struct dentry *new_dentry)
-+				const struct path *new_dir, struct dentry *new_dentry,
-+				const unsigned int flags)
- {
- 	struct aa_label *label;
- 	int error = 0;
- 
- 	if (!path_mediated_fs(old_dentry))
- 		return 0;
-+	if ((flags & RENAME_EXCHANGE) && !path_mediated_fs(new_dentry))
-+		return 0;
- 
- 	label = begin_current_label_crit_section();
- 	if (!unconfined(label)) {
-@@ -374,10 +377,27 @@ static int apparmor_path_rename(const struct path *old_dir, struct dentry *old_d
- 			d_backing_inode(old_dentry)->i_mode
- 		};
- 
--		error = aa_path_perm(OP_RENAME_SRC, label, &old_path, 0,
--				     MAY_READ | AA_MAY_GETATTR | MAY_WRITE |
--				     AA_MAY_SETATTR | AA_MAY_DELETE,
--				     &cond);
-+		if (flags & RENAME_EXCHANGE) {
-+			struct path_cond cond_exchange = {
-+				i_uid_into_mnt(mnt_userns, d_backing_inode(new_dentry)),
-+				d_backing_inode(new_dentry)->i_mode
-+			};
-+
-+			error = aa_path_perm(OP_RENAME_SRC, label, &new_path, 0,
-+					     MAY_READ | AA_MAY_GETATTR | MAY_WRITE |
-+					     AA_MAY_SETATTR | AA_MAY_DELETE,
-+					     &cond_exchange);
-+			if (!error)
-+				error = aa_path_perm(OP_RENAME_DEST, label, &old_path,
-+						     0, MAY_WRITE | AA_MAY_SETATTR |
-+						     AA_MAY_CREATE, &cond_exchange);
-+		}
-+
-+		if (!error)
-+			error = aa_path_perm(OP_RENAME_SRC, label, &old_path, 0,
-+					     MAY_READ | AA_MAY_GETATTR | MAY_WRITE |
-+					     AA_MAY_SETATTR | AA_MAY_DELETE,
-+					     &cond);
- 		if (!error)
- 			error = aa_path_perm(OP_RENAME_DEST, label, &new_path,
- 					     0, MAY_WRITE | AA_MAY_SETATTR |
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 97b8e421f617..7e57fca6e814 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -574,10 +574,12 @@ static inline u32 maybe_remove(const struct dentry *const dentry)
- static int hook_path_rename(const struct path *const old_dir,
- 		struct dentry *const old_dentry,
- 		const struct path *const new_dir,
--		struct dentry *const new_dentry)
-+		struct dentry *const new_dentry,
-+		const unsigned int flags)
- {
- 	const struct landlock_ruleset *const dom =
- 		landlock_get_current_domain();
-+	u32 exchange_access = 0;
- 
- 	if (!dom)
- 		return 0;
-@@ -585,11 +587,17 @@ static int hook_path_rename(const struct path *const old_dir,
- 	if (old_dir->dentry != new_dir->dentry)
- 		/* Gracefully forbids reparenting. */
- 		return -EXDEV;
-+	if (flags & RENAME_EXCHANGE) {
-+		if (unlikely(d_is_negative(new_dentry)))
-+			return -ENOENT;
-+		exchange_access =
-+			get_mode_access(d_backing_inode(new_dentry)->i_mode);
-+	}
- 	if (unlikely(d_is_negative(old_dentry)))
- 		return -ENOENT;
- 	/* RENAME_EXCHANGE is handled because directories are the same. */
- 	return check_access_path(dom, old_dir, maybe_remove(old_dentry) |
--			maybe_remove(new_dentry) |
-+			maybe_remove(new_dentry) | exchange_access |
- 			get_mode_access(d_backing_inode(old_dentry)->i_mode));
- }
- 
-diff --git a/security/security.c b/security/security.c
-index 22261d79f333..8634da4cfd46 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1184,15 +1184,8 @@ int security_path_rename(const struct path *old_dir, struct dentry *old_dentry,
- 		     (d_is_positive(new_dentry) && IS_PRIVATE(d_backing_inode(new_dentry)))))
- 		return 0;
- 
--	if (flags & RENAME_EXCHANGE) {
--		int err = call_int_hook(path_rename, 0, new_dir, new_dentry,
--					old_dir, old_dentry);
--		if (err)
--			return err;
--	}
--
- 	return call_int_hook(path_rename, 0, old_dir, old_dentry, new_dir,
--				new_dentry);
-+				new_dentry, flags);
- }
- EXPORT_SYMBOL(security_path_rename);
- 
-diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
-index b6a31901f289..71e82d855ebf 100644
---- a/security/tomoyo/tomoyo.c
-+++ b/security/tomoyo/tomoyo.c
-@@ -264,17 +264,26 @@ static int tomoyo_path_link(struct dentry *old_dentry, const struct path *new_di
-  * @old_dentry: Pointer to "struct dentry".
-  * @new_parent: Pointer to "struct path".
-  * @new_dentry: Pointer to "struct dentry".
-+ * @flags: Rename options.
-  *
-  * Returns 0 on success, negative value otherwise.
-  */
- static int tomoyo_path_rename(const struct path *old_parent,
- 			      struct dentry *old_dentry,
- 			      const struct path *new_parent,
--			      struct dentry *new_dentry)
-+			      struct dentry *new_dentry,
-+			      const unsigned int flags)
- {
- 	struct path path1 = { .mnt = old_parent->mnt, .dentry = old_dentry };
- 	struct path path2 = { .mnt = new_parent->mnt, .dentry = new_dentry };
- 
-+	if (flags & RENAME_EXCHANGE) {
-+		const int err = tomoyo_path2_perm(TOMOYO_TYPE_RENAME, &path2,
-+				&path1);
-+
-+		if (err)
-+			return err;
-+	}
- 	return tomoyo_path2_perm(TOMOYO_TYPE_RENAME, &path1, &path2);
- }
- 
+Ahmad Fatoum (5):
+  KEYS: trusted: allow use of TEE as backend without TCG_TPM support
+  KEYS: trusted: allow users to use kernel RNG for key material
+  KEYS: trusted: allow trust sources to use kernel RNG for key material
+  crypto: caam - add in-kernel interface for blob generator
+  KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
 
-base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507
+ .../admin-guide/kernel-parameters.txt         |  11 +
+ .../security/keys/trusted-encrypted.rst       |  60 ++++-
+ MAINTAINERS                                   |   9 +
+ crypto/asymmetric_keys/Kconfig                |   2 +-
+ drivers/crypto/caam/Kconfig                   |   3 +
+ drivers/crypto/caam/Makefile                  |   1 +
+ drivers/crypto/caam/blob_gen.c                | 230 ++++++++++++++++++
+ include/keys/trusted-type.h                   |   2 +-
+ include/keys/trusted_caam.h                   |  11 +
+ include/soc/fsl/caam-blob.h                   |  56 +++++
+ security/keys/Kconfig                         |  18 +-
+ security/keys/trusted-keys/Kconfig            |  38 +++
+ security/keys/trusted-keys/Makefile           |  10 +-
+ security/keys/trusted-keys/trusted_caam.c     |  74 ++++++
+ security/keys/trusted-keys/trusted_core.c     |  45 +++-
+ 15 files changed, 540 insertions(+), 30 deletions(-)
+ create mode 100644 drivers/crypto/caam/blob_gen.c
+ create mode 100644 include/keys/trusted_caam.h
+ create mode 100644 include/soc/fsl/caam-blob.h
+ create mode 100644 security/keys/trusted-keys/Kconfig
+ create mode 100644 security/keys/trusted-keys/trusted_caam.c
+
 -- 
-2.35.1
+2.30.2
 
