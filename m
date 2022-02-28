@@ -2,109 +2,75 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389164C6B03
-	for <lists+linux-security-module@lfdr.de>; Mon, 28 Feb 2022 12:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5364C6BEB
+	for <lists+linux-security-module@lfdr.de>; Mon, 28 Feb 2022 13:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235986AbiB1LoY (ORCPT
+        id S236192AbiB1MOk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 28 Feb 2022 06:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        Mon, 28 Feb 2022 07:14:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbiB1LoT (ORCPT
+        with ESMTP id S231341AbiB1MOj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 28 Feb 2022 06:44:19 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823F94248F;
-        Mon, 28 Feb 2022 03:43:39 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21SAF4En036329;
-        Mon, 28 Feb 2022 11:43:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=2oSiORtt5a9QwiuhXxdU0VsQ+I8NwUBoWpk6NI0GnpI=;
- b=tNKeBreuQH20raqshNBorvptrAB5Zuf/8pbdXLlJsbN2zzwMUCDRL+E6ccoJvakGal3G
- 3cwXfIruHsft59bQHSB6PNh4vxWQeg4LDAObwYx89A2lTnwbPDkzChb7pKAMMTXRgLDG
- SigDT3vZsSt6HohaPv1pb/8k/ykuAdJfw0k/UfmX54hqy8q9wqbGC5xxXdb0GamGLJhR
- zgp+R2lZ3baHaiN+wbQJu2aanFNtaS5xnAMgersUHTy83lV5i5edNV5Vp50oiI+urMjo
- opOiCGt7JqdnGP2PdFGXvBGrdzZABZ6pb6lK55r0c3KDmhHvtywPIPOMm/4wdqgfUITG BQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3egvfs9ysa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Feb 2022 11:43:06 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21SAwTX7035846;
-        Mon, 28 Feb 2022 11:43:05 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3egvfs9yrq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Feb 2022 11:43:05 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21SBXEWF017806;
-        Mon, 28 Feb 2022 11:43:04 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01dal.us.ibm.com with ESMTP id 3efbua0ft7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Feb 2022 11:43:04 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21SBh0FQ10683000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Feb 2022 11:43:00 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29E77112061;
-        Mon, 28 Feb 2022 11:43:00 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4A5D11206B;
-        Mon, 28 Feb 2022 11:42:59 +0000 (GMT)
-Received: from amdrome3.watson.ibm.com (unknown [9.2.130.16])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Feb 2022 11:42:59 +0000 (GMT)
-From:   Dov Murik <dovmurik@linux.ibm.com>
-To:     linux-efi@vger.kernel.org
-Cc:     Dov Murik <dovmurik@linux.ibm.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mon, 28 Feb 2022 07:14:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ED126110;
+        Mon, 28 Feb 2022 04:14:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0A246111F;
+        Mon, 28 Feb 2022 12:14:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20BECC340F0;
+        Mon, 28 Feb 2022 12:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646050440;
+        bh=Km/ETwktcu0d0SJMnDCeHyQj69xN1Lz9uFFUMONXypA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=n1v5K07n8jOhxyq57xn7BQrEorbQ8yrMw4Ug0tI2DGAYQcMUtfIPciRT+HTKaJmkf
+         dkKdBiPqKImphpI6YQxHf+cNb9TuS10OItQ/rTK8pj4W3/0KiXw9O9uIF9ywMDcM0c
+         m9bEv7m68SSFVeCSQgAn+5MP0xwENwl1Ly2urKNly6PEGvK920nBreaupHLk/kw7wO
+         VaNiktvdcmMnISxVHTTvnrtnYRP5TxzoUgc/xT33OTxlBiWD1vVxaWfaJ0R7vrjZ1k
+         IvqHjKyO77AOORScaclklg9AN4faCvi26+53xWVbku2UCd9TbwZOEVL/n/je90ezi0
+         wJAxsphQpIXCw==
+Message-ID: <79b912b5e9e16f446753270f7b9463fee95ebac7.camel@kernel.org>
+Subject: Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface for blob
+ generator
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Horia =?UTF-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        David Gstir <david@sigma-star.at>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
         James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 4/4] docs: security: Add secrets/coco documentation
-Date:   Mon, 28 Feb 2022 11:42:54 +0000
-Message-Id: <20220228114254.1099945-5-dovmurik@linux.ibm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220228114254.1099945-1-dovmurik@linux.ibm.com>
-References: <20220228114254.1099945-1-dovmurik@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xoKGQU-TyteUFoJb6x1qg-TePv6SOUOR
-X-Proofpoint-GUID: OTm78mls2nGSdP-K5SrDUvu55w9L78Qu
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Mon, 28 Feb 2022 13:14:41 +0100
+In-Reply-To: <a8cb99e0-fe01-2234-9839-fea28ca09f6d@pengutronix.de>
+References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
+         <20220222195819.2313913-5-a.fatoum@pengutronix.de>
+         <YhZVmBy3/nWbqf+/@iki.fi>
+         <a8cb99e0-fe01-2234-9839-fea28ca09f6d@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-28_04,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- clxscore=1015 suspectscore=0 bulkscore=0 spamscore=0 phishscore=0
- malwarescore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202280065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -112,150 +78,193 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add documentation for the efi_secret module which allows access
-to Confidential Computing injected secrets.
+On Wed, 2022-02-23 at 17:20 +0100, Ahmad Fatoum wrote:
+> On 23.02.22 16:41, Jarkko Sakkinen wrote:
+> > On Tue, Feb 22, 2022 at 08:58:18PM +0100, Ahmad Fatoum wrote:
+> > > The NXP Cryptographic Acceleration and Assurance Module (CAAM)
+> > > can be used to protect user-defined data across system reboot:
+> > >=20
+> > > =C2=A0 - When the system is fused and boots into secure state, the ma=
+ster
+> > > =C2=A0=C2=A0=C2=A0 key is a unique never-disclosed device-specific ke=
+y
+> > > =C2=A0 - random key is encrypted by key derived from master key
+> > > =C2=A0 - data is encrypted using the random key
+> > > =C2=A0 - encrypted data and its encrypted random key are stored along=
+side
+> > > =C2=A0 - This blob can now be safely stored in non-volatile memory
+> > >=20
+> > > On next power-on:
+> > > =C2=A0 - blob is loaded into CAAM
+> > > =C2=A0 - CAAM writes decrypted data either into memory or key registe=
+r
+> > >=20
+> > > Add functions to realize encrypting and decrypting into memory alongs=
+ide
+> > > the CAAM driver.
+> > >=20
+> > > They will be used in a later commit as a source for the trusted key
+> > > seal/unseal mechanism.
+> > >=20
+> > > Reviewed-by: David Gstir <david@sigma-star.at>
+> > > Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> > > Tested-By: Tim Harvey <tharvey@gateworks.com>
+> > > Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > > Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+> > > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> > > ---
+> > > To: "Horia Geant=C4=83" <horia.geanta@nxp.com>
+> > > To: Aymen Sghaier <aymen.sghaier@nxp.com>
+> > > To: Herbert Xu <herbert@gondor.apana.org.au>
+> > > To: "David S. Miller" <davem@davemloft.net>
+> > > Cc: James Bottomley <jejb@linux.ibm.com>
+> > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> > > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > > Cc: David Howells <dhowells@redhat.com>
+> > > Cc: James Morris <jmorris@namei.org>
+> > > Cc: Eric Biggers <ebiggers@kernel.org>
+> > > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > > Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+> > > Cc: David Gstir <david@sigma-star.at>
+> > > Cc: Richard Weinberger <richard@nod.at>
+> > > Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+> > > Cc: Sumit Garg <sumit.garg@linaro.org>
+> > > Cc: Tim Harvey <tharvey@gateworks.com>
+> > > Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > > Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+> > > Cc: linux-integrity@vger.kernel.org
+> > > Cc: keyrings@vger.kernel.org
+> > > Cc: linux-crypto@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: linux-security-module@vger.kernel.org
+> > > ---
+> > > =C2=A0drivers/crypto/caam/Kconfig=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 +
+> > > =C2=A0drivers/crypto/caam/Makefile=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> > > =C2=A0drivers/crypto/caam/blob_gen.c | 230 ++++++++++++++++++++++++++=
++++++++
+> > > =C2=A0include/soc/fsl/caam-blob.h=C2=A0=C2=A0=C2=A0 |=C2=A0 56 ++++++=
+++
+> > > =C2=A04 files changed, 290 insertions(+)
+> > > =C2=A0create mode 100644 drivers/crypto/caam/blob_gen.c
+> > > =C2=A0create mode 100644 include/soc/fsl/caam-blob.h
+> > >=20
+> > > diff --git a/drivers/crypto/caam/Kconfig b/drivers/crypto/caam/Kconfi=
+g
+> > > index 84ea7cba5ee5..ea9f8b1ae981 100644
+> > > --- a/drivers/crypto/caam/Kconfig
+> > > +++ b/drivers/crypto/caam/Kconfig
+> > > @@ -151,6 +151,9 @@ config CRYPTO_DEV_FSL_CAAM_RNG_API
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Selecting this=
+ will register the SEC4 hardware rng to
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 the hw_random =
+API for supplying the kernel entropy pool.
+> > > =C2=A0
+> > > +config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool
+> > > +
+> > > =C2=A0endif # CRYPTO_DEV_FSL_CAAM_JR
+> > > =C2=A0
+> > > =C2=A0endif # CRYPTO_DEV_FSL_CAAM
+> > > diff --git a/drivers/crypto/caam/Makefile b/drivers/crypto/caam/Makef=
+ile
+> > > index 3570286eb9ce..25f7ae5a4642 100644
+> > > --- a/drivers/crypto/caam/Makefile
+> > > +++ b/drivers/crypto/caam/Makefile
+> > > @@ -21,6 +21,7 @@ caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI)=
+ +=3D caamalg_qi.o
+> > > =C2=A0caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_AHASH_API) +=3D caamhash.o
+> > > =C2=A0caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_API) +=3D caamrng.o
+> > > =C2=A0caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_PKC_API) +=3D caampkc.o pk=
+c_desc.o
+> > > +caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_BLOB_GEN) +=3D blob_gen.o
+> > > =C2=A0
+> > > =C2=A0caam-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) +=3D qi.o
+> > > =C2=A0ifneq ($(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI),)
+> > > diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blo=
+b_gen.c
+> > > new file mode 100644
+> > > index 000000000000..513d3f90e438
+> > > --- /dev/null
+> > > +++ b/drivers/crypto/caam/blob_gen.c
+> > > @@ -0,0 +1,230 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * Copyright (C) 2015 Pengutronix, Steffen Trumtrar <kernel@pengutro=
+nix.de>
+> > > + * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.=
+de>
+> > > + */
+> > > +
+> > > +#include <linux/device.h>
+> > > +#include <soc/fsl/caam-blob.h>
+> > > +
+> > > +#include "compat.h"
+> > > +#include "desc_constr.h"
+> > > +#include "desc.h"
+> > > +#include "error.h"
+> > > +#include "intern.h"
+> > > +#include "jr.h"
+> > > +#include "regs.h"
+> > > +
+> > > +struct caam_blob_priv {
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct device jrdev;
+> > > +};
+> > > +
+> > > +struct caam_blob_job_result {
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int err;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct completion completi=
+on;
+> > > +};
+> > > +
+> > > +static void caam_blob_job_done(struct device *dev, u32 *desc, u32 er=
+r, void *context)
+> > > +{
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct caam_blob_job_resul=
+t *res =3D context;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ecode =3D 0;
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_dbg(dev, "%s %d: err 0=
+x%x\n", __func__, __LINE__, err);
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (err)
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ecode =3D caam_jr_strstatus(dev, err);
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0res->err =3D ecode;
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Upon completion, desc p=
+oints to a buffer containing a CAAM job
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * descriptor which encaps=
+ulates data into an externally-storable
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * blob.
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0complete(&res->completion)=
+;
+> > > +}
+> > > +
+> > > +static u32 *caam_blob_alloc_desc(size_t keymod_len)
+> > > +{
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size_t len;
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* header + (key mod immed=
+iate) + 2x pointers + op */
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0len =3D 4 + (4 + ALIGN(key=
+mod_len, 4)) + 2*(4 + 4 + CAAM_PTR_SZ_MAX) + 4;
+> >=20
+> > Nit: the amount of magic numbers is overwhelming here. I neither unders=
+tand
+> > the statement nor how that comment should help me to understand it.
+>=20
+> header=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 =3D=C2=A0 4
+> (key mod immediate) =3D (4 + ALIGN(keymod_len, 4))
+> 2x pointer=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D=C2=
+=A0 2 * (4 + 4 + CAAM_PTR_SZ_MAX)
+> op=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D=C2=A0 4
 
-Signed-off-by: Dov Murik <dovmurik@linux.ibm.com>
-Reviewed-by: Gerd Hoffmann <kraxel@redhat.com>
----
- Documentation/security/index.rst         |   1 +
- Documentation/security/secrets/coco.rst  | 103 ++++++++++++++++++++
- Documentation/security/secrets/index.rst |   9 ++
- 3 files changed, 113 insertions(+)
+Please create a struct with the associated fields instead and then
+it is just sizeof that.
 
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 16335de04e8c..6ed8d2fa6f9e 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -17,3 +17,4 @@ Security Documentation
-    tpm/index
-    digsig
-    landlock
-+   secrets/index
-diff --git a/Documentation/security/secrets/coco.rst b/Documentation/security/secrets/coco.rst
-new file mode 100644
-index 000000000000..262e7abb1b24
---- /dev/null
-+++ b/Documentation/security/secrets/coco.rst
-@@ -0,0 +1,103 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==============================
-+Confidential Computing secrets
-+==============================
-+
-+This document describes how Confidential Computing secret injection is handled
-+from the firmware to the operating system, in the EFI driver and the efi_secret
-+kernel module.
-+
-+
-+Introduction
-+============
-+
-+Confidential Computing (coco) hardware such as AMD SEV (Secure Encrypted
-+Virtualization) allows guest owners to inject secrets into the VMs
-+memory without the host/hypervisor being able to read them.  In SEV,
-+secret injection is performed early in the VM launch process, before the
-+guest starts running.
-+
-+The efi_secret kernel module allows userspace applications to access these
-+secrets via securityfs.
-+
-+
-+Secret data flow
-+================
-+
-+The guest firmware may reserve a designated memory area for secret injection,
-+and publish its location (base GPA and length) in the EFI configuration table
-+under a ``LINUX_EFI_COCO_SECRET_AREA_GUID`` entry
-+(``adf956ad-e98c-484c-ae11-b51c7d336447``).  This memory area should be marked
-+by the firmware as ``EFI_RESERVED_TYPE``, and therefore the kernel should not
-+be use it for its own purposes.
-+
-+During the VM's launch, the virtual machine manager may inject a secret to that
-+area.  In AMD SEV and SEV-ES this is performed using the
-+``KVM_SEV_LAUNCH_SECRET`` command (see [sev]_).  The strucutre of the injected
-+Guest Owner secret data should be a GUIDed table of secret values; the binary
-+format is described in ``drivers/virt/coco/efi_secret/efi_secret.c`` under
-+"Structure of the EFI secret area".
-+
-+On kernel start, the kernel's EFI driver saves the location of the secret area
-+(taken from the EFI configuration table) in the ``efi.coco_secret`` field.
-+Later it checks if the secret area is populated: it maps the area and checks
-+whether its content begins with ``EFI_SECRET_TABLE_HEADER_GUID``
-+(``1e74f542-71dd-4d66-963e-ef4287ff173b``).  If the secret area is populated,
-+the EFI driver will autoload the efi_secret kernel module, which exposes the
-+secrets to userspace applications via securityfs.  The details of the
-+efi_secret filesystem interface are in [secrets-coco-abi]_.
-+
-+
-+Application usage example
-+=========================
-+
-+Consider a guest performing computations on encrypted files.  The Guest Owner
-+provides the decryption key (= secret) using the secret injection mechanism.
-+The guest application reads the secret from the efi_secret filesystem and
-+proceeds to decrypt the files into memory and then performs the needed
-+computations on the content.
-+
-+In this example, the host can't read the files from the disk image
-+because they are encrypted.  Host can't read the decryption key because
-+it is passed using the secret injection mechanism (= secure channel).
-+Host can't read the decrypted content from memory because it's a
-+confidential (memory-encrypted) guest.
-+
-+Here is a simple example for usage of the efi_secret module in a guest
-+to which an EFI secret area with 4 secrets was injected during launch::
-+
-+	# ls -la /sys/kernel/security/secrets/coco
-+	total 0
-+	drwxr-xr-x 2 root root 0 Jun 28 11:54 .
-+	drwxr-xr-x 3 root root 0 Jun 28 11:54 ..
-+	-r--r----- 1 root root 0 Jun 28 11:54 736870e5-84f0-4973-92ec-06879ce3da0b
-+	-r--r----- 1 root root 0 Jun 28 11:54 83c83f7f-1356-4975-8b7e-d3a0b54312c6
-+	-r--r----- 1 root root 0 Jun 28 11:54 9553f55d-3da2-43ee-ab5d-ff17f78864d2
-+	-r--r----- 1 root root 0 Jun 28 11:54 e6f5a162-d67f-4750-a67c-5d065f2a9910
-+
-+	# hd /sys/kernel/security/secrets/coco/e6f5a162-d67f-4750-a67c-5d065f2a9910
-+	00000000  74 68 65 73 65 2d 61 72  65 2d 74 68 65 2d 6b 61  |these-are-the-ka|
-+	00000010  74 61 2d 73 65 63 72 65  74 73 00 01 02 03 04 05  |ta-secrets......|
-+	00000020  06 07                                             |..|
-+	00000022
-+
-+	# rm /sys/kernel/security/secrets/coco/e6f5a162-d67f-4750-a67c-5d065f2a9910
-+
-+	# ls -la /sys/kernel/security/secrets/coco
-+	total 0
-+	drwxr-xr-x 2 root root 0 Jun 28 11:55 .
-+	drwxr-xr-x 3 root root 0 Jun 28 11:54 ..
-+	-r--r----- 1 root root 0 Jun 28 11:54 736870e5-84f0-4973-92ec-06879ce3da0b
-+	-r--r----- 1 root root 0 Jun 28 11:54 83c83f7f-1356-4975-8b7e-d3a0b54312c6
-+	-r--r----- 1 root root 0 Jun 28 11:54 9553f55d-3da2-43ee-ab5d-ff17f78864d2
-+
-+
-+References
-+==========
-+
-+See [sev-api-spec]_ for more info regarding SEV ``LAUNCH_SECRET`` operation.
-+
-+.. [sev] Documentation/virt/kvm/amd-memory-encryption.rst
-+.. [secrets-coco-abi] Documentation/ABI/testing/securityfs-secrets-coco
-+.. [sev-api-spec] https://www.amd.com/system/files/TechDocs/55766_SEV-KM_API_Specification.pdf
-diff --git a/Documentation/security/secrets/index.rst b/Documentation/security/secrets/index.rst
-new file mode 100644
-index 000000000000..ced34e9c43bd
---- /dev/null
-+++ b/Documentation/security/secrets/index.rst
-@@ -0,0 +1,9 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================
-+Secrets documentation
-+=====================
-+
-+.. toctree::
-+
-+   coco
--- 
-2.25.1
-
+BR, Jarkko
