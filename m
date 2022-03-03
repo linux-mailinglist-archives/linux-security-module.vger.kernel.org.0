@@ -2,80 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7864CBCC6
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Mar 2022 12:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBE04CBD50
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Mar 2022 13:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiCCLfl (ORCPT
+        id S230301AbiCCMD7 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 3 Mar 2022 06:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        Thu, 3 Mar 2022 07:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiCCLfT (ORCPT
+        with ESMTP id S233048AbiCCMD5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 3 Mar 2022 06:35:19 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6535BE40;
-        Thu,  3 Mar 2022 03:32:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=2e8X21nKPcQgvz9UXWL0zk5b2nxs/yzM+chK1IEMLUc=; b=OLRzNYV4Ywf1h8kqedT00LxQVD
-        X3ccleUWQ3cc1n7C+d5Au8bNFvD33QHhEVal4gYk/Q5pOt2w+fC8kJevtk0Z1RmX3OnR0R+C3nurK
-        gvynpABsGjCB6TvdMheGhVfFYteaKmvD+0bTioKa5+KRtFQfyuAKpBw3gSIkVQneRwYZBXMkHwJBA
-        vF2m2axLl4lvnpcE2tsi8cJo0MbzN5lRE8Q3roRvL0zcmQC6LD2aqmQMESpkwheTsyEingOs90nZT
-        r6r7AGrt+xp+F5lHa/+viaYTs5B1Dx1qb/WWOAPCClRpWgBTgE5erzZaDixSV+7HeBZetSBrF0Yxi
-        99WGy6+w==;
-Received: from [91.93.38.115] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nPjhR-006Dfo-AN; Thu, 03 Mar 2022 11:32:49 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Philipp Reisner <philipp.reisner@linbit.com>,
-        Kees Cook <keescook@chromium.org>, linux-block@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-security-module@vger.kernel.org
-Subject: [PATCH 5/5] loadpin: stop using bdevname
-Date:   Thu,  3 Mar 2022 14:32:23 +0300
-Message-Id: <20220303113223.326220-6-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220303113223.326220-1-hch@lst.de>
-References: <20220303113223.326220-1-hch@lst.de>
+        Thu, 3 Mar 2022 07:03:57 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165CF7C17F;
+        Thu,  3 Mar 2022 04:03:12 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id a23so10174329eju.3;
+        Thu, 03 Mar 2022 04:03:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C5MXByekrRs4p3Ek5KYAlI6yucTo9+FwBD2Nkb2Yalg=;
+        b=Ui8PefNKbm6pGhWvMC4Rgetj9x5P35nwLzN4AfU/bmeo/+NAk8YQfR2Go19sCR8cyQ
+         /PqFqJ43R2Q9JRo3sK5r0QqetjF7kOveg5AxR+JUHmkPS4pd2Vx+0e2eDeuYbHshKdUs
+         6dZuz2h1ka0K5r4Mq/o6TgHrhzygalRwZYcss+Hv9/ggXpgz+Z7kttvij2vV/QOgQcQj
+         BRJeT960/QLEYw+YH11zLPwQttYi/kRhUgvm/FqCmXrrfGt5BL3jp9NmOItttFyOrwkB
+         JtwuDpkA79wtVcx/1eRtVNi/muu+FWGl8daCJLYXsIHp+H9zprA9oi+SdM2ESFZg0EHe
+         NWPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C5MXByekrRs4p3Ek5KYAlI6yucTo9+FwBD2Nkb2Yalg=;
+        b=bTjY4dUk5hdNRFyMALMgd11MKIezU/ePltMCPOtDKfDj2KmqOLAUqdIMr4dosu5tyG
+         wGt942n3ZHHRHrLFcE77D723v5W43pVfCFoF6dVCNpAy5HifPHqhPmPJB7GmUfNB88Bw
+         WTaPhcDrGNAl4sI0YVqi/EE7B8t/y9McHkU+qntdZTTJduIPxf/wp0NafLpJ7wqM3ohB
+         m0QukeWPC1ObapzCMRAR1CPnmUe3+No+/9vm1QYFTZFbbRm6XIxQ7xSOI5sxNn9mzJeK
+         7Gqx86Wji+lnvDtjbM/L+hhdcXF8tAhR6d4sWd8Ghaei9h0ELM7RVKhD0s5cX28n3FsQ
+         y6ZQ==
+X-Gm-Message-State: AOAM531+ZFW4JI0jMHwtZSJ0XGdyJi1uRpsnUF1kFT5xOzJK2p9PaPSM
+        ZVuUoTqea0zOlmTSaWK4gJZPdOQHZ9Kpgxvj6Fo=
+X-Google-Smtp-Source: ABdhPJwJU7zLBGAAQRJjPbA6o0rwI5aOpqP0j+GHXxJvsNRbGuBkFEHZommJZIgcD8F/Pn66FMzvf+GQ5bB9WZ5mfDo=
+X-Received: by 2002:a17:906:b157:b0:6d0:9f3b:a6aa with SMTP id
+ bt23-20020a170906b15700b006d09f3ba6aamr26740267ejb.365.1646308990587; Thu, 03
+ Mar 2022 04:03:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220303081428.12979-1-d.glazkov@omp.ru>
+In-Reply-To: <20220303081428.12979-1-d.glazkov@omp.ru>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Thu, 3 Mar 2022 20:02:44 +0800
+Message-ID: <CAD-N9QUR3H-r4g9jkyDhFnoozVeuUxBvQEMuiBRJ7Q6HHaGsaA@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: fix memory leak when reading certificate fails
+To:     Denis Glazkov <d.glazkov@omp.ru>
+Cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Use the %pg format specifier to save on stack consuption and code size.
+On Thu, Mar 3, 2022 at 7:49 PM Denis Glazkov <d.glazkov@omp.ru> wrote:
+>
+> In the `read_file` function of `insert-sys-cert.c` script, if
+> the data is read incorrectly, the memory allocated for the `buf`
+> array is not freed.
+>
+> Fixes: c4c361059585 ("KEYS: Reserve an extra certificate symbol for inserting without recompiling")
+> Signed-off-by: Denis Glazkov <d.glazkov@omp.ru>
+> ---
+>  scripts/insert-sys-cert.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/scripts/insert-sys-cert.c b/scripts/insert-sys-cert.c
+> index 8902836c2342..b98a0b12f16f 100644
+> --- a/scripts/insert-sys-cert.c
+> +++ b/scripts/insert-sys-cert.c
+> @@ -251,6 +251,7 @@ static char *read_file(char *file_name, int *size)
+>         if (read(fd, buf, *size) != *size) {
+>                 perror("File read failed");
+>                 close(fd);
+> +               free(buf);
+>                 return NULL;
+>         }
+>         close(fd);
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- security/loadpin/loadpin.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Hi Denis,
 
-diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
-index b12f7d986b1e3..ad4e6756c0386 100644
---- a/security/loadpin/loadpin.c
-+++ b/security/loadpin/loadpin.c
-@@ -78,11 +78,8 @@ static void check_pinning_enforcement(struct super_block *mnt_sb)
- 	 * device, allow sysctl to change modes for testing.
- 	 */
- 	if (mnt_sb->s_bdev) {
--		char bdev[BDEVNAME_SIZE];
--
- 		ro = bdev_read_only(mnt_sb->s_bdev);
--		bdevname(mnt_sb->s_bdev, bdev);
--		pr_info("%s (%u:%u): %s\n", bdev,
-+		pr_info("%pg (%u:%u): %s\n", mnt_sb->s_bdev,
- 			MAJOR(mnt_sb->s_bdev->bd_dev),
- 			MINOR(mnt_sb->s_bdev->bd_dev),
- 			ro ? "read-only" : "writable");
--- 
-2.30.2
+There is another issue related to variable buf. On the success path,
+buf will be assigned to variable cert in the main function. And cert
+is not free when the main function exits.
 
+> --
+> 2.25.1
