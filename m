@@ -2,92 +2,115 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E7F4DBC7A
-	for <lists+linux-security-module@lfdr.de>; Thu, 17 Mar 2022 02:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D1E4DC045
+	for <lists+linux-security-module@lfdr.de>; Thu, 17 Mar 2022 08:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358310AbiCQB3J (ORCPT
+        id S230363AbiCQHkS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 16 Mar 2022 21:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
+        Thu, 17 Mar 2022 03:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358403AbiCQB26 (ORCPT
+        with ESMTP id S230362AbiCQHkR (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:28:58 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392D31F631
-        for <linux-security-module@vger.kernel.org>; Wed, 16 Mar 2022 18:27:29 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id y22so4842576eds.2
-        for <linux-security-module@vger.kernel.org>; Wed, 16 Mar 2022 18:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LlTH+G09rcVN0vQqtM5Msv7WROSZnwcaeBZzTdA/4gI=;
-        b=Gta4TIZXLILirF7gfnrO7YgWEjB3SLjF0xn5PYqWfkcU3f2rCNOTAwttJ5RaOUYcEN
-         IL/KnKuzVML6tmQ5vNx6Ap7s9sIoztvAx0gKaohJj92FgLpdit9Te1NW94nXasoZy5Fb
-         Qt84EU51en3oFiIXYSC+LJ7o492gVsRWdYkYBopUBjvX5GKfniK5s/L+OJvs3ryFORot
-         iXYxbSOi+POCJUOGGgHqeR5CFkYkdDqODzhAKpdLp8MIIOb7aRdnaFMMtsVtHoWABfka
-         4LyicoGjRjJle5hDeV8yCwzQtUfAGLoC+FEpsveRZo15DyCtpJqy1/TCHChSDv3/XpNE
-         /R/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LlTH+G09rcVN0vQqtM5Msv7WROSZnwcaeBZzTdA/4gI=;
-        b=ZRS99DsYTMFx0v1Ml2B9jFxp9sacK14mx51AkKiq8iqiVISnshAk55sDpTrFmQWAy1
-         XIfRcc7FHxT0vPvtLnlZdjqYhM1oictOUuWNQphD0Y9YukCQG+Z+LXo7uu00TFrzL9Sw
-         h0e5rC0QVc+GJrGUKEJl7nUz7g+DeXnrC02mvk0iNYxJsN/jrXE1epBp/4flCFqnSY8T
-         Ecn4RUns2bSl7EleoW0f2aNDeAkBR72/XHmGh5A/CT/Is3jbsXktAfuVdtHhVic0t5IX
-         A+rQyhBs/xmrHo6vNQK3bktHNcqnfti1WNa70bwHBLA4lW9MUxzbKp7ETQ5LcJuZ0e9q
-         Lpbw==
-X-Gm-Message-State: AOAM531hdxO2+oILvpXG9WcGEwehLAz4NJuc4750qNEwffpUtjsSUmjg
-        sQTSQvMDGNoIpYWPCATOiDyfvamBH9D9dBPOapMt
-X-Google-Smtp-Source: ABdhPJyQf6Sx+VLp9Inh3suxXELVVTMqKA2vmRoPnOq/6Us7RHLzOl0j0BC6mxnVRiSybuRb3t6MQT+Nyca7bV1qfBA=
-X-Received: by 2002:a05:6402:27ca:b0:418:93fe:da71 with SMTP id
- c10-20020a05640227ca00b0041893feda71mr1941793ede.409.1647480447687; Wed, 16
- Mar 2022 18:27:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220221212522.320243-1-mic@digikod.net> <20220221212522.320243-12-mic@digikod.net>
-In-Reply-To: <20220221212522.320243-12-mic@digikod.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 16 Mar 2022 21:27:16 -0400
-Message-ID: <CAHC9VhQM99=OVFBcpO72QM-9NSk5dBXy3_jVrwmG304ugjzSdQ@mail.gmail.com>
-Subject: Re: [PATCH v1 11/11] landlock: Add design choices documentation for
- filesystem access rights
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 17 Mar 2022 03:40:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8DDBD2FD;
+        Thu, 17 Mar 2022 00:39:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70591B81DD2;
+        Thu, 17 Mar 2022 07:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCF3C340EE;
+        Thu, 17 Mar 2022 07:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647502739;
+        bh=O79CEsoyIM7lxDVdJAO6U5R65lNwXiJdQsB6hFftUwY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FFuNrIGNOAYmosTutCqrDM2kXVQiSItuO1IPhKEQHAgH4HwLiAVMVFOUjKN1DjwpD
+         4osvtn0lcnS5F3eaG/pVFKSfTBWqvFh4j3uOfHDvJqSb5w7sdTzuiMs7XGd8P6O7bi
+         nyTHoIxWh2wpLcbgW+auOg2nRYmMp/h2OS8E/tHxx/fqzhXDcGN2X8rrWFT4x9wjya
+         lXreP54kXkeKsCdeEub9CRYsu+1htrC11ZTTR8/u+1xq2QpR+q9qaW8/uKQxf7pfPg
+         dmmgPCqjUgq2TsKZ2sBgff7IHAw4/Z8RkkDwFr9sPZaIyYrVVFnyCuqLtZzBHIcGLz
+         nNz2EoXYfsZFw==
+Date:   Thu, 17 Mar 2022 09:38:09 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Nayna <nayna@linux.vnet.ibm.com>
+Cc:     Nageswara Sastry <rnsastry@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        dhowells@redhat.com, zohar@linux.ibm.com,
         linux-security-module@vger.kernel.org,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v11 0/4] integrity: support including firmware
+ ".platform" keys at build time
+Message-ID: <YjLlYTs+2ep80zoK@iki.fi>
+References: <20220310214450.676505-1-nayna@linux.ibm.com>
+ <4afae87c-2986-6b0e-07be-954dd4937afd@linux.ibm.com>
+ <f78d11fefd13bd17748e36621acee9c2f27a77f6.camel@kernel.org>
+ <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Feb 21, 2022 at 4:15 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
->
-> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
->
-> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> Link: https://lore.kernel.org/r/20220221212522.320243-12-mic@digikod.net
-> ---
->  Documentation/security/landlock.rst | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
+On Fri, Mar 11, 2022 at 04:03:12PM -0500, Nayna wrote:
+> 
+> On 3/11/22 11:42, Jarkko Sakkinen wrote:
+> > On Fri, 2022-03-11 at 10:11 +0530, Nageswara Sastry wrote:
+> > > 
+> > > On 11/03/22 3:14 am, Nayna Jain wrote:
+> > > > Some firmware support secure boot by embedding static keys to verify the
+> > > > Linux kernel during boot. However, these firmware do not expose an
+> > > > interface for the kernel to load firmware keys onto the ".platform"
+> > > > keyring, preventing the kernel from verifying the kexec kernel image
+> > > > signature.
+> > > > 
+> > > > This patchset exports load_certificate_list() and defines a new function
+> > > > load_builtin_platform_cert() to load compiled in certificates onto the
+> > > > ".platform" keyring.
+> > > > 
+> > > > Changelog:
+> > > > v11:
+> > > > * Added a new patch to conditionally build extract-cert if
+> > > > PLATFORM_KEYRING is enabled.
+> > > > 
+> > > Tested the following four patches with and with out setting
+> > > CONFIG_INTEGRITY_PLATFORM_KEYS
+> > > 
+> > > Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+> > OK, I added it:
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> 
+> Thanks Jarkko. Masahiro Yamada would prefer to revert the original commit
+> 340a02535ee785c64c62a9c45706597a0139e972 i.e. move extract-cert back to the
+> scripts/ directory.
+> 
+> I am just posting v12 which includes Masahiro feedback. Nageswara has
+> already tested v12 version as well.
+> 
+> I am fine either way 1.) Adding v11 and then separately handling of
+> reverting of the commit or 2.) Adding v12 version which includes the revert.
+> I leave the decision on you as to which one to upstream.
+> 
+> Thanks & Regards,
+> 
+>     - Nayna
+> 
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+I already sent PR for v5.18. Too many late changes to include this, which
+means that v12 is the way to go.
 
---
-paul-moore.com
+BR, Jarkko
+
