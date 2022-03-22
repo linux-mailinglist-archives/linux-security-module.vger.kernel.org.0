@@ -2,541 +2,87 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB294E431B
-	for <lists+linux-security-module@lfdr.de>; Tue, 22 Mar 2022 16:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373A24E4540
+	for <lists+linux-security-module@lfdr.de>; Tue, 22 Mar 2022 18:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238596AbiCVPhF (ORCPT
+        id S239637AbiCVRjJ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 22 Mar 2022 11:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        Tue, 22 Mar 2022 13:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238579AbiCVPhE (ORCPT
+        with ESMTP id S239623AbiCVRjI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 22 Mar 2022 11:37:04 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE116AE61
-        for <linux-security-module@vger.kernel.org>; Tue, 22 Mar 2022 08:35:32 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id b15so22133656edn.4
-        for <linux-security-module@vger.kernel.org>; Tue, 22 Mar 2022 08:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=1iSiwW/U+DweOlsvahyNIrQHjcrb1kkSroEQxDJW2/M=;
-        b=hQQEYfVUnY/Dpp6X5unwmO+zpJj06sYmQi0pQmGFsCuVX21DGipWNkP8hCku8xKK/J
-         0xAoN4O05/RDleqpXrshI617LYtJ1J++mHdYcoyPl1Wl10nz1H5ss67bty4LoYdymmId
-         tLKIXDa5ADTY7gCOKMAxTHw1KgQw3fnyQtr+AGHm57hKk/E1BMiIx+DjBMehuTYb46DP
-         UxfJhpHbBgopFq5DdRLtP44iFteI6hf9cffvzUe2Fwtk5xZzGakEK/gRZWocRxylDmOO
-         Nh1mZwcvxvobL9wjiMGUyZ/PS9h41Xg5HNcC0b+yaME/ACAV3P5kfITr3+u+/MUrz3Qa
-         w4Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=1iSiwW/U+DweOlsvahyNIrQHjcrb1kkSroEQxDJW2/M=;
-        b=hICxmEAP+8gbCjkmePKdcr7xyEfmZxyljSTKu4akyNMgtm/vNf8CkZGF9vQE1sVo+i
-         vtw1zZpCHGBbyT4WA/zgCqdPwXsYiAbpiIbuh72WR/fzLcYXKRlhQJds4DPd770VnWJ9
-         5S/fi3aU2GrW0ENmQln6i5ujhlXzjode0mIG+++2m8VkuK5tBQT3u9r7Y2nz6RyTG2za
-         rPrXj6/dGLoU6bXDdbK67LYokDEdhFA57xvQILiLX/8xT6Vodi9oI2wfkGptAtP/gxU0
-         sHhsCJjMbw3RMArHXMJbl3IibAp2fhk/dMPrk3kV56J43Y2EXZc1TUh+BOYmv8MCR70I
-         JGHQ==
-X-Gm-Message-State: AOAM5330nlb4SOI4Ixp7bCJvP1n+i6G5IpU17afXfLFkpBF2An2vVL77
-        kLW/8nKVvJEWv3v+i+guyeH0zHHAS1apZCjfTPQ=
-X-Google-Smtp-Source: ABdhPJzmpFGC4btTzix/OIqzZ+QN4+ZetwAddHho6/uOfHsss0zqotCIyMFiwxU7n+mRtKBrBqxPsxKWG0oq8gwG4II=
-X-Received: by 2002:a05:6402:8d7:b0:419:1162:a507 with SMTP id
- d23-20020a05640208d700b004191162a507mr21614603edz.157.1647963330960; Tue, 22
- Mar 2022 08:35:30 -0700 (PDT)
+        Tue, 22 Mar 2022 13:39:08 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC5050E25;
+        Tue, 22 Mar 2022 10:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zVXKwBc1JcWHQCoSSK+DrgoMAyqc1wIUN0g4y2t1xXU=; b=FM6OAmOQAamX1rwFcjPZhLhkv9
+        JPdM78sMnPU3Wfz+ph/B/NHi/dGZHoK9a0D0YtFwhbsUGKlOfhH8jxv6JplGJ/Mwt5+6Xu8B5INLs
+        onq5r4RHi2ml+v43GbK13NcQFTHwMt3kxwRpmflaKyZiSRTMKwhTp42Z548wataFM4GJ6GSAhoTeR
+        JK5piU/Zv+uxpzp/ktuxAC4dBhfCgMSjW0rCTzKZQXI09zkC3GOw7hgzC7Zt+lkpsSDAiH+r0Asoe
+        3ruJuIvYxVv2Q7JXV8Cbu/guJ88QGP74ZN18VGCD2+OVQ+FU7lzz2JRIKUUFUQTXDQXKUIxIRrjJo
+        FfKsuj4w==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWiRi-00BkYT-6u; Tue, 22 Mar 2022 17:37:26 +0000
+Date:   Tue, 22 Mar 2022 10:37:26 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        James Morse <james.morse@arm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Kairui Song <kasong@redhat.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-modules@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@kernel.org, Eric Snowberg <eric.snowberg@oracle.com>
+Subject: Re: [PATCH 4/4] module, KEYS: Make use of platform keyring for
+ signature verification
+Message-ID: <YjoJVnTuaw/3l7Xp@bombadil.infradead.org>
+References: <cover.1644953683.git.msuchanek@suse.de>
+ <840433bc93a58d6dfc4d96c34c0c3b158a0e669d.1644953683.git.msuchanek@suse.de>
+ <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
+ <20220215204730.GQ3113@kunlun.suse.cz>
+ <c3f6f6c8a9db34cc1cdc1000f9272c2b36445e15.camel@linux.ibm.com>
+ <20220216105645.GS3113@kunlun.suse.cz>
+ <edb305079c28e49021166423af0378f8d218f269.camel@linux.ibm.com>
+ <20220216120911.GT3113@kunlun.suse.cz>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 22 Mar 2022 15:35:21 +0000
-Message-ID: <CAHpNFcNdWdcrkHCWLAFRYbhr_g49msMaS5cChczOjjk2UFxdHQ@mail.gmail.com>
-Subject: Haptic & 3D Audio : Kernel Core Security & Privacy 'Cache Ripper
- Memory Sniffers & Privacy Baiters ALL GONE' Cash_Bo_Montin Selector RS for
- Cache & System Operations Optimisation & Compute CBoMontin Processor
- Scheduler - Good for consoles & RT Kernels & Firmware (For HTTP+JS HyperThreading)
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216120911.GT3113@kunlun.suse.cz>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Haptic & 3D Audio : Kernel Core Security & Privacy 'Cache Ripper
-Memory Sniffers & Privacy Baiters ALL GONE' Cash_Bo_Montin Selector RS
-for Cache & System Operations Optimisation & Compute CBoMontin
-Processor Scheduler - Good for consoles & RT Kernels & Firmware (For
-HTTP+JS HyperThreading)
 
-Primary Reference:
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+How's this series going? Did you and Mimi sort things out? Either way,
+just wanted to let you kow you can base your changes on modules-testing
+[0] if you want to resubmit for v5.19 (v5.18 will be too late already).
+Once testing is done what is on modules-testing will go to modules-next
+for testing for v5.19. There are no changes planned for v5.18 other than
+fixes and so far there are none.
 
-Cash_Bo_Montin Selector (c)Rupert S for Cache & System Operations
-Optimisation & Compute
-CBoMontin Processor Scheduler - Good for consoles & RT Kernels (For
-HTTP+JS HyperThreading)
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-testing
 
-*
-Monticarlo Workload Selector
-
-CPU, GPU, APU, SPU, ROM, Kernel & Operating system :
-
-CPU/GPU/Chip/Kernel Cache & Thread Work Operations management
-
-In/out Memory operations & CU feature selection are ordered into
-groups based on:
-
-CU Selection is preferred by Chip features used by code & Cache
-in-lining in the same group.
-
-Global Use (In application or common DLL) Group Core CU
-Localised Thread group, Sub prioritised to Sub CU in location of work use
-Prioritised to local CU with Chip feature available & with lower
-utilisation (lowers latency)
-
-{ Monticarlos In/Out }
-System input load Predictable Statistic analysis }
-Monticarlo Assumed averages per task }
-System: IO, IRQ, DMA, Data Motion }
-
-{ Process by Advantage }
-{ Process By Task FeatureSet }
-{ Process by time & Tick & Clock Cycle: Estimates }
-{ Monticarlos Out/In }
-
-Random task & workload optimiser ,
-Task & Workload Assignment Requestor,
-Pointer Allocator,
-Cache RAM Allocation System.
-
-Multithreaded pointer Cache Object tasks & management.
-
-{SEV_TDL_TDX Kernel Interaction mount point: Input & Output by SSL Code Class}:
-{Code Runtime Classification & Arch:Feature & Location Store: Kernel
-System Interaction Cache Flow Buffer}
-HT-ReadLinkAtTopForReference/SEV_SSLSecureCore
-HT-ReadLinkAtTopForReference/SSL_DRM_CleanKernel
-*
-
-Based upon the fact that you can input Monti Carlos Semi Random
-Ordered work loads into the core process:
-
-*Core Process Instruction*
-
-CPU, Cache, Light memory load job selector
-Resident in Cache L3 for 256KB+- Cache list + Code 4Kb L2 with list access to L3
-
-L2:L3 <> L1 Data + Instruction
-
-*formula*
-
-(c)RS 12:00 to 14:00 Haptic & 3D Audio : Group Cluster Thread SPU:GPU CU
-
-Merge = "GPU+CPU SiMD" 3D Wave (Audio 93% * Haptic 7%)
-
-Grouping selector
-3D Wave selector
-
-Group Property value A = Audio S=Sound G=Geometry V=Video H=Haptic
-B=Both BH=BothHaptic
-
-CPU Int : ID+ (group of)"ASGVH"
-
-Float ops FPU Light localised positioning 8 thread
-
-Shader ID + Group 16 Blocks
-SiMD/AVX Big Group 2 Cycle
-GPU CU / Audio CU (Localised grouping MultiThreads)
-
-https://www.youtube.com/watch?v=cJkx-OLgLzo
-
-*
-
-Task & Workload Assignment Requestor : Memory & Power
-
-We have to bear in mind power requirements & task persistence in the
-:Task & Workload Assignment Requestor
-
-knowledge of the operating systems requirements:
-Latency list in groups { high processor load requirements > Low
-processor load requirements } : { latency Estimates }
-Ram load , Store & clear {high burst : 2ns < 15ns } GB/s Ordered
-Ram load , Store & clear {high burst : 5ns < 20ns } MB/s Disordered
-
-GPU Ram load , Store & clear {high burst : 2ns < 15ns } GB/s Ordered
-AUDIO Ram load , Store & clear {high burst : 1ns < 15ns } MB/s Disordered
-
-AUDIO Ram load , Store & clear {high burst : 1ns < 15ns } MB/s Ordered
-AUDIO Ram load , Store & clear {high burst : 1ns < 15ns } KB/s Disordered
-
-Network load , Send & Receive {Medium burst : 2ns < 15ns } GB/s Ordered
-Network load , Send & Receive {high burst : 1ns < 20ns } MB/s Disordered
-Hard drive management & storage {medium : 15ns SSD < 40ns HDD}
-
-*
-
-Also Good for disassociated Asymmetric cores; Since these pose a
-significant challenge to most software,
-However categorising by Processor function yields remarkable
-classification abilities:
-
-Processor Advanced Instruction set
-Core speed
-Importance
-
-Location in association with a group of baton passing & inter-thread
-messaging & cache,
-Symmetry classed processes & threads.
-
-*
-
-Bo-Montin Workload Compute :&: Hardware Accelerated Audio : 3D Audio
-Dolby NR & DTS
-
-Hardware Accelerated Audio : 3D Audio Dolby NR & DTS : Project
-Acoustics : Strangely enough ....
-Be more positive about Audio Block : Dolby & DTS will use it & thereby in games!
-
-Workload Compute : Where you optimise workload lists though SiMD Maths
-to HASH subtasks into new GPU workloads,
-
-Simply utilize Direct ML to anticipate future motion vectors (As with video)
-
-OpenCL & Direct Compute : Lists & Compute RAM Loads and Shaders to load...
-
-DMA & Reversed DMA (From GPU to & from RAM)
-ReBAR to vector compressed textures without intervention of one
-processor or another...
-
-Compression Block :
-KRAKEN & BC Compression & Decompression
-&
-SiMD Direct Compressed Load using the Cache Block per SiMD Work Group.
-
-Shaders Optimised & compiled in FPU & SiMD Code form for GPU: Compiling Methods:
-
-In advance load & compile : BRT : Before Runtime Time : task load
-optimised & ordered Task Executor : Bo-Montin Scheduler
-
-GPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
-CPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
-
-JIT : Just in Time task load optimised & ordered Task Executor :
-Bo-Montin Scheduler
-
-load & compile :
-
-GPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
-CPU SiMD & FPU (micro 128KB Block encoder : decoder : compiler)
-
-(c)Rupert S https://science.n-helix.com
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-*
-
-EMS Leaf Allocations & Why we find them useful:  (c)RS
-https://science.n-helix.com
-
-Memory clear though page Voltage removal..
-
-Systematic Cache randomisation flipping (On RAM Cache Directs
-syncobable (RAND Static, Lower quality RAND)(Why not DEV Write 8 x
-16KB (Aligned Streams (2x) L2 CACHE Reasons)
-
-Anyway in order to do this we Allocate Leaf Pages or Large Pages...
-De Allocation invokes scrubbing or VOID Call in the case of a VM.
-
-So in our case VT86 Instructions are quite useful in a Hypervisor;
-&So Hypervisor from kernel = WIN!
-
-(c)Rupert Summerskill
-
-Reference T Clear
-https://www.phoronix.com/scan.php?page=news_item&px=Linux-MGLRU-v9-Promising
-
-*
-
-If you could "Decode" Win DLL & particularly the Compiler code, plug
-in! you could use these on console :
-
-https://bit.ly/DJ_EQ
-https://bit.ly/VESA_BT
-
-https://www.youtube.com/watch?v=cJkx-OLgLzo
-
-High performance firmware:
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2021/11/parallel-execution.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-HT-ReadLinkAtTopForReference/SEV_SSLSecureCore
-HT-ReadLinkAtTopForReference/SSL_DRM_CleanKernel
-
-HT-ReadLinkAtTopForReference/workcacheserver
-
-HT-ReadLinkAtTopForReference/HPCLinux
-
-*
-More on HRTF 3D Audio
-
-TERMINATOR Interview #Feeling
-https://www.youtube.com/watch?v=srksXVEkfAs & Yes you want that Conan
-to sound right in 3D HTRF
-
-Cyberpunk 2077 HDR : THX, DTS, Dolby : Haptic response so clear you
-can feel the 3D SOUND
-https://www.youtube.com/watch?v=0t34NQ7Yrwo
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
-
-HT-ReadLinkAtTopForReference/Quality3DAudioTest
-
-https://bit.ly/VESA_BT
-*
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-*
-
-(Spectra & Repoline Ablation) PreFETCH Statistical Load Adaptive CPU
-Optimising Task Manager ML(c)RS 2022
-
-Come to think of it, Light encryption 'In State' may be possible in
-the Cache L3 (the main problem with repoline) & L2 (secondary) : How?
-
-PFIO_Pol & GPIO Combined with PSLAC TaskManager (CBo_Montin)
-Processor, Kernel, UserSpace.
-
-Byte Swapping for example or 16b instruction, If a lightly used
-instruction is used
-(one that is under utilized)
-Other XOR SiMD instructions can potentially be used to pre load L2 &
-L1 Instruction & Data.
-
-Spectra & Repoline 1% CPU Hit : 75% improved Security : ALL CPU v& GPU
-Processor Type Compatible.
-
-In Terms of passwords & SSL Certificate loads only, The Coding would
-take 20Minutes & consume only 0.1% of total CPU Time.
-
-Also Good for disassociated Asymmetric cores; Since these pose a
-significant challenge to most software,
-However categorising by Processor function yields remarkable
-classification abilities:
-
-Processor Advanced Instruction set
-Core speed
-Importance
-
-Location in association with a group of baton passing & inter-thread
-messaging & cache,
-Symmetry classed processes & threads.
-
-HASH Example
-https://lkml.org/lkml/2022/3/17/120
-https://lkml.org/lkml/2022/3/17/119
-https://lkml.org/lkml/2022/3/17/116
-https://lkml.org/lkml/2022/3/17/115
-https://lkml.org/lkml/2022/3/17/118
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-In reference to :
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-CPU Statistical load debug 128 Thread :
-https://lkml.org/lkml/2022/3/17/243
-
-PFIO_Pol Generic Processor Function IO & Feature Statistics polling +
-CPUFunctionClass.h + VCache Memory Table Secure HASH
-
-GPIO: Simple logic analyzer using polling : Prefer = Precise Core
-VClock + GPIO + Processor Function IO & Feature Statistics polling
-
-https://lkml.org/lkml/2022/3/17/216
-https://lkml.org/lkml/2022/3/17/215
-*******
-
-Security bug; Solutions & explanation's :RS
-
-https://science.n-helix.com/2020/06/cryptoseed.html
-https://science.n-helix.com/2019/05/zombie-load.html
-https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
-
-https://www.phoronix.com/scan.php?page=article&item=spectre-bhi-retpoline&num=1
-
-https://lore.kernel.org/lkml/?t=20211204091833
-
-The core scheduler is not the task prioritiser, This deals with Secure
-CPU & Processor Transactions.
-
-Good for consoles & RT Kernels (For HTTP+JS HyperThreading)
-
-Rupert S
-
-*Kernel Runtime Strict KeyLock Secure Chaos Scheduler: CTimeTree*
-
-[PATCH 0/5] Make Cluster Scheduling Configurable
- 2021-12-04  9:14 UTC  (4+ messages)
-` [PATCH 4/5] scheduler: Add boot time enabling/disabling of cluster scheduling
-
-[mark:arm64/preempt-dynamic-static-key 6/6]
-kernel/locking/locktorture.c:122:3: error: implicit declaration of
-function 'preempt_schedule'
- 2021-12-03 23:39 UTC
-
-[PATCH] preempt/dynamic: Fix setup_preempt_mode() return value
- 2021-12-03 23:32 UTC
-
-[PATCH v11 0/4] Introduce Platform Firmware Runtime Update and Telemetry drivers
- 2021-12-04  8:07 UTC  (4+ messages)
-` [PATCH v11 2/4] drivers/acpi: Introduce Platform Firmware Runtime
-Update device driver
-
-*CPU Core Logic*
-
-[RFC 0/6] Sparse HART id support
- 2021-12-04  0:40 UTC  (7+ messages)
-` [RFC 1/6] RISC-V: Avoid using per cpu array for ordered booting
-` [RFC 2/6] RISC-V: Do not print the SBI version during HSM extension boot print
-` [RFC 3/6] RISC-V: Use __cpu_up_stack/task_pointer only for spinwait method
-` [RFC 5/6] RISC-V: Move spinwait booting method to its own config
-` [RFC 6/6] RISC-V: Do not use cpumask data structure for hartid bitmap
-
-AES RAND*****
-
-If we had a front door & a back door & we said that, "That door is
-only available exclusively to us "Someone would still want to use our
-code!
-AES is good for one thing! Stopping Cyber Crime!
-hod Save us from total anarchistic cynicism
-
-Rupert S
-
-/*
-  * This function will use the architecture-specific hardware random
-- * number generator if it is available.  The arch-specific hw RNG will
-- * almost certainly be faster than what we can do in software, but it
-- * is impossible to verify that it is implemented securely (as
-- * opposed, to, say, the AES encryption of a sequence number using a
-- * key known by the NSA).  So it's useful if we need the speed, but
-- * only if we're willing to trust the hardware manufacturer not to
-- * have put in a back door.
-- *
-- * Return number of bytes filled in.
-+ * number generator if it is available. It is not recommended for
-+ * use. Use get_random_bytes() instead. It returns the number of
-+ * bytes filled in.
-  */
-
-https://lore.kernel.org/lkml/20220209135211.557032-1-Jason@zx2c4.com/t/
-
-RAND : Callback & spinlock
-
-Callback & spinlock are not just linux : Best we hash &or Encrypt
-several sources (if we have them)
-If we have a pure source of Random.. we like the purity! but 90% of
-the time we like to hash them all together & keep the quality & source
-integrally variable to improve complexity.
-Rupert S
-https://www.spinics.net/lists/linux-crypto/msg61312.html
-
-'function gets random data from the best available sourceThe current
-code has a sequence in several places that calls one or more of
-arch_get_random_long() or related functions, checks the return
-value(s) and on failure falls back to random_get_entropy().get_source
-long() is intended to replace all such sequences.This is better in
-several ways. In the fallback case it gives much more random output
-than random_get_entropy(). It never wasted effort by calling
-arch_get_random_long() et al. when the relevant config variables are
-not set. When it does usearch_get_random_long(), it does not deliver
-raw output from that function but masks it by mixing with stored
-random data.'
-
-https://science.n-helix.com/2022/02/rdseed.html
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-RAND : Callback & spinlock : Code Method
-
-Spinlock IRQ Interrupted upon RAND Pool Transfer > Why not Use DMA
-Transfer & Memory Buffer Merge with SiMD : AVX Byte Swapping & Merge
-into present RAM Buffer or Future location with Memory location Fast
-Table.
-
-Part of Bo-Montin Selector Code:
-
-(CPU & Thread Synced & on same CPU)
-
-(Thread 1 : cpu:1:2:3:4)
-(RAND)
-(Buffer 1) > SiMD cache & Function :
-
-(Thread 2 : cpu:1:2:3:4)
-(Memory Location Table : EMS:XMS:32Bit:64Bit)
-(Selection Buffer & Transfer)
-
-(Buffer 1) (Buffer 2) (Buffer 3)
-(Entropy Sample : DieHARD : Small)
-
-Rupert S
-
-https://lore.kernel.org/all/20220211011446.392673-1-Jason@zx2c4.com/
-
-Random Initiator : Linus' 50ee7529ec45
-
-Linus' 50ee7529ec45 ("random: try to actively add entropy
-rather than passively wait for it"), the RNG does a haveged-style jitter
-dance around the scheduler, in order to produce entropy
-
-The key is to initialize with a SEED key; To avoid the seed needing to
-be replaced too often we Encipher it in a set order with an additive
-key..
-
-to create the perfect circumstances we utilize 2 seeds:
-AES/SHA2/PolyCHA
-
-Initiator math key CH1:8Bit to 32Bit High quality HASH Cryptic
-& Key 2 CrH
-
-8Bit to 256Bit : Stored HASH Cryptic
-
-We operate maths on the differential and Crypro the HASH :
-AES/SHA2/PolyCHA
-CrH 'Math' CH1(1,2,3>)
-
-AES/SHA2/PolyCHA > Save to /dev/random & use
-
-We may also use the code directly to do unique HASH RAND & therefore
-keep crucial details personal or per application & MultiThreads &or
-CPU & GPU & Task.
-
-Rupert S
-
-TRNG Samples & Method
-
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=drive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=drive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=drive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=drive_web
+  Luis
