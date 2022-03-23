@@ -2,111 +2,149 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625BB4E5332
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Mar 2022 14:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E654E5345
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Mar 2022 14:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244332AbiCWNiD (ORCPT
+        id S244361AbiCWNjq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 23 Mar 2022 09:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        Wed, 23 Mar 2022 09:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244323AbiCWNiB (ORCPT
+        with ESMTP id S244362AbiCWNjp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 23 Mar 2022 09:38:01 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E432B5F247
-        for <linux-security-module@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id b15so1869371edn.4
-        for <linux-security-module@vger.kernel.org>; Wed, 23 Mar 2022 06:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
-        b=bNAXkMThypJ8Fp6kfoI5Ak+DXC/qipME9qq62aGmE5rQINI4bXll1STdm+yJBTY1XJ
-         MAB6Colidi9wkqYkm7XWQwOKwYmnk4N/8QwaoLXdCBDgbO31bDjqhqNM7981z02PuoO3
-         M5L7fKggjZfAXBPxbyqoGJX8NduefdgX+vtezqdHOYoYD18Z5xNXH5mk1vIXUsDfCfO/
-         dURe8v8nEofP406hTLidblrYU8cfLUmEEdN7mt1/VBpZE2j2IUxhkmXtSwrxT0EowZJY
-         MteICWcMF6ES9/2/i6lSw8Gu7YZwdZjcjbUzz6HU0lS5Vrt7EMjMCphuPwK0KJ+6ciVZ
-         NmNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=eoJL8/ssTz//H6D1ky8wIdZCZtyYwQOapMLC4rpTJK4=;
-        b=sczpxv6mtyAsRcQtxw3Xf7RqJgaEGD6exqsZ6IHeQBXjDENEjDZjEWMVyTjAILLOpw
-         UHsEDvNzv6hxKBeUXMkgiTl3i+GCNEdt9b8bxVgPo4WPssDHtGfrHxpKG+4v2Rob8oOh
-         XpkQguV73iMc0vaBAlpRFoCjHqUssDmPbzkTSepm0vMq89m29b0KB4yEiyrEhuNtXnfA
-         Ngqe8Yo6DMIx/77n0BXhvq29cq7X6ROkMFnsczPLIRVk9h4dJvrIBDb7RPVvhAUW2yeg
-         3+kbqzT+SIB/HfWBTViiJHWvOoCZpZqpHMw0FQVbaJefkUJ2z7FInhmPAIJPeeXgYmDX
-         VLSA==
-X-Gm-Message-State: AOAM530WdydZnwAAGM2zO8lbRZA4lj/dd0ebiwJVBSfZacPxMP1GaRXh
-        b246qTPp7CEPdRTnzeoYjsODpW9vB5IGZ3A4cbI=
-X-Google-Smtp-Source: ABdhPJwFcJm7rfKsAySs+0vGMiLsgkerhO1IJaAaoI5nIsMNewFDbxma8gXpcBnrN9wIhl6vxQwOyxG97McgmzXPrzY=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr67804edb.342.1648042590389; Wed, 23 Mar
- 2022 06:36:30 -0700 (PDT)
+        Wed, 23 Mar 2022 09:39:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E35F8D6;
+        Wed, 23 Mar 2022 06:38:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3593B81F13;
+        Wed, 23 Mar 2022 13:38:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EFBC340E8;
+        Wed, 23 Mar 2022 13:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1648042690;
+        bh=FS4rMUgYm98K72DS/l0zV5frCfm1kqj/zcgo/7pabXw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JT3Ze9V22MkpJEe9f7BnjRn/vnsga2B9nHBVD0kV8zKLTi+VEroCdcjGzZlWKuHYJ
+         1gyqGo/IrlVtRZkznGfLmYBmgt2Uworm16hjtXdDeQl+39jWHRbUTf26ct9hOH0/uG
+         er6PCviMcAqG8oVa0XLsFb3EYWzzpovOYPuNPGhM=
+Date:   Wed, 23 Mar 2022 14:38:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+Message-ID: <Yjsiv2XesJRzoeTW@kroah.com>
+References: <20220322192712.709170-1-mszeredi@redhat.com>
+ <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+ <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 23 Mar 2022 13:36:22 +0000
-Message-ID: <CAHpNFcM8p5hZ=wC5s+5JOw03yJbC-ZqApX0Cqpa48p=QdszTeg@mail.gmail.com>
-Subject: Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you
- trade markerz ***** Dukes Of THRUST ******
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-***** Dukes Of THRUST ******
+On Wed, Mar 23, 2022 at 02:24:40PM +0100, Miklos Szeredi wrote:
+> On Wed, 23 Mar 2022 at 12:43, Christian Brauner <brauner@kernel.org> wrote:
+> 
+> > Yes, we really need a way to query for various fs information. I'm a bit
+> > torn about the details of this interface though. I would really like if
+> > we had interfaces that are really easy to use from userspace comparable
+> > to statx for example.
+> 
+> The reason I stated thinking about this is that Amir wanted a per-sb
+> iostat interface and dumped it into /proc/PID/mountstats.  And that is
+> definitely not the right way to go about this.
+> 
+> So we could add a statfsx() and start filling in new stuff, and that's
+> what Linus suggested.  But then we might need to add stuff that is not
+> representable in a flat structure (like for example the stuff that
+> nfs_show_stats does) and that again needs new infrastructure.
+> 
+> Another example is task info in /proc.  Utilities are doing a crazy
+> number of syscalls to get trivial information.  Why don't we have a
+> procx(2) syscall?  I guess because lots of that is difficult to
+> represent in a flat structure.  Just take the lsof example: tt's doing
+> hundreds of thousands of syscalls on a desktop computer with just a
+> few hundred processes.
+> 
+> So I'm trying to look beyond fsinfo and about how we could better
+> retrieve attributes, statistics, small bits and pieces within a
+> unified framework.
+> 
+> The ease of use argument does not really come into the picture here,
+> because (unlike stat and friends) most of this info is specialized and
+> will be either consumed by libraries, specialized utilities
+> (util-linux, procos) or with a generic utility application that can
+> query any information about anything that is exported through such an
+> interface.    That applies to plain stat(2) as well: most users will
+> not switch to statx() simply because that's too generic.  And that's
+> fine, for info as common as struct stat a syscall is warranted.  If
+> the info is more specialized, then I think a truly generic interface
+> is a much better choice.
+> 
+> >  I know having this generic as possible was the
+> > goal but I'm just a bit uneasy with such interfaces. They become
+> > cumbersome to use in userspace. I'm not sure if the data: part for
+> > example should be in this at all. That seems a bit out of place to me.
+> 
+> Good point, reduction of scope may help.
+> 
+> > Would it be really that bad if we added multiple syscalls for different
+> > types of info? For example, querying mount information could reasonably
+> > be a more focussed separate system call allowing to retrieve detailed
+> > mount propagation info, flags, idmappings and so on. Prior approaches to
+> > solve this in a completely generic way have gotten us not very far too
+> > so I'm a bit worried about this aspect too.
+> 
+> And I fear that this will just result in more and more ad-hoc
+> interfaces being added, because a new feature didn't quite fit the old
+> API.  You can see the history of this happening all over the place
+> with multiple new syscall versions being added as the old one turns
+> out to be not generic enough.
+> 
+> I think a new interface needs to
+> 
+>   - be uniform (a single utility can be used to retrieve various
+> attributes and statistics, contrast this with e.g. stat(1),
+> getfattr(1), lsattr(1) not to mention various fs specific tools).
+> 
+>  - have a hierarchical namespace (the unix path lookup is an example
+> of this that stood the test of time)
+> 
+>  - allow retrieving arbitrary text or binary data
+> 
+> And whatever form it takes, I'm sure it will be easier to use than the
+> mess we currently have in various interfaces like the mount or process
+> stats.
 
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
+This has been proposed in the past a few times.  Most recently by the
+KVM developers, which tried to create a "generic" api, but ended up just
+making something to work for KVM as they got tired of people ignoring
+their more intrusive patch sets.  See virt/kvm/binary_stats.c for what
+they ended up with, and perhaps you can just use that same type of
+interface here as well?
 
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
+thanks,
 
-Microchip clock abd 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-***** Dukes Of THRUST ******
-
-Autism, Deafness & the hard of hearing : In need of ANC & Active audio
-clarification or correction 2022-01
-
-Sony & a few others make noise cancelling headphones that are suitable
-for people with Acute disfunction to brain function for ear drums ...
-Attention deficit or Autism,
-The newer Sony headsets are theoretically enablers of a clear
-confusion free world for Autistic people..
-Reaching out to a larger audience of people simply annoyed by a
-confusing world; While they listen to music..
-Can and does protect a small percentage of people who are confused &
-harassed by major discord located in all jurisdictions of life...
-
-Crazy noise levels, Or simply drowned in HISSING Static:
-
-Search for active voice enhanced noise cancellation today.
-
-Rupert S https://science.n-helix.com
-
-
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-
-https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
-
-
-https://www.orosound.com/
-
-https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
+greg k-h
