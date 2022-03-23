@@ -2,860 +2,475 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B949E4E47CC
-	for <lists+linux-security-module@lfdr.de>; Tue, 22 Mar 2022 21:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D05F4E4A56
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Mar 2022 02:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiCVUyw (ORCPT
+        id S241043AbiCWBLf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 22 Mar 2022 16:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
+        Tue, 22 Mar 2022 21:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbiCVUyv (ORCPT
+        with ESMTP id S241032AbiCWBLe (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 22 Mar 2022 16:54:51 -0400
-Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEEB6247
-        for <linux-security-module@vger.kernel.org>; Tue, 22 Mar 2022 13:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1647982399; bh=mZ4kp59bi9MieN2xYf9v/XorQZtYwGoyRab8+nHGEU4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PkhZBDpWr4AQ0ejvuX3uX2uIynj0FwsehwA3CmW8EMbSWiwMKoolamZnZGldlGZ24Ptp0g8UUopHyx6ETZ8iUyg4NhmJDvJxxMUHGyK1sdlMj4qZRWArbqD8ARarmmn8wolyyv0bghtpItCW7K2Yj1N1srMu4fWGfQh7/nML1MSIQp5P3lUEmw2qFMiOdm6hdtBJfQ9GmBX7rDeZXnWS2WVIiwlerggTG7THtiS0/3I48HSfUF14FufgDWL8o7R0SPX8asTvBvZ1r3RkL/Ti4EdiHNVW8Q92WyHyFJr6CXJOhJm5Sq7X81dtrtUiC+zx2e5W0N4vaJBvRLiURRimmA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1647982399; bh=OcZFwoYHU87ECunAE8nkSvhqrcbdbYdo8W33ugSyzxZ=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=nijIvJgzqkXqM41Lb/pBC1oc9WIF48CEQIFCnGhagmS8+XBtSRME3gbP9gKYX3nQ6CIUVKy4KyXyT8492EuC9XbrV9uJFqp/Y6/YPEBuBdSBrsuQU3X3awki0/Lpn9m29r7DCq2W7Rj5DW+to5s8Q2GofojB33tWcgmRMc2h6sQEPWhUNol1XNv7ms+p+sivYIL/O1Cxq2WiT6DGvUN/RCKLAPdRqrRpb7YtyZUP2Xeq697/IZsEqFy7R5Rp9wX06xgOV3d6ujB7RTqfhQd3wbL6rqfHUaIOXvJBSdsDNsGqVI5KQUs4mYpK4HdkKlBi1IoFjxEMb3lzc42dF4zTlw==
-X-YMail-OSG: yJdLcvEVM1kaEAyqjKdNCrWhHI_DfrKDO3McpyyDlzTkTci7FkvaWhapSNKg2an
- 9wjTCCSYpgZ2ypwJnOED.7c57xe0HmOlnpJil1qmHWd3kTliDLGN6BMB8pKiHUJsqsiBFECSQTXb
- 9oPseAkI0uMhbj1SX2kgfWph0A.DnVUGuIUWqsqXenw54xfM9vPtXHpmG6ZtbOF07Jd1.7J1lLC6
- O5qQ3lQPEio3o6USGh9bwgzccn8MOXMa.sxCzweY_QT9y2AOz5gMoSfkKVQio5WaVkJ2ECeQpbVo
- a2zrzLI2sNSJbkcq_yRqeHy.S66hzBGP7.LRJuO2KIvAQbEfjAvB2bngswcvZTRNCB8YLVUBzo8s
- vfoWwPdnt1sLqH4NCvvOgtVvgPWFqtJ8kd4p.DPzR_GVT45HnrqHFQ08z_FHCfLldU4aXmm5GDeM
- 8fl40BpyYbqA.Q4akT7N7gHbQdsz2XaSXCuxIa3VqQSD3tKLFLs07T_aOXWuXpWoYqFQ99jjZ9rZ
- xiNxbVi9MuW5liR7PLhhK1kO5V1bYQyc4NZkNE9EJinmx2ElYTEBn60Z99wb5slMHkj9ffAIwclE
- UhSSTu_DNJRgXr4pFn1NDawbS6pw_l37KWUPlzB4hP8MK70q5_ntaJetsw.vcajLgrneaOSwZeMf
- rGe_UsstbUqq31.vaQvFb_Ts4AmSbEmEtaxinqWFtvKMp.6SK6uqiBeoYchFCts8weokp1TaDYqu
- DsAHmMttU_npsltM5iSjuqeYFmsMvXFjN3GL1QOhP59nPqEdTw8C_UUZoz7l60zxmBOKXb5X6zkh
- kFW6nVmnfq6YVmw7X7MWgq_r1Z9S09Hc0Qz9dAXKQBLXrDN_DGlLDmyXdDDvEi6gUcIuMQPu.B5n
- 4WirbyjeNCex7zD0ipqVQg4D.J20OKylpLGtvRSJPCsa3J0ZfpwPwKNTir98rHFsifaFURWBQoUD
- broisT18V1NdDZG0Lxxi7muVCV4dHmxhUirfjh8z_J7ba_W43ASWmTPj8bmo640N6BHb0Yln006Z
- 0WCQ3_LjKsP_CDF8nA_YpFyOi_P96D.TrHosM17nVqCLQSTIcL9NrguPV0HbnsSnPXOhNmqCS6Wg
- qEw98TDLaVCXk0x7Cf9NKS2bmQXAKTKxe3hELdFNMW6_qKeGGpqdySJzeSlhuzXtceB0AZgpUVW6
- Z0P5pZX5aKUU.m9bB5YEVq3cUeR6BjNEcyqQoI4sjeM9ssnfMi9q6y88qM37TurmFv3koIa.b9mZ
- 8aCdAdvfYX9WPWoQem3A7r9W6dAMbPUFjz5Fu3WJviO0DzHEJZclWDPtoareVckrbP6eo4tQjTsT
- 5qeRNKRBaGYLPHDj5uWQk7Sp_9wJPWlcM6yboSiHimwUtPh2_rWEPeufjpBajnMMRg9wr_QCjS14
- xMT4CAA0ALj2GDZGpui2wIfmVOWy1vWRVH7huHAS9aGJsJ_KGqh4yel7om1kj5cANh5eqr.duVVe
- hfMSBmLf6jJYrKhxO.uqDiyUvHUDW4XEMCf3VqIT_72VDYONUZ74CSU5mRwtkzY9OfzmTignSHnw
- AAiEobvOMiEdEYtDsfvo2qdsMV73y2K771X7Qu7tH3PjjxJ_CcUSbMvSgTyA1p668FDk5MyGV6j.
- s9Y47OrLcAA3Ewcmdra8G_T6IVCjPYWzlfMpagj3P..MePNEoGLWwcY2sLqJ88FkQ2dLXau.EMCp
- ws.dNA.hcS8ay_T7ZgcknOY9fo1NdjQKd9rsgt2JAv.WycL_46SAXscy3NNFLtKj8u_RS64Zv6G1
- GZYLzsekVmwHojEroc_3gtE3j4Jatyy5zQcSuKX4quR7cBmlbdspYB6KuiUeuAEiHvRc9me4pYhX
- GtFY.C0Qk9cjsELuxVHSvvdnGluXZsSKgAnOXw2GI3k3K8DLK5BUqmMAH4Mnq3SCxttOn1Swbfjm
- .lHaRrOwEYNCQq6D4XCQnsJYoNy1AZ1g8g.mE8LZJv43375_MG9E5ZUyh.vSTW3AO1dQaMu2IKNr
- IKg7zBg7.cISq_d85AdMYduLRNaeecxJJ4.xP10tdtDutx3u4r8R6J.oewsuBMb4t2d8iwrkefXQ
- Cy5MqLKO_Gaa0pXjwMgBnFdMzucZ_Zjhb4tscTPaV4Ll6P5Bg8Tfmt6fx2.e4pJHopZ_oCv0MNVh
- Q2rx1_ymXlxxMmEaaQ_ifYUF95AMt2YabwwyObDgCr4MvXEj8QYJdu3pDJFflpdDvtrKDkd70zKT
- zXS8iwwHUb6xzbqSqKK2p_LAdQGsOf_3_Y.IWiTzt_fK.N.gawvaoPFqme42yhmiC5lB4x82Pfdp
- 24BZFe_u5WZDfpNfrB3Bsrt3MzA--
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Tue, 22 Mar 2022 20:53:19 +0000
-Received: by hermes--canary-production-bf1-665cdb9985-tmblj (VZM Hermes SMTP Server) with ESMTPA ID 59324c1ed3f18108442dfba4f1f7561c;
-          Tue, 22 Mar 2022 20:53:15 +0000 (UTC)
-Message-ID: <8339cb9c-d0ec-1e47-9b11-84535fe79683@schaufler-ca.com>
-Date:   Tue, 22 Mar 2022 13:53:12 -0700
+        Tue, 22 Mar 2022 21:11:34 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8596F4BC
+        for <linux-security-module@vger.kernel.org>; Tue, 22 Mar 2022 18:10:00 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id qx21so39658643ejb.13
+        for <linux-security-module@vger.kernel.org>; Tue, 22 Mar 2022 18:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Usl1cb51/8av9PlFaE8pZNe2bf5KKJvN2T2RDmfs+5U=;
+        b=aHnC0nri4D5uQSk+Up+F9iO14ux5h+n+BlngUlSSFeHS/nBafyWB5cs4vZ93RjxRy2
+         wJXhLNWWc4Sik01lxZUoXit/e8NGk9gmTwKIthzLrAuEpaZh/OXDTTV5kj4arkx5nlBV
+         9lQ+a3b/01wBnY+xhOVsxRiB6sr0n+zL4SRu1X9Kk8Tid9zvjnlN/06+uOJfUpKf1D+a
+         EyrESDwNVBpZnhUZMlSYX17D9zFLXFZx3X9SRPvtUYZlKfhl5VEftIoXXGtqluU9hmzs
+         AhnTYmCOcYwIIpU0FxoE2e3NPn77ruuyWC/AdHP727WgZeNKirx17nssTJB6pquUPX5I
+         FL+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Usl1cb51/8av9PlFaE8pZNe2bf5KKJvN2T2RDmfs+5U=;
+        b=Hx4wbSLc9c/TmLFbuPlgBtkZJzEHl7zL01bHnqyZjzOP6itGSRlHpZLwq9J7ac9RSe
+         taJL+RvDRkm8C3rSIzYggGE5ssulIM78BT43wKPcx9gkuzjp8SWAafCXItnRIwfr7EWw
+         qGiEcPIKZv07ZS+0/VpEM5wX3PWfyTeWmME4Gqx5FdoWE3U4LLUMwRX5D/LLm9h7fvdZ
+         OJiUOR56wb3wslXQ6oLMQ6hBpJAI+J3YFjUlNQS/G3EcvrY4pIysQuMLMqOw9KJRVTh9
+         UpFHjkCrKkDwLdo0Y1bjGTl9CnrJj+IaKpsdgoAGzr0l0Gay7OfbJmy8hIM7KF4oB8DM
+         otpg==
+X-Gm-Message-State: AOAM533VGVH9PEJR3xc1nk91niXQbT1sDiqPOw0yrTx6s6CAS6BISw5f
+        DXZ9Xw1vhH6f7DoTB3Re6Q47lgC57tM1qsjL6ck=
+X-Google-Smtp-Source: ABdhPJx2Fe0bZIuqd87mbasfgYXrFbgLcYQO3s8qk+AEOPZGfqexNtyVhVbs6oN/bUxTGEH4Qt7tzAlq7El+neeWNC0=
+X-Received: by 2002:a17:907:c0c:b0:6d1:8c46:6415 with SMTP id
+ ga12-20020a1709070c0c00b006d18c466415mr29543836ejc.326.1647997799095; Tue, 22
+ Mar 2022 18:09:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH] getvalues(2) prototype
-Content-Language: en-US
-To:     Miklos Szeredi <mszeredi@redhat.com>, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-man@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220322192712.709170-1-mszeredi@redhat.com>
- <f80f372b-4249-eb25-ed95-9f8615877745@schaufler-ca.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <f80f372b-4249-eb25-ed95-9f8615877745@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.19894 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 23 Mar 2022 01:09:50 +0000
+Message-ID: <CAHpNFcN_tkiK1hO5HkJtvydLhj8biSLVQ+sFsuidM7wYF8PJPw@mail.gmail.com>
+Subject: GPIO & QFFT : RS : Subject Re: [PATCH] watchdog: gpio_wdt: Support
+ GPO lines with the toggle algorithm
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 3/22/2022 1:36 PM, Casey Schaufler wrote:
-> On 3/22/2022 12:27 PM, Miklos Szeredi wrote:
->> Add a new userspace API that allows getting multiple short values in a
->> single syscall.
->>
->> This would be useful for the following reasons:
->>
->> - Calling open/read/close for many small files is inefficient. E.g. on my
->>    desktop invoking lsof(1) results in ~60k open + read + close calls under
->>    /proc and 90% of those are 128 bytes or less.
->
-> You don't need the generality below to address this issue.
->
-> int openandread(const char *path, char *buffer, size_t size);
->
-> would address this case swimmingly.
->
->> - Interfaces for getting various attributes and statistics are fragmented.
->>    For files we have basic stat, statx, extended attributes, file attributes
->>    (for which there are two overlapping ioctl interfaces).  For mounts and
->>    superblocks we have stat*fs as well as /proc/$PID/{mountinfo,mountstats}.
->>    The latter also has the problem on not allowing queries on a specific
->>    mount.
->>
->> - Some attributes are cheap to generate, some are expensive. Allowing
->>    userspace to select which ones it needs should allow optimizing queries.
->>
->> - Adding an ascii namespace should allow easy extension and self
->>    description.
+GPIO is used for Super speed output, However Serialised Parallel
+processing allows constant flow:
 
-... I forgot to mention that without a mechanism to ask what attributes
-are available on the file this is completely pointless. If the application
-asks for xattr:security.selinux on a system using Smack, which would have
-xattr:security.SMACK64 and might have xattr:security.SMACK64EXEC or
-xattr:security.SMACK64TRANSMUTE, it won't be happy. Or on a system with
-no LSM for that matter.
+Examples:
 
->>
->> - The values can be text or binary, whichever is fits best.
->>
->> The interface definition is:
->>
->> struct name_val {
->>     const char *name;    /* in */
->>     struct iovec value_in;    /* in */
->>     struct iovec value_out;    /* out */
->>     uint32_t error;        /* out */
->>     uint32_t reserved;
->> };
->>
->> int getvalues(int dfd, const char *path, struct name_val *vec, size_t num,
->>           unsigned int flags);
->>
->> @dfd and @path are used to lookup object $ORIGIN.
+Audio devices such as creative logic ISA & PCI Cards on SUPER
+input mode (Mic & Input ports)16Bit HQ into 256 Drums in 32Bit Super HQ
+
+CPU Coprocessors such as the QFFT : Input & Output alternate lines on pins
+
+Parallel ports in Super IO mode! 4MB/S WOW
+
+Hard Drives IO 120MB/s Write Cycle (Audio Recording Desks & Studio
+Recording Studios)
+
+Tape DECKS : IBM, Fuji, Sony & Samsung TAPE Backups Super IO GPIO :
+1.2GB/s to 72GB/s Compressed
+
+GPIO Could be used on RAM : Examples is 4 special pins on the RAM for
+burst mode!
+
+GPIO is rather more relevant than you think!
+
+Rupert S
+
+https://science.n-helix.com/2021/11/wave-focus-anc.html
+
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.ht=
+ml
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-cancel=
+ing-headphones-of-the-year-a1166868524/
+
+
+https://lkml.org/lkml/2022/3/22/1112
+
+Date Tue, 22 Mar 2022 17:04:53 -0700
+From Guenter Roeck <>
+Subject Re: [PATCH] watchdog: gpio_wdt: Support GPO lines with the
+toggle algorithm
+share 0
+On 3/22/22 15:29, Tobias Waldekranz wrote:
+> Support using GPO lines (i.e. GPIOs that are output-only) with
+> gpio_wdt using the "toggle" algorithm.
 >
-> To be conventional you should have
+> Since its inception, gpio_wdt has configured its GPIO line as an input
+> when using the "toggle" algorithm, even though it is used as an output
+> when kicking. This needlessly barred hardware with output-only pins
+> from using the driver.
 >
-> int getvalues(const char *path, struct name_val *vec, size_t num,
->           unsigned int flags);
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
 >
-> and
+> Hi,
 >
-> int fgetvalues(int dfd, struct name_val *vec, size_t num,
->            unsigned int flags);
+> This patch has been in our downstream tree for a long time. We need it
+> because our kick GPIO can't be used as an input.
 >
->>    @vec contains @num
->> name/value descriptors.  @flags contains lookup flags for @path.
->>
->> The syscall returns the number of values filled or an error.
->>
->> A single name/value descriptor has the following fields:
->>
->> @name describes the object whose value is to be returned.  E.g.
->>
->> mnt                    - list of mount parameters
->> mnt:mountpoint         - the mountpoint of the mount of $ORIGIN
->> mntns                  - list of mount ID's reachable from the current root
->> mntns:21:parentid      - parent ID of the mount with ID of 21
->> xattr:security.selinux - the security.selinux extended attribute
->> data:foo/bar           - the data contained in file $ORIGIN/foo/bar
->>
->> If the name starts with the separator, then it is taken to have the same
->> prefix as the previous name/value descriptor.  E.g. in the following
->> sequence of names the second one is equivalent to mnt:parentid:
->>
->> mnt:mountpoint
->> :parentid
+> What I really can't figure out is why the driver would request the pin
+> as in input, when it's always going to end up being used as an output
+> anyway.
 >
-> I would consider this a clever optimization that is likely to
-> cause confusion and result in lots of bugs. Yes, you'll save some
-> parsing time, but the debugging headaches it would introduce would
-> more than make up for it.
+> So I thought I'd send it upstream in the hopes of either getting it
+> merged, or an explanation as to why it is needed.
 >
->> @value_in supplies the buffer to store value(s) in.  If a subsequent
->> name/value descriptor has NULL value of value_in.iov_base, then the buffer
->> from the previous name/value descriptor will be used.  This way it's
->> possible to use a shared buffer for multiple values.
+
+I _think_ the assumption / idea was that "toggle" implies that the output
+is connected to a pull-up resistor and that the pin either floats or is
+pulled down to ground, causing the signal to toggle. I don't know if/how
+that works in practice, though.
+
+Guenter
+
+>   drivers/watchdog/gpio_wdt.c | 13 +++++--------
+>   1 file changed, 5 insertions(+), 8 deletions(-)
 >
-> I would not trust very many application developers to use the NULL
-> value_in.iov_base correctly. In fact, I can't think of a way it could
-> be used sensibly. Sure, you could put two things of known size into
-> one buffer and use the known offset, but again that's a clever
-> optimization that will result in more bugs than it is worth.
+> diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
+> index 0923201ce874..f7686688e0e2 100644
+> --- a/drivers/watchdog/gpio_wdt.c
+> +++ b/drivers/watchdog/gpio_wdt.c
+> @@ -108,7 +108,6 @@ static int gpio_wdt_probe(struct platform_device *pde=
+v)
+>   struct device *dev =3D &pdev->dev;
+>   struct device_node *np =3D dev->of_node;
+>   struct gpio_wdt_priv *priv;
+> - enum gpiod_flags gflags;
+>   unsigned int hw_margin;
+>   const char *algo;
+>   int ret;
+> @@ -122,17 +121,15 @@ static int gpio_wdt_probe(struct platform_device *p=
+dev)
+>   ret =3D of_property_read_string(np, "hw_algo", &algo);
+>   if (ret)
+>   return ret;
+> - if (!strcmp(algo, "toggle")) {
+> +
+> + if (!strcmp(algo, "toggle"))
+>   priv->hw_algo =3D HW_ALGO_TOGGLE;
+> - gflags =3D GPIOD_IN;
+> - } else if (!strcmp(algo, "level")) {
+> + else if (!strcmp(algo, "level"))
+>   priv->hw_algo =3D HW_ALGO_LEVEL;
+> - gflags =3D GPIOD_OUT_LOW;
+> - } else {
+> + else
+>   return -EINVAL;
+> - }
 >
->> The starting address and length of the actual value will be stored in
->> @value_out, unless an error has occurred in which case @error will be set to
->> the positive errno value.
+> - priv->gpiod =3D devm_gpiod_get(dev, NULL, gflags);
+> + priv->gpiod =3D devm_gpiod_get(dev, NULL, GPIOD_OUT_LOW);
+>   if (IS_ERR(priv->gpiod))
+>   return PTR_ERR(priv->gpiod);
 >
-> You only need to return the address if you do the multi-value in a buffer.
-> Which I've already expressed distaste for.
->
-> If the application asks for 6 attributes and is denied access to the
-> 3rd (by an LSM let's say) what is returned? Are the 1st two buffers
-> filled? How can I tell which attribute was unavailable?
->
->> Multiple names starting with the same prefix (including the shorthand form)
->> may also be batched together under the same lock, so the order of the names
->> can determine atomicity.
->
-> I will believe you, but it's hardly obvious why this is true.
->
->>
->> Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
->> ---
->>   arch/x86/entry/syscalls/syscall_64.tbl |   1 +
->>   fs/Makefile                            |   2 +-
->>   fs/mount.h                             |   8 +
->>   fs/namespace.c                         |  42 ++
->>   fs/proc_namespace.c                    |   2 +-
->>   fs/values.c                            | 524 +++++++++++++++++++++++++
->>   6 files changed, 577 insertions(+), 2 deletions(-)
->>   create mode 100644 fs/values.c
->>
->> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
->> index c84d12608cd2..c72668001b39 100644
->> --- a/arch/x86/entry/syscalls/syscall_64.tbl
->> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
->> @@ -372,6 +372,7 @@
->>   448    common    process_mrelease    sys_process_mrelease
->>   449    common    futex_waitv        sys_futex_waitv
->>   450    common    set_mempolicy_home_node sys_set_mempolicy_home_node
->> +451    common    getvalues        sys_getvalues
->>     #
->>   # Due to a historical design error, certain syscalls are numbered differently
->> diff --git a/fs/Makefile b/fs/Makefile
->> index 208a74e0b00e..f00d6bcd1178 100644
->> --- a/fs/Makefile
->> +++ b/fs/Makefile
->> @@ -16,7 +16,7 @@ obj-y :=    open.o read_write.o file_table.o super.o \
->>           pnode.o splice.o sync.o utimes.o d_path.o \
->>           stack.o fs_struct.o statfs.o fs_pin.o nsfs.o \
->>           fs_types.o fs_context.o fs_parser.o fsopen.o init.o \
->> -        kernel_read_file.o remap_range.o
->> +        kernel_read_file.o remap_range.o values.o
->>     ifeq ($(CONFIG_BLOCK),y)
->>   obj-y +=    buffer.o direct-io.o mpage.o
->> diff --git a/fs/mount.h b/fs/mount.h
->> index 0b6e08cf8afb..a3ca5233e481 100644
->> --- a/fs/mount.h
->> +++ b/fs/mount.h
->> @@ -148,3 +148,11 @@ static inline bool is_anon_ns(struct mnt_namespace *ns)
->>   }
->>     extern void mnt_cursor_del(struct mnt_namespace *ns, struct mount *cursor);
->> +
->> +extern void namespace_lock_read(void);
->> +extern void namespace_unlock_read(void);
->> +extern void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt);
->> +extern void seq_mnt_list(struct seq_file *seq, struct mnt_namespace *ns,
->> +             struct path *root);
->> +extern struct vfsmount *mnt_lookup_by_id(struct mnt_namespace *ns,
->> +                     struct path *root, int id);
->> diff --git a/fs/namespace.c b/fs/namespace.c
->> index de6fae84f1a1..52b15c17251f 100644
->> --- a/fs/namespace.c
->> +++ b/fs/namespace.c
->> @@ -1405,6 +1405,38 @@ void mnt_cursor_del(struct mnt_namespace *ns, struct mount *cursor)
->>   }
->>   #endif  /* CONFIG_PROC_FS */
->>   +void seq_mnt_list(struct seq_file *seq, struct mnt_namespace *ns,
->> +          struct path *root)
->> +{
->> +    struct mount *m;
->> +
->> +    down_read(&namespace_sem);
->> +    for (m = mnt_list_next(ns, &ns->list); m; m = mnt_list_next(ns, &m->mnt_list)) {
->> +        if (is_path_reachable(m, m->mnt.mnt_root, root)) {
->> +            seq_printf(seq, "%i", m->mnt_id);
->> +            seq_putc(seq, '\0');
->> +        }
->> +    }
->> +    up_read(&namespace_sem);
->> +}
->> +
->> +/* called with namespace_sem held for read */
->> +struct vfsmount *mnt_lookup_by_id(struct mnt_namespace *ns, struct path *root,
->> +                  int id)
->> +{
->> +    struct mount *m;
->> +
->> +    for (m = mnt_list_next(ns, &ns->list); m; m = mnt_list_next(ns, &m->mnt_list)) {
->> +        if (m->mnt_id == id) {
->> +            if (is_path_reachable(m, m->mnt.mnt_root, root))
->> +                return mntget(&m->mnt);
->> +            else
->> +                return NULL;
->> +        }
->> +    }
->> +    return NULL;
->> +}
->> +
->>   /**
->>    * may_umount_tree - check if a mount tree is busy
->>    * @m: root of mount tree
->> @@ -1494,6 +1526,16 @@ static inline void namespace_lock(void)
->>       down_write(&namespace_sem);
->>   }
->>   +void namespace_lock_read(void)
->> +{
->> +    down_read(&namespace_sem);
->> +}
->> +
->> +void namespace_unlock_read(void)
->> +{
->> +    up_read(&namespace_sem);
->> +}
->> +
->>   enum umount_tree_flags {
->>       UMOUNT_SYNC = 1,
->>       UMOUNT_PROPAGATE = 2,
->> diff --git a/fs/proc_namespace.c b/fs/proc_namespace.c
->> index 49650e54d2f8..fa6dc2c20578 100644
->> --- a/fs/proc_namespace.c
->> +++ b/fs/proc_namespace.c
->> @@ -61,7 +61,7 @@ static int show_sb_opts(struct seq_file *m, struct super_block *sb)
->>       return security_sb_show_options(m, sb);
->>   }
->>   -static void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt)
->> +void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt)
->>   {
->>       static const struct proc_fs_opts mnt_opts[] = {
->>           { MNT_NOSUID, ",nosuid" },
->> diff --git a/fs/values.c b/fs/values.c
->> new file mode 100644
->> index 000000000000..618fa9bf48a1
->> --- /dev/null
->> +++ b/fs/values.c
->> @@ -0,0 +1,524 @@
->> +#include <linux/syscalls.h>
->> +#include <linux/printk.h>
->> +#include <linux/namei.h>
->> +#include <linux/fs_struct.h>
->> +#include <linux/posix_acl_xattr.h>
->> +#include <linux/xattr.h>
->> +#include "pnode.h"
->> +#include "internal.h"
->> +
->> +#define VAL_GRSEP ':'
->> +
->> +struct name_val {
->> +    const char __user *name;    /* in */
->> +    struct iovec value_in;        /* in */
->> +    struct iovec value_out;        /* out */
->> +    __u32 error;            /* out */
->> +    __u32 reserved;
->> +};
->> +
->> +struct val_iter {
->> +    struct name_val __user *curr;
->> +    size_t num;
->> +    struct iovec vec;
->> +    char name[256];
->> +    size_t bufsize;
->> +    struct seq_file seq;
->> +    const char *prefix;
->> +    const char *sub;
->> +};
->> +
->> +struct val_desc {
->> +    const char *name;
->> +    union {
->> +        int idx;
->> +        int (*get)(struct val_iter *vi, const struct path *path);
->> +    };
->> +};
->> +
->> +static int val_get(struct val_iter *vi)
->> +{
->> +    struct name_val nameval;
->> +    long err;
->> +
->> +    if (copy_from_user(&nameval, vi->curr, sizeof(nameval)))
->> +        return -EFAULT;
->> +
->> +    err = strncpy_from_user(vi->name, nameval.name, sizeof(vi->name));
->> +    if (err < 0)
->> +        return err;
->> +    if (err == sizeof(vi->name))
->> +        return -ERANGE;
->> +
->> +    if (nameval.value_in.iov_base)
->> +        vi->vec = nameval.value_in;
->> +
->> +    vi->seq.size = min(vi->vec.iov_len, vi->bufsize);
->> +    vi->seq.count = 0;
->> +
->> +    return 0;
->> +}
->> +
->> +static int val_next(struct val_iter *vi)
->> +{
->> +    vi->curr++;
->> +    vi->num--;
->> +
->> +    return vi->num ? val_get(vi) : 0;
->> +}
->> +
->> +static int val_end(struct val_iter *vi, size_t count)
->> +{
->> +    struct iovec iov = {
->> +        .iov_base = vi->vec.iov_base,
->> +        .iov_len = count,
->> +    };
->> +
->> +    if (copy_to_user(&vi->curr->value_out, &iov, sizeof(iov)))
->> +        return -EFAULT;
->> +
->> +    vi->vec.iov_base += count;
->> +    vi->vec.iov_len -= count;
->> +
->> +    return val_next(vi);
->> +}
->> +
->> +static int val_err(struct val_iter *vi, int err)
->> +{
->> +    if (put_user(-err, &vi->curr->error))
->> +        return -EFAULT;
->> +
->> +    return val_next(vi);
->> +}
->> +
->> +static int val_end_seq(struct val_iter *vi, int err)
->> +{
->> +    size_t count = vi->seq.count;
->> +
->> +    if (err)
->> +        return val_err(vi, err);
->> +
->> +    if (count == vi->seq.size)
->> +        return -EOVERFLOW;
->> +
->> +    if (copy_to_user(vi->vec.iov_base, vi->seq.buf, count))
->> +        return -EFAULT;
->> +
->> +    return val_end(vi, count);
->> +}
->> +
->> +static struct val_desc *val_lookup(struct val_iter *vi, struct val_desc *vd)
->> +{
->> +    const char *name = vi->name;
->> +    const char *prefix = vi->prefix;
->> +    size_t prefixlen = strlen(prefix);
->> +
->> +    if (prefixlen) {
->> +        /*
->> +         * Name beggining with a group separator is a shorthand for
->> +         * previously prefix.
->> +         */
->> +        if (name[0] == VAL_GRSEP) {
->> +            name++;
->> +        } else  {
->> +            if (strncmp(name, prefix, prefixlen) != 0)
->> +                return NULL;
->> +            name += prefixlen;
->> +        }
->> +    }
->> +
->> +    vi->sub = NULL;
->> +    for (; vd->name; vd++) {
->> +        if (strcmp(name, vd->name) == 0)
->> +            break;
->> +        else {
->> +            size_t grlen = strlen(vd->name);
->> +
->> +            if (strncmp(vd->name, name, grlen) == 0 &&
->> +                name[grlen] == VAL_GRSEP) {
->> +                vi->sub = name + grlen + 1;
->> +                break;
->> +            }
->> +        }
->> +    }
->> +    return vd;
->> +}
->> +
->> +static int val_get_group(struct val_iter *vi, struct val_desc *vd)
->> +{
->> +    for (; vd->name; vd++)
->> +        seq_write(&vi->seq, vd->name, strlen(vd->name) + 1);
->> +
->> +    return val_end_seq(vi, 0);
->> +}
->> +
->> +static bool val_push_prefix(struct val_iter *vi, const char **oldprefix)
->> +{
->> +    char *newprefix;
->> +
->> +    newprefix = kmemdup_nul(vi->name, vi->sub - vi->name, GFP_KERNEL);
->> +    if (newprefix) {
->> +        *oldprefix = vi->prefix;
->> +        vi->prefix = newprefix;
->> +    }
->> +
->> +    return newprefix;
->> +}
->> +
->> +static void val_pop_prefix(struct val_iter *vi, const char *oldprefix)
->> +{
->> +    kfree(vi->prefix);
->> +    vi->prefix = oldprefix;
->> +}
->> +
->> +enum {
->> +    VAL_MNT_ID,
->> +    VAL_MNT_PARENTID,
->> +    VAL_MNT_ROOT,
->> +    VAL_MNT_MOUNTPOINT,
->> +    VAL_MNT_OPTIONS,
->> +    VAL_MNT_SHARED,
->> +    VAL_MNT_MASTER,
->> +    VAL_MNT_PROPAGATE_FROM,
->> +    VAL_MNT_UNBINDABLE,
->> +    VAL_MNT_NOTFOUND,
->> +};
->> +
->> +static struct val_desc val_mnt_group[] = {
->> +    { .name = "id",            .idx = VAL_MNT_ID        },
->> +    { .name = "parentid",        .idx = VAL_MNT_PARENTID,    },
->> +    { .name = "root",        .idx = VAL_MNT_ROOT,        },
->> +    { .name = "mountpoint",        .idx = VAL_MNT_MOUNTPOINT,    },
->> +    { .name = "options",        .idx = VAL_MNT_OPTIONS, },
->> +    { .name = "shared",        .idx = VAL_MNT_SHARED,        },
->> +    { .name = "master",        .idx = VAL_MNT_MASTER,        },
->> +    { .name = "propagate_from",    .idx = VAL_MNT_PROPAGATE_FROM,    },
->> +    { .name = "unbindable",        .idx = VAL_MNT_UNBINDABLE,    },
->> +    { .name = NULL,            .idx = VAL_MNT_NOTFOUND },
->> +};
->> +
->> +static int seq_mnt_root(struct seq_file *seq, struct vfsmount *mnt)
->> +{
->> +    struct super_block *sb = mnt->mnt_sb;
->> +    int err = 0;
->> +
->> +    if (sb->s_op->show_path) {
->> +        err = sb->s_op->show_path(seq, mnt->mnt_root);
->> +        if (!err) {
->> +            seq_putc(seq, '\0');
->> +            if (seq->count < seq->size)
->> +                seq->count = string_unescape(seq->buf, seq->buf, seq->size, UNESCAPE_OCTAL);
->> +        }
->> +    } else {
->> +        seq_dentry(seq, mnt->mnt_root, "");
->> +    }
->> +
->> +    return err;
->> +}
->> +
->> +static int val_mnt_show(struct val_iter *vi, struct vfsmount *mnt)
->> +{
->> +    struct mount *m = real_mount(mnt);
->> +    struct path root, mnt_path;
->> +    struct val_desc *vd;
->> +    const char *oldprefix;
->> +    int err = 0;
->> +
->> +    if (!val_push_prefix(vi, &oldprefix))
->> +        return -ENOMEM;
->> +
->> +    while (!err && vi->num) {
->> +        vd = val_lookup(vi, val_mnt_group);
->> +        if (!vd)
->> +            break;
->> +
->> +        switch(vd->idx) {
->> +        case VAL_MNT_ID:
->> +            seq_printf(&vi->seq, "%i", m->mnt_id);
->> +            break;
->> +        case VAL_MNT_PARENTID:
->> +            seq_printf(&vi->seq, "%i", m->mnt_parent->mnt_id);
->> +            break;
->> +        case VAL_MNT_ROOT:
->> +            seq_mnt_root(&vi->seq, mnt);
->> +            break;
->> +        case VAL_MNT_MOUNTPOINT:
->> +            get_fs_root(current->fs, &root);
->> +            mnt_path.dentry = mnt->mnt_root;
->> +            mnt_path.mnt = mnt;
->> +            err = seq_path_root(&vi->seq, &mnt_path, &root, "");
->> +            path_put(&root);
->> +            break;
->> +        case VAL_MNT_OPTIONS:
->> +            seq_puts(&vi->seq, mnt->mnt_flags & MNT_READONLY ? "ro" : "rw");
->> +            show_mnt_opts(&vi->seq, mnt);
->> +            break;
->> +        case VAL_MNT_SHARED:
->> +            if (IS_MNT_SHARED(m))
->> +                seq_printf(&vi->seq, "%i,", m->mnt_group_id);
->> +            break;
->> +        case VAL_MNT_MASTER:
->> +            if (IS_MNT_SLAVE(m))
->> +                seq_printf(&vi->seq, "%i,",
->> +                       m->mnt_master->mnt_group_id);
->> +            break;
->> +        case VAL_MNT_PROPAGATE_FROM:
->> +            if (IS_MNT_SLAVE(m)) {
->> +                int dom;
->> +
->> +                get_fs_root(current->fs, &root);
->> +                dom = get_dominating_id(m, &root);
->> +                path_put(&root);
->> +                if (dom)
->> +                    seq_printf(&vi->seq, "%i,", dom);
->> +            }
->> +            break;
->> +        case VAL_MNT_UNBINDABLE:
->> +            if (IS_MNT_UNBINDABLE(m))
->> +                seq_puts(&vi->seq, "yes");
->> +            break;
->> +        default:
->> +            err = -ENOENT;
->> +            break;
->> +        }
->> +        err = val_end_seq(vi, err);
->> +    }
->> +    val_pop_prefix(vi, oldprefix);
->> +
->> +    return err;
->> +}
->> +
->> +static int val_mnt_get(struct val_iter *vi, const struct path *path)
->> +{
->> +    int err;
->> +
->> +    if (!vi->sub)
->> +        return val_get_group(vi, val_mnt_group);
->> +
->> +    namespace_lock_read();
->> +    err = val_mnt_show(vi, path->mnt);
->> +    namespace_unlock_read();
->> +
->> +    return err;
->> +}
->> +
->> +static int val_mntns_get(struct val_iter *vi, const struct path *path)
->> +{
->> +    struct mnt_namespace *mnt_ns = current->nsproxy->mnt_ns;
->> +    struct vfsmount *mnt;
->> +    struct path root;
->> +    char *end;
->> +    int mnt_id;
->> +    int err;
->> +
->> +    if (!vi->sub) {
->> +        get_fs_root(current->fs, &root);
->> +        seq_mnt_list(&vi->seq, mnt_ns, &root);
->> +        path_put(&root);
->> +        return val_end_seq(vi, 0);
->> +    }
->> +
->> +    end = strchr(vi->sub, VAL_GRSEP);
->> +    if (end)
->> +        *end = '\0';
->> +    err = kstrtoint(vi->sub, 10, &mnt_id);
->> +    if (err)
->> +        return val_err(vi, err);
->> +    vi->sub = NULL;
->> +    if (end) {
->> +        *end = VAL_GRSEP;
->> +        vi->sub = end + 1;
->> +    }
->> +
->> +    namespace_lock_read();
->> +    get_fs_root(current->fs, &root);
->> +    mnt = mnt_lookup_by_id(mnt_ns, &root, mnt_id);
->> +    path_put(&root);
->> +    if (!mnt) {
->> +        namespace_unlock_read();
->> +        return val_err(vi, -ENOENT);
->> +    }
->> +    if (vi->sub)
->> +        err = val_mnt_show(vi, mnt);
->> +    else
->> +        err = val_get_group(vi, val_mnt_group);
->> +
->> +    namespace_unlock_read();
->> +    mntput(mnt);
->> +
->> +    return err;
->> +}
->> +
->> +static ssize_t val_do_read(struct val_iter *vi, struct path *path)
->> +{
->> +    ssize_t ret;
->> +    struct file *file;
->> +    struct open_flags op = {
->> +        .open_flag = O_RDONLY,
->> +        .acc_mode = MAY_READ,
->> +        .intent = LOOKUP_OPEN,
->> +    };
->> +
->> +    file = do_file_open_root(path, "", &op);
->> +    if (IS_ERR(file))
->> +        return PTR_ERR(file);
->> +
->> +    ret = vfs_read(file, vi->vec.iov_base, vi->vec.iov_len, NULL);
->> +    fput(file);
->> +
->> +    return ret;
->> +}
->> +
->> +static ssize_t val_do_readlink(struct val_iter *vi, struct path *path)
->> +{
->> +    int ret;
->> +
->> +    ret = security_inode_readlink(path->dentry);
->> +    if (ret)
->> +        return ret;
->> +
->> +    return vfs_readlink(path->dentry, vi->vec.iov_base, vi->vec.iov_len);
->> +}
->> +
->> +static inline bool dot_or_dotdot(const char *s)
->> +{
->> +    return s[0] == '.' &&
->> +        (s[1] == '/' || s[1] == '\0' ||
->> +         (s[1] == '.' && (s[2] == '/' || s[2] == '\0')));
->> +}
->> +
->> +/*
->> + * - empty path is okay
->> + * - must not begin or end with slash or have a double slash anywhere
->> + * - must not have . or .. components
->> + */
->> +static bool val_verify_path(const char *subpath)
->> +{
->> +    const char *s = subpath;
->> +
->> +    if (s[0] == '\0')
->> +        return true;
->> +
->> +    if (s[0] == '/' || s[strlen(s) - 1] == '/' || strstr(s, "//"))
->> +        return false;
->> +
->> +    for (s--; s; s = strstr(s + 3, "/."))
->> +        if (dot_or_dotdot(s + 1))
->> +            return false;
->> +
->> +    return true;
->> +}
->> +
->> +static int val_data_get(struct val_iter *vi, const struct path *path)
->> +{
->> +    struct path this;
->> +    ssize_t ret;
->> +
->> +    if (!vi->sub)
->> +        return val_err(vi, -ENOENT);
->> +
->> +    if (!val_verify_path(vi->sub))
->> +        return val_err(vi, -EINVAL);
->> +
->> +    ret = vfs_path_lookup(path->dentry, path->mnt, vi->sub,
->> +                  LOOKUP_NO_XDEV | LOOKUP_BENEATH |
->> +                  LOOKUP_IN_ROOT, &this);
->> +    if (ret)
->> +        return val_err(vi, ret);
->> +
->> +    ret = -ENODATA;
->> +    if (d_is_reg(this.dentry) || d_is_symlink(this.dentry)) {
->> +        if (d_is_reg(this.dentry))
->> +            ret = val_do_read(vi, &this);
->> +        else
->> +            ret = val_do_readlink(vi, &this);
->> +    }
->> +    path_put(&this);
->> +    if (ret == -EFAULT)
->> +        return ret;
->> +    if (ret < 0)
->> +        return val_err(vi, ret);
->> +    if (ret == vi->vec.iov_len)
->> +        return -EOVERFLOW;
->> +
->> +    return val_end(vi, ret);
->> +}
->> +
->> +static int val_xattr_get(struct val_iter *vi, const struct path *path)
->> +{
->> +    ssize_t ret;
->> +    struct user_namespace *mnt_userns = mnt_user_ns(path->mnt);
->> +    void *value = vi->seq.buf + vi->seq.count;
->> +    size_t size = min_t(size_t, vi->seq.size - vi->seq.count,
->> +                XATTR_SIZE_MAX);
->> +
->> +    if (!vi->sub)
->> +        return val_err(vi, -ENOENT);
->> +
->> +    ret = vfs_getxattr(mnt_userns, path->dentry, vi->sub, value, size);
->> +    if (ret < 0)
->> +        return val_err(vi, ret);
->> +
->> +    if ((strcmp(vi->sub, XATTR_NAME_POSIX_ACL_ACCESS) == 0) ||
->> +        (strcmp(vi->sub, XATTR_NAME_POSIX_ACL_DEFAULT) == 0))
->> +        posix_acl_fix_xattr_to_user(mnt_userns, value, ret);
->> +
->> +    vi->seq.count += ret;
->> +
->> +    return val_end_seq(vi, 0);
->> +}
->> +
->> +
->> +static struct val_desc val_toplevel_group[] = {
->> +    { .name = "mnt",    .get = val_mnt_get,    },
->> +    { .name = "mntns",    .get = val_mntns_get,    },
->> +    { .name = "xattr",    .get = val_xattr_get,    },
->> +    { .name = "data",    .get = val_data_get,    },
->> +    { .name = NULL },
->> +};
->> +
->> +SYSCALL_DEFINE5(getvalues,
->> +        int, dfd,
->> +        const char __user *, pathname,
->> +        struct name_val __user *, vec,
->> +        size_t, num,
->> +        unsigned int, flags)
->> +{
->> +    char vals[1024];
->> +    struct val_iter vi = {
->> +        .curr = vec,
->> +        .num = num,
->> +        .seq.buf = vals,
->> +        .bufsize = sizeof(vals),
->> +        .prefix = "",
->> +    };
->> +    struct val_desc *vd;
->> +    struct path path = {};
->> +    ssize_t err;
->> +
->> +    err = user_path_at(dfd, pathname, 0, &path);
->> +    if (err)
->> +        return err;
->> +
->> +    err = val_get(&vi);
->> +    if (err)
->> +        goto out;
->> +
->> +    if (!strlen(vi.name)) {
->> +        err = val_get_group(&vi, val_toplevel_group);
->> +        goto out;
->> +    }
->> +    while (!err && vi.num) {
->> +        vd = val_lookup(&vi, val_toplevel_group);
->> +        if (!vd->name)
->> +            err = val_err(&vi, -ENOENT);
->> +        else
->> +            err = vd->get(&vi, &path);
->> +    }
->> +out:
->> +    if (err == -EOVERFLOW)
->> +        err = 0;
->> +
->> +    path_put(&path);
->> +    return err < 0 ? err : num - vi.num;
->> +}
+
+*****
+
+Get the best out of Youtube encoding with GPL QFFT Codecs for :
+Windows,Linux & Android #RockTheHouseGoogle!
+
+Advanced FFT & 3D Audio functions for CPU & GPU
+https://gpuopen.com/true-audio-next/
+
+Multimedia Codec SDK https://gpuopen.com/advanced-media-framework/
+
+(c)Rupert S https://science.n-helix.com
+
+***
+Decoder CB 2021 Codecs
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"aac","codec delay":0,"discard
+decoder delay":false,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed
+16-bit","samples per second":48000,"seek preroll":"0us"}]
+
+kVideoDecoderName "MojoVideoDecoder"
+kVideoPlaybackFreezing 0.10006
+kVideoPlaybackRoughness 3.048
+kVideoTracks [{"alpha mode":"is_opaque","codec":"h264","coded
+size":"426x240","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"426x240","orientation":"0=C2=B0","profile":"h264 baseline","visible
+rect":"0,0 426x240"}]
+
+info "Selected FFmpegAudioDecoder for audio decoding, config: codec:
+mp3, profile: unknown, bytes_per_channel: 2, channel_layout: STEREO,
+channels: 2, samples_per_second: 44100, sample_format: Signed 16-bit
+planar, bytes_per_frame: 4, seek_preroll: 0us, codec_delay: 0, has
+extra data: false, encryption scheme: Unencrypted, discard decoder
+delay: true"
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"mp3","codec delay":0,"discard
+decoder delay":true,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed 16-bit
+planar","samples per second":44100,"seek preroll":"0us"}]
+kBitrate 192000
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":4,"bytes per frame":8,"channel
+layout":"STEREO","channels":2,"codec":"opus","codec
+delay":312,"discard decoder delay":true,"encryption
+scheme":"Unencrypted","has extra
+data":true,"profile":"unknown","sample format":"Float 32-bit","samples
+per second":48000,"seek preroll":"80000us"}]
+
+kVideoDecoderName "VpxVideoDecoder"
+kVideoTracks [{"alpha mode":"is_opaque","codec":"vp9","coded
+size":"1920x1080","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"1920x1080","orientation":"0=C2=B0","profile":"vp9 profile0","visible
+rect":"0,0 1920x1080"}]
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"aac","codec delay":0,"discard
+decoder delay":false,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed
+16-bit","samples per second":44100,"seek preroll":"0us"}]
+
+kVideoDecoderName "MojoVideoDecoder"
+kVideoTracks [{"alpha mode":"is_opaque","codec":"h264","coded
+size":"1920x1080","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"1920x1080","orientation":"0=C2=B0","profile":"h264 main","visible
+rect":"0,0 1920x1080"}]
+***
+
+PlayStation 5 and Xbox Series Spatial Audio Comparison | Technalysis
+Audio 3D Tested : Tempest,ATMOS,DTX,DTS
+
+https://www.youtube.com/watch?v=3DvsC2orqiCwI
+
+*
+
+Waves & Shape FFT original QFFT Audio device & CPU/GPU : (c)RS
+
+The use of an FFT simple unit to output directly: Sound
+& other content such as a BLENDER or DAC Content : (c)RS
+
+FFT Examples :
+
+Analogue smoothed audio ..
+Using a capacitor on the pin output to a micro diode laser (for analogue Fi=
+bre)
+
+Digital output using:
+8 to 128Bit multiple high frequency burst mode..
+
+(Multi Phase step at higher frequency & smooth interpolation)
+Analogue wave converted to digital in key steps through a DAC at
+higher frequency & amplitude.
+
+For many systems an analogue wave makes sense when high speed crystal
+digital is too expensive.
+
+Multiple frequency overlapped digital signals with a time formula is
+also possible.
+
+The mic works by calculating angle on a drum...
+Light.. and timing & dispersion...
+The audio works by QFFT replication of audio function..
+The DAC works by quantifying as Analog digital or Metric Matrix..
+The CPU/GPU by interpreting the data of logic, Space & timing...
+
+We need to calculate Quantum is not the necessary feature;
+
+But it is the highlight of our:
+Data storage cache.
+Our Temporary RAM
+Our Data transport..
+Of our fusion future.
+
+FFT & fast precise wave operations in SiMD
+
+Several features included for Audio & Video : Add to Audio & Video
+drivers & sdk i love you <3 DL
+
+In particular I want Bluetooth audio optimized with SiMD,AVX vector
+instructions & DSP process drivers..
+
+The opportunity presents itself to improve the DAC; In particular of
+the Video cards & Audio devices & HardDrives & BDBlueRay Player Record
+& load functions of the fluctuating laser..
+More than that FFT is logical and fast; Precise & adaptive; FP & SiMD
+present these opportunities with correct FFT operations & SDK's.
+
+3D surround optimised the same, In particular with FFT efficient code,
+As one imagines video is also effected by FFT ..
+
+Video colour & representation & wavelet compression & sharpness restoration=
+..
+Vivid presentation of audio & video & 3D objects and texture; For
+example DOT compression & image,Audio presentation...
+
+SSD & HD technology presents unique opportunities for magnetic waves
+and amplitude speculation & presentation.
+
+FFT : FMA : SiMD instructions & speed : application examples : Audio,
+Colour pallet , Rainbows, LUT, Blood corpuscles with audio & vibration
+interaction, Rain with environmental effects & gravity.. There are
+many application examples of transforms in action (More and more
+complex by example)
+
+High performance SIMD modular arithmetic for polynomial evaluation
+
+FFT Examples :  in the SiMD Folder...
+
+Evaluation of FFT and polynomial X array algebra .. is here handled to
+over 50Bits...
+As we understand it the maths depends on a 64bit value with a 128Bit  ..
+as explained in the article value have to be in identical ranges bit
+wise, However odd bit depth sizes are non conforming (God i need
+coffee!)
+
+In one example (page 9) Most of the maths is 64Bit & One value 128Bit
+"We therefore focus in this article on the use of floating-point (FP)
+FMA (fused multiply-add) instructions for floating-point based modular
+arithmetic. Since the FMA instruction performs two operations (a =E2=88=97 =
+b +
+c) with one single final rounding, it can indeed be used to design a
+fast error-free transformation of the product of two floating-point
+numbers"
+
+Our latest addition is a quite detailed example for us
+High performance SIMD modular arithmetic for
+polynomial evaluation 2020
+
+Pierre Fortin, Ambroise Fleury, Fran=C3=A7ois Lemaire, Michael Monagan
+
+https://hal.archives-ouvertes.fr/hal-02552673/document
+
+Contains multiple algorithm examples & is open about the computer
+operations in use.
+
+Advanced FFT & 3D Audio functions for CPU & GPU
+https://gpuopen.com/true-audio-next/
+
+Multimedia Codec SDK https://gpuopen.com/advanced-media-framework/
+
+(c)Rupert S https://science.n-helix.com
+
+*****
+
+Lets face it, Realtec could well resource the QFFT Audio device &
+transformer/DAC
+
+(c)Rupert S https://science.n-helix.com
+
+document work examples :
+
+https://eurekalert.org/pub_releases/2021-01/epfd-lpb010621.php
+
+"Light-based processors boost machine-learning processing
+ECOLE POLYTECHNIQUE F=C3=89D=C3=89RALE DE LAUSANNE
+
+Research News
+
+IMAGE
+IMAGE: SCHEMATIC REPRESENTATION OF A PROCESSOR FOR MATRIX
+MULTIPLICATIONS WHICH RUNS ON LIGHT. view more
+
+CREDIT: UNIVERSITY OF OXFORD
+
+The exponential growth of data traffic in our digital age poses some
+real challenges on processing power. And with the advent of machine
+learning and AI in, for example, self-driving vehicles and speech
+recognition, the upward trend is set to continue. All this places a
+heavy burden on the ability of current computer processors to keep up
+with demand.
+
+Now, an international team of scientists has turned to light to tackle
+the problem. The researchers developed a new approach and architecture
+that combines processing and data storage onto a single chip by using
+light-based, or "photonic" processors, which are shown to surpass
+conventional electronic chips by processing information much more
+rapidly and in parallel.
+
+The scientists developed a hardware accelerator for so-called
+matrix-vector multiplications, which are the backbone of neural
+networks (algorithms that simulate the human brain), which themselves
+are used for machine-learning algorithms. Since different light
+wavelengths (colors) don't interfere with each other, the researchers
+could use multiple wavelengths of light for parallel calculations. But
+to do this, they used another innovative technology, developed at
+EPFL, a chip-based "frequency comb", as a light source.
+
+"Our study is the first to apply frequency combs in the field of
+artificially neural networks," says Professor Tobias Kippenberg at
+EPFL, one the study's leads. Professor Kippenberg's research has
+pioneered the development of frequency combs. "The frequency comb
+provides a variety of optical wavelengths that are processed
+independently of one another in the same photonic chip."
+
+"Light-based processors for speeding up tasks in the field of machine
+learning enable complex mathematical tasks to be processed at high
+speeds and throughputs," says senior co-author Wolfram Pernice at
+M=C3=BCnster University, one of the professors who led the research. "This
+is much faster than conventional chips which rely on electronic data
+transfer, such as graphic cards or specialized hardware like TPU's
+(Tensor Processing Unit)."
+
+After designing and fabricating the photonic chips, the researchers
+tested them on a neural network that recognizes of hand-written
+numbers. Inspired by biology, these networks are a concept in the
+field of machine learning and are used primarily in the processing of
+image or audio data. "The convolution operation between input data and
+one or more filters - which can identify edges in an image, for
+example, are well suited to our matrix architecture," says Johannes
+Feldmann, now based at the University of Oxford Department of
+Materials. Nathan Youngblood (Oxford University) adds: "Exploiting
+wavelength multiplexing permits higher data rates and computing
+densities, i.e. operations per area of processor, not previously
+attained."
+
+"This work is a real showcase of European collaborative research,"
+says David Wright at the University of Exeter, who leads the EU
+project FunComp, which funded the work. "Whilst every research group
+involved is world-leading in their own way, it was bringing all these
+parts together that made this work truly possible."
+
+The study is published in Nature this week, and has far-reaching
+applications: higher simultaneous (and energy-saving) processing of
+data in artificial intelligence, larger neural networks for more
+accurate forecasts and more precise data analysis, large amounts of
+clinical data for diagnoses, enhancing rapid evaluation of sensor data
+in self-driving vehicles, and expanding cloud computing
+infrastructures with more storage space, computing power, and
+applications software.
+
+###
+
+Reference
+
+J. Feldmann, N. Youngblood, M. Karpov, H. Gehring, X. Li, M. Stappers,
+M. Le Gallo, X. Fu, A. Lukashchuk, A.S. Raja, J. Liu, C.D. Wright, A.
+Sebastian, T.J. Kippenberg, W.H.P. Pernice, H. Bhaskaran. Parallel
+convolution processing using an integrated photonic tensor core.
+Nature 07 January 2021. DOI: 10.1038/s41586-020-03070-1"
+
+Time Measurement
+
+"Let's Play" Station NitroMagika_LightCaster
