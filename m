@@ -2,155 +2,112 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51374E5ABF
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Mar 2022 22:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED20D4E5B33
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Mar 2022 23:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbiCWVhv (ORCPT
+        id S244337AbiCWWVw (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 23 Mar 2022 17:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        Wed, 23 Mar 2022 18:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244696AbiCWVht (ORCPT
+        with ESMTP id S241279AbiCWWVv (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:37:49 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC4785644
-        for <linux-security-module@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id r13so5482713ejd.5
-        for <linux-security-module@vger.kernel.org>; Wed, 23 Mar 2022 14:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
-        b=FDmYihKKzIc4yCb6yyRWzeIYyumvZwecwAAWPpH8gf+7y31BKaU6zi3RuFOXkagZRu
-         D3SE9gVMpCx+cvRSK4ySRgAhi655hjl/JMewgCdT8V5guWxa87/RvrjSVNcrQcF3aAe3
-         ZfxJi9DrcnAKWnHrYIaNU/qNPuOrtBcsgsvGZrdoGj+IiSX+68tGmwlV3zQ1YymCDT4y
-         S9TI4go0g+aq1TFkXcXxBGcvg1JTJDJuPSLS36OnGIEnhM/2uIFeTQ0AUpRVQEaHvL4s
-         XU4MD6uzD5Qi1vH6j7JUEIHFjU/7g8mIbHXq2Ze+smBrhZQrbaEDNeW5T6Q5nqNNYUfv
-         Gjsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2RHrOWoISIZGm/DvPY0LuaxD7QmbEyuYj5ghZWW+2nE=;
-        b=DMabuVPnlsvlHe0SBXWrxv/6dw8nTwRA1GaOk75JnvbtMOEVG41EAAJKvoRgaRLWv3
-         CF2ngTjvjnyatrcrECDTgq9se2WCiWn3Bez5iLlUgXQzwc2ksVy2FJ+navOGP4lp7+fJ
-         JL0chS/S64d6cJs3cemo4t0uLwlPB7e2OfO52XMVeRjSb+7yJ9ZVFqo9lwmY4Hk52oLf
-         Db4PwoKJKUFLuoBLssPr0sbHcHD6ApkschzhjxTn+s2RiC9HNVGxDWwWt08Vxwi2862R
-         pU40FWWtqqQK6caKKqmMVgGGjzrHNoDrug6+tdHuaPXFLdG7rCYGTDDo/Hd+5JlIHJmT
-         Gyug==
-X-Gm-Message-State: AOAM5309J7kB5EejfpWm74Usx34vPlV8UeJ7AyWCaHKKfysS+eJ5/kWz
-        r42UwnFZSZW6RncpQc5W1Ve3b08TOBDv45z9LmA=
-X-Google-Smtp-Source: ABdhPJwwRgKueE5YMcjujXfBvSQ4CanyXkLJdj0YeSDjc8PVBYDzXkRdxqDc5TPQYNpYAExnuscG3Aot+Yj5Lyt5j70=
-X-Received: by 2002:a17:906:743:b0:6d0:7f19:d737 with SMTP id
- z3-20020a170906074300b006d07f19d737mr2328129ejb.11.1648071375043; Wed, 23 Mar
- 2022 14:36:15 -0700 (PDT)
+        Wed, 23 Mar 2022 18:21:51 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423B36A032;
+        Wed, 23 Mar 2022 15:20:21 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 22NMJqTT003315
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Mar 2022 18:19:52 -0400
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id DEF6F15C0038; Wed, 23 Mar 2022 18:19:51 -0400 (EDT)
+Date:   Wed, 23 Mar 2022 18:19:51 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getvalues(2) prototype
+Message-ID: <YjudB7XARLlRtBiR@mit.edu>
+References: <20220322192712.709170-1-mszeredi@redhat.com>
+ <20220323114215.pfrxy2b6vsvqig6a@wittgenstein>
+ <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 23 Mar 2022 21:36:08 +0000
-Message-ID: <CAHpNFcOi=PouCaLfpcLriTDwij+2KbzLA+MhjsdC9WnbPjpwoQ@mail.gmail.com>
-Subject: Presenting : IiCE-SSRTP for digital channel infrastructure & cables
- <Yes Even The Internet &+ Ethernet 5 Band> RS
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegsCKEx41KA1S2QJ9gX9BEBG4_d8igA0DT66GFH2ZanspA@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
+On Wed, Mar 23, 2022 at 02:24:40PM +0100, Miklos Szeredi wrote:
+> The reason I stated thinking about this is that Amir wanted a per-sb
+> iostat interface and dumped it into /proc/PID/mountstats.  And that is
+> definitely not the right way to go about this.
+> 
+> So we could add a statfsx() and start filling in new stuff, and that's
+> what Linus suggested.  But then we might need to add stuff that is not
+> representable in a flat structure (like for example the stuff that
+> nfs_show_stats does) and that again needs new infrastructure.
+> 
+> Another example is task info in /proc.  Utilities are doing a crazy
+> number of syscalls to get trivial information.  Why don't we have a
+> procx(2) syscall?  I guess because lots of that is difficult to
+> represent in a flat structure.  Just take the lsof example: tt's doing
+> hundreds of thousands of syscalls on a desktop computer with just a
+> few hundred processes.
 
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
+I'm still a bit puzzled about the reason for getvalues(2) beyond,
+"reduce the number of system calls".  Is this a performance argument?
+If so, have you benchmarked lsof using this new interface?
 
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands help us?
+I did a quickie run on my laptop, which currently had 444 process.
+"lsof /home/tytso > /tmp/foo" didn't take long:
 
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
+% time lsof /home/tytso >& /tmp/foo
+real    0m0.144s
+user    0m0.039s
+sys     0m0.087s
 
-Transistor emission fatigue...
+And an strace of that same lsof command indicated had 67,889 lines.
+So yeah, lots of system calls.  But is this new system call really
+going to speed up things by all that much?
 
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protocol
+If the argument is "make it easier to use", what's wrong the solution
+of creating userspace libraries which abstract away calls to
+open/read/close a whole bunch of procfs files to make life easier for
+application programmers?
 
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
+In short, what problem is this new system call going to solve?  Each
+new system call, especially with all of the parsing that this one is
+going to use, is going to be an additional attack surface, and an
+additional new system call that we have to maintain --- and for the
+first 7-10 years, userspace programs are going to have to use the
+existing open/read/close interface since enterprise kernels stick a
+wrong for a L-O-N-G time, so any kind of ease-of-use argument isn't
+really going to help application programs until RHEL 10 becomes
+obsolete.  (Unless you plan to backport this into RHEL 9 beta, but
+still, waiting for RHEL 9 to become completely EOL is going to be... a
+while.)  So whatever the benefits of this new interface is going to
+be, I suggest we should be sure that it's really worth it.
 
-Overlapping inverted waves are a profile for complex audio & FFT is the result.
+Cheers,
 
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-*
-
-***** Dukes Of THRUST ******
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade markerz
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-***** Dukes Of THRUST ******
-
-Autism, Deafness & the hard of hearing : In need of ANC & Active audio
-clarification or correction 2022-01
-
-Sony & a few others make noise cancelling headphones that are suitable
-for people with Acute disfunction to brain function for ear drums ...
-Attention deficit or Autism,
-The newer Sony headsets are theoretically enablers of a clear
-confusion free world for Autistic people..
-Reaching out to a larger audience of people simply annoyed by a
-confusing world; While they listen to music..
-Can and does protect a small percentage of people who are confused &
-harassed by major discord located in all jurisdictions of life...
-
-Crazy noise levels, Or simply drowned in HISSING Static:
-
-Search for active voice enhanced noise cancellation today.
-
-Rupert S https://science.n-helix.com
-
-
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-
-https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.html
-
-
-https://www.orosound.com/
-
-https://www.consumerreports.org/noise-canceling-headphone/best-noise-canceling-headphones-of-the-year-a1166868524/
+					- Ted
