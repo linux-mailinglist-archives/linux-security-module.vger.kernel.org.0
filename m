@@ -2,62 +2,62 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B2B4E718C
-	for <lists+linux-security-module@lfdr.de>; Fri, 25 Mar 2022 11:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68C64E7191
+	for <lists+linux-security-module@lfdr.de>; Fri, 25 Mar 2022 11:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348412AbiCYKvK (ORCPT
+        id S1347300AbiCYKvL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 25 Mar 2022 06:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        Fri, 25 Mar 2022 06:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347898AbiCYKvJ (ORCPT
+        with ESMTP id S1347367AbiCYKvJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
         Fri, 25 Mar 2022 06:51:09 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F40621E1A
-        for <linux-security-module@vger.kernel.org>; Fri, 25 Mar 2022 03:49:33 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id r13so14532894ejd.5
-        for <linux-security-module@vger.kernel.org>; Fri, 25 Mar 2022 03:49:33 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F58721E29
+        for <linux-security-module@vger.kernel.org>; Fri, 25 Mar 2022 03:49:34 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g20so8758656edw.6
+        for <linux-security-module@vger.kernel.org>; Fri, 25 Mar 2022 03:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
         bh=W1igGM1WsluVfytMkOoD9rahAF+bYDF3ee2Dn6NnyLs=;
-        b=GigTWFECocRIF6olPcCShwRe6OdePvO00XW/L2oUCqgABUvokIEG3G07NqweaT+zHS
-         eJVfG/By5jf4SKZaNuLlmtSymDMWDFGC/cnl0v0DSGsxV3icHAk2j1OiDabY6untnhuw
-         4XXn2QyuNWA7XYzjcv7Gz1hLdOBRSUq0dBthmAWYgn4Og92rXksVyjypTRjDv/u/SL2A
-         5Hx4roixB5TI1POl5RZQKi+kxm9w/T7Gs8p7NT0qaqmGwd4S4EQ4aU5uVcxU1rmsFPgZ
-         lh/0AsIQeggersJMieOyqWnJ+RhD/CY782xYRK4J1NApSs75RUCMjFeB/XIeMF81H0dg
-         17rQ==
+        b=kEU9oClKPA6napY8Am9GDPR2TG7lJoyYcAWInw0td78hQGhRnFdKEVefthiagcOkAc
+         1sFJWJBBn5iekSDtqQMnRQBFE9TwayysflOmGEOEc5fXLMTfYjszGZFQRV0nCWyaAQ2B
+         tsIbPDwJ4RNf/ETgzPSfFD/B4F9bnj9iBarDIgIslXWarG7bP8VybJAZKnsLOvAgbyp1
+         6d306tW/Tef6AfYYmJwX0F3BvrXEByOW9/R7+88DB2jbbyJMtu/aaS5+IW+L50zZcsL2
+         lPEUdolyuuviJvJ8taCqktGnqN/M+I0WYSO29tYdvLn5gSdvCwBz2zzjBsnYRA6DFhJH
+         iy9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
         bh=W1igGM1WsluVfytMkOoD9rahAF+bYDF3ee2Dn6NnyLs=;
-        b=Kk8rdodCGswwRUKe3VLu6IsmjW2lPa0QyRvuSyhxjdOOxJej3rxdsAThquNQN6R38I
-         HVQWJfuAozvm/WVwwaRNagx/YKhsGX11zoTshkFO6RGkAEb/C3KIjyFDWw9KZduWxFGA
-         io10rWlPvddiObZsWCXW953X0ZkzuLDxiDb/3we9UsG5ay9i7dk1600MXTZbCy5kdAsY
-         fHCd4ZhX8kLbsh0yT/4Y+3pf6N3CTlwWyl61kamifjn0qKulmF7RtuOjLrsuFuAPwgvV
-         oPcFLuy0XfK4D3Jgy9Os1rGpUSVfagZgfLo348Ew7D2rqxQwjYEQkOONKSVU4aSU8MYv
-         HMhA==
-X-Gm-Message-State: AOAM5327oa+8jUGJZAXarIT1y8PM5fTWXfMmk3u2ZJwbiIxq5DUQlgeG
-        KIehrSQ6su+wlCniyx2+ZRLY0CnYLFf9dQ5jIko=
-X-Google-Smtp-Source: ABdhPJwkLNBM2eT3hWL2+P05sNNSGWF8kE+yPW/n79G3E0EaDfdYSc1pZjhHSX/vehMEwc+G3cnqtOq2lON/uwd2DbE=
-X-Received: by 2002:a17:907:d13:b0:6e0:b799:8fcc with SMTP id
- gn19-20020a1709070d1300b006e0b7998fccmr554664ejc.11.1648205371943; Fri, 25
- Mar 2022 03:49:31 -0700 (PDT)
+        b=ZZ293hS01KRvD8UC7jL3IlQ+3LYSNvxO/uonT8rIcgn1SSVjf1bJcw9CU1gsEtzXWq
+         4LxsXW7wSa3+7j0bylBBvqE+RW8AAsvszjc/j8hKv1tLh3g++XTBnnTxf5paqvLGCft2
+         leD7TDJg+HFFVqAfhjd9hzniURWE9G6Bs3A/TNuA50/2XzzGcKZhWQBLz0UEsYzPyoAW
+         MOZmeLHogOqMU+KFypl4C66EVLO3or+sys8APVzj8MaH4ZFx1PekZbs2u6OWecOK3rVg
+         S/zJvoPmqxSrKQoIge+7X6AtcdTIj5TVmeCtSKzFJMaGcfjL5v5Yd/gAnNFhGdx5DNed
+         8t7Q==
+X-Gm-Message-State: AOAM533f6zUMYD+3cwbelzejn0t+2Wti+Blm6x47DSYeG19hZy74cgNw
+        +HR8PWzyxtBKkTMbMg68j1gmKdO/LluiyElH2E0=
+X-Google-Smtp-Source: ABdhPJwno2Me2em4RdspVO1v9jY+/EaZNxE42yqkoKVmbcDzvBXjTLLBEhPxitN/iAsM/Qu4ynVDhNoo5br7gbAnJR0=
+X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id
+ y20-20020a056402441400b0041928bc55dcmr12519198eda.130.1648205372155; Fri, 25
+ Mar 2022 03:49:32 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 25 Mar 2022 10:49:15 +0000
-Message-ID: <CAHpNFcNxwdgY+pFj==jkjrJaPtoFwhzqM8_ws+JNoa5cLLUp+g@mail.gmail.com>
+Date:   Fri, 25 Mar 2022 10:49:18 +0000
+Message-ID: <CAHpNFcNGnnGdxdxR3-0Occta0gn7LK1fdL_+uxK14v-kY1Yz1w@mail.gmail.com>
 Subject: GPRS Is Basically secure with TRNG from https://pollinate.n-helix.com/
  & TPM/Jitter TimeCrystal, AS the report shows Origin /dev/random seed is a
  most important matter : 1 of 13,291 Audio, Visual & Bluetooth & Headset &
  mobile developments only go so far: https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-To:     do-webmaster@nist.gov
+To:     service@2-sight.com, mobile@cloudflare.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
