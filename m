@@ -2,52 +2,52 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C25F94E860B
-	for <lists+linux-security-module@lfdr.de>; Sun, 27 Mar 2022 07:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72B04E8893
+	for <lists+linux-security-module@lfdr.de>; Sun, 27 Mar 2022 17:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235203AbiC0Flh (ORCPT
+        id S235928AbiC0P5n (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 27 Mar 2022 01:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        Sun, 27 Mar 2022 11:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbiC0Flg (ORCPT
+        with ESMTP id S235931AbiC0P5f (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 27 Mar 2022 01:41:36 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D1C4B1FC
-        for <linux-security-module@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bq8so8646156ejb.10
-        for <linux-security-module@vger.kernel.org>; Sat, 26 Mar 2022 22:39:54 -0700 (PDT)
+        Sun, 27 Mar 2022 11:57:35 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4760636B76
+        for <linux-security-module@vger.kernel.org>; Sun, 27 Mar 2022 08:55:53 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a8so23990266ejc.8
+        for <linux-security-module@vger.kernel.org>; Sun, 27 Mar 2022 08:55:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
         bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
-        b=OtwB7mGJUasgZlH+7SPhyQ5Ks5i2bfDW4Wy+j/EQXTiLgTo6ZvS00DXj3DrO4Uj++u
-         ndRfnz9M/5Ir0tGI+IV5mU89XVRdVNRweQa6EDFqmh7iFBBywWrtn7vyUxBLSEEbsKNR
-         koPjg9XgUxk+h3h79ZYQsgGpVoc9HTjRdj/PES1SYh0GJ6QK8cAUluxB9guNUo71TBIo
-         38w2BsXHnYxyGIAfp1D7+xp3XZqLc4ghBd96Y69BwVLudiSgXNvcvbHnlH+dnfFprK0o
-         QUZ7+rXfTj/owDcBSFJwAVOLF8N5blI509CZ91FpWGS1fSgqyd1+/FJ7zwFrL5+6LHnc
-         PGsg==
+        b=HMAbI9tlfFODaYz3IY20RPiVYIUzzXF49wRNPBoaSkqhwx2iS77E9aH0vPkXx6xnBD
+         Y5A8TVa/Nq++saEWr4NXmDUYTEscOzdOU5ww3B8uyenScx/zGrE2Wch7r2Y1c0KGe92A
+         gBOPWNPSqbe4Mi7KEeqyOUlmJEruAqRlW42a5NeJGSuFgI8Xv6zYY+YwOEsrRYQNTWd2
+         0clyY8jWFdf2QtTzLUefig9U/uFuE5557wVh7qbLi5pzAGiGlii9XnFFSwVSMn+S7Iv0
+         STfsUy3DaaFmy5uSgG0YMiS3g7ClOpF3YZMXVOg+Dz9s4t62yDlkNf5SdSFuFN9SUHAh
+         rYVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
         bh=vsfG96DftpA+zdHkf533mvx+fsCVdMHbbbON3W2HRdM=;
-        b=LnnLHN9Hy3LcmLswNfvOh+6Y9f1r41z83h7xswrjPBi9wsubIotw0lQ8Kq7sIB7pBa
-         oSfS+fa5ezSK0Es5dRQCKePy0t5135b9tlioLXxtrVXzmZJnIfI5zq9aYzzRadJ/HFNB
-         pUvTy5TueGu+NATGPpPbBuMjpC5n9K843DAwvq3BX2fytXe88MdgWfUOmYy6O7QsYFFb
-         KlVUoXN/AQeyYJFGjsWNoOcM6QDqiTQohn9yyFnq99wEIapLnSYW7JqyfF0NX+sINuRX
-         ondEtQaHbOrRm8ZseEcIB6GM1fCUU3JkAZ771WpEZWMaHrq99LSDgL6kW+XDLjTCOwRC
-         X6Eg==
-X-Gm-Message-State: AOAM533tTNo10grVhdooMFwfPfsuwQn8JCnz9Jth0D965IG6P5HFp/fj
-        yFS6GBKAdge/2lJWqo7CAkWQo99tmdXZzwPf+Wk=
-X-Google-Smtp-Source: ABdhPJzCOVofvmTh82oj+qn8IqGE+D0DGEF6nJd2ktr1OjSsm26Hcvu5URNaJZmBmpHfg3Zx1fC+xLROSUFsmCQt9Xo=
-X-Received: by 2002:a17:907:1c9c:b0:6e0:df50:d39d with SMTP id
- nb28-20020a1709071c9c00b006e0df50d39dmr5194440ejc.24.1648359593062; Sat, 26
- Mar 2022 22:39:53 -0700 (PDT)
+        b=lTSlOML2XcVaFK2b7abuuGB4WfwVj/g86eF8CeeSrcivNAdu0tKxPfmm3yINT2dgEZ
+         LzRzfQaPcZZdCKltzW0UtVU1Lwl4C7asET1Sq23+ixiC1UgbTzJyE0j/OF3b72htJEsk
+         eFvXVAfT9FgtIGX3WBcoAW06rWOq8JzBm10MnWqv6KWECBvPes4RndhQxjew9xebtuaP
+         pT8eDZGcH3yP2Ekrnu8AhvMCRhuAAkXJsyfAZ8//0iH83Wb7qdPW0XY988NS7LKaggH4
+         bj/gq89lMe3FCnDPxTr8QXhrbXEdLMyZqrZyGFzf9AUAXtUQRYnaYuRwfunVSqAv2MZN
+         hNEA==
+X-Gm-Message-State: AOAM532ig2zt/uGJD+kegOr8BxDm7YKkTScizuCWA6mVU5bau3S5uA6N
+        dRWybER8p0RIysL7vQ4Cl1NqmNnVxLfkkhT895w=
+X-Google-Smtp-Source: ABdhPJyLiKz0GwYU5cR/csBxCvmrzbrh2KMyD30Hj2voPwVz7xw7NU21XKDoM8c22plYLoZ95q8P64BpSEuaA+XD01w=
+X-Received: by 2002:a17:907:d13:b0:6e0:b799:8fcc with SMTP id
+ gn19-20020a1709070d1300b006e0b7998fccmr12472723ejc.11.1648396551243; Sun, 27
+ Mar 2022 08:55:51 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 27 Mar 2022 06:39:43 +0100
-Message-ID: <CAHpNFcNcQ-hcDk8XpiUq2G3KzBx92tEAD7y8NM9QzNNhh3Y3eQ@mail.gmail.com>
+Date:   Sun, 27 Mar 2022 16:55:42 +0100
+Message-ID: <CAHpNFcP61zVHxhgLprwgB=0M+QaQhmJhRCw1vfCcJ8TSq2Vkcg@mail.gmail.com>
 Subject: Presenting GPRS VT2 from ViaLicensing today world wide RS : for
  ViaLicencing GPRS is quite a package, New from RS @ Via 2022
 To:     info@vialicensing.com
