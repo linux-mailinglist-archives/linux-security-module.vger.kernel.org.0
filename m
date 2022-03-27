@@ -2,63 +2,63 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6466F4E854E
-	for <lists+linux-security-module@lfdr.de>; Sun, 27 Mar 2022 05:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778304E8557
+	for <lists+linux-security-module@lfdr.de>; Sun, 27 Mar 2022 06:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbiC0Dzl (ORCPT
+        id S234061AbiC0EDJ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 26 Mar 2022 23:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        Sun, 27 Mar 2022 00:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiC0Dzj (ORCPT
+        with ESMTP id S233688AbiC0EC6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 26 Mar 2022 23:55:39 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FCC13DEB
-        for <linux-security-module@vger.kernel.org>; Sat, 26 Mar 2022 20:53:57 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id h4so5646866edr.3
-        for <linux-security-module@vger.kernel.org>; Sat, 26 Mar 2022 20:53:57 -0700 (PDT)
+        Sun, 27 Mar 2022 00:02:58 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18933DDFF
+        for <linux-security-module@vger.kernel.org>; Sat, 26 Mar 2022 21:01:19 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id h4so5655766edr.3
+        for <linux-security-module@vger.kernel.org>; Sat, 26 Mar 2022 21:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
         bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=WHbYB3D/saNPToEkj0WBAa6nXvL0HqfyU+Y5hpaCgsZHyQXCuaSeRuenQPGDxRBqMG
-         UyzlGbn3CCnOsy+T29J1n/Ld8koFyyfXtS+nBvXASsct4dvFn9CXwkNCJoWK3vzn4pI+
-         8aOjLzCUBC5MtfXmPdaXpVWaBCcNeELP+IpTc4EYHOCf9zYkZv/mX9DIeboIUOcBWdb2
-         1CXdUy3wyYocilgEY3l2a0JX2G0Awwjp6eqAFl5AonsT2Ntdll4p+K9ZMH6+tScCs29o
-         arF7GSfy4Hw1iTLsjoJf5JZsA/FlydB32Ii8bfHAo1IZJO6yfLV94YxeP1orA4QxKF7n
-         9DXg==
+        b=mi75o0cngKnUOZEbERJH2D8V3pPP9+giBVeRvg36YtV4/v97iXYTF7No6wjCnEwPDx
+         ay6bPkBrnGgHveKppz7rqAjGr9GZPDkNwxo8omeNfU2eDJui4JjQD1zuNPjJZkUKOJJh
+         I9KH5PB85RLf4JHorBO1oDiBlRv8ycDSuFov49+FGNEwxidytjOVI0yaVLNRAe4BuNeA
+         vMW5mrXxfCgZEIvEdL85IqbSnmE6qrC7VUlRl2hVeOUito6r7lP+7+yvgwOIcL1Dl9yY
+         Y8Qhed47urhzmfB3OsbKQvUb9jlfNFXfpo2yPb85TpQTvMsXgIf5UhJ6MQ3cP3s8FYcM
+         qqsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
         bh=uXaRvLUj+1B5FMxtaQVDP6hPG33CuATLlxKJ63s1fLU=;
-        b=wgZiAHYrhbAZrOPepquWC6G9cl5si44FjvBiJorOGN1EhOQBwq0VaZDKhrbzaMSISt
-         0pBLvCAPCb7XOcbMpQmQ8ibAotMzydfPBcUV0ZsDB5uspNGw6YFDDfk36eTIB33fa6ad
-         5w5v7AyBWTRggFm8GTf2HqhwieIzsqOltJFWWbooYkvZtwzuYadke+Zx77sdAgCwQ7C9
-         5oVg880g1XafH5LQzytAcSS7Gwr0cluHyJ8SHKQCrzOxpbFNnB0aEpa8XNmc49A/Zy56
-         5T/++4+W3gSsM8nDJw0CK1YxIQZ5g5N4qLGTRAO+MAXT2uC2mD/Xr2tPx5JRvi1UjVXn
-         e7Xg==
-X-Gm-Message-State: AOAM5325K6gr5cUq8jW8zI0SI0WKeQooBBRpyNu+NXBAW7nLR64HS+FE
-        EDc5ZVm0hS4beuxfhmNUfrF4WaI6NCsvR5VU8iA=
-X-Google-Smtp-Source: ABdhPJzZD8Z2yWonCFr6uw6HTW3jwHIxz8mSt1fdP844JxY8by8YlapVE2a4JgJWnjZlUWC1MJLGeCDgSiCh9jr8jcY=
-X-Received: by 2002:a05:6402:8d7:b0:419:1162:a507 with SMTP id
- d23-20020a05640208d700b004191162a507mr8313467edz.157.1648353235326; Sat, 26
- Mar 2022 20:53:55 -0700 (PDT)
+        b=Ow62CtV3vmWnWszPWViAX9cWOrFa9AfIhMCj+xNnYuJ2HfPkfhHc3EOmAvQLvCdxat
+         0+syzMvAnl6E0Mcmk9HbMyh2xzO07LF+eJ0Q0kPyhJQTDfps2Yc4zmxautTOJgksmvAJ
+         QO3esJHWriSb/C0xtNNMp2B5E3ycPX6+evp1RxI0E8eRsQcQJTw2RZzTWEQrsFV3SGVL
+         DrwKbyrzIQFvogxcC9kNzK3OY0HDPAKbj2zei1N+lHPrarux3+z2LYxYD2s6+mi3T6tv
+         tmc2upRPaTpwvnleBKMlRIesP1bDx4ic3qfcnSt6Xz96iSM3TkrHRDVYXCHUQpT1y1Fp
+         bceQ==
+X-Gm-Message-State: AOAM532Id9XtYYHYnCQbSAlZlO4CGhFBQVHH8O1ZRqiVBc2dKx3IXlXx
+        eVemNGS3TRPE8RGF9rY9TZ2NEQQs2o3zsXJiaRY=
+X-Google-Smtp-Source: ABdhPJyoaU/jgY4Ui7YN9/3IaaJfzxv5UKzALK1PXuduQwxOGI4ooNJhxvIFOor0zTiF7Ut0ls8FhJNSCH2bWiVgCAA=
+X-Received: by 2002:a50:ab16:0:b0:414:39b0:7fc1 with SMTP id
+ s22-20020a50ab16000000b0041439b07fc1mr8360561edc.214.1648353678142; Sat, 26
+ Mar 2022 21:01:18 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 27 Mar 2022 04:53:45 +0100
-Message-ID: <CAHpNFcNX7G+exq5KiyHS=EC5Ptuu8to+gn5v3tP4RCyX2cg+OA@mail.gmail.com>
+Date:   Sun, 27 Mar 2022 05:01:08 +0100
+Message-ID: <CAHpNFcO7h1_ZijMRt19OrRRESirTvBWrmV8TqMYkwZ0_A8YqFw@mail.gmail.com>
 Subject: GPRS New Solutions ViaSystems 2022 : For VIA 2G> 5G Security IS THE
  LAW We Will Progress GPRS Will Survive as a manageable system in Africa &
  south america "We The People Are Hungry" Leaf Random & GPRS Security :
  Operating Systems will manage, But how long will we survive with No KLOGS :
  progress in linux ? https://lkml.org/lkml/2022/3/25/991
-To:     info@vialicensing.com
+To:     membership@iacr.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
