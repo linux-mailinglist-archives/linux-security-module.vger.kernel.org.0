@@ -2,85 +2,226 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF0E4EB5C1
-	for <lists+linux-security-module@lfdr.de>; Wed, 30 Mar 2022 00:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F024EB71A
+	for <lists+linux-security-module@lfdr.de>; Wed, 30 Mar 2022 01:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiC2WUh (ORCPT
+        id S241342AbiC2Xxn (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 29 Mar 2022 18:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        Tue, 29 Mar 2022 19:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236228AbiC2WUh (ORCPT
+        with ESMTP id S241256AbiC2Xx0 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:20:37 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E44133F;
-        Tue, 29 Mar 2022 15:18:53 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id b19so26728546wrh.11;
-        Tue, 29 Mar 2022 15:18:53 -0700 (PDT)
+        Tue, 29 Mar 2022 19:53:26 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9A214043;
+        Tue, 29 Mar 2022 16:51:34 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id h63so22937976iof.12;
+        Tue, 29 Mar 2022 16:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:mime-version:content-transfer-encoding
-         :content-description:subject:to:from:date:reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=AaO/7U6voaQRExQlTqfDcA+oIsiwc81pgkEPkOsPtz85YHR368ABI46O2bkEjbJErR
-         oUP8PByB4+6CWDngNCqOiNmAyfn6iMtxYx8fMg7Uge80694no39LhYQRgPcUY7M0G/7S
-         e7QNxs3cy3xLLoRZn2KFLJHwKVv7Ii9z5EJ+FcPNu6kMrpEjqrVMuW+jgTogI7z/p4za
-         QqfG/cn+0Kzj2SVdLnp9s/m+Oo0ph90ABQKB8hdEBJJ9torko0+CIDDJR8PZXgeVNfnY
-         da9TcsyFdgmBUBzAXOa5J9FrdDAUt2wck2kBo81PqaTa6Xyqxuen4c4hNwnrmBKe9CtO
-         /p6g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=74O0cY+bOP3wHBSafmTjrdQXSiGpOdiTWDZVtBoQYXc=;
+        b=WvcbotgBYKiLC714YGuezgXnN5lhQOgSKqIhHWIcs9SJ/TjZ4qDiqztKVhq/c/fbb7
+         CRtEocnpbz+n+n5R4BSUrwuS9w0k9zSF+7f5EXq/mk6amSJaPcWyoRv3RhXelFYfeMxL
+         6E82rTdvv4aC+vwPLUB3zQkanX7p8PkgSR49eK6jlxnnT+JBe4fF1F6F4YILiHIQ1Dfo
+         YThyrVAbT2ezC4Vir9buU/Cc4wEcqylttF1i8ZPdMSV2rVOD8XZluQqt4Tq9JsLSMwr6
+         /TK8qSeBHIm8gGPHU96piNQ1TWROyWk1JGmJNBYf3RhsSgpygDw04QQq8iXLcNuXa1/n
+         SfbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:content-description:subject:to:from:date
-         :reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=qso1w9T65yzhQH4SugwIXE0w/cscOacj7V6vybPzSvh3BPt2FZKK++XNLHLi+tRHaX
-         Cm2HlCgItcgrA//cnkHUV2pMuJ/j/DO1XdFPBimuFTh6VD1RpONkk64/4lBJSPLSG6Vf
-         LyLMlP73E1TZdzKG/ndTGAUr2JIJfvcQJjXrywNu5O9iPSwdNW5IT4083Qx/spAyPxqu
-         5PqbS8qjK12E47zQ1rupZnXb3Mmxmmow8Bd3rDibQxEqCq6jwydWrVrjFB56XnK7GKTC
-         EnalsLuuzjE9SM8kZcYgHB49AsWY9gPH9VhbBST2HzCNXYKrdTKBZ4fJfByabHyczGRD
-         HMPA==
-X-Gm-Message-State: AOAM532jR5l597Br7WiUwAPpBjEm+4TM5zt2r9l1a2ed/bxalZ6Nqu/r
-        EcF7op2LehNxJdOh9hWTa2zOTM8Zl+xMqU2hCeI=
-X-Google-Smtp-Source: ABdhPJw9q+xTJm9zRorIk40024hWICgfunfYZFNzzOl8F5eeT5uxdWelv06Bvoaz46ynlRPaBzlvjw==
-X-Received: by 2002:a5d:640a:0:b0:204:619:4354 with SMTP id z10-20020a5d640a000000b0020406194354mr33632345wru.43.1648592331829;
-        Tue, 29 Mar 2022 15:18:51 -0700 (PDT)
-Received: from [172.20.10.4] ([197.210.71.189])
-        by smtp.gmail.com with ESMTPSA id x3-20020a5d6b43000000b001e317fb86ecsm15642619wrw.57.2022.03.29.15.18.45
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Tue, 29 Mar 2022 15:18:50 -0700 (PDT)
-Message-ID: <624385ca.1c69fb81.af85d.d5c0@mx.google.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=74O0cY+bOP3wHBSafmTjrdQXSiGpOdiTWDZVtBoQYXc=;
+        b=ctgEN0VYGSzWUpZBYk8xpBz6+KGrgfPifmjeplkjaCFzdX2NfL+WOxoyR7DElhQp6t
+         ni3I/f4t9C9ano7pv5ChiXce3E2dWA7CHUfVpGyi7ylC+oIMICN9kgAH9/iqfXCBOOyK
+         Jn2P6XdiCrsRfn9bTZea3nmO0v4skSPvJUfisFJxEnSMYCCAG+atOnYfjUqvLDCXNCS/
+         +/9Axpp4ZfP+nf3rR7ZJ+f/il0BYa42udAvsMWAhApcOTN7+6lPEBtM+kFq1hXa/YKX3
+         o3A0H5peqs7ZL/+pU8WpyfhHoLczTtsM3ZdJBI3Xzf+qv4j/eu8+n+tp6vL8azJZ8Lxx
+         Tz2A==
+X-Gm-Message-State: AOAM530qBxKDak1eHcileEbi12ctd84yA5YCmTNwdiWKhDZk79RN7KrA
+        ghXP3oWGJ9B8GRkZqpaOtozm88jlkya0+paPhVM=
+X-Google-Smtp-Source: ABdhPJwS9Fg+z09Kw/RcFYy3K93hJ67At+Bq0ikjVOdBE5T/1iZTAgYq3sbL/9qW5x19tnSgSohTJSUxFCaVijVlhWg=
+X-Received: by 2002:a05:6638:148e:b0:321:6b54:d966 with SMTP id
+ j14-20020a056638148e00b003216b54d966mr17338496jak.103.1648597893376; Tue, 29
+ Mar 2022 16:51:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Gefeliciteerd, er is geld aan je gedoneerd
-To:     Recipients <adeboyejofolashade55@gmail.com>
-From:   adeboyejofolashade55@gmail.com
-Date:   Tue, 29 Mar 2022 23:18:37 +0100
-Reply-To: mike.weirsky.foundation003@gmail.com
-X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+In-Reply-To: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 29 Mar 2022 16:51:22 -0700
+Message-ID: <CAEf4BzZNs-DYzQcE5LPxNzXDa+9A7QFszw99fnd2=cq9SuWsLg@mail.gmail.com>
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Networking <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Beste begunstigde,
+On Mon, Mar 28, 2022 at 10:51 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> eBPF already allows programs to be preloaded and kept running without
+> intervention from user space. There is a dedicated kernel module called
+> bpf_preload, which contains the light skeleton of the iterators_bpf eBPF
+> program. If this module is enabled in the kernel configuration, its loading
+> will be triggered when the bpf filesystem is mounted (unless the module is
+> built-in), and the links of iterators_bpf are pinned in that filesystem
+> (they will appear as the progs.debug and maps.debug files).
+>
+> However, the current mechanism, if used to preload an LSM, would not offer
+> the same security guarantees of LSMs integrated in the security subsystem.
+> Also, it is not generic enough to be used for preloading arbitrary eBPF
+> programs, unless the bpf_preload code is heavily modified.
+>
+> More specifically, the security problems are:
+> - any program can be pinned to the bpf filesystem without limitations
+>   (unless a MAC mechanism enforces some restrictions);
+> - programs being executed can be terminated at any time by deleting the
+>   pinned objects or unmounting the bpf filesystem.
+>
+> The usability problems are:
+> - only a fixed amount of links can be pinned;
+> - only links can be pinned, other object types are not supported;
+> - code to pin objects has to be written manually;
+> - preloading multiple eBPF programs is not practical, bpf_preload has to be
+>   modified to include additional light skeletons.
+>
+> Solve the security problems by mounting the bpf filesystem from the kernel,
+> by preloading authenticated kernel modules (e.g. with module.sig_enforce)
+> and by pinning objects to that filesystem. This particular filesystem
+> instance guarantees that desired eBPF programs run until the very end of
+> the kernel lifecycle, since even root cannot interfere with it.
+>
+> Solve the usability problems by generalizing the pinning function, to
+> handle not only links but also maps and progs. Also increment the object
+> reference count and call the pinning function directly from the preload
+> method (currently in the bpf_preload kernel module) rather than from the
+> bpf filesystem code itself, so that a generic eBPF program can do those
+> operations depending on its objects (this also avoids the limitation of the
+> fixed-size array for storing the objects to pin).
+>
+> Then, simplify the process of pinning objects defined by a generic eBPF
+> program by automatically generating the required methods in the light
+> skeleton. Also, generate a separate kernel module for each eBPF program to
+> preload, so that existing ones don't have to be modified. Finally, support
+> preloading multiple eBPF programs by allowing users to specify a list from
+> the kernel configuration, at build time, or with the new kernel option
+> bpf_preload_list=, at run-time.
+>
+> To summarize, this patch set makes it possible to plug in out-of-tree LSMs
+> matching the security guarantees of their counterpart in the security
+> subsystem, without having to modify the kernel itself. The same benefits
+> are extended to other eBPF program types.
+>
+> Only one remaining problem is how to support auto-attaching eBPF programs
+> with LSM type. It will be solved with a separate patch set.
+>
+> Patches 1-2 export some definitions, to build out-of-tree kernel modules
+> with eBPF programs to preload. Patches 3-4 allow eBPF programs to pin
+> objects by themselves. Patches 5-10 automatically generate the methods for
+> preloading in the light skeleton. Patches 11-14 make it possible to preload
+> multiple eBPF programs. Patch 15 automatically generates the kernel module
+> for preloading an eBPF program, patch 16 does a kernel mount of the bpf
+> filesystem, and finally patches 17-18 test the functionality introduced.
+>
 
- Je hebt een liefdadigheidsdonatie van ($ 10.000.000,00) van Mr. Mike Weirs=
-ky, een winnaar van een powerball-jackpotloterij van $ 273 miljoen.  Ik don=
-eer aan 5 willekeurige personen als je deze e-mail ontvangt, dan is je e-ma=
-il geselecteerd na een spin-ball. Ik heb vrijwillig besloten om het bedrag =
-van $ 10 miljoen USD aan jou te doneren als een van de geselecteerde 5, om =
-mijn winst te verifi=EBren
- =
+This approach of moving tons of pretty generic code into codegen of
+lskel seems suboptimal. Why so much code has to be codegenerated?
+Especially that tiny module code?
 
-  Vriendelijk antwoord op: mike.weirsky.foundation003@gmail.com
- Voor uw claim.
+Can you please elaborate on why it can't be done in a way that doesn't
+require such extensive light skeleton codegen changes?
+
+
+> Roberto Sassu (18):
+>   bpf: Export bpf_link_inc()
+>   bpf-preload: Move bpf_preload.h to include/linux
+>   bpf-preload: Generalize object pinning from the kernel
+>   bpf-preload: Export and call bpf_obj_do_pin_kernel()
+>   bpf-preload: Generate static variables
+>   bpf-preload: Generate free_objs_and_skel()
+>   bpf-preload: Generate preload()
+>   bpf-preload: Generate load_skel()
+>   bpf-preload: Generate code to pin non-internal maps
+>   bpf-preload: Generate bpf_preload_ops
+>   bpf-preload: Store multiple bpf_preload_ops structures in a linked
+>     list
+>   bpf-preload: Implement new registration method for preloading eBPF
+>     programs
+>   bpf-preload: Move pinned links and maps to a dedicated directory in
+>     bpffs
+>   bpf-preload: Switch to new preload registration method
+>   bpf-preload: Generate code of kernel module to preload
+>   bpf-preload: Do kernel mount to ensure that pinned objects don't
+>     disappear
+>   bpf-preload/selftests: Add test for automatic generation of preload
+>     methods
+>   bpf-preload/selftests: Preload a test eBPF program and check pinned
+>     objects
+
+please use proper prefixes: bpf (for kernel-side changes), libbpf,
+bpftool, selftests/bpf, etc
+
+
+>
+>  .../admin-guide/kernel-parameters.txt         |   8 +
+>  fs/namespace.c                                |   1 +
+>  include/linux/bpf.h                           |   5 +
+>  include/linux/bpf_preload.h                   |  37 ++
+>  init/main.c                                   |   2 +
+>  kernel/bpf/inode.c                            | 295 +++++++++--
+>  kernel/bpf/preload/Kconfig                    |  25 +-
+>  kernel/bpf/preload/bpf_preload.h              |  16 -
+>  kernel/bpf/preload/bpf_preload_kern.c         |  85 +---
+>  kernel/bpf/preload/iterators/Makefile         |   9 +-
+>  .../bpf/preload/iterators/iterators.lskel.h   | 466 +++++++++++-------
+>  kernel/bpf/syscall.c                          |   1 +
+>  .../bpf/bpftool/Documentation/bpftool-gen.rst |  13 +
+>  tools/bpf/bpftool/bash-completion/bpftool     |   6 +-
+>  tools/bpf/bpftool/gen.c                       | 331 +++++++++++++
+>  tools/bpf/bpftool/main.c                      |   7 +-
+>  tools/bpf/bpftool/main.h                      |   1 +
+>  tools/testing/selftests/bpf/Makefile          |  32 +-
+>  .../bpf/bpf_testmod_preload/.gitignore        |   7 +
+>  .../bpf/bpf_testmod_preload/Makefile          |  20 +
+>  .../gen_preload_methods.expected.diff         |  97 ++++
+>  .../bpf/prog_tests/test_gen_preload_methods.c |  27 +
+>  .../bpf/prog_tests/test_preload_methods.c     |  69 +++
+>  .../selftests/bpf/progs/gen_preload_methods.c |  23 +
+>  24 files changed, 1246 insertions(+), 337 deletions(-)
+>  create mode 100644 include/linux/bpf_preload.h
+>  delete mode 100644 kernel/bpf/preload/bpf_preload.h
+>  create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/.gitignore
+>  create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/Makefile
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_preload_methods.expected.diff
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_gen_preload_methods.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_preload_methods.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/gen_preload_methods.c
+>
+> --
+> 2.32.0
+>
