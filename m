@@ -2,93 +2,90 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD8E4EC853
-	for <lists+linux-security-module@lfdr.de>; Wed, 30 Mar 2022 17:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA084EC85E
+	for <lists+linux-security-module@lfdr.de>; Wed, 30 Mar 2022 17:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348260AbiC3PfC (ORCPT
+        id S241652AbiC3PjJ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 30 Mar 2022 11:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        Wed, 30 Mar 2022 11:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348242AbiC3PfB (ORCPT
+        with ESMTP id S237960AbiC3PjI (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 30 Mar 2022 11:35:01 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639EB326C6
-        for <linux-security-module@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id c10so23882820ejs.13
-        for <linux-security-module@vger.kernel.org>; Wed, 30 Mar 2022 08:33:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
-        b=ZvpGgO0rTRy4BxXcRwzsHHFuZRo4g3CARr5qe1cMD3fSVYBkhDQT6I2pcj7Wkus4vD
-         L/pV4kO5BVuN7x61TI7A+uMRtm6324yVDgXfaYOq8q+KMQ4/V+pPoRb3AiLc/FKSr3if
-         J+GN3sLdj4bXGUUPsxuj3SC4VikYaGpYroHXs5RMwPBZOrA1zUbc8rzoSnbIoyzl5VYP
-         89L+v9l7lH3QmK4n4TBz8AELmkTFCPVCwiqHn4OIwiNAuuOatlSMaRsSEJOknqnFEvhk
-         bDxbb6BqZPGpGeIOCUn9EPudkbn9Vuherq8IXnE6nukxV9ijFCla9WR35o8ITBwkLi59
-         jHgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=k4tOjXwVcjRbwIqO75tPZMywji6NA5bvyUrV2lo9zfU=;
-        b=stFLBDVMWlCH65yWcGExEpHf0LpqvBCGNEcANAFjbOk+yWQWzUQZgr5lDedUPrGjBi
-         dwvjdvHcRz5OY1TKrVMWI7p5KaR9YZi1igAZCYAEawmtEemfp9dZRzaCYAZOUk/xXwty
-         rx4zSaHD4hCbSGSQ30GnJltv6rKOkz1ABrg01LCpB9z/lW300woG3EeRUrurCE8HSMpZ
-         rMRO/eoWwstxNhEiNRw/gBe2lrpGS0EQcoONpYuErfr6Jz5nQntB4R46Trh9WOpak2GP
-         JBHh06t5R2x2UVsylJyRhQiIujyLshmkxRAzHFEI7we8Yi3PeIW3vNx3VIG2MnD7oQZa
-         uzbQ==
-X-Gm-Message-State: AOAM532fDghnzsABam1l24yHjWCc+d9m7ZXKEEPdvubRalUilvJ8FWVv
-        As/E7aYJXUTAynNedjkJtPTICBPFclq/r/Ve6Gk=
-X-Google-Smtp-Source: ABdhPJwqVo/RXrPoFsKPyisy5cThCgK4HiCNge6BTqyGlCrCBOuLxp78snnPGrCVRBmrldImsNzhfzIlFfVZyJBHyi0=
-X-Received: by 2002:a17:907:a42a:b0:6e4:973b:9d34 with SMTP id
- sg42-20020a170907a42a00b006e4973b9d34mr102917ejc.24.1648654393947; Wed, 30
- Mar 2022 08:33:13 -0700 (PDT)
+        Wed, 30 Mar 2022 11:39:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C113856749
+        for <linux-security-module@vger.kernel.org>; Wed, 30 Mar 2022 08:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648654641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hHrmC24Jo3CTM6YvkvlpfQVskDBFgAZarL5vBmkT/1w=;
+        b=SYP3eyImNIYqbg6XXldrmQyR6yuwTG7KBolUgASrMZicPIX4lGaiDl3sMIgq8UC0d3q2DW
+        gqWgRV2gfRBpXQDMWZbBjvSf2+dupE9f6yYzyg2ytuBxcyYnVLjRE/H8SPr8hsctlpn+Oz
+        vqiB45MF/gnMk0Wz7kMCb3bB0zfTY0s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-53-RRlkUzyIPVKePa_Ax9wclg-1; Wed, 30 Mar 2022 11:37:17 -0400
+X-MC-Unique: RRlkUzyIPVKePa_Ax9wclg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9F8241C0514D;
+        Wed, 30 Mar 2022 15:37:16 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EABD7C202C6;
+        Wed, 30 Mar 2022 15:37:14 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220303125627.93930-1-d.glazkov@omp.ru>
+References: <20220303125627.93930-1-d.glazkov@omp.ru> <20220303081428.12979-1-d.glazkov@omp.ru>
+To:     Denis Glazkov <d.glazkov@omp.ru>
+Cc:     dhowells@redhat.com, "jarkko@kernel.org" <jarkko@kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "mkayaalp@linux.vnet.ibm.com" <mkayaalp@linux.vnet.ibm.com>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2] KEYS: fix memory leaks when reading certificate
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 30 Mar 2022 16:33:09 +0100
-Message-ID: <CAHpNFcPYBVg53gm_P7yh29n6ZyT=C=MsLXB5p9KyNMfZMjjMKQ@mail.gmail.com>
-Subject: On the subject of PSP processors : Arm features include NEON2! Why
- not use this to our advantage? if safely potentiated! Every SiMD matters
- after all! RS
-To:     submissions@vialicensing.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PLING_QUERY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2996112.1648654634.1@warthog.procyon.org.uk>
+Date:   Wed, 30 Mar 2022 16:37:14 +0100
+Message-ID: <2996113.1648654634@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On the subject of PSP processors : Arm features include NEON2!
-Why not use this to our advantage? if safely potentiated! Every SiMD
-matters after all,
+Denis Glazkov <d.glazkov@omp.ru> wrote:
 
-Particularly preparing for the GPU & Audio output!
-As a driver specific the advantages are around 13% improved
-performance & 20% improved code flexibility on SiMD compatibility.
+> The `exit()` function usage produce possible memory leaks. This
+> patch removes the use of the `exit()` function and adds memory
+> free in case of a negative scenarios.
 
-We can also directly utilize for Automated Direct Reactive Secure DMA or ADRSDMA
+?
 
-(signed RS)
+Barring a kernel bug, there should be no memory leaks from exit().  _exit() is
+the ultimate process cleanup tool.  Calling free() won't necessarily return
+the memory allocated by malloc() to the kernel.
 
-ARM Patches 3 arte enabled! https://lkml.org/lkml/2022/3/30/977
+Unless you have a good reason to actually tear down everything, just print a
+message and call exit on error in little helpers like this.
 
-*
+David
 
-GPRS for immediate use in all SFR SIM's & SFR Firmware & routers &
-boxes including ADSL & Fibre
-
-Cloudflare Kernels & VM linux, I pretty obviously would like to be
-able to utilise cloudflare Kernel & Linux & cloudflare is very special
-to me
-
-Submissions for review
-
-RS
-
-https://drive.google.com/drive/folders/1X5fUvsXkvBU6td78uq3EdEUJ_S6iUplA?usp=sharing
-
-https://lore.kernel.org/lkml/20220329164117.1449-1-mario.limonciello@amd.com/
