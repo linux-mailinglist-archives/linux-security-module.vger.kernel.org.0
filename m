@@ -2,57 +2,56 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AAC4ED289
-	for <lists+linux-security-module@lfdr.de>; Thu, 31 Mar 2022 06:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6C74ED27E
+	for <lists+linux-security-module@lfdr.de>; Thu, 31 Mar 2022 06:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiCaEYz (ORCPT
+        id S229731AbiCaEIY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 31 Mar 2022 00:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        Thu, 31 Mar 2022 00:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiCaEYs (ORCPT
+        with ESMTP id S229646AbiCaEIT (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:24:48 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC01D16809A
-        for <linux-security-module@vger.kernel.org>; Wed, 30 Mar 2022 21:14:05 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id qa43so45432908ejc.12
-        for <linux-security-module@vger.kernel.org>; Wed, 30 Mar 2022 21:14:05 -0700 (PDT)
+        Thu, 31 Mar 2022 00:08:19 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC77B170D8D
+        for <linux-security-module@vger.kernel.org>; Wed, 30 Mar 2022 20:57:11 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id bh17so5936648ejb.8
+        for <linux-security-module@vger.kernel.org>; Wed, 30 Mar 2022 20:57:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=CCOr5pk3vSMtiJOP1fX/1K0uEtoSN1aksCDMiPaKahQ=;
-        b=Ueg4ZkwYkJ0tkpNw0LKEAblt0x6p54CxjXVs7FoB5sjQlgLEZdpQXRaSeaJeimFQMb
-         TrrbumdtViEGGH9ENKDeUK5QBBJB/ykDTDPjeVFgi3X1aeD0zzzplY/ZqJlcBTyimvXS
-         8hZ/HDwfoUk53eHJIaggw0+bt+N6160iiGOuOFb6waekJgSvIl4nihR9VJMEFi0JDYwy
-         qhu/RloE7TzbtZzmnuc2rY4nnFVNoskhMtDfyPDglQik0UEBp2s1ErOYV/10Lk9qDW02
-         Tbz53R1Y5SOPb0HkKzthjQf0J6gDcGHSyXoIqkf5eo7ox/QbfXcENHcQZLclzMFMSQrp
-         n2Rg==
+        bh=DQEdIqJQMT2DTXxNnryD3JrAvawMTCRUVp7h3+Y4I58=;
+        b=cc2rALVw1jxOK2Gb8L0J6Mph69Y5VA57JZQiuXcdW5z3m5d/DZa8hjTvhe9AMJD+oR
+         sZWBxGtudQhCDz36qcCCNXc3ZsuQhTI5QG975d+QEmIL1cXJrOcVg13mjtJE8BHQS/S4
+         iIpcrSGJc0jxFV9wD+VDOhUyo6n2rNmRzTngyO4v1oH9t0lTZGBvhB7L8IY+4CzZD6+5
+         M4FqiJvek0gzYy5Td1KrRIVZHZrS0to+wXWFHnEmd210xrZ0KyIsMVxwUnRTdhYssOXv
+         tEb6TOB/UOHofzCf3ePHP/RV74cESHbxnUZZk4LeNqIi36k63llzvcvq1RWBRsRe+fH3
+         8SsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=CCOr5pk3vSMtiJOP1fX/1K0uEtoSN1aksCDMiPaKahQ=;
-        b=EGYFK/8UxDoxncA9PhOse0CQhmxouU6H4B8lLTmkTmkFcrfbIHcMVux0GLW61g7hME
-         z+QgrIGPohKE8F0QR+DU0IyRszsMFFEI/ApKJWtKPhYI1U+q571ofNFf+xiA96AS+KQC
-         KFQFQhfZbbsXL7ksuTH88OBkZdy8cIoXkIfaEAGQ0TUVPI6dRqAKTVDrLwwoq0zd/jk9
-         9satIJFhXD2hZH69Gpq8ijKRQmWOsNbO1twouxF6csEsMTLY7ZWj5zZdMYntBJUJ0iRF
-         KvIwn8qZlfn2lH4GL7OWEgKZYfeUKR0RpBsV+wv+Nya2nQ0hXgDDkndY6MW/O3rhPcVp
-         Un4A==
-X-Gm-Message-State: AOAM532tEUqQqKvtvgj0G7OLGaS1NjqOdWa9IArJQx0jFILfD4Dhq75/
-        ZbXL3iwmNwcz5lVIQlVCYcR191WS3qd2k+ElSJXPC7LH2PZWkB3p
-X-Google-Smtp-Source: ABdhPJy2HAc7r5WCokNQxGBfrf1K6XYqiIYpMJApgGKKmbQDWHng8FbzYO0QPdf8zefVZRLkP7rnMp+pr0YL/wFmhB8=
-X-Received: by 2002:a05:6402:1347:b0:41b:79bf:cf12 with SMTP id
- y7-20020a056402134700b0041b79bfcf12mr1739801edw.195.1648695521732; Wed, 30
- Mar 2022 19:58:41 -0700 (PDT)
+        bh=DQEdIqJQMT2DTXxNnryD3JrAvawMTCRUVp7h3+Y4I58=;
+        b=LzS6hQ5JOnF/D5ixq5ryK5TSzs5ukrg576vSb03x/L3xcBrMtat6vt6mOzsd+02vQx
+         F3s91rC3Y5LcFYju6haIxbKXK5xf6az/RjlG39bQsC14LncfTX6od1/vOOmuwBgwHygB
+         jcsIhGDQsvA6TmRt91UZpKnS4dSsk+utDiME340ITRmqgUj7t63d7UweA6jTrjixXuly
+         r+WIRoDF0Ood/YcrVbrycZdsJJ5xE1XnOGqQ1c4fWHULfV9iyv8Bbo5ZPHdXGVs/+rhf
+         dhElFTQ8Ts/NmvFC73BSdobyVVTSWtDPzWkoe8UbRNWmjfkJiOaXzwkocZtU1bPtBmwL
+         rMyw==
+X-Gm-Message-State: AOAM532Q4x/TqE9X0qhCUqwxVHkrXKWCcJP6ffBQ520pxfaJ/Tk+nSbu
+        7Zm7r7gur/+hcoZEO0A0u8nEsi1RmitWt77qHe4=
+X-Google-Smtp-Source: ABdhPJy14q49ndRpft22Zxx3hmPk1d7rlxFG+MTHM3G13eqOKVC53V7KmYGrVmRIuAapJFVzhRur/hctam12CatbZ+4=
+X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
+ ji13-20020a170907980d00b006d6f910513amr2951893ejc.643.1648699030251; Wed, 30
+ Mar 2022 20:57:10 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Thu, 31 Mar 2022 03:58:38 +0100
-Message-ID: <CAHpNFcMKUp_b7bv-OE5d9_x-vUL-hSudQ1REstTHC27vMFs0Ew@mail.gmail.com>
-Subject: RISCV: implement cache-management : RISC Instructions : What do they
- all mean ? Todays manuel BLTU : https://passlab.github.io/CSE564/notes/lecture08_RISCV_Impl.pdf
-To:     yan@oakland.edu
+Date:   Thu, 31 Mar 2022 04:57:06 +0100
+Message-ID: <CAHpNFcPLqwMyzHt9F5WTGSHr8goaFcczEHS5YL7uajnhe3EwZw@mail.gmail.com>
+Subject: Fast AMD, MIPS & RISC Instruction guidance in reference to https://lkml.org/lkml/2022/3/30/1565
+To:     support.android@sfr.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,6 +79,9 @@ be A : Rooflined B : Streamlined & C : In Crypto_hash_function.h
 https://lkml.org/lkml/2022/3/30/1313
 
 https://lkml.org/lkml/2022/3/30/1565
+
+Coding folder:
+https://bit.ly/VESA_BT
 
 Rupert S
 *****
