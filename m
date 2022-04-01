@@ -2,56 +2,55 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A4B4EE951
-	for <lists+linux-security-module@lfdr.de>; Fri,  1 Apr 2022 09:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57C54EEAC9
+	for <lists+linux-security-module@lfdr.de>; Fri,  1 Apr 2022 11:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343998AbiDAHxY (ORCPT
+        id S241278AbiDAJ6K (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 1 Apr 2022 03:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        Fri, 1 Apr 2022 05:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244380AbiDAHxX (ORCPT
+        with ESMTP id S237951AbiDAJ6J (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 1 Apr 2022 03:53:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55754262405
-        for <linux-security-module@vger.kernel.org>; Fri,  1 Apr 2022 00:51:33 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id yy13so4153408ejb.2
-        for <linux-security-module@vger.kernel.org>; Fri, 01 Apr 2022 00:51:33 -0700 (PDT)
+        Fri, 1 Apr 2022 05:58:09 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F341E7A5C
+        for <linux-security-module@vger.kernel.org>; Fri,  1 Apr 2022 02:56:18 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b24so2297721edu.10
+        for <linux-security-module@vger.kernel.org>; Fri, 01 Apr 2022 02:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
-        b=R5qxyMq0KSgMLORzVFr6f8JZchVpBqg3vw6QZkgQMBmMpmrWvKJXEkPbDrZs+NDRNX
-         Q03+2GBXLOuu+WGHr2ImgjCSP8i5ANZM6zdGZHPChpz6m1xhNKPBNPmzSPCmhFczeIiG
-         zBBE5QrYUxqLcx7KAqLrrRxVbscoBuS+Nz0+d/T4WtF+Fz7Cyc0JvzCcF5/+dviBqJWY
-         GhXtl/dXbzv1w9GW18RawAEXaU70jdKR1CPuevT7lUMwFRzc8G1G+ukqTCVltycG1Dwb
-         4kf+VTT2GgdcwdOYxr1ksgSfhfhDaqD3WpPlg0ZS9r0RijRNPPQu60iG14SENDohcZyP
-         MHIQ==
+        bh=eqp//V44V+hcbISIvt1lJuK4foZj7CO3yEn40TtD0t8=;
+        b=FCPp1/Q0xwCZRmR00bNEYibbjXgURkA37k8/uPpkC0Iuqg70Oj1QLiW3YTIfet3Qy1
+         S4rWOFuM02tOs4TlrIDwGGpr8KBRmVE8wZImPgmBIGvjfVLo0BXty9sKj0wQ9rcNSYA/
+         NJIp7TMsBZMbN1cOjPZia8z2IhtyN710vNTe6MWzUnWJ0KbH3mY3BRnuEFtLFN05hm2Y
+         FxKXq3zyC/edFB9Snr+Z1sWzbm9TLmn/J/1xp/XfEXn7li429/I4lbA4k3BFMo3fBfkR
+         DrwG3JwRXUmEJY+FT0eXzNzph+smmXKfOwbLirlqwdgIBi7VGZdmBv112dDSEK2oFlDB
+         xK3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=nXjAzXLpXSZdHQ34t/UZmSG0B+pcFpFO0TzLkKO37nA=;
-        b=o/TyopzW19Z4+HT1zGpo/Ci4bzb/oeWqao6eZUJvq1blymMAj2OEoIeNyFT716SWWJ
-         sWKtsVxPGUXfoVDc9Cb3ik7vwWVqQ6CJZQRryd7e4RN/jzXRwwHDK/wu15df5oK3CVCr
-         kP94y2j1InknvBsv3D5N7Cc7RvavrfvN84D/nJCtWeCqY4wWE7YY/HjEo9LYpU5Xiplt
-         +uB5dS8biXzSuh+M2dEtRxFY/Pkjgh8mFK1j9zr1W5HZV+QmiZcjS5UGyTF3yANMDycU
-         5Ia5vPIV0KOCd8jqoJWgDccZxi63nzuFhww2RExltm7kTUPFCb6of7ey6mvyPJ58HSxG
-         rjTw==
-X-Gm-Message-State: AOAM531XXaFrmGCC79zRvNJTw8L7egp1nge6aOqideQMdTyut1jlZ0R2
-        Ma4CreqlnMBp5Nimopwd4EN/52XF0eJhOMqRMWo=
-X-Google-Smtp-Source: ABdhPJy15tXaBUCoFtBaiXbg+DtyxG4m2FK0tsoBWDirs3TPeDTGqKEPNXZ3qdpz2WbQOSw71PF4td1cPe7M8XL04po=
-X-Received: by 2002:a17:907:980d:b0:6d6:f910:513a with SMTP id
- ji13-20020a170907980d00b006d6f910513amr7769180ejc.643.1648799491620; Fri, 01
- Apr 2022 00:51:31 -0700 (PDT)
+        bh=eqp//V44V+hcbISIvt1lJuK4foZj7CO3yEn40TtD0t8=;
+        b=zE7yxjWCqtMVLe0DeLAz9uox4EQwtDBWAq4fyAZMKAQyCJOqzO0ApSSeBt3qNCU4oj
+         iviEHh1FihyCvt5ofwSOsnpDiSNL18Hm2BLRsuHzqkB2TTGIBBdmu8KlPHVL82zhxqlR
+         dNP1WTMCMZj8Wjgtk4DOpgwMO8WDQjbg4IOFGVar3OUFUKYTWFSEqOtVMv44IWO+ylY3
+         HBNm1VPYv9GqQV//wzb/3qo5o7DmFxJTLqnDViGlhNMCgvpSFDwZ7DW/r1hJ7/uXaLk5
+         o1NmsREO9+MvEtrGHmlqemU0uH6eZKcw2KBg3SEayJ3gc9VYibjIeZzzjT8a4UhD81Eo
+         IGTQ==
+X-Gm-Message-State: AOAM532f8eUSdO3JQuWaHAc5KjyJwXWWZYlxvYvaQzpsDHP6pZkP/bPi
+        uko5JLUUI71wEMhlXNHlmZduWtLsnxHVwMfMYJA=
+X-Google-Smtp-Source: ABdhPJzaHueKtUu7kIF5f9s+gg+fr5zzXike940e/a2j34x6DN5dHRWD/YMxxF+9D4n4fU/Pa3t2M5zICTgbx+ndrvg=
+X-Received: by 2002:a50:ab16:0:b0:414:39b0:7fc1 with SMTP id
+ s22-20020a50ab16000000b0041439b07fc1mr20111224edc.214.1648806976973; Fri, 01
+ Apr 2022 02:56:16 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 1 Apr 2022 08:51:30 +0100
-Message-ID: <CAHpNFcPUVeOhEnL_10u9Omb+LDpYXjTPkYzteduPYWFiLe90bw@mail.gmail.com>
-Subject: Though the VESA & HDMI & DisplayPort standards Facilitates direct low
- bandwidth transport of and transformation of 3D & 2D graphics & fonts into
- directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-To:     moderator@vesa.org
+Date:   Fri, 1 Apr 2022 10:56:16 +0100
+Message-ID: <CAHpNFcNc0bJDZdd4JsiXZTQSGHuDQ=akDR20jPHu+jHVpTdnRA@mail.gmail.com>
+Subject: VecSR Firmware update 2022 For immediate implementation in all
+ operating systems, monitors, TV's & equipment such as Mouses, Audio Systems & Webcams
+To:     bill@vesa.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -61,6 +60,10 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
+
+Date: Fri, Apr 1, 2022 at 9:48 AM
+
+https://lkml.org/lkml/2022/4/1/139
 
 VecSR - Vector Standard Render
 
