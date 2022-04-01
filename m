@@ -2,37 +2,37 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED034EF31E
-	for <lists+linux-security-module@lfdr.de>; Fri,  1 Apr 2022 17:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E134EF3F1
+	for <lists+linux-security-module@lfdr.de>; Fri,  1 Apr 2022 17:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351010AbiDAPHh (ORCPT
+        id S1345184AbiDAPHm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 1 Apr 2022 11:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        Fri, 1 Apr 2022 11:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352543AbiDAOub (ORCPT
+        with ESMTP id S1349653AbiDAO5H (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:50:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73E22B3331;
-        Fri,  1 Apr 2022 07:41:53 -0700 (PDT)
+        Fri, 1 Apr 2022 10:57:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11AF15040E;
+        Fri,  1 Apr 2022 07:44:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DA34B82511;
-        Fri,  1 Apr 2022 14:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFEDC3410F;
-        Fri,  1 Apr 2022 14:41:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D5EB60AD8;
+        Fri,  1 Apr 2022 14:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C81C34111;
+        Fri,  1 Apr 2022 14:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824111;
-        bh=FuCO+U6N9ZCghCVd1CqTy9TOpm50qfLHeScE/HPLP+o=;
+        s=k20201202; t=1648824276;
+        bh=8gh+4Mhbk2luWoalZsJvkPybHUn5HxFJvrvm+ZoaMyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y9nBDVEnIt2QPcIWHicP0P1dHaXTuZ5PAtn0IVzzxlt8/mKGKrYTauH7lQMan5eAZ
-         Bl3wpdDGY5t04PHJkN41EYvuRyAqGQ0n0wGMQl3LfGu7SkzoGPrfvOqUfPJePuvLNz
-         91SdDoMdZnWp/JQjhHMxWHgJzMdMawfMAayikX1SNum9H6NSnkCWa0cFKX6KNjJCP5
-         iwEIKjIChM1rkHtySCcpsoVl8bvydZEh6gUHBNZSEZuFI30rlJrClbcKWJrTVYBZXo
-         PSP97QEu1UcBaQxLl1eXAD/fJ/uX6S1GDKrXei6g7kvboqbju0wB6gSNLTmiQMY4Yg
-         o5To90B9Wm6lA==
+        b=ieWwYrO70pKY+GVO5kR07MJvhzp4AEhqWYyiKesyglHn7zrk0OPPmkIrWfkrrbnxe
+         OlGPW6aFZHdwXdA0v+X0UDNlMxoZkIdbEzW2Hn2Oiz9/TLehOm+efhNtu8idwopqWu
+         kiGFBfAVvo+CP6yFCptFOyC9X7Dhdu54aLKpY5M62BPsD/ZDkb2WhgBFas0XoVLt2B
+         lxWVGM6q6GlSk0EIU89q25qiVVJIZuqEL6HkUplVPUJctsTFCIv3B5hJsbf09q6cfR
+         4kAZOLiyKQapRQTAqrmTCtedXxN1xR8aLVPtIsTtvty1MtCdzkeeOT/En1Ym2Wiwkj
+         GgJPo1vaEGxOA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wang Yufen <wangyufen@huawei.com>, Hulk Robot <hulkci@huawei.com>,
@@ -41,12 +41,12 @@ Cc:     Wang Yufen <wangyufen@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Sasha Levin <sashal@kernel.org>, kuba@kernel.org,
         pabeni@redhat.com, netdev@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 93/98] netlabel: fix out-of-bounds memory accesses
-Date:   Fri,  1 Apr 2022 10:37:37 -0400
-Message-Id: <20220401143742.1952163-93-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 62/65] netlabel: fix out-of-bounds memory accesses
+Date:   Fri,  1 Apr 2022 10:42:03 -0400
+Message-Id: <20220401144206.1953700-62-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
-References: <20220401143742.1952163-1-sashal@kernel.org>
+In-Reply-To: <20220401144206.1953700-1-sashal@kernel.org>
+References: <20220401144206.1953700-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -110,7 +110,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/net/netlabel/netlabel_kapi.c b/net/netlabel/netlabel_kapi.c
-index beb0e573266d..54c083003947 100644
+index 5e1239cef000..91b35b7c80d8 100644
 --- a/net/netlabel/netlabel_kapi.c
 +++ b/net/netlabel/netlabel_kapi.c
 @@ -885,6 +885,8 @@ int netlbl_bitmap_walk(const unsigned char *bitmap, u32 bitmap_len,
