@@ -2,69 +2,78 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6364EFDB4
-	for <lists+linux-security-module@lfdr.de>; Sat,  2 Apr 2022 03:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB5B4EFDC4
+	for <lists+linux-security-module@lfdr.de>; Sat,  2 Apr 2022 03:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241352AbiDBBWH (ORCPT
+        id S235711AbiDBBcF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 1 Apr 2022 21:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        Fri, 1 Apr 2022 21:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245671AbiDBBWG (ORCPT
+        with ESMTP id S229819AbiDBBcE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:22:06 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857C62F383
-        for <linux-security-module@vger.kernel.org>; Fri,  1 Apr 2022 18:20:14 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bh17so9231698ejb.8
-        for <linux-security-module@vger.kernel.org>; Fri, 01 Apr 2022 18:20:14 -0700 (PDT)
+        Fri, 1 Apr 2022 21:32:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2BA1A637B
+        for <linux-security-module@vger.kernel.org>; Fri,  1 Apr 2022 18:29:59 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id i16so9188837ejk.12
+        for <linux-security-module@vger.kernel.org>; Fri, 01 Apr 2022 18:29:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
-        b=DkN2+IoGQRNVn9I3tQluJaEc0MtViO8LRtF2NJ4s7IaMBLZLmCvQWoKwHzIenK2Uvt
-         oM6wyR7cpVpw/DP2N18V03yoXgGRVrapdyCInNpevW5rlrzsyvf5gqZL4sA2Rw4B9ZJg
-         3UOY3d8SQ47sXetoK5U9iEEGwQTb8Ff0UQw5PtcJEam5PYMgJASsTyuSg/uaNe/g3fMz
-         yqwj0iiYgM3HaLEVT5o3TRcIIHaIQnbEZiSbYiR2x9jyWrHznvIUDRuJBO5JN4SX+MQD
-         8mzqNLGq4bG6euGysH79oPKXg+fJLacgaCYuRQu3I8s681Fy18Rz98Cx4bqbek74Luqn
-         hifw==
+        bh=28vAyIlWmTWBBzazT2gmuotOzviWJtQdA3dJRL//zKo=;
+        b=a874jFrROO8zHRa7BA26IpMaqO6Xu76OpaSsUwKbe0PUjUnD1APv4PQa+fkbTxZmMe
+         wwsG35frpXr4OWaNcKhRz8xWLzbYH65CllBGPazcbWqszAE5gPK/TK/hvwgtyNzvCBxG
+         8Z2RnILhY69v8jgB6/GUVKbAVd+RAcDzyNlxelH6jPddG3coarO4VJuxYqYKhzBzllY5
+         I6dhoM/W9NCAn/VFL1QX2cJ43yREheKoztROsH4gaEl2pJIex9U8x/3RHrjyklaGQwhq
+         dVmv58xsImSjK6zdHZS29bT43ov/I7reJUeDpc/SohJcIxVz1xY3qC0ua29AEm90jx3X
+         Nw7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=IaS1hkvmveC5IBbs3iH06s2bJz4c3BLVqz2F+DTX2Y4=;
-        b=1s8kn5ZUq3nrrQwNoLBbIyht4GNrNUl+5A2qIFUK8iz5JO13+Xqi5r5IRxogX3lQzL
-         gUPcixEcFuzl06Ik5MdF5Ix6BZBqQSEz8QIw+jAweTVNlRvVe7y2sqbHSXcRsnIXrjE+
-         RtiOvAUqPIqwnO8KnahGiZxfWijhl6W/qexqYOIzBaITNrSUU/e8ETmLM0qBEHOp07Yw
-         eb9RU8QTvoNuc+h3KtDz6o8C5v1+wlR62cUn/H2kIWrWub7HS6QZTchVIncsylGQhrpi
-         m7pB7LOpAIPYkg4zxPLTSfdxWMmbgBB+5FE4j0pvXtNrRUUdvLb0wCus0wWMoM70GUEk
-         Buiw==
-X-Gm-Message-State: AOAM530TzZyn6ZYsCaoSdWT4IpMnv0RIi/22BscNdmmU9dn44eODT2pR
-        SbFH2st3Nk7LuIQ6DsgEwrO5XWlrJKoD3LqczMo=
-X-Google-Smtp-Source: ABdhPJxdMQmVZLNF+7vq8tj4btDtW9ROcnQCx3SXwX2vXAT2C3lTN7xw3dnuRurNZE+ZiQItXzYYUylWjK6AIFqxWz8=
-X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
- sd6-20020a1709076e0600b006e4dae79574mr2172572ejc.540.1648862413069; Fri, 01
- Apr 2022 18:20:13 -0700 (PDT)
+        bh=28vAyIlWmTWBBzazT2gmuotOzviWJtQdA3dJRL//zKo=;
+        b=69FcmSYcOhyHZ6VQRa5SHuaCo8mxaruooTBp9SBPDHGVoZuzA140KlEtjNp7jFqOjE
+         5Q5XOrXrvOsIgvrI/Sewqaj7iMuwjJ3r5ttqqCzObz/oUmbiab8LoXqvaBUb7cNyrnrG
+         hB2sNc/xKQwHP12zOCVLRte0na90DYmCxqcfhXSBWi7FsokzHdwtkKIbOH5jmuk4gI51
+         Z7XQp0kEzPVWgROTqPglvAHBL6q7my7JX6NGPnKpP4iaNUWRs/n0pEi2xaBLN667Jen+
+         wXWV6m4kZewLx8KzFlsTK+Q96sTyBLwbFaAOWB0eZUmtLIhvDdo+CYB5C+jkvFcejBVy
+         sCWQ==
+X-Gm-Message-State: AOAM531J2SkBl+ASeJfACjrKZ8Jswz6FmbLhQvyO0b6Z2fzF8XtRY/qq
+        /mL5U8VU/stAgtC8pkYV8OGb1xiKqa40+x4Fvrw=
+X-Google-Smtp-Source: ABdhPJwHPDWyec9gn3qg1wh//0mc5kVi1NRCG4JefntpV4CiW1IKbMbPEKzqs1otDaGoQZZvuFBcbqe0QoGlziOmhgY=
+X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
+ cr21-20020a170906d55500b006db148e05ccmr2047095ejc.63.1648862997490; Fri, 01
+ Apr 2022 18:29:57 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 02:20:14 +0100
-Message-ID: <CAHpNFcOpX0JwcqrPSQkP0oV10EFhJmCiMZOYKis+xSQO5C_rDg@mail.gmail.com>
+Date:   Sat, 2 Apr 2022 02:29:58 +0100
+Message-ID: <CAHpNFcMaF-cqoOy7g4Ee2XeG05LoLx60J9WCpRKbumh+J5hKjg@mail.gmail.com>
 Subject: Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
  Class VESA Console + With Console in VecSR you can 3DText & Audio + VecSR
  Firmware update 2022 For immediate implementation in all operating systems & ROM's
-To:     torvalds@linux-foundation.org
+To:     moderator@vesa.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
+Class VESA Console + With Console in VecSR you can 3DText & Audio +
 VecSR Firmware update 2022 For immediate implementation in all
-operating systems, monitors, TV's & equipment such as Mouses, Audio
-Systems & Webcams
+operating systems & ROM's
+
+Potential is fast & useful
+
+DT
+
+https://lkml.org/lkml/2022/4/1/1451
+
+*****
 
 VecSR - Vector Standard Render
 
