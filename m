@@ -2,57 +2,57 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DBA4F03B9
-	for <lists+linux-security-module@lfdr.de>; Sat,  2 Apr 2022 16:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5265E4F03CB
+	for <lists+linux-security-module@lfdr.de>; Sat,  2 Apr 2022 16:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350583AbiDBOFp (ORCPT
+        id S243594AbiDBOKt (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 2 Apr 2022 10:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        Sat, 2 Apr 2022 10:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235277AbiDBOFo (ORCPT
+        with ESMTP id S240764AbiDBOKs (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 2 Apr 2022 10:05:44 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E090D44755
-        for <linux-security-module@vger.kernel.org>; Sat,  2 Apr 2022 07:03:51 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id a17so6001083edm.9
-        for <linux-security-module@vger.kernel.org>; Sat, 02 Apr 2022 07:03:51 -0700 (PDT)
+        Sat, 2 Apr 2022 10:10:48 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E26B13D29
+        for <linux-security-module@vger.kernel.org>; Sat,  2 Apr 2022 07:08:54 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id yy13so11354781ejb.2
+        for <linux-security-module@vger.kernel.org>; Sat, 02 Apr 2022 07:08:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
-        b=l9oquwuJX8aoHfucglsw++UoXcioGJNogrTjwOdTLTB/dHlkQSV3X24YTMB5ln7tqv
-         hOE92EU0pyrnxADrzPJLUdvulxpPGEB0ocqGafzBTH9OyrkaQ+/XaJttdEjqrPoh6n1U
-         RgG2CxlcDpzK7AamKLGUzPm/Fr+iKzAY4FMfhvwYPAIriezszZ1f0yd5Yi5kGGQ/BHit
-         dSA52OfPU8dcYodTg7HEfYntW6MOAFdHd5NyxWd4+96atPx9bvRWWnJt8tA0nO+0d424
-         vOObVkfaRmTFjHZe8R9m3nzRzjBfd1XbXmCErnac76qH9Xm5H79QvYn1YwzZ25R3Rd8i
-         VFPQ==
+        b=bEnc5Xu/f9tfdiQvw1VrBF2c4hTnQpn+nPJhfMCv6Uo62aLg32LRqUa/V0O8NyeDs+
+         oGzc7pjI8mfm90kVDggKmmPs9A+imFq05/mujxsbIUMNqlLFTOcdFzCTUa5Nvvs3+Qs7
+         gIJDnFn2L4mf0tmeGZuDBfKvJmYLTf0Us2u0sWZj5IO7e/MVBT8CuNo1UUhqYLdgmhpV
+         Ds6wFwqrrp0bo+/LzOcimtgax7LIiXXOzVLY/tsKcAOmX4spmFduBxYGXCuXkZWLeJvb
+         aPwHSmwOHbH4oTkp96PDay3Yl3mloYzwDHcYhlKTDrox8vTJDtbXEK36R6Icw0QGb03r
+         tLQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=wigNce4qvVmV3d7DkdJzc8BH1TPhQWRtN2hw97s9mNw=;
-        b=OYz+qdZhDPj2IFjuSAmUbwWsvsNY//AazKp5qmAXt4Jc/H6ltzMJKGt2jUr5jJEtS1
-         aJ4WKfa3aaM/zVTRLwx1hqZJHvPyePiAnqvKv5Bz2F7vcNVA7qwMOmtl//inwql/voXX
-         zhno+9zNxTZNoxRNch4sGDBmxYo5zs2BIYM32dzYh130FBSLflYlC00k8Y34pngC5yTq
-         81zvzK3vWD0bE8P5DaB02GWR/HYgq3/AMRA/7ZxMCiilMAYvh3mCjSWEfyAGnne6CJj6
-         cnYYKPQpHj3VxZz9XL0nIbQjHi+FMe96gKfoTL76zBtKM5ZXsvfVnjkiRhdSZo8GsKZd
-         CL2A==
-X-Gm-Message-State: AOAM532lPZfgPT5tdREO2QgIUw0mXKFA/+k+gI0rUr8YTraB5ju4cpEU
-        apNRI2JVDIkSVjgcK1kmkyCy2D3ncMRMS4OCuZ8=
-X-Google-Smtp-Source: ABdhPJxOX11QqM8G7fEQhYKqU9aPL6nFYLCwA2GLQoe4p3E9A41CSdo7uIKa026CVQH2D6MDSNKbIURx2LxF38AtEUY=
-X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id
- y20-20020a056402441400b0041928bc55dcmr25658674eda.130.1648908230168; Sat, 02
- Apr 2022 07:03:50 -0700 (PDT)
+        b=dyh2/Ov/Qu8Hf6DlWa0cdxr09l5NvVeDMILP9f1ojE80jyzoUTP1xhhU8BnakbKVUi
+         ouSgXDR+dYb5mF3I0FqX+InlkjRfCe03hQNwWNiE5jK62kUjjcL3sgqWpKwb1jBBvypA
+         nDskIlboW70+1qTJt3baR3Eqp6GxXh841/5vxB8bEsaokz3ajKUTx5x7jFW6WqTYj4Xj
+         OkKSKHlUKCSdb753AkAMwYQDT/CYpQV3OYtbTc4vwjcad5Aq79vUSifUdwKBR8BFqybP
+         i0yEdwYKZ6A5fJV9vlSy7SFuxIExpd5h022sjsNfbXavEp8n8P1faL4P0fBx4OjmVkNJ
+         RzhQ==
+X-Gm-Message-State: AOAM533wU2+t21f7FeCUMYVxYkAFpYR+uLAxTTEssX9IeBScgtM7K/AQ
+        4kXpbIlPoPAXNU55i+lHSD2frWpPmPt/De22HFo=
+X-Google-Smtp-Source: ABdhPJwbdc+fO0hy1xLt8T9rkKjD8XTsqwFzNGDzOaWO9aTsShzwErg/VRYPXMBWsyxM8Fp6u1qLzpwZ12jx9Xc4U3g=
+X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
+ e20-20020a1709061e9400b006cc4382f12emr3929722ejj.482.1648908533020; Sat, 02
+ Apr 2022 07:08:53 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 15:03:52 +0100
-Message-ID: <CAHpNFcM0dvdvfYSzzOVV3cV=oikimugv9YkeyK_JcB1rPBfTBw@mail.gmail.com>
+Date:   Sat, 2 Apr 2022 15:08:55 +0100
+Message-ID: <CAHpNFcNSzf8OQfX0MEVyYrZxVpR23qBG-_FDqAyAfuySvtP__A@mail.gmail.com>
 Subject: VecSR Wins another global Feat - The font-palette CSS property -
  font-palette and Custom @font-palette-values Palettes
-To:     bill@vesa.org
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
