@@ -2,65 +2,65 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0530F4F00CC
-	for <lists+linux-security-module@lfdr.de>; Sat,  2 Apr 2022 12:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4714F011E
+	for <lists+linux-security-module@lfdr.de>; Sat,  2 Apr 2022 13:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354564AbiDBKyc (ORCPT
+        id S240258AbiDBLd4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 2 Apr 2022 06:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        Sat, 2 Apr 2022 07:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354569AbiDBKyW (ORCPT
+        with ESMTP id S239238AbiDBLd4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 2 Apr 2022 06:54:22 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1FD148664
-        for <linux-security-module@vger.kernel.org>; Sat,  2 Apr 2022 03:52:16 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id pv16so10825925ejb.0
-        for <linux-security-module@vger.kernel.org>; Sat, 02 Apr 2022 03:52:16 -0700 (PDT)
+        Sat, 2 Apr 2022 07:33:56 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BFA1427EC
+        for <linux-security-module@vger.kernel.org>; Sat,  2 Apr 2022 04:32:02 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id r13so10829201ejd.5
+        for <linux-security-module@vger.kernel.org>; Sat, 02 Apr 2022 04:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=Zu8eKPzRskdlQlbramfPaoD/f1fGti5TmNsQY/hQanM=;
-        b=GY1j8tzy/iDpw5ZJczyjRnKh/rlWb7bFzscp7zALfPv6PUvQKhRLyFUClMnBwdOit1
-         Qjco5r1NYNkX48o1HPbAJENvDQYr4Ji2z8feBQMHUpsmyTOkI7Z+Ag9eSCxya8oa3n13
-         74HghIOf/UOx8ZIFpgRrXCOCquCfHl57OF+1OIPOSf1NeSK57R1iaDX+TZs6ZxdXEzhO
-         ecK7nqqnlwYk5alg+boRREXT74AfNPKjmmw+stYPehetPDmT47qZJkQeOyT1AiAh4EBN
-         BIcgOCVM2u1OYM2BM4BOXcBDsli3ZupoRbO2jV3QlrawgXFDX2KckQx8qcvAuq+fjHHo
-         8Fvw==
+        b=CIIQzK8rbC+RcFX9f3W8RVw/coWcTYcu5ya9tWYCqSJ0KdqeCTRKztFEKDK7EIB3f6
+         M0gN98TIM+vbQipg965NiAMwkYHnUjIEv7Ms+CsryAcLVfTj7jptnEEtjHSatQaNfNB4
+         uKh/72W912V8+ox54/gGnIsiuCQRrjl0Yw6Gq/X+74OX0KeaUmf0rIDGXbtTpmhSG1M7
+         BZHfLNPI7m21UmALjfkpls26VwaFynoE1lD59hmmdBW/cjZ3c9q3QYJ7NSxgi4ZhZHOo
+         M5OAUQoYLzk7uy1vzy7uLkGsSpDsMd+KthSE6Xztvt1oWaeBm/ljmtNJ89VlxGr0ev8h
+         icZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=Zu8eKPzRskdlQlbramfPaoD/f1fGti5TmNsQY/hQanM=;
-        b=ISFS3ICYqVY61c4XqLzDsEWl8ASgmtDppaxCTLs88po/2YWpMz4TbD5qV6I6nGg3IN
-         s48Si+idE9HFxBB/fwOtW+KO6k5FD0cfd1LsmOQiURejrzSBV8U8iDjgZ9Pi4Lkrzl0G
-         0ZSvjLRjBIfippyCdKD7U4/3UImIRGIXrJWvnpDuyIOIn48CMaBbDfmMk8kE5hfAkcFP
-         UcrOkFK2mttgaf0HP+y/KcWBJmXB7DikODIUXBFf7rOpc67I4/7uibSQc6ZYOre+AD2G
-         YyGy+HHWOqBdZmdFya37GKMSpxqsT/mNS0mqjwna+Zctph99gqHM8h71QxpOUnWXfl9f
-         k+ng==
-X-Gm-Message-State: AOAM532xEvRiwhAMCgNtLvUMKFoL40EeInh1Yhme9hSNBnRqIhRl9Zu4
-        LlVC6osWy4Xsl4M2/CM3AU33OEtoBfGLr8yy+PE=
-X-Google-Smtp-Source: ABdhPJz5+6PACXGqfh3RKI04rKN0HSLK/vS+N6oXQKeLI1lmw2daUD2eqc4MZA333CysDKTaGXC64G4Wduj0dDB9GmI=
-X-Received: by 2002:a17:907:1b10:b0:6e4:bac5:f080 with SMTP id
- mp16-20020a1709071b1000b006e4bac5f080mr3434011ejc.24.1648896735229; Sat, 02
- Apr 2022 03:52:15 -0700 (PDT)
+        b=ApLZA6XrlBA4A96iwYMRgMKG67/vLZdG4sUDyMi23JaGf2pfgWMVKwPCRgFIGfYBmn
+         qStNBHH2KhHtqkuJ3eBo/G5YqrcU01UXXj+XZd7kSGz6LoqxTs1mAJHAp0+1ZisR4XEW
+         N9CU3e7k1hGWAPp/RnrQ/CGFjr7Q7ltSv8CutssfM3EV7yjAyL//0n6hvGRkE7eUd+DS
+         h/0aw3tUml6Z8in/b58BudrvV/8sbFqC1nFLr4KRn9VxaHJ7QAKaHdInj/JYDTO/DPAh
+         JYQn9U5aqtw5D+WqQ5M6vgVUg9X+r8Ytu7Z9FjHnfaxYsZ8Yjt3L1c2u05aZD6qHIcrE
+         0PkA==
+X-Gm-Message-State: AOAM5328dE+2YYIn/6CgDSyS5z6E2XLGCB+xr+Imsjsl0m6TnKswcvXq
+        FFj228f33XUvdBXO9Jlv+rTW7alaYVKYX6Bg3IFufbkPPpj0Wq3/
+X-Google-Smtp-Source: ABdhPJzStAksb/egRmfGjkKwyuVRy05cibbNUQ0oIYy22xL/Wff/xxZl4pQSBS+cp9XuyavlKtoeT2E5XKP8LjpLaAQ=
+X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
+ e20-20020a1709061e9400b006cc4382f12emr3451709ejj.482.1648899121194; Sat, 02
+ Apr 2022 04:32:01 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sat, 2 Apr 2022 11:52:16 +0100
-Message-ID: <CAHpNFcOhLyPqE4-0f7vZ1rRRdC6BK6UgX17bJrM8_99GQ9T5bQ@mail.gmail.com>
+Date:   Sat, 2 Apr 2022 12:32:02 +0100
+Message-ID: <CAHpNFcNqhL2TZLJenRqUKP6d1wTCGjZ9VA=d2TnDpKZxbSH4Vw@mail.gmail.com>
 Subject: VecSR is really good for secondary loading of sprites & text; In
  these terms very good for pre loading on for example the X86, RISC, AMIGA &
  Famicon type devices, With appropriate loading into Sprite buffers or
  Emulated Secondaries (Special Animations) or Font Buffers. RS
-To:     torvalds@linux-foundation.org
+To:     bill@vesa.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
