@@ -2,54 +2,54 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D807D4F08DA
-	for <lists+linux-security-module@lfdr.de>; Sun,  3 Apr 2022 12:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFD44F0941
+	for <lists+linux-security-module@lfdr.de>; Sun,  3 Apr 2022 14:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiDCLBc (ORCPT
+        id S1357265AbiDCMOu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 3 Apr 2022 07:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        Sun, 3 Apr 2022 08:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356603AbiDCLBb (ORCPT
+        with ESMTP id S1357263AbiDCMOt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 3 Apr 2022 07:01:31 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC711DA79
-        for <linux-security-module@vger.kernel.org>; Sun,  3 Apr 2022 03:59:33 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id p15so14433331ejc.7
-        for <linux-security-module@vger.kernel.org>; Sun, 03 Apr 2022 03:59:33 -0700 (PDT)
+        Sun, 3 Apr 2022 08:14:49 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7F331348
+        for <linux-security-module@vger.kernel.org>; Sun,  3 Apr 2022 05:12:55 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so7952732edw.6
+        for <linux-security-module@vger.kernel.org>; Sun, 03 Apr 2022 05:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=nyBvcJp6mRrQPKBpyIR21awT1EYL+eciU9AOxh5ALmI=;
-        b=XMqnegJZvpjidT9zZmfBPzcB2shOPPCd4Cd6jwxu2XG/ax2iNOGP0fVwFiO2ZJAfN9
-         JleQZq/BZ2tE8/x81yQgHE+gGkFeBp44Nkq1/0Px81xyJfUxnJ+l5PwSZQTBTEazWRJG
-         fUAbTlGgbBMlClQjHT5rktSE1GrAKKMdVyHI3VaLxFJWwAz8SPkt4v739JBab/3fXzU6
-         1QuqlsYLrn3GU8NAGwMymaNOy3PKFczaUA38OQaYz2DBl4UtGdAJSM2tXZ3jgwyButhK
-         8SzXw1IbFmGWHMid13cyiPxPf8F75nwBrjn0e55VKxhtIMp4xykrFSsxlKIA6gh/FyYq
-         kEzg==
+        bh=NQyHn+U8eVPdUIPvGzN3lKmJI7IauuBDznn8eNpqpKU=;
+        b=KGcQD8Mn0/jy05r0IiH697GNb2wCmzwZbm1upjSDYVA4CrGiZICd/wJ16EB3hFD6k+
+         ePwbGKjhG8cTaEhTK0KPo6YdDaJFO2ADS3aAZjoAusxrXZcKmUb+0y3njw9AHnLWj/oB
+         AVu2tjwTyTtn0TZNJ0WsNIa33TNyjwHK66UlU57sqJBAiXaCDCA7FWkvGhZVuGAYuZSy
+         6T97y0Ksn0gr0IBCy/89ZGuntkoyAqFrKrbji61sttvF1xH1sbVVcDw9BOm3B/N6CeVh
+         somEY6uunZWTeubgTPXFpG18Tt1drLl6CDfTuWETGPkylpADgARxwClkTUVateepNHAk
+         QMXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=nyBvcJp6mRrQPKBpyIR21awT1EYL+eciU9AOxh5ALmI=;
-        b=IlVfJhDyqB9fuqKy4H53eOz85jz9IBfp4S0XFRBzfKViB+wWYmTqC4VjRcNmyLniwY
-         9qxPuR6OHzvPrHuLILo0b/Aq0Ks/JzzFcL17aA7bFSQ+oKqubpzDnWuCQMH1TlMAgfvl
-         ExJi2EnSepABTWofca1bE31NFp7/WZTgWX8WATjPDBl6db5KHLCl9fPJgmXkEsYwnFHA
-         fyD6x1gda9gwjtEQ5yQUcr1LDgFyR8u9kwVZUL9qxvP+8h7eTh11/0DuZHm5F93MqOMy
-         f8vKQFcelOFn7R5vHhXAAP6r4P6Pw8MsflqWhJBwx9aQjfHAV8pofVJGbASyqBTWN5DL
-         3Vew==
-X-Gm-Message-State: AOAM532WUYG4kzBQI2JSbJi2HdRGBk31Uvj9cycZ1Nyg6N45sf4z2jdI
-        XwJGEbB2caARM1hOWsvlFGfeKDZ1JNrnXhUkk7s=
-X-Google-Smtp-Source: ABdhPJxrQ4ZFXtrWbvV/UGCkUjXweXwdns9MUwQAhu+ypbjxtHI+VApvXkjUN+XSEPm99DIF6vreW+ycwLrfY7BhTNc=
-X-Received: by 2002:a17:907:d13:b0:6e0:b799:8fcc with SMTP id
- gn19-20020a1709070d1300b006e0b7998fccmr6820829ejc.11.1648983571537; Sun, 03
- Apr 2022 03:59:31 -0700 (PDT)
+        bh=NQyHn+U8eVPdUIPvGzN3lKmJI7IauuBDznn8eNpqpKU=;
+        b=ir31pdFD4Zy5MyzIx9xBOMdFDS9VBl4ZKVpVc8WOwzZI1M321iJGfmRpOoj9/KHi6B
+         V/75hZXJ1cHeX4WmYkYXmcloLPDYFXyu5BNGQT2XVOod52Kout2ZaqX/aK0e6grEAFNA
+         zTBu5DKLioDgdRINDMYHs40M9vnk2rqFACvKAEPGifjTLpNb87iX6ZAhxtNkQP7Qt4Q6
+         1kG9JB2v/JImtYIGI99hC7MReP1lCQXiVX5X+1yXvmS2H3wgNqk/F5HLyTPi2rprFUEN
+         /MIo9Rv5NqLVLWNg9aqYSX/d1WlHa96JmBURto71U9VnK/tp8faY+/G0qHMjAyzLbvns
+         sRJQ==
+X-Gm-Message-State: AOAM530UvSEY3EQ6Q9w1y6icQDRveMxPlxy9S0lQxM2O6mM3cmpA8Xtu
+        tAw++2/J4nst2WER0DpuRUrdIowXSzwiyTzhwmU=
+X-Google-Smtp-Source: ABdhPJyee7Uspz+HoclvXe8kI62vrNVU1vInYowNLQoL1xZMYCxmrtlG9iHpvglxvFXB7O9vIzLApbU6+78IPl+19sA=
+X-Received: by 2002:a50:ce03:0:b0:41c:c36b:c75 with SMTP id
+ y3-20020a50ce03000000b0041cc36b0c75mr1687142edi.195.1648987973246; Sun, 03
+ Apr 2022 05:12:53 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 3 Apr 2022 11:59:35 +0100
-Message-ID: <CAHpNFcOTZQJYoWyVdbMvnYzFL1iFMdjE2GaOgFBnjKukL=iPEQ@mail.gmail.com>
-Subject: GPRS Expansion & Development - Basic comparison of Modes for
- Authenticated-Encryption -IAPM, XCBC, OCB, CCM, EAX, CWC, GCM, PCFB, CS
+Date:   Sun, 3 Apr 2022 13:12:57 +0100
+Message-ID: <CAHpNFcMwsTH6cCHms0MwckbSZqy8RoSu=Bcs_dfx9uE5sdDr4g@mail.gmail.com>
+Subject: Modulus Dual Encrypt & Decrypt package : Processor feature RS AES-CCM
+ & AES-GCM & Other Cypher Modulus
 To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,16 +61,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-GPRS Expansion & Development
+Modulus Dual Encrypt & Decrypt package : Processor feature (c)RS
+
+AES-CCM & AES-GCM & Other Cypher Modulus + CCM & GCM can be
+accelerated with a joint AES Crypto module,
+
+Processor feature & package : Module list:
+
+2 Decryption pipelines working in parallel,
+With a Shared cache & RAM Module
+Modulus & Semi-parallel modulating decryption & Encryption combined
+with Encapsulation Cypher IP Protocol packet
+
+*reference*
+
+Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Modes
+http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
 
 Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
 OCB, CCM, EAX, CWC, GCM, PCFB, CS
-
 https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
 
-VecSR Compression (HDMI  & DP) & X-OR DSC1.2C & Along with our
-brilliant security features in NTP Folder (Security bat & WebHSM) &
-Default JS https://bit.ly/VESA_BT sure to please all on their servers
 
 *****
 
@@ -133,6 +144,30 @@ Invert them over Time Var = T
 We can do all & principally this is relatively simple.
 
 (c)RS
+
+*
+
+Modulus Dual Encrypt & Decrypt package : Processor feature (c)RS
+
+AES-CCM & AES-GCM & Other Cypher Modulus + CCM & GCM can be
+accelerated with a joint AES Crypto module,
+
+Processor feature & package : Module list:
+
+2 Decryption pipelines working in parallel,
+With a Shared cache & RAM Module
+Modulus & Semi-parallel modulating decryption & Encryption combined
+with Encapsulation Cypher IP Protocol packet
+
+*reference*
+
+Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Modes
+http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
+
+Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
+OCB, CCM, EAX, CWC, GCM, PCFB, CS
+https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
+
 
 *
 
@@ -199,10 +234,6 @@ https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
 
 https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.html
 
-Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
-OCB, CCM, EAX, CWC, GCM, PCFB, CS
-
-https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
 
 Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
 
