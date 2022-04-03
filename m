@@ -2,64 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E214F081E
-	for <lists+linux-security-module@lfdr.de>; Sun,  3 Apr 2022 08:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4FA4F082D
+	for <lists+linux-security-module@lfdr.de>; Sun,  3 Apr 2022 08:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239739AbiDCGpe (ORCPT
+        id S1351045AbiDCGtk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 3 Apr 2022 02:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
+        Sun, 3 Apr 2022 02:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349643AbiDCGpc (ORCPT
+        with ESMTP id S236493AbiDCGtj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 3 Apr 2022 02:45:32 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C18711172
-        for <linux-security-module@vger.kernel.org>; Sat,  2 Apr 2022 23:43:35 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bh17so13868520ejb.8
-        for <linux-security-module@vger.kernel.org>; Sat, 02 Apr 2022 23:43:35 -0700 (PDT)
+        Sun, 3 Apr 2022 02:49:39 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE4E377FB
+        for <linux-security-module@vger.kernel.org>; Sat,  2 Apr 2022 23:47:46 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id d10so2702716edj.0
+        for <linux-security-module@vger.kernel.org>; Sat, 02 Apr 2022 23:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
-        b=i9rDzybQOX37P+qV8TaQQg/OWkO8nhv8kgK42pzWL139Z8Xu9iSCKQwDblvXomhQdz
-         erv8P/h9REJoC4eMGW651lYjvDDBy3NA7QOPQL8DfMmtPpvkbCZ6n7//UrRniEAi29yw
-         4tSlQ1bvLmKZJeBSJwKQV45geF/xfvB/Lm3lHTu/WbIlhhLZQ8DqrR+FpcUJpM2zaJZm
-         LRVQ0cFP1rJPYw3si2S3se7+ZTQmjcFLpmEc4dDx+6seXPz/iiZziII8dEb84JGicwcN
-         IuS8ILoduby5VIzBgGJF+E7viQ/8AwAUImqesCBKIfbnxqlXVNc4drxfJZAMlQi7wTS2
-         SACQ==
+        b=hfxGHE/neBDBmVHC4B5zXX8I50+6tdLjnoBOV/+10786Ml6c/ZRBOW9tsUnyK+/vr9
+         DDWmzeKqnab1OxzsPxOlPmdxMZo5tMPeYTScmT+tnrqLE3JRls/SRwhdOvZb4OmYorO0
+         XssO0BYxcHoTOapXYhKKAYCsJefxgNlBPlf0XftY7mTweHpR6fMAAorTeVSNVnd/wUCo
+         fEy9SKgT7W8YKoM+Wno1mSqy4spB5D+5rlAXljuDbj8CUvw2g4n8OcUefVW/z7BkBnE4
+         FtS3o3gpXpMPx43BxV0iKStp4nxZOZVT86+sYmcwmwbBDVw8AoHrL8DoUPIncvtdk1T4
+         9Gvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
-        b=QmSQ1t6JyJNYW/q9sjxUhZDda2PZDb1yY7NoSuCa8pTlsGL87/NFObKjb4LsO0KKu3
-         U4ZmfjJcLUEOpPW/fii9rSOb30FXME9ROqTjWwBb6e6mja36azwekeF2FicZxRteXENU
-         5f+N8eJAuCwtuyM9c5bxhmavgGBfOVwlUXurbowMSM7b1akBATOMyM6sEr9pLMt7jwia
-         r7kR2RgikhOl12TdNclTKfDDER+AhIroIMzOwEVF6NYjnq2V/y4tcyLL85Bs5GmU4NbX
-         CC+jn2PWxFJDPhwosA0xtAZV5H9oLyvs+vqOnHeP697BqiPVwO67mcnc5S5sfjV5+TC6
-         MNYw==
-X-Gm-Message-State: AOAM530HrIf8di4i0okJUCMoLDhgrlTKmdNPMy8cGufa6rLo0sAZHykG
-        b2zu+K267dsNpGqcL2hwN7/1B7cL94Ctf7KVA4U=
-X-Google-Smtp-Source: ABdhPJx/3YPNiIHFwcdTaaNlKfTfaMhjgdlgvxJs/3tX27AB4qh3X5TrQZv3Z73xqSyo00fOZ3JUVsT4gKwvPn2U1js=
-X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
- sd6-20020a1709076e0600b006e4dae79574mr6451508ejc.540.1648968213486; Sat, 02
- Apr 2022 23:43:33 -0700 (PDT)
+        b=7IVSEbI5eSAjll/8zM65dgD5bWcltXL7BP0dV14W2yDEsRiWAzdcJBRJ/iAgScB1WQ
+         IvHNXMUbeKKFaA+dEVNibd2DzgCO6LvTEn60YhgKj81cZyi2yFr00eC0WLB7kfXEVdVK
+         e1BkXDhGhOrnkOsgpTwsP1nnoTQmNWOX/eL4+L6/BJ7XoxLiyKFZjedgGOqEtS7qM8lS
+         KJNQaeo73QMoiMUsk0WmIwPwymeEn3FHFc9csJbrFDJ7mMpfz4ivmWLdtZ0zYhLnjAFk
+         YU8uVYT54q4jFpFA58TfvVmZMoTUyWjiacmtw2rg4NXjhsBWEijNiIgvyfkdQSRagCiO
+         H2+A==
+X-Gm-Message-State: AOAM530QzrG562rD+TlNeB70RF28vK8D8GYcElnTtdk1mAkdc0j/EXpd
+        KNCNp6hmk6m/hmadHoZ2cjdnyiqXeuMB8K21nN8=
+X-Google-Smtp-Source: ABdhPJyAYfHCsDtRtmYUKdplrpUZXodzKP8AbCz7kM3pTL1GBkOSBclwEpybeQJULtcGn2j7g+4sdcG4U3P/qAYlbkg=
+X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
+ f11-20020a0564021e8b00b0041c59f62c26mr10246881edf.156.1648968464448; Sat, 02
+ Apr 2022 23:47:44 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 3 Apr 2022 07:43:37 +0100
-Message-ID: <CAHpNFcNqkhWQ3xpSw1+MowYrVWii8FMjVOzv_DViCPSBMAHz0g@mail.gmail.com>
+Date:   Sun, 3 Apr 2022 07:47:47 +0100
+Message-ID: <CAHpNFcMywwyb4zaqpfytYUoH=coiPWubKz0q=E61Eo_8Jp3D7Q@mail.gmail.com>
 Subject: VecSR Compression (HDMI & DP) & X-OR DSC1.2C & Along with our
  brilliant security features in NTP Folder (Security bat & WebHSM) & Default
- JS VESA_BT sure to please all on their servers
-To:     torvalds@linux-foundation.org
+ JS https://bit.ly/VESA_BT sure to please all on their servers
+To:     do-webmaster@nist.gov
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
