@@ -2,60 +2,60 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFD44F0941
-	for <lists+linux-security-module@lfdr.de>; Sun,  3 Apr 2022 14:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64744F094C
+	for <lists+linux-security-module@lfdr.de>; Sun,  3 Apr 2022 14:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357265AbiDCMOu (ORCPT
+        id S236694AbiDCMQL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 3 Apr 2022 08:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        Sun, 3 Apr 2022 08:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357263AbiDCMOt (ORCPT
+        with ESMTP id S229660AbiDCMQL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 3 Apr 2022 08:14:49 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7F331348
-        for <linux-security-module@vger.kernel.org>; Sun,  3 Apr 2022 05:12:55 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id g20so7952732edw.6
-        for <linux-security-module@vger.kernel.org>; Sun, 03 Apr 2022 05:12:55 -0700 (PDT)
+        Sun, 3 Apr 2022 08:16:11 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7B633A02
+        for <linux-security-module@vger.kernel.org>; Sun,  3 Apr 2022 05:14:16 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id k23so11209565ejd.3
+        for <linux-security-module@vger.kernel.org>; Sun, 03 Apr 2022 05:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
         bh=NQyHn+U8eVPdUIPvGzN3lKmJI7IauuBDznn8eNpqpKU=;
-        b=KGcQD8Mn0/jy05r0IiH697GNb2wCmzwZbm1upjSDYVA4CrGiZICd/wJ16EB3hFD6k+
-         ePwbGKjhG8cTaEhTK0KPo6YdDaJFO2ADS3aAZjoAusxrXZcKmUb+0y3njw9AHnLWj/oB
-         AVu2tjwTyTtn0TZNJ0WsNIa33TNyjwHK66UlU57sqJBAiXaCDCA7FWkvGhZVuGAYuZSy
-         6T97y0Ksn0gr0IBCy/89ZGuntkoyAqFrKrbji61sttvF1xH1sbVVcDw9BOm3B/N6CeVh
-         somEY6uunZWTeubgTPXFpG18Tt1drLl6CDfTuWETGPkylpADgARxwClkTUVateepNHAk
-         QMXw==
+        b=ktvmhe2PGzuthjecgzjApoajtxELJySAhcEAsjKHIYu+CCzprQYXywC3TN2hyld9S5
+         74AmEPSOi0MGxh/PQ7axRsnTY54+GYDUwR3fW9hX9RBF5QMGg+4LN4jiijZhu3GDW7by
+         d5ENDkXVTrbEYBryzmbvswk2hK7ehfbdvOesgCGE2yLksCdWSvX7wEfaLI1fMpPtiJ3v
+         Mii9Ex2ozg9mXoBrIdjWEfmvFpxPrgGUMmUoKBQjjnGf6utD/vAOnXDduw+UsIjZzIG7
+         fKV9M7J5p5loUlhdU0roJddVw2DpyNGBNb49iBqPMMdJ87raQ9gEmL+tY+ZbLAq1KAU3
+         rfcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
         bh=NQyHn+U8eVPdUIPvGzN3lKmJI7IauuBDznn8eNpqpKU=;
-        b=ir31pdFD4Zy5MyzIx9xBOMdFDS9VBl4ZKVpVc8WOwzZI1M321iJGfmRpOoj9/KHi6B
-         V/75hZXJ1cHeX4WmYkYXmcloLPDYFXyu5BNGQT2XVOod52Kout2ZaqX/aK0e6grEAFNA
-         zTBu5DKLioDgdRINDMYHs40M9vnk2rqFACvKAEPGifjTLpNb87iX6ZAhxtNkQP7Qt4Q6
-         1kG9JB2v/JImtYIGI99hC7MReP1lCQXiVX5X+1yXvmS2H3wgNqk/F5HLyTPi2rprFUEN
-         /MIo9Rv5NqLVLWNg9aqYSX/d1WlHa96JmBURto71U9VnK/tp8faY+/G0qHMjAyzLbvns
-         sRJQ==
-X-Gm-Message-State: AOAM530UvSEY3EQ6Q9w1y6icQDRveMxPlxy9S0lQxM2O6mM3cmpA8Xtu
-        tAw++2/J4nst2WER0DpuRUrdIowXSzwiyTzhwmU=
-X-Google-Smtp-Source: ABdhPJyee7Uspz+HoclvXe8kI62vrNVU1vInYowNLQoL1xZMYCxmrtlG9iHpvglxvFXB7O9vIzLApbU6+78IPl+19sA=
-X-Received: by 2002:a50:ce03:0:b0:41c:c36b:c75 with SMTP id
- y3-20020a50ce03000000b0041cc36b0c75mr1687142edi.195.1648987973246; Sun, 03
- Apr 2022 05:12:53 -0700 (PDT)
+        b=08EXTteduGEETWG5fKaAuBKNQSZIPNqPvANmHrdhULk7ZUWrMF45D+v19aPkkowL2I
+         BIsHBtx9mt6ktE7txo7+FUz9txpOoR/Q8JDxriqM7CM2qYX2t3szC14eMTNe+khdDTaj
+         ssrYDNuOXCERhs+Fp6y0WICuFJklDBavcW+5Tc5xIM9i4f9lzAUqj7Od4VPQ3wflWABc
+         OBjy7QgMiqOINqzrGiS/G7wJru4yw+9kGnzIuJUWCvKDNZLsUCulIhHiZCBRZeMTnnCG
+         4EIbRbzPOmMKZLkFZj4/Id9sqqUdxZbaGxa8OcapKeQ+Bx1KWW5cJ2FJCAbPVDimRLtl
+         /WUQ==
+X-Gm-Message-State: AOAM532JGVttDz54sP0WPjiDKGYeN2lQptgo84SB8nMjJFLgNmR93c+P
+        /sTrDCtb67JtOsb6JkUoqVAn2JzTYBFha2/Eu+0=
+X-Google-Smtp-Source: ABdhPJyK1y4mPmJJnPUoxUcF1AmfVhBqXcGvaXQ0E+O5gMG/V/0X3k64RAKMenTx4x36isvmst/yIkgfeTBKP56bdSU=
+X-Received: by 2002:a17:907:1b10:b0:6e4:bac5:f080 with SMTP id
+ mp16-20020a1709071b1000b006e4bac5f080mr6962253ejc.24.1648988054723; Sun, 03
+ Apr 2022 05:14:14 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Sun, 3 Apr 2022 13:12:57 +0100
-Message-ID: <CAHpNFcMwsTH6cCHms0MwckbSZqy8RoSu=Bcs_dfx9uE5sdDr4g@mail.gmail.com>
+Date:   Sun, 3 Apr 2022 13:14:16 +0100
+Message-ID: <CAHpNFcNqH-ovA8hvkKyKHuTDC=m_cA+L=RSOXBqZuXeHuL1XdA@mail.gmail.com>
 Subject: Modulus Dual Encrypt & Decrypt package : Processor feature RS AES-CCM
  & AES-GCM & Other Cypher Modulus
-To:     torvalds@linux-foundation.org
+To:     membership@iacr.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
