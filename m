@@ -2,149 +2,121 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFBC4F1D34
-	for <lists+linux-security-module@lfdr.de>; Mon,  4 Apr 2022 23:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3A04F1D23
+	for <lists+linux-security-module@lfdr.de>; Mon,  4 Apr 2022 23:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382503AbiDDVaZ (ORCPT
+        id S1379669AbiDDVaL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 4 Apr 2022 17:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
+        Mon, 4 Apr 2022 17:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379986AbiDDSeS (ORCPT
+        with ESMTP id S1380034AbiDDSl7 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:34:18 -0400
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363992E0AC
-        for <linux-security-module@vger.kernel.org>; Mon,  4 Apr 2022 11:32:20 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KXKBV48wlzMpvVR;
-        Mon,  4 Apr 2022 20:32:18 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KXKBT6wMFzlhRVT;
-        Mon,  4 Apr 2022 20:32:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1649097138;
-        bh=YAOsStc2y5wOQ15cC5RQNCD4FLyM/10VhMrFzxISgno=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=dexQLDYr9HI4i84PBFN4kfFFHH7V/THIYIw9SnEIu6mK92PIi9YM/lsl1sSUAYaSN
-         +AGPbebQ3W/4GZ1fNlMaDLJyokXVrygARsFiZORaETOEStrGvOZtp5L+wU2GcHH38T
-         vL3xoFDW1zl5GSL4IQaEgqYDq1+2d6NX0LzFygco=
-Message-ID: <c2bc5ccf-8942-ab5e-c071-6f6c6e6b2d9d@digikod.net>
-Date:   Mon, 4 Apr 2022 20:32:42 +0200
+        Mon, 4 Apr 2022 14:41:59 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEF55F99
+        for <linux-security-module@vger.kernel.org>; Mon,  4 Apr 2022 11:40:01 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id t13so9036022pgn.8
+        for <linux-security-module@vger.kernel.org>; Mon, 04 Apr 2022 11:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=dVG8SdKJh3lNF5aMlMn0lGtL8TsUuGiy0ylcJGnwrLQ=;
+        b=mX37UAkizZPJSLK5nuleOQGUHlnzGzVIX7n8Ey1L438YuOI2RXx1GF5cjewpiTeFfb
+         NEZ5/iVMlRh6ZJghqjttF4FVrgeWQQRSBDnKhGJlGSusXLPVP9/IzJTcC6cJyGhipMEZ
+         NN5pT8S0RD/wR/TL2mC3KHhfGSWO55u10Bk6M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=dVG8SdKJh3lNF5aMlMn0lGtL8TsUuGiy0ylcJGnwrLQ=;
+        b=WPTsLXv5HClVPr17u8731kLqL99+Yr4KcX9qjA+MJtDc8IQeV3AGorIgxCoNywnLZ8
+         FwH/SYjCO0xkC0ptbQdv8wLd0O5s+qM6bDtT7/1aZrRVf00vC3VzKiWVnGYUlqHEIfG2
+         eI0xvCemR/GbPYQjPoMarQyiG3nme0oi86C/f5xg90Uqn5BiX3dh/7b0mPAswpB8P2TT
+         Ellrm41fqSP6wPdOAktJp0t3bgzmRkReoUDqO++CLKhyss6/+woUVPsgF1XLZi9MjW3i
+         8sVYJvSNNM5827edVtufKXOE1zrI+Xmp+2GA6VA+XBWRlM8buVAot8W7btR1K7ZVuoEy
+         W5XQ==
+X-Gm-Message-State: AOAM530XH0K/oCvZfMJo5xrcvtIUBgAdsjfQNg4K8+0hj0XVzzzpOuvt
+        6BmKe1EvrrU5mQ2sH6INkVYc7A==
+X-Google-Smtp-Source: ABdhPJx3WYIgYP8Ex9on1q2aw9dCFrPaAv+SqDaCN+xEoGXLlI1AISWPm+KJ14/yd+3EV0nxg5JGCg==
+X-Received: by 2002:a05:6a00:1252:b0:4fa:afcc:7d24 with SMTP id u18-20020a056a00125200b004faafcc7d24mr911536pfi.85.1649097601437;
+        Mon, 04 Apr 2022 11:40:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id ay9-20020a056a00300900b004fae1346aa1sm12196740pfb.122.2022.04.04.11.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 11:40:01 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 11:40:00 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Message-ID: <202204041130.F649632@keescook>
+References: <20220321161557.495388-1-mic@digikod.net>
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-Cc:     willemdebruijn.kernel@gmail.com,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, yusongping@huawei.com,
-        artem.kuzin@huawei.com, anton.sirazetdinov@huawei.com
-References: <20220309134459.6448-1-konstantin.meskhidze@huawei.com>
- <20220309134459.6448-11-konstantin.meskhidze@huawei.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [RFC PATCH v4 10/15] seltest/landlock: add tests for bind() hooks
-In-Reply-To: <20220309134459.6448-11-konstantin.meskhidze@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220321161557.495388-1-mic@digikod.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-
-On 09/03/2022 14:44, Konstantin Meskhidze wrote:
-> Adds two selftests for bind socket action.
-> The one is with no landlock restrictions:
->      - bind_no_restrictions;
-> The second one is with mixed landlock rules:
->      - bind_with_restrictions;
+On Mon, Mar 21, 2022 at 05:15:57PM +0100, Mickaël Salaün wrote:
+> [...]
+> For further details, please see the latest cover letter:
+> https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
 > 
-> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-> ---
+> Commit dae71698b6c5 ("printk: Move back proc_dointvec_minmax_sysadmin()
+> to sysctl.c") was recently added due to the sysctl refactoring.
 > 
-> Changes since v3:
-> * Split commit.
-> * Add helper create_socket.
-> * Add FIXTURE_SETUP.
+> Commit e674341a90b9 ("selftests/interpreter: fix separate directory
+> build") will fix some test build cases as explained here:
+> https://lore.kernel.org/r/20220119101531.2850400-1-usama.anjum@collabora.com
+> Merging this commit without the new KHDR_INCLUDES is not an issue.
+> The upcoming kselftest pull request is ready:
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
 > 
-> ---
->   .../testing/selftests/landlock/network_test.c | 153 ++++++++++++++++++
->   1 file changed, 153 insertions(+)
->   create mode 100644 tools/testing/selftests/landlock/network_test.c
-> 
-> diff --git a/tools/testing/selftests/landlock/network_test.c b/tools/testing/selftests/landlock/network_test.c
-> new file mode 100644
-> index 000000000000..4c60f6d973a8
-> --- /dev/null
-> +++ b/tools/testing/selftests/landlock/network_test.c
+> This patch series has been open for review for more than three years and
+> got a lot of feedbacks (and bikeshedding) which were all considered.
+> Since I heard no objection, please consider to pull this code for
+> v5.18-rc1 .  These five patches have been successfully tested in the
+> latest linux-next releases for several weeks.
 
-[...]
+Hi Linus,
 
-> +
-> +uint port[MAX_SOCKET_NUM];
-> +struct sockaddr_in addr[MAX_SOCKET_NUM];
+It looks like this didn't get pulled for -rc1 even though it was sent
+during the merge window and has been in -next for a while. It would be
+really nice to get this landed since userspace can't make any forward
+progress without the kernel support.
 
-You should not change global variables, it is a source of issue. Instead 
-use FIXTURE local variables accessible through self->X.
+Was there some issue blocking this from being merged? All the feedback I
+can find on prior versions was addressed.
 
-> +
-> +const int one = 1;
+-Kees
 
-This doesn't need to be global.
-
-[...]
-
-> +
-> +static void enforce_ruleset(struct __test_metadata *const _metadata,
-> +		const int ruleset_fd)
-> +{
-> +	ASSERT_EQ(0, prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0));
-> +	ASSERT_EQ(0, landlock_restrict_self(ruleset_fd, 0)) {
-> +		TH_LOG("Failed to enforce ruleset: %s", strerror(errno));
-> +	}
-> +}
-
-You should move the same helper from fs_base.c to common.h (see caps 
-helpers) and reuse it here.
-
-
-> +
-> +FIXTURE(socket) { };
-> +
-> +FIXTURE_SETUP(socket)
-> +{
-> +	int i;
-
-Please add a new line between declaration and actual code (everywhere).
-
-> +	/* Creates socket addresses */
-> +	for (i = 0; i < MAX_SOCKET_NUM; i++) {
-
-Use ARRAY_SIZE() instead of MAY_SOCKET_NUM.
-
-
-> +		port[i] = SOCK_PORT_START + SOCK_PORT_ADD*i;
-
-Use self->port[i] and self->addr[i] instead.
-
-> +		addr[i].sin_family = AF_INET;
-> +		addr[i].sin_port = htons(port[i]);
-> +		addr[i].sin_addr.s_addr = inet_addr(IP_ADDRESS);
-> +		memset(&(addr[i].sin_zero), '\0', 8);
-> +	}
-> +}
-
-[...]
-
-> +	/* Allows connect and deny bind operations to the port[1] socket. */
-> +	ASSERT_EQ(0, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_NET_SERVICE,
-> +				&net_service_2, 0));
-> +	/* Empty allowed_access (i.e. deny rules) are ignored in network actions
-
-The kernel coding style says to start a multi-line comments with a "/*" 
-and a new line.
+-- 
+Kees Cook
