@@ -2,129 +2,173 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7B44F1D17
-	for <lists+linux-security-module@lfdr.de>; Mon,  4 Apr 2022 23:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02DE4F1D2C
+	for <lists+linux-security-module@lfdr.de>; Mon,  4 Apr 2022 23:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382473AbiDDVaF (ORCPT
+        id S1379486AbiDDVaS (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 4 Apr 2022 17:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        Mon, 4 Apr 2022 17:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380057AbiDDSts (ORCPT
+        with ESMTP id S1380523AbiDDUVJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:49:48 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1D731232
-        for <linux-security-module@vger.kernel.org>; Mon,  4 Apr 2022 11:47:51 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id q68so2117540ljb.3
-        for <linux-security-module@vger.kernel.org>; Mon, 04 Apr 2022 11:47:50 -0700 (PDT)
+        Mon, 4 Apr 2022 16:21:09 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB53A17E19
+        for <linux-security-module@vger.kernel.org>; Mon,  4 Apr 2022 13:19:11 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g20so12483169edw.6
+        for <linux-security-module@vger.kernel.org>; Mon, 04 Apr 2022 13:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=gE1myDBwoMMXv/sqmeeTtdtKANbFnGzqW1O8e9pC9SM=;
-        b=Yw1ZNqApekZ8AeL0PldgD9VjhOHOy85q4fAqhpYMwGIKsvyjwUgV3+tfYqgx/Hct6n
-         jD5U2/G9z45ZzVG+RK48MiJA/vGEl6/n1PrVgO3E4okVxoNB71vm3JXzkpG1pNnI8dPy
-         LprtMmSxkZJ8rgeVf8rwgvz2/P8kEtbmNFRow=
+        bh=+IOD94qLZON7z5cpIIeb+KlBMTXlMtRyTG6pq9z/7sE=;
+        b=1XznDSFaeBL43LgBjOmEUUMnMaSzLra1EE4nshzUAR1prsSMutPqf14uLfx3FS29gE
+         /zkI90HkCOuxsuRP2wKobkOzkJoRkH4aGE/Ck197Xe6RG0BH3GbKpttQc1ooL8Q9e3yg
+         +gLc3YjjJaB4aSDB5M+CDRi94nmWY2YeNvMhm2V4ldT2wRMrwG69n0hS4g+7W7GUAJQZ
+         2Ok60fbFu7wN2BdPXmcfCY2S+BwuORU9QSDwOHElcoDt1LiLztnLrMft5lJCLqwObQx+
+         7IPdIEx2J94GEZ64jxysK9JK7eKTu9bq9aEBOteC/fYv0ksWMBgJ+dj9RQveG/satKBv
+         RT5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gE1myDBwoMMXv/sqmeeTtdtKANbFnGzqW1O8e9pC9SM=;
-        b=C+I5fNpkN0M+RkvWNGYcF/FkQggtqYEI0MMDTfqAlm7mGUk5xU7HEa1Wkqe/jS4qkF
-         7tCKYw7XvBTkUVKNop0UAdHwgIRXtuqKe3uihiI/jerrNIaE39TFtMWmmOWcFng/yomw
-         TZVxE/pSJAX2XaXZhxQUHmxgO9tDTAianpJHnX8IidKJq7rBX/EKowHygtAPNxz/KG8N
-         qauloTCLbSWVTxp9RqWhDkXiP1KEdM9ae3oYCCvoPURPM0kHTn6Hx1dm9nwngf/4vmSK
-         QFoxQI5Tk1TUTS/c29+LOEIaQGdHuUsxiTXxfRrYPGIXnc2r25tTtVB8WqzEEdrk4JY8
-         K5uw==
-X-Gm-Message-State: AOAM533D3x76YlGiCiE4RxDrk5yEUxhx+oJciqgvMmNyB2FUm1gemA07
-        dXhHg64nnLq7tnwaPF6xZnDblQ0SW6uXeSgZ
-X-Google-Smtp-Source: ABdhPJw5KkIyF3R4J+NahNdbBLIEsrOrCMmHvaAyzsKgYUf2mzJTAK+E5q1alEBCNuB4ZZV83nyuiw==
-X-Received: by 2002:a2e:a903:0:b0:24a:f39a:88e9 with SMTP id j3-20020a2ea903000000b0024af39a88e9mr617464ljq.394.1649098068883;
-        Mon, 04 Apr 2022 11:47:48 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id t25-20020a2e9c59000000b0024af7b8fac2sm1118362ljj.6.2022.04.04.11.47.45
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 11:47:46 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id h11so14162799ljb.2
-        for <linux-security-module@vger.kernel.org>; Mon, 04 Apr 2022 11:47:45 -0700 (PDT)
-X-Received: by 2002:a2e:a790:0:b0:249:906a:c6f1 with SMTP id
- c16-20020a2ea790000000b00249906ac6f1mr638041ljf.164.1649098065631; Mon, 04
- Apr 2022 11:47:45 -0700 (PDT)
+        bh=+IOD94qLZON7z5cpIIeb+KlBMTXlMtRyTG6pq9z/7sE=;
+        b=UKHDtARWo9siM5gVA69VTNV65u6lHtxioKbNjXn36OpGChTKIAFwWBDAvwzHTNJUKK
+         fJcTadt04nIg5p6vGjn/Tu+td5Mr6zcdufSrVQhyPDvIs+ncfnNzza/OUp74Zgi5PFDM
+         uBU4Id4rHay61zLF0nYogrbzra4MbPdmCeNvOaUt2Dstz+3rPtlHripd+p8n5vAy/fID
+         UVzoQ/PcnrVrS2SQ4qlT2DTlQMZU0nVWbRwInNeiH2T797uOzEtQrQr0SDfmKrtGbLKs
+         rDRMeXe0REUvoExEt0bBVwMNzeX9TC2HA58vf9+QsuaIIZU5tLlH+7hHCSv0QQu6Mf9P
+         wnew==
+X-Gm-Message-State: AOAM532MA8NsL9rfUuKB7vLb9MzGn5w+DWJR/wAWp9nlijedEnwAGNme
+        4M3OecBkJRFJdVU+w6cAmFSewU08eIL8edTl4lN7
+X-Google-Smtp-Source: ABdhPJz7lr2QA4pAedBicmWoNNd3dV+nYeSKLZcGV0j1cS/xio7wu3dCf3exaEW4/+2Wf2hvpNbYqREZigKGexmGcxo=
+X-Received: by 2002:a05:6402:350d:b0:419:547f:134a with SMTP id
+ b13-20020a056402350d00b00419547f134amr1969103edd.405.1649103550207; Mon, 04
+ Apr 2022 13:19:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321161557.495388-1-mic@digikod.net> <202204041130.F649632@keescook>
-In-Reply-To: <202204041130.F649632@keescook>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 4 Apr 2022 11:47:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
-Message-ID: <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Heimes <christian@python.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?Q?Philippe_Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steve Dower <steve.dower@python.org>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
+References: <20220217143457.75229-1-cgzones@googlemail.com> <20220308170928.58040-1-cgzones@googlemail.com>
+In-Reply-To: <20220308170928.58040-1-cgzones@googlemail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 4 Apr 2022 16:18:59 -0400
+Message-ID: <CAHC9VhSiqvCbKQHYTGAj3vqECNto6eNm0MyzLd92kcJnvZSw1A@mail.gmail.com>
+Subject: Re: [PATCH v2] selinux: log anon inode class name
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Apr 4, 2022 at 11:40 AM Kees Cook <keescook@chromium.org> wrote:
+On Tue, Mar 8, 2022 at 12:09 PM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
 >
-> It looks like this didn't get pulled for -rc1 even though it was sent
-> during the merge window and has been in -next for a while. It would be
-> really nice to get this landed since userspace can't make any forward
-> progress without the kernel support.
+> Log the anonymous inode class name in the security hook
+> inode_init_security_anon.  This name is the key for name based type
+> transitions on the anon_inode security class on creation.  Example:
+>
+>     type=3DAVC msg=3Daudit(02/16/22 22:02:50.585:216) : avc:  granted \
+>         { create } for  pid=3D2136 comm=3Dmariadbd anonclass=3D"[io_uring=
+]" \
+>         scontext=3Dsystem_u:system_r:mysqld_t:s0 \
+>         tcontext=3Dsystem_u:system_r:mysqld_iouring_t:s0 tclass=3Danon_in=
+ode
+>
+> Add a new LSM audit data type holding the inode and the class name.
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+>
+> ---
+> v2:
+>   - drop dev=3D and name=3D output for anonymous inodes, and hence simpli=
+fy
+>     the common_audit_data union member.
+>   - drop WARN_ON() on empty name passed to inode_init_security_anon hook
+> ---
+>  include/linux/lsm_audit.h | 2 ++
+>  security/lsm_audit.c      | 4 ++++
+>  security/selinux/hooks.c  | 4 ++--
+>  3 files changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+> index 17d02eda9538..97a8b21eb033 100644
+> --- a/include/linux/lsm_audit.h
+> +++ b/include/linux/lsm_audit.h
+> @@ -76,6 +76,7 @@ struct common_audit_data {
+>  #define LSM_AUDIT_DATA_IBENDPORT 14
+>  #define LSM_AUDIT_DATA_LOCKDOWN 15
+>  #define LSM_AUDIT_DATA_NOTIFICATION 16
+> +#define LSM_AUDIT_DATA_ANONINODE       17
+>         union   {
+>                 struct path path;
+>                 struct dentry *dentry;
+> @@ -96,6 +97,7 @@ struct common_audit_data {
+>                 struct lsm_ibpkey_audit *ibpkey;
+>                 struct lsm_ibendport_audit *ibendport;
+>                 int reason;
+> +               const char *anonclass;
+>         } u;
+>         /* this union contains LSM specific data */
+>         union {
+> diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+> index 1897cbf6fc69..981f6a4e4590 100644
+> --- a/security/lsm_audit.c
+> +++ b/security/lsm_audit.c
+> @@ -433,6 +433,10 @@ static void dump_common_audit_data(struct audit_buff=
+er *ab,
+>                 audit_log_format(ab, " lockdown_reason=3D\"%s\"",
+>                                  lockdown_reasons[a->u.reason]);
+>                 break;
+> +       case LSM_AUDIT_DATA_ANONINODE:
+> +               audit_log_format(ab, " anonclass=3D");
+> +               audit_log_untrustedstring(ab, a->u.anonclass);
 
-Honestly, I need a *lot* better reasoning for random new non-standard
-system calls than this had.
+My apologies, I didn't notice this in the previous patch ... I don't
+think we need to log this as an untrusted string as the string value
+is coming from the kernel, not userspace, so we could rewrite the
+above as the following:
 
-And this kind of "completely random interface with no semantics except
-for random 'future flags'" I will not pull even *with* good reasoning.
+  audit_log_format(ab, " anonclass=3D%s", a->u.anonclass);
 
-I already told Micka=C3=ABl in private that I wouldn't pull this.
+... if you are okay with that, I can make the change when I merge the
+patch or you can submit another revision, let me know which you would
+prefer.
 
-Honestly, we have a *horrible* history with non-standard system calls,
-and that's been true even for well-designed stuff that actually
-matters, that people asked for.
+The rest of the patch looks good, thanks!
 
-Something  like this, which adds one very special system call and
-where the whole thing is designed for "let's add something random
-later because we don't even know what we want" is right out.
+> +               break;
+>         } /* switch (a->type) */
+>  }
+>
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index b12e14b2797b..49c0abfd2f6a 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2965,8 +2965,8 @@ static int selinux_inode_init_security_anon(struct =
+inode *inode,
+>          * allowed to actually create this type of anonymous inode.
+>          */
+>
+> -       ad.type =3D LSM_AUDIT_DATA_INODE;
+> -       ad.u.inode =3D inode;
+> +       ad.type =3D LSM_AUDIT_DATA_ANONINODE;
+> +       ad.u.anonclass =3D name ? (const char *)name->name : "?";
+>
+>         return avc_has_perm(&selinux_state,
+>                             tsec->sid,
+> --
+> 2.35.1
 
-What the system call seems to actually *want* is basically a new flag
-to access() (and faccessat()). One that is very close to what X_OK
-already is.
-
-But that wasn't how it was sold.
-
-So no. No way will this ever get merged, and whoever came up with that
-disgusting "trusted_for()" (for WHAT? WHO TRUSTS? WHY?) should look
-themselves in the mirror.
-
-If you add a new X_OK variant to access(), maybe that could fly.
-
-                Linus
+--=20
+paul-moore.com
