@@ -2,68 +2,102 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4814C4F2695
-	for <lists+linux-security-module@lfdr.de>; Tue,  5 Apr 2022 10:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C014F2DFB
+	for <lists+linux-security-module@lfdr.de>; Tue,  5 Apr 2022 13:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiDEIFZ (ORCPT
+        id S241894AbiDEKgB (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 5 Apr 2022 04:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        Tue, 5 Apr 2022 06:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234107AbiDEH6A (ORCPT
+        with ESMTP id S242682AbiDEJhz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:58:00 -0400
-X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 00:51:57 PDT
-Received: from mail.bizcall.pl (mail.bizcall.pl [192.71.213.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC5998F51
-        for <linux-security-module@vger.kernel.org>; Tue,  5 Apr 2022 00:51:56 -0700 (PDT)
-Received: by mail.bizcall.pl (Postfix, from userid 1001)
-        id 6555B415DF; Tue,  5 Apr 2022 09:43:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizcall.pl; s=mail;
-        t=1649144630; bh=L7rZPDqncV/PGNK3vBL4eFyhOA8rMHMu3jCfxnl4mEc=;
-        h=Date:From:To:Subject:From;
-        b=XB/Z8KVq3bH93OeXd0IlAX8fpC4a2AKeexh8k1eJ7cXtcZlWpinhc7eMO3+0v48az
-         54OLUdiFgkN4/RZ76likNy4J4cDviydQRRNycsGkpjzAm43S7DFzQFnGdkT+5qdZtc
-         HwQFSNVoWZP6Lva57PU9Yda95MtdtYgWE7bYHT9ZQalFbLlTiaOIlq8VTXi896u3h9
-         kCMrb8j8qy/RVjsGfjFFfH2R8qVpxBxn3iL92p79yxoqQAsCl4M2vQokk3M/uT92NT
-         eMdEY/MJ1VTmkeUyNVHijTPHKhHpKtZSUqYyhTp6UI8KTYzK1Fu/DDVgjGrsChpXqY
-         p20LPliPGiNSQ==
-Received: by mail.bizcall.pl for <linux-security-module@vger.kernel.org>; Tue,  5 Apr 2022 07:43:50 GMT
-Message-ID: <20220405084501-0.1.1v.5hrm.0.nofda71dlb@bizcall.pl>
-Date:   Tue,  5 Apr 2022 07:43:50 GMT
-From:   "Marek Onufrowicz" <marek.onufrowicz@bizcall.pl>
-To:     <linux-security-module@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.bizcall.pl
+        Tue, 5 Apr 2022 05:37:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1B3A1445;
+        Tue,  5 Apr 2022 02:24:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BE45B81C69;
+        Tue,  5 Apr 2022 09:24:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE4DC385A2;
+        Tue,  5 Apr 2022 09:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649150665;
+        bh=S9aXtfEKDGdBQZkVkd+a1yTaeGJtvtEgjUrZ0wayzj4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tyujKVS8wKWcbVSzxWWYCeqlh6QKdMbI4yElPpuvcBq/pPWnSLtA8MdzlknEUyeI6
+         NjKgO5697yIz7GyxDpWwBk27jQsWDCjdBrlJ+9R6GBfzz4/LpHsRoLSFC+ECnQCtY4
+         gZsxQFMA26pYKJiuZ3VYOMedt5ThgEd5lHIEC/h8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH 5.15 137/913] landlock: Use square brackets around "landlock-ruleset"
+Date:   Tue,  5 Apr 2022 09:19:59 +0200
+Message-Id: <20220405070343.938274918@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dzie=C5=84 dobry!
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+commit aea0b9f2486da8497f35c7114b764bf55e17c7ea upstream.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+Make the name of the anon inode fd "[landlock-ruleset]" instead of
+"landlock-ruleset". This is minor but most anon inode fds already
+carry square brackets around their name:
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+    [eventfd]
+    [eventpoll]
+    [fanotify]
+    [fscontext]
+    [io_uring]
+    [pidfd]
+    [signalfd]
+    [timerfd]
+    [userfaultfd]
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+For the sake of consistency lets do the same for the landlock-ruleset anon
+inode fd that comes with landlock. We did the same in
+1cdc415f1083 ("uapi, fsopen: use square brackets around "fscontext" [ver #2]")
+for the new mount api.
+
+Cc: linux-security-module@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Link: https://lore.kernel.org/r/20211011133704.1704369-1-brauner@kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ security/landlock/syscalls.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/security/landlock/syscalls.c
++++ b/security/landlock/syscalls.c
+@@ -192,7 +192,7 @@ SYSCALL_DEFINE3(landlock_create_ruleset,
+ 		return PTR_ERR(ruleset);
+ 
+ 	/* Creates anonymous FD referring to the ruleset. */
+-	ruleset_fd = anon_inode_getfd("landlock-ruleset", &ruleset_fops,
++	ruleset_fd = anon_inode_getfd("[landlock-ruleset]", &ruleset_fops,
+ 			ruleset, O_RDWR | O_CLOEXEC);
+ 	if (ruleset_fd < 0)
+ 		landlock_put_ruleset(ruleset);
 
 
-Pozdrawiam,
-Marek Onufrowicz
