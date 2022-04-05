@@ -2,55 +2,53 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E23E4F2121
-	for <lists+linux-security-module@lfdr.de>; Tue,  5 Apr 2022 06:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCA44F22B4
+	for <lists+linux-security-module@lfdr.de>; Tue,  5 Apr 2022 07:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiDEEIs (ORCPT
+        id S229944AbiDEFud (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 5 Apr 2022 00:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        Tue, 5 Apr 2022 01:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiDEEIr (ORCPT
+        with ESMTP id S229959AbiDEFuc (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 5 Apr 2022 00:08:47 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC01B14
-        for <linux-security-module@vger.kernel.org>; Mon,  4 Apr 2022 21:06:44 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x20so5545658edi.12
-        for <linux-security-module@vger.kernel.org>; Mon, 04 Apr 2022 21:06:44 -0700 (PDT)
+        Tue, 5 Apr 2022 01:50:32 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C455A17D
+        for <linux-security-module@vger.kernel.org>; Mon,  4 Apr 2022 22:48:27 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bq8so24315041ejb.10
+        for <linux-security-module@vger.kernel.org>; Mon, 04 Apr 2022 22:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
-        bh=k33GZGWU+w9uUOgE7RI/0gXQX1NT8yDgH8ann6GGs8w=;
-        b=bxGBiyEIZStrtD3+4iQ1HCM1sWxhlXV10+iqEn/qlNsNX+5jYs2oeIrAi38GhH3C/S
-         c4jmU83itAIPmrqzQsT48+z9H0vZrIhLoIvwKeWHiAcWWZh6Rg0n8hISzOGzlrM8qjss
-         GUH0oG8ecLJJgWZesSFb6l0iqdc7YCTiHwoTZ+UwPKDeDaddbqwYkO+PhnucQWqqOI5z
-         aXQuqLdPO5kq9uzkL7RUjUz6OOsmFI8eWqAFhel/n5OnlxRJSpL34TAzn+pq0PyA+dVp
-         SntH10wmVLUg7gRuVFaDTOSkTQXEU5W3v4ZPNRSzW+wAc7bhj7EjZGWtG2NJu4+Z+vzc
-         Xt1g==
+        bh=UDHAMxs9mV1EMuLwtCxTt6T4FIB57N3ZOKBk0SEX43I=;
+        b=QaFSLDRdIAu5jQgFLWMNCpzMa5yvS6h8MbRbV6I0PLoNleptEM54m2gTYRdrZBPAct
+         HAEbYcso3gv2WMCfxwtzTA4rktsHyJBulhlxBvBiCLnV5KS6Bg9btgh4L6UFwwPpCdY1
+         niTjGdTQ9D2/sYFebCy34OmN7lfL5Bu2yTbiBv9KtslnWEjP9b3bXILHA5TBJI9qfqWY
+         jf652FCx3cAeRyFl8wIlI8G+3/F3W0AclggEj3xWO/3BKetis2VTcf9XCL9D09TySmS6
+         FEJO5JS8grk9ppcmyTXVxxsHeAnnfoRKlylvzkuIoQKkRLe5FX8r9t3ytVH2nYLTNknl
+         wK6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=k33GZGWU+w9uUOgE7RI/0gXQX1NT8yDgH8ann6GGs8w=;
-        b=7qhf88l636QBv1IPL+5nAWhy+O8xkLvHmmQl7GzTbCBYuJgyobZM8wYKuc/Wa6ZZ45
-         IKeU63++F3n1FWS6ErTS/Q9o/tYNf1X3QF7uqJnWtf+gY75P+7MmUCKcb4WuKlt4beRX
-         1DxxaTJvzef+KgNPtvGggB32vLIQ9TLjTrighp5gI8g9xoGVF+QZVf8nWhu64ORypPZs
-         naoN0JiA6RlELa64s1oq2nVbANPEgyf9vDezmZLGHuSs2omHM/TD5qeD7WJBWVI8YzFV
-         RxEcmCEgtiNO1X1SmCXa/iE3NCd8BNf/a5BJNGapsIbK9xP1VrDlU8QutDtxw+5mYkjA
-         7EJQ==
-X-Gm-Message-State: AOAM530VyXpKmKSl90acBShhsokAxvqAUO2p3LEsjBt2YaBHRgK8C9YL
-        70HnHqj7LOEzuqv4vLPN2kfNMwsueNrHEuGuotc=
-X-Google-Smtp-Source: ABdhPJzIwxH2Bdxpe3kP5X875Mjtstqa6tDNBqcHYydSExz556mCkxa77yqXPypcDIe5L5yfy2+OGnvw8Xqzcr2Wdek=
-X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id
- el4-20020a056402360400b0041cc4e62988mr1477962edb.157.1649131602779; Mon, 04
- Apr 2022 21:06:42 -0700 (PDT)
+        bh=UDHAMxs9mV1EMuLwtCxTt6T4FIB57N3ZOKBk0SEX43I=;
+        b=FtfdZyTyoRRuoSUNbraQpx4cak1BAtN9R8JuRj2vT2AsNzYoPP3Xrlj/6JYGibFnNY
+         09NtISXu5Wk/aeIBdM8YoNeskSaaThSDnTCuhT6EAlsOlqdwgX4nBcfn778ecbvvVID6
+         wj8Smox7GBf6+03jOtnKLyZ5aWmzt+E1TLuukIRByTHzPjgT2cKCh10VqtstTsaKwb4r
+         O6vRPzxVx0i7bjpfKlXd05RG/sN4gIeEq51YPuMDx/X5FBBSoF0kAf/WDrAMLtLZgKzP
+         V3I8iPZyd7A7eaHduDxhggCdhks5zcZHp4tH+dpcdo5xrq36XQd1g2nYKYuJMyCVAAgD
+         MEyA==
+X-Gm-Message-State: AOAM531q4rTsVyZAYtOse8g9n7PGeGe9Oh2cJgAQezFbu0JfNIR9Kp/W
+        TNHJapP0t1mhqEcc3P5EWrIsZPh90aUnhBGb2Uc=
+X-Google-Smtp-Source: ABdhPJyZyVtRY0qmb1cHAXrDsY6J0hmABrGvKcpsHaHvh5isaDs9Pm82ZSa9uDWiwoTP46TQzvh3SdK+tIut+hmGEpE=
+X-Received: by 2002:a17:907:d13:b0:6e0:b799:8fcc with SMTP id
+ gn19-20020a1709070d1300b006e0b7998fccmr1836715ejc.11.1649137705679; Mon, 04
+ Apr 2022 22:48:25 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 5 Apr 2022 05:06:31 +0100
-Message-ID: <CAHpNFcMO+-rxX=T4GPX9C8hb81AfMP8KhEaxiozFx3URRcf89Q@mail.gmail.com>
-Subject: Device Cache Align 'code align also speeds up prefetch' RS 128Bit
- Buffer to Cache Align = Pure, 32Bit,64Bit,128Bit Align Quads & Float Quads -
- HDD,SSD & Subject: Hardware Dual Encrypt & Decrypt : Hardware Accelerators
+Date:   Tue, 5 Apr 2022 06:48:09 +0100
+Message-ID: <CAHpNFcO-iDrRSVvgogwQgkxXOogBuiLKPkQ4XQ4X0x1d9CS-MQ@mail.gmail.com>
+Subject: Secure-Enable PSP + SGX + Initiator Security Virtualise 2022
 To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -61,6 +59,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
+
+Secure-Enable PSP + SGX + Initiator Security Virtualise 2022
+
+Proper initiation requires at least a basic permission statement
+before kernel load:RS
+
+<VMaWare Initiator>
+Firmware, bios load <init>1 }
+Boot Loader <init>2         } Enclave 1
+Kernel Jack on safe boot <init>3 : Enclave 2
+Core Modules <init>4 Enclave 3
+System <init><init><init><init><init>
+
+(c)Rupert S https://bit.ly/VESA_BT
+
+> > + * Some 'Enable PSP + SGX' functions require that no cached linear-to-physical address
+> > + * mappings are present before they can succeed. Collaborate with
+> > + * hardware via ENCLS[ETRACK] to ensure that all cached
+> > + * linear-to-physical address mappings belonging to all threads of
+> > + * the enclave are cleared. See sgx_encl_cpumask() for details.
+
+Cache Buffer can hide locations from direct attack! <VERUALISE LOC>
+But do involve a potential page break if not aligned
+
+> > + * Return valid permission fields from a secinfo structure provided by
+> > + * user space. The secinfo structure is required to only have bits in
+> > + * the permission fields set.
+
+Virtualise buffer can lazy IO & Lazy DMA #Thread mate DT
+
+> > + * Ensure enclave is ready for SGX2 functions. Readiness is checked
+> > + * by ensuring the hardware supports SGX2 and the enclave is initialized
+> > + * and thus able to handle requests to modify pages within it.
+
+Boot time check can validate SGX & PSP & YES Cache a relocatable table,
+Direct Read required INT & IO Activations & is not Cache permitted one
+presumes. DT
+
+> > Changes since V2:
+> > - Include the sgx_ioc_sgx2_ready() utility
+> >   that previously was in "x86/sgx: Support relaxing of enclave page
+> >   permissions" that is removed from the next version.
+> > - Few renames requested >
+
+Broken Alignment DT
+Separated BASE Code DT
+
+Strict Code Align =1
+Buffer RELOC = 1
+Security permission Buffer = 751
+
+Enable PSP + SGX
+
+https://lkml.org/lkml/2022/4/5/29
+https://lkml.org/lkml/2022/4/5/27
+https://lkml.org/lkml/2022/4/5/25
+
+*****
 
 DMAC yep Security Align 128Bits to Cache Array
 Align that 128Bit Buffer to Cache Align = Pure, 32Bit,64Bit,128Bit
