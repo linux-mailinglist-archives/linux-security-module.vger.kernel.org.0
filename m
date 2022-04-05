@@ -2,208 +2,379 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1DC4F5250
+	by mail.lfdr.de (Postfix) with ESMTP id BA5EF4F5251
 	for <lists+linux-security-module@lfdr.de>; Wed,  6 Apr 2022 04:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447333AbiDFCmU (ORCPT
+        id S1447606AbiDFCmY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 5 Apr 2022 22:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        Tue, 5 Apr 2022 22:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457755AbiDEQkG (ORCPT
+        with ESMTP id S1573070AbiDERxM (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:40:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D259D9EA1
-        for <linux-security-module@vger.kernel.org>; Tue,  5 Apr 2022 09:38:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59CC9B81E8D
-        for <linux-security-module@vger.kernel.org>; Tue,  5 Apr 2022 16:38:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 280B5C385A1
-        for <linux-security-module@vger.kernel.org>; Tue,  5 Apr 2022 16:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649176685;
-        bh=Godeb1QF1XaLrnNDs3lSu+RGeizZyertdC0hYAIHClw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fE6K3ZMOrzLhOrGELR5HAtFVyi2NejfAzQAYn94hbuyiYrk1Wj/uHjQ/sUwrFLq7b
-         A90RQAeTHiH/jnF2FsoDzzb6YF6K7Da9PcyEtfDSMTTtqoV+6881nB3QRuxgbRB1C0
-         L1BVh6We0d4/AWznFWw+bE9HrosTDxOoqixJRgriBIQeRWuil9/sq6gfrBnMMr+5wI
-         zMbtCSoVvsck22ldzHRKFa04rO6n/CZ4G3xf1f7z+cHOmA7EOAPN7aPLK7G36cU3Ql
-         jPOSWjIGfcde6VfzUdUUGxaUZdzwVjVyzkIbs+C0Mf1xPcXcBfPZUslz33qheWg8dg
-         7wC9nhqlRbeAg==
-Received: by mail-lf1-f52.google.com with SMTP id z12so24214101lfu.10
-        for <linux-security-module@vger.kernel.org>; Tue, 05 Apr 2022 09:38:05 -0700 (PDT)
-X-Gm-Message-State: AOAM533LVKyPhBPYrM24F4avhoqsAkr7gZlM+fiKRkrtqoFQV0NbH2kQ
-        zJGVaN7SDGqxPfdMf1Cwtp8CLmguDuWAJ9xLIK/bAg==
-X-Google-Smtp-Source: ABdhPJzKjYrImTJI9WyByUp50Mj9PCG8J06DWt1ucdJTqdDxCPRpsxJHnkt2Vhm9WUOmFxdnESIK5CAyDWTZbEBHta8=
-X-Received: by 2002:a17:907:6089:b0:6db:a3d7:3fa9 with SMTP id
- ht9-20020a170907608900b006dba3d73fa9mr4556278ejc.593.1649176672844; Tue, 05
- Apr 2022 09:37:52 -0700 (PDT)
+        Tue, 5 Apr 2022 13:53:12 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37D8DE0A0
+        for <linux-security-module@vger.kernel.org>; Tue,  5 Apr 2022 10:51:11 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a6so17377374ejk.0
+        for <linux-security-module@vger.kernel.org>; Tue, 05 Apr 2022 10:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=71VjE26wPh9ej6RgLNzZLjV1gyE1eSSpA4bJwgE7Yx0=;
+        b=TWaP8JwC5o8iBLTw9CODzM5aRo0JC/FLK+j+aWugaAWMVUqJa3ytY5ypTcq7HlgQNT
+         vMyudlVc3uFiCg5wlfZj4es1DKKUsZnsAyrNmPleekmNiHH9X9kiAmw58x1QBUZWhouA
+         B+CnACM2mjA30xil9LgJNEfH6/6FvEm8WD1XknfPOg8PvZHpLsab+uDwrMIdxv5fAS5j
+         EsvmxXh5sSXIC7rgcUH/OWYBBSTDctz0P10laxSUMfNxjiY8HMxlHuxOPFFipbGLUvMd
+         vUWuD62m0P7jQdxjKrM2L6XSW6AODE7UiBDuqkn95bfFdlKqE7aP/foEJfxLyJ8/fBTw
+         yxUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=71VjE26wPh9ej6RgLNzZLjV1gyE1eSSpA4bJwgE7Yx0=;
+        b=pQHGg/f5jpY0MPpHBm1ogj5md78kDiUVYwXeIdXc/ldmfqBB3Po7IkWE56Lr90tB5p
+         65oYxM/SDZTvzI6YSLwHfuJEDUvnL0+JHEaA9L0nyy3y17Eh5oea6jxIY1bEJFvTyt9G
+         6L0+V7j3fzCbbyqMxA67n2fdIr4evjmDoUmv+zKRn78fY5XsGv7s6J3MJXYJAXkRzC77
+         1nJ1n8rzDOmTWBSrrZOH4onHpx6O9TDFQ+iTseccML2sa2I1/6nFn0/d5A8scwlaI1Ks
+         0BLcRT6FGwD2DoXB2Y2O2nTtmspeSlRuYh/5lxa2TjGZmIkB1S3Py/S5xpqDKcjEWmUp
+         dwig==
+X-Gm-Message-State: AOAM533oGAPXrWLlDomAZez8dJiy3WEqZDglUUWOESWkBNVAjtItIUdR
+        VUh/HKEcrnBv8yNlXXd89wR60OdQEE6nu8o0CHEI6y6ws3H5xUIs4O8=
+X-Google-Smtp-Source: ABdhPJy3WqnbFWhFyzR2jjv9wo3teILmv3rquwAOArhBIyRmnyDnYZLaGkiIJ7sloKGihwZJppz+pMAkxRt4WJz8Q/4=
+X-Received: by 2002:a17:906:d555:b0:6db:148e:5cc with SMTP id
+ cr21-20020a170906d55500b006db148e05ccmr4559155ejc.63.1649181069336; Tue, 05
+ Apr 2022 10:51:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
- <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
- <b9f5995f96da447c851f7c9db8232a9b@huawei.com> <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
- <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
- <c2e57f10b62940eba3cfcae996e20e3c@huawei.com> <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
- <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com> <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
-In-Reply-To: <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 5 Apr 2022 18:37:42 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4KwWykYjb0DJ1SHe9syiefqgfjDB8om7RNx10vZ3UiKg@mail.gmail.com>
-Message-ID: <CACYkzJ4KwWykYjb0DJ1SHe9syiefqgfjDB8om7RNx10vZ3UiKg@mail.gmail.com>
-Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Djalal Harouni <tixxdz@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Tue, 5 Apr 2022 18:50:57 +0100
+Message-ID: <CAHpNFcPDv_NYw-h50YgH5qmQmFmpWVL6DCf4jvjg-KE0iSN2OQ@mail.gmail.com>
+Subject: USB & Dongle & Bluetooth & 2.4g Devices 'Example' Logitech devices'
+ need a /dev/random Seed Saved for their Cryptological security for both the
+ device & the USB Dongle>
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Apr 5, 2022 at 6:22 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 4/5/2022 8:29 AM, Roberto Sassu wrote:
-> >> From: Casey Schaufler [mailto:casey@schaufler-ca.com]
-> >> Sent: Tuesday, April 5, 2022 4:50 PM
-> >> On 4/4/2022 10:20 AM, Roberto Sassu wrote:
-> >>>> From: Djalal Harouni [mailto:tixxdz@gmail.com]
-> >>>> Sent: Monday, April 4, 2022 9:45 AM
-> >>>> On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
-> >>>>> On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
-> >>>>> <alexei.starovoitov@gmail.com> wrote:
-> >>>> ...
-> >>>>>>> Pinning
-> >>>>>>> them to unreachable inodes intuitively looked the
-> >>>>>>> way to go for achieving the stated goal.
-> >>>>>> We can consider inodes in bpffs that are not unlinkable by root
-> >>>>>> in the future, but certainly not for this use case.
-> >>>>> Can this not be already done by adding a BPF_LSM program to the
-> >>>>> inode_unlink LSM hook?
-> >>>>>
-> >>>> Also, beside of the inode_unlink... and out of curiosity: making
-> >> sysfs/bpffs/
-> >>>> readonly after pinning, then using bpf LSM hooks
-> >>>> sb_mount|remount|unmount...
-> >>>> family combining bpf() LSM hook... isn't this enough to:
-> >>>> 1. Restrict who can pin to bpffs without using a full MAC
-> >>>> 2. Restrict who can delete or unmount bpf filesystem
-> >>>>
-> >>>> ?
-> >>> I'm thinking to implement something like this.
-> >>>
-> >>> First, I add a new program flag called
-> >>> BPF_F_STOP_ONCONFIRM, which causes the ref count
-> >>> of the link to increase twice at creation time. In this way,
-> >>> user space cannot make the link disappear, unless a
-> >>> confirmation is explicitly sent via the bpf() system call.
-> >>>
-> >>> Another advantage is that other LSMs can decide
-> >>> whether or not they allow a program with this flag
-> >>> (in the bpf security hook).
-> >>>
-> >>> This would work regardless of the method used to
-> >>> load the eBPF program (user space or kernel space).
-> >>>
-> >>> Second, I extend the bpf() system call with a new
-> >>> subcommand, BPF_LINK_CONFIRM_STOP, which
-> >>> decreasres the ref count for the link of the programs
-> >>> with the BPF_F_STOP_ONCONFIRM flag. I will also
-> >>> introduce a new security hook (something like
-> >>> security_link_confirm_stop), so that an LSM has the
-> >>> opportunity to deny the stop (the bpf security hook
-> >>> would not be sufficient to determine exactly for
-> >>> which link the confirmation is given, an LSM should
-> >>> be able to deny the stop for its own programs).
-> >> Would you please stop referring to a set of eBPF programs
-> >> loaded into the BPF LSM as an LSM? Call it a BPF security
-> >> module (BSM) if you must use an abbreviation. An LSM is a
-> >> provider of security_ hooks. In your case that is BPF. When
-> >> you call the set of eBPF programs an LSM it is like calling
-> >> an SELinux policy an LSM.
-> > An eBPF program could be a provider of security_ hooks
-> > too.
->
-> No, it can't. If I look in /sys/kernel/security/lsm what
-> you see is "bpf". The LSM is BPF. What BPF does in its
-> hooks is up to it and its responsibility.
->
-> >   The bpf LSM is an aggregator, similarly to your
-> > infrastructure to manage built-in LSMs. Maybe, calling
-> > it second-level LSM or secondary LSM would better
-> > represent this new class.
->
-> It isn't an LSM, and adding a qualifier doesn't make it
-> one and only adds to the confusion.
->
-> > The only differences are the registration method, (SEC
-> > directive instead of DEFINE_LSM), and what the hook
-> > implementation can access.
->
-> Those two things pretty well define what an LSM is.
->
-> > The implementation of a security_ hook via eBPF can
-> > follow the same structure of built-in LSMs, i.e. it can be
-> > uniquely responsible for enforcing and be policy-agnostic,
-> > and can retrieve the decisions based on a policy from a
-> > component implemented somewhere else.
->
-> The BPF LSM provides mechanism. The eBPF programs provide policy.
+USB & Dongle & Bluetooth & 2.4g Devices 'Example' Logitech devices'
+need a /dev/random Seed Saved for their Cryptological security for
+both the device & the USB Dongle>
 
-Yeah, let's stick what we call an LSM in the kernel, Here,
-"bpf" is the LSM like selinux,apparmor and this is what you set in
-CONFIG_LSM or pass on cmdline as lsm= and can be seen
-in /sys/kernel/security/lsm
+Instructions  *RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
 
-Calling your BPF programs an LSM will just confuse people.
+https://pollinate.n-helix.com
 
->
-> >
-> > Hopefully, I understood the basic principles correctly.
-> > I let the eBPF maintainers comment on this.
-> >
-> > Thanks
-> >
-> > Roberto
-> >
-> > HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> > Managing Director: Li Peng, Zhong Ronghua
-> >
-> >>> What do you think?
-> >>>
-> >>> Thanks
-> >>>
-> >>> Roberto
-> >>>
-> >>> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> >>> Managing Director: Li Peng, Zhong Ronghua
+*****
+
+NT Interrupt counter Entropy : A counter theory : RS
+
+"more importantly, our
+distribution is not 2-monotone like NT's, because in addition to the
+cycle counter, we also include in those 4 words a register value, a
+return address, and an inverted jiffies. (Whether capturing anything
+beyond the cycle counter in the interrupt handler is even adding much of
+value is a question for a different time.)"
+
+NT Interrupt counter Entropy : A counter theory : RS
+
+To be clear interrupts are old fashioned (NT & Bios) : Points
+
+Network cards have offloading? Yes & why cannot we?
+
+Offloaded does not mean that a time differential matrix HASH AES of 32Bit w=
+ords,
+Cross pollinated though MMX, AVX , SiMD is plausible!
+
+Combined with even network latency timing & interrupt latency...
+
+Various system differentials can alternate line in our table per clock sync=
+!
+
+In this reference Quartz clock instability is not only counter acted by NTP=
+...
+But also utilized as a variable co-modifier.
+
+So why not also advantage ourselves of the clock frequency scaling
+effect to confuse odds again for Entropy (Random, Not Entropy)
+
+SSD does also have a write counter & a cleared state, not so boring as
+one thinks if per 32KB segment is hashed in 4Bit, 8,Bit 32Bit float!
+(remember we have DOT3 DOT 4 & INT8 in ML)
+
+We can utilize write cycle statistics & all hardware; Interrupts by
+themselves are rather Boring!
+
+Computed timings on processes multiplexed over 3 Threads per group in
+competition is also a potential complexifier of Random
+
+Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
+tml
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+****
+
+PreSEED Poly Elliptic SiMD RAND : RS
+
+Preseed ; 3 Seeds with AES or Poly ChaCha or even 1 : 2 would be
+rather fast Init
+
+Blending them would make a rather paranoid Kernel developer feel safe! :D
+
+Like so List:
+
+3 seeds 32Bit or 64Bit :
+Examples :
+
+1 Seed : Pre seeded from CPU IRQ & Net 16Bit values each & merged
+2 & 3 from server https://pollinate.n-helix.com &or System TRNG
+
+4 Seed mix 128Bit Value
+
+Advantages :
+
+AVX & SiMD Mixxer is fast 'Byte Swap & Maths etcetera" & MultiThreaded
+AES Support is common :
+
+*
+HASH : RSA Source Cert C/TRNG : (c)RS
+
+Elliptic RSA : Cert Mixer : RSA 4096/2048/1024Temporal : 384/256/192
+ECC Temporal
+
+Centric Entropy HASH: Butterfly Effects
+
+Blake2
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Elliptic : Time Variance : Tick Count Variance : On & Off Variance : IRQ
+
+*
+Time & Crystal : Quartz as a diffraction point fractal differentiator : RS
+
+RDTSC Variable bit differentiation & deviation of the quartz sub .0001
+Value combined with complexity of unique interplay with Alternative
+clocks such as Network cards, Audio cards & USB Sticks & Bluetooth
+radio clocks & Ultimately the NTP Pools themselves when required.
+
+(TIME Differential Float maths) TSC : RDTSC : RDTSCP : TCE supports
+single and half precision floating-point calculations
+
+Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 fma
+cx16 sse4_1 sse4_2 popcnt aes f16c syscall nx lm avx svm sse4a osvw
+ibs xop skinit wdt lwp fma4 tce tbm topx page1gb rdtscp bmi1
+
+*
+For RDTSCP =3D TValue TV1=3D16.0685 TV2=3D16.1432 TV3=3D15.1871
+When Processor Mzh =3D PV1 PV2 PV3
+RAND Source =3D Es1 Es2 Es3
+
+If Xt =3D 1.9 < then roll right
+
+((TV1 - TV2) * (PV1 - PV2)) / ((TV1 - TV3) * (PV1 - PV3)) =3D FractorXt(Xt)
+
+Es1 * Xt =3D Differential
+
+Es2 Es3
+
+(c) Rupert S
+
+Quartz as a diffraction point fractal differentiator : RS
+
+https://tches.iacr.org/index.php/TCHES/article/download/7274/6452
+https://perso.univ-rennes1.fr/david.lubicz/articles/gda.pdf
+https://patents.google.com/patent/US9335971
+*
+
+"Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
+is, in part, why we take trylocks instead. But apparently this still
+trips up various lock dependency analysers. That seems like a bug in the
+analyser's that should be fixed, rather than having to change things
+here.
+
+But maybe there's another reason to change things up: by deferring the
+crng pre-init loading to the worker, we can use the cryptographic hash
+function rather than xor, which is perhaps a meaningful difference when
+considering this data has only been through the relatively weak
+fast_mix() function.
+
+The biggest downside of this approach is that the pre-init loading is
+now deferred until later, which means things that need random numbers
+after interrupts are enabled, but before work-queues are running -- or
+before this particular worker manages to run -- are going to get into
+trouble. Hopefully in the real world, this window is rather small,
+especially since this code won't run until 64 interrupts have occurred."
+
+https://lore.kernel.org/lkml/Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net/T/
+
+Rupert S
+
+*****
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+SipHash: a fast short-input PRF
+
+Rotation Alignment : "The advantage of choosing such =E2=80=9Caligned=E2=80=
+=9D
+rotation counts is that aligned rotation counts are much faster than
+unaligned rotation counts on many non-64-bit architectures."
+
+http://cr.yp.to/siphash/siphash-20120918.pdf
+
+https://www.aumasson.jp/siphash/siphash.pdf
+
+"Choice of rotation counts. Finding really bad rotation counts for ARX
+algorithms turns out to be difficult. For example, randomly setting
+all rotations in
+BLAKE-512 or Skein to a value in {8, 16, 24, . . . , 56} may allow known at=
+tacks
+to reach slightly more rounds, but no dramatic improvement is expected.
+The advantage of choosing such =E2=80=9Caligned=E2=80=9D rotation counts is=
+ that
+aligned rotation counts are much faster than unaligned rotation counts
+on many non-64-bit
+architectures. Many 8-bit microcontrollers have only 1-bit shifts of bytes,=
+ so
+rotation by (e.g.) 3 bits is particularly expensive; implementing a rotatio=
+n by
+a mere permutation of bytes greatly speeds up ARX algorithms. Even 64-bit
+systems can benefit from alignment, when a sequence of shift-shift-xor can =
+be
+replaced by SSSE3=E2=80=99s pshufb byte-shuffling instruction. For comparis=
+on,
+implementing BLAKE-256=E2=80=99s 16- and 8-bit rotations with pshufb led to=
+ a
+20% speedup
+on Intel=E2=80=99s Nehalem microarchitecture."
+
+https://www.kernel.org/doc/html/latest/security/siphash.html
+
+https://en.wikipedia.org/wiki/SipHash
+
+Code SIP-HASH
+https://github.com/veorq/SipHash
+
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+As we see rotation may benefact from the addition of Quartz crystal
+alignment sync data from 4 cycles & aligning data blocks,
+
+Obviously we can pre share 4 64Bit blocks use use a pre seed AES/ChaCha Qua=
+d!
+Indeed we can have 16 64Bit pre Seeds & chose them by time sync for kernel
+
+Security bug; Solutions & explanation's (contains additional RANDOM
+Security Methods) :RS
+
+https://science.n-helix.com/2020/06/cryptoseed.html
+https://science.n-helix.com/2019/05/zombie-load.html
+https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
+
+Rupert S https://science.n-helix.com
+
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://aka.ms/win10rng
+*
+
+Encryption Methods:
+https://tools.ietf.org/id/?doc=3Dhash
+
+https://tools.ietf.org/id/?doc=3Dencrypt
+
+HASH :
+
+https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs
+
+https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
+
+https://tools.ietf.org/id/?doc=3Dsha
+
+https://tools.ietf.org/id/?doc=3Drsa
+
+Encryption Common Support:
+
+https://tools.ietf.org/id/?doc=3Dchacha
+
+https://tools.ietf.org/id/?doc=3Daes
+
+SM4e does seem a good possibility for C/T/RNG CORE HASH Functions!
+
+ARM Crypto Extensions Code (Maybe AES Extensions would work here)
+https://lkml.org/lkml/2022/3/15/324
+
+ARM Neon / SiMD / AVX Compatible (GPU is possible)
+https://lkml.org/lkml/2022/3/15/323
+
+*
+
+197 FIPS NIST Standards Specification C/T/RNG
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+Only a Neanderthal would approve a non additive source combination
+that is injected into the HASH & Re-HASHED ,
+
+One does not Procreate inadequate RANDOM from a simple bias KERNEL,
+Hardware RNG's added together may add around 450% Complexity!
+
+Hardware RNG devices MUST be able to Re-HASH to their 197 NIST
+Standards Specification, That is FINAL 2022 DT
+
+KEYS: trusted: allow use of kernel RNG for key material
+
+https://lkml.org/lkml/2022/3/16/598
+
+CAAM PRNG Reference : https://lkml.org/lkml/2022/3/16/649
