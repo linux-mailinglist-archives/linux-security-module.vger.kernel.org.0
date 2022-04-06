@@ -2,214 +2,220 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565644F65D4
-	for <lists+linux-security-module@lfdr.de>; Wed,  6 Apr 2022 18:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAF44F660A
+	for <lists+linux-security-module@lfdr.de>; Wed,  6 Apr 2022 18:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237563AbiDFQij (ORCPT
+        id S238094AbiDFQtx (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 6 Apr 2022 12:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        Wed, 6 Apr 2022 12:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238753AbiDFQiU (ORCPT
+        with ESMTP id S238054AbiDFQtj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:38:20 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931482F8FCA
-        for <linux-security-module@vger.kernel.org>; Wed,  6 Apr 2022 06:57:27 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id l26so4498847ejx.1
-        for <linux-security-module@vger.kernel.org>; Wed, 06 Apr 2022 06:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
-        b=TIHndFfPo+aaXhrleHu1XKHsvk8SmC+eKthCJ1x8k1jOU+FlmZp1HraGZe+KRNSejw
-         lAdLIaFuzOEvGXFyAJm6TYPZxSDLp8r3tTzTA7hH4bWGi5bmSlmjb/JhO4m81EX/23zo
-         JMC37cyMVhkPc2YolTh/ZQH4C8yQX30KAKqpvHjDMS121yd+bZ+kGjC4fw/VSDTd/Bel
-         r++sz3h90Y1q3YMtz3u9vkqTtI9AnQYD9Dxw44zbHFq/3sIfbG/fosSlnR1j3w9I45Hd
-         c20ZFtPU/2IMcvlxH0WaArlfD88e06eBvHl6UAsbzD3EpoCHHQmgMnUL6JnMa80b+0IK
-         VdEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
-        b=tSj+87bHQfDDSZ9jMWsF7xwpHffx/K6wdrmgIcuijStv4B70kX4K9uIE3bZHpUBIQy
-         3wpyTFUn9UtWJwNm5qo9mqpyVgA1OFfwVbILHhx1JZxOGX2fwdHi5Ls1JjHxaoRPSrKC
-         XQIWP/Q7lheA3iv/QQGgfMkof2vsmwfwJBuF31t30Prom03QE+0MUGgYlUlT6Oj6K002
-         9kTcuS+jiQ1U1gHxmrhqAhn3KIExYV13nX/K3SHV5hU0DenGxOogjBldIrducSH2aUne
-         JqgoelnAWFZKt5UL9XlvsgXPLWUCI/6TDJBLODe2AJB71Nj0eNWgod7voD/0V8sQVq1Z
-         G39Q==
-X-Gm-Message-State: AOAM5302scP2E+5cEiwA0hGQBCH7kkhUdLq5Q4PytpsNxZ/x/U9AuhqN
-        wHR8xgKPlgq0MP7iVohYFfpbEYhe7quXkEEXk2s=
-X-Google-Smtp-Source: ABdhPJzFnHz+H9bUAOi37zIlujICLHHCorayrVW8scWF90/ZOC3VDJeoKK7oBD1gDjScx2MY4DTEtjSy2PyuLZI+P4Y=
-X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
- sd6-20020a1709076e0600b006e4dae79574mr8718896ejc.540.1649253445762; Wed, 06
- Apr 2022 06:57:25 -0700 (PDT)
+        Wed, 6 Apr 2022 12:49:39 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFEE1E9622;
+        Wed,  6 Apr 2022 07:12:07 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KYRFv5ClGz67Nl1;
+        Wed,  6 Apr 2022 22:09:07 +0800 (CST)
+Received: from [10.122.132.241] (10.122.132.241) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 6 Apr 2022 16:12:04 +0200
+Message-ID: <2958392e-ba3e-453e-415b-c3869523ea25@huawei.com>
+Date:   Wed, 6 Apr 2022 17:12:00 +0300
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Wed, 6 Apr 2022 14:57:14 +0100
-Message-ID: <CAHpNFcObr9v28HTpqKS=eAKC5wV2z7k0NaVXz94ga6JN1kJ_vA@mail.gmail.com>
-Subject: Display Stream Compression Support - 3D Mux , 3D Mu-X by GPU & CPU
- though SiMD & AVX 32Bit IfNotOR to a Singular planar Frame Buffer
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATCH v4 10/15] seltest/landlock: add tests for bind() hooks
+Content-Language: ru
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+CC:     <willemdebruijn.kernel@gmail.com>,
+        <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>, <yusongping@huawei.com>,
+        <artem.kuzin@huawei.com>, <anton.sirazetdinov@huawei.com>
+References: <20220309134459.6448-1-konstantin.meskhidze@huawei.com>
+ <20220309134459.6448-11-konstantin.meskhidze@huawei.com>
+ <d3340ed0-fe61-3f00-d7ba-44ece235a319@digikod.net>
+ <491d6e96-4bfb-ed97-7eb8-fb18aa144d64@huawei.com>
+ <6f631d7c-a2e3-20b3-997e-6b533b748767@digikod.net>
+From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+In-Reply-To: <6f631d7c-a2e3-20b3-997e-6b533b748767@digikod.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.122.132.241]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ fraeml704-chm.china.huawei.com (10.206.15.53)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-https://lkml.org/lkml/2022/4/6/401
-
-*
-[PATCH v7 13/14] drm/msm: Update generated headers Vinod Koul
-  [PATCH v7 07/14] drm/msm/disp/dpu1: Add support for DSC in encoder Vinod =
-Koul
-  [PATCH v7 09/14] drm/msm: Add missing num_dspp field documentation Vinod =
-Koul
-  [PATCH v7 06/14] drm/msm/disp/dpu1: Add DSC support in hw_ctl Vinod Koul
-  [PATCH v7 08/14] drm/msm/dpu: don't use merge_3d if DSC merge topo
-... Vinod Koul
-  [PATCH v7 03/14] drm/msm/disp/dpu1: Add support for DSC Vinod Koul
-  [PATCH v7 01/14] drm/msm/dsi: add support for dsc data Vinod Koul
-[New] [PATCH v7 00/14] drm/msm: Add Display Stream Compression Support
-Vinod Koul
-*
-3D Mux , 3D Mu-X by GPU & CPU though SiMD & AVX 32Bit IfNotOR to a
-Single planar Frame Buffer is logical in the case of Multi Window
-desktops,
-A Blitter Frame Works well for X-OR.
-
-The relevance is that a Single Frame buffer per Eye does 3D Imagery!
-(Google Glass & MS & PS4 VR)
-
-We can and will need more; For this Substance Called Flexibility we
-need 2 Details:
-
-ReDirectable DMA & Multi Frame Blitter...
-
-By this method we can literally write every detail if we wish in
-Shader, But we do not need to worry!
-
-X-OR Blitter Recovers from Overwrite by detecting details that are new.
-
-Simple is best but keep in mind that CPU Frame Buffer (In RAM & Cache)
-& GPU Frame Buffer (in GPU) & Direct Access RAM : ReBAR to
-Transparently access GPU RAM!
-
-Allowing ALL.
-
-****
-
-Vector Compression VESA Standard Display protocol 3 +
-DSC : Zero compression or low level compression version of DSC
-1.2bc
-
-Frame by Frame compression with vector prediction.
-
-X-OR Frame Buffer Compression & Blank Space Compression:
-
-X-OR X=3D1 New Data & X=3D0 being not sent,
-Therefore Masking the frame buffer,
-
-A Frame buffer needs a cleared aria; A curve or ellipsoid for example,
-Draw the ellipsoid; This is the mask & can be in 3 levels:
-
-X-OR : Draw or not Draw Aria : Blitter XOR
-AND : Draw 1 Value & The other : Blitter Additive
-Variable Value Resistor : Draw 1 Value +- The other : Blitter + or - Modifi=
-er
-*
-
-Vector Compression VESA Standard Display protocol 3 : RS
-
-SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
-Improve Console & TV & BIOS & General Animated Render
-
-Vector Display Standards with low relative CPU Weight
-SiMD Polygon Font Method Render
-
-Default option point scaling (the space) : Metadata Vector Fonts with
-Curl mathematical vector :
-
-16 Bit : SiMD 1 width
-32 Bit : SiMD Double Width
-
-High precision for AVX 32Bit to 256Bit width precision.
-
-Vectoring with SiMD allows traditional CPU mastered VESA Emulation
-desktops & safe mode to be super fast & displays to conform to VESA
-render standards with little effort & a 1MB Table ROM.
-
-Though the VESA & HDMI & DisplayPort standards Facilitates direct low
-bandwidth transport of and transformation of 3D & 2D graphics & fonts
-into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
-
-Display Standards Vector Render : DSVR-SiMD Can and will be directly
-rendered to a Surface for visual element : SfVE-Vec
-
-As such transport of Vectors & transformation onto display (Monitor,
-3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
-
-Directly resolve The total graphics pipeline into high quality output
-or input & allow communication of almost infinite Floating point
-values for all rendered 3D & 2D Elements on a given surface (RAM
-Render Page or Surface)
-
-In high precision that is almost unbeatable & yet consumes many levels
-less RAM & Transport Protocol bandwidth,
-
-Further more can also render Vector 3D & 2D Audio & other elements
-though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
-Harmonic reproduction units for example Yamaha and Casio keyboards.
-
-"QFT a Zero compression or low level compression version of DSC
-1.2bc
-
-X-OR Frame Buffer Compression & Blank Space Compression:
-Vector Compression VESA Standard Display protocol 3"
-
-"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
-latency=E2=80=9D, which is the amount of time between a frame being ready f=
-or
-transport in the GPU and that frame being completely displayed. This
-latency is the sum of the transport time through the source=E2=80=99s outpu=
-t
-circuits, the transport time across the interface, the processing of
-the video data in the display, and the painting of the screen with the
-new data. This overall latency affects the responsiveness of games:
-how long it appears between a button is pressed to the time at which
-the resultant action is observed on the screen.
 
 
-While there are a lot of variables in this equation, not many are
-adjustable from an HDMI specification perspective. QFT operates on the
-transport portion of this equation by reducing the time it takes to
-send only the active video across the cable. This results in reduced
-display latency and increased responsiveness."
-*
+4/4/2022 12:44 PM, Mickaël Salaün пишет:
+> 
+> On 04/04/2022 10:28, Konstantin Meskhidze wrote:
+>>
+>>
+>> 4/1/2022 7:52 PM, Mickaël Salaün пишет:
+> 
+> [...]
+> 
+>>>> +static int create_socket(struct __test_metadata *const _metadata)
+>>>> +{
+>>>> +
+>>>> +        int sockfd;
+>>>> +
+>>>> +        sockfd = socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
+>>>> +        ASSERT_LE(0, sockfd);
+>>>> +        /* Allows to reuse of local address */
+>>>> +        ASSERT_EQ(0, setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, 
+>>>> &one, sizeof(one)));
+>>>
+>>> Why is it required?
+>>
+>>    Without SO_REUSEADDR there is an error that a socket's port is in use.
+> 
+> I'm sure there is, but why is this port reused? I think this means that 
+> there is an issue in the tests and that could hide potential issue with 
+> the tests (and then with the kernel code). Could you investigate and 
+> find the problem? This would make these tests reliable.
+   The next scenario is possible here:
+   "In order for a network connection to close, both ends have to send 
+FIN (final) packets, which indicate they will not send any additional 
+data, and both ends must ACK (acknowledge) each other's FIN packets. The 
+FIN packets are initiated by the application performing a close(), a 
+shutdown(), or an exit(). The ACKs are handled by the kernel after the 
+close() has completed. Because of this, it is possible for the process 
+to complete before the kernel has released the associated network 
+resource, and this port cannot be bound to another process until the 
+kernel has decided that it is done."
+https://hea-www.harvard.edu/~fine/Tech/addrinuse.html.
 
-(c)Rupert S
+So in this case we have busy port in network selfttest and one of the 
+solution is to set SO_REUSEADDR socket option, "which explicitly allows 
+a process to bind to a port which remains in TIME_WAIT (it still only 
+allows a single process to be bound to that port). This is the both the 
+simplest and the most effective option for reducing the "address already 
+in use" error".
+> 
+> Without removing the need to find this issue, the next series should use 
+> a network namespace per test, which will confine such issue from other 
+> tests and the host.
 
-Include vector today *important* RS
-https://vesa.org/vesa-display-compression-codecs/
+   So there are 2 options here:
+	1. Using SO_REUSEADDR option
+	2. Using network namespace.
 
-https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+I prefer the first option - "the simplest and the most effective one"
 
-https://science.n-helix.com/2019/06/vulkan-stack.html
-
-https://science.n-helix.com/2019/06/kernel.html
-
-https://science.n-helix.com/2022/03/fsr-focal-length.html
-
-https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
-ml
-
-https://bit.ly/VESA_BT
-
-Rupert S
+> 
+> [...]
+> 
+>>>> +TEST_F_FORK(socket, bind_with_restrictions) {
+>>>> +
+>>>> +    int sockfd_1, sockfd_2, sockfd_3;
+>>>
+>>> Do you really need to have 3 opened socket at the same time?
+>>
+>>    I just wanted to "kill two birds with one stone" in this test.
+>>    It possible to split it in 3 tests and open just one socket in each 
+>> one.
+> 
+> I wanted to point out that these three variables could be replaced with 
+> only one (taking into account that successful opened socket are closed 
+> before the variable is reused).
+> 
+> It may not be obvious if we need to split a test into multiple. The 
+> rules I try to follow are:
+> - use a consistent Landlock rule setup, with potentially nested rules, 
+> to test specific edge cases;
+> - don't tamper the context of a test (e.g. with FS topology/layout 
+> modification or network used port) unless it is clearly documented and 
+> easy to spot, but be careful about the dependent tests;
+> - don't make tests too long unless it makes sense for a specific scenario.
+> 
+   Ok. I got your point here. Thanks.
+> 
+>>>
+>>>> +
+>>>> +    struct landlock_ruleset_attr ruleset_attr = {
+>>>> +        .handled_access_net = LANDLOCK_ACCESS_NET_BIND_TCP |
+>>>> +                      LANDLOCK_ACCESS_NET_CONNECT_TCP,
+>>>> +    };
+>>>> +    struct landlock_net_service_attr net_service_1 = {
+>>>> +        .allowed_access = LANDLOCK_ACCESS_NET_BIND_TCP |
+>>>> +                  LANDLOCK_ACCESS_NET_CONNECT_TCP,
+>>>> +        .port = port[0],
+>>>> +    };
+>>>> +    struct landlock_net_service_attr net_service_2 = {
+>>>> +        .allowed_access = LANDLOCK_ACCESS_NET_CONNECT_TCP,
+>>>> +        .port = port[1],
+>>>> +    };
+>>>> +    struct landlock_net_service_attr net_service_3 = {
+>>>> +        .allowed_access = 0,
+>>>> +        .port = port[2],
+>>>> +    };
+>>>> +
+>>>> +    const int ruleset_fd = landlock_create_ruleset(&ruleset_attr,
+>>>> +            sizeof(ruleset_attr), 0);
+>>>> +    ASSERT_LE(0, ruleset_fd);
+>>>> +
+>>>> +    /* Allows connect and bind operations to the port[0] socket. */
+>>>> +    ASSERT_EQ(0, landlock_add_rule(ruleset_fd, 
+>>>> LANDLOCK_RULE_NET_SERVICE,
+>>>> +                &net_service_1, 0));
+>>>> +    /* Allows connect and deny bind operations to the port[1] 
+>>>> socket. */
+>>>> +    ASSERT_EQ(0, landlock_add_rule(ruleset_fd, 
+>>>> LANDLOCK_RULE_NET_SERVICE,
+>>>> +                &net_service_2, 0));
+>>>> +    /* Empty allowed_access (i.e. deny rules) are ignored in 
+>>>> network actions
+>>>> +     * for port[2] socket.
+>>>> +     */
+>>>> +    ASSERT_EQ(-1, landlock_add_rule(ruleset_fd, 
+>>>> LANDLOCK_RULE_NET_SERVICE,
+>>>> +                &net_service_3, 0));
+>>>> +    ASSERT_EQ(ENOMSG, errno);
+>>>> +
+>>>> +    /* Enforces the ruleset. */
+>>>> +    enforce_ruleset(_metadata, ruleset_fd);
+>>>> +
+>>>> +    sockfd_1 = create_socket(_metadata);
+>>>> +    ASSERT_LE(0, sockfd_1);
+>>>> +    /* Binds a socket to port[0] */
+>>>> +    ASSERT_EQ(0, bind(sockfd_1, (struct sockaddr  *)&addr[0], 
+>>>> sizeof(addr[0])));
+>>>> +
+>>>> +    /* Close bounded socket*/
+>>>> +    ASSERT_EQ(0, close(sockfd_1));
+>>>> +
+>>>> +    sockfd_2 = create_socket(_metadata);
+>>>> +    ASSERT_LE(0, sockfd_2);
+>>>> +    /* Binds a socket to port[1] */
+>>>> +    ASSERT_EQ(-1, bind(sockfd_2, (struct sockaddr *)&addr[1], 
+>>>> sizeof(addr[1])));
+>>>> +    ASSERT_EQ(EACCES, errno);
+>>>> +
+>>>> +    sockfd_3 = create_socket(_metadata);
+>>>> +    ASSERT_LE(0, sockfd_3);
+>>>> +    /* Binds a socket to port[2] */
+>>>> +    ASSERT_EQ(-1, bind(sockfd_3, (struct sockaddr *)&addr[2], 
+>>>> sizeof(addr[2])));
+>>>> +    ASSERT_EQ(EACCES, errno);
+>>>> +}
+>>>> +TEST_HARNESS_MAIN
+>>>> -- 
+>>>> 2.25.1
+>>>>
+>>>
+>>> .
+> .
