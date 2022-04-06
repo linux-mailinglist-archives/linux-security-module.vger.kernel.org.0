@@ -2,142 +2,214 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700ED4F646A
-	for <lists+linux-security-module@lfdr.de>; Wed,  6 Apr 2022 18:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565644F65D4
+	for <lists+linux-security-module@lfdr.de>; Wed,  6 Apr 2022 18:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236731AbiDFQDZ (ORCPT
+        id S237563AbiDFQij (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 6 Apr 2022 12:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        Wed, 6 Apr 2022 12:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237446AbiDFQDL (ORCPT
+        with ESMTP id S238753AbiDFQiU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:03:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46CEA47938B
-        for <linux-security-module@vger.kernel.org>; Wed,  6 Apr 2022 06:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649252051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xqJrO6dmU5SvkPcGw8UCuWuh5/5NxvMZsaumTowIu8c=;
-        b=XayyjZV8LUoA1PLyX9HsXMdMLGZaFEXs0y+MHC/k2malIRQa8pIxqmDgyGvWDCDryJrUpc
-        Enc/tNBWsdHmbB9EHf2l0XJCfsFvXaJl7RKNzwGy3O4DMM+g7mtqAEEbaq2dU9Dukiwd+j
-        /qgYJoKIZpq+sZAiLqas7cSpOBdoH8o=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-147-6ikgMHtFP6SXBQajvdeDbA-1; Wed, 06 Apr 2022 09:34:09 -0400
-X-MC-Unique: 6ikgMHtFP6SXBQajvdeDbA-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-2eb645be8dbso21036777b3.11
-        for <linux-security-module@vger.kernel.org>; Wed, 06 Apr 2022 06:34:09 -0700 (PDT)
+        Wed, 6 Apr 2022 12:38:20 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931482F8FCA
+        for <linux-security-module@vger.kernel.org>; Wed,  6 Apr 2022 06:57:27 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id l26so4498847ejx.1
+        for <linux-security-module@vger.kernel.org>; Wed, 06 Apr 2022 06:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
+        b=TIHndFfPo+aaXhrleHu1XKHsvk8SmC+eKthCJ1x8k1jOU+FlmZp1HraGZe+KRNSejw
+         lAdLIaFuzOEvGXFyAJm6TYPZxSDLp8r3tTzTA7hH4bWGi5bmSlmjb/JhO4m81EX/23zo
+         JMC37cyMVhkPc2YolTh/ZQH4C8yQX30KAKqpvHjDMS121yd+bZ+kGjC4fw/VSDTd/Bel
+         r++sz3h90Y1q3YMtz3u9vkqTtI9AnQYD9Dxw44zbHFq/3sIfbG/fosSlnR1j3w9I45Hd
+         c20ZFtPU/2IMcvlxH0WaArlfD88e06eBvHl6UAsbzD3EpoCHHQmgMnUL6JnMa80b+0IK
+         VdEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xqJrO6dmU5SvkPcGw8UCuWuh5/5NxvMZsaumTowIu8c=;
-        b=P13ms0+1mfoB+jgazTAH3Geh83IBIEDt7RjLIBgw5bvt7CBjkQXm+1folh1TcA7S9c
-         1sTq+XfI6lsUQenvrLrEBkRblD8N04+cg2ISxcyIWNoskcrO7YmNbheSXBF1ZO9PNlA3
-         /DbmTK14paPsRAutyVxf+hWfV9TbhpYeL1l/7Y0I62DR0ImjtiqsUf5iVdFi6iyTGQoP
-         0egIWVcxRSXdzu4CYLjGssgc0mwnt9MiY4lI4KiEtZ8/OaQIyt1uqC3d92E0CxUD+Y3v
-         4anmHGLSD8S2Y61rgoMYpAt6cU0UOgTpc+OdOROGIlLX13Ek/2o9wMSIupTmRLxZAsyq
-         JQTA==
-X-Gm-Message-State: AOAM533SZv7OCUsFoHmWozNlqaACzhqu4YRZYpNd4wF+gY9S9ebFNfM+
-        g8bpYEtpao59+MWCMZPvbWOun6BtUYdCpl5Hfo/uJRFD6frbFAd/sRhdYnixk/0aZ/rChemrqAR
-        /RPtGcoVbJytNMMmRBxJieIH6jgZrQIUCELNyodcQzQAfBK/tTnOF
-X-Received: by 2002:a0d:e64d:0:b0:2e6:43f8:234f with SMTP id p74-20020a0de64d000000b002e643f8234fmr7012367ywe.12.1649252049387;
-        Wed, 06 Apr 2022 06:34:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzVRyzw7tB7nHauTQeSQg7Hj0WMwzeDSc4tOVfXZNCRQWMlZ043KzTYBmx0XGbMf0eIBPqtGUja+rJ6sTcquoA=
-X-Received: by 2002:a0d:e64d:0:b0:2e6:43f8:234f with SMTP id
- p74-20020a0de64d000000b002e643f8234fmr7012342ywe.12.1649252049081; Wed, 06
- Apr 2022 06:34:09 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=12C6tMvUOqmE7iPeN67Buox9hidIxbeU6o+nTMIlrmg=;
+        b=tSj+87bHQfDDSZ9jMWsF7xwpHffx/K6wdrmgIcuijStv4B70kX4K9uIE3bZHpUBIQy
+         3wpyTFUn9UtWJwNm5qo9mqpyVgA1OFfwVbILHhx1JZxOGX2fwdHi5Ls1JjHxaoRPSrKC
+         XQIWP/Q7lheA3iv/QQGgfMkof2vsmwfwJBuF31t30Prom03QE+0MUGgYlUlT6Oj6K002
+         9kTcuS+jiQ1U1gHxmrhqAhn3KIExYV13nX/K3SHV5hU0DenGxOogjBldIrducSH2aUne
+         JqgoelnAWFZKt5UL9XlvsgXPLWUCI/6TDJBLODe2AJB71Nj0eNWgod7voD/0V8sQVq1Z
+         G39Q==
+X-Gm-Message-State: AOAM5302scP2E+5cEiwA0hGQBCH7kkhUdLq5Q4PytpsNxZ/x/U9AuhqN
+        wHR8xgKPlgq0MP7iVohYFfpbEYhe7quXkEEXk2s=
+X-Google-Smtp-Source: ABdhPJzFnHz+H9bUAOi37zIlujICLHHCorayrVW8scWF90/ZOC3VDJeoKK7oBD1gDjScx2MY4DTEtjSy2PyuLZI+P4Y=
+X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
+ sd6-20020a1709076e0600b006e4dae79574mr8718896ejc.540.1649253445762; Wed, 06
+ Apr 2022 06:57:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com>
- <CAFqZXNt=Ca+x7PaYgc1jXq-3cKxin-_=UNCSiyVHjbP7OYUKvA@mail.gmail.com> <CADvbK_fTnWhnuxR7JkNYeoSB4a1nSX7O0jg4Mif6V_or-tOy3w@mail.gmail.com>
-In-Reply-To: <CADvbK_fTnWhnuxR7JkNYeoSB4a1nSX7O0jg4Mif6V_or-tOy3w@mail.gmail.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Wed, 6 Apr 2022 15:33:57 +0200
-Message-ID: <CAFqZXNss=7DMb=75ZBDwL9HrrubkxJK=xu7-kqxX-Mw1FtRuuA@mail.gmail.com>
-Subject: Re: [PATCH net] sctp: use the correct skb for security_sctp_assoc_request
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     network dev <netdev@vger.kernel.org>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=omosnace@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 6 Apr 2022 14:57:14 +0100
+Message-ID: <CAHpNFcObr9v28HTpqKS=eAKC5wV2z7k0NaVXz94ga6JN1kJ_vA@mail.gmail.com>
+Subject: Display Stream Compression Support - 3D Mux , 3D Mu-X by GPU & CPU
+ though SiMD & AVX 32Bit IfNotOR to a Singular planar Frame Buffer
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Apr 5, 2022 at 1:58 PM Xin Long <lucien.xin@gmail.com> wrote:
-> On Mon, Apr 4, 2022 at 6:15 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> >
-> > Adding LSM and SELinux lists to CC for awareness; the original patch
-> > is available at:
-> > https://lore.kernel.org/netdev/a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com/T/
-> > https://patchwork.kernel.org/project/netdevbpf/patch/a77a584b3ce9761eb5dda5828192e1cab94571f0.1649037151.git.lucien.xin@gmail.com/
-> >
-> > On Mon, Apr 4, 2022 at 3:53 AM Xin Long <lucien.xin@gmail.com> wrote:
-> > >
-> > > Yi Chen reported an unexpected sctp connection abort, and it occurred when
-> > > COOKIE_ECHO is bundled with DATA Fragment by SCTP HW GSO. As the IP header
-> > > is included in chunk->head_skb instead of chunk->skb, it failed to check
-> > > IP header version in security_sctp_assoc_request().
-> > >
-> > > According to Ondrej, SELinux only looks at IP header (address and IPsec
-> > > options) and XFRM state data, and these are all included in head_skb for
-> > > SCTP HW GSO packets. So fix it by using head_skb when calling
-> > > security_sctp_assoc_request() in processing COOKIE_ECHO.
-> >
-> > The logic looks good to me, but I still have one unanswered concern.
-> > The head_skb member of struct sctp_chunk is defined inside a union:
-> >
-> > struct sctp_chunk {
-> >         [...]
-> >         union {
-> >                 /* In case of GSO packets, this will store the head one */
-> >                 struct sk_buff *head_skb;
-> >                 /* In case of auth enabled, this will point to the shkey */
-> >                 struct sctp_shared_key *shkey;
-> >         };
-> >         [...]
-> > };
-> >
-> > What guarantees that this chunk doesn't have "auth enabled" and the
-> > head_skb pointer isn't actually a non-NULL shkey pointer? Maybe it's
-> > obvious to a Linux SCTP expert, but at least for me as an outsider it
-> > isn't - that's usually a good hint that there should be a code comment
-> > explaining it.
-> Hi Ondrej,
->
-> shkey is for tx skbs only, while head_skb is for skbs on rx path.
+https://lkml.org/lkml/2022/4/6/401
 
-That makes sense, thanks. I would still be happier if this was
-documented, but the comment would best fit in the struct sctp_chunk
-definition and that wouldn't fit in this patch...
+*
+[PATCH v7 13/14] drm/msm: Update generated headers Vinod Koul
+  [PATCH v7 07/14] drm/msm/disp/dpu1: Add support for DSC in encoder Vinod =
+Koul
+  [PATCH v7 09/14] drm/msm: Add missing num_dspp field documentation Vinod =
+Koul
+  [PATCH v7 06/14] drm/msm/disp/dpu1: Add DSC support in hw_ctl Vinod Koul
+  [PATCH v7 08/14] drm/msm/dpu: don't use merge_3d if DSC merge topo
+... Vinod Koul
+  [PATCH v7 03/14] drm/msm/disp/dpu1: Add support for DSC Vinod Koul
+  [PATCH v7 01/14] drm/msm/dsi: add support for dsc data Vinod Koul
+[New] [PATCH v7 00/14] drm/msm: Add Display Stream Compression Support
+Vinod Koul
+*
+3D Mux , 3D Mu-X by GPU & CPU though SiMD & AVX 32Bit IfNotOR to a
+Single planar Frame Buffer is logical in the case of Multi Window
+desktops,
+A Blitter Frame Works well for X-OR.
 
-Actually I have one more question - what about the
-security_sctp_assoc_established() call in sctp_sf_do_5_1E_ca()? Is
-COOKIE ACK guaranteed to be never bundled?
+The relevance is that a Single Frame buffer per Eye does 3D Imagery!
+(Google Glass & MS & PS4 VR)
 
---
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+We can and will need more; For this Substance Called Flexibility we
+need 2 Details:
 
+ReDirectable DMA & Multi Frame Blitter...
+
+By this method we can literally write every detail if we wish in
+Shader, But we do not need to worry!
+
+X-OR Blitter Recovers from Overwrite by detecting details that are new.
+
+Simple is best but keep in mind that CPU Frame Buffer (In RAM & Cache)
+& GPU Frame Buffer (in GPU) & Direct Access RAM : ReBAR to
+Transparently access GPU RAM!
+
+Allowing ALL.
+
+****
+
+Vector Compression VESA Standard Display protocol 3 +
+DSC : Zero compression or low level compression version of DSC
+1.2bc
+
+Frame by Frame compression with vector prediction.
+
+X-OR Frame Buffer Compression & Blank Space Compression:
+
+X-OR X=3D1 New Data & X=3D0 being not sent,
+Therefore Masking the frame buffer,
+
+A Frame buffer needs a cleared aria; A curve or ellipsoid for example,
+Draw the ellipsoid; This is the mask & can be in 3 levels:
+
+X-OR : Draw or not Draw Aria : Blitter XOR
+AND : Draw 1 Value & The other : Blitter Additive
+Variable Value Resistor : Draw 1 Value +- The other : Blitter + or - Modifi=
+er
+*
+
+Vector Compression VESA Standard Display protocol 3 : RS
+
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+Improve Console & TV & BIOS & General Animated Render
+
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
+
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
+
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
+
+High precision for AVX 32Bit to 256Bit width precision.
+
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
+
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
+
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
+
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
+
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
+
+"QFT a Zero compression or low level compression version of DSC
+1.2bc
+
+X-OR Frame Buffer Compression & Blank Space Compression:
+Vector Compression VESA Standard Display protocol 3"
+
+"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
+latency=E2=80=9D, which is the amount of time between a frame being ready f=
+or
+transport in the GPU and that frame being completely displayed. This
+latency is the sum of the transport time through the source=E2=80=99s outpu=
+t
+circuits, the transport time across the interface, the processing of
+the video data in the display, and the painting of the screen with the
+new data. This overall latency affects the responsiveness of games:
+how long it appears between a button is pressed to the time at which
+the resultant action is observed on the screen.
+
+
+While there are a lot of variables in this equation, not many are
+adjustable from an HDMI specification perspective. QFT operates on the
+transport portion of this equation by reducing the time it takes to
+send only the active video across the cable. This results in reduced
+display latency and increased responsiveness."
+*
+
+(c)Rupert S
+
+Include vector today *important* RS
+https://vesa.org/vesa-display-compression-codecs/
+
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+
+https://science.n-helix.com/2019/06/kernel.html
+
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
+ml
+
+https://bit.ly/VESA_BT
+
+Rupert S
