@@ -2,64 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F384F7CAF
-	for <lists+linux-security-module@lfdr.de>; Thu,  7 Apr 2022 12:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75BE4F7CB9
+	for <lists+linux-security-module@lfdr.de>; Thu,  7 Apr 2022 12:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234948AbiDGK2X (ORCPT
+        id S244250AbiDGK3c (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 7 Apr 2022 06:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        Thu, 7 Apr 2022 06:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244227AbiDGK2W (ORCPT
+        with ESMTP id S244230AbiDGK3Y (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 7 Apr 2022 06:28:22 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E891F7F233
-        for <linux-security-module@vger.kernel.org>; Thu,  7 Apr 2022 03:26:19 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id x20so5819992edi.12
-        for <linux-security-module@vger.kernel.org>; Thu, 07 Apr 2022 03:26:19 -0700 (PDT)
+        Thu, 7 Apr 2022 06:29:24 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A480896802
+        for <linux-security-module@vger.kernel.org>; Thu,  7 Apr 2022 03:27:21 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id k2so5831488edj.9
+        for <linux-security-module@vger.kernel.org>; Thu, 07 Apr 2022 03:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=nCzDGoAAIWVuUNjHdyahcYIJjBTGEOu0CAiErPb7eZo=;
-        b=PP1Ayqyb8OCEZUouy9mjoUET3cCDMidGvrCYfo5G1i6icPeY3CoYaDugwGvOsSBlIX
-         dT07V2+sQyp5DASQEKCn0/M288vzMUFMUpxJTZKYjtOCxsLrbKPxZYrxKSB3MEd0phZ/
-         JDqX6282qv0yVV4Z3w0w32P3+tR/xO9a9OLzjjrOF+CH7Uw7eGJ4R2g4eYGsZ5zDY5kc
-         UUbhIQe8/IE73uTZU03JVDnvNMxNqCrwv4EW7FxOnMlaApl/dEYH0vYb4/qJjZE1APsV
-         NpwdPdrVOTHGw2lqFd9KvwgRXoF3NxmeGERkAFXY3ADZ3iGcgw6m9kDoBqepwmOdpTr1
-         qyLA==
+        b=FTJlEqqxBDV64LIwPkvXBcoh9trQUUoRjT/D4FLXc0CRQIvjCyXGkj+b7F9UHxe4d1
+         cNkUActC2RJGsdazfex8QIIQUNZ1oQYpEIVojzwNimpGYp5PkONtQBzSs4oYFaBbxQHX
+         aNrcjt1373oh4kjOzi1XJLURIFzdcuJ7w8Vew2TgJ5iR3RE9FeUXjs2fM8r2cHqlne34
+         qANEnEj1ay/Q3MhgY0Yr4zRu3Ikctc8NRurX8RNDqmkQOVKUaRibR/TpOgM58vECD2L/
+         DFpj1nWhv4nXX5k3SDj9G7X8KkxNEQDrrT/dVZlhzAeGUZnrZRFFmHhGSoBTeQmHBs0+
+         unqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=nCzDGoAAIWVuUNjHdyahcYIJjBTGEOu0CAiErPb7eZo=;
-        b=1NsHbOy1Jhr3whptwrx6HwlT3fQt+8bGbr/XmyzXt7fcI3++ymo0D9AFgz8QWy8lYG
-         C4SWCgrbLOHG9HDFHm/dyyHr67IM271KiigGOSKanA06I9fhdp2TXNgTdS5dNmgO36lN
-         UemCpJlxitjA2pwVuQtdCtsD6M7absUMRlWusSsq1I9IVu5AJmxYNofRq6rvfEHN1UXP
-         we2Bo8SuFPogxTL44G+MZUzKqYsoJuBMksmTZs8pNBhEN4KstKf31mmakmM4lV7k+IOf
-         2m8jf+9eCqfLAhCJo7tYDLjacVNgBuDCzC7C4C7if/lagU+l2vM1wt/dJdt8yOdCYFVX
-         UpKg==
-X-Gm-Message-State: AOAM533772cw7XSubLj7c8w5P7USXYYYxOPChDIVdZOEHnkuaF5tzPQW
-        OugG24dVSPy+SnAIHYeo0elooIcQ9X2DNjWwVOE=
-X-Google-Smtp-Source: ABdhPJxpKvsRHSxhRQNRmV5ia6/p8xVEd8c/utinx71mvMB1x4+HAD1gzOSwpCFKHoClIP6oughpXMMHMb0KEfOqAFE=
-X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
- n13-20020a5099cd000000b00418d6c22405mr13413023edb.342.1649327178038; Thu, 07
- Apr 2022 03:26:18 -0700 (PDT)
+        b=eFG8OeScJ+kOISaMIvuF0cu8pTlmoUlk6tjHDT5C8KYQ74+MGZ/OxomY138lA6upf+
+         g37+yltIWYdzsaoGzSRDzyxAw5ZNGicdUfFQ7W6orxS0+qseIfey8mAmUM2POMO26WX6
+         W3yhEABA3ClRvnFkgVCkHxkGpsPZJ2AbLAtVRqF0Rp4FrCllSjPsJlcXUPYor+UPFprh
+         wusS8XGRsibXSM13J0dhRa8Id6ICQD8L81BDeb8NJJcW/MiyrKwXTFf+s8ufXp8HPvEl
+         zoHMNA2+AKVyiYFcZdQ++K5XoY55fiYNcH8UWBc/k7Fnuom8Qqlr7gFHk5gWJKfs0HKp
+         1ZMQ==
+X-Gm-Message-State: AOAM5314Qu/9hL/yVZwemxogVNRhYos0ruHM6ZK5OF5q0odIxRtLYM0P
+        VDDj8sWiQeoSNHM6L+GT74N0PwPulo1EaHcHP1mWZwcREi3e/9pB
+X-Google-Smtp-Source: ABdhPJzhJm5G6h/1s8qVHgh0xyjNXtVFlMfjIEnaY70+LOKOo9Ha2HjJO8TEhwRk+ZG5QCT6FZxu83GxSr2RHLv5o5I=
+X-Received: by 2002:a05:6402:34d6:b0:419:4dc2:91c5 with SMTP id
+ w22-20020a05640234d600b004194dc291c5mr13599230edc.329.1649327239973; Thu, 07
+ Apr 2022 03:27:19 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Thu, 7 Apr 2022 11:26:06 +0100
-Message-ID: <CAHpNFcPccNngVHdjq+Zdv7U=+5Ch8b2+ixrFq37OvMQhn6Ym7w@mail.gmail.com>
+Date:   Thu, 7 Apr 2022 11:27:07 +0100
+Message-ID: <CAHpNFcPcz0B9ohjoRDsuN1F_tac2mLrpdUn6N9NidvtGevkF8A@mail.gmail.com>
 Subject: Random : (Dynamic Elliptic Curve / T) * Factor Of T : problems for
  Arm (32-bit), Motorola 68000 (M68k), Microblaze, SPARX32, Xtensa, and other
  niche architectures.
-To:     submissions@vialicensing.com
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
