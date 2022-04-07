@@ -2,179 +2,494 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B664F71F2
-	for <lists+linux-security-module@lfdr.de>; Thu,  7 Apr 2022 04:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F384F7CAF
+	for <lists+linux-security-module@lfdr.de>; Thu,  7 Apr 2022 12:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237450AbiDGCUJ (ORCPT
+        id S234948AbiDGK2X (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 6 Apr 2022 22:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        Thu, 7 Apr 2022 06:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236945AbiDGCUH (ORCPT
+        with ESMTP id S244227AbiDGK2W (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 6 Apr 2022 22:20:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB21830578;
-        Wed,  6 Apr 2022 19:18:08 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KYlNL0GsVzDqTS;
-        Thu,  7 Apr 2022 10:15:46 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 7 Apr 2022 10:18:05 +0800
-Message-ID: <2760cfec-6866-5a7b-99c6-1831aae26c58@huawei.com>
-Date:   Thu, 7 Apr 2022 10:18:05 +0800
+        Thu, 7 Apr 2022 06:28:22 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E891F7F233
+        for <linux-security-module@vger.kernel.org>; Thu,  7 Apr 2022 03:26:19 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x20so5819992edi.12
+        for <linux-security-module@vger.kernel.org>; Thu, 07 Apr 2022 03:26:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=nCzDGoAAIWVuUNjHdyahcYIJjBTGEOu0CAiErPb7eZo=;
+        b=PP1Ayqyb8OCEZUouy9mjoUET3cCDMidGvrCYfo5G1i6icPeY3CoYaDugwGvOsSBlIX
+         dT07V2+sQyp5DASQEKCn0/M288vzMUFMUpxJTZKYjtOCxsLrbKPxZYrxKSB3MEd0phZ/
+         JDqX6282qv0yVV4Z3w0w32P3+tR/xO9a9OLzjjrOF+CH7Uw7eGJ4R2g4eYGsZ5zDY5kc
+         UUbhIQe8/IE73uTZU03JVDnvNMxNqCrwv4EW7FxOnMlaApl/dEYH0vYb4/qJjZE1APsV
+         NpwdPdrVOTHGw2lqFd9KvwgRXoF3NxmeGERkAFXY3ADZ3iGcgw6m9kDoBqepwmOdpTr1
+         qyLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=nCzDGoAAIWVuUNjHdyahcYIJjBTGEOu0CAiErPb7eZo=;
+        b=1NsHbOy1Jhr3whptwrx6HwlT3fQt+8bGbr/XmyzXt7fcI3++ymo0D9AFgz8QWy8lYG
+         C4SWCgrbLOHG9HDFHm/dyyHr67IM271KiigGOSKanA06I9fhdp2TXNgTdS5dNmgO36lN
+         UemCpJlxitjA2pwVuQtdCtsD6M7absUMRlWusSsq1I9IVu5AJmxYNofRq6rvfEHN1UXP
+         we2Bo8SuFPogxTL44G+MZUzKqYsoJuBMksmTZs8pNBhEN4KstKf31mmakmM4lV7k+IOf
+         2m8jf+9eCqfLAhCJo7tYDLjacVNgBuDCzC7C4C7if/lagU+l2vM1wt/dJdt8yOdCYFVX
+         UpKg==
+X-Gm-Message-State: AOAM533772cw7XSubLj7c8w5P7USXYYYxOPChDIVdZOEHnkuaF5tzPQW
+        OugG24dVSPy+SnAIHYeo0elooIcQ9X2DNjWwVOE=
+X-Google-Smtp-Source: ABdhPJxpKvsRHSxhRQNRmV5ia6/p8xVEd8c/utinx71mvMB1x4+HAD1gzOSwpCFKHoClIP6oughpXMMHMb0KEfOqAFE=
+X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
+ n13-20020a5099cd000000b00418d6c22405mr13413023edb.342.1649327178038; Thu, 07
+ Apr 2022 03:26:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] ima: remove the IMA_TEMPLATE Kconfig option
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, <linux-integrity@vger.kernel.org>
-CC:     <dmitry.kasatkin@gmail.com>, <roberto.sassu@huawei.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220406061624.173584-1-guozihua@huawei.com>
- <35c38676a8b464a0fb7e4842de5108e08cb53380.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <35c38676a8b464a0fb7e4842de5108e08cb53380.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Thu, 7 Apr 2022 11:26:06 +0100
+Message-ID: <CAHpNFcPccNngVHdjq+Zdv7U=+5Ch8b2+ixrFq37OvMQhn6Ym7w@mail.gmail.com>
+Subject: Random : (Dynamic Elliptic Curve / T) * Factor Of T : problems for
+ Arm (32-bit), Motorola 68000 (M68k), Microblaze, SPARX32, Xtensa, and other
+ niche architectures.
+To:     submissions@vialicensing.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2022/4/6 20:08, Mimi Zohar wrote:
-> On Wed, 2022-04-06 at 14:16 +0800, GUO Zihua wrote:
->> It is discovered thatO allowing template "ima" as the compiled default
->> would cause the following issue: the boot command line option
->> "ima_hash=" must be behind "ima_template=", otherwise "ima_hash=" might
->> be rejected.
-> 
-> The format of a proper patch description describes the current status,
-> provides a succinct problem description, followed by the solution.
-> 
-> The original 'ima' measurement list template contains a hash, defined
-> as 20 bytes, and a null terminated pathname, limited to 255
-> characters.  Other measurement list templates permit both larger hashes
-> and longer pathnames.  When the "ima" template is configured as the
-> default, a new measurement list template (ima_template=) must be
-> specified before specifying a larger hash algorithm (ima_hash=) on the
-> boot command line.
-> 
-> To avoid this boot command line ordering issue, remove the legacy "ima"
-> template configuration option, allowing it to still be specified on the
-> boot command line.
-> 
->>
->> The root cause of this issue is that during the processing of ima_hash,
->> we would try to check whether the hash algorithm is compatible with the
->> template. If the template is not set at the moment we do the check, we
->> check the algorithm against the compiled default template. If the
->> complied default template is "ima", then we reject any hash algorithm
->> other than sha1 and md5.
->>
->> For example, if the compiled default template is "ima", and the default
->> algorithm is sha1 (which is the current default). In the cmdline, we put
->> in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
->> that ima starts with ima-ng as the template and sha256 as the hash
->> algorithm. However, during the processing of "ima_hash=",
->> "ima_template=" has not been processed yet, and hash_setup would check
->> the configured hash algorithm against the compiled default: ima, and
->> reject sha256. So at the end, the hash algorithm that is actually used
->> will be sha1.
->>
->> With template "ima" removed from the compiled default, we ensure that
->> the default tempalte would at least be "ima-ng" which allows for
->> basically any hash algorithm. Users who needs to use "ima" template
->> could still do it by specifying "ima_template=ima" in boot command line.
->>
->> This change would not break the algorithm compatibility checking for
->> IMA.
->>
->> Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
->> Signed-off-by: GUO Zihua <guozihua@huawei.com>
->> ---
->>   security/integrity/ima/Kconfig | 22 +++++++++-------------
->>   1 file changed, 9 insertions(+), 13 deletions(-)
->>
->> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
->> index f3a9cc201c8c..f392cac7a7d1 100644
->> --- a/security/integrity/ima/Kconfig
->> +++ b/security/integrity/ima/Kconfig
->> @@ -65,14 +65,11 @@ choice
->>   	help
->>   	  Select the default IMA measurement template.
->>   
->> -	  The original 'ima' measurement list template contains a
->> -	  hash, defined as 20 bytes, and a null terminated pathname,
->> -	  limited to 255 characters.  The 'ima-ng' measurement list
->> -	  template permits both larger hash digests and longer
->> -	  pathnames.
->> -
->> -	config IMA_TEMPLATE
->> -		bool "ima"
->> +	  The 'ima-ng' measurement list template permits various hash
->> +	  digests and long pathnames. The compiled default template
->> +	  can be overwritten using the kernel command line
->> +	  'ima_template=' option.
->> +
-> 
-> Other than perhaps changing "contains" to "contained", there's no
-> reason for changing the text.  Adding an additional line is fine - The
-> configured default template can be replaced by specifying
-> "ima_template="  on the boot command line.
-> 
->>   	config IMA_NG_TEMPLATE
->>   		bool "ima-ng (default)"
->>   	config IMA_SIG_TEMPLATE
->> @@ -82,7 +79,6 @@ endchoice
->>   config IMA_DEFAULT_TEMPLATE
->>   	string
->>   	depends on IMA
->> -	default "ima" if IMA_TEMPLATE
->>   	default "ima-ng" if IMA_NG_TEMPLATE
->>   	default "ima-sig" if IMA_SIG_TEMPLATE
->>   
->> @@ -102,19 +98,19 @@ choice
->>   
->>   	config IMA_DEFAULT_HASH_SHA256
->>   		bool "SHA256"
->> -		depends on CRYPTO_SHA256=y && !IMA_TEMPLATE
->> +		depends on CRYPTO_SHA256=y
->>   
->>   	config IMA_DEFAULT_HASH_SHA512
->>   		bool "SHA512"
->> -		depends on CRYPTO_SHA512=y && !IMA_TEMPLATE
->> +		depends on CRYPTO_SHA512=y
->>   
->>   	config IMA_DEFAULT_HASH_WP512
->>   		bool "WP512"
->> -		depends on CRYPTO_WP512=y && !IMA_TEMPLATE
->> +		depends on CRYPTO_WP512=y
->>   
->>   	config IMA_DEFAULT_HASH_SM3
->>   		bool "SM3"
->> -		depends on CRYPTO_SM3=y && !IMA_TEMPLATE
->> +		depends on CRYPTO_SM3=y
->>   endchoice
->>   
->>   config IMA_DEFAULT_HASH
-> 
-> 
-> .
+Random : (Dynamic Elliptic Curve / T) * Factor Of T :
 
-Thanks Mimi, will fix those.
+"Problems for Arm (32-bit), Motorola 68000 (M68k), Microblaze,
+SPARX32, Xtensa, and other niche architectures."
 
--- 
-Best
-GUO Zihua
+NoJitter - Initiating the dev/random ; Initiating Random with a SEED
+is the prospect I propose,
+My personal Time Crystal RNG is based upon the variable clock rate
+principle of Quartz clock crystals & could potentially sound too
+regular.
+
+However as we know very small variabilities in Super Stable Quartz
+crystals (Factory made) causes doubt,
+
+However in the 0.005 or smaller range & Especially with variable
+frequencies & power input levels to controlled crystals; Creative
+Chaos Exists,
+
+Particular market is motherboards that tweak frequencies to improve perform=
+ance!
+
+Clock rate variance is combined with a seed; As a Factoring agent &
+Again as a differentiator.
+
+What Is a Factoring Differentiator ? a Math that shifts values subtly
+& therefor shifts our results from predictable to unpredictable; Well
+hard to!
+
+The more effort we make; The harder it will be to see our Dynamic
+Elliptic Curve.
+
+Rupert S
+
+https://www.phoronix.com/scan.php?page=3Dnews_item&px=3DLinux-RNG-Opportuni=
+stic-urandom
+
+"Linux 5.19 To Try To Opportunistically Initialize /dev/urandom
+Written by Michael Larabel in Linux Security on 7 April 2022 at 05:44
+AM EDT. Add A Comment
+LINUX SECURITY -- Linux 5.18 is bringing many random/RNG improvements
+thanks to the work of kernel developer Jason Donenfeld. One of the
+changes though that had to be backed out during the merge window was
+trying to get /dev/random and /dev/urandom to behave exactly the same.
+While reverted for now with the 5.18 code, Donenfeld has prepared a
+change that should get it into good shape for major architectures with
+the next kernel cycle.
+
+That unifying of /dev/random and /dev/urandom work had to be backed
+out due to some CPU architectures not having enough source of
+randomness at boot and no jitter entropy. This was causing problems
+for Arm (32-bit), Motorola 68000 (M68k), Microblaze, SPARX32, Xtensa,
+and other niche architectures.
+
+With this patch now in the random.git development tree, it's trying to
+opportunistically initialize on /dev/urandom reads. For major,
+prominent architectures this should allow the same behavior as was
+desired with the Linux 5.18 RNG changes around urandom.
+In 6f98a4bfee72 ("random: block in /dev/urandom"), we tried to make a
+successful try_to_generate_entropy() call *required* if the RNG was
+not already initialized. Unfortunately, weird architectures and old
+userspaces combined in TCG test harnesses, making that change still
+not realistic, so it was reverted in 0313bc278dac ("Revert "random:
+block in /dev/urandom"").
+
+However, rather than making a successful try_to_generate_entropy()
+call *required*, we can instead make it *best-effort*.
+
+If try_to_generate_entropy() fails, it fails, and nothing changes from
+the current behavior. If it succeeds, then /dev/urandom becomes safe
+to use for free. This way, we don't risk the regression potential that
+led to us reverting the required-try_to_generate_entropy() call
+before.
+
+Practically speaking, this means that at least on x86, /dev/urandom
+becomes safe. Probably other architectures with working cycle counters
+will also become safe. And architectures with slow or broken cycle
+counters at least won't be affected at all by this change.
+
+So it may not be the glorious "all things are unified!" change we were
+hoping for initially, but practically speaking, it makes a positive
+impact.
+
+Assuming no further RNG issues uncovered with this work, you can
+expect to find this change appear in the Linux 5.19 kernel this
+summer."
+
+*****
+
+NT Interrupt counter Entropy : A counter theory : RS
+
+"more importantly, our
+distribution is not 2-monotone like NT's, because in addition to the
+cycle counter, we also include in those 4 words a register value, a
+return address, and an inverted jiffies. (Whether capturing anything
+beyond the cycle counter in the interrupt handler is even adding much of
+value is a question for a different time.)"
+
+NT Interrupt counter Entropy : A counter theory : RS
+
+To be clear interrupts are old fashioned (NT & Bios) : Points
+
+Network cards have offloading? Yes & why cannot we?
+
+Offloaded does not mean that a time differential matrix HASH AES of 32Bit w=
+ords,
+Cross pollinated though MMX, AVX , SiMD is plausible!
+
+Combined with even network latency timing & interrupt latency...
+
+Various system differentials can alternate line in our table per clock sync=
+!
+
+In this reference Quartz clock instability is not only counter acted by NTP=
+...
+But also utilized as a variable co-modifier.
+
+So why not also advantage ourselves of the clock frequency scaling
+effect to confuse odds again for Entropy (Random, Not Entropy)
+
+SSD does also have a write counter & a cleared state, not so boring as
+one thinks if per 32KB segment is hashed in 4Bit, 8,Bit 32Bit float!
+(remember we have DOT3 DOT 4 & INT8 in ML)
+
+We can utilize write cycle statistics & all hardware; Interrupts by
+themselves are rather Boring!
+
+Computed timings on processes multiplexed over 3 Threads per group in
+competition is also a potential complexifier of Random
+
+Rupert S
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
+tml
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+****
+
+PreSEED Poly Elliptic SiMD RAND : RS
+
+Preseed ; 3 Seeds with AES or Poly ChaCha or even 1 : 2 would be
+rather fast Init
+
+Blending them would make a rather paranoid Kernel developer feel safe! :D
+
+Like so List:
+
+3 seeds 32Bit or 64Bit :
+Examples :
+
+1 Seed : Pre seeded from CPU IRQ & Net 16Bit values each & merged
+2 & 3 from server https://pollinate.n-helix.com &or System TRNG
+
+4 Seed mix 128Bit Value
+
+Advantages :
+
+AVX & SiMD Mixxer is fast 'Byte Swap & Maths etcetera" & MultiThreaded
+AES Support is common :
+
+*
+HASH : RSA Source Cert C/TRNG : (c)RS
+
+Elliptic RSA : Cert Mixer : RSA 4096/2048/1024Temporal : 384/256/192
+ECC Temporal
+
+Centric Entropy HASH: Butterfly Effects
+
+Blake2
+ChaCha
+SM4
+SHA2
+SHA3
+
+Elliptic Encipher
+AES
+Poly ChaCha
+
+Elliptic : Time Variance : Tick Count Variance : On & Off Variance : IRQ
+
+*
+Time & Crystal : Quartz as a diffraction point fractal differentiator : RS
+
+RDTSC Variable bit differentiation & deviation of the quartz sub .0001
+Value combined with complexity of unique interplay with Alternative
+clocks such as Network cards, Audio cards & USB Sticks & Bluetooth
+radio clocks & Ultimately the NTP Pools themselves when required.
+
+(TIME Differential Float maths) TSC : RDTSC : RDTSCP : TCE supports
+single and half precision floating-point calculations
+
+Processor features: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+pge mca cmov pat pse36 clflush mmx fxsr sse sse2 htt pni ssse3 fma
+cx16 sse4_1 sse4_2 popcnt aes f16c syscall nx lm avx svm sse4a osvw
+ibs xop skinit wdt lwp fma4 tce tbm topx page1gb rdtscp bmi1
+
+*
+For RDTSCP =3D TValue TV1=3D16.0685 TV2=3D16.1432 TV3=3D15.1871
+When Processor Mzh =3D PV1 PV2 PV3
+RAND Source =3D Es1 Es2 Es3
+
+If Xt =3D 1.9 < then roll right
+
+((TV1 - TV2) * (PV1 - PV2)) / ((TV1 - TV3) * (PV1 - PV3)) =3D FractorXt(Xt)
+
+Es1 * Xt =3D Differential
+
+Es2 Es3
+
+(c) Rupert S
+
+Quartz as a diffraction point fractal differentiator : RS
+
+https://tches.iacr.org/index.php/TCHES/article/download/7274/6452
+https://perso.univ-rennes1.fr/david.lubicz/articles/gda.pdf
+https://patents.google.com/patent/US9335971
+*
+
+"Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
+is, in part, why we take trylocks instead. But apparently this still
+trips up various lock dependency analysers. That seems like a bug in the
+analyser's that should be fixed, rather than having to change things
+here.
+
+But maybe there's another reason to change things up: by deferring the
+crng pre-init loading to the worker, we can use the cryptographic hash
+function rather than xor, which is perhaps a meaningful difference when
+considering this data has only been through the relatively weak
+fast_mix() function.
+
+The biggest downside of this approach is that the pre-init loading is
+now deferred until later, which means things that need random numbers
+after interrupts are enabled, but before work-queues are running -- or
+before this particular worker manages to run -- are going to get into
+trouble. Hopefully in the real world, this window is rather small,
+especially since this code won't run until 64 interrupts have occurred."
+
+https://lore.kernel.org/lkml/Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net/T/
+
+Rupert S
+
+*
+
+Random : (Dynamic Elliptic Curve / T) * Factor Of T :
+
+"Problems for Arm (32-bit), Motorola 68000 (M68k), Microblaze,
+SPARX32, Xtensa, and other niche architectures."
+
+NoJitter - Initiating the dev/random ; Initiating Random with a SEED
+is the prospect I propose,
+My personal Time Crystal RNG is based upon the variable clock rate
+principle of Quartz clock crystals & could potentially sound too
+regular.
+
+However as we know very small variabilities in Super Stable Quartz
+crystals (Factory made) causes doubt,
+
+However in the 0.005 or smaller range & Especially with variable
+frequencies & power input levels to controlled crystals; Creative
+Chaos Exists,
+
+Particular market is motherboards that tweak frequencies to improve perform=
+ance!
+
+Clock rate variance is combined with a seed; As a Factoring agent &
+Again as a differentiator.
+
+What Is a Factoring Differentiator ? a Math that shifts values subtly
+& therefor shifts our results from predictable to unpredictable; Well
+hard to!
+
+The more effort we make; The harder it will be to see our Dynamic
+Elliptic Curve.
+
+Rupert S
+
+https://www.phoronix.com/scan.php?page=3Dnews_item&px=3DLinux-RNG-Opportuni=
+stic-urandom
+
+*****
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+SipHash: a fast short-input PRF
+
+Rotation Alignment : "The advantage of choosing such =E2=80=9Caligned=E2=80=
+=9D
+rotation counts is that aligned rotation counts are much faster than
+unaligned rotation counts on many non-64-bit architectures."
+
+http://cr.yp.to/siphash/siphash-20120918.pdf
+
+https://www.aumasson.jp/siphash/siphash.pdf
+
+"Choice of rotation counts. Finding really bad rotation counts for ARX
+algorithms turns out to be difficult. For example, randomly setting
+all rotations in
+BLAKE-512 or Skein to a value in {8, 16, 24, . . . , 56} may allow known at=
+tacks
+to reach slightly more rounds, but no dramatic improvement is expected.
+The advantage of choosing such =E2=80=9Caligned=E2=80=9D rotation counts is=
+ that
+aligned rotation counts are much faster than unaligned rotation counts
+on many non-64-bit
+architectures. Many 8-bit microcontrollers have only 1-bit shifts of bytes,=
+ so
+rotation by (e.g.) 3 bits is particularly expensive; implementing a rotatio=
+n by
+a mere permutation of bytes greatly speeds up ARX algorithms. Even 64-bit
+systems can benefit from alignment, when a sequence of shift-shift-xor can =
+be
+replaced by SSSE3=E2=80=99s pshufb byte-shuffling instruction. For comparis=
+on,
+implementing BLAKE-256=E2=80=99s 16- and 8-bit rotations with pshufb led to=
+ a
+20% speedup
+on Intel=E2=80=99s Nehalem microarchitecture."
+
+https://www.kernel.org/doc/html/latest/security/siphash.html
+
+https://en.wikipedia.org/wiki/SipHash
+
+Code SIP-HASH
+https://github.com/veorq/SipHash
+
+Serve C-TRNG QT Fractional Differentiator(c)RS
+
+Server C/TRNG Quarts Time * Fractional differentiator : 8Bit, 16Bit,
+32Bit, Float Int32 : Fractional Differentiator : fig-mantuary micro
+differentiator.
+
+As we see rotation may benefact from the addition of Quartz crystal
+alignment sync data from 4 cycles & aligning data blocks,
+
+Obviously we can pre share 4 64Bit blocks use use a pre seed AES/ChaCha Qua=
+d!
+Indeed we can have 16 64Bit pre Seeds & chose them by time sync for kernel
+
+Security bug; Solutions & explanation's (contains additional RANDOM
+Security Methods) :RS
+
+https://science.n-helix.com/2020/06/cryptoseed.html
+https://science.n-helix.com/2019/05/zombie-load.html
+https://science.n-helix.com/2018/01/microprocessor-bug-meltdown.html
+
+Rupert S https://science.n-helix.com
+
+*RAND OP Ubuntu :
+https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
+
+https://pollinate.n-helix.com
+
+https://science.n-helix.com/2018/12/rng.html
+
+https://science.n-helix.com/2022/02/rdseed.html
+
+https://science.n-helix.com/2017/04/rng-and-random-web.html
+
+https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
+
+https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
+
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+https://aka.ms/win10rng
+*
+
+Encryption Methods:
+https://tools.ietf.org/id/?doc=3Dhash
+
+https://tools.ietf.org/id/?doc=3Dencrypt
+
+HASH :
+
+https://datatracker.ietf.org/doc/html/draft-ietf-cose-hash-algs
+
+https://tools.ietf.org/id/draft-ribose-cfrg-sm4-10.html
+
+https://tools.ietf.org/id/?doc=3Dsha
+
+https://tools.ietf.org/id/?doc=3Drsa
+
+Encryption Common Support:
+
+https://tools.ietf.org/id/?doc=3Dchacha
+
+https://tools.ietf.org/id/?doc=3Daes
+
+SM4e does seem a good possibility for C/T/RNG CORE HASH Functions!
+
+ARM Crypto Extensions Code (Maybe AES Extensions would work here)
+https://lkml.org/lkml/2022/3/15/324
+
+ARM Neon / SiMD / AVX Compatible (GPU is possible)
+https://lkml.org/lkml/2022/3/15/323
+
+*
+
+197 FIPS NIST Standards Specification C/T/RNG
+https://science.n-helix.com/2022/02/interrupt-entropy.html
+
+Only a Neanderthal would approve a non additive source combination
+that is injected into the HASH & Re-HASHED ,
+
+One does not Procreate inadequate RANDOM from a simple bias KERNEL,
+Hardware RNG's added together may add around 450% Complexity!
+
+Hardware RNG devices MUST be able to Re-HASH to their 197 NIST
+Standards Specification, That is FINAL 2022 DT
+
+KEYS: trusted: allow use of kernel RNG for key material
+
+https://lkml.org/lkml/2022/3/16/598
+
+CAAM PRNG Reference : https://lkml.org/lkml/2022/3/16/649
