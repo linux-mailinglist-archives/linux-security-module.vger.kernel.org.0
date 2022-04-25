@@ -2,98 +2,198 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D7D50DD4B
-	for <lists+linux-security-module@lfdr.de>; Mon, 25 Apr 2022 11:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E27450E31F
+	for <lists+linux-security-module@lfdr.de>; Mon, 25 Apr 2022 16:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239363AbiDYJ6O (ORCPT
+        id S235562AbiDYOci (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 25 Apr 2022 05:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        Mon, 25 Apr 2022 10:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240146AbiDYJ5m (ORCPT
+        with ESMTP id S236007AbiDYOc2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 25 Apr 2022 05:57:42 -0400
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6362F5590
-        for <linux-security-module@vger.kernel.org>; Mon, 25 Apr 2022 02:54:38 -0700 (PDT)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-2f7d621d1caso30711087b3.11
-        for <linux-security-module@vger.kernel.org>; Mon, 25 Apr 2022 02:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
-        b=ATyrrXg7Zde9kNKDF5ZCIwB8sFwpTlj1alooHiv5B82ElZ6NtBEuNx95Avx3yfEG+v
-         SR3Pi9YiGn8JkKlYHD/qdytouxQeX3oJ0iJvxi83jqS7n6ODsQVEo3TYQchW3Es2L9VU
-         WpUkJmlaB6wVhppaQWj/4q6pjGxtcDa4HJW4QOfeOpSLK6Z6UVte2AgKSDjpTAjhaUvp
-         1vlu8JD8M0fsDcaE5ehzA10bFVyNVT/sZxFBm7wzmvCvDzerVUlRGvU96jP/8ljbUbru
-         odoIA7j0rE1KKiANkkvBpPl/x2AfmHungJLTzDrn645E4r+5rvRovpsE1TzToHsa3UvN
-         2Ivg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
-        b=H8RNuT9DWm0XEu1Juga8Snsq53LFK3912IZ+heJBoqNjCrR3yPk0OVttZJY2CeL/RS
-         E/dIoPIjKVixO6l17WTCkHHPCBfC/rQ3QsgMpvOFngAMseCYerbB0VpH+kAoaVTyE3ph
-         WywxOJFVvYflApbVc5TzOSPhkQ+MKDjYQfn4VtkqUAnLD/OYWdJTJswc4mMWHRuUdV9x
-         /8MKF99LADLOJAX26VkG2kCkn/WsbNyAcHwFJlwo8AyedsM8jLXyFITgb/eUQ0cBDFdL
-         vZiJAk1sowXco1hNnOUlU+mgUvWmsnPBgUa6k/EFNt6e0XhnT1dMmtZTwmP0ya1u9053
-         LuQA==
-X-Gm-Message-State: AOAM531MfYqzpRmfPQjanVTdHhHBApvOI074KBgFctcfcYu8tW4/qPim
-        W5flIthvrVg6hwrQxiH9jt7aPkL5NSWFMuUeQpg=
-X-Google-Smtp-Source: ABdhPJxQijnkVqO46AP9dZFBb+zIV+lJgA02aHBxz50/JloNDj/GM6qY165L4Ew15qf1giwmqZ6pYLM3j+WeCcqd3IM=
-X-Received: by 2002:a0d:d787:0:b0:2f4:dfc5:9a70 with SMTP id
- z129-20020a0dd787000000b002f4dfc59a70mr16308194ywd.447.1650880477612; Mon, 25
- Apr 2022 02:54:37 -0700 (PDT)
+        Mon, 25 Apr 2022 10:32:28 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B72A34BB8;
+        Mon, 25 Apr 2022 07:29:23 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kn6lb1Wj2z686wt;
+        Mon, 25 Apr 2022 22:26:51 +0800 (CST)
+Received: from [10.122.132.241] (10.122.132.241) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 25 Apr 2022 16:29:19 +0200
+Message-ID: <3809fa82-8484-744b-a491-f8a5f7eda861@huawei.com>
+Date:   Mon, 25 Apr 2022 17:29:18 +0300
 MIME-Version: 1.0
-Received: by 2002:a05:7000:bf06:0:0:0:0 with HTTP; Mon, 25 Apr 2022 02:54:37
- -0700 (PDT)
-Reply-To: lawrencetansanco.y@gmail.com
-From:   Lawrence Tansanco <lt01102203@gmail.com>
-Date:   Mon, 25 Apr 2022 09:54:37 +0000
-Message-ID: <CAHP1huHfPzicY=hdR831QxbM-x=dFovv4_naSGV3EfxdN+Ra9g@mail.gmail.com>
-Subject: THANKS FOR YOUR RESPONSE AND GOD BLESS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1143 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4727]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lt01102203[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [lt01102203[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATCH v4 07/15] landlock: user space API network support
+Content-Language: ru
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+CC:     <willemdebruijn.kernel@gmail.com>,
+        <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>, <yusongping@huawei.com>,
+        <artem.kuzin@huawei.com>, <anton.sirazetdinov@huawei.com>
+References: <20220309134459.6448-1-konstantin.meskhidze@huawei.com>
+ <20220309134459.6448-8-konstantin.meskhidze@huawei.com>
+ <d4724117-167d-00b0-1f10-749b35bffc2f@digikod.net>
+From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+In-Reply-To: <d4724117-167d-00b0-1f10-749b35bffc2f@digikod.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.122.132.241]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml704-chm.china.huawei.com (10.206.15.53)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-.
-I will like to disclose something very important to you,
-get back for more details please.
 
-Regards.
-Mr Lawrence Tansanco Y.
+
+4/12/2022 2:21 PM, Mickaël Salaün пишет:
+> 
+> On 09/03/2022 14:44, Konstantin Meskhidze wrote:
+>> User space API was refactored to support
+>> network actions. New network access flags,
+>> network rule and network attributes were
+>> added.
+>>
+>> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+>> ---
+>>
+>> Changes since v3:
+>> * Split commit.
+>> * Refactoring User API for network rule type.
+>>
+>> ---
+>>   include/uapi/linux/landlock.h | 48 +++++++++++++++++++++++++++++++++++
+>>   security/landlock/syscalls.c  |  5 ++--
+>>   2 files changed, 51 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/uapi/linux/landlock.h 
+>> b/include/uapi/linux/landlock.h
+>> index b3d952067f59..4fc6c793fdf4 100644
+>> --- a/include/uapi/linux/landlock.h
+>> +++ b/include/uapi/linux/landlock.h
+>> @@ -25,6 +25,13 @@ struct landlock_ruleset_attr {
+>>        * compatibility reasons.
+>>        */
+>>       __u64 handled_access_fs;
+>> +
+>> +    /**
+>> +     * @handled_access_net: Bitmask of actions (cf. `Network flags`_)
+>> +     * that is handled by this ruleset and should then be forbidden 
+>> if no
+>> +     * rule explicitly allow them.
+>> +     */
+>> +    __u64 handled_access_net;
+>>   };
+>>
+>>   /*
+>> @@ -46,6 +53,11 @@ enum landlock_rule_type {
+>>        * landlock_path_beneath_attr .
+>>        */
+>>       LANDLOCK_RULE_PATH_BENEATH = 1,
+>> +    /**
+>> +     * @LANDLOCK_RULE_NET_SERVICE: Type of a &struct
+>> +     * landlock_net_service_attr .
+>> +     */
+>> +    LANDLOCK_RULE_NET_SERVICE = 2,
+>>   };
+>>
+>>   /**
+>> @@ -70,6 +82,24 @@ struct landlock_path_beneath_attr {
+>>        */
+>>   } __attribute__((packed));
+>>
+>> +/**
+>> + * struct landlock_net_service_attr - TCP subnet definition
+>> + *
+>> + * Argument of sys_landlock_add_rule().
+>> + */
+>> +struct landlock_net_service_attr {
+>> +    /**
+>> +     * @allowed_access: Bitmask of allowed access network for services
+>> +     * (cf. `Network flags`_).
+>> +     */
+>> +    __u64 allowed_access;
+>> +    /**
+>> +     * @port: Network port
+>> +     */
+>> +    __u16 port;
+>> +
+>> +} __attribute__((packed));
+>> +
+>>   /**
+>>    * DOC: fs_access
+>>    *
+>> @@ -134,4 +164,22 @@ struct landlock_path_beneath_attr {
+>>   #define LANDLOCK_ACCESS_FS_MAKE_BLOCK            (1ULL << 11)
+>>   #define LANDLOCK_ACCESS_FS_MAKE_SYM            (1ULL << 12)
+>>
+>> +/**
+>> + * DOC: net_access
+>> + *
+>> + * Network flags
+>> + * ~~~~~~~~~~~~~~~~
+>> + *
+>> + * These flags enable to restrict a sandboxed process to a set of 
+>> network
+>> + * actions.
+>> + *
+>> + * TCP sockets with allowed actions:
+>> + *
+>> + * - %LANDLOCK_ACCESS_NET_BIND_TCP: Bind a TCP socket to a local port.
+>> + * - %LANDLOCK_ACCESS_NET_CONNECT_TCP: Connect an active TCP socket to
+>> + *   a remote port.
+>> + */
+>> +#define LANDLOCK_ACCESS_NET_BIND_TCP            (1ULL << 0)
+>> +#define LANDLOCK_ACCESS_NET_CONNECT_TCP            (1ULL << 1)
+>> +
+>>   #endif /* _UAPI_LINUX_LANDLOCK_H */
+>> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+>> index 8c0f6165fe3a..fcbce83d64ef 100644
+>> --- a/security/landlock/syscalls.c
+>> +++ b/security/landlock/syscalls.c
+>> @@ -81,8 +81,9 @@ static void build_check_abi(void)
+>>        * struct size.
+>>        */
+>>       ruleset_size = sizeof(ruleset_attr.handled_access_fs);
+>> +    ruleset_size += sizeof(ruleset_attr.handled_access_net);
+>>       BUILD_BUG_ON(sizeof(ruleset_attr) != ruleset_size);
+>> -    BUILD_BUG_ON(sizeof(ruleset_attr) != 8);
+>> +    BUILD_BUG_ON(sizeof(ruleset_attr) != 16);
+>>
+>>       path_beneath_size = sizeof(path_beneath_attr.allowed_access);
+>>       path_beneath_size += sizeof(path_beneath_attr.parent_fd);
+>> @@ -184,7 +185,7 @@ SYSCALL_DEFINE3(landlock_create_ruleset,
+>>
+>>       /* Checks content (and 32-bits cast). */
+>>       if ((ruleset_attr.handled_access_fs | LANDLOCK_MASK_ACCESS_FS) !=
+>> -            LANDLOCK_MASK_ACCESS_FS)
+>> +             LANDLOCK_MASK_ACCESS_FS)
+> 
+> Don't add cosmetic changes. FYI, I'm relying on the way Vim does line 
+> cuts, which is mostly tabs. Please try to do the same.
+> 
+   Ok. I'm using VsCode as an editor. It also could be set up to 
+different code styles.
+> 
+>>           return -EINVAL;
+>>       access_mask_set.fs = ruleset_attr.handled_access_fs;
+>>
+>> -- 
+>> 2.25.1
+>>
+> 
+> You need to also update Documentation/userspace-api/landlock.rst 
+> accordingly. You can check you changes by building the HTML doc.
+
+   OK. I got it. Thnaks for the comment.
+> .
