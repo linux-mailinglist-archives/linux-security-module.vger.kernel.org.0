@@ -2,41 +2,60 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A7E518745
-	for <lists+linux-security-module@lfdr.de>; Tue,  3 May 2022 16:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64A65187D0
+	for <lists+linux-security-module@lfdr.de>; Tue,  3 May 2022 17:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237424AbiECO5Z (ORCPT
+        id S237770AbiECPHy (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 3 May 2022 10:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
+        Tue, 3 May 2022 11:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiECO5Y (ORCPT
+        with ESMTP id S237764AbiECPHx (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 3 May 2022 10:57:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A22721E39;
-        Tue,  3 May 2022 07:53:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B923560C8E;
-        Tue,  3 May 2022 14:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25B5C385A4;
-        Tue,  3 May 2022 14:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651589630;
-        bh=w4Xoznwtn3tyLr1cRCPJ8Tdo2kOlrKOwvD7MSq9598s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IyWn4OGCKIQfCoxx32JI1GCwxVovGVNz6H+TT+Vmx1nsr80YfM9XlxGM+qPZ4Vjcf
-         vutt68+pESkS+B05T6D76+md0K1qTXmBrG5Xw6qAeJb+comkTppxOC4FYmH6777Img
-         LPA/+W66303oz14RM5evehJfP/n/hn5hy981rZDI=
-Date:   Tue, 3 May 2022 16:53:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Tue, 3 May 2022 11:07:53 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFDC3A1BC
+        for <linux-security-module@vger.kernel.org>; Tue,  3 May 2022 08:04:20 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g6so34048651ejw.1
+        for <linux-security-module@vger.kernel.org>; Tue, 03 May 2022 08:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bmC7DRu7flM3aFzKHb+bDUK/tB+P+W9KDDy98mVSVQ0=;
+        b=oyxVT1gpTaomCxljv6pbFCCpbu4ZgTR/80bvs4ClyThEQsIq3L3UeHcgt4WI2j+7Uf
+         lpG1gBMr5yuIBdD0NvK/i6vwQSr7AUsssXoNfkNqCXxTbcaNwVQ2GkR267bP6zLn5QM0
+         XxEgxNI7Vkbu6Crh8QfSUAvz9q57mPWXd1UGs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bmC7DRu7flM3aFzKHb+bDUK/tB+P+W9KDDy98mVSVQ0=;
+        b=3LYib0dIjSaMUFKm5MvLB4dIXUNlbbVnZTdrrxL9bGp3ErXMwznzjiT6sqvj0/UhR0
+         dA867TW/9ufxrPwEVIlM1KRNcSl9Y9FihouIEqT/3khPTZdEHywZLzaizbjHnwa8SdiT
+         EUdOKS4DHWeWZa/U17x+/jWapVlxO9gD2Uzn+keYb9Y6JoMrZKtCVwxsk2Uh2Ehc3O8w
+         ATfKfAvENssIJ157TK0sV33/nwkDgt10MW9jtr6X0brJtrM6A1PJigZBDWmLAVvhufdv
+         MfmgDbiouOYpifYhshBFW9Q9NL5g4ECBcIkemkGFiJ38smR/4JF5smyJbW8SOazlTI3D
+         rVpg==
+X-Gm-Message-State: AOAM530vtSIm/AkdUkgtNWTPMvqM8omxsNWA0AAzT7HFYxnuHX90AsmW
+        vbPgGo48G3hWoPNNebmd6q7+FyOP9NPMBMVLJIwNzw==
+X-Google-Smtp-Source: ABdhPJxhO8bLjM6wdea3bRux6bogjYO+c6+DWAw0ArELIY5Ox+tfOrkFBk71CkkeK4W0MVxxYnnxxKbq8koDg++bpqU=
+X-Received: by 2002:a17:907:62aa:b0:6e0:f208:b869 with SMTP id
+ nd42-20020a17090762aa00b006e0f208b869mr16047649ejc.270.1651590258996; Tue, 03
+ May 2022 08:04:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com> <CAOQ4uxim+JmFbXPQcasELDEgRDP-spdPtJrLuhvSiyxErSUkvw@mail.gmail.com>
+ <YnFB/ct2Q/yYBnm8@kroah.com>
+In-Reply-To: <YnFB/ct2Q/yYBnm8@kroah.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 3 May 2022 17:04:06 +0200
+Message-ID: <CAJfpegtZjRca5QPm2QgPtPG0-BJ=15Vtd48OTnRnr5G7ggAtmA@mail.gmail.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Amir Goldstein <amir73il@gmail.com>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
         Christian Brauner <brauner@kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
@@ -48,90 +67,40 @@ Cc:     Miklos Szeredi <miklos@szeredi.hu>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Christian Brauner <christian@brauner.io>,
         James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-Message-ID: <YnFB/ct2Q/yYBnm8@kroah.com>
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
- <CAOQ4uxim+JmFbXPQcasELDEgRDP-spdPtJrLuhvSiyxErSUkvw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxim+JmFbXPQcasELDEgRDP-spdPtJrLuhvSiyxErSUkvw@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, May 03, 2022 at 05:39:46PM +0300, Amir Goldstein wrote:
-> On Tue, May 3, 2022 at 3:23 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
-> >
-> > This is a simplification of the getvalues(2) prototype and moving it to the
-> > getxattr(2) interface, as suggested by Dave.
-> >
-> > The patch itself just adds the possibility to retrieve a single line of
-> > /proc/$$/mountinfo (which was the basic requirement from which the fsinfo
-> > patchset grew out of).
-> >
-> > But this should be able to serve Amir's per-sb iostats, as well as a host of
-> > other cases where some statistic needs to be retrieved from some object.  Note:
-> > a filesystem object often represents other kinds of objects (such as processes
-> > in /proc) so this is not limited to fs attributes.
-> >
-> > This also opens up the interface to setting attributes via setxattr(2).
-> >
-> > After some pondering I made the namespace so:
-> >
-> > : - root
-> > bar - an attribute
-> > foo: - a folder (can contain attributes and/or folders)
-> >
-> > The contents of a folder is represented by a null separated list of names.
-> >
-> > Examples:
-> >
-> > $ getfattr -etext -n ":" .
-> > # file: .
-> > :="mnt:\000mntns:"
-> >
-> > $ getfattr -etext -n ":mnt:" .
-> > # file: .
-> > :mnt:="info"
-> >
-> > $ getfattr -etext -n ":mnt:info" .
-> > # file: .
-> > :mnt:info="21 1 254:0 / / rw,relatime - ext4 /dev/root rw\012"
-> >
-> > $ getfattr -etext -n ":mntns:" .
-> > # file: .
-> > :mntns:="21:\00022:\00024:\00025:\00023:\00026:\00027:\00028:\00029:\00030:\00031:"
-> >
-> > $ getfattr -etext -n ":mntns:28:" .
-> > # file: .
-> > :mntns:28:="info"
-> >
-> > Comments?
-> >
-> 
-> I like that :)
-> 
-> It should be noted that while this API mandates text keys,
-> it does not mandate text values, so for example, sb iostats could be
-> exported as text or as binary struct, or as individual text/binary records or
-> all of the above.
+On Tue, 3 May 2022 at 16:53, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, May 03, 2022 at 05:39:46PM +0300, Amir Goldstein wrote:
 
-Ugh, no, that would be a total mess.  Don't go exporting random binary
-structs depending on the file, that's going to be completely
-unmaintainable.  As it is, this is going to be hard enough with random
-text fields.
+> > It should be noted that while this API mandates text keys,
+> > it does not mandate text values, so for example, sb iostats could be
+> > exported as text or as binary struct, or as individual text/binary records or
+> > all of the above.
+>
+> Ugh, no, that would be a total mess.  Don't go exporting random binary
+> structs depending on the file, that's going to be completely
+> unmaintainable.  As it is, this is going to be hard enough with random
+> text fields.
+>
+> As for this format, it needs to be required to be documented in
+> Documentation/ABI/ for each entry and key type so that we have a chance
+> of knowing what is going on and tracking how things are working and
+> validating stuff.
 
-As for this format, it needs to be required to be documented in
-Documentation/ABI/ for each entry and key type so that we have a chance
-of knowing what is going on and tracking how things are working and
-validating stuff.
+My preference would be a single text value for each key.
 
-thanks,
+Contents of ":mnt:info" contradicts that, but mountinfo has a long
+established, well documented format, and nothing prevents exporting
+individual attributes with separate names as well (the getvalues(2)
+patch did exactly that).
 
-greg k-h
+Thanks,
+Miklos
