@@ -2,101 +2,107 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB5F51B45C
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 May 2022 02:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EC351B549
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 May 2022 03:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiEEAEE (ORCPT
+        id S234496AbiEEBjW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 4 May 2022 20:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        Wed, 4 May 2022 21:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244181AbiEDX61 (ORCPT
+        with ESMTP id S230176AbiEEBjV (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 4 May 2022 19:58:27 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACBC53A64
-        for <linux-security-module@vger.kernel.org>; Wed,  4 May 2022 16:54:11 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id g28so5031345ybj.10
-        for <linux-security-module@vger.kernel.org>; Wed, 04 May 2022 16:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=Dn1MT8x7p4Rbn+pctwVkt7IgIdUxT0LRLjox/JaF9ttsZ2N8sUUglHFRxQa3sl75aK
-         h1U1JpCoOjPff8rV+LL0edQuBh+YvYlTbZ4zx127Qa80qMcS49J0d2nS2s7mVVadwp/M
-         vGp6wV8qQhR9tMRiQjyWHIJslgvG4HigF7p24aLxixJ1l99K68kLikab9Y0HgtSpkDYW
-         0+riuhXlj9dAnGs04evyYz4sFXKtm0FlJKiBI2Dtbo7ebvKr6E7XJkxgxzCXhReMwL1D
-         yv9OUeo9KjH+/RIlVXefhsYivAQRdlwo604eWoXrrvRFVxcSgXwgPis+UtVhyLpBWx3z
-         WyWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=hxGZIgSifUQgf+4t0KdGu2mQZsquD1/r5uUTD0UJttcZ7c9Vs417fQeizEYPEHxTbM
-         HwLfkCUCXZG86V7p90E1byGstdyYZrD6dHcfav7xYqThaiIHODN9zvHJ5KyAyRCgjhZF
-         YNIvdoGHLOZ3tbPhnI6oOEHpZmyUPpuoWnJId1PhC+wtTgiuYO72hXnICY9esZnT9Lap
-         5PSXepXSFc6OvZ309fkEJjvMw8YnDSFMQfE38EazXwBNG6coq4X8ZTKvi2uZa/oIM78x
-         ilv/1RQ7BLh242CAwOHk6jqnb/3bLW/6oF9XOcnJ3jSIY4hkMKZM8g15YW+F/oXhfKRV
-         YLXw==
-X-Gm-Message-State: AOAM531idJrD+jOkkvLztiVmxfi7BKQRB5uOQTojpFmkTC4c6u4Ho12V
-        76f7dz8V67QdCpOUX+w6WhPz1aA3lsQGLNomzT2h9KmxmPErYw==
-X-Google-Smtp-Source: ABdhPJyXbFHNtxfp8+qt+M9kuv/iG7XfFeFFPd7I4/fmpdxuycMtmf6dIJw5ghtZAT2CwgvAVE/kUl0HxsirxLIU8v0=
-X-Received: by 2002:a9d:6b16:0:b0:605:e0eb:d3d6 with SMTP id
- g22-20020a9d6b16000000b00605e0ebd3d6mr8263208otp.213.1651708440302; Wed, 04
- May 2022 16:54:00 -0700 (PDT)
+        Wed, 4 May 2022 21:39:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082696175;
+        Wed,  4 May 2022 18:35:43 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ktx8l599GzhYFq;
+        Thu,  5 May 2022 09:35:19 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 09:35:41 +0800
+Message-ID: <1f40a55b-7489-5e87-3584-73e2b1948615@huawei.com>
+Date:   Thu, 5 May 2022 09:35:40 +0800
 MIME-Version: 1.0
-Received: by 2002:a05:6802:1a9:0:0:0:0 with HTTP; Wed, 4 May 2022 16:53:59
- -0700 (PDT)
-Reply-To: ortegainvestmmentforrealinvest@gmail.com
-From:   Info <joybhector64@gmail.com>
-Date:   Thu, 5 May 2022 05:23:59 +0530
-Message-ID: <CAP7KLYgH9LcKHS-KgR0zObHAgC6Fr3D+dOJSbDKurTc_12+iFw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b42 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [joybhector64[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [joybhector64[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 1/1] ima: remove the IMA_TEMPLATE Kconfig option
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <linux-integrity@vger.kernel.org>
+CC:     <dmitry.kasatkin@gmail.com>, <roberto.sassu@huawei.com>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220407021619.146410-1-guozihua@huawei.com>
+ <20220407021619.146410-2-guozihua@huawei.com>
+ <fbc9cda8eacc0a701d7b336bf45ecb6dfd450be9.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <fbc9cda8eacc0a701d7b336bf45ecb6dfd450be9.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--- 
-I am an investor. I came from the USA and I have many investments all
-over the world.
+On 2022/4/7 22:43, Mimi Zohar wrote:
+> On Thu, 2022-04-07 at 10:16 +0800, GUO Zihua wrote:
+>> The original 'ima' measurement list template contains a hash, defined
+>> as 20 bytes, and a null terminated pathname, limited to 255
+>> characters.  Other measurement list templates permit both larger hashes
+>> and longer pathnames.  When the "ima" template is configured as the
+>> default, a new measurement list template (ima_template=) must be
+>> specified before specifying a larger hash algorithm (ima_hash=) on the
+>> boot command line.
+>>
+>> To avoid this boot command line ordering issue, remove the legacy "ima"
+>> template configuration option, allowing it to still be specified on the
+>> boot command line.
+>>
+>> The root cause of this issue is that during the processing of ima_hash,
+>> we would try to check whether the hash algorithm is compatible with the
+>> template. If the template is not set at the moment we do the check, we
+>> check the algorithm against the configured default template. If the
+>> default template is "ima", then we reject any hash algorithm other than
+>> sha1 and md5.
+>>
+>> For example, if the compiled default template is "ima", and the default
+>> algorithm is sha1 (which is the current default). In the cmdline, we put
+>> in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+>> that ima starts with ima-ng as the template and sha256 as the hash
+>> algorithm. However, during the processing of "ima_hash=",
+>> "ima_template=" has not been processed yet, and hash_setup would check
+>> the configured hash algorithm against the compiled default: ima, and
+>> reject sha256. So at the end, the hash algorithm that is actually used
+>> will be sha1.
+>>
+>> With template "ima" removed from the configured default, we ensure that
+>> the default tempalte would at least be "ima-ng" which allows for
+>> basically any hash algorithm.
+>>
+>> This change would not break the algorithm compatibility checks for IMA.
+>>
+>> Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+>> Signed-off-by: GUO Zihua <guozihua@huawei.com>
+> 
+> thanks,
+> 
+> Mimi
+> 
+> 
+> .
 
-I want you to partner with me to invest in your country I am into many
-investment such as real Estate or buying of properties i can also
-invest money in any of existing business with equity royalty or by %
-percentage so on,
-Warm regards
+Hi,
+
+Is this patch picked?
+
+Thanks
+GUO Zihua
