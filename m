@@ -2,136 +2,65 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727BC51D13F
-	for <lists+linux-security-module@lfdr.de>; Fri,  6 May 2022 08:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FCD51D2AA
+	for <lists+linux-security-module@lfdr.de>; Fri,  6 May 2022 09:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237378AbiEFGac (ORCPT
+        id S1389752AbiEFH73 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 6 May 2022 02:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        Fri, 6 May 2022 03:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237471AbiEFGa3 (ORCPT
+        with ESMTP id S1389756AbiEFH70 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 6 May 2022 02:30:29 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A278665D2D
-        for <linux-security-module@vger.kernel.org>; Thu,  5 May 2022 23:26:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1nmrPo-0005oH-Ma; Fri, 06 May 2022 08:26:13 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1nmrPi-000edh-C9; Fri, 06 May 2022 08:26:05 +0200
-Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1nmrPf-004Tw9-LV; Fri, 06 May 2022 08:26:03 +0200
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     kernel@pengutronix.de, Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v9 7/7] MAINTAINERS: add KEYS-TRUSTED-CAAM
-Date:   Fri,  6 May 2022 08:25:53 +0200
-Message-Id: <20220506062553.1068296-8-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
-References: <20220506062553.1068296-1-a.fatoum@pengutronix.de>
+        Fri, 6 May 2022 03:59:26 -0400
+X-Greylist: delayed 585 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 00:55:43 PDT
+Received: from mail.greatagencyonline.pl (mail.greatagencyonline.pl [89.40.125.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6C915A18
+        for <linux-security-module@vger.kernel.org>; Fri,  6 May 2022 00:55:42 -0700 (PDT)
+Received: by mail.greatagencyonline.pl (Postfix, from userid 1001)
+        id 4C53BAA28B; Fri,  6 May 2022 08:41:40 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=greatagencyonline.pl;
+        s=mail; t=1651822965;
+        bh=ksvwLPFdjL017OLwir5xHXy3Vmrj/5fhZ5DwBI62qzc=;
+        h=Date:From:To:Subject:From;
+        b=T7h4DipEzqkrKQs2QMHRtdrNZQ7NwP/V16LHZgN/QJx0PavvAU0EjZxDcWSCP8kPI
+         iNIIdwrjJ4mDuBquOAoAJQ7PLTB9/GwGByo6TR/qE3640ifb0OsIOdq+9i+d6NGb/X
+         dfwbAjW0f/dzu98y2NIpF45WkIptvyhfMRWf+477nuNbeUC2L6EoFnGOHq1Fz2456n
+         OaV44W3/lBkTckqQdcxln7BX/YphqgTXoF2roQwGuqg50BCTb06x0bYHna60YLVw+v
+         Pw+5nos2OkUQzc8+GxklH4si/ZQiih2SJgiHhtZs/WdbGbpR48XPQ+bzisij4Ro5CY
+         ar1rN5gRO/HEw==
+Received: by mail.greatagencyonline.pl for <linux-security-module@vger.kernel.org>; Fri,  6 May 2022 07:38:48 GMT
+Message-ID: <20220506073002-0.1.3r.k0u3.0.9u1lf9mjlu@greatagencyonline.pl>
+Date:   Fri,  6 May 2022 07:38:48 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= 
+        <mikolaj.rudzik@greatagencyonline.pl>
+To:     <linux-security-module@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.greatagencyonline.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Create a maintainer entry for CAAM trusted keys in the Linux keyring.
+Dzie=C5=84 dobry,
 
-Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-v8 -> v9:
-  - rewrite commit message (Jarkko)
-v7 -> v8:
-  - add Pankaj's Reviewed-by
-v6 -> v7:
-  - split off as separate patch (Jarkko)
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-To: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Bottomley <jejb@linux.ibm.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-To: David Howells <dhowells@redhat.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: "Horia Geantă" <horia.geanta@nxp.com>
-Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Biggers <ebiggers@kernel.org>
-Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-Cc: David Gstir <david@sigma-star.at>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Michael Walle <michael@walle.cc>
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: keyrings@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5e8c2f611766..e58e6fc3016d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10855,6 +10855,15 @@ S:	Supported
- F:	include/keys/trusted_tee.h
- F:	security/keys/trusted-keys/trusted_tee.c
- 
-+KEYS-TRUSTED-CAAM
-+M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
-+R:	Pengutronix Kernel Team <kernel@pengutronix.de>
-+L:	linux-integrity@vger.kernel.org
-+L:	keyrings@vger.kernel.org
-+S:	Maintained
-+F:	include/keys/trusted_caam.h
-+F:	security/keys/trusted-keys/trusted_caam.c
-+
- KEYS/KEYRINGS
- M:	David Howells <dhowells@redhat.com>
- M:	Jarkko Sakkinen <jarkko@kernel.org>
--- 
-2.30.2
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
+
+Pozdrawiam,
+Miko=C5=82aj Rudzik
