@@ -2,164 +2,98 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6E851DD9F
-	for <lists+linux-security-module@lfdr.de>; Fri,  6 May 2022 18:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D617251E0B0
+	for <lists+linux-security-module@lfdr.de>; Fri,  6 May 2022 23:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443811AbiEFQdk (ORCPT
+        id S1349045AbiEFVJ4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 6 May 2022 12:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        Fri, 6 May 2022 17:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443809AbiEFQdj (ORCPT
+        with ESMTP id S1444137AbiEFVJy (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 6 May 2022 12:33:39 -0400
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF696EB0A
-        for <linux-security-module@vger.kernel.org>; Fri,  6 May 2022 09:29:55 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KvwyT4LLBzMpt82;
-        Fri,  6 May 2022 18:29:53 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KvwyS25M7zlhRVT;
-        Fri,  6 May 2022 18:29:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1651854593;
-        bh=5oj7hdI4Rj2ExwGYaOYEvvUzEy2tnYUuMitHlfxtsZs=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=eti4l+QSiv/912WPo99HWiKwdLRXF7I+vnsJ8P71DmSJkPUK5qdYZjhpVZ2qHvkWp
-         QOF62IJbqEhi3Lyi46H0spdGplVO0Xhch7bo/QNYPYA8KQ6BDy2XX1JhhLMFVxp5Sn
-         lg1uCApeKQEZBKS/+hAkimmuhDoHbgik4Alg1eKU=
-Message-ID: <d6a6d963-a8d3-0f21-c35e-9d430c6f19ea@digikod.net>
-Date:   Fri, 6 May 2022 18:31:19 +0200
+        Fri, 6 May 2022 17:09:54 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4776EB07
+        for <linux-security-module@vger.kernel.org>; Fri,  6 May 2022 14:06:10 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id x23so7209335pff.9
+        for <linux-security-module@vger.kernel.org>; Fri, 06 May 2022 14:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=PJTSNrpddi80Uz+Djs36Qc3mS8ZiBvq5TFfPDbaTkeEqvy3oDU4TN+rHEujQKuYIB8
+         66SJV+vCiU9JRMXAO6lXaCOhiep9V0F7nNNMXkIDz3FzZxSA70ovwIMDInjPY9uDrXOM
+         NYS3DLo2POJ2mh3kn2MymGrl3NlysMU5gvicF23utfz33EjSp/U0UXk+FqXEhj3d+bFM
+         t7YM//oPotb/instdcx8nASyEqF0bHTOoykz2s+P5oIJS5Hu6Q2U4bN7V8Pw/xIC/97F
+         JtdB53LaN5PM6ZcpfTf+vQTaN33wnrGXHsqlm6G5Y9lYrEqzwo+Huqg7f6zIUYiK2m4d
+         216g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=2S9ZkHzMdbvquXBidp0D1yesLOtQel4k82/mBnPby6VTTOSBHtqcZd0xY4WkEJZgO8
+         euAUP+bHRakzWThAV3YyDUfUcdZaTQOrL4O7Qb6Mp8UALssM69AKiK/GtZKtqrB0rbRA
+         0c6o9sZeK1Tc6ki3ompYsnoJV43guRHUHjqBV3ifVrDgi9VyjVV2iPQTuuOoXkz1odL1
+         8zbq4Y4WVBXPk7Aol9RzodcRy6ZtAjTFF/Os7HqfqsovSxnSY+qszVibqE7QMuHz/2fy
+         ZSkSukM7BK7rq83a2Fli1p/iTwvVVDCIw8C6DZhXNdGE/dzx9dYfdFR9SwbvuZQyu7w1
+         NoKg==
+X-Gm-Message-State: AOAM533C81s0ZFu0sD1BKgBfOVR03EvxwXzdYudhtBp99Clgi821GzZv
+        DdCJbCOcifyVvaJIjI5k9tkBdxErMctMIPQDvw==
+X-Google-Smtp-Source: ABdhPJwLkAxvukvlfPdsSQWSqa7XGjVmBCKJM6w/IhcfybrGaBU2OYUf/5lBzVaJf1STq54J3YkVSIgFkFEduS4ZmDQ=
+X-Received: by 2002:a63:87c3:0:b0:3aa:fc1b:3459 with SMTP id
+ i186-20020a6387c3000000b003aafc1b3459mr4218528pge.210.1651871170520; Fri, 06
+ May 2022 14:06:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jann Horn <jannh@google.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20220506161102.525323-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v3 00/12] Landlock: file linking and renaming support
-In-Reply-To: <20220506161102.525323-1-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
+ 14:06:09 -0700 (PDT)
+Reply-To: warren001buffett@gmail.com
+In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+From:   Warren Buffett <guidayema@gmail.com>
+Date:   Fri, 6 May 2022 21:06:09 +0000
+Message-ID: <CAD_xG_q02-pCaOj2MFVgNGOykABOSsgyAVjZGtaK5-+EAZubYg@mail.gmail.com>
+Subject: Fwd: My name is Warren Buffett, an American businessman.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:441 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4989]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [guidayema[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The four related patch series are available here: 
-https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/log/?h=landlock-wip
+My name is Warren Buffett, an American businessman and investor I have
+something important to discuss with you.
 
-On 06/05/2022 18:10, Mickaël Salaün wrote:
-> Hi,
-> 
-> This third patch series is mostly a rebase with some whitespace changes
-> because of clang-format.  There is also some new "unlikely()" calls and
-> minor code cleanup.
-> 
-> Test coverage for security/landlock was 94.4% of 504 lines (with the
-> previous patch series), and it is now 95.4% of 604 lines according to
-> gcc/gcov-11.
-> 
-> Problem
-> =======
-> 
-> One of the most annoying limitations of Landlock is that sandboxed
-> processes can only link and rename files to the same directory (i.e.
-> file reparenting is always denied).  Indeed, because of the unprivileged
-> nature of Landlock, file hierarchy are identified thanks to ephemeral
-> inode tagging, which may cause arbitrary renaming and linking to change
-> the security policy in an unexpected way.
-> 
-> Solution
-> ========
-> 
-> This patch series brings a new access right, LANDLOCK_ACCESS_FS_REFER,
-> which enables to allow safe file linking and renaming.  In a nutshell,
-> Landlock checks that the inherited access rights of a moved or renamed
-> file cannot increase but only reduce.  Eleven new test suits cover file
-> renaming and linking, which improves test coverage.
-> 
-> The documentation and the tutorial is extended with this new access
-> right, along with more explanations about backward and forward
-> compatibility, good practices, and a bit about the current access
-> rights rational.
-> 
-> While developing this new feature, I also found an issue with the
-> current implementation of Landlock.  In some (rare) cases, sandboxed
-> processes may be more restricted than intended.  Indeed, because of the
-> current way to check file hierarchy access rights, composition of rules
-> may be incomplete when requesting multiple accesses at the same time.
-> This is fixed with a dedicated patch involving some refactoring.  A new
-> test suite checks relevant new edge cases.
-> 
-> As a side effect, and to limit the increased use of the stack, I reduced
-> the number of Landlock nested domains from 64 to 16.  I think this
-> should be more than enough for legitimate use cases, but feel free to
-> challenge this decision with real and legitimate use cases.
-> 
-> Additionally, a new dedicated syzkaller test has been developed to cover
-> new paths.
-> 
-> This patch series is based on and was developed with some complementary
-> new tests sent in a standalone patch series:
-> https://lore.kernel.org/r/20220506160820.524344-1-mic@digikod.net
-> 
-> Previous versions:
-> v2: https://lore.kernel.org/r/20220329125117.1393824-1-mic@digikod.net
-> v1: https://lore.kernel.org/r/20220221212522.320243-1-mic@digikod.net
-> 
-> Regards,
-> 
-> Mickaël Salaün (12):
->    landlock: Define access_mask_t to enforce a consistent access mask
->      size
->    landlock: Reduce the maximum number of layers to 16
->    landlock: Create find_rule() from unmask_layers()
->    landlock: Fix same-layer rule unions
->    landlock: Move filesystem helpers and add a new one
->    LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
->    landlock: Add support for file reparenting with
->      LANDLOCK_ACCESS_FS_REFER
->    selftests/landlock: Add 11 new test suites dedicated to file
->      reparenting
->    samples/landlock: Add support for file reparenting
->    landlock: Document LANDLOCK_ACCESS_FS_REFER and ABI versioning
->    landlock: Document good practices about filesystem policies
->    landlock: Add design choices documentation for filesystem access
->      rights
-> 
->   Documentation/security/landlock.rst          |   17 +-
->   Documentation/userspace-api/landlock.rst     |  151 ++-
->   include/linux/lsm_hook_defs.h                |    2 +-
->   include/linux/lsm_hooks.h                    |    1 +
->   include/uapi/linux/landlock.h                |   27 +-
->   samples/landlock/sandboxer.c                 |   40 +-
->   security/apparmor/lsm.c                      |   30 +-
->   security/landlock/fs.c                       |  771 ++++++++++---
->   security/landlock/fs.h                       |    2 +-
->   security/landlock/limits.h                   |    6 +-
->   security/landlock/ruleset.c                  |    6 +-
->   security/landlock/ruleset.h                  |   22 +-
->   security/landlock/syscalls.c                 |    2 +-
->   security/security.c                          |    9 +-
->   security/tomoyo/tomoyo.c                     |   11 +-
->   tools/testing/selftests/landlock/base_test.c |    2 +-
->   tools/testing/selftests/landlock/fs_test.c   | 1039 ++++++++++++++++--
->   17 files changed, 1853 insertions(+), 285 deletions(-)
-> 
-> 
-> base-commit: 4b0cdb0cf6eefa7521322007931ccfb7edc96c53
+Mr. Warren Buffett
+warren001buffett@gmail.com
+Chief Executive Officer: Berkshire Hathaway
+aphy/Warren-Edward-Buffett
