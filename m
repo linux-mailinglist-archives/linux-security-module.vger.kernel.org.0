@@ -2,73 +2,73 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F4552476F
-	for <lists+linux-security-module@lfdr.de>; Thu, 12 May 2022 09:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B077A524DA1
+	for <lists+linux-security-module@lfdr.de>; Thu, 12 May 2022 14:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351110AbiELHx4 (ORCPT
+        id S1353997AbiELM7s (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 12 May 2022 03:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        Thu, 12 May 2022 08:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344994AbiELHx4 (ORCPT
+        with ESMTP id S1353948AbiELM7r (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 12 May 2022 03:53:56 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17D5326F7;
-        Thu, 12 May 2022 00:53:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VCziySh_1652342031;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VCziySh_1652342031)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 15:53:52 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     john.johansen@canonical.com
-Cc:     jmorris@namei.org, serge@hallyn.com, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] apparmor: Fix aa_str_perms() kernel-doc comment
-Date:   Thu, 12 May 2022 15:53:50 +0800
-Message-Id: <20220512075350.31163-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 12 May 2022 08:59:47 -0400
+Received: from mail.pekanbaru.go.id (mail.pekanbaru.go.id [103.131.245.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFFC205468;
+        Thu, 12 May 2022 05:59:43 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.pekanbaru.go.id (Postfix) with ESMTP id 223D798ADE4;
+        Thu, 12 May 2022 10:45:45 +0700 (WIB)
+Received: from mail.pekanbaru.go.id ([127.0.0.1])
+        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id MQD3I4zQrv2b; Thu, 12 May 2022 10:45:44 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.pekanbaru.go.id (Postfix) with ESMTP id 1593198AE0E;
+        Thu, 12 May 2022 10:45:44 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.pekanbaru.go.id 1593198AE0E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pekanbaru.go.id;
+        s=EA5C5C9E-4206-11EC-835B-1ADACEA726A0; t=1652327144;
+        bh=WgQd2bW8hb2KeIDNbeIeW1Bb4lp6m29iibMhAQT/egc=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=HWVIEUt3lCt/VzLFJ8bpl3mEHWGZyWo+hzGHoAt+uorbPddGdwOct0B2yi/4GFTCI
+         o9byfHpnGv7DNbb9656RsgWx4TKCuF+HvYcOhzYAFkill4z3Gti6wo1Ce3dvAAWusp
+         HxYVYQbV/u4WSmA13DHyKF05VCtiXbuSR1p+cYZOtIGl0hw5FA9UYlOaOt41GJv6+o
+         scoJrsKb4yL7gbqaeI0CNWsHEJXkcISdx6Dl5tmAFw2Ax4JRXOegR0agzctrPVH2Lc
+         Kz176ag/uFtCsPuGKbGnm9orxYwNmSVsZ3PQHJp3KezccYzCUkYj1Zz4EZ7wqhWHEw
+         vw5DLXHiigqeA==
+X-Virus-Scanned: amavisd-new at mail.pekanbaru.go.id
+Received: from mail.pekanbaru.go.id ([127.0.0.1])
+        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5cufU7KVXFMc; Thu, 12 May 2022 10:45:43 +0700 (WIB)
+Received: from [192.168.15.101] (unknown [41.79.219.176])
+        by mail.pekanbaru.go.id (Postfix) with ESMTPSA id C338298ADF3;
+        Thu, 12 May 2022 10:45:35 +0700 (WIB)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Awaiting your response 
+To:     Recipients <waterproject@pekanbaru.go.id>
+From:   waterproject@pekanbaru.go.id
+Date:   Thu, 12 May 2022 04:45:27 +0100
+Reply-To: test@hostnextdoor.com
+Message-Id: <20220512034535.C338298ADF3@mail.pekanbaru.go.id>
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add the description of @start and remove @state in aa_str_perms()
-kernel-doc comment to remove warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+Hi =
 
-security/apparmor/file.c:260: warning: Function parameter or member
-'start' not described in 'aa_str_perms'
-security/apparmor/file.c:260: warning: Excess function parameter 'state'
-description in 'aa_str_perms'
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- security/apparmor/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Did you get my previous email? I have attempted over 3 times to open up com=
+munication with you. Please acknowledge if you receive this email. =
 
-diff --git a/security/apparmor/file.c b/security/apparmor/file.c
-index e1b7e93602e4..137c99bb5d4a 100644
---- a/security/apparmor/file.c
-+++ b/security/apparmor/file.c
-@@ -247,7 +247,7 @@ struct aa_perms aa_compute_fperms(struct aa_dfa *dfa, unsigned int state,
- /**
-  * aa_str_perms - find permission that match @name
-  * @dfa: to match against  (MAYBE NULL)
-- * @state: state to start matching in
-+ * @start: the state of the dfa to start matching in
-  * @name: string to match against dfa  (NOT NULL)
-  * @cond: conditions to consider for permission set computation  (NOT NULL)
-  * @perms: Returns - the permissions found when matching @name
--- 
-2.20.1.7.g153144c
 
+Regards
+Morten Friis
