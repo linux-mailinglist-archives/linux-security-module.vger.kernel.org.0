@@ -2,73 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B077A524DA1
-	for <lists+linux-security-module@lfdr.de>; Thu, 12 May 2022 14:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F64524C6C
+	for <lists+linux-security-module@lfdr.de>; Thu, 12 May 2022 14:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353997AbiELM7s (ORCPT
+        id S1353561AbiELMJA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 12 May 2022 08:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        Thu, 12 May 2022 08:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353948AbiELM7r (ORCPT
+        with ESMTP id S1351652AbiELMJA (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 12 May 2022 08:59:47 -0400
-Received: from mail.pekanbaru.go.id (mail.pekanbaru.go.id [103.131.245.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFFC205468;
-        Thu, 12 May 2022 05:59:43 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id 223D798ADE4;
-        Thu, 12 May 2022 10:45:45 +0700 (WIB)
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id MQD3I4zQrv2b; Thu, 12 May 2022 10:45:44 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id 1593198AE0E;
-        Thu, 12 May 2022 10:45:44 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.pekanbaru.go.id 1593198AE0E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pekanbaru.go.id;
-        s=EA5C5C9E-4206-11EC-835B-1ADACEA726A0; t=1652327144;
-        bh=WgQd2bW8hb2KeIDNbeIeW1Bb4lp6m29iibMhAQT/egc=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=HWVIEUt3lCt/VzLFJ8bpl3mEHWGZyWo+hzGHoAt+uorbPddGdwOct0B2yi/4GFTCI
-         o9byfHpnGv7DNbb9656RsgWx4TKCuF+HvYcOhzYAFkill4z3Gti6wo1Ce3dvAAWusp
-         HxYVYQbV/u4WSmA13DHyKF05VCtiXbuSR1p+cYZOtIGl0hw5FA9UYlOaOt41GJv6+o
-         scoJrsKb4yL7gbqaeI0CNWsHEJXkcISdx6Dl5tmAFw2Ax4JRXOegR0agzctrPVH2Lc
-         Kz176ag/uFtCsPuGKbGnm9orxYwNmSVsZ3PQHJp3KezccYzCUkYj1Zz4EZ7wqhWHEw
-         vw5DLXHiigqeA==
-X-Virus-Scanned: amavisd-new at mail.pekanbaru.go.id
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5cufU7KVXFMc; Thu, 12 May 2022 10:45:43 +0700 (WIB)
-Received: from [192.168.15.101] (unknown [41.79.219.176])
-        by mail.pekanbaru.go.id (Postfix) with ESMTPSA id C338298ADF3;
-        Thu, 12 May 2022 10:45:35 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 12 May 2022 08:09:00 -0400
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123DD36314
+        for <linux-security-module@vger.kernel.org>; Thu, 12 May 2022 05:08:57 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KzVtc25HczMq0p4;
+        Thu, 12 May 2022 14:08:56 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KzVtb4x74zlhRVf;
+        Thu, 12 May 2022 14:08:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1652357336;
+        bh=VAzyzqBsb5khQ9HXF8UiahInvKHtn618TZOLyFUBrQI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bXqdqZSSqxEbbGwkmo7SIN1ptW+6/alRxTzCM5DSKNzdFLcl0L4pzPIDUkBJeBkUj
+         EE5bwIGbY6pQj/PTbpYMF7UeNUWUbfeipx8c59HBRM6uuj4VRKNPtIlCVXvgQqqFDH
+         3LaKEeot34rmTjE+d7WWKib5qqq1TapXNdXOZR1Y=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Paul Moore <paul@paul-moore.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v1] landlock: Explain how to support Landlock
+Date:   Thu, 12 May 2022 14:08:47 +0200
+Message-Id: <20220512120847.124822-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Awaiting your response 
-To:     Recipients <waterproject@pekanbaru.go.id>
-From:   waterproject@pekanbaru.go.id
-Date:   Thu, 12 May 2022 04:45:27 +0100
-Reply-To: test@hostnextdoor.com
-Message-Id: <20220512034535.C338298ADF3@mail.pekanbaru.go.id>
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi =
+Let's help users by documenting how to enable and check for Landlock in
+the kernel and the running system.  The userspace-api section may not be
+the best place for this but it still makes sense to put all the user
+documentation at the same place.
 
+Cc: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20220512120847.124822-1-mic@digikod.net
+---
+ Documentation/userspace-api/landlock.rst | 26 ++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Did you get my previous email? I have attempted over 3 times to open up com=
-munication with you. Please acknowledge if you receive this email. =
+diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+index 7b4fe6218132..e69dbddcc191 100644
+--- a/Documentation/userspace-api/landlock.rst
++++ b/Documentation/userspace-api/landlock.rst
+@@ -388,6 +388,32 @@ Starting with the Landlock ABI version 2, it is now possible to securely
+ control renaming and linking thanks to the new `LANDLOCK_ACCESS_FS_REFER`
+ access right.
+ 
++Landlock support
++================
++
++Kernel configuration
++--------------------
++
++Landlock can be supported since Linux 5.13 but it must be configured in the
++kernel with `CONFIG_SECURITY_LANDLOCK=y`, and it should be enabled at boot time
++with `CONFIG_LSM=landlock,[...]`.  The `[...]` must be replaced with the list
++of LSMs that may be useful for the running system (see the `CONFIG_LSM` help).
++
++Running system configuration
++----------------------------
++
++If the running kernel doesn't have `landlock` in `CONFIG_LSM`, then we can
++still enable it by adding `lsm=landlock,[...]` to
++Documentation/admin-guide/kernel-parameters.rst. The `[...]` must be replaced
++with the list of LSMs that may be useful for the running system (see the
++`CONFIG_LSM` help).
++
++Running system check
++--------------------
++
++We can check that Landlock is enabled by looking for "landlock: Up and running"
++in kernel logs: `dmesg | grep landlock`
++
+ Questions and answers
+ =====================
+ 
 
+base-commit: 67761d8181f0fb9dbd264caa5b6408dbc0d8e86a
+-- 
+2.36.0
 
-Regards
-Morten Friis
