@@ -2,62 +2,59 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693E253326E
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 May 2022 22:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA6F533270
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 May 2022 22:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241626AbiEXU1B (ORCPT
+        id S241636AbiEXU1F (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 24 May 2022 16:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
+        Tue, 24 May 2022 16:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241617AbiEXU07 (ORCPT
+        with ESMTP id S241621AbiEXU1A (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 24 May 2022 16:26:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F7A47ADB;
-        Tue, 24 May 2022 13:26:58 -0700 (PDT)
+        Tue, 24 May 2022 16:27:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1170660DA9;
+        Tue, 24 May 2022 13:27:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A92661736;
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBA7DB81BBB;
         Tue, 24 May 2022 20:26:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6DAFCC34117;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 845ABC34118;
         Tue, 24 May 2022 20:26:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1653424017;
-        bh=UgJwoioBQp+N6UVxgosxyflX/qCHI4Eqdy7VWHm4lgQ=;
+        bh=txjWrb0zV6Y0Jm1KR+pa59JbumZ33VprP+yMEx25ows=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=q8qedn3Tqo2obhL2kMVbhug0Ei1ZvjUyj/VrvaYBb51OJTfJNxp37qjDpsJV1BAXG
-         +ewPTfw2Gm5HO73z0FoKG8SFleUoJXsTiC4jeGXGhXZs7MEpaRmvE7ncfQ77Mjl2KG
-         8GmqxLbz6pxjGr6/YCbM056yIoaOFMu+fC+O+wQ1rntJ2uxJaUL+IbPoP744Yl3P4g
-         SUDz/8J2C3S5oCF3/FiNHfBLqwwjvLLklluOXKsJWwmm/ss6hcbc8YY0TKkIjm2w6o
-         GlBJOxb7qYmZeOI85eaxuWm7Cv4Zb44cnjHIWP4vw+F28i+GNkAqoL5lUGUCzziIZQ
-         IuKgQ8BLmORJg==
+        b=Vpx2K/sdlEvf8J9A/jc2nPNFh8qJurqOX0Pi7t+OiOiRRFafRlTrTLqoGij4PFv0s
+         fAdU3TAFhNK4n00QxpNHyuQDyTwfJXBBUmXxt2vqew0JIdkGNtX1Tvf/bmVT4v/VCn
+         pAlUCdYm1wY2B8WpizrgYIt1UxbVk0LubyH7fMNUWV3BhL03me30quSjAIb1orI0//
+         2gJUV4DKEXhpC1Fo3pyNB8nyWnDXlY2XKWzWOfuhrDof/08nl2JAeJox6HOkhZzoOv
+         lc/YE3rJvFgrpIl6Y71oMhEZ/avHD5z1im8ZANx7GeAKotPXdYvLE0PTsHpotlQjy/
+         +W2wIuSpNqEtQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53EE0E8DD61;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6783AF03944;
         Tue, 24 May 2022 20:26:57 +0000 (UTC)
-Subject: Re: [GIT PULL] Landlock changes for v5.19
+Subject: Re: [GIT PULL] Smack patches for v5.19
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220523161245.2451265-1-mic@digikod.net>
-References: <20220523161245.2451265-1-mic@digikod.net>
+In-Reply-To: <52db2436-fe75-0810-aa82-382aa4ffd0b5@schaufler-ca.com>
+References: <52db2436-fe75-0810-aa82-382aa4ffd0b5.ref@schaufler-ca.com> <52db2436-fe75-0810-aa82-382aa4ffd0b5@schaufler-ca.com>
 X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220523161245.2451265-1-mic@digikod.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-5.19-rc1
-X-PR-Tracked-Commit-Id: 5e469829baa1b1320e843adf3631edef1d6d2cf2
+X-PR-Tracked-Message-Id: <52db2436-fe75-0810-aa82-382aa4ffd0b5@schaufler-ca.com>
+X-PR-Tracked-Remote: https://github.com/cschaufler/smack-next tags/Smack-for-5.19
+X-PR-Tracked-Commit-Id: eaff451d4b7c86e3db3c03611426f5ce1d3826fd
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cb44e4f061e16be65b8a16505e121490c66d30d0
-Message-Id: <165342401733.5255.6026414404497432650.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: a9d1046a846571422a92d2b8fbf8a8b24221b9a3
+Message-Id: <165342401741.5255.2103153154534441713.pr-tracker-bot@kernel.org>
 Date:   Tue, 24 May 2022 20:26:57 +0000
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Casey Schaufler <casey@schaufler-ca.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,12 +64,12 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The pull request you sent on Mon, 23 May 2022 18:12:45 +0200:
+The pull request you sent on Mon, 23 May 2022 12:12:19 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-5.19-rc1
+> https://github.com/cschaufler/smack-next tags/Smack-for-5.19
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cb44e4f061e16be65b8a16505e121490c66d30d0
+https://git.kernel.org/torvalds/c/a9d1046a846571422a92d2b8fbf8a8b24221b9a3
 
 Thank you!
 
