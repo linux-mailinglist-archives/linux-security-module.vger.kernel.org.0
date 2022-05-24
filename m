@@ -2,84 +2,69 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86005325AE
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 May 2022 10:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC12533D67
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 May 2022 15:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbiEXIzv (ORCPT
+        id S229379AbiEYNMa (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 24 May 2022 04:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        Wed, 25 May 2022 09:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiEXIzs (ORCPT
+        with ESMTP id S244174AbiEYNMZ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 24 May 2022 04:55:48 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6826FD2C;
-        Tue, 24 May 2022 01:55:47 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L6nyT6WKJz67bZ1;
-        Tue, 24 May 2022 16:52:33 +0800 (CST)
-Received: from [10.122.132.241] (10.122.132.241) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 24 May 2022 10:55:43 +0200
-Message-ID: <e83d9e6f-738f-a4b0-f556-8b162c5bd65d@huawei.com>
-Date:   Tue, 24 May 2022 11:55:41 +0300
+        Wed, 25 May 2022 09:12:25 -0400
+X-Greylist: delayed 99103 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 May 2022 06:12:22 PDT
+Received: from box.indicandustries.com (hwsrv-970840.hostwindsdns.com [IPv6:2607:5501:3000:21a5::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD03E261E
+        for <linux-security-module@vger.kernel.org>; Wed, 25 May 2022 06:12:22 -0700 (PDT)
+Received: from authenticated-user (box.indicandustries.com [104.168.149.109])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.indicandustries.com (Postfix) with ESMTPSA id BED18108472
+        for <linux-security-module@vger.kernel.org>; Tue, 24 May 2022 03:25:01 -0600 (MDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=box.indicandustries.com; s=mail; t=1653384302;
+        bh=V6VCn7WEbqHjVVQ20/+SYu6rwS1WmTHcxX88g+j430s=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=Z+l5X7nRbcq+CJRdB4BmLQN/5HfL+9SxZsTYzBNNsV2vVdx4cRWF8M6BpvCMulcGo
+         COxcdkMG86Esfbx499sErCWAZC5aR3iH7Js2Fp6Gwrhsi/ao+zgII12ywt5uzfIXDr
+         oADcjaAYuflhpC07KBt29NXjszQG1rzDKN3njMgKtm37vGFJXygxKQA8fxnmX3FND4
+         0F5A/Ej+Uw11rN7KgIJYoUPR1ZXOZgZmEHlfJ/3XW3gvewu5XLxTS56fBWuz4HdUmk
+         5DziF1pmgM5qPsguX/a0TvWu+FPJMG/HxPXIjCq8+dKKbAlirI3QO1Z7Hmn7eLvIey
+         PsHgZIw+lwweg==
+Reply-To: amjalia90@gmail.com
+From:   amjad.ali@box.indicandustries.com
+To:     linux-security-module@vger.kernel.org
+Subject: Hello Sir, I seek your urgent consideration.
+Date:   24 May 2022 11:25:01 +0200
+Message-ID: <20220524112501.80267F4C2E8889FC@box.indicandustries.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v5 12/15] seltests/landlock: rules overlapping test
-Content-Language: ru
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-CC:     <willemdebruijn.kernel@gmail.com>,
-        <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <netfilter-devel@vger.kernel.org>, <yusongping@huawei.com>,
-        <anton.sirazetdinov@huawei.com>
-References: <20220516152038.39594-1-konstantin.meskhidze@huawei.com>
- <20220516152038.39594-13-konstantin.meskhidze@huawei.com>
- <4806f5ed-41c0-f9f2-d7a1-2173c8494399@digikod.net>
- <09ab37e1-eba5-80be-8fb3-df2bde698fc6@huawei.com>
- <0958567e-cc91-f63f-402a-a6324a576da2@digikod.net>
-From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-In-Reply-To: <0958567e-cc91-f63f-402a-a6324a576da2@digikod.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.122.132.241]
-X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
- fraeml704-chm.china.huawei.com (10.206.15.53)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Hello,
 
+Greetings? I am Amjad. I work with a leading Bio Firm.  Due to=20
+the setbacks of the pandemic, my company has opened a bid in=20
+search of new suppliers for basic raw materials needed in=20
+production.
 
-5/19/2022 6:04 PM, Mickaël Salaün пишет:
-> 
-> 
-> On 19/05/2022 14:24, Konstantin Meskhidze wrote:
->>
->>
->> 5/16/2022 8:41 PM, Mickaël Salaün пишет:
-> 
-> [...]
-> 
->>>> +
->>>> +    /* Makes connection to socket with port[0] */
->>>> +    ASSERT_EQ(0, connect(sockfd, (struct sockaddr *)&self->addr4[0],
->>>
->>> Can you please get rid of this (struct sockaddr *) type casting 
->>> please (without compiler warning)?
->>>
->>    Do you have a warning here? Cause I don't.
-> 
-> There is no warning but this kind of cast is useless.
+I am seeking a representative=C2=A0as I am a staff, I can not be=20
+involved directly. It may not be your area of work but the=20
+profits are great and I will guide you through. I have already=20
+sourced a local supplier for this. I only need a reliable=20
+representative.
 
-   But addr4 is struct sockaddr_in type and connect/bind use struct 
-sockaddr type. That's why casting is needed here.
+Please get back to me so I can explain this in full.
 
-> .
+Amjad
