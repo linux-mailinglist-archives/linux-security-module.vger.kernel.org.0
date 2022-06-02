@@ -2,70 +2,76 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC40753AE32
-	for <lists+linux-security-module@lfdr.de>; Wed,  1 Jun 2022 22:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495CB53B458
+	for <lists+linux-security-module@lfdr.de>; Thu,  2 Jun 2022 09:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiFAUpx (ORCPT
+        id S231757AbiFBHbQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 1 Jun 2022 16:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        Thu, 2 Jun 2022 03:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiFAUpT (ORCPT
+        with ESMTP id S231169AbiFBHbP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:45:19 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7EE2629F8
-        for <linux-security-module@vger.kernel.org>; Wed,  1 Jun 2022 13:31:39 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-f3381207a5so4264842fac.4
-        for <linux-security-module@vger.kernel.org>; Wed, 01 Jun 2022 13:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=Gk4nfCem3ECRa7Gml0J0mN/3RZoOAdfGaQAqyHPKtiI=;
-        b=DxxMd4k8tG1Z+DI+JxuL9225Cp+S+uInl/poXMcuMZiTQV1c8XJNPCuJB0EN9Fm1lJ
-         tjqO15tZbiRtkiZc869kqZb+gTGwGsofr4Ks/EzA24HoqZkeukApCRLbeWaJgYbzN6Uj
-         DJcyUaN0vgzLiaJiK8SKJwd17XWuJUN7X4OrSO+zy2q+txFdEpb8ifoCAb/ECnGeqxQV
-         22+OgKU21rrXICCeKXN25GVJHEIOuX810V30PW3f8Y111fShlwSlQkBARV9N87g0aoLJ
-         wQNCoaF08Ng768jLDvSBCHYHS21HkQkWfLc+tM30B/O2SgLendb0dLrFE3BY6UlGqUm0
-         gBYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=Gk4nfCem3ECRa7Gml0J0mN/3RZoOAdfGaQAqyHPKtiI=;
-        b=OAvdqN9pmf2Nutuz1aWQCaDNm6Xb2xWCjXueZQj2z8qpLKncx5pbK7ZpzYhrhEaLbL
-         9V3ZcE5L8R/AbdDkBvBzG51gyw0XaOI08tM1hn+IM6/7Ut3sFpSSmNZ6qXLQ1Zm88Ga6
-         yjsXuLrHMLmVr1X3zAZ1PbGaNN35PNxXLLdsMv2oY4Dpn+mvRDBOzC4JXqF0UKEUVg5g
-         DqD107PPd2019qsVr2rmEis7HU1Dy4k544HeQbZ7J9/TMtYRGrDpINrQc7Q4Kp2YUCFb
-         jsG7MC8J4exK7roR51HnSBDjEvohhINoqLThX7F6F9JzKQKXOIYgXw2V1q7So8SWpstv
-         wslQ==
-X-Gm-Message-State: AOAM532VjAC0zGQb7nLUn47p5hydfLVsAeBeyVU9/gwvMKLnuWoLBcqs
-        Xsu0YExR2mauz0lIPoDi67/F9SIJRqvGbafXIwm8uoEz704=
-X-Google-Smtp-Source: ABdhPJxRHJ7PowqzwP8FVf7Pao2siL9+mp8F+vsKwg9Hvlld1uXwEH8+vzJyu5zLQk9d57eu+g6BtXkHW1P4ce0P3TA=
-X-Received: by 2002:a05:6870:4619:b0:f1:e78d:fd54 with SMTP id
- z25-20020a056870461900b000f1e78dfd54mr18175523oao.195.1654111088174; Wed, 01
- Jun 2022 12:18:08 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6358:3601:b0:a3:2139:251d with HTTP; Wed, 1 Jun 2022
- 12:18:07 -0700 (PDT)
-Reply-To: johnwinery@online.ee
-In-Reply-To: <CAFqHCSSUC0MpbjYK8d-GCxOG4b6Qbk2uH3+xQDZte6cPBsxLGA@mail.gmail.com>
-References: <CAFqHCSSUC0MpbjYK8d-GCxOG4b6Qbk2uH3+xQDZte6cPBsxLGA@mail.gmail.com>
-From:   johnwinery <alicejohnson8974@gmail.com>
-Date:   Wed, 1 Jun 2022 12:18:07 -0700
-Message-ID: <CAFqHCSTLW5uHwBqcyU-qn7_jF2jtwt2-CjgdN8-B9nAn9yi+vg@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Thu, 2 Jun 2022 03:31:15 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41DDF2A90C4
+        for <linux-security-module@vger.kernel.org>; Thu,  2 Jun 2022 00:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=gaEyDHO1LpI7BPrJT3
+        Ah6HERITFafn14fFE2XuY+C3w=; b=RtUtyDNHQcDLIbAVRWbhpNGMKgoXrLdoJ9
+        PKD8GfQxRIwqAla4CzdAxAlW7gjgnF3jDQ8lKIytt2B7XCGpt8kI7Q80Srz+IKJr
+        zMO8kz74oloA6uOcatjRB+kl292xX9Fhqm/Z4cUqs9/iqEh89DzWYKaOliYF9Pmc
+        YQXYCCOV0=
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp12 (Coremail) with SMTP id EMCowACX1jHuZphiC_kjAA--.3208S4;
+        Thu, 02 Jun 2022 15:30:13 +0800 (CST)
+From:   Yuanjun Gong <ruc_gongyuanjun@163.com>
+To:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     linux-security-module@vger.kernel.org,
+        Yuanjun Gong <ruc_gongyuanjun@163.com>
+Subject: [PATCH 1/1] security: avoid a leak in securityfs_remove()
+Date:   Thu,  2 Jun 2022 15:29:43 +0800
+Message-Id: <20220602072943.8095-1-ruc_gongyuanjun@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: EMCowACX1jHuZphiC_kjAA--.3208S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrGw1xWF15ZF1ftryxKF1UAwb_yoWxGwb_CF
+        y5Ar4kG3yDu3WrJrsxAF4FvFZI9r95Gry8Ca4fJ3ZFy345Ar45XFy7JryxXryUGr4UWr90
+        kFsxGFyIk3W7WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sR_-tx3UUUUU==
+X-Originating-IP: [202.112.113.212]
+X-CM-SenderInfo: 5uxfsw5rqj53pdqm30i6rwjhhfrp/xtbB0AUU5WEsqyef-QAAsH
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Greeting ,I had written an earlier mail to you but without response
+Delete the dentry in securityfs_remove() to make sure the
+dentry is not used by another thread and live longer than
+the call of securityfs_remove().
+
+Signed-off-by: Yuanjun Gong <ruc_gongyuanjun@163.com>
+---
+ security/inode.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/security/inode.c b/security/inode.c
+index 6c326939750d..606f390d21d2 100644
+--- a/security/inode.c
++++ b/security/inode.c
+@@ -306,6 +306,7 @@ void securityfs_remove(struct dentry *dentry)
+ 			simple_rmdir(dir, dentry);
+ 		else
+ 			simple_unlink(dir, dentry);
++		d_delete(dentry);
+ 		dput(dentry);
+ 	}
+ 	inode_unlock(dir);
+-- 
+2.17.1
+
