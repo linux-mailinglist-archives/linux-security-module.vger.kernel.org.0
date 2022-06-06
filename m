@@ -2,130 +2,99 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5533F53D995
-	for <lists+linux-security-module@lfdr.de>; Sun,  5 Jun 2022 06:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB97F53E04E
+	for <lists+linux-security-module@lfdr.de>; Mon,  6 Jun 2022 06:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243712AbiFEEKM (ORCPT
+        id S229512AbiFFDyx (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 5 Jun 2022 00:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        Sun, 5 Jun 2022 23:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiFEEKL (ORCPT
+        with ESMTP id S229490AbiFFDyw (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 5 Jun 2022 00:10:11 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C76035DEB
-        for <linux-security-module@vger.kernel.org>; Sat,  4 Jun 2022 21:10:09 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id v106so20363702ybi.0
-        for <linux-security-module@vger.kernel.org>; Sat, 04 Jun 2022 21:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=3x72/ah7oVy1n7hZQ2TRq4JYjiu8oyFxE5Jon1kCtcA=;
-        b=m2MotxmnxmWCcLS1bCzOQl4JZVWyZ58OqqFbmIEb2MqVGfuY17hEKe33k+cBV2kTmF
-         hWNAxWuyuCL/R8Q2g06PdqUu26GZg5bpyJDSPirBXRCw8CFoiWk7DRX5TT1VMym/ZFNx
-         TYUwRs/th2AAmguHDsRe2K1x6V/ZMv1N0P0Cm5combCRsCce4mjoMhfeAoFziQnZXDVh
-         A1G9mdxEJmvd92/VghrdUlYslyXwqLycadENIAIdHWQ1lqHXvN7+JKDVbAmL/6RpddI+
-         JWJeIz4Fdrb8yvASx0ms5Rukjru6Ul476f0qP3471VIPva5N/BZglAipifkRI7eaO8wP
-         9vXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=3x72/ah7oVy1n7hZQ2TRq4JYjiu8oyFxE5Jon1kCtcA=;
-        b=WcPWlqbNFGn6Aeu8W7geCISdgTxA5Gdtquh58gYt6KT59I9vDLCRJ9sVELNHUWkrPk
-         549d05babxI6X87EPsAagmspfWTrlMgh9+4wGZiV1AWUEkOcaM1qEKeoC+WIbsRRjl4w
-         Hq2o5EB8gtP7rYLJZAXkKn1Vb8Koi9oIuTH/HnoXjBCv8jyYpDPYEaYoIg++hHb3GAiL
-         7qBz7RKWRsKz34KDRPsJ+JE8GCslRcGYYnNKobebkgwzDv9LAFp3kzjquCbXfUqsjQMt
-         gVWiIKYgJp6OeA7SPQ3JYOXA2ZEHQSc6FnQ8Ui6ZAc3Rl/RYcRGlvXhaBOYjXyMWj/T9
-         vzbg==
-X-Gm-Message-State: AOAM5309GFf/KLjRS2gEcMmKcqD6zJqHY/514nIyK35V3WJUi6APBK6o
-        Ch4M+8lvpIRB2DZzG0Nc2W6VC/pOeu7vKCSbU0Q=
-X-Google-Smtp-Source: ABdhPJyLuRyUqVo3qdwlHYox5OP+26Yo7OSjr/7agA+lqVWiNNWcxczs5eIyKKGKzkDGwAvnuMLbFFGjNkiLzR3jpRA=
-X-Received: by 2002:a25:d609:0:b0:65c:f2a1:6cf0 with SMTP id
- n9-20020a25d609000000b0065cf2a16cf0mr19059420ybg.417.1654402208855; Sat, 04
- Jun 2022 21:10:08 -0700 (PDT)
+        Sun, 5 Jun 2022 23:54:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F0348CB1D
+        for <linux-security-module@vger.kernel.org>; Sun,  5 Jun 2022 20:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654487687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i5iEgTqlGFXZU9nwYiUMELTTny6xbpViLZQTc0dGuT4=;
+        b=gdNq6b1j3LwZiFwwV2EXrkCL/7775WAKNO9uwd+3T05oFgeVc9uLm9XT/mM5u7WZZLRQHR
+        J6ym13wFZp/2xKOK0xI1V64WuZRyKq6nOVEzcMp0HMtWBgTnpndLfEYFspkx9oOobcyErC
+        SAU981lJLwZ+AybWcdv6d4XuXhv6IgM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-637-IQrCFuIjN8215spNptb1Rg-1; Sun, 05 Jun 2022 23:54:42 -0400
+X-MC-Unique: IQrCFuIjN8215spNptb1Rg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 41FCD398CA60;
+        Mon,  6 Jun 2022 03:54:41 +0000 (UTC)
+Received: from localhost (ovpn-12-209.pek2.redhat.com [10.72.12.209])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AB65D403371;
+        Mon,  6 Jun 2022 03:54:38 +0000 (UTC)
+Date:   Mon, 6 Jun 2022 11:54:35 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Jonathan McDowell <noodles@fb.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org
+Subject: Re: [PATCH v4] x86/kexec: Carry forward IMA measurement log on kexec
+Message-ID: <Yp16e5hMphomr2+H@MiWiFi-R3L-srv>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+ <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
+ <8634d4dd0813b9522f039ed211023c2c65c6f888.camel@linux.ibm.com>
+ <YpSC4AQInLM73wex@noodles-fedora.dhcp.thefacebook.com>
+ <e7758ed1-5dcb-80dd-092a-a6bb21c3997d@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6918:7906:b0:bd:b847:5058 with HTTP; Sat, 4 Jun 2022
- 21:10:08 -0700 (PDT)
-Reply-To: mrstheresaheidi8@gmail.com
-From:   Ms Theresa Heidi <hovossourafiatou@gmail.com>
-Date:   Sat, 4 Jun 2022 21:10:08 -0700
-Message-ID: <CAJK1sRR_+Qs6M9rpHEXnVUeYBSMqjZ541mBfJE-M+cuuLAj3+w@mail.gmail.com>
-Subject: =?UTF-8?B?5oCl5LqL5rGC5Yqp77yB?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7758ed1-5dcb-80dd-092a-a6bb21c3997d@intel.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b44 listed in]
-        [list.dnswl.org]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrstheresaheidi8[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [hovossourafiatou[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-5oWI5ZaE5o2Q5qy+77yBDQoNCuivt+S7lOe7humYheivu++8jOaIkeefpemBk+i/meWwgeS/oeeh
-ruWunuWPr+iDveS8mue7meS9oOS4gOS4quaDiuWWnOOAgiDmiJHlnKjpnIDopoHkvaDluK7liqnn
-moTml7blgJnpgJrov4fnp4HkurrmkJzntKLpgYfliLDkuobkvaDnmoTnlLXlrZDpgq7ku7bogZTn
-s7vjgIINCuaIkeaAgOedgOayiemHjeeahOaCsuS8pOWGmei/meWwgemCruS7tue7meS9oO+8jOaI
-kemAieaLqemAmui/h+S6kuiBlOe9keS4juS9oOiBlOezu++8jOWboOS4uuWug+S7jeeEtuaYr+ac
-gOW/q+eahOayn+mAmuWqkuS7i+OAgg0KDQrmiJHmmK82MuWygeeahOeJueiVvuiOjirmtbfokoLl
-pKvkurrvvIznm67liY3lm6DogrrnmYzlnKjku6XoibLliJfnmoTkuIDlrrbnp4Hnq4vljLvpmaLk
-vY/pmaLmsrvnlpfjgIINCjTlubTliY3vvIzmiJHnmoTkuIjlpKvljrvkuJblkI7vvIzmiJHnq4vl
-jbPooqvor4rmlq3lh7rmgqPmnInogrrnmYzvvIzku5bmiorku5bmiYDmnInnmoTkuIDliIfpg73n
-lZnnu5nkuobmiJHjgIIg5oiR5bim552A5oiR55qE56yU6K6w5pys55S16ISR5Zyo5LiA5a625Yy7
-6Zmi6YeM77yM5oiR5LiA55u05Zyo5o6l5Y+X6IK66YOo55mM55eH55qE5rK755aX44CCDQoNCuaI
-keS7juaIkeW3suaVheeahOS4iOWkq+mCo+mHjOe7p+aJv+S6huS4gOeslOi1hOmHke+8jOWPquac
-iTI1MOS4h+e+juWFg++8iDI1MOS4h+e+juWFg++8ieOAgueOsOWcqOW+iOaYjuaYvu+8jOaIkeat
-o+WcqOaOpei/keeUn+WRveeahOacgOWQjuWHoOWkqe+8jOaIkeiupOS4uuaIkeS4jeWGjemcgOim
-gei/meeslOmSseS6huOAgg0K5oiR55qE5Yy755Sf6K6p5oiR5piO55m977yM55Sx5LqO6IK655mM
-55qE6Zeu6aKY77yM5oiR5LiN5Lya5oyB57ut5LiA5bm044CCDQoNCui/meeslOmSsei/mOWcqOWb
-veWklumTtuihjO+8jOeuoeeQhuWxguS7peecn+ato+eahOS4u+S6uueahOi6q+S7veWGmeS/oee7
-meaIke+8jOimgeaxguaIkeWHuumdouaUtumSse+8jOaIluiAheetvuWPkeaOiOadg+S5pu+8jOiu
-qeWIq+S6uuS7o+aIkeaUtumSse+8jOWboOS4uuaIkeeUn+eXheS4jeiDvei/h+adpeOAgg0K5aaC
-5p6c5LiN6YeH5Y+W6KGM5Yqo77yM6ZO26KGM5Y+v6IO95Lya5Zug5Li65L+d5oyB6L+Z5LmI6ZW/
-5pe26Ze06ICM6KKr5rKh5pS26LWE6YeR44CCDQoNCuaIkeWGs+WumuS4juaCqOiBlOezu++8jOWm
-guaenOaCqOaEv+aEj+W5tuacieWFtOi2o+W4ruWKqeaIkeS7juWkluWbvemTtuihjOaPkOWPlui/
-meeslOmSse+8jOeEtuWQjuWwhui1hOmHkeeUqOS6juaFiOWWhOS6i+S4mu+8jOW4ruWKqeW8seWK
-v+e+pOS9k+OAgg0K5oiR6KaB5L2g5Zyo5oiR5Ye65LqL5LmL5YmN55yf6K+a5Zyw5aSE55CG6L+Z
-5Lqb5L+h5omY5Z+66YeR44CCIOi/meS4jeaYr+S4gOeslOiiq+ebl+eahOmSse+8jOS5n+ayoeac
-iea2ieWPiueahOWNsemZqeaYrzEwMCXnmoTpo47pmanlhY3otLnkuI7lhYXliIbnmoTms5Xlvovo
-r4HmmI7jgIINCg0K5oiR6KaB5L2g5ou/NDUl55qE6ZKx57uZ5L2g5Liq5Lq65L2/55So77yM6ICM
-NTUl55qE6ZKx5bCG55So5LqO5oWI5ZaE5bel5L2c44CCDQrmiJHlsIbmhJ/osKLmgqjlnKjov5nk
-u7bkuovkuIrmnIDlpKfnmoTkv6Hku7vlkozkv53lr4bvvIzku6Xlrp7njrDmiJHnmoTlhoXlv4Pm
-hL/mnJvvvIzlm6DkuLrmiJHkuI3mg7PopoHku7vkvZXkvJrljbHlj4rmiJHmnIDlkI7nmoTmhL/m
-nJvnmoTkuJzopb/jgIINCuaIkeW+iOaKseatie+8jOWmguaenOaCqOaUtuWIsOi/meWwgeS/oeWc
-qOaCqOeahOWeg+WcvumCruS7tu+8jOaYr+eUseS6juacgOi/keeahOi/nuaOpemUmeivr+WcqOi/
-memHjOeahOWbveWutuOAgg0KDQrkvaDkurLniLHnmoTlprnlprnjgIINCueJueiVvuiOjirmtbfo
-koLlpKvkuroNCg==
+On 06/03/22 at 08:55am, Dave Hansen wrote:
+> On 5/30/22 01:40, Jonathan McDowell wrote:
+> > Borislav,
+> > 
+> > I don't think there are any outstanding review comments for me to deal
+> > with on this, so is it safe to assume it'll get picked up at some point
+> > once the merge window calms down?
+> 
+> Nothing here looks too crazy, but it's still been _very_ lightly
+> reviewed.  It doesn't seem like anyone from the kexec world has seen it,
+> for instance.
+> 
+> Mimi's review was a great start, but it would be really nice to make
+> sure that the kexec bits look good.
+
+The change looks good from kexec/kdump side. Not sure if Eric has
+any concern.
+
