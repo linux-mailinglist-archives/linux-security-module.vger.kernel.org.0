@@ -2,92 +2,83 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9191253F36A
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jun 2022 03:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6766353FAEE
+	for <lists+linux-security-module@lfdr.de>; Tue,  7 Jun 2022 12:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiFGBgb (ORCPT
+        id S240674AbiFGKL4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 6 Jun 2022 21:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        Tue, 7 Jun 2022 06:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiFGBga (ORCPT
+        with ESMTP id S240669AbiFGKLz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 6 Jun 2022 21:36:30 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14CECEBB9;
-        Mon,  6 Jun 2022 18:36:29 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHCZm5xMyz1K9Rj;
-        Tue,  7 Jun 2022 09:34:40 +0800 (CST)
-Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 09:36:27 +0800
-Received: from huawei.com (10.67.174.33) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 7 Jun
- 2022 09:36:27 +0800
-From:   "GONG, Ruiqi" <gongruiqi1@huawei.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-CC:     Kees Cook <keescook@chromium.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Wang Weiyang" <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Gong Ruiqi <gongruiqi1@huawei.com>
-Subject: [RESEND PATCH] smack: Replace kzalloc + strncpy with kstrndup
-Date:   Tue, 7 Jun 2022 17:36:49 +0800
-Message-ID: <20220607093649.928131-1-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 7 Jun 2022 06:11:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC1DA338C;
+        Tue,  7 Jun 2022 03:11:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3A09B81EDB;
+        Tue,  7 Jun 2022 10:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F64AC3411E;
+        Tue,  7 Jun 2022 10:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654596711;
+        bh=u/LeARG2hwxh21NjNwvi6BgnN1cum7FrrFPMu1OzkfY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ep4byXZ8izun2IJ+1pW7U1VjvjuX0mLio8JYSqFxp96ZTPtlppNuwjAgGzLO58DmO
+         F1BS8dLeF3tRS57YXHB2AvkPU01RHWYxPVpx92soGPkInCwWYWmomoS9qYBNmd0ku0
+         YxFLyuy9RTaY8uFE8iT3Ls3OI2sWZO3Mob0QDIvNY89Scx0xrDv690vrFmpi9mB2Ni
+         CWPTE4foaaomaw1I+BJzDb48A7ytfFhQt0+boLnB0h0DeMLFoZuV9Nt0xooN6rLOn+
+         bMikhScHjD8yv0fS1vf3q59YUNCycOQzHg5Fh17I+XYsHnJuayqQIPG0pCqkVnLbeF
+         JRyee4eULKOWg==
+Date:   Tue, 7 Jun 2022 13:09:56 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
+        jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
+ tpm2_key_encode()
+Message-ID: <Yp8j9FilcBMyeL2G@iki.fi>
+References: <20220607074650.432834-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.33]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607074650.432834-1-niejianglei2021@163.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Simplify the code by using kstrndup instead of kzalloc and strncpy in
-smk_parse_smack(), which meanwhile remove strncpy as [1] suggests.
+"KEYS: trusted: fix memory leak in tpm2_key_encode()"
 
-[1]: https://github.com/KSPP/linux/issues/90
+On Tue, Jun 07, 2022 at 03:46:50PM +0800, Jianglei Nie wrote:
+> The function allocates a memory chunk for scratch by kmalloc(), but
+                                        ~~~         ~~ 
+                                        from        with
 
-Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
----
+There's more than one function in Linux - maybe you'd rather want
+to write: "tpm2_key_encode() allocates ..."
 
-Resend: fix email issue to make it acceptable by the mailing list
+> it is never freed through the function, which leads to a memory leak.
 
- security/smack/smack_access.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+You can just write "it is never freed, which leads to a memory leak."
 
-diff --git a/security/smack/smack_access.c b/security/smack/smack_access.c
-index d2186e2757be..585e5e35710b 100644
---- a/security/smack/smack_access.c
-+++ b/security/smack/smack_access.c
-@@ -465,12 +465,9 @@ char *smk_parse_smack(const char *string, int len)
- 	if (i == 0 || i >= SMK_LONGLABEL)
- 		return ERR_PTR(-EINVAL);
- 
--	smack = kzalloc(i + 1, GFP_NOFS);
--	if (smack == NULL)
-+	smack = kstrndup(string, i, GFP_NOFS);
-+	if (!smack)
- 		return ERR_PTR(-ENOMEM);
--
--	strncpy(smack, string, i);
--
- 	return smack;
- }
- 
--- 
-2.25.1
+> Handle those cases with kfree().
 
+"Free the memory chunk with kfree() in the return paths."
+
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+
+Thank you finding this and providing a fix, it is highly appreciated.
+Please don't take the nitpicking with the language personally. Just want
+to have it documented in appropriate form.
+
+BR, Jarkko
