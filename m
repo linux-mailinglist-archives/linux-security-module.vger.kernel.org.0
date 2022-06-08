@@ -2,132 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FDD542A00
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jun 2022 10:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B87542C52
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jun 2022 12:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbiFHIyD (ORCPT
+        id S235581AbiFHJ7z (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 8 Jun 2022 04:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        Wed, 8 Jun 2022 05:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbiFHIxj (ORCPT
+        with ESMTP id S235694AbiFHJ7l (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:53:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872B337E8B1;
-        Wed,  8 Jun 2022 01:12:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9BF0ECE2535;
-        Wed,  8 Jun 2022 08:02:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99192C3411D;
-        Wed,  8 Jun 2022 08:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654675336;
-        bh=09GflePoermPFREk/n9az26hTfpo0H7Xj5McEsLlFJQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZCDxQYVmYqZidM5WW39gUjkgm4WMrJxNpUzfJj4EhOFOWPvu4V6xp81uL1rsn0o+o
-         QfQLpX+VGhCgIeYK3mtLHVuI8dSweZq8nflfguxlEXwyeOYwDjG7enN91wpByGeRRr
-         dFYK7sIqQQQTMkqrcDMK/aZF7epgSy243V6VEgaasLwJGBF1MgoMG05c8rzdkGeFKS
-         wx+0tVXAfb9C7a6q8HlfqwmkkBgDg8bDaMZIhnkie0eomYRUFvzv/dtsCX4jl4b2GW
-         MNJVIAOcln1Nv2khtLWUW3ofqY348n/xXnIr6/R4mlvggciQt+UjFANuWbgcZBzVq4
-         xdEPxs0uQM+Jg==
-Date:   Wed, 8 Jun 2022 11:00:19 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
- tpm2_key_encode()
-Message-ID: <YqBXExY7M012ENt7@iki.fi>
-References: <20220608025938.447908-1-niejianglei2021@163.com>
+        Wed, 8 Jun 2022 05:59:41 -0400
+X-Greylist: delayed 2398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 02:33:27 PDT
+Received: from mail.puregrowthonline.pl (mail.puregrowthonline.pl [51.38.124.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF81114AAA
+        for <linux-security-module@vger.kernel.org>; Wed,  8 Jun 2022 02:33:22 -0700 (PDT)
+Received: by mail.puregrowthonline.pl (Postfix, from userid 1002)
+        id 9C9C0A2938; Wed,  8 Jun 2022 08:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puregrowthonline.pl;
+        s=mail; t=1654676115;
+        bh=CSKXLMgcdpWkXuTgJn5+jsCVobtU9JEF4vCnS5z6McM=;
+        h=Date:From:To:Subject:From;
+        b=rAGxsGTivPlcAJUrSALGfgWjeSTV3fmChzEGBiHQggn2SDgNZxOT76kpaekVCd1Ve
+         w90fh2ziXfV4TSGP2e4cBP1gR9wXU2+CuFrzQwcbta69wiJxZkpa+I7KqrzDifqUXe
+         1cM93YP6Bqezv68RKTbpFGKOl449QjTNkInPAFDcGyHe1l9pNk2P+OGytUV4+FQqO+
+         Xmlg06uDuNJUbqbtR3hl8Qv/EEDBCi6SZTTJ3O5kcUhZ/jzZuo/2d5Qpy7tJuy0/AZ
+         GcH/OYpOIcx9haNcUBfnsUpHeT14z7/XILQODAbvvloxccqwzj3a48YPJZWh+bcb1s
+         OkH6LohAGM9gQ==
+Received: by mail.puregrowthonline.pl for <linux-security-module@vger.kernel.org>; Wed,  8 Jun 2022 08:15:09 GMT
+Message-ID: <20220608064500-0.1.41.cywx.0.fmdlp97dmx@puregrowthonline.pl>
+Date:   Wed,  8 Jun 2022 08:15:09 GMT
+From:   "Wiktor Nurek" <wiktor.nurek@puregrowthonline.pl>
+To:     <linux-security-module@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.puregrowthonline.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608025938.447908-1-niejianglei2021@163.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The short summary (as mentioned in review):
+Dzie=C5=84 dobry,
 
-"KEYS: trusted: Fix memory leak in tpm2_key_encode()"
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-Also, you should version your patches, and provide a change log.
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-See: https://www.kernel.org/doc/html/v5.18/process/submitting-patches.html#the-canonical-patch-format
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
-For git format-patch  you can simply supply "-vX" to get
-the-canonical-patch-format version included.
 
-On Wed, Jun 08, 2022 at 10:59:38AM +0800, Jianglei Nie wrote:
-> tpm2_key_encode() allocates a memory chunk from scratch with kmalloc(),
-> but it is never freed, which leads to a memory leak. Free the memory
-> chunk with kfree() in the return path.
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
-
-Here you can write:
-
-v3:
-...
-v2:
-...
-
->  security/keys/trusted-keys/trusted_tpm2.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> index 0165da386289..dc9efd6c8b14 100644
-> --- a/security/keys/trusted-keys/trusted_tpm2.c
-> +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> @@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  		unsigned char bool[3], *w = bool;
->  		/* tag 0 is emptyAuth */
->  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
-> -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-> +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-> +			kfree(scratch);
->  			return PTR_ERR(w);
-> +		}
->  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
->  	}
->  
-> @@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  	 * trigger, so if it does there's something nefarious going on
->  	 */
->  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-> -		 "BUG: scratch buffer is too small"))
-> +		 "BUG: scratch buffer is too small")) {
-> +		kfree(scratch);
->  		return -EINVAL;
-> +	}
->  
->  	work = asn1_encode_integer(work, end_work, options->keyhandle);
->  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
-> @@ -79,8 +83,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  	work1 = payload->blob;
->  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
->  				     scratch, work - scratch);
-> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-> +		kfree(scratch);
->  		return PTR_ERR(work1);
-> +	}
->  
->  	return work1 - payload->blob;
->  }
-> -- 
-> 2.25.1
-> 
-
-BR, Jarkko
+Pozdrawiam serdecznie,
+Wiktor Nurek
