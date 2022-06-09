@@ -2,142 +2,141 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83B5545885
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 Jun 2022 01:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805D054584A
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 Jun 2022 01:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345561AbiFIXTy (ORCPT
+        id S236565AbiFIXP5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 9 Jun 2022 19:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        Thu, 9 Jun 2022 19:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235953AbiFIXTw (ORCPT
+        with ESMTP id S236603AbiFIXP4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:19:52 -0400
-Received: from sonic304-28.consmr.mail.ne1.yahoo.com (sonic304-28.consmr.mail.ne1.yahoo.com [66.163.191.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C02648316
-        for <linux-security-module@vger.kernel.org>; Thu,  9 Jun 2022 16:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654816790; bh=6OEHWBhN+Xf3kcIIRqn1KVWVpE9iuHUdlNhbzS5Ytzg=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=oyIZoaiMp7F4UjJR1ztRGiQ2Qs2OPHaJPbzgIfc44FwiyJKeN9/wlJjyqBGCPcdf+fhF2Oazpt26CVPSno/AZVZGN18saU5PTTcv3yprWtHCxqhP1JUl7uYoHrjbvwq+A6PYz7wdvSQtIOPi+41kvUnA5fXiqAu/6rNAhxVxkSLqWR7vHMZ5fAZlMUaqe4mcruLeaExcll6KVAVDs54qQO9axI7nnWm8pEun+1Ln5JVlxN4n6r0CK0+Qg7tm1+wbKDTB7YFMKNmPO9QKdkU0uHqIn6v6uyJ8cMgTFdXL0d2aD1J5JQLROnhcf8QD2M4hL3ArSN46wpQgIMatgvlgfA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654816790; bh=Nv+6WX90LR6zUWYNLfCynFqbtbcic+HHa4tQKlq+7cV=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=WMqmxybe8gJAwoyYUMUKqVHAIZAQEHJMC+nKSe1FHDg2ZrhPsYe0Il0lKIX2vTtXzBHBQOIMdnpNn4tWSmNJe9+JGNa3RVvK4078E4fOEKFzYvF/Zpez/Lwc7xLUF6guPPeH4ZfApshpKYltbe4EzXTIUYs3OJs+Zr/RhOqwqIwvmuiOJlh/j4fTzkfLvSH+xGHNlx7iHtL+M5Dqll5RQlLJj1T2mVjSm0xXZzdgFTdRLkgmI8XQ+/GHHMuH3NZi5ocHpTrlWBxgUBezUGjBacILiw3QC/hc6S5ZDAj/vR8H4fEkju0MoVrAd3zbavfIwvkMCLIXn7JrSetsTw7T0Q==
-X-YMail-OSG: rBtIgioVM1kkk6gmUTR90KOa0AEj3PA1t3DdjqftKZbH5MJELjXYbsNouK8KkQ8
- BX2HKIlczQ0z8nJX.3_JnOHpGNo0zTms4vJRAU5cFgB1GEAjr_cHM5dhdyUPTKAEyd4ubJBB6C5K
- Jn4wGldGxZxZZXkbRUHIo_uPAMl76aXw2OYSdh75JsidfHwWk8vtBDiRD5dAAh_DtUv0qFhT0Qmj
- owGDi4Wfq_4zANVEJUUUJ5gqD2dhqsQFqKs_AfxiF3hV0eY_4yLX6HC.GNkNtVdpoWGo6.OYmEOU
- kgg7O4RPQraTPbzHphSdwDCvgDGNRTyhp_Y2NxUBNH8gVRv98S0tCYDax4rnmjcYDLCUzqEeEB9g
- sz.MndfpRJhibnTsdg7i.vjG4gIMPr2Bfx6iSZ.hKg6mM3XxFTbsxfLXPPSKXumzEx8tzpcL8qi0
- Vk74a67Kg42tUdV8u37WZtnFskhm70djSWDt55eqpeU4pkp0DNa4AfMF67cO7gvH_IvrrYVYyu1G
- lJZ5mQxF1rBGR2ecEtviXaMwxUUcV_1W1ZUW7e0MteKmhm8SS0lzrQHGm2fVhQadCKoqobyAJc9s
- ruQvQyLYCD8QmTu8hZE7KUxum5AJKwUse5kBCHqJBvFSFpgxu4JIhD.0TpX3rG3ViubtCHj.r4iJ
- niSVcLgEikMIf9yzGdBlLjTTp0Fyo5aIcIKYnENi4ebBuz00fkpe_lNxGkfY4cqIJaoRzHNCITBk
- wZbl30puH2.Jdtjbdhzuep0ipE3ShtDHjJGPCUumOuVathnmndtgU69dPv3t0ini.GV9bE24UgvD
- NacQ5wYsDRb9AajHPCye067kz7jyJOrpNDup2Ctae.bEkw9Ms8EbFdR_FJuawDRqFClotRdbVbtA
- I0GeJV7qICaSgSPuhvj1CqTFd9ps2alORdwEXYkFiRcAMR0ueMYohWM0nWZxAXevgWe9ajFloSpJ
- TBjOR7pEYCdlBmZJRLik89gZUKBASmH95Rj.XpJDg1jWnAnuWyceqB0aDO.zyHUwSH1ranPPGx5L
- 4EfLPHxxICamy8fgnZQAtSrPip0H6_uk3uZE0B4zq07XuB2P5jDx68jZMmm0qy8ymIE6ruuv00vG
- 9OenoFLJSK1.iEPQqxsaNDkiRMep9ypHdJnLNFOjv533PKmhqxcRANSjvDEDYaIbjkQUm4Kvy_g5
- V7.v4bVDyQ04xAcaERws0eKs4D0PKjx_i7Rtpy7EDaAMvJe1iN_YkVMoWA8XUn4dAua0y_Qni_rA
- 1cf2u6jW3c7t9xNAwQTuWjIymZUwwfa6Ow_tBIZZL4s0zDUmLaMfXsU1g.DzfO.DAa56rDfEJmgp
- N1n4i6Ydtllh7cHC.AwXcL1gPtrgltWxCKwTiwuB3D5lmJnHiId7Su9_OsBaeArRcsRjL4Yc_bTU
- .0yWOFwVnEbHBqsuNYAj6srNGjVizpsPKLhBBNwSThXwZCsXT_n_oH2OYPMCmbbnCn_W9638WWz2
- HWt5ENUWT8HDcexNbelrTdiJpJHMK_Lqmce2yCLCLLxSey_4dk0ev2pdi.U1zxU2VLqLQOmQymkc
- nAs8jyDrUF80Qp6vTDFeqA5d_UAm_64M.fWoduSazJzEvEZFDs8a_gaVkmXpjLR8THqyiZzXW7j0
- oRojvkudytBmd13VOvbiQPnUBbgT2A0.Dlw.LmMeNYUxBWcGOu.nV_QyCPYdoBHWhoOp3A.jFrGz
- WWerpyAuCFvESibbSKjnUq_PKKr.aGoRgVNb3KxDEKZYxNS6U8zvjgTztuoWnUviiXtrKlO8.Epi
- XZ4WumPflPjM1iDpFjvItnCjMc5AtAXsJdqNh8Q53jL5EGmfyiFNV_HLXy3tu7h20gvhEdhNQAaJ
- XUVZf5xcY3PlzM7eVObKwAr33xBqVMN8zdgI7HHrmmTvGdYDLy9nl4xneLaKeIev5G0uz7l6Py1d
- 0TpYax9RAsGmeXQYs.yrmkv79MCPR9z2AlCJ_iysf81kDG9A7xaXnnkbmgCWAl0m55kHwmwKycjD
- F2DbTTl_mCX7apE1OgRv1xM6XMKswwbLNyI5aYVq4.X4g35KcaH7vetkE5SV0qKBtDz58CMthq1i
- .q3z_S6QKeWNEA74Eoy.PazbWaZMPpaomuixqCUR2ef.IqxOEiuCa4cVBKrKzCmgGT_.iNGcrcww
- 5_hj8EqvJ39j1nEXMTXgxly9CEzu_yedO91WKDDooMgg4MJIolbfq0sMwZMt2zjsZiHyWmQGqZx3
- h88V0TOPJm1yWoo76izZ2mSlnOGd2Qra3uJU08z3ClTTHKnHT.DedaZX4qRiTci8PUpR3nbndyvP
- dOg--
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Thu, 9 Jun 2022 23:19:50 +0000
-Received: by hermes--canary-production-bf1-856dbf94db-29hkj (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d4831bccd9bce2c443fd61283228c72f;
-          Thu, 09 Jun 2022 23:19:48 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     casey@schaufler-ca.com, linux-audit@redhat.com,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v36 33/33] AppArmor: Remove the exclusive flag
-Date:   Thu,  9 Jun 2022 16:01:46 -0700
-Message-Id: <20220609230146.319210-34-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220609230146.319210-1-casey@schaufler-ca.com>
-References: <20220609230146.319210-1-casey@schaufler-ca.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 9 Jun 2022 19:15:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB2F165379;
+        Thu,  9 Jun 2022 16:15:51 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 259N9lNa030155;
+        Thu, 9 Jun 2022 23:15:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=6rV25bVukC0FzXp8C+eOvheKB/Ow7ad3IEMVII0+WpA=;
+ b=RHOtXYOZ9bsKZLp7BpFsh8xAA1w+ADlN0/KyiaOLAfMUmEKpvIjNaVHmuM1ixTKXz3u3
+ 8rdap9v1Q7WMGgOkjy64pZ9O5wfQQ8c1XhuMnzbzTiQhPKj29mhNrTf9+wJ/p52qpHmb
+ pjZxUs48VW1ROKzR6CVJRGFMjYGXI6eKG7a46MN/FlE2B5fRj2odL0WLZNqUGrI0Ht54
+ XHIU52qptcQW51LeTjIuao6Wo0lnRXj++JfG6rO2y66mItDojOgbHHNnaPLOqYra9/zI
+ 9rSPPP9+QStbwwfbnHyJGHAnENcJzUhuZnhPQYAg4V67J1yclMLjXx6cTR+BVAmR9J1P vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gks69gysn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 23:15:36 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 259NAuRn009191;
+        Thu, 9 Jun 2022 23:15:35 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gks69gys6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 23:15:35 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 259N5ubN001267;
+        Thu, 9 Jun 2022 23:15:32 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gfy19fft3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 23:15:32 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 259NFUKJ21496240
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Jun 2022 23:15:30 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2DE6D11C04C;
+        Thu,  9 Jun 2022 23:15:30 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1AF8011C04A;
+        Thu,  9 Jun 2022 23:15:28 +0000 (GMT)
+Received: from sig-9-65-64-6.ibm.com (unknown [9.65.64.6])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Jun 2022 23:15:27 +0000 (GMT)
+Message-ID: <e44bb6b11573838417b5d561173c27a1571c94b6.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 3/4] arm64: kexec_file: use more system keyrings to
+ verify kernel image signature
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Chun-Yi Lee <jlee@suse.com>, stable@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 09 Jun 2022 19:15:27 -0400
+In-Reply-To: <20220512070123.29486-4-coxu@redhat.com>
+References: <20220512070123.29486-1-coxu@redhat.com>
+         <20220512070123.29486-4-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AZVfSAyGR6zReIne5Uk26XJVLhnwfpqj
+X-Proofpoint-ORIG-GUID: mzxr_bl7MDVagn9LqpV5ZEpivnd1vDN9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-09_15,2022-06-09_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ priorityscore=1501 bulkscore=0 adultscore=0 mlxlogscore=999 clxscore=1011
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206090085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-With the inclusion of the interface LSM process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+On Thu, 2022-05-12 at 15:01 +0800, Coiby Xu wrote:
+> Currently, a problem faced by arm64 is if a kernel image is signed by a
+> MOK key, loading it via the kexec_file_load() system call would be
+> rejected with the error "Lockdown: kexec: kexec of unsigned images is
+> restricted; see man kernel_lockdown.7".
+> 
+> This happens because image_verify_sig uses only the primary keyring that
+> contains only kernel built-in keys to verify the kexec image.
 
-Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Acked-by: John Johansen <john.johansen@canonical.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+From the git history it's clear that .platform keyring was upstreamed
+during the same open window as commit 732b7b93d849 ("arm64: kexec_file:
+add kernel signature verification support").   Loading the MOK keys
+onto the .platform keyring was upstreamed much later.  For this reason,
+commit 732b7b93d849 only used keys on the  .builtin_trusted_keys
+keyring.   This patch is now addressing it and the newly upstreamed
+.machine keyring.
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 1fdb885facbb..1d742d864e0b 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1165,22 +1165,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock,
- 	return error;
- }
- 
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1284,8 +1268,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1939,7 +1921,7 @@ static int __init apparmor_init(void)
- 
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
--- 
-2.35.1
+Only using the .builtin_trusted_keys is the problem statement, which
+should be one of the first lines of the patch description, if not the
+first line.
+
+> 
+> This patch allows to verify arm64 kernel image signature using not only
+> .builtin_trusted_keys but also .platform and .secondary_trusted_keys
+> keyring.
+
+Please remember to update this to include the .machine keyring.
+
+> 
+> Fixes: 732b7b93d849 ("arm64: kexec_file: add kernel signature verification support")
+
+Since the MOK keys weren't loaded onto the .platform keyring until much
+later, I would not classify this as a fix.
+
+thanks,
+
+Mimi
 
