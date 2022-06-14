@@ -2,118 +2,75 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139F754B052
-	for <lists+linux-security-module@lfdr.de>; Tue, 14 Jun 2022 14:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35CC54B056
+	for <lists+linux-security-module@lfdr.de>; Tue, 14 Jun 2022 14:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356972AbiFNMNH (ORCPT
+        id S1356766AbiFNMOo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 14 Jun 2022 08:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        Tue, 14 Jun 2022 08:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356831AbiFNMMw (ORCPT
+        with ESMTP id S1357006AbiFNMOV (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:12:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8042949FA0;
-        Tue, 14 Jun 2022 05:12:39 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LMnMs47CPzjXcV;
-        Tue, 14 Jun 2022 20:11:05 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 20:12:34 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] lsm_audit: Clean up redundant NULL pointer check
-Date:   Tue, 14 Jun 2022 20:10:30 +0800
-Message-ID: <20220614121030.115491-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 14 Jun 2022 08:14:21 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CBC34BB2
+        for <linux-security-module@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id s20-20020a056830439400b0060c3e43b548so6420085otv.7
+        for <linux-security-module@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
+        b=UNA00ExpSe/IYk9qRpK3nhNY3MQGhIZVH9b+TBjq+LdlUjXIh78z6gPdY8GF0sQHK1
+         HJ2n3gfPpUPhyyacfGQvRyEpF1QlynrQ30w+G5Aew5oVgyNdOMVYVhySdHNUBZObva2y
+         PuLir0DHRxYshYjhyycNkTLQ7VsAQLmTK6m5EVJfcKtgRbmxa7D08ugJk7y5pLRJ/ze1
+         6cL1+ieOt2sNltOPHDSKZebgxow79UdI2TUNij2cNTn50jsq9VR126vHNmWni88LExVM
+         7xKsxa1nHQ7JrwK4VAXG7j0wCn6FqCQrLI4ANDOm8760jdm8KbeqIvWnFua/uGvpfZQ4
+         nejg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
+        b=WbjaX5Mcni0qky9otEXEwEUMs6xgQptrE66+C9t1qL/X9stBX+IpluxeD/+4O3f0UG
+         O7C3brPTtUHgAwc9ab6a98F/ZcSz6//OtkqbiPyWh6KVOj4autrj/ghS6FBFDjuXwPd0
+         4GXde9e+Fsl5t2Tho3/IHfEyFtfaKFWifRA82f1Z0e9flj6bcT79D7NsDQ5hqntByePm
+         ydhQgx7wHupVX+6r7lBltzX2ACebxYADIW9yLszffpGmwFA0loWts8Gb7NiwxKUV4Def
+         cFEh5P59MUMiifBF49lXZRDWn+8WqCCnRB3iJ+PAy0pt19j8jrtfzJwYL42C4W0IK1TS
+         iAjQ==
+X-Gm-Message-State: AOAM530bMrKx1U0UKO2NH6lthX8vKAcfMTSzHGNSK7m/zdqmfpK+raEA
+        6D1a1NamLusI7fjMFsZnz802OAr2ngNxcmA363s=
+X-Google-Smtp-Source: ABdhPJxH036Sb3549Y0f3hc7Zhwns93SCbnuybCuqmcROW8sIBDtc8O0vPfU6QLql+6epoXLTxfkWaoTwfvvDQjMptA=
+X-Received: by 2002:a05:6830:1691:b0:60c:1eb1:6ddf with SMTP id
+ k17-20020a056830169100b0060c1eb16ddfmr1906144otr.205.1655208853785; Tue, 14
+ Jun 2022 05:14:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a8a:c46:0:b0:42d:ab20:ed24 with HTTP; Tue, 14 Jun 2022
+ 05:14:13 -0700 (PDT)
+From:   Daniel Affum <danielaffum05@gmail.com>
+Date:   Tue, 14 Jun 2022 15:14:13 +0300
+Message-ID: <CAPkju_PQmptLCUNLrFjDqn4sN-xwFQ9XOg5Cv+KN_pd6V1aXpA@mail.gmail.com>
+Subject: Confirm Receipt
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The implements of {ip,tcp,udp,dccp,sctp,ipv6}_hdr(skb) guarantee that
-they will never return NULL, and elsewhere user don't do the check
-as well, so remove the check here.
+Hello Dear,
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- security/lsm_audit.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+I am Daniel Affum a retired civil servant i have a  business to
+discuss with you from the Eastern part of Africa aimed at agreed
+percentage upon your acceptance of my hand in business and friendship.
+Kindly respond to me if you are interested to partner with me for an
+update.Very important.
 
-diff --git a/security/lsm_audit.c b/security/lsm_audit.c
-index 78a278f28e49..75cc3f8d2a42 100644
---- a/security/lsm_audit.c
-+++ b/security/lsm_audit.c
-@@ -44,9 +44,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	struct iphdr *ih;
- 
- 	ih = ip_hdr(skb);
--	if (ih == NULL)
--		return -EINVAL;
--
- 	ad->u.net->v4info.saddr = ih->saddr;
- 	ad->u.net->v4info.daddr = ih->daddr;
- 
-@@ -59,8 +56,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	switch (ih->protocol) {
- 	case IPPROTO_TCP: {
- 		struct tcphdr *th = tcp_hdr(skb);
--		if (th == NULL)
--			break;
- 
- 		ad->u.net->sport = th->source;
- 		ad->u.net->dport = th->dest;
-@@ -68,8 +63,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_UDP: {
- 		struct udphdr *uh = udp_hdr(skb);
--		if (uh == NULL)
--			break;
- 
- 		ad->u.net->sport = uh->source;
- 		ad->u.net->dport = uh->dest;
-@@ -77,8 +70,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_DCCP: {
- 		struct dccp_hdr *dh = dccp_hdr(skb);
--		if (dh == NULL)
--			break;
- 
- 		ad->u.net->sport = dh->dccph_sport;
- 		ad->u.net->dport = dh->dccph_dport;
-@@ -86,8 +77,7 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_SCTP: {
- 		struct sctphdr *sh = sctp_hdr(skb);
--		if (sh == NULL)
--			break;
-+
- 		ad->u.net->sport = sh->source;
- 		ad->u.net->dport = sh->dest;
- 		break;
-@@ -115,8 +105,6 @@ int ipv6_skb_to_auditdata(struct sk_buff *skb,
- 	__be16 frag_off;
- 
- 	ip6 = ipv6_hdr(skb);
--	if (ip6 == NULL)
--		return -EINVAL;
- 	ad->u.net->v6info.saddr = ip6->saddr;
- 	ad->u.net->v6info.daddr = ip6->daddr;
- 	/* IPv6 can have several extension header before the Transport header
--- 
-2.17.1
-
+Yours Sincerely,
+Daniel Affum.
+Reply to:danielaffum005@yahoo.com
