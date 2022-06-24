@@ -2,56 +2,56 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8067B5591B1
-	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jun 2022 07:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CD85590C6
+	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jun 2022 07:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbiFXEu1 (ORCPT
+        id S231888AbiFXEud (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 24 Jun 2022 00:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        Fri, 24 Jun 2022 00:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiFXEs3 (ORCPT
+        with ESMTP id S231891AbiFXEs3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
         Fri, 24 Jun 2022 00:48:29 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6519869276
-        for <linux-security-module@vger.kernel.org>; Thu, 23 Jun 2022 21:48:27 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id k127so1531048pfd.10
-        for <linux-security-module@vger.kernel.org>; Thu, 23 Jun 2022 21:48:27 -0700 (PDT)
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954C36927C
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Jun 2022 21:48:28 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 184so1324861pga.12
+        for <linux-security-module@vger.kernel.org>; Thu, 23 Jun 2022 21:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=YbFhCGzhKhLbr2G2ThS1s0sN7jwXYQ4vWhYkrXF5osc=;
-        b=kkxvDxX6n5CO12HAysNPgLTCaKTovZj6n1W4WM6NrdWPKdt8jHf/gjXiqu7I26pISm
-         ua6NuOBU0e747Hkio56Q5FXCk7rSyhq3Y6Zq55CZ25pU97Fj2MfR7zJOcZ41hi7FIff1
-         UZdKWwl3KHRXa7tdvTwjrgx6d6+yqM9BG8AZIhTjl1u7f/aVNNosUAXA5LKe9/MYnIvG
-         LlPZDl/L+rPWYZtuuiuwai4BFZqZ2PEnrQKWLvGk7JAWOVawnMXlmZxb2Q+2Kgculowg
-         wQXZjqI2+6jVMZLja/f8RD2VIlQY6lApwCHArAD4TdMuo1d9XJYF0lETVOugyAaATC3x
-         mPRg==
+        bh=jMCGTpB4qORgO/HAj9/J+wYW1m5dKZO1Y3zKxKtdM4E=;
+        b=vKrF/uHWOix1+6Rl9MXcsk8W+kFQn6mM1CVaeA0uQogMNrgp1k5wMZQey+aLu9X84R
+         BHXhsOPoUF5SO8RkvrBFWIykapEklgV+UwvVqywVNBz3I1je7hl1nHH5FqCv2/bTn5gE
+         b6zmsjYCTjMu2DCbRqxal23S6foeAxjvZ0I9Vb5h7bTIL5rTPNVCdmhSv3BwnpnzJ8+h
+         sFU3SoJoaQ9pnSxUOSPWi0V0Q5O82fR6fWL+FaNZd8GLx4embxn/u/LXoRJYHDE0pb8r
+         gD6DJ+Rd7qA2JTDGwJ+L08FUMO2kUJU+iPqZ6+nAFU93FeYZs3QiOusK8ZsB5m3Zx5Bw
+         TQ3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=YbFhCGzhKhLbr2G2ThS1s0sN7jwXYQ4vWhYkrXF5osc=;
-        b=rjlyMYGDhY7oIONaEJpNkuGWWp2msm0l2MY+VAwrqdeANBt3viYytUpJAq4Z91cX5U
-         /1r1jSaTGQJDRhaS4fJS8AXf3N5p2ERgwZoXzcIcsXJWiLEcrrUvlqjWncO2aCghw3xf
-         95vgHSkKO5a5FNHKdqmS78vW7PV1D2O0lWaGE6xAcZel3zirjJxUFqO+QNZrYJgYA801
-         0rdqSBZMs1uuEDPrV6zcsi06WApkcLS31V86lF4hUEO4sxRHIGcmxryZMTBlNRM3CPAt
-         Z9Se2hRIPjG84si7s/d0yO67B09Bi5elHjUnhpaOO+Rq9pbMdtsOIn79RZC/WKYnBcFX
-         ipWQ==
-X-Gm-Message-State: AJIora+uMhm+mpi6CXaeh+avgxu/Ph1pCamwDiQigWxOVEh/ypwJWN/0
-        92zYZXzrmgPN9H7hvjnwdXHT87VwvsIHzw==
-X-Google-Smtp-Source: AGRyM1vJW29/sVxuMxr0tG1PDaIe69h+YLS81Q9kQN6GZXjLMUjcoObBkYAeIvvbIZG+ephEELUDwg==
-X-Received: by 2002:aa7:9470:0:b0:525:4214:bd9e with SMTP id t16-20020aa79470000000b005254214bd9emr13914582pfq.11.1656046106909;
-        Thu, 23 Jun 2022 21:48:26 -0700 (PDT)
+        bh=jMCGTpB4qORgO/HAj9/J+wYW1m5dKZO1Y3zKxKtdM4E=;
+        b=VqMs+o8GLJPTqt3ewUgLf7h9ea1KVF3DwUDjGEXz91D61SNUTnbl5gcJfZ5itkda95
+         z/JoIbeiqvh/EtDy0+ocW/WiW0KngmLY4IHWxFBtKMYpSghB4d/a5v3byNsekWpesVc6
+         M0GfWWucO/RcPItBv8/kndcj+7nbTIGl4Id2WKBqSR8+Co5oRdaT9fDiIbRcWm851CKf
+         sr+HbgNTHoJkym4rMSYgQjGeBYcCxSP5n2O6yV4r/W8N6p7lhE3fbp/UWf1OXNmU+wUj
+         wdd/qN/JQ8qeo5sY0GE1AIAWdxuKOFAwyRhbuhIbxqGOk8WqHxoqacdzGsu8tnikGkDc
+         FT7Q==
+X-Gm-Message-State: AJIora9Mq5O+9nlyr/TceOiEtQxBzgDMWHd8+AUnrSW8uW/X3FDmeHiW
+        JvAovExR7HHWX6sHLGo/dad+xQ==
+X-Google-Smtp-Source: AGRyM1uXZHQEpXqpNCieCPKUs298Zc7ZlsXzMC3KKqzIqfHMvB+F20JyDbM4hFNh9MRoTPgZTKoG4A==
+X-Received: by 2002:a63:fa41:0:b0:408:9d1b:2e57 with SMTP id g1-20020a63fa41000000b004089d1b2e57mr10364962pgk.102.1656046108122;
+        Thu, 23 Jun 2022 21:48:28 -0700 (PDT)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id j5-20020a63ec05000000b0040d2f92d30fsm503488pgh.88.2022.06.23.21.48.26
+        by smtp.gmail.com with ESMTPSA id 64-20020a621743000000b0051e7b6e8b12sm579926pfx.11.2022.06.23.21.48.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 21:48:26 -0700 (PDT)
-Subject: [PATCH v2 2/5] ima: Fix a build issue on 32-bit platforms
-Date:   Thu, 23 Jun 2022 21:48:08 -0700
-Message-Id: <20220624044811.9682-3-palmer@rivosinc.com>
+        Thu, 23 Jun 2022 21:48:27 -0700 (PDT)
+Subject: [PATCH v2 3/5] RISC-V: kexec: Use Elf64 on 64-bit targets
+Date:   Thu, 23 Jun 2022 21:48:09 -0700
+Message-Id: <20220624044811.9682-4-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220624044811.9682-1-palmer@rivosinc.com>
 References: <20220624044811.9682-1-palmer@rivosinc.com>
@@ -65,33 +65,47 @@ To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
         linux-integrity@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-ima_dump_measurement_list() took an "unsigned long *", but was passed a
-size_t.  This triggers build warnings on 32-bit RISC-V.
+Most of the Elf macros automatically select the correct Elf type, this
+converts the one explicit Elf64 usage to depend on XLEN.
 
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- security/integrity/ima/ima_kexec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/kernel/elf_kexec.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 13753136f03f..f2a94ec3002a 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -15,7 +15,7 @@
- #include "ima.h"
+diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
+index 9cb85095fd45..4532e3cf17a5 100644
+--- a/arch/riscv/kernel/elf_kexec.c
++++ b/arch/riscv/kernel/elf_kexec.c
+@@ -342,6 +342,12 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+ #define CLEAN_IMM(type, x) \
+ 	((~ENCODE_##type##_IMM((uint64_t)(-1))) & (x))
  
- #ifdef CONFIG_IMA_KEXEC
--static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
-+static int ima_dump_measurement_list(size_t *buffer_size, void **buffer,
- 				     unsigned long segment_size)
- {
- 	struct ima_queue_entry *qe;
++#if __riscv_xlen == 32
++#define ELFN(T) ELF32 ## T
++#else
++#define ELFN(T) ELF64 ## T
++#endif
++
+ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+ 				     Elf_Shdr *section,
+ 				     const Elf_Shdr *relsec,
+@@ -367,7 +373,7 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+ 		void *loc;		/* tmp location to modify */
+ 
+ 		sym = (void *)pi->ehdr + symtab->sh_offset;
+-		sym += ELF64_R_SYM(relas[i].r_info);
++		sym += ELFN(_R_SYM)(relas[i].r_info);
+ 
+ 		if (sym->st_name)
+ 			name = strtab + sym->st_name;
 -- 
 2.34.1
 
