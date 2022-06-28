@@ -2,196 +2,219 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE9355C374
-	for <lists+linux-security-module@lfdr.de>; Tue, 28 Jun 2022 14:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E4755D615
+	for <lists+linux-security-module@lfdr.de>; Tue, 28 Jun 2022 15:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244677AbiF1LZL (ORCPT
+        id S1345732AbiF1M21 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 28 Jun 2022 07:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        Tue, 28 Jun 2022 08:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239678AbiF1LZK (ORCPT
+        with ESMTP id S1345715AbiF1M2S (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:25:10 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193DA2CDF0;
-        Tue, 28 Jun 2022 04:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656415508; x=1687951508;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cV9gLh7/ksNfxbUkADTMFCNP+M9eg5dvTgDTdjYN6QQ=;
-  b=nNKliq9m5ulO4VeKDs8Y8B+v6E9KznAj40C0ZwSmGFUa0REU757wjyBT
-   9Uskplw3TRTdAmHicqmR5P5Llq/gNatfTM4/xvM+NRuPB613Cg7OVRqbp
-   VHWEpp6uW0C3pxFfwH6sX9OvBwg85av/PzQtRac9UPvNGg2GAaK1Ek0E0
-   T2K/5YwDg+ViBNvd8+cogSodQDfYI2VQgm8OR22QgW7CThkO2S6XKnCzb
-   jpNKEcwWz2M9iNZtixhnmvUmfU4AsDu/8b0Zyk9ZUSv5OcdyKx4PXoneb
-   L/EB62hE5QjbSKBRHYoc7aoad7eA540EADFHtRlwKRHElo2i+t65EjAVn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="345710578"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="345710578"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:25:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="540458827"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jun 2022 04:25:03 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o69L4-0009xs-QF;
-        Tue, 28 Jun 2022 11:25:02 +0000
-Date:   Tue, 28 Jun 2022 19:24:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        casey@schaufler-ca.com, linux-audit@redhat.com,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v37 18/33] LSM: Use lsmcontext in
- security_dentry_init_security
-Message-ID: <202206281923.PWn0D5ak-lkp@intel.com>
-References: <20220628005611.13106-19-casey@schaufler-ca.com>
+        Tue, 28 Jun 2022 08:28:18 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46392DFB2;
+        Tue, 28 Jun 2022 05:28:07 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LXP0M4Xn1z67LMV;
+        Tue, 28 Jun 2022 20:24:03 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 14:28:04 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
+        <songliubraving@fb.com>, <kafai@fb.com>, <yhs@fb.com>,
+        <dhowells@redhat.com>
+CC:     <keyrings@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v6 0/5] bpf: Add bpf_verify_pkcs7_signature() helper
+Date:   Tue, 28 Jun 2022 14:27:45 +0200
+Message-ID: <20220628122750.1895107-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628005611.13106-19-casey@schaufler-ca.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Casey,
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-I love your patch! Yet something to improve:
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
 
-[auto build test ERROR on pcmoore-audit/next]
-[also build test ERROR on pcmoore-selinux/next linus/master v5.19-rc4 next-20220628]
-[cannot apply to jmorris-security/next-testing]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220628-095614
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-config: x86_64-randconfig-a002-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281923.PWn0D5ak-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c930a07cebde69363d3633fba8bd4cac46dd1520
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220628-095614
-        git checkout c930a07cebde69363d3633fba8bd4cac46dd1520
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing a new helper:
+bpf_verify_pkcs7_signature(), dedicated to verify PKCS#7 signatures. More
+helpers will be introduced later, as necessary.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The job of bpf_verify_pkcs7_signature() is to retrieve the trusted keyring 
+from function parameters, and to perform signature verification by calling
+verify_pkcs7_signature().
 
-All errors (new ones prefixed by >>):
+Data and signature can be provided to the new helper with two dynamic
+pointers, to reduce the number of parameters. The keyring can be provided
+by its serial, or by its special ID defined in verification.h, if the
+serial is zero (not a valid value). bpf_verify_pkcs7_signature() also
+accepts key lookup-specific flags, passed to lookup_user_key() when the
+helper searches the keyring by its serial.
 
->> security/security.c:2319:24: error: use of undeclared identifier 'lsm_slotlist'; did you mean 'lsm_slot'?
-                           if (!strcmp(termed, lsm_slotlist[slot]->lsm)) {
-                                               ^~~~~~~~~~~~
-                                               lsm_slot
-   security/security.c:489:12: note: 'lsm_slot' declared here
-   static int lsm_slot __lsm_ro_after_init;
-              ^
->> security/security.c:2319:36: error: subscripted value is not an array, pointer, or vector
-                           if (!strcmp(termed, lsm_slotlist[slot]->lsm)) {
-                                               ~~~~~~~~~~~~^~~~~
-   2 errors generated.
+While passing the keyring serial to bpf_verify_pkcs7_signature() provides
+great flexibility, it seems suboptimal in terms of security guarantees, as
+even if the eBPF program is assumed to be trusted, that serial might come
+from untrusted user space not choosing one that the system administrator
+approves to enforce a mandatory policy. The same goal could be instead more
+easily achieved by setting a hardcoded keyring ID in the signed eBPF
+program, to be passed to bpf_verify_pkcs7_signature().
 
+bpf_verify_pkcs7_signature() can be called only from sleepable programs,
+because of memory allocation (with lookup flag KEY_LOOKUP_CREATE) and
+crypto operations. For example, the lsm.s/bpf attach point is suitable,
+fexit/array_map_update_elem is not.
 
-vim +2319 security/security.c
+A test was added to check the ability of bpf_verify_pkcs7_signature() to
+verify PKCS#7 signatures from the session keyring, a newly-created keyring,
+and from the primary and secondary keyring (taking the tcp_bic.ko kernel
+module for the verification). The test does not fail if that kernel module
+is not found (needs support from the CI).
 
-20510f2f4e2dab James Morris    2007-10-16  2266  
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2267  /**
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2268   * security_setprocattr - Set process attributes via /proc
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2269   * @lsm: name of module involved, or NULL
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2270   * @name: name of the attribute
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2271   * @value: value to set the attribute to
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2272   * @size: size of the value
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2273   *
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2274   * Set the process attribute for the specified security module
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2275   * to the specified value. Note that this can only be used to set
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2276   * the process attributes for the current, or "self" process.
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2277   * The /proc code has already done this check.
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2278   *
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2279   * Returns 0 on success, an appropriate code otherwise.
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2280   */
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2281  int security_setprocattr(const char *lsm, const char *name, void *value,
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2282  			 size_t size)
-20510f2f4e2dab James Morris    2007-10-16  2283  {
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2284  	struct security_hook_list *hp;
-c930a07cebde69 Casey Schaufler 2022-06-27  2285  	const char *slotname;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2286  	char *termed;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2287  	char *copy;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2288  	int *ilsm = current->security;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2289  	int rc = -EINVAL;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2290  	int slot = 0;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2291  
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2292  	if (!strcmp(name, "interface_lsm")) {
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2293  		/*
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2294  		 * Change the "interface_lsm" value only if all the security
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2295  		 * modules that support setting a procattr allow it.
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2296  		 * It is assumed that all such security modules will be
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2297  		 * cooperative.
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2298  		 */
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2299  		if (size == 0)
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2300  			return -EINVAL;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2301  
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2302  		hlist_for_each_entry(hp, &security_hook_heads.setprocattr,
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2303  				     list) {
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2304  			rc = hp->hook.setprocattr(name, value, size);
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2305  			if (rc < 0 && rc != LSM_RET_DEFAULT(setprocattr))
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2306  				return rc;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2307  		}
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2308  
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2309  		rc = -EINVAL;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2310  
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2311  		copy = kmemdup_nul(value, size, GFP_KERNEL);
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2312  		if (copy == NULL)
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2313  			return -ENOMEM;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2314  
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2315  		termed = strsep(&copy, " \n");
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2316  
-c930a07cebde69 Casey Schaufler 2022-06-27  2317  		for (slot = 0; slot < lsm_slot; slot++) {
-c930a07cebde69 Casey Schaufler 2022-06-27  2318  			slotname = lsm_slot_to_name(slot);
-a87b0b9fe463f0 Casey Schaufler 2022-06-27 @2319  			if (!strcmp(termed, lsm_slotlist[slot]->lsm)) {
-c930a07cebde69 Casey Schaufler 2022-06-27  2320  				*ilsm = slot;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2321  				rc = size;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2322  				break;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2323  			}
-c930a07cebde69 Casey Schaufler 2022-06-27  2324  		}
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2325  
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2326  		kfree(termed);
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2327  		return rc;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2328  	}
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2329  
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2330  	hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
-ac35545bc102bf Casey Schaufler 2022-06-27  2331  		if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2332  			continue;
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2333  		if (lsm == NULL && *ilsm != LSMBLOB_INVALID &&
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2334  		    *ilsm != hp->lsmid->slot)
-a87b0b9fe463f0 Casey Schaufler 2022-06-27  2335  			continue;
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2336  		return hp->hook.setprocattr(name, value, size);
-6d9c939dbe4d0b Casey Schaufler 2018-09-21  2337  	}
-98e828a0650f34 KP Singh        2020-03-29  2338  	return LSM_RET_DEFAULT(setprocattr);
-20510f2f4e2dab James Morris    2007-10-16  2339  }
-20510f2f4e2dab James Morris    2007-10-16  2340  
+A consideration was made on whether bpf_verify_pkcs7_signature() should be
+a simple wrapper, doing as little as possible, or whether it could have
+more complex logic. Having a simple and flexible wrapper requires two
+additional helpers, bpf_lookup_user_key() and bpf_key_put(), to search and
+acquire a key reference, pass that key to the wrapper, and release the
+reference. More care is also required on the eBPF verifier side, to ensure
+that an eBPF program always releases an acquired reference.
+
+While that gives eBPF developers the greatest flexibility to use the
+helpers as necessary, it does not match the security of the solution of
+retrieving the key and using it within the same function, as for example in
+security/keys/keyctl.c. The risk is that an eBPF program requests a key for
+a purpose, and then uses the key in a different way with one of the
+available key-related helpers (to be added in the future).
+
+struct key is not like a file descriptor, carrying permissions requested
+during an open, that can be revalidated at the time a read or write is
+performed. It is more close to a struct inode, the function using the key
+cannot know reliably which permission was requested at lookup time.
+
+For that reason, the key lookup and usage cannot be separated, as the
+kernel will guarantee (also to other MAC mechanisms) that once a key has
+been requested with a specific purpose, it will be used accordingly, beyond
+the control of eBFP programs.
+
+The patch set is organized as follows.
+
+Patch 1 exports bpf_dynptr_get_size(), to obtain the real size of data
+carried by a dynamic pointer. Patch 2 makes available for new eBPF helpers
+some key-related definitions. Patch 3 fixes the helper prototype regular
+expression to accept unsigned as type prefix. Patch 4 introduces the
+bpf_verify_pkcs7_signature() helper and patch 5 adds the corresponding
+test.
+
+Changelog
+
+v5:
+ - Move KEY_LOOKUP_ to include/linux/key.h
+   for validation of bpf_verify_pkcs7_signature() parameter
+ - Remove bpf_lookup_user_key() and bpf_key_put() helpers, and the
+   corresponding tests
+ - Replace struct key parameter of bpf_verify_pkcs7_signature() with the
+   keyring serial and lookup flags
+ - Call lookup_user_key() and key_put() in bpf_verify_pkcs7_signature()
+   code, to ensure that the retrieved key is used according to the
+   permission requested at lookup time
+ - Clarified keyring precedence in the description of
+   bpf_verify_pkcs7_signature() (suggested by John)
+ - Remove newline in the second argument of ASSERT_
+ - Fix helper prototype regular expression in bpf_doc.py
+
+v4:
+ - Remove bpf_request_key_by_id(), don't return an invalid pointer that
+   other helpers can use
+ - Pass the keyring ID (without ULONG_MAX, suggested by Alexei) to
+   bpf_verify_pkcs7_signature()
+ - Introduce bpf_lookup_user_key() and bpf_key_put() helpers (suggested by
+   Alexei)
+ - Add lookup_key_norelease test, to ensure that the verifier blocks eBPF
+   programs which don't decrement the key reference count
+ - Parse raw PKCS#7 signature instead of module-style signature in the
+   verify_pkcs7_signature test (suggested by Alexei)
+ - Parse kernel module in user space and pass raw PKCS#7 signature to the
+   eBPF program for signature verification
+
+v3:
+ - Rename bpf_verify_signature() back to bpf_verify_pkcs7_signature() to
+   avoid managing different parameters for each signature verification
+   function in one helper (suggested by Daniel)
+ - Use dynamic pointers and export bpf_dynptr_get_size() (suggested by
+   Alexei)
+ - Introduce bpf_request_key_by_id() to give more flexibility to the caller
+   of bpf_verify_pkcs7_signature() to retrieve the appropriate keyring
+   (suggested by Alexei)
+ - Fix test by reordering the gcc command line, always compile sign-file
+ - Improve helper support check mechanism in the test
+
+v2:
+ - Rename bpf_verify_pkcs7_signature() to a more generic
+   bpf_verify_signature() and pass the signature type (suggested by KP)
+ - Move the helper and prototype declaration under #ifdef so that user
+   space can probe for support for the helper (suggested by Daniel)
+ - Describe better the keyring types (suggested by Daniel)
+ - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
+   redeclaration
+ - Make the test selfcontained (suggested by Alexei)
+
+v1:
+ - Don't define new map flag but introduce simple wrapper of
+   verify_pkcs7_signature() (suggested by Alexei and KP)
+
+Roberto Sassu (5):
+  bpf: Export bpf_dynptr_get_size()
+  KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+  scripts: Handle unsigned type prefix in bpf_doc.py
+  bpf: Add bpf_verify_pkcs7_signature() helper
+  selftests/bpf: Add test for bpf_verify_pkcs7_signature() helper
+
+ include/linux/bpf.h                           |   1 +
+ include/linux/key.h                           |   3 +
+ include/uapi/linux/bpf.h                      |  24 ++
+ kernel/bpf/bpf_lsm.c                          |  63 +++
+ kernel/bpf/helpers.c                          |   2 +-
+ scripts/bpf_doc.py                            |   2 +-
+ security/keys/internal.h                      |   2 -
+ tools/include/uapi/linux/bpf.h                |  24 ++
+ tools/testing/selftests/bpf/Makefile          |  14 +-
+ tools/testing/selftests/bpf/config            |   2 +
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 359 ++++++++++++++++++
+ .../bpf/progs/test_verify_pkcs7_sig.c         |  79 ++++
+ .../testing/selftests/bpf/verify_sig_setup.sh | 104 +++++
+ 13 files changed, 672 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+ create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
