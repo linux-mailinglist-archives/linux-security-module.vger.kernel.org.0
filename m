@@ -2,126 +2,71 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6E8562FEF
-	for <lists+linux-security-module@lfdr.de>; Fri,  1 Jul 2022 11:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A83A5630A8
+	for <lists+linux-security-module@lfdr.de>; Fri,  1 Jul 2022 11:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234249AbiGAJZY (ORCPT
+        id S236385AbiGAJt2 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 1 Jul 2022 05:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
+        Fri, 1 Jul 2022 05:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbiGAJZC (ORCPT
+        with ESMTP id S234423AbiGAJt0 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:25:02 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C5570E6F;
-        Fri,  1 Jul 2022 02:25:01 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id w187so1782089vsb.1;
-        Fri, 01 Jul 2022 02:25:01 -0700 (PDT)
+        Fri, 1 Jul 2022 05:49:26 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1869C74DF4
+        for <linux-security-module@vger.kernel.org>; Fri,  1 Jul 2022 02:49:24 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1048b8a38bbso2783579fac.12
+        for <linux-security-module@vger.kernel.org>; Fri, 01 Jul 2022 02:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=coMdZsoBLFF2SPgIqz5Om1GKfC6D/IFyXSVjO+sm1WA=;
-        b=GeFetqCLVEvof4iBAZyA89rSx4tq9yXzo+ey3N0IKao1e4lT3Hy8t34I9Oh2Kl+2LY
-         h7oIV9LXd7ZUppFh5YQtRaAJFumBZsH8tKifbG4j2NXffSB5aqAnKP7Ny1wV/ZOYzD94
-         CvDMikDOjzWtsJMWmjWvpgddWazIUYMTnZcwds5cUILnWt0QOE0R5sFP2WzmWGrwbdeC
-         4cFWaHjKM44fc7ZVVTjV2KrfFwaQJh5qrg+iiC9RxWg79pzLNrI/pyJ3F3l2YabaLdXW
-         Mz0nEWM3shQqWGpRxTtK/YREAcjCyUUDyBzbWw8tfs4VssKgoO6TqhBTF8xXZNhwxxn5
-         CtkQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DMyolhHXpmu1+9rKonQ8Ub5Er3bhcnEayHaPyRlkSA4=;
+        b=GBrFvYFYOVBzzpmDHs3IrrfJPWTh6RCiSsJBTWQSl2QmDgws/O5CzbbvaoYo7P/SJf
+         cyhOGlDu6Sy/aJd1T9ENNALBTKHhubukyjTytEz5ksj1SfTpIDkxMeNNkK0i66J2J7aD
+         T22Pj2T34mGGznldlkSe4GcLvzDzzbDCAUo7xC7XmHsgEQxx4Prha3Uyr4yPd9WzTZBj
+         US+cZB51ElKLZPX1ckN42uJz3Y2Q8FOvCJ/Eq7TyFFGPJ6Pi6rl84Q2WgBKtR3UVOJtR
+         jt03u3XwJDf3PfURRZlrovDUFv44xp0ZXH7T7lRQEM3b4E/TBU4sOFbPamIb3L9f9yf1
+         kSlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=coMdZsoBLFF2SPgIqz5Om1GKfC6D/IFyXSVjO+sm1WA=;
-        b=34EsP6pHvOus26D56/zek5Ch4D/+lG/TAV5XqCVVnKl8sAoO8xxsb96Mrc1c0Gb9xi
-         z+5EWXR3kUPhkIVVDWOrD/xyGk5AvLuvHmeBPAi0H70Q9kiDroeYnPcmG5uVCjwJ3bq9
-         wBOSpxmu9ZNpAn9cVVErac1v//4LMiRt53c1EznVqqG9xMKEcIEIxVIX4ZNTHTfy3Gq8
-         eC0N9FXnf8WTejhPZI1WZNNVDV9r2g3ilTDqqWJqvOKAZ3s32AmPNPFWGVR4oo1WqEGK
-         pZZHNjUhziQt+eDw14nhZ//nY1QdkUlBUDcrYtwGtSuXJpBRJW2ZF2TTWoaL4/5Oh9Ul
-         MWnA==
-X-Gm-Message-State: AJIora96GWE49YDSvL1JFwv3bWQlWZbxOomqMkqwGAYW+EA12TxOgLbZ
-        hnW9yZ2p7Rr+VId+xi/QNgXWFbbeX4Wi8TmE7qw=
-X-Google-Smtp-Source: AGRyM1u4JMUnBkLlcY9JynQS2OtpUIXzwM163MAp0K6YA6aH0HINrPerXILHn+G5fN/ZG/4mLHiy9WXgTKr55pJkPtc=
-X-Received: by 2002:a67:fa01:0:b0:354:3136:c62e with SMTP id
- i1-20020a67fa01000000b003543136c62emr9936014vsq.2.1656667500175; Fri, 01 Jul
- 2022 02:25:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DMyolhHXpmu1+9rKonQ8Ub5Er3bhcnEayHaPyRlkSA4=;
+        b=pzNRCwuUTp5Wf/2MMIrV08YQBC3ch4mwEuEoPOFzyPZ1lMu1BL7I/2excDQMwwrkFX
+         59Qk2JrgaDDMZ2hFMGeNTSRK0+D+Zd/RU5+iqz6mHX3dTD/vwbkbrklzoPgbq+JlHMB1
+         RlC21TPk4SPymk3QztKJU53ghPSiET+Y4TmZ4uD1NlH6Fu0ilMRK+S9VFLF6KLasvvb2
+         tUq++ezWoN7VIPgvSYrC7//9VTPcObPs2n8c2SA7O6MfIrJYL2AkTNCLPQrpf5cOm0vN
+         PSYkFZiX22scWCdiGK0Lto6/6Cui6j2CpMzUidTELidfrKmK4RRDv1fKB/2kA+g8baHL
+         mASQ==
+X-Gm-Message-State: AJIora9LYJOFdzZEyaan5BVU2yHY2ErWOuyn0J2mSmeFOFl9VTxESr+P
+        Wt0uI04EeygImrPu7PT4CBV/3zSU0tFSSPJGahc=
+X-Google-Smtp-Source: AGRyM1vUEnxfVBXnLthcFdYPBiJex2ydqSUkRs3JBYl50JOjTOlBaOXlFT8Lm5+/LueeNt5C1Zsv3fMm8ZXYb+a7VHM=
+X-Received: by 2002:a05:6870:8195:b0:101:9342:bf1a with SMTP id
+ k21-20020a056870819500b001019342bf1amr7805666oae.149.1656668963662; Fri, 01
+ Jul 2022 02:49:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAADnVQ+HhhQdcz_u8kP45Db_gUK+pOYg=jObZpLtdin=v_t9tw@mail.gmail.com>
- <20220630114549.uakuocpn7w5jfrz2@wittgenstein> <CACYkzJ4uiY5B09RqRFhePNXKYLmhD_F2KepEO-UZ4tQN09yWBg@mail.gmail.com>
- <20220630132635.bxxx7q654y5icd5b@wittgenstein> <CACYkzJ6At2T9YGgs25mbqdVUiLtOh1LabZ5Auc+oDm4605A31A@mail.gmail.com>
- <20220630134702.bn2eq3mxeiqmg2fj@wittgenstein> <7d42faf7-1f55-03cb-e17e-e12f7cffe3de@schaufler-ca.com>
- <CACYkzJ7fVCWFtKhFqth5CNHGTiPnS8d=T2+-xSc03UBGLgW+4Q@mail.gmail.com>
- <e95e107e-e279-6efc-0011-3995b96414af@schaufler-ca.com> <CAOQ4uxgyPYK78Cs_OvjNrCF3wMJ9rnZooZZPenzRN_jDs7pXwQ@mail.gmail.com>
- <20220701085817.7jzdyqcboj6vkl5m@wittgenstein>
-In-Reply-To: <20220701085817.7jzdyqcboj6vkl5m@wittgenstein>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Fri, 1 Jul 2022 12:24:48 +0300
-Message-ID: <CAOQ4uxgXWa4x9+Ec2PTrztk4ZvPvewLbavg3VpxSFjhJp-v4=A@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 5/5] bpf/selftests: Add a selftest for bpf_getxattr
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Tyler Hicks <code@tyhicks.com>
+Received: by 2002:a05:6839:f85:0:0:0:0 with HTTP; Fri, 1 Jul 2022 02:49:23
+ -0700 (PDT)
+Reply-To: fredrich.david.mail@gmail.com
+From:   Mr Fredrich David <randywoods212@gmail.com>
+Date:   Fri, 1 Jul 2022 09:49:23 +0000
+Message-ID: <CAAAmqEZoJXvR7bNFTw7wgM9EcEBmT+Vx+5RsO3evURK6PFAN0Q@mail.gmail.com>
+Subject: dcv3
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-> >
-> > Apropos __vfs_getxattr(), looks like ecryptfs_getxattr_lower()
-> > is abusing it.
->
-> Heh, quoting what I wrote to KP yesterday off-list about
-> __vfs_getxattr():
->
-> "it's [__vfs_getxattr()] exported but [afaict] it's not used in kernel
-> modules. afaict it's only exposed because of ecryptfs"
->
-> So right at the beginning I had already pondered whether we should just
-> rip out __vfs_getxattr() from ecryptfs and unexport the helper
-> completely because there's barely a reason to use it. Module/driver code
-> should not use something as low-level as __vfs_getxattr() imho.
->
-> Overlayfs does it correctly and uses vfs_getxattr() but maybe ecryptfs
-> needs to use it for for some reason?. I haven't looked yet.
->
-
-No reason AFAIK (CC Tyler+Miklos)
-
-Most lower ecryptfs operations use vfs_XXX()
-48b512e68571 ("ecryptfs: call vfs_setxattr() in ecryptfs_setxattr()")
-fixed vfs_setxattr() which was later changed to __vfs_setxattr_locked(),
-but left __vfs_getxattr(), __vfs_removexattr() and i_op->listxattr().
-
-> > Christian, not sure if you intend to spend time of idmapped
-> > mount support of ecryptfs lower layer, but anyway that's that.
->
-> Not really. Remember the conversation we had with Tyler at LSFMM where
-> he considered marking it deprecated. I don't think it's worth putting in
-> the work.
-
-OK, so just need a volunteer to close the security hole and
-possibly unexport __vfs_getxattr().
-
-Does anybody know of any out of tree modules that use it
-for a good reason?
-
-Thanks,
-Amir.
+-In risposta alle tue email, ti scrivo per informarti che i progetti
+sono ora completati e sei stato approvato!
+Cordiali saluti,
+Signor Fredrich David
