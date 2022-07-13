@@ -2,103 +2,141 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CAE573D24
-	for <lists+linux-security-module@lfdr.de>; Wed, 13 Jul 2022 21:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72557574024
+	for <lists+linux-security-module@lfdr.de>; Thu, 14 Jul 2022 01:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbiGMTd3 (ORCPT
+        id S231362AbiGMXok (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 13 Jul 2022 15:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        Wed, 13 Jul 2022 19:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236557AbiGMTd2 (ORCPT
+        with ESMTP id S231363AbiGMXoh (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 13 Jul 2022 15:33:28 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD952C13E
-        for <linux-security-module@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id j1so11019627vsr.4
-        for <linux-security-module@vger.kernel.org>; Wed, 13 Jul 2022 12:33:26 -0700 (PDT)
+        Wed, 13 Jul 2022 19:44:37 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012D352DFC
+        for <linux-security-module@vger.kernel.org>; Wed, 13 Jul 2022 16:44:36 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso597227pjj.5
+        for <linux-security-module@vger.kernel.org>; Wed, 13 Jul 2022 16:44:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
-        b=aM1IhBunUxE23qoS04VXLKhmfEzv0G+rIPuL+tw7ecWQpkkV/VIRfagQrgSyOoTIAm
-         AZWPXQE2ns7ZNMtu2h9VrGRckGYmFXAYncydcobmDBiRLde8BCgwi2hlvMDHXzYgqMkQ
-         SeJxIk0u87w3y3HvNwB5qYF3cTerdoWv2b9mV8jFDizIJX8stbEHhwQnKSILH4q0Huup
-         hTOO9Jx4LSsJcLZc09WMxCsF4ciSzvQTXVpvt0KUlX7r0Y8qXhkOofhAjq9rhr7n0O3a
-         0Nz5Fyl2IiFFXOdqA4nMId1341Np8datpnUgsVwvaqGydn6uB0z1+35u/mxwEULjiUxM
-         xCNw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DkLczyynfYqNqbmOPaNJ7DNHFGb7fm4PXY7dj6rYjTQ=;
+        b=loYuYy3MmNz6Uj1ZIA98jCbcYDXIDl09HIF11IVrvPgGq0dBLFL1FzHZ30rajZVYKj
+         Gbj9CsrM6c/2bJRBnoNTG0rJJHuUYeVMbEpdP+0czlCJCXWWIzZa+H531jivzil/sOwY
+         GoRaTDyXM0qgBqPnTOs+McDg8ctCpA/hKhyilae34nB3vZ1TSUMyy5UqSxDV9KooXGRK
+         3bCyQXnxwLqQToKcbwm2HsaUdmZY+wr1Zkl+Ci1GqZqslYGjveHXFKj3TfM5T7lWOR1j
+         DsAeIZ+l9U9uO/e2UG1s+FSyPfWNfZYd93qRDSX1H3UUGKf47KCdIvMwoPDLeiykWvtS
+         4W8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=CAIH/48VCAZZUEhRpfaRPTSaBdpuCbyHyIV69iiJf1M=;
-        b=11jP92Ath33TTayDeH5WVtUC75HZ6TDZbt0FgJk3/GKvMhMSglXT8BQbhO1RTw9ffp
-         oMi22suNjDb9WlqiURPztFqUuJgqK3bdY22tiQTOWFmyts3dZuaINxdm6ZH6AQCDIaJR
-         Mfaj8MzfsPPxF0j/TwvXMwBdEFbEM8t0fvMpdBrE9kfrmpg0P/O2l8tNMUG1QXhVqHkY
-         2k73Oy5Iu4cmSgQFoK+jt1dVE6paF9uveA0hdS7f0L5i2uu9PZI5ndEgQBU3ky4Eqe4E
-         mtlZLIIkCALehLyqS4os4EY2CulRBATWCt9SSKz9eEq6rNVuaWLV6e3EwjWlmapEuR1s
-         j/qg==
-X-Gm-Message-State: AJIora8T5+uz1nzzgiOQatAsS2o0htNA2EN91Sw5a3rlYBUGcIvkAfRc
-        8EPsNBvkmDr6OWW+3yY8z12n9QuP0wJs+B40aoI=
-X-Google-Smtp-Source: AGRyM1sJxaHNFmNllzWTe6lcXJtKq+jpeM0H1VbICZMt0N2iL7xjj1CQ/iGumgoql0QuMbeebjAgPClviShoH8saaK0=
-X-Received: by 2002:a67:a449:0:b0:357:3407:9f60 with SMTP id
- p9-20020a67a449000000b0035734079f60mr2391818vsh.17.1657740805145; Wed, 13 Jul
- 2022 12:33:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DkLczyynfYqNqbmOPaNJ7DNHFGb7fm4PXY7dj6rYjTQ=;
+        b=5s5ZNuMciZigdQBfJTwZl6gebkc0XgcEs8zfxwdNMxCWJKiNED8QXjIoPZJAJVzba0
+         JSTOzFYks9R9a3z+vC4fhY3pg3Um51dQ8jxk1JFyI+Qn/yHz5YSctXd4NwGbxXUzkJtb
+         U2x2EOaw/vJnB5RbnWCTIvMi9faRCyC3ZENMeC+Gp/WevuA+moJoJm4cSJUa1bXwbGrE
+         rV/W0YhnJhwcLp/hvIgDv84FnCvG/H+/xMDZpklNprSyww0pHtoa06knfRroQpHuk3QW
+         7ryR1QO58VfqAJs9gOPSXw1EUGaC6HpwrdTItDiy0Xs7iRNgu8AjeOOvjszuOhSn7jix
+         5W3g==
+X-Gm-Message-State: AJIora9X0dYcugMhcDW36fuehywnrSG4j3x/rMwe10ZbLgn1+hxYgd5Y
+        7SxVaolylvlnQWuDpcUd/A9up4RKFPtcf4b4GYPkAA==
+X-Google-Smtp-Source: AGRyM1sF0CHBSujgRPezFJtGPT9byf+jCqWPrGeecAwg3HFZ3hLEipwDkpuiYZMxog4exJ2JfLXSf/gw55p7jxc3ji4=
+X-Received: by 2002:a17:90a:db96:b0:1ef:8c86:eb09 with SMTP id
+ h22-20020a17090adb9600b001ef8c86eb09mr12548254pjv.22.1657755876399; Wed, 13
+ Jul 2022 16:44:36 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a67:e05b:0:0:0:0:0 with HTTP; Wed, 13 Jul 2022 12:33:24
- -0700 (PDT)
-Reply-To: pstefanopessina80@gmail.com
-From:   STEFANO PESSINA <awabuts49@gmail.com>
-Date:   Wed, 13 Jul 2022 22:33:24 +0300
-Message-ID: <CABqU-Kt960=z5WPCBXkW7U+2SM=criymhoesJ=oQD7uhrCaFLQ@mail.gmail.com>
-Subject: donation
-To:     undisclosed-recipients:;
+References: <20220628222941.2642917-1-jeffxu@google.com> <06847585-8712-5f0c-b7e4-e32745576e16@digikod.net>
+ <CALmYWFtn97HpsTK02Sn7riD7yJ3zdbGob+Yz8PHa_Yx0tgfchQ@mail.gmail.com>
+ <CALmYWFvcSn_wks0bXo3_DUyYGtVW_MHrrO1dRoYcxY4uiB1KEA@mail.gmail.com> <0abdd920-b5cc-2fa9-7494-104c9c67480d@digikod.net>
+In-Reply-To: <0abdd920-b5cc-2fa9-7494-104c9c67480d@digikod.net>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Wed, 13 Jul 2022 16:44:00 -0700
+Message-ID: <CALmYWFvfRFfZbk=9P-=RNtjhXoR0ToQKnVVEZwmXB9yxLEHotg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/landlock: skip ptrace_test when YAMA is enabled
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     linux-security-module@vger.kernel.org,
+        Jorge Lucangeli Obes <jorgelo@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e44 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4987]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [awabuts49[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [pstefanopessina80[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [awabuts49[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
---=20
+> > a correction:
+> >
+> >     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >     case 0 - classic ptrace permissions: a process can PTRACE_ATTACH to
+> >     any other
+> >          process running under the same uid, as long as it is dumpable =
+(i.e.
+> >          did not transition uids, start privileged, or have called
+> >          prctl(PR_SET_DUMPABLE...) already). Similarly, PTRACE_TRACEME =
+is
+> >          unchanged.
+> >
+> >     Test: All passing
+> >
+> > // Base_test: 7/7 pass.
+> > // Fs_test 46/48 pass
+> > //.   not ok 47 layout2_overlay.no_restriction
+> > //.   not ok 48 layout2_overlay.same_content_different_file
+> > //  Ptrace 8/8 pass
 
-Congratulations!
-The sum of =E2=82=AC1,500,000.00 has been donated to you by STEFANO PESSINA=
-.
-Kindly get back for more info via pstefanopessina80@gmail.com
+
+> Hmm, well, it is not related to Yama then. Could it be linked to other
+> Chromium OS non-upstream patches?
+
+
+fs_test.c 47 and 48 are failing in chromeOS because OVERLAYFS is not
+enabled in chromeOS.
+If there is a reliable way of detecting OVERLAYFS (checking mount
+overlayfs is successful ? ), this is a good candidate to add SKIP.
+
+Overall, all the failure of landlock selftest seen in chromeOS are
+expected, we just need to modify the test.
+
+Thanks
+Best Regards
+Jeff
+
+
+
+On Thu, Jul 7, 2022 at 7:25 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> w=
+rote:
+>
+>
+> On 07/07/2022 01:35, Jeff Xu wrote:
+> > a correction:
+> >
+> >     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >     case 0 - classic ptrace permissions: a process can PTRACE_ATTACH to
+> >     any other
+> >          process running under the same uid, as long as it is dumpable =
+(i.e.
+> >          did not transition uids, start privileged, or have called
+> >          prctl(PR_SET_DUMPABLE...) already). Similarly, PTRACE_TRACEME =
+is
+> >          unchanged.
+> >
+> >     Test: All passing
+> >
+> > // Base_test: 7/7 pass.
+> > // Fs_test 46/48 pass
+> > //.   not ok 47 layout2_overlay.no_restriction
+> > //.   not ok 48 layout2_overlay.same_content_different_file
+> > //  Ptrace 8/8 pass
+>
+> Hmm, well, it is not related to Yama then. Could it be linked to other
+> Chromium OS non-upstream patches?
