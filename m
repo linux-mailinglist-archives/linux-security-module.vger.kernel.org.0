@@ -2,149 +2,98 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706295741AF
-	for <lists+linux-security-module@lfdr.de>; Thu, 14 Jul 2022 05:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2A4574707
+	for <lists+linux-security-module@lfdr.de>; Thu, 14 Jul 2022 10:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbiGNDA5 (ORCPT
+        id S237147AbiGNIhF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 13 Jul 2022 23:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        Thu, 14 Jul 2022 04:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiGNDA4 (ORCPT
+        with ESMTP id S236173AbiGNIg6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 13 Jul 2022 23:00:56 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA8921E05
-        for <linux-security-module@vger.kernel.org>; Wed, 13 Jul 2022 20:00:55 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id h17so782409wrx.0
-        for <linux-security-module@vger.kernel.org>; Wed, 13 Jul 2022 20:00:54 -0700 (PDT)
+        Thu, 14 Jul 2022 04:36:58 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8457C3ED7D
+        for <linux-security-module@vger.kernel.org>; Thu, 14 Jul 2022 01:36:50 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a9so1607976lfk.11
+        for <linux-security-module@vger.kernel.org>; Thu, 14 Jul 2022 01:36:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+xwAXAvYI9FTbVDjyFeCH64OhB8MXdH0zkgpyggSvUk=;
-        b=dMCsTIAFAcgVHxxSiOLpbduJW+c7ON7UybqBzef+4ZnZnGUYbSLHechQQdGPF7SLa7
-         Xcl7s4pBFVoASRgo8sggxFSu0BuIzvYnjIauzoDCpmOkbiJ0k9J1yofYL6Jd4W4OpCIZ
-         vZu+IImCn4t+odtM7993ooGtuwJET10zE1b7fZ+moMrtVjeylBBr/DN4V+ukrwSozaKX
-         Mqln9AlXkZphrX0FvdbJulL0n7XymjCkeZFn/W0jQICg7syyUfDLs6lB6aymnFGRCaFw
-         Emz39/ROBeBxLQ42xcazo+DFBJCTkt9AR+z/KHtFFfj9P2fu49qjTkTmUyCKmQd7LDPf
-         1w5w==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=XrPG1uZaQRn1UCA0WJJ2pmJQ1csZW3HabgB7E+QXuACfRhko5FjAocWwoGAFMQM+4K
+         maoBv4gTZQXqu9EJzYUg27HWYGn7H4ps8X1YfFKAamIhhLSUESO1F6QG9mJgGHe0KMpr
+         yS6EmWRT7znGhWAi5CHDysnG1OxosqIxRYFf098GB0Xs4T6zMcBwQ+Ijt6ciUPeVVUwm
+         NwEO+Wz1v4Oa+mBtHNRupxuLErGpDho6oqFPRIm2MU+57eHEreDtv9TWX6BBq17KbV3w
+         UCTpqQeOnk576xhvUmMdcgTy5b4PgstjqS11/4Py/0diTc9tD3MngzVuJ3uMtq9Qr/CL
+         qkvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+xwAXAvYI9FTbVDjyFeCH64OhB8MXdH0zkgpyggSvUk=;
-        b=ollS8XdSSJQQvN8nmlom+MEMIp/OdD63Oqv2Nkt1ZjT2Mvt4GXTo8C8dYrmRGKB6mo
-         EwJmiEDZmdw7AtcFLwduNw0P7GydLy02vTLS9le+3DBWGwyvXXgR2fELxE+fQ6mU4131
-         PWmOGywwBlUMyrTiZgP2pS9Irqmiifue3osjOmLAi4ziT5gQiKli/krq2Q6rpZb6bd3s
-         02b2TeZVegY5pfB2xQTj0oDrOwc5Wq2WMPB5VOPecfbF5XfpxBI0mbpyw+IIoDkWUhHb
-         LD2lMx+bYf0Dp+5OfnBp8dT8o1QOrqQCwy/WI2SdXCF6hlJuU7Bjfl6ivBL/NJZ9zNvt
-         erRQ==
-X-Gm-Message-State: AJIora/Eeml28UVcXh7udt6ie9+0Z9bSNhYPd3ntB/2fFhbBdUd0Frpj
-        /rtImoOErUQ2mOL1xfiUhgM27DyH+elRqBeSRMGF
-X-Google-Smtp-Source: AGRyM1vvo+tthDYWScteO4hpZvrGvs19yHNivGyWRsakaG8eMJ8KqyISvXRV6JQGpJ44lzvE5fOckdhkSSV/DO8/okM=
-X-Received: by 2002:a5d:64a3:0:b0:21d:adaa:ce4c with SMTP id
- m3-20020a5d64a3000000b0021dadaace4cmr6001437wrp.161.1657767653490; Wed, 13
- Jul 2022 20:00:53 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=natAeza0wjgc9DEyPgckDPEqjayW86pD2jwfnFFtywITxsAKbG8lOSyx7qyhCc/Tvv
+         PMqA0j+QS1vLn4cd4mcACTVPsborxNA7l87fkJsiOsOcJ4HtOknp62Sfad5yusG3YLwM
+         GuwS0/+oNyu9oqF4XjaD/bed7tPvUR7fyKKWOBE3JQftmhqzotsfXsuOHMNdyr0AlxJa
+         N5vfbKG08YuJFFbExGRPf9N0YwOtyBqRYWcF4qx/++tLA18olhTdnVyQPhnHN5kNRUyI
+         eAgza/Pvi36dGAfLcfPQktNoKqIpOhQcwmgwi2vSKGIn7RhZKBQrviecTM2IRhWxDH4k
+         +73Q==
+X-Gm-Message-State: AJIora9sqMvU/XY9pWOTyCxaUW3lQDtqEXaMWDgfXRKlLRrA1uPiARv4
+        hiWl4MUzN0p55+yo/z81lCQtLqUGeRaOttvHY6M=
+X-Google-Smtp-Source: AGRyM1u3j4Kh8ROf600mZ9n+2mzPHZx1NFVtrSntlSiwIK2NP6HVto6IIpM3hlWxyt39lgmrdSwWdCXGiGrSzCPb6JE=
+X-Received: by 2002:a05:6512:3d27:b0:489:e623:f244 with SMTP id
+ d39-20020a0565123d2700b00489e623f244mr4930609lfv.236.1657787809582; Thu, 14
+ Jul 2022 01:36:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220714000536.2250531-1-mcgrof@kernel.org>
-In-Reply-To: <20220714000536.2250531-1-mcgrof@kernel.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 13 Jul 2022 23:00:42 -0400
-Message-ID: <CAHC9VhSjfrMtqy_6+=_=VaCsJKbKU1oj6TKghkue9LrLzO_++w@mail.gmail.com>
-Subject: Re: [PATCH] lsm,io_uring: add LSM hooks to for the new uring_cmd file op
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     axboe@kernel.dk, casey@schaufler-ca.com, joshi.k@samsung.com,
-        linux-security-module@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        a.manzanares@samsung.com, javier@javigon.com
+Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:36:48
+ -0700 (PDT)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
+Date:   Thu, 14 Jul 2022 09:36:48 +0100
+Message-ID: <CAFC-3ifKFkAVLmD=8z4VAKFLX0pV+_h5OJ=Ks62m+0uk+DimKQ@mail.gmail.com>
+Subject: Get back to me... URGENT
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:131 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4902]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [abdwabbomaddah746[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [abdwabbomaddah746[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Jul 13, 2022 at 8:05 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> io-uring cmd support was added through ee692a21e9bf ("fs,io_uring:
-> add infrastructure for uring-cmd"), this extended the struct
-> file_operations to allow a new command which each subsystem can use
-> to enable command passthrough. Add an LSM specific for the command
-> passthrough which enables LSMs to inspect the command details.
->
-> This was discussed long ago without no clear pointer for something
-> conclusive, so this enables LSMs to at least reject this new file
-> operation.
->
-> [0] https://lkml.kernel.org/r/8adf55db-7bab-f59d-d612-ed906b948d19@schaufler-ca.com
-
-[NOTE: I now see that the IORING_OP_URING_CMD has made it into the
-v5.19-rcX releases, I'm going to be honest and say that I'm
-disappointed you didn't post the related LSM additions until
-v5.19-rc6, especially given our earlier discussions.]
-
-While the earlier discussion may not have offered a detailed approach
-on how to solve this, I think it was rather conclusive in that the
-approach used then (and reproduced here) did not provide enough
-context to the LSMs to be able to make a decision.  There were similar
-concerns when it came to auditing the command passthrough.  It appears
-that most of my concerns in the original thread still apply to this
-patch.
-
-Given the LSM hook in this patch, it is very difficult (impossible?)
-to determine the requested operation as these command opcodes are
-device/subsystem specific.  The unfortunate result is that the LSMs
-are likely going to either allow all, or none, of the commands for a
-given device/subsystem, and I think we can all agree that is not a
-good idea.
-
-That is the critical bit of feedback on this patch, but there is more
-feedback inline below.
-
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->  include/linux/lsm_hook_defs.h | 1 +
->  include/linux/lsm_hooks.h     | 3 +++
->  include/linux/security.h      | 5 +++++
->  io_uring/uring_cmd.c          | 5 +++++
->  security/security.c           | 4 ++++
->  5 files changed, 18 insertions(+)
-
-...
-
-> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-> index 0a421ed51e7e..5e666aa7edb8 100644
-> --- a/io_uring/uring_cmd.c
-> +++ b/io_uring/uring_cmd.c
-> @@ -3,6 +3,7 @@
->  #include <linux/errno.h>
->  #include <linux/file.h>
->  #include <linux/io_uring.h>
-> +#include <linux/security.h>
->
->  #include <uapi/linux/io_uring.h>
->
-> @@ -82,6 +83,10 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
->         struct file *file = req->file;
->         int ret;
->
-> +       ret = security_uring_cmd(ioucmd);
-> +       if (ret)
-> +               return ret;
-> +
->         if (!req->file->f_op->uring_cmd)
->                 return -EOPNOTSUPP;
->
-
-In order to be consistent with most of the other LSM hooks, the
-'req->file->f_op->uring_cmd' check should come before the LSM hook
-call.  The general approach used in most places is to first validate
-the request and do any DAC based access checks before calling into the
-LSM.
-
 -- 
-paul-moore.com
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Abd-Wabbo Maddah
