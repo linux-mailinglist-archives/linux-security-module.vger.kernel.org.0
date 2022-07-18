@@ -2,79 +2,158 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C590578A26
-	for <lists+linux-security-module@lfdr.de>; Mon, 18 Jul 2022 21:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A23578CA8
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 Jul 2022 23:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235072AbiGRTBo (ORCPT
+        id S233811AbiGRVZK (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 18 Jul 2022 15:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        Mon, 18 Jul 2022 17:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbiGRTBb (ORCPT
+        with ESMTP id S233142AbiGRVZJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:01:31 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E382FFE7
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Jul 2022 12:01:18 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id o16-20020a9d4110000000b0061cac66bd6dso1496372ote.11
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Jul 2022 12:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
-        b=IQXHlBQ3jHSYUTt89EYBBYMpS/rXYtHBaNUJ6e2ZzB07/ETpvOJM0/ZijryokIEfDh
-         oJG0jiachEiIldTcksV5XzU+dy3csOVeMrzVRYAIpdf4PUrGYfI/KNNvcLIWjvmc8oHa
-         yWKlPWKnOFkuEw2Mq2CzZYpqcRK9kJ+LygeUXE0izxh4s3I+nauj1w40rP+480vJCi+X
-         rAPSoEvo8wXV23cydMjOZnuzBivYToT/OwjRuq1iqX/8Isb8Rqougy46FnOdoQuh9Z/u
-         z7xKihQATs9EIIDqpmGAQl/2n//vpMk3ZDpLHQioaLk/1hVBrL4som/CgeyT77yPFwbn
-         VU6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
-        b=qk89miAwfmps8gTYkQCnhREciYYbknr75wG6Hr0lXRQo+dhwq8Xn0G2Qej0XxPjeIB
-         Yz/OpEeEzd+8niPEWA8jutsU/OVTyXFKaZzL+S2zB74sD2I2nNQ4T2/j6A+PwIcLjRvg
-         rY54PeCDHhl0x5jVeTT5b9dnUGvMqRBu+mVRFIHoy4GxhsspRpmfvJp4HjBXLLg6UMHc
-         uWx4mG2rTyXD8QcTfa8VJlsxsclCUkQV8AG53wv7Ugm2rY30mW0kiyxW+3356XdUSJyY
-         PEl7/ovT0HfmZgWus0eXSJ6NDsotJTu2saCnvMZZEY2Qs5rtlEiWI+iAnNTk3C1H7KmV
-         eBkQ==
-X-Gm-Message-State: AJIora+nDI38Fb2Wyv9mdSFYrQJNXeC7yDpDE+Dm6AfYIwwUwwfjqDUx
-        DtzcASAU8ftgR2Is6pGG347ozWVg1CmLShaRAolQJi7HlCWzEw==
-X-Google-Smtp-Source: AGRyM1sOF4caZ/Mzb7i1HwUB8dyXYAmjf9y+Pd1nVHRKiUHeMR6opOrMc10oZNu5DLkN2HS0cpkKNGEh0T+MU99Jmes=
-X-Received: by 2002:a81:5747:0:b0:31d:1bb8:65b7 with SMTP id
- l68-20020a815747000000b0031d1bb865b7mr30830046ywb.168.1658170865217; Mon, 18
- Jul 2022 12:01:05 -0700 (PDT)
+        Mon, 18 Jul 2022 17:25:09 -0400
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [IPv6:2001:1600:4:17::190c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4860F29CBB
+        for <linux-security-module@vger.kernel.org>; Mon, 18 Jul 2022 14:25:07 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Lmw3N6GKFzMq4HH;
+        Mon, 18 Jul 2022 23:25:04 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Lmw3N2ZpZzlrKcd;
+        Mon, 18 Jul 2022 23:25:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1658179504;
+        bh=uihiR1f4lYUSezy+w1vsLpwdQHDrAdjGFXDr/iSKEUg=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=J8SeEUPxGPIv+q6/PgK+rCdPIy0Rh9huigjRJ/GI0G5aphiZbv8mh/a/utyL3mUh3
+         EWEeT/fYTMOTXm4HgFVc48dySvAU+QdkD+M0UChtIP1/bPso8CPyZQijgEw2KtaLIF
+         wlqlcrtCCZX9in3lE+exEOcfofBj4KvjPbjhm2+k=
+Message-ID: <b851a37a-f5f1-3ee0-edf7-582d848c915b@digikod.net>
+Date:   Mon, 18 Jul 2022 23:24:48 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6919:4004:b0:cc:50ff:b3d8 with HTTP; Mon, 18 Jul 2022
- 12:01:04 -0700 (PDT)
-Reply-To: lilywilliam989@gmail.com
-From:   Lily William <sgtalberts@gmail.com>
-Date:   Mon, 18 Jul 2022 11:01:04 -0800
-Message-ID: <CALPTejMFgL0Bg7jCKa7j+5KxVv_jnSM4ZPq-QhHCiUpG_ZswsQ@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: 
+Content-Language: en-US
+To:     Guenter Roeck <groeck@google.com>, Jeff Xu <jeffxu@google.com>
+Cc:     linux-security-module@vger.kernel.org,
+        Jorge Lucangeli Obes <jorgelo@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Kees Cook <keescook@chromium.org>
+References: <20220628222941.2642917-1-jeffxu@google.com>
+ <06847585-8712-5f0c-b7e4-e32745576e16@digikod.net>
+ <CALmYWFtn97HpsTK02Sn7riD7yJ3zdbGob+Yz8PHa_Yx0tgfchQ@mail.gmail.com>
+ <CALmYWFvcSn_wks0bXo3_DUyYGtVW_MHrrO1dRoYcxY4uiB1KEA@mail.gmail.com>
+ <0abdd920-b5cc-2fa9-7494-104c9c67480d@digikod.net>
+ <CALmYWFvfRFfZbk=9P-=RNtjhXoR0ToQKnVVEZwmXB9yxLEHotg@mail.gmail.com>
+ <CABXOdTf=o1zSSDUPNubHxAnF=1dOwOuxKfrViPHAD-tV_4x=Ww@mail.gmail.com>
+ <CALmYWFvfDcJCUDCLhrDPdvyY6fH_2diQbbo8ejq3Xvu6E8_2rA@mail.gmail.com>
+ <CABXOdTcQOrat3vGCm3nw_ufYKcrQ1gqVdvbUSEUehfhZ7gAW4g@mail.gmail.com>
+ <CALmYWFu-c7HvfqB=JpX-iN8QUfEwwZpQRpwncebJ8R8urvvCUQ@mail.gmail.com>
+ <CALmYWFtrMdTY9HTWzG=MctUcsKQZVExHWu7+3C58hncazH5+5w@mail.gmail.com>
+ <CABXOdTcZM-RomzrCZQkzexCSS7RTFf_Mz+kCghqEK_icd9W3LQ@mail.gmail.com>
+ <CALmYWFtstvRVZOYCJBwrhayGJDc-=c8avuD0wWm6LURu8EKG2g@mail.gmail.com>
+ <CABXOdTdzHu6CkNvOLvFoxH13MBo=r+TCr56xJsK3oXCbuOp4NA@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH] selftests/landlock: skip ptrace_test when YAMA is enabled
+In-Reply-To: <CABXOdTdzHu6CkNvOLvFoxH13MBo=r+TCr56xJsK3oXCbuOp4NA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Dear,
 
-My name is Dr Lily William from the United States.I am a French and
-American nationality (dual) living in the U.S and sometimes in France
-for Work Purpose.
+On 16/07/2022 23:45, Guenter Roeck wrote:
+> On Fri, Jul 15, 2022 at 5:17 PM Jeff Xu <jeffxu@google.com> wrote:
+>>
+>>> Maybe the error code returned from mount gives a hint.
+>>
+>> It returns -1
+>>
+> Sorry, I meant errno, not the return value.
+> 
+>>>
+>>> Also, how about
+>>> /proc/filesystems ?
+>>
+>> Yes. it has what I want:
+>> nodev overlay
+>>
+> Excellent.
+> 
+> Guenter
+> 
+>> Thanks for your help! I can use this at runtime check.
+>>
+>> Jeff
+>>
+>>
+>> On Fri, Jul 15, 2022 at 3:42 PM Guenter Roeck <groeck@google.com> wrote:
+>>>
+>>> On Fri, Jul 15, 2022 at 2:42 PM Jeff Xu <jeffxu@google.com> wrote:
+>>>>
+>>>> Jeff Xu <jeffxu@google.com>
+>>>>
+>>>>> Jul 14, 2022, 5:35 PM (20 hours ago)
+>>>>> to Guenter, Mickaël, linux-security-module, Jorge, Guenter, Kees
+>>>>>> On Thu, Jul 14, 2022 at 11:37 AM Jeff Xu <jeffxu@google.com> wrote:
+>>>>>>>
+>>>>>>>>>> Hmm, well, it is not related to Yama then. Could it be linked to other
+>>>>>>>>>> Chromium OS non-upstream patches?
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> fs_test.c 47 and 48 are failing in chromeOS because OVERLAYFS is not
+>>>>>>>>> enabled in chromeOS.
+>>>>>>>>> If there is a reliable way of detecting OVERLAYFS (checking mount
+>>>>>>>>> overlayfs is successful ? ), this is a good candidate to add SKIP.
+>>>>>>>>>
+>>>>>>>
+>>>>>>>> IS_ENABLED(CONFIG_OVERLAY_FS) ?
+>>>>>>>
+>>>>>>> Could be. Landlock selftest currently is a user space program though,
+>>>>>>> IS_ENABLED will depend on the kernel header during compile time.
+>>>>>>>
+>>>>
+>>>>
+>>>>
+>>>>>> Ah, sorry, I thought it was an in-kernel test. Userspace should be
+>>>>>> able to determine if overlayfs is supported by checking /sys/fs/ or
+>>>>>> possibly /proc/fs/.
+>>>>
+>>>>
+>>>>> Thanks for clarifying.
+>>>>
+>>>>
+>>>>> lsmod might be the one, such as:
+>>>>> lsmod | grep overlayfs
+>>>>
+>>>>
+>>>> I built a kernel with overlayfs on chromeos, and lsmod didn't give me
+>>>> what I wanted.
+>>>> /sys/fs and /proc/fs also doesn't show anything about overlayfs
+>>>>
+>>>> @Mickaël Salaün
+>>>> Are you OK with SKIP the overlay test when mount("overlay",...) fails
+>>>> in FIXTURE_SETUP() ? Mount failure can be used as an indication.
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
+In a normal scenario, all configurations in 
+tools/testing/selftests/landlock/config should be enabled, but I think 
+it makes sense for some use cases like chromeOS to be able to not fail 
+if overlayfs is not supported. Please patch 
+FIXTURE_SETUP(layout2_overlay) to skip these tests if the related 
+filesystem string is present (with or without "nodev") in 
+/proc/filesystems . You can create a is_filesystem_supported(const char 
+*filesystem) helper before prepare_layout() for this check, we'll need 
+it for future tests.
 
-Thanks
 
-With love
-Lily
+>>>>
+>>>
+>>> Maybe the error code returned from mount gives a hint. Also, how about
+>>> /proc/filesystems ?
+>>>
+>>> Guenter
