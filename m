@@ -2,129 +2,147 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFC85785E4
-	for <lists+linux-security-module@lfdr.de>; Mon, 18 Jul 2022 16:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5150657889B
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 Jul 2022 19:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiGROzj (ORCPT
+        id S235687AbiGRRjo (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 18 Jul 2022 10:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        Mon, 18 Jul 2022 13:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiGROzi (ORCPT
+        with ESMTP id S233725AbiGRRjn (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:55:38 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6848D2229C
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Jul 2022 07:55:37 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso7499781wms.2
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Jul 2022 07:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=awB3IScCM82ThTtG2SFehRsEwEakyzEv6teXUnsFMUA=;
-        b=xpExZ3kZCdk2WKHRKvNTZvS7M91X0EEJtGhiw331LmrtUZOYjX68OUTX0PXvRoq9Mg
-         rqRaN2pueOU9+e0THRE0dnpvpdRcP3K01m4gEUfL1uPoqfF0O0ihsPtN58yxHoc7voDY
-         1cQFrVWgDcoMgZ2WmrmEL8uzt0DB4SWAnFV2j4Taehtrz8/xQLX0L0ptEmEwFjp60GVk
-         0S5wr44rR8pwrLJpegsNUKKkLGK+MuKZxkjnEkCS7p+fYa7uxUteoCgcGecUQA0ED3RN
-         YE1oRr4rJnXM+3ZYpfeYSI/rtdPEpucaIulaDfXRio1x4Wkz9vHEqUBu5M1jnvusK3wR
-         CITA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=awB3IScCM82ThTtG2SFehRsEwEakyzEv6teXUnsFMUA=;
-        b=c3zJJeJIE1eeeoGzW3Yc3OyhcAu62ANvcK73ZrV53ax+CDrw+iQLSaG2aUpr+UArNL
-         BrX1P0ekqKvXN0WGlCmHJoad46QS+W7QIMGwSeJjXquXiQvqr0h11xPNYXMU8FPwcvMJ
-         Ix1KQJF+qlsLhP9OVgPkiNg6xFCZdnpsT/BPl/tuk+11vMS/PWTvqRDVFoL8nzGZxULA
-         HLAUuTbyFd7sqnpSYLngmiJfgI4+Z2Z0pid1BToYhibjIJPHfBSEbP+j4dFGsxpFOnVW
-         y5KWgFW4j5vEoA0tii6rsoEHZb2miQh6ixoJ4Oe4jE5nEDgFz+8JskbF3QPHnRGuFB3B
-         zSFw==
-X-Gm-Message-State: AJIora/y5g7CYEx80XQqeMFO1xqRiJ/uNvZXRr3uiI4nf+9ZEDhmBI2X
-        a4wRGX8tbbvCB60IPy4i2gT8QWM9gjbnsnFMJJG9
-X-Google-Smtp-Source: AGRyM1tH7+KDgIRxNaY2LGntFQMixVhfjpDqcUF6WGCiIIg9/YcIi0aQwTC6+2UR286rXvWRV6cy1fT2sqKQ7U2WyyY=
-X-Received: by 2002:a7b:c3cc:0:b0:3a3:8ec:d69 with SMTP id t12-20020a7bc3cc000000b003a308ec0d69mr17787022wmj.78.1658156135929;
- Mon, 18 Jul 2022 07:55:35 -0700 (PDT)
+        Mon, 18 Jul 2022 13:39:43 -0400
+X-Greylist: delayed 1922 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 10:39:42 PDT
+Received: from esa3.mentor.iphmx.com (esa3.mentor.iphmx.com [68.232.137.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C74248D3
+        for <linux-security-module@vger.kernel.org>; Mon, 18 Jul 2022 10:39:42 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,281,1650960000"; 
+   d="scan'208";a="79810792"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa3.mentor.iphmx.com with ESMTP; 18 Jul 2022 08:36:16 -0800
+IronPort-SDR: RTjfIgzc+dEN6kC/wiahZ34aDq4N/lz4wt2gOaf3gyvKgbBgy7GQpdrAGz0TSAiEUWi+ya5Unr
+ gmkYsvQK+ohtMCEWFgUOpyY66f9X39W1vVK02qBI1H5onSYK75Pc/1vMoVCUJxGv33IMPq9bQ2
+ oVXSpXODQ6Og1foDv+s8GFj50phjddzVPBJt2HR23rxJmXRZiaFdLlzC1jNdr2lwwmR5DNHLGX
+ AK5/7yyQ++vhwU/PHSyXdo4u6nIwJuPb8F93oY3w+emM9L4h04z8oSkrSns1WQE8vNYUpZYkVK
+ UJM=
+Message-ID: <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
+Date:   Mon, 18 Jul 2022 17:36:06 +0100
 MIME-Version: 1.0
-References: <20220714000536.2250531-1-mcgrof@kernel.org> <CAHC9VhSjfrMtqy_6+=_=VaCsJKbKU1oj6TKghkue9LrLzO_++w@mail.gmail.com>
- <YtC8Hg1mjL+0mjfl@bombadil.infradead.org> <CGME20220715184632epcas5p36bd157d36a2aed044de40264911bec05@epcas5p3.samsung.com>
- <CAHC9VhQMABYKRqZmJQtXai0gtiueU42ENvSUH929=pF6tP9xOg@mail.gmail.com> <20220716032041.GB25618@test-zns>
-In-Reply-To: <20220716032041.GB25618@test-zns>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 18 Jul 2022 10:55:24 -0400
-Message-ID: <CAHC9VhQKeufrqN=dVZ74wEFgd3K=KY-aEZafYembT738juzWUw@mail.gmail.com>
-Subject: Re: [PATCH] lsm,io_uring: add LSM hooks to for the new uring_cmd file op
-To:     Kanchan Joshi <joshi.k@samsung.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, casey@schaufler-ca.com,
-        axboe@kernel.dk, linux-security-module@vger.kernel.org,
-        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, a.manzanares@samsung.com,
-        javier@javigon.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Content-Language: en-GB
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+ <20220610153336.GA8881@lxhi-065>
+ <4bc349a59e4042f7831b1190914851fe@huawei.com>
+ <20220615092712.GA4068@lxhi-065>
+From:   Jim Baxter <jim_baxter@mentor.com>
+Organization: Siemens Digital Industries Software
+In-Reply-To: <20220615092712.GA4068@lxhi-065>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-13.mgc.mentorg.com (139.181.222.13) To
+ svr-ies-mbx-12.mgc.mentorg.com (139.181.222.12)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Jul 15, 2022 at 11:26 PM Kanchan Joshi <joshi.k@samsung.com> wrote:
-> On Fri, Jul 15, 2022 at 02:46:16PM -0400, Paul Moore wrote:
-> >On Thu, Jul 14, 2022 at 9:00 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >> On Wed, Jul 13, 2022 at 11:00:42PM -0400, Paul Moore wrote:
-> >> > On Wed, Jul 13, 2022 at 8:05 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >> > >
-> >> > > io-uring cmd support was added through ee692a21e9bf ("fs,io_uring:
-> >> > > add infrastructure for uring-cmd"), this extended the struct
-> >> > > file_operations to allow a new command which each subsystem can use
-> >> > > to enable command passthrough. Add an LSM specific for the command
-> >> > > passthrough which enables LSMs to inspect the command details.
-> >> > >
-> >> > > This was discussed long ago without no clear pointer for something
-> >> > > conclusive, so this enables LSMs to at least reject this new file
-> >> > > operation.
-> >> > >
-> >> > > [0] https://lkml.kernel.org/r/8adf55db-7bab-f59d-d612-ed906b948d19@schaufler-ca.com
-> >> >
-> >> > [NOTE: I now see that the IORING_OP_URING_CMD has made it into the
-> >> > v5.19-rcX releases, I'm going to be honest and say that I'm
-> >> > disappointed you didn't post the related LSM additions
-> >>
-> >> It does not mean I didn't ask for them too.
-> >>
-> >> > until
-> >> > v5.19-rc6, especially given our earlier discussions.]
-> >>
-> >> And hence since I don't see it either, it's on us now.
-> >
-> >It looks like I owe you an apology, Luis.  While my frustration over
-> >io_uring remains, along with my disappointment that the io_uring
-> >developers continue to avoid discussing access controls with the LSM
-> >community, you are not the author of the IORING_OP_URING_CMD.   You
->
-> I am to be shot down here. Solely.
-> My LSM understanding has been awful. At a level that I am not clear
-> how to fix if someone says - your code lacks LSM consideration.
-> But nothing to justify, I fully understand this is not someone else's
-> problem but mine. I intend to get better at it.
-> And I owe apology (to you/LSM-folks, Luis, Jens) for the mess.
+On 15/06/2022 10:27, Eugeniu Rosca wrote:
+> Hello Roberto,
+> 
+> On Fr, Jun 10, 2022 at 03:38:24 +0000, Roberto Sassu wrote:
+>> I would be happy to address the remaining concerns, or take more
+>> suggestions, and then develop a new version of the patch set.
+> I face a number of conflicts when I try to rebase the latest openEuler
+> commits against vanilla master (v5.19-rc2). Do you think it is possible
+> to submit the rebased version to ML?
+> 
+> In addition, I can also see some open/unresolved points from Mimi [*].
+> Did you by chance find some mutual agreement offline or do you think
+> they would still potentially need some attention?
+> 
+> Maybe we can resume the discussion once you submit the rebased series?
+> 
+> Many thanks and looking forward to it.
+> 
+> [*] Potentially comments which deserve a reply/clarification/resolution
+> 
+> https://lore.kernel.org/lkml/1561985652.4049.24.camel@linux.ibm.com/#t
+> https://lore.kernel.org/lkml/1561908456.3985.23.camel@linux.ibm.com/
+> 
+> BR, Eugeniu.
+> 
 
-Thanks for your honesty.  If it is any consolation, my understanding
-of io_uring remains superficial at best, and it's one of the reasons
-I've asked the io_uring devs to ack/review the LSM io_uring hooks and
-their placement in the io_uring code.  Developing a deep understanding
-of one kernel subsystem is often very difficult, doing the same across
-multiple subsystems requires a *lot* of time and effort.  We have to
-rely on our combined expertise to help each other fill in the gaps :)
 
-If you are ever unsure about something in the LSM layer, or how a
-change to io_uring (or any other subsystem) might impact the LSMs,
-please don't hesitate to ask us.  It might take all of us a little
-while to sort it out, but we can usually get it working in the end.
+Hello,
 
-There shouldn't be harm in asking for help/clarification, the harm
-usually comes when assumptions are made.
+I have been testing these patches and do not see the xattr information when
+trying to retrieve it within the initramfs, do you have an example of how
+you tested this originally?
 
--- 
-paul-moore.com
+
+So far I have set the xattr in the rootfs before creating the cpio file like this:
+$ setfattr -n user.comment -v "this is a comment" test.txt
+If I access the data here it works:
+$ getfattr test.txt 
+# file: test.txt
+user.comment
+
+
+Then I package it and try to verify it with this command:
+$getfattr /test.txt
+
+Which returns to the command line without the data.
+
+
+
+I believe the cpio is working because I see the file /METADATA\!\!\! in
+the target root filesystem, which shows the following when viewed with cat -e:
+00000028^A^Auser.comment^@this is a comment
+
+This matches the data I fed in at the start, so I believe the data is being
+transferred correctly but I am accessioning it with the wrong tools.
+
+Thank you for any help.
+
+Best regards,
+Jim
