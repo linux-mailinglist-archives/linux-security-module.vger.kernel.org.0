@@ -2,95 +2,120 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BC257AE03
-	for <lists+linux-security-module@lfdr.de>; Wed, 20 Jul 2022 04:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E7657B5EA
+	for <lists+linux-security-module@lfdr.de>; Wed, 20 Jul 2022 13:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiGTCbN (ORCPT
+        id S233067AbiGTLwG (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 19 Jul 2022 22:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        Wed, 20 Jul 2022 07:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234448AbiGTCbA (ORCPT
+        with ESMTP id S229490AbiGTLwE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:31:00 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594FC47B9B;
-        Tue, 19 Jul 2022 19:29:12 -0700 (PDT)
-Received: from [192.168.192.83] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2D5763F3B9;
-        Wed, 20 Jul 2022 02:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658284150;
-        bh=9j/ZqHLMNdT5QMf1JvgP7iBoNYWJdux7J9tU03wREIM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=rDojAGkctKN4FpCk51sLeFbhP9LNM4q0qtwFwbV9eMs2c61IFkE5c/xXsVBnmepjM
-         SN5k5docgU8Xo6hw5MInmVYAUk0bU6strqyRLN65/t9q2NWd2E0GFm6KKGuDo4yUXC
-         8Y3i8NNLA6eM24Tnh6FiOK0ZAko7pcq+VVhXWo6JS88T47M6B7xFbOcCXF7PxseSZt
-         Npr5sU9j8ZVfUt4YReZP6NdwWHULL9cAGaJGw1wqqm1wbwiLWOb1IwdIH50RVdFOWB
-         IF8Ijsrqcu0jeOkOJ3QUQKGensqtNbWg+2P6lITj7F7TgYF28EDWvbXnVJ9rS+bFJv
-         1onzKBGzmICZg==
-Message-ID: <110d78bc-d1f4-0b69-9562-c6758b39279d@canonical.com>
-Date:   Tue, 19 Jul 2022 19:29:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] apparmor: Mark alloc_unconfined() as static
+        Wed, 20 Jul 2022 07:52:04 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B227157268;
+        Wed, 20 Jul 2022 04:52:03 -0700 (PDT)
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lnv9H1bNxz6J6Mk;
+        Wed, 20 Jul 2022 19:48:35 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 20 Jul 2022 13:52:01 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 20 Jul 2022 13:52:01 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Rob Landley <rob@landley.net>, Jim Baxter <jim_baxter@mentor.com>,
+        "Eugeniu Rosca" <erosca@de.adit-jv.com>
+CC:     "hpa@zytor.com" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2QgAG+ywCAACILEIAHUz4AgDRUxQCAACKFgP//9y0AgAD3swCAADE5AIAAIobAgAAFq4CAAYjhkA==
+Date:   Wed, 20 Jul 2022 11:52:00 +0000
+Message-ID: <0b9971555f6b4a319614570aae8bcdf3@huawei.com>
+References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+        <1561909199.3985.33.camel@linux.ibm.com>
+        <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+        <1561991485.4067.14.camel@linux.ibm.com>
+        <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+        <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+        <20220609102627.GA3922@lxhi-065>
+        <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+        <20220610153336.GA8881@lxhi-065>
+        <4bc349a59e4042f7831b1190914851fe@huawei.com>
+        <20220615092712.GA4068@lxhi-065>
+        <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
+        <f82d4961986547b28b6de066219ad08b@huawei.com>
+        <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
+        <8e6a723874644449be99fcebb0905058@huawei.com>
+        <dc86769f-0ac6-d9f3-c003-54d3793ccfec@landley.net>
+        <5b8b0bcac01b477eaa777ceb8c109f58@huawei.com>
+ <3d77db23-51da-be5e-b40d-a92aeb568833@landley.net>
+In-Reply-To: <3d77db23-51da-be5e-b40d-a92aeb568833@landley.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Souptick Joarder <jrdr.linux@gmail.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220719021218.6807-1-jrdr.linux@gmail.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20220719021218.6807-1-jrdr.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 7/18/22 19:12, Souptick Joarder wrote:
-> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
-> 
-> Kernel test robot throws below warning ->
-> security/apparmor/policy_ns.c:83:20: warning: no previous prototype
-> for function 'alloc_unconfined' [-Wmissing-prototypes]
-> 
-> Mark it as static.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-
-Thanks, I have pulled this into apparmor-next
-
-Acked-by: John Johansen <john.johansen@canonical.com>
-
-
-> ---
->   security/apparmor/policy_ns.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/apparmor/policy_ns.c b/security/apparmor/policy_ns.c
-> index 300953a02a24..4f6e9b3c24e6 100644
-> --- a/security/apparmor/policy_ns.c
-> +++ b/security/apparmor/policy_ns.c
-> @@ -80,7 +80,7 @@ const char *aa_ns_name(struct aa_ns *curr, struct aa_ns *view, bool subns)
->   	return aa_hidden_ns_name;
->   }
->   
-> -struct aa_profile *alloc_unconfined(const char *name)
-> +static struct aa_profile *alloc_unconfined(const char *name)
->   {
->   	struct aa_profile *profile;
->   
-
+PiBGcm9tOiBSb2IgTGFuZGxleSBbbWFpbHRvOnJvYkBsYW5kbGV5Lm5ldF0NCj4gU2VudDogVHVl
+c2RheSwgSnVseSAxOSwgMjAyMiA0OjE1IFBNDQo+IE9uIDcvMTkvMjIgMDc6MjYsIFJvYmVydG8g
+U2Fzc3Ugd3JvdGU6DQo+ID4+IFAuUC5TLiBJZiB5b3Ugd2FudCB0byBydW4gYSBjb21tYW5kIG90
+aGVyIHRoYW4gL2luaXQgb3V0IG9mIGluaXRyYW1mcyBvciBpbml0cmQsDQo+ID4+IHVzZSB0aGUg
+cmRpbml0PS9ydW4vdGhpcyBvcHRpb24uIE5vdGUgdGhlIHJvb3Q9IG92ZXJtb3VudCBtZWNoYW5p
+c20gaXMNCj4gPj4gY29tcGxldGVseSBkaWZmZXJlbnQgY29kZSBhbmQgdXNlcyB0aGUgaW5pdD0v
+cnVuL3RoaXMgYXJndW1lbnQgaW5zdGVhZCwNCj4gd2hpY2gNCj4gPj4gbWVhbnMgbm90aGluZyB0
+byBpbml0cmFtZnMuIEFnYWluLCBzcGVjaWZ5aW5nIHJvb3Q9IHNheXMgd2UgYXJlIE5PVCBzdGF5
+aW5nDQo+IGluDQo+ID4+IGluaXRyYW1mcy4NCj4gPg0KPiA+IFNvcnJ5LCBpdCB3YXMgc29tZSB0
+aW1lIGFnby4gSSBoYXZlIHRvIGdvIGJhY2sgYW5kIHNlZSB3aHkgd2UgbmVlZGVkDQo+ID4gYSBz
+ZXBhcmF0ZSBvcHRpb24uDQo+IA0KPiBEaWQgSSBtZW50aW9uIHRoYXQgaW5pdC9kb19tb3VudHMu
+YyBhbHJlYWR5IGhhczoNCj4gDQo+IF9fc2V0dXAoInJvb3Rmc3R5cGU9IiwgZnNfbmFtZXNfc2V0
+dXApOw0KDQpJdCBpcyBjb25zdW1lZCBieSBkcmFjdXQgdG9vLCBmb3IgdGhlIHJlYWwgcm9vdCBm
+aWxlc3lzdGVtLg0KDQpbLi4uXQ0KDQo+IExvdHMgb2Ygc3lzdGVtcyBydW5uaW5nIGZyb20gaW5p
+dHJhbWZzIGFscmVhZHkgRE9OJ1QgaGF2ZSBhIHJvb3Q9LCBzbyB5b3UncmUNCj4gc2F5aW5nIGRy
+YWN1dCBiZWluZyBicm9rZW4gd2hlbiB0aGVyZSBpcyBubyByb290PSBpcyBzb21ldGhpbmcgdG8g
+d29yayBhcm91bmQNCj4gcmF0aGVyIHRoYW4gZml4IGluIGRyYWN1dCwgZXZlbiB0aG91Z2ggaXQn
+cyBiZWVuIGVhc3kgdG8gY3JlYXRlIGEgc3lzdGVtIHdpdGhvdXQNCj4gYSByb290PSBmb3IgYSBk
+ZWNhZGUgYW5kIGEgaGFsZiBhbHJlYWR5Li4uDQoNCklmIHRoZXJlIGlzIGEgcG9zc2liaWxpdHkg
+dGhhdCByb290PSBvciByb290ZnN0eXBlPSBhcmUgdXNlZCBieQ0Kc29tZW9uZSBlbHNlLCBJIHdv
+dWxkIG5vdCBjb3VudCBvbiB0aG9zZSB0byBtYWtlIGEgc2VsZWN0aW9uDQpvZiB0aGUgZmlsZXN5
+c3RlbSBmb3Igcm9vdGZzLg0KDQpPbiB0aGUgb3RoZXIgaGFuZCwgd2hhdCBjYW4gZ28gd3Jvbmcg
+aW4gaGF2aW5nIGEgZGVkaWNhdGVkLA0Kbm90IHVzZWQgYnkgYW55b25lIG9wdGlvbiB0byBkbyB0
+aGlzIGpvYj8NCg0KVGhhbmtzDQoNClJvYmVydG8NCg==
