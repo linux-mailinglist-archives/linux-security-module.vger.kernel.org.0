@@ -2,71 +2,87 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3A757EF5F
-	for <lists+linux-security-module@lfdr.de>; Sat, 23 Jul 2022 16:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F1057EFBA
+	for <lists+linux-security-module@lfdr.de>; Sat, 23 Jul 2022 16:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236970AbiGWOFV (ORCPT
+        id S238149AbiGWOaX (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 23 Jul 2022 10:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        Sat, 23 Jul 2022 10:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237328AbiGWOFV (ORCPT
+        with ESMTP id S238130AbiGWOaG (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 23 Jul 2022 10:05:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8EB1056E;
-        Sat, 23 Jul 2022 07:05:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8951B614B5;
-        Sat, 23 Jul 2022 14:05:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB10C341C0;
-        Sat, 23 Jul 2022 14:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658585119;
-        bh=2g5s13C+IFBQd9xKYRDH27YjqkKmXT8LzRfCOLtta2w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d3v6kDUyyoOc2RLrQEdcJh8KRxU32gs+RlKKkJNJwfOPCw15HDLg7JGAjZEBwurps
-         b8J9KVbEGG17e9nIMXn8ePxKwEV4ltEUozC2FWRSXaaij1DESR8mv0o9sWx6ab0Gnu
-         zM+H7htPngHmRGV50lkndYupXy/GGXV4nilXaVnI=
-Date:   Sat, 23 Jul 2022 16:05:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-modules <linux-security-module@vger.kernel.org>,
-        keyrings <keyrings@vger.kernel.org>,
-        linux-kernel-mentees 
+        Sat, 23 Jul 2022 10:30:06 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C83D1C138;
+        Sat, 23 Jul 2022 07:30:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1658586572; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=OYq163lvA2Bqz3Yn4jatz3mbts9pw8Mo0ri4o5+iknE4WgtpLwGFwRrk138GGR29SrCrRgPY29+sl6+YRWivTJUNquN/MoLZpPSQllxdqLyeX0QK2zNOY4v3iOrrI3CHD7q6+PIpiHHVhOagmanPWMq2DfOk33ZgmiG/0+WMPlw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1658586572; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=a/9usRWIfKTQJmjOCrdt/xVzLad7G/lItwk6BnowcDE=; 
+        b=bb/Kj22EZ5tXuuv0BNBthqeUKbZsM3AFivbJlFn7yUkiHvxVMqM7unOFZgPAEfHJTt3VD/t0nnj4/1AebnYEqteIaXMRmgBf3sMk98FJSldaWHRsl5aOckmNUUkCR1y9YMquLH+r7oul9T49mAghXodRj9UBojPMgabbRekEdhk=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658586572;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=a/9usRWIfKTQJmjOCrdt/xVzLad7G/lItwk6BnowcDE=;
+        b=tDBA1sdg8MTEoxUTL9NLDKsUFJjHvaYYFZOKCPtKEMZ6jE4SDp5StnQnIPF6h5Cr
+        qu4ZsClhibfg3Q+LpT0awGh8WffR6wu4WznGGvnmccX+oIM1XdAIL8ihFpVqTjHz/Zv
+        XVfwg38ljifrVetqLVHN90zDhBri5l/VnqfuyHM8=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1658586560433935.6815882019292; Sat, 23 Jul 2022 19:59:20 +0530 (IST)
+Date:   Sat, 23 Jul 2022 19:59:20 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     "David Howells" <dhowells@redhat.com>,
+        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "linux-security-modules" <linux-security-module@vger.kernel.org>,
+        "linux-kernel-mentees" 
         <linux-kernel-mentees@lists.linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] keys/keyctl: Use kfree_rcu instead of kfree
-Message-ID: <YtwAHGISvlgXgXZM@kroah.com>
-References: <20220723135035.199188-1-code@siddh.me>
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "syzbot+c70d87ac1d001f29a058" 
+        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
+Message-ID: <1822b76775c.69c52873236056.4849193904753307696@siddh.me>
+In-Reply-To: <Ytv/tUrdK1ZTn4Uk@kroah.com>
+References: <20220723135447.199557-1-code@siddh.me> <Ytv/tUrdK1ZTn4Uk@kroah.com>
+Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing
+ watch_queue
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723135035.199188-1-code@siddh.me>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Sat, Jul 23, 2022 at 07:20:35PM +0530, Siddh Raman Pant via Linux-kernel-mentees wrote:
-> In keyctl_watch_key, use kfree_rcu() for freeing watch and wlist
-> as they support RCU and have an rcu_head in the struct definition.
+On Sat, 23 Jul 2022 19:33:33 +0530  Greg KH <gregkh@linuxfoundation.org> wrote:
+> You should not use #ifdef in .c files, it's unmaintainable over time.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-That does not explain why this change is needed.  What problem does this
-solve?  Why use RCU if you don't have to?  What functionality did you
-just change in this commit and why?
+I used it because it is used in the same way in fs/pipe.c too (please check the
+stated line number).
 
-And how was this tested?
+That, in turn, is because `watch_queue` member in the `pipe_inode_info` struct
+is defined that way (see line 80 of include/linux/pipe_fs_i.h), so I am forced
+to use the ifdef guard.
 
-thanks,
-
-greg k-h
+Thanks,
+Siddh
