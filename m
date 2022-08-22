@@ -2,87 +2,209 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BA859BEEB
-	for <lists+linux-security-module@lfdr.de>; Mon, 22 Aug 2022 13:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C4C59BFE1
+	for <lists+linux-security-module@lfdr.de>; Mon, 22 Aug 2022 14:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbiHVLv0 (ORCPT
+        id S231915AbiHVM4Q (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 22 Aug 2022 07:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        Mon, 22 Aug 2022 08:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234870AbiHVLuR (ORCPT
+        with ESMTP id S229565AbiHVM4P (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:50:17 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F34B862;
-        Mon, 22 Aug 2022 04:50:17 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MB9Yz4dSfz1N7Tt;
-        Mon, 22 Aug 2022 19:46:47 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 22 Aug 2022 19:50:14 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <mic@digikod.net>, <paul@paul-moore.com>, <jmorris@namei.org>,
-        <serge@hallyn.com>, <shuah@kernel.org>, <corbet@lwn.net>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-Subject: [PATCH -next 5/5] landlock: update chmod and chown support in document
-Date:   Mon, 22 Aug 2022 19:47:01 +0800
-Message-ID: <20220822114701.26975-6-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220822114701.26975-1-xiujianfeng@huawei.com>
-References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+        Mon, 22 Aug 2022 08:56:15 -0400
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AB418359
+        for <linux-security-module@vger.kernel.org>; Mon, 22 Aug 2022 05:56:12 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MBC621MgmzMq0t2;
+        Mon, 22 Aug 2022 14:56:10 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MBC606y77zlh8Ts;
+        Mon, 22 Aug 2022 14:56:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1661172970;
+        bh=NTgn+GUbi4XOqLkT2fQsXBCAJYtABmn0YdbNd0LIMnk=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=B1ES+nkloF5pU6m6tgkn4oMGGb4UTYVCZ4n81PTsWcFcya4dPImGnXFHrjRG6iKZQ
+         KMY3zuWoqbjMEYYQOXX1hEljnTMbw2yUKpECtoOYnV8eL9nzKVCKR+qZ4gkRG1TPlW
+         xbsgjBv0KhRACjt+dfQamI4uMEvjG1aBrvLfwJmM=
+Message-ID: <2728a73c-a3f9-d8f5-9264-9437d6eeda02@digikod.net>
+Date:   Mon, 22 Aug 2022 14:55:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: 
+To:     jeffxu@google.com
+Cc:     jorgelo@chromium.org, keescook@chromium.org,
+        linux-security-module@vger.kernel.org, groeck@chromium.org,
+        Jeff Xu <jeffxu@chromium.org>
+References: <20220820004547.2135627-1-jeffxu@google.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH] selftests/landlock: skip overlayfs test when kernel not
+ support it
+In-Reply-To: <20220820004547.2135627-1-jeffxu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-update LANDLOCK_ACCESS_FS_{CHMOD, CHOWN} support and add abi change
-in the document.
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- Documentation/userspace-api/landlock.rst | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On 20/08/2022 02:45, jeffxu@google.com wrote:
+> From: Jeff Xu <jeffxu@google.com>
+> 
+> Overlayfs can be disabled in kernel config, causing related tests to fail.
+> Add check for overlayfs’s supportability at runtime, so we can call SKIP()
+> when needed.
+> 
+> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> ---
+>   tools/testing/selftests/landlock/fs_test.c | 56 ++++++++++++++++++++--
+>   1 file changed, 53 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+> index 21a2ce8fa739..f604165dbd21 100644
+> --- a/tools/testing/selftests/landlock/fs_test.c
+> +++ b/tools/testing/selftests/landlock/fs_test.c
+> @@ -11,6 +11,7 @@
+>   #include <fcntl.h>
+>   #include <linux/landlock.h>
+>   #include <sched.h>
+> +#include <stdio.h>
+>   #include <string.h>
+>   #include <sys/capability.h>
+>   #include <sys/mount.h>
+> @@ -3398,12 +3399,53 @@ static const char (*merge_sub_files[])[] = {
+>    *         └── work
+>    */
+>   
+> +static char *fgrep(FILE *inf, const char *str)
 
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-index 2509c2fbf98f..05ab338db529 100644
---- a/Documentation/userspace-api/landlock.rst
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -61,7 +61,9 @@ the need to be explicit about the denied-by-default access rights.
-             LANDLOCK_ACCESS_FS_MAKE_BLOCK |
-             LANDLOCK_ACCESS_FS_MAKE_SYM |
-             LANDLOCK_ACCESS_FS_REFER |
--            LANDLOCK_ACCESS_FS_TRUNCATE,
-+            LANDLOCK_ACCESS_FS_TRUNCATE |
-+            LANDLOCK_ACCESS_FS_CHMOD |
-+            LANDLOCK_ACCESS_FS_CHOWN
-     };
- 
- Because we may not know on which kernel version an application will be
-@@ -90,6 +92,10 @@ the ABI.
-     case 2:
-             /* Removes LANDLOCK_ACCESS_FS_TRUNCATE for ABI < 3 */
-             ruleset_attr.handled_access_fs &= ~LANDLOCK_ACCESS_FS_TRUNCATE;
-+    case 3:
-+            /* Removes LANDLOCK_ACCESS_FS_{CHMOD, CHOWN} for ABI < 4 */
-+            ruleset_attr.handled_access_fs &= ~(LANDLOCK_ACCESS_FS_CHMOD |
-+                                                LANDLOCK_ACCESS_FS_CHOWN);
-     }
- 
- This enables to create an inclusive ruleset that will contain our rules.
--- 
-2.17.1
+Please move these two helpers just before prepare_layout(). I plan to 
+use them for other filesystems.
 
+
+> +{
+> +	char line[256];
+
+I guess we can safely set this array size to 32 for now.
+
+
+> +	int slen = strlen(str);
+> +
+> +	while (!feof(inf)) {
+> +		if (!fgets(line, 256, inf))
+
+Please use sizeof(line)
+
+> +			break;
+> +		if (strncmp(line, str, slen))
+> +			continue;
+> +
+> +		return strdup(line);
+
+No need to duplicate the string, just return a boolean.
+
+
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static bool check_overlayfs_support(void)
+
+Can be renamed to supports_overlayfs().
+
+
+> +{
+> +	FILE *inf = fopen("/proc/filesystems", "r");
+
+Just move the fopen() call at the end of variable declaration and add a 
+const.
+
+
+> +	char *res;
+> +	bool ret = false;
+> +
+> +	if (!inf)
+> +		return false;
+
+Let's assume that a failed attempt to open /proc/filesystems means the 
+filesystem is supported (default behavior). This can help detect such 
+missing file (which should not happen). You can add a comment to explain 
+the rational.
+
+
+> +
+> +	res = fgrep(inf, "nodev\toverlay\n");
+> +
+> +	if (res) {
+> +		ret = true;
+> +		free(res);
+> +	}
+> +
+> +	fclose(inf);
+> +
+> +	return ret;
+> +}
+> +
+>   /* clang-format off */
+>   FIXTURE(layout2_overlay) {};
+>   /* clang-format on */
+>   
+>   FIXTURE_SETUP(layout2_overlay)
+>   {
+> +	int rc;
+
+Let's stick to "ret".
+
+
+> +	bool support;
+
+s/support/is_supported/
+
+
+> +
+>   	prepare_layout(_metadata);
+>   
+>   	create_directory(_metadata, LOWER_BASE);
+> @@ -3431,9 +3473,17 @@ FIXTURE_SETUP(layout2_overlay)
+>   	create_directory(_metadata, MERGE_DATA);
+>   	set_cap(_metadata, CAP_SYS_ADMIN);
+>   	set_cap(_metadata, CAP_DAC_OVERRIDE);
+> -	ASSERT_EQ(0, mount("overlay", MERGE_DATA, "overlay", 0,
+> -			   "lowerdir=" LOWER_DATA ",upperdir=" UPPER_DATA
+> -			   ",workdir=" UPPER_WORK));
+> +
+> +	rc = mount("overlay", MERGE_DATA, "overlay", 0,
+> +			"lowerdir=" LOWER_DATA ",upperdir=" UPPER_DATA
+> +			",workdir=" UPPER_WORK);
+
+Please format with clang-format-14, otherwise I'll do it myself.
+
+
+> +	if (rc < 0) {
+
+Please check errno with ASSERT_EQ() to differentiate from a skippable 
+mount and an unexpected error. The next TH_LOG() would then not be needed.
+
+
+> +		TH_LOG("mount overlay failed: errorno=%s", strerror(errno));
+> +		support = check_overlayfs_support();
+> +		ASSERT_FALSE(support);
+
+ASSERT_FALSE(supports_overlayfs());
+
+> +		SKIP(return, "overlayfs is not supported");
+> +	}
+> +
+
+Please keep these clear_cap() calls just after the mount call.
+
+>   	clear_cap(_metadata, CAP_DAC_OVERRIDE);
+>   	clear_cap(_metadata, CAP_SYS_ADMIN);
+>   }
