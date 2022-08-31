@@ -2,63 +2,121 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3F05A6ED9
-	for <lists+linux-security-module@lfdr.de>; Tue, 30 Aug 2022 23:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBABD5A7427
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 Aug 2022 04:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiH3VGK (ORCPT
+        id S232054AbiHaCxi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 30 Aug 2022 17:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        Tue, 30 Aug 2022 22:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiH3VGJ (ORCPT
+        with ESMTP id S232024AbiHaCxf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:06:09 -0400
-X-Greylist: delayed 340 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 14:06:05 PDT
-Received: from capitanantonio.escuelaartegranada.net (unknown [82.223.67.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA7C32075
-        for <linux-security-module@vger.kernel.org>; Tue, 30 Aug 2022 14:06:04 -0700 (PDT)
-Received: by capitanantonio.escuelaartegranada.net (Postfix, from userid 10011)
-        id B22042AE5B; Tue, 30 Aug 2022 21:00:22 +0000 (UTC)
-To:     linux-security-module@vger.kernel.org
-Subject: =?UTF-8?Q?MANIPULADOS_PUBLITEX_=C2=ABBild:_Sind_Sie_es_leid,
- ?= =?UTF-8?Q?_in_Schulden_zu_leben=3F_Es_gibt_einen_Ausweg_und_?=
- =?UTF-8?Q?es_ist_sehr_einfach.=C2=BB?=
-Date:   Tue, 30 Aug 2022 21:00:22 +0000
-From:   MANIPULADOS PUBLITEX <info@manipuladospublitex.com>
-Message-ID: <3radHib2JHE6VDxwz5vyWNJTl4uvr9WG7OTmdENOMI@manipuladospublitex.com>
-X-Mailer: PHPMailer 6.5.3 (https://github.com/PHPMailer/PHPMailer)
+        Tue, 30 Aug 2022 22:53:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB32FB530D;
+        Tue, 30 Aug 2022 19:53:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83E31B81E3D;
+        Wed, 31 Aug 2022 02:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F7FC433C1;
+        Wed, 31 Aug 2022 02:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661914412;
+        bh=LkRLEF8OBNLXUqwC/tgny7T8EZJ+8dFOYdrlED2oNmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e9JMAM9M6pDXmIrlzWP3yUwWAa9zGZNJhRQ6/u6nv/liC61MlCinLTa4ZVbrv3jrM
+         RbXLm1xv53fQ0MAg2ibazpEAfsjBZfBwXcXuBG5y8FX3cVcF8jQQBCjTvnedwzJJ/e
+         hCu5uv63m0gd3IrGKxS6i9C9YfCoKbMQwvsygptGk8wqQUwCVcyve5IAwx2vjjCn7/
+         Hkxx/f2cevpHDKs2OQiCP+NffW6KFlzAy2DKE65GEwNK6xMxxVAKawGz4DF0qPeYJ+
+         aUv6NIGeGXNW1+svRKm5Tg3VkOADbqTaa2VR9Sh/5IQfT4dwlJVCufx11ZhbnV1+h3
+         w38Gdc8xFTPEQ==
+Date:   Wed, 31 Aug 2022 05:53:28 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v14 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and set KEY_LOOKUP_FLAGS_ALL
+Message-ID: <Yw7NKJfhyJqIWUcx@kernel.org>
+References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com>
+ <20220830161716.754078-6-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-PPP-Message-ID: <166189322268.82802.554230298637397887@capitanantonio.escuelaartegranada.net>
-X-PPP-Vhost: manipuladospublitex.com
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAD_ENC_HEADER,BAYES_50,
-        BODY_URI_ONLY,RCVD_IN_VALIDITY_RPBL,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_PH_SURBL autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830161716.754078-6-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 BAD_ENC_HEADER Message has bad MIME encoding in the header
-        *  0.6 URIBL_PH_SURBL Contains an URL listed in the PH SURBL blocklist
-        *      [URIs: churchfaq.com]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [82.223.67.229 listed in bl.score.senderscore.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.7 SCC_BODY_URI_ONLY No description available.
-        *  1.4 BODY_URI_ONLY Message body is only a URI in one line of text or
-        *       for an image
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Cuerpo del mensaje:
-Sind Sie es leid, in Schulden zu leben? Es gibt einen Ausweg und es ist sehr einfach. http://bitcoin-stock.churchfaq.com/dayli-news-2546
--- 
-Este mensaje se ha enviado desde un formulario de contacto en MANIPULADOS PUBLITEX (https://manipuladospublitex.com).
-En breve nos pondremos en contacto contigo.
-Gracias por confiar en nosotros.
+On Tue, Aug 30, 2022 at 06:17:09PM +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
+> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
+> validate the kfunc parameters.
+> 
+> Also, define the new constant KEY_LOOKUP_FLAGS_ALL, to facilitate checking
+> whether a variable contains only defined flags.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> ---
+>  include/linux/key.h      | 4 ++++
+>  security/keys/internal.h | 2 --
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index 7febc4881363..e2a70e0fa89f 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -88,6 +88,10 @@ enum key_need_perm {
+>  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+>  };
+>  
+> +#define KEY_LOOKUP_CREATE	0x01
+> +#define KEY_LOOKUP_PARTIAL	0x02
+> +#define KEY_LOOKUP_FLAGS_ALL	(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL)
 
+IMHO this could be just KEY_LOOKUP_ALL.
+
+> +
+>  struct seq_file;
+>  struct user_struct;
+>  struct signal_struct;
+> diff --git a/security/keys/internal.h b/security/keys/internal.h
+> index 9b9cf3b6fcbb..3c1e7122076b 100644
+> --- a/security/keys/internal.h
+> +++ b/security/keys/internal.h
+> @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
+>  
+>  extern bool lookup_user_key_possessed(const struct key *key,
+>  				      const struct key_match_data *match_data);
+> -#define KEY_LOOKUP_CREATE	0x01
+> -#define KEY_LOOKUP_PARTIAL	0x02
+>  
+>  extern long join_session_keyring(const char *name);
+>  extern void key_change_session_keyring(struct callback_head *twork);
+> -- 
+> 2.25.1
+> 
+
+Other than that wfm.
+
+BR, Jarkko
