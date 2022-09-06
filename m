@@ -2,172 +2,183 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFD65AE1E6
-	for <lists+linux-security-module@lfdr.de>; Tue,  6 Sep 2022 10:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF085AE1FD
+	for <lists+linux-security-module@lfdr.de>; Tue,  6 Sep 2022 10:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238687AbiIFII1 (ORCPT
+        id S232896AbiIFIJf (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 6 Sep 2022 04:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        Tue, 6 Sep 2022 04:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238465AbiIFII0 (ORCPT
+        with ESMTP id S238783AbiIFIIe (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 6 Sep 2022 04:08:26 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC02652E7E;
-        Tue,  6 Sep 2022 01:08:24 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MMHwJ5hqLz9xqvl;
-        Tue,  6 Sep 2022 16:04:16 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnYl3P_xZj3EYnAA--.22559S2;
-        Tue, 06 Sep 2022 09:07:55 +0100 (CET)
-Message-ID: <3d32decb1fda80e261d9ed08decfdca45614c4af.camel@huaweicloud.com>
-Subject: Re: [PATCH v16 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, joannelkoong@gmail.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 06 Sep 2022 10:07:41 +0200
-In-Reply-To: <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
-         <20220905143318.1592015-8-roberto.sassu@huaweicloud.com>
-         <CAP01T77F-A7igW+vp5RhzcqzRJymO6YRvNR2cfsh+2fKNy56YA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 6 Sep 2022 04:08:34 -0400
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59016F24C
+        for <linux-security-module@vger.kernel.org>; Tue,  6 Sep 2022 01:08:32 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MMJ1C1WBRzMqFwR;
+        Tue,  6 Sep 2022 10:08:31 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MMJ1B37MVzMpnPl;
+        Tue,  6 Sep 2022 10:08:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1662451711;
+        bh=r7iIg4faxJnz6DnPDM/x7O9FrVGSuWyoxur0fSwO+Tc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LDmvMigImi67BjTeWbowKZ8e3Zrbc5DRTAQUMyzypXtrz5EvUc+X8ge4uZvEliu5Z
+         HKZpHsSc9+mSwaxagMSUfHuupF6yWV2ymiL3yCuaJ8WGuwgSv3ykcGC2zU+hseCjmr
+         lxV/qbhl9fH457GeTsQIBlnCbDfbt9Tkqu2kVKtk=
+Message-ID: <89241aad-8c17-31bf-85bf-e2d0eea6b7ae@digikod.net>
+Date:   Tue, 6 Sep 2022 10:08:29 +0200
 MIME-Version: 1.0
+User-Agent: 
+Subject: Re: [PATCH v7 07/18] landlock: user space API network support
+Content-Language: en-US
+To:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Cc:     willemdebruijn.kernel@gmail.com, gnoack3000@gmail.com,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, yusongping@huawei.com,
+        hukeping@huawei.com, anton.sirazetdinov@huawei.com
+References: <20220829170401.834298-1-konstantin.meskhidze@huawei.com>
+ <20220829170401.834298-8-konstantin.meskhidze@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20220829170401.834298-8-konstantin.meskhidze@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDnYl3P_xZj3EYnAA--.22559S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw1rWF4fWw17ZrWftry7Jrb_yoW5ZF1DpF
-        W8KF4Y9ry8JF12yF13Za1fua4Sk3yvqw17W3sxt3s3ZrnY9r1xuF18tF45W3sYkry8try2
-        vFyIqrya9wn8Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KmiQAAse
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, 2022-09-06 at 04:57 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Mon, 5 Sept 2022 at 16:35, Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security
-> > modules
-> > the ability to check the validity of a signature against supplied
-> > data, by
-> > using user-provided or system-provided keys as trust anchor.
-> > 
-> > The new kfunc makes it possible to enforce mandatory policies, as
-> > eBPF
-> > programs might be allowed to make security decisions only based on
-> > data
-> > sources the system administrator approves.
-> > 
-> > The caller should provide the data to be verified and the signature
-> > as eBPF
-> > dynamic pointers (to minimize the number of parameters) and a
-> > bpf_key
-> > structure containing a reference to the keyring with keys trusted
-> > for
-> > signature verification, obtained from bpf_lookup_user_key() or
-> > bpf_lookup_system_key().
-> > 
-> > For bpf_key structures obtained from the former lookup function,
-> > bpf_verify_pkcs7_signature() completes the permission check
-> > deferred by
-> > that function by calling key_validate(). key_task_permission() is
-> > already
-> > called by the PKCS#7 code.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Acked-by: KP Singh <kpsingh@kernel.org>
-> > ---
-> >  kernel/trace/bpf_trace.c | 45
-> > ++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 45 insertions(+)
-> > 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 7a7023704ac2..8e2c026b0a58 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -1294,12 +1294,57 @@ void bpf_key_put(struct bpf_key *bkey)
-> >         kfree(bkey);
-> >  }
-> > 
-> > +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> > +/**
-> > + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-> > + * @data_ptr: data to verify
-> > + * @sig_ptr: signature of the data
-> > + * @trusted_keyring: keyring with keys trusted for signature
-> > verification
-> > + *
-> > + * Verify the PKCS#7 signature *sig_ptr* against the supplied
-> > *data_ptr*
-> > + * with keys in a keyring referenced by *trusted_keyring*.
-> > + *
-> > + * Return: 0 on success, a negative value on error.
-> > + */
-> > +int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-> > +                              struct bpf_dynptr_kern *sig_ptr,
-> > +                              struct bpf_key *trusted_keyring)
-> > +{
-> > +       int ret;
-> > +
-> > +       if (trusted_keyring->has_ref) {
-> > +               /*
-> > +                * Do the permission check deferred in
-> > bpf_lookup_user_key().
-> > +                * See bpf_lookup_user_key() for more details.
-> > +                *
-> > +                * A call to key_task_permission() here would be
-> > redundant, as
-> > +                * it is already done by keyring_search() called by
-> > +                * find_asymmetric_key().
-> > +                */
-> > +               ret = key_validate(trusted_keyring->key);
-> > +               if (ret < 0)
-> > +                       return ret;
-> > +       }
-> > +
-> > +       return verify_pkcs7_signature(data_ptr->data,
-> > +                                     bpf_dynptr_get_size(data_ptr)
-> > ,
-> > +                                     sig_ptr->data,
-> > +                                     bpf_dynptr_get_size(sig_ptr),
+You can squash this commit into 8/18.
+
+You need to increment the Landlock ABI version here.
+
+
+On 29/08/2022 19:03, Konstantin Meskhidze wrote:
+> Refactors user space API to support network actions. Adds new network
+> access flags, network rule and network attributes.
 > 
-> MIssing check for data_ptr->data == NULL before making this call?
-> Same
-> for sig_ptr.
-
-Patch 3 requires the dynptrs to be initialized. Isn't enough?
-
-Thanks
-
-Roberto
-
+> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+> ---
+> 
+> Changes since v6:
+> * None.
+> 
+> Changes since v5:
+> * Formats code with clang-format-14.
+> 
+> Changes since v4:
+> * None
+> 
+> Changes since v3:
+> * Splits commit.
+> * Refactors User API for network rule type.
+> 
+> ---
+>   include/uapi/linux/landlock.h | 49 +++++++++++++++++++++++++++++++++++
+>   security/landlock/syscalls.c  |  3 ++-
+>   2 files changed, 51 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+> index 735b1fe8326e..1ce2be6a78af 100644
+> --- a/include/uapi/linux/landlock.h
+> +++ b/include/uapi/linux/landlock.h
+> @@ -31,6 +31,13 @@ struct landlock_ruleset_attr {
+>   	 * this access right.
+>   	 */
+>   	__u64 handled_access_fs;
+> +
+> +	/**
+> +	 * @handled_access_net: Bitmask of actions (cf. `Network flags`_)
+> +	 * that is handled by this ruleset and should then be forbidden if no
+> +	 * rule explicitly allow them.
+> +	 */
+> +	__u64 handled_access_net;
+>   };
+> 
+>   /*
+> @@ -54,6 +61,11 @@ enum landlock_rule_type {
+>   	 * landlock_path_beneath_attr .
+>   	 */
+>   	LANDLOCK_RULE_PATH_BENEATH = 1,
+> +	/**
+> +	 * @LANDLOCK_RULE_NET_SERVICE: Type of a &struct
+> +	 * landlock_net_service_attr .
+> +	 */
+> +	LANDLOCK_RULE_NET_SERVICE = 2,
+>   };
+> 
+>   /**
+> @@ -79,6 +91,24 @@ struct landlock_path_beneath_attr {
+>   	 */
+>   } __attribute__((packed));
+> 
+> +/**
+> + * struct landlock_net_service_attr - TCP subnet definition
+> + *
+> + * Argument of sys_landlock_add_rule().
+> + */
+> +struct landlock_net_service_attr {
+> +	/**
+> +	 * @allowed_access: Bitmask of allowed access network for services
+> +	 * (cf. `Network flags`_).
+> +	 */
+> +	__u64 allowed_access;
+> +	/**
+> +	 * @port: Network port.
+> +	 */
+> +	__u16 port;
+> +
+> +} __attribute__((packed));
+> +
+>   /**
+>    * DOC: fs_access
+>    *
+> @@ -169,4 +199,23 @@ struct landlock_path_beneath_attr {
+>   #define LANDLOCK_ACCESS_FS_TRUNCATE			(1ULL << 14)
+>   /* clang-format on */
+> 
+> +/**
+> + * DOC: net_access
+> + *
+> + * Network flags
+> + * ~~~~~~~~~~~~~~~~
+> + *
+> + * These flags enable to restrict a sandboxed process to a set of network
+> + * actions.
+> + *
+> + * TCP sockets with allowed actions:
+> + *
+> + * - %LANDLOCK_ACCESS_NET_BIND_TCP: Bind a TCP socket to a local port.
+> + * - %LANDLOCK_ACCESS_NET_CONNECT_TCP: Connect an active TCP socket to
+> + *   a remote port.
+> + */
+> +/* clang-format off */
+> +#define LANDLOCK_ACCESS_NET_BIND_TCP			(1ULL << 0)
+> +#define LANDLOCK_ACCESS_NET_CONNECT_TCP			(1ULL << 1)
+> +/* clang-format on */
+>   #endif /* _UAPI_LINUX_LANDLOCK_H */
+> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+> index 28acc4cef3e8..ffd5805eddd9 100644
+> --- a/security/landlock/syscalls.c
+> +++ b/security/landlock/syscalls.c
+> @@ -82,8 +82,9 @@ static void build_check_abi(void)
+>   	 * struct size.
+>   	 */
+>   	ruleset_size = sizeof(ruleset_attr.handled_access_fs);
+> +	ruleset_size += sizeof(ruleset_attr.handled_access_net);
+>   	BUILD_BUG_ON(sizeof(ruleset_attr) != ruleset_size);
+> -	BUILD_BUG_ON(sizeof(ruleset_attr) != 8);
+> +	BUILD_BUG_ON(sizeof(ruleset_attr) != 16);
+> 
+>   	path_beneath_size = sizeof(path_beneath_attr.allowed_access);
+>   	path_beneath_size += sizeof(path_beneath_attr.parent_fd);
+> --
+> 2.25.1
+> 
