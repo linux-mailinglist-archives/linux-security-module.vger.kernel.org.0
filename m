@@ -2,100 +2,114 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1B05B0611
-	for <lists+linux-security-module@lfdr.de>; Wed,  7 Sep 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFA35B06C5
+	for <lists+linux-security-module@lfdr.de>; Wed,  7 Sep 2022 16:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiIGOGA (ORCPT
+        id S230345AbiIGOcL (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Sep 2022 10:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        Wed, 7 Sep 2022 10:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiIGOGA (ORCPT
+        with ESMTP id S230290AbiIGOb5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:06:00 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADE67E814;
-        Wed,  7 Sep 2022 07:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=/er90jz3XhSjwxV6BXeghY119eyGz9IxZW6xIbS/7mI=; b=fAtx79q791GXA5jH6/opXz3/dE
-        3s+JBEjsnf0lhHB5Hq8IMHlNxzUwHYxQYoIfTtcyngogWhyOghP1ubKHHNFqOjeC51XLuEIFvzAxz
-        45N0rTa5i7HYF60PqHal2bI3O2/3HUqG1o21s8NB3E9SZi21kH9aSlB7oRUn9++b3np8COFLn5i2N
-        80qYjWIvyELvh2gqbkHYojX/HNRSQjIfk2S0ykB7sKTotwRBu+vfzoYtSyejYVl2kwqG8h5cjRRWE
-        Vt66MQ4na9b/l9H68PihX7YatKkFhqM3Tv1HMNeU1jdRI6W5iOTSmxr3wyxLHeZdjo/qz9TpPjYlx
-        L4Wup//w==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oVvgj-006iIw-DQ; Wed, 07 Sep 2022 14:05:57 +0000
-Message-ID: <f1cefdb9-363a-c938-f02a-851173431610@infradead.org>
-Date:   Wed, 7 Sep 2022 07:05:55 -0700
+        Wed, 7 Sep 2022 10:31:57 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CF16FA0F
+        for <linux-security-module@vger.kernel.org>; Wed,  7 Sep 2022 07:31:54 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id r17so3421124ejy.9
+        for <linux-security-module@vger.kernel.org>; Wed, 07 Sep 2022 07:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=hlX5LG70Pfi5xUfXCm2C7WvkXcJVP5UakJZVNodPOy7vNkSXQuxkM6JMnL0NkwpmEx
+         GApIDchppryVktOBo5G41BqVss7NVeWmLRXcOx2bAZqQ+LAYFz8ePbLc684sFXT4Nmqj
+         OcoPmJYuvMlwncvSBL0BFnkvuWLyKibj/n8A5QS+qmy30Nhg7xyf0NkI/q67juR/h0tY
+         bD/nOML45bK21IZjrLP4cVfkyGYdsdvh6OJ7KPKPWGwDpi4WDdxiFiQ5bptV3cHn11YY
+         R2/ccByiK1oIAZVOw3mE9dymIO7CzllUwLBF2JbmBffIhO2NpTaaNqhGzBB+XMxejIE1
+         VDsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=r0xqA6oAnuixxwFAFsZ/mkP/1c/FPD3RFNo/WEt2/iARUbJxwjexLIWo42VxhrPM7+
+         5snnLFCQyLnokiROniSyX2y15HdqlFgyiLF874WsPKHPynRk2VdxkkdFO4BKI8lWPUV1
+         sbzIqe9V4we2RbnmdSXemhfaNfajFlV1JoohCemmJrGO85jB/+FyKlMIBEM5qG/cCnHd
+         UR+REiZOwJqi2nquHd0I13dBGDVLXi6jxCANwpTTMQaBnfsM0oyLwllHmdHgjjem+GQ6
+         LExNAzvQY7hQtqPZcsxhq4a5USiz5UfWRUtUYcFPZc5tbrlFJyJWBmnB8xfI1sknbvp7
+         0MLQ==
+X-Gm-Message-State: ACgBeo1zB7dg4A/8nSCrT9yfNgk20+hTZ3/lvuZ7Nhk27GVOHfmCXCh7
+        dqQkVrkHWizlqMxYA9YuhoBrhGFSzs1LwhKwk10=
+X-Google-Smtp-Source: AA6agR4pyZsB+xbbjgKGlrl2+RDjPAQ7wWCMdSGS3qWC1Sv629AIX++hkd3miN/bJlP1/yRRoX5bdHKo53e2l2Vr/Xc=
+X-Received: by 2002:a17:906:38f:b0:742:1f68:7058 with SMTP id
+ b15-20020a170906038f00b007421f687058mr2510502eja.743.1662561112231; Wed, 07
+ Sep 2022 07:31:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] security/keys: Remove inconsistent __user annotation
-Content-Language: en-US
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>
-References: <20220907121230.21252-1-vincenzo.frascino@arm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220907121230.21252-1-vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:31:51 -0700 (PDT)
+Reply-To: lumar.casey@outlook.com
+From:   LUMAR CASEY <miriankushrat@gmail.com>
+Date:   Wed, 7 Sep 2022 16:31:51 +0200
+Message-ID: <CAO4StN23CjT73+kAZo3jW6NA7B_rVMGFz9vZYzq4Gs86AZgN6A@mail.gmail.com>
+Subject: ATTENTION/PROPOSAL
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:644 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5014]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [miriankushrat[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+ATTENTION
 
+BUSINESS PARTNER,
 
-On 9/7/22 05:12, Vincenzo Frascino wrote:
-> The declaration of keyring_read does not match the definition
-> (security/keys/keyring.c). In this case the definition is correct
-> because it matches what defined in "struct key_type::read"
-> (linux/key-type.h).
-> 
-> Fix the declaration removing the inconsistent __user annotation.
-> 
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
-> Note: This issue was discovered during the porting of the linux kernel
-> on Morello [1].
-> 
-> [1] https://git.morello-project.org/morello/kernel/linux
+I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
+MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
+PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
+DIPLOMATIC OUTLET.
 
-FTR, I have sent this same patch 3 times.
-Good luck.
+I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
+PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
+YOUR COUNTRY.
 
->  security/keys/keyring.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> index 5e6a90760753..4448758f643a 100644
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
-> @@ -79,7 +79,7 @@ static void keyring_revoke(struct key *keyring);
->  static void keyring_destroy(struct key *keyring);
->  static void keyring_describe(const struct key *keyring, struct seq_file *m);
->  static long keyring_read(const struct key *keyring,
-> -			 char __user *buffer, size_t buflen);
-> +			 char *buffer, size_t buflen);
->  
->  struct key_type key_type_keyring = {
->  	.name		= "keyring",
+I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
 
--- 
-~Randy
+REGARDS,
+
+LUMAR CASEY
