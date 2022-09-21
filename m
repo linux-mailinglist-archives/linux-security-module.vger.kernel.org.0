@@ -2,150 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4565BFE93
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Sep 2022 15:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FE75BFF13
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Sep 2022 15:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiIUNB5 (ORCPT
+        id S229701AbiIUNnk (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 21 Sep 2022 09:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
+        Wed, 21 Sep 2022 09:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiIUNBx (ORCPT
+        with ESMTP id S229580AbiIUNnj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:01:53 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0655E8E98A;
-        Wed, 21 Sep 2022 06:01:51 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXdlS37TqzpV2q;
-        Wed, 21 Sep 2022 20:59:00 +0800 (CST)
-Received: from huawei.com (10.67.175.31) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 21:01:49 +0800
-From:   GUO Zihua <guozihua@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>
-Subject: [PATCH v5 2/2] ima: Handle -ESTALE returned by ima_filter_rule_match()
-Date:   Wed, 21 Sep 2022 20:58:04 +0800
-Message-ID: <20220921125804.59490-3-guozihua@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220921125804.59490-1-guozihua@huawei.com>
-References: <20220921125804.59490-1-guozihua@huawei.com>
+        Wed, 21 Sep 2022 09:43:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236A440569
+        for <linux-security-module@vger.kernel.org>; Wed, 21 Sep 2022 06:43:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B260962BA4
+        for <linux-security-module@vger.kernel.org>; Wed, 21 Sep 2022 13:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2198BC433B5
+        for <linux-security-module@vger.kernel.org>; Wed, 21 Sep 2022 13:43:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663767818;
+        bh=Gmuw7RYv066IxRae4zmwgZqYaBan3eu2R7Ak+x42SkI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=epzRSJ0jyAlPZ16JH3+XPj16W+fgflBh69EoIUoCn+iYNALhGhq0EGN7hyvK6/xnz
+         tCrpO2MgL9f/JKcaFVIpdYkwWnKD81N8BqNwoKaIfVpULQLmOvz2ZVdroMjawrta0o
+         ltKZ/KorHpLGLupVh7L0N+yDipDQXa6ThxHz29DxoZb9DXxNv+/aKxvEEYH4WGYHYT
+         oaAootsA0LfuR1MUG3VujCM5P1GmGhokDptfnnqRKL295GKdkC9Z7vl9faJN982WEV
+         SSAWusvTxydhhjpXEPqqtH0teulP5+KXcoBUaMngLqObOmac7yPzK5i/UYTPtLUnEo
+         byWIA2B/BIBDA==
+Received: by mail-wr1-f54.google.com with SMTP id t7so9912775wrm.10
+        for <linux-security-module@vger.kernel.org>; Wed, 21 Sep 2022 06:43:38 -0700 (PDT)
+X-Gm-Message-State: ACrzQf26OcoBC9UiI53uRfc8uhL3q4i5sLz0dXKrdO2qDh80FIl2D+g0
+        J4g77+L8UDxclKgqCpPP82LQO02TBh23L6sGGr/uJw==
+X-Google-Smtp-Source: AMsMyM79gcUQDdS+aheFYCBSJgkOeTa2g6z7vtIVxydF5XAVlYV8l3YcMmi9Yn+KvZ/xQuuFPV3NVrj9PpUfx7TqFJ4=
+X-Received: by 2002:a2e:920a:0:b0:26c:f7b:95db with SMTP id
+ k10-20020a2e920a000000b0026c0f7b95dbmr9324650ljg.156.1663767805783; Wed, 21
+ Sep 2022 06:43:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.31]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220920075951.929132-1-roberto.sassu@huaweicloud.com> <20220920075951.929132-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220920075951.929132-3-roberto.sassu@huaweicloud.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 21 Sep 2022 15:43:14 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7or3+zwZShXC7TdzhSbN4O9wEk6KEkbRBFh85=HZ87PQ@mail.gmail.com>
+Message-ID: <CACYkzJ7or3+zwZShXC7TdzhSbN4O9wEk6KEkbRBFh85=HZ87PQ@mail.gmail.com>
+Subject: Re: [PATCH v18 02/13] btf: Export bpf_dynptr definition
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, dhowells@redhat.com,
+        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org, Joanne Koong <joannelkoong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-IMA relies on the blocking LSM policy notifier callback to update the
-LSM based IMA policy rules.
+On Tue, Sep 20, 2022 at 10:01 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> eBPF dynamic pointers is a new feature recently added to upstream. It binds
+> together a pointer to a memory area and its size. The internal kernel
+> structure bpf_dynptr_kern is not accessible by eBPF programs in user space.
+> They instead see bpf_dynptr, which is then translated to the internal
+> kernel structure by the eBPF verifier.
+>
+> The problem is that it is not possible to include at the same time the uapi
+> include linux/bpf.h and the vmlinux BTF vmlinux.h, as they both contain the
+> definition of some structures/enums. The compiler complains saying that the
+> structures/enums are redefined.
+>
+> As bpf_dynptr is defined in the uapi include linux/bpf.h, this makes it
+> impossible to include vmlinux.h. However, in some cases, e.g. when using
+> kfuncs, vmlinux.h has to be included. The only option until now was to
+> include vmlinux.h and add the definition of bpf_dynptr directly in the eBPF
+> program source code from linux/bpf.h.
+>
+> Solve the problem by using the same approach as for bpf_timer (which also
+> follows the same scheme with the _kern suffix for the internal kernel
+> structure).
+>
+> Add the following line in one of the dynamic pointer helpers,
+> bpf_dynptr_from_mem():
+>
+> BTF_TYPE_EMIT(struct bpf_dynptr);
+>
+> Cc: stable@vger.kernel.org
+> Cc: Joanne Koong <joannelkoong@gmail.com>
+> Fixes: 97e03f521050c ("bpf: Add verifier support for dynptrs")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
 
-When SELinux update its policies, IMA would be notified and starts
-updating all its lsm rules one-by-one. During this time, -ESTALE would
-be returned by ima_filter_rule_match() if it is called with a LSM rule
-that has not yet been updated. In ima_match_rules(), -ESTALE is not
-handled, and the LSM rule is considered a match, causing extra files
-to be measured by IMA.
+I tested this out and it works, however for the BPF signing use case
+where "bpf_dynptr_kern" is added to struct bpf_prog_aux one still
+ends up defining the __ksym extern with bpf_dynptr_kern.
 
-Fix it by re-initializing a temporary rule if -ESTALE is returned by
-ima_filter_rule_match(). The origin rule in the rule list would be
-updated by the LSM policy notifier callback.
+But let's discuss that when the series is posted.
 
-Fixes: b16942455193 ("ima: use the lsm policy update notifier")
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/ima_policy.c | 41 ++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 9 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 8040215c0252..2edff7f58c25 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -545,6 +545,9 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 			    const char *func_data)
- {
- 	int i;
-+	bool result = false;
-+	struct ima_rule_entry *lsm_rule = rule;
-+	bool rule_reinitialized = false;
- 
- 	if ((rule->flags & IMA_FUNC) &&
- 	    (rule->func != func && func != POST_SETATTR))
-@@ -606,35 +609,55 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 		int rc = 0;
- 		u32 osid;
- 
--		if (!rule->lsm[i].rule) {
--			if (!rule->lsm[i].args_p)
-+		if (!lsm_rule->lsm[i].rule) {
-+			if (!lsm_rule->lsm[i].args_p)
- 				continue;
- 			else
- 				return false;
- 		}
-+
-+retry:
- 		switch (i) {
- 		case LSM_OBJ_USER:
- 		case LSM_OBJ_ROLE:
- 		case LSM_OBJ_TYPE:
- 			security_inode_getsecid(inode, &osid);
--			rc = ima_filter_rule_match(osid, rule->lsm[i].type,
-+			rc = ima_filter_rule_match(osid, lsm_rule->lsm[i].type,
- 						   Audit_equal,
--						   rule->lsm[i].rule);
-+						   lsm_rule->lsm[i].rule);
- 			break;
- 		case LSM_SUBJ_USER:
- 		case LSM_SUBJ_ROLE:
- 		case LSM_SUBJ_TYPE:
--			rc = ima_filter_rule_match(secid, rule->lsm[i].type,
-+			rc = ima_filter_rule_match(secid, lsm_rule->lsm[i].type,
- 						   Audit_equal,
--						   rule->lsm[i].rule);
-+						   lsm_rule->lsm[i].rule);
- 			break;
- 		default:
- 			break;
- 		}
--		if (!rc)
--			return false;
-+
-+		if (rc == -ESTALE && !rule_reinitialized) {
-+			lsm_rule = ima_lsm_copy_rule(rule);
-+			if (lsm_rule) {
-+				rule_reinitialized = true;
-+				goto retry;
-+			}
-+		}
-+		if (!rc) {
-+			result = false;
-+			goto out;
-+		}
- 	}
--	return true;
-+	result = true;
-+
-+out:
-+	if (rule_reinitialized) {
-+		for (i = 0; i < MAX_LSM_RULES; i++)
-+			ima_filter_rule_free(lsm_rule->lsm[i].rule);
-+		kfree(lsm_rule);
-+	}
-+	return result;
- }
- 
- /*
--- 
-2.17.1
-
+Tested-by: KP Singh <kpsingh@kernel.org>
