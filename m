@@ -2,105 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACB35E6B7E
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Sep 2022 21:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36D15E6BD1
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Sep 2022 21:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiIVTH7 (ORCPT
+        id S232146AbiIVTii (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 22 Sep 2022 15:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        Thu, 22 Sep 2022 15:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiIVTH6 (ORCPT
+        with ESMTP id S232093AbiIVTih (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 22 Sep 2022 15:07:58 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5486EFFA5B
-        for <linux-security-module@vger.kernel.org>; Thu, 22 Sep 2022 12:07:56 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1225219ee46so15290724fac.2
-        for <linux-security-module@vger.kernel.org>; Thu, 22 Sep 2022 12:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=2E/C7DbYFbgaIr08r5WQJJ8lH65h8Rlpzk3fsg7D9e8=;
-        b=Sc2t84MYNifRdpTZz6LHCdTHbGpHtePPoew2qsdF9HHe8gStsU2qKwHjLQmE1+oPPg
-         I1EurkRBUsiV216mZSYCjX649kwgi5p9dGPj50oSNxaH8t9N5Lyt/GsKj+zklmLR6qEr
-         6R4aHXhiCm/iktm0j/EoGmNd0poPj6lF+d3aisz2dZom3AWJS8ZfcYs8qIfw2l7FOMBe
-         HWJ3KinBwLAunUH38CmELQ+uYEnv7YZf9KTUM3+NhHM3aV3rTSVddlmYen3IgFOvDILn
-         1pehVy8LfZjvBTsHHkBR3BUiOkMUko7Ppki5o5o9Li47YyyXPlz3/ARUMXM7puPuP26M
-         yXxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2E/C7DbYFbgaIr08r5WQJJ8lH65h8Rlpzk3fsg7D9e8=;
-        b=IPjUvpbmEuo4lO6RbLoJSqjqyyexISdgTbIWKHdXW/W8ZdombTQejxlrWF4xdPq67j
-         jr7MyLhsacvv/PKM9vPNZHM/0NqaLSQ9EbDF/FIeWOeqruzpWu++m0/nskEomcizDz8H
-         AJB2PQliIQ3saWsjGK57r2kxrSkD/Gq9soMyfLAw8FDCdQgP9Id9yOy9dY6AEQD00SE3
-         eWzXqtMlC0XhL0bHZNbmzEgA/HwE4pHc/eBMLoWTJ4tm76819OICZKYMihZ8f5XvuTi7
-         MYpRmWGbgGnxndjI9s3jYt7I+VUgVDDtjETQD6JOZIcYQdcqHJHDkJIxiaDmfVojdSma
-         LYuA==
-X-Gm-Message-State: ACrzQf2KITT2RbPCMqddLqmBjTAN6T4tKop/BoacPlo43SxYWyKfKS8q
-        gOGxyx3BRkvzhWGYkkhstU+5oXRJKwsGb4wjAMuu
-X-Google-Smtp-Source: AMsMyM6d9RAgQ5lrUQAwZbu3DJT1/UNg9egieC9LHbxthXW7OebfrM1G5JLCjS1iPUbSyY1utPnUyQOKNNFWojmurr0=
-X-Received: by 2002:a05:6870:600c:b0:12d:9e19:9860 with SMTP id
- t12-20020a056870600c00b0012d9e199860mr2966449oaa.172.1663873675323; Thu, 22
- Sep 2022 12:07:55 -0700 (PDT)
+        Thu, 22 Sep 2022 15:38:37 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E3510B20F;
+        Thu, 22 Sep 2022 12:38:32 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MJbBmf030933;
+        Thu, 22 Sep 2022 19:38:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=/gvip40Cjs4rl8pNl1FIAxG45esfx0k/1rSLIcN5b6Y=;
+ b=dyo4/Mim/buXLyBU/vS9yw6B8t6uL6i2epAn3TUHFJe8qsdhZUPAtKTTLgoinWRE/Bdu
+ 0LxP166i0x5rB/JIIQJRvB21pO/qMW5vjw+Q522R16t6RAx3MghZQOMLVXhdwIu580gv
+ f3H2vDGrABnQfyYbk9gqPnrnUboqOGRUKlVQJ2JVACIPMeOc5B4gnrMPCLPvbZGgP+8f
+ ZGZeb+b47JFnWum0j5W67YEo4mw4VRFVqCKnxTiguWFt76W8B4eSux3CrswBg4kxEZwp
+ 8k93uuDDWrCBjwBkF4aKPbCpEjdmPHEmOAXHCtbdpZS1+sgca4ZQciA0PGe9VhR0DExN sA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jrwpd8jgm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:38:19 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28MJZDK8011293;
+        Thu, 22 Sep 2022 19:38:19 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03dal.us.ibm.com with ESMTP id 3jn5va3jxb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 19:38:19 +0000
+Received: from smtpav06.dal12v.mail.ibm.com ([9.208.128.130])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28MJcGKX55312696
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Sep 2022 19:38:17 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4168F5805F;
+        Thu, 22 Sep 2022 19:38:17 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E0945805D;
+        Thu, 22 Sep 2022 19:38:17 +0000 (GMT)
+Received: from localhost (unknown [9.41.178.242])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Sep 2022 19:38:17 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jmorris@namei.org, mpe@ellerman.id.au, paul@paul-moore.com,
+        serge@hallyn.com, ajd@linux.ibm.com, gcwilson@linux.ibm.com,
+        nayna@linux.ibm.com
+Subject: [PATCH 0/2] powerpc/pseries: restrict error injection and DT changes when locked down
+Date:   Thu, 22 Sep 2022 14:38:15 -0500
+Message-Id: <20220922193817.106041-1-nathanl@linux.ibm.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220922151728.1557914-1-brauner@kernel.org> <d74030ae-4b9a-5b39-c203-4b813decd9eb@schaufler-ca.com>
- <CAHk-=whLbq9oX5HDaMpC59qurmwj6geteNcNOtQtb5JN9J0qFw@mail.gmail.com> <16ca7e4c-01df-3585-4334-6be533193ba6@schaufler-ca.com>
-In-Reply-To: <16ca7e4c-01df-3585-4334-6be533193ba6@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 22 Sep 2022 15:07:44 -0400
-Message-ID: <CAHC9VhQRST66pVuNM0WGJsh-W01mDD-bX=GpFxCceUJ1FMWrmg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/29] acl: add vfs posix acl api
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        v9fs-developer@lists.sourceforge.net, linux-cifs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: PLyb9hbhpFhTVYl4PHQG37RUQ_ny_e0W
+X-Proofpoint-GUID: PLyb9hbhpFhTVYl4PHQG37RUQ_ny_e0W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_14,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ suspectscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 mlxlogscore=854
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Sep 22, 2022 at 2:54 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> On 9/22/2022 10:57 AM, Linus Torvalds wrote:
-> > On Thu, Sep 22, 2022 at 9:27 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> >> Could we please see the entire patch set on the LSM list?
-> > While I don't think that's necessarily wrong, I would like to point
-> > out that the gitweb interface actually does make it fairly easy to
-> > just see the whole patch-set.
-> >
-> > IOW, that
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/log/?h=fs.acl.rework
-> >
-> > that Christian pointed to is not a horrible way to see it all. Go to
-> > the top-most commit, and it's easy to follow the parent links.
->
-> I understand that the web interface is fine for browsing the changes.
-> It isn't helpful for making comments on the changes. The discussion
-> on specific patches (e.g. selinux) may have impact on other parts of
-> the system (e.g. integrity) or be relevant elsewhere (e.g. smack). It
-> can be a real problem if the higher level mailing list (the LSM list
-> in this case) isn't included.
+Add two new lockdown reasons for use in powerpc's pseries platform
+code.
 
-This is probably one of those few cases where Casey and I are in
-perfect agreement.  I'd much rather see the patches hit my inbox than
-have to go hunting for them and then awkwardly replying to them (and
-yes, I know there are ways to do that, I just personally find it
-annoying).  I figure we are all deluged with email on a daily basis
-and have developed mechanisms to deal with that in a sane way, what is
-29 more patches on the pile?
+The pseries platform allows hardware-level error injection via certain
+calls to the RTAS (Run Time Abstraction Services) firmware. ACPI-based
+error injection is already restricted in lockdown; this facility
+should be restricted for the same reasons.
+
+pseries also allows nearly arbitrary device tree changes via
+/proc/powerpc/ofdt. Just as overriding ACPI tables is not allowed
+while locked down, so should this facility be restricted.
+
+Nathan Lynch (2):
+  powerpc/pseries: block untrusted device tree changes when locked down
+  powerpc/rtas: block error injection when locked down
+
+ arch/powerpc/kernel/rtas.c                | 25 ++++++++++++++++++++++-
+ arch/powerpc/platforms/pseries/reconfig.c |  5 +++++
+ include/linux/security.h                  |  2 ++
+ security/security.c                       |  2 ++
+ 4 files changed, 33 insertions(+), 1 deletion(-)
 
 -- 
-paul-moore.com
+2.37.3
+
