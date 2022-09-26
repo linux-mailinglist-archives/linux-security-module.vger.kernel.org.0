@@ -2,104 +2,196 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4405EAF4A
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Sep 2022 20:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84E15EAF65
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Sep 2022 20:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbiIZSK6 (ORCPT
+        id S231410AbiIZSOa (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 26 Sep 2022 14:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        Mon, 26 Sep 2022 14:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiIZSK3 (ORCPT
+        with ESMTP id S231524AbiIZSNt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 26 Sep 2022 14:10:29 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749D265801
-        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 10:56:37 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3454b0b1b6dso76976197b3.4
-        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 10:56:37 -0700 (PDT)
+        Mon, 26 Sep 2022 14:13:49 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98D513F82
+        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 11:03:20 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id d8so5866144iof.11
+        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 11:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=C237qwozOvl8aPF+8xhmIlNpmWxUmRobeuzg2CJNr44=;
-        b=U9hwiLfYludCtXf+u0nsabYBP7stdr7yW99wIfiKPEhqMHuuQX6od3d2kHzQbh22li
-         U/zTa1UeDa99ukJG6xtOrZn0LBmGQXcx5OW/YCV9ONG7IC0HDs24sEhnFeKotoq2a0mE
-         OyMgLs0LpFpwtmy8snEODDWoFj9tCQkCc+YtGWJzTA6qetH5qBICh+sDbGFahSo7jzDB
-         T4xdvWGGdej4b7MLGPvCIhDgZDk5+CsajAyU9jKjdUUSAigMdAqtODPI8KwwhJbr7+7U
-         3parV/TeNWqYg5AxN+caSJ0MAv04AKY4P/Rsi7JvXzlChyB2mYdJqzGKo3aZ5yvTETvs
-         yA2A==
+        bh=Mzbyizo3Nwtc8a3WAxtxS6k0hBx8va3OMev51GvHHpg=;
+        b=ZQgK0edH4AVL5PgPv4C44UeBjddDT3gctcEWYER1PysSVDiOvUk21nSeHSLJyqVla3
+         AWTGB+dsQ/gM7ZbhYW2c3pTOqC+7VGnadW5jchbc1mdqfFuQsiFWfvvxqdbKEsfWBQfJ
+         TH5MF7q9HCcLO1rk09L2yzOoUY2sksvcroNrc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=C237qwozOvl8aPF+8xhmIlNpmWxUmRobeuzg2CJNr44=;
-        b=iH0FAQJC+Q56uMdMlKMxp5dzaNEXqi7lAqzHpQS0OynMOnIIbTY+T8I10Bp12EvHuU
-         /YbqKBtxh4fOCxoRygIuK+fBnp7EY6FFuN64ko4ZMAyWjSXgT+fiHvAeiS25CAgq2pF6
-         RzpYdeY7vg4VY1tVQrpAydP0HgXujJgbDXelkTojvf2tJ778+5FOwzI8XYQE9f3DdWX7
-         qqICW23oD8C4hM973Taz9xxLMHXmx7X6S172d3TwGdcSphfU1vDIC52dvcAH4mHBwkUA
-         DY8BiHNiEvuLPbMO7oXCO4KoFaAYE1oFp8wmrj+ivYAhKdWw2x+VCO82fu+6zdJAg3C3
-         82Ug==
-X-Gm-Message-State: ACrzQf3u7aoAugq4hmaAD0nEEclpd4ExfVBeTkYuvqqnUuhbSX53wTGA
-        /NizIc0EmfyCAp+82L7zlMRHxLu4oFTz1n8FKbo=
-X-Google-Smtp-Source: AMsMyM4DtELNq3UfC6ogqw6JJnpKyAYcDqudvgTz/Cf2F94+yabovEqZ4sg5zE+TIZdy1rLTqMtQ9t3eTSSycA0RlkI=
-X-Received: by 2002:a81:7955:0:b0:349:e6a4:7960 with SMTP id
- u82-20020a817955000000b00349e6a47960mr22130363ywc.74.1664214992399; Mon, 26
- Sep 2022 10:56:32 -0700 (PDT)
+        bh=Mzbyizo3Nwtc8a3WAxtxS6k0hBx8va3OMev51GvHHpg=;
+        b=WWF9GaA/zYUAyVhk/viiuVSq3qsF2sWmLMv16Fsn6o7Q3ZiY+HZCy8xHcX7ApkhyDm
+         ObBX/8PW2oOvjHYgGovY9Te3YtUUemmu6k1ystNcnxpWcZCiYS1wQ7rHJA0jooC39zZv
+         C1i12eoVHS56LzHWTTV65A2GwN/kFgBrJHXFucFKjCHdFMJ+pMJs2yKjZW0x3hA6eAap
+         vCNvFoIeDCJzuEloUw3pXEu5MXOF5qV2u/ev2O5iKWOLRrBCiYtk0yrHRL3uzDeq9pzr
+         mLlHq4DQnPD0OTuCsrAEVrzPLNqQ9Zz0r8cMwr34SI6kgYeZV0J8Ri/uZlf6eJIELToF
+         otKA==
+X-Gm-Message-State: ACrzQf13McVW6Ks0/hQJtOUaGrZPtlUfy85e+IHEY3qWgkVvkcUMFt9B
+        A0H1BLyMshSWDlrsc3bRP5KWea96xOOlqllLPXobtw==
+X-Google-Smtp-Source: AMsMyM75w4EGQuoeMByhsQXEOTOlioGW8fh+xsDx5Oc4kkXTJdqgREqv2KmcTvJPCf5vVOde0o/S2J/JggnpSjgxvI0=
+X-Received: by 2002:a6b:e714:0:b0:6a1:35af:82dc with SMTP id
+ b20-20020a6be714000000b006a135af82dcmr9588636ioh.205.1664215400281; Mon, 26
+ Sep 2022 11:03:20 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7108:7150:0:0:0:0 with HTTP; Mon, 26 Sep 2022 10:56:31
- -0700 (PDT)
-Reply-To: pointerscott009@gmail.com
-From:   Abdulkareem Ademola <adeomoade123g@gmail.com>
-Date:   Mon, 26 Sep 2022 18:56:31 +0100
-Message-ID: <CALzsaxtqUL3ixWqHqjkdPSYn1rM2gkh46kq-VCD+Grzcb7UU=w@mail.gmail.com>
-Subject: =?UTF-8?Q?Bussines_offer_Gesch=C3=A4ftsangebot=2E?=
-To:     undisclosed-recipients:;
+References: <20220921185426.1663357-1-jeffxu@chromium.org> <20220921185426.1663357-2-jeffxu@chromium.org>
+ <CAHC9VhS-jv5cpSdq7dxFGYH=z=5grQceNMyjroeL2KHdrVUV6g@mail.gmail.com>
+ <CABi2SkXRxomrYn-xUf3B+XswmQjXZUJXmYJECmr_nBfrZWwqkA@mail.gmail.com>
+ <CAHC9VhRuUZxdsVQftqWa0zEuNAxk8ur0-TZp5KecJ537hRONRQ@mail.gmail.com> <875yhe6ial.fsf@defensec.nl>
+In-Reply-To: <875yhe6ial.fsf@defensec.nl>
+From:   Jeff Xu <jeffxu@chromium.org>
+Date:   Mon, 26 Sep 2022 11:03:09 -0700
+Message-ID: <CABi2SkW4P+s-+5X7UGYYp1tUtT350_7UfQx_KYqHAyYe31ORWw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Add CONFIG_SECURITY_SELINUX_PERMISSIVE_DONTAUDIT
+To:     Dominick Grift <dominick.grift@defensec.nl>
+Cc:     Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, jorgelo@chromium.org,
+        groeck@chromium.org, Luis Hector Chavez <lhchavez@google.com>,
+        Luis Hector Chavez <lhchavez@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1130 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8818]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [pointerscott009[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [adeomoade123g[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
---=20
+On Fri, Sep 23, 2022 at 11:45 AM Dominick Grift
+<dominick.grift@defensec.nl> wrote:
+>
+> Paul Moore <paul@paul-moore.com> writes:
+>
+> > On Fri, Sep 23, 2022 at 1:43 PM Jeff Xu <jeffxu@chromium.org> wrote:
+> >> On Wed, Sep 21, 2022 at 12:11 PM Paul Moore <paul@paul-moore.com> wrote:
+> >> > On Wed, Sep 21, 2022 at 2:54 PM <jeffxu@chromium.org> wrote:
+> >> > >
+> >> > > From: Jeff Xu <jeffxu@chromium.org>
+> >> > >
+> >> > > When SECURITY_SELINUX_DEVELOP=y and the system is running in permissive
+> >> > > mode, it is useful to disable logging from permissive domain, so audit
+> >> > > log does not get spamed.
+> >> > >
+> >> > > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> >> > > Signed-off-by: Luis Hector Chavez <lhchavez@google.com>
+> >> > > Tested-by: Luis Hector Chavez <lhchavez@chromium.org>
+> >> > > Tested-by: Jeff Xu<jeffxu@chromium.org>
+> >> > > ---
+> >> > >  security/selinux/Kconfig | 10 ++++++++++
+> >> > >  security/selinux/avc.c   |  9 +++++++++
+> >> > >  2 files changed, 19 insertions(+)
+> >> >
+> >> > I'm sorry, but I can't accept this into the upstream kernel.
+> >> > Permissive mode, both per-domain and system-wide, is not intended to
+> >> > be a long term solution.  Permissive mode should really only be used
+> >> > as a development tool or emergency "hotfix" with the proper solution
+> >> > being either an adjustment of the existing policy (SELinux policy
+> >> > booleans, labeling changes, etc.) or the development of a new policy
+> >> > module which better fits your use case.
+> >>
+> >> Thanks for the response.
+> >> For a system that wants to control a few daemons, is there a
+> >> recommended pattern from selinux ?
+>
+> That is effectively a "targeted" policy model. You target a selection of
+> entities and everything else is "unconfined" (ie not targeteed).
+>
+> An "unconfined" domain is just a process type that has many allow rules
+> associated with it making it effectively similar to an "permissive"
+> domain. The difference is that since "unconfined" domains have full
+> access there should not be any AVC denials (nothing is blocked by
+> SELinux because the policy does not target the entity)
+>
+> The stock policy enforced in Red Hat based distributions is a "targeted"
+> policy model for example. The unconfined_t domain is one of various
+> "unconfined" domains (other examples are unconfined_service_t but
+> effectively any type could be made unconfined by simply allowing all accesses.
+>
+> >
+> > Guidance on how to write a SELinux policy for an application is a bit
+> > beyond what I have time for in this email, but others on this mailing
+> > list might be able to help.  There has definitely been a lot written
+> > on the subject, both available online and offline.  My suggestion
+> > would be to start "small" with a single SELinux domain for the
+> > application and a single type for any configuration, data, or log
+> > files it might need; get this initial domain working properly and then
+> > you can add increasing levels of access control granularity until
+> > you've met your security requirements.  If you've never done this
+> > before, go slow, the start might be challenging as you get used to the
+> > tools, but you can do it :)
+> >
+> >> I read this blog about unconfined domain (unconfined_t), maybe this is one way ?
+> >> https://wiki.gentoo.org/wiki/SELinux/Tutorials/What_is_this_unconfined_thingie_and_tell_me_about_attributes
+> >
+> > It is important to remember that an unconfined domain is, as the name
+> > would imply, effectively unconfined by SELinux.  Perhaps this is what
+> > you want, but generally speaking if you are running SELinux it is
+> > because you have a need or desire for additional access controls
+> > beyond the legacy Linux discretionary access controls.
+> >
+> >> I have two questions on unconfined domain:
+> >> 1> Is unconfined_t domain supported in SECURITY_SELINUX_DEVELOP=n mode ?
+> >
+> > Yes.  The SECURITY_SELINUX_DEVELOP kernel build configuration only
+> > enables the admin to boot the kernel initially in permissive mode
+> > and/or determine the SELinux mode using the "enforcing=X" kernel
+> > command line option and a sysfs/securityfs tunable under
+> > /sys/fs/selinux/enforce.  The unconfined_t domain is defined purely in
+> > the SELinux policy and not the kernel; you could write a SELinux
+> > policy without it you wanted, or you could grant unconfined_t-like
+> > permissions to multiple different domains in your policy.  It's been a
+> > while since I played with it, but I believe the SELinux reference
+> > policy (refpol) provides a macro interface to define an arbitrary
+> > domain with unconfined_t-like permissions.
+> >
+> >> 2> will unconfined_t domain log also as permissive domain ?
+> >
+> > The intent of the unconfined_t domain is that there would be no access
+> > denials due to SELinux and thus no AVC audit records related to the
+> > unconfined_t domain.  It is not permissive in the sense of the SELinux
+> > "mode" (enforcing/permissive/disabled), but it is permissive in the
+> > sense that it is given a large number of permissions.
+>
+> --
+> gpg --locate-keys dominick.grift@defensec.nl
+> Key fingerprint = FCD2 3660 5D6B 9D27 7FC6  E0FF DA7E 521F 10F6 4098
+> Dominick Grift
 
-Hello, Do you have a projects that need urgent loan??
-Granting out loans today in 10,000 / 500 Million to Interested
-Investors, Companies & Private Individuals.
-Revert back if you interested.
+Thanks for details about the unconfined_t domain, this is one option.
 
+IMHO: between permissive domain + audit log and unconfined_t, there might
+be room for letting each permissive domain decide its own audit logging
+strategy. The reasons are:
 
-Hallo, haben Sie Projekte, die dringend einen Kredit ben=C3=B6tigen?
-Vergeben Sie heute Kredite in H=C3=B6he von 10.000 / 500 Millionen an
-interessierte Investoren, Unternehmen und Privatpersonen.
-Kommen Sie zur=C3=BCck, wenn Sie interessiert sind.
+1> For a system that have many daemons, a lot of those are not actively
+worked by devs, relying on tests is not sufficient to discover all possible
+legitimate accesses  at runtime, dev won't be comfortable to enable enforced
+mode without some bake time in production, this is where permissive + audit log
+helps.
+
+2> The set back of "permissive + audit log" is that one daemon might generate
+too much log in production, set to unconfined_t is one option, but
+then dev revert
+the progress made so far with permissive mode.
+
+3> For a system that is on continuous delivery pipeline, during the phase of
+development of selinux policy, daemon owner might need permissive + audit log
+in testing, but permissive - audit log in production. This is where
+the per-domain
+audit log can help, it would be even nicer if this can be controlled
+at runtime,
+similar to sysctl.
+
+Best regards,
+Jeff
