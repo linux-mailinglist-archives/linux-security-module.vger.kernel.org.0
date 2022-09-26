@@ -2,97 +2,111 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407F85EA850
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Sep 2022 16:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EF65EA905
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Sep 2022 16:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiIZOYS (ORCPT
+        id S235184AbiIZOv5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 26 Sep 2022 10:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        Mon, 26 Sep 2022 10:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234829AbiIZOX4 (ORCPT
+        with ESMTP id S235190AbiIZOvg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 26 Sep 2022 10:23:56 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930BA16586
-        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 05:34:45 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MbgvN3XlrzHqHS;
-        Mon, 26 Sep 2022 19:46:24 +0800 (CST)
-Received: from cgs.huawei.com (10.244.148.83) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 19:48:39 +0800
-From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <john.johansen@canonical.com>, <paul@paul-moore.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>, <cuigaosheng1@huawei.com>
-CC:     <apparmor@lists.ubuntu.com>,
-        <linux-security-module@vger.kernel.org>
-Subject: [PATCH] apparmor: fix obsoleted comments for aa_getprocattr() and audit_resource()
-Date:   Mon, 26 Sep 2022 19:48:38 +0800
-Message-ID: <20220926114838.1699096-1-cuigaosheng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 26 Sep 2022 10:51:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DFB8FD41;
+        Mon, 26 Sep 2022 06:17:03 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QBgMoQ004765;
+        Mon, 26 Sep 2022 13:16:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=yzaBqGlmr9z0WILYDL7+0YEOCV7bF7YOavzmZIkGJY4=;
+ b=R7dwZWzQ7S04vsq2rMwvlqaCZJ3qehDbobZjTzkGRyid769mtos/MPmqZP2A9OlHDzLa
+ iemmjpskP53nbwmab/oKH5OD88k3MeeeKd5mvfDtDTqxoWRkUfV7n8iNvCWZFlUUhSfy
+ Lz2rgYVi52u27lzU4ixJ21N+K0tNJz/b0M/AIPQ31YRHoK2mtXhd5T0c/fv/NUHVtgFQ
+ KvQ+tFOKq2/J6Dq8nK2HrccrnlmvFv2Qst2lzOhQPKP+CETyovdswLGb6jkwoIe7Q7Pq
+ +aZbDGDr35+AhBd19aDrJPWjJ6variJazsPbwkybd1CWRaRQs66QQwaoGLyyrkYJvh8g nA== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ju8kh782t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:16:45 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28QD6CtU011689;
+        Mon, 26 Sep 2022 13:16:44 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma01wdc.us.ibm.com with ESMTP id 3jt40rk43w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Sep 2022 13:16:44 +0000
+Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28QDGh7P12911048
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Sep 2022 13:16:43 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C48758057;
+        Mon, 26 Sep 2022 13:16:43 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 512CA58059;
+        Mon, 26 Sep 2022 13:16:43 +0000 (GMT)
+Received: from localhost (unknown [9.163.91.170])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 26 Sep 2022 13:16:43 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jmorris@namei.org, mpe@ellerman.id.au, paul@paul-moore.com,
+        serge@hallyn.com, ajd@linux.ibm.com, gcwilson@linux.ibm.com,
+        nayna@linux.ibm.com
+Subject: [PATCH v2 0/2] powerpc/pseries: restrict error injection and DT changes when locked down
+Date:   Mon, 26 Sep 2022 08:16:41 -0500
+Message-Id: <20220926131643.146502-1-nathanl@linux.ibm.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.244.148.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1bov1B5pxHJJ6EuhXp0wwiyMVTePjLRe
+X-Proofpoint-ORIG-GUID: 1bov1B5pxHJJ6EuhXp0wwiyMVTePjLRe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 mlxlogscore=863 phishscore=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209260083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Update the comments for aa_getprocattr() and audit_resource(), the
-args of them have beed changed since commit 76a1d263aba3 ("apparmor:
-switch getprocattr to using label_print fns()").
+Add two new lockdown reasons for use in powerpc's pseries platform
+code.
 
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
----
- security/apparmor/procattr.c | 11 +++++------
- security/apparmor/resource.c |  2 ++
- 2 files changed, 7 insertions(+), 6 deletions(-)
+The pseries platform allows hardware-level error injection via certain
+calls to the RTAS (Run Time Abstraction Services) firmware. ACPI-based
+error injection is already restricted in lockdown; this facility
+should be restricted for the same reasons.
 
-diff --git a/security/apparmor/procattr.c b/security/apparmor/procattr.c
-index 86ad26ef72ed..197d41f9c32b 100644
---- a/security/apparmor/procattr.c
-+++ b/security/apparmor/procattr.c
-@@ -17,14 +17,13 @@
- 
- 
- /**
-- * aa_getprocattr - Return the profile information for @profile
-- * @profile: the profile to print profile info about  (NOT NULL)
-- * @string: Returns - string containing the profile info (NOT NULL)
-+ * aa_getprocattr - Return the label information for @label
-+ * @label: the label to print label info about  (NOT NULL)
-+ * @string: Returns - string containing the label info (NOT NULL)
-  *
-- * Requires: profile != NULL
-+ * Requires: label != NULL && string != NULL
-  *
-- * Creates a string containing the namespace_name://profile_name for
-- * @profile.
-+ * Creates a string containing the label information for @label.
-  *
-  * Returns: size of string placed in @string else error code on failure
-  */
-diff --git a/security/apparmor/resource.c b/security/apparmor/resource.c
-index 1ae4874251a9..4c1869bb31ec 100644
---- a/security/apparmor/resource.c
-+++ b/security/apparmor/resource.c
-@@ -45,6 +45,8 @@ static void audit_cb(struct audit_buffer *ab, void *va)
-  * @profile: profile being enforced  (NOT NULL)
-  * @resource: rlimit being auditing
-  * @value: value being set
-+ * @peer: aa_albel of the task being set
-+ * @info: info being auditing
-  * @error: error value
-  *
-  * Returns: 0 or sa->error else other error code on failure
+pseries also allows nearly arbitrary device tree changes via
+/proc/powerpc/ofdt. Just as overriding ACPI tables is not allowed
+while locked down, so should this facility be restricted.
+
+Changes since v1:
+* Move LOCKDOWN_DEVICE_TREE next to LOCKDOWN_ACPI_TABLES.
+
+Nathan Lynch (2):
+  powerpc/pseries: block untrusted device tree changes when locked down
+  powerpc/rtas: block error injection when locked down
+
+ arch/powerpc/kernel/rtas.c                | 25 ++++++++++++++++++++++-
+ arch/powerpc/platforms/pseries/reconfig.c |  5 +++++
+ include/linux/security.h                  |  2 ++
+ security/security.c                       |  2 ++
+ 4 files changed, 33 insertions(+), 1 deletion(-)
+
 -- 
-2.25.1
+2.37.3
 
