@@ -2,22 +2,22 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE6C5EB4A5
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Sep 2022 00:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6015EB4A3
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Sep 2022 00:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiIZWk0 (ORCPT
+        id S229746AbiIZWkR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 26 Sep 2022 18:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        Mon, 26 Sep 2022 18:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiIZWkU (ORCPT
+        with ESMTP id S229769AbiIZWkQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 26 Sep 2022 18:40:20 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D11236858
-        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 15:40:14 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1280590722dso11187634fac.1
-        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 15:40:14 -0700 (PDT)
+        Mon, 26 Sep 2022 18:40:16 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C393C145
+        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 15:40:09 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-12b542cb1d3so11115032fac.13
+        for <linux-security-module@vger.kernel.org>; Mon, 26 Sep 2022 15:40:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
@@ -62,8 +62,8 @@ Cc:     linuxppc-dev@lists.ozlabs.org,
         gcwilson@linux.ibm.com, nayna@linux.ibm.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
