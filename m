@@ -2,145 +2,221 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F645EDBB4
-	for <lists+linux-security-module@lfdr.de>; Wed, 28 Sep 2022 13:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEAC5EDDEB
+	for <lists+linux-security-module@lfdr.de>; Wed, 28 Sep 2022 15:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbiI1LYb (ORCPT
+        id S234196AbiI1NlT (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 28 Sep 2022 07:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        Wed, 28 Sep 2022 09:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbiI1LYS (ORCPT
+        with ESMTP id S233179AbiI1NlJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:24:18 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8F8E99AE;
-        Wed, 28 Sep 2022 04:24:10 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Mcv9x07Zgz9xHf0;
-        Wed, 28 Sep 2022 19:18:13 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBHP5PDLjRjJ5yAAA--.16292S2;
-        Wed, 28 Sep 2022 12:23:54 +0100 (CET)
-Message-ID: <fe9fe2443b8401a076330a3019bd46f6c815a023.camel@huaweicloud.com>
-Subject: Re: Closing the BPF map permission loophole
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@kernel.org>,
-        Lorenz Bauer <oss@lmb.io>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Wed, 28 Sep 2022 13:23:45 +0200
-In-Reply-To: <87mtajss8j.fsf@toke.dk>
-References: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
-         <8e243ad132ecf2885fc65c33c7793f0703937890.camel@huaweicloud.com>
-         <7f7c3337-74f1-424e-a14d-578c4c7ee2fe@www.fastmail.com>
-         <65546f56be138ab326544b7b2e59bb3175ec884a.camel@huaweicloud.com>
-         <b0c00f80-c11e-4f5d-ba63-2e9fb7cad561@www.fastmail.com>
-         <9aba20351924aa0d82d258205030ad4f2c404de2.camel@huaweicloud.com>
-         <98a26e5c-d44f-4e65-8186-c4e94918daa1@www.fastmail.com>
-         <06a47f11778ca9d074c815e57dc1c75d073b3a85.camel@huaweicloud.com>
-         <439dd1e5-71b8-49ed-8268-02b3428a55a4@www.fastmail.com>
-         <6e142c3526df693abfab6e1293a27828267cc45e.camel@huaweicloud.com>
-         <87mtajss8j.fsf@toke.dk>
+        Wed, 28 Sep 2022 09:41:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E0E97D78;
+        Wed, 28 Sep 2022 06:41:08 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SDarhw029178;
+        Wed, 28 Sep 2022 13:40:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Mh2fWVk3fNEf2DhAYeJxnFE3lkUUL1QVUTXLHpMXmPg=;
+ b=jyl7wRTq6Gk7BW8atbRWFccufGg4KPj/S7tcFRjs5qIxcEC7zV+gz/QA69AzERRzo0sN
+ DPOii7OJ7uzMHb5kbu+G+nOnnHm0PkgPsHY3Hp7Y0UkC2VFIwlBeU8hUhnx4hmxq0Dvv
+ WGS7oHbuWHJgy3+fqcyKT3hBHSpK3NRTHQUUywr0lSUF2XgSfsBVYTbcNidy2wZ0pgmy
+ qp234ogI149MIknflBq4UjYuSTSbra15mh7aKlNBhTJFoM04bQTOvpPXv4dbSs2J1+Fw
+ kbjwOEVGIBAp23dKpFLcKp1J+PTcrFYSrVmMuI5v7iWpouTCW297+4JUJnOxP76/sdFX NQ== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvmtr50aj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 13:40:54 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28SDb6Q8020722;
+        Wed, 28 Sep 2022 13:40:51 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3jssh9409c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 13:40:51 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28SDeniI52035980
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Sep 2022 13:40:49 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 04E65A4054;
+        Wed, 28 Sep 2022 13:40:49 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A260A4060;
+        Wed, 28 Sep 2022 13:40:48 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Sep 2022 13:40:48 +0000 (GMT)
+Received: from intelligence.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id B95496016C;
+        Wed, 28 Sep 2022 20:02:40 +1000 (AEST)
+Message-ID: <591a3e016605181e119496992027ae21700a2c3b.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 2/2] powerpc/rtas: block error injection when locked
+ down
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Nathan Lynch <nathanl@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jmorris@namei.org, mpe@ellerman.id.au, paul@paul-moore.com,
+        serge@hallyn.com, gcwilson@linux.ibm.com, nayna@linux.ibm.com
+Date:   Wed, 28 Sep 2022 20:02:40 +1000
+In-Reply-To: <20220926131643.146502-3-nathanl@linux.ibm.com>
+References: <20220926131643.146502-1-nathanl@linux.ibm.com>
+         <20220926131643.146502-3-nathanl@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBHP5PDLjRjJ5yAAA--.16292S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy5tr47Kw1rWF4fCFWxZwb_yoW8Kr43pF
-        W8t3Z0kF4DJr1Fka9a9w1fJFy0v3yrGFnrWr13AryrZFyDZw1rtr40kF45uF92vr1Ikw1j
-        vr4Fka43Za4kZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBF1jj4OJHwABsp
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mG5ysnGAlMM9Fev4UY_3wOPa0iaGdcWB
+X-Proofpoint-ORIG-GUID: mG5ysnGAlMM9Fev4UY_3wOPa0iaGdcWB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_06,2022-09-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
+ phishscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0
+ bulkscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280083
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, 2022-09-28 at 12:33 +0200, Toke Høiland-Jørgensen wrote:
-> Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
+On Mon, 2022-09-26 at 08:16 -0500, Nathan Lynch wrote:
+> The error injection facility on pseries VMs allows corruption of
+> arbitrary guest memory, potentially enabling a sufficiently
+> privileged
+> user to disable lockdown or perform other modifications of the
+> running
+> kernel via the rtas syscall.
 > 
-> > On Wed, 2022-09-28 at 09:52 +0100, Lorenz Bauer wrote:
-> > > On Mon, 26 Sep 2022, at 17:18, Roberto Sassu wrote:
-> > > > Uhm, if I get what you mean, you would like to add DAC controls
-> > > > to
-> > > > the
-> > > > pinned map to decide if you can get a fd and with which modes.
-> > > > 
-> > > > The problem I see is that a map exists regardless of the pinned
-> > > > path
-> > > > (just by ID).
-> > > 
-> > > Can you spell this out for me? I imagine you're talking about
-> > > MAP_GET_FD_BY_ID, but that is CAP_SYS_ADMIN only, right? Not
-> > > great
-> > > maybe, but no gaping hole IMO.
-> > 
-> > +linux-security-module ML (they could be interested in this topic
-> > as
-> > well)
-> > 
-> > Good to know! I didn't realize it before.
-> > 
-> > I figured out better what you mean by escalating privileges.
-> > 
-> > Pin a read-only fd, get a read-write fd from the pinned path.
-> > 
-> > What you want to do is, if I pin a read-only fd, I should get read-
-> > only 
-> > fds too, right?
-> > 
-> > I think here there could be different views. From my perspective,
-> > pinning is just creating a new link to an existing object.
-> > Accessing
-> > the link does not imply being able to access the object itself (the
-> > same happens for files).
-> > 
-> > I understand what you want to achieve. If I have to choose a
-> > solution,
-> > that would be doing something similar to files, i.e. add owner and
-> > mode
-> > information to the bpf_map structure (m_uid, m_gid, m_mode). We
-> > could
-> > add the MAP_CHMOD and MAP_CHOWN operations to the bpf() system call
-> > to
-> > modify the new fields.
-> > 
-> > When you pin the map, the inode will get the owner and mode from
-> > bpf_map. bpf_obj_get() will then do DAC-style verification similar
-> > to
-> > MAC-style verification (with security_bpf_map()).
+> Block the PAPR error injection facility from being opened or called
+> when locked down.
 > 
-> As someone pointed out during the discussing at LPC, this will
-> effectively allow a user to create files owned by someone else, which
-> is
-> probably not a good idea either from a security PoV. (I.e., user A
-> pins
-> map owned by user B, so A creates a file owned by B).
+> Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
 
-Uhm, I see what you mean. Right, it is not a good idea, the owner of
-the file should the one that pinned the map.
+Is there any circumstance (short of arbitrary code execution etc) where
+the rtas_call() check will actually trigger rather than the sys_rtas()
+check? (Not that it matters, defence in depth is good.)
 
-Other than that, DAC verification on the map would be still correct, as
-it would be independent from the DAC verification of the file.
+Reviewed-by: Andrew Donnellan <ajd@linux.ibm.com>
 
-Roberto
+> ---
+>  arch/powerpc/kernel/rtas.c | 25 ++++++++++++++++++++++++-
+>  include/linux/security.h   |  1 +
+>  security/security.c        |  1 +
+>  3 files changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/kernel/rtas.c b/arch/powerpc/kernel/rtas.c
+> index 693133972294..c2540d393f1c 100644
+> --- a/arch/powerpc/kernel/rtas.c
+> +++ b/arch/powerpc/kernel/rtas.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/memblock.h>
+>  #include <linux/slab.h>
+>  #include <linux/reboot.h>
+> +#include <linux/security.h>
+>  #include <linux/syscalls.h>
+>  #include <linux/of.h>
+>  #include <linux/of_fdt.h>
+> @@ -464,6 +465,9 @@ void rtas_call_unlocked(struct rtas_args *args,
+> int token, int nargs, int nret,
+>         va_end(list);
+>  }
+>  
+> +static int ibm_open_errinjct_token;
+> +static int ibm_errinjct_token;
+> +
+>  int rtas_call(int token, int nargs, int nret, int *outputs, ...)
+>  {
+>         va_list list;
+> @@ -476,6 +480,16 @@ int rtas_call(int token, int nargs, int nret,
+> int *outputs, ...)
+>         if (!rtas.entry || token == RTAS_UNKNOWN_SERVICE)
+>                 return -1;
+>  
+> +       if (token == ibm_open_errinjct_token || token ==
+> ibm_errinjct_token) {
+> +               /*
+> +                * It would be nicer to not discard the error value
+> +                * from security_locked_down(), but callers expect an
+> +                * RTAS status, not an errno.
+> +                */
+> +               if
+> (security_locked_down(LOCKDOWN_RTAS_ERROR_INJECTION))
+> +                       return -1;
+> +       }
+> +
+>         if ((mfmsr() & (MSR_IR|MSR_DR)) != (MSR_IR|MSR_DR)) {
+>                 WARN_ON_ONCE(1);
+>                 return -1;
+> @@ -1227,6 +1241,14 @@ SYSCALL_DEFINE1(rtas, struct rtas_args __user
+> *, uargs)
+>         if (block_rtas_call(token, nargs, &args))
+>                 return -EINVAL;
+>  
+> +       if (token == ibm_open_errinjct_token || token ==
+> ibm_errinjct_token) {
+> +               int err;
+> +
+> +               err =
+> security_locked_down(LOCKDOWN_RTAS_ERROR_INJECTION);
+> +               if (err)
+> +                       return err;
+> +       }
+> +
+>         /* Need to handle ibm,suspend_me call specially */
+>         if (token == rtas_token("ibm,suspend-me")) {
+>  
+> @@ -1325,7 +1347,8 @@ void __init rtas_initialize(void)
+>  #ifdef CONFIG_RTAS_ERROR_LOGGING
+>         rtas_last_error_token = rtas_token("rtas-last-error");
+>  #endif
+> -
+> +       ibm_open_errinjct_token = rtas_token("ibm,open-errinjct");
+> +       ibm_errinjct_token = rtas_token("ibm,errinjct");
+>         rtas_syscall_filter_init();
+>  }
+>  
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 39e7c0e403d9..70f89dc3a712 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -123,6 +123,7 @@ enum lockdown_reason {
+>         LOCKDOWN_XMON_WR,
+>         LOCKDOWN_BPF_WRITE_USER,
+>         LOCKDOWN_DBG_WRITE_KERNEL,
+> +       LOCKDOWN_RTAS_ERROR_INJECTION,
+>         LOCKDOWN_INTEGRITY_MAX,
+>         LOCKDOWN_KCORE,
+>         LOCKDOWN_KPROBES,
+> diff --git a/security/security.c b/security/security.c
+> index 51bf66d4f472..eabe3ce7e74e 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -61,6 +61,7 @@ const char *const
+> lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+>         [LOCKDOWN_XMON_WR] = "xmon write access",
+>         [LOCKDOWN_BPF_WRITE_USER] = "use of bpf to write user RAM",
+>         [LOCKDOWN_DBG_WRITE_KERNEL] = "use of kgdb/kdb to write
+> kernel RAM",
+> +       [LOCKDOWN_RTAS_ERROR_INJECTION] = "RTAS error injection",
+>         [LOCKDOWN_INTEGRITY_MAX] = "integrity",
+>         [LOCKDOWN_KCORE] = "/proc/kcore access",
+>         [LOCKDOWN_KPROBES] = "use of kprobes",
+
+-- 
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
 
