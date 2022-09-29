@@ -2,255 +2,394 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4E25EF8A8
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Sep 2022 17:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B52F5EF8BD
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Sep 2022 17:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbiI2P1h (ORCPT
+        id S235587AbiI2PbA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 29 Sep 2022 11:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
+        Thu, 29 Sep 2022 11:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbiI2P1g (ORCPT
+        with ESMTP id S235869AbiI2Paz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:27:36 -0400
-Received: from sonic309-26.consmr.mail.ne1.yahoo.com (sonic309-26.consmr.mail.ne1.yahoo.com [66.163.184.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B395E15D653
-        for <linux-security-module@vger.kernel.org>; Thu, 29 Sep 2022 08:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1664465253; bh=pGLNsoLzPUts8onFeF22LrTZNLZ89dyzql1L/5mktq8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=TG2VHxC7Jp/WamRwkxNV7aQpdUWVGtw3qxo1yRBUfN2+5mJBUZIRa6KH6vSvToaAdpULnbikGHlTcBZQcvbZRT87LuTYJWSiIOu6Jo4Hy3PvFcEZ8Nad5E/pndC2quULsp68mx64cJehDFaSYO1Ij5I+Wk0PTMIDcPbclA+BeehQenPq1mX7SF9Tojmd6zgxX84YBp5nbpI+sMZ19+zsX1FwiDEyF6KqyYADoON2MDpNU9X9c66BkqgmXQ5CGcWkJ4XPNiunFXGHiFjp23qK8YqsbrC5NQxgXHB4HOa+H9QT1166QVOTDA27uUtKb8+S1eU5WpzjjUNmOKKtJJSZqQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1664465253; bh=7MC5hoLN8LU71/ClawFlKWuGXcHmN68PgWx/JqYpNNm=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jcUhdHiJQUz/wZCicMA+rfFKfk5QNDcHZdtf+uPxclQfsYoxNTsh5wkAAxmEhsnou/0glbBiKvqqrrN9XNLXuIbcrzI7MYH/A2MexNuX/hDy34Sg4sThKysDc+ZY6BbJs68uuLufmRy8JhSBzxgbHmAov0Tc4IucJo0MYthh97EPZFEdRbodB3kW1Gupe+FAHf3rso4d/OlOZRFIQGyXKoHluFpaZncupTGTLgkKwrzOOVDMi9vM4dON26dXpPfD443Ak+fiXxXYo6ewyKZimchmLmf/I3ROFkucdadqgNuibfiuOLBf/Q67K8XwzXu8rUCyFWD7uyRr7gJyYZFqFw==
-X-YMail-OSG: nCBF3oMVM1kH0ueRicuMGeRaCuWV7vAOXpVI_ygtyr2CwtiajojN9PmjhLxwVgk
- JE_RsYl1FWqAtVWCU8pqchNOgQGY6CZkuPs5WxeK8wZC93h5Ad59ANO3e4.kWsSUK21kf7l3vCMw
- CxBwmZ2uHKATxKBkaGtbCt0g4ZzwTN7Pn3mMTa_13xOkXuXdWabPgKcmCslAq5Bdc.3PY6gIjnLu
- aej5zJb4ClP0HBKeDXtD1AwUfbID4wBMn9aReIxTNIJjrYg282pLG5l1iv2PbAY2Cobggc.MRF8c
- BOaqtQNBxPdWnzALGNT0qME.FK2dUsmGUiOwV1FA3Dz_.TWCOZbDu8QBkCIjYSGf9j1U8..ew4T4
- ZuYXAE25xriUnn1sexwa97.cTjBuLqU0HjCsfQhKUQWjqc3FT6I4Y6g3zxNrXqC_gwtD9VLQ.HAX
- Xa71C84sV7C8aV7bq2mfM_Q9DRVXkAwvhCVW8l4qG5hXMmipGoinMdO3G9B7g2DT.J76aWx1jf0L
- fEQTlfIbdccWVgF8hO9J5AHd2H.qLA1Te3LJHvlGvNPu_xCxKSoncA6h7G0hXnTmVKcH_YpwFccL
- 9HviUoPD84yxqsJCvDskTO4Tew4e3_LEXPVpvGWXWIkA9B2xuoHJOafRO5XuGqTO4uM28wgA9P8N
- NJq.DSRZ2.uV9e8DjnBD_Z54h2BcwB.AgcXE_yi9xx9Gu4QRDVdoWH2c7KKr0dP2aG2azIBEVDrA
- n6VhFXHouGcR7d2ABfVYAc6hyIKHbNT.rgPNovOyjfau_7to4lrMHA7SEWxRDEBzsJC8.pCI7CI7
- 0_YLv1.jggsZsTNxtPi8D3GbB3KK1adXG.5aivNr_ocLTsR2CL_FD4g0jCMN.YkbGMPOSK.I9hVr
- Aw9CxJTRHZaRskKKcXJmo_YKfMRa1l5TZsBvZwb9E187uQtgvVjGtcQ1WX30mFEPhlkOSBt1AcVD
- m3mxNj_OOQKGdUIkofFE65D6ABkb.ElCnwe2KjDJOAUUaWm5GUY_rAkNrM0wkkWFlIwGQ6ZjQy1O
- pcpYwktQYAqB_xqnQ_SUAa_fujkMH1ug5RakF0mBzScYow._sH7Y2QbmwjLRTd2DVLL7MV7ID7oO
- LLinrjhppeVY1MU0Bu5VPoqfPlkw7au2RF.1_s709J7jsZwZK1kIYeyoAdbBE2m39HzxsK_dlGfC
- BN7AbOpitvMzSIQ0_sSXODz9UMSf2xiE9HkrRM1cSXinisx98XtnQjtjjNzJZZ2oUgt1h68miL86
- bidu_2WfQFpBJ0EHqHxuGgDxSkjKtS4szoaBZsvvPe3ZlskpCNLANQGRIvjUO9rci8G6ruButB99
- FVq2sdeQR2hH0tvv1b2BsS9wEhoo1NndLW09SHiWyzc0Kw_UVuXJNFJ4fgV7dcR2hg43szqx_exL
- AmjJ0Qheym3aFdB5FNA9bUUNSJJgqPKIzz2N.UtDm1hzKY1JX0tLqzkIQX1Tl3JqnU0tFPBilbec
- jesELeOGNwT2r1rTrwRB_e6tpgCLlVYsXzMGZEBRS541EVw079euok4o_K8U.v7THfz77j5jGu4k
- ICH18sEqQFTEbqDvY02H9IYhrL3wt3Y1U1yx0s3wGVeLQQAbJoN1Mr09eAnlsufCC3QbSA_IFOuK
- p.rLe8kO99ms1muyQb3D2HLyCpx_T7FZdBITdYgtIgO6e53UQGolw0DNB4fAa4l2chXcWeCn6ACd
- DQeYwSQejQPrH5_er54OhoM1WxydkxBQGOq36WEHLUuvUJF_WO_Ff_5H9FURGLGoikyJNfUjtzft
- JTGzYI6uWeTXerEIkP6x89PJspuq_PfTK6J874MLKJ6BgNmmFru8STtMavKRawHCH1RUdUtJihD5
- E7aBb7YnyRkendWPf5HvNyHHhYTJuHcR97iw4rVxtOIYcB5VaAfdpfhwR8VXDZvQlU_sp.2NSKPO
- 4euqvqVkjhzZCG2I.3APYz37q_vmcPZUd_nnoDL6Y4aVXmonEanzzb3hCk1Xs94W7HrmVMonvzGX
- 5vMysDa90Q9dHNqRghDUz3_dGprhq14OmmypSPI5gYIvS0nHswpf8erjCN52WhXF1qjoQK3IZ8IS
- W6Fx1_XJA3EoqMsPpypXI82hND2ZuRIDml9soFhcciSOMaqIM1SsULSxSgd3VCLXSzgK.AhrFOu.
- bAl8s84rN6Xa9e7Ui4exaeuUBtHn3Zl9TcDlKJrqqTGdhm6CJAgSdn8fMi3MLY4E4xPj3JnOAsGL
- 5Ug7qSr7A0QHZ3Swi4XGkBdRu1zdV1a0k0...cmG2UDrBe7_g
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Thu, 29 Sep 2022 15:27:33 +0000
-Received: by hermes--production-ne1-6944b4579f-p7xcb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4e8fe131166d9d1396d49b7657ebfeb2;
-          Thu, 29 Sep 2022 15:27:28 +0000 (UTC)
-Message-ID: <24b60b5d-2664-89e6-1aa4-088623781455@schaufler-ca.com>
-Date:   Thu, 29 Sep 2022 08:27:26 -0700
+        Thu, 29 Sep 2022 11:30:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD4432058;
+        Thu, 29 Sep 2022 08:30:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32157618D7;
+        Thu, 29 Sep 2022 15:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44B7C433C1;
+        Thu, 29 Sep 2022 15:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664465452;
+        bh=LL8NejFbocWSy+AvSUtjXMIjl5uWCqF/UI1pdqvEzPg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qUj/ZM2JERsNRbYvA60slQIPan31PZUZJ4BulTKVKN2tW465By7tfIN4cUdGbBcag
+         dvXN9qK/rdbawI69dJQ0W++tCYWVe3GyyIKqd/fNqMCNVvjtk1yss0m0eNfUnHN1DD
+         EwTnt7lzZKRPzfYkfSgY6KHX2xwibMc+gS9wqwPA1eT6oKtee0+74EP3knhG/3w/Bw
+         DA+7PkdbbOTn8hBzcsu8ZVqOc/0NX62UntXV7Dl0+sfuUM2ECGfWC2wHvfJFdum4Fn
+         ldIxjvq/VzYIc4F6l01OpYV48MiBnBEfykN0FpjwyJhMw/XPvjPgw1X6sf97jvtLdi
+         Cx20ivNoGXDcQ==
+From:   Christian Brauner <brauner@kernel.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Seth Forshee <sforshee@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        v9fs-developer@lists.sourceforge.net, linux-cifs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v4 00/30] acl: add vfs posix acl api
+Date:   Thu, 29 Sep 2022 17:30:10 +0200
+Message-Id: <20220929153041.500115-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: Closing the BPF map permission loophole
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@kernel.org>,
-        Lorenz Bauer <oss@lmb.io>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, casey@schaufler-ca.com
-References: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
- <8e243ad132ecf2885fc65c33c7793f0703937890.camel@huaweicloud.com>
- <7f7c3337-74f1-424e-a14d-578c4c7ee2fe@www.fastmail.com>
- <65546f56be138ab326544b7b2e59bb3175ec884a.camel@huaweicloud.com>
- <b0c00f80-c11e-4f5d-ba63-2e9fb7cad561@www.fastmail.com>
- <9aba20351924aa0d82d258205030ad4f2c404de2.camel@huaweicloud.com>
- <98a26e5c-d44f-4e65-8186-c4e94918daa1@www.fastmail.com>
- <06a47f11778ca9d074c815e57dc1c75d073b3a85.camel@huaweicloud.com>
- <439dd1e5-71b8-49ed-8268-02b3428a55a4@www.fastmail.com>
- <6e142c3526df693abfab6e1293a27828267cc45e.camel@huaweicloud.com>
- <87mtajss8j.fsf@toke.dk>
- <fe9fe2443b8401a076330a3019bd46f6c815a023.camel@huaweicloud.com>
- <CAHC9VhRKq=BMtAat2_+0VvYk91hnryUHg+wbZRhu2BDB9ehC2A@mail.gmail.com>
- <3a9efcd6c8f7fa3908230ef5be0e0ad224a730ff.camel@huaweicloud.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <3a9efcd6c8f7fa3908230ef5be0e0ad224a730ff.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14865; i=brauner@kernel.org; h=from:subject; bh=t07fl0LHVWk+O2Gxdp1eWyXQ0q+ftyK1Eg7M4h+Pc1Q=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSSb7hKUm3nEv876uUO65dko8f+mpmeN45/1qHCvvrKqWD7h ytb3HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABNJlWD4py31eVIU70OuTawPWPd+ef +pU8CeXeWmx+x4fVPr46sFTzP8T+AR2Hv/WJ/uDe89LI/9A33WKMyIYNiuc4x9/+pFNfLFLAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20702 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 9/29/2022 12:54 AM, Roberto Sassu wrote:
-> On Wed, 2022-09-28 at 20:24 -0400, Paul Moore wrote:
->> On Wed, Sep 28, 2022 at 7:24 AM Roberto Sassu
->> <roberto.sassu@huaweicloud.com> wrote
->>> On Wed, 2022-09-28 at 12:33 +0200, Toke Høiland-Jørgensen wrote:
->>>> Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
->>>>
->>>>> On Wed, 2022-09-28 at 09:52 +0100, Lorenz Bauer wrote:
->>>>>> On Mon, 26 Sep 2022, at 17:18, Roberto Sassu wrote:
->>>>>>> Uhm, if I get what you mean, you would like to add DAC
->>>>>>> controls
->>>>>>> to
->>>>>>> the
->>>>>>> pinned map to decide if you can get a fd and with which
->>>>>>> modes.
->>>>>>>
->>>>>>> The problem I see is that a map exists regardless of the
->>>>>>> pinned
->>>>>>> path
->>>>>>> (just by ID).
->>>>>> Can you spell this out for me? I imagine you're talking about
->>>>>> MAP_GET_FD_BY_ID, but that is CAP_SYS_ADMIN only, right? Not
->>>>>> great
->>>>>> maybe, but no gaping hole IMO.
->>>>> +linux-security-module ML (they could be interested in this
->>>>> topic
->>>>> as
->>>>> well)
->>>>>
->>>>> Good to know! I didn't realize it before.
->>>>>
->>>>> I figured out better what you mean by escalating privileges.
->>>>>
->>>>> Pin a read-only fd, get a read-write fd from the pinned path.
->>>>>
->>>>> What you want to do is, if I pin a read-only fd, I should get
->>>>> read-
->>>>> only
->>>>> fds too, right?
->>>>>
->>>>> I think here there could be different views. From my
->>>>> perspective,
->>>>> pinning is just creating a new link to an existing object.
->>>>> Accessing
->>>>> the link does not imply being able to access the object itself
->>>>> (the
->>>>> same happens for files).
->>>>>
->>>>> I understand what you want to achieve. If I have to choose a
->>>>> solution,
->>>>> that would be doing something similar to files, i.e. add owner
->>>>> and
->>>>> mode
->>>>> information to the bpf_map structure (m_uid, m_gid, m_mode). We
->>>>> could
->>>>> add the MAP_CHMOD and MAP_CHOWN operations to the bpf() system
->>>>> call
->>>>> to
->>>>> modify the new fields.
->>>>>
->>>>> When you pin the map, the inode will get the owner and mode
->>>>> from
->>>>> bpf_map. bpf_obj_get() will then do DAC-style verification
->>>>> similar
->>>>> to
->>>>> MAC-style verification (with security_bpf_map()).
->>>> As someone pointed out during the discussing at LPC, this will
->>>> effectively allow a user to create files owned by someone else,
->>>> which
->>>> is
->>>> probably not a good idea either from a security PoV. (I.e., user
->>>> A
->>>> pins
->>>> map owned by user B, so A creates a file owned by B).
->>> Uhm, I see what you mean. Right, it is not a good idea, the owner
->>> of
->>> the file should the one that pinned the map.
->>>
->>> Other than that, DAC verification on the map would be still
->>> correct, as
->>> it would be independent from the DAC verification of the file.
->> I only became aware of this when the LSM list was CC'd so I'm a
->> little
->> behind on what is going on here ... looking quickly through the
->> mailing list archive it looks like there is an issue with BPF map
->> permissions not matching well with their associated fd permissions,
->> yes?  From a LSM perspective, there are a couple of hooks that
->> currently use the fd's permissions (read/write) to determine the
->> appropriate access control check.
-> >From what I understood, access control on maps is done in two steps.
-> First, whenever someone attempts to get a fd to a map
-> security_bpf_map() is called. LSM implementations could check access if
-> the current process has the right to access the map (whose label can be
-> assigned at map creation time with security_bpf_map_alloc()).
->
-> Second, whenever the holder of the obtained fd wants to do an operation
-> on the map (lookup, update, delete, ...), eBPF checks if the fd modes
-> are compatible with the operation to perform (e.g. lookup requires
-> FMODE_CAN_READ).
->
-> One problem is that the second part is missing for some operations
-> dealing with the map fd:
->
-> Map iterators:
-> https://lore.kernel.org/bpf/20220906170301.256206-1-roberto.sassu@huaweicloud.com/
->
-> Map fd directly used by eBPF programs without system call:
-> https://lore.kernel.org/bpf/20220926154430.1552800-1-roberto.sassu@huaweicloud.com/
->
-> Another problem is that there is no DAC, only MAC (work in progress). I
-> don't know exactly the status of enabling unprivileged eBPF.
->
-> Apart from this, now the discussion is focusing on the following
-> problem. A map (kernel object) can be referenced in two ways: by ID or
-> by path. By ID requires CAP_ADMIN, so we can consider by path for now.
->
-> Given a map fd, the holder of that fd can create a new reference
-> (pinning) to the map in the bpf filesystem (a new file whose private
-> data contains the address of the kernel object).
->
-> Pinning a map does not have a corresponding permission. Any fd mode is
-> sufficient to do the operation. Furthermore, subsequent requests to
-> obtain a map fd by path could result in receiving a read-write fd,
-> while at the time of pinning the fd was read-only.
->
-> While this does not seem to me a concern from MAC perspective, as
-> attempts to get a map fd still have to pass through security_bpf_map(),
-> in general this should be fixed without relying on LSMs.
->
->> Is the plan to ensure that the map and fd permissions are correct at
->> the core BPF level, or do we need to do some additional checks in the
->> LSMs (currently only SELinux)?
-> Should we add a new map_pin permission in SELinux?
->
-> Should we have DAC to restrict pinnning without LSMs?
+From: "Christian Brauner (Microsoft)" <brauner@kernel.org>
 
-As you've hinted above, DAC hasn't been an issue because there isn't
-unprivileged eBPF. Even with privileged eBPF I expect that there are
-going to be cases where not having DAC controls will surprise someone.
-The less BPF looks like low level kernel internals and the more it looks
-like general userspace code, the more likely this is to be an issue.
+Hey everyone,
 
-Or ...
+/* v4 */
+Various minor changes. Details in the notes to the commits.
 
-If you are treating maps as kernel internal data structures you don't
-need DAC. If you are treating them as user accessible named objects you
-do need DAC. Security modules that implement MAC may chose to control
-kernel internal data access (e.g. SElinux) in addition to named objects,
-so you may want to accommodate that as well. If you do decide that maps
-are named objects Smack (and possibly AppArmor) needs significant work.
-Probably audit and IMA, too.
+As we discussed and seen multiple times the current state of how posix
+acls are handled isn't nice and comes with a lot of problems. For a long
+and detailed explanation for just some of the issues [1] provides a good
+summary.
 
->
-> Thanks
->
-> Roberto
->
+The current way of handling posix acls via the generic xattr api is
+error prone, hard to maintain, and type unsafe for the vfs until we call
+into the filesystem's dedicated get and set inode operations.
+
+It is already the case that posix acls are special-cased to death all
+the way through the vfs. There are an uncounted number of hacks that
+operate on the uapi posix acl struct instead of the dedicated vfs struct
+posix_acl. And the vfs must be involved in order to interpret and fixup
+posix acls before storing them to the backing store, caching them,
+reporting them to userspace, or for permission checking.
+
+Currently a range of hacks and duct tape exist to make this work. As
+with most things this is really no ones fault it's just something that
+happened over time. But the code is hard to understand and difficult
+to maintain and one is constantly at risk of introducing bugs and
+regressions when having to touch it.
+
+Instead of continuing to hack posix acls through the xattr handlers this
+series builds a dedicated posix acl api solely around the get and set
+inode operations. Going forward, the vfs_get_acl(), vfs_remove_acl(),
+and vfs_set_acl() helpers must be used in order to interact with posix
+acls. They operate directly on the vfs internal struct posix_acl instead
+of abusing the uapi posix acl struct as we currently do. In the end this
+removes all of the hackiness, makes the codepaths easier to maintain,
+and gets us type safety.
+
+This series passes the LTP and xfstests suites without any regressions.
+For xfstests the following combinations were tested:
+
+* xfs
+* ext4
+* btrfs
+* overlayfs
+* overlayfs on top of idmapped mounts
+
+For people wanting to run their own xfstests I'd recommend to shorten
+their test runs via:
+
+./check -g acl,attr,cap,idmapped,io_uring,perms,subvol,unlink
+
+I would appreciate if the 9p and cifs folks could run any posix acl
+related tests as I have no setup to really do this without causing me a
+lot of pain.
+
+Very likely there's a lot more simplifications for posix acls that we
+can make in the future if the basic api has made it.
+
+A few implementation details:
+
+* The series makes sure to retain exactly the same security and
+  integrity module permission checks. See [2] for annotated callchains.
+  Especially for the integrity modules this api is a win because right
+  now they convert the uapi posix acl struct passed to them via a void
+  pointer into the vfs struct posix_acl format to perform permission
+  checking on the mode.
+
+  There's a new dedicated security hook for setting posix acls which
+  passes the vfs struct posix_acl not a void pointer. Basing checking on
+  the posix acl stored in the uapi format is really unreliable. The vfs
+  currently hacks around directly in the uapi struct storing values that
+  frankly the security and integrity modules can't correctly interpret
+  as evidenced by bugs we reported and fixed in this area. It's not
+  necessarily even their fault it's just that the format we provide to
+  them is sub optimal.
+
+* Some filesystems like 9p and cifs need access to the dentry in order
+  to get and set posix acls which is why they either only partially or
+  not even at all implement get and set inode operations. For example,
+  cifs allows setxattr() and getxattr() operations but doesn't allow
+  permission checking based on posix acls because it can't implement a
+  get acl inode operation.
+
+  Thus, this patch series updates the set acl inode operation to take a
+  dentry instead of an inode argument. However, for the get acl inode
+  operation we can't do this as the old get acl method is called in
+  e.g., generic_permission() and inode_permission(). These helpers in
+  turn are called in various filesystem's permission inode operation. So
+  passing a dentry argument to the old get acl inode operation would
+  amount to passing a dentry to the permission inode operation which we
+  shouldn't and probably can't do.
+
+  So instead of extending the existing inode operation Christoph
+  suggested to add a new one. He also requested to ensure that the get
+  and set acl inode operation taking a dentry are consistently named. So
+  for this version the old get acl operation is renamed to
+  ->get_inode_acl() and a new ->get_acl() inode operation taking a
+  dentry is added. With this we can give both 9p and cifs get and set
+  acl inode operations and in turn remove their complex custom posix
+  xattr handlers.
+
+* I've done a full audit of every codepaths using variant of the
+  current generic xattr api to get and set posix acls and surprisingly
+  it isn't that many places. There's of course always a chance that I
+  might have missed some and I'm sure we'll find them soon enough.
+
+  The crucial codepaths to be converted are obviously stacking
+  filesystems such as ecryptfs and overlayfs.
+
+  For a list of all callers currently using generic xattr api helpers
+  see [2] including comments whether they support posix acls or not.
+
+* The old vfs generic posix acl infrastructure doesn't obey
+  the create and replace semantics promised on the setxattr(2) manpage.
+  This patch series doesn't address this. It really is something we
+  should revisit later though.
+
+The patch series is roughly organized as follows:
+
+// intended to be a non-functional change
+1. Change existing set acl inode operation to take a dentry argument.
+
+// intended to be a non-functional change
+2. Rename existing get acl method.
+
+// intended to be a non-functional change
+3. Implement get and set acl inode operations for filesystems that
+   couldn't implement one before because of the missing dentry. That's
+   mostly 9p and cifs.
+
+// intended to be a non-functional change
+4. Build posix acl api, i.e., add vfs_get_acl(), vfs_remove_acl(), and
+   vfs_set_acl() including security and integrity hooks.
+
+// intended to be a non-functional change
+5. Implement get and set acl inode operations for stacking filesystems.
+
+// semantical change
+6. Switch posix acl handling in stacking filesystems to new posix acl
+   api now that all filesystems it can stack upon support it.
+
+// semantical change
+7. Switch vfs to new posix acl api
+
+8. Remove all now unused helpers
+
+The series can be pulled from:
+
+https://gitlab.com/brauner/linux/-/commits/fs.acl.rework
+https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/log/?h=fs.acl.rework
+
+The series contains a few preliminary patches which are scheduled for
+the next merge window. It was just easier to base the series on top of
+them. But if you pull this branch you'll get them included.
+
+I've been working on this for a while and before going any further it'd
+be nice to get some reviews. I think that it should be fine to have get
+and set acl inode operations that operate on the dentry at least nothing
+stuck out immediately that would prevent this. But obviously having
+other people point out issues with that would be helpful.
+
+Thanks to Seth for a lot of good discussion around this and
+encouragement and input from Christoph.
+
+[1]: https://lore.kernel.org/all/20220801145520.1532837-1-brauner@kernel.org
+[2]: https://gist.github.com/brauner/12c795b93a05dc3b3056b1982549a633
+
+Thanks!
+Christian
+
+/* v1 */
+Link: https://lore.kernel.org/linux-cifs/20220922151728.1557914-1-brauner@kernel.org
+
+/* v2 */
+Link: https://lore.kernel.org/linux-cifs/20220926140827.142806-1-brauner@kernel.org
+This fixes various things pointed out during review. The individual
+commits contain more details were appropriate.
+
+/* v3 */
+Link: https://lore.kernel.org/linux-cifs/20220928160843.382601-1-brauner@kernel.org
+As requested this adds dedicated get and remove security hooks in
+addition to the set hook instead of reusing the generic xattr hooks.
+
+Christian Brauner (30):
+  orangefs: rework posix acl handling when creating new filesystem
+    objects
+  fs: pass dentry to set acl method
+  fs: rename current get acl method
+  fs: add new get acl method
+  cifs: implement get acl method
+  cifs: implement set acl method
+  9p: implement get acl method
+  9p: implement set acl method
+  security: add get, remove and set acl hook
+  selinux: implement get, set and remove acl hook
+  smack: implement get, set and remove acl hook
+  integrity: implement get and set acl hook
+  evm: add post set acl hook
+  internal: add may_write_xattr()
+  acl: add vfs_set_acl()
+  acl: add vfs_get_acl()
+  acl: add vfs_remove_acl()
+  ksmbd: use vfs_remove_acl()
+  ecryptfs: implement get acl method
+  ecryptfs: implement set acl method
+  ovl: implement get acl method
+  ovl: implement set acl method
+  ovl: use posix acl api
+  xattr: use posix acl api
+  evm: remove evm_xattr_acl_change()
+  ecryptfs: use stub posix acl handlers
+  ovl: use stub posix acl handlers
+  cifs: use stub posix acl handlers
+  9p: use stub posix acl handlers
+  acl: remove a slew of now unused helpers
+
+ Documentation/filesystems/locking.rst |   4 +-
+ Documentation/filesystems/porting.rst |   4 +-
+ Documentation/filesystems/vfs.rst     |   3 +-
+ fs/9p/acl.c                           | 295 ++++++-----
+ fs/9p/acl.h                           |   8 +-
+ fs/9p/vfs_inode_dotl.c                |   4 +
+ fs/9p/xattr.c                         |   7 +-
+ fs/9p/xattr.h                         |   2 -
+ fs/bad_inode.c                        |   4 +-
+ fs/btrfs/acl.c                        |   3 +-
+ fs/btrfs/ctree.h                      |   2 +-
+ fs/btrfs/inode.c                      |   8 +-
+ fs/ceph/acl.c                         |   3 +-
+ fs/ceph/dir.c                         |   2 +-
+ fs/ceph/inode.c                       |   4 +-
+ fs/ceph/super.h                       |   2 +-
+ fs/cifs/cifsacl.c                     | 141 +++++
+ fs/cifs/cifsfs.c                      |   4 +
+ fs/cifs/cifsproto.h                   |  20 +-
+ fs/cifs/cifssmb.c                     | 206 +++++---
+ fs/cifs/xattr.c                       |  68 +--
+ fs/ecryptfs/inode.c                   |  32 ++
+ fs/erofs/inode.c                      |   6 +-
+ fs/erofs/namei.c                      |   2 +-
+ fs/ext2/acl.c                         |   3 +-
+ fs/ext2/acl.h                         |   2 +-
+ fs/ext2/file.c                        |   2 +-
+ fs/ext2/inode.c                       |   2 +-
+ fs/ext2/namei.c                       |   4 +-
+ fs/ext4/acl.c                         |   3 +-
+ fs/ext4/acl.h                         |   2 +-
+ fs/ext4/file.c                        |   2 +-
+ fs/ext4/ialloc.c                      |   2 +-
+ fs/ext4/inode.c                       |   2 +-
+ fs/ext4/namei.c                       |   4 +-
+ fs/f2fs/acl.c                         |   4 +-
+ fs/f2fs/acl.h                         |   2 +-
+ fs/f2fs/file.c                        |   4 +-
+ fs/f2fs/namei.c                       |   4 +-
+ fs/fuse/acl.c                         |   3 +-
+ fs/fuse/dir.c                         |   4 +-
+ fs/fuse/fuse_i.h                      |   2 +-
+ fs/gfs2/acl.c                         |   3 +-
+ fs/gfs2/acl.h                         |   2 +-
+ fs/gfs2/inode.c                       |   6 +-
+ fs/internal.h                         |   5 +
+ fs/jffs2/acl.c                        |   3 +-
+ fs/jffs2/acl.h                        |   2 +-
+ fs/jffs2/dir.c                        |   2 +-
+ fs/jffs2/file.c                       |   2 +-
+ fs/jffs2/fs.c                         |   2 +-
+ fs/jfs/acl.c                          |   3 +-
+ fs/jfs/file.c                         |   4 +-
+ fs/jfs/jfs_acl.h                      |   2 +-
+ fs/jfs/namei.c                        |   2 +-
+ fs/ksmbd/smb2pdu.c                    |   8 +-
+ fs/ksmbd/smbacl.c                     |   6 +-
+ fs/ksmbd/vfs.c                        |  21 +-
+ fs/ksmbd/vfs.h                        |   4 +-
+ fs/namei.c                            |   4 +-
+ fs/nfs/nfs3_fs.h                      |   2 +-
+ fs/nfs/nfs3acl.c                      |   9 +-
+ fs/nfs/nfs3proc.c                     |   4 +-
+ fs/nfsd/nfs2acl.c                     |   8 +-
+ fs/nfsd/nfs3acl.c                     |   8 +-
+ fs/nfsd/nfs4acl.c                     |   4 +-
+ fs/nfsd/vfs.c                         |   4 +-
+ fs/ntfs3/file.c                       |   4 +-
+ fs/ntfs3/namei.c                      |   4 +-
+ fs/ntfs3/ntfs_fs.h                    |   4 +-
+ fs/ntfs3/xattr.c                      |   9 +-
+ fs/ocfs2/acl.c                        |   3 +-
+ fs/ocfs2/acl.h                        |   2 +-
+ fs/ocfs2/file.c                       |   4 +-
+ fs/ocfs2/namei.c                      |   2 +-
+ fs/orangefs/acl.c                     |  47 +-
+ fs/orangefs/inode.c                   |  47 +-
+ fs/orangefs/namei.c                   |   2 +-
+ fs/orangefs/orangefs-kernel.h         |   8 +-
+ fs/orangefs/orangefs-utils.c          |  12 +-
+ fs/overlayfs/copy_up.c                |  38 ++
+ fs/overlayfs/dir.c                    |  22 +-
+ fs/overlayfs/inode.c                  | 153 +++++-
+ fs/overlayfs/overlayfs.h              |  34 +-
+ fs/overlayfs/super.c                  | 107 +---
+ fs/posix_acl.c                        | 728 +++++++++++++-------------
+ fs/reiserfs/acl.h                     |   6 +-
+ fs/reiserfs/file.c                    |   2 +-
+ fs/reiserfs/inode.c                   |   2 +-
+ fs/reiserfs/namei.c                   |   4 +-
+ fs/reiserfs/xattr_acl.c               |  11 +-
+ fs/xattr.c                            |  82 +--
+ fs/xfs/xfs_acl.c                      |   3 +-
+ fs/xfs/xfs_acl.h                      |   2 +-
+ fs/xfs/xfs_iops.c                     |  16 +-
+ include/linux/evm.h                   |  49 ++
+ include/linux/fs.h                    |  10 +-
+ include/linux/ima.h                   |  21 +
+ include/linux/lsm_hook_defs.h         |   6 +
+ include/linux/lsm_hooks.h             |  12 +
+ include/linux/posix_acl.h             |  41 +-
+ include/linux/posix_acl_xattr.h       |  43 +-
+ include/linux/security.h              |  29 +
+ include/linux/xattr.h                 |   6 +
+ mm/shmem.c                            |   2 +-
+ security/integrity/evm/evm_main.c     | 134 ++---
+ security/integrity/ima/ima_appraise.c |   9 +
+ security/security.c                   |  42 ++
+ security/selinux/hooks.c              |  24 +
+ security/smack/smack_lsm.c            |  69 +++
+ 110 files changed, 1766 insertions(+), 1094 deletions(-)
+
+
+base-commit: 38e316398e4e6338b80223fb5f74415c0513718f
+-- 
+2.34.1
+
