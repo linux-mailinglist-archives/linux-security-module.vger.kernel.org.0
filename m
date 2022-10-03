@@ -2,119 +2,143 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE645F338E
-	for <lists+linux-security-module@lfdr.de>; Mon,  3 Oct 2022 18:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC3A5F3748
+	for <lists+linux-security-module@lfdr.de>; Mon,  3 Oct 2022 22:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiJCQ2k (ORCPT
+        id S229880AbiJCUpM (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 3 Oct 2022 12:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        Mon, 3 Oct 2022 16:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJCQ2j (ORCPT
+        with ESMTP id S229536AbiJCUpJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 3 Oct 2022 12:28:39 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEA61E3E0
-        for <linux-security-module@vger.kernel.org>; Mon,  3 Oct 2022 09:28:37 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id b2so23339787eja.6
-        for <linux-security-module@vger.kernel.org>; Mon, 03 Oct 2022 09:28:37 -0700 (PDT)
+        Mon, 3 Oct 2022 16:45:09 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC29011C24
+        for <linux-security-module@vger.kernel.org>; Mon,  3 Oct 2022 13:45:07 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-12c8312131fso14383173fac.4
+        for <linux-security-module@vger.kernel.org>; Mon, 03 Oct 2022 13:45:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=xce4wQhmvhYeWSepDsnUtgi8Lnr8UCfCZD6d9GvBcfM=;
-        b=AvVsrlDeH5kg4hScwRaSfC/JPtGZAJxMFomMQZUW2IdwaFLFp4UC5KDTQS6c0FBZ/u
-         OqxACNbMLnW6sixfUrkcPYMZQNVDCGmHYUJi87UodlIVZ39cHoievSZKxHRffJWfDMt3
-         76pAIQsPtfZWjiZbpDa4o4LHJlUWtfU5LsFme6ItU9hZ7/ABKEg3ubar5QYrVlgmYALM
-         MpGltnTl5rIyx/2ELxiWwFKVuccR8BODYnrzApbNtVeS8PaY38Zeopctq678NNDCqBT4
-         so84VpgOMFSF9NT1I3fpn3qihNSQuMoKoeZXG2H6sFfKcCEZ/l0m9xWX+SkruID47f4U
-         b3Jw==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date;
+        bh=GRFNXX+YGfhDX+aHBP2Nz6DfcCY9saOPFr6kWqxKvSw=;
+        b=bgZGNnvMfKlPZeCu2f8GtaIjwdo06nqJhgXiyYNQ70/MUamPjQWWzAf65cmL5RILAE
+         I7nH4hrqujTzVWRbE2pEXakx6VUL2nOHnb+VNd0x+MB2Y1cl/U5Ht+rO2x1y10PDTlV5
+         Z2V7/SXtMOHPEw8abFgHd2Gp0kgJ+wrvHcQXMudNNtVVm559+X3L2IyrvdeiFUU1Gz3o
+         o3zUQqtnt1PRlePPqjk7k+JQReKz8lEGTc8XWB5IMmkWYpNvZwtBcXfXhEMm2i/Q5D+w
+         W8q1b/cPC8Ehf2hi6u7SErrjisY3JcZVlx+rbaZv/uw5VRfW1gLHmKRuRSeH/zEJAW0N
+         6NSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=xce4wQhmvhYeWSepDsnUtgi8Lnr8UCfCZD6d9GvBcfM=;
-        b=we+eiSDFNmGPtXM+k1jbwgTV/8mdbmnfXL+dNBnsTbKKtGV/xXaiY4hzlrQpz5OD8k
-         0QDUL7P5oE2E/agJP5uP+2O8wXUpygFSBRcf/PgueyqfE3ammN7290BC//A19Whqy6wR
-         ZoW5RUinJoxsU0RtUH5ZBCl27oFivrf2ndRnroaN8s9vZyOYkX+xxev/bMLHNirvIAks
-         +0qRqmovEdfR6pvEZ3/YhHacVzhSmSHiv952YcO+SrbPTehiuI2JC5bKpNrZUT/htK76
-         IVeh4vuZF0g1w30E2GMb9Js9hNL+6tLVFwNQC5ly2uU69/e7A/OoWYJAFvqiM8nkL8JG
-         QfZg==
-X-Gm-Message-State: ACrzQf2OIYe3VPKBQkVnLgmWfyvxdVVWVOjTilHXWJYfqeh0HNnYUhtu
-        ffERSQe/ptlZV0tlFk1y+bo6qAx3PAN2weN4+K4=
-X-Google-Smtp-Source: AMsMyM5KSYPAzMt757Eme63S62EjvO2hT7jAUUVTbcMioFRNwakL4yzk64R3KRzwyR7LbZ4vguEC/3t3vvwRfTijSBo=
-X-Received: by 2002:a17:907:96ab:b0:782:2f88:cf29 with SMTP id
- hd43-20020a17090796ab00b007822f88cf29mr15899857ejc.72.1664814516282; Mon, 03
- Oct 2022 09:28:36 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GRFNXX+YGfhDX+aHBP2Nz6DfcCY9saOPFr6kWqxKvSw=;
+        b=eiB7Zdls3FCqc0C9xO4nxz2sr0C3pLgepsq/jae7OOAKz1srVMDzzGdjLZrR3Ql+tc
+         Jx2Et8LZ19Lu5CxzX1s7hpzi6wnGbSl5KFK9qROu9Y1JLv2g+YDQDAM5BB4hcF/wcM5i
+         5HMCrwtVSigv0paidpXnYsuLihoeHav1pg0CmavLWX5shkdl2oK4B7fd3tY0RitqgqxO
+         pYC36lile6jWlg4u+142VsM+36oiAzqAhRJM7rXrFUZfi5KGy2DNSkfFgzkBVI8qViOe
+         AKbhaOOxR42uvL2QFqLdOO1Em+do1yLHVh1usPMZDgADLU1IafKANvCpkoYF7gspxtIJ
+         glvA==
+X-Gm-Message-State: ACrzQf2O6fIinnYOsOuF3x/WWostNJCyGFE93WRMyQU9fzwtKCLbfU3k
+        oU5pmDUJWLdCt7psuSKvLoIct/bDAE/9pZ8N2jbxDkjV8lEP
+X-Google-Smtp-Source: AMsMyM6AE4a3eyvYdZWj3InHKQ/Qj8Brq1+zlkvrSHcqTMaSz+NckPDuyvb00NvT+s/IkwROhhSGYn8ZYIUjKuyHlhs=
+X-Received: by 2002:a05:6870:a916:b0:131:9361:116a with SMTP id
+ eq22-20020a056870a91600b001319361116amr6560165oab.172.1664829906962; Mon, 03
+ Oct 2022 13:45:06 -0700 (PDT)
 MIME-Version: 1.0
-Sender: kaneluis2020@gmail.com
-Received: by 2002:a17:907:1c28:0:0:0:0 with HTTP; Mon, 3 Oct 2022 09:28:35
- -0700 (PDT)
-From:   Mrs Aisha Gaddafi <aishagaddafiaisha20@gmail.com>
-Date:   Mon, 3 Oct 2022 09:28:35 -0700
-X-Google-Sender-Auth: 2lmGZrRThCvh-ylMv5Uh7tsRMpc
-Message-ID: <CAGOuOZuczcrO8=Md_XnE_KOSPjpMgScuB2eBVZweQ6_hw91MRA@mail.gmail.com>
-Subject: SEASONS GREETINGS DEAR.
-To:     undisclosed-recipients:;
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 3 Oct 2022 16:44:56 -0400
+Message-ID: <CAHC9VhQF6oLGHN=fHSN568iM-mP7yDpMWH=OKwSRADu4Rb5-Dw@mail.gmail.com>
+Subject: [GIT PULL] SELinux patches for v6.1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
-        MONEY_FRAUD_3,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:633 listed in]
-        [list.dnswl.org]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [kaneluis2020[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafiaisha20[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_3 Lots of money and several fraud phrases
-X-Spam-Level: *******
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Please may i use this medium to create a mutual conversations with
-you. My name is aisha gaddafi and presently living in Oman, I am a
-Widow and single Mother with three Children, the only biological
-Daughter of late Libyan President (Late Colonel Muammar Gaddafi) and
-presently I am under political asylum protection by the Omani
-Government.
+Hi Linus,
 
-I have funds worth " Seven Million Five Hundred Thousand United State
-Dollars {USD$7.500.000.00} US Dollars which I want to entrust to you
-for investment projects in your country.
+Six SELinux patches, all are simple and easily understood, but a list
+of the highlights is below:
 
-If you are willing to handle this project on my behalf, kindly reply
-urgent to enable me provide you more details to start the transfer
-process.
+- Use 'grep -E' instead of 'egrep' in the SELinux policy install
+script.  Fun fact, this seems to be GregKH's *second* dedicated
+SELinux patch since we transitioned to git (ignoring merges, the SPDX
+stuff, and a trivial fs reference removal when lustre was yanked); the
+first was back in 2011 when selinuxfs was placed in /sys/fs/selinux.
+Oh, the memories ...
 
-You shall withness more through the BBC news links below:
-http://www.bbc.com/news/world-africa-19966059
+- Convert the SELinux policy boolean values to use signed integer
+types throughout the SELinux kernel code.  Prior to this we were using
+a mix of signed and unsigned integers which was probably okay in this
+particular case, but it is definitely not a good idea in general.
 
-Thanks
-Aisha Gaddafi
+- Remove a reference to the SELinux runtime disable functionality in
+/etc/selinux/config as we are in the process of deprecating that.  See
+<https://github.com/SELinuxProject/selinux-kernel/wiki/DEPRECATE-runtime-di=
+sable>
+for more background on this if you missed the previous notes on the
+deprecation.
+
+- Minor cleanups: remove unneeded variables and function parameter
+constification.
+
+Please merge for v6.1,
+-Paul
+
+--
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868=
+:
+
+ Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
+   tags/selinux-pr-20221003
+
+for you to fetch changes up to 2fe2fb4ce60be9005d7bfdd5665be03b8efb5b13:
+
+ selinux: remove runtime disable message in the install_policy.sh script
+   (2022-09-20 14:12:25 -0400)
+
+----------------------------------------------------------------
+selinux/stable-6.1 PR 20221003
+
+----------------------------------------------------------------
+Christian G=C3=B6ttsche (2):
+     selinux: use int arrays for boolean values
+     selinux: declare read-only parameters const
+
+Greg Kroah-Hartman (1):
+     selinux: use "grep -E" instead of "egrep"
+
+Paul Moore (1):
+     selinux: remove runtime disable message in the install_policy.sh scrip=
+t
+
+Xu Panda (1):
+     selinux: remove the unneeded result variable
+
+ye xingchen (1):
+     selinux: remove an unneeded variable in sel_make_class_dir_entries()
+
+scripts/selinux/install_policy.sh |  5 ++---
+security/selinux/hooks.c          | 24 +++++++++---------------
+security/selinux/selinuxfs.c      | 15 ++++++---------
+security/selinux/ss/context.h     | 17 +++++++++--------
+security/selinux/ss/ebitmap.c     | 21 +++++++++++----------
+security/selinux/ss/ebitmap.h     | 18 +++++++++---------
+security/selinux/ss/mls_types.h   |  4 ++--
+7 files changed, 48 insertions(+), 56 deletions(-)
+
+--=20
+paul-moore.com
