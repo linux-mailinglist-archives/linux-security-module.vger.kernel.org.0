@@ -2,117 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE8A5F6481
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Oct 2022 12:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADF75F662B
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Oct 2022 14:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiJFKsq (ORCPT
+        id S230124AbiJFMgW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 6 Oct 2022 06:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        Thu, 6 Oct 2022 08:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiJFKsp (ORCPT
+        with ESMTP id S229796AbiJFMgU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 6 Oct 2022 06:48:45 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DE098373
-        for <linux-security-module@vger.kernel.org>; Thu,  6 Oct 2022 03:48:42 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-405-DgXWoVwcNIW55WKjoHfY8Q-1; Thu, 06 Oct 2022 11:48:39 +0100
-X-MC-Unique: DgXWoVwcNIW55WKjoHfY8Q-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Thu, 6 Oct
- 2022 11:48:37 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Thu, 6 Oct 2022 11:48:37 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christian Brauner' <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-CC:     Eric Biederman <ebiederm@xmission.com>,
-        Jorge Merlino <jorge.merlino@canonical.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "John Johansen" <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Kjos <tkjos@google.com>,
-        "Ondrej Mosnacek" <omosnace@redhat.com>,
-        Prashanth Prahlad <pprahlad@redhat.com>,
-        Micah Morton <mortonm@chromium.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-Thread-Topic: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
-Thread-Index: AQHY2WLGFfe2CPUaDEa6axdLVGgCBq4BLZlw
-Date:   Thu, 6 Oct 2022 10:48:36 +0000
-Message-ID: <cd4c600f91404387bb7be0d727c3c337@AcuMS.aculab.com>
-References: <20221006082735.1321612-1-keescook@chromium.org>
- <20221006082735.1321612-2-keescook@chromium.org>
- <20221006090506.paqjf537cox7lqrq@wittgenstein>
-In-Reply-To: <20221006090506.paqjf537cox7lqrq@wittgenstein>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 6 Oct 2022 08:36:20 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4CF85A8E;
+        Thu,  6 Oct 2022 05:36:18 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id A3BA73200805;
+        Thu,  6 Oct 2022 08:36:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 06 Oct 2022 08:36:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1665059773; x=
+        1665146173; bh=x/5eQeyF8wgxc3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=q
+        +sgP3Tc/y297yW5XXTzhrO4+Qo6cxIjnmKI3zcvscNQwafBSie53iKn3KCSwJfSu
+        LC0WbgPyKW5Xc1UsQeJw3PwnECIjH8emzV0abYkXYxgCyh4Gif+antZgx7LNbqW/
+        9ddmEF/4b1GoW4FR/glvrutlElogDrL8gehTfKvuFoMmfdaH8IUKwgLo3V5fqDhp
+        32qlfia1GOqZZHrvoJbZln9rdSqlXgXoBI6QVb49px5nZOCs9Qkgp6CQQr3eLstx
+        5n9t028e3VkD6mHwgaCLAwsPE3fQyy2exQFRWiILShrXZJPMQ54fDVu5LnvuXa1o
+        tdXfQNwPw4cYE1X5fJARw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1665059773; x=1665146173; bh=x/5eQeyF8wgxc
+        3lBlMlLCE+D3SClhrVS+22aVr9TqjU=; b=raTmo2i386qfqhru2VjLPvoZMtJmv
+        nQQUiMPj6BWtWemO+UGjVXK8d9R+RQmHOFFWPV+rNcHEJY9k3pi2O7t4j3FPMCbE
+        +KOHy9DafDsRDnMY62SGvTRuRIi+orJuaksZxtHJfDQfx91niWX1tZ/Ol1RqVVB7
+        E9v9n7DveTFJTfHzGasj+FOQcQXoP+VhYB8lL95tZ1/DU3PWNghTYIxCUQSQYlAL
+        FUrSyHDLa+0TIMVMpvWm9DTnTn887/j+xiXEBrCRIeY3IX6vcD39kiT/i2bkYFdO
+        8SJYRtMINHRPKkewjt6UTPVgbti/V1PGgKReavF0D4ZQhQVulCmPhei3w==
+X-ME-Sender: <xms:uss-Y1vYy2Vqs8hF-ULSkI7VRJTg5ui-mHr7WbUC_8PfV6Q0F4lqlw>
+    <xme:uss-Y-f8BiJcJaRYQThmkup6rV_TuuP7O6V5dMhJpqiHDTSybh6J3nXc3I-bN9mPM
+    4OA5ryUbinLOfVRNws>
+X-ME-Received: <xmr:uss-Y4yQhTLgH2hwlyfhykGdjoe0LOt5x-YQ0KRx0v1n-odCTikP1z3yc3cK7_hZ1zRHEQXD_XIHNgX9J_GLvQeFXiSRLd3o903R>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkrhhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegv
+    nhcuuehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrg
+    htthgvrhhnpeduteehgfefudfffeelfffhheejgfdvfffhledvueekudeuieegueejieff
+    vdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmvgessggvnhgsohgvtghkvghlrdhnvght
+X-ME-Proxy: <xmx:uss-Y8O_r3BBxeFMpfHX33weeXb5KKr6skLM9dBoKh0TLy3GXSsvRQ>
+    <xmx:uss-Y1-cJf9I8_HXk2-JQg_xeoQ4dFfS7l1r1V-Dl8O4Merzz4bJmA>
+    <xmx:uss-Y8WK-3erQvyA7yRtCKK6hrIVzT3Fo7WJjEmsrGHY3cMikx92rw>
+    <xmx:vcs-Y5Sbjc3jYNXO0uaAfqH0Nh35mLLSQDxdAnpMI3L5oTp3d7IyrQ>
+Feedback-ID: iffc1478b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Oct 2022 08:36:10 -0400 (EDT)
+Date:   Thu, 6 Oct 2022 08:37:00 -0400
+From:   Ben Boeckel <me@benboeckel.net>
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>
+Cc:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
+        Jason@zx2c4.com, jejb@linux.ibm.com, zohar@linux.ibm.com,
+        dhowells@redhat.com, sumit.garg@linaro.org, david@sigma-star.at,
+        michael@walle.cc, john.ernberg@actia.se, jmorris@namei.org,
+        serge@hallyn.com, herbert@gondor.apana.org.au, davem@davemloft.net,
+        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
+        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
+Subject: Re: [PATCH v0 2/8] keys-trusted: new cmd line option added
+Message-ID: <Yz7L7KZ4WVW6XBmx@megas.dev.benboeckel.internal>
+Reply-To: list.lkml.keyrings@me.benboeckel.net
+References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
+ <20221006130837.17587-3-pankaj.gupta@nxp.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221006130837.17587-3-pankaj.gupta@nxp.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-RnJvbTogQ2hyaXN0aWFuIEJyYXVuZXINCj4gU2VudDogMDYgT2N0b2JlciAyMDIyIDEwOjA1DQo+
-IA0KPiBPbiBUaHUsIE9jdCAwNiwgMjAyMiBhdCAwMToyNzozNEFNIC0wNzAwLCBLZWVzIENvb2sg
-d3JvdGU6DQo+ID4gVGhlIGNoZWNrX3Vuc2FmZV9leGVjKCkgY291bnRpbmcgb2Ygbl9mcyB3b3Vs
-ZCBub3QgYWRkIHVwIHVuZGVyIGEgaGVhdmlseQ0KPiA+IHRocmVhZGVkIHByb2Nlc3MgdHJ5aW5n
-IHRvIHBlcmZvcm0gYSBzdWlkIGV4ZWMsIGNhdXNpbmcgdGhlIHN1aWQgcG9ydGlvbg0KPiA+IHRv
-IGZhaWwuIFRoaXMgY291bnRpbmcgZXJyb3IgYXBwZWFycyB0byBiZSB1bm5lZWRlZCwgYnV0IHRv
-IGNhdGNoIGFueQ0KPiA+IHBvc3NpYmxlIGNvbmRpdGlvbnMsIGV4cGxpY2l0bHkgdW5zaGFyZSBm
-c19zdHJ1Y3Qgb24gZXhlYywgaWYgaXQgZW5kcyB1cA0KPiANCj4gSXNuJ3QgdGhpcyBhIHBvdGVu
-dGlhbCB1YXBpIGJyZWFrPyBBZmFpY3QsIGJlZm9yZSB0aGlzIGNoYW5nZSBhIGNhbGwgdG8NCj4g
-Y2xvbmV7M30oQ0xPTkVfRlMpIGZvbGxvd2VkIGJ5IGFuIGV4ZWMgaW4gdGhlIGNoaWxkIHdvdWxk
-IGhhdmUgdGhlDQo+IHBhcmVudCBhbmQgY2hpbGQgc2hhcmUgZnMgaW5mb3JtYXRpb24uIFNvIGlm
-IHRoZSBjaGlsZCBlLmcuLCBjaGFuZ2VzIHRoZQ0KPiB3b3JraW5nIGRpcmVjdG9yeSBwb3N0IGV4
-ZWMgaXQgd291bGQgYWxzbyBhZmZlY3QgdGhlIHBhcmVudC4gQnV0IGFmdGVyDQo+IHRoaXMgY2hh
-bmdlIGhlcmUgdGhpcyB3b3VsZCBubyBsb25nZXIgYmUgdHJ1ZS4gU28gYSBjaGlsZCBjaGFuZ2lu
-ZyBhDQo+IHdvcmtkaW5nIGRpcmVjdG9ybyB3b3VsZCBub3QgYWZmZWN0IHRoZSBwYXJlbnQgYW55
-bW9yZS4gSU9XLCBhbiBleGVjIGlzDQo+IGFjY29tcGFuaWVkIGJ5IGFuIHVuc2hhcmUoQ0xPTkVf
-RlMpLiBNaWdodCBzdGlsbCBiZSB3b3J0aCB0cnlpbmcgb2ZjIGJ1dA0KPiBpdCBzZWVtcyBsaWtl
-IGEgbm9uLXRyaXZpYWwgdWFwaSBjaGFuZ2UgYnV0IHRoZXJlIG1pZ2h0IGJlIGZldyB1c2Vycw0K
-PiB0aGF0IGRvIGNsb25lezN9KENMT05FX0ZTKSBmb2xsb3dlZCBieSBhbiBleGVjLg0KDQpUaGUg
-dGhvdWdodCBvZiB0aGF0IGlzIGVudGlyZWx5IGhvcnJpZC4uLg0KDQpJIHByZXN1bWUgYSBzdWlk
-IGV4ZWMgd2lsbCBmYWlsIGluIHRoYXQgY2FzZT8NCg0KSWYgdGhlIG9sZCBjb2RlIGlzIHRyeWlu
-ZyB0byBjb21wYXJlIHRoZSBudW1iZXIgb2YgdGhyZWFkcw0Kd2l0aCB0aGUgbnVtYmVyIG9mIHVz
-ZXJzIG9mIHRoZSBmcyB0YWJsZSBpc24ndCBpcyBqdXN0IGJ1Z2d5Pw0KSWYgYSB0aHJlYWQgdW5z
-aGFyZXMgdGhlIGZzIHRhYmxlIHRoZXJlIGNhbiBiZSBhbm90aGVyDQpyZWZlcmVuY2Ugc29tZXdo
-ZXJlIGVsc2UgLSB3aGljaCBpcyB3aGF0IChJIHByZXN1bWUpIGlzIGJlaW5nDQp0ZXN0ZWQgZm9y
-Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
-YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
-Tm86IDEzOTczODYgKFdhbGVzKQ0K
+On Thu, Oct 06, 2022 at 18:38:31 +0530, Pankaj Gupta wrote:
+> Changes done:
+> - new cmd line option "hw" needs to be suffix, to generate the
+>   hw bound key.
 
+`Documentation/` is silent on this. Can you please add this there?
+
+Other than that, is `hw` really a good name for this? Are there virtual
+devices for these things that can make them not hardware in some way?
+Is there a better name in such a case? Maybe something "device"
+oriented?
+
+--Ben
