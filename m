@@ -2,187 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DDE5F65B0
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Oct 2022 14:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBA85F6972
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Oct 2022 16:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiJFMFR (ORCPT
+        id S232038AbiJFOR1 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 6 Oct 2022 08:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
+        Thu, 6 Oct 2022 10:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiJFMD6 (ORCPT
+        with ESMTP id S231924AbiJFOQt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 6 Oct 2022 08:03:58 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10049.outbound.protection.outlook.com [40.107.1.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158E49DFA8;
-        Thu,  6 Oct 2022 05:03:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bIKhDFcdjxbYcM4HZCg9yRUru0yqJdZkHLAc4QASjnBbeB5dJ+Dip4n8oMDkSEWLdEhVXch0hHwLDvwBUOzLWDiQzyjrjByItTxjoV4eOedK71rOp2E6LHRMjlJz5zHRFJ+X9frg7yVO6gIe4HoWrlx1I6NmnVBci5yuvYA3vitoL0rwgXxrT6Q7XW5cLe9RbiKPH6e73w3cylVXBiYwdbmlS+JCGW2xIpgWvAo52/b7eHQXWsKRYYA3BELUCKrYzLAuJKlp7w2AlS3hYJnSqyu93+hQZHP8sUoTy40mfL93BjsSgYhaUqBBUqLrA0NJ+XhmdFrP2OJww2Ef+cv9EA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zJHKE1DoG8ShMStm76AC3w1I6ls2KmauOqjww3i9/Iw=;
- b=RWoFi0U0uNApGhCHkaYFmsqOm1I1CA3M87k9u6KbaHdsca66j6XZ94KMVDZmEF70AoYkPZiZsYJ/kCiHjs4vLK0gh0r983zzAtZk9X2tkwA6Eeh0oZ/WEspaNMoAp4d610fw3PQ6+ayHmChTGUz3BOl22s9+s1/N8OcLFY0x+y/pxupHmbwpfST4XTf3AtQXAqAh8OJJi3/xfDsRnG3P+WflQAq+0GW2k4c1FMHThy3SaFDLjJxbFGn8Hwkgy08FDZh3o9XbvOUKDgxxdzx9nLBbetroV7GDZZSbAwPxaMSeY8YUSvULqt4xpSaM555kPLPZ7ITeqNq6NEuLFBEbVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zJHKE1DoG8ShMStm76AC3w1I6ls2KmauOqjww3i9/Iw=;
- b=E2NtCIQr+xLH/u1e4l9FfoO+kgtZGaadDhnJ0SOX5pzyYL46AawYhdFe/HJPFCNZamRhcIcfuIlEKCm1PF50S58y9kvt2B2xpwcrWJiSjKK0i2krEO4EVkrRo8Cc2hNJPBNPxG8Xp636N3Kq+kdRExSIVL2R8jIX+KU1FHKjmG8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com (2603:10a6:10:2dd::15)
- by AS8PR04MB8245.eurprd04.prod.outlook.com (2603:10a6:20b:3f9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.32; Thu, 6 Oct
- 2022 12:03:47 +0000
-Received: from DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::d551:6af4:bca4:88ea]) by DU2PR04MB8630.eurprd04.prod.outlook.com
- ([fe80::d551:6af4:bca4:88ea%7]) with mapi id 15.20.5676.032; Thu, 6 Oct 2022
- 12:03:47 +0000
-From:   Pankaj Gupta <pankaj.gupta@nxp.com>
-To:     jarkko@kernel.org, a.fatoum@pengutronix.de, gilad@benyossef.com,
-        Jason@zx2c4.com, jejb@linux.ibm.com, zohar@linux.ibm.com,
-        dhowells@redhat.com, sumit.garg@linaro.org, david@sigma-star.at,
-        michael@walle.cc, john.ernberg@actia.se, jmorris@namei.org,
-        serge@hallyn.com, herbert@gondor.apana.org.au, davem@davemloft.net,
-        j.luebbe@pengutronix.de, ebiggers@kernel.org, richard@nod.at,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, sahil.malhotra@nxp.com,
-        kshitiz.varshney@nxp.com, horia.geanta@nxp.com, V.Sethi@nxp.com
-Cc:     Pankaj Gupta <pankaj.gupta@nxp.com>
-Subject: [PATCH v0 8/8] dm-crypt: consumer-app setting the flag-is_hbk
-Date:   Thu,  6 Oct 2022 18:38:37 +0530
-Message-Id: <20221006130837.17587-9-pankaj.gupta@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221006130837.17587-1-pankaj.gupta@nxp.com>
-References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0011.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::19) To DU2PR04MB8630.eurprd04.prod.outlook.com
- (2603:10a6:10:2dd::15)
+        Thu, 6 Oct 2022 10:16:49 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1545CAE210
+        for <linux-security-module@vger.kernel.org>; Thu,  6 Oct 2022 07:14:15 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id o65so1362946iof.4
+        for <linux-security-module@vger.kernel.org>; Thu, 06 Oct 2022 07:14:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPoSw2DcS8I2PL1GAxLCIjBZkmIbahmymE7q5ESqNH4=;
+        b=J9UmphxOwRlKuKwKJGEStMq2njru+PiIwGVLUfPBPq5L+NiQWR0X0ph0BMc2W5nbt8
+         4fY0afnp5OGHoR48WDeXsZwHxoMN5k4f3cAvRzRwXhvGYbcMUIpKQGeu62j2J2SnGy+J
+         Xj/w4pUH+FdGPKiKioCFBigar50r6VlCGptHXogYu0vEHZthEC9POAERgLfXsIlNUJAT
+         4LL5lhcH/9QJf5wjtvXr093IFQ5FVgHnW9DKsbH5n9oFVp8IFEYJH/pVve/xHlsOIZTb
+         JrrThpZZTRv6pIFAUlojtCkCpeK6hrRAxbyXE8fkyWQe0FnS13WwHzjaGBDQmYXcBSxS
+         r/Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uPoSw2DcS8I2PL1GAxLCIjBZkmIbahmymE7q5ESqNH4=;
+        b=2YfOlj8kPDyPf+AgLqJGCPrDgoiac0W09RsJXKP3xxbd7QbUM5wyPqKSiqRv0p6Wtd
+         uLgjX48dXOufpt8+NRaW47q6UWvCs1is1S2MhEmc9y+JZt8HKaF09rmdDqhJWNPsglQW
+         0ank/HrwNTTTy6yEkvNI2DWA2MSOf8Mxw/KVeIDwA1fBF60/0Elhue+zO71pQYw+jI01
+         tHNTlAiZS+4wmH2ULe90RBdpNLT6e9On7WPuVWvcJcAaKSyUd09xSJL4+Er5XNGQhids
+         SMIBlZlrZMWrtYDhfv1qpwjhlDwwTC52MK/9HGkFaJ0TKfq/tkL7fPF8DKYLJiPVIc0w
+         uJxA==
+X-Gm-Message-State: ACrzQf0cGB6eTGJiQU98gktQL+c+dd7svSQkOxxySTA08xp3ujkBwUa5
+        2f83cBaZy8P6SdbQtcNGrELXq9kq3p5+seBxW/AbIg==
+X-Google-Smtp-Source: AMsMyM6kii+MO2rLiB+gLKVkRtdEKc2Fqc0GkifGVmj9R/yf+5vbD7WJTCsBBNNUYIzb2JEn4WLbsp9vBGxMSZlBt2Y=
+X-Received: by 2002:a6b:5d07:0:b0:6bb:7253:a439 with SMTP id
+ r7-20020a6b5d07000000b006bb7253a439mr37286iob.2.1665065653849; Thu, 06 Oct
+ 2022 07:14:13 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8630:EE_|AS8PR04MB8245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 85020fc1-a3f5-41d3-4e90-08daa792d30e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E1LcyNylw7fekofHUsQbu62g2DZE0H1l5k6FZtNAKWoEh3Jb5BWerTPgalhPIyTe2iLMuiGy3z39rHl9estqjbfXC+F+eLahPZQWswMaob8F3LPKiGtOTA2asDke26wzNl30h9tQi7ObshxVkCbuGOlmYxyMpcgHnasXPRnngI+6+ICj7W+KIMT6nEBHBDvrgyPfVsTpqi/BmVinJ5w+PHN358/likvqyxay72RE7D/L8y3yAn/dlMqPO4CSYEtp96sYKG+yQiIh1tXGB8roUB4wRnrwsSgpJcCW7RwGAKsw13jQDhB01iOsKaaGmlnSR4mN0mNy540VHVYCV6jfDw8iPXnmBga+3iUwgQ5FzBfEZZ1ZqRqgz3NZEo46S6+/3wg8w8Q3fwnVELeJte4Ljf5HIFmL+nBZgZFBAtQ4NyMTeGI0FxLhczWuwQ3ERVlAmKjUuu6IMIcEQGiUXNeoBr67wsfgdpQqe/plA+jNQOkQ/aFabdlJmIEcDtQuHFdY8SGwtbwmZgeWtiFmGc25uGkT0o5yRsEA3DdVDX4hJJ6e6cxmShwoXXrcbFpwCGJwu8xIvMDxMiadGxH18w5uy4y5rkGzMngjN2i52KKjxyohpkpC8yZBA7D6472PKOHxTQ23NqAK1TDvpMCbNQ03hAY0dPq3sBDY2B/H2uZXu0Y2j15LqkW4jS6UcV8UymdW0I8BSyDHoJOBCwoFZhHYYH9pxJuij8X9j5JQSEiRgE1EIOo/cA1RyOVsSdbt065hrpSgHxK5YrnCd6cz4+/rA1FCbDjYUNJleQ3VDHy576spofbknHyw/KAizQHikPPs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8630.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(451199015)(2616005)(186003)(83380400001)(1076003)(38100700002)(7416002)(38350700002)(921005)(5660300002)(44832011)(2906002)(8936002)(6666004)(6506007)(52116002)(6486002)(6512007)(41300700001)(478600001)(26005)(6636002)(8676002)(66476007)(66946007)(4326008)(66556008)(316002)(36756003)(86362001)(21314003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cK3A61X15SvmEobr+R+H8VQcxWdjJaV0MYfdMmfF7nua+5B4tpfAcPKAPDza?=
- =?us-ascii?Q?pfv+VxXF7LVwlWTXK17sdx/GxbE9/9LMo91ntnH8Yc4rxndsuV1ryhqe4wVB?=
- =?us-ascii?Q?Na/igHz2YW1Q+QStKLbRpcctY/UJUft/x32521w+hKgZriZwRI/IuM0CPu90?=
- =?us-ascii?Q?wLLF83mQHs5wNDofik0c9ViLhXh9/sppxTopEJP+RPf0pFrmPwB1v0pwz5uG?=
- =?us-ascii?Q?dQ7zIUb5u7rCKLDAi2qwfjeku9PuCVqC728Db6BgWl/1DaOO3HwFpJa5IJOJ?=
- =?us-ascii?Q?oUAUaX5Q91z6ERLkNsM6VSQ16zK1BchsTJE7k2erTWMt2O4XsGCnBz/n1njm?=
- =?us-ascii?Q?LBGmosn3HLLbkIW+DF8eFw+PdEH1CWsKu9R96MYXsQqQwqX/ZfXX9zLCDDo1?=
- =?us-ascii?Q?janvK4MRkW7GRdXL58w2oBBLKOHo43Df4nLautxyQ2Dpc0s8irWscmi3p+pP?=
- =?us-ascii?Q?ybH49Sw2q+zrYQjsbDvyRdrwsBo7OW3O26dLlFTcRoOIHHB8n0WA6st+BQ2z?=
- =?us-ascii?Q?ggS3BN+laPUu+bqZZUu2Z+B7gBKRwek9au1Jo0EE8/hbEqHeQcUUIUqoJ0OT?=
- =?us-ascii?Q?P88pizX+jApmUh7DkuxpzVcHTAZ4v1QGk1HMP2+O1Uy3RxluYJiYIkMp+1Y8?=
- =?us-ascii?Q?5YyPovZ6SWYOzgjnD0JpBlcwYZbk7mltnC4Cf3Aa1+0Xi7uplTQtwi82ouV5?=
- =?us-ascii?Q?At/F7nwzS0YZqmhe9UI7h80TLltvLkQARmIYdyZ+GmSCGBp3Q6nV6wEOugKv?=
- =?us-ascii?Q?RXcXbKSnTAKVm+dd5RP22HmZ+ek/kEeku5E9C0KaKxQcLHmsAunLw0n6gd6g?=
- =?us-ascii?Q?eVwUVHuDjYS2DH3O4oca/+VHOXr+iXwSFqscFRiRAhIjLI4JZhOKs8PJtISZ?=
- =?us-ascii?Q?POQsGiUWOjMpj9gMBoUZ0u+6a2xDz8IjO3mOp9tmAHjkT4jaeWProUcRQ5wz?=
- =?us-ascii?Q?mFI6k5lt4eUbLQkgLVKmsqYQdKf8IHlemqz9zSzbWPA+lx3qOVg1FIg5ReoU?=
- =?us-ascii?Q?3TBSa1UhQ9RdrpeRilRG62WYVcwNdV9PHrjjZMRCoBe91YNLAkNFWxGEzCE7?=
- =?us-ascii?Q?eZXPGu2wn4xF0lUKiJh9fTVIFXwPjt4SwsvS62uSxFo2/hMM2y7N/19hq10r?=
- =?us-ascii?Q?PhNfxlGvxEbfjCBNriKoUOCFVW6mSX1mmVduS5PWZRsY6TvVOHHo1nlIiD+j?=
- =?us-ascii?Q?dTC1w3ovFHsmc7pCL/NJvd+6s5zuM0bFsEMLEX9GDmrffmRdLzNiH4yfz6v2?=
- =?us-ascii?Q?vlGVfE6f5OcxAydGMd901pi3KQ4qGLkqsgp1ENFdn5kKVQnD1uV5sjKMgyNZ?=
- =?us-ascii?Q?VTgttCksqNanaqbi24ToIWBVgYxH6avHHUlQ1RYuqbD5Df7vHqhUhbxAfOBJ?=
- =?us-ascii?Q?KMuqTNwcWchZPurEBBRi6W0stZXnWqQBl0jH8fm4LsgCPHCzQOP3R9ByGsmF?=
- =?us-ascii?Q?AfJxwj6Wr6DUvGBUgFfCIju5jeViYIZ3RXoe3T7HZxANBsU+Az/RUZW2vFqh?=
- =?us-ascii?Q?wK7y418qUB6tqjNMO4cpxFlcxwBXp/knUBpbe3YuJExeBMrQmFJzxh6c0x+z?=
- =?us-ascii?Q?3Tl8yNk7HPut6Pgvg6/PSkBmdbVOta8xYboER4wA?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85020fc1-a3f5-41d3-4e90-08daa792d30e
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8630.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 12:03:47.7464
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: noNZ/HZSnaYX+SLssiqhN3yULnVd9dy0eTPuDiqb/aPJDQBLJ9+vwuNeAnHC3Xfg3AdWWOIYeGAHFqXJblhgUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8245
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221006082735.1321612-1-keescook@chromium.org>
+ <20221006082735.1321612-2-keescook@chromium.org> <20221006090506.paqjf537cox7lqrq@wittgenstein>
+In-Reply-To: <20221006090506.paqjf537cox7lqrq@wittgenstein>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 6 Oct 2022 16:13:37 +0200
+Message-ID: <CAG48ez0sEkmaez9tYqgMXrkREmXZgxC9fdQD3mzF9cGo_=Tfyg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fs/exec: Explicitly unshare fs_struct on exec
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Jorge Merlino <jorge.merlino@canonical.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Haines <richard_c_haines@btinternet.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Todd Kjos <tkjos@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Prashanth Prahlad <pprahlad@redhat.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Consumer application:
-- Adding a flag 'is_hbk', in its "struct crypto_config".
+On Thu, Oct 6, 2022 at 11:05 AM Christian Brauner <brauner@kernel.org> wrote:
+> On Thu, Oct 06, 2022 at 01:27:34AM -0700, Kees Cook wrote:
+> > The check_unsafe_exec() counting of n_fs would not add up under a heavily
+> > threaded process trying to perform a suid exec, causing the suid portion
+> > to fail. This counting error appears to be unneeded, but to catch any
+> > possible conditions, explicitly unshare fs_struct on exec, if it ends up
+>
+> Isn't this a potential uapi break? Afaict, before this change a call to
+> clone{3}(CLONE_FS) followed by an exec in the child would have the
+> parent and child share fs information. So if the child e.g., changes the
+> working directory post exec it would also affect the parent. But after
+> this change here this would no longer be true. So a child changing a
+> workding directoro would not affect the parent anymore. IOW, an exec is
+> accompanied by an unshare(CLONE_FS). Might still be worth trying ofc but
+> it seems like a non-trivial uapi change but there might be few users
+> that do clone{3}(CLONE_FS) followed by an exec.
 
-- After fetching the keys, it is setting the above
-  mentioned flag, based on the key fetched.
-  -- Note: Supported for trusted keys only.
+I believe the following code in Chromium explicitly relies on this
+behavior, but I'm not sure whether this code is in active use anymore:
 
-- After allocating the tfm, and before calling
-  crypto_xxx_setkey(), setting the:
-  -- tfm flag 'is_hbk':
-          cc->cipher_tfm.tfms[i]->base.is_hbk = cc->is_hbk;
-  -- tfm hbk_info, if cc->is_hbk, is non-zero.
-
-  Note: HBK Supported for symmetric-key ciphers only.
-
-Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
----
- drivers/md/dm-crypt.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 159c6806c19b..d28c4af2904e 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -221,6 +221,8 @@ struct crypt_config {
- 	struct mutex bio_alloc_lock;
- 
- 	u8 *authenc_key; /* space for keys in authenc() format (if used) */
-+	unsigned int is_hbk;
-+	struct hw_bound_key_info hbk_info;
- 	u8 key[];
- };
- 
-@@ -2397,10 +2399,16 @@ static int crypt_setkey(struct crypt_config *cc)
- 			r = crypto_aead_setkey(cc->cipher_tfm.tfms_aead[i],
- 					       cc->key + (i * subkey_size),
- 					       subkey_size);
--		else
-+		else {
-+			cc->cipher_tfm.tfms[i]->base.is_hbk = cc->is_hbk;
-+			if (cc->is_hbk)
-+				memcpy(&(cc->cipher_tfm.tfms[i]->base.hbk_info),
-+				       &(cc->hbk_info),
-+				       sizeof(struct hw_bound_key_info));
- 			r = crypto_skcipher_setkey(cc->cipher_tfm.tfms[i],
- 						   cc->key + (i * subkey_size),
- 						   subkey_size);
-+		}
- 		if (r)
- 			err = r;
- 	}
-@@ -2461,9 +2469,11 @@ static int set_key_trusted(struct crypt_config *cc, struct key *key)
- 	if (!tkp)
- 		return -EKEYREVOKED;
- 
-+	cc->is_hbk = tkp->is_hw_bound;
- 	if (cc->key_size != tkp->key_len)
- 		return -EINVAL;
- 
-+	memcpy(&(cc->hbk_info), &(tkp->hbk_info), sizeof(struct hw_bound_key_info));
- 	memcpy(cc->key, tkp->key, cc->key_size);
- 
- 	return 0;
--- 
-2.17.1
-
+https://source.chromium.org/chromium/chromium/src/+/main:sandbox/linux/suid/sandbox.c;l=101?q=CLONE_FS&sq=&ss=chromium
