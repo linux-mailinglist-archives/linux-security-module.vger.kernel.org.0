@@ -2,98 +2,82 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911FD600AD4
-	for <lists+linux-security-module@lfdr.de>; Mon, 17 Oct 2022 11:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED7260111C
+	for <lists+linux-security-module@lfdr.de>; Mon, 17 Oct 2022 16:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiJQJdC (ORCPT
+        id S230370AbiJQOaO (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 17 Oct 2022 05:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        Mon, 17 Oct 2022 10:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiJQJcu (ORCPT
+        with ESMTP id S230306AbiJQOaN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 17 Oct 2022 05:32:50 -0400
-X-Greylist: delayed 360 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Oct 2022 02:32:48 PDT
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342C546632;
-        Mon, 17 Oct 2022 02:32:48 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MrWpZ0skczMq6HQ;
-        Mon, 17 Oct 2022 11:26:46 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MrWpX6ttJzMppMq;
-        Mon, 17 Oct 2022 11:26:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1665998806;
-        bh=Dtqqx/if1ibvMMPRjJERffrtCsRUnCY7m3rsjyXBRgM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZXlehtNi2gROMyNPvpn6xEoGYafMaWeNVUohoi9gv1Z4tBj0H/9jnrJ5/voT2jG4y
-         LBugl+JkVyZXe5aAVsNkGo5lqG8xC04RjwAsOu046lQhjfSnh2SaV0yVJbyLBGznpH
-         02GvexwKNa0ZQ7DAq2kAwMOrfv5LdSU1KP9zpX7w=
-Message-ID: <0d2b9d34-2eda-8aa6-d596-eb1899645192@digikod.net>
-Date:   Mon, 17 Oct 2022 11:26:44 +0200
+        Mon, 17 Oct 2022 10:30:13 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82DD4B98D;
+        Mon, 17 Oct 2022 07:30:10 -0700 (PDT)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 29HET4N6008933;
+        Mon, 17 Oct 2022 23:29:04 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Mon, 17 Oct 2022 23:29:04 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 29HET4ge008929
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 17 Oct 2022 23:29:04 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <4a3a6527-4a19-699a-d7a5-21249254522b@I-love.SAKURA.ne.jp>
+Date:   Mon, 17 Oct 2022 23:29:01 +0900
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH 1/9] integrity: Prepare for having "ima" and "evm"
- available in "integrity" LSM
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [syzbot] general protection fault in security_inode_getattr
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20221013222702.never.990-kees@kernel.org>
- <20221013223654.659758-1-keescook@chromium.org>
- <08a8b202-69b4-e154-28f5-337a898acf61@digikod.net>
- <202210141050.A8DF7D10@keescook>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <202210141050.A8DF7D10@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Paul Moore <paul@paul-moore.com>, miklos@szeredi.hu,
+        linux-unionfs@vger.kernel.org
+Cc:     dvyukov@google.com, hdanton@sina.com,
+        linux-fsdevel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com>,
+        yhs@fb.com, omosnace@redhat.com
+References: <0000000000008caae305ab9a5318@google.com>
+ <000000000000618a8205eb160404@google.com>
+ <CAHC9VhRt2vpArZ=bOrkBOGiAuoTdEcp2PRP5NtbyEZkuMHvopA@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAHC9VhRt2vpArZ=bOrkBOGiAuoTdEcp2PRP5NtbyEZkuMHvopA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-
-On 14/10/2022 19:59, Kees Cook wrote:
-> On Fri, Oct 14, 2022 at 04:40:01PM +0200, Mickaël Salaün wrote:
->> This is not backward compatible
+On 2022/10/16 23:52, Paul Moore wrote:
+> It doesn't look like this is a problem with
+> security_inode_getattr()/d_backing_inode() as it appears that the
+> passed path struct pointer has a bogus/NULL path->dentry pointer and
+> to the best of my knowledge it would appear that vfs_getattr() (the
+> caller) requires a valid path->dentry value.
 > 
-> Why? Nothing will be running LSM hooks until init finishes, at which
-> point the integrity inode cache will be allocated. And ima and evm don't
-> start up until lateinit.
-> 
->> , but can easily be fixed thanks to
->> DEFINE_LSM().order
-> 
-> That forces the LSM to be enabled, which may not be desired?
+> Looking quickly at the code, I wonder if there is something wonky
+> going on in the overlayfs code, specifically ovl_copy_up_flags() and
+> ovl_copy_up_one() as they have to play a number of tricks to handle
+> the transparent overlays and copy up operations.  I'm not an overlayfs
+> expert, but that seems like a good place to start digging further into
+> this.
 
-This is not backward compatible because currently IMA is enabled 
-independently of the "lsm=" cmdline, which means that for all installed 
-systems using IMA and also with a custom "lsm=" cmdline, updating the 
-kernel with this patch will (silently) disable IMA. Using ".order =
-LSM_ORDER_FIRST," should keep this behavior.
+Right. This is a bug in overlayfs code. Probably due to some race condition,
+ovl_copy_up_flags() is calling ovl_copy_up_one() with "next" dentry with
+"struct ovl_entry"->numlower == 0. As a result, ovl_path_lower() from
+ovl_copy_up_one() fills ctx.lowerpath with NULLs, and vfs_getattr() gets
+surprised by ctx.lowerpath.dentry == NULL.
 
-BTW, I think we should set such order (but maybe rename it) for LSMs 
-that do nothing unless configured (e.g. Yama, Landlock).
+If we can't avoid selecting a dentry with "struct ovl_entry"->numlower == 0 using
+some lock, I guess that we would need to use a workaround suggested by Hillf Danton
+at https://groups.google.com/g/syzkaller-bugs/c/xDcxFKSppfE/m/b38Tv7LoAAAJ .
 
-
-> 
->> Side node: I proposed an alternative to that but it was Nacked:
->> https://lore.kernel.org/all/20210222150608.808146-1-mic@digikod.net/
-> 
-> Yeah, for the reasons pointed out -- that can't work. The point is to
-> not have The Default LSM. I do think Casey's NAK was rather prickly,
-> though. ;)
-
-I don't agree, there is no "the default LSM", and this new behavior is 
-under an LSM_AUTO configuration option.
