@@ -2,186 +2,130 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B6D60328B
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 Oct 2022 20:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9E2603324
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 Oct 2022 21:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJRScc (ORCPT
+        id S229535AbiJRTOM (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 18 Oct 2022 14:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        Tue, 18 Oct 2022 15:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiJRScc (ORCPT
+        with ESMTP id S229961AbiJRTNy (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 18 Oct 2022 14:32:32 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4EF88A33
-        for <linux-security-module@vger.kernel.org>; Tue, 18 Oct 2022 11:32:30 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id f205so6876345yba.2
-        for <linux-security-module@vger.kernel.org>; Tue, 18 Oct 2022 11:32:30 -0700 (PDT)
+        Tue, 18 Oct 2022 15:13:54 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39308F269
+        for <linux-security-module@vger.kernel.org>; Tue, 18 Oct 2022 12:13:52 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-360871745b0so146880697b3.3
+        for <linux-security-module@vger.kernel.org>; Tue, 18 Oct 2022 12:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L16nsXH834AKuMsM1DMh0J2GdKedU+LxwtqcL0kTxPI=;
-        b=XO8YUb/HBgZcSFvKYW3v1o26TnjeGANLpJgT83ktEA5S3Wpn8WFZv1ed3CMM3+J+2M
-         BZy26UEEhByJ/XoGJuZMOT70oocT1eWbj1tLh2Y05Y9NNDzK3f5PWHipzgAtlbBsTCd6
-         z1uWBMk+2CzW7mvcTmvhwAFbUpRAHM2d3K+NNH4uyCu+TuNeU/EyxIXMq9RxRoVeaY3R
-         YnRpBEZ+pNJUGKqB6hHn2TOYXx8KD5M398NxDBe1fooI4f1dfNY0GnWJR71p1MLgb3x9
-         FxW4UmbW9u+j2FVcEubUkGusDH8gGJAxJtHMYJNxZrved0o3fbCGFZYNZYhT4fIIRjzo
-         Iq9A==
+        bh=wcJ/xbErnhkU7YIuf1pvj6IUQICGZQUe0Qc8Pk2Fhp0=;
+        b=BwoExkDi2Uvo8U6alOZcZr9ieHzV/EzPaiN6gXiVyArwWY8I9VnXUYBe78bdgAJbFl
+         B835Av7yVCP3BvfPaU7kCKW9CUHIv8+YaoEVBXzYy8pJjX3iuTS6b55xQBk+480wWsl+
+         yB3xS53AnQ3wlKvLPqnn80PQ6bJEAJa8FwsPw66lOU+TkY+OBbDDsmky8PTbKjPhLDKW
+         Ic75X+WcinQ6iiXDkByuWr0XmXJfFjQV/o+ubxiTE7Dd6Aw7t5/IVOyelSs1n6FBzJ0z
+         nF+rrqRueYOResBBJTGXpcKe1EoWtvFNz6fHrqvpsC2ncmghM9ZYl449UpwW/Pzafent
+         dGmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L16nsXH834AKuMsM1DMh0J2GdKedU+LxwtqcL0kTxPI=;
-        b=6HGObjfXxi/I7HCgpVkIlW6f94krE0baxn2XRVYjkZjBswfifjSBWwK+QJEnqH6Vrr
-         XK2OqAwRN+HVXXC3vMp/OeSccIqR6E8zay+2X4f10UaNl4Iz8lP0gcHeJ7PkW/2AqAQJ
-         B56kGOyTK3ZPQgWlbCVkR9HdtCNqfkXyJP4rQ7/VraGx8Yp05EeeZRlIjZPYJFFHLr2w
-         ijzli7hhuaZl9IXPvZGfe1BGTGTEZupMHeolFRwYKTHVaE40GXjrnmFZZ1o8q590rsAT
-         Cw2KyaXVDUiBMyQnAXJuykHySsmzFqCBQB1x7DqMcmydHJm5X/Eg7IXPN5OMauxGkSMB
-         QwuA==
-X-Gm-Message-State: ACrzQf3SaCbmiBNHK3ss3mLINOIs0jjkiMqevM7BtVAtwP/3BWmI/5wP
-        J30VueuUapuhnW5hgWKBAHi4Kuxy8TQJIEVmIgnj
-X-Google-Smtp-Source: AMsMyM549fr2F8ghdaTmpS/lhPUsehNpD3P88Hit4TOUZZUVZsJ34NGZDgq0dmFRGFU5YGCDaHopXFJifv1b36RZvn0=
-X-Received: by 2002:a05:6902:724:b0:6c0:1784:b6c7 with SMTP id
- l4-20020a056902072400b006c01784b6c7mr3615835ybt.15.1666117949646; Tue, 18 Oct
- 2022 11:32:29 -0700 (PDT)
+        bh=wcJ/xbErnhkU7YIuf1pvj6IUQICGZQUe0Qc8Pk2Fhp0=;
+        b=F+zVtcqt22HatLiJUM0HccQwBmfgUOpI0ofBQCJi5TwI6z9yA0uM/0fud3GO34qNj6
+         +fTWjPs162WN9s3uka7CJkX6166aoXvA45bVQs/gj/rEAW3F6xy/vYqOqDcs9cwKLLKg
+         oesHqrQ801qDk9qo9AoeFZecTxt0ttQMEZLtXxMbrG6U4BPmtL1TdhnxxvFXkc2gNA/h
+         xeJDEPIZBliCz6118HJWFLMGpNiGsdwHv1NbzU91C49Zkyy1bLyeNHMz59YRSJ2dtKzl
+         3hyBwQ6AvaaMnZhw9NG0WCOYs21u5v8pdvhJIPuTA7Oh+tvLTRl2EX6ZTURlrJJltQMx
+         ZcTQ==
+X-Gm-Message-State: ACrzQf1D3yxh8+JYkFElZMdU40psRSEzoAhRprCK6onQ3siq1zZqYo/p
+        pgCz9JVWSxv0xPb+gtnDB0ZVwH8XfLMCEtHRPVOz
+X-Google-Smtp-Source: AMsMyM6clLSDFpw2sKQW2zs3XR6UXYycad8dnQF0C8n7utjAvU8Qy9XuX/E70evPgpIM8gNBF6TcYIjQrCfanTScDH8=
+X-Received: by 2002:a0d:e64f:0:b0:357:815d:614 with SMTP id
+ p76-20020a0de64f000000b00357815d0614mr3816985ywe.276.1666120431588; Tue, 18
+ Oct 2022 12:13:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221008100935.73706-1-gnoack3000@gmail.com> <b8566973-63bc-441f-96b9-f822e9944127@digikod.net>
- <Y0g+TEgGGhZDm7MX@dev-arch.thelio-3990X> <Y0xJUy3igQXWPAeq@nuc>
- <Y0xkZqKoE3rRJefh@nuc> <ea8117e5-7f5c-7598-5d6a-868184a6e4ae@digikod.net>
- <CAHC9VhR8SQo9x_cv6BZQSwt0rrjeGh-t+YV10GrA3PbC+yHrxw@mail.gmail.com> <Y07rP/YNYxvQzOei@nuc>
-In-Reply-To: <Y07rP/YNYxvQzOei@nuc>
+References: <20221018182216.301684-1-gnoack3000@gmail.com> <20221018182216.301684-5-gnoack3000@gmail.com>
+In-Reply-To: <20221018182216.301684-5-gnoack3000@gmail.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 18 Oct 2022 14:32:18 -0400
-Message-ID: <CAHC9VhRamtwyA00A1j+8cd+UtZy7THu6VFch6qe0ESTx+bc+jA@mail.gmail.com>
-Subject: Re: [PATCH v9 00/11] landlock: truncate support
+Date:   Tue, 18 Oct 2022 15:13:40 -0400
+Message-ID: <CAHC9VhTCb2UXq_fATM6rHjLL-o4Bib3JXUYL_wONthB8WTnG9g@mail.gmail.com>
+Subject: Re: [PATCH v10 04/11] landlock: Support file truncation
 To:     =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
+Cc:     linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
         James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Oct 18, 2022 at 2:06 PM G=C3=BCnther Noack <gnoack3000@gmail.com> w=
+On Tue, Oct 18, 2022 at 2:22 PM G=C3=BCnther Noack <gnoack3000@gmail.com> w=
 rote:
 >
-> On Tue, Oct 18, 2022 at 01:12:48PM -0400, Paul Moore wrote:
-> > On Mon, Oct 17, 2022 at 5:16 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.n=
-et> wrote:
-> > > On 16/10/2022 22:07, G=C3=BCnther Noack wrote:
-> >
-> > ...
-> >
-> > > > Proposed fix
-> > > > ------------
-> > > >
-> > > > I think the LSM framework should ensure that security blobs are
-> > > > pointer-aligned.
-> > > >
-> > > > The LSM framework takes the role of a memory allocator here, and
-> > > > memory allocators should normally return aligned addresses, in my
-> > > > understanding. -- It seems reasonable for AppArmor to make that
-> > > > assumption.
-> > > >
-> > > > The proposed one-line fix is: Change lsm_set_blob_size() in
-> > > > security/security.c, where the positions of the individual security
-> > > > blobs are calculated, so that each allocated blob is aligned to a
-> > > > pointer size boundary.
-> > > >
-> > > > if (*need > 0) {
-> > > >    *lbs =3D ALIGN(*lbs, sizeof(void *));   // NEW
-> > > >
-> > > >    offset =3D *lbs;
-> > > >    *lbs +=3D *need;
-> > > >    *need =3D offset;
-> > > > }
-> > >
-> > > This looks good to me. This fix should be part of patch 4/11 since it
-> > > only affects Landlock for now.
-> >
-> > Hi G=C3=BCnther,
-> >
-> > Sorry for not seeing this email sooner; I had thought the landlock
-> > truncate work was largely resolved with just a few small things for
-> > you to sort out with Micka=C3=ABl so I wasn't following this thread ver=
-y
-> > closely anymore.
-> >
-> > Regarding the fix, yes, I think the solution is to fixup the LSM
-> > security blob allocator to properly align the entries.  As you already
-> > mentioned, that's common behavior elsewhere and I see no reason why we
-> > should deviate from that in the LSM allocator.  Honestly, looking at
-> > the rest of the allocator right now I can see a few other things to
-> > improve, but those can wait for a later time so as to not conflict
-> > with this work (/me adds a new entry to my todo list).
-> >
-> > Other than that, I might suggest the lsm_set_blob_size()
-> > implementation below as it seems cleaner to me and should be
-> > functionally equivalent ... at least on quick inspection, if I've done
-> > something dumb with the code below please feel free to ignore me ;)
-> >
-> >   static void __init lsm_set_blob_size(int *need, int *lbs)
-> >   {
-> >     if (*need <=3D 0)
-> >       return;
-> >
-> >     *need =3D ALIGN(*need, sizeof(void *));
-> >     *lbs +=3D *need;
-> >   }
+> Introduce the LANDLOCK_ACCESS_FS_TRUNCATE flag for file truncation.
 >
-> Hello Paul,
+> This flag hooks into the path_truncate, file_truncate and
+> file_alloc_security LSM hooks and covers file truncation using
+> truncate(2), ftruncate(2), open(2) with O_TRUNC, as well as creat().
 >
-> thanks for the reply. Sounds good, I'll go forward with this approach
-> then and send a V10 soon.
+> This change also increments the Landlock ABI version, updates
+> corresponding selftests, and updates code documentation to document
+> the flag.
 >
-> Implementation-wise for this function, I think this is the closest to
-> your suggestion I can get:
+> In security/security.c, allocate security blobs at pointer-aligned
+> offsets. This fixes the problem where one LSM's security blob can
+> shift another LSM's security blob to an unaligned address. (Reported
+> by Nathan Chancellor)
 >
-> static void __init lsm_set_blob_size(int *need, int *lbs)
-> {
->   int offset;
+> The following operations are restricted:
 >
->   if (*need <=3D 0)
->     return;
+> open(2): requires the LANDLOCK_ACCESS_FS_TRUNCATE right if a file gets
+> implicitly truncated as part of the open() (e.g. using O_TRUNC).
 >
->   offset =3D ALIGN(*lbs, sizeof(void *));
->   *lbs =3D offset + *need;
->   *need =3D offset;
-> }
+> Notable special cases:
+> * open(..., O_RDONLY|O_TRUNC) can truncate files as well in Linux
+> * open() with O_TRUNC does *not* need the TRUNCATE right when it
+>   creates a new file.
 >
-> This differs from your suggestion in that:
+> truncate(2) (on a path): requires the LANDLOCK_ACCESS_FS_TRUNCATE
+> right.
 >
-> - *need gets assigned to the offset at the end. (It's a bit unusual:
->   *need is both used to specify the requested blob size when calling
->   the function, and for returning the allocated offset from the
->   function call.)
+> ftruncate(2) (on a file): requires that the file had the TRUNCATE
+> right when it was previously opened. File descriptors acquired by
+> other means than open(2) (e.g. memfd_create(2)) continue to support
+> truncation with ftruncate(2).
 >
-> - This implementation aligns the blob's start offset, not the end
->   offset. (probably makes no real difference in practice)
->
-> As suggested by Micka=C3=ABl, I'll make this fix part of the "Landlock:
-> Support file truncation" patch, so that people backporting it won't
-> accidentally leave it out.
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: G=C3=BCnther Noack <gnoack3000@gmail.com>
+> ---
+>  include/uapi/linux/landlock.h                |  21 +++-
+>  security/landlock/fs.c                       | 104 ++++++++++++++++++-
+>  security/landlock/fs.h                       |  24 +++++
+>  security/landlock/limits.h                   |   2 +-
+>  security/landlock/setup.c                    |   1 +
+>  security/landlock/syscalls.c                 |   2 +-
+>  security/security.c                          |  11 +-
+>  tools/testing/selftests/landlock/base_test.c |   2 +-
+>  tools/testing/selftests/landlock/fs_test.c   |   7 +-
+>  9 files changed, 153 insertions(+), 21 deletions(-)
 
-That's all fine with me, the important thing is to make sure the
-landlock truncate patches don't break anything.  We'll cleanup the
-allocator later.
+Thanks for the LSM security blob allocator fixes G=C3=BCnther!
+
+Acked-by: Paul Moore <paul@paul-moore.com> (LSM)
 
 --=20
 paul-moore.com
