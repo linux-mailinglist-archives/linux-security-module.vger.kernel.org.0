@@ -2,151 +2,137 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1A66046EF
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Oct 2022 15:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755C5604760
+	for <lists+linux-security-module@lfdr.de>; Wed, 19 Oct 2022 15:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiJSNYo (ORCPT
+        id S232335AbiJSNhm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 19 Oct 2022 09:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        Wed, 19 Oct 2022 09:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbiJSNX7 (ORCPT
+        with ESMTP id S229552AbiJSNg6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:23:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D1F13CF5
-        for <linux-security-module@vger.kernel.org>; Wed, 19 Oct 2022 06:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666184901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LA6Cza3pSGpXKVU6F+S8U8JWg8ZovqHMMGY0EaLCBBg=;
-        b=J8ybhSfm/9MF1vCZPns4Y1SgMZJN/bRQj8IQb47tU8q5mItTOBH8+GBAzqSShOQurYKGN1
-        mZiNkc4njTWszYF8r6vXC4RntjDgMd37/OoDHk8XlILehtIN7LGsmxlSaiJ6yD132bRjiv
-        g1Bl5gVHVHM99MNuJN78NUu2IZvOGgM=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-118-tLeOvE10MeuNq_PnYDWi9w-1; Wed, 19 Oct 2022 04:42:22 -0400
-X-MC-Unique: tLeOvE10MeuNq_PnYDWi9w-1
-Received: by mail-pl1-f198.google.com with SMTP id k16-20020a170902c41000b00184987e3d09so11523133plk.21
-        for <linux-security-module@vger.kernel.org>; Wed, 19 Oct 2022 01:42:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LA6Cza3pSGpXKVU6F+S8U8JWg8ZovqHMMGY0EaLCBBg=;
-        b=BrOrspGaTm9yr+536xyCHxwZRdMlO0m6xnodyo9btMn5TLalD6cNiOasHBT8oPCHi3
-         NrKmaxzO0MuIbh9VLn2a6PxW1W9fzrZThGWkR/A0YA59CwMO3zF4/GksIxQCYeyeV368
-         CdD/SiL1UEC3Le8KYDEA34OznkP7YpngCV3DtOWamZnDWmrMjahXIDPuRK3OqWn4kPP8
-         ERlW0EtKKSD6Vl10oRg5sG0uxSonaxJOk2gYwAOjG++2RLNza/6oYdny3fKir2n9eOQA
-         GLPAgTPsFXKhh6CkS3UrGsxXIzJUxKYEH0A5KJc00cBwbyErzTDrZOYnjX90/zd0R2fr
-         19Qg==
-X-Gm-Message-State: ACrzQf0wVSARDwDHlb0NDSXB0/Q2YufVNXihzcJJ+oPtcoaUbNmuN0C6
-        Ic+bGNizPsNi2KHnMOJ18uUxvSf3aWlPgQjFFC2ms7ZsG9ecxBjuLAvuca5Z2EWSNGpYpeIJK59
-        0THpB9b25Ph4gPW5Az6OK4eZnoJv3EK/zyNEv1Nh1dxwBPzuiB7HA
-X-Received: by 2002:a17:90b:4b41:b0:20a:fe8f:5a3 with SMTP id mi1-20020a17090b4b4100b0020afe8f05a3mr43848757pjb.120.1666168941129;
-        Wed, 19 Oct 2022 01:42:21 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6FuVvfJ4E95k0X9Xk8r9zpE8dH9chRXdFCbAhrjjTZD6cYyig2V8giEmVJuPpTRlj8KdTBtxBPT1gpaqW0jcs=
-X-Received: by 2002:a17:90b:4b41:b0:20a:fe8f:5a3 with SMTP id
- mi1-20020a17090b4b4100b0020afe8f05a3mr43848724pjb.120.1666168940805; Wed, 19
- Oct 2022 01:42:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221019025710.2482945-1-gongruiqi1@huawei.com>
-In-Reply-To: <20221019025710.2482945-1-gongruiqi1@huawei.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Wed, 19 Oct 2022 10:42:07 +0200
-Message-ID: <CAFqZXNuyiYEizcPrjCVE=e6bdH9fA0ffAn6VtJswP9JLboGUTw@mail.gmail.com>
-Subject: Re: [PATCH v2] selinux: use GFP_ATOMIC in convert_context()
-To:     "GONG, Ruiqi" <gongruiqi1@huawei.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        Wed, 19 Oct 2022 09:36:58 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BBF12D813;
+        Wed, 19 Oct 2022 06:25:26 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JDFgGV002967;
+        Wed, 19 Oct 2022 13:24:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=DVW03iTiTRTyayeqLUvLgu638TsI5iFPDEtu5YBUGdY=;
+ b=LR2a5igEdy+qgsweIHBHmRr+SHmak/XXDMlFKTePwJIjo2knWnb4bvSowhVkzi28O+xr
+ 74kMGbDVXjlBomtcJsksgo+XnhOY2Po3JBLra0Hi7yN3QZoy6+uwG1uLiLxqi08l3WUU
+ RZT8PpxmsiofZ4zNt5SJK2Fi2OaUo+RWoD0z5RBcCjpxJNw3//9XoNIaRMOYL7czwsvF
+ qZBlgk2Rbzp3j0l9lrg4gjWaL7djHvL9/6asdRRtNfW12VvAbaO9tW8eJS3rttoaV0Qe
+ baKTAcChWdOKP77Y6c0E9MQArG4FzD7l3NIumTtxSh5Gnap0Bb49Tn9LHxJZ/2IWS7oj oA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kahyb0e48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 13:24:09 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29JDGL51006539;
+        Wed, 19 Oct 2022 13:24:09 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kahyb0e3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 13:24:08 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29JDNoe1021140;
+        Wed, 19 Oct 2022 13:24:08 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma03wdc.us.ibm.com with ESMTP id 3k7mg9ny5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Oct 2022 13:24:08 +0000
+Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29JDOAA461669648
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Oct 2022 13:24:10 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E90C758061;
+        Wed, 19 Oct 2022 13:24:06 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC12158057;
+        Wed, 19 Oct 2022 13:24:05 +0000 (GMT)
+Received: from sig-9-65-252-68.ibm.com (unknown [9.65.252.68])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Oct 2022 13:24:05 +0000 (GMT)
+Message-ID: <7b6f01c201ce82f58c19a1e22df9333f30eedda5.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/9] ima: Move xattr hooks into LSM
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Borislav Petkov <bp@suse.de>,
+        Jonathan McDowell <noodles@fb.com>,
+        Takashi Iwai <tiwai@suse.de>, Petr Vorel <pvorel@suse.cz>,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiu Jianfeng <xiujianfeng@huawei.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Wed, 19 Oct 2022 09:24:05 -0400
+In-Reply-To: <20221018150751.3qsbehcnli4c4g4o@wittgenstein>
+References: <20221013222702.never.990-kees@kernel.org>
+         <20221013223654.659758-3-keescook@chromium.org>
+         <20221018150751.3qsbehcnli4c4g4o@wittgenstein>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qAO7TduTXm7UKdzpxb-rqCPH3_RjdJHr
+X-Proofpoint-ORIG-GUID: xUE2GvXWPHkkknVG_aXO0rT3CK50EAdq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_08,2022-10-19_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ clxscore=1011 mlxscore=0 bulkscore=0 spamscore=0 mlxlogscore=659
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Oct 19, 2022 at 4:56 AM GONG, Ruiqi <gongruiqi1@huawei.com> wrote:
->
-> The following warning was triggered on a hardware environment:
->
->   SELinux: Converting 162 SID table entries...
->   BUG: sleeping function called from invalid context at __might_sleep+0x60/0x74 0x0
->   in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 5943, name: tar
->   CPU: 7 PID: 5943 Comm: tar Tainted: P O 5.10.0 #1
->   Call trace:
->    dump_backtrace+0x0/0x1c8
->    show_stack+0x18/0x28
->    dump_stack+0xe8/0x15c
->    ___might_sleep+0x168/0x17c
->    __might_sleep+0x60/0x74
->    __kmalloc_track_caller+0xa0/0x7dc
->    kstrdup+0x54/0xac
->    convert_context+0x48/0x2e4
->    sidtab_context_to_sid+0x1c4/0x36c
->    security_context_to_sid_core+0x168/0x238
->    security_context_to_sid_default+0x14/0x24
->    inode_doinit_use_xattr+0x164/0x1e4
->    inode_doinit_with_dentry+0x1c0/0x488
->    selinux_d_instantiate+0x20/0x34
->    security_d_instantiate+0x70/0xbc
->    d_splice_alias+0x4c/0x3c0
->    ext4_lookup+0x1d8/0x200 [ext4]
->    __lookup_slow+0x12c/0x1e4
->    walk_component+0x100/0x200
->    path_lookupat+0x88/0x118
->    filename_lookup+0x98/0x130
->    user_path_at_empty+0x48/0x60
->    vfs_statx+0x84/0x140
->    vfs_fstatat+0x20/0x30
->    __se_sys_newfstatat+0x30/0x74
->    __arm64_sys_newfstatat+0x1c/0x2c
->    el0_svc_common.constprop.0+0x100/0x184
->    do_el0_svc+0x1c/0x2c
->    el0_svc+0x20/0x34
->    el0_sync_handler+0x80/0x17c
->    el0_sync+0x13c/0x140
->   SELinux: Context system_u:object_r:pssp_rsyslog_log_t:s0:c0 is not valid (left unmapped).
->
-> It was found that within a critical section of spin_lock_irqsave in
-> sidtab_context_to_sid(), convert_context() (hooked by
-> sidtab_convert_params.func) might cause the process to sleep via
-> allocating memory with GFP_KERNEL, which is problematic.
->
-> As Ondrej pointed out [1], convert_context()/sidtab_convert_params.func
-> has another caller sidtab_convert_tree(), which is okay with GFP_KERNEL.
-> Therefore, fix this problem by adding a gfp_t argument for
-> convert_context()/sidtab_convert_params.func and pass GFP_KERNEL/_ATOMIC
-> properly in individual callers.
->
-> Link: https://lore.kernel.org/all/20221018120111.1474581-1-gongruiqi1@huawei.com/ [1]
-> Reported-by: Tan Ninghao <tanninghao1@huawei.com>
-> Fixes: ee1a84fdfeed ("selinux: overhaul sidtab to fix bug and improve performance")
-> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
-> ---
->
-> v2: change as Ondrej suggests & redraft commit message
+On Tue, 2022-10-18 at 17:07 +0200, Christian Brauner wrote:
+> On Thu, Oct 13, 2022 at 03:36:48PM -0700, Kees Cook wrote:
+> > Move the xattr IMA hooks into normal LSM layer. As with SELinux and
+> > Smack, handle calling cap_inode_setxattr() internally.
+> > 
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: Borislav Petkov <bp@suse.de>
+> > Cc: Jonathan McDowell <noodles@fb.com>
+> > Cc: Takashi Iwai <tiwai@suse.de>
+> > Cc: Petr Vorel <pvorel@suse.cz>
+> > Cc: linux-integrity@vger.kernel.org
+> > Cc: linux-security-module@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> 
+> I like that changes obviously but in general, does IMA depend on being
+> called _after_ all other LSMs or is this just a historical artifact?
 
-This looks good, thanks!
-
-Reviewed-by: Ondrej Mosnacek <omosnace@redhat.com>
-
->  [...]
+Calculating the EVM HMAC must be last, after the other security xattrs
+have been updated.
 
 -- 
-Ondrej Mosnacek
-Senior Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+thanks,
+
+Mimi
+
 
