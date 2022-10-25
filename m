@@ -2,138 +2,87 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CFD60CA7F
-	for <lists+linux-security-module@lfdr.de>; Tue, 25 Oct 2022 13:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B088060CCF2
+	for <lists+linux-security-module@lfdr.de>; Tue, 25 Oct 2022 15:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiJYLC3 (ORCPT
+        id S229995AbiJYNF4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 25 Oct 2022 07:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        Tue, 25 Oct 2022 09:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiJYLC2 (ORCPT
+        with ESMTP id S232507AbiJYNFX (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:02:28 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957F3DFB4B;
-        Tue, 25 Oct 2022 04:02:25 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MxTV22n9xzJn7j;
-        Tue, 25 Oct 2022 18:59:38 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 19:02:23 +0800
-Received: from octopus.huawei.com (10.67.174.191) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 19:02:23 +0800
-From:   Wang Weiyang <wangweiyang2@huawei.com>
-To:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
-        <serge.hallyn@canonical.com>, <akpm@linux-foundation.org>,
-        <aris@redhat.com>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] device_cgroup: Roll back to original exceptions after copy failure
-Date:   Tue, 25 Oct 2022 19:31:01 +0800
-Message-ID: <20221025113101.41132-1-wangweiyang2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 25 Oct 2022 09:05:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2BC21807
+        for <linux-security-module@vger.kernel.org>; Tue, 25 Oct 2022 06:05:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E2D9B81A9C
+        for <linux-security-module@vger.kernel.org>; Tue, 25 Oct 2022 13:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0589C433D6;
+        Tue, 25 Oct 2022 13:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666703104;
+        bh=N7uqJ+CGk49Z44tFva+K2sjK+Cgv5kaX4FPfGJVtftM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MhW1nQ9tKDDwb+RTZhX0fmLczWHmhcXYb2vt7ArEsqKxkwW9EJCVC9Wd6NjQplPpp
+         fKnMpLe/BNHWUbQtn31o4Oo+NkL3ZoGLRh6iAQR7ywhOdpkf7A51wIm5mgaDK0dJc6
+         xUnderqYTZ8JWupPBQoQIppZkt7AYv5vOlXc0eAtRa577pteM3P6EIha+FhSXiJfgP
+         LofR6CNHOGBe3jK0eqTaRwSMnJQm/1Z9VSGNo2lN3LLhPZjw7SeaqSW1egrmkZiLNO
+         YJCo8yMjYO35NO+XjVHFAzaA7s8voCJjgaykAbb2XcRQcm5bmLX8YYByuKuWYQdeci
+         fHTK4d93fKMpw==
+Date:   Tue, 25 Oct 2022 15:04:59 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     serge@hallyn.com, paul@paul-moore.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] security: commoncap: fix potential memleak on error path
+ from vfs_getxattr_alloc
+Message-ID: <20221025130459.kk42edsz56vsd3ur@wittgenstein>
+References: <20221025104544.2298829-1-cuigaosheng1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.191]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221025104544.2298829-1-cuigaosheng1@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-When add the 'a *:* rwm' entry to devcgroup A's whitelist, at first A's
-exceptions will be cleaned and A's behavior is changed to
-DEVCG_DEFAULT_ALLOW. Then parent's exceptions will be copyed to A's
-whitelist. If copy failure occurs, just return leaving A to grant
-permissions to all devices. And A may grant more permissions than
-parent.
+On Tue, Oct 25, 2022 at 06:45:44PM +0800, Gaosheng Cui wrote:
+> In cap_inode_getsecurity(), we will use vfs_getxattr_alloc() to
+> complete the memory allocation of tmpbuf, if we have completed
+> the memory allocation of tmpbuf, but failed to call handler->get(...),
+> there will be a memleak in below logic:
+> 
+>   |-- ret = (int)vfs_getxattr_alloc(mnt_userns, ...)  <-- alloc for tmpbuf
+>     |-- value = krealloc(*xattr_value, error + 1, flags)  <-- alloc memory
+>     |-- error = handler->get(handler, ...)  <-- if error
+>     |-- *xattr_value = value <-- xattr_value is &tmpbuf  <-- memory leak
+> 
+> So we will try to free(tmpbuf) after vfs_getxattr_alloc() fails to fix it.
 
-Backup A's whitelist and recover original exceptions after copy
-failure.
+Hey Gaosheng,
 
-Fixes: 4cef7299b478 ("device_cgroup: add proper checking when changing default behavior")
-Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
----
- security/device_cgroup.c | 33 +++++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
+> 
+> Fixes: 71bc356f93a1 ("commoncap: handle idmapped mounts")
 
-diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index a9f8c63a96d1..bef2b9285fb3 100644
---- a/security/device_cgroup.c
-+++ b/security/device_cgroup.c
-@@ -82,6 +82,17 @@ static int dev_exceptions_copy(struct list_head *dest, struct list_head *orig)
- 	return -ENOMEM;
- }
- 
-+static void dev_exceptions_move(struct list_head *dest, struct list_head *orig)
-+{
-+	struct dev_exception_item *ex, *tmp;
-+
-+	lockdep_assert_held(&devcgroup_mutex);
-+
-+	list_for_each_entry_safe(ex, tmp, orig, list) {
-+		list_move_tail(&ex->list, dest);
-+	}
-+}
-+
- /*
-  * called under devcgroup_mutex
-  */
-@@ -604,11 +615,13 @@ static int devcgroup_update_access(struct dev_cgroup *devcgroup,
- 	int count, rc = 0;
- 	struct dev_exception_item ex;
- 	struct dev_cgroup *parent = css_to_devcgroup(devcgroup->css.parent);
-+	struct dev_cgroup tmp_devcgrp;
- 
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EPERM;
- 
- 	memset(&ex, 0, sizeof(ex));
-+	memset(&tmp_devcgrp, 0, sizeof(tmp_devcgrp));
- 	b = buffer;
- 
- 	switch (*b) {
-@@ -620,15 +633,27 @@ static int devcgroup_update_access(struct dev_cgroup *devcgroup,
- 
- 			if (!may_allow_all(parent))
- 				return -EPERM;
--			dev_exception_clean(devcgroup);
--			devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
--			if (!parent)
-+			if (!parent) {
-+				devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
-+				dev_exception_clean(devcgroup);
- 				break;
-+			}
- 
-+			INIT_LIST_HEAD(&tmp_devcgrp.exceptions);
-+			rc = dev_exceptions_copy(&tmp_devcgrp.exceptions,
-+						 &devcgroup->exceptions);
-+			if (rc)
-+				return rc;
-+			dev_exception_clean(devcgroup);
- 			rc = dev_exceptions_copy(&devcgroup->exceptions,
- 						 &parent->exceptions);
--			if (rc)
-+			if (rc) {
-+				dev_exceptions_move(&devcgroup->exceptions,
-+						    &tmp_devcgrp.exceptions);
- 				return rc;
-+			}
-+			devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
-+			dev_exception_clean(&tmp_devcgrp);
- 			break;
- 		case DEVCG_DENY:
- 			if (css_has_online_children(&devcgroup->css))
--- 
-2.17.1
+The Fixes: tag is wrong afaict. The control flow isn't changed in any
+way by the referenced commit.
 
+The logic changed the last time with
+82e5d8cc768b ("security: commoncap: fix -Wstringop-overread warning")
+but even that commit wouldn't have introduced the bug. It would've been
+introduced by 8db6c34f1dbc ("Introduce v3 namespaced file
+capabilities"). So update the Fixes: tag with that reference, please.
+
+Otherwise I think you in principle have a point. Not sure if we have any
+filesystem that in practice would fail after permission checks have
+already passed with the first call to ->get() but then fail with the
+correct size passed in the second ->get() invocation. Sounds super
+unlikely but not impossible.
