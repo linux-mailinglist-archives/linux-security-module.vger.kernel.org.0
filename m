@@ -2,185 +2,74 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC3260F577
-	for <lists+linux-security-module@lfdr.de>; Thu, 27 Oct 2022 12:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1810760F77D
+	for <lists+linux-security-module@lfdr.de>; Thu, 27 Oct 2022 14:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiJ0Kjp (ORCPT
+        id S235333AbiJ0MhV (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 27 Oct 2022 06:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
+        Thu, 27 Oct 2022 08:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiJ0Kjl (ORCPT
+        with ESMTP id S234240AbiJ0MhU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 27 Oct 2022 06:39:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60006562
-        for <linux-security-module@vger.kernel.org>; Thu, 27 Oct 2022 03:39:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5ACCEB82571
-        for <linux-security-module@vger.kernel.org>; Thu, 27 Oct 2022 10:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017B7C43147
-        for <linux-security-module@vger.kernel.org>; Thu, 27 Oct 2022 10:39:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666867172;
-        bh=Wfmr4jp4HWW9KkLYlH5RdoT/CI548D6X9rUf/WCpVQg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oKsgT1PjuIzr/x0ppB0HfU/AtoiNBThShImmM38C5H93pDCWBAbimk9ZdSxe+v1Ao
-         c5Za/d03Pe04V0A6ttVg3AQbrDvVHq2DI9aiKLGCYlJ0rbaI3UKLsI604/AuM29vns
-         a53S8WjbgDiSJrVGMjyloI8yttBzQoIz1HZKwgjiaEtIFb6o/gtOhaxIMkisAaIH44
-         HUxrJfxrb4+O/jCIpxIC+sKyKsIjvcTuuwNMRFtxsCDUQfbysPRgeVMGgjLEiEHcGl
-         MW+51kq5URuTrJaRT6sMR7hIqE2JTcPSI4C7ryCUplTQ/3d+cqpMh1s8Yly1cxHHiG
-         +HjbAmS8YvrRw==
-Received: by mail-lj1-f178.google.com with SMTP id j14so1719240ljh.12
-        for <linux-security-module@vger.kernel.org>; Thu, 27 Oct 2022 03:39:31 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1ZdM58mXORDa5ULv21b2uYl0DotQ2ee9dOurEI4JOmITzG7h6D
-        AUi6qCaEImJwLSZBqao/AvZcPaQN6fkX4xdId8UhUg==
-X-Google-Smtp-Source: AMsMyM5lSj/2LnLqo7T20znVrmI7UobT8m/3WPr8d4g5QIvgeQkhIyhha+FrrV0RKJldTOKLM0u9mHBI8oYzZVC6HQ8=
-X-Received: by 2002:a2e:9107:0:b0:277:2e85:79d4 with SMTP id
- m7-20020a2e9107000000b002772e8579d4mr455368ljg.425.1666867169899; Thu, 27 Oct
- 2022 03:39:29 -0700 (PDT)
+        Thu, 27 Oct 2022 08:37:20 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D6EDDA0B
+        for <linux-security-module@vger.kernel.org>; Thu, 27 Oct 2022 05:37:16 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id y20so493415uao.8
+        for <linux-security-module@vger.kernel.org>; Thu, 27 Oct 2022 05:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eQtHVIh1aNe4Qh0x0ragWBnOPchUE+ZIYXzmSXO/abc=;
+        b=qlNsrosJercoAIRBP7rls2+DO6N2QChzhgrNubVLaP/XZ7tWFhYD2doN/zhwy9Cs1e
+         L5AwTxtyURDNZaSaQ/ebp/8aEvsmYaIF6x+x+FqPBBWJiYFyt9OMCwRx9tMBIPWnp7F/
+         mUwDIG4hGvbAjjLj04uUrwrXcq+uixbDkyXOBjL8NnckOq2OmwSIksNEzw9+DXuTkjel
+         anWxa84DOGXhwpFrWIcQXqpOCeE5cO/HPba2rzhAE2cJjKVoruNhznc5g3zZO/KjaCcy
+         qLrw3OvYOuUqzMkaPfqOFOyoslmE8CQnW0J9t/SP+zdB02OLr+lewqCLEghdRsaiAnnR
+         M2Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eQtHVIh1aNe4Qh0x0ragWBnOPchUE+ZIYXzmSXO/abc=;
+        b=CjvMk8m++9ZeISXH1uLzVy6nLJwNY5roOFTQSK6UymKTeIkWZKELx16S0M8lF0dts3
+         D0Z//YJqJz+IJV2iFik2f39+q5Xt7AHrOqtsJSOm1TC/EbT0eEphfZM/vpuh4sl2Qbia
+         y/xD51L1PbTBv8hbXFACp0CFncEa0p6DaEuaIaVIl7c8dFNFPvIMb0vA6qUFyppT4uxa
+         O8F8md7U1ZsVt1xrQwCtX3UefM4c5rss7AN0Zlq7AbR493Jl9LtdWv3wqBMg6e7HcCdE
+         gYGiz38w0zcECJHyoxeQBUjl/7Qbhi7RPzTJeJ4maeoll0UThRR5f2h401iJbaQghB3F
+         y7vg==
+X-Gm-Message-State: ACrzQf0zSzNvvP2MqxUj01AK0NslmbGjpM12Mpp3fPoICe2bIs1A45SE
+        ltpcWZON/N2bz88Q0l90W/6Fq0COn4jysDLw+CM=
+X-Google-Smtp-Source: AMsMyM6N08J1cioI6DLoa3mFh9ZAP88WuUeI6aE0ejM3764JQ988W4bu8pKA91x/cekbo5NTW4+llGzKYI0ICPZU6fE=
+X-Received: by 2002:ab0:32cd:0:b0:408:ffa4:85f9 with SMTP id
+ f13-20020ab032cd000000b00408ffa485f9mr4028372uao.62.1666874234647; Thu, 27
+ Oct 2022 05:37:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
- <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
- <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
- <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
- <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
- <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
- <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com> <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
- <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com> <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
-In-Reply-To: <CAADnVQKD5e9vKsSo1TPeBm5hr6j4GzQeHqRURoBJyB++VOwHCw@mail.gmail.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 27 Oct 2022 12:39:19 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
-Message-ID: <CACYkzJ4ak4=qPNQxVckvn3c8CZpXkXSLSyYa_HCU-RJNyuLoZg@mail.gmail.com>
-Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from bpf_lsm_inode_init_security()
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>
+Received: by 2002:a05:6102:3d83:0:0:0:0 with HTTP; Thu, 27 Oct 2022 05:37:13
+ -0700 (PDT)
+From:   Cheickna Toure <metk1959@gmail.com>
+Date:   Thu, 27 Oct 2022 13:37:13 +0100
+Message-ID: <CAOAL42hQPJ6_wWrbOjTu=aUC1hBe-EmZ85SW_AE6rkYp283tBQ@mail.gmail.com>
+Subject: Hello, Good afternoon
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Oct 26, 2022 at 7:14 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Oct 26, 2022 at 1:42 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> >
-> > On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
-> > > On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > >>
-> > >> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
-> > >>> On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
-> > >>>> I'm looking at security_inode_init_security() and it is indeed messy.
-> > >>>> Per file system initxattrs callback that processes kmalloc-ed
-> > >>>> strings.
-> > >>>> Yikes.
-> > >>>>
-> > >>>> In the short term we should denylist inode_init_security hook to
-> > >>>> disallow attaching bpf-lsm there. set/getxattr should be done
-> > >>>> through kfuncs instead of such kmalloc-a-string hack.
-> > >>> Inode_init_security is an example. It could be that the other hooks are
-> > >>> affected too. What happens if they get arbitrary positive values too?
-> > >>
-> > >> TL;DR - Things will go cattywampus.
-> > >>
-> > >> The LSM infrastructure is an interface that has "grown organically",
-> > >> and isn't necessarily consistent in what it requires of the security
-> > >> module implementations. There are cases where it assumes that the
-> > >> security module hooks are well behaved, as you've discovered. I have
-> > >> no small amount of fear that someone is going to provide an eBPF
-> > >> program for security_secid_to_secctx(). There has been an assumption,
-> > >> oft stated, that all security modules are going to be reviewed as
-> > >> part of the upstream process. The review process ought to catch hooks
-> > >> that return unacceptable values. Alas, we've lost that with BPF.
-> > >>
-> > >> It would take a(nother) major overhaul of the LSM infrastructure to
-> > >> make it safe against hooks that are not well behaved. From what I have
-> > >> seen so far it wouldn't be easy/convenient/performant to do it in the
-> > >> BPF security module either. I personally think that BPF needs to
-> > >> ensure that the eBPF implementations don't return inappropriate values,
-> > >> but I understand why that is problematic.
-> > >
-> > > That's an accurate statement. Thank you.
-> > >
-> > > Going back to the original question...
-> > > We fix bugs when we discover them.
-> > > Regardless of the subsystem they belong to.
-> > > No finger pointing.
-> >
-> > I'm concerned about the following situation:
-> >
-> > struct <something> *function()
-> > {
-> >
-> >         ret = security_*();
-> >         if (ret)
-> >                 return ERR_PTR(ret);
-> >
-> > }
-> >
-> > int caller()
-> > {
-> >         ptr = function()
-> >         if (IS_ERR(ptr)
-> >                 goto out;
-> >
-> >         <use of invalid pointer>
-> > }
-> >
-> > I quickly found an occurrence of this:
-> >
-> > static int lookup_one_common()
-> > {
-> >
-> > [...]
-> >
-> >         return inode_permission();
-> > }
-> >
-> > struct dentry *try_lookup_one_len()
-> > {
-> >
-> > [...]
-> >
-> >          err = lookup_one_common(&init_user_ns, name, base, len, &this);
-> >          if (err)
-> >                  return ERR_PTR(err);
-> >
-> >
-> > Unfortunately, attaching to inode_permission causes the kernel
-> > to crash immediately (it does not happen with negative return
-> > values).
-> >
-> > So, I think the fix should be broader, and not limited to the
-> > inode_init_security hook. Will try to see how it can be fixed.
->
-> I see. Let's restrict bpf-lsm return values to IS_ERR_VALUE.
-> Trivial verifier change.
-
-Thanks, yes this indeed is an issue. We need to do a few things:
-
-1. Restrict some hooks that we know the BPF LSM will never need.
-2. A verifier function that checks return values of LSM
-hooks.
-For most LSK hooks IS_ERR_VALUE is fine, however, there are some hooks
-like *xattr hooks that use a return value of 1 to indicate a
-capability check is required which might need special handling.
+Hello,
+Good afternoon and how are you?
+I have an important and favourable information/proposal which might
+interest you to know,
+let me hear from you to detail you, it's important
+Sincerely,
+M.Cheickna
+tourecheickna@consultant.com
