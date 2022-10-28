@@ -2,127 +2,127 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2620C611849
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 Oct 2022 18:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7393561196E
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 Oct 2022 19:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJ1QzZ (ORCPT
+        id S229665AbiJ1Rkl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 28 Oct 2022 12:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
+        Fri, 28 Oct 2022 13:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiJ1QzG (ORCPT
+        with ESMTP id S229802AbiJ1Rkk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:55:06 -0400
-Received: from sonic312-30.consmr.mail.ne1.yahoo.com (sonic312-30.consmr.mail.ne1.yahoo.com [66.163.191.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BBF255BF
-        for <linux-security-module@vger.kernel.org>; Fri, 28 Oct 2022 09:55:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666976104; bh=USvzCPd0E6P3/NEsNOIQjiv0Sgmot1DiPjCpRG3MEgg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=kTgWczZBKKmTTCcrMWIKeczHqSL6W7ojknqxNLBS73o1kPh4tBjGbjI5sLIW+KJ7QxkdZ5Ig3qDJAjlBTcPHkXLiF15mvq0dGwnvvPAcsV5NDOySof5Vxa0t1qa1Oa4LnnTLGHJSmduQ+BidonuB0Qq5YtYxqJ5455E1Tx3ySKVIBQG1xQlczwQYlcmCMX5JFsWlxJzbrCNjdVgZZSRYx9QsqO4rvDQ+Esg6wARco9cJv1jpDgGa28uie5Uyzyzw9lit9+egt/sc04azueir7k/c8JHEk1FkP5M9o6hgY10lXkmt1Usl6kmVWgNVzfBr0vKuUDDeq+ORunqzBqnzuA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666976104; bh=7i1AeYfxky6U0ak/YwqMIr95KFFuFbV2XSjvKqZW6mj=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ZKs//0lgfSvtE5rgrTSoshrlo6yZhaG5pSpIVrbAPoF2+KxlK1wVo2f8I6Ceytx9O+8F5dSL7k4ByiVL3ByMJ4obk7xESCcMhmevQ2PPntfdRZj8a/NcvdQWPlYhCI2T26lqj3/CmS8gIQhhZJR7JuVCf/f6bjquTpbeuK8tcnJADqSfjsrk300hFYE+52d/JQY+kmlcz+HFZM8YGaFn1ND2yOOAPgtCuwun4qSKaQ6CjhgLmFI1eZQwqlWPFouy46VQkdWxKDnfkDzgC70HaZELCIX0BKyfvcT8o9zHJAC8h7zTi0YgVz9PGEFHPr2hHpoKRI4Zj4deMeMTO0H90w==
-X-YMail-OSG: us23g6QVM1lciwlfpT8NDmeF.nnGodquVNNNkwa.BvxLZT_IDTjSOeyprR_KsQz
- 1NsnHJIJ1j_N08ju4x9kWS5eTIHR3oF.1sRYEfbAYuz3TSuRGshgMndV3q4PboWqEI5B51dCMD4y
- lgZyAmyc7lgYkRJe1r9s8kxx7a267Yu2zzIy0NMShM0U0PVs5hYoJGgCsLiCEAvzRVno0L8h0p_E
- cThqNQgKugn4BuFk_mq8l.jXjhBxtn0yKJshBLbCPQ13UE_1aDhy.ubF2Ksl5gYc6NsmQrapKMrY
- pzy2.HQOYhdWbCs_aeepFMQbNq9UEf65TMCpE6ffzHJvgn2Gw0F6XFDKOhIBC0P8OE4XB.DptpeM
- c6eeOF7c23OpHjkhue099GazFbfgTjVk8cfP0xl4sVRrEsanygCaX2MZAMAZjWXoLMtP4C11s11l
- sk9SWq07t9.56bC5RIoAgMZYFui7gI3QOPsZzqP6gvww24bH5JqKX9oShJEiZs4MV6xDhpjYdTVS
- zKagFXKEfbfEMS5TTXa7ALNSVFe16NooPujXApeXHlsfbY4AJ14ZrM.a_RqpfUVZJCYPbTs77NhE
- BCKjqZCz.x0GxLodh3flsd4KAP85XyFsUuZn.QR8nGOHMa0grBrbcT63LaCQGe6KPwwLS0IIGYIO
- 6Y_wRuvhBk6i_vzKq.wwvcIfEByK0JzGlN4.UfejkoslfRA44X4OxZfe8vgOwt.rL1TqJZDujHcE
- hvKxvwph_5LrmU4nzY.XImNaWpVLMpr4pgYtpZt1f.w_G.79Kkm3qBP4rWwrVo7VR2p3Arerhy1J
- iQmA03rWPiW0Hx8xNe0Lf6iIgD9hMmo.MgC6OZQPbvlZR9YIa3v2kl90o2Y9BHvlQr4vwh2c8nT7
- c87VyrWPIB68IBcoomeEEZtqukaguu8xIojPtIXYh.WRNL4d1ysvg3ijfFz6mh3ip4fvqVm3GtXR
- sdXpBrmvNyy9RMQ8jI9vNoQvhoR2ddvddc42hTLIhPhbNN6wDdGcEvCjcUz2dzvpyu.pFJDl7UnX
- .yzoP7k7wmnkBsknIJPm.5m7SCc0UrAttP.6ZHeEUjCldzPVmunFlEveSqji8OGfujlaK43SQMZS
- f2Y2SQA7.43_3el2xg_nE6KsSY7I4xuGo_NUO1EDc3hWPVkbPjatf9ut2vAfLzrF_6og92Q4Ag.h
- etdTCia89cG09c7MGhP_QT5voib4zKQ64ycOQM7RCT47YZab8fKn0CBwOnAgEwc811hyoUXi59Pu
- 7sH86fLfRgF_I0KArHLIvOX19JN_oEZoKtEkj4l6Bx.eH6ba60N3rx71ovF2jjlCKO.fTgpacCSk
- 7L_wH5IsFyHtOaOWfi8oAYZ.4c1BdyXX8GrUCm8Ob4o5IY7X.5ejkt.wTo9F9nGSMvmTRa6AxnVW
- J5DTFtjkLJrprkcUE_h555QIAOLEI8t9z1TGMF_hM4X4Pm0wESM8Au0o7NfBMougUGe53D3V6_.2
- r0A_T_8EjYGjkTc4VEoFifSBzq41yUwt6.svV8SL_rnvPKq2lg45kAGOQxcmj2P7xtYBsVmRqTvw
- tzZWgn1ROor._zbQ.LL0TY8c0s3hdetz2fkd6tsPbHhmTguU5d3Vy4T_jdxzvnqcQdDX4ytq2CHJ
- 4qF6LCeTdT9ieuCYZIWQdUI4Vrf5Tsa_QSHCKLImoDTD3iQa2xqdXTZ4861sRv6wKOLIRPANvMAH
- SRnfz3EW4U909sRpfj7Qi_0E2_f9pRWvlrHY0S8z5iCD9GVLI5Cn5nLapEKb_swTN99uqUoeCH0c
- _iV.terwuSsH5EdaqPnLP5l0NFTxSJK_krrbh69qFHcE03nyAh08.xZTrPNntb40J2jGMeyUY.Pt
- _a2CyAFhyXXS5kPI1Qc9Ik3gNHSl_HXZAASowEleOhmyLmrZMCWMwOJV2vKiJ6IWN47H55Ve6RRd
- vHTBCSIK5PWBR78eaiIu9dcAkm2yl89Fs678I0arJgxKqjuqST_FC2wUY30xLAWD64T0_xo_5V8Y
- pIwf_0M5mSyDQ4vp1AhMoLjPG9pQVdr06lCVNS4cQybCErxd0pDP.MNY6W8kizsTpN3nxsFPGbVa
- fwJGYvgxRB8fYriccbDU7C_wAvf1afPMPe1uSybHGgSzeX.d9lo3F6Vj7_PV8OsjjFUNr8KYysYe
- KV1__ractVmc9OhvHasWVkP1KUeZT_Ixg3kyaubCPiBNpwtySSoCM3CEeoqUEdi3NOfhLWACZLF6
- 9X5FyDLZXgWZncGIa.P5aTQFOj1vgMoKbVQXzkdM5VQrrnAJXeIOl51mOKEJlDJxrXC2T5mf1.Cz
- RdE3OLzSF
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ne1.yahoo.com with HTTP; Fri, 28 Oct 2022 16:55:04 +0000
-Received: by hermes--production-ne1-c47ffd5f5-8c2cz (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a6c42424d120c2ce70fa3921ddc9a513;
-          Fri, 28 Oct 2022 16:55:00 +0000 (UTC)
-Message-ID: <612c169c-2e11-13cf-9742-19714a247152@schaufler-ca.com>
-Date:   Fri, 28 Oct 2022 09:54:59 -0700
+        Fri, 28 Oct 2022 13:40:40 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0138A17FD42
+        for <linux-security-module@vger.kernel.org>; Fri, 28 Oct 2022 10:40:38 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id g62so5343272pfb.10
+        for <linux-security-module@vger.kernel.org>; Fri, 28 Oct 2022 10:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pD8xAs6hz8K/GwlkkWEBIlgMqA6rS7UqF9zh8XCJrDM=;
+        b=lMu/aHyftjQPfPXg/l61M6f9UM3LPnFbqCvJX2fO2zsrz46+GcTb8F3VppNulvG4p7
+         MEEXMMvAc0TpHTAjwW4m2L7QG5Q0xV0573g13vEJ/mHwGKwBdkSTqBZs9LNU59gboJKH
+         UzRU8jX2UQvC1cLNwRFJd80uMuregblbF1mok=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pD8xAs6hz8K/GwlkkWEBIlgMqA6rS7UqF9zh8XCJrDM=;
+        b=Ejc8u0xMgYtijGUObSk0Ayb3JL1oV0PsG0oJ+KLm1dM0pyxMCFHQlrZc83TSiTmhz0
+         f2g0RYjg0pYUKmuf1uacxov0OkRkAXQm/10YwyI9rYemb5lbIacnmqvXxRB3TA3q4jXO
+         9yMAqlR6wTtX5Tk+i9k1qv/8CNCeSsgZKp2vdBd1FWo78FYL5lXDMiIMmmrtT6Xx/Odc
+         DEM8S3pI4to6N/GZJ0y8tgotL/ypSCBKID6rRo10Gy9/Wmyhzks9e5JCeXzUCYBfWJUL
+         dbtwzZ27irgp2ZnrlSLS130+xJFGy6a511UDV9KmmgVgFAelCmT8d/5aaZ0CXkAkRHF4
+         ebcw==
+X-Gm-Message-State: ACrzQf1pi5GLqqanq0VGNaPcQbw8N0xcK7Iqh4OjRQrWvpM0Ds5MpYNg
+        /kq7J6+u3LFqMHMxR7gis8btaA==
+X-Google-Smtp-Source: AMsMyM6DTNw3s9S/F5sJs7fsfz3/GYHCtEIHiJDX19noke49fsc96sZ1X8ywUtxMWK3oLrmdy33pug==
+X-Received: by 2002:a62:b501:0:b0:557:d887:20ee with SMTP id y1-20020a62b501000000b00557d88720eemr394469pfe.8.1666978838423;
+        Fri, 28 Oct 2022 10:40:38 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902f20c00b00186e2123506sm3262526plc.300.2022.10.28.10.40.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 10:40:37 -0700 (PDT)
+Date:   Fri, 28 Oct 2022 10:40:36 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>, linux-audit@redhat.com,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        SElinux list <selinux@vger.kernel.org>
+Subject: Re: LSM stacking in next for 6.1?
+Message-ID: <202210280944.AF75E37DC@keescook>
+References: <ff43e254-0f41-3f4f-f04d-63b76bed2ccf@I-love.SAKURA.ne.jp>
+ <1a9f9182-9188-2f64-4a17-ead2fed70348@schaufler-ca.com>
+ <2225aec6-f0f3-d38e-ee3c-6139a7c25a37@I-love.SAKURA.ne.jp>
+ <5995f18c-5623-9d97-0aa6-5f13a2a8e895@I-love.SAKURA.ne.jp>
+ <77ec837a-ff64-e6f0-fe14-a54c1646ea0b@canonical.com>
+ <0fcc5444-a957-f107-25a1-3540588eab5a@I-love.SAKURA.ne.jp>
+ <CAHC9VhQy91eezWMQ=MoLe3fQSu_Rc+ZUWW2Mm3+78Mr7vS_Z0A@mail.gmail.com>
+ <a0567b10-fa83-50f4-7bf6-937e0c677e60@I-love.SAKURA.ne.jp>
+ <CAHC9VhT2Azg1F-G3RQ4xL7JgA3OAtHafzS1_nvUyEUFsCJ9+SA@mail.gmail.com>
+ <56add81d-0ea7-9d3e-0e30-e0b02e62a8d0@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v1 2/8] LSM: Add an LSM identifier for external use
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     casey.schaufler@intel.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net, casey@schaufler-ca.com
-References: <20221025184519.13231-1-casey@schaufler-ca.com>
- <20221025184519.13231-3-casey@schaufler-ca.com> <Y1jMeWl0oV4/2zyE@kroah.com>
- <5396ab1e-9b93-df33-ca49-58dc59459a76@schaufler-ca.com>
- <Y1olsHWnaEk6+b1L@kroah.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <Y1olsHWnaEk6+b1L@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20783 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56add81d-0ea7-9d3e-0e30-e0b02e62a8d0@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 10/26/2022 11:31 PM, Greg KH wrote:
-> On Wed, Oct 26, 2022 at 12:36:34PM -0700, Casey Schaufler wrote:
->>>> + *
->>>> + * Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
->>>> + * Copyright (C) Intel Corporation
->>> No date for Intel?
->> The latest guidance I have received is that Intel does not want a date.
-> Ok, then I need to have an Intel lawyer sign off on a patch that does
-> this in order to have that be their official statement.  Otherwise, it
-> needs a date.
+On Fri, Oct 28, 2022 at 10:58:30PM +0900, Tetsuo Handa wrote:
+> Do you remember that 10 modules were proposed 
+> 
+>     SimpleFlow ( 2016/04/21 https://lwn.net/Articles/684825/ )
+>     HardChroot ( 2016/07/29 https://lwn.net/Articles/695984/ )
+>     Checmate ( 2016/08/04 https://lwn.net/Articles/696344/ )
+>     LandLock ( 2016/08/25 https://lwn.net/Articles/698226/ )
+>     PTAGS ( 2016/09/29 https://lwn.net/Articles/702639/ )
+>     CaitSith ( 2016/10/21 https://lwn.net/Articles/704262/ )
+>     SafeName ( 2016/05/03 https://lwn.net/Articles/686021/ )
+>     WhiteEgret ( 2017/05/30 https://lwn.net/Articles/724192/ )
+>     shebang ( 2017/06/09 https://lwn.net/Articles/725285/ )
+>     S.A.R.A. ( 2017/06/13 https://lwn.net/Articles/725230/ )
 
-Seems I misunderstood something. The date will be there.
+There was also:
 
->>>> + */
->>>> +
->>>> +#ifndef _UAPI_LINUX_LSM_H
->>>> +#define _UAPI_LINUX_LSM_H
->>>> +
->>>> +/*
->>>> + * ID values to identify security modules.
->>>> + * A system may use more than one security module.
->>>> + *
->>>> + * LSM_ID_XXX values 0 - 31 are reserved for future use
->>> Reserved for what?  Why?
->> You're not the first person to ask.
-> And the answer is?
+      LoadPin ( 2016/04/20 https://lore.kernel.org/lkml/1461192388-13900-1-git-send-email-keescook@chromium.org/ )
+      SafeSetID ( 2018/10/31 https://lore.kernel.org/linux-security-module/20181031152846.234791-1-mortonm@chromium.org/ )
+      BPF ( 2019/09/10 https://lore.kernel.org/linux-security-module/20190910115527.5235-1-kpsingh@chromium.org/ )
 
-There hasn't been an argument for it beyond "just in case".
-I can't see a rational reason to reserve specific numbers as
-I don't see value in LSM ranges.
+So, 13 LSM proposed, 4 landed: roughly 30%, which is on par[1] with regular
+kernel development.
 
->> I'll remove the reserved values for the next version.
-> Because we asked it will be removed?
+> I consider /sbin/insmod-able LSM modules as a compromise/remedy for LSM modules
+> which could not get merged upstream or supported by distributors, for patching and
+> rebuilding the whole kernel in order to use not-yet-upstreamed and/or not-builtin
+> LSMs is already a lot of barrier for users. But requiring a permanent integer in
+> order to use a LSM module is a denial of even patching and rebuilding the whole
+> kernel. That's why I hate this change.
 
-Because I don't have a good reason for including it and it
-has been called into question. If a reviewer has a legitimate
-case for reserved values they may be back.
+But the upstream kernel _does not support APIs for out-of-tree code_. To
+that point, security_add_hooks() is _not exported_, so it is already not
+possible to create a modular LSM without patching the kernel source.
 
-> confused,
->
-> greg k-h
+> I can't understand why assigning a permanent integer identifier is mandatory.
+
+Plenty of other APIs use numeric identifiers: syscalls, prctl, etc. This
+doesn't block them from being upstreamed.
+
+-Kees
+
+[1] https://ieeexplore.ieee.org/abstract/document/6624016
+
+-- 
+Kees Cook
