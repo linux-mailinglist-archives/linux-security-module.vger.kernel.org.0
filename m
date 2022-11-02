@@ -2,31 +2,31 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5E6616A35
-	for <lists+linux-security-module@lfdr.de>; Wed,  2 Nov 2022 18:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416E6616A66
+	for <lists+linux-security-module@lfdr.de>; Wed,  2 Nov 2022 18:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiKBRMS (ORCPT
+        id S230311AbiKBRQu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 2 Nov 2022 13:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        Wed, 2 Nov 2022 13:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbiKBRLh (ORCPT
+        with ESMTP id S231309AbiKBRQi (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:11:37 -0400
+        Wed, 2 Nov 2022 13:16:38 -0400
 Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A7D1D0C3
-        for <linux-security-module@vger.kernel.org>; Wed,  2 Nov 2022 10:11:33 -0700 (PDT)
-Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2A2HAvBv021897;
-        Thu, 3 Nov 2022 02:10:57 +0900 (JST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B98248D2
+        for <linux-security-module@vger.kernel.org>; Wed,  2 Nov 2022 10:16:34 -0700 (PDT)
+Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2A2HG3eC023046;
+        Thu, 3 Nov 2022 02:16:03 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
 Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
- Thu, 03 Nov 2022 02:10:57 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+ by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
+ Thu, 03 Nov 2022 02:16:03 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
 Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
         (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2A2HAnkK021849
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2A2HAnkL021849
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
         Thu, 3 Nov 2022 02:10:57 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
@@ -37,9 +37,9 @@ To:     linux-security-module@vger.kernel.org,
         John Johansen <john.johansen@canonical.com>,
         Kees Cook <kees@kernel.org>
 Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH 09/10] CaitSith: Add garbage collector functions.
-Date:   Thu,  3 Nov 2022 02:10:24 +0900
-Message-Id: <20221102171025.126961-9-penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH 10/10] CaitSith: Add Kconfig and Makefile files.
+Date:   Thu,  3 Nov 2022 02:10:25 +0900
+Message-Id: <20221102171025.126961-10-penguin-kernel@I-love.SAKURA.ne.jp>
 X-Mailer: git-send-email 2.18.4
 In-Reply-To: <20221102171025.126961-1-penguin-kernel@I-love.SAKURA.ne.jp>
 References: <20221102171025.126961-1-penguin-kernel@I-love.SAKURA.ne.jp>
@@ -50,594 +50,184 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This file implements similar functions provided by
-security/tomoyo/gc.c file.
+The point of CaitSith is that you can choose CONFIG_SECURITY_CAITSITH=m .
+But please don't choose CONFIG_SECURITY_CAITSITH_OMIT_USERSPACE_LOADER=y
+unless you understood how to prepare built-in policy configuration.
+If you choose CONFIG_SECURITY_CAITSITH_OMIT_USERSPACE_LOADER=y without
+built-in policy configuration, the kernel will panic().
+
+For more information, please follow instructions at "2.1.6. Install the
+userspace tools" and afterwards in https://caitsith.osdn.jp/index.html .
 
 Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 ---
- security/caitsith/gc.c | 573 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 573 insertions(+)
- create mode 100644 security/caitsith/gc.c
+ security/Kconfig           |   1 +
+ security/Makefile          |   1 +
+ security/caitsith/Kconfig  | 112 +++++++++++++++++++++++++++++++++++++
+ security/caitsith/Makefile |  11 ++++
+ 4 files changed, 125 insertions(+)
+ create mode 100644 security/caitsith/Kconfig
+ create mode 100644 security/caitsith/Makefile
 
-diff --git a/security/caitsith/gc.c b/security/caitsith/gc.c
+diff --git a/security/Kconfig b/security/Kconfig
+index e6db09a779b7..a2f3ba29d63b 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -209,6 +209,7 @@ source "security/lockdown/Kconfig"
+ source "security/landlock/Kconfig"
+ 
+ source "security/integrity/Kconfig"
++source "security/caitsith/Kconfig"
+ 
+ choice
+ 	prompt "First legacy 'major LSM' to be initialized"
+diff --git a/security/Makefile b/security/Makefile
+index 18121f8f85cd..ef03c490e099 100644
+--- a/security/Makefile
++++ b/security/Makefile
+@@ -24,6 +24,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
+ obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
+ obj-$(CONFIG_BPF_LSM)			+= bpf/
+ obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
++obj-$(CONFIG_SECURITY_CAITSITH)		+= caitsith/
+ 
+ # Object integrity file lists
+ obj-$(CONFIG_INTEGRITY)			+= integrity/
+diff --git a/security/caitsith/Kconfig b/security/caitsith/Kconfig
 new file mode 100644
-index 000000000000..85d75f22fa2c
+index 000000000000..0bae4f2d8b7f
 --- /dev/null
-+++ b/security/caitsith/gc.c
-@@ -0,0 +1,573 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * gc.c
-+ *
-+ * Copyright (C) 2005-2012  NTT DATA CORPORATION
-+ *
-+ * Version: 0.2.10   2021/06/06
-+ */
++++ b/security/caitsith/Kconfig
+@@ -0,0 +1,112 @@
++config SECURITY_CAITSITH
++	tristate "CaitSith support"
++	default n
++	help
++	  Say Y or M here to support CaitSith.
++	  https://caitsith.osdn.jp/
 +
-+#include "caitsith.h"
++config SECURITY_CAITSITH_OMIT_USERSPACE_LOADER
++	bool "Activate without calling userspace policy loader."
++	default n
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to activate access control as soon as built-in
++	  policy was loaded. This option will be useful for systems where
++	  operations which can lead to the hijacking of the boot sequence are
++	  needed before loading the policy. For example, you can activate
++	  immediately after loading the fixed part of policy which will allow
++	  only operations needed for mounting a partition which contains the
++	  variant part of policy and verifying (e.g. running GPG check) and
++	  loading the variant part of policy. Since you can start using
++	  enforcing mode from the beginning, you can reduce the possibility of
++	  hijacking the boot sequence.
 +
-+/***** SECTION1: Constants definition *****/
++	  If you say Y to both "Compile as loadable kernel module" option and
++	  "Activate without calling userspace policy loader." option, be sure
++	  to excplicitly load the kernel module from the userspace, for
++	  the kernel will not call /sbin/caitsith-init when /sbin/init starts.
 +
-+/* The list for "struct cs_io_buffer". */
-+static LIST_HEAD(cs_io_buffer_list);
-+/* Lock for protecting cs_io_buffer_list. */
-+static DEFINE_SPINLOCK(cs_io_buffer_list_lock);
++config SECURITY_CAITSITH_POLICY_LOADER
++	string "Location of userspace policy loader"
++	default "/sbin/caitsith-init"
++	depends on SECURITY_CAITSITH
++	depends on !SECURITY_CAITSITH_OMIT_USERSPACE_LOADER
++	help
++	  This is the default pathname of policy loader which is called before
++	  activation. You can override this setting via CS_loader= kernel
++	  command line option.
 +
-+/***** SECTION2: Structure definition *****/
++config SECURITY_CAITSITH_ACTIVATION_TRIGGER
++	string "Trigger for calling userspace policy loader"
++	default "/sbin/init"
++	depends on SECURITY_CAITSITH
++	depends on !SECURITY_CAITSITH_OMIT_USERSPACE_LOADER
++	help
++	  This is the default pathname of activation trigger.
++	  You can override this setting via CS_trigger= kernel command line
++	  option. For example, if you pass init=/bin/systemd option, you may
++	  want to also pass CS_trigger=/bin/systemd option.
 +
-+/***** SECTION3: Prototype definition section *****/
++	  Say Y here if you want to enable only specific functionality in order
++	  to reduce object file size.
 +
-+static bool cs_domain_used_by_task(struct cs_domain_info *domain);
-+static bool cs_name_used_by_io_buffer(const char *string, const size_t size);
-+static bool cs_struct_used_by_io_buffer(const struct list_head *element);
-+static int cs_gc_thread(void *unused);
-+static void cs_collect_acl(struct list_head *list);
-+static void cs_collect_entry(void);
-+static void cs_collect_member(const enum cs_policy_id id,
-+			      struct list_head *member_list);
-+static void cs_try_to_gc(const enum cs_policy_id type,
-+			 struct list_head *element);
++config SECURITY_CAITSITH_READDIR
++	bool "Enable readdir operation restriction."
++	default y
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to enable restriction of opening directories
++	  for reading. Reading directory entries is a commonly requested
++	  operation and damage caused by not restricting it might be acceptable
++	  for you.
 +
-+/***** SECTION4: Standalone functions section *****/
++config SECURITY_CAITSITH_GETATTR
++	bool "Enable getattr operation restriction."
++	default y
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to enable restriction of getting information
++	  of files. Getting file's information is a commonly requested
++	  operation and damage caused by not restricting it might be acceptable
++	  for you.
 +
-+/***** SECTION5: Variables definition section *****/
++config SECURITY_CAITSITH_NETWORK
++	bool "Enable socket operation restriction."
++	default y
++	depends on SECURITY_NETWORK
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to enable restriction of INET/INET6/UNIX
++	  socket's operations.
 +
-+/*
-+ * Lock for syscall users.
-+ *
-+ * This lock is held for only protecting single SRCU section.
-+ */
-+struct srcu_struct cs_ss;
++config SECURITY_CAITSITH_CAPABILITY
++	bool "Enable non-POSIX capability operation restriction."
++	default y
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to enable restriction of non-POSIX
++	  capabilities.
 +
-+/***** SECTION6: Dependent functions section *****/
++config SECURITY_CAITSITH_ENVIRON
++	bool "Enable environment variable names/values restriction."
++	default y
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to enable restriction of environment variable
++	  names/values passed upon program execution request.
 +
-+/**
-+ * cs_struct_used_by_io_buffer - Check whether the list element is used by /sys/kernel/security/caitsith/ users or not.
-+ *
-+ * @element: Pointer to "struct list_head".
-+ *
-+ * Returns true if @element is used by /sys/kernel/security/caitsith/ users,
-+ * false otherwise.
-+ */
-+static bool cs_struct_used_by_io_buffer(const struct list_head *element)
-+{
-+	struct cs_io_buffer *head;
-+	bool in_use = false;
++config SECURITY_CAITSITH_MANUAL_DOMAIN_TRANSITION
++	bool "Enable domain transition without program execution request."
++	default y
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to enable domain transition without involving
++	  program execution request.
 +
-+	spin_lock(&cs_io_buffer_list_lock);
-+	list_for_each_entry(head, &cs_io_buffer_list, list) {
-+		head->users++;
-+		spin_unlock(&cs_io_buffer_list_lock);
-+		mutex_lock(&head->io_sem);
-+		if (head->r.acl == element || head->r.subacl == element ||
-+		    head->r.group == element || &head->w.acl->list == element)
-+			in_use = true;
-+		mutex_unlock(&head->io_sem);
-+		spin_lock(&cs_io_buffer_list_lock);
-+		head->users--;
-+		if (in_use)
-+			break;
-+	}
-+	spin_unlock(&cs_io_buffer_list_lock);
-+	return in_use;
-+}
++config SECURITY_CAITSITH_AUTO_DOMAIN_TRANSITION
++	bool "Enable automatic domain transition."
++	default y
++	depends on SECURITY_CAITSITH
++	help
++	  Say Y here if you want to enable automatic domain transition when
++	  conditions are met.
+diff --git a/security/caitsith/Makefile b/security/caitsith/Makefile
+new file mode 100644
+index 000000000000..4fb86ed45df0
+--- /dev/null
++++ b/security/caitsith/Makefile
+@@ -0,0 +1,11 @@
++caitsith-objs := permission.o gc.o policy_io.o realpath.o lsm.o
++obj-$(CONFIG_SECURITY_CAITSITH) += caitsith.o
 +
-+/**
-+ * cs_name_used_by_io_buffer - Check whether the string is used by /sys/kernel/security/caitsith/ users or not.
-+ *
-+ * @string: String to check.
-+ * @size:   Memory allocated for @string .
-+ *
-+ * Returns true if @string is used by /sys/kernel/security/caitsith/ users,
-+ * false otherwise.
-+ */
-+static bool cs_name_used_by_io_buffer(const char *string, const size_t size)
-+{
-+	struct cs_io_buffer *head;
-+	bool in_use = false;
++targets += builtin-policy.h
++quiet_cmd_policy = Generating built-in policy for CaitSith 0.2.
++cmd_policy = ( echo "static char cs_builtin_policy[] __initdata ="; sed -e 's/\\/\\134/g' -e 's/"/\\"/g' -e 's/\(.*\)/"\1\\n"/'; echo "\"\";" ) < $< > $@
 +
-+	spin_lock(&cs_io_buffer_list_lock);
-+	list_for_each_entry(head, &cs_io_buffer_list, list) {
-+		int i;
++$(obj)/builtin-policy.h: $(wildcard $(obj)/policy.conf $(srctree)/$(src)/policy.conf) /dev/null FORCE
++	$(call if_changed,policy)
 +
-+		head->users++;
-+		spin_unlock(&cs_io_buffer_list_lock);
-+		mutex_lock(&head->io_sem);
-+		for (i = 0; i < CS_MAX_IO_READ_QUEUE; i++) {
-+			const char *w = head->r.w[i];
-+
-+			if (w < string || w > string + size)
-+				continue;
-+			in_use = true;
-+			break;
-+		}
-+		mutex_unlock(&head->io_sem);
-+		spin_lock(&cs_io_buffer_list_lock);
-+		head->users--;
-+		if (in_use)
-+			break;
-+	}
-+	spin_unlock(&cs_io_buffer_list_lock);
-+	return in_use;
-+}
-+
-+/**
-+ * cs_domain_used_by_task - Check whether the given pointer is referenced by a task.
-+ *
-+ * @domain: Pointer to "struct cs_domain_info".
-+ *
-+ * Returns true if @domain is in use, false otherwise.
-+ */
-+static bool cs_domain_used_by_task(struct cs_domain_info *domain)
-+{
-+	bool in_use = false;
-+	/*
-+	 * Don't delete this domain if somebody is doing execve().
-+	 *
-+	 * Since cs_finish_execve() first reverts cs_domain_info and then
-+	 * updates cs_flags, we need smp_rmb() to make sure that GC first
-+	 * checks cs_flags and then checks cs_domain_info.
-+	 */
-+	int idx;
-+
-+	rcu_read_lock();
-+	for (idx = 0; idx < CS_MAX_TASK_SECURITY_HASH; idx++) {
-+		struct cs_security *ptr;
-+		struct list_head *list = &cs_task_security_list[idx];
-+
-+		list_for_each_entry_rcu(ptr, list, list) {
-+			if (!(ptr->cs_flags & CS_TASK_IS_IN_EXECVE)) {
-+				smp_rmb(); /* Avoid out of order execution. */
-+				if (ptr->cs_domain_info != domain)
-+					continue;
-+			}
-+			in_use = true;
-+			goto out;
-+		}
-+	}
-+	in_use = cs_used_by_cred(domain);
-+out:
-+	rcu_read_unlock();
-+	return in_use;
-+}
-+
-+/**
-+ * cs_acl_info_has_sub_acl - Clear "struct cs_acl_info"->acl_info.
-+ *
-+ * @list: Pointer to "struct list_head".
-+ *
-+ * Returns true if @list is not empty, false otherwise.
-+ */
-+static bool cs_acl_info_has_sub_acl(struct list_head *list)
-+{
-+	struct cs_acl_info *acl;
-+	struct cs_acl_info *tmp;
-+
-+	if (list_empty(list))
-+		return false;
-+	mutex_lock(&cs_policy_lock);
-+	list_for_each_entry_safe(acl, tmp, list, list) {
-+		cs_try_to_gc(CS_ID_ACL, &acl->list);
-+	}
-+	mutex_unlock(&cs_policy_lock);
-+	return !list_empty(list);
-+}
-+
-+/**
-+ * cs_del_acl - Delete members in "struct cs_acl_info".
-+ *
-+ * @element: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ */
-+static inline void cs_del_acl(struct list_head *element)
-+{
-+	struct cs_acl_info *acl = container_of(element, typeof(*acl), list);
-+
-+	cs_put_condition(acl->cond);
-+}
-+
-+/**
-+ * cs_del_domain - Delete members in "struct cs_domain_info".
-+ *
-+ * @element: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ *
-+ * Caller holds cs_policy_lock mutex.
-+ */
-+static inline void cs_del_domain(struct list_head *element)
-+{
-+	struct cs_domain_info *domain =
-+		container_of(element, typeof(*domain), list);
-+	cs_put_name(domain->domainname);
-+}
-+
-+/**
-+ * cs_del_string_group - Delete members in "struct cs_string_group".
-+ *
-+ * @element: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ */
-+static inline void cs_del_string_group(struct list_head *element)
-+{
-+	struct cs_string_group *member =
-+		container_of(element, typeof(*member), head.list);
-+	cs_put_name(member->member_name);
-+}
-+
-+/**
-+ * cs_del_group - Delete "struct cs_group".
-+ *
-+ * @element: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ */
-+static inline void cs_del_group(struct list_head *element)
-+{
-+	struct cs_group *group =
-+		container_of(element, typeof(*group), head.list);
-+	cs_put_name(group->group_name);
-+}
-+
-+/**
-+ * cs_del_condition - Delete members in "struct cs_condition".
-+ *
-+ * @element: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ */
-+void cs_del_condition(struct list_head *element)
-+{
-+	struct cs_condition *cond = container_of(element, typeof(*cond),
-+						 head.list);
-+	const union cs_condition_element *condp = (typeof(condp)) (cond + 1);
-+
-+	while ((void *) condp < (void *) ((u8 *) cond) + cond->size) {
-+		const enum cs_conditions_index left = condp->left;
-+		const enum cs_conditions_index right = condp->right;
-+
-+		condp++;
-+		if (left == CS_ARGV_ENTRY)
-+			condp++;
-+		else if (left == CS_ENVP_ENTRY) {
-+			cs_put_name(condp->path);
-+			condp++;
-+		}
-+		if (right == CS_IMM_GROUP) {
-+			cs_put_group(condp->group);
-+			condp++;
-+		} else if (right == CS_IMM_NAME_ENTRY) {
-+			if (condp->path != &cs_null_name)
-+				cs_put_name(condp->path);
-+			condp++;
-+		} else if (right == CS_IMM_NUMBER_ENTRY1)
-+			condp++;
-+		else if (right == CS_IMM_NUMBER_ENTRY2)
-+			condp += 2;
-+#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
-+		else if (right == CS_IMM_IPV6ADDR_ENTRY1)
-+			condp = (void *)
-+				(((u8 *) condp) + sizeof(struct in6_addr));
-+		else if (right == CS_IMM_IPV6ADDR_ENTRY2)
-+			condp = (void *)
-+				(((u8 *) condp) + sizeof(struct in6_addr) * 2);
-+#endif
-+	}
-+}
-+
-+/**
-+ * cs_try_to_gc - Try to kfree() an entry.
-+ *
-+ * @type:    One of values in "enum cs_policy_id".
-+ * @element: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ *
-+ * Caller holds cs_policy_lock mutex.
-+ */
-+static void cs_try_to_gc(const enum cs_policy_id type,
-+			 struct list_head *element)
-+{
-+	/*
-+	 * __list_del_entry() guarantees that the list element became no longer
-+	 * reachable from the list which the element was originally on (e.g.
-+	 * cs_domain_list). Also, synchronize_srcu() guarantees that the list
-+	 * element became no longer referenced by syscall users.
-+	 */
-+	__list_del_entry(element);
-+	mutex_unlock(&cs_policy_lock);
-+	synchronize_srcu(&cs_ss);
-+	/*
-+	 * However, there are two users which may still be using the list
-+	 * element. We need to defer until both users forget this element.
-+	 *
-+	 * Don't kfree() until "struct cs_io_buffer"->r.{group,acl,subacl} and
-+	 * "struct cs_io_buffer"->w.acl forget this element.
-+	 */
-+	if (cs_struct_used_by_io_buffer(element))
-+		goto reinject;
-+	switch (type) {
-+	case CS_ID_GROUP:
-+		cs_del_group(element);
-+		break;
-+	case CS_ID_STRING_GROUP:
-+		cs_del_string_group(element);
-+		break;
-+	case CS_ID_CONDITION:
-+		cs_del_condition(element);
-+		break;
-+	case CS_ID_NAME:
-+		/*
-+		 * Don't kfree() until all "struct cs_io_buffer"->r.w[] forget
-+		 * this element.
-+		 */
-+		if (cs_name_used_by_io_buffer
-+		    (container_of(element, typeof(struct cs_name),
-+				  head.list)->entry.name,
-+		     container_of(element, typeof(struct cs_name),
-+				  head.list)->size))
-+			goto reinject;
-+		break;
-+	case CS_ID_ACL:
-+		/*
-+		 * Don't kfree() until "struct cs_acl_info"->acl_info_list
-+		 * becomes empty.
-+		 */
-+		if (cs_acl_info_has_sub_acl
-+		    (&container_of(element, typeof(struct cs_acl_info),
-+				   list)->acl_info_list))
-+			goto reinject;
-+		cs_del_acl(element);
-+		break;
-+	case CS_ID_DOMAIN:
-+		/*
-+		 * Don't kfree() until all "struct task_struct" forget this
-+		 * element.
-+		 */
-+		if (cs_domain_used_by_task
-+		    (container_of(element, typeof(struct cs_domain_info),
-+				  list)))
-+			goto reinject;
-+		cs_del_domain(element);
-+		break;
-+	default:
-+		break;
-+	}
-+	mutex_lock(&cs_policy_lock);
-+	cs_memory_used[CS_MEMORY_POLICY] -= ksize(element);
-+	kfree(element);
-+	return;
-+reinject:
-+	/*
-+	 * We can safely reinject this element here because
-+	 * (1) Appending list elements and removing list elements are protected
-+	 *     by cs_policy_lock mutex.
-+	 * (2) Only this function removes list elements and this function is
-+	 *     exclusively executed by cs_gc_mutex mutex.
-+	 * are true.
-+	 */
-+	mutex_lock(&cs_policy_lock);
-+	list_add_rcu(element, element->prev);
-+}
-+
-+/**
-+ * cs_collect_member - Delete elements with "struct cs_acl_head".
-+ *
-+ * @id:          One of values in "enum cs_policy_id".
-+ * @member_list: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ *
-+ * Caller holds cs_policy_lock mutex.
-+ */
-+static void cs_collect_member(const enum cs_policy_id id,
-+			      struct list_head *member_list)
-+{
-+	struct cs_acl_head *member;
-+	struct cs_acl_head *tmp;
-+
-+	list_for_each_entry_safe(member, tmp, member_list, list) {
-+		if (!member->is_deleted)
-+			continue;
-+		member->is_deleted = CS_GC_IN_PROGRESS;
-+		cs_try_to_gc(id, &member->list);
-+	}
-+}
-+
-+/**
-+ * cs_collect_acl - Delete elements in "struct cs_acl_info".
-+ *
-+ * @list: Pointer to "struct list_head".
-+ *
-+ * Returns nothing.
-+ *
-+ * Caller holds cs_policy_lock mutex.
-+ */
-+static void cs_collect_acl(struct list_head *list)
-+{
-+	struct cs_acl_info *acl;
-+	struct cs_acl_info *tmp;
-+
-+	list_for_each_entry_safe(acl, tmp, list, list) {
-+		if (!acl->is_deleted)
-+			continue;
-+		cs_try_to_gc(CS_ID_ACL, &acl->list);
-+	}
-+}
-+
-+/**
-+ * cs_collect_entry - Try to kfree() deleted elements.
-+ *
-+ * Returns nothing.
-+ */
-+static void cs_collect_entry(void)
-+{
-+	int i;
-+
-+	mutex_lock(&cs_policy_lock);
-+	{
-+		struct cs_domain_info *domain;
-+		struct cs_domain_info *tmp;
-+
-+		list_for_each_entry_safe(domain, tmp, &cs_domain_list, list) {
-+			if (domain == &cs_kernel_domain ||
-+			    cs_domain_used_by_task(domain))
-+				continue;
-+			cs_try_to_gc(CS_ID_DOMAIN, &domain->list);
-+		}
-+	}
-+	for (i = 0; i < CS_MAX_MAC_INDEX; i++) {
-+		struct cs_acl_info *ptr;
-+		struct cs_acl_info *tmp;
-+		struct list_head * const list = &cs_acl_list[i];
-+
-+		list_for_each_entry_safe(ptr, tmp, list, list) {
-+			cs_collect_acl(&ptr->acl_info_list);
-+			if (!ptr->is_deleted)
-+				continue;
-+			/* ptr->is_deleted = CS_GC_IN_PROGRESS; */
-+			cs_try_to_gc(CS_ID_ACL, &ptr->list);
-+		}
-+	}
-+	{
-+		struct cs_shared_acl_head *ptr;
-+		struct cs_shared_acl_head *tmp;
-+
-+		list_for_each_entry_safe(ptr, tmp, &cs_condition_list, list) {
-+			if (atomic_read(&ptr->users) > 0)
-+				continue;
-+			atomic_set(&ptr->users, CS_GC_IN_PROGRESS);
-+			cs_try_to_gc(CS_ID_CONDITION, &ptr->list);
-+		}
-+	}
-+	for (i = 0; i < CS_MAX_GROUP; i++) {
-+		struct list_head *list = &cs_group_list[i];
-+		struct cs_group *group;
-+		struct cs_group *tmp;
-+		enum cs_policy_id id = CS_ID_STRING_GROUP;
-+
-+		if (i == CS_NUMBER_GROUP)
-+			id = CS_ID_NUMBER_GROUP;
-+#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
-+		else if (i == CS_IP_GROUP)
-+			id = CS_ID_IP_GROUP;
-+#endif
-+		list_for_each_entry_safe(group, tmp, list, head.list) {
-+			cs_collect_member(id, &group->member_list);
-+			if (!list_empty(&group->member_list) ||
-+			    atomic_read(&group->head.users) > 0)
-+				continue;
-+			atomic_set(&group->head.users, CS_GC_IN_PROGRESS);
-+			cs_try_to_gc(CS_ID_GROUP, &group->head.list);
-+		}
-+	}
-+	for (i = 0; i < CS_MAX_HASH; i++) {
-+		struct list_head *list = &cs_name_list[i];
-+		struct cs_shared_acl_head *ptr;
-+		struct cs_shared_acl_head *tmp;
-+
-+		list_for_each_entry_safe(ptr, tmp, list, list) {
-+			if (atomic_read(&ptr->users) > 0)
-+				continue;
-+			atomic_set(&ptr->users, CS_GC_IN_PROGRESS);
-+			cs_try_to_gc(CS_ID_NAME, &ptr->list);
-+		}
-+	}
-+	mutex_unlock(&cs_policy_lock);
-+}
-+
-+/**
-+ * cs_gc_thread - Garbage collector thread function.
-+ *
-+ * @unused: Unused.
-+ *
-+ * Returns 0.
-+ */
-+static int cs_gc_thread(void *unused)
-+{
-+	/* Garbage collector thread is exclusive. */
-+	static DEFINE_MUTEX(cs_gc_mutex);
-+
-+	if (!mutex_trylock(&cs_gc_mutex))
-+		goto out;
-+	cs_collect_entry();
-+	{
-+		struct cs_io_buffer *head;
-+		struct cs_io_buffer *tmp;
-+
-+		spin_lock(&cs_io_buffer_list_lock);
-+		list_for_each_entry_safe(head, tmp, &cs_io_buffer_list,
-+					 list) {
-+			if (head->users)
-+				continue;
-+			list_del(&head->list);
-+			kfree(head->read_buf);
-+			kfree(head->write_buf);
-+			kfree(head);
-+		}
-+		spin_unlock(&cs_io_buffer_list_lock);
-+	}
-+	mutex_unlock(&cs_gc_mutex);
-+out:
-+	/* This acts as do_exit(0). */
-+	return 0;
-+}
-+
-+/**
-+ * cs_notify_gc - Register/unregister /sys/kernel/security/caitsith/ users.
-+ *
-+ * @head:        Pointer to "struct cs_io_buffer".
-+ * @is_register: True if register, false if unregister.
-+ *
-+ * Returns nothing.
-+ */
-+void cs_notify_gc(struct cs_io_buffer *head, const bool is_register)
-+{
-+	bool is_write = false;
-+
-+	spin_lock(&cs_io_buffer_list_lock);
-+	if (is_register) {
-+		head->users = 1;
-+		list_add(&head->list, &cs_io_buffer_list);
-+	} else {
-+		is_write = head->write_buf != NULL;
-+		if (!--head->users) {
-+			list_del(&head->list);
-+			kfree(head->read_buf);
-+			kfree(head->write_buf);
-+			kfree(head);
-+		}
-+	}
-+	spin_unlock(&cs_io_buffer_list_lock);
-+	if (is_write) {
-+		struct task_struct *task = kthread_create(cs_gc_thread, NULL,
-+							  "CaitSith's GC");
-+		if (!IS_ERR(task))
-+			wake_up_process(task);
-+	}
-+}
++$(obj)/policy_io.o: $(obj)/builtin-policy.h
 -- 
 2.18.4
 
