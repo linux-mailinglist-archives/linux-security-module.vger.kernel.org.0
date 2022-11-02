@@ -2,22 +2,22 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441CF616A3A
-	for <lists+linux-security-module@lfdr.de>; Wed,  2 Nov 2022 18:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DB9616A3D
+	for <lists+linux-security-module@lfdr.de>; Wed,  2 Nov 2022 18:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiKBRMU (ORCPT
+        id S230320AbiKBRMY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 2 Nov 2022 13:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        Wed, 2 Nov 2022 13:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbiKBRLn (ORCPT
+        with ESMTP id S231143AbiKBRLx (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:11:43 -0400
+        Wed, 2 Nov 2022 13:11:53 -0400
 Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E6D1A068
-        for <linux-security-module@vger.kernel.org>; Wed,  2 Nov 2022 10:11:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BAF1B9C4
+        for <linux-security-module@vger.kernel.org>; Wed,  2 Nov 2022 10:11:50 -0700 (PDT)
 Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2A2HAt4H021875;
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2A2HAtn7021880;
         Thu, 3 Nov 2022 02:10:55 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
 Received: from www262.sakura.ne.jp (202.181.97.72)
@@ -26,7 +26,7 @@ Received: from www262.sakura.ne.jp (202.181.97.72)
 X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
 Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
         (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2A2HAnkF021849
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2A2HAnkG021849
         (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
         Thu, 3 Nov 2022 02:10:55 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
@@ -37,9 +37,9 @@ To:     linux-security-module@vger.kernel.org,
         John Johansen <john.johansen@canonical.com>,
         Kees Cook <kees@kernel.org>
 Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH 04/10] CaitSith: Add header file.
-Date:   Thu,  3 Nov 2022 02:10:19 +0900
-Message-Id: <20221102171025.126961-4-penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH 05/10] CaitSith: Add LSM interface management file.
+Date:   Thu,  3 Nov 2022 02:10:20 +0900
+Message-Id: <20221102171025.126961-5-penguin-kernel@I-love.SAKURA.ne.jp>
 X-Mailer: git-send-email 2.18.4
 In-Reply-To: <20221102171025.126961-1-penguin-kernel@I-love.SAKURA.ne.jp>
 References: <20221102171025.126961-1-penguin-kernel@I-love.SAKURA.ne.jp>
@@ -50,953 +50,1381 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The main point of this submission is to demonstrate how an LSM module
-which can be loaded using /sbin/insmod can work, and to provide
-consideration points for making changes for LSM stacking in a way that
-will not lock out LSM modules which can be loaded using /sbin/insmod .
-
-CaitSith was developed as next version of TOMOYO. But since it became
-too different to call as TOMOYO (this was a fundamental change as if
-SELinux stops using filesystem's extended attributes), I gave this module
-a new name. Background of developing this module is explained in
-https://I-love.SAKURA.ne.jp/tomoyo/CaitSith-en.pdf .
-
-This file defines constants, structures, and inline functions used by
-CaitSith. Please ignore redundancy, for this submission is just an output
- from repository which supports 2.6.27+ kernels with LINUX_VERSION_CODE
-removed.
+This file is used for registering CaitSith module into the
+security_hook_heads list. Further patches will not be interesting for
+reviewers, for further patches are providing similar functions provided
+by TOMOYO (but too different to share the code).
 
 Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 ---
- security/caitsith/caitsith.h | 919 +++++++++++++++++++++++++++++++++++
- 1 file changed, 919 insertions(+)
- create mode 100644 security/caitsith/caitsith.h
+ security/caitsith/lsm.c | 1358 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 1358 insertions(+)
+ create mode 100644 security/caitsith/lsm.c
 
-diff --git a/security/caitsith/caitsith.h b/security/caitsith/caitsith.h
+diff --git a/security/caitsith/lsm.c b/security/caitsith/lsm.c
 new file mode 100644
-index 000000000000..b85050d2d5e3
+index 000000000000..1a487b4021c6
 --- /dev/null
-+++ b/security/caitsith/caitsith.h
-@@ -0,0 +1,919 @@
++++ b/security/caitsith/lsm.c
+@@ -0,0 +1,1358 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * caitsith.h
++ * lsm.c
 + *
-+ * Copyright (C) 2005-2012  NTT DATA CORPORATION
++ * Copyright (C) 2010-2013  Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 + *
 + * Version: 0.2.10   2021/06/06
 + */
 +
-+#ifndef _SECURITY_CAITSITH_INTERNAL_H
-+#define _SECURITY_CAITSITH_INTERNAL_H
++#include "caitsith.h"
++#include <linux/lsm_hooks.h>
 +
-+#include <linux/types.h>
-+#include <linux/kernel.h>
-+#include <linux/string.h>
-+#include <linux/mm.h>
-+#include <linux/utime.h>
-+#include <linux/file.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/slab.h>
-+#include <linux/highmem.h>
-+#include <linux/poll.h>
-+#include <linux/binfmts.h>
-+#include <linux/delay.h>
-+#include <linux/sched.h>
-+#include <linux/dcache.h>
-+#include <linux/mount.h>
-+#include <linux/net.h>
-+#include <linux/inet.h>
-+#include <linux/in.h>
-+#include <linux/in6.h>
-+#include <linux/un.h>
-+#include <linux/namei.h>
-+#include <linux/fs_struct.h>
-+#include <linux/hash.h>
-+#include <linux/kthread.h>
-+#include <linux/magic.h>
-+#include <linux/uaccess.h>
-+#include <linux/sched/signal.h>
-+#include <net/sock.h>
-+#include <net/af_unix.h>
-+#include <net/ip.h>
-+#include <net/ipv6.h>
-+#include <net/udp.h>
-+#include <linux/ctype.h>
-+#include <linux/magic.h>
-+#include <uapi/linux/mount.h>
-+#include <linux/uidgid.h>
++/* Prototype definition. */
++static int __cs_alloc_task_security(const struct task_struct *task);
++static void __cs_free_task_security(const struct task_struct *task);
 +
-+/* Index numbers for Capability Controls. */
-+enum cs_capability_acl_index {
-+	/* socket(PF_ROUTE, *, *)                                      */
-+	CS_USE_ROUTE_SOCKET,
-+	/* socket(PF_PACKET, *, *)                                     */
-+	CS_USE_PACKET_SOCKET,
-+	CS_MAX_CAPABILITY_INDEX
++/* Dummy security context for avoiding NULL pointer dereference. */
++static struct cs_security cs_oom_security = {
++	.cs_domain_info = &cs_kernel_domain
 +};
 +
-+/* Enumeration definition for internal use. */
++/* Dummy security context for avoiding NULL pointer dereference. */
++static struct cs_security cs_default_security = {
++	.cs_domain_info = &cs_kernel_domain
++};
 +
-+/* Index numbers for "struct cs_condition". */
-+enum cs_conditions_index {
-+	CS_INVALID_CONDITION,
-+	CS_SELF_UID,             /* current_uid()   */
-+	CS_SELF_EUID,            /* current_euid()  */
-+	CS_SELF_SUID,            /* current_suid()  */
-+	CS_SELF_FSUID,           /* current_fsuid() */
-+	CS_SELF_GID,             /* current_gid()   */
-+	CS_SELF_EGID,            /* current_egid()  */
-+	CS_SELF_SGID,            /* current_sgid()  */
-+	CS_SELF_FSGID,           /* current_fsgid() */
-+	CS_SELF_PID,             /* sys_getpid()   */
-+	CS_SELF_PPID,            /* sys_getppid()  */
-+	CS_SELF_DOMAIN,
-+	CS_SELF_EXE,
-+	CS_EXEC_ARGC,            /* "struct linux_binprm *"->argc */
-+	CS_EXEC_ENVC,            /* "struct linux_binprm *"->envc */
-+	CS_OBJ_IS_SOCKET,        /* S_IFSOCK */
-+	CS_OBJ_IS_SYMLINK,       /* S_IFLNK */
-+	CS_OBJ_IS_FILE,          /* S_IFREG */
-+	CS_OBJ_IS_BLOCK_DEV,     /* S_IFBLK */
-+	CS_OBJ_IS_DIRECTORY,     /* S_IFDIR */
-+	CS_OBJ_IS_CHAR_DEV,      /* S_IFCHR */
-+	CS_OBJ_IS_FIFO,          /* S_IFIFO */
-+	CS_MODE_SETUID,          /* S_ISUID */
-+	CS_MODE_SETGID,          /* S_ISGID */
-+	CS_MODE_STICKY,          /* S_ISVTX */
-+	CS_MODE_OWNER_READ,      /* S_IRUSR */
-+	CS_MODE_OWNER_WRITE,     /* S_IWUSR */
-+	CS_MODE_OWNER_EXECUTE,   /* S_IXUSR */
-+	CS_MODE_GROUP_READ,      /* S_IRGRP */
-+	CS_MODE_GROUP_WRITE,     /* S_IWGRP */
-+	CS_MODE_GROUP_EXECUTE,   /* S_IXGRP */
-+	CS_MODE_OTHERS_READ,     /* S_IROTH */
-+	CS_MODE_OTHERS_WRITE,    /* S_IWOTH */
-+	CS_MODE_OTHERS_EXECUTE,  /* S_IXOTH */
-+	CS_TRANSIT_DOMAIN,
-+	CS_COND_SARG0,
-+	CS_COND_SARG1,
-+	CS_COND_SARG2,
-+	CS_COND_SARG3,
-+	CS_COND_NARG0,
-+	CS_COND_NARG1,
-+	CS_COND_NARG2,
-+	CS_COND_IPARG,
-+	CS_COND_DOMAIN,
-+	CS_IMM_GROUP,
-+	CS_IMM_NAME_ENTRY,
-+	CS_IMM_NUMBER_ENTRY1,
-+	CS_IMM_NUMBER_ENTRY2,
-+#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
-+	CS_IMM_IPV4ADDR_ENTRY1,
-+	CS_IMM_IPV4ADDR_ENTRY2,
-+	CS_IMM_IPV6ADDR_ENTRY1,
-+	CS_IMM_IPV6ADDR_ENTRY2,
++/* List of "struct cs_security". */
++struct list_head cs_task_security_list[CS_MAX_TASK_SECURITY_HASH];
++/* Lock for protecting cs_task_security_list[]. */
++static DEFINE_SPINLOCK(cs_task_security_list_lock);
++
++/* Original hooks. */
++static union security_list_options original_cred_prepare;
++static union security_list_options original_task_alloc;
++static union security_list_options original_task_free;
++
++#if !defined(CONFIG_SECURITY_CAITSITH_DEBUG)
++#define cs_debug_trace(pos) do { } while (0)
++#else
++#define cs_debug_trace(pos)						\
++	do {								\
++		static bool done;					\
++		if (!done) {						\
++			pr_info("CAITSITH: Debug trace: " pos " of 2\n"); \
++			done = true;					\
++		}							\
++	} while (0)
 +#endif
-+	CS_ARGV_ENTRY,
-+	CS_ENVP_ENTRY,
-+	CS_PATH_ATTRIBUTE_START = 192,
-+	CS_PATH_ATTRIBUTE_END = 255
-+} __packed;
 +
-+enum cs_path_attribute_index {
-+	CS_PATH_ATTRIBUTE_UID,
-+	CS_PATH_ATTRIBUTE_GID,
-+	CS_PATH_ATTRIBUTE_INO,
-+	CS_PATH_ATTRIBUTE_TYPE,
-+	CS_PATH_ATTRIBUTE_MAJOR,
-+	CS_PATH_ATTRIBUTE_MINOR,
-+	CS_PATH_ATTRIBUTE_PERM,
-+	CS_PATH_ATTRIBUTE_DEV_MAJOR,
-+	CS_PATH_ATTRIBUTE_DEV_MINOR,
-+	CS_PATH_ATTRIBUTE_FSMAGIC,
-+	CS_MAX_PATH_ATTRIBUTE
-+} __packed;
++/**
++ * cs_clear_execve - Release memory used by do_execve().
++ *
++ * @ret:      0 if do_execve() succeeded, negative value otherwise.
++ * @security: Pointer to "struct cs_security".
++ *
++ * Returns nothing.
++ */
++static void cs_clear_execve(int ret, struct cs_security *security)
++{
++	struct cs_request_info *r = security->r;
 +
-+/* Index numbers for group entries. */
-+enum cs_group_id {
-+	CS_STRING_GROUP,
-+	CS_NUMBER_GROUP,
-+#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
-+	CS_IP_GROUP,
++	if (security == &cs_default_security || security == &cs_oom_security ||
++	    !r)
++		return;
++	security->r = NULL;
++	cs_finish_execve(ret, r);
++}
++
++/**
++ * cs_task_alloc_security - Allocate memory for new tasks.
++ *
++ * @p: Pointer to "struct task_struct".
++ * @clone_flags: Flags passed to clone().
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_task_alloc_security(struct task_struct *p,
++				   unsigned long clone_flags)
++{
++	int rc = __cs_alloc_task_security(p);
++
++	if (rc)
++		return rc;
++	if (original_task_alloc.task_alloc) {
++		rc = original_task_alloc.task_alloc(p, clone_flags);
++		if (rc)
++			__cs_free_task_security(p);
++	}
++	return rc;
++}
++
++/**
++ * cs_task_free_security - Release memory for "struct task_struct".
++ *
++ * @p: Pointer to "struct task_struct".
++ *
++ * Returns nothing.
++ */
++static void cs_task_free_security(struct task_struct *p)
++{
++	struct cs_security *ptr = cs_find_task_security(p);
++	struct cs_request_info *r = ptr->r;
++
++	if (original_task_free.task_free)
++		original_task_free.task_free(p);
++	/*
++	 * Since an LSM hook for reverting domain transition is missing,
++	 * cs_finish_execve() is not called if exited immediately after
++	 * execve() failed.
++	 */
++	if (r) {
++		cs_debug_trace("2");
++		kfree(r);
++		ptr->r = NULL;
++	}
++	__cs_free_task_security(p);
++}
++
++/**
++ * __cs_free_task_security - Release memory associated with "struct task_struct".
++ *
++ * @task: Pointer to "struct task_struct".
++ *
++ * Returns nothing.
++ */
++static void __cs_free_task_security(const struct task_struct *task)
++{
++	unsigned long flags;
++	struct cs_security *ptr = cs_find_task_security(task);
++
++	if (ptr == &cs_default_security || ptr == &cs_oom_security)
++		return;
++	spin_lock_irqsave(&cs_task_security_list_lock, flags);
++	list_del_rcu(&ptr->list);
++	spin_unlock_irqrestore(&cs_task_security_list_lock, flags);
++	kfree_rcu(ptr, rcu);
++}
++
++/**
++ * cs_cred_prepare - Allocate memory for new credentials.
++ *
++ * @new: Pointer to "struct cred".
++ * @old: Pointer to "struct cred".
++ * @gfp: Memory allocation flags.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_cred_prepare(struct cred *new, const struct cred *old,
++			   gfp_t gfp)
++{
++	/*
++	 * For checking whether reverting domain transition is needed or not.
++	 *
++	 * See cs_find_task_security() for reason.
++	 */
++	if (gfp == GFP_KERNEL)
++		cs_find_task_security(current);
++	if (original_cred_prepare.cred_prepare)
++		return original_cred_prepare.cred_prepare(new, old, gfp);
++	return 0;
++}
++
++/**
++ * cs_bprm_committing_creds - A hook which is called when do_execve() succeeded.
++ *
++ * @bprm: Pointer to "struct linux_binprm".
++ *
++ * Returns nothing.
++ */
++static void cs_bprm_committing_creds(struct linux_binprm *bprm)
++{
++	cs_clear_execve(0, cs_current_security());
++}
++
++#ifndef CONFIG_SECURITY_CAITSITH_OMIT_USERSPACE_LOADER
++
++/**
++ * cs_policy_loader_exists - Check whether /sbin/caitsith-init exists.
++ *
++ * Returns true if /sbin/caitsith-init exists, false otherwise.
++ */
++static _Bool cs_policy_loader_exists(void)
++{
++	struct path path;
++
++	if (kern_path(CONFIG_SECURITY_CAITSITH_POLICY_LOADER, LOOKUP_FOLLOW, &path)
++	    == 0) {
++		path_put(&path);
++		return 1;
++	}
++	pr_info("Not activating CaitSith as %s does not exist.\n",
++		CONFIG_SECURITY_CAITSITH_POLICY_LOADER);
++	return 0;
++}
++
++/**
++ * cs_load_policy - Run external policy loader to load policy.
++ *
++ * @filename: The program about to start.
++ *
++ * Returns nothing.
++ *
++ * This function checks whether @filename is /sbin/init, and if so
++ * invoke /sbin/caitsith-init and wait for the termination of
++ * /sbin/caitsith-init and then continues invocation of /sbin/init.
++ * /sbin/caitsith-init reads policy files in /etc/caitsith/ directory and
++ * writes to /sys/kernel/security/caitsith/ interfaces.
++ */
++static void cs_load_policy(const char *filename)
++{
++	static _Bool done;
++
++	if (done)
++		return;
++	if (strcmp(filename, CONFIG_SECURITY_CAITSITH_ACTIVATION_TRIGGER))
++		return;
++	if (!cs_policy_loader_exists())
++		return;
++	done = 1;
++	{
++		char *argv[2];
++		char *envp[3];
++
++		pr_info("Calling %s to load policy. Please wait.\n",
++			CONFIG_SECURITY_CAITSITH_POLICY_LOADER);
++		argv[0] = (char *) CONFIG_SECURITY_CAITSITH_POLICY_LOADER;
++		argv[1] = NULL;
++		envp[0] = "HOME=/";
++		envp[1] = "PATH=/sbin:/bin:/usr/sbin:/usr/bin";
++		envp[2] = NULL;
++		call_usermodehelper(argv[0], argv, envp, UMH_WAIT_PROC);
++	}
++	cs_check_profile();
++}
++
 +#endif
-+	CS_MAX_GROUP
-+} __packed;
 +
-+/* Index numbers for functionality. */
-+enum cs_mac_index {
-+	CS_MAC_EXECUTE,
-+	CS_MAC_READ,
-+	CS_MAC_WRITE,
-+	CS_MAC_APPEND,
-+	CS_MAC_CREATE,
-+	CS_MAC_UNLINK,
++/**
++ * cs_bprm_check_security - Check permission for execve().
++ *
++ * @bprm: Pointer to "struct linux_binprm".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_bprm_check_security(struct linux_binprm *bprm)
++{
++	struct cs_security *security = cs_current_security();
++
++	if (security == &cs_default_security || security == &cs_oom_security)
++		return -ENOMEM;
++	if (security->r)
++		return 0;
++#ifndef CONFIG_SECURITY_CAITSITH_OMIT_USERSPACE_LOADER
++	if (!cs_policy_loaded)
++		cs_load_policy(bprm->filename);
++#endif
++	return cs_start_execve(bprm, &security->r);
++}
++
++/**
++ * cs_file_open - Check permission for open().
++ *
++ * @f:    Pointer to "struct file".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_file_open(struct file *f)
++{
++	return cs_open_permission(&f->f_path, f->f_flags);
++}
++
++#ifdef CONFIG_SECURITY_PATH
++
++/**
++ * cs_path_chown - Check permission for chown()/chgrp().
++ *
++ * @path:  Pointer to "struct path".
++ * @user:  User ID.
++ * @group: Group ID.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_chown(const struct path *path, kuid_t user, kgid_t group)
++{
++	return cs_chown_permission(path, user, group);
++}
++
++/**
++ * cs_path_chmod - Check permission for chmod().
++ *
++ * @path: Pointer to "struct path".
++ * @mode: Mode.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_chmod(const struct path *path, umode_t mode)
++{
++	return cs_chmod_permission(path, mode);
++}
++
++/**
++ * cs_path_chroot - Check permission for chroot().
++ *
++ * @path: Pointer to "struct path".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_chroot(const struct path *path)
++{
++	return cs_chroot_permission(path);
++}
++
++/**
++ * cs_path_truncate - Check permission for truncate().
++ *
++ * @path: Pointer to "struct path".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_truncate(const struct path *path)
++{
++	return cs_truncate_permission(path);
++}
++
++#else
++
++/**
++ * cs_inode_setattr - Check permission for chown()/chgrp()/chmod()/truncate().
++ *
++ * @dentry: Pointer to "struct dentry".
++ * @attr:   Pointer to "struct iattr".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_setattr(struct dentry *dentry, struct iattr *attr)
++{
++	int rc = 0;
++	struct path path = { .mnt = NULL, .dentry = dentry };
++
++	if (attr->ia_valid & ATTR_UID)
++		rc = cs_chown_permission(&path, attr->ia_uid, INVALID_GID);
++	if (!rc && (attr->ia_valid & ATTR_GID))
++		rc = cs_chown_permission(&path, INVALID_UID, attr->ia_gid);
++	if (!rc && (attr->ia_valid & ATTR_MODE))
++		rc = cs_chmod_permission(&path, attr->ia_mode);
++	if (!rc && (attr->ia_valid & ATTR_SIZE))
++		rc = cs_truncate_permission(&path);
++	return rc;
++}
++
++#endif
++
 +#ifdef CONFIG_SECURITY_CAITSITH_GETATTR
-+	CS_MAC_GETATTR,
++
++/**
++ * cs_inode_getattr - Check permission for stat().
++ *
++ * @path: Pointer to "struct path".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_getattr(const struct path *path)
++{
++	return cs_getattr_permission(path);
++}
++
 +#endif
-+	CS_MAC_MKDIR,
-+	CS_MAC_RMDIR,
-+	CS_MAC_MKFIFO,
-+	CS_MAC_MKSOCK,
-+	CS_MAC_TRUNCATE,
-+	CS_MAC_SYMLINK,
-+	CS_MAC_MKBLOCK,
-+	CS_MAC_MKCHAR,
-+	CS_MAC_LINK,
-+	CS_MAC_RENAME,
-+	CS_MAC_CHMOD,
-+	CS_MAC_CHOWN,
-+	CS_MAC_CHGRP,
-+	CS_MAC_IOCTL,
-+	CS_MAC_CHROOT,
-+	CS_MAC_MOUNT,
-+	CS_MAC_UMOUNT,
-+	CS_MAC_PIVOT_ROOT,
++
++#ifdef CONFIG_SECURITY_PATH
++
++/**
++ * cs_path_mknod - Check permission for mknod().
++ *
++ * @dir:    Pointer to "struct path".
++ * @dentry: Pointer to "struct dentry".
++ * @mode:   Create mode.
++ * @dev:    Device major/minor number.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_mknod(const struct path *dir, struct dentry *dentry,
++			 umode_t mode, unsigned int dev)
++{
++	struct path path = { .mnt = dir->mnt, .dentry = dentry };
++
++	return cs_mknod_permission(&path, mode, dev);
++}
++
++/**
++ * cs_path_mkdir - Check permission for mkdir().
++ *
++ * @dir:    Pointer to "struct path".
++ * @dentry: Pointer to "struct dentry".
++ * @mode:   Create mode.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_mkdir(const struct path *dir, struct dentry *dentry,
++			 umode_t mode)
++{
++	struct path path = { .mnt = dir->mnt, .dentry = dentry };
++
++	return cs_mkdir_permission(&path, mode);
++}
++
++/**
++ * cs_path_rmdir - Check permission for rmdir().
++ *
++ * @dir:    Pointer to "struct path".
++ * @dentry: Pointer to "struct dentry".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_rmdir(const struct path *dir, struct dentry *dentry)
++{
++	struct path path = { .mnt = dir->mnt, .dentry = dentry };
++
++	return cs_rmdir_permission(&path);
++}
++
++/**
++ * cs_path_unlink - Check permission for unlink().
++ *
++ * @dir:    Pointer to "struct path".
++ * @dentry: Pointer to "struct dentry".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_unlink(const struct path *dir, struct dentry *dentry)
++{
++	struct path path = { .mnt = dir->mnt, .dentry = dentry };
++
++	return cs_unlink_permission(&path);
++}
++
++/**
++ * cs_path_symlink - Check permission for symlink().
++ *
++ * @dir:      Pointer to "struct path".
++ * @dentry:   Pointer to "struct dentry".
++ * @old_name: Content of symbolic link.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_symlink(const struct path *dir, struct dentry *dentry,
++			   const char *old_name)
++{
++	struct path path = { .mnt = dir->mnt, .dentry = dentry };
++
++	return cs_symlink_permission(&path, old_name);
++}
++
++/**
++ * cs_path_rename - Check permission for rename().
++ *
++ * @old_dir:    Pointer to "struct path".
++ * @old_dentry: Pointer to "struct dentry".
++ * @new_dir:    Pointer to "struct path".
++ * @new_dentry: Pointer to "struct dentry".
++ * @flags:      Rename flags.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_rename(const struct path *old_dir,
++			  struct dentry *old_dentry,
++			  const struct path *new_dir,
++			  struct dentry *new_dentry,
++			  const unsigned int flags)
++{
++	struct path old = { .mnt = old_dir->mnt, .dentry = old_dentry };
++	struct path new = { .mnt = new_dir->mnt, .dentry = new_dentry };
++
++	if (flags & RENAME_EXCHANGE) {
++		const int err = cs_rename_permission(&new, &old);
++
++		if (err)
++			return err;
++	}
++	return cs_rename_permission(&old, &new);
++}
++
++/**
++ * cs_path_link - Check permission for link().
++ *
++ * @old_dentry: Pointer to "struct dentry".
++ * @new_dir:    Pointer to "struct path".
++ * @new_dentry: Pointer to "struct dentry".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_path_link(struct dentry *old_dentry, const struct path *new_dir,
++			struct dentry *new_dentry)
++{
++	struct path old = { .mnt = new_dir->mnt, .dentry = old_dentry };
++	struct path new = { .mnt = new_dir->mnt, .dentry = new_dentry };
++
++	return cs_link_permission(&old, &new);
++}
++
++#else
++
++/**
++ * cs_inode_mknod - Check permission for mknod().
++ *
++ * @dir:    Pointer to "struct inode".
++ * @dentry: Pointer to "struct dentry".
++ * @mode:   Create mode.
++ * @dev:    Device major/minor number.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_mknod(struct inode *dir, struct dentry *dentry,
++			  umode_t mode, dev_t dev)
++{
++	struct path path = { .mnt = NULL, .dentry = dentry };
++
++	return cs_mknod_permission(&path, mode, dev);
++}
++
++/**
++ * cs_inode_mkdir - Check permission for mkdir().
++ *
++ * @dir:    Pointer to "struct inode".
++ * @dentry: Pointer to "struct dentry".
++ * @mode:   Create mode.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_mkdir(struct inode *dir, struct dentry *dentry,
++			  umode_t mode)
++{
++	struct path path = { .mnt = NULL, .dentry = dentry };
++
++	return cs_mkdir_permission(&path, mode);
++}
++
++/**
++ * cs_inode_rmdir - Check permission for rmdir().
++ *
++ * @dir:    Pointer to "struct inode".
++ * @dentry: Pointer to "struct dentry".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_rmdir(struct inode *dir, struct dentry *dentry)
++{
++	struct path path = { .mnt = NULL, .dentry = dentry };
++
++	return cs_rmdir_permission(&path);
++}
++
++/**
++ * cs_inode_unlink - Check permission for unlink().
++ *
++ * @dir:    Pointer to "struct inode".
++ * @dentry: Pointer to "struct dentry".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_unlink(struct inode *dir, struct dentry *dentry)
++{
++	struct path path = { .mnt = NULL, .dentry = dentry };
++
++	return cs_unlink_permission(&path);
++}
++
++/**
++ * cs_inode_symlink - Check permission for symlink().
++ *
++ * @dir:      Pointer to "struct inode".
++ * @dentry:   Pointer to "struct dentry".
++ * @old_name: Content of symbolic link.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_symlink(struct inode *dir, struct dentry *dentry,
++			    const char *old_name)
++{
++	struct path path = { .mnt = NULL, .dentry = dentry };
++
++	return cs_symlink_permission(&path, old_name);
++}
++
++/**
++ * cs_inode_rename - Check permission for rename().
++ *
++ * @old_dir:    Pointer to "struct inode".
++ * @old_dentry: Pointer to "struct dentry".
++ * @new_dir:    Pointer to "struct inode".
++ * @new_dentry: Pointer to "struct dentry".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_rename(struct inode *old_dir, struct dentry *old_dentry,
++			   struct inode *new_dir, struct dentry *new_dentry)
++{
++	struct path old = { .mnt = NULL, .dentry = old_dentry };
++	struct path new = { .mnt = NULL, .dentry = new_dentry };
++
++	return cs_rename_permission(&old, &new);
++}
++
++/**
++ * cs_inode_link - Check permission for link().
++ *
++ * @old_dentry: Pointer to "struct dentry".
++ * @dir:        Pointer to "struct inode".
++ * @new_dentry: Pointer to "struct dentry".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_link(struct dentry *old_dentry, struct inode *dir,
++			 struct dentry *new_dentry)
++{
++	struct path old = { .mnt = NULL, .dentry = old_dentry };
++	struct path new = { .mnt = NULL, .dentry = new_dentry };
++
++	return cs_link_permission(&old, &new);
++}
++
++/**
++ * cs_inode_create - Check permission for creat().
++ *
++ * @dir:    Pointer to "struct inode".
++ * @dentry: Pointer to "struct dentry".
++ * @mode:   Create mode.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_inode_create(struct inode *dir, struct dentry *dentry,
++			   umode_t mode)
++{
++	struct path path = { .mnt = NULL, .dentry = dentry };
++
++	return cs_mknod_permission(&path, mode, 0);
++}
++
++#endif
++
 +#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
-+	CS_MAC_INET_STREAM_BIND,
-+	CS_MAC_INET_STREAM_LISTEN,
-+	CS_MAC_INET_STREAM_CONNECT,
-+	CS_MAC_INET_STREAM_ACCEPT,
-+	CS_MAC_INET_DGRAM_BIND,
-+	CS_MAC_INET_DGRAM_SEND,
-+	CS_MAC_INET_RAW_BIND,
-+	CS_MAC_INET_RAW_SEND,
-+	CS_MAC_UNIX_STREAM_BIND,
-+	CS_MAC_UNIX_STREAM_LISTEN,
-+	CS_MAC_UNIX_STREAM_CONNECT,
-+	CS_MAC_UNIX_STREAM_ACCEPT,
-+	CS_MAC_UNIX_DGRAM_BIND,
-+	CS_MAC_UNIX_DGRAM_SEND,
-+	CS_MAC_UNIX_SEQPACKET_BIND,
-+	CS_MAC_UNIX_SEQPACKET_LISTEN,
-+	CS_MAC_UNIX_SEQPACKET_CONNECT,
-+	CS_MAC_UNIX_SEQPACKET_ACCEPT,
-+#endif
-+#ifdef CONFIG_SECURITY_CAITSITH_ENVIRON
-+	CS_MAC_ENVIRON,
-+#endif
-+	CS_MAC_MODIFY_POLICY,
-+#ifdef CONFIG_SECURITY_CAITSITH_CAPABILITY
-+	CS_MAC_USE_NETLINK_SOCKET,
-+	CS_MAC_USE_PACKET_SOCKET,
-+#endif
-+#ifdef CONFIG_SECURITY_CAITSITH_AUTO_DOMAIN_TRANSITION
-+	CS_MAC_AUTO_DOMAIN_TRANSITION,
-+#endif
-+#ifdef CONFIG_SECURITY_CAITSITH_MANUAL_DOMAIN_TRANSITION
-+	CS_MAC_MANUAL_DOMAIN_TRANSITION,
-+#endif
-+	CS_MAX_MAC_INDEX,
-+	/* Map undefined functions to CS_MAX_MAC_INDEX */
-+#ifndef CONFIG_SECURITY_CAITSITH_GETATTR
-+	CS_MAC_GETATTR = CS_MAX_MAC_INDEX,
-+#endif
-+#ifndef CONFIG_SECURITY_CAITSITH_NETWORK
-+	CS_MAC_INET_STREAM_BIND = CS_MAX_MAC_INDEX,
-+	CS_MAC_INET_STREAM_LISTEN = CS_MAX_MAC_INDEX,
-+	CS_MAC_INET_STREAM_CONNECT = CS_MAX_MAC_INDEX,
-+	CS_MAC_INET_STREAM_ACCEPT = CS_MAX_MAC_INDEX,
-+	CS_MAC_INET_DGRAM_BIND = CS_MAX_MAC_INDEX,
-+	CS_MAC_INET_DGRAM_SEND = CS_MAX_MAC_INDEX,
-+	CS_MAC_INET_RAW_BIND = CS_MAX_MAC_INDEX,
-+	CS_MAC_INET_RAW_SEND = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_STREAM_BIND = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_STREAM_LISTEN = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_STREAM_CONNECT = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_STREAM_ACCEPT = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_DGRAM_BIND = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_DGRAM_SEND = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_SEQPACKET_BIND = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_SEQPACKET_LISTEN = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_SEQPACKET_CONNECT = CS_MAX_MAC_INDEX,
-+	CS_MAC_UNIX_SEQPACKET_ACCEPT = CS_MAX_MAC_INDEX,
-+#endif
-+#ifndef CONFIG_SECURITY_CAITSITH_ENVIRON
-+	CS_MAC_ENVIRON = CS_MAX_MAC_INDEX,
-+#endif
-+#ifndef CONFIG_SECURITY_CAITSITH_CAPABILITY
-+	CS_MAC_USE_NETLINK_SOCKET = CS_MAX_MAC_INDEX,
-+	CS_MAC_USE_PACKET_SOCKET = CS_MAX_MAC_INDEX,
-+#endif
-+#ifndef CONFIG_SECURITY_CAITSITH_AUTO_DOMAIN_TRANSITION
-+	CS_MAC_AUTO_DOMAIN_TRANSITION = CS_MAX_MAC_INDEX,
-+#endif
-+#ifndef CONFIG_SECURITY_CAITSITH_MANUAL_DOMAIN_TRANSITION
-+	CS_MAC_MANUAL_DOMAIN_TRANSITION = CS_MAX_MAC_INDEX,
-+#endif
-+} __packed;
 +
-+/* Index numbers for statistic information. */
-+enum cs_memory_stat_type {
-+	CS_MEMORY_POLICY,
-+	CS_MEMORY_AUDIT,
-+	CS_MEMORY_QUERY,
-+	CS_MAX_MEMORY_STAT
-+} __packed;
++#include <net/sock.h>
 +
-+enum cs_matching_result {
-+	CS_MATCHING_UNMATCHED,
-+	CS_MATCHING_ALLOWED,
-+	CS_MATCHING_DENIED,
-+	CS_MAX_MATCHING
-+} __packed;
-+
-+/* Index numbers for stat(). */
-+enum cs_path_stat_index {
-+	/* Do not change this order. */
-+	CS_PATH1,
-+	CS_PATH1_PARENT,
-+	CS_PATH2,
-+	CS_PATH2_PARENT,
-+	CS_MAX_PATH_STAT
-+} __packed;
-+
-+/* Index numbers for entry type. */
-+enum cs_policy_id {
-+	CS_ID_GROUP,
-+#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
-+	CS_ID_IP_GROUP,
-+#endif
-+	CS_ID_STRING_GROUP,
-+	CS_ID_NUMBER_GROUP,
-+	CS_ID_CONDITION,
-+	CS_ID_NAME,
-+	CS_ID_ACL,
-+	CS_ID_DOMAIN,
-+	CS_MAX_POLICY
-+} __packed;
-+
-+/* Index numbers for statistic information. */
-+enum cs_policy_stat_type {
-+	CS_STAT_POLICY_UPDATES,
-+	CS_STAT_REQUEST_DENIED,
-+	CS_MAX_POLICY_STAT
-+} __packed;
-+
-+/* Index numbers for /sys/kernel/security/caitsith/ interfaces. */
-+enum cs_securityfs_interface_index {
-+	CS_POLICY,
-+	CS_PROCESS_STATUS,
-+	CS_AUDIT,
-+	CS_VERSION,
-+	CS_QUERY,
-+} __packed;
-+
-+/* Index numbers for special mount operations. */
-+enum cs_special_mount {
-+	CS_MOUNT_BIND,            /* mount --bind /source /dest   */
-+	CS_MOUNT_MOVE,            /* mount --move /old /new       */
-+	CS_MOUNT_REMOUNT,         /* mount -o remount /dir        */
-+	CS_MOUNT_MAKE_UNBINDABLE, /* mount --make-unbindable /dir */
-+	CS_MOUNT_MAKE_PRIVATE,    /* mount --make-private /dir    */
-+	CS_MOUNT_MAKE_SLAVE,      /* mount --make-slave /dir      */
-+	CS_MOUNT_MAKE_SHARED,     /* mount --make-shared /dir     */
-+	CS_MAX_SPECIAL_MOUNT
-+} __packed;
-+
-+/* Index numbers for type of numeric values. */
-+enum cs_value_type {
-+	CS_VALUE_TYPE_INVALID,
-+	CS_VALUE_TYPE_DECIMAL,
-+	CS_VALUE_TYPE_OCTAL,
-+	CS_VALUE_TYPE_HEXADECIMAL,
-+} __packed;
-+
-+/* Constants definition for internal use. */
-+
-+/*
-+ * CaitSith uses this hash only when appending a string into the string table.
-+ * Frequency of appending strings is very low. So we don't need large (e.g.
-+ * 64k) hash size. 256 will be sufficient.
-+ */
-+#define CS_HASH_BITS 8
-+#define CS_MAX_HASH (1u << CS_HASH_BITS)
-+
-+/*
-+ * CaitSith checks only SOCK_STREAM, SOCK_DGRAM, SOCK_RAW, SOCK_SEQPACKET.
-+ * Therefore, we don't need SOCK_MAX.
-+ */
-+#define CS_SOCK_MAX 6
-+
-+/* Size of temporary buffer for execve() operation. */
-+#define CS_EXEC_TMPSIZE     4096
-+
-+/* Patterns for auditing logs quota. */
-+#define CS_MAX_LOG_QUOTA 256
-+
-+/* Garbage collector is trying to kfree() this element. */
-+#define CS_GC_IN_PROGRESS -1
-+
-+/* Current thread is doing open(3) ? */
-+#define CS_OPEN_FOR_IOCTL_ONLY           2
-+/* Current thread is doing do_execve() ? */
-+#define CS_TASK_IS_IN_EXECVE             4
-+/*
-+ * Current thread is allowed to modify policy via
-+ * /sys/kernel/security/caitsith/ interface?
-+ */
-+#define CS_TASK_IS_MANAGER               8
-+
-+/*
-+ * Retry this request. Returned by cs_supervisor() if policy violation has
-+ * occurred in enforcing mode and the userspace daemon decided to retry.
-+ *
-+ * We must choose a positive value in order to distinguish "granted" (which is
-+ * 0) and "rejected" (which is a negative value) and "retry".
-+ */
-+#define CS_RETRY_REQUEST 1
-+
-+/* Size of read buffer for /sys/kernel/security/caitsith/ interface. */
-+#define CS_MAX_IO_READ_QUEUE 64
-+
-+/* Structure definition for internal use. */
-+
-+/* Common header for holding ACL entries. */
-+struct cs_acl_head {
++/* Structure for remembering an accept()ed socket's status. */
++struct cs_socket_tag {
 +	struct list_head list;
-+	s8 is_deleted; /* true or false or CS_GC_IN_PROGRESS */
-+} __packed;
-+
-+/* Common header for shared entries. */
-+struct cs_shared_acl_head {
-+	struct list_head list;
-+	atomic_t users;
-+} __packed;
-+
-+/* Common header for individual entries. */
-+struct cs_acl_info {
-+	struct list_head list;
-+	struct list_head acl_info_list;
-+	struct cs_condition *cond; /* Maybe NULL. */
-+	bool is_deleted;
-+	bool is_deny;
-+	u16 priority;
-+	u8 audit;
-+};
-+
-+/* Structure for "string_group"/"number_group"/"ip_group" directive. */
-+struct cs_group {
-+	struct cs_shared_acl_head head;
-+	/* Name of group (without leading "@"). */
-+	const struct cs_path_info *group_name;
-+	/*
-+	 * List of "struct cs_string_group" or "struct cs_number_group" or
-+	 * "struct cs_ip_group".
-+	 */
-+	struct list_head member_list;
-+};
-+
-+/* Structure for "string_group" directive. */
-+struct cs_string_group {
-+	struct cs_acl_head head;
-+	const struct cs_path_info *member_name;
-+};
-+
-+/* Structure for "number_group" directive. */
-+struct cs_number_group {
-+	struct cs_acl_head head;
-+	u8 radix;
-+	unsigned long value[2];
-+};
-+
-+/* Structure for "ip_group" directive. */
-+struct cs_ip_group {
-+	struct cs_acl_head head;
-+	bool is_ipv6;
-+	/* Structure for holding an IP address. */
-+	struct in6_addr ip[2]; /* Big endian. */
-+};
-+
-+/* Subset of "struct stat". Used by conditional ACL and audit logs. */
-+struct cs_mini_stat {
-+	kuid_t uid;
-+	kgid_t gid;
-+	ino_t ino;
-+	umode_t mode;
-+	dev_t dev;
-+	dev_t rdev;
-+	unsigned long fsmagic;
-+};
-+
-+/* Structure for dumping argv[] and envp[] of "struct linux_binprm". */
-+struct cs_page_dump {
-+	struct page *page;    /* Previously dumped page. */
-+	char *data;           /* Contents of "page". Size is PAGE_SIZE. */
-+};
-+
-+/* Structure for entries which follows "struct cs_condition". */
-+union cs_condition_element {
-+	struct {
-+		enum cs_conditions_index left;
-+		enum cs_conditions_index right;
-+		bool is_not;
-+		u8 radix;
-+	};
-+	struct cs_group *group;
-+	const struct cs_path_info *path;
-+	u32 ip; /* Repeat 4 times if IPv6 address. */
-+	unsigned long value;
-+};
-+
-+/* Structure for optional arguments. */
-+struct cs_condition {
-+	struct cs_shared_acl_head head;
-+	u32 size; /* Memory size allocated for this entry. */
-+	/* union cs_condition_element condition[]; */
-+};
-+
-+/* Structure for holding a token. */
-+struct cs_path_info {
-+	const char *name;
-+	u32 hash;          /* = full_name_hash(name, strlen(name)) */
-+	u32 total_len;     /* = strlen(name)                       */
-+	u32 const_len;     /* = cs_const_part_length(name)        */
-+};
-+
-+/* Structure for request info. */
-+struct cs_request_info {
-+	/* For holding parameters. */
-+	struct cs_request_param {
-+		const struct cs_path_info *s[4];
-+		unsigned long i[3];
-+#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
-+		const u8 *ip; /* Big endian. */
-+		bool is_ipv6;
-+#endif
-+	} param;
-+	/* For holding pathnames and attributes. */
-+	struct {
-+		/*
-+		 * True if cs_get_attributes() was already called, false
-+		 * otherwise.
-+		 */
-+		bool validate_done;
-+		/* True if @stat[] is valid. */
-+		bool stat_valid[CS_MAX_PATH_STAT];
-+		/* Pointer to file objects. */
-+		struct path path[2];
-+		/*
-+		 * Information on @path[0], @path[0]'s parent directory,
-+		 * @path[1] and @path[1]'s parent directory.
-+		 */
-+		struct cs_mini_stat stat[CS_MAX_PATH_STAT];
-+		/*
-+		 * Name of @path[0] and @path[1].
-+		 * Cleared by cs_clear_request_info().
-+		 */
-+		struct cs_path_info pathname[2];
-+	} obj;
-+	struct {
-+		struct linux_binprm *bprm;
-+		struct cs_domain_info *previous_domain;
-+		/* For dumping argv[] and envp[]. */
-+		struct cs_page_dump dump;
-+		/* For temporary use. Size is CS_EXEC_TMPSIZE bytes. */
-+		char *tmp;
-+	};
-+	/*
-+	 * Name of current thread's executable.
-+	 * Cleared by cs_clear_request_info().
-+	 */
-+	struct cs_path_info exename;
-+	/*
-+	 * Matching "struct cs_acl_info" is copied. Used for caitsith-queryd.
-+	 * Valid until cs_read_unlock().
-+	 */
-+	struct cs_acl_info *matched_acl;
-+	/*
-+	 * Matching domain transition is copied.
-+	 * Valid until cs_read_unlock().
-+	 */
-+	const struct cs_path_info *transition;
-+	const struct cs_path_info *transition_candidate;
-+	/*
-+	 * For holding operation index used for this request.
-+	 * One of values in "enum cs_mac_index".
-+	 */
-+	enum cs_mac_index type;
-+	/* For holding matching result. */
-+	enum cs_matching_result result;
-+	/*
-+	 * For counting number of retries made for this request.
-+	 * This counter is incremented whenever cs_supervisor() returned
-+	 * CS_RETRY_REQUEST.
-+	 */
-+	u8 retry;
-+	/* For holding max audit log count for this matching entry. */
-+	u8 audit;
-+	/*
-+	 * Set to true if condition could not be checked due to out of memory.
-+	 * This flag is used for returning out of memory flag back to
-+	 * cs_check_acl_list(). Thus, this flag will not be set if out of
-+	 * memory occurred before cs_check_acl_list() is called.
-+	 */
-+	bool failed_by_oom;
-+};
-+
-+/* Structure for domain information. */
-+struct cs_domain_info {
-+	struct list_head list;
-+	/* Name of this domain. Never NULL. */
-+	const struct cs_path_info *domainname;
-+};
-+
-+/* Structure for holding string data. */
-+struct cs_name {
-+	struct cs_shared_acl_head head;
-+	int size; /* Memory size allocated for this entry. */
-+	struct cs_path_info entry;
-+};
-+
-+/*
-+ * Structure for reading/writing policy via /sys/kernel/security/caitsith/
-+ * interfaces.
-+ */
-+struct cs_io_buffer {
-+	/* Exclusive lock for this structure.   */
-+	struct mutex io_sem;
-+	char __user *read_user_buf;
-+	size_t read_user_buf_avail;
-+	struct {
-+		struct list_head *group;
-+		struct list_head *acl;
-+		struct list_head *subacl;
-+		const union cs_condition_element *cond;
-+		size_t avail;
-+		unsigned int step;
-+		unsigned int query_index;
-+		u16 index;
-+		u8 cond_step;
-+		u8 w_pos;
-+		enum cs_mac_index acl_index;
-+		bool eof;
-+		bool print_this_acl_only;
-+		bool version_done;
-+		bool stat_done;
-+		bool quota_done;
-+		bool group_done;
-+		const char *w[CS_MAX_IO_READ_QUEUE];
-+	} r;
-+	struct {
-+		char *data;
-+		struct cs_acl_info *acl;
-+		size_t avail;
-+		enum cs_mac_index acl_index;
-+		bool is_delete;
-+		bool is_deny;
-+		u16 priority;
-+	} w;
-+	/* Buffer for reading.                  */
-+	char *read_buf;
-+	/* Size of read buffer.                 */
-+	size_t readbuf_size;
-+	/* Buffer for writing.                  */
-+	char *write_buf;
-+	/* Size of write buffer.                */
-+	size_t writebuf_size;
-+	/* Type of interface. */
-+	enum cs_securityfs_interface_index type;
-+	/* Users counter protected by cs_io_buffer_list_lock. */
-+	u8 users;
-+	/* List for telling GC not to kfree() elements. */
-+	struct list_head list;
-+};
-+
-+/* Structure for representing YYYY/MM/DD hh/mm/ss. */
-+struct cs_time {
-+	u16 year;
-+	u8 month;
-+	u8 day;
-+	u8 hour;
-+	u8 min;
-+	u8 sec;
-+};
-+
-+/* Prototype definition for internal use. */
-+
-+int __init cs_init_module(void);
-+void cs_check_profile(void);
-+bool cs_dump_page(struct linux_binprm *bprm, unsigned long pos,
-+		  struct cs_page_dump *dump);
-+bool cs_get_exename(struct cs_path_info *buf);
-+bool cs_manager(void);
-+bool cs_transit_domain(const char *domainname);
-+char *cs_encode(const char *str);
-+char *cs_encode2(const char *str, int str_len);
-+char *cs_realpath(const struct path *path);
-+char *cs_get_exe(void);
-+int cs_audit_log(struct cs_request_info *r);
-+int cs_check_acl(struct cs_request_info *r, const bool clear);
-+void cs_del_condition(struct list_head *element);
-+void cs_fill_path_info(struct cs_path_info *ptr);
-+void cs_get_attributes(struct cs_request_info *r);
-+void cs_notify_gc(struct cs_io_buffer *head, const bool is_register);
-+void cs_populate_patharg(struct cs_request_info *r, const bool first);
-+void cs_transition_failed(const char *domainname);
-+void cs_warn_oom(const char *function);
-+int cs_chroot_permission(const struct path *path);
-+int cs_chmod_permission(const struct path *path, mode_t mode);
-+int cs_chown_permission(const struct path *path, kuid_t user, kgid_t group);
-+int cs_fcntl_permission(struct file *file, unsigned int cmd,
-+			unsigned long arg);
-+int cs_ioctl_permission(struct file *filp, unsigned int cmd,
-+			unsigned long arg);
-+int cs_link_permission(const struct path *old, const struct path *new);
-+int cs_mkdir_permission(const struct path *path, unsigned int mode);
-+int cs_mknod_permission(const struct path *path, const unsigned int mode,
-+			unsigned int dev);
-+int cs_mount_permission(const char *dev_name, const struct path *path,
-+			const char *type, unsigned long flags,
-+			void *data_page);
-+int cs_move_mount_permission(const struct path *from_path,
-+			     const struct path *to_path);
-+int cs_pivot_root_permission(const struct path *old_path,
-+			     const struct path *new_path);
-+int cs_rename_permission(const struct path *old, const struct path *new);
-+int cs_symlink_permission(const struct path *path, const char *from);
-+int cs_truncate_permission(const struct path *path);
-+int cs_umount_permission(const struct path *path, int flags);
-+int cs_unlink_permission(const struct path *path);
-+int cs_socket_create_permission(int family, int type, int protocol);
-+int cs_socket_bind_permission(struct socket *sock, struct sockaddr *addr,
-+			      int addr_len);
-+int cs_socket_connect_permission(struct socket *sock, struct sockaddr *addr,
-+				 int addr_len);
-+int cs_socket_listen_permission(struct socket *sock);
-+int cs_socket_post_accept_permission(struct socket *sock,
-+				     struct socket *newsock);
-+int cs_socket_sendmsg_permission(struct socket *sock,
-+				 struct msghdr *msg, int size);
-+int cs_rmdir_permission(const struct path *path);
-+int cs_getattr_permission(const struct path *path);
-+bool cs_capable(const u8 operation);
-+int cs_open_permission(const struct path *path, const int flag);
-+
-+/* Variable definition for internal use. */
-+
-+extern bool cs_policy_loaded;
-+extern struct cs_domain_info cs_kernel_domain;
-+extern struct cs_path_info cs_null_name;
-+extern struct list_head cs_acl_list[CS_MAX_MAC_INDEX];
-+extern struct list_head cs_condition_list;
-+extern struct list_head cs_domain_list;
-+extern struct list_head cs_group_list[CS_MAX_GROUP];
-+extern struct list_head cs_name_list[CS_MAX_HASH];
-+extern struct mutex cs_policy_lock;
-+extern struct srcu_struct cs_ss;
-+extern unsigned int cs_memory_used[CS_MAX_MEMORY_STAT];
-+
-+/* Inlined functions for internal use. */
-+
-+/**
-+ * cs_pathcmp - strcmp() for "struct cs_path_info" structure.
-+ *
-+ * @a: Pointer to "struct cs_path_info".
-+ * @b: Pointer to "struct cs_path_info".
-+ *
-+ * Returns true if @a != @b, false otherwise.
-+ */
-+static inline bool cs_pathcmp(const struct cs_path_info *a,
-+			      const struct cs_path_info *b)
-+{
-+	return a->hash != b->hash || strcmp(a->name, b->name);
-+}
-+
-+/**
-+ * cs_read_lock - Take lock for protecting policy.
-+ *
-+ * Returns index number for cs_read_unlock().
-+ */
-+static inline int cs_read_lock(void)
-+{
-+	return srcu_read_lock(&cs_ss);
-+}
-+
-+/**
-+ * cs_read_unlock - Release lock for protecting policy.
-+ *
-+ * @idx: Index number returned by cs_read_lock().
-+ *
-+ * Returns nothing.
-+ */
-+static inline void cs_read_unlock(const int idx)
-+{
-+	srcu_read_unlock(&cs_ss, idx);
-+}
-+
-+/**
-+ * cs_sys_getppid - Copy of getppid().
-+ *
-+ * Returns parent process's PID.
-+ *
-+ * Alpha does not have getppid() defined. To be able to build this module on
-+ * Alpha, I have to copy getppid() from kernel/timer.c.
-+ */
-+static inline pid_t cs_sys_getppid(void)
-+{
-+	pid_t pid;
-+
-+	rcu_read_lock();
-+	pid = task_tgid_vnr(rcu_dereference(current->real_parent));
-+	rcu_read_unlock();
-+	return pid;
-+}
-+
-+/**
-+ * cs_sys_getpid - Copy of getpid().
-+ *
-+ * Returns current thread's PID.
-+ *
-+ * Alpha does not have getpid() defined. To be able to build this module on
-+ * Alpha, I have to copy getpid() from kernel/timer.c.
-+ */
-+static inline pid_t cs_sys_getpid(void)
-+{
-+	return task_tgid_vnr(current);
-+}
-+
-+/**
-+ * cs_put_condition - Drop reference on "struct cs_condition".
-+ *
-+ * @cond: Pointer to "struct cs_condition". Maybe NULL.
-+ *
-+ * Returns nothing.
-+ */
-+static inline void cs_put_condition(struct cs_condition *cond)
-+{
-+	if (cond)
-+		atomic_dec(&cond->head.users);
-+}
-+
-+/**
-+ * cs_put_group - Drop reference on "struct cs_group".
-+ *
-+ * @group: Pointer to "struct cs_group". Maybe NULL.
-+ *
-+ * Returns nothing.
-+ */
-+static inline void cs_put_group(struct cs_group *group)
-+{
-+	if (group)
-+		atomic_dec(&group->head.users);
-+}
-+
-+/**
-+ * cs_put_name - Drop reference on "struct cs_name".
-+ *
-+ * @name: Pointer to "struct cs_path_info". Maybe NULL.
-+ *
-+ * Returns nothing.
-+ */
-+static inline void cs_put_name(const struct cs_path_info *name)
-+{
-+	if (name)
-+		atomic_dec(&container_of(name, struct cs_name, entry)->
-+			   head.users);
-+}
-+
-+/*
-+ * Structure for holding "struct cs_domain_info *" and "u32 cs_flags" for
-+ * each "struct task_struct".
-+ *
-+ * "struct cs_domain_info *" and "u32 cs_flags" for each "struct task_struct"
-+ * are maintained outside that "struct task_struct". Therefore, cs_security
-+ * != task_struct . This keeps KABI for distributor's prebuilt kernels but
-+ * entails slow access.
-+ *
-+ * Memory for this structure is allocated when current thread tries to access
-+ * it. Therefore, if memory allocation failed, current thread will be killed by
-+ * SIGKILL. Note that if current->pid == 1, sending SIGKILL won't work.
-+ */
-+struct cs_security {
-+	struct list_head list;
-+	const struct task_struct *task;
-+	struct cs_domain_info *cs_domain_info;
-+	u32 cs_flags;
-+	struct cs_request_info *r; /* Maybe NULL. */
++	struct inode *inode;
++	int status;
 +	struct rcu_head rcu;
 +};
 +
-+void __init cs_main_init(void);
-+bool cs_used_by_cred(const struct cs_domain_info *domain);
-+int cs_start_execve(struct linux_binprm *bprm, struct cs_request_info **rp);
-+void cs_finish_execve(int retval, struct cs_request_info *r);
-+int cs_sysctl_permission(enum cs_mac_index type,
-+			 const struct cs_path_info *filename);
-+
-+#define CS_TASK_SECURITY_HASH_BITS 12
-+#define CS_MAX_TASK_SECURITY_HASH (1u << CS_TASK_SECURITY_HASH_BITS)
-+extern struct list_head cs_task_security_list[CS_MAX_TASK_SECURITY_HASH];
-+
-+struct cs_security *cs_find_task_security(const struct task_struct *task);
++/*
++ * List for managing accept()ed sockets.
++ * Since we don't need to keep an accept()ed socket into this list after
++ * once the permission was granted, the number of entries in this list is
++ * likely small. Therefore, we don't use hash tables.
++ */
++static LIST_HEAD(cs_accepted_socket_list);
++/* Lock for protecting cs_accepted_socket_list . */
++static DEFINE_SPINLOCK(cs_accepted_socket_list_lock);
 +
 +/**
-+ * cs_current_security - Get "struct cs_security" for current thread.
++ * cs_update_socket_tag - Update tag associated with accept()ed sockets.
 + *
-+ * Returns pointer to "struct cs_security" for current thread.
++ * @inode:  Pointer to "struct inode".
++ * @status: New status.
++ *
++ * Returns nothing.
++ *
++ * If @status == 0, memory for that socket will be released after RCU grace
++ * period.
 + */
-+static inline struct cs_security *cs_current_security(void)
++static void cs_update_socket_tag(struct inode *inode, int status)
 +{
-+	return cs_find_task_security(current);
++	struct cs_socket_tag *ptr;
++	/*
++	 * Protect whole section because multiple threads may call this
++	 * function with same "sock" via cs_validate_socket().
++	 */
++	spin_lock(&cs_accepted_socket_list_lock);
++	rcu_read_lock();
++	list_for_each_entry_rcu(ptr, &cs_accepted_socket_list, list) {
++		if (ptr->inode != inode)
++			continue;
++		ptr->status = status;
++		if (status)
++			break;
++		list_del_rcu(&ptr->list);
++		kfree_rcu(ptr, rcu);
++		break;
++	}
++	rcu_read_unlock();
++	spin_unlock(&cs_accepted_socket_list_lock);
 +}
 +
 +/**
-+ * cs_task_domain - Get "struct cs_domain_info" for specified thread.
++ * cs_validate_socket - Check post accept() permission if needed.
 + *
-+ * @task: Pointer to "struct task_struct".
++ * @sock: Pointer to "struct socket".
 + *
-+ * Returns pointer to "struct cs_security" for specified thread.
++ * Returns 0 on success, negative value otherwise.
 + */
-+static inline struct cs_domain_info *cs_task_domain(struct task_struct *task)
++static int cs_validate_socket(struct socket *sock)
 +{
-+	struct cs_domain_info *domain;
++	struct inode *inode = SOCK_INODE(sock);
++	struct cs_socket_tag *ptr;
++	int ret = 0;
 +
 +	rcu_read_lock();
-+	domain = cs_find_task_security(task)->cs_domain_info;
++	list_for_each_entry_rcu(ptr, &cs_accepted_socket_list, list) {
++		if (ptr->inode != inode)
++			continue;
++		ret = ptr->status;
++		break;
++	}
 +	rcu_read_unlock();
-+	return domain;
++	if (ret <= 0)
++		/*
++		 * This socket is not an accept()ed socket or this socket is
++		 * an accept()ed socket and post accept() permission is done.
++		 */
++		return ret;
++	/*
++	 * Check post accept() permission now.
++	 *
++	 * Strictly speaking, we need to pass both listen()ing socket and
++	 * accept()ed socket to __cs_socket_post_accept_permission().
++	 * But since socket's family and type are same for both sockets,
++	 * passing the accept()ed socket in place for the listen()ing socket
++	 * will work.
++	 */
++	ret = cs_socket_post_accept_permission(sock, sock);
++	/*
++	 * If permission was granted, we forget that this is an accept()ed
++	 * socket. Otherwise, we remember that this socket needs to return
++	 * error for subsequent socketcalls.
++	 */
++	cs_update_socket_tag(inode, ret);
++	return ret;
 +}
 +
 +/**
-+ * cs_current_domain - Get "struct cs_domain_info" for current thread.
++ * cs_socket_accept - Check permission for accept().
 + *
-+ * Returns pointer to "struct cs_domain_info" for current thread.
++ * @sock:    Pointer to "struct socket".
++ * @newsock: Pointer to "struct socket".
++ *
++ * Returns 0 on success, negative value otherwise.
++ *
++ * This hook is used for setting up environment for doing post accept()
++ * permission check. If dereferencing sock->ops->something() were ordered by
++ * rcu_dereference(), we could replace sock->ops with "a copy of original
++ * sock->ops with modified sock->ops->accept()" using rcu_assign_pointer()
++ * in order to do post accept() permission check before returning to userspace.
++ * If we make the copy in security_socket_post_create(), it would be possible
++ * to safely replace sock->ops here, but we don't do so because we don't want
++ * to allocate memory for sockets which do not call sock->ops->accept().
++ * Therefore, we do post accept() permission check upon next socket syscalls
++ * rather than between sock->ops->accept() and returning to userspace.
++ * This means that if a socket was close()d before calling some socket
++ * syscalls, post accept() permission check will not be done.
 + */
-+static inline struct cs_domain_info *cs_current_domain(void)
++static int cs_socket_accept(struct socket *sock, struct socket *newsock)
 +{
-+	return cs_find_task_security(current)->cs_domain_info;
++	struct cs_socket_tag *ptr;
++	const int rc = cs_validate_socket(sock);
++
++	if (rc < 0)
++		return rc;
++	ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
++	if (!ptr)
++		return -ENOMEM;
++	/*
++	 * Subsequent LSM hooks will receive "newsock". Therefore, I mark
++	 * "newsock" as "an accept()ed socket but post accept() permission
++	 * check is not done yet" by allocating memory using inode of the
++	 * "newsock" as a search key.
++	 */
++	ptr->inode = SOCK_INODE(newsock);
++	ptr->status = 1; /* Check post accept() permission later. */
++	spin_lock(&cs_accepted_socket_list_lock);
++	list_add_tail_rcu(&ptr->list, &cs_accepted_socket_list);
++	spin_unlock(&cs_accepted_socket_list_lock);
++	return 0;
 +}
 +
 +/**
-+ * cs_task_flags - Get flags for specified thread.
++ * cs_socket_listen - Check permission for listen().
 + *
-+ * @task: Pointer to "struct task_struct".
++ * @sock:    Pointer to "struct socket".
++ * @backlog: Backlog parameter.
 + *
-+ * Returns flags for specified thread.
++ * Returns 0 on success, negative value otherwise.
 + */
-+static inline u32 cs_task_flags(struct task_struct *task)
++static int cs_socket_listen(struct socket *sock, int backlog)
 +{
-+	u32 cs_flags;
++	const int rc = cs_validate_socket(sock);
 +
-+	rcu_read_lock();
-+	cs_flags = cs_find_task_security(task)->cs_flags;
-+	rcu_read_unlock();
-+	return cs_flags;
++	if (rc < 0)
++		return rc;
++	return cs_socket_listen_permission(sock);
 +}
 +
 +/**
-+ * cs_current_flags - Get flags for current thread.
++ * cs_socket_connect - Check permission for connect().
 + *
-+ * Returns flags for current thread.
++ * @sock:     Pointer to "struct socket".
++ * @addr:     Pointer to "struct sockaddr".
++ * @addr_len: Size of @addr.
++ *
++ * Returns 0 on success, negative value otherwise.
 + */
-+static inline u32 cs_current_flags(void)
++static int cs_socket_connect(struct socket *sock, struct sockaddr *addr,
++			     int addr_len)
 +{
-+	return cs_find_task_security(current)->cs_flags;
++	const int rc = cs_validate_socket(sock);
++
++	if (rc < 0)
++		return rc;
++	return cs_socket_connect_permission(sock, addr, addr_len);
++}
++
++/**
++ * cs_socket_bind - Check permission for bind().
++ *
++ * @sock:     Pointer to "struct socket".
++ * @addr:     Pointer to "struct sockaddr".
++ * @addr_len: Size of @addr.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_bind(struct socket *sock, struct sockaddr *addr,
++			  int addr_len)
++{
++	const int rc = cs_validate_socket(sock);
++
++	if (rc < 0)
++		return rc;
++	return cs_socket_bind_permission(sock, addr, addr_len);
++}
++
++/**
++ * cs_socket_sendmsg - Check permission for sendmsg().
++ *
++ * @sock: Pointer to "struct socket".
++ * @msg:  Pointer to "struct msghdr".
++ * @size: Size of message.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_sendmsg(struct socket *sock, struct msghdr *msg,
++			     int size)
++{
++	const int rc = cs_validate_socket(sock);
++
++	if (rc < 0)
++		return rc;
++	return cs_socket_sendmsg_permission(sock, msg, size);
++}
++
++/**
++ * cs_socket_recvmsg - Check permission for recvmsg().
++ *
++ * @sock:  Pointer to "struct socket".
++ * @msg:   Pointer to "struct msghdr".
++ * @size:  Size of message.
++ * @flags: Flags.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_recvmsg(struct socket *sock, struct msghdr *msg,
++			     int size, int flags)
++{
++	return cs_validate_socket(sock);
++}
++
++/**
++ * cs_socket_getsockname - Check permission for getsockname().
++ *
++ * @sock: Pointer to "struct socket".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_getsockname(struct socket *sock)
++{
++	return cs_validate_socket(sock);
++}
++
++/**
++ * cs_socket_getpeername - Check permission for getpeername().
++ *
++ * @sock: Pointer to "struct socket".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_getpeername(struct socket *sock)
++{
++	return cs_validate_socket(sock);
++}
++
++/**
++ * cs_socket_getsockopt - Check permission for getsockopt().
++ *
++ * @sock:    Pointer to "struct socket".
++ * @level:   Level.
++ * @optname: Option's name,
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_getsockopt(struct socket *sock, int level, int optname)
++{
++	return cs_validate_socket(sock);
++}
++
++/**
++ * cs_socket_setsockopt - Check permission for setsockopt().
++ *
++ * @sock:    Pointer to "struct socket".
++ * @level:   Level.
++ * @optname: Option's name,
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_setsockopt(struct socket *sock, int level, int optname)
++{
++	return cs_validate_socket(sock);
++}
++
++/**
++ * cs_socket_shutdown - Check permission for shutdown().
++ *
++ * @sock: Pointer to "struct socket".
++ * @how:  Shutdown mode.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_socket_shutdown(struct socket *sock, int how)
++{
++	return cs_validate_socket(sock);
++}
++
++#define SOCKFS_MAGIC 0x534F434B
++
++/**
++ * cs_inode_free_security - Release memory associated with an inode.
++ *
++ * @inode: Pointer to "struct inode".
++ *
++ * Returns nothing.
++ *
++ * We use this hook for releasing memory associated with an accept()ed socket.
++ */
++static void cs_inode_free_security(struct inode *inode)
++{
++	if (inode->i_sb && inode->i_sb->s_magic == SOCKFS_MAGIC)
++		cs_update_socket_tag(inode, 0);
 +}
 +
 +#endif
++
++/**
++ * cs_sb_pivotroot - Check permission for pivot_root().
++ *
++ * @old_path: Pointer to "struct path".
++ * @new_path: Pointer to "struct path".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_sb_pivotroot(const struct path *old_path,
++			   const struct path *new_path)
++{
++	return cs_pivot_root_permission(old_path, new_path);
++}
++
++/**
++ * cs_sb_mount - Check permission for mount().
++ *
++ * @dev_name:  Name of device file.
++ * @path:      Pointer to "struct path".
++ * @type:      Name of filesystem type. Maybe NULL.
++ * @flags:     Mount options.
++ * @data_page: Optional data. Maybe NULL.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_sb_mount(const char *dev_name, const struct path *path,
++		       const char *type, unsigned long flags, void *data_page)
++{
++	return cs_mount_permission(dev_name, path, type, flags, data_page);
++}
++
++/**
++ * cs_move_mount - Check permission for move_mount().
++ *
++ * @from_path: Pointer to "struct path".
++ * @to_path:   Pointer to "struct path".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_move_mount(const struct path *from_path,
++			 const struct path *to_path)
++{
++	return cs_move_mount_permission(from_path, to_path);
++}
++
++/**
++ * cs_sb_umount - Check permission for umount().
++ *
++ * @mnt:   Pointer to "struct vfsmount".
++ * @flags: Unmount flags.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_sb_umount(struct vfsmount *mnt, int flags)
++{
++	struct path path = { .mnt = mnt, .dentry = mnt->mnt_root };
++
++	return cs_umount_permission(&path, flags);
++}
++
++/**
++ * cs_file_fcntl - Check permission for fcntl().
++ *
++ * @file: Pointer to "struct file".
++ * @cmd:  Command number.
++ * @arg:  Value for @cmd.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_file_fcntl(struct file *file, unsigned int cmd,
++			 unsigned long arg)
++{
++	return cs_fcntl_permission(file, cmd, arg);
++}
++
++/**
++ * cs_file_ioctl - Check permission for ioctl().
++ *
++ * @filp: Pointer to "struct file".
++ * @cmd:  Command number.
++ * @arg:  Value for @cmd.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int cs_file_ioctl(struct file *filp, unsigned int cmd,
++			  unsigned long arg)
++{
++	return cs_ioctl_permission(filp, cmd, arg);
++}
++
++#define MY_HOOK_INIT LSM_HOOK_INIT
++
++static struct security_hook_list caitsith_hooks[] = {
++	/* Security context allocator. */
++	MY_HOOK_INIT(task_free, cs_task_free_security),
++	MY_HOOK_INIT(cred_prepare, cs_cred_prepare),
++	MY_HOOK_INIT(task_alloc, cs_task_alloc_security),
++	/* Security context updater for successful execve(). */
++	MY_HOOK_INIT(bprm_check_security, cs_bprm_check_security),
++	MY_HOOK_INIT(bprm_committing_creds, cs_bprm_committing_creds),
++	/* Various permission checker. */
++	MY_HOOK_INIT(file_open, cs_file_open),
++	MY_HOOK_INIT(file_fcntl, cs_file_fcntl),
++	MY_HOOK_INIT(file_ioctl, cs_file_ioctl),
++	MY_HOOK_INIT(sb_pivotroot, cs_sb_pivotroot),
++	MY_HOOK_INIT(sb_mount, cs_sb_mount),
++	MY_HOOK_INIT(move_mount, cs_move_mount),
++	MY_HOOK_INIT(sb_umount, cs_sb_umount),
++#ifdef CONFIG_SECURITY_PATH
++	MY_HOOK_INIT(path_mknod, cs_path_mknod),
++	MY_HOOK_INIT(path_mkdir, cs_path_mkdir),
++	MY_HOOK_INIT(path_rmdir, cs_path_rmdir),
++	MY_HOOK_INIT(path_unlink, cs_path_unlink),
++	MY_HOOK_INIT(path_symlink, cs_path_symlink),
++	MY_HOOK_INIT(path_rename, cs_path_rename),
++	MY_HOOK_INIT(path_link, cs_path_link),
++	MY_HOOK_INIT(path_truncate, cs_path_truncate),
++	MY_HOOK_INIT(path_chmod, cs_path_chmod),
++	MY_HOOK_INIT(path_chown, cs_path_chown),
++	MY_HOOK_INIT(path_chroot, cs_path_chroot),
++#else
++	MY_HOOK_INIT(inode_mknod, cs_inode_mknod),
++	MY_HOOK_INIT(inode_mkdir, cs_inode_mkdir),
++	MY_HOOK_INIT(inode_rmdir, cs_inode_rmdir),
++	MY_HOOK_INIT(inode_unlink, cs_inode_unlink),
++	MY_HOOK_INIT(inode_symlink, cs_inode_symlink),
++	MY_HOOK_INIT(inode_rename, cs_inode_rename),
++	MY_HOOK_INIT(inode_link, cs_inode_link),
++	MY_HOOK_INIT(inode_create, cs_inode_create),
++	MY_HOOK_INIT(inode_setattr, cs_inode_setattr),
++#endif
++#ifdef CONFIG_SECURITY_CAITSITH_GETATTR
++	MY_HOOK_INIT(inode_getattr, cs_inode_getattr),
++#endif
++#ifdef CONFIG_SECURITY_CAITSITH_NETWORK
++	MY_HOOK_INIT(socket_bind, cs_socket_bind),
++	MY_HOOK_INIT(socket_connect, cs_socket_connect),
++	MY_HOOK_INIT(socket_listen, cs_socket_listen),
++	MY_HOOK_INIT(socket_sendmsg, cs_socket_sendmsg),
++	MY_HOOK_INIT(socket_recvmsg, cs_socket_recvmsg),
++	MY_HOOK_INIT(socket_getsockname, cs_socket_getsockname),
++	MY_HOOK_INIT(socket_getpeername, cs_socket_getpeername),
++	MY_HOOK_INIT(socket_getsockopt, cs_socket_getsockopt),
++	MY_HOOK_INIT(socket_setsockopt, cs_socket_setsockopt),
++	MY_HOOK_INIT(socket_shutdown, cs_socket_shutdown),
++	MY_HOOK_INIT(socket_accept, cs_socket_accept),
++	MY_HOOK_INIT(inode_free_security, cs_inode_free_security),
++#endif
++};
++
++static inline void add_hook(struct security_hook_list *hook)
++{
++	hlist_add_tail_rcu(&hook->list, hook->head);
++}
++
++static void __init swap_hook(struct security_hook_list *hook,
++			     union security_list_options *original)
++{
++	struct hlist_head *list = hook->head;
++
++	if (hlist_empty(list)) {
++		add_hook(hook);
++	} else {
++		struct security_hook_list *shp =
++			hlist_entry(list->first, typeof(*shp), list);
++
++		while (shp->list.next)
++			shp = hlist_entry(shp->list.next, typeof(*shp), list);
++		*original = shp->hook;
++		/* Make sure that original callback is saved. */
++		smp_wmb();
++		shp->hook = hook->hook;
++	}
++}
++
++#if defined(CONFIG_STRICT_KERNEL_RWX) && !defined(CONFIG_SECURITY_WRITABLE_HOOKS)
++#include <linux/uaccess.h> /* copy_to_kernel_nofault() */
++#define NEED_TO_CHECK_HOOKS_ARE_WRITABLE
++
++#if defined(CONFIG_X86)
++#define MAX_RO_PAGES 1024
++static struct page *ro_pages[MAX_RO_PAGES] __initdata;
++static unsigned int ro_pages_len __initdata;
++
++static bool __init lsm_test_page_ro(void *addr)
++{
++	unsigned int i;
++	int unused;
++	struct page *page;
++
++	page = (struct page *) lookup_address((unsigned long) addr, &unused);
++	if (!page)
++		return false;
++	if (test_bit(_PAGE_BIT_RW, &(page->flags)))
++		return true;
++	for (i = 0; i < ro_pages_len; i++)
++		if (page == ro_pages[i])
++			return true;
++	if (ro_pages_len == MAX_RO_PAGES)
++		return false;
++	ro_pages[ro_pages_len++] = page;
++	return true;
++}
++
++static bool __init check_ro_pages(struct security_hook_heads *hooks)
++{
++	int i;
++	struct hlist_head *list = &hooks->capable;
++
++	if (!copy_to_kernel_nofault(list, list, sizeof(void *)))
++		return true;
++	for (i = 0; i < ARRAY_SIZE(caitsith_hooks); i++) {
++		struct hlist_head *head = caitsith_hooks[i].head;
++		struct security_hook_list *shp;
++
++		if (!lsm_test_page_ro(&head->first))
++			return false;
++		hlist_for_each_entry(shp, head, list)
++			if (!lsm_test_page_ro(&shp->list.next) ||
++			    !lsm_test_page_ro(&shp->list.pprev))
++				return false;
++	}
++	return true;
++}
++#else
++static bool __init check_ro_pages(struct security_hook_heads *hooks)
++{
++	struct hlist_head *list = &hooks->capable;
++
++	return !copy_to_kernel_nofault(list, list, sizeof(void *));
++}
++#endif
++#endif
++
++/**
++ * cs_init - Initialize this module.
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int __init cs_init(void)
++{
++	int idx;
++#if defined(NEED_TO_CHECK_HOOKS_ARE_WRITABLE)
++	if (!check_ro_pages(&security_hook_heads)) {
++		pr_info("Can't update security_hook_heads due to write protected. Retry with rodata=0 kernel command line option added.\n");
++		return -EINVAL;
++	}
++#endif
++	for (idx = 0; idx < CS_MAX_TASK_SECURITY_HASH; idx++)
++		INIT_LIST_HEAD(&cs_task_security_list[idx]);
++	cs_init_module();
++#if defined(NEED_TO_CHECK_HOOKS_ARE_WRITABLE) && defined(CONFIG_X86)
++	for (idx = 0; idx < ro_pages_len; idx++)
++		set_bit(_PAGE_BIT_RW, &(ro_pages[idx]->flags));
++#endif
++	swap_hook(&caitsith_hooks[0], &original_task_free);
++	swap_hook(&caitsith_hooks[1], &original_cred_prepare);
++	swap_hook(&caitsith_hooks[2], &original_task_alloc);
++	for (idx = 3; idx < ARRAY_SIZE(caitsith_hooks); idx++)
++		add_hook(&caitsith_hooks[idx]);
++#if defined(NEED_TO_CHECK_HOOKS_ARE_WRITABLE) && defined(CONFIG_X86)
++	for (idx = 0; idx < ro_pages_len; idx++)
++		clear_bit(_PAGE_BIT_RW, &(ro_pages[idx]->flags));
++#endif
++	return 0;
++}
++
++module_init(cs_init);
++MODULE_LICENSE("GPL");
++
++/**
++ * cs_used_by_cred - Check whether the given domain is in use or not.
++ *
++ * @domain: Pointer to "struct cs_domain_info".
++ *
++ * Returns true if @domain is in use, false otherwise.
++ *
++ * Caller holds rcu_read_lock().
++ */
++bool cs_used_by_cred(const struct cs_domain_info *domain)
++{
++	return false;
++}
++
++/**
++ * cs_add_task_security - Add "struct cs_security" to list.
++ *
++ * @ptr:  Pointer to "struct cs_security".
++ * @list: Pointer to "struct list_head".
++ *
++ * Returns nothing.
++ */
++static void cs_add_task_security(struct cs_security *ptr,
++				 struct list_head *list)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&cs_task_security_list_lock, flags);
++	list_add_rcu(&ptr->list, list);
++	spin_unlock_irqrestore(&cs_task_security_list_lock, flags);
++}
++
++/**
++ * __cs_alloc_task_security - Allocate memory for new tasks.
++ *
++ * @task: Pointer to "struct task_struct".
++ *
++ * Returns 0 on success, negative value otherwise.
++ */
++static int __cs_alloc_task_security(const struct task_struct *task)
++{
++	struct cs_security *old_security = cs_current_security();
++	struct cs_security *new_security = kzalloc(sizeof(*new_security),
++						   GFP_KERNEL);
++	struct list_head *list = &cs_task_security_list
++		[hash_ptr((void *) task, CS_TASK_SECURITY_HASH_BITS)];
++
++	if (!new_security)
++		return -ENOMEM;
++	new_security->task = task;
++	new_security->cs_domain_info = old_security->cs_domain_info;
++	new_security->cs_flags = old_security->cs_flags;
++	cs_add_task_security(new_security, list);
++	return 0;
++}
++
++/**
++ * cs_find_task_security - Find "struct cs_security" for given task.
++ *
++ * @task: Pointer to "struct task_struct".
++ *
++ * Returns pointer to "struct cs_security" on success, &cs_oom_security on
++ * out of memory, &cs_default_security otherwise.
++ *
++ * If @task is current thread and "struct cs_security" for current thread was
++ * not found, I try to allocate it. But if allocation failed, current thread
++ * will be killed by SIGKILL. Note that if current->pid == 1, sending SIGKILL
++ * won't work.
++ */
++struct cs_security *cs_find_task_security(const struct task_struct *task)
++{
++	struct cs_security *ptr;
++	struct list_head *list = &cs_task_security_list
++		[hash_ptr((void *) task, CS_TASK_SECURITY_HASH_BITS)];
++	/* Make sure INIT_LIST_HEAD() in cs_mm_init() takes effect. */
++	while (!list->next)
++		smp_rmb();
++	rcu_read_lock();
++	list_for_each_entry_rcu(ptr, list, list) {
++		if (ptr->task != task)
++			continue;
++		rcu_read_unlock();
++		/*
++		 * Current thread needs to transit from old domain to new
++		 * domain before do_execve() succeeds in order to check
++		 * permission for interpreters and environment variables using
++		 * new domain's ACL rules. The domain transition has to be
++		 * visible from other CPU in order to allow interactive
++		 * enforcing mode. Also, the domain transition has to be
++		 * reverted if do_execve() failed. However, an LSM hook for
++		 * reverting domain transition is missing.
++		 *
++		 * security_prepare_creds() is called from prepare_creds() from
++		 * prepare_bprm_creds() from do_execve() before setting
++		 * current->in_execve flag, and current->in_execve flag is
++		 * cleared by the time next do_execve() request starts.
++		 * This means that we can emulate the missing LSM hook for
++		 * reverting domain transition, by calling this function from
++		 * security_prepare_creds().
++		 *
++		 * If current->in_execve is not set but ptr->cs_flags has
++		 * CS_TASK_IS_IN_EXECVE set, it indicates that do_execve()
++		 * has failed and reverting domain transition is needed.
++		 */
++		if (task == current &&
++		    (ptr->cs_flags & CS_TASK_IS_IN_EXECVE) &&
++		    !current->in_execve) {
++			cs_debug_trace("1");
++			cs_clear_execve(-1, ptr);
++		}
++		return ptr;
++	}
++	rcu_read_unlock();
++	if (task != current)
++		return &cs_default_security;
++	/* Use GFP_ATOMIC because caller may have called rcu_read_lock(). */
++	ptr = kzalloc(sizeof(*ptr), GFP_ATOMIC);
++	if (!ptr) {
++		pr_warn("Unable to allocate memory for pid=%u\n",
++			task->pid);
++		send_sig(SIGKILL, current, 0);
++		return &cs_oom_security;
++	}
++	*ptr = cs_default_security;
++	ptr->task = task;
++	cs_add_task_security(ptr, list);
++	return ptr;
++}
 -- 
 2.18.4
 
