@@ -2,74 +2,76 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304A461DA29
-	for <lists+linux-security-module@lfdr.de>; Sat,  5 Nov 2022 13:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D403761DFBB
+	for <lists+linux-security-module@lfdr.de>; Sun,  6 Nov 2022 00:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiKEMj0 (ORCPT
+        id S229472AbiKEXqW (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 5 Nov 2022 08:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        Sat, 5 Nov 2022 19:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiKEMjS (ORCPT
+        with ESMTP id S229479AbiKEXqV (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 5 Nov 2022 08:39:18 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF8F18E31
-        for <linux-security-module@vger.kernel.org>; Sat,  5 Nov 2022 05:39:09 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d10so6737043pfh.6
-        for <linux-security-module@vger.kernel.org>; Sat, 05 Nov 2022 05:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=kq8TjKIfMuAddEcVf9rp0MAfAJKYgNJ2cBueguYMfNrrn5Y92RfhwFFtqQvsnJ25Za
-         h8SiEvPnMYeYwSArc6GY5SQq2zL79mDe+hlmdrq1jqhbH32Nym17IyGJ74jGudUVTyjZ
-         ZLa+VsNOq9rTzyLWrUxnZgdCFuXXszm94ql2h5uYD4teS2ObX7Ib8b3enSyx0rZvP7zG
-         5FbHMpk+xlNrX2y2GPhcopcKv7ZR4EpypqjNop73JfuR6545JlmmQxS6l+camVmBR4vB
-         Qcb7Ryy9wzPcpeWZUz6H6C51a26OjytDawXkXf5lh/Pu+41hWQfHFExixc8fiMddJWTE
-         Lgyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=JnsZqZhMrsMorWkg3JtoQSZ2ZbQGCUBIV38QNTHJys3VFTUT9TWEMHr9/PRwY6HQqF
-         ciXxEIL4w+DnxPLaC08T11ylEAOPpTBAeS7XjKM1/SsUTpFhoLbc3sljLkK191XuCaAe
-         KskK4f7QdyAZaXuO3/RsaMsF0Gsd1nJNLPp0pFg0+Mhsx1+munQDXI0rHpkaYArckucG
-         WCqKbaNKai9+SKk6Zzq/qnJNXwegsjXsaUbwPgAZL39/5MlVjuoDT83dL1ttttS/Lz0h
-         VRPG0hSWYpRrtCWqebgPMq1k0RV/UCkPiwTr5N7SklBOKQPNu6czgkpp2wGIntyoeSHB
-         NIjA==
-X-Gm-Message-State: ACrzQf3l8wxbBQ8bU2/OOP6qPgCIvxfDZthSGcFFThezAoEe92Na9Sn7
-        3Em0Yw22YkzbO6C/WKlcuOKsv/NQ7VePkiMX3z4=
-X-Google-Smtp-Source: AMsMyM5P7QJPc4xabig4w413XzwG+LvLR4ujBQF052MYyp4X4jLct43goqeG6nAke9/cOoRc7kMVFnOPm8Ba6LmlOPE=
-X-Received: by 2002:a05:6a00:1251:b0:56d:b039:1f8 with SMTP id
- u17-20020a056a00125100b0056db03901f8mr23491834pfi.72.1667651947721; Sat, 05
- Nov 2022 05:39:07 -0700 (PDT)
+        Sat, 5 Nov 2022 19:46:21 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B797212776
+        for <linux-security-module@vger.kernel.org>; Sat,  5 Nov 2022 16:46:16 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id EB99B839; Sat,  5 Nov 2022 18:46:14 -0500 (CDT)
+Date:   Sat, 5 Nov 2022 18:46:14 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-security-module@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH 04/10] CaitSith: Add header file.
+Message-ID: <20221105234614.GA23523@mail.hallyn.com>
+References: <20221102171025.126961-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <20221102171025.126961-4-penguin-kernel@I-love.SAKURA.ne.jp>
+ <ef5fa206-4e7f-3c23-07d4-8591c4315d20@schaufler-ca.com>
+ <20221105024345.GA15957@mail.hallyn.com>
+ <5d31873f-f477-ef5a-591f-6f0195f258a8@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
- 05:39:07 -0700 (PDT)
-Reply-To: stefanopessia755@hotmail.com
-From:   Stefano Pessina <wamathaibenard@gmail.com>
-Date:   Sat, 5 Nov 2022 15:39:07 +0300
-Message-ID: <CAN7bvZ+AZ+N2xWXWK-6rTbyGw_5yApLbz-J5U42mOWMbcyp4aA@mail.gmail.com>
-Subject: Geldspende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d31873f-f477-ef5a-591f-6f0195f258a8@I-love.SAKURA.ne.jp>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
---=20
-Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
-t.
-Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
-stefanopessia755@hotmail.com
+On Sat, Nov 05, 2022 at 01:05:44PM +0900, Tetsuo Handa wrote:
+> On 2022/11/05 11:43, Serge E. Hallyn wrote:
+> > On Wed, Nov 02, 2022 at 10:57:48AM -0700, Casey Schaufler wrote:
+> >> On 11/2/2022 10:10 AM, Tetsuo Handa wrote:
+> >>> The main point of this submission is to demonstrate how an LSM module
+> >>> which can be loaded using /sbin/insmod can work, and to provide
+> >>> consideration points for making changes for LSM stacking in a way that
+> >>> will not lock out LSM modules which can be loaded using /sbin/insmod .
+> >>
+> >> CaitSith could readily be done as an in-tree LSM. The implementation
+> >> of loadable module infrastructure is unnecessary.
+> > 
+> > Sorry, I'm getting confused.  But in-tree and loadable are not related,
+> > right?
+> 
+> Very much related. My goal is to get CaitSith in-tree as a loadable LSM module
+> which can be loaded using /sbin/insmod .
+
+Great.  I support that.  But the sentence
+
+> >> CaitSith could readily be done as an in-tree LSM. The implementation
+> >> of loadable module infrastructure is unnecessary.
+
+suggests that because CaitSith could be done in-tree, it doesn't need
+to be loadable.  I'm saying that is a non sequitur.  It sounded like
+that setence was meant to say "Because CaitSith could be in-tree, it
+doesn't need to be =m.  Only out of tree modules need to be loadable."
+
+-serge
