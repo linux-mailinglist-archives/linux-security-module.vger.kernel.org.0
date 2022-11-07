@@ -2,68 +2,129 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656C661E865
-	for <lists+linux-security-module@lfdr.de>; Mon,  7 Nov 2022 02:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131F361F024
+	for <lists+linux-security-module@lfdr.de>; Mon,  7 Nov 2022 11:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiKGBoR (ORCPT
+        id S231421AbiKGKVR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 6 Nov 2022 20:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        Mon, 7 Nov 2022 05:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiKGBoO (ORCPT
+        with ESMTP id S230475AbiKGKVQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 6 Nov 2022 20:44:14 -0500
-Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63CF6D2C3;
-        Sun,  6 Nov 2022 17:44:12 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id A7DD11E80D89;
-        Mon,  7 Nov 2022 09:41:49 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WwgNVPdpX_TG; Mon,  7 Nov 2022 09:41:47 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 9745C1E80D59;
-        Mon,  7 Nov 2022 09:41:46 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: [PATCH] integrity: iint: Remove unnecessary (void*) conversions
-Date:   Mon,  7 Nov 2022 09:44:02 +0800
-Message-Id: <20221107014402.3088-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 7 Nov 2022 05:21:16 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C23314034
+        for <linux-security-module@vger.kernel.org>; Mon,  7 Nov 2022 02:21:15 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so12232680pjh.1
+        for <linux-security-module@vger.kernel.org>; Mon, 07 Nov 2022 02:21:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=L9okY7Icb0Gf5ctoFsS3m7Ms6FyffuhIG/wumllqb99pGSDM0eKoVdXRomu4k2Vvje
+         vaAAA5b5CG4T9vL3DYzTbt6i7ilTYVRiZHeAf51qWroCKMi/06UV8twkwYbbvcb58b0c
+         O8aiXYIeKLPGKFxD8AeTNjdm9XiiwAwYXXYnxXnBzQtt4ZaPQYbu2mn3d4/wBF5dq0sI
+         fYgKey8dWac3TMQ3pm+aZLL8XgADS0c8wc9DQhJYDoGLimjkDspSigMMA/pe1/be4Mmf
+         FTMTprRtatoAeN10/4e16TIuQYPcJ6zZ7AsqjnUqg8Bde3BWUPkO4V20s/KjpolOjYbD
+         1dVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=vA5y5WWWQd/H43KDW2cAo8o/FOkmsoTXvO+r41VOTBGpHJBPzvxah7c2grb2BK/HxW
+         dYqUDklItSo+3/j8BrSv8I5EVr7Bqa63m9C61tPxNX61gszslKm2yTIPk1PWKH8sY4Of
+         GtJpnwgYVm+pEVbaTCPYBnZ5Hw56AMZo9GHvKkM+74cO34R7K7r7MgbSSEzNaaSHPSRc
+         rpntQeW8t7r2eTzGFkSgTeNIMC+cmAHrx1fynVEnJOok4HSFOy0jGnjNORIX2M9UM0Et
+         oU67Flmcwuv3Ik2jW4yTdfhFNeOrNZfzhw/WTU9a2BuQLRmE8VUdOkdGHp4ntutIilZa
+         RY6Q==
+X-Gm-Message-State: ACrzQf1nqD4CXqj05tNbN8tLuQadb/gcBjnjpcupVkpcgh39+/8FVbVB
+        /+ufBaaLV2/0BPQMPM5Hgn8eZi7IMi7+BEtshIc=
+X-Google-Smtp-Source: AMsMyM4Z92xjGZXgCyg2wym9Bu3/u65n6EL2ZpWI9kWf7s8xWZden0QG/zdZVfFd3uCVmOfceIs+YigxV7lXSF4Af+Y=
+X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id
+ mr19-20020a17090b239300b00213ecb22e04mr38944517pjb.100.1667816475223; Mon, 07
+ Nov 2022 02:21:15 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
+ 02:21:14 -0800 (PST)
+Reply-To: contact@ammico.it
+From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
+Date:   Mon, 7 Nov 2022 11:21:14 +0100
+Message-ID: <CAHAXD+Z_SoFK+TjW_6apBCCLtc_awXEjaqOdf77jdLRxxup3TA@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1043 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [977638ib[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The iint pointer does not need to cast the type.
-
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- security/integrity/iint.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-index 8638976f7990..d66b94c7c8d5 100644
---- a/security/integrity/iint.c
-+++ b/security/integrity/iint.c
-@@ -160,7 +160,7 @@ void integrity_inode_free(struct inode *inode)
- 
- static void init_once(void *foo)
- {
--	struct integrity_iint_cache *iint = (struct integrity_iint_cache *) foo;
-+	struct integrity_iint_cache *iint = foo;
- 
- 	memset(iint, 0, sizeof(*iint));
- 	iint->ima_file_status = INTEGRITY_UNKNOWN;
--- 
-2.18.2
-
+Hei ja miten voit?
+Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
+ toivolla
+v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
+leikkaus
+t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
+suudet selviyty=C3=A4.
+Mutta ennen kuin min=C3=A4
+Tee toinen vaarallinen operaatio, annan sen sinulle
+Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
+sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
+voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
+iden auttamista
+ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
+=C3=A4 minulla ei ole niit=C3=A4
+kenelt=C3=A4 perii rahaa.
+Vastaa minulle nopeasti
+terveisi=C3=A4
+Rouva Monika Evereen
+Florida, Amerikan Yhdysvallat
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+Hi and how are you?
+My name is Mrs. Evereen, I am sending this message with great hope for
+an immediate response, as I have to undergo heart reoperation in my
+current poor health with little chance of survival. But before I
+undertake the second dangerous operation, I will give you the
+$6,550,000 I have in my US bank account to invest well, manage and use
+the profits to run a charity project for me. I count helping the sick
+and the poor as my last wish on earth, because I have no one to
+inherit money from.
+Please give me a quick reply
+regards
+Mrs. Monika Evereen
+Florida, United States of America
