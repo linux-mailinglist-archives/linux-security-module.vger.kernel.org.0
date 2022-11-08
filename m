@@ -2,144 +2,106 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0796620D16
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Nov 2022 11:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A431B620EB4
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Nov 2022 12:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbiKHKUf (ORCPT
+        id S234141AbiKHLV4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Nov 2022 05:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        Tue, 8 Nov 2022 06:21:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233974AbiKHKUS (ORCPT
+        with ESMTP id S234112AbiKHLVr (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:20:18 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD37326F9
-        for <linux-security-module@vger.kernel.org>; Tue,  8 Nov 2022 02:20:04 -0800 (PST)
-Received: from fsav413.sakura.ne.jp (fsav413.sakura.ne.jp [133.242.250.112])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2A8AJTXW056434;
-        Tue, 8 Nov 2022 19:19:30 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav413.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp);
- Tue, 08 Nov 2022 19:19:29 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav413.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2A8AIEdQ056183
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 8 Nov 2022 19:18:14 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <133ffb84-551e-866d-5597-e62a5a39bc05@I-love.SAKURA.ne.jp>
-Date:   Tue, 8 Nov 2022 19:18:14 +0900
+        Tue, 8 Nov 2022 06:21:47 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001524C240
+        for <linux-security-module@vger.kernel.org>; Tue,  8 Nov 2022 03:21:43 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-370547b8ca0so131024577b3.0
+        for <linux-security-module@vger.kernel.org>; Tue, 08 Nov 2022 03:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
+        b=TH6ODfpzgWQOI6wK8En85vWReym/6MZKLaa27NkF6wKNmePYkJDD4IOjEcA55zYEoa
+         HHB0a9gnxmJPipnjfbR/VTrTtbZP9JbC3khMivblt/XvUW8aBVIZyTmxKN/Qv0xNEpBV
+         X05HHz+nqmiHXAfjfgiHxkx67gPkCb15hnBSl7YhnxRThqtJ0izawNEQRCBRgNr7/Vnw
+         pgJhAFeW/Oo0lmTvp7FOO3mONf7oOkQPFxaPHBWSyR1yI88QGW2abJQWrY8AU74+txMd
+         gKcxlEKpQy8Dh7cC+yRZRubj5o+X3LQDqSvIxldsnQinpZXNaqtta7vJkEyAVlZvCJO1
+         TrIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
+        b=lIQElDGwJfDlQtm+5KAzSGlV1foYC1mvgPbb4oZUjFUGdp6EiyfTXYaiH9ga/1eG5T
+         jTzVP8krQ5FA8U1byX7DSP33Gp5RmexU1M9X35I9RarxqTuPXJD+rtGCJSeqO6berKpw
+         Ls8zQ7+A7NZqflVajO7zl/kArr94/dCr3YDEdfhzYreCuKdIJMdcHtCHDJa77NtY91V3
+         qRUOOJXhyggFFiDpTkDfHdT9s+G00W3WhYP1g9kCX1P7vyaBYBY/3vLcERvzdJ+5XMYO
+         q4P49RRDWUfHKMtHeDTMHGKHXhq6ePlzfH21ktlKNXbvliiEcTLMKUVvzcU2rKZDVsHU
+         DBLA==
+X-Gm-Message-State: ACrzQf1gSC5cwHbWZTpymvOdvwHMpT7zchEqcd5yMRBv2k3ZTr6j2k6o
+        YwEpPOwDm3Ds4RuxIpyuZLw+X5fqXGUYfiHJ/4w=
+X-Google-Smtp-Source: AMsMyM73Po92pkBAuMw1lnuuxVsDEt6vWZsXPrYQ9yqzpQAFsXcQLr1QePow3gpIHUdrgggOwyqdpjF4eWyEAjgQlxQ=
+X-Received: by 2002:a81:8644:0:b0:349:1126:97a4 with SMTP id
+ w65-20020a818644000000b00349112697a4mr50326237ywf.333.1667906503158; Tue, 08
+ Nov 2022 03:21:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 04/10] CaitSith: Add header file.
-Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-security-module@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <kees@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20221102171025.126961-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <20221102171025.126961-4-penguin-kernel@I-love.SAKURA.ne.jp>
- <ef5fa206-4e7f-3c23-07d4-8591c4315d20@schaufler-ca.com>
- <20221105024345.GA15957@mail.hallyn.com>
- <5d31873f-f477-ef5a-591f-6f0195f258a8@I-love.SAKURA.ne.jp>
- <20221105234614.GA23523@mail.hallyn.com>
- <52fdbbe4-cad5-6cd0-9574-2e5efb88a478@I-love.SAKURA.ne.jp>
- <4ead148f-1629-22ec-91f3-44c71f70fce4@schaufler-ca.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <4ead148f-1629-22ec-91f3-44c71f70fce4@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:a38a:b0:313:c983:1d7e with HTTP; Tue, 8 Nov 2022
+ 03:21:42 -0800 (PST)
+Reply-To: mrinvest1010@gmail.com
+From:   "K. A. Mr. Kairi" <ctocik2@gmail.com>
+Date:   Tue, 8 Nov 2022 03:21:42 -0800
+Message-ID: <CAC9COZcaXufcjypwUNRcwAEKjKwxfz16pebG_pB5BL8dL_E_kA@mail.gmail.com>
+Subject: Re: My Response..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrinvest1010[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ctocik2[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ctocik2[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2022/11/08 3:59, Casey Schaufler wrote:
-> On 11/5/2022 5:56 PM, Tetsuo Handa wrote:
->> On 2022/11/06 8:46, Serge E. Hallyn wrote:
->>> On Sat, Nov 05, 2022 at 01:05:44PM +0900, Tetsuo Handa wrote:
->>>> On 2022/11/05 11:43, Serge E. Hallyn wrote:
->>>>> On Wed, Nov 02, 2022 at 10:57:48AM -0700, Casey Schaufler wrote:
->>>>>> On 11/2/2022 10:10 AM, Tetsuo Handa wrote:
->>>>>>> The main point of this submission is to demonstrate how an LSM module
->>>>>>> which can be loaded using /sbin/insmod can work, and to provide
->>>>>>> consideration points for making changes for LSM stacking in a way that
->>>>>>> will not lock out LSM modules which can be loaded using /sbin/insmod .
->>>>>> CaitSith could readily be done as an in-tree LSM. The implementation
->>>>>> of loadable module infrastructure is unnecessary.
->>>>> Sorry, I'm getting confused.  But in-tree and loadable are not related,
->>>>> right?
->>>> Very much related. My goal is to get CaitSith in-tree as a loadable LSM module
->>>> which can be loaded using /sbin/insmod .
->>> Great.  I support that.  But the sentence
->> Thank you.
->>
->>>>>> CaitSith could readily be done as an in-tree LSM. The implementation
->>>>>> of loadable module infrastructure is unnecessary.
->>> suggests that because CaitSith could be done in-tree, it doesn't need
->>> to be loadable.  I'm saying that is a non sequitur.  It sounded like
->>> that setence was meant to say "Because CaitSith could be in-tree, it
->>> doesn't need to be =m.  Only out of tree modules need to be loadable."
->> Unfortunately, I don't think that my intended Linux distributor (namely, Red Hat)
->> will support LSMs other than SELinux.
-> 
-> I also doubt that even if you came up with a 100% perfect implementation
-> of loadable module support it would be accepted upstream. If you somehow
-> got it upstream I really, really think it would be required to be optional.
-> There's no way Redhat would enable loadable module support if were available.
-> I am perfectly willing to be corrected if I've made a statement here that
-> isn't true, but I'll bet a refreshing beverage on it.
-> 
->>
->>   https://bugzilla.redhat.com/show_bug.cgi?id=542986
->>
->> Therefore, not only out of tree modules but also in-tree modules which cannot be
->> enabled by Linux distributors need to be implemented as loadable kernel modules.
-> 
-> Today you cannot use SELinux and AppArmor together on Redhat. Someday
-> "soon ;)" you won't be allowed to run them together on Redhat. If there's
-> market demand (I'm not holding my breath) it could happen in the future.
-> But that's up to Redhat to decide. I don't see Redhat as the customer for
-> LSM improvements. They are happy with what they have.
-> 
-> You have to take a different approach. Find a distribution that does want
-> loadable modules. You'll need a viable implementation to convince them to
-> help with the effort. Even then, you'll have a tough row to hoe.
-> 
+-- 
+Hi
 
-You are proving yourself that you are completely trapped into
-"only in-tree and supported by distributors is correct" crap.
+How are you with your family, I have a serious client, whom will be
+interested to invest in your country, I got your Details through the
+Investment Network and world Global Business directory.
 
-I am an individual who don't belong to specific distribution. Most of Linux users
-in companies I relate with are using RHEL. Company's financial support for TOMOYO
-terminated in March 2012 because I was not able to establish support/consult business
-because I was not able to get TOMOYO enabled in RHEL (even in Fedora).
+If you are interested for more details.....
 
-My support for TOMOYO is still continued, but unless loadable LSMs becomes legally
-possible, I can't introduce TOMOYO/CaitSith to Linux users in companies I relate with.
-
-Even if your LSM stacking work completes some day, I can imagine that there will be
-no LSMs I can stack (unless loadable LSMs becomes legally possible).
-Finding a distribution who want loadable LSMs does not help.
-Only that loadable LSMs becomes legally possible without kernel config option helps.
-
-What I'm asking you are that:
-
-  Please don't lock out out-of-tree LSM modules (by requiring an LSM id integer value
-  which are assigned to only in-tree LSM modules) because we can't accept whatever LSM
-  modules as in-tree.
-
-  Please don't lock out loadable LSM modules (by using fixed sized array) because
-  locking out loadable LSM modules reduces the value of your LSM stacking work.
-
-Quite simple.
-
+Sincerely,
+Kairi Andrew
