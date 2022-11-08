@@ -2,98 +2,73 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A226216A1
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Nov 2022 15:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6990621E00
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Nov 2022 21:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiKHObU (ORCPT
+        id S229552AbiKHUs7 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Nov 2022 09:31:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        Tue, 8 Nov 2022 15:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233684AbiKHOax (ORCPT
+        with ESMTP id S229566AbiKHUs6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:30:53 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3864FB08
-        for <linux-security-module@vger.kernel.org>; Tue,  8 Nov 2022 06:30:45 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso13516975pjc.2
-        for <linux-security-module@vger.kernel.org>; Tue, 08 Nov 2022 06:30:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=WDX8jESP5o0hYsqTRNV0E33I+UiuXo6QrBUYHK2m8yjd+yVsSQJ670MLuInnJ00AAn
-         lBBWrOntbuVMAue0wE2TrwsZKXEfFDNMqC5R6tCWqKEgGFxQxkRlJNdbKjRsJjGNfBru
-         KH2TG+ATlAWpLsgkVeBpn6IJJwDTPIZ2HiIrsZ0Wc9Fh2CfiYZRH2JVCtla2mAhfrDcv
-         WfczoRhEaDFduiY4E6NZmxTOoipjt0njg7MBnJjMGOYDxF1sJVrs/1Vd3642UyDZ3J2M
-         wtJ+Kd2QePZiVLlJxgLdMXSB8gNW9u9/Dkv2pwXgXMeRUPq+88NYf11ItH6tmWpWacMI
-         UUsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=S8xZJT5EilCVJR+CeODpf98X4KBSNILAKSs8y3OvkWRAHRQsH4aTiw/qH5/98EMZJ7
-         onSODq6DsvxmfBGXTQ5iwmTnOa37d1bVf3HSPgOl39kmpsDdjocO+lJ26yguDmQm7IYv
-         mNpTZGF+APuduX0DCOQTHftT2yhNuDusmrJvg7Ez8/nubTSKSPTf4FiZNaia9QYX9gWk
-         y8pBKkHPJ9vJ2ZqaKUYIcU1AKn9Q3QAjT4DatWJs394/Em5i246+E2zUyo4pR8XKG6M+
-         Kmjbddqo02QCL+s69Tk4gVmqVse02kywBWL3GHF+3MxISy8BUox5ELmD42p/cvNKFImn
-         n25g==
-X-Gm-Message-State: ACrzQf0U/zJ2z4lf4tvle4EJW1CSFC1NY594JzQVimmtrTJBa5dbzzOh
-        kF/BbGhuUKIqkaGtdF0Hfl1gf9btcPu6maRyd/0=
-X-Google-Smtp-Source: AMsMyM4L9V3t32r7uko+t8YxF1/SxpO/2u5BqPtEP2fFULrP29Yi88sG/7O0kyMBFpxPmDfBvPymU/6htrkybSwddAw=
-X-Received: by 2002:a17:90a:77c1:b0:214:2921:41c9 with SMTP id
- e1-20020a17090a77c100b00214292141c9mr35377782pjs.104.1667917844700; Tue, 08
- Nov 2022 06:30:44 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:30:43 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:30:43 +0000
-Message-ID: <CAHGOU4PbuaQmBHRnRdx0u3UurwX2NABaxQZ3A0KbDYPAmYk7uQ@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1034 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4954]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        Tue, 8 Nov 2022 15:48:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8508F17A87;
+        Tue,  8 Nov 2022 12:48:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EE05B81C62;
+        Tue,  8 Nov 2022 20:48:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E1639C433D6;
+        Tue,  8 Nov 2022 20:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667940534;
+        bh=3ZRq1GS1VAJ0yvS9EZeTnGTtjfCdgqKeb//rR//qb68=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=l1x/MnjfNe6FJwJmvQ3kIsQ71rq/aCAkzhEAEyV+K+tzNR4j+aJHfAjLEciOdbE3a
+         NsGfJxeu2BY7Vu/+mO5wd2vAhI54qWYtxsV5HDXCxTHr/XLF2M1DSXDyCSFIArtNfU
+         M06wHAmkesT1SeSO+9cvGN6WMyRlnbwoO8fOwAip9kfPJvFqTEJasIMn8PaqmEl3et
+         p+WeUDWdPdS/xyhdYDwO54W7W0j1/NhYozR1GPD2QUOFPFgB8Rq3iRt97LLDwG/eQ7
+         VuFq2C+UDz19jYTddoPw4bUAQNXGuIQ1Rz3Jv2A6xDQFc7xIYmSROzeNdQfScjEzZS
+         kNOMMjz7JqxWg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CBEF3C4166D;
+        Tue,  8 Nov 2022 20:48:54 +0000 (UTC)
+Subject: Re: [GIT PULL] LSM fixes for v6.1 (#2)
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAHC9VhSbLE-Uw7X9oYpqewgVWLsqBE0xeRPgwvE=0B4O6Yne_A@mail.gmail.com>
+References: <CAHC9VhSbLE-Uw7X9oYpqewgVWLsqBE0xeRPgwvE=0B4O6Yne_A@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAHC9VhSbLE-Uw7X9oYpqewgVWLsqBE0xeRPgwvE=0B4O6Yne_A@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git tags/lsm-pr-20221107
+X-PR-Tracked-Commit-Id: 46653972e3ea64f79e7f8ae3aa41a4d3fdb70a13
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f49b2d89fb10ef5fa5fa1993f648ec5daa884bef
+Message-Id: <166794053482.22160.771710189801377197.pr-tracker-bot@kernel.org>
+Date:   Tue, 08 Nov 2022 20:48:54 +0000
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+The pull request you sent on Mon, 7 Nov 2022 18:10:13 -0500:
+
+> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git tags/lsm-pr-20221107
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f49b2d89fb10ef5fa5fa1993f648ec5daa884bef
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
