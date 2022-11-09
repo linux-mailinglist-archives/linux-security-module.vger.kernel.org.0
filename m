@@ -2,106 +2,86 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA21B6221E2
-	for <lists+linux-security-module@lfdr.de>; Wed,  9 Nov 2022 03:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221E6622235
+	for <lists+linux-security-module@lfdr.de>; Wed,  9 Nov 2022 03:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiKICUp (ORCPT
+        id S230078AbiKICug (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Nov 2022 21:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        Tue, 8 Nov 2022 21:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiKICUn (ORCPT
+        with ESMTP id S229867AbiKICuf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:20:43 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029466A695
-        for <linux-security-module@vger.kernel.org>; Tue,  8 Nov 2022 18:20:38 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13d9a3bb27aso17519492fac.11
-        for <linux-security-module@vger.kernel.org>; Tue, 08 Nov 2022 18:20:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DuNXn1cOzuY2nKg/nqBcIj8YoCOvo5lp0PuOT3uZQDE=;
-        b=l1ZU7FsXBxISQCjxvBcAsUxUUspvwFJjWNh1TQY0aVAR0o+eI5++Utr25+ZpJ6uYJ0
-         7rFLIFiMRgoOOI3F9h/RfGTH/ymeM9ixYCeP99WuMMW9pOS+ZtmsrsHbhQq/Hy8EsVRg
-         2ratMxktiFg6t7cjcOeUilfemvz0tLrzQvV45LlpqFpbATjgWDpi82wFkli6srx2+Mz4
-         sf731uryUkym1cDky85KhL2qwJK09HpT03PsT34fhoiuTPE7Gg1gb3uVmNjHXD59qBEf
-         RGI4iroxWW1Mb18oetlI/FnhgVMhO20Vo5+KUSXCL2BZ8e5BTS1URe/F3sKNkOdtG63S
-         Ev1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DuNXn1cOzuY2nKg/nqBcIj8YoCOvo5lp0PuOT3uZQDE=;
-        b=gGEtKhb3qItPtZDDBGvN1Xc8R1iUHAPEhLNIK1M06igNZjT/CyQrCRGFOCgcUM8J2k
-         k1K8F+mnauk/+l4w1ekzzWxmj+podJBosBI/FG6jAQ7x5BLMw3EigG+sAFhPy9ELl7gs
-         aMgJzjNskCWzMV99bkHRkwzg0yWUVbavY8EEY+F7jQqdrtAzwSS77bdbGYJFZY/COyZZ
-         VCxxnqPcOYGaAgMWk7+nb3VvZzGFMT9QOckQ3ahz+pq/Z43E5KKMQDL8zWusVtbTPZjE
-         wu6bBPr7D7WNId49MP1Vl5Z9buX9QmPgrPPjcWVIJ1DE7TY9z4jtR9FLfgPsvx5047zr
-         mhyw==
-X-Gm-Message-State: ACrzQf3XHk2QOMs7YEGrfNQOvoR8TcSNZXgOo5Jv/Nlqz/oHh5x+CkZw
-        0lmUWrO2eAtsZDxjTnQ+/yPK75lFDGUHgOtk5H8BONtH6w==
-X-Google-Smtp-Source: AMsMyM54DfGyCv8euWxG4rIMDOZWCdv6eGMMMXAVOcm3VbMNBaycONH3bfE0EmY2J1WZoVOwtvwbSXKGPjiJKDKxi8A=
-X-Received: by 2002:a05:6870:f299:b0:13b:ad21:934d with SMTP id
- u25-20020a056870f29900b0013bad21934dmr34782038oap.172.1667960437296; Tue, 08
- Nov 2022 18:20:37 -0800 (PST)
+        Tue, 8 Nov 2022 21:50:35 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B62F1F9DD;
+        Tue,  8 Nov 2022 18:50:34 -0800 (PST)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1667962230;
+        bh=sRBb1yoX5FkhrIkmhhnkMlMgMwZoHsWyWpPUUDhCe1A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ak7T7+oRpA3erDu1wQ3UgJ9+njLjl0ooywpMrO9E2TQReGV77M6io1GeUyqJ5PjKz
+         KsFSLoEJBCcoKbzoaBQj2DZUdon7iKxJ3a1ecUWBtEl0Q8VwU1zB2MUSQh3oib1U4I
+         Be939Vqs0G3jizW1V4dcRC4kcVxgKCxzow/spxBs=
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2 0/3] certs: Prevent spurious errors on repeated blacklisting
+Date:   Wed,  9 Nov 2022 03:50:16 +0100
+Message-Id: <20221109025019.1855-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221102171025.126961-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <20221102171025.126961-4-penguin-kernel@I-love.SAKURA.ne.jp>
- <ef5fa206-4e7f-3c23-07d4-8591c4315d20@schaufler-ca.com> <20221105024345.GA15957@mail.hallyn.com>
- <5d31873f-f477-ef5a-591f-6f0195f258a8@I-love.SAKURA.ne.jp>
- <20221105234614.GA23523@mail.hallyn.com> <52fdbbe4-cad5-6cd0-9574-2e5efb88a478@I-love.SAKURA.ne.jp>
- <4ead148f-1629-22ec-91f3-44c71f70fce4@schaufler-ca.com> <133ffb84-551e-866d-5597-e62a5a39bc05@I-love.SAKURA.ne.jp>
-In-Reply-To: <133ffb84-551e-866d-5597-e62a5a39bc05@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 8 Nov 2022 21:20:26 -0500
-Message-ID: <CAHC9VhS9RQdeCipSpSH3_LZyFfb-BDry=EsSmkt4OLVk=OZnEg@mail.gmail.com>
-Subject: Re: [PATCH 04/10] CaitSith: Add header file.
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <kees@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1667962214; l=1370; s=20211113; h=from:subject; bh=sRBb1yoX5FkhrIkmhhnkMlMgMwZoHsWyWpPUUDhCe1A=; b=/FQehqL8oo8cDEvahT+bddamTe3EHhG1k4Xm2iu/e0fdzh+kZ3cQJr+iQWeiWRrEF0sxCWqO/6Z7 0noAI3i7CYaMUGKPSch6B469ssLVsPrwFF2X98m1zrCHluYkpWDD
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Nov 8, 2022 at 5:20 AM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> What I'm asking you are that:
->
->   Please don't lock out out-of-tree LSM modules (by requiring an LSM id integer value
->   which are assigned to only in-tree LSM modules) because we can't accept whatever LSM
->   modules as in-tree.
->
->   Please don't lock out loadable LSM modules (by using fixed sized array) because
->   locking out loadable LSM modules reduces the value of your LSM stacking work.
->
-> Quite simple.
+When the blacklist keyring was changed to allow updates from the root
+user it gained an ->update() function that disallows all updates.
+When the a hash is blacklisted multiple times from the builtin or
+firmware-provided blacklist this spams prominent logs during boot:
 
-Tetsuo, at this point I think we all understand your concern and I
-appreciate and respect the passion you have for your argument.
-However, I think the rest of the developers, including myself, have
-also made our points very clear.  While there may still be revisions
-to the syscall patches, I believe identifying LSMs via a token value
-as opposed to a string value is the better option for the upstream
-Linux Kernel.  This alone should not prevent dynamically loadable LSMs
-in the future, if we decide to pursue that, but I do recognize that it
-will present more of a challenge for the long term maintenance of
-out-of-tree LSMs.  I see no reason to trade off what I believe as a
-better API choice (LSM ID tokens) for something that is explicitly not
-supported by the Linux Kernel as a whole (out-of-tree kernel code).
+[    0.890814] blacklist: Problem blacklisting hash (-13)
 
-Thank you for your comments, but I'm considering this settled.
+This affects the firmware of various vendors. Reported have been at least:
+* Samsung: https://askubuntu.com/questions/1436856/
+* Acer: https://ubuntuforums.org/showthread.php?t=2478840
+* MSI: https://forum.archlabslinux.com/t/blacklist-problem-blacklisting-hash-13-errors-on-boot/6674/7
+* Micro-Star: https://bbs.archlinux.org/viewtopic.php?id=278860
 
+This series is an extension of the following single patch:
+https://lore.kernel.org/all/20221104014704.3469-1-linux@weissschuh.net/
+
+Only the first patch has been marked for stable as otherwise the whole of
+key_create() would need to be applied to stable.
+
+Thomas Weißschuh (3):
+  certs: log more information on blacklist error
+  KEYS: Add key_create()
+  certs: don't try to update blacklist keys
+
+ certs/blacklist.c   |  23 ++++---
+ include/linux/key.h |   8 +++
+ security/keys/key.c | 149 +++++++++++++++++++++++++++++++++-----------
+ 3 files changed, 133 insertions(+), 47 deletions(-)
+
+
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
 -- 
-paul-moore.com
+2.38.1
+
