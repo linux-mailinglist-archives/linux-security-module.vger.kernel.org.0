@@ -2,82 +2,102 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAF2626884
-	for <lists+linux-security-module@lfdr.de>; Sat, 12 Nov 2022 10:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C356268F5
+	for <lists+linux-security-module@lfdr.de>; Sat, 12 Nov 2022 11:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbiKLJbZ (ORCPT
+        id S234853AbiKLKs5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 12 Nov 2022 04:31:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        Sat, 12 Nov 2022 05:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbiKLJbW (ORCPT
+        with ESMTP id S234802AbiKLKsz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 12 Nov 2022 04:31:22 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69D51DF3B;
-        Sat, 12 Nov 2022 01:31:21 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N8VbX4YmNzbnb0;
-        Sat, 12 Nov 2022 17:27:36 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 17:31:20 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
-        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
-        <roberto.sassu@polito.it>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <roberto.sassu@huawei.com>
-Subject: [PATCH] ima: Fix misuse of dereference of pointer in template_desc_init_fields()
-Date:   Sat, 12 Nov 2022 17:27:19 +0800
-Message-ID: <20221112092719.224888-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 12 Nov 2022 05:48:55 -0500
+X-Greylist: delayed 94 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Nov 2022 02:48:53 PST
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA0E1704A;
+        Sat, 12 Nov 2022 02:48:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1668249051; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=LFqAfRynvUXCUpErtnOL6NDnj4CYj8iUanwK1DI2pR+ycJNXJzAwqaHIZmzZOgUIt02nNaJBMnJmhKGlIruks6xnjLYgWeI0U4bgegcQS0Or9DXN0OOsU+fJ6BR29aBMM7qz/NUICVDPdVbsW5J5hNoQ4dphep8ZwHCZ/uLWJIQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1668249051; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=BCGeylOFJYtUpHot+ky277Ye6xqHBGluvEQQ9Xbj6Mg=; 
+        b=KNmJaKaRXLHJy2ps9hY+5dEQrg7iBmOw45HEscaazRCJAfFomGO/z3zFitv7w/OjVJjJ+W051G3AAH3Lp+rabtrQ2INaCv0/gHYL6kWKDmHOsy0Ted8tGhIMGA7fplxTjmw4YnAdviF6+UyCjf4Aiavc6a7Nuk/esNNph2AO7Wc=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1668249051;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=BCGeylOFJYtUpHot+ky277Ye6xqHBGluvEQQ9Xbj6Mg=;
+        b=PozslzT7pVPO2qvIFATO1I96o2g8GSKMsxdghJMy8CfbfKGTpVvE6px9WGHEOunY
+        HVzWfULbawSa5IR8qvhULazw3+TmhelCBIQbApNmSWHqGS3X9VbMmUiD7zzA8gBozNo
+        3SaZNtO27VhwOcopImrs34fC1d/Kje44T4HTcxTE=
+Received: from kampyooter.. (110.226.30.173 [110.226.30.173]) by mx.zoho.in
+        with SMTPS id 166824904951082.6955736246938; Sat, 12 Nov 2022 16:00:49 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     keyrings <keyrings@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <cover.1668248462.git.code@siddh.me>
+Subject: [RESEND PATCH v2 0/2] watch_queue: Clean up some code
+Date:   Sat, 12 Nov 2022 16:00:39 +0530
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The input parameter @fields is type of struct ima_template_field ***, so
-when allocates array memory for @fields, the size of element should be
-sizeof(**field) instead of sizeof(*field).
+There is a dangling reference to pipe in a watch_queue after clearing it.
+Thus, NULL that pointer while clearing.
 
-Actually the original code would not cause any runtime error, but it's
-better to make it logically right.
+This change renders wqueue->defunct superfluous, as the latter is only used
+to check if watch_queue is cleared. With this change, the pipe is NULLed
+while clearing, so we can just check if the pipe is NULL.
 
-Fixes: adf53a778a0a ("ima: new templates management mechanism")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- security/integrity/ima/ima_template.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Extending comment for watch_queue->pipe in the definition of watch_queue
+made the comment conventionally too long (it was already past 80 chars),
+so I have changed the struct annotations to be kerneldoc-styled, so that
+I can extend the comment mentioning that the pipe is NULL when watch_queue
+is cleared. In the process, I have also hopefully improved documentation
+by documenting things which weren't documented before.
 
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 49f0626928a1..04c49f05cb74 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -245,11 +245,11 @@ int template_desc_init_fields(const char *template_fmt,
- 	}
- 
- 	if (fields && num_fields) {
--		*fields = kmalloc_array(i, sizeof(*fields), GFP_KERNEL);
-+		*fields = kmalloc_array(i, sizeof(**fields), GFP_KERNEL);
- 		if (*fields == NULL)
- 			return -ENOMEM;
- 
--		memcpy(*fields, found_fields, i * sizeof(*fields));
-+		memcpy(*fields, found_fields, i * sizeof(**fields));
- 		*num_fields = i;
- 	}
- 
--- 
-2.17.1
+Changes in v2:
+- Merged the NULLing and removing defunct patches.
+- Removed READ_ONCE barrier in lock_wqueue().
+- Improved and fixed errors in struct docs.
+- Better commit messages.
+
+Original date of posting patch: 6 Aug 2022
+
+Siddh Raman Pant (2):
+  include/linux/watch_queue: Improve documentation
+  kernel/watch_queue: NULL the dangling *pipe, and use it for clear
+    check
+
+ include/linux/watch_queue.h | 100 ++++++++++++++++++++++++++----------
+ kernel/watch_queue.c        |  12 ++---
+ 2 files changed, 79 insertions(+), 33 deletions(-)
+
+--=20
+2.35.1
+
 
