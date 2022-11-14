@@ -2,210 +2,194 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C5762872C
-	for <lists+linux-security-module@lfdr.de>; Mon, 14 Nov 2022 18:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B9D62877E
+	for <lists+linux-security-module@lfdr.de>; Mon, 14 Nov 2022 18:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236375AbiKNRe2 (ORCPT
+        id S237091AbiKNRwg (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 14 Nov 2022 12:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        Mon, 14 Nov 2022 12:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237582AbiKNRe0 (ORCPT
+        with ESMTP id S237712AbiKNRwQ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:34:26 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008B01571B
-        for <linux-security-module@vger.kernel.org>; Mon, 14 Nov 2022 09:34:24 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id s11-20020a056a00178b00b0056cb4545c3fso6372841pfg.5
-        for <linux-security-module@vger.kernel.org>; Mon, 14 Nov 2022 09:34:24 -0800 (PST)
+        Mon, 14 Nov 2022 12:52:16 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6AB26547
+        for <linux-security-module@vger.kernel.org>; Mon, 14 Nov 2022 09:52:14 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id f5so30241149ejc.5
+        for <linux-security-module@vger.kernel.org>; Mon, 14 Nov 2022 09:52:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=msz3ozvlPLroWfT8x2NNZs//GvUccXdOW5UK6ZYn4c0=;
-        b=BIqlyBz0MDGXETR7a6p1Ndp0XeFZ6GGFRhqNB/OHBLLLurkUXexaaVCWU2W0zoExCG
-         hJDRgc9RH9+rdVs8DbClI1j/9ySqOZ1+hJCz/fWIWlg4bnyTmOrbSOiLsXQ2fc9UiSo/
-         fhC88erSxjutvBDvF3mcu7xOFyb/UTlWpeOc+GDQOjAoZz7MPzLqmqr8VaydCnWoFJG0
-         iFSMqZHw600P8s6hksBteTHJPdRP6hkETdfVtZhRCYsrksBGrYTHL0YsQI2a9/zoXAnD
-         ouj6y4Z3c0RmqRxNc1oUsa852ZsLbLpFS8bVnGbFvlqoY8CfR7U6YUvdGndmoaAJ6bbu
-         1NmQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dFbOq8KvPfyqv8Tvmztn6miVwXV7s2YCAIN0rDZgKn8=;
+        b=kZAUj86IXe75dnl5U1/0XlxZ6WiVvz4JF/MFnWu5WfrqUcHIfpIwloMIqexqEiyr6V
+         K/9kWKkJfuHr15e10x1+ONoUzzBsMmZYVXI/2yoTq+2rhQtzN9nD2QPPLoO00VQgpHyF
+         NTtevwQQPEukJ10Av1iiOWVTKuNvLTl68r8Ks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=msz3ozvlPLroWfT8x2NNZs//GvUccXdOW5UK6ZYn4c0=;
-        b=SSXxTT056ubvozHg4bpbqEPN1teapuh4MxgGwNW7x3is/lin4cCnMPA3EaX/2QWz0O
-         clr7+fsXwgfd97jp7ahvkdhImF2uJnm8k2qcZ4u6fSad2+eJzO06MOAqMPquS7QgDKzK
-         1wTkar0H8OwUo5/Ws3dIoe5X6d4a+FfV5JSIgdM+n45Zc49bpUEMgdHXpl8GK+3zwKpb
-         VgnhZWiRmcs2BA1lsn/hpAOZzSZqtpqcCIs5aSmZHNhnzvTMNyLHT68RgUfLXrqe90cs
-         vfeUKnHjuTpAAWznCO7YrAlk6LUorqQYpKd+3ICCNM0HmuB9BEWAme8HNPfndXbSTUhy
-         aSww==
-X-Gm-Message-State: ANoB5pn3THWopLhr/51a4ZYI4nTYpJFxGr5Im6xC0Kb40v9LYlRZCD23
-        eFKDIMlW01dNS9XhR5PF29+0Bj0=
-X-Google-Smtp-Source: AA0mqf6oV5jBgwVrMG+lgn68FDlvRNY25mg6ElHE/ciQImgwloJgW/4/A2kf7qgGHApYKmXPRJumPnY=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:a586:b0:188:5681:4dc7 with SMTP id
- az6-20020a170902a58600b0018856814dc7mr291394plb.97.1668447264478; Mon, 14 Nov
- 2022 09:34:24 -0800 (PST)
-Date:   Mon, 14 Nov 2022 09:34:23 -0800
-In-Reply-To: <1668401942-6309-1-git-send-email-wangyufen@huawei.com>
-Mime-Version: 1.0
-References: <1668401942-6309-1-git-send-email-wangyufen@huawei.com>
-Message-ID: <Y3J8HyIfhm7rgpvI@google.com>
-Subject: Re: [PATCH bpf] selftests/bpf: fix memory leak of lsm_cgroup
-From:   sdf@google.com
-To:     Wang Yufen <wangyufen@huawei.com>
-Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, paul@paul-moore.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dFbOq8KvPfyqv8Tvmztn6miVwXV7s2YCAIN0rDZgKn8=;
+        b=ZfzuFD2gnG7ixGbd9Sl5atVYtoMb5aWO4hNGVVHj7NSiLziCuTvjD91khn5CScOnCZ
+         ogmIP+3rCpmof/JRRXr7sO0S+q+trA+AeHlhjbv3cUXjDxa/JvupTXHYJul2q/CXmg44
+         GjkBHFQbEzb6iim9GWpT2SbuTyBYSyeVFTh+QP1IMygZELGBU+35D/me2+6PzPpxBBgG
+         zdizGz9/B2dhn+03KN0brEf96xeP3AzpxccKUCtpALQysMKQHRh1ykbB8/NJalrfqXDD
+         hSvw0I0/TIfDD60L2xuqYATDVAqoG1aFAqS86pHnzZUUJuKLCk81yF66nDGRtms4Yr2C
+         I6oA==
+X-Gm-Message-State: ANoB5plP91vqoPId2muWrR6bZxZdCpP5QKW2zDMMP2eYRx6XD8QCOWO2
+        mm6kXc1mvQ7Qa2h9V+P9RUty8svEMumNFw==
+X-Google-Smtp-Source: AA0mqf4GWwBxyknZVOUWdNg3WxXuv4XdJ9IBU/rs1N2B8MqXFq1/FeyrAQUSAEnFYriyA01DaBPvXg==
+X-Received: by 2002:a17:906:bc85:b0:781:e01e:951f with SMTP id lv5-20020a170906bc8500b00781e01e951fmr11583097ejb.283.1668448332869;
+        Mon, 14 Nov 2022 09:52:12 -0800 (PST)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id cf6-20020a170906b2c600b007ad94fd48dfsm4422582ejb.139.2022.11.14.09.52.12
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 09:52:12 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id l14so19672019wrw.2
+        for <linux-security-module@vger.kernel.org>; Mon, 14 Nov 2022 09:52:12 -0800 (PST)
+X-Received: by 2002:adf:f10a:0:b0:236:863c:22d with SMTP id
+ r10-20020adff10a000000b00236863c022dmr8382325wro.590.1668447818962; Mon, 14
+ Nov 2022 09:43:38 -0800 (PST)
+MIME-Version: 1.0
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+ <Y3FfhrgvBNey6T7V@sol.localdomain> <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
+ <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com> <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
+In-Reply-To: <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Mon, 14 Nov 2022 09:43:02 -0800
+X-Gmail-Original-Message-ID: <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
+Message-ID: <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
+Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation data
+To:     jejb@linux.ibm.com
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, linux-integrity@vger.kernel.org,
+        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 11/14, Wang Yufen wrote:
-> kmemleak reports this issue:
+On Mon, Nov 14, 2022 at 8:56 AM James Bottomley <jejb@linux.ibm.com> wrote:
+>
+> On Mon, 2022-11-14 at 08:32 -0800, Evan Green wrote:
+> > On Sun, Nov 13, 2022 at 7:32 PM James Bottomley <jejb@linux.ibm.com>
+> > wrote:
+> > >
+> > > On Sun, 2022-11-13 at 13:20 -0800, Eric Biggers wrote:
+> > > > On Fri, Nov 11, 2022 at 03:16:29PM -0800, Evan Green wrote:
+> > > > > diff --git a/security/keys/trusted-keys/tpm2key.asn1
+> > > > > b/security/keys/trusted-keys/tpm2key.asn1
+> > > > > index f57f869ad60068..608f8d9ca95fa8 100644
+> > > > > --- a/security/keys/trusted-keys/tpm2key.asn1
+> > > > > +++ b/security/keys/trusted-keys/tpm2key.asn1
+> > > > > @@ -7,5 +7,18 @@ TPMKey ::= SEQUENCE {
+> > > > >         emptyAuth       [0] EXPLICIT BOOLEAN OPTIONAL,
+> > > > >         parent          INTEGER ({tpm2_key_parent}),
+> > > > >         pubkey          OCTET STRING ({tpm2_key_pub}),
+> > > > > -       privkey         OCTET STRING ({tpm2_key_priv})
+> > > > > +       privkey         OCTET STRING ({tpm2_key_priv}),
+> > > > > +       ---
+> > > > > +       --- A TPM2B_CREATION_DATA struct as returned from the
+> > > > > TPM2_Create command.
+> > > > > +       ---
+> > > > > +       creationData    [1] EXPLICIT OCTET STRING OPTIONAL
+> > > > > ({tpm2_key_creation_data}),
+> > > > > +       ---
+> > > > > +       --- A TPM2B_DIGEST of the creationHash as returned from
+> > > > > the
+> > > > > TPM2_Create
+> > > > > +       --- command.
+> > > > > +       ---
+> > > > > +       creationHash    [2] EXPLICIT OCTET STRING OPTIONAL
+> > > > > ({tpm2_key_creation_hash}),
+> > > > > +       ---
+> > > > > +       --- A TPMT_TK_CREATION ticket as returned from the
+> > > > > TPM2_Create command.
+> > > > > +       ---
+> > > > > +       creationTk      [3] EXPLICIT OCTET STRING OPTIONAL
+> > > > > ({tpm2_key_creation_tk})
+> > > > >         }
+> > > >
+> > > > The commit that added this file claimed:
+> > > >
+> > > >         "The benefit of the ASN.1 format is that it's a standard
+> > > > and thus the
+> > > >         exported key can be used by userspace tools
+> > > > (openssl_tpm2_engine,
+> > > >         openconnect and tpm2-tss-engine"
+> > > >
+> > > > Are these new fields in compliance with whatever standard that
+> > > > was referring to?
+> > >
+> > > Not really, no.  The current use case (and draft standard) is
+> > > already using [1] for policies and [2] for importable keys:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/tree/doc/draft-bottomley-tpm2-keys.xml
+> > >
+> > > I'm actually planning to use [3] for signed policies.  There's no
+> > > reason why you can't use [4] though.  Since the creation data, hash
+> > > and ticket are likely used as a job lot, it strikes me they should
+> > > be a single numbered optional sequence instead of individually
+> > > numbered, since you're unlikely to have one without the others.
+> >
+> > Thanks, I was hoping James might pipe up and tell me what to do.
+> > Grouping them as a single numbered optional sequence sounds
+> > reasonable to me. Is your draft too far along to squeeze this in?
+>
+> Not at all.  The draft only becomes frozen once I submit it to the IETF
+> which, so far thanks to lack of any reviewers I haven't done (That's
+> why I was also thinking of adding signed policies).
+>
+> >  If it is and I'm on my own to draft up and submit this, I would
+> > definitely appreciate any pointers on getting started you might have.
+> >
+> > I notice the draft and the code seem to be out of alignment.
+>
+> The kernel code is out of alignment just because development moves a
+> bit slowly.  Policy based keys were submitted a long time ago as part
+> of the original move to interoperable sealed keys based on ASN.1:
+>
+> https://lore.kernel.org/all/20200616160229.8018-7-James.Bottomley@HansenPartnership.com/
+>
+> But eventually the policy part was split out and forgotten about.  I
+> think the only complete implementation of the draft standard is the
+> openssl_tpm2_engine.
+>
+> >  I'm unfamiliar with this process, is the idea to get through all the
+> > iterations and land the standard, then fix up the code? What happens
+> > to existing data handed out in the old format?
+>
+> No, it doesn't matter at all.  That's the whole point of using ASN.1
+> explicit optionals: the ASN.1 is always backwards compatible.  If I
+> ever submit the draft, there'll have to be a new RFC to add new
+> explicit optionals, but keys conforming to the old RFC will still be
+> valid under the new one.
 
-> unreferenced object 0xffff88810b7835c0 (size 32):
->    comm "test_progs", pid 270, jiffies 4294969007 (age 1621.315s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      03 00 00 00 03 00 00 00 0f 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<00000000376cdeab>] kmalloc_trace+0x27/0x110
->      [<000000003bcdb3b6>] selinux_sk_alloc_security+0x66/0x110
->      [<000000003959008f>] security_sk_alloc+0x47/0x80
->      [<00000000e7bc6668>] sk_prot_alloc+0xbd/0x1a0
->      [<0000000002d6343a>] sk_alloc+0x3b/0x940
->      [<000000009812a46d>] unix_create1+0x8f/0x3d0
->      [<000000005ed0976b>] unix_create+0xa1/0x150
->      [<0000000086a1d27f>] __sock_create+0x233/0x4a0
->      [<00000000cffe3a73>] __sys_socket_create.part.0+0xaa/0x110
->      [<0000000007c63f20>] __sys_socket+0x49/0xf0
->      [<00000000b08753c8>] __x64_sys_socket+0x42/0x50
->      [<00000000b56e26b3>] do_syscall_64+0x3b/0x90
->      [<000000009b4871b8>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Ah I see, with the optionals in mind things do line up again.
 
-> The issue occurs in the following scenarios:
+>
+> Of course, since openssl_tpm2_engine is the complete reference
+> implementation that means I'll have to add the creation PCRs
+> implementation to it ... unless you'd like to do it?
 
-> unix_create1()
->    sk_alloc()
->      sk_prot_alloc()
->        security_sk_alloc()
->          call_int_hook()
->            hlist_for_each_entry()
->              entry1->hook.sk_alloc_security
->              <-- selinux_sk_alloc_security() succeeded,
->              <-- sk->security alloced here.
->              entry2->hook.sk_alloc_security
->              <-- bpf_lsm_sk_alloc_security() failed
->        goto out_free;
->          ...    <-- the sk->security not freed, memleak
-
-> The core problem is that the LSM is not yet fully stacked (work is
-> actively going on in this space) which means that some LSM hooks do
-> not support multiple LSMs at the same time. To fix, skip the
-> "EPERM" test when it runs in the environments that already have
-> non-bpf lsms installed
-
-> Fixes: dca85aac8895 ("selftests/bpf: lsm_cgroup functional test")
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> ---
->   tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c | 19  
-> +++++++++++++++----
->   tools/testing/selftests/bpf/progs/lsm_cgroup.c      |  8 ++++++++
->   2 files changed, 23 insertions(+), 4 deletions(-)
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c  
-> b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> index 1102e4f..a927ade 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> @@ -173,10 +173,14 @@ static void test_lsm_cgroup_functional(void)
->   	ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count");
->   	ASSERT_EQ(query_prog_cnt(cgroup_fd2, NULL), 1, "total prog count");
-
-> -	/* AF_UNIX is prohibited. */
-> -
->   	fd = socket(AF_UNIX, SOCK_STREAM, 0);
-> -	ASSERT_LT(fd, 0, "socket(AF_UNIX)");
-> +	if (skel->kconfig->CONFIG_SECURITY_APPARMOR
-> +	    || skel->kconfig->CONFIG_SECURITY_SELINUX
-> +	    || skel->kconfig->CONFIG_SECURITY_SMACK)
-
-[..]
-
-> +		ASSERT_GE(fd, 0, "socket(AF_UNIX)");
-
-nit: maybe skip this completely instead of having ASSERT_GE+close?
-
-	if (!(skel->kconfig->CONFIG_SECURITY_APPARMOR || _SELINUX || _SMACK)
-		/* AF_UNIX is prohibited. */
-		ASSERT_LT(fd, 0, "socket(AF_UNIX)");
-
-
-> +	else
-> +		/* AF_UNIX is prohibited. */
-> +		ASSERT_LT(fd, 0, "socket(AF_UNIX)");
->   	close(fd);
-
->   	/* AF_INET6 gets default policy (sk_priority). */
-> @@ -233,11 +237,18 @@ static void test_lsm_cgroup_functional(void)
-
->   	/* AF_INET6+SOCK_STREAM
->   	 * AF_PACKET+SOCK_RAW
-> +	 * AF_UNIX+SOCK_RAW if already have non-bpf lsms installed
->   	 * listen_fd
->   	 * client_fd
->   	 * accepted_fd
->   	 */
-> -	ASSERT_EQ(skel->bss->called_socket_post_create2, 5, "called_create2");
-> +	if (skel->kconfig->CONFIG_SECURITY_APPARMOR
-> +	    || skel->kconfig->CONFIG_SECURITY_SELINUX
-> +	    || skel->kconfig->CONFIG_SECURITY_SMACK)
-> +		/* AF_UNIX+SOCK_RAW if already have non-bpf lsms installed */
-> +		ASSERT_EQ(skel->bss->called_socket_post_create2, 6, "called_create2");
-> +	else
-> +		ASSERT_EQ(skel->bss->called_socket_post_create2, 5, "called_create2");
-
->   	/* start_server
->   	 * bind(ETH_P_ALL)
-> diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c  
-> b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-> index 4f2d60b..02c11d1 100644
-> --- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-> +++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-> @@ -7,6 +7,10 @@
-
->   char _license[] SEC("license") = "GPL";
-
-> +extern bool CONFIG_SECURITY_SELINUX __kconfig __weak;
-> +extern bool CONFIG_SECURITY_SMACK __kconfig __weak;
-> +extern bool CONFIG_SECURITY_APPARMOR __kconfig __weak;
-> +
->   #ifndef AF_PACKET
->   #define AF_PACKET 17
->   #endif
-> @@ -140,6 +144,10 @@ int BPF_PROG(socket_bind2, struct socket *sock,  
-> struct sockaddr *address,
->   int BPF_PROG(socket_alloc, struct sock *sk, int family, gfp_t priority)
->   {
->   	called_socket_alloc++;
-> +	/* if already have non-bpf lsms installed, EPERM will cause memory leak  
-> of non-bpf lsms */
-> +	if (CONFIG_SECURITY_SELINUX || CONFIG_SECURITY_SMACK ||  
-> CONFIG_SECURITY_APPARMOR)
-> +		return 1;
-> +
->   	if (family == AF_UNIX)
->   		return 0; /* EPERM */
-
-> --
-> 1.8.3.1
-
+I am willing to help as I'm the one making the mess. How does it
+sequence along with your draft submission (before, after,
+simultaneous)?
