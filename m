@@ -2,217 +2,137 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F711628763
-	for <lists+linux-security-module@lfdr.de>; Mon, 14 Nov 2022 18:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A1E6287BD
+	for <lists+linux-security-module@lfdr.de>; Mon, 14 Nov 2022 19:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237617AbiKNRqH (ORCPT
+        id S238046AbiKNSCH (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 14 Nov 2022 12:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        Mon, 14 Nov 2022 13:02:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237599AbiKNRqG (ORCPT
+        with ESMTP id S235617AbiKNSBf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:46:06 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D2720365
-        for <linux-security-module@vger.kernel.org>; Mon, 14 Nov 2022 09:46:01 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id h14so10977935pjv.4
-        for <linux-security-module@vger.kernel.org>; Mon, 14 Nov 2022 09:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GQVTl44oIH8oiV5K+Sv7U8T5hFlw2/VkCt8UIAvJo8k=;
-        b=V1n/QmQ3AuN9+EmhyutLATvVqBnCmhroS/UAPXghdJmV0HU19jBjKXe8xXfkDii3uh
-         NbqQrvC/rIPyGUCNyfGy1CLDRxYC6OHpDDCIHCoreQBo6O43xJmvGtuz6/9H7Vi9jUqD
-         XauwRtxnkP/SX8dYOyE67HzHi8XH7ivB0fiyHazCPB1o5D8BR+/IEvz71nNZ73FZygr9
-         Ixm16SE66NbwJ8g5krU2+4ZOzLZJ0u2CK9HUpXZQ9F4r4zDVHshhQ/fKQ0+/uNJkjoJY
-         l3SUcHNoLOYCYhyvJUlY09N3xdjfCcdJAmAk5LAs9znBiX0C4BZTg0Stl3/l4cZ2B2We
-         +gkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GQVTl44oIH8oiV5K+Sv7U8T5hFlw2/VkCt8UIAvJo8k=;
-        b=l5s6+lM/q/vAPLFstw/dHuYFQds6CWEfIo2s1KcxXx3BWq36YdSatO+n9HABS7mLak
-         X9S4lpFCPJKhRFkT+PAbBca/66Q4+wWyVOl3IueLvTLGfcLNg0fwtZIiIB4SknE0d+ZR
-         uLAe573y8lbfVlGzz2wXOztLlUK3dz9/2/Y4lD1aGwwesiCY27YVddb04HUdrxBeeHeA
-         YIzcMwiqJaTYcTux5nZA5vPKdn4eDqqdCF2NBd162qNkCxOYOXRzeA0NhzHbPuP+Fnlc
-         qno7M+Tql4thDVfJM/MBr28hRhwlhg6M30Ci8sOlMbVrSR4LucAVm4HC1QsQ961qz5NW
-         +d0g==
-X-Gm-Message-State: ANoB5plDY+WuExrR+Iqmfz9OEU7/PhnGyTMa3YY/Jm8FaM636yw8hTSz
-        lxyenZp1/IPqZFMWTpPrXVl57nc3ghrmXqa8Jten
-X-Google-Smtp-Source: AA0mqf4ETxqkXKYu+RpDh1ikHko1QWsZc6mC5UAwT9xXuQfI1egKxQiAZWWgvKVnWMoGCW1s91/EqBlGHFO3dDz7mK8=
-X-Received: by 2002:a17:90b:3682:b0:1fd:5b5d:f09d with SMTP id
- mj2-20020a17090b368200b001fd5b5df09dmr14979218pjb.69.1668447960577; Mon, 14
- Nov 2022 09:46:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20221114111844.3461403-1-konstantin.meskhidze@huawei.com>
-In-Reply-To: <20221114111844.3461403-1-konstantin.meskhidze@huawei.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 14 Nov 2022 12:45:49 -0500
-Message-ID: <CAHC9VhQZ0i1GF2a9P9v05awKCb_j2X0Tv_xVfhQm4NnMJFs5Lw@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] SELINUX: Remove obsolete deferred inode security
- init list.
-To:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-Cc:     linux-security-module@vger.kernel.org,
-        jamorris@linux.microsoft.com, selinux@vger.kernel.org,
-        stephen.smalley.work@gmail.com, artem.kuzin@huawei.com,
-        hw.likun@huawei.com, alexander.kozhevnikov@huawei-partners.com,
-        xiujianfeng@huawei.com, yusongping@huawei.com, hukeping@huawei.com
+        Mon, 14 Nov 2022 13:01:35 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B9B2B262;
+        Mon, 14 Nov 2022 10:00:41 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AEHXTi6007635;
+        Mon, 14 Nov 2022 18:00:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=QPhSdp/WvfS+gB8RUHumycoy4o2HnncDto2p1MtB9DY=;
+ b=OFVyYebNpWw/Lk5Ok4oNlUZyZwd+Yt6FdFX5hhaq1Xtca61+3PE9pUCR+yjD0kHHqE6X
+ Aa4Va2Dcmvv3rgrPMCXRtgYflj0A+uwrfaV7j2W1OiVLwhMl06RZ00t8t2rIa6sxiYjd
+ 1bGFVRJ2wgLglC0gz1MWRED1AEg9PcxyrNL+vZ1FuxYgD9DNRrs/fDOeMYgpy8a2I3GI
+ YnikAQjpp57I3vL1Jl9B0MFl38Nf0tlVX7DdovQnG1enSmPqTmxpjYtDv0OepYTlHzjG
+ cqeMkFcwrPyMYwXPDwKhIb7MxnoEKR0WYn1fn4pwrsTRCqhP7V4sNCgJLGCF+sS7ae6N Kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kut698pej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 18:00:17 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AEHXZoB007861;
+        Mon, 14 Nov 2022 18:00:16 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kut698pd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 18:00:16 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEHoaqs019792;
+        Mon, 14 Nov 2022 18:00:14 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 3kt349f8py-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 18:00:14 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEI0AkM52101664
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Nov 2022 18:00:10 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54BDE7805E;
+        Mon, 14 Nov 2022 18:57:43 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6D8F7805C;
+        Mon, 14 Nov 2022 18:57:39 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.197])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Nov 2022 18:57:39 +0000 (GMT)
+Message-ID: <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
+ data
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, linux-integrity@vger.kernel.org,
+        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Mon, 14 Nov 2022 13:00:08 -0500
+In-Reply-To: <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+         <Y3FfhrgvBNey6T7V@sol.localdomain>
+         <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
+         <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com>
+         <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
+         <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mQ0o1bvpk3uvMiLkzZl2cNHEOfjstpwl
+X-Proofpoint-GUID: cPzfQg2eCGXV_bQt6IZwGIcCXhV5_zn6
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_13,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=561
+ bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Nov 14, 2022 at 6:19 AM Konstantin Meskhidze
-<konstantin.meskhidze@huawei.com> wrote:
-> From: Alexander Kozhevnikov <alexander.kozhevnikov@huawei-partners.com>
->
-> This patch is a proposed code optimization for SELinux:
->
-> 1) Each inode has SELinux security structure attached
->    to it, this one need to be initialized at some point.
-> 2) This initialization is done by the function
->    inode_doinit_with_dentry ( ).
-> 3) In the kernel releases started from some point in the past
->    this function (2) is always called normally from function
->    __inode_security_revalidate ( ).
-> 4) Which in turn is always called  from inode_security ( ), which
->    is a base point for any selinux calls and always called on
->    any access to any inode except a few special cases when
->    _inode_security_novalidate ( ) is used.
-> 5) Inode security structure initialization can be done only after
->    SELinux is fully initialized and policy is loaded.
-> 6) So, for this purpose there was a special defeferred inode security
->    initialization list protected by a spinlock implemented, which was
->    populated instead of isec initialization in function
->    inode_doinit_with_dentry ( ), if it was called before SELinux full
->    initialization, and processed at the time when SELinux policy load
->    occurred by calling again inode_doinit_with_dentry ( ) on each inode
->    in this list.
-> 7) This list was a part of a default initialization logic before (3) was
->    implemented, but now, taking into account new mechanism implemented
->    with current approach of inode security revalidation on each access
->    (4)-(3)-(2), it looks obsolete and not needed anymore.
-> 8) So deferred initialization, this list and code associated with it can
->    be safely removed now, as anyway, if inode isec was not initialized
->    before it will be processed on any next inode access.
-> 9) There are two possible positive consequences from this removal:
->      a. More clean and simple code, less memory consumption;
->      b. This deferred initialization in some cases (for example SELinux
->         was switched on manually after system was up quite a long time)
->         could take some significant time to process, i.e. system looks
->         hung for some notable time. And now this is avoided.
->
-> Signed-off-by: Alexander Kozhevnikov <alexander.kozhevnikov@huawei-partners.com>
-> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-> ---
->  security/selinux/hooks.c          | 70 ++++---------------------------
->  security/selinux/include/objsec.h |  3 --
->  2 files changed, 7 insertions(+), 66 deletions(-)
+On Mon, 2022-11-14 at 09:43 -0800, Evan Green wrote:
+> On Mon, Nov 14, 2022 at 8:56 AM James Bottomley <jejb@linux.ibm.com>
+> wrote:
+[...]
+> > Of course, since openssl_tpm2_engine is the complete reference
+> > implementation that means I'll have to add the creation PCRs
+> > implementation to it ... unless you'd like to do it?
+> 
+> I am willing to help as I'm the one making the mess. How does it
+> sequence along with your draft submission (before, after,
+> simultaneous)?
 
-Hi Konstantin, Alexander,
+At the moment, just send patches.  The openssl_tpm2_engine is developed
+on a groups.io mailing list:
 
-A few comments below, but can you share what testing you've done with
-this?  Specifically what you've done to ensure that inodes allocated
-before the policy is loaded are properly initialized/validated after
-the policy is loaded?
+https://groups.io/g/openssl-tpm2-engine/
 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index f553c370397e..c93b5621d735 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -316,27 +316,7 @@ static struct inode_security_struct *backing_inode_security(struct dentry *dentr
->
->  static void inode_free_security(struct inode *inode)
->  {
-> -       struct inode_security_struct *isec = selinux_inode(inode);
-> -       struct superblock_security_struct *sbsec;
-> -
-> -       if (!isec)
-> -               return;
-> -       sbsec = selinux_superblock(inode->i_sb);
-> -       /*
-> -        * As not all inode security structures are in a list, we check for
-> -        * empty list outside of the lock to make sure that we won't waste
-> -        * time taking a lock doing nothing.
-> -        *
-> -        * The list_del_init() function can be safely called more than once.
-> -        * It should not be possible for this function to be called with
-> -        * concurrent list_add(), but for better safety against future changes
-> -        * in the code, we use list_empty_careful() here.
-> -        */
-> -       if (!list_empty_careful(&isec->list)) {
-> -               spin_lock(&sbsec->isec_lock);
-> -               list_del_init(&isec->list);
-> -               spin_unlock(&sbsec->isec_lock);
-> -       }
-> +/* NOTHING TO DO AFTER DEFERRED LIST REMOVAL */
->  }
+You need an IETF specific tool (xml2rfc) to build the rfc from the xml,
+but it's available in most distros as python3-xml2rfc.  If you don't
+want to learn the IETF XML I can help you code up the patch to add that
+to the draft spec.
 
-We should just remove inode_free_security(), as well as
-selinux_inode_free_security(), there is no reason to leave them as
-empty functions and/or hooks.
+Regards,
 
-> @@ -551,27 +531,6 @@ static int sb_finish_set_opts(struct super_block *sb)
->         /* Initialize the root inode. */
->         rc = inode_doinit_with_dentry(root_inode, root);
->
-> -       /* Initialize any other inodes associated with the superblock, e.g.
-> -          inodes created prior to initial policy load or inodes created
-> -          during get_sb by a pseudo filesystem that directly
-> -          populates itself. */
-> -       spin_lock(&sbsec->isec_lock);
-> -       while (!list_empty(&sbsec->isec_head)) {
-> -               struct inode_security_struct *isec =
-> -                               list_first_entry(&sbsec->isec_head,
-> -                                          struct inode_security_struct, list);
-> -               struct inode *inode = isec->inode;
-> -               list_del_init(&isec->list);
-> -               spin_unlock(&sbsec->isec_lock);
-> -               inode = igrab(inode);
-> -               if (inode) {
-> -                       if (!IS_PRIVATE(inode))
-> -                               inode_doinit_with_dentry(inode, NULL);
-> -                       iput(inode);
-> -               }
-> -               spin_lock(&sbsec->isec_lock);
-> -       }
-> -       spin_unlock(&sbsec->isec_lock);
->         return rc;
->  }
+James
 
-I would suggest ending sb_finish_set_opts() by returning from the
-inode_doinit_with_dentry() call, e.g.:
-
-    /* ... */
-    return inode_doinit_with_dentry(root_inode, root);
-  }
-
-> @@ -1430,9 +1381,7 @@ static int inode_doinit_with_dentry(struct inode *inode, struct dentry *opt_dent
->                 if (!dentry) {
->                         /*
->                          * this is can be hit on boot when a file is accessed
-> -                        * before the policy is loaded.  When we load policy we
-> -                        * may find inodes that have no dentry on the
-> -                        * sbsec->isec_head list.  No reason to complain as these
-> +                        * before the policy is loaded. No reason to complain as these
->                          * will get fixed up the next time we go through
->                          * inode_doinit with a dentry, before these inodes could
->                          * be used again by userspace.
-
-There are some typos at the start of this comment that are worth
-fixing here since you are updating the comment block, e.g.:
-
-  /*
-   * This can be hit on boot when a file is accessed
-   * before the policy is loaded ...
-
--- 
-paul-moore.com
