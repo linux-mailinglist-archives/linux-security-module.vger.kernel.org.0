@@ -2,183 +2,153 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2543862BAD3
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Nov 2022 12:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C0962BEBA
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Nov 2022 13:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiKPLFM (ORCPT
+        id S231177AbiKPMyh (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 16 Nov 2022 06:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
+        Wed, 16 Nov 2022 07:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiKPLE1 (ORCPT
+        with ESMTP id S231292AbiKPMyg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:04:27 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C9B4AF1B
-        for <linux-security-module@vger.kernel.org>; Wed, 16 Nov 2022 02:51:01 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id s5so9738971edc.12
-        for <linux-security-module@vger.kernel.org>; Wed, 16 Nov 2022 02:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NMt8HjKxItO2J6bIbRsCvEdSlAZpP8uC48lcisou+nI=;
-        b=eLnGvKK+w1XqLxzowLTo19VxBdUCyRC3jZCwBMpKaUWXXlLi4fs0Axmuul/wRN/I3k
-         Ls2daX/AS8NBqlkGiJqqxb0gEFzgn6n0a6+XnpTDtipAc3J5NayuL7HDBO33beS0D75x
-         K2gRZhVXeM0+lA+7zcbmJS/RVo1YdOeZ/sxms=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NMt8HjKxItO2J6bIbRsCvEdSlAZpP8uC48lcisou+nI=;
-        b=6GuSWK3FbIHZofyo2crPX7X776XfPz4akr5J6k3yrGosbNvsLkVkB7FhHA/sHz4Nfb
-         t44vcron/oxP1SLudJyMFyxqFWdRB5s+VAGdZ3JRs0+MLAjYJlzE9IrKnlvPBq6Iwz33
-         xGt631xTrrXIlQkruKLbqcfs7Cqciz5H1oMXybGFbM1GhhLatBP6MLxW9yedjHnYEL8P
-         JwP7Mfqu0FmJTs+XXdLnuAMDjOKu+EwlxoUysnHtsJlD3UBwW7idjuNdPEFTJHcERINQ
-         zNT0mgBOiNx2NDnn7Ev+gvGsQSRmRLIFOcESXR7orLR6744Nr1BgOO7GDQfTFxaF6cim
-         54Zg==
-X-Gm-Message-State: ANoB5plA5OmquAMbsNUiNRB9m8yFSVuVPNGGShIggmnxV0gCH4lypJar
-        WoZ+Po5mqAoi5emmEdGuNC3bhg==
-X-Google-Smtp-Source: AA0mqf4Z9KF9DYfdJQdqGvbtRloYOPQXnN3MkKcJxdOs80iDic7Ysg9e6qfGKtqJuC+1emfUPfQ+gw==
-X-Received: by 2002:a50:ff04:0:b0:462:709:9f7b with SMTP id a4-20020a50ff04000000b0046207099f7bmr19331341edu.263.1668595860175;
-        Wed, 16 Nov 2022 02:51:00 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id s6-20020a170906bc4600b007aed2057eaesm6056420ejv.161.2022.11.16.02.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:50:59 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:50:57 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH mm-unstable v1 17/20] drm/exynos: remove FOLL_FORCE usage
-Message-ID: <Y3TAkWy/xXfX1cIv@phenom.ffwll.local>
-Mail-Followup-To: David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>, Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-18-david@redhat.com>
+        Wed, 16 Nov 2022 07:54:36 -0500
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A340B199
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Nov 2022 04:54:33 -0800 (PST)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221116125430euoutp0205ee63f9a5f045af51e57edc1c3ac15e~oEdWFRAAB0238002380euoutp021
+        for <linux-security-module@vger.kernel.org>; Wed, 16 Nov 2022 12:54:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221116125430euoutp0205ee63f9a5f045af51e57edc1c3ac15e~oEdWFRAAB0238002380euoutp021
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1668603270;
+        bh=HjZKvWsi7Asp/BfxfeYKpMu6OvENuo1t6Dui6oN5Mjw=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=S8iSPZi4TOHxf+GCBZWbx7e3kQJ9gmTnfthZH9YLWC/sPBdqa1kMkNCy9rcksSy9P
+         gme/Y5SnkAAdIy9NMsXVAc5Ib15AtOMZikNdoKQX9UX3u6NGHmdE0RWM2MxtvdT30L
+         8SskefPNeINPvg2ghQL4aWCGSFeg7cLIFJD4Tdpc=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20221116125430eucas1p2257c00a068d414c20a449ad53b7affcc~oEdV778030530405304eucas1p2c;
+        Wed, 16 Nov 2022 12:54:30 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id D9.25.10112.68DD4736; Wed, 16
+        Nov 2022 12:54:30 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221116125430eucas1p2f2969a4a795614ce3b8c06f9ea3be36f~oEdVsS7xz0496204962eucas1p2k;
+        Wed, 16 Nov 2022 12:54:30 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221116125430eusmtrp2c24866dfc6e4991f7cf7048d69d9a82b~oEdVrrP430810808108eusmtrp2B;
+        Wed, 16 Nov 2022 12:54:30 +0000 (GMT)
+X-AuditID: cbfec7f4-cf3ff70000002780-f0-6374dd862b0f
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2B.A5.08916.68DD4736; Wed, 16
+        Nov 2022 12:54:30 +0000 (GMT)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221116125430eusmtip202f3a4d2d7e99dd8c208bd95d31c7be3~oEdVjhjjh3185831858eusmtip2I;
+        Wed, 16 Nov 2022 12:54:30 +0000 (GMT)
+Received: from localhost (106.110.32.33) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 16 Nov 2022 12:54:29 +0000
+From:   Joel Granados <j.granados@samsung.com>
+To:     <joshi.k@samsung.com>, <ddiss@suse.de>, <mcgrof@kernel.org>,
+        <paul@paul-moore.com>
+CC:     <linux-security-module@vger.kernel.org>,
+        <io-uring@vger.kernel.org>,
+        "Joel Granados" <j.granados@samsung.com>
+Subject: [RFC 0/1] RFC on how to include LSM hooks for io_uring commands
+Date:   Wed, 16 Nov 2022 13:50:50 +0100
+Message-ID: <20221116125051.3338926-1-j.granados@samsung.com>
+X-Mailer: git-send-email 2.30.2
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116102659.70287-18-david@redhat.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [106.110.32.33]
+X-ClientProxiedBy: CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42LZduznOd22uyXJBs+OyVp8/T+dxeJd6zkW
+        iw89j9gsbkx4ymhxe9J0FgdWj02rOtk81u59weix+XS1x+dNcgEsUVw2Kak5mWWpRfp2CVwZ
+        /W/aWAuauSu+frnA1sD4lqOLkZNDQsBE4u3RHrYuRi4OIYEVjBJ/F81khHC+MEq8PDmVHcL5
+        zCix9UUnE0zLvW97oaqWM0qsOz6FCa7qzpJWqGGbGSVavk1hAWlhE9CROP/mDjOILSIQITF/
+        +n9GEJtZoFhi2/55QDs4OIQFPCS6r5qAhFkEVCVWbv0MVsIrYCvxbPU6FojN8hJt16czgpQz
+        C2hKrN+lD1EiKHFy5hMWiInyEs1bZzNDlCtKbJnznRXCrpV48KaHGeQ0CYEDHBLrJjRBzXSR
+        uL50PyOELSzx6vgWdghbRuL/zvlQH2dL7JyyC2pogcSsk1PZQG6QELCW6DuTAxF2lDj65joT
+        RJhP4sZbQYhz+CQmbZvODBHmlehoE4KoVpPY0bSVcQKj8iyEX2Yh+WUWkl8WMDKvYhRPLS3O
+        TU8tNspLLdcrTswtLs1L10vOz93ECEwkp/8d/7KDcfmrj3qHGJk4GA8xSnAwK4nw5k8uSRbi
+        TUmsrEotyo8vKs1JLT7EKM3BoiTOyzZDK1lIID2xJDU7NbUgtQgmy8TBKdXA1MqxQlGtwCd2
+        3r19S5VdfjHssJ94OV7uKcerepF1u5W5nsmf/NXmfTX6tsjh9rkTX3yJ6hFeqDHP+XLxJmcH
+        N8/MyiUdcmZlkjfY3n+fss+mMfLlR60D93jXhDR97+DWZp6rv/HzPO1+rqK6e5et5Wu+JBjO
+        59Q8vi75a7jrmfQpUywe56/68ceD4RFzYEX9K+N1Ci8+KhpaHT+exTN9wie/hOfOSpfXTtie
+        c1JfVK5jhtO7/XqH8x7cWPnGys1XcNfK77/qL/qHPfk9/3uDxTXvhof7ZS7zJjxYvcb4Yt2t
+        lpqvafqqxwRCu+WuzjEr+tjWtbYo+JvpXKb26fLT7jxX1+K1lf3wI3DJ5Hu3A5VYijMSDbWY
+        i4oTAZH/3ImTAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsVy+t/xe7ptd0uSDWZt4bP4+n86i8W71nMs
+        Fh96HrFZ3JjwlNHi9qTpLA6sHptWdbJ5rN37gtFj8+lqj8+b5AJYovRsivJLS1IVMvKLS2yV
+        og0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQy+t+0sRY0c1d8/XKBrYHxLUcX
+        IyeHhICJxL1vexm7GLk4hASWMkq8aT/HCJGQkfh05SM7hC0s8edaFxtE0UdGiQM7z7NDOJsZ
+        JR6e3sYKUsUmoCNx/s0dZhBbRCBCYv70/2CTmAWKJdZO6Abq5uAQFvCQ6L5qAhJmEVCVWLn1
+        M1gJr4CtxLPV61gglslLtF2fzghSziygKbF+lz5EiaDEyZlPWCAmyks0b53NDFGuKLFlzndW
+        CLtWYtPr9UwTGIVmIXTPQtI9C0n3AkbmVYwiqaXFuem5xYZ6xYm5xaV56XrJ+bmbGIGRs+3Y
+        z807GOe9+qh3iJGJg/EQowQHs5IIb/7kkmQh3pTEyqrUovz4otKc1OJDjKZA30xklhJNzgfG
+        bl5JvKGZgamhiZmlgamlmbGSOK9nQUeikEB6YklqdmpqQWoRTB8TB6dUAxO7z4ZvfCFf1zDf
+        Ea3J1vTftOXYtWVcInM2zUzpXXw9+oPRwcuh9gKKu/e7LGj+quVjv1ZLfoJR49mlWh43LAxU
+        WfIvyAhu2ynJyXqC53PKctdXpx5+K8z/u/5lm9P2T9u3mgf89RLLsw2I+HM1vvJq2P0WqW8b
+        rZJNJaV0cmozPKbtZD6k7q9k9izkf1bX++6enO+tH10e/lh87sUfo0XeVjPWHEv093lelxre
+        ae96fmWBp+DGkqqrO88LKG5dNnE5Y8bF9rsPfSewHdKap3hcVM/JQL3jd+mb5EIWCeVrXxgP
+        PUtP/XrI//HeKtkINeF7nRNeCSV+rAgucnov3+sSvefSnLOTt5dk5s16nKzEUpyRaKjFXFSc
+        CADs/4IVJQMAAA==
+X-CMS-MailID: 20221116125430eucas1p2f2969a4a795614ce3b8c06f9ea3be36f
+X-Msg-Generator: CA
+X-RootMTR: 20221116125430eucas1p2f2969a4a795614ce3b8c06f9ea3be36f
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20221116125430eucas1p2f2969a4a795614ce3b8c06f9ea3be36f
+References: <CGME20221116125430eucas1p2f2969a4a795614ce3b8c06f9ea3be36f@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Nov 16, 2022 at 11:26:56AM +0100, David Hildenbrand wrote:
-> FOLL_FORCE is really only for ptrace access. As we unpin the pinned pages
-> using unpin_user_pages_dirty_lock(true), the assumption is that all these
-> pages are writable.
-> 
-> FOLL_FORCE in this case seems to be a legacy leftover. Let's just remove
-> it.
-> 
-> Cc: Inki Dae <inki.dae@samsung.com>
-> Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+The motivation for this patch is to continue the discussion around how to
+include LSM callback hooks in the io_uring infrastructure. To begin I take
+the nvme io_uring passthrough and try to include it in the already existing
+LSM infrastructure that is there for ioctl. This is far from a general
+io_uring approach, but its a start :)
 
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+You are very welcome to comment on the patch, but I have specific questions
+in mind:
 
-Plus ack for merging through the appropriate non-drm tree.
--Daniel
+1. The nvme io_uring are governed by ioctl numbers. In this patch I have
+passed this number directly to the ioctl_has_perm function in selinux. For
+the io_uring commands that follow such a pattern, is it enough to forward
+the call? or do we need to plumb something else? @Paul: really interested
+in hearing your thoughts.
 
-> ---
->  drivers/gpu/drm/exynos/exynos_drm_g2d.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> index 471fd6c8135f..e19c2ceb3759 100644
-> --- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> +++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> @@ -477,7 +477,7 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
->  	}
->  
->  	ret = pin_user_pages_fast(start, npages,
-> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-> +				  FOLL_WRITE | FOLL_LONGTERM,
->  				  g2d_userptr->pages);
->  	if (ret != npages) {
->  		DRM_DEV_ERROR(g2d->dev,
-> -- 
-> 2.38.1
-> 
+2. Could we use something similar for commands that are not structured as
+an ioctl? Does ublk structure its commands after ioctl, or does it use
+another system? @David would like to hear your thoughts on
+this.
+
+3. Finally, Is there anything preventing us from gathering all these
+io_uring commands under a common LSM infrastructure like the one that
+already exists for ioctl?
+
+Comments are greatly appreciated
+
+Joel Granados (1):
+  Use ioctl selinux callback io_uring commands that implement the ioctl
+    op convention
+
+ security/selinux/hooks.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.30.2
+
