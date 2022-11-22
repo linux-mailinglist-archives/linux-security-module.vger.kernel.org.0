@@ -2,96 +2,174 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1868063329E
-	for <lists+linux-security-module@lfdr.de>; Tue, 22 Nov 2022 03:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31026336C3
+	for <lists+linux-security-module@lfdr.de>; Tue, 22 Nov 2022 09:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiKVCED (ORCPT
+        id S232499AbiKVIMi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 21 Nov 2022 21:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        Tue, 22 Nov 2022 03:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbiKVCD6 (ORCPT
+        with ESMTP id S232361AbiKVIMg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:03:58 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0682BDEAC8;
-        Mon, 21 Nov 2022 18:03:57 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3938dc90ab0so112022607b3.4;
-        Mon, 21 Nov 2022 18:03:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+ptI+nYITeW1gKXUBABTe9iXK3+s6B6YR5hHe/uuAEk=;
-        b=aMtTD3FN91QuunzdQeJlDFtrgk7U61gYOsbhNxGjRp6qOvuSQkBew+G4nOb+I9lvjF
-         Gvs0dtTw0XcjDq6vXXhmaX9VsIHd8e463rPOH0Bxk4Sy1KIy/nR86RLTDqLLbgDLiX5M
-         1pT48i0anCd7RZ9HovhykDcZM0SUo2HaZUolkcviIdE4jWp2J2ei7J4oEwWyAwscRAXa
-         c9n8fcZoX4lvlZTtKRqv0PdoMhIrwHqCj0a8OByHjz8muMqyBbx/19CCSAPsRWSUkt86
-         JtyywhmXW6PofLaTX0Bq3IZxMJ8SNpQwsI2rz1fS+ygF4ST18Skr2SvqYXLiYZwIzIA8
-         xO7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+ptI+nYITeW1gKXUBABTe9iXK3+s6B6YR5hHe/uuAEk=;
-        b=B7uz6hV7HoonPjutfh+7FRl/+3a7EOI+PmZ2Gz5bjDDtNpYyFntXNWfKQnc9rgpIQF
-         r0GJbXDaBaNTeK+n+kKclyf3ssevdL9sLKAnY6HhwzhWJ3DuSajrstyl3K2Kmh1yjSK7
-         t+yobEKa1pfLm+tZwxxi+e9IVwSsUIv6uG+2iuV2OiofOtA0kcJ4DMmuOIGQ7hpdmRLX
-         YVJAlgVf9/S17MP+9nY2M1hqMr/MNwr8OKw20/2XRulqSsvTbfr3IuVSBLccbB8Qwrw4
-         nFSbGfxIbGOvJTJzB8cu59EEa0U1U9bFf1pi3IQOgTycfXEaDq6UVp1x2PhEIefxK3pl
-         rpxw==
-X-Gm-Message-State: ANoB5pm6qRT6tWp00zsNKXuassLG8V5FdWh8Ey2rbDF//mElEi5rea7e
-        5Wpww4WwjgKIek9IkCt1waJZ3RJ0jrWG+NtKUGtsJWQaW1TeW2+R
-X-Google-Smtp-Source: AA0mqf4J/yGvWf07lle42oLrKocwEUTgOWE6vyJjrwDumrKphjCqlctEtjZfGzrbCQNvzw7Tn4wd9zgCPP+0RJOZyRU=
-X-Received: by 2002:a81:574f:0:b0:39b:4c23:9cf0 with SMTP id
- l76-20020a81574f000000b0039b4c239cf0mr1397275ywb.185.1669082636235; Mon, 21
- Nov 2022 18:03:56 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a25:9f88:0:0:0:0:0 with HTTP; Mon, 21 Nov 2022 18:03:55
- -0800 (PST)
-From:   Felipe Bedetti <felipebedetticosta@gmail.com>
-Date:   Mon, 21 Nov 2022 23:03:55 -0300
-Message-ID: <CAFO8uswgpf01EKXfi6ULE_481mMCLr737E1sRuq29jQf1yQ=4Q@mail.gmail.com>
-Subject: Norah Colly
-To:     linux rdma <linux-rdma@vger.kernel.org>,
-        linux s390 <linux-s390@vger.kernel.org>,
-        linux samsung soc <linux-samsung-soc@vger.kernel.org>,
-        linux scsi <linux-scsi@vger.kernel.org>,
-        linux sctp <linux-sctp@vger.kernel.org>,
-        linux security module <linux-security-module@vger.kernel.org>
+        Tue, 22 Nov 2022 03:12:36 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D00DEE0;
+        Tue, 22 Nov 2022 00:12:31 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NGcJL3Bkwz9v7Gp;
+        Tue, 22 Nov 2022 16:05:38 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnGPVLhHxj44iEAA--.29174S2;
+        Tue, 22 Nov 2022 09:12:07 +0100 (CET)
+Message-ID: <aa51b845dca6021282b5b2ae260020a3a5cfb5c6.camel@huaweicloud.com>
+Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to
+ reiserfs_security_free()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Date:   Tue, 22 Nov 2022 09:11:50 +0100
+In-Reply-To: <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
+         <CAHC9VhQ9WftDrF1R--ZYJXOv-YbVU-Pr1Ob_deDwEWm8OcQ-TA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,BODY_SINGLE_URI,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SHORT_SHORTNER,SPF_HELO_NONE,SPF_PASS,
-        SUSPICIOUS_RECIPS,TVD_SPACE_RATIO autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:112c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  2.5 SUSPICIOUS_RECIPS Similar addresses in recipient list
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [felipebedetticosta[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 TVD_SPACE_RATIO No description available.
-        *  1.6 SHORT_SHORTNER Short body with little more than a link to a
-        *      shortener
-        *  0.7 BODY_SINGLE_URI Message body is only a URI
-X-Spam-Level: *****
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwDnGPVLhHxj44iEAA--.29174S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw48Zr1xAF4kJFW5GFW8Crg_yoW5KF1fpF
+        WxK3WUKr1DJF1kur1Fvanxua1Iq3yag3y7GrsxKryqya9xZw1kKF4Ikay3u397KrWDGr4I
+        qa1xGw43uw45J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4GyWwAAsb
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-https://bit.ly/3gk1Aho
+On Mon, 2022-11-21 at 18:41 -0500, Paul Moore wrote:
+> On Thu, Nov 10, 2022 at 4:47 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
+> > during inode creation") defined reiserfs_security_free() to free the name
+> > and value of a security xattr allocated by the active LSM through
+> > security_old_inode_init_security(). However, this function is not called
+> > in the reiserfs code.
+> > 
+> > Thus, add a call to reiserfs_security_free() whenever
+> > reiserfs_security_init() is called, and initialize value to NULL, to avoid
+> > to call kfree() on an uninitialized pointer.
+> > 
+> > Finally, remove the kfree() for the xattr name, as it is not allocated
+> > anymore.
+> > 
+> > Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
+> > Cc: stable@vger.kernel.org
+> > Cc: Jeff Mahoney <jeffm@suse.com>
+> > Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Reported-by: Mimi Zohar <zohar@linux.ibm.com>
+> > Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  fs/reiserfs/namei.c          | 4 ++++
+> >  fs/reiserfs/xattr_security.c | 2 +-
+> >  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> If I'm understanding this patch correctly, this is a standalone
+> bugfix, right?  Any reason this shouldn't be merged now, independent
+> of the rest of patches in this patchset?
+
+Yes. It would be fine for me to pick this sooner.
+
+Thanks
+
+Roberto
+
+> > diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
+> > index 3d7a35d6a18b..b916859992ec 100644
+> > --- a/fs/reiserfs/namei.c
+> > +++ b/fs/reiserfs/namei.c
+> > @@ -696,6 +696,7 @@ static int reiserfs_create(struct user_namespace *mnt_userns, struct inode *dir,
+> > 
+> >  out_failed:
+> >         reiserfs_write_unlock(dir->i_sb);
+> > +       reiserfs_security_free(&security);
+> >         return retval;
+> >  }
+> > 
+> > @@ -779,6 +780,7 @@ static int reiserfs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
+> > 
+> >  out_failed:
+> >         reiserfs_write_unlock(dir->i_sb);
+> > +       reiserfs_security_free(&security);
+> >         return retval;
+> >  }
+> > 
+> > @@ -878,6 +880,7 @@ static int reiserfs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+> >         retval = journal_end(&th);
+> >  out_failed:
+> >         reiserfs_write_unlock(dir->i_sb);
+> > +       reiserfs_security_free(&security);
+> >         return retval;
+> >  }
+> > 
+> > @@ -1194,6 +1197,7 @@ static int reiserfs_symlink(struct user_namespace *mnt_userns,
+> >         retval = journal_end(&th);
+> >  out_failed:
+> >         reiserfs_write_unlock(parent_dir->i_sb);
+> > +       reiserfs_security_free(&security);
+> >         return retval;
+> >  }
+> > 
+> > diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
+> > index 8965c8e5e172..857a65b05726 100644
+> > --- a/fs/reiserfs/xattr_security.c
+> > +++ b/fs/reiserfs/xattr_security.c
+> > @@ -50,6 +50,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
+> >         int error;
+> > 
+> >         sec->name = NULL;
+> > +       sec->value = NULL;
+> > 
+> >         /* Don't add selinux attributes on xattrs - they'll never get used */
+> >         if (IS_PRIVATE(dir))
+> > @@ -95,7 +96,6 @@ int reiserfs_security_write(struct reiserfs_transaction_handle *th,
+> > 
+> >  void reiserfs_security_free(struct reiserfs_security_handle *sec)
+> >  {
+> > -       kfree(sec->name);
+> >         kfree(sec->value);
+> >         sec->name = NULL;
+> >         sec->value = NULL;
+> > --
+> > 2.25.1
+> > 
+> 
+> 
+
