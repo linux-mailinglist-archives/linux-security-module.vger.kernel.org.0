@@ -2,123 +2,96 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B98B633104
-	for <lists+linux-security-module@lfdr.de>; Tue, 22 Nov 2022 00:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1868063329E
+	for <lists+linux-security-module@lfdr.de>; Tue, 22 Nov 2022 03:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiKUX4Q (ORCPT
+        id S232439AbiKVCED (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 21 Nov 2022 18:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        Mon, 21 Nov 2022 21:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbiKUX4N (ORCPT
+        with ESMTP id S232429AbiKVCD6 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 21 Nov 2022 18:56:13 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16AC4AF3E
-        for <linux-security-module@vger.kernel.org>; Mon, 21 Nov 2022 15:56:11 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 136so12628359pga.1
-        for <linux-security-module@vger.kernel.org>; Mon, 21 Nov 2022 15:56:11 -0800 (PST)
+        Mon, 21 Nov 2022 21:03:58 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0682BDEAC8;
+        Mon, 21 Nov 2022 18:03:57 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3938dc90ab0so112022607b3.4;
+        Mon, 21 Nov 2022 18:03:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFqoA3xlAXzNwNaJLAB412Ok7P7Z69MnqdPRYsS/dcY=;
-        b=UGMGIxl4MlQMRNDDoJWW1JeWd1Saa+VY7wYO0h5+ALzBmXWpD2TS+rloS5mLWItbTu
-         dmLO6NI0/V1oHyb1t8W3cmApDUm4Tye2vUImDyToVFtk3M6GOw5Inchh/UMvHT2e/+Mq
-         TZ0Zu/FXa04YRFFPQkZkOCpTQLS0EdUOIT0pN4L3oxkVk6sF6dYFnXSdIODc7wwURPgb
-         9uoLDRbPa4Hxw+5ALlkY5tWI5ZiDCeNk3+/eGSw7eJ37LD7LmjdzmNfuwXTxMuQBy69L
-         SQx4AJf0J8sU68MUvZMsMSHdQOZmK/LoNgQ2SeuUcyj1Hy7Nep6MNCRwXKjnXY74GtT0
-         A1eQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+ptI+nYITeW1gKXUBABTe9iXK3+s6B6YR5hHe/uuAEk=;
+        b=aMtTD3FN91QuunzdQeJlDFtrgk7U61gYOsbhNxGjRp6qOvuSQkBew+G4nOb+I9lvjF
+         Gvs0dtTw0XcjDq6vXXhmaX9VsIHd8e463rPOH0Bxk4Sy1KIy/nR86RLTDqLLbgDLiX5M
+         1pT48i0anCd7RZ9HovhykDcZM0SUo2HaZUolkcviIdE4jWp2J2ei7J4oEwWyAwscRAXa
+         c9n8fcZoX4lvlZTtKRqv0PdoMhIrwHqCj0a8OByHjz8muMqyBbx/19CCSAPsRWSUkt86
+         JtyywhmXW6PofLaTX0Bq3IZxMJ8SNpQwsI2rz1fS+ygF4ST18Skr2SvqYXLiYZwIzIA8
+         xO7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sFqoA3xlAXzNwNaJLAB412Ok7P7Z69MnqdPRYsS/dcY=;
-        b=Ak9s8SUn9agniWXtvZ/psUcT8k1CEdCb1Vc5AVB5qKoqAigKPsheqA+NO8U0fEqCms
-         t8FLZ7Xkmv8rupyxpdoxsNtbgoD5Lk47/u1yj7YlrPVnp6Rg9XVLS4z2wcHOMbR9ReNY
-         FLOgceB0frpCyt7I79CjYsn1POWXrweHA7Y5oLtH2dAukNY0dNEpAWTIiD/9QW0UKcta
-         C05GvUG+v9awdiWYHBEIz6iEJiV40mFWz26n49EBxJKF1JE/wlIuLKKgOt8eA5/qK8Bv
-         UIU5jqUrir8W7DkFpytVQg8ibTv1+OEBWYOe8XYKBsjcQzBDa7we4sy/IWAxV/pQsqDD
-         cZqA==
-X-Gm-Message-State: ANoB5pmKr012mNt7UR5TrxBzTMdyRSMYZr/OM+KJPUS/YYd/EXRWrqRN
-        mAbRVBwqvZUMHJ17uMv4qGhZa5k7uDeoXC6FE0BY
-X-Google-Smtp-Source: AA0mqf7G6c3Nvud9YG/dWkDyX6JZDp8dvZSG4MT1APz5NyskblXGRN/R4W65HJ2mSLW6V+5KIth5yCSQDFWO6JKT7SI=
-X-Received: by 2002:a62:2941:0:b0:573:6a8d:dd15 with SMTP id
- p62-20020a622941000000b005736a8ddd15mr11936805pfp.2.1669074971136; Mon, 21
- Nov 2022 15:56:11 -0800 (PST)
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+ptI+nYITeW1gKXUBABTe9iXK3+s6B6YR5hHe/uuAEk=;
+        b=B7uz6hV7HoonPjutfh+7FRl/+3a7EOI+PmZ2Gz5bjDDtNpYyFntXNWfKQnc9rgpIQF
+         r0GJbXDaBaNTeK+n+kKclyf3ssevdL9sLKAnY6HhwzhWJ3DuSajrstyl3K2Kmh1yjSK7
+         t+yobEKa1pfLm+tZwxxi+e9IVwSsUIv6uG+2iuV2OiofOtA0kcJ4DMmuOIGQ7hpdmRLX
+         YVJAlgVf9/S17MP+9nY2M1hqMr/MNwr8OKw20/2XRulqSsvTbfr3IuVSBLccbB8Qwrw4
+         nFSbGfxIbGOvJTJzB8cu59EEa0U1U9bFf1pi3IQOgTycfXEaDq6UVp1x2PhEIefxK3pl
+         rpxw==
+X-Gm-Message-State: ANoB5pm6qRT6tWp00zsNKXuassLG8V5FdWh8Ey2rbDF//mElEi5rea7e
+        5Wpww4WwjgKIek9IkCt1waJZ3RJ0jrWG+NtKUGtsJWQaW1TeW2+R
+X-Google-Smtp-Source: AA0mqf4J/yGvWf07lle42oLrKocwEUTgOWE6vyJjrwDumrKphjCqlctEtjZfGzrbCQNvzw7Tn4wd9zgCPP+0RJOZyRU=
+X-Received: by 2002:a81:574f:0:b0:39b:4c23:9cf0 with SMTP id
+ l76-20020a81574f000000b0039b4c239cf0mr1397275ywb.185.1669082636235; Mon, 21
+ Nov 2022 18:03:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
- <20221110094639.3086409-3-roberto.sassu@huaweicloud.com> <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
- <aa5fa8c5f231115c58012352124df57d16a01e41.camel@huaweicloud.com> <7812899531b2bd936b25fde8fc2f1c2a6080b2bd.camel@linux.ibm.com>
-In-Reply-To: <7812899531b2bd936b25fde8fc2f1c2a6080b2bd.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 21 Nov 2022 18:55:59 -0500
-Message-ID: <CAHC9VhTvcgOjXAH51Vnk66kEjXfjUS2aJjXjJmU-rwLT53vWPw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] security: Rewrite security_old_inode_init_security()
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        ocfs2-devel@oss.oracle.com
+Received: by 2002:a25:9f88:0:0:0:0:0 with HTTP; Mon, 21 Nov 2022 18:03:55
+ -0800 (PST)
+From:   Felipe Bedetti <felipebedetticosta@gmail.com>
+Date:   Mon, 21 Nov 2022 23:03:55 -0300
+Message-ID: <CAFO8uswgpf01EKXfi6ULE_481mMCLr737E1sRuq29jQf1yQ=4Q@mail.gmail.com>
+Subject: Norah Colly
+To:     linux rdma <linux-rdma@vger.kernel.org>,
+        linux s390 <linux-s390@vger.kernel.org>,
+        linux samsung soc <linux-samsung-soc@vger.kernel.org>,
+        linux scsi <linux-scsi@vger.kernel.org>,
+        linux sctp <linux-sctp@vger.kernel.org>,
+        linux security module <linux-security-module@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,BODY_SINGLE_URI,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SHORT_SHORTNER,SPF_HELO_NONE,SPF_PASS,
+        SUSPICIOUS_RECIPS,TVD_SPACE_RATIO autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.5 SUSPICIOUS_RECIPS Similar addresses in recipient list
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [felipebedetticosta[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 TVD_SPACE_RATIO No description available.
+        *  1.6 SHORT_SHORTNER Short body with little more than a link to a
+        *      shortener
+        *  0.7 BODY_SINGLE_URI Message body is only a URI
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Nov 21, 2022 at 3:54 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Mon, 2022-11-21 at 10:45 +0100, Roberto Sassu wrote:
-> > > As ocfs2 already defines initxattrs, that leaves only reiserfs missing
-> > > initxattrs().  A better, cleaner solution would be to define one.
-> >
-> > If I understood why security_old_inode_init_security() is called
-> > instead of security_inode_init_security(), the reason seems that the
-> > filesystem code uses the length of the obtained xattr to make some
-> > calculations (e.g. reserve space). The xattr is written at a later
-> > time.
-> >
-> > Since for reiserfs there is a plan to deprecate it, it probably
-> > wouldn't be worth to support the creation of multiple xattrs. I would
-> > define a callback to take the first xattr and make a copy, so that
-> > calling security_inode_init_security() + reiserfs_initxattrs() is
-> > equivalent to calling security_old_inode_init_security().
-
-FWIW, reiserfs isn't going to be removed until 2025, I'm hopeful we
-can remove the IMA/EVM special cases before then :)
-
-> > But then, this is what anyway I was doing with the
-> > security_initxattrs() callback, for all callers of security_old_inode_i
-> > nit_security().
-> >
-> > Also, security_old_inode_init_security() is exported to kernel modules.
-> > Maybe, it is used somewhere. So, unless we plan to remove it
-> > completely, it should be probably be fixed to avoid multiple LSMs
-> > successfully setting an xattr, and losing the memory of all except the
-> > last (which this patch fixes by calling security_inode_init_security()).
-
-I would much rather remove security_old_inode_init_security() then
-worry about what out-of-tree modules might be using it.  Hopefully we
-can resolve the ocfs2 usage and get ocfs2 exclusively on the new hook
-without too much trouble, which means all we have left is reiserfs ...
-how difficult would you expect the conversion to be for reiserfs?
-
-> > If there is still the preference, I will implement the reiserfs
-> > callback and make a fix for security_old_inode_init_security().
->
-> There's no sense in doing both, as the purpose of defining a reiserfs
-> initxattrs function was to clean up this code making it more readable.
->
-> Mimi
-
--- 
-paul-moore.com
+https://bit.ly/3gk1Aho
