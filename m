@@ -2,169 +2,168 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07FD636960
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Nov 2022 19:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0C4636A4E
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Nov 2022 21:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237461AbiKWS6u (ORCPT
+        id S235397AbiKWT7H (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 23 Nov 2022 13:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
+        Wed, 23 Nov 2022 14:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236940AbiKWS6p (ORCPT
+        with ESMTP id S239930AbiKWT5y (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:58:45 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B0C87543;
-        Wed, 23 Nov 2022 10:58:41 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANI3vju030703;
-        Wed, 23 Nov 2022 18:58:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=OWd1TMAtI9YXm3ugWju/m0erSY+DisOV9bmg4+k/m3k=;
- b=q4bGZ/SwCdcxMTCDce8bjFBUoDMN0CZ31q6DI7oTd3Lf9e8FOZgCgHZQ48zOuuWvzCUO
- g65mPRAX6xpkXngwmP/wW2GD7kRr8pBWi2zh25utGJupBCeSK8g2Bmri4qiorULyb0Qb
- l2lA14Gg2WxhPDnONXZDVVOXVwiFAvhq8uROjB5r8tWrD96R7LXyRZsTdvmb8I76XwXL
- 7vVlWY8kND9j0qkhpFUgym5pBE3b+hqvo6qmV5+7CivPva8+Xj8Dc4HsLsSzR6hg2QFm
- 2FGPRDZBXW/QdGmFtJBOtR5PtYtTO6s3vgGSnrKfZyvQ6qG+yzPHRYuSxvw5Tg+dp7lY Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x813evb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 18:58:04 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANIvaif024504;
-        Wed, 23 Nov 2022 18:58:03 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x813ev0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 18:58:03 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ANIpeoh007133;
-        Wed, 23 Nov 2022 18:58:02 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03dal.us.ibm.com with ESMTP id 3kxpsakr3n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 18:58:02 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ANIw0Ji6030060
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Nov 2022 18:58:01 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7C4258045;
-        Wed, 23 Nov 2022 18:58:00 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A7DC5805F;
-        Wed, 23 Nov 2022 18:57:59 +0000 (GMT)
-Received: from [9.163.61.172] (unknown [9.163.61.172])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Nov 2022 18:57:58 +0000 (GMT)
-Message-ID: <6f2a4a5f-ab5b-8c1b-47d5-d4e6dca5fc3a@linux.vnet.ibm.com>
-Date:   Wed, 23 Nov 2022 13:57:58 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] fs: define a firmware security filesystem named
- fwsecurityfs
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, Dov Murik <dovmurik@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-References: <20221106210744.603240-1-nayna@linux.ibm.com>
- <20221106210744.603240-3-nayna@linux.ibm.com> <Y2uvUFQ9S2oaefSY@kroah.com>
- <8447a726-c45d-8ebb-2a74-a4d759631e64@linux.vnet.ibm.com>
- <20221119114234.nnfxsqx4zxiku2h6@riteshh-domain>
- <d3e8df29-d9b0-5e8e-4a53-d191762fe7f2@linux.vnet.ibm.com>
- <a2752fdf-c89f-6f57-956e-ad035d32aec6@linux.vnet.ibm.com>
- <Y35C9O27J29bUDjA@kroah.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <Y35C9O27J29bUDjA@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2YrEmH-Vwbi1pRZxNLbmgvdX-b8wwU50
-X-Proofpoint-ORIG-GUID: _wOu0IfhLy4hU6MJ6gGyX-1HjXY9bgsf
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 23 Nov 2022 14:57:54 -0500
+Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3F15FDE
+        for <linux-security-module@vger.kernel.org>; Wed, 23 Nov 2022 11:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669233470; bh=KGezVsV0Po7wkqsLTMkHH3Oi+nbFxChfwJVSfxR3dMA=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=Ml6RS7b/q91w3NUyI9l+ulLb15yIe868ZH/FzDmVuIDMOklorbMYlTM7wocGkhQuRubK8HtvYX1I08q1oWSDaUZsW2W2t0iKqo62KF1G9THwRARNVImQVlHZpyqo1RRULgAwAgYeUnl/IPBfSn2b6rXHvVioxSlIe9gtKAVQ5naDoWTuw02dfx46MJmZauG5BK+Jt64YW2XkAuU4mSzmtO4vJ49JRtOq1MGqU0uNKQnBhVYqlSyti4I/PgnxUkIzHKVzrFlGz13GmomfpInGP8eDCZIY9lfLy1mHg7H+t/aIufEqbjY3ODCffl3HghDkVFP9VmvWlxjTsSg02Czd/Q==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669233470; bh=iDdE/f5HexrxIf1Jz1p61NqQ3OaTQvJBYgQ9RSJ1nkK=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=LThMiHdfh4IsyOqVdNIeQVDoTR/XTrH284w1f8sNpKSzK6Chs2MyH3clfJpZcHsxWU8HXKWGuAdfL+aHVH41azJvHPnVWYETvIt/keK/wJAxIFYt9n2oyo7bRVc/0IEw7C/1Ix36C+3AaMs6JhQwsvG0WTDLXPmnCbaOQtH0VSVnjQvf31wLKES63kfVVzqJpoIKWt9P8Q5QS1yd7OrrIEhtbrMf6J4bJkCCq1yYEorhEY4QfjqpZnotgckuzs4WZTFa+bBw/NtZUSGuyhEh9inDf/U7hqX+ZGv0WNnGFaMK9FEnmRTl7Hu8kqAtZQ+CJeEKJzTGymf+xRHsSVZdxQ==
+X-YMail-OSG: LXWC9P0VM1nWqJx7OwjvahsCdES_Rxx6WP3D.XQDpyLHkLCoVI2yfQeg6IhsSLU
+ hCTZsD48CbhtZ_lI4eAjr4FGLvo3b4_xBQpwBN6ZB9liAkVE7CQSNpBaylwbBfIXX7McIrs99W78
+ Q5mHf.JoRx4v.vzhStp6kMUNjhSp2alhWyJaFOdxEpWjSxbIN_gFWF_WP8WavCXjrXxnaLJX5Pxu
+ cPzafRGQ69g66sAylgtqvK0FFdq6ZEl9Ur2Wc9DX54MhtTUeUG3DrKp9uvPdne.Hcado94pskFx9
+ R3Oz8GePtZXu_rTJ.5oObrTZNHiIa2xKCFaxDjzrfRZU5IVkKO44SNrFbNA5ZEWZKlRSVhKZNvO6
+ fcCpHWkuVVLSd7w7sBhzUnEdpnUyyj2ajaEmzd5Ik7skeAuEaMnjPk.UkrMyQGjm1k1b6KF6CkwH
+ UYkF_QCTYkJc7msc7JB1MUUYKawrf4TmQfJZ.AzQ59HQvB_T19A3cvpaWB.gBP9EvdplZ4.4FHV9
+ vGX4ER73zK.uwv0yaERFwYgzRSDaDK1tpOpPUPNwka7IDQ8qYlqbmA_2SFqmYJcZEha0rTwXQs4e
+ upLxQ3dB.GYUwNHsF1ehuaQ544TfCezf1coUffAYjsgGTmrnrBH0JgvJdCFBMIgtuG.BsADxjFJQ
+ IyOfrrVluWbJzg_yftG25rPQ4CQUB8WquGbM5HTls4u7bUy1D2.oykZCnvWOPvJFlDEmMrQcvtg2
+ kcNJjgVRm7dD8eACfflGRbz05YADPKSQnCuMns7gf.Ah_uOHQRP_wFnLmI8mQKZnXgrGvTeagAKp
+ wNqDcvSG76Uq9zj.qoL.9lNTVqLz.yNOfBbCupriX8NAtYafSFb2SrXs3OwrBD2EGG0JbXdo4uvv
+ 20yQADzTBN4ZVbMWv_UC2UPDJYpcpbDKAlfc8HhrcjIdarH6HGNwBcgPzKogAXvFX_GoWgf6pS3F
+ 9NC9j6F522Dy9DRkrCUzcencSP2JGF5uKfVcpzO1NdBJYqSu7.rNJ3fmzEn_b1WI_Smy4VPD1Gzu
+ gggdGbJcrilgOpz0TECLZRJfl7KLD6ch9AJnZNyPXHXdysJE9yBb3MRc45zunyEuK4R8VcwPKhn7
+ 2_WjvF8VI1hqpzHzglSIFmEqFK5QO85S4Wz_z8Ba4ls5UduovM4lYIiZmDHsBZCQtzjvQ_.ooKHK
+ SGfIGTcDbR9ig_.yQwOk3OnKhhr.hT6ozW1u763N4l9fPdc6i4d2JgfhOnUwereV.uey7Sb9TxpJ
+ BQnM5yR.ognjqJ6TBOXIqnzE4wj6.EbLrmVmMnBK.dcX32o2NpuYxKkBJNoz9AjgP78aGDs.k3SB
+ KqWcV4MInM8aOHNurXIUnatxUahnmyesT4Tnfb.Cew5EvkBjc8.u8Ro_xbnMaDqX7r06NonyEJa9
+ lWGMDlZ0PCuHJL1bLLBOdRsAKFc1WEZekB_EzE5B9kxIYDdjN1.ZdD2tkMthmpt0MZHmMPNdycsw
+ T.WIvbf.JfcujaAZOMybGXHdqoxjKtD1q1CnvpMuHDjG8SoHdwbGXNWIjNuErvqkNcx7zqsnO46R
+ DuIqRGIBoEbrpTz0YMp4ZKdcFgGAzKx3d05hI2AUR51_PWy_jwEr.Ff2NE2kYN1ZzSooKdGmRicQ
+ oWLa06LgMNOD0je53gdlM_D06WY3YbJfrNh4eU1o181nds3WyYBGQTnwNC39lkNfZCqi3SNFfeW9
+ spImseU.rLUS8Be_Z8lLaQkqYOHvL1_dwX_VSt1StLJd5HU5b58KeYLlUUTsIsqQvWMdBnnIFeU1
+ jCneWOHX9i8wkBFAwDyfAm4dlKcr3_42DWGx1Gzk9iLbSwPUbhpRaf15vVuh6HSYrzJwljyaas1x
+ ycUY8y3j4VdKqdN8zQqEX7iW7n_cylkJICRw5lTClNrN7pYUG5m1n4JEQn523BBKgs5DJNon5oT5
+ 3U6_jz6okzdcxZu1ozH8DyNhahxBiy6_jJ5wSUp4lw6yrSUdVvZkzS1mPXn2tepNmj2EeZsAPgps
+ 4bZmNL_JxT2_vPvGrFK_wLu2kOFk7Q098IQB3tLqE4HKU45DbJgj306_i.aWoUP9unjVhIbr3i_Z
+ jsgVdxrJF3KtHUN0I6gcs3rBxtgEAMx5aXWXDQi4TtpaPxBgZ4DAZz4M6sh1YGh3p6yUNvtPbpv.
+ cqcQk8TUtMWZCyxzhM7lAIcXXc7H1vifCSGrtgP9hJ09H3DNnOFjrkIFjXl2qsqRRsNl_fdFpCAx
+ a4VmAjnHvRUmCWbcKE9jEj5aA0dIqY2UmA5_ruUwmuEBx8VpFPrXDSug72shvgAE1lBtj3b99Nqn
+ 0Bxt981JGJpp.
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Wed, 23 Nov 2022 19:57:50 +0000
+Received: by hermes--production-gq1-579bc4bddd-hbm49 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID dd0bf7e44b76ebf62a48c0cf31f93899;
+          Wed, 23 Nov 2022 19:57:48 +0000 (UTC)
+From:   Casey Schaufler <casey@schaufler-ca.com>
+To:     casey.schaufler@intel.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Cc:     casey@schaufler-ca.com, jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Subject: [PATCH v1 0/8] LSM: Two basic syscalls
+Date:   Wed, 23 Nov 2022 11:57:35 -0800
+Message-Id: <20221123195744.7738-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-23_10,2022-11-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 spamscore=0 phishscore=0
- bulkscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211230137
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+References: <20221123195744.7738-1-casey.ref@schaufler-ca.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Add two system calls for the Linux Security Module ABI.
 
-On 11/23/22 10:57, Greg Kroah-Hartman wrote:
-> On Wed, Nov 23, 2022 at 10:05:49AM -0500, Nayna wrote:
->> On 11/22/22 18:21, Nayna wrote:
->>>  From the perspective of our use case, we need to expose firmware
->>> security objects to userspace for management. Not all of the objects
->>> pre-exist and we would like to allow root to create them from userspace.
->>>
->>>  From a unification perspective, I have considered a common location at
->>> /sys/firmware/security for managing any platform's security objects. And
->>> I've proposed a generic filesystem, which could be used by any platform
->>> to represent firmware security objects via /sys/firmware/security.
->>>
->>> Here are some alternatives to generic filesystem in discussion:
->>>
->>> 1. Start with a platform-specific filesystem. If more platforms would
->>> like to use the approach, it can be made generic. We would still have a
->>> common location of /sys/firmware/security and new code would live in
->>> arch. This is my preference and would be the best fit for our use case.
->>>
->>> 2. Use securityfs.  This would mean modifying it to satisfy other use
->>> cases, including supporting userspace file creation. I don't know if the
->>> securityfs maintainer would find that acceptable. I would also still
->>> want some way to expose variables at /sys/firmware/security.
->>>
->>> 3. Use a sysfs-based approach. This would be a platform-specific
->>> implementation. However, sysfs has a similar issue to securityfs for
->>> file creation. When I tried it in RFC v1[1], I had to implement a
->>> workaround to achieve that.
->>>
->>> [1] https://lore.kernel.org/linuxppc-dev/20220122005637.28199-3-nayna@linux.ibm.com/
->>>
->> Hi Greg,
->>
->> Based on the discussions so far, is Option 1, described above, an acceptable
->> next step?
-> No, as I said almost a year ago, I do not want to see platform-only
-> filesystems going and implementing stuff that should be shared by all
-> platforms.
+lsm_self_attr() provides the security module specific attributes
+that have previously been visible in the /proc/self/attr directory.
+For each attribute that is set on the current process the system
+call will return an LSM identifier, an attribute identifier and
+the value of the attribute. The LSM and attribute identifier values
+are defined in include/uapi/linux/lsm.h
 
-Given there are no other exploiters for fwsecurityfs and there should be 
-no platform-specific fs, would modifying sysfs now to let userspace 
-create files cleanly be the way forward? Or, if we should strongly 
-consider securityfs, which would result in updating securityfs to allow 
-userspace creation of files and then expose variables via a more 
-platform-specific directory /sys/kernel/security/pks? We want to pick 
-the best available option and would find some hints on direction helpful 
-before we develop the next patch.
+lsm_module_list() provides the LSM identifiers, in order, of the
+security modules that are active on the system. This has been
+available in the securityfs file /sys/kernel/security/lsm.
 
-Thanks & Regards,
+Patch 0001 changes the LSM registration from passing the name
+of the module to passing a lsm_id structure that contains the
+name of the module.
+Patch 0002 adds an LSM identifier number to the lsm_id structure.
+Patch 0003 adds an attribute identifier to the lsm_id.
+Patch 0004 adds the registered lsm_ids to a table.
+Patch 0005 changes security_[gs]etprocattr() to use LSM IDs instead
+of LSM names.
+Patch 0006 implements lsm_self_attr().
+Patch 0007 implements lsm_module_list().
+Patch 0008 wires up the two syscalls.
 
-       - Nayna
+Casey Schaufler (8):
+  LSM: Identify modules by more than name
+  LSM: Add an LSM identifier for external use
+  LSM: Identify the process attributes for each module
+  LSM: Maintain a table of LSM attribute data
+  proc: Use lsmids instead of lsm names for attrs
+  LSM: lsm_self_attr syscall for LSM self attributes
+  LSM: Create lsm_module_list system call
+  lsm: wireup syscalls lsm_self_attr and lsm_module_list
+
+ arch/alpha/kernel/syscalls/syscall.tbl        |   2 +
+ arch/arm/tools/syscall.tbl                    |   2 +
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   2 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   2 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   2 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   2 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   2 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   2 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   2 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   2 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   2 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   2 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   2 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   2 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   2 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   2 +
+ fs/proc/base.c                                |  29 +--
+ fs/proc/internal.h                            |   2 +-
+ include/linux/lsm_hooks.h                     |  13 +-
+ include/linux/security.h                      |  28 ++-
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/lsm.h                      |  67 ++++++
+ kernel/sys_ni.c                               |   4 +
+ security/Makefile                             |   1 +
+ security/apparmor/lsm.c                       |   9 +-
+ security/bpf/hooks.c                          |  13 +-
+ security/commoncap.c                          |   8 +-
+ security/landlock/cred.c                      |   2 +-
+ security/landlock/fs.c                        |   2 +-
+ security/landlock/ptrace.c                    |   2 +-
+ security/landlock/setup.c                     |   6 +
+ security/landlock/setup.h                     |   1 +
+ security/loadpin/loadpin.c                    |   9 +-
+ security/lockdown/lockdown.c                  |   8 +-
+ security/lsm_syscalls.c                       | 194 ++++++++++++++++++
+ security/safesetid/lsm.c                      |   9 +-
+ security/security.c                           |  37 +++-
+ security/selinux/hooks.c                      |  11 +-
+ security/smack/smack_lsm.c                    |   9 +-
+ security/tomoyo/tomoyo.c                      |   9 +-
+ security/yama/yama_lsm.c                      |   8 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   2 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   2 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   2 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   2 +
+ 47 files changed, 484 insertions(+), 47 deletions(-)
+ create mode 100644 include/uapi/linux/lsm.h
+ create mode 100644 security/lsm_syscalls.c
+
+
+base-commit: 247f34f7b80357943234f93f247a1ae6b6c3a740
+-- 
+2.37.3
 
