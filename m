@@ -2,140 +2,97 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46ECD63A8B7
-	for <lists+linux-security-module@lfdr.de>; Mon, 28 Nov 2022 13:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C04C863AB70
+	for <lists+linux-security-module@lfdr.de>; Mon, 28 Nov 2022 15:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiK1MtS (ORCPT
+        id S232627AbiK1Onm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 28 Nov 2022 07:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        Mon, 28 Nov 2022 09:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiK1MtQ (ORCPT
+        with ESMTP id S232616AbiK1OnL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:49:16 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBCAE41
-        for <linux-security-module@vger.kernel.org>; Mon, 28 Nov 2022 04:49:12 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id c2so7066944qko.1
-        for <linux-security-module@vger.kernel.org>; Mon, 28 Nov 2022 04:49:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TGVmMJIaDzF+HZ9gyq+88LkwK1s7TvZ3LoSpvYVKuJs=;
-        b=Yc4mY6AvvR8J0FvilEHOp4YJztk5dej6+6PHrqtJwOKPe36IVOw6KUbOFPvxqaIUVL
-         EKFpogzvGm5EXh9TW/siBoniymJvMkxoq2s2dEzDKzySHox0B0xSAyWktDHmUzO51+5r
-         xBS2R51caFTcaZHv7tE2Is3GOhS4XFGMGdcni1OmAj9u7AIsdo2OBC6Zs3HQUO6jBJLv
-         WeR77C4rP7xgp7c/aFdK2MLoUKskkP98Mt6qMdHjTw7hhwDdYJ7y6jlJ5bHRt/CQ7ysK
-         65OhWflnpl2owcwtMU/s6jA0FNYtvL78Qc9INGOyriQqV3yzcPyXQWZS92FrOCZ0e3aP
-         rMug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TGVmMJIaDzF+HZ9gyq+88LkwK1s7TvZ3LoSpvYVKuJs=;
-        b=FCgWqbauo3m3KlhuF09pbl1sSqOLHvZKjXvlBk1XuqvDnTA8cfUELnr9MDh0JJRz8X
-         cXqU98IBhn8E6mxk5plvvzfFnnC/j8RLcUekx19D05KEC9pjx/sX0gW8P5pLGiapW5oN
-         f9/S/GFVNHtbW8XnITE1EU6wbecIIyDBrPXO4Gu/OePv8iRY6MHv0OCdHwIXbd3M1Y9g
-         rENazqxd09evtL/5UuWoJ/0N5pV3xVxc3vaEBdTHkhB8das8Cfv6IzYB2v5iKx9f9SST
-         YAVN9EPsRwId6jUlkKbwj7D3ZxZ19mqvQ1WEFWp0q70S3ijhVRHlwCHtRbel6H6KUEXk
-         rppA==
-X-Gm-Message-State: ANoB5pkRs2I95G6C/GyXE3zddx6jwsZ00NsdWNQz5xb1+V/8sGOgCsln
-        0Lt/MIay3NyIdR5mzzzBEgBh
-X-Google-Smtp-Source: AA0mqf4Ds2RG2gMvCRQqsJgfksVgiZ7yR5a4UThP2iPQ0CQqTIvFBEEQxZnN45hFk2rmk57REIkPQg==
-X-Received: by 2002:a37:9ad2:0:b0:6fc:3ccb:f0ea with SMTP id c201-20020a379ad2000000b006fc3ccbf0eamr19410302qke.669.1669639751623;
-        Mon, 28 Nov 2022 04:49:11 -0800 (PST)
-Received: from [192.168.68.74] (096-033-065-247.res.spectrum.com. [96.33.65.247])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac873c2000000b003a57f822157sm6805786qtp.90.2022.11.28.04.49.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 28 Nov 2022 04:49:10 -0800 (PST)
-From:   Paul Moore <paul@paul-moore.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        <casey.schaufler@intel.com>,
-        <linux-security-module@vger.kernel.org>, <jmorris@namei.org>,
-        <keescook@chromium.org>, <john.johansen@canonical.com>,
-        <penguin-kernel@i-love.sakura.ne.jp>,
-        <stephen.smalley.work@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <linux-api@vger.kernel.org>
-Date:   Mon, 28 Nov 2022 07:49:11 -0500
-Message-ID: <184be48c558.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-In-Reply-To: <Y4Rok2iAOekw/tSJ@kroah.com>
-References: <20221123201552.7865-1-casey@schaufler-ca.com>
- <20221123201552.7865-2-casey@schaufler-ca.com>
- <Y38D1s3uQ6zNORei@kroah.com>
- <463cb747-5bac-9e8e-b78e-1ff6a1b29142@digikod.net>
- <CAHC9VhR9h1GF6VGovp1+UB-vt+QNofjmecPwLqE3OviKQHRMcg@mail.gmail.com>
- <Y4Rok2iAOekw/tSJ@kroah.com>
-User-Agent: AquaMail/1.40.1 (build: 104001224)
-Subject: Re: [PATCH v3 1/9] LSM: Identify modules by more than name
+        Mon, 28 Nov 2022 09:43:11 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4226AF3D;
+        Mon, 28 Nov 2022 06:43:09 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NLShl3G7Cz9xGXF;
+        Mon, 28 Nov 2022 22:36:39 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3oG3iyIRjL9qiAA--.42928S2;
+        Mon, 28 Nov 2022 15:42:49 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     paul@paul-moore.com, casey@schaufler-ca.com, omosnace@redhat.com,
+        john.johansen@canonical.com, kpsingh@kernel.org
+Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/2] lsm: Improve LSM hooks documentation
+Date:   Mon, 28 Nov 2022 15:42:38 +0100
+Message-Id: <20221128144240.210110-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwC3oG3iyIRjL9qiAA--.42928S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar4DXw43JF45WF1DAw4UXFb_yoW8XF47pa
+        yrGw45JryrAr1xurs3Kw48A3yFyFWrGF1DJrW7Grn5urWjyr1Fkr4Skw1Fgas8CF9xKa4q
+        qF12vry5urnrA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jzQ6JUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4X7EgABsT
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On November 28, 2022 2:51:55 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-> On Sun, Nov 27, 2022 at 10:48:53PM -0500, Paul Moore wrote:
->> On Fri, Nov 25, 2022 at 11:19 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.n=
-et> wrote:
->>> On 24/11/2022 06:40, Greg KH wrote:
->>>> On Wed, Nov 23, 2022 at 12:15:44PM -0800, Casey Schaufler wrote:
->>>>> Create a struct lsm_id to contain identifying information
->>>>> about Linux Security Modules (LSMs). At inception this contains
->>>>> the name of the module and an identifier associated with the
->>>>> security module. Change the security_add_hooks() interface to
->>>>> use this structure. Change the individual modules to maintain
->>>>> their own struct lsm_id and pass it to security_add_hooks().
->>>>>
->>>>> The values are for LSM identifiers are defined in a new UAPI
->>>>> header file linux/lsm.h. Each existing LSM has been updated to
->>>>> include it's LSMID in the lsm_id.
->>>>>
->>>>> The LSM ID values are sequential, with the oldest module
->>>>> LSM_ID_CAPABILITY being the lowest value and the existing modules
->>>>> numbered in the order they were included in the main line kernel.
->>>>> This is an arbitrary convention for assigning the values, but
->>>>> none better presents itself. The value 0 is defined as being invalid.
->>>>> The values 1-99 are reserved for any special case uses which may
->>>>> arise in the future.
->>>>
->>>> What would be a "special case" that deserves a lower number?
->>>
->>> I don't see any meaningful use case for these reserved numbers either.
->>> If there are some, let's put them now, otherwise we should start with 1=
-.
->>> Is it inspired by an existing UAPI?
->>> Reserving 0 as invalid is good though.
->>
->> I haven't finished reviewing this latest patchset, but I wanted to
->> comment on this quickly while I had a moment in front of a keyboard
->> ... I did explain my desire and reasoning for this in a previous
->> revision of this patchset and I still believe the
->> reserved-for-potential-future-use to be a valid reason so I'm going to
->> ask for this to remain.
->
-> Then that reasoning and explaination needs to be here in the changelog
-> so that we understand and have a chance to agree/disagree with that.
-> Otherwise we, and everyone else, are left to just be confused.
->
-> thanks,
->
-> greg k-h
+The recent discussion about return values from LSM hooks, available here:
 
-The patch author should have done that considering I made my comments on th=
-e last revision.
+https://lore.kernel.org/bpf/20221115175652.3836811-1-roberto.sassu@huaweicloud.com/
 
---
-paul-moore.com
+motivated revisiting the documentation in include/linux/lsm_hooks.h, to
+ensure that it is complete and accurate. It was also a good occasion to fix
+discovered formatting issues.
 
+Changelog:
+
+v1 (security: Ensure LSMs return expected values):
+- A positive value, not only 1 can cause cap_set_admin to be set when
+  calling __vm_enough_memory() (reported by Paul)
+- Improve description of the vm_enough_memory hook
+- Remove documentation of the sb_add_mnt_opt hook, as it was removed
+  (reported by Paul)
+- Add more periods in the parameters description
+- Adjust mmap_addr and mmap_file semicolon
+- Move description of gfp parameter of xfrm_policy_alloc_security together
+  with the others
+- Add missing return value description for binder_transaction,
+  binder_transfer_binder, binder_transfer_file, quotactl and quota_on
+- Improve return value description for sb_eat_lsm_opts, sb_show_options,
+  dentry_init_security, dentry_create_files_as and sctp_assoc_established
+
+Roberto Sassu (2):
+  lsm: Clarify documentation of vm_enough_memory hook
+  lsm: Add/fix return values in lsm_hooks.h and fix formatting
+
+ include/linux/lsm_hooks.h | 227 ++++++++++++++++++++++++--------------
+ 1 file changed, 143 insertions(+), 84 deletions(-)
+
+-- 
+2.25.1
 
