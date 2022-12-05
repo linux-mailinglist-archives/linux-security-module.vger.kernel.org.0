@@ -2,287 +2,78 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5761D642929
-	for <lists+linux-security-module@lfdr.de>; Mon,  5 Dec 2022 14:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDCE642DC1
+	for <lists+linux-security-module@lfdr.de>; Mon,  5 Dec 2022 17:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiLENSQ (ORCPT
+        id S232709AbiLEQus (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 5 Dec 2022 08:18:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        Mon, 5 Dec 2022 11:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiLENSJ (ORCPT
+        with ESMTP id S231555AbiLEQuG (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:18:09 -0500
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBFD1659B
-        for <linux-security-module@vger.kernel.org>; Mon,  5 Dec 2022 05:18:05 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4NQkcq373MzMpnxt;
-        Mon,  5 Dec 2022 14:18:03 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4NQkcp32S4zMprqV;
-        Mon,  5 Dec 2022 14:18:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1670246283;
-        bh=0ouhhW42hcLs1wyFIb/3ZCREaalKE/we7hNJQykI3OA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eZPQ7mHfzAJX4tnsohhYRlDba6aDOqQfsu4JsYGI2wR++lsS6Etw0wN2EPZ3pdgtd
-         EcPkTlIHkTylk3n2/NvOqoEYr+A50NxBmOND+XDM0Jr3Pku92YoeBELR8Zmhyz4vPX
-         UZgoKIL+F7taKpuZkjVkloRjiPOBiHK2wAksLXWs=
-Message-ID: <9a10a7f0-e7ec-a33d-f3ae-978814a1627a@digikod.net>
-Date:   Mon, 5 Dec 2022 14:18:01 +0100
+        Mon, 5 Dec 2022 11:50:06 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F9160D6
+        for <linux-security-module@vger.kernel.org>; Mon,  5 Dec 2022 08:49:14 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id ay27-20020a05600c1e1b00b003d070f4060bso10531943wmb.2
+        for <linux-security-module@vger.kernel.org>; Mon, 05 Dec 2022 08:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
+         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
+         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
+         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
+         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
+         BSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=4YPLI7I3S206tsco313Jei9JCx3j58tyL9ZG1GFvclkuan1YbfihF7dAlnYvzeWPJ1
+         4NF2n1bnPnBCcxjyDPSaH4XYIe9G+iBctzso3qbGGHrzc3cXM2oG9x2x9W1oxLLpTQ7G
+         ei67N0IQlUM+P/jgxdOEOamCYgnoUGq6wucSeFQA2rUCvI4tZDBHK2UhMOpC46QAoDl/
+         EhApL1Kx9+gZ23xthjLU4VvLM9ENCWso4FRn7VXYqVoty1Mhw9TEE+1p8whkC5/pe5VF
+         F/V92XefpSx4mo52Ro6dAMBIqwc2HrNVFWGXh1aKCAYbDKCF+/L2QuToPp/PWkq4IETl
+         o2ag==
+X-Gm-Message-State: ANoB5pnILtUMKy6vfEEijyLUq5JSl65RFtbdj3PW+8h61riU56aKTWY6
+        LeChuLWZ3dHk0Uhtu0jWNd208R7wY5re5IezltEBeYGn3Ec=
+X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
+X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
+ f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
+ Dec 2022 08:49:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v8 08/12] landlock: Implement TCP network hooks
-Content-Language: en-US
-To:     "Konstantin Meskhidze (A)" <konstantin.meskhidze@huawei.com>,
-        willemdebruijn.kernel@gmail.com
-Cc:     gnoack3000@gmail.com, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        artem.kuzin@huawei.com, linux-api@vger.kernel.org,
-        "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>,
-        Paul Moore <paul@paul-moore.com>
-References: <20221021152644.155136-1-konstantin.meskhidze@huawei.com>
- <20221021152644.155136-9-konstantin.meskhidze@huawei.com>
- <3452964b-04d3-b297-92a1-1220e087323e@digikod.net>
- <335a5372-e444-5deb-c04d-664cbc7cdc2e@huawei.com>
- <6071d053-a4b4-61f0-06f6-f94e6ce1e6d6@digikod.net>
- <56f9af17-f824-ff5d-7fee-8de0ae520cc2@huawei.com>
- <200bd6ce-de44-7335-63d9-04c17b1b1cf9@digikod.net>
- <e1e81fc5-40af-8373-0def-926870691c0e@huawei.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <e1e81fc5-40af-8373-0def-926870691c0e@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
+ -0800 (PST)
+Reply-To: phmanu14@hotmail.com
+From:   Philip Manul <zagbamdjala@gmail.com>
+Date:   Mon, 5 Dec 2022 08:49:02 -0800
+Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-
-On 05/12/2022 03:55, Konstantin Meskhidze (A) wrote:
-> 
-> 
-> 12/2/2022 4:01 PM, Mickaël Salaün пишет:
->>
->> On 02/12/2022 04:13, Konstantin Meskhidze (A) wrote:
->>>
->>>
->>> 11/29/2022 12:00 AM, Mickaël Salaün пишет:
->>>> The previous commit provides an interface to theoretically restrict
->>>> network access (i.e. ruleset handled network accesses), but in fact this
->>>> is not enforced until this commit. I like this split but to avoid any
->>>> inconsistency, please squash this commit into the previous one: "7/12
->>>> landlock: Add network rules support"
->>>> You should keep all the commit messages but maybe tweak them a bit.
->>>>
->>>      Ok. Will be squashed.
->>>>
->>>> On 28/11/2022 09:21, Konstantin Meskhidze (A) wrote:
->>>>>
->>>>>
->>>>> 11/17/2022 9:43 PM, Mickaël Salaün пишет:
->>>>>>
->>>>>> On 21/10/2022 17:26, Konstantin Meskhidze wrote:
->>>>>>> This patch adds support of socket_bind() and socket_connect() hooks.
->>>>>>> It's possible to restrict binding and connecting of TCP sockets to
->>>>>>> particular ports.
->>>>>>
->>>>>> Implement socket_bind() and socket_connect LSM hooks, which enable to
->>>>>> restrict TCP socket binding and connection to specific ports.
->>>>>>
->>>>>       Ok. Thanks.
->>>>>>
->>>>>>>
->>>>>>> Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
->>>>>>> ---
->>>>
->>>> [...]
->>>>
->>>>>>> +static int hook_socket_connect(struct socket *sock, struct sockaddr *address,
->>>>>>> +			       int addrlen)
->>>>>>> +{
->>>>>>> +	const struct landlock_ruleset *const dom =
->>>>>>> +		landlock_get_current_domain();
->>>>>>> +
->>>>>>> +	if (!dom)
->>>>>>> +		return 0;
->>>>>>> +
->>>>>>> +	/* Check if it's a TCP socket. */
->>>>>>> +	if (sock->type != SOCK_STREAM)
->>>>>>> +		return 0;
->>>>>>> +
->>>>>>> +	/* Check if the hook is AF_INET* socket's action. */
->>>>>>> +	switch (address->sa_family) {
->>>>>>> +	case AF_INET:
->>>>>>> +#if IS_ENABLED(CONFIG_IPV6)
->>>>>>> +	case AF_INET6:
->>>>>>> +#endif
->>>>>>> +		return check_socket_access(dom, get_port(address),
->>>>>>> +					   LANDLOCK_ACCESS_NET_CONNECT_TCP);
->>>>>>> +	case AF_UNSPEC: {
->>>>>>> +		u16 i;
->>>>>>
->>>>>> You can move "i" after the "dom" declaration to remove the extra braces.
->>>>>>
->>>>>       Ok. Thanks.
->>>>>>
->>>>>>> +
->>>>>>> +		/*
->>>>>>> +		 * If just in a layer a mask supports connect access,
->>>>>>> +		 * the socket_connect() hook with AF_UNSPEC family flag
->>>>>>> +		 * must be banned. This prevents from disconnecting already
->>>>>>> +		 * connected sockets.
->>>>>>> +		 */
->>>>>>> +		for (i = 0; i < dom->num_layers; i++) {
->>>>>>> +			if (landlock_get_net_access_mask(dom, i) &
->>>>>>> +			    LANDLOCK_ACCESS_NET_CONNECT_TCP)
->>>>>>> +				return -EACCES;
->>>>>>
->>>>>> I'm wondering if this is the right error code for this case. EPERM may
->>>>>> be more appropriate.
->>>>>
->>>>>       Ok. Will be refactored.
->>>>>>
->>>>>> Thinking more about this case, I don't understand what is the rationale
->>>>>> to deny such action. What would be the consequence to always allow
->>>>>> connection with AF_UNSPEC (i.e. to disconnect a socket)?
->>>>>>
->>>>>       I thought we have come to a conclusion about connect(...AF_UNSPEC..)
->>>>>      behaviour in the patchset V3:
->>>>> https://lore.kernel.org/linux-security-module/19ad3a01-d76e-0e73-7833-99acd4afd97e@huawei.com/
->>>>
->>>> The conclusion was that AF_UNSPEC disconnects a socket, but I'm asking
->>>> if this is a security issue. I don't think it is more dangerous than a
->>>> new (unconnected) socket. Am I missing something? Which kind of rule
->>>> could be bypassed? What are we protecting against by restricting AF_UNSPEC?
->>>
->>> I just follow Willem de Bruijn concerns about this issue:
->>>
->>> quote: "It is valid to pass an address with AF_UNSPEC to a PF_INET(6)
->>> socket. And there are legitimate reasons to want to deny this. Such as
->>> passing a connection to a unprivileged process and disallow it from
->>> disconnect and opening a different new connection."
->>>
->>> https://lore.kernel.org/linux-security-module/CA+FuTSf4EjgjBCCOiu-PHJcTMia41UkTh8QJ0+qdxL_J8445EA@mail.gmail.com/
->>
->> I agree with the fact that we want to deny this, but in this example the
->> new connection should still be restricted by the Landlock domain. Using
->> AF_UNSPEC on a connected socket should not make this socket allowed to
->> create any connection if the process is restricted with TCP_CONNECT.
->> Being allowed to close a connection should not be an issue, and any new
->> connection must be vetted by Landlock.
->>
-> 
->     You are right. This makes sense. Thanks for the comment.
->>>
->>>
->>> quote: "The intended use-case is for a privileged process to open a
->>> connection (i.e., bound and connected socket) and pass that to a
->>> restricted process. The intent is for that process to only be allowed to
->>> communicate over this pre-established channel.
->>>
->>> In practice, it is able to disconnect (while staying bound) and
->>> elevate its privileges to that of a listening server: ..."
->>>
->>> https://lore.kernel.org/linux-security-module/CA+FuTScaoby-=xRKf_Dz3koSYHqrMN0cauCg4jMmy_nDxwPADA@mail.gmail.com/
->>>
->>> Looks like it's a security issue here.
->>
->> It the provided example, if child_process() is restricted with
->> TCP_CONNECT and TCP_BIND, any call to connect() or bind() will return an
->> access error. listen() and accept() would work if the socket is bound,
->> which is the case here, and then implicitly allowed by the parent
->> process. I don' see any security issue. Am I missing something?
->>
->> In fact, connect with AF_UNSPEC should always be allowed to be
->> consistent with close(2), which is a way to drop privileges.
->>
-> 
->    It should be allowed with checking:
-> "return check_socket_access(dom, get_port(address),
->                                    LANDLOCK_ACCESS_NET_CONNECT_TCP);
->>
->> What Willem said:
->>> It would be good to also
->>> ensure that a now-bound socket cannot call listen.
->>
->> This is not relevant for Landlock because the security model is to check
->> process's requests to get new accesses (e.g. create a new file
->> descriptor), but not to check passed accesses (e.g. inherited from a
->> parent process, or pass through a unix socket) which are delegated to
->> the sender/parent. The goal of a sandbox is to limit the set of new
->> access requested (to the kernel) from within this sandbox. All already
->> opened file descriptors were previously vetted by Landlock (and other
->> access control systems).
-> 
->      I got your point. Thanks.
->>
->>>
->>>>
->>>> We could then reduce the hook codes to just:
->>>> return current_check_access_socket(sock, address, LANDLOCK_ACCESS_NET_*);
-
-This current_check_access_socket() helper should contain all the access 
-control code.
-
->>>> .
->>
->> As for SELinux, the connect hook should first do this check (with an
->> appropriate comment):
->> if (address->sa_family == AF_UNSPEC)
->> 	return 0;
-> 
->     In case of Landlock it looks like a landlocked process could connnect
-> to the ports it's not allowed to connect to.
-> So we need just to return check_socket_access(dom, get_port(address),
-> 				   LANDLOCK_ACCESS_NET_CONNECT_TCP);
-> I'm I correct? Did I miss something?
-
-Using AF_UNSPEC with connect(2) doesn't connect the socket to a port, 
-and in fact completely ignore the port. We can move the AF_UNSPEC check 
-to the current_check_access_socket() helper:
-
-  	switch (address->sa_family) {
-  	case AF_UNSPEC:
-+		/*
-+		 * Connecting to an address with AF_UNSPEC dissolves the TCP
-+		 * association, which have the same effect as closing the
-+		 * connection while retaining the socket object (i.e., the file
-+		 * descriptor).  As for dropping privileges, closing
-+		 * connections is always allowed.
-+		 */
-+		if (access_request == LANDLOCK_ACCESS_NET_CONNECT_TCP)
-+			return 0;
-+
-+		/*
-+		 * For compatibility reason, accept AF_UNSPEC for bind
-+		 * accesses (mapped to AF_INET) only if the address is
-+		 * INADDR_ANY (cf. __inet_bind).  Checking the address is
-+		 * required to not wrongfully return -EACCES instead of
-+		 * -EAFNOSUPPORT.
-+		 */
-+		if (access_request == LANDLOCK_ACCESS_NET_BIND_TCP) {
-+			const struct sockaddr_in *const sockaddr =
-+				(struct sockaddr_in *)address;
-+
-+			if (sockaddr->sin_addr.s_addr != htonl(INADDR_ANY))
-+				return -EAFNOSUPPORT;
-+		}
-+
-+		fallthrough;
-  	case AF_INET:
-  #if IS_ENABLED(CONFIG_IPV6)
-  	case AF_INET6:
-
-
-I also added another check (copied from SELinux) with the appropriate 
-explanation. All this needs dedicated tests to make sure everything is 
-covered.
-
-We also need to add extra checks (and related tests) for addrlen as do 
-other LSMs.
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
