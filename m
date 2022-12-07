@@ -2,207 +2,219 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D6D6460A0
-	for <lists+linux-security-module@lfdr.de>; Wed,  7 Dec 2022 18:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 404086460AB
+	for <lists+linux-security-module@lfdr.de>; Wed,  7 Dec 2022 18:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiLGRtR (ORCPT
+        id S230009AbiLGRwz (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Dec 2022 12:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        Wed, 7 Dec 2022 12:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiLGRtQ (ORCPT
+        with ESMTP id S230110AbiLGRwz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:49:16 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E182368697;
-        Wed,  7 Dec 2022 09:49:14 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id n7so14251079wms.3;
-        Wed, 07 Dec 2022 09:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fXNqkXGWcmQ6UKPLwLmTN6pvQwCbW2EJ14f2E+6Nf+k=;
-        b=P3WHISqE1fEcapvnL1QBGBCZt5fe40TD1H7qzJEbJJQzWmoaiDQGBBkUXwyJwFeYl9
-         T2zb7YS+N5OIcfAYoQqgNZ6jtAdCIVpERcJG/jiiH/3GE0XB8zuq6WB6QYNODXji4nzw
-         SzxM1YZaVXGRHZ/WpOoaZP1ZDfGx6+17nK2+3sNEdbwXJbohalhjrYQ0caq0oQLmVWWS
-         fGhNril1RFO3Jy/G6zp3jJTs2lyfx351ASvdSb71niotA46/FWaPWPMXJnOhKdhV1K2T
-         hfBavjC1ZI3Jr0ImSKgZ5AdV5155C9JolmkBxSjaT88op16exPSEBSn3YKZ+4zmIJTDk
-         j3AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fXNqkXGWcmQ6UKPLwLmTN6pvQwCbW2EJ14f2E+6Nf+k=;
-        b=kH3rQfVtwAcBCVJ48/JJWYwWjOJuG272R0l/CKNXIMa9gYCE8wFzwVWt37liDeeM4y
-         nv866LWJmKkmOZOb5ONoVmEjYnAK3NNEuaMM91JXuhH4qlpOmw8hfIweef3mDHxLaL//
-         ZlTzkrizZEeGe3LSqftt2OyemKkkWbqrjgsGQ6NJL6uATAfcx/29nzLKl+oR8KOoKmQ/
-         83mIL5JTwKOJ5N5dB9uNILFKi1I8VoXjNWjlXKYAwuFj27ORa1iH8ytENsNncLAhDaNa
-         W5rOf6o6vM2qIHk758icr10NmQaY1W52mlX/CpXgL06o9XkglLbjCiRCNqx0DogFAMPl
-         NqqA==
-X-Gm-Message-State: ANoB5pmlwz3NqXOQ3vmEypVfULTGgMy9gj8UWScwGG4gHNrRxkUiVu21
-        gj5wQd581PYhYdeFClyZ55uZ7Tn3CnA=
-X-Google-Smtp-Source: AA0mqf78uQ5ryk9TDBaHEuak28VHkWpHoYS4xaJcekIidnr3o+QpVv9kZ/xrhDcK42F4Y4V7o1C3vw==
-X-Received: by 2002:a1c:f617:0:b0:3cf:5584:7730 with SMTP id w23-20020a1cf617000000b003cf55847730mr71788516wmc.187.1670435353504;
-        Wed, 07 Dec 2022 09:49:13 -0800 (PST)
-Received: from nuc ([2a02:168:633b:1:1e69:7aff:fe05:97e6])
-        by smtp.gmail.com with ESMTPSA id e18-20020a5d4e92000000b0024206ed539fsm19887689wru.66.2022.12.07.09.49.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 09:49:13 -0800 (PST)
-Date:   Wed, 7 Dec 2022 18:49:11 +0100
-From:   =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v1] landlock: Explain file descriptor access rights
-Message-ID: <Y5DSFwHoYZwYEn0T@nuc>
-References: <20221205112621.3530557-1-mic@digikod.net>
+        Wed, 7 Dec 2022 12:52:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F174C6C71E
+        for <linux-security-module@vger.kernel.org>; Wed,  7 Dec 2022 09:51:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670435517;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LOZ8x6C4D+JnlKlmoreFGr0U0F06apiXIqBr4xtjBzc=;
+        b=YrFJy6AMlaxIk5aL401FeUW3v45m0Xyn2r4J2DBbYzmwVp6ZGi33vlpYqKDrMtx55aLQZl
+        nfoVhkglz/kABekh+gx5W1N+Z3NVTTNug90dxmVNw9SVnXG8xGBBUVQgzf6uq9qbi7bi8j
+        A3jn1ObDrbZMxbgV4OWjLXWAC53JlhU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-lxcTsvN8Nua8Xn0OFq6pzw-1; Wed, 07 Dec 2022 12:51:53 -0500
+X-MC-Unique: lxcTsvN8Nua8Xn0OFq6pzw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DA7086C044;
+        Wed,  7 Dec 2022 17:51:53 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.194.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 72A4C492CA4;
+        Wed,  7 Dec 2022 17:51:52 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     mptcp@lists.linux.dev
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>
+Subject: [PATCH mptcp-net] mptcp: fix LSM labeling for passive msk
+Date:   Wed,  7 Dec 2022 18:51:29 +0100
+Message-Id: <ffee337de5d6e447185b87ade65cc27f0b3576db.1670434580.git.pabeni@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221205112621.3530557-1-mic@digikod.net>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi!
+MPTCP sockets created via accept() inherit their LSM label
+from the initial request socket, which in turn get it from the
+listener socket's first subflow. The latter is a kernel socket,
+and get the relevant labeling at creation time.
 
-Thanks for sending this patch! I have overlooked to update this in the
-original patch set.
+Due to all the above even the accepted MPTCP socket get a kernel
+label, causing unexpected behaviour and failure on later LSM tests.
 
-On Mon, Dec 05, 2022 at 12:26:21PM +0100, Mickaël Salaün wrote:
-> Starting with LANDLOCK_ACCESS_FS_TRUNCATE, it is worth explaining why we
-> choose to restrict access checks at open time.  This new "File
-> descriptor access rights" section is complementary to the existing
-> "Inode access rights" section.
-> 
-> Cc: Günther Noack <gnoack3000@gmail.com>
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> Link: https://lore.kernel.org/r/20221205112621.3530557-1-mic@digikod.net
-> ---
->  Documentation/security/landlock.rst | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
-> index c0029d5d02eb..bd0af6031ebb 100644
-> --- a/Documentation/security/landlock.rst
-> +++ b/Documentation/security/landlock.rst
-> @@ -7,7 +7,7 @@ Landlock LSM: kernel documentation
->  ==================================
->  
->  :Author: Mickaël Salaün
-> -:Date: September 2022
-> +:Date: November 2022
->  
->  Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
->  harden a whole system, this feature should be available to any process,
-> @@ -45,8 +45,8 @@ Guiding principles for safe access controls
->  Design choices
->  ==============
->  
-> -Filesystem access rights
-> -------------------------
-> +Inode access rights
-> +-------------------
->  
->  All access rights are tied to an inode and what can be accessed through it.
->  Reading the content of a directory does not imply to be allowed to read the
-> @@ -57,6 +57,25 @@ directory, not the unlinked inode.  This is the reason why
->  ``LANDLOCK_ACCESS_FS_REMOVE_FILE`` or ``LANDLOCK_ACCESS_FS_REFER`` are not
->  allowed to be tied to files but only to directories.
->  
-> +File descriptor access rights
-> +-----------------------------
-> +
-> +Access rights are checked and tied to file descriptors at open time.  As a
-> +consequence, it may be allowed to create a file without being allowed to
-> +truncate it if the file hierarchy doesn't grant such access right.  The
-> +rationale is that this approach is simple and consistent with all access
-> +rights, however file requests are based on path or based on file descriptor
-> +(obtained with the same path, by a thread restricted with the same Landlock
-> +domain).  For instance, updating an application from using :manpage:`mknod` and
-> +:manpage:`truncate` to initialize a file (i.e. path-based), to using
-> +:manpage:`open` and :manpage:`ftruncate` to initialize the same file (i.e. file
-> +descriptor-based) should work the same way with the same Landlock restrictions.
+Address the issue factoring out a socket creation helper that does
+not include the post-creation LSM checks. Use such helper to create
+mptcp subflow as in-kernel sockets and doing explicitly LSM validation:
+vs the current user for the first subflow, as a kernel socket otherwise.
 
-Nit: The paragraph seems a bit long and is mixing more general
-considerations with examples. Maybe they could be split into separate
-paragraphs?
+Fixes: 0c14846032f2 ("mptcp: fix security context on server socket")
+Reported-by: Ondrej Mosnacek <omosnace@redhat.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+---
+ include/linux/net.h |  2 ++
+ net/mptcp/subflow.c | 19 ++++++++++++--
+ net/socket.c        | 60 ++++++++++++++++++++++++++++++---------------
+ 3 files changed, 59 insertions(+), 22 deletions(-)
 
-Regarding the "As a consequence..." example: I would word it as "...it
-may be allowed to open a file for writing without being allowed to
-ftruncate the resulting file descriptor...".
-
-The example you are giving with creating files is also accurate, but
-it is potentially confusing, because creat() and open(..., O_TRUNC)
-are also implicitly truncating files when opening the file.
-
-Regarding "The rationale is that this approach is simple and
-consistent...": The word "simple" is often a sign that we could be
-more concrete, and there is also a risk that a reader might not
-perceive it as simple ;)  How about this:
-
-```
-
-The rationale is that equivalent sequences of operations should lead
-to the same results, when they are executed under the same Landlock
-domain.
-
-For example, for the LANDLOCK_ACCESS_FS_TRUNCATE right, the following
-sequences of operations are roughly equivalent and should have the
-same result:
-
-* truncate(path)
-* fd = open(path, O_WRONLY); ftruncate(fd); close(fd)
-
-```
-
-(I think it's a bit more readable with bullet points, and the
-truncate/ftruncate example might be a bit more familiar than the
-somewhat unusual mknod?)
-
-> +
-> +Processes not sandboxed by Landlock may still be restricted for operations on
-> +file descriptors coming from a sandboxed process.  Indeed, this is required to
-> +keep a consistent access control over the whole system, and avoid unattended
-> +bypasses through file descriptor passing (i.e. confused deputy attack).
-
-"May still be restricted" is leaving the reader a bit in the dark
-about the exact circumstances where this might happen? I think we
-could be more bold and give a guarantee here, like:
-
-```
-
-Access rights attached to file descriptors are retained even if the
-file descriptor is passed between Unix processes (e.g. through a Unix
-Domain Socket). The access rights will be enforced even if the
-receiving process is not sandboxed by Landlock.
-
-```
-
---Günther
-
-> +
->  Tests
->  =====
->  
-> 
-> base-commit: 0b4ab8cd635e8b21e42c14b9e4810ca701babd11
-> -- 
-> 2.38.1
-> 
-
+diff --git a/include/linux/net.h b/include/linux/net.h
+index b73ad8e3c212..91713012504d 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -251,6 +251,8 @@ int sock_wake_async(struct socket_wq *sk_wq, int how, int band);
+ int sock_register(const struct net_proto_family *fam);
+ void sock_unregister(int family);
+ bool sock_is_registered(int family);
++int __sock_create_nosec(struct net *net, int family, int type, int proto,
++			struct socket **res, int kern);
+ int __sock_create(struct net *net, int family, int type, int proto,
+ 		  struct socket **res, int kern);
+ int sock_create(int family, int type, int proto, struct socket **res);
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index d5ff502c88d7..e7e6f17df7ef 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -1646,11 +1646,26 @@ int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock)
+ 	if (unlikely(!sk->sk_socket))
+ 		return -EINVAL;
+ 
+-	err = sock_create_kern(net, sk->sk_family, SOCK_STREAM, IPPROTO_TCP,
+-			       &sf);
++	/* the subflow is created by the kernel, and we need kernel annotation
++	 * for lockdep's sake...
++	 */
++	err = __sock_create_nosec(net, sk->sk_family, SOCK_STREAM, IPPROTO_TCP,
++				  &sf, 1);
+ 	if (err)
+ 		return err;
+ 
++	/* ... but the MPC subflow will be indirectly exposed to the
++	 * user-space via accept(). Let's attach the current user security
++	 * label to the first subflow, that is when msk->first is not yet
++	 * initialized.
++	 */
++	err = security_socket_post_create(sf, sk->sk_family, SOCK_STREAM,
++					  IPPROTO_TCP, !!mptcp_sk(sk)->first);
++	if (err) {
++		sock_release(sf);
++		return err;
++	}
++
+ 	lock_sock(sf->sk);
+ 
+ 	/* the newly created socket has to be in the same cgroup as its parent */
+diff --git a/net/socket.c b/net/socket.c
+index 55c5d536e5f6..d5d51e4e26ae 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -1426,23 +1426,11 @@ int sock_wake_async(struct socket_wq *wq, int how, int band)
+ }
+ EXPORT_SYMBOL(sock_wake_async);
+ 
+-/**
+- *	__sock_create - creates a socket
+- *	@net: net namespace
+- *	@family: protocol family (AF_INET, ...)
+- *	@type: communication type (SOCK_STREAM, ...)
+- *	@protocol: protocol (0, ...)
+- *	@res: new socket
+- *	@kern: boolean for kernel space sockets
+- *
+- *	Creates a new socket and assigns it to @res, passing through LSM.
+- *	Returns 0 or an error. On failure @res is set to %NULL. @kern must
+- *	be set to true if the socket resides in kernel space.
+- *	This function internally uses GFP_KERNEL.
+- */
+ 
+-int __sock_create(struct net *net, int family, int type, int protocol,
+-			 struct socket **res, int kern)
++
++/*creates a socket leaving LSM post-creation checks to the caller */
++int __sock_create_nosec(struct net *net, int family, int type, int protocol,
++			struct socket **res, int kern)
+ {
+ 	int err;
+ 	struct socket *sock;
+@@ -1528,11 +1516,8 @@ int __sock_create(struct net *net, int family, int type, int protocol,
+ 	 * module can have its refcnt decremented
+ 	 */
+ 	module_put(pf->owner);
+-	err = security_socket_post_create(sock, family, type, protocol, kern);
+-	if (err)
+-		goto out_sock_release;
+-	*res = sock;
+ 
++	*res = sock;
+ 	return 0;
+ 
+ out_module_busy:
+@@ -1548,6 +1533,41 @@ int __sock_create(struct net *net, int family, int type, int protocol,
+ 	rcu_read_unlock();
+ 	goto out_sock_release;
+ }
++
++/**
++ *	__sock_create - creates a socket
++ *	@net: net namespace
++ *	@family: protocol family (AF_INET, ...)
++ *	@type: communication type (SOCK_STREAM, ...)
++ *	@protocol: protocol (0, ...)
++ *	@res: new socket
++ *	@kern: boolean for kernel space sockets
++ *
++ *	Creates a new socket and assigns it to @res, passing through LSM.
++ *	Returns 0 or an error. On failure @res is set to %NULL. @kern must
++ *	be set to true if the socket resides in kernel space.
++ *	This function internally uses GFP_KERNEL.
++ */
++
++int __sock_create(struct net *net, int family, int type, int protocol,
++		  struct socket **res, int kern)
++{
++	struct socket *sock;
++	int err;
++
++	err = __sock_create_nosec(net, family, type, protocol, &sock, kern);
++	if (err)
++		return err;
++
++	err = security_socket_post_create(sock, family, type, protocol, kern);
++	if (err) {
++		sock_release(sock);
++		return err;
++	}
++
++	*res = sock;
++	return 0;
++}
+ EXPORT_SYMBOL(__sock_create);
+ 
+ /**
 -- 
+2.38.1
+
