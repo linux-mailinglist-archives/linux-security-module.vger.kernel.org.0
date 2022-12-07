@@ -2,214 +2,198 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC8B645FDA
-	for <lists+linux-security-module@lfdr.de>; Wed,  7 Dec 2022 18:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59A9646016
+	for <lists+linux-security-module@lfdr.de>; Wed,  7 Dec 2022 18:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiLGRNq (ORCPT
+        id S229728AbiLGRZT (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Dec 2022 12:13:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
+        Wed, 7 Dec 2022 12:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiLGRNm (ORCPT
+        with ESMTP id S229720AbiLGRZS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:13:42 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A51654DE;
-        Wed,  7 Dec 2022 09:13:40 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7GGlS0021894;
-        Wed, 7 Dec 2022 17:13:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=BwjU6HLISIcurPWwMgKVLqa4mU1kc4uoYuJlz7APYHM=;
- b=e6wJWEHctxftKPRlCGskX1ikgDVrPCoLSHxMEBVlAz3Sp2T/NVqchQ/qko+9T2PGIU78
- KKONBeLj8LCspiWyQfGdBMZyWhHrgkevEw17OXoXNKXYoo/p6u+hRSr5LjyoixrvtAiY
- wyg4oDrg0NClFmaMk/srzVTNv3QoQICNdfXJJa8fSCwq7su3hKlx28FrAz0xykN+NAWZ
- bmmQbyYVx6dZBNKe2zjGJdAsQAr5Cp8un8sV5j7VWKOwE51p2xh1B3+Su2UOJrxnXLkF
- nbQFi0ErbRWW6s4zU9/+c2daWYPUNlN0yxjlcpy6x3YtlhbUbrL65+ooUfoBf0TVYmqT sA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maubagw0r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 17:13:10 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B7FwPH8002304;
-        Wed, 7 Dec 2022 17:13:09 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa7chkjm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 17:13:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nee7/UrWKz4KvdvAhEWQJFsq24E33FdgIUPvarXlZxrSgQnOTKtS4QUk0Sn/gfs7hIhFfmLTNYzyjCdrQ9RmPpQ07bpn7x50XlpGxHlrJ4jov7TBATotle0ZyLemCxnuHNl7qNEdyjf9ZMtoXxR2wANGcTxKZW+eSBN2P/m2GYtACevzqI4hkRLXZarYT/eqMq5fnTwe1+nCEwok1d86RVo3PlBxhRnRO3Bf92cXkmr+Z0Ylsi40xHJiS/S5+paDo3kMbW7JOoIGOZMkok7N/Umt1fClzDywdZUrrYDQxC4ooY1LdFbv7Pda9vctvlTmDzdAIdnd1SyzKLkHb1Uk1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BwjU6HLISIcurPWwMgKVLqa4mU1kc4uoYuJlz7APYHM=;
- b=Q2yrySjvy64nYmQiUGE8+KODcPYotnj28T4+Q83TpkjureXcMWAMbOWtDvNLrJOtRiIDDvZ0ZTawyvSshdRWLdzH4xd2V4nagsEBTeW38zF3sX6lnWjquzA2cwk9B87ykC2MecxHxzPL+Ab2qj24L9TZRbk5Yi9J9S7pHlJqKiwziklq+P74rdW88f4PbjTgeIeVuMEy8X7oe407eU1FtX25+V+dkkjhMLPBalpj/x+wtoYzzW/cnrL/E25yLFG5mQyp0CKZPA5zz3xu9hZ9qFJTlZ46jNZdt3iEDQwKwDUn1t5sPLHaNBqXZdZ7o3VTp0vTHMag4AcoqL3IEtEXgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BwjU6HLISIcurPWwMgKVLqa4mU1kc4uoYuJlz7APYHM=;
- b=yKPL+YYHM9c7rIajDYxWbA57zSeYlvuipRg/m8T/JcLEV94QpHsDGABhNzKRroCnLK0KzF8fsGAOb+S7nQRTKzlcRF3g8zfU9G5HGyUgDxGmYTxjWIivDNeQdxGD+WM8N/ni84NAYmJKOsug92WjGpvhCvZ3ISVXkIVET5DchfI=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by SJ0PR10MB4685.namprd10.prod.outlook.com (2603:10b6:a03:2df::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 17:13:06 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::f006:f411:9056:63a4]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::f006:f411:9056:63a4%4]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 17:13:05 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     jarkko@kernel.org, zohar@linux.ibm.com
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
-        bp@suse.de, eric.snowberg@oracle.com, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
-        coxu@redhat.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v2 10/10] integrity: restrict INTEGRITY_KEYRING_MACHINE to restrict_link_by_ca
-Date:   Wed,  7 Dec 2022 12:12:38 -0500
-Message-Id: <20221207171238.2945307-11-eric.snowberg@oracle.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20221207171238.2945307-1-eric.snowberg@oracle.com>
-References: <20221207171238.2945307-1-eric.snowberg@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0138.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::23) To CH2PR10MB4150.namprd10.prod.outlook.com
- (2603:10b6:610:ac::13)
+        Wed, 7 Dec 2022 12:25:18 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9B65B584;
+        Wed,  7 Dec 2022 09:25:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NS3rs5tq6z9xqcC;
+        Thu,  8 Dec 2022 01:18:05 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwD34m9YzJBjc9DJAA--.62662S2;
+        Wed, 07 Dec 2022 18:24:53 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
+        jackmanb@chromium.org, mykolal@fb.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH v2 0/7] bpf-lsm: Check return values of security modules
+Date:   Wed,  7 Dec 2022 18:24:27 +0100
+Message-Id: <20221207172434.435893-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PR10MB4150:EE_|SJ0PR10MB4685:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c609ca5-9f40-435e-8004-08dad8764ddc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ABK83vBcC44/pXYq6olY9k/klNAKzC4m11Z72R08fVClZDBHpeecl2fCAytBperz6Mq08jzRqimwTUQ0QjH3dNuzxMCqq62QVMr0uGHwH6oVysafxc0oE26wcXu8k78Qq9k3j46AZ3G14QKDlOG1KBuNS6w9d9i66yLWRA3HJz4Nk9eph5jT6GkBaGp2Kk87Q3Rmbz3uQSiGUvmAf/lzpbKQSwpY2+SovKrCD2O5cZERHXgiy46IH56XnToCUKmvB5bJEO1/HF8jKJNexDYMvtmJlC4JbtF9qqNyKj0rBzekrpR/OqPA5kvKnhXXOAC1QSCwf8vrfvm0daW2AWZ1RjZioAa5L8g3fl3xxNPUpAB1ZCVi3iYOumeVUc00qXM7oX4h/f+G34nnSyJ7Z29yuNGkbnO+AwlILMa85gDczKlhRDfuvuskIbNZ9od6wzkKKC8v4ycLqnR+gWZ5fpdGvcqrNL9DPJmjU26XYdNoD6CTUqUV3/sQ2j02fuZ4epYzFxMaiNzClOdlBzbVoEmQ02Zf87JXabI6+0qmB/3MLOWhabucP+UWY8ghjdzEEMDgtomfkgHTT4dS+o+IY9ZyPAzJ539As66ja31gTt6Y+uVYsdMELh8GhgkwNoZv5KA+txyF8Uc8cgF6eCzagLi97g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(396003)(136003)(366004)(376002)(451199015)(5660300002)(1076003)(36756003)(41300700001)(2616005)(7416002)(83380400001)(38100700002)(8936002)(2906002)(44832011)(478600001)(6486002)(6666004)(6512007)(316002)(66556008)(4326008)(8676002)(66476007)(6506007)(86362001)(66946007)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GRgudxubvAa7diJ9hTyRvd5pOwZcUCQYPAyqP2VFiFAN5eEY1LLO8avtbZ/J?=
- =?us-ascii?Q?ZIxKa5t4rS+oFsObq6548ovp1xAyDgWvx/Q7hvH243kz5vgJCJprB+AYAp1u?=
- =?us-ascii?Q?SMYP/Sv2RpnS+0loq1aOBL9+ojkSG7QGBayz0xLJ1NQaSuVbJ4YOn1dq8J4L?=
- =?us-ascii?Q?eewlE3k288v1L2K00wKUNW0y1aqBhovmSOQIRzqZ9quQXo3yxhnvwVoEbmsD?=
- =?us-ascii?Q?A7Qdww10yDhjYz4AzdX08OlNfH3hjHoKQNtJ4S5SDszRqseZ7V5TqiJh1XX/?=
- =?us-ascii?Q?66s1Mw98zs9kGh777aB/DjL75i2sgKZ1VwbkbCbCQR2qD9jj41vDXLtTZ6fC?=
- =?us-ascii?Q?jfRnNd5fsHd84kZUDBlBYcvqDp17kRVHcK9KUEJMt8rCMr59nU9cwLECBXpH?=
- =?us-ascii?Q?CnqzeJZGwYNBFIvNMWeYwyE5oVfAw/2Ev8AWCvgw4+yUtT2vKxAmOjigMLB7?=
- =?us-ascii?Q?4e973WdYAuJ58NvEdPnlqKIKoA4b96M5O61HQFN4h2DBAnFenS+QvVDWCmMq?=
- =?us-ascii?Q?nCNDk4F30DYNZJCp++NgG8HE1EYXYzS2AxcI8BqI/e9+2CRKIx9ieKOwo8Qx?=
- =?us-ascii?Q?BFrI/RX49TMjTSza/vBwtR+BXQRcun+5pHcwXcgmp4vorKECmKMA+wYdDXhQ?=
- =?us-ascii?Q?Hth53nB7flaxFjdSZALq+nJjYgfYHDVC1gLDP57vw0Q1c8tecENoMCl8kfva?=
- =?us-ascii?Q?OQjyhS8EPr1hv4oGBXH5Y7Hszd37vBRmP45dSTVdmZhe9nEtr81tEzB1amAy?=
- =?us-ascii?Q?Cv/3iUtCgMoDtF6h+nhggTLd5R9hEC0PXHkBou9JNnaZDoz4wHG3v0UnsW6s?=
- =?us-ascii?Q?+OHxWxkY3HmQmYcBErE28jakjEqSykw9q5M9FgefDMKZALI+By0sgbycp6yK?=
- =?us-ascii?Q?WBFAzFg0WKj17VgkGQLUq2Qju5lN+7B8t6cKq7Cxr/KxB6llSo9PWYMtUjI7?=
- =?us-ascii?Q?NiTUcpvqN3G9ARzNXbvWHZRe+LF+0xV29Kt1Krrh28glQevPq1k4iRJYWY9K?=
- =?us-ascii?Q?UsqUy5ILHMsHMq/fcmOZnzZDdSedKov8sHP5sSoE6grhkuOGtecVQq1IbZVX?=
- =?us-ascii?Q?kqsz1cg2UzKtICZdJ8WxxfS0/BYiRRHTsA4nXsznd+HQvuXVvbjBq3yV8UBo?=
- =?us-ascii?Q?aedGKi9yTbR1gKaVHCygYQRocOvJ7oP8/Iww3XFVeR0bNTox97gxg2eyTjwh?=
- =?us-ascii?Q?+kAKK4qxVJ3LJYNasNSiFG2urjj2C2c98kEImTl3QYnpbf1vZMPBdByTUNgV?=
- =?us-ascii?Q?9H86IeoX/p6af9I9stpeYBTNkIuQKjy0sU3T2Achgarc1Bz0OX8SdsptUkLx?=
- =?us-ascii?Q?u3zxohh8FAXXYxoNW6qsKv1bPoY50HgCtIDDs9keCMT6Ii8ArusiYTPRkqFA?=
- =?us-ascii?Q?RlIDH95AbMFpD1SfxW35Yft2yr3wU1IlFBBlV3eUVebuW+Op4d8aglU7DH/w?=
- =?us-ascii?Q?lOsd8FqmowzPZ3bQMEBXhlY6pDqrPDRGaMNHcVrYAURoYeNxV61FHdQKuGLQ?=
- =?us-ascii?Q?RIQvzMCr7eYiMofY6vKTOEk+n9g9HGZNAQ0TRD0Jq9owkUN1imQyj6s8QhWn?=
- =?us-ascii?Q?eV/yqjJyT3c5gNXvH9Xo/ynhfcRhhmUfui/q2gbcqJpAHgMQMgjLGc0Z4tve?=
- =?us-ascii?Q?fu6QDwyyS/gXQo2pgsYre6w=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c609ca5-9f40-435e-8004-08dad8764ddc
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 17:13:05.5070
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ke+1EeCNrw1sslgpKKN/QN8SOZc9mx/iS+2R5ZMO3VJLT2GuATsOHGVAb063cv9BJ9M91X+lpghWSwfFZu657CWLCfoCrGvB7zs2/Im+QMU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4685
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_08,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 spamscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212070150
-X-Proofpoint-GUID: l5z464-Eg8dgu_oy_ZzjWhrYKftNDtwC
-X-Proofpoint-ORIG-GUID: l5z464-Eg8dgu_oy_ZzjWhrYKftNDtwC
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwD34m9YzJBjc9DJAA--.62662S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF1rCFWrtr4fJrWrZr1UJrb_yoWxGw4fpF
+        4Fka4rKF4vkry8CF1UAa18Zw4SyFs5AFWUJFyDtr10y3WUtr1jqryxKr4YvrnxCr4UKr1x
+        tr12qanYyryUZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUxo7KDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4JqngAAsS
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Set the restriction check for INTEGRITY_KEYRING_MACHINE keys to
-restrict_link_by_ca.  This will only allow CA keys into the machine
-keyring.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
----
- security/integrity/Kconfig  | 10 ++++++++++
- security/integrity/digsig.c |  8 ++++++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
+Notes:
+- This patch set addresses the kernel panic described below, and not the
+  more broad issue of accessing kernel objects whose pointer is passed
+  as parameter by LSM hooks
+- Alternative approaches trying to limit return values at run-time either
+  in the security subsystem or in the eBPF JIT are not preferred by the
+  respective maintainers
+- Although all eBPF selftests have been verified to pass, it still might
+  be cumbersome to have an eBPF program being accepted by the eBPF
+  verifier (e.g. ANDing negative numbers causes existing bounds to be lost)
+- The patch to store whether a register state changed due to an ALU64 or an
+  ALU32 operation might not be correct/complete, a review by eBPF
+  maintainers would be needed
+- This patch set requires "lsm: make security_socket_getpeersec_stream()
+  sockptr_t safe", in lsm/next
+- The modification of the LSM infrastructure to define allowed return
+  values for the LSM hooks could be replaced with an eBPF-only fix, with
+  the drawback of having to update the information manually each time a
+  new hook is added; allowing zero or negative values by default could be
+  reasonable, but there are already exceptions of LSM hooks accepting 0 or
+  1 (ismaclabel)
+- The patches to fix the LSM infrastructure documentation are separated
+  from this patch set and available here:
+  https://lore.kernel.org/linux-security-module/20221128144240.210110-1-roberto.sassu@huaweicloud.com/
 
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 14cc3c767270..3357883fa5a8 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -74,6 +74,16 @@ config INTEGRITY_MACHINE_KEYRING
- 	 in the platform keyring, keys contained in the .machine keyring will
- 	 be trusted within the kernel.
- 
-+config INTEGRITY_CA_MACHINE_KEYRING
-+	bool "Only allow CA keys into the Machine Keyring"
-+	depends on INTEGRITY_MACHINE_KEYRING
-+	help
-+	 If set, only Machine Owner Keys (MOK) that are Certificate
-+	 Authority (CA) keys will be added to the .machine keyring. All
-+	 other MOK keys will be added to the .platform keyring.  After
-+	 booting, any other key signed by the CA key can be added to the
-+	 secondary_trusted_keys keyring.
-+
- config LOAD_UEFI_KEYS
-        depends on INTEGRITY_PLATFORM_KEYRING
-        depends on EFI
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index 1fe8d1ed6e0b..b0ec615745e3 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -131,7 +131,8 @@ int __init integrity_init_keyring(const unsigned int id)
- 		| KEY_USR_READ | KEY_USR_SEARCH;
- 
- 	if (id == INTEGRITY_KEYRING_PLATFORM ||
--	    id == INTEGRITY_KEYRING_MACHINE) {
-+	    (id == INTEGRITY_KEYRING_MACHINE &&
-+	    !IS_ENABLED(CONFIG_INTEGRITY_CA_MACHINE_KEYRING))) {
- 		restriction = NULL;
- 		goto out;
- 	}
-@@ -143,7 +144,10 @@ int __init integrity_init_keyring(const unsigned int id)
- 	if (!restriction)
- 		return -ENOMEM;
- 
--	restriction->check = restrict_link_to_ima;
-+	if (id == INTEGRITY_KEYRING_MACHINE)
-+		restriction->check = restrict_link_by_ca;
-+	else
-+		restriction->check = restrict_link_to_ima;
- 
- 	/*
- 	 * MOK keys can only be added through a read-only runtime services
+BPF LSM defines attachment points to allows security modules (eBPF programs
+with type LSM) to provide their implementation of the desired LSM hooks.
+
+Unfortunately, BPF LSM does not restrict which values security modules can
+return (for non-void LSM hooks). If they put arbitrary values instead of
+those stated in include/linux/lsm_hooks.h, they could cause big troubles.
+
+For example, this simple eBPF program:
+
+SEC("lsm/inode_permission")
+int BPF_PROG(test_int_hook, struct inode *inode, int mask)
+{
+	return 1;
+}
+
+causes the following kernel panic:
+
+[  181.130807] BUG: kernel NULL pointer dereference, address: 0000000000000079
+[  181.131478] #PF: supervisor read access in kernel mode
+[  181.131942] #PF: error_code(0x0000) - not-present page
+[  181.132407] PGD 0 P4D 0 
+[  181.132650] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  181.133054] CPU: 5 PID: 857 Comm: systemd-oomd Tainted: G           OE      6.1.0-rc7+ #530
+[  181.133806] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+[  181.134601] RIP: 0010:do_sys_openat2+0x235/0x300
+
+[...]
+
+[  181.136682] RSP: 0018:ffffc90001557ee0 EFLAGS: 00010203
+[  181.137154] RAX: 0000000000000001 RBX: ffffc90001557f20 RCX: ffff888112003380
+[  181.137790] RDX: 0000000000000000 RSI: ffffffff8280b026 RDI: ffffc90001557e28
+[  181.138432] RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
+[  181.139081] R10: ffffffff835097dc R11: 0000000000000000 R12: ffff888106118000
+[  181.139717] R13: 000000000000000c R14: 0000000000000000 R15: 0000000000000000
+[  181.140149] FS:  00007fa6ceb0bb40(0000) GS:ffff88846fb40000(0000) knlGS:0000000000000000
+[  181.140556] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  181.140865] CR2: 0000000000000079 CR3: 0000000135c50000 CR4: 0000000000350ee0
+[  181.141239] Call Trace:
+[  181.141373]  <TASK>
+[  181.141495]  do_sys_open+0x34/0x60
+[  181.141678]  do_syscall_64+0x3b/0x90
+[  181.141875]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Avoid this situation by statically analyzing the eBPF programs attaching to
+LSM hooks, and ensure that their return values are compatible with the LSM
+infrastructure conventions.
+
+First, add a preliminary patch (patch 1) to fix a small code duplication
+issue.
+
+Extend the eBPF verifier to let BPF LSM determine whether it should check
+estimated 64 bit values or the 32 bit ones (patch 2). Also, extend the LSM
+infrastructure to record more precisely the allowed return values depending
+on the documentation found in include/linux/lsm_hooks.h (patch 3). Add the
+LSM_RET_NEG, LSM_RET_ZERO, LSM_RET_ONE, LSM_RET_GT_ONE flags to an LSM hook
+if that hook allows respectively > 0, 0, 1, > 1 return values.
+
+Then, extend BPF LSM to verify that return values, estimated by the
+verifier by analyzing the eBPF program, fall in the allowed intervals found
+from the return value flags of the LSM hook being attached to (patch 4).
+
+Finally, add new tests to ensure that the verifier enforces return values
+correctly (patch 5), and slightly modify existing tests to make them follow
+the LSM infrastructure conventions (patches 6-7) and are accepted by the
+verifier.
+
+Changelog:
+
+v1:
+- Complete the documentation of return values in lsm_hooks.h
+- Introduce return value flags in the LSM infrastructure
+- Use those flags instead of the scattered logic (suggested by KP)
+- Expose a single verification function to the verifier (suggested by KP)
+- Add new patch to remove duplicated function definition
+- Add new patch to let BPF LSM determine the appropriate register values
+  to use
+
+Roberto Sassu (7):
+  bpf: Remove superfluous btf_id_set_contains() declaration
+  bpf: Mark ALU32 operations in bpf_reg_state structure
+  lsm: Redefine LSM_HOOK() macro to add return value flags as argument
+  bpf-lsm: Enforce return value limitations on security modules
+  selftests/bpf: Check if return values of LSM programs are allowed
+  selftests/bpf: Prevent positive ret values in test_lsm and
+    verify_pkcs7_sig
+  selftests/bpf: Change return value in test_libbpf_get_fd_by_id_opts.c
+
+ include/linux/bpf.h                           |   1 -
+ include/linux/bpf_lsm.h                       |  11 +-
+ include/linux/bpf_verifier.h                  |   1 +
+ include/linux/lsm_hook_defs.h                 | 780 ++++++++++--------
+ include/linux/lsm_hooks.h                     |   9 +-
+ kernel/bpf/bpf_lsm.c                          |  81 +-
+ kernel/bpf/verifier.c                         |  17 +-
+ security/bpf/hooks.c                          |   2 +-
+ security/security.c                           |   4 +-
+ tools/testing/selftests/bpf/progs/lsm.c       |   4 +
+ .../bpf/progs/test_libbpf_get_fd_by_id_opts.c |   7 +-
+ .../bpf/progs/test_verify_pkcs7_sig.c         |  11 +-
+ .../testing/selftests/bpf/verifier/lsm_ret.c  | 148 ++++
+ 13 files changed, 729 insertions(+), 347 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/lsm_ret.c
+
 -- 
-2.27.0
+2.25.1
 
