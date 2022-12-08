@@ -2,198 +2,124 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE5D64748E
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Dec 2022 17:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F0064786B
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Dec 2022 23:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiLHQqk (ORCPT
+        id S230162AbiLHWAA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 8 Dec 2022 11:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        Thu, 8 Dec 2022 17:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiLHQqj (ORCPT
+        with ESMTP id S230146AbiLHV7c (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:46:39 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E28AD9AF
-        for <linux-security-module@vger.kernel.org>; Thu,  8 Dec 2022 08:46:37 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso6127853pjb.1
-        for <linux-security-module@vger.kernel.org>; Thu, 08 Dec 2022 08:46:37 -0800 (PST)
+        Thu, 8 Dec 2022 16:59:32 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B954A65B3
+        for <linux-security-module@vger.kernel.org>; Thu,  8 Dec 2022 13:59:20 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id a14so2361601pfa.1
+        for <linux-security-module@vger.kernel.org>; Thu, 08 Dec 2022 13:59:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M5g9x1VwrktuopxwMZHjOgJ8tHfMh8aN/AqahvEyUyc=;
-        b=U2b9lM71DR7CIe1jVRJVDqcCVhIQHrqrw/uvbLFZM9bDhCqODmtXgLThl7qogxizyH
-         LHX+6BExWkAsbrHdlV59CE1zTXObbdVbPVjURA6GJFFKmtA6dpDCKmVME2CfPTDIysXO
-         78uEvSSKu9kDFFKutu9isCrAh0vezxIhwguWU=
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g16i19egww1EdjGD+zRuacsquJsxBwloaiWcEoNVR9E=;
+        b=WxKa1V6jeJxxo14AlfMldjz0WsyEw+FaBx/HybeIBV0TJkD0adijMV0A/4JxP8WNh6
+         wHL3+5H/cR6dMO4/U9Bj3kTySQO2hGaOxN84MY1dnDEtJeVVTLEN/+Ghq1f81y/Y8VQ8
+         +jpGyBj0+H2zglyjpVNDov9dNqUix8S8TplAu0AWIuiG2IDr2AppxGmc8rRKnOyKk/t9
+         9O8I7AGruiBpdU4TohuFxxMEAqqqELsBBENYFcXgWxxAiKqj55M7Z/h3/R8Aor/2poW8
+         hXR1KKEOQh1uXoRGRkxLyUJpy2O5tXGGzOE9gmf/vYvRXTe+/shARE+/Fhum5MsqgQPF
+         bjVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M5g9x1VwrktuopxwMZHjOgJ8tHfMh8aN/AqahvEyUyc=;
-        b=HFLOyQMsUrr9PMuv3Nsis8fDtHJmxXAxfyEO53F18IwBUeRWSqcSrWKwXEOW/9IcUY
-         Ht2LfyNiiIh2LElCOw9LSM/VQPVlkaXC77r0DdVjmqyc13VsVrYS+6+v3paw0plIS83K
-         VAgJ7d7RldNxa+ID60+i+8E4pG1ZfimgbOsAEl9KJkMJqRu4czapDhedGUjbD0ctF2GD
-         C9aYZ9TExyTTMNFreLEoFYX+XNYMal78yA8/qyHLm8WV7fw5BhcapAcPdfAsVAyWo7+f
-         4Mu9GYGN4SbM3yJG/OKOjermzb77mJPEsLTZ8TE9TnVe37b3LARKsprTbrA/CcID67F4
-         KAKw==
-X-Gm-Message-State: ANoB5plNNDyK6nO7jb10+xHKNEv2zpds4uq+ywOgs5QRto6oVcJbhsQm
-        bXMnIgtCLv1IQYNN0ryfRkemdA==
-X-Google-Smtp-Source: AA0mqf7rJ3anr4Kc+n7+Zjin6BYJYXJCfq/+N+XN/qjcSVRqcGe1qoouE4guqX4TOa/NYXtzAAEA9A==
-X-Received: by 2002:a17:902:dacd:b0:189:6889:c30a with SMTP id q13-20020a170902dacd00b001896889c30amr61854329plx.6.1670517997289;
-        Thu, 08 Dec 2022 08:46:37 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f6-20020a170902ce8600b001743ba85d39sm16877857plg.110.2022.12.08.08.46.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:46:36 -0800 (PST)
-Date:   Thu, 8 Dec 2022 08:46:35 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v6 6/6] mm/memfd: security hook for memfd_create
-Message-ID: <202212080845.8E9D894B@keescook>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-7-jeffxu@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g16i19egww1EdjGD+zRuacsquJsxBwloaiWcEoNVR9E=;
+        b=wO7qjO/15RQnnEQebYLTm0+w7CVVEFAh10ghNVonr09HPoNkjj4o7AvQLGJNGeBsZb
+         4XK6NWpXsFcOnktTP6E2NAcNcssP6I9jVnhcBM/l6Jod5x0wWW/zrnkN7Rw9p2/wjJzd
+         cO/zJEAKuC+h+IQhlb9JbKZXdJI5grigt3bxgH9oEkCVjG1MVSuJHyv3bS2Wvcp0wgj9
+         aYFURgqeOtSwRtU/p2YyYTzx/MmrBgHehrHMTfLVcv76AXsAe8cAWa7mL1jcGxmPv3oU
+         xQR19x6IiaGOD+gPq5PckKWdpoeChMTxUCfwYmwdQ4oxiV83UuslDQRUswyQ3O1OusYt
+         DiZw==
+X-Gm-Message-State: ANoB5pnZLiWGrLl8D1yzyHDlFfr1LoJ78fXnNwbtYRADYWCj/W3RsWQp
+        r1Jo8EUSNLG8lEJeoBToxWsUl4Q85IueFC4L45CL
+X-Google-Smtp-Source: AA0mqf7suwg0r3ZmbbOjxSTcWJhzHqQ3v2uKPwyphLovzYmK2k21JaK9XAWCHM3WCrDS5+FcFG7JaZTAt+3m6BG89iw=
+X-Received: by 2002:a63:1f63:0:b0:460:ec46:3645 with SMTP id
+ q35-20020a631f63000000b00460ec463645mr88685381pgm.92.1670536759965; Thu, 08
+ Dec 2022 13:59:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207154939.2532830-7-jeffxu@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221128144240.210110-1-roberto.sassu@huaweicloud.com>
+ <20221128144240.210110-3-roberto.sassu@huaweicloud.com> <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
+ <7225e76c09c7ff68937e37ee041fefdd6ccac1c8.camel@huaweicloud.com>
+ <0682348d9601ca3847ce9ba035e4ab1b586cf712.camel@huaweicloud.com>
+ <CAHC9VhQZ3VKWsNarUGPcHZuoRLgb8owKgbdLymwR759qVyQ+2Q@mail.gmail.com> <b989b278a16c48e104b32ba7243e4298491a6056.camel@huaweicloud.com>
+In-Reply-To: <b989b278a16c48e104b32ba7243e4298491a6056.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 8 Dec 2022 16:59:08 -0500
+Message-ID: <CAHC9VhSdcyOd01VYtqhJGrgKyG3oZmE_1d0RQymxKv1=ErhduQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] lsm: Add/fix return values in lsm_hooks.h and fix formatting
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     David Howells <dhowells@redhat.com>, casey@schaufler-ca.com,
+        omosnace@redhat.com, john.johansen@canonical.com,
+        kpsingh@kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Dec 07, 2022 at 03:49:39PM +0000, jeffxu@chromium.org wrote:
-> From: Jeff Xu <jeffxu@google.com>
-> 
-> The new security_memfd_create allows lsm to check flags of
-> memfd_create.
-> 
-> The security by default system (such as chromeos) can use this
-> to implement system wide lsm to allow only non-executable memfd
-> being created.
-> 
-> Signed-off-by: Jeff Xu <jeffxu@google.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Dec 8, 2022 at 4:29 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Wed, 2022-12-07 at 14:34 -0500, Paul Moore wrote:
+> > On Wed, Dec 7, 2022 at 4:18 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > For this patch, I saw it is already in lsm/next. Paul, should I do an
+> > > incremental patch or change the one in the repo and you force push it?
+> > > I would just remove the three lines after the parameters description.
+> >
+> > Just send a patch against the current lsm/next branch to remove those
+> > lines, and please do it ASAP as the merge window opens this
+> > weekend/Monday.
+>
+> Ok, was about to send but I would need a clarification first.
+>
+> In mount_api.rst, there is for security_fs_context_parse_param():
+>
+>      The value pointed to by param may be modified (if a string) or stolen
+>      (provided the value pointer is NULL'd out).  If it is stolen, 0 must be
+>      returned to prevent it being passed to the filesystem.
+>
+> Looking at security.c:
+>
+>         hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
+>                              list) {
+>                 trc = hp->hook.fs_context_parse_param(fc, param);
+>                 if (trc == 0)
+>                         rc = 0;
+>                 else if (trc != -ENOPARAM)
+>                         return trc;
+>         }
+>
+> If, as mount_api.rst says, the value is modified by an LSM or stolen,
+> should it be passed to other LSMs too?
 
-Oh, btw, please CC linux-security-module@vger.kernel.org when adding new
-hooks. (I've added the CC here.)
+All of the LSMs should be using fs_parse() in their
+fs_context_parse_param() hook to identify the mount options that they
+own, skipping those they do not (fs_parse() would return -ENOPARAM in
+those cases).  I don't believe we currently have any mount options
+that are shared across the different LSMs, so I believe this is a
+non-issue.
 
--Kees
-
-> ---
->  include/linux/lsm_hook_defs.h |  1 +
->  include/linux/lsm_hooks.h     |  4 ++++
->  include/linux/security.h      |  6 ++++++
->  mm/memfd.c                    |  5 +++++
->  security/security.c           | 13 +++++++++++++
->  5 files changed, 29 insertions(+)
-> 
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index ec119da1d89b..fd40840927c8 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
->  LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
->  LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
->  	 unsigned long arg)
-> +LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
->  LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
->  LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
->  	 unsigned long prot, unsigned long flags)
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 4ec80b96c22e..5a18a6552278 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -543,6 +543,10 @@
->   *	simple integer value.  When @arg represents a user space pointer, it
->   *	should never be used by the security module.
->   *	Return 0 if permission is granted.
-> + * @memfd_create:
-> + *	@name is the name of memfd file.
-> + *	@flags is the flags used in memfd_create.
-> + *	Return 0 if permission is granted.
->   * @mmap_addr :
->   *	Check permissions for a mmap operation at @addr.
->   *	@addr contains virtual address that will be used for the operation.
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index ca1b7109c0db..5b87a780822a 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
->  int security_file_alloc(struct file *file);
->  void security_file_free(struct file *file);
->  int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-> +int security_memfd_create(char *name, unsigned int flags);
->  int security_mmap_file(struct file *file, unsigned long prot,
->  			unsigned long flags);
->  int security_mmap_addr(unsigned long addr);
-> @@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
->  	return 0;
->  }
->  
-> +static inline int security_memfd_create(char *name, unsigned int flags)
-> +{
-> +	return 0;
-> +}
-> +
->  static inline int security_mmap_file(struct file *file, unsigned long prot,
->  				     unsigned long flags)
->  {
-> diff --git a/mm/memfd.c b/mm/memfd.c
-> index 92f0a5765f7c..f04ed5f0474f 100644
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -356,6 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
->  		goto err_name;
->  	}
->  
-> +	/* security hook for memfd_create */
-> +	error = security_memfd_create(name, flags);
-> +	if (error)
-> +		return error;
-> +
->  	if (flags & MFD_HUGETLB) {
->  		file = hugetlb_file_setup(name, 0, VM_NORESERVE,
->  					HUGETLB_ANONHUGE_INODE,
-> diff --git a/security/security.c b/security/security.c
-> index 79d82cb6e469..5c018e080923 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1010,6 +1010,19 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
->  }
->  EXPORT_SYMBOL(security_sb_clone_mnt_opts);
->  
-> +int security_add_mnt_opt(const char *option, const char *val, int len,
-> +			 void **mnt_opts)
-> +{
-> +	return call_int_hook(sb_add_mnt_opt, -EINVAL,
-> +					option, val, len, mnt_opts);
-> +}
-> +EXPORT_SYMBOL(security_add_mnt_opt);
-> +
-> +int security_memfd_create(char *name, unsigned int flags)
-> +{
-> +	return call_int_hook(memfd_create, 0, name, flags);
-> +}
-> +
->  int security_move_mount(const struct path *from_path, const struct path *to_path)
->  {
->  	return call_int_hook(move_mount, 0, from_path, to_path);
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
+In the future if we ever find the need to share mount options across
+different LSMs we will need some additional work to ensure it is
+handled properly, but I don't think we need to worry too much about
+that now.
 
 -- 
-Kees Cook
+paul-moore.com
