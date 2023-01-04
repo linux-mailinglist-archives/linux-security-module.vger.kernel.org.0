@@ -2,113 +2,105 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AD965CD3B
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Jan 2023 07:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119FE65D16A
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Jan 2023 12:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjADGkh (ORCPT
+        id S233383AbjADLbn (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 4 Jan 2023 01:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        Wed, 4 Jan 2023 06:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjADGkM (ORCPT
+        with ESMTP id S233284AbjADLbm (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:40:12 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90509183A3
-        for <linux-security-module@vger.kernel.org>; Tue,  3 Jan 2023 22:40:09 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id w203so5536366pfc.12
-        for <linux-security-module@vger.kernel.org>; Tue, 03 Jan 2023 22:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
-        b=lxucC7WdJqs/f6vnO0xyjDIiYvkO1zIUbY5dvzc1gS3dAy3OfQQYNJY3qgkIp4IvGC
-         Oi3Qiq2J4RL2YPCvlge/HIY6+nyJiUXFhgSIFyzAmwWVXagd97/PUtXlb5jfygBt6BRf
-         fwWN260uJVbK/yc9R8WuWezkJeUQdhpjES8XGIHyH3AdF/AFkNlz+YfQuZN2gO1EmOPc
-         8KKIj6/qhE8i3Fe0WWEG9u5kvwBFlkiVo2YRHtZuVzM09AJ0QQD44w0muYyCcKVpzTF1
-         KpA5Z3tjS1NOBVAYcaIMzzN2x6CIMAwuhChhhugpiMtk+ck5Mr24ICxbQ/8nSTPVum7J
-         QJOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
-        b=DpYu3hoTkEq19+zi9ntwOH5+l+FddFSpgeqQBgQl1R0hbiO+MrO3tAyhLYZj50Ir/u
-         NiAWGFd5cqRgm2FRH+W2iyZCgrGsTzC+K3kkTRFb4UM3ZR27pUVehhEP9BFS75fZsGLy
-         CimkYyst9xyi8kRX7P6wQVwACNAw4hAbo6MlEbFFiaVPvIyUEaZPisYW2RkCEdkuQPzD
-         E3y2mxAC4Kqb2iBpqAzkDCC9bGqcHWmoWmBgm/9LTyAH+3hMn3zJ8Hv/7GIHP4W1SpSA
-         Zvjk+AUrFBtEgMGv1/8bVM16D6y1SJyUqtevZVL8UkPAACyPZAr+fdByJdIZ78hGLGSw
-         iExw==
-X-Gm-Message-State: AFqh2kqFyzh1W18C6tCH7ebHzSUEZ/txXp3WNdO2pUt6lunC1/LlMaVt
-        q+WoeAVtR67lLL4y70RujYhZtQBdzcBbC5LCReM=
-X-Google-Smtp-Source: AMrXdXtzEgdGNYXviASYnSqNJC0ZiQxlpsBhKtwlV/fC9EHlEQAD4b0ufCVYBzwI8FMubEJLf3ti+D5YEYUYV8QjtJ4=
-X-Received: by 2002:a62:1d07:0:b0:582:e7c:f6f3 with SMTP id
- d7-20020a621d07000000b005820e7cf6f3mr1157112pfd.8.1672814408803; Tue, 03 Jan
- 2023 22:40:08 -0800 (PST)
+        Wed, 4 Jan 2023 06:31:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D557AEAF;
+        Wed,  4 Jan 2023 03:31:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97772B810FA;
+        Wed,  4 Jan 2023 11:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3661C433D2;
+        Wed,  4 Jan 2023 11:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672831898;
+        bh=VgAXciag9TzqrbcrI2xLeki43co0yEKZUHdTYmAlYPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HaCvyZ9SN5MjBzF491yLiUrG6aIlOgG3B3Sco4CrslbxmQHfPEYapIkZrbgm3j4Xt
+         /KuyeA9kQ5U0O+HGYfDe9zjZ9tK7yBaKZoZ2kxnwCwTx2rL3Ru+EDfFjQgFnOoAI1o
+         /evWjQ+OXk9HOp/0yWsvNO2b5PIUBp0eytuxjfQSuJF68SAeb+4ceyBPQoMMXHqVNt
+         DJnxAZzJ+BvCopT6QzdMhj429j2bI6o/vY96Q16IdPEtrLjP2RMkKbNtf9SCLh87Eq
+         4FiDQEDVbBiMpJqQovGuB1aZrq3geee0lRHbnrano1PslXM0jdGwOwlh8y+0IEhkYh
+         FZOXDVdk8D1gA==
+Date:   Wed, 4 Jan 2023 11:31:34 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, noodles@fb.com, tiwai@suse.de,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 01/10] KEYS: Create static version of
+ public_key_verify_signature
+Message-ID: <Y7Vjlof68d0WRKdc@kernel.org>
+References: <20221214003401.4086781-1-eric.snowberg@oracle.com>
+ <20221214003401.4086781-2-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-Reply-To: mrs.maryander1947@gmail.com
-Sender: mrs.janeval197@gmail.com
-Received: by 2002:a05:7300:7652:b0:94:fcda:856a with HTTP; Tue, 3 Jan 2023
- 22:40:08 -0800 (PST)
-From:   "Mrs. Mary Anderson" <amrsmary16@gmail.com>
-Date:   Wed, 4 Jan 2023 06:40:08 +0000
-X-Google-Sender-Auth: jTqv_0vHyo2y0EStaK-jLA4ClSk
-Message-ID: <CAL+V8fx8n5YVCBnyPw3TzcFWBtXqZO5w+9A_JwP7BB54jJSoEA@mail.gmail.com>
-Subject: Dear Beloved,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5800]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrs.janeval197[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrs.maryander1947[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrs.janeval197[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:42f listed in]
-        [list.dnswl.org]
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214003401.4086781-2-eric.snowberg@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello,
+On Tue, Dec 13, 2022 at 07:33:52PM -0500, Eric Snowberg wrote:
+> The kernel test robot reports undefined reference to
+> public_key_verify_signature when CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE is
+> not defined. Create a static version in this case and return -EINVAL.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> ---
+>  include/crypto/public_key.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+> index 68f7aa2a7e55..6d61695e1cde 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -80,7 +80,16 @@ extern int create_signature(struct kernel_pkey_params *, const void *, void *);
+>  extern int verify_signature(const struct key *,
+>  			    const struct public_key_signature *);
+>  
+> +#if IS_REACHABLE(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
+>  int public_key_verify_signature(const struct public_key *pkey,
+>  				const struct public_key_signature *sig);
+> +#else
+> +static inline
+> +int public_key_verify_signature(const struct public_key *pkey,
+> +				const struct public_key_signature *sig)
+> +{
+> +	return -EINVAL;
+> +}
+> +#endif
+>  
+>  #endif /* _LINUX_PUBLIC_KEY_H */
+> -- 
+> 2.27.0
+> 
 
-Dear Beloved,
+Should this have fixes tag?
 
-I am Mrs. Mary Anderson, It is understandable that you may be a bit
-apprehensive because you do not know me, I found your email address
-from a Human resources database and decided to contact you. I would
-love to employ you into my charity work, I am ready to donate some
-money to you to carry on the Charity work in your country. Please
-reply so that i will give you further details and tell you about
-myself.
+BR, Jarkko
 
-Yours Sincerely
-Mrs. Mary Anderson
