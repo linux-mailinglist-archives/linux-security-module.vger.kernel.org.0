@@ -2,82 +2,110 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63FD660B3A
-	for <lists+linux-security-module@lfdr.de>; Sat,  7 Jan 2023 02:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68616660CCC
+	for <lists+linux-security-module@lfdr.de>; Sat,  7 Jan 2023 08:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235069AbjAGBEs (ORCPT
+        id S229639AbjAGHr6 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 6 Jan 2023 20:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        Sat, 7 Jan 2023 02:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236767AbjAGBEj (ORCPT
+        with ESMTP id S229468AbjAGHr5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 6 Jan 2023 20:04:39 -0500
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9465C848C2
-        for <linux-security-module@vger.kernel.org>; Fri,  6 Jan 2023 17:04:29 -0800 (PST)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-15651a0e01aso2587080fac.1
-        for <linux-security-module@vger.kernel.org>; Fri, 06 Jan 2023 17:04:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C56Q+YV0i1VwzqpPgsaApjf/2tDIDNvnJyLhwVpmM08=;
-        b=bcoS6C2817GyhpLzxWz4AennzXQkVoalnht/kvY2qVGPJamxy0FVqumbcSAm2l1NqQ
-         hy/EbmIuwDTqYxeMFZQN6XY18JkVILmKJT/GygXMgrvO6//waE+nQTdbIbNXVkha/zXn
-         GTUOUKR5VzfSvierNOKOb/fypmxrHJfV3dGXeMQqdfnzt0Cnrb/L8gWvzi035jYxnf7T
-         7v0UvpHiznbIuUeWHusLWvId8cd2/fVvMjCYCEKh4iKZk61FcaAay2hkvbgFy+ydojvU
-         JrG+tnw0oS+u030j8LlVXM+z0/t4QaguOLB1OQQCddSARexpMkLpKszPWSy0AHDm5mEH
-         6hNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C56Q+YV0i1VwzqpPgsaApjf/2tDIDNvnJyLhwVpmM08=;
-        b=KHjTH89hpOqaUB/PmhLqBn2AXSlHexCJCcW+1Verh+PIoyvjzJ8smxX1CNZjRqsl81
-         7Jq6jDSzqATB+chzBe9SCyV/UqbzA6V0H/Mfe+JKU8MQT75+5wHXfOyI7P9EM0DgnSVi
-         UYSgQEuyt874IYd0ppf3vDUEfxq0tuJOO5KRombhqX4Y1ol0jAPGing5ySu/UWSCFmXA
-         /1s1JdIRkKKKN5gzMjH/PnAAGknxK1XdeDVVDBF96JIhAz6pVDCjyzdTSCdVh0Ajlq++
-         TaVfcwxOxMan9fbVTlAn73QWPshLfcgL0ugemYidbFpfxI3AzIJ1Rmsvrutw+33D4mqo
-         m5Vg==
-X-Gm-Message-State: AFqh2kqKFRJNoXqoW2lWkjNBwDL31ZAzwOLV8XFGUdsJnaR+kF4lBuPA
-        Uoxh0og3NOgcqzUtmw25g1hzvf/xxyYwIh3Sg68=
-X-Google-Smtp-Source: AMrXdXuLIkczffrw/nGPLzU+T6JxiPMjzQSjI9ZGkHR5kSqJF4HT1c1+MtonQsd7rfA5ATZjfHy3pOf2qpZaN69zav8=
-X-Received: by 2002:a05:6871:6c94:b0:150:8bf9:1c04 with SMTP id
- zj20-20020a0568716c9400b001508bf91c04mr1587529oab.239.1673053468965; Fri, 06
- Jan 2023 17:04:28 -0800 (PST)
+        Sat, 7 Jan 2023 02:47:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1352848CD;
+        Fri,  6 Jan 2023 23:47:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DD3B608C3;
+        Sat,  7 Jan 2023 07:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F5AAC433D2;
+        Sat,  7 Jan 2023 07:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673077675;
+        bh=ePoHU4GENwIfAdeBcPaqU+CazliNAW/mfkD74kveQSE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EARISaexCJgsuI1qYC7HkNS6XgtOzyD2kMMUX93hH15nIeJuIURFAkLiPjsDmfJlU
+         JXVymnYlboNjuQb+asz7oHo5XxbVnkaR8KovfE7B7ctrMMxm077UQ9dgzc4JoJCaWA
+         QUYnburKZuINVt5PNTg4Ur4YYvH5WDX3X6tuh+FYUk/tlUCNQLVY4teitmnvLEUDDb
+         ILBFLtQ5zZ6QEpunjc+HNRaVlDHykUL0Q2AX53F+vjb5jmrRz388DQbC/s/dIAH4kb
+         nm9060g5Lzkd5THkKaXfY3/jOmsj5cfS+XYsvCYFht+N2uUTGO73qq1RiPe3RtGgLU
+         ryiLS1qHG60Sw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        Michal Marek <mmarek@suse.cz>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 1/3] tomoyo: fix broken dependency on *.conf.default
+Date:   Sat,  7 Jan 2023 16:47:41 +0900
+Message-Id: <20230107074743.3352242-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6808:2387:0:0:0:0 with HTTP; Fri, 6 Jan 2023 17:04:28
- -0800 (PST)
-Reply-To: jamesaissy13@gmail.com
-From:   James AISSY <samueltia200@gmail.com>
-Date:   Fri, 6 Jan 2023 17:04:28 -0800
-Message-ID: <CAOD2y7=cNgFAGNQm9FK_b=Ut3J4M_0=BtMdunxKn86M9z64y9Q@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello My Dear,
+If *.conf.default is updated, builtin-policy.h should be rebuilt,
+but this does not work when compiled with O= option.
 
-I hope this message finds you in good Health.
+[Without this commit]
 
-My name is Mr. James AISSY. I am looking for a partner who is willing to
-team up with me for potential investment opportunities. I shall provide the
-FUND for the investment, and upon your acknowledgment of receiving this
-Message I will therefore enlighten you with the Full Details of my
-investment proposal.
+  $ touch security/tomoyo/policy/exception_policy.conf.default
+  $ make O=/tmp security/tomoyo/
+  make[1]: Entering directory '/tmp'
+    GEN     Makefile
+    CALL    /home/masahiro/ref/linux/scripts/checksyscalls.sh
+    DESCEND objtool
+  make[1]: Leaving directory '/tmp'
 
-I'm awaiting your Response.
+[With this commit]
 
-My regards,
-Mr. James AISSY.
+  $ touch security/tomoyo/policy/exception_policy.conf.default
+  $ make O=/tmp security/tomoyo/
+  make[1]: Entering directory '/tmp'
+    GEN     Makefile
+    CALL    /home/masahiro/ref/linux/scripts/checksyscalls.sh
+    DESCEND objtool
+    POLICY  security/tomoyo/builtin-policy.h
+    CC      security/tomoyo/common.o
+    AR      security/tomoyo/built-in.a
+  make[1]: Leaving directory '/tmp'
+
+$(srctree)/ is essential because $(wildcard ) does not follow VPATH.
+
+Fixes: f02dee2d148b ("tomoyo: Do not generate empty policy files")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ security/tomoyo/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/tomoyo/Makefile b/security/tomoyo/Makefile
+index cca5a3012fee..221eaadffb09 100644
+--- a/security/tomoyo/Makefile
++++ b/security/tomoyo/Makefile
+@@ -10,7 +10,7 @@ endef
+ quiet_cmd_policy  = POLICY  $@
+       cmd_policy  = ($(call do_policy,profile); $(call do_policy,exception_policy); $(call do_policy,domain_policy); $(call do_policy,manager); $(call do_policy,stat)) >$@
+ 
+-$(obj)/builtin-policy.h: $(wildcard $(obj)/policy/*.conf $(src)/policy/*.conf.default) FORCE
++$(obj)/builtin-policy.h: $(wildcard $(obj)/policy/*.conf $(srctree)/$(src)/policy/*.conf.default) FORCE
+ 	$(call if_changed,policy)
+ 
+ $(obj)/common.o: $(obj)/builtin-policy.h
+-- 
+2.34.1
+
