@@ -2,62 +2,106 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E636660EF0
-	for <lists+linux-security-module@lfdr.de>; Sat,  7 Jan 2023 13:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD8266149D
+	for <lists+linux-security-module@lfdr.de>; Sun,  8 Jan 2023 11:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjAGM5l (ORCPT
+        id S233071AbjAHKws (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 7 Jan 2023 07:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
+        Sun, 8 Jan 2023 05:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjAGM5l (ORCPT
+        with ESMTP id S229822AbjAHKwq (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 7 Jan 2023 07:57:41 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6C7CDF
-        for <linux-security-module@vger.kernel.org>; Sat,  7 Jan 2023 04:57:40 -0800 (PST)
-Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 307Cv83H083864;
-        Sat, 7 Jan 2023 21:57:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
- Sat, 07 Jan 2023 21:57:08 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
-Received: from [192.168.1.20] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 307Cv8Jn083861
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 7 Jan 2023 21:57:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <bb3be570-610b-24f1-5fa1-0f7d3955b834@I-love.SAKURA.ne.jp>
-Date:   Sat, 7 Jan 2023 21:57:09 +0900
+        Sun, 8 Jan 2023 05:52:46 -0500
+X-Greylist: delayed 914 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Jan 2023 02:52:44 PST
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1C513E10;
+        Sun,  8 Jan 2023 02:52:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1673174207; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=R4sR6HypQhsq0FANUSSfT92ZwhHFDchRxsFIGEqe4+EA8pC9qA2wUtwkh8Kw1iMhCdTIsRsP/mK9je1Z9PNCidJP04cxYDGkoNQ3v5z4rAJSirhFGN1EmBrpik2seKCiS0NvPigLMLU4NpUqmwe3/2ZxL5CnZxwFdGvSvmkOOJg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1673174207; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=pcXt8bFzKFZCxe/K2x0CZ6wr09PH7+KBAfFhihnTjHU=; 
+        b=V7u4OWXFpp4PlPYvEEKPtTBJGA2E3Ov6tJxkWSOT4sq1LQS+aIy9WwTx0h2d5BIrfN1TtaC58A6CnZB/HopVk0+LF/dUY1KLoEZoTaHNpLRFh57Q8NForv76xHyze0DR/CWDcQnCx6VBkkCxdCPpzr7ckl8lf1u/rVQd6kOVTI4=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1673174207;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=pcXt8bFzKFZCxe/K2x0CZ6wr09PH7+KBAfFhihnTjHU=;
+        b=MyiAs1b9XVjh7OyDI6QRNFE/1Zxtc78eCokPbQL8L+SA9D0hwRszQaPPS2+vg+Au
+        yEHFVV70X1V0pihDEzq9txLwGCHl8IAx0Esw2lVcvkZ7ygLF8/EQxuq4j615gedgax/
+        ew1b4vxtQrp2jksCg/e5cnOZJss4nxEvg3aEQd9o=
+Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 1673174205063602.2424519389933; Sun, 8 Jan 2023 16:06:45 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     keyrings <keyrings@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <cover.1673173920.git.code@siddh.me>
+Subject: [PATCH v3 0/2] watch_queue: Clean up some code
+Date:   Sun,  8 Jan 2023 16:06:30 +0530
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] tomoyo: fix broken dependency on *.conf.default
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, James Morris <jmorris@namei.org>,
-        Michal Marek <mmarek@suse.cz>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        Kentaro Takeda <takedakn@nttdata.co.jp>
-References: <20230107074743.3352242-1-masahiroy@kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20230107074743.3352242-1-masahiroy@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-All patches applied to https://osdn.net/projects/tomoyo/scm/git/tomoyo-test1/ .
+There is a dangling reference to pipe in a watch_queue after clearing it.
+Thus, NULL that pointer while clearing.
 
-Thank you.
+This change renders wqueue->defunct superfluous, as the latter is only used
+to check if watch_queue is cleared. With this change, the pipe is NULLed
+while clearing, so we can just check if the pipe is NULL.
+
+Extending comment for watch_queue->pipe in the definition of watch_queue
+made the comment conventionally too long (it was already past 80 chars),
+so I have changed the struct annotations to be kerneldoc-styled, so that
+I can extend the comment mentioning that the pipe is NULL when watch_queue
+is cleared. In the process, I have also hopefully improved documentation
+by documenting things which weren't documented before.
+
+Changes in v3:
+- Fixed misplaced/incorrect comment for members watch_list and list_node
+  in struct watch.
+- Minor rephrase of comment before NULLing in watch_queue_clear().
+
+Changes in v2 (6 Aug 2022):
+- Merged the NULLing and removing defunct patches.
+- Removed READ_ONCE barrier in lock_wqueue().
+- Improved and fixed errors in struct docs.
+- Better commit messages.
+
+Siddh Raman Pant (2):
+  include/linux/watch_queue: Improve documentation
+  kernel/watch_queue: NULL the dangling *pipe, and use it for clear
+    check
+
+ include/linux/watch_queue.h | 100 ++++++++++++++++++++++++++----------
+ kernel/watch_queue.c        |  12 ++---
+ 2 files changed, 79 insertions(+), 33 deletions(-)
+
+--=20
+2.39.0
+
 
