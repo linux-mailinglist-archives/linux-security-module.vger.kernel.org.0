@@ -2,114 +2,151 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED5D6635EE
-	for <lists+linux-security-module@lfdr.de>; Tue, 10 Jan 2023 01:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59527663620
+	for <lists+linux-security-module@lfdr.de>; Tue, 10 Jan 2023 01:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237300AbjAIX75 (ORCPT
+        id S235639AbjAJAS3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 9 Jan 2023 18:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
+        Mon, 9 Jan 2023 19:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234480AbjAIX75 (ORCPT
+        with ESMTP id S235654AbjAJAS0 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 9 Jan 2023 18:59:57 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB3A1D0FC;
-        Mon,  9 Jan 2023 15:59:55 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1673308792;
-        bh=XbsyBGwFNX/+AhMDtn4NosVJq1CKEYv0BSyy10RgWi8=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=JGTxi12A9Q1nheqVStkHBKWzMEVW5z1qpY2qLGO9WHdBjI1WjHsUXawmS/cqTUAJj
-         sVTTiEumgxwmWhWQIVdoGJxINu79EBLWDNLPiq/IH60IS/KvD65sb7andhXJkQJ7ti
-         SzJUtSQ5OZg4S7vRQ4RbExw+/jjLFYwA7qC/y6dg=
-Date:   Mon, 09 Jan 2023 23:59:43 +0000
-Subject: [PATCH RESEND v6 3/3] certs: don't try to update blacklist keys
+        Mon, 9 Jan 2023 19:18:26 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4E739F8A
+        for <linux-security-module@vger.kernel.org>; Mon,  9 Jan 2023 16:18:24 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4d13cb4bbffso14778227b3.3
+        for <linux-security-module@vger.kernel.org>; Mon, 09 Jan 2023 16:18:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sgQCt0va7Fj5/9fGcldqaAxXWYK8cBxGZmP9xyPfdn4=;
+        b=CjxZ1mdpIhqu8VGPVCMoqsbsDlIhqCjEmsPqq5qkb1qszkge1Jm7eoOuPAcP/ZV3bk
+         wPP+sf8id+ynxeTBPKOWQaibXFQF9VkirxIevCIzpGAQ21ueiyMyljdoDpqBwv6iADhp
+         JWDpspg8gxuUz/g8o8f3Q/TpOZXD4wUkStfMnP3bNMTdaoT8E8PrN4XpF0W1y5T9lIyj
+         m9H9otSUCpmNvNlNujrmOWTRlgks+Pwp+EXc1GX8tr1KUVIqmZXacuPH98ZfnNVZNFn8
+         /a3FCftCVuu8stwkCKaAOtd2Rf8qgv7JUkOT3SOOPfRdmX4H3QpcqFd3fI60DVZdrWVr
+         exyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sgQCt0va7Fj5/9fGcldqaAxXWYK8cBxGZmP9xyPfdn4=;
+        b=1QUmBkLQEepW2X7ua5oZsq2VVT4H6IU4TWZc1ebOVmi/4RVfHkxN30UNJN+j2gQ7dY
+         1XRpMGOC3kCsuAoNLuOJueuuFOa6y56RIiQ03d5I3f6grhMOsosjQ30p1llc/afgoB+y
+         nrQxGvzPL2qJ0jMZYYeAHvuYmVSNNHyFjGmALV+cDdl9e2UCSxXQYQefgm30QDFiQ9r1
+         5bvOdJrdHxN0NqM7uWH9bE7oijamSxFhaxP4smyJVMx8a6GWqxPW8VKA7wEKL2YZ9/ig
+         MYrA187an/TOJxae0pvyzLrrw9lrQXMhN9xFtmSYWp35mbHYrM2Pm/Se73tn8awNcp/t
+         q7/A==
+X-Gm-Message-State: AFqh2kqmJXZVQXpQ+iRtkUi5Z00k+0caIoTjhE3KnuhPM8kj4wvTQCTY
+        DaRw6dzyU0yI5/yHfK/rmnY2iuhZA26U489ncz7+sA==
+X-Google-Smtp-Source: AMrXdXvykUOk6Aq29zKPFweeZ5QLOqVr0VtGabuLWKsdUabDXPvAWtUyFW1w97fkSV+2AQTk/rtQ4CJ6GNWf2U6U44A=
+X-Received: by 2002:a81:7386:0:b0:391:c415:f872 with SMTP id
+ o128-20020a817386000000b00391c415f872mr1094430ywc.318.1673309903890; Mon, 09
+ Jan 2023 16:18:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221212-keys-blacklist-v6-3-933267a80582@weissschuh.net>
-References: <20221212-keys-blacklist-v6-0-933267a80582@weissschuh.net>
-In-Reply-To: <20221212-keys-blacklist-v6-0-933267a80582@weissschuh.net>
-To:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
+References: <20230109213809.418135-1-tjmercier@google.com>
+In-Reply-To: <20230109213809.418135-1-tjmercier@google.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 9 Jan 2023 16:18:12 -0800
+Message-ID: <CALvZod4ru7F38tAO-gM9ZFKaEhS0w3KqFbPwhwcTvgJs4xMUow@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Track exported dma-buffers with memcg
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Paul Moore <paul@paul-moore.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Mark Pearson <markpearson@lenovo.com>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12-dev-3dd91
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1673308789; l=1743;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=XbsyBGwFNX/+AhMDtn4NosVJq1CKEYv0BSyy10RgWi8=;
- b=m22y9R8oSOW93S3ubz+AnnJoxZ9hUwAVd6c+F34GIiRUf5++/uFiiniR7WAkiS2gpmI1wx9XxO77
- HypSBqAlAj56LRUxNTvo5JiRklFZoOhzbOwoxmmJ3ckeThurk1TJ
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, daniel.vetter@ffwll.ch,
+        android-mm@google.com, jstultz@google.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-When the same key is blacklisted repeatedly logging at pr_err() level is
-excessive as no functionality is impaired.
-When these duplicates are provided by buggy firmware there is nothing
-the user can do to fix the situation.
-Instead of spamming the bootlog with errors we use a warning that can
-still be seen by OEMs when testing their firmware.
+Hi T.J.,
 
-Link: https://lore.kernel.org/all/c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de/
-Link: https://lore.kernel.org/all/20221104014704.3469-1-linux@weissschuh.net/
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- certs/blacklist.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+On Mon, Jan 9, 2023 at 1:38 PM T.J. Mercier <tjmercier@google.com> wrote:
+>
+> Based on discussions at LPC, this series adds a memory.stat counter for
+> exported dmabufs. This counter allows us to continue tracking
+> system-wide total exported buffer sizes which there is no longer any
+> way to get without DMABUF_SYSFS_STATS, and adds a new capability to
+> track per-cgroup exported buffer sizes. The total (root counter) is
+> helpful for accounting in-kernel dmabuf use (by comparing with the sum
+> of child nodes or with the sum of sizes of mapped buffers or FD
+> references in procfs) in addition to helping identify driver memory
+> leaks when in-kernel use continually increases over time. With
+> per-application cgroups, the per-cgroup counter allows us to quickly
+> see how much dma-buf memory an application has caused to be allocated.
+> This avoids the need to read through all of procfs which can be a
+> lengthy process, and causes the charge to "stick" to the allocating
+> process/cgroup as long as the buffer is alive, regardless of how the
+> buffer is shared (unless the charge is transferred).
+>
+> The first patch adds the counter to memcg. The next two patches allow
+> the charge for a buffer to be transferred across cgroups which is
+> necessary because of the way most dmabufs are allocated from a central
+> process on Android. The fourth patch adds a SELinux hook to binder in
+> order to control who is allowed to transfer buffer charges.
+>
+> [1] https://lore.kernel.org/all/20220617085702.4298-1-christian.koenig@amd.com/
+>
 
-diff --git a/certs/blacklist.c b/certs/blacklist.c
-index 6e260c4b6a19..675dd7a8f07a 100644
---- a/certs/blacklist.c
-+++ b/certs/blacklist.c
-@@ -183,16 +183,19 @@ static int mark_raw_hash_blacklisted(const char *hash)
- {
- 	key_ref_t key;
- 
--	key = key_create_or_update(make_key_ref(blacklist_keyring, true),
--				   "blacklist",
--				   hash,
--				   NULL,
--				   0,
--				   BLACKLIST_KEY_PERM,
--				   KEY_ALLOC_NOT_IN_QUOTA |
--				   KEY_ALLOC_BUILT_IN);
-+	key = key_create(make_key_ref(blacklist_keyring, true),
-+			 "blacklist",
-+			 hash,
-+			 NULL,
-+			 0,
-+			 BLACKLIST_KEY_PERM,
-+			 KEY_ALLOC_NOT_IN_QUOTA |
-+			 KEY_ALLOC_BUILT_IN);
- 	if (IS_ERR(key)) {
--		pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
-+		if (PTR_ERR(key) == -EEXIST)
-+			pr_warn("Duplicate blacklisted hash %s\n", hash);
-+		else
-+			pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
- 		return PTR_ERR(key);
- 	}
- 	return 0;
+I am a bit confused by the term "charge" used in this patch series.
+From the patches, it seems like only a memcg stat is added and nothing
+is charged to the memcg.
 
--- 
-2.39.0
+This leads me to the question: Why add this stat in memcg if the
+underlying memory is not charged to the memcg and if we don't really
+want to limit the usage?
 
+I see two ways forward:
+
+1. Instead of memcg, use bpf-rstat [1] infra to implement the
+per-cgroup stat for dmabuf. (You may need an additional hook for the
+stat transfer).
+
+2. Charge the actual memory to the memcg. Since the size of dmabuf is
+immutable across its lifetime, you will not need to do accounting at
+page level and instead use something similar to the network memory
+accounting interface/mechanism (or even more simple). However you
+would need to handle the reclaim, OOM and charge context and failure
+cases. However if you are not looking to limit the usage of dmabuf
+then this option is an overkill.
+
+Please let me know if I misunderstood something.
+
+[1] https://lore.kernel.org/all/20220824233117.1312810-1-haoluo@google.com/
+
+thanks,
+Shakeel
