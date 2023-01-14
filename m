@@ -2,190 +2,305 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EC166A735
-	for <lists+linux-security-module@lfdr.de>; Sat, 14 Jan 2023 00:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC7666A883
+	for <lists+linux-security-module@lfdr.de>; Sat, 14 Jan 2023 03:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjAMXoU (ORCPT
+        id S231163AbjANCD0 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 13 Jan 2023 18:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
+        Fri, 13 Jan 2023 21:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjAMXoS (ORCPT
+        with ESMTP id S231166AbjANCDZ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 13 Jan 2023 18:44:18 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD9E7A397;
-        Fri, 13 Jan 2023 15:44:17 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id m21so33288936edc.3;
-        Fri, 13 Jan 2023 15:44:17 -0800 (PST)
+        Fri, 13 Jan 2023 21:03:25 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B18B52D
+        for <linux-security-module@vger.kernel.org>; Fri, 13 Jan 2023 18:03:23 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id c26so12983498pfp.10
+        for <linux-security-module@vger.kernel.org>; Fri, 13 Jan 2023 18:03:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WiD4XuljWboqUYIS4LRAcIps0II1sfWftKD+kMm06Go=;
-        b=C/s/9LuL/WYBqFD4EB5pxlKXWidNEPzGOv0vv1psvI3HB4A/OoUL4OYdPB9OVNHnSf
-         /zhA+pFWUCxOnaVoyzAL//ACBTXJR0oJhpYrBQ8/acEbAJ5dZ/s8gb0MDYGmFL+wRfv6
-         JN3v1W5I/8Jc3a0RRGgIna8GqMgyOPG43htzzVc508tueV1HT2I1PaerVBkKf1YD/KZ5
-         sMSS7IQzxl4yX+uKb9UpXWYZQHoSh2rVBjNhyHdKoZFuexeoDkouLOVOiySzNHtRuxkK
-         mVsgx8369gaO0PuGcl+dpF/xfVv3dt+tJTjzypzFWD6u7DNjdaJx7nBvmeyCfLS/vwiO
-         UnaA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HwgAKeOI7A94Xvi9KexBt8/SPzPdsMO8DHg2D1kLGHY=;
+        b=Wd/cV9Ee2etY3+vKpdQLsp0EyKpitmvJsKWXpEudjiKn3LvJhM40F+YeADF9qf4bv+
+         0elGOYZJGnAUhAAXJEK0N29GlvULHG/6xDPvpbTafnIQ0kS6FcpnodS+BTpZbmGuNNFV
+         7Pe9oGnaeYXElcg8X8aUi/FSMy84kAhd4WnwXiCscYMCaW9aBHKmSlJjSWrKgx2E2kEv
+         f6R0wBrwAnBvTCZrr0DBSJqT1ZymJm9Jk77/ZWQIZ8V/es1bHSQZ6MFeX8Cd8szLwjFK
+         3XMaA6yLxhWTdKSk2L3tQhH+Pu32jlpBvcql3bDZWQg66Z+DdH4+42VggmcE2osXUlZM
+         NtRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WiD4XuljWboqUYIS4LRAcIps0II1sfWftKD+kMm06Go=;
-        b=gGDLtEtQF6F1PrOZkYYiLohQ7KjI6JaqboJ1LLK0xoaPbHaBHOQGgFw7ZuPihheoaE
-         0eWvLjH5y4sLOY1eOeSGRQyrEZOpdg4omttJ/HmiltX2ZthQ8C7Ui0mTifw2pJ+VV9Gb
-         7xJGgU+YPKsjbYRXEbHg0fhlHXMd5rYHQ2rTeTgi9LB2rKjV/Lmu0SymgMnuJrp7NcpD
-         jp8b1KTcaYlzxWPVB6ndGTPLE9oaDZXybsajA4YSoyyfGB3sR0mGUDwp4n71MBKhsru+
-         wzkFKNb/ZViD1KwCFnMRQbEyUGgNrgqQbgAckAhg/p2I7okRIUVjdKyKj8l3XlIBob7T
-         ajUQ==
-X-Gm-Message-State: AFqh2kpIC8f02vdHkbdz5e/9i76CI77VbXnFNrIQS9XnuoVmOEgjXkYI
-        7VoNGBJFsbStgh1Skp7Id0nI0n/nO0uFgNxJnZ8=
-X-Google-Smtp-Source: AMrXdXugIxxCOTLCsJL5l1WzdJMhO1+av+OVIqu/rQiE4QSd8ANPBGJ7IOEjFzWCdrxmDHXl3I9pzXYhip9mmMxDPoc=
-X-Received: by 2002:a05:6402:6d9:b0:499:7efc:1d78 with SMTP id
- n25-20020a05640206d900b004997efc1d78mr1921636edy.81.1673653455917; Fri, 13
- Jan 2023 15:44:15 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HwgAKeOI7A94Xvi9KexBt8/SPzPdsMO8DHg2D1kLGHY=;
+        b=BDQXtgcvlLLRBXQV+u179mTGZEDwFOap3dsMhmL0Xes0jJwTtWLX3qCpTnwfXb0if0
+         oND73dHTNXSV/8XlZq0U/cfcCDMH+VQMYLWtGJ1tCwTEYwi5mwkJSxORWO8iEC1CfY+f
+         9bKvjSF4290QhIL0+KSikIAqtnFT7jWkuZ+3jQlU/BxLCZCeIB/ZzjPwWVwQGS/eY8WM
+         THG+NRBX1Fv4cBeAD2CnM2WLpz3AvdA3JJ3XtIBDwYwks9LPklcNoBta3x36H2OCGcsz
+         ag0Hvz8wrC9kDmugLD9IhbxMcxYaEb19bk3eCeyEofckAqNaeDtoKimaOCGWOCsiUOiH
+         qyEQ==
+X-Gm-Message-State: AFqh2krMRI0k9vUuCF+p0r+QC2z3KTCnh4MVZAuNMEL+fr7KU86oCU5O
+        HKtnnJHkl6xo0LU8RCS5P9PGiYE0GTgQn3qdo0jIzITTGVwI95HM
+X-Google-Smtp-Source: AMrXdXspl8aZUAQzxsCEqiGHtZYnVMD7GW82WymHFqiUMI8DIxt+G8N7TlkapPrn+BA/CzoKpLOUxz3z1Vcc5tz7aZo=
+X-Received: by 2002:a63:180c:0:b0:479:3a88:5e0 with SMTP id
+ y12-20020a63180c000000b004793a8805e0mr4040987pgl.466.1673661802672; Fri, 13
+ Jan 2023 18:03:22 -0800 (PST)
 MIME-Version: 1.0
-References: <a6c0bb85-6eeb-407e-a515-06f67e70db57@www.fastmail.com>
- <21be7356-8710-408a-94e3-1a0d3f5f842e@www.fastmail.com> <CAEf4BzawXPiXY3mNabi0ggyTS9wtg6mh8x97=fYGhuGj4=2hnw@mail.gmail.com>
- <a9367491-5ac3-385b-d0d6-820772ebd395@huaweicloud.com> <CAEf4BzZJDRNyafMEjy-1RX9cUmpcvZzYd9YBf9Q3uv_vVsiLCw@mail.gmail.com>
- <5abb0b0090fd0bce77dca0a6b9036de121b65cf5.camel@huaweicloud.com>
- <20f55084c341093d18d2bc462e49123c7f03cc8e.camel@huaweicloud.com>
- <CAADnVQLU+c+gsZ=V6myG0-GhU3EzZgqjzTPvqvYmCDBjqMoF+Q@mail.gmail.com>
- <3fa1fdafc4335c43f84259261dcd1f7d588985a6.camel@huaweicloud.com>
- <c0f7120e433c80b7c4e0af788eda58de8d1ecdad.camel@huaweicloud.com>
- <CAHC9VhQKa36C4xh1OiCdC1baNSeNL7OMLY9zg4O0UWahX-mzow@mail.gmail.com>
- <4175e56b-8522-5086-bdf1-b534122c841b@huaweicloud.com> <CAHC9VhSRs0cUowuedQ1Sth4U7P5vcJMqe-qTLMBvCpYbeZ5OxA@mail.gmail.com>
- <981170d7e587ff2c7e4673b1acc2886200e22392.camel@huaweicloud.com>
-In-Reply-To: <981170d7e587ff2c7e4673b1acc2886200e22392.camel@huaweicloud.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 13 Jan 2023 15:44:04 -0800
-Message-ID: <CAEf4BzYRx5gdwsEGTFY=C9-C72pus2Z3QV6THMLR4wACGMDrrQ@mail.gmail.com>
-Subject: Re: Closing the BPF map permission loophole
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Lorenz Bauer <oss@lmb.io>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
+References: <20230113050755.1277736-2-jeffxu@google.com> <20230113175308.50900-1-mic@digikod.net>
+ <2985dea2-e9ac-2416-3065-0713723f6280@digikod.net>
+In-Reply-To: <2985dea2-e9ac-2416-3065-0713723f6280@digikod.net>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 13 Jan 2023 18:02:44 -0800
+Message-ID: <CALmYWFs2bJBqWvt7pu4e=U=55J36WLdaLLgiv+ZmrZWRJE5KCg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/landlock: Improve ptrace_test with Yama
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     gnoack@google.com, groeck@chromium.org, jorgelo@chromium.org,
+        keescook@chromium.org, linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jan 10, 2023 at 1:12 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On Wed, 2022-12-21 at 19:55 -0500, Paul Moore wrote:
-> > On Wed, Dec 21, 2022 at 4:54 AM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On 12/20/2022 9:44 PM, Paul Moore wrote:
-> > > > On Fri, Dec 16, 2022 at 5:24 AM Roberto Sassu
-> > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > Ok, let me try to complete the solution for the issues Lorenz pointed
-> > > > > out. Here I discuss only the system call side of access.
-> > > > >
-> > > > > I was thinking on the meaning of the permissions on the inode of a
-> > > > > pinned eBPF object. Given that the object exists without pinning, this
-> > > > > double check of permissions first on the inode and then on the object
-> > > > > to me looks very confusing.
-> > > > >
-> > > > > So, here is a proposal: what if read and write in the context of
-> > > > > pinning don't refer to accessing the eBPF object itself but to the
-> > > > > ability to read the association between inode and eBPF object or to
-> > > > > write/replace the association with a different eBPF object (I guess not
-> > > > > supported now).
-> > > > >
-> > > > > We continue to do access control only at the time a requestor asks for
-> > > > > a fd. Currently there is only MAC, but we can add DAC and POSIX ACL too
-> > > > > (Andrii wanted to give read permission to a specific group). The owner
-> > > > > is who created the eBPF object and who can decide (for DAC and ACL) who
-> > > > > can access that object.
-> > > > >
-> > > > > The requestor obtains a fd with modes depending on what was granted. Fd
-> > > > > modes (current behavior) give the requestor the ability to do certain
-> > > > > operations. It is responsibility of the function performing the
-> > > > > operation on an eBPF object to check the fd modes first.
-> > > > >
-> > > > > It does not matter if the eBPF object is accessed through ID or inode,
-> > > > > access control is solely based on who is accessing the object, who
-> > > > > created it and the object permissions. *_GET_FD_BY_ID and OBJ_GET
-> > > > > operations will have the same access control.
-> > > > >
-> > > > > With my new proposal, once an eBPF object is pinned the owner or
-> > > > > whoever can access the inode could do chown/chmod. But this does not
-> > > > > have effect on the permissions of the object. It changes only who can
-> > > > > retrieve the association with the eBPF object itself.
-> > > >
-> > > > Just to make sure I understand you correctly, you're suggesting that
-> > > > the access modes assigned to a pinned map's fd are simply what is
-> > > > requested by the caller, and don't necessarily represent the access
-> > > > control modes of the underlying map, is that correct?  That seems a
-> > >
-> > > The fd modes don't necessarily represent the access control modes of the
-> > > inode the map is pinned to. But they surely represent the access control
-> > > modes of the map object itself.
-> > >
-> > > The access control modes of the inode tell if the requestor is able to
-> > > retrieve the map from it, before accessing the map is attempted. But,
-> > > even if the request is granted (i.e. the inode has read permission), the
-> > > requestor has still to pass access control on the map object, which is
-> > > separate.
-> >
-> > Okay, good.  That should work.
-> >
-> > > Fd modes are bound to the map access modes, but not necessarily bound to
-> > > the inode access modes (fd with write mode, on an inode with only read
-> > > permission). Fd modes are later enforced by map operations by checking
-> > > the compatibility of the operation (e.g. read-like operation requires fd
-> > > read mode).
-> > >
-> > > The last point is what it means getting a fd on the inode itself. It is
-> > > possible, because inodes could have seq_file operations. Thus, one could
-> > > dump the map content by just reading from the inode.
-> >
-> > Gotcha, yes, that would be bad.
-> >
-> > > Here, I suggest that we still do two separate checks. One is for the
-> > > open(), done by the VFS, and the other to access the map object. Not
-> > > having read permission on the inode means that the map content cannot be
-> > > dumped. But, having read permission on the inode does not imply the
-> > > ability to do it (still the map object check has to be passed).
-> >
-> > That makes sense to me.
->
-> Andrii, Lorenz, what do you think about the new interpretation of the
-> permissions of the inode of a pinned map?
+Done.
+Thank you for double checking the read operation.
+The test case is more complete with that.
+-Jeff
 
-Hi Roberto,
-
-Sorry, I've lost track of all these intricacies a while ago. I'd like
-to hear from Lorenz as well. My role here was to expand on what I
-meant by "BPF map view" back then at BPF office hours and why I think
-it solves all the problems mentioned earlier.
-
-You seem to be proposing some alternative, but I'm not clear why we
-need an alternative, given BPF map view seems to be the right
-abstraction here? Either way, I think Lorenz was passionate about
-solving this problem, so would certainly help to get his input as
-well.
-
-Thanks.
-
+On Fri, Jan 13, 2023 at 10:12 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
+ wrote:
 >
-> Thanks
 >
-> Roberto
+> On 13/01/2023 18:53, Micka=C3=ABl Sala=C3=BCn wrote:
+> > I found some issues running this new ptrace_test. Indeed, Yama doesn't
+> > restrict PTRACE_MODE_READ whereas Landlock does. I also changed some
+> > comments and socpe conditions. In fact, the final SKIP() wasn't a good
+> > idea because it masks such potential errors; let's only use a log
+> > message instead. I also removed the first SKIP() because we want
+> > everything to be tested, and the MODE_READ does still matter anyway.
+> >
+> > Please review this patch and squash it in yours.
+> >
+> > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> > Link: https://lore.kernel.org/r/20230113175308.50900-1-mic@digikod.net
+> > ---
+> >   .../testing/selftests/landlock/ptrace_test.c  | 106 ++++++++++-------=
+-
+> >   1 file changed, 57 insertions(+), 49 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/tes=
+ting/selftests/landlock/ptrace_test.c
+> > index c9d9f3001d0f..3c3ba37bf8ec 100644
+> > --- a/tools/testing/selftests/landlock/ptrace_test.c
+> > +++ b/tools/testing/selftests/landlock/ptrace_test.c
+> > @@ -19,7 +19,7 @@
+> >
+> >   #include "common.h"
+> >
+> > -/* copy from yama_lsm.c */
+> > +/* Copied from security/yama/yama_lsm.c */
+> >   #define YAMA_SCOPE_DISABLED 0
+> >   #define YAMA_SCOPE_RELATIONAL 1
+> >   #define YAMA_SCOPE_CAPABILITY 2
+> > @@ -70,7 +70,7 @@ static int get_yama_ptrace_scope(void)
+> >   {
+> >       int ret;
+> >       char buf[2] =3D {};
+> > -     int fd =3D open("/proc/sys/kernel/yama/ptrace_scope", O_RDONLY);
+> > +     const int fd =3D open("/proc/sys/kernel/yama/ptrace_scope", O_RDO=
+NLY);
+> >
+> >       if (fd < 0)
+> >               return 0;
+> > @@ -260,46 +260,48 @@ TEST_F(hierarchy, trace)
+> >       int yama_ptrace_scope;
+> >       char buf_parent;
+> >       long ret;
+> > -     bool can_trace_child, can_trace_parent;
+> > +     bool can_read_child, can_trace_child, can_read_parent, can_trace_=
+parent;
+> >
+> >       yama_ptrace_scope =3D get_yama_ptrace_scope();
+> >       ASSERT_LE(0, yama_ptrace_scope);
+> >
+> > -     if (yama_ptrace_scope >=3D YAMA_SCOPE_NO_ATTACH)
+> > -             SKIP(return, "Yama forbids any ptrace use (scope %d)",
+> > -                        yama_ptrace_scope);
+> > +     if (yama_ptrace_scope > YAMA_SCOPE_DISABLED)
+> > +             TH_LOG("Incomplete tests due to Yama restrictions (scope =
+%d)",
+> > +                    yama_ptrace_scope);
+> >
+> >       /*
+> > -      * can_trace_child: if a parent process can trace its child proce=
+ss.
+> > -      *
+> > -      * There are two conditions concerning landlock:
+> > -      * 1> the parent and child processes are in the same landlock dom=
+ain or
+> > -      *      one beneath it (case: domain_both =3D true).
+> > -      * 2> yama allows tracing children (up to YAMA_SCOPE_RELATIONAL).
+> > -      * Both 1 and 2 need to be met for can_trace_child to be true.
+> > -      *
+> > -      * If a parent process has its own domain not shared with the chi=
+ld
+> > -      * process (case:domain_parent =3D true), then the parent can't t=
+race the
+> > -      * child.
+> > +      * can_read_child is true if a parent process can read its child
+> > +      * process, which is only the case when the parent process is not
+> > +      * isolated from the child with a dedicated Landlock domain.
+> >        */
+> > -     can_trace_child =3D !variant->domain_parent &&
+> > -                       yama_ptrace_scope < YAMA_SCOPE_CAPABILITY;
+> > +     can_read_child =3D !variant->domain_parent;
+> >
+> >       /*
+> > -      * can_trace_parent: if a child process can trace its parent proc=
+ess.
+> > -      *
+> > -      * There are two conditions concerning landlock:
+> > -      * 1> the parent and child process are in the same landlock domai=
+n or
+> > -      *      one beneath it.(case: domain_both =3D true).
+> > -      * 2> yama is disabled (YAMA_SCOPE_DISABLED).
+> > -      * Both 1 and 2 need to be met for can_trace_parent to be true.
+> > -      *
+> > -      * If a child process has its own domain not shared with the pare=
+nt
+> > -      * process (case:domain_child =3D true, then the child can't trac=
+e the
+> > -      * parent.
+> > +      * can_trace_child is true if a parent process can trace its chil=
+d
+> > +      * process.  This depends on two conditions:
+> > +      * - The parent process is not isolated from the child with a ded=
+icated
+> > +      *   Landlock domain.
+> > +      * - Yama allows tracing children (up to YAMA_SCOPE_RELATIONAL).
+> >        */
+> > -     can_trace_parent =3D !variant->domain_child &&
+> > -                        yama_ptrace_scope < YAMA_SCOPE_RELATIONAL;
+> > +     can_trace_child =3D can_read_child &&
+> > +                       yama_ptrace_scope <=3D YAMA_SCOPE_RELATIONAL;
+> > +
+> > +     /*
+> > +      * can_read_parent is true if a child process can read its parent
+> > +      * process, which is only the case when the child process is not
+> > +      * isolated from the parent with a dedicated Landlock domain.
+> > +      */
+> > +     can_read_parent =3D !variant->domain_child;
+> > +
+> > +     /*
+> > +      * can_trace_parent is true if a child process can trace its pare=
+nt
+> > +      * process.  This depends on two conditions:
+> > +      * - The child process is not isolated from the parent with a ded=
+icated
+> > +      *   Landlock domain.
+> > +      * - Yama is disabled (YAMA_SCOPE_DISABLED).
+> > +      */
+> > +     can_trace_parent =3D can_read_parent &&
+> > +                        yama_ptrace_scope <=3D YAMA_SCOPE_DISABLED;
+> >
+> >       /*
+> >        * Removes all effective and permitted capabilities to not interf=
+ere
+> > @@ -330,16 +332,21 @@ TEST_F(hierarchy, trace)
+> >               /* Waits for the parent to be in a domain, if any. */
+> >               ASSERT_EQ(1, read(pipe_parent[0], &buf_child, 1));
+> >
+> > -             /* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent=
+. */
+> > +             /* Tests PTRACE_MODE_READ on the parent. */
+> >               err_proc_read =3D test_ptrace_read(parent);
+> > +             if (can_read_parent) {
+> > +                     EXPECT_EQ(0, err_proc_read);
+> > +             } else {
+> > +                     EXPECT_EQ(EACCES, err_proc_read);
+> > +             }
+> > +
+> > +             /* Tests PTRACE_ATTACH on the parent. */
+> >               ret =3D ptrace(PTRACE_ATTACH, parent, NULL, 0);
+> > -             if (!can_trace_parent) {
+> > +             if (can_trace_parent) {
+> > +                     EXPECT_EQ(0, ret);
+> > +             } else {
+> >                       EXPECT_EQ(-1, ret);
+> >                       EXPECT_EQ(EPERM, errno);
+> > -                     EXPECT_EQ(EACCES, err_proc_read);
+> > -             } else {
+> > -                     EXPECT_EQ(0, ret);
+> > -                     EXPECT_EQ(0, err_proc_read);
+> >               }
+> >               if (ret =3D=3D 0) {
+> >                       ASSERT_EQ(parent, waitpid(parent, &status, 0));
+> > @@ -349,11 +356,11 @@ TEST_F(hierarchy, trace)
+> >
+> >               /* Tests child PTRACE_TRACEME. */
+> >               ret =3D ptrace(PTRACE_TRACEME);
+> > -             if (!can_trace_child) {
+> > +             if (can_trace_child) {
+> > +                     EXPECT_EQ(0, ret);
+> > +             } else {
+> >                       EXPECT_EQ(-1, ret);
+> >                       EXPECT_EQ(EPERM, errno);
+> > -             } else {
+> > -                     EXPECT_EQ(0, ret);
+> >               }
+> >
+> >               /*
+> > @@ -396,17 +403,23 @@ TEST_F(hierarchy, trace)
+> >               EXPECT_EQ(ESRCH, errno);
+> >       }
+> >
+> > -     /* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the child. */
+> > +     /* Tests PTRACE_MODE_READ on the child. */
+> >       err_proc_read =3D test_ptrace_read(child);
+> > +     if (can_read_child) {
+> > +             EXPECT_EQ(0, err_proc_read);
+> > +     } else {
+> > +             EXPECT_EQ(EACCES, err_proc_read);
+> > +     }
+> > +
+> > +     /* Tests PTRACE_ATTACH on the child. */
+> >       ret =3D ptrace(PTRACE_ATTACH, child, NULL, 0);
+> >       if (!can_trace_child) {
 >
+> I forgot to inverse the !can_trace_child condition to make it more
+> consistent with the rest. Please update it for your next patch.
+>
+>
+> >               EXPECT_EQ(-1, ret);
+> >               EXPECT_EQ(EPERM, errno);
+> > -             EXPECT_EQ(EACCES, err_proc_read);
+> >       } else {
+> >               EXPECT_EQ(0, ret);
+> > -             EXPECT_EQ(0, err_proc_read);
+> >       }
+> > +
+> >       if (ret =3D=3D 0) {
+> >               ASSERT_EQ(child, waitpid(child, &status, 0));
+> >               ASSERT_EQ(1, WIFSTOPPED(status));
+> > @@ -419,11 +432,6 @@ TEST_F(hierarchy, trace)
+> >       if (WIFSIGNALED(status) || !WIFEXITED(status) ||
+> >           WEXITSTATUS(status) !=3D EXIT_SUCCESS)
+> >               _metadata->passed =3D 0;
+> > -
+> > -     if (yama_ptrace_scope > 0)
+> > -             SKIP(return,
+> > -                        "Incomplete tests due to Yama restrictions (sc=
+ope %d)",
+> > -                        yama_ptrace_scope);
+> >   }
+> >
+> >   TEST_HARNESS_MAIN
