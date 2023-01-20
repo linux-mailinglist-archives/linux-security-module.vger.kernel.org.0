@@ -2,92 +2,143 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BF1674B58
-	for <lists+linux-security-module@lfdr.de>; Fri, 20 Jan 2023 05:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F545674A5E
+	for <lists+linux-security-module@lfdr.de>; Fri, 20 Jan 2023 04:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjATEwS (ORCPT
+        id S229490AbjATDsg (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 19 Jan 2023 23:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        Thu, 19 Jan 2023 22:48:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbjATEwC (ORCPT
+        with ESMTP id S229458AbjATDsf (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 19 Jan 2023 23:52:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4E0B4E0D
-        for <linux-security-module@vger.kernel.org>; Thu, 19 Jan 2023 20:44:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C2AAB827E7
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Jan 2023 02:15:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A645C433EF
-        for <linux-security-module@vger.kernel.org>; Fri, 20 Jan 2023 02:15:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674180956;
-        bh=bX0/q7PjcsSi4896E9fw8c7E2xywXdcBvGNiSmFIRzg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kLORRCsTgHwAljQrgXKnPxuo6+UG4ZPVNMJ+50EmGXu74LG+ECziJ58a0t0DmvGT+
-         +/3x1+tAcGlUOfbZe7Ewyf4BR9tuOjv1nZhyfzqABP1Ltjo3H7l4tsUEW/Hy5NNdhf
-         E9wgSiEOhHYxQiM7d9Buee3yjFRypBLv5rtVcXJqjcQC6Y5UqeHXBhOxyOuya8xEhq
-         klSnY8AXDRkvxS9aA9rbPQMpclYH9BQYamSP8iXTLLu4x+osbQ+MfsymiCHQ7epyIB
-         o6IzI0t6Ryqj3J2uxoGTmhJgwKWSnP3l1fnhBMZ8wcx79BtWHIFs7eR03eHRu5pgSS
-         YLp9qHHVXPxmw==
-Received: by mail-ej1-f42.google.com with SMTP id hw16so10473537ejc.10
-        for <linux-security-module@vger.kernel.org>; Thu, 19 Jan 2023 18:15:56 -0800 (PST)
-X-Gm-Message-State: AFqh2kqPK0QeV4MH73wJUW9SP2g27YLTomjDwmk825F3trG8F/WC7Txb
-        PXvoJNJQxt/bey/CIaW1RzWkOZMWFrQNcIfi2Upd0A==
-X-Google-Smtp-Source: AMrXdXsKppXlY4Gw0f8JZqhJqfVHOnKPlThA3uWn5l7Y5r98z4vj3hP/2lyDrDN4gFotKbpRFBhi34Ozxe/VUvxAipY=
-X-Received: by 2002:a17:906:1796:b0:873:2ca1:9118 with SMTP id
- t22-20020a170906179600b008732ca19118mr871410eje.0.1674180954363; Thu, 19 Jan
- 2023 18:15:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20230119231033.1307221-1-kpsingh@kernel.org> <20230119231033.1307221-3-kpsingh@kernel.org>
- <5e99e2d6-30a8-ea94-d911-de272a2a0a69@schaufler-ca.com>
-In-Reply-To: <5e99e2d6-30a8-ea94-d911-de272a2a0a69@schaufler-ca.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Fri, 20 Jan 2023 03:15:43 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ5LwLD_yo=b5MMvpDUBGJ_puzr2TLYEK-DR3NRDRwgSLw@mail.gmail.com>
-Message-ID: <CACYkzJ5LwLD_yo=b5MMvpDUBGJ_puzr2TLYEK-DR3NRDRwgSLw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] security: Generate a header with the count
- of enabled LSMs
-To:     Casey Schaufler <casey@schaufler-ca.com>
+        Thu, 19 Jan 2023 22:48:35 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9683B7D657
+        for <linux-security-module@vger.kernel.org>; Thu, 19 Jan 2023 19:48:33 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id b6so3181927pgi.7
+        for <linux-security-module@vger.kernel.org>; Thu, 19 Jan 2023 19:48:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xYlYYwidFMsYGMcEAqTW/TSYKnVvBTImcdKv0esWOg=;
+        b=I/hCvBgArkRJYrKjLErfJ1lV42+ANPGFDVtEjg6t987XpBK3FBhyVvno/lo4aSL/dT
+         PbuweWutUZ+PwzDMbE9ARqEpJ4VlkEB7BmhMUcYqaXJCEIfzK/wy2yok7ogGYaPEERa8
+         ++kpPOQJ2yDe+cLBQUaU3kKK08drO+kynVThk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5xYlYYwidFMsYGMcEAqTW/TSYKnVvBTImcdKv0esWOg=;
+        b=uRGd8/VKT0n32LgEPkVH1IoGX0Ea8UdkpP8hxxA+2Fp+NO5SVvqE8eR/u3EHgtDaiF
+         SVo5vPQMMbp4dzXAHqqKagP3KkN7ROV2es+DUlTddtfOihbSGu+h+TI3A+RRRW/5aabp
+         pjVVWwrh/pAZf8XhwHyWHXqiBF1n+5sLyXaNTwjYzSQSEn+jMeV3ekBtAgLD6If6lJKf
+         lYc05ha5AzwbwXTWuRxspHQFPf4z9RfR8RVBDi0kpgIBfHE/kMnSr7RM6OFqLPvkrH27
+         k9r5bnoq0YnWh3SBZy1FKOFVGIid49JSZCLtkYAqnk5n76/DHe1l5ubGbmzAWlOprdJH
+         A+Kg==
+X-Gm-Message-State: AFqh2kpESU8lN3DF1v9sFi+dedNQyZ89y6H82NJOhCfkvunb9b9i5Qqy
+        t6I96fhqj8ujA70nbn2JFXpikg==
+X-Google-Smtp-Source: AMrXdXuax1LzobrWZKP/qQYBYMBg3lpUvoOqNaUBZ09TA0aRtS+pTYsDlgKqY/lBz5hhwaYk+J6s4g==
+X-Received: by 2002:aa7:88d5:0:b0:58d:a683:bb2d with SMTP id k21-20020aa788d5000000b0058da683bb2dmr18113345pff.30.1674186513080;
+        Thu, 19 Jan 2023 19:48:33 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v4-20020a626104000000b0058de0998f17sm4629415pfb.154.2023.01.19.19.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 19:48:32 -0800 (PST)
+Date:   Thu, 19 Jan 2023 19:48:31 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     KP Singh <kpsingh@kernel.org>
 Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
         ast@kernel.org, daniel@iogearbox.net, jackmanb@google.com,
-        renauld@google.com, paul@paul-moore.com, song@kernel.org,
-        revest@chromium.org, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        renauld@google.com, paul@paul-moore.com, casey@schaufler-ca.com,
+        song@kernel.org, revest@chromium.org
+Subject: Re: [PATCH RESEND bpf-next 1/4] kernel: Add helper macros for loop
+ unrolling
+Message-ID: <202301191938.A7465D123@keescook>
+References: <20230120000818.1324170-1-kpsingh@kernel.org>
+ <20230120000818.1324170-2-kpsingh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120000818.1324170-2-kpsingh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Jan 20, 2023 at 2:32 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 1/19/2023 3:10 PM, KP Singh wrote:
-> > The header defines a MAX_LSM_COUNT constant which is used in a
-> > subsequent patch to generate the static calls for each LSM hook which
-> > are named using preprocessor token pasting. Since token pasting does not
-> > work with arithmetic expressions, generate a simple lsm_count.h header
-> > which represents the subset of LSMs that can be enabled on a given
-> > kernel based on the config.
-> >
-> > While one can generate static calls for all the possible LSMs that the
-> > kernel has, this is actually wasteful as most kernels only enable a
-> > handful of LSMs.
->
-> Why "generate" anything? Why not include your GEN_MAX_LSM_COUNT macro
-> in security.h and be done with it? I've proposed doing just that in the
-> stacking patch set for some time. This seems to be much more complicated
-> than it needs to be.
+On Fri, Jan 20, 2023 at 01:08:15AM +0100, KP Singh wrote:
+> This helps in easily initializing blocks of code (e.g. static calls and
+> keys).
+> 
+> UNROLL(N, MACRO, __VA_ARGS__) calls MACRO N times with the first
+> argument as the index of the iteration. This allows string pasting to
+> create unique tokens for variable names, function calls etc.
+> 
+> As an example:
+> 
+> 	#include <linux/unroll.h>
+> 
+> 	#define MACRO(N, a, b)            \
+> 		int add_##N(int a, int b) \
+> 		{                         \
+> 			return a + b + N; \
+> 		}
+> 
+> 	UNROLL(2, MACRO, x, y)
+> 
+> expands to:
+> 
+> 	int add_0(int x, int y)
+> 	{
+> 		return x + y + 0;
+> 	}
+> 
+> 	int add_1(int x, int y)
+> 	{
+> 		return x + y + 1;
+> 	}
+> 
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
+> ---
+>  include/linux/unroll.h | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 include/linux/unroll.h
+> 
+> diff --git a/include/linux/unroll.h b/include/linux/unroll.h
+> new file mode 100644
+> index 000000000000..e19aef95b94b
+> --- /dev/null
+> +++ b/include/linux/unroll.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * Copyright (C) 2020 Google LLC.
+> + */
+> +
+> +#ifndef __UNROLL_H
+> +#define __UNROLL_H
+> +
+> +#define __UNROLL_CONCAT(a, b) a ## _ ## b
 
-The answer is in the commit description, the count is used in token
-pasting and you cannot have arithmetic in when you generate tokens in
-preprocessor macros.
+#include <linux/kernel.h>
+and just use CONCATENATE
 
-you cannot generate bprm_check_security_call_1 + 1 + 1 this does not
-get resolved by preprocessor.
+> +#define UNROLL(N, MACRO, args...) __UNROLL_CONCAT(__UNROLL, N)(MACRO, args)
+
+Which would be, and it just loses the _, which isn't important here:
+#define UNROLL(N, MACRO, args...) CONCATENATE(__UNROLL, N)(MACRO, args)
+
+> +#define __UNROLL_0(MACRO, args...)
+> +#define __UNROLL_1(MACRO, args...)  __UNROLL_0(MACRO, args)  MACRO(0, args)
+
+But yeah, I like it. It's an expression version of the __MAP() macro
+used by the syscall wrappers for arguments.
+
+-- 
+Kees Cook
