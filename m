@@ -2,32 +2,32 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0B468A862
-	for <lists+linux-security-module@lfdr.de>; Sat,  4 Feb 2023 06:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1D168A864
+	for <lists+linux-security-module@lfdr.de>; Sat,  4 Feb 2023 06:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbjBDFdA (ORCPT
+        id S232470AbjBDFdJ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 4 Feb 2023 00:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        Sat, 4 Feb 2023 00:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbjBDFc4 (ORCPT
+        with ESMTP id S233338AbjBDFdF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 4 Feb 2023 00:32:56 -0500
+        Sat, 4 Feb 2023 00:33:05 -0500
 Received: from blizzard.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7E1892EFA
-        for <linux-security-module@vger.kernel.org>; Fri,  3 Feb 2023 21:32:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A8DD30EC
+        for <linux-security-module@vger.kernel.org>; Fri,  3 Feb 2023 21:33:00 -0800 (PST)
 Received: from blizzard.enjellic.com (localhost [127.0.0.1])
-        by blizzard.enjellic.com (8.15.2/8.15.2) with ESMTP id 3145A3Mh011666;
+        by blizzard.enjellic.com (8.15.2/8.15.2) with ESMTP id 3145A3vv011671;
         Fri, 3 Feb 2023 23:10:03 -0600
 Received: (from greg@localhost)
-        by blizzard.enjellic.com (8.15.2/8.15.2/Submit) id 3145A2L3011664;
-        Fri, 3 Feb 2023 23:10:02 -0600
+        by blizzard.enjellic.com (8.15.2/8.15.2/Submit) id 3145A3Hl011669;
+        Fri, 3 Feb 2023 23:10:03 -0600
 X-Authentication-Warning: blizzard.enjellic.com: greg set sender to greg@enjellic.com using -f
 From:   "Dr. Greg" <greg@enjellic.com>
 To:     linux-security-module@vger.kernel.org
-Subject: [PATCH 10/14] Add security event description export facility.
-Date:   Fri,  3 Feb 2023 23:09:50 -0600
-Message-Id: <20230204050954.11583-11-greg@enjellic.com>
+Subject: [PATCH 11/14] Add event description implementation.
+Date:   Fri,  3 Feb 2023 23:09:51 -0600
+Message-Id: <20230204050954.11583-12-greg@enjellic.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230204050954.11583-1-greg@enjellic.com>
 References: <20230204050954.11583-1-greg@enjellic.com>
@@ -40,450 +40,552 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The functionality for surfacing security model events to an
-external modeling domain is implemented in the export.c file.
+The event.c file implements support for packaging the description
+of an event into its Context Of Execution (COE) and CELL
+components for subsequent modeling by an internal Trusted
+Modeling Agent or export to a trust orchestrator.
 
-ASCII descriptions of the events are presented to a userspace
-trust orchestrator through the following pseudo-files:
+The tsem_event_allocate() function is called by every security
+event handler that determines that an event is to be modeled,
+either generically or explicitly.  For externally modeled domains
+the event description is released after the export of the event
+is completed.
 
-/sys/fs/tsem/ExternalTMA/N
+For internally modeled domains the event description is retained
+in order to support retention and surfacing of the security event
+descriptions until the domain is terminated.
 
-Where N is replaced with security model domain identifier.
+The event description structures are allocated from a TSEM
+event description cache named 'tsem_event_cache'.  This cache is
+created by an initialization function exported from this file
+that is called as part of the TSEM LSM initialization process.o
 
-The following event types are exported:
+In the case of a security event that acts on a file, ie. is
+called with a 'struct file' pointer, one of the components of the
+CELL value is a digest of the contents of the file.  This file
+uses the integrity_kernel_read() function supplied by the
+integrity infrastructure to compute the file digest value using
+the SHA256 cryptographic hashing function.
 
-AGGREGATE_EVENT
+In a manner similar to the Integrity Measurement Architecture the
+file digest processing functionality needs to temporarily alter
+the file mode characteristics if the file is not readable.  The
+characteristics are returned to their normal file after reading
+of the digest is complete.
 
-EXPORT_EVENT
+The TSEM LSM allocates uses the LSM 'blob' infrastructure to
+allocate a TSEM specific inode structure when an inode is
+allocated.  The digest value for the value is stored in this
+structure in order to eliminate subsequent re-computation of the
+digest value if the file has not changed.
 
-LOG_EVENT
+The inode 'iversion' value is used to detect changes to an inode
+in order to trigger the re-computation of the digest value if the
+file has changed.
 
-The AGGREGATE_EVENT is used to inject the hardware platform
-aggregate that was computed over TPM Platform Configuration
-Registers 0 through 7 at the time the LSM was initialized.  In
-TSEM modeling this is the first security state point committed to
-a model.
+One of the subtle issues that needs to be addressed is to handle
+re-entrancy of the file_open security event hook that is caused
+by the integrity_kernel_read() function opening the file.  The
+TSEM specific inode structure contains a member that is used to
+indicate whether or not a digest is being computed for a file.
+The tsem_file_open() event handler checks for the presence of
+this flag and allows permission for the open if this flag is
+detected.
 
-An EXPORT_EVENT is used to surface the description of either an
-explicitly or generically modeled security state event for
-injection into a security model run by an external orchestrator
-and its associated Trusted Modeling Agent (TMA).
+For IPV6 and IPV6 sockets relevant socket information is
+collected to be used in the CELL computation.
 
-A LOG_EVENT is used to export descriptions of security events
-that are invoked by untrusted processes.
+For a UNIX domain socket (AF_UNIX) the digest of the pathname for
+the socket is used for the CELL value.
 
-The modeling and logging by external orchestrators allow the
-implementation of out-of-band notifications of security forensics
-events that occur.
-
-The /sys/fs/tsem/ExternalTMA/N pseudo-files implement a pollable
-interface that the trust orchestrators can use to wait on events.
-After placing the event description into the device queue the
-process is placed in an interruptible sleep state.
-
-After the TMA completes modeling of the event, the trust
-orchestrator is responsible for using the tsemfs control plane to
-wake the process that exported the event and set its status to
-either trusted or untrusted.
+Other socket types are generically modeled by computing the
+digest of the address field supplied when the socket was created
+or bound.
 
 Signed-off-by: Greg Wettstein <greg@enjellic.com>
 ---
- security/tsem/export.c | 388 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 388 insertions(+)
- create mode 100644 security/tsem/export.c
+ security/tsem/event.c | 474 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 474 insertions(+)
+ create mode 100644 security/tsem/event.c
 
-diff --git a/security/tsem/export.c b/security/tsem/export.c
+diff --git a/security/tsem/event.c b/security/tsem/event.c
 new file mode 100644
-index 000000000000..84c71fb96153
+index 000000000000..a6162caf2d81
 --- /dev/null
-+++ b/security/tsem/export.c
-@@ -0,0 +1,388 @@
++++ b/security/tsem/event.c
+@@ -0,0 +1,474 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
 +/*
 + * Copyright (C) 2022 Enjellic Systems Development, LLC
 + * Author: Dr. Greg Wettstein <greg@enjellic.com>
 + *
-+ * Implements updates to an external modeling engine.
++ * This file manages the data structures used to define a security event.
 + */
 +
-+#include <linux/seq_file.h>
++#define ZERO_FILE "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++
++#include <linux/iversion.h>
++#include <crypto/hash.h>
 +
 +#include "tsem.h"
++#include "../integrity/integrity.h"
 +
-+enum export_events_type {
-+	AGGREGATE_EVENT = 1,
-+	EXPORT_EVENT,
-+	LOG_EVENT
-+};
++static struct kmem_cache *event_cachep;
 +
-+struct action_description {
-+	enum tsem_event_type type;
-+	enum tsem_action_type action;
-+	char comm[TASK_COMM_LEN];
-+};
++static void get_COE(struct tsem_COE *COE)
 +
-+struct export_event {
-+	struct list_head list;
-+	enum export_events_type type;
-+	union {
-+		u8 *aggregate[WP256_DIGEST_SIZE];
-+		struct tsem_event *ep;
-+		struct action_description action;
-+	} u;
-+};
-+
-+static const char * const tsem_actions[TSEM_ACTION_CNT] = {
-+	"LOG",
-+	"DENY"
-+};
-+
-+static void trigger_event(struct tsem_TMA_context *ctx)
 +{
-+	ctx->external->have_event = true;
-+	wake_up_interruptible(&ctx->external->wq);
++	kernel_cap_t eff, per, inh;
++
++	COE->uid = from_kuid(&init_user_ns, current_uid());
++	COE->euid = from_kuid(&init_user_ns, current_euid());
++	COE->suid = from_kuid(&init_user_ns, current_suid());
++
++	COE->gid = from_kgid(&init_user_ns, current_gid());
++	COE->egid = from_kgid(&init_user_ns, current_egid());
++	COE->sgid = from_kgid(&init_user_ns, current_sgid());
++
++	COE->fsuid = from_kuid(&init_user_ns, current_fsuid());
++	COE->fsgid = from_kgid(&init_user_ns, current_fsgid());
++
++	if (security_capget(current, &eff, &inh, &per) != 0)
++		eff = CAP_FULL_SET;
++	COE->capability.mask = eff;
 +}
 +
-+static void show_event_coe(struct tsem_event *ep, struct seq_file *page)
++static char *get_path(struct file *file)
 +{
-+	seq_printf(page, "export pid{%u} ", ep->pid);
++	int retn = 0;
++	const char *pathname = NULL;
++	char *path, *pathbuffer = NULL;
 +
-+	seq_printf(page, "event{process=%s, filename=%s, ", ep->comm,
-+			   ep->pathname == NULL ? "none" : ep->pathname);
-+	seq_printf(page, "type=%s, task_id=%*phN} ", tsem_names[ep->event],
-+		   WP256_DIGEST_SIZE, ep->task_id);
-+
-+	seq_printf(page, "COE{uid=%d, euid=%d, suid=%d, gid=%d, ", ep->COE.uid,
-+		   ep->COE.euid, ep->COE.suid, ep->COE.gid);
-+	seq_printf(page, "egid=%d, sgid=%d, fsuid=%d, fsgid=%d, ",
-+		   ep->COE.egid, ep->COE.sgid, ep->COE.fsuid, ep->COE.fsgid);
-+	seq_printf(page, "cap=0x%llx} ", ep->COE.capability.value);
-+}
-+
-+static void show_file(struct tsem_event *ep, struct seq_file *page)
-+{
-+	seq_printf(page, "file{flags=%u, uid=%d, gid=%d, mode=0%o, ",
-+		ep->file.flags, ep->file.uid, ep->file.gid, ep->file.mode);
-+	seq_printf(page, "name_length=%u, name=%*phN, s_magic=0x%0x, ",
-+		   ep->file.name_length, WP256_DIGEST_SIZE, ep->file.name,
-+		   ep->file.s_magic);
-+	seq_printf(page, "s_id=%s, s_uuid=%*phN, digest=%*phN}\n",
-+		   ep->file.s_id, (int) sizeof(ep->file.s_uuid),
-+		   ep->file.s_uuid, WP256_DIGEST_SIZE, ep->file.digest);
-+}
-+
-+static void show_mmap_file(struct tsem_event *ep, struct seq_file *page)
-+{
-+	show_event_coe(ep, page);
-+
-+	seq_printf(page, "%s{type=%u, reqprot=%u, ", tsem_names[ep->event],
-+		   ep->CELL.mmap_file.anonymous, ep->CELL.mmap_file.reqprot);
-+	seq_printf(page, "prot=%u, flags=%u}", ep->CELL.mmap_file.prot,
-+		   ep->CELL.mmap_file.flags);
-+
-+	if (!ep->CELL.mmap_file.anonymous) {
-+		seq_puts(page, " ");
-+		show_file(ep, page);
-+	} else
-+		seq_puts(page, "\n");
-+}
-+
-+static void show_ipv4_socket(struct tsem_event *ep, struct seq_file *page)
-+{
-+	struct sockaddr_in *ipv4 = &ep->CELL.socket_connect.u.ipv4;
-+
-+	show_event_coe(ep, page);
-+	seq_printf(page, "%s{family=%u, port=%u, addr=%u}\n",
-+		   tsem_names[ep->event], ipv4->sin_family, ipv4->sin_port,
-+		   ipv4->sin_addr.s_addr);
-+}
-+
-+static void show_ipv6_socket(struct tsem_event *ep, struct seq_file *page)
-+{
-+	struct sockaddr_in6 *ipv6 = &ep->CELL.socket_connect.u.ipv6;
-+
-+	show_event_coe(ep, page);
-+
-+	seq_printf(page, "%s{family=%u, port=%u, flow=%u, ",
-+		   tsem_names[ep->event], ipv6->sin6_family,
-+		   ipv6->sin6_port, ipv6->sin6_flowinfo);
-+	seq_printf(page, "scope=%u, addr=%*phN}\n", ipv6->sin6_scope_id,
-+		       (int) sizeof(ipv6->sin6_addr.in6_u.u6_addr8),
-+		       ipv6->sin6_addr.in6_u.u6_addr8);
-+}
-+
-+static void show_socket(struct tsem_event *ep, struct seq_file *page)
-+{
-+	struct tsem_socket_connect_args *scp = &ep->CELL.socket_connect;
-+
-+	show_event_coe(ep, page);
-+
-+	seq_printf(page, "%s{family=%u, addr=%*phN}\n", tsem_names[ep->event],
-+		   scp->family, WP256_DIGEST_SIZE, scp->u.mapping);
-+}
-+
-+static void show_socket_create(struct tsem_event *ep, struct seq_file *page)
-+{
-+	show_event_coe(ep, page);
-+
-+	seq_printf(page, "%s{family=%u, type=%u, ", tsem_names[ep->event],
-+		   ep->CELL.socket_create.family, ep->CELL.socket_create.type);
-+	seq_printf(page, "protocol=%u, kern=%u}\n",
-+		   ep->CELL.socket_create.protocol,
-+		   ep->CELL.socket_create.kern);
-+}
-+
-+static void show_socket_accept(struct tsem_event *ep, struct seq_file *page)
-+{
-+	u8 *p;
-+	int size;
-+	struct tsem_socket_accept_args *sap = &ep->CELL.socket_accept;
-+
-+	show_event_coe(ep, page);
-+
-+	seq_printf(page, "%s{family=%u, type=%u, port=%u, addr=",
-+		   tsem_names[ep->event], sap->family, sap->type, sap->port);
-+
-+	if (sap->family == AF_INET) {
-+		seq_printf(page, "%u}\n", sap->ipv4);
-+		return;
-+	}
-+
-+	if (sap->family == AF_INET6) {
-+		p = sap->ipv6.in6_u.u6_addr8;
-+		size = sizeof(sap->ipv6.in6_u.u6_addr8);
-+	} else {
-+		p = sap->tsip->digest;
-+		size = sizeof(sap->tsip->digest);
-+	}
-+	seq_printf(page, "%*phN}\n", size, p);
-+}
-+
-+static void show_socket_events(struct tsem_event *ep, struct seq_file *page)
-+{
-+	switch (ep->event) {
-+	case TSEM_SOCKET_CREATE:
-+		show_socket_create(ep, page);
-+		break;
-+
-+	case TSEM_SOCKET_CONNECT:
-+	case TSEM_SOCKET_BIND:
-+		switch (ep->CELL.socket_connect.family) {
-+		case AF_INET:
-+			show_ipv4_socket(ep, page);
-+			break;
-+		case AF_INET6:
-+			show_ipv6_socket(ep, page);
-+			break;
-+		default:
-+			show_socket(ep, page);
-+			break;
++	pathbuffer = __getname();
++	if (pathbuffer) {
++		pathname = d_absolute_path(&file->f_path, pathbuffer,
++					   PATH_MAX);
++		if (IS_ERR(pathname)) {
++			__putname(pathbuffer);
++			pathbuffer = NULL;
++			pathname = NULL;
 +		}
-+		break;
-+
-+	case TSEM_SOCKET_ACCEPT:
-+		show_socket_accept(ep, page);
-+		break;
-+
-+	default:
-+		break;
 +	}
++
++	if (pathname)
++		path = kstrdup(pathname, GFP_KERNEL);
++	else
++		path = kstrdup(file->f_path.dentry->d_name.name, GFP_KERNEL);
++	if (!path)
++		retn = -ENOMEM;
++
++	if (pathbuffer)
++		__putname(pathbuffer);
++	if (retn)
++		path = ERR_PTR(retn);
++	return path;
 +}
 +
-+static void show_task_kill(struct tsem_event *ep, struct seq_file *page)
++static int add_file_name(struct crypto_shash *tfm, struct tsem_event *ep)
 +{
-+	struct tsem_task_kill_args *args = &ep->CELL.task_kill;
++	int retn;
++	SHASH_DESC_ON_STACK(shash, tfm);
 +
-+	show_event_coe(ep, page);
-+
-+	seq_printf(page, "%s{cross=%u, signal=%u, target=%*phN}\n",
-+		   tsem_names[ep->event], args->cross_model,
-+		   args->signal, WP256_DIGEST_SIZE, args->target);
-+}
-+
-+static void show_event_generic(struct tsem_event *ep, struct seq_file *page)
-+{
-+	show_event_coe(ep, page);
-+
-+	seq_printf(page, "%s{type=%s}\n", tsem_names[ep->event],
-+		   tsem_names[ep->CELL.event_type]);
-+}
-+
-+int tsem_export_show(struct seq_file *page)
-+{
-+	ssize_t retn = -ENODATA;
-+	struct export_event *mp;
-+	struct tsem_event *ep;
-+	struct tsem_TMA_context *ctx = tsem_context(current);
-+
-+	if (!ctx->id)
-+		return -EPERM;
-+
-+	mutex_lock(&ctx->external->measurement_mutex);
-+	if (list_empty(&ctx->external->measurement_list))
++	shash->tfm = tfm;
++	retn = crypto_shash_init(shash);
++	if (retn)
 +		goto done;
-+	mp = list_first_entry(&ctx->external->measurement_list,
-+			      struct export_event, list);
 +
-+	switch (mp->type) {
-+	case AGGREGATE_EVENT:
-+		seq_printf(page, "aggregate %*phN\n", WP256_DIGEST_SIZE,
-+			   mp->u.aggregate);
-+		break;
-+
-+	case EXPORT_EVENT:
-+		ep = mp->u.ep;
-+		switch (ep->event) {
-+		case TSEM_FILE_OPEN:
-+			show_event_coe(ep, page);
-+			show_file(ep, page);
-+			break;
-+
-+		case TSEM_MMAP_FILE:
-+			show_mmap_file(ep, page);
-+			break;
-+
-+		case TSEM_SOCKET_CREATE:
-+		case TSEM_SOCKET_CONNECT:
-+		case TSEM_SOCKET_BIND:
-+		case TSEM_SOCKET_ACCEPT:
-+			show_socket_events(ep, page);
-+			break;
-+
-+		case TSEM_TASK_KILL:
-+			show_task_kill(ep, page);
-+			break;
-+
-+		case TSEM_GENERIC_EVENT:
-+			show_event_generic(ep, page);
-+			break;
-+
-+		default:
-+			break;
-+		}
-+		tsem_event_put(ep);
-+		break;
-+
-+	case LOG_EVENT:
-+		seq_printf(page, "log process{%s} event{%s} action{%s}\n",
-+			    mp->u.action.comm, tsem_names[mp->u.action.type],
-+			    tsem_actions[mp->u.action.action]);
-+		break;
-+	}
-+
-+	list_del(&mp->list);
-+	kfree(mp);
-+	retn = 0;
++	ep->file.name_length = strlen(ep->pathname);
++	retn = crypto_shash_finup(shash, ep->pathname, ep->file.name_length,
++				  ep->file.name);
 +
 + done:
-+	mutex_unlock(&ctx->external->measurement_mutex);
 +	return retn;
 +}
 +
-+int tsem_export_event(struct tsem_event *ep)
++static struct file *open_event_file(struct file *file, unsigned int *status)
 +{
-+	int retn = 0;
-+	struct tsem_task *task = tsem_task(current);
-+	struct tsem_TMA_context *ctx = task->context;
-+	struct export_event *mp;
++	int flags;
++	struct file *alt_file;
 +
-+	if (!ctx->external)
-+		return 0;
++	if (!(file->f_mode & FMODE_CAN_READ)) {
++		file->f_mode |= FMODE_CAN_READ;
++		*status |= 4;
++	}
++	if (file->f_mode & FMODE_READ)
++		return file;
 +
-+	mp = kzalloc(sizeof(struct export_event), GFP_KERNEL);
-+	if (!mp) {
++	flags = file->f_flags & ~(O_WRONLY | O_APPEND | O_TRUNC | O_CREAT |
++				  O_NOCTTY | O_EXCL);
++	flags |= O_RDONLY;
++
++	alt_file = dentry_open(&file->f_path, flags, file->f_cred);
++	if (!IS_ERR(alt_file)) {
++		*status |= 1;
++		return alt_file;
++	}
++
++	file->f_flags |= FMODE_READ;
++	*status |= 2;
++	return file;
++}
++
++static int get_file_digest(struct crypto_shash *tfm, struct file *file,
++			   struct inode *inode, loff_t size, u8 *digest)
++{
++	u8 *bufr;
++	int retn = 0, rsize;
++	unsigned int open_status = 0;
++	loff_t posn = 0;
++	struct file *read_file;
++	SHASH_DESC_ON_STACK(shash, tfm);
++
++	shash->tfm = tfm;
++	retn = crypto_shash_init(shash);
++	if (retn)
++		goto done;
++
++	bufr = kzalloc(PAGE_SIZE, GFP_KERNEL);
++	if (!bufr) {
 +		retn = -ENOMEM;
 +		goto done;
 +	}
-+	mp->type = EXPORT_EVENT;
-+	mp->u.ep = ep;
-+	tsem_event_get(ep);
 +
-+	mutex_lock(&ctx->external->measurement_mutex);
-+	list_add_tail(&mp->list, &ctx->external->measurement_list);
-+	mutex_unlock(&ctx->external->measurement_mutex);
++	if (!likely(file->f_op->read || file->f_op->read_iter)) {
++		retn = -EINVAL;
++		goto done;
++	}
++	read_file = open_event_file(file, &open_status);
 +
-+	task->trust_status |= TSEM_TASK_TRUST_PENDING;
-+	trigger_event(ctx);
++	while (posn < size) {
++		rsize = integrity_kernel_read(read_file, posn, bufr, 4096);
++		if (rsize < 0) {
++			retn = rsize;
++			break;
++		}
++		if (rsize == 0)
++			break;
 +
-+	while (task->trust_status & TSEM_TASK_TRUST_PENDING) {
-+		set_current_state(TASK_INTERRUPTIBLE);
-+		schedule();
-+		if (signal_pending(current)) {
-+			if (sigismember(&current->pending.signal, SIGKILL) ||
-+			    sigismember(&current->signal->shared_pending.signal,
-+					SIGKILL))
-+				task->trust_status = TSEM_TASK_UNTRUSTED;
++		posn += rsize;
++		retn = crypto_shash_update(shash, bufr, rsize);
++		if (retn)
++			break;
++	}
++
++	kfree(bufr);
++	if (!retn)
++		retn = crypto_shash_final(shash, digest);
++
++ done:
++	if (open_status & 1)
++		fput(read_file);
++	if (open_status & 2)
++		file->f_flags &= ~FMODE_READ;
++	if (open_status & 4)
++		file->f_flags &= ~FMODE_CAN_READ;
++	return retn;
++}
++
++int add_file_digest(struct file *file, struct tsem_file *tfp)
++{
++	int retn = 0;
++	loff_t size;
++	struct inode *inode = NULL;
++	struct tsem_inode *tsip;
++	u8 measurement[WP256_DIGEST_SIZE];
++	struct tsem_TMA_context *ctx = tsem_context(current);
++	struct crypto_shash *tfm;
++
++	memset(measurement, '\0', sizeof(measurement));
++	inode = file_inode(file);
++	tsip = tsem_inode(inode);
++
++	mutex_lock(&tsip->mutex);
++	if (!ctx->external) {
++		retn = tsem_model_has_pseudonym(tsip, tfp, measurement);
++		if (retn < 0)
++			goto done;
++		if (retn) {
++			memcpy(tfp->digest, measurement, sizeof(tfp->digest));
++			retn = 0;
++			goto done;
 +		}
 +	}
++
++	size = i_size_read(inode);
++	if (!size) {
++		if (!hex2bin(measurement, ZERO_FILE, sizeof(measurement)))
++			memcpy(tfp->digest, measurement, sizeof(tfp->digest));
++		else
++			memset(tfp->digest, '\0', sizeof(tfp->digest));
++		goto done;
++	}
++
++	if (inode_eq_iversion(inode, tsip->version) &&
++	    tsip->status == TSEM_INODE_COLLECTED) {
++		memcpy(tfp->digest, tsip->digest, sizeof(tfp->digest));
++		goto done;
++	}
++
++	tfm = crypto_alloc_shash("sha256", 0, 0);
++	if (IS_ERR(tfm)) {
++		retn = PTR_ERR(tfm);
++		goto done;
++	}
++
++	tsip->status = TSEM_INODE_COLLECTING;
++	retn = get_file_digest(tfm, file, inode, size, measurement);
++	if (retn)
++		tsip->status = 0;
++	else {
++		memcpy(tfp->digest, measurement, sizeof(tfp->digest));
++		memcpy(tsip->digest, measurement, sizeof(tsip->digest));
++		tsip->status = TSEM_INODE_COLLECTED;
++		tsip->version = inode_query_iversion(inode);
++	}
++
++ done:
++	mutex_unlock(&tsip->mutex);
++	return retn;
++}
++
++static int get_file_cell(struct file *file, struct tsem_event *ep)
++{
++	int retn = 1;
++	struct crypto_shash *tfm;
++	struct inode *inode;
++
++	inode = file_inode(file);
++	inode_lock(inode);
++
++	ep->pathname = get_path(file);
++	if (IS_ERR(ep->pathname)) {
++		retn = PTR_ERR(ep->pathname);
++		goto done;
++	}
++
++	tfm = crypto_alloc_shash("sha256", 0, 0);
++	if (IS_ERR(tfm)) {
++		retn = PTR_ERR(tfm);
++		goto done;
++	}
++
++	retn = add_file_name(tfm, ep);
++	if (retn)
++		goto done;
++
++	retn = add_file_digest(file, &ep->file);
++	if (retn)
++		goto done;
++
++	ep->file.flags = file->f_flags;
++
++	ep->file.uid = from_kuid(&init_user_ns, inode->i_uid);
++	ep->file.gid = from_kgid(&init_user_ns, inode->i_gid);
++	ep->file.mode = inode->i_mode;
++	ep->file.s_magic = inode->i_sb->s_magic;
++	memcpy(ep->file.s_id, inode->i_sb->s_id, sizeof(ep->file.s_id));
++	memcpy(ep->file.s_uuid, inode->i_sb->s_uuid.b,
++	       sizeof(ep->file.s_uuid));
++
++ done:
++	inode_unlock(inode);
++	crypto_free_shash(tfm);
++	return retn;
++}
++
++static int get_socket_mapping(struct crypto_shash *tfm,
++			      struct tsem_socket_connect_args *scp)
++{
++	int retn, size;
++	u8 *p;
++	SHASH_DESC_ON_STACK(shash, tfm);
++
++	shash->tfm = tfm;
++	retn = crypto_shash_init(shash);
++	if (retn)
++		goto done;
++
++	switch (scp->family) {
++	case AF_UNIX:
++		p = (u8 *) scp->addr->sa_data;
++		size = strlen(p);
++		retn = crypto_shash_finup(shash, p, size, scp->u.mapping);
++		break;
++	default:
++		p = (u8 *) scp->addr->sa_data;
++		size = sizeof(scp->addr) - offsetof(struct sockaddr, sa_data);
++		retn = crypto_shash_finup(shash, p, size, scp->u.mapping);
++		break;
++	}
++	memcpy(scp->tsip->digest, scp->u.mapping, sizeof(scp->tsip->digest));
 +
 + done:
 +	return retn;
 +}
 +
-+/**
-+ * tsem_export_action() - Exports the action taken to a security violation.
-+ * @event: The TSEM event type number for which the log event is being
-+ *	   generated.
-+ *
-+ * This function queues for export a description of an event that
-+ * was being disciplined.
-+ *
-+ * Return: This function returns 0 if the export was successful or
-+ *	   an error value if it was not.
-+ */
-+int tsem_export_action(enum tsem_event_type event)
++static int get_socket_cell(struct tsem_event *ep)
++
 +{
-+	struct tsem_TMA_context *ctx = tsem_context(current);
-+	struct export_event *exp;
++	int retn = 0;
++	struct crypto_shash *tfm = NULL;
++	struct tsem_socket_connect_args *scp = &ep->CELL.socket_connect;
 +
-+	exp = kzalloc(sizeof(struct export_event), GFP_KERNEL);
-+	if (!exp)
-+		return -ENOMEM;
++	scp->family = scp->addr->sa_family;
 +
-+	exp->type = LOG_EVENT;
-+	exp->u.action.type = event;
-+	exp->u.action.action = ctx->actions[event];
-+	strcpy(exp->u.action.comm, current->comm);
++	switch (scp->family) {
++	case AF_INET:
++		memcpy(&scp->u.ipv4, scp->addr, sizeof(scp->u.ipv4));
++		break;
++	case AF_INET6:
++		memcpy(&scp->u.ipv6, scp->addr, sizeof(scp->u.ipv6));
++		break;
++	default:
++		tfm = crypto_alloc_shash("sha256", 0, 0);
++		if (IS_ERR(tfm)) {
++			retn = PTR_ERR(tfm);
++			tfm = NULL;
++			goto done;
++		}
++		retn = get_socket_mapping(tfm, scp);
++		break;
++	}
 +
-+	mutex_lock(&ctx->external->measurement_mutex);
-+	list_add_tail(&exp->list, &ctx->external->measurement_list);
-+	mutex_unlock(&ctx->external->measurement_mutex);
-+
-+	trigger_event(ctx);
-+
-+	return 0;
++ done:
++	crypto_free_shash(tfm);
++	return retn;
 +}
 +
 +/**
-+ * tsem_export_aggregate() - Exports the hardware aggregate value.
++ * tsem_event_allocate() - Allocate a security event description structure.
++ * @event: The security event number for which the structure is being
++ *	   allocated.
++ * @params: A pointer to the aggregation structure used to hold the
++ *	    parameters that describe the function.
 + *
-+ * This function exports the hardware aggregate measurement for
-+ * the platform on which the TSEM LSM is being run on.
++ * This function is responsible for allocating the primary tsem_event
++ * structure and populating it based on the event type.
 + *
-+ * Return: This function returns a value of 0 if the export was
-+ *	   successful or a non-zero return value if the export was
-+ *	   not successful.
++ * Return: This function returns a pointer to the allocated structure which
++ *	   on failure will have an error return code embedded in it.
 + */
-+int tsem_export_aggregate(void)
++struct tsem_event *tsem_event_allocate(enum tsem_event_type event,
++				       struct tsem_event_parameters *params)
 +{
-+	struct tsem_TMA_context *ctx = tsem_context(current);
-+	struct export_event *exp;
++	int retn = 0;
++	struct tsem_event *ep;
++	struct tsem_task *task = tsem_task(current);
 +
-+	exp = kzalloc(sizeof(struct export_event), GFP_KERNEL);
-+	if (!exp)
++	ep = kmem_cache_zalloc(event_cachep, GFP_KERNEL);
++	if (!ep) {
++		retn = -ENOMEM;
++		goto done;
++	}
++
++	ep->event = event;
++	ep->pid = task_pid_nr(current);
++	memcpy(ep->comm, current->comm, sizeof(ep->comm));
++	memcpy(ep->task_id, task->task_id, sizeof(ep->task_id));
++
++	get_COE(&ep->COE);
++	switch (event) {
++	case TSEM_FILE_OPEN:
++	case TSEM_BPRM_SET_CREDS:
++		retn = get_file_cell(params->u.file, ep);
++		break;
++	case TSEM_MMAP_FILE:
++		ep->CELL.mmap_file = *params->u.mmap_file;
++		if (!ep->CELL.mmap_file.anonymous)
++			retn = get_file_cell(ep->CELL.mmap_file.file, ep);
++		break;
++	case TSEM_SOCKET_CREATE:
++		ep->CELL.socket_create = *params->u.socket_create;
++		break;
++	case TSEM_SOCKET_CONNECT:
++	case TSEM_SOCKET_BIND:
++		ep->CELL.socket_connect = *params->u.socket_connect;
++		retn = get_socket_cell(ep);
++		break;
++	case TSEM_SOCKET_ACCEPT:
++		ep->CELL.socket_accept = *params->u.socket_accept;
++		break;
++	case TSEM_TASK_KILL:
++		ep->CELL.task_kill = *params->u.task_kill;
++		break;
++	case TSEM_GENERIC_EVENT:
++		ep->CELL.event_type = params->u.event_type;
++		break;
++	default:
++		WARN_ONCE(true, "Unhandled event type: %d\n", event);
++		break;
++	}
++
++ done:
++	if (retn) {
++		kfree(ep);
++		ep = ERR_PTR(retn);
++	} else
++		kref_init(&ep->kref);
++
++	return ep;
++}
++
++/**
++ * tsem_free_event() - Free a security event description.
++ * @ep: A pointer to the security event description that is to be freed.
++ *
++ * This function is responsible for freeing the resources that were
++ * allocated by the tsem_event_allocate_COE_cell() function.
++ */
++static void tsem_event_free(struct kref *kref)
++{
++	struct tsem_event *ep;
++
++	ep = container_of(kref, struct tsem_event, kref);
++	if (ep)
++		kfree(ep->pathname);
++	kmem_cache_free(event_cachep, ep);
++}
++
++/**
++ * tsem_event_put() - Release a referenceto a TSEM event description.
++ *
++ * This function is called each time the use of a TSEM event description
++ * is dropped.
++ */
++void tsem_event_put(struct tsem_event *ep)
++{
++	kref_put(&ep->kref, tsem_event_free);
++}
++
++/**
++ * tsem_event_get() - Obtain a reference to a TSEM event description.
++ *
++ * This function is called on each invocation of the tsem_task_free
++ * function to release one of the references on the TMA modeling
++ * structure.
++ */
++void tsem_event_get(struct tsem_event *ep)
++{
++	kref_get(&ep->kref);
++}
++
++/**
++ * tsem event_cache_init() - Initialize the TSEM event cache.
++ *
++ * This function is called by the TSEM initialization function and sets
++ * up the cache that will hold tsem_event structures.
++ *
++ * Return: This function returns a value of zero on success and a negative
++ *	   error code on failure.
++ */
++int __init tsem_event_cache_init(void)
++{
++	event_cachep = kmem_cache_create("tsem_event_cache",
++					 sizeof(struct tsem_event), 0,
++					 SLAB_PANIC, 0);
++	if (!event_cachep)
 +		return -ENOMEM;
-+
-+	exp->type = AGGREGATE_EVENT;
-+	memcpy(exp->u.aggregate, tsem_trust_aggregate(),
-+	       sizeof(exp->u.aggregate));
-+
-+	mutex_lock(&ctx->external->measurement_mutex);
-+	list_add_tail(&exp->list, &ctx->external->measurement_list);
-+	mutex_unlock(&ctx->external->measurement_mutex);
-+
-+	trigger_event(ctx);
-+
 +	return 0;
 +}
 -- 
