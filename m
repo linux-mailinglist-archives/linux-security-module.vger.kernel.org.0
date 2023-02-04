@@ -2,134 +2,109 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BA968A85D
-	for <lists+linux-security-module@lfdr.de>; Sat,  4 Feb 2023 06:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA7C68A881
+	for <lists+linux-security-module@lfdr.de>; Sat,  4 Feb 2023 07:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbjBDFco (ORCPT
+        id S232601AbjBDGGK (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 4 Feb 2023 00:32:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        Sat, 4 Feb 2023 01:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbjBDFcn (ORCPT
+        with ESMTP id S229449AbjBDGGJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 4 Feb 2023 00:32:43 -0500
-Received: from blizzard.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B191A93AEC
-        for <linux-security-module@vger.kernel.org>; Fri,  3 Feb 2023 21:32:42 -0800 (PST)
-Received: from blizzard.enjellic.com (localhost [127.0.0.1])
-        by blizzard.enjellic.com (8.15.2/8.15.2) with ESMTP id 3145A6Iq011686;
-        Fri, 3 Feb 2023 23:10:06 -0600
+        Sat, 4 Feb 2023 01:06:09 -0500
+X-Greylist: delayed 1594 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Feb 2023 22:06:07 PST
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AD6E611F2;
+        Fri,  3 Feb 2023 22:06:07 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 3145cmjc010476;
+        Fri, 3 Feb 2023 23:38:48 -0600
 Received: (from greg@localhost)
-        by blizzard.enjellic.com (8.15.2/8.15.2/Submit) id 3145A6I5011684;
-        Fri, 3 Feb 2023 23:10:06 -0600
-X-Authentication-Warning: blizzard.enjellic.com: greg set sender to greg@enjellic.com using -f
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 3145clRD010475;
+        Fri, 3 Feb 2023 23:38:47 -0600
+Date:   Fri, 3 Feb 2023 23:38:46 -0600
 From:   "Dr. Greg" <greg@enjellic.com>
-To:     linux-security-module@vger.kernel.org
-Subject: [PATCH 14/14] Activate the configuration and build of the TSEM LSM.
-Date:   Fri,  3 Feb 2023 23:09:54 -0600
-Message-Id: <20230204050954.11583-15-greg@enjellic.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230204050954.11583-1-greg@enjellic.com>
-References: <20230204050954.11583-1-greg@enjellic.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, xen-devel@lists.xen.org,
+        linux-sgx@vger.kernel.org, tboot-devel@lists.sourceforge.net
+Cc:     paul@paul-moore.com, casey@schaufler-ca.com, corbet@lwn.net
+Subject: Quixote/TSEM: A new security architecture and eco-system for Linux.
+Message-ID: <20230204053846.GA10404@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Fri, 03 Feb 2023 23:38:49 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Complete the implementation by integrating the LSM into the
-configuration and kernel build infrastructure.
+Good evening, I hope the week has gone well for everyone.
 
-Signed-off-by: Greg Wettstein <greg@enjellic.com>
----
- security/Kconfig       | 11 ++++++-----
- security/Makefile      |  1 +
- security/tsem/Kconfig  | 22 ++++++++++++++++++++++
- security/tsem/Makefile |  2 ++
- 4 files changed, 31 insertions(+), 5 deletions(-)
- create mode 100644 security/tsem/Kconfig
- create mode 100644 security/tsem/Makefile
+On behalf of the Quixote team: Izzy the Golden Retriever, Maria, John
+and myself; I am pleased to announce the initial release of the
+Quixote/TSEM Trust Orchestration System.  We believe it uniquely
+positions Linux to demonstrate a new approach to security and security
+co-processor architectures.
 
-diff --git a/security/Kconfig b/security/Kconfig
-index e6db09a779b7..98c538ad6790 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -207,6 +207,7 @@ source "security/yama/Kconfig"
- source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
- source "security/landlock/Kconfig"
-+source "security/tsem/Kconfig"
- 
- source "security/integrity/Kconfig"
- 
-@@ -246,11 +247,11 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
--	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf,tsem" if DEFAULT_SECURITY_SMACK
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf,tsem" if DEFAULT_SECURITY_APPARMOR
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf,tsem" if DEFAULT_SECURITY_TOMOYO
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf,tsem" if DEFAULT_SECURITY_DAC
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf,tsem"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list will be ignored. This can be
-diff --git a/security/Makefile b/security/Makefile
-index 18121f8f85cd..11d93885c806 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
- obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
- obj-$(CONFIG_BPF_LSM)			+= bpf/
- obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
-+obj-$(CONFIG_SECURITY_TSEM)		+= tsem/
- 
- # Object integrity file lists
- obj-$(CONFIG_INTEGRITY)			+= integrity/
-diff --git a/security/tsem/Kconfig b/security/tsem/Kconfig
-new file mode 100644
-index 000000000000..f9199686844a
---- /dev/null
-+++ b/security/tsem/Kconfig
-@@ -0,0 +1,22 @@
-+config SECURITY_TSEM
-+	bool "Trusted Security Event Modeling"
-+	depends on SECURITY
-+	depends on NET && INET
-+	select SECURITY_NETWORK
-+	select SECURITYFS
-+	select CRYPTO
-+	select CRYPTO_SHA256
-+	select CRYPTO_HASH_INFO
-+	select TCG_TPM if HAS_IOMEM && !UML
-+	select TCG_TIS if TCG_TPM && X86
-+	select TCG_CRB if TCG_TPM && ACPI
-+	default n
-+	help
-+	  This option selects support for Trusted Security Event
-+	  Modeling (TSEM).  TSEM implements the ability to model
-+	  the security state of either the system at large or in a
-+	  restricted namespace on the basis of the LSM security
-+	  events and attributes that occur in the scope of the model.
-+	  The model may be implemented either in the kernel proper
-+	  or exported to an external Trusted Modeling Agent (TMA).
-+	  If you are unsure how to answer this question, answer N.
-diff --git a/security/tsem/Makefile b/security/tsem/Makefile
-new file mode 100644
-index 000000000000..d43cf2ae2142
---- /dev/null
-+++ b/security/tsem/Makefile
-@@ -0,0 +1,2 @@
-+obj-$(CONFIG_SECURITY_TSEM) := tsem.o model.o namespace.o map.o event.o fs.o \
-+	export.o trust.o
--- 
-2.39.1
+Quixote/TSEM is based on the notion, that like all other physical
+phenomenon, the security state of a platform or workload can be
+mathematically modeled.  The objective is to provide for Linux
+security what Docker did for Linux namespace technology.
 
+There are two major components to this architecture.
+
+TSEM is the Trusted Security Event Modeling system.  It is a new Linux
+Security Module implementation, that at a conceptual level, is a
+blending of integrity measurement and mandatory access controls.  It
+treats the LSM hooks as the basis set for a functional description of
+the security state of a system.
+
+Quixote is the userspace software stack that makes the TSEM LSM
+useful.  It implements the concept of a Trust Orchestration System
+(TOS).  A trust orchestration environment is designed to keep a
+platform or workload in a known trust state.  It thus implements the
+notion of prospective trust rather than the retrospective trust model
+available with TPM based architectures.
+
+A patch series implementing the TSEM LSM has been submitted to the
+linux-security-module list for review and inclusion in the upstream
+kernel.
+
+The source code for the Quixote TOS and pre-compiled binaries for the
+userspace tooling can be found at the following URL:
+
+ftp://ftp.enjellic.com/pub/Quixote
+
+The source release includes a selection of TMA's that include Xen, SGX
+and micro-controller implementations.
+
+The kernel patches include a documentation file, that we believe,
+thoroughly discusses the rationale and implementation of the new
+architecture.  To avoid further indemnifying my reputation for
+loquaciousness in e-mail, I will defer interested parties to that
+document for further discussion.  The document is also included in the
+Quixote source code release for those who choose to download that.
+
+In addition to initiating a discussion on a different approach to
+security, we hope that this release keeps Casey Schaufler from turning
+more blue than he already is.  Given that I had mentioned to him two
+months ago that a new LSM would become available, "in a couple of
+weeks", that may influence conversations on changes to the Linux LSM
+architecture that are being discussed.  Such is the state of software
+development.... :-)
+
+I would be more than happy to field any additional questions that may
+be forthcoming.
+
+Best wishes for a pleasant weekend.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
