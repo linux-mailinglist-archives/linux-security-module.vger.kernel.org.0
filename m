@@ -2,142 +2,281 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB44568FDFD
-	for <lists+linux-security-module@lfdr.de>; Thu,  9 Feb 2023 04:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2DC6900DE
+	for <lists+linux-security-module@lfdr.de>; Thu,  9 Feb 2023 08:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjBIDbT (ORCPT
+        id S229731AbjBIHOd (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 8 Feb 2023 22:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        Thu, 9 Feb 2023 02:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjBIDak (ORCPT
+        with ESMTP id S229818AbjBIHOS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 8 Feb 2023 22:30:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C13E04E;
-        Wed,  8 Feb 2023 19:30:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9E096187E;
-        Thu,  9 Feb 2023 03:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 811C9C433EF;
-        Thu,  9 Feb 2023 03:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675913436;
-        bh=DbojSuLwxvxHTVD5904kFFvTdY99TONLdsOPCTQ9EhM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FA0VUJj7ytZLpiHkeewSZwqz9dEmgx0S3pifki8Zcpk9++H3Dqe+ArXeU9EurEFys
-         ncnXUbFFqyS9VkC+E8xoFZquwJXy9AVKuAwPwv3ga2wiJWXdWpzFj1p3Xjqo20tInp
-         QZfUyf7VMb2de0AVoGcS9d6TwcYYx4KlLDxzLck5lO4Gm+r41WiAU2NazDYBvoHoFw
-         SYHH4IYpw9aQvAdWes6uALQdiP83QzMgGmH+TMupJAVoK2V4dPWN3PVi7ixp4oeUJO
-         N05xOagdxelzguO4h2Ct5mt2kfIXcBqgA4Ke6UiB4SM6vCbypBiN/Mmptr3UWmlD8k
-         gSiecvIQEJMkw==
-Date:   Wed, 8 Feb 2023 19:30:33 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Fan Wu <wufan@linux.microsoft.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
-        snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v9 12/16] fsverity: consume builtin signature via LSM
- hook
-Message-ID: <Y+Ro2Uor21d/Gfqc@sol.localdomain>
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-13-git-send-email-wufan@linux.microsoft.com>
+        Thu, 9 Feb 2023 02:14:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C9942DC2;
+        Wed,  8 Feb 2023 23:14:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=hOwPtrFr9W1RAetj4yw8lS4WGxzVY9WeB5xiD+rtLZk=; b=YzYv5Lu+GhnsQWcrh/P3dNn99Y
+        kFFn/VTStVzrVt7izdrqqcFl3XXWJTiUSU7zkMNSHLZccvHB/fdFfsSF2G3d9l6tM8mZkGWrqFoL+
+        zV70haeTAUkVk/rmntIAjBbeTETDQ9gynZkiS5FkcxD5ysQrDwctOiqgUEqy0Xc8jqVEGJ0uWfK0f
+        t2HqZ/A6Oxx0EJl+SAADCmwyxjMuktOo75CIMUWNmk83r+Z+8eyEK1uwZEhembDTSx9i7ostc00tO
+        /jouGLzfxYzc3+YcINRJIpim6ul86T5PcNwp2g7wUJajkYggQ+pjUyATSgrXOBG/P/NTAUzC9nrO4
+        AJo7w9JQ==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pQ189-000LPt-4s; Thu, 09 Feb 2023 07:14:05 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, keyrings@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        openrisc@lists.librecores.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org
+Subject: [PATCH 00/24 v2] Documentation: correct lots of spelling errors (series 1)
+Date:   Wed,  8 Feb 2023 23:13:36 -0800
+Message-Id: <20230209071400.31476-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1675119451-23180-13-git-send-email-wufan@linux.microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-So disregarding the fact that using the fsverity builtin signatures still seems
-like a bad idea to me, here's a few comments on the diff itself:
+Correct many spelling errors in Documentation/ as reported by codespell.
 
-On Mon, Jan 30, 2023 at 02:57:27PM -0800, Fan Wu wrote:
-> diff --git a/fs/verity/open.c b/fs/verity/open.c
-> index 81ff94442f7b..7e6fa52c0e9c 100644
-> --- a/fs/verity/open.c
-> +++ b/fs/verity/open.c
-> @@ -7,7 +7,9 @@
->  
->  #include "fsverity_private.h"
->  
-> +#include <linux/security.h>
->  #include <linux/slab.h>
-> +#include <crypto/public_key.h>
+Maintainers of specific kernel subsystems are only Cc-ed on their
+respective patches, not the entire series.
 
-There's no need to include <crypto/public_key.h>.
+These patches are based on linux-next-20230209.
 
->  
->  static struct kmem_cache *fsverity_info_cachep;
->  
-> @@ -146,7 +148,7 @@ static int compute_file_digest(struct fsverity_hash_alg *hash_alg,
->   * appended signature), and check the signature if present.  The
->   * fsverity_descriptor must have already undergone basic validation.
->   */
-> -struct fsverity_info *fsverity_create_info(const struct inode *inode,
-> +struct fsverity_info *fsverity_create_info(struct inode *inode,
->  					   struct fsverity_descriptor *desc)
->  {
->  	struct fsverity_info *vi;
-> @@ -182,6 +184,15 @@ struct fsverity_info *fsverity_create_info(const struct inode *inode,
->  
->  	err = fsverity_verify_signature(vi, desc->signature,
->  					le32_to_cpu(desc->sig_size));
-> +	if (err) {
-> +		fsverity_err(inode, "Error %d verifying signature", err);
-> +		goto out;
-> +	}
 
-The above error message is unnecessary because fsverity_verify_signature()
-already prints an error message on failure.
+ [PATCH 01/24] Documentation: arm: correct spelling
+ [PATCH 02/24] Documentation: block: correct spelling
+ [PATCH 03/24] Documentation: core-api: correct spelling
+ [PATCH 04/24] Documentation: fault-injection: correct spelling
+ [PATCH 05/24] Documentation: fb: correct spelling
+ [PATCH 06/24] Documentation: features: correct spelling
+ [PATCH 07/24] Documentation: input: correct spelling
+ [PATCH 08/24] Documentation: isdn: correct spelling
+ [PATCH 09/24] Documentation: livepatch: correct spelling
+ [PATCH 10/24] Documentation: locking: correct spelling
+ [PATCH 11/24] Documentation: mm: correct spelling
+ [PATCH 12/24] Documentation: openrisc: correct spelling
+ [PATCH 13/24] Documentation: PCI: correct spelling
+ [PATCH 14/24] Documentation: powerpc: correct spelling
+ [PATCH 15/24] Documentation: s390: correct spelling
+ [PATCH 16/24] Documentation: scheduler: correct spelling
+ [PATCH 17/24] Documentation: security: correct spelling
+ [PATCH 18/24] Documentation: timers: correct spelling
+ [PATCH 19/24] Documentation: tools/rtla: correct spelling
+ [PATCH 20/24] Documentation: trace/rv: correct spelling
+ [PATCH 21/24] Documentation: trace: correct spelling
+ [PATCH 22/24] Documentation: w1: correct spelling
+ [PATCH 23/24] Documentation: x86: correct spelling
+ [PATCH 24/24] Documentation: xtensa: correct spelling
 
-> +
-> +	err = security_inode_setsecurity(inode, FS_VERITY_INODE_SEC_NAME, desc->signature,
-> +					 le32_to_cpu(desc->sig_size), 0);
 
-This runs even if CONFIG_FS_VERITY_BUILTIN_SIGNATURES is disabled.  Is that
-really the right behavior?
+diffstat:
+ Documentation/PCI/endpoint/pci-vntb-howto.rst                    |    2 +-
+ Documentation/PCI/msi-howto.rst                                  |    2 +-
+ Documentation/arm/arm.rst                                        |    2 +-
+ Documentation/arm/ixp4xx.rst                                     |    4 ++--
+ Documentation/arm/keystone/knav-qmss.rst                         |    2 +-
+ Documentation/arm/stm32/stm32-dma-mdma-chaining.rst              |    6 +++---
+ Documentation/arm/sunxi/clocks.rst                               |    2 +-
+ Documentation/arm/swp_emulation.rst                              |    2 +-
+ Documentation/arm/tcm.rst                                        |    2 +-
+ Documentation/arm/vlocks.rst                                     |    2 +-
+ Documentation/block/data-integrity.rst                           |    2 +-
+ Documentation/core-api/packing.rst                               |    2 +-
+ Documentation/core-api/padata.rst                                |    2 +-
+ Documentation/fault-injection/fault-injection.rst                |    2 +-
+ Documentation/fb/sm712fb.rst                                     |    2 +-
+ Documentation/fb/sstfb.rst                                       |    2 +-
+ Documentation/features/core/thread-info-in-task/arch-support.txt |    2 +-
+ Documentation/input/devices/iforce-protocol.rst                  |    2 +-
+ Documentation/input/multi-touch-protocol.rst                     |    2 +-
+ Documentation/isdn/interface_capi.rst                            |    2 +-
+ Documentation/isdn/m_isdn.rst                                    |    2 +-
+ Documentation/livepatch/reliable-stacktrace.rst                  |    2 +-
+ Documentation/locking/lockdep-design.rst                         |    4 ++--
+ Documentation/locking/locktorture.rst                            |    2 +-
+ Documentation/locking/locktypes.rst                              |    2 +-
+ Documentation/locking/preempt-locking.rst                        |    2 +-
+ Documentation/mm/hmm.rst                                         |    4 ++--
+ Documentation/mm/hwpoison.rst                                    |    2 +-
+ Documentation/openrisc/openrisc_port.rst                         |    4 ++--
+ Documentation/power/suspend-and-interrupts.rst                   |    2 +-
+ Documentation/powerpc/kasan.txt                                  |    2 +-
+ Documentation/powerpc/papr_hcalls.rst                            |    2 +-
+ Documentation/powerpc/qe_firmware.rst                            |    4 ++--
+ Documentation/powerpc/vas-api.rst                                |    4 ++--
+ Documentation/s390/pci.rst                                       |    4 ++--
+ Documentation/s390/vfio-ccw.rst                                  |    2 +-
+ Documentation/scheduler/sched-bwc.rst                            |    2 +-
+ Documentation/scheduler/sched-energy.rst                         |    4 ++--
+ Documentation/security/digsig.rst                                |    4 ++--
+ Documentation/security/keys/core.rst                             |    2 +-
+ Documentation/security/secrets/coco.rst                          |    2 +-
+ Documentation/timers/hrtimers.rst                                |    2 +-
+ Documentation/tools/rtla/rtla-timerlat-top.rst                   |    2 +-
+ Documentation/trace/coresight/coresight-etm4x-reference.rst      |    2 +-
+ Documentation/trace/events.rst                                   |    6 +++---
+ Documentation/trace/fprobe.rst                                   |    2 +-
+ Documentation/trace/ftrace-uses.rst                              |    2 +-
+ Documentation/trace/hwlat_detector.rst                           |    2 +-
+ Documentation/trace/rv/runtime-verification.rst                  |    2 +-
+ Documentation/trace/uprobetracer.rst                             |    2 +-
+ Documentation/w1/w1-netlink.rst                                  |    2 +-
+ Documentation/x86/boot.rst                                       |    2 +-
+ Documentation/x86/buslock.rst                                    |    2 +-
+ Documentation/x86/mds.rst                                        |    2 +-
+ Documentation/x86/resctrl.rst                                    |    2 +-
+ Documentation/x86/sgx.rst                                        |    2 +-
+ Documentation/xtensa/atomctl.rst                                 |    2 +-
+ 57 files changed, 70 insertions(+), 70 deletions(-)
 
-Also a nit: please stick to the preferred line length of 80 characters.
-See Documentation/process/coding-style.rst
 
-> diff --git a/fs/verity/signature.c b/fs/verity/signature.c
-> index 143a530a8008..5d7b9496f9c4 100644
-> --- a/fs/verity/signature.c
-> +++ b/fs/verity/signature.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/cred.h>
->  #include <linux/key.h>
-> +#include <linux/security.h>
->  #include <linux/slab.h>
->  #include <linux/verification.h>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Vladimir Oltean <olteanv@gmail.com>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: Akinobu Mita <akinobu.mita@gmail.com>
+Cc: Helge Deller <deller@gmx.de>
+?Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Henrik Rydberg <rydberg@bitmath.org>
+Cc: Karsten Keil <isdn@linux-pingi.de>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Jérôme Glisse <jglisse@redhat.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Evgeniy Polyakov <zbr@ioremap.net>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
 
-This change is unnecessary.
-
-> diff --git a/include/linux/fsverity.h b/include/linux/fsverity.h
-> index 40f14e5fed9d..29e9888287ba 100644
-> --- a/include/linux/fsverity.h
-> +++ b/include/linux/fsverity.h
-> @@ -254,4 +254,6 @@ static inline bool fsverity_active(const struct inode *inode)
->  	return fsverity_get_info(inode) != NULL;
->  }
->  
-> +#define FS_VERITY_INODE_SEC_NAME "fsverity.inode-info"
-
-"inode-info" is very vague.  Shouldn't it be named "builtin-sig" or something?
-
-- Eric
+Cc: coresight@lists.linaro.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-block@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-sgx@vger.kernel.org
+Cc: linux-trace-devel@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: live-patching@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: x86@kernel.org
