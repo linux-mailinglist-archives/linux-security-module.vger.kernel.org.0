@@ -2,61 +2,61 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1658569A452
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 Feb 2023 04:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCE669A44F
+	for <lists+linux-security-module@lfdr.de>; Fri, 17 Feb 2023 04:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjBQD1N (ORCPT
+        id S230048AbjBQD1B (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 16 Feb 2023 22:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        Thu, 16 Feb 2023 22:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjBQD0z (ORCPT
+        with ESMTP id S229739AbjBQD0y (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 16 Feb 2023 22:26:55 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9ECD4FC8C
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:47 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id t16so1773169qto.3
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:47 -0800 (PST)
+        Thu, 16 Feb 2023 22:26:54 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B2759731
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:48 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id b21so4247752qtr.13
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8LhYESzoJTyJbG8UIuPE/K4ImH+HITUZGlYLJUGWzzo=;
-        b=A2tugsMP0O89l/YxZNSbNoXq8klBsK36+Q+l6p7qbiGnQ2uB0peO8I91eFGXfY0z7t
-         uuOF0KTDk69WRcEhSisN+B3W20dzpUZ3J1Ij4ojcZFy8PmvU547pqqBrXQ4uJGcJcGud
-         IsA9PcttjxH/Sszid8Uy3xnpJ3gu7CyRBpLrv7AXWa+DhpPaR4rMAIyDOpBdRgq4Wi6S
-         I/7IC3rb6nj2FZi3VevPzgZWkJpveqQYl0QFT3D/wkWOCC3ODNNWrsW5JXg9x40/BlJu
-         i1lhkCuUfaZY/gJAaMVdxsCe3jsFhnzoDLyyM85LY7CxqntGPeXEORZzPB9TbSVDqYRQ
-         BhZA==
+        bh=l941xZLUa3StD56ZJmY0zkFqLlRGjjOVeTEPQ20n3vs=;
+        b=eRHx8jDqnIcPXybD5LpUKsCI0ZKpGyK9cZQPc3tM/eNJQcvHE/25DHymDS1KpeqGOT
+         dYpDqnJL+O70LBXQBbSfNPfBmiLno9Qty8fLLWSmeHqVhClAR3QluHNOumMHKe6WXXLH
+         7vlISXugywqhwDbAiZu41KttVsLZfWXV7dnCc9G9LaHprzRfJLZJAIyVi8/xwJJvA2MT
+         d6DnR/v96+k5dlz+OlBVtqGWWScQ6e0SO+bV85Z8IM/nheZloxJkepxITxD3gmhWt4SQ
+         o6wbTdNCSkwVhdyR8RBHD7iY5San//Yy5kmsgYZ0z29Yxsvv61TZx0Df8JkTtuZW61H7
+         L+Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8LhYESzoJTyJbG8UIuPE/K4ImH+HITUZGlYLJUGWzzo=;
-        b=vnvBZgSSINqVA9LkyAj95gQlqMDkuWlB3M/R3qsMQbk9BX5CVUS2reyqjtuolMUkZ+
-         BJMgBhN3ifxPd8xZIWcj5ItoTEsAXqjnFP07tXrKCWp3wBxI2f+VXoxToO7fjmY5bSyE
-         pCHi7dztSkbzwXtNlKGOUbTgG2Tdld0lgBfr+G079jVGyvflBcGEW+ucjLcqmMtVACa9
-         9H7mNk+wJP/9UcJOTyJ8aDPti/fOs8JAXXoLIy0o/BH9EtCdcGiSqYJJYfmpGrQ2YlzG
-         kYl6dwXZkABL1g/JjGmddPJ+yOodnflpPs/Ey6aX7sEX9pQFfb2NmZRHaLtEsrTeZKRi
-         fqNg==
-X-Gm-Message-State: AO0yUKWHkruQlja1o6kp9MGu6rIwyuQkuGYrLL1LlsHJYpBCOXtodNVE
-        3W1+Hiq+Eei6kt+oCGBgulqNjfUiLdVX0mE=
-X-Google-Smtp-Source: AK7set8b4bFnSukwn9+qTUO90lQN7tzqgi9t4NxT0UTmn9ZwOqFRiAVICX/upGH0sdT4zIjz5672HQ==
-X-Received: by 2002:ac8:7d84:0:b0:3ba:1acd:4f8 with SMTP id c4-20020ac87d84000000b003ba1acd04f8mr12496537qtd.42.1676604406212;
-        Thu, 16 Feb 2023 19:26:46 -0800 (PST)
+        bh=l941xZLUa3StD56ZJmY0zkFqLlRGjjOVeTEPQ20n3vs=;
+        b=WZwiZ+NWCLIHHF0b6eT7p0qW/JmutS99vZB2Mlx0q4MUquriYEc3HVSI6Ka54RsUZm
+         hV6wFcWR5Q9InIhF2I4+CjPOcSsmf3OhXQ8HmgBr6R9Zan4aDoKF2R/navXA+FoUt1G0
+         RVVGwkKnlIIJUPGqqSewxyB1vHtizbP93k34rLEL1q8j+Vbhw5N1jWTajbAZLM9sOPAo
+         Ui2XB+2+OVXwsAU+/iHJivAHegJs0o7602udTjo2FmGQbfodlB5uThtBklUMg7PShPuQ
+         Dm3L+hZOISI/YsR11epVQkLNt42vTZlqvhikszrFtTZiKwq4MjoFnvNU5zwMj8D1baIe
+         eyEg==
+X-Gm-Message-State: AO0yUKXYk2nnEH6RpIDr5zNM3AAn6GQUd+LcNsHrXXLFfWYSeOxZ22FS
+        d1ABwi17GUnXSBwV6uD19JYynnRdD1vSUdY=
+X-Google-Smtp-Source: AK7set+ePfaO5feU7SsoOUV51735wGCSgsHQ56ghRmvUEsjE3kQfJKlhEN2u7ajvvnEb1cM7RP1PAQ==
+X-Received: by 2002:ac8:5c0e:0:b0:3bd:d8f:2d79 with SMTP id i14-20020ac85c0e000000b003bd0d8f2d79mr6291940qti.64.1676604407706;
+        Thu, 16 Feb 2023 19:26:47 -0800 (PST)
 Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
-        by smtp.gmail.com with ESMTPSA id jt12-20020a05622aa00c00b003bd0d04bf1esm2108011qtb.90.2023.02.16.19.26.45
+        by smtp.gmail.com with ESMTPSA id 196-20020a3707cd000000b0073ba97eb13csm489832qkh.50.2023.02.16.19.26.46
         for <linux-security-module@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 19:26:45 -0800 (PST)
+        Thu, 16 Feb 2023 19:26:46 -0800 (PST)
 From:   Paul Moore <paul@paul-moore.com>
 To:     linux-security-module@vger.kernel.org
-Subject: [PATCH 13/22] lsm: move the xfrm hook comments to security/security.c
-Date:   Thu, 16 Feb 2023 22:26:16 -0500
-Message-Id: <20230217032625.678457-14-paul@paul-moore.com>
+Subject: [PATCH 14/22] lsm: move the key hook comments to security/security.c
+Date:   Thu, 16 Feb 2023 22:26:17 -0500
+Message-Id: <20230217032625.678457-15-paul@paul-moore.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230217032625.678457-1-paul@paul-moore.com>
 References: <20230217032625.678457-1-paul@paul-moore.com>
@@ -83,268 +83,121 @@ comments.
 
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- include/linux/lsm_hooks.h |  73 ---------------------------
- security/security.c       | 103 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 103 insertions(+), 73 deletions(-)
+ include/linux/lsm_hooks.h | 32 -------------------------------
+ security/security.c       | 40 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+), 32 deletions(-)
 
 diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 9fc6417af980..9c5254e4e9d1 100644
+index 9c5254e4e9d1..2cfa56e3abc3 100644
 --- a/include/linux/lsm_hooks.h
 +++ b/include/linux/lsm_hooks.h
-@@ -32,79 +32,6 @@
+@@ -32,38 +32,6 @@
  /**
   * union security_list_options - Linux Security Module hook function list
   *
-- * Security hooks for XFRM operations.
+- * Security hooks affecting all Key Management operations
 - *
-- * @xfrm_policy_alloc_security:
-- *	@ctxp is a pointer to the xfrm_sec_ctx being added to Security Policy
-- *	Database used by the XFRM system.
-- *	@sec_ctx contains the security context information being provided by
-- *	the user-level policy update program (e.g., setkey).
-- *	@gfp is to specify the context for the allocation.
-- *	Allocate a security structure to the xp->security field; the security
-- *	field is initialized to NULL when the xfrm_policy is allocated.
-- *	Return 0 if operation was successful (memory to allocate, legal
-- *	context).
-- * @xfrm_policy_clone_security:
-- *	@old_ctx contains an existing xfrm_sec_ctx.
-- *	@new_ctxp contains a new xfrm_sec_ctx being cloned from old.
-- *	Allocate a security structure in new_ctxp that contains the
-- *	information from the old_ctx structure.
-- *	Return 0 if operation was successful (memory to allocate).
-- * @xfrm_policy_free_security:
-- *	@ctx contains the xfrm_sec_ctx.
-- *	Deallocate xp->security.
-- * @xfrm_policy_delete_security:
-- *	@ctx contains the xfrm_sec_ctx.
-- *	Authorize deletion of xp->security.
-- *	Return 0 if permission is granted.
-- * @xfrm_state_alloc:
-- *	@x contains the xfrm_state being added to the Security Association
-- *	Database by the XFRM system.
-- *	@sec_ctx contains the security context information being provided by
-- *	the user-level SA generation program (e.g., setkey or racoon).
-- *	Allocate a security structure to the x->security field; the security
-- *	field is initialized to NULL when the xfrm_state is allocated. Set the
-- *	context to correspond to sec_ctx. Return 0 if operation was successful
-- *	(memory to allocate, legal context).
-- * @xfrm_state_alloc_acquire:
-- *	@x contains the xfrm_state being added to the Security Association
-- *	Database by the XFRM system.
-- *	@polsec contains the policy's security context.
-- *	@secid contains the secid from which to take the mls portion of the
-- *	context.
-- *	Allocate a security structure to the x->security field; the security
-- *	field is initialized to NULL when the xfrm_state is allocated. Set the
-- *	context to correspond to secid. Return 0 if operation was successful
-- *	(memory to allocate, legal context).
-- * @xfrm_state_free_security:
-- *	@x contains the xfrm_state.
-- *	Deallocate x->security.
-- * @xfrm_state_delete_security:
-- *	@x contains the xfrm_state.
-- *	Authorize deletion of x->security.
-- *	Return 0 if permission is granted.
-- * @xfrm_policy_lookup:
-- *	@ctx contains the xfrm_sec_ctx for which the access control is being
-- *	checked.
-- *	@fl_secid contains the flow security label that is used to authorize
-- *	access to the policy xp.
-- *	@dir contains the direction of the flow (input or output).
-- *	Check permission when a flow selects a xfrm_policy for processing
-- *	XFRMs on a packet.  The hook is called when selecting either a
-- *	per-socket policy or a generic xfrm policy.
-- *	Return 0 if permission is granted, -ESRCH otherwise, or -errno
-- *	on other errors.
-- * @xfrm_state_pol_flow_match:
-- *	@x contains the state to match.
-- *	@xp contains the policy to check for a match.
-- *	@flic contains the flowi_common struct to check for a match.
-- *	Return 1 if there is a match.
-- * @xfrm_decode_session:
-- *	@skb points to skb to decode.
-- *	@secid points to the flow key secid to set.
-- *	@ckall says if all xfrms used should be checked for same secid.
-- *	Return 0 if ckall is zero or all xfrms used have the same secid.
+- * @key_alloc:
+- *	Permit allocation of a key and assign security data. Note that key does
+- *	not have a serial number assigned at this point.
+- *	@key points to the key.
+- *	@flags is the allocation flags.
+- *	Return 0 if permission is granted, -ve error otherwise.
+- * @key_free:
+- *	Notification of destruction; free security data.
+- *	@key points to the key.
+- *	No return value.
+- * @key_permission:
+- *	See whether a specific operational right is granted to a process on a
+- *	key.
+- *	@key_ref refers to the key (key pointer + possession attribute bit).
+- *	@cred points to the credentials to provide the context against which to
+- *	evaluate the security data on the key.
+- *	@perm describes the combination of permissions required of this key.
+- *	Return 0 if permission is granted, -ve error otherwise.
+- * @key_getsecurity:
+- *	Get a textual representation of the security context attached to a key
+- *	for the purposes of honouring KEYCTL_GETSECURITY.  This function
+- *	allocates the storage for the NUL-terminated string and the caller
+- *	should free it.
+- *	@key points to the key to be queried.
+- *	@_buffer points to a pointer that should be set to point to the
+- *	resulting string (if no label or an error occurs).
+- *	Return the length of the string (including terminating NUL) or -ve if
+- *	an error.
+- *	May also return 0 (and a NULL buffer pointer) if there is no label.
 - *
-  * Security hooks affecting all Key Management operations
+  * Security hooks affecting all System V IPC operations.
   *
-  * @key_alloc:
+  * @ipc_permission:
 diff --git a/security/security.c b/security/security.c
-index 3b713ed3d29c..f06b95a9705c 100644
+index f06b95a9705c..cc2294e094ec 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -4268,6 +4268,17 @@ EXPORT_SYMBOL(security_ib_free_security);
+@@ -4467,23 +4467,63 @@ EXPORT_SYMBOL(security_skb_classify_flow);
  
- #ifdef CONFIG_SECURITY_NETWORK_XFRM
- 
-+/**
-+ * security_xfrm_policy_alloc() - Allocate a xfrm policy LSM blob
-+ * @ctxp: xfrm security context being added to the SPD
-+ * @sec_ctx: security label provided by userspace
-+ * @gfp: gfp flags
-+ *
-+ * Allocate a security structure to the xp->security field; the security field
-+ * is initialized to NULL when the xfrm_policy is allocated.
-+ *
-+ * Return:  Return 0 if operation was successful.
-+ */
- int security_xfrm_policy_alloc(struct xfrm_sec_ctx **ctxp,
- 			       struct xfrm_user_sec_ctx *sec_ctx,
- 			       gfp_t gfp)
-@@ -4276,23 +4287,58 @@ int security_xfrm_policy_alloc(struct xfrm_sec_ctx **ctxp,
- }
- EXPORT_SYMBOL(security_xfrm_policy_alloc);
+ #ifdef CONFIG_KEYS
  
 +/**
-+ * security_xfrm_policy_clone() - Clone xfrm policy LSM state
-+ * @old_ctx: xfrm security context
-+ * @new_ctxp: target xfrm security context
++ * security_key_alloc() - Allocate and initialize a kernel key LSM blob
++ * @key: key
++ * @cred: credentials
++ * @flags: allocation flags
 + *
-+ * Allocate a security structure in new_ctxp that contains the information from
-+ * the old_ctx structure.
++ * Permit allocation of a key and assign security data. Note that key does not
++ * have a serial number assigned at this point.
 + *
-+ * Return: Return 0 if operation was successful.
++ * Return: Return 0 if permission is granted, -ve error otherwise.
 + */
- int security_xfrm_policy_clone(struct xfrm_sec_ctx *old_ctx,
- 			      struct xfrm_sec_ctx **new_ctxp)
+ int security_key_alloc(struct key *key, const struct cred *cred,
+ 		       unsigned long flags)
  {
- 	return call_int_hook(xfrm_policy_clone_security, 0, old_ctx, new_ctxp);
+ 	return call_int_hook(key_alloc, 0, key, cred, flags);
  }
  
 +/**
-+ * security_xfrm_policy_free() - Free a xfrm security context
-+ * @ctx: xfrm security context
++ * security_key_free() - Free a kernel key LSM blob
++ * @key: key
 + *
-+ * Free LSM resources associated with @ctx.
++ * Notification of destruction; free security data.
 + */
- void security_xfrm_policy_free(struct xfrm_sec_ctx *ctx)
+ void security_key_free(struct key *key)
  {
- 	call_void_hook(xfrm_policy_free_security, ctx);
+ 	call_void_hook(key_free, key);
  }
- EXPORT_SYMBOL(security_xfrm_policy_free);
  
 +/**
-+ * security_xfrm_policy_delete() - Check if deleting a xfrm policy is allowed
-+ * @ctx: xfrm security context
++ * security_key_permission() - Check if a kernel key operation is allowed
++ * @key_ref: key reference
++ * @cred: credentials of actor requesting access
++ * @need_perm: requested permissions
 + *
-+ * Authorize deletion of a SPD entry.
++ * See whether a specific operational right is granted to a process on a key.
 + *
-+ * Return: Returns 0 if permission is granted.
++ * Return: Return 0 if permission is granted, -ve error otherwise.
 + */
- int security_xfrm_policy_delete(struct xfrm_sec_ctx *ctx)
+ int security_key_permission(key_ref_t key_ref, const struct cred *cred,
+ 			    enum key_need_perm need_perm)
  {
- 	return call_int_hook(xfrm_policy_delete_security, 0, ctx);
+ 	return call_int_hook(key_permission, 0, key_ref, cred, need_perm);
  }
  
 +/**
-+ * security_xfrm_state_alloc() - Allocate a xfrm state LSM blob
-+ * @x: xfrm state being added to the SAD
-+ * @sec_ctx: security label provided by userspace
++ * security_key_getsecurity() - Get the key's security label
++ * @key: key
++ * @buffer: security label buffer
 + *
-+ * Allocate a security structure to the @x->security field; the security field
-+ * is initialized to NULL when the xfrm_state is allocated. Set the context to
-+ * correspond to @sec_ctx.
++ * Get a textual representation of the security context attached to a key for
++ * the purposes of honouring KEYCTL_GETSECURITY.  This function allocates the
++ * storage for the NUL-terminated string and the caller should free it.
 + *
-+ * Return: Return 0 if operation was successful.
++ * Return: Returns the length of @buffer (including terminating NUL) or -ve if
++ *         an error occurs.  May also return 0 (and a NULL buffer pointer) if
++ *         there is no security label assigned to the key.
 + */
- int security_xfrm_state_alloc(struct xfrm_state *x,
- 			      struct xfrm_user_sec_ctx *sec_ctx)
+ int security_key_getsecurity(struct key *key, char **_buffer)
  {
-@@ -4300,28 +4346,76 @@ int security_xfrm_state_alloc(struct xfrm_state *x,
- }
- EXPORT_SYMBOL(security_xfrm_state_alloc);
- 
-+/**
-+ * security_xfrm_state_alloc_acquire() - Allocate a xfrm state LSM blob
-+ * @x: xfrm state being added to the SAD
-+ * @polsec: associated policy's security context
-+ * @secid: secid from the flow
-+ *
-+ * Allocate a security structure to the x->security field; the security field
-+ * is initialized to NULL when the xfrm_state is allocated.  Set the context to
-+ * correspond to secid.
-+ *
-+ * Return: Returns 0 if operation was successful.
-+ */
- int security_xfrm_state_alloc_acquire(struct xfrm_state *x,
- 				      struct xfrm_sec_ctx *polsec, u32 secid)
- {
- 	return call_int_hook(xfrm_state_alloc_acquire, 0, x, polsec, secid);
- }
- 
-+/**
-+ * security_xfrm_state_delete() - Check if deleting a xfrm state is allowed
-+ * @x: xfrm state
-+ *
-+ * Authorize deletion of x->security.
-+ *
-+ * Return: Returns 0 if permission is granted.
-+ */
- int security_xfrm_state_delete(struct xfrm_state *x)
- {
- 	return call_int_hook(xfrm_state_delete_security, 0, x);
- }
- EXPORT_SYMBOL(security_xfrm_state_delete);
- 
-+/**
-+ * security_xfrm_state_free() - Free a xfrm state
-+ * @x: xfrm state
-+ *
-+ * Deallocate x->security.
-+ */
- void security_xfrm_state_free(struct xfrm_state *x)
- {
- 	call_void_hook(xfrm_state_free_security, x);
- }
- 
-+/**
-+ * security_xfrm_policy_lookup() - Check if using a xfrm policy is allowed
-+ * @ctx: target xfrm security context
-+ * @fl_secid: flow secid used to authorize access
-+ *
-+ * Check permission when a flow selects a xfrm_policy for processing XFRMs on a
-+ * packet.  The hook is called when selecting either a per-socket policy or a
-+ * generic xfrm policy.
-+ *
-+ * Return: Return 0 if permission is granted, -ESRCH otherwise, or -errno on
-+ *         other errors.
-+ */
- int security_xfrm_policy_lookup(struct xfrm_sec_ctx *ctx, u32 fl_secid)
- {
- 	return call_int_hook(xfrm_policy_lookup, 0, ctx, fl_secid);
- }
- 
-+/**
-+ * security_xfrm_state_pol_flow_match() - Check for a xfrm match
-+ * @x: xfrm state to match
-+ * @xp xfrm policy to check for a match
-+ * @flic: flow to check for a match.
-+ *
-+ * Check @xp and @flic for a match with @x.
-+ *
-+ * Return: Returns 1 if there is a match.
-+ */
- int security_xfrm_state_pol_flow_match(struct xfrm_state *x,
- 				       struct xfrm_policy *xp,
- 				       const struct flowi_common *flic)
-@@ -4346,6 +4440,15 @@ int security_xfrm_state_pol_flow_match(struct xfrm_state *x,
- 	return rc;
- }
- 
-+/**
-+ * security_xfrm_decode_session() - Determine the xfrm secid for a packet
-+ * @skb: xfrm packet
-+ * @secid: secid
-+ *
-+ * Decode the packet in @skb and return the security label in @secid.
-+ *
-+ * Return: Return 0 if all xfrms used have the same secid.
-+ */
- int security_xfrm_decode_session(struct sk_buff *skb, u32 *secid)
- {
- 	return call_int_hook(xfrm_decode_session, 0, skb, secid, 1);
+ 	*_buffer = NULL;
 -- 
 2.39.2
 
