@@ -2,61 +2,61 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658C169A455
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 Feb 2023 04:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FCC69A456
+	for <lists+linux-security-module@lfdr.de>; Fri, 17 Feb 2023 04:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjBQD1P (ORCPT
+        id S230309AbjBQD1k (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 16 Feb 2023 22:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
+        Thu, 16 Feb 2023 22:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjBQD05 (ORCPT
+        with ESMTP id S229738AbjBQD1C (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 16 Feb 2023 22:26:57 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728BC5972D
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:53 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id q13so4306780qtx.2
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:53 -0800 (PST)
+        Thu, 16 Feb 2023 22:27:02 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C624BEA8
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:55 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id y2so3143697qvo.4
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bc7zwUTAdB7OsU4/MJPO3KTv9ylTakbgk8wB6QrWFg4=;
-        b=LEtjQcT/g9jMZb/Ohms9DjEx9WcUEEdM3KWUeNuTQ2DpQ/n1IM3kn3i6AbfPxJG13j
-         WCeQB2AP+Cbt6k0k/hh3SYP3pU+2TgPMrBRRBDMYmVD7beY29C90vaPsLhVrjFRv0JY7
-         MtZJU+ShZrCo7X55YUpziHh9LJvhDDeZ8K+xCBdrV6iCc4AvxC/975eBjTy9K7Z0Rdd/
-         2yJF7xNgx3ll9OmCTOP65HtWMNOQoJCuXz91lxuDN8zL5UQOBy3uRcpC/yldsyTCWzdu
-         3Baqu/jlbscNdQfUkpq32R3PywYnVqxBFcDia6aVXzqC2vrsulbd9F980TSL3Rpmo0GR
-         C6lw==
+        bh=QGJTy/KKbGyyQHVdcCeKOFNsWJh1zHVmQkOjCyezJ64=;
+        b=O7Qy5BcKOmfzpELQGHbhZTuC9Oe7jDzUHYXEq5HVO4dtduBYHRjDOG/sUUUk4rh/L4
+         +LLgI2grtgPKiOm0+iSaAJYbk9V5xVEqRfWGdi943CjsB4bQsipzCBmxCDCZhcjNQsfs
+         6mZZi89wKGPtIWZ+XqonyiKE9zVnmshwS1gFVJkAnKXv5MsEkvRTrvXAlTq24qGfNYXS
+         4gogdOBRxGaxGKWydZBgsMyqi3vBHhD1UP6fdb78nVY83V3iBXp6y03KtFdqL94v1olL
+         ysoVV6YJ1bdQeqca+gD73MukrmxNJm0We9uURvnKnXBu0/GsgVysfCiQUsKQdGCAQYY2
+         4dHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bc7zwUTAdB7OsU4/MJPO3KTv9ylTakbgk8wB6QrWFg4=;
-        b=17+Aebm0+ySPhsHrmIxAGZdOcWbUzMK/tVix4aX+z60kWUE1V2XEq3tLl1Q7Q6MCVw
-         qOJdpxUPxs5LlfNW1JxDLQsCEdy3u3P8muI0HPleGzGSWNQG54wfSx2w8piuAy8tlNt7
-         2O+ceSzRAAl6mngGwMoh47t40xX9/9oP71by3M4c0BNFwQY9FYMXJ0FZrr09Bd7XV6IC
-         0LHv94O1QRhBl8oSW6mN89oAU9ALn6JwZuWa5S3Jemj3ao5IayPcReqxwjcY71MAE1my
-         ier2JBb9LKuHQdSHz1KHMDvvH+sXdATsYG5epVD92hEuWfhW2fRIw2YMNsWEsQqm5mg8
-         vRcw==
-X-Gm-Message-State: AO0yUKVfHCrOhFagesrrEDbxUs52TfYZQx5BwVywdazU8JieoloLZfsE
-        aIoceRdzNoVXl8hwEhVeUONosJh0WaULLA8=
-X-Google-Smtp-Source: AK7set/r38Y+rSZp1BGknEotow7zteWMcZlDiz4mKHOcyXi7KqKRwfvsJ31C48PErcW0mUT5bYohxw==
-X-Received: by 2002:ac8:5990:0:b0:3bd:1647:9333 with SMTP id e16-20020ac85990000000b003bd16479333mr4154652qte.28.1676604412594;
-        Thu, 16 Feb 2023 19:26:52 -0800 (PST)
+        bh=QGJTy/KKbGyyQHVdcCeKOFNsWJh1zHVmQkOjCyezJ64=;
+        b=7Ad61qELxhG+JvRw8WRkwFsZf8Wd7tn8JCXfCjukcuB7T9KirJh+QwIo0uDw8E9nQL
+         ZuRTJ/3l/IWUdxNnau1cc2bwfmNf4CdoftaY9g8IJAO+FKdCEMCardFICT+GJipDTzIm
+         qHw8zOXlGTDtMH2FpZxdlta3K7z+HvNJuzLUkqASiOEyYylsT1X/oI9B7l8me35kUbLX
+         X3v848WK1ZMffTbvhxfdqT2P9K4XSrvjWVkJVggGLUwQBvUBxR7HnRXJVfanu/ooaSdX
+         uoZbQnEhYJUQHcOOHOK2WAuj4tTSj3SRpWFsqcilVPmkXx4G0Jy+UnE+mRGWM1//iLW6
+         1flg==
+X-Gm-Message-State: AO0yUKUkOH3AsyFyXRi2pyOLjFLJ5m61W1ITeDXyRk70xqQThdruIAxY
+        xXPCaJRXFxQiwWHgthdnzHxcaHCYRhirIk0=
+X-Google-Smtp-Source: AK7set8TK7i5qzaYxGtqhCQQFdidVyo4NRm8AgJ0tNUCNQZOuU11w6kMltpAANtn+LUFIVyQ5C1COA==
+X-Received: by 2002:a05:6214:1d2e:b0:56f:154:2517 with SMTP id f14-20020a0562141d2e00b0056f01542517mr5892916qvd.10.1676604413896;
+        Thu, 16 Feb 2023 19:26:53 -0800 (PST)
 Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
-        by smtp.gmail.com with ESMTPSA id b1-20020a378001000000b0073b597ce5f8sm2456045qkd.120.2023.02.16.19.26.51
+        by smtp.gmail.com with ESMTPSA id a143-20020ae9e895000000b007389403f7e6sm2552426qkg.9.2023.02.16.19.26.53
         for <linux-security-module@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 19:26:52 -0800 (PST)
+        Thu, 16 Feb 2023 19:26:53 -0800 (PST)
 From:   Paul Moore <paul@paul-moore.com>
 To:     linux-security-module@vger.kernel.org
-Subject: [PATCH 18/22] lsm: move the bpf hook comments to security/security.c
-Date:   Thu, 16 Feb 2023 22:26:21 -0500
-Message-Id: <20230217032625.678457-19-paul@paul-moore.com>
+Subject: [PATCH 19/22] lsm: move the perf hook comments to security/security.c
+Date:   Thu, 16 Feb 2023 22:26:22 -0500
+Message-Id: <20230217032625.678457-20-paul@paul-moore.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230217032625.678457-1-paul@paul-moore.com>
 References: <20230217032625.678457-1-paul@paul-moore.com>
@@ -83,157 +83,108 @@ comments.
 
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- include/linux/lsm_hooks.h | 36 ----------------------
- security/security.c       | 65 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 65 insertions(+), 36 deletions(-)
+ include/linux/lsm_hooks.h | 17 -----------------
+ security/security.c       | 39 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+), 17 deletions(-)
 
 diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index e36387f88083..601d1ecdae0f 100644
+index 601d1ecdae0f..3d8d430e271a 100644
 --- a/include/linux/lsm_hooks.h
 +++ b/include/linux/lsm_hooks.h
-@@ -190,42 +190,6 @@
-  *	@key: The key to watch.
+@@ -196,23 +196,6 @@
+  *	@what: kernel feature being accessed.
   *	Return 0 if permission is granted.
   *
-- * Security hooks for using the eBPF maps and programs functionalities through
-- * eBPF syscalls.
+- * Security hooks for perf events
 - *
-- * @bpf:
-- *	Do a initial check for all bpf syscalls after the attribute is copied
-- *	into the kernel. The actual security module can implement their own
-- *	rules to check the specific cmd they need.
+- * @perf_event_open:
+- *	Check whether the @type of perf_event_open syscall is allowed.
 - *	Return 0 if permission is granted.
-- *
-- * @bpf_map:
-- *	Do a check when the kernel generate and return a file descriptor for
-- *	eBPF maps.
-- *	@map: bpf map that we want to access.
-- *	@mask: the access flags.
-- *	Return 0 if permission is granted.
-- *
-- * @bpf_prog:
-- *	Do a check when the kernel generate and return a file descriptor for
-- *	eBPF programs.
-- *	@prog: bpf prog that userspace want to use.
-- *	Return 0 if permission is granted.
-- *
-- * @bpf_map_alloc_security:
-- *	Initialize the security field inside bpf map.
+- * @perf_event_alloc:
+- *	Allocate and save perf_event security info.
 - *	Return 0 on success, error on failure.
+- * @perf_event_free:
+- *	Release (free) perf_event security info.
+- * @perf_event_read:
+- *	Read perf_event security info if allowed.
+- *	Return 0 if permission is granted.
+- * @perf_event_write:
+- *	Write perf_event security info if allowed.
+- *	Return 0 if permission is granted.
 - *
-- * @bpf_map_free_security:
-- *	Clean up the security information stored inside bpf map.
-- *
-- * @bpf_prog_alloc_security:
-- *	Initialize the security field inside bpf program.
-- *	Return 0 on success, error on failure.
-- *
-- * @bpf_prog_free_security:
-- *	Clean up the security information stored inside bpf prog.
-- *
-  * @locked_down:
-  *	Determine whether a kernel feature that potentially enables arbitrary
-  *	code execution in kernel space should be permitted.
+  * Security hooks for io_uring
+  *
+  * @uring_override_creds:
 diff --git a/security/security.c b/security/security.c
-index 4a2eff06f418..8eb0cef761dd 100644
+index 8eb0cef761dd..557dbd748f7b 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -4824,30 +4824,95 @@ int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
- #endif /* CONFIG_AUDIT */
+@@ -4926,26 +4926,65 @@ int security_locked_down(enum lockdown_reason what)
+ EXPORT_SYMBOL(security_locked_down);
  
- #ifdef CONFIG_BPF_SYSCALL
+ #ifdef CONFIG_PERF_EVENTS
 +/**
-+ * security_bpf() - Check if the bpf syscall operation is allowed
-+ * @cmd: command
-+ * @attr: bpf attribute
-+ * @size: size
++ * security_perf_event_open() - Check if a perf event open is allowed
++ * @attr: perf event attribute
++ * @type: type of event
 + *
-+ * Do a initial check for all bpf syscalls after the attribute is copied into
-+ * the kernel. The actual security module can implement their own rules to
-+ * check the specific cmd they need.
++ * Check whether the @type of perf_event_open syscall is allowed.
 + *
 + * Return: Returns 0 if permission is granted.
 + */
- int security_bpf(int cmd, union bpf_attr *attr, unsigned int size)
+ int security_perf_event_open(struct perf_event_attr *attr, int type)
  {
- 	return call_int_hook(bpf, 0, cmd, attr, size);
+ 	return call_int_hook(perf_event_open, 0, attr, type);
  }
-+
+ 
 +/**
-+ * security_bpf_map() - Check if access to a bpf map is allowed
-+ * @map: bpf map
-+ * @fmode: mode
++ * security_perf_event_alloc() - Allocate a perf event LSM blob
++ * @event: perf event
 + *
-+ * Do a check when the kernel generates and returns a file descriptor for eBPF
-+ * maps.
-+ *
-+ * Return: Returns 0 if permission is granted.
-+ */
- int security_bpf_map(struct bpf_map *map, fmode_t fmode)
- {
- 	return call_int_hook(bpf_map, 0, map, fmode);
- }
-+
-+/**
-+ * security_bpf_prog() - Check if access to a bpf program is allowed
-+ * @prog: bpf program
-+ *
-+ * Do a check when the kernel generates and returns a file descriptor for eBPF
-+ * programs.
-+ *
-+ * Return: Returns 0 if permission is granted.
-+ */
- int security_bpf_prog(struct bpf_prog *prog)
- {
- 	return call_int_hook(bpf_prog, 0, prog);
- }
-+
-+/**
-+ * security_bpf_map_alloc() - Allocate a bpf map LSM blob
-+ * @map: bpf map
-+ *
-+ * Initialize the security field inside bpf map.
++ * Allocate and save perf_event security info.
 + *
 + * Return: Returns 0 on success, error on failure.
 + */
- int security_bpf_map_alloc(struct bpf_map *map)
+ int security_perf_event_alloc(struct perf_event *event)
  {
- 	return call_int_hook(bpf_map_alloc_security, 0, map);
+ 	return call_int_hook(perf_event_alloc, 0, event);
  }
-+
+ 
 +/**
-+ * security_bpf_prog_alloc() - Allocate a bpf program LSM blob
-+ * @aux: bpf program aux info struct
++ * security_perf_event_free() - Free a perf event LSM blob
++ * @event: perf event
 + *
-+ * Initialize the security field inside bpf program.
-+ *
-+ * Return: Returns 0 on success, error on failure.
++ * Release (free) perf_event security info.
 + */
- int security_bpf_prog_alloc(struct bpf_prog_aux *aux)
+ void security_perf_event_free(struct perf_event *event)
  {
- 	return call_int_hook(bpf_prog_alloc_security, 0, aux);
+ 	call_void_hook(perf_event_free, event);
  }
-+
+ 
 +/**
-+ * security_bpf_map_free() - Free a bpf map's LSM blob
-+ * @map: bpf map
++ * security_perf_event_read() - Check if reading a perf event label is allowed
++ * @event: perf event
 + *
-+ * Clean up the security information stored inside bpf map.
++ * Read perf_event security info if allowed.
++ *
++ * Return: Returns 0 if permission is granted.
 + */
- void security_bpf_map_free(struct bpf_map *map)
+ int security_perf_event_read(struct perf_event *event)
  {
- 	call_void_hook(bpf_map_free_security, map);
+ 	return call_int_hook(perf_event_read, 0, event);
  }
-+
+ 
 +/**
-+ * security_bpf_prog_free() - Free a bpf program's LSM blob
-+ * @aux: bpf program aux info struct
++ * security_perf_event_write() - Check if writing a perf event label is allowed
++ * @event: perf event
 + *
-+ * Clean up the security information stored inside bpf prog.
++ * Write perf_event security info if allowed.
++ *
++ * Return: Returns 0 if permission is granted.
 + */
- void security_bpf_prog_free(struct bpf_prog_aux *aux)
+ int security_perf_event_write(struct perf_event *event)
  {
- 	call_void_hook(bpf_prog_free_security, aux);
+ 	return call_int_hook(perf_event_write, 0, event);
 -- 
 2.39.2
 
