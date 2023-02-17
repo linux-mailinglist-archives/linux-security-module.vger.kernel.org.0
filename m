@@ -2,61 +2,61 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5193F69A453
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 Feb 2023 04:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658C169A455
+	for <lists+linux-security-module@lfdr.de>; Fri, 17 Feb 2023 04:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjBQD1O (ORCPT
+        id S229493AbjBQD1P (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 16 Feb 2023 22:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        Thu, 16 Feb 2023 22:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjBQD05 (ORCPT
+        with ESMTP id S230144AbjBQD05 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
         Thu, 16 Feb 2023 22:26:57 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94A95A385
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:52 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id i5so3132547qvp.6
-        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:52 -0800 (PST)
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728BC5972D
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:53 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id q13so4306780qtx.2
+        for <linux-security-module@vger.kernel.org>; Thu, 16 Feb 2023 19:26:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q6G9lKyS1KVfFFMP7ztRA7H7QDEyjlDjPSIl6UQnbPw=;
-        b=dTYb7rQEfoZGgDon/mEvmnD+PmBnJABrMDd04O3HPf3TH3aYn4fMbozyc4+e2re2sY
-         ASvD7j+mzTb/frfiIv0AV9O5SqTTzIgowNiPXx5E4Iye+2h2UfXjH8seFivVQUzxpeL0
-         WZhQwDkQsVPDuyk4a3NZTwLPbQeZCoaiXUbbNGFdj6WsTqOEoGRYoBtuhetqNlQFdVrU
-         CsgXGz8Pl/PUbH85sPXZnwYBYr7z9QsshuOfi6yAP3LzhOEO0CmVvXKgLH2GtqxdRNtk
-         X6PBxUXHb8fTWCmUHYZMVO+dfQLVqaxpE69MEt4ML/hE7oYwdFKgfSygaFnwEYHB9182
-         C7Lw==
+        bh=bc7zwUTAdB7OsU4/MJPO3KTv9ylTakbgk8wB6QrWFg4=;
+        b=LEtjQcT/g9jMZb/Ohms9DjEx9WcUEEdM3KWUeNuTQ2DpQ/n1IM3kn3i6AbfPxJG13j
+         WCeQB2AP+Cbt6k0k/hh3SYP3pU+2TgPMrBRRBDMYmVD7beY29C90vaPsLhVrjFRv0JY7
+         MtZJU+ShZrCo7X55YUpziHh9LJvhDDeZ8K+xCBdrV6iCc4AvxC/975eBjTy9K7Z0Rdd/
+         2yJF7xNgx3ll9OmCTOP65HtWMNOQoJCuXz91lxuDN8zL5UQOBy3uRcpC/yldsyTCWzdu
+         3Baqu/jlbscNdQfUkpq32R3PywYnVqxBFcDia6aVXzqC2vrsulbd9F980TSL3Rpmo0GR
+         C6lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q6G9lKyS1KVfFFMP7ztRA7H7QDEyjlDjPSIl6UQnbPw=;
-        b=DVGHlAFhrKf3gJht1nnMTaKpEUMl+bjwH1Qm0l3UmoVON1YX/YmZepL/5Dqib6jyim
-         F7hr3B4mZmcU/NfzryElSfoIWimHoyOJvsxFGeRrbqLwzVnf0Jlj3+nebrT4TI4Ocwcy
-         R2nO1Lhsk8raQA7V1CN9/ME7NRpHmFPWns42uwJ50qK3HhgtrQcSI2go/V7sCbeUSEx2
-         N9GgFeiFnktFGCprOW7YFzJY1QXGzu3iKxsLIZB2WvKCa80cPseUc8hz0/jXkGidgtxS
-         mDwNeM4UkegrCITKRX8PcZ19EuJtxu+WJsn/99Aspg4/oXOfCyrZ9PMXb3r2wwRqPleg
-         hK/g==
-X-Gm-Message-State: AO0yUKXAbqssWve8lCvYjFUv6bpWAKjpXcD2bX9ZxAxWEgcrlTlIPFxg
-        UWX+/GRiaxa5laT5U0+wjHz4VO5fwM0ncG8=
-X-Google-Smtp-Source: AK7set8g0xGc5CofamsXw7wbGwFDJmjJZbHSk4LiYb2vUJItiBwcfZM/hXnP9rdKRYQSyGtMTVy8Vw==
-X-Received: by 2002:ad4:5c86:0:b0:56b:ff69:7df8 with SMTP id o6-20020ad45c86000000b0056bff697df8mr17755123qvh.51.1676604411342;
-        Thu, 16 Feb 2023 19:26:51 -0800 (PST)
+        bh=bc7zwUTAdB7OsU4/MJPO3KTv9ylTakbgk8wB6QrWFg4=;
+        b=17+Aebm0+ySPhsHrmIxAGZdOcWbUzMK/tVix4aX+z60kWUE1V2XEq3tLl1Q7Q6MCVw
+         qOJdpxUPxs5LlfNW1JxDLQsCEdy3u3P8muI0HPleGzGSWNQG54wfSx2w8piuAy8tlNt7
+         2O+ceSzRAAl6mngGwMoh47t40xX9/9oP71by3M4c0BNFwQY9FYMXJ0FZrr09Bd7XV6IC
+         0LHv94O1QRhBl8oSW6mN89oAU9ALn6JwZuWa5S3Jemj3ao5IayPcReqxwjcY71MAE1my
+         ier2JBb9LKuHQdSHz1KHMDvvH+sXdATsYG5epVD92hEuWfhW2fRIw2YMNsWEsQqm5mg8
+         vRcw==
+X-Gm-Message-State: AO0yUKVfHCrOhFagesrrEDbxUs52TfYZQx5BwVywdazU8JieoloLZfsE
+        aIoceRdzNoVXl8hwEhVeUONosJh0WaULLA8=
+X-Google-Smtp-Source: AK7set/r38Y+rSZp1BGknEotow7zteWMcZlDiz4mKHOcyXi7KqKRwfvsJ31C48PErcW0mUT5bYohxw==
+X-Received: by 2002:ac8:5990:0:b0:3bd:1647:9333 with SMTP id e16-20020ac85990000000b003bd16479333mr4154652qte.28.1676604412594;
+        Thu, 16 Feb 2023 19:26:52 -0800 (PST)
 Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
-        by smtp.gmail.com with ESMTPSA id b68-20020a37b247000000b0073980414888sm2483677qkf.42.2023.02.16.19.26.50
+        by smtp.gmail.com with ESMTPSA id b1-20020a378001000000b0073b597ce5f8sm2456045qkd.120.2023.02.16.19.26.51
         for <linux-security-module@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Feb 2023 19:26:50 -0800 (PST)
+        Thu, 16 Feb 2023 19:26:52 -0800 (PST)
 From:   Paul Moore <paul@paul-moore.com>
 To:     linux-security-module@vger.kernel.org
-Subject: [PATCH 17/22] lsm: move the audit hook comments to security/security.c
-Date:   Thu, 16 Feb 2023 22:26:20 -0500
-Message-Id: <20230217032625.678457-18-paul@paul-moore.com>
+Subject: [PATCH 18/22] lsm: move the bpf hook comments to security/security.c
+Date:   Thu, 16 Feb 2023 22:26:21 -0500
+Message-Id: <20230217032625.678457-19-paul@paul-moore.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230217032625.678457-1-paul@paul-moore.com>
 References: <20230217032625.678457-1-paul@paul-moore.com>
@@ -83,120 +83,157 @@ comments.
 
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- include/linux/lsm_hooks.h | 32 ------------------------------
- security/security.c       | 41 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 41 insertions(+), 32 deletions(-)
+ include/linux/lsm_hooks.h | 36 ----------------------
+ security/security.c       | 65 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+), 36 deletions(-)
 
 diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 0a5b3b46fc2b..e36387f88083 100644
+index e36387f88083..601d1ecdae0f 100644
 --- a/include/linux/lsm_hooks.h
 +++ b/include/linux/lsm_hooks.h
-@@ -135,38 +135,6 @@
-  *	@secdata contains the security context.
-  *	@seclen contains the length of the security context.
+@@ -190,42 +190,6 @@
+  *	@key: The key to watch.
+  *	Return 0 if permission is granted.
   *
-- * Security hooks for Audit
+- * Security hooks for using the eBPF maps and programs functionalities through
+- * eBPF syscalls.
 - *
-- * @audit_rule_init:
-- *	Allocate and initialize an LSM audit rule structure.
-- *	@field contains the required Audit action.
-- *	Fields flags are defined in <include/linux/audit.h>
-- *	@op contains the operator the rule uses.
-- *	@rulestr contains the context where the rule will be applied to.
-- *	@lsmrule contains a pointer to receive the result.
-- *	Return 0 if @lsmrule has been successfully set,
-- *	-EINVAL in case of an invalid rule.
+- * @bpf:
+- *	Do a initial check for all bpf syscalls after the attribute is copied
+- *	into the kernel. The actual security module can implement their own
+- *	rules to check the specific cmd they need.
+- *	Return 0 if permission is granted.
 - *
-- * @audit_rule_known:
-- *	Specifies whether given @krule contains any fields related to
-- *	current LSM.
-- *	@krule contains the audit rule of interest.
-- *	Return 1 in case of relation found, 0 otherwise.
+- * @bpf_map:
+- *	Do a check when the kernel generate and return a file descriptor for
+- *	eBPF maps.
+- *	@map: bpf map that we want to access.
+- *	@mask: the access flags.
+- *	Return 0 if permission is granted.
 - *
-- * @audit_rule_match:
-- *	Determine if given @secid matches a rule previously approved
-- *	by @audit_rule_known.
-- *	@secid contains the security id in question.
-- *	@field contains the field which relates to current LSM.
-- *	@op contains the operator that will be used for matching.
-- *	@lrule points to the audit rule that will be checked against.
-- *	Return 1 if secid matches the rule, 0 if it does not, -ERRNO on failure.
+- * @bpf_prog:
+- *	Do a check when the kernel generate and return a file descriptor for
+- *	eBPF programs.
+- *	@prog: bpf prog that userspace want to use.
+- *	Return 0 if permission is granted.
 - *
-- * @audit_rule_free:
-- *	Deallocate the LSM audit rule structure previously allocated by
-- *	audit_rule_init.
-- *	@lsmrule contains the allocated rule.
+- * @bpf_map_alloc_security:
+- *	Initialize the security field inside bpf map.
+- *	Return 0 on success, error on failure.
 - *
-  * @inode_invalidate_secctx:
-  *	Notify the security module that it must revalidate the security context
-  *	of an inode.
+- * @bpf_map_free_security:
+- *	Clean up the security information stored inside bpf map.
+- *
+- * @bpf_prog_alloc_security:
+- *	Initialize the security field inside bpf program.
+- *	Return 0 on success, error on failure.
+- *
+- * @bpf_prog_free_security:
+- *	Clean up the security information stored inside bpf prog.
+- *
+  * @locked_down:
+  *	Determine whether a kernel feature that potentially enables arbitrary
+  *	code execution in kernel space should be permitted.
 diff --git a/security/security.c b/security/security.c
-index d7a07264fb73..4a2eff06f418 100644
+index 4a2eff06f418..8eb0cef761dd 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -4761,21 +4761,62 @@ int security_key_getsecurity(struct key *key, char **_buffer)
+@@ -4824,30 +4824,95 @@ int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
+ #endif /* CONFIG_AUDIT */
  
- #ifdef CONFIG_AUDIT
- 
+ #ifdef CONFIG_BPF_SYSCALL
 +/**
-+ * security_audit_rule_init() - Allocate and init an LSM audit rule struct
-+ * @field: audit action
-+ * @op: rule operator
-+ * @rulestr: rule context
-+ * @lsmrule: receive buffer for audit rule struct
++ * security_bpf() - Check if the bpf syscall operation is allowed
++ * @cmd: command
++ * @attr: bpf attribute
++ * @size: size
 + *
-+ * Allocate and initialize an LSM audit rule structure.
++ * Do a initial check for all bpf syscalls after the attribute is copied into
++ * the kernel. The actual security module can implement their own rules to
++ * check the specific cmd they need.
 + *
-+ * Return: Return 0 if @lsmrule has been successfully set, -EINVAL in case of
-+ *         an invalid rule.
++ * Return: Returns 0 if permission is granted.
 + */
- int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule)
+ int security_bpf(int cmd, union bpf_attr *attr, unsigned int size)
  {
- 	return call_int_hook(audit_rule_init, 0, field, op, rulestr, lsmrule);
+ 	return call_int_hook(bpf, 0, cmd, attr, size);
  }
- 
++
 +/**
-+ * security_audit_rule_known() - Check if an audit rule contains LSM fields
-+ * @krule: audit rule
++ * security_bpf_map() - Check if access to a bpf map is allowed
++ * @map: bpf map
++ * @fmode: mode
 + *
-+ * Specifies whether given @krule contains any fields related to the current
-+ * LSM.
++ * Do a check when the kernel generates and returns a file descriptor for eBPF
++ * maps.
 + *
-+ * Return: Returns 1 in case of relation found, 0 otherwise.
++ * Return: Returns 0 if permission is granted.
 + */
- int security_audit_rule_known(struct audit_krule *krule)
+ int security_bpf_map(struct bpf_map *map, fmode_t fmode)
  {
- 	return call_int_hook(audit_rule_known, 0, krule);
+ 	return call_int_hook(bpf_map, 0, map, fmode);
  }
- 
++
 +/**
-+ * security_audit_rule_free() - Free an LSM audit rule struct
-+ * @lsmrule: audit rule struct
++ * security_bpf_prog() - Check if access to a bpf program is allowed
++ * @prog: bpf program
 + *
-+ * Deallocate the LSM audit rule structure previously allocated by
-+ * audit_rule_init().
++ * Do a check when the kernel generates and returns a file descriptor for eBPF
++ * programs.
++ *
++ * Return: Returns 0 if permission is granted.
 + */
- void security_audit_rule_free(void *lsmrule)
+ int security_bpf_prog(struct bpf_prog *prog)
  {
- 	call_void_hook(audit_rule_free, lsmrule);
+ 	return call_int_hook(bpf_prog, 0, prog);
  }
- 
++
 +/**
-+ * security_audit_rule_match() - Check if a label matches an audit rule
-+ * @secid: security label
-+ * @field: LSM audit field
-+ * @op: matching operator
-+ * @lsmrule: audit rule
++ * security_bpf_map_alloc() - Allocate a bpf map LSM blob
++ * @map: bpf map
 + *
-+ * Determine if given @secid matches a rule previously approved by
-+ * security_audit_rule_known().
++ * Initialize the security field inside bpf map.
 + *
-+ * Return: Returns 1 if secid matches the rule, 0 if it does not, -ERRNO on
-+ *         failure.
++ * Return: Returns 0 on success, error on failure.
 + */
- int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
+ int security_bpf_map_alloc(struct bpf_map *map)
  {
- 	return call_int_hook(audit_rule_match, 0, secid, field, op, lsmrule);
+ 	return call_int_hook(bpf_map_alloc_security, 0, map);
+ }
++
++/**
++ * security_bpf_prog_alloc() - Allocate a bpf program LSM blob
++ * @aux: bpf program aux info struct
++ *
++ * Initialize the security field inside bpf program.
++ *
++ * Return: Returns 0 on success, error on failure.
++ */
+ int security_bpf_prog_alloc(struct bpf_prog_aux *aux)
+ {
+ 	return call_int_hook(bpf_prog_alloc_security, 0, aux);
+ }
++
++/**
++ * security_bpf_map_free() - Free a bpf map's LSM blob
++ * @map: bpf map
++ *
++ * Clean up the security information stored inside bpf map.
++ */
+ void security_bpf_map_free(struct bpf_map *map)
+ {
+ 	call_void_hook(bpf_map_free_security, map);
+ }
++
++/**
++ * security_bpf_prog_free() - Free a bpf program's LSM blob
++ * @aux: bpf program aux info struct
++ *
++ * Clean up the security information stored inside bpf prog.
++ */
+ void security_bpf_prog_free(struct bpf_prog_aux *aux)
+ {
+ 	call_void_hook(bpf_prog_free_security, aux);
 -- 
 2.39.2
 
