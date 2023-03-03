@@ -2,121 +2,171 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C5C6A9E03
-	for <lists+linux-security-module@lfdr.de>; Fri,  3 Mar 2023 18:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE306A9F16
+	for <lists+linux-security-module@lfdr.de>; Fri,  3 Mar 2023 19:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbjCCRy1 (ORCPT
+        id S231915AbjCCSiP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 3 Mar 2023 12:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        Fri, 3 Mar 2023 13:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjCCRy0 (ORCPT
+        with ESMTP id S231401AbjCCSiD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:54:26 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50DD5B5F6
-        for <linux-security-module@vger.kernel.org>; Fri,  3 Mar 2023 09:54:19 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o12so13467949edb.9
-        for <linux-security-module@vger.kernel.org>; Fri, 03 Mar 2023 09:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677866058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2o3rQetZgv6ewfCPpQy7L56u60VboNrnPcXuCAU8c9I=;
-        b=e2Ior9ml2a6sA3xqp7/mjoi0eleFZCbAWkfIeYEfktk8tXziMAOZD/rb60OwD1S8Tq
-         0ZKD5Fv3R1sSQd0bkxwWKqa3qP3F6K54E1OHOetzjSw1or205pyp9m8SbKstEClDabn9
-         z96OmJ2w4kxlFMTrccZmn1jsSCSNXTRtfFVQs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677866058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2o3rQetZgv6ewfCPpQy7L56u60VboNrnPcXuCAU8c9I=;
-        b=i3Dw/fjfvSIN193Fwet+aVxNAEk3RNl0FB3k2mwED02Gd1hjDwrX6Ct2R7/2HZJsLL
-         djNeA9kV3s1DbXEsUBZlQgCBrAG3SO1Q8ZL47/T2tQ5IDfCTc3+7kLIpGO9fn88DLl4i
-         bX4n2iTOAwhwsm4LDPinC8s3i79X/B2H2extjury5MxxTyZtHu22jfSHuzwWSb6GQfms
-         +jetM8mqwqgdCQCR2Od5WfrVw8QyBtZj88r0dohNvw/bORqU0LBlu0hfGqY2wwHlKi+h
-         jpj375GUd1r2ecgVvNj+UAc+wUnUztpt+2apELEBM8ZhViqiCOf1/f/l7kXWQvUgKwwp
-         v/vQ==
-X-Gm-Message-State: AO0yUKWMcRTUJpKFMCmOcEb+nrmjbpelpXSerd3Dt4m10du8IDTevSgl
-        k7pYkOmsFh5twLtkps5CFdAqtMt34sCZEDDs1p52zg==
-X-Google-Smtp-Source: AK7set9unG6a/s304L1GVH4zKdRZDq9WqyPE0cqeA+jsOcWeSnpOX+H8W70bgVHyjwzdgNre3MOjsw==
-X-Received: by 2002:aa7:c585:0:b0:4bf:38dc:d78 with SMTP id g5-20020aa7c585000000b004bf38dc0d78mr3078336edq.21.1677866058059;
-        Fri, 03 Mar 2023 09:54:18 -0800 (PST)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id s23-20020a50d497000000b004c8948162e8sm1033798edi.67.2023.03.03.09.54.17
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 09:54:17 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id f13so13539581edz.6
-        for <linux-security-module@vger.kernel.org>; Fri, 03 Mar 2023 09:54:17 -0800 (PST)
-X-Received: by 2002:a17:906:b281:b0:8b8:aef3:f2a9 with SMTP id
- q1-20020a170906b28100b008b8aef3f2a9mr1190087ejz.0.1677866056901; Fri, 03 Mar
- 2023 09:54:16 -0800 (PST)
+        Fri, 3 Mar 2023 13:38:03 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E6260D50;
+        Fri,  3 Mar 2023 10:37:40 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PSwxM4lW4z9xtRk;
+        Sat,  4 Mar 2023 02:10:15 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnMVgKOgJk5iFpAQ--.12605S2;
+        Fri, 03 Mar 2023 19:19:02 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 00/28] security: Move IMA and EVM to the LSM infrastructure
+Date:   Fri,  3 Mar 2023 19:18:14 +0100
+Message-Id: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
- <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
- <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
- <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
- <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
- <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
- <ZAD21ZEiB2V9Ttto@ZenIV> <6400fedb.170a0220.ece29.04b8@mx.google.com>
- <ZAEC3LN6oUe6BKSN@ZenIV> <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
- <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
-In-Reply-To: <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 3 Mar 2023 09:54:00 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
-Message-ID: <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Mateusz Guzik <mjguzik@gmail.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwBnMVgKOgJk5iFpAQ--.12605S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrWUAw47GF4UXFW5uF4fuFg_yoWrKFW7pF
+        s0ga15GrykJFyUurWfAF4xua1SgFWrWryUJrnxJw10v3Z0vr1FqFW0yryrury5GrW8JF1v
+        q3ZFv3909r1DZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x
+        0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x02
+        62kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Cr1j6rxdMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280
+        aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43
+        ZEXa7IU0bAw3UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj4otUwAAsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Mar 3, 2023 at 9:39=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.com> wr=
-ote:
->
-> So the key is: memset is underperforming at least on x86-64 for
-> certain sizes and the init-on-alloc thingy makes it used significantly
-> more, exacerbating the problem
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-One reason that the kernel memset isn't as optimized as memcpy, is
-simply because under normal circumstances it shouldn't be *used* that
-much outside of page clearing and constant-sized structure
-initialization.
+This patch set depends on:
+- https://lore.kernel.org/linux-integrity/20221201104125.919483-1-roberto.sassu@huaweicloud.com/ (there will be a v8 shortly)
+- https://lore.kernel.org/linux-security-module/20230217032625.678457-1-paul@paul-moore.com/
 
-Page clearing is fine, and constant-sized structure inits are also
-generally fine (ie the compiler does the small ones directly).
+IMA and EVM are not effectively LSMs, especially due the fact that in the
+past they could not provide a security blob while there is another LSM
+active.
 
-So this is literally a problem with pointless automated memset,
-introduced by that hardening option. And hardening people generally
-simply don't care about performance, and the people who _do _care
-about performance usually don't enable the known-expensive crazy
-stuff.
+That changed in the recent years, the LSM stacking feature now makes it
+possible to stack together multiple LSMs, and allows them to provide a
+security blob for most kernel objects. While the LSM stacking feature has
+some limitations being worked out, it is already suitable to make IMA and
+EVM as LSMs.
 
-Honestly, I think the INIT_ONCE stuff is actively detrimental, and
-only hides issues (and in this case adds its own). So I can't but help
-to say "don't do that then". I think it's literally stupid to clear
-allocations by default.
+In short, while this patch set is big, it does not make any functional
+change to IMA and EVM. IMA and EVM functions are called by the LSM
+infrastructure in the same places as before (except ima_post_path_mknod()),
+rather being hardcoded calls, and the inode metadata pointer is directly
+stored in the inode security blob rather than in a separate rbtree.
 
-I'm not opposed to improving memset, but honestly, if the argument is
-based on the stupid hardening behavior, I really think *that* needs to
-be fixed first.
+More specifically, patches 1-13 make IMA and EVM functions suitable to
+be registered to the LSM infrastructure, by aligning function parameters.
 
-               Linus
+Patches 14-22 add new LSM hooks in the same places where IMA and EVM
+functions are called, if there is no LSM hook already.
+
+Patch 23 adds the 'last' ordering strategy for LSMs, so that IMA and EVM
+functions are called in the same order as of today. Also, like with the
+'first' strategy, LSMs using it are always enabled, so IMA and EVM
+functions will be always called (if IMA and EVM are compiled built-in).
+
+Patches 24-27 do the bulk of the work, remove hardcoded calls to IMA and
+EVM functions, register those functions in the LSM infrastructure, and let
+the latter call them. In addition, they also reserve one slot for EVM to 
+supply an xattr to the inode_init_security hook.
+
+Finally, patch 28 removes the rbtree used to bind metadata to the inodes,
+and instead reserve a space in the inode security blob to store the pointer
+to metadata. This also brings performance improvements due to retrieving
+metadata in constant time, as opposed to logarithmic.
+
+Roberto Sassu (28):
+  ima: Align ima_inode_post_setattr() definition with LSM infrastructure
+  ima: Align ima_post_path_mknod() definition with LSM infrastructure
+  ima: Align ima_post_create_tmpfile() definition with LSM
+    infrastructure
+  ima: Align ima_file_mprotect() definition with LSM infrastructure
+  ima: Align ima_inode_setxattr() definition with LSM infrastructure
+  ima: Align ima_inode_removexattr() definition with LSM infrastructure
+  ima: Align ima_post_read_file() definition with LSM infrastructure
+  evm: Align evm_inode_post_setattr() definition with LSM infrastructure
+  evm: Align evm_inode_setxattr() definition with LSM infrastructure
+  evm: Align evm_inode_post_setxattr() definition with LSM
+    infrastructure
+  evm: Complete description of evm_inode_setattr()
+  fs: Fix description of vfs_tmpfile()
+  security: Align inode_setattr hook definition with EVM
+  security: Introduce inode_post_setattr hook
+  security: Introduce inode_post_removexattr hook
+  security: Introduce file_post_open hook
+  security: Introduce file_pre_free_security hook
+  security: Introduce path_post_mknod hook
+  security: Introduce inode_post_create_tmpfile hook
+  security: Introduce inode_post_set_acl hook
+  security: Introduce inode_post_remove_acl hook
+  security: Introduce key_post_create_or_update hook
+  security: Introduce LSM_ORDER_LAST
+  ima: Move to LSM infrastructure
+  ima: Move IMA-Appraisal to LSM infrastructure
+  evm: Move to LSM infrastructure
+  integrity: Move integrity functions to the LSM infrastructure
+  integrity: Switch from rbtree to LSM-managed blob for
+    integrity_iint_cache
+
+ fs/attr.c                             |   5 +-
+ fs/file_table.c                       |   3 +-
+ fs/namei.c                            |  13 +-
+ fs/nfsd/vfs.c                         |   3 +-
+ fs/open.c                             |   1 -
+ fs/posix_acl.c                        |   5 +-
+ fs/xattr.c                            |   3 +-
+ include/linux/evm.h                   | 112 -----------
+ include/linux/ima.h                   | 142 -------------
+ include/linux/integrity.h             |  26 ---
+ include/linux/lsm_hook_defs.h         |  21 +-
+ include/linux/lsm_hooks.h             |   1 +
+ include/linux/security.h              |  65 ++++++
+ security/integrity/evm/evm_main.c     | 109 ++++++++--
+ security/integrity/iint.c             |  90 +++------
+ security/integrity/ima/ima.h          |  12 ++
+ security/integrity/ima/ima_appraise.c |  38 +++-
+ security/integrity/ima/ima_main.c     |  77 +++++--
+ security/integrity/integrity.h        |  44 +++-
+ security/keys/key.c                   |  10 +-
+ security/security.c                   | 276 ++++++++++++++++----------
+ security/selinux/hooks.c              |   3 +-
+ security/smack/smack_lsm.c            |   4 +-
+ 23 files changed, 550 insertions(+), 513 deletions(-)
+
+-- 
+2.25.1
+
