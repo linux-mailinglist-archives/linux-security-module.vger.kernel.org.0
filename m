@@ -2,92 +2,116 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC8E6B601A
-	for <lists+linux-security-module@lfdr.de>; Sat, 11 Mar 2023 20:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12646B6140
+	for <lists+linux-security-module@lfdr.de>; Sat, 11 Mar 2023 22:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCKTRQ (ORCPT
+        id S230010AbjCKVwx (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 11 Mar 2023 14:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        Sat, 11 Mar 2023 16:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCKTRP (ORCPT
+        with ESMTP id S230022AbjCKVwu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 11 Mar 2023 14:17:15 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB4C4B839
-        for <linux-security-module@vger.kernel.org>; Sat, 11 Mar 2023 11:17:14 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id x14so7632488vso.9
-        for <linux-security-module@vger.kernel.org>; Sat, 11 Mar 2023 11:17:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678562233;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=nPpnsBwc7bdIYGOIsyVCPrJFmoPHvVCCNjWwFsbHN636s+ykUgRBO/W+hoMlXjO0YW
-         OWM69RKfeItfRoAIRECq/7AuMNxa2baO4SJqpwfh7QafvTEVP21/4hnsG2cy3iFC/0WS
-         gvKjo/2fyBvg4u617340/0Vy3t9b1rKfk/DxPC0u+TLpLegxNWTbYnR5L28T2sBnmmSD
-         hEFFZ7kanld4QSXG46R9kcBKUo1pEZkALU7w+QSBRJZSrGmIWlkGEBlLRLJm1y1xCrZV
-         VsW/ZDnJM2bapsvl6r2d9ZqzNOKXBp/vBm0RN+tWdcu1QgBtuweONVE5GGproX+zY3FL
-         oT1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678562233;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=jOWhcmeOroSv3zhZL2Basw968XFqwsiPFxkoplguMsuCcd2c666vlXCRKCURpKBJi+
-         7A6rrSR5An6HRqN6RrrNDPBxD2yPGjXKx8bQ778ETgLH6xVz4mwOJNWs33A4GeFi1KBA
-         4Scte9SdIgmRlRJT9AARtxeR0cA7bjV5fY9ImsSPgUFaHW+NBilaFOwhX3qjpbhQllyQ
-         Nl2/CQnfx/F3J0ANUYxwdCEzOATv3SNA5C8M3U/W+aUMwrPlul3pYi55+UGg46s22Njw
-         BNwle3pcu/Wj9NL4vW40JTg6fKQgmVLpkiBm893HRTi02Wqwao7NY7QBGP6lwkLgwRKx
-         UwaQ==
-X-Gm-Message-State: AO0yUKWNphYzsZqfK/qffY4jFOqNiNAJfuQrYzOodrawemE8XviIM72C
-        vuVsg4MZawdLhIIzXh3ZKknrUqHTAo8t1KQil4E=
-X-Google-Smtp-Source: AK7set+tpJ3tJ9hcaO+apj22JuQwBcEccHzQF2SNR2IxewxR73oyHMev8KqxW1XKBEvuhkzMIN12MJQT1CWNaWDjRFs=
-X-Received: by 2002:a05:6102:237a:b0:412:d18:c718 with SMTP id
- o26-20020a056102237a00b004120d18c718mr18880956vsa.3.1678562233568; Sat, 11
- Mar 2023 11:17:13 -0800 (PST)
-MIME-Version: 1.0
-Reply-To: katefranzoni@gmail.com
-Sender: florentkangnidjissif@gmail.com
-Received: by 2002:a59:ca43:0:b0:3aa:7a40:ddea with HTTP; Sat, 11 Mar 2023
- 11:17:13 -0800 (PST)
-From:   Kate Franzoni <katefranzoni@gmail.com>
-Date:   Sat, 11 Mar 2023 19:17:13 +0000
-X-Google-Sender-Auth: DOJwn1WVw0yu2pfbXgxQ_CF1q0k
-Message-ID: <CAEavVTwVvpx8TeNBq75uUymMV_dn8Z0FM8XOW08spxzqiN9=yg@mail.gmail.com>
-Subject: Hello, I am Kate Franzoni, from Syria. Nice meeting someone like you.
- Thanks for accepting my request
-To:     undisclosed-recipients:;
+        Sat, 11 Mar 2023 16:52:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0DD4E5CE;
+        Sat, 11 Mar 2023 13:52:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F436B80066;
+        Sat, 11 Mar 2023 21:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFBF3C433EF;
+        Sat, 11 Mar 2023 21:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678571527;
+        bh=4ihtkamQW1DKeXGj7i+4ho2sOjUjujw9GnHfOu6wzLI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=sz9VV5mz2YtNPMQCPMir3pAN+2eSzIV/hVgQCLUv6WCO1H+xb50FJ3bHMWZGoLv62
+         ZuBCDrjxE5mvY7yXhgP/c6Whkx9MpLlA9aUTwaqdr1gGo+Zxg7OYbdKtdbQdMlwTym
+         y6hdahKeHbm9Rnh7oyxTydbZOfZ8XFq1oSSLTB7BDVe59TeoB6iAdRBT/pLdS5dyIa
+         oDAoNPfcguNa2x/n62/Zre+KBx/kRnqo3qubKiSPBll56oWACoB109vYEA2RA1d6nC
+         X+vlgY3c0KVmmADyrWeyi1ylXI3Q6URdJWr4wf2CXmyb5PN39jtm3OMmCBoC71nHnb
+         iyTVdVdcd5XWw==
+Message-ID: <e0558e9ece8bfd413080aa3101f2e3d7f746a5e2.camel@kernel.org>
+Subject: Re: [PATCH v5 1/6] KEYS: Create static version of
+ public_key_verify_signature
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, zohar@linux.ibm.com,
+        dhowells@redhat.com, dwmw2@infradead.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, kanth.ghatraju@oracle.com,
+        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
+        coxu@redhat.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Sat, 11 Mar 2023 23:52:05 +0200
+In-Reply-To: <20230302164652.83571-2-eric.snowberg@oracle.com>
+References: <20230302164652.83571-1-eric.snowberg@oracle.com>
+         <20230302164652.83571-2-eric.snowberg@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e36 listed in]
-        [list.dnswl.org]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [florentkangnidjissif[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.3 EMPTY_MESSAGE Message appears to have no textual parts
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Thu, 2023-03-02 at 11:46 -0500, Eric Snowberg wrote:
+> The kernel test robot reports undefined reference to
+> public_key_verify_signature when CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+> is
+> not defined. Create a static version in this case and return -EINVAL.
+>=20
+> Fixes: db6c43bd2132 ("crypto: KEYS: convert public key and digsig
+> asym to the akcipher api")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> ---
+> =C2=A0include/crypto/public_key.h | 9 +++++++++
+> =C2=A01 file changed, 9 insertions(+)
+>=20
+> diff --git a/include/crypto/public_key.h
+> b/include/crypto/public_key.h
+> index 68f7aa2a7e55..6d61695e1cde 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -80,7 +80,16 @@ extern int create_signature(struct
+> kernel_pkey_params *, const void *, void *);
+> =C2=A0extern int verify_signature(const struct key *,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 const struct public_key_signature *);
+> =C2=A0
+> +#if IS_REACHABLE(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
+> =C2=A0int public_key_verify_signature(const struct public_key *pkey,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct public_key_signat=
+ure
+> *sig);
+> +#else
+> +static inline
+> +int public_key_verify_signature(const struct public_key *pkey,
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct public_key_signature
+> *sig)
+> +{
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
+> +}
+> +#endif
+> =C2=A0
+> =C2=A0#endif /* _LINUX_PUBLIC_KEY_H */
 
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
