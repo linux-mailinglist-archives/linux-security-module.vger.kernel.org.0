@@ -2,103 +2,74 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E32F6BF2EA
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 Mar 2023 21:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3CA6BF710
+	for <lists+linux-security-module@lfdr.de>; Sat, 18 Mar 2023 01:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjCQUnp (ORCPT
+        id S229690AbjCRAzQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 17 Mar 2023 16:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
+        Fri, 17 Mar 2023 20:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjCQUno (ORCPT
+        with ESMTP id S229473AbjCRAzP (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:43:44 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8C33E1D7
-        for <linux-security-module@vger.kernel.org>; Fri, 17 Mar 2023 13:43:20 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id n125so7079738ybg.7
-        for <linux-security-module@vger.kernel.org>; Fri, 17 Mar 2023 13:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1679085800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fU20fxywhRWXwZ1DJtjS1uiRvlI/+SyujIlKDdPMt5g=;
-        b=GASfzLqOwDBpzg8fQWhRINknpEp1xqrIDxa94JDJv2xjTEQ/szCiftJ5LKyxdJlC3N
-         i9LgRHjtpviskgQgK9BtfgL2ylbxOR/WnfTWoWebtsKEPHD1wz6rCqqAV6t9k7ZKHxAV
-         Jb7U+duT1xt6idDTzE1ibuR4E51jLZobkMZ2LCt53Sd72OaetL9vYOhmFiHE+V23F5nV
-         wt6PvbC+qqLFnOd7myjtVZ3VHr7dF/eZLIxJwBmeM70P9/iSUiEuWGg2xNi0Z0/EBadn
-         o3yh8ErSJBspdssnYnLc20ZPuJn/qIMs/CA6JRdBgA8rPvxMgl+zs++EDVfMVRvZDWyH
-         COQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679085800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fU20fxywhRWXwZ1DJtjS1uiRvlI/+SyujIlKDdPMt5g=;
-        b=0ovoTyiF49Me0lvg3RpbdyZ6OvBtxHNkUA4oePut/1klBafDQvgFSAaZSTLmogptOx
-         3pkEuJ39X06srbwJXK6a8Uuk6ymIXnaPViG/0bl0Mn5cvRQnOCTc7CilF/V4XEREEC6X
-         1P9fPQhGB6T962hgZD13HaFr2z3wnD/8TfABZUAmxJ/5lfOlxs19MtGDeRsPzPUp/fRV
-         xQTH6MhgWKqyGFvvdP5I4+vDNVCz0y8sW78gzHIk0k+lIyVMvUITcuNjEj1vIqjrMDLL
-         9lL0O0xyxwT/7duWOHVwB3D/rjPx2+llTAcoXR7PfuqbfFZF9Do2bUYMJr8IDrxjOGAy
-         y4ww==
-X-Gm-Message-State: AO0yUKXAcVIadI5LHSiAtTXUr8nFD6nnecNol+m9utxPlFJ5VEUp63IN
-        xZcvQ5PAY4hPoaeO0+xBFUzLHwsZA6IuMGrC1Qi6HYsO9m4DB8Vz8g==
-X-Google-Smtp-Source: AK7set+UxQJkEEVKNTpI2JSDVTO7ckrG/nE4zgLwG6YvQr+WkkR5XlZyMQVuPjxWC5aQ7Tk0G374xbFI/UHASYaXWhs=
-X-Received: by 2002:a05:6902:1109:b0:b27:4632:f651 with SMTP id
- o9-20020a056902110900b00b274632f651mr555300ybu.3.1679085799908; Fri, 17 Mar
- 2023 13:43:19 -0700 (PDT)
+        Fri, 17 Mar 2023 20:55:15 -0400
+X-Greylist: delayed 162611 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Mar 2023 17:55:13 PDT
+Received: from defaultworkshop.klidefectmanagement.com.novalocal (unknown [103.30.145.160])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4952E241FA
+        for <linux-security-module@vger.kernel.org>; Fri, 17 Mar 2023 17:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=asda.co.uk;
+        s=x; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:
+        Subject:To:From:Reply-To:Sender:Cc:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=PI+hPcTHm4WdIUU6QFFMPPyGLCVT5jqFNtHdip1wZDA=; b=V
+        rd1mPf9PD/Jd9CdtfO6xvGtX5ABwU7bXSU4ppuEXplOBxgIBTVgu5F4sX20J0OYUt6UFxmEYESCoC
+        KTD3qZjIb6FFEueY0/+j+RCeJfalxWxjBBNk/RfUfTfGJ9UW1gt92Vp8dJKWKLhsssVVuCM/joWB9
+        Bo/DzyzXMqSkLhhU=;
+Received: from ec2-52-11-215-80.us-west-2.compute.amazonaws.com ([52.11.215.80] helo=asda.co.uk)
+        by defaultworkshop.klidefectmanagement.com.novalocal with esmtpa (Exim 4.94.2)
+        (envelope-from <sales1@asda.co.uk>)
+        id 1pbltn-0005XV-6K
+        for linux-security-module@vger.kernel.org; Tue, 14 Mar 2023 00:23:51 +0700
+Reply-To: sales@asda-c.com
+From:   ASDA Stores Limited <sales1@asda.co.uk>
+To:     linux-security-module@vger.kernel.org
+Subject: First quarter procurement order/enquiry
+Date:   13 Mar 2023 17:23:49 +0000
+Message-ID: <20230313152049.FB9BAE742BE7BC67@asda.co.uk>
 MIME-Version: 1.0
-References: <20230317195615.281810-1-paul@paul-moore.com> <7b02ffaa-d9ce-d75d-1078-cd1691f1230f@linux.microsoft.com>
-In-Reply-To: <7b02ffaa-d9ce-d75d-1078-cd1691f1230f@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 17 Mar 2023 16:43:09 -0400
-Message-ID: <CAHC9VhTF9XXxzeYARYcht_3h7hAkOGtdn1Z86rjHnjfd3c_WGw@mail.gmail.com>
-Subject: Re: [PATCH] selinux: remove the runtime disable functionality
-To:     Daniel Burgener <dburgener@linux.microsoft.com>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,KHOP_HELO_FCRDNS,MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,
+        RCVD_IN_VALIDITY_RPBL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Mar 17, 2023 at 4:25=E2=80=AFPM Daniel Burgener
-<dburgener@linux.microsoft.com> wrote:
->
-> On 3/17/2023 3:56 PM, Paul Moore wrote:
-> > --- a/Documentation/ABI/obsolete/sysfs-selinux-disable
-> > +++ b/Documentation/ABI/removed/sysfs-selinux-disable
-> > @@ -4,6 +4,9 @@ KernelVersion:        2.6.12-rc2 (predates git)
-> >   Contact:    selinux@vger.kernel.org
-> >   Description:
-> >
-> > +     REMOVAL UPDATE: The SELinux checkreqprot functionality was remove=
-d in
-> > +     March 2023, the original deprecation notice is shown below.
-> > +
-> >       The selinuxfs "disable" node allows SELinux to be disabled at run=
-time
-> >       prior to a policy being loaded into the kernel.  If disabled via =
-this
-> >       mechanism, SELinux will remain disabled until the system is reboo=
-ted.
->
-> Looks like a copy/paste typo from the other deprecation removal.  I
-> assume this should mention runtime disable, rather than checkreqprot.
+Dear linux-security-module
+I'm a procurement manager  with ASDA Group (the owners of ASDA=20
+Stores) and your company product has caught our interest.=20
+Therefore, we request you send
+list and prices of your hot selling items (products) for our=20
+evaluation/pick.
 
-Ooops, thanks Daniel :)
+Soon as we receive your reply, we shall send you our company=20
+profile and buying proposal. You can also check our website below=20
+for detailed info of our purchase area and trading capacity.
 
-I've replaced the text above with the following:
+Your immediate response E-mail:  sales@asda-c.com   shall be=20
+appreciated.
 
-  "REMOVAL UPDATE: The SELinux runtime disable functionality was
-   removed in March 2023, the original deprecation notice is shown
-   below."
+Best Wishes
 
---=20
-paul-moore.com
+Ms Stelle Montgomery
+Purchasing Dept.
+ASDA Stores Limited
+Tel:  +44 7418367220
+WhatsApp: + 44-7502985874
+Website: www.asda.com
