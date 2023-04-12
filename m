@@ -2,31 +2,31 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45476DEAA0
-	for <lists+linux-security-module@lfdr.de>; Wed, 12 Apr 2023 06:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3686DEA95
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 Apr 2023 06:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjDLEfy convert rfc822-to-8bit (ORCPT
+        id S229690AbjDLEdz convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 12 Apr 2023 00:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        Wed, 12 Apr 2023 00:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDLEfx (ORCPT
+        with ESMTP id S229709AbjDLEdu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 12 Apr 2023 00:35:53 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED27AE66
-        for <linux-security-module@vger.kernel.org>; Tue, 11 Apr 2023 21:35:51 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 33BNTGqn027797
-        for <linux-security-module@vger.kernel.org>; Tue, 11 Apr 2023 21:35:51 -0700
+        Wed, 12 Apr 2023 00:33:50 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306475277
+        for <linux-security-module@vger.kernel.org>; Tue, 11 Apr 2023 21:33:34 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BNTgos016733
+        for <linux-security-module@vger.kernel.org>; Tue, 11 Apr 2023 21:33:33 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3pwf9whtsf-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pw088fcwe-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-security-module@vger.kernel.org>; Tue, 11 Apr 2023 21:35:51 -0700
+        for <linux-security-module@vger.kernel.org>; Tue, 11 Apr 2023 21:33:33 -0700
 Received: from twshared52232.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 11 Apr 2023 21:35:50 -0700
+ 15.1.2507.17; Tue, 11 Apr 2023 21:33:32 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
         id 48FCF2DCF4531; Tue, 11 Apr 2023 21:33:23 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
@@ -45,14 +45,14 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: VDaFpsz7YNtC-5iGn1RFwU1bb9rGsGHs
-X-Proofpoint-GUID: VDaFpsz7YNtC-5iGn1RFwU1bb9rGsGHs
+X-Proofpoint-ORIG-GUID: 5TBZZSh2pziIAX4IYnLvK4b3wzZy5cZv
+X-Proofpoint-GUID: 5TBZZSh2pziIAX4IYnLvK4b3wzZy5cZv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
