@@ -2,107 +2,235 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147966F45ED
-	for <lists+linux-security-module@lfdr.de>; Tue,  2 May 2023 16:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6E46F490B
+	for <lists+linux-security-module@lfdr.de>; Tue,  2 May 2023 19:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbjEBOTt (ORCPT
+        id S234316AbjEBRSM (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 2 May 2023 10:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        Tue, 2 May 2023 13:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbjEBOTt (ORCPT
+        with ESMTP id S234305AbjEBRSL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 2 May 2023 10:19:49 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69AB595
-        for <linux-security-module@vger.kernel.org>; Tue,  2 May 2023 07:19:47 -0700 (PDT)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B0B783F235
-        for <linux-security-module@vger.kernel.org>; Tue,  2 May 2023 14:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683037183;
-        bh=YEbt8fJaJHySlZTdZRpdSbFwcXzeFhKie6WmHehZH00=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=DKVJ+Zur1RXebmECPN8zKujN1W7Z+zyKs5JZkbep/04ljj6a8tHRn+Ha9tfFYtT3m
-         /ODtKG5LnGXbNXNVl1a5urwdQHq6R8a0cSSGW+0PUngZj45518GuXnHrKeGl2C5yNh
-         F4z5HmM6UpnIDWceuj0ssVus40G9jLkFKe1owrWlmOHQMd0P5TqMh5jdoTTeq4FHKc
-         ObD51jGVNAKtU5oEKaG1je47tPRFEjRyoGpjC4/hMKZFEZq85AOmah5ASg9hsaAopQ
-         USL7FaJf4X1RdiaTkA09xjqXS/qYAJETEhg2jA3h/zhse4j7hl64L//udFrhPReOlJ
-         rHWG/B0KwgrRQ==
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-953759a9d18so385006166b.0
-        for <linux-security-module@vger.kernel.org>; Tue, 02 May 2023 07:19:43 -0700 (PDT)
+        Tue, 2 May 2023 13:18:11 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E238410FE
+        for <linux-security-module@vger.kernel.org>; Tue,  2 May 2023 10:18:00 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f19a80a330so25439775e9.2
+        for <linux-security-module@vger.kernel.org>; Tue, 02 May 2023 10:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683047879; x=1685639879;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qki2g9Mb14rbBQdzJX6RPgJ2mA3yqsPZYHsNI+UG2NY=;
+        b=LRgNgyt5is5EO7/FU758SAALBPFDXtM6DpEey8ZScImQECFzOrv+8TjtS0a5micguI
+         aK6HE0jA2Sk4fqfV5FDlYX3J5T4QcEaMzyAudviADfo1/Ro++vbfs9TJ1tD2dxKckVR7
+         uz3Oq1OVALtjeH6iv54uQZDlq3qtKQ0OEOzY7J2ckz5iNRipJYrOWr76IwtgQUlfuRGX
+         WB0K161po13pzvwlJzTQva7AfsZ2vOE0K1/xEWpJKRkioB6BvyIyTvBHFtiGOLQruAlS
+         Sqm9dvJO9mInc0RyuqKll8rLNY0tbeb0cfmcL2zUSAHmOjmcELVh2M2jxWzQ46XxVbWP
+         K7aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683037183; x=1685629183;
+        d=1e100.net; s=20221208; t=1683047879; x=1685639879;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YEbt8fJaJHySlZTdZRpdSbFwcXzeFhKie6WmHehZH00=;
-        b=NVVIFqzWdT+BDkr8SyaairkrzewkvSt/mnSDOCqTp3NADQYDNJIDc3taN4Iqns5Auh
-         1057TmNq2z6lKMbhJmcYGfasbUfmu2Pb1j5qrui3KPfzIN9oAFIw2U+d9Ze1dGgyaUA3
-         r4z0mqQjKNykGiC3UVsNX8lSHT2T6bE5hOMT0140DeJF0r9FQpjIZEvtMXPWAGQTbnXv
-         3SwL5PFnaMfpr5037lmOthVsnCUb7JuXaQ4OGCK6PksBQJZebhD4XmnEeAQHpooB7TU+
-         gDQAKsv2fzFchhq1qh/F64DkJmMHdXie7Vy4ZydzY8B62P3wedYLdlqBBT1J0saiEGMm
-         knQQ==
-X-Gm-Message-State: AC+VfDxanEuhJgwvaGDIKpp9ClFdBhdlUBqbYyBCDmgCZYg6ESZiwMmI
-        nlzDJKSFRAtfzkss253hTyZADwmIg46qj1wr4aG5yQKIuAB+b/JcEVGds1TbQrRdPEbntIhDD4+
-        YMegpR25ZxXkSdqfCnNgZy3sTvLmJRSFdXCKmx6YAPurcRgOEpJB30w==
-X-Received: by 2002:a17:907:36c7:b0:94f:6025:be53 with SMTP id bj7-20020a17090736c700b0094f6025be53mr82666ejc.50.1683037182993;
-        Tue, 02 May 2023 07:19:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6DXO/3B64V8bJw9amh7S0N0hZheD2NW4YD1COF7NlvNtn+ZJpanfL+e6CluGemZjs9V5YXTA==
-X-Received: by 2002:a17:907:36c7:b0:94f:6025:be53 with SMTP id bj7-20020a17090736c700b0094f6025be53mr82651ejc.50.1683037182694;
-        Tue, 02 May 2023 07:19:42 -0700 (PDT)
-Received: from amikhalitsyn.. ([62.168.35.11])
-        by smtp.gmail.com with ESMTPSA id tk5-20020a170907c28500b0095004c87676sm16000802ejc.199.2023.05.02.07.19.41
+        bh=qki2g9Mb14rbBQdzJX6RPgJ2mA3yqsPZYHsNI+UG2NY=;
+        b=L4eRYbFsrviUME1wF7TvgxYXfJCO8nno6sTpUd5VIGwzCcHE5NODNmczMw/4GNK/ye
+         7mia7zFY91kOyVkOWAq9Ntzkyj0kSQHoHwErX4CAFWgKrUbvGPnGYxhJN0sLh1KYse6m
+         NqiEJiPkWMCicJNuFwcTPIYaG3UygOZuig0vEBWdqsqJpS9UqRMNfv8K4uS/0YqQXqRs
+         YxEo6LeB6x7kABt/2FgqbdPUSwOoqVLFp3JGS00Ixp4iX1IknJmw9FYXYkyU6kUgOBsK
+         gR3fpfeOA3+LtIdJ5q77apDgb/ygedIkb9txCodDRd5Xz1Iox8WNWDxmxcTAg/0rXVMF
+         joAg==
+X-Gm-Message-State: AC+VfDzl1UJM0/AXrkBbF8N2ACea05UdHwokilZiWCa6Yyi6KvCcAetr
+        v6f1qbK0hEO+dvwW6veNvM+Sp1DEfD0=
+X-Google-Smtp-Source: ACHHUZ5r1nuDZzaL07DhNo9MNj8elE9fRGvSEjlrB9NzIh04yXRQhKIfrmcxgKgooXZDt0KBiALYNA==
+X-Received: by 2002:a7b:cd18:0:b0:3f1:6fe2:c4b2 with SMTP id f24-20020a7bcd18000000b003f16fe2c4b2mr12865625wmj.23.1683047879122;
+        Tue, 02 May 2023 10:17:59 -0700 (PDT)
+Received: from localhost ([2a02:168:633b:1:9d6a:15a4:c7d1:a0f0])
+        by smtp.gmail.com with ESMTPSA id s12-20020a7bc38c000000b003f1739a0116sm35916956wmj.33.2023.05.02.10.17.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 07:19:42 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     mortonm@chromium.org
-Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Tue, 02 May 2023 10:17:58 -0700 (PDT)
+From:   =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>
+To:     linux-security-module@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc:     =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
         Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] LSM: SafeSetID: fix UID printed instead of GID
-Date:   Tue,  2 May 2023 16:18:32 +0200
-Message-Id: <20230502141832.217234-1-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Subject: [RFC 0/4] Landlock: ioctl support
+Date:   Tue,  2 May 2023 19:17:51 +0200
+Message-Id: <20230502171755.9788-1-gnoack3000@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-pr_warn message clearly says that GID should be printed,
-but we have UID there. Let's fix that.
+Hello!
 
-Found accidentaly during the work on isolated user namespaces.
+These patches add ioctl support to Landlock.
 
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
- security/safesetid/lsm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It's an early version - it potentially needs more tests and
+documentation.  I'd like to circulate the patches early to discuss
+whether this approach is feasible.
 
-diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
-index e806739f7868..6191e5ba0f70 100644
---- a/security/safesetid/lsm.c
-+++ b/security/safesetid/lsm.c
-@@ -131,7 +131,7 @@ static int safesetid_security_capable(const struct cred *cred,
- 		 * set*gid() (e.g. setting up userns gid mappings).
- 		 */
- 		pr_warn("Operation requires CAP_SETGID, which is not available to GID %u for operations besides approved set*gid transitions\n",
--			__kuid_val(cred->uid));
-+			__kuid_val(cred->gid));
- 		return -EPERM;
- 	default:
- 		/* Error, the only capabilities were checking for is CAP_SETUID/GID */
+Objective
+~~~~~~~~~
+
+Make ioctl(2) requests restrictable with Landlock,
+in a way that is useful for real-world applications.
+
+Proposed approach
+~~~~~~~~~~~~~~~~~
+
+Introduce the LANDLOCK_ACCESS_FS_IOCTL right, which restricts the use
+of ioctl(2) on file descriptors.
+
+We attach the LANDLOCK_ACCESS_FS_IOCTL right to opened file
+descriptors, as we already do for LANDLOCK_ACCESS_FS_TRUNCATE.
+
+I believe that this approach works for the majority of use cases, and
+offers a good trade-off between Landlock API and implementation
+complexity and flexibility when the feature is used.
+
+Notable implications of this approach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Existing inherited file descriptors stay unaffected
+  when a program enables Landlock.
+
+  This means in particular that in common scenarios,
+  the terminal's ioctls (ioctl_tty(2)) continue to work.
+
+* ioctl(2) continues to be available for file descriptors acquired
+  through means other than open(2).  Example: Network sockets.
+
+Examples
+~~~~~~~~
+
+Starting a sandboxed shell from $HOME with samples/landlock/sandboxer:
+
+  LL_FS_RO=/ LL_FS_RW=. ./sandboxer /bin/bash
+
+The LANDLOCK_ACCESS_FS_IOCTL right is part of the "read-write" rights
+here, so we expect that newly opened files outside of $HOME don't work
+with ioctl(2).
+
+  * "stty" works: It probes terminal properties
+
+  * "stty </dev/tty" fails: /dev/tty can be reopened, but the ioctl is
+    denied.
+
+  * "eject" fails: ioctls to use CD-ROM drive are denied.
+
+  * "ls /dev" works: It uses ioctl to get the terminal size for
+    columnar layout
+
+  * The text editors "vim" and "mg" work.  (GNU Emacs fails because it
+    attempts to reopen /dev/tty.)
+
+Alternatives considered: Allow-listing specific ioctl requests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It would be technically possible to keep an allow-list of ioctl
+requests and thereby control in more detail which ioctls should work.
+
+I believe that this is not needed for the majority of use cases and
+that it is a reasonable trade-off to make here (but I'm happy to hear
+about counterexamples).  The reasoning is:
+
+* Many programs do not need ioctl at all,
+  and denying all ioctl(2) requests OK for these.
+
+* Other programs need ioctl, but only for the terminal FDs.
+  This is supported because these file descriptors are usually
+  inherited from the parent process - so the parent process gets to
+  control the ioctl(2) policy for them.
+
+* Some programs need ioctl on specific files that they are opening
+  themselves.  They can allow-list these file paths for ioctl(2).
+  This makes the programs work, but it restricts a variety of other
+  ioctl requests which are otherwise possible through opening other
+  files.
+
+Because the LANDLOCK_ACCESS_FS_IOCTL right is attached to the file
+descriptor, programs have flexible options to control which ioctl
+operations should work, without the implementation complexity of
+additional ioctl allow-lists in the kernel.
+
+Finally, the proposed approach is simpler in implementation and has
+lower API complexity, but it does *not* preclude us from implementing
+per-ioctl-request allow lists later, if that turns out to be necessary
+at a later point.
+
+Related Work
+~~~~~~~~~~~~
+
+OpenBSD's pledge(2) [1] restricts ioctl(2) independent of the file
+descriptor which is used.  The implementers maintain multiple
+allow-lists of predefined ioctl(2) operations required for different
+application domains such as "audio", "bpf", "tty" and "inet".
+
+OpenBSD does not guarantee ABI backwards compatibility to the same
+extent as Linux does, so it's easier for them to update these lists in
+later versions.  It might not be a feasible approach for Linux though.
+
+[1] https://man.openbsd.org/OpenBSD-7.3/pledge.2
+
+Feedback I'm looking for
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some specific points I would like to get your opinion on:
+
+* Is this the right general approach to restricting ioctl(2)?
+
+  It will probably be possible to find counter-examples where the
+  alternative (see below) is better.  I'd be interested in these, and
+  in how common they are, to understand whether we have picked the
+  right trade-off here.
+
+* Should we introduce a "landlock_fd_rights_limit()" syscall?
+
+  We could potentially implement a system call for dropping the
+  LANDLOCK_ACCESS_FS_IOCTL and LANDLOCK_ACCESS_FS_TRUNCATE rights from
+  existing file descriptors (independent of the type of file
+  descriptor, even).
+
+  Possible use cases would be to (a) restrict the rights on inherited
+  file descriptors like std{in,out,err} and to (b) restrict ioctl and
+  truncate operations on file descriptors that are not acquired
+  through open(2), such as network sockets.
+
+  This would be similar to the cap_rights_limit(2) system call in
+  FreeBSD's Capsicum.
+
+  This idea feels somewhat orthogonal to the ioctl patch, but it would
+  start to be more useful if the ioctl right exists.
+
+
+Günther Noack (4):
+  landlock: Increment Landlock ABI version to 4
+  landlock: Add LANDLOCK_ACCESS_FS_IOCTL access right
+  selftests/landlock: Test ioctl support
+  samples/landlock: Add support for LANDLOCK_ACCESS_FS_IOCTL
+
+ include/uapi/linux/landlock.h                | 19 ++++--
+ samples/landlock/sandboxer.c                 | 12 +++-
+ security/landlock/fs.c                       | 20 +++++-
+ security/landlock/limits.h                   |  2 +-
+ security/landlock/syscalls.c                 |  2 +-
+ tools/testing/selftests/landlock/base_test.c |  2 +-
+ tools/testing/selftests/landlock/fs_test.c   | 67 +++++++++++++++++++-
+ 7 files changed, 107 insertions(+), 17 deletions(-)
+
+
+base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
 -- 
-2.34.1
+2.40.1
 
