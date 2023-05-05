@@ -2,43 +2,69 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471E86F858E
-	for <lists+linux-security-module@lfdr.de>; Fri,  5 May 2023 17:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8696F86B9
+	for <lists+linux-security-module@lfdr.de>; Fri,  5 May 2023 18:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjEEPWj (ORCPT
+        id S230487AbjEEQ2S (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 5 May 2023 11:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        Fri, 5 May 2023 12:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbjEEPWW (ORCPT
+        with ESMTP id S232726AbjEEQ2Q (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 5 May 2023 11:22:22 -0400
-Received: from smtp-8fad.mail.infomaniak.ch (smtp-8fad.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fad])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC8E15686
-        for <linux-security-module@vger.kernel.org>; Fri,  5 May 2023 08:22:08 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QCZDH0FZXzMqc7P;
-        Fri,  5 May 2023 17:22:07 +0200 (CEST)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QCZDG2bp6zMpxBc;
-        Fri,  5 May 2023 17:22:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1683300126;
-        bh=6hEUXV1Yu+QqE06q6YV92ksgcTE4SSVMGFp/YRlUSqM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cCom6GYQLGlk2nCbcclR8AZKUkW0AJpZFC6wR92gff0rbAnNjJlFfzBd5J+3y++84
-         WAx+LLa8CAjewu98goOyt+2vh84ogydmCURfKSQ02P+jr2VYlfAmiT9Knsjn08r/LT
-         Tng2aFdb73PL8bp/dTy6vPMFTznPlq63+NzYf8sI=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Borislav Petkov <bp@alien8.de>,
+        Fri, 5 May 2023 12:28:16 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE14191FA
+        for <linux-security-module@vger.kernel.org>; Fri,  5 May 2023 09:28:10 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-55a3146ed47so19664547b3.2
+        for <linux-security-module@vger.kernel.org>; Fri, 05 May 2023 09:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683304090; x=1685896090;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tpG4xiqP3mzArRx9Ask1She9PnSIKi9NV0T7HckdUAY=;
+        b=R7ZId5oM7hLrX+tcfVm/Bnk2u8JbAC1I8QSh2twc/YutVfGMASmtW7tbm2YP3uHqlk
+         RwtPwL861jZAZsMdLif5CXyQc6HVUK4hq+Rsigm7g9H5SwYxxSrPZKroysdphn0wBKMc
+         5pkuhlqCX/BOp4yTuk4h5T1NCQgcpfPZ9KLIiem4KASWPyrgXBR48rcxQa06YhEaqMbn
+         orfLSFQcdN2vNomHtco8b3soICbHS5a9W6R91ScgWRyqTuI6OJFa+omcbJE3G4QloJsc
+         Zd/UhaIHTp9GBfbJO6BShFyMFzXWMH9S7e+yp/9GzVVu/Y2uZsmKlNFrDjrpY2RYPhtU
+         7R+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683304090; x=1685896090;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tpG4xiqP3mzArRx9Ask1She9PnSIKi9NV0T7HckdUAY=;
+        b=X1XvIx2gcbPz6z6KGYsL1wn2Sa+V+CvkrwbenZrcyL7ZTUkZ7468KCutsYzuoP7rCS
+         fQ8btJ3mrDxdhxboQxsu/LXvlvvsQahTlR9Ez82GeoHM1Ovhqi0DDJUM5CYu8+wEsR8j
+         n1LBulDFue5FckdzXkzWd/Aij5innIr7CxEZ26KJo+/Mv06JxSwLZkgTR2e1NFcR7Vwl
+         PhZqA9R117mrpOVUtbmhcp9cpTlpuW51OimlfWZ51dVgqmLWbMmMaYwA8gsRSgoMMmI4
+         J1j4A2RzCeAeJH8HHwespLp9VBOp/AvqjyHAaaQ47PVhi5qNCNaIwXYKaNS6twbYp/6a
+         Zxeg==
+X-Gm-Message-State: AC+VfDxha0l87+5adhu2wRSpJzMuC1p8Z7zS01TJNKq+3xUqFeGHQxeR
+        po5d9Iopo/MsbrL569bF+0uu09wHzPg=
+X-Google-Smtp-Source: ACHHUZ6MaxIQ4e6CYkENF40G6p9cF+vIn2nNSO3VXw5131N/TbPSwiBkXRT2QEZKyWmorm0BLuruUfs9Bhg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ac24:0:b0:559:d859:d746 with SMTP id
+ k36-20020a81ac24000000b00559d859d746mr1208880ywh.10.1683304090087; Fri, 05
+ May 2023 09:28:10 -0700 (PDT)
+Date:   Fri, 5 May 2023 09:28:08 -0700
+In-Reply-To: <20230505152046.6575-3-mic@digikod.net>
+Mime-Version: 1.0
+References: <20230505152046.6575-1-mic@digikod.net> <20230505152046.6575-3-mic@digikod.net>
+Message-ID: <ZFUumGdZDNs1tkQA@google.com>
+Subject: Re: [PATCH v1 2/9] KVM: x86/mmu: Add support for prewrite page tracking
+From:   Sean Christopherson <seanjc@google.com>
+To:     "=?iso-8859-1?Q?Micka=EBl_Sala=FCn?=" <mic@digikod.net>
+Cc:     Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         Kees Cook <keescook@chromium.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Wanpeng Li <wanpengli@tencent.com>,
         Alexander Graf <graf@amazon.com>,
         Forrest Yuan Yu <yuanyu@google.com>,
         James Morris <jamorris@linux.microsoft.com>,
@@ -46,325 +72,128 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Liran Alon <liran.alon@oracle.com>,
         "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
         Marian Rotariu <marian.c.rotariu@gmail.com>,
-        =?UTF-8?q?Mihai=20Don=C8=9Bu?= <mdontu@bitdefender.com>,
-        =?UTF-8?q?Nicu=C8=99or=20C=C3=AE=C8=9Bu?= <nicu.citu@icloud.com>,
+        "Mihai =?utf-8?B?RG9uyJt1?=" <mdontu@bitdefender.com>,
+        "=?utf-8?B?TmljdciZb3IgQ8OuyJt1?=" <nicu.citu@icloud.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Thara Gopinath <tgopinath@microsoft.com>,
         Will Deacon <will@kernel.org>,
         Zahra Tarkhani <ztarkhani@microsoft.com>,
-        =?UTF-8?q?=C8=98tefan=20=C8=98icleru?= <ssicleru@bitdefender.com>,
+        "=?utf-8?Q?=C8=98tefan_=C8=98icleru?=" <ssicleru@bitdefender.com>,
         dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
         linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
         virtualization@lists.linux-foundation.org, x86@kernel.org,
         xen-devel@lists.xenproject.org
-Subject: [PATCH v1 9/9] virt: Add Heki KUnit tests
-Date:   Fri,  5 May 2023 17:20:46 +0200
-Message-Id: <20230505152046.6575-10-mic@digikod.net>
-In-Reply-To: <20230505152046.6575-1-mic@digikod.net>
-References: <20230505152046.6575-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This adds a new CONFIG_HEKI_TEST option to run tests at boot.  Indeed,
-because this patch series forbids the loading of kernel modules after
-the boot, we need to make built-in tests.  Furthermore, because we use
-some symbols not exported to modules (e.g., kernel_set_to_readonly) this
-could not work as modules.
+On Fri, May 05, 2023, Micka=EF=BF=BDl Sala=EF=BF=BDn wrote:
+> diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm=
+/kvm_page_track.h
+> index eb186bc57f6a..a7fb4ff888e6 100644
+> --- a/arch/x86/include/asm/kvm_page_track.h
+> +++ b/arch/x86/include/asm/kvm_page_track.h
+> @@ -3,6 +3,7 @@
+>  #define _ASM_X86_KVM_PAGE_TRACK_H
+> =20
+>  enum kvm_page_track_mode {
+> +	KVM_PAGE_TRACK_PREWRITE,
 
-To run these tests, we need to boot the kernel with the heki_test=N boot
-argument with N selecting a specific test:
-1. heki_test_cr_disable_smep: Check CR pinning and try to disable SMEP.
-2. heki_test_write_to_const: Check .rodata (const) protection.
-3. heki_test_write_to_ro_after_init: Check __ro_after_init protection.
-4. heki_test_exec: Check non-executable kernel memory.
+Heh, just when I decide to finally kill off support for multiple modes[1] :=
+-)
 
-This way to select tests should not be required when the kernel will
-properly handle the triggered synthetic page faults.  For now, these
-page faults make the kernel loop.
+My assessment from that changelog still holds true for this case:
 
-All these tests temporarily disable the related kernel self-protections
-and should then failed if Heki doesn't protect the kernel.  They are
-verbose to make it easier to understand what is going on.
+  Drop "support" for multiple page-track modes, as there is no evidence
+  that array-based and refcounted metadata is the optimal solution for
+  other modes, nor is there any evidence that other use cases, e.g. for
+  access-tracking, will be a good fit for the page-track machinery in
+  general.
+ =20
+  E.g. one potential use case of access-tracking would be to prevent guest
+  access to poisoned memory (from the guest's perspective).  In that case,
+  the number of poisoned pages is likely to be a very small percentage of
+  the guest memory, and there is no need to reference count the number of
+  access-tracking users, i.e. expanding gfn_track[] for a new mode would be
+  grossly inefficient.  And for poisoned memory, host userspace would also
+  likely want to trap accesses, e.g. to inject #MC into the guest, and that
+  isn't currently supported by the page-track framework.
+ =20
+  A better alternative for that poisoned page use case is likely a
+  variation of the proposed per-gfn attributes overlay (linked), which
+  would allow efficiently tracking the sparse set of poisoned pages, and by
+  default would exit to userspace on access.
 
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: H. Peter Anvin <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc: Wanpeng Li <wanpengli@tencent.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20230505152046.6575-10-mic@digikod.net
----
- virt/heki/Kconfig |  12 +++
- virt/heki/heki.c  | 194 +++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 205 insertions(+), 1 deletion(-)
+Of particular relevance:
 
-diff --git a/virt/heki/Kconfig b/virt/heki/Kconfig
-index 96f18ce03013..806981f2b22d 100644
---- a/virt/heki/Kconfig
-+++ b/virt/heki/Kconfig
-@@ -27,3 +27,15 @@ config HYPERVISOR_SUPPORTS_HEKI
- 	  A hypervisor should select this when it can successfully build
- 	  and run with CONFIG_HEKI. That is, it should provide all of the
- 	  hypervisor support required for the Heki feature.
-+
-+config HEKI_TEST
-+	bool "Tests for Heki" if !KUNIT_ALL_TESTS
-+	depends on HEKI && KUNIT=y
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Run Heki tests at runtime according to the heki_test=N boot
-+	  parameter, with N identifying the test to run (between 1 and 4).
-+
-+	  Before launching the init process, the system might not respond
-+	  because of unhandled kernel page fault.  This will be fixed in a
-+	  next patch series.
-diff --git a/virt/heki/heki.c b/virt/heki/heki.c
-index 142b5dc98a2f..361e7734e950 100644
---- a/virt/heki/heki.c
-+++ b/virt/heki/heki.c
-@@ -5,11 +5,13 @@
-  * Copyright © 2023 Microsoft Corporation
-  */
- 
-+#include <kunit/test.h>
- #include <linux/cache.h>
- #include <linux/heki.h>
- #include <linux/kernel.h>
- #include <linux/mm.h>
- #include <linux/printk.h>
-+#include <linux/set_memory.h>
- #include <linux/types.h>
- #include <linux/vmalloc.h>
- 
-@@ -78,13 +80,201 @@ void __init heki_early_init(void)
- 	heki_arch_init();
- }
- 
-+#ifdef CONFIG_HEKI_TEST
-+
-+/* Heki test data */
-+
-+/* Takes two pages to not change permission of other read-only pages. */
-+const char heki_test_const_buf[PAGE_SIZE * 2] = {};
-+char heki_test_ro_after_init_buf[PAGE_SIZE * 2] __ro_after_init = {};
-+
-+long heki_test_exec_data(long);
-+void _test_exec_data_end(void);
-+
-+/* Used to test ROP execution against the .rodata section. */
-+/* clang-format off */
-+asm(
-+".pushsection .rodata;" // NOT .text section
-+".global heki_test_exec_data;"
-+".type heki_test_exec_data, @function;"
-+"heki_test_exec_data:"
-+ASM_ENDBR
-+"movq %rdi, %rax;"
-+"inc %rax;"
-+ASM_RET
-+".size heki_test_exec_data, .-heki_test_exec_data;"
-+"_test_exec_data_end:"
-+".popsection");
-+/* clang-format on */
-+
-+static void heki_test_cr_disable_smep(struct kunit *test)
-+{
-+	unsigned long cr4;
-+
-+	/* SMEP should be initially enabled. */
-+	KUNIT_ASSERT_TRUE(test, __read_cr4() & X86_CR4_SMEP);
-+
-+	kunit_warn(test,
-+		   "Starting control register pinning tests with SMEP check\n");
-+
-+	/*
-+	 * Trying to disable SMEP, bypassing kernel self-protection by not
-+	 * using cr4_clear_bits(X86_CR4_SMEP).
-+	 */
-+	cr4 = __read_cr4() & ~X86_CR4_SMEP;
-+	asm volatile("mov %0,%%cr4" : "+r"(cr4) : : "memory");
-+
-+	/* SMEP should still be enabled. */
-+	KUNIT_ASSERT_TRUE(test, __read_cr4() & X86_CR4_SMEP);
-+}
-+
-+static inline void print_addr(struct kunit *test, const char *const buf_name,
-+			      void *const buf)
-+{
-+	const pte_t pte = *virt_to_kpte((unsigned long)buf);
-+	const phys_addr_t paddr = slow_virt_to_phys(buf);
-+	bool present = pte_flags(pte) & (_PAGE_PRESENT);
-+	bool accessible = pte_accessible(&init_mm, pte);
-+
-+	kunit_warn(
-+		test,
-+		"%s vaddr:%llx paddr:%llx exec:%d write:%d present:%d accessible:%d\n",
-+		buf_name, (unsigned long long)buf, paddr, !!pte_exec(pte),
-+		!!pte_write(pte), present, accessible);
-+}
-+
-+extern int kernel_set_to_readonly;
-+
-+static void heki_test_write_to_rodata(struct kunit *test,
-+				      const char *const buf_name,
-+				      char *const ro_buf)
-+{
-+	print_addr(test, buf_name, (void *)ro_buf);
-+	KUNIT_EXPECT_EQ(test, 0, *ro_buf);
-+
-+	kunit_warn(
-+		test,
-+		"Bypassing kernel self-protection: mark memory as writable\n");
-+	kernel_set_to_readonly = 0;
-+	/*
-+	 * Removes execute permission that might be set by bugdoor-exec,
-+	 * because change_page_attr_clear() is not use by set_memory_rw().
-+	 * This is required since commit 652c5bf380ad ("x86/mm: Refuse W^X
-+	 * violations").
-+	 */
-+	KUNIT_ASSERT_FALSE(test, set_memory_nx((unsigned long)PTR_ALIGN_DOWN(
-+						       ro_buf, PAGE_SIZE),
-+					       1));
-+	KUNIT_ASSERT_FALSE(test, set_memory_rw((unsigned long)PTR_ALIGN_DOWN(
-+						       ro_buf, PAGE_SIZE),
-+					       1));
-+	kernel_set_to_readonly = 1;
-+
-+	kunit_warn(test, "Trying memory write\n");
-+	*ro_buf = 0x11;
-+	KUNIT_EXPECT_EQ(test, 0, *ro_buf);
-+	kunit_warn(test, "New content: 0x%02x\n", *ro_buf);
-+}
-+
-+static void heki_test_write_to_const(struct kunit *test)
-+{
-+	heki_test_write_to_rodata(test, "const_buf",
-+				  (void *)heki_test_const_buf);
-+}
-+
-+static void heki_test_write_to_ro_after_init(struct kunit *test)
-+{
-+	heki_test_write_to_rodata(test, "ro_after_init_buf",
-+				  (void *)heki_test_ro_after_init_buf);
-+}
-+
-+typedef long test_exec_t(long);
-+
-+static void heki_test_exec(struct kunit *test)
-+{
-+	const size_t exec_size = 7;
-+	unsigned long nx_page_start = (unsigned long)PTR_ALIGN_DOWN(
-+		(const void *const)heki_test_exec_data, PAGE_SIZE);
-+	unsigned long nx_page_end = (unsigned long)PTR_ALIGN(
-+		(const void *const)heki_test_exec_data + exec_size, PAGE_SIZE);
-+	test_exec_t *exec = (test_exec_t *)heki_test_exec_data;
-+	long ret;
-+
-+	/* Starting non-executable memory tests. */
-+	print_addr(test, "test_exec_data", heki_test_exec_data);
-+
-+	kunit_warn(
-+		test,
-+		"Bypassing kernel-self protection: mark memory as executable\n");
-+	kernel_set_to_readonly = 0;
-+	KUNIT_ASSERT_FALSE(test,
-+			   set_memory_rox(nx_page_start,
-+					  PFN_UP(nx_page_end - nx_page_start)));
-+	kernel_set_to_readonly = 1;
-+
-+	kunit_warn(
-+		test,
-+		"Trying to execute data (ROP) in (initially) non-executable memory\n");
-+	ret = exec(3);
-+
-+	/* This should not be reached because of the uncaught page fault. */
-+	KUNIT_EXPECT_EQ(test, 3, ret);
-+	kunit_warn(test, "Result of execution: 3 + 1 = %ld\n", ret);
-+}
-+
-+const struct kunit_case heki_test_cases[] = {
-+	KUNIT_CASE(heki_test_cr_disable_smep),
-+	KUNIT_CASE(heki_test_write_to_const),
-+	KUNIT_CASE(heki_test_write_to_ro_after_init),
-+	KUNIT_CASE(heki_test_exec),
-+	{}
-+};
-+
-+static unsigned long heki_test __ro_after_init;
-+
-+static int __init parse_heki_test_config(char *str)
-+{
-+	if (kstrtoul(str, 10, &heki_test) ||
-+	    heki_test > (ARRAY_SIZE(heki_test_cases) - 1))
-+		pr_warn("Invalid option string for heki_test: '%s'\n", str);
-+	return 1;
-+}
-+
-+__setup("heki_test=", parse_heki_test_config);
-+
-+static void heki_run_test(void)
-+{
-+	struct kunit_case heki_test_case[2] = {};
-+	struct kunit_suite heki_test_suite = {
-+		.name = "heki",
-+		.test_cases = heki_test_case,
-+	};
-+	struct kunit_suite *const test_suite = &heki_test_suite;
-+
-+	if (!kunit_enabled() || heki_test == 0 ||
-+	    heki_test >= ARRAY_SIZE(heki_test_cases))
-+		return;
-+
-+	pr_warn("Running test #%lu\n", heki_test);
-+	heki_test_case[0] = heki_test_cases[heki_test - 1];
-+	__kunit_test_suites_init(&test_suite, 1);
-+}
-+
-+#else /* CONFIG_HEKI_TEST */
-+
-+static inline void heki_run_test(void)
-+{
-+}
-+
-+#endif /* CONFIG_HEKI_TEST */
-+
- void heki_late_init(void)
- {
- 	struct heki_hypervisor *hypervisor = heki.hypervisor;
- 	int ret;
- 
- 	if (!heki_enabled)
--		return;
-+		return heki_run_test();
- 
- 	if (!heki.static_ranges) {
- 		pr_warn("Architecture did not initialize static ranges\n");
-@@ -113,6 +303,8 @@ void heki_late_init(void)
- 		goto out;
- 	pr_warn("Control registers locked\n");
- 
-+	heki_run_test();
-+
- out:
- 	heki_free_pa_ranges(heki.static_ranges, heki.num_static_ranges);
- 	heki.static_ranges = NULL;
--- 
-2.40.1
+  - Using the page-track machinery is inefficient because the guest is like=
+ly
+    going to write-protect a minority of its memory.  And this
 
+      select KVM_EXTERNAL_WRITE_TRACKING if KVM
+
+    is particularly nasty because simply enabling HEKI in the Kconfig will =
+cause
+    KVM to allocate rmaps and gfn tracking.
+
+  - There's no need to reference count the protection, i.e. 15 of the 16 bi=
+ts of
+    gfn_track are dead weight.
+
+  - As proposed, adding a second "mode" would double the cost of gfn tracki=
+ng.
+
+  - Tying the protections to the memslots will create an impossible-to-main=
+tain
+    ABI because the protections will be lost if the owning memslot is delet=
+ed and
+    recreated.
+
+  - The page-track framework provides incomplete protection and will lead t=
+o an
+    ongoing game of whack-a-mole, e.g. this patch catches the obvious cases=
+ by
+    adding calls to kvm_page_track_prewrite(), but misses things like kvm_v=
+cpu_map().
+
+  - The scaling and maintenance issues will only get worse if/when someone =
+tries
+    to support dropping read and/or execute permissions, e.g. for execute-o=
+nly.
+
+  - The code is x86-only, and is likely to stay that way for the foreseeabl=
+e
+    future.
+
+The proposed alternative is to piggyback the memory attributes implementati=
+on[2]
+that is being added (if all goes according to plan) for confidential VMs.  =
+This
+use case (dropping permissions) came up not too long ago[3], which is why I=
+ have
+a ready-made answer).
+
+I have no doubt that we'll need to solve performance and scaling issues wit=
+h the
+memory attributes implementation, e.g. to utilize xarray multi-range suppor=
+t
+instead of storing information on a per-4KiB-page basis, but AFAICT, the co=
+re
+idea is sound.  And a very big positive from a maintenance perspective is t=
+hat
+any optimizations, fixes, etc. for one use case (CoCo vs. hardening) should=
+ also
+benefit the other use case.
+
+[1] https://lore.kernel.org/all/20230311002258.852397-22-seanjc@google.com
+[2] https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com
+[3] https://lore.kernel.org/all/Y1a1i9vbJ%2FpVmV9r@google.com
