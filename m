@@ -2,59 +2,42 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C636FE75A
-	for <lists+linux-security-module@lfdr.de>; Thu, 11 May 2023 00:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F706FE96F
+	for <lists+linux-security-module@lfdr.de>; Thu, 11 May 2023 03:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjEJWmQ (ORCPT
+        id S229580AbjEKB1V (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 10 May 2023 18:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        Wed, 10 May 2023 21:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjEJWmP (ORCPT
+        with ESMTP id S232376AbjEKB1T (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 10 May 2023 18:42:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2564270D;
-        Wed, 10 May 2023 15:42:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33F3D6150C;
-        Wed, 10 May 2023 22:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5237EC433EF;
-        Wed, 10 May 2023 22:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683758533;
-        bh=OiwLhQKzpZvZvKvLZRl67jdxCOPPpaWtbveL4cX81eI=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=OOQPElEIN+BFxDFLJpbN9NI2XBIIYn7h6wl+j5JjLn6AGaHMoO428fWtFFC2aEtvU
-         PE5cRJqNUh04xyzx984bUJGSuvQmxgW1UF50SGBbLh42RKHydO9yizIaxaGClkW/P5
-         0MO3ISisER/5mXCTfgkCuDwUpY45deeV2OgC4Nj1RUgsvrhb0oURpjEkXhh7Spg3f4
-         Wf5wwLzrfGifGBC1e38wroAfd9H0O8hDO0JzP2Iw7tOgL8AoU+6k0RFkklXVJNSCYl
-         gmVC8z75RNuQQw+IL7CXN0pMmUA7wZF2C5V/toxmwOUgn4csZdHx0/H7z2m48zARX1
-         TZuVbbe5eRrMg==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 11 May 2023 01:42:08 +0300
-Message-Id: <CSIYL1HLJ1RX.3J5079H7TBTT8@suppilovahvero>
-Cc:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <dmitry.kasatkin@gmail.com>, <paul@paul-moore.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>, <jlee@suse.com>,
-        <kanth.ghatraju@oracle.com>, <konrad.wilk@oracle.com>,
-        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH 3/3] integrity: Remove EXPERIMENTAL from Kconfig
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Eric Snowberg" <eric.snowberg@oracle.com>, <zohar@linux.ibm.com>,
-        <dhowells@redhat.com>, <dwmw2@infradead.org>
-X-Mailer: aerc 0.14.0
-References: <20230508220708.2888510-1-eric.snowberg@oracle.com>
- <20230508220708.2888510-4-eric.snowberg@oracle.com>
-In-Reply-To: <20230508220708.2888510-4-eric.snowberg@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Wed, 10 May 2023 21:27:19 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53094EE8
+        for <linux-security-module@vger.kernel.org>; Wed, 10 May 2023 18:27:17 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QGvJs0lWczTkZp;
+        Thu, 11 May 2023 09:22:37 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 11 May 2023 09:27:15 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <serge@hallyn.com>, <cuigaosheng1@huawei.com>
+CC:     <linux-security-module@vger.kernel.org>
+Subject: [PATCH -next] capability: fix kernel-doc warnings in capability.c
+Date:   Thu, 11 May 2023 09:27:15 +0800
+Message-ID: <20230511012715.3692211-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,34 +45,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue May 9, 2023 at 1:07 AM EEST, Eric Snowberg wrote:
-> Remove the EXPERIMENTAL from the
-> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY Kconfig
-> now that digitalSignature usage enforcement is set.
->
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
->  security/integrity/ima/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kcon=
-fig
-> index 684425936c53..225c92052a4d 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -261,7 +261,7 @@ config IMA_TRUSTED_KEYRING
->  	   This option is deprecated in favor of INTEGRITY_TRUSTED_KEYRING
-> =20
->  config IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
-> -	bool "Permit keys validly signed by a built-in or secondary CA cert (EX=
-PERIMENTAL)"
-> +	bool "Permit keys validly signed by a built-in or secondary CA cert"
->  	depends on SYSTEM_TRUSTED_KEYRING
->  	depends on SECONDARY_TRUSTED_KEYRING
->  	depends on INTEGRITY_ASYMMETRIC_KEYS
-> --=20
-> 2.27.0
+Fix all kernel-doc warnings in capability.c:
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+kernel/capability.c:477: warning: Function parameter or member 'idmap'
+not described in 'privileged_wrt_inode_uidgid'
+kernel/capability.c:493: warning: Function parameter or member 'idmap'
+not described in 'capable_wrt_inode_uidgid'
 
-BR, Jarkko
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ kernel/capability.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/capability.c b/kernel/capability.c
+index 3e058f41df32..1a2795102ae4 100644
+--- a/kernel/capability.c
++++ b/kernel/capability.c
+@@ -467,6 +467,7 @@ EXPORT_SYMBOL(file_ns_capable);
+ /**
+  * privileged_wrt_inode_uidgid - Do capabilities in the namespace work over the inode?
+  * @ns: The user namespace in question
++ * @idmap: idmap of the mount @inode was found from
+  * @inode: The inode in question
+  *
+  * Return true if the inode uid and gid are within the namespace.
+@@ -481,6 +482,7 @@ bool privileged_wrt_inode_uidgid(struct user_namespace *ns,
+ 
+ /**
+  * capable_wrt_inode_uidgid - Check nsown_capable and uid and gid mapped
++ * @idmap: idmap of the mount @inode was found from
+  * @inode: The inode in question
+  * @cap: The capability in question
+  *
+-- 
+2.25.1
+
