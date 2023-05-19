@@ -2,75 +2,101 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715DD709650
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 May 2023 13:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562DC709ABE
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 May 2023 16:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjESLSp (ORCPT
+        id S232201AbjESO6p (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 19 May 2023 07:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        Fri, 19 May 2023 10:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjESLS3 (ORCPT
+        with ESMTP id S232196AbjESO6o (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 19 May 2023 07:18:29 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6187C173F
-        for <linux-security-module@vger.kernel.org>; Fri, 19 May 2023 04:18:24 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96f588bc322so146665666b.1
-        for <linux-security-module@vger.kernel.org>; Fri, 19 May 2023 04:18:24 -0700 (PDT)
+        Fri, 19 May 2023 10:58:44 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE9218F
+        for <linux-security-module@vger.kernel.org>; Fri, 19 May 2023 07:58:42 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-562108900acso21281447b3.2
+        for <linux-security-module@vger.kernel.org>; Fri, 19 May 2023 07:58:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684495103; x=1687087103;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
-        b=YrB/oM/9+DfdWsBYK5tE+VKexgOscQSdsQfyNuKsAEzaTYQrmV8QTOqw+n6ncFEG7/
-         NrzWtVQUP7+OiIp81BAxWp4/UA25FSfMBP8v31Vr27/6mv+gpWeEjdQtXcTyd5QbQRXQ
-         jQsq3ZZiseoC7dbmEKV/v7W5pMditEv8MtmfbU+xJe27P/r6UpIIOa1tC9UGmpl2zp50
-         MzUJDLpg49H8SzwE6tQuOsZmLJqfmdmj+F1UdmogGeAKG+63if08XOvkcQ3hE8tURB/u
-         e+KtIjmw1bhP1l1fiAyUwAswvZk0EPc4O8/eM+CpYABwaPGP/JS50wZnv1wX2QAcz1gX
-         wwDA==
+        d=paul-moore.com; s=google; t=1684508322; x=1687100322;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AajyqWszb0uY6qD9cS3VXYrfDU988bXtZCs1rPMruhw=;
+        b=CVjYLnK8pZSm+0s+2JgmOpL6fd7Fh3xe0DrvRV47kW58O8GUdqascT+ihAWb+4/PB5
+         57l1fSbdpzDrjebhCKxmt8dH+h8nzNnzfGUC6O47kcvj+/tq7D0PSJjuIJJayEMDuPTp
+         RZmYcbvGlGStIcUkuVCBO7399/guNv++G9I5Asoz5DROlHagoZjpYdqO7T9i1NOAzJ1w
+         Du4lToaIIcFchOrn0Nn//43a6dCasI0vQfLXRVHExkpStSbCh+g9ayLmw5x0ghVHqblw
+         Dsm6QLKodk9RMwxd+A5A9Ln0JG71pTOJEq/9kFiLF97zE4pLcdM5N8FRzbB5GfM0mP18
+         P5iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684495103; x=1687087103;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
-        b=V57J8KjXkfzy+ZzEyfMaVdBZsVU7okLhVodyOnrOJ/EFeWQ+sA8qO467tvwDaliE00
-         sahsW33yjbW20vu5Q8T+2N5M6rxZcGHFHKMqGmiY2MCRkm76w0cZm7s039DqUfYGQ/Uy
-         soRTlL/SoWEZx/Fa+O/WUVycN/FEFYz+qxOu8V6rCZoFIpq3aywMg6njNiypwXBEAhb7
-         CiJEAUQmjG7P+zf+tGY4x4jwYnrutKjWNsVhtfb9bQU6b4d7rkn8rxv2qGCNTmtQzfv+
-         RqGZ1Qvd8r2fsQqV+ymy6sHrIMJ75Pm2axe+7/W1lQP+t+ccQ+wGBzPLX0PbHXzuQmdt
-         gsaw==
-X-Gm-Message-State: AC+VfDwKz2RUxeAhZ7176tI0otQXlpCofTQSMzNDTpO+YNOS+wooG4lj
-        /XisnjrEc6nq191eT5uckj1V/3Qzz6IPBDUgvvVlLwcQ4Ca/6Q==
-X-Google-Smtp-Source: ACHHUZ4u0RD9o3Kl8FtNeecPkKIUUkqQP5EKCQy8Odb3BCVRQ/plvct7PNXp53hldLkfZ7jyXh0W2roGP4wdAWIFYf4=
-X-Received: by 2002:a17:906:af64:b0:966:5730:c3fe with SMTP id
- os4-20020a170906af6400b009665730c3femr1223003ejb.52.1684495082502; Fri, 19
- May 2023 04:18:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684508322; x=1687100322;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AajyqWszb0uY6qD9cS3VXYrfDU988bXtZCs1rPMruhw=;
+        b=G/TEIMGCu5hcNGP/K7OV1ydkGp/DfwnftyDg0uEiLZqadILyk04oAL2b6K4r6WuJPy
+         xAFTs322DdaOrgAmaZQhxAcxJJKf/gKQKI926KPLylyGwcYj3N59U8E02l1O6CehEGVp
+         kdA8YslzoHRtXf3W1gaCo5NOjIuyDOohTYut894EpJF4c/fwWb63GvFPnP+NHYIGU2xH
+         55Sy4q9Kp8gPOi16mdrCAkcQvKd3zWHn2Bw4/S6VQYH406A/jQo9cyFVTUIZcOQhSAIO
+         M5+w57CaUv4Mobi6w2ZFy6e7QPXkROXh7ofWPxud5W4rZCW1P4Nvz31FzrBxCUUJpWOs
+         g9Iw==
+X-Gm-Message-State: AC+VfDyFsr4QmOAd+ImNTQp+d5zOgf4MPuhG20xmsRJQsmfYHqTbT8zr
+        aBlEyKm26hiH6gEOVs/GVRqdJpaolYQ8wo3lVsla
+X-Google-Smtp-Source: ACHHUZ4wVQ8Htbed+cTytEWUQf0lb6NRULZiiMX8VBBzsWBICc5rj9+tiqRxdZAlDEbFGOiNVwJSMMDulwZ/apnybkg=
+X-Received: by 2002:a81:4e92:0:b0:561:d6dd:bc84 with SMTP id
+ c140-20020a814e92000000b00561d6ddbc84mr2216527ywb.48.1684508321812; Fri, 19
+ May 2023 07:58:41 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:907:7dab:b0:94f:7d03:8e8b with HTTP; Fri, 19 May 2023
- 04:18:02 -0700 (PDT)
-Reply-To: ninacoulibaly03@myself.com
-From:   nina coulibaly <ninacoulibaly199@gmail.com>
-Date:   Fri, 19 May 2023 04:18:02 -0700
-Message-ID: <CAM7Z2JAs+q6RsD5Hw352ZDFruUVR5ngjAamir+4ZCakNdZyceg@mail.gmail.com>
-Subject: from nina coulibaly
-To:     undisclosed-recipients:;
+References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
+ <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
+ <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
+ <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com> <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
+In-Reply-To: <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 19 May 2023 10:58:30 -0400
+Message-ID: <CAHC9VhS7uMMgvwRRDzpZPUQDAeibdkLi0OCdp=j_Q-EcMHm0cw@mail.gmail.com>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after writes
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Dear,
+On Thu, May 18, 2023 at 4:56=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
+ote:
+> On Thu, 2023-05-18 at 16:46 -0400, Paul Moore wrote:
+> > On Fri, Apr 21, 2023 at 10:44=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.co=
+m> wrote:
+> > > On Fri, 2023-04-07 at 09:29 -0400, Jeff Layton wrote:
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+...
 
-Mrs. Nina Coulibal
+> > I'm going through my review queue to make sure I haven't missed
+> > anything and this thread popped up ... Stefan, Mimi, did you get a fix
+> > into an upstream tree somewhere?  If not, is it because you are
+> > waiting on a review/merge from me into the LSM tree?
+>
+> Sorry for the delay.  Between vacation and LSS, I just started testing
+> Jeff Layton's patch.
+
+No worries, I'm a bit behind too, I just wanted to make sure I wasn't
+blocking this thread :)
+
+--=20
+paul-moore.com
