@@ -2,63 +2,181 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73C870CF94
-	for <lists+linux-security-module@lfdr.de>; Tue, 23 May 2023 02:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A4F70D22C
+	for <lists+linux-security-module@lfdr.de>; Tue, 23 May 2023 05:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbjEVXeS convert rfc822-to-8bit (ORCPT
+        id S231716AbjEWDFs (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 22 May 2023 19:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        Mon, 22 May 2023 23:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235120AbjEVX2A (ORCPT
+        with ESMTP id S229448AbjEWDFr (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 22 May 2023 19:28:00 -0400
-X-Greylist: delayed 114086 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 16:21:18 PDT
-Received: from mail.reaganai.com (mail.reaganai.com [70.237.186.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5891700;
-        Mon, 22 May 2023 16:21:18 -0700 (PDT)
-Received-SPF: none (HFG.local: legacylifeagent.com does not designate permitted sender hosts)
-Received: from [192.168.1.91] ([102.64.209.60]) by HFG.local with
- MailEnable ESMTPS (version=TLS1 cipher=TLS_RSA_WITH_AES_256_CBC_SHA); Sun, 21 May 2023 06:43:34 -0500
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 22 May 2023 23:05:47 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECF98F;
+        Mon, 22 May 2023 20:05:45 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VjIII9u_1684811140;
+Received: from 30.240.108.216(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VjIII9u_1684811140)
+          by smtp.aliyun-inc.com;
+          Tue, 23 May 2023 11:05:42 +0800
+Message-ID: <60f6f1f0-4918-5fea-9827-9bf9d1e496e3@linux.alibaba.com>
+Date:   Tue, 23 May 2023 11:05:38 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: 
-To:     Recipients <brianjneal@legacylifeagent.com>
-From:   "Daniela Kovalenko" <brianjneal@legacylifeagent.com>
-Date:   Sun, 21 May 2023 12:43:19 +0100
-Reply-To: kovalenkodaniela1@gmail.com
-X-Antivirus: Avast (VPS 230520-6, 5/20/2023), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <AFAE9B612DC14D78B456EE49F863D23F.MAI@HFG.local>
-X-ME-CountryOrigin: TG
-X-Envelope-Sender: brianjneal@legacylifeagent.com
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [102.64.209.60 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [kovalenkodaniela1[at]gmail.com]
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [70.237.186.148 listed in wl.mailspike.net]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 0/2] capability: Introduce CAP_BLOCK_ADMIN
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        louxiao.lx@alibaba-inc.com
+References: <20230511070520.72939-1-tianjia.zhang@linux.alibaba.com>
+ <b645e195-7875-9fc3-a8de-6676dfe800b8@schaufler-ca.com>
+ <e1242268-e7b6-d77c-a94f-edd913845ca7@linux.alibaba.com>
+ <bcf4df59-3915-6df3-027b-8cb35b310650@schaufler-ca.com>
+ <345a7cdc-e55b-7aaa-43d4-59b3f911ef18@linux.alibaba.com>
+ <bcf38ded-f1da-2fe4-c6a5-195c9d46718b@schaufler-ca.com>
+Content-Language: en-US
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <bcf38ded-f1da-2fe4-c6a5-195c9d46718b@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hello,I'm Daniela Kovalenko, I'm from Ukraine, please, I need your help.
 
--- 
-This email has been checked for viruses by Avast antivirus software.
-www.avast.com
+
+On 5/23/23 3:13 AM, Casey Schaufler wrote:
+> On 5/21/2023 7:53 PM, Tianjia Zhang wrote:
+>> Hi Casey,
+>>
+>> On 5/18/23 8:01 AM, Casey Schaufler wrote:
+>>> On 5/16/2023 5:05 AM, Tianjia Zhang wrote:
+>>>> Hi Casey,
+>>>>
+>>>> On 5/12/23 12:17 AM, Casey Schaufler wrote:
+>>>>> On 5/11/2023 12:05 AM, Tianjia Zhang wrote:
+>>>>>> Separated fine-grained capability CAP_BLOCK_ADMIN from CAP_SYS_ADMIN.
+>>>>>> For backward compatibility, the CAP_BLOCK_ADMIN capability is
+>>>>>> included
+>>>>>> within CAP_SYS_ADMIN.
+>>>>>>
+>>>>>> Some database products rely on shared storage to complete the
+>>>>>> write-once-read-multiple and write-multiple-read-multiple functions.
+>>>>>> When HA occurs, they rely on the PR (Persistent Reservations)
+>>>>>> protocol
+>>>>>> provided by the storage layer to manage block device permissions to
+>>>>>> ensure data correctness.
+>>>>>>
+>>>>>> CAP_SYS_ADMIN is required in the PR protocol implementation of
+>>>>>> existing
+>>>>>> block devices in the Linux kernel, which has too many sensitive
+>>>>>> permissions, which may lead to risks such as container escape. The
+>>>>>> kernel needs to provide more fine-grained permission management like
+>>>>>> CAP_NET_ADMIN to avoid online products directly relying on root to
+>>>>>> run.
+>>>>>>
+>>>>>> CAP_BLOCK_ADMIN can also provide support for other block device
+>>>>>> operations that require CAP_SYS_ADMIN capabilities in the future,
+>>>>>> ensuring that applications run with least privilege.
+>>>>>
+>>>>> Can you demonstrate that there are cases where a program that needs
+>>>>> CAP_BLOCK_ADMIN does not also require CAP_SYS_ADMIN for other
+>>>>> operations?
+>>>>> How much of what's allowed by CAP_SYS_ADMIN would be allowed by
+>>>>> CAP_BLOCK_ADMIN? If use of a new capability is rare it's difficult to
+>>>>> justify.
+>>>>>
+>>>>
+>>>> For the previous non-container scenarios, the block device is a shared
+>>>> device, because the business-system generally operates the file system
+>>>> on the block. Therefore, directly operating the block device has a high
+>>>> probability of affecting other processes on the same host, and it is a
+>>>> reasonable requirement to need the CAP_SYS_ADMIN capability.
+>>>>
+>>>> But for a database running in a container scenario, especially a
+>>>> container scenario on the cloud, it is likely that a container
+>>>> exclusively occupies a block device. That is to say, for a container,
+>>>> its access to the block device will not affect other process, there is
+>>>> no need to obtain a higher CAP_SYS_ADMIN capability.
+>>>
+>>> If I understand correctly, you're saying that the process that requires
+>>> CAP_BLOCK_ADMIN in the container won't also require CAP_SYS_ADMIN for
+>>> other operations.
+>>>
+>>> That's good, but it isn't clear how a process on bare metal would
+>>> require CAP_SYS_ADMIN while the same process in a container wouldn't.
+>>>
+>>>>
+>>>> For a file system similar to distributed write-once-read-many, it is
+>>>> necessary to ensure the correctness of recovery, then when recovery
+>>>> occurs, it is necessary to ensure that no inflighting-io is completed
+>>>> after recovery.
+>>>>
+>>>> This can be guaranteed by performing operations such as SCSI/NVME
+>>>> Persistent Reservations on block devices on the distributed file
+>>>> system.
+>>>
+>>> Does your cloud based system always run "real" devices? My
+>>> understanding is that cloud based deployment usually uses
+>>> virtual machines and virtio or other simulated devices.
+>>> A container deployment in the cloud seems unlikely to be able
+>>> to take advantage of block administration. But I can't say
+>>> I know the specifics of your environment.
+>>>
+>>>> Therefore, at present, it is only necessary to have the relevant
+>>>> permission support of the control command of such container-exclusive
+>>>> block devices.
+>>>
+>>> This looks like an extremely special case in which breaking out
+>>> block management would make sense.
+>>>
+>> Our scenario is like this. In simply terms, a distributed database has
+>> a read-write instance and one or more read-only instances. Each instance
+>> runs in an isolated container. All containers share the same block
+>> device.
+>>
+>> In addition to the database instance, there is also a control program
+>> running on the control plane in the container. The database ensures
+>> the correctness of the data through the PR (Persistent Reservations)
+>> of the block device. This operation is also the only operation in the
+>> container that requires CAP_SYS_ADMIN privileges.
+>>
+>> This system as a whole, whether it is running on VM or bare metal, the
+>> difference is not big.
+>>
+>> In order to support the PR of block devices, we need to grant
+>> CAP_SYS_ADMIN permissions to the container, which not only greatly
+>> increases the risk of container escape, but also makes us have to
+>> carefully configure the permissions of the container. Many container
+>> escapes that have occurred are also caused by these reasons.
+>>
+>> This is essentially a problem of permission isolation. We hope to
+>> share the smallest possible permissions from CAP_SYS_ADMIN to support
+>> necessary operations, and avoid providing CAP_SYS_ADMIN permissions
+>> to containers as much as possible.
+> 
+> Your use case is interesting, but not compelling. While you may have
+> come up with a specific case where you can completely break CAP_BLOCK_ADMIN
+> out from CAP_SYS_ADMIN, it's hardly general.
+> 
+
+It sounds a pity, thanks for your reply, we try to provide support
+through self-developed patches first.
+
+Kind regards,
+Tianjia
+
