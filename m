@@ -2,151 +2,101 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558F7718B1B
-	for <lists+linux-security-module@lfdr.de>; Wed, 31 May 2023 22:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9952A718B98
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 May 2023 23:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjEaUYM (ORCPT
+        id S229790AbjEaVLI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 31 May 2023 16:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        Wed, 31 May 2023 17:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjEaUYK (ORCPT
+        with ESMTP id S229473AbjEaVLH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 31 May 2023 16:24:10 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5429E186
-        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 13:24:04 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-568ab5c813eso99197b3.2
-        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 13:24:04 -0700 (PDT)
+        Wed, 31 May 2023 17:11:07 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE11312C
+        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 14:11:02 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-55db055b412so22074927b3.0
+        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 14:11:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685564643; x=1688156643;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=APftvx9keMYUt1Xk5prtdAgJw5++/nh9oJ2TjaQ+44Q=;
-        b=PX/4QCBDJ9PLCDibCE4LoOf2U0DE4t/KWyS05NGIZcGzqK/qwcSjxPluWcaqwv1Stk
-         rMyraQASzxyWuHCUByRiPyI4r+TKzg18DQi23LqLbo8WEM0cjd44YF28bRWYO1A5spCy
-         C8uoUDWMPuMiaxHglFY6t+vlO8uFRPkrpIUD9WU6y/eI2MWpQZdCjDnBrvtPK2foPDM8
-         2b0pUD4qsLCE5pd4FfnukjL1T9+czSe/1aJuv1AeB5D9vgahqEpjGWaUrfGv4vRCGUgK
-         7d8Ob7qWLSyhaFm1bWvZd46hX/2rCmhkQhiUf9f78KTYzvmJ6/SxSLGkVtXf5wgn2kFJ
-         IIHQ==
+        d=paul-moore.com; s=google; t=1685567462; x=1688159462;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tBVvWrCiTxtzHEDX16BAY1j+7bSgZNwLuSAk5FN/PvE=;
+        b=TwLEaj52ZRYp1qrngqFFdT+akHp+jZIAWRAdGud0wjJdUD4VkESfBuc6KLIlfu8B5T
+         DgNKWh06VarQ4XX9e9KMMm5PtqzyNgpUqCbt+Y8S1Q1C/8aNlhBqc13ZylPQKggZDYKX
+         pnyoa4nRSnRPzUQ+qcNq1rQIeUKcZajMCXWourOAY8fqZmfv6B6JDsArMK4fTRZ6xPAY
+         OCIo4rSLKXNOBSDrnnzZgrwxLFPxBYv8VHimlaWGUv5g6K4vtJEQXv/gS7lHmDOBbTat
+         e9iWQpf/s0j6qomZp10nGeexnSsquf5XQShkTy8HKjgy6fmopr2RE0RKe/jGwqehsCzS
+         Qbgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685564643; x=1688156643;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=APftvx9keMYUt1Xk5prtdAgJw5++/nh9oJ2TjaQ+44Q=;
-        b=G7cGQ4bL8YWQn2Wh6iy5NqqzJH6a3mutIwvGlWUyGKtXctSfi7dOiDMc+d91f97lD0
-         UzPiOIQSHACsO4ypBuzPr+TXPtq446nTDxN/KZINQyHf+dRlw1gyjVjM3cKC4PRbEm29
-         7mU6c59p30zOe1W5//HtKlkm9lcguXkj7GEeMTbPJgkiHak4Xmg0HUwoUPA4sJ1RiLOj
-         ADcRJ4AkNrorS7E+7bJnD+g8EXvoM9gWNbnA5agokHw1UlUNI/yKgEbbPLJYDu78YmQ7
-         +iILTUCypH+ctep/lScI0IV1lZSjtKFTZ4FbjwFkF2pklBBzJxTtmW78u/jSWSNtQmin
-         oxiw==
-X-Gm-Message-State: AC+VfDylKLwQvrpJ32XpZYgmg/WypCVgMLV9ZUOr3qyMLhKAjDZ5VzCp
-        OSqON3HKPdjAMJ2Q6hojpHHOT0XgCJM=
-X-Google-Smtp-Source: ACHHUZ4Rs9okzQlJSZpcwd3Z5dIegCtWutSFaW8eVk3gk4ZcP95GwA04TMkwmyC49mplI5lk+ocRWvQTqeQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:e305:0:b0:55d:ea61:d8e9 with SMTP id
- q5-20020a81e305000000b0055dea61d8e9mr4086306ywl.7.1685564643426; Wed, 31 May
- 2023 13:24:03 -0700 (PDT)
-Date:   Wed, 31 May 2023 13:24:01 -0700
-In-Reply-To: <fd1dd8bcc172093ad20243ac1e7bb8fce45b38ef.camel@intel.com>
-Mime-Version: 1.0
-References: <20230505152046.6575-1-mic@digikod.net> <93726a7b9498ec66db21c5792079996d5fed5453.camel@intel.com>
- <facfd178-3157-80b4-243b-a5c8dabadbfb@digikod.net> <58a803f6-c3de-3362-673f-767767a43f9c@digikod.net>
- <fd1dd8bcc172093ad20243ac1e7bb8fce45b38ef.camel@intel.com>
-Message-ID: <ZHes4a73Zg+6JuFB@google.com>
-Subject: Re: [RFC PATCH v1 0/9] Hypervisor-Enforced Kernel Integrity
-From:   Sean Christopherson <seanjc@google.com>
-To:     Rick P Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     "mic@digikod.net" <mic@digikod.net>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        "liran.alon@oracle.com" <liran.alon@oracle.com>,
-        "marian.c.rotariu@gmail.com" <marian.c.rotariu@gmail.com>,
-        Alexander Graf <graf@amazon.com>,
-        John S Andersen <john.s.andersen@intel.com>,
-        "madvenka@linux.microsoft.com" <madvenka@linux.microsoft.com>,
-        "ssicleru@bitdefender.com" <ssicleru@bitdefender.com>,
-        "yuanyu@google.com" <yuanyu@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tgopinath@microsoft.com" <tgopinath@microsoft.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "dev@lists.cloudhypervisor.org" <dev@lists.cloudhypervisor.org>,
-        "mdontu@bitdefender.com" <mdontu@bitdefender.com>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "nicu.citu@icloud.com" <nicu.citu@icloud.com>,
-        "ztarkhani@microsoft.com" <ztarkhani@microsoft.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+        d=1e100.net; s=20221208; t=1685567462; x=1688159462;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tBVvWrCiTxtzHEDX16BAY1j+7bSgZNwLuSAk5FN/PvE=;
+        b=fCui0GsrSzrfvFUCyP0UDCzOke3HQBdM9355yH7Ch4o5tsC3Wvu609PubycW0qWzme
+         LIXPKw/xAOKHszk67Ww2p2C/HiVfnsCq4XAjwSeIAbgKrODjtWMQ66fDdDF5sgW1qRpS
+         lvJaG9gAt3AdMNVg8NyoX8pgzG8PBYDJOeSpM5/kNdgBD/LwOMJ12mJlqCFdJHRFHm8C
+         X1uUcxqEgkghmYipPthiLtwY/IrsrVC3AfQ9vfFNRAEoTv1dUHDjJt2elmtY6mVj96zI
+         U2T/7c0dVQs27iOosn7K+RvwbaSSSehOCwEE16Vl6+1VbCnk4LVM3nNuRx6FqdTA0u71
+         WOSA==
+X-Gm-Message-State: AC+VfDwtlTNaWkGTAuAt69dLsTym2K0on2PjT/Db3irs5dnHJ2+8K5At
+        a5y3YIuPuklGLJL2XBGj5SXI7teDct6Np9jkxp+5
+X-Google-Smtp-Source: ACHHUZ5boVf27k0iS5jfVFPwokYp9Hw5Z8flmgxYi0TeT/CNKztyX3P6jG/zcmXClc1Sq25xkYFiyrh068Lne5GH+OA=
+X-Received: by 2002:a05:690c:ed5:b0:565:34bb:9009 with SMTP id
+ cs21-20020a05690c0ed500b0056534bb9009mr24254648ywb.16.1685567462010; Wed, 31
+ May 2023 14:11:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230531110506.142951-1-gongruiqi@huaweicloud.com> <fe6a0f1e-6378-a4f2-f995-46799ed5248e@schaufler-ca.com>
+In-Reply-To: <fe6a0f1e-6378-a4f2-f995-46799ed5248e@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 31 May 2023 17:10:51 -0400
+Message-ID: <CAHC9VhQHUKXLejiMvETYE_PJz3cyHPF5z+T1ifUCD9ezMztcSQ@mail.gmail.com>
+Subject: Re: [PATCH] LSM: Infrastructure management of the sock
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     "GONG, Ruiqi" <gongruiqi@huaweicloud.com>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        linux-kernel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, May 30, 2023, Rick P Edgecombe wrote:
-> On Fri, 2023-05-26 at 17:22 +0200, Micka=EF=BF=BDl Sala=EF=BF=BDn wrote:
-> > > > Can the guest kernel ask the host VMM's emulated devices to DMA int=
-o
-> > > > the protected data? It should go through the host userspace mapping=
-s I
-> > > > think, which don't care about EPT permissions. Or did I miss where =
-you
-> > > > are protecting that another way? There are a lot of easy ways to as=
-k
-> > > > the host to write to guest memory that don't involve the EPT. You
-> > > > probably need to protect the host userspace mappings, and also the
-> > > > places in KVM that kmap a GPA provided by the guest.
-> > >=20
-> > > Good point, I'll check this confused deputy attack. Extended KVM
-> > > protections should indeed handle all ways to map guests' memory.  I'm
-> > > wondering if current VMMs would gracefully handle such new restrictio=
-ns
-> > > though.
-> >=20
-> > I guess the host could map arbitrary data to the guest, so that need to=
- be
-> > handled, but how could the VMM (not the host kernel) bypass/update EPT
-> > initially used for the guest (and potentially later mapped to the host)=
-?
->=20
-> Well traditionally both QEMU and KVM accessed guest memory via host
-> mappings instead of the EPT.=EF=BF=BDSo I'm wondering what is stopping th=
+On Wed, May 31, 2023 at 10:00=E2=80=AFAM Casey Schaufler <casey@schaufler-c=
+a.com> wrote:
+> On 5/31/2023 4:05 AM, GONG, Ruiqi wrote:
+> > As the security infrastructure has taken over the management of multipl=
 e
-> guest from passing a protected gfn when setting up the DMA, and QEMU
-> being enticed to write to it? The emulator as well would use these host
-> userspace mappings and not consult the EPT IIRC.
->=20
-> I think Sean was suggesting host userspace should be more involved in
-> this process, so perhaps it could protect its own alias of the
-> protected memory, for example mprotect() it as read-only.
+> > *_security blobs that are accessed by multiple security modules, and
+> > sk->sk_security shares the same situation, move its management out of
+> > individual security modules and into the security infrastructure as
+> > well. The infrastructure does the memory allocation, and each relavant
+> > module uses its own share.
+>
+> Do you have a reason to make this change? The LSM infrastructure
+> manages other security blobs to enable multiple concurrently active
+> LSMs to use the blob. If only one LSM on a system can use the
+> socket blob there's no reason to move the management.
 
-Ya, though "suggesting" is really "demanding, unless someone provides super=
- strong
-justification for handling this directly in KVM".  It's basically the same =
-argument
-that led to Linux Security Modules: I'm all for KVM providing the framework=
- and
-plumbing, but I don't want KVM to get involved in defining policy, thread m=
-odels, etc.
+I think an argument could be made for consistent handling of security
+blobs, but with the LSM stacking work in development the argument for
+merging this patch needs to be a lot stronger than just "consistency".
+
+--=20
+paul-moore.com
