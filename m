@@ -2,161 +2,151 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2086C718A32
-	for <lists+linux-security-module@lfdr.de>; Wed, 31 May 2023 21:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558F7718B1B
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 May 2023 22:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjEaTci (ORCPT
+        id S230271AbjEaUYM (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 31 May 2023 15:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        Wed, 31 May 2023 16:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjEaTch (ORCPT
+        with ESMTP id S230034AbjEaUYK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 31 May 2023 15:32:37 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5732E126;
-        Wed, 31 May 2023 12:32:36 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b04782fe07so239325ad.3;
-        Wed, 31 May 2023 12:32:36 -0700 (PDT)
+        Wed, 31 May 2023 16:24:10 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5429E186
+        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 13:24:04 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-568ab5c813eso99197b3.2
+        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 13:24:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685561555; x=1688153555;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5J4LPQ9ReuK0IhpZ5ik66n+nr9CBcPra6BZYguF+U8w=;
-        b=bZZ7Cqu92UozlVfYY/7HeI8nBwOZ0nJum2vd8QNMweoxKz6CuQF640GNfK/WjgME85
-         weMvgXX41I/JJFiQTIt/nbxts4Fugcp/xoU5fxrCpJ5ONRNY+QG1Mfqur7Q/87Bb1l6p
-         mwkcL2mvCBHu3kkg4loIdrBaj36y8eTJi9NSe1f+GTBCoAvI98wqz8p9geHQ7VKV19+x
-         ORhX8B/qilw5nzUtYYkVKCzq4CYN6EGmqaflwTzegSUOHf0RnE85Rjrr3isAEUUG3TZ8
-         zmAniNIZIOsMEz9i3XfQfryBnNlhYUHIQUMe9m/MgNJk2wvrx4e+Z+oQfCpEfuv7vkIH
-         jNfA==
+        d=google.com; s=20221208; t=1685564643; x=1688156643;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=APftvx9keMYUt1Xk5prtdAgJw5++/nh9oJ2TjaQ+44Q=;
+        b=PX/4QCBDJ9PLCDibCE4LoOf2U0DE4t/KWyS05NGIZcGzqK/qwcSjxPluWcaqwv1Stk
+         rMyraQASzxyWuHCUByRiPyI4r+TKzg18DQi23LqLbo8WEM0cjd44YF28bRWYO1A5spCy
+         C8uoUDWMPuMiaxHglFY6t+vlO8uFRPkrpIUD9WU6y/eI2MWpQZdCjDnBrvtPK2foPDM8
+         2b0pUD4qsLCE5pd4FfnukjL1T9+czSe/1aJuv1AeB5D9vgahqEpjGWaUrfGv4vRCGUgK
+         7d8Ob7qWLSyhaFm1bWvZd46hX/2rCmhkQhiUf9f78KTYzvmJ6/SxSLGkVtXf5wgn2kFJ
+         IIHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685561555; x=1688153555;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5J4LPQ9ReuK0IhpZ5ik66n+nr9CBcPra6BZYguF+U8w=;
-        b=g0l78voiU+7SfpV/3KFAP+SHkJ+wno4VT24cU//XD9VbDllSeJU+zrhaK63Pnw11XI
-         OL8u8zsDD0mT/Wk2eeZBkDn4TtOE2ZkaBem7f6hVaB2zDxG2ftnvr9liWCyDAReH/pve
-         KJ0NsZm3ZhIUccc1FyAYwF5rvE9xkQelDJTANz0tHUdgNCWWqBrnsYeQIcrGBOXB6g+w
-         1Viwwc67OjMNCj5S0utd3Hxl/cJFu1J/y0sZd7j621Ygvbm9mu03qyQrty5oq2kr4NVS
-         ZdgIEjodvEyBDQpqT3JFzam4E5TSZqoesIPas5brXHwVt2TBeCxjsaLVT3iDFM2VIdbT
-         s+4A==
-X-Gm-Message-State: AC+VfDyGJnRGCG/s6HXISYR5A9gRCEYG073zJgO5xrW9LLHumG/sP0Ps
-        euSLBNtahWdwPX3ajCKLNGA=
-X-Google-Smtp-Source: ACHHUZ4JZAefqCNzsj8EGiZ8A5V8CXK9/MA9+qBWXlQYSqovGOm/CXCHabJkAsLEJ9mn4cKQRisToQ==
-X-Received: by 2002:a17:902:da85:b0:1b0:35c7:feed with SMTP id j5-20020a170902da8500b001b035c7feedmr5792589plx.59.1685561555401;
-        Wed, 31 May 2023 12:32:35 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-82-61.dynamic-ip.hinet.net. [36.228.82.61])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170902d38600b001a67759f9f8sm1778613pld.106.2023.05.31.12.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 12:32:34 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     david.laight@aculab.com
-Cc:     jmorris@namei.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, minhuadotchen@gmail.com,
-        paul@paul-moore.com, serge@hallyn.com
-Subject: RE: [PATCH] capabilities: use logical OR
-Date:   Thu,  1 Jun 2023 03:32:31 +0800
-Message-Id: <20230531193231.58732-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <db536b16e33648fdb44629fc9c1c1afc@AcuMS.aculab.com>
-References: <db536b16e33648fdb44629fc9c1c1afc@AcuMS.aculab.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685564643; x=1688156643;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=APftvx9keMYUt1Xk5prtdAgJw5++/nh9oJ2TjaQ+44Q=;
+        b=G7cGQ4bL8YWQn2Wh6iy5NqqzJH6a3mutIwvGlWUyGKtXctSfi7dOiDMc+d91f97lD0
+         UzPiOIQSHACsO4ypBuzPr+TXPtq446nTDxN/KZINQyHf+dRlw1gyjVjM3cKC4PRbEm29
+         7mU6c59p30zOe1W5//HtKlkm9lcguXkj7GEeMTbPJgkiHak4Xmg0HUwoUPA4sJ1RiLOj
+         ADcRJ4AkNrorS7E+7bJnD+g8EXvoM9gWNbnA5agokHw1UlUNI/yKgEbbPLJYDu78YmQ7
+         +iILTUCypH+ctep/lScI0IV1lZSjtKFTZ4FbjwFkF2pklBBzJxTtmW78u/jSWSNtQmin
+         oxiw==
+X-Gm-Message-State: AC+VfDylKLwQvrpJ32XpZYgmg/WypCVgMLV9ZUOr3qyMLhKAjDZ5VzCp
+        OSqON3HKPdjAMJ2Q6hojpHHOT0XgCJM=
+X-Google-Smtp-Source: ACHHUZ4Rs9okzQlJSZpcwd3Z5dIegCtWutSFaW8eVk3gk4ZcP95GwA04TMkwmyC49mplI5lk+ocRWvQTqeQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:e305:0:b0:55d:ea61:d8e9 with SMTP id
+ q5-20020a81e305000000b0055dea61d8e9mr4086306ywl.7.1685564643426; Wed, 31 May
+ 2023 13:24:03 -0700 (PDT)
+Date:   Wed, 31 May 2023 13:24:01 -0700
+In-Reply-To: <fd1dd8bcc172093ad20243ac1e7bb8fce45b38ef.camel@intel.com>
+Mime-Version: 1.0
+References: <20230505152046.6575-1-mic@digikod.net> <93726a7b9498ec66db21c5792079996d5fed5453.camel@intel.com>
+ <facfd178-3157-80b4-243b-a5c8dabadbfb@digikod.net> <58a803f6-c3de-3362-673f-767767a43f9c@digikod.net>
+ <fd1dd8bcc172093ad20243ac1e7bb8fce45b38ef.camel@intel.com>
+Message-ID: <ZHes4a73Zg+6JuFB@google.com>
+Subject: Re: [RFC PATCH v1 0/9] Hypervisor-Enforced Kernel Integrity
+From:   Sean Christopherson <seanjc@google.com>
+To:     Rick P Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     "mic@digikod.net" <mic@digikod.net>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "liran.alon@oracle.com" <liran.alon@oracle.com>,
+        "marian.c.rotariu@gmail.com" <marian.c.rotariu@gmail.com>,
+        Alexander Graf <graf@amazon.com>,
+        John S Andersen <john.s.andersen@intel.com>,
+        "madvenka@linux.microsoft.com" <madvenka@linux.microsoft.com>,
+        "ssicleru@bitdefender.com" <ssicleru@bitdefender.com>,
+        "yuanyu@google.com" <yuanyu@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tgopinath@microsoft.com" <tgopinath@microsoft.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dev@lists.cloudhypervisor.org" <dev@lists.cloudhypervisor.org>,
+        "mdontu@bitdefender.com" <mdontu@bitdefender.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "nicu.citu@icloud.com" <nicu.citu@icloud.com>,
+        "ztarkhani@microsoft.com" <ztarkhani@microsoft.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
->From: Min-Hua Chen <minhuadotchen@gmail.com>
->> Sent: 29 May 2023 23:55
->> 
->> Use logical OR to fix the following sparse warnings:
->> 
->> security/commoncap.c:1358:41: sparse: warning: dubious: !x | y
->> 
->> No functional changes intended.
->
->Except it will run just that teeny, weeny bit slower.
->
->	David
->
+On Tue, May 30, 2023, Rick P Edgecombe wrote:
+> On Fri, 2023-05-26 at 17:22 +0200, Micka=EF=BF=BDl Sala=EF=BF=BDn wrote:
+> > > > Can the guest kernel ask the host VMM's emulated devices to DMA int=
+o
+> > > > the protected data? It should go through the host userspace mapping=
+s I
+> > > > think, which don't care about EPT permissions. Or did I miss where =
+you
+> > > > are protecting that another way? There are a lot of easy ways to as=
+k
+> > > > the host to write to guest memory that don't involve the EPT. You
+> > > > probably need to protect the host userspace mappings, and also the
+> > > > places in KVM that kmap a GPA provided by the guest.
+> > >=20
+> > > Good point, I'll check this confused deputy attack. Extended KVM
+> > > protections should indeed handle all ways to map guests' memory.  I'm
+> > > wondering if current VMMs would gracefully handle such new restrictio=
+ns
+> > > though.
+> >=20
+> > I guess the host could map arbitrary data to the guest, so that need to=
+ be
+> > handled, but how could the VMM (not the host kernel) bypass/update EPT
+> > initially used for the guest (and potentially later mapped to the host)=
+?
+>=20
+> Well traditionally both QEMU and KVM accessed guest memory via host
+> mappings instead of the EPT.=EF=BF=BDSo I'm wondering what is stopping th=
+e
+> guest from passing a protected gfn when setting up the DMA, and QEMU
+> being enticed to write to it? The emulator as well would use these host
+> userspace mappings and not consult the EPT IIRC.
+>=20
+> I think Sean was suggesting host userspace should be more involved in
+> this process, so perhaps it could protect its own alias of the
+> protected memory, for example mprotect() it as read-only.
 
-Thanks for the comment.
-
-I wrote a test case on my x86 machine to see the difference
-between '|' and '||' versions.
-
-The '|' version does 2 OR operations and 1 test. (all cases)
-The '||' (logical or) version does 3 cmpl (worst case)
-and 1 cmpl and 1 jump if the first argument is TRUE (best case).
-
-For the readers, I think the logical OR version is clearer.
-
-
-thanks,
-Min-Hua
-
-my test case:
-
-void foo(void)
-{
-}
-
-void bar(void)
-{
-}
-
-int main(void)
-{
-	int a, b, c;
-	if (a || b || c) 
-		foo();
-	else
-		bar();
-}
-
-if (a || b || c) 
-logical OR
-Dump of assembler code for function main:
-0x000000000000113f <+0>:     endbr64
-0x0000000000001143 <+4>:     push   %rbp
-0x0000000000001144 <+5>:     mov    %rsp,%rbp
-0x0000000000001147 <+8>:     sub    $0x10,%rsp
-0x000000000000114b <+12>:    cmpl   $0x0,-0xc(%rbp)
-0x000000000000114f <+16>:    jne    0x115d <main+30>
-0x0000000000001151 <+18>:    cmpl   $0x0,-0x8(%rbp)
-0x0000000000001155 <+22>:    jne    0x115d <main+30>
-0x0000000000001157 <+24>:    cmpl   $0x0,-0x4(%rbp)
-0x000000000000115b <+28>:    je     0x1164 <main+37>
-0x000000000000115d <+30>:    call   0x1129 <foo>
-0x0000000000001162 <+35>:    jmp    0x1169 <main+42>
-0x0000000000001164 <+37>:    call   0x1134 <bar>
-0x0000000000001169 <+42>:    mov    $0x0,%eax
-0x000000000000116e <+47>:    leave
-0x000000000000116f <+48>:    ret
-End of assembler dump.
-
-if (a | b | c)
-Dump of assembler code for function main:
-0x000000000000113f <+0>:     endbr64
-0x0000000000001143 <+4>:     push   %rbp
-0x0000000000001144 <+5>:     mov    %rsp,%rbp
-0x0000000000001147 <+8>:     sub    $0x10,%rsp
-0x000000000000114b <+12>:    mov    -0xc(%rbp),%eax
-0x000000000000114e <+15>:    or     -0x8(%rbp),%eax
-0x0000000000001151 <+18>:    or     -0x4(%rbp),%eax
-0x0000000000001154 <+21>:    test   %eax,%eax
-0x0000000000001156 <+23>:    je     0x115f <main+32>
-0x0000000000001158 <+25>:    call   0x1129 <foo>
-0x000000000000115d <+30>:    jmp    0x1164 <main+37>
-0x000000000000115f <+32>:    call   0x1134 <bar>
-0x0000000000001164 <+37>:    mov    $0x0,%eax
-0x0000000000001169 <+42>:    leave
-0x000000000000116a <+43>:    ret
-End of assembler dump.
+Ya, though "suggesting" is really "demanding, unless someone provides super=
+ strong
+justification for handling this directly in KVM".  It's basically the same =
+argument
+that led to Linux Security Modules: I'm all for KVM providing the framework=
+ and
+plumbing, but I don't want KVM to get involved in defining policy, thread m=
+odels, etc.
