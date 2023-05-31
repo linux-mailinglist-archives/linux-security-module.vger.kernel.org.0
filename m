@@ -2,101 +2,111 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9952A718B98
-	for <lists+linux-security-module@lfdr.de>; Wed, 31 May 2023 23:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AC7718BB9
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 May 2023 23:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjEaVLI (ORCPT
+        id S230179AbjEaVVC (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 31 May 2023 17:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        Wed, 31 May 2023 17:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEaVLH (ORCPT
+        with ESMTP id S230181AbjEaVVA (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 31 May 2023 17:11:07 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE11312C
-        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 14:11:02 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-55db055b412so22074927b3.0
-        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 14:11:02 -0700 (PDT)
+        Wed, 31 May 2023 17:21:00 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618C912F
+        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 14:20:58 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-565ba2c7554so663987b3.3
+        for <linux-security-module@vger.kernel.org>; Wed, 31 May 2023 14:20:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1685567462; x=1688159462;
+        d=paul-moore.com; s=google; t=1685568057; x=1688160057;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tBVvWrCiTxtzHEDX16BAY1j+7bSgZNwLuSAk5FN/PvE=;
-        b=TwLEaj52ZRYp1qrngqFFdT+akHp+jZIAWRAdGud0wjJdUD4VkESfBuc6KLIlfu8B5T
-         DgNKWh06VarQ4XX9e9KMMm5PtqzyNgpUqCbt+Y8S1Q1C/8aNlhBqc13ZylPQKggZDYKX
-         pnyoa4nRSnRPzUQ+qcNq1rQIeUKcZajMCXWourOAY8fqZmfv6B6JDsArMK4fTRZ6xPAY
-         OCIo4rSLKXNOBSDrnnzZgrwxLFPxBYv8VHimlaWGUv5g6K4vtJEQXv/gS7lHmDOBbTat
-         e9iWQpf/s0j6qomZp10nGeexnSsquf5XQShkTy8HKjgy6fmopr2RE0RKe/jGwqehsCzS
-         Qbgg==
+        bh=LoZ0QonL7GpvkzVGqoB0gV8pXc0xldAiiia3lsdp4Jw=;
+        b=bV4CEIauWya7OBEvEJZ8O8BySgJRaCgtsOwV6TTfZUxO5baLK/jxr8/dThczBffNj1
+         g1gilTPiZQifPjEoO+IN/kk9i9ttCodVZ8VAZQtdacEO/I73YOsQw1P3KDX0Q7NmzVl5
+         fWejNhHweIU62YqvrPCRW4133WGgKrli3JmhqeqvcL8piPMRhv5kXzRVBqPq9qLq/qnk
+         DYPmRx+V/9Ra/NmqVGiyPe/eqdSrEtP3EsfkjQln612yGRhW29oLVVtt+CMN+/kCRLon
+         kft2gp88qfJMj0vw5N1jDI9nRjKoMbdmze8lCQUhFECmOfrFLAjt2nlsqiJvMXmcx5wf
+         sMDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685567462; x=1688159462;
+        d=1e100.net; s=20221208; t=1685568057; x=1688160057;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tBVvWrCiTxtzHEDX16BAY1j+7bSgZNwLuSAk5FN/PvE=;
-        b=fCui0GsrSzrfvFUCyP0UDCzOke3HQBdM9355yH7Ch4o5tsC3Wvu609PubycW0qWzme
-         LIXPKw/xAOKHszk67Ww2p2C/HiVfnsCq4XAjwSeIAbgKrODjtWMQ66fDdDF5sgW1qRpS
-         lvJaG9gAt3AdMNVg8NyoX8pgzG8PBYDJOeSpM5/kNdgBD/LwOMJ12mJlqCFdJHRFHm8C
-         X1uUcxqEgkghmYipPthiLtwY/IrsrVC3AfQ9vfFNRAEoTv1dUHDjJt2elmtY6mVj96zI
-         U2T/7c0dVQs27iOosn7K+RvwbaSSSehOCwEE16Vl6+1VbCnk4LVM3nNuRx6FqdTA0u71
-         WOSA==
-X-Gm-Message-State: AC+VfDwtlTNaWkGTAuAt69dLsTym2K0on2PjT/Db3irs5dnHJ2+8K5At
-        a5y3YIuPuklGLJL2XBGj5SXI7teDct6Np9jkxp+5
-X-Google-Smtp-Source: ACHHUZ5boVf27k0iS5jfVFPwokYp9Hw5Z8flmgxYi0TeT/CNKztyX3P6jG/zcmXClc1Sq25xkYFiyrh068Lne5GH+OA=
-X-Received: by 2002:a05:690c:ed5:b0:565:34bb:9009 with SMTP id
- cs21-20020a05690c0ed500b0056534bb9009mr24254648ywb.16.1685567462010; Wed, 31
- May 2023 14:11:02 -0700 (PDT)
+        bh=LoZ0QonL7GpvkzVGqoB0gV8pXc0xldAiiia3lsdp4Jw=;
+        b=CPyoOqOxrd4fVeVgCKNSv15p9hMxpymXeBwbEzWLxL7EbyBlFNcBZQooLXTDEQXX4h
+         5L6yYDvGqaOuYt/liclcSXke6vg87u+Lu0h/L1j60D0MdUqkyTDi5tYzUuvIl5o/T1uY
+         UEKZEltmtyBCR4TiGrik/7ZCYi4C68H/fsxLcgiyWXp65UIkWVu2P7DtwDDyR6SZhde0
+         6icckd1pcZb3d6NADjhfJD0+4KHw0EmjoGarlkVNOTDq6Opcg+RWFMtLCuwvB+zqcLO0
+         ok7oVhkqRBOrtpRkTHDz63TiK4XXzATylvWaQXavKe9R00hYcmWxtnIJfZpunVb1lPG5
+         dCBw==
+X-Gm-Message-State: AC+VfDxM7u+gO+HxPB5POegOfBEfIX1YbcfguboUvZk/b/bgSOqXjire
+        1T1SjwXascLxL4KVVRZrWQTCa+bTWeqvNjk+psvk
+X-Google-Smtp-Source: ACHHUZ7xDxpY+qZ+kHStKpfyGCUmSZFIrAOaNegLCNmyLU6OfWoFLFoTJ5KIVySJiQxq5mqHTIQOq8i1T+EuU78aXoc=
+X-Received: by 2002:a81:d246:0:b0:561:9051:d2d3 with SMTP id
+ m6-20020a81d246000000b005619051d2d3mr6586195ywl.11.1685568057462; Wed, 31 May
+ 2023 14:20:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230531110506.142951-1-gongruiqi@huaweicloud.com> <fe6a0f1e-6378-a4f2-f995-46799ed5248e@schaufler-ca.com>
-In-Reply-To: <fe6a0f1e-6378-a4f2-f995-46799ed5248e@schaufler-ca.com>
+References: <20230530232914.3689712-1-mcgrof@kernel.org> <20230530232914.3689712-3-mcgrof@kernel.org>
+In-Reply-To: <20230530232914.3689712-3-mcgrof@kernel.org>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 31 May 2023 17:10:51 -0400
-Message-ID: <CAHC9VhQHUKXLejiMvETYE_PJz3cyHPF5z+T1ifUCD9ezMztcSQ@mail.gmail.com>
-Subject: Re: [PATCH] LSM: Infrastructure management of the sock
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     "GONG, Ruiqi" <gongruiqi@huaweicloud.com>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        linux-kernel@vger.kernel.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
+Date:   Wed, 31 May 2023 17:20:46 -0400
+Message-ID: <CAHC9VhRA_XkkiZpg=d1RiME+VUYe7bsuV6pOpsseDRWfwV+q9A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sysctl: move security keys sysctl registration to its
+ own file
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     keescook@chromium.org, yzaikin@google.com, dhowells@redhat.com,
+        jarkko@kernel.org, jmorris@namei.org, serge@hallyn.com,
+        j.granados@samsung.com, brauner@kernel.org, ebiederm@xmission.com,
+        patches@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, May 31, 2023 at 10:00=E2=80=AFAM Casey Schaufler <casey@schaufler-c=
-a.com> wrote:
-> On 5/31/2023 4:05 AM, GONG, Ruiqi wrote:
-> > As the security infrastructure has taken over the management of multipl=
-e
-> > *_security blobs that are accessed by multiple security modules, and
-> > sk->sk_security shares the same situation, move its management out of
-> > individual security modules and into the security infrastructure as
-> > well. The infrastructure does the memory allocation, and each relavant
-> > module uses its own share.
+On Tue, May 30, 2023 at 7:29=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
 >
-> Do you have a reason to make this change? The LSM infrastructure
-> manages other security blobs to enable multiple concurrently active
-> LSMs to use the blob. If only one LSM on a system can use the
-> socket blob there's no reason to move the management.
+> The security keys sysctls are already declared on its own file,
+> just move the sysctl registration to its own file to help avoid
+> merge conflicts on sysctls.c, and help with clearing up sysctl.c
+> further.
+>
+> This creates a small penalty of 23 bytes:
+>
+> ./scripts/bloat-o-meter vmlinux.1 vmlinux.2
+> add/remove: 2/0 grow/shrink: 0/1 up/down: 49/-26 (23)
+> Function                                     old     new   delta
+> init_security_keys_sysctls                     -      33     +33
+> __pfx_init_security_keys_sysctls               -      16     +16
+> sysctl_init_bases                             85      59     -26
+> Total: Before=3D21256937, After=3D21256960, chg +0.00%
+>
+> But soon we'll be saving tons of bytes anyway, as we modify the
+> sysctl registrations to use ARRAY_SIZE and so we get rid of all the
+> empty array elements so let's just clean this up now.
+>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  include/linux/key.h    | 3 ---
+>  kernel/sysctl.c        | 4 ----
+>  security/keys/sysctl.c | 7 +++++++
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
-I think an argument could be made for consistent handling of security
-blobs, but with the LSM stacking work in development the argument for
-merging this patch needs to be a lot stronger than just "consistency".
+Ultimately I'll leave the ACK to David or Jarkko, but this looks
+reasonable to me.
+
+Reviewed-by: Paul Moore <paul@paul-moore.com>
 
 --=20
 paul-moore.com
