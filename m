@@ -2,41 +2,41 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A13720530
-	for <lists+linux-security-module@lfdr.de>; Fri,  2 Jun 2023 17:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1D8720525
+	for <lists+linux-security-module@lfdr.de>; Fri,  2 Jun 2023 17:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbjFBPB4 convert rfc822-to-8bit (ORCPT
+        id S229447AbjFBPBg convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 2 Jun 2023 11:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        Fri, 2 Jun 2023 11:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236405AbjFBPBZ (ORCPT
+        with ESMTP id S236314AbjFBPBF (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:01:25 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50B10C1
-        for <linux-security-module@vger.kernel.org>; Fri,  2 Jun 2023 08:01:16 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352CCwRs020050
-        for <linux-security-module@vger.kernel.org>; Fri, 2 Jun 2023 08:01:15 -0700
+        Fri, 2 Jun 2023 11:01:05 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593CAE53
+        for <linux-security-module@vger.kernel.org>; Fri,  2 Jun 2023 08:01:00 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3527Y5qj003045
+        for <linux-security-module@vger.kernel.org>; Fri, 2 Jun 2023 08:00:59 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qxcvfnphw-2
+        by m0001303.ppops.net (PPS) with ESMTPS id 3qyc3papjm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-security-module@vger.kernel.org>; Fri, 02 Jun 2023 08:01:12 -0700
-Received: from twshared52232.38.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <linux-security-module@vger.kernel.org>; Fri, 02 Jun 2023 08:00:59 -0700
+Received: from twshared44841.48.prn1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.23; Fri, 2 Jun 2023 08:00:58 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 17BF531E04B54; Fri,  2 Jun 2023 08:00:48 -0700 (PDT)
+        id 261E131E04B7C; Fri,  2 Jun 2023 08:00:50 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>
 CC:     <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
         <brauner@kernel.org>, <lennart@poettering.net>,
         <cyphar@cyphar.com>, <luto@kernel.org>
-Subject: [PATCH RESEND bpf-next 17/18] libbpf: add BPF token support to bpf_prog_load() API
-Date:   Fri, 2 Jun 2023 08:00:10 -0700
-Message-ID: <20230602150011.1657856-18-andrii@kernel.org>
+Subject: [PATCH RESEND bpf-next 18/18] selftests/bpf: add BPF token-enabled BPF_PROG_LOAD tests
+Date:   Fri, 2 Jun 2023 08:00:11 -0700
+Message-ID: <20230602150011.1657856-19-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230602150011.1657856-1-andrii@kernel.org>
 References: <20230602150011.1657856-1-andrii@kernel.org>
@@ -44,8 +44,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: UWpiaPOxzTbICuBDQwU_3WLTFUcgZ_kN
-X-Proofpoint-GUID: UWpiaPOxzTbICuBDQwU_3WLTFUcgZ_kN
+X-Proofpoint-GUID: kH4hUrNOt53NNaUsCxM7Xt875ejki43i
+X-Proofpoint-ORIG-GUID: kH4hUrNOt53NNaUsCxM7Xt875ejki43i
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-02_11,2023-06-02_02,2023-05-22_02
@@ -58,74 +58,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Wire through token_fd into bpf_prog_load(). Also make sure to pass
-allowed_{prog,attach}_types to kernel in bpf_token_create().
+Add a test validating that BPF token can be used to load privileged BPF
+program using privileged BPF helpers through delegated BPF token created
+by privileged process.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c | 5 ++++-
- tools/lib/bpf/bpf.h | 7 +++++--
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ .../testing/selftests/bpf/prog_tests/token.c  | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 193993dbbdc4..cd8f0c525de6 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -234,7 +234,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 		  const struct bpf_insn *insns, size_t insn_cnt,
- 		  struct bpf_prog_load_opts *opts)
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
+index b141f722c0c6..d5093ededf06 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -4,6 +4,7 @@
+ #include <test_progs.h>
+ #include <bpf/btf.h>
+ #include "cap_helpers.h"
++#include <linux/filter.h>
+ 
+ static int drop_priv_caps(__u64 *old_caps)
  {
--	const size_t attr_sz = offsetofend(union bpf_attr, log_true_size);
-+	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
- 	void *finfo = NULL, *linfo = NULL;
- 	const char *func_info, *line_info;
- 	__u32 log_size, log_level, attach_prog_fd, attach_btf_obj_fd;
-@@ -263,6 +263,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 	attr.prog_flags = OPTS_GET(opts, prog_flags, 0);
- 	attr.prog_ifindex = OPTS_GET(opts, prog_ifindex, 0);
- 	attr.kern_version = OPTS_GET(opts, kern_version, 0);
-+	attr.prog_token_fd = OPTS_GET(opts, token_fd, 0);
+@@ -191,6 +192,83 @@ static void subtest_btf_token(void)
+ 		ASSERT_OK(restore_priv_caps(old_caps), "restore_caps");
+ }
  
- 	if (prog_name && kernel_supports(NULL, FEAT_PROG_NAME))
- 		libbpf_strlcpy(attr.prog_name, prog_name, sizeof(attr.prog_name));
-@@ -1220,6 +1221,8 @@ int bpf_token_create(struct bpf_token_create_opts *opts)
- 	attr.token_create.token_fd = OPTS_GET(opts, token_fd, 0);
- 	attr.token_create.allowed_cmds = OPTS_GET(opts, allowed_cmds, 0);
- 	attr.token_create.allowed_map_types = OPTS_GET(opts, allowed_map_types, 0);
-+	attr.token_create.allowed_prog_types = OPTS_GET(opts, allowed_prog_types, 0);
-+	attr.token_create.allowed_attach_types = OPTS_GET(opts, allowed_attach_types, 0);
- 
- 	ret = sys_bpf_fd(BPF_TOKEN_CREATE, &attr, attr_sz);
- 	return libbpf_err_errno(ret);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 3153a9e697e2..f9afc7846762 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -104,9 +104,10 @@ struct bpf_prog_load_opts {
- 	 * If kernel doesn't support this feature, log_size is left unchanged.
- 	 */
- 	__u32 log_true_size;
-+	__u32 token_fd;
- 	size_t :0;
- };
--#define bpf_prog_load_opts__last_field log_true_size
-+#define bpf_prog_load_opts__last_field token_fd
- 
- LIBBPF_API int bpf_prog_load(enum bpf_prog_type prog_type,
- 			     const char *prog_name, const char *license,
-@@ -560,9 +561,11 @@ struct bpf_token_create_opts {
- 	__u32 token_fd;
- 	__u64 allowed_cmds;
- 	__u64 allowed_map_types;
-+	__u64 allowed_prog_types;
-+	__u64 allowed_attach_types;
- 	size_t :0;
- };
--#define bpf_token_create_opts__last_field allowed_map_types
-+#define bpf_token_create_opts__last_field allowed_attach_types
- 
- LIBBPF_API int bpf_token_create(struct bpf_token_create_opts *opts);
- 
++static void subtest_prog_token(void)
++{
++	LIBBPF_OPTS(bpf_token_create_opts, token_opts);
++	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts);
++	int token_fd = 0, prog_fd = 0;
++	__u64 old_caps = 0;
++	struct bpf_insn insns[] = {
++		/* bpf_jiffies64() requires CAP_BPF */
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
++		/* bpf_get_current_task() requires CAP_PERFMON */
++		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_get_current_task),
++		/* r0 = 0; exit; */
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	size_t insn_cnt = ARRAY_SIZE(insns);
++
++	/* check that IGNORE_UNKNOWN_PROG_TYPES flag is respected */
++	token_opts.flags = BPF_F_TOKEN_IGNORE_UNKNOWN_PROG_TYPES;
++	token_opts.allowed_prog_types = ~0ULL; /* any current and future prog type is allowed */
++	token_opts.allowed_attach_types = 0;
++	token_fd = bpf_token_create(&token_opts);
++	if (!ASSERT_GT(token_fd, 0, "token_create_prog_type_future_proof"))
++		return;
++	close(token_fd);
++
++	/* check that IGNORE_UNKNOWN_ATTACH_TYPES flag is respected */
++	token_opts.flags = BPF_F_TOKEN_IGNORE_UNKNOWN_ATTACH_TYPES;
++	token_opts.allowed_prog_types = 0;
++	token_opts.allowed_attach_types = ~0ULL; /* any current and future attach type is allowed */
++	token_fd = bpf_token_create(&token_opts);
++	if (!ASSERT_GT(token_fd, 0, "token_create_prog_type_future_proof"))
++		return;
++	close(token_fd);
++
++	/* create BPF token allowing BPF_PROG_LOAD command */
++	token_opts.flags = 0;
++	token_opts.allowed_cmds = 1ULL << BPF_PROG_LOAD;
++	token_opts.allowed_prog_types = 1ULL << BPF_PROG_TYPE_XDP;
++	token_opts.allowed_attach_types = 1ULL << BPF_XDP;
++	token_fd = bpf_token_create(&token_opts);
++	if (!ASSERT_GT(token_fd, 0, "token_create"))
++		return;
++
++	/* drop privileges to test token_fd passing */
++	if (!ASSERT_OK(drop_priv_caps(&old_caps), "drop_caps"))
++		goto cleanup;
++
++	/* validate we can successfully load BPF program with token; this
++	 * being XDP program (CAP_NET_ADMIN) using bpf_jiffies64() (CAP_BPF)
++	 * and bpf_get_current_task() (CAP_PERFMON) helpers validates we have
++	 * BPF token wired properly in a bunch of places in the kernel
++	 */
++	prog_opts.token_fd = token_fd;
++	prog_opts.expected_attach_type = BPF_XDP;
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_XDP, "token_prog", "GPL",
++				insns, insn_cnt, &prog_opts);
++	if (!ASSERT_GT(prog_fd, 0, "prog_fd"))
++		goto cleanup;
++	close(prog_fd);
++
++	/* now validate that we *cannot* load BPF program without token */
++	prog_opts.token_fd = 0;
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_XDP, "token_prog", "GPL",
++				insns, insn_cnt, &prog_opts);
++	if (!ASSERT_EQ(prog_fd, -EPERM, "prog_fd_eperm"))
++		goto cleanup;
++
++cleanup:
++	if (prog_fd > 0)
++		close(prog_fd);
++	if (token_fd)
++		close(token_fd);
++	if (old_caps)
++		ASSERT_OK(restore_priv_caps(old_caps), "restore_caps");
++}
++
+ void test_token(void)
+ {
+ 	if (test__start_subtest("token_create"))
+@@ -199,4 +277,6 @@ void test_token(void)
+ 		subtest_map_token();
+ 	if (test__start_subtest("btf_token"))
+ 		subtest_btf_token();
++	if (test__start_subtest("prog_token"))
++		subtest_prog_token();
+ }
 -- 
 2.34.1
 
