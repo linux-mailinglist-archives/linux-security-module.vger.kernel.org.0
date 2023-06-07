@@ -2,146 +2,195 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F127727335
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jun 2023 01:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54A372735C
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jun 2023 01:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjFGXk3 (ORCPT
+        id S230046AbjFGXyM convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 7 Jun 2023 19:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        Wed, 7 Jun 2023 19:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbjFGXkU (ORCPT
+        with ESMTP id S230445AbjFGXyK (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:40:20 -0400
-Received: from sonic311-31.consmr.mail.ne1.yahoo.com (sonic311-31.consmr.mail.ne1.yahoo.com [66.163.188.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91D226BC
-        for <linux-security-module@vger.kernel.org>; Wed,  7 Jun 2023 16:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686181198; bh=MLg3eEIQ6oxa5ubin2En3vP+BFYlpn63vPZqcYHn8/c=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=L/8MkD72LF/Lc0nlDvMsqldR6tGxbQz3xtUxMnnexoh4/yczWF813WrtkaYNqlNBwO834Bu8cJpigYShXpbYLcHyoOyyn69fGBwM9WnG1SEGj419LTUK5QsAtlFaUGTVxfo7bFKY3MoHw1BmflWrLg7ZiXIwB3FFigweISoJhMac99mHDl/aaRklQJ397FvsEuVptW0EhNRZOURnWXEUfPHep4ZX/jU1CB55Ae1AZ1mkqUbtY7YmaL0GUGzjeaARxHgq9WteMManQ1IW/+JAf7M/R+oK07TXWm4ce1QaM+Y8+C+lCeG2Xwk3uiEqimjFFMl4cw8E0T/wMFmiL4/pQQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686181198; bh=T8klwkrVKqfnlECaKgGkKbooPwQxUIVUUHSupnXE/Fy=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=EYSNA8nZ62hxDRua+4mKwljUmw7Pvie0EdDDL3p4swLATTSJVJJCeKdcbDDA4sutujm4oLRTWVELJkbBxglHqB8vsww5njtMUS+zL8JvPdrSxuMQV3Thgsu8TCSWHK3XKKRpMOlG9ZVGqQBO4V11hwghzbqZ2uQhRQF5yEw0Hl9iX3sNadMJfotyydIkN7eQi69GWN1hZUsOwIRQkFSfHO4yttTJG0PrMR/qy6/5JRv71D71qTKD2CS89ah04544v/rqYQkPSzoDGEb2rIXvRDQ6CJJYMJKMl8t4FXUDTv+M72dEfgUyoNPSpAe6/+yOTRziURHScPcoYC6mghzp3Q==
-X-YMail-OSG: 9DZ00UIVM1nf7gHNoSEJ_nQWRcW9g8Xfe_zpCClhZWdUoGLj_c_czAmMX82snG.
- EtXqu9.iP68RkKlYIDDaphvlBZCmGws9fbP4QhqaDyVLSzVGNWxXLVb2MOQVcAry.HF3I52WhI4D
- PKG_tAo_sviZephuG5VTSLYTBMsMPY7xJvJk25w60qIqC62H6UXeYqeg0HdIVd.Us.aysoxmkPxf
- ogF_ILbmys0RhgLlVtr.EhhS7BGJSVOkaTxA02G9S5n1lgQbBXqsedAJ64mkzCG3jQCOJjlmx.Dv
- 6y_H7TQGYRRVQql5NQrONSRPZ2YpzkfmqxzDHMv_objgDooc_lrUUzf8UHdpuaPVqY6rpNeU8TOZ
- e5mLjKbYPwp49p37sJpsBPcMNyGHBq7U6hkGLPix84zf1ipMbjOLYfpF7B5a3LHXjAAfHWrvqCcN
- lMffFRTxLeBBjN.vsgm0nBrL5IJUQKGsaie0Q6oezroJWGJ.OR3NL2frCfA4cal9wDEGRkRWGcfW
- iO24EvJ5RL8HkIaPN1DG3y2Io0kWag1b9epoONUrA6zggtd5U479RiczA0vul9evpicsvAMpHbbl
- ITDGSLv5cEu69DRFUYMOGZf6DNhgBhH_Tor9.7gt.FCYxWjpL0rPtCO_CQv1dTSYnJqAY_ypMUad
- hdqW2asKRPaC9dw0zJ22uYfuvf5GgkSfcFJFWzvsoG3eBywJF1rpSfcwKE45ppUV5rGRnJjvpXDQ
- 9YFOhypYjgDgZyxH3Ewm.JKJF77YpUouBT9fDtWFqBqV7U5gsoQlW4Vg5Q3npVsnXm9C34lybazL
- P_XpmC2d9NjTPUR3fpDLSYvH26OBYeetWh2ewrfV7kPWSNSOIy5SlP7iHv7_WaAxbsrtR2msS6AC
- Qtb8yxIFH0TP2wE2hd5QJxaKIQGNJm34bej_u.2QpkjRUr1pgAnniF22_EWBrhrhDGqjB55eJZLt
- jgIDr.eiHxoKMfKaBv9vwRs65eygNRDNqIVaAixkt7ho3DiqRTw5CJeJPIIjy8auG2t9iqEo.UcV
- KOHF1yx.J.SL2aATCAltOtvp2uS.kPXV.DB..aaBSogrOBD2WdgGcjKcDrhZNrdy.2zvEObvi_DW
- FvFj1lkvebih76k2HCiuOv_FfcriX48tFjqgAuAOW43.yFnk_PyvjKXBveAEHGIEnURD7jDFcDBY
- yJyY.ndXsula46PI7Pc9Tra7cSC3AY6Ti5wi0fc0d.aJM9YVKQ1FPfjw8CL.q..lJULUpn1Uksk5
- gn.wxf2KdRODJ0Tk7vSUBzHRpsHtuGGvZLnA8DPJypNEAOqbOgONzd5iwyhi8WRlR0OactKXuB3T
- t5wVUbhSU9WLwyDUAxoDhScJLYK_eyiG_HiTh8I96ftIMPwYStsnRLQQt.3erIT31LU105kO0gwf
- 1nDpz5vW6jtPcesr6lvz4xm95vysDUZr7_1z_fRF4DqY2vPsYuPsnBzhAXSBEleiGrdBZtt0lWtZ
- P4qbTLNvvnrISQM6OmOUHXactFUmSLnqmgW80oUX9QFPqsb3DQWw5pxe0j7_4dECibAiaJPrUK5K
- 8yowLBcUFs5iF5EhnPGh4.03qSKGEbah82axnlMqA.Xl.iPvq0vsDEfO8dWTfcWRkq1LaIkOo4lj
- kuKI9JoK0P9MAdgThuSvlb6hp8s50ykZc_dc606j_HFoUXT_T2YaXWE1Y_gC1fpK53FfW8xrbgul
- dvsVCquT88yypSo6va9qg42R3I3U7ks7yspn2CQodLJ8gu4NOe_Fwnt105YHjmWY9gZnvUmzwLJr
- f5SLOU4QgvMsJ9lCMhRSJcS4cZ841PgNTes5Yx.mi1E3Kl0Lr7Ic40allvm.2TfbQqVovCjkvyq6
- 7l.Ot0Im08EswnGuamVZUu6DiINcXAgx54rBdLdtqPOTnGZCbFe4KAclmZETJWuumgxWHyLva.Tb
- 1Da6hr0DzkMSiw5IJr_xNJLJtuAkXgIxghOKuoZRP1uow0vJI2q2YEPdNdPw2MlGupEMOJA9hWqC
- y9rohL3BVno3vrHQeyTklM8uzKagPnjJ2mvC7LFbGqqqFjRcmEmUyfHyhb7D33Pllt.a4iPvD5Yu
- eiHRSt75FCH4EzEmyzwCMneLEDQKlfHoIYNDr7sc5po5FVzUIiQP2pVI1E_fMSj4y1h2wdLD3ovs
- TVLef8m_Ug0gSLcpzFYt52HToxDS4pOwtBACGwxqOhczApOKFskW01vy1UVEyXdtV.PcYTwRqfWb
- V_gZQdnheV3reVNzsB.CWOm16ZZPXQVi.VzGIpWDiSHsko9r2PMZ.ORE_bF6AG0OdJwdYwOa.auz
- QPoT0s_qdpN4ooTJffd0v
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: aa61df0c-dead-4c2e-8f62-dac88edc3df4
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Jun 2023 23:39:58 +0000
-Received: by hermes--production-ne1-574d4b7954-xz2cn (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 722d8a43fe0be971fa9347acc11d3ac0;
-          Wed, 07 Jun 2023 23:39:57 +0000 (UTC)
-Message-ID: <3319126a-c5b5-c9db-dddb-7ed169ac7e83@schaufler-ca.com>
-Date:   Wed, 7 Jun 2023 16:39:55 -0700
+        Wed, 7 Jun 2023 19:54:10 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB62213A
+        for <linux-security-module@vger.kernel.org>; Wed,  7 Jun 2023 16:54:06 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357HfwOG009959
+        for <linux-security-module@vger.kernel.org>; Wed, 7 Jun 2023 16:54:06 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r2a89tp4q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Wed, 07 Jun 2023 16:54:06 -0700
+Received: from twshared52565.14.frc2.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 16:54:04 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 7C21A32857D16; Wed,  7 Jun 2023 16:53:52 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>
+CC:     <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
+        <brauner@kernel.org>, <lennart@poettering.net>,
+        <cyphar@cyphar.com>, <luto@kernel.org>, <kernel-team@meta.com>
+Subject: [PATCH v2 bpf-next 00/18] BPF token
+Date:   Wed, 7 Jun 2023 16:53:34 -0700
+Message-ID: <20230607235352.1723243-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: LYz_oUnxK3uzi2NG-E2zFLJGqjU341_8
+X-Proofpoint-ORIG-GUID: LYz_oUnxK3uzi2NG-E2zFLJGqjU341_8
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 10/11] SELinux: Add selfattr hooks
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>,
-        linux-security-module@vger.kernel.org
-Cc:     jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net,
-        selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
-References: <20230428203417.159874-11-casey@schaufler-ca.com>
- <b09b591926e0f297fe0a3e9d8fcf3a6a.paul@paul-moore.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <b09b591926e0f297fe0a3e9d8fcf3a6a.paul@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21516 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_13,2023-06-07_01,2023-05-22_02
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 6/7/2023 3:32 PM, Paul Moore wrote:
-> On Apr 28, 2023 Casey Schaufler <casey@schaufler-ca.com> wrote:
->> Add hooks for setselfattr and getselfattr. These hooks are not very
->> different from their setprocattr and getprocattr equivalents, and
->> much of the code is shared.
->>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> Cc: selinux@vger.kernel.org
->> Cc: Paul Moore <paul@paul-moore.com>
->> ---
->>  security/selinux/hooks.c | 154 +++++++++++++++++++++++++++++++--------
->>  1 file changed, 124 insertions(+), 30 deletions(-)
->>
->> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
->> index 2ee92d3fb79d..e78b955e04f8 100644
->> --- a/security/selinux/hooks.c
->> +++ b/security/selinux/hooks.c
->> @@ -6542,6 +6559,81 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
->>  	return error;
->>  }
->>  
->> +static int selinux_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
->> +			       size_t *size, u32 flags)
->> +{
->> +	char *value;
->> +	size_t total_len;
->> +	int len;
->> +	int rc;
->> +
->> +	len = selinux_lsm_getattr(attr, current, &value);
->> +	if (len < 0)
->> +		return len;
->> +
->> +	total_len = ALIGN(struct_size(ctx, ctx, len), 8);
->> +
->> +	if (total_len > *size)
->> +		rc = -E2BIG;
-> Hmm.  Since we need to calculate the aligned @total_len value in the
-> LSM specific code, perhaps it doesn't make sense to also do the
-> alignment in lsm_fill_user_ctx().  My apologies, I know I was the one
-> who suggested doing the alignment in a common place previously.
+This patch set introduces new BPF object, BPF token, which allows to delegate
+a subset of BPF functionality from privileged system-wide daemon (e.g.,
+systemd or any other container manager) to a *trusted* unprivileged
+application. Trust is the key here. This functionality is not about allowing
+unconditional unprivileged BPF usage. Establishing trust, though, is
+completely up to the discretion of respective privileged application that
+would create a BPF token.
 
-Some future user of lsm_fill_user_ctx() may not need to do the
-calculation, so I would be inclined to leave it here. I'm thinking
-SO_PEERCONTEXT, or the like. But I'll go with whatever gets the
-patchset moving forward.
+The main motivation for BPF token is a desire to enable containerized
+BPF applications to be used together with user namespaces. This is currently
+impossible, as CAP_BPF, required for BPF subsystem usage, cannot be namespaced
+or sandboxed, as a general rule. E.g., tracing BPF programs, thanks to BPF
+helpers like bpf_probe_read_kernel() and bpf_probe_read_user() can safely read
+arbitrary memory, and it's impossible to ensure that they only read memory of
+processes belonging to any given namespace. This means that it's impossible to
+have namespace-aware CAP_BPF capability, and as such another mechanism to
+allow safe usage of BPF functionality is necessary. BPF token and delegation
+of it to a trusted unprivileged applications is such mechanism. Kernel makes
+no assumption about what "trusted" constitutes in any particular case, and
+it's up to specific privileged applications and their surrounding
+infrastructure to decide that. What kernel provides is a set of APIs to create
+and tune BPF token, and pass it around to privileged BPF commands that are
+creating new BPF objects like BPF programs, BPF maps, etc.
 
->
->> +	else if (ctx)
->> +		rc = lsm_fill_user_ctx(ctx, value, len, LSM_ID_SELINUX, 0);
->> +	else
->> +		rc = 1;
->> +
->> +	*size = total_len;
->> +	if (rc < 0)
->> +		return rc;
->> +	return 1;
->> +}
-> --
-> paul-moore.com
+Previous attempt at addressing this very same problem ([0]) attempted to
+utilize authoritative LSM approach, but was conclusively rejected by upstream
+LSM maintainers. BPF token concept is not changing anything about LSM
+approach, but can be combined with LSM hooks for very fine-grained security
+policy. Some ideas about making BPF token more convenient to use with LSM (in
+particular custom BPF LSM programs) was briefly described in recent LSF/MM/BPF
+2023 presentation ([1]). E.g., an ability to specify user-provided data
+(context), which in combination with BPF LSM would allow implementing a very
+dynamic and fine-granular custom security policies on top of BPF token. In the
+interest of minimizing API surface area discussions this is going to be
+added in follow up patches, as it's not essential to the fundamental concept
+of delegatable BPF token.
+
+It should be noted that BPF token is conceptually quite similar to the idea of
+/dev/bpf device file, proposed by Song a while ago ([2]). The biggest
+difference is the idea of using virtual anon_inode file to hold BPF token and
+allowing multiple independent instances of them, each with its own set of
+restrictions. BPF pinning solves the problem of exposing such BPF token
+through file system (BPF FS, in this case) for cases where transferring FDs
+over Unix domain sockets is not convenient. And also, crucially, BPF token
+approach is not using any special stateful task-scoped flags. Instead, bpf()
+syscall accepts token_fd parameters explicitly for each relevant BPF command.
+This addresses main concerns brought up during the /dev/bpf discussion, and
+fits better with overall BPF subsystem design.
+
+This patch set adds a basic minimum of functionality to make BPF token useful
+and to discuss API and functionality. Currently only low-level libbpf APIs
+support passing BPF token around, allowing to test kernel functionality, but
+for the most part is not sufficient for real-world applications, which
+typically use high-level libbpf APIs based on `struct bpf_object` type. This
+was done with the intent to limit the size of patch set and concentrate on
+mostly kernel-side changes. All the necessary plumbing for libbpf will be sent
+as a separate follow up patch set kernel support makes it upstream.
+
+Another part that should happen once kernel-side BPF token is established, is
+a set of conventions between applications (e.g., systemd), tools (e.g.,
+bpftool), and libraries (e.g., libbpf) about sharing BPF tokens through BPF FS
+at well-defined locations to allow applications take advantage of this in
+automatic fashion without explicit code changes on BPF application's side.
+But I'd like to postpone this discussion to after BPF token concept lands.
+
+  [0] https://lore.kernel.org/bpf/20230412043300.360803-1-andrii@kernel.org/
+  [1] http://vger.kernel.org/bpfconf2023_material/Trusted_unprivileged_BPF_LSFMM2023.pdf
+  [2] https://lore.kernel.org/bpf/20190627201923.2589391-2-songliubraving@fb.com/
+
+v1->v2:
+  - fix build failures on Kconfig with CONFIG_BPF_SYSCALL unset;
+  - drop BPF_F_TOKEN_UNKNOWN_* flags and simplify UAPI (Stanislav).
+
+Andrii Nakryiko (18):
+  bpf: introduce BPF token object
+  libbpf: add bpf_token_create() API
+  selftests/bpf: add BPF_TOKEN_CREATE test
+  bpf: move unprivileged checks into map_create() and bpf_prog_load()
+  bpf: inline map creation logic in map_create() function
+  bpf: centralize permissions checks for all BPF map types
+  bpf: add BPF token support to BPF_MAP_CREATE command
+  libbpf: add BPF token support to bpf_map_create() API
+  selftests/bpf: add BPF token-enabled test for BPF_MAP_CREATE command
+  bpf: add BPF token support to BPF_BTF_LOAD command
+  libbpf: add BPF token support to bpf_btf_load() API
+  selftests/bpf: add BPF token-enabled BPF_BTF_LOAD selftest
+  bpf: keep BPF_PROG_LOAD permission checks clear of validations
+  bpf: add BPF token support to BPF_PROG_LOAD command
+  bpf: take into account BPF token when fetching helper protos
+  bpf: consistenly use BPF token throughout BPF verifier logic
+  libbpf: add BPF token support to bpf_prog_load() API
+  selftests/bpf: add BPF token-enabled BPF_PROG_LOAD tests
+
+ drivers/media/rc/bpf-lirc.c                   |   2 +-
+ include/linux/bpf.h                           |  70 ++-
+ include/linux/filter.h                        |   2 +-
+ include/uapi/linux/bpf.h                      |  37 ++
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/arraymap.c                         |   2 +-
+ kernel/bpf/bloom_filter.c                     |   3 -
+ kernel/bpf/bpf_local_storage.c                |   3 -
+ kernel/bpf/bpf_struct_ops.c                   |   3 -
+ kernel/bpf/cgroup.c                           |   6 +-
+ kernel/bpf/core.c                             |   3 +-
+ kernel/bpf/cpumap.c                           |   4 -
+ kernel/bpf/devmap.c                           |   3 -
+ kernel/bpf/hashtab.c                          |   6 -
+ kernel/bpf/helpers.c                          |   6 +-
+ kernel/bpf/inode.c                            |  26 ++
+ kernel/bpf/lpm_trie.c                         |   3 -
+ kernel/bpf/queue_stack_maps.c                 |   4 -
+ kernel/bpf/reuseport_array.c                  |   3 -
+ kernel/bpf/stackmap.c                         |   3 -
+ kernel/bpf/syscall.c                          | 401 ++++++++++++++----
+ kernel/bpf/token.c                            | 136 ++++++
+ kernel/bpf/verifier.c                         |  13 +-
+ kernel/trace/bpf_trace.c                      |   2 +-
+ net/core/filter.c                             |  36 +-
+ net/core/sock_map.c                           |   4 -
+ net/ipv4/bpf_tcp_ca.c                         |   2 +-
+ net/netfilter/nf_bpf_link.c                   |   2 +-
+ net/xdp/xskmap.c                              |   4 -
+ tools/include/uapi/linux/bpf.h                |  39 ++
+ tools/lib/bpf/bpf.c                           |  32 +-
+ tools/lib/bpf/bpf.h                           |  24 +-
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/libbpf_probes.c  |   4 +
+ .../selftests/bpf/prog_tests/libbpf_str.c     |   6 +
+ .../testing/selftests/bpf/prog_tests/token.c  | 260 ++++++++++++
+ .../bpf/prog_tests/unpriv_bpf_disabled.c      |   6 +-
+ 37 files changed, 975 insertions(+), 188 deletions(-)
+ create mode 100644 kernel/bpf/token.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/token.c
+
+-- 
+2.34.1
+
