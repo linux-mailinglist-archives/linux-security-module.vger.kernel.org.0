@@ -2,87 +2,141 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35F67310A9
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jun 2023 09:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690B4731334
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jun 2023 11:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244847AbjFOHav (ORCPT
+        id S245427AbjFOJIu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 15 Jun 2023 03:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
+        Thu, 15 Jun 2023 05:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244613AbjFOHap (ORCPT
+        with ESMTP id S245385AbjFOJIp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:30:45 -0400
-X-Greylist: delayed 10270 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:30:43 PDT
-Received: from mail.sitirkam.com (mail.aurorateknoglobal.com [103.126.10.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5455E69;
-        Thu, 15 Jun 2023 00:30:43 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.sitirkam.com (Postfix) with ESMTP id 16CDD4E7BE8D;
-        Thu, 15 Jun 2023 08:32:17 +0700 (WIB)
-Received: from mail.sitirkam.com ([127.0.0.1])
-        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Ese7-pAPUxzt; Thu, 15 Jun 2023 08:32:16 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.sitirkam.com (Postfix) with ESMTP id 29E3C4E7BA8C;
-        Thu, 15 Jun 2023 08:32:05 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sitirkam.com 29E3C4E7BA8C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sitirkam.com;
-        s=B8AB377C-ED3B-11EA-8736-9248CAEF674E; t=1686792725;
-        bh=q7vDHy+gLAr4GKZUDI+hjt8I93kvW09nNmGJORUTyfg=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=Xb++C53IX6it0NRdJ6KCI6lXfhAKCq8P8Ks4ohctCBfc2WvkzaYUrDEbpIjtMfZM6
-         gwATCPxfO+XYuxJPNqaezrRwlrrZFnDgM3A1BLcJqYJVx+8XBBtXz2vL5vF0AE1l6G
-         guIKrbBV8tBP0pQEYkK8JYl/PGU1zWqrdVasxD98/swdJ2VGyaUPe0DtY1e4zV7gmW
-         3QR7PzCVRhGpRjm4sUM22RfpoasHalob+LUPqOlS+Wl/vP12LSG1XoiSThFLP72YM5
-         GLpk+2HNVmRN72yYrA3XTeCiRT10hIqpfMlnd6eUpWmOZ5Q/kW2WB+mXltuqM9dtz0
-         9/VdXlfQ6bf9Q==
-X-Virus-Scanned: amavisd-new at mail.sitirkam.com
-Received: from mail.sitirkam.com ([127.0.0.1])
-        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EtD8e92cZ5a5; Thu, 15 Jun 2023 08:32:04 +0700 (WIB)
-Received: from [185.169.4.111] (unknown [185.169.4.111])
-        by mail.sitirkam.com (Postfix) with ESMTPSA id 21E5C4E7BA81;
-        Thu, 15 Jun 2023 08:31:55 +0700 (WIB)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 15 Jun 2023 05:08:45 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82741FE8;
+        Thu, 15 Jun 2023 02:08:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vl9wwvH_1686820112;
+Received: from 30.240.108.67(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Vl9wwvH_1686820112)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Jun 2023 17:08:34 +0800
+Message-ID: <66c72938-912c-5167-fdb1-bffefe1db0c9@linux.alibaba.com>
+Date:   Thu, 15 Jun 2023 17:08:31 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Spende
-To:     Recipients <admin@sitirkam.com>
-From:   "Maria-Elisabeth Schaeffler" <admin@sitirkam.com>
-Date:   Wed, 14 Jun 2023 18:34:03 -0700
-Reply-To: schaefflermariaelisabeth1941@gmail.com
-Message-Id: <20230615013156.21E5C4E7BA81@mail.sitirkam.com>
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [schaefflermariaelisabeth1941[at]gmail.com]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v2] integrity: Fix possible multiple allocation in
+ integrity_inode_get()
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
+ <20230601064244.33633-1-tianjia.zhang@linux.alibaba.com>
+ <CT86SNGF201H.2UZF8SN2MEKZ6@suppilovahvero>
+Content-Language: en-US
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <CT86SNGF201H.2UZF8SN2MEKZ6@suppilovahvero>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Your email account has been selected for a donation of =E2=82=AC1,700,000. =
-Please contact me for more information.
+Hi Jarkko,
 
-Mrs Maria Elisabeth Schaeffler
-CEO SCHAEFFLER.
+On 6/9/23 10:24 PM, Jarkko Sakkinen wrote:
+> On Thu Jun 1, 2023 at 9:42 AM EEST, Tianjia Zhang wrote:
+>> When integrity_inode_get() is querying and inserting the cache, there
+>> is a conditional race in the concurrent environment.
+>>
+>> The race condition is the result of not properly implementing
+>> "double-checked locking". In this case, it first checks to see if the
+>> iint cache record exists before taking the lock, but doesn't check
+>> again after taking the integrity_iint_lock.
+>>
+>> Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+>> Cc: <stable@vger.kernel.org> # v3.10+
+> 
+> s/v3.10/v4.14/
+> 
+> I.e. cover only currently maintained longterms, right?
+> 
+
+Yes, the race condition was indeed introduced in 3.10, but the fix is
+estimated to only cover the LTS version.
+
+> 
+>> ---
+>>   security/integrity/iint.c | 15 +++++++++------
+>>   1 file changed, 9 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+>> index c73858e8c6d5..a462df827de2 100644
+>> --- a/security/integrity/iint.c
+>> +++ b/security/integrity/iint.c
+>> @@ -43,12 +43,10 @@ static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
+>>   		else if (inode > iint->inode)
+>>   			n = n->rb_right;
+>>   		else
+>> -			break;
+>> +			return iint;
+>>   	}
+>> -	if (!n)
+>> -		return NULL;
+>>   
+>> -	return iint;
+>> +	return NULL;
+>>   }
+>>   
+>>   /*
+>> @@ -113,10 +111,15 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
+>>   		parent = *p;
+>>   		test_iint = rb_entry(parent, struct integrity_iint_cache,
+>>   				     rb_node);
+>> -		if (inode < test_iint->inode)
+>> +		if (inode < test_iint->inode) {
+>>   			p = &(*p)->rb_left;
+>> -		else
+>> +		} else if (inode > test_iint->inode) {
+>>   			p = &(*p)->rb_right;
+>> +		} else {
+>> +			write_unlock(&integrity_iint_lock);
+>> +			kmem_cache_free(iint_cache, iint);
+>> +			return test_iint;
+>> +		}
+>>   	}
+>>   
+>>   	iint->inode = inode;
+>> -- 
+>> 2.24.3 (Apple Git-128)
+> 
+> Mimi, are you picking this?
+
+Mimi has picked this patch in next-integrity.
+
+> 
+> Off-topic: how do you compile kernel on macOS, you're using VM right?
+> I'm just interested because I recently bought Mac mini for both
+> compiling and testing arm64. Optimal would be to be able to compile
+> the kernel on bare metal and then deploy to a VM...
+> 
+
+I am currently only coding and sending the final patch on a Mac.
+Compilation and testing are still carried out in the linux environment.
+If you have experience in launching a linux VM on macOS, please share it
+with me, thanks.
+
+Best regards,
+Tianjia
