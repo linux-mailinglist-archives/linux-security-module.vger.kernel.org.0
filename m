@@ -2,35 +2,35 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D77673CDA8
-	for <lists+linux-security-module@lfdr.de>; Sun, 25 Jun 2023 03:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C554F73CDAA
+	for <lists+linux-security-module@lfdr.de>; Sun, 25 Jun 2023 03:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjFYBNy (ORCPT
+        id S229878AbjFYBN6 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 24 Jun 2023 21:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        Sat, 24 Jun 2023 21:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjFYBNx (ORCPT
+        with ESMTP id S229975AbjFYBNz (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 24 Jun 2023 21:13:53 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA14FDD
-        for <linux-security-module@vger.kernel.org>; Sat, 24 Jun 2023 18:13:52 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QpXz413tWzTkRC;
-        Sun, 25 Jun 2023 09:13:04 +0800 (CST)
+        Sat, 24 Jun 2023 21:13:55 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C455310E9
+        for <linux-security-module@vger.kernel.org>; Sat, 24 Jun 2023 18:13:53 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QpXzl59dlz1HBhK;
+        Sun, 25 Jun 2023 09:13:39 +0800 (CST)
 Received: from cgs.huawei.com (10.244.148.83) by
  kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Sun, 25 Jun 2023 09:13:50 +0800
+ 15.1.2507.27; Sun, 25 Jun 2023 09:13:51 +0800
 From:   Gaosheng Cui <cuigaosheng1@huawei.com>
 To:     <john.johansen@canonical.com>, <paul@paul-moore.com>,
         <jmorris@namei.org>, <serge@hallyn.com>, <cuigaosheng1@huawei.com>
 CC:     <apparmor@lists.ubuntu.com>,
         <linux-security-module@vger.kernel.org>
-Subject: [PATCH -next 02/11] apparmor: Fix kernel-doc warnings in apparmor/capability.c
-Date:   Sun, 25 Jun 2023 09:13:40 +0800
-Message-ID: <20230625011349.1457810-3-cuigaosheng1@huawei.com>
+Subject: [PATCH -next 03/11] apparmor: Fix kernel-doc warnings in apparmor/domain.c
+Date:   Sun, 25 Jun 2023 09:13:41 +0800
+Message-ID: <20230625011349.1457810-4-cuigaosheng1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230625011349.1457810-1-cuigaosheng1@huawei.com>
 References: <20230625011349.1457810-1-cuigaosheng1@huawei.com>
@@ -42,8 +42,8 @@ X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  kwepemi500012.china.huawei.com (7.221.188.12)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -51,31 +51,60 @@ List-ID: <linux-security-module.vger.kernel.org>
 
 Fix kernel-doc warnings:
 
-security/apparmor/capability.c:45: warning: Function parameter
-or member 'ab' not described in 'audit_cb'
-security/apparmor/capability.c:45: warning: Function parameter
-or member 'va' not described in 'audit_cb'
+security/apparmor/domain.c:279: warning: Function parameter or
+member 'perms' not described in 'change_profile_perms'
+security/apparmor/domain.c:380: warning: Function parameter or
+member 'bprm' not described in 'find_attach'
+security/apparmor/domain.c:380: warning: Function parameter or
+member 'head' not described in 'find_attach'
+security/apparmor/domain.c:380: warning: Function parameter or
+member 'info' not described in 'find_attach'
+security/apparmor/domain.c:380: warning: Function parameter or
+member 'name' not described in 'find_attach'
+security/apparmor/domain.c:558: warning: Function parameter or
+member 'info' not described in 'x_to_label'
 
 Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- security/apparmor/capability.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ security/apparmor/domain.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/security/apparmor/capability.c b/security/apparmor/capability.c
-index 326a51838ef2..8ebf0fcb796c 100644
---- a/security/apparmor/capability.c
-+++ b/security/apparmor/capability.c
-@@ -38,8 +38,8 @@ static DEFINE_PER_CPU(struct audit_cache, audit_cache);
+diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
+index 68598557aef5..7f81502019da 100644
+--- a/security/apparmor/domain.c
++++ b/security/apparmor/domain.c
+@@ -265,6 +265,7 @@ static int label_match(struct aa_profile *profile, struct aa_label *label,
+  * @stack: whether this is a stacking request
+  * @request: requested perms
+  * @start: state to start matching in
++ * @perms: Returns computed perms (NOT NULL)
+  *
+  *
+  * Returns: permission set
+@@ -359,11 +360,11 @@ static int aa_xattrs_match(const struct linux_binprm *bprm,
  
  /**
-  * audit_cb - call back for capability components of audit struct
-- * @ab - audit buffer   (NOT NULL)
-- * @va - audit struct to audit data from  (NOT NULL)
-+ * @ab: audit buffer   (NOT NULL)
-+ * @va: audit struct to audit data from  (NOT NULL)
-  */
- static void audit_cb(struct audit_buffer *ab, void *va)
- {
+  * find_attach - do attachment search for unconfined processes
+- * @bprm - binprm structure of transitioning task
++ * @bprm: binprm structure of transitioning task
+  * @ns: the current namespace  (NOT NULL)
+- * @head - profile list to walk  (NOT NULL)
+- * @name - to match against  (NOT NULL)
+- * @info - info message if there was an error (NOT NULL)
++ * @head: profile list to walk  (NOT NULL)
++ * @name: to match against  (NOT NULL)
++ * @info: info message if there was an error (NOT NULL)
+  *
+  * Do a linear search on the profiles in the list.  There is a matching
+  * preference where an exact match is preferred over a name which uses
+@@ -545,6 +546,7 @@ struct aa_label *x_table_lookup(struct aa_profile *profile, u32 xindex,
+  * @name: name to lookup (NOT NULL)
+  * @xindex: index into x transition table
+  * @lookupname: returns: name used in lookup if one was specified (NOT NULL)
++ * @info: info message if there was an error (NOT NULL)
+  *
+  * find label for a transition index
+  *
 -- 
 2.25.1
 
