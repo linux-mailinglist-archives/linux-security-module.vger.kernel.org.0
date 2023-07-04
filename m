@@ -2,54 +2,95 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D3D74718A
-	for <lists+linux-security-module@lfdr.de>; Tue,  4 Jul 2023 14:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11A17471F4
+	for <lists+linux-security-module@lfdr.de>; Tue,  4 Jul 2023 14:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjGDMoB (ORCPT
+        id S230050AbjGDM50 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 4 Jul 2023 08:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        Tue, 4 Jul 2023 08:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjGDMoB (ORCPT
+        with ESMTP id S231535AbjGDM5X (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 4 Jul 2023 08:44:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5938FB
-        for <linux-security-module@vger.kernel.org>; Tue,  4 Jul 2023 05:43:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 793F16122F
-        for <linux-security-module@vger.kernel.org>; Tue,  4 Jul 2023 12:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC44AC433C8;
-        Tue,  4 Jul 2023 12:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688474638;
-        bh=3uWWXYQi7kK6BpqNYFmpjXEJwOshnrKioFoy1EDIkNY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GttEWMebhIP3hGh4P0Vw1ZOC3oAxq88jxrLylBbuFhwu/ObeeoHTDvDM8GPJp9M2b
-         7nblJb/wszRUs3mThk5hxlVwcUE+lcAM4XQi+VN586WOv8eYL4xZzQpFnU7Rs5g5pz
-         2yitpwrZ8voQGWXsiUVcr68tw2jRMRr2rc1M5MEBIxI4UX1l2Fw/YJQaXpZLtRbYRp
-         4VJY883r1jv7y6QiR9YFq1vWlWugi810xh59Ni8DkLgfqK/n2TKGxngDiGwXBqyL95
-         AqxgovhOGAYQjHSg44yPjpMhqx8RZiztOPKiplsTa+UQpX+HyuAeEQg7/bTZSI8lRI
-         IaRuj6rR8Fk7g==
-Date:   Tue, 4 Jul 2023 14:43:53 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        keescook@chromium.org, lennart@poettering.net, cyphar@cyphar.com,
-        luto@kernel.org, kernel-team@meta.com, sargun@sargun.me
-Subject: Re: [PATCH RESEND v3 bpf-next 01/14] bpf: introduce BPF token object
-Message-ID: <20230704-hochverdient-lehne-eeb9eeef785e@brauner>
-References: <20230629051832.897119-1-andrii@kernel.org>
- <20230629051832.897119-2-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230629051832.897119-2-andrii@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Tue, 4 Jul 2023 08:57:23 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD89710CE;
+        Tue,  4 Jul 2023 05:57:18 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 364Clq1L030500;
+        Tue, 4 Jul 2023 12:57:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=iTDv4VPTfZqUZ7AKCiQnqMYiZmFlxHkGxEf8+CPNWo8=;
+ b=F2z63e/OYzNaCShNERNgVClfVfXi3YLv77s28P2rmWpDMlYrvMKUrWpvHmbMbuYA16Mv
+ usDaskLOxXN2ssxtqJGUWHL+C83KmR3jbibqzp4PPB0FgQUbYPp4/ZInIJT7ybrSzu5O
+ vGPrSTWJEA7hC4YjiCgiPA8wl9VIjd29ZHYYeWdXLePTSETfWsxrHQ1CvtBEmLR8Q7CL
+ 62NI/8kVSECLXFWIeQUmGTIUqnIr9uYX2dAUXC/rSeNSfnp/87WKQmgmY9wA1fqUS0Rg
+ stGyEZMiJr9jh3GdcAD48XIyUoIzjl/U1h7OjnBquq7UgTwNaJCAAJmZrxABNM5k6XXo 4g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmkr887x6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jul 2023 12:57:15 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 364CnP0p003018;
+        Tue, 4 Jul 2023 12:57:14 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmkr887wh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jul 2023 12:57:14 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 364A6PWf008595;
+        Tue, 4 Jul 2023 12:57:14 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3rjbs5ys1e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jul 2023 12:57:13 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 364CvCMW25297190
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Jul 2023 12:57:12 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EACE458055;
+        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33E0F5805E;
+        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.36.177])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Jul 2023 12:57:11 +0000 (GMT)
+Message-ID: <b61fedf214cbe72de063a3bf516dd72f80595219.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: require signed IMA policy when UEFI secure boot is
+ enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 04 Jul 2023 08:57:10 -0400
+In-Reply-To: <20230703115442.129725-1-coxu@redhat.com>
+References: <20230703115442.129725-1-coxu@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: TAr0e02RnOj9NLIdD-orsSF3sFfLLkK4
+X-Proofpoint-GUID: kHJ-0h6YRVkkA6xkvOne638UU5eyQSgX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-04_07,2023-07-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2307040106
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,223 +98,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Jun 28, 2023 at 10:18:19PM -0700, Andrii Nakryiko wrote:
-> Add new kind of BPF kernel object, BPF token. BPF token is meant to to
-> allow delegating privileged BPF functionality, like loading a BPF
-> program or creating a BPF map, from privileged process to a *trusted*
-> unprivileged process, all while have a good amount of control over which
-> privileged operations could be performed using provided BPF token.
+On Mon, 2023-07-03 at 19:54 +0800, Coiby Xu wrote:
+> With the introduction of the .machine keyring for UEFI-based systems,
+> users are able to add custom CAs keys via MOK. This allow users to sign
+> their own IMA polices. For the sake of security, mandate signed IMA
+> policy when UEFI secure boot is enabled.
 > 
-> This patch adds new BPF_TOKEN_CREATE command to bpf() syscall, which
-> allows to create a new BPF token object along with a set of allowed
-> commands that such BPF token allows to unprivileged applications.
-> Currently only BPF_TOKEN_CREATE command itself can be
-> delegated, but other patches gradually add ability to delegate
-> BPF_MAP_CREATE, BPF_BTF_LOAD, and BPF_PROG_LOAD commands.
-> 
-> The above means that new BPF tokens can be created using existing BPF
-> token, if original privileged creator allowed BPF_TOKEN_CREATE command.
-> New derived BPF token cannot be more powerful than the original BPF
-> token.
-> 
-> Importantly, BPF token is automatically pinned at the specified location
-> inside an instance of BPF FS and cannot be repinned using BPF_OBJ_PIN
-> command, unlike BPF prog/map/btf/link. This provides more control over
-> unintended sharing of BPF tokens through pinning it in another BPF FS
-> instances.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
 > ---
+>  security/integrity/ima/ima_efi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
+> index 9db66fe310d4..bb2881759505 100644
+> --- a/security/integrity/ima/ima_efi.c
+> +++ b/security/integrity/ima/ima_efi.c
+> @@ -58,6 +58,9 @@ static const char * const sb_arch_rules[] = {
+>  #if !IS_ENABLED(CONFIG_MODULE_SIG)
+>  	"appraise func=MODULE_CHECK appraise_type=imasig",
+>  #endif
+> +#if IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && IS_ENABLED(CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY)
+> +	"appraise func=POLICY_CHECK appraise_type=imasig",
+> +#endif /* CONFIG_INTEGRITY_MACHINE_KEYRING && IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY */
+>  	"measure func=MODULE_CHECK",
+>  	NULL
+>  };
 
-The main issue I have with the token approach is that it is a completely
-separate delegation vector on top of user namespaces. We mentioned this
-duringthe conf and this was brought up on the thread here again as well.
-Imho, that's a problem both security-wise and complexity-wise.
+Thanks, Coiby.
 
-It's not great if each subsystem gets its own custom delegation
-mechanism. This imposes such a taxing complexity on both kernel- and
-userspace that it will quickly become a huge liability. So I would
-really strongly encourage you to explore another direction.
+Using IS_ENABLED() is not wrong, but unnecessary.  IS_BUILTIN()
+suffices.
 
-I do think the spirit of your proposal is workable and that it can
-mostly be kept in tact.
+-- 
+thanks,
 
-As mentioned before, bpffs has all the means to be taught delegation:
+Mimi
 
-        // In container's user namespace
-        fd_fs = fsopen("bpffs");
-
-        // Delegating task in host userns (systemd-bpfd whatever you want)
-        ret = fsconfig(fd_fs, FSCONFIG_SET_FLAG, "delegate", ...);
-
-        // In container's user namespace
-        fd_mnt = fsmount(fd_fs, 0);
-
-        ret = move_mount(fd_fs, "", -EBADF, "/my/fav/location", MOVE_MOUNT_F_EMPTY_PATH)
-
-Roughly, this would mean:
-
-(i) raise FS_USERNS_MOUNT on bpffs but guard it behind the "delegate"
-    mount option. IOW, it's only possibly to mount bpffs as an
-    unprivileged user if a delegating process like systemd-bpfd with
-    system-level privileges has marked it as delegatable.
-(ii) add fine-grained delegation options that you want this
-     bpffs instance to allow via new mount options. Idk,
-
-     // allow usage of foo
-     fsconfig(fd_fs, FSCONFIG_SET_STRING, "abilities", "foo");
-
-     // also allow usage of bar
-     fsconfig(fd_fs, FSCONFIG_SET_STRING, "abilities", "bar");
-
-     // reset allowed options
-     fsconfig(fd_fs, FSCONFIG_SET_STRING, "");
-
-     // allow usage of schmoo
-     fsconfig(fd_fs, FSCONFIG_SET_STRING, "abilities", "schmoo");
-
-This all seems more intuitive and integrates with user and mount
-namespaces of the container. This can also work for restricting
-non-userns bpf instances fwiw. You can also share instances via
-bind-mount and so on. The userns of the bpffs instance can also be used
-for permission checking provided a given functionality has been
-delegated by e.g., systemd-bpfd or whatever.
-
-So roughly - untested and unfinished:
-
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index b9b93b81af9a..c021b0a674bb 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -623,15 +623,24 @@ struct bpf_prog *bpf_prog_get_type_path(const char *name, enum bpf_prog_type typ
- }
- EXPORT_SYMBOL(bpf_prog_get_type_path);
- 
-+struct bpf_mount_opts {
-+	umode_t mode;
-+	bool delegate;
-+	u64 abilities;
-+};
-+
- /*
-  * Display the mount options in /proc/mounts.
-  */
- static int bpf_show_options(struct seq_file *m, struct dentry *root)
- {
-+	struct bpf_mount_opts *opts = root->d_sb->s_fs_info;
- 	umode_t mode = d_inode(root)->i_mode & S_IALLUGO & ~S_ISVTX;
- 
- 	if (mode != S_IRWXUGO)
- 		seq_printf(m, ",mode=%o", mode);
-+	if (opts->delegate)
-+		seq_printf(m, ",delegate");
- 	return 0;
- }
- 
-@@ -655,17 +664,17 @@ static const struct super_operations bpf_super_ops = {
- 
- enum {
- 	OPT_MODE,
-+	Opt_delegate,
-+	Opt_abilities,
- };
- 
- static const struct fs_parameter_spec bpf_fs_parameters[] = {
--	fsparam_u32oct	("mode",			OPT_MODE),
-+	fsparam_u32oct	     ("mode",			OPT_MODE),
-+	fsparam_flag_no	     ("delegate",		Opt_delegate),
-+	fsparam_string       ("abilities",		Opt_abilities),
- 	{}
- };
- 
--struct bpf_mount_opts {
--	umode_t mode;
--};
--
- static int bpf_parse_param(struct fs_context *fc, struct fs_parameter *param)
- {
- 	struct bpf_mount_opts *opts = fc->fs_private;
-@@ -694,6 +703,16 @@ static int bpf_parse_param(struct fs_context *fc, struct fs_parameter *param)
- 	case OPT_MODE:
- 		opts->mode = result.uint_32 & S_IALLUGO;
- 		break;
-+	case Opt_delegate:
-+		if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
-+			return -EPERM;
-+
-+		if (!result.negated)
-+			opts->delegate = true;
-+		break;
-+	case Opt_abilities:
-+		// parse param->string to opts->abilities
-+		break;
- 	}
- 
- 	return 0;
-@@ -768,10 +787,20 @@ static int populate_bpffs(struct dentry *parent)
- static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
- {
- 	static const struct tree_descr bpf_rfiles[] = { { "" } };
--	struct bpf_mount_opts *opts = fc->fs_private;
-+	struct bpf_mount_opts *opts = sb->s_fs_info;
- 	struct inode *inode;
- 	int ret;
- 
-+	if (fc->user_ns != &init_user_ns && !opts->delegate) {
-+		errorfc(fc, "Can't mount bpffs without delegation permissions");
-+		return -EPERM;
-+	}
-+
-+	if (opts->abilities && !opts->delegate) {
-+		errorfc(fc, "Specifying abilities without enabling delegation");
-+		return -EINVAL;
-+	}
-+
- 	ret = simple_fill_super(sb, BPF_FS_MAGIC, bpf_rfiles);
- 	if (ret)
- 		return ret;
-@@ -793,7 +822,10 @@ static int bpf_get_tree(struct fs_context *fc)
- 
- static void bpf_free_fc(struct fs_context *fc)
- {
--	kfree(fc->fs_private);
-+	struct bpf_mount_opts *opts = fc->s_fs_info;
-+
-+	if (opts)
-+		kfree(opts);
- }
- 
- static const struct fs_context_operations bpf_context_ops = {
-@@ -815,17 +847,30 @@ static int bpf_init_fs_context(struct fs_context *fc)
- 
- 	opts->mode = S_IRWXUGO;
- 
--	fc->fs_private = opts;
-+	/* If an instance is delegated it will start with no abilities. */
-+	opts->delegate = false;
-+	opts->abilities = 0;
-+
-+	fc->s_fs_info = opts;
- 	fc->ops = &bpf_context_ops;
- 	return 0;
- }
- 
-+static void bpf_kill_super(struct super_block *sb)
-+{
-+	struct bpf_mount_opts *opts = sb->s_fs_info;
-+
-+	kill_litter_super(sb);
-+	kfree(opts);
-+}
-+
- static struct file_system_type bpf_fs_type = {
- 	.owner		= THIS_MODULE,
- 	.name		= "bpf",
- 	.init_fs_context = bpf_init_fs_context,
- 	.parameters	= bpf_fs_parameters,
--	.kill_sb	= kill_litter_super,
-+	.kill_sb	= bpf_kill_super,
-+	.fs_flags	= FS_USERNS_MOUNT,
- };
- 
- static int __init bpf_init(void)
