@@ -2,140 +2,51 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D1674A203
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Jul 2023 18:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A0374A3C0
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Jul 2023 20:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbjGFQP0 (ORCPT
+        id S231613AbjGFS20 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 6 Jul 2023 12:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        Thu, 6 Jul 2023 14:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjGFQPU (ORCPT
+        with ESMTP id S229490AbjGFS2Z (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:15:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79750DC;
-        Thu,  6 Jul 2023 09:15:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 6 Jul 2023 14:28:25 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778B31FC1;
+        Thu,  6 Jul 2023 11:28:23 -0700 (PDT)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBCAB602F1;
-        Thu,  6 Jul 2023 16:15:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD63C433C7;
-        Thu,  6 Jul 2023 16:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688660118;
-        bh=r5Eqjb/koo4X65bgDBYxDesIkgsRAdhnfATQ4gt2Esk=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uOgU9evq5o16T6L6tpJH1n8YSQl4p50BjR5wiJPLoKkMzHgO7DWjFII6ePLp5KpdE
-         3SlBOVBQ0Ayb1Ck5njyhQkfK/lBmsjOnzq7A/dE1stN3VqJX7pH6IQsgFKtN1DalJo
-         E+zh6oq4S0OPw7rIh8zXpFwi+8/fexgoqLXDvhFUUOG0TWnPj5LM1mmg7dIC7PaCB3
-         IOEyQDVn/tGwcs+s3mZaJELn1kEqbOemjyG66rmihhs9u/EaGnd4WvmH/942idbgOQ
-         fgiPtHR0C+lrv0o8CzKEzOTX/CaJMpmdnCKaL0ZpaSmvJsFgbp9PEliTkXRbGZddzd
-         Fm4yxVau37qTQ==
-Message-ID: <3948ae7653d1cb7c51febcca26a35775e71a53b4.camel@kernel.org>
-Subject: Re: [PATCH v2 00/89] fs: new accessors for inode->i_ctime
-From:   Jeff Layton <jlayton@kernel.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     jk@ozlabs.org, arnd@arndb.de, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
-        cmllamas@google.com, surenb@google.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        leon@kernel.org, bwarrum@linux.ibm.com, rituagar@linux.ibm.com,
-        ericvh@kernel.org, lucho@ionkov.net, asmadeus@codewreck.org,
-        linux_oss@crudebyte.com, dsterba@suse.com, dhowells@redhat.com,
-        marc.dionne@auristor.com, viro@zeniv.linux.org.uk,
-        raven@themaw.net, luisbg@kernel.org, salah.triki@gmail.com,
-        aivazian.tigran@gmail.com, keescook@chromium.org, clm@fb.com,
-        josef@toxicpanda.com, xiubli@redhat.com, idryomov@gmail.com,
-        jaharkes@cs.cmu.edu, coda@cs.cmu.edu, jlbec@evilplan.org,
-        hch@lst.de, nico@fluxnic.net, rafael@kernel.org, code@tyhicks.com,
-        ardb@kernel.org, xiang@kernel.org, chao@kernel.org,
-        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linkinjeon@kernel.org, sj1557.seo@samsung.com, jack@suse.com,
-        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
-        hirofumi@mail.parknet.co.jp, miklos@szeredi.hu,
-        rpeterso@redhat.com, agruenba@redhat.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        mikulas@artax.karlin.mff.cuni.cz, mike.kravetz@oracle.com,
-        muchun.song@linux.dev, dwmw2@infradead.org, shaggy@kernel.org,
-        tj@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
-        chuck.lever@oracle.com, neilb@suse.de, kolga@netapp.com,
-        Dai.Ngo@oracle.com, tom@talpey.com, konishi.ryusuke@gmail.com,
-        anton@tuxera.com, almaz.alexandrovich@paragon-software.com,
-        mark@fasheh.com, joseph.qi@linux.alibaba.com, me@bobcopeland.com,
-        hubcap@omnibond.com, martin@omnibond.com, amir73il@gmail.com,
-        mcgrof@kernel.org, yzaikin@google.com, tony.luck@intel.com,
-        gpiccoli@igalia.com, al@alarsen.net, sfrench@samba.org,
-        pc@manguebit.com, lsahlber@redhat.com, sprasad@microsoft.com,
-        senozhatsky@chromium.org, phillip@squashfs.org.uk,
-        rostedt@goodmis.org, mhiramat@kernel.org, dushistov@mail.ru,
-        hdegoede@redhat.com, djwong@kernel.org, dlemoal@kernel.org,
-        naohiro.aota@wdc.com, jth@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, hughd@google.com, akpm@linux-foundation.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, john.johansen@canonical.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        jgross@suse.com, stern@rowland.harvard.edu, lrh2000@pku.edu.cn,
-        sebastian.reichel@collabora.com, wsa+renesas@sang-engineering.com,
-        quic_ugoswami@quicinc.com, quic_linyyuan@quicinc.com,
-        john@keeping.me.uk, error27@gmail.com, quic_uaggarwa@quicinc.com,
-        hayama@lineo.co.jp, jomajm@gmail.com, axboe@kernel.dk,
-        dhavale@google.com, dchinner@redhat.com, hannes@cmpxchg.org,
-        zhangpeng362@huawei.com, slava@dubeyko.com, gargaditya08@live.com,
-        penguin-kernel@I-love.SAKURA.ne.jp, yifeliu@cs.stonybrook.edu,
-        madkar@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
-        yuzhe@nfschina.com, willy@infradead.org, okanatov@gmail.com,
-        jeffxu@chromium.org, linux@treblig.org, mirimmad17@gmail.com,
-        yijiangshan@kylinos.cn, yang.yang29@zte.com.cn,
-        xu.xin16@zte.com.cn, chengzhihao1@huawei.com, shr@devkernel.io,
-        Liam.Howlett@Oracle.com, adobriyan@gmail.com,
-        chi.minghao@zte.com.cn, roberto.sassu@huawei.com,
-        linuszeng@tencent.com, bvanassche@acm.org, zohar@linux.ibm.com,
-        yi.zhang@huawei.com, trix@redhat.com, fmdefrancesco@gmail.com,
-        ebiggers@google.com, princekumarmaurya06@gmail.com,
-        chenzhongjin@huawei.com, riel@surriel.com,
-        shaozhengchao@huawei.com, jingyuwang_vip@163.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-usb@vger.kernel.org, v9fs@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        autofs@vger.kernel.org, linux-mm@kvack.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-um@lists.infradead.org,
-        linux-mtd@lists.infradead.org,
-        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
-        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org
-Date:   Thu, 06 Jul 2023 12:14:58 -0400
-In-Reply-To: <87ilaxgjek.fsf@email.froward.int.ebiederm.org>
-References: <20230705185812.579118-1-jlayton@kernel.org>
-         <a4e6cfec345487fc9ac8ab814a817c79a61b123a.camel@kernel.org>
-         <87ilaxgjek.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2190141FE2;
+        Thu,  6 Jul 2023 18:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1688668100;
+        bh=8NFL9we8Y8MHZ5EOLhjaIYmRvFfm/t1AXz0LAFwiLEE=;
+        h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type;
+        b=JVG74TzNws+vAkajJR/u+ElIXuGZ5sIoYbCYQZlnskJhB0/9oO5DTp5cvznk0TR5n
+         3fgqol2JqsVAY69cjcBKhXTHNLT0lZUQpqLih6a8vzmA5EO6PNhLJce3QBrlf0M/Bd
+         IaIg6I7OEmn8my9O5m/wcS7Ww8a+dIE0VOUrqh0FNKWLfWAIVUuZhxtNJolg5RFiny
+         UGtSKB7q3vd1flIQ1KLN1AzyEaK3DzeTvyKnLow7yHIeIGISRvUG3x4idj+t2TZ6pK
+         8klGUBAsFobSU/mXMtDtx+zXYcPUiG9d0gXWrAG/3XPBnZnLR0y8v18y2A1B9BRi8F
+         Rrqa+3wOKPHYg==
+Message-ID: <b68ad9e0-2ce1-50d5-4856-e4d8fe97fc82@canonical.com>
+Date:   Thu, 6 Jul 2023 11:28:17 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   John Johansen <john.johansen@canonical.com>
+Subject: [GIT PULL] apparmor bug fixes for 6.5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKLM <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Content-Language: en-US
+Organization: Canonical
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -145,77 +56,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 2023-07-06 at 10:16 -0500, Eric W. Biederman wrote:
-> Jeff Layton <jlayton@kernel.org> writes:
->=20
-> > On Wed, 2023-07-05 at 14:58 -0400, Jeff Layton wrote:
-> > > v2:
-> > > - prepend patches to add missing ctime updates
-> > > - add simple_rename_timestamp helper function
-> > > - rename ctime accessor functions as inode_get_ctime/inode_set_ctime_=
-*
-> > > - drop individual inode_ctime_set_{sec,nsec} helpers
-> > >=20
-> > > I've been working on a patchset to change how the inode->i_ctime is
-> > > accessed in order to give us conditional, high-res timestamps for the
-> > > ctime and mtime. struct timespec64 has unused bits in it that we can =
-use
-> > > to implement this. In order to do that however, we need to wrap all
-> > > accesses of inode->i_ctime to ensure that bits used as flags are
-> > > appropriately handled.
-> > >=20
-> > > The patchset starts with reposts of some missing ctime updates that I
-> > > spotted in the tree. It then adds a new helper function for updating =
-the
-> > > timestamp after a successful rename, and new ctime accessor
-> > > infrastructure.
-> > >=20
-> > > The bulk of the patchset is individual conversions of different
-> > > subsysteme to use the new infrastructure. Finally, the patchset renam=
-es
-> > > the i_ctime field to __i_ctime to help ensure that I didn't miss
-> > > anything.
-> > >=20
-> > > This should apply cleanly to linux-next as of this morning.
-> > >=20
-> > > Most of this conversion was done via 5 different coccinelle scripts, =
-run
-> > > in succession, with a large swath of by-hand conversions to clean up =
-the
-> > > remainder.
-> > >=20
-> >=20
-> > A couple of other things I should note:
-> >=20
-> > If you sent me an Acked-by or Reviewed-by in the previous set, then I
-> > tried to keep it on the patch here, since the respun patches are mostly
-> > just renaming stuff from v1. Let me know if I've missed any.
-> >=20
-> > I've also pushed the pile to my tree as this tag:
-> >=20
-> >     https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/t=
-ag/?h=3Dctime.20230705
-> >=20
-> > In case that's easier to work with.
->=20
-> Are there any preliminary patches showing what you want your introduced
-> accessors to turn into?  It is hard to judge the sanity of the
-> introduction of wrappers without seeing what the wrappers are ultimately
-> going to do.
->=20
-> Eric
+Hi Linus,
 
-I have a draft version of the multigrain patches on top of the wrapper
-conversion I've already posted in my "mgctime-experimental" branch:
+Please pull the following set bug fixes to apparmor for 6.5 or 6.5-rc1
 
-    https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/log/?=
-h=3Dmgctime-experimental
++ Bug Fixes
+   - fix missing error check for rhashtable_insert_fast
+   - add missing failure check in compute_xmatch_perms
+   - fix policy_compat permission remap with extended permissions
+   - fix profile verification and enable it
+   - fix: kzalloc perms tables for shared dfas
+   - Fix kernel-doc header for verify_dfa_accept_index
+   - aa_buffer: Convert 1-element array to flexible array
+   - Return directly after a failed kzalloc() in two functions
+   - fix use of strcpy in policy_unpack_test
+   - fix kernel-doc complaints
+   - Fix some kernel-doc comments
 
-The rationale is best explained in this changelog:
+thanks
+- john
 
-    https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commi=
-t/?h=3Dmgctime-experimental&id=3Dface437a144d3375afb7f70c233b0644b4edccba
 
-The idea will be to enable this on a per-fs basis.
---=20
-Jeff Layton <jlayton@kernel.org>
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-pr-2023-07-06
+
+for you to fetch changes up to 3f069c4c643225f2b96b4b3f8c30e4445f079d2e:
+
+   apparmor: Fix kernel-doc header for verify_dfa_accept_index (2023-07-06 11:12:10 -0700)
+
+----------------------------------------------------------------
++ Bug Fixes
+       apparmor: fix missing error check for rhashtable_insert_fast
+       apparmor: add missing failure check in compute_xmatch_perms
+       apparmor: fix policy_compat permission remap with extended permissions
+       apparmor: fix profile verification and enable it
+       apparmor: fix: kzalloc perms tables for shared dfas
+       apparmor: Fix kernel-doc header for verify_dfa_accept_index
+       apparmor: aa_buffer: Convert 1-element array to flexible array
+       apparmor: Return directly after a failed kzalloc() in two functions
+       apparmor: fix use of strcpy in policy_unpack_test
+       apparmor: fix kernel-doc complaints
+       AppArmor: Fix some kernel-doc comments
+
+----------------------------------------------------------------
+Danila Chernetsov (1):
+       apparmor: fix missing error check for rhashtable_insert_fast
+
+John Johansen (5):
+       apparmor: add missing failure check in compute_xmatch_perms
+       apparmor: fix policy_compat permission remap with extended permissions
+       apparmor: fix profile verification and enable it
+       apparmor: fix: kzalloc perms tables for shared dfas
+       apparmor: Fix kernel-doc header for verify_dfa_accept_index
+
+Kees Cook (1):
+       apparmor: aa_buffer: Convert 1-element array to flexible array
+
+Markus Elfring (1):
+       apparmor: Return directly after a failed kzalloc() in two functions
+
+Rae Moar (1):
+       apparmor: fix use of strcpy in policy_unpack_test
+
+Randy Dunlap (1):
+       apparmor: fix kernel-doc complaints
+
+Yang Li (1):
+       AppArmor: Fix some kernel-doc comments
+
+  security/apparmor/crypto.c             |  10 ++--
+  security/apparmor/file.c               |   2 +-
+  security/apparmor/lsm.c                |   8 +--
+  security/apparmor/policy.c             |  20 +++++--
+  security/apparmor/policy_compat.c      |  20 +++++--
+  security/apparmor/policy_unpack.c      | 102 +++++++++++++++++++++------------
+  security/apparmor/policy_unpack_test.c |  13 ++---
+  security/apparmor/secid.c              |   3 +-
+  8 files changed, 110 insertions(+), 68 deletions(-)
