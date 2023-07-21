@@ -2,86 +2,95 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1818775CD8A
-	for <lists+linux-security-module@lfdr.de>; Fri, 21 Jul 2023 18:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246C875CFDC
+	for <lists+linux-security-module@lfdr.de>; Fri, 21 Jul 2023 18:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjGUQMn (ORCPT
+        id S229539AbjGUQnP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 21 Jul 2023 12:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        Fri, 21 Jul 2023 12:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbjGUQM3 (ORCPT
+        with ESMTP id S229610AbjGUQmx (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 21 Jul 2023 12:12:29 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5EF4211
-        for <linux-security-module@vger.kernel.org>; Fri, 21 Jul 2023 09:12:03 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bff89873d34so1872617276.2
-        for <linux-security-module@vger.kernel.org>; Fri, 21 Jul 2023 09:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1689955906; x=1690560706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xxyXwUMYyMvFKFhBcqHjy6FPhm+754pa75RGLMebRPg=;
-        b=Wj+FUhDvmTTeRSt9GaR6tT+3MpYlB4CoZ9KWDMJGexsGe20N+xrnxTgIMSctx8ApfR
-         EWLBqTE2J3z2aNzKu9T21hFYuf4gqvmY+BWZZLAVsvQssNtzRZsRYJHCUn7lM9Zx5VZv
-         Y9LJbGNtTTxgUpi+Ooi51JzwchZVJAriStKfAFU79+X2s879ekFC4GPubWJ8G5H9iq4c
-         OGryoD/XHUmN09lH4+tPMlk+Sa2ictQRXSDhJBq6bOdA7PlcKCwTPrsO8oo3JEfgvaCL
-         WlSSokMxu+nyn8RY+R5zjvItZEjv4nxU0j99yqgGEAr1am/w5TPQTmTwDTWQWVVYXeY/
-         dA7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689955906; x=1690560706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xxyXwUMYyMvFKFhBcqHjy6FPhm+754pa75RGLMebRPg=;
-        b=F6xA5Z1uC9Zt9BConp1qGISQ9qJgq7ZG8zZI8f3zZg/6s19vXLiiDJoWj579rqm9t1
-         KSZfELxYoHemvr6yXlnPS9jwYLNWDtlws0OIpgvEQXaH7NJHEfW4veyzrHrdOm6mVdG2
-         BcIJ1yKTFf0uW01zfAQxYnGq/9GB+lJAivfT3bETlZAVO0LxAfm2OfkHo0o9ZewyBCLu
-         Aj4hldL9jJ4jkvSIeaSg5VLfaLipKTDc/s3QGl3ZgCQ7Or4b6K9RgixXgBSLU1ncWB/m
-         ef2h84NDJF1TJcnRopTYXWqjOdAbg/QZO/i5O+1VgP4EfCs/XnT1FEzWV8kMwaRA9Mtu
-         AOYw==
-X-Gm-Message-State: ABy/qLbZVrbVOAO+7zpUkVTgsxDGYy5s2HGrCpaX4wwJpZqCgCjDz/rs
-        fQa390VCwZTwJ6uIpvfdflpbYrn2mAitstnszakN
-X-Google-Smtp-Source: APBJJlGoHBcPT9hiWIWL6i3mvF4rekhA0utDaCn/hE81JlepiVuxAGpbe69fcrxsAy+mQbEZo7YWwncQp01TNjEWgQQ=
-X-Received: by 2002:a25:9c82:0:b0:c01:308a:44f2 with SMTP id
- y2-20020a259c82000000b00c01308a44f2mr2067818ybo.57.1689955906621; Fri, 21 Jul
- 2023 09:11:46 -0700 (PDT)
+        Fri, 21 Jul 2023 12:42:53 -0400
+Received: from sonic307-15.consmr.mail.ne1.yahoo.com (sonic307-15.consmr.mail.ne1.yahoo.com [66.163.190.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036EB2D71
+        for <linux-security-module@vger.kernel.org>; Fri, 21 Jul 2023 09:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1689957725; bh=V9dOu9Ky2pqvJawWDuTlA/cc/wSDtbwaMovWTd36Ir0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=qbbXeBScNl0vdISfM84hJyJsPPYE8fYFhtSJhaDXP40bv9fh+YA8besHHCyzu93K74QyMkkOnPtiAO6TejIlP+lWcaRZAnUy2NuoGQAn0z/42eFWmyFW2AvxYnyXCH/aYWqpI9vyJyu7j6+WuTWuwYFFddtFoEOesdrLYLzSwiw3W/oJyWocVXa7PkpaqscHObB8i3n4am/jNRl6wnnBGSNuXW+HQxB64EIcUwobuSwH+7xskqvCEE+wV9pN0Hj5JflDcaXFw0g+dEMPpmWU1DAVkCaAnP2ueyWQfmcG8K32b3Irr6yMWxUyyUguw6d94gCiG2ki76R+S5tC2jwE1w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1689957725; bh=ngZaYfRw/dPp4HTrDetNd/XSNKRoQBtZNF99DQwpAUZ=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=AVAM9mK+sB3OPL9CBgsrthSAQupa/6u+MBHWDw8r8645MCAuDP3Ugl/nNrIIFXSGaE1Wd5aOfYV+5+HZhKVCFBt8K6YQ6R0288RJHbqncfq26hSshWVh0yLFlJGW/excmY772cixB1ga3Ma4OZ8jmhCEgNRk8jav6C5pqQ6yGte/nFRK0GUkOFckC5M0qYfEtyyr5e16OIFNwD+50qUJDQyXbelr6RXmcKEVQLYCfrRTv/VPNYZO0pbhIrYcNJggnNR4D8RieHwfGYUMsu0qLMN+qeUK+Ul5qJhSjLM5iNkzAXf0uPkk776dDG3d6rpI3tzBFrvOq29WWqJgl0537A==
+X-YMail-OSG: 2FHoy48VM1mlwbrEE8ShMTn9qIRrRRHE5aVtGc9B3MLESGI0uOE9p25.JLZwCV1
+ Owc4Z45ZQwQR_p2cczv504zGiLBjX.TOecq1YUJuZDKrScE7zaPKT3Z74L710QcinQ2QaU9xZ..E
+ zn09FEKfy_4FW2.2OssWBp42aU7QNxigO49fMQDKxArBsouBqk5.vObO93Ofm_qgh8Svw_DmHWZ9
+ Xc3TT4xD3ztuuDVy8FuIsxOrOD7IQvcd40L0roUigQ72kf6B8Uv_DMuPzd9Ms29ifVU6KnEmOs8_
+ V1IQWQyumUzN.uPzPqwW7l9dG2dQZNLSkgBdK5LDHk5h6Oiw1d3e8x3CHR3T9YQ1yz45tohCc56s
+ qIIfD5J1blnfysQaV0hxp32WS2hhR1sNhJlPPUUtx31MHOUBnb9Zgd6pOBM_EuiPpYijvd1JWDE9
+ XiDbtutJ7L7K2iND2B2_AX6Bj.V.bBGMs.nRRusG871KC1f60_gAfV2W1ltsLL7FBv7ug1kNcacn
+ rcY53XdTz3jDP4QdlulTLaHEXe.lq_wHA4YhiUrUyx32V5G4e3QrWRMAuSrVb9CwmWfIKbP57dzu
+ 0yuR4y7jFmyobWvLcvTU.8x3nUEGJzLZJkQwqdjuKbuxJlWC5w7ruMHQWY1Sys.pXvqinZ5WG3II
+ UCp_bBZMmOXK8LM8zi7sfCrIKagQpYkotZ_9pUMOSpkuUc.euemdFsADMVMXR2meYs4b4SqvCybt
+ XGFDnT80B.jebXOuZWgKnKtCEFNg2oL1eIa7if7dV_pBA.zFZ50UzOByC1bK4s_.iT7akGn7u7Uz
+ bxganHcDHdQlwKaIsxbvQikA8jzUUJR8PluZLRUBNh.I1K9uda3i0kVQSC4tzXdA5CcJAiEVJ3fZ
+ VKIXOKNXpeOTp3FmvzrxUFCoqEx8XJw2v_78OxMRg17a.AJ90UMKB6jOvuyc0SKKRge_Bcu0T88.
+ drCZ9Abalkxt_csnYHmhX0uQTllpx6mikiJ2Ie64XF6rEnWJDxCITy9xn1xHE0eHG2b121SxC_pe
+ CQg2yp6tN0Oz7Rn3afA3AviWTvyZY_Yo_Pu87JqEDFPcVhu8zjMowKv2hOtP1nErACfvRMmdgLp.
+ JvFGjmwTyOBOfhI28NicPdaup7WvBwFiHBKfS6Bs5RzarwcphZjRHXqslsE89uzYl8FA16Ke5Gzc
+ 3IgeW47anD4lYveeHmWI42jjE7CVzFDfyLI3w7qdEGRRm1.4VJFlSdhT9OV5wCtIIOA573dHCP80
+ dqb8oyrXnGnfki04CghliU9qix_BYmb5Uj1OfCMg6SVjjD8s9biDme0O81oaGyhhMH4qOz4R2n1s
+ Yo6GYGBrOkhjDAsuDDbO4cVh44JuU0xS2ZCSgrUZadJihUKCtr6zAdKYVogKB04qXygXUoi3wIlh
+ hFt1LM1SfE5BY36N0y00IVf_Lzv0Sw2H7Zmh5AVAKPRHVNX0IwilbsTwFlWTgoOipplV7iHrA_.9
+ 9o6Sywq0VSWNyoeJY9Ybe8pPYV5h14t3elcu0r7IlekzL7ehq6gFVIDrl21bfSgp9TFsoMpI4Czp
+ 6vfOVOnNmLhzWStFCkZOGoinZYjsvx_1cAgdmhSax4osgbO3jJEU1oZ3qmSmArQ9dLrKt26BJoGX
+ f8nleB0YZLijgaw7jYHATpeldB2IKGK3KA1jRmO1p9OYaJ3s8bBXD3lYI44RT_zcz.7urNNwYgOq
+ Sw7gcXwyuqp3T1ZEG7DBEMDrJlv4o3.zVIMwGlib50N8wtdA9fUM2l5Y7p8CFRIefuUoy21PRTgq
+ FtqhJEj6UpIZi1lalQOCOHwHBKfn8WTObBbdGvuSLLvTZeji8MZUbRYHsPSGwnHVAIJS2xaS57Gd
+ JHMwQXfVcUDAC8S4J6ALAVQrHbzbVZRz0HaKl5bmEq25ZMC4r9aaCzVcsufERqLPMXjoCQf7hwVm
+ qUYAy5DNBASIN31SFTP6qbfDzNwL..yh5GLJyaBzv7ccJC4yyt4cG_7lufhc9V3zUGIhLp9YAG2q
+ JNAcebflXs23cu3gKNDmvrfVy99bmAWVxaBhh8RWGnaerRmMQtSMZbo_8OxA1mT6r_1YVsI9JixU
+ w0EpT2gRSwyuieqNCPdQrNNmtf7mnNfWB2zY7op63d961uootplVnyk3vfSWJBrE1FTfOenSVVBM
+ BjgO5gAdrv4GrP6CS6rYCI8jVCLYVlnv8Mm7GEAqJ68IRfT2MQaIDVOT2vRks7dxy3haCwXYWYqG
+ xdDmquhE7He0U1STNJyEnbP.FnoPLzWNSXv43d8pai0JlF4RS8USu0IhGhdya4UBtxBLK2crRWR3
+ rtW07Ppv4pg--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 0d35e154-3db0-441c-8f0a-9a6e0ee19a4a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Fri, 21 Jul 2023 16:42:05 +0000
+Received: by hermes--production-ne1-77c6dd44c7-b2ztb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9db050f78d2d5093cbc6bde4da7a5542;
+          Fri, 21 Jul 2023 16:31:32 +0000 (UTC)
+Message-ID: <4c4e6d51-1ee4-46bc-b355-c15151b3214f@schaufler-ca.com>
+Date:   Fri, 21 Jul 2023 09:31:30 -0700
 MIME-Version: 1.0
-References: <73a810980a8452f0cb98d25698c4ae83285b7393.1689604030.git.pabeni@redhat.com>
- <679840421f2e7794bb69962b97e0cee1a4e0f0f6.camel@redhat.com>
-In-Reply-To: <679840421f2e7794bb69962b97e0cee1a4e0f0f6.camel@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 21 Jul 2023 12:11:35 -0400
-Message-ID: <CAHC9VhTRkWL_R0xdnrYChwmbp3FvXKMjQYpdBn9OvCH23mW=bA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
 Subject: Re: [RFC PATCH] selinux: introduce and use ad_init_net*() helpers
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     selinux@vger.kernel.org,
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, selinux@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
         Stephen Smalley <stephen.smalley.work@gmail.com>,
         Eric Paris <eparis@parisplace.org>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <73a810980a8452f0cb98d25698c4ae83285b7393.1689604030.git.pabeni@redhat.com>
+ <679840421f2e7794bb69962b97e0cee1a4e0f0f6.camel@redhat.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <679840421f2e7794bb69962b97e0cee1a4e0f0f6.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21647 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Jul 21, 2023 at 11:35=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wr=
-ote:
->
+On 7/21/2023 8:34 AM, Paolo Abeni wrote:
 > Hi all,
 >
 > On Mon, 2023-07-17 at 16:27 +0200, Paolo Abeni wrote:
-> > The only
-> > remaining perf-related pain-point I see is the indirect call at the
-> > security_ level, and tackling it looks much more difficult... :(
->
+>> The only
+>> remaining perf-related pain-point I see is the indirect call at the
+>> security_ level, and tackling it looks much more difficult... :(
 > I spent a little more time on this latest topic. AFAICS recently such
 > overhead has increased due to the bpf lsm introduction. My
 > understanding is that a major LSM and BPF LSM simultaneously enabled is
@@ -94,6 +103,13 @@ ote:
 > for a limited number of hooks, it checks if only the default major lsm
 > and eventually the bpf lsm are registered and if so, converts such
 > hooks to static call[s], using static branches.
+
+K.P. Singh proposed similar changes recently, and Brendan Jackman
+had something in 2020. The performance benefit demonstrated has
+been encouraging. The approach has two serious problems. It doesn't
+lend itself very well to special cases, and the code is incredibly
+ugly.
+
 >
 > The idea would be to keep the above infra usage restricted to the most
 > performance-relevant hooks (e.g. one-off initialization or
@@ -110,16 +126,8 @@ ote:
 > status and try to cleanup the code.
 >
 > Any feedback more then appreciated!
-
-KP, the BPF LSM maintainer, has posted patches to move the LSM hooks
-over to static calls, but to the best of my current understanding the
-patchset intermingles a bug fix with the performance improvements,
-which I want to avoid.
-
-There have been updated patchsets posted, but the original link
-(below) contains my comments:
-https://lore.kernel.org/linux-security-module/20230119231033.1307221-1-kpsi=
-ngh@kernel.org/
-
---=20
-paul-moore.com
+>
+> Cheers,
+>
+> Paolo
+>
