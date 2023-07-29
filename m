@@ -2,141 +2,88 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F57D767949
-	for <lists+linux-security-module@lfdr.de>; Sat, 29 Jul 2023 02:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F913767B92
+	for <lists+linux-security-module@lfdr.de>; Sat, 29 Jul 2023 04:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbjG2ADi (ORCPT
+        id S233150AbjG2Ck4 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 28 Jul 2023 20:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
+        Fri, 28 Jul 2023 22:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235817AbjG2ADh (ORCPT
+        with ESMTP id S231783AbjG2Ckt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 28 Jul 2023 20:03:37 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF3C1BD6
-        for <linux-security-module@vger.kernel.org>; Fri, 28 Jul 2023 17:03:35 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1bb982d2572so17187755ad.0
-        for <linux-security-module@vger.kernel.org>; Fri, 28 Jul 2023 17:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690589015; x=1691193815;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rJg9MbukUkeAf25VcBnSvGPEfaUIyqqF94QJU8orhSY=;
-        b=Zp0GOXqU9vAtanM7byzLEY1ZTAuQCQrnfrak1thKcFFHMBCZO/N4KqKDBd5I3kJffW
-         Vh8ovzLtMVpv7R9tgjnJuitRPz0iowTqbSccpqb9sCrit8s8jZkHgE3EKWmaz9/YJybN
-         uhR+1LBQ/EGKFm12kofvmo1N8Or8Mhd5I9QIxgAZxJjUnAncn/OfNQ+xg9V9rSfFrTW5
-         6+gyXWvxsDfod0XUAEoSS/aCS0HqakbjGuI1/I8BU2Uy6FDW2YJ6LrCVt60GU5GehRX5
-         3Ug/sPFW2Iawha4cKCkpfEtG9Mwjo7aL2M8Rz65tztUDm7ObzFqkZ6ozvUAWJtziwaLO
-         +gKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690589015; x=1691193815;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rJg9MbukUkeAf25VcBnSvGPEfaUIyqqF94QJU8orhSY=;
-        b=PImNbjPjWdIPpqMQ51e928zNGU63nH8N/ZjPANuME0esGpP/S71udhkps60LWXePBW
-         SoPSn1RKufCq+wTp34bX5+BkH2dYcUZ3uIINyth/gixZ9ytsKnf6EuRmewLxbnUOlbjX
-         IaY0yms+/9wwxYnXH/NstgE7n2tXTI/yvps2dcPtYrCpAx0YlK/8KrkUPZDK67+NPqVG
-         DV426uedcCfmi1SZ/eZUzS0xy+7K1XR246FauzVfTSg3sgCQrrkRetD8M3bhbeadqFzr
-         +O5H3lz9FifB7DPY111L0Hkyt396c6/YJn8b6wlmYUcDt63JVOxtoqRajjlDpVLZ5f1w
-         lxwA==
-X-Gm-Message-State: ABy/qLYn2TjeHECYPC0Q1Xjz0Rz9RwxzH5a32JWlQLPlxqMa8YnARFWL
-        MODg5fz2v3fIFTw19vccTmM3FWIaI0o=
-X-Google-Smtp-Source: APBJJlGy4rMQGFiWHQC+IuRONPQH0HvvNAt7asJXiFk+bZ/uVjfNOjPYVgrOl+x+eQJGyA+j61wbqvGP0DI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:c951:b0:1ae:6895:cb96 with SMTP id
- i17-20020a170902c95100b001ae6895cb96mr12864pla.5.1690589014804; Fri, 28 Jul
- 2023 17:03:34 -0700 (PDT)
-Date:   Fri, 28 Jul 2023 17:03:33 -0700
-In-Reply-To: <ZMOJgnyzzUNIx+Tn@google.com>
-Mime-Version: 1.0
-References: <20230718234512.1690985-1-seanjc@google.com> <20230718234512.1690985-7-seanjc@google.com>
- <ZMOJgnyzzUNIx+Tn@google.com>
-Message-ID: <ZMRXVZYaJ9wojGtS@google.com>
-Subject: Re: [RFC PATCH v11 06/29] KVM: Introduce KVM_SET_USER_MEMORY_REGION2
-From:   Sean Christopherson <seanjc@google.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 28 Jul 2023 22:40:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFCF1711;
+        Fri, 28 Jul 2023 19:40:47 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RCTHS3N5wzrRh6;
+        Sat, 29 Jul 2023 10:39:48 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 29 Jul
+ 2023 10:40:45 +0800
+From:   Yue Haibing <yuehaibing@huawei.com>
+To:     <dhowells@redhat.com>, <jarkko@kernel.org>, <paul@paul-moore.com>,
+        <jmorris@namei.org>, <serge@hallyn.com>, <yuehaibing@huawei.com>
+CC:     <keyrings@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 -next] keys: Remove unused extern declarations
+Date:   Sat, 29 Jul 2023 10:40:26 +0800
+Message-ID: <20230729024026.32228-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Jul 28, 2023, Quentin Perret wrote:
-> On Tuesday 18 Jul 2023 at 16:44:49 (-0700), Sean Christopherson wrote:
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -95,6 +95,16 @@ struct kvm_userspace_memory_region {
-> >  	__u64 userspace_addr; /* start of the userspace allocated memory */
-> >  };
-> >  
-> > +/* for KVM_SET_USER_MEMORY_REGION2 */
-> > +struct kvm_userspace_memory_region2 {
-> > +	__u32 slot;
-> > +	__u32 flags;
-> > +	__u64 guest_phys_addr;
-> > +	__u64 memory_size;
-> > +	__u64 userspace_addr;
-> > +	__u64 pad[16];
-> 
-> Should we replace that pad[16] with:
-> 
-> 	__u64 size;
-> 
-> where 'size' is the size of the structure as seen by userspace? This is
-> used in other UAPIs (see struct sched_attr for example) and is a bit
-> more robust for future extensions (e.g. an 'old' kernel can correctly
-> reject a newer version of the struct with additional fields it doesn't
-> know about if that makes sense, etc).
+From: YueHaibing <yuehaibing@huawei.com>
 
-"flags" serves that purpose, i.e. allows userspace to opt-in to having KVM actually
-consume what is currently just padding.
+Since commit b2a4df200d57 ("KEYS: Expand the capacity of a keyring")
+iterate_over_keyring() is never used, so can be removed.
 
-The padding is there mainly to simplify kernel/KVM code, e.g. the number of bytes
-that KVM needs to copy in is static.
+And commit b5f545c880a2 ("[PATCH] keys: Permit running process to instantiate keys")
+left behind keyring_search_instkey().
 
-But now that I think more on this, I don't know why we didn't just unconditionally
-bump the size of kvm_userspace_memory_region.  We tried to play games with unions
-and overlays, but that was a mess[*].
+Fixes: b2a4df200d57 ("KEYS: Expand the capacity of a keyring")
+Fixes: b5f545c880a2 ("[PATCH] keys: Permit running process to instantiate keys")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+v3: Add Fixes tag
+v2: Also remove keyring_search_instkey()
+---
+ security/keys/internal.h | 7 -------
+ 1 file changed, 7 deletions(-)
 
-KVM would need to do multiple uaccess reads, but that's not a big deal.  Am I
-missing something, or did past us just get too clever and miss the obvious solution?
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 3c1e7122076b..471cf36dedc0 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -109,13 +109,6 @@ extern void __key_link_end(struct key *keyring,
+ extern key_ref_t find_key_to_update(key_ref_t keyring_ref,
+ 				    const struct keyring_index_key *index_key);
+ 
+-extern struct key *keyring_search_instkey(struct key *keyring,
+-					  key_serial_t target_id);
+-
+-extern int iterate_over_keyring(const struct key *keyring,
+-				int (*func)(const struct key *key, void *data),
+-				void *data);
+-
+ struct keyring_search_context {
+ 	struct keyring_index_key index_key;
+ 	const struct cred	*cred;
+-- 
+2.34.1
 
-[*] https://lkml.kernel.org/r/Y7xrtf9FCuYRYm1q%40google.com
