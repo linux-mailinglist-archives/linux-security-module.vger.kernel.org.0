@@ -2,52 +2,52 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989EA76F06E
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Aug 2023 19:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE05276F071
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Aug 2023 19:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbjHCROP (ORCPT
+        id S233738AbjHCROb (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 3 Aug 2023 13:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        Thu, 3 Aug 2023 13:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234648AbjHCROL (ORCPT
+        with ESMTP id S234347AbjHCRO2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 3 Aug 2023 13:14:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C2E3C16
-        for <linux-security-module@vger.kernel.org>; Thu,  3 Aug 2023 10:13:25 -0700 (PDT)
+        Thu, 3 Aug 2023 13:14:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C193C38
+        for <linux-security-module@vger.kernel.org>; Thu,  3 Aug 2023 10:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691082804;
+        s=mimecast20190719; t=1691082819;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YiA6TsqHwe73wZwOUb7qdSWZF8mWFolXm7MMmc8GrsI=;
-        b=FnQ+eOOSv0L7dFEr0eng2vPgD/CxTuEqA/LRsE8tO+yc7hflzqDgMS3nduLuKej2xxODfI
-        oBJNTeO8+KlsLx74rPIXM0Am3PDY85WCqh09qWrYu8H4ohnnP7ZlmF7X87cazqkLApT61F
-        BSnA35qJ2QK/WTg2a6IQ0JvAYQPoLlM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-672-JDFrQwn0Pya9QVAi0XjWhw-1; Thu, 03 Aug 2023 13:13:21 -0400
-X-MC-Unique: JDFrQwn0Pya9QVAi0XjWhw-1
+        bh=NwboMpndKcSVwHb15bn2zb0MUP8wKG5ZpPY0Hw7kAC8=;
+        b=GEEhkYhiRQNXL9BgUR0kbbmjV9dKKQx7ZVc/FaQZFS2Oft2bpYhYxiW7rq9oeSfc6yQtM8
+        HJqgWjzeVKXBzRJvReOPf1HdQtwvDufEcb8481DR6K6fq8IiuatpppMMyBwrF3jATjfDZh
+        BLVi40kr4p9le33V2BM10P7sv3PvSYI=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-JrasZZNjM3mDGgFrfS1szg-1; Thu, 03 Aug 2023 13:13:33 -0400
+X-MC-Unique: JrasZZNjM3mDGgFrfS1szg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1C3518DC664;
-        Thu,  3 Aug 2023 17:13:21 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1CD83C0C4A9;
+        Thu,  3 Aug 2023 17:13:22 +0000 (UTC)
 Received: from gerbillo.redhat.com (unknown [10.45.224.242])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB5C2200A7CA;
-        Thu,  3 Aug 2023 17:13:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 657C9200C0EF;
+        Thu,  3 Aug 2023 17:13:21 +0000 (UTC)
 From:   Paolo Abeni <pabeni@redhat.com>
 To:     linux-security-module@vger.kernel.org
 Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Ondrej Mosnacek <omosnace@redhat.com>,
         KP Singh <kpsingh@kernel.org>
-Subject: [PATCH RFC 1/3] security: introduce and use call_int_hook_ignore_default()
-Date:   Thu,  3 Aug 2023 19:12:40 +0200
-Message-ID: <7bfe86eb0a0e3ec15af0a93c329d2aca72fb0bdc.1691082677.git.pabeni@redhat.com>
+Subject: [PATCH RFC 2/3] security: two more call_int_hook_ignore_default use-cases
+Date:   Thu,  3 Aug 2023 19:12:41 +0200
+Message-ID: <d48c8c4f84acac7536b8b48e44574c81a96e5cdc.1691082677.git.pabeni@redhat.com>
 In-Reply-To: <cover.1691082677.git.pabeni@redhat.com>
 References: <cover.1691082677.git.pabeni@redhat.com>
 MIME-Version: 1.0
@@ -66,168 +66,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The following hooks currently don't allow the LSM module to tell the
-core to ignore its return code:
+Quite similar to the previous commit, the hooks:
 
-sb_set_mnt_opts
-inode_init_security
-inode_getsecctx
-socket_getpeersec_stream
-socket_getpeersec_dgram
+inode_setxattr
+inode_removexattr
 
-because the return value for the security function when no LSMs are
-loaded is non zero, and LSMs use the current LSM_RET_DEFAULT() (zero)
-to represent "success".
+don't allow the LSM to tell the core to ignore it's return code.
+The main difference it that the above mentioned hooks explicitly check
+for a non zero return value from the hook to perform the default action.
 
-Introduce a new variant of the call_int_hook() macros the explicitly
-ignores the return code from the LSM when equal to LSM_RET_DEFAULT,
-use it for the above hooks, and change the default to 1.
+Changing the LSM_RET_DEFAULT to 1 and using call_int_hook_ignore_default
+allows LSM returning the LSM_RET_DEFAULT value will become no-op for the
+mentioned hooks.
 
-All the exiting LSM except BPF don't use such return value, so no
+All the exiting LSM except BPF never use 1 as return value, so no
 functional change is expected.
-
-After this change, LSM returning the LSM_RET_DEFAULT value will become
-a no-op for the mentioned hooks.
 
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 ---
- include/linux/lsm_hook_defs.h | 10 ++++-----
- security/security.c           | 42 ++++++++++++++++++++++++++---------
- 2 files changed, 36 insertions(+), 16 deletions(-)
+ include/linux/lsm_hook_defs.h | 4 ++--
+ security/security.c           | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 4f2621e87634..c9032e20d0b3 100644
+index c9032e20d0b3..49f1f9bed958 100644
 --- a/include/linux/lsm_hook_defs.h
 +++ b/include/linux/lsm_hook_defs.h
-@@ -73,7 +73,7 @@ LSM_HOOK(int, 0, sb_mount, const char *dev_name, const struct path *path,
- LSM_HOOK(int, 0, sb_umount, struct vfsmount *mnt, int flags)
- LSM_HOOK(int, 0, sb_pivotroot, const struct path *old_path,
- 	 const struct path *new_path)
--LSM_HOOK(int, 0, sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
-+LSM_HOOK(int, 1, sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
- 	 unsigned long kern_flags, unsigned long *set_kern_flags)
- LSM_HOOK(int, 0, sb_clone_mnt_opts, const struct super_block *oldsb,
- 	 struct super_block *newsb, unsigned long kern_flags,
-@@ -111,7 +111,7 @@ LSM_HOOK(int, 0, path_notify, const struct path *path, u64 mask,
- 	 unsigned int obj_type)
- LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
- LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)
--LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
-+LSM_HOOK(int, 1, inode_init_security, struct inode *inode,
- 	 struct inode *dir, const struct qstr *qstr, const char **name,
- 	 void **value, size_t *len)
- LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
-@@ -272,7 +272,7 @@ LSM_HOOK(void, LSM_RET_VOID, release_secctx, char *secdata, u32 seclen)
- LSM_HOOK(void, LSM_RET_VOID, inode_invalidate_secctx, struct inode *inode)
- LSM_HOOK(int, 0, inode_notifysecctx, struct inode *inode, void *ctx, u32 ctxlen)
- LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 ctxlen)
--LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
-+LSM_HOOK(int, 1, inode_getsecctx, struct inode *inode, void **ctx,
- 	 u32 *ctxlen)
- 
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
-@@ -308,9 +308,9 @@ LSM_HOOK(int, 0, socket_getsockopt, struct socket *sock, int level, int optname)
- LSM_HOOK(int, 0, socket_setsockopt, struct socket *sock, int level, int optname)
- LSM_HOOK(int, 0, socket_shutdown, struct socket *sock, int how)
- LSM_HOOK(int, 0, socket_sock_rcv_skb, struct sock *sk, struct sk_buff *skb)
--LSM_HOOK(int, 0, socket_getpeersec_stream, struct socket *sock,
-+LSM_HOOK(int, 1, socket_getpeersec_stream, struct socket *sock,
- 	 sockptr_t optval, sockptr_t optlen, unsigned int len)
--LSM_HOOK(int, 0, socket_getpeersec_dgram, struct socket *sock,
-+LSM_HOOK(int, 1, socket_getpeersec_dgram, struct socket *sock,
- 	 struct sk_buff *skb, u32 *secid)
- LSM_HOOK(int, 0, sk_alloc_security, struct sock *sk, int family, gfp_t priority)
- LSM_HOOK(void, LSM_RET_VOID, sk_free_security, struct sock *sk)
+@@ -136,14 +136,14 @@ LSM_HOOK(int, 0, inode_follow_link, struct dentry *dentry, struct inode *inode,
+ LSM_HOOK(int, 0, inode_permission, struct inode *inode, int mask)
+ LSM_HOOK(int, 0, inode_setattr, struct dentry *dentry, struct iattr *attr)
+ LSM_HOOK(int, 0, inode_getattr, const struct path *path)
+-LSM_HOOK(int, 0, inode_setxattr, struct mnt_idmap *idmap,
++LSM_HOOK(int, 1, inode_setxattr, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *name, const void *value,
+ 	 size_t size, int flags)
+ LSM_HOOK(void, LSM_RET_VOID, inode_post_setxattr, struct dentry *dentry,
+ 	 const char *name, const void *value, size_t size, int flags)
+ LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
+ LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
+-LSM_HOOK(int, 0, inode_removexattr, struct mnt_idmap *idmap,
++LSM_HOOK(int, 1, inode_removexattr, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *name)
+ LSM_HOOK(int, 0, inode_set_acl, struct mnt_idmap *idmap,
+ 	 struct dentry *dentry, const char *acl_name, struct posix_acl *kacl)
 diff --git a/security/security.c b/security/security.c
-index 2dfc7b9f6ed9..b9a7b15e269e 100644
+index b9a7b15e269e..0528cbef0624 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -784,6 +784,23 @@ static int lsm_superblock_alloc(struct super_block *sb)
- 	RC;							\
- })
+@@ -2158,8 +2158,8 @@ int security_inode_setxattr(struct mnt_idmap *idmap,
+ 	 * SELinux and Smack integrate the cap call,
+ 	 * so assume that all LSMs supplying this call do so.
+ 	 */
+-	ret = call_int_hook(inode_setxattr, 1, idmap, dentry, name, value,
+-			    size, flags);
++	ret = call_int_hook_ignore_default(inode_setxattr, 1, idmap, dentry, name,
++					   value, size, flags);
  
-+#define call_int_hook_ignore_default(FUNC, IRC, ...) ({		\
-+	int TRC, RC = IRC;					\
-+	do {							\
-+		struct security_hook_list *P;			\
-+								\
-+		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
-+			TRC = P->hook.FUNC(__VA_ARGS__);	\
-+			if (TRC != LSM_RET_DEFAULT(FUNC))	\
-+				continue;			\
-+			RC = TRC;				\
-+			if (RC != 0)				\
-+				break;				\
-+		}						\
-+	} while (0);						\
-+	RC;							\
-+})
-+
- /* Security operations */
- 
- /**
-@@ -1405,9 +1422,9 @@ int security_sb_set_mnt_opts(struct super_block *sb,
- 			     unsigned long kern_flags,
- 			     unsigned long *set_kern_flags)
- {
--	return call_int_hook(sb_set_mnt_opts,
--			     mnt_opts ? -EOPNOTSUPP : 0, sb,
--			     mnt_opts, kern_flags, set_kern_flags);
-+	return call_int_hook_ignore_default(sb_set_mnt_opts,
-+					    mnt_opts ? -EOPNOTSUPP : 0, sb,
-+					    mnt_opts, kern_flags, set_kern_flags);
- }
- EXPORT_SYMBOL(security_sb_set_mnt_opts);
- 
-@@ -1612,11 +1629,13 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
- 		return 0;
- 
- 	if (!initxattrs)
--		return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
--				     dir, qstr, NULL, NULL, NULL);
-+		return call_int_hook_ignore_default(inode_init_security,
-+						    -EOPNOTSUPP, inode, dir,
-+						    qstr, NULL, NULL, NULL);
- 	memset(new_xattrs, 0, sizeof(new_xattrs));
- 	lsm_xattr = new_xattrs;
--	ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
-+	ret = call_int_hook_ignore_default(inode_init_security, -EOPNOTSUPP,
-+			    inode, dir, qstr,
- 			    &lsm_xattr->name,
- 			    &lsm_xattr->value,
- 			    &lsm_xattr->value_len);
-@@ -3973,7 +3992,8 @@ EXPORT_SYMBOL(security_inode_setsecctx);
-  */
- int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen)
- {
--	return call_int_hook(inode_getsecctx, -EOPNOTSUPP, inode, ctx, ctxlen);
-+	return call_int_hook_ignore_default(inode_getsecctx, -EOPNOTSUPP, inode,
-+					    ctx, ctxlen);
- }
- EXPORT_SYMBOL(security_inode_getsecctx);
- 
-@@ -4330,8 +4350,8 @@ EXPORT_SYMBOL(security_sock_rcv_skb);
- int security_socket_getpeersec_stream(struct socket *sock, sockptr_t optval,
- 				      sockptr_t optlen, unsigned int len)
- {
--	return call_int_hook(socket_getpeersec_stream, -ENOPROTOOPT, sock,
--			     optval, optlen, len);
-+	return call_int_hook_ignore_default(socket_getpeersec_stream, -ENOPROTOOPT,
-+					    sock, optval, optlen, len);
- }
- 
- /**
-@@ -4351,8 +4371,8 @@ int security_socket_getpeersec_stream(struct socket *sock, sockptr_t optval,
- int security_socket_getpeersec_dgram(struct socket *sock,
- 				     struct sk_buff *skb, u32 *secid)
- {
--	return call_int_hook(socket_getpeersec_dgram, -ENOPROTOOPT, sock,
--			     skb, secid);
-+	return call_int_hook_ignore_default(socket_getpeersec_dgram, -ENOPROTOOPT,
-+					    sock, skb, secid);
- }
- EXPORT_SYMBOL(security_socket_getpeersec_dgram);
- 
+ 	if (ret == 1)
+ 		ret = cap_inode_setxattr(dentry, name, value, size, flags);
+@@ -2321,7 +2321,8 @@ int security_inode_removexattr(struct mnt_idmap *idmap,
+ 	 * SELinux and Smack integrate the cap call,
+ 	 * so assume that all LSMs supplying this call do so.
+ 	 */
+-	ret = call_int_hook(inode_removexattr, 1, idmap, dentry, name);
++	ret = call_int_hook_ignore_default(inode_removexattr, 1, idmap, dentry,
++					   name);
+ 	if (ret == 1)
+ 		ret = cap_inode_removexattr(idmap, dentry, name);
+ 	if (ret)
 -- 
 2.41.0
 
