@@ -2,128 +2,172 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4D776F596
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Aug 2023 00:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD36076F620
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Aug 2023 01:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjHCWVJ (ORCPT
+        id S231701AbjHCX1W (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 3 Aug 2023 18:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        Thu, 3 Aug 2023 19:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjHCWVI (ORCPT
+        with ESMTP id S230471AbjHCX1W (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 3 Aug 2023 18:21:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1B0212D;
-        Thu,  3 Aug 2023 15:21:07 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 373MEKmh010326;
-        Thu, 3 Aug 2023 22:20:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=J94tjLs7NSAtXHZpjBBYmnDnVDQrX+eytO+yIXyB3B4=;
- b=YZrOd00t9u52oYMDCrBbE/PDVyhBHmrDuHFTvS//H2rm0u6/CdmNSF+V8I6twLnV5Ms9
- Dyf4asJTTuRcVVS+sRGMcNCwag2YQPYuAw/QNsgERtH+GtFHl6W6MGoERZnH1gRIgpLx
- xaVbC6L1yMPTarTcZYUnmy8HSIXMxFBO5lObzBpOjn361woqzLLyLKNeHXI6tpeWUeOc
- R4p6JSBJPu9S3IkJxgtaMt1scBgmsTrrwL0hpl3DD/UcENcM86lqIwrwHLHZA5VQglYV
- vZ2CtiEgz0sefTculZIoqUz+DBm0RIeIcpOnp0788e5SsRGgC4/fBArwfxWeJAdUNrNj 2g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s8mun83h7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 22:20:49 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 373MJK9Q023657;
-        Thu, 3 Aug 2023 22:20:48 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3s8mun83gx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 22:20:48 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 373KrZtM022105;
-        Thu, 3 Aug 2023 22:20:48 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3s8kp2rgym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 22:20:47 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 373MKlNR64225720
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Aug 2023 22:20:47 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8F43B58056;
-        Thu,  3 Aug 2023 22:20:47 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 078B25803F;
-        Thu,  3 Aug 2023 22:20:47 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.157.226])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Aug 2023 22:20:46 +0000 (GMT)
-Message-ID: <31a5aed2f075b69705142ff6f558e8cd8ccb9cd8.camel@linux.ibm.com>
-Subject: Re: [PATCH -next] trusted-keys: Fix kernel-doc warnings in
- trusted-keys
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>, jarkko@kernel.org,
-        dhowells@redhat.com
-Cc:     jejb@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Thu, 03 Aug 2023 18:20:46 -0400
-In-Reply-To: <CAHC9VhTibk2tFPt7ZjFL9ps9NO6_sCQwXtbF1pQCXO+jGhshpg@mail.gmail.com>
-References: <20230621074623.498647-1-cuigaosheng1@huawei.com>
-         <CAHC9VhQzZYg1HH_Q6OYytkp-uYOmCAnpzHb9tiRA-YC0VNha9A@mail.gmail.com>
-         <CAHC9VhQaWM=eC98ezfKmOA6sd9wzxQ0PFp5EysUKLZFEt=yB=A@mail.gmail.com>
-         <CAHC9VhTibk2tFPt7ZjFL9ps9NO6_sCQwXtbF1pQCXO+jGhshpg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tQb5cWjKssgTUgceOD4trAYZqC4Bcysk
-X-Proofpoint-ORIG-GUID: e9MDNwE43T5FD8_-GOcKGxZCUkF7VNr-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-03_22,2023-08-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 bulkscore=0
- impostorscore=0 clxscore=1011 suspectscore=0 mlxlogscore=911
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308030198
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 3 Aug 2023 19:27:22 -0400
+X-Greylist: delayed 561 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Aug 2023 16:27:17 PDT
+Received: from out-64.mta1.migadu.com (out-64.mta1.migadu.com [95.215.58.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EAE1FCB
+        for <linux-security-module@vger.kernel.org>; Thu,  3 Aug 2023 16:27:17 -0700 (PDT)
+Message-ID: <b9c219e6-e42c-3772-fba8-e40afaad1465@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1691104672; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5UcTW2ZerF3E/NIit4kPDouCVNTX9RBlsI5Ewa1ULsM=;
+        b=Fsjc8Ltt0taLpi+MclSzQBt+8MTlUJ8c8vCqPf13fjSwgX7el+/jK+lMzp6L2Lw0CINOpz
+        50OxThDABRzHVgXUkfNL3OZ+ItQ7RrAD0W0Vdm14Q38UTuGef0HnHmGb2an9ilV3nzU2gi
+        RosNEGLXB9iKVo09A0d+mcpJ3il/vFg=
+Date:   Thu, 3 Aug 2023 16:17:37 -0700
+MIME-Version: 1.0
+Reply-To: yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v9 1/4] bpf: Add update_socket_protocol hook
+To:     Geliang Tang <geliang.tang@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Simon Horman <horms@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1691069778.git.geliang.tang@suse.com>
+ <fc284a49832630e4b908f11c7e07a8066b7bd789.1691069778.git.geliang.tang@suse.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <fc284a49832630e4b908f11c7e07a8066b7bd789.1691069778.git.geliang.tang@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, 2023-08-03 at 18:00 -0400, Paul Moore wrote:
-> On Tue, Jul 25, 2023 at 4:49 PM Paul Moore <paul@paul-moore.com> wrote:
-> > On Wed, Jun 21, 2023 at 9:33 AM Paul Moore <paul@paul-moore.com> wrote:
-> > > On Wed, Jun 21, 2023 at 3:46 AM Gaosheng Cui <cuigaosheng1@huawei.com> wrote:
-> > > >
-> > > > Fix kernel-doc warnings in trusted-keys:
-> > > >
-> > > > security/keys/trusted-keys/trusted_tpm2.c:203: warning: expecting
-> > > > prototype for tpm_buf_append_auth(). Prototype was for
-> > > > tpm2_buf_append_auth() instead.
-> > > >
-> > > > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> > > > ---
-> > > >  security/keys/trusted-keys/trusted_tpm2.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > Reviewed-by: Paul Moore <paul@paul-moore.com>
-> >
-> > Jarkko, David, can one of you pick this up into your tree?
+
+
+On 8/3/23 6:41 AM, Geliang Tang wrote:
+> Add a hook named update_socket_protocol in __sys_socket(), for bpf
+> progs to attach to and update socket protocol. One user case is to
+> force legacy TCP apps to create and use MPTCP sockets instead of
+> TCP ones.
 > 
-> Guys, this patch is both trivial and obviously correct, please pick it
-> up so it can go up during the next merge window.
+> Define a mod_ret set named bpf_mptcp_fmodret_ids, add the hook
+> update_socket_protocol into this set, and register it in
+> bpf_mptcp_kfunc_init().
+> 
+> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/79
+> Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+> ---
+>   net/mptcp/bpf.c | 17 +++++++++++++++++
+>   net/socket.c    | 24 ++++++++++++++++++++++++
+>   2 files changed, 41 insertions(+)
+> 
+> diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
+> index 5a0a84ad94af..c43aee31014d 100644
+> --- a/net/mptcp/bpf.c
+> +++ b/net/mptcp/bpf.c
+> @@ -12,6 +12,23 @@
+>   #include <linux/bpf.h>
+>   #include "protocol.h"
+>   
+> +#ifdef CONFIG_BPF_JIT
 
-Paul, either Jarkko or I can queue a trusted-keys patch.  As this isn't
-on the top of Jarkko's radar, I'll queue it.
+Is this necessary? Most other register_btf_* functions do not have
+a config like this.
 
-Mimi
-
+> +BTF_SET8_START(bpf_mptcp_fmodret_ids)
+> +BTF_ID_FLAGS(func, update_socket_protocol)
+> +BTF_SET8_END(bpf_mptcp_fmodret_ids)
+> +
+> +static const struct btf_kfunc_id_set bpf_mptcp_fmodret_set = {
+> +	.owner = THIS_MODULE,
+> +	.set   = &bpf_mptcp_fmodret_ids,
+> +};
+> +
+> +static int __init bpf_mptcp_kfunc_init(void)
+> +{
+> +	return register_btf_fmodret_id_set(&bpf_mptcp_fmodret_set);
+> +}
+> +late_initcall(bpf_mptcp_kfunc_init);
+> +#endif /* CONFIG_BPF_JIT */
+> +
+>   struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
+>   {
+>   	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
+> diff --git a/net/socket.c b/net/socket.c
+> index 2b0e54b2405c..9f98ced88ac5 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -1644,11 +1644,35 @@ struct file *__sys_socket_file(int family, int type, int protocol)
+>   	return sock_alloc_file(sock, flags, NULL);
+>   }
+>   
+> +/*	A hook for bpf progs to attach to and update socket protocol.
+> + *
+> + *	A static noinline declaration here could cause the compiler to
+> + *	optimize away the function. A global noinline declaration will
+> + *	keep the definition, but may optimize away the callsite.
+> + *	Therefore, __weak is needed to ensure that the call is still
+> + *	emitted, by telling the compiler that we don't know what the
+> + *	function might eventually be.
+> + *
+> + *	__diag_* below are needed to dismiss the missing prototype warning.
+> + */
+> +
+> +__diag_push();
+> +__diag_ignore_all("-Wmissing-prototypes",
+> +		  "kfuncs which will be used in BPF programs");
+> +
+> +__weak noinline int update_socket_protocol(int family, int type, int protocol)
+> +{
+> +	return protocol;
+> +}
+> +
+> +__diag_pop();
+> +
+>   int __sys_socket(int family, int type, int protocol)
+>   {
+>   	struct socket *sock;
+>   	int flags;
+>   
+> +	protocol = update_socket_protocol(family, type, protocol);
+>   	sock = __sys_socket_create(family, type, protocol);
+>   	if (IS_ERR(sock))
+>   		return PTR_ERR(sock);
