@@ -2,182 +2,120 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B020277428A
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 19:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5BB773DC2
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 18:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbjHHRqi (ORCPT
+        id S229535AbjHHQWh (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Aug 2023 13:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        Tue, 8 Aug 2023 12:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbjHHRpj (ORCPT
+        with ESMTP id S230527AbjHHQVD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:45:39 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949009009
-        for <linux-security-module@vger.kernel.org>; Tue,  8 Aug 2023 09:20:44 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6bc9c01e154so12200a34.0
-        for <linux-security-module@vger.kernel.org>; Tue, 08 Aug 2023 09:20:44 -0700 (PDT)
+        Tue, 8 Aug 2023 12:21:03 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495D993E0
+        for <linux-security-module@vger.kernel.org>; Tue,  8 Aug 2023 08:49:06 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7659cb9c42aso423151685a.3
+        for <linux-security-module@vger.kernel.org>; Tue, 08 Aug 2023 08:49:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1691511611; x=1692116411;
+        d=paul-moore.com; s=google; t=1691509745; x=1692114545;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JtPBjD5nO4Kh7oz9+OPpfIl2AMkC3z5v5j8dstfO/Ys=;
-        b=ICyi5gqQ+n4U5vz+WigjnO7KgXZRFJ99oFlrZEzUqvja5GyH7goSLi4NsW4tiNgctW
-         1bX5hHWgc5BXxZHcvMKB/LdCxXWUNFLyICWwmrm5SZyvKGpeXAnhyqvBaglbq+RDk97q
-         4qiPt72a4v4TvPBm1LHesLAhfSo766d7Us9VoDGlshRfz6qz9RvPjWesVu1qdQPKcXmG
-         zkAfmkwy9pCitjxIa+b3We2Eer5WkcklAYKp/afIvyj/1PTjbAPBn3/UBe9tmKP6SPxP
-         sK3am//SYoUq2aA4OWFN6gKfbD0J4Z3x42bP/trjOaNwb59q3vuf352USbJJu/R1Mitj
-         2AeA==
+        bh=Em0u3rAwfsJ9DADQmbz8jINXwrAXQCvwsoKWZ+kvbag=;
+        b=XhmtZmN+4X3aHwdqW3pPQRMyQQlli/XhwSdU/PJi+DXyt+yEZuKyAuD8yRPFxZXfel
+         3Xy21G0U+rkD+acyyq4aUFern1imNDo6Ew3vPYOhXwFv8fGOgGIA3Cq2jGs4GKlDXOUw
+         9JG6WlfRgnU4V8AiIR6KKUpjRqR4ARkvHhL3J3EIgHuNFU1Xsi4w6icTCi4fLbAxJXiM
+         Yri4tHKoYDO5v1g3xvvyrCfLrCoWSLYJnyGG/2aOogMmK72TA5S3MHntHKdH3sP2yPBF
+         JPbAJTMPgHq689qygQbHobGvQsuRUxIoSoFT0K4P+GhYnMckfJ5/TRlWYTy9INNXUQoR
+         lHQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691511611; x=1692116411;
+        d=1e100.net; s=20221208; t=1691509745; x=1692114545;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JtPBjD5nO4Kh7oz9+OPpfIl2AMkC3z5v5j8dstfO/Ys=;
-        b=P8fhNiX0vadTi8pvzAX4MDg92+/LfsD6cku1OJEnKRYJv5iY1Wpc+8/3Y0LMkrDdFw
-         fK4Un7D/xtp//p8wmQgyw1bgc+qysaKICOOfh1bmv1jr25Dp9C51tQSERSE/+TL1wBvi
-         p8b+Rw+UB6CbgwFsVfsMWYnEPiY7ZFVEKZMcWSfM4NjhMey3Y49KhcMMujdc0XHnCdru
-         rmFsS6bcS0SU+ZxZcAWhal8bI1aQSlO5HRyK6o6NT6Gjxsfiehntlv2xQgchBJ7wEsj5
-         DKjscn0ozWOKExPnYCAjwh8fPMSxvPzqEx3n/vCM4mGf6N5nYUqLrCPZq5jcTisJ+SNb
-         FZyQ==
-X-Gm-Message-State: AOJu0Yxrvomi/MqNXNQIXn1S0imtgUNO62wTpYJu92frGusCwCrnRCpV
-        OQV7f84/LzsLSFR2QgxK+kehJuQiUiUYpg9wsoEDsnnFVbtmOYTudg==
-X-Google-Smtp-Source: AGHT+IF/JRz4aZIQWa2WepnDOzwFFd1ZxEtS4bEAC0j0D3rdTiHKJrP+/acga61+52VOdNPg2Otbk0y2AdC2UR4pjsU=
-X-Received: by 2002:a81:8381:0:b0:586:a680:250 with SMTP id
- t123-20020a818381000000b00586a6800250mr15902ywf.5.1691505182583; Tue, 08 Aug
- 2023 07:33:02 -0700 (PDT)
+        bh=Em0u3rAwfsJ9DADQmbz8jINXwrAXQCvwsoKWZ+kvbag=;
+        b=Mt/t7nHsN9Kh6IK+2yf9PSdFLSHpAb/VaWMuxh1nq+3rv7QFVwyxJGpvns4hZ4x1G8
+         ekYZpabRHd505cdad60W492GDV14hKkKSpr7xWlj064KymG5qOgd4p6TJHfbsTM+mzLR
+         kfP/LKWFNI+Je6xzS1H99RJLaJUlytwIeVHhhjF+0mjXDfG7J47e5p96K6eJdYzV8ZRs
+         ghSd/myFf87uEQK01NgpcvmyVuz73DpbdIY4VKmtfRSG/a3GY9mgSHwNyk50eGEm8Fiz
+         4idR+1Nq5EbEeWbweiLACimJ7eaf2TplbPltjvFUS9V1ubVN/0gPOiG2NK9ho8KV0sYM
+         3LeQ==
+X-Gm-Message-State: AOJu0YwGEoI73DN5SemDHbwzOcRqGvtSQSIn6zwCOPqv0SAfeuRaSnO/
+        goXPty1PFMoVoFVifvHqY3WDSfVU05gYPDz3O+x23g+vdw8fe07jjA==
+X-Google-Smtp-Source: AGHT+IGLc34aLVA9ZLIe34W64Ir8n1SwTlr71PLKuPbf1vupgTPfoQCmYXbLiBv77geHjnpKt9FR9UZG6Qiq89sY/1I=
+X-Received: by 2002:a81:7741:0:b0:583:7b49:15dd with SMTP id
+ s62-20020a817741000000b005837b4915ddmr13398514ywc.48.1691505497509; Tue, 08
+ Aug 2023 07:38:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <32e59b69-79a2-f440-bf94-fdb8f8f5fa64@wewakecorp.com>
- <CAHC9VhRdCSJwB9hpyrCe+D00ddeRLisz=9GEWJz50ybr80tnsg@mail.gmail.com>
- <4ec9e7ae-e95e-a737-5131-0b57922e4fce@wewakecorp.com> <CAHC9VhQBbbSu6YBbnXOPMjpBxQxc1nmgA+icfN4x6s6FeQSeiw@mail.gmail.com>
- <02da6484-658c-bfe8-0ae0-08ffe9b93c47@wewakecorp.com> <20230806171622.GA17655@wind.enjellic.com>
- <CAHC9VhRDcJTMpzeWsNHbhkJEk0Vsj+zH_utTgmfzK6Teqzn81Q@mail.gmail.com> <20230808064014.GA31533@wind.enjellic.com>
-In-Reply-To: <20230808064014.GA31533@wind.enjellic.com>
+References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
+ <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com>
+ <2155117.irdbgypaU6@x2> <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
+ <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
+In-Reply-To: <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 8 Aug 2023 10:32:51 -0400
-Message-ID: <CAHC9VhRy0=N+kJ8QETgQv8nkyA6_B+7t9QFiQCxC8MFU7A_E=Q@mail.gmail.com>
-Subject: Re: [LSM Stacking] SELinux policy inside container affects a
- processon Host
-To:     "Dr. Greg" <greg@enjellic.com>
-Cc:     Leesoo Ahn <lsahn@wewakecorp.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-security-module@vger.kernel.org
+Date:   Tue, 8 Aug 2023 10:38:06 -0400
+Message-ID: <CAHC9VhQPROcbN5MfS5pnNDe-YDgLTAY7W9eQkNAJU3kBH43ZEA@mail.gmail.com>
+Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Steve Grubb <sgrubb@redhat.com>, linux-audit@redhat.com,
+        audit@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Aug 8, 2023 at 2:41=E2=80=AFAM Dr. Greg <greg@enjellic.com> wrote:
-> On Sun, Aug 06, 2023 at 03:25:32PM -0400, Paul Moore wrote:
-> > On Sun, Aug 6, 2023 at 1:16???PM Dr. Greg <greg@enjellic.com> wrote:
-> > > On Fri, Jul 28, 2023 at 10:54:23AM +0900, Leesoo Ahn wrote:
-> > > > 2023-07-07 ?????? 11:20??? Paul Moore ???(???) ??? ???:
-> > > > >On Fri, Jul 7, 2023 at 4:29???AM Leesoo Ahn <lsahn@wewakecorp.com>=
- wrote:
-> > > >
-> > > > [...]
-> > > >
-> > > > >
-> > > > >What you are looking for is a combination of LSM stacking and
-> > > > >individual LSM namespacing. Sadly, I think the communications arou=
-nd
-> > > > >LSM stacking have not been very clear on this and I worry that man=
-y
-> > > > >people are going to be disappointed with LSM stacking for this ver=
-y
-> > > > >reason.
-> > > > >
-> > > > >While stacking of LSMs is largely done at the LSM layer, namespaci=
-ng
-> > > > >LSMs such that they can be customized for individual containers
-> > > > >requires work to be done at the per-LSM level as each LSM is
-> > > > >different. AppArmor already has a namespacing concept, but SELinux
-> > > > >does not. Due to differences in the approach taken by the two LSMs=
-,
-> > > > >namespacing is much more of a challenge for SELinux, largely due t=
+On Tue, Aug 8, 2023 at 6:07=E2=80=AFAM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+> On 2023/08/08 5:13, Paul Moore wrote:
+> > On Mon, Aug 7, 2023 at 3:03=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> =
+wrote:
+> >> On Monday, August 7, 2023 2:53:40 PM EDT Paul Moore wrote:
+> >>> On Sun, Aug 6, 2023 at 9:05=E2=80=AFAM Tetsuo Handa
+> >>>
+> >>> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> >>>> When an unexpected system event occurs, the administrator may want t=
 o
-> > > > >issues around filesystem labeling. We have not given up on the ide=
-a,
-> > > > >but we have yet to arrive at a viable solution for namespacing
-> > > > >SELinux.
-> > > > >
-> > > > >If you are interested in stacking SELinux and AppArmor, I believe =
-the
-> > > > >only practical solution is to run SELinux on the host system (init=
-ial
-> > > > >namespace) and run AppArmor in the containers.
-> > >
-> > > > Paul, I don't get that SELinux on the host system and run AppArmor
-> > > > in the containers is the only practical solution. Could you please
-> > > > explain that in more details?
-> > >
-> > > It appears that Paul is extremely busy, so I thought the 'Quixote
-> > > Group' would try and offer some reflections that may help with your
-> > > efforts.
->
-> > My apologies, yes I am rather busy at the moment, but I also stopped
-> > following this thread a while ago as it didn't seem to be going
-> > anywhere meaningful.  I happen to read this last email while I'm
-> > waiting in an airport, so let me try and provide a quick explanation
-> > about why running SELinux only in a container is a bad idea.
+> >>>> identify which application triggered the event. For example, unexpec=
+ted
+> >>>> process termination is still a real concern enough to write articles
+> >>>> like https://access.redhat.com/solutions/165993 . TaskTracker is a
+> >>>> trivial LSM module which emits TOMOYO-like information into the audi=
+t
+> >>>> logs for better understanding of unexpected system events.
+> >>>
+> >>> Help me understand why all of this information isn't already availabl=
+e
+> >>> via some combination of Audit and TOMOYO, or simply audit itself?
+> >>
+> >> Usually when you want this kind of information, you are investigating =
+an
+> >> incident. You wouldn't place a syscall audit for every execve and then
+> >> reconstruct the call chain from that. In the case of long running daem=
+ons,
+> >> the information could have been rotated away. But typically you want t=
+o see
+> >> what the entry point is. A sudden shell from bind would be suspicious =
+while a
+> >> shell from sshd is not.
 > >
-> > As you probably know, the Linux kernel has no concept of a container,
-> > it only supports subsystem specific namespaces, e.g. mount namespace,
-> > network namespace, etc.  SELinux does not provide a subsystem
-> > namespace, and it does not generally concern itself with other
-> > subsystem names.  From a SELinux perspective there is no difference
-> > between a process running in the host namespace or a
-> > container/namespace; both are treated the same with access control
-> > decisions made based on the processes' SELinux domain, the type of the
-> > target resource, and the access requested.
+> > Once again, why not use the existing audit and/or TOMOYO capabilities.
 > >
-> > If one were to load a SELinux policy inside a container, even if it
-> > were allowed, the system would likely behave in unexpected ways as the
-> > container-loaded policy will take effect across the entire system, not
-> > just inside the container.
 >
-> All reasonable and consistent, with what we had previously written
-> with respect to there being no notion of LSM namespacing.
->
-> To further assist Leesoo and others who may be following this, you had
-> suggested the following earlier in this thread:
->
-> Paul> If you are interested in stacking SELinux and AppArmor, I
-> Paul> believe the only practical solution is to run SELinux on the
-> Paul> host system (initial namespace) and run AppArmor in the
-> Paul> containers.
->
-> Which would seem to apply that in a 'stacked' LSM configuration of
-> SELinux and AppArmor, there would be a possibility of using the two
-> LSM's without them 'colliding', the equivalent of what could be
-> considered a 'nested' LSM implementation.
+> Can't, for Fedora/RHEL does not enable TOMOYO.
+> I need a way that can be used by RHEL users running with selinux=3D0.
 
-SELinux applies access control across the entire system, regardless of
-what namespaces may be configured on the system.  Loading a SELinux
-policy in the host/initial-namespace during early boot helps ensure
-proper labeling of system entities and a better user experience;
-loading a SELinux policy in a container/namespace can lead to
-surprising and unpredictable results across the whole of the system.
-AppArmor is different in that it has support for
-containers/namespaces.  Running SELinux on the host and AppArmor in a
-container isn't so much about preventing collisions, they are still
-simultaneously running and applying their security policies, it is
-more about ensuring the LSMs, the admins, and the users all see
-compatible views of the system.
-
-Please do not confuse any of the above as a 'nested' or namespaced LSM
-layer; the current in-progress LSM stacking is simply that: the
-ability to stack some combination of LSMs in a few prescribed
-configurations.  Talking about 'nesting' or 'namespacing' at the LSM
-layer is confusing at best, and misleading at the worst.
+What makes you think your distribution of choice would enable this new
+LSM?  I'm sorry, but this sounds like more of an issue with the
+choices made by a distro rather than something missing upstream.
 
 --=20
 paul-moore.com
