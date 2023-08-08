@@ -2,52 +2,52 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3125774C62
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 23:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C612774BAE
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 22:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234817AbjHHVIE (ORCPT
+        id S235692AbjHHUxr (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Aug 2023 17:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        Tue, 8 Aug 2023 16:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbjHHVIC (ORCPT
+        with ESMTP id S235135AbjHHUxg (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Aug 2023 17:08:02 -0400
+        Tue, 8 Aug 2023 16:53:36 -0400
 Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066251FC8C;
-        Tue,  8 Aug 2023 13:39:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD9421797;
+        Tue,  8 Aug 2023 13:39:30 -0700 (PDT)
 Received: from [192.168.192.83] (unknown [50.47.134.245])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id EC3D33F7B7;
-        Tue,  8 Aug 2023 20:38:59 +0000 (UTC)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id DF2BB3F7B7;
+        Tue,  8 Aug 2023 20:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1691527141;
-        bh=g4haua1IOmEAZIW6GpRHq65jQw5+tkVRcSl6jTiUYWE=;
+        s=20210705; t=1691527169;
+        bh=rwhgNCgCm4EhMb9h8pB1jFw10fTpnGr8gIdPRM1+pEY=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=Sk7TlFRtjCEL1EgTvHO0+JFUkHXioqPLs/P3V+X2gPA1XLr2blkUd7RNW/wsKMF9r
-         ivUJPqPQovu/t2MFHdzmiCvkD5+izdmPtAcX8TdFMDPZaaCaP6kiQPKZEfFe+UnKFW
-         EEgpjQh6reR1/FlPpDCJ3VANSE964P2NGSVkJ5uyrzgUIJNnqufxBIBK7g5pDxNof7
-         QWn+OTZetD6pkjCReQNVz/kBadC7e/7kjm0DQqlP38aKgm1JRjxIublUxEDBBWjRM8
-         hB8n1unTxD69uHUYplqPiS4y3mPy+LIl/Lj7T0AFjj4B/GdbNNFbtxIrkr8RdtrOyR
-         6a062F51ddwUw==
-Message-ID: <33790c5c-c23a-7207-c3a7-454af1452ad5@canonical.com>
-Date:   Tue, 8 Aug 2023 13:38:58 -0700
+        b=PqIUVK41G9gdA+HLd9j1+rmGhkiPrUIPA5JI0T4bTxKpjkVths1rYgL2vCGnSBGIS
+         YQIp6TNMjys9A7yJCjF0QvNB8kmDP2R7d09HRCNqEi/p+2DPre2PZfGLU03tq+IWXg
+         1ML2AJX8NUT7crONFxMGxua+Su5EoELYLx6ae0zvRVTaaRio0bWD9936UJE18pUJ6L
+         AF2/1JvIiDZQwhnt+ZuX7gWsgd9nGmZsZb8iHGQWNdK7jg+MO3IPqmlkETn/axtAl5
+         pw7hAQsLIXZK36iAlWGEKrZzQl0h0UzD3XaG3h9JvlZknxvqmE/b4aq3GYxxN57rCa
+         sgEwMonqbTeAA==
+Message-ID: <2c3a9d22-4e7b-ccf9-d43e-8e785401945f@canonical.com>
+Date:   Tue, 8 Aug 2023 13:39:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH -next] apparmor: cleanup unused functions in file.h
+Subject: Re: [PATCH -next] apparmor: cleanup unused declarations in policy.h
 Content-Language: en-US
 To:     Xiu Jianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
         jmorris@namei.org, serge@hallyn.com, mike.salvatore@canonical.com
 Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230725141259.233391-1-xiujianfeng@huawei.com>
+References: <20230725141239.233372-1-xiujianfeng@huawei.com>
 From:   John Johansen <john.johansen@canonical.com>
 Organization: Canonical
-In-Reply-To: <20230725141259.233391-1-xiujianfeng@huawei.com>
+In-Reply-To: <20230725141239.233372-1-xiujianfeng@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -60,66 +60,47 @@ Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
 On 7/25/23 07:12, Xiu Jianfeng wrote:
-> After changes in commit 33bf60cabcc7 ("LSM: Infrastructure management of
-> the file security"), aa_alloc_file_ctx() and aa_free_file_ctx() are no
-> longer used, so remove them, and also remove aa_get_file_label() because
-> it seems that it's never been used before.
+> The implementions of these declarations do not exist, remove them all.
 > 
 > Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+
 Acked-by: John Johansen <john.johansen@canonical.com>
 
 this has been pulled into apparmor-next
 
+
 > ---
->   security/apparmor/include/file.h | 37 --------------------------------
->   1 file changed, 37 deletions(-)
+>   security/apparmor/include/policy.h | 6 ------
+>   1 file changed, 6 deletions(-)
 > 
-> diff --git a/security/apparmor/include/file.h b/security/apparmor/include/file.h
-> index 5be620af33ba..23cb6f9dbe6e 100644
-> --- a/security/apparmor/include/file.h
-> +++ b/security/apparmor/include/file.h
-> @@ -45,43 +45,6 @@ struct aa_file_ctx {
->   	u32 allow;
->   };
+> diff --git a/security/apparmor/include/policy.h b/security/apparmor/include/policy.h
+> index 545f791cabda..6e5ec9c37b48 100644
+> --- a/security/apparmor/include/policy.h
+> +++ b/security/apparmor/include/policy.h
+> @@ -227,10 +227,6 @@ extern enum profile_mode aa_g_profile_mode;
+>   #define profiles_ns(P) ((P)->ns)
+>   #define name_is_shared(A, B) ((A)->hname && (A)->hname == (B)->hname)
 >   
-> -/**
-> - * aa_alloc_file_ctx - allocate file_ctx
-> - * @label: initial label of task creating the file
-> - * @gfp: gfp flags for allocation
-> - *
-> - * Returns: file_ctx or NULL on failure
-> - */
-> -static inline struct aa_file_ctx *aa_alloc_file_ctx(struct aa_label *label,
-> -						    gfp_t gfp)
-> -{
-> -	struct aa_file_ctx *ctx;
+> -void aa_add_profile(struct aa_policy *common, struct aa_profile *profile);
 > -
-> -	ctx = kzalloc(sizeof(struct aa_file_ctx), gfp);
-> -	if (ctx) {
-> -		spin_lock_init(&ctx->lock);
-> -		rcu_assign_pointer(ctx->label, aa_get_label(label));
-> -	}
-> -	return ctx;
-> -}
 > -
-> -/**
-> - * aa_free_file_ctx - free a file_ctx
-> - * @ctx: file_ctx to free  (MAYBE_NULL)
-> - */
-> -static inline void aa_free_file_ctx(struct aa_file_ctx *ctx)
-> -{
-> -	if (ctx) {
-> -		aa_put_label(rcu_access_pointer(ctx->label));
-> -		kfree_sensitive(ctx);
-> -	}
-> -}
-> -
-> -static inline struct aa_label *aa_get_file_label(struct aa_file_ctx *ctx)
-> -{
-> -	return aa_get_label_rcu(&ctx->label);
-> -}
-> -
->   /*
->    * The xindex is broken into 3 parts
->    * - index - an index into either the exec name table or the variable table
+> -void aa_free_proxy_kref(struct kref *kref);
+>   struct aa_ruleset *aa_alloc_ruleset(gfp_t gfp);
+>   struct aa_profile *aa_alloc_profile(const char *name, struct aa_proxy *proxy,
+>   				    gfp_t gfp);
+> @@ -239,14 +235,12 @@ struct aa_profile *aa_alloc_null(struct aa_profile *parent, const char *name,
+>   struct aa_profile *aa_new_learning_profile(struct aa_profile *parent, bool hat,
+>   					   const char *base, gfp_t gfp);
+>   void aa_free_profile(struct aa_profile *profile);
+> -void aa_free_profile_kref(struct kref *kref);
+>   struct aa_profile *aa_find_child(struct aa_profile *parent, const char *name);
+>   struct aa_profile *aa_lookupn_profile(struct aa_ns *ns, const char *hname,
+>   				      size_t n);
+>   struct aa_profile *aa_lookup_profile(struct aa_ns *ns, const char *name);
+>   struct aa_profile *aa_fqlookupn_profile(struct aa_label *base,
+>   					const char *fqname, size_t n);
+> -struct aa_profile *aa_match_profile(struct aa_ns *ns, const char *name);
+>   
+>   ssize_t aa_replace_profiles(struct aa_ns *view, struct aa_label *label,
+>   			    u32 mask, struct aa_loaddata *udata);
 
