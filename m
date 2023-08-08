@@ -2,90 +2,88 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7A57742F4
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 19:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A6F7741B7
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 19:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234984AbjHHRxL (ORCPT
+        id S233929AbjHHR0v (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Aug 2023 13:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        Tue, 8 Aug 2023 13:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235073AbjHHRwl (ORCPT
+        with ESMTP id S229763AbjHHR0W (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:52:41 -0400
+        Tue, 8 Aug 2023 13:26:22 -0400
 Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8995728EBB;
-        Tue,  8 Aug 2023 09:23:31 -0700 (PDT)
-Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 378A7BCl055363;
-        Tue, 8 Aug 2023 19:07:11 +0900 (JST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1D785287;
+        Tue,  8 Aug 2023 09:11:18 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 378APexv059107;
+        Tue, 8 Aug 2023 19:25:40 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
 Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
- Tue, 08 Aug 2023 19:07:11 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Tue, 08 Aug 2023 19:25:40 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
 Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
         (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 378A7BmK055360
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 378APdoI059104
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 8 Aug 2023 19:07:11 +0900 (JST)
+        Tue, 8 Aug 2023 19:25:40 +0900 (JST)
         (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
-Date:   Tue, 8 Aug 2023 19:07:10 +0900
+Message-ID: <025aa551-7ed7-d413-26e3-222ac12e9345@I-love.SAKURA.ne.jp>
+Date:   Tue, 8 Aug 2023 19:25:39 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
 Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
 Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>, Steve Grubb <sgrubb@redhat.com>
-Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
+To:     Steve Grubb <sgrubb@redhat.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        audit@vger.kernel.org, linux-audit@redhat.com
 References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
- <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com>
- <2155117.irdbgypaU6@x2>
- <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
+ <2029076.tdWV9SEqCh@x2>
+ <ab7b4099-d238-e791-6dc2-25be5952798c@I-love.SAKURA.ne.jp>
+ <2294714.ElGaqSPkdT@x2>
 From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
+In-Reply-To: <2294714.ElGaqSPkdT@x2>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2023/08/08 5:13, Paul Moore wrote:
-> On Mon, Aug 7, 2023 at 3:03 PM Steve Grubb <sgrubb@redhat.com> wrote:
->> On Monday, August 7, 2023 2:53:40 PM EDT Paul Moore wrote:
->>> On Sun, Aug 6, 2023 at 9:05 AM Tetsuo Handa
->>>
->>> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->>>> When an unexpected system event occurs, the administrator may want to
->>>> identify which application triggered the event. For example, unexpected
->>>> process termination is still a real concern enough to write articles
->>>> like https://access.redhat.com/solutions/165993 . TaskTracker is a
->>>> trivial LSM module which emits TOMOYO-like information into the audit
->>>> logs for better understanding of unexpected system events.
->>>
->>> Help me understand why all of this information isn't already available
->>> via some combination of Audit and TOMOYO, or simply audit itself?
+On 2023/08/08 3:54, Steve Grubb wrote:
+>>> What I would suggest is to make a separate record: AUDIT_PROC_TREE that
+>>> describes process tree from the one killed up to the last known parent.
+>>> This way you can define your own format and SYSCALL can stay as everyone
+>>> expects it to look. In the EXECVE audit record, there is a precedent of
+>>> using agv[0]=xx argv[1]=xx argv[2]=yy  and so on. If you want to make
+>>> these generally parsable without special knowledge of the record format,
+>>> I'd suggest something like it.
 >>
->> Usually when you want this kind of information, you are investigating an
->> incident. You wouldn't place a syscall audit for every execve and then
->> reconstruct the call chain from that. In the case of long running daemons,
->> the information could have been rotated away. But typically you want to see
->> what the entry point is. A sudden shell from bind would be suspicious while a
->> shell from sshd is not.
+>> Yes,
+>> https://lkml.kernel.org/r/201501202220.DJJ34834.OLJOHFMQOFtSVF@I-love.SAKU
+>> RA.ne.jp used AUDIT_PROCHISTORY instead of LSM hooks, but that thread died
+>> there.
 > 
-> Once again, why not use the existing audit and/or TOMOYO capabilities.
-> 
+> I do not read that mail list. AUDIT_PROC_HIST or AUDIT_PROC_CHAIN or some 
+> thing like that would be the better way to go. If someone wanted to see if 
+> they have process history for a segfault, how would they do it with the 
+> proposed record?
 
-Can't, for Fedora/RHEL does not enable TOMOYO.
-I need a way that can be used by RHEL users running with selinux=0.
+Avoid bloating of audit log files could be done when saving into audit log
+files, but avoiding overhead of tracking/recording this history information
+would need to be done using kernel command line options.
 
-This history information is expected to become available for those who
-might want to investigate unexpected system events, but should not become
-unconditionally available for those who do not want to bloat audit logs.
-Switching via lsm=tt is a handy way for satisfying both.
+Is there a kernel command line option that can configure whether to include
+(and what to be included into) this history information or not?
+
+If an LSM is used, a kernel command line option like lsm=tt can be used for
+telling the kernel to include this history information and kernel command
+line options like tt.size=512 tt.fields=name,stamp for telling the kernel
+max history length and fields to include.
 
