@@ -2,120 +2,131 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5BB773DC2
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 18:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F92F774624
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 20:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjHHQWh (ORCPT
+        id S233893AbjHHSyB (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Aug 2023 12:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
+        Tue, 8 Aug 2023 14:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjHHQVD (ORCPT
+        with ESMTP id S231739AbjHHSxj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Aug 2023 12:21:03 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495D993E0
-        for <linux-security-module@vger.kernel.org>; Tue,  8 Aug 2023 08:49:06 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7659cb9c42aso423151685a.3
-        for <linux-security-module@vger.kernel.org>; Tue, 08 Aug 2023 08:49:06 -0700 (PDT)
+        Tue, 8 Aug 2023 14:53:39 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833946349E;
+        Tue,  8 Aug 2023 10:08:29 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b9e6cc93c6so90882431fa.2;
+        Tue, 08 Aug 2023 10:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1691509745; x=1692114545;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Em0u3rAwfsJ9DADQmbz8jINXwrAXQCvwsoKWZ+kvbag=;
-        b=XhmtZmN+4X3aHwdqW3pPQRMyQQlli/XhwSdU/PJi+DXyt+yEZuKyAuD8yRPFxZXfel
-         3Xy21G0U+rkD+acyyq4aUFern1imNDo6Ew3vPYOhXwFv8fGOgGIA3Cq2jGs4GKlDXOUw
-         9JG6WlfRgnU4V8AiIR6KKUpjRqR4ARkvHhL3J3EIgHuNFU1Xsi4w6icTCi4fLbAxJXiM
-         Yri4tHKoYDO5v1g3xvvyrCfLrCoWSLYJnyGG/2aOogMmK72TA5S3MHntHKdH3sP2yPBF
-         JPbAJTMPgHq689qygQbHobGvQsuRUxIoSoFT0K4P+GhYnMckfJ5/TRlWYTy9INNXUQoR
-         lHQw==
+        d=gmail.com; s=20221208; t=1691514508; x=1692119308;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=w+N5RxJ6j6TsIuXun+/KHtX8AkDeBPMRbGieTCGtLH0=;
+        b=UehQQQ1vXkVzZS4c2tTeWknevaOpsUVU/94XcQALmgDqehT/nQ6bN0pkXXbhP9E8wU
+         LRzirxRk13f1NSgxNY2xdwwrXqY+lL1Rfe/20336u+IyeZWwERwvS4kcw4gKms7Ow5Ep
+         x/FU0ZABxo0IoYqhJWggpjFuX32Wn1qPCvj15TIjsMttrOoN+H7xtcj3U1n5wQEJ4fpi
+         ulUgPsXD3icKTuksK3lUwlfFQ9zzYyBr9ORjYtnEzU0zo+1D2rlcCRj475F7MiPKS6Ch
+         ACuNYei0Q6IWC2qIVmOWFxqFuuBh+wWkWtARJm9JDqiLC1tYdIklOhJh/zWEHYZe72vM
+         K2Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691509745; x=1692114545;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Em0u3rAwfsJ9DADQmbz8jINXwrAXQCvwsoKWZ+kvbag=;
-        b=Mt/t7nHsN9Kh6IK+2yf9PSdFLSHpAb/VaWMuxh1nq+3rv7QFVwyxJGpvns4hZ4x1G8
-         ekYZpabRHd505cdad60W492GDV14hKkKSpr7xWlj064KymG5qOgd4p6TJHfbsTM+mzLR
-         kfP/LKWFNI+Je6xzS1H99RJLaJUlytwIeVHhhjF+0mjXDfG7J47e5p96K6eJdYzV8ZRs
-         ghSd/myFf87uEQK01NgpcvmyVuz73DpbdIY4VKmtfRSG/a3GY9mgSHwNyk50eGEm8Fiz
-         4idR+1Nq5EbEeWbweiLACimJ7eaf2TplbPltjvFUS9V1ubVN/0gPOiG2NK9ho8KV0sYM
-         3LeQ==
-X-Gm-Message-State: AOJu0YwGEoI73DN5SemDHbwzOcRqGvtSQSIn6zwCOPqv0SAfeuRaSnO/
-        goXPty1PFMoVoFVifvHqY3WDSfVU05gYPDz3O+x23g+vdw8fe07jjA==
-X-Google-Smtp-Source: AGHT+IGLc34aLVA9ZLIe34W64Ir8n1SwTlr71PLKuPbf1vupgTPfoQCmYXbLiBv77geHjnpKt9FR9UZG6Qiq89sY/1I=
-X-Received: by 2002:a81:7741:0:b0:583:7b49:15dd with SMTP id
- s62-20020a817741000000b005837b4915ddmr13398514ywc.48.1691505497509; Tue, 08
- Aug 2023 07:38:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691514508; x=1692119308;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w+N5RxJ6j6TsIuXun+/KHtX8AkDeBPMRbGieTCGtLH0=;
+        b=ZnTou9jnVlcWpUl8QXLeRAnVil17/Amubw45L6wMtsM4QoxAiKf9bx2gXG5ItFjBt2
+         ZvJutrk7qqfvJEVKQ+KZlpctltjlnXO4WWCPEiU3yxJqdrhiay+d7ZVoEkv4mAdFLAwf
+         3m2yO1a/rVA14JTtLbDR8HsW21qW7I/p3XS6y7DwPl3Y8X7IqUrRxfymysSvXsgizAsZ
+         xR3J6hueR6bzOubhej2z6Pz6HwKO56OL/7dukPDRYUDUhJopDTQc10+DEydYBP3Epcrz
+         YL5+N/ONF6O42BD8m5WFdMLSlOanSMdE2DzJh9WaDU/JFAsixAxwblB/UNENNEZutB5m
+         m99g==
+X-Gm-Message-State: AOJu0YzkU4Rv70OFvB+DfgbAoGfggiq40yg677UZ6yiLOjl7SeMO+qCh
+        GVzVELvhZv3oZ0va4P+0gaL/FxGxL7i5LA==
+X-Google-Smtp-Source: AGHT+IEnw4US5yDsOeUor3Z8UQFq3Runobu5MxyYy8pAwDuZK8bCHEEwqGaSwHqDLwP2Hpwr5dwWHg==
+X-Received: by 2002:a1c:7211:0:b0:3fe:19cf:93ca with SMTP id n17-20020a1c7211000000b003fe19cf93camr8603683wmc.8.1691473291792;
+        Mon, 07 Aug 2023 22:41:31 -0700 (PDT)
+Received: from khadija-virtual-machine ([124.29.208.67])
+        by smtp.gmail.com with ESMTPSA id q7-20020a1cf307000000b003fa98908014sm16983211wmq.8.2023.08.07.22.41.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 22:41:31 -0700 (PDT)
+Date:   Tue, 8 Aug 2023 10:41:29 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        ztarkhani@microsoft.com, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] lsm: add comment block for
+ security_sk_classify_flow() LSM hook
+Message-ID: <ZNHVieyzjc320RXu@gmail.com>
+References: <ZNCZ4KL7TRDE9vIC@gmail.com>
+ <CAHC9VhSULN1B_EjVPA5st+NhDjiUbymOwt81C4gZ9Tn4_wWpuw@mail.gmail.com>
 MIME-Version: 1.0
-References: <41d03271-ff8a-9888-11de-a7f53da47328@I-love.SAKURA.ne.jp>
- <CAHC9VhSsDTyfae6f0XvYYcCRH590L1ZEqbHSM4UgUCHRGm7X_g@mail.gmail.com>
- <2155117.irdbgypaU6@x2> <CAHC9VhRG2aX-_ye7ZRWpZkR7rq8Op7RUVS3cMtxhF8t1bdw5oQ@mail.gmail.com>
- <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
-In-Reply-To: <6f3a90b9-b210-512a-f74a-6003aebf5c30@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 8 Aug 2023 10:38:06 -0400
-Message-ID: <CAHC9VhQPROcbN5MfS5pnNDe-YDgLTAY7W9eQkNAJU3kBH43ZEA@mail.gmail.com>
-Subject: Re: [PATCH v2] TaskTracker : Simplified thread information tracker.
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Steve Grubb <sgrubb@redhat.com>, linux-audit@redhat.com,
-        audit@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhSULN1B_EjVPA5st+NhDjiUbymOwt81C4gZ9Tn4_wWpuw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Aug 8, 2023 at 6:07=E2=80=AFAM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2023/08/08 5:13, Paul Moore wrote:
-> > On Mon, Aug 7, 2023 at 3:03=E2=80=AFPM Steve Grubb <sgrubb@redhat.com> =
-wrote:
-> >> On Monday, August 7, 2023 2:53:40 PM EDT Paul Moore wrote:
-> >>> On Sun, Aug 6, 2023 at 9:05=E2=80=AFAM Tetsuo Handa
-> >>>
-> >>> <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> >>>> When an unexpected system event occurs, the administrator may want t=
-o
-> >>>> identify which application triggered the event. For example, unexpec=
-ted
-> >>>> process termination is still a real concern enough to write articles
-> >>>> like https://access.redhat.com/solutions/165993 . TaskTracker is a
-> >>>> trivial LSM module which emits TOMOYO-like information into the audi=
-t
-> >>>> logs for better understanding of unexpected system events.
-> >>>
-> >>> Help me understand why all of this information isn't already availabl=
-e
-> >>> via some combination of Audit and TOMOYO, or simply audit itself?
-> >>
-> >> Usually when you want this kind of information, you are investigating =
-an
-> >> incident. You wouldn't place a syscall audit for every execve and then
-> >> reconstruct the call chain from that. In the case of long running daem=
-ons,
-> >> the information could have been rotated away. But typically you want t=
-o see
-> >> what the entry point is. A sudden shell from bind would be suspicious =
-while a
-> >> shell from sshd is not.
+On Mon, Aug 07, 2023 at 07:14:45PM -0400, Paul Moore wrote:
+> On Mon, Aug 7, 2023 at 3:14 AM Khadija Kamran <kamrankhadijadj@gmail.com> wrote:
 > >
-> > Once again, why not use the existing audit and/or TOMOYO capabilities.
+> > security_sk_classify_flow() LSM hook has no comment block. Add a comment
+> > block with a brief description of LSM hook and its function parameters.
 > >
->
-> Can't, for Fedora/RHEL does not enable TOMOYO.
-> I need a way that can be used by RHEL users running with selinux=3D0.
+> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > ---
+> > Changed in v2:
+> >  - Add parenthesis with security_sk_calssify_flow to refer to it as a
+> >    function in commit message and commit log.
+> >  - Remove an extra space in the comment block.
+> >
+> > security/security.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> 
+> Hi Khadija,
+> 
+> Thanks, but I already merged your original patch :)
+> 
+> https://lore.kernel.org/linux-security-module/abe91475c7f9e3483405c6096006b2a9.paul@paul-moore.com/
 
-What makes you think your distribution of choice would enable this new
-LSM?  I'm sorry, but this sounds like more of an issue with the
-choices made by a distro rather than something missing upstream.
+Hey Paul,
 
---=20
-paul-moore.com
+Great. Thank you. :)
+
+Regards,
+Khadija
+
+> 
+> > diff --git a/security/security.c b/security/security.c
+> > index d5ff7ff45b77..b76fb27a1dc6 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -4396,6 +4396,13 @@ void security_sk_clone(const struct sock *sk, struct sock *newsk)
+> >  }
+> >  EXPORT_SYMBOL(security_sk_clone);
+> >
+> > +/**
+> > + * security_sk_classify_flow() - Set a flow's secid based on socket
+> > + * @sk: original socket
+> > + * @flic: target flow
+> > + *
+> > + * Set the target flow's secid to socket's secid.
+> > + */
+> >  void security_sk_classify_flow(struct sock *sk, struct flowi_common *flic)
+> >  {
+> >         call_void_hook(sk_getsecid, sk, &flic->flowic_secid);
+> > --
+> > 2.34.1
+> 
+> -- 
+> paul-moore.com
