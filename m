@@ -2,51 +2,52 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E5C774B6E
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 22:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3125774C62
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Aug 2023 23:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjHHUrQ (ORCPT
+        id S234817AbjHHVIE (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 8 Aug 2023 16:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        Tue, 8 Aug 2023 17:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234930AbjHHUqt (ORCPT
+        with ESMTP id S234996AbjHHVIC (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 8 Aug 2023 16:46:49 -0400
+        Tue, 8 Aug 2023 17:08:02 -0400
 Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030CE16571
-        for <linux-security-module@vger.kernel.org>; Tue,  8 Aug 2023 13:24:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066251FC8C;
+        Tue,  8 Aug 2023 13:39:02 -0700 (PDT)
 Received: from [192.168.192.83] (unknown [50.47.134.245])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2149541F38;
-        Tue,  8 Aug 2023 20:24:06 +0000 (UTC)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id EC3D33F7B7;
+        Tue,  8 Aug 2023 20:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1691526248;
-        bh=4BQLKRDO3fv4Nxm5Vkxx4czvYuMe15qi/VUS0w2UCvw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+        s=20210705; t=1691527141;
+        bh=g4haua1IOmEAZIW6GpRHq65jQw5+tkVRcSl6jTiUYWE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=wL9IIQwkAgZlMOiEXZGnBsvIuIjnYrzoRY1I93cMToS5cWxR0TQNirqq0Ul12OdM+
-         JjFL+Q1NZmXs9zHTBUXTi59MLGIUuWUJauHOVVT46Dx6zAE3T9zZyXybHiKjZk/kzq
-         MoG05Je74FaoeLB+TCz/bOr5vIX6w4Y173VWk4BuZGejWrmueo+CLTA8aJNHu9o8if
-         rwLOtEKQ1vUe6icMnxmaqdUeypD8+QMGtx/AOousdVWjU2gWdDp0CXl/a5saDaEbEA
-         X7h1xjeITt0IDj0nTe3xvutHnUDvz97gzoHdFLW5JDcN2S/BxR3V7fNt6a+0vuDodR
-         8iwXRPNq3fa+g==
-Message-ID: <c4c2be04-5b39-ae56-cf4c-3124986e0c98@canonical.com>
-Date:   Tue, 8 Aug 2023 13:24:04 -0700
+        b=Sk7TlFRtjCEL1EgTvHO0+JFUkHXioqPLs/P3V+X2gPA1XLr2blkUd7RNW/wsKMF9r
+         ivUJPqPQovu/t2MFHdzmiCvkD5+izdmPtAcX8TdFMDPZaaCaP6kiQPKZEfFe+UnKFW
+         EEgpjQh6reR1/FlPpDCJ3VANSE964P2NGSVkJ5uyrzgUIJNnqufxBIBK7g5pDxNof7
+         QWn+OTZetD6pkjCReQNVz/kBadC7e/7kjm0DQqlP38aKgm1JRjxIublUxEDBBWjRM8
+         hB8n1unTxD69uHUYplqPiS4y3mPy+LIl/Lj7T0AFjj4B/GdbNNFbtxIrkr8RdtrOyR
+         6a062F51ddwUw==
+Message-ID: <33790c5c-c23a-7207-c3a7-454af1452ad5@canonical.com>
+Date:   Tue, 8 Aug 2023 13:38:58 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH -next] apparmor: remove kernel-doc warnings
+Subject: Re: [PATCH -next] apparmor: cleanup unused functions in file.h
 Content-Language: en-US
-To:     Zhu Wang <wangzhu9@huawei.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org
-References: <20230731111614.212113-1-wangzhu9@huawei.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, mike.salvatore@canonical.com
+Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230725141259.233391-1-xiujianfeng@huawei.com>
 From:   John Johansen <john.johansen@canonical.com>
 Organization: Canonical
-In-Reply-To: <20230731111614.212113-1-wangzhu9@huawei.com>
+In-Reply-To: <20230725141259.233391-1-xiujianfeng@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,56 +59,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 7/31/23 04:16, Zhu Wang wrote:
-> Remove kernel-doc warnings:
+On 7/25/23 07:12, Xiu Jianfeng wrote:
+> After changes in commit 33bf60cabcc7 ("LSM: Infrastructure management of
+> the file security"), aa_alloc_file_ctx() and aa_free_file_ctx() are no
+> longer used, so remove them, and also remove aa_get_file_label() because
+> it seems that it's never been used before.
 > 
-> security/apparmor/lib.c:33: warning: Function parameter or member 't' not
-> described in 'aa_free_str_table'
-> security/apparmor/lib.c:33: warning: Excess function parameter 'str'
-> description in 'aa_free_str_table'
-> security/apparmor/lib.c:94: warning: Function parameter or member 'n' not
-> described in 'skipn_spaces'
-> security/apparmor/lib.c:390: warning: Excess function parameter 'deny'
-> description in 'aa_check_perms'
-> 
-> Signed-off-by: Zhu Wang <wangzhu9@huawei.com>
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-thank you for your contribution unfortunately Gaosheng Cui beat you to this
-set of changes with
-
-[PATCH -next 06/11] apparmor: Fix kernel-doc warnings in apparmor/lib.c
+this has been pulled into apparmor-next
 
 > ---
->   security/apparmor/lib.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   security/apparmor/include/file.h | 37 --------------------------------
+>   1 file changed, 37 deletions(-)
 > 
-> diff --git a/security/apparmor/lib.c b/security/apparmor/lib.c
-> index a630c951bb3b..01943ec184da 100644
-> --- a/security/apparmor/lib.c
-> +++ b/security/apparmor/lib.c
-> @@ -27,7 +27,7 @@ struct aa_perms allperms = { .allow = ALL_PERMS_MASK,
+> diff --git a/security/apparmor/include/file.h b/security/apparmor/include/file.h
+> index 5be620af33ba..23cb6f9dbe6e 100644
+> --- a/security/apparmor/include/file.h
+> +++ b/security/apparmor/include/file.h
+> @@ -45,43 +45,6 @@ struct aa_file_ctx {
+>   	u32 allow;
+>   };
 >   
->   /**
->    * aa_free_str_table - free entries str table
-> - * @str: the string table to free  (MAYBE NULL)
-> + * @t: the string table to free  (MAYBE NULL)
->    */
->   void aa_free_str_table(struct aa_str_table *t)
->   {
-> @@ -85,6 +85,7 @@ char *aa_split_fqname(char *fqname, char **ns_name)
->   /**
->    * skipn_spaces - Removes leading whitespace from @str.
->    * @str: The string to be stripped.
-> + * @n: Number of spaces to be removed.
->    *
->    * Returns a pointer to the first non-whitespace character in @str.
->    * if all whitespace will return NULL
-> @@ -371,7 +372,6 @@ int aa_profile_label_perm(struct aa_profile *profile, struct aa_profile *target,
->    * @profile: profile being checked
->    * @perms: perms computed for the request
->    * @request: requested perms
-> - * @deny: Returns: explicit deny set
->    * @sa: initialized audit structure (MAY BE NULL if not auditing)
->    * @cb: callback fn for type specific fields (MAY BE NULL)
->    *
+> -/**
+> - * aa_alloc_file_ctx - allocate file_ctx
+> - * @label: initial label of task creating the file
+> - * @gfp: gfp flags for allocation
+> - *
+> - * Returns: file_ctx or NULL on failure
+> - */
+> -static inline struct aa_file_ctx *aa_alloc_file_ctx(struct aa_label *label,
+> -						    gfp_t gfp)
+> -{
+> -	struct aa_file_ctx *ctx;
+> -
+> -	ctx = kzalloc(sizeof(struct aa_file_ctx), gfp);
+> -	if (ctx) {
+> -		spin_lock_init(&ctx->lock);
+> -		rcu_assign_pointer(ctx->label, aa_get_label(label));
+> -	}
+> -	return ctx;
+> -}
+> -
+> -/**
+> - * aa_free_file_ctx - free a file_ctx
+> - * @ctx: file_ctx to free  (MAYBE_NULL)
+> - */
+> -static inline void aa_free_file_ctx(struct aa_file_ctx *ctx)
+> -{
+> -	if (ctx) {
+> -		aa_put_label(rcu_access_pointer(ctx->label));
+> -		kfree_sensitive(ctx);
+> -	}
+> -}
+> -
+> -static inline struct aa_label *aa_get_file_label(struct aa_file_ctx *ctx)
+> -{
+> -	return aa_get_label_rcu(&ctx->label);
+> -}
+> -
+>   /*
+>    * The xindex is broken into 3 parts
+>    * - index - an index into either the exec name table or the variable table
 
