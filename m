@@ -2,162 +2,151 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6B07779F5
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Aug 2023 15:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657CA7777DC
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Aug 2023 14:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235493AbjHJN5k (ORCPT
+        id S229890AbjHJMLN (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 10 Aug 2023 09:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        Thu, 10 Aug 2023 08:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjHJN5j (ORCPT
+        with ESMTP id S230457AbjHJMLM (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 10 Aug 2023 09:57:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5236C212B;
-        Thu, 10 Aug 2023 06:57:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E464C64A1F;
-        Thu, 10 Aug 2023 13:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88C1C433C7;
-        Thu, 10 Aug 2023 13:57:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691675858;
-        bh=8TLHDCTColfLSCdxEVFmLaRfu1yS1/99cHLfJeUUwA4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=WBhsUVuR/RFO+wlrVpHGFEl49UYiU3eSfSTZmXJVEdoAdppwGGfY1w94k5Awt0ScR
-         Mqsx+eEA35BFxGTQ6rkQd/rL3nPeGShFLDkTNa42ScNw5j4b/fjbB05P7hiyqzbNYJ
-         nN7kCP3gcuWcsLOE62Yuk4R+iQPdGPvIi6q/A10mLqSk7zYclfVcVqEi2fIsVKmcFj
-         Xic7aeTVbHof/AB+wNsYOau7ha5h5XA3NAN0mFV1OnC2glqxt4UQWeFDy/jX8q/X4y
-         fJHzeKfg1Khy1hd/P0L7mEFqlG9B9C7f4sn9WirH0GBvu4zmim+X7zZnn1Tmdz+YfY
-         EjgoHPnX7wiBw==
-Message-ID: <7d596fc2c526a5d6e4a84240dede590e868f3345.camel@kernel.org>
-Subject: Re: [PATCH v9] vfs, security: Fix automount superblock LSM init
- problem, preventing NFS sb sharing
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        David Howells <dhowells@redhat.com>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org
-Date:   Thu, 10 Aug 2023 09:57:35 -0400
-In-Reply-To: <20230808-erdaushub-sanieren-2bd8d7e0a286@brauner>
-References: <20230808-master-v9-1-e0ecde888221@kernel.org>
-         <20230808-erdaushub-sanieren-2bd8d7e0a286@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Thu, 10 Aug 2023 08:11:12 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D706E1718
+        for <linux-security-module@vger.kernel.org>; Thu, 10 Aug 2023 05:11:08 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4RM5P16x4Jz4f4PN0
+        for <linux-security-module@vger.kernel.org>; Thu, 10 Aug 2023 20:11:01 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.67.174.26])
+        by APP4 (Coremail) with SMTP id gCh0CgA3x6nV09RkLBWGAQ--.14819S4;
+        Thu, 10 Aug 2023 20:11:03 +0800 (CST)
+From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+To:     john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
+Subject: [PATCH -next] apparmor: remove unused functions in policy_ns.c/.h
+Date:   Thu, 10 Aug 2023 20:10:56 +0000
+Message-Id: <20230810201056.429575-1-xiujianfeng@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgA3x6nV09RkLBWGAQ--.14819S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxur47AFW5GF48XF47Zw1kXwb_yoW5CF15pa
+        nayasxJF4xKF1Fvw1DXr17C34a9r4rKr1ay398W3WSyFsIgw1kCFWFkr10934Fyry8Aryx
+        XFsF9Fs5A3ZrXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_
+        Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+        r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
+        Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU0VnQUUUUUU==
+X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, 2023-08-08 at 15:31 +0200, Christian Brauner wrote:
-> On Tue, Aug 08, 2023 at 07:34:20AM -0400, Jeff Layton wrote:
-> > From: David Howells <dhowells@redhat.com>
-> >=20
-> > When NFS superblocks are created by automounting, their LSM parameters
-> > aren't set in the fs_context struct prior to sget_fc() being called,
-> > leading to failure to match existing superblocks.
-> >=20
-> > This bug leads to messages like the following appearing in dmesg when
-> > fscache is enabled:
-> >=20
-> >     NFS: Cache volume key already in use (nfs,4.2,2,108,106a8c0,1,,,,10=
-0000,100000,2ee,3a98,1d4c,3a98,1)
-> >=20
-> > Fix this by adding a new LSM hook to load fc->security for submount
-> > creation.
-> >=20
-> > Signed-off-by: David Howells <dhowells@redhat.com>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > Fixes: 9bc61ab18b1d ("vfs: Introduce fs_context, switch vfs_kern_mount(=
-) to it.")
-> > Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
-> > Tested-by: Jeff Layton <jlayton@kernel.org>
-> > Reviewed-by: Jeff Layton <jlayton@kernel.org>
-> > Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-I've made a significant number of changes since Casey acked this. It
-might be a good idea to drop his Acked-by (unless he wants to chime in
-and ask us to keep it).
+These functions are not used now, remove them.
 
-Thanks,
-Jeff
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ security/apparmor/include/policy_ns.h | 14 ----------
+ security/apparmor/policy_ns.c         | 37 ---------------------------
+ 2 files changed, 51 deletions(-)
 
-> > Acked-by: "Christian Brauner (Microsoft)" <brauner@kernel.org>
-> > Link: https://lore.kernel.org/r/165962680944.3334508.661002390034914203=
-4.stgit@warthog.procyon.org.uk/ # v1
-> > Link: https://lore.kernel.org/r/165962729225.3357250.143507288464715271=
-37.stgit@warthog.procyon.org.uk/ # v2
-> > Link: https://lore.kernel.org/r/165970659095.2812394.686889417110231879=
-6.stgit@warthog.procyon.org.uk/ # v3
-> > Link: https://lore.kernel.org/r/166133579016.3678898.628319501948056727=
-5.stgit@warthog.procyon.org.uk/ # v4
-> > Link: https://lore.kernel.org/r/217595.1662033775@warthog.procyon.org.u=
-k/ # v5
-> > ---
-> > ver #2)
-> > - Added Smack support
-> > - Made LSM parameter extraction dependent on reference !=3D NULL.
-> >=20
-> > ver #3)
-> > - Made LSM parameter extraction dependent on fc->purpose =3D=3D
-> >    FS_CONTEXT_FOR_SUBMOUNT.  Shouldn't happen on FOR_RECONFIGURE.
-> >=20
-> > ver #4)
-> > - When doing a FOR_SUBMOUNT mount, don't set the root label in SELinux =
-or Smack.
-> >=20
-> > ver #5)
-> > - Removed unused variable.
-> > - Only allocate smack_mnt_opts if we're dealing with a submount.
-> >=20
-> > ver #6)
-> > - Rebase onto v6.5.0-rc4
-> > - Link to v6: https://lore.kernel.org/r/20230802-master-v6-1-45d4829916=
-8b@kernel.org
-> >=20
-> > ver #7)
-> > - Drop lsm_set boolean
-> > - Link to v7: https://lore.kernel.org/r/20230804-master-v7-1-5d4e484072=
-98@kernel.org
-> >=20
-> > ver #8)
-> > - Remove spurious semicolon in smack_fs_context_init
-> > - Make fs_context_init take a superblock as reference instead of dentry
-> > - WARN_ON_ONCE's when fc->purpose !=3D FS_CONTEXT_FOR_SUBMOUNT
-> > - Call the security hook from fs_context_for_submount instead of alloc_=
-fs_context
-> > - Link to v8: https://lore.kernel.org/r/20230807-master-v8-1-54e249595f=
-10@kernel.org
-> >=20
-> > ver #9)
-> > - rename *_fs_context_init to *_fs_context_submount
-> > - remove checks for FS_CONTEXT_FOR_SUBMOUNT and NULL reference pointers
-> > - fix prototype on smack_fs_context_submount
->=20
-> Thanks, this looks good from my perspective. If it looks fine to LSM
-> folks as well I can put it with the rest of the super work for this
-> cycle or it can go through the LSM tree.
+diff --git a/security/apparmor/include/policy_ns.h b/security/apparmor/include/policy_ns.h
+index 33d665516fc1..d646070fd966 100644
+--- a/security/apparmor/include/policy_ns.h
++++ b/security/apparmor/include/policy_ns.h
+@@ -86,10 +86,7 @@ const char *aa_ns_name(struct aa_ns *parent, struct aa_ns *child, bool subns);
+ void aa_free_ns(struct aa_ns *ns);
+ int aa_alloc_root_ns(void);
+ void aa_free_root_ns(void);
+-void aa_free_ns_kref(struct kref *kref);
+ 
+-struct aa_ns *aa_find_ns(struct aa_ns *root, const char *name);
+-struct aa_ns *aa_findn_ns(struct aa_ns *root, const char *name, size_t n);
+ struct aa_ns *__aa_lookupn_ns(struct aa_ns *view, const char *hname, size_t n);
+ struct aa_ns *aa_lookupn_ns(struct aa_ns *view, const char *name, size_t n);
+ struct aa_ns *__aa_find_or_create_ns(struct aa_ns *parent, const char *name,
+@@ -151,15 +148,4 @@ static inline struct aa_ns *__aa_find_ns(struct list_head *head,
+ 	return __aa_findn_ns(head, name, strlen(name));
+ }
+ 
+-static inline struct aa_ns *__aa_lookup_ns(struct aa_ns *base,
+-					   const char *hname)
+-{
+-	return __aa_lookupn_ns(base, hname, strlen(hname));
+-}
+-
+-static inline struct aa_ns *aa_lookup_ns(struct aa_ns *view, const char *name)
+-{
+-	return aa_lookupn_ns(view, name, strlen(name));
+-}
+-
+ #endif /* AA_NAMESPACE_H */
+diff --git a/security/apparmor/policy_ns.c b/security/apparmor/policy_ns.c
+index fd5b7afbcb48..1f02cfe1d974 100644
+--- a/security/apparmor/policy_ns.c
++++ b/security/apparmor/policy_ns.c
+@@ -159,43 +159,6 @@ void aa_free_ns(struct aa_ns *ns)
+ 	kfree_sensitive(ns);
+ }
+ 
+-/**
+- * aa_findn_ns  -  look up a profile namespace on the namespace list
+- * @root: namespace to search in  (NOT NULL)
+- * @name: name of namespace to find  (NOT NULL)
+- * @n: length of @name
+- *
+- * Returns: a refcounted namespace on the list, or NULL if no namespace
+- *          called @name exists.
+- *
+- * refcount released by caller
+- */
+-struct aa_ns *aa_findn_ns(struct aa_ns *root, const char *name, size_t n)
+-{
+-	struct aa_ns *ns = NULL;
+-
+-	rcu_read_lock();
+-	ns = aa_get_ns(__aa_findn_ns(&root->sub_ns, name, n));
+-	rcu_read_unlock();
+-
+-	return ns;
+-}
+-
+-/**
+- * aa_find_ns  -  look up a profile namespace on the namespace list
+- * @root: namespace to search in  (NOT NULL)
+- * @name: name of namespace to find  (NOT NULL)
+- *
+- * Returns: a refcounted namespace on the list, or NULL if no namespace
+- *          called @name exists.
+- *
+- * refcount released by caller
+- */
+-struct aa_ns *aa_find_ns(struct aa_ns *root, const char *name)
+-{
+-	return aa_findn_ns(root, name, strlen(name));
+-}
+-
+ /**
+  * __aa_lookupn_ns - lookup the namespace matching @hname
+  * @view: namespace to search in  (NOT NULL)
+-- 
+2.34.1
 
---=20
-Jeff Layton <jlayton@kernel.org>
