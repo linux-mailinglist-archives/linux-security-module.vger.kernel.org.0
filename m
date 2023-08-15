@@ -2,214 +2,152 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFF977CB18
-	for <lists+linux-security-module@lfdr.de>; Tue, 15 Aug 2023 12:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D9177CBF3
+	for <lists+linux-security-module@lfdr.de>; Tue, 15 Aug 2023 13:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236397AbjHOKUl (ORCPT
+        id S236838AbjHOLqY (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 15 Aug 2023 06:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        Tue, 15 Aug 2023 07:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236484AbjHOKUb (ORCPT
+        with ESMTP id S236835AbjHOLqB (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 15 Aug 2023 06:20:31 -0400
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4573115;
-        Tue, 15 Aug 2023 03:20:27 -0700 (PDT)
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 37FAJnlt031412;
-        Tue, 15 Aug 2023 05:19:49 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 37FAJlZF031411;
-        Tue, 15 Aug 2023 05:19:47 -0500
-Date:   Tue, 15 Aug 2023 05:19:47 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net
-Subject: Re: [PATCH 03/13] Implement CAP_TRUST capability.
-Message-ID: <20230815101947.GA31391@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20230710102319.19716-1-greg@enjellic.com> <20230710102319.19716-4-greg@enjellic.com> <c5b07b78-f37e-6e95-9c2e-044afe1dd894@schaufler-ca.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5b07b78-f37e-6e95-9c2e-044afe1dd894@schaufler-ca.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Tue, 15 Aug 2023 05:19:49 -0500 (CDT)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 15 Aug 2023 07:46:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115A3171F;
+        Tue, 15 Aug 2023 04:46:00 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37FBh0is028669;
+        Tue, 15 Aug 2023 11:45:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=7DP/Q/hdQzJhswhaeMjJO8a+YDVLokFn098hnf6tMK8=;
+ b=dBFYrqtQrK0B3axK48PpS7bTUEgg+STtGdJZPdQPMh48PciRfPh6TwWFan8GTOxIlQ8R
+ XarDxdt7Zx7b9zfgo3zeHKzmfnxfqycaoDx+op3CxYo8qM2OaQ6UhWNeLZRrti31eSQ4
+ MOSmG7am2+3424cFlQx/FRTHUS4JlHCfJOUr40ggSE4yXY4JaIbzAVu/W3NN3NZ4Yx6a
+ bVQHEKw+11DHge8efPiKWjyAztT9Pi1RMma9w2lsIao/Ez88zXsc7HJnbWSPwb/mFnDU
+ 8umgCZozKaFG9u1wxafoJuQi19JDXrfPH0wW7oMT8eRV0pFisaIEG5Bltiq2rizd01PE gw== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sg8qy81fa-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Aug 2023 11:45:50 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37F8o951018920;
+        Tue, 15 Aug 2023 11:27:37 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3seq41bsg7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Aug 2023 11:27:37 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37FBRYlc5636652
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Aug 2023 11:27:35 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB67920040;
+        Tue, 15 Aug 2023 11:27:34 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E30620043;
+        Tue, 15 Aug 2023 11:27:32 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.61.3.84])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Aug 2023 11:27:32 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-security-module@vger.kernel.org, inux-kernel@vger.kernel.org,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH v4 0/6] Enable loading local and third party keys on PowerVM guest
+Date:   Tue, 15 Aug 2023 07:27:16 -0400
+Message-Id: <20230815112722.1591829-1-nayna@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: yc7FbDNlJv9AoCdA7QD2NPr9cBhAPEhp
+X-Proofpoint-ORIG-GUID: yc7FbDNlJv9AoCdA7QD2NPr9cBhAPEhp
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-15_10,2023-08-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 malwarescore=0 impostorscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308150103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Aug 07, 2023 at 01:21:35PM -0700, Casey Schaufler wrote:
+On a secure boot enabled PowerVM guest, local and third party code signing
+keys are needed to verify signed applications, configuration files, and
+kernel modules.
 
-Good morning, I hope this note finds the day starting well for
-everyone.
+Loading these keys onto either the .secondary_trusted_keys or .ima
+keyrings requires the certificates be signed by keys on the
+.builtin_trusted_keys, .machine or .secondary_trusted_keys keyrings.
 
-> On 7/10/2023 3:23 AM, Dr. Greg wrote:
-> > TSEM was designed to support a Trust Orchestration System (TOS)
-> > security architecture.  A TOS based system uses the concept of a
-> > minimum Trusted Computing Base of utilities, referred to as trust
-> > orchestrators, that maintain workloads in a trusted execution
-> > state.  The trust orchestrators are thus, from a security
-> > perspective, the most security privileged processes running on
-> > the platform.
-> >
-> > The CAP_ML (machine modeling) capability is defined as a
-> > capability that allows a process to alter the modeling and hence
-> > the trust status of the platform.  In a fully orchestrated system
-> > only the trust orchestrator carry this capability bit and then
-> > drop the capability for the execution of the workload.  This is
-> > designed to prevent a security vulnerability in workloads to be
-> > leveraged to create an entity that could conduct adversarial
-> > modifications to the trust status of the platform.
-> >
-> > With the introduction of TSEM there are three generic mechanisms
-> > for implementing security contols, each with its own capability
-> > bit for management, ie:
-> >
-> > DAC - CAP_DAC_ADMIN
+Keys on the .builtin_trusted_keys keyring are trusted because of the chain
+of trust from secure boot up to and including the linux kernel.  Keys on
+the .machine keyring that derive their trust from an entity such as a
+security officer, administrator, system owner, or machine owner are said
+to have "imputed trust." The type of certificates and the mechanism for
+loading them onto the .machine keyring is platform dependent.
 
-> There is no CAP_DAC_ADMIN. There are several capabilities related to
-> changing the DAC state of the system.
+Userspace may load certificates onto the .secondary_trusted_keys or .ima
+keyrings. However, keys may also need to be loaded by the kernel if they
+are needed for verification in early boot time. On PowerVM guest, third
+party code signing keys are loaded from the moduledb variable in the
+Platform KeyStore(PKS) onto the .secondary_trusted_keys.
 
-Our apologies, I believe we were thinking of CAP_DAC_OVERRIDE.
+The purpose of this patch set is to allow loading of local and third party
+code signing keys on PowerVM.
 
-> > MAC - CAP_MAC_ADMIN
+Changelog:
 
-> Since your system implements a mandatory access control policy
-> you should be using CAP_MAC_ADMIN.
+v4:
 
-See below.
+* Fixed build error reported by Nageswara R Sastry
+<rnsastry@linux.ibm.com>, as part of his testing of patches.
+* Included Jarkko's and Mimi's feedback
 
-> > Security modeling - CAP_ML
+v3:
 
-> First, the name you've chosen makes no sense at all. It isn't
-> descriptive and fails even as an abbreviation. Second, you aren't
-> doing anything that wouldn't be covered under CAP_MAC_ADMIN.
+* Included Jarkko's feedback for Patch 6/6.
 
-Apologies for the name, we choose it ad-hoc as an acronym for 'Machine
-Learning' which is what TSEM uses, in potentially multiple forms, to
-implement its security controls.  I wouldn't anticipate it to be
-forthcoming from your corner, but feel free to suggest an alternative.
+v2:
 
-You note above that CAP_MAC_ADMIN should be used because TSEM ends up
-implementing access control decsions that are mandatory in nature
+* Patch 5/6: Update CA restriction to allow only key signing CA's.
+* Rebase on Jarkko's master tree - https://kernel.googlesource.com/pub/scm/linux/kernel/git/jarkko/linux-tpmdd
+* Tested after reverting cfa7522f280aa95 because of build failure due to
+this commit.
 
-As our documentation notes, with the introduction of TSEM there are
-three mechanisms that are now available to implement security
-controls: DAC, static MAC and dynamic controls based on
-modeling/machine learning.
+Nayna Jain (6):
+  integrity: PowerVM support for loading CA keys on machine keyring
+  integrity: ignore keys failing CA restrictions on non-UEFI platform
+  integrity: remove global variable from machine_keyring.c
+  integrity: check whether imputed trust is enabled
+  integrity: PowerVM machine keyring enablement
+  integrity: PowerVM support for loading third party code signing keys
 
-Our premise for proposing a separate capability is that different
-methods of achieving security controls should use different
-capabilities, so that the capability controls remain orthogonal and
-independent of one another.
+ certs/system_keyring.c                        | 30 ++++++++++++++++
+ include/keys/system_keyring.h                 |  4 +++
+ security/integrity/Kconfig                    |  4 ++-
+ security/integrity/digsig.c                   |  2 +-
+ security/integrity/integrity.h                |  5 +--
+ .../platform_certs/keyring_handler.c          | 19 ++++++++++-
+ .../platform_certs/keyring_handler.h          | 10 ++++++
+ .../integrity/platform_certs/load_powerpc.c   | 34 +++++++++++++++++++
+ .../platform_certs/machine_keyring.c          | 22 +++++++++---
+ 9 files changed, 121 insertions(+), 9 deletions(-)
 
-Additionally.
-
-The mandatory controls implemented by TSEM are subtly different in
-intent from those implemented by the incumbent LSM's, since TSEM's
-controls can be generated and implemented by software developers or
-users.  You had noted in other replies that classic mandatory controls
-should only be implemented by system administrators or security
-architects.
-
-Finally.
-
-TSEM brings with it the ability to allow the creation of security
-control namespaces that do not conflict with other security
-namespaces, with the exception that the non-namespaced controls will
-also exert their authority if they are 'stacked' with TSEM.  If we
-read user interest and expectations correctly, which I believe we do,
-there will only be an increasing demand for this type of security
-functionality.
-
-Given that, it will be problematic, moving forward, if the capability
-to create isolated security namespaces is not orthogonal with the
-ability to modify how a policy can be configured or managed within an
-isolated security namespace.
-
-Given this latter issue, CAP_ML probably needs a different name,
-once again, suggestions are welcome.
-
-> > Having a separate capability bit for security modeling allows DAC
-> > and classic label or path based MAC systems to be implemented in
-> > the context of a security modeling namespace.  Looking forward it
-> > is not unreasonable to consider the implementation of a modeling
-> > policy that would verify the status of extended attributes being
-> > used for label based MAC controls.
-
-> It seems reasonable that being trusted with the privilege to change
-> the modeling policy would imply sufficient trust to change other
-> security states where allowed. As the Smack maintainer, and having
-> introduced CAP_MAC_ADMIN, I say that there's insufficient grounds to
-> introduce a new, single purpose capability.
-
-First, no one, least of all our group, doubts your contributions to
-the art.
-
-We are also very confident, in the level of skills and experience in
-the fields of modeling and security operations, of the team that is
-bringing forward TSEM.
-
-Based on these experiences, as we noted above, we believe it will be
-unwise to not make the ability to control the creation, isolation and
-protection of a security namespace from the ability to modify the
-configuration of a security policy within a namespace.
-
-Secondly.
-
-With respect to the capability being 'single purpose'.  We haven't
-seen a clear pathway or discussion regarding namespaces for other
-security architectures, given the known structural issues involved
-with classic labeling or pathname based implementations.  Paul
-suggests that there is ongoing thinking on how to address this issue
-and you've noted that the stacking work needs to go in before further
-functionality can be considered.
-
-The new capability bit will be available when those initiatives move
-forward.  Kernel doctrine has been that at least a single use of
-functionality must be present for a feature to be added, TSEM provides
-that initial use.
-
-Finally.
-
-In his 'ANN' document, regarding LSM submission requirements, Paul
-Moore noted that he did not want to require the need to demonstrate a
-'community of support' around an LSM in order to avoid a 'chicken and
-egg' problem.  He further noted that LSM authors need to be able to
-guarantee that API's will be durable for 20+ years.
-
-Within the security industry there is already a 'chicken and egg'
-problem.  A new security architecture or scheme will not evolve
-without the system, at a minimum, being in the Linux kernel.  New
-security architectures do not organically appear and evolve, we can
-state this fact with significant authority.
-
-Without generic availability and use of a technology, it is difficult
-to reason how correct 20+ year guesses on needed functionality can be
-made.  So there needs to be a 'guess' on how to implement technology,
-in the most generic form that does not lock the implementation into a
-corner.
-
-We've tried to make these 'guesses' with TSEM, based on, now 15+ years
-of experience, with multiple implementations of security modeling and
-namespacing.  Our advocacy for the new capability bit, whatever it is
-named, is based on that body of experience.
-
-We have proposed what we believe is the correct implementation and
-API.  If the only way forward is an alternate implementation, we have
-conducted our due diligence, which history will document if that
-alternate implementation proves to be insufficient and constraining.
-
-Best wishes for a productive remainder of the week.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
+-- 
+2.31.1
