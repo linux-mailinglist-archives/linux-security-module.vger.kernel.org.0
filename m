@@ -2,141 +2,233 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27977817E6
-	for <lists+linux-security-module@lfdr.de>; Sat, 19 Aug 2023 09:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266C57817F5
+	for <lists+linux-security-module@lfdr.de>; Sat, 19 Aug 2023 09:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343941AbjHSHDv (ORCPT
+        id S1344113AbjHSHK0 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 19 Aug 2023 03:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        Sat, 19 Aug 2023 03:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343919AbjHSHDU (ORCPT
+        with ESMTP id S1344346AbjHSHKJ (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 19 Aug 2023 03:03:20 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7070D4227
-        for <linux-security-module@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id 5614622812f47-3a7d7de894bso1169428b6e.3
-        for <linux-security-module@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692428596; x=1693033396;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
-        b=JBXWdTgGa+H/8z7x8k6G4qRwkJ3v5AZ/3PYGnj7kkAMZbCITGbjXSuvcuKkaCUxj9A
-         hT+XSYJhdIdPsvN5uxepyoS5Yam8aiBOX7SRpGJgnvsRpFETmvB+u6CDvixjem3Auaz9
-         8XJTWSstONS7IHuP1KyK28Rq9cj9dMxehv9DuKFz97OyC6g6RCaqQCEfd1xPRF022Yxv
-         OVM1DuuVFrZOu0YWpd6OOGdZWk4r+v5LcWVhUS78S2WY/4U2qavTx1YIuX7hrkxe9nGH
-         /u9oCEeYI97+kWDS4PvF+OMWVZVDXeWZlkidVm9mYe1M2ztCdqbJibZhzUQ+rI08LuWJ
-         5AYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692428596; x=1693033396;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
-        b=K3RcV+VLTIr3211yxXW3KT67oAmeKmkBckFxjhTLB0kUjv2VmnX3x1rTIcSAgDKaKr
-         o+LAqgAFC9xcGL8WUnrGstIKHzcuxLzA7n1L4dhJQAfBk/kDYB9PTM4jWDfUMXkRYClB
-         Zl8b9Ni0v1KjuqjIxhF377VsGyMo1+UqNNeh+HzO8D6oKUk/U9I7PQpBz9f/C2I774ez
-         bH05Et4dux8lfHb4xnp7EoYVmB4Bx7DiMumz2GjgxeE4zpQ7eapZ2O+2xFIGBlqoyD6v
-         9FOMQdm48TF/AkdXX9cT/WI//VXtQKxS0GGnLMWci3oicBSdOrTRK+9ct336AlyAr+2m
-         ovHQ==
-X-Gm-Message-State: AOJu0YxLqdJGGh3kIgBqITcPoTk318MURxvE9K1IwgSXk9CIX8SWFoxX
-        9dGYcCxaVmQrhX/r89PBh+gguoCwLhW52tECc6osB92Irbf7gQ==
-X-Google-Smtp-Source: AGHT+IHBFHux9W7amy752XAKQ4G+pXj9K8KLABgekYkKVjTaNiUovhqWPJjy5q7mdLIzANUAVG24gzrYlmHT6Kjn7Kk=
-X-Received: by 2002:a81:8782:0:b0:589:a9fc:ffcd with SMTP id
- x124-20020a818782000000b00589a9fcffcdmr1407212ywf.20.1692428576106; Sat, 19
- Aug 2023 00:02:56 -0700 (PDT)
+        Sat, 19 Aug 2023 03:10:09 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EFC4231;
+        Sat, 19 Aug 2023 00:10:04 -0700 (PDT)
+Received: from fsav114.sakura.ne.jp (fsav114.sakura.ne.jp [27.133.134.241])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 37J79m2c075496;
+        Sat, 19 Aug 2023 16:09:48 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav114.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp);
+ Sat, 19 Aug 2023 16:09:48 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 37J79mSQ075493
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 19 Aug 2023 16:09:48 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <b0b60fdc-4484-2265-7fdf-8367bf218d18@I-love.SAKURA.ne.jp>
+Date:   Sat, 19 Aug 2023 16:09:46 +0900
 MIME-Version: 1.0
-Reply-To: razumkoykhailo@gmail.com
-Sender: mrtombaba@gmail.com
-Received: by 2002:a05:7000:5395:b0:4f4:2174:eed4 with HTTP; Sat, 19 Aug 2023
- 00:02:55 -0700 (PDT)
-From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
-Date:   Sat, 19 Aug 2023 00:02:55 -0700
-X-Google-Sender-Auth: TD1SbUwALQWUaG93zNo0ky4SaO8
-Message-ID: <CADXgghn2t3mU_VvtZDjHwnbadg2QnVcJ30yFd0kN8SL6NDhY1g@mail.gmail.com>
-Subject: Greetings from Ukraine,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [2607:f8b0:4864:20:0:0:0:242 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrtombaba[at]gmail.com]
-        *  2.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] audit: add task history record
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     linux-audit@redhat.com, audit@vger.kernel.org,
+        Steve Grubb <sgrubb@redhat.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <36b65eb1-ccbf-8b81-468f-b8d88c4be5a3@I-love.SAKURA.ne.jp>
+ <CAHC9VhTLQjjQ0QMfBDHYCz9LOAuO=rJWSDEUqPsFE+dowFbN=Q@mail.gmail.com>
+ <b06dbdd8-d2f6-b190-5635-948c0a966103@I-love.SAKURA.ne.jp>
+ <CAHC9VhSz=3utr_CigGvkMEb6_avJUQq1Ak2smB7neSd76mzjFw@mail.gmail.com>
+ <6957af54-16a2-4c28-56ff-dafe95f4e276@I-love.SAKURA.ne.jp>
+ <CAHC9VhTj-PQ0qPTiphPLXyJx3bWeqgVS_GPCWNgjqFqBgH6Njg@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAHC9VhTj-PQ0qPTiphPLXyJx3bWeqgVS_GPCWNgjqFqBgH6Njg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
-wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
-aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
-aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
-YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
-b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
-CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
-wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
-ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
-aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
-bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
-oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
-cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
-bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
-bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
-wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
-aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
-bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
-wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
-LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
-wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
-YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
-bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
-dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
-d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
-b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
-dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
-Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
-oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
-wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
-wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
-oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
-dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
-dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
-wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
-wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
-DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
-Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
-oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
-bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
-ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
-YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
-ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
+On 2023/08/18 23:59, Paul Moore wrote:
+> Except we are not talking SELinux or LSMs here, we are talking about
+> audit and the audit subsystem is very different from the LSM layer.
+> The LSM layer is designed to be pluggable with support for multiple
+> individual LSMs, whereas the audit subsystem is designed to support a
+> single audit implementation.  It is my opinion that the audit patch
+> you have proposed here does not provide an audit administrator with
+> any new capabilities that they do not currently have as an option.
+
+Before explaining why an audit administrator cannot afford emulating
+this patch, I explain what this patch will do.
+
+
+
+There are three system calls for managing a process: fork()/execve()/exit().
+
+  https://I-love.SAKURA.ne.jp/tomoyo/fork.gif
+  https://I-love.SAKURA.ne.jp/tomoyo/execve.gif
+  https://I-love.SAKURA.ne.jp/tomoyo/exit.gif
+
+As a result, history of a process can be represented as a tree, where the
+root of the tree is the kernel thread which is started by the boot loader.
+
+  https://I-love.SAKURA.ne.jp/tomoyo/railway.gif
+
+This fundamental mechanism cannot be changed as long as Linux remains as a
+Unix-like OS. That is, adding this information will not cause what you call
+"the support burden".
+
+
+
+Currently, a "struct task_struct" has comm field and pid field, and
+people use these fields like
+
+  printk("[%s:%d] some msg comes here\n", current->comm, current->pid);
+
+for giving hints for identifying a process.
+
+What this patch does is to allow people do like
+
+  printk("[%s] some msg comes here\n", current->comm_history);
+
+for giving hints for identifying a process more precisely.
+That is, users of this information is not limited to audit. For example,
+an LSM module can use this information, an audit record can use this
+information, a SystemTap script can use this information, and so on...
+
+
+
+> 
+> There are also concerns around field formatting, record length, etc.,
+> but those are secondary issues compared to the more important issue of
+> redundant functionality.
+
+If someone tries to emulate this patch, we need to be able to trace all
+fork()/execve()/exit() system calls. Or, the history tree will be broken.
+
+If an audit administrator tries to emulate this patch using system call
+auditing functionality, we need to make sure that
+
+  "auditctl -D" must not clear rules for tracing fork()/execve()/exit()
+  system calls. This is impossible because this change will break userspace
+  programs expecting that "auditctl -D" clears all rules.
+
+  Rules for tracing fork()/execve()/exit() system calls must be enabled
+  when the kernel thread which is started by the boot loader starts.
+  How can we embed such system call auditing rules into the kernel and
+  tell whether to enable these rules using the kernel command line options?
+
+  In order to avoid possibility of loosing fork()/execve()/exit() records,
+  auditd must not be stopped even temporarily. Who wants to enforce such
+  requirement in order to be able to obtain process history information?
+
+It seems that Linux kernel also offers "proc connector" mechanism. But is that
+reliable enough to guarantee that all fork()/execve()/exit() histories are
+kept up-to-dated? Any emulation done by userspace programs is unreliable,
+for programs for emulating this patch are started too late to trace all.
+Only the built-in kernel code can trace all fork()/execve()/exit() events
+and guarantee that all fork()/execve()/exit() histories are kept up-to-dated.
+
+
+
+The tracing implemented by this patch needs to be done using the kernel code.
+
+https://www.intellilink.co.jp/column/oss/2014/093001.aspx (sorry, this article
+is written in Japanese language) explains 4 survey methods for finding locations
+affected by CVE-2014-6271 (also known as "ShellShock"). This article was based on
+https://I-love.SAKURA.ne.jp/tomoyo/LCJ2014-en.pdf . Copying P43 and P44 of this
+PDF file here:
+
+  Is SystemTap good at everything?
+
+    SystemTap can be used for not only measuring performance
+    of functionality but also tracing functionality.
+
+      LSM interface allows probing at only locations where LSM
+      callback hooks are provided, for it is designed for making
+      security decision and auditing.
+
+    SystemTap allows probing at almost everywhere (not only the
+    start/end of a function but also any line number in a function in
+    the source code).
+
+      For example, you can find out the exact location in the
+      source code where the errno the system call auditing would
+      record was set, by writing a SystemTap script which probes
+      at specific line number
+
+    Unfortunately, SystemTap is not a tool designed for monitoring
+    throughout years.
+
+      LSM modules do not skip events nor stop working until
+      shutdown, but SystemTap might skip events or stop working
+      due to SystemTap's safety mechanism (and/or external
+      factors like SIGKILL) before the event you want to record
+      occurs.
+
+    Please check whether SystemTap is suitable for solving your
+    problem.
+
+      There will be cases where system call auditing is better.
+      There will be cases where single function LSM modules
+      explained later is better.
+
+P100, P101, P102 of this PDF file demonstrates a SystemTap script
+which tries to emulate subset of what this patch can do. The difficult
+part of such emulation is mainly managing the process history tree.
+If the built-in kernel code offers the process history tree, writing
+SystemTap scripts will become much easier. 
+
+But I can't propose this code as a patch for SystemTap, for SystemTap
+is not a in-tree kernel code. I need to propose this code as a patch
+for in-tree kernel code. LSM and system call auditing are users who
+can utilize this code. But you don't want this code as a patch for
+audit due to unknown "the support burden".
+
+
+
+> 
+>> People propose different approaches/implementations because
+>> they can't afford utilizing/configuring existing approaches/implementations.
+> 
+> From what I've seen, both in this thread as well as the other related
+> threads from you, these recent efforts are due to a lack of TOMOYO
+> support in mainstream Linux distributions.  My advice is to stop
+> trying to duplicate the TOMOYO functionality in other subsystems/LSMs
+> and start working with the distributions to better understand why they
+> are not supporting TOMOYO.  I believe that if you can determine why
+> the distributions are not enabling TOMOYO, you should be able to
+> develop a plan to address those issues and eventually gain
+> distribution support for TOMOYO.  I understand that such an approach
+> will likely be time consuming and difficult, but I think that is your
+> best option for success.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=542986 was the request for
+enabling TOMOYO in Fedora. But Red Hat people do not want to support
+TOMOYO due to unknown "the support burden" like you say.
+
+TOMOYO is tested by syzbot, and quite few bugs have been found in TOMOYO.
+I think that enabling TOMOYO in Fedora/RHEL kernels won't cause "the support
+burden.". But I can't determine why Red Hat people do not enable TOMOYO.
+How can I convince Red Hat people afraiding unprovable, unexplainable,
+unknown "the support burden" ?
+
+
+
+Anyway, enabling TOMOYO in Fedora/RHEL kernels won't solve the problem
+this patch is trying to solve, for TOMOYO cannot utilize TOMOYO's process
+history information because LSM hook for sending signals does not allow
+TOMOYO to sleep...
+
