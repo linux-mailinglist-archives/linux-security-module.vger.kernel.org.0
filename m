@@ -2,61 +2,61 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9147850E6
-	for <lists+linux-security-module@lfdr.de>; Wed, 23 Aug 2023 08:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D8B7850F2
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Aug 2023 08:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbjHWGzz (ORCPT
+        id S233060AbjHWG50 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 23 Aug 2023 02:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
+        Wed, 23 Aug 2023 02:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjHWGzy (ORCPT
+        with ESMTP id S232983AbjHWG50 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 23 Aug 2023 02:55:54 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D00DE50
-        for <linux-security-module@vger.kernel.org>; Tue, 22 Aug 2023 23:55:51 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-44d4d997dcfso1256393137.0
-        for <linux-security-module@vger.kernel.org>; Tue, 22 Aug 2023 23:55:51 -0700 (PDT)
+        Wed, 23 Aug 2023 02:57:26 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7804AE5E
+        for <linux-security-module@vger.kernel.org>; Tue, 22 Aug 2023 23:57:22 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-44bfe8bcf78so1433699137.2
+        for <linux-security-module@vger.kernel.org>; Tue, 22 Aug 2023 23:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692773750; x=1693378550;
+        d=linaro.org; s=google; t=1692773841; x=1693378641;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PLfKs0vxuqFqgLcCcFNFpi2DXG8BlcoLy65tZmmHn4s=;
-        b=C9fd660wNdFLLdlS2TW0H+x8soH+wvy9kheDYuP5m9XABGCmyBn+reV7925EIRPp6a
-         7AXhimwLYPR08T0phs8tN2Be1X/caQvrUiIh7KJQkIVF3yNTS8uOcP+sLGxHyFyFBu8l
-         xU8E0DDwLqTKgfqqoQbFY5frZwkr5QbOO5pEBLxT48KoHVlD3ZFag8jq85yJXibiEzVQ
-         5qt6mpv/gxdaZ7JHHKfhk5u8rRIV7ejeu8wgLm+i9LqTSwJGwLcgtZ1JR7kNDaYgf3Kz
-         iC76tFy5F31ctUtAJwoBD6OExWePXojnDkc54iOiQVjbrf61yF8v3XHpwi3C3uXoO1Q7
-         9Spw==
+        bh=iVRAOJ2V1xFLlhLJ5dZhwuizlLc11hemaOhn9axZBD0=;
+        b=N9E01nYu4DMUBxNw5K8MjXxy6A97r9ty3PhOwRfstuf1nTsAiVFZKGfc6KGe8A5afF
+         1ptWhZyrbWjavtu8/IOQCMITzX4Irbz8woEu2IQRkWe68H9UoP1dMyCgsfoHVsQNwNfT
+         fCvzOwT7RGgNIaYoPnq/eC605QyVdplAYxxdYGip+FbXef1Ds5ztdyB9pM073frW0CAg
+         YBljBPEf+kOm2bzeoN9OsqYyHiXon7wtJjOmjy2TbK3nPjmogJfgZKROpq3O8ExY+thP
+         hy8FYBqyojh1LWsvgGgVFln1xowb+q4GGu8+C7BY7y/Kb0E6GiqQN2gENzcXKcuOIHbU
+         rMwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692773750; x=1693378550;
+        d=1e100.net; s=20221208; t=1692773841; x=1693378641;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PLfKs0vxuqFqgLcCcFNFpi2DXG8BlcoLy65tZmmHn4s=;
-        b=b/rafWFHgyqGxaSzg4NYIzKtwXDarM+C+y33urGk5qC+2nvyQVkZqsG9FHkjtnZLhi
-         XVFfS0PwAdHK7VdxCsu5aI8b/LCSPXHENPMjkC79wX2QimJxPg8KIe4Z8J/VTvAAQlf0
-         eCG+0bw0HSZWApGW/SZ2KVpkg6MA13ftq15rt8oCS6BVG2OssXL/d+WMyJ4Sj6Fyo9yO
-         8kl8yM5RcvOyonn1Sf1WMODhLUmKwKJsKa9sO93UlqB0TbQbY7RvVNjrtXJ3Z/861d94
-         jWp8E8Rkf8xfuTHhtQjr4+RTl3JRVG3qMfW9q2uDlrd+b8NjPJxM19GGcpd9v3g1yNqR
-         2tPw==
-X-Gm-Message-State: AOJu0YwnADbc0bu9BM75n96Uu3YC07OLq8lL4nb35Zwf4IrHpIl43X4p
-        RG6rICyjCiYqVh8SwdsJvxIQg5DdmzLMvNH9AKSy4Q==
-X-Google-Smtp-Source: AGHT+IHZ6wzYTYuJHshwpDW0Nk/qU4m6YVHI11y0vAqL8DLXYwnKrO6DRhb4Erf21/HfbRs2sqC1d+WekK+UVKjFJCE=
-X-Received: by 2002:a05:6102:354f:b0:447:55b0:bceb with SMTP id
- e15-20020a056102354f00b0044755b0bcebmr10299298vss.0.1692773750399; Tue, 22
- Aug 2023 23:55:50 -0700 (PDT)
+        bh=iVRAOJ2V1xFLlhLJ5dZhwuizlLc11hemaOhn9axZBD0=;
+        b=Y/9HOCPsr7hQ9VaDKyUMvUOVjKJTrFlTknuA7/bsY075pSL50dR0J9M2Hpm8taoCZ9
+         7y2/UiF0r+GdJWh5pzi6rTRROVxRkzLXZJY9S0fklEXRvYwDNe6T+MQG63jPQ5zWJ5Us
+         2romimBWZieBq1Fi1P0J16yIh1EDoT/7vUWDMkKh3/RqqQjD7nKDtjPO3QMmx6TjErU2
+         TyEhL24cP6Cie17ZZus8skd0KFGRWlft4snA4Qr6/3A129NJGvibDjywOAXbNxlb/u+7
+         EcNgHuHsjK+fCLipYcpF6/9qdbpLYniX3Zjsp8Cvh9VwkTJepk9tbG1ct4ndiOrn1f37
+         eMrQ==
+X-Gm-Message-State: AOJu0YzCr4OMFL4TBsuLS6XaAfVbs2fiRLLZKfUkxk1KVsM+phbRfMuv
+        927l9ICt6RuXrXw8BM32gJ0hlL3mlpLxxz9NhDzv7A==
+X-Google-Smtp-Source: AGHT+IGQvVZm8BkFEz+9tquBvWRQY0FaLDoMTO+xUVZEH/h9M0dLo23sZ7XdNYwYn1UP6B0iwAoN0O0ZglVbPVw5ShA=
+X-Received: by 2002:a05:6102:448:b0:44d:590d:28a9 with SMTP id
+ e8-20020a056102044800b0044d590d28a9mr4022555vsq.3.1692773841485; Tue, 22 Aug
+ 2023 23:57:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230822112933.1550062-1-sumit.garg@linaro.org> <20230822125555.GA82256@rayden>
-In-Reply-To: <20230822125555.GA82256@rayden>
+References: <20230822112933.1550062-1-sumit.garg@linaro.org> <CUZ4G9FRXIW1.23TJD5ASQBUNE@suppilovahvero>
+In-Reply-To: <CUZ4G9FRXIW1.23TJD5ASQBUNE@suppilovahvero>
 From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 23 Aug 2023 12:25:39 +0530
-Message-ID: <CAFA6WYPy=yxGg1HbT+ipWJFpxiJeUGK6BSgMhtRPd=zmKef-cw@mail.gmail.com>
+Date:   Wed, 23 Aug 2023 12:27:10 +0530
+Message-ID: <CAFA6WYOetWZhuobQE3h1oyu=wKUOjyrVu53vyA399P0DV5MGjg@mail.gmail.com>
 Subject: Re: [PATCH] KEYS: trusted: tee: Refactor register SHM usage
-To:     Jens Wiklander <jens.wiklander@linaro.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        jarkko@kernel.org, jejb@linux.ibm.com, zohar@linux.ibm.com,
+        jejb@linux.ibm.com, zohar@linux.ibm.com, jens.wiklander@linaro.org,
         sudeep.holla@arm.com, achin.gupta@arm.com,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -69,9 +69,9 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, 22 Aug 2023 at 18:25, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+On Tue, 22 Aug 2023 at 19:22, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 >
-> On Tue, Aug 22, 2023 at 04:59:33PM +0530, Sumit Garg wrote:
+> On Tue Aug 22, 2023 at 2:29 PM EEST, Sumit Garg wrote:
 > > The OP-TEE driver using the old SMC based ABI permits overlapping shared
 > > buffers, but with the new FF-A based ABI each physical page may only
 > > be registered once.
@@ -85,6 +85,15 @@ On Tue, 22 Aug 2023 at 18:25, Jens Wiklander <jens.wiklander@linaro.org> wrote:
 > > Fixes: 4615e5a34b95 ("optee: add FF-A support")
 > > Reported-by: Jens Wiklander <jens.wiklander@linaro.org>
 > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+>
+> Does this retain backwards compatibility?
+>
+
+Yeah it does retain backwards compatibility since there aren't any
+changes needed on OP-TEE Trusted Keys TA end.
+
+-Sumit
+
 > > ---
 > >  security/keys/trusted-keys/trusted_tee.c | 64 ++++++++----------------
 > >  1 file changed, 20 insertions(+), 44 deletions(-)
@@ -118,20 +127,6 @@ On Tue, 22 Aug 2023 at 18:25, Jens Wiklander <jens.wiklander@linaro.org> wrote:
 > > -             goto out;
 > > +     reg_shm = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
 > > +                                           sizeof(p->key) + sizeof(p->blob));
->
-> This is somewhat fragile. What if struct trusted_key_payload has a small
-> unexpected change in layout?
-
-key and blob buffers are just two adjacent fixed sized byte arrays. So
-I am not worried here as long as they stay adjacent (which has been
-the case since trusted keys were introduced in the kernel).
-
--Sumit
-
->
-> Thanks,
-> Jens
->
 > > +     if (IS_ERR(reg_shm)) {
 > > +             dev_err(pvt_data.dev, "shm register failed\n");
 > > +             return PTR_ERR(reg_shm);
@@ -229,4 +224,5 @@ the case since trusted keys were introduced in the kernel).
 > >  }
 > > --
 > > 2.34.1
-> >
+>
+> BR, Jarkko
