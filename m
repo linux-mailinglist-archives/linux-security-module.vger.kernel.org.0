@@ -2,827 +2,250 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF35078B903
-	for <lists+linux-security-module@lfdr.de>; Mon, 28 Aug 2023 22:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DED78BB3B
+	for <lists+linux-security-module@lfdr.de>; Tue, 29 Aug 2023 00:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjH1UDa (ORCPT
+        id S234152AbjH1W4a (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 28 Aug 2023 16:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        Mon, 28 Aug 2023 18:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233741AbjH1UD0 (ORCPT
+        with ESMTP id S234291AbjH1W4T (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 28 Aug 2023 16:03:26 -0400
-Received: from sonic317-38.consmr.mail.ne1.yahoo.com (sonic317-38.consmr.mail.ne1.yahoo.com [66.163.184.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CCB1B1
-        for <linux-security-module@vger.kernel.org>; Mon, 28 Aug 2023 13:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1693252992; bh=NMqYtLgXItMJ8wXuC/GuaE3Kf9k8LrGktkI9+3eBY5Q=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=IRmwwv1l3e94nvrTmONpvkU7Pnya2GpBqWNuk82HKw5+xaEfbY/RLQSUtzLIM6cwfgmUfo4TZG+zoVof84jryJ57S6hUnP1GNr0BRoGju5H6t9TpXXbkp+7uaaF5n6FyEjbospGLwivRLOwIOpfahhDD/xln3ikLtTxE0WdwTVgumzBzrdYpa1t6lvwOPLLlgCsaDvvRqNN9o2fKG86e5ypVGOrRg/Mrbxj4kTIRFNYlAWLn+CstQz2sJAxJDT9Qj5dgAI27Iv8HduVlnSRcrb7XiKYZTJYKwj0apq+7MTwKLgp67zfsIKStRugd0iNr2sqVA+3sEac0uU2Dpgg5fw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1693252992; bh=y4FtJx9Wsy9oC/F9PZZM7HSeHUWYSBtq8xGVNbr07Rw=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=sV3M2JKJiOk66PoDNhpvdbFqBZtK0V5T+sd/Zb7d/kwdn+N65EjDPMjDae7xXCbjtRoBkfguoItgj3ZRJfxmVrZzo0bYpXSr7+TilcxemCBzPDuCjdz1BRM0ZHVOivzElc+lkrugiVpUj7bZap2SevdoYoYw1DzchsSYrxovfUjV3ULdr43oAhu65Z1eVwyvXrjYkwk4yww3u8uK7Q7IC/KOM/Ggb6VJz/7mNXjiTvp1c3IHzBCx96WRJxOPFW2bvGDHzzh5UIvwTWiSFr+QPPNd7q5hGJx+cocbsiY4dLqxk2FP+oumSvgi26BxDQJ3M2EqjJ0hwmH+FiB9icYgug==
-X-YMail-OSG: j2VPz2UVM1mHolda.UYIjEUXe2QeQTY9HD7U5FTHbgavptQFysV1MQfE2k7NjjD
- dqMtlYbCN4Ggy0eQQyw31xBaLVNPRTdO_Dhw00gQvVrsll.50THdGAixnQ1sUiKwS2Tj_gAlF7VN
- n_aZAx3MZoujUzx1Mp_twptuobXZECnl0CKi93fMIzWIeUpfnoFi2jvNRx26GgNJt7RXmFu0t5Pt
- 6zimeg76iNunWKZs61SNVouLL.LRNtLwMJYHiJE8Ke4m0uJiuuNKL_uNdvdzPFAM3qxYXKqxXRVA
- 1oqRvsuuTsOcCeWsAudJPYYivWCObfdhKmefNQb5eet8GvDtFtzYe8ZSJ3K0bhlFpq4U3PVY0y97
- 8tR33i39FW28aNUrcWbAe89aOQCpI1FqIpcoci6k9qjKynjme.e8xPFqf9zJM6Ldpnqwrx9oOsTJ
- PXEPZLtnrtT.OHMyML23kw4lbMr9vo6PKWsLyQWVmLv6dLUE_iiq__LRAt_PEnS_2wGJ1By6Bvw6
- PNonxriGJmAOP5FZ8f6aqKgxIpzM1eETYchRXgCGE9yoIdtuLEETSDS5hYiGZq4IGcGvRSuJFF8y
- v5vAW5hNBZ.vC2wauUdf.JWLslAGsnCWlTvpMrvcKYdP6Zc1.wgN9NOfKz_ji2RJko5mwVUJc895
- sP24js6QBNGlmwXcwoRS3Lnj_R9p6F1w2sRhV0uLSiBHEuylvwJAd1as_dg9Pb1gOYdCeGbKWZ1S
- zosfbe3h9pYiYYEb4KVJNweDafUoMbSHhrYq9QJYqtE2aqYV3By8BPxqd9GzbovRg69LDg6bdwQb
- Z3dWgNE3HtdTzK82wPqTXZqae3guCY79OcZeWtQ3UxCSG8.z8QMpM4bFwQ5r.rpR0534O.3t1Y_4
- TuMbF1BEQS67tWXzp5LSIw0ScNoqvEJo8hoDEsXCv.PQLhEbLyM8LgAWxpQuU.JYFuiVE2tL9v4Z
- 9zkuji0Vcc6dX6tDKKRrCIlOBcvI52OytMErTUHC_C16cPNrhWf5uPYYlt4_Vwl2UsC6UIHK_UIZ
- 7NwzcB5bT9vKvjUNpLDWWtbFT8DqmScV1.H7ApjBWVPrmlsH0lbrtXLTZx6wsBNijy5u5VcKuigC
- VGmd0PfP3cBqp3hyeP5S7N2E55y7tKij6JSIKfoec.qcQdAh2cP4ZzMRn8J72Tj72Gh_.9r8GYkX
- ZY3lil2_yGNZwXWHG.dD4VOEU83__x2k.1PYV5qDZT8ElXtkuB.d9JcAIxtsBjXK2oBVbnh.VnV.
- stvoTP2nRyAsqIDs8sQuKRmA2.mGp80f.LinhwB.CLcFhWunx6b1i0ZXOmS9cFtySAWQprfm7fxm
- IZEY3zTt9JO8_.dGMEWRO9Ii7iiDL0F46BJY6_9QoJAfItBMQlVlRrDL1dsn0pELKNlKCichrlNl
- JATrxIJ8CMZvk8zokwdMaa1PuXe4QhtHQ4WOkP29r83iskd_RQ.LljBLjTDDOdY7DrlKpmjTfG2c
- gtQlY7eJ3s1mmB3bJ82HikEmtrABZSyEpsVlT3C22b2AiDmXGmsCyhWtKzjxOPjSibLbeN7rrePL
- .yQJHPRYvKAAPXHc61KunHus2HO1jrMiUNMh2txdEsyByp__Hjc_.LkgpQHJRbRpNEB0zIcO3LLR
- MCks2pJvhYxsjYlEMOR21WSCzDrUHSiapRaOiNalSEck5DwmvyZ6QKcHzdkD05AISONN6fq_yOKR
- id1PH_SE4AxoGumB3XwNuyhm7zARLFZrL7escPfKqFL7USJ05wL176mWSbGFQlF7KIiOpoq3DBHK
- UACI.x8XIQ7ImONC4NzYf2JQiJdeapM1Eb98nLKDelRhiOKOxVtUmRl4mj2W9atoIgl58v4BVRfh
- NjT16TlCyaIZHb5d_gK3wlABgYw7dShj8URfI6P74SMQfNWs6AoCUUeopMrphR7DWfX1QDh0AhpW
- zRKQhUxAsR5P_mGcuw_en_2T1O06rUZSSGpRGGzV5orJsuOUM0yUvN9cYiSso.Ny6SxYRHCd_hRx
- 5UP3nI7h0JCOy2nXnrvLmN6GU1RJ6bN_yrQaw_8lUPv3q5g.4mr8qqYAz1UtYQuCFUxeNOqqvyS.
- xWfXujfn17sCfE3EtT.lAcwR4KJ7ItD.W6YQbU9Ar13gysGElL5eZtIQeRDeQ9Cnis8vU3bDCNhv
- pCtGcT.4gAolabOLLLjbYnKR_rzvq3O6jffhN6TyNKeiAcPWyW68UzOP6O.ymoHaxWfWMHN379BY
- WrdivPHM95njIB.HtxiHQterdambwCRYrDOCG7DUdgS5QmeiMUZ9gTInu0A1rRo4p_nqA19A_UGL
- xfH1SPNksXC8Rxe6zT4btc10pSc8-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: f8954986-0e28-4003-8d3b-fcd647ed39ee
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Mon, 28 Aug 2023 20:03:12 +0000
-Received: by hermes--production-gq1-6b7c87dcf5-6x8bf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 29138cd0d16732a579d2f4720912c9a5;
-          Mon, 28 Aug 2023 20:03:07 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey@schaufler-ca.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v14 11/11] LSM: selftests for Linux Security Module syscalls
-Date:   Mon, 28 Aug 2023 12:58:01 -0700
-Message-ID: <20230828195802.135055-12-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230828195802.135055-1-casey@schaufler-ca.com>
-References: <20230828195802.135055-1-casey@schaufler-ca.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Aug 2023 18:56:19 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9839E189
+        for <linux-security-module@vger.kernel.org>; Mon, 28 Aug 2023 15:56:14 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-56f8c8fd8e7so2480959a12.1
+        for <linux-security-module@vger.kernel.org>; Mon, 28 Aug 2023 15:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693263374; x=1693868174;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=45FPDFU2bi5QNrTegRTZSI4D/kTsLJ5aPvVquLb6Kb4=;
+        b=pLOLnQlAccDWO/O5kVLkKwA9wRVSEEkjq7uLC+mlmD7Vfw3vEYXCkgTxxXccxGMWgZ
+         wRGNqorlmNPayZTm3R+GqSyo7GngRdVoeiMDanQ2qTLDbFHAwVr7soK6dbWp8LVur1IJ
+         7Dj7NDy10jedqv9lpI8G9Si/rF4w8XfNDjmoH8zHrZK+nE/CztRtHvsfpP2cZBuR/WSb
+         r1GFzm2yEAVnnjHec8JxS7mw13lbH162cn2tJ8OGbc1nr9IEbWJ5p7u+QgsCm1qR34DM
+         OtkAkqUjCP9VneeTOmcCYfI7wZJzfHg/Vici91Fsjq4cCd2IzQiQr/mxwrVo3egZBd6/
+         M4pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693263374; x=1693868174;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=45FPDFU2bi5QNrTegRTZSI4D/kTsLJ5aPvVquLb6Kb4=;
+        b=BJ/YFwjNm8majGYR+qzhTijCl4B67NUXKuSaJdfgnUD1aYP0RN/Dgdo7d9QJ+Jjq+p
+         k3OV+X6538NgwUvJ5B01U2fHpBLXE2mPkV90VXmBrPDKQirX9dXkYg9esLHENERxRpLN
+         SDtHqKcINOHBgcgPXAKp60fV2ImF7OzS2TNYG76Zf3SAYBrKP93nNfbF0dp08RZwq7Of
+         ARcUZ/lcW2RfVHDNtmCCwUn/oSd/p/+Tk3LEgamN2FzDBEFQ31A/oKWF2+I0jp3eTjqZ
+         LHyIfZ57yoW0Ij2T8ZiQ4kP+Opd73HAuJtPcwpi0o0EBdEaTA66ZkS7qjtbCOUpLHOEP
+         8r+w==
+X-Gm-Message-State: AOJu0Yxj6AY3ZirdjZ874eQ+iwAIsL89mv9OZlK5iyxR+XlmDBoaRh1c
+        eWVq46e7WA52jiyPeFSSKzkyjDVF+Mk86L7BWA==
+X-Google-Smtp-Source: AGHT+IHiRfp4dtsSrmAF/uBzjUu2XQ3xTysjq4Ohm5oUAXB2N+6Zi644lMyKLSW9uEB1MtUrJ1+LGs2ibik7KIYLPQ==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a63:8f09:0:b0:566:2d6:f71b with SMTP
+ id n9-20020a638f09000000b0056602d6f71bmr5097167pgd.12.1693263374002; Mon, 28
+ Aug 2023 15:56:14 -0700 (PDT)
+Date:   Mon, 28 Aug 2023 22:56:12 +0000
+In-Reply-To: <ZOO782YGRY0YMuPu@google.com> (message from Sean Christopherson
+ on Mon, 21 Aug 2023 12:33:07 -0700)
+Mime-Version: 1.0
+Message-ID: <diqzttsiu67n.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, maz@kernel.org, oliver.upton@linux.dev,
+        chenhuacai@kernel.org, mpe@ellerman.id.au, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, willy@infradead.org,
+        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chao.p.peng@linux.intel.com,
+        tabba@google.com, jarkko@kernel.org, yu.c.zhang@linux.intel.com,
+        vannapurve@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        david@redhat.com, qperret@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add selftests for the three system calls supporting the LSM
-infrastructure. This set of tests is limited by the differences
-in access policy enforced by the existing security modules.
+Sean Christopherson <seanjc@google.com> writes:
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- MAINTAINERS                                   |   1 +
- security/security.c                           |   2 +-
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/lsm/.gitignore        |   1 +
- tools/testing/selftests/lsm/Makefile          |  17 ++
- tools/testing/selftests/lsm/common.c          |  89 ++++++
- tools/testing/selftests/lsm/common.h          |  33 +++
- tools/testing/selftests/lsm/config            |   3 +
- .../selftests/lsm/lsm_get_self_attr_test.c    | 275 ++++++++++++++++++
- .../selftests/lsm/lsm_list_modules_test.c     | 140 +++++++++
- .../selftests/lsm/lsm_set_self_attr_test.c    |  74 +++++
- 11 files changed, 635 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/lsm/.gitignore
- create mode 100644 tools/testing/selftests/lsm/Makefile
- create mode 100644 tools/testing/selftests/lsm/common.c
- create mode 100644 tools/testing/selftests/lsm/common.h
- create mode 100644 tools/testing/selftests/lsm/config
- create mode 100644 tools/testing/selftests/lsm/lsm_get_self_attr_test.c
- create mode 100644 tools/testing/selftests/lsm/lsm_list_modules_test.c
- create mode 100644 tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+> On Mon, Aug 21, 2023, Ackerley Tng wrote:
+>> Sean Christopherson <seanjc@google.com> writes:
+>>
+>> > On Tue, Aug 15, 2023, Ackerley Tng wrote:
+>> >> Sean Christopherson <seanjc@google.com> writes:
+>> >> > Nullifying the KVM pointer isn't sufficient, because without additional actions
+>> >> > userspace could extract data from a VM by deleting its memslots and then binding
+>> >> > the guest_memfd to an attacker controlled VM.  Or more likely with TDX and SNP,
+>> >> > induce badness by coercing KVM into mapping memory into a guest with the wrong
+>> >> > ASID/HKID.
+>> >> >
+>> >> > I can think of three ways to handle that:
+>> >> >
+>> >> >   (a) prevent a different VM from *ever* binding to the gmem instance
+>> >> >   (b) free/zero physical pages when unbinding
+>> >> >   (c) free/zero when binding to a different VM
+>> >> >
+>> >> > Option (a) is easy, but that pretty much defeats the purpose of decopuling
+>> >> > guest_memfd from a VM.
+>> >> >
+>> >> > Option (b) isn't hard to implement, but it screws up the lifecycle of the memory,
+>> >> > e.g. would require memory when a memslot is deleted.  That isn't necessarily a
+>> >> > deal-breaker, but it runs counter to how KVM memlots currently operate.  Memslots
+>> >> > are basically just weird page tables, e.g. deleting a memslot doesn't have any
+>> >> > impact on the underlying data in memory.  TDX throws a wrench in this as removing
+>> >> > a page from the Secure EPT is effectively destructive to the data (can't be mapped
+>> >> > back in to the VM without zeroing the data), but IMO that's an oddity with TDX and
+>> >> > not necessarily something we want to carry over to other VM types.
+>> >> >
+>> >> > There would also be performance implications (probably a non-issue in practice),
+>> >> > and weirdness if/when we get to sharing, linking and/or mmap()ing gmem.  E.g. what
+>> >> > should happen if the last memslot (binding) is deleted, but there outstanding userspace
+>> >> > mappings?
+>> >> >
+>> >> > Option (c) is better from a lifecycle perspective, but it adds its own flavor of
+>> >> > complexity, e.g. the performant way to reclaim TDX memory requires the TDMR
+>> >> > (effectively the VM pointer), and so a deferred relcaim doesn't really work for
+>> >> > TDX.  And I'm pretty sure it *can't* work for SNP, because RMP entries must not
+>> >> > outlive the VM; KVM can't reuse an ASID if there are pages assigned to that ASID
+>> >> > in the RMP, i.e. until all memory belonging to the VM has been fully freed.
+>
+> ...
+>
+>> I agree with you that nulling the KVM pointer is insufficient to keep
+>> host userspace out of the TCB. Among the three options (a) preventing a
+>> different VM (HKID/ASID) from binding to the gmem instance, or zeroing
+>> the memory either (b) on unbinding, or (c) on binding to another VM
+>> (HKID/ASID),
+>>
+>> (a) sounds like adding a check issued to TDX/SNP upon binding and this
+>>     check would just return OK for software-protected VMs (line of sight
+>>     to removing host userspace from TCB).
+>>
+>> Or, we could go further for software-protected VMs and add tracking in
+>> the inode to prevent the same inode from being bound to different
+>> "HKID/ASID"s, perhaps like this:
+>>
+>> + On first binding, store the KVM pointer in the inode - not file (but
+>>   not hold a refcount)
+>> + On rebinding, check that the KVM matches the pointer in the inode
+>> + On intra-host migration, update the KVM pointer in the inode to allow
+>>   binding to the new struct kvm
+>>
+>> I think you meant associating the file with a struct kvm at creation
+>> time as an implementation for (a), but technically since the inode is
+>> the representation of memory, tracking of struct kvm should be with the
+>> inode instead of the file.
+>>
+>> (b) You're right that this messes up the lifecycle of the memory and
+>>     wouldn't work with intra-host migration.
+>>
+>> (c) sounds like doing the clearing on a check similar to that of (a)
+>
+> Sort of, though it's much nastier, because it requires the "old" KVM instance to
+> be alive enough to support various operations.  I.e. we'd have to make stronger
+> guarantees about exactly when the handoff/transition could happen.
+>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f7fa85ba9a56..11ea4810207e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19156,6 +19156,7 @@ W:	http://kernsec.org/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git
- F:	include/uapi/linux/lsm.h
- F:	security/
-+F:	tools/testing/selftests/lsm/
- X:	security/selinux/
- 
- SELINUX SECURITY MODULE
-diff --git a/security/security.c b/security/security.c
-index 1cd3123a18f8..d17cf0cae8e4 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -3880,7 +3880,7 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
- 		/*
- 		 * Only flag supported is LSM_FLAG_SINGLE
- 		 */
--		if (flags & LSM_FLAG_SINGLE)
-+		if (flags != LSM_FLAG_SINGLE)
- 			return -EINVAL;
- 		if (uctx &&
- 		    copy_struct_from_user(&lctx, sizeof(lctx), uctx, left))
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 666b56f22a41..bde7c217b23f 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -39,6 +39,7 @@ TARGETS += landlock
- TARGETS += lib
- TARGETS += livepatch
- TARGETS += lkdtm
-+TARGETS += lsm
- TARGETS += membarrier
- TARGETS += memfd
- TARGETS += memory-hotplug
-diff --git a/tools/testing/selftests/lsm/.gitignore b/tools/testing/selftests/lsm/.gitignore
-new file mode 100644
-index 000000000000..bd68f6c3fd07
---- /dev/null
-+++ b/tools/testing/selftests/lsm/.gitignore
-@@ -0,0 +1 @@
-+/*_test
-diff --git a/tools/testing/selftests/lsm/Makefile b/tools/testing/selftests/lsm/Makefile
-new file mode 100644
-index 000000000000..3f80c0bc093d
---- /dev/null
-+++ b/tools/testing/selftests/lsm/Makefile
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# First run: make -C ../../../.. headers_install
-+
-+CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
-+LOCAL_HDRS += common.h
-+
-+TEST_GEN_PROGS := lsm_get_self_attr_test lsm_list_modules_test \
-+		  lsm_set_self_attr_test
-+
-+include ../lib.mk
-+
-+$(OUTPUT)/lsm_get_self_attr_test: lsm_get_self_attr_test.c common.c
-+$(OUTPUT)/lsm_set_self_attr_test: lsm_set_self_attr_test.c common.c
-+$(OUTPUT)/lsm_list_modules_test: lsm_list_modules_test.c common.c
-+
-+EXTRA_CLEAN = $(OUTPUT)/common.o
-diff --git a/tools/testing/selftests/lsm/common.c b/tools/testing/selftests/lsm/common.c
-new file mode 100644
-index 000000000000..9ad258912646
---- /dev/null
-+++ b/tools/testing/selftests/lsm/common.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Linux Security Module infrastructure tests
-+ *
-+ * Copyright © 2023 Casey Schaufler <casey@schaufler-ca.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <linux/lsm.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include "common.h"
-+
-+#define PROCATTR "/proc/self/attr/"
-+
-+int read_proc_attr(const char *attr, char *value, size_t size)
-+{
-+	int fd;
-+	int len;
-+	char *path;
-+
-+	len = strlen(PROCATTR) + strlen(attr) + 1;
-+	path = calloc(len, 1);
-+	if (path == NULL)
-+		return -1;
-+	sprintf(path, "%s%s", PROCATTR, attr);
-+
-+	fd = open(path, O_RDONLY);
-+	free(path);
-+
-+	if (fd < 0)
-+		return -1;
-+	len = read(fd, value, size);
-+
-+	close(fd);
-+
-+	/* Ensure value is terminated */
-+	if (len <= 0 || len == size)
-+		return -1;
-+	value[len] = '\0';
-+
-+	path = strchr(value, '\n');
-+	if (path)
-+		*path = '\0';
-+
-+	return 0;
-+}
-+
-+int read_sysfs_lsms(char *lsms, size_t size)
-+{
-+	FILE *fp;
-+	size_t red;
-+
-+	fp = fopen("/sys/kernel/security/lsm", "r");
-+	if (fp == NULL)
-+		return -1;
-+	red = fread(lsms, 1, size, fp);
-+	fclose(fp);
-+
-+	if (red <= 0 || red == size)
-+		return -1;
-+	lsms[red] = '\0';
-+	return 0;
-+}
-+
-+int attr_lsm_count(void)
-+{
-+	char *names = calloc(sysconf(_SC_PAGESIZE), 1);
-+	int count = 0;
-+
-+	if (!names)
-+		return 0;
-+
-+	if (read_sysfs_lsms(names, sysconf(_SC_PAGESIZE)))
-+		return 0;
-+
-+	if (strstr(names, "selinux"))
-+		count++;
-+	if (strstr(names, "smack"))
-+		count++;
-+	if (strstr(names, "apparmor"))
-+		count++;
-+
-+	return count;
-+}
-diff --git a/tools/testing/selftests/lsm/common.h b/tools/testing/selftests/lsm/common.h
-new file mode 100644
-index 000000000000..d404329e5eeb
---- /dev/null
-+++ b/tools/testing/selftests/lsm/common.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Linux Security Module infrastructure tests
-+ *
-+ * Copyright © 2023 Casey Schaufler <casey@schaufler-ca.com>
-+ */
-+
-+#ifndef lsm_get_self_attr
-+static inline int lsm_get_self_attr(unsigned int attr, struct lsm_ctx *ctx,
-+				    size_t *size, __u32 flags)
-+{
-+	return syscall(__NR_lsm_get_self_attr, attr, ctx, size, flags);
-+}
-+#endif
-+
-+#ifndef lsm_set_self_attr
-+static inline int lsm_set_self_attr(unsigned int attr, struct lsm_ctx *ctx,
-+				    size_t size, __u32 flags)
-+{
-+	return syscall(__NR_lsm_set_self_attr, attr, ctx, size, flags);
-+}
-+#endif
-+
-+#ifndef lsm_list_modules
-+static inline int lsm_list_modules(__u64 *ids, size_t *size, __u32 flags)
-+{
-+	return syscall(__NR_lsm_list_modules, ids, size, flags);
-+}
-+#endif
-+
-+extern int read_proc_attr(const char *attr, char *value, size_t size);
-+extern int read_sysfs_lsms(char *lsms, size_t size);
-+int attr_lsm_count(void);
-diff --git a/tools/testing/selftests/lsm/config b/tools/testing/selftests/lsm/config
-new file mode 100644
-index 000000000000..1c0c4c020f9c
---- /dev/null
-+++ b/tools/testing/selftests/lsm/config
-@@ -0,0 +1,3 @@
-+CONFIG_SYSFS=y
-+CONFIG_SECURITY=y
-+CONFIG_SECURITYFS=y
-diff --git a/tools/testing/selftests/lsm/lsm_get_self_attr_test.c b/tools/testing/selftests/lsm/lsm_get_self_attr_test.c
-new file mode 100644
-index 000000000000..e0e313d9047a
---- /dev/null
-+++ b/tools/testing/selftests/lsm/lsm_get_self_attr_test.c
-@@ -0,0 +1,275 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Linux Security Module infrastructure tests
-+ * Tests for the lsm_get_self_attr system call
-+ *
-+ * Copyright © 2022 Casey Schaufler <casey@schaufler-ca.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <linux/lsm.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include "../kselftest_harness.h"
-+#include "common.h"
-+
-+static struct lsm_ctx *next_ctx(struct lsm_ctx *ctxp)
-+{
-+	void *vp;
-+
-+	vp = (void *)ctxp + sizeof(*ctxp) + ctxp->ctx_len;
-+	return (struct lsm_ctx *)vp;
-+}
-+
-+TEST(size_null_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+
-+	ASSERT_NE(NULL, ctx);
-+	errno = 0;
-+	ASSERT_EQ(-1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, NULL, 0));
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	free(ctx);
-+}
-+
-+TEST(ctx_null_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	size_t size = page_size;
-+	int rc;
-+
-+	rc = lsm_get_self_attr(LSM_ATTR_CURRENT, NULL, &size, 0);
-+
-+	if (attr_lsm_count()) {
-+		ASSERT_NE(-1, rc);
-+		ASSERT_NE(1, size);
-+	} else {
-+		ASSERT_EQ(-1, rc);
-+	}
-+}
-+
-+TEST(size_too_small_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	size_t size = 1;
-+
-+	ASSERT_NE(NULL, ctx);
-+	errno = 0;
-+	ASSERT_EQ(-1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size, 0));
-+	if (attr_lsm_count()) {
-+		ASSERT_EQ(E2BIG, errno);
-+	} else {
-+		ASSERT_EQ(EOPNOTSUPP, errno);
-+	}
-+	ASSERT_NE(1, size);
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_zero_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	__u64 *syscall_lsms = calloc(page_size, 1);
-+	size_t size;
-+	int lsmcount;
-+	int i;
-+
-+	ASSERT_NE(NULL, ctx);
-+	errno = 0;
-+	size = page_size;
-+	ASSERT_EQ(-1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
-+					LSM_FLAG_SINGLE));
-+	ASSERT_EQ(EINVAL, errno);
-+	ASSERT_EQ(page_size, size);
-+
-+	lsmcount = syscall(__NR_lsm_list_modules, syscall_lsms, &size, 0);
-+	ASSERT_LE(1, lsmcount);
-+	ASSERT_NE(NULL, syscall_lsms);
-+
-+	for (i = 0; i < lsmcount; i++) {
-+		errno = 0;
-+		size = page_size;
-+		ctx->id = syscall_lsms[i];
-+
-+		if (syscall_lsms[i] == LSM_ID_SELINUX ||
-+		    syscall_lsms[i] == LSM_ID_SMACK ||
-+		    syscall_lsms[i] == LSM_ID_APPARMOR) {
-+			ASSERT_EQ(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx,
-+						       &size, LSM_FLAG_SINGLE));
-+		} else {
-+			ASSERT_EQ(-1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx,
-+							&size,
-+							LSM_FLAG_SINGLE));
-+		}
-+	}
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_overset_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	size_t size;
-+
-+	ASSERT_NE(NULL, ctx);
-+
-+	errno = 0;
-+	size = page_size;
-+	ASSERT_EQ(-1, lsm_get_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, ctx,
-+					&size, 0));
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+
-+	errno = 0;
-+	size = page_size;
-+	ASSERT_EQ(-1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
-+					LSM_FLAG_SINGLE |
-+					(LSM_FLAG_SINGLE << 1)));
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	free(ctx);
-+}
-+
-+TEST(basic_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	size_t size = page_size;
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	struct lsm_ctx *tctx = NULL;
-+	__u64 *syscall_lsms = calloc(page_size, 1);
-+	char *attr = calloc(page_size, 1);
-+	int cnt_current = 0;
-+	int cnt_exec = 0;
-+	int cnt_fscreate = 0;
-+	int cnt_keycreate = 0;
-+	int cnt_prev = 0;
-+	int cnt_sockcreate = 0;
-+	int lsmcount;
-+	int count;
-+	int i;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_NE(NULL, syscall_lsms);
-+
-+	lsmcount = syscall(__NR_lsm_list_modules, syscall_lsms, &size, 0);
-+	ASSERT_LE(1, lsmcount);
-+
-+	for (i = 0; i < lsmcount; i++) {
-+		switch (syscall_lsms[i]) {
-+		case LSM_ID_SELINUX:
-+			cnt_current++;
-+			cnt_exec++;
-+			cnt_fscreate++;
-+			cnt_keycreate++;
-+			cnt_prev++;
-+			cnt_sockcreate++;
-+			break;
-+		case LSM_ID_SMACK:
-+			cnt_current++;
-+			break;
-+		case LSM_ID_APPARMOR:
-+			cnt_current++;
-+			cnt_exec++;
-+			cnt_prev++;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	if (cnt_current) {
-+		size = page_size;
-+		count = lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size, 0);
-+		ASSERT_EQ(cnt_current, count);
-+		tctx = ctx;
-+		ASSERT_EQ(0, read_proc_attr("current", attr, page_size));
-+		ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_exec) {
-+		size = page_size;
-+		count = lsm_get_self_attr(LSM_ATTR_EXEC, ctx, &size, 0);
-+		ASSERT_GE(cnt_exec, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			if (read_proc_attr("exec", attr, page_size) == 0)
-+				ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_fscreate) {
-+		size = page_size;
-+		count = lsm_get_self_attr(LSM_ATTR_FSCREATE, ctx, &size, 0);
-+		ASSERT_GE(cnt_fscreate, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			if (read_proc_attr("fscreate", attr, page_size) == 0)
-+				ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_keycreate) {
-+		size = page_size;
-+		count = lsm_get_self_attr(LSM_ATTR_KEYCREATE, ctx, &size, 0);
-+		ASSERT_GE(cnt_keycreate, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			if (read_proc_attr("keycreate", attr, page_size) == 0)
-+				ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_prev) {
-+		size = page_size;
-+		count = lsm_get_self_attr(LSM_ATTR_PREV, ctx, &size, 0);
-+		ASSERT_GE(cnt_prev, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			ASSERT_EQ(0, read_proc_attr("prev", attr, page_size));
-+			ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+			for (i = 1; i < count; i++) {
-+				tctx = next_ctx(tctx);
-+				ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+			}
-+		}
-+	}
-+	if (cnt_sockcreate) {
-+		size = page_size;
-+		count = lsm_get_self_attr(LSM_ATTR_SOCKCREATE, ctx, &size, 0);
-+		ASSERT_GE(cnt_sockcreate, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			if (read_proc_attr("sockcreate", attr, page_size) == 0)
-+				ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+
-+	free(ctx);
-+	free(attr);
-+	free(syscall_lsms);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/lsm/lsm_list_modules_test.c b/tools/testing/selftests/lsm/lsm_list_modules_test.c
-new file mode 100644
-index 000000000000..445c02f09c74
---- /dev/null
-+++ b/tools/testing/selftests/lsm/lsm_list_modules_test.c
-@@ -0,0 +1,140 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Linux Security Module infrastructure tests
-+ * Tests for the lsm_list_modules system call
-+ *
-+ * Copyright © 2022 Casey Schaufler <casey@schaufler-ca.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <linux/lsm.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include "../kselftest_harness.h"
-+#include "common.h"
-+
-+TEST(size_null_lsm_list_modules)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__u64 *syscall_lsms = calloc(page_size, 1);
-+
-+	ASSERT_NE(NULL, syscall_lsms);
-+	errno = 0;
-+	ASSERT_EQ(-1, lsm_list_modules(syscall_lsms, NULL, 0));
-+	ASSERT_EQ(EFAULT, errno);
-+
-+	free(syscall_lsms);
-+}
-+
-+TEST(ids_null_lsm_list_modules)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	size_t size = page_size;
-+
-+	errno = 0;
-+	ASSERT_EQ(-1, lsm_list_modules(NULL, &size, 0));
-+	ASSERT_EQ(EFAULT, errno);
-+	ASSERT_NE(1, size);
-+}
-+
-+TEST(size_too_small_lsm_list_modules)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__u64 *syscall_lsms = calloc(page_size, 1);
-+	size_t size = 1;
-+
-+	ASSERT_NE(NULL, syscall_lsms);
-+	errno = 0;
-+	ASSERT_EQ(-1, lsm_list_modules(syscall_lsms, &size, 0));
-+	ASSERT_EQ(E2BIG, errno);
-+	ASSERT_NE(1, size);
-+
-+	free(syscall_lsms);
-+}
-+
-+TEST(flags_set_lsm_list_modules)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__u64 *syscall_lsms = calloc(page_size, 1);
-+	size_t size = page_size;
-+
-+	ASSERT_NE(NULL, syscall_lsms);
-+	errno = 0;
-+	ASSERT_EQ(-1, lsm_list_modules(syscall_lsms, &size, 7));
-+	ASSERT_EQ(EINVAL, errno);
-+	ASSERT_EQ(page_size, size);
-+
-+	free(syscall_lsms);
-+}
-+
-+TEST(correct_lsm_list_modules)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	size_t size = page_size;
-+	__u64 *syscall_lsms = calloc(page_size, 1);
-+	char *sysfs_lsms = calloc(page_size, 1);
-+	char *name;
-+	char *cp;
-+	int count;
-+	int i;
-+
-+	ASSERT_NE(NULL, sysfs_lsms);
-+	ASSERT_NE(NULL, syscall_lsms);
-+	ASSERT_EQ(0, read_sysfs_lsms(sysfs_lsms, page_size));
-+
-+	count = lsm_list_modules(syscall_lsms, &size, 0);
-+	ASSERT_LE(1, count);
-+	cp = sysfs_lsms;
-+	for (i = 0; i < count; i++) {
-+		switch (syscall_lsms[i]) {
-+		case LSM_ID_CAPABILITY:
-+			name = "capability";
-+			break;
-+		case LSM_ID_SELINUX:
-+			name = "selinux";
-+			break;
-+		case LSM_ID_SMACK:
-+			name = "smack";
-+			break;
-+		case LSM_ID_TOMOYO:
-+			name = "tomoyo";
-+			break;
-+		case LSM_ID_IMA:
-+			name = "ima";
-+			break;
-+		case LSM_ID_APPARMOR:
-+			name = "apparmor";
-+			break;
-+		case LSM_ID_YAMA:
-+			name = "yama";
-+			break;
-+		case LSM_ID_LOADPIN:
-+			name = "loadpin";
-+			break;
-+		case LSM_ID_SAFESETID:
-+			name = "safesetid";
-+			break;
-+		case LSM_ID_LOCKDOWN:
-+			name = "lockdown";
-+			break;
-+		case LSM_ID_BPF:
-+			name = "bpf";
-+			break;
-+		case LSM_ID_LANDLOCK:
-+			name = "landlock";
-+			break;
-+		default:
-+			name = "INVALID";
-+			break;
-+		}
-+		ASSERT_EQ(0, strncmp(cp, name, strlen(name)));
-+		cp += strlen(name) + 1;
-+	}
-+
-+	free(sysfs_lsms);
-+	free(syscall_lsms);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-new file mode 100644
-index 000000000000..e9712c6cf596
---- /dev/null
-+++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Linux Security Module infrastructure tests
-+ * Tests for the lsm_set_self_attr system call
-+ *
-+ * Copyright © 2022 Casey Schaufler <casey@schaufler-ca.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <linux/lsm.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include "../kselftest_harness.h"
-+#include "common.h"
-+
-+TEST(ctx_null_lsm_set_self_attr)
-+{
-+	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT, NULL,
-+					sizeof(struct lsm_ctx), 0));
-+}
-+
-+TEST(size_too_small_lsm_set_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	size_t size = page_size;
-+
-+	ASSERT_NE(NULL, ctx);
-+	if (attr_lsm_count()) {
-+		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
-+					       0));
-+	}
-+	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT, ctx, 1, 0));
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_zero_lsm_set_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	size_t size = page_size;
-+
-+	ASSERT_NE(NULL, ctx);
-+	if (attr_lsm_count()) {
-+		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
-+					       0));
-+	}
-+	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT, ctx, size, 1));
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_overset_lsm_set_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *ctx = calloc(page_size, 1);
-+	size_t size = page_size;
-+	struct lsm_ctx *tctx = (struct lsm_ctx *)ctx;
-+
-+	ASSERT_NE(NULL, ctx);
-+	if (attr_lsm_count()) {
-+		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, tctx, &size,
-+					       0));
-+	}
-+	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, tctx,
-+					size, 0));
-+
-+	free(ctx);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.41.0
+Good point!
 
+>> If we track struct kvm with the inode, then I think (a), (b) and (c) can
+>> be independent of the refcounting method. What do you think?
+>
+> No go.  Because again, the inode (physical memory) is coupled to the virtual machine
+> as a thing, not to a "struct kvm".  Or more concretely, the inode is coupled to an
+> ASID or an HKID, and there can be multiple "struct kvm" objects associated with a
+> single ASID.  And at some point in the future, I suspect we'll have multiple KVM
+> objects per HKID too.
+>
+> The current SEV use case is for the migration helper, where two KVM objects share
+> a single ASID (the "real" VM and the helper).  I suspect TDX will end up with
+> similar behavior where helper "VMs" can use the HKID of the "real" VM.  For KVM,
+> that means multiple struct kvm objects being associated with a single HKID.
+>
+> To prevent use-after-free, KVM "just" needs to ensure the helper instances can't
+> outlive the real instance, i.e. can't use the HKID/ASID after the owning virtual
+> machine has been destroyed.
+>
+> To put it differently, "struct kvm" is a KVM software construct that _usually_,
+> but not always, is associated 1:1 with a virtual machine.
+>
+> And FWIW, stashing the pointer without holding a reference would not be a complete
+> solution, because it couldn't guard against KVM reusing a pointer.  E.g. if a
+> struct kvm was unbound and then freed, KVM could reuse the same memory for a new
+> struct kvm, with a different ASID/HKID, and get a false negative on the rebinding
+> check.
+
+I agree that inode (physical memory) is coupled to the virtual machine
+as a more generic concept.
+
+I was hoping that in the absence of CC hardware providing a HKID/ASID,
+the struct kvm pointer could act as a representation of the "virtual
+machine". You're definitely right that KVM could reuse a pointer and so
+that idea doesn't stand.
+
+I thought about generating UUIDs to represent "virtual machines" in the
+absence of CC hardware, and this UUID could be transferred during
+intra-host migration, but this still doesn't take host userspace out of
+the TCB. A malicious host VMM could just use the migration ioctl to copy
+the UUID to a malicious dumper VM, which would then pass checks with a
+gmem file linked to the malicious dumper VM. This is fine for HKID/ASIDs
+because the memory is encrypted; with UUIDs there's no memory
+encryption.
+
+Circling back to the original topic, was associating the file with
+struct kvm at gmem file creation time meant to constrain the use of the
+gmem file to one struct kvm, or one virtual machine, or something else?
+
+Follow up questions:
+
+1. Since the physical memory's representation is the inode and should be
+   coupled to the virtual machine (as a concept, not struct kvm), should
+   the binding/coupling be with the file, or the inode?
+
+2. Should struct kvm still be bound to the file/inode at gmem file
+   creation time, since
+
+   + struct kvm isn't a good representation of a "virtual machine"
+   + we currently don't have anything that really represents a "virtual
+     machine" without hardware support
+
+
+I'd also like to bring up another userspace use case that Google has:
+re-use of gmem files for rebooting guests when the KVM instance is
+destroyed and rebuilt.
+
+When rebooting a VM there are some steps relating to gmem that are
+performance-sensitive:
+
+a.      Zeroing pages from the old VM when we close a gmem file/inode
+b. Deallocating pages from the old VM when we close a gmem file/inode
+c.   Allocating pages for the new VM from the new gmem file/inode
+d.      Zeroing pages on page allocation
+
+We want to reuse the gmem file to save re-allocating pages (b. and c.),
+and one of the two page zeroing allocations (a. or d.).
+
+Binding the gmem file to a struct kvm on creation time means the gmem
+file can't be reused with another VM on reboot. Also, host userspace is
+forced to close the gmem file to allow the old VM to be freed.
+
+For other places where files pin KVM, like the stats fd pinning vCPUs, I
+guess that matters less since there isn't much of a penalty to close and
+re-open the stats fd.
