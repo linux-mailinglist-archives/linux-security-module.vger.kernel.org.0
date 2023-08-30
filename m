@@ -2,272 +2,87 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53A278DCDD
-	for <lists+linux-security-module@lfdr.de>; Wed, 30 Aug 2023 20:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9384F78DCC7
+	for <lists+linux-security-module@lfdr.de>; Wed, 30 Aug 2023 20:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242010AbjH3SrA (ORCPT
+        id S241020AbjH3Sqq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 30 Aug 2023 14:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        Wed, 30 Aug 2023 14:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245441AbjH3PQZ (ORCPT
+        with ESMTP id S245732AbjH3QF2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:16:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D141A4;
-        Wed, 30 Aug 2023 08:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693408582; x=1724944582;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kuhHM9Pb2S9UA4HVLvALcSSOlQFsYNKCJA5urnK1yJE=;
-  b=UD8Pz/HW6JEgt3jfst5cGqUwsolyeM3zHBuRKLVpMHbbrSNMcE+aBj3W
-   3Fa+Zzh/aIBXDqbryWR92GLddKLUc9ssOiqe4tOpiyBS1bPto3qSqCdPw
-   bwPB0G0ymDT5MYS+qPQD7fzcKLUObuMb8innymM/cAcT3Qab8x4/+eFiA
-   JfF+T2bjINQkH9xmWwWmJiDUW/novaUDcovM7mC5f5vVh/XrKHH0zVmQ2
-   7l+EVAXcIhQzX368CPDakO74+T5pTCMMSaiTEr0r7dcsbM7fXtwzgr1hK
-   Vgvts1Ns/bVeOesVs76vX7V2YIBHuFXUL4tRRN1sD2RleY8DFSDjZJ3wI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="439614385"
-X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="439614385"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 08:12:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="804574149"
-X-IronPort-AV: E=Sophos;i="6.02,214,1688454000"; 
-   d="scan'208";a="804574149"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.25.116]) ([10.93.25.116])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 08:12:21 -0700
-Message-ID: <30ffe039-c9e2-b996-500d-5e11bf6ea789@linux.intel.com>
-Date:   Wed, 30 Aug 2023 23:12:19 +0800
+        Wed, 30 Aug 2023 12:05:28 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC33F19A
+        for <linux-security-module@vger.kernel.org>; Wed, 30 Aug 2023 09:05:24 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5922b96c5fcso65438867b3.0
+        for <linux-security-module@vger.kernel.org>; Wed, 30 Aug 2023 09:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1693411524; x=1694016324; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6wWR6vPSewXdystMdP/BcryutnZfkXis7EkLLpd/jjA=;
+        b=NwNavoqzJ5tpUrXjnFg7a3TCF4E3SA9elR+qNrZAESoUsfJCPgJhzrzOoMgligrHwB
+         xzxcBVgBJk7cLVmjncAd/tnnL9DtjiOhkl20TJ6kYxDoDvYmVuKOv8YXLne1f2oHEBRr
+         fucWKR2NB93ZCuuL8yx0qBxBOiaqy3o7VIRCQK8aALyxKIbVs3aV6/6gOOhB0A8G2CfQ
+         NAyiBYsmOHGt5009CAvnI6lF/vWxL1iZyA11/I7ykAoS7/yuB4DiPzmlCJ4Sm1+b2g0A
+         vrq8vly6AAs1PEOWVLLEAr4ms78A8pn0TSAMEyrkV9eq2vQf2DZEGBhyy/yEsUj6/w67
+         pT+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693411524; x=1694016324;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6wWR6vPSewXdystMdP/BcryutnZfkXis7EkLLpd/jjA=;
+        b=RxjzMM0YRnqDK7skHCb1DSi7w5dRgn7zdoEvHSh1wfpUquQ1NecKr5/MRbKwJxCq+P
+         LOIvnH+5oYpdcN8NZEd/9ORIZ7AiAYz5AE0zRD+Hs0jmBTsUCtZSW2wXJtrKPv36AskD
+         qIp3CVkIEjWFAuRgbYwSgrp5lZigJhctLzSHEIJroJOwRdzLwwGwcm/sbhmHwyrk6CYO
+         cv2qIvQ9UlGYqc3L4Ght/tHtGr93HXbkNoixRiJyxVYIZ27sf/v73v2a4L7Uh+YYM9UY
+         mOHXAMXmzGHOUNxvKMMYa2pOta7dFbbdWXNe9hGh/8jZoILG5E5/8JLutjkA+/3Spts5
+         /PJw==
+X-Gm-Message-State: AOJu0YzpSUf/q0jLriqBRac34aYeTp56uIWrXSxF+yUPbVTHANz55HP/
+        9pS37787cooL4t2pMmOkRndb9HIJieKS6UEM7WEhpmoybn4oBhpvCw==
+X-Google-Smtp-Source: AGHT+IG6O2vD9Ui9R6aID4YcLbGDbyy3BOVdDWgdUShKy6tkG2weeuIdcj1Dzsn85ebN3Q5Fbo4k8brbkjhEGBtNmqQ=
+X-Received: by 2002:a0d:e483:0:b0:595:2de4:c991 with SMTP id
+ n125-20020a0de483000000b005952de4c991mr2549978ywe.29.1693411523984; Wed, 30
+ Aug 2023 09:05:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [RFC PATCH v11 12/29] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
- guest-specific backing memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 30 Aug 2023 12:05:13 -0400
+Message-ID: <CAHC9VhQr2cpes2W0oWa8OENPFAgFKyGZQu3_m7-hjEdib_3s3Q@mail.gmail.com>
+Subject: LSM hook ordering in shmem_mknod() and shmem_tmpfile()?
+To:     linux-mm@kvack.org, linux-security-module@vger.kernel.org
+Cc:     Hugh Dickins <hughd@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230718234512.1690985-1-seanjc@google.com>
- <20230718234512.1690985-13-seanjc@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230718234512.1690985-13-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Hello all,
 
+While looking at some recent changes in mm/shmem.c I noticed that the
+ordering between simple_acl_create() and
+security_inode_init_security() is different between shmem_mknod() and
+shmem_tmpfile().  In shmem_mknod() the ACL call comes before the LSM
+hook, and in shmem_tmpfile() the LSM call comes before the ACL call.
 
-On 7/19/2023 7:44 AM, Sean Christopherson wrote:
+Perhaps this is correct, but it seemed a little odd to me so I wanted
+to check with all of you to make sure there is a good reason for the
+difference between the two functions.  Looking back to when
+shmem_tmpfile() was created ~2013 I don't see any explicit mention as
+to why the ordering is different so I'm looking for a bit of a sanity
+check to see if I'm missing something obvious.
 
-[...]
-> +
-> +static struct folio *kvm_gmem_get_folio(struct file *file, pgoff_t index)
-> +{
-> +	struct folio *folio;
-> +
-> +	/* TODO: Support huge pages. */
-> +	folio = filemap_grab_folio(file->f_mapping, index);
-> +	if (!folio)
-Should use  if ((IS_ERR(folio)) instead.
+My initial thinking this morning is that the
+security_inode_init_security() call should come before
+simple_acl_create() in both cases, but I'm open to different opinions
+on this.
 
-> +		return NULL;
-> +
-> +	/*
-> +	 * Use the up-to-date flag to track whether or not the memory has been
-> +	 * zeroed before being handed off to the guest.  There is no backing
-> +	 * storage for the memory, so the folio will remain up-to-date until
-> +	 * it's removed.
-> +	 *
-> +	 * TODO: Skip clearing pages when trusted firmware will do it when
-> +	 * assigning memory to the guest.
-> +	 */
-> +	if (!folio_test_uptodate(folio)) {
-> +		unsigned long nr_pages = folio_nr_pages(folio);
-> +		unsigned long i;
-> +
-> +		for (i = 0; i < nr_pages; i++)
-> +			clear_highpage(folio_page(folio, i));
-> +
-> +		folio_mark_uptodate(folio);
-> +	}
-> +
-> +	/*
-> +	 * Ignore accessed, referenced, and dirty flags.  The memory is
-> +	 * unevictable and there is no storage to write back to.
-> +	 */
-> +	return folio;
-> +}
-[...]
-> +
-> +static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
-> +{
-> +	struct address_space *mapping = inode->i_mapping;
-> +	pgoff_t start, index, end;
-> +	int r;
-> +
-> +	/* Dedicated guest is immutable by default. */
-> +	if (offset + len > i_size_read(inode))
-> +		return -EINVAL;
-> +
-> +	filemap_invalidate_lock_shared(mapping);
-> +
-> +	start = offset >> PAGE_SHIFT;
-> +	end = (offset + len) >> PAGE_SHIFT;
-> +
-> +	r = 0;
-> +	for (index = start; index < end; ) {
-> +		struct folio *folio;
-> +
-> +		if (signal_pending(current)) {
-> +			r = -EINTR;
-> +			break;
-> +		}
-> +
-> +		folio = kvm_gmem_get_folio(inode, index);
-> +		if (!folio) {
-> +			r = -ENOMEM;
-> +			break;
-> +		}
-> +
-> +		index = folio_next_index(folio);
-> +
-> +		folio_unlock(folio);
-> +		folio_put(folio);
-May be a dumb question, why we get the folio and then put it immediately?
-Will it make the folio be released back to the page allocator?
-
-> +
-> +		/* 64-bit only, wrapping the index should be impossible. */
-> +		if (WARN_ON_ONCE(!index))
-> +			break;
-> +
-> +		cond_resched();
-> +	}
-> +
-> +	filemap_invalidate_unlock_shared(mapping);
-> +
-> +	return r;
-> +}
-> +
-[...]
-> +
-> +int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
-> +		  unsigned int fd, loff_t offset)
-> +{
-> +	loff_t size = slot->npages << PAGE_SHIFT;
-> +	unsigned long start, end, flags;
-> +	struct kvm_gmem *gmem;
-> +	struct inode *inode;
-> +	struct file *file;
-> +
-> +	BUILD_BUG_ON(sizeof(gfn_t) != sizeof(slot->gmem.pgoff));
-> +
-> +	file = fget(fd);
-> +	if (!file)
-> +		return -EINVAL;
-> +
-> +	if (file->f_op != &kvm_gmem_fops)
-> +		goto err;
-> +
-> +	gmem = file->private_data;
-> +	if (gmem->kvm != kvm)
-> +		goto err;
-> +
-> +	inode = file_inode(file);
-> +	flags = (unsigned long)inode->i_private;
-> +
-> +	/*
-> +	 * For simplicity, require the offset into the file and the size of the
-> +	 * memslot to be aligned to the largest possible page size used to back
-> +	 * the file (same as the size of the file itself).
-> +	 */
-> +	if (!kvm_gmem_is_valid_size(offset, flags) ||
-> +	    !kvm_gmem_is_valid_size(size, flags))
-> +		goto err;
-> +
-> +	if (offset + size > i_size_read(inode))
-> +		goto err;
-> +
-> +	filemap_invalidate_lock(inode->i_mapping);
-> +
-> +	start = offset >> PAGE_SHIFT;
-> +	end = start + slot->npages;
-> +
-> +	if (!xa_empty(&gmem->bindings) &&
-> +	    xa_find(&gmem->bindings, &start, end - 1, XA_PRESENT)) {
-> +		filemap_invalidate_unlock(inode->i_mapping);
-> +		goto err;
-> +	}
-> +
-> +	/*
-> +	 * No synchronize_rcu() needed, any in-flight readers are guaranteed to
-> +	 * be see either a NULL file or this new file, no need for them to go
-> +	 * away.
-> +	 */
-> +	rcu_assign_pointer(slot->gmem.file, file);
-> +	slot->gmem.pgoff = start;
-> +
-> +	xa_store_range(&gmem->bindings, start, end - 1, slot, GFP_KERNEL);
-> +	filemap_invalidate_unlock(inode->i_mapping);
-> +
-> +	/*
-> +	 * Drop the reference to the file, even on success.  The file pins KVM,
-> +	 * not the other way 'round.  Active bindings are invalidated if the
-an extra ',  or maybe around?
-
-
-> +	 * file is closed before memslots are destroyed.
-> +	 */
-> +	fput(file);
-> +	return 0;
-> +
-> +err:
-> +	fput(file);
-> +	return -EINVAL;
-> +}
-> +
-[...]
-> []
-
+-- 
+paul-moore.com
