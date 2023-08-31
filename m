@@ -2,68 +2,114 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCCE78E382
-	for <lists+linux-security-module@lfdr.de>; Thu, 31 Aug 2023 01:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1024B78E945
+	for <lists+linux-security-module@lfdr.de>; Thu, 31 Aug 2023 11:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244424AbjH3Xvm (ORCPT
+        id S243402AbjHaJUI (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 30 Aug 2023 19:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        Thu, 31 Aug 2023 05:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjH3Xvm (ORCPT
+        with ESMTP id S235934AbjHaJUH (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 30 Aug 2023 19:51:42 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9219ACC
-        for <linux-security-module@vger.kernel.org>; Wed, 30 Aug 2023 16:51:39 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-500b0f06136so654007e87.0
-        for <linux-security-module@vger.kernel.org>; Wed, 30 Aug 2023 16:51:39 -0700 (PDT)
+        Thu, 31 Aug 2023 05:20:07 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041E0E7C
+        for <linux-security-module@vger.kernel.org>; Thu, 31 Aug 2023 02:19:44 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-58d70c441d5so7128527b3.2
+        for <linux-security-module@vger.kernel.org>; Thu, 31 Aug 2023 02:19:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693439498; x=1694044298; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=60vkiIPl4xKlq/6mDzw10wSwQokxqQFJ1+9ae0BGcAU=;
-        b=ooEvWcA+qPKP4YkshCXsVwQFFfFR3sMWQKsLKYcFqyZjKdGI2AptISgGDct0xlAZeb
-         C25ysTcCRs7jrwN5AiDIyszbII3LNKUx2PmZ/dakwuUSnLpDizyj/oDflVZwpChTsSkR
-         uSknXigGUXIVYCzcxoMzv2dcUXcHDD8yHYhD/AOJRMbv5bfPdPSZLFaOGXv/bRNhcRCC
-         MaCMuQfJfScOGg9TC7AJDP6pWqtjcrx8EQKRJu0u1N/Lpy6Zkke3Gu5kbh+8oWVZ9I7V
-         vTP4VdmvBe11V/RRob4xdbcWxiPidU1aMS6reuAUwTtJiUMUEmvZwNuyQIiK0wcwVYYh
-         aMsg==
+        d=google.com; s=20221208; t=1693473573; x=1694078373; darn=vger.kernel.org;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Cbrhq38paxu0xySM9f3IPWoiWkUTnk9D5gKI2jM47E=;
+        b=6ChA0ZmY6HfHM/+kUAZQ2L9jhyeL9HY0g46tbWHzDMypPE4knP9/Vr94oMZYfpccMn
+         1IZT8hYX4W0tHYbMSh8EsALxNpqEABKlS5nMdPNVKY8W4sJA8JS7mwvoBrd5kFB++6+N
+         E8Ji7eUFqzs7vIuvSh52NkP/yfVWn0qDUGaWmdkmF13K6E0OU9tWQZ0zpcTy1+Z6ZDrL
+         9iVE4vOg+VSqzZLN5Dr6jl/QAk2yLp+e4V0ReqCKpdL38Hyiy61zlGkADa+m7JBkwblp
+         zPnmZqHgEtq0bMX3IvYLAGCzyqqCFQ+Y1w2Bzy2gtBfL4ddJUzfcX3FbJqem5/uGzms4
+         GhRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693439498; x=1694044298;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=60vkiIPl4xKlq/6mDzw10wSwQokxqQFJ1+9ae0BGcAU=;
-        b=ZSovCYutB9FL0npyj6VSEqvc9e5YEwBQGmtSJ3FJqk351Z1pfd01gbTMwefbHFRqsI
-         vF8CYDcsYKl61xzcNpKMX3oYJ+LzZFyC9oiZLhCzLyFjz4RhBcW1KTClUcb1EoBygIs0
-         uBjpCD6MfJj3wnJoWD9KpAhaFm/11iEsA2saRg9resHkMPOCRNdx56BHIU5Lja1Suus9
-         pkmCQIOGbfmsVoK+keskE8ZGryb8xwhde+5YdyihSXEieIyw3uce97c/PGgjNKVcCD2r
-         UNCMAwdxDNtqazvS7D4LlwmxWIQN7IGae5puHw9gm744AbtCSgwYKwIERLImBPw9lFkt
-         RMXg==
-X-Gm-Message-State: AOJu0Yz88JvdhiymFSNvzKJww3s6zDjmWOYhUx1iW5nRB6C0FaXam7yw
-        T0O/vcEi6Z3EosEF67gfIOOMv/8tCPbIV+jmEt8=
-X-Google-Smtp-Source: AGHT+IHOy8R0i265HVU7caIDGkXCvvJDo7RhZ/lr/Kc+/1qi9pPifPBGv1KXwpPeI9JZBwHVdq559RJJ1aRBs8SKQC4=
-X-Received: by 2002:a05:6512:78a:b0:4fb:73ce:8e7d with SMTP id
- x10-20020a056512078a00b004fb73ce8e7dmr2120775lfr.15.1693439497456; Wed, 30
- Aug 2023 16:51:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693473573; x=1694078373;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Cbrhq38paxu0xySM9f3IPWoiWkUTnk9D5gKI2jM47E=;
+        b=SoAl6jVQnUCVdOhD9w6Tb1s2XB4W6O2t5oyQo+R7nT7SEY3qUuyVDZUfNKA5kwNE4Z
+         W/FT+o3rszrXN/R3anLhL4Ou9ZHI66DAFN6loUh0W0WD8awDAzTdo6CxETde0XoeGBSz
+         ZweN4h90EdnTBc8KJuRKSX5kxOYj+CiPJNFVv/IjAp3zvle8hCgyb/UgQxCWdG2SOzn4
+         WN98JaT5tupoK8JM8imuMDobMkwC0vYbo1zCZj9U/P96CatBU+2LgWLOn7/4v5IFASV9
+         qkIQtUKmOyghsucoh8yMpxxuidF6rsCFbka+CxsfjuyXfFwcx2FBpsRDXVdt9Nr6WNQ3
+         TJfg==
+X-Gm-Message-State: AOJu0YwBcgQfCZU8pakcn0Ppa6YB3LKbyTuvOyu1UaSF9AnOWqFx/rPo
+        h4k6OYFWzajvdnQgd7BaIol7dT0UMMrbYFQLyMX2hw==
+X-Google-Smtp-Source: AGHT+IFThEVwm5PdQ/QiEIcAo8WglpblQRWl0MFWrXvjJuNLD0Kr5QEj6RbRV7hyCCkRaORZMOKarA==
+X-Received: by 2002:a0d:c483:0:b0:592:9236:9460 with SMTP id g125-20020a0dc483000000b0059292369460mr4914737ywd.31.1693473572920;
+        Thu, 31 Aug 2023 02:19:32 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id i185-20020a8191c2000000b00583e52232f1sm293607ywg.112.2023.08.31.02.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Aug 2023 02:19:32 -0700 (PDT)
+Date:   Thu, 31 Aug 2023 02:19:20 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Paul Moore <paul@paul-moore.com>
+cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, selinux@vger.kernel.org,
+        linux-mm@kvack.org, linux-integrity@vger.kernel.org
+Subject: Re: LSM hook ordering in shmem_mknod() and shmem_tmpfile()?
+In-Reply-To: <CAHC9VhQr2cpes2W0oWa8OENPFAgFKyGZQu3_m7-hjEdib_3s3Q@mail.gmail.com>
+Message-ID: <f75539a8-adf0-159b-15b9-4cc4a674e623@google.com>
+References: <CAHC9VhQr2cpes2W0oWa8OENPFAgFKyGZQu3_m7-hjEdib_3s3Q@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:424b:b0:273:4862:c0c9 with HTTP; Wed, 30 Aug 2023
- 16:51:36 -0700 (PDT)
-Reply-To: info.moneygrampostunit@gmail.com
-From:   MoneyGram <barristerattohmensahchamber@gmail.com>
-Date:   Wed, 30 Aug 2023 23:51:36 +0000
-Message-ID: <CACdHfaXZTFfsAZZAXaGxZgKXo_cLvw_VCVfkqfJAmSDiyrhHFQ@mail.gmail.com>
-Subject: EQTY5W6
-To:     barristerattohmensahchamber@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-oldingi harakatlaringiz uchun kompensatsiya
+On Wed, 30 Aug 2023, Paul Moore wrote:
+
+> Hello all,
+> 
+> While looking at some recent changes in mm/shmem.c I noticed that the
+> ordering between simple_acl_create() and
+> security_inode_init_security() is different between shmem_mknod() and
+> shmem_tmpfile().  In shmem_mknod() the ACL call comes before the LSM
+> hook, and in shmem_tmpfile() the LSM call comes before the ACL call.
+> 
+> Perhaps this is correct, but it seemed a little odd to me so I wanted
+> to check with all of you to make sure there is a good reason for the
+> difference between the two functions.  Looking back to when
+> shmem_tmpfile() was created ~2013 I don't see any explicit mention as
+> to why the ordering is different so I'm looking for a bit of a sanity
+> check to see if I'm missing something obvious.
+> 
+> My initial thinking this morning is that the
+> security_inode_init_security() call should come before
+> simple_acl_create() in both cases, but I'm open to different opinions
+> on this.
+
+Good eye.  The crucial commit here appears to be Mimi's 3.11 commit
+37ec43cdc4c7 "evm: calculate HMAC after initializing posix acl on tmpfs"
+which intentionally moved shmem_mknod()'s generic_acl_init() up before
+the security_inode_init_security(), around the same time as Al was
+copying shmem_mknod() to introduce shmem_tmpfile().
+
+I'd have agreed with you, Paul, until reading Mimi's commit:
+now it looks more like shmem_tmpfile() is the one to be changed,
+except (I'm out of my depth) maybe it's irrelevant on tmpfiles.
+
+Anyway, I think it's a question better answered by Mimi and Al.
+
+Thanks,
+Hugh
