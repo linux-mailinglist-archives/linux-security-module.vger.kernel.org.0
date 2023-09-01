@@ -2,100 +2,168 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EF37903CC
-	for <lists+linux-security-module@lfdr.de>; Sat,  2 Sep 2023 00:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C65790387
+	for <lists+linux-security-module@lfdr.de>; Sat,  2 Sep 2023 00:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351122AbjIAWzF (ORCPT
+        id S231544AbjIAWGu (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 1 Sep 2023 18:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        Fri, 1 Sep 2023 18:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244369AbjIAWzE (ORCPT
+        with ESMTP id S230140AbjIAWGt (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 1 Sep 2023 18:55:04 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124B81730;
-        Fri,  1 Sep 2023 14:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693602368; x=1725138368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XHxocslFLQU8xD6gE26XwrfQlSg9WQxfvtoRwUmoXd4=;
-  b=fs73fJm9bRJyKBZKwbD5mEgyXK9s/AowGNS+H0gXHA0EQQMa1nzj0JyO
-   4ivvodVmSEvCTmNx1xrrPG92m1n7/EkRzmofX9AcXraGnN9/xc4Xh6ZG3
-   r17c6FwtwVCMhafLGgi3Sd3anIHvouYoJWsbVtWB5atZgqa0tZ4kh6j80
-   EFKQ+sRpiruArmeWkbRk9jIoYa/6oLBssZoPneaIcO7Ca9aqEuR30pD4j
-   bKFwnbrDOw1uWI+bsld1+fUELpibsdIlhMv8O6msge/MjCVUs3juuNPv0
-   Bu48qxjBE2vnB0/wR3uxxdkcZAipPR81Pe31J6LaK0FJtf82Ckk21l7eo
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="379031042"
-X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
-   d="scan'208";a="379031042"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 14:06:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="1070871974"
-X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
-   d="scan'208";a="1070871974"
-Received: from jroorda-mobl4.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.32.118])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 14:05:58 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 94702104994; Sat,  2 Sep 2023 00:05:55 +0300 (+03)
-Date:   Sat, 2 Sep 2023 00:05:55 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     seanjc@google.com, ackerleytng@google.com,
-        akpm@linux-foundation.org, anup@brainfault.org,
-        aou@eecs.berkeley.edu, chao.p.peng@linux.intel.com,
-        chenhuacai@kernel.org, david@redhat.com, isaku.yamahata@gmail.com,
-        jarkko@kernel.org, jmorris@namei.org,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        kvmarm@lists.linux.dev, liam.merwick@oracle.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org,
-        linux-security-module@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mail@maciej.szmigiero.name,
-        maz@kernel.org, michael.roth@amd.com, mpe@ellerman.id.au,
-        oliver.upton@linux.dev, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, paul@paul-moore.com, pbonzini@redhat.com,
-        qperret@google.com, serge@hallyn.com, tabba@google.com,
-        vannapurve@google.com, wei.w.wang@intel.com, willy@infradead.org,
-        yu.c.zhang@linux.intel.com
-Subject: Re: [PATCH gmem FIXUP] mm, compaction: make testing
- mapping_unmovable() safe
-Message-ID: <20230901210555.j5d5a4azmkxzlnn2@box.shutemov.name>
-References: <20230901082025.20548-2-vbabka@suse.cz>
+        Fri, 1 Sep 2023 18:06:49 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94A19469D;
+        Fri,  1 Sep 2023 15:06:46 -0700 (PDT)
+Received: from [192.168.86.41] (unknown [50.46.242.41])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D3815212A784;
+        Fri,  1 Sep 2023 15:06:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D3815212A784
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1693606006;
+        bh=MAPRirw43SQMAfz9BXvFsZVrtiSMUrdiYLmeabyub5w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bDc71/vAEO8noPu3QZzGncOeJGhePJcsYowD2WoxUuQ3PhfdPsMNiq3K3D1zPV17/
+         iAAp0/G2gkvF6AoRvzYK20DojoEfmfkdu1VC6cILfwGa1CqvszKVyb271J28IYvAJv
+         maR9SveydEYU9f2y8hl1lF6xQg7bbbtoC2s8S0LI=
+Message-ID: <c83e13f8-4b7d-9489-37cc-53936b24343c@linux.microsoft.com>
+Date:   Fri, 1 Sep 2023 15:06:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230901082025.20548-2-vbabka@suse.cz>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC] IMA Log Snapshotting Design Proposal - aggregate
+Content-Language: en-US
+To:     Ken Goldman <kgold@linux.ibm.com>,
+        Sush Shringarputale <sushring@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
+        jmorris@namei.org, Paul Moore <paul@paul-moore.com>,
+        serge@hallyn.com
+Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
+        linux-security-module@vger.kernel.org
+References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
+ <598fdd62-f4c3-a6dc-ae22-8f5a9e18f570@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <598fdd62-f4c3-a6dc-ae22-8f5a9e18f570@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-21.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Sep 01, 2023 at 10:20:26AM +0200, Vlastimil Babka wrote:
-> As Kirill pointed out, mapping can be removed under us due to
-> truncation. Test it under folio lock as already done for the async
-> compaction / dirty folio case. To prevent locking every folio with
-> mapping to do the test, do it only for unevictable folios, as we can
-> expect the unmovable mapping folios are also unevictable - it is the
-> case for guest memfd folios.
-> 
-> Also incorporate comment update suggested by Matthew.
-> 
-> Fixes: 3424873596ce ("mm: Add AS_UNMOVABLE to mark mapping as completely unmovable")
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-Superficially looks good to me. But I don't really understand this
-code path to Ack.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+On 8/30/23 11:12, Ken Goldman wrote:
+> On 8/1/2023 3:12 PM, Sush Shringarputale wrote:
+>> - A user-mode process will trigger the snapshot by opening a file in 
+>> SysFS
+>>    say /sys/kernel/security/ima/snapshot (referred to as 
+>> sysk_ima_snapshot_file
+>>    here onwards).
+>> - The Kernel will get the current TPM PCR values and PCR update 
+>> counter [2]
+>>    and store them as template data in a new IMA event 
+>> "snapshot_aggregate".
+> 
+> If this is relying on a user-mode process, is there a concern that the 
+> process doesn't run. Might it be safer to have the kernel trigger the
+> snapshot.
+> 
+The UM process here would be typically an attestation client
+which passes on the IMA log to the remote service for attestation.
+If the process doesn't run, the client will operate the same way as it
+does currently.
+
+Kernel triggering snapshot would come with its own issues of Kernel
+storing the snapshot on some persistent file-system. They are being
+discussed on the main thread [1].
+
+> PCR reads are not atomic, with each other and with event log appends. Is 
+> this an issue?
+> 
+In this design, reading the PCR plus adding the snapshot_aggregate
+has to be an atomic operation.  Other IMA events shouldn't interfere
+with this operation. Just like IMA ensures adding an entry to the log
+plus PCR extension happens in an atomic way by holding the
+ima_extend_list_mutex [2], we intend to use a similar mechanism to
+ensure reading the PCR plus adding the snapshot_aggregate remains an
+atomic operation.  And since taking a snapshot would be a rare event
+compared to adding a generic event to IMA log - overall we expect a low
+overhead in case of snapshotting.
+
+However, please note that the event addition to IMA logs will *not*
+be paused while the log is written out to disk by the UM process.
+
+> The PCR update counter can change between PCR reads.  What is its purpose?
+> 
+Earlier we believed the PCR update counter will help with keeping track
+of events in the IMA log snapshot. But I soon realized (and it was
+also pointed out by Stefan Berger on the PCR update counter patch-series 
+[3]) that the update counter gets incremented on updates to any PCR
+(including the PCRs not touched by IMA).
+
+I agree that update counter may not be a reliable marker for this
+particular feature.
+
+We have put that series [3] on hold for other higher priority work items
+in the IMA/kexec space.
+
+> What is the purpose of the snapshot aggregate?  Since the entire event 
+> log has to be retained and sent to the verifier, is the aggregate 
+> redundant?
+
+The goals of snapshot_aggregate marker are:
+     1. To allow the IMA log to be divided into multiple chunks and
+        provide attestation service the ability to verify and use the
+        latest chunk (i.e. snapshot ) for attestation.
+
+     2. To indicate to the attestation service that the client device has
+        IMA log snapshotting feature enabled, and at least one snapshot
+        is taken.  So that the service can ask for previous snapshots
+        as needed.
+
+     3. In the event of multiple snapshots, the snapshot_aggregate
+        marker has sufficient information to verify the integrity
+        of latest subset of isolated snapshots (with the help of PCR
+        quote of course)
+
+     4. snapshot_aggregate helps both kernel and UM define clear
+        boundaries between multiple snapshots.
+        (each new snapshot starts with either the first boot_aggregate
+         or a snapshot_aggregate event)
+
+The overall goals of IMA log snapshotting feature are:
+     a. to relieve memory pressure on the client device.
+
+     b. to make attestation service side processing more efficient
+        They don't have to deal with the entire log since boot,
+        as you mentioned on
+
+     c. Reduce network bandwidth usage by sending less data
+        for each attestation request.
+
+We missed stating them explicitly in the original RFC proposal we
+sent. We will add them in the next version of the proposal.
+
+References:
+
+[1] Re: [RFC] IMA Log Snapshotting Design Proposal - Paul Moore 
+(kernel.org)
+https://lore.kernel.org/linux-integrity/CAHC9VhQbnyd2nvmL-t=3kXppsm985ps+NPJ5QDvM1WSS-Hd_Ew@mail.gmail.com/
+
+
+[2] ima_extend_list_mutex
+https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_queue.c#L159
+
+[3] Re: [PATCH 0/6] Measuring TPM update counter in IMA - Stefan Berger 
+(kernel.org)
+https://lore.kernel.org/linux-integrity/a4a5e40b-abc1-27fa-3984-cee18fb4522c@linux.ibm.com/
+
+Thanks,
