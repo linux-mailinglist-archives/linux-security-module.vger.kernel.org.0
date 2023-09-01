@@ -2,90 +2,100 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108CC79032D
-	for <lists+linux-security-module@lfdr.de>; Fri,  1 Sep 2023 23:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EF37903CC
+	for <lists+linux-security-module@lfdr.de>; Sat,  2 Sep 2023 00:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjIAVq2 (ORCPT
+        id S1351122AbjIAWzF (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 1 Sep 2023 17:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        Fri, 1 Sep 2023 18:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350805AbjIAVmu (ORCPT
+        with ESMTP id S244369AbjIAWzE (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 1 Sep 2023 17:42:50 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28AA71BFE;
-        Fri,  1 Sep 2023 14:22:41 -0700 (PDT)
-Received: from [192.168.86.41] (unknown [50.46.242.41])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 372E5212A780;
-        Fri,  1 Sep 2023 14:22:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 372E5212A780
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1693603360;
-        bh=4JQjdrI292EM3uTRhuuRomABTjztaCmafSCbCythPpo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=j30XoI5vPo8T3nfJL9MN6kNFYCQB+CNeUOW2GiK0ojRnnmunk7GhuBXobWOux+4tY
-         UrKElmoYgxqVEpUtD9BTMfq9Rb2yO4xwZ/yTv3ysw/HPeL/0idV82XqbRGA0b6u9NH
-         E56ByYSPFK3sPcWXTOElRqwQziO0eL/LPhCEhmDQ=
-Message-ID: <1d2b1df7-aabd-8a18-a564-24399b53f3d2@linux.microsoft.com>
-Date:   Fri, 1 Sep 2023 14:22:40 -0700
+        Fri, 1 Sep 2023 18:55:04 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124B81730;
+        Fri,  1 Sep 2023 14:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693602368; x=1725138368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XHxocslFLQU8xD6gE26XwrfQlSg9WQxfvtoRwUmoXd4=;
+  b=fs73fJm9bRJyKBZKwbD5mEgyXK9s/AowGNS+H0gXHA0EQQMa1nzj0JyO
+   4ivvodVmSEvCTmNx1xrrPG92m1n7/EkRzmofX9AcXraGnN9/xc4Xh6ZG3
+   r17c6FwtwVCMhafLGgi3Sd3anIHvouYoJWsbVtWB5atZgqa0tZ4kh6j80
+   EFKQ+sRpiruArmeWkbRk9jIoYa/6oLBssZoPneaIcO7Ca9aqEuR30pD4j
+   bKFwnbrDOw1uWI+bsld1+fUELpibsdIlhMv8O6msge/MjCVUs3juuNPv0
+   Bu48qxjBE2vnB0/wR3uxxdkcZAipPR81Pe31J6LaK0FJtf82Ckk21l7eo
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="379031042"
+X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
+   d="scan'208";a="379031042"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 14:06:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="1070871974"
+X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
+   d="scan'208";a="1070871974"
+Received: from jroorda-mobl4.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.32.118])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 14:05:58 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 94702104994; Sat,  2 Sep 2023 00:05:55 +0300 (+03)
+Date:   Sat, 2 Sep 2023 00:05:55 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     seanjc@google.com, ackerleytng@google.com,
+        akpm@linux-foundation.org, anup@brainfault.org,
+        aou@eecs.berkeley.edu, chao.p.peng@linux.intel.com,
+        chenhuacai@kernel.org, david@redhat.com, isaku.yamahata@gmail.com,
+        jarkko@kernel.org, jmorris@namei.org,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        kvmarm@lists.linux.dev, liam.merwick@oracle.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org,
+        linux-security-module@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mail@maciej.szmigiero.name,
+        maz@kernel.org, michael.roth@amd.com, mpe@ellerman.id.au,
+        oliver.upton@linux.dev, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, paul@paul-moore.com, pbonzini@redhat.com,
+        qperret@google.com, serge@hallyn.com, tabba@google.com,
+        vannapurve@google.com, wei.w.wang@intel.com, willy@infradead.org,
+        yu.c.zhang@linux.intel.com
+Subject: Re: [PATCH gmem FIXUP] mm, compaction: make testing
+ mapping_unmovable() safe
+Message-ID: <20230901210555.j5d5a4azmkxzlnn2@box.shutemov.name>
+References: <20230901082025.20548-2-vbabka@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC] IMA Log Snapshotting Design Proposal - unseal
-Content-Language: en-US
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Sush Shringarputale <sushring@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, bhe@redhat.com,
-        vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
-        jmorris@namei.org, Paul Moore <paul@paul-moore.com>,
-        serge@hallyn.com
-Cc:     code@tyhicks.com, nramas@linux.microsoft.com,
-        linux-security-module@vger.kernel.org
-References: <c5737141-7827-1c83-ab38-0119dcfea485@linux.microsoft.com>
- <1ef45099-da24-b73f-b33f-6a299c0b1696@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <1ef45099-da24-b73f-b33f-6a299c0b1696@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-21.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230901082025.20548-2-vbabka@suse.cz>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-
-
-On 8/30/23 12:12, Ken Goldman wrote:
-> On 8/1/2023 3:12 PM, Sush Shringarputale wrote:
+On Fri, Sep 01, 2023 at 10:20:26AM +0200, Vlastimil Babka wrote:
+> As Kirill pointed out, mapping can be removed under us due to
+> truncation. Test it under folio lock as already done for the async
+> compaction / dirty folio case. To prevent locking every folio with
+> mapping to do the test, do it only for unevictable folios, as we can
+> expect the unmovable mapping folios are also unevictable - it is the
+> case for guest memfd folios.
 > 
->> For remote attestation to work, the service will need to know how to
->>  validate the snapshot_aggregate entry in the IMA log.  It will have
->> to read the PCR values present in the template data of
->> snapshot_aggregate event in the latest IMA log, and ensure that the
->> PCR quotes align with the contents of the past UM_snapshot_file(s).
->> This will re-establish the chain of trust needed for the device to
->> pass remote attestation.  This will also maintain the ability of the
->> remote-attestation-service to seal the secrets, if the client-server
->>  use TPM unseal mechanism to attest the state of the device.
+> Also incorporate comment update suggested by Matthew.
 > 
-> I think that seal/unseal to IMA PCRs is futile.  Since boot is
-> multi-threaded, the IMA PCR is unpredictable even when valid.
+> Fixes: 3424873596ce ("mm: Add AS_UNMOVABLE to mark mapping as completely unmovable")
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-True. But here we are talking about seal/unseal post boot when the
-device is in a stable state, and there are relatively less number of
-events extending IMA PCR. The value of the actual IMA PCR doesn't matter
-in this context as long as it stays the same between seal-unseal window.
+Superficially looks good to me. But I don't really understand this
+code path to Ack.
 
-If it changes between that window, the clients typically retry by
-sending the request to the service with a new stable PCR.
-
-Seal-unseal is supported by TPM spec, and is used widely. So we had to
-ensure that our proposed design wouldn't regress this existing
-functionality.
-
-~Tushar
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
