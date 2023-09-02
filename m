@@ -2,63 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57F27903C9
-	for <lists+linux-security-module@lfdr.de>; Sat,  2 Sep 2023 00:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F359279048D
+	for <lists+linux-security-module@lfdr.de>; Sat,  2 Sep 2023 02:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348929AbjIAWxD (ORCPT
+        id S1351447AbjIBAtA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 1 Sep 2023 18:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        Fri, 1 Sep 2023 20:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237598AbjIAWxD (ORCPT
+        with ESMTP id S240699AbjIBAtA (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 1 Sep 2023 18:53:03 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78485138;
-        Fri,  1 Sep 2023 15:52:59 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6beff322a97so1987578a34.3;
-        Fri, 01 Sep 2023 15:52:59 -0700 (PDT)
+        Fri, 1 Sep 2023 20:49:00 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED1EE7E
+        for <linux-security-module@vger.kernel.org>; Fri,  1 Sep 2023 17:48:57 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-68bee12e842so2158794b3a.3
+        for <linux-security-module@vger.kernel.org>; Fri, 01 Sep 2023 17:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693608778; x=1694213578; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5+sW4mqGW8LxuwW7ALWEfQkhUWpZcqcc3uSM7JKnmU=;
-        b=hcDJnOeUyTMaEbNAjzf7Ke+aCOxykR+eR44E6CKXaOshZvZ3YtDOy8IPSb7NO6NcFt
-         z/ewvpctnsOsArEFJxShtI2vzE2HX53cCqDKonMrNobMRMzFrYMTpOweUkfUyS3iF11S
-         ZjPP/lLl0Dg43zDmVHYOZgx0fGL+hY/ZKAHmq5BN7dI9Bvn0x+Y2I72I5Au86gCcs568
-         xk1WLVD/gPZ/aAClGIzohwGAbOsU7Ya0HsKNbpb+72MYVV+V9JIF0RIDQdtlPwK4higq
-         /XOHz20DQUfi1725mpZMqVT1tZYei/X+QVyFuInzFvVc9rBSNCx+W/hd4yeJtheT16/m
-         xyeQ==
+        d=gmail.com; s=20221208; t=1693615736; x=1694220536; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ylIMM6O8H66mX5wEUzm+jJ9Dx/8lS9WU/xj1ockT74I=;
+        b=FRyQraa/n3/pc6/pD9s70+nS3mdzfKnMpEUmT19KKJwbm9Xc5QwkIFfW5I6sldl9aT
+         aU4KtJRvOS/Nnt7K/K4TGT/ZS3XIUUyndHrqTE4vjX6LmIuq9d7Mn61XuCTUB3i58qTK
+         QUbb4/WstZduVc5qSOgIa7enLyzAwvXWNSCmlLcTYwi1IT35+UYTdeHQjCu5FC9+mNPY
+         Yq7X6nHmUXiK2OvWVkIqgbiVD5IVfZb8b1FVroPEkdEvcpVFzyDVr7qFCD4/IWdP87aC
+         HgqUm7MBdsB82ilhEMRgZEPeQFXiRpzFrmKTsW+HWgouz4hGeFDwPhgpce7wLZmpWd/F
+         K+6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693608778; x=1694213578;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1693615736; x=1694220536;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=w5+sW4mqGW8LxuwW7ALWEfQkhUWpZcqcc3uSM7JKnmU=;
-        b=XxzQzkjkUV1z6bmUfDZt5N8y/UHz1GXiR0SGDK8gJJejUsZenx5E33Z6UDqYuGXSG7
-         Fa78JXq3JGI1MCdJ3jk7gBo4HWrUpMsoZwvrOw2ZqTpdI1gv98xdZOitvqaX3RL8fQdA
-         2fdNy/2cocjUX84kAKB7kJ+01yaVL55MfYp9EhN9wBl5maHMBofFc9WIkiJce/gB2x7X
-         +UYTBoICFGAbKMpK+3GL3In+VyA/X2M7zh2Tu4Vb76c7h3iG3/+XvrnLGqvOKTRstn1Q
-         XhkCEuMCDYTe3DGqMyLc4W2I0LlGtOcA7DfLyQ+SRAaiOf23mixDtkpNOOcWXNdpUeIo
-         x5Gg==
-X-Gm-Message-State: AOJu0YyNrtMx3cD9usluJrUYOtySnSgpiyrWhJrnf1mUDuJ1gjdcNabX
-        O+qh6LTFsmQt3BUB2pahjo/Maz8bvyUG/09z9b7+vT54Mdk=
-X-Google-Smtp-Source: AGHT+IFBIIy7lYXGAeciBBAefu2viHmqKMYhtBngNepWE6COHhxykxZY/5i5hOrrjp5zDVPpXiNdxO46qfzaDZ87W0Y=
-X-Received: by 2002:a05:6870:a924:b0:1bf:74cc:c815 with SMTP id
- eq36-20020a056870a92400b001bf74ccc815mr4059571oab.19.1693608778493; Fri, 01
- Sep 2023 15:52:58 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a8a:60c:0:b0:4f0:1250:dd51 with HTTP; Fri, 1 Sep 2023
- 15:52:57 -0700 (PDT)
-In-Reply-To: <20230815183759.1821357-1-mjguzik@gmail.com>
-References: <20230815183759.1821357-1-mjguzik@gmail.com>
-From:   Mateusz Guzik <mjguzik@gmail.com>
-Date:   Sat, 2 Sep 2023 00:52:57 +0200
-Message-ID: <CAGudoHEgwMwbRr-CpgYFAkEKdcsoV320cicn-wPYr-_wiT0mXQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH] cred: add get_cred_many and put_cred_many
+        bh=ylIMM6O8H66mX5wEUzm+jJ9Dx/8lS9WU/xj1ockT74I=;
+        b=VFA0WBRKlYHSo6NbnRg4llyuGFQ+iWO4gEqMcd+2D6jScNfa3sKe+RN6XkPyipvMhz
+         rJh3AQ5aHGsg5O7MSxSxOY31YxnGsYuC0m0qRA8tMOrizvmUdEjCbFouS+Pg6lONV4Pl
+         5axSI+DOUW6w6D7sFpEXUPEP6kqvqfEPflaTxqG9tOrnurRLhwiZ14xQgWjjLxO+sv28
+         qgYOG5o9hEgchrVH9JvFFPrlY2UKVbZBteX55w9P6BnTyCmqV4fKOztGu+7XLPqO1iM3
+         mFrbvS/Wn/pSStt8j36eSYRIvIvXD61hNYyBIq5eLtaYP2C5uxQMEGrzknfj0xf8dLfQ
+         BbSA==
+X-Gm-Message-State: AOJu0YwE9tYo19hoPMhe0D81aGD7Jvr0ZDs8es/vP5XgvctygWAj5s+1
+        sfyJ37hn46zfMD1SoYos7WKlKteWYISi8A==
+X-Google-Smtp-Source: AGHT+IGwfgkjwdVjFrI6ycJe+rkV6NFEqoOfjMR1W/MtOaDc4kPKbK7aa4oxTVDwBayQRTvJVDRWLQ==
+X-Received: by 2002:a05:6a20:7f9a:b0:141:d54e:a907 with SMTP id d26-20020a056a207f9a00b00141d54ea907mr5911133pzj.19.1693615736314;
+        Fri, 01 Sep 2023 17:48:56 -0700 (PDT)
+Received: from nova-ws.. ([103.167.140.11])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902c1c100b001b83dc8649dsm3543356plc.250.2023.09.01.17.48.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Sep 2023 17:48:56 -0700 (PDT)
+From:   Xiao Liang <shaw.leon@gmail.com>
 To:     linux-security-module@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Mateusz Guzik <mjguzik@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     John Johansen <john.johansen@canonical.com>,
+        Matthew Garrett <mjg59@google.com>
+Subject: [PATCH] apparmor: Fix null pointer deref when receiving skb during sock creation
+Date:   Sat,  2 Sep 2023 08:48:38 +0800
+Message-ID: <20230902004841.614102-1-shaw.leon@gmail.com>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,166 +69,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-can I get some flames on this?
+The panic below is observed when receiving ICMP packets with secmark set
+while an ICMP raw socket is being created. SK_CTX(sk)->label is updated
+in apparmor_socket_post_create(), but the packet is delivered to the
+socket before that, causing the null pointer dereference.
+Drop the packet if label context is not set.
 
-It there are no responses I'm dropping the patch, it is not worth
-significant hassle.
+    BUG: kernel NULL pointer dereference, address: 000000000000004c
+    #PF: supervisor read access in kernel mode
+    #PF: error_code(0x0000) - not-present page
+    PGD 0 P4D 0
+    Oops: 0000 [#1] PREEMPT SMP NOPTI
+    CPU: 0 PID: 407 Comm: a.out Not tainted 6.4.12-arch1-1 #1 3e6fa2753a2d75925c34ecb78e22e85a65d083df
+    Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/28/2020
+    RIP: 0010:aa_label_next_confined+0xb/0x40
+    Code: 00 00 48 89 ef e8 d5 25 0c 00 e9 66 ff ff ff 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 66 0f 1f 00 0f 1f 44 00 00 89 f0 <8b> 77 4c 39 c6 7e 1f 48 63 d0 48 8d 14 d7 eb 0b 83 c0 01 48 83 c2
+    RSP: 0018:ffffa92940003b08 EFLAGS: 00010246
+    RAX: 0000000000000000 RBX: 0000000000000000 RCX: 000000000000000e
+    RDX: ffffa92940003be8 RSI: 0000000000000000 RDI: 0000000000000000
+    RBP: ffff8b57471e7800 R08: ffff8b574c642400 R09: 0000000000000002
+    R10: ffffffffbd820eeb R11: ffffffffbeb7ff00 R12: ffff8b574c642400
+    R13: 0000000000000001 R14: 0000000000000001 R15: 0000000000000000
+    FS:  00007fb092ea7640(0000) GS:ffff8b577bc00000(0000) knlGS:0000000000000000
+    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+    CR2: 000000000000004c CR3: 00000001020f2005 CR4: 00000000007706f0
+    PKRU: 55555554
+    Call Trace:
+     <IRQ>
+     ? __die+0x23/0x70
+     ? page_fault_oops+0x171/0x4e0
+     ? exc_page_fault+0x7f/0x180
+     ? asm_exc_page_fault+0x26/0x30
+     ? aa_label_next_confined+0xb/0x40
+     apparmor_secmark_check+0xec/0x330
+     security_sock_rcv_skb+0x35/0x50
+     sk_filter_trim_cap+0x47/0x250
+     sock_queue_rcv_skb_reason+0x20/0x60
+     raw_rcv+0x13c/0x210
+     raw_local_deliver+0x1f3/0x250
+     ip_protocol_deliver_rcu+0x4f/0x2f0
+     ip_local_deliver_finish+0x76/0xa0
+     __netif_receive_skb_one_core+0x89/0xa0
+     netif_receive_skb+0x119/0x170
+     ? __netdev_alloc_skb+0x3d/0x140
+     vmxnet3_rq_rx_complete+0xb23/0x1010 [vmxnet3 56a84f9c97178c57a43a24ec073b45a9d6f01f3a]
+     vmxnet3_poll_rx_only+0x36/0xb0 [vmxnet3 56a84f9c97178c57a43a24ec073b45a9d6f01f3a]
+     __napi_poll+0x28/0x1b0
+     net_rx_action+0x2a4/0x380
+     __do_softirq+0xd1/0x2c8
+     __irq_exit_rcu+0xbb/0xf0
+     common_interrupt+0x86/0xa0
+     </IRQ>
+     <TASK>
+     asm_common_interrupt+0x26/0x40
+    RIP: 0010:apparmor_socket_post_create+0xb/0x200
+    Code: 08 48 85 ff 75 a1 eb b1 0f 1f 80 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 41 54 <55> 48 89 fd 53 45 85 c0 0f 84 b2 00 00 00 48 8b 1d 80 56 3f 02 48
+    RSP: 0018:ffffa92940ce7e50 EFLAGS: 00000286
+    RAX: ffffffffbc756440 RBX: 0000000000000000 RCX: 0000000000000001
+    RDX: 0000000000000003 RSI: 0000000000000002 RDI: ffff8b574eaab740
+    RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+    R10: ffff8b57444cec70 R11: 0000000000000000 R12: 0000000000000003
+    R13: 0000000000000002 R14: ffff8b574eaab740 R15: ffffffffbd8e4748
+     ? __pfx_apparmor_socket_post_create+0x10/0x10
+     security_socket_post_create+0x4b/0x80
+     __sock_create+0x176/0x1f0
+     __sys_socket+0x89/0x100
+     __x64_sys_socket+0x17/0x20
+     do_syscall_64+0x5d/0x90
+     ? do_syscall_64+0x6c/0x90
+     ? do_syscall_64+0x6c/0x90
+     ? do_syscall_64+0x6c/0x90
+     entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-On 8/15/23, Mateusz Guzik <mjguzik@gmail.com> wrote:
-> Shaves back-to-back atomics in a few places.
->
-> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
-> ---
->  include/linux/cred.h | 27 +++++++++++++++++++++------
->  kernel/cred.c        | 29 +++++++++++++++++------------
->  2 files changed, 38 insertions(+), 18 deletions(-)
->
-> diff --git a/include/linux/cred.h b/include/linux/cred.h
-> index 9ed9232af934..b2b570ba204a 100644
-> --- a/include/linux/cred.h
-> +++ b/include/linux/cred.h
-> @@ -226,12 +226,17 @@ static inline bool cap_ambient_invariant_ok(const
-> struct cred *cred)
->   * Get a reference on the specified set of new credentials.  The caller
-> must
->   * release the reference.
->   */
-> -static inline struct cred *get_new_cred(struct cred *cred)
-> +static inline struct cred *get_new_cred_many(struct cred *cred, int nr)
->  {
-> -	atomic_inc(&cred->usage);
-> +	atomic_add(nr, &cred->usage);
->  	return cred;
->  }
->
-> +static inline struct cred *get_new_cred(struct cred *cred)
-> +{
-> +	return get_new_cred_many(cred, 1);
-> +}
-> +
->  /**
->   * get_cred - Get a reference on a set of credentials
->   * @cred: The credentials to reference
-> @@ -245,14 +250,19 @@ static inline struct cred *get_new_cred(struct cred
-> *cred)
->   * accidental alteration of a set of credentials that should be considered
->   * immutable.
->   */
-> -static inline const struct cred *get_cred(const struct cred *cred)
-> +static inline const struct cred *get_cred_many(const struct cred *cred, int
-> nr)
->  {
->  	struct cred *nonconst_cred = (struct cred *) cred;
->  	if (!cred)
->  		return cred;
->  	validate_creds(cred);
->  	nonconst_cred->non_rcu = 0;
-> -	return get_new_cred(nonconst_cred);
-> +	return get_new_cred_many(nonconst_cred, nr);
-> +}
-> +
-> +static inline const struct cred *get_cred(const struct cred *cred)
-> +{
-> +	return get_cred_many(cred, 1);
->  }
->
->  static inline const struct cred *get_cred_rcu(const struct cred *cred)
-> @@ -278,17 +288,22 @@ static inline const struct cred *get_cred_rcu(const
-> struct cred *cred)
->   * on task_struct are attached by const pointers to prevent accidental
->   * alteration of otherwise immutable credential sets.
->   */
-> -static inline void put_cred(const struct cred *_cred)
-> +static inline void put_cred_many(const struct cred *_cred, int nr)
->  {
->  	struct cred *cred = (struct cred *) _cred;
->
->  	if (cred) {
->  		validate_creds(cred);
-> -		if (atomic_dec_and_test(&(cred)->usage))
-> +		if (atomic_sub_and_test(nr, &cred->usage))
->  			__put_cred(cred);
->  	}
->  }
->
-> +static inline void put_cred(const struct cred *cred)
-> +{
-> +	put_cred_many(cred, 1);
-> +}
-> +
->  /**
->   * current_cred - Access the current task's subjective credentials
->   *
-> diff --git a/kernel/cred.c b/kernel/cred.c
-> index 811ad654abd1..8a506bc7c1b8 100644
-> --- a/kernel/cred.c
-> +++ b/kernel/cred.c
-> @@ -159,23 +159,30 @@ EXPORT_SYMBOL(__put_cred);
->   */
->  void exit_creds(struct task_struct *tsk)
->  {
-> -	struct cred *cred;
-> +	struct cred *real_cred, *cred;
->
->  	kdebug("exit_creds(%u,%p,%p,{%d,%d})", tsk->pid, tsk->real_cred,
-> tsk->cred,
->  	       atomic_read(&tsk->cred->usage),
->  	       read_cred_subscribers(tsk->cred));
->
-> -	cred = (struct cred *) tsk->real_cred;
-> +	real_cred = (struct cred *) tsk->real_cred;
->  	tsk->real_cred = NULL;
-> -	validate_creds(cred);
-> -	alter_cred_subscribers(cred, -1);
-> -	put_cred(cred);
->
->  	cred = (struct cred *) tsk->cred;
->  	tsk->cred = NULL;
-> -	validate_creds(cred);
-> -	alter_cred_subscribers(cred, -1);
-> -	put_cred(cred);
-> +
-> +	if (real_cred == cred) {
-> +		validate_creds(cred);
-> +		alter_cred_subscribers(cred, -2);
-> +		put_cred_many(cred, 2);
-> +	} else {
-> +		validate_creds(real_cred);
-> +		validate_creds(cred);
-> +		alter_cred_subscribers(real_cred, -1);
-> +		put_cred(real_cred);
-> +		alter_cred_subscribers(cred, -1);
-> +		put_cred(cred);
-> +	}
->
->  #ifdef CONFIG_KEYS_REQUEST_CACHE
->  	key_put(tsk->cached_requested_key);
-> @@ -352,8 +359,7 @@ int copy_creds(struct task_struct *p, unsigned long
-> clone_flags)
->  #endif
->  		clone_flags & CLONE_THREAD
->  	    ) {
-> -		p->real_cred = get_cred(p->cred);
-> -		get_cred(p->cred);
-> +		p->real_cred = get_cred_many(p->cred, 2);
->  		alter_cred_subscribers(p->cred, 2);
->  		kdebug("share_creds(%p{%d,%d})",
->  		       p->cred, atomic_read(&p->cred->usage),
-> @@ -517,8 +523,7 @@ int commit_creds(struct cred *new)
->  		proc_id_connector(task, PROC_EVENT_GID);
->
->  	/* release the old obj and subj refs both */
-> -	put_cred(old);
-> -	put_cred(old);
-> +	put_cred_many(old, 2);
->  	return 0;
->  }
->  EXPORT_SYMBOL(commit_creds);
-> --
-> 2.39.2
->
->
+Fixes: ab9f2115081a ("apparmor: Allow filtering based on secmark policy")
+Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
+---
+ security/apparmor/lsm.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index 108eccc5ada5..0dbff677ac2e 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -1097,6 +1097,13 @@ static int apparmor_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
+ 	if (!skb->secmark)
+ 		return 0;
+ 
++	/*
++	 * If reach here before socket_post_create hook is called, in which
++	 * case label is null, drop the packet.
++	 */
++	if (!ctx->label)
++		return -EACCES;
++
+ 	return apparmor_secmark_check(ctx->label, OP_RECVMSG, AA_MAY_RECEIVE,
+ 				      skb->secmark, sk);
+ }
 -- 
-Mateusz Guzik <mjguzik gmail.com>
+2.42.0
+
