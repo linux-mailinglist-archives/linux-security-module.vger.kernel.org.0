@@ -2,115 +2,311 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D7379294F
-	for <lists+linux-security-module@lfdr.de>; Tue,  5 Sep 2023 18:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAFF792953
+	for <lists+linux-security-module@lfdr.de>; Tue,  5 Sep 2023 18:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351634AbjIEQ0K (ORCPT
+        id S1351670AbjIEQ0M (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 5 Sep 2023 12:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        Tue, 5 Sep 2023 12:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353838AbjIEIU5 (ORCPT
+        with ESMTP id S1354371AbjIELFN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 5 Sep 2023 04:20:57 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E705CC7
-        for <linux-security-module@vger.kernel.org>; Tue,  5 Sep 2023 01:20:53 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id 2adb3069b0e04-5007616b756so3796339e87.3
-        for <linux-security-module@vger.kernel.org>; Tue, 05 Sep 2023 01:20:53 -0700 (PDT)
+        Tue, 5 Sep 2023 07:05:13 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6B01AD
+        for <linux-security-module@vger.kernel.org>; Tue,  5 Sep 2023 04:05:08 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-7a52a1e2a59so857444241.0
+        for <linux-security-module@vger.kernel.org>; Tue, 05 Sep 2023 04:05:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693902051; x=1694506851; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CvUmRYKO5rN5JiKdYLn9/Xxm/soJiVGtQm650JnL3Yc=;
-        b=WyyvPMEfe4FOVqHOIWdr/B2P0p03RPzGq0eAy6olIuEmDr190DF60UMTUjSzD3ICzN
-         0WsAegs64/BiRqCpXkN1qURw3kJmTI2wMa8rTaukjr0/l9jhm+3ubCn9+y0oKw0Vf/Ks
-         YIRtHy/tktgd0JCbt9j66zUkqNxhaH1k0FzKmAu+yKNICqHvkjDH6q7yKGNLfZeY066C
-         rjUXbiHJ42XZriL2gTX15/F6y+Se4qD3ChTlmHmU/A+Bl1kzMG1cMn1BnC25iR+qjjlJ
-         Ikwy1nXebC5hCeU4AgcZQ4VZpVOWulwi6FywqPblj59NiPYUSn0tuU6Bbo6p4XZRvT/F
-         gtfQ==
+        d=linaro.org; s=google; t=1693911907; x=1694516707; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AjdfAUMQt11lOtOZhXgZtyQBLOJqMLXTb8Y4HhqzChQ=;
+        b=lcFsCct2iHd6Yqum5uTTqukHzbH+rplnx0vqFnNYDQUSw5WAULSLXIKHAmwgZhk7RB
+         /XV9P30gFTv8X4e+Ljbmu2dyqaW/s9p7+eKMSiNGErKioeN56aB2rbL5XdLw1Su9Vtgu
+         X7sYtda4TPlZO+fOFnNw3u4EaK43fp4J6YkgwdwSFE97vtNvy+sCHGuiAGC4FzeKCuzY
+         lHtQK8+XTb9ZtMuRdy/BrTKOSWapld2F/ArHF8qRtj1v4iLZsotKPXdeV9Z4JteFR5DW
+         iItPz8ZLoSDkun98u/XPwg3zDFyFSP/Q4mFvEIpI3YYopbTL52EC4jsbFAEaRGaszeO0
+         YLhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693902051; x=1694506851;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CvUmRYKO5rN5JiKdYLn9/Xxm/soJiVGtQm650JnL3Yc=;
-        b=VoEEwSinLW0YmxDndGV278DC1ayYGVqC/BZ4BJ2S/wBFJbG69Pk8yv065pAxaSDrDT
-         YPO4Cg2wAgBOfWd1eR/zHadJBn2TAl1eyPHXEB6NLMggNm+n7UudFxQFY9tcp8Fzejqi
-         JAwrIBaLbVm3QbF6/EmXKXJVqeO75Zktu73K5k5c+AIYqrV80JZLxL9Y+TuY9NQeuhpC
-         EUFRI3laZjpB2h8TbDdVTlmhgdnK9Z98Drvhl1rSR2z2kYNP7VFO+E4VWYcjSw9hPz2v
-         JMpHU8vLH59iAkqSYMTLdFpmqUMosof80IjFKb4IZVmiLFdOE/nYcOsumlMwxzkD6Yb+
-         VAFA==
-X-Gm-Message-State: AOJu0YxRgWyzrUqlmItakWoeRFLnRmpsMdgiTwFG0ShvGEGNg3ElMy8+
-        MIz18aysLlT/8yBGAwT97G6eTefZSwKklSlFgO4=
-X-Google-Smtp-Source: AGHT+IHc9ajH3Rii9UZwOOqLrsXanmcTWvKjiURPKmJK5D52sTkbD7l1BRzq/bCfrfUZjlWt/04s1jIBCk3z7CpHIFE=
-X-Received: by 2002:a19:6755:0:b0:501:bf37:1fc0 with SMTP id
- e21-20020a196755000000b00501bf371fc0mr624754lfj.33.1693902050884; Tue, 05 Sep
- 2023 01:20:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693911907; x=1694516707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AjdfAUMQt11lOtOZhXgZtyQBLOJqMLXTb8Y4HhqzChQ=;
+        b=C0teaCJCPtmpGCCIl5tc4ndHPYh7lwE0cG/InlI8YkzGAqsZQx8vIc6Q9oTAnwCgYk
+         QEmayJscK22fkUYYkKk6TcxyxIFaRsVwUdgYVgrL+egOdCoT6HSOVvdqsoeEI6oUKJNY
+         na7fZ+sHDpr9os8f9jbJhLWxeE/s5SPNn1G1Zt3+ODmEFd+puEpuqTF9tyMwzuRt+tS7
+         JlXgJ6zWrp/7Ae6kJPuL5idv1+7hQFscVuA/KUEafi1JmluUSHi0+mCIJTrWpLTpPWfY
+         5v0Y0WeoXYttkl8hN3j4KECaIxNMynhVyBQdonL6GKb0eCYCn3PMW2YNJ9AiyxT3gf8M
+         AWGQ==
+X-Gm-Message-State: AOJu0YyvMdGGi4eX6B/CzvOTVcXIQSD+nPBXPXJ7Fq0TrqSnieeQyKyP
+        Ce/ttpN3BT9gum+xojdlUpTYQ+Dfnr+XMHjR41HN1A==
+X-Google-Smtp-Source: AGHT+IE7fBNntLQi1M21QzJ8SZhchLaav2pstQ/dADdPA6JsBb22kj31acXgw3V2iy63h6j6WUTXLA4nVMn1nuZCk5c=
+X-Received: by 2002:a67:f3ce:0:b0:44d:4385:1627 with SMTP id
+ j14-20020a67f3ce000000b0044d43851627mr11184867vsn.14.1693911907511; Tue, 05
+ Sep 2023 04:05:07 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a54:3ac4:0:b0:22f:40f:e031 with HTTP; Tue, 5 Sep 2023
- 01:20:50 -0700 (PDT)
-Reply-To: wuwumoneytransfer5000@hotmail.com
-From:   "(IMF) SCAM VICTIMS" <mimichi4500@gmail.com>
-Date:   Tue, 5 Sep 2023 01:20:50 -0700
-Message-ID: <CAGhkD8USA9d9+1HDw3AKO0o45v_Z8cjdpcgnjTbVjdDUbiyg2w@mail.gmail.com>
-Subject: Betrugsopfer
-To:     undisclosed-recipients:;
+References: <20230822112933.1550062-1-sumit.garg@linaro.org>
+ <20230822125555.GA82256@rayden> <CAFA6WYPy=yxGg1HbT+ipWJFpxiJeUGK6BSgMhtRPd=zmKef-cw@mail.gmail.com>
+ <CAHUa44G9jCeHcRq=AZeieaTPWN_tpOVKeJNY=777QAh-bw1QNg@mail.gmail.com>
+ <CAFA6WYPY70iYCmQhzCkATGinqK_C1i4SEZzTdv4yDwntpGNzew@mail.gmail.com> <CAHUa44H5eG6N0M_aAiWsYJorWVt4pYEZPWXgOJHgXAYVmR=cww@mail.gmail.com>
+In-Reply-To: <CAHUa44H5eG6N0M_aAiWsYJorWVt4pYEZPWXgOJHgXAYVmR=cww@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 5 Sep 2023 16:34:56 +0530
+Message-ID: <CAFA6WYNAifDVZy-pLSTJWonGTJBECijsTFw4OQdqToW3u6Lj_Q@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: trusted: tee: Refactor register SHM usage
+To:     jarkko@kernel.org
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, sudeep.holla@arm.com, achin.gupta@arm.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Sehr geehrter E-Mail-Besitzer,
+Hi Jarkko,
 
+On Wed, 23 Aug 2023 at 19:58, Jens Wiklander <jens.wiklander@linaro.org> wr=
+ote:
+>
+> On Wed, Aug 23, 2023 at 3:04=E2=80=AFPM Sumit Garg <sumit.garg@linaro.org=
+> wrote:
+> >
+> > On Wed, 23 Aug 2023 at 13:32, Jens Wiklander <jens.wiklander@linaro.org=
+> wrote:
+> > >
+> > > On Wed, Aug 23, 2023 at 8:55=E2=80=AFAM Sumit Garg <sumit.garg@linaro=
+.org> wrote:
+> > > >
+> > > > On Tue, 22 Aug 2023 at 18:25, Jens Wiklander <jens.wiklander@linaro=
+.org> wrote:
+> > > > >
+> > > > > On Tue, Aug 22, 2023 at 04:59:33PM +0530, Sumit Garg wrote:
+> > > > > > The OP-TEE driver using the old SMC based ABI permits overlappi=
+ng shared
+> > > > > > buffers, but with the new FF-A based ABI each physical page may=
+ only
+> > > > > > be registered once.
+> > > > > >
+> > > > > > As the key and blob buffer are allocated adjancently, there is =
+no need
+> > > > > > for redundant register shared memory invocation. Also, it is in=
+compatibile
+> > > > > > with FF-A based ABI limitation. So refactor register shared mem=
+ory
+> > > > > > implementation to use only single invocation to register both k=
+ey and blob
+> > > > > > buffers.
+> > > > > >
+> > > > > > Fixes: 4615e5a34b95 ("optee: add FF-A support")
+> > > > > > Reported-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > > > > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> > > > > > ---
+> > > > > >  security/keys/trusted-keys/trusted_tee.c | 64 ++++++++--------=
+--------
+> > > > > >  1 file changed, 20 insertions(+), 44 deletions(-)
+> > > > > >
+> > > > > > diff --git a/security/keys/trusted-keys/trusted_tee.c b/securit=
+y/keys/trusted-keys/trusted_tee.c
+> > > > > > index ac3e270ade69..aa3d477de6db 100644
+> > > > > > --- a/security/keys/trusted-keys/trusted_tee.c
+> > > > > > +++ b/security/keys/trusted-keys/trusted_tee.c
+> > > > > > @@ -65,24 +65,16 @@ static int trusted_tee_seal(struct trusted_=
+key_payload *p, char *datablob)
+> > > > > >       int ret;
+> > > > > >       struct tee_ioctl_invoke_arg inv_arg;
+> > > > > >       struct tee_param param[4];
+> > > > > > -     struct tee_shm *reg_shm_in =3D NULL, *reg_shm_out =3D NUL=
+L;
+> > > > > > +     struct tee_shm *reg_shm =3D NULL;
+> > > > > >
+> > > > > >       memset(&inv_arg, 0, sizeof(inv_arg));
+> > > > > >       memset(&param, 0, sizeof(param));
+> > > > > >
+> > > > > > -     reg_shm_in =3D tee_shm_register_kernel_buf(pvt_data.ctx, =
+p->key,
+> > > > > > -                                              p->key_len);
+> > > > > > -     if (IS_ERR(reg_shm_in)) {
+> > > > > > -             dev_err(pvt_data.dev, "key shm register failed\n"=
+);
+> > > > > > -             return PTR_ERR(reg_shm_in);
+> > > > > > -     }
+> > > > > > -
+> > > > > > -     reg_shm_out =3D tee_shm_register_kernel_buf(pvt_data.ctx,=
+ p->blob,
+> > > > > > -                                               sizeof(p->blob)=
+);
+> > > > > > -     if (IS_ERR(reg_shm_out)) {
+> > > > > > -             dev_err(pvt_data.dev, "blob shm register failed\n=
+");
+> > > > > > -             ret =3D PTR_ERR(reg_shm_out);
+> > > > > > -             goto out;
+> > > > > > +     reg_shm =3D tee_shm_register_kernel_buf(pvt_data.ctx, p->=
+key,
+> > > > > > +                                           sizeof(p->key) + si=
+zeof(p->blob));
+> > > > >
+> > > > > This is somewhat fragile. What if struct trusted_key_payload has =
+a small
+> > > > > unexpected change in layout?
+> > > >
+> > > > key and blob buffers are just two adjacent fixed sized byte arrays.=
+ So
+> > > > I am not worried here as long as they stay adjacent (which has been
+> > > > the case since trusted keys were introduced in the kernel).
+> > >
+> > > Yeah, that was my point, but fine if you don't believe it's an issue.
+> > >
+> >
+> > Does it resolve the issue with FFA ABI for you? It would be good to
+> > have your Tested-by tag.
+>
+> It does:
+> Tested-by: Jens Wiklander <jens.wiklander@linaro.org>
+> Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+>
 
+Can you help pick up this fix for v6.6 kernel release?
 
-Der Internationale W=C3=A4hrungsfonds (IWF) entsch=C3=A4digt alle Betrugsop=
-fer
-und Ihre E-Mail-Adresse wurde auf der Liste der Betrugsopfer gefunden.
+-Sumit
 
-Dieses Western Union-B=C3=BCro wurde vom IWF beauftragt Ihnen Ihre
-Verg=C3=BCtung per Western Union Money Transfer zu =C3=BCberweisen.
-
-Wir haben uns jedoch entschieden Ihre eigene Zahlung =C3=BCber Geldtransfer
-der Westunion in H=C3=B6he von =E2=82=AC5,000, pro Tag vorzunehmen bis die
-Gesamtsumme von =E2=82=AC1,500.000.00, vollst=C3=A4ndig an Sie =C3=BCberwie=
-sen wurde.
-
-Wir k=C3=B6nnen die Zahlung m=C3=B6glicherweise nicht nur mit Ihrer
-E-Mail-Adresse senden daher ben=C3=B6tigen wir Ihre Informationen dar=C3=BC=
-ber
-wohin wir das Geld an Sie senden wie z. B.:
-
-
-Name des Adressaten ________________
-
-Adresse________________
-
-Land__________________
-
-Telefonnummer________________
-
-Angeh=C3=A4ngte Kopie Ihres Ausweises______________
-
-Das Alter ________________________
-
-
-Wir beginnen mit der =C3=9Cbertragung sobald wir Ihre Informationen
-erhalten haben: Kontakt E-Mail: ( wuwumoneytransfer5000@hotmail.com)
-
-
-Getreu,
-
-
-Herr Anthony Duru,
-
-Direktor von Geldtransfer der Westunion
+> Thanks,
+> Jens
+>
+> >
+> > -Sumit
+> >
+> > > Thanks,
+> > > Jens
+> > >
+> > > >
+> > > > -Sumit
+> > > >
+> > > > >
+> > > > > Thanks,
+> > > > > Jens
+> > > > >
+> > > > > > +     if (IS_ERR(reg_shm)) {
+> > > > > > +             dev_err(pvt_data.dev, "shm register failed\n");
+> > > > > > +             return PTR_ERR(reg_shm);
+> > > > > >       }
+> > > > > >
+> > > > > >       inv_arg.func =3D TA_CMD_SEAL;
+> > > > > > @@ -90,13 +82,13 @@ static int trusted_tee_seal(struct trusted_=
+key_payload *p, char *datablob)
+> > > > > >       inv_arg.num_params =3D 4;
+> > > > > >
+> > > > > >       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
+> > > > > > -     param[0].u.memref.shm =3D reg_shm_in;
+> > > > > > +     param[0].u.memref.shm =3D reg_shm;
+> > > > > >       param[0].u.memref.size =3D p->key_len;
+> > > > > >       param[0].u.memref.shm_offs =3D 0;
+> > > > > >       param[1].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT=
+;
+> > > > > > -     param[1].u.memref.shm =3D reg_shm_out;
+> > > > > > +     param[1].u.memref.shm =3D reg_shm;
+> > > > > >       param[1].u.memref.size =3D sizeof(p->blob);
+> > > > > > -     param[1].u.memref.shm_offs =3D 0;
+> > > > > > +     param[1].u.memref.shm_offs =3D sizeof(p->key);
+> > > > > >
+> > > > > >       ret =3D tee_client_invoke_func(pvt_data.ctx, &inv_arg, pa=
+ram);
+> > > > > >       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
+> > > > > > @@ -107,11 +99,7 @@ static int trusted_tee_seal(struct trusted_=
+key_payload *p, char *datablob)
+> > > > > >               p->blob_len =3D param[1].u.memref.size;
+> > > > > >       }
+> > > > > >
+> > > > > > -out:
+> > > > > > -     if (reg_shm_out)
+> > > > > > -             tee_shm_free(reg_shm_out);
+> > > > > > -     if (reg_shm_in)
+> > > > > > -             tee_shm_free(reg_shm_in);
+> > > > > > +     tee_shm_free(reg_shm);
+> > > > > >
+> > > > > >       return ret;
+> > > > > >  }
+> > > > > > @@ -124,24 +112,16 @@ static int trusted_tee_unseal(struct trus=
+ted_key_payload *p, char *datablob)
+> > > > > >       int ret;
+> > > > > >       struct tee_ioctl_invoke_arg inv_arg;
+> > > > > >       struct tee_param param[4];
+> > > > > > -     struct tee_shm *reg_shm_in =3D NULL, *reg_shm_out =3D NUL=
+L;
+> > > > > > +     struct tee_shm *reg_shm =3D NULL;
+> > > > > >
+> > > > > >       memset(&inv_arg, 0, sizeof(inv_arg));
+> > > > > >       memset(&param, 0, sizeof(param));
+> > > > > >
+> > > > > > -     reg_shm_in =3D tee_shm_register_kernel_buf(pvt_data.ctx, =
+p->blob,
+> > > > > > -                                              p->blob_len);
+> > > > > > -     if (IS_ERR(reg_shm_in)) {
+> > > > > > -             dev_err(pvt_data.dev, "blob shm register failed\n=
+");
+> > > > > > -             return PTR_ERR(reg_shm_in);
+> > > > > > -     }
+> > > > > > -
+> > > > > > -     reg_shm_out =3D tee_shm_register_kernel_buf(pvt_data.ctx,=
+ p->key,
+> > > > > > -                                               sizeof(p->key))=
+;
+> > > > > > -     if (IS_ERR(reg_shm_out)) {
+> > > > > > -             dev_err(pvt_data.dev, "key shm register failed\n"=
+);
+> > > > > > -             ret =3D PTR_ERR(reg_shm_out);
+> > > > > > -             goto out;
+> > > > > > +     reg_shm =3D tee_shm_register_kernel_buf(pvt_data.ctx, p->=
+key,
+> > > > > > +                                           sizeof(p->key) + si=
+zeof(p->blob));
+> > > > > > +     if (IS_ERR(reg_shm)) {
+> > > > > > +             dev_err(pvt_data.dev, "shm register failed\n");
+> > > > > > +             return PTR_ERR(reg_shm);
+> > > > > >       }
+> > > > > >
+> > > > > >       inv_arg.func =3D TA_CMD_UNSEAL;
+> > > > > > @@ -149,11 +129,11 @@ static int trusted_tee_unseal(struct trus=
+ted_key_payload *p, char *datablob)
+> > > > > >       inv_arg.num_params =3D 4;
+> > > > > >
+> > > > > >       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
+> > > > > > -     param[0].u.memref.shm =3D reg_shm_in;
+> > > > > > +     param[0].u.memref.shm =3D reg_shm;
+> > > > > >       param[0].u.memref.size =3D p->blob_len;
+> > > > > > -     param[0].u.memref.shm_offs =3D 0;
+> > > > > > +     param[0].u.memref.shm_offs =3D sizeof(p->key);
+> > > > > >       param[1].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT=
+;
+> > > > > > -     param[1].u.memref.shm =3D reg_shm_out;
+> > > > > > +     param[1].u.memref.shm =3D reg_shm;
+> > > > > >       param[1].u.memref.size =3D sizeof(p->key);
+> > > > > >       param[1].u.memref.shm_offs =3D 0;
+> > > > > >
+> > > > > > @@ -166,11 +146,7 @@ static int trusted_tee_unseal(struct trust=
+ed_key_payload *p, char *datablob)
+> > > > > >               p->key_len =3D param[1].u.memref.size;
+> > > > > >       }
+> > > > > >
+> > > > > > -out:
+> > > > > > -     if (reg_shm_out)
+> > > > > > -             tee_shm_free(reg_shm_out);
+> > > > > > -     if (reg_shm_in)
+> > > > > > -             tee_shm_free(reg_shm_in);
+> > > > > > +     tee_shm_free(reg_shm);
+> > > > > >
+> > > > > >       return ret;
+> > > > > >  }
+> > > > > > --
+> > > > > > 2.34.1
+> > > > > >
