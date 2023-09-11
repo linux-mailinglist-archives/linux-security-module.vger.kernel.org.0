@@ -2,150 +2,356 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB9879BEA9
-	for <lists+linux-security-module@lfdr.de>; Tue, 12 Sep 2023 02:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D7D79C116
+	for <lists+linux-security-module@lfdr.de>; Tue, 12 Sep 2023 02:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357910AbjIKWGw (ORCPT
+        id S230114AbjILA06 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 11 Sep 2023 18:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
+        Mon, 11 Sep 2023 20:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244317AbjIKUFJ (ORCPT
+        with ESMTP id S231453AbjILA0v (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 11 Sep 2023 16:05:09 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16909185
-        for <linux-security-module@vger.kernel.org>; Mon, 11 Sep 2023 13:05:04 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-59254e181a2so46594627b3.1
-        for <linux-security-module@vger.kernel.org>; Mon, 11 Sep 2023 13:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1694462703; x=1695067503; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rhlMLK8WCLZGaMrHreCTIhW1CPUp3+vyJu4Njc0iJm8=;
-        b=WIsqxOb3QL8dFzesIx76fkB0GekBAc3GAzQbCH11tFsTIS6044a34z6tyWDi/YZVHG
-         5CfZLEb4froN/F86b35qPZui69zbvIeGUltF6JHCetdQW81PSoXjhMx/OIym+PNWjvDX
-         PYuXq7Zpy19w46Qzv2/O3qX4pa1fjYal3OAVYS34B7gT6Xx8yvTamrmTU9IGzNXTaR46
-         q0HGpN4DgMWaINBUoALs3xrDyvUk2AZALBCiXaUauuFhynMLIfJap5BxawR0/BCbp6Km
-         bS2srerKgYzxVWcr8HI1x1Setr7mRXnGFq5XdCkx23MEV3SC+r5fzQk/a1PF91WHuR5E
-         MefA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694462703; x=1695067503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rhlMLK8WCLZGaMrHreCTIhW1CPUp3+vyJu4Njc0iJm8=;
-        b=cqvXrQdO2D3laQL9DX8NyFhuWNxGUmeD0VQxrB/2/JFJpSJ4bUcNkjITJ/AuF4oN4N
-         DLmKPIb+iebdOVjFxb7rAJgZRVSvHJ7rU8T8h53OjFjVXFqeTgRsVoeN/bmtp2ee5USR
-         XmZR1qd1+ocsKH+781bPUs9RlJpcAI9mCOWRh6Gw/h8oDmdMiZ2o8wsTx4bypuNO1FID
-         J/uNZsVMHN3V/HYskOYOld9wNMNkxzVh5gEJ5GQ94isPtV8HEZ+hXfo2ZkyJjg1SiAsE
-         C3Hnyql6NCb43f3QkXqoMG8mx5qEs/lx+KEdVSIYVdP2Eyy3s+LLKs4X7Ec8OZHZarV+
-         vssg==
-X-Gm-Message-State: AOJu0YxIjYpbPMpoE0ZhewfID+RjlxVPcyZZlyKyupKqslGgeJHm/43P
-        LBkLeYqDzzk7hsVz1qoJ06tIihk4BtkSjn7lLOYce1LU/8EpVXSM7w==
-X-Google-Smtp-Source: AGHT+IHGzHQq2UJBivPZSkdEihaA6buSKaXJziY2+kx8pFy7tor3uBu5RFPf9BRQHI51DwMhlDxBfrlRXXv9mpp0BfE=
-X-Received: by 2002:a0d:c404:0:b0:594:e357:a1f8 with SMTP id
- g4-20020a0dc404000000b00594e357a1f8mr10068624ywd.24.1694462703084; Mon, 11
- Sep 2023 13:05:03 -0700 (PDT)
+        Mon, 11 Sep 2023 20:26:51 -0400
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFE3BFFDE
+        for <linux-security-module@vger.kernel.org>; Mon, 11 Sep 2023 15:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1694473088; bh=UUgz2B5wg4S6yAnMOKzi3AsEIZNsX57mspyGve0DwoE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Vp+gPZMgT9Ow+pQ+Y0+HXEXrEOwEXnMUawgR0K0eDpHTSv8ykl7XGcbZatPPycQgQ633WjlAQUIRlQyg/cEgPzbgcGAsPp+j42oEXvjAFn5pWaGMhUc3gPqlbVDyhSBbM522LLwJEkgbbvvBa7dtdrydp6zDq4dU7NARXQZLd53mtCuI3+GiDZ4dxAyT5SqFIHElaysogg+Q+yQlFO8hdlxVsAu0A2Z0kQWAgJ9QDe+0Gnm6BXhFz4gsmnwQWFgRBLZpRevE+ibevtC6BV0R1vGy2XIF0xZJWINfNq6khlQV4JbEBRgirGyfOl6AqKK/VcnbBUDCFDm+ajKnaxT88w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1694473088; bh=pXwag3G8Zn40pI5eeQb3CTsZyccKYT+OmVzUH8Or2J0=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PRF29ENZBt3kmjwRK71qTDRQpY7Ra4PtsUqOV6OeUzJv82MwKmV8rX8CxUlDdbLx+HnvcRIdUyVaP5dBYAiggs9TzIgUv92RDna9mY1p0AuBKsc08rDI/v3KQAkzKZtWq7U3rOoVtH1Ik+dg4RvFunsCh419TOpiS6GXx4s1mRyhCjZV3EErKC7eK05UqkLrV66LLhpSxWUOoEswmynSyxhSxUkCRPKB0ISh3FMLibstvoFzoRTnSdm4u7oiV9vGWZui27jHPzhPhBeYx0GlVZCT9TKGT91iN3xmdEMvT6dBr9D2j4g1OO9Aqx/83Xz79p93+K4bRDaRk/rnltXnLg==
+X-YMail-OSG: aRg8FcIVM1mwFl4uoud2FulZbKh97FKZ7mx06BUNUySGkRyruapt7sHJLeME0Jy
+ YS.tus7zjnbg6Rsv06vHB8lWxXw6oRiOpSOFM1bd.EJX3gvfkL84Qhi3MgkIj.xD7.71rsfypGB.
+ Q3ewyBCVMJCUX6ESacE5kEIwAWJMXQdaKEdmQJlgNPny4PEWnFnt_KqU5hireTbzOGgPxsev0._5
+ 0HzH8_yuUyGIQWFdXKsEhNZV.MhppAtBcd5V10zFYfVetNo6b3xQE16axxd6RV3jFzCptwO2OnSU
+ uJA7owKGv6aQXETXTkF0nVqRj4.njXZ_APcbctcRrgogrXmWZrUDm.pEWrtWQ9pj88sAY0GHLYQT
+ AC3erXfOB.b2Q8xeQt21GYzXJhNPGxGtKqO5JQmBdq.7mIhtFe9GzMpZo9ROZmmOrdxf_kUC.Gp4
+ tDZAE2LfDrsuLP2rHypbdjQlz9NNstZugVBldrqocFtzhPeox4MWZKk6SriZRh8WWb27YH2.AODg
+ 9HfGVCb1aAcrbkgw8GZxg2kiW9FVPQpWimgn3G5e9PCwuoilSsGHYK6ZHgS3a4puMgrlfKhu0MF8
+ dNjlwUwQIT8pGJg5CHQkoBsVXKDXNxWTwcCctxRZMkTpIBmAIDjl7awOIg__ev8nwEe9dTSTsSqZ
+ xSts.768JzYlGzxtGJQ19q143kmQ6GZhFZcwP.X90m_X8Zsa1OQTF5kPdfeFVjWWKYCHO4q9gq8N
+ 7I9MbAq6mbxFJr2uyGt4Xhyz2TLLOaQrVfEcjR8utdGXJUti2.zSnUFjGM7tK4axBfwa3E5RYZ6h
+ bhV0UurWTY4G53aLzD3iNLlyd.1Td9j_lpUJnLB0_e5OCpmuGm1zIzIHpnBVLRtvUC4ZR4GbqJzm
+ zL6xRZeIQVeXzE6r_ajAh3WYLpBO4ZqjmFmRaCJCEThyBwj7Yz3iN6CCaf1lnXedY6PMAICoSYo6
+ LB4kXJWkE4ZUd3EbZawAsC4aw_zmxXe0YbUCzE94XY.lAQiBWhBoxTH8rmuZXa0wD12CdXkWvqnm
+ idwfu.UzqmnM8kP4__KPZjvk4AXuN374ztu_5PEJLlyGhN2U0qu3c8gWEqqaWxhZZciyoA4Ii479
+ au.P64bZbpLbnrhOBA48CSWhFWZ_e2.ZUZcS6Jsan4ZlCi5EowNz659ydwcBmLFjdQLvjNVOdZqG
+ 9dE1lNrwsYPtDXlOKnAJ5IHcGpSZA8EV71U.C_QX7OKKcA9ndPY5Kt7uNDxhV6Q7Gs2DraIbePV3
+ l7VEC0PNxwR8Ok.JRSg2lEMOvVSPBcdsf74kVgkEB5iAXs3L8gwCJ6gNiQI8NCdcNQlTM8hDpB68
+ p.i5WwkNRiDQBw8ASUMNsrCGbjh8hnD.wCQmr3sBeGyG7UX5_3DNvANloNGjEX2qfbjrrl3n5jzX
+ O6u2O9Kwb2ZWdMLZIBqQEfwNEyOzfz2HoTY98H_CNvQvQkr.s6A0u6QhxWWSFvwA7Dv7iTC6Rw2s
+ XjVYjbzogiDUsxEPoYcucGiyXj1N4n7HKmFBBAniN9I.vRPjxkNJMbXldI_mnXj.JwdHlt1USohg
+ 36nErN2sOH2Z_5ems8X2a5yPKKi_Qr56JDxJ7mW7XlG8oNS6ZvsrGQdhaU9RfXVNaZCcheGS7uGr
+ wsFRWBpo9TZPna7lFil6YYhFmtg0YuYaJTl3cn0g9ujauQL1m_ZqPwzmnUPllhXqSH1tPmmvDhMF
+ aKB9e3YQoCut0bq.JMy3yFqI3Quzp8SaZ2jvSX8dySefQVYbJ3hj6HCEpdQmhPienMqeigcKIqn.
+ lpk2EEXki7ioG.H5l2gWzO121SOO_Qhe5emM33oMSYETm.jtKaTSKjabIqzwTTEuNV.Ow62HS5M1
+ G3m8JAJt4CSMwnrIIuFmDjgE20P1JqnPtx_FlpYMLTvamf7wB28.gBdsopjU_RkuBL89N39BW_61
+ x8u7JMemM_bs3aVc4l8ELvPi7QKNyTcrkiMH5ANLYdFFGXST.uX.FYbxdIHm42PvfdoLgr_e.Xrf
+ em1AXkHdtFGjvXHsbjyS75LgDdta5OVE.5m6EmuTmN10BrjMRcWIVdkbUalXQ_MmppX_2Y_.4l.t
+ h7DlckOznnLf9NjKc7UZ.06tu5BqHHKUYLxjkejyBHQFje4W9kG._xLOkXg2CO0AJqyQPY4jZNqy
+ W6ND4JL652redG5o_5eXWw0AeiBQy7cOZSL9geK.tEmyvXsefNQGZHhXlg07WlC74M47jy8fiTXq
+ SxHZ5kPonod29nyebaL.OkkD1Tc94488MEV9eyn5KrUSsxg.8w.ZNif6Q3zmK1KZBXACX1_XKfyb
+ Q6Qnv2w0-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: cdda92d8-d76e-4d8b-8667-c1b92d795c98
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Mon, 11 Sep 2023 22:58:08 +0000
+Received: by hermes--production-bf1-865889d799-5m62n (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8d3f1abcca143a9e2bba0e3e7669e2ea;
+          Mon, 11 Sep 2023 22:08:52 +0000 (UTC)
+Message-ID: <ebd82727-cc8e-d922-972b-ebd2cc47f1ee@schaufler-ca.com>
+Date:   Mon, 11 Sep 2023 15:08:48 -0700
 MIME-Version: 1.0
-References: <CAHC9VhRsxARUsFcJC-5zp9pX8LWbKQLE4vW+S6n-PMG5XJZtDA@mail.gmail.com>
- <4708afda-8867-735a-2f55-ca974e76cc9c@schaufler-ca.com> <CAHC9VhTepATGki_8_nyUcmCCvJ2hpLO4bWFhF-gJ3CQceEBMfA@mail.gmail.com>
- <CAHC9VhQ9EfH5sb85+uwyB726iDNR47k=sfr0zBCENz=-PerR9A@mail.gmail.com>
- <CAHC9VhQhf+ik5S_aJOVn59pax1Aa0vO5gJ4YoxrtGRKtoWh7sA@mail.gmail.com> <f8f32da5-6f31-d197-7405-8f308bd29228@I-love.SAKURA.ne.jp>
-In-Reply-To: <f8f32da5-6f31-d197-7405-8f308bd29228@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 11 Sep 2023 16:04:52 -0400
-Message-ID: <CAHC9VhTktg4RFWw+rSZ6wWQ8iR3n2p8XaOO95BbJ1QGAd4y9fg@mail.gmail.com>
-Subject: Re: ANN: new LSM guidelines
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v14 04/11] LSM: syscalls for current process attributes
+Content-Language: en-US
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Cc:     paul@paul-moore.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20230828195802.135055-1-casey@schaufler-ca.com>
+ <20230828195802.135055-5-casey@schaufler-ca.com>
+ <20230907.go2eLeCo6ov1@digikod.net>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20230907.go2eLeCo6ov1@digikod.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.21797 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Sep 8, 2023 at 8:46=E2=80=AFPM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2023/08/03 7:00, Paul Moore wrote:
-> > * The new LSM must be sufficiently unique to justify the additional wor=
-k
-> > involved in reviewing, maintaining, and supporting the LSM.  It is reas=
-onable
-> > for there to be a level of overlap between LSMs, but either the securit=
-y model
-> > or the admin/user experience must be significantly unique.
+On 9/7/2023 8:37 AM, Mickaël Salaün wrote:
+> On Mon, Aug 28, 2023 at 12:57:54PM -0700, Casey Schaufler wrote:
+>> Create a system call lsm_get_self_attr() to provide the security
+>> module maintained attributes of the current process.
+>> Create a system call lsm_set_self_attr() to set a security
+>> module maintained attribute of the current process.
+>> Historically these attributes have been exposed to user space via
+>> entries in procfs under /proc/self/attr.
+>>
+>> The attribute value is provided in a lsm_ctx structure. The structure
+>> identifies the size of the attribute, and the attribute value. The format
+>> of the attribute value is defined by the security module. A flags field
+>> is included for LSM specific information. It is currently unused and must
+>> be 0. The total size of the data, including the lsm_ctx structure and any
+>> padding, is maintained as well.
+>>
+>> struct lsm_ctx {
+>>         __u64 id;
+>>         __u64 flags;
+>>         __u64 len;
+>>         __u64 ctx_len;
+>>         __u8 ctx[];
+>> };
+>>
+>> Two new LSM hooks are used to interface with the LSMs.
+>> security_getselfattr() collects the lsm_ctx values from the
+>> LSMs that support the hook, accounting for space requirements.
+>> security_setselfattr() identifies which LSM the attribute is
+>> intended for and passes it along.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>> Reviewed-by: Serge Hallyn <serge@hallyn.com>
+>> Reviewed-by: John Johansen <john.johansen@canonical.com>
+>> ---
+>>  Documentation/userspace-api/lsm.rst |  70 +++++++++++++
+>>  include/linux/lsm_hook_defs.h       |   4 +
+>>  include/linux/lsm_hooks.h           |   1 +
+>>  include/linux/security.h            |  19 ++++
+>>  include/linux/syscalls.h            |   5 +
+>>  include/uapi/linux/lsm.h            |  36 +++++++
+>>  kernel/sys_ni.c                     |   2 +
+>>  security/Makefile                   |   1 +
+>>  security/lsm_syscalls.c             |  57 +++++++++++
+>>  security/security.c                 | 146 ++++++++++++++++++++++++++++
+>>  10 files changed, 341 insertions(+)
+>>  create mode 100644 Documentation/userspace-api/lsm.rst
+>>  create mode 100644 security/lsm_syscalls.c
+>>
+>> +/**
+>> + * security_getselfattr - Read an LSM attribute of the current process.
+>> + * @attr: which attribute to return
+>> + * @uctx: the user-space destination for the information, or NULL
+>> + * @size: pointer to the size of space available to receive the data
+>> + * @flags: special handling options. LSM_FLAG_SINGLE indicates that only
+>> + * attributes associated with the LSM identified in the passed @ctx be
+>> + * reported.
+>> + *
+>> + * A NULL value for @uctx can be used to get both the number of attributes
+>> + * and the size of the data.
+>> + *
+>> + * Returns the number of attributes found on success, negative value
+>> + * on error. @size is reset to the total size of the data.
+>> + * If @size is insufficient to contain the data -E2BIG is returned.
+>> + */
+>> +int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>> +			 size_t __user *size, u32 flags)
+>> +{
+>> +	struct security_hook_list *hp;
+>> +	struct lsm_ctx lctx = { .id = LSM_ID_UNDEF, };
+>> +	u8 __user *base = (u8 __user *)uctx;
+>> +	size_t total = 0;
+>> +	size_t entrysize;
+>> +	size_t left;
+>> +	bool toobig = false;
+>> +	bool single = false;
+> Much easier to read with these booleans.
 >
-> s/work/burden/ ?
+>> +	int count = 0;
+>> +	int rc;
+>> +
+>> +	if (attr == LSM_ATTR_UNDEF)
+>> +		return -EINVAL;
+>> +	if (size == NULL)
+>> +		return -EINVAL;
+>> +	if (get_user(left, size))
+>> +		return -EFAULT;
+>> +
+>> +	if (flags) {
+>> +		/*
+>> +		 * Only flag supported is LSM_FLAG_SINGLE
+>> +		 */
+>> +		if (flags & LSM_FLAG_SINGLE)
+>> +			return -EINVAL;
+>> +		if (uctx &&
+>> +		    copy_struct_from_user(&lctx, sizeof(lctx), uctx, left))
+> Again, I'm not sure is copy_struct_from_user() should be used here
+> because it checks that the user space structures ends with zeros, which
+> is inconsistent with the case without LSM_FLAG_SINGLE. Anyway, this code
+> should at least properly handle the copy_struct_from_user() error codes
+> which includes EFAULT *and* E2BIG.
 
-Possibly, although I think I prefer "work" here since it has a more
-positive connotation than "burden".
+Further testing makes your point. The checking in copy_struct_from_user()
+is really annoying. I'm going to fix this.
 
-> > * Any userspace tools or patches created in support of the LSM must be =
-publicly
-> > available, with a public git repository preferable over a tarball snaps=
-hot.
 >
-> What is the definition of "publicly" here? Everyone can download related =
-resources
-> including the source code etc. anonymously (e.g. without asking for creat=
-ing user
-> account and/or buying subscriptions ) ?
+>> +			return -EFAULT;
+>> +		/*
+>> +		 * If the LSM ID isn't specified it is an error.
+>> +		 */
+>> +		if (lctx.id == LSM_ID_UNDEF)
+>> +			return -EINVAL;
+>> +		single = true;
+>> +	}
+>> +
+>> +	/*
+>> +	 * In the usual case gather all the data from the LSMs.
+>> +	 * In the single case only get the data from the LSM specified.
+>> +	 */
+>> +	hlist_for_each_entry(hp, &security_hook_heads.getselfattr, list) {
+>> +		if (single) {
+>> +			if (count > 0)
+>> +				break;
+>> +			if (lctx.id != hp->lsmid->id)
+>> +				continue;
+>> +		}
+>> +		entrysize = left;
+>> +		if (base)
+>> +			uctx = (struct lsm_ctx __user *)(base + total);
+>> +		rc = hp->hook.getselfattr(attr, uctx, &entrysize, flags);
+>> +		if (rc == -EOPNOTSUPP) {
+>> +			rc = 0;
+> Not a big deal but with LSM_FLAG_SINGLE, if the selected LSM doesn't
+> implement this hook, this will uselessly loop over all LSMs.
+> I'd add:
+>
+> if (single)
+> 	/* Still try to write 0 as the total size for consistency. */
+> 	break;
 
-I agree with Serge that you bring up a very good point, and I think
-the requirement of being able to download and use the tools without
-requiring a account, subscription, etc. is a good one.
+I'm trying to keep LSM_FLAG_SINGLE from being a complete special case.
+Asking for an attribute that the specified LSM doesn't support is a
+programming error, so I'm not concerned about a trivial performance
+issue.
 
-I've replaced that guideline with the following:
+>
+>> +			continue;
+>> +		}
+>> +		if (rc == -E2BIG) {
+>> +			toobig = true;
+>> +			left = 0;
+>> +			total += entrysize;
+> I'm not sure what is the desired behavior with LSM_FLAG_SINGLE in this
+> case but I'd add:
+>
+> if (single)
+> 	break;
 
-"If new userspace tools, or patches to existing tools, are necessary to
-configure, operate, or otherwise manage the LSM, these tools or patches mus=
-t
-be publicly available without download restrictions requiring accounts,
-subscriptions, etc.  Maintaining these tools or patches in a public git
-repository is preferable over tarball snapshots."
+I'm shifting the control logic a bit. I think it'll look cleaner.
 
-I made a similar edit to the test suite guidelines:
+>
+>> +			continue;
+>> +		}
+>> +		if (rc < 0)
+>> +			return rc;
+> I think this should be a break instead of the return rc for consistency
+> reasons.
 
-"New LSMs must be accompanied by a test suite to verify basic functionality
-and help identify regressions.  The test suite must be publicly available
-without download restrictions requiring accounts, subscriptions, etc.  Test
-coverage does not need to reach a specific percentage, but core functionali=
-ty
-and any user interfaces should be well covered by the test suite.  Maintain=
-ing
-the test suite in a public git repository is preferable over tarball snapsh=
-ots.
-Integrating the test suite with existing automated Linux kernel testing
-services is encouraged."
+No one has ever accused me of being consistent. I believe in using
+return aggressively.
 
-What do you think?
+>
+>> +
+>> +		left -= entrysize;
+>> +		total += entrysize;
+>> +		count += rc;
+> You could simplify a bit by replacing the first single check with this
+> one:
+>
+> if (single)
+> 	break;
 
-> If one of userspace tools designed for the new LSM depends on the LSM ID,=
- when can
-> the author of the new LSM obtain the stable LSM ID for that LSM ?
+As above, I think I'm making this clearer in v15.
 
-A permanent LSM ID is assigned to LSMs when they are merged into the
-upstream LSM tree.  This is no different than any other kernel defined
-macro constant, enum, magic number, etc. that is shared between kernel
-and userspace and is considered part of the kernel's API.
+>
+>> +	}
+>> +	if (put_user(total, size))
+>> +		return -EFAULT;
+>> +	if (toobig)
+>> +		return -E2BIG;
+>> +	if (count == 0)
+>> +		return LSM_RET_DEFAULT(getselfattr);
+>> +	return count;
+>> +}
+>> +
+> It would be nice to add a comment before all these three syscall
+> documentations to keep up-to-date the related user space documentation
+> in lsm_syscalls.c
 
-LSM developers creating userspace tooling that makes use of the LSM ID
-numbers should use the macro name and not the number, this should
-allow the tooling to support the permanent LSM ID with a simple
-recompile.
+Good thinking.
 
-I understand you are opposed to the numeric LSM ID as part of the
-kernel's API, but I believe this is both the correct way forward, and
-consistent with other kernel APIs.  It is your right to disagree, but
-I have yet to see a reason to revisit this decision and respectfully
-request that you accept this and refrain from revisiting this argument
-unless you have new information which would warrant a new discussion.
+>
+>> +/**
+>> + * security_setselfattr - Set an LSM attribute on the current process.
+>> + * @attr: which attribute to set
+>> + * @uctx: the user-space source for the information
+>> + * @size: the size of the data
+>> + * @flags: reserved for future use, must be 0
+>> + *
+>> + * Set an LSM attribute for the current process. The LSM, attribute
+>> + * and new value are included in @uctx.
+>> + *
+>> + * Returns 0 on success, -EINVAL if the input is inconsistent, -EFAULT
+>> + * if the user buffer is inaccessible or an LSM specific failure.
+>> + */
+>> +int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>> +			 size_t size, u32 flags)
+>> +{
+>> +	struct security_hook_list *hp;
+>> +	struct lsm_ctx *lctx;
+>> +	int rc = LSM_RET_DEFAULT(setselfattr);
+>> +
+>> +	if (flags)
+>> +		return -EINVAL;
+>> +	if (size < sizeof(*lctx) || size > PAGE_SIZE)
+> I would be better to return -E2BIG if size > PAGE_SIZE, and update the
+> (two) documentations accordingly.
+>
+>> +		return -EINVAL;
+>> +
+>> +	lctx = kmalloc(size, GFP_KERNEL);
+>> +	if (lctx == NULL)
+>> +		return -ENOMEM;
+>> +
+>> +	if (copy_from_user(lctx, uctx, size)) {
+>> +		rc = -EFAULT;
+>> +		goto free_out;
+>> +	}
+>> +
+>> +	if (size < lctx->len || size < lctx->ctx_len + sizeof(*lctx) ||
+>> +	    lctx->len < lctx->ctx_len + sizeof(*lctx)) {
+>> +		rc = -EINVAL;
+>> +		goto free_out;
+>> +	}
+>> +
+>> +	hlist_for_each_entry(hp, &security_hook_heads.setselfattr, list)
+>> +		if ((hp->lsmid->id) == lctx->id) {
+>> +			rc = hp->hook.setselfattr(attr, lctx, size, flags);
+> There is no need (at least for now) to directly expose lctx->id nor
+> lctx->flags. It would be simpler to only pass lctx->ctx and
+> lctx->ctx_len to the hooks.
 
---=20
-paul-moore.com
+No. Absolutely not. I dislike passing string/length pairs, especially when
+they are both contained in a structure.
+
+>
+>> +			break;
+>> +		}
+>> +
+>> +free_out:
+>> +	kfree(lctx);
+>> +	return rc;
+>> +}
+>> +
+>>  /**
+>>   * security_getprocattr() - Read an attribute for a task
+>>   * @p: the task
+>> -- 
+>> 2.41.0
+>>
