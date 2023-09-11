@@ -2,22 +2,22 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D7D79C116
-	for <lists+linux-security-module@lfdr.de>; Tue, 12 Sep 2023 02:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBDA79C10C
+	for <lists+linux-security-module@lfdr.de>; Tue, 12 Sep 2023 02:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjILA06 (ORCPT
+        id S229791AbjILADC (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 11 Sep 2023 20:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        Mon, 11 Sep 2023 20:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjILA0v (ORCPT
+        with ESMTP id S230355AbjILAC7 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 11 Sep 2023 20:26:51 -0400
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFE3BFFDE
-        for <linux-security-module@vger.kernel.org>; Mon, 11 Sep 2023 15:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1694473088; bh=UUgz2B5wg4S6yAnMOKzi3AsEIZNsX57mspyGve0DwoE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Vp+gPZMgT9Ow+pQ+Y0+HXEXrEOwEXnMUawgR0K0eDpHTSv8ykl7XGcbZatPPycQgQ633WjlAQUIRlQyg/cEgPzbgcGAsPp+j42oEXvjAFn5pWaGMhUc3gPqlbVDyhSBbM522LLwJEkgbbvvBa7dtdrydp6zDq4dU7NARXQZLd53mtCuI3+GiDZ4dxAyT5SqFIHElaysogg+Q+yQlFO8hdlxVsAu0A2Z0kQWAgJ9QDe+0Gnm6BXhFz4gsmnwQWFgRBLZpRevE+ibevtC6BV0R1vGy2XIF0xZJWINfNq6khlQV4JbEBRgirGyfOl6AqKK/VcnbBUDCFDm+ajKnaxT88w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1694473088; bh=pXwag3G8Zn40pI5eeQb3CTsZyccKYT+OmVzUH8Or2J0=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PRF29ENZBt3kmjwRK71qTDRQpY7Ra4PtsUqOV6OeUzJv82MwKmV8rX8CxUlDdbLx+HnvcRIdUyVaP5dBYAiggs9TzIgUv92RDna9mY1p0AuBKsc08rDI/v3KQAkzKZtWq7U3rOoVtH1Ik+dg4RvFunsCh419TOpiS6GXx4s1mRyhCjZV3EErKC7eK05UqkLrV66LLhpSxWUOoEswmynSyxhSxUkCRPKB0ISh3FMLibstvoFzoRTnSdm4u7oiV9vGWZui27jHPzhPhBeYx0GlVZCT9TKGT91iN3xmdEMvT6dBr9D2j4g1OO9Aqx/83Xz79p93+K4bRDaRk/rnltXnLg==
+        Mon, 11 Sep 2023 20:02:59 -0400
+Received: from sonic315-27.consmr.mail.ne1.yahoo.com (sonic315-27.consmr.mail.ne1.yahoo.com [66.163.190.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BD7C6F6
+        for <linux-security-module@vger.kernel.org>; Mon, 11 Sep 2023 16:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1694476386; bh=UUgz2B5wg4S6yAnMOKzi3AsEIZNsX57mspyGve0DwoE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=GICTxrInk2ppEtyAzB3GmQXpQG4AOl/1B5sRPrrHUcyJPng0y2NSIZCo+pttf7s4CvlhDixjxaUxs7i7vRgtk5NmpQdfkGsnbOTU3/DrmOznMft7/7WXz0AXHzfrbzfxGhYzlkFqqx+6miUfCW+acXX4b6lok5i932j3SBTadecyc2VFK55XPpIDWIAmVmXCa1VeKxjJzOWjYCTFy2GOTd6UHbEBufOHojLAS2wfrGzKBX3H9jDLA5mhWPiTdvVvogeDQVk52pNmwGx7ZD6ZBiE9NV9bsx96yN4wX4gM1BTaSp27ZpTJxVf+lqy4xkRfatAHKhKcD5QVGONe8DDcjg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1694476386; bh=Kdfv4Ad1fTv+uS229VPyxqo5bmhRW61/0IhpR/bWbag=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=J9XvJI2H1wUvnLjussU8O7HYCPDzMQIoRhgstFKJmJojtIWDCBTV3QRc+nkLfkZtOfnCfbSBilebHmMtYVJNOtW/CFmvZS5XHE8X1frCJd5wnQPvQX0VYLc4wFGbxD2cWdO24PuSoN3oz03BAIxKPObRhs7dyRVjABreJz6aUO8gXNUEa7xNzyHjP9yQtkecQ41NYoTCJ9v1jpeG72DNTQDe87yfKpxkeCAs4H5EmEuVCNDp04t/ydBtvN9gZlX92TDmrD2pcrrK0trLH7fgHGg6opQQhnWtDKarrpZOHacEGVPBVir1fgQzMq1yJaqkv+r186qM6d+DWq8VrAV2+g==
 X-YMail-OSG: aRg8FcIVM1mwFl4uoud2FulZbKh97FKZ7mx06BUNUySGkRyruapt7sHJLeME0Jy
  YS.tus7zjnbg6Rsv06vHB8lWxXw6oRiOpSOFM1bd.EJX3gvfkL84Qhi3MgkIj.xD7.71rsfypGB.
  Q3ewyBCVMJCUX6ESacE5kEIwAWJMXQdaKEdmQJlgNPny4PEWnFnt_KqU5hireTbzOGgPxsev0._5
@@ -52,7 +52,7 @@ X-YMail-OSG: aRg8FcIVM1mwFl4uoud2FulZbKh97FKZ7mx06BUNUySGkRyruapt7sHJLeME0Jy
  Q6Qnv2w0-
 X-Sonic-MF: <casey@schaufler-ca.com>
 X-Sonic-ID: cdda92d8-d76e-4d8b-8667-c1b92d795c98
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Mon, 11 Sep 2023 22:58:08 +0000
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Mon, 11 Sep 2023 23:53:06 +0000
 Received: by hermes--production-bf1-865889d799-5m62n (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8d3f1abcca143a9e2bba0e3e7669e2ea;
           Mon, 11 Sep 2023 22:08:52 +0000 (UTC)
 Message-ID: <ebd82727-cc8e-d922-972b-ebd2cc47f1ee@schaufler-ca.com>
@@ -77,9 +77,8 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Mailer: WebService/1.1.21797 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
