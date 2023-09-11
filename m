@@ -2,196 +2,117 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59C379B0EB
-	for <lists+linux-security-module@lfdr.de>; Tue, 12 Sep 2023 01:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4E179AD02
+	for <lists+linux-security-module@lfdr.de>; Tue, 12 Sep 2023 01:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357877AbjIKWGm (ORCPT
+        id S1357856AbjIKWGi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 11 Sep 2023 18:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        Mon, 11 Sep 2023 18:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236310AbjIKKNe (ORCPT
+        with ESMTP id S236526AbjIKKu3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 11 Sep 2023 06:13:34 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B413EE5F;
-        Mon, 11 Sep 2023 03:13:28 -0700 (PDT)
-Received: from lhrpeml500004.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RkjDj4R36z6HJpM;
-        Mon, 11 Sep 2023 18:11:49 +0800 (CST)
-Received: from [10.123.123.126] (10.123.123.126) by
- lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Mon, 11 Sep 2023 11:13:25 +0100
-Message-ID: <239800f3-baf4-1c7d-047f-8ba90b097bee@huawei.com>
-Date:   Mon, 11 Sep 2023 13:13:24 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v11.1] selftests/landlock: Add 11 new test suites
- dedicated to network
-Content-Language: ru
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Paul Moore <paul@paul-moore.com>
-CC:     <artem.kuzin@huawei.com>, <gnoack3000@gmail.com>,
-        <willemdebruijn.kernel@gmail.com>, <yusongping@huawei.com>,
-        <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <netfilter-devel@vger.kernel.org>
-References: <20230515161339.631577-11-konstantin.meskhidze@huawei.com>
- <20230706145543.1284007-1-mic@digikod.net>
- <3db64cf8-6a45-a361-aa57-9bfbaf866ef8@digikod.net>
- <b2a94da1-f9df-b684-7666-1c63060f68f1@huawei.com>
- <20230817.koh5see0eaLa@digikod.net>
-From:   "Konstantin Meskhidze (A)" <konstantin.meskhidze@huawei.com>
-In-Reply-To: <20230817.koh5see0eaLa@digikod.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.123.123.126]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500004.china.huawei.com (7.191.163.9)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        Mon, 11 Sep 2023 06:50:29 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11675E9;
+        Mon, 11 Sep 2023 03:50:25 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD08AC433C9;
+        Mon, 11 Sep 2023 10:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694429424;
+        bh=5eCOHpwInPjQA6NxPDr5kZtgwrG8Hy+L9RSiIjoYzXQ=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=I63fO3Oped5CcoSGIlghzn65dDLDS3AgXMOjiToNZvSUdrhpid8dA2fwnZ3L0uvuQ
+         vRO43uNZPPKAjLBYaxKuEpPRCi/DBPQ5JahZ+/xplfXgFn+m6+K1DVaoMVszFQn7e3
+         c/7ShNyPjBTDlCTah8S2O9CnI6mNmrRR5K25WKyBtu4HXfsGlCg1Nmd2cAEeAGJtqk
+         +Xaszsx6GIBzt4dpxcFYC1VW/aJEKgOxHSFW2mvoY/oVjBtFiZDYuvh56WBy8I8ZL6
+         aLRIobdGSMWYlt8ZweMRDuHBYUhcsbpwXJ23mEyEwkNhh06xFKUyD5SbyXxtBFA6QG
+         oJalfh9jeUlHA==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 11 Sep 2023 13:50:18 +0300
+Message-Id: <CVG13KLCIT1X.1MQT6HYAYFRAU@suppilovahvero>
+Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-nfs@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <keyrings@vger.kernel.org>, <selinux@vger.kernel.org>,
+        "Roberto Sassu" <roberto.sassu@huawei.com>,
+        "Stefan Berger" <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v2 11/25] security: Align inode_setattr hook definition
+ with EVM
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Casey Schaufler" <casey@schaufler-ca.com>,
+        "Roberto Sassu" <roberto.sassu@huaweicloud.com>,
+        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+        <chuck.lever@oracle.com>, <jlayton@kernel.org>, <neilb@suse.de>,
+        <kolga@netapp.com>, <Dai.Ngo@oracle.com>, <tom@talpey.com>,
+        <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <dhowells@redhat.com>, <stephen.smalley.work@gmail.com>,
+        <eparis@parisplace.org>
+X-Mailer: aerc 0.14.0
+References: <20230831104136.903180-1-roberto.sassu@huaweicloud.com>
+ <20230831104136.903180-12-roberto.sassu@huaweicloud.com>
+ <CVAFV92MONCH.257Y9YQ3OEU4B@suppilovahvero>
+ <19943e35-2e7c-d27a-1a5d-189eea439dfd@schaufler-ca.com>
+In-Reply-To: <19943e35-2e7c-d27a-1a5d-189eea439dfd@schaufler-ca.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Tue Sep 5, 2023 at 6:56 PM EEST, Casey Schaufler wrote:
+> On 9/4/2023 2:08 PM, Jarkko Sakkinen wrote:
+> > On Thu Aug 31, 2023 at 1:41 PM EEST, Roberto Sassu wrote:
+> >> From: Roberto Sassu <roberto.sassu@huawei.com>
+> >>
+> >> Add the idmap parameter to the definition, so that evm_inode_setattr()=
+ can
+> >> be registered as this hook implementation.
+> >>
+> >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> >> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> >> Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+> >> ---
+> >>  include/linux/lsm_hook_defs.h | 3 ++-
+> >>  security/security.c           | 2 +-
+> >>  security/selinux/hooks.c      | 3 ++-
+> >>  security/smack/smack_lsm.c    | 4 +++-
+> >>  4 files changed, 8 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_de=
+fs.h
+> >> index 4bdddb52a8fe..fdf075a6b1bb 100644
+> >> --- a/include/linux/lsm_hook_defs.h
+> >> +++ b/include/linux/lsm_hook_defs.h
+> >> @@ -134,7 +134,8 @@ LSM_HOOK(int, 0, inode_readlink, struct dentry *de=
+ntry)
+> >>  LSM_HOOK(int, 0, inode_follow_link, struct dentry *dentry, struct ino=
+de *inode,
+> >>  	 bool rcu)
+> >>  LSM_HOOK(int, 0, inode_permission, struct inode *inode, int mask)
+> >> -LSM_HOOK(int, 0, inode_setattr, struct dentry *dentry, struct iattr *=
+attr)
+> >> +LSM_HOOK(int, 0, inode_setattr, struct mnt_idmap *idmap, struct dentr=
+y *dentry,
+> >> +	 struct iattr *attr)
+> > LSM_HOOK(int, 0, inode_setattr, struct mnt_idmap *idmap, struct dentry =
+*dentry, struct iattr *attr)
+> >
+> > Only 99 characters, i.e. breaking into two lines is not necessary.
+>
+> We're keeping the LSM code in the ancient 80 character format.
+> Until we get some fresh, young maintainers involved who can convince
+> us that line wrapped 80 character terminals are kewl we're sticking
+> with what we know.
+>
+> 	https://lwn.net/Articles/822168/
 
+Pretty artificial counter-example tbh :-) Even with Rust people tend to
+stick one character variable names for trivial integer indices.
 
-8/17/2023 6:08 PM, Mickaël Salaün пишет:
-> On Sat, Aug 12, 2023 at 05:37:00PM +0300, Konstantin Meskhidze (A) wrote:
->> 
->> 
->> 7/12/2023 10:02 AM, Mickaël Salaün пишет:
->> > 
->> > On 06/07/2023 16:55, Mickaël Salaün wrote:
->> > > From: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
->> > > 
->> > > This patch is a revamp of the v11 tests [1] with new tests (see the
->> > > "Changes since v11" description).  I (Mickaël) only added the following
->> > > todo list and the "Changes since v11" sections in this commit message.
->> > > I think this patch is good but it would appreciate reviews.
->> > > You can find the diff of my changes here but it is not really readable:
->> > > https://git.kernel.org/mic/c/78edf722fba5 (landlock-net-v11 branch)
->> > > [1] https://lore.kernel.org/all/20230515161339.631577-11-konstantin.meskhidze@huawei.com/
->> > > TODO:
->> > > - Rename all "net_service" to "net_port".
->> > > - Fix the two kernel bugs found with the new tests.
->> > > - Update this commit message with a small description of all tests.
->> > 
->> > [...]
-> 
->> > We should also add a test to make sure errno is the same with and
->> > without sandboxing when using port 0 for connect and consistent with
->> > bind (using an available port). The test fixture and variants should be
->> > quite similar to the "ipv4" ones, but we can also add AF_INET6 variants,
->> > which will result in 8 "ip" variants:
->> > 
->> > TEST_F(ip, port_zero)
->> > {
->> > 	if (variant->sandbox == TCP_SANDBOX) {
->> > 		/* Denies any connect and bind. */
->> > 	}
->> > 	/* Checks errno for port 0. */
->> > }
->> As I understand the would be the next test cases:
->> 
->> 	1. ip4, sandboxed, bind port 0 -> should return EACCES (denied by
->> landlock).
-> 
-> Without any allowed port, yes. This test case is useful.
-> 
-> By tuning /proc/sys/net/ipv4/ip_local_port_range (see
-> inet_csk_find_open_port call) we should be able to pick a specific
-> allowed port and test it.  We can also test for the EADDRINUSE error to
-> make sure error ordering is correct (compared with -EACCES).
-   Sorry, did not get this case. Could please explain it with more details?
-> 
-> However, I think the current LSM API don't enable to infer this random
-> port because the LSM hook is called before a port is picked.  If this is
-> correct, the best way to control port binding would be to always deny
-> binding on port zero/random (when restricting port binding, whatever
-> exception rules are in place). This explanation should be part of a
-> comment for this specific exception.
-
-   Yep, if some LSM rule (for bind) has been applied a with specific 
-port, other attemps to bind with zero/random ports would be refused by 
-LSM security checks.
-> 
-> Cc Paul
-> 
->> 	2. ip4, non-sandboxed, bind port 0 -> should return 0 (should be bounded to
->> random port).
-> 
-> I think so but we need to make sure the random port cannot be < 1024, I
-> guess with /proc/sys/net/ipv4/ip_local_port_range but I don't know for
-> IPv6.
-
-   For ipv4 when connecting to a server a client binds to a random port 
-within /proc/sys/net/ipv4/ip_local_port_range, by default one my machine
-this range is: cat /proc/sys/net/ipv4/ip_local_port_range
-32768   60999.
-But for ipv6 there is no such tuning range.
-
-> 
->> 	3. ip6, sandboxed, bind port 0 -> should return EACCES (denied by
->> landlock).
->> 	4. ip6, non-sandboxed, bind port 0 -> should return 0 (should be bounded to
->> random port).
->> 	5. ip4, sandboxed, bind some available port, connect port 0 -> should
->> return -EACCES (denied by landlock).
-> 
-> Yes, but don't need to bind to anything (same for the next ones).
-> 
->> 	6. ip4, non-sandboxed, bind some available port, connect port 0 -> should
->> return ECONNREFUSED.
-> 
-> Yes, but without any binding.
-> 
->> 	7. ip6, sandboxed, bind some available port, connect port 0 -> should
->> return -EACCES (denied by landlock)
->> 	8. ip6, non-sandboxed, some bind available port, connect port 0 -> should
->> return ECONNREFUSED.
->> 
->> Correct?
-> 
-> Thinking more about this case, being able to add a rule with port zero
-> *for a connect action* looks legitimate.  A rule with both connect and
-> bind actions on port zero should then be denied.  We should fix
-> add_rule_net_service() and test that (with a first layer allowing port
-> zero, and a second without rule, for connect).
-
-  So with first rule allowing port 0 connect action, the second rule 
-with some another port and connect action, as a result test should allow 
-that. Correct?
-> 
-> 
->> 
->> > 
->> > [...]
->> > 
->> > > +FIXTURE(inet)
->> > > +{
->> > > +	struct service_fixture srv0, srv1;
->> > > +};
->> > 
->> > The "inet" variants are useless and should be removed. The "inet"
->> > fixture can then be renamed to "ipv4_tcp".
->> > 
->>   So inet should be changed to ipv4_tcp and ipv6_tcp with next variants:
->> 
->>   - ipv4_tcp.no_sandbox_with_ipv4.port_endianness
->>   - ipv4_tcp.sandbox_with_ipv4.port_endianness
->>   - ipv6_tcp.no_sandbox_with_ipv6.port_endianness
->>   - ipv6_tcp.sandbox_with_ipv6.port_endianness
->> ????
->> 
->>    in this case we need double copy of TEST_F(inet, port_endianness) :
->> 	TEST_F(ipv4_tcp, port_endianness)
->> 	TEST_F(ipv6_tcp, port_endianness)
-> 
-> There is no need for any variant for the port_endianness test. You can
-> rename "inet" to "ipv4_tcp" (and not "inet_tcp" like I said before).
-> .
+BR, Jarkko
