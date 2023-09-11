@@ -2,268 +2,196 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEB7799A8B
-	for <lists+linux-security-module@lfdr.de>; Sat,  9 Sep 2023 21:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59C379B0EB
+	for <lists+linux-security-module@lfdr.de>; Tue, 12 Sep 2023 01:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238223AbjIITTr (ORCPT
+        id S1357877AbjIKWGm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 9 Sep 2023 15:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        Mon, 11 Sep 2023 18:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjIITTr (ORCPT
+        with ESMTP id S236310AbjIKKNe (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 9 Sep 2023 15:19:47 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14471AA;
-        Sat,  9 Sep 2023 12:19:42 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-52683da3f5cso4034788a12.3;
-        Sat, 09 Sep 2023 12:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694287181; x=1694891981; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VCiyyGxHUfWj2a16BGYodmWe931Hll8Cz0TSaFHH9lw=;
-        b=pcYcBHUa1ZOeFmlvLlLGJe32hsdS5pUtSTW99rbNWnuZzY8FRhIACbOrQ3jDEqEJO1
-         LR3gooP4tu9T+376zemeTE3CruhYYF5eNmQ6bQ61rA2gH1ydYqB9BBDuMAdQ9BfNzzJS
-         mWi308RskTk7WEqT3lVw2sCnA3VY1Es38vjfpoRzHF47b4T2M4TSZzCmmQNvvdh5bmnc
-         5Z/lnFgjLwEXbwZAlerztiCz1cEVkMzX0NicB4DFw7fH1xYQsIAML5UXzak9kgz0N2bM
-         efgOwWpvNQXQhlBbm7f8mJxosOBXR4C7If0sxWmxAWne3cq9qqd9FWNyU9SCarWHCDhg
-         l4iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694287181; x=1694891981;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VCiyyGxHUfWj2a16BGYodmWe931Hll8Cz0TSaFHH9lw=;
-        b=bfITykF9cW0Tts9bw1t7nEkUIO6VHPByxjsBP9mp8wqxXYxuWGIUnzqiqPpoARS6B4
-         beM+RpZWMWkYGuCScmVYpM0fftR05Oe3PUrAEB+a4vVxyj+XKQlUal/F18dEkvlgDA1p
-         Khpgzw0GBT2fT/NYME2wtQKwkiBXVGVqgjPMNwX/opKpcPqU8M5hGBK9otuBVDfIBR+l
-         vl7MvXR6voHxFYMz3GQItcwq+Gd/+jQF/GuIhF+D2oDeg4Y7rUxRX/2ytE1pmtTa49k7
-         232Ko8Vp+cIqexfZjZCVYZ3a6ZVNnn0L92dlrr98IAt/2djBz3d+byrIUy1I7Do1P0bL
-         J/YQ==
-X-Gm-Message-State: AOJu0YyPKSN9Km+p6+I2yyYwnpl4eQKVoVe4Ln/J4QtxzQgdMdkTqTMe
-        gMljZ6shp7vFgT1O2xlIb6Jam5HeqVE=
-X-Google-Smtp-Source: AGHT+IEQnfQJXsZfD5l3eTHMFXEnf/LuX1aOWRKHKb0YO9vboO3g/ow1Ng2yjIbywfhnwipFXttfcA==
-X-Received: by 2002:a05:6402:493:b0:523:100b:462b with SMTP id k19-20020a056402049300b00523100b462bmr5019955edv.5.1694287181004;
-        Sat, 09 Sep 2023 12:19:41 -0700 (PDT)
-Received: from f.. (cst-prg-30-5.cust.vodafone.cz. [46.135.30.5])
-        by smtp.gmail.com with ESMTPSA id d4-20020aa7d5c4000000b0052544bca116sm2482314eds.13.2023.09.09.12.19.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Sep 2023 12:19:40 -0700 (PDT)
-From:   Mateusz Guzik <mjguzik@gmail.com>
-To:     linux-security-module@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, paul@paul-moore.com,
-        Mateusz Guzik <mjguzik@gmail.com>
-Subject: [PATCH v2] cred: add get_cred_many and put_cred_many
-Date:   Sat,  9 Sep 2023 21:19:32 +0200
-Message-Id: <20230909191932.3187633-1-mjguzik@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 11 Sep 2023 06:13:34 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B413EE5F;
+        Mon, 11 Sep 2023 03:13:28 -0700 (PDT)
+Received: from lhrpeml500004.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RkjDj4R36z6HJpM;
+        Mon, 11 Sep 2023 18:11:49 +0800 (CST)
+Received: from [10.123.123.126] (10.123.123.126) by
+ lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Mon, 11 Sep 2023 11:13:25 +0100
+Message-ID: <239800f3-baf4-1c7d-047f-8ba90b097bee@huawei.com>
+Date:   Mon, 11 Sep 2023 13:13:24 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v11.1] selftests/landlock: Add 11 new test suites
+ dedicated to network
+Content-Language: ru
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Paul Moore <paul@paul-moore.com>
+CC:     <artem.kuzin@huawei.com>, <gnoack3000@gmail.com>,
+        <willemdebruijn.kernel@gmail.com>, <yusongping@huawei.com>,
+        <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>
+References: <20230515161339.631577-11-konstantin.meskhidze@huawei.com>
+ <20230706145543.1284007-1-mic@digikod.net>
+ <3db64cf8-6a45-a361-aa57-9bfbaf866ef8@digikod.net>
+ <b2a94da1-f9df-b684-7666-1c63060f68f1@huawei.com>
+ <20230817.koh5see0eaLa@digikod.net>
+From:   "Konstantin Meskhidze (A)" <konstantin.meskhidze@huawei.com>
+In-Reply-To: <20230817.koh5see0eaLa@digikod.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.123.123.126]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500004.china.huawei.com (7.191.163.9)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Some of the frequent consumers of get_cred and put_cred operate on 2
-references on the same creds back-to-back.
 
-Switch them to doing the work in one go instead.
 
-v2:
-- add kdoc entries
-- hoist validate_cred call in exit_creds
-- reword commit message
+8/17/2023 6:08 PM, Mickaël Salaün пишет:
+> On Sat, Aug 12, 2023 at 05:37:00PM +0300, Konstantin Meskhidze (A) wrote:
+>> 
+>> 
+>> 7/12/2023 10:02 AM, Mickaël Salaün пишет:
+>> > 
+>> > On 06/07/2023 16:55, Mickaël Salaün wrote:
+>> > > From: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+>> > > 
+>> > > This patch is a revamp of the v11 tests [1] with new tests (see the
+>> > > "Changes since v11" description).  I (Mickaël) only added the following
+>> > > todo list and the "Changes since v11" sections in this commit message.
+>> > > I think this patch is good but it would appreciate reviews.
+>> > > You can find the diff of my changes here but it is not really readable:
+>> > > https://git.kernel.org/mic/c/78edf722fba5 (landlock-net-v11 branch)
+>> > > [1] https://lore.kernel.org/all/20230515161339.631577-11-konstantin.meskhidze@huawei.com/
+>> > > TODO:
+>> > > - Rename all "net_service" to "net_port".
+>> > > - Fix the two kernel bugs found with the new tests.
+>> > > - Update this commit message with a small description of all tests.
+>> > 
+>> > [...]
+> 
+>> > We should also add a test to make sure errno is the same with and
+>> > without sandboxing when using port 0 for connect and consistent with
+>> > bind (using an available port). The test fixture and variants should be
+>> > quite similar to the "ipv4" ones, but we can also add AF_INET6 variants,
+>> > which will result in 8 "ip" variants:
+>> > 
+>> > TEST_F(ip, port_zero)
+>> > {
+>> > 	if (variant->sandbox == TCP_SANDBOX) {
+>> > 		/* Denies any connect and bind. */
+>> > 	}
+>> > 	/* Checks errno for port 0. */
+>> > }
+>> As I understand the would be the next test cases:
+>> 
+>> 	1. ip4, sandboxed, bind port 0 -> should return EACCES (denied by
+>> landlock).
+> 
+> Without any allowed port, yes. This test case is useful.
+> 
+> By tuning /proc/sys/net/ipv4/ip_local_port_range (see
+> inet_csk_find_open_port call) we should be able to pick a specific
+> allowed port and test it.  We can also test for the EADDRINUSE error to
+> make sure error ordering is correct (compared with -EACCES).
+   Sorry, did not get this case. Could please explain it with more details?
+> 
+> However, I think the current LSM API don't enable to infer this random
+> port because the LSM hook is called before a port is picked.  If this is
+> correct, the best way to control port binding would be to always deny
+> binding on port zero/random (when restricting port binding, whatever
+> exception rules are in place). This explanation should be part of a
+> comment for this specific exception.
 
-Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
----
- include/linux/cred.h | 59 +++++++++++++++++++++++++++++++++++++-------
- kernel/cred.c        | 26 ++++++++++---------
- 2 files changed, 65 insertions(+), 20 deletions(-)
+   Yep, if some LSM rule (for bind) has been applied a with specific 
+port, other attemps to bind with zero/random ports would be refused by 
+LSM security checks.
+> 
+> Cc Paul
+> 
+>> 	2. ip4, non-sandboxed, bind port 0 -> should return 0 (should be bounded to
+>> random port).
+> 
+> I think so but we need to make sure the random port cannot be < 1024, I
+> guess with /proc/sys/net/ipv4/ip_local_port_range but I don't know for
+> IPv6.
 
-diff --git a/include/linux/cred.h b/include/linux/cred.h
-index f923528d5cc4..56bc432fe49b 100644
---- a/include/linux/cred.h
-+++ b/include/linux/cred.h
-@@ -218,6 +218,20 @@ static inline bool cap_ambient_invariant_ok(const struct cred *cred)
- 					  cred->cap_inheritable));
- }
- 
-+/**
-+ * get_new_cred_many - Get references on a new set of credentials
-+ * @cred: The new credentials to reference
-+ * @nr: Number of references to acquire
-+ *
-+ * Get references on the specified set of new credentials.  The caller must
-+ * release all acquired references.
-+ */
-+static inline struct cred *get_new_cred_many(struct cred *cred, int nr)
-+{
-+	atomic_add(nr, &cred->usage);
-+	return cred;
-+}
-+
- /**
-  * get_new_cred - Get a reference on a new set of credentials
-  * @cred: The new credentials to reference
-@@ -227,16 +241,16 @@ static inline bool cap_ambient_invariant_ok(const struct cred *cred)
-  */
- static inline struct cred *get_new_cred(struct cred *cred)
- {
--	atomic_inc(&cred->usage);
--	return cred;
-+	return get_new_cred_many(cred, 1);
- }
- 
- /**
-- * get_cred - Get a reference on a set of credentials
-+ * get_cred_many - Get references on a set of credentials
-  * @cred: The credentials to reference
-+ * @nr: Number of references to acquire
-  *
-- * Get a reference on the specified set of credentials.  The caller must
-- * release the reference.  If %NULL is passed, it is returned with no action.
-+ * Get references on the specified set of credentials.  The caller must release
-+ * all acquired reference.  If %NULL is passed, it is returned with no action.
-  *
-  * This is used to deal with a committed set of credentials.  Although the
-  * pointer is const, this will temporarily discard the const and increment the
-@@ -244,14 +258,28 @@ static inline struct cred *get_new_cred(struct cred *cred)
-  * accidental alteration of a set of credentials that should be considered
-  * immutable.
-  */
--static inline const struct cred *get_cred(const struct cred *cred)
-+static inline const struct cred *get_cred_many(const struct cred *cred, int nr)
- {
- 	struct cred *nonconst_cred = (struct cred *) cred;
- 	if (!cred)
- 		return cred;
- 	validate_creds(cred);
- 	nonconst_cred->non_rcu = 0;
--	return get_new_cred(nonconst_cred);
-+	return get_new_cred_many(nonconst_cred, nr);
-+}
-+
-+/*
-+ * get_cred - Get a reference on a set of credentials
-+ * @cred: The credentials to reference
-+ *
-+ * Get a reference on the specified set of credentials.  The caller must
-+ * release the reference.  If %NULL is passed, it is returned with no action.
-+ *
-+ * This is used to deal with a committed set of credentials.
-+ */
-+static inline const struct cred *get_cred(const struct cred *cred)
-+{
-+	return get_cred_many(cred, 1);
- }
- 
- static inline const struct cred *get_cred_rcu(const struct cred *cred)
-@@ -269,6 +297,7 @@ static inline const struct cred *get_cred_rcu(const struct cred *cred)
- /**
-  * put_cred - Release a reference to a set of credentials
-  * @cred: The credentials to release
-+ * @nr: Number of references to release
-  *
-  * Release a reference to a set of credentials, deleting them when the last ref
-  * is released.  If %NULL is passed, nothing is done.
-@@ -277,17 +306,29 @@ static inline const struct cred *get_cred_rcu(const struct cred *cred)
-  * on task_struct are attached by const pointers to prevent accidental
-  * alteration of otherwise immutable credential sets.
-  */
--static inline void put_cred(const struct cred *_cred)
-+static inline void put_cred_many(const struct cred *_cred, int nr)
- {
- 	struct cred *cred = (struct cred *) _cred;
- 
- 	if (cred) {
- 		validate_creds(cred);
--		if (atomic_dec_and_test(&(cred)->usage))
-+		if (atomic_sub_and_test(nr, &cred->usage))
- 			__put_cred(cred);
- 	}
- }
- 
-+/*
-+ * put_cred - Release a reference to a set of credentials
-+ * @cred: The credentials to release
-+ *
-+ * Release a reference to a set of credentials, deleting them when the last ref
-+ * is released.  If %NULL is passed, nothing is done.
-+ */
-+static inline void put_cred(const struct cred *cred)
-+{
-+	put_cred_many(cred, 1);
-+}
-+
- /**
-  * current_cred - Access the current task's subjective credentials
-  *
-diff --git a/kernel/cred.c b/kernel/cred.c
-index 98cb4eca23fb..9398e534b997 100644
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -162,23 +162,29 @@ EXPORT_SYMBOL(__put_cred);
-  */
- void exit_creds(struct task_struct *tsk)
- {
--	struct cred *cred;
-+	struct cred *real_cred, *cred;
- 
- 	kdebug("exit_creds(%u,%p,%p,{%d,%d})", tsk->pid, tsk->real_cred, tsk->cred,
- 	       atomic_read(&tsk->cred->usage),
- 	       read_cred_subscribers(tsk->cred));
- 
--	cred = (struct cred *) tsk->real_cred;
-+	real_cred = (struct cred *) tsk->real_cred;
- 	tsk->real_cred = NULL;
--	validate_creds(cred);
--	alter_cred_subscribers(cred, -1);
--	put_cred(cred);
- 
- 	cred = (struct cred *) tsk->cred;
- 	tsk->cred = NULL;
-+
- 	validate_creds(cred);
--	alter_cred_subscribers(cred, -1);
--	put_cred(cred);
-+	if (real_cred == cred) {
-+		alter_cred_subscribers(cred, -2);
-+		put_cred_many(cred, 2);
-+	} else {
-+		validate_creds(real_cred);
-+		alter_cred_subscribers(real_cred, -1);
-+		put_cred(real_cred);
-+		alter_cred_subscribers(cred, -1);
-+		put_cred(cred);
-+	}
- 
- #ifdef CONFIG_KEYS_REQUEST_CACHE
- 	key_put(tsk->cached_requested_key);
-@@ -355,8 +361,7 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
- #endif
- 		clone_flags & CLONE_THREAD
- 	    ) {
--		p->real_cred = get_cred(p->cred);
--		get_cred(p->cred);
-+		p->real_cred = get_cred_many(p->cred, 2);
- 		alter_cred_subscribers(p->cred, 2);
- 		kdebug("share_creds(%p{%d,%d})",
- 		       p->cred, atomic_read(&p->cred->usage),
-@@ -520,8 +525,7 @@ int commit_creds(struct cred *new)
- 		proc_id_connector(task, PROC_EVENT_GID);
- 
- 	/* release the old obj and subj refs both */
--	put_cred(old);
--	put_cred(old);
-+	put_cred_many(old, 2);
- 	return 0;
- }
- EXPORT_SYMBOL(commit_creds);
--- 
-2.39.2
+   For ipv4 when connecting to a server a client binds to a random port 
+within /proc/sys/net/ipv4/ip_local_port_range, by default one my machine
+this range is: cat /proc/sys/net/ipv4/ip_local_port_range
+32768   60999.
+But for ipv6 there is no such tuning range.
 
+> 
+>> 	3. ip6, sandboxed, bind port 0 -> should return EACCES (denied by
+>> landlock).
+>> 	4. ip6, non-sandboxed, bind port 0 -> should return 0 (should be bounded to
+>> random port).
+>> 	5. ip4, sandboxed, bind some available port, connect port 0 -> should
+>> return -EACCES (denied by landlock).
+> 
+> Yes, but don't need to bind to anything (same for the next ones).
+> 
+>> 	6. ip4, non-sandboxed, bind some available port, connect port 0 -> should
+>> return ECONNREFUSED.
+> 
+> Yes, but without any binding.
+> 
+>> 	7. ip6, sandboxed, bind some available port, connect port 0 -> should
+>> return -EACCES (denied by landlock)
+>> 	8. ip6, non-sandboxed, some bind available port, connect port 0 -> should
+>> return ECONNREFUSED.
+>> 
+>> Correct?
+> 
+> Thinking more about this case, being able to add a rule with port zero
+> *for a connect action* looks legitimate.  A rule with both connect and
+> bind actions on port zero should then be denied.  We should fix
+> add_rule_net_service() and test that (with a first layer allowing port
+> zero, and a second without rule, for connect).
+
+  So with first rule allowing port 0 connect action, the second rule 
+with some another port and connect action, as a result test should allow 
+that. Correct?
+> 
+> 
+>> 
+>> > 
+>> > [...]
+>> > 
+>> > > +FIXTURE(inet)
+>> > > +{
+>> > > +	struct service_fixture srv0, srv1;
+>> > > +};
+>> > 
+>> > The "inet" variants are useless and should be removed. The "inet"
+>> > fixture can then be renamed to "ipv4_tcp".
+>> > 
+>>   So inet should be changed to ipv4_tcp and ipv6_tcp with next variants:
+>> 
+>>   - ipv4_tcp.no_sandbox_with_ipv4.port_endianness
+>>   - ipv4_tcp.sandbox_with_ipv4.port_endianness
+>>   - ipv6_tcp.no_sandbox_with_ipv6.port_endianness
+>>   - ipv6_tcp.sandbox_with_ipv6.port_endianness
+>> ????
+>> 
+>>    in this case we need double copy of TEST_F(inet, port_endianness) :
+>> 	TEST_F(ipv4_tcp, port_endianness)
+>> 	TEST_F(ipv6_tcp, port_endianness)
+> 
+> There is no need for any variant for the port_endianness test. You can
+> rename "inet" to "ipv4_tcp" (and not "inet_tcp" like I said before).
+> .
