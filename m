@@ -2,56 +2,199 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952CE79E21C
-	for <lists+linux-security-module@lfdr.de>; Wed, 13 Sep 2023 10:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C4C79E239
+	for <lists+linux-security-module@lfdr.de>; Wed, 13 Sep 2023 10:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbjIMIay convert rfc822-to-8bit (ORCPT
+        id S238968AbjIMIg3 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 13 Sep 2023 04:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        Wed, 13 Sep 2023 04:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjIMIay (ORCPT
+        with ESMTP id S238922AbjIMIg3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 13 Sep 2023 04:30:54 -0400
-Received: from jamoutsourcing.in (unknown [202.149.222.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E737010C0;
-        Wed, 13 Sep 2023 01:30:49 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by jamoutsourcing.in (Postfix) with ESMTP id CA0793018CB01;
-        Wed, 13 Sep 2023 04:49:29 +0000 (UTC)
-Received: from jamoutsourcing.in ([127.0.0.1])
-        by localhost (jamoutsourcing.in [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id YFJmrcX9o7fs; Wed, 13 Sep 2023 04:49:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by jamoutsourcing.in (Postfix) with ESMTP id 2CFF5306C0B13;
-        Wed, 13 Sep 2023 04:43:46 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at jamoutsourcing.in
-Received: from jamoutsourcing.in ([127.0.0.1])
-        by localhost (jamoutsourcing.in [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 49bszqEo2_4m; Wed, 13 Sep 2023 04:43:46 +0000 (UTC)
-Received: from [185.225.73.120] (_gateway [192.168.1.1])
-        by jamoutsourcing.in (Postfix) with ESMTP id 1DC173018CB17;
-        Wed, 13 Sep 2023 04:36:54 +0000 (UTC)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: my offer
-To:     Recipients <test@test.com>
-From:   "Mr. mohd" <test@test.com>
-Date:   Tue, 12 Sep 2023 21:36:52 -0700
-Reply-To: mohamedsafiah47@gmail.com
-Message-Id: <20230913043655.1DC173018CB17@jamoutsourcing.in>
+        Wed, 13 Sep 2023 04:36:29 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE29E73
+        for <linux-security-module@vger.kernel.org>; Wed, 13 Sep 2023 01:36:25 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-403061cdf2bso40070135e9.2
+        for <linux-security-module@vger.kernel.org>; Wed, 13 Sep 2023 01:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sigma-star.at; s=google; t=1694594184; x=1695198984; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uolj6bycuQLgVCoKuVx7OW6O8ol63jhVI8+H9GWvM7E=;
+        b=Vmz3kM5iod7g2/kTmUqwIehe1BC7Wxz1zWFdOdF3TiSQsYUBaxOQUqq9BK9dTs12l4
+         Qa+A/Qt0st2kubPQLk7YJt3Gt5Q8uWWQdCBrh4fgdJ/9NpqSmGxukKY5YTWplAhyXtxX
+         Wz+yaTS3GyCnYY7Mf22/8xGWnpd2yPH7dfL3a4/+4+gw7TrrxzEuwcNiVnskIJ9aXhBz
+         1NRE7h54vKgvrb8aYRScrg+awzMReU669L344JEz2BXhFyS35akvZVZRfvXNw+F5mOLb
+         cua7JIXoBMe7BQsGydTrHjsbtx62c3IYrvZH3zepxtKy60RzQKp8BwJl0bI1/72YViQK
+         bcmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694594184; x=1695198984;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uolj6bycuQLgVCoKuVx7OW6O8ol63jhVI8+H9GWvM7E=;
+        b=tiNX3PX3VkOMB/Xm6UGVuUSDr+9zxeqb3VU2UuDZSYU7JDgTiOVNap3gcXE2pKIR//
+         Rn3tudfv8Z1P86vxpzr2FMXIYbA2ieX84WTwoMubsxdInOGABInSOUWhtNNZ20XiXjgy
+         qHHQJ4vVBEK6V1aMmqG4SSQ8uiH2OO4i7Li1NmYrdL2yaFwb/dZUPEm+ZEu9+V93peT/
+         t9UXg05YTM4h3nN4ioS7yHArx818K938Djs9MQf4lW/ZuXppyLWXxmtfKBdVpEvepIPs
+         4yxdWq2gKC8ab/EtbJNY18QWM2RTWy2oTHpfSBpsONZoI2cCZ+ssR40y2wvmP9IfD14o
+         EFjw==
+X-Gm-Message-State: AOJu0YyJ6COGXOXbQ7JWYkLNcxYohbQQwT1Mi6I6K4WfZC5h6gisF33I
+        ksOi/fWiawd4tfVg9/wJ3W6D1g==
+X-Google-Smtp-Source: AGHT+IGXZEXOiBFL14tbu7JB9wJiL81o7SR10ExAo1isVi5iswnBwwcoSwfHQtzWGjeJP8MxZaq/dw==
+X-Received: by 2002:a05:600c:2159:b0:402:f503:6d1b with SMTP id v25-20020a05600c215900b00402f5036d1bmr1463747wml.0.1694594183662;
+        Wed, 13 Sep 2023 01:36:23 -0700 (PDT)
+Received: from smtpclient.apple (clnet-p106-198.ikbnet.co.at. [83.175.106.198])
+        by smtp.gmail.com with ESMTPSA id y17-20020adff151000000b0031c5dda3aedsm14955606wro.95.2023.09.13.01.36.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 Sep 2023 01:36:23 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
+Subject: Re: [PATCH v2 1/3] crypto: mxs-dcp: Add support for hardware provided
+ keys
+From:   David Gstir <david@sigma-star.at>
+In-Reply-To: <CVH49V57VE6R.2488KOQMR5AKQ@suppilovahvero>
+Date:   Wed, 13 Sep 2023 10:36:11 +0200
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        sigma star Kernel Team <upstream+dcp@sigma-star.at>,
+        David Howells <dhowells@redhat.com>,
+        Li Yang <leoyang.li@nxp.com>, Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Tejun Heo <tj@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        linux-doc@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F2794F55-D63B-448D-B954-C3C25E0B474D@sigma-star.at>
+References: <20230912111115.24274-1-david@sigma-star.at>
+ <20230912111115.24274-2-david@sigma-star.at>
+ <CVH49V57VE6R.2488KOQMR5AKQ@suppilovahvero>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+X-Mailer: Apple Mail (2.3731.700.6)
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Hi Jarkko,
 
-Dear
-My name is Mohamed Abdul I have the capacity to inject a considerable
-amount of capital in any viable project 
-1,cell phone number what-sap
-2,full name
+thanks for the review!
+
+> On 12.09.2023, at 19:32, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>=20
+> On Tue Sep 12, 2023 at 2:11 PM EEST, David Gstir wrote:
+
+[...]
+
+>> - /* Payload contains the key. */
+>> - desc->control0 |=3D MXS_DCP_CONTROL0_PAYLOAD_KEY;
+>> + if (key_referenced) {
+>> + /* Set OTP key bit to select the key via KEY_SELECT. */
+>> + desc->control0 |=3D MXS_DCP_CONTROL0_OTP_KEY;
+>> + } else {
+>> + /* Payload contains the key. */
+>> + desc->control0 |=3D MXS_DCP_CONTROL0_PAYLOAD_KEY;
+>> + }
+>=20
+> Remove curly braces (coding style).
+
+Will fix that and all similar cases for v3.
 
 
-yours truly
-Mohamed Abdul Ahmed
+>> +static int mxs_dcp_aes_setrefkey(struct crypto_skcipher *tfm, const =
+u8 *key,
+>> + unsigned int len)
+>> +{
+>> + struct dcp_async_ctx *actx =3D crypto_skcipher_ctx(tfm);
+>> +
+>> + if (len !=3D DCP_PAES_KEYSIZE)
+>> + return -EINVAL;
+>> +
+>> + switch (key[0]) {
+>> + case DCP_PAES_KEY_SLOT0:
+>> + case DCP_PAES_KEY_SLOT1:
+>> + case DCP_PAES_KEY_SLOT2:
+>> + case DCP_PAES_KEY_SLOT3:
+>> + case DCP_PAES_KEY_UNIQUE:
+>> + case DCP_PAES_KEY_OTP:
+>> + memcpy(actx->key, key, len);
+>> + break;
+>=20
+> I don't understand why the "commit" is split into two parts
+> (memcpy and assignments in different code blocks). You should
+> probably rather:
+>=20
+> switch (key[0]) {
+> case DCP_PAES_KEY_SLOT0:
+> case DCP_PAES_KEY_SLOT1:
+> case DCP_PAES_KEY_SLOT2:
+> case DCP_PAES_KEY_SLOT3:
+> case DCP_PAES_KEY_UNIQUE:
+> case DCP_PAES_KEY_OTP:
+> memcpy(actx->key, key, len);
+> actx->key_len =3D len;
+> actx->refkey =3D true;
+> return 0;
+>=20
+> default:
+> return -EINVAL;
+> }
+> }
+>=20
+> Or alternatively you can move all operations after the switch-case
+> statement. IMHO, any state change is better to put into a singular
+> location.
+
+Makes sense. I=E2=80=99ll change that.
+
+
+>> diff --git a/include/soc/fsl/dcp.h b/include/soc/fsl/dcp.h
+>> new file mode 100644
+>> index 000000000000..df6678ee10a1
+>> --- /dev/null
+>> +++ b/include/soc/fsl/dcp.h
+>> @@ -0,0 +1,19 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (C) 2021 sigma star gmbh
+>> + * Authors: David Gstir <david@sigma-star.at>
+>> + *          Richard Weinberger <richard@sigma-star.at>
+>=20
+> Git already has author-field and commit can have co-developed-by so
+> this is totally obsolete.
+
+Also noted for v3.
+
+Thanks,
+- David
+
+--
+sigma star gmbh | Eduard-Bodem-Gasse 6, 6020 Innsbruck, Austria
+UID/VAT Nr: ATU 66964118 | FN: 374287y
+
