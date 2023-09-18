@@ -2,45 +2,45 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21C77A4F5F
-	for <lists+linux-security-module@lfdr.de>; Mon, 18 Sep 2023 18:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF1F7A51BD
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 Sep 2023 20:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjIRQlO (ORCPT
+        id S229563AbjIRSKM (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 18 Sep 2023 12:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
+        Mon, 18 Sep 2023 14:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjIRQk4 (ORCPT
+        with ESMTP id S229379AbjIRSKL (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 18 Sep 2023 12:40:56 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FE990;
-        Mon, 18 Sep 2023 09:37:09 -0700 (PDT)
+        Mon, 18 Sep 2023 14:10:11 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C95FB;
+        Mon, 18 Sep 2023 11:10:03 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eu2RQKimjXlXW7W9cE+unZHe7lMxN724HXxOLWbhq0SWPNbOK5nnCkFu/t3OOrdPWjNcLSep/lwXYu2CiZ+7oF8en7zQNf5gkfFebShPO+uA7uY02CH/ibkQNM65aN7l3Tz84f0MIYvloiWzMn9xTNgvAzQYWS/FmAgg3texq3lVg+YB6YywO8nffffn8cdUFB9cKf4KE3lzF0ckvJOXlWZWwJ9PONy0j7YS9KxKG5eJiKJipOgI5RoRXEwDw/sEQwJkmfc0oPTM4pwJkRfyv/kjS/25l++YENPN3HZR/qfaY9+L7gcIWjCLNfJyD+FDoaeqAz+lPNs86SB6t3j9mg==
+ b=Zv2h3OKQFvoe6TTN/8PO3vD/Owbu7UNfs+iIgPii41GL9jy/SR8ycX4K72sf0ZBzJaOENT+6OpDD2txPMYQCMUT5cnQ9Ax3l7TlvrIkT66uvbJ0gcTuzykV0s6xyr4Pe0FdEutsaIEOUZsfwzqIrmvPoGbpG7lGziHaf8Jx/BehL7kv+kFtEBNd92LyT4taT2oesQjDlv/p8vVU5jQ5rYnmCXtqOSkQDBrnLFYZrEPlw1mk9MzUuQmMNphGDiG7qPA4A6lN5dijJhSijWHvmFKuPxz5onwHq3fQvtGAqmpIuQt1AruFqsnDIkXMzxN3RMMzEdhtLPEEVUbCqV4bKPQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jyzmYcLV+sptuG5IDyfXVowshZf+33f9QlVSHiv27bA=;
- b=TrEAXZtGTAW9okbDr0jzgUxyPkg6ADla8SlxNh0Dq9CFtXP3A6MjUxu8oBsR8oEJ7ejBu1vIrDDplPochZhV0kXH7Iqs3W1HLa/mWwSeU1rbk5DQnNgxp8S5SPmqaBS2S5k76aSi18Y3EoMsniW044XCSvgYg58pJ8bYrxf/NUsDIn75cgMdGq6QFmm2QzGnex6QNIosH1nOVDgCgzESk1IDNZ+FHPNxbSfaGmlf57i0j5kVBQKv/eKINhHHpFB6e7JMrGD89NrbmuQ0XscC83M9Qm38IMNHpAXiCYk4wZumJNq0s5J/zCrp4iLo/NqFEGKYjR7xlNC1bVysKQGUpA==
+ bh=Ui00fgoUGuvv4efb1zdLO+78IhADs4VjQNoD9jVITVE=;
+ b=WB1hkV3qU8mCLZv2srAiD9GNUmwPVjmAsqa4FPCFrWykgYzmVh/T/goLFUG2Ac+/2FRgtlOHTIdlcLycYMFk/uVLqjJy5FmbATrmUJaLAg6xLyk4I0MVOTzmrPvI/qUiFEQFehp2iJ0r1+kbQC6uSfFy7M50Yw6MX37ebfY284MC/uyfLGkZPPWQSyF0gZJcGb16LE5f+upoqOl0aFKVHC/ZaN8ToBV/mvAIgYJshjb4KdOQ7zzs49YoZ27Ke52/ki4RTpLA+DBXwhbmd2hwPuwYK/7J/1uzGGbU2Uwh5b7oRWrGJx+VfL2CTDmGWmFzgZR1VZgNW2+W1Qdja/Uqvw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jyzmYcLV+sptuG5IDyfXVowshZf+33f9QlVSHiv27bA=;
- b=wovO6PVLfH+XOvbKxZzF44pw7e/8zDeQedjg2pIOcEgAw3zkcg799SvqAph1oRX2v2fuL5hUvgaI878XikR4pOae11ICUFm9a6wPvWLKvkLkk0oAouoxcIlimllisDM0TOH2IsXW5ny6qFf4lx6WvXGl1GI8huDh2xObWCT5fCM=
-Received: from CY5PR15CA0060.namprd15.prod.outlook.com (2603:10b6:930:1b::6)
- by PH8PR12MB6820.namprd12.prod.outlook.com (2603:10b6:510:1cb::13) with
+ bh=Ui00fgoUGuvv4efb1zdLO+78IhADs4VjQNoD9jVITVE=;
+ b=QrdMfrDTLfxAXeFz0An7O3CkZRQCeMQ2tsChY4Bmurmf9OViQP2lCVa5ldD3TWK+M9l28YMqqYCL+e/EeBRfo+VipZvv43W4T/T+sSh0yPJiwLYs8ARam4z0f0Nedwr5to+5PhRnd+GPpH52S6qecWB95aH7o45hnmza8NzAJ3U=
+Received: from MN2PR15CA0012.namprd15.prod.outlook.com (2603:10b6:208:1b4::25)
+ by BL3PR12MB6523.namprd12.prod.outlook.com (2603:10b6:208:3bf::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.24; Mon, 18 Sep
- 2023 16:37:05 +0000
-Received: from CY4PEPF0000EE31.namprd05.prod.outlook.com
- (2603:10b6:930:1b:cafe::4e) by CY5PR15CA0060.outlook.office365.com
- (2603:10b6:930:1b::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27 via Frontend
- Transport; Mon, 18 Sep 2023 16:37:05 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Mon, 18 Sep
+ 2023 18:09:59 +0000
+Received: from MN1PEPF0000F0E5.namprd04.prod.outlook.com
+ (2603:10b6:208:1b4:cafe::95) by MN2PR15CA0012.outlook.office365.com
+ (2603:10b6:208:1b4::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26 via Frontend
+ Transport; Mon, 18 Sep 2023 18:09:59 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,22 +48,22 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EE31.mail.protection.outlook.com (10.167.242.37) with Microsoft
+ MN1PEPF0000F0E5.mail.protection.outlook.com (10.167.242.43) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6792.20 via Frontend Transport; Mon, 18 Sep 2023 16:37:04 +0000
+ 15.20.6792.20 via Frontend Transport; Mon, 18 Sep 2023 18:09:57 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 18 Sep
- 2023 11:37:04 -0500
-Date:   Mon, 18 Sep 2023 11:36:47 -0500
+ 2023 13:09:56 -0500
+Date:   Mon, 18 Sep 2023 13:07:54 -0500
 From:   Michael Roth <michael.roth@amd.com>
 To:     Sean Christopherson <seanjc@google.com>
 CC:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
+        "Oliver Upton" <oliver.upton@linux.dev>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
         Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
@@ -77,54 +77,54 @@ CC:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Chao Peng" <chao.p.peng@linux.intel.com>,
         Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
+        "Jarkko Sakkinen" <jarkko@kernel.org>,
         Anish Moorthy <amoorthy@google.com>,
         Yu Zhang <yu.c.zhang@linux.intel.com>,
         Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
+        "Xu Yilun" <yilun.xu@intel.com>, Vlastimil Babka <vbabka@suse.cz>,
+        "Vishal Annapurve" <vannapurve@google.com>,
         Ackerley Tng <ackerleytng@google.com>,
         Maciej Szmigiero <mail@maciej.szmigiero.name>,
         David Hildenbrand <david@redhat.com>,
         Quentin Perret <qperret@google.com>,
         Wang <wei.w.wang@intel.com>,
         Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [RFC PATCH v12 14/33] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl()
- for guest-specific backing memory
-Message-ID: <20230918163647.m6bjgwusc7ww5tyu@amd.com>
+        "Isaku Yamahata" <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Subject: Re: [RFC PATCH v12 10/33] KVM: Set the stage for handling only
+ shared mappings in mmu_notifier events
+Message-ID: <20230918180754.iomoaqnw75j3rrxb@amd.com>
 References: <20230914015531.1419405-1-seanjc@google.com>
- <20230914015531.1419405-15-seanjc@google.com>
+ <20230914015531.1419405-11-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230914015531.1419405-15-seanjc@google.com>
+In-Reply-To: <20230914015531.1419405-11-seanjc@google.com>
 X-Originating-IP: [10.180.168.240]
 X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE31:EE_|PH8PR12MB6820:EE_
-X-MS-Office365-Filtering-Correlation-Id: 312b407d-0494-4860-7bea-08dbb8657e1e
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E5:EE_|BL3PR12MB6523:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1fbb331e-c212-48f7-9870-08dbb87278e2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Hf//+xF5X+HV33ANfZQIRomTlciR8+GA0BiVUWGu5B+F91TEL3LTJYqKqauYTW2CWFMAxpwIwjJGv+qSrZ0PPP0MBW5O1quxWbBo6OPKR7BdgHTT1fXM2hCgLqyOvn3zRuMkPByquecngUqCBCsHpOLzysOCDrQ6Pwx87Ge87D9mWg+VY+cTBansVNl6TrO0/qWypNLlzh74pJVWj4hgPOtFa6pqwYRGE58jL0VQpdxPZBNfE9mDOi62QUsbWgh/IWSiuU8UtK5z9woKU6PdR0jK1oc1kAHB3QNCmzMB0ETc7gaJR1sDjD/agQP4B6wddykv4CgE3/8OkUy6juVoVTBEdIbSJINERAmaGz87uEZ63HOmzvxktHELEbV+iXtGJjzIhMqc8dWSYuxtYZvOpFCH8wvEFoKUvxiGUY4HoFjZnfj52+8ABI2L8mKOAQRNvxw19Wh+V19pnoFe28qJ9l8WuieIdabWkgKezdpCAYkwGSN/tcsxiOEIq39xPsWg/O1/nYmH8yc11k02trlse7XBCYVH568XabbjBJikmhb27UDC5+a5gAf18rhMmXGYmuL6pXK0qrp2aJDUiUlY/0XQYlcP4lPlMjQspwiyaDbZsZYrxSWuHU7RKkc9OafZYkfcplyfdUYsytt6h+fW5ylA5TiARBx96xAaO15pR26vbouxBloAO2PlxRu5zdyOAwYmNEHk3EFM4eBQ9q2V4oyv38Gib1hNd2TPJErB/wNDhTAu5eZnyHFJyf/144wGWtQm8DWgspiXjKDKVESgvQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(346002)(39860400002)(136003)(396003)(186009)(1800799009)(82310400011)(451199024)(40470700004)(46966006)(36840700001)(26005)(5660300002)(16526019)(1076003)(8936002)(4326008)(8676002)(40460700003)(36860700001)(2616005)(2906002)(7406005)(7416002)(86362001)(82740400003)(81166007)(356005)(36756003)(47076005)(83380400001)(336012)(426003)(40480700001)(70586007)(70206006)(54906003)(44832011)(6666004)(478600001)(41300700001)(316002)(6916009)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: nubEhsrBRvQJ6oma/H/fezu40fl8JjosgGr2UV3f6xuzgQMloCWUp72moVwjS3pI5/Oj96YFIfM/WIGvT0yzDGpEpYVWuuXxNqepQhKPL6LTYGoZ06fmZQW3Ma7BiSzzibtevEJzgUzQexmNCGcPx+q8oITBnfWr2MVgIe6/s9tfwS/fp6Cqusz4StPVX/wq5qt9GPAk/QCfEaQibhFQ9GLX07vIQPE0U52iCZeSPdqMKzSN462deDp5f06n18eQTOQpOPMpVtCC4PI7518DU2mXUUwPT6kmBpLO6fm/gRYy9Mm07S9mGjb7vj82D2dROY+sIYL3Qe7pxzCEVRUEHdTI0zZ22eu1rPNE91uiF4EBfZVYbPlbfuiH2gnBDezUqFj2tvuRRKoorWpnE5HoI1e66yH5W/vm/v4ZDdXsEElxce6zNYCAXaBzp8Qs67VhfxNXA4weRBwnKse6Xgwe0UQrKNS0NRavXG4wmhbvQ/n+otdwmQAIEf4uXMLL3+/2LIFOZFIA4zsWxUxAleZBJ/a6zs9yxkm9OSgdZUpORNt4uXySWk5waQEf8YgGS6WKToleU0JNSpaKmnbolWHBGHwQfNhyEIK/iBhWZv0tFTkbmqWh0gQLCflo0mLoRVgL0Frg407g6sqSLdoLjZuwhHSkjKM9w44Xkv9RSqEU/0mASkrA1lH0e3wdFNWRQjtiSR21ng8CWyImExG7ezjf8vnSR74f4E/0Fjg02Q02YC5RulcqfRx9AaVQyVOjBU4tUHaaFX+KujOT9O2XOEVBWw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199024)(1800799009)(186009)(82310400011)(36840700001)(40470700004)(46966006)(4326008)(16526019)(26005)(40480700001)(426003)(336012)(2616005)(1076003)(40460700003)(8676002)(8936002)(83380400001)(356005)(82740400003)(2906002)(81166007)(36860700001)(36756003)(41300700001)(44832011)(86362001)(70586007)(70206006)(316002)(6916009)(54906003)(7416002)(7406005)(5660300002)(966005)(47076005)(478600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2023 16:37:04.9098
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2023 18:09:57.2580
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 312b407d-0494-4860-7bea-08dbb8657e1e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fbb331e-c212-48f7-9870-08dbb87278e2
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE31.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: MN1PEPF0000F0E5.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6820
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6523
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -134,226 +134,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Sep 13, 2023 at 06:55:12PM -0700, Sean Christopherson wrote:
-> TODO
+On Wed, Sep 13, 2023 at 06:55:08PM -0700, Sean Christopherson wrote:
+> Add flags to "struct kvm_gfn_range" to let notifier events target only
+> shared and only private mappings, and write up the existing mmu_notifier
+> events to be shared-only (private memory is never associated with a
+> userspace virtual address, i.e. can't be reached via mmu_notifiers).
 > 
-> Cc: Fuad Tabba <tabba@google.com>
-> Cc: Vishal Annapurve <vannapurve@google.com>
-> Cc: Ackerley Tng <ackerleytng@google.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Maciej Szmigiero <mail@maciej.szmigiero.name>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Quentin Perret <qperret@google.com>
-> Cc: Michael Roth <michael.roth@amd.com>
-> Cc: Wang <wei.w.wang@intel.com>
-> Cc: Liam Merwick <liam.merwick@oracle.com>
-> Cc: Isaku Yamahata <isaku.yamahata@gmail.com>
-> Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Co-developed-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Add two flags so that KVM can handle the three possibilities (shared,
+> private, and shared+private) without needing something like a tri-state
+> enum.
+> 
+> Link: https://lore.kernel.org/all/ZJX0hk+KpQP0KUyB@google.com
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  include/linux/kvm_host.h   |  48 +++
->  include/uapi/linux/kvm.h   |  15 +-
->  include/uapi/linux/magic.h |   1 +
->  virt/kvm/Kconfig           |   4 +
->  virt/kvm/Makefile.kvm      |   1 +
->  virt/kvm/guest_mem.c       | 593 +++++++++++++++++++++++++++++++++++++
->  virt/kvm/kvm_main.c        |  61 +++-
->  virt/kvm/kvm_mm.h          |  38 +++
->  8 files changed, 756 insertions(+), 5 deletions(-)
->  create mode 100644 virt/kvm/guest_mem.c
+>  include/linux/kvm_host.h | 2 ++
+>  virt/kvm/kvm_main.c      | 7 +++++++
+>  2 files changed, 9 insertions(+)
 > 
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index d8c6ce6c8211..b5373cee2b08 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -263,6 +263,8 @@ struct kvm_gfn_range {
+>  	gfn_t start;
+>  	gfn_t end;
+>  	union kvm_mmu_notifier_arg arg;
+> +	bool only_private;
+> +	bool only_shared;
+>  	bool may_block;
+>  };
+>  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 174de2789657..a41f8658dfe0 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -635,6 +635,13 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
+>  			 * the second or later invocation of the handler).
+>  			 */
+>  			gfn_range.arg = range->arg;
+> +
+> +			/*
+> +			 * HVA-based notifications aren't relevant to private
+> +			 * mappings as they don't have a userspace mapping.
+> +			 */
+> +			gfn_range.only_private = false;
+> +			gfn_range.only_shared = true;
+>  			gfn_range.may_block = range->may_block;
 
-<snip>
+Who is supposed to read only_private/only_shared? Is it supposed to be
+plumbed onto arch code and handled specially there?
 
-> +static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
-> +{
-> +	struct list_head *gmem_list = &inode->i_mapping->private_list;
-> +	pgoff_t start = offset >> PAGE_SHIFT;
-> +	pgoff_t end = (offset + len) >> PAGE_SHIFT;
-> +	struct kvm_gmem *gmem;
-> +
-> +	/*
-> +	 * Bindings must stable across invalidation to ensure the start+end
-> +	 * are balanced.
-> +	 */
-> +	filemap_invalidate_lock(inode->i_mapping);
-> +
-> +	list_for_each_entry(gmem, gmem_list, entry) {
-> +		kvm_gmem_invalidate_begin(gmem, start, end);
+I ask because I see elsewhere you have:
 
-In v11 we used to call truncate_inode_pages_range() here to drop filemap's
-reference on the folio. AFAICT the folios are only getting free'd upon
-guest shutdown without this. Was this on purpose?
+    /*
+     * If one or more memslots were found and thus zapped, notify arch code
+     * that guest memory has been reclaimed.  This needs to be done *after*
+     * dropping mmu_lock, as x86's reclaim path is slooooow.
+     */
+    if (__kvm_handle_hva_range(kvm, &hva_range).found_memslot)
+            kvm_arch_guest_memory_reclaimed(kvm);
 
-> +		kvm_gmem_invalidate_end(gmem, start, end);
-> +	}
-> +
-> +	filemap_invalidate_unlock(inode->i_mapping);
-> +
-> +	return 0;
-> +}
-> +
-> +static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
-> +{
-> +	struct address_space *mapping = inode->i_mapping;
-> +	pgoff_t start, index, end;
-> +	int r;
-> +
-> +	/* Dedicated guest is immutable by default. */
-> +	if (offset + len > i_size_read(inode))
-> +		return -EINVAL;
-> +
-> +	filemap_invalidate_lock_shared(mapping);
+and if there are any MMU notifier events that touch HVAs, then
+kvm_arch_guest_memory_reclaimed()->wbinvd_on_all_cpus() will get called,
+which causes the performance issues for SEV and SNP that Ashish had brought
+up. Technically that would only need to happen if there are GPAs in that
+memslot that aren't currently backed by gmem pages (and then gmem could handle
+its own wbinvd_on_all_cpus() (or maybe clflush per-page)). 
 
-We take the filemap lock here, but not for
-kvm_gmem_get_pfn()->kvm_gmem_get_folio(). Is it needed there as well?
-
-> +
-> +	start = offset >> PAGE_SHIFT;
-> +	end = (offset + len) >> PAGE_SHIFT;
-> +
-> +	r = 0;
-> +	for (index = start; index < end; ) {
-> +		struct folio *folio;
-> +
-> +		if (signal_pending(current)) {
-> +			r = -EINTR;
-> +			break;
-> +		}
-> +
-> +		folio = kvm_gmem_get_folio(inode, index);
-> +		if (!folio) {
-> +			r = -ENOMEM;
-> +			break;
-> +		}
-> +
-> +		index = folio_next_index(folio);
-> +
-> +		folio_unlock(folio);
-> +		folio_put(folio);
-> +
-> +		/* 64-bit only, wrapping the index should be impossible. */
-> +		if (WARN_ON_ONCE(!index))
-> +			break;
-> +
-> +		cond_resched();
-> +	}
-> +
-> +	filemap_invalidate_unlock_shared(mapping);
-> +
-> +	return r;
-> +}
-> +
-
-<snip>
-
-> +static int __kvm_gmem_create(struct kvm *kvm, loff_t size, struct vfsmount *mnt)
-> +{
-> +	const char *anon_name = "[kvm-gmem]";
-> +	const struct qstr qname = QSTR_INIT(anon_name, strlen(anon_name));
-> +	struct kvm_gmem *gmem;
-> +	struct inode *inode;
-> +	struct file *file;
-> +	int fd, err;
-> +
-> +	inode = alloc_anon_inode(mnt->mnt_sb);
-> +	if (IS_ERR(inode))
-> +		return PTR_ERR(inode);
-> +
-> +	err = security_inode_init_security_anon(inode, &qname, NULL);
-> +	if (err)
-> +		goto err_inode;
-> +
-> +	inode->i_private = (void *)(unsigned long)flags;
-
-The 'flags' argument isn't added until the subsequent patch that adds THP
-support.
-
-<snip>
-
-> +static bool kvm_gmem_is_valid_size(loff_t size, u64 flags)
-> +{
-> +	if (size < 0 || !PAGE_ALIGNED(size))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *args)
-> +{
-> +	loff_t size = args->size;
-> +	u64 flags = args->flags;
-> +	u64 valid_flags = 0;
-> +
-> +	if (flags & ~valid_flags)
-> +		return -EINVAL;
-> +
-> +	if (!kvm_gmem_is_valid_size(size, flags))
-> +		return -EINVAL;
-> +
-> +	return __kvm_gmem_create(kvm, size, flags, kvm_gmem_mnt);
-> +}
-> +
-> +int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
-> +		  unsigned int fd, loff_t offset)
-> +{
-> +	loff_t size = slot->npages << PAGE_SHIFT;
-> +	unsigned long start, end, flags;
-> +	struct kvm_gmem *gmem;
-> +	struct inode *inode;
-> +	struct file *file;
-> +
-> +	BUILD_BUG_ON(sizeof(gfn_t) != sizeof(slot->gmem.pgoff));
-> +
-> +	file = fget(fd);
-> +	if (!file)
-> +		return -EBADF;
-> +
-> +	if (file->f_op != &kvm_gmem_fops)
-> +		goto err;
-> +
-> +	gmem = file->private_data;
-> +	if (gmem->kvm != kvm)
-> +		goto err;
-> +
-> +	inode = file_inode(file);
-> +	flags = (unsigned long)inode->i_private;
-> +
-> +	/*
-> +	 * For simplicity, require the offset into the file and the size of the
-> +	 * memslot to be aligned to the largest possible page size used to back
-> +	 * the file (same as the size of the file itself).
-> +	 */
-> +	if (!kvm_gmem_is_valid_size(offset, flags) ||
-> +	    !kvm_gmem_is_valid_size(size, flags))
-> +		goto err;
-
-I needed to relax this check for SNP. KVM_GUEST_MEMFD_ALLOW_HUGEPAGE
-applies to entire gmem inode, so it makes sense for userspace to enable
-hugepages if start/end are hugepage-aligned, but QEMU will do things
-like map overlapping regions for ROMs and other things on top of the
-GPA range that the gmem inode was originally allocated for. For
-instance:
-
-  692500@1689108688.696338:kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x4 gpa=0x0 size=0x80000000 ua=0x7fbf5be00000 ret=0 restricted_fd=19 restricted_offset=0x0
-  692500@1689108688.699802:kvm_set_user_memory AddrSpace#0 Slot#1 flags=0x4 gpa=0x100000000 size=0x380000000 ua=0x7fbfdbe00000 ret=0 restricted_fd=19 restricted_offset=0x80000000
-  692500@1689108688.795412:kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x0 gpa=0x0 size=0x0 ua=0x7fbf5be00000 ret=0 restricted_fd=19 restricted_offset=0x0
-  692500@1689108688.795550:kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x4 gpa=0x0 size=0xc0000 ua=0x7fbf5be00000 ret=0 restricted_fd=19 restricted_offset=0x0
-  692500@1689108688.796227:kvm_set_user_memory AddrSpace#0 Slot#6 flags=0x4 gpa=0x100000 size=0x7ff00000 ua=0x7fbf5bf00000 ret=0 restricted_fd=19 restricted_offset=0x100000
-
-Because of that the KVM_SET_USER_MEMORY_REGIONs for non-THP-aligned GPAs
-will fail. Maybe instead it should be allowed, and kvm_gmem_get_folio()
-should handle the alignment checks on a case-by-case and simply force 4k
-for offsets corresponding to unaligned bindings?
+Actually, even if there are shared pages in the GPA range, the
+kvm_arch_guest_memory_reclaimed()->wbinvd_on_all_cpus() can be skipped for
+guests that only use gmem pages for private memory. Is that acceptable? Just
+trying to figure out where this only_private/only_shared handling ties into
+that (or if it's a separate thing entirely).
 
 -Mike
+
+>  
+>  			/*
+> -- 
+> 2.42.0.283.g2d96d420d3-goog
+> 
