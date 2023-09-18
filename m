@@ -2,136 +2,176 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FE87A507B
-	for <lists+linux-security-module@lfdr.de>; Mon, 18 Sep 2023 19:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3785A7A4EA5
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 Sep 2023 18:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjIRRHi (ORCPT
+        id S230299AbjIRQUi (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 18 Sep 2023 13:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
+        Mon, 18 Sep 2023 12:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjIRRHh (ORCPT
+        with ESMTP id S230238AbjIRQU2 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 18 Sep 2023 13:07:37 -0400
+        Mon, 18 Sep 2023 12:20:28 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E348E
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 10:07:32 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BA4FC433A9
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 13:27:48 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66115FC5;
+        Mon, 18 Sep 2023 09:17:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25AEDC433B7;
+        Mon, 18 Sep 2023 13:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695043668;
-        bh=NpDQaIq8slcpBBgt5F7J36tVVCzb5GbvEyBtCzOBLa8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UoxmHwOgqyogWMleGl7hlYN60HkduLBu56UN6a+4DTfHcLmBgI+h1pf5qWAePe/Uk
-         IbqBJP8SKRqIWxZyTr+dA2QAoihC53I3syrPshrD/i/O5neW3R+fPbjb3iGdp37RLZ
-         PUdOuzTbvs0TwPzO9bOg8mIwcy0VrhLPrhJDaxSCW9pnAU6NYFC+tSP6v32rkmfRBx
-         zGjl8ZbkzUCq8QUI8X2aE309WAaqmFZba1mAvrVYeU9nX6XOnDOChV6HaXRN8E9GjK
-         ODvI9HpRdEj0ikMDnSA2QtIT/66Ed0qf87vgraicOICuSilQc/0/T4wfou04qrvFUu
-         WrlEUzbRWL6fA==
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-530c9980556so2337273a12.2
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 06:27:48 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxUgubWXTgXjYMcU+IKq8OANovLMPH54gjq2LhArtLBc7c99eoF
-        sZGZ7yNn46TRbz3JKm4FmVMBXiFcjmb+ZFhFQ1b7UQ==
-X-Google-Smtp-Source: AGHT+IHVacgZlb19m5SNsEYtq+vvIEOgYDfqOIvL1EGeUP6of8LJwyHm479IBQOjE2k7UHwxocOqT8Qvp9EQwMirE8w=
-X-Received: by 2002:aa7:d58b:0:b0:530:4f4b:9d1a with SMTP id
- r11-20020aa7d58b000000b005304f4b9d1amr7872098edq.5.1695043666738; Mon, 18 Sep
- 2023 06:27:46 -0700 (PDT)
+        s=k20201202; t=1695045108;
+        bh=jiGrt6majxDR+XMOL+qVbyDBwKKU2Pb4JTzAJ6GQJEE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RPrbpHUafnMPvp4lSfOS5DEN4hjXnwPwKAXM3Z0zwmTzIP5zeJkn8U9NzB38B5Tex
+         k+2tyA6hrOslXumLkwMjHPpZ+WQGvkjfeS20C0Cb/KbV4p6/Nx3KaY2BBxdDjRA2Oq
+         M/QPer3Z0Zmp1vFxzR5roQfGsteyheBghYUFbMTrWg2o5WdqAXXMmIsWFjhIjiknoz
+         Zs6at91WlL6saoO8M1axs/BCMJYjR9XA+8Vkk7NV2ROdgImshQLMo4QYe5rOkYWkXf
+         uc1BPYi5/reup0U7DOzjaPaXJkuWVmscixL/VAo9Mh+/vbb5SfoahdBXnAiqqYxuQZ
+         b8kgNMNS0Ke2g==
+Date:   Mon, 18 Sep 2023 15:51:42 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Miklos Szeredi <mszeredi@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [RFC PATCH 2/3] add statmnt(2) syscall
+Message-ID: <20230918-grafik-zutreffen-995b321017ae@brauner>
+References: <20230913152238.905247-1-mszeredi@redhat.com>
+ <20230913152238.905247-3-mszeredi@redhat.com>
+ <20230914-salzig-manifest-f6c3adb1b7b4@brauner>
+ <CAJfpegs-sDk0++FjSZ_RuW5m-z3BTBQdu4T9QPtWwmSZ1_4Yvw@mail.gmail.com>
+ <20230914-lockmittel-verknallen-d1a18d76ba44@brauner>
+ <CAJfpegt-VPZP3ou-TMQFs1Xupj_iWA5ttC2UUFKh3E43EyCOQQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230616000441.3677441-1-kpsingh@kernel.org> <20230616000441.3677441-6-kpsingh@kernel.org>
- <202306201356.CF454506@keescook>
-In-Reply-To: <202306201356.CF454506@keescook>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 18 Sep 2023 15:27:36 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7Nv+_L_scpZL3L32AZtradq6yTeN9adz0ayihe3PpHsw@mail.gmail.com>
-Message-ID: <CACYkzJ7Nv+_L_scpZL3L32AZtradq6yTeN9adz0ayihe3PpHsw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] security: Add CONFIG_SECURITY_HOOK_LIKELY
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        paul@paul-moore.com, casey@schaufler-ca.com, song@kernel.org,
-        daniel@iogearbox.net, ast@kernel.org, jannh@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJfpegt-VPZP3ou-TMQFs1Xupj_iWA5ttC2UUFKh3E43EyCOQQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Jun 20, 2023 at 10:59=E2=80=AFPM Kees Cook <keescook@chromium.org> =
-wrote:
->
-> On Fri, Jun 16, 2023 at 02:04:41AM +0200, KP Singh wrote:
-> > [...]
-> > @@ -110,6 +110,9 @@ static __initdata struct lsm_info *exclusive;
-> >  #undef LSM_HOOK
-> >  #undef DEFINE_LSM_STATIC_CALL
-> >
-> > +#define security_hook_active(n, h) \
-> > +     static_branch_maybe(CONFIG_SECURITY_HOOK_LIKELY, &SECURITY_HOOK_A=
-CTIVE_KEY(h, n))
-> > +
-> >  /*
-> >   * Initialise a table of static calls for each LSM hook.
-> >   * DEFINE_STATIC_CALL_NULL invocation above generates a key (STATIC_CA=
-LL_KEY)
-> > @@ -816,7 +819,7 @@ static int lsm_superblock_alloc(struct super_block =
-*sb)
-> >   */
-> >  #define __CALL_STATIC_VOID(NUM, HOOK, ...)                            =
-    \
-> >  do {                                                                  =
-    \
-> > -     if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM)))=
- {    \
-> > +     if (security_hook_active(NUM, HOOK)) {                           =
-    \
-> >               static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__);    =
-    \
-> >       }                                                                =
-    \
-> >  } while (0);
-> > @@ -828,7 +831,7 @@ do {                                               =
-                            \
-> >
-> >  #define __CALL_STATIC_INT(NUM, R, HOOK, LABEL, ...)                   =
-    \
-> >  do {                                                                  =
-    \
-> > -     if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM)))=
- {  \
-> > +     if (security_hook_active(NUM, HOOK)) {    \
-> >               R =3D static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__=
-);    \
-> >               if (R !=3D 0)                                            =
-      \
-> >                       goto LABEL;                                      =
-    \
->
-> I actually think I'd prefer there be no macro wrapping
-> static_branch_maybe(), just for reading it more easily. i.e. people
-> reading this code are going to expect the static_branch/static_call code
-> patterns, and seeing "security_hook_active" only slows them down in
-> understanding it. I don't think it's _that_ ugly to have it all typed
-> out. e.g.:
+> Atomicity of getting a snapshot of the current mount tree with all of
+> its attributes was never guaranteed, although reading
+> /proc/self/mountinfo into a sufficiently large buffer would work that
+> way.   However, I don't see why mount trees would require stronger
+> guarantees than dentry trees (for which we have basically none).
 
-Done and agreed, especially given that this is behind a macro anyways.
+So atomicity was never put forward as a requirement. In that
+session/recording I explicitly state that we won't guarantee atomicity.
+And systemd agreed with this. So I think we're all on the same page.
 
+> Even more type clean interface:
+> 
+> struct statmnt *statmnt(u64 mnt_id, u64 mask, void *buf, size_t
+> bufsize, unsigned int flags);
+> 
+> Kernel would return a fully initialized struct with the numeric as
+> well as string fields filled.  That part is trivial for userspace to
+> deal with.
 
->
->         if (static_branch_maybe(CONFIG_SECURITY_HOOK_LIKELY,             =
-    \
->                                 &SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM)) {  =
-    \
->                 R =3D static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__=
-);    \
->                 if (R !=3D 0)                                            =
-      \
->                         goto LABEL;                                      =
-    \
->
->
->
-> --
-> Kees Cook
+I really would prefer a properly typed struct and that's what everyone
+was happy with in the session as well. So I would not like to change the
+main parameters.
+
+> > Plus, the format for how to return arbitrary filesystem mount options
+> > warrants a separate discussion imho as that's not really vfs level
+> > information.
+> 
+> Okay.   Let's take fs options out of this.
+
+Thanks.
+
+> 
+> That leaves:
+> 
+>  - fs type and optionally subtype
+
+So since subtype is FUSE specific it might be better to move this to
+filesystem specific options imho.
+
+>  - root of mount within fs
+>  - mountpoint path
+> 
+> The type and subtype are naturally limited to sane sizes, those are
+> not an issue.
+
+What's the limit for fstype actually? I don't think there is one.
+There's one by chance but not by design afaict?
+
+Maybe crazy idea:
+That magic number thing that we do in include/uapi/linux/magic.h
+is there a good reason for this or why don't we just add a proper,
+simple enum:
+
+enum {
+        FS_TYPE_ADFS        1
+        FS_TYPE_AFFS        2
+        FS_TYPE_AFS         3
+        FS_TYPE_AUTOFS      4
+	FS_TYPE_EXT2	    5
+	FS_TYPE_EXT3	    6
+	FS_TYPE_EXT4	    7
+	.
+	.
+	.
+	FS_TYPE_MAX
+}
+
+that we start returning from statmount(). We can still return both the
+old and the new fstype? It always felt a bit odd that fs developers to
+just select a magic number.
+
+> 
+> For paths the evolution of the relevant system/library calls was:
+> 
+>   char *getwd(char buf[PATH_MAX]);
+>   char *getcwd(char *buf, size_t size);
+>   char *get_current_dir_name(void);
+> 
+> It started out using a fixed size buffer, then a variable sized
+> buffer, then an automatically allocated buffer by the library, hiding
+> the need to resize on overflow.
+> 
+> The latest style is suitable for the statmnt() call as well, if we
+> worry about pleasantness of the API.
+
+So, can we then do the following struct:
+
+struct statmnt {
+        __u64 mask;             /* What results were written [uncond] */
+        __u32 sb_dev_major;     /* Device ID */
+        __u32 sb_dev_minor;
+        __u64 sb_magic;         /* ..._SUPER_MAGIC */
+        __u32 sb_flags;         /* MS_{RDONLY,SYNCHRONOUS,DIRSYNC,LAZYTIME} */
+        __u32 __spare1;
+        __u64 mnt_id;           /* Unique ID of mount */
+        __u64 mnt_parent_id;    /* Unique ID of parent (for root == mnt_id) */
+        __u32 mnt_id_old;       /* Reused IDs used in proc/.../mountinfo */
+        __u32 mnt_parent_id_old;
+        __u64 mnt_attr;         /* MOUNT_ATTR_... */
+        __u64 mnt_propagation;  /* MS_{SHARED,SLAVE,PRIVATE,UNBINDABLE} */
+        __u64 mnt_peer_group;   /* ID of shared peer group */
+        __u64 mnt_master;       /* Mount receives propagation from this ID */
+        __u64 propagate_from;   /* Propagation from in current namespace */
+	__aligned_u64 mountpoint;
+	__u32 mountpoint_len;
+	__aligned_u64 mountroot;
+	__u32 mountroot_len;
+        __u64 __spare[20];
+};
+
+Userspace knows already how to deal with that because of bpf and other
+structs (e.g., both systemd and LXC have ptr_to_u64() helpers and so
+on). Libmount and glibc can hide this away internally as well.
