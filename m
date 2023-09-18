@@ -2,118 +2,86 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5D97A4E7B
-	for <lists+linux-security-module@lfdr.de>; Mon, 18 Sep 2023 18:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B997A4EF3
+	for <lists+linux-security-module@lfdr.de>; Mon, 18 Sep 2023 18:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjIRQSa (ORCPT
+        id S229830AbjIRQbp (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 18 Sep 2023 12:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        Mon, 18 Sep 2023 12:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjIRQSS (ORCPT
+        with ESMTP id S229862AbjIRQbb (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 18 Sep 2023 12:18:18 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281F549F6
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 09:09:53 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-59bfccec7f3so49343197b3.2
-        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 09:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695053392; x=1695658192; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s17YssV/eLMk3v6BQw21PztJLVQ1uDSUDnGyHA0nJic=;
-        b=qX+BtdOnVRHNQXTUm2TRlG4JWP9Ko3PcF6I9U2bIP0SD1mERSxOG6nVDmmoVV79+Kn
-         EhesEMZmOkyH0JgbFtFQt0ltV/RjMipelXNSDklRdEUX3y+C5Y/tMR3+J7eqq0QscCS3
-         a/Hm1dWP1IMYx3FSxL5vctPaFIs1mgtHhg7ppBsOgCil2EBnFS2L2U/tHpNx+LpKxdId
-         /AsZK5ehsVJ/26dX9ATP9iJcksIzHNockou5OtEeo8vWbboCpcjdpcwq16eG87GyMO0C
-         OokEGWoD0UXvyx0KcMzb+823CkZ2BOxISdz7WJ8Pa1HYOcNCDRWMNObb8IT3M0Nr9piV
-         snFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695053392; x=1695658192;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s17YssV/eLMk3v6BQw21PztJLVQ1uDSUDnGyHA0nJic=;
-        b=I7v2fyGcvyTsdaDixXbAeNCSasBa2GITeyzkeYeLvoAx8f8afAmwZ8nBLBNk6H8eLI
-         dd/CbmKfFd93D/vuvvLqb5NPo9L1/Qe1Sf1apKmiHdcIhw8aMr5WkaUgEyKUte0DEXqu
-         jplreNlUJaV8RsEkq6eGAzryzjlvXdgMniLEEBpc5Q7Bllef+/eyZE/MlW36G9CBCZ6H
-         vVucC0YrQ5nMMPKpFfM2CcU8UhW2x0JiGdF27QcUWQdhRmbQzC7hIDjx4wmOJGthzgu7
-         +f1VEuCkbJQ/kzKhYBxa79FeTSI9SXFGWZ4sfY0rBt38QeoYWOt1jwwj+MIWhNwCPsXP
-         DgPg==
-X-Gm-Message-State: AOJu0YyimyhdY9ixkOQuQFk280DrIFjf2C7pOrQjuC5+eIb2VWBdkaVD
-        +dRrjau/yRUvSZc+SWuArgJCtM8Dfr8=
-X-Google-Smtp-Source: AGHT+IFqXVMaW5EWUR3sn7RRHAULv1S9Ax+JzluU+Y462jgw29bgpZAEkbL739S68Hx7QOlYkiFqSLcGAUw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:4cf:b0:d7f:f3e:74ab with SMTP id
- v15-20020a05690204cf00b00d7f0f3e74abmr227961ybs.1.1695052667494; Mon, 18 Sep
- 2023 08:57:47 -0700 (PDT)
-Date:   Mon, 18 Sep 2023 08:57:45 -0700
-In-Reply-To: <9925e01b-7fa9-95e4-dc21-1d760ef9cde4@linux.intel.com>
-Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-11-seanjc@google.com>
- <9925e01b-7fa9-95e4-dc21-1d760ef9cde4@linux.intel.com>
-Message-ID: <ZQhzeQLbB5zz2yIc@google.com>
-Subject: Re: [RFC PATCH v12 10/33] KVM: Set the stage for handling only shared
- mappings in mmu_notifier events
-From:   Sean Christopherson <seanjc@google.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
+        Mon, 18 Sep 2023 12:31:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DA02D56
+        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 09:29:08 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0E7C116A1
+        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 16:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695054547;
+        bh=bIScZDSarCmOldPejQYXyOwMlItQgnmEFeGCinR7+Ao=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YlOvnsWpTIEjzR1qfc8wGBF3yBnSgrHjHIP39Mb4tfQfZb4KRCP9uAH5QKaHC0HWQ
+         6JhbD8Y2p2zYBaVPRQugu+oqZB2RRdTeuCK7OQ//C7X9wH+THBv+6+autKWkf1KK4n
+         WKCnTLDVDqI3c7FKVoaJx54g7IhejPrFOLLgUJ+4c+iCd/u19C/izdNVLnt/U2CzBa
+         PnRvZ3oo3LsNOARVV+wxy97Q7TSzhO6wUbRK2XzHP/zZNt0dhFA/iVmE+JeoMK2yj8
+         lP5Sd5FxlFKbrhrY7DEZAs9aPKwZUfx6yoJGEbNhZ5ZsSanwTaSiLCk2s22+4GFwHX
+         jwQ6bXsNnUzjg==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-52a49a42353so5809375a12.2
+        for <linux-security-module@vger.kernel.org>; Mon, 18 Sep 2023 09:29:07 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yzq2k6hnC3RFOVV7EW9if2fcls5Smn/CQVeVOR/oRECbDssWnUE
+        Tv5Gq6OPKgk5ep8sGwrIp7BNk/HzZS3FXy+madWKHg==
+X-Google-Smtp-Source: AGHT+IGFizkAWnjs6XKY7G7IkOr11E8gFY0Ec5SFArsvF9d7vzTnafn7UQ9cXA9NFbKD9mljtwgdWRoPupGMinp53OU=
+X-Received: by 2002:aa7:d8d7:0:b0:52b:d169:b374 with SMTP id
+ k23-20020aa7d8d7000000b0052bd169b374mr7709583eds.3.1695054546031; Mon, 18 Sep
+ 2023 09:29:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230616000441.3677441-1-kpsingh@kernel.org> <20230616000441.3677441-6-kpsingh@kernel.org>
+ <CAHC9VhSSX0KRuWRURUmt2tUis6fbbmozUbcoeAPkLRmfR2jqAg@mail.gmail.com>
+In-Reply-To: <CAHC9VhSSX0KRuWRURUmt2tUis6fbbmozUbcoeAPkLRmfR2jqAg@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Mon, 18 Sep 2023 18:28:55 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7KBBJV-CWPkMCqT6rK6yVEOJzhqUjvWzp9BAm-rx3Gsg@mail.gmail.com>
+Message-ID: <CACYkzJ7KBBJV-CWPkMCqT6rK6yVEOJzhqUjvWzp9BAm-rx3Gsg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] security: Add CONFIG_SECURITY_HOOK_LIKELY
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        keescook@chromium.org, casey@schaufler-ca.com, song@kernel.org,
+        daniel@iogearbox.net, ast@kernel.org, jannh@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Sep 18, 2023, Binbin Wu wrote:
-> 
-> 
-> On 9/14/2023 9:55 AM, Sean Christopherson wrote:
-> > Add flags to "struct kvm_gfn_range" to let notifier events target only
-> > shared and only private mappings, and write up the existing mmu_notifier
-> > events to be shared-only (private memory is never associated with a
-> > userspace virtual address, i.e. can't be reached via mmu_notifiers).
-> > 
-> > Add two flags so that KVM can handle the three possibilities (shared,
-> > private, and shared+private) without needing something like a tri-state
-> > enum.
-> 
-> How to understand the word "stage" in short log?
+On Mon, Sep 18, 2023 at 3:56=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> On Thu, Jun 15, 2023 at 8:05=E2=80=AFPM KP Singh <kpsingh@kernel.org> wro=
+te:
+> >
+> > This config influences the nature of the static key that guards the
+> > static call for LSM hooks.
+>
+> No further comment on the rest of this patch series yet, this just
+> happened to bubble to the top of my inbox and I wanted to comment
+> quickly - I'm not in favor of adding a Kconfig option for something
 
-Sorry, it's an idiom[*] that essentially means "to prepare for".  I'll rephrase
-the shortlog to be more straightforward (I have a bad habit of using idioms).
+I understand, I will send the v3 with the patch for reference and we
+can drop it, if that's the consensus.
 
-[*] https://dictionary.cambridge.org/us/dictionary/english/set-the-stage-for
+> like this.  If you have an extremely well defined use case then you
+> can probably do the work to figure out the "correct" value for the
+> tunable, but for a general purpose kernel build that will have
+> different LSMs active, a variety of different BPF LSM hook
+> implementations at different times, etc. there is little hope to
+> getting this right.  No thank you.
+>
+> --
+> paul-moore.com
