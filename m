@@ -2,178 +2,129 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0EC7A96DC
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 19:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56B77A982D
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 19:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjIURBR (ORCPT
+        id S230195AbjIURcQ (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Sep 2023 13:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        Thu, 21 Sep 2023 13:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjIURBA (ORCPT
+        with ESMTP id S230081AbjIURcD (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:01:00 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CB1CDD;
-        Thu, 21 Sep 2023 09:59:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695315562; x=1726851562;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oZ26NaKC2zv5YONE8y6jW8KHDfibqQbE4Lcj557476A=;
-  b=Xkm+iGlBE6orJWszf3h/H4m+HtQA60DEUHwyUtmg9i5jaWDT1S9FR8hj
-   YtEipiPub8bi9mHzl/Fr81HyOkvRvNtT0YrBXT+3HaBEzzQ1sUxwsaS6C
-   pfHGU46eOVUiEDEZ3xb645ixhLZ5XlzmImCHNozhHQ/WlHR72aSrebSFc
-   TxYc74ca32GhUTwfalEh0chny9CW4gkGVohFKopw0l0Iht8Tv4JsBnkWO
-   hKQ/Fk8xJlhLWLLqa3LBD+Nq4ScdGTjikwcKLZBYF21Or2parWQ2yty81
-   CBbWjQLqAU+4W7BZ7L7xXcz7UlbJalHuoJWQ44Gfcpm3XagCA84ek5F7u
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="466734468"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="466734468"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 22:51:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="837187245"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="837187245"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.17.222]) ([10.93.17.222])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 22:51:36 -0700
-Message-ID: <ef36db9d-bb9c-e042-2617-830cf44602de@linux.intel.com>
-Date:   Thu, 21 Sep 2023 13:51:34 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [RFC PATCH v12 18/33] KVM: x86/mmu: Handle page fault for private
- memory
-To:     Sean Christopherson <seanjc@google.com>,
-        Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 21 Sep 2023 13:32:03 -0400
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD8F10919;
+        Thu, 21 Sep 2023 10:07:32 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlY55m19zMqhBY;
+        Thu, 21 Sep 2023 06:16:57 +0000 (UTC)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlY35QQvz3f;
+        Thu, 21 Sep 2023 08:16:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1695277017;
+        bh=JPGqIw4NybtPv8UXpkiwD6sCB9HCR+gM6q1qZN9IqXk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YchhqMwoEcrcTmhUUQ9lpZZ8cs3lJqNM4E1jZL1qt4XqjlAFav6irE0qMM/KUEjor
+         M88gN/aDWfE3sWP2nf+DSZjStURCumnvl9CRZ9cj1Y2e4+jYZTFjqbRgUx3GL5+xMj
+         oNyd2c6uILdSsyYJu/YaEeK46TOeELV0lOaM0bdo=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
         Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20230914015531.1419405-1-seanjc@google.com>
- <20230914015531.1419405-19-seanjc@google.com>
- <ZQPuMK6D/7UzDH+D@yzhao56-desk.sh.intel.com> <ZQRpiOd1DNDDJQ3r@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ZQRpiOd1DNDDJQ3r@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Ben Scarlato <akhna@google.com>,
+        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+        Jeff Xu <jeffxu@google.com>,
+        Jorge Lucangeli Obes <jorgelo@google.com>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [RFC PATCH v1 0/7] Landlock audit support
+Date:   Thu, 21 Sep 2023 08:16:34 +0200
+Message-ID: <20230921061641.273654-1-mic@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Hi,
+
+This patch series adds basic audit support to Landlock for most actions.
+Logging denied requests is useful for different use cases:
+* app developers: to ease and speed up sandboxing support
+* power users: to understand denials
+* sysadmins: to look for users' issues
+* tailored distro maintainers: to get usage metrics from their fleet
+* security experts: to detect attack attempts
+
+To make logs useful, they need to contain the most relevant Landlock
+domain that denied an action, and the reason. This translates to the
+latest nested domain and the related missing access rights.
+
+Two "Landlock permissions" are used to describe mandatory restrictions
+enforced on all domains:
+* fs_layout: change the view of filesystem with mount operations.
+* ptrace: tamper with a process.
+
+Here is an example of logs, result of the sandboxer activity:
+tid=267 comm="sandboxer" op=create-ruleset ruleset=1 handled_access_fs=execute,write_file,read_file,read_dir,remove_dir,remove_file,make_char,make_dir,make_reg,make_sock,make_fifo,make_block,make_sym,refer,truncate
+tid=267 comm="sandboxer" op=restrict-self domain=2 ruleset=1 parent=0
+op=release-ruleset ruleset=1
+tid=267 comm="bash" domain=2 op=open errno=13 missing-fs-accesses=write_file,read_file missing-permission= path="/dev/tty" dev="devtmpfs" ino=9
+tid=268 comm="ls" domain=2 op=open errno=13 missing-fs-accesses=read_dir missing-permission= path="/" dev="vda2" ino=256
+tid=269 comm="touch" domain=2 op=mknod errno=13 missing-fs-accesses=make_reg missing-permission= path="/" dev="vda2" ino=256
+tid=270 comm="umount" domain=2 op=umount errno=1 missing-fs-accesses= missing-permission=fs_layout name="/" dev="tmpfs" ino=1
+tid=271 comm="strace" domain=2 op=ptrace errno=1 missing-fs-accesses= missing-permission=ptrace opid=1 ocomm="systemd"
+
+As highlighted in comments, support for audit is not complete yet with
+this series: some actions are not logged (e.g. file reparenting), and
+rule additions are not logged neither.
+
+I'm also not sure if we need to have seccomp-like features such as
+SECCOMP_FILTER_FLAG_LOG, SECCOMP_RET_LOG, and
+/proc/sys/kernel/seccomp/actions_logged
+
+I'd like to get some early feedback on this proposal.
+
+This series is based on v6.6-rc2
+
+Regards,
+
+Mickaël Salaün (7):
+  lsm: Add audit_log_lsm_data() helper
+  landlock: Factor out check_access_path()
+  landlock: Log ruleset creation and release
+  landlock: Log domain creation and enforcement
+  landlock: Log file-related requests
+  landlock: Log mount-related requests
+  landlock: Log ptrace requests
+
+ include/linux/lsm_audit.h    |   2 +
+ include/uapi/linux/audit.h   |   1 +
+ security/landlock/Makefile   |   2 +
+ security/landlock/audit.c    | 283 +++++++++++++++++++++++++++++++++++
+ security/landlock/audit.h    |  88 +++++++++++
+ security/landlock/fs.c       | 169 ++++++++++++++++-----
+ security/landlock/ptrace.c   |  47 +++++-
+ security/landlock/ruleset.c  |   6 +
+ security/landlock/ruleset.h  |  10 ++
+ security/landlock/syscalls.c |  12 ++
+ security/lsm_audit.c         |  26 ++--
+ 11 files changed, 595 insertions(+), 51 deletions(-)
+ create mode 100644 security/landlock/audit.c
+ create mode 100644 security/landlock/audit.h
 
 
-On 9/15/2023 10:26 PM, Sean Christopherson wrote:
-> On Fri, Sep 15, 2023, Yan Zhao wrote:
->> On Wed, Sep 13, 2023 at 06:55:16PM -0700, Sean Christopherson wrote:
->> ....
->>> +static void kvm_mmu_prepare_memory_fault_exit(struct kvm_vcpu *vcpu,
->>> +					      struct kvm_page_fault *fault)
->>> +{
->>> +	kvm_prepare_memory_fault_exit(vcpu, fault->gfn << PAGE_SHIFT,
->>> +				      PAGE_SIZE, fault->write, fault->exec,
->>> +				      fault->is_private);
->>> +}
->>> +
->>> +static int kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
->>> +				   struct kvm_page_fault *fault)
->>> +{
->>> +	int max_order, r;
->>> +
->>> +	if (!kvm_slot_can_be_private(fault->slot)) {
->>> +		kvm_mmu_prepare_memory_fault_exit(vcpu, fault);
->>> +		return -EFAULT;
->>> +	}
->>> +
->>> +	r = kvm_gmem_get_pfn(vcpu->kvm, fault->slot, fault->gfn, &fault->pfn,
->>> +			     &max_order);
->>> +	if (r) {
->>> +		kvm_mmu_prepare_memory_fault_exit(vcpu, fault);
->>> +		return r;
->>> +	}
->>> +
->>> +	fault->max_level = min(kvm_max_level_for_order(max_order),
->>> +			       fault->max_level);
->>> +	fault->map_writable = !(fault->slot->flags & KVM_MEM_READONLY);
->>> +
->>> +	return RET_PF_CONTINUE;
->>> +}
->>> +
->>>   static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->>>   {
->>>   	struct kvm_memory_slot *slot = fault->slot;
->>> @@ -4293,6 +4356,14 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->>>   			return RET_PF_EMULATE;
->>>   	}
->>>   
->>> +	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
->> In patch 21,
->> fault->is_private is set as:
->> 	".is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT)",
->> then, the inequality here means memory attribute has been updated after
->> last check.
->> So, why an exit to user space for converting is required instead of a mere retry?
->>
->> Or, is it because how .is_private is assigned in patch 21 is subjected to change
->> in future?
-> This.  Retrying on SNP or TDX would hang the guest.  I suppose we could special
-> case VMs where .is_private is derived from the memory attributes, but the
-> SW_PROTECTED_VM type is primary a development vehicle at this point.  I'd like to
-> have it mimic SNP/TDX as much as possible; performance is a secondary concern.
-So when .is_private is derived from the memory attributes, and if I 
-didn't miss
-anything, there is no explicit conversion mechanism introduced yet so 
-far, does
-it mean for pure sw-protected VM (withouth SNP/TDX), the page fault will be
-handled according to the memory attributes setup by host/user vmm, no 
-implicit
-conversion will be triggered, right?
-
-
->
-> E.g. userspace needs to be prepared for "spurious" exits due to races on SNP and
-> TDX, which this can theoretically exercise.  Though the window is quite small so
-> I doubt that'll actually happen in practice; which of course also makes it less
-> important to retry instead of exiting.
+base-commit: ce9ecca0238b140b88f43859b211c9fdfd8e5b70
+-- 
+2.42.0
 
