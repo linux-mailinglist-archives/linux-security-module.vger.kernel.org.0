@@ -2,116 +2,140 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8637A9706
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 19:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9577A9D36
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 21:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjIURLA (ORCPT
+        id S229952AbjIUT3r (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Sep 2023 13:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        Thu, 21 Sep 2023 15:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjIURKX (ORCPT
+        with ESMTP id S230301AbjIUT3T (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:10:23 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5AF93C8
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 10:05:45 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1c43cd8b6cbso10004575ad.0
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 10:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695315945; x=1695920745; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VFujV55InQpfIcmwhWIdcFo9LOSK6bP3ULKilR3pEPA=;
-        b=gRy2oWe5kbczxsDfBAGWqWCwRfa8u5S5khYqBsdItMdbjTMG6GouRWGgkuTQ4abr63
-         9xT4kzmjSvVpuTHFqWd8z0iWk/QRG7IY5/Bb6FwyMZeq+BfmAJP7zD4b8bOOFUeqUyWz
-         d/L92J0F8YvOlv7RGv+S+HyP/kqpPo55vDyvrENu80MQXvrJ2s8K3ZlyZv91GG95zkVl
-         RjOPaoFbQ0nhjhBE6Gz4eDsmKXK+k++QCTj7Ji/2IhFjzhglHAlMyU3lkRqxBdyBRcXP
-         oUkj/BvJxgVYEwKlnaiaejjIXnZOjQlhVBLF6XREIrpHRiUZ4Il21yqnee2dFSG+c9pm
-         PF5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695315945; x=1695920745;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VFujV55InQpfIcmwhWIdcFo9LOSK6bP3ULKilR3pEPA=;
-        b=G3IuqkCAzv7Wt1ZCfghw3m0AB+nksD/AmqhuFoSpSusa7hBFce2yAReWKmY2+LILj2
-         mUsxE0OHgAnPIPt6lhagRIBoHO+7Amt1REcejxmgKRSL9pkiZlEnecXbePBBVK3XQFga
-         7/fDXln38lTtE+7+QEPHiX3kM2XxjealUqKbbylSuflB/RQ9zvdUMIVy26rqm+rEVIWl
-         eFjqD8LizBjNBjHxRf7Elr/pjFsq2yqhUhSkLrcVeu9rSBSmmimXhlA/yRiN8/KmosW2
-         Q0K9TtiYoLlExhPWp4PNAB5aZhPu3R3sp4TzRgK74yTUr3QHM+aP/eFP7VctUQPj5ub1
-         GYFg==
-X-Gm-Message-State: AOJu0YymWYIrPIW2P6ZWZQLF9AuwTL/YBs2wxO3H/ea207PXrTL2S9Ow
-        yrt3GpzqK0nlR1z9l+OQu83GswKmofc=
-X-Google-Smtp-Source: AGHT+IGn6bxt0aytyfRrQvdNGXaSXeT8sIcIptWMB2qfEas65NY2TcrLdWuDyigFBOjNZ28AUG3erUeC33s=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:ce86:b0:1c3:c127:558 with SMTP id
- f6-20020a170902ce8600b001c3c1270558mr71199plg.0.1695306271120; Thu, 21 Sep
- 2023 07:24:31 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 07:24:29 -0700
-In-Reply-To: <ZQus1v3AvEZjuat9@yilunxu-OptiPlex-7050>
-Mime-Version: 1.0
-References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-3-seanjc@google.com>
- <ZQqMBEL61p739dpF@yilunxu-OptiPlex-7050> <ZQr5uXhV6Cnx4DYT@google.com> <ZQus1v3AvEZjuat9@yilunxu-OptiPlex-7050>
-Message-ID: <ZQxSHXIGdWXy+zDU@google.com>
-Subject: Re: [RFC PATCH v12 02/33] KVM: Use gfn instead of hva for mmu_notifier_retry
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 21 Sep 2023 15:29:19 -0400
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E05612446
+        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 10:06:53 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RrlY738kszMpnsb;
+        Thu, 21 Sep 2023 06:16:59 +0000 (UTC)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4RrlY62SQNzMppKT;
+        Thu, 21 Sep 2023 08:16:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1695277019;
+        bh=C96mByL5VMgKe+z3S4sdB6o2Dq3umyYV2RysHQLeFgI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NIh9AE6iGXfm/w7dRtI3eR/bv26/nMk6QUSrB46LLWPGRDS69Fz10CJeqMYOtM3Jf
+         ptzdpk0XS+wZajN8f6q6NpzX9bYPyCWibReuzVDfHT/HDZAh7GkkTTYCTiZiNYxqj0
+         1xcDI7CD86C3lYgqB/e/ZiQ2kUmJEoNIcZ/oLGME=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>,
         Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fuad Tabba <tabba@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Ben Scarlato <akhna@google.com>,
+        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+        Jeff Xu <jeffxu@google.com>,
+        Jorge Lucangeli Obes <jorgelo@google.com>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shervin Oloumi <enlightened@google.com>, audit@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [RFC PATCH v1 1/7] lsm: Add audit_log_lsm_data() helper
+Date:   Thu, 21 Sep 2023 08:16:35 +0200
+Message-ID: <20230921061641.273654-2-mic@digikod.net>
+In-Reply-To: <20230921061641.273654-1-mic@digikod.net>
+References: <20230921061641.273654-1-mic@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Sep 21, 2023, Xu Yilun wrote:
-> When the invalidation acrosses multiple slots, I'm not sure if the
-> contiguous HVA range must correspond to contiguous GFN range. If not,
-> are we producing a larger range than required?
+Extract code from common_dump_audit_data() into the audit_log_lsm_data()
+helper. This helps reuse common LSM audit data while not abusing
+AUDIT_AVC records because of the common_lsm_audit() helper.
 
-Multiple invalidations are all but guaranteed to yield a range that covers addresses
-that aren't actually being invalidated.  This is true today.
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ include/linux/lsm_audit.h |  2 ++
+ security/lsm_audit.c      | 26 +++++++++++++++++---------
+ 2 files changed, 19 insertions(+), 9 deletions(-)
 
-> And when the invalidation acrosses multiple address space, I'm almost
-> sure it is wrong to merge GFN ranges from different address spaces. 
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index 97a8b21eb033..5f9a7ed0e7a5 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -122,6 +122,8 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ int ipv6_skb_to_auditdata(struct sk_buff *skb,
+ 		struct common_audit_data *ad, u8 *proto);
+ 
++void audit_log_lsm_data(struct audit_buffer *ab, struct common_audit_data *a);
++
+ void common_lsm_audit(struct common_audit_data *a,
+ 	void (*pre_audit)(struct audit_buffer *, void *),
+ 	void (*post_audit)(struct audit_buffer *, void *));
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 849e832719e2..58f9b8bde22a 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -189,16 +189,12 @@ static inline void print_ipv4_addr(struct audit_buffer *ab, __be32 addr,
+ }
+ 
+ /**
+- * dump_common_audit_data - helper to dump common audit data
++ * audit_log_lsm_data - helper to log common LSM audit data
+  * @ab : the audit buffer
+  * @a : common audit data
+- *
+  */
+-static void dump_common_audit_data(struct audit_buffer *ab,
+-				   struct common_audit_data *a)
++void audit_log_lsm_data(struct audit_buffer *ab, struct common_audit_data *a)
+ {
+-	char comm[sizeof(current->comm)];
+-
+ 	/*
+ 	 * To keep stack sizes in check force programmers to notice if they
+ 	 * start making this union too large!  See struct lsm_network_audit
+@@ -206,9 +202,6 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 	 */
+ 	BUILD_BUG_ON(sizeof(a->u) > sizeof(void *)*2);
+ 
+-	audit_log_format(ab, " pid=%d comm=", task_tgid_nr(current));
+-	audit_log_untrustedstring(ab, memcpy(comm, current->comm, sizeof(comm)));
+-
+ 	switch (a->type) {
+ 	case LSM_AUDIT_DATA_NONE:
+ 		return;
+@@ -428,6 +421,21 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 	} /* switch (a->type) */
+ }
+ 
++/**
++ * dump_common_audit_data - helper to dump common audit data
++ * @ab : the audit buffer
++ * @a : common audit data
++ */
++static void dump_common_audit_data(struct audit_buffer *ab,
++				   struct common_audit_data *a)
++{
++	char comm[sizeof(current->comm)];
++
++	audit_log_format(ab, " pid=%d comm=", task_tgid_nr(current));
++	audit_log_untrustedstring(ab, memcpy(comm, current->comm, sizeof(comm)));
++	audit_log_lsm_data(ab, a);
++}
++
+ /**
+  * common_lsm_audit - generic LSM auditing function
+  * @a:  auxiliary audit data
+-- 
+2.42.0
 
-It's not "wrong" in the sense that false positives do not cause functional
-problems, at worst a false positive can unnecessarily stall a vCPU until the
-unrelated invalidations complete.
-
-Multiple concurrent invalidations are not common, and if they do happen, they are
-likely related and will have spacial locality in both host virtual address space
-and guest physical address space.  Given that, we chose for the simple (and fast!)
-approach of maintaining a single all-encompassing range.
