@@ -2,166 +2,187 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C971B7AA028
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 22:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843077AA254
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 23:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbjIUUdZ (ORCPT
+        id S232748AbjIUVQR (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Sep 2023 16:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        Thu, 21 Sep 2023 17:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjIUUdG (ORCPT
+        with ESMTP id S233284AbjIUVPd (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:33:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DF586111
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 10:37:55 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA39C4E757
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 14:14:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695305649;
-        bh=KlkOjcXb0cHh5t1CjCCbqUvSBR8pKSTpPS0Loql+GfA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=u0sg6t4I4yW/mXkFHpdpXqosGHgg7C0+IV+BY+W6mVIY8P+yKbZ2fD9aqOmhIlBHc
-         mOgQ6MikpwoaQnR0U3WyVVpu+ayIB2aCEeg690Czy05Qrpq0sUmLYwxDcGSCvLvs1h
-         z0aPd/1Mci+VmKilxFun3t84JYofL4DzOAEeyVda1sEZ3O5oJ3DZk00+jyQv0cWqJb
-         x7NoMYCmiuXH6kVu8omdmXcRvLbjfvz6J+azzQkesL/SBgiUqpFDpEG1WSFZLXGhk6
-         ewCYu0qX2q8xOYTJKo0INGnSozOPcbbpPYKHobf6mE3CqdxSOXcPy0weive1ApLaQc
-         pgx+OYDD6PRHw==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5043120ffbcso877607e87.2
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 07:14:09 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzPEnrgIK9Kcq3K9cIKcHIkg2NqbZYOyfamfJR4drpYXoLQyurc
-        DGF3xU0TLj+356KdbbdcmY7ZZPzVfoLeQbWrTcbISw==
-X-Google-Smtp-Source: AGHT+IGasP641htQm4SmX0/XiYvGFP4Ximw7EqIZmOnsOZKkzf1zkCc5ySy88IqgOGqKy92hPytG1LuADlQ401mvN2s=
-X-Received: by 2002:a19:3813:0:b0:4ff:7046:984a with SMTP id
- f19-20020a193813000000b004ff7046984amr4432863lfa.7.1695305647578; Thu, 21 Sep
- 2023 07:14:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230918212459.1937798-1-kpsingh@kernel.org> <20230918212459.1937798-3-kpsingh@kernel.org>
- <cb67f607-3a9d-34d2-0877-a3ff957da79e@I-love.SAKURA.ne.jp>
-In-Reply-To: <cb67f607-3a9d-34d2-0877-a3ff957da79e@I-love.SAKURA.ne.jp>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 21 Sep 2023 16:13:56 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7Dn=W1Kd5M_bXOzoomzdjMXBoEZZo5k=cgQ4R6f5G+vw@mail.gmail.com>
-Message-ID: <CACYkzJ7Dn=W1Kd5M_bXOzoomzdjMXBoEZZo5k=cgQ4R6f5G+vw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] security: Count the LSMs enabled at compile time
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com,
-        song@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        Kui-Feng Lee <sinquersw@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Thu, 21 Sep 2023 17:15:33 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF35B1701
+        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 09:57:53 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id 6a1803df08f44-65854d1f626so10205996d6.2
+        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 09:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695315467; x=1695920267; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hX9qb1Iw7SkuB3FcSZYopfwd6y9xnz247DDm3mrX40=;
+        b=vABXJnRfvlVlBoLyJlRiIWJVD3XBHIKH9n/Pq13u0p32UdoZNFQ5qZXqvBRNcjP3jc
+         0wGoi9KFfOZJwbsZHitLSurhV6kokHb5Hb7vtv3e4LIHFaXDIKTD5zwHiuOSeT8VB5Zn
+         CgVIGTyOi574MwOQdBG2NXOltWlY7DfljoFBBerko9NZeBbLVP4+maqn8jU+Y2wl7TMj
+         64IItwoHgBsg75yxfZKBadqyceTRThE5cyO668aypIKCUVnylZ/bS2QtDgObvBHsI7pQ
+         Nf+zx8ngXPH4LnQPlqUEhewnN8K4437RuL7RrxnmXi3H9SaX690DgASpKp202sWeOTa3
+         YHZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695315467; x=1695920267;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hX9qb1Iw7SkuB3FcSZYopfwd6y9xnz247DDm3mrX40=;
+        b=DCK0QRa1p5PBu1RDw0mbWvhrq/xN6bfBM4hGjvkECBrU2MkL8dL4fot8Um4yZoINMe
+         4ifUQ2r7W4AYPuT4NJnciEJzsPQjjyqnQqALuMiBKcUwoMPB7UHfAGQB9FykVYZqi04Y
+         iIks9T4sxiey2s6AREPjY5nejEn2oRFTvBXG1PaZZUIYzUuJFmak4Ky0UOUUCPXG8uKr
+         qjPeAho6id9tGBjwdrgclKnQkvs+jPNDEzlSiEyw8rPWAVqA+wBGcxUFrnKxVc3gEz+n
+         n6NHPEEFmtwfA9D22DvIR2eBsHlm8qMEPy2WyNndQ7NJbH3sK8ilSHqXny/Q+ruwPC4a
+         1lvA==
+X-Gm-Message-State: AOJu0Yy2Os6ftYdjgLr+j7p0AohVRDtvh/A76jDdfFH85pmPyU4XLqNV
+        hbPyheaIpvd9+sXUFebYxWJ3eGT/nvg=
+X-Google-Smtp-Source: AGHT+IGMlI3r5pTKtUH2X22CRcKkDXwZa01FQ/zuLj/x6iC6Lpx1DAvznI7oMbumBcX5i3FsE4fH+yzcjSE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:2906:b0:59e:ee51:52a1 with SMTP id
+ eg6-20020a05690c290600b0059eee5152a1mr76581ywb.10.1695308352199; Thu, 21 Sep
+ 2023 07:59:12 -0700 (PDT)
+Date:   Thu, 21 Sep 2023 07:59:10 -0700
+In-Reply-To: <ZQef3zAEYjZMkn9k@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-19-seanjc@google.com>
+ <ZQPuMK6D/7UzDH+D@yzhao56-desk.sh.intel.com> <ZQRpiOd1DNDDJQ3r@google.com> <ZQef3zAEYjZMkn9k@yzhao56-desk.sh.intel.com>
+Message-ID: <ZQxaPsNiFgfXH7aq@google.com>
+Subject: Re: [RFC PATCH v12 18/33] KVM: x86/mmu: Handle page fault for private memory
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Sep 21, 2023 at 3:21=E2=80=AFPM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> On 2023/09/19 6:24, KP Singh wrote:
-> > These macros are a clever trick to determine a count of the number of
-> > LSMs that are enabled in the config to ascertain the maximum number of
-> > static calls that need to be configured per LSM hook.
->
-> As a LKM-based LSM user, indirect function calls using a linked list have
-> an advantage which this series kills. There always is a situation where a
-> LSM cannot be built into vmlinux (and hence has to be loaded as a LKM-bas=
-ed
-> LSM) due to distributor's support policy. Therefore, honestly speaking,
-> I don't want LSM infrastructure to define the maximum number of "slots" o=
-r
-> "static calls"...
->
-> >
-> > Without this one would need to generate static calls for (number of
-> > possible LSMs * number of LSM hooks) which ends up being quite wasteful
-> > especially when some LSMs are not compiled into the kernel.
->
-> I can't interpret "number of possible LSMs * number of LSM hooks" part.
-> Is this tokenized as "number of possible LSMs" (an integer) * (multipled =
-by)
-> "number of LSM hooks" (an integer) ? But the next patch includes
->
+On Mon, Sep 18, 2023, Yan Zhao wrote:
+> On Fri, Sep 15, 2023 at 07:26:16AM -0700, Sean Christopherson wrote:
+> > On Fri, Sep 15, 2023, Yan Zhao wrote:
+> > > >  static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> > > >  {
+> > > >  	struct kvm_memory_slot *slot = fault->slot;
+> > > > @@ -4293,6 +4356,14 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> > > >  			return RET_PF_EMULATE;
+> > > >  	}
+> > > >  
+> > > > +	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
+> > > In patch 21,
+> > > fault->is_private is set as:
+> > > 	".is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT)",
+> > > then, the inequality here means memory attribute has been updated after
+> > > last check.
+> > > So, why an exit to user space for converting is required instead of a mere retry?
+> > > 
+> > > Or, is it because how .is_private is assigned in patch 21 is subjected to change
+> > > in future? 
+> > 
+> > This.  Retrying on SNP or TDX would hang the guest.  I suppose we could special
+> Is this because if the guest access a page in private way (e.g. via
+> private key in TDX), the returned page must be a private page?
 
-The tokenization is in the name of the static call slots. you cannot
-have __SCT__lsm_static_call_bprm_check_security_1+1+1 it's not a valid
-name. You may want to build security/security.i to see what's going on
-(and actually try disabling some of the DEFINE_STATIC_CALL macros to
-reduce further expansion of macros.
+Yes, the returned page must be private, because the GHCI (TDX) and GHCB (SNP)
+require that the host allow implicit conversions.  I.e. if the guest accesses
+memory as private (or shared), then the host must map memory as private (or shared).
+Simply resuming the guest will not change the guest access, nor will it change KVM's
+memory attributes.
 
->   struct lsm_static_calls_table {
->   #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
->                 struct lsm_static_call NAME[MAX_LSM_COUNT];
+Ideally (IMO), implicit conversions would be disallowed, but even if implicit
+conversions weren't a thing, retrying would still be wrong as KVM would either
+inject an exception into the guest or exit to userspace to let userspace handle
+the illegal access.
 
-Each LSM that is compiled in the kernel can theoretically register a
-callback, so we add MAX_LSM_COUNT slots. Now the word "possible"
-because one may compile the LSM but not choose to enable it with the
-lsm=3D parameter.
+> > case VMs where .is_private is derived from the memory attributes, but the
+> > SW_PROTECTED_VM type is primary a development vehicle at this point.  I'd like to
+> > have it mimic SNP/TDX as much as possible; performance is a secondary concern.
+> Ok. But this mimic is somewhat confusing as it may be problematic in below scenario,
+> though sane guest should ensure no one is accessing a page before doing memory
+> conversion.
+> 
+> 
+> CPU 0                           CPU 1
+> access GFN A in private way
+> fault->is_private=true
+>                                 convert GFN A to shared
+> 			        set memory attribute of A to shared
+> 
+> faultin, mismatch and exit
+> set memory attribute of A
+> to private
+> 
+>                                 vCPU access GFN A in shared way
+>                                 fault->is_private = true
+>                                 faultin, match and map a private PFN B
+> 
+>                                 vCPU accesses private PFN B in shared way
 
+If this is a TDX or SNP VM, then the private vs. shared information comes from
+the guest itself, e.g. this sequence
 
->         #include <linux/lsm_hook_defs.h>
->         #undef LSM_HOOK
->   } __randomize_layout;
->
-> which seems to me that lsm_static_calls_table will get "number of possibl=
-e
-> LSMs" static calls for each LSM hook defined in linux/lsm_hook_defs.h .
-> How did this patch help reducing static calls? What does "possible LSMs" =
-mean?
+                                   vCPU access GFN A in shared way
+                                   fault->is_private = true
 
-If the kernel is compiled only with CONFIG_BPF_LSM, CONFIG_SELINUX and
-CONFIG_SECURITY (for capabilities) and not any other LSM, then one
-does not need to generate 12 slots for all each LSM hook when there
-are only 3 LSMs compiled in (capabilities being implicitly behind
-CONFIG_SECURITY).
+cannot happen because is_private will be false based on the error code (SNP) or
+the GPA (TDX).
 
-> Should "number of possible LSMs" be replaced with "number of built-in LSM=
-s" ?
+And when hardware doesn't generate page faults based on private vs. shared, i.e.
+for non-TDX/SNP VMs, from a fault handling perspective there is no concept of the
+guest accessing a GFN in a "private way" or a "shared way".  I.e. there are no
+implicit conversions.
 
-Sure. I think "compiled LSMs" is a better word here.
+For SEV and SEV-ES, the guest can access memory as private vs. shared, but the
+and the host VMM absolutely must be in agreement and synchronized with respect to
+the state of a page, otherwise guest memory will be corrupted.  But that has
+nothing to do with the fault handling, e.g. creating aliases in the guest to access
+a single GFN as shared and private from two CPUs will create incoherent cache
+entries and/or corrupt data without any involvement from KVM.
 
-
->
-> > Suggested-by: Andrii Nakryiko <andrii@kernel.org
->
-> Trailing ">" is missing.
-
-Fixed.
-
->
-> > +/*
-> > + * Macros to count the number of LSMs enabled in the kernel at compile=
- time.
-> > + */
-> > +#define MAX_LSM_COUNT                        \
-> > +     ___COUNT_COMMAS(                \
-> > +             CAPABILITIES_ENABLED    \
-> > +             SELINUX_ENABLED         \
-> > +             SMACK_ENABLED           \
-> > +             APPARMOR_ENABLED        \
-> > +             TOMOYO_ENABLED          \
-> > +             YAMA_ENABLED            \
-> > +             LOADPIN_ENABLED         \
-> > +             LOCKDOWN_ENABLED        \
-> > +             BPF_LSM_ENABLED         \
-> > +             LANDLOCK_ENABLED)
->
-> Since IS_ENABLED(CONFIG_FOO) is evaluated to either 1 or 0, why can't you=
- directly
-> do like IS_ENABLED(CONFIG_FOO) + IS_ENABLED(CONFIG_BAR) + IS_ENABLED(CONF=
-IG_BUZ) ?
-> If you can't do direct "+", can't you still do indirect "+" like somethin=
-g below?
->
-> #if IS_ENABLED(CONFIG_FOO)
-> #define FOO_ENABLED 1
-> #else
-> #define FOO_ENABLED 0
-> #endif
->
+In other words, the above isn't possible for TDX/SNP, and for all other types,
+the conflict between CPU0 and CPU1 is unequivocally a guest bug.
