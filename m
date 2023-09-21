@@ -2,118 +2,114 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93987A9B86
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 21:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63E07A9D7B
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 21:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjIUTCU (ORCPT
+        id S230036AbjIUTiA (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Sep 2023 15:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
+        Thu, 21 Sep 2023 15:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjIUTCH (ORCPT
+        with ESMTP id S229878AbjIUThp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:02:07 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AD47B952
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 10:36:59 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B61C32776
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 09:13:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695287593;
-        bh=fvuvrEMuWsS5n+aGsOLqfaD8qATP5Zo1Pwy194y+UDc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VFxR0Xm8lppYnQc2DtCt1zAm5qI6gc/hWD0XRDNpCZAs9ziVTFOyyXXkU+P2VHSyj
-         iwm8MY2+VYo62YZOWN6PWor/JAy+6dMyJRdek7FmicgqySk3NnOSxj05b4e9byWw5S
-         RRhJbKCq6x8QXpV0EuklENVbbc/9drRusGfcLg9Yqz3dAeseDAK+s98oZZCLjrmZxH
-         OIJgt+zR5lkX0wGK+qXf//4XHKZSTCNm+5OU1knD8bK/ZATpSQrk8KBJAlkdruMt0g
-         Obp26Jhtifq2XU1au7UIb4NNC0RgDBHL9z+t29rFlzNz0dLCFFRy5DWquyzbWrKiE7
-         ITE5bZFmY9IIg==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-52f3ba561d9so1390707a12.1
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 02:13:13 -0700 (PDT)
-X-Gm-Message-State: AOJu0YygjbwyjyPlxx3KJYBFgSrhdF2riQv7K0RrhoBl0WWygEsxChPW
-        AuY65VRQVpEeYhCAtNxLBKZnuRSQv4UOk0c0cXutmw==
-X-Google-Smtp-Source: AGHT+IGZs/JgRQZYIsXmekaViv2Yqk40SAdhhYWpZYRBrN/Or5FrzsdIHPGeTx7ga8VqEmC31rT+zYyKvF9U0OGRTnw=
-X-Received: by 2002:a05:6402:1205:b0:522:582c:f427 with SMTP id
- c5-20020a056402120500b00522582cf427mr7511577edw.14.1695287591558; Thu, 21 Sep
- 2023 02:13:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230918212459.1937798-1-kpsingh@kernel.org> <20230918212459.1937798-4-kpsingh@kernel.org>
- <202309200848.7099DFF1B@keescook>
-In-Reply-To: <202309200848.7099DFF1B@keescook>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 21 Sep 2023 11:13:00 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7RvY7xpF0HjxR0nKFzGmuUyHD1A-Pc1-ChHy94tHbRjw@mail.gmail.com>
-Message-ID: <CACYkzJ7RvY7xpF0HjxR0nKFzGmuUyHD1A-Pc1-ChHy94tHbRjw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] security: Replace indirect LSM hook calls with
- static calls
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        paul@paul-moore.com, casey@schaufler-ca.com, song@kernel.org,
-        daniel@iogearbox.net, ast@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 21 Sep 2023 15:37:45 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E09AEBCFE
+        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 12:10:39 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59bdae1ef38so45501637b3.1
+        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 12:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695323438; x=1695928238; darn=vger.kernel.org;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=msCRqftjzvMka6Rl5V/NvDEz768neF2Qswneru1ptF4=;
+        b=ANIsopKH6FB/YfeeiHhknjvBJ5XAITWb1M/gbs+yBeC/ao6mEHXNiCijAVIw3AUBEu
+         /L10qRlBCqsFUCKjuQ13ougwWzehqWocSM7xFbHiwYegbOYJIt/J8GRTSphAAc/IXNxA
+         o/QR0WmMt3Rr9/Z8RTFG6WRUg72slcENJ91CRvg4tLf3p19skDGjdSesRMqooJ1TxrwN
+         kPhHasmtBgG5lahnT+KGJMN8FxVv+FrAn5x5/Kv9qYOj8nLmDk3goWg8x91Iiv6qr5n8
+         fwxGc9VtkPBY6BwtxtcN575WzcMCKX9wO1T2K3HDKmiEMiuIAhwnOqpeTpRRAHJ8OTQF
+         ea5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695323438; x=1695928238;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=msCRqftjzvMka6Rl5V/NvDEz768neF2Qswneru1ptF4=;
+        b=jTN54CbU0Z4IWQA0PeR1jXMBgi1azY+1nSobbaiLUWKTzuwsm+gVVz2R8Qtng5TC3L
+         Nq7p5v8w0C0NFdCjqnKAZ9lO5fQFO0vIaXsrsuwWm0tvanIJddbyn0sg+0aEaw1As1A0
+         GyyIeEfPY0badI/8/39q9esxDP5IKXYd+ppMYdQdsbdmrEHO3nBA0r37eT2dD2+bzXuG
+         NyB3n4qsDxNtiAiegOscCDXctke60dAxhy9u56xO79PeJjTsx4dsilG9Dy/rQqs3GdeY
+         iaplFIkVyf24mCb8IXdNNcyZzC3zQl/fsq0qBN43pjlkT1DNLhY5y45jOK2PqBjtWamB
+         /r/w==
+X-Gm-Message-State: AOJu0YykDzoqSozLsjn+nwPnizG/w6hv5G3kq8v7YIeFOxcsh8bQ5XYn
+        X2gAK/VdH4PXfQrA1AyW3MLe9yE4JOk=
+X-Google-Smtp-Source: AGHT+IHW881nAqFnjABVXUT4908B5v4pAo/onJespz4HnG5MCVd8NLEq9DsMcDxqDXD3hJb4Zo/K0u0JOVE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:70a:b0:58c:e8da:4d1a with SMTP id
+ bs10-20020a05690c070a00b0058ce8da4d1amr8361ywb.2.1695323438500; Thu, 21 Sep
+ 2023 12:10:38 -0700 (PDT)
+Date:   Thu, 21 Sep 2023 12:10:36 -0700
+In-Reply-To: <20230914015531.1419405-15-seanjc@google.com>
+Mime-Version: 1.0
+References: <20230914015531.1419405-1-seanjc@google.com> <20230914015531.1419405-15-seanjc@google.com>
+Message-ID: <ZQyVLEKXbpJ9Wvud@google.com>
+Subject: Re: [RFC PATCH v12 14/33] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Fuad Tabba <tabba@google.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Anish Moorthy <amoorthy@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Maciej Szmigiero <mail@maciej.szmigiero.name>,
+        David Hildenbrand <david@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Wang <wei.w.wang@intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Sep 20, 2023 at 5:54=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Mon, Sep 18, 2023 at 11:24:57PM +0200, KP Singh wrote:
-> > LSM hooks are currently invoked from a linked list as indirect calls
-> > which are invoked using retpolines as a mitigation for speculative
-> > attacks (Branch History / Target injection) and add extra overhead whic=
-h
-> > is especially bad in kernel hot paths:
->
-> I feel like the performance details in the cover letter should be
-> repeated in this patch, since it's the one doing the heavy lifting.
+On Wed, Sep 13, 2023, Sean Christopherson wrote:
+>  virt/kvm/guest_mem.c       | 593 +++++++++++++++++++++++++++++++++++++
 
-Good point, added the results to the patch as well.
+Getting to the really important stuff...
 
->
-> > [...]
-> >
-> > Signed-off-by: KP Singh <kpsingh@kernel.org>
->
-> Regardless, this is a nice improvement on execution time and one of the
-> more complex cases for static calls.
->
-> > -struct security_hook_heads {
-> > -     #define LSM_HOOK(RET, DEFAULT, NAME, ...) struct hlist_head NAME;
-> > -     #include "lsm_hook_defs.h"
-> > +/*
-> > + * @key: static call key as defined by STATIC_CALL_KEY
-> > + * @trampoline: static call trampoline as defined by STATIC_CALL_TRAMP
-> > + * @hl: The security_hook_list as initialized by the owning LSM.
-> > + * @active: Enabled when the static call has an LSM hook associated.
-> > + */
-> > +struct lsm_static_call {
-> > +     struct static_call_key *key;
-> > +     void *trampoline;
-> > +     struct security_hook_list *hl;
-> > +     /* this needs to be true or false based on what the key defaults =
-to */
-> > +     struct static_key_false *active;
-> > +};
->
-> Can this be marked __randomize_layout too?
+Anyone object to naming the new file guest_memfd.c instead of guest_mem.c?  Just
+the file, i.e. still keep the gmem namespace.
 
-Yes, done.
-
->
-> Everything else looks good to me. I actually find the result more
-> readable that before. But then I do love a good macro. :)
-
-Yay!
-
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> --
-> Kees Cook
+Using guest_memfd.c would make it much more obvious that the file holds more than
+generic "guest memory" APIs, and would provide a stronger conceptual connection
+with memfd.c.
