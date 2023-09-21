@@ -2,104 +2,147 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296127A9EE1
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 22:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981737AA070
+	for <lists+linux-security-module@lfdr.de>; Thu, 21 Sep 2023 22:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjIUUOD (ORCPT
+        id S232116AbjIUUhl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 21 Sep 2023 16:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
+        Thu, 21 Sep 2023 16:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjIUUNo (ORCPT
+        with ESMTP id S232101AbjIUUh3 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:13:44 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7F392819
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 11:54:36 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d818fb959f4so1845522276.1
-        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 11:54:36 -0700 (PDT)
+        Thu, 21 Sep 2023 16:37:29 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615F888496
+        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 10:39:00 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-986d8332f50so161862066b.0
+        for <linux-security-module@vger.kernel.org>; Thu, 21 Sep 2023 10:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695322461; x=1695927261; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6b+r/qO6jTNd+eQdEZK212ydTtWtBK6Hb2cWKKJgo7o=;
-        b=Rj6H/jq0RXpY6lFrI48jysV0iZ9hkRY63vhJoo1NBULrphM3/NtWmTeUAgPbaVLWnL
-         blwB1Gf5itzJyTfd4/8graG0p8h2Mvb4HQNRWMFgXF355oqG+Z2Z4cAyfX/3a2e64Oh+
-         S9Tayz78LEE56OXeOWL0lH2KtavjvhJr6+oNUqarw1rvSUdAr/XaHgx/Zt/TlIysK/sc
-         tvFi4R/oUrfVnPM+c0eOzGTVoZZPLLBMyRjgzgtQk8159LPH8yCZnwc6x4Msd5h5cNkr
-         91O3eSVTt8y37hSV2VYuau4Rne3ppvinyRoVOlnbn8p5cjCCq+sxqted5uv3Bpk1zMZ0
-         0mjA==
+        d=szeredi.hu; s=google; t=1695317939; x=1695922739; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=duasdIDps1Ar+JiX8MLjxGEHHubOxG32YmdpyidUjAA=;
+        b=XcM3rWYaMmhlNnRswsR0HhTNm6SxFSrzuCh3sBwVpv7qAfeBVzCxO/oAq7xZdsY17c
+         4IaCoMvswi2LOU2U8IpDp/A+Pha/rZ+nr3oqQJ3PJHpVKKM6GI+YKAtnC6TldejnuZkZ
+         wmHHECWwxgLQ1ZoTyw7KJaRqrTbp+afeJniVc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695322461; x=1695927261;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6b+r/qO6jTNd+eQdEZK212ydTtWtBK6Hb2cWKKJgo7o=;
-        b=d7wkWHCqHFb6/3F1PQqMIqhRSZ6V5MNdLfnbh8TVYrOC0JgXvAVuobswrtC6vB/95S
-         JE7+Vlvaoes+YWFBTHL67nnxZVI++Ywwi0bHk3NG+lv9MtcSsPk1MLEuWRxBtU8gmVs9
-         sjApxDYkLnEe7UIOnRCZYtb+jLgU/0iGK92OTiLufnybSyc28KKjFsyKrLq1+4cKt0DM
-         qqzw6YDAtBC8ZKSazGK0Ckm0pI+97KmZD4OxaPLIz7jl9BLIz60QkyKx3Uss8Tdwux9H
-         VrlFKIWGYzyUJbaGADKzqVP3x7x65smmeJWjuy+v5DV4BuCfgOLLJjmn9EMZUvR9oJ2E
-         nS+g==
-X-Gm-Message-State: AOJu0YxQhcNCGss9/71cZbyTizXHq33d+MnT5qndzpbaE968aOXwpOnf
-        I9UXzEE0L0vw0DZqR/nrKgOFfvo=
-X-Google-Smtp-Source: AGHT+IFLA7pELMkRmPVUcV9dQSyP5wShtjA3I4pLFmR0wr3ICAIAxSCbstWOoMP3LDJ/cCr9C0wtfNw=
-X-Received: from hmarynka.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:925])
- (user=ovt job=sendgmr) by 2002:a25:408f:0:b0:d7f:8774:dfd4 with SMTP id
- n137-20020a25408f000000b00d7f8774dfd4mr62822yba.12.1695278727640; Wed, 20 Sep
- 2023 23:45:27 -0700 (PDT)
-Date:   Thu, 21 Sep 2023 06:45:05 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Message-ID: <20230921064506.3420402-1-ovt@google.com>
-Subject: [PATCH] ima: Finish deprecation of IMA_TRUSTED_KEYRING Kconfig
-From:   Oleksandr Tymoshenko <ovt@google.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Nayna Jain <nayna@linux.ibm.com>
-Cc:     ovt@google.com, rnv@google.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20230601; t=1695317939; x=1695922739;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=duasdIDps1Ar+JiX8MLjxGEHHubOxG32YmdpyidUjAA=;
+        b=dTb+G4C+O6bIdZ67jzqveB8VO5WztmlVAeg+KYvp+octgiOnxXGbv7AMhNyNL58a9P
+         2x7B3wCBDtA6ObrctG7eNVe2q0xbrjcO6cawoRa55AFXLgfzTkH05HYOkdILIiHjfKOJ
+         qCb60LkAh4gofc3OOhLW+09adtGSWpGrTL9wvlDX53Aa6B1140sYXy0Q2G17D5JfgsKL
+         CtfEgOcJWfbvgwKDVn15nmdP/NFJR0DaSeoahDyMz/nD+gfcppLwk2iP/5U+mEKjFzCS
+         TylI1DLoyHat9mK7r2BGypOxE4w2/YG8u1CcuyIaLZ8ilBJrZzUjWI9YGKoK69V+lgzO
+         DYsA==
+X-Gm-Message-State: AOJu0Yw21Nz1X/jp5BWYsMZqA1+ofUuRJ4dHGmJVMqxG8ZhM8RYenA8Q
+        xt/AebQBLcNN/xxry4QEkgFbS8Yv0/M12yUZ3ZWJ4TYiMsaNpdWVEi8=
+X-Google-Smtp-Source: AGHT+IEMcpET+KyGeAflcKrt2Lb0K8gxzNygopNZCsI5AgwGZvckAbSqyadk7XQvFGprUQhpXBwpf5gUZkOt9LY6QjE=
+X-Received: by 2002:a17:906:d3:b0:99e:1358:ffdf with SMTP id
+ 19-20020a17090600d300b0099e1358ffdfmr3894831eji.72.1695281665917; Thu, 21 Sep
+ 2023 00:34:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230914-salzig-manifest-f6c3adb1b7b4@brauner>
+ <CAJfpegs-sDk0++FjSZ_RuW5m-z3BTBQdu4T9QPtWwmSZ1_4Yvw@mail.gmail.com>
+ <20230914-lockmittel-verknallen-d1a18d76ba44@brauner> <CAJfpegt-VPZP3ou-TMQFs1Xupj_iWA5ttC2UUFKh3E43EyCOQQ@mail.gmail.com>
+ <20230918-grafik-zutreffen-995b321017ae@brauner> <CAOssrKfS79=+F0h=XPzJX2E6taxAPmEJEYPi4VBNQjgRR5ujqw@mail.gmail.com>
+ <20230918-hierbei-erhielten-ba5ef74a5b52@brauner> <CAJfpegtaGXoZkMWLnk3PcibAvp7kv-4Yobo=UJj943L6v3ctJQ@mail.gmail.com>
+ <20230918-stuhl-spannend-9904d4addc93@brauner> <CAJfpegvxNhty2xZW+4MM9Gepotii3CD1p0fyvLDQB82hCYzfLQ@mail.gmail.com>
+ <20230918-bestialisch-brutkasten-1fb34abdc33c@brauner> <CAJfpegvTiK=RM+0y07h-2vT6Zk2GCu6F98c=_CNx8B1ytFtO-g@mail.gmail.com>
+ <20230919003800.93141-1-mattlloydhouse@gmail.com> <CAJfpegs6g8JQDtaHsECA_12ss_8KXOHVRH9gwwPf5WamzxXOWQ@mail.gmail.com>
+ <20230919212840.144314-1-mattlloydhouse@gmail.com> <CAJfpeguMf7ouiW79iey1i68kYnCcvcpEXLpUNf+CF=aNWxXO2Q@mail.gmail.com>
+ <20230920132606.187860-1-mattlloydhouse@gmail.com>
+In-Reply-To: <20230920132606.187860-1-mattlloydhouse@gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 21 Sep 2023 09:34:14 +0200
+Message-ID: <CAJfpegvZ+4SNnkOEkS=7D44bZNQBovA7SU7etChN6Bh_B9f3dQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/3] add statmnt(2) syscall
+To:     Matthew House <mattlloydhouse@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-The removal of IMA_TRUSTED_KEYRING made IMA_LOAD_X509
-and IMA_BLACKLIST_KEYRING unavailable because the latter
-two depend on the former. Since IMA_TRUSTED_KEYRING was
-deprecated in favor of INTEGRITY_TRUSTED_KEYRING use it
-as a dependency for the two Kconfigs affected by the
-deprecation.
+On Wed, 20 Sept 2023 at 15:26, Matthew House <mattlloydhouse@gmail.com> wrote:
 
-Fixes: 5087fd9e80e5 ("ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig")
-Signed-off-by: Oleksandr Tymoshenko <ovt@google.com>
----
- security/integrity/ima/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> The declared type of a variable *is* one of the different types, as far as
+> the aliasing rules are concerned. In C17, section 6.5 ("Expressions"):
+>
+> > The *effective type* of an object for an access to its stored value is
+> > the declared type of the object, if any. [More rules about objects with
+> > no declared type, i.e., those created with malloc(3) or realloc(3)...]
+> >
+> > An object shall have its stored value accessed only by an lvalue
+> > expression that has one of the following types:
+> >
+> > -- a type compatible with the effective type of the object,
+> >
+> > -- a qualified version of a type compatible with the effective type of
+> >    the object,
+> >
+> > -- a type that is the signed or unsigned type corresponding to the
+> >    effective type of the object,
+> >
+> > -- a type that is the signed or unsigned type corresponding to a
+> >    qualified version of the effective type of the object,
+> >
+> > -- an aggregate or union type that includes one of the aforementioned
+> >    types among its members (including, recursively, a member of a
+> >    subaggregate or contained union), or
+> >
+> > -- a character type.
+>
+> In this case, buf is declared in the program as a char[10000] array, so the
+> declared type of each element is char, and the effective type of each
+> element is also char. If we want to access, say, st->mnt_id, the lvalue
+> expression has type __u64, and it tries to access 8 of the char objects.
+> However, the integer type that __u64 expands to doesn't meet any of those
+> criteria, so the aliasing rules are violated and the behavior is undefined.
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index ecddc807c536..4e559bd1fd41 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -269,7 +269,7 @@ config IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
- config IMA_BLACKLIST_KEYRING
- 	bool "Create IMA machine owner blacklist keyrings (EXPERIMENTAL)"
- 	depends on SYSTEM_TRUSTED_KEYRING
--	depends on IMA_TRUSTED_KEYRING
-+	depends on INTEGRITY_TRUSTED_KEYRING
- 	default n
- 	help
- 	   This option creates an IMA blacklist keyring, which contains all
-@@ -279,7 +279,7 @@ config IMA_BLACKLIST_KEYRING
- 
- config IMA_LOAD_X509
- 	bool "Load X509 certificate onto the '.ima' trusted keyring"
--	depends on IMA_TRUSTED_KEYRING
-+	depends on INTEGRITY_TRUSTED_KEYRING
- 	default n
- 	help
- 	   File signature verification is based on the public keys
--- 
-2.42.0.459.ge4e396fd5e-goog
+Some of the above is new information for me.
 
+However for all practical purposes the code doesn't violate aliasing
+rules.  Even the most aggressive "-Wstrict-aliasing=1" doesn't trigger
+a warning.  I guess this is because gcc takes the definition to be
+symmetric, i.e. anything may safely be aliased to a char pointer and a
+char pointer may safely be aliased to anything.  I'm not saying that
+that is what the language definition says, just that gcc interprets
+the language definition that way.  Also plain "-Wstrict-aliasing"
+doesn't trigger even if the type of the array is not char, because gcc
+tries hard not to warn about cases where there's no dereference of the
+aliased pointer.  This is consistent with what I said and what the gcc
+manpage says:  only accesses count, declarations don't.
+
+>
+> I've always felt that capacity doubling is a bit wasteful, but it's
+> definitely something I can live with, especially if providing size feedback
+> is as complex as you suggest. Still, I'm not a big fan of single-buffer
+> interfaces in general, with how poorly they tend to interact with C's
+> aliasing rules. (Also, those kinds of interfaces also invite alignment
+> errors: for instance, your snippet above is missing the necessary union to
+> prevent the buffer from being misaligned, which would cause UB when you
+> cast it to a struct statmnt *.)
+
+Okay, alignment is a different story.   I'll note this in the man page.
+
+Thanks,
+Miklos
