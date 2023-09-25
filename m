@@ -2,87 +2,111 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5B07AD888
-	for <lists+linux-security-module@lfdr.de>; Mon, 25 Sep 2023 15:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A157D7AD894
+	for <lists+linux-security-module@lfdr.de>; Mon, 25 Sep 2023 15:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbjIYNEx (ORCPT
+        id S231367AbjIYNGd (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 25 Sep 2023 09:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        Mon, 25 Sep 2023 09:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjIYNEw (ORCPT
+        with ESMTP id S231576AbjIYNGb (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 25 Sep 2023 09:04:52 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264729F;
-        Mon, 25 Sep 2023 06:04:46 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFABFC433C7;
-        Mon, 25 Sep 2023 13:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695647085;
-        bh=5GuHghoJcw0TFo6RZTpC3p1AZANQLw1yiRSTt3ti8yE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pv1CXqBn5nTrzr0t9MFnlsVhtGHOK0QSh3H/lQVxM4MdRWJtvXnJTGjVDdxcA1KzW
-         /vBix8pFtolV+cpyTWnQ8knvCMsM68JpCyWHOnqP9Tnrr+CsU9Tsa/PnkGNq8CKqru
-         uyQ+i1SxAk/TuxunEmiou35oYvjd0fTbavpl9yMZ5lh5xhCPYmf6cSDGR4wn/1D1Ta
-         FA5f/i+DIzV4hy49Ohei2TQFkRc0OlPSZrS6qxp0NR8Ki7uRyyWJt2yjDr17hokIK7
-         M0YEDvRPu3o96x8vP39dGDNzL45Znjz8R9mGP5a2MZcROyQ5uArRlqiRDlvtaPOxEl
-         L4yshaJhKj7fA==
-Date:   Mon, 25 Sep 2023 15:04:40 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [RFC PATCH 2/3] add statmnt(2) syscall
-Message-ID: <20230925-total-debatten-2a1f839fde5a@brauner>
-References: <20230913152238.905247-1-mszeredi@redhat.com>
- <20230913152238.905247-3-mszeredi@redhat.com>
- <44631c05-6b8a-42dc-b37e-df6776baa5d4@app.fastmail.com>
+        Mon, 25 Sep 2023 09:06:31 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E801E112
+        for <linux-security-module@vger.kernel.org>; Mon, 25 Sep 2023 06:06:23 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-692c70bc440so2021658b3a.3
+        for <linux-security-module@vger.kernel.org>; Mon, 25 Sep 2023 06:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695647183; x=1696251983; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mXglc8opTBOxqxBVnbKKZEfOjkArzaJ5mbcscFyV/Wo=;
+        b=E9p/DdAhQv/UcBbrSHqMLXHKKFmTmAEugjpfcAaJIi0oAhHW91Fn3L148iHyI9tq6y
+         1AXxdfTrMhS72Zy9gDH3x6BZX047nWgHv5SIYLenoGYIxmyhv/3Z0OHCspeSEWUjv/Dr
+         5v3ZlzF9MCgA6c4GY0EVCOxSXAvWL66AAIUVTzUcrOiHt1xQuSXO/meOJiZwKRblOuuE
+         cKIGL6pARcFlHbPhB2iJsp7kw3Bog0Y/ZW5yTM9A3tyq5lZSSMxCvErvB3dVJ9fa+G8q
+         yvN079Vrw4bkbbYAlPNEYfEE1Ty6s7Y2UpwRLImeV4hkPd1Mji5zfoNrzlvslblzeye5
+         9Qew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695647183; x=1696251983;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mXglc8opTBOxqxBVnbKKZEfOjkArzaJ5mbcscFyV/Wo=;
+        b=QHcGY5myOdiK5COynHvwIXNufCsI2dARBnie5hNfeC/ay8O7LMfGVCaA545hjv0YT6
+         CTnovX/1HH7kRuXfmeAZwxO4hcSjneBPCwOOS9W0E1Hcsws9tJ3op2nVA+IaSxMoGMuD
+         pao309DQjb/jgY7swBalo+lrtZB05u7g2eojK2XuB2mOUutUNhX1yWEneUV+thPYDhLE
+         INiueK3WjUMgYIjMA8/9IWr1szF7t2/AcXDs5LEv5Qsx9uJhvQlah2cUhMTGyAyMEFRB
+         3wrhzb1iq9JE/MtEP+mCrdochXux4QMjYumv7L3zFJjKPZEpuESFRoz031Oq3rrHcexA
+         Tn5g==
+X-Gm-Message-State: AOJu0Yza/lXsydTrwkWHyr8YrSpCIdPph1kz24QKTpT7iC/xgi6OJPDf
+        4MP9V4gIC4DniKnyZZSIyjAzE/nX3uZhcTNhBb0=
+X-Google-Smtp-Source: AGHT+IFXiu+hIuGpbMGnryBZPI9zrQcfgcwULkxd1ATRGTszst7B+kzsc3FXYgt1Oi/EhIFKc10wDAE9O22h3BLnnC4=
+X-Received: by 2002:a17:90b:33cc:b0:268:553f:1938 with SMTP id
+ lk12-20020a17090b33cc00b00268553f1938mr4364657pjb.4.1695647182818; Mon, 25
+ Sep 2023 06:06:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <44631c05-6b8a-42dc-b37e-df6776baa5d4@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: mr.isaiahnwabudike01@gmail.com
+Received: by 2002:a05:6a10:4410:b0:4e6:519f:124c with HTTP; Mon, 25 Sep 2023
+ 06:06:22 -0700 (PDT)
+From:   "Mrs. Rita Hassan" <ritahassan02@gmail.com>
+Date:   Mon, 25 Sep 2023 06:06:22 -0700
+X-Google-Sender-Auth: yeq3_xtuipO1P77d2qeKwPgsd4c
+Message-ID: <CAN0kuD_Mb6r_ybPEbbHkv8BKeKwvyedgB_EOczj0YvEYjcG2ZQ@mail.gmail.com>
+Subject: Please I need your help,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_5,MONEY_NOHTML,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_MONEY_PERCENT,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Sep 25, 2023 at 02:57:31PM +0200, Arnd Bergmann wrote:
-> On Wed, Sep 13, 2023, at 17:22, Miklos Szeredi wrote:
-> 
-> >  asmlinkage long sys_fstatfs64(unsigned int fd, size_t sz,
-> >  				struct statfs64 __user *buf);
-> > +asmlinkage long sys_statmnt(u64 mnt_id, u64 mask,
-> > +			    struct statmnt __user *buf, size_t bufsize,
-> > +			    unsigned int flags);
-> 
-> This definition is problematic on 32-bit architectures for two
-> reasons:
-> 
-> - 64-bit register arguments are passed in pairs of registers
->   on two architectures, so anything passing those needs to
->   have a separate entry point for compat syscalls on 64-bit
->   architectures. I would suggest also using the same one on
->   32-bit ones, so you don't rely on the compiler splitting
->   up the long arguments into pairs.
-> 
-> - There is a limit of six argument registers for system call
->   entry points, but with two pairs and three single registers
->   you end up with seven of them.
-> 
-> The listmnt syscall in patch 3 also has the first problem,
-> but not the second.
+Please I need your help,
 
-Both fields could also just be moved into the struct itself just like we
-did for clone3() and others.
+
+Please forgive me for stressing you with my predicaments as I know
+that this letter may come to you as big surprise. Actually, I came
+across your E-mail from my personal search afterward I decided to
+email you directly believing that you will be honest to fulfill my
+final wish before i die.
+
+Meanwhile, I Am Mrs. Rita, 62 years old,I am suffering from a long
+time cancer and from all indication my condition is really
+deteriorating as my doctors have confirmed and courageously advised me
+that I may not live beyond two months from now for the reason that my
+tumor has reached a critical stage which has defiled all forms of
+medical treatment.
+
+As a matter of fact, registered nurse by profession while my husband
+was dealing on Gold Dust and Gold Dory Bars till his sudden death the
+year 2019 then I took over his business till date. In fact, at this
+moment I have a deposit sum of $5.5million dollars with one of the
+leading bank  but unfortunately I cannot visit the bank since I am
+critically sick and powerless to do anything myself but my bank
+account officer advised me to assign any of my trustworthy relative,
+friends or partner with authorization letter to stand as the recipient
+of my money but sorrowfully I don t have any reliable relative and no
+child.
+
+Therefore, I want you to receive the money and take 30% to take care
+of yourself and family while 70% should be use basically on
+humanitarian purposes mostly to orphanages home, Motherless babies
+home, less privileged and disable citizens and widows around the
+world. and as soon as I receive your respond I shall send you my
+pictures, banking records and with full contacts of my banking
+institution If you are interested in carrying out this task please
+contact me for more details on this email. ( ritahassan02@gmail.com )
+
+Hope to hear from you soon.
+
+Yours Faithfully
+
+Mrs. Rita Hassan
