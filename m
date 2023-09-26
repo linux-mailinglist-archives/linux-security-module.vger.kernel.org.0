@@ -2,87 +2,118 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936D27AF655
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Sep 2023 00:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC537AF6B4
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Sep 2023 01:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjIZWd4 (ORCPT
+        id S232180AbjIZXX5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 26 Sep 2023 18:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
+        Tue, 26 Sep 2023 19:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbjIZWb4 (ORCPT
+        with ESMTP id S232524AbjIZXV4 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 26 Sep 2023 18:31:56 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7AA158AB
-        for <linux-security-module@vger.kernel.org>; Tue, 26 Sep 2023 14:32:20 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-d862533ea85so9517392276.0
-        for <linux-security-module@vger.kernel.org>; Tue, 26 Sep 2023 14:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1695763939; x=1696368739; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NY9jveINp5V5rlaBbscxlXmPxYesM9ges3+QHzPHTww=;
-        b=JevHIhiYqEti5uTChAjUeDs+BEKCL2g/TRyKpHJ/sKw/h9kJ+4HCHHueL9YgowiXeH
-         y+mmV6LB+UES6nnIE0g9mcDow3/ZHPCPRA5pmeJtKaqszxJpl0NT7ay2th4isuwERWRd
-         6ifB8qXrbjG6XHh86W6nYjbJ42MprekK2a0jDJyRYz6wdUkKZDcVRoJbS8W75zZJ/ol/
-         wjRxHQwuiELIsm0pgootgzP3h4C5nRtHxDOpGShBY4KEdcX1nWkWGPR50zOC0aZH70pv
-         bM2ZAeX1I+fDiPw6Kc3dDttcv550is1BDPyTfxuXeB+7xXzhCZYRvFSfU+WatkBxmaVl
-         Tq7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695763939; x=1696368739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NY9jveINp5V5rlaBbscxlXmPxYesM9ges3+QHzPHTww=;
-        b=UD0g5QF/hTw1ZjLmOW4fC/q+KRlsR9t67FzpepLSrUPpfeLv9pxpPi4G2sy/jgBHix
-         jHM6fkO4SkZJiYGu3ZJjAeLUozUe2f19I1wk01VEP1a1SGboihRAOpmpLhCKVWgxmZ1k
-         sBl6joFQFGHaVMsxDWv8YCUw2W73oyTQiFsAoJGlMe+DbB89q1HRLeBK7l2Gbfyl8UNK
-         0zyldumncCZKSr8AH4DWag518EG7ALJ4fmiccqySfPrA5+3IxVrBhSMxvRO00eeA8H86
-         iKf7SsHL08SxBzQ8EMClzF1BXH5rPiLzH1b8TvYuziVV93868NhLz4qoH1D9PDy4oVjd
-         Iy1w==
-X-Gm-Message-State: AOJu0Yy0Be9yLOQ72tsXmuE+72mtR5RrmAcBnf/LbkZYW+TNtlKMGnbB
-        qXXuNWN83Pf+PJlZCcnTu9E1fJ1w/G614qg6jRq8
-X-Google-Smtp-Source: AGHT+IFCtQ0lRQAQtAczfLsb2sztHe5JKNKH8brd6I1PKgoiFWprOSxrLQWdFdj8Jz71vraPlw9N0n534XJeETDCyZI=
-X-Received: by 2002:a25:d308:0:b0:d85:e4c4:4778 with SMTP id
- e8-20020a25d308000000b00d85e4c44778mr183132ybf.0.1695763939574; Tue, 26 Sep
- 2023 14:32:19 -0700 (PDT)
+        Tue, 26 Sep 2023 19:21:56 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836145274;
+        Tue, 26 Sep 2023 15:23:57 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38QLJDwm008181;
+        Tue, 26 Sep 2023 21:36:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HdYo7IF3hvnNdrc0T8ThUqLB1fvlrLKGIPhITVuMjN8=;
+ b=NTKpIytOOZuX/yP+0E+Jkq6/im6xcHz8j2qloyPZ0kRf7vo8yxJvy7unQIYWcUgu3L+3
+ YuRtJCYXIsgV9YdYXIvf9zITmfijhh5r8ArKf/thA21jr9aOd4uu06Fh/0434HcGIVlr
+ wM55xURNC7dBgx5Fc1eVA9sqyYLk4DHB0+3k6vrI5GZ/73O9wbljhS2A0aaShWFKrWFl
+ LDQ725wwWU9l0Df7D2nYYIqlsCorC8SiJE6IVchR3JfPGj2CJmZKP3iuYeOn9G7uarv6
+ 3ArmMjS5GSJ2kl0YRs96+nrjDGzGbCyfigeSlG8rQBY4YiEY+B8aHFF/7cpEdyVOIVqx UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tc6me1k2c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 21:36:16 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38QLaDVX009478;
+        Tue, 26 Sep 2023 21:36:13 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tc6me1jkd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 21:36:12 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38QJPrWT008250;
+        Tue, 26 Sep 2023 21:32:49 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+        by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3tabbn6h33-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Sep 2023 21:32:49 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38QLWmZF7537308
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Sep 2023 21:32:48 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 80F1358055;
+        Tue, 26 Sep 2023 21:32:48 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D95EC58063;
+        Tue, 26 Sep 2023 21:32:47 +0000 (GMT)
+Received: from [9.61.144.60] (unknown [9.61.144.60])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Sep 2023 21:32:47 +0000 (GMT)
+Message-ID: <ed95040b-2368-473b-1dda-5d8c0eaa3259@linux.vnet.ibm.com>
+Date:   Tue, 26 Sep 2023 17:32:47 -0400
 MIME-Version: 1.0
-References: <20230912212906.3975866-3-andrii@kernel.org> <3808036a0b32a17a7fd9e7d671b5458d.paul@paul-moore.com>
- <CAEf4BzYiKhG3ZL-GGQ4fHzSu6RKx2fh2JHwcL9_XKzQBvx3Bjg@mail.gmail.com>
- <CAHC9VhSOCAb6JQJn96xgwNNMGM0mKXf64ygkj4=Yv0FA8AYR=Q@mail.gmail.com>
- <CAEf4BzZC+9GbCsG56B2Q=woq+RHQS8oMTGJSNiMFKZpOKHhKpg@mail.gmail.com>
- <CAHC9VhTiqhQcfDr-7mThY1kH-Fwa7NUUU8ZWZvLFVudgtO8RAA@mail.gmail.com> <CAEf4BzZ8RvGwzVfm-EN1qdDiTv3Q2eYxBKOdBgGT96XzcvJCpw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ8RvGwzVfm-EN1qdDiTv3Q2eYxBKOdBgGT96XzcvJCpw@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 26 Sep 2023 17:32:08 -0400
-Message-ID: <CAHC9VhTLnT6HmkvJBXVCApHG4sCFdgXxJykPQ8oYLaVa8vXWkQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/12] bpf: introduce BPF token object
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keescook@chromium.org,
-        brauner@kernel.org, lennart@poettering.net, kernel-team@meta.com,
-        sargun@sargun.me, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] ima: Finish deprecation of IMA_TRUSTED_KEYRING Kconfig
+Content-Language: en-US
+To:     Oleksandr Tymoshenko <ovt@google.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     rnv@google.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>
+References: <20230921064506.3420402-1-ovt@google.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <20230921064506.3420402-1-ovt@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: fwjYmKAlxZvFNdVeaJ5d8wlks2OY9nkT
+X-Proofpoint-GUID: JOJkSSU5U-SAKUyZv7E0aYNsAI5y13bt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-26_15,2023-09-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=395 spamscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 suspectscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309260184
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Sep 22, 2023 at 6:35=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> No worries, lots of conferences are happening right now, so I expected
-> people to be unavailable.
 
-Just a quick note to let you know that my network access is still
-limited, but I appreciate the understanding and the detail in your
-reply; I'll get you a proper response next week.
+On 9/21/23 02:45, Oleksandr Tymoshenko wrote:
+> The removal of IMA_TRUSTED_KEYRING made IMA_LOAD_X509
+> and IMA_BLACKLIST_KEYRING unavailable because the latter
+> two depend on the former. Since IMA_TRUSTED_KEYRING was
+> deprecated in favor of INTEGRITY_TRUSTED_KEYRING use it
+> as a dependency for the two Kconfigs affected by the
+> deprecation.
+>
+> Fixes: 5087fd9e80e5 ("ima: Remove deprecated IMA_TRUSTED_KEYRING Kconfig")
+> Signed-off-by: Oleksandr Tymoshenko <ovt@google.com>
 
---=20
-paul-moore.com
+Thanks for doing this.
+
+Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+
