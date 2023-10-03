@@ -2,161 +2,68 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F75B7B6AC0
-	for <lists+linux-security-module@lfdr.de>; Tue,  3 Oct 2023 15:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E879D7B6ABD
+	for <lists+linux-security-module@lfdr.de>; Tue,  3 Oct 2023 15:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235573AbjJCNky (ORCPT
+        id S232619AbjJCNko (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 3 Oct 2023 09:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        Tue, 3 Oct 2023 09:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbjJCNkx (ORCPT
+        with ESMTP id S232169AbjJCNkn (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 3 Oct 2023 09:40:53 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14591AD;
-        Tue,  3 Oct 2023 06:40:49 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 8AB133200B40;
-        Tue,  3 Oct 2023 09:40:45 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 03 Oct 2023 09:40:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1696340445; x=1696426845; bh=pFiUCM0Cn00jPD1kU6gNbpIBQuIHykihdnF
-        gCoeT11M=; b=N1rsup18Lf/e/7bOBtifmqIztvYO5QZengtcNpzCJUyAeIOrTTQ
-        RwSPWXxrpgkpGub37RnfhA4l8kNZQ2/6ISAtp4cXBp4pd3EKcIhdhuISJbqMH3QW
-        VqmrZPyWiiojsQA5j+Bq7TWvI7emjjNTTN97CZt1V3mWhIJWVUJQuhxqkN9PWg/v
-        LRsQuH3JdNmtHO9nOBgsU8298q1dSBXlrhbpGNJfHdzpTlRkTe1EgY800b63u7Kb
-        BE87xNSa8uC4A/ZlPsfVjAUyBOFSn3Vdg+iypFhO55M2CVb0AeST8iyxupVigOkg
-        ZzNy4a+XxzwvQjdzhcXceRKkfi/dSkqG9TA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1696340445; x=1696426845; bh=pFiUCM0Cn00jPD1kU6gNbpIBQuIHykihdnF
-        gCoeT11M=; b=X8xWX1F87dFRO3w8fBnHCxAjOlmej7UIeTtFEDQO3JFj/z8xhhD
-        aqjCsFoshVqquyrxj81l2OdqYMGnfHAoT/nqTkKtWiJf1IHJu7mnbaf3Z3PuCYs9
-        b2sM7M3PJmxAbYOTRr89zA4YghcmGNN23VyItGXPLMnhNfFmxRHKF2Y/p31zrZv3
-        DF9LC44mfcQ40ZFJUDlywjvAn5wtDgx+gcB11wfUg46FGB+GOkxW2me4VD3jXMEt
-        HEjHxcA4Regb8zAABd97Eh+CtQ3ZujpuRyzA5jWMBKBNjnLTgdEOeerC58PD2e44
-        lyRKaXA+a0Lr+HSchP8KNTHjK15YI4eq2cw==
-X-ME-Sender: <xms:3BkcZWwjGs7LvcVC55nvMdLGmR9riSdPjYORODr6gtPz9GK-cGTc-g>
-    <xme:3BkcZSQ5etQsozNBvMakkeCpck1-cuwFp8qsdzYhcDYWMnIzwv3bf1CflTP_ep1Jz
-    q_qiNJY6B2xjdIbGVg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfeeigdeihecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
-    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:3BkcZYUE8SN8HerVPa3OcBXQR5czyY9JUEKot_I15wNz2yoWT1VMDw>
-    <xmx:3BkcZcjWLZ1RDOhC-0EiDQtl_E_FbQc6oFR5BbIP0uTIq5yMO9Maaw>
-    <xmx:3BkcZYDnH8g49iUq2pL8bFWVz9yW9vTeazdOY-kBlLTanv0l-TuHtg>
-    <xmx:3RkcZRJZ3hxVzxVnwd3RLlepQE3kDRSWegZNuC_ltIWliSaKyMIg3w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0F0E8B6008D; Tue,  3 Oct 2023 09:40:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
+        Tue, 3 Oct 2023 09:40:43 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CF9AD
+        for <linux-security-module@vger.kernel.org>; Tue,  3 Oct 2023 06:40:41 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5a24b03e22eso11754697b3.0
+        for <linux-security-module@vger.kernel.org>; Tue, 03 Oct 2023 06:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696340440; x=1696945240; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=puh49xxlHdZn1qw+vgX3cUDO6cZOkdYsWxDz9zkeBeQ=;
+        b=Tl15g8U4BjY3b0bI6V37MZq2x/Ar9pSP1YjwwW6/EFbb00t0hZGvg1AWE5dxYTrdv6
+         u7vnA1tg4wmiEDpaUl9JX0sXGCWa/zaT5xpimLw20lmnKWyY4iHAHI+95PdRJV8lP90p
+         /ZLZFrMH+tMuJSX8uWZOg0Hnq35Ejx2WTUBRcBWDRtQGhiUfIPR5L9Pl6gf2G5CuBAzW
+         1EOteBZI2FhA5fwCIX6PQntYTaVXi/0Kc0nAv/TNEDEAHEakGe1vGWMnhI0G5Qt2u5De
+         NU1laqUYaPAYhlNmTBqW77MvcJAcpphRflO6FaRgq+6W3+AB1IOwTEQZdHkQS5Ox21Fa
+         vzXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696340440; x=1696945240;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=puh49xxlHdZn1qw+vgX3cUDO6cZOkdYsWxDz9zkeBeQ=;
+        b=Yus0/mtFE613DmEGsBINd2hSbaTReK80FBRUSdFjY7HAOUQlFg+Yau/OtFACnC1rJA
+         t1LwUNUDpthZeuUS+6ifZ5Ic1rs4eQ2okP3Sk0S/yuEl4oRUlfkZsv3J2Lo5BdKSc/wP
+         gOQuB/PjGfXpPFc9UaHRo6X1Megvq7x5p4+7AyqJzUPLAkrcpLqtQHsmxeHi9aJwNR4P
+         +DtDaMp0FHHc8MgLVYMbcQOAUNqlpa0eMJ2ktsxY10gcvtF1TINRBalHKXec19IvFHKI
+         DUgWecr6GAIEE/X/mdoMjqHV0oLCezl2R48jI7A8Rzy2gH7DlYyWWrEr/h4+Wbg3Mg45
+         XCtw==
+X-Gm-Message-State: AOJu0YzVXI2EPyHFIm7Zstku3v1HMxORmT7dP7YWpj7eCcfmbw6OaI1Y
+        pVOd83XoIApX9aJJDCWeU3Xqa5YNoyVOg9w5mLo=
+X-Google-Smtp-Source: AGHT+IErGxsjD/v8N8pWdKVVVwEQXIugQTTC6VEJuvfGv15R+Hxgg5sB0QFg2M4ISFhjVQX86gqduiGUtnFVrCCUYAs=
+X-Received: by 2002:a0d:e041:0:b0:59b:8da4:dc2 with SMTP id
+ j62-20020a0de041000000b0059b8da40dc2mr13979047ywe.48.1696340440388; Tue, 03
+ Oct 2023 06:40:40 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <0174c612-ed97-44f3-bec5-1f512f135d21@app.fastmail.com>
-In-Reply-To: <20231003.ahPha5bengee@digikod.net>
-References: <20231003.ahPha5bengee@digikod.net>
-Date:   Tue, 03 Oct 2023 15:40:23 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>
-Cc:     "Konstantin Meskhidze" <konstantin.meskhidze@huawei.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
-        gnoack3000@gmail.com, linux-security-module@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        yusongping@huawei.com, artem.kuzin@huawei.com,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>
-Subject: Re: linux-next: build warning after merge of the landlock tree
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:3e12:b0:383:ba9:50c2 with HTTP; Tue, 3 Oct 2023
+ 06:40:39 -0700 (PDT)
+Reply-To: info.moneygrampostunit@gmail.com
+From:   moneygram <moneygrampostunittogo1@gmail.com>
+Date:   Tue, 3 Oct 2023 13:40:39 +0000
+Message-ID: <CAGN3jeZgqZ++BhPZriu-yzVDs3U=g4K=J6cxxz4p5C31adTvBA@mail.gmail.com>
+Subject: Oldingi xatlarimni oldingizmi? yangilanish uchun javob bering
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Tue, Oct 3, 2023, at 15:15, Micka=C3=ABl Sala=C3=BCn wrote:
-> PowerPC-64 follows the LP64 data model and then uses int-l64.h (instea=
-d of
-> int-ll64.h like most architectures) for user space code.
->
-> Here is the same code with the (suggested) "%lu" token on x86_86:
->
->   samples/landlock/sandboxer.c: In function =E2=80=98populate_ruleset_=
-net=E2=80=99:
->   samples/landlock/sandboxer.c:170:77: error: format =E2=80=98%lu=E2=80=
-=99 expects=20
-> argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 h=
-as type =E2=80=98__u64=E2=80=99=20
-> {aka =E2=80=98long long unsigned int=E2=80=99} [-Werror=3Dformat=3D]
->     170 |                                 "Failed to update the rulese=
-t=20
-> with port \"%lu\": %s\n",
->         |                                                             =
- =20
->             ~~^
->         |                                                             =
- =20
->               |
->         |                                                             =
- =20
->               long unsigned int
->         |                                                             =
- =20
->             %llu
->     171 |                                 net_port.port,=20
-> strerror(errno));
->         |                                 ~~~~~~~~~~~~~
->         |                                         |
->         |                                         __u64 {aka long long=20
-> unsigned int}
->
->
-> We would then need to cast __u64 to unsigned long long to avoid this w=
-arning,
-> which may look useless, of even buggy, for people taking a look at thi=
-s sample.
->
-> Anyway, it makes more sense to cast it to __u16 because it is the
-> expected type for a TCP port. I'm updating the patch with that.
-> Konstantin, please take this fix for the next series:
-> https://git.kernel.org/mic/c/fc9de206a61a
->
->
-> On Tue, Oct 03, 2023 at 02:27:37PM +1100, Stephen Rothwell wrote:
->> Hi all,
->>=20
->> After merging the landlock tree, today's linux-next build (powerpc
->> allyesconfig) produced this warning:
->>=20
->> samples/landlock/sandboxer.c: In function 'populate_ruleset_net':
->> samples/landlock/sandboxer.c:170:78: warning: format '%llu' expects a=
-rgument of type 'long long unsigned int', but argument 3 has type '__u64=
-' {aka 'long unsigned int'} [-Wformat=3D]
->>   170 |                                 "Failed to update the ruleset=
- with port \"%llu\": %s\n"
-
-I think defining the __SANE_USERSPACE_TYPES__ macro should take care of =
-this,
-then __u64 has the same type as it does in the kernel.
-
-        Arnd
+Oldingi xatlarimni oldingizmi? yangilanish uchun javob bering
