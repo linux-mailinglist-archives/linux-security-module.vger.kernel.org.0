@@ -2,89 +2,64 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8AE7B776A
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Oct 2023 07:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8DC7B7920
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Oct 2023 09:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241298AbjJDFTI convert rfc822-to-8bit (ORCPT
+        id S241532AbjJDHyT (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 4 Oct 2023 01:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        Wed, 4 Oct 2023 03:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241323AbjJDFTH (ORCPT
+        with ESMTP id S241516AbjJDHyS (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 4 Oct 2023 01:19:07 -0400
-Received: from esa2.hc5620-63.iphmx.com (esa2.hc5620-63.iphmx.com [68.232.149.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3B96A7;
-        Tue,  3 Oct 2023 22:19:03 -0700 (PDT)
-X-CSE-ConnectionGUID: M9/SVn+AS+GYKfkQcXmkjg==
-X-CSE-MsgGUID: zbQ+5IJZSTWCEoHIQ9Zm3w==
-Message-Id: <bc8e20$ot3r@esa2.hc5620-63.iphmx.com>
-X-IronPort-RemoteIP: 185.225.73.120
-X-IronPort-MID: 816251
-X-IronPort-Reputation: -5.6
-X-IronPort-Listener: MailFlow
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from unknown (HELO [185.225.73.120]) ([185.225.73.120])
-  by esa2.hc5620-63.iphmx.com with ESMTP; 04 Oct 2023 01:19:00 -0400
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 4 Oct 2023 03:54:18 -0400
+X-Greylist: delayed 489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Oct 2023 00:54:13 PDT
+Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3F1CC
+        for <linux-security-module@vger.kernel.org>; Wed,  4 Oct 2023 00:54:13 -0700 (PDT)
+Received: by mail.citycodes.pl (Postfix, from userid 1001)
+        id 5D2711F4AB; Wed,  4 Oct 2023 09:45:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
+        t=1696405563; bh=mMhfBvhM53FtUQl1P3lyeSY5aDBQYiR8qQBy6YFQHi0=;
+        h=Date:From:To:Subject:From;
+        b=OxQSSvC4p3Q/Jk+GiDORNM5kCPj1BksJ30c8KAFLdvq0F5Z9OLaw1zXwh5UJLs3Oz
+         J0YCZs2JkWmVzLQE/zAeljZmgrUljxb37VWoJV9L80XjumTRzcl73sTW4XpbYqvn8C
+         PBThaLjhzvZ5/r8jFiPMbTgeHexn76xulnwAY6aRRv5isrr13cb6PsOFV/yETZrV5R
+         TxZdP6ZeE3yyjJq5YexLmKqqM/WHHuwwNMYt7TY/QItQ8KqRgGtAcz14hP4k0C3ICM
+         TiJREKDVlk1HQewTYxvWA2PaaH+gO8puJhuIFA9JryzBbkEORO19gSVxq7nsAY/Hti
+         sUNAAkCRaE+vw==
+Received: by mail.citycodes.pl for <linux-security-module@vger.kernel.org>; Wed,  4 Oct 2023 07:45:38 GMT
+Message-ID: <20231004084500-0.1.7v.j100.0.4fmnwyr4kc@citycodes.pl>
+Date:   Wed,  4 Oct 2023 07:45:38 GMT
+From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
+To:     <linux-security-module@vger.kernel.org>
+Subject: =?UTF-8?Q?Rozszerzenie_Programu_M=C3=B3j_Pr=C4=85d_5.0?=
+X-Mailer: mail.citycodes.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: REMINDER
-To:     Recipients <test@mail2world.com>
-From:   "Mr. mohd" <test@mail2world.com>
-Date:   Tue, 03 Oct 2023 22:18:45 -0700
-Reply-To: mohamedsafiah47@gmail.com
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_FM_MR_MRS,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL,SPF_FAIL,
-        SPF_HELO_PASS,SPOOFED_FREEMAIL,SPOOFED_FREEM_REPTO,
-        TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL autolearn=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [68.232.149.158 listed in list.dnswl.org]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [185.225.73.120 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=test%40mail2world.com;ip=68.232.149.158;r=lindbergh.monkeyblade.net]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mohamedsafiah47[at]gmail.com]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [test[at]mail2world.com]
-        *  0.0 MSGID_FROM_MTA_HEADER Message-Id was added by a relay
-        *  1.5 HK_NAME_FM_MR_MRS No description available.
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
-        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
-        *       failed
-        *  0.4 SPOOFED_FREEMAIL No description available.
-        *  1.0 SPOOFED_FREEM_REPTO Forged freemail sender with freemail
-        *      reply-to
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+Szanowni Pa=C5=84stwo!
 
-Dear
-My name is Mohamed Abdul I have the capacity to inject a considerable
-amount of capital in any viable project 
-1,cell phone number what-sap
-2,full name
+W ramach nowej edycji programu M=C3=B3j Pr=C4=85d mog=C4=85 otrzyma=C4=87=
+ Pa=C5=84stwo dofinansowanie na zakup i monta=C5=BC fotowoltaiki i/lub ma=
+gazynu energii. Maksymalna kwota dofinansowania wynosi 58 tys. z=C5=82.=20
+
+Jako firma wyspecjalizowana w tym zakresie zajmiemy si=C4=99 Pa=C5=84stwa=
+ wnioskiem o dofinansowanie oraz instalacj=C4=85 i serwisem dopasowanych =
+do Pa=C5=84stwa budynku paneli s=C5=82onecznych.
+
+B=C4=99d=C4=99 wdzi=C4=99czny za informacj=C4=99 czy s=C4=85 Pa=C5=84stwo=
+ zainteresowani.
 
 
-yours truly
-Mohamed Abdul Ahmed
+Pozdrawiam,
+Kamil Lasek
