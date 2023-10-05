@@ -2,329 +2,219 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56FB7BA222
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 Oct 2023 17:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1307BA699
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Oct 2023 18:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjJEPP0 (ORCPT
+        id S235517AbjJEQjc (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 5 Oct 2023 11:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        Thu, 5 Oct 2023 12:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233745AbjJEPOn (ORCPT
+        with ESMTP id S231749AbjJEQiU (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 5 Oct 2023 11:14:43 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FBD6994
-        for <linux-security-module@vger.kernel.org>; Thu,  5 Oct 2023 07:43:19 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-d81afd5273eso1126514276.3
-        for <linux-security-module@vger.kernel.org>; Thu, 05 Oct 2023 07:43:19 -0700 (PDT)
+        Thu, 5 Oct 2023 12:38:20 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEF28693;
+        Thu,  5 Oct 2023 01:09:51 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40566f89f6eso6271165e9.3;
+        Thu, 05 Oct 2023 01:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696516999; x=1697121799; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EE8iPYu9LpRlrA3P5svRFO6CzOzjvPUAMSGvj485Oxk=;
-        b=inptMAmDcUZ1iBCTY/rT4ZJ75tNZgRwaf6/zv4O44QzEe+ZBaFB053c+VOj3C4QipE
-         zMd3KGrBNxPCRXwqq1eVQpP9HB/gPjmGNvFGD/oshJzSOEdaCYIrYk80LOKEJGLs6wzF
-         IzrmKnbTd8vJPVU4VxrBBFi1dwoGbLrnE+ePMOrSam8Z3FyJiYZRJOyaw7Gc6ehQdczz
-         kuadF+lYJQ6jNTREZqwL7fMtvowk4Lg/LP8kG4CiqDg5BDXkY4OEB5cCttwxjLvLAtJH
-         c1vJ5f88oeq9RNFpgmcs5T/k9u5AUAMp4qdytFz3UEGHD+Z+7oNCmB0arvYqa1lVa+AN
-         J2gA==
+        d=gmail.com; s=20230601; t=1696493390; x=1697098190; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vac1cc2NhqqKLkLLqOWp/M2Xk8kK7YsIhEZC7x4c1VE=;
+        b=ifxXrmyMYXHjcpSGaFKIgeQotHSKfSy5PDv2NeErW+QuINbwTDPPthQY9ge6UjkvqN
+         SdR/RMTwtvSzLsGxO4FrJRIMm2HbQuWoRcc/2Wrn9/JjQgUbRCeMdng4N62/JemSG8G5
+         dqjj34jnlTLGAry+8qwAq4KJXYx+Di5xsP1JGpVYALs8MFBsQwltpyVqZxD6kkS4USzg
+         Nx02WxzNoDD/DL1liaBN/qmzcdwl7ZaFeDJ5YFDOSrm258/3VddP285dhAEq12YJ12nv
+         J6CGzrKVOQdeiy1hPCVfZJfAqHdzevVbtOkm1scaZW7pDbWhwvVHQWKq0qwyc7B6evwi
+         oU9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696516999; x=1697121799;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EE8iPYu9LpRlrA3P5svRFO6CzOzjvPUAMSGvj485Oxk=;
-        b=Gj2SviDHsaAaXPBfgf6Fc7XvEuSSonIKjeumKy371WXDxPbRIDeYX8tIOe4qXyJWDW
-         4YDtU4RwQvI9KIBLENh+Zvv4IizXGbViAa1oLOSAH5KvHbuln6EIYjFvUyjJY4TtBBqn
-         kHhah1pQOqfhOw2QnEx6jfapbl10zukqwy24NK7WvB5rsEk+ZJHg7R8cZ4MbncFbKSRc
-         FPEeiK6LR8DomRgsaKSp8alY7D69CpMaBp5JbZShkMJm3mE9sVDcQrwPQ8pVcSsvthks
-         rtl/DvtQUI+WvgxjSnfLqMgBQTM9Rr3LFIRqq066C07lp+vAJiJAD9ABCcqOTxtdLoy4
-         cx9g==
-X-Gm-Message-State: AOJu0YwVBtRn5fHx9/kgJ7RkpFEMxrZO8zIjlDd3ilgft56L30IMmI5L
-        3QSZMDjuzi2+czuTCC48vDYPMGZZy1eXV+gHiru/kQ==
-X-Google-Smtp-Source: AGHT+IGOqTvtxfqWgNnMMFc4737tOPznDx2Ec+u1Qc6vg6Ytf9IAjo7xOI8HjQPL083wFsBnlWD0qahO/3mYB56VT9A=
-X-Received: by 2002:a25:23ce:0:b0:d91:5a1b:eea with SMTP id
- j197-20020a2523ce000000b00d915a1b0eeamr4876224ybj.50.1696516998560; Thu, 05
- Oct 2023 07:43:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696493390; x=1697098190;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vac1cc2NhqqKLkLLqOWp/M2Xk8kK7YsIhEZC7x4c1VE=;
+        b=ZNqJZ8iv/ZSPCDc4ddPW/WwHppgM1sMSuUlTdUKG0hZFeIkA/MYjG4SpOJ8/h0479r
+         h6OdwwpFYg4SGNdgBc/2lf9RZOb0OF0HqNfWCn9Eeu1QhAOFqLixO2uH73pBm3XcZ3p3
+         HWmEMsBNIvk5C7VkrUsxcbOaI9Rysh0/DT2C3wR+iFQkh1TKh3jWtkku7xrfucA7/e6w
+         bLI58gIdjjbdY43cA8z48fUWrztilwTEc1oEvxJ7NdjIF+AhYfpy2B3KS9o9vb+QkSoP
+         lH3yIumHK3Vo+fhw7YsyUjICEYJ+4YWOsyA7ZoMcyh5r8qbPSlNUvYUOKHGge/i7Krwg
+         pdjg==
+X-Gm-Message-State: AOJu0Yy6lirmVtyVpQGQRGOj4EO13FlllqmvRVhb7XOjX5ZT7n+gto4P
+        yMIQYSiPLfjjERe8poIdgoQ=
+X-Google-Smtp-Source: AGHT+IGgFchs9lATe9wTJNhW991KYQ9SWvuqIs9rt0eFGO2Eyw1PAmzzNgwHsXi/uGf+PI9L6DTL0A==
+X-Received: by 2002:a05:600c:220b:b0:406:7029:c4f2 with SMTP id z11-20020a05600c220b00b004067029c4f2mr4051867wml.26.1696493389528;
+        Thu, 05 Oct 2023 01:09:49 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id y6-20020a1c4b06000000b00405588aa40asm923957wma.24.2023.10.05.01.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 01:09:49 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 5 Oct 2023 10:09:47 +0200
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com,
+        song@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        renauld@google.com
+Subject: Re: [PATCH v5 4/5] bpf: Only enable BPF LSM hooks when an LSM
+ program is attached
+Message-ID: <ZR5vSyyNGBb8TvNH@krava>
+References: <20230928202410.3765062-1-kpsingh@kernel.org>
+ <20230928202410.3765062-5-kpsingh@kernel.org>
 MIME-Version: 1.0
-From:   Fuad Tabba <tabba@google.com>
-Date:   Thu, 5 Oct 2023 15:42:42 +0100
-Message-ID: <CA+EHjTwTgEVtea7wgef5G6EEgFa0so_GbNXTMZNKyFE=ucyV0g@mail.gmail.com>
-Subject: Re: [RFC PATCH v12 11/33] KVM: Introduce per-page memory attributes
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, KVM <kvm@vger.kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        KVMARM <kvmarm@lists.linux.dev>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Anish Moorthy <amoorthy@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Maciej Szmigiero <mail@maciej.szmigiero.name>,
-        David Hildenbrand <david@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Wang <wei.w.wang@intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230928202410.3765062-5-kpsingh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Hi Sean,
+On Thu, Sep 28, 2023 at 10:24:09PM +0200, KP Singh wrote:
 
-On Tue, Oct 3, 2023 at 9:51=E2=80=AFPM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> On Tue, Oct 03, 2023, Fuad Tabba wrote:
-> > On Tue, Oct 3, 2023 at 4:59=E2=80=AFPM Sean Christopherson <seanjc@goog=
-le.com> wrote:
-> > > On Tue, Oct 03, 2023, Fuad Tabba wrote:
-> > > > > +#define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-> > > > > +
-> > > >
-> > > > In pKVM, we don't want to allow setting (or clearing) of PRIVATE/SH=
-ARED
-> > > > attributes from userspace.
-> > >
-> > > Why not?  The whole thing falls apart if userspace doesn't *know* the=
- state of a
-> > > page, and the only way for userspace to know the state of a page at a=
- given moment
-> > > in time is if userspace controls the attributes.  E.g. even if KVM we=
-re to provide
-> > > a way for userspace to query attributes, the attributes exposed to us=
-rspace would
-> > > become stale the instant KVM drops slots_lock (or whatever lock prote=
-cts the attributes)
-> > > since userspace couldn't prevent future changes.
-> >
-> > I think I might not quite understand the purpose of the
-> > KVM_SET_MEMORY_ATTRIBUTES ABI. In pKVM, all of a protected guest's memo=
-ry is
-> > private by default, until the guest shares it with the host (via a
-> > hypercall), or another guest (future work). When the guest shares it,
-> > userspace is notified via KVM_EXIT_HYPERCALL. In many use cases, usersp=
-ace
-> > doesn't need to keep track directly of all of this, but can reactively =
-un/map
-> > the memory being un/shared.
->
-> Yes, and then userspace needs to tell KVM, via KVM_SET_MEMORY_ATTRIBUTES,=
- that
-> userspace has agreed to change the state of the page.  Userspace may not =
-need/want
-> to explicitly track the state of pages, but userspace still needs to tell=
- KVM what
-> userspace wants.
->
-> KVM is primarily an accelerator, e.g. KVM's role is to make things go fas=
-t (relative
-> to doing things in userspace) and provide access to resources/instruction=
-s that
-> require elevated privileges.  As a general rule, we try to avoid defining=
- the vCPU
-> model, security policies, etc. in KVM, because hardcoding policy into KVM=
- (and the
-> kernel as a whole) eventually limits the utility of KVM.
->
-> As it pertains to PRIVATE vs. SHARED, KVM's role is to define and enforce=
- the basic
-> rules, but KVM shouldn't do things like define when it is (il)legal to co=
-nvert
-> memory to/from SHARED, what pages can be converted, what happens if the g=
-uest and
-> userspace disagree, etc.
+SNIP
 
-Thanks for clarifying that. My initial understanding of the purpose of
-KVM_SET_MEMORY_ATTRIBUTES wasn't clear. Now I see how having the
-userspace view in KVM would avoid the need to hardcore many policies,
-and I can see how this could come in handy in the future when we start
-going into multi-sharing, for example.
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index e97aeda3a86b..df9699bce372 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/bpf_verifier.h>
+>  #include <linux/bpf_lsm.h>
+>  #include <linux/delay.h>
+> +#include <linux/bpf_lsm.h>
+>  
+>  /* dummy _ops. The verifier will operate on target program's ops. */
+>  const struct bpf_verifier_ops bpf_extension_verifier_ops = {
+> @@ -514,7 +515,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
+>  {
+>  	enum bpf_tramp_prog_type kind;
+>  	struct bpf_tramp_link *link_exiting;
+> -	int err = 0;
+> +	int err = 0, num_lsm_progs = 0;
+>  	int cnt = 0, i;
+>  
+>  	kind = bpf_attach_type_to_tramp(link->link.prog);
+> @@ -545,8 +546,14 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
+>  			continue;
+>  		/* prog already linked */
+>  		return -EBUSY;
+> +
+> +		if (link_exiting->link.prog->type == BPF_PROG_TYPE_LSM)
+> +			num_lsm_progs++;
 
-> > > Why does pKVM need to prevent userspace from stating *its* view of at=
-tributes?
-> > >
-> > > If the goal is to reduce memory overhead, that can be solved by using=
- an internal,
-> > > non-ABI attributes flag to track pKVM's view of SHARED vs. PRIVATE.  =
-If the guest
-> > > attempts to access memory where pKVM and userspace don't agree on the=
- state,
-> > > generate an exit to userspace.  Or kill the guest.  Or do something e=
-lse entirely.
-> >
-> > For the pKVM hypervisor the guest's view of the attributes doesn't
-> > matter. The hypervisor at the end of the day is the ultimate arbiter
-> > for what is shared and with how. For pKVM (at least in my port of
-> > guestmem), we use the memory attributes from guestmem essentially to
-> > control which memory can be mapped by the host.
->
-> The guest's view absolutely matters.  The guest's view may not be express=
-ed at
-> access time, e.g. as you note below, pKVM and other software-protected VM=
-s don't
-> have a dedicated shared vs. private bit like TDX and SNP.  But the view i=
-s still
-> there, e.g. in the pKVM model, the guest expresses its desire for shared =
-vs.
-> private via hypercall, and IIRC, the guest's view is tracked by the hyper=
-visor
-> in the stage-2 PTEs.  pKVM itself may track the guest's view on things, b=
-ut the
-> view is still the guest's.
+this looks wrong, it's never reached.. seems like we should add separate
+hlist_for_each_entry loop over trampoline's links for this check/init of
+num_lsm_progs ?
 
-This was poorly worded on my part. You're right that in practice the
-pKVM hypervisor is the one tracking the guest's view, based on the
-hypercalls from the guest.
+jirka
 
-> E.g. if the guest thinks a page is private, but in reality KVM and host u=
-serspace
-> have it as shared, then the guest may unintentionally leak data to the un=
-trusted
-> world.
->
-> IIUC, you have implemented guest_memfd support in pKVM by changing the at=
-tributes
-> when the guest makes the hypercall.  This can work, but only so long as t=
-he guest
-> and userspace are well-behaved, and it will likely paint pKVM into a corn=
-er in
-> the long run.
->
-> E.g. if the guest makes a hypercall to convert memory to PRIVATE, but the=
-re is
-> no memslot or the memslot doesn't support private memory, then unless the=
-re is
-> policy baked into KVM, or an ABI for the guest<=3D>host hypercall interfa=
-ce that
-> allows unwinding the program counter, you're stuck.  Returning an error f=
-or the
-> hypercall straight from KVM is undesirable as that would put policy into =
-KVM that
-> doesn't need to be there, e.g. that would prevent userspace from manipula=
-ting
-> memslots in response to (un)share requests from the guest.  It's a simila=
-r story
-> if KVM marks the page as PRIVATE, as that would prevent userspace from re=
-turning
-> an error for the hypercall, i.e. would prevent usersepace from denying th=
-e request
-> to convert to PRIVATE.
-
-Ack.
-
-> > One difference between pKVM and TDX (as I understand it), is that TDX
-> > uses the msb of the guest's IPA to indicate whether memory is shared
-> > or private, and that can generate a mismatch on guest memory access
-> > between what it thinks the state is, and what the sharing state in
-> > reality is. pKVM doesn't have that. Memory is private by default, and
-> > can be shared in-place, both in the guest's IPA space as well as the
-> > underlying physical page.
->
-> TDX's shared bit and SNP's encryption bit are just a means of hardware en=
-forcement.
-> pKVM does have a hardware bit because hardware doesn't provide any enforc=
-ement.
-> But as above, pKVM does have an equivalent *somewhere*.
->
-> > > > The other thing, which we need for pKVM anyway, is to make
-> > > > kvm_vm_set_mem_attributes() global, so that it can be called from o=
-utside of
-> > > > kvm_main.c (already have a local patch for this that declares it in
-> > > > kvm_host.h),
-> > >
-> > > That's no problem, but I am definitely opposed to KVM modifying attri=
-butes that
-> > > are owned by userspace.
-> > >
-> > > > and not gate this function by KVM_GENERIC_MEMORY_ATTRIBUTES.
-> > >
-> > > As above, I am opposed to pKVM having a completely different ABI for =
-managing
-> > > PRIVATE vs. SHARED.  I have no objection to pKVM using unclaimed flag=
-s in the
-> > > attributes to store extra metadata, but if KVM_SET_MEMORY_ATTRIBUTES =
-doesn't work
-> > > for pKVM, then we've failed miserably and should revist the uAPI.
-> >
-> > Like I said, pKVM doesn't need a userspace ABI for managing PRIVATE/SHA=
-RED,
-> > just a way of tracking in the host kernel of what is shared (as opposed=
- to
-> > the hypervisor, which already has the knowledge). The solution could si=
-mply
-> > be that pKVM does not enable KVM_GENERIC_MEMORY_ATTRIBUTES, has its own
-> > tracking of the status of the guest pages, and only selects KVM_PRIVATE=
-_MEM.
->
-> At the risk of overstepping my bounds, I think that effectively giving th=
-e guest
-> full control over what is shared vs. private is a mistake.  It more or le=
-ss locks
-> pKVM into a single model, and even within that model, dealing with errors=
- and/or
-> misbehaving guests becomes unnecessarily problematic.
->
-> Using KVM_SET_MEMORY_ATTRIBUTES may not provide value *today*, e.g. the u=
-serspace
-> side of pKVM could simply "reflect" all conversion hypercalls, and termin=
-ate the
-> VM on errors.  But the cost is very minimal, e.g. a single extra ioctl() =
-per
-> converion, and the upside is that pKVM won't be stuck if a use case comes=
- along
-> that wants to go beyond "all conversion requests either immediately succe=
-ed or
-> terminate the guest".
-
-Now that I understand the purpose of KVM_SET_MEMORY_ATTRIBUTES, I
-agree. However, pKVM needs to track at the host kernel (i.e., EL1)
-whether guest memory is shared or private.
-
-One approach would be to add another flag to the attributes that
-tracks the host kernel view. The way KVM_SET_MEMORY_ATTRIBUTES is
-implemented now, userspace can zero it, so in that case, that
-operation would need to be masked to avoid that.
-
-Another approach would be to have a pKVM-specific xarray (or similar)
-to do the tracking, but since there is a structure that's already
-doing something similar (i.e.,the attributes array), it seems like it
-would be unnecessary overhead.
-
-Do you have any ideas or preferences?
-
-Cheers,
-/fuad
+>  	}
+>  
+> +	if (!num_lsm_progs && link->link.prog->type == BPF_PROG_TYPE_LSM)
+> +		bpf_lsm_toggle_hook(tr->func.addr, true);
+> +
+>  	hlist_add_head(&link->tramp_hlist, &tr->progs_hlist[kind]);
+>  	tr->progs_cnt[kind]++;
+>  	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
+> @@ -569,8 +576,10 @@ int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline
+>  
+>  static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
+>  {
+> +	struct bpf_tramp_link *link_exiting;
+>  	enum bpf_tramp_prog_type kind;
+> -	int err;
+> +	bool lsm_link_found = false;
+> +	int err, num_lsm_progs = 0;
+>  
+>  	kind = bpf_attach_type_to_tramp(link->link.prog);
+>  	if (kind == BPF_TRAMP_REPLACE) {
+> @@ -580,8 +589,24 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_
+>  		tr->extension_prog = NULL;
+>  		return err;
+>  	}
+> +
+> +	if (link->link.prog->type == BPF_PROG_TYPE_LSM) {
+> +		hlist_for_each_entry(link_exiting, &tr->progs_hlist[kind],
+> +				     tramp_hlist) {
+> +			if (link_exiting->link.prog->type == BPF_PROG_TYPE_LSM)
+> +				num_lsm_progs++;
+> +
+> +			if (link_exiting->link.prog == link->link.prog)
+> +				lsm_link_found = true;
+> +		}
+> +	}
+> +
+>  	hlist_del_init(&link->tramp_hlist);
+>  	tr->progs_cnt[kind]--;
+> +
+> +	if (lsm_link_found && num_lsm_progs == 1)
+> +		bpf_lsm_toggle_hook(tr->func.addr, false);
+> +
+>  	return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
+>  }
+>  
+> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> index cfaf1d0e6a5f..1957244196d0 100644
+> --- a/security/bpf/hooks.c
+> +++ b/security/bpf/hooks.c
+> @@ -8,7 +8,7 @@
+>  
+>  static struct security_hook_list bpf_lsm_hooks[] __ro_after_init = {
+>  	#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> -	LSM_HOOK_INIT(NAME, bpf_lsm_##NAME),
+> +	LSM_HOOK_INIT_DISABLED(NAME, bpf_lsm_##NAME),
+>  	#include <linux/lsm_hook_defs.h>
+>  	#undef LSM_HOOK
+>  	LSM_HOOK_INIT(inode_free_security, bpf_inode_storage_free),
+> @@ -32,3 +32,26 @@ DEFINE_LSM(bpf) = {
+>  	.init = bpf_lsm_init,
+>  	.blobs = &bpf_lsm_blob_sizes
+>  };
+> +
+> +void bpf_lsm_toggle_hook(void *addr, bool value)
+> +{
+> +	struct lsm_static_call *scalls;
+> +	struct security_hook_list *h;
+> +	int i, j;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(bpf_lsm_hooks); i++) {
+> +		h = &bpf_lsm_hooks[i];
+> +		scalls = h->scalls;
+> +		if (h->hook.lsm_callback == addr)
+> +			continue;
+> +
+> +		for (j = 0; j < MAX_LSM_COUNT; j++) {
+> +			if (scalls[j].hl != h)
+> +				continue;
+> +			if (value)
+> +				static_branch_enable(scalls[j].active);
+> +			else
+> +				static_branch_disable(scalls[j].active);
+> +		}
+> +	}
+> +}
+> diff --git a/security/security.c b/security/security.c
+> index c2c2cf6b711f..d1ee72e563cc 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -382,7 +382,8 @@ static void __init lsm_static_call_init(struct security_hook_list *hl)
+>  			__static_call_update(scall->key, scall->trampoline,
+>  					     hl->hook.lsm_callback);
+>  			scall->hl = hl;
+> -			static_branch_enable(scall->active);
+> +			if (hl->default_state)
+> +				static_branch_enable(scall->active);
+>  			return;
+>  		}
+>  		scall++;
+> -- 
+> 2.42.0.582.g8ccd20d70d-goog
+> 
+> 
