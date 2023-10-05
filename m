@@ -2,139 +2,160 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310947BA14B
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 Oct 2023 16:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFC07BA16A
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Oct 2023 16:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236286AbjJEOmY (ORCPT
+        id S238474AbjJEOnm (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 5 Oct 2023 10:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        Thu, 5 Oct 2023 10:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbjJEOjE (ORCPT
+        with ESMTP id S238543AbjJEOkk (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:39:04 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E725826181
-        for <linux-security-module@vger.kernel.org>; Thu,  5 Oct 2023 07:05:37 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-59f6e6b7600so10831467b3.3
-        for <linux-security-module@vger.kernel.org>; Thu, 05 Oct 2023 07:05:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1696514737; x=1697119537; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YUPOooK4Ns6DH/Jalgn9lVTRMXc80w0ZAjwIoNKA7QA=;
-        b=gZJjm7wIgO3iNaVndIuYT4UV17QLvXVqy6yrN8Ec6SpZ1nPqHW9BOYT9/GBBD2pxUY
-         4X6htYn6c+WhUk2zH/Ppo9KAs97EYf/C5jPcdpK6dBpy5vqEYhqHKDSBAWyau5FJH84h
-         y0yt9V/2+L5zoliDdtajzBAAVTAOcuemc6Dp53MKB/NmrALbmsdPSCdVqnFUt0PV1PFk
-         SM5UvQ/PBgLUYEybmLEXY+7EjY2/Z/M3tEW7ME5LUcvM4gNv3LUBa8lkS5aaZ2T1W50K
-         QgFN7cgf79mUY8nEGz0LU993w2u2BA+LaJA58F7x7VOPCvsWz5UcDkQPS9CaD/Ps1kCr
-         1tGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696514737; x=1697119537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YUPOooK4Ns6DH/Jalgn9lVTRMXc80w0ZAjwIoNKA7QA=;
-        b=dugF2FT4njTfgBWopJfTAC/nmH5zMbj3xpwR13e7mg55a47lGEvtmWov8F5DY+wqFw
-         gpbwtloCnFpaEOi1U1q7hiiKERVm7147oHbWeDCey6IoARA/diMZ1jBRXoILJP4DKrSm
-         Fi4MU8KdznwxvaJQX95J6S+x4rQpKfWcPJzmzxAisyvEj0ty/gJYElLIPylW44rAAI5W
-         D94/uKMoaWvXJ2iVARAU8OeVO/bsBto3TPbfNIwVTd966kObJoZNNulQkROiP5fthodY
-         gSYHLywKtwflecPc9dbGfHngfN8fRpclXrJwhuFHIlF+04Zl+Mp91lj3YU2KLC83WBGi
-         YDGA==
-X-Gm-Message-State: AOJu0YxRp2n8g2XV4SoP1aKmQOfiPI2iwqPd80s90O34ur+iWvF4fQ0c
-        TpEUh3KmJC1FJ3nZ0nRxQ0quVV8Vq/N3feghez09
-X-Google-Smtp-Source: AGHT+IEhII1+ssm6kMv+2+D8NIey8gXMZEJQg4s9lOhq3v8CS0TIyvbGSdMA3HXKy2CrlPTC5uALpYCU+9MbO/YcHp4=
-X-Received: by 2002:a25:bb83:0:b0:d80:1bbf:fabf with SMTP id
- y3-20020a25bb83000000b00d801bbffabfmr4580170ybg.2.1696514736829; Thu, 05 Oct
- 2023 07:05:36 -0700 (PDT)
+        Thu, 5 Oct 2023 10:40:40 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A663877659
+        for <linux-security-module@vger.kernel.org>; Thu,  5 Oct 2023 07:13:09 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24423C4167D
+        for <linux-security-module@vger.kernel.org>; Thu,  5 Oct 2023 14:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696515189;
+        bh=Bo5mvk6vkrQxD2IluJgA/5OHu6xLKoIvtWmLKT7zBGU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YFXdRFQRqfZb9ryswA8hjH1yUFvBiQo0da78Lxg1Chw2WKPaBUa3Bi1npIh+1neqO
+         +L9x4TldM0VTimJ4LhlgEEAIVk/cBtiCmEME8hmUe9mHyNxM80GSBW4a58ucWu4hc6
+         x3emtGX18las8qAETtkQgTopX1Bx/HVKSsaBXiS0U1tkj0p1A8Y3izJvMBA57Q6Ec0
+         V1gy+Uxmuc2bDN47SszebtD/AwW1OLDV2Ksf6J0gM6mjPBYNt7ZExSSlMwko4ebELU
+         WpdB959b/jXxVorczfUdl2+kG9ZRZnHUOfsyGKLkahGxwPQ6J+6v5TOrRPZcfpokNc
+         xYAekP59hvWFw==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-533d9925094so1793928a12.2
+        for <linux-security-module@vger.kernel.org>; Thu, 05 Oct 2023 07:13:09 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyOoRNgZxOabkdgD1wk6IKWoOYClZ0TmQEt07XLOxhQTa5jbsRw
+        sFIhmXT2Lmlqievx/15u/MsB568NknwPm8WUI/DdoQ==
+X-Google-Smtp-Source: AGHT+IGM7SGGf75Todds88tZ8hzjPtZ+Z8ItHdiSECABQJ5cIJlbNJT2qigtQfzO57mkPNcA5RMCRhzJBrjw4ATwjjg=
+X-Received: by 2002:a05:6402:14d2:b0:530:e9bf:1ea3 with SMTP id
+ f18-20020a05640214d200b00530e9bf1ea3mr5287832edx.7.1696515187421; Thu, 05 Oct
+ 2023 07:13:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <CEA476C1-4CE5-4FFC-91D7-6061C8605B18@oracle.com>
- <ba2f5560800608541e81fbdd28efa9875b35e491.camel@linux.ibm.com>
- <932231F5-8050-4436-84B8-D7708DC43845@oracle.com> <7335a4587233626a39ce9bc8a969957d7f43a34c.camel@linux.ibm.com>
- <FD6FB139-F901-4E55-9705-E7B0023BDBA8@oracle.com> <1149b6dbfdaabef3e48dc2852cc76aa11a6dd6b0.camel@linux.ibm.com>
- <4A0505D0-2933-43BD-BEEA-94350BB22AE7@oracle.com> <20230913.Ceifae7ievei@digikod.net>
- <D0F16BFD-72EB-4BE2-BA3D-BAE1BCCDCB6F@oracle.com> <20230914.shah5al9Kaib@digikod.net>
- <20231005.dajohf2peiBu@digikod.net>
-In-Reply-To: <20231005.dajohf2peiBu@digikod.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 5 Oct 2023 10:05:25 -0400
-Message-ID: <CAHC9VhQioMnXdbBugn3h8TBmOPvv_pCehMh8ON5LOOPmt1=6LA@mail.gmail.com>
-Subject: Re: RFC: New LSM to control usage of x509 certificates
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
+References: <cc8e16bb-5083-01da-4a77-d251a76dc8ff@I-love.SAKURA.ne.jp>
+ <CACYkzJ5k7oYxFgWp9bz1Wmp3n6LcU39Mh-HXFWTKnZnpY-Ef7w@mail.gmail.com> <20231005114754.56c40a2f@d-jobol>
+In-Reply-To: <20231005114754.56c40a2f@d-jobol>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 5 Oct 2023 16:12:56 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ458OJT9fii--uhZ-3JCbWJqvvZy736FDaCheL0V-U3AA@mail.gmail.com>
+Message-ID: <CACYkzJ458OJT9fii--uhZ-3JCbWJqvvZy736FDaCheL0V-U3AA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] LSM: Allow dynamically appendable LSM modules.
+To:     =?UTF-8?Q?Jos=C3=A9_Bollo?= <jobol@nonadev.net>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Paul Moore <paul@paul-moore.com>, bpf <bpf@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Oct 5, 2023 at 6:32=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
-d.net> wrote:
+On Thu, Oct 5, 2023 at 11:48=E2=80=AFAM Jos=C3=A9 Bollo <jobol@nonadev.net>=
+ wrote:
 >
-> The initial subject was "Re: [PATCH] certs: Restrict blacklist updates
-> to the secondary trusted keyring":
-> https://lore.kernel.org/all/20230908213428.731513-1-eric.snowberg@oracle.=
-com/
+> Le Wed, 27 Sep 2023 18:02:32 +0200,
+> KP Singh <kpsingh@kernel.org> a =C3=A9crit :
 >
-> On Thu, Sep 14, 2023 at 10:34:44AM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
-> > CCing the LSM mailing list for this potential new LSM proposal:
-> > On Wed, Sep 13, 2023 at 10:29:58PM +0000, Eric Snowberg wrote:
-> > > > On Sep 13, 2023, at 4:21 AM, Micka=C3=ABl Sala=C3=BCn <mic@digikod.=
-net> wrote:
-> > > > On Wed, Sep 13, 2023 at 02:40:17AM +0000, Eric Snowberg wrote:
-> > > >>> On Sep 12, 2023, at 4:47 PM, Mimi Zohar <zohar@linux.ibm.com> wro=
-te:
-
-[Just a reminder that trimming massive emails to the relevant portions
-is a nice thing to do]
-
-> > > > A complementary approach would be to create an
-> > > > LSM (or a dedicated interface) to tie certificate properties to a s=
-et of
-> > > > kernel usages, while still letting users configure these constraint=
-s.
+> > On Wed, Sep 27, 2023 at 5:09=E2=80=AFPM Tetsuo Handa
+> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
 > > >
-> > > That is an interesting idea.  Would the other security maintainers be=
- in
-> > > support of such an approach?  Would a LSM be the correct interface?
-> > > Some of the recent work I have done with introducing key usage and CA
-> > > enforcement is difficult for a distro to pick up, since these changes=
- can be
-> > > viewed as a regression.  Each end-user has different signing procedur=
-es
-> > > and policies, so making something work for everyone is difficult.  Le=
-tting the
-> > > user configure these constraints would solve this problem.
+> > > Recently, the LSM community is trying to make drastic changes.
+> > >
+> > > Crispin Cowan has explained
+> > >
+> > >   It is Linus' comments that spurred me to want to start this
+> > > undertaking.  He observes that there are many different security
+> > > approaches, each with their own advocates.  He doesn't want to
+> > > arbitrate which of them should be "the" Linux security approach,
+> > > and would rather that Linux can support any of them.
+> > >
+> > >   That is the purpose of this project:  to allow Linux to support a
+> > > variety of security models, so that security developers don't have
+> > > to have the "my dog's bigger than your dog" argument, and users can
+> > > choose the security model that suits their needs.
+> > >
+> > > when the LSM project started [1].
+> > >
+> > > However, Casey Schaufler is trying to make users difficult to
+> > > choose the security model that suits their needs, by requiring LSM
+> > > ID value which is assigned to only LSM modules that succeeded to
+> > > become in-tree [2]. Therefore, I'm asking Casey and Paul Moore to
+> > > change their mind to allow assigning LSM ID value to any LSM
+> > > modules (so that users can choose the security model that suits
+> > > their needs) [3].
+> > >
+> > > I expect that LSM ID value will be assigned to any publicly
+> > > available LSM modules. Otherwise, it is mostly pointless to propose
+> > > this patch; there will be little LSM modules to built into vmlinux;
+> > > let alone dynamically loading as LKM-based LSMs.
+> > >
+> > > Also, KP Singh is trying to replace the linked list with static
+> > > calls in order to reduce overhead of indirect calls [4]. However,
+> > > this change assumed that any LSM modules are built-in. I don't like
+> > > such assumption because I still consider that LSM modules which are
+> > > not built into vmlinux will be wanted by users [5].
+> > >
+> > > Then, Casey told me to supply my implementation of loadable security
+> > > modules [6]. Therefore, I post this patch as basic changes needed
+> > > for allowing dynamically appendable LSM modules (and an example of
+> > > appendable LSM modules). This patch was tested on only x86_64.
+> > >
+> > > Question for KP Singh would be how can we allow dynamically
+> > > appendable LSM modules if current linked list is replaced with
+> > > static calls with minimal-sized array...
+> >
+> > As I suggested in the other thread:
+> >
+> > https://lore.kernel.org/bpf/20230918212459.1937798-1-kpsingh@kernel.org=
+/T/#md21b9d9cc769f39e451d20364857b693d3fcb587
+> >
+> > You can add extra static call slots and fallback to a linked list
+> > based implementation if you have more than say N modules [1] and
+> > fallback to a linked list implementation [2].
+> >
+> > for [1] you can just do MAX_LSM_COUNT you can just do:
+> >
+> > #ifdef CONFIG_MODULAR_LSM
+> > #define MODULAR_LSM_ENABLED "1,1,1,1"
+> > #endif
+> >
+> > and use it in the LSM_COUNT.
+> >
+> > for [2] you can choose to export a better module API than directly
+> > exposing security_hook_heads.
+> >
+> > Now, comes the question of whether we need dynamically loaded LSMs, I
+> > am not in favor of this.Please share your limitations of BPF as you
+> > mentioned and what's missing to implement dynamic LSMs. My question
+> > still remains unanswered.
+> >
+> > Until I hear the real limitations of using BPF, it's a NAK from me.
+>
+> Hi all,
+>
+> I don't understand the reason why you want to enforce implementers to
+> use your BPF?
+>
+> Even if it can do any possible thing that security implementer wants,
+> why enforcing to use it? For experimenting? But then after successful
+> experimentation the implementer must translate to real LSM and rewrite
+> almost every thing.
+>
+> And also why to use faty BPF for a tricky simple stuff?
+>
 
-I can't say that I have been following this thread very closely, but I
-see no reason why we wouldn't support a LSM that enforces access
-controls on certificates/keys based on their attributes/properties.
-We do have some LSM control points for the kernel keyring, which are
-used by at least one LSM, but I'm sure you would probably need some
-additional control points.
-
-If you are interested in pursuing the creation of a new LSM, and
-likely new LSM hooks, we do have some documented guidelines you should
-keep in mind:
-
-* https://github.com/LinuxSecurityModule/kernel/blob/main/README.md
-
---=20
-paul-moore.com
+faty BPF? I am not even sure what that means? BPF is compiled to
+native code and is used in production systems and not just
+experimental stuff. I think you have some catching up to do here!
