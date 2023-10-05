@@ -2,87 +2,144 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2C67BA461
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 Oct 2023 18:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D627BA636
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Oct 2023 18:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239988AbjJEQFP (ORCPT
+        id S230333AbjJEQcd (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 5 Oct 2023 12:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        Thu, 5 Oct 2023 12:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237539AbjJEQEE (ORCPT
+        with ESMTP id S232821AbjJEQcW (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:04:04 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165AD64D4D;
-        Thu,  5 Oct 2023 07:51:16 -0700 (PDT)
-Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 395AmOUx096200;
-        Thu, 5 Oct 2023 19:48:24 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
- Thu, 05 Oct 2023 19:48:24 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 395AmNh2096197
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 5 Oct 2023 19:48:23 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <f6349370-7581-65a6-e10e-1aac86a45d85@I-love.SAKURA.ne.jp>
-Date:   Thu, 5 Oct 2023 19:48:23 +0900
+        Thu, 5 Oct 2023 12:32:22 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A904349C8;
+        Thu,  5 Oct 2023 06:52:12 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5362bcc7026so1787068a12.1;
+        Thu, 05 Oct 2023 06:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696513931; x=1697118731; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XXU5LKhEUYEh+UOKLTIWtg4yqSv2ITj+Fle6A6fBIcY=;
+        b=SLfeULF6nw1LrCiQriHvqRRN/bg4i6ExtT7EGEmHNTDO79HD2aocr6y6i5eFroDoHs
+         ZFAs6UN9NMRe9ceo/hRkQpz3UgrSEHc98URMnBf/cX1sxlLh2ibwMSrTd3/i0orRlvOw
+         NsoYNSlgg6zfI5NcyLPPmdt1s9L/cMmYEPjXM8cdFJr8Nf8bCZ8ca6V/QMHvU9r4P94V
+         dXxwXuN9tbFG5mm/laEWMAMWC7T+AcjGWcdJPlxsoTnTfD6aDx+dZaD68pC+l8riQ0iO
+         uEMrYFNExF3MpYYZIkw/RPxrMZbOOhfvyi26T8GGm/P44APLfK+uqK0QOxD/Vd4LWkpL
+         in8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696513931; x=1697118731;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XXU5LKhEUYEh+UOKLTIWtg4yqSv2ITj+Fle6A6fBIcY=;
+        b=UK4F4BCnDKqh0W56mU5nsGMox2i6QHKsjkzU5OoOVB9eOVCGffmfFK8XJ1lo90ggFS
+         5xk7TwGdSlTy0fvoltyHwIF+XslrlTi2CXtbdbYH7i15Fle6ZbBaDqoBEqSYY5VrclyQ
+         yzcZTqQoINqEwzhZDnmiw7+oXhs7454DhPXQoPe4XFWvd8te6uFL19+GcMsFQnfhk/iW
+         wN450crxqdIMgc+YG6bq1IIDEKSCETbnxmlN0XlfzkH1V62lFbG7T9zOD4w+9IT2D4ea
+         MPTxiPXdSXdDq0JPbGovzEMX3QMTjuh8OhI8ApxV1P02T8k3CK2r4P9sxXSsP7yZf6M1
+         W2PA==
+X-Gm-Message-State: AOJu0Yyggo+bV5GKJn1XLyUk3rDknx0CsgopiIwWeW7TBUmx3xDsZ79f
+        tRmIlt2sD5gqiBblMHEcruB3sPqyqzI=
+X-Google-Smtp-Source: AGHT+IFIa8BRuPwMn2n8dH8rtcUowfST0euOC8DTQPttzb93oHi3jkImZQus0XRA0kI5x6dPMHHIqA==
+X-Received: by 2002:a17:907:7711:b0:9ae:82b4:e309 with SMTP id kw17-20020a170907771100b009ae82b4e309mr4830924ejc.0.1696513930785;
+        Thu, 05 Oct 2023 06:52:10 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id o20-20020a170906289400b009930042510csm1216027ejd.222.2023.10.05.06.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 06:52:10 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 5 Oct 2023 15:52:08 +0200
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com,
+        song@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        renauld@google.com
+Subject: Re: [PATCH v5 4/5] bpf: Only enable BPF LSM hooks when an LSM
+ program is attached
+Message-ID: <ZR6/iMnfl1q6Hf9I@krava>
+References: <20230928202410.3765062-1-kpsingh@kernel.org>
+ <20230928202410.3765062-5-kpsingh@kernel.org>
+ <ZR5vSyyNGBb8TvNH@krava>
+ <CACYkzJ69x9jX3scjSA7zT99CJoM+eG6FDQdBT-SCxm47a6UEoA@mail.gmail.com>
+ <CACYkzJ7Q0NEc9HThS1DZr0pMC+zO0GSToWmwQkTgXTeDs5VKaw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [RFC PATCH 1/2] LSM: Allow dynamically appendable LSM modules.
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>, Kees Cook <keescook@chromium.org>
-Cc:     Kees Cook <kees@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <cc8e16bb-5083-01da-4a77-d251a76dc8ff@I-love.SAKURA.ne.jp>
- <57295dac-9abd-3bac-ff5d-ccf064947162@schaufler-ca.com>
- <b2cd749e-a716-1a13-6550-44a232deac25@I-love.SAKURA.ne.jp>
- <06BC106C-E0FD-4ACA-83A8-DFD1400B696E@kernel.org>
- <51d6c605-25cc-71fc-9c11-707b78297b38@I-love.SAKURA.ne.jp>
- <202310021000.B494D0DD@keescook>
- <CAHC9VhQFywb+CG2hAuHGRkdo3iMEGVogrdV_S6dZhfWJ0ACvOg@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CAHC9VhQFywb+CG2hAuHGRkdo3iMEGVogrdV_S6dZhfWJ0ACvOg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACYkzJ7Q0NEc9HThS1DZr0pMC+zO0GSToWmwQkTgXTeDs5VKaw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On 2023/10/04 8:39, Paul Moore wrote:
-> As far as I can tell this RFC isn't really about dynamically loadable
-> LSMs, it's about blocking the LSM syscall work, specifically the LSM
-> ID tokens.  As I've said many times before, the LSM ID concept is
-> moving forward and if you can't respect that decision, at least stop
-> wasting our time.
+On Thu, Oct 05, 2023 at 03:27:35PM +0200, KP Singh wrote:
+> On Thu, Oct 5, 2023 at 3:26 PM KP Singh <kpsingh@kernel.org> wrote:
+> >
+> > On Thu, Oct 5, 2023 at 10:09 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Thu, Sep 28, 2023 at 10:24:09PM +0200, KP Singh wrote:
+> > >
+> > > SNIP
+> > >
+> > > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > > > index e97aeda3a86b..df9699bce372 100644
+> > > > --- a/kernel/bpf/trampoline.c
+> > > > +++ b/kernel/bpf/trampoline.c
+> > > > @@ -13,6 +13,7 @@
+> > > >  #include <linux/bpf_verifier.h>
+> > > >  #include <linux/bpf_lsm.h>
+> > > >  #include <linux/delay.h>
+> > > > +#include <linux/bpf_lsm.h>
+> > > >
+> > > >  /* dummy _ops. The verifier will operate on target program's ops. */
+> > > >  const struct bpf_verifier_ops bpf_extension_verifier_ops = {
+> > > > @@ -514,7 +515,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
+> > > >  {
+> > > >       enum bpf_tramp_prog_type kind;
+> > > >       struct bpf_tramp_link *link_exiting;
+> 
+> I think this is a typo here. It should be existing, no?
 
-This RFC is mainly about how do we plan to allow LKM-based LSMs.
-Two proposals (LSM ID and elimination of linked list) might damage
-LKM-based LSMs.
+yes, I was wondering about that as well ;-)
 
-Regarding LSM ID, I'm asserting that assigning stable LSM ID to every LSM
-is the *better* usage, for users can find whatever LSMs like CVE database
-and developers can avoid possible collisions in the LSM infrastructure and
-developers can avoid writing obvious duplicates (like you want to reject
-proposals that are sufficiently "close"). If some ID were assigned to
-implementations like https://github.com/linux-lock/bpflock , users can find
-implementations that fit their needs more easily...
+jirka
 
-BTW, is bpflock considered as an LSM module entity that should be recognized
-(i.e. assigned a stable LSM ID) so that the LSM syscalls can return "bpflock" ?
-If users want to know which hook caused an access request to be rejected,
-having the granularity of "bpf" might not be sufficient...
-
+> 
+> > > > -     int err = 0;
+> > > > +     int err = 0, num_lsm_progs = 0;
+> > > >       int cnt = 0, i;
+> > > >
+> > > >       kind = bpf_attach_type_to_tramp(link->link.prog);
+> > > > @@ -545,8 +546,14 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
+> > > >                       continue;
+> > > >               /* prog already linked */
+> > > >               return -EBUSY;
+> > > > +
+> > > > +             if (link_exiting->link.prog->type == BPF_PROG_TYPE_LSM)
+> > > > +                     num_lsm_progs++;
+> > >
+> > > this looks wrong, it's never reached.. seems like we should add separate
+> > > hlist_for_each_entry loop over trampoline's links for this check/init of
+> > > num_lsm_progs ?
+> > >
+> > > jirka
+> >
+> > Good catch, I missed this during my rebase, after
+> > https://lore.kernel.org/bpf/20220510205923.3206889-2-kuifeng@fb.com/
+> > this condition is basically never reached. I will do a general loop
+> > over to count LSM programs and toggle the hook to true (and same for
+> > unlink).
+> >
+> > - KP
+> >
+> > [...]
