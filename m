@@ -2,255 +2,162 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA897BA5E4
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 Oct 2023 18:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE257BAF8F
+	for <lists+linux-security-module@lfdr.de>; Fri,  6 Oct 2023 02:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242319AbjJEQUs (ORCPT
+        id S229506AbjJFA1X (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 5 Oct 2023 12:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        Thu, 5 Oct 2023 20:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242482AbjJEQSG (ORCPT
+        with ESMTP id S229455AbjJFA1W (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:18:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32245BA3
-        for <linux-security-module@vger.kernel.org>; Thu,  5 Oct 2023 09:07:41 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 652C0C433CB
-        for <linux-security-module@vger.kernel.org>; Thu,  5 Oct 2023 16:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696522061;
-        bh=ex/4a4hL/BltlrDLRwQmRO36M3XSgUdNoud2wHz73uk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W1qIUMvLHpZgC40aypRPHNV0O+GXBEjGd2uh9Wkzj+hjLsSMPZ5yLmVmwYjyBFMhD
-         53pQsOdySkiMbX6lbRA7x6rl4azcXZH3jyESqnV6DQT3JQdXuoxgy5G/2zvfzFkdcy
-         z7eFYAWuW8fxYUMBVskAwluvQW6N5GlYUxRoMwFCVRJ3UBJb7NgREEh8Do4R7hYKId
-         RElnucdw/qA3bdrQpWd2ZewIM+dqj2rz4VciO0IZB06MWQ0yd63P7k+YNqD2mRYSqf
-         IDe99wZaCs+TLbYW+uXh8jin3KJ+YDctnSETmL0ctay38JlhD9aZG1AT96b4N3Nynp
-         823CJinaTj2cg==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-53627feca49so1973100a12.1
-        for <linux-security-module@vger.kernel.org>; Thu, 05 Oct 2023 09:07:41 -0700 (PDT)
-X-Gm-Message-State: AOJu0Yx1/Rtynm4oNWINzNr/xKV4phJ/Dmod7xfKSAZuzmPQZzUM8KJc
-        keFbkw5S/yjE/zZzaXnqpioHePeoRWUYnVFkT37Wnw==
-X-Google-Smtp-Source: AGHT+IE7N4R7qSzwfyOnCXQ5AyhDWnTCTUlUj7HsQKIphesyMcFKL3WGpx4Ygep9GXG7lC/FEh6Eq7vs3lRgEsRl6QE=
-X-Received: by 2002:a05:6402:217:b0:533:4c15:c337 with SMTP id
- t23-20020a056402021700b005334c15c337mr4822697edv.16.1696522059790; Thu, 05
- Oct 2023 09:07:39 -0700 (PDT)
+        Thu, 5 Oct 2023 20:27:22 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238CFD6;
+        Thu,  5 Oct 2023 17:27:18 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id D6DBD5C022E;
+        Thu,  5 Oct 2023 20:27:14 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 05 Oct 2023 20:27:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1696552034; x=1696638434; bh=T0KKGiY1Q8zqQlnDql/yrnMneNPlqDlkRnN
+        aCenas50=; b=NsjPxZnjfyHwzZfOHHXiexldWr+qApfmB0/vePs04hlPTprXeLP
+        muo00EbDjfVB1reJo4Gi4OS1KB2yKHJLXypX7FP9f8SiFiuTTmSrdGnGbT4K689r
+        z66w+t1ZqKIb1NIjSbKd+C3UTVrNSLtPth5mcA3FYufCXiws+vpJmy2O516DHjyJ
+        ihdQSZ38omannW+GHVLJOeh9SQ6MZquPLile5x3UrWcDg4Q2JEJiJD9zcQTBoNRr
+        6x/a/6VF9DRNQK9BxCUhL2jfUfE394R7CcxAHV7hxrIaVlniEjAEaUKbHFTqMYQa
+        fqyo8jR86/CgH3mfBPaM3dcgHcKEAjlyiog==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1696552034; x=1696638434; bh=T0KKGiY1Q8zqQlnDql/yrnMneNPlqDlkRnN
+        aCenas50=; b=X888C7YOEFoEUmRM8CxSfxcrCdN9fA9Y5Wy6nLVEg9ywh69eNaa
+        6W3pVRhpXRkpqInMSTExphzKk98r8O/8dVuEsTt+gm6V9pxt9eSkQ0j65XTkkWJ0
+        MNvfAOLtcJrmVR4FChTj/BXwfRhGsHO0CZN6T1pxihIcqNsUqpLgodWcxVVSjxe/
+        J7WaYl4kaoT0sRg5jCO/jRjX+EIu36obx3yapz54vniMmrIyIrQVRmJgS2iIcYTP
+        sEUVz7bYc3OLvHqkLUkELZaiyWx+0oNyWsIpVwsggmP9Jww+pZlAhtsozkL3qGOp
+        +1/5oNgpXRGev7OaRgAzJ4sTXuSzyXpcK/Q==
+X-ME-Sender: <xms:YVQfZfmuJNp-n-wtUgJgsFbSLdiR22bouAjj_2tgWzTIrIUUBX2gCQ>
+    <xme:YVQfZS1SVFoihWiBusOuFwPtyP31D50Ca_GbiWm7abTAAL_2bs4isr20RLkFfjAcL
+    BxjfhFtL5fb>
+X-ME-Received: <xmr:YVQfZVrDl_aaip9HvCknlI6jRPyGFHmp4XIR2As3mc0fM0hq9NcHh2YOfCQYeFPLTHjC0FB7jevxc-zpl4gQfd14McbIogeQGtJNcrdmu93JGq2r-eLXH8Xs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeehgdefhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepkfgrnhcu
+    mfgvnhhtuceorhgrvhgvnhesthhhvghmrgifrdhnvghtqeenucggtffrrghtthgvrhhnpe
+    euhfeuieeijeeuveekgfeitdethefguddtleffhfelfeelhfduuedvfefhgefhheenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehrrghvvghnse
+    hthhgvmhgrfidrnhgvth
+X-ME-Proxy: <xmx:YlQfZXl1_L8TMWe7RLDu62ZvUSa2BREvMrbrCCOrXMfOn5Qm8b3OIw>
+    <xmx:YlQfZd1-2AUNUqJXnkVrBopvHNDc9gw-i0J_3MpQWHS7GRNgMX9LPw>
+    <xmx:YlQfZWsuyxmLje11F-KKbJnHXS9c6kPzsNYDWePd3DSoN72GFSt7dw>
+    <xmx:YlQfZXMBhWMqKgsB-pnkEyij8sgxlC3Mdp0aHMAxo11bXMPdJ4_mbQ>
+Feedback-ID: i31e841b0:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 5 Oct 2023 20:27:07 -0400 (EDT)
+Message-ID: <7fe3c01f-c225-394c-fac5-cabfc70f3606@themaw.net>
+Date:   Fri, 6 Oct 2023 08:27:03 +0800
 MIME-Version: 1.0
-References: <20230928202410.3765062-1-kpsingh@kernel.org> <20230928202410.3765062-5-kpsingh@kernel.org>
- <ZR5vSyyNGBb8TvNH@krava> <CACYkzJ69x9jX3scjSA7zT99CJoM+eG6FDQdBT-SCxm47a6UEoA@mail.gmail.com>
- <CACYkzJ7Q0NEc9HThS1DZr0pMC+zO0GSToWmwQkTgXTeDs5VKaw@mail.gmail.com> <ZR6/iMnfl1q6Hf9I@krava>
-In-Reply-To: <ZR6/iMnfl1q6Hf9I@krava>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 5 Oct 2023 18:07:28 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7aeBjMFTrBPf5u-Wib0Jk=rOX31yeBT5koUt=iYUF2MA@mail.gmail.com>
-Message-ID: <CACYkzJ7aeBjMFTrBPf5u-Wib0Jk=rOX31yeBT5koUt=iYUF2MA@mail.gmail.com>
-Subject: Re: [PATCH v5 4/5] bpf: Only enable BPF LSM hooks when an LSM program
- is attached
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-        paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com,
-        song@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        renauld@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 4/4] add listmount(2) syscall
+Content-Language: en-US
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Matthew House <mattlloydhouse@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20230928130147.564503-1-mszeredi@redhat.com>
+ <20230928130147.564503-5-mszeredi@redhat.com>
+ <CAHC9VhQD9r+Qf5Vz1XmxUdJJJO7HNTKdo8Ux=n+xkxr=JGFMrw@mail.gmail.com>
+ <CAJfpegsPbDgaz46x4Rr9ZgCpF9rohVHsvuWtQ5LNAdiYU_D4Ww@mail.gmail.com>
+ <a25f2736-1837-f4ca-b401-85db24f46452@themaw.net>
+ <CAJfpegv78njkWdaShTskKXoGOpKAndvYYJwq7CLibiu+xmLCvg@mail.gmail.com>
+From:   Ian Kent <raven@themaw.net>
+In-Reply-To: <CAJfpegv78njkWdaShTskKXoGOpKAndvYYJwq7CLibiu+xmLCvg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Thu, Oct 5, 2023 at 3:52=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrote=
-:
+On 5/10/23 23:47, Miklos Szeredi wrote:
+> On Thu, 5 Oct 2023 at 06:23, Ian Kent <raven@themaw.net> wrote:
 >
-> On Thu, Oct 05, 2023 at 03:27:35PM +0200, KP Singh wrote:
-> > On Thu, Oct 5, 2023 at 3:26=E2=80=AFPM KP Singh <kpsingh@kernel.org> wr=
-ote:
-> > >
-> > > On Thu, Oct 5, 2023 at 10:09=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com=
-> wrote:
-> > > >
-> > > > On Thu, Sep 28, 2023 at 10:24:09PM +0200, KP Singh wrote:
-> > > >
-> > > > SNIP
-> > > >
-> > > > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > > > > index e97aeda3a86b..df9699bce372 100644
-> > > > > --- a/kernel/bpf/trampoline.c
-> > > > > +++ b/kernel/bpf/trampoline.c
-> > > > > @@ -13,6 +13,7 @@
-> > > > >  #include <linux/bpf_verifier.h>
-> > > > >  #include <linux/bpf_lsm.h>
-> > > > >  #include <linux/delay.h>
-> > > > > +#include <linux/bpf_lsm.h>
-> > > > >
-> > > > >  /* dummy _ops. The verifier will operate on target program's ops=
-. */
-> > > > >  const struct bpf_verifier_ops bpf_extension_verifier_ops =3D {
-> > > > > @@ -514,7 +515,7 @@ static int __bpf_trampoline_link_prog(struct =
-bpf_tramp_link *link, struct bpf_tr
-> > > > >  {
-> > > > >       enum bpf_tramp_prog_type kind;
-> > > > >       struct bpf_tramp_link *link_exiting;
-> >
-> > I think this is a typo here. It should be existing, no?
+>> The proc interfaces essentially use <mount namespace>->list to provide
+>>
+>> the mounts that can be seen so it's filtered by mount namespace of the
+>>
+>> task that's doing the open().
+>>
+>>
+>> See fs/namespace.c:mnt_list_next() and just below the m_start(), m_next(),
+> /proc/$PID/mountinfo will list the mount namespace of $PID.  Whether
+> current task has permission to do so is decided at open time.
 >
-> yes, I was wondering about that as well ;-)
+> listmount() will list the children of the given mount ID.  The mount
+> ID is looked up in the task's mount namespace, so this cannot be used
+> to list mounts of other namespaces.  It's a more limited interface.
+
+Yep. But isn't the ability to see these based on task privilege?
+
+
+Is the proc style restriction actually what we need here (or some variation
+
+of that implementation)?
+
+
+An privileged task typically has the init namespace as its mount namespace
+
+and mounts should propagate from there so it should be able to see all 
+mounts.
+
+
+If the file handle has been opened in a task that is using some other mount
+
+namespace then presumably that's what the program author wants the task 
+to see.
+
+So I'm not sure I see a problem obeying the namespace of a given task.
+
+
+Ian
+
 >
-> jirka
+> I sort of understand the reasoning behind calling into a security hook
+> on entry to statmount() and listmount().  And BTW I also think that if
+> statmount() and listmount() is limited in this way, then the same
+> limitation should be applied to the proc interfaces.  But that needs
+> to be done real carefully because it might cause regressions.  OTOH if
+> it's only done on the new interfaces, then what is the point, since
+> the old interfaces will be available indefinitely?
 >
-> >
-> > > > > -     int err =3D 0;
-> > > > > +     int err =3D 0, num_lsm_progs =3D 0;
-> > > > >       int cnt =3D 0, i;
-> > > > >
-> > > > >       kind =3D bpf_attach_type_to_tramp(link->link.prog);
-> > > > > @@ -545,8 +546,14 @@ static int __bpf_trampoline_link_prog(struct=
- bpf_tramp_link *link, struct bpf_tr
-> > > > >                       continue;
-> > > > >               /* prog already linked */
-> > > > >               return -EBUSY;
-> > > > > +
-> > > > > +             if (link_exiting->link.prog->type =3D=3D BPF_PROG_T=
-YPE_LSM)
-> > > > > +                     num_lsm_progs++;
-> > > >
-> > > > this looks wrong, it's never reached.. seems like we should add sep=
-arate
-> > > > hlist_for_each_entry loop over trampoline's links for this check/in=
-it of
-> > > > num_lsm_progs ?
-> > > >
-> > > > jirka
-> > >
-> > > Good catch, I missed this during my rebase, after
-> > > https://lore.kernel.org/bpf/20220510205923.3206889-2-kuifeng@fb.com/
-> > > this condition is basically never reached. I will do a general loop
-> > > over to count LSM programs and toggle the hook to true (and same for
-> > > unlink).
-
-So, there is something that is unclear about this code, i.e. what
-happens when there is an error from bpf_trampoline_update fails and
-the link and unlink seem to have different expectations:
-
-* link seems to go back to the linked list and removes the trampoline
-and restores the refcount:
-
-[...]
- err =3D bpf_trampoline_update(tr, true /* lock_direct_mutex */);
- if (err) {
-    hlist_del_init(&link->tramp_hlist);
-    tr->progs_cnt[kind]--;
-  }
- return err;
-}
-
-
-* unlink does restore the side effect (i.e. it does not put the
-removed trampoline back and increments the refcount).
-
-hlist_del_init(&link->tramp_hlist);
-tr->progs_cnt[kind]--;
-return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
-
-However, I think I will make it simpler and enforce the invariant that
-if an LSM program is attached, the hook is enabled and vice versa. How
-about:
-
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index df9699bce372..4f31384b5637 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -511,11 +511,30 @@ static enum bpf_tramp_prog_type
-bpf_attach_type_to_tramp(struct bpf_prog *prog)
-        }
- }
-
-+static void bpf_trampoline_toggle_lsm(struct bpf_trampoline *tr,
-+                                     enum bpf_tramp_prog_type kind)
-+{
-+       struct bpf_tramp_link *link;
-+       volatile bool found =3D false;
-+
-+       /* Loop through the links and if any LSM program is attached, ensur=
-e
-+        * that the hook is enabled.
-+        */
-+       hlist_for_each_entry(link, &tr->progs_hlist[kind], tramp_hlist) {
-+               if (link->link.prog->type =3D=3D BPF_PROG_TYPE_LSM) {
-+                       found  =3D true;
-+                       break;
-+               }
-+       }
-+
-+       bpf_lsm_toggle_hook(tr->func.addr, found);
-+}
-+
- static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link,
-struct bpf_trampoline *tr)
- {
-        enum bpf_tramp_prog_type kind;
-        struct bpf_tramp_link *link_exiting;
--       int err =3D 0, num_lsm_progs =3D 0;
-+       int err =3D 0;
-        int cnt =3D 0, i;
-
-        kind =3D bpf_attach_type_to_tramp(link->link.prog);
-@@ -547,15 +566,14 @@ static int __bpf_trampoline_link_prog(struct
-bpf_tramp_link *link, struct bpf_tr
-                /* prog already linked */
-                return -EBUSY;
-
--               if (link_exiting->link.prog->type =3D=3D BPF_PROG_TYPE_LSM)
--                       num_lsm_progs++;
-        }
-
--       if (!num_lsm_progs && link->link.prog->type =3D=3D BPF_PROG_TYPE_LS=
-M)
--               bpf_lsm_toggle_hook(tr->func.addr, true);
--
-        hlist_add_head(&link->tramp_hlist, &tr->progs_hlist[kind]);
-        tr->progs_cnt[kind]++;
-+
-+       if (link->link.prog->type =3D=3D BPF_PROG_TYPE_LSM)
-+               bpf_trampoline_toggle_lsm(tr, kind);
-+
-        err =3D bpf_trampoline_update(tr, true /* lock_direct_mutex */);
-        if (err) {
-                hlist_del_init(&link->tramp_hlist);
-@@ -578,7 +596,6 @@ static int __bpf_trampoline_unlink_prog(struct
-bpf_tramp_link *link, struct bpf_
- {
-        struct bpf_tramp_link *link_exiting;
-        enum bpf_tramp_prog_type kind;
--       bool lsm_link_found =3D false;
-        int err, num_lsm_progs =3D 0;
-
-        kind =3D bpf_attach_type_to_tramp(link->link.prog);
-@@ -595,18 +612,14 @@ static int __bpf_trampoline_unlink_prog(struct
-bpf_tramp_link *link, struct bpf_
-                                     tramp_hlist) {
-                        if (link_exiting->link.prog->type =3D=3D BPF_PROG_T=
-YPE_LSM)
-                                num_lsm_progs++;
--
--                       if (link_exiting->link.prog =3D=3D link->link.prog)
--                               lsm_link_found =3D true;
-                }
-        }
-
-        hlist_del_init(&link->tramp_hlist);
-        tr->progs_cnt[kind]--;
-
--       if (lsm_link_found && num_lsm_progs =3D=3D 1)
--               bpf_lsm_toggle_hook(tr->func.addr, false);
--
-+       if (link->link.prog->type =3D=3D BPF_PROG_TYPE_LSM)
-+               bpf_trampoline_toggle_lsm(tr, kind);
-        return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
- }
-
-
-- KP
+> Also I cannot see the point in hiding some mount ID's from the list.
+> It seems to me that the list is just an array of numbers that in
+> itself doesn't carry any information.
+>
+> Thanks,
+> Miklos
