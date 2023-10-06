@@ -2,77 +2,90 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70A27BC222
-	for <lists+linux-security-module@lfdr.de>; Sat,  7 Oct 2023 00:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DAA7BC229
+	for <lists+linux-security-module@lfdr.de>; Sat,  7 Oct 2023 00:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbjJFWPv convert rfc822-to-8bit (ORCPT
+        id S233648AbjJFWT5 (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 6 Oct 2023 18:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
+        Fri, 6 Oct 2023 18:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbjJFWPu (ORCPT
+        with ESMTP id S233545AbjJFWT5 (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 6 Oct 2023 18:15:50 -0400
-X-Greylist: delayed 10089 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Oct 2023 15:15:48 PDT
-Received: from dentika.net (unknown [202.72.206.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500CABD;
-        Fri,  6 Oct 2023 15:15:48 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by dentika.net (Postfix) with ESMTP id 859BC4A2A63;
-        Sat,  7 Oct 2023 00:38:16 +0700 (WIB)
-Received: from dentika.net ([127.0.0.1])
- by localhost (dentika.net [127.0.0.1]) (amavis, port 10032) with ESMTP
- id Xh8AcrSVJoiV; Sat,  7 Oct 2023 00:38:13 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by dentika.net (Postfix) with ESMTP id 741574A1532;
-        Sat,  7 Oct 2023 00:26:24 +0700 (WIB)
-X-Virus-Scanned: amavis at 
-Received: from dentika.net ([127.0.0.1])
- by localhost (dentika.net [127.0.0.1]) (amavis, port 10026) with ESMTP
- id 4zOZR5LWt33C; Sat,  7 Oct 2023 00:26:24 +0700 (WIB)
-Received: from [185.225.73.120] (wifi.dentika.net [10.0.0.1])
-        by dentika.net (Postfix) with ESMTP id 17A164A3BD4;
-        Sat,  7 Oct 2023 00:14:51 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 6 Oct 2023 18:19:57 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E65CBF
+        for <linux-security-module@vger.kernel.org>; Fri,  6 Oct 2023 15:19:55 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-584bfb14c59so1803417a12.0
+        for <linux-security-module@vger.kernel.org>; Fri, 06 Oct 2023 15:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696630794; x=1697235594; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ec5NVHbOagI42dAvgiLFB5L5PsJa40bcRKKQnaC9gmQ=;
+        b=ON2TIh5+R6axoaeHGclGeaglqFrSBEMyFQZceJ2K+Tsp9S+fTRZpJKp12KGEYKJ+La
+         QObSxdHSXGUVxyNjMpDDCZB3BO+HCPsWsP3WAmSMr44CRYP7P2zD2azSfVkyRTjP5+rz
+         hiPPx8mnG/x/qCH9xmdCm3IXW6AoYUzHW/W0A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696630794; x=1697235594;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ec5NVHbOagI42dAvgiLFB5L5PsJa40bcRKKQnaC9gmQ=;
+        b=JBRzLjaCcXiu4y3XcgYQmfzoZ4y+dPDgFJzt6dGLq8lxig4wK4sSgb79NqAeiSpryP
+         5TD5YK9lR4RMWdZ02bI8QY2CYAQR46V6uq8QldGEIDqoxPNf7poGM2TtekSSw2MJrCLk
+         XOY4Yn/ffUjPFp6Yfh2V6PM54jMnpiCfQmhRnqo5ywRGe3vqAFFVW9P/y/BugyrNWw1o
+         qsBnUwE3zWOf4fRpKKRwirtNy1+jx5l/JGnS3iDHWPnDWzuJRLXkjYXYqIAGSxaqJtZf
+         naKgGIZQ0ebT/3g11xUx1TS7Ubock/xUOBhKwXCSfsqhCLMGfUDZ5sA61Pkp/QPEjY7m
+         7c9Q==
+X-Gm-Message-State: AOJu0YyUTzztKssGK5DZVTc7sp0RaQEaQnwA/EXZfZcOpjVKZfKBem52
+        izc/SOk2NXUi7Q66UOm+T9M4rg==
+X-Google-Smtp-Source: AGHT+IEey6lOaoGA9MCcQYpZbetqjfB4y53xgl/tiG/jQHm6b7ng4VEgrIdMet51CFBr3t9yqWxMRQ==
+X-Received: by 2002:a17:90b:4f46:b0:267:f9c4:c0a8 with SMTP id pj6-20020a17090b4f4600b00267f9c4c0a8mr9120373pjb.4.1696630794515;
+        Fri, 06 Oct 2023 15:19:54 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id lj4-20020a17090b344400b0026cecddfc58sm6048065pjb.42.2023.10.06.15.19.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 15:19:53 -0700 (PDT)
+Date:   Fri, 6 Oct 2023 15:19:50 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        paul@paul-moore.com, casey@schaufler-ca.com, song@kernel.org,
+        daniel@iogearbox.net, ast@kernel.org, renauld@google.com,
+        pabeni@redhat.com, Kui-Feng Lee <sinquersw@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH v6 2/5] security: Count the LSMs enabled at compile time
+Message-ID: <202310061519.7A41CF216C@keescook>
+References: <20231006204701.549230-1-kpsingh@kernel.org>
+ <20231006204701.549230-3-kpsingh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: business loan and investment are you interested? 
-To:     Recipients <support@xmails.me>
-From:   "Mr. mohd" <support@xmails.me>
-Date:   Fri, 06 Oct 2023 10:14:45 -0700
-Reply-To: a69412571@gmail.com
-Message-Id: <20231006171452.17A164A3BD4@dentika.net>
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
-        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_PASS,T_SPF_PERMERROR
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [202.72.206.114 listed in bl.score.senderscore.com]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.0 T_SPF_PERMERROR SPF: test of record failed (permerror)
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [a69412571[at]gmail.com]
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231006204701.549230-3-kpsingh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
+On Fri, Oct 06, 2023 at 10:46:58PM +0200, KP Singh wrote:
+> These macros are a clever trick to determine a count of the number of
+> LSMs that are enabled in the config to ascertain the maximum number of
+> static calls that need to be configured per LSM hook.
+> 
+> Without this one would need to generate static calls for the total
+> number of LSMs in the kernel (even if they are not compiled) times the
+> number of LSM hooks which ends up being quite wasteful.
+> 
+> Suggested-by: Kui-Feng Lee <sinquersw@gmail.com>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Acked-by: Song Liu <song@kernel.org>
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
 
-Dear
-My name is Mohamed Abdul I have the capacity to inject a considerable
-amount of capital in any viable project 
-1,cell phone number 
-2,full name
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-
-yours truly
-Mohamed Abdul Ahmed
+-- 
+Kees Cook
