@@ -2,163 +2,226 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFA17BC2CC
-	for <lists+linux-security-module@lfdr.de>; Sat,  7 Oct 2023 01:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD9C7BC622
+	for <lists+linux-security-module@lfdr.de>; Sat,  7 Oct 2023 10:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbjJFXIG (ORCPT
+        id S234166AbjJGIon (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 6 Oct 2023 19:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        Sat, 7 Oct 2023 04:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbjJFXIG (ORCPT
+        with ESMTP id S234147AbjJGIol (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 6 Oct 2023 19:08:06 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D0493
-        for <linux-security-module@vger.kernel.org>; Fri,  6 Oct 2023 16:08:04 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5a1d0fee86aso32027887b3.2
-        for <linux-security-module@vger.kernel.org>; Fri, 06 Oct 2023 16:08:04 -0700 (PDT)
+        Sat, 7 Oct 2023 04:44:41 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E988B9;
+        Sat,  7 Oct 2023 01:44:40 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3296b87aa13so1141907f8f.3;
+        Sat, 07 Oct 2023 01:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1696633684; x=1697238484; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F50fu8DXl9ERFHVYVt4zY9h1hnn4ptAJ3MO5xm3ht8M=;
-        b=DSWU7Th6ZPr/C9XYfy2ArD7EwQYRdfx5NerMmWa6VeiCNw24YRrs4c7/Vfca2xgG4O
-         aiv44TiryMe03QX0qA4WsJTNRtLHaZmTv5GAFT+E90Slc9yUpNis1hUvIqujMk9dy+Lu
-         whWgQoQmCxAp1reO223+nIWNoses+CDen4cXjYYHWeYzLJ0XgXhVLoiKgmVihZ7t0VBF
-         KVUvLeTTU1rCg0CZsgE8hY/Wnvf7cl6RkUSwfcA/M9AgkF8uRT5sXVjkWFUGMQ7x9ArI
-         g9ogSHC6U/qeV7Vb1LKQIgnT0KsuxnywtMV2ZAYQh0Qi2tCddZbyOa0V2URk+/YnNPYn
-         rhyQ==
+        d=gmail.com; s=20230601; t=1696668279; x=1697273079; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8Q6RB7pZRofW9grFTMD1CNsmWWlfFvEqQfQ3qiNILA=;
+        b=LF7TGU9p9zVClDuBLIDKdbGGsAqWagsP33055tE/3zDXtmLnBkFtWrxouQT5F/1oIN
+         St/lg9nu5HPe9NAgR01Sewg+qjP5I8/4drrD5XXcqp+HbZN5gONPbU3TEdQ8L9pDiooP
+         o9JpJAm9/PQEHF703iV+GoVv+J2Q38ct2VWyHxt43AamWA/ck0dbPTIk49nFDjuBEa/a
+         C94nvvBtgSJRGZ6MVlHTvx8HuxicaLYhJM3oS25tPdt6G8kvjH0n+4y36yOBFlMuGyky
+         72UtuUgVuehYkV31RQ/TmCEu3TYS0Udm8aIfj3/Dv11RMIbGJspw9tJjSXWWVZ5PzADL
+         YQHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696633684; x=1697238484;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F50fu8DXl9ERFHVYVt4zY9h1hnn4ptAJ3MO5xm3ht8M=;
-        b=lHb9NVj8h/N0u4qKtdStI+n5LuidpmqP6Uay+DvN2nIEOd0FfFU4Vb70LWlaSrOlzC
-         yupIy8imElp80XdbOGEItjMR/Ym9ablKG67gjzSWi6o9mbH1yOY3kmYo4q/kz8uShCH0
-         n18+GLRsDxn9JJWhW6vaEs6sig/Lrhi2TbUAFacybyFh8pkX1CkmUtr4gTfloR5XNLJG
-         1T/5l2Dl25OWL9DgfLow7EhTd0KLrQKgH1dGulsVvSkYSALq+V8kfd+lp0WJqZW+cU13
-         OqXLARBTylaW4z0bnoTAbgHhzxDLovPSUgmJEj6sHbm/wdJqlQ1Pz6S7b4yoTIxrz5oj
-         xAQQ==
-X-Gm-Message-State: AOJu0YxTLVKp51p9gvuj9PvwOqyBWCPrhTXa9FIi4ajPXL7xNFO8tvpy
-        tXozjMP3RobE2SPl5P6C+M07JOJG7WUp2rv9d2BZ
-X-Google-Smtp-Source: AGHT+IFptmDYsPUwJNXgzo/KC+xeqdAaTYpkEhIAeXQIc7ZwVI4dQTLTBID85bUW0YeCyFWkPLg7ZtNgHG2nI/ZPkQI=
-X-Received: by 2002:a25:b31a:0:b0:d4b:ab7b:17ed with SMTP id
- l26-20020a25b31a000000b00d4bab7b17edmr8590362ybj.4.1696633683762; Fri, 06 Oct
- 2023 16:08:03 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696668279; x=1697273079;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8Q6RB7pZRofW9grFTMD1CNsmWWlfFvEqQfQ3qiNILA=;
+        b=j64AT7T6/Tzo9vo33eo6Nd8v3JXq/0AbOGqnqN1/f1bIa3OU9V9aFXUxAw+Z1bN6Ka
+         ENrlGNcxlmxYTxnV2KVQLAcEN+K92vomoP3Nc0OZscuB/iivk1nSZzFX1kjaalz0Kn9Y
+         XdGh0YNI2+mIy8LNaeo9yh7lRoLqA7y7c+mVgJaEHUXgVSosvZaWZyWiNANL32suueCT
+         GchYNbsen1Thv1j54PzBVIBIzvtmS69ooePIub1x0n2WEmenR9J2XwT7DDv+OARAj1Pg
+         5ME/15rzy1gPj6R5et/tP4ZE1fSNPVrD/v4UPWnPLUqnJqDpIltU1heWlseBIqJs17rt
+         XlGA==
+X-Gm-Message-State: AOJu0Yxat1LbASO++mIJcSOwAWgg9VGT56ZXRXRsPm6TmBCsT8zHCAUO
+        zN1iQRQixaCJZP+Ea5vJG/g=
+X-Google-Smtp-Source: AGHT+IFvZbr6hhHd2T1Ug+7rj0jacx1PmFHcSWJVko1czZJ7BoTnXKH9FIICdPnTHbJJHx8a1eLhaQ==
+X-Received: by 2002:a5d:4d8c:0:b0:323:36a3:8ca with SMTP id b12-20020a5d4d8c000000b0032336a308camr9504559wru.28.1696668278356;
+        Sat, 07 Oct 2023 01:44:38 -0700 (PDT)
+Received: from amir-ThinkPad-T480.lan ([5.29.249.86])
+        by smtp.gmail.com with ESMTPSA id a12-20020adff7cc000000b0031423a8f4f7sm3677850wrq.56.2023.10.07.01.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Oct 2023 01:44:37 -0700 (PDT)
+From:   Amir Goldstein <amir73il@gmail.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v2 0/3] Reduce impact of overlayfs backing files fake path
+Date:   Sat,  7 Oct 2023 11:44:30 +0300
+Message-Id: <20231007084433.1417887-1-amir73il@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230928130147.564503-1-mszeredi@redhat.com> <20230928130147.564503-5-mszeredi@redhat.com>
- <CAHC9VhQD9r+Qf5Vz1XmxUdJJJO7HNTKdo8Ux=n+xkxr=JGFMrw@mail.gmail.com>
- <CAJfpegsPbDgaz46x4Rr9ZgCpF9rohVHsvuWtQ5LNAdiYU_D4Ww@mail.gmail.com>
- <a25f2736-1837-f4ca-b401-85db24f46452@themaw.net> <CAJfpegv78njkWdaShTskKXoGOpKAndvYYJwq7CLibiu+xmLCvg@mail.gmail.com>
- <CAHC9VhTwnjhfmkT5Rzt+SBf-8hyw4PYkbuPYnm6XLoyY7VAUiw@mail.gmail.com> <CAJfpegsZqF4TnnFBsV-tzi=w_7M=To5DeAjyW=cei9YuG+qMfg@mail.gmail.com>
-In-Reply-To: <CAJfpegsZqF4TnnFBsV-tzi=w_7M=To5DeAjyW=cei9YuG+qMfg@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 6 Oct 2023 19:07:52 -0400
-Message-ID: <CAHC9VhS5cRA3FFWAttuy-tNP=p+Rk1O3Sq8Np29jenFQprFi4A@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] add listmount(2) syscall
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Ian Kent <raven@themaw.net>, Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Matthew House <mattlloydhouse@gmail.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Oct 6, 2023 at 4:53=E2=80=AFAM Miklos Szeredi <miklos@szeredi.hu> w=
-rote:
-> On Fri, 6 Oct 2023 at 04:56, Paul Moore <paul@paul-moore.com> wrote:
->
-> > > Also I cannot see the point in hiding some mount ID's from the list.
-> > > It seems to me that the list is just an array of numbers that in
-> > > itself doesn't carry any information.
-> >
-> > I think it really comes down to the significance of the mount ID, and
-> > I can't say I know enough of the details here to be entirely
-> > comfortable taking a hard stance on this.  Can you help me understand
-> > the mount ID concept a bit better?
->
-> Mount ID is a descriptor that allows referring to a specific struct
-> mount from userspace.
->
-> The old 32 bit mount id is allocated with IDA from a global pool.
-> Because it's non-referencing it doesn't allow uniquely identifying a
-> mount.  That was a design mistake that I made back in 2008, thinking
-> that the same sort of dense descriptor space as used for file
-> descriptors would work.  Originally it was used to identify the mount
-> and the parent mount in /proc/PID/mountinfo.  Later it was also added
-> to the following interfaces:
->
->  - name_to_handle_at(2) returns 32 bit value
->  - /proc/PID/FD/fdinfo
->  - statx(2) returns 64 bit value
->
-> It was never used on the kernel interfaces as an input argument.
+Hi Christian,
 
-Thanks for the background.
+This is another step in the multi step plan to reduce the vulnerability
+of filesystems code to overlayfs backing files whose f_path and f_inode
+are not on the same sb.
 
-> statmount(2) and listmount(2) require the mount to be identified by
-> userspace, so having a unique ID is important.  So the "[1/4] add
-> unique mount ID" adds a new 64 bit ID (still global) that is allocated
-> sequentially and only reused after reboot.   It is used as an input to
-> these syscalls.  It is returned by statx(2) if requested by
-> STATX_MNT_ID_UNIQUE and as an array of ID's by listmount(2).
->
-> I can see mild security problems with the global allocation, since a
-> task can observe mounts being done in other namespaces.  This doesn't
-> sound too serious, and the old ID has similar issues.  But I think
-> making the new ID be local to the mount namespace is also feasible.
+History:
+--------
+When overlayfs was first merged, overlayfs files of regular files and
+directories, the ones that are installed in file table, had a "fake" path,
+namely, f_path is the overlayfs path and f_inode is the "real" inode on
+the underlying filesystem.
 
-The LSM hook API is designed to operate independently from any of the
-kernel namespaces; while some LSMs may choose to be aware of
-namespaces and adjust their controls accordingly, there is no
-requirement that they do so.  For that reason, I'm not too bothered
-either way if the mount ID is global or tied to a namespace.
+At that time, all filesystem syscalls, generic vfs code and any filesystem
+code (among the fs that are supported as overlayfs underlying layers) had
+to be aware of the possibility of a file with "fake" path and had to use
+the helper file_dentry() to get the "real" dentry and the helper
+locks_inode() to get to the overlayfs inode.
+At that time, there was no way to get the "real" path.
 
-> > While I'm reasonably confident that we want a security_sb_statfs()
-> > control point in statmount(), it may turn out that we don't want/need
-> > a call in the listmount() case.  Perhaps your original patch was
-> > correct in the sense that we only want a single security_sb_statfs()
-> > call for the root (implying that the child mount IDs are attributes of
-> > the root/parent mount)?  Maybe it's something else entirely?
->
-> Mounts are arranged in a tree (I think it obvious how) and
-> listmount(2) just lists the IDs of the immediate children of a mount.
->
-> I don't see ID being an attribute of a mount, it's a descriptor.
+This situation was fragile because many filesystem developers were not
+aware of having to deal with file with "fake" path.
+Admittedly, it wasn't very well documented either.
 
-In this case I think the approach you took originally in this thread
-is likely what we want, call security_sb_statfs() against the root
-mount in listmount().  Just please move it after the capability
-checks.
+Backing files:
+--------------
+The first big step to reduce the impact of files with fake path was in
+v4.19 that introduced d1d04ef8572b ("ovl: stack file ops").  Since
+v4.19, f_inode of the overlayfs files that are installed in file table
+are overlayfs inodes, so those files are no longer odd.
 
-If you look at the two LSMs which implement the security_sb_statfs(),
-Smack and SELinux, you see that Smack treats this as a read operation
-between the current process and the specified mount and SELinux treats
-this as a filesystem:getattr operations between the current process
-and the specified mount.  In both cases I can see that being the right
-approach for reading a list of child mounts off of a root mount.
+As a result of this change, a lot of syscalls code, which take fd as an
+argument, is no longer exposed to files with "fake" path and the helper
+file_locks() was no longer needed.
 
-Does that sound good?  I'm guessing that's okay since that was how you
-wrote it in your original patch, but there has been a lot of
-discussion since then :)
+However, since v4.19, overlayfs uses internal backing files with "fake"
+path, so generic vfs code that overlayfs calls with the backing files and
+filesystem code still needs to be aware of files with "fake" path.
 
---=20
-paul-moore.com
+The one place where the internal backing files are "exposed" to users
+is when users mmap overlayfs files, the backing file (and not the
+overlayfs file) is stored in vm_file. The reason that overlayfs backing
+files use a "fake" path is so that /proc/<pid>/maps will disaply the
+overlayfs file path to users.
+
+Recently:
+---------
+In v6.5, we took another small step by introducing of the backing_file
+container and the file_real_path() helper.  This change allowed vfs and
+filesystem code to get the "real" path of an overlayfs backing file.
+With this change, we were able to make fsnotify work correctly and
+report events on the "real" filesystem objects that were accessed via
+overlayfs.
+
+This method works fine, but it still leaves the vfs vulnerable to new
+code that is not aware of files with fake path.  A recent example is
+commit db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the i_version").
+This commit uses direct referencing to f_path in IMA code that otherwise
+uses file_inode() and file_dentry() to reference the filesystem objects
+that it is measuring.
+
+Coming up:
+----------
+This patch set actually implements my initial proposal [1] that was
+proposed for v6.5 - instead of having filesystem code opt-in to get the
+"real" path, have generic code opt-in for the "fake" path in the few
+places that it is needed.
+
+It is possible that I missed a few places that need opt-in for "fake"
+path, but in most likelihood, a missed opt-in to "fake" path would just
+result in printing the "real" path to user and if %pD is used for
+printing, that will probably make no difference anyway.
+
+Is it far more likely that new filesystems code that does not use the
+file_dentry() and file_real_path() helpers will end up causing crashes
+or averting LSM/audit rules if we keep the "fake" path exposed by default.
+
+Future:
+-------
+This change already makes file_dentry() moot, but for now we did not
+change this helper just added a WARN_ON() in ovl_d_real() to catch if we
+have made any wrong assumptions.
+
+After the dust settles on this change, we can make file_dentry() a plain
+accessor and we can drop the inode argument to ->d_real().
+
+Testing:
+--------
+As usual, I ran fstests with overlayfs over xfs and all the LTS tests
+that test fsnotify + overlayfs.
+
+I have limited testing ability for audit/IMA/LSM modules, so we will
+have to rely on other people and bots testing of linux-next.
+Syzbot has been known to be very obsessive about reporting bugs of
+overlayfs + IMA.
+
+Merging:
+--------
+The branch that I tested [2] is based on both the stable vfs.mount.write
+branch and vfs.misc of the moment.
+
+If you agree to stage these patches in vfs tree, they would need
+to be based on both vfs.mount.write and the file_free_rcu patches.
+So perhaps split the file_free_rcu patches out of vfs.misc and into a
+vfs.file topic branch that is based on the stable vfs.mount.write branch
+and add my patches on top?
+
+I don't need vfs.file to be stable, I understand that the file_free_rcu()
+patches may still change, but since I would like to test overlayfs-next
+together with the "fake" path patches, it would be nice if the vfs.file
+branch would be more stable than vfs.misc usually is.
+
+Thanks,
+Amir.
+
+Changes since v1:
+- backing_file (fake_file rebranded) container already merged
+- fsnotify support for backing files already merged
+- Take mnt_writers refcount on the "real" path
+- Rename file_fake_path() => file_user_path()
+- No need to use file_user_path() for exe_file path access
+- No need to use file_user_path() in audit/LSM code
+- Added file_user_path() in some tracing/debugging code
+
+[1] https://lore.kernel.org/r/20230609073239.957184-1-amir73il@gmail.com/
+[2] https://github.com/amir73il/linux/commits/ovl_fake_path
+
+Amir Goldstein (3):
+  fs: get mnt_writers count for an open backing file's real path
+  fs: create helper file_user_path() for user displayed mapped file path
+  fs: store real path instead of fake path in backing file f_path
+
+ arch/arc/kernel/troubleshoot.c |  3 +-
+ fs/file_table.c                | 12 ++++----
+ fs/internal.h                  | 15 ++++++++--
+ fs/open.c                      | 55 +++++++++++++++++++++++-----------
+ fs/overlayfs/super.c           | 11 ++++++-
+ fs/proc/base.c                 |  2 +-
+ fs/proc/nommu.c                |  2 +-
+ fs/proc/task_mmu.c             |  4 +--
+ fs/proc/task_nommu.c           |  2 +-
+ include/linux/fs.h             | 27 ++++++++++-------
+ include/linux/fsnotify.h       |  3 +-
+ kernel/trace/trace_output.c    |  2 +-
+ 12 files changed, 92 insertions(+), 46 deletions(-)
+
+-- 
+2.34.1
+
