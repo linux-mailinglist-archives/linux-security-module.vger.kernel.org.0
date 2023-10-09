@@ -2,307 +2,276 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2A07BE512
-	for <lists+linux-security-module@lfdr.de>; Mon,  9 Oct 2023 17:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F28C7BE5D3
+	for <lists+linux-security-module@lfdr.de>; Mon,  9 Oct 2023 18:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377749AbjJIPiE (ORCPT
+        id S230326AbjJIQEq (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 9 Oct 2023 11:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        Mon, 9 Oct 2023 12:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377773AbjJIPht (ORCPT
+        with ESMTP id S233666AbjJIQEp (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 9 Oct 2023 11:37:49 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541A4133;
-        Mon,  9 Oct 2023 08:37:26 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-405417465aaso45093405e9.1;
-        Mon, 09 Oct 2023 08:37:26 -0700 (PDT)
+        Mon, 9 Oct 2023 12:04:45 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD1992
+        for <linux-security-module@vger.kernel.org>; Mon,  9 Oct 2023 09:04:43 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-59f4db9e11eso54883847b3.0
+        for <linux-security-module@vger.kernel.org>; Mon, 09 Oct 2023 09:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696865845; x=1697470645; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=paul-moore.com; s=google; t=1696867483; x=1697472283; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a+HQeegMFxdTmIDUpikNUTP1EtMcJMa5JsrdaHT+oHI=;
-        b=RTONlsEOkrCOArytf6/vvcav2wand0FWjRSCuvH9GyLIQO1XlpiBzEl0EKlKHRFy+Z
-         qUL21DjsuE42Pgt30EjUF6H/Xcu08KR+j2lExMP6wwnJT+A9rD7tw0lJ/oWv7b9NKKoS
-         AuS44COFYNCO/vcYZVmZBISvd7jbJ1MWWJ49aOHwTR/YLDVw20EP0KWhtZrULA7w8DMn
-         4d5BaTaHrRyc9u276BgiAogZ2uGC5N4VcHDTIyj1YuiNOUzHllJp9LzakbQpjNc+j2UP
-         b37JUnKKIcwXra05GwzeIe9O7f1PiPD3gg7jmbCQpcJFbdbxNe9QrjvVvPLoeOHGPbXx
-         YBLQ==
+        bh=C9fDlNvOmnLtg5Op0t4a2gYADf6L/TQ4pS3//DFpv4Y=;
+        b=Zd5STm59FoJsi3k5D876d90iOOjfR6B38r+qNuFlVmk0Hk0HAlgbTQ2Y3CqGbpvg7/
+         h20rrLzzMYnsQ+PO8Tl+EXUPsue4zIPa5LNqCY4VNET7wlRqXgSGzhTtySc3DgDHQfEh
+         jdWlUps295VLoKZYWcvHCNpsnNKZLIIuAehcnOMFAeom/FsfrorGX5puUNbQahHy3lu/
+         XWw/mQ523ZhC7Tl6qManggDvuMmYRce01m9dfP49bTuVNQEIQUhj5GotkXlMnPf8Rv/g
+         hyVCd0b48jn9DyBGeW1dcFgN4hGyuiTHbwP364KgfCGAfH92UGXv3FqKTai/A/ochCEX
+         wGrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696865845; x=1697470645;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1696867483; x=1697472283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a+HQeegMFxdTmIDUpikNUTP1EtMcJMa5JsrdaHT+oHI=;
-        b=OlKvk2PvEKCdSeROV5M8EMBDIcwFZO7HsIieNLhcZBt8Gbzky2FM5yVbUSzqs917LG
-         6OJ6Ua6ew+elWHZr4pDmMnu8TpQ7u2LwFDyJ6lA4PnDK7oVkc3PW1U7yJo1AO1IB+qTo
-         8MRkMg45hXpgA+tjmAkxVHZqcdZZnZ1lsRsmIABur5fY7nK6HzSNdmxaAV1NdfvNA8qb
-         jh0HcOJAcCnkEcmPmWUN1yG42jRQvYjvmm2ocytE6/Fm8huRKzoBpWWWrHTziursrwUs
-         fV6OpquDFTW8/gZCFzhTR7bVY5qRYzBUmJvvzITISpxz1F1o09VWEUXW9+3XPgYNF82L
-         yQbA==
-X-Gm-Message-State: AOJu0YwWtR2Xq/nZNioVse/xkcCTqPqOnk1ZcjdBCiQbTT6hIQRLVcKB
-        ASrjdqmlBBdi50vgxwP6tnA=
-X-Google-Smtp-Source: AGHT+IFgK5KMOpEDr9wVY4CaERQNmSjbu5seeXhEaWKuEXZ/0l5iKQo6/MWCUvdOiy6PL/vWXvZQ0g==
-X-Received: by 2002:adf:f74f:0:b0:319:68ba:7c8e with SMTP id z15-20020adff74f000000b0031968ba7c8emr13896792wrp.38.1696865844676;
-        Mon, 09 Oct 2023 08:37:24 -0700 (PDT)
-Received: from amir-ThinkPad-T480.lan ([5.29.249.86])
-        by smtp.gmail.com with ESMTPSA id g7-20020a056000118700b003143c9beeaesm9939924wrx.44.2023.10.09.08.37.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 08:37:24 -0700 (PDT)
-From:   Amir Goldstein <amir73il@gmail.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v3 3/3] fs: store real path instead of fake path in backing file f_path
-Date:   Mon,  9 Oct 2023 18:37:12 +0300
-Message-Id: <20231009153712.1566422-4-amir73il@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231009153712.1566422-1-amir73il@gmail.com>
-References: <20231009153712.1566422-1-amir73il@gmail.com>
+        bh=C9fDlNvOmnLtg5Op0t4a2gYADf6L/TQ4pS3//DFpv4Y=;
+        b=urnxDv+bdNB91DM6+sJ1esCkAeOfVkEHT5eab4iM1px7ieWIHfWiUlouqjZDeGNBQp
+         cagFe4iAeF1FSdY2o2C4AhUEAeGHa1aKfkqJpQg5pbGD77dQm5QQjcZUIYgzrFFqG0e8
+         i2V4f7oEG3WyNWypkfPH09Vev+j0ZKIAa/JMRdHSzmc2CikrP4xBEV8Gb5k+zWv4P1fb
+         WFq44xogPP776Xqvcjv7A3UR5nhclSmdJnfPMGgfnbEVwnA49G5j0bqOl+wSRWccHaiX
+         4iZlegEFLdpgqzuMyS/8ZizHvqnpXFLpOSij9DnTG1CawFzLpms9Y6YA4lULLcVjWFq3
+         +Xsg==
+X-Gm-Message-State: AOJu0YwLpSubL7i6r2iNVpqXetqBFIde6mRI6E7qzC9YB55LRtA9SNMx
+        VaNyG5tefdGHOWeqP9zGshR7CkUPflD0ssT778rUhOiV3Yha6Yg=
+X-Google-Smtp-Source: AGHT+IG289Jk17vEztzyThvi6KHoyIoAnumxy2kyOt6T/0bQ9I8E6+Ff1KHXg3mIX4GLMEPGX9TcMjbz2O+cpsfjwe0=
+X-Received: by 2002:a25:db08:0:b0:d9a:3adf:95a0 with SMTP id
+ g8-20020a25db08000000b00d9a3adf95a0mr1147643ybf.27.1696867482619; Mon, 09 Oct
+ 2023 09:04:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230912205658.3432-1-casey@schaufler-ca.com> <20230912205658.3432-5-casey@schaufler-ca.com>
+ <20231003.kooghohS2Aiz@digikod.net> <CAHC9VhT_ijmqo9ap-EokWHuALsMAqome2qcWgst3eRP6m+vbRA@mail.gmail.com>
+ <20231009.MieQu5ou2loo@digikod.net>
+In-Reply-To: <20231009.MieQu5ou2loo@digikod.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 9 Oct 2023 12:04:31 -0400
+Message-ID: <CAHC9VhS_pFy=WUq8F7jXQ3gstdM36FG52NQ+OeESHRSa54h7MQ@mail.gmail.com>
+Subject: Re: [PATCH v15 04/11] LSM: syscalls for current process attributes
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        serge@hallyn.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-A backing file struct stores two path's, one "real" path that is referring
-to f_inode and one "fake" path, which should be displayed to users in
-/proc/<pid>/maps.
+On Mon, Oct 9, 2023 at 11:37=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
+> On Thu, Oct 05, 2023 at 09:04:34PM -0400, Paul Moore wrote:
+> > On Tue, Oct 3, 2023 at 10:09=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@d=
+igikod.net> wrote:
+> > > On Tue, Sep 12, 2023 at 01:56:49PM -0700, Casey Schaufler wrote:
+> > > > Create a system call lsm_get_self_attr() to provide the security
+> > > > module maintained attributes of the current process.
+> > > > Create a system call lsm_set_self_attr() to set a security
+> > > > module maintained attribute of the current process.
+> > > > Historically these attributes have been exposed to user space via
+> > > > entries in procfs under /proc/self/attr.
+> > > >
+> > > > The attribute value is provided in a lsm_ctx structure. The structu=
+re
+> > > > identifies the size of the attribute, and the attribute value. The =
+format
+> > > > of the attribute value is defined by the security module. A flags f=
+ield
+> > > > is included for LSM specific information. It is currently unused an=
+d must
+> > > > be 0. The total size of the data, including the lsm_ctx structure a=
+nd any
+> > > > padding, is maintained as well.
+> > > >
+> > > > struct lsm_ctx {
+> > > >         __u64 id;
+> > > >         __u64 flags;
+> > > >         __u64 len;
+> > > >         __u64 ctx_len;
+> > > >         __u8 ctx[];
+> > > > };
+> > > >
+> > > > Two new LSM hooks are used to interface with the LSMs.
+> > > > security_getselfattr() collects the lsm_ctx values from the
+> > > > LSMs that support the hook, accounting for space requirements.
+> > > > security_setselfattr() identifies which LSM the attribute is
+> > > > intended for and passes it along.
+> > > >
+> > > > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > > Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> > > > Reviewed-by: John Johansen <john.johansen@canonical.com>
+> > > > ---
+> > > >  Documentation/userspace-api/lsm.rst |  70 +++++++++++++
+> > > >  include/linux/lsm_hook_defs.h       |   4 +
+> > > >  include/linux/lsm_hooks.h           |   1 +
+> > > >  include/linux/security.h            |  19 ++++
+> > > >  include/linux/syscalls.h            |   5 +
+> > > >  include/uapi/linux/lsm.h            |  36 +++++++
+> > > >  kernel/sys_ni.c                     |   2 +
+> > > >  security/Makefile                   |   1 +
+> > > >  security/lsm_syscalls.c             |  57 +++++++++++
+> > > >  security/security.c                 | 152 ++++++++++++++++++++++++=
+++++
+> > > >  10 files changed, 347 insertions(+)
+> > > >  create mode 100644 Documentation/userspace-api/lsm.rst
+> > > >  create mode 100644 security/lsm_syscalls.c
+> >
+> > ...
+> >
+> > > > diff --git a/security/security.c b/security/security.c
+> > > > index a3489c04b783..0d179750d964 100644
+> > > > --- a/security/security.c
+> > > > +++ b/security/security.c
+> > > > @@ -3837,6 +3837,158 @@ void security_d_instantiate(struct dentry *=
+dentry, struct inode *inode)
+> > > >  }
+> > > >  EXPORT_SYMBOL(security_d_instantiate);
+> > > >
+> > > > +/*
+> > > > + * Please keep this in sync with it's counterpart in security/lsm_=
+syscalls.c
+> > > > + */
+> > > > +
+> > > > +/**
+> > > > + * security_getselfattr - Read an LSM attribute of the current pro=
+cess.
+> > > > + * @attr: which attribute to return
+> > > > + * @uctx: the user-space destination for the information, or NULL
+> > > > + * @size: pointer to the size of space available to receive the da=
+ta
+> > > > + * @flags: special handling options. LSM_FLAG_SINGLE indicates tha=
+t only
+> > > > + * attributes associated with the LSM identified in the passed @ct=
+x be
+> > > > + * reported.
+> > > > + *
+> > > > + * A NULL value for @uctx can be used to get both the number of at=
+tributes
+> > > > + * and the size of the data.
+> > > > + *
+> > > > + * Returns the number of attributes found on success, negative val=
+ue
+> > > > + * on error. @size is reset to the total size of the data.
+> > > > + * If @size is insufficient to contain the data -E2BIG is returned=
+.
+> > > > + */
+> > > > +int security_getselfattr(unsigned int attr, struct lsm_ctx __user =
+*uctx,
+> > > > +                      size_t __user *size, u32 flags)
+> > > > +{
+> > > > +     struct security_hook_list *hp;
+> > > > +     struct lsm_ctx lctx =3D { .id =3D LSM_ID_UNDEF, };
+> > > > +     u8 __user *base =3D (u8 __user *)uctx;
+> > > > +     size_t total =3D 0;
+> > > > +     size_t entrysize;
+> > > > +     size_t left;
+> > > > +     bool toobig =3D false;
+> > > > +     bool single =3D false;
+> > > > +     int count =3D 0;
+> > > > +     int rc;
+> > > > +
+> > > > +     if (attr =3D=3D LSM_ATTR_UNDEF)
+> > > > +             return -EINVAL;
+> > > > +     if (size =3D=3D NULL)
+> > > > +             return -EINVAL;
+> > > > +     if (get_user(left, size))
+> > > > +             return -EFAULT;
+> > > > +
+> > > > +     if (flags) {
+> > > > +             /*
+> > > > +              * Only flag supported is LSM_FLAG_SINGLE
+> > > > +              */
+> > > > +             if (flags !=3D LSM_FLAG_SINGLE)
+> > > > +                     return -EINVAL;
+> > > > +             if (uctx && copy_from_user(&lctx, uctx, sizeof(lctx))=
+)
+> > >
+> > > I'm not sure if we should return -EINVAL or -EFAULT when uctx =3D=3D =
+NULL.
+> > > Because uctx is optional (when LSM_FLAG_SINGLE is not set), I guess
+> > > -EINVAL is OK.
+> >
+> > That's a good point, we should probably the error codes here: if uctx
+> > is NULL in the LSM_FLAG_SINGLE case we should return -EINVAL, if the
+> > copy_from_user() fails we should return -EFAULT.
+> >
+> > > > +                     return -EFAULT;
+> > > > +             /*
+> > > > +              * If the LSM ID isn't specified it is an error.
+> > > > +              */
+> > > > +             if (lctx.id =3D=3D LSM_ID_UNDEF)
+> > > > +                     return -EINVAL;
+> > > > +             single =3D true;
+> > > > +     }
+> > > > +
+> > > > +     /*
+> > > > +      * In the usual case gather all the data from the LSMs.
+> > > > +      * In the single case only get the data from the LSM specifie=
+d.
+> > > > +      */
+> > > > +     hlist_for_each_entry(hp, &security_hook_heads.getselfattr, li=
+st) {
+> > > > +             if (single && lctx.id !=3D hp->lsmid->id)
+> > > > +                     continue;
+> > > > +             entrysize =3D left;
+> > > > +             if (base)
+> > > > +                     uctx =3D (struct lsm_ctx __user *)(base + tot=
+al);
+> > > > +             rc =3D hp->hook.getselfattr(attr, uctx, &entrysize, f=
+lags);
+> > > > +             if (rc =3D=3D -EOPNOTSUPP) {
+> > > > +                     rc =3D 0;
+> > > > +                     continue;
+> > > > +             }
+> > > > +             if (rc =3D=3D -E2BIG) {
+> > > > +                     toobig =3D true;
+> > > > +                     left =3D 0;
+> > > > +             } else if (rc < 0)
+> > > > +                     return rc;
+> > > > +             else
+> > > > +                     left -=3D entrysize;
+> > > > +
+> > > > +             total +=3D entrysize;
+> > > > +             count +=3D rc;
+> > >
+> > > There is a bug if rc =3D=3D -E2BIG
+> >
+> > Can you elaborate a bit more on this? Nothing is jumping out at me as
+> > obviously broken... are you talking about @count becoming garbage due
+> > to @rc being equal to -E2BIG?  If that is the case it should be okay
+> > since we explicitly return -E2BIG, not @count, if @toobig is true.
+>
+> Indeed, in this case count will not be returned thanks to toobig. I'd
+> suggest to "continue" if rc =3D=3D -E2BIG (like for -EOPNOTSUPP) to avoid=
+ an
+> inconsistent count value, which could bite us one day.
 
-There is a lot more potential code that needs to know the "real" path, then
-code that needs to know the "fake" path.
+Okay, how about we reset @rc to zero in the -E2BIG case?  We don't
+want to bypass the lower part of the loop in this case as we still
+need to update @total.
 
-Instead of code having to request the "real" path with file_real_path(),
-store the "real" path in f_path and require code that needs to know the
-"fake" path request it with file_user_path().
-Replace the file_real_path() helper with a simple const accessor f_path().
+  if (rc =3D=3D -E2BIG) {
+    rc =3D 0;
+    left =3D 0;
+    toobig =3D true;
+  }
 
-After this change, file_dentry() is not expected to observe any files
-with overlayfs f_path and real f_inode, so the call to ->d_real() should
-not be needed.  Leave the ->d_real() call for now and add an assertion
-in ovl_d_real() to catch if we made wrong assumptions.
-
-Suggested-by: Miklos Szeredi <miklos@szeredi.hu>
-Link: https://lore.kernel.org/r/CAJfpegtt48eXhhjDFA1ojcHPNKj3Go6joryCPtEFAKpocyBsnw@mail.gmail.com/
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
----
- fs/file_table.c          | 12 ++++++------
- fs/internal.h            |  2 +-
- fs/open.c                | 23 +++++++++++------------
- fs/overlayfs/super.c     | 16 ++++++++++++----
- include/linux/fs.h       | 22 ++++------------------
- include/linux/fsnotify.h |  3 +--
- 6 files changed, 35 insertions(+), 43 deletions(-)
-
-diff --git a/fs/file_table.c b/fs/file_table.c
-index 08fd1dd6d863..fa92743ba6a9 100644
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -44,10 +44,10 @@ static struct kmem_cache *filp_cachep __read_mostly;
- 
- static struct percpu_counter nr_files __cacheline_aligned_in_smp;
- 
--/* Container for backing file with optional real path */
-+/* Container for backing file with optional user path */
- struct backing_file {
- 	struct file file;
--	struct path real_path;
-+	struct path user_path;
- };
- 
- static inline struct backing_file *backing_file(struct file *f)
-@@ -55,11 +55,11 @@ static inline struct backing_file *backing_file(struct file *f)
- 	return container_of(f, struct backing_file, file);
- }
- 
--struct path *backing_file_real_path(struct file *f)
-+struct path *backing_file_user_path(struct file *f)
- {
--	return &backing_file(f)->real_path;
-+	return &backing_file(f)->user_path;
- }
--EXPORT_SYMBOL_GPL(backing_file_real_path);
-+EXPORT_SYMBOL_GPL(backing_file_user_path);
- 
- static inline void file_free(struct file *f)
- {
-@@ -68,7 +68,7 @@ static inline void file_free(struct file *f)
- 		percpu_counter_dec(&nr_files);
- 	put_cred(f->f_cred);
- 	if (unlikely(f->f_mode & FMODE_BACKING)) {
--		path_put(backing_file_real_path(f));
-+		path_put(backing_file_user_path(f));
- 		kfree(backing_file(f));
- 	} else {
- 		kmem_cache_free(filp_cachep, f);
-diff --git a/fs/internal.h b/fs/internal.h
-index 4e93a685bdaa..58e43341aebf 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -101,7 +101,7 @@ static inline void file_put_write_access(struct file *file)
- 	put_write_access(file->f_inode);
- 	mnt_put_write_access(file->f_path.mnt);
- 	if (unlikely(file->f_mode & FMODE_BACKING))
--		mnt_put_write_access(backing_file_real_path(file)->mnt);
-+		mnt_put_write_access(backing_file_user_path(file)->mnt);
- }
- 
- static inline void put_file_access(struct file *file)
-diff --git a/fs/open.c b/fs/open.c
-index fe63e236da22..02dc608d40d8 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -881,7 +881,7 @@ static inline int file_get_write_access(struct file *f)
- 	if (unlikely(error))
- 		goto cleanup_inode;
- 	if (unlikely(f->f_mode & FMODE_BACKING)) {
--		error = mnt_get_write_access(backing_file_real_path(f)->mnt);
-+		error = mnt_get_write_access(backing_file_user_path(f)->mnt);
- 		if (unlikely(error))
- 			goto cleanup_mnt;
- 	}
-@@ -1182,20 +1182,19 @@ EXPORT_SYMBOL_GPL(kernel_file_open);
- 
- /**
-  * backing_file_open - open a backing file for kernel internal use
-- * @path:	path of the file to open
-+ * @user_path:	path that the user reuqested to open
-  * @flags:	open flags
-  * @real_path:	path of the backing file
-  * @cred:	credentials for open
-  *
-  * Open a backing file for a stackable filesystem (e.g., overlayfs).
-- * @path may be on the stackable filesystem and backing inode on the
-- * underlying filesystem. In this case, we want to be able to return
-- * the @real_path of the backing inode. This is done by embedding the
-- * returned file into a container structure that also stores the path of
-- * the backing inode on the underlying filesystem, which can be
-- * retrieved using backing_file_real_path().
-+ * @user_path may be on the stackable filesystem and @real_path on the
-+ * underlying filesystem.  In this case, we want to be able to return the
-+ * @user_path of the stackable filesystem. This is done by embedding the
-+ * returned file into a container structure that also stores the stacked
-+ * file's path, which can be retrieved using backing_file_user_path().
-  */
--struct file *backing_file_open(const struct path *path, int flags,
-+struct file *backing_file_open(const struct path *user_path, int flags,
- 			       const struct path *real_path,
- 			       const struct cred *cred)
- {
-@@ -1206,9 +1205,9 @@ struct file *backing_file_open(const struct path *path, int flags,
- 	if (IS_ERR(f))
- 		return f;
- 
--	f->f_path = *path;
--	path_get(real_path);
--	*backing_file_real_path(f) = *real_path;
-+	path_get(user_path);
-+	*backing_file_user_path(f) = *user_path;
-+	f->f_path = *real_path;
- 	error = do_dentry_open(f, d_inode(real_path->dentry), NULL);
- 	if (error) {
- 		fput(f);
-diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
-index 3fa2416264a4..400a925a8ad2 100644
---- a/fs/overlayfs/super.c
-+++ b/fs/overlayfs/super.c
-@@ -34,14 +34,22 @@ static struct dentry *ovl_d_real(struct dentry *dentry,
- 	struct dentry *real = NULL, *lower;
- 	int err;
- 
--	/* It's an overlay file */
-+	/*
-+	 * vfs is only expected to call d_real() with NULL from d_real_inode()
-+	 * and with overlay inode from file_dentry() on an overlay file.
-+	 *
-+	 * TODO: remove @inode argument from d_real() API, remove code in this
-+	 * function that deals with non-NULL @inode and remove d_real() call
-+	 * from file_dentry().
-+	 */
- 	if (inode && d_inode(dentry) == inode)
- 		return dentry;
-+	else if (inode)
-+		goto bug;
- 
- 	if (!d_is_reg(dentry)) {
--		if (!inode || inode == d_inode(dentry))
--			return dentry;
--		goto bug;
-+		/* d_real_inode() is only relevant for regular files */
-+		return dentry;
- 	}
- 
- 	real = ovl_dentry_upper(dentry);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index a8e4e1cac48e..b0624d83c2db 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2451,26 +2451,10 @@ struct file *dentry_open(const struct path *path, int flags,
- 			 const struct cred *creds);
- struct file *dentry_create(const struct path *path, int flags, umode_t mode,
- 			   const struct cred *cred);
--struct file *backing_file_open(const struct path *path, int flags,
-+struct file *backing_file_open(const struct path *user_path, int flags,
- 			       const struct path *real_path,
- 			       const struct cred *cred);
--struct path *backing_file_real_path(struct file *f);
--
--/*
-- * file_real_path - get the path corresponding to f_inode
-- *
-- * When opening a backing file for a stackable filesystem (e.g.,
-- * overlayfs) f_path may be on the stackable filesystem and f_inode on
-- * the underlying filesystem.  When the path associated with f_inode is
-- * needed, this helper should be used instead of accessing f_path
-- * directly.
--*/
--static inline const struct path *file_real_path(struct file *f)
--{
--	if (unlikely(f->f_mode & FMODE_BACKING))
--		return backing_file_real_path(f);
--	return &f->f_path;
--}
-+struct path *backing_file_user_path(struct file *f);
- 
- /*
-  * file_user_path - get the path to display for memory mapped file
-@@ -2483,6 +2467,8 @@ static inline const struct path *file_real_path(struct file *f)
-  */
- static inline const struct path *file_user_path(struct file *f)
- {
-+	if (unlikely(f->f_mode & FMODE_BACKING))
-+		return backing_file_user_path(f);
- 	return &f->f_path;
- }
- 
-diff --git a/include/linux/fsnotify.h b/include/linux/fsnotify.h
-index ed48e4f1e755..bcb6609b54b3 100644
---- a/include/linux/fsnotify.h
-+++ b/include/linux/fsnotify.h
-@@ -96,8 +96,7 @@ static inline int fsnotify_file(struct file *file, __u32 mask)
- 	if (file->f_mode & FMODE_NONOTIFY)
- 		return 0;
- 
--	/* Overlayfs internal files have fake f_path */
--	path = file_real_path(file);
-+	path = &file->f_path;
- 	return fsnotify_parent(path->dentry, mask, path, FSNOTIFY_EVENT_PATH);
- }
- 
--- 
-2.34.1
-
+--=20
+paul-moore.com
