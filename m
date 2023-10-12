@@ -2,31 +2,31 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B82F7C7981
-	for <lists+linux-security-module@lfdr.de>; Fri, 13 Oct 2023 00:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE0F7C7975
+	for <lists+linux-security-module@lfdr.de>; Fri, 13 Oct 2023 00:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443015AbjJLWbb convert rfc822-to-8bit (ORCPT
+        id S1344221AbjJLW3Y convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 12 Oct 2023 18:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        Thu, 12 Oct 2023 18:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442981AbjJLWb3 (ORCPT
+        with ESMTP id S1344180AbjJLW3X (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 12 Oct 2023 18:31:29 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE316D8
-        for <linux-security-module@vger.kernel.org>; Thu, 12 Oct 2023 15:31:26 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39CLu4ZN019398
-        for <linux-security-module@vger.kernel.org>; Thu, 12 Oct 2023 15:31:26 -0700
+        Thu, 12 Oct 2023 18:29:23 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB773B8
+        for <linux-security-module@vger.kernel.org>; Thu, 12 Oct 2023 15:29:19 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39CLu1tF015219
+        for <linux-security-module@vger.kernel.org>; Thu, 12 Oct 2023 15:29:19 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3tpjtjj0wr-2
+        by m0001303.ppops.net (PPS) with ESMTPS id 3tpbsndrg7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-security-module@vger.kernel.org>; Thu, 12 Oct 2023 15:31:25 -0700
+        for <linux-security-module@vger.kernel.org>; Thu, 12 Oct 2023 15:29:18 -0700
 Received: from twshared11278.41.prn1.facebook.com (2620:10d:c085:108::8) by
  mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 12 Oct 2023 15:31:24 -0700
+ 15.1.2507.23; Thu, 12 Oct 2023 15:29:17 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
         id 5A28539A3A089; Thu, 12 Oct 2023 15:28:10 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
@@ -41,17 +41,17 @@ Message-ID: <20231012222810.4120312-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.34.1
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: oSuOM3KWlHjk7aqQa90_5nEYMeRB3hny
-X-Proofpoint-GUID: oSuOM3KWlHjk7aqQa90_5nEYMeRB3hny
+X-Proofpoint-GUID: t2uyWS8zBOXyBX4RZVF-65YJKljeatex
+X-Proofpoint-ORIG-GUID: t2uyWS8zBOXyBX4RZVF-65YJKljeatex
 Content-Transfer-Encoding: 8BIT
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-12_14,2023-10-12_01,2023-05-22_02
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
