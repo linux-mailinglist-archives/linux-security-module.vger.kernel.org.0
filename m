@@ -2,97 +2,253 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6999F7CACF3
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Oct 2023 17:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575B47CB1D5
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Oct 2023 20:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjJPPGv (ORCPT
+        id S233853AbjJPSDD convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Mon, 16 Oct 2023 11:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        Mon, 16 Oct 2023 14:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233788AbjJPPGu (ORCPT
+        with ESMTP id S234089AbjJPSCw (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Mon, 16 Oct 2023 11:06:50 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554FDE6
-        for <linux-security-module@vger.kernel.org>; Mon, 16 Oct 2023 08:06:45 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d9ac31cb021so5163962276.1
-        for <linux-security-module@vger.kernel.org>; Mon, 16 Oct 2023 08:06:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1697468804; x=1698073604; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7JPLLbFfi+3DcdR4lMb9bxT1Efqz3WnKELubajvCf/8=;
-        b=dagC2NQY29AS3Upuik35O6nqJ8zXL3qZIbhmlUeyEHTa5xsoWW8EXpxGWIC3jdlgvP
-         5OIPBMdEQ5LjLZwJk5kr/40hLiHfRcWQS6iemI39AY6srmG0LKt2/ZYH9nVrMoVquag2
-         uR9p6GEoOSN4mioIM/WN2CFSg+mB2od5Brd5GA9K/6UIHwqXwrNmQE0qqWiQnxIXrnXT
-         2Igh9t/uvVwet52Yx/myMeYwqyGBo7aYH6hvhLg3ld6lq7SCU8NePOKh6bhRfebvW5mR
-         Em++plsgl7iF0+7F7p5VBEbeN0Hrk5PZTp8P6m/fR5B/21Q8UeomsnXqGHCO+oMl/5N9
-         Wmng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697468804; x=1698073604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7JPLLbFfi+3DcdR4lMb9bxT1Efqz3WnKELubajvCf/8=;
-        b=p8VC5Z8MGj8AIWLaZo7Kh4T0n+5eLKv8OsIwHdcmL0r6RvpL3YykbtTTXPot6+RIGM
-         emh1BcD68tGbDwW1TXnGEiDSoccra76IyI0C8nUU8pG3hdQugCsTzcqHuCj6UsksL+7i
-         I3JGmBrx0P1AFYNqrDr4QYwTRmXqSDsrSg5fqoTfrMpkqsGLL4GOjljYRsSrOwPDYq6N
-         aMYfA8mDISecUgUtAq1JSXHofB6q0TvSVgjLbNkl6tHG7K4I/d/Jcx8YwaeX0fm7rb46
-         R5ENtc151Hn5juQq7MkcqyRHPxTk5oP4qzpF37kwXa4txM9xW5LR5sLjFl7PpzXen8Ib
-         3vQg==
-X-Gm-Message-State: AOJu0Yy7taqlv8URfNQlx08r7nkMFwqGHh+n1NMx8xA3SCb6Q2jEVJmx
-        TNTZAWSK9y0mhTVHuvKzM8X6PdNhzGqYf3Z+tVpbzP7oI8OUINM=
-X-Google-Smtp-Source: AGHT+IGDqKl7MND9wZqcX+N6HWeeMu6HHtgNjthMSWYuYqtbmsB/+9mEShdOg4gGou5EhGsCNoZVqcXb9rZceJuQ6gU=
-X-Received: by 2002:a25:ae8b:0:b0:d9a:d20d:7d5a with SMTP id
- b11-20020a25ae8b000000b00d9ad20d7d5amr13002821ybj.1.1697468804361; Mon, 16
- Oct 2023 08:06:44 -0700 (PDT)
+        Mon, 16 Oct 2023 14:02:52 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3171113
+        for <linux-security-module@vger.kernel.org>; Mon, 16 Oct 2023 11:02:48 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 39GFHPW9011571
+        for <linux-security-module@vger.kernel.org>; Mon, 16 Oct 2023 11:02:48 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3trsmp5sxa-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Mon, 16 Oct 2023 11:02:47 -0700
+Received: from twshared32169.15.frc2.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 16 Oct 2023 11:02:29 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 0D37139D9C236; Mon, 16 Oct 2023 11:02:20 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <linux-fsdevel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
+        <brauner@kernel.org>, <lennart@poettering.net>,
+        <kernel-team@meta.com>, <sargun@sargun.me>
+Subject: [PATCH v8 bpf-next 00/18] BPF token and BPF FS-based delegation
+Date:   Mon, 16 Oct 2023 11:02:02 -0700
+Message-ID: <20231016180220.3866105-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: CfHG_iRa7QfuUFFAXi5f55HToWvYMHpB
+X-Proofpoint-ORIG-GUID: CfHG_iRa7QfuUFFAXi5f55HToWvYMHpB
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20230912205658.3432-1-casey.ref@schaufler-ca.com>
- <20230912205658.3432-1-casey@schaufler-ca.com> <CAHC9VhRcbp3iWQwL7FTUrcU1C3OsZ413Nbq+17oTwW7hZ7XvBw@mail.gmail.com>
- <CAHC9VhSqY5+DR-jXprrftb1=CzDvhTh0Ep66A16RMd4L7W7TYw@mail.gmail.com> <ae39864947debbc7c460db478b8abe1c147b7d5c.camel@huaweicloud.com>
-In-Reply-To: <ae39864947debbc7c460db478b8abe1c147b7d5c.camel@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 16 Oct 2023 11:06:33 -0400
-Message-ID: <CAHC9VhRQ7xpeSX7b3VZfzQ15noJ8mgauNMuHWo_n3hMgsYMAfQ@mail.gmail.com>
-Subject: Re: [PATCH v15 00/11] LSM: Three basic syscalls
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        serge@hallyn.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-16_10,2023-10-12_01,2023-05-22_02
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Mon, Oct 16, 2023 at 8:05=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> Sorry, I just noticed LSM_ID_IMA. Since we have the 'integrity' LSM, I
-> think it should be LSM_ID_INTEGRITY.
->
-> Mimi, all, do you agree? If yes, I send a patch shortly.
+This patch set introduces an ability to delegate a subset of BPF subsystem
+functionality from privileged system-wide daemon (e.g., systemd or any other
+container manager) through special mount options for userns-bound BPF FS to
+a *trusted* unprivileged application. Trust is the key here. This
+functionality is not about allowing unconditional unprivileged BPF usage.
+Establishing trust, though, is completely up to the discretion of respective
+privileged application that would create and mount a BPF FS instance with
+delegation enabled, as different production setups can and do achieve it
+through a combination of different means (signing, LSM, code reviews, etc),
+and it's undesirable and infeasible for kernel to enforce any particular way
+of validating trustworthiness of particular process.
 
-I believe LSM_ID_IMA is the better option, despite "integrity" already
-being present in Kconfig and possibly other areas.  "IMA" is a
-specific thing/LSM whereas "integrity" is a property, principle, or
-quality.  Especially as we move forward with promoting IMA as a full
-and proper LSM, we should work towards referring to it as "IMA" and
-not "integrity".
+The main motivation for this work is a desire to enable containerized BPF
+applications to be used together with user namespaces. This is currently
+impossible, as CAP_BPF, required for BPF subsystem usage, cannot be namespaced
+or sandboxed, as a general rule. E.g., tracing BPF programs, thanks to BPF
+helpers like bpf_probe_read_kernel() and bpf_probe_read_user() can safely read
+arbitrary memory, and it's impossible to ensure that they only read memory of
+processes belonging to any given namespace. This means that it's impossible to
+have a mechanically verifiable namespace-aware CAP_BPF capability, and as such
+another mechanism to allow safe usage of BPF functionality is necessary.BPF FS
+delegation mount options and BPF token derived from such BPF FS instance is
+such a mechanism. Kernel makes no assumption about what "trusted" constitutes
+in any particular case, and it's up to specific privileged applications and
+their surrounding infrastructure to decide that. What kernel provides is a set
+of APIs to setup and mount special BPF FS instanecs and derive BPF tokens from
+it. BPF FS and BPF token are both bound to its owning userns and in such a way
+are constrained inside intended container. Users can then pass BPF token FD to
+privileged bpf() syscall commands, like BPF map creation and BPF program
+loading, to perform such operations without having init userns privileged.
 
-If anything we should be working to support "IMA" in places where we
-currently have "integrity" so that we can eventually deprecate
-"integrity".
+This version incorporates feedback and suggestions ([3]) received on v3 of
+this patch set, and instead of allowing to create BPF tokens directly assuming
+capable(CAP_SYS_ADMIN), we instead enhance BPF FS to accepts a few new
+delegation mount options. If these options are used and BPF FS itself is
+properly created, set up, and mounted inside the user namespaced container,
+user application is able to derive a BPF token object from BPF FS instance,
+and pass that token to bpf() syscall. As explained in patch #2, BPF token
+itself doesn't grant access to BPF functionality, but instead allows kernel to
+do namespaced capabilities checks (ns_capable() vs capable()) for CAP_BPF,
+CAP_PERFMON, CAP_NET_ADMIN, and CAP_SYS_ADMIN, as applicable. So it forms one
+half of a puzzle and allows container managers and sys admins to have safe and
+flexible configuration options: determining which containers get delegation of
+BPF functionality through BPF FS, and then which applications within such
+containers are allowed to perform bpf() commands, based on namespaces
+capabilities.
 
---=20
-paul-moore.com
+Previous attempt at addressing this very same problem ([0]) attempted to
+utilize authoritative LSM approach, but was conclusively rejected by upstream
+LSM maintainers. BPF token concept is not changing anything about LSM
+approach, but can be combined with LSM hooks for very fine-grained security
+policy. Some ideas about making BPF token more convenient to use with LSM (in
+particular custom BPF LSM programs) was briefly described in recent LSF/MM/BPF
+2023 presentation ([1]). E.g., an ability to specify user-provided data
+(context), which in combination with BPF LSM would allow implementing a very
+dynamic and fine-granular custom security policies on top of BPF token. In the
+interest of minimizing API surface area and discussions this was relegated to
+follow up patches, as it's not essential to the fundamental concept of
+delegatable BPF token.
+
+It should be noted that BPF token is conceptually quite similar to the idea of
+/dev/bpf device file, proposed by Song a while ago ([2]). The biggest
+difference is the idea of using virtual anon_inode file to hold BPF token and
+allowing multiple independent instances of them, each (potentially) with its
+own set of restrictions. And also, crucially, BPF token approach is not using
+any special stateful task-scoped flags. Instead, bpf() syscall accepts
+token_fd parameters explicitly for each relevant BPF command. This addresses
+main concerns brought up during the /dev/bpf discussion, and fits better with
+overall BPF subsystem design.
+
+This patch set adds a basic minimum of functionality to make BPF token idea
+useful and to discuss API and functionality. Currently only low-level libbpf
+APIs support creating and passing BPF token around, allowing to test kernel
+functionality, but for the most part is not sufficient for real-world
+applications, which typically use high-level libbpf APIs based on `struct
+bpf_object` type. This was done with the intent to limit the size of patch set
+and concentrate on mostly kernel-side changes. All the necessary plumbing for
+libbpf will be sent as a separate follow up patch set kernel support makes it
+upstream.
+
+Another part that should happen once kernel-side BPF token is established, is
+a set of conventions between applications (e.g., systemd), tools (e.g.,
+bpftool), and libraries (e.g., libbpf) on exposing delegatable BPF FS
+instance(s) at well-defined locations to allow applications take advantage of
+this in automatic fashion without explicit code changes on BPF application's
+side. But I'd like to postpone this discussion to after BPF token concept
+lands.
+
+  [0] https://lore.kernel.org/bpf/20230412043300.360803-1-andrii@kernel.org/
+  [1] http://vger.kernel.org/bpfconf2023_material/Trusted_unprivileged_BPF_LSFMM2023.pdf
+  [2] https://lore.kernel.org/bpf/20190627201923.2589391-2-songliubraving@fb.com/
+  [3] https://lore.kernel.org/bpf/20230704-hochverdient-lehne-eeb9eeef785e@brauner/
+
+v7->v8:
+  - add bpf_token_allow_cmd and bpf_token_capable hooks (Paul);
+  - inline bpf_token_alloc() into bpf_token_create() to prevent accidental
+    divergence with security_bpf_token_create() hook (Paul);
+v6->v7:
+  - separate patches to refactor bpf_prog_alloc/bpf_map_alloc LSM hooks, as
+    discussed with Paul, and now they also accept struct bpf_token;
+  - added bpf_token_create/bpf_token_free to allow LSMs (SELinux,
+    specifically) to set up security LSM blob (Paul);
+  - last patch also wires bpf_security_struct setup by SELinux, similar to how
+    it's done for BPF map/prog, though I'm not sure if that's enough, so worst
+    case it's easy to drop this patch if more full fledged SELinux
+    implementation will be done separately;
+  - small fixes for issues caught by code reviews (Jiri, Hou);
+  - fix for test_maps test that doesn't use LIBBPF_OPTS() macro (CI);
+v5->v6:
+  - fix possible use of uninitialized variable in selftests (CI);
+  - don't use anon_inode, instead create one from BPF FS instance (Christian);
+  - don't store bpf_token inside struct bpf_map, instead pass it explicitly to
+    map_check_btf(). We do store bpf_token inside prog->aux, because it's used
+    during verification and even can be checked during attach time for some
+    program types;
+  - LSM hooks are left intact pending the conclusion of discussion with Paul
+    Moore; I'd prefer to do LSM-related changes as a follow up patch set
+    anyways;
+v4->v5:
+  - add pre-patch unifying CAP_NET_ADMIN handling inside kernel/bpf/syscall.c
+    (Paul Moore);
+  - fix build warnings and errors in selftests and kernel, detected by CI and
+    kernel test robot;
+v3->v4:
+  - add delegation mount options to BPF FS;
+  - BPF token is derived from the instance of BPF FS and associates itself
+    with BPF FS' owning userns;
+  - BPF token doesn't grant BPF functionality directly, it just turns
+    capable() checks into ns_capable() checks within BPF FS' owning user;
+  - BPF token cannot be pinned;
+v2->v3:
+  - make BPF_TOKEN_CREATE pin created BPF token in BPF FS, and disallow
+    BPF_OBJ_PIN for BPF token;
+v1->v2:
+  - fix build failures on Kconfig with CONFIG_BPF_SYSCALL unset;
+  - drop BPF_F_TOKEN_UNKNOWN_* flags and simplify UAPI (Stanislav).
+
+Andrii Nakryiko (18):
+  bpf: align CAP_NET_ADMIN checks with bpf_capable() approach
+  bpf: add BPF token delegation mount options to BPF FS
+  bpf: introduce BPF token object
+  bpf: add BPF token support to BPF_MAP_CREATE command
+  bpf: add BPF token support to BPF_BTF_LOAD command
+  bpf: add BPF token support to BPF_PROG_LOAD command
+  bpf: take into account BPF token when fetching helper protos
+  bpf: consistenly use BPF token throughout BPF verifier logic
+  bpf,lsm: refactor bpf_prog_alloc/bpf_prog_free LSM hooks
+  bpf,lsm: refactor bpf_map_alloc/bpf_map_free LSM hooks
+  bpf,lsm: add BPF token LSM hooks
+  libbpf: add bpf_token_create() API
+  selftests/bpf: fix test_maps' use of bpf_map_create_opts
+  libbpf: add BPF token support to bpf_map_create() API
+  libbpf: add BPF token support to bpf_btf_load() API
+  libbpf: add BPF token support to bpf_prog_load() API
+  selftests/bpf: add BPF token-enabled tests
+  bpf,selinux: allocate bpf_security_struct per BPF token
+
+ drivers/media/rc/bpf-lirc.c                   |   2 +-
+ include/linux/bpf.h                           |  83 ++-
+ include/linux/filter.h                        |   2 +-
+ include/linux/lsm_hook_defs.h                 |  15 +-
+ include/linux/security.h                      |  43 +-
+ include/uapi/linux/bpf.h                      |  44 ++
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/arraymap.c                         |   2 +-
+ kernel/bpf/bpf_lsm.c                          |  15 +-
+ kernel/bpf/cgroup.c                           |   6 +-
+ kernel/bpf/core.c                             |   3 +-
+ kernel/bpf/helpers.c                          |   6 +-
+ kernel/bpf/inode.c                            |  98 ++-
+ kernel/bpf/syscall.c                          | 215 ++++--
+ kernel/bpf/token.c                            | 247 +++++++
+ kernel/bpf/verifier.c                         |  13 +-
+ kernel/trace/bpf_trace.c                      |   2 +-
+ net/core/filter.c                             |  36 +-
+ net/ipv4/bpf_tcp_ca.c                         |   2 +-
+ net/netfilter/nf_bpf_link.c                   |   2 +-
+ security/security.c                           | 101 ++-
+ security/selinux/hooks.c                      |  47 +-
+ tools/include/uapi/linux/bpf.h                |  44 ++
+ tools/lib/bpf/bpf.c                           |  30 +-
+ tools/lib/bpf/bpf.h                           |  39 +-
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../bpf/map_tests/map_percpu_stats.c          |  20 +-
+ .../selftests/bpf/prog_tests/libbpf_probes.c  |   4 +
+ .../selftests/bpf/prog_tests/libbpf_str.c     |   6 +
+ .../testing/selftests/bpf/prog_tests/token.c  | 629 ++++++++++++++++++
+ 30 files changed, 1577 insertions(+), 182 deletions(-)
+ create mode 100644 kernel/bpf/token.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/token.c
+
+-- 
+2.34.1
+
