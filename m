@@ -2,101 +2,108 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF0A7D28EC
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Oct 2023 05:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFB47D2ACD
+	for <lists+linux-security-module@lfdr.de>; Mon, 23 Oct 2023 08:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbjJWDKR (ORCPT
+        id S229708AbjJWG7b (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sun, 22 Oct 2023 23:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
+        Mon, 23 Oct 2023 02:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbjJWDKM (ORCPT
+        with ESMTP id S229450AbjJWG7a (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sun, 22 Oct 2023 23:10:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D3C99
-        for <linux-security-module@vger.kernel.org>; Sun, 22 Oct 2023 20:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698030561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uR3upPr1un9Y15hnQrF7MdsdEdC4wHgJk4tSO1HctOg=;
-        b=bzQwkiAMhuhNUtNQDi7SSG2gMVkrIkv/uuGGFYCwmvzSVHjHToPzEFj0JHjN68McqMWi3m
-        15QaTTxzYgYrfX/fHYEMJeFdeJgHxYVvHgWphfh/WTdobZ+J/mFenAQ4BoeOwDUgDDRNke
-        E52Er2LWX++332td+fpQBYbTQMldWA4=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-692-MpYzJF4KM9-oOwMcesCIiw-1; Sun, 22 Oct 2023 23:09:18 -0400
-X-MC-Unique: MpYzJF4KM9-oOwMcesCIiw-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-507a3426041so2976637e87.0
-        for <linux-security-module@vger.kernel.org>; Sun, 22 Oct 2023 20:09:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698030557; x=1698635357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uR3upPr1un9Y15hnQrF7MdsdEdC4wHgJk4tSO1HctOg=;
-        b=FsuOGyvMMej+XqCo8TSf462pZAYTfkKebsEsMvrAu6XXVLkU7MF1Gr9t33b5iyGoWn
-         qefmjBueluzKZ2C804x0ohM8fjQWyASlCZ7S/QkpGVJyAEBbE97gVf9Czi8prmDGDwE1
-         wislRGcIR2ChHo1D3eImvVwhI/gDlKTsJxeM0PdBQqAKXE2qAB3FMqCmZ4qF2tCz2D5n
-         XfjUlj8tbxAJnc3ELj+Azh/oshTFO4AsSzRCzZbe0ABSYjvXTKGk5ptojG1NroJe9h82
-         cIW5Jtsoxcttv6sAOySw5iLzIROWDtRdKDrYhg6oXtPB6l+WWj1dYDErzR0BNubYsQKg
-         CMcQ==
-X-Gm-Message-State: AOJu0YygZZ8SPlIBIdWag+zX3545sCVZIYp6vsVO5Eemx8aEecmBpgsJ
-        ljpWcj8x/kBAQ/Dg7Qyv7kBikXS3W7GrKgb+VJAC0NBKQsvyxsA6eZeQ8tMyvBHFvC+721MDsY6
-        a9mHU6do0OZuGKylvmu2TTOktRSM8amkv0t9O4898+dna1Q7U7o3G
-X-Received: by 2002:ac2:518b:0:b0:503:55c:7999 with SMTP id u11-20020ac2518b000000b00503055c7999mr4906990lfi.34.1698030557007;
-        Sun, 22 Oct 2023 20:09:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFgWCb7RrjHP+YKyif/eQ3pCH0351kwLRVv4y6D+4xjgstUC95BiBq1L5oqqzYLzjBLiA8Wpf2Vn16vXSmNb5E=
-X-Received: by 2002:ac2:518b:0:b0:503:55c:7999 with SMTP id
- u11-20020ac2518b000000b00503055c7999mr4906972lfi.34.1698030556727; Sun, 22
- Oct 2023 20:09:16 -0700 (PDT)
+        Mon, 23 Oct 2023 02:59:30 -0400
+X-Greylist: delayed 91 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 Oct 2023 23:59:28 PDT
+Received: from omta33.uswest2.a.cloudfilter.net (omta33.uswest2.a.cloudfilter.net [35.89.44.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A00DEE;
+        Sun, 22 Oct 2023 23:59:28 -0700 (PDT)
+Received: from eig-obgw-5009a.ext.cloudfilter.net ([10.0.29.176])
+        by cmsmtp with ESMTPS
+        id uPdGqIpfQ8HteuosvqJz9T; Mon, 23 Oct 2023 06:57:57 +0000
+Received: from 162-240-83-27.unifiedlayer.com ([137.59.148.200])
+        by cmsmtp with ESMTPS
+        id uostqqf19I9guuosuq5ahA; Mon, 23 Oct 2023 06:57:56 +0000
+X-Authority-Analysis: v=2.4 cv=Ds1FRUz+ c=1 sm=1 tr=0 ts=65361974
+ a=MgGYFET5X96nYrQ76toljg==:117 a=/5CYD1hNzocxg58dEBddTw==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=kj9zAlcOel0A:10 a=bhdUkHdE2iEA:10 a=lUDAUsI-kUQA:10
+ a=9m64_h_j2zU8ieQoq-sA:9 a=CjuIK1q_8ugA:10
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=35686686.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Dm1nus89JLbD/65ItGQLhdR/UwQLhddPM+BxEJ7yOwM=; b=JFP9PqkwSdBW/5BnZLvEh3O0/I
+        9HUaQ2GIBX2J845NgWsUkRRpIcgmqSVPqgla6YFZ1F0cG1RycxOdwmaZpTAVyO2oa0ETe7a+WeQu/
+        OxjycM40OWJyzZ7r7iWNXpNC/IOgpZ88wNjA4G47kjsy677Zvlv6RH2baPHhx/TRZL8Tu2gH4lOt2
+        BUT04Thnh9esPXppM4TpGoT+SvyH9UkZMwCtNemVJSS62p6FudVDPEjKYTZHUZr0bdqNao7EHzY4z
+        S+CpLgIxzeiqYarWPpZor3S7lFuV91Sx3v4OXFX7phX55Kf1uhg+5txphKV3R0/VtHYjBuVN9NakT
+        dIknl/Uw==;
+Received: from md-hk-12.webhostbox.net ([137.59.148.200]:54486)
+        by md-hk-12.webhostbox.net with esmtpa (Exim 4.96.2)
+        (envelope-from <jc@35686686.com>)
+        id 1qulIb-003ZCm-2a;
+        Mon, 23 Oct 2023 08:38:13 +0530
+Received: from [181.214.94.254]
+ by 35686686.com
+ with HTTP (HTTP/1.1 POST); Mon, 23 Oct 2023 08:38:08 +0530
 MIME-Version: 1.0
-References: <20231020155819.24000-1-maxime.coquelin@redhat.com> <20231020155819.24000-5-maxime.coquelin@redhat.com>
-In-Reply-To: <20231020155819.24000-5-maxime.coquelin@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 23 Oct 2023 11:09:05 +0800
-Message-ID: <CACGkMEvht+u9nO96u-Tosw9un8_rt+-RuJJo-kAA+0mrkNspbw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] vduse: Add LSM hooks to check Virtio device type
-To:     Maxime Coquelin <maxime.coquelin@redhat.com>
-Cc:     mst@redhat.com, xuanzhuo@linux.alibaba.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        xieyongji@bytedance.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        david.marchand@redhat.com, lulu@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Date:   Mon, 23 Oct 2023 11:08:08 +0800
+From:   jc@35686686.com
+To:     undisclosed-recipients:;
+Subject: LOAN SCHEME
+Reply-To: info@kafurinvestment.com
+Mail-Reply-To: info@kafurinvestment.com
+User-Agent: Roundcube Webmail/1.6.0
+Message-ID: <d76e4ab48498742dd7c9d43057a84008@35686686.com>
+X-Sender: jc@35686686.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-hk-12.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - 35686686.com
+X-BWhitelist: no
+X-Source-IP: 137.59.148.200
+X-Source-L: No
+X-Exim-ID: 1qulIb-003ZCm-2a
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: md-hk-12.webhostbox.net [137.59.148.200]:54486
+X-Source-Auth: jc@35686686.com
+X-Email-Count: 0
+X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: ZmJkZXN4amc7Ymx1ZWhvc3Q7bWQtaGstMTIud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfN/VpKAd/dVnsdzNFOkvZFmKda0s9MH2LJ2Ga8PjsB/OW+OCgwqyT3iuYaHCBNzDmuu7BspmEkzlwT9UkPpPke5FbFWQUSqXQuwLwtNwmcrO/ZC7HsrJ
+ Jp8eC7AnHTNLUdFllw4KiNM9TUXqye+qOYUcLmEmaUzpCj0WE0jrr3alokDtUdnqR3R9+GJMpN7C+uXn+GbNKYt8gtMrqbPN+5aQx8bACAQjE8RPwZkzapmq
+ ZOeVZkap6bkHSF0d+XB261RM4esja8rCUHdp0kSdEEb0dh+DcfkYztpXvWnLAHgWM4zUTMovoSl+Pc/Nm+PsS5ISv6VRuAasb17FjrXM8SLG8SQtyxq7YQeI
+ cWqgrJJoWQCFO4t0Y4eYeUKQS9BUmsOs4nNs7HMeYZZ1iS0/hKkJqWL5GQOnNH7Kwzc3WFngPwNy24URG/ktULk4NxQIew==
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,SUBJ_ALL_CAPS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Fri, Oct 20, 2023 at 11:58=E2=80=AFPM Maxime Coquelin
-<maxime.coquelin@redhat.com> wrote:
->
-> This patch introduces LSM hooks for devices creation,
-> destruction and opening operations, checking the
-> application is allowed to perform these operations for
-> the Virtio device type.
->
-> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
-> ---
+Greetings:
 
-Hi Maxime:
+I am Mr. Faheem Badawi, working as a project facilitator for (Kafur 
+Project Management Services) also, with numerous investors worldwide. As 
+a means of widening our global portfolio we would like to know if you 
+have any project(s) requiring funding. We also offer business, personal 
+and home loans to finance new projects as well as expansion capital.
 
-I think we need to document the reason why we need those hooks now.
+For more updates on the mode of operation send a reply.
 
-Thanks
+Waiting for your prompt response.
 
+Kind regards,
+Faheem Badawi.
+(Financial Advisory - KPMS)
