@@ -2,199 +2,454 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045BC7D6CF0
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Oct 2023 15:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1997D6F29
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Oct 2023 16:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344506AbjJYNRx (ORCPT
+        id S1344724AbjJYODw (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 25 Oct 2023 09:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        Wed, 25 Oct 2023 10:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234528AbjJYNRw (ORCPT
+        with ESMTP id S1344192AbjJYODu (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 25 Oct 2023 09:17:52 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B3B133
-        for <linux-security-module@vger.kernel.org>; Wed, 25 Oct 2023 06:17:49 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-d9ad90e1038so5011384276.3
-        for <linux-security-module@vger.kernel.org>; Wed, 25 Oct 2023 06:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1698239868; x=1698844668; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OhI+0U3C4maNiYVWrEGT2SlLeFp5Rtq5XADzsjH+0y0=;
-        b=YUExOLi3bB63BLB3LmYOz5fXJsFz3giuSe6MQq8EMmn0CbAicL3fynsuabXbu5RnpM
-         8YerNvWGWSvLxa4RpdC8ZKkr6GO+zdwHREY0+u6WbPDTZxY+HFatJXYan1fFXjo1IKdZ
-         vGEF4K/J3gwmKsairkEsU5iQ7q5Z1Av03mCrwGf7P42OsacRgFuwDhR5676fhGxlXki8
-         lFKd24FRToX7wRSQOqIZAmTOxSTYCIl9/0b9RZGhHsO3R6+yi2d9Zi1Uwp5XD+D9tPlf
-         s1OBenoev16RvP2Jd8aoDcQDGm7D28qgTAnINVZAzfr0KmVchGFRN/KpvWSgc+Mwd0iC
-         2fsw==
+        Wed, 25 Oct 2023 10:03:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4C91B5
+        for <linux-security-module@vger.kernel.org>; Wed, 25 Oct 2023 07:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1698242544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=x1DYN7Za1uyLzcDLrfQjEDekO6UImwLBhsScIzlPerc=;
+        b=Ra5AKbkX0G3jTlb4xhI0Xf2wjv9uRXNwfwnLg+vWVKqa6rOtWPej5mZUJuuc9/Gdbmoso/
+        vUDQHokCU5LUoRgE5oQAFbhPpRB5DIQxW7QWk+zKfX352L051VCNKUDsDXNKB7MGpruk/E
+        C8x5GXz1YTkYnr/Vnz3Y8f8oJW93RNw=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-04eRyCJsMp25A9TQgbX-1w-1; Wed, 25 Oct 2023 10:02:09 -0400
+X-MC-Unique: 04eRyCJsMp25A9TQgbX-1w-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9b2cf504e3aso374347366b.2
+        for <linux-security-module@vger.kernel.org>; Wed, 25 Oct 2023 07:02:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698239868; x=1698844668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OhI+0U3C4maNiYVWrEGT2SlLeFp5Rtq5XADzsjH+0y0=;
-        b=gQgJWotJ+zs8M5xgcUy2X62Bhnts2SZXnCQ55ycTBwIDuXEx9XLxbk59HuEu9u+Zj/
-         59mCEdatEh/SvmqAs0u4KoyvLoUYxyEKYcqHXQDrzDqFEvfUwcIfAOc7w2uaLc1zIJ65
-         qcFJeR7mMXYtdRDaf1sRRl15tmi1vdAd9+IY6jQVOszHjB4dBzCocxDrz7priyucpH3T
-         pZ6UERzvMweJOoRYRWl3uYyqI9q6OyoZuxU2cokGCj1QESTq6X10R1fSff3ommQvpjmT
-         02GBPNjz7IR5jurS0cWWILBC6E8jvs2qHraoNAqTAT/LnbWmpkz/G7s3Bx6PBPWqj8dA
-         YkFA==
-X-Gm-Message-State: AOJu0YwdPjV5CwegsUrQeRROnZH3kTGBW2daoqH/SHzyaUWU7l6pVOCn
-        sNDH+z9SzkMu/Uyt6s8Vwu4le8ITvUPQhpSRmUpQ
-X-Google-Smtp-Source: AGHT+IEmM4VRNzvMlwEig7LRJ0/I8fW70H8OJI07w9jqnVgfL3k2gIIT/BmMHa1TUskU3QK75Bw+pBd7fYHozFYVqsg=
-X-Received: by 2002:a25:5856:0:b0:da0:86e8:aea4 with SMTP id
- m83-20020a255856000000b00da086e8aea4mr840904ybb.57.1698239868426; Wed, 25 Oct
- 2023 06:17:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231025094224.72858-1-michael.weiss@aisec.fraunhofer.de>
-In-Reply-To: <20231025094224.72858-1-michael.weiss@aisec.fraunhofer.de>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 25 Oct 2023 09:17:37 -0400
-Message-ID: <CAHC9VhThNGA+qRgs=rOmEfvffj3qLzB=Jx4ii-uksuU1YJ6F5w@mail.gmail.com>
-Subject: Re: [RESEND RFC PATCH v2 00/14] device_cgroup: guard mknod for
- non-initial user namespace
-To:     =?UTF-8?Q?Michael_Wei=C3=9F?= <michael.weiss@aisec.fraunhofer.de>
-Cc:     Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
+        d=1e100.net; s=20230601; t=1698242528; x=1698847328;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x1DYN7Za1uyLzcDLrfQjEDekO6UImwLBhsScIzlPerc=;
+        b=XL2P8cLIEVI5xBUvMNsMSGtXQL1PBGoiwVIv7VQrKybKocsjUEAT8HEtxPbo8f9+C5
+         RZ+G9jyjMn5xX+iScMAaTVy2F7gEKl56bgf3z4k+Rc9eLhBSOkW75tMpEhZXZ6PZvjt0
+         1ZhTLpU6SxG/G/RuhqKrkg+n4xs6wM8sXE+ltH4itEEpBxl29x4vhwGnICQCkalrofw1
+         VAG6/+7VK4e69SFgTlmdiPIcNKSOLpztk+1MDEl6QB71EqSKzTq0L3ZNyp2D30BC3M5/
+         psVDgzRabep19Oq+e/xolrpzvfLktGI6Q5VPj0xmZKbQGKxOmTAMT5oSG/19U2rgl0f/
+         RUKQ==
+X-Gm-Message-State: AOJu0YxE18KmCATsS19TIU2toLG5HpVLJIXhyihwg0aC0TT+XaN+U5dF
+        HIZ6CxorKq89ncqnhoIktDnFsInjkC/vI/GrDVOpAv9YMBabUdKrKINu++EJoSQfYsWsB3H9sXG
+        AeacHw36nVCcsYXtpmDkXqCrRad1QP2uCAMqN
+X-Received: by 2002:a17:906:c115:b0:9be:839a:3372 with SMTP id do21-20020a170906c11500b009be839a3372mr11884367ejc.59.1698242527909;
+        Wed, 25 Oct 2023 07:02:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEWrkTOkCAZfzN3xYcXcvz5ivnltGcFS7nQ3UQVnKVXqNdwubssOqdk3o6zzAPGNGJ5035rSA==
+X-Received: by 2002:a17:906:c115:b0:9be:839a:3372 with SMTP id do21-20020a170906c11500b009be839a3372mr11884320ejc.59.1698242527362;
+        Wed, 25 Oct 2023 07:02:07 -0700 (PDT)
+Received: from maszat.piliscsaba.szeredi.hu (92-249-235-200.pool.digikabel.hu. [92.249.235.200])
+        by smtp.gmail.com with ESMTPSA id vl9-20020a170907b60900b00989828a42e8sm9857073ejc.154.2023.10.25.07.02.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 07:02:06 -0700 (PDT)
+From:   Miklos Szeredi <mszeredi@redhat.com>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-man@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Karel Zak <kzak@redhat.com>, Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
         Amir Goldstein <amir73il@gmail.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        gyroidos@aisec.fraunhofer.de, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Matthew House <mattlloydhouse@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v4 0/6] querying mount attributes
+Date:   Wed, 25 Oct 2023 16:01:58 +0200
+Message-ID: <20231025140205.3586473-1-mszeredi@redhat.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-On Wed, Oct 25, 2023 at 5:42=E2=80=AFAM Michael Wei=C3=9F
-<michael.weiss@aisec.fraunhofer.de> wrote:
->
-> Introduce the flag BPF_DEVCG_ACC_MKNOD_UNS for bpf programs of type
-> BPF_PROG_TYPE_CGROUP_DEVICE which allows to guard access to mknod
-> in non-initial user namespaces.
->
-> If a container manager restricts its unprivileged (user namespaced)
-> children by a device cgroup, it is not necessary to deny mknod()
-> anymore. Thus, user space applications may map devices on different
-> locations in the file system by using mknod() inside the container.
->
-> A use case for this, we also use in GyroidOS, is to run virsh for
-> VMs inside an unprivileged container. virsh creates device nodes,
-> e.g., "/var/run/libvirt/qemu/11-fgfg.dev/null" which currently fails
-> in a non-initial userns, even if a cgroup device white list with the
-> corresponding major, minor of /dev/null exists. Thus, in this case
-> the usual bind mounts or pre populated device nodes under /dev are
-> not sufficient.
->
-> To circumvent this limitation, allow mknod() by checking CAP_MKNOD
-> in the userns by implementing the security_inode_mknod_nscap(). The
-> hook implementation checks if the corresponding permission flag
-> BPF_DEVCG_ACC_MKNOD_UNS is set for the device in the bpf program.
-> To avoid to create unusable inodes in user space the hook also
-> checks SB_I_NODEV on the corresponding super block.
->
-> Further, the security_sb_alloc_userns() hook is implemented using
-> cgroup_bpf_current_enabled() to allow usage of device nodes on super
-> blocks mounted by a guarded task.
->
-> Patch 1 to 3 rework the current devcgroup_inode hooks as an LSM
->
-> Patch 4 to 8 rework explicit calls to devcgroup_check_permission
-> also as LSM hooks and finalize the conversion of the device_cgroup
-> subsystem to a LSM.
->
-> Patch 9 and 10 introduce new generic security hooks to be used
-> for the actual mknod device guard implementation.
->
-> Patch 11 wires up the security hooks in the vfs
->
-> Patch 12 and 13 provide helper functions in the bpf cgroup
-> subsystem.
->
-> Patch 14 finally implement the LSM hooks to grand access
->
-> Signed-off-by: Michael Wei=C3=9F <michael.weiss@aisec.fraunhofer.de>
-> ---
-> Changes in v2:
-> - Integrate this as LSM (Christian, Paul)
-> - Switched to a device cgroup specific flag instead of a generic
->   bpf program flag (Christian)
-> - do not ignore SB_I_NODEV in fs/namei.c but use LSM hook in
->   sb_alloc_super in fs/super.c
-> - Link to v1: https://lore.kernel.org/r/20230814-devcg_guard-v1-0-654971a=
-b88b1@aisec.fraunhofer.de
->
-> Michael Wei=C3=9F (14):
->   device_cgroup: Implement devcgroup hooks as lsm security hooks
->   vfs: Remove explicit devcgroup_inode calls
->   device_cgroup: Remove explicit devcgroup_inode hooks
->   lsm: Add security_dev_permission() hook
->   device_cgroup: Implement dev_permission() hook
->   block: Switch from devcgroup_check_permission to security hook
->   drm/amdkfd: Switch from devcgroup_check_permission to security hook
->   device_cgroup: Hide devcgroup functionality completely in lsm
->   lsm: Add security_inode_mknod_nscap() hook
->   lsm: Add security_sb_alloc_userns() hook
->   vfs: Wire up security hooks for lsm-based device guard in userns
->   bpf: Add flag BPF_DEVCG_ACC_MKNOD_UNS for device access
->   bpf: cgroup: Introduce helper cgroup_bpf_current_enabled()
->   device_cgroup: Allow mknod in non-initial userns if guarded
->
->  block/bdev.c                                 |   9 +-
->  drivers/gpu/drm/amd/amdkfd/kfd_priv.h        |   7 +-
->  fs/namei.c                                   |  24 ++--
->  fs/super.c                                   |   6 +-
->  include/linux/bpf-cgroup.h                   |   2 +
->  include/linux/device_cgroup.h                |  67 -----------
->  include/linux/lsm_hook_defs.h                |   4 +
->  include/linux/security.h                     |  18 +++
->  include/uapi/linux/bpf.h                     |   1 +
->  init/Kconfig                                 |   4 +
->  kernel/bpf/cgroup.c                          |  14 +++
->  security/Kconfig                             |   1 +
->  security/Makefile                            |   2 +-
->  security/device_cgroup/Kconfig               |   7 ++
->  security/device_cgroup/Makefile              |   4 +
->  security/{ =3D> device_cgroup}/device_cgroup.c |   3 +-
->  security/device_cgroup/device_cgroup.h       |  20 ++++
->  security/device_cgroup/lsm.c                 | 114 +++++++++++++++++++
->  security/security.c                          |  75 ++++++++++++
->  19 files changed, 294 insertions(+), 88 deletions(-)
->  delete mode 100644 include/linux/device_cgroup.h
->  create mode 100644 security/device_cgroup/Kconfig
->  create mode 100644 security/device_cgroup/Makefile
->  rename security/{ =3D> device_cgroup}/device_cgroup.c (99%)
->  create mode 100644 security/device_cgroup/device_cgroup.h
->  create mode 100644 security/device_cgroup/lsm.c
+Implement mount querying syscalls agreed on at LSF/MM 2023.
 
-Hi Michael,
+Features:
 
-I think this was lost because it wasn't CC'd to the LSM list (see
-below).  I've CC'd the list on my reply, but future patch submissions
-that involve the LSM must be posted to the LSM list if you would like
-them to be considered.
+ - statx-like want/got mask
+ - allows returning ascii strings (fs type, root, mount point)
+ - returned buffer is relocatable (no pointers)
 
-http://vger.kernel.org/vger-lists.html#linux-security-module
+Still missing:
+ - man pages
+ - kselftest
 
---=20
-paul-moore.com
+Please find the test utility at the end of this mail.
+
+  Usage: statmnt [-l|-r] [-u] (mnt_id|path)
+
+Git tree:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs.git#statmount-v4
+
+
+Changes v3..v4:
+
+ - incorporate patch moving list of mounts to an rbtree
+ - wire up syscalls for all archs
+ - add LISTMOUNT_RECURSIVE (depth first iteration of mount tree)
+ - add LSMT_ROOT (list root instead of a specific mount ID)
+ - list_for_each_entry_del() moved to a separate patchset
+
+Changes v1..v3:
+
+ - rename statmnt(2) -> statmount(2)
+ - rename listmnt(2) -> listmount(2)
+ - make ABI 32bit compatible by passing 64bit args in a struct (tested on
+   i386 and x32)
+ - only accept new 64bit mount IDs
+ - fix compile on !CONFIG_PROC_FS
+ - call security_sb_statfs() in both syscalls
+ - make lookup_mnt_in_ns() static
+ - add LISTMOUNT_UNREACHABLE flag to listmnt() to explicitly ask for
+   listing unreachable mounts
+ - remove .sb_opts
+ - remove subtype from .fs_type
+ - return the number of bytes used (including strings) in .size
+ - rename .mountpoint -> .mnt_point
+ - point strings by an offset against char[] VLA at the end of the struct.
+   E.g. printf("fs_type: %s\n", st->str + st->fs_type);
+ - don't save string lengths
+ - extend spare space in struct statmnt (complete size is now 512 bytes)
+
+
+Miklos Szeredi (6):
+  add unique mount ID
+  mounts: keep list of mounts in an rbtree
+  namespace: extract show_path() helper
+  add statmount(2) syscall
+  add listmount(2) syscall
+  wire up syscalls for statmount/listmount
+
+ arch/alpha/kernel/syscalls/syscall.tbl      |   3 +
+ arch/arm/tools/syscall.tbl                  |   3 +
+ arch/arm64/include/asm/unistd32.h           |   4 +
+ arch/ia64/kernel/syscalls/syscall.tbl       |   3 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |   3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |   3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |   3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |   3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |   3 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |   3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |   3 +
+ arch/s390/kernel/syscalls/syscall.tbl       |   3 +
+ arch/sh/kernel/syscalls/syscall.tbl         |   3 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |   3 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |   3 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |   2 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |   3 +
+ fs/internal.h                               |   2 +
+ fs/mount.h                                  |  27 +-
+ fs/namespace.c                              | 573 ++++++++++++++++----
+ fs/pnode.c                                  |   2 +-
+ fs/proc_namespace.c                         |  13 +-
+ fs/stat.c                                   |   9 +-
+ include/linux/mount.h                       |   5 +-
+ include/linux/syscalls.h                    |   8 +
+ include/uapi/asm-generic/unistd.h           |   8 +-
+ include/uapi/linux/mount.h                  |  65 +++
+ include/uapi/linux/stat.h                   |   1 +
+ 28 files changed, 635 insertions(+), 129 deletions(-)
+
+-- 
+2.41.0
+
+=== statmnt.c ===
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/mount.h>
+#include <sys/stat.h>
+#include <sys/param.h>
+#include <err.h>
+
+/*
+ * Structure for getting mount/superblock/filesystem info with statmount(2).
+ *
+ * The interface is similar to statx(2): individual fields or groups can be
+ * selected with the @mask argument of statmount().  Kernel will set the @mask
+ * field according to the supported fields.
+ *
+ * If string fields are selected, then the caller needs to pass a buffer that
+ * has space after the fixed part of the structure.  Nul terminated strings are
+ * copied there and offsets relative to @str are stored in the relevant fields.
+ * If the buffer is too small, then EOVERFLOW is returned.  The actually used
+ * size is returned in @size.
+ */
+struct statmnt {
+	__u32 size;		/* Total size, including strings */
+	__u32 __spare1;
+	__u64 mask;		/* What results were written */
+	__u32 sb_dev_major;	/* Device ID */
+	__u32 sb_dev_minor;
+	__u64 sb_magic;		/* ..._SUPER_MAGIC */
+	__u32 sb_flags;		/* MS_{RDONLY,SYNCHRONOUS,DIRSYNC,LAZYTIME} */
+	__u32 fs_type;		/* [str] Filesystem type */
+	__u64 mnt_id;		/* Unique ID of mount */
+	__u64 mnt_parent_id;	/* Unique ID of parent (for root == mnt_id) */
+	__u32 mnt_id_old;	/* Reused IDs used in proc/.../mountinfo */
+	__u32 mnt_parent_id_old;
+	__u64 mnt_attr;		/* MOUNT_ATTR_... */
+	__u64 mnt_propagation;	/* MS_{SHARED,SLAVE,PRIVATE,UNBINDABLE} */
+	__u64 mnt_peer_group;	/* ID of shared peer group */
+	__u64 mnt_master;	/* Mount receives propagation from this ID */
+	__u64 propagate_from;	/* Propagation from in current namespace */
+	__u32 mnt_root;		/* [str] Root of mount relative to root of fs */
+	__u32 mnt_point;	/* [str] Mountpoint relative to current root */
+	__u64 __spare2[50];
+	char str[];		/* Variable size part containing strings */
+};
+
+/*
+ * To be used on the kernel ABI only for passing 64bit arguments to statmount(2)
+ */
+struct __mount_arg {
+	__u64 mnt_id;
+	__u64 request_mask;
+};
+
+/*
+ * @mask bits for statmount(2)
+ */
+#define STMT_SB_BASIC		0x00000001U     /* Want/got sb_... */
+#define STMT_MNT_BASIC		0x00000002U	/* Want/got mnt_... */
+#define STMT_PROPAGATE_FROM	0x00000004U	/* Want/got propagate_from */
+#define STMT_MNT_ROOT		0x00000008U	/* Want/got mnt_root  */
+#define STMT_MNT_POINT		0x00000010U	/* Want/got mnt_point */
+#define STMT_FS_TYPE		0x00000020U	/* Want/got fs_type */
+
+/* listmount(2) flags */
+#define LISTMOUNT_UNREACHABLE	0x01	/* List unreachable mounts too */
+#define LISTMOUNT_RECURSIVE	0x02	/* List a mount tree */
+
+/*
+ * Special @mnt_id values that can be passed to listmount
+ */
+#define LSMT_ROOT		0xffffffffffffffff	/* root mount */
+
+#ifdef __alpha__
+#define __NR_statmount   564
+#define __NR_listmount   565
+#else
+#define __NR_statmount   454
+#define __NR_listmount   455
+#endif
+
+#define STATX_MNT_ID_UNIQUE	0x00004000U	/* Want/got extended stx_mount_id */
+
+
+static void free_if_neq(void *p, const void *q)
+{
+	if (p != q)
+		free(p);
+}
+
+static struct statmnt *statmount(uint64_t mnt_id, uint64_t mask, unsigned int flags)
+{
+	struct __mount_arg arg = {
+		.mnt_id = mnt_id,
+		.request_mask = mask,
+	};
+	union {
+		struct statmnt m;
+		char s[4096];
+	} buf;
+	struct statmnt *ret, *mm = &buf.m;
+	size_t bufsize = sizeof(buf);
+
+	while (syscall(__NR_statmount, &arg, mm, bufsize, flags) == -1) {
+		free_if_neq(mm, &buf.m);
+		if (errno != EOVERFLOW)
+			return NULL;
+		bufsize = MAX(1 << 15, bufsize << 1);
+		mm = malloc(bufsize);
+		if (!mm)
+			return NULL;
+	}
+	ret = malloc(mm->size);
+	if (ret)
+		memcpy(ret, mm, mm->size);
+	free_if_neq(mm, &buf.m);
+
+	return ret;
+}
+
+static int listmount(uint64_t mnt_id, uint64_t **listp, unsigned int flags)
+{
+	struct __mount_arg arg = {
+		.mnt_id = mnt_id,
+	};
+	uint64_t buf[512];
+	size_t bufsize = sizeof(buf);
+	uint64_t *ret, *ll = buf;
+	long len;
+
+	while ((len = syscall(__NR_listmount, &arg, ll, bufsize / sizeof(buf[0]), flags)) == -1) {
+		free_if_neq(ll, buf);
+		if (errno != EOVERFLOW)
+			return -1;
+		bufsize = MAX(1 << 15, bufsize << 1);
+		ll = malloc(bufsize);
+		if (!ll)
+			return -1;
+	}
+	bufsize = len * sizeof(buf[0]);
+	ret = malloc(bufsize);
+	if (!ret)
+		return -1;
+
+	*listp = ret;
+	memcpy(ret, ll, bufsize);
+	free_if_neq(ll, buf);
+
+	return len;
+}
+
+
+int main(int argc, char *argv[])
+{
+	struct statmnt *st;
+	char *end;
+	int res;
+	int list = 0;
+	int flags = 0;
+	uint64_t mask = STMT_SB_BASIC | STMT_MNT_BASIC | STMT_PROPAGATE_FROM | STMT_MNT_ROOT | STMT_MNT_POINT | STMT_FS_TYPE;
+	uint64_t mnt_id;
+	int opt;
+
+	for (;;) {
+		opt = getopt(argc, argv, "lru");
+		if (opt == -1)
+			break;
+		switch (opt) {
+		case 'r':
+			flags |= LISTMOUNT_RECURSIVE;
+			/* fallthrough */
+		case 'l':
+			list = 1;
+			break;
+		case 'u':
+			flags |= LISTMOUNT_UNREACHABLE;
+			break;
+		default:
+			errx(1, "usage: %s [-l|-r] [-u] (mnt_id|path)", argv[0]);
+		}
+	}
+	if (optind >= argc) {
+		if (!list)
+			errx(1, "missing mnt_id or path");
+		else
+			mnt_id = -1LL;
+	} else {
+		const char *arg = argv[optind];
+
+		mnt_id = strtoll(arg, &end, 0);
+		if (!mnt_id || *end != '\0') {
+			struct statx sx;
+
+			res = statx(AT_FDCWD, arg, 0, STATX_MNT_ID_UNIQUE, &sx);
+			if (res == -1)
+				err(1, "%s", arg);
+
+			if (!(sx.stx_mask & (STATX_MNT_ID | STATX_MNT_ID_UNIQUE)))
+				errx(1, "Sorry, no mount ID");
+
+			mnt_id = sx.stx_mnt_id;
+		}
+	}
+
+	if (list) {
+		uint64_t *list;
+		int num, i;
+
+		res = listmount(mnt_id, &list, flags);
+		if (res == -1)
+			err(1, "listmnt(0x%llx)", (unsigned long long) mnt_id);
+
+		num = res;
+		for (i = 0; i < num; i++) {
+			printf("0x%llx", (unsigned long long) list[i]);
+
+			st = statmount(list[i], STMT_MNT_POINT, 0);
+			if (!st) {
+				printf("\t[%s]\n", strerror(errno));
+			} else {
+				printf("\t%s\n", (st->mask & STMT_MNT_POINT) ? st->str + st->mnt_point : "???");
+			}
+			free(st);
+		}
+		free(list);
+
+		return 0;
+	}
+
+	st = statmount(mnt_id, mask, 0);
+	if (!st)
+		err(1, "statmnt(0x%llx)", (unsigned long long) mnt_id);
+
+	printf("size: %u\n", st->size);
+	printf("mask: 0x%llx\n", st->mask);
+	if (st->mask & STMT_SB_BASIC) {
+		printf("sb_dev_major: %u\n", st->sb_dev_major);
+		printf("sb_dev_minor: %u\n", st->sb_dev_minor);
+		printf("sb_magic: 0x%llx\n", st->sb_magic);
+		printf("sb_flags: 0x%08x\n", st->sb_flags);
+	}
+	if (st->mask & STMT_MNT_BASIC) {
+		printf("mnt_id: 0x%llx\n", st->mnt_id);
+		printf("mnt_parent_id: 0x%llx\n", st->mnt_parent_id);
+		printf("mnt_id_old: %u\n", st->mnt_id_old);
+		printf("mnt_parent_id_old: %u\n", st->mnt_parent_id_old);
+		printf("mnt_attr: 0x%08llx\n", st->mnt_attr);
+		printf("mnt_propagation: %s%s%s%s\n",
+		       st->mnt_propagation & MS_SHARED ? "shared," : "",
+		       st->mnt_propagation & MS_SLAVE ? "slave," : "",
+		       st->mnt_propagation & MS_UNBINDABLE ? "unbindable," : "",
+		       st->mnt_propagation & MS_PRIVATE ? "private" : "");
+		printf("mnt_peer_group: %llu\n", st->mnt_peer_group);
+		printf("mnt_master: %llu\n", st->mnt_master);
+	}
+	if (st->mask & STMT_PROPAGATE_FROM)
+		printf("propagate_from: %llu\n", st->propagate_from);
+	if (st->mask & STMT_MNT_ROOT)
+		printf("mnt_root: %u <%s>\n", st->mnt_root, st->str + st->mnt_root);
+	if (st->mask & STMT_MNT_POINT)
+		printf("mnt_point: %u <%s>\n", st->mnt_point, st->str + st->mnt_point);
+	if (st->mask & STMT_FS_TYPE)
+		printf("fs_type: %u <%s>\n", st->fs_type, st->str + st->fs_type);
+	free(st);
+
+	return 0;
+}
+
