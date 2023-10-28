@@ -2,142 +2,156 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C7C7D9D49
-	for <lists+linux-security-module@lfdr.de>; Fri, 27 Oct 2023 17:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC9A7DA4A8
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Oct 2023 03:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346239AbjJ0Pqi (ORCPT
+        id S232967AbjJ1Bgl (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 27 Oct 2023 11:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        Fri, 27 Oct 2023 21:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346187AbjJ0Pqh (ORCPT
+        with ESMTP id S229471AbjJ1Bgj (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 27 Oct 2023 11:46:37 -0400
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [IPv6:2001:1600:4:17::42aa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBDC1AA
-        for <linux-security-module@vger.kernel.org>; Fri, 27 Oct 2023 08:46:34 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4SH6Tg5Vp7zMq8TT;
-        Fri, 27 Oct 2023 15:46:31 +0000 (UTC)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4SH6Tg1m6CzMpp9q;
-        Fri, 27 Oct 2023 17:46:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1698421591;
-        bh=SNlk9IazPeKmar0eikDYYJcTfW9nhEhrpsIBijS58+w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xE5W2a8+vtnkiU52ZTX2uEamZH9d0oNP95hI5AfmADmMhzaccIka/I49agY9kAwPj
-         1fK3NqRd3H6xP4gyHakGY3LOu547kqynsbtfIpY73VQahiwIZyC8lD2aPuBNxpes47
-         4Yqbv/D0QGg08nD9RAkoAle8Y4WP5FQWuqwRAMto=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        artem.kuzin@huawei.com, gnoack3000@gmail.com,
-        willemdebruijn.kernel@gmail.com, yusongping@huawei.com,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: [PATCH] selftests/landlock: Add tests for FS topology changes with network rules
-Date:   Fri, 27 Oct 2023 17:46:15 +0200
-Message-ID: <20231027154615.815134-1-mic@digikod.net>
-In-Reply-To: <20231026014751.414649-1-konstantin.meskhidze@huawei.com>
-References: <20231026014751.414649-1-konstantin.meskhidze@huawei.com>
+        Fri, 27 Oct 2023 21:36:39 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DD91A6;
+        Fri, 27 Oct 2023 18:36:36 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 066505C0100;
+        Fri, 27 Oct 2023 21:36:34 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 27 Oct 2023 21:36:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1698456994; x=1698543394; bh=KsUaa2dQRxZCNliH8E4IgB96uElIa6AZYOi
+        IzXKoc/g=; b=fZYSL1Hh4egXuicxkMFg+jLgSXE3ZgD8AFpH+th6BJTlZigkseO
+        mtkr17z5D5GSLqS3VGFVp3OeFx9U78fXmtLa9W0N/XHvBo5ajUNKShNtUDs7/sKd
+        ZV4tr0uGpIz8uPI45OdgM/w5KYporhOEOR24znvm/rirYuDF3x6YBc+zxbDplwcj
+        7eBteMNTZrNWsvL9HHyHvp/BuuTW1dNXe++6VfFOS27Qnk8Z+nS9kmlR+bgDjVzf
+        gzUPt1jW0vMwPsIsCCc5Gobwv8H4jeIM+R7sWGfp/qmKEDAGzJQ7Vn3acMbKXa6M
+        jPYyerd5HZZrgWis7rMj8zYIuHGTycY1cyQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1698456994; x=1698543394; bh=KsUaa2dQRxZCNliH8E4IgB96uElIa6AZYOi
+        IzXKoc/g=; b=F3HFKyzmmg9oxz/ntz+T5+XmYWDdcKhDALX/MCh6lte6GAO0rwY
+        RBcb9BjyHp8jfuTcYbT2DGUA7udnstUUZIewC+T0DtyeWdgMhJ1CexKem91iZYy6
+        UGw2pgxXP/vDrtoAus18DfE8shNHIcPiyWKBOSmk2oal3LptEcqVlRX5oMXDlu+F
+        AF3WjmY+PFO3tr/zpnWzGTezgZo9zPILxeYMg5+G5Z3PliD3q1tUvm7YPhNsNzVD
+        HoedNHyyAhNO8zmJjwOqJoRSuLUhPzLCExH6mpE/QFi0Bg+8usyrjuGQNliseQTW
+        6ABGQ2psafUCNfRw0eRgJHREBL0cIJ+Q2tA==
+X-ME-Sender: <xms:oWU8ZeXAoF6deDOgUPP8C37DgzNB5zqFhXIx_UUlwRxfnidgTS8Z2g>
+    <xme:oWU8Zan70Wjt7XusI4EdTk3INHaBCZEJTNlCgkgZlPjZw0Z6YaGz4P_VlXKBWXG_o
+    5b2IrLD46uq>
+X-ME-Received: <xmr:oWU8ZSZVrs7Ok5a2SVYQddVtyrDFBGeXIx6fztF1Qj5veEm0bWwUb_g9XUSv6pumVvon4v7pGkdUm-az3drwVgg2PHpCw3QRedu6TbUw3NTX1OazR_mEExRB>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleehgdegjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepkfgrnhcu
+    mfgvnhhtuceorhgrvhgvnhesthhhvghmrgifrdhnvghtqeenucggtffrrghtthgvrhhnpe
+    egvdetvedvfeeivdeuueejgeetvdehlefhheethfekgfejueffgeeugfekudfhjeenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehrrghvvghnse
+    hthhgvmhgrfidrnhgvth
+X-ME-Proxy: <xmx:oWU8ZVXRpVhBFGvyoK3JORYTRAnTL3oJArZ07m9g1A_Y-w8QOstB-Q>
+    <xmx:oWU8ZYlDTKU5SN-q5rutlx_Ge-tniBq1-2UQr9mEKu7oWWOVtiafRQ>
+    <xmx:oWU8ZadzWHfaQcb9lqILEARfOFF8xBUCqVR_7FZPHZC2aNr_ddzUkA>
+    <xmx:omU8ZT-ELN39i8ylB1sZIrKCuC2WhY8InDf7as0RWilH3weOxiBTDQ>
+Feedback-ID: i31e841b0:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Oct 2023 21:36:27 -0400 (EDT)
+Message-ID: <c938a7d9-aa9e-a3ad-a001-fb9022d21475@themaw.net>
+Date:   Sat, 28 Oct 2023 09:36:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v4 2/6] mounts: keep list of mounts in an rbtree
+To:     Miklos Szeredi <mszeredi@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-security-module@vger.kernel.org, Karel Zak <kzak@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Matthew House <mattlloydhouse@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20231025140205.3586473-1-mszeredi@redhat.com>
+ <20231025140205.3586473-3-mszeredi@redhat.com>
+ <b69c1c17-35f9-351e-79a9-ef3ef5481974@themaw.net>
+ <CAOssrKe76uZ5t714=Ta7GMLnZdS4QGm-fOfT9q5hNFe1fsDMVg@mail.gmail.com>
+Content-Language: en-US
+From:   Ian Kent <raven@themaw.net>
+In-Reply-To: <CAOssrKe76uZ5t714=Ta7GMLnZdS4QGm-fOfT9q5hNFe1fsDMVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Add 2 tests to the layout1 fixture:
-* topology_changes_with_net_only: Checks that FS topology
-  changes are not denied by network-only restrictions.
-* topology_changes_with_net_and_fs: Make sure that FS topology
-  changes are still denied with FS and network restrictions.
+On 27/10/23 16:17, Miklos Szeredi wrote:
+> On Fri, Oct 27, 2023 at 5:12 AM Ian Kent <raven@themaw.net> wrote:
+>> On 25/10/23 22:02, Miklos Szeredi wrote:
+>>> The mnt.mnt_list is still used to set up the mount tree and for
+>>> propagation, but not after the mount has been added to a namespace.  Hence
+>>> mnt_list can live in union with rb_node.  Use MNT_ONRB mount flag to
+>>> validate that the mount is on the correct list.
+>> Is that accurate, propagation occurs at mount and also at umount.
+> When propagating a mount, the new mount's mnt_list is used as a head
+> for the new propagated mounts.  These are then moved to the rb tree by
+> commit_tree().
+>
+> When umounting there's a "to umount" list called tmp_list in
+> umount_tree(), this list is used to collect direct umounts and then
+> propagated umounts.  The direct umounts are added in umount_tree(),
+> the propagated ones umount_one().
+>
+> Note: umount_tree() can be called on a not yet finished mount, in that
+> case the mounts are still on mnt_list, so umount_tree() needs to deal
+> with both.
+>
+>> IDG how the change to umount_one() works, it looks like umount_list()
+>>
+>> uses mnt_list. It looks like propagate_umount() is also using mnt_list.
+>>
+>>
+>> Am I missing something obvious?
+> So when a mount is part of a namespace (either anonymous or not) it is
+> on the rb tree, when not then it can temporarily be on mnt_list.
+> MNT_ONRB flag is used to validate that the mount is on the list that
+> we expect it to be on, but also to detect the case of the mount setup
+> being aborted.
+>
+> We could handle the second case differently, since we should be able
+> to tell when we are removing the mount from a namespace and when we
+> are aborting a mount, but this was the least invasive way to do this.
 
-This specifically test commit d7220364039f ("landlock: Allow FS topology
-changes for domains without such rule type").
+Thanks for the explanation, what you've said is essentially what I
 
-Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- tools/testing/selftests/landlock/fs_test.c | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+understood reading the series.
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 68b7a89cf65b..18e1f86a6234 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -1625,6 +1625,65 @@ TEST_F_FORK(layout1, move_mount)
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- }
- 
-+TEST_F_FORK(layout1, topology_changes_with_net_only)
-+{
-+	const struct landlock_ruleset_attr ruleset_net = {
-+		.handled_access_net = LANDLOCK_ACCESS_NET_BIND_TCP |
-+				      LANDLOCK_ACCESS_NET_CONNECT_TCP,
-+	};
-+	int ruleset_fd;
-+
-+	/* Add network restrictions. */
-+	ruleset_fd =
-+		landlock_create_ruleset(&ruleset_net, sizeof(ruleset_net), 0);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+
-+	/* Mount, remount, move_mount, umount, and pivot_root checks. */
-+	set_cap(_metadata, CAP_SYS_ADMIN);
-+	ASSERT_EQ(0, mount_opt(&mnt_tmp, dir_s1d2));
-+	ASSERT_EQ(0, mount(NULL, dir_s1d2, NULL, MS_PRIVATE | MS_REC, NULL));
-+	ASSERT_EQ(0, syscall(__NR_move_mount, AT_FDCWD, dir_s1d2, AT_FDCWD,
-+			     dir_s2d2, 0));
-+	ASSERT_EQ(0, umount(dir_s2d2));
-+	ASSERT_EQ(0, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3));
-+	ASSERT_EQ(0, chdir("/"));
-+	clear_cap(_metadata, CAP_SYS_ADMIN);
-+}
-+
-+TEST_F_FORK(layout1, topology_changes_with_net_and_fs)
-+{
-+	const struct landlock_ruleset_attr ruleset_net_fs = {
-+		.handled_access_net = LANDLOCK_ACCESS_NET_BIND_TCP |
-+				      LANDLOCK_ACCESS_NET_CONNECT_TCP,
-+		.handled_access_fs = LANDLOCK_ACCESS_FS_EXECUTE,
-+	};
-+	int ruleset_fd;
-+
-+	/* Add network and filesystem restrictions. */
-+	ruleset_fd = landlock_create_ruleset(&ruleset_net_fs,
-+					     sizeof(ruleset_net_fs), 0);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+
-+	/* Mount, remount, move_mount, umount, and pivot_root checks. */
-+	set_cap(_metadata, CAP_SYS_ADMIN);
-+	ASSERT_EQ(-1, mount_opt(&mnt_tmp, dir_s1d2));
-+	ASSERT_EQ(EPERM, errno);
-+	ASSERT_EQ(-1, mount(NULL, dir_s3d2, NULL, MS_PRIVATE | MS_REC, NULL));
-+	ASSERT_EQ(EPERM, errno);
-+	ASSERT_EQ(-1, syscall(__NR_move_mount, AT_FDCWD, dir_s3d2, AT_FDCWD,
-+			      dir_s2d2, 0));
-+	ASSERT_EQ(EPERM, errno);
-+	ASSERT_EQ(-1, umount(dir_s3d2));
-+	ASSERT_EQ(EPERM, errno);
-+	ASSERT_EQ(-1, syscall(__NR_pivot_root, dir_s3d2, dir_s3d3));
-+	ASSERT_EQ(EPERM, errno);
-+	clear_cap(_metadata, CAP_SYS_ADMIN);
-+}
-+
- TEST_F_FORK(layout1, release_inodes)
- {
- 	const struct rule rules[] = {
--- 
-2.42.0
 
+But I still haven't quite got this so I'll need to spend more time
+
+on this part of the patch series.
+
+
+That's not a problem, ;).
+
+
+Ian
+
+>
+> Thanks,
+> Miklos
+>
