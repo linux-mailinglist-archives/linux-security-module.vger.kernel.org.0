@@ -2,115 +2,125 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8450D7DCCF5
-	for <lists+linux-security-module@lfdr.de>; Tue, 31 Oct 2023 13:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6CA7DD63A
+	for <lists+linux-security-module@lfdr.de>; Tue, 31 Oct 2023 19:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344271AbjJaMc5 (ORCPT
+        id S231774AbjJaSlz (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Tue, 31 Oct 2023 08:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        Tue, 31 Oct 2023 14:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344246AbjJaMc4 (ORCPT
+        with ESMTP id S231676AbjJaSly (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Tue, 31 Oct 2023 08:32:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A42B98
-        for <linux-security-module@vger.kernel.org>; Tue, 31 Oct 2023 05:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698755535;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IwcTumPEA8MXD9aE6NAuiQnpk8SlcZkJMMNjOT52wQs=;
-        b=fssdZvZHBYokIq/zHxOozixsLLJyKetALYZTmiu/97OjX2oOY8MNnLVuH/3jFnVW+zxn52
-        eu0LZSRQj8HZTmKAcA3n2hu0IRAX72i6OLlA57VcS/yQXpsxe4UdqyhIDZFZfDP98lEwTV
-        QZtDaYHZnkUG02NA7519MgSjhow8/Os=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-517-cthUV14aPVCEaXTs4FjvUg-1; Tue, 31 Oct 2023 08:32:14 -0400
-X-MC-Unique: cthUV14aPVCEaXTs4FjvUg-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7789405320fso708054385a.0
-        for <linux-security-module@vger.kernel.org>; Tue, 31 Oct 2023 05:32:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698755533; x=1699360333;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IwcTumPEA8MXD9aE6NAuiQnpk8SlcZkJMMNjOT52wQs=;
-        b=gLYOQ6xQs0TZYn+sGh8r4Rp/ZGbiZjB4D9WprLxOwS2+xmgn+L/Xr/W4bUF5PEnCfp
-         7H5xMMlgCq/wyHOp5m97RFvgwxJ7ZEiVKfhrzhLXLJBzFD91iVTYiwS4sUzHVsLu8va6
-         BArVz9rpJGfCe/tw+NvN650cSbuOMa73g++WVLBnvtMIKtjq+ziXN1xiJrwh3padFdtJ
-         hfzQ/1czzxGpnluGULlNGkCNEEtqVgOhF0LqwOlX6nXL4aaAFWEz9XdDWEB83E6bdZFt
-         GGPtsaSmq1PjKyLmn8KTrtDaXpQUyiIzY7z836oBAzv9dWQDz3+7kGClp4EJRx4HSZ04
-         O5Pw==
-X-Gm-Message-State: AOJu0YzsiywCQu90ncwrqMQ3XduDDn6uvhdwMYxRt4/7XTZ15ORnxD0D
-        8+u4LBx3dlipV+syg3z7ig153kk4OwikW7NMgzP8hhpXCDWyB2bGzcb3D96sd7V8UQbdvoxLbkB
-        Q6NwyVrMEv6Oyfsq+SvzsfNbBpZ/gaTPJIgvM
-X-Received: by 2002:a05:620a:2408:b0:774:2e8f:2170 with SMTP id d8-20020a05620a240800b007742e8f2170mr15537037qkn.4.1698755533768;
-        Tue, 31 Oct 2023 05:32:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF1PibxJcjMn2MZ8vm902icTDEZ+hR9K82a6PAvEbaLbNmN/JzZjcwNxAmmW4i0Zd0iBebAFA==
-X-Received: by 2002:a05:620a:2408:b0:774:2e8f:2170 with SMTP id d8-20020a05620a240800b007742e8f2170mr15537013qkn.4.1698755533490;
-        Tue, 31 Oct 2023 05:32:13 -0700 (PDT)
-Received: from localhost.localdomain (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id g23-20020a05620a13d700b00777063b89casm457697qkl.5.2023.10.31.05.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Oct 2023 05:32:12 -0700 (PDT)
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     linux-security-module@vger.kernel.org,
-        Benjamin Coddington <bcodding@redhat.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] lsm: fix default return value for inode_getsecctx
-Date:   Tue, 31 Oct 2023 13:32:07 +0100
-Message-ID: <20231031123207.758655-3-omosnace@redhat.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231031123207.758655-1-omosnace@redhat.com>
-References: <20231031123207.758655-1-omosnace@redhat.com>
+        Tue, 31 Oct 2023 14:41:54 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA82A3;
+        Tue, 31 Oct 2023 11:41:52 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39VIeBdf007624;
+        Tue, 31 Oct 2023 18:41:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OhxT7s0ROgOqX4hjBEGVRBCrZOsmBqayX4UGjZbJ7XQ=;
+ b=VXuz51C5mgsiTlQbo/F/IXnP9QNNssQabkb7KGCswBqgjk01+QZRt1OUhJajtcdWQKEC
+ 1o3/HQYa1SujTZSfONi8B9zZAw3wbpJtu4Fna5IYrBlw3otITpvym7JOr3PEZcLV/PVs
+ BdAfCnlhyzJyFgL/BKKLy/iuarhcvnCr3Y9jgAkwmu/wqMA8dYFWisqfKpPQC4brID8g
+ BdgKV9fXti9cRb5+3EnlBuHy+1EDQC4VMa3Xc8mrOH69RnXProIrsEROt3nXInSX04ZD
+ ngKlIDU1SEJtAL/+3X0a6+5AwNy1g4XZSEnI6e/giWw7GLufWh9LJREEUyrbQGlfJnTi Uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u372dr2vd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 18:41:31 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39VIeP4J009617;
+        Tue, 31 Oct 2023 18:41:30 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3u372dr2kj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 18:41:30 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39VGWqqY011300;
+        Tue, 31 Oct 2023 18:37:37 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3u1euk29em-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Oct 2023 18:37:37 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39VIba8i17760930
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Oct 2023 18:37:37 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A13445805D;
+        Tue, 31 Oct 2023 18:37:36 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F6F558061;
+        Tue, 31 Oct 2023 18:37:20 +0000 (GMT)
+Received: from [9.2.202.85] (unknown [9.2.202.85])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Oct 2023 18:37:20 +0000 (GMT)
+Message-ID: <1f7bdb13-859e-46ce-b327-8043e7dbd598@linux.ibm.com>
+Date:   Tue, 31 Oct 2023 14:37:19 -0400
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        peterhuewe@gmx.de, Jarkko Sakkinen <jarkko@kernel.org>,
+        jgg@ziepe.ca, bhe@redhat.com, vgoyal@redhat.com,
+        Dave Young <dyoung@redhat.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        jmorris@namei.org, Paul Moore <paul@paul-moore.com>,
+        serge@hallyn.com,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-security-module@vger.kernel.org
+Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Sush Shringarputale <sushring@linux.microsoft.com>
+References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
+Content-Language: en-US
+From:   Ken Goldman <kgold@linux.ibm.com>
+In-Reply-To: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: U8ETMQ8tREdR3K8DbiFNGY17v4kgfZX2
+X-Proofpoint-ORIG-GUID: kPRWCWYcnM1PEs87tSV-atqzBwEDSCsz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-31_05,2023-10-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ suspectscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 adultscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ mlxlogscore=993 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310310150
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
--EOPNOTSUPP is the return value that implements a "no-op" hook, not 0.
+On 10/19/2023 2:49 PM, Tushar Sugandhi wrote:
+>    f. A new event, "snapshot_aggregate", will be computed and measured
+>         in the IMA log as part of this feature.  It should help the
+>         remote-attestation client/service to benefit from the IMA log
+>         snapshot feature.
+>         The "snapshot_aggregate" event is described in more details in
+>         section "D.1 Snapshot Aggregate Event" below.
 
-Without this fix having only the BPF LSM enabled (with no programs
-attached) can cause uninitialized variable reads in
-nfsd4_encode_fattr(), because the BPF hook returns 0 without touching
-the 'ctxlen' variable and the corresponding 'contextlen' variable in
-nfsd4_encode_fattr() remains uninitialized, yet being treated as valid
-based on the 0 return value.
+What is the use case for the snapshot aggregate?  My thinking is:
 
-Reported-by: Benjamin Coddington <bcodding@redhat.com>
-Fixes: 98e828a0650f ("security: Refactor declaration of LSM hooks")
-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
----
- include/linux/lsm_hook_defs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+1. The platform must retain the entire measurement list.  Early 
+measurements can never be discarded because a new quote verifier
+must receive the entire log starting at the first measurement.
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 4dd55fdfec267..ff217a5ce5521 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -273,7 +273,7 @@ LSM_HOOK(void, LSM_RET_VOID, release_secctx, char *secdata, u32 seclen)
- LSM_HOOK(void, LSM_RET_VOID, inode_invalidate_secctx, struct inode *inode)
- LSM_HOOK(int, 0, inode_notifysecctx, struct inode *inode, void *ctx, u32 ctxlen)
- LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 ctxlen)
--LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
-+LSM_HOOK(int, -EOPNOTSUPP, inode_getsecctx, struct inode *inode, void **ctx,
- 	 u32 *ctxlen)
- 
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
--- 
-2.41.0
+In this case, isn't the snapshot aggregate redundant?
 
+2. There is a disadvantage to redundant data.  The verifier must support 
+this new event type. It receives this event and must validate the 
+aggregate against the snapshot-ed events. This is an attack surface. 
+The attacker can send an aggregate and snapshot-ed measurements that do 
+not match to exploit a flaw in the verifier.
