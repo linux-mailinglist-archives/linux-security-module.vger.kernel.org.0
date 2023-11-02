@@ -2,198 +2,94 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF94B7DE9CA
-	for <lists+linux-security-module@lfdr.de>; Thu,  2 Nov 2023 01:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3359D7DEA74
+	for <lists+linux-security-module@lfdr.de>; Thu,  2 Nov 2023 02:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbjKBAzt (ORCPT
+        id S232035AbjKBBxw (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Wed, 1 Nov 2023 20:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        Wed, 1 Nov 2023 21:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234958AbjKBAzr (ORCPT
+        with ESMTP id S232963AbjKBBxv (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Wed, 1 Nov 2023 20:55:47 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629CB12B
-        for <linux-security-module@vger.kernel.org>; Wed,  1 Nov 2023 17:55:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D89C433CA;
-        Thu,  2 Nov 2023 00:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698886542;
-        bh=pDTQGlJyhEUbr+oPLqtOR2IyJ1Tt/7G7gxE8XosZUDw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R2g/nebMZJQa2oKl/wCYih/1MuyLbSbg0nsjj7vnEZri6/h0kMHNAvtPzFSKS1zw+
-         kyY1Dae3cImhDTga/zWlTAj+oExgJWIo11sJBGmFyESwtV1VFryBxgfbsIu07UC3Xs
-         f1UJ/OYOo1uJHXT3ttQ7JktdVud/5YI6WEdM0tDJczBjbgn3x5huCbnwN6U0wlP4oY
-         OAuqtWVGEVFCcME0TtRUHav4jljYDsGJPaQ3Pa1c7W6k3YmEncg9ggevRtMqu+wHMN
-         z2ePZGSlajq2+N5Thf5kFsqZklPCQykjHga0JC3PvZd85tZ8gzfjo4bBg3IOncaL6j
-         lEXA7nhf95p+Q==
-From:   KP Singh <kpsingh@kernel.org>
-To:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org
-Cc:     paul@paul-moore.com, keescook@chromium.org, casey@schaufler-ca.com,
-        song@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        kpsingh@kernel.org, renauld@google.com, pabeni@redhat.com
-Subject: [PATCH v7 5/5] security: Add CONFIG_SECURITY_HOOK_LIKELY
-Date:   Thu,  2 Nov 2023 01:55:21 +0100
-Message-ID: <20231102005521.346983-6-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-In-Reply-To: <20231102005521.346983-1-kpsingh@kernel.org>
-References: <20231102005521.346983-1-kpsingh@kernel.org>
+        Wed, 1 Nov 2023 21:53:51 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7C4119
+        for <linux-security-module@vger.kernel.org>; Wed,  1 Nov 2023 18:53:46 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-77a453eb01cso23708585a.0
+        for <linux-security-module@vger.kernel.org>; Wed, 01 Nov 2023 18:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1698890025; x=1699494825; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=37+mNFmGhNhaOfRXTXcvrpHmGQE/WN93HJkE71oO5zk=;
+        b=Fdnp+OGozlv9jxCZYpkjZyvSbjAj8GYac/1e9m/HRGhy/l0kaVvC2EWD5baF/TzkqM
+         d5Hu67wplTICwDOk5kFwAbWyhQ1m8/YNfhaXjDp/mM7uHLX6lQT4iN186oBLNOmPy9Tk
+         Sbb9GcWUMEj2EGIfRQ1F6rDpd3MYOSUH7X5DA8wadFFwr0LRHPudj3b5ODVqKpSnBlfh
+         QT1sKuBjS0EWzk+8mW+HabH1HkfHJrbPxURQB3gJPn5lNgMEsaQRUu7MtMSfR203c9oz
+         N5mpte3Xes7l2PSksu68OUl8lzIgq15CIwHci5QfKH7fg8NGmDJlFANM8EEszmSSqz9t
+         iavA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698890025; x=1699494825;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=37+mNFmGhNhaOfRXTXcvrpHmGQE/WN93HJkE71oO5zk=;
+        b=nK5pnhucjSVG4TmnS2oK/Qj4FGjVEkFdjpjiQ74m7HP+L+vh39gmYVEDL+naSc3OeX
+         CCGEc+UOLZ0FBbEX+u8h87CU35IwNj4YbfhM6pvPiliue8ob/7+zxwde6TEt7ByRq2wG
+         h+5ZMH+ghRBno8JOhIhMLlP5awWzpaG9lM0ptBQ1GTPYhfkK20B1t7L+H38+e/XgaCAb
+         XyP7sqTr6DEhaSyPyDFzli1HoQ3yNyhBh9XuMKTl1FCFuOSJwYFqDqMTrLGxnkFnnSuk
+         8245FvxgQfl2DHB3MfK60meH2lAZjNkx8nttRtFqJhp7EIP+Tdm1PYe3uwjE1GKL8ZOo
+         V6NQ==
+X-Gm-Message-State: AOJu0YzCD8Y2ALeuVa+PTznJP2c26A/CRNOWcQnSuwYZu3jhpReLxr9l
+        1LNONs5XNTtizQExcekHsDP/0WFo9V2li75Ktg==
+X-Google-Smtp-Source: AGHT+IHYjO9BgVsmKC3TTlFq1+Ckib+PZr8tJuacn96Ny7t2xQGG0MSZYN4UpTCvibhkZ0TwvNp6/A==
+X-Received: by 2002:a05:620a:190d:b0:778:8822:9a3f with SMTP id bj13-20020a05620a190d00b0077888229a3fmr21707831qkb.63.1698890024954;
+        Wed, 01 Nov 2023 18:53:44 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id de14-20020a05620a370e00b007756c8ce8f5sm952001qkb.59.2023.11.01.18.53.44
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Nov 2023 18:53:44 -0700 (PDT)
+From:   Paul Moore <paul@paul-moore.com>
+To:     linux-security-module@vger.kernel.org
+Subject: [PATCH] lsm: align based on pointer length in lsm_fill_user_ctx()
+Date:   Wed,  1 Nov 2023 21:53:38 -0400
+Message-ID: <20231102015337.510827-2-paul@paul-moore.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=707; i=paul@paul-moore.com; h=from:subject; bh=C6WLJZ7gAV0X573yUDz60N3O/EhKYa28yLkwvUBqRao=; b=owEBbQKS/ZANAwAIAeog8tqXN4lzAcsmYgBlQwEhszTohcD86gWrk/JYm1GDCPZxMnhl0bcLA wf2SzOPPeSJAjMEAAEIAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCZUMBIQAKCRDqIPLalzeJ cwfkD/9cBZJoUoJ6svQGrDZwtt79Mm1Mqcy87qEp6VSX38GNmX+7UkbQhpu8wtwBEWNmKv0l3wA HNcWZ8tkxk3vTU6VPFpgJzHsssSqGbRx7/7kUCe5lP1jJoK1Bgbz0xunUnN+l2mhJoKWUhwQ88c tS0K7ScrTMooXDcoVt/xasx1UaxSzoFA0TdVF747BCi4BMGCMKmJqnlw7djfpMJK65pplaRMp/B eHiXPZYFjeJlUr1ysT4YML+yRIfYCfjnbNXqmo8lWhKKE2HEyufbxyle9kMps+8wpI7loi9eOb0 KUOlisFnHJ/TXewnYutil/0EkscKq3v18Rfq7Eudf2CMW8XOWkAvHXQCryHMFNOyDUgw+QJF9fb QJw69tTu5KXPFu8Q2/V3STSCfmQKHXE0nnZB7KrXP14osx0tXcbaBng1JtbazYbupuZ5dpSCpGA 59YN4kP989c9lB8DAXEg1tcXwivtCZbFsT7fTml2EA1VctWGzOebqFajS4EISC3J7hW/dtDaakG uSP0aOPLWvpejIjrlDYCRC1BDkRO3qH6DTkjjrIwkv1Fsqb6A9e/D/2e1ASl/AzuA6DHB8eQC63 c9NtFUjYWWsugKt7knBP2DjWnMOaEZW/qEKrhqzd+C0y+gSsFoSFkCNgjTgGawg+9G2ptnTOaP9 qJX2uSJ02/JTDbw==
+X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-This config influences the nature of the static key that guards the
-static call for LSM hooks.
+Using the size of a void pointer is much cleaner than
+BITS_PER_LONG / 8.
 
-When enabled, it indicates that an LSM static call slot is more likely
-to be initialized. When disabled, it optimizes for the case when static
-call slot is more likely to be not initialized.
-
-When a major LSM like (SELinux, AppArmor, Smack etc) is active on a
-system the system would benefit from enabling the config. However there
-are other cases which would benefit from the config being disabled
-(e.g. a system with a BPF LSM with no hooks enabled by default, or an
-LSM like loadpin / yama). Ultimately, there is no one-size fits all
-solution.
-
-with CONFIG_SECURITY_HOOK_LIKELY enabled, the inactive /
-uninitialized case is penalized with a direct jmp (still better than
-an indirect jmp):
-
-function security_file_ioctl:
-   0xffffffff818f0c80 <+0>:	endbr64
-   0xffffffff818f0c84 <+4>:	nopl   0x0(%rax,%rax,1)
-   0xffffffff818f0c89 <+9>:	push   %rbp
-   0xffffffff818f0c8a <+10>:	push   %r14
-   0xffffffff818f0c8c <+12>:	push   %rbx
-   0xffffffff818f0c8d <+13>:	mov    %rdx,%rbx
-   0xffffffff818f0c90 <+16>:	mov    %esi,%ebp
-   0xffffffff818f0c92 <+18>:	mov    %rdi,%r14
-   0xffffffff818f0c95 <+21>:	jmp    0xffffffff818f0ca8 <security_file_ioctl+40>
-
-   jump to skip the inactive BPF LSM hook.
-
-   0xffffffff818f0c97 <+23>:	mov    %r14,%rdi
-   0xffffffff818f0c9a <+26>:	mov    %ebp,%esi
-   0xffffffff818f0c9c <+28>:	mov    %rbx,%rdx
-   0xffffffff818f0c9f <+31>:	call   0xffffffff8141e3b0 <bpf_lsm_file_ioctl>
-   0xffffffff818f0ca4 <+36>:	test   %eax,%eax
-   0xffffffff818f0ca6 <+38>:	jne    0xffffffff818f0cbf <security_file_ioctl+63>
-   0xffffffff818f0ca8 <+40>:	endbr64
-   0xffffffff818f0cac <+44>:	jmp    0xffffffff818f0ccd <security_file_ioctl+77>
-
-   jump to skip the empty slot.
-
-   0xffffffff818f0cae <+46>:	mov    %r14,%rdi
-   0xffffffff818f0cb1 <+49>:	mov    %ebp,%esi
-   0xffffffff818f0cb3 <+51>:	mov    %rbx,%rdx
-   0xffffffff818f0cb6 <+54>:	nopl   0x0(%rax,%rax,1)
-  				^^^^^^^^^^^^^^^^^^^^^^^
-				Empty slot
-
-   0xffffffff818f0cbb <+59>:	test   %eax,%eax
-   0xffffffff818f0cbd <+61>:	je     0xffffffff818f0ccd <security_file_ioctl+77>
-   0xffffffff818f0cbf <+63>:	endbr64
-   0xffffffff818f0cc3 <+67>:	pop    %rbx
-   0xffffffff818f0cc4 <+68>:	pop    %r14
-   0xffffffff818f0cc6 <+70>:	pop    %rbp
-   0xffffffff818f0cc7 <+71>:	cs jmp 0xffffffff82c00000 <__x86_return_thunk>
-   0xffffffff818f0ccd <+77>:	endbr64
-   0xffffffff818f0cd1 <+81>:	xor    %eax,%eax
-   0xffffffff818f0cd3 <+83>:	jmp    0xffffffff818f0cbf <security_file_ioctl+63>
-   0xffffffff818f0cd5 <+85>:	mov    %r14,%rdi
-   0xffffffff818f0cd8 <+88>:	mov    %ebp,%esi
-   0xffffffff818f0cda <+90>:	mov    %rbx,%rdx
-   0xffffffff818f0cdd <+93>:	pop    %rbx
-   0xffffffff818f0cde <+94>:	pop    %r14
-   0xffffffff818f0ce0 <+96>:	pop    %rbp
-   0xffffffff818f0ce1 <+97>:	ret
-
-When the config is disabled, the case optimizes the scenario above.
-
-security_file_ioctl:
-   0xffffffff818f0e30 <+0>:	endbr64
-   0xffffffff818f0e34 <+4>:	nopl   0x0(%rax,%rax,1)
-   0xffffffff818f0e39 <+9>:	push   %rbp
-   0xffffffff818f0e3a <+10>:	push   %r14
-   0xffffffff818f0e3c <+12>:	push   %rbx
-   0xffffffff818f0e3d <+13>:	mov    %rdx,%rbx
-   0xffffffff818f0e40 <+16>:	mov    %esi,%ebp
-   0xffffffff818f0e42 <+18>:	mov    %rdi,%r14
-   0xffffffff818f0e45 <+21>:	xchg   %ax,%ax
-   0xffffffff818f0e47 <+23>:	xchg   %ax,%ax
-
-   The static keys in their disabled state do not create jumps leading
-   to faster code.
-
-   0xffffffff818f0e49 <+25>:	xor    %eax,%eax
-   0xffffffff818f0e4b <+27>:	xchg   %ax,%ax
-   0xffffffff818f0e4d <+29>:	pop    %rbx
-   0xffffffff818f0e4e <+30>:	pop    %r14
-   0xffffffff818f0e50 <+32>:	pop    %rbp
-   0xffffffff818f0e51 <+33>:	cs jmp 0xffffffff82c00000 <__x86_return_thunk>
-   0xffffffff818f0e57 <+39>:	endbr64
-   0xffffffff818f0e5b <+43>:	mov    %r14,%rdi
-   0xffffffff818f0e5e <+46>:	mov    %ebp,%esi
-   0xffffffff818f0e60 <+48>:	mov    %rbx,%rdx
-   0xffffffff818f0e63 <+51>:	call   0xffffffff8141e3b0 <bpf_lsm_file_ioctl>
-   0xffffffff818f0e68 <+56>:	test   %eax,%eax
-   0xffffffff818f0e6a <+58>:	jne    0xffffffff818f0e4d <security_file_ioctl+29>
-   0xffffffff818f0e6c <+60>:	jmp    0xffffffff818f0e47 <security_file_ioctl+23>
-   0xffffffff818f0e6e <+62>:	endbr64
-   0xffffffff818f0e72 <+66>:	mov    %r14,%rdi
-   0xffffffff818f0e75 <+69>:	mov    %ebp,%esi
-   0xffffffff818f0e77 <+71>:	mov    %rbx,%rdx
-   0xffffffff818f0e7a <+74>:	nopl   0x0(%rax,%rax,1)
-   0xffffffff818f0e7f <+79>:	test   %eax,%eax
-   0xffffffff818f0e81 <+81>:	jne    0xffffffff818f0e4d <security_file_ioctl+29>
-   0xffffffff818f0e83 <+83>:	jmp    0xffffffff818f0e49 <security_file_ioctl+25>
-   0xffffffff818f0e85 <+85>:	endbr64
-   0xffffffff818f0e89 <+89>:	mov    %r14,%rdi
-   0xffffffff818f0e8c <+92>:	mov    %ebp,%esi
-   0xffffffff818f0e8e <+94>:	mov    %rbx,%rdx
-   0xffffffff818f0e91 <+97>:	pop    %rbx
-   0xffffffff818f0e92 <+98>:	pop    %r14
-   0xffffffff818f0e94 <+100>:	pop    %rbp
-   0xffffffff818f0e95 <+101>:	ret
-
-Acked-by: Song Liu <song@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: KP Singh <kpsingh@kernel.org>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- security/Kconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ security/security.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/Kconfig b/security/Kconfig
-index 52c9af08ad35..317018dcbc67 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -32,6 +32,17 @@ config SECURITY
+diff --git a/security/security.c b/security/security.c
+index 86f7a1995991..a808fd5eba6d 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -792,7 +792,7 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uctx, size_t *uctx_len,
+ 	size_t nctx_len;
+ 	int rc = 0;
  
- 	  If you are unsure how to answer this question, answer N.
- 
-+config SECURITY_HOOK_LIKELY
-+	bool "LSM hooks are likely to be initialized"
-+	depends on SECURITY && EXPERT
-+	default SECURITY_SELINUX || SECURITY_SMACK || SECURITY_TOMOYO || SECURITY_APPARMOR
-+	help
-+	  This controls the behaviour of the static keys that guard LSM hooks.
-+	  If LSM hooks are likely to be initialized by LSMs, then one gets
-+	  better performance by enabling this option. However, if the system is
-+	  using an LSM where hooks are much likely to be disabled, one gets
-+	  better performance by disabling this config.
-+
- config SECURITYFS
- 	bool "Enable the securityfs filesystem"
- 	help
+-	nctx_len = ALIGN(struct_size(nctx, ctx, val_len), BITS_PER_LONG / 8);
++	nctx_len = ALIGN(struct_size(nctx, ctx, val_len), sizeof(void *));
+ 	if (nctx_len > *uctx_len) {
+ 		rc = -E2BIG;
+ 		goto out;
 -- 
-2.42.0.820.g83a721a137-goog
+2.42.0
 
