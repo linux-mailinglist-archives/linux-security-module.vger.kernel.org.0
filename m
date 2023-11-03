@@ -2,122 +2,71 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031937E08DE
-	for <lists+linux-security-module@lfdr.de>; Fri,  3 Nov 2023 20:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5CE7E09A8
+	for <lists+linux-security-module@lfdr.de>; Fri,  3 Nov 2023 20:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234516AbjKCTGa convert rfc822-to-8bit (ORCPT
+        id S1378174AbjKCTxP (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 3 Nov 2023 15:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        Fri, 3 Nov 2023 15:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbjKCTGM (ORCPT
+        with ESMTP id S1377815AbjKCTxO (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 3 Nov 2023 15:06:12 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AECD57
-        for <linux-security-module@vger.kernel.org>; Fri,  3 Nov 2023 12:06:09 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3A3FJq7V013574
-        for <linux-security-module@vger.kernel.org>; Fri, 3 Nov 2023 12:06:09 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3u51bjjv88-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-security-module@vger.kernel.org>; Fri, 03 Nov 2023 12:06:09 -0700
-Received: from twshared29647.38.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 3 Nov 2023 12:06:08 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 3E90C3AE384D7; Fri,  3 Nov 2023 12:06:00 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <paul@paul-moore.com>, <brauner@kernel.org>
-CC:     <linux-fsdevel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
-        <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH v9 bpf-next 17/17] bpf,selinux: allocate bpf_security_struct per BPF token
-Date:   Fri, 3 Nov 2023 12:05:23 -0700
-Message-ID: <20231103190523.6353-18-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231103190523.6353-1-andrii@kernel.org>
-References: <20231103190523.6353-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: dtkoaLw72r6LM65GFuKPLolvLop_cHWI
-X-Proofpoint-ORIG-GUID: dtkoaLw72r6LM65GFuKPLolvLop_cHWI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-03_18,2023-11-02_03,2023-05-22_02
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 3 Nov 2023 15:53:14 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B07D4E;
+        Fri,  3 Nov 2023 12:53:12 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AB79C433C9;
+        Fri,  3 Nov 2023 19:53:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699041192;
+        bh=vJK+HTBVrBZqEsFha7PFvEuOMVFmc5cHgad9vM2yzE4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=szBgiB/vgKgzhZAdgIoBjRRzGe8xLnxDf2ZoYZjNB+vZaR6zY0DXYz97TNIzBGde9
+         4DcBdY62Fu/FT/GGTs32NLVyEoqPMXD0oWjrDu9qvqUj4i08+ffuGLSPZ0NWC8rN00
+         N3IClp0JZbseLwe8WiitSXn3SVT4XTzvT1g6sWr9va1ujX7YSFHm/Qoc9nQphLM16+
+         FQ1Q8kLH76tD3LrCGIPnSP0zr9rAzmr4kiVop/W25SFm6huOAh/sLnmentqhK8xi6/
+         Uprpuy3s+fknsSuUQi9JP3hHFtA7zU3xGFh9zcBI0bIOLnZ2ya5vyY8m23t69L0Uen
+         DHHkt57g8o8Tg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EBC9AC04DD9;
+        Fri,  3 Nov 2023 19:53:11 +0000 (UTC)
+Subject: Re: [GIT PULL] AppArmor updates for 6.7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <bf45d4d9-5a15-4ba3-9f55-b8c7e300dc54@canonical.com>
+References: <bf45d4d9-5a15-4ba3-9f55-b8c7e300dc54@canonical.com>
+X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
+X-PR-Tracked-Message-Id: <bf45d4d9-5a15-4ba3-9f55-b8c7e300dc54@canonical.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-pr-2023-11-03
+X-PR-Tracked-Commit-Id: 6cede10161be00d129a24e8b84c2674785a32cf8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6bdfe2d88b9ff8b0cce32ce87cd47c0e9d665f48
+Message-Id: <169904119195.17286.4098682969111235538.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Nov 2023 19:53:11 +0000
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKLM <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Utilize newly added bpf_token_create/bpf_token_free LSM hooks to
-allocate struct bpf_security_struct for each BPF token object in
-SELinux. This just follows similar pattern for BPF prog and map.
+The pull request you sent on Fri, 3 Nov 2023 04:13:36 -0700:
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- security/selinux/hooks.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-pr-2023-11-03
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 002351ab67b7..1501e95366a1 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -6828,6 +6828,29 @@ static void selinux_bpf_prog_free(struct bpf_prog *prog)
- 	prog->aux->security = NULL;
- 	kfree(bpfsec);
- }
-+
-+static int selinux_bpf_token_create(struct bpf_token *token, union bpf_attr *attr,
-+				    struct path *path)
-+{
-+	struct bpf_security_struct *bpfsec;
-+
-+	bpfsec = kzalloc(sizeof(*bpfsec), GFP_KERNEL);
-+	if (!bpfsec)
-+		return -ENOMEM;
-+
-+	bpfsec->sid = current_sid();
-+	token->security = bpfsec;
-+
-+	return 0;
-+}
-+
-+static void selinux_bpf_token_free(struct bpf_token *token)
-+{
-+	struct bpf_security_struct *bpfsec = token->security;
-+
-+	token->security = NULL;
-+	kfree(bpfsec);
-+}
- #endif
- 
- struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
-@@ -7183,6 +7206,7 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(bpf_prog, selinux_bpf_prog),
- 	LSM_HOOK_INIT(bpf_map_free, selinux_bpf_map_free),
- 	LSM_HOOK_INIT(bpf_prog_free, selinux_bpf_prog_free),
-+	LSM_HOOK_INIT(bpf_token_free, selinux_bpf_token_free),
- #endif
- 
- #ifdef CONFIG_PERF_EVENTS
-@@ -7241,6 +7265,7 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
- #ifdef CONFIG_BPF_SYSCALL
- 	LSM_HOOK_INIT(bpf_map_create, selinux_bpf_map_create),
- 	LSM_HOOK_INIT(bpf_prog_load, selinux_bpf_prog_load),
-+	LSM_HOOK_INIT(bpf_token_create, selinux_bpf_token_create),
- #endif
- #ifdef CONFIG_PERF_EVENTS
- 	LSM_HOOK_INIT(perf_event_alloc, selinux_perf_event_alloc),
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6bdfe2d88b9ff8b0cce32ce87cd47c0e9d665f48
+
+Thank you!
+
 -- 
-2.34.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
