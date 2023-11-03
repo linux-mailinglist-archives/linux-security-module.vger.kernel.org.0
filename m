@@ -2,319 +2,254 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D307E05E5
-	for <lists+linux-security-module@lfdr.de>; Fri,  3 Nov 2023 16:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55D57E08C2
+	for <lists+linux-security-module@lfdr.de>; Fri,  3 Nov 2023 20:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344024AbjKCP6A (ORCPT
+        id S234458AbjKCTFx convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Fri, 3 Nov 2023 11:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
+        Fri, 3 Nov 2023 15:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344318AbjKCP54 (ORCPT
+        with ESMTP id S234449AbjKCTFw (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Fri, 3 Nov 2023 11:57:56 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE903D5B
-        for <linux-security-module@vger.kernel.org>; Fri,  3 Nov 2023 08:57:52 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d86dac81f8fso2644926276.1
-        for <linux-security-module@vger.kernel.org>; Fri, 03 Nov 2023 08:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699027072; x=1699631872; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4VOiCN8o/DjtYXboLphKkKFmrLlTPpPKQqRg+hd9A94=;
-        b=LgLw/V/Wpi1268LB78IzmbPKykgAJUWCtQri41hqjerWJpDQH5e+h56sXIBVRnYJ6K
-         cHxl+3s5srCAoQ2ZrpqML85U6g3ar5nHi+B2X2Hrk2JfbRSrIUIH3gLIwBEts2nV8dmn
-         ZYYP6i+Zxf81DPYyYchDRv+k3caoL0mBtPYgVtpZ5arpoHDMRPsL6emAOlft9i2x4Tjv
-         7oKVGu57VCY3xEpf81/pPxiJgABeQN7jUYWJqtrp0DT16h1EK1029Tbh3sCdLBvesmtj
-         y57IpV8Us8Rr3MC0WHp6hS2Nz1V2bqtwI3a+iDBFQBESmpRb5cuOeO1dY6AnRxPtnMTh
-         TVvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699027072; x=1699631872;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4VOiCN8o/DjtYXboLphKkKFmrLlTPpPKQqRg+hd9A94=;
-        b=V8KJzrDB8mP8Yfug/CQXGg6qzxvBrP8HeiqGH+fdbKsNmrH5mRF5NfLlyfZ+R6aKns
-         f6CeuWNbKWYrNKVLXuiD/7dMDO+umfXFQS098ZFl7hg4xLD5lG6SsX6bnBRqrSSH1Mb2
-         CJnUfWAvJLrmIYmbCHEpWlOZ3LkdLoLsye67wUiMQatSxWK7F35JEJ1Jck27xSO+7i3d
-         W3uHk5YzXGDKS9C8fvjQ1h79Ta8ilNcoL92IKKyO7g88SGRSiKxrJ4fjgTLYgPodgy3b
-         4CDeF2FWf2AmxVddikoi05AvGKU6OHZ6vlAte9CeFmLrN1HPZKPdNWVXSUrFAlv+czzb
-         Uf+w==
-X-Gm-Message-State: AOJu0YySe859APw+XEn4U+iiUEpUm5CVrpLAcINCRAB4BW0P632FddKN
-        4o3IcvY6PxrZcKbz/lwS/0us5ss82Amp2QGCmIR0QFxPOMVCXZyrTLLbuIJO6s/OE4qq7IsB717
-        zR0BmDHy57gevUVQOglssUlYfHm7q+NS0YFXdg4Yo1vqmCx9t9XBN6WKQpbtB73TKHXjYxqTEeG
-        eWv3bTRg==
-X-Google-Smtp-Source: AGHT+IFafpyzF7d3cKv64Oaba1Jzq343m+7zJQytbaFGf4dNJ0KJO1thYwDC/DTpnsIZR6dNC02aPGCv2FY=
-X-Received: from sport.zrh.corp.google.com ([2a00:79e0:9d:4:7ddd:bc72:7a4a:ba94])
- (user=gnoack job=sendgmr) by 2002:a25:bc90:0:b0:d9c:c9a8:8c27 with SMTP id
- e16-20020a25bc90000000b00d9cc9a88c27mr427171ybk.13.1699027071630; Fri, 03 Nov
- 2023 08:57:51 -0700 (PDT)
-Date:   Fri,  3 Nov 2023 16:57:17 +0100
-In-Reply-To: <20231103155717.78042-1-gnoack@google.com>
-Message-Id: <20231103155717.78042-8-gnoack@google.com>
-Mime-Version: 1.0
-References: <20231103155717.78042-1-gnoack@google.com>
-X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Subject: [PATCH v4 7/7] landlock: Document IOCTL support
-From:   "=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>
-To:     linux-security-module@vger.kernel.org,
-        "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>
-Cc:     Jeff Xu <jeffxu@google.com>,
-        Jorge Lucangeli Obes <jorgelo@chromium.org>,
-        Allen Webb <allenwebb@google.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Matt Bobrowski <repnop@google.com>,
-        linux-fsdevel@vger.kernel.org,
-        "=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 3 Nov 2023 15:05:52 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E25CD61
+        for <linux-security-module@vger.kernel.org>; Fri,  3 Nov 2023 12:05:45 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A3GUmUD013260
+        for <linux-security-module@vger.kernel.org>; Fri, 3 Nov 2023 12:05:45 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u54en99tb-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-security-module@vger.kernel.org>; Fri, 03 Nov 2023 12:05:45 -0700
+Received: from twshared68648.02.prn6.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Fri, 3 Nov 2023 12:05:37 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 1AD123AE38384; Fri,  3 Nov 2023 12:05:23 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <paul@paul-moore.com>, <brauner@kernel.org>
+CC:     <linux-fsdevel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>, <keescook@chromium.org>,
+        <kernel-team@meta.com>, <sargun@sargun.me>
+Subject: [PATCH v9 bpf-next 00/17] BPF token and BPF FS-based delegation
+Date:   Fri, 3 Nov 2023 12:05:06 -0700
+Message-ID: <20231103190523.6353-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.34.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: goJQYnJL-aD1egPVbjg5liXIpmxr_plP
+X-Proofpoint-GUID: goJQYnJL-aD1egPVbjg5liXIpmxr_plP
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-03_18,2023-11-02_03,2023-05-22_02
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-In the paragraph above the fallback logic, use the shorter phrasing
-from the landlock(7) man page.
+This patch set introduces an ability to delegate a subset of BPF subsystem
+functionality from privileged system-wide daemon (e.g., systemd or any other
+container manager) through special mount options for userns-bound BPF FS to
+a *trusted* unprivileged application. Trust is the key here. This
+functionality is not about allowing unconditional unprivileged BPF usage.
+Establishing trust, though, is completely up to the discretion of respective
+privileged application that would create and mount a BPF FS instance with
+delegation enabled, as different production setups can and do achieve it
+through a combination of different means (signing, LSM, code reviews, etc),
+and it's undesirable and infeasible for kernel to enforce any particular way
+of validating trustworthiness of particular process.
 
-Signed-off-by: G=C3=BCnther Noack <gnoack@google.com>
----
- Documentation/userspace-api/landlock.rst | 74 +++++++++++++++++++-----
- include/uapi/linux/landlock.h            | 28 +++++++--
- 2 files changed, 83 insertions(+), 19 deletions(-)
+The main motivation for this work is a desire to enable containerized BPF
+applications to be used together with user namespaces. This is currently
+impossible, as CAP_BPF, required for BPF subsystem usage, cannot be namespaced
+or sandboxed, as a general rule. E.g., tracing BPF programs, thanks to BPF
+helpers like bpf_probe_read_kernel() and bpf_probe_read_user() can safely read
+arbitrary memory, and it's impossible to ensure that they only read memory of
+processes belonging to any given namespace. This means that it's impossible to
+have a mechanically verifiable namespace-aware CAP_BPF capability, and as such
+another mechanism to allow safe usage of BPF functionality is necessary.BPF FS
+delegation mount options and BPF token derived from such BPF FS instance is
+such a mechanism. Kernel makes no assumption about what "trusted" constitutes
+in any particular case, and it's up to specific privileged applications and
+their surrounding infrastructure to decide that. What kernel provides is a set
+of APIs to setup and mount special BPF FS instanecs and derive BPF tokens from
+it. BPF FS and BPF token are both bound to its owning userns and in such a way
+are constrained inside intended container. Users can then pass BPF token FD to
+privileged bpf() syscall commands, like BPF map creation and BPF program
+loading, to perform such operations without having init userns privileged.
 
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/users=
-pace-api/landlock.rst
-index 2e3822677061..c64f315d5a2e 100644
---- a/Documentation/userspace-api/landlock.rst
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -75,7 +75,8 @@ to be explicit about the denied-by-default access rights.
-             LANDLOCK_ACCESS_FS_MAKE_BLOCK |
-             LANDLOCK_ACCESS_FS_MAKE_SYM |
-             LANDLOCK_ACCESS_FS_REFER |
--            LANDLOCK_ACCESS_FS_TRUNCATE,
-+            LANDLOCK_ACCESS_FS_TRUNCATE |
-+            LANDLOCK_ACCESS_FS_IOCTL,
-         .handled_access_net =3D
-             LANDLOCK_ACCESS_NET_BIND_TCP |
-             LANDLOCK_ACCESS_NET_CONNECT_TCP,
-@@ -84,10 +85,10 @@ to be explicit about the denied-by-default access right=
-s.
- Because we may not know on which kernel version an application will be
- executed, it is safer to follow a best-effort security approach.  Indeed, =
-we
- should try to protect users as much as possible whatever the kernel they a=
-re
--using.  To avoid binary enforcement (i.e. either all security features or
--none), we can leverage a dedicated Landlock command to get the current ver=
-sion
--of the Landlock ABI and adapt the handled accesses.  Let's check if we sho=
-uld
--remove access rights which are only supported in higher versions of the AB=
-I.
-+using.
-+
-+To be compatible with older Linux versions, we detect the available Landlo=
-ck ABI
-+version, and only use the available subset of access rights:
-=20
- .. code-block:: c
-=20
-@@ -113,6 +114,10 @@ remove access rights which are only supported in highe=
-r versions of the ABI.
-         ruleset_attr.handled_access_net &=3D
-             ~(LANDLOCK_ACCESS_NET_BIND_TCP |
-               LANDLOCK_ACCESS_NET_CONNECT_TCP);
-+        __attribute__((fallthrough));
-+    case 4:
-+        /* Removes LANDLOCK_ACCESS_FS_IOCTL for ABI < 5 */
-+        ruleset_attr.handled_access_fs &=3D ~LANDLOCK_ACCESS_FS_IOCTL;
-     }
-=20
- This enables to create an inclusive ruleset that will contain our rules.
-@@ -224,6 +229,7 @@ access rights per directory enables to change the locat=
-ion of such directory
- without relying on the destination directory access rights (except those t=
-hat
- are required for this operation, see ``LANDLOCK_ACCESS_FS_REFER``
- documentation).
-+
- Having self-sufficient hierarchies also helps to tighten the required acce=
-ss
- rights to the minimal set of data.  This also helps avoid sinkhole directo=
-ries,
- i.e.  directories where data can be linked to but not linked from.  Howeve=
-r,
-@@ -317,18 +323,24 @@ It should also be noted that truncating files does no=
-t require the
- system call, this can also be done through :manpage:`open(2)` with the fla=
-gs
- ``O_RDONLY | O_TRUNC``.
-=20
--When opening a file, the availability of the ``LANDLOCK_ACCESS_FS_TRUNCATE=
-``
--right is associated with the newly created file descriptor and will be use=
-d for
--subsequent truncation attempts using :manpage:`ftruncate(2)`.  The behavio=
-r is
--similar to opening a file for reading or writing, where permissions are ch=
-ecked
--during :manpage:`open(2)`, but not during the subsequent :manpage:`read(2)=
-` and
-+The truncate right is associated with the opened file (see below).
-+
-+Rights associated with file descriptors
-+---------------------------------------
-+
-+When opening a file, the availability of the ``LANDLOCK_ACCESS_FS_TRUNCATE=
-`` and
-+``LANDLOCK_ACCESS_FS_IOCTL`` rights is associated with the newly created f=
-ile
-+descriptor and will be used for subsequent truncation and ioctl attempts u=
-sing
-+:manpage:`ftruncate(2)` and :manpage:`ioctl(2)`.  The behavior is similar =
-to
-+opening a file for reading or writing, where permissions are checked durin=
-g
-+:manpage:`open(2)`, but not during the subsequent :manpage:`read(2)` and
- :manpage:`write(2)` calls.
-=20
--As a consequence, it is possible to have multiple open file descriptors fo=
-r the
--same file, where one grants the right to truncate the file and the other d=
-oes
--not.  It is also possible to pass such file descriptors between processes,
--keeping their Landlock properties, even when these processes do not have a=
-n
--enforced Landlock ruleset.
-+As a consequence, it is possible to have multiple open file descriptors
-+referring to the same file, where one grants the truncate or ioctl right a=
-nd the
-+other does not.  It is also possible to pass such file descriptors between
-+processes, keeping their Landlock properties, even when these processes do=
- not
-+have an enforced Landlock ruleset.
-=20
- Compatibility
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-@@ -457,6 +469,28 @@ Memory usage
- Kernel memory allocated to create rulesets is accounted and can be restric=
-ted
- by the Documentation/admin-guide/cgroup-v1/memory.rst.
-=20
-+IOCTL support
-+-------------
-+
-+The ``LANDLOCK_ACCESS_FS_IOCTL`` access right restricts the use of
-+:manpage:`ioctl(2)`, but it only applies to newly opened files.  This mean=
-s
-+specifically that pre-existing file descriptors like stdin, stdout and std=
-err
-+are unaffected.
-+
-+Users should be aware that TTY devices have traditionally permitted to con=
-trol
-+other processes on the same TTY through the ``TIOCSTI`` and ``TIOCLINUX`` =
-IOCTL
-+commands.  It is therefore recommended to close inherited TTY file descrip=
-tors,
-+or to reopen them from ``/proc/self/fd/*`` without the
-+``LANDLOCK_ACCESS_FS_IOCTL`` right, if possible.  The :manpage:`isatty(3)`
-+function checks whether a given file descriptor is a TTY.
-+
-+Landlock's IOCTL support is coarse-grained at the moment, but may become m=
-ore
-+fine-grained in the future.  Until then, users are advised to establish th=
-e
-+guarantees that they need through the file hierarchy, by only permitting t=
-he
-+``LANDLOCK_ACCESS_FS_IOCTL`` right on files where it is really harmless.  =
-In
-+cases where you can control the mounts, the ``nodev`` mount option can hel=
-p to
-+rule out that device files can be accessed.
-+
- Previous limitations
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-@@ -494,6 +528,16 @@ bind and connect actions to only a set of allowed port=
-s thanks to the new
- ``LANDLOCK_ACCESS_NET_BIND_TCP`` and ``LANDLOCK_ACCESS_NET_CONNECT_TCP``
- access rights.
-=20
-+Ioctl (ABI < 5)
-+---------------
-+
-+IOCTL operations could not be denied before the fourth Landlock ABI, so
-+:manpage:`ioctl(2)` is always allowed when using a kernel that only suppor=
-ts an
-+earlier ABI.
-+
-+Starting with the Landlock ABI version 4, it is possible to restrict the u=
-se of
-+:manpage:`ioctl(2)` using the new ``LANDLOCK_ACCESS_FS_IOCTL`` access righ=
-t.
-+
- .. _kernel_support:
-=20
- Kernel support
-diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-index 6d41c059e910..3af0b1590f1b 100644
---- a/include/uapi/linux/landlock.h
-+++ b/include/uapi/linux/landlock.h
-@@ -205,11 +205,31 @@ struct landlock_net_port_attr {
-  *   file or directory.
-  *
-  *   This access right applies to all :manpage:`ioctl(2)` commands, except=
- of
-- *   ``FIOCLEX``, ``FIONCLEX``, ``FIONBIO``, ``FIOASYNC`` and ``FIONREAD``=
-.
-- *   These commands continue to be invokable independent of the
-- *   %LANDLOCK_ACCESS_FS_IOCTL access right.
-+ *   ``FIOCLEX``, ``FIONCLEX``, ``FIONBIO`` and ``FIOASYNC``.  These comma=
-nds
-+ *   continue to be invokable independent of the %LANDLOCK_ACCESS_FS_IOCTL
-+ *   access right.
-  *
-- *   This access right is available since the fourth version of the Landlo=
-ck
-+ *   When certain other access rights are handled in the ruleset, in addit=
-ion to
-+ *   %LANDLOCK_ACCESS_FS_IOCTL, granting these access rights will unlock a=
-ccess
-+ *   to additional groups of IOCTL commands, on the affected files:
-+ *
-+ *   * %LANDLOCK_ACCESS_FS_READ_FILE unlocks access to ``FIOQSIZE``,
-+ *     ``FS_IOC_FIEMAP``, ``FIBMAP``, ``FIGETBSZ``, ``FIONREAD``,
-+ *     ``FIDEDUPRANGE``.
-+ *
-+ *   * %LANDLOCK_ACCESS_FS_WRITE_FILE unlocks access to ``FIOQSIZE``,
-+ *     ``FS_IOC_FIEMAP``, ``FIBMAP``, ``FIGETBSZ``, ``FICLONE``,
-+ *     ``FICLONERANGE``, ``FS_IOC_RESVSP``, ``FS_IOC_RESVSP64``,
-+ *     ``FS_IOC_UNRESVSP``, ``FS_IOC_UNRESVSP64``, ``FS_IOC_ZERO_RANGE``.
-+ *
-+ *   * %LANDLOCK_ACCESS_FS_READ_DIR unlocks access to ``FIOQSIZE``,
-+ *     ``FS_IOC_FIEMAP``, ``FIBMAP``, ``FIGETBSZ``.
-+ *
-+ *   When these access rights are handled in the ruleset, the availability=
- of
-+ *   the affected IOCTL commands is not governed by %LANDLOCK_ACCESS_FS_IO=
-CTL
-+ *   any more, but by the respective access right.
-+ *
-+ *   This access right is available since the fifth version of the Landloc=
-k
-  *   ABI.
-  *
-  * .. warning::
---=20
-2.42.0.869.gea05f2083d-goog
+This version incorporates feedback and suggestions ([3]) received on v3 of
+this patch set, and instead of allowing to create BPF tokens directly assuming
+capable(CAP_SYS_ADMIN), we instead enhance BPF FS to accepts a few new
+delegation mount options. If these options are used and BPF FS itself is
+properly created, set up, and mounted inside the user namespaced container,
+user application is able to derive a BPF token object from BPF FS instance,
+and pass that token to bpf() syscall. As explained in patch #2, BPF token
+itself doesn't grant access to BPF functionality, but instead allows kernel to
+do namespaced capabilities checks (ns_capable() vs capable()) for CAP_BPF,
+CAP_PERFMON, CAP_NET_ADMIN, and CAP_SYS_ADMIN, as applicable. So it forms one
+half of a puzzle and allows container managers and sys admins to have safe and
+flexible configuration options: determining which containers get delegation of
+BPF functionality through BPF FS, and then which applications within such
+containers are allowed to perform bpf() commands, based on namespaces
+capabilities.
+
+Previous attempt at addressing this very same problem ([0]) attempted to
+utilize authoritative LSM approach, but was conclusively rejected by upstream
+LSM maintainers. BPF token concept is not changing anything about LSM
+approach, but can be combined with LSM hooks for very fine-grained security
+policy. Some ideas about making BPF token more convenient to use with LSM (in
+particular custom BPF LSM programs) was briefly described in recent LSF/MM/BPF
+2023 presentation ([1]). E.g., an ability to specify user-provided data
+(context), which in combination with BPF LSM would allow implementing a very
+dynamic and fine-granular custom security policies on top of BPF token. In the
+interest of minimizing API surface area and discussions this was relegated to
+follow up patches, as it's not essential to the fundamental concept of
+delegatable BPF token.
+
+It should be noted that BPF token is conceptually quite similar to the idea of
+/dev/bpf device file, proposed by Song a while ago ([2]). The biggest
+difference is the idea of using virtual anon_inode file to hold BPF token and
+allowing multiple independent instances of them, each (potentially) with its
+own set of restrictions. And also, crucially, BPF token approach is not using
+any special stateful task-scoped flags. Instead, bpf() syscall accepts
+token_fd parameters explicitly for each relevant BPF command. This addresses
+main concerns brought up during the /dev/bpf discussion, and fits better with
+overall BPF subsystem design.
+
+This patch set adds a basic minimum of functionality to make BPF token idea
+useful and to discuss API and functionality. Currently only low-level libbpf
+APIs support creating and passing BPF token around, allowing to test kernel
+functionality, but for the most part is not sufficient for real-world
+applications, which typically use high-level libbpf APIs based on `struct
+bpf_object` type. This was done with the intent to limit the size of patch set
+and concentrate on mostly kernel-side changes. All the necessary plumbing for
+libbpf will be sent as a separate follow up patch set kernel support makes it
+upstream.
+
+Another part that should happen once kernel-side BPF token is established, is
+a set of conventions between applications (e.g., systemd), tools (e.g.,
+bpftool), and libraries (e.g., libbpf) on exposing delegatable BPF FS
+instance(s) at well-defined locations to allow applications take advantage of
+this in automatic fashion without explicit code changes on BPF application's
+side. But I'd like to postpone this discussion to after BPF token concept
+lands.
+
+  [0] https://lore.kernel.org/bpf/20230412043300.360803-1-andrii@kernel.org/
+  [1] http://vger.kernel.org/bpfconf2023_material/Trusted_unprivileged_BPF_LSFMM2023.pdf
+  [2] https://lore.kernel.org/bpf/20190627201923.2589391-2-songliubraving@fb.com/
+  [3] https://lore.kernel.org/bpf/20230704-hochverdient-lehne-eeb9eeef785e@brauner/
+
+v8->v9:
+  - fix issue in selftests due to sys/mount.h header (Jiri);
+  - fix warning in doc comments in LSM hooks (kernel test robot);
+v7->v8:
+  - add bpf_token_allow_cmd and bpf_token_capable hooks (Paul);
+  - inline bpf_token_alloc() into bpf_token_create() to prevent accidental
+    divergence with security_bpf_token_create() hook (Paul);
+v6->v7:
+  - separate patches to refactor bpf_prog_alloc/bpf_map_alloc LSM hooks, as
+    discussed with Paul, and now they also accept struct bpf_token;
+  - added bpf_token_create/bpf_token_free to allow LSMs (SELinux,
+    specifically) to set up security LSM blob (Paul);
+  - last patch also wires bpf_security_struct setup by SELinux, similar to how
+    it's done for BPF map/prog, though I'm not sure if that's enough, so worst
+    case it's easy to drop this patch if more full fledged SELinux
+    implementation will be done separately;
+  - small fixes for issues caught by code reviews (Jiri, Hou);
+  - fix for test_maps test that doesn't use LIBBPF_OPTS() macro (CI);
+v5->v6:
+  - fix possible use of uninitialized variable in selftests (CI);
+  - don't use anon_inode, instead create one from BPF FS instance (Christian);
+  - don't store bpf_token inside struct bpf_map, instead pass it explicitly to
+    map_check_btf(). We do store bpf_token inside prog->aux, because it's used
+    during verification and even can be checked during attach time for some
+    program types;
+  - LSM hooks are left intact pending the conclusion of discussion with Paul
+    Moore; I'd prefer to do LSM-related changes as a follow up patch set
+    anyways;
+v4->v5:
+  - add pre-patch unifying CAP_NET_ADMIN handling inside kernel/bpf/syscall.c
+    (Paul Moore);
+  - fix build warnings and errors in selftests and kernel, detected by CI and
+    kernel test robot;
+v3->v4:
+  - add delegation mount options to BPF FS;
+  - BPF token is derived from the instance of BPF FS and associates itself
+    with BPF FS' owning userns;
+  - BPF token doesn't grant BPF functionality directly, it just turns
+    capable() checks into ns_capable() checks within BPF FS' owning user;
+  - BPF token cannot be pinned;
+v2->v3:
+  - make BPF_TOKEN_CREATE pin created BPF token in BPF FS, and disallow
+    BPF_OBJ_PIN for BPF token;
+v1->v2:
+  - fix build failures on Kconfig with CONFIG_BPF_SYSCALL unset;
+  - drop BPF_F_TOKEN_UNKNOWN_* flags and simplify UAPI (Stanislav).
+
+Andrii Nakryiko (17):
+  bpf: align CAP_NET_ADMIN checks with bpf_capable() approach
+  bpf: add BPF token delegation mount options to BPF FS
+  bpf: introduce BPF token object
+  bpf: add BPF token support to BPF_MAP_CREATE command
+  bpf: add BPF token support to BPF_BTF_LOAD command
+  bpf: add BPF token support to BPF_PROG_LOAD command
+  bpf: take into account BPF token when fetching helper protos
+  bpf: consistently use BPF token throughout BPF verifier logic
+  bpf,lsm: refactor bpf_prog_alloc/bpf_prog_free LSM hooks
+  bpf,lsm: refactor bpf_map_alloc/bpf_map_free LSM hooks
+  bpf,lsm: add BPF token LSM hooks
+  libbpf: add bpf_token_create() API
+  libbpf: add BPF token support to bpf_map_create() API
+  libbpf: add BPF token support to bpf_btf_load() API
+  libbpf: add BPF token support to bpf_prog_load() API
+  selftests/bpf: add BPF token-enabled tests
+  bpf,selinux: allocate bpf_security_struct per BPF token
+
+ drivers/media/rc/bpf-lirc.c                   |   2 +-
+ include/linux/bpf.h                           |  83 ++-
+ include/linux/filter.h                        |   2 +-
+ include/linux/lsm_hook_defs.h                 |  15 +-
+ include/linux/security.h                      |  43 +-
+ include/uapi/linux/bpf.h                      |  44 ++
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/arraymap.c                         |   2 +-
+ kernel/bpf/bpf_lsm.c                          |  15 +-
+ kernel/bpf/cgroup.c                           |   6 +-
+ kernel/bpf/core.c                             |   3 +-
+ kernel/bpf/helpers.c                          |   6 +-
+ kernel/bpf/inode.c                            |  98 ++-
+ kernel/bpf/syscall.c                          | 215 ++++--
+ kernel/bpf/token.c                            | 247 +++++++
+ kernel/bpf/verifier.c                         |  13 +-
+ kernel/trace/bpf_trace.c                      |   2 +-
+ net/core/filter.c                             |  36 +-
+ net/ipv4/bpf_tcp_ca.c                         |   2 +-
+ net/netfilter/nf_bpf_link.c                   |   2 +-
+ security/security.c                           | 101 ++-
+ security/selinux/hooks.c                      |  47 +-
+ tools/include/uapi/linux/bpf.h                |  44 ++
+ tools/lib/bpf/bpf.c                           |  30 +-
+ tools/lib/bpf/bpf.h                           |  39 +-
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/libbpf_probes.c  |   4 +
+ .../selftests/bpf/prog_tests/libbpf_str.c     |   6 +
+ .../testing/selftests/bpf/prog_tests/token.c  | 622 ++++++++++++++++++
+ 29 files changed, 1565 insertions(+), 167 deletions(-)
+ create mode 100644 kernel/bpf/token.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/token.c
+
+-- 
+2.34.1
 
