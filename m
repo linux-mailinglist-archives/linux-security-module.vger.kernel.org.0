@@ -2,69 +2,88 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD0D7E8965
-	for <lists+linux-security-module@lfdr.de>; Sat, 11 Nov 2023 07:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B90247E852E
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 Nov 2023 22:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjKKGFg (ORCPT
+        id S229537AbjKJVhN (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Sat, 11 Nov 2023 01:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        Fri, 10 Nov 2023 16:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjKKGFf (ORCPT
+        with ESMTP id S229471AbjKJVhN (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Sat, 11 Nov 2023 01:05:35 -0500
-Received: from mail.maprial.com (mail.maprial.com [190.181.35.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A49420B;
-        Fri, 10 Nov 2023 22:05:33 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.maprial.com (Postfix) with ESMTP id 590248524A18;
-        Fri, 10 Nov 2023 21:40:10 -0400 (-04)
-Received: from mail.maprial.com ([127.0.0.1])
-        by localhost (mail.maprial.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id kvswRlScdU15; Fri, 10 Nov 2023 21:40:07 -0400 (-04)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.maprial.com (Postfix) with ESMTP id 9A8D586A96CC;
-        Fri, 10 Nov 2023 17:46:40 -0400 (-04)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.maprial.com 9A8D586A96CC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maprial.com;
-        s=8A254412-65B9-11ED-A564-8B9C10001A2B; t=1699652801;
-        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=tbeZP3Sd/qH6tgoGG35Ffy7/SFul2Fuz0araWRDxlezhpfgOllyuobLmygAays5FW
-         qAvtabGSY8MidZBfO9ulLIEgRonkgwtWNEPRdpeD1AG8JDUzzYxE6KJDEYaYOqrnGS
-         TnIIhS5xR4mUHS8J5ZWX+LIRdeTrVOryteWu1tr4=
-X-Virus-Scanned: amavisd-new at mail.maprial.com
-Received: from mail.maprial.com ([127.0.0.1])
-        by localhost (mail.maprial.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id d79VFJDa3cWR; Fri, 10 Nov 2023 17:46:40 -0400 (-04)
-Received: from [192.168.1.152] (unknown [51.179.104.230])
-        by mail.maprial.com (Postfix) with ESMTPSA id D9CBE75AD000;
-        Fri, 10 Nov 2023 17:03:58 -0400 (-04)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 10 Nov 2023 16:37:13 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D634229
+        for <linux-security-module@vger.kernel.org>; Fri, 10 Nov 2023 13:37:07 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-daf2eda7efaso841446276.0
+        for <linux-security-module@vger.kernel.org>; Fri, 10 Nov 2023 13:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1699652227; x=1700257027; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EK5KZJbX0KbAZTwqVt/Wc/I4RWhJOChSq/SaWjfJwig=;
+        b=AklQlihVAALFrjusgorrKweLtVNF+dIHAxhVJGj8LxBq3P5rqDsN1DhzMoV3fmyg/Y
+         yZ2qYGf7gNPx9SD82ecqPlXw15s7oC1tIsXf4ZCUhSsmnyccLhBt5aJuCidIufIo6hnv
+         ohSJV3VVPSDUhJ87khnRyC/+Oid7NBlalEt9p35PoXUuTCRoWC5rKaY3GfviS5BoaXGO
+         BJWJyn/O+06cI53V4yPGHSXIyq2EvpXfP/0kq9OVscjP/1nVnGZhM8EsSTdo3OHzT1XP
+         +DqE+ybVADU6oFXLJOKS+C5XB74e0156+bZin/l1xupOC5iaLXe/wY8ZJshUhQLv1C1I
+         wXYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699652227; x=1700257027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EK5KZJbX0KbAZTwqVt/Wc/I4RWhJOChSq/SaWjfJwig=;
+        b=sY5CY9IVeJAuEvcpyiQir5LrC5vaUBJe0avdRQZF476Nie8lkOLVV9fvBvUf6UvRWI
+         gjSDOg78dOWiEM4urlJCu5pcN2kdSWU7lucBwulevIjn6KqeTL0oiBq8ZhdkBJKQYh9p
+         VQYf+pCQdSl8EoNTl/Q+DWi0ETNOqA09VK8oli29GiR6uIRexBlAVmY4csgJpG/5sFI1
+         MEPpiHFPqPJa7YiN/zDLYmT2Ss2E8FqtfEPGBbF5mSuu7FBCLiqTSz3SYQ3jvi0wRNC8
+         r4yYyCzXrS5zYUoDu+eBV+SxLWvZAnAdIeSELkPT5XLk/1/1FE6qEZyZQhxfqH+haV7Q
+         Ul8w==
+X-Gm-Message-State: AOJu0YwxcH6s3cicbaYI+6CwmtS9nWfzzlkRBUFnoJJCu73yOJrXpWyW
+        e042tLa2l2X5rmpNc807tpxfrBJn4n25FKsVIklKHyh+gz2aKBM=
+X-Google-Smtp-Source: AGHT+IFMlSarcL5KAxEisJv0DZQMJ5iBnbrXUYuXN2/6EyvVg/0icWzZGNHv7xUft+hzP7PLxD7N5q0DvScqDtSJz4c=
+X-Received: by 2002:a25:e689:0:b0:da0:cded:62f8 with SMTP id
+ d131-20020a25e689000000b00da0cded62f8mr318077ybh.28.1699652226705; Fri, 10
+ Nov 2023 13:37:06 -0800 (PST)
 MIME-Version: 1.0
+References: <20231110173427.79275-2-paul@paul-moore.com> <b32a3279-5c2f-4ddb-b400-09681276cf1d@schaufler-ca.com>
+In-Reply-To: <b32a3279-5c2f-4ddb-b400-09681276cf1d@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 10 Nov 2023 16:36:55 -0500
+Message-ID: <CAHC9VhSdC-=vDK8ezhMe=ymL4vjNB1NPxi2pCAG5Uo1P0Z5fjA@mail.gmail.com>
+Subject: Re: [PATCH] lsm: mark the lsm_id variables are marked as static
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
-To:     Recipients <gvalencia@maprial.com>
-From:   gvalencia@maprial.com
-Date:   Fri, 10 Nov 2023 22:03:49 +0100
-Reply-To: joliushk@gmail.com
-Message-Id: <20231110210359.D9CBE75AD000@mail.maprial.com>
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-security-module.vger.kernel.org>
 
-Goededag,
-Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
-Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
+On Fri, Nov 10, 2023 at 3:23=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
+>
+> On 11/10/2023 9:34 AM, Paul Moore wrote:
+> > As the kernel test robot helpfully reminded us, all of the lsm_id
+> > instances defined inside the various LSMs should be marked as static.
+> > The one exception is Landlock which uses its lsm_id variable across
+> > multiple source files with an extern declaration in a header file.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
+> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
+Thanks Casey, I've gone ahead and merge this into lsm/dev-staging.
 
-Ik wacht op jullie reacties
-Met vriendelijke groeten
-mevrouw Joanna Liu
+--=20
+paul-moore.com
