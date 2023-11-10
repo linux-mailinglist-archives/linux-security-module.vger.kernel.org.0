@@ -2,31 +2,31 @@ Return-Path: <linux-security-module-owner@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96717E7882
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 Nov 2023 04:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D46647E785B
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 Nov 2023 04:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345865AbjKJDvd convert rfc822-to-8bit (ORCPT
+        id S1345905AbjKJDtm convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-security-module@lfdr.de>);
-        Thu, 9 Nov 2023 22:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        Thu, 9 Nov 2023 22:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345860AbjKJDvc (ORCPT
+        with ESMTP id S1345915AbjKJDta (ORCPT
         <rfc822;linux-security-module@vger.kernel.org>);
-        Thu, 9 Nov 2023 22:51:32 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57053468C
-        for <linux-security-module@vger.kernel.org>; Thu,  9 Nov 2023 19:51:30 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A9MYr3J003725
-        for <linux-security-module@vger.kernel.org>; Thu, 9 Nov 2023 19:51:29 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u91s75fxk-7
+        Thu, 9 Nov 2023 22:49:30 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D5646B3
+        for <linux-security-module@vger.kernel.org>; Thu,  9 Nov 2023 19:49:23 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A9MYvSN018927
+        for <linux-security-module@vger.kernel.org>; Thu, 9 Nov 2023 19:49:23 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u8xr3pwcn-20
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-security-module@vger.kernel.org>; Thu, 09 Nov 2023 19:51:29 -0800
-Received: from twshared4634.37.frc1.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+        for <linux-security-module@vger.kernel.org>; Thu, 09 Nov 2023 19:49:23 -0800
+Received: from twshared58712.02.prn6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 9 Nov 2023 19:51:25 -0800
+ 15.1.2507.34; Thu, 9 Nov 2023 19:49:16 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
         id 648C63B41DCA6; Thu,  9 Nov 2023 19:49:11 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
@@ -43,8 +43,8 @@ In-Reply-To: <20231110034838.1295764-1-andrii@kernel.org>
 References: <20231110034838.1295764-1-andrii@kernel.org>
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 6HX1-P4u2LsD35hq918vTbHUORmHE-zi
-X-Proofpoint-ORIG-GUID: 6HX1-P4u2LsD35hq918vTbHUORmHE-zi
+X-Proofpoint-GUID: sglOPaKiU2qdjbXvPyhIoDaxsBgFFOE4
+X-Proofpoint-ORIG-GUID: sglOPaKiU2qdjbXvPyhIoDaxsBgFFOE4
 Content-Transfer-Encoding: 8BIT
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
