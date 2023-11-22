@@ -1,139 +1,172 @@
-Return-Path: <linux-security-module+bounces-18-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-20-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CC187F4932
-	for <lists+linux-security-module@lfdr.de>; Wed, 22 Nov 2023 15:44:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CDBE7F4936
+	for <lists+linux-security-module@lfdr.de>; Wed, 22 Nov 2023 15:45:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDDDA2815C5
-	for <lists+linux-security-module@lfdr.de>; Wed, 22 Nov 2023 14:44:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0C38B2096A
+	for <lists+linux-security-module@lfdr.de>; Wed, 22 Nov 2023 14:45:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A37D20300
-	for <lists+linux-security-module@lfdr.de>; Wed, 22 Nov 2023 14:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC9625563
+	for <lists+linux-security-module@lfdr.de>; Wed, 22 Nov 2023 14:45:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=infotecs.ru header.i=@infotecs.ru header.b="OZ2rMpvd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mBBIpDfd"
 X-Original-To: linux-security-module@vger.kernel.org
-X-Greylist: delayed 438 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Nov 2023 06:02:47 PST
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF42197
-	for <linux-security-module@vger.kernel.org>; Wed, 22 Nov 2023 06:02:47 -0800 (PST)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-	by mx0.infotecs.ru (Postfix) with ESMTP id A1721114CAA9;
-	Wed, 22 Nov 2023 16:55:24 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru A1721114CAA9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-	t=1700661324; bh=WfKnDkL5/6UmicSAggQzojP2VBLZEawhK5wwMkpVq1E=;
-	h=From:To:CC:Subject:Date:From;
-	b=OZ2rMpvd/GJ73lWv/91VdsU2sZM9EbQqMl2PcXY1yYh7mpWJJ435lqjs2EumtYveD
-	 LOMIL4jCVIm39swBIRBi70L+FUbFbK9kS12PmU2HlwCfeW8Uz0mmlcp1lxxU5FHtqo
-	 iUULdiaJ0jWPW9vQbYt3HhoajFJ+0LGXPjDX+D+I=
-Received: from msk-exch-01.infotecs-nt (msk-exch-01.infotecs-nt [10.0.7.191])
-	by mx0.infotecs-nt (Postfix) with ESMTP id 9EC4031301CF;
-	Wed, 22 Nov 2023 16:55:24 +0300 (MSK)
-From: Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To: Paul Moore <paul@paul-moore.com>
-CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Huw Davies <huw@codeweavers.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "lvc-project@linuxtesting.org"
-	<lvc-project@linuxtesting.org>
-Subject: [PATCH net] calipso: Fix memory leak in netlbl_calipso_add_pass()
-Thread-Topic: [PATCH net] calipso: Fix memory leak in
- netlbl_calipso_add_pass()
-Thread-Index: AQHaHUuKnw2Bkvmb60ybqCKOZMz9OQ==
-Date: Wed, 22 Nov 2023 13:55:24 +0000
-Message-ID: <20231122135242.2779058-1-Ilia.Gavrilov@infotecs.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF09101;
+	Wed, 22 Nov 2023 06:16:19 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6c34e87b571so5506235b3a.3;
+        Wed, 22 Nov 2023 06:16:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700662579; x=1701267379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gEFaC38G2s27p4sRXGudzDSfRCeLNbnrtzWPTvuPOrE=;
+        b=mBBIpDfdRD158dyCUhvkxm5a2zMAI2AGBY+utO481YikNmyh2u2LN2hBXRy7cYDZmp
+         NS80YyDNow07pRvew+e6gs+IODlJR/syxKbfxFOkq9RA0KlHKdQ5I3yYRlP2XC8ktsRB
+         TloJD+DyZv4PVwAwhinSuvpHqvHiHV+GwnszxdOBKcjdXzZdxwFZr5a2I8z8CiE2AWMk
+         N0KKujncAL4j73A55rgltObNu+r+dxdINGMfnEtGIaOWlkVAGONF3P2VE3p48xxuRYrX
+         ELyv8GWEvoj9maO6Wf/mwHeTNJLYJdx8nPSbYstr/q60vrTiWBR5qkJOjX9pOL/BZJas
+         d+ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700662579; x=1701267379;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gEFaC38G2s27p4sRXGudzDSfRCeLNbnrtzWPTvuPOrE=;
+        b=l4BofyLpjjzr27wahjhHogFdBEbdHA9E/Y+N8XaGVqcdvAkUG2OLn5cEDRSRSRAbYG
+         0Wep4j9gedlp72wv2tI/8yYjgtM4vHhoMJyo93ClXRj+GZ+I2fPZOx7Ql73jWDS113xG
+         7RfiNcgSwaZmIqqSgCdgm1b7nagseIfTTcGV6mTY56FjKWvpWPi1zQgLIRppWdiVk52Y
+         vYDGR3hcy2SOFUBoyd/5myhJKadKqz7dZwXRO6xbC2+/UfcV7onPUhqDw7EkkzarlDMI
+         WHlGwT7tVYAEX6UzQjQtQ4z/2VEB2OxUIY7iFZqVNDSXVXa79HCY13CWOHRDSequkZoE
+         zVSQ==
+X-Gm-Message-State: AOJu0Yyb4LK5sK9d+MvWK5hSBb7vy4cha0Z4Swga3i4w3o/mEkuNtb1v
+	W0UX9Kzm7dgUdAMJsznX7r3KrE85TRROkd6n
+X-Google-Smtp-Source: AGHT+IFhmaA9eJSUL6Bl04UTu5jGhNUgNaEDGcrXHRztOb4CKetZJ/zl0FEet0evFRzuIE+jA8PGEA==
+X-Received: by 2002:a05:6a20:7207:b0:187:58b0:337 with SMTP id y7-20020a056a20720700b0018758b00337mr1586648pzb.11.1700662578496;
+        Wed, 22 Nov 2023 06:16:18 -0800 (PST)
+Received: from vultr.guest ([2001:19f0:ac01:a71:5400:4ff:fea8:5687])
+        by smtp.gmail.com with ESMTPSA id p18-20020a63fe12000000b0058988954686sm9356260pgh.90.2023.11.22.06.16.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 06:16:17 -0800 (PST)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: akpm@linux-foundation.org,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	omosnace@redhat.com,
+	mhocko@suse.com
+Cc: linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ligang.bdlg@bytedance.com,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [RFC PATCH v2 0/6] mm, security, bpf: Fine-grained control over memory policy adjustments with lsm bpf 
+Date: Wed, 22 Nov 2023 14:15:53 +0000
+Message-Id: <20231122141559.4228-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 5
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Status: not scanned, disabled by settings
-X-KLMS-AntiSpam-Interceptor-Info: not scanned
-X-KLMS-AntiPhishing: Clean, bases: 2023/11/22 12:40:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/11/22 10:55:00 #22501072
-X-KLMS-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
 
-If IPv6 support is disabled at boot (ipv6.disable=3D1),
-the calipso_init() -> netlbl_calipso_ops_register() function isn't called,
-and the netlbl_calipso_ops_get() function always returns NULL.
-In this case, the netlbl_calipso_add_pass() function allocates memory
-for the doi_def variable but doesn't free it with the calipso_doi_free().
+Background
+==========
 
-BUG: memory leak
-unreferenced object 0xffff888011d68180 (size 64):
-  comm "syz-executor.1", pid 10746, jiffies 4295410986 (age 17.928s)
-  hex dump (first 32 bytes):
-    00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000730d8770>] kmalloc include/linux/slab.h:552 [inline]
-    [<00000000730d8770>] netlbl_calipso_add_pass net/netlabel/netlabel_cali=
-pso.c:76 [inline]
-    [<00000000730d8770>] netlbl_calipso_add+0x22e/0x4f0 net/netlabel/netlab=
-el_calipso.c:111
-    [<0000000002e662c0>] genl_family_rcv_msg_doit+0x22f/0x330 net/netlink/g=
-enetlink.c:739
-    [<00000000a08d6d74>] genl_family_rcv_msg net/netlink/genetlink.c:783 [i=
-nline]
-    [<00000000a08d6d74>] genl_rcv_msg+0x341/0x5a0 net/netlink/genetlink.c:8=
-00
-    [<0000000098399a97>] netlink_rcv_skb+0x14d/0x440 net/netlink/af_netlink=
-.c:2515
-    [<00000000ff7db83b>] genl_rcv+0x29/0x40 net/netlink/genetlink.c:811
-    [<000000000cf53b8c>] netlink_unicast_kernel net/netlink/af_netlink.c:13=
-13 [inline]
-    [<000000000cf53b8c>] netlink_unicast+0x54b/0x800 net/netlink/af_netlink=
-.c:1339
-    [<00000000d78cd38b>] netlink_sendmsg+0x90a/0xdf0 net/netlink/af_netlink=
-.c:1934
-    [<000000008328a57f>] sock_sendmsg_nosec net/socket.c:651 [inline]
-    [<000000008328a57f>] sock_sendmsg+0x157/0x190 net/socket.c:671
-    [<000000007b65a1b5>] ____sys_sendmsg+0x712/0x870 net/socket.c:2342
-    [<0000000083da800e>] ___sys_sendmsg+0xf8/0x170 net/socket.c:2396
-    [<000000004a9b827f>] __sys_sendmsg+0xea/0x1b0 net/socket.c:2429
-    [<0000000061b64d3a>] do_syscall_64+0x30/0x40 arch/x86/entry/common.c:46
-    [<00000000a1265347>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+In our containerized environment, we've identified unexpected OOM events
+where the OOM-killer terminates tasks despite having ample free memory.
+This anomaly is traced back to tasks within a container using mbind(2) to
+bind memory to a specific NUMA node. When the allocated memory on this node
+is exhausted, the OOM-killer, prioritizing tasks based on oom_score,
+indiscriminately kills tasks. 
 
-Found by InfoTeCS on behalf of Linux Verification Center
-(linuxtesting.org) with Syzkaller
+The Challenge 
+============
+In a containerized environment, independent memory binding by a user can
+lead to unexpected system issues or disrupt tasks being run by other users
+on the same server. If a user genuinely requires memory binding, we will
+allocate dedicated servers to them by leveraging kubelet deployment.
 
-Fixes: cb72d38211ea ("netlabel: Initial support for the CALIPSO netlink pro=
-tocol.")
-Signed-off-by: Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
----
- net/netlabel/netlabel_calipso.c | 2 ++
- 1 file changed, 2 insertions(+)
+Currently, users possess the ability to autonomously bind their memory to
+specific nodes without explicit agreement or authorization from our end.
+It's imperative that we establish a method to prevent this behavior.
 
-diff --git a/net/netlabel/netlabel_calipso.c b/net/netlabel/netlabel_calips=
-o.c
-index f1d5b8465217..76ae57c4df90 100644
---- a/net/netlabel/netlabel_calipso.c
-+++ b/net/netlabel/netlabel_calipso.c
-@@ -423,6 +423,8 @@ void calipso_doi_free(struct calipso_doi *doi_def)
-=20
- 	if (ops)
- 		ops->doi_free(doi_def);
-+	else
-+		kfree(doi_def);
- }
-=20
- /**
---=20
-2.39.2
+Proposed Solutions
+=================
+
+- Introduce Capability to Disable MPOL_BIND
+  Currently, any task can perform MPOL_BIND without specific capabilities.
+  Enforcing CAP_SYS_RESOURCE or CAP_SYS_NICE could be an option, but this
+  may have unintended consequences. Capabilities, being broad, might grant
+  unnecessary privileges. We should explore alternatives to prevent
+  unexpected side effects.
+
+- Use LSM BPF to Disable MPOL_BIND
+  Introduce LSM hooks for syscalls such as mbind(2), set_mempolicy(2), and
+  set_mempolicy_home_node(2) to disable MPOL_BIND. This approach is more
+  flexibility and allows for fine-grained control without unintended
+  consequences. A sample LSM BPF program is included, demonstrating
+  practical implementation in a production environment.
+
+- seccomp
+  seccomp is relatively heavyweight, making it less suitable for
+  enabling in our production environment:
+  - Both kubelet and containers need adaptation to support it.
+  - Dynamically altering security policies for individual containers
+    without interrupting their operations isn't straightforward.
+
+Future Considerations
+=====================
+
+In addition, there's room for enhancement in the OOM-killer for cases
+involving CONSTRAINT_MEMORY_POLICY. It would be more beneficial to
+prioritize selecting a victim that has allocated memory on the same NUMA
+node. My exploration on the lore led me to a proposal[0] related to this
+matter, although consensus seems elusive at this point. Nevertheless,
+delving into this specific topic is beyond the scope of the current
+patchset.
+
+[0] https://lore.kernel.org/lkml/20220512044634.63586-1-ligang.bdlg@bytedance.com/
+
+
+Changes:
+- RFC v1 -> RFC v2:
+  - Refine the commit log to avoid misleading
+  - Use one common lsm hook instead and add comment for it
+  - Add selinux implementation
+  - Other improments in mempolicy
+- RFC v1: https://lwn.net/Articles/951188/
+
+Yafang Shao (6):
+  mm, doc: Add doc for MPOL_F_NUMA_BALANCING
+  mm: mempolicy: Revise comment regarding mempolicy mode flags
+  mm, security: Fix missed security_task_movememory() in mbind(2)
+  mm, security: Add lsm hook for memory policy adjustment
+  security: selinux: Implement set_mempolicy hook
+  selftests/bpf: Add selftests for set_mempolicy with a lsm prog
+
+ .../admin-guide/mm/numa_memory_policy.rst     | 27 +++++++
+ include/linux/lsm_hook_defs.h                 |  3 +
+ include/linux/security.h                      |  9 +++
+ include/uapi/linux/mempolicy.h                |  2 +-
+ mm/mempolicy.c                                | 17 +++-
+ security/security.c                           | 13 +++
+ security/selinux/hooks.c                      |  8 ++
+ security/selinux/include/classmap.h           |  2 +-
+ tools/testing/selftests/bpf/Makefile          |  2 +-
+ .../selftests/bpf/prog_tests/set_mempolicy.c  | 79 +++++++++++++++++++
+ .../selftests/bpf/progs/test_set_mempolicy.c  | 29 +++++++
+ 11 files changed, 187 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/set_mempolicy.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_set_mempolicy.c
+
+-- 
+2.30.1 (Apple Git-130)
+
 
