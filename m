@@ -1,33 +1,33 @@
-Return-Path: <linux-security-module+bounces-83-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-95-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3BA77FABEF
-	for <lists+linux-security-module@lfdr.de>; Mon, 27 Nov 2023 21:48:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0912A7FABFE
+	for <lists+linux-security-module@lfdr.de>; Mon, 27 Nov 2023 21:50:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA0A92813A0
-	for <lists+linux-security-module@lfdr.de>; Mon, 27 Nov 2023 20:48:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FB63B209AC
+	for <lists+linux-security-module@lfdr.de>; Mon, 27 Nov 2023 20:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A533DB81
-	for <lists+linux-security-module@lfdr.de>; Mon, 27 Nov 2023 20:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A3246440
+	for <lists+linux-security-module@lfdr.de>; Mon, 27 Nov 2023 20:50:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370E110D1
-	for <linux-security-module@vger.kernel.org>; Mon, 27 Nov 2023 11:04:41 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3ARICHpo003271
-	for <linux-security-module@vger.kernel.org>; Mon, 27 Nov 2023 11:04:40 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3umf0n5e6a-3
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF04D60
+	for <linux-security-module@vger.kernel.org>; Mon, 27 Nov 2023 11:07:43 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARIB7rR021476
+	for <linux-security-module@vger.kernel.org>; Mon, 27 Nov 2023 11:07:43 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3um4gy7g9e-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-security-module@vger.kernel.org>; Mon, 27 Nov 2023 11:04:40 -0800
-Received: from twshared29647.38.frc1.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+	for <linux-security-module@vger.kernel.org>; Mon, 27 Nov 2023 11:07:43 -0800
+Received: from twshared9518.03.prn6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 27 Nov 2023 11:04:38 -0800
+ 15.1.2507.34; Mon, 27 Nov 2023 11:07:42 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
 	id 9F17E3C35FC04; Mon, 27 Nov 2023 11:04:30 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: N8LygEgfgCp1-gbNsE6MyWhethyXier4
-X-Proofpoint-GUID: N8LygEgfgCp1-gbNsE6MyWhethyXier4
+X-Proofpoint-GUID: 8hQWzKjs9CZVqvd_JV1JXSgGlNRsTdMv
+X-Proofpoint-ORIG-GUID: 8hQWzKjs9CZVqvd_JV1JXSgGlNRsTdMv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-27_17,2023-11-27_01,2023-05-22_02
