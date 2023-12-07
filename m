@@ -1,200 +1,195 @@
-Return-Path: <linux-security-module+bounces-392-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-396-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69FD480965C
-	for <lists+linux-security-module@lfdr.de>; Fri,  8 Dec 2023 00:00:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C01080974F
+	for <lists+linux-security-module@lfdr.de>; Fri,  8 Dec 2023 01:36:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C643628227B
-	for <lists+linux-security-module@lfdr.de>; Thu,  7 Dec 2023 23:00:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11DD71F20FC7
+	for <lists+linux-security-module@lfdr.de>; Fri,  8 Dec 2023 00:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB8456394
-	for <lists+linux-security-module@lfdr.de>; Thu,  7 Dec 2023 23:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C53A1860
+	for <lists+linux-security-module@lfdr.de>; Fri,  8 Dec 2023 00:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="L2m78iNi"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5A1170C
-	for <linux-security-module@vger.kernel.org>; Thu,  7 Dec 2023 14:28:11 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B7GeMWI030180
-	for <linux-security-module@vger.kernel.org>; Thu, 7 Dec 2023 14:28:11 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3uu2jh0b7y-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-security-module@vger.kernel.org>; Thu, 07 Dec 2023 14:28:10 -0800
-Received: from twshared4634.37.frc1.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 7 Dec 2023 14:28:07 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-	id B9B4A3CC5459E; Thu,  7 Dec 2023 14:28:01 -0800 (PST)
-From: Andrii Nakryiko <andrii@kernel.org>
-To: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <paul@paul-moore.com>,
-        <brauner@kernel.org>
-CC: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-        <keescook@chromium.org>, <kernel-team@meta.com>, <sargun@sargun.me>
-Subject: [PATCH RFC bpf-next 3/3] selftests/bpf: utilize string values for delegate_xxx mount options
-Date: Thu, 7 Dec 2023 14:27:55 -0800
-Message-ID: <20231207222755.3920286-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231207222755.3920286-1-andrii@kernel.org>
-References: <20231207222755.3920286-1-andrii@kernel.org>
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4361717
+	for <linux-security-module@vger.kernel.org>; Thu,  7 Dec 2023 15:30:21 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-7b70139d54cso34280839f.1
+        for <linux-security-module@vger.kernel.org>; Thu, 07 Dec 2023 15:30:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1701991821; x=1702596621; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qMzV6rito0IVod3bZImEbgc3/1q8nnlDU+92MtlIeos=;
+        b=L2m78iNiAOt78txlSXrI86z5XrI8GEqP7GXFGyGxn22DE02xych9ikj8E+Wm+PG1EO
+         UZf/2wp3BZ/DA+9Fn3nf+a8TBJxib4nPwwws+asfmibkuwr9bYnc9GwMziIuTtORXN3I
+         AhBCfsRIRNqNHgRvftW3xiSnEwk2eQqCDR9WjAHR4V1uuPZpLcdZYOVb9B0ZrLilWtSN
+         g/qdPHTzu+/QyfJouJrrcO8gnVQRH/x9Ny7BDdV8AXMe6z795+didMx0yK6UwyPps8BW
+         JviP0Fz2vce8UQfIZLHf2bQPh5SnJtM8/DkjQncEQ/eWSh9u1h7IJcRUXkrp+lEGKH8T
+         lZZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701991821; x=1702596621;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qMzV6rito0IVod3bZImEbgc3/1q8nnlDU+92MtlIeos=;
+        b=EG09GWLNwHgsfM6MQFEmB1gTCa0AWLlz+KkRX0nIza7E//d4+KkLsfmnw+0nyn5Ppm
+         fNRzFV0yL2Ct1TyVIkmSF9I4k5bRrMzdVdg/58T8gIH13VeHLQh7AJ9z4uYiVZv5VhRK
+         VNsTJXF7gzKHyE4RJ0nD8556aNV4bcA5II8/eeePCNJcXc8lWf66tGkCPelx6Sky8v+6
+         FarYZa6bmkTwOoNwGQ0eeC0Lrxmjqo2+QyxbuxFvCSaIxOssPPlh2JHotbGrp3FQH0vl
+         9pTe/oM6PHBEk92OmnRkxAPyYAEPUxqyfhz1a4h1/8lNTcEsIiLIIvO3K6AFcPwfbz0+
+         bo7g==
+X-Gm-Message-State: AOJu0YwAJVzFIGxoL/YWQPXp9l4OUITVbwby7Rb0N7TMC6ZHmB+D0fJ1
+	nIYHI/8iiTbba5NKu191/lcn2g==
+X-Google-Smtp-Source: AGHT+IEKm1QqA41tQFNxwbmF1NNcyUcKYN0XrqIPpXNsDRDOYJzy+2Yni/yRG+WGFTakK0mvUWCxOg==
+X-Received: by 2002:a6b:ea14:0:b0:7b7:475:5b2d with SMTP id m20-20020a6bea14000000b007b704755b2dmr1223723ioc.8.1701991820802;
+        Thu, 07 Dec 2023 15:30:20 -0800 (PST)
+Received: from CMGLRV3 ([2a09:bac5:9478:4e6::7d:47])
+        by smtp.gmail.com with ESMTPSA id y4-20020a5ec804000000b007b0684e260dsm189878iol.2.2023.12.07.15.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 15:30:20 -0800 (PST)
+Date: Thu, 7 Dec 2023 17:30:17 -0600
+From: Frederick Lawler <fred@cloudflare.com>
+To: KP Singh <kpsingh@kernel.org>
+Cc: revest@chromium.org, jackmanb@chromium.org, bpf@vger.kernel.org,
+	kernel-team@cloudflare.com, linux-security-module@vger.kernel.org,
+	paul@paul-moore.com, laoar.shao@gmail.com, casey@schaufler-ca.com,
+	penguin-kernel@i-love.sakura.ne.jp
+Subject: Re: BPF LSM prevent program unload
+Message-ID: <ZXJViQDsdj7Bg4e9@CMGLRV3>
+References: <ZW+KYViDT3HWtKI1@CMGLRV3>
+ <CACYkzJ5iyiUi_3r439ZMRnjM2f9Wd0XYoGJYQY=aXJ4QmX7e-A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: xClB-G2ZLoAposMu4TsWoBQQpXdl4yiF
-X-Proofpoint-ORIG-GUID: xClB-G2ZLoAposMu4TsWoBQQpXdl4yiF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-07_17,2023-12-07_01,2023-05-22_02
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACYkzJ5iyiUi_3r439ZMRnjM2f9Wd0XYoGJYQY=aXJ4QmX7e-A@mail.gmail.com>
 
-Use both hex-based and string-based way to specify delegate mount
-options for BPF FS.
+On Thu, Dec 07, 2023 at 03:01:33PM +0100, KP Singh wrote:
+> On Tue, Dec 5, 2023 at 9:39 PM Frederick Lawler <fred@cloudflare.com> wrote:
+> >
+> > Hi,
+> >
+> > IIUC, LSMs are supposed to give us the ability to design policy around
+> > unprivileged users and in addition to privileged users. As we expand
+> > our usage of BPF LSM's, there are cases where we want to restrict
+> > privileged users from unloading our progs. For instance, any privileged
+> > user that wants to remove restrictions we've placed on privileged users.
+> >
+> > We currently have a loader application doesn't leverage BPF skeletons. We
+> > instead load BPF object files, and then pin the progs to a mount point that
+> > is a bpf filesystem. On next run, if we have new policies, load in new
+> > policies, and finally unload the old.
+> >
+> > Here are some conditions a privileged user may unload programs:
+> >
+> >         umount /sys/fs/bpf
+> >         rm -rf /sys/fs/bpf/lsm
+> >         rm /sys/fs/bpf/lsm/some_prog
+> >         unlink /sys/fs/bpf/lsm/some_prog
+> >
+> > This works because once we remove the last reference, the programs and
+> > pinned maps are cleaned up.
+> >
+> > Moving individual pins or moving the mount entirely with mount --move
+> > do not perform any clean up operations. Lastly, bpftool doesn't currently
+> > have the ability to unload LSM's AFAIK.
+> >
+> > The few ideas I have floating around are:
+> >
+> > 1. Leverage some LSM hooks (BPF or otherwise) to restrict on the functions
+> >    security_sb_umount(), security_path_unlink(), security_inode_unlink().
+> >
+> >    Both security_path_unlink() and security_inode_unlink() handle the
+> >    unlink/remove case, but not the umount case.
+> 
+> IMHO this is the best option. Here:
+> 
+> * BPF LSM Program = MAC Policy
+> * Removing / detaching / updating programs = Updating MAC policy
+> 
+> The decision around who can update MAC policy can be governed by the
+> policy itself a.k.a. implemented with BPF LSM programs.  So we can
+> update hooks (as suggested here inode_unlink, sb_unmount, path_unlink)
+> to only allow this action for a subset of users (e.g. CAP_MAC_ADMIN or
+> even further restricted)
+> 
+> While, I think this may be doable with existing LSM hooks but we need
+> to probably have to cover multiple hook points needed to prevent one
+> action which makes a good case for another LSM hook, perhaps something
+> in the link->ops->detach path like
+> https://elixir.bootlin.com/linux/latest/source/kernel/bpf/syscall.c#L5074
+> 
+> What do you think?
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../testing/selftests/bpf/prog_tests/token.c  | 43 +++++++++++--------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+That's what I was thinking for option (4) "introduce a
+security_bpf_prog_unload()". Anyway, I agree. Paul brought up a good
+point that he'd like to see more discussion around this idea [1].
+Mucking with the mounts (see below) is a bit of a mess, and there could
+still exist other methods for unloading I'm not aware of yet.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
-ng/selftests/bpf/prog_tests/token.c
-index dc03790c6272..ec59c81c54b5 100644
---- a/tools/testing/selftests/bpf/prog_tests/token.c
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -55,14 +55,22 @@ static int restore_priv_caps(__u64 old_caps)
- 	return cap_enable_effective(old_caps, NULL);
- }
-=20
--static int set_delegate_mask(int fs_fd, const char *key, __u64 mask)
-+static int set_delegate_mask(int fs_fd, const char *key, __u64 mask, con=
-st char *mask_str)
- {
- 	char buf[32];
- 	int err;
-=20
--	snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
-+	if (!mask_str) {
-+		if (mask =3D=3D ~0ULL) {
-+			mask_str =3D "any";
-+		} else {
-+			snprintf(buf, sizeof(buf), "0x%llx", (unsigned long long)mask);
-+			mask_str =3D buf;
-+		}
-+	}
-+
- 	err =3D sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, key,
--			   mask =3D=3D ~0ULL ? "any" : buf, 0);
-+			   mask_str, 0);
- 	if (err < 0)
- 		err =3D -errno;
- 	return err;
-@@ -72,6 +80,7 @@ static int set_delegate_mask(int fs_fd, const char *key=
-, __u64 mask)
-=20
- struct bpffs_opts {
- 	__u64 cmds;
-+	const char *cmds_str;
- 	__u64 maps;
- 	__u64 progs;
- 	__u64 attachs;
-@@ -93,16 +102,16 @@ static int materialize_bpffs_fd(int fs_fd, struct bp=
-ffs_opts *opts)
- 	int mnt_fd, err;
-=20
- 	/* set up token delegation mount options */
--	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds);
-+	err =3D set_delegate_mask(fs_fd, "delegate_cmds", opts->cmds, opts->cmd=
-s_str);
- 	if (!ASSERT_OK(err, "fs_cfg_cmds"))
- 		return err;
--	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps);
-+	err =3D set_delegate_mask(fs_fd, "delegate_maps", opts->maps, NULL);
- 	if (!ASSERT_OK(err, "fs_cfg_maps"))
- 		return err;
--	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs);
-+	err =3D set_delegate_mask(fs_fd, "delegate_progs", opts->progs, NULL);
- 	if (!ASSERT_OK(err, "fs_cfg_progs"))
- 		return err;
--	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs);
-+	err =3D set_delegate_mask(fs_fd, "delegate_attachs", opts->attachs, NUL=
-L);
- 	if (!ASSERT_OK(err, "fs_cfg_attachs"))
- 		return err;
-=20
-@@ -284,13 +293,13 @@ static void child(int sock_fd, struct bpffs_opts *o=
-pts, child_callback_fn callba
- 	}
-=20
- 	/* ensure unprivileged child cannot set delegation options */
--	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm");
--	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_maps_eperm");
--	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_progs_eperm");
--	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1);
-+	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0x1, NULL);
- 	ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm");
-=20
- 	/* pass BPF FS context object to parent */
-@@ -314,22 +323,22 @@ static void child(int sock_fd, struct bpffs_opts *o=
-pts, child_callback_fn callba
- 	}
-=20
- 	/* ensure unprivileged child cannot reconfigure to set delegation optio=
-ns */
--	err =3D set_delegate_mask(fs_fd, "delegate_cmds", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_cmds", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_cmd_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
- 	}
--	err =3D set_delegate_mask(fs_fd, "delegate_maps", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_maps", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_maps_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
- 	}
--	err =3D set_delegate_mask(fs_fd, "delegate_progs", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_progs", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_progs_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
- 	}
--	err =3D set_delegate_mask(fs_fd, "delegate_attachs", ~0ULL);
-+	err =3D set_delegate_mask(fs_fd, "delegate_attachs", 0, "any");
- 	if (!ASSERT_EQ(err, -EPERM, "delegate_attachs_eperm_reconfig")) {
- 		err =3D -EINVAL;
- 		goto cleanup;
-@@ -647,7 +656,7 @@ void test_token(void)
- {
- 	if (test__start_subtest("map_token")) {
- 		struct bpffs_opts opts =3D {
--			.cmds =3D 1ULL << BPF_MAP_CREATE,
-+			.cmds_str =3D "BPF_MAP_CREATE",
- 			.maps =3D 1ULL << BPF_MAP_TYPE_STACK,
- 		};
-=20
-@@ -662,7 +671,7 @@ void test_token(void)
- 	}
- 	if (test__start_subtest("prog_token")) {
- 		struct bpffs_opts opts =3D {
--			.cmds =3D 1ULL << BPF_PROG_LOAD,
-+			.cmds_str =3D "BPF_PROG_LOAD",
- 			.progs =3D 1ULL << BPF_PROG_TYPE_XDP,
- 			.attachs =3D 1ULL << BPF_XDP,
- 		};
---=20
-2.34.1
+Yesterday I whipped up a hack such that: 
 
+	mkdir -p /run/fs/bpf-lsm
+	mount -t bpf none /run/fs/bpf-lsm
+	./load-policies /run/fs/bpf-lsm
+
+Where the implemented hooks inode_unlink & sb_umount look for a "bpf"
+filesystem type on the struct super_block for the mount, and then check
+for a xattr or UUID to hone in on _just_ that special mount point. This is
+so we can still umount /sys/fs/bpf. This hack so far is working out
+quite well.
+
+xattr is still under development, thus the UUID idea (we're still exploring
+unique-path-agnostic identifiers). I also didn't prove the UUID
+idea yet. For instance, I wouldn't want the UUID to change on mount
+--move or mount -o remount.
+
+Apropos the reboot problem, the idea is to force a reboot for policy change
+for now. And then eventually leverage xattr + IMA, or something else to prove
+the loader binary + progs once these features are available. Policy
+versioning is also an idea we're floating around for handling the update
+case with the loader to avoid reboot.
+
+This is all to say, I think there is a use-case here for a new hook to
+simplify the unload problem at least.
+
+[1] https://lore.kernel.org/all/CAHC9VhSRdXLeJvS3tOmAAat+h8G7_cvAYnFvbrTwgG+sC+PRYg@mail.gmail.com/
+
++cc: discussion contributors
+> 
+> - KP
+> 
+> >
+> > 3. Leverage SELinux/Apparmor to possibly handle these cases.
+> >
+> > 4. Introduce a security_bpf_prog_unload() to target hopefully the
+> >    umount and unlink cases at the same time.
+> 
+> 
+> 
+> >
+> > 5. Possible moonshot idea: introduce a interface to pin _specifically_
+> >    BPF LSM's to the kernel, and avoid the bpf sysfs problems all
+> >    together.
+> >
+> > We're making the assumption this problem has been thought about before,
+> > and are wondering if there's anything obvious we're missing here.
+> >
+> > Fred
+> >
+
+Fred
+
+P.S. This is an awesome discussion :) Thanks everyone!
 
