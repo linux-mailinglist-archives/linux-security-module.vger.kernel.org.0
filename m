@@ -1,36 +1,36 @@
-Return-Path: <linux-security-module+bounces-781-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-786-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 235178237D2
-	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jan 2024 23:23:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9AD8237E4
+	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jan 2024 23:25:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A18201F25F31
-	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jan 2024 22:23:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD8531C24B39
+	for <lists+linux-security-module@lfdr.de>; Wed,  3 Jan 2024 22:25:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDDE1DA44;
-	Wed,  3 Jan 2024 22:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D13F1EB4B;
+	Wed,  3 Jan 2024 22:23:47 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624D31EB22
-	for <linux-security-module@vger.kernel.org>; Wed,  3 Jan 2024 22:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39061EB44
+	for <linux-security-module@vger.kernel.org>; Wed,  3 Jan 2024 22:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403GiT7v026621
-	for <linux-security-module@vger.kernel.org>; Wed, 3 Jan 2024 14:21:45 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vd5324sc7-11
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 403GkdPu023083
+	for <linux-security-module@vger.kernel.org>; Wed, 3 Jan 2024 14:23:45 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3vcvqhf413-11
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-security-module@vger.kernel.org>; Wed, 03 Jan 2024 14:21:44 -0800
-Received: from twshared44805.48.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+	for <linux-security-module@vger.kernel.org>; Wed, 03 Jan 2024 14:23:44 -0800
+Received: from twshared10507.42.prn1.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 3 Jan 2024 14:21:01 -0800
+ 15.1.2507.34; Wed, 3 Jan 2024 14:23:37 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
 	id 06DF63DF9EAF3; Wed,  3 Jan 2024 14:20:58 -0800 (PST)
 From: Andrii Nakryiko <andrii@kernel.org>
@@ -53,8 +53,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: -TTKLwUK3fApT1HqIxrir0N0ImraScRw
-X-Proofpoint-GUID: -TTKLwUK3fApT1HqIxrir0N0ImraScRw
+X-Proofpoint-GUID: JR_cqk5iI5l6c54tR0yz13D4Sdz7JwN3
+X-Proofpoint-ORIG-GUID: JR_cqk5iI5l6c54tR0yz13D4Sdz7JwN3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-03_08,2024-01-03_01,2023-05-22_02
