@@ -1,100 +1,82 @@
-Return-Path: <linux-security-module+bounces-1136-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1139-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A6183C664
-	for <lists+linux-security-module@lfdr.de>; Thu, 25 Jan 2024 16:19:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79DB183C70C
+	for <lists+linux-security-module@lfdr.de>; Thu, 25 Jan 2024 16:41:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74A791C22240
-	for <lists+linux-security-module@lfdr.de>; Thu, 25 Jan 2024 15:19:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32BD728FF12
+	for <lists+linux-security-module@lfdr.de>; Thu, 25 Jan 2024 15:41:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A72D6E2DC;
-	Thu, 25 Jan 2024 15:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA286EB78;
+	Thu, 25 Jan 2024 15:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="SEr/5czF"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0E332182
-	for <linux-security-module@vger.kernel.org>; Thu, 25 Jan 2024 15:19:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB560224E8
+	for <linux-security-module@vger.kernel.org>; Thu, 25 Jan 2024 15:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706195976; cv=none; b=Tnw7RzcAJChiXjhSaAQ2SEh/RIC4OwUibeTHHEQ/dwqi3IiNI1AKevxbOQdnTGE3V1wkhhzDkgknDjR8wyUtdnfXjM97dJH4N7XSVC9kBSNzvzTTpfcM211ztfKN0V0qlQQZZZqd/xPFbjLWbV6MSypltFCjBxF9Cjo7sZBJh5Q=
+	t=1706197305; cv=none; b=uVT1Dd0FA7F8Ev5UJC/fMv1rqhpqzj8TTxI5xX/KsXbQEN7RNeXQyvLRjlHRUBbMVY5ZOD6XoNz+CwTMixxAfC9+b/eK229xxwjtHqS19tdpFvUxCDLhhO0a0cMzOpZf7UqqAqLOYuBcyNwmPBxJOdRazI646VC4w4UeaCnQ2BI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706195976; c=relaxed/simple;
-	bh=BmvDdeljIENX1smYGKU6VIP04aCOW69cMANOrGYY+Po=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=N6hqSnFxoUevgS5zj03I/p0flnpJHcpdQCqXZyUtQHsIeIwGPszQBTsM9ru24QuK+xuV95tb2b2DfxAD6KQNDtJV+Qq6AVUyc1SejTO4+yozfx1naPVmswpY7jiYjS4uQSZZ5sZ5VbIGpKA+4JYdVFwaDBVHf2bSwmJStUboqvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=none smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 40PFJSS9081736;
-	Fri, 26 Jan 2024 00:19:28 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Fri, 26 Jan 2024 00:19:28 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 40PFJSu9081733
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 26 Jan 2024 00:19:28 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a8868907-91bb-4125-8f7a-79acd9c01f08@I-love.SAKURA.ne.jp>
-Date: Fri, 26 Jan 2024 00:19:29 +0900
+	s=arc-20240116; t=1706197305; c=relaxed/simple;
+	bh=WX55qrtb6obU9n+zBqneZj374blgH3zEv2tkR/PMhZ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SAm7whdxwXseNdVr460EY/6kSb1GK9DyfVpsOZD9SIjrREvv7TDvfPRAjXxsPuEhZUWuy3t1RaoBIxkbuu8tncfXT82zGZxvcB1HQl7WbLp2drJkzcKXw9Gc5Zoul6x9TVbq6dDWcKLfmzxggesplW2o3qmgdyhTAqGhCYPRbno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=SEr/5czF; arc=none smtp.client-ip=45.157.188.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TLPw35JYjzJW0;
+	Thu, 25 Jan 2024 16:32:35 +0100 (CET)
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4TLPw32FWLz5tg;
+	Thu, 25 Jan 2024 16:32:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1706196755;
+	bh=WX55qrtb6obU9n+zBqneZj374blgH3zEv2tkR/PMhZ8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SEr/5czFbwkCSz+r2kwk8w205kQEuZHtzOvJDnEV2INYzqGSlYTWtudxLcAprxx2S
+	 WOI5mA8IKqj0F6U/7ju8ooRJ4mSlNQfMPe8h4FMvP6tG/J8AxPzQhjAcumQ1w6EDcJ
+	 dcomWpUJwnHexWcm6WcK7IV1hr38/DqTcQtSuyeQ=
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v1 0/2] Fix Landlock's net_test for non-root users
+Date: Thu, 25 Jan 2024 16:32:28 +0100
+Message-ID: <20240125153230.3817165-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: security_file_free contract/expectations
-Content-Language: en-US
-To: Ben Smith <ben.smith@crowdstrike.com>
-References: <CF22CFC7-11A8-4BE5-BA61-04A55FDEA1DB@contoso.com>
-Cc: "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CF22CFC7-11A8-4BE5-BA61-04A55FDEA1DB@contoso.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On 2024/01/25 8:46, Ben Smith wrote:
-> Hi, I'm looking at a kernel panic and I'm trying to figure out whether
-> the code in question is doing something that breaks the contract for
-> the security_file_free hook. I'm specifically wondering whether it's
-> expected/safe for code called from security_file_free to open and read
-> from a file. In the case I'm looking at what happens is:
-> 
-> - Process exit
-> - exit_fs() sets current->fs to NULL
-> - exit_task_work() calls __fput() on files which were closed in exit_files()
-> - __fput() calls security_file_free()
-> - security_file_free() then reads the file that was just closed in order
->   to gather information about it.
-> - a filesystem driver (I've seen this with two out-of-tree filesystems) then
->   accesses current->fs and panics.
-> 
-> So I'm wondering if the expectation here is that filesystem code should NULL
-> check current->fs before using it or that an LSM shouldn't try to read a file
-> from security_file_free().
+Hi,
 
-I guess the out-of-tree filesystems are used by CrowdStrike products and
-therefore the source code etc. cannot be shared. (It took me 2 years to prove
-that an out-of-tree filesystem used by TrendMicro products was the culprit.)
-But are you sure that the location that triggered panic is at reading current->fs ?
+This two patches fix an issue when the user running net_test is not
+root. The second patch simplify test error logs.
 
-security_file_free() is not meant for reading files. But if the location were
-really at reading current->fs, whether an LSM shouldn't try to read a file from
-security_file_free() is a bogus question.
+Regards,
 
-security_file_release() proposed by Roberto Sassu would be OK. But I guess that
-the kernel version you want to load the out-of-tree filesystems is not the latest...
+Mickaël Salaün (2):
+  selftests/landlock: Fix capability for net_test
+  selftests/landlock: Clean up error logs related to capabilities
 
-Without more details, we can't give you appropriate suggestions.
+ tools/testing/selftests/landlock/common.h   | 88 ++++++++++++---------
+ tools/testing/selftests/landlock/net_test.c |  5 +-
+ 2 files changed, 55 insertions(+), 38 deletions(-)
+
+-- 
+2.43.0
 
 
