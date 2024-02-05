@@ -1,155 +1,158 @@
-Return-Path: <linux-security-module+bounces-1295-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1297-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F6A9849F47
-	for <lists+linux-security-module@lfdr.de>; Mon,  5 Feb 2024 17:09:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70B0784A211
+	for <lists+linux-security-module@lfdr.de>; Mon,  5 Feb 2024 19:25:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A220282026
-	for <lists+linux-security-module@lfdr.de>; Mon,  5 Feb 2024 16:09:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F94C1F240C8
+	for <lists+linux-security-module@lfdr.de>; Mon,  5 Feb 2024 18:25:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3D52A1BA;
-	Mon,  5 Feb 2024 16:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC37481AE;
+	Mon,  5 Feb 2024 18:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XN5GyoFt"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pwO/4muW"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37427376E1
-	for <linux-security-module@vger.kernel.org>; Mon,  5 Feb 2024 16:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C5C47F7E;
+	Mon,  5 Feb 2024 18:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707149382; cv=none; b=WA2SufyzUqsfiTuo46QYG233AgVnUMCY9i1QEv3g9rE13/ZyR1285EfkO7H87+PXQh2kiJl0Io+KCv8MsQwqrImgOKC1Io90sbCdCAeF3g7NoPbG/p3z/P72/M7RsiGqmOR/42H1SMfa22CGKby3buXDdRsztugSIs9emZqzdm4=
+	t=1707157536; cv=none; b=DA17R9uYk7Xt/UTo8bGw1XLE90CCBzc90nvmvCG8/jIZSuu4tb6JLgETr5W+1jb5WCPeTsB6LfGd9BLkiVtqRo5L4R7ZEVUajTIvZFb08c9S3r8VtGeaem4pHemixOkhmbtGoc9iyWf481P4nCQF6xY+f5fu9I8+sbRSe/awqdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707149382; c=relaxed/simple;
-	bh=03g8YYzWTRdjkVfeAcqvzZPU42Q430iY00QziolvaYs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FkLYItQdEVxNlFF7ZaIXOXT0eH5wFi+cPwcav/pfTKWLryxnaq1rf72irHR5UDPlhCtyz90BtkwhguKZlzgcpSNeX56FO+R7s7nuGioUxQAB/92Lc4WXRPw9lEEgkU8meFCXUtKV2JMS4QxC95nPgz/V0NXUubQSdZyRxda2gkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XN5GyoFt; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6cbe1ac75so2396033276.1
-        for <linux-security-module@vger.kernel.org>; Mon, 05 Feb 2024 08:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1707149379; x=1707754179; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oDax4K7QGWSqZTbEFiDmrgrp84G1TitrDt4HTH4cP+s=;
-        b=XN5GyoFt9wsWWVCrgl3h3CjdU0LFQHJs7Dit8yKsLFQOavl/AA/h22XsB/TdjyEgpa
-         exKQrW2pe99N0Jn1A6BKTbNTbdybz31sRhSKbeqgTBZhhMpJsFU/CQ5/wiwA9jPDucSa
-         KbR1kFMbpmheY3dXBAcWEV8zndAzR0tpIYgoAg5T/hDIDiXZ4GP9dcibH7xO2zNTnYab
-         5Qz7ZXbAsWD1YM2ByclymA+oQxSFkDCfwFqEhgJut98kOrmwVUiJsRbvQk3M/Rmmdpza
-         sFjhfaj8Skw99RYMuZNfsFdNek8PrP9etYc7nJ+qXVFPaj2ofCGb3/P4+jz2bfvZThZM
-         eE5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707149379; x=1707754179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oDax4K7QGWSqZTbEFiDmrgrp84G1TitrDt4HTH4cP+s=;
-        b=RjDXbNZhM4+WDylyqK5tdFXrWqumQnvzQSTxAdOrfhiC7krwzBnXmspfGcvOxloEXh
-         UZMSHH59LRSScyo2Wxcr7CrT5sVGzYadYPFSOwdJLT5KJhnXI/CfQdtwN1qXUCeGdNn0
-         AhxRJL1rpFLx2qKkobt9499NpHCKRM/kYyAMR1s0cA3/5eMBenzEM/JpsGLO0TsHXozw
-         B09SeV/MwYnb06l3oQj1X/wLDNbsAGf7L7d6RuSWg4mwth2rB2dICajE376pqItkNfgv
-         jNKlAPBaz46manMPGsysHaDXWqagBWd0ok99j55BQFSTjw8HPsfdbhLGo9owZ2vAy0iW
-         wXjg==
-X-Gm-Message-State: AOJu0YyaVjoErl1P9+qfSVbh2wH78xRxjCBu3Z7/Ni+HlhZiJmEdTqYK
-	+FL317nbKsuoF/TH2Thl6idZqgtKtpDOfkNfdYIeCgWUCRGGhZo+7LqeCJ3Go/v5ZaYDtYNCKd1
-	I5FMmwQoWwJQQysmOZTkgMCXDmLB6/OT7QPUGECQl+y9wmiA=
-X-Google-Smtp-Source: AGHT+IH0iNAzlR0TiH1t90UubQVEwvYs282KbJ8bF5sKnw0TNASMdqJyBO1nGxH65klPYK6tRlDsPpaDf1Ysl4t3qDA=
-X-Received: by 2002:a25:df06:0:b0:dc6:bbb9:5dc with SMTP id
- w6-20020a25df06000000b00dc6bbb905dcmr186303ybg.6.1707149379072; Mon, 05 Feb
- 2024 08:09:39 -0800 (PST)
+	s=arc-20240116; t=1707157536; c=relaxed/simple;
+	bh=lZOFVZ5BrPGJAEI+dGcHnVNQVExP4X/ULhxLPHyVzzA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VtWxl6u6y0LWZMajqsr1bUX5AttWZgC1i3c0HeZ9RPf+TMoK68ncS2PDgaJcCKMCMRBClYrkgzM5IguGT4DgcsFpZXvWJK2hzZ7yA5L3pdEcfNPi1psnJZxSAYN0AsCCKk0K0O/++9xgl03ZNC0f8gzBIblj/zGjFWXgmG+pJ4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pwO/4muW; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 415IGbmm002098;
+	Mon, 5 Feb 2024 18:25:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=AmNsHJB73FQSeLBEzIki50uToPeDyz0KaEgQoaLpJ8c=;
+ b=pwO/4muWMbR6r1IFqGLQE4n41IhsTgr1wKuHS5TqM5EdzwJd8UvysDseqnfg5KhFNDm4
+ Nf4mE8HzAGivfwyz+F1tMCnxQ7Rr/e/ClncOmkcleTkJRhwo5A3vRnSjY2PSfw6ovcUg
+ GJoE7tV3+Uiy+3DYgH5meumAh9Qf88uwd1/+0iAXB1seK6xb9yBJitlI29Kn/Fl+rJr7
+ OOFoSovq6HE8rmD07Ng9h5Y2AgyKO62plYsDkhfTu6hzP+Lt2f7kULV6W2q+X16lDnZa
+ vCw4ef+aEu/ZUTYrP3KwTwGq2MAEduwRU2HRBNCJq0WzCOcfGiKf7jIq53x6+UYYCese RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w33s31pnh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 Feb 2024 18:25:13 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 415IGmt1003408;
+	Mon, 5 Feb 2024 18:25:13 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w33s31pnc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 Feb 2024 18:25:13 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 415Fs5w5019996;
+	Mon, 5 Feb 2024 18:25:12 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w1ytstesg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 Feb 2024 18:25:12 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 415IPAxX50004426
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 5 Feb 2024 18:25:11 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B62AF58060;
+	Mon,  5 Feb 2024 18:25:10 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 12DE15803F;
+	Mon,  5 Feb 2024 18:25:10 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  5 Feb 2024 18:25:09 +0000 (GMT)
+From: Stefan Berger <stefanb@linux.ibm.com>
+To: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-unionfs@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, zohar@linux.ibm.com, roberto.sassu@huawei.com,
+        amir73il@gmail.com, brauner@kernel.org, miklos@szeredi.hu,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v2 0/9] evm: Support signatures on stacked filesystem
+Date: Mon,  5 Feb 2024 13:24:57 -0500
+Message-ID: <20240205182506.3569743-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230710102319.19716-3-greg@enjellic.com> <ffdd5e4d10865da5f767df53b12bb6db@paul-moore.com>
- <20240108114324.GA4085@wind.enjellic.com>
-In-Reply-To: <20240108114324.GA4085@wind.enjellic.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 5 Feb 2024 11:09:28 -0500
-Message-ID: <CAHC9VhR+Sukfi+-7TTxK2Paxon6i+zDxaELzXUZ=eBOUMf9nwA@mail.gmail.com>
-Subject: Re: [PATCH 2/13] Add TSEM specific documentation.
-To: "Dr. Greg" <greg@enjellic.com>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	corbet@lwn.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 78G_aEGCnAk9ZPOsa2bKqt9_FAXlRoI6
+X-Proofpoint-GUID: Y98mxjG3XNgG3hkTLs2LogCyBM_Iga9W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-05_12,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=753
+ bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402050138
 
-On Mon, Jan 8, 2024 at 6:43=E2=80=AFAM Dr. Greg <greg@enjellic.com> wrote:
-> On Wed, Jan 03, 2024 at 11:00:33PM -0500, Paul Moore wrote:
-> > On Jul 10, 2023 "Dr. Greg" <greg@enjellic.com> wrote:
-> > >
-> > > An entry was added to the ABI testing documentation to document
-> > > the files in the TSEM management filesystem.
-> > >
-> > > The file documenting the kernel command-line parameters was
-> > > updated to document the TSEM specific command-line parameters
-> > >
-> > > The primary TSEM documentation file was added to the LSM
-> > > administration guide and the file was linked to the index of LSM
-> > > documentation.
-> > >
-> > > Signed-off-by: Greg Wettstein <greg@enjellic.com>
-> > > ---
-> > >  Documentation/ABI/testing/tsem                |  828 +++++++++
-> > >  Documentation/admin-guide/LSM/index.rst       |    1 +
-> > >  Documentation/admin-guide/LSM/tsem.rst        | 1526 +++++++++++++++=
-++
-> > >  .../admin-guide/kernel-parameters.txt         |   18 +
-> > >  4 files changed, 2373 insertions(+)
-> > >  create mode 100644 Documentation/ABI/testing/tsem
-> > >  create mode 100644 Documentation/admin-guide/LSM/tsem.rst
+EVM signature verification on stacked filesystem has recently been
+completely disabled by declaring some filesystems as unsupported
+(only overlayfs). This series now enables copy-up of "portable
+and immutable" signatures on those filesystems and enables the
+enforcement of "portable and immultable" as well as the "original"
+signatures on previously unsupported filesystem when evm is enabled
+with EVM_INIT_X509. HMAC verification and generation remains disabled.
 
-...
+"Portable and immutable" signatures can be copied up since they are
+not created over file-specific metadata, such as UUID or generation.
+Instead, they are only covering file metadata such as mode bits, uid, and
+gid, that will all be preserved during a copy-up of the file metadata.
 
-> > I don't want to assume too much about the TSEM design, but I'm
-> > guessing the aggregate is intended to be a deterministic value based
-> > on the PCRs and therefore it seems like there is value in providing
-> > a clear explanation of how it is calculated.
->
-> The aggregate is the linear extension sum over PCR registers 0 through
-> 8 using the namespace hash function, we will cook up a generic
-> description, although it should be a common enough concept for anyone
-> working on trusted system implementations.
+Regards,
+   Stefan
 
-The Linux kernel documentation is used by a wide variety of
-administrators, users, and developers with varying backgrounds, I
-would recommend assuming very little about the documentation's
-audience.  This is not to say that you need to explain everything
-yourself, referring interested readers to established, publicly
-available sources of background information can be acceptable.
+v2:
+  - Added patch to rename backing_inode to real_inode (1/9)
+  - Added patches renaming flag and function due to RSA enablement (7,8/9)
+  - Added patch to record i_version of real_inode for change detection (9/9)
+  - Use Amir's function to get inode holding metadata now (4,5/9)
 
-> > > +           trusted pid=3DPID key=3DHEXID
-> > > +                   The trusted keyword is used by a trust
-> > > +                   orchestrator to indicate that the process
-> > > +                   identified by the PID argument should be
-> > > +                   allowed to run in trusted status after the
-> > > +                   modeling of a security event.
->
-> > I mentioned this quite a few times in my review of the previous
-> > patchset, PIDs are not a safe way to identify a process in the
-> > system.  PID reuse/recycling is a real danger and you need to
-> > account for this risk.
->
-> We will defer that discussion to our previous e-mail where we
-> discussed how this is addressed.
+Stefan Berger (9):
+  ima: Rename backing_inode to real_inode
+  security: allow finer granularity in permitting copy-up of security
+    xattrs
+  evm: Implement per signature type decision in
+    security_inode_copy_up_xattr
+  ima: Reset EVM status upon detecting changes to the real file
+  evm: Use the inode holding the metadata to calculate metadata hash
+  evm: Enforce signatures on unsupported filesystem for EVM_INIT_X509
+  fs: Rename SB_I_EVM_UNSUPPORTED to SB_I_EVM_HMAC_UNSUPPORTED
+  evm: Rename is_unsupported_fs to is_unsupported_hmac_fs
+  ima: Record i_version of real_inode for change detection
 
-Adding a secret key/token/etc. may provide some additional
-authentication benefits, but it doesn't entirely solve the PID
-identification issue, it only reduces the likelihood of a process
-misidentification.  We need to do better for new
-designs/implementations; look at the pidfd work as an example of work
-that has gone into reducing/eliminating the use of PIDs to identify
-processes.
+ fs/overlayfs/copy_up.c              |  2 +-
+ fs/overlayfs/super.c                |  2 +-
+ include/linux/evm.h                 | 13 +++++-
+ include/linux/fs.h                  |  2 +-
+ include/linux/lsm_hook_defs.h       |  3 +-
+ include/linux/security.h            |  4 +-
+ security/integrity/evm/evm_crypto.c |  2 +-
+ security/integrity/evm/evm_main.c   | 69 ++++++++++++++++++++++-------
+ security/integrity/ima/ima_api.c    | 28 ++++++------
+ security/integrity/ima/ima_main.c   | 23 ++++++----
+ security/security.c                 |  7 +--
+ security/selinux/hooks.c            |  2 +-
+ security/smack/smack_lsm.c          |  2 +-
+ 13 files changed, 107 insertions(+), 52 deletions(-)
 
---=20
-paul-moore.com
+-- 
+2.43.0
+
 
