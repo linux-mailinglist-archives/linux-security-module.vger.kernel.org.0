@@ -1,77 +1,85 @@
-Return-Path: <linux-security-module+bounces-1461-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1463-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3700F854BAA
-	for <lists+linux-security-module@lfdr.de>; Wed, 14 Feb 2024 15:39:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E793854DA0
+	for <lists+linux-security-module@lfdr.de>; Wed, 14 Feb 2024 17:05:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B29591F24E90
-	for <lists+linux-security-module@lfdr.de>; Wed, 14 Feb 2024 14:39:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7ADD1F29F89
+	for <lists+linux-security-module@lfdr.de>; Wed, 14 Feb 2024 16:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5097F5B20E;
-	Wed, 14 Feb 2024 14:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E2259B46;
+	Wed, 14 Feb 2024 16:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MEIXjw6n"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C63F5B02B;
-	Wed, 14 Feb 2024 14:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192675DF0F
+	for <linux-security-module@vger.kernel.org>; Wed, 14 Feb 2024 16:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707921472; cv=none; b=HoONdoXOF3ntGfU0mtt+ahja4JCNICvsqvm7ArtUGUtic4lcpS/SiA+VT6Q539E7aTCpFaFaO6IvVBwD23AddVh3Xqk2v9vZioeVowvg2Wil2sPvrlLgRo02m7gngwlH9iYKrxncp/I0oN8hPH7R23CoN8ZfT+eZGXhrI6qFuzc=
+	t=1707926750; cv=none; b=I3Hf25Z1wlR86rBj1KD0P6sm1o4Q9ikMgaSDFgCFz9JF7Xoe2LFo5y8344W7MSQVJHduX54xfLyOZcJKCDXnM9p2bOnDttupP2Fq5Eim9OqDlNvVkA6ex4euwF2Sj6EOxTpvpRGfXe+JtpslKbh3rP2MuhZuyrsVXp5SUO6yvWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707921472; c=relaxed/simple;
-	bh=+JzV9zu5I05SQvb2FTgYGGXhXwu6XOdL9AMsciATnr4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WSqeH98nJMLyogK5e1xPWR+mJnDtpsEsS+EXeC6AZOOe98I4gMa+lZpI0YzoIvgQGQ//1QwYZRgXL4tmzid76nNAH8f6lO712MALWWv2iRRuj2TtJ4nXK+4pZfEN52TX7LwFT4L9zYEcb+1ZjWmgv9REEbvdrsGZghCcg3ePDyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4TZgKW2lKsz9xrnX;
-	Wed, 14 Feb 2024 22:18:39 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 7A0A21405F3;
-	Wed, 14 Feb 2024 22:37:41 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXgRrHz8xlZ55_Ag--.52204S10;
-	Wed, 14 Feb 2024 15:37:40 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: corbet@lwn.net,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
+	s=arc-20240116; t=1707926750; c=relaxed/simple;
+	bh=dc1KQpY0JaxYBA4PG7k53I+9SMfrAWxXKgE5iyHjJ6M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l1XEHwkB7inQITqK8WuOm589rhPuTZhDLmJ/aSqvpDM9TSvwctcnYxLmaw2DXpPX7z8r2+9o+SZZ/31aNrc/fpW79RlywlDrS1oRSzh8/lKSdCw3T2jkZJ57bFlRAz3S30wcW9NrIX45y2TSeCZhqMbxURGuzarcL+dINw3YwgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MEIXjw6n; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-410c9f17c9eso149845e9.0
+        for <linux-security-module@vger.kernel.org>; Wed, 14 Feb 2024 08:05:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707926746; x=1708531546; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D0ZXpfKsVxZsard92upIgK/guQSZv3oZnwS2SvpnT4A=;
+        b=MEIXjw6nY91nWXEVl/kjohanka7g716qRufSWAk+bGomW7W6lELukjL/1Dnt28uRj2
+         i+4uo0U3XXf7AoC6ahQtcLD7/6iWyx8acJhcyAgMObz/jwhFdoUmpDm7hK4vcdEmSTdE
+         F58ymKXo5cej04qnQaLzjNmZG+Cby9xIqEEjmUTl44RiHEgzHwk6wvViRyIyuR3bF50K
+         9zRnbHM9pnhMyYoGArQSiuX+4Mp/DydBwEK/u/lh/uOm6Ha6FCHRmiJnAJdtSpdP+MwC
+         8cbHNlKz9kVskBTxtq0kFlFyqsN9nnyE3tCxzjrD3kyWfcApXOwfBeufwI3CA4D8Svh0
+         IRGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707926746; x=1708531546;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D0ZXpfKsVxZsard92upIgK/guQSZv3oZnwS2SvpnT4A=;
+        b=Jr2ptTgocnNPU3w6Zahc2lni7aY9fW/97PICecMiHdbvx2UmGQAlo4D/KM2QSJBW4L
+         gmpJYB10LNQGzDQHZuu6zVVVYBHVEddv2Q3LoRoslayhYyg1r7Gz/4vk15C0AuKED7QR
+         fGymWgvrQXLeNxIqWqU3ulp0sVYxtkTAx952WfsZh7eu8okY38TbUwSXRS9YKOvjX26i
+         VFu0vVln5HwSCUx/yTaadBv3Dwst1wsF7s3l/6pHcdq4w81t3ZrIKAaaSHFq54OCoKKb
+         qhFe2rmlCDE+uhmkkOhiMHydBCrygv0weXAtGxHXkrtVXyixwoU+2cfSPBoNWbLdX2mn
+         kbDw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwsOhGtLiyvSpreL0mP8oz6edTm/qceIvQjhrkbTjUADVEBLTa3Ecc+wx7w/b4+vehp88XSYb8RNc+5j1TtNmOgrQ482kxab9VkL14HSlZ3/7f7ZGM
+X-Gm-Message-State: AOJu0YxYOdQeEBxPB1+lgzJ2T9Ct2VAj0bWc98298/tLZZI4NGXeh3xF
+	B0tVCPWjZ+OaFiu4j2dzwjmmZvPOC1b9eoDEJwTL4a1mgAsKlXaOdsv1lgAAXg==
+X-Google-Smtp-Source: AGHT+IFQx3AR+dJ4tRuny2Zl3PYxdt3LuDwruLklz7IHA3o+QvX7gRTt7eytQ7BUceKnARE9I8n+Sw==
+X-Received: by 2002:a05:600c:519b:b0:411:e5c1:9b2a with SMTP id fa27-20020a05600c519b00b00411e5c19b2amr161066wmb.2.1707926746115;
+        Wed, 14 Feb 2024 08:05:46 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUwwkkMnTjoYEDNabe8vKqZdn5tv9oDKwRWK4zf5GsCOWHcf/AVXcvm52C5bTuLK2NbqXtblzKIkrpdtJeCa9hhed3VVSbYEDUx6curN4LLsKnOqFixNfhl9htsCIwkPiXU4F9B/uqjZhfOYcLix0x2v9gzCQgnkiSDq10Qq3/qTY6TVGv4EbpIJDgJB7McV2I+5xL4HBSW3OkV67lySg/bQm1ulJVesuup+MG96wCqEQmQg0KL2DkkKFKdy+e4quYRaAXr7JCLAgP4jxINha04ZDK/LTDAi35fpr3wdxE=
+Received: from localhost ([2a02:168:96c5:1:cead:684f:86ff:5d41])
+        by smtp.gmail.com with ESMTPSA id i22-20020a05600c4b1600b0040fdb244485sm2291938wmp.40.2024.02.14.08.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Feb 2024 08:05:44 -0800 (PST)
+From: Jann Horn <jannh@google.com>
+To: Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>
+Cc: Casey Schaufler <casey@schaufler-ca.com>,
+	Kees Cook <keescook@chromium.org>,
+	John Johansen <john.johansen@canonical.com>,
 	linux-security-module@vger.kernel.org,
-	wufan@linux.microsoft.com,
-	pbrobinson@gmail.com,
-	zbyszek@in.waw.pl,
-	hch@lst.de,
-	mjg59@srcf.ucam.org,
-	pmatilai@redhat.com,
-	jannh@google.com,
-	dhowells@redhat.com,
-	jikos@kernel.org,
-	mkoutny@suse.com,
-	ppavlu@suse.com,
-	petr.vorel@gmail.com,
-	petrtesarik@huaweicloud.com,
-	mzerqung@0pointer.de,
-	kgold@linux.ibm.com,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 8/8] ima: Detect if digest cache changed since last measurement/appraisal
-Date: Wed, 14 Feb 2024 15:35:24 +0100
-Message-Id: <20240214143525.2205481-9-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
-References: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
+	linux-kernel@vger.kernel.org,
+	Jann Horn <jannh@google.com>
+Subject: [PATCH] security: fix integer overflow in lsm_set_self_attr() syscall
+Date: Wed, 14 Feb 2024 17:05:38 +0100
+Message-ID: <20240214160538.1086089-1-jannh@google.com>
+X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -79,142 +87,205 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwDXgRrHz8xlZ55_Ag--.52204S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxXry7ZF4xGF4ruFyxKFy5XFb_yoWrKr4kpa
-	9ruF1UKr48ZF43CanxAa42kF4rKrZYgFW7Gws8GwnYyFs3Xr1vvw1Fyw1UuryrGrWUZa1x
-	tw42gr4UZ3WjvaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmv14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j
-	6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x
-	IIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_
-	Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8c
-	xan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-	c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-	CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryU
-	MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-	WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUv
-	cSsGvfC2KfnxnUUI43ZEXa7sRRtCztUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj5ZZnAABso
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+security_setselfattr() has an integer overflow bug that leads to
+out-of-bounds access when userspace provides bogus input:
+`lctx->ctx_len + sizeof(*lctx)` is checked against `lctx->len` (and,
+redundantly, also against `size`), but there are no checks on
+`lctx->ctx_len`.
+Therefore, userspace can provide an `lsm_ctx` with `->ctx_len` set to a
+value between `-sizeof(struct lsm_ctx)` and -1, and this bogus `->ctx_len`
+will then be passed to an LSM module as a buffer length, causing LSM
+modules to perform out-of-bounds accesses.
 
-IMA invalidates the cached verification result on file content/metadata
-update, so that the file is evaluated again at next access.
+The following reproducer will demonstrate this under ASAN (if AppArmor is
+loaded as an LSM):
+```
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <sys/syscall.h>
 
-While until now checking modifications on the file was sufficient to
-determine if the cached verification result is still valid, that no longer
-applies if that verification result was obtained with digest caches.
+struct lsm_ctx {
+  uint64_t id;
+  uint64_t flags;
+  uint64_t len;
+  uint64_t ctx_len;
+  char ctx[];
+};
 
-In that case, it is also necessary to check modifications on the digest
-lists and on the security.digest_list xattr of the files for which digest
-caches are used.
+int main(void) {
+  size_t size = sizeof(struct lsm_ctx);
+  struct lsm_ctx *ctx = malloc(size);
+  ctx->id = 104/*LSM_ID_APPARMOR*/;
+  ctx->flags = 0;
+  ctx->len = size;
+  ctx->ctx_len = -sizeof(struct lsm_ctx);
+  syscall(
+    460/*__NR_lsm_set_self_attr*/,
+    /*attr=*/  100/*LSM_ATTR_CURRENT*/,
+    /*ctx=*/   ctx,
+    /*size=*/  size,
+    /*flags=*/ 0
+  );
+}
+```
 
-The digest_cache LSM offers the digest_cache_changed() function, which
-tells if a file would use a different digest cache than the one passed as
-argument. digest_cache_get() might return a different digest cache if the
-digest list was modified/deleted/renamed or the security.digest_list xattr
-was modified.
+(I'm including an ASAN splat in the patch notes sent to the list.)
 
-Hold a digest cache reference in the IMA integrity metadata, when using it
-for measurement/appraisal. At every file access, check if that reference is
-still actual by passing it to digest_cache_changed(). If not, reset the
-integrity status and do the verification again.
-
-Finally, move the digest_cache_put() call from process_measurement() to
-ima_iint_free(), unless the digest cache changed. In that case, still
-release the reference in process_measurement().
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Fixes: a04a1198088a ("LSM: syscalls for current process attributes")
+Signed-off-by: Jann Horn <jannh@google.com>
 ---
- security/integrity/ima/ima.h      |  1 +
- security/integrity/ima/ima_iint.c |  3 +++
- security/integrity/ima/ima_main.c | 22 ++++++++++++++++++----
- 3 files changed, 22 insertions(+), 4 deletions(-)
+ASAN splat from the reproducer:
+==================================================================
+BUG: KASAN: slab-out-of-bounds in do_setattr (security/apparmor/lsm.c:860) 
+Read of size 1 at addr ffff888006163abf by task setselfattr/548
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 36faf2bc81b0..c25bde918cd5 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -192,6 +192,7 @@ struct ima_iint_cache {
- 	enum integrity_status ima_read_status:4;
- 	enum integrity_status ima_creds_status:4;
- 	struct ima_digest_data *ima_hash;
-+	struct digest_cache *digest_cache;
- };
+CPU: 0 PID: 548 Comm: setselfattr Not tainted 6.8.0-rc4-00014-g7e90b5c295ec-dirty #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+Call Trace:
+<TASK>
+dump_stack_lvl (lib/dump_stack.c:107) 
+print_report (mm/kasan/report.c:378 mm/kasan/report.c:488) 
+[...]
+kasan_report (mm/kasan/report.c:603) 
+[...]
+do_setattr (security/apparmor/lsm.c:860) 
+[...]
+apparmor_setselfattr (security/apparmor/lsm.c:935) 
+security_setselfattr (security/security.c:4038) 
+__x64_sys_lsm_set_self_attr (security/lsm_syscalls.c:55) 
+do_syscall_64 (arch/x86/entry/common.c:52 arch/x86/entry/common.c:83) 
+entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:129) 
+RIP: 0033:0x7f29a170ff59
+Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 07 6f 0c 00 f7 d8 64 89 01 48
+All code
+========
+   0:	00 c3                	add    %al,%bl
+   2:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+   9:	00 00 00 
+   c:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  11:	48 89 f8             	mov    %rdi,%rax
+  14:	48 89 f7             	mov    %rsi,%rdi
+  17:	48 89 d6             	mov    %rdx,%rsi
+  1a:	48 89 ca             	mov    %rcx,%rdx
+  1d:	4d 89 c2             	mov    %r8,%r10
+  20:	4d 89 c8             	mov    %r9,%r8
+  23:	4c 8b 4c 24 08       	mov    0x8(%rsp),%r9
+  28:	0f 05                	syscall
+  2a:*	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax		<-- trapping instruction
+  30:	73 01                	jae    0x33
+  32:	c3                   	ret
+  33:	48 8b 0d 07 6f 0c 00 	mov    0xc6f07(%rip),%rcx        # 0xc6f41
+  3a:	f7 d8                	neg    %eax
+  3c:	64 89 01             	mov    %eax,%fs:(%rcx)
+  3f:	48                   	rex.W
+
+Code starting with the faulting instruction
+===========================================
+   0:	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax
+   6:	73 01                	jae    0x9
+   8:	c3                   	ret
+   9:	48 8b 0d 07 6f 0c 00 	mov    0xc6f07(%rip),%rcx        # 0xc6f17
+  10:	f7 d8                	neg    %eax
+  12:	64 89 01             	mov    %eax,%fs:(%rcx)
+  15:	48                   	rex.W
+RSP: 002b:00007ffd41c781a8 EFLAGS: 00000202 ORIG_RAX: 00000000000001cc
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f29a170ff59
+RDX: 0000000000000020 RSI: 000056518c581260 RDI: 0000000000000064
+RBP: 00007ffd41c781c0 R08: 00000000000a3330 R09: 000056518c581260
+R10: 0000000000000000 R11: 0000000000000202 R12: 000056518bd95060
+R13: 00007ffd41c782a0 R14: 0000000000000000 R15: 0000000000000000
+</TASK>
+
+Allocated by task 548 on cpu 0 at 61.045304s:
+kasan_save_stack (mm/kasan/common.c:48) 
+kasan_save_track (mm/kasan/common.c:68) 
+__kasan_kmalloc (mm/kasan/common.c:372 mm/kasan/common.c:389) 
+__kmalloc (./include/linux/kasan.h:211 mm/slub.c:3981 mm/slub.c:3994) 
+load_elf_binary (./include/linux/slab.h:594 fs/binfmt_elf.c:880) 
+bprm_execve (fs/exec.c:1783 fs/exec.c:1825 fs/exec.c:1877 fs/exec.c:1853) 
+do_execveat_common.isra.0 (fs/exec.c:1984) 
+__x64_sys_execve (fs/exec.c:2129 (discriminator 1)) 
+do_syscall_64 (arch/x86/entry/common.c:52 arch/x86/entry/common.c:83) 
+entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:129) 
+
+Freed by task 548 on cpu 0 at 61.045380s:
+kasan_save_stack (mm/kasan/common.c:48) 
+kasan_save_track (mm/kasan/common.c:68) 
+kasan_save_free_info (mm/kasan/generic.c:643 (discriminator 1)) 
+poison_slab_object (mm/kasan/common.c:243) 
+__kasan_slab_free (mm/kasan/common.c:257 (discriminator 1)) 
+kfree (mm/slub.c:4299 (discriminator 3) mm/slub.c:4409 (discriminator 3)) 
+load_elf_binary (fs/binfmt_elf.c:896 (discriminator 1)) 
+bprm_execve (fs/exec.c:1783 fs/exec.c:1825 fs/exec.c:1877 fs/exec.c:1853) 
+do_execveat_common.isra.0 (fs/exec.c:1984) 
+__x64_sys_execve (fs/exec.c:2129 (discriminator 1)) 
+do_syscall_64 (arch/x86/entry/common.c:52 arch/x86/entry/common.c:83) 
+entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:129) 
+
+The buggy address belongs to the object at ffff888006163a80
+which belongs to the cache kmalloc-32 of size 32
+The buggy address is located 31 bytes to the right of
+allocated 32-byte region [ffff888006163a80, ffff888006163aa0)
+
+The buggy address belongs to the physical page:
+page:0000000021a8da3a refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x6163
+flags: 0x100000000000800(slab|node=0|zone=1)
+page_type: 0xffffffff()
+raw: 0100000000000800 ffff888001042500 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000080400040 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ffff888006163980: fa fb fb fb fc fc fc fc 00 00 00 00 fc fc fc fc
+ffff888006163a00: fa fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
+>ffff888006163a80: fa fb fb fb fc fc fc fc 00 00 00 00 fc fc fc fc
+^
+ffff888006163b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ffff888006163b80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+ security/security.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/security/security.c b/security/security.c
+index 3aaad75c9ce8..7035ee35a393 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -29,6 +29,7 @@
+ #include <linux/backing-dev.h>
+ #include <linux/string.h>
+ #include <linux/msg.h>
++#include <linux/overflow.h>
+ #include <net/flow.h>
  
- extern struct lsm_blob_sizes ima_blob_sizes;
-diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/ima_iint.c
-index b4f476fae437..fd369809809f 100644
---- a/security/integrity/ima/ima_iint.c
-+++ b/security/integrity/ima/ima_iint.c
-@@ -68,6 +68,7 @@ static void ima_iint_init_always(struct ima_iint_cache *iint,
- 	iint->ima_read_status = INTEGRITY_UNKNOWN;
- 	iint->ima_creds_status = INTEGRITY_UNKNOWN;
- 	iint->measured_pcrs = 0;
-+	iint->digest_cache = NULL;
- 	mutex_init(&iint->mutex);
- 	ima_iint_lockdep_annotate(iint, inode, nested);
- }
-@@ -75,6 +76,8 @@ static void ima_iint_init_always(struct ima_iint_cache *iint,
- static void ima_iint_free(struct ima_iint_cache *iint)
- {
- 	kfree(iint->ima_hash);
-+	if (iint->digest_cache)
-+		digest_cache_put(iint->digest_cache);
- 	mutex_destroy(&iint->mutex);
- 	kmem_cache_free(ima_iint_cache, iint);
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index a66522a22cbc..e1b2f5737753 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -301,6 +301,15 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 		}
+ /* How many LSMs were built into the kernel? */
+@@ -4015,6 +4016,7 @@ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+ 	struct security_hook_list *hp;
+ 	struct lsm_ctx *lctx;
+ 	int rc = LSM_RET_DEFAULT(setselfattr);
++	u64 required_len;
+ 
+ 	if (flags)
+ 		return -EINVAL;
+@@ -4027,8 +4029,9 @@ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+ 	if (IS_ERR(lctx))
+ 		return PTR_ERR(lctx);
+ 
+-	if (size < lctx->len || size < lctx->ctx_len + sizeof(*lctx) ||
+-	    lctx->len < lctx->ctx_len + sizeof(*lctx)) {
++	if (size < lctx->len ||
++	    check_add_overflow(sizeof(*lctx), lctx->ctx_len, &required_len) ||
++	    lctx->len < required_len) {
+ 		rc = -EINVAL;
+ 		goto free_out;
  	}
- 
-+	/* Check if digest cache changed since last measurement/appraisal. */
-+	if (iint->digest_cache &&
-+	    digest_cache_changed(inode, iint->digest_cache)) {
-+		iint->flags &= ~IMA_DONE_MASK;
-+		iint->measured_pcrs = 0;
-+		digest_cache_put(iint->digest_cache);
-+		iint->digest_cache = NULL;
-+	}
-+
- 	/* Determine if already appraised/measured based on bitmask
- 	 * (IMA_MEASURE, IMA_MEASURED, IMA_XXXX_APPRAISE, IMA_XXXX_APPRAISED,
- 	 *  IMA_AUDIT, IMA_AUDITED)
-@@ -371,8 +380,15 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	 * Since we allow IMA policy rules without func=, we have to enforce
- 	 * this restriction here.
- 	 */
--	if (rc == 0 && policy_mask && func != DIGEST_LIST_CHECK)
--		digest_cache = digest_cache_get(file_dentry(file));
-+	if (rc == 0 && policy_mask && func != DIGEST_LIST_CHECK) {
-+		if (!iint->digest_cache) {
-+			/* Released by ima_iint_free(). */
-+			digest_cache = digest_cache_get(file_dentry(file));
-+			iint->digest_cache = digest_cache;
-+		} else {
-+			digest_cache = iint->digest_cache;
-+		}
-+	}
- 
- 	if (digest_cache) {
- 		found = digest_cache_lookup(file_dentry(file), digest_cache,
-@@ -386,8 +402,6 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 			if (verif_mask_ptr)
- 				allow_mask = policy_mask & *verif_mask_ptr;
- 		}
--
--		digest_cache_put(digest_cache);
- 	}
- 
- 	if (action & IMA_MEASURE)
+
+base-commit: 7e90b5c295ec1e47c8ad865429f046970c549a66
 -- 
-2.34.1
+2.43.0.687.g38aa6559b0-goog
 
 
