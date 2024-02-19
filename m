@@ -1,464 +1,497 @@
-Return-Path: <linux-security-module+bounces-1528-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1530-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E5EA85A1C1
-	for <lists+linux-security-module@lfdr.de>; Mon, 19 Feb 2024 12:17:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5532B85AB57
+	for <lists+linux-security-module@lfdr.de>; Mon, 19 Feb 2024 19:44:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52F741C20C98
-	for <lists+linux-security-module@lfdr.de>; Mon, 19 Feb 2024 11:17:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0CA41F22CA3
+	for <lists+linux-security-module@lfdr.de>; Mon, 19 Feb 2024 18:44:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6276728E2B;
-	Mon, 19 Feb 2024 11:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995E51F952;
+	Mon, 19 Feb 2024 18:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="SOzbKVjA"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 207BE200C8;
-	Mon, 19 Feb 2024 11:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [83.166.143.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C0848783
+	for <linux-security-module@vger.kernel.org>; Mon, 19 Feb 2024 18:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708341427; cv=none; b=B5IV9v3Y++LacQyBNHdprQbUuyG4ZKwyRGdG9O2ljcvI6CGeRvp4EJgVQ9+5wpd13MK0faO2srByVQIgMI4yltPXiIueek77fD3tNfnzmB0rwURz1El4xTUGMr+qTkRGjbKS4QQAALhWEKB/acP1WHlaBOXRxNJ+IAbRltC5qoo=
+	t=1708368265; cv=none; b=qDLn3gU8awwx+nGhNVeppXc9E3RdV/zxoBS6UMuYQIj23JUzDUHKE4ek5+LO0sBaGamCxBZgbxmAy298GC1PzSH7Z5ski+jJXllthqIh7kU3NLQncifKAeuodX/nim/34Z8KcXRv8bi/vUDe0KVRZOHQP9o+JwyvmHU7U4X2orU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708341427; c=relaxed/simple;
-	bh=T4/GoWefqsmk3T2TyBkikQx3EB5lK7Ir7VybrQOUuWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BVqPNf1ze5Z4GK5o5ZSwJiZNY2eVjvfFp+8GgtGFwR20VamfHDprgT3h7bIBaCFdB45WBPBNRu5P6TXGECag+Q3uNKDMVPtDIdw24Zj0MoVFjZbWrsQz3f6bcsKMeX14xi6MKGQJsCypnUcJWDWd4SWr7KnQQyOMDN2IbIicehc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 41JBGckY022711;
-	Mon, 19 Feb 2024 05:16:38 -0600
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 41JBGblb022710;
-	Mon, 19 Feb 2024 05:16:37 -0600
-Date: Mon, 19 Feb 2024 05:16:37 -0600
-From: "Dr. Greg" <greg@enjellic.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net
-Subject: Re: [PATCH 2/13] Add TSEM specific documentation.
-Message-ID: <20240219111636.GA22664@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20230710102319.19716-3-greg@enjellic.com> <ffdd5e4d10865da5f767df53b12bb6db@paul-moore.com> <20240108114324.GA4085@wind.enjellic.com> <CAHC9VhR+Sukfi+-7TTxK2Paxon6i+zDxaELzXUZ=eBOUMf9nwA@mail.gmail.com>
+	s=arc-20240116; t=1708368265; c=relaxed/simple;
+	bh=PjOXyLps/ZNp6sE2Wo3gMIHnCuqRhZJuUfSX5JaRNMY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GWKlNvLem3zFYHcvKAHUgqohl+7rLG5yMesAeYqpb5kv20XbbOQETwa1x04vSA5v2lMPObPGlZi50W1mXkKvrPfRcRytc4URr7ie8RjNVBgfZh6PmVuiJxh/sxwmuQmSKJyGybkZ7czjQVOOPcB8k3H6hdeEi+iLNU8mkKsgT84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=SOzbKVjA; arc=none smtp.client-ip=83.166.143.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Tdrmp4C2wzbYp;
+	Mon, 19 Feb 2024 19:34:50 +0100 (CET)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Tdrmn4rXhzMpnPd;
+	Mon, 19 Feb 2024 19:34:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1708367690;
+	bh=PjOXyLps/ZNp6sE2Wo3gMIHnCuqRhZJuUfSX5JaRNMY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SOzbKVjAkOuxFTX1b2ms/Ygz5Fo2CQiAPSTfo30UZU/sguuBOgpZTkr/q7pwi/eVJ
+	 80do/76B5ELcG9ZJRaa8+4/5IX08P2nn9bSlVI669hOEHXckNGilPaWu+4HApqJjyM
+	 98H4idzXBjLlQbH9Wk7cF9+IWrzK7hTARBO0oa5k=
+Date: Mon, 19 Feb 2024 19:34:42 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Christian Brauner <brauner@kernel.org>
+Cc: linux-security-module@vger.kernel.org, Jeff Xu <jeffxu@google.com>, 
+	Jorge Lucangeli Obes <jorgelo@chromium.org>, Allen Webb <allenwebb@google.com>, 
+	Dmitry Torokhov <dtor@google.com>, Paul Moore <paul@paul-moore.com>, 
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <repnop@google.com>, 
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v9 1/8] landlock: Add IOCTL access right
+Message-ID: <20240219.chu4Yeegh3oo@digikod.net>
+References: <20240209170612.1638517-1-gnoack@google.com>
+ <20240209170612.1638517-2-gnoack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhR+Sukfi+-7TTxK2Paxon6i+zDxaELzXUZ=eBOUMf9nwA@mail.gmail.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Mon, 19 Feb 2024 05:16:38 -0600 (CST)
-
-On Mon, Feb 05, 2024 at 11:09:28AM -0500, Paul Moore wrote:
-
-Hi, I hope the week is starting well for everyone.
-
-Sorry for the delay in responding, was involved with a bit of
-travel.
-
-> On Mon, Jan 8, 2024 at 6:43AM Dr. Greg <greg@enjellic.com> wrote:
-> > On Wed, Jan 03, 2024 at 11:00:33PM -0500, Paul Moore wrote:
-
-> > > > +           trusted pid=PID key=HEXID
-> > > > +                   The trusted keyword is used by a trust
-> > > > +                   orchestrator to indicate that the process
-> > > > +                   identified by the PID argument should be
-> > > > +                   allowed to run in trusted status after the
-> > > > +                   modeling of a security event.
-> >
-> > > I mentioned this quite a few times in my review of the previous
-> > > patchset, PIDs are not a safe way to identify a process in the
-> > > system.  PID reuse/recycling is a real danger and you need to
-> > > account for this risk.
-> >
-> > We will defer that discussion to our previous e-mail where we
-> > discussed how this is addressed.
-
-> Adding a secret key/token/etc. may provide some additional
-> authentication benefits, but it doesn't entirely solve the PID
-> identification issue, it only reduces the likelihood of a process
-> misidentification.
-
-We agree with you that PID reuse/recycling is a real danger.  It is
-our position that TSEM, for its purposes, properly mitigates this
-risk.  
-
-Before doing that, for the benefit of everyone reading along.  The
-threat scenario is that a process waiting for model evaluation of an
-LSM hook by an external trust orchestrator could be killed and a
-process with an identical PID substituted.  This would result in the
-trust orchestrator setting the trust status of the wrong process.
-
-Big picture overview:
-
-- A trust orchestrator enforces a security model that has been
-  previously established through unit testing as valid.  Substituting
-  an alternate process with the same PID would result in that process
-  being constrained to only security states that are considered valid.
-
-- Once a process has been designated as untrusted, that status cannot
-  be reversed by occupying a known good security state.  Thus a
-  process misidentification attack cannot be used to reverse the
-  trust state of an untrusted process.
-
-For purposes of further clarification, lets look at the relevant
-portions of the TSEM code.
-
-For an externally modeled domain, the process begins with the export
-of the security event description by tsem_export_event() in export.c:
-
----------------------------------------------------------------------------
-int tsem_export_event(struct tsem_event *ep)
-{
-	int retn = 0;
-	struct export_event *exp;
-	struct tsem_task *task = tsem_task(current);
-	struct tsem_context *ctx = task->context;
-
-	exp = allocate_export(ep->locked);
-	if (!exp) {
-		pr_warn("tsem: domain %llu failed export allocation.\n",
-			ctx->id);
-		return -ENOMEM;
-	}
-
-	exp->type = ep->locked ? EXPORT_ASYNC_EVENT : EXPORT_EVENT;
-	exp->u.ep = ep;
-	tsem_event_get(ep);
-
-	spin_lock(&ctx->external->export_lock);
-	list_add_tail(&exp->list, &ctx->external->export_list);
-	spin_unlock(&ctx->external->export_lock);
-
-	if (ctx->external->export_only || ep->locked) {
-		trigger_event(ctx);
-		return 0;
-	}
-
-	task->trust_status |= TSEM_TASK_TRUST_PENDING;
-	trigger_event(ctx);
-
-A TSEM modeled task can exist in one of two states: TRUSTED and
-UNTRUSTED in combination with TRUST_PENDING.  The process trust status
-gets set to TRUST_PENDING to force it to wait until it is released by
-the trust orchestrator.  The orchestrator is signaled to indicate that
-a security event is in need of evaluation.
-
-The process then waits in the following loop until the trust
-orchestrator issues a control plane call to set its trust status and
-clear the TRUST_PENDING state.  The PID slot will be maintained and
-thus unavailable by virtue of the task maintaining a reference to the
-PID slot while it is sleeping.
-
-	while (task->trust_status & TSEM_TASK_TRUST_PENDING) {
-		set_current_state(TASK_INTERRUPTIBLE);
-		schedule();
-		if (fatal_signal_pending(task)) {
-			retn = -EPERM;
-			task->trust_status = TSEM_TASK_UNTRUSTED;
-		}
-	}
-
-The only way out of the loop is to either have the TRUST_PENDING
-status cleared by the orchestrator or to have a fatal signal queued.
-In the event of the latter condition, the process trust state is set
-to untrusted for the exit and an error is returned to the trust
-orchestrator.
-
-An error return from a control plane call would be considered an
-actionable event to shutdown the workload, secondary to it being
-considered untrusted by virtue of a failure that should not occur.
-The process itself would be considered untrusted during its exit.
-
-Next, lets consider the issues and protections surrounding the
-initiation of a fatal signal.
-
-A security modeling namespace serves as a boundary for a kill signal,
-unless a cross-model signal generation event has been enabled in the
-signal initiating namespace or the initiating process has
-CAP_MAC_ADMIN privileges.  Either case admits the notion that such a
-signal is being administratively allowed from a security perspective.
-
-Within a security namespace, for a kill signal to be initiated, it
-must have a security state coefficient included in the model that is
-specific to the TASK_ID of the process initiating the signal.  The
-target of the signal must have a specific TASK_ID as well.
-
-This gates successful signaling to two binaries of known provenance.  
-Given that the model being enforced is generated from a known good unit
-test, no adversarial signals would be allowed from within the modeling
-namespace.
-
-That leaves the OOM killer, as has been previously suggested.  An
-adversary would need to deplete memory in a manner that caused the OOM
-killer to select the process that was sleeping on an evaluation by the
-trust orchestrator, rather than the adversarial process or processes
-that were consuming memory.
-
-We would also offer the following with respect to the latency
-challenges associated with a PID misidentification attack.
-
-As noted previously, threat latencies with respect to substituting an
-alternate process with something like the OOM killer would be on the
-order of 200-300 micro-seconds.
-
-A sufficient number of processes would have to be forked during the
-race window in order to have a process poised to replace the task that
-is being held for trust evaluation.  These forks must occur before the
-trust orchestrator has a chance to be scheduled and complete
-processing of the event, which would have the effect of terminating
-the race window.
-
-For purposes of reasoning, here is a sample of average process fork
-latencies over 32,768 attempts:
-
-Intel(R) Xeon(R) Silver 4214R CPU @ 2.40GHz - 8 core - 69.4 micro-seconds
-
-Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz - 4 core - 81.3 micro-seconds
-
-Intel(R) Core(TM) i5-9400 CPU @ 2.90GHz - 1 core - 132.2 micro-seconds
-
-The above timings indicate a requirement for an adversarial process to
-be within a window of 2-5 PID 'slots' below the target process for an
-attack to be effective.
-
-As noted at the start of this mail, the substituted PID would be
-constrained to the security policy that the trust orchestrator is
-implementing.  It would thus be limited from initiating any security
-relevant events that are inconsistent with the security model being
-enforced.
-
-A single failed security event would result in a security state change
-for the security modeling namespace, that in turn would result in
-failed attestation of the trust status of the workload or platform.
-
-	return retn;
-}
----------------------------------------------------------------------------
-
-There are additional quarantees in place that disallow a substituted
-process from being acted upon by the trust orchestrator for a security
-modeling namespace.
-
-For an externally modeled security event, the process ends with a
-request by the trust orchestrator, through the control plane file for
-the security modeling namespace.  The file only allows a single open
-and that open would have been by the trust orchestrator that created
-the security modeling namespace, thereby precluding an adversarial
-process from gaining control of the release process.
-
-The trust relationship between an orchestrator and the processes in a
-security modeling namespace is established in the allocate_external()
-function in namespace.c:
-
----------------------------------------------------------------------------
-static struct tsem_external *allocate_external(u64 context_id,
-					       const char *keystr)
-{
-	int retn = -ENOMEM;
-	char bufr[20 + 1];
-	struct tsem_external *external;
-	struct tsem_task *t_ttask = tsem_task(current);
-	struct tsem_task *p_ttask = tsem_task(current->real_parent);
-
-	external = kzalloc(sizeof(*external), GFP_KERNEL);
-	if (!external)
-		goto done;
-
-	retn = generate_task_key(keystr, context_id, t_ttask, p_ttask);
-	if (retn)
-		goto done;
-
-The generate_task_key() function is responsible for generating a
-random trust orchestrator identifier that is unique across all
-currently active security modeling namespaces.  Uniqueness is
-guaranteed by all facets of namespace creation being gated by the
-context_id_mutex lock held during the critical section of namespace
-creation in tsem_ns_create().
-
-Half of the input to the final identifier is provided by the trust
-orchestrator, with the other half being a random key is generated and
-attempted until a system unique identifier is demonstrated.
-
-The trust orchestrator identifier is copied into the TSEM specific
-portion of the task structure of the parent of the task that is
-creating the namespace (p_ttask).  This process is the trust
-orchestrator that forked the current process that is divesting itself,
-and its children, into a new security modeling namespace.
-
-By virtue of this uniqueness gurantee, no other task on the system
-will have this identifier.
-
-	spin_lock_init(&external->export_lock);
-	INIT_LIST_HEAD(&external->export_list);
-
-	init_waitqueue_head(&external->wq);
-
-	scnprintf(bufr, sizeof(bufr), "%llu", context_id);
-	external->dentry = tsem_fs_create_external(bufr);
-	if (IS_ERR(external->dentry)) {
-		retn = PTR_ERR(external->dentry);
-		external->dentry = NULL;
-	} else
-		retn = 0;
-
- done:
-	if (retn) {
-		memset(t_ttask->task_key, '\0', tsem_digestsize());
-		memset(p_ttask->task_key, '\0', tsem_digestsize());
-		kfree(external);
-		remove_task_key(context_id);
-		external = ERR_PTR(retn);
-	} else
-		p_ttask->tma_for_ns = context_id;
-
-In addition to having a system unique orchestration identifier placed
-in the trust orchestrator's task structure, the identifier of the
-namespace, that is guaranteed to not wrap, is also placed in the task
-control structure of the orchestrator.
-
-	return external;
-}
----------------------------------------------------------------------------
-
-All of this leads us to the processing of the control plane request by
-a trust orchestrator to set the trust status of a process whose
-security event is being modeled.  This request is handled by the
-control_COE() function in fs.c:
-
----------------------------------------------------------------------------
-static int control_COE(unsigned long cmd, pid_t pid, char *keystr)
-{
-	bool wakeup = false;
-	int retn = -ESRCH;
-	u8 event_key[HASH_MAX_DIGESTSIZE];
-	struct task_struct *COE;
-	struct tsem_task *task;
-	struct tsem_task *tma = tsem_task(current);
-
-	rcu_read_lock();
-	COE = find_task_by_vpid(pid);
-
-We use the standard kernel infrastructure to find the PID that has
-been previously put to sleep in the export code.  If someone was
-nefariously attempting to kill PIDs, an actionable error will be
-registered with the trust orchestor if the task cannot be located.
-
-Once again, the only way out of the previously described control
-section is by either the process receiving a fatal signal or this
-function clearing the TRUST_PENDING state bit.
-
-	if (COE != NULL) {
-		task = tsem_task(COE);
-		if (tsem_context(COE)->id != tma->tma_for_ns) {
-			retn = -EINVAL;
-			goto done;
-		}
-
-Once the candidate task is located, its security modeling namespace
-identifier is verified to match that of the trust orchestrator.  This
-denies processes from outside of the security modeling namespace
-access to this control call.
-
-		retn = tsem_ns_event_key(task->task_key, keystr, event_key);
-		if (retn)
-			goto done;
-
-The trust orchestrator identifier is generated using half of the key
-re-supplied in the control call by the trust orchestrator itself and
-the other half that has been re-supplied from the task structure of
-the process being evaluated.
-
-This limits the PID substitution domain to the security modeling
-namespace that the trust orchestrator holds dominion over.  Once
-again, only security relevant events that the namespace has been
-tested to are allowed to occur within the namespace.
-
-If a PID substitution attack were to be mounted, it would have to be
-by 'known good' code that was admitted for execution into the modeling
-namespace.
-
-		if (memcmp(tma->task_key, event_key, tsem_digestsize())) {
-			retn = -EINVAL;
-			goto done;
-		}
-
-The generated key is compared to the key held inside the task control
-structure of the trust orchestrator and the control is denied if they
-do not match.  Once again, this would be an actionable event to
-shutdown the workload as being untrusted.
-
-		if (cmd == TSEM_CONTROL_UNTRUSTED)
-			task->trust_status = TSEM_TASK_UNTRUSTED;
-		if (cmd == TSEM_CONTROL_TRUSTED) {
-			if (tsem_task_trusted(COE))
-				task->trust_status = TSEM_TASK_TRUSTED;
-		}
-		task->trust_status &= ~TSEM_TASK_TRUST_PENDING;
-
-The trust status of the process is set and the TRUST_PENDING state is
-cleared.  As the above code section demonstrates, a process that is
-untrusted cannot use a PID substitution attack to convert its status
-to trusted.
-
-		}
-		retn = 0;
-		wakeup = true;
-	}
-
- done:
-	rcu_read_unlock();
-
-	if (retn == -EINVAL)
-		pr_warn("tsem: Invalid process release request.\n");
-
-	if (wakeup)
-		wake_up_process(COE);
-
-The process is turned loose from its loop in
-export.c:tsem_export_event() with its new trust status.
-
-	return retn;
-}
----------------------------------------------------------------------------
-
-> We need to do better for new designs/implementations; look at the
-> pidfd work as an example of work that has gone into
-> reducing/eliminating the use of PIDs to identify processes.
-
-We have a high degree of familiarity with the pidfd work, in fact we
-use pidfd_open() to establish a stable and immutable relationship
-between a Quixote trust orchestrator and the lead process in a
-security modeling namespace, typically runc in a container
-environment.
-
-In TSEM, the issue is that the trust orchestrator may not have a
-direct relationship with any number of processes that may be running
-in a security modeling namespace.  Processes asynchronously generate
-events that need to be identified for the trust orchestrator to act
-on.
-
-If we misunderstand pidfd's, or lack understanding of other alternate
-infrastructure that could be purposed for our needs, we would
-certainly be interested in your thoughts on an alternate
-implementation.
-
-Otherwise we would enjoy specific comments on how our implementation
-would be security insufficient in the face of a PID substitution or
-race attack.
-
-> paul-moore.com
-
-Have a good day.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240209170612.1638517-2-gnoack@google.com>
+X-Infomaniak-Routing: alpha
+
+Arn, Christian, please take a look at the following RFC patch and the
+rationale explained here.
+
+On Fri, Feb 09, 2024 at 06:06:05PM +0100, Günther Noack wrote:
+> Introduces the LANDLOCK_ACCESS_FS_IOCTL access right
+> and increments the Landlock ABI version to 5.
+> 
+> Like the truncate right, these rights are associated with a file
+> descriptor at the time of open(2), and get respected even when the
+> file descriptor is used outside of the thread which it was originally
+> opened in.
+> 
+> A newly enabled Landlock policy therefore does not apply to file
+> descriptors which are already open.
+> 
+> If the LANDLOCK_ACCESS_FS_IOCTL right is handled, only a small number
+> of safe IOCTL commands will be permitted on newly opened files.  The
+> permitted IOCTLs can be configured through the ruleset in limited ways
+> now.  (See documentation for details.)
+> 
+> Specifically, when LANDLOCK_ACCESS_FS_IOCTL is handled, granting this
+> right on a file or directory will *not* permit to do all IOCTL
+> commands, but only influence the IOCTL commands which are not already
+> handled through other access rights.  The intent is to keep the groups
+> of IOCTL commands more fine-grained.
+> 
+> Noteworthy scenarios which require special attention:
+> 
+> TTY devices are often passed into a process from the parent process,
+> and so a newly enabled Landlock policy does not retroactively apply to
+> them automatically.  In the past, TTY devices have often supported
+> IOCTL commands like TIOCSTI and some TIOCLINUX subcommands, which were
+> letting callers control the TTY input buffer (and simulate
+> keypresses).  This should be restricted to CAP_SYS_ADMIN programs on
+> modern kernels though.
+> 
+> Some legitimate file system features, like setting up fscrypt, are
+> exposed as IOCTL commands on regular files and directories -- users of
+> Landlock are advised to double check that the sandboxed process does
+> not need to invoke these IOCTLs.
+
+I think we really need to allow fscrypt and fs-verity IOCTLs.
+
+> 
+> Known limitations:
+> 
+> The LANDLOCK_ACCESS_FS_IOCTL access right is a coarse-grained control
+> over IOCTL commands.  Future work will enable a more fine-grained
+> access control for IOCTLs.
+> 
+> In the meantime, Landlock users may use path-based restrictions in
+> combination with their knowledge about the file system layout to
+> control what IOCTLs can be done.  Mounting file systems with the nodev
+> option can help to distinguish regular files and devices, and give
+> guarantees about the affected files, which Landlock alone can not give
+> yet.
+
+I had a second though about our current approach, and it looks like we
+can do simpler, more generic, and with less IOCTL commands specific
+handling.
+
+What we didn't take into account is that an IOCTL needs an opened file,
+which means that the caller must already have been allowed to open this
+file in read or write mode.
+
+I think most FS-specific IOCTL commands check access rights (i.e. access
+mode or required capability), other than implicit ones (at least read or
+write), when appropriate.  We don't get such guarantee with device
+drivers.
+
+The main threat is IOCTLs on character or block devices because their
+impact may be unknown (if we only look at the IOCTL command, not the
+backing file), but we should allow IOCTLs on filesystems (e.g. fscrypt,
+fs-verity, clone extents).  I think we should only implement a
+LANDLOCK_ACCESS_FS_IOCTL_DEV right, which would be more explicit.  This
+change would impact the IOCTLs grouping (not required anymore), but
+we'll still need the list of VFS IOCTLs.
+
+
+> 
+> Signed-off-by: Günther Noack <gnoack@google.com>
+> ---
+>  include/uapi/linux/landlock.h                |  55 ++++-
+>  security/landlock/fs.c                       | 227 ++++++++++++++++++-
+>  security/landlock/fs.h                       |   3 +
+>  security/landlock/limits.h                   |  11 +-
+>  security/landlock/ruleset.h                  |   2 +-
+>  security/landlock/syscalls.c                 |  19 +-
+>  tools/testing/selftests/landlock/base_test.c |   2 +-
+>  tools/testing/selftests/landlock/fs_test.c   |   5 +-
+>  8 files changed, 302 insertions(+), 22 deletions(-)
+
+> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> index 73997e63734f..84efea3f7c0f 100644
+> --- a/security/landlock/fs.c
+> +++ b/security/landlock/fs.c
+
+> @@ -84,6 +87,186 @@ static const struct landlock_object_underops landlock_fs_underops = {
+>  	.release = release_inode
+>  };
+>  
+> +/* IOCTL helpers */
+> +
+> +/*
+> + * These are synthetic access rights, which are only used within the kernel, but
+> + * not exposed to callers in userspace.  The mapping between these access rights
+> + * and IOCTL commands is defined in the get_required_ioctl_access() helper function.
+> + */
+> +#define LANDLOCK_ACCESS_FS_IOCTL_RW (LANDLOCK_LAST_PUBLIC_ACCESS_FS << 1)
+> +#define LANDLOCK_ACCESS_FS_IOCTL_RW_FILE (LANDLOCK_LAST_PUBLIC_ACCESS_FS << 2)
+> +
+> +/* ioctl_groups - all synthetic access rights for IOCTL command groups */
+> +/* clang-format off */
+> +#define IOCTL_GROUPS (				\
+> +	LANDLOCK_ACCESS_FS_IOCTL_RW |		\
+> +	LANDLOCK_ACCESS_FS_IOCTL_RW_FILE)
+> +/* clang-format on */
+> +
+> +static_assert((IOCTL_GROUPS & LANDLOCK_MASK_ACCESS_FS) == IOCTL_GROUPS);
+> +
+> +/**
+> + * get_required_ioctl_access(): Determine required IOCTL access rights.
+> + *
+> + * @cmd: The IOCTL command that is supposed to be run.
+> + *
+> + * Any new IOCTL commands that are implemented in fs/ioctl.c's do_vfs_ioctl()
+> + * should be considered for inclusion here.
+> + *
+> + * Returns: The access rights that must be granted on an opened file in order to
+> + * use the given @cmd.
+> + */
+> +static __attribute_const__ access_mask_t
+> +get_required_ioctl_access(const unsigned int cmd)
+> +{
+> +	switch (cmd) {
+> +	case FIOCLEX:
+> +	case FIONCLEX:
+> +	case FIONBIO:
+> +	case FIOASYNC:
+> +		/*
+> +		 * FIOCLEX, FIONCLEX, FIONBIO and FIOASYNC manipulate the FD's
+> +		 * close-on-exec and the file's buffered-IO and async flags.
+> +		 * These operations are also available through fcntl(2), and are
+> +		 * unconditionally permitted in Landlock.
+> +		 */
+> +		return 0;
+> +	case FIONREAD:
+> +	case FIOQSIZE:
+> +	case FIGETBSZ:
+> +		/*
+> +		 * FIONREAD returns the number of bytes available for reading.
+> +		 * FIONREAD returns the number of immediately readable bytes for
+> +		 * a file.
+> +		 *
+> +		 * FIOQSIZE queries the size of a file or directory.
+> +		 *
+> +		 * FIGETBSZ queries the file system's block size for a file or
+> +		 * directory.
+> +		 *
+> +		 * These IOCTL commands are permitted for files which are opened
+> +		 * with LANDLOCK_ACCESS_FS_READ_DIR,
+> +		 * LANDLOCK_ACCESS_FS_READ_FILE, or
+> +		 * LANDLOCK_ACCESS_FS_WRITE_FILE.
+> +		 */
+
+Because files or directories can only be opened with
+LANDLOCK_ACCESS_FS_{READ,WRITE}_{FILE,DIR}, and because IOCTLs can only
+be sent on a file descriptor, this means that we can always allow these
+3 commands (for opened files).
+
+> +		return LANDLOCK_ACCESS_FS_IOCTL_RW;
+> +	case FS_IOC_FIEMAP:
+> +	case FIBMAP:
+> +		/*
+> +		 * FS_IOC_FIEMAP and FIBMAP query information about the
+> +		 * allocation of blocks within a file.  They are permitted for
+> +		 * files which are opened with LANDLOCK_ACCESS_FS_READ_FILE or
+> +		 * LANDLOCK_ACCESS_FS_WRITE_FILE.
+> +		 */
+> +		fallthrough;
+> +	case FIDEDUPERANGE:
+> +	case FICLONE:
+> +	case FICLONERANGE:
+> +		/*
+> +		 * FIDEDUPERANGE, FICLONE and FICLONERANGE make files share
+> +		 * their underlying storage ("reflink") between source and
+> +		 * destination FDs, on file systems which support that.
+> +		 *
+> +		 * The underlying implementations are already checking whether
+> +		 * the involved files are opened with the appropriate read/write
+> +		 * modes.  We rely on this being implemented correctly.
+> +		 *
+> +		 * These IOCTLs are permitted for files which are opened with
+> +		 * LANDLOCK_ACCESS_FS_READ_FILE or
+> +		 * LANDLOCK_ACCESS_FS_WRITE_FILE.
+> +		 */
+> +		fallthrough;
+> +	case FS_IOC_RESVSP:
+> +	case FS_IOC_RESVSP64:
+> +	case FS_IOC_UNRESVSP:
+> +	case FS_IOC_UNRESVSP64:
+> +	case FS_IOC_ZERO_RANGE:
+> +		/*
+> +		 * These IOCTLs reserve space, or create holes like
+> +		 * fallocate(2).  We rely on the implementations checking the
+> +		 * files' read/write modes.
+> +		 *
+> +		 * These IOCTLs are permitted for files which are opened with
+> +		 * LANDLOCK_ACCESS_FS_READ_FILE or
+> +		 * LANDLOCK_ACCESS_FS_WRITE_FILE.
+> +		 */
+
+These 10 commands only make sense on directories, so we could also
+always allow them on file descriptors.
+
+> +		return LANDLOCK_ACCESS_FS_IOCTL_RW_FILE;
+> +	default:
+> +		/*
+> +		 * Other commands are guarded by the catch-all access right.
+> +		 */
+> +		return LANDLOCK_ACCESS_FS_IOCTL;
+> +	}
+> +}
+> +
+> +/**
+> + * expand_ioctl() - Return the dst flags from either the src flag or the
+> + * %LANDLOCK_ACCESS_FS_IOCTL flag, depending on whether the
+> + * %LANDLOCK_ACCESS_FS_IOCTL and src access rights are handled or not.
+> + *
+> + * @handled: Handled access rights.
+> + * @access: The access mask to copy values from.
+> + * @src: A single access right to copy from in @access.
+> + * @dst: One or more access rights to copy to.
+> + *
+> + * Returns: @dst, or 0.
+> + */
+> +static __attribute_const__ access_mask_t
+> +expand_ioctl(const access_mask_t handled, const access_mask_t access,
+> +	     const access_mask_t src, const access_mask_t dst)
+> +{
+> +	access_mask_t copy_from;
+> +
+> +	if (!(handled & LANDLOCK_ACCESS_FS_IOCTL))
+> +		return 0;
+> +
+> +	copy_from = (handled & src) ? src : LANDLOCK_ACCESS_FS_IOCTL;
+> +	if (access & copy_from)
+> +		return dst;
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * landlock_expand_access_fs() - Returns @access with the synthetic IOCTL group
+> + * flags enabled if necessary.
+> + *
+> + * @handled: Handled FS access rights.
+> + * @access: FS access rights to expand.
+> + *
+> + * Returns: @access expanded by the necessary flags for the synthetic IOCTL
+> + * access rights.
+> + */
+> +static __attribute_const__ access_mask_t landlock_expand_access_fs(
+> +	const access_mask_t handled, const access_mask_t access)
+> +{
+> +	return access |
+> +	       expand_ioctl(handled, access, LANDLOCK_ACCESS_FS_WRITE_FILE,
+> +			    LANDLOCK_ACCESS_FS_IOCTL_RW |
+> +				    LANDLOCK_ACCESS_FS_IOCTL_RW_FILE) |
+> +	       expand_ioctl(handled, access, LANDLOCK_ACCESS_FS_READ_FILE,
+> +			    LANDLOCK_ACCESS_FS_IOCTL_RW |
+> +				    LANDLOCK_ACCESS_FS_IOCTL_RW_FILE) |
+> +	       expand_ioctl(handled, access, LANDLOCK_ACCESS_FS_READ_DIR,
+> +			    LANDLOCK_ACCESS_FS_IOCTL_RW);
+> +}
+> +
+> +/**
+> + * landlock_expand_handled_access_fs() - add synthetic IOCTL access rights to an
+> + * access mask of handled accesses.
+> + *
+> + * @handled: The handled accesses of a ruleset that is being created.
+> + *
+> + * Returns: @handled, with the bits for the synthetic IOCTL access rights set,
+> + * if %LANDLOCK_ACCESS_FS_IOCTL is handled.
+> + */
+> +__attribute_const__ access_mask_t
+> +landlock_expand_handled_access_fs(const access_mask_t handled)
+> +{
+> +	return landlock_expand_access_fs(handled, handled);
+> +}
+> +
+>  /* Ruleset management */
+>  
+>  static struct landlock_object *get_inode_object(struct inode *const inode)
+> @@ -148,7 +331,8 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
+>  	LANDLOCK_ACCESS_FS_EXECUTE | \
+>  	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>  	LANDLOCK_ACCESS_FS_READ_FILE | \
+> -	LANDLOCK_ACCESS_FS_TRUNCATE)
+> +	LANDLOCK_ACCESS_FS_TRUNCATE | \
+> +	LANDLOCK_ACCESS_FS_IOCTL)
+>  /* clang-format on */
+>  
+>  /*
+> @@ -158,6 +342,7 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+>  			    const struct path *const path,
+>  			    access_mask_t access_rights)
+>  {
+> +	access_mask_t handled;
+>  	int err;
+>  	struct landlock_id id = {
+>  		.type = LANDLOCK_KEY_INODE,
+> @@ -170,9 +355,11 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+>  	if (WARN_ON_ONCE(ruleset->num_layers != 1))
+>  		return -EINVAL;
+>  
+> +	handled = landlock_get_fs_access_mask(ruleset, 0);
+> +	/* Expands the synthetic IOCTL groups. */
+> +	access_rights |= landlock_expand_access_fs(handled, access_rights);
+>  	/* Transforms relative access rights to absolute ones. */
+> -	access_rights |= LANDLOCK_MASK_ACCESS_FS &
+> -			 ~landlock_get_fs_access_mask(ruleset, 0);
+> +	access_rights |= LANDLOCK_MASK_ACCESS_FS & ~handled;
+>  	id.key.object = get_inode_object(d_backing_inode(path->dentry));
+>  	if (IS_ERR(id.key.object))
+>  		return PTR_ERR(id.key.object);
+> @@ -1333,7 +1520,9 @@ static int hook_file_open(struct file *const file)
+>  {
+>  	layer_mask_t layer_masks[LANDLOCK_NUM_ACCESS_FS] = {};
+>  	access_mask_t open_access_request, full_access_request, allowed_access;
+> -	const access_mask_t optional_access = LANDLOCK_ACCESS_FS_TRUNCATE;
+> +	const access_mask_t optional_access = LANDLOCK_ACCESS_FS_TRUNCATE |
+> +					      LANDLOCK_ACCESS_FS_IOCTL |
+> +					      IOCTL_GROUPS;
+>  	const struct landlock_ruleset *const dom = get_current_fs_domain();
+>  
+>  	if (!dom)
+
+We should set optional_access according to the file type before
+`full_access_request = open_access_request | optional_access;`
+
+const bool is_device = S_ISBLK(inode->i_mode) || S_ISCHR(inode->i_mode);
+
+optional_access = LANDLOCK_ACCESS_FS_TRUNCATE;
+if (is_device)
+    optional_access |= LANDLOCK_ACCESS_FS_IOCTL_DEV;
+
+
+Because LANDLOCK_ACCESS_FS_IOCTL_DEV is dedicated to character or block
+devices, we may want landlock_add_rule() to only allow this access right
+to be tied to directories, or character devices, or block devices.  Even
+if it would be more consistent with constraints on directory-only access
+rights, I'm not sure about that.
+
+
+> @@ -1375,6 +1564,16 @@ static int hook_file_open(struct file *const file)
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * Named pipes should be treated just like anonymous pipes.
+> +	 * Therefore, we permit all IOCTLs on them.
+> +	 */
+> +	if (S_ISFIFO(file_inode(file)->i_mode)) {
+> +		allowed_access |= LANDLOCK_ACCESS_FS_IOCTL |
+> +				  LANDLOCK_ACCESS_FS_IOCTL_RW |
+> +				  LANDLOCK_ACCESS_FS_IOCTL_RW_FILE;
+> +	}
+
+Instead of this S_ISFIFO check:
+
+if (!is_device)
+    allowed_access |= LANDLOCK_ACCESS_FS_IOCTL_DEV;
+
+> +
+>  	/*
+>  	 * For operations on already opened files (i.e. ftruncate()), it is the
+>  	 * access rights at the time of open() which decide whether the
+> @@ -1406,6 +1605,25 @@ static int hook_file_truncate(struct file *const file)
+>  	return -EACCES;
+>  }
+>  
+> +static int hook_file_ioctl(struct file *file, unsigned int cmd,
+> +			   unsigned long arg)
+> +{
+> +	const access_mask_t required_access = get_required_ioctl_access(cmd);
+
+const access_mask_t required_access = LANDLOCK_ACCESS_FS_IOCTL_DEV;
+
+
+> +	const access_mask_t allowed_access =
+> +		landlock_file(file)->allowed_access;
+> +
+> +	/*
+> +	 * It is the access rights at the time of opening the file which
+> +	 * determine whether IOCTL can be used on the opened file later.
+> +	 *
+> +	 * The access right is attached to the opened file in hook_file_open().
+> +	 */
+> +	if ((allowed_access & required_access) == required_access)
+> +		return 0;
+
+We could then check against the do_vfs_ioctl()'s commands, excluding
+FIONREAD and file_ioctl()'s commands, to always allow VFS-related
+commands:
+
+if (vfs_masked_device_ioctl(cmd))
+    return 0;
+
+As a safeguard, we could define vfs_masked_device_ioctl(cmd) in
+fs/ioctl.c and make it called by do_vfs_ioctl() as a safeguard to make
+sure we keep an accurate list of VFS IOCTL commands (see next RFC patch).
+
+The compat IOCTL hook must also be implemented.
+
+What do you think? Any better idea?
+
+
+> +
+> +	return -EACCES;
+> +}
+> +
+>  static struct security_hook_list landlock_hooks[] __ro_after_init = {
+>  	LSM_HOOK_INIT(inode_free_security, hook_inode_free_security),
+>  
+> @@ -1428,6 +1646,7 @@ static struct security_hook_list landlock_hooks[] __ro_after_init = {
 
