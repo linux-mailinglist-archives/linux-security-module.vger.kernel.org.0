@@ -1,145 +1,160 @@
-Return-Path: <linux-security-module+bounces-1588-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1589-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E62E085EABE
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Feb 2024 22:28:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89FB685EB19
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Feb 2024 22:38:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2440D1C22BF1
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Feb 2024 21:28:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29C7B1F285EA
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Feb 2024 21:38:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3DF21482E7;
-	Wed, 21 Feb 2024 21:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E620B13398E;
+	Wed, 21 Feb 2024 21:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BRSh2cwD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MxjvrMMI"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B8A12FB30;
-	Wed, 21 Feb 2024 21:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0D412DD81;
+	Wed, 21 Feb 2024 21:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708550707; cv=none; b=HboMgOmEtxyZzmQz11Tm7Lk3fo3OuwWTst9YoQPvjuqUbl1ovYXElMcqjWaFejy/0pUv0+5EApHPNM48ZUjBws14w5Mls7QdQs3v/XNUMXQmTaIxGc78Ld+sgw+BnS6RtN90fkGEZGsu8xD07qaLbi5Hh459XOZ1lbiqf02K6EM=
+	t=1708551358; cv=none; b=oO5k34ddnqqxwmKoXCvb8IUiCSxHK0KprAsUzG+8M9CIxKwfej8gMUbyB4MEYZy7Xcp6wsfH7BgDTa7c3t2WkYzp4mZJLb8M6ewfMsPW12saKuTNmj42dM8h98kBUb0HJLh9aRH8EydR9Mvgqie3XTb7OkH/ADZOdM7bPWVa44E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708550707; c=relaxed/simple;
-	bh=JkAYnCkvvJdZGpxH4b0zbmLDehUJl7XVpS/k3t/jU9U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=H6PhMTWwGgklOkwQJCKeHQcxiEedR+0GdGaerzK943HYZmQ6J6MP9aSW6RMmqCzXfH368n/FRkpQR74HO///+emAlOr5AjC0QoPvhUaIIAGoXFbMyW8xa6r9K35irZhu4cSmN9dLwNLs2+09gAkxMh3LThm1I+Q9UK3D6C8Qp7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BRSh2cwD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73227C41679;
-	Wed, 21 Feb 2024 21:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708550707;
-	bh=JkAYnCkvvJdZGpxH4b0zbmLDehUJl7XVpS/k3t/jU9U=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BRSh2cwDivQmO5cvnVkqxeC7Nu/3tUOtiCSGbP9nzwTtRBOai53XjC60y7iBHWVCL
-	 Dx94tHN+ntUevMHXYVUbAS96T3OzjNnBeM8g6bT+w0cgsa+m/9GIMoWSOpL3L109Dy
-	 p/jRXZVKK3Qjitov8q4GUy+frcJTU6YE5Ie3LnK3jmqZAXOJeDLPo4jOozcggPjlcT
-	 bz3P6FSFwLZzaSt/6n//M6/PaXd4R8vES39SkmRstrtljgGBEWOAKbkiv5Bhk6T9n2
-	 Pw+aGyaiA2KT1m8IKWHDlgRepdSTF3fyENURSQ5hgUUZSI7XfpBd46oydQjBI3KyjM
-	 z/g84a8N8kCRQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6283CC48BEB;
-	Wed, 21 Feb 2024 21:25:07 +0000 (UTC)
-From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-Date: Wed, 21 Feb 2024 15:24:56 -0600
-Subject: [PATCH v2 25/25] vfs: return -EOPNOTSUPP for fscaps from
- vfs_*xattr()
+	s=arc-20240116; t=1708551358; c=relaxed/simple;
+	bh=7kAfcN1/13WrOj7hm7Y4/wFCohh865CFE4P/KUkvp1c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJ9W/S4jyJGaaYvE6kmuMEP20SgK+f3rB6MfRgYQu6/bIGFUtE+Kfd32zX+c5oFkctZGWANoq5nO1/Mj+5Nocyb+uXYtHdWY2imv87GPTw/EeCTeGqHxJ2D+0dXDEgk9d4U0ISCY6roKthUA+ajR7A7ic8FwS/qNFZ5qavqmyb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MxjvrMMI; arc=none smtp.client-ip=209.85.166.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7c488a5af5eso6964539f.1;
+        Wed, 21 Feb 2024 13:35:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708551356; x=1709156156; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hEhygBtosGq+EZCjwlVt0RPtsTFLG976dZg39gbKTO0=;
+        b=MxjvrMMIEUwucQ17vwd1WU657hQ3Mm/unPdh9zSRwzcimFA0yUD8FAOLu8iYnRz9P0
+         vZQOub1Qpr3nRaHhDXIVA+QwLmtW6FPuElHS/mtn2k8ypdW9xX4bTI8eyBMJcTIHvRyh
+         E9+wO0PjkpbWDpJHMepg/81PHMr4VGEgvHyw/+lOxQYBgwjsK868aGtXfvJ6p69HsUJx
+         z/R1Q2uY7b97PPcGBVWtxlrxt+kaYO6mss9BnbwiRrtuTNgr6+LH8Lc44oocoKUAreJC
+         isQC8kPnhh0xiYdNPLMeAdI6714LYR4sCoWh8D4pvrmY8rnO2qtgzxFBI0oeyEykgp4Z
+         h+Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708551356; x=1709156156;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hEhygBtosGq+EZCjwlVt0RPtsTFLG976dZg39gbKTO0=;
+        b=eagmxiH88QEgN2sfeU8tc9ur4z3BoIcnD9SLGjQ0zpUOqNDZZh8GywJxbBtBHcCkJy
+         pSgaTMrehvYlIWFuxwLSj+m7Sn39uLkHwVBF5Zq6O/DcgPuPdijNd9eTohese8aLN2tE
+         BtEwf7yJW6b9ti2MPHJVqaduK8ufGm/TKvCLS31EhmRElZE2WqcjALiECJ4jHOZmRfoe
+         KqLDksQYhL9BYoQQVwayL2ONnN5Bi9FdnWQO/ZTyZjqRFRaaUZtoQU5rjltRoJuj9C8A
+         0Cr51WqK3XWCPMJb5nDiqqqM8gQPXQqxKViQXF6iNJHPPZSALvDKiyVzjVk0/BV04SLA
+         n0/g==
+X-Forwarded-Encrypted: i=1; AJvYcCWuw0QrLmmRumJi2PxUvMCY/0nbMRV3m1h4TaUi4kcfUeTR3N/G/iOgaGyuRHKEpqDNEhgAD+q4A8ZDj+RBH0jgokKjayDAb5FZNPWSQ4xUWVIn3IGnkzxRfJqB7zugrc9JfaD1UwCwA+u/eBoaRT0m1l7JJGN7Gdaqp1hGA3/9S8pe6+9FuJN/unIcXR6/sxSgwtEEYLX3z2PmQbzuF4pM1E0hYRXMZXESqa+F
+X-Gm-Message-State: AOJu0Yzi+wEBAYtX7uHT0kiKQV6E4TxRlrva4A6xsmNoj55iHmMfAyDZ
+	WoDtuzoYMfNFrU4khwuZc4ZHwu+8LCVx9OdmE3rmGBFcd3ctTprCidKktZjT
+X-Google-Smtp-Source: AGHT+IFmF1+6vZPUdEg3sXIJoAZI1kHF31CDjrsju8l+yXoRnYkhWW8unvAUdMdGtN7NXXgO7XVipQ==
+X-Received: by 2002:a6b:6f15:0:b0:7bf:e57f:3ecf with SMTP id k21-20020a6b6f15000000b007bfe57f3ecfmr657115ioc.0.1708551356458;
+        Wed, 21 Feb 2024 13:35:56 -0800 (PST)
+Received: from localhost ([2a02:168:59f0:1:63b6:5e21:e19f:4684])
+        by smtp.gmail.com with ESMTPSA id f32-20020a0284a3000000b00473c8573648sm3007942jai.146.2024.02.21.13.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 13:35:56 -0800 (PST)
+Date: Wed, 21 Feb 2024 22:35:50 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Paul Moore <paul@paul-moore.com>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+	Shervin Oloumi <enlightened@chromium.org>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] landlock: Warn once if a Landlock action is requested
+ while disabled
+Message-ID: <20240221.b8dcd9590c37@gnoack.org>
+References: <20240219191804.2978911-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240221-idmap-fscap-refactor-v2-25-3039364623bd@kernel.org>
-References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
-In-Reply-To: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
-To: Christian Brauner <brauner@kernel.org>, 
- Seth Forshee <sforshee@kernel.org>, Serge Hallyn <serge@hallyn.com>, 
- Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
- James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
- Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
- Ondrej Mosnacek <omosnace@redhat.com>, 
- Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
- Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>, 
- Amir Goldstein <amir73il@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
- selinux@vger.kernel.org, linux-integrity@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1556; i=sforshee@kernel.org;
- h=from:subject:message-id; bh=JkAYnCkvvJdZGpxH4b0zbmLDehUJl7XVpS/k3t/jU9U=; 
- =?utf-8?q?b=3DowEBbQGS/pANAwAKAVMDma7l9DHJAcsmYgBl1mouT6WPJX7a66eMZi03rVY0Q?=
- =?utf-8?q?ujcBq9Oshkq0LfM_Tuo4JCOJATMEAAEKAB0WIQSQnt+rKAvnETy4Hc9TA5mu5fQxy?=
- =?utf-8?q?QUCZdZqLgAKCRBTA5mu5fQxyYCgB/_945jyUfmMhsxGudorl5vI3QR/Ixu+abEbAK?=
- =?utf-8?q?QoQWFIgQCflgI7lEzlE8Gpqk4PF6fP+Z4ZfP0ipIhZW_Hvcg61i4lw3bmENsZEOVv?=
- =?utf-8?q?ExwPI4miDqPaQYM5MgS72JjInytlPLdJ5J9YHHPBvYMhUlUJvF4NzVBC1_9E242eb?=
- =?utf-8?q?zj+LwCGygOgJWhED2lY/Hb6uyrRFm1Cz7HpnhwU6iLvmwzI2zV1OW2VbkuTMnKBAY?=
- =?utf-8?q?o6R6P4_c+pauDINbyl1S9IwKjV1/Nmp3njKa6CF4FcIE+hdhnDFMdvpB7KmRK/3vS?=
- =?utf-8?q?9yDqlhgFpDIuqkf8wNp7?= kOXGHoNmPjZ5soY0mZi+wE1d1xksOV
-X-Developer-Key: i=sforshee@kernel.org; a=openpgp;
- fpr=2ABCA7498D83E1D32D51D3B5AB4800A62DB9F73A
-X-Endpoint-Received:
- by B4 Relay for sforshee@kernel.org/default with auth_id=103
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240219191804.2978911-1-mic@digikod.net>
 
-Now that the new vfs-level interfaces are fully supported and all code
-has been converted to use them, stop permitting use of the top-level vfs
-xattr interfaces for capabilities xattrs. Unlike with ACLs we still need
-to be able to work with fscaps xattrs using lower-level interfaces in a
-handful of places, so only use of the top-level xattr interfaces is
-restricted.
+Hello!
 
-Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
----
- fs/xattr.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+I think this is a good idea.
+Some minor implementation remarks below.
 
-diff --git a/fs/xattr.c b/fs/xattr.c
-index 30eff6bc4f6d..2b8214c9534f 100644
---- a/fs/xattr.c
-+++ b/fs/xattr.c
-@@ -534,6 +534,9 @@ vfs_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	const void  *orig_value = value;
- 	int error;
- 
-+	if (WARN_ON_ONCE(is_fscaps_xattr(name)))
-+		return -EOPNOTSUPP;
-+
- retry_deleg:
- 	inode_lock(inode);
- 	error = __vfs_setxattr_locked(idmap, dentry, name, value, size,
-@@ -649,6 +652,9 @@ vfs_getxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	struct inode *inode = dentry->d_inode;
- 	int error;
- 
-+	if (WARN_ON_ONCE(is_fscaps_xattr(name)))
-+		return -EOPNOTSUPP;
-+
- 	error = xattr_permission(idmap, inode, name, MAY_READ);
- 	if (error)
- 		return error;
-@@ -788,6 +794,9 @@ vfs_removexattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	struct inode *delegated_inode = NULL;
- 	int error;
- 
-+	if (WARN_ON_ONCE(is_fscaps_xattr(name)))
-+		return -EOPNOTSUPP;
-+
- retry_deleg:
- 	inode_lock(inode);
- 	error = __vfs_removexattr_locked(idmap, dentry,
+On Mon, Feb 19, 2024 at 08:18:04PM +0100, Mickaël Salaün wrote:
+> Because sandboxing can be used as an opportunistic security measure,
+> user space may not log unsupported features.  Let the system
+> administrator know if an application tries to use Landlock but failed
+> because it isn't enabled at boot time.  This may be caused by bootloader
+> configurations with outdated "lsm" kernel's command-line parameter.
+> 
+> Cc: Günther Noack <gnoack@google.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 265885daf3e5 ("landlock: Add syscall implementations")
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> ---
+>  security/landlock/syscalls.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+> index f0bc50003b46..b5b424819dee 100644
+> --- a/security/landlock/syscalls.c
+> +++ b/security/landlock/syscalls.c
+> @@ -33,6 +33,18 @@
+>  #include "ruleset.h"
+>  #include "setup.h"
+>  
+> +static bool is_not_initialized(void)
+> +{
+> +	if (likely(landlock_initialized))
+> +		return false;
 
--- 
-2.43.0
+Optional stylistic remark; I try to avoid predicate functions which
+have a "negated" meaning, because double negations are slightly more
+error prone.  (We return false here, so Landlock is not not
+initialized.)
 
+> +
+> +	pr_warn_once(
+> +		"Disabled but requested by user space. "
+> +		"You should enable Landlock at boot time: "
+> +		"https://docs.kernel.org/userspace-api/landlock.html#kernel-support\n");
+> +	return true;
+> +}
+> +
+>  /**
+>   * copy_min_struct_from_user - Safe future-proof argument copying
+>   *
+> @@ -173,7 +185,7 @@ SYSCALL_DEFINE3(landlock_create_ruleset,
+>  	/* Build-time checks. */
+>  	build_check_abi();
+>  
+> -	if (!landlock_initialized)
+> +	if (is_not_initialized())
+>  		return -EOPNOTSUPP;
+
+Technically, any Landlock user needs to go through the
+landlock_create_ruleset() system call anyway; it might be enough to
+just add it in that place and leave the other system calls as they
+were.  Then you could also omit the special function.
+
+Reviewed-by: Günther Noack <gnoack3000@gmail.com>
+
+–Günther
 
