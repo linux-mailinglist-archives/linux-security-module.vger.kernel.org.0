@@ -1,128 +1,97 @@
-Return-Path: <linux-security-module+bounces-1644-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1649-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E20C861A93
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 Feb 2024 18:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7823861D75
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 Feb 2024 21:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9ED7B1C253F4
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 Feb 2024 17:51:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D12621C20B37
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 Feb 2024 20:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1527F143C4E;
-	Fri, 23 Feb 2024 17:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211CF14A4EB;
+	Fri, 23 Feb 2024 20:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PaqJkDVN"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="1N9Om1Cl"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874B014265C
-	for <linux-security-module@vger.kernel.org>; Fri, 23 Feb 2024 17:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D979146E70
+	for <linux-security-module@vger.kernel.org>; Fri, 23 Feb 2024 20:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708710539; cv=none; b=VK+hb435xdZsL4uORNta5NzXTqyRNgCS37D36pmIBx3TjWs0xcYWTLGnlCcDnJLhXFFgS3O8CxH793Japn+e5Hfrm/g6xVPiONKXAHHaZMZF+G96gxNvOPP3pAXBuM/FKbaVcRNOXiX3CI2B0GlTG+9G9EPIUsJiCo2n9NUOaTs=
+	t=1708719578; cv=none; b=B5DHZlbBaEou+CbjSnTbfsSkY1N4/9JTvebZll+XLprf1QYI1CnbnDxrEQUEgMpylyAHlavLAKe8y4MtUB3G9q60TARoPNeCHV9tOlG+FsSK7y4eVqG2hp/DTfA04qyWh8hXaqqlLJiJ9ESd0uP451gdj0AvIJ7rQI0ppF7h1i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708710539; c=relaxed/simple;
-	bh=J9CJg+f2XESx0EE8EOWgy7TWOEQmNvNe7CTVEAvMpdQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rPCddVq3GEh5DYPeAQOmZ8I2sKaIiSElqQhlpPLIOhm4FQhKHTtERojsBm/PURR8R0Nr8Hr3QN5jtcYjprBGbSWSpIs4zhmjIfRgHJBkL9L1MT3yWJBnhxMATdTm3+5NEp7F3SKUOqV3/gWLZf+geD9Hsa2hAM1Xeg9e8l13nqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PaqJkDVN; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-299372abcfeso875833a91.1
-        for <linux-security-module@vger.kernel.org>; Fri, 23 Feb 2024 09:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708710537; x=1709315337; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0xniysJokrJSL4kA+7xMXMFdpfM5voHW8xKXFN/4z3Q=;
-        b=PaqJkDVNUvhAcZHYjyaXXhlR47txCPW5nwh7UvN501VLusznbTi0vhhkvcVwVUe96y
-         hF9onaV6DcaczNiwnv7KhPHQPymZZRCFIjHroVVHqbkLd0KJRfiRo+86fPpFhLQrtQZE
-         gLAV3WtKX9IYx4fP7TZjdHyZMZ5ZsVGOH12c8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708710537; x=1709315337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0xniysJokrJSL4kA+7xMXMFdpfM5voHW8xKXFN/4z3Q=;
-        b=ku2WRij01T+PS268jiwogjNDCKWvrmwQ74dYKC3NcCehdr8FUbOON4pEmrbRc07hKn
-         tDOp/UIZqam9fFA8twCHzTx1ROLj2x8w0X1kx8TAguaSL6wBgIeQQfbb5HOiqzvv6ig4
-         Es4Nxx8qkE6mlxqf2OH8kr0jO3ob2oN71Af9Z4j/2tSGm2/rNc73Cg7OyKsqTHjYbmC7
-         1EYoBN7hnnqb6PrcrYC6MgBF3VLA+75HPvc4jGBhTDj/KD5XuihN5hFqYzRe4LG/8mdv
-         XUsxAR3p7HzUt5ZiPbjwWFOik9gMVYPNhOs8K9Y7/70BUBAClPBzkVzPizZS10P7LYn2
-         onzg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqlzTUjPtiqhY/2zEza4VxvD1H+XNGpC6kNOnD5b2aUEnlp3A1W42/++DO5C0W3v6FqzzRHqBM2EI7R4JIE2i9l1buZ7jb/cSBGG5FtdJX9gMo3nmH
-X-Gm-Message-State: AOJu0YzTO6e/pYM8OfC/NhtDZRt+AfN3VxgtsYErGTocx2AupaExjQMz
-	cNqh7NznHlhf1Ruj5KqzzxExXMgEgSKOPYYcR2OR6DJkznSl8DpSV5U7/AIiYA==
-X-Google-Smtp-Source: AGHT+IHPn7Lo2ZZEfv0egVA1U0588A9KlqO0T0qP4pZBiF5v6f+M7qkLa0yUFIE4yhmkeXZ+FjLDCg==
-X-Received: by 2002:a17:90a:ad97:b0:299:41dd:95c0 with SMTP id s23-20020a17090aad9700b0029941dd95c0mr619373pjq.16.1708710536866;
-        Fri, 23 Feb 2024 09:48:56 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id l14-20020a17090a72ce00b002961a383303sm1742861pjk.14.2024.02.23.09.48.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Feb 2024 09:48:56 -0800 (PST)
-Date: Fri, 23 Feb 2024 09:48:55 -0800
-From: Kees Cook <keescook@chromium.org>
-To: shuah@kernel.org, Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, edumazet@google.com,
-	linux-kselftest@vger.kernel.org, mic@digikod.net,
-	linux-security-module@vger.kernel.org, jakub@cloudflare.com,
-	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Subject: Re: [PATCH net-next v3 00/11] selftests: kselftest_harness: support
- using xfail
-Message-ID: <202402230947.614061ABBB@keescook>
-References: <20240220192235.2953484-1-kuba@kernel.org>
- <e0ce5ab05a0fc956ccde61686d7c6c90026e3909.camel@redhat.com>
+	s=arc-20240116; t=1708719578; c=relaxed/simple;
+	bh=qpzM6NBYR7WpVcp9/HBiZFKK8JElis+2lrx2b9BJFms=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nttgu6UsMPU1V4vZoWRMXweCu1rhA1BTywMUuOxKmZtB0eeHvNyC8WaVMB22xDnBS4DXV2nmTacaz9OART+KHE3y12KH813CXnxqrfhhP/D2hyFP/8arNVqBUcrKPPpPRzzo3ofZYdt5s+jCnV5npCB9GrW9Uo5yx3L90tL9JXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=1N9Om1Cl; arc=none smtp.client-ip=45.157.188.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ThKGt4rmsz2TC;
+	Fri, 23 Feb 2024 20:05:58 +0100 (CET)
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4ThKGs49MCzjsT;
+	Fri, 23 Feb 2024 20:05:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1708715158;
+	bh=qpzM6NBYR7WpVcp9/HBiZFKK8JElis+2lrx2b9BJFms=;
+	h=From:To:Cc:Subject:Date:From;
+	b=1N9Om1ClO+r+L8Qkam4EJkqyN1SiVBZqs5lER3lgzN2iIjXSyXKUsBnEwslb1urAP
+	 jw9IIgIu8sDs1Q4U5Oe/6uKx2AlVRr4rQwt/lIGGpkjJ1kHax1FNIiJsD+DMzXzo78
+	 KnimjfuRbCak8dfFUJl1/GYfQfvSCPQEYotFWX+c=
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Casey Schaufler <casey@schaufler-ca.com>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] SELinux: Fix lsm_get_self_attr()
+Date: Fri, 23 Feb 2024 20:05:45 +0100
+Message-ID: <20240223190546.3329966-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e0ce5ab05a0fc956ccde61686d7c6c90026e3909.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On Wed, Feb 21, 2024 at 01:03:26PM +0100, Paolo Abeni wrote:
-> On Tue, 2024-02-20 at 11:22 -0800, Jakub Kicinski wrote:
-> > When running selftests for our subsystem in our CI we'd like all
-> > tests to pass. Currently some tests use SKIP for cases they
-> > expect to fail, because the kselftest_harness limits the return
-> > codes to pass/fail/skip.
-> > 
-> > Clean up and support the use of the full range of ksft exit codes
-> > under kselftest_harness.
-> > 
-> > Merge plan is to put it on top of -rc4 and merge into net-next.
-> > That way others should be able to pull the patches without
-> > any networking changes.
-> > 
-> > v2: https://lore.kernel.org/all/20240216002619.1999225-1-kuba@kernel.org/
-> >  - fix alignment
-> > follow up RFC: https://lore.kernel.org/all/20240216004122.2004689-1-kuba@kernel.org/
-> > v1: https://lore.kernel.org/all/20240213154416.422739-1-kuba@kernel.org/
-> 
-> @Shuah: it's not clear to me if you prefer to take this series via the
-> kselftests tree or we can take it via the net-next tree. Could you
-> please advise?
-> 
-> thanks!
-> 
-> Paolo
-> 
-> p.s. if this was already clarified in the past, I'm sorry: I lost track
-> of it.
+selinux_lsm_getattr() may not initialize the value's pointer in some
+case.  As for proc_pid_attr_read(), initialize this pointer to NULL in
+selinux_getselfattr() to avoid an UAF in the kfree() call.
 
-Given the urgency for net-dev and the lack of conflicts with other
-kselftest changes (AFAICT), I would assume it would be fine to carry
-this in net-dev (especially since the merge window fast approaches).
+Cc: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: stable@vger.kernel.org
+Fixes: 762c934317e6 ("SELinux: Add selfattr hooks")
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ security/selinux/hooks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Shuah, any objection?
-
--Kees
-
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index a6bf90ace84c..338b023a8c3e 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -6559,7 +6559,7 @@ static int selinux_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+ 			       size_t *size, u32 flags)
+ {
+ 	int rc;
+-	char *val;
++	char *val = NULL;
+ 	int val_len;
+ 
+ 	val_len = selinux_lsm_getattr(attr, current, &val);
 -- 
-Kees Cook
+2.43.0
+
 
