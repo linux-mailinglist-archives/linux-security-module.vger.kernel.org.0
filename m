@@ -1,106 +1,96 @@
-Return-Path: <linux-security-module+bounces-1657-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1661-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9533866F44
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Feb 2024 10:52:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A41AD867BFC
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Feb 2024 17:30:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F58A1F21358
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Feb 2024 09:52:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B2DF289FB0
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Feb 2024 16:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9174C3CD;
-	Mon, 26 Feb 2024 09:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF6053E3B;
+	Mon, 26 Feb 2024 16:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HXu9YeOJ"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="xZDChlsE"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AF4481AD;
-	Mon, 26 Feb 2024 09:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013C6335C7
+	for <linux-security-module@vger.kernel.org>; Mon, 26 Feb 2024 16:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708939040; cv=none; b=JqmoZgZgfS+ixqVvLnpNo8QnpyOfk1wakUQAmhScPe1Ztg/BE726PS0jDynIp+9zRs80KRcMXiVRGRZwNKrjI6Zxx2zOFnJNHcF4CiuS0Kzgz9MZEjTOLjXAWj2UlHqe9aucCbengxkYHJk7wZ8xtUAy6BXdFY/8WofzYzL6NtE=
+	t=1708965011; cv=none; b=n7dr3OOQXqc9ndU7xWps3VH9qpnRpGfC1ewp93zIJLFhtxj7Q/pJovjZdhhDsqLH6/TPD6GHN28FcLt0MNPrXxCa+BZ1kZhwIbRRX7PXQyX1SBcczt2tH4Xv4MDopuIFVDrAZPQxoROfuvB+SUBAFqu0J5kRaWiZtu8/9alaICA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708939040; c=relaxed/simple;
-	bh=TDPshTEB2YgsSzMjFOliwieaa4N3m+QIe+o0VAqCL30=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=GAXBXatlOrAZXkL/tWrRUW82HMHz3nbagFVQPcsyirRRohAoU0d4FgoamT8AmCSuWvIkaodjKEWbIp7iMqVyn4QDdTkP9ACtUZwCk5EnuXxpYQMOwcHNvDtmwABMJ3xp08zDqIp/v/xlgCDW5DQFZHBzRl69gyv1ppLt/tdjDI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HXu9YeOJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB87C433F1;
-	Mon, 26 Feb 2024 09:17:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708939040;
-	bh=TDPshTEB2YgsSzMjFOliwieaa4N3m+QIe+o0VAqCL30=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=HXu9YeOJLt1Yvf8NXTZ1efm0443uX2U1V2DLHVLDjanw7eFOgW7x2+1m103AC/PZK
-	 WXamFGx2xgSh7mVv/kXFnpgIE9Ch3mU5XP+4HQ02nLndcsNVMiSm9vuUANAHNQbjM7
-	 aNRDSIORRFc3AdpzsAw+aQzpxyQzkjg/OuOEe2AicvH/xDk71DkEKXiNOEUtyGgcU2
-	 5DpSDGRzkIpDdtqF7BzdhFkBJaizksaEHqsoj4PbPCeYLLJ31diCmfAV27euPJvF4M
-	 hqsBUHxgrjvyCxzCRVR+V2KdU3tVlT26TPFhxLyoiAkCsMSOHhPibfQyZ7iWb69/lR
-	 T8Taz6GzuK1OQ==
+	s=arc-20240116; t=1708965011; c=relaxed/simple;
+	bh=olTfBIftIqoEp/VOpd1IMdJpxpy9THNXLqxVEH7X7MA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pEzdy+ifjwpmLy2A/gnHoJC+d898t2QubI7comv2n3ihX70G6dllGM5OU3xcN34FFnWw/cbJ93NDQ0IoS47qAr8oAN67rrF5zHBr7TmpXEPO483X6mPkU6YwcM8uNj5GtRDkKihcaOSc4jf7nwdu5NMZtvGaGJpF+DJLA5DiTxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=xZDChlsE; arc=none smtp.client-ip=84.16.66.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Tk5XK1qpszMpp1c;
+	Mon, 26 Feb 2024 17:23:45 +0100 (CET)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Tk5XJ2PmTzMpsDh;
+	Mon, 26 Feb 2024 17:23:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1708964625;
+	bh=olTfBIftIqoEp/VOpd1IMdJpxpy9THNXLqxVEH7X7MA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=xZDChlsEztJl/3JzQC3Bn0c7msXOSlb54AMYIWcWZux52vvfqgon1+CEliOtKCA45
+	 eMnXxs1tNnsEop7VQ2Z+0WvzcU5AjBbdkBrocJ4XX8Omt4CKGSH4CrW8ytlWLnOhe8
+	 OfjmD8h155QlFnNOglWeBImQq28ksGZA+KxKIYoI=
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Will Drewry <wad@chromium.org>,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH 0/2] Merge TEST_F_FORK() into TEST_F()
+Date: Mon, 26 Feb 2024 17:23:33 +0100
+Message-ID: <20240226162335.3532920-1-mic@digikod.net>
+In-Reply-To: <20240223160259.22c61d1e@kernel.org>
+References: <20240223160259.22c61d1e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 Feb 2024 11:17:11 +0200
-Message-Id: <CZEWBSXM7LHU.15UW6P0T61VBN@suppilovahvero>
-Subject: Re: [PATCH v5 0/6] DCP as trusted keys backend
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Richard Weinberger" <richard@sigma-star.at>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "James Bottomley" <jejb@linux.ibm.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
- <upstream@sigma-star.at>, "David Howells" <dhowells@redhat.com>
-Cc: "Shawn Guo" <shawnguo@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- "Sascha Hauer" <s.hauer@pengutronix.de>, "kernel@pengutronix.de"
- <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "NXP Linux
- Team" <linux-imx@nxp.com>, "Ahmad Fatoum" <a.fatoum@pengutronix.de>, "sigma
- star Kernel Team" <upstream+dcp@sigma-star.at>, "Li Yang"
- <leoyang.li@nxp.com>, "Paul Moore" <paul@paul-moore.com>, "James Morris"
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Paul E.
- McKenney" <paulmck@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, "Tejun Heo" <tj@kernel.org>, "Steven Rostedt
- (Google)" <rostedt@goodmis.org>, <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
- "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "David Gstir"
- <david@sigma-star.at>
-X-Mailer: aerc 0.15.2
-References: <20231215110639.45522-1-david@sigma-star.at>
- <7AED262F-9387-446D-B11A-C549C02542F9@sigma-star.at>
- <47439997.XUcTiDjVJD@somecomputer> <1733761.uacIGzncQW@somecomputer>
-In-Reply-To: <1733761.uacIGzncQW@somecomputer>
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On Mon Feb 26, 2024 at 12:20 AM EET, Richard Weinberger wrote:
-> Mimi, James, Jarkko, David,
->
-> you remained silent for a whole release cycle.
-> Is there anything we can do to get this forward?
->
-> Thanks,
-> //richard
+Hi,
 
-Thanks for reminding.
+This is a long due cleanup to merge TEST_F_FORK() into TEST_F().
 
-From my side, I've had pretty busy month as I've adapted to a new work
-project: https://sochub.fi/
+This should simplify Jakub's patches by removing the step counter:
+https://lore.kernel.org/r/20240220192235.2953484-1-kuba@kernel.org
 
-I exported the thread [1] and will look into it within this or next week
-in detail (thus the large'ish time window).
+Regards,
 
-[1] https://lore.kernel.org/linux-integrity/1733761.uacIGzncQW@somecomputer=
-/t.mbox.gz
+Mickaël Salaün (2):
+  selftests/landlock: Redefine TEST_F() as TEST_F_FORK()
+  selftests/harness: Merge TEST_F_FORK() into TEST_F()
 
-BR, Jarkko
+ tools/testing/selftests/kselftest_harness.h | 56 +++++++++-----------
+ tools/testing/selftests/landlock/common.h   | 58 +--------------------
+ 2 files changed, 27 insertions(+), 87 deletions(-)
+
+-- 
+2.44.0
+
 
