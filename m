@@ -1,150 +1,98 @@
-Return-Path: <linux-security-module+bounces-1676-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1678-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F9DD868E56
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 12:06:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC178690AE
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 13:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C60F1F24964
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 11:06:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA96E1C21D4B
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 12:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CCED139587;
-	Tue, 27 Feb 2024 11:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF4C0208A5;
+	Tue, 27 Feb 2024 12:35:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="oCw/iF23"
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="uObex2rW"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC049139583
-	for <linux-security-module@vger.kernel.org>; Tue, 27 Feb 2024 11:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152041CFA9
+	for <linux-security-module@vger.kernel.org>; Tue, 27 Feb 2024 12:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709031975; cv=none; b=Bp4bDITXwf/HwQjsT/JY1kzfmDaJC27hn8Uc7tFxanWNpIxKTQgd0tKjvV3k1cgY+opYb5XuRL6wrnZG8eTiEBc4Np0zUc2XT4ztvL4nNOlJhfLRokMxKeJ4QsZlMO+c5c42q9JKH8qK3JGm3LOioD4pmko+xY39cUbDrM6eJxo=
+	t=1709037331; cv=none; b=s7UMzglYHtM8tx2T4EidPH7b2jIP5jkd/zHYaiBFUB2jNLLXHi8D0P+wP0FdYaNj4a/88+/GydkQYyBMfHaIhN+HKv71BomY0H+5iGG+lzF1Hr5BlbBz8Xh3lGZoYCVxsJQ3mQ8HQ2w1T/8iyehxL/l/R7blqQvDp6GbiXfmNos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709031975; c=relaxed/simple;
-	bh=jPUoWxQfL0gN4M9XnMPtb4OVmzxvQ8jhCx4n49IoT7U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BlQE8QYr9exPrETTQaZK86vqrgyy5GZFGAYRuYyhrGntI5UtK7mMnj23oarqBNgF+smlMy9L9egLxGyI9x5doOtiTSH7uUruPPWv4gOdKN9Ha6ZaFQ+s/obaTjQWOFoBpjvOe3VYi2d1QvbseWYfvlQJAMXfTDE05pJWVRG1Pmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=oCw/iF23; arc=none smtp.client-ip=45.157.188.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TkZRL3hQgzfF;
-	Tue, 27 Feb 2024 12:06:06 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4TkZRL0Ngrz3k;
-	Tue, 27 Feb 2024 12:06:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1709031966;
-	bh=jPUoWxQfL0gN4M9XnMPtb4OVmzxvQ8jhCx4n49IoT7U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oCw/iF23a34Rv0MBwr2Ia6cQ8m8h0jvHC8OAnyauVIncs0HoaFwNz47dPhVBwgEjw
-	 R5yruWwiqbByh+WzDRqxenUS46BMI9ak98EP9PcOxTd4ecJ/LXUlBEDCPa5K9iN5Qt
-	 hb3lJFSu+CT4yjc6FlcRhOYLyM3bfinMCILgyBUg=
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Paul Moore <paul@paul-moore.com>,
-	"Serge E . Hallyn" <serge@hallyn.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Shervin Oloumi <enlightened@chromium.org>,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	stable@vger.kernel.org,
-	Kees Cook <keescook@chromium.org>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>
-Subject: [PATCH v2 2/2] landlock: Warn once if a Landlock action is requested while disabled
-Date: Tue, 27 Feb 2024 12:05:50 +0100
-Message-ID: <20240227110550.3702236-2-mic@digikod.net>
-In-Reply-To: <20240227110550.3702236-1-mic@digikod.net>
-References: <20240227110550.3702236-1-mic@digikod.net>
+	s=arc-20240116; t=1709037331; c=relaxed/simple;
+	bh=LqQjNtAJzV/gp8gce32yqi56pdn76UnZ3HyAMC87ntA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gy/oZ07oqldG61nRfj/qEyai5haEJPZ48LbqOMhmH4PRTS/OefaRDeeWrx1r6lmY332WKr3v2j+NkCnFNS2zhXqBtVuNHhD2Y079qtkBpCTep9PXAZ4JuE02fBo/WDWI4O6rldjoYfDjJ0FLMysJkvgSd1vF+0PRSvRtODHVQEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=uObex2rW; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d21a68dd3bso55930451fa.1
+        for <linux-security-module@vger.kernel.org>; Tue, 27 Feb 2024 04:35:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1709037328; x=1709642128; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LqQjNtAJzV/gp8gce32yqi56pdn76UnZ3HyAMC87ntA=;
+        b=uObex2rW201aM7ZqwwO9pCHCkJjgcAPFhwkT13/XIhNXSAHWuzgsLT8xGGpr/9hoXQ
+         1olbPDn+1S/G51wV0NyeInwNDidQTYRFDXhgUDkfVg4gFP9e2EKgalJf0ZXd89coLv/R
+         AgVDPvNp2qdNlNWe1MVMMrIt+APNxWG2MD/aVklw5Zr+WodZKhSdsT78XjWo3bgW8AaS
+         0S8/Ia0l/iSYG6TCMiO+VPVPtbwlI+/pgOa/9T5trNSmAB0mbwc3hd/Dwg4hYrBbUUpj
+         tZplOWaKLohoevIHsfENhBokSxi5g3YPOulbnpTtq0wfX5wNlJWfKiQ6l167Cjs/RRjm
+         At0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709037328; x=1709642128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LqQjNtAJzV/gp8gce32yqi56pdn76UnZ3HyAMC87ntA=;
+        b=WEwALZSgSmeFyRlSZfUzBzC/RxsJeFXTPlc+ObeI8sdSN71HuggD/1WaJqJ0rFNcgJ
+         H7M5BPePKwu44vkXcgeuzIf9rROVFQYAjqWrpbdKlILrGnCEWSokUemLXeK/CEJqaCzC
+         w+zdYVq8qcIwfQgZ3s8IXS/G/usJ5azVt87FmJRzUGJVOab9qAAxpPKK39fleruenR1X
+         zETqAw0l4g1lC4ef4zl6neXRgyYxEz3gUmrNAbNWGODVKOW2xge8Rb6kIs6N+DrYxIwG
+         qJQUaMcsT14dikIP2vAd/S27MkZxxrYPxl7AFQ82oT1O3fkGO2YAkf0lkTZ+QLeblSXg
+         jbww==
+X-Forwarded-Encrypted: i=1; AJvYcCX85JpzlEa5nizrKHamd1d++n8M3O75mSQgDJTWRTKHqMoTxnlQs6R6KbjT2DxR2UWyCIKKEvSg9HcY4+7Q/UY7R16Cs5I1gOlUx8qs/bS4zAdw5Mht
+X-Gm-Message-State: AOJu0YyWAX1ysDwIP6WipeRXg+j56obzhxyNRrYzK3lnhZubvByUGKNR
+	LdfbPlnLDj0lo2RXkiJIDTggWx/lVyFSU1+eol3kzFWtyMbx9cRlvWwg/nUVVT8=
+X-Google-Smtp-Source: AGHT+IGtVbQM40FX1l0FwsCKabOK5Fl9BQdKbcv5HV0cfoBXNg6iZRnkx6VgegUeOQlFiKpghYbRFQ==
+X-Received: by 2002:a2e:9ad4:0:b0:2d2:4160:bb6e with SMTP id p20-20020a2e9ad4000000b002d24160bb6emr6176296ljj.27.1709037328163;
+        Tue, 27 Feb 2024 04:35:28 -0800 (PST)
+Received: from localhost ([193.47.165.251])
+        by smtp.gmail.com with ESMTPSA id v18-20020a2e9f52000000b002d0a98330b3sm1182269ljk.108.2024.02.27.04.35.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Feb 2024 04:35:27 -0800 (PST)
+Date: Tue, 27 Feb 2024 13:35:24 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Zhengchao Shao <shaozhengchao@huawei.com>
+Cc: netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
+	davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, paul@paul-moore.com,
+	weiyongjun1@huawei.com, yuehaibing@huawei.com
+Subject: Re: [PATCH net-next] netlabel: remove impossible return value in
+ netlbl_bitmap_walk
+Message-ID: <Zd3XDMRqN088oSQW@nanopsycho>
+References: <20240227093604.3574241-1-shaozhengchao@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240227093604.3574241-1-shaozhengchao@huawei.com>
 
-Because sandboxing can be used as an opportunistic security measure,
-user space may not log unsupported features.  Let the system
-administrator know if an application tries to use Landlock but failed
-because it isn't enabled at boot time.  This may be caused by bootloader
-configurations with outdated "lsm" kernel's command-line parameter.
+Tue, Feb 27, 2024 at 10:36:04AM CET, shaozhengchao@huawei.com wrote:
+>Since commit 446fda4f2682 ("[NetLabel]: CIPSOv4 engine"), *bitmap_walk
+>function only returns -1. Nearly 18 years have passed, -2 scenes never
+>come up, so there's no need to consider it.
+>
+>Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 
-Cc: stable@vger.kernel.org
-Fixes: 265885daf3e5 ("landlock: Add syscall implementations")
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Günther Noack <gnoack3000@gmail.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
-
-Changes since v1:
-* Add Kees's and Günther's Reviewed-by.
-* Rename is_not_initialized() to not_initialized() and invert the logic,
-  as suggested by Günther.  This is a cosmetic change without global
-  behavioral changed.
-* Update link to point to a new subsection.
----
- security/landlock/syscalls.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index 898358f57fa0..6788e73b6681 100644
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -33,6 +33,18 @@
- #include "ruleset.h"
- #include "setup.h"
- 
-+static bool is_initialized(void)
-+{
-+	if (likely(landlock_initialized))
-+		return true;
-+
-+	pr_warn_once(
-+		"Disabled but requested by user space. "
-+		"You should enable Landlock at boot time: "
-+		"https://docs.kernel.org/userspace-api/landlock.html#boot-time-configuration\n");
-+	return false;
-+}
-+
- /**
-  * copy_min_struct_from_user - Safe future-proof argument copying
-  *
-@@ -173,7 +185,7 @@ SYSCALL_DEFINE3(landlock_create_ruleset,
- 	/* Build-time checks. */
- 	build_check_abi();
- 
--	if (!landlock_initialized)
-+	if (!is_initialized())
- 		return -EOPNOTSUPP;
- 
- 	if (flags) {
-@@ -398,7 +410,7 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
- 	struct landlock_ruleset *ruleset;
- 	int err;
- 
--	if (!landlock_initialized)
-+	if (!is_initialized())
- 		return -EOPNOTSUPP;
- 
- 	/* No flag for now. */
-@@ -458,7 +470,7 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	struct landlock_cred_security *new_llcred;
- 	int err;
- 
--	if (!landlock_initialized)
-+	if (!is_initialized())
- 		return -EOPNOTSUPP;
- 
- 	/*
--- 
-2.44.0
-
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 
