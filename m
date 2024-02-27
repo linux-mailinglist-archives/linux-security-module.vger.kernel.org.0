@@ -1,123 +1,178 @@
-Return-Path: <linux-security-module+bounces-1675-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1677-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6D91868C3B
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 10:28:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E35D868E90
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 12:15:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFE0EB28580
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 09:28:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A478283D9C
+	for <lists+linux-security-module@lfdr.de>; Tue, 27 Feb 2024 11:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58D2136660;
-	Tue, 27 Feb 2024 09:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC0FB139585;
+	Tue, 27 Feb 2024 11:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="aJAgMZqv"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C58013665C;
-	Tue, 27 Feb 2024 09:28:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC65F139563
+	for <linux-security-module@vger.kernel.org>; Tue, 27 Feb 2024 11:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709026086; cv=none; b=CvcGLnNor1Mx28u4NG9al8jry6fOmwlVGq8IUYVNtLNP220XxwrQma4bcimMJG+93RXM2QzOOIeYB5Zvwjs4p+tx1wh7wV6OsNfjvY2q52BhA+YsYN5l2Lrr9+u/IsbZfVlfGAns6dZ3qBhsNgmU07Zrm87alhaEqS1xAq6HFPw=
+	t=1709032514; cv=none; b=QZxbPEMascT6u+oKd3NuJyS3dBTjoHR2zzkOFNQoSKYhspCXuU8Iq4MX5shdrG68bzn4B6G1Du2fsJEbj7IvjcmlmpzUFSeVzQjt8FJkvYxu8SPMjXeKOj7f4cKC1LBafrC1fONXmYJpzaT0u/aX8JKgM9S94KobaAUUB1I6mzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709026086; c=relaxed/simple;
-	bh=Zbvn6ZhoUbnLmX0A3Zm9N0pbkE8+2Ni+LdZohLEciOM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lrc5fymaRAQOtiTp1H0LU0gT5gVxcvIkA9hEwfFv4AKua7lMX3LhrIM5wc0J2IoVqxG3e6DfY6n1CIyYfzpz170hDU2mRax22clsQ/qDyzdyP0cIkG56Z7l83aRlyJEy9RF+UPFBZDH/iB9Y2xY8VbhPNSflzZqSw8FJayvGfPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4TkX8P0GRQz1b14C;
-	Tue, 27 Feb 2024 17:23:01 +0800 (CST)
-Received: from dggpeml500026.china.huawei.com (unknown [7.185.36.106])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2C8CE1A016B;
-	Tue, 27 Feb 2024 17:27:59 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 27 Feb
- 2024 17:27:58 +0800
-From: Zhengchao Shao <shaozhengchao@huawei.com>
-To: <netdev@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>
-CC: <paul@paul-moore.com>, <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-	<shaozhengchao@huawei.com>
-Subject: [PATCH net-next] netlabel: remove impossible return value in netlbl_bitmap_walk
-Date: Tue, 27 Feb 2024 17:36:04 +0800
-Message-ID: <20240227093604.3574241-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1709032514; c=relaxed/simple;
+	bh=fo0e4FRJyzZJ6d6n/7sR3VvkreP3rfZ9EhEu8wKED6Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zq7JcYG406UgrQtP0KWX4f9J2GA9HxK8A/kNcfxphE7sq5RFFbH6mNXK0q6wk53u2JEitjCLlKm/RIez4o1AanuznDEhqVXrhYQpDSF63bDl1QEJ/xNdmKXyo8ygl4lQ5NIccRQ7Pb/66bqnIEo8l0sg81uId+39/28LljoUQFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=aJAgMZqv; arc=none smtp.client-ip=83.166.143.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [10.7.10.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TkZRK3mSFzMq5jp;
+	Tue, 27 Feb 2024 12:06:05 +0100 (CET)
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4TkZRJ1SGDzDLf;
+	Tue, 27 Feb 2024 12:06:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1709031965;
+	bh=fo0e4FRJyzZJ6d6n/7sR3VvkreP3rfZ9EhEu8wKED6Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aJAgMZqvXCuTbBi3QrqQEix+We3BKKkgtSzWSI/iyXVsm+O11Q4WECvzP7XS5p7AK
+	 SysOh8oMYi25zAJ5MEnSVlYHTBLoZKpMm1EgyycJhArAgZ+5oaXh/Ej5Es4I7TuWwX
+	 6Vizit1a6SoZwfE3jEmCv42kq4iV/5BZJ2nNfIPM=
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Paul Moore <paul@paul-moore.com>,
+	"Serge E . Hallyn" <serge@hallyn.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+	Shervin Oloumi <enlightened@chromium.org>,
+	linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>
+Subject: [PATCH v2 1/2] landlock: Extend documentation for kernel support
+Date: Tue, 27 Feb 2024 12:05:49 +0100
+Message-ID: <20240227110550.3702236-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500026.china.huawei.com (7.185.36.106)
+X-Infomaniak-Routing: alpha
 
-Since commit 446fda4f2682 ("[NetLabel]: CIPSOv4 engine"), *bitmap_walk
-function only returns -1. Nearly 18 years have passed, -2 scenes never
-come up, so there's no need to consider it.
+Extend the kernel support section with one subsection for build time
+configuration and another for boot time configuration.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Extend the boot time subsection with a concrete example.
+
+Update the journalctl command to include the boot option.
+
+Cc: Günther Noack <gnoack@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- net/ipv4/cipso_ipv4.c        | 5 +----
- net/ipv6/calipso.c           | 5 +----
- net/netlabel/netlabel_kapi.c | 2 +-
- 3 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/net/ipv4/cipso_ipv4.c b/net/ipv4/cipso_ipv4.c
-index d048aa833293..8b17d83e5fde 100644
---- a/net/ipv4/cipso_ipv4.c
-+++ b/net/ipv4/cipso_ipv4.c
-@@ -864,11 +864,8 @@ static int cipso_v4_map_cat_rbm_ntoh(const struct cipso_v4_doi *doi_def,
- 					      net_clen_bits,
- 					      net_spot + 1,
- 					      1);
--		if (net_spot < 0) {
--			if (net_spot == -2)
--				return -EFAULT;
-+		if (net_spot < 0)
- 			return 0;
--		}
+Changes since v1:
+* New patch, suggested by Kees Cook.
+---
+ Documentation/userspace-api/landlock.rst | 57 +++++++++++++++++++++---
+ 1 file changed, 51 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+index 2e3822677061..838cc27db232 100644
+--- a/Documentation/userspace-api/landlock.rst
++++ b/Documentation/userspace-api/landlock.rst
+@@ -19,11 +19,12 @@ unexpected/malicious behaviors in user space applications.  Landlock empowers
+ any process, including unprivileged ones, to securely restrict themselves.
  
- 		switch (doi_def->type) {
- 		case CIPSO_V4_MAP_PASS:
-diff --git a/net/ipv6/calipso.c b/net/ipv6/calipso.c
-index 1578ed9e97d8..eb8ee1e9373a 100644
---- a/net/ipv6/calipso.c
-+++ b/net/ipv6/calipso.c
-@@ -657,11 +657,8 @@ static int calipso_map_cat_ntoh(const struct calipso_doi *doi_def,
- 					  net_clen_bits,
- 					  spot + 1,
- 					  1);
--		if (spot < 0) {
--			if (spot == -2)
--				return -EFAULT;
-+		if (spot < 0)
- 			return 0;
--		}
+ We can quickly make sure that Landlock is enabled in the running system by
+-looking for "landlock: Up and running" in kernel logs (as root): ``dmesg | grep
+-landlock || journalctl -kg landlock`` .  Developers can also easily check for
+-Landlock support with a :ref:`related system call <landlock_abi_versions>`.  If
+-Landlock is not currently supported, we need to :ref:`configure the kernel
+-appropriately <kernel_support>`.
++looking for "landlock: Up and running" in kernel logs (as root):
++``dmesg | grep landlock || journalctl -kb -g landlock`` .
++Developers can also easily check for Landlock support with a
++:ref:`related system call <landlock_abi_versions>`.
++If Landlock is not currently supported, we need to
++:ref:`configure the kernel appropriately <kernel_support>`.
  
- 		ret_val = netlbl_catmap_setbit(&secattr->attr.mls.cat,
- 					       spot,
-diff --git a/net/netlabel/netlabel_kapi.c b/net/netlabel/netlabel_kapi.c
-index 7b844581ebee..1ba4f58e1d35 100644
---- a/net/netlabel/netlabel_kapi.c
-+++ b/net/netlabel/netlabel_kapi.c
-@@ -876,7 +876,7 @@ int netlbl_catmap_setlong(struct netlbl_lsm_catmap **catmap,
-  * Description:
-  * Starting at @offset, walk the bitmap from left to right until either the
-  * desired bit is found or we reach the end.  Return the bit offset, -1 if
-- * not found, or -2 if error.
-+ * not found.
-  */
- int netlbl_bitmap_walk(const unsigned char *bitmap, u32 bitmap_len,
- 		       u32 offset, u8 state)
+ Landlock rules
+ ==============
+@@ -499,6 +500,9 @@ access rights.
+ Kernel support
+ ==============
+ 
++Build time configuration
++------------------------
++
+ Landlock was first introduced in Linux 5.13 but it must be configured at build
+ time with ``CONFIG_SECURITY_LANDLOCK=y``.  Landlock must also be enabled at boot
+ time as the other security modules.  The list of security modules enabled by
+@@ -507,11 +511,52 @@ contains ``CONFIG_LSM=landlock,[...]`` with ``[...]``  as the list of other
+ potentially useful security modules for the running system (see the
+ ``CONFIG_LSM`` help).
+ 
++Boot time configuration
++-----------------------
++
+ If the running kernel does not have ``landlock`` in ``CONFIG_LSM``, then we can
+-still enable it by adding ``lsm=landlock,[...]`` to
++enable Landlock by adding ``lsm=landlock,[...]`` to
+ Documentation/admin-guide/kernel-parameters.rst thanks to the bootloader
+ configuration.
+ 
++For example, if the current built-in configuration is:
++
++.. code-block:: console
++
++    $ zgrep -h "^CONFIG_LSM=" "/boot/config-$(uname -r)" /proc/config.gz 2>/dev/null
++    CONFIG_LSM="lockdown,yama,integrity,apparmor"
++
++...and if the cmdline doesn't contain ``landlock`` either:
++
++.. code-block:: console
++
++    $ sed -n 's/.*\(\<lsm=\S\+\).*/\1/p' /proc/cmdline
++    lsm=lockdown,yama,integrity,apparmor
++
++...we should configure the bootloader to set a cmdline extending the ``lsm``
++list with the ``landlock,`` prefix::
++
++  lsm=landlock,lockdown,yama,integrity,apparmor
++
++After a reboot, we can check that Landlock is up and running by looking at
++kernel logs:
++
++.. code-block:: console
++
++    # dmesg | grep landlock || journalctl -kb -g landlock
++    [    0.000000] Command line: [...] lsm=landlock,lockdown,yama,integrity,apparmor
++    [    0.000000] Kernel command line: [...] lsm=landlock,lockdown,yama,integrity,apparmor
++    [    0.000000] LSM: initializing lsm=lockdown,capability,landlock,yama,integrity,apparmor
++    [    0.000000] landlock: Up and running.
++
++Note that according to the built time kernel configuration,
++``lockdown,capability,`` may always stay at the beginning of the ``LSM:
++initializing lsm=`` list even if they are not configured with the bootloader,
++which is OK.
++
++Network support
++---------------
++
+ To be able to explicitly allow TCP operations (e.g., adding a network rule with
+ ``LANDLOCK_ACCESS_NET_BIND_TCP``), the kernel must support TCP
+ (``CONFIG_INET=y``).  Otherwise, sys_landlock_add_rule() returns an
+
+base-commit: b4007fd27206c478a4b76e299bddf4a71787f520
 -- 
-2.34.1
+2.44.0
 
 
