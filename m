@@ -1,115 +1,135 @@
-Return-Path: <linux-security-module+bounces-1728-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-1730-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFD8186BFFA
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Feb 2024 05:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C52B86D003
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Feb 2024 18:04:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 719F6287DED
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Feb 2024 04:46:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECF062897F7
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Feb 2024 17:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D291D39850;
-	Thu, 29 Feb 2024 04:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90BD6CBF4;
+	Thu, 29 Feb 2024 17:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0SfIz6K"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="nlVkoodR"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F1638F80;
-	Thu, 29 Feb 2024 04:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564684AEC4
+	for <linux-security-module@vger.kernel.org>; Thu, 29 Feb 2024 17:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709181988; cv=none; b=BQLfsatGnFvgOB4ky7BC2ICZKC6z2lwiu+rNTcZHuu/TZ2EnefvnK++8SegPwscKM5jVs1KGyCMCYBgOV1WY6n31CvznpBr4ZpDJMd+T8nMpX+NmRraiXWgjS1LPEmmyUG2ooJPqnhRVOzeC2JqZoE5QkuoA5xNSvAOp7JTz/g0=
+	t=1709226276; cv=none; b=p/FiTZosBv87aVWg/sC1jrSZ3hlENWchweXOK1tR8bcetVelJmtJIu01gjZq9zdbRCaa1SDMVsQzorMyjvpiLPeBjFehfXqtONkw9IJ+D9Ks8YozPVWbTKuh67D7I6tZZ6jcQENgHO5E9w023PCMxEulx14CZF+AqrzsWM1o84k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709181988; c=relaxed/simple;
-	bh=G615x2fPETkC6k8ewYPfYhknWUlajYkHMppEN+Pscsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o3789GLX/Y5YoaEqTls+PFvjdb/VOg0mhBlCy2a3i1OwAqztxHhj656cJgkWqQ9yDZaWhvvHZBqvglpdFK5H06ZRcQWFUJPfcVSmY5ezRBOGhxuLUPfIG0hE5OMAdRLqlVcHTyWrgMvxYWzf05QbQaGHq/S2z1BKeBDZi0Ni0GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0SfIz6K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 723F2C433C7;
-	Thu, 29 Feb 2024 04:46:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709181988;
-	bh=G615x2fPETkC6k8ewYPfYhknWUlajYkHMppEN+Pscsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I0SfIz6K4eWboYPJOn9QHUR9jcspDY0b9JguNlXodaayrm9xfqHOcEeY/fJfposd3
-	 V8r1gYbc8BJCo8zKx1EsIvKX6/RPT848BpEU2DP+eEv7Qt4Z46DEsLojDaKwEnPN8m
-	 wGp82+pjV8TU0IhG7W56CnPbV+7b+BPDIDbvmrWgXs1AeGWCYzVJ7JAM7HsfNdMB1s
-	 vzOb1/oCpJER2nuxDKX/t2FTZppQm9NocVloRX8bIAGRt9cjYU5h7gT+M5KbVMiELY
-	 9MKr7Y4dHClV+1ImFEhmA8MujCP60bPtXA8kI3Hv/gJ0oP+/dlLS8xUwST5T5gUuo8
-	 f95kSrKe/18PQ==
-Date: Wed, 28 Feb 2024 20:46:25 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-	serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-	dm-devel@lists.linux.dev, audit@vger.kernel.org,
+	s=arc-20240116; t=1709226276; c=relaxed/simple;
+	bh=4wDdbt4I56G5n6LSUJ2u1jaEVBMsm/64WWZPbsYi9U0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bQE7NajQSZBmp49NEGNSLgTBZuSy4twdNVOzq/qJfXvgSogv2Ic0tStrb1o6G/RgAtuPMt9HT4OAyxpXwbKdGLBrWsZqtT1kUvPBjZqvItwR+w5KIUd7dF60Q8CwlTnLSQ0tDPKR6b6IleACpsGm+lU90ezByRIqgN4eawk2Uuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=nlVkoodR; arc=none smtp.client-ip=185.125.25.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TlyHp6JJMz5wk;
+	Thu, 29 Feb 2024 18:04:22 +0100 (CET)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4TlyHm47S2zYBH;
+	Thu, 29 Feb 2024 18:04:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1709226262;
+	bh=4wDdbt4I56G5n6LSUJ2u1jaEVBMsm/64WWZPbsYi9U0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=nlVkoodRGG/+JH60co6QTYI+j/xS/kAvzRqTk/xdhkVfSSC5JtD7P7treNBKoqd0u
+	 U5gu49lO236cmDqZAiQi+oFIZbE1jszXjS2h0mslolmhNqIG4IKa/drMCKvMRTmYRX
+	 pKXV1VkrqQbG3nE+oEnjraDdG3Vrknapc8Mb93bc=
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Rae Moar <rmoar@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+	Marco Pagani <marpagan@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thara Gopinath <tgopinath@microsoft.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wanpeng Li <wanpengli@tencent.com>,
+	Zahra Tarkhani <ztarkhani@microsoft.com>,
+	kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v13 17/20] ipe: enable support for fs-verity as a
- trust provider
-Message-ID: <20240229044625.GA1946@sol.localdomain>
-References: <1709168102-7677-1-git-send-email-wufan@linux.microsoft.com>
- <1709168102-7677-18-git-send-email-wufan@linux.microsoft.com>
+	linux-security-module@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	x86@kernel.org
+Subject: [PATCH v1 0/8] Run KUnit tests late and handle faults
+Date: Thu, 29 Feb 2024 18:04:01 +0100
+Message-ID: <20240229170409.365386-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1709168102-7677-18-git-send-email-wufan@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On Wed, Feb 28, 2024 at 04:54:59PM -0800, Fan Wu wrote:
-> diff --git a/security/ipe/hooks.c b/security/ipe/hooks.c
-> index f5190a1347a6..ca1573ff21b7 100644
-> --- a/security/ipe/hooks.c
-> +++ b/security/ipe/hooks.c
-> @@ -254,3 +254,33 @@ int ipe_bdev_setsecurity(struct block_device *bdev, const char *key,
->  	return -EOPNOTSUPP;
->  }
->  #endif /* CONFIG_IPE_PROP_DM_VERITY */
-> +
-> +#ifdef CONFIG_IPE_PROP_FS_VERITY
-> +/**
-> + * ipe_inode_setsecurity - Sets fields of a inode security blob from @key.
-> + * @inode: The inode to source the security blob from.
-> + * @name: The name representing the information to be stored.
-> + * @value: The value to be stored.
-> + * @size: The size of @value.
-> + * @flags: unused
-> + *
-> + * Saves fsverity signature & digest into inode security blob
-> + *
-> + * Return:
-> + * * 0	- OK
-> + * * !0	- Error
-> + */
-> +int ipe_inode_setsecurity(struct inode *inode, const char *name,
-> +			  const void *value, size_t size,
-> +			  int flags)
-> +{
-> +	struct ipe_inode *inode_sec = ipe_inode(inode);
-> +
-> +	if (!strcmp(name, FS_VERITY_INODE_SEC_NAME)) {
-> +		inode_sec->fs_verity_signed = size > 0 && value;
-> +		return 0;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
+Hi,
 
-So IPE is interested in whether a file has an fsverity builtin signature, but it
-doesn't care what the signature is or whether it has been checked.  What is the
-point?
+This patch series moves KUnit test execution at the very end of kernel
+initialization, just before launching the init process.  This opens the
+way to test any kernel code in its normal state (i.e. fully
+initialized).
 
-- Eric
+This patch series also teaches KUnit to handle kthread faults as errors,
+and it brings a few related fixes and improvements.
+
+New tests check NULL pointer dereference and read-only memory, which
+wasn't possible before.
+
+This is useful to test current kernel self-protection mechanisms or
+future ones such as Heki: https://github.com/heki-linux
+
+Regards,
+
+Mickaël Salaün (8):
+  kunit: Run tests when the kernel is fully setup
+  kunit: Handle thread creation error
+  kunit: Fix kthread reference
+  kunit: Fix timeout message
+  kunit: Handle test faults
+  kunit: Fix KUNIT_SUCCESS() calls in iov_iter tests
+  kunit: Print last test location on fault
+  kunit: Add tests for faults
+
+ include/kunit/test.h                |  24 +++++-
+ include/kunit/try-catch.h           |   3 -
+ init/main.c                         |   4 +-
+ lib/bitfield_kunit.c                |   8 +-
+ lib/checksum_kunit.c                |   2 +-
+ lib/kunit/executor.c                |  81 ++++++++++++++------
+ lib/kunit/kunit-example-test.c      |   6 +-
+ lib/kunit/kunit-test.c              | 115 +++++++++++++++++++++++++++-
+ lib/kunit/try-catch.c               |  33 +++++---
+ lib/kunit_iov_iter.c                |  70 ++++++++---------
+ tools/testing/kunit/kunit_kernel.py |   6 +-
+ 11 files changed, 261 insertions(+), 91 deletions(-)
+
+
+base-commit: d206a76d7d2726f3b096037f2079ce0bd3ba329b
+-- 
+2.44.0
+
 
