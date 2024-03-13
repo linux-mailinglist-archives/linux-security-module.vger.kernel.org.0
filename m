@@ -1,139 +1,79 @@
-Return-Path: <linux-security-module+bounces-2071-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2073-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B008987A1B1
-	for <lists+linux-security-module@lfdr.de>; Wed, 13 Mar 2024 03:40:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0499487A1D4
+	for <lists+linux-security-module@lfdr.de>; Wed, 13 Mar 2024 04:14:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4320128453C
-	for <lists+linux-security-module@lfdr.de>; Wed, 13 Mar 2024 02:40:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D3DC1C209B3
+	for <lists+linux-security-module@lfdr.de>; Wed, 13 Mar 2024 03:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEC32C13D;
-	Wed, 13 Mar 2024 02:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F116ED30B;
+	Wed, 13 Mar 2024 03:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KgQ0JuPg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLH7gfOp"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05679C122
-	for <linux-security-module@vger.kernel.org>; Wed, 13 Mar 2024 02:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6645DDD1;
+	Wed, 13 Mar 2024 03:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710297620; cv=none; b=gN/iWJ8N2Kg2jyc0fNmyGzaUomS4CBG7CmMankYYR8WB6ZcLyKMJm9kYBPuO2B8JTs41kyvczdtU71wIJTDLK1DU8w9an8bhB+3QjaXLKMo40yDzEX39EtwUY8Lp6/wxrboPJOe6+63WhtJRMojeBTdnnlFZqHuGLeIThFr09fI=
+	t=1710299688; cv=none; b=r9QAdNGraP7d/b03gdGLx7GUhRUYtxHHqh2EtEVfgRTbQsz8sqSLnrBhTPVvsH/eNPnuWYLwtXqCkeYcRu9MRiiPBsRkBm306GCKsHstzJr6kcK0BvXxEAm6Ye1J3Yh+fS3K3Z3x1UgrYKODd8oAqizjPCvyM/g5S1pGjzaJTQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710297620; c=relaxed/simple;
-	bh=bT9cgD9xoMLhqt3/eDR3nr6SSI/CyX28YEwHte2GLxU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=kVV/Cq5bvy9BzsNulMQEuEMu6Pa2MeGVglOxYD9VGQEzX9FRcv9bmf20X7ZCNtIqFO4F189zGw4F+2g6pcC7sZnGQJL6Q+q/ITKj/cL419gtxFlwOUC9l/lfLg0mSZQfd293xtlfBkJG9PbpEaCuIp1zDFqnCFk98mGfWVIoSvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KgQ0JuPg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710297618;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xLDKnplj27bk7XMdJMqwJSbyHYnIPFsAuwJfX8G+gAU=;
-	b=KgQ0JuPgHoV0+clD26G82HuMpE4ngpdzpP0TjxxeA0awucPpCX+y1Zt2W0+a4Pk+yanpWX
-	w/3kg40JJYYTmtXDzD5HkRluFZVH9Xm/ldjNB3pa4Eg3EA44qrxr+Q3TXYpmocDKiAqK/p
-	Na//6sVb8nuTXjZDV09dDTfCg6w5xQs=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-159-7aRZKD_JMre3ald5tJOoHA-1; Tue, 12 Mar 2024 22:40:16 -0400
-X-MC-Unique: 7aRZKD_JMre3ald5tJOoHA-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-221a4d886fcso6102505fac.3
-        for <linux-security-module@vger.kernel.org>; Tue, 12 Mar 2024 19:40:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710297615; x=1710902415;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xLDKnplj27bk7XMdJMqwJSbyHYnIPFsAuwJfX8G+gAU=;
-        b=jDv+nNEcbyWlCMRE7Va4lyW9n03hwYPOajLkwNdveKspnzjI/gP/IhFajEJitjnt6l
-         FdLTqBIH1KOf8AKh+oAQkCb+dsHCb0IEzngu19AooinYqjfgUarXM57hLobhkjF/hRMp
-         6cuS6y4U2lUsahAh3XieaLA1h3JiV8/zJl1e8uV4xTrV70kMXOiMFOoqV76gPZpuKPFc
-         aGwJtEp6TAqSFennY/HhUS7FHuC8eBfNZpr2uK+JP9VWeAbPtLmqONPqGN8qxC4aakb+
-         e0BXBH+EFVZl2vpNhKqIn1C4W7Pg8m6yeMtNKRjMNXI5yyGC3HL9yK6XKe3PYhBhvQJe
-         +pew==
-X-Forwarded-Encrypted: i=1; AJvYcCXz6sYs+YQ3CEup8s+BEuAxs+3aOeaUV6xMbve7zpeMWuOLS5Fyd6uGGJ946roWA5FhAqReimXIoY/18DzFyCPp5+IeepMxrf1IRhTFdUEA1FHhVL2M
-X-Gm-Message-State: AOJu0YwwtzUtPimQlOY10LEcv+txZLznBTWb2yjJC6NeH3LdN+8niA3F
-	DVvFW7LAZ9ECuX+oZwckT2i8j1Fe1vtFJM/8lOlFNN3jIDZSxP08wtZ/sNYk9xzq12ByB8TEtDo
-	Skeju67tEygZC+89Wf1WDgD+5XLXXhp9cpWsQgXFHi8tisVGQy1Oa7GXu82bhjw/cnzP8KxcNZw
-	==
-X-Received: by 2002:a05:6358:3401:b0:17b:f4a1:b626 with SMTP id h1-20020a056358340100b0017bf4a1b626mr14909057rwd.13.1710297615395;
-        Tue, 12 Mar 2024 19:40:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH2czkJxHHK8iTWoJP2+GXQgOSzrR8EUnlqBRIqzbEfeFRiTVhU4BFfN2MY00qNUPEEuj0R+A==
-X-Received: by 2002:a05:6358:3401:b0:17b:f4a1:b626 with SMTP id h1-20020a056358340100b0017bf4a1b626mr14909016rwd.13.1710297614481;
-        Tue, 12 Mar 2024 19:40:14 -0700 (PDT)
-Received: from localhost ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d12-20020a63d64c000000b005dcaa45d87esm5975622pgj.42.2024.03.12.19.40.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Mar 2024 19:40:14 -0700 (PDT)
-Date: Wed, 13 Mar 2024 10:37:29 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Maxime Ripard <mripard@redhat.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	linux-integrity@vger.kernel.org, itrymybest80@protonmail.com, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] integrity: eliminate unnecessary "Problem loading
- X.509 certificate" msg
-Message-ID: <gucfr7sxmv4hiowr6dokx7r7nf6wdiqdm577arnwe5yua5z24b@3sljt73mpjke>
-References: <20231227044156.166009-1-coxu@redhat.com>
- <20240109002429.1129950-1-coxu@redhat.com>
- <20240306-humongous-nuthatch-of-science-00e58b@houat>
- <a677a9cd8eda40e5529094ba2a6ad2f7c0c927fa.camel@linux.ibm.com>
- <20240306-large-lush-catfish-e75cb2@houat>
+	s=arc-20240116; t=1710299688; c=relaxed/simple;
+	bh=fMzuWh39HrSr6LJuUun9tILqEcsZfaAZv5ySGOklm9o=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=PaLf9+n5yvV8oRWcs1ZYKcpwIar7izfL5N47GF1lQvK85ThDPv9OtyeRZkum0mJ/1yS4s+VJl8pfq50TOFaj6r1HYrTrRAaxlADRTizrBeLrpj1DESayqdnzf4pMX3zr8DBJuNSWHkWRNbUARr0kv2BYPIdTm3xGzf2rSE0CemY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLH7gfOp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 52F5AC433C7;
+	Wed, 13 Mar 2024 03:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710299688;
+	bh=fMzuWh39HrSr6LJuUun9tILqEcsZfaAZv5ySGOklm9o=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=iLH7gfOpL8ofKE0feNTzJQA+LbSowAmIJVOs22XPptKvF/gEpdhDJ03NEbhHPbrLK
+	 FqRY4txDQUsWcRHlBYlTuvo+5Sz3iJxB5Z+YICqkXaycTG1tY86MA1KpAtJPEqLOSd
+	 UM7HdTPBHwPreeanJUbQaJqdcxQI9uOYOOhNtriBnVZ0LMByC1JGmzdBOM6Z6420ij
+	 H1xdlMbqkBpThPLOgZXT9Tj5jRr7vG/5Vg7PP+nCU5idv2xvkd0oSdyHNTsXzAa2uk
+	 OpqloCpcWRyEEMSpX1nH7zXHC6xumZYQ0xSWeQRtBKapCRf1AOe8Otj+f2semEHIC9
+	 /EF9ZzNO9i/ng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 419D4D95057;
+	Wed, 13 Mar 2024 03:14:48 +0000 (UTC)
+Subject: Re: [GIT PULL] selinux/selinux-pr-20240312
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <f584f8da8096351cc7e941d0586b2fa3@paul-moore.com>
+References: <f584f8da8096351cc7e941d0586b2fa3@paul-moore.com>
+X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
+X-PR-Tracked-Message-Id: <f584f8da8096351cc7e941d0586b2fa3@paul-moore.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20240312
+X-PR-Tracked-Commit-Id: a1fc79343abbdc5bebb80c2a9032063442df8b59
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ca661c5e1d89a65642d7de5ad3edc00b5666002a
+Message-Id: <171029968825.23890.18315375045795766853.pr-tracker-bot@kernel.org>
+Date: Wed, 13 Mar 2024 03:14:48 +0000
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, selinux@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20240306-large-lush-catfish-e75cb2@houat>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
 
-On Wed, Mar 06, 2024 at 01:40:01PM +0100, Maxime Ripard wrote:
->On Wed, Mar 06, 2024 at 06:55:00AM -0500, Mimi Zohar wrote:
->> On Wed, 2024-03-06 at 11:57 +0100, Maxime Ripard wrote:
->> > Hi Dmitry, Eric, James, Mimi, Paul, Serge,
->> >
->> > On Tue, Jan 09, 2024 at 08:24:28AM +0800, Coiby Xu wrote:
->> > > Currently when the kernel fails to add a cert to the .machine keyring,
->> > > it will throw an error immediately in the function integrity_add_key.
->> > >
->> > > Since the kernel will try adding to the .platform keyring next or throw
->> > > an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
->> > > so there is no need to throw an error immediately in integrity_add_key.
->> > >
->> > > Reported-by: itrymybest80@protonmail.com
->> > > Closes: https://bugzilla.redhat.com/show_bug.cgi?id=2239331
->> > > Fixes: d19967764ba8 ("integrity: Introduce a Linux keyring called machine")
->> > > Reviewed-by: Eric Snowberg <eric.snowberg@oracle.com>
->> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
->> >
->> > Any chance this patch can be merged? This is breaking (at least) Fedora
->> > at the moment.
->>
->> https://git.kernel.org/torvalds/c/29cd507cbec282e13dcf8f38072a100af96b2bb7
->
->Oh, awesome, we missed it.
+The pull request you sent on Tue, 12 Mar 2024 19:18:26 -0400:
 
-Oh, I missed the emails about Mimi's PR sent to Linus as well. Btw, I'm
-curious to ask why you used the word "breaking" because I thought these KERN_ERR
-errors shouldn't cause any real problem.
+> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20240312
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ca661c5e1d89a65642d7de5ad3edc00b5666002a
+
+Thank you!
 
 -- 
-Best regards,
-Coiby
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
