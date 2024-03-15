@@ -1,106 +1,96 @@
-Return-Path: <linux-security-module+bounces-2118-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2116-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC61987CFD1
-	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 16:07:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC38687CFB6
+	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 16:03:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E4361F215E8
-	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 15:07:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4183A282BA5
+	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 15:03:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9171C3CF40;
-	Fri, 15 Mar 2024 15:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F6B3C470;
+	Fri, 15 Mar 2024 15:03:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b="kEzOciAj"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD22D18EA8
-	for <linux-security-module@vger.kernel.org>; Fri, 15 Mar 2024 15:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8EF3838C
+	for <linux-security-module@vger.kernel.org>; Fri, 15 Mar 2024 15:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710515263; cv=none; b=CBSX/DHXYxpCi+swlZCiECnRa/X9+Lm4eriVjs3gNzE905hFXQD+Nfpv3l/vDk5LxkotGRrH13W4zQr7QRuCIR+Jvb0TyOviPqdZOWVOa6SvUpI+1NZRLbWX6nbOLw8zVUX0QJB7iP+jkzY/TAABGAs4iOYP/SPkaDqCIHUsftk=
+	t=1710515009; cv=none; b=I81Njxvy2FziOth16XePE7H4WNCrzEMvcNeUC1kA8hbSULvIbOqGxHS2vVrOCnG0iM+TJ8ugIFFunlnDCMv0lStUnzfBedLxktZduhuNoU+XhQmlTBMWwIEbpfgzElOfy/8yjf4Iv6xGTcRHy7UA97P2HKBoyf43AXqczZOVaXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710515263; c=relaxed/simple;
-	bh=p4tnq7/vMjan4zLSn1XJRt2ypTigSeLCtr4TRWiQ1Fs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nmo7V6nh6zsayCl+P+Dsy8nZzk3vWgkYQfxvwCNsfE8w3Z9PqbM8QaO3KOSprPMGR7NoyU7Ad+PvY4gNQudusMOwoVO5CZYzHyjCPvEqQnoRbMOEGYwzcNt5q2EZpaNcLrxxV2cqHhOOFtdVVaADIQ0RzvAuiWlIvZ9S9ENOVX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id 8570CC12; Fri, 15 Mar 2024 10:02:08 -0500 (CDT)
-Date: Fri, 15 Mar 2024 10:02:08 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] lsm: handle the NULL buffer case in lsm_fill_user_ctx()
-Message-ID: <20240315150208.GA307433@mail.hallyn.com>
-References: <20240314022202.599471-2-paul@paul-moore.com>
+	s=arc-20240116; t=1710515009; c=relaxed/simple;
+	bh=X2wT/BzxQKN1MciyzH4oQdmRg/MDDXfK0mOlDaA3dS8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s4GNUF/l3JBQUXlAlYj4GTGS7glsfpECLbub6qJg6NIsugAyNlLmN+E2HuJY1p9VB7K5Yzg4pOT64EfMORfAbgFPkGK+oMMTeHYl0xg6OdZmPU7WacMQTrOg7iiA9HlAsIw20TpvHLlh7IWC6LDQ8nflXlEIiJJuEVqmf2j3Opk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com; spf=pass smtp.mailfrom=netflix.com; dkim=pass (1024-bit key) header.d=netflix.com header.i=@netflix.com header.b=kEzOciAj; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=netflix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netflix.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a467322d52eso246386066b.2
+        for <linux-security-module@vger.kernel.org>; Fri, 15 Mar 2024 08:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netflix.com; s=google; t=1710515006; x=1711119806; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X2wT/BzxQKN1MciyzH4oQdmRg/MDDXfK0mOlDaA3dS8=;
+        b=kEzOciAjMA5phAV/00wPYG5sZcTzbhJyA9Yo2E82IIOMsTSH2p7d4JDKqicRbudlGY
+         g4wWMPRzq/lvF25JBhalwacac20xpAEuIVEq9I3T9yhUNNs5Rsj7WvOwmzN4fuYgzOdH
+         veJ4op9RJEK6qhSJvLmpNiGp50NzIQF/Ryfy8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710515006; x=1711119806;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X2wT/BzxQKN1MciyzH4oQdmRg/MDDXfK0mOlDaA3dS8=;
+        b=DBm7l7uHzQjN0g9hXNPD06nmAGnCnzdMDH+YQiGsKpZ7NiivG65aOWXJ2YWk0EkWB4
+         5UO9r2O/prKXl6fCeeUNNyCEZLXwHbGXvSLEfTgbfw302zVHyNykfPaFnYg5EBGmEbR6
+         VJCB0wLLiZWmesRyP2h0EBvlFcFQVHNzc2L3VAhaP44S/r+XurUxRPm9KhuuVJUCi3Yc
+         8yGtl/6u/YnialQKWjKQX/HI13YBqDmljgHLEqFoiPe3CVKMYyp2TL27JVFryI8FALPp
+         aUtLz29DPWIFYRn2qAiwC5xfg58veJHxoMWSQ4SkG9Mn05WG2nHkI7ZFgGCqi60W4WdX
+         VgUA==
+X-Gm-Message-State: AOJu0Yy+AaA4Z0VWHjcSJK0i8gQRHaTDtogzgn9XwD+evDteXlhPHHhp
+	ojtJsYc8amoduMUD9erXv4pgx9xOKu6fMIYmx4IikNSR4mOngaMX1EPdFoY6ft3U5wvW9gFKK42
+	n0E2lWVN3r/UVEjoCe8hXlaAhLvWv9LLNrUEfxw==
+X-Google-Smtp-Source: AGHT+IGWgmfkja/H4b5nneN2aa04dXN3RKuMZKfXyBOXRkigwPhRJyr2zzT1SFedI9QSjahv9+IVHf26dBfqo5+priM=
+X-Received: by 2002:a17:906:b899:b0:a3f:5ad2:1ff0 with SMTP id
+ hb25-20020a170906b89900b00a3f5ad21ff0mr3527043ejb.46.1710515006228; Fri, 15
+ Mar 2024 08:03:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240314022202.599471-2-paul@paul-moore.com>
+References: <20240315113828.258005-1-cgzones@googlemail.com> <20240315113828.258005-7-cgzones@googlemail.com>
+In-Reply-To: <20240315113828.258005-7-cgzones@googlemail.com>
+From: Tycho Andersen <tandersen@netflix.com>
+Date: Fri, 15 Mar 2024 09:03:14 -0600
+Message-ID: <CABp92JBZXcfNgh=0Np0uH-XtxioqHXL2SeTQQ=Fc7ZeGNuFQjg@mail.gmail.com>
+Subject: Re: [PATCH 07/10] kernel: use new capable_any functionality
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc: linux-security-module@vger.kernel.org, 
+	Christian Brauner <brauner@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Oleg Nesterov <oleg@redhat.com>, Mateusz Guzik <mjguzik@gmail.com>, 
+	Nicholas Piggin <npiggin@gmail.com>, Peng Zhang <zhangpeng.00@bytedance.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 13, 2024 at 10:22:03PM -0400, Paul Moore wrote:
-> Passing a NULL buffer into the lsm_get_self_attr() syscall is a valid
-> way to quickly determine the minimum size of the buffer needed to for
-> the syscall to return all of the LSM attributes to the caller.
-> Unfortunately we/I broke that behavior in commit d7cf3412a9f6
-> ("lsm: consolidate buffer size handling into lsm_fill_user_ctx()")
-> such that it returned an error to the caller; this patch restores the
-> original desired behavior of using the NULL buffer as a quick way to
-> correctly size the attribute buffer.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: d7cf3412a9f6 ("lsm: consolidate buffer size handling into lsm_fill_user_ctx()")
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> ---
->  security/security.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/security/security.c b/security/security.c
-> index 5b2e0a15377d..7e118858b545 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -780,7 +780,9 @@ static int lsm_superblock_alloc(struct super_block *sb)
->   * @id: LSM id
->   * @flags: LSM defined flags
->   *
-> - * Fill all of the fields in a userspace lsm_ctx structure.
-> + * Fill all of the fields in a userspace lsm_ctx structure.  If @uctx is NULL
-> + * simply calculate the required size to output via @utc_len and return
-> + * success.
->   *
->   * Returns 0 on success, -E2BIG if userspace buffer is not large enough,
->   * -EFAULT on a copyout error, -ENOMEM if memory can't be allocated.
-> @@ -799,6 +801,10 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uctx, u32 *uctx_len,
->  		goto out;
->  	}
->  
-> +	/* no buffer - return success/0 and set @uctx_len to the req size */
-> +	if (!uctx)
-> +		goto out;
+On Fri, Mar 15, 2024 at 5:39=E2=80=AFAM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> Use the new added capable_any function in appropriate cases, where a
+> task is required to have any of two capabilities.
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> Reviewed-by: Christian Brauner <brauner@kernel.org>
 
-If the user just passes in *uctx_len=0, then they will get -E2BIG
-but still will get the length in *uctx_len.
 
-To use it this new way, they have to first set *uctx_len to a
-value larger than nctx_len could possibly be, else they'll...
-still get -E2BIG.
-
-So I'm not sure this patch has value.
-
->  	nctx = kzalloc(nctx_len, GFP_KERNEL);
->  	if (nctx == NULL) {
->  		rc = -ENOMEM;
-> -- 
-> 2.44.0
-> 
+Reviewed-by: Tycho Andersen <tandersen@netflix.com>
 
