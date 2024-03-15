@@ -1,219 +1,153 @@
-Return-Path: <linux-security-module+bounces-2117-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2119-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 628FF87CFBE
-	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 16:04:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 142CE87D00A
+	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 16:18:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E623282D8D
-	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 15:04:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45A7A1C20399
+	for <lists+linux-security-module@lfdr.de>; Fri, 15 Mar 2024 15:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069F03C470;
-	Fri, 15 Mar 2024 15:03:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC24F2562F;
+	Fri, 15 Mar 2024 15:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MpKp+4ZB"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WdvpEfFq"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C96C3BBF0;
-	Fri, 15 Mar 2024 15:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710515023; cv=fail; b=CLGRQPw4vwSDiseNmhCmMU3OnFTnItKSk7uX8zC8dsKAHnhZBgvy4triHxtS8mLaY2INbHW6xILqRJm2xfp0zXWrEldc04Sjg7HarXrwzTDe1KS8CWZ1hs/zv3rwvEKpuXhL3jHTH3g0L3RmZDOP4hTVDQ28RDd6uWJz462ej5M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710515023; c=relaxed/simple;
-	bh=9e07p4g04BxxHeEFJ9ZkQcEBtquw8SNxSUgtNR+tNEo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=nsFydrkpqlXJOTljFX67bftyd9s3fJPJxK7MDNJEofIqvV4iMZVGdiobvdTPGUCrYIE9kGGI3e08DiCHkfEIU5EV22VXrdUhGLVBkBoPu/yG/iGoRFGmzKiSBF31YsrfldXuePtAdGyfZ2z7JuugFCTXFb4E03qg7c/7sERFW3M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MpKp+4ZB; arc=fail smtp.client-ip=40.107.220.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ElMXVT7SsjssDYAq15nS7h17L8BRcQcdNkpAxTsdciRCoNkbCjNIOtEuA/RxbpTU58M8ddQCVAomow1nfgRC1o+c/sa5MuiqNTS+vRSyFYyKlmqZjJtcBdfANzla8A3IElffoHV0PPpUevCXFJd+32WaWKMDNq3B01OKJy1EmkID2g/YzwVbyuJrjmntinGXgrLCuSz26SGTebJitzDWacE5z2lEPB5Atzqsldest7KpAPpOJDdMc1r6C9FmPRZUg1zup7FXXRLI7HzIHD7qpI8/6tFe/GHKAWPhf/t/89+gY01YoOYEXDMqrJY+FzTOiwjJ/F3E4QJW2BL1p+Yy1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2SuwOCjBbLYkST//PsfWcv36UMFESUO0IP8x5avek5w=;
- b=mr1XFXsGrfHG3zne2UzEFWgnBs/00ZE9J05l5QPAvJz20KSjEdSAV1OH6P8QOUHAGid5HGHmLpKYLByd1UB3cjcM7T+42EsOWmTyiWa+XjlViDIi8THN4XjVIE4O4nCWXwQecfNCF4zHy8ASaARvaGm9JhIZGaDDYWI8dh1HxmRfotXgBYBO/nx52qpzwaSRbfuevMxdj99E6r2BEr30mbafpGaZnYhdWhAaNVek4X/OoGe3CHsN7ygkCreWinjFngKYPTigYd5qCR6BqmqV82ZoDZffNRe0hECWKiKnwyxifIKQL0qm+L3blrfqawX9QXjCG2stkLx1YMe4hGiRvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2SuwOCjBbLYkST//PsfWcv36UMFESUO0IP8x5avek5w=;
- b=MpKp+4ZBMSb+KrqaCN2C6/LDVx6N+jd6wsI97ZTg68FTtqlRCNEMscFx5/VSx9LDWINlDD6fAQPOi7XsrD4lijJJEXakM+loKm+FV0nsIe14Tu7omtt61vZPcmvmcUu1w+IIOWeisTbEAioIYFK9QgqCGUWxHSM2vBaOAtUnomY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by SJ2PR12MB9210.namprd12.prod.outlook.com (2603:10b6:a03:561::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.20; Fri, 15 Mar
- 2024 15:03:39 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::8099:8c89:7b48:beed]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::8099:8c89:7b48:beed%7]) with mapi id 15.20.7386.021; Fri, 15 Mar 2024
- 15:03:39 +0000
-Message-ID: <f6c3a153-ff64-4e9c-98f3-04c38fd75485@amd.com>
-Date: Fri, 15 Mar 2024 11:03:33 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/10] drivers: use new capable_any functionality
-Content-Language: en-US
-To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
- linux-security-module@vger.kernel.org
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Stefan Haberland <sth@linux.ibm.com>,
- Jan Hoeppner <hoeppner@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Mark Brown <broonie@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-s390@vger.kernel.org, bpf@vger.kernel.org
-References: <20240315113828.258005-1-cgzones@googlemail.com>
- <20240315113828.258005-5-cgzones@googlemail.com>
-From: Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20240315113828.258005-5-cgzones@googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR01CA0130.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:1::30) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8CC3CF4B
+	for <linux-security-module@vger.kernel.org>; Fri, 15 Mar 2024 15:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710515932; cv=none; b=tdpcEgnlmbFZI/1RnhdrYvisKb4HR2WNXcImWVmzjKhEXtIATxOFa44NUV5p1LL77v0W/93dznYKd3QaieKeRe4UdxsadPd4sfrfidzdEkrEd4pLcJ0U+tbnr2JcIZ5cbUqMRWrMtw004RC3dMux6996kbu+AQzhbS8Al1QHbSo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710515932; c=relaxed/simple;
+	bh=1dkgyhgXb2hRIuFKD/Is0ExPnEEbM/gjiWzIuvGxr7w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JNsutPE5WK4ViBcSSYdbunG+Qv7KJEep42yHU9DuchThCGRXtv9rLlj7Mv07jHFFXgBdPTWi2b4C8EjsvCb1htKBqDhMNMmy/tTROQZsTOidOkWzhxecyZh1T7794Cr6i/6w3zlV0gtG+aotl/8vBRRdvph56DULf4tqPprVb50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WdvpEfFq; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-d9b9adaf291so1949582276.1
+        for <linux-security-module@vger.kernel.org>; Fri, 15 Mar 2024 08:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1710515930; x=1711120730; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EhgU2LAsHaTMWktvq7zLR53iJUeP+TxmjW585Viy54I=;
+        b=WdvpEfFqhHrElHsRDMt2kGIRWEbj7bW4V34oFlTCHSWH6ghvUxswpOhmUw+QrOCkDX
+         VagYdL4GD7E0Nl7/OMaZG+9lJVlC9gcxx3JKGDUHfmKpHkb+fIJEC3R4TjzWo6lJgvx7
+         vx9fV3wiaZC91CRX+qZSBFZ3tKqwW+8B5TVhjuR7vJhS9cBXZbesDsM3lFfiO8CqtCKZ
+         Hks5nqFkWeZV4Lm6Q+Kn1KnyQziCxE5m1xWM9CrgnCCy4y6xpT2MbMYrgg35CerEZbQv
+         soI/mh/J9OMtXnhorZXOam4UMtsKHSWIDCT63t+mNpoiKPmFajTvhBXAnVkMNsL51MHv
+         pdWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710515930; x=1711120730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EhgU2LAsHaTMWktvq7zLR53iJUeP+TxmjW585Viy54I=;
+        b=OVQxoLA7URSZ/gXKznT5MCSmp3B+FskJZ8mfyABxnkfsWLyLIWuQFDXg+k4aSd0zup
+         ZbpQdIgdvJkwo4GnWFcLbHGmlK+CkvqeaOnfshj4Esp6fCRIXN7aPFCiIJAInTqskKx+
+         fkNZHtKjeNV0UoJ9Lmw/M4eeoS5zrLDsWUVpEcwgpOeIbA3LRymYIbwGj8+LhbqC2mo4
+         FzX0cxbgeRk52p8LWjBTsQs8OMNEawXfAggnsSrhZf0fOTzSgTPLgo48w7+xCk3N7xbM
+         wS8gjLkZ4l9RCux+pR3wnalGw0oo4/vigovJU+NZVNWSlWUaVniGEuXf30ww7Iy+tchB
+         npdQ==
+X-Gm-Message-State: AOJu0Yz1TcXi4hhWp6zLId5Coij3/I9zTTvDV3+UwaJaeKM1Uaoa/p8O
+	R5bLX0bB+iR7RoW4BnNunfjAKEjquhisfvUAnTvMjd8kXv9zrVlMXX3cJpowXjlosPruEXEeBrt
+	+ZJ6A4LWLuvMsploKzvssRAiPu51Ls0It2pK9Dsg5NvIT7Dg=
+X-Google-Smtp-Source: AGHT+IFR5YbyuMlFhOYnG6YUj/TkPG7HxyxY29c/KbQYcQOt4mGCh2R+jCXtV4mNJeutE64BMkOij2rrHVfkGleTaWI=
+X-Received: by 2002:a05:6902:81:b0:dd0:412f:e01f with SMTP id
+ h1-20020a056902008100b00dd0412fe01fmr4831352ybs.43.1710515929660; Fri, 15 Mar
+ 2024 08:18:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|SJ2PR12MB9210:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71a63ed5-7878-47ae-1fdf-08dc45011899
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	h47ZDeEuqRFmLYAKIfMZMVG6m8R3E+9Cm4vBQviHGOcbH4amWBl+7I0Cvm6ofzESW1F1J2vJMjIRbzlSF+7Nqa6iVZFYLs9wxnYFokEhgHCEm39umyIap38E8gwmbw/zYmA/dTDx17fHcGPAaFqoweutbBsi4nzxjeNoK3CS+L62hD7mvMQbshbuB+EK8AM0tPeBkSONyttP+8nh0MkJuJ3j8cQHzT8RO4u3K9cFJxqrGjiUwkhL5UImh7nDi586pfqVBzObDcAeL2exvyHfyBhZQAV7IT8RJHeVn/e04G17TMWnvMx/oeM4/prRPGs6KTrNE+dohKpHyV9X7n4Ag5xznVwFE2R8CvIHVklFvMpHfztyAoBJCUxL1lwpLt8kizI+WZaIMKFapDsbed5BkckPDJM7SRkGFLbj+x4r70ba37HjqcVszW+Sb/SAYy5fB7ZD/8WdxAGau3jpkk0ey5rboQ4sE5amU/LZaC2NPHGqTM/mXGQ2EueDNFdO+56Eo+Rf2ikwDsn93uJ4GM3bj/jNo/6ItBSDJQw4OXCMOkWwBOGHELfVrSzgI/qkoVtYfqI7ByDaqaFxP7+o5XTIS2zeIWICTRu+tWzUX1xSiQoZZHT5IHRlcKlpC+TYrCSkoMnI5ga8qlbL8qy/8IaniDJaHMYL8BFmFLWgPP6Ex7M=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WDh1SnFsRTQwQUlqaW5PTjhJZ0ZMTWcreTEvd0VkMDc3c0tKa0dpSnFQb0xO?=
- =?utf-8?B?bjNZRGl1QXJNTk5uVXd2STRNY0xPdzRqNG45RG9oTWY5OTQyOFdYTS9VTmRV?=
- =?utf-8?B?MTU0R3VNRFVnbnpIbFhScjFmdnVBK0lIVDRnVnFZbGxWMmpidXFMZmhwM0Zh?=
- =?utf-8?B?WXI0TkdnQTdTbDMxemFKamZadnBFVGtxMnFBRFhYU0VuZ2hNc0tTTy8wZVZm?=
- =?utf-8?B?MnlvUDFtMm1xV0RUdE1iUkZCa3RrUWJRWGs3WCtQWTk2L0pyTi9MUW9kRUk4?=
- =?utf-8?B?OTFVUG9jcmVEaVF5N0ZQdmNLay9aVm5GOU5tekFJcW9xZFRtck1hOGpVR2Ir?=
- =?utf-8?B?SUQ1cFVMTXc4S0RFMDBxSXJ3T2lGRTdLdmh3V090NW5yOXFudU5tM1dEK1F3?=
- =?utf-8?B?aktrQit0VzhsMzczakZMVmdPSENhaG5jaGdtTTR1WldMZWFWcUh0d25sdGFX?=
- =?utf-8?B?R1k3WkFsSzhZRUdxb1JJNlYyaG5CT0FHcXlhWEZMNjNmLzBlR3dFd2JURFZ3?=
- =?utf-8?B?L2hzTm81MjFxRDZvN2NYTWFhL3NhY2pWS3ZpekVlcUVCY2lOOVVZVWgxTjFp?=
- =?utf-8?B?TzA3SXdiaGRnZnpXMW5DQXVaN094UzZNdmtSUi9MWFE5MTd3M3djUFZ5azVh?=
- =?utf-8?B?TmNVQlhiakhxSzY2TDVsbjZNWWJrMTRGa1QvaG4rdmFkREJSdjhuY2hMVVox?=
- =?utf-8?B?b0FvdGxRenhnYUZDWjc2NWk3c21FaDRYTlZ4MUd6SjJFYTRDRDRwd04rUHpG?=
- =?utf-8?B?NjBZdVhwY2FwWkJ2TmFvYVBFSTAxNVh3M3ZHVHFNbDRWbzlLM2tnSnpiWnVH?=
- =?utf-8?B?cldpbzBPT2FVY0p4NUNuUmlVTEJVWi9FY3RXeWIxNTh3ZFQ4cENBb0UxM1Vz?=
- =?utf-8?B?R2R3Y0RMYTVwQVpobGpnYWl3QXNUWE1xMGh3ZlRZUHlMTEh3MzZ0cUZTYzdC?=
- =?utf-8?B?dlRmOUVXVW5YNXgwM3FzKy9xVllRL2Z3dmQ4NVFra0FhcmQ3MWdnUTdUY1Rq?=
- =?utf-8?B?YWgvcFFjdWJvQ2haSHlSNXE3N1FhTll6Tnl0N0dKWG9FRXR3QkFFZDJUZ3po?=
- =?utf-8?B?d0VYYk9YVlN2dllWQmw5RmFBYjE0MDZ1RUJ2eXpzcHFENXBUZGZXaEZXL3h4?=
- =?utf-8?B?Zlp6eVdFYzVITkJRcS9lck5sbllmNmE4L2JrN3BWcjlYS1JlVjN1WUg2OGlX?=
- =?utf-8?B?clZPMDNsU3pEVUd1WndhUW94TDNkR2NDVlA3WENLVGRLSG91c0dXMkV4S0Nr?=
- =?utf-8?B?TDNOaHhaVlFUSGJXWklXNmcvMEdNZndEODM0OHBGR1c3dUlrZUFPMVd4RFhq?=
- =?utf-8?B?dGhzODUvcENlbGhGY1ZoTnRTZ1hIditCb2doSnZVRkh6RHREZnE2b2thVmFN?=
- =?utf-8?B?RTFHS3l3c0kvcGpobE93anNCeUY2VlBzMDZXOU1vdGRXNGt2cjgzdEF5RUd1?=
- =?utf-8?B?ZmFRbEpyTzFGdmprLzhVbnJFN3VPallMcllUUXBEWlNRZXdQZUxqVmVGOS9J?=
- =?utf-8?B?ZEp0THA5bXRZU0VlaytSSXZVSXI4djZGTndlTzR6d2pqdW16TUlkSE94eFVD?=
- =?utf-8?B?WlBQYVJPbzdaNmgvU1NyRy9HUXRua2FtWlZDUnJGTDd1ZDJURmpmU0ROajZu?=
- =?utf-8?B?dk9Od2gxNEcrazBhenhhMHJIdVJUeG5yWHlWTmRCMG1qNDVmdnlnVStCcjVl?=
- =?utf-8?B?NzdCOWRsSVZDQ1B2Q216clNVTGtCSjFEcmJ5V09YR0RMZ3ptVWdFWXNTVnU5?=
- =?utf-8?B?dW45YU9ZcmhOS25iY01YU2hCZDd1bXRlaU5hZ3dSMEVGYUlBMGIwVW14MElj?=
- =?utf-8?B?clpMUjFYS3dWYjA4Qy9SSFRZMzVzVGVZUVZDdURydHVOZUEyNEROSG9DWjZ3?=
- =?utf-8?B?dmhLbHEveHZSV0R1b3hwUnlJaUwzQ0RMZ2VTNE5kaDdGQlN4N3VvaC9QM0Na?=
- =?utf-8?B?VXBxdlE1bkhmNlZZNWNtemNESmp6d2ZMbWZXQ25kdlJSaFZUVjRYSFA3RHZj?=
- =?utf-8?B?ZjBXRFhwNE53QWNKdmExZWR6dU50TTJTeVE1cmFWdU1yaXdwc2hwZ1hIbS9C?=
- =?utf-8?B?cXU3ZUkxYk91N2lqVStvZ0puN3lLVkJZS2lHK01GUWRGVVRWLzR6L2dmU3Nh?=
- =?utf-8?Q?BKUVEYWU+eIoAs1PUYc4iAZhw?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71a63ed5-7878-47ae-1fdf-08dc45011899
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2024 15:03:39.0898
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: n397wT+Wna3gIQhLwWRPZJj8CbGU1ZjnD/OZ9EdnFBtnE3XkAQpCdZ8x0YBYniGXlV1A299WBah0GQ4UfBhYxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9210
+References: <20240314022202.599471-2-paul@paul-moore.com> <20240315150208.GA307433@mail.hallyn.com>
+In-Reply-To: <20240315150208.GA307433@mail.hallyn.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 15 Mar 2024 11:18:38 -0400
+Message-ID: <CAHC9VhRWbiPSrLKaykFJ80p-orvxhifxMvN+emygF6Q2y=hf_A@mail.gmail.com>
+Subject: Re: [PATCH] lsm: handle the NULL buffer case in lsm_fill_user_ctx()
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-03-15 7:37, Christian Göttsche wrote:
-> Use the new added capable_any function in appropriate cases, where a
-> task is required to have any of two capabilities.
+On Fri, Mar 15, 2024 at 11:02=E2=80=AFAM Serge E. Hallyn <serge@hallyn.com>=
+ wrote:
+> On Wed, Mar 13, 2024 at 10:22:03PM -0400, Paul Moore wrote:
+> > Passing a NULL buffer into the lsm_get_self_attr() syscall is a valid
+> > way to quickly determine the minimum size of the buffer needed to for
+> > the syscall to return all of the LSM attributes to the caller.
+> > Unfortunately we/I broke that behavior in commit d7cf3412a9f6
+> > ("lsm: consolidate buffer size handling into lsm_fill_user_ctx()")
+> > such that it returned an error to the caller; this patch restores the
+> > original desired behavior of using the NULL buffer as a quick way to
+> > correctly size the attribute buffer.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: d7cf3412a9f6 ("lsm: consolidate buffer size handling into lsm_fi=
+ll_user_ctx()")
+> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+> > ---
+> >  security/security.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/security/security.c b/security/security.c
+> > index 5b2e0a15377d..7e118858b545 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -780,7 +780,9 @@ static int lsm_superblock_alloc(struct super_block =
+*sb)
+> >   * @id: LSM id
+> >   * @flags: LSM defined flags
+> >   *
+> > - * Fill all of the fields in a userspace lsm_ctx structure.
+> > + * Fill all of the fields in a userspace lsm_ctx structure.  If @uctx =
+is NULL
+> > + * simply calculate the required size to output via @utc_len and retur=
+n
+> > + * success.
+> >   *
+> >   * Returns 0 on success, -E2BIG if userspace buffer is not large enoug=
+h,
+> >   * -EFAULT on a copyout error, -ENOMEM if memory can't be allocated.
+> > @@ -799,6 +801,10 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uctx,=
+ u32 *uctx_len,
+> >               goto out;
+> >       }
+> >
+> > +     /* no buffer - return success/0 and set @uctx_len to the req size=
+ */
+> > +     if (!uctx)
+> > +             goto out;
 >
-> Reorder CAP_SYS_ADMIN last.
->
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> Acked-by: Alexander Gordeev <agordeev@linux.ibm.com> (s390 portion)
+> If the user just passes in *uctx_len=3D0, then they will get -E2BIG
+> but still will get the length in *uctx_len.
 
-Acked-by: Felix Kuehling <felix.kuehling@amd.com> (amdkfd portion)
+Right, which is the desired behavior, this patch allows userspace to
+not have to worry about supplying a buffer if they just want to check
+the required size, regardless of the value passed in @uctx_len.
 
+> To use it this new way, they have to first set *uctx_len to a
+> value larger than nctx_len could possibly be, else they'll...
+> still get -E2BIG.
 
-> ---
-> v4:
->     Additional usage in kfd_ioctl()
-> v3:
->     rename to capable_any()
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 3 +--
->   drivers/net/caif/caif_serial.c           | 2 +-
->   drivers/s390/block/dasd_eckd.c           | 2 +-
->   3 files changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> index dfa8c69532d4..8c7ebca01c17 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> @@ -3290,8 +3290,7 @@ static long kfd_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
->   	 * more priviledged access.
->   	 */
->   	if (unlikely(ioctl->flags & KFD_IOC_FLAG_CHECKPOINT_RESTORE)) {
-> -		if (!capable(CAP_CHECKPOINT_RESTORE) &&
-> -						!capable(CAP_SYS_ADMIN)) {
-> +		if (!capable_any(CAP_CHECKPOINT_RESTORE, CAP_SYS_ADMIN)) {
->   			retcode = -EACCES;
->   			goto err_i1;
->   		}
-> diff --git a/drivers/net/caif/caif_serial.c b/drivers/net/caif/caif_serial.c
-> index ed3a589def6b..e908b9ce57dc 100644
-> --- a/drivers/net/caif/caif_serial.c
-> +++ b/drivers/net/caif/caif_serial.c
-> @@ -326,7 +326,7 @@ static int ldisc_open(struct tty_struct *tty)
->   	/* No write no play */
->   	if (tty->ops->write == NULL)
->   		return -EOPNOTSUPP;
-> -	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_TTY_CONFIG))
-> +	if (!capable_any(CAP_SYS_TTY_CONFIG, CAP_SYS_ADMIN))
->   		return -EPERM;
->   
->   	/* release devices to avoid name collision */
-> diff --git a/drivers/s390/block/dasd_eckd.c b/drivers/s390/block/dasd_eckd.c
-> index 373c1a86c33e..8f9a5136306a 100644
-> --- a/drivers/s390/block/dasd_eckd.c
-> +++ b/drivers/s390/block/dasd_eckd.c
-> @@ -5384,7 +5384,7 @@ static int dasd_symm_io(struct dasd_device *device, void __user *argp)
->   	char psf0, psf1;
->   	int rc;
->   
-> -	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
-> +	if (!capable_any(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
->   		return -EACCES;
->   	psf0 = psf1 = 0;
->   
+True.
+
+> So I'm not sure this patch has value.
+
+Oh, but it resolves a kselftest failure in a released kernel, that's
+worth a *lot* in my mind.
+
+--
+paul-moore.com
 
