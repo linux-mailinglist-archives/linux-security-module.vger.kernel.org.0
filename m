@@ -1,149 +1,187 @@
-Return-Path: <linux-security-module+bounces-2189-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2192-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7A3E87DA24
-	for <lists+linux-security-module@lfdr.de>; Sat, 16 Mar 2024 13:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0C0687DAFD
+	for <lists+linux-security-module@lfdr.de>; Sat, 16 Mar 2024 18:17:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 768A7282143
-	for <lists+linux-security-module@lfdr.de>; Sat, 16 Mar 2024 12:20:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67695281602
+	for <lists+linux-security-module@lfdr.de>; Sat, 16 Mar 2024 17:17:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB6018B1A;
-	Sat, 16 Mar 2024 12:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BBDF1BC53;
+	Sat, 16 Mar 2024 17:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="A6EeWpqG"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D9518045;
-	Sat, 16 Mar 2024 12:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A591C2AC
+	for <linux-security-module@vger.kernel.org>; Sat, 16 Mar 2024 17:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710591616; cv=none; b=sXsORMyJifhH6cqTPQxCT2m0Sd1O02ADczuEHkqo4qRPEFmn8R23TwaLQWIB1d937IPsRyteMnjq1jsSsMk3W889aemRF35I+JgM35iZKmAzCOvCHCYQ0Dee3IchIRGZgwKE83GeFxc02Eag1XAtnOwftQRLGEPXT1trytxezOM=
+	t=1710609451; cv=none; b=bt8RqumKtcIzr+I+jzTxqqVhsdEtnVFw1zD2fva1QjXUH30PRT0Lpbp/7A0F7k7OinRCexCsmwCVnyqhGJgbjMAU6e+QYyWBnwXALr2ir4mP4CSXfaC5POtAMBEz5bkrArGYJ83gkyH1OX7//2gEOEPHk6Uqy+VeW0iEupNp/XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710591616; c=relaxed/simple;
-	bh=/CxeULT5kR+RD3NSe0u40FOQAIPQdqzrfrThysSCq1k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uZzXZpp/BvT6zDKgv7WMciyTESuUTqxhGoX3u0/Q0dy13hwFHdeT2bmo669mO631ltV9XM6t84qbOz9aMWmo9KcWXOAtekxp4HyeA3mfshd4NXZBKkKjEzsIg7i1wxkbUxNGwNhwY90ZXqrMtsKwN0C8Ooi1J73kJrUt86IVFr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4TxgDF2HzXz4f3n6m;
-	Sat, 16 Mar 2024 20:19:57 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 1F6051A0C72;
-	Sat, 16 Mar 2024 20:20:05 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP1 (Coremail) with SMTP id cCh0CgCXsQpyjvVls7GEHA--.54843S7;
-	Sat, 16 Mar 2024 20:20:04 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Florent Revest <revest@chromium.org>,
-	Brendan Jackman <jackmanb@chromium.org>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Khadija Kamran <kamrankhadijadj@gmail.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	John Johansen <john.johansen@canonical.com>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Subject: [PATCH bpf-next 5/5] bpf: Fix compare error in function retval_range_within
-Date: Sat, 16 Mar 2024 20:23:59 +0800
-Message-Id: <20240316122359.1073787-6-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240316122359.1073787-1-xukuohai@huaweicloud.com>
-References: <20240316122359.1073787-1-xukuohai@huaweicloud.com>
+	s=arc-20240116; t=1710609451; c=relaxed/simple;
+	bh=kxTk/zWbrWQmT2PYOeEcrde+if1JXoN1MgZJTpb862Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dPwIHUuEHAF709bxo6HA/CbEG1NVZtBqNdWMCoonCixwnx7naddb/89bB5MeHDJH3RZ5v37MGY6u4mWXtqPQgmx8uJ0v28cT8FLU8S6sPy/tg7p+dKtVuIwkb590tpNpw/BOEoF3GWDDNmRcRBsq2kaA5hzL7eOsMd7SkoXgw/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=A6EeWpqG; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6e6ca65edc9so887072b3a.0
+        for <linux-security-module@vger.kernel.org>; Sat, 16 Mar 2024 10:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1710609449; x=1711214249; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KwyFsUDC4cYPBKX6IfNABRcCDq2xzgMKMVjZ16s/Y7M=;
+        b=A6EeWpqG+nmbCu0wSHseUQeGvokZdhBMidrggEr0tnxAQeYjRw6WoWlm998jDJoEIx
+         Pi0O3+Rv5R+m2zLvBVYx6Lt5DkOuWuVlsAMn2RmLJ6d+boB92d9OSp0/wKbBQG7e14nu
+         P7atWzkM2tOGL3b30wVOlijUBZrusivefI+VNd/en+TtqjeEUWdgTi/NmGqbumKyPTRM
+         fDs8reh4hGRJqIbi+R4pOAZmBnfvzLoWgBnfCXK8Ss5NVyglvjV/vbS/+BT35W186jQ2
+         8BpMiXasdd3uUSiKtp5xz6POfwFiD9YxKxasaHHoPl5h3pTvLKnGhVNIDbBTBzQrm33Y
+         SP2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710609449; x=1711214249;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KwyFsUDC4cYPBKX6IfNABRcCDq2xzgMKMVjZ16s/Y7M=;
+        b=PUTRrpldTkqTRo5nkoEGHkH5EzHANTCtTawzRABNbAsRc2ad4M8+7sCRsSf08HL4bD
+         CbsaIM3D9HUVJaIG/UmIyJ+WRTyDrrUWI8roavk/uURC7LGFosoLUrVA3REAF8zFyYmh
+         L8PaZslaHTGNJ9RWjNAlhoKK96d304Zk7DKwuPVXoYQIvJ4+dL+hodkfx/wqAgAL2ZDH
+         hC1qUOyFHsKz06lzhPWKkNaHY/gkHM69R61zDGpS/hx8aPb/YRlHwV2JHbzEAsC5zaXp
+         LcOnS3ia7cjByNhmnzJOUAvMizYtg8W2R+eIZSBwjv6lsrLK7ghcyUOEcSRRse/rqezy
+         5z2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWo/sO1coVkjjwIhK6QyRNqNxOoGTmcCzT1wWW6SovXEVdUqUv5XpZNz2Qu40FEB6fZE5XFE7sd8qvOOb6WCojXOA70T8tQURP+qogW5VbJI0cGzZ8Q
+X-Gm-Message-State: AOJu0Yy1Iod0YzLJH059RFEAPIXp9/7pG1QoKcAPLicjtO6WLg4XHt3N
+	E76EBReOukQJqUYYYHBJN7OIGjkYvipS1WmxRkC/X78Hw9Di8kADOm0ebbeQeeg=
+X-Google-Smtp-Source: AGHT+IG3DPOFC1jCqg0VsU6zQ3yiocZQTZSrqg+K4gBfn0DXYa5cYs2kvobaBYLoCDVrM0MSeTmAvw==
+X-Received: by 2002:a17:902:d2ce:b0:1df:fbc3:d130 with SMTP id n14-20020a170902d2ce00b001dffbc3d130mr2372826plc.1.1710609448903;
+        Sat, 16 Mar 2024 10:17:28 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.194])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090311cc00b001db9e12cd62sm6011304plh.10.2024.03.16.10.17.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Mar 2024 10:17:28 -0700 (PDT)
+Message-ID: <4405edd4-f20f-4040-ad67-aca3fcd7eff3@kernel.dk>
+Date: Sat, 16 Mar 2024 11:17:26 -0600
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgCXsQpyjvVls7GEHA--.54843S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfWF4kKw15tF1kuw13twb_yoW8Zr1fpF
-	1rGr1qyw4DXr43W3yjyr4kA3yrK3Wjqw47KFWkC34Fyw15tryqgF4UKw4akrW5KrW8Ww1S
-	vF12v3yYqa4UuaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/10] capability: add any wrappers to test for multiple
+ caps with exactly one audit message
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+ linux-security-module@vger.kernel.org, linux-block@vger.kernel.org,
+ Serge Hallyn <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20240315113828.258005-1-cgzones@googlemail.com>
+ <20240315113828.258005-2-cgzones@googlemail.com>
+ <CAEf4BzZF0A9qEzmRigHFLQ4vBQshGUQWZVG5L0q2_--kx4=AXA@mail.gmail.com>
+ <0f8291f7-48b1-4be1-8a57-dbad5d0ab28c@kernel.dk>
+ <CAEf4BzbgQrYDMma=NbW6A-qikA693eSnz9-RwjkF3xPLRE8qqg@mail.gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAEf4BzbgQrYDMma=NbW6A-qikA693eSnz9-RwjkF3xPLRE8qqg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On 3/15/24 3:16 PM, Andrii Nakryiko wrote:
+> On Fri, Mar 15, 2024 at 11:41?AM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 3/15/24 10:45 AM, Andrii Nakryiko wrote:
+>>>> +/**
+>>>> + * ns_capable_any - Determine if the current task has one of two superior capabilities in effect
+>>>> + * @ns:  The usernamespace we want the capability in
+>>>> + * @cap1: The capabilities to be tested for first
+>>>> + * @cap2: The capabilities to be tested for secondly
+>>>> + *
+>>>> + * Return true if the current task has at least one of the two given superior
+>>>> + * capabilities currently available for use, false if not.
+>>>> + *
+>>>> + * In contrast to or'ing capable() this call will create exactly one audit
+>>>> + * message, either for @cap1, if it is granted or both are not permitted,
+>>>> + * or @cap2, if it is granted while the other one is not.
+>>>> + *
+>>>> + * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
+>>>> + *
+>>>> + * This sets PF_SUPERPRIV on the task if the capability is available on the
+>>>> + * assumption that it's about to be used.
+>>>> + */
+>>>> +bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
+>>>> +{
+>>>> +       if (cap1 == cap2)
+>>>> +               return ns_capable(ns, cap1);
+>>>> +
+>>>> +       if (ns_capable_noauditondeny(ns, cap1))
+>>>> +               return true;
+>>>> +
+>>>> +       if (ns_capable_noauditondeny(ns, cap2))
+>>>> +               return true;
+>>>> +
+>>>> +       return ns_capable(ns, cap1);
+>>>
+>>> this will incur an extra capable() check (with all the LSMs involved,
+>>> etc), and so for some cases where capability is expected to not be
+>>> present, this will be a regression. Is there some way to not redo the
+>>> check, but just audit the failure? At this point we do know that cap1
+>>> failed before, so might as well just log that.
+>>
+>> Not sure why that's important - if it's a failure case, and any audit
+>> failure should be, then why would we care if that's now doing a bit of
+>> extra work?
+> 
+> Lack of capability doesn't necessarily mean "failure". E.g., in FUSE
+> there are at least few places where the code checks
+> capable(CAP_SYS_ADMIN), and based on that decides on some limit values
+> or extra checks. So if !capable(CAP_SYS_ADMIN), operation doesn't
+> necessarily fail outright, it just has some more restricted resources
+> or something.
+> 
+> Luckily in FUSE's case it's singular capable() check, so capable_any()
+> won't incur extra overhead. But I was just wondering if it would be
+> possible to avoid this with capable_any() as well, so that no one has
+> to do these trade-offs.
 
-After checking lsm hook return range in verifier, the test case
-"test_progs -t test_lsm" failed, and the failure log says:
+That's certainly a special and odd case, as most other cases really
+would be of the:
 
-libbpf: prog 'test_int_hook': BPF program load failed: Invalid argument
-libbpf: prog 'test_int_hook': -- BEGIN PROG LOAD LOG --
-0: R1=ctx() R10=fp0
-; int BPF_PROG(test_int_hook, struct vm_area_struct *vma, @ lsm.c:89
-0: (79) r0 = *(u64 *)(r1 +24)         ; R0_w=scalar(smin=smin32=-4095,smax=smax32=0) R1=ctx()
+if (capable(SOMETHING))
+	return -EFAUL;
 
-[...]
+Might make more sense to special case the FUSE thing then, or provide a
+cheap way for it to do what it needs to do. I really don't think that
+kind of:
 
-24: (b4) w0 = -1                      ; R0_w=0xffffffff
-; int BPF_PROG(test_int_hook, struct vm_area_struct *vma, @ lsm.c:89
-25: (95) exit
-At program exit the register R0 has smin=4294967295 smax=4294967295 should have been in [-4095, 0]
+if (capable(SOMETHING))
+	do something since I can
+else
+	bummer, do something else then
 
-It can be seen that instruction "w0 = -1" zero extended -1 to 64-bit
-register r0, setting both smin and smax values of r0 to 4294967295.
-This resulted in a false reject when r0 was checked with range [-4095, 0].
+is a common occurrence.
 
-Given bpf_retval_range is a 32-bit range, this patch fixes it by
-changing the compare between r0 and return range from 64-bit
-operation to 32-bit operation.
+> We also had cases in production of some BPF applications tracing
+> cap_capable() calls, so each extra triggering of it would be a bit of
+> added overhead, as a general rule.
+> 
+> Having said the above, I do like capable_any() changes (which is why I
+> acked BPF side of things).
 
-Fixes: 8fa4ecd49b81 ("bpf: enforce exact retval range on subprog/callback exit")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, the BPF tracking capable in production is a pain in the butt, as it
+slows down any valid fast path capable checking by a substantial amount.
+We've had to work around that on the block side, unfortunately. These
+are obviously cases where you expect success, and any failure is
+permanent as far as that operation goes.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c3387357bc0d..36cd13982926 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9864,7 +9864,7 @@ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
- 
- static bool retval_range_within(struct bpf_retval_range range, const struct bpf_reg_state *reg)
- {
--	return range.minval <= reg->smin_value && reg->smax_value <= range.maxval;
-+	return range.minval <= reg->s32_min_value && reg->s32_max_value <= range.maxval;
- }
- 
- static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
 -- 
-2.30.2
+Jens Axboe
 
 
