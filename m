@@ -1,122 +1,216 @@
-Return-Path: <linux-security-module+bounces-2347-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2349-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0EC488E692
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 15:39:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E6ED88E8DC
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 16:25:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B7062C4749
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 14:39:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98D361C3025D
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 15:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9C4156F59;
-	Wed, 27 Mar 2024 13:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A62286AF;
+	Wed, 27 Mar 2024 15:19:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lnTBa5uq"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZUjmSrHU"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A607D157472
-	for <linux-security-module@vger.kernel.org>; Wed, 27 Mar 2024 13:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86B612FF60
+	for <linux-security-module@vger.kernel.org>; Wed, 27 Mar 2024 15:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711545073; cv=none; b=AUbmk1ZstR1Zp03AEg4H2IoKpZ1F9qzhb6X+Z4yn3+ujCOugxULNw7tfhoGNNtB8MHhSXwKCyE1wD2UdYSMlwPIxinxBBL8jr+Ppw3WMrwW10OzwYzQt80SJmutqzmOSL3uACZa1Qt7JyHag0809yrJXfHL4a8qPAIN3fSVvlXU=
+	t=1711552742; cv=none; b=YPMVVJ1GBUfIKev6T8dNRrdvrGtl72O/qnzJctPmoeqBzAq2TKDnq8of4qm0A6Jtxm0AqDnmr1MIiwEd2oDyzVHdxCZaWwWHvj5v+S1ru36aSmnw2McjkCbePj+9Y2K8oAhPV0Rod2ek5HFKkAh6xKzIWjaunteDMdhmrELEL+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711545073; c=relaxed/simple;
-	bh=DaxfOx5juRgkGT1onoeBml+KzX99DS3H5Kfd98iKnRA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gl3yb5OOL7oqDM81gJ/w8QfR3FTdMCnS4MieSnI9YEgIypbeoj9wwZkcfe+N0CDAhpQ35KWyly7BDFi2bWjacGxKV8b7s8XWnAHhn8HDrJFbbnAhmEoi7mBo57B+6xTMY03fZdF6Sq/STSbnQPUsjWRjd00gXO000LZlVKh/SEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--gnoack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lnTBa5uq; arc=none smtp.client-ip=209.85.218.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gnoack.bounces.google.com
-Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-a4a356fc0d1so72343766b.3
-        for <linux-security-module@vger.kernel.org>; Wed, 27 Mar 2024 06:11:10 -0700 (PDT)
+	s=arc-20240116; t=1711552742; c=relaxed/simple;
+	bh=cYV47wSqDLz/DZEO4hDxq39ar8uuEH/aAHyDveZz6OM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tcBGfiTlA2YRQ4DfGTgpR+XwIZ9arUtcVdL541/feD7fUVkpgaychlTQzmf1B1LdbUwi4jbWOBjuIRUIRsEPfTm0p0imT8iraUKWx/g0dOppehiltLLE3IyJqXTF2uYVqdREZquYHk4UR3JoDN+oUmnA5errg3GKgFFQMiLy1Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZUjmSrHU; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dc74435c428so6751455276.2
+        for <linux-security-module@vger.kernel.org>; Wed, 27 Mar 2024 08:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711545069; x=1712149869; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JyYxrfp8pIz08BwXl1sIdsAZMNI11A0A6tQ7MGaWE3A=;
-        b=lnTBa5uqfVtfS29tUfP5h5yCrCyZWNqmNSPAdyChw/rok2c8rtAMBOK2Cn4IPjEeQp
-         oMha+GFLF/sJG6ZFG3zUtJeQWtDJ1/RJ1i7H2pqt098wVkHvTpn0/xKmLssZzyhpegVX
-         NShBh+V2YwQ36iTIWcjjJGZyqD/9p2VTYQkxQ6dhhi2UZlNR1o3pecJdGjol2dDAxd+X
-         gIRy/vC1JTB/ZSKJPVkaNd/uI6xowdznOhNEYBjgUha4cCmhF00+qoin47v3fRjCfKFv
-         XjkYXT7uE2+QlHL4FZANl2wiW6Zgm4E58tWR9z/UbyeXvi+MNt2Z/rd1J57C40Vkjax7
-         FbEA==
+        d=paul-moore.com; s=google; t=1711552739; x=1712157539; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yq59GO0FnyPqwHqxe0IeQ1op8rTclciPhd2Wg71JmLk=;
+        b=ZUjmSrHULF9DSCJB/rh9PcAuzAu0bLBNQQA/Ok09JJfiXS1GipjKqPAQVTQEj3lk3P
+         QOiMOw1N8J9d/slTlGfTups3MkIwoZFGpqlpDVWXqwNVhR+AG80b0xFddgoDUmyXsgPR
+         TGcXD5wFjvTB+9FPB4tDptUOLn8vjOOz5Z+SzX9ce1WR8GXMDL5D4y0NFP4HZGvC3c9Q
+         SmwLAdhJdTvRo8nj/9mR/Lwv32YaVR8dA6tHuh7ZPTEnLbstHQFVag4vhm6B+mexr4ok
+         OM0XzbZtTtKg4mHAVJIM1Xp9sek8mzu/AU4XYTOZ9lnCvCQJDAjelYbINF46+2TDHFpW
+         gKIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711545069; x=1712149869;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JyYxrfp8pIz08BwXl1sIdsAZMNI11A0A6tQ7MGaWE3A=;
-        b=Nh2GjqZzdMFFDE9rJgY1P2/dAJVz+eKZIdd7bsfuAw8/vL40rliWdIVj346Z+2Au6e
-         jI8xHWdRxOBmxaJPTUZmE+4VLUKzSh0qG2AMYH0rYYPOVlMtrGquUe8EKME4X+1G8wQG
-         IAWth6cO0AW3NIDJzm1HId3CUk0NRStNlbHzsgzifQwm+TsCD4Dqr1uwGrBiUGONbB1k
-         qZAo7MuBcETzP5NgkX8xZeo1XS78pQlR1SXcXGYamxMh04Ym0fg/s+woCM5rCfc6PwmI
-         +j2nVai2SLeQW7Md6lk3CnVL3uk2isKEIW/tRWU+ZvDTZvXZSDv6k0jQIG7dDa4WmNf+
-         wBcQ==
-X-Gm-Message-State: AOJu0YwK3BMNkekPcjMayLXqA2h9opGB/MpJ9pmQ+P9Lrh3GVAUpEG1A
-	FX6k9ms0byYqoTvyJSc1THBj3x0CdHAXxAhsou8dB0invKp1jJScl7MsPQEjrfo5hcrfye4Zt8+
-	P6AufJy9G//h4XLHaFY3gqY9pZWtgnG568DPhOvMEDqwg/CbGmDFnlbDaeGw+TssX5ZGQSEb5b7
-	3JSSin1yIgumuu8QP6uhACpdG7RLkcIWcw7mD4Ys07aOSlrRmO8zP0
-X-Google-Smtp-Source: AGHT+IE0fDcnEvDqGJg1fVMOQ6R5gkGljbJZHgo/+asP4z0tgVwIay2ta6riix8G+ncHSOmPx2WqFOJsbtU=
-X-Received: from swim.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:1605])
- (user=gnoack job=sendgmr) by 2002:a17:906:a1d0:b0:a47:1499:6de0 with SMTP id
- bx16-20020a170906a1d000b00a4714996de0mr61846ejb.7.1711545068926; Wed, 27 Mar
- 2024 06:11:08 -0700 (PDT)
-Date: Wed, 27 Mar 2024 13:10:40 +0000
-In-Reply-To: <20240327131040.158777-1-gnoack@google.com>
+        d=1e100.net; s=20230601; t=1711552739; x=1712157539;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Yq59GO0FnyPqwHqxe0IeQ1op8rTclciPhd2Wg71JmLk=;
+        b=fSOBcL+xXFoWIgifopIgpI48Ao68W6R+fqfXjsfVGEUUeZ8hKPdKu456og62gyN3Gu
+         bLtRTkSnNGrkgCJ3Fj8I1tfkFPQv08viTS1MnxD6Wh5iinWiFefz6Me7AJyXeWJSwm8J
+         83qah3kKg0mDd1X8NlRaWRrTapjT3RbfUPVaMX7YD9l/Fb8CWT839iZo34erT+IDfEST
+         d0Yb0z3hsY+Yc/DHdXxl3SUcNBkrB6sMyUrtRk+ZtCEEo3M7XhbzzBVARyQR62Z2jg5Z
+         /kiCHMAEtowib9koombWezAliFevvm7PNxwARkB21FOeyKjwcRMuwWy34pGce6+xvY/t
+         xwkQ==
+X-Gm-Message-State: AOJu0YySY1w28L48hSWahJkotT2ZEoch0e6WYzBjEco7Sqr0iQzVmelY
+	1wXhc/jMeuJYSCwHbB5eMib44WYbPgL9wmzkV02ZpvnruOq4DxeMhcokA4TNiwk23S1sCDVkxmd
+	yFjFpVofpFtTHgnboSUPbQcFUXJAruafR7M3oI+UwAImXpgQ=
+X-Google-Smtp-Source: AGHT+IHSXeWROPJJ2oeP5xwdcr6BxMf0BxB4uDqqigtM0cMsC1fTkS6aEH/hbvfDj93A8rCd+7Qq8H2441U397mHFiY=
+X-Received: by 2002:a25:b28c:0:b0:dcb:fa70:c09 with SMTP id
+ k12-20020a25b28c000000b00dcbfa700c09mr94463ybj.28.1711552738637; Wed, 27 Mar
+ 2024 08:18:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240327131040.158777-1-gnoack@google.com>
-X-Mailer: git-send-email 2.44.0.396.g6e790dbe36-goog
-Message-ID: <20240327131040.158777-11-gnoack@google.com>
-Subject: [PATCH v13 10/10] fs/ioctl: Add a comment to keep the logic in sync
- with the Landlock LSM
-From: "=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>
-To: linux-security-module@vger.kernel.org, 
-	"=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>
-Cc: Jeff Xu <jeffxu@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Jorge Lucangeli Obes <jorgelo@chromium.org>, Allen Webb <allenwebb@google.com>, 
-	Dmitry Torokhov <dtor@google.com>, Paul Moore <paul@paul-moore.com>, 
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <repnop@google.com>, 
-	linux-fsdevel@vger.kernel.org, 
-	"=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>
+MIME-Version: 1.0
+References: <20240324223231.6249-1-greg@enjellic.com> <CAHC9VhQ22ef_o_OYue93RZfff70LPuOaCuN7Czv7HiEy346Svw@mail.gmail.com>
+ <20240326103047.GA19964@wind.enjellic.com> <CAHC9VhQvN43LL-ynV-ZZgR2L8wFfUeq2-SZb5QHh9ZMWtz4C1A@mail.gmail.com>
+ <20240327091644.GA32347@wind.enjellic.com>
+In-Reply-To: <20240327091644.GA32347@wind.enjellic.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 27 Mar 2024 11:18:47 -0400
+Message-ID: <CAHC9VhSjjeBH2CE5i+PK9Zyg661k-ryDbYkoPLtEe-g52DW0Fw@mail.gmail.com>
+Subject: Re: [PATCH] Do not require attributes for security_inode_init_security.
+To: "Dr. Greg" <greg@enjellic.com>
+Cc: linux-security-module@vger.kernel.org, roberto.sassu@huaweicloud.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Landlock's IOCTL support needs to partially replicate the list of
-IOCTLs from do_vfs_ioctl().  The list of commands implemented in
-do_vfs_ioctl() should be kept in sync with Landlock's IOCTL policies.
+On Wed, Mar 27, 2024 at 5:17=E2=80=AFAM Dr. Greg <greg@enjellic.com> wrote:
+> On Tue, Mar 26, 2024 at 03:12:37PM -0400, Paul Moore wrote:
+> > On Tue, Mar 26, 2024 at 6:31???AM Dr. Greg <greg@enjellic.com> wrote:
+> > > On Mon, Mar 25, 2024 at 05:08:54PM -0400, Paul Moore wrote:
+> > > > On Sun, Mar 24, 2024 at 6:33???PM Greg Wettstein <greg@enjellic.com=
+> wrote:
+> > > > >
+> > > > > The integration of the Integrity Measurement Architecture (IMA)
+> > > > > into the LSM infrastructure introduced a conditional check that
+> > > > > denies access to the security_inode_init_security() event handler
+> > > > > if the LSM extended attribute 'blob' size is 0.
+> > > > >
+> > > > > This changes the previous behavior of this event handler and
+> > > > > results in variable behavior of LSM's depending on the LSM boot
+> > > > > configuration.
+> > > > >
+> > > > > Modify the function so that it removes the need for a non-zero
+> > > > > extended attribute blob size and bypasses the memory allocation
+> > > > > and freeing that is not needed if the LSM infrastructure is not
+> > > > > using extended attributes.
+> > > > >
+> > > > > Use a break statement to exit the loop that is iterating over the
+> > > > > defined handlers for this event if a halting error condition is
+> > > > > generated by one of the invoked LSM handlers.  The checks for how
+> > > > > to handle cleanup are executed at the end of the loop regardless
+> > > > > of how the loop terminates.
+> > > > >
+> > > > > A two exit label strategy is implemented.  One of the exit
+> > > > > labels is a target for the no attribute case while the second is
+> > > > > the target for the case where memory allocated for processing of
+> > > > > extended attributes needs to be freed.
+> > > > >
+> > > > > Signed-off-by: Greg Wettstein <greg@enjellic.com>
+> > > > > ---
+> > > > >  security/security.c | 24 ++++++++++++------------
+> > > > >  1 file changed, 12 insertions(+), 12 deletions(-)
+> >
+> > ...
+> >
+> > > > Looking at this quickly, why does something like the following not =
+work?
+> > > >
+> > > > [Warning: copy-n-paste patch, likely whitespace damaged]
+> > > >
+> > > > diff --git a/security/security.c b/security/security.c
+> > > > index 7e118858b545..007ce438e636 100644
+> > > > --- a/security/security.c
+> > > > +++ b/security/security.c
+> > > > @@ -1712,10 +1712,7 @@ int security_inode_init_security(struct inod=
+e *inode, str
+> > > > uct inode *dir,
+> > > >        if (unlikely(IS_PRIVATE(inode)))
+> > > >                return 0;
+> > > >
+> > > > -       if (!blob_sizes.lbs_xattr_count)
+> > > > -               return 0;
+> > > > -
+> > > > -       if (initxattrs) {
+> > > > +       if (initxattrs && blob_sizes.lbs_xattr_count) {
+> > > >                /* Allocate +1 as terminator. */
+> > > >                new_xattrs =3D kcalloc(blob_sizes.lbs_xattr_count + =
+1,
+> > > >                                     sizeof(*new_xattrs), GFP_NOFS);
+> > >
+> > > We ran with something similar to the above for several days of TSEMv3
+> > > testing.
+> > >
+> > > For the patch that we submitted upstream, we elected to take a 'belt
+> > > and suspenders' approach that isolated the 'no attributes' execution
+> > > flow from the flow followed if extended attributes are present.
+> > >
+> > > The approach used doesn't make any difference to us as long as we get
+> > > the functionality of the hook restored.
+>
+> > I'd prefer the simpler approach.  I'd likely also prefer we park
+> > this patch until it is needed upstream, or am I misunderstanding
+> > things and upstream is currently broken without a fix like this?
+>
+> As of the 6.8 release, a security handler that previously functioned
+> in a consistent manner now functions inconsistently depending on the
+> LSM stacking configuration that is in effect.
 
-Signed-off-by: G=C3=BCnther Noack <gnoack@google.com>
----
- fs/ioctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+In Linux v6.8[1] only Smack and SELinux provide implementations for
+the security_inode_init_security() hook, and both also increment the
+associated lsm_blob_sizes::lbs_xattr_count field.  While the behavior
+of the hook may have changed, I see no indications of any harm with
+respect to the standard upstream Linux kernel.  We obviously want to
+ensure that we work to fix harmful behavior, but I simply don't see
+that here; convince me there is a problem, send me a patch as we've
+discussed, and I'll merge it.
 
-diff --git a/fs/ioctl.c b/fs/ioctl.c
-index 1d5abfdf0f22..661b46125669 100644
---- a/fs/ioctl.c
-+++ b/fs/ioctl.c
-@@ -796,6 +796,9 @@ static int ioctl_get_fs_sysfs_path(struct file *file, v=
-oid __user *argp)
-  *
-  * When you add any new common ioctls to the switches above and below,
-  * please ensure they have compatible arguments in compat mode.
-+ *
-+ * The commands which are implemented here should be kept in sync with the=
- IOCTL
-+ * security policies in the Landlock LSM.
-  */
- static int do_vfs_ioctl(struct file *filp, unsigned int fd,
- 			unsigned int cmd, unsigned long arg)
+If we are talking about future code, simply include the change with
+the associated patchset.
+
+If we are talking about out-of-tree code, that's something else.
+
+[1] In Linux v6.9-rc1 this grows to include EVM, but EVM also provides
+both a hook implementation and a lbs_xattr_count bump.
+
+> Perhaps more problematically, when the handler does not function
+> correctly, there is no indication of that fact passed upward to the
+> LSM invoking the handler.  This would cause the LSM to conclude that a
+> security relevant action was conducted when it did not actually occur.
+>
+> I believe we would all universally conclude that having security
+> critical infrastructure function in a consistent and reliable manner
+> is of benefit, so we should return the previous behavior of the
+> handler, particularly since it can be done with a one line fix if that
+> is your preference.
+
+You need to demonstrate the harm caused to the upstream Linux kernel,
+either a proper tagged release in Linus' tree, the current development
+code in Linus tree, or a subsystem branch/repository.
+
+> If you would be so kind, please put a 'Reported-by:' tag on whatever
+> you commit upstream.
+
+As you initially submitted a patch for this, it would be preferable if
+you would send a patch ... if necessary (see above comments).  Of
+course if you are unable to do so, and we all agree that a problem in
+the upstream kernel exists, I can submit a patch with the appropriate
+credit.
+
+I will mention that bug fixes like this are a great way for new
+contributors to gain experience working with the upstream Linux
+kernel; I would encourage you to see this through.  As frustrating as
+this might be, debates like this are part of the process :)
+
 --=20
-2.44.0.396.g6e790dbe36-goog
-
+paul-moore.com
 
