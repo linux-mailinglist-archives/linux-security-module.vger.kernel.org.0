@@ -1,289 +1,290 @@
-Return-Path: <linux-security-module+bounces-2352-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2355-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0ED088E987
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 16:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC4A988EC36
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 18:12:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F6451C30FA9
-	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 15:42:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B3711C28686
+	for <lists+linux-security-module@lfdr.de>; Wed, 27 Mar 2024 17:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F8E130A60;
-	Wed, 27 Mar 2024 15:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC79314E2E2;
+	Wed, 27 Mar 2024 17:12:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WevJ7zL2"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="YdAl/ae5"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4E6130A4F;
-	Wed, 27 Mar 2024 15:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B6414E2F1
+	for <linux-security-module@vger.kernel.org>; Wed, 27 Mar 2024 17:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711554020; cv=none; b=QPqO5Tzan/tlquBK9wxXbB/yEL5oFyrhr3Xpu6KmMRuyfMlKdoUg2UfY8Ij5bLDosrBdTEojuZw0sJDogoq1o84i4pO/tPU3ewhZiH9arapjTi3lacSijn/APF0EAqtp6o8ZGLbGqkB5VxOknIhnN8jjGOJ8EhkVugkEVjPP7xY=
+	t=1711559521; cv=none; b=MhKBkHejgI9nhlNNDIeKLaZD2jl9qirGJTwCq7LhogGxI0FkD6TQZGuDaJUDoiMVFsNbZK1pcsbHJxex8QXV/QR5PnBgXi1uNYaX2KCUq2IUq2HaYObk7UtFMR/nM//UBfUF+9PjZh+f5FT0wNh1ddIjcDH7u3WaVIeZiscFXH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711554020; c=relaxed/simple;
-	bh=0kU1Y1g7b5S7SzsNPgZKwi7JQaJEmDAsXvKCtpVKdQI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=M6Gjx2Fkdf4IDjFb6WeqHlWtyxmHk1kkAwCmbnBMK/g27QhdQvjnBXEkup1vX8BvLQ4wyFS4Ca5mSfg7y4w5DPc8S7P13v4KcuomMQps6q0yEOjaRA4jxYsExkqDmskyY2PwmYDWZG5hg9Mj6zraIqNrhq/tRoVwwyeTwzUG+Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WevJ7zL2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2B8C433C7;
-	Wed, 27 Mar 2024 15:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711554019;
-	bh=0kU1Y1g7b5S7SzsNPgZKwi7JQaJEmDAsXvKCtpVKdQI=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=WevJ7zL2SbneDrByZF4xuhxghlDU0PwsMnc75tQheSw2fbENgrL/WTKvlrn86wr8k
-	 tfwpXXuyIlggJd0lUame2pkRb2yrpEiJkgjALyUJgan0RJLEl3QRdTufbHgc3lNCWm
-	 qWsGQJar+deai9SBnqn5wj2jxTHN/c6htYxJaS7FpeEJfduk7IweGaDdm0zKrVM3Gv
-	 Vj5FfArk0sKufcVVKFNwE+IcwwirRu4Oocz3PhGjflHNyIOqFFOzhzkrtHAwHWtMEM
-	 rlBWmNdj9so1KCAJo28yXf7e4D92yzkmrBOgpCnEl8NWL6h87AG6R2pcw8ayo+W2JU
-	 dJ3K6mIOrX/+Q==
+	s=arc-20240116; t=1711559521; c=relaxed/simple;
+	bh=gmH+uTacPzjyp7Yurex/z4wPGEI7RsT5ppa+mADoqcY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hEI02Lxnbl8a91n40RA0qOpR98t73Zw8j25AF2R846QJy/SrybSu55gubFptfmD59Z7Wjhzh5gjv2Be4Q3mRacBpvFAe54PbwsiAuo8QH2oxz8EOcuD03J5tG7uZ2Fvz5K+tQmQEe8789grQe9xVe4Pi+QVO0/P5McZfi5aMyqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=YdAl/ae5; arc=none smtp.client-ip=66.163.189.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1711559513; bh=S4s/cRuVn8aOsyEwWy6dTN26SfAB3+28DeSKA/yH8YI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=YdAl/ae5ufidZgQOt+ViQhr/+/yr4mzxK6WF3dcT6XVWssTg6sBbPEA7GW2qAPMoQ6NA4S50QszNwoqDTYC46lt5GP6ASgE+DO3qWsgnLMp7dOsdo///8A3VTE/iI8aYz74bSpZvBLLWztL/SLuVr+PdaI2V/9E+UehQCSche5/4Q06q+uJatQTvOy/ImMsI0GZY6WMjNGmHvRUhxNLYzielUQEI/ARqUOWsmnLmE9DR2V/nWgGgjpUYLqQezoDYO5M2mA62/ieavx/eESQJiVLk3Kv78Z9g6Xzm8Tw9xBH8YWpAZQgiFQTfd721ink2SWJWzMITw2Am7I6K69yfpQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1711559513; bh=sLOWVUioAOPB9XF4o+C/pzRJ05tZvIfEvqVuA86OJo3=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ukvoBRV8Z+KJm8tkjLKHFSZHo/86FL/5D94Fp9sLk1hXTzB85K2PddvyiQ41Q69pdkSJX3FUrZL0rqxQXKQlms1M63TxqCDQ7giGC4N7mgXFpkjsdrYGo3hElEmG1kchZkfRO0EW7n+8+Ep8YGn/9Ja8oM+1D2fgCoJQGMaIITbs0BFoNt0OSAWZnRTu/P0cmhGhVhGbJpCtGV3kjEQe9u2ZX4SuWq8DrsScO4zT84bGeLnS9ACD8TUr/tYM+k1vLkW4iGUQqihvnuSHz+yHAj4h+tTQK2ptGSuBxsvo5uu3KSYXHKOazxZlECt+G9DcMaTT/f04jZXpNKu/vLA8EQ==
+X-YMail-OSG: YvPU9YQVM1lEBtPAUIB9HWblh9TRRUZhYxzmSA0si_DL1F1kzQ.9fjOyiKsIwQk
+ qbZ1Dm4zEq5HgN5_4JjAuxs9SgBdW9y_8t0VNBNwRASwDu9Y11dKSynIAkF9eFBP0I77FmB2hxrm
+ WwnDUMGi1iT0ZKXPK_hD6YqcOWutdt_mbacCYySgZIyhpng_m.zda566cvOraagqDHwLO7qHOyCO
+ iWRZ0NMp4fLRAipraMlgPBMcxZm_O7DX7ZLuB.0PI8mMhH..B5IdNu64jIChH67.PRdNus8L1Mwe
+ 35Xq2FskOcSaFTHltkMfKgv_Wzx3WZnteH3Nnz8MRpmjb8lET0QSZ.GQRjLK95t3llvsr5BRAlcc
+ T92dwmazwKovBxZnS.JHmK37aWUg.I1I7cvn8o9VjhF7QrioGdpVCGW_.dCHejK0_DTdW2xa81aF
+ jvmnuISsPPrSJ2ovDZxvP.nV.XxdC3lueoasQQr7kTuw8MlQIy.FjGDpmkZkukZoStycr64CSz_1
+ cSlpDj4ulSvF.fSvlOLe4E3569OLrFHEDX3eBu6EfKejWgLOPGX5Sy1gy3w9Q2zSBpgdRXufZBo6
+ LmzQ_2JL63TLVtziakxg38pWFfuJaJ255wSDJC.9OblVvXKHKZUAFwu2g1eR54TvXh3YRQ62CETI
+ D5F_mFIz5ciGmMsGZTME8iISLku0dzBKO8cM3CehgR6LhEgHhb1X08qzwT_Bx1ba6w3wI1hcFj9E
+ udAz6_aIVmAtr21FNvO9O0hgoC92vv5TodPX1jtZezw_kXVG108yeNjaQFg7rUsirGlRSUAe2aTu
+ .QNZETUJeI2a4ty471vQidYDHR_fBZg2AYgI5LJ0gIg0FXMsLPU_KPDkxlcLh72zR8_t9NWsrug5
+ .PnA2gZB8itqim2Z20ScVtVBkAMzSU3VM.LlGzPA8FsCurPO0y5J0KKdvfrSvWrXyfUyCRaaIxyg
+ rW46yqez519KpQI13XMttRWHAwvVBM5Lg8TIRV8I5qwItysrBw4.M23s8gNPxDHahLYyYh9QW0Pf
+ UWC56BvQ8Cjg5uhcVlNeaLK6l5XkQVf4aK4VN2Hytop.ydbe0nxUcvi7IrwzCxklrMfyGeBWU4PW
+ kpXBXoPWYQXV2qxX959jPWmClhQpIh6A7IM5I5ruRFVRzDTpv7mYI5Fu8uosqL5l1VlR7Uuj_cUN
+ .AG3WrpDuYZayM5byAlGML9REvQtIL81N.gyE4TKhW_ZjsRXO8u0rCM7_o9OsXej3tzbFeV3zfZJ
+ Cb5U8YwZ532299L6Dsk3C4wzhdUuM4OEpyzwhOApXNYsyxP4oQcBLmneIdS4d9O9UhwBN8GuL1C2
+ WojNxuDXuWDTpc32cJGOWS8.heuW1kwB8._5cq2Hijun7._d9pvsQQw_KQirbB3Q81pFZgg.vjXf
+ cL2dwRLDwHU06f8ew5G8iZMuXb6rPFu5tAHdyzZR8vgkvn.8lSldz4UerrBIP5K0poncIQGMSKgc
+ evSQ5w4fpDptjX7k6qHfGCt4UgfR008cUDdXqE2h_PMQW63WYUc2Eu0ht2K9ueaPvuyOPmEtqXMQ
+ eOPNyKztSNCSoT5lm0LoCp2uGOgAfGVZwJigaCnQPgHpMjL8C7tJk4T2eW5zY_L.9sS6Ha4TPoNP
+ nxjecjXk2IP7pXYl8oYGqlIcvTEbi2rw2JSO2doxVYbpz8HQ4iVaTy8aBFMbwcgiVpoZo.Q.h7X5
+ eQnnYlqDTAE974vycsyN3t6Gnqvv0gcTtWtdI7j6XjL8Mc3HSZn3F7n3QuMxBIwd8i_Aas8BXInq
+ IUuCizsEVR2A1Y4LtysYQGH5M0PHqd4SkovPgvi5QHYwIs9S0QVbpvs3YAuogtE..CvqkkxUk91y
+ CtD0ssHSqO0.A3so7InbOrOEqK_l4_IhpR1Q.OG5_FWzgdpnjXhQvaotmrmU4DTgHrKqjZgTHOZJ
+ w0d307532k5tMFHXTuu4mrgoeHIu.tzbEAHA0Z6C66jLjnyHc2tH3pZpvJD340ahOO6g5eqe3QRD
+ YiOZMidYBXppFArdXe97nxYy2_psJeKFPK1DQ3hOLeq2eHUgKwe3vcYWVLa.2fZwZ7OkKsiik_42
+ bnmxH2aVVCAnllO1S72AHxLEe5SH09cC1a4MdT6JYw1lVLz_zZkvOX4Jvb3vSqBH5DsAfCksVHpC
+ lrKW8YcMW7vhFU2bRDfIAkuPvOvORLMcSZezpoh1uK0srTePkuPMA4MGp5OSPtYPhdiECDwVzjns
+ TDlHFsLlAF125YB2m0xA9Vsfx81uaS9uACDnu97Bpi8hAgV8St29uw7XCSTXo70yB3FTMu4Jp1iZ
+ .DfBSG0xdLuw-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 87e86a45-cae3-4f9c-90d3-4c3d3667730f
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Wed, 27 Mar 2024 17:11:53 +0000
+Received: by hermes--production-gq1-5c57879fdf-c7xks (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d60cd2f837db50b116b6abd5ed0cb669;
+          Wed, 27 Mar 2024 16:41:26 +0000 (UTC)
+Message-ID: <cebcfa4f-885f-45de-b629-165d521a2756@schaufler-ca.com>
+Date: Wed, 27 Mar 2024 09:41:24 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] lsm: Check and handle error priority for
+ socket_bind and socket_connect
+To: =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ Paul Moore <paul@paul-moore.com>
+Cc: linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+ Alexey Kodanev <alexey.kodanev@oracle.com>,
+ Eric Dumazet <edumazet@google.com>, =?UTF-8?Q?G=C3=BCnther_Noack?=
+ <gnoack@google.com>, Ivanov Mikhail <ivanov.mikhail1@huawei-partners.com>,
+ Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ "Serge E . Hallyn" <serge@hallyn.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240327120036.233641-1-mic@digikod.net>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20240327120036.233641-1-mic@digikod.net>
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 27 Mar 2024 17:40:11 +0200
-Message-Id: <D04N9E61QWYB.3IPEEGVPY6V8L@kernel.org>
-Cc: "Shawn Guo" <shawnguo@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- "Sascha Hauer" <s.hauer@pengutronix.de>, "Pengutronix Kernel Team"
- <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "NXP Linux
- Team" <linux-imx@nxp.com>, "Ahmad Fatoum" <a.fatoum@pengutronix.de>, "sigma
- star Kernel Team" <upstream+dcp@sigma-star.at>, "David Howells"
- <dhowells@redhat.com>, "Li Yang" <leoyang.li@nxp.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, "Tejun Heo" <tj@kernel.org>, "Steven Rostedt
- (Google)" <rostedt@goodmis.org>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
- <linux-security-module@vger.kernel.org>, "Richard Weinberger"
- <richard@nod.at>, "David Oberhollenzer" <david.oberhollenzer@sigma-star.at>
-Subject: Re: [PATCH v7 6/6] docs: trusted-encrypted: add DCP as new trust
- source
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "David Gstir" <david@sigma-star.at>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "James Bottomley" <jejb@linux.ibm.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
-X-Mailer: aerc 0.17.0
-References: <20240327082454.13729-1-david@sigma-star.at>
- <20240327082454.13729-7-david@sigma-star.at>
-In-Reply-To: <20240327082454.13729-7-david@sigma-star.at>
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.22205 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Wed Mar 27, 2024 at 10:24 AM EET, David Gstir wrote:
-> Update the documentation for trusted and encrypted KEYS with DCP as new
-> trust source:
+On 3/27/2024 5:00 AM, Mickaël Salaün wrote:
+> Because the security_socket_bind and the security_socket_bind hooks are
+> called before the network stack, it is easy to introduce error code
+> inconsistencies. Instead of adding new checks to current and future
+> LSMs, let's fix the related hook instead. The new checks are already
+> (partially) implemented by SELinux and Landlock, and it should not
+> change user space behavior but improve error code consistency instead.
 >
-> - Describe security properties of DCP trust source
-> - Describe key usage
-> - Document blob format
+> The first check is about the minimal sockaddr length according to the
+> address family. This improves the security of the AF_INET and AF_INET6
+> sockaddr parsing for current and future LSMs.
 >
-> Co-developed-by: Richard Weinberger <richard@nod.at>
-> Signed-off-by: Richard Weinberger <richard@nod.at>
-> Co-developed-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> Signed-off-by: David Gstir <david@sigma-star.at>
+> The second check is about AF_UNSPEC. This fixes error priority for bind
+> on PF_INET6 socket when SELinux (and potentially others) is enabled.
+> Indeed, the IPv6 network stack first checks the sockaddr length (-EINVAL
+> error) before checking the family (-EAFNOSUPPORT error). See commit
+> bbf5a1d0e5d0 ("selinux: Fix error priority for bind with AF_UNSPEC on
+> PF_INET6 socket").
+>
+> The third check is about consistency between socket family and address
+> family. Only AF_INET and AF_INET6 are tested (by Landlock tests), so no
+> other protocols are checked for now.
+>
+> These new checks should enable to simplify current LSM implementations,
+> but we may want to first land this patch on all stable branches.
+>
+> A following patch adds new tests improving AF_UNSPEC test coverage for
+> Landlock.
+>
+> Cc: Alexey Kodanev <alexey.kodanev@oracle.com>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Günther Noack <gnoack@google.com>
+> Cc: Ivanov Mikhail <ivanov.mikhail1@huawei-partners.com>
+> Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
+> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> Fixes: 20510f2f4e2d ("security: Convert LSM into a static interface")
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
 > ---
->  .../security/keys/trusted-encrypted.rst       | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
+>  security/security.c | 96 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
 >
-> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Document=
-ation/security/keys/trusted-encrypted.rst
-> index e989b9802f92..81fb3540bb20 100644
-> --- a/Documentation/security/keys/trusted-encrypted.rst
-> +++ b/Documentation/security/keys/trusted-encrypted.rst
-> @@ -42,6 +42,14 @@ safe.
->           randomly generated and fused into each SoC at manufacturing tim=
-e.
->           Otherwise, a common fixed test key is used instead.
-> =20
-> +     (4) DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs=
-)
+> diff --git a/security/security.c b/security/security.c
+> index 7e118858b545..64fe07a73b14 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -28,7 +28,9 @@
+>  #include <linux/xattr.h>
+>  #include <linux/msg.h>
+>  #include <linux/overflow.h>
+> +#include <linux/in.h>
+>  #include <net/flow.h>
+> +#include <net/ipv6.h>
+>  
+>  /* How many LSMs were built into the kernel? */
+>  #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
+> @@ -4415,6 +4417,82 @@ int security_socket_socketpair(struct socket *socka, struct socket *sockb)
+>  }
+>  EXPORT_SYMBOL(security_socket_socketpair);
+>  
+> +static int validate_inet_addr(struct socket *sock, struct sockaddr *address,
+> +			      int addrlen, bool bind)
+> +{
+> +	const int sock_family = sock->sk->sk_family;
 > +
-> +         Rooted to a one-time programmable key (OTP) that is generally b=
-urnt
-> +         in the on-chip fuses and is accessible to the DCP encryption en=
-gine only.
-> +         DCP provides two keys that can be used as root of trust: the OT=
-P key
-> +         and the UNIQUE key. Default is to use the UNIQUE key, but selec=
-ting
-> +         the OTP key can be done via a module parameter (dcp_use_otp_key=
-).
+> +	/* Checks for minimal header length to safely read sa_family. */
+> +	if (addrlen < offsetofend(typeof(*address), sa_family))
+> +		return -EINVAL;
 > +
->    *  Execution isolation
-> =20
->       (1) TPM
-> @@ -57,6 +65,12 @@ safe.
-> =20
->           Fixed set of operations running in isolated execution environme=
-nt.
-> =20
-> +     (4) DCP
-> +
-> +         Fixed set of cryptographic operations running in isolated execu=
-tion
-> +         environment. Only basic blob key encryption is executed there.
-> +         The actual key sealing/unsealing is done on main processor/kern=
-el space.
-> +
->    * Optional binding to platform integrity state
-> =20
->       (1) TPM
-> @@ -79,6 +93,11 @@ safe.
->           Relies on the High Assurance Boot (HAB) mechanism of NXP SoCs
->           for platform integrity.
-> =20
-> +     (4) DCP
-> +
-> +         Relies on Secure/Trusted boot process (called HAB by vendor) fo=
-r
-> +         platform integrity.
-> +
->    *  Interfaces and APIs
-> =20
->       (1) TPM
-> @@ -94,6 +113,11 @@ safe.
-> =20
->           Interface is specific to silicon vendor.
-> =20
-> +     (4) DCP
-> +
-> +         Vendor-specific API that is implemented as part of the DCP cryp=
-to driver in
-> +         ``drivers/crypto/mxs-dcp.c``.
-> +
->    *  Threat model
-> =20
->       The strength and appropriateness of a particular trust source for a=
- given
-> @@ -129,6 +153,13 @@ selected trust source:
->       CAAM HWRNG, enable CRYPTO_DEV_FSL_CAAM_RNG_API and ensure the devic=
-e
->       is probed.
-> =20
-> +  *  DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs)
-> +
-> +     The DCP hardware device itself does not provide a dedicated RNG int=
-erface,
-> +     so the kernel default RNG is used. SoCs with DCP like the i.MX6ULL =
-do have
-> +     a dedicated hardware RNG that is independent from DCP which can be =
-enabled
-> +     to back the kernel RNG.
-> +
->  Users may override this by specifying ``trusted.rng=3Dkernel`` on the ke=
-rnel
->  command-line to override the used RNG with the kernel's random number po=
-ol.
-> =20
-> @@ -231,6 +262,19 @@ Usage::
->  CAAM-specific format.  The key length for new keys is always in bytes.
->  Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> =20
-> +Trusted Keys usage: DCP
-> +-----------------------
-> +
-> +Usage::
-> +
-> +    keyctl add trusted name "new keylen" ring
-> +    keyctl add trusted name "load hex_blob" ring
-> +    keyctl print keyid
-> +
-> +"keyctl print" returns an ASCII hex copy of the sealed key, which is in =
-format
-> +specific to this DCP key-blob implementation.  The key length for new ke=
-ys is
-> +always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> +
->  Encrypted Keys usage
->  --------------------
-> =20
-> @@ -426,3 +470,44 @@ string length.
->  privkey is the binary representation of TPM2B_PUBLIC excluding the
->  initial TPM2B header which can be reconstructed from the ASN.1 octed
->  string length.
-> +
-> +DCP Blob Format
-> +---------------
-> +
-> +The Data Co-Processor (DCP) provides hardware-bound AES keys using its
-> +AES encryption engine only. It does not provide direct key sealing/unsea=
-ling.
-> +To make DCP hardware encryption keys usable as trust source, we define
-> +our own custom format that uses a hardware-bound key to secure the seali=
-ng
-> +key stored in the key blob.
-> +
-> +Whenever a new trusted key using DCP is generated, we generate a random =
-128-bit
-> +blob encryption key (BEK) and 128-bit nonce. The BEK and nonce are used =
-to
-> +encrypt the trusted key payload using AES-128-GCM.
-> +
-> +The BEK itself is encrypted using the hardware-bound key using the DCP's=
- AES
-> +encryption engine with AES-128-ECB. The encrypted BEK, generated nonce,
-> +BEK-encrypted payload and authentication tag make up the blob format tog=
-ether
-> +with a version number, payload length and authentication tag::
-> +
-> +    /*
-> +     * struct dcp_blob_fmt - DCP BLOB format.
-> +     *
-> +     * @fmt_version: Format version, currently being %1
-> +     * @blob_key: Random AES 128 key which is used to encrypt @payload,
-> +     *            @blob_key itself is encrypted with OTP or UNIQUE devic=
-e key in
-> +     *            AES-128-ECB mode by DCP.
-> +     * @nonce: Random nonce used for @payload encryption.
-> +     * @payload_len: Length of the plain text @payload.
-> +     * @payload: The payload itself, encrypted using AES-128-GCM and @bl=
-ob_key,
-> +     *           GCM auth tag of size AES_BLOCK_SIZE is attached at the =
-end of it.
-> +     *
-> +     * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) + @pa=
-yload_len +
-> +     * AES_BLOCK_SIZE.
-> +     */
-> +    struct dcp_blob_fmt {
-> +            __u8 fmt_version;
-> +            __u8 blob_key[AES_KEYSIZE_128];
-> +            __u8 nonce[AES_KEYSIZE_128];
-> +            __le32 payload_len;
-> +            __u8 payload[];
-> +    } __packed;
+> +	/* Only handle inet sockets for now. */
+> +	switch (sock_family) {
+> +	case PF_INET:
+> +	case PF_INET6:
+> +		break;
+> +	default:
+> +		return 0;
+> +	}
 
-I'm thinking here given that you need to replicate the same thing that
-is in the source files. E.g. Documentation/gpu/i915.rst.
+Seems like a clunky way to say:
 
-The rationale would so many sources so maybe it would make sense to
-maintain this in the source code.
+	if (sock_family != PF_INET && sock_family != PF_INET6)
+		return 0;
 
-Also this documents how to generally insert documentation inline:
-https://docs.kernel.org/doc-guide/kernel-doc.html
+> +
+> +	/* Checks minimal address length for inet sockets. */
+> +	switch (address->sa_family) {
+> +	case AF_UNSPEC: {
+> +		const struct sockaddr_in *sa_in;
+> +
+> +		/* Cf. inet_dgram_connect(), __inet_stream_connect() */
+> +		if (!bind)
+> +			return 0;
+> +
+> +		if (sock_family == PF_INET6) {
+> +			/* Length check from inet6_bind_sk() */
+> +			if (addrlen < SIN6_LEN_RFC2133)
+> +				return -EINVAL;
+> +
+> +			/* Family check from __inet6_bind() */
+> +			goto err_af;
+> +		}
+> +
+> +		/* Length check from inet_bind_sk() */
+> +		if (addrlen < sizeof(struct sockaddr_in))
+> +			return -EINVAL;
+> +
+> +		sa_in = (struct sockaddr_in *)address;
+> +		if (sa_in->sin_addr.s_addr != htonl(INADDR_ANY))
+> +			goto err_af;
+> +
+> +		return 0;
+> +	}
+> +	case AF_INET:
+> +		/* Length check from inet_bind_sk() */
+> +		if (addrlen < sizeof(struct sockaddr_in))
+> +			return -EINVAL;
+> +		break;
+> +	case AF_INET6:
+> +		/* Length check from inet6_bind_sk() */
+> +		if (addrlen < SIN6_LEN_RFC2133)
+> +			return -EINVAL;
+> +		break;
+> +	}
+> +
+> +	/*
+> +	 * Checks sa_family consistency to not wrongfully return -EACCES
+> +	 * instead of -EINVAL.  Valid sa_family changes are only (from AF_INET
+> +	 * or AF_INET6) to AF_UNSPEC.
+> +	 */
+> +	if (address->sa_family != sock_family)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +
+> +err_af:
+> +	/* SCTP services expect -EINVAL, others -EAFNOSUPPORT. */
+> +	if (sock->sk->sk_protocol == IPPROTO_SCTP)
+> +		return -EINVAL;
+> +
+> +	return -EAFNOSUPPORT;
+> +}
+> +
+>  /**
+>   * security_socket_bind() - Check if a socket bind operation is allowed
+>   * @sock: socket
+> @@ -4425,11 +4503,23 @@ EXPORT_SYMBOL(security_socket_socketpair);
+>   * and the socket @sock is bound to the address specified in the @address
+>   * parameter.
+>   *
+> + * For security reasons and to get consistent error code whatever LSM are
+> + * enabled, we first do the same sanity checks against sockaddr as the ones
+> + * done by the network stack (executed after hook).  Currently only AF_UNSPEC,
+> + * AF_INET, and AF_INET6 are handled.  Please add support for other family
+> + * specificities when handled by an LSM.
+> + *
+>   * Return: Returns 0 if permission is granted.
+>   */
+>  int security_socket_bind(struct socket *sock,
+>  			 struct sockaddr *address, int addrlen)
+>  {
+> +	int err;
+> +
+> +	err = validate_inet_addr(sock, address, addrlen, true);
+> +	if (err)
+> +		return err;
+> +
+>  	return call_int_hook(socket_bind, sock, address, addrlen);
+>  }
+>  
+> @@ -4447,6 +4537,12 @@ int security_socket_bind(struct socket *sock,
+>  int security_socket_connect(struct socket *sock,
+>  			    struct sockaddr *address, int addrlen)
+>  {
+> +	int err;
+> +
+> +	err = validate_inet_addr(sock, address, addrlen, false);
+> +	if (err)
+> +		return err;
 
-I.e. I'm feeling that this is good time to improve scalability so that
-documentation will keep up to date. Also then backend specific patches
-mostly go to their subdirectories and not to Documentation/ subtree
-(or that would be more rare case).
+The smack_socket_connect() code is among my ugliest. I don't think this
+would do any harm, but if you haven't run the Smack test suite you probably
+should.
 
-So a good chance to do more than just a new backend for the benefit
-of the trusted keys subsystem :-)
-
-Also, later on if something is changed e.g. in the above struct you
-don't have to do matching update to the documentation so it will save
-time too (over time).
-
-BR, Jarkko
+> +
+>  	return call_int_hook(socket_connect, sock, address, addrlen);
+>  }
+>  
 
