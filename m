@@ -1,136 +1,132 @@
-Return-Path: <linux-security-module+bounces-2382-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2386-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0E6689043B
-	for <lists+linux-security-module@lfdr.de>; Thu, 28 Mar 2024 16:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96B39890639
+	for <lists+linux-security-module@lfdr.de>; Thu, 28 Mar 2024 17:49:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95E051F2303B
-	for <lists+linux-security-module@lfdr.de>; Thu, 28 Mar 2024 15:59:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AFCD1F27E2A
+	for <lists+linux-security-module@lfdr.de>; Thu, 28 Mar 2024 16:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C846F13280D;
-	Thu, 28 Mar 2024 15:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72661304BE;
+	Thu, 28 Mar 2024 16:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+v1+/no"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="a8Zkzgsy"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7731A132472;
-	Thu, 28 Mar 2024 15:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FA43BBEF
+	for <linux-security-module@vger.kernel.org>; Thu, 28 Mar 2024 16:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711641546; cv=none; b=fXUJ1HoSXoLQoO+mO0yzFcKOxmAY3bvDQ4NRBsl02lgi+avQmWTEnt9+N+F1Q6KUnoKZeSyZc2qDE5OlU/9JfrArnp5xdgRp6NDRSy0QLLybLE6K0cGNEWQ7Xfc18M9pUgsU0ejK8Ru5lIJw4yfqEJl5J6b4UI/1wVvUUW8UyxU=
+	t=1711644295; cv=none; b=U0ggXh7QPo+cdyggO4Hs8zNSeorDDMZuQLjSbEUZibf70S8zB07jslaeSpqq45j6+aV1lnKjT1ogsvpPb4Uqq1Ah8DGI2/qyfpQVvPWyhymFIPV66AhjBwxXTjlRB/4/QGI57nZ11jNTU5SnLs26RQEs1hzGu3sG5YPNSgFlgzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711641546; c=relaxed/simple;
-	bh=mM06SAnSuRZUv5Kr1gQkrOle0ZVHR6HF0Jnu4nRNtL0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=l9+bvpOCWzjPhcspKXeKHCSN94RUamnnwPNtZzHgkIzX6+UuEfktVF1ZSYDjqPEuSqFQ8MmhbzN7p+8tNbPAmkzXvtaxLEnezE+V3JpF5NbEizPktW+5US1NUwM7t2RfZEw6n74nxcle2qVxYry545ZAjfXoC5dc9xbEaxnWttI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+v1+/no; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 52F70C3277D;
-	Thu, 28 Mar 2024 15:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711641546;
-	bh=mM06SAnSuRZUv5Kr1gQkrOle0ZVHR6HF0Jnu4nRNtL0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=O+v1+/noxeHa2Z29M0Dfz3L7XwTqiI0xSKknYFHgodqhhqIXTlgaF5GJjkqnuAv3L
-	 QJxvcu3YYA1qZjmQriQPtlGiApETtmUtwQHVF/mp/WtFQk9UehvOgAJeV6PpbAWgWt
-	 02/i+g/f0rWpKPeEEZakfWjZpLF/khrQ+h7tWPfJteywlTTTgyReBJobJ5ExHS2O2q
-	 P+uatIB9TfpZ9YCFscfcUjEAexbVtmkvVbscVRBTU0U0R6SWjGJWmJjXG4HSM2sdT5
-	 VtY1FnB+Bq7tZ4HXbaYYH7rGNOO4FPxvElyBHUboqVi1ty0+qGhl83aKm0zP/ug6uc
-	 /8eNJHjxwny0g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E82CCD11DD;
-	Thu, 28 Mar 2024 15:59:06 +0000 (UTC)
-From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Thu, 28 Mar 2024 16:57:54 +0100
-Subject: [PATCH 7/7] drivers: perf: Remove the now superfluous sentinel
- elements from ctl_table array
+	s=arc-20240116; t=1711644295; c=relaxed/simple;
+	bh=upbDFt0G/aqujOQ/jczW7McnIK1k38wtJ65H6HaVGrw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aeJuLv4Nrq1AbaKmaLna5eCRLSR5kb73TjlKx30wz8GACjiqj7tJGj4H55G7/6pHBUSVmBIFzwzkXic4BYAJYcc+Yyvpzbcu/iNG0gGOZh8f2mPWfXuhsz9d3JIvVoUPY1XygTWbaz8tndLz3X5hhmReXCKPDbPPKRHVD903m9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=a8Zkzgsy; arc=none smtp.client-ip=66.163.187.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1711644292; bh=KbVXIl5WS69mtz578cqveETwQiTUCqyWWc4TShTmsdQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=a8ZkzgsyrsYHRIYheEbI5A7zheDQGYZuSX/x3LhN6SOco64hSpIrksOQ+qYFr1eYeKNih0VNjbf1zgxtADYc244OIIsSc19rvZNaA1j2OstTm0XtWK9NrrjBZudNHVGxU1/5ajVIPsb0XnTlRRSQtRrxSxA9P2lsc/BX408Ch0NLOirsUvYyTNRBJmb8/MrtbpkmlAAEIdXa8S52IWodOV5nBSFACAK8cw9wDe+Dhwem3iQrD4W6iK/62mId8dyLkZeb9vx4pVw+IUGiMh01tbC6JfKhpwvBdwiSIP4CIbZ5P4x+qDEUq0mIYTDMOAjFSGy3tILg6BUgpusvlGiFYA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1711644292; bh=QgjI7iQUB93IWgJsx4jmO0XK+Y5bN7m8+i5SAow2EYs=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=qW4vxlMgKj6LfTTw8R4Id1HAIlU6jSNERorMc6lvs81B0RIohpza3zgqXa1JoAtoLONVPIktqEbxGP3jBbQ2VWEaMi175v1ulR0zvSQSVhb+9LtkoLzYO8S1S2rCk3vZaAeGsS/25xT2aRlphMumeVmrgLCai5/9bRvkBho1HOr4X5RubGVgWLalwbALC8DTLFKiyQIR5XVaaUTpXHvS7uutElbE9yAhXokLrmdx6DLsAbKtm8V2irhyLA46guSsNa0syMQRwMBCDko2KPBIp7uuw5YeuCbAoyp78cFeB2UGlqkKg5ieDApllcJFM02Yf/Eor+TTPGNNu+nRgPqJww==
+X-YMail-OSG: HEJwnG0VM1k1Cb1KM4jPGZEgw710Jj12bKJOU4.bZQ0Y4RJro1h13vbhJC9UUig
+ gBZ1L1FUqkIUuazU72F02laPnyjQ81LiDSiVnBM.4eTqh7F5Sa51bgYEzWUb1TAOYEMh9LuYPA48
+ shSnLAorl2jNvBE7xd8U_V8myKEK7hLtwnRjS7rfS7XlyfFV6Lu8GQMXpSIqN8mjdRONP.7YVdtW
+ zsVRYUpwyQVFWXabVjM0ZcMuHZjK2u_yiQKXjpLG_DIEOKY..nwy2GZJtEsy5oq_xgR7D_LTl1kQ
+ 8Gg_tGgUcQRTWMz2y2WJ1NqP3vhBYlf1Aer6cGGC6taqfxZUeGI82oH2TUH4o7xWbEmVdmrPViKR
+ NNARpFlGIhFQOw.QHQzZFAwTAqB5gyNzY.Ey24lPq8Dve4EY5AdUKBQl3mJybWEibqKsxZVZVDoK
+ _T1FLMJXp6jXJWQmt9gy0iRGEpUXOXdp44buTg.5ZcR8K_9a8vUSoNglbLF7H7Jp5uLQFADUxrkh
+ E4eMuUUAuIlsq2dyRQKqf0xUHc_HwxnoR1q6Nl3nZhkX.3V1rOxyg1M9kSKc0Oc77jCb11yvzdIB
+ TXgusWkr_.3W.e1bTJPvgrFYe8sbaOTTUefFaFys4qX9E0OihBFhumUoPGbzPc76187NXoRPpOfY
+ a1lcsmfkjg5xuU4XBEf.Xe4OoFqgzQdb7YdmUb4XK3ppc22KDocXHZcGfPMVGi2mxwJJ.psN8ub.
+ yP.u7W9gxfcvWG1h.wIe6c01MFtO8wYGOvQgbjjIUYHF.BZHzxWXnxRAOulg6Wa33XncBL0o4Pva
+ acA8a0jMFsIgzL8.7aC7X5joZRbft0wm0EuoXxenWlf0fMZiZMLiS3u1h.kpnslxcQHdbio3rB0W
+ oiY64PznoxRhG89.iZ8SRyXbpHXs3PsdPj0gyBQofLt7i7aY2OuvBFNQpdObjwaH1LkCPojysgdF
+ L1RsvZ0rQDobRM9_qOo8OFFEX0xde0oDEfdCK0_UmXr9rj__yhCJRfHjouk3r47WXiIEpNQ3IbZr
+ Sv15gv3SBS_PZG66tRT8Kjo0vVGGY0uEfBwojAJxbhwTdnvMBWfblRsgjw.Klj5yGVx_2fMlHDOy
+ WEKCbs_krZ7vpru2ezpwY6g6PT1zcdKH2VdTBRVoQ2P.EnGlPB5FDBUpeR_PNFkDdnfQDXmRx8_3
+ eE.mWGgJq3Dd9GbkLa1rqFvV60_ZJcKSVCkjc6w4hkmOlEKCz0cyqvJXUuAL6DF1aFTBK77Ojx51
+ gzQO95SsXJMUc_09mwoDzayi9AeA1VR7xHG6BKTVZyUjMb7JwtfqmULourLZ6XB.RtDgVJ1Z0hmC
+ bStAeoPnSFlhIy6nxrJF218xYpWrV4xeSseQIjsQyBCYpMS.HzIadWzjdQmStu9VxHPl7UiIE4pd
+ 22v4giy232uw32xYCflzJmy0RJ.fqdFqvWMqPuChspxf.JwHy2ydjzDgbdDK1caQBGTIU6UtQ_eq
+ ue0WYej9z_JSTB4DhW5ehlyZTX0_3uOGMfvaGY.bGZ6Qay0yNZc1qn7HNv1F_qsRU4fEi2MI8Oyb
+ To3sqkQsBEC7jAan.kwhXRgvjQAn7HXC9f0WNBrZQXc0liHKsi2wEonGaz.hHwshgoA37gQb5QIC
+ FgxNa7cRWOVjp4y5w5nMcPbugAdNd5Monh_WdbApqqYeGjW45JC4EBIRnrNy2arFSgV4wQ3RkotQ
+ i8g3R8kG5FqBm.KdY5f_u_xEVMD86OfDsDYUMVGx_LMH7hTLWpuyV44.3xk07EEOhdDT2qyta5d4
+ SmAvcWwkPSYZz7blRqV3yIzVGeM01cuUI.H7cAivegYDayr13Cldx1ztl8SY4NaEDrdvwk7lGme3
+ 2J5sisuJ7d3p7iDzw_brCA7AFzWLlGp0fx.wtFu1TNPiG5_5SVVSDDCgAlo6uNkqxeEIOQDV9MuT
+ r8kJsP54oHqOqvdMszDGNSHY8jljvGaaBVN19h6Q4wt0qjqBU2ZbpkwBs.oPFWuVdVPUwhzhsr7e
+ YZHFEjH18lDmqsJnh8I5VwBekPwUSwOMXq5WIfLRTq8W27AsOWM81n47lWowo0EaIQwYDW1x6AN5
+ RgI2vei8l8cItjzX1WD3OpOLyKCf.Opa5klmx2VcD5SCRgsUDfPIDIyFhZHhgvQfAVRbGxm1HC9s
+ Jc7McMoi32fKG60Rng4t.Tt7JUhIWjCpnKKpmZVNcEMGyXYvcAhKCV2SMM5EQ0YeMO7aiOkY9TyJ
+ iPIUDjFYB5ptoqnkAb3PLiUIxJacDE8pVyiDdK0eYut.P6ARTNxmdNknI8JkzMS65CsMQjXRQpra
+ E7GXcpfkGLNo-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 02c310b2-0936-4aba-9d5f-9b14cea307c6
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 28 Mar 2024 16:44:52 +0000
+Received: by hermes--production-gq1-5c57879fdf-7pjsc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b7e8eeb25656c4ca14a551933a7c07ea;
+          Thu, 28 Mar 2024 16:34:41 +0000 (UTC)
+Message-ID: <86c7477e-260f-419a-8aea-ea527a344877@schaufler-ca.com>
+Date: Thu, 28 Mar 2024 09:34:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Do not require attributes for
+ security_inode_init_security.
+To: "Dr. Greg" <greg@enjellic.com>, Paul Moore <paul@paul-moore.com>
+Cc: linux-security-module@vger.kernel.org, roberto.sassu@huaweicloud.com,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240324223231.6249-1-greg@enjellic.com>
+ <CAHC9VhQ22ef_o_OYue93RZfff70LPuOaCuN7Czv7HiEy346Svw@mail.gmail.com>
+ <20240326103047.GA19964@wind.enjellic.com>
+ <CAHC9VhQvN43LL-ynV-ZZgR2L8wFfUeq2-SZb5QHh9ZMWtz4C1A@mail.gmail.com>
+ <20240327091644.GA32347@wind.enjellic.com>
+ <CAHC9VhSjjeBH2CE5i+PK9Zyg661k-ryDbYkoPLtEe-g52DW0Fw@mail.gmail.com>
+ <20240328153800.GA17524@wind.enjellic.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20240328153800.GA17524@wind.enjellic.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240328-jag-sysctl_remset_misc-v1-7-47c1463b3af2@samsung.com>
-References: <20240328-jag-sysctl_remset_misc-v1-0-47c1463b3af2@samsung.com>
-In-Reply-To: <20240328-jag-sysctl_remset_misc-v1-0-47c1463b3af2@samsung.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Muchun Song <muchun.song@linux.dev>, Miaohe Lin <linmiaohe@huawei.com>, 
- Naoya Horiguchi <naoya.horiguchi@nec.com>, 
- John Johansen <john.johansen@canonical.com>, 
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
- "Serge E. Hallyn" <serge@hallyn.com>, David Howells <dhowells@redhat.com>, 
- Jarkko Sakkinen <jarkko@kernel.org>, Kees Cook <keescook@chromium.org>, 
- Herbert Xu <herbert@gondor.apana.org.au>, 
- "David S. Miller" <davem@davemloft.net>, Jens Axboe <axboe@kernel.dk>, 
- Pavel Begunkov <asml.silence@gmail.com>, 
- Atish Patra <atishp@atishpatra.org>, Anup Patel <anup@brainfault.org>, 
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
- keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
- io-uring@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, 
- Joel Granados <j.granados@samsung.com>
-X-Mailer: b4 0.13-dev-2d940
-X-Developer-Signature: v=1; a=openpgp-sha256; l=941;
- i=j.granados@samsung.com; h=from:subject:message-id;
- bh=x6LKxIed1g3mBTsVnM3LyyId0GhLgp5Sc+vsy/qx9t0=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYFk8b3d2Da02YyON9nng/oh0az7TH1At0Oj
- Klqtpadz8QDfYkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmBZPGAAoJELqXzVK3
- lkFPn8AL/RQuAkZvqODJOaCfSxnffeO8fIdKo3HY6jpLrbB1T2bwX+NMLubJdUp3yENm7YB8nRa
- WW22oyyDlvKBzvMdpZd+FKjXo7UBi7qchJGagofe3xiSIEGW50zF5NJDsM7ktMH5gzkhzIXDn2y
- zr/ABmufu4M7Zp2Wr9jVGv4y27IaAVDyFc4zrPnoSa0mN49bPR3NDQWuqqdYJEL6TmQnN2pKz1K
- wTPVnaqmhRdvr5Rjm7bltaHte6Bc8+h5J14i2UXK1jWSg1QYCATTJjpTGopxecIhWetPhrcfO1l
- 3sSGhEU/sq2scZklB97vertazO6s46/yNljcLygRX2jL+HciVVcAOzhjZZMUQWAqUDPhCH5PQyL
- oF5sSgTDRjbTSNQpMGp+Zz4Le+f0MYjgkudGjGozgrNAA/i//Ct6jR22lj9qFmZGqe9IxsUEDiI
- mlqlj7Zr6yMfYyLS/gGgRPGvV1D6kyV9cMFEdPnBexcqwE/4lVrh9+wu+JqVoOoY6+a/ZCRcCN7
- k8=
-X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
- auth_id=70
-X-Original-From: Joel Granados <j.granados@samsung.com>
-Reply-To: j.granados@samsung.com
+X-Mailer: WebService/1.1.22205 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-From: Joel Granados <j.granados@samsung.com>
+On 3/28/2024 8:38 AM, Dr. Greg wrote:
+> ...
+>> In Linux v6.8[1] only Smack and SELinux provide implementations for
+>> the security_inode_init_security() hook, and both also increment the
+>> associated lsm_blob_sizes::lbs_xattr_count field.  While the
+>> behavior of the hook may have changed, I see no indications of any
+>> harm with respect to the standard upstream Linux kernel.  We
+>> obviously want to ensure that we work to fix harmful behavior, but I
+>> simply don't see that here; convince me there is a problem, send me
+>> a patch as we've discussed, and I'll merge it.
+> BPF provides an implementation and would be affected.
 
-This commit comes at the tail end of a greater effort to remove the
-empty elements at the end of the ctl_table arrays (sentinels) which will
-reduce the overall build time size of the kernel and run time memory
-bloat by ~64 bytes per sentinel (further information Link :
-https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
+BPF has chosen to implement its LSM hooks their own way. As it is
+impossible for the infrastructure developers to predict what the
+behavior of those hooks may be, it is unreasonable to constrain
+them based on hypothetical or rumored use cases.
 
-Remove sentinel from sbi_pmu_sysctl_table
+The implementation of BPF precludes its use of LSM blobs that are
+infrastructure managed. That ought to be obvious. BPF could include
+a non-zero lbs_xattr_count just in case, and your problem would be
+solved, but at a cost. 
 
-Signed-off-by: Joel Granados <j.granados@samsung.com>
----
- drivers/perf/riscv_pmu_sbi.c | 1 -
- 1 file changed, 1 deletion(-)
+> Bear poking trimmed ...
+>
+> [1] In Linux v6.9-rc1 this grows to include EVM, but EVM also provides
+> both a hook implementation and a lbs_xattr_count bump.
+> BPF initialization, as of 6.8 does not include an xattr request.
 
-diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index 8cbe6e5f9c39..5aef5a8737b2 100644
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -1043,7 +1043,6 @@ static struct ctl_table sbi_pmu_sysctl_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_TWO,
- 	},
--	{ }
- };
- 
- static int pmu_sbi_device_probe(struct platform_device *pdev)
-
--- 
-2.43.0
-
+Just so. If BPF wants to use the aforementioned interface, it needs to
+include an xattr request. Just like any other LSM.
 
 
