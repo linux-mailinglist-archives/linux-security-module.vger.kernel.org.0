@@ -1,175 +1,126 @@
-Return-Path: <linux-security-module+bounces-2455-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2457-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8432089348F
-	for <lists+linux-security-module@lfdr.de>; Sun, 31 Mar 2024 19:08:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BDB0893529
+	for <lists+linux-security-module@lfdr.de>; Sun, 31 Mar 2024 19:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A4CE284B19
-	for <lists+linux-security-module@lfdr.de>; Sun, 31 Mar 2024 17:08:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E11F1C23A8D
+	for <lists+linux-security-module@lfdr.de>; Sun, 31 Mar 2024 17:24:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB8315F322;
-	Sun, 31 Mar 2024 16:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31780154425;
+	Sun, 31 Mar 2024 16:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KATUYlPX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tK6CanBc"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AB515E5DD
-	for <linux-security-module@vger.kernel.org>; Sun, 31 Mar 2024 16:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=62.96.220.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711903428; cv=pass; b=aRYQWwP4FYgRcPGMB13lC9/VcE6DgT5LJlhadd/4c/tTWTvZ+Ru2kPOKwfMUvYVe1mX9UQWOMV5uoJFElxll9l45+ZMDSRw0jgeBPGGQM9RXXULofzmplCe+RYjak1WGpVVZyFTHebbxJ07Q94Y+eREb+79HmlXRVXo32SGOQqo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711903428; c=relaxed/simple;
-	bh=DF/L0+Q5E9+KTQeS14VYcTiSfXzgyZHE5qV4GXYVLVY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dFI47Ov+1jT7wusocvgscsus9DRd45bw4EeGIyBYNkJfjlCBekrVt33OB5sEprwYKOpLIuuTltqlf+oXIhsYa0h3+1WD2smP96ZOJJZJYu5/lTTDwE/T0lkialnLignbjgLePfSgb2u9R/Pq3j5++GDvzD91WyctNW7xshjSNXw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=fail smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KATUYlPX; arc=none smtp.client-ip=209.85.128.175; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; arc=pass smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=paul-moore.com
-Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id E5207208D4;
-	Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ub_T_zf_ql53; Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id 55570208CB;
-	Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 55570208CB
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout1.secunet.com (Postfix) with ESMTP id 498EB800061;
-	Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 18:43:44 +0200
-Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
- 15.1.2507.17; Sun, 31 Mar 2024 16:37:05 +0000
-X-sender: <linux-security-module+bounces-2449-steffen.klassert=secunet.com@vger.kernel.org>
-X-Receiver: <steffen.klassert@secunet.com> ORCPT=rfc822;steffen.klassert@secunet.com
-X-CreatedBy: MSExchange15
-X-HeloDomain: mbx-dresden-01.secunet.de
-X-ExtendedProps: BQBjAAoA0GQFfe5Q3AgFADcAAgAADwA8AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50Lk9yZ2FuaXphdGlvblNjb3BlEQAAAAAAAAAAAAAAAAAAAAAADwA/AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLk1haWxEZWxpdmVyeVByaW9yaXR5DwADAAAATG93
-X-Source: SMTP:Default MBX-ESSEN-02
-X-SourceIPAddress: 10.53.40.199
-X-EndOfInjectedXHeaders: 11214
-X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.80.249; helo=am.mirrors.kernel.org; envelope-from=linux-security-module+bounces-2449-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 9D32F2025D
-Authentication-Results: b.mx.secunet.com;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KATUYlPX"
-X-Original-To: linux-security-module@vger.kernel.org
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
-ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711834783; cv=none; b=nwOgGl7r3yIMuISFv3aqTzdtSUdXkBIc74XqSRTVfCii10Edq5W5rgk2QeCmbBSlmXFZ7ep6zVl+JA/YqPH0Mvym0PdRJvzH1TduNHD6DiRyVB1yJfwZsjNfl2s0YhqJXoX8TZB1O9y4HfPOMbQNUi+XQ80XbUS745O74vYHlbk=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711834783; c=relaxed/simple;
-	bh=DF/L0+Q5E9+KTQeS14VYcTiSfXzgyZHE5qV4GXYVLVY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P/bwcNN8GzOR1rmzEOr2oYinsqS3OLDVPY51qt04Mm01B4PhCnuxL8UrCDGjWEjoiTPfCdvWXlxrpyUh2o9ct1MLwJoN9QfSiW2AoB6o+J4JhAgv6K+0ygmtftvTJdHhO3RaLZ/q2tegIODAR5mMLvaPsW4FikCetcQe+7HsUQA=
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KATUYlPX; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1711834780; x=1712439580; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gGWA0gwym6PRWQPU3SPN95r2Cy2WmqnySATlGVqX0IQ=;
-        b=KATUYlPXmsAlLoU34HLNsLK1fAvQCGHDI9FuVQpNSXqLf+Qwo2akp57rJQ1IxIqZy8
-         +LtG6cV750HgC2kYtwNcWMibLRsYo8Dyf1nb5JPtATqqYBvMeK3N+j2uTnbwUnzUOAOx
-         196Yzpm97OqTdH4nGmVMRhCpw/qs09FFvd7Abpg93sTUBlsTjHRvs2dwZ9DxTb0xXC+o
-         OZuGJ3rRiLewAuDYRs65vAWhuttu8LL9fboHAIJMQIUOyCaJu7DDRJQLjoSF50XnqcaJ
-         pI+gk3eWGl2EkipTPZU52kkxpFW8kJ3y+KfnQ4brEgPc4VJnhGCPJF+VE6iCvTn0Jfm6
-         9mlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711834780; x=1712439580;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gGWA0gwym6PRWQPU3SPN95r2Cy2WmqnySATlGVqX0IQ=;
-        b=dQ/lWSZfBupJrZsV7oFydfo+91w6dlrcvh+gEFc2TpJQBBkngrk8xUOWh8rrjbc7HE
-         ZZongwkH+Rs9T78aDrhmCjhZ7WKvYFTaURQVJuyg7+PKAUZ3orQi/si51kd161IOSDj0
-         bqYD4a609WzHgEQT0/XV8fpPKaA7gp67LnPWOkKkJPqYp2NyoGbhdvu1zFL1IeCbxsTO
-         3x7YQN66YJE0d2mH+lF8UFDdyzZzBUKLC0umEbVCfMUDCJ+bwG304kKL6JO7IccQRIYI
-         cq67qofEupdP3okvADPnp2Zz9xsKL4OGBx2tewBAOCReB3UVG4Zybu8JGzEUz/Kri0lr
-         fprA==
-X-Gm-Message-State: AOJu0YwZsLbkhjb3WyZ3/Tw1jJVNAYWl1tkIX627x7vtyd8dNL+0c6dl
-	bAHnUrcH/XkY0APsHkb2tfbeUg82GS5MRH0nu+DL7De3NbUh4XAhQD/dAEsP2uxi2cbNXMix/Ec
-	/KtpXX+H1AHHjDAFtluSZT3n9Wv2Lpn2JasuU
-X-Google-Smtp-Source: AGHT+IGDR7sSsXYtGe+LeHaAVsSnqHcKvB5dfKxCnr8LKd3YMoaQWtkNixesi6Xsn/zjb3RSYA9G89IhSlmvu1V9vy8=
-X-Received: by 2002:a81:4c86:0:b0:614:4f9e:5671 with SMTP id
- z128-20020a814c86000000b006144f9e5671mr4433014ywa.17.1711834779854; Sat, 30
- Mar 2024 14:39:39 -0700 (PDT)
-Precedence: bulk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E558F15382B;
+	Sun, 31 Mar 2024 16:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711904083; cv=none; b=dQETvXBd2WWxgeAsPzBMQ2rSxPwdtzXokMfH+LUlVH3cFqol8gTUN/JLsmZR+PNmrK6jV2mZAVTLv64FrbUKtwJd7cFvs6p+e5jkhIxrDRNl7sg+c5H+EDFsrx1vHhhM5Aj7Z+Mm7aJ+h+g2oXgXL0/NbO0+X5icnVRobAFD9Bg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711904083; c=relaxed/simple;
+	bh=s7RS9CLgfOYl44fC5tGC2rr2q02WhNnP4BvSdb44qh4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xxf/KE11Xm9oczZdPLUfrRGv4WuENUpaqhvpMYW9RMdzVxOcIWNaWo00OYNDp0AlNUha9gatujxaiwSzzpFt7F0foBo+NEVSJnkrsaLvNFXnH/dJkXK8CzBwiUHvBz/AI8jD4GweJoomErK5kpYppZF4I9dDfn/gWG8SMq5LOQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tK6CanBc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F41A4C43390;
+	Sun, 31 Mar 2024 16:54:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711904082;
+	bh=s7RS9CLgfOYl44fC5tGC2rr2q02WhNnP4BvSdb44qh4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tK6CanBcNgxuju0hQvyE355ZTenttn+acrIgqciCS7PHPZSv2StdnV1SJh9g1acOA
+	 YB8n/+KI+ZjCuUbwkSL3KSdN6LMztPNYMNGfOkguxm+22VeZ7q1HqNysrSjJoD3ZOa
+	 J8A8M7e3n09zGhaX3fbA000C0SPTn4IEt/qm77Ew=
+Date: Sun, 31 Mar 2024 18:54:39 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ayush Tiwari <ayushtiw0110@gmail.com>
+Cc: alison.schofield@intel.com, paul@paul-moore.com, mic@digikod.net,
+	fabio.maria.de.francesco@linux.intel.com,
+	linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2] landlock: Use kmem for landlock_object
+Message-ID: <2024033111-squeezing-linoleum-52a7@gregkh>
+References: <ZggZi/EFICvb4xTU@ayush-HP-Pavilion-Gaming-Laptop-15-ec0xxx>
+ <2024033030-tutu-dynamite-47c9@gregkh>
+ <ZgmETqQr7+W9XtWN@ayush-HP-Pavilion-Gaming-Laptop-15-ec0xxx>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240324223231.6249-1-greg@enjellic.com> <CAHC9VhQ22ef_o_OYue93RZfff70LPuOaCuN7Czv7HiEy346Svw@mail.gmail.com>
- <20240326103047.GA19964@wind.enjellic.com> <CAHC9VhQvN43LL-ynV-ZZgR2L8wFfUeq2-SZb5QHh9ZMWtz4C1A@mail.gmail.com>
- <20240327091644.GA32347@wind.enjellic.com> <CAHC9VhSjjeBH2CE5i+PK9Zyg661k-ryDbYkoPLtEe-g52DW0Fw@mail.gmail.com>
- <20240328153800.GA17524@wind.enjellic.com> <CAHC9VhTwZD7OU9v36HOd28a6jULLJeoQTdNSBYZWSrsY+jf7ZA@mail.gmail.com>
- <20240330144604.GA4625@wind.enjellic.com>
-In-Reply-To: <20240330144604.GA4625@wind.enjellic.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sat, 30 Mar 2024 17:39:28 -0400
-Message-ID: <CAHC9VhRruSLET+aOhCt7WKucWNBE_qLCYV3won+p10XOjLLiHQ@mail.gmail.com>
-Subject: Re: [PATCH] Do not require attributes for security_inode_init_security.
-To: "Dr. Greg" <greg@enjellic.com>
-Cc: linux-security-module@vger.kernel.org, roberto.sassu@huaweicloud.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZgmETqQr7+W9XtWN@ayush-HP-Pavilion-Gaming-Laptop-15-ec0xxx>
 
-On Sat, Mar 30, 2024 at 10:46=E2=80=AFAM Dr. Greg <greg@enjellic.com> wrote=
-:
-> On Thu, Mar 28, 2024 at 08:26:11PM -0400, Paul Moore wrote:
-> > On Thu, Mar 28, 2024 at 11:38???AM Dr. Greg <greg@enjellic.com> wrote:
-> > >
-> > > BPF provides an implementation and would be affected ...
->
-> > Casey pretty much summed up my thoughts fairly well, including the
-> > "Bear poking trimmed" comment, which was worth a good laugh :)
->
-> Very good, we will take Casey's e-mail as the official position of the
-> Linux security maintainers on the functionality under discussion and
-> similar issues moving forward.
+On Sun, Mar 31, 2024 at 09:12:06PM +0530, Ayush Tiwari wrote:
+> Hello Greg. Thanks for the feedback.
+> On Sat, Mar 30, 2024 at 05:12:18PM +0100, Greg KH wrote:
+> > On Sat, Mar 30, 2024 at 07:24:19PM +0530, Ayush Tiwari wrote:
+> > > Use kmem_cache replace kzalloc() calls with kmem_cache_zalloc() for
+> > > struct landlock_object and update the related dependencies to improve
+> > > memory allocation and deallocation performance.
+> > 
+> > So it's faster?  Great, what are the measurements?
+> > 
+> Thank you for the feedback. Regarding the performance improvements, I
+> realized I should have provided concrete measurements to support the
+> claim. The intention behind switching to kmem_cache_zalloc() was to
+> optimize memory management efficiency based on general principles.
+> Could you suggest some way to get some measurements if possible?
 
-You're welcome to take whatever lessons you want from this thread,
-that is your choice, but please understand that your interpretation of
-this thread may not accurately reflect the opinions or policies,
-either now or in the future, of the subsystem maintainers.  I
-understand that developers/engineers like hard rules, it's reassuring
-and comforting; I'm right there with you.  Unfortunately, the Linux
-kernel is a bizarrely complex beast with changes happening on a
-regular basis and in an often unpredictable way.  While I do attempt
-to provide guidelines on certain things, e.g. new LSMs, new LSM hooks,
-etc., ultimately decisions still boil down to the
-wonderfully/frustratingly vague "maintainer's discretion".
+If you can not measure the difference, why make the change at all?
 
-In this thread, especially the last few messages, the only "position"
-I would suggest one take as a lesson, is that the LSM developers don't
-need to be told about the BPF LSM, or BPF in general, because we have
-all be struggling (?) with the challenges it brings for many, many
-years already.  That isn't to say the BPF LSM, or eBPF in general, is
-a bad technology - you can definitely do some cool things with it -
-but integrating it into the kernel, and determining the appropriate
-boundaries between BPF code and the kernel internals, has been (and
-continues to be) a struggle.  Simply dig through the archives and
-you'll see more than a few threads on this subject.
+Again, you need to prove the need for this change, so far I fail to see
+a reason why.
 
---=20
-paul-moore.com
+> > > +static struct kmem_cache *landlock_object_cache;
+> > > +
+> > > +void __init landlock_object_cache_init(void)
+> > > +{
+> > > +	landlock_object_cache = kmem_cache_create(
+> > > +		"landlock_object_cache", sizeof(struct landlock_object), 0,
+> > > +		SLAB_PANIC, NULL);
+> > 
+> > You really want SLAB_PANIC?  Why?
+> >
+> The SLAB_PANIC flag used in kmem_cache_create indicates that if the
+> kernel is unable to create the cache, it should panic. The use of
+> SLAB_PANIC in the creation of the landlock_object_cache is due to the
+> critical nature of this cache for the Landlock LSM's operation. I
+> found it to be a good choice to be used. Should I use some other
+> altrnative?
 
+Is panicing really a good idea?  Why can't you properly recover from
+allocation failures?
+
+> > > +
+> > >  struct landlock_object *
+> > >  landlock_create_object(const struct landlock_object_underops *const underops,
+> > >  		       void *const underobj)
+> > > @@ -25,7 +34,8 @@ landlock_create_object(const struct landlock_object_underops *const underops,
+> > >  
+> > >  	if (WARN_ON_ONCE(!underops || !underobj))
+> > >  		return ERR_PTR(-ENOENT);
+> > > -	new_object = kzalloc(sizeof(*new_object), GFP_KERNEL_ACCOUNT);
+> > > +	new_object =
+> > > +		kmem_cache_zalloc(landlock_object_cache, GFP_KERNEL_ACCOUNT);
+> > 
+> > Odd indentation, why?
+> > 
+> This indentation is due to formatting introduced by running
+> clang-format.
+
+Why not keep it all on one line?
+
+thanks,
+
+greg k-h
 
