@@ -1,191 +1,209 @@
-Return-Path: <linux-security-module+bounces-2467-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2474-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57C8A893A5C
-	for <lists+linux-security-module@lfdr.de>; Mon,  1 Apr 2024 12:51:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18EEC89446A
+	for <lists+linux-security-module@lfdr.de>; Mon,  1 Apr 2024 19:43:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BBC71C21216
-	for <lists+linux-security-module@lfdr.de>; Mon,  1 Apr 2024 10:51:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DD8F1C215AA
+	for <lists+linux-security-module@lfdr.de>; Mon,  1 Apr 2024 17:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63EF023778;
-	Mon,  1 Apr 2024 10:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2224D5A0;
+	Mon,  1 Apr 2024 17:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="pv12/5Hs"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from blizzard.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0EF1200CD;
-	Mon,  1 Apr 2024 10:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EE83FE55;
+	Mon,  1 Apr 2024 17:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711968643; cv=none; b=E/Utu0yTby8MxV8HT9saugbEKoSOh3jeKGBFVjIXmuIe0sbcFSUPiR1J+o+9WzSHKT2cf13n0DSSKsR+Enh4+NZlxdu/xHwzugU7LO7JVGFet+rX2dbyCJ6psOdECQmH/+rq6awOV8jeSjqVgbJ5ySOCJ1ONw3BnqhXGQ8OKG8U=
+	t=1711993388; cv=none; b=Qf/25BBGCiNZOKE+ISYx2Lz1Sy81+q1JSlP1SMptCRxzkwpkC9dInQPuY1so6D8Ppfokya/Bi+zy+j4ne1BNY9QKMYvDuHf5dEr/b9b7REiBQ4ufzVpa18zHKZQbOh9Th8y1ZFLNr2U2r3MiU4XPpqOAPrLZXpG7+u6gyonl1aA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711968643; c=relaxed/simple;
-	bh=e5RgIIoBjoGLrQasjIh4BM2qQ5hIEJfXSJEBzAqwjhE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NEZ/PCT3u6bEst/YeqD8Y5HkMWQsuJR05+11WPpYy1FQ+3RuelhoiFTncKMBx+VArYIu63Ov5X8Sf+DRjMM3n4+IabOGrliWBcg8im/bgXRo75JB6r0tRTm8ZKUlhTBMV7D+J/jy/qyNY4i35o83xlrdi5VCUJcJNZq4OpongxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjellic.com
-Received: from blizzard.enjellic.com (localhost [127.0.0.1])
-	by blizzard.enjellic.com (8.15.2/8.15.2) with ESMTP id 431AoSFj027708;
-	Mon, 1 Apr 2024 05:50:28 -0500
-Received: (from greg@localhost)
-	by blizzard.enjellic.com (8.15.2/8.15.2/Submit) id 431AoRQW027706;
-	Mon, 1 Apr 2024 05:50:27 -0500
-X-Authentication-Warning: blizzard.enjellic.com: greg set sender to greg@enjellic.com using -f
-From: Greg Wettstein <greg@enjellic.com>
-To: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jmorris@namei.org
-Subject: [PATCH v3 12/12] Activate the configuration and build of the TSEM LSM.
-Date: Mon,  1 Apr 2024 05:50:15 -0500
-Message-Id: <20240401105015.27614-13-greg@enjellic.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20240401105015.27614-1-greg@enjellic.com>
-References: <20240401105015.27614-1-greg@enjellic.com>
+	s=arc-20240116; t=1711993388; c=relaxed/simple;
+	bh=JgU8DwGeS6UdB0ISiaIplMMPCy9sdLqL6ijz1fpUNqc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X9HqYuXMS9d4FSODIYOUhni0nmE5qo7ZjftpwTTOj0AoXrIhfeZGit6HMJB48Zj0qCQg0/nPZ+DVn+x9lcGoPV1J2OQHao43+XCdSa9ndDaCgVdrAhY/klGaL3+kOJEYBe4ezcW5RbVZ/o7N3sgmTziQNmjhbXY3sHtwhZ2m9CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=pv12/5Hs; arc=none smtp.client-ip=95.143.211.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
+Date: Mon, 1 Apr 2024 20:36:58 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+	t=1711993018;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HV1qp1NUlPyvoGDoA7alKszkCgDl8gSbryMc5j01V3w=;
+	b=pv12/5HsDAD0zZShi3p6j4DD+fYgUUCNL0ULdWiHMD7c2HpDZQ1MyjmL+zK/q34wzeGIoP
+	Ve4oGM3aY/bMsC0AwfykPos0qCIe3Gdwu/Bpg5A5FVZuEbpilkIwah9Dfe/wcUlF+HbofV
+	nDKEsGmyoSHXuJS4M6KVhieirpwBUdA=
+From: Andrey Kalachev <kalachev@swemel.ru>
+To: syzbot <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com>
+Cc: andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, jmorris@namei.org, john.fastabend@gmail.com,
+	kafai@fb.com, kpsingh@chromium.org, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+	serge@hallyn.com, songliubraving@fb.com,
+	syzkaller-bugs@googlegroups.com, yhs@fb.com, miklos@szeredi.hu,
+	linux-unionfs@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: general protection fault in security_inode_getattr
+Message-ID: <ZgrwugCEDH2fLJXK@ural>
+References: <0000000000008caae305ab9a5318@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <0000000000008caae305ab9a5318@google.com>
 
-From: "Dr. Greg" <greg@enjellic.com>
+On Wed, Jul 29, 2020 at 01:23:18PM -0700, syzbot wrote:
+>Hello,
+>
+>syzbot found the following issue on:
+>
+>HEAD commit:    92ed3019 Linux 5.8-rc7
+>git tree:       upstream
+>console output: https://syzkaller.appspot.com/x/log.txt?x=140003ac900000
+>kernel config:  https://syzkaller.appspot.com/x/.config?x=84f076779e989e69
+>dashboard link: https://syzkaller.appspot.com/bug?extid=f07cc9be8d1d226947ed
+>compiler:       gcc (GCC) 10.1.0-syz 20200507
+>
+>Unfortunately, I don't have any reproducer for this issue yet.
+>
+>IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>Reported-by: syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com
+>
+>general protection fault, probably for non-canonical address 0xdffffc000000000c: 0000 [#1] PREEMPT SMP KASAN
+>KASAN: null-ptr-deref in range [0x0000000000000060-0x0000000000000067]
+>CPU: 0 PID: 9214 Comm: syz-executor.3 Not tainted 5.8.0-rc7-syzkaller #0
+>Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>RIP: 0010:d_backing_inode include/linux/dcache.h:549 [inline]
+>RIP: 0010:security_inode_getattr+0x46/0x140 security/security.c:1276
+>Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 04 01 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 08 48 8d 7b 60 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 d7 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
+>RSP: 0018:ffffc9000d41f638 EFLAGS: 00010206
+>RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000f539000
+>RDX: 000000000000000c RSI: ffffffff8354f8ee RDI: 0000000000000060
+>RBP: ffffc9000d41f810 R08: 0000000000000001 R09: ffff88804edc2dc8
+>R10: 0000000000000000 R11: 00000000000ebc58 R12: ffff888089f10170
+>R13: ffffc9000d41f810 R14: 00000000000007ff R15: 0000000000000000
+>FS:  00007f3599717700(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+>CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>CR2: 0000001b2c12c000 CR3: 0000000099919000 CR4: 00000000001406f0
+>DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>Call Trace:
+> vfs_getattr+0x22/0x60 fs/stat.c:121
+> ovl_copy_up_one+0x13b/0x1870 fs/overlayfs/copy_up.c:850
+> ovl_copy_up_flags+0x14b/0x1d0 fs/overlayfs/copy_up.c:931
+> ovl_maybe_copy_up+0x140/0x190 fs/overlayfs/copy_up.c:963
+> ovl_open+0xba/0x270 fs/overlayfs/file.c:147
+> do_dentry_open+0x501/0x1290 fs/open.c:828
+> do_open fs/namei.c:3243 [inline]
+> path_openat+0x1bb9/0x2750 fs/namei.c:3360
+> do_filp_open+0x17e/0x3c0 fs/namei.c:3387
+> file_open_name+0x290/0x400 fs/open.c:1124
+> acct_on+0x78/0x770 kernel/acct.c:207
+> __do_sys_acct kernel/acct.c:286 [inline]
+> __se_sys_acct kernel/acct.c:273 [inline]
+> __x64_sys_acct+0xab/0x1f0 kernel/acct.c:273
+> do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:384
+> entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>RIP: 0033:0x45c369
+>Code: 8d b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 5b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+>RSP: 002b:00007f3599716c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a3
+>RAX: ffffffffffffffda RBX: 0000000000000700 RCX: 000000000045c369
+>RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000440
+>RBP: 000000000078bf30 R08: 0000000000000000 R09: 0000000000000000
+>R10: 0000000000000000 R11: 0000000000000246 R12: 000000000078bf0c
+>R13: 00007ffda41ffbef R14: 00007f35997179c0 R15: 000000000078bf0c
+>Modules linked in:
+>---[ end trace d1398a63985d3915 ]---
+>RIP: 0010:d_backing_inode include/linux/dcache.h:549 [inline]
+>RIP: 0010:security_inode_getattr+0x46/0x140 security/security.c:1276
+>Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 04 01 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 08 48 8d 7b 60 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 d7 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
+>RSP: 0018:ffffc9000d41f638 EFLAGS: 00010206
+>RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000f539000
+>RDX: 000000000000000c RSI: ffffffff8354f8ee RDI: 0000000000000060
+>RBP: ffffc9000d41f810 R08: 0000000000000001 R09: ffff88804edc2dc8
+>R10: 0000000000000000 R11: 00000000000ebc58 R12: ffff888089f10170
+>R13: ffffc9000d41f810 R14: 00000000000007ff R15: 0000000000000000
+>FS:  00007f3599717700(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+>CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>CR2: 0000000020000440 CR3: 0000000099919000 CR4: 00000000001406f0
+>DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>
+>
+>---
+>This report is generated by a bot. It may contain errors.
+>See https://goo.gl/tpsmEJ for more information about syzbot.
+>syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+>syzbot will keep track of this issue. See:
+>https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Complete the implementation by integrating TSEM into the
-configuration and kernel build infrastructure.  This includes
-registration of TSEM with the LSM infrastructure and the
-assignment of an LSM identifier number.
----
- include/uapi/linux/lsm.h |  1 +
- security/Kconfig         | 11 ++++++-----
- security/Makefile        |  1 +
- security/security.c      |  3 ++-
- security/tsem/Kconfig    | 36 ++++++++++++++++++++++++++++++++++++
- security/tsem/Makefile   |  2 ++
- 6 files changed, 48 insertions(+), 6 deletions(-)
- create mode 100644 security/tsem/Kconfig
- create mode 100644 security/tsem/Makefile
+Hello,
 
-diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-index 33d8c9f4aa6b..6b63c158c1df 100644
---- a/include/uapi/linux/lsm.h
-+++ b/include/uapi/linux/lsm.h
-@@ -64,6 +64,7 @@ struct lsm_ctx {
- #define LSM_ID_LANDLOCK		110
- #define LSM_ID_IMA		111
- #define LSM_ID_EVM		112
-+#define LSM_ID_TSEM		113
- 
- /*
-  * LSM_ATTR_XXX definitions identify different LSM attributes
-diff --git a/security/Kconfig b/security/Kconfig
-index 412e76f1575d..a7802eb29034 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -192,6 +192,7 @@ source "security/yama/Kconfig"
- source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
- source "security/landlock/Kconfig"
-+source "security/tsem/Kconfig"
- 
- source "security/integrity/Kconfig"
- 
-@@ -231,11 +232,11 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
--	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
--	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
--	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
--	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list, except for those with order
-diff --git a/security/Makefile b/security/Makefile
-index 59f238490665..1d4e0a698a2d 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -25,6 +25,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
- obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
- obj-$(CONFIG_BPF_LSM)			+= bpf/
- obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
-+obj-$(CONFIG_SECURITY_TSEM)		+= tsem/
- 
- # Object integrity file lists
- obj-$(CONFIG_INTEGRITY)			+= integrity/
-diff --git a/security/security.c b/security/security.c
-index 7e118858b545..0c91579f2912 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -51,7 +51,8 @@
- 	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_IMA) ? 1 : 0) + \
--	(IS_ENABLED(CONFIG_EVM) ? 1 : 0))
-+	(IS_ENABLED(CONFIG_EVM) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_TSEM) ? 1 : 0))
- 
- /*
-  * These are descriptions of the reasons that can be passed to the
-diff --git a/security/tsem/Kconfig b/security/tsem/Kconfig
-new file mode 100644
-index 000000000000..2e9d54eb3acc
---- /dev/null
-+++ b/security/tsem/Kconfig
-@@ -0,0 +1,36 @@
-+config SECURITY_TSEM
-+	bool "Trusted Security Event Modeling"
-+	depends on SECURITY
-+	depends on NET && INET
-+	select SECURITY_NETWORK
-+	select SECURITYFS
-+	select CRYPTO
-+	select CRYPTO_SHA256
-+	select CRYPTO_HASH_INFO
-+	select TCG_TPM if HAS_IOMEM && !UML
-+	select TCG_TIS if TCG_TPM && X86
-+	select TCG_CRB if TCG_TPM && ACPI
-+	default n
-+	help
-+	  This option selects support for Trusted Security Event
-+	  Modeling (TSEM).  TSEM implements the ability to model
-+	  the security state of either the system at large or in a
-+	  restricted namespace on the basis of the LSM security
-+	  events and attributes that occur in the scope of the model.
-+	  The model may be implemented either in the kernel proper
-+	  or exported to an external Trusted Modeling Agent (TMA).
-+	  If you are unsure how to answer this question, answer N.
-+
-+config SECURITY_TSEM_ROOT_MODEL_PCR
-+	int "TPM PCR index for root domain"
-+	depends on SECURITY_TSEM
-+	range 8 14
-+	default 11
-+	help
-+	  This configuration variable determines the TPM Platform
-+	  Configuration Register (PCR) that the coefficients of
-+	  security events for the root modeling domain are extended
-+	  into.  The default value is one register above the default
-+	  value that IMA uses for its integrity measurements, in order
-+	  to avoid a conflict between the two sub-systems.  If unsure,
-+	  leave the value at its default value of 11.
-diff --git a/security/tsem/Makefile b/security/tsem/Makefile
-new file mode 100644
-index 000000000000..d43cf2ae2142
---- /dev/null
-+++ b/security/tsem/Makefile
-@@ -0,0 +1,2 @@
-+obj-$(CONFIG_SECURITY_TSEM) := tsem.o model.o namespace.o map.o event.o fs.o \
-+	export.o trust.o
--- 
-2.39.1
+I've found that the bug fixed by commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0af950f57fefabab628f1963af881e6b9bfe7f38
+merged with mainline here:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?id=be3c213150dc4370ef211a78d78457ff166eba4e
+
+Kernel release 6.5 include the fixed code.
+
+Hence, the stable kernels up to 6.5 still affected.
+I've got early version (4.19.139) from syzbot report, here is the first time when been reported.
+Maybe previous versions are also affected, I haven't checked it.
+
+I've only deal with stable 5.10 and 6.1, here I can confirm the issue.
+
+The tracing results showed that GPF caused by the dentry shared between two processes.
+Suppose we have a regular file `A` onto lower overlayfs layer, metacopy=on.
+P1 execute link syscall ( `A` link to `B`), P2 do open `B`.
+
+   P1          P2
+
+   sys_link
+               sys_open
+                 ovl_lookup B -- lookup non existent `B`, alloc `B` dentry
+                   ovl_alloc_entry -- non existent file, zero filled ovl_entry
+
+     ovl_link -- link A to B, use same dentry `B`, dentry associated with
+     `A`, lower layer file now.
+
+   sys_link -- return to userspace, zero filled ovl_entry `B` untouched
+
+                     ovl_open B, reuse the same dentry `B`
+                       ovl_copy_up_one
+                         ovl_path_lower
+                           ovl_numlower(oe) -- return 0, numlower in zero filled ovl_entry `oe`
+                         ovl_path_lower -- return zero filled `struct path`
+                         vfs_getattr(struct path, ..)
+                           security_inode_getattr(struct path, ...)
+                             d_backing_inode(path->dentry) -- NULL dereference, GPF
+
+Stable kernel v6.1 can be easy fixed by 4 mainline commits transfer:
+
+0af950f57fef ovl: move ovl_entry into ovl_inode
+163db0da3515 ovl: factor out ovl_free_entry() and ovl_stack_*() helpers
+5522c9c7cbd2 ovl: use ovl_numlower() and ovl_lowerstack() accessors
+a6ff2bc0be17 ovl: use OVL_E() and OVL_E_FLAGS() accessors
+
+Just commit 5522c9c7cbd2 has conflict caused by
+4609e1f18e19c ("fs: port ->permission() to pass mnt_idmap").
+It is enough to change mnt_idmap() call to mnt_user_ns(),
+in the rejected hunk.
+
+--
+Andrey Kalachev
+Software Engineer,
+Swemel
 
 
