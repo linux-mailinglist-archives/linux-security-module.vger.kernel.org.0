@@ -1,189 +1,123 @@
-Return-Path: <linux-security-module+bounces-2581-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2583-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C15689B971
-	for <lists+linux-security-module@lfdr.de>; Mon,  8 Apr 2024 09:57:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 137C889BBFB
+	for <lists+linux-security-module@lfdr.de>; Mon,  8 Apr 2024 11:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D1341C224A7
-	for <lists+linux-security-module@lfdr.de>; Mon,  8 Apr 2024 07:57:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0F272824AA
+	for <lists+linux-security-module@lfdr.de>; Mon,  8 Apr 2024 09:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CDDB2C695;
-	Mon,  8 Apr 2024 07:53:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="irilo2Ty"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118AA47F65;
+	Mon,  8 Apr 2024 09:40:10 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440544437C
-	for <linux-security-module@vger.kernel.org>; Mon,  8 Apr 2024 07:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979ED481A6;
+	Mon,  8 Apr 2024 09:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712562795; cv=none; b=CS18jzTiv4nrJNbfBGByxaVmjR7/ErC/dCFlypA655laRXQN6+DQHg7sZJtmCVRIGq2SLFfN/Fxu9JYMSAlvWTy9400wKUj3vP0B0E4WceRplt222sj8p7Q/7Xtxz3h5vSf+euv+rRTz96arQVu4f/W+IqoVMIs1D0igTA3EKQI=
+	t=1712569209; cv=none; b=MBq6ceC+ebFhpMMDkRs+VAV1t1Q6KJftgN9+numQe9a253D1DqvjxY4Z+c8nxEyPRcEInPIa8E6nWc+8Kl8eWFU/H4499bX7EELwnpC3wyuWRvNj/90l5gfosuyOg3VKxMpjL26LbuU25AwZ4v93xx80CocbqOv/31gOogZeuus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712562795; c=relaxed/simple;
-	bh=bZ6LYvtmVQg7V+57TeHLNvjsThrxUvXCCbMFN4WIJOA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HozeP1XLNuNm+1TbZa7FQoN/aj5Mlh5BKR/EuyZlGewgq3OuO+6wkTzLGWwkREvJ7z/e2tFPwphtADoAHubBJqMV7rxgjGc28MGqbcEvPUMB321aj3XQlt3lxp+PwrctuUp9XNJofkXNMsRqRSKWcuptn9Mu3kA77Wn+puxnIqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=irilo2Ty; arc=none smtp.client-ip=84.16.66.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VCh4g4LNJzDj5;
-	Mon,  8 Apr 2024 09:46:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1712562419;
-	bh=bZ6LYvtmVQg7V+57TeHLNvjsThrxUvXCCbMFN4WIJOA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=irilo2TyXHxH1HmjWzd5ma96hKDCpOPWki4uN2ph3nDS7pWaaIj92Q972R3WxyM6k
-	 XhwQ1VQbAPWBHBxCkKYmZbAOk+BD/75YzXVGHjteeuVW09LgY1gkf0LC1mK7inHsp9
-	 qFr9Bj6/nr68DCEodak6KjYhKUJEH+So8MYTUDr8=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VCh4f732zzS7b;
-	Mon,  8 Apr 2024 09:46:58 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Brendan Higgins <brendanhiggins@google.com>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"Eric W . Biederman" <ebiederm@xmission.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Kees Cook <keescook@chromium.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-	Marco Pagani <marpagan@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Thara Gopinath <tgopinath@microsoft.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Zahra Tarkhani <ztarkhani@microsoft.com>,
-	kunit-dev@googlegroups.com,
-	kvm@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	x86@kernel.org
-Subject: [PATCH v4 RESEND 7/7] kunit: Add tests for fault
-Date: Mon,  8 Apr 2024 09:46:25 +0200
-Message-ID: <20240408074625.65017-8-mic@digikod.net>
-In-Reply-To: <20240408074625.65017-1-mic@digikod.net>
-References: <20240408074625.65017-1-mic@digikod.net>
+	s=arc-20240116; t=1712569209; c=relaxed/simple;
+	bh=YBUbh6HtUyMMTAq9uOto0mpD3Zh0eaTzvy58NwTSo6c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aiV/DWQ8XIiXjq13qF/Fz8OVo19PWzyHrSXNFMgikipuchNMitAz1NOv1yLkpR4X/Yqb5Y5cnXegJ0wbq8CHqmStA3IclVQ8C4tVT7RIpM617/s7G3xmGkiXBTHWqb3YGZzQgNCs+547H/VbVbzj0E/eas79JKz9eS/1LBEla44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4VCkWs5l4Pz29lMy;
+	Mon,  8 Apr 2024 17:37:13 +0800 (CST)
+Received: from dggpemm500020.china.huawei.com (unknown [7.185.36.49])
+	by mail.maildlp.com (Postfix) with ESMTPS id E0AD718005F;
+	Mon,  8 Apr 2024 17:40:03 +0800 (CST)
+Received: from mscphis02103.huawei.com (10.123.65.215) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Mon, 8 Apr 2024 17:40:01 +0800
+From: Ivanov Mikhail <ivanov.mikhail1@huawei-partners.com>
+To: <mic@digikod.net>
+CC: <willemdebruijn.kernel@gmail.com>, <gnoack3000@gmail.com>,
+	<linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<netfilter-devel@vger.kernel.org>, <yusongping@huawei.com>,
+	<artem.kuzin@huawei.com>, <konstantin.meskhidze@huawei.com>
+Subject: [RFC PATCH v1 00/10] Socket type control for Landlock
+Date: Mon, 8 Apr 2024 17:39:17 +0800
+Message-ID: <20240408093927.1759381-1-ivanov.mikhail1@huawei-partners.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain
+X-ClientProxiedBy: mscpeml100003.china.huawei.com (10.199.174.67) To
+ dggpemm500020.china.huawei.com (7.185.36.49)
 
-Add a test case to check NULL pointer dereference and make sure it would
-result as a failed test.
+Patchset implements new type of Landlock rule, that restricts actions for
+sockets of any protocol. Such restriction would be useful to ensure
+that a sandboxed process uses only necessary protocols.
+See [2] for more cases.
 
-The full kunit_fault test suite is marked as skipped when run on UML
-because it would result to a kernel panic.
+The rules store information about the socket family(aka domain) and type.
 
-Tested with:
-./tools/testing/kunit/kunit.py run --arch x86_64 kunit_fault
-./tools/testing/kunit/kunit.py run --arch arm64 \
-  --cross_compile=aarch64-linux-gnu- kunit_fault
+struct landlock_socket_attr {
+	__u64 allowed_access;
+	int domain; // see socket(2)
+	int type; // see socket(2)
+}
 
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Cc: Rae Moar <rmoar@google.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20240408074625.65017-8-mic@digikod.net
----
+Patchset currently implements rule only for socket_create() method, but
+other necessary rules will also be impemented. [1]
 
-Changes since v2:
-* Add David's Reviewed-by.
+Code coverage(gcov) report with the launch of all the landlock selftests:
+* security/landlock:
+lines......: 94.7% (784 of 828 lines)
+functions..: 97.2% (105 of 108 functions)
 
-Changes since v1:
-* Remove the rodata and const test cases for now.
-* Replace CONFIG_X86 check with !CONFIG_UML, and remove the "_x86"
-  references.
----
- lib/kunit/kunit-test.c | 45 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 44 insertions(+), 1 deletion(-)
+* security/landlock/socket.c:
+lines......: 100.0% (33 of 33 lines)
+functions..: 100.0% (5 of 5 functions)
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index f7980ef236a3..0fdca5fffaec 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -109,6 +109,48 @@ static struct kunit_suite kunit_try_catch_test_suite = {
- 	.test_cases = kunit_try_catch_test_cases,
- };
- 
-+#ifndef CONFIG_UML
-+
-+static void kunit_test_null_dereference(void *data)
-+{
-+	struct kunit *test = data;
-+	int *null = NULL;
-+
-+	*null = 0;
-+
-+	KUNIT_FAIL(test, "This line should never be reached\n");
-+}
-+
-+static void kunit_test_fault_null_dereference(struct kunit *test)
-+{
-+	struct kunit_try_catch_test_context *ctx = test->priv;
-+	struct kunit_try_catch *try_catch = ctx->try_catch;
-+
-+	kunit_try_catch_init(try_catch,
-+			     test,
-+			     kunit_test_null_dereference,
-+			     kunit_test_catch);
-+	kunit_try_catch_run(try_catch, test);
-+
-+	KUNIT_EXPECT_EQ(test, try_catch->try_result, -EINTR);
-+	KUNIT_EXPECT_TRUE(test, ctx->function_called);
-+}
-+
-+#endif /* !CONFIG_UML */
-+
-+static struct kunit_case kunit_fault_test_cases[] = {
-+#ifndef CONFIG_UML
-+	KUNIT_CASE(kunit_test_fault_null_dereference),
-+#endif /* !CONFIG_UML */
-+	{}
-+};
-+
-+static struct kunit_suite kunit_fault_test_suite = {
-+	.name = "kunit_fault",
-+	.init = kunit_try_catch_test_init,
-+	.test_cases = kunit_fault_test_cases,
-+};
-+
- /*
-  * Context for testing test managed resources
-  * is_resource_initialized is used to test arbitrary resources
-@@ -826,6 +868,7 @@ static struct kunit_suite kunit_current_test_suite = {
- 
- kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
- 		  &kunit_log_test_suite, &kunit_status_test_suite,
--		  &kunit_current_test_suite, &kunit_device_test_suite);
-+		  &kunit_current_test_suite, &kunit_device_test_suite,
-+		  &kunit_fault_test_suite);
- 
- MODULE_LICENSE("GPL v2");
+[1] https://lore.kernel.org/all/b8a2045a-e7e8-d141-7c01-bf47874c7930@digikod.net/
+[2] https://lore.kernel.org/all/ZJvy2SViorgc+cZI@google.com/
+
+Ivanov Mikhail (10):
+  landlock: Support socket access-control
+  landlock: Add hook on socket_create()
+  selftests/landlock: Create 'create' test
+  selftests/landlock: Create 'socket_access_rights' test
+  selftests/landlock: Create 'rule_with_unknown_access' test
+  selftests/landlock: Create 'rule_with_unhandled_access' test
+  selftests/landlock: Create 'inval' test
+  selftests/landlock: Create 'ruleset_overlap' test
+  selftests/landlock: Create 'ruleset_with_unknown_access' test
+  samples/landlock: Support socket protocol restrictions
+
+ include/uapi/linux/landlock.h                 |  49 ++
+ samples/landlock/sandboxer.c                  | 149 +++++-
+ security/landlock/Makefile                    |   2 +-
+ security/landlock/limits.h                    |   5 +
+ security/landlock/net.c                       |   2 +-
+ security/landlock/ruleset.c                   |  35 +-
+ security/landlock/ruleset.h                   |  44 +-
+ security/landlock/setup.c                     |   2 +
+ security/landlock/socket.c                    | 115 +++++
+ security/landlock/socket.h                    |  19 +
+ security/landlock/syscalls.c                  |  55 ++-
+ tools/testing/selftests/landlock/base_test.c  |   2 +-
+ .../testing/selftests/landlock/socket_test.c  | 457 ++++++++++++++++++
+ 13 files changed, 910 insertions(+), 26 deletions(-)
+ create mode 100644 security/landlock/socket.c
+ create mode 100644 security/landlock/socket.h
+ create mode 100644 tools/testing/selftests/landlock/socket_test.c
+
 -- 
-2.44.0
+2.34.1
 
 
