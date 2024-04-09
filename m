@@ -1,134 +1,114 @@
-Return-Path: <linux-security-module+bounces-2608-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2610-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB6B189E176
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 19:23:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F6A889E18E
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 19:28:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69FE71F23095
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 17:23:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60E381C22FC0
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 17:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D04615539C;
-	Tue,  9 Apr 2024 17:23:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cttmha/9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E99156678;
+	Tue,  9 Apr 2024 17:28:40 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165C6155387
-	for <linux-security-module@vger.kernel.org>; Tue,  9 Apr 2024 17:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BB9156860
+	for <linux-security-module@vger.kernel.org>; Tue,  9 Apr 2024 17:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712683384; cv=none; b=Qx+CP3KBNb/k0SfB1Tn92G5zevxxxGV4UcvJ2UJtNAuWaN3TkyjCIK+5NH2HdXyShrzwjFYLVoZVYQ3CtLTHO7uW46YKDSBM6hnObeCwLl6nrozod5sQsFbmUf8mdPvdFSlujywHTf3en2ljMAvjCJkEYpz/5yGAF3iVrCbs+4w=
+	t=1712683720; cv=none; b=BfX9hPp4UDwy6seMzuUg2BjbXWHw1ddvTytzUl5zzoqc9bv3Fwhdd9Brt3LGGTGQ/ZfnEndGBRLOwLvfHK5SjJedxQwC7OtbnxxKTz8xDZWBC5hTAzWORM6JRJNETRNmglJKmy41u4AwVXyT9ic35l3DXSVQzb67fEWZx5RpzVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712683384; c=relaxed/simple;
-	bh=D6NH/veypjX3visTbwV07IOKhioYsy7e8a4VJvDvwSc=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=dTDuA0chCXtvYWWW3hZMtEcpALj3Ia65kPAtbABo1PYttU7JrrOYu7XhLLhGeMuFkUTPljR1vsSYDTOKZwYIDOj7S2J+CUE5+v1km4smJJbGLG+Ov2sRr61O5yQddVXvsw7wTKTKu8oobhnXIIaUCfXNfsG+Kd8xXK1Cb4aaEuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cttmha/9; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2d700beb60bso95680981fa.1
-        for <linux-security-module@vger.kernel.org>; Tue, 09 Apr 2024 10:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1712683380; x=1713288180; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gZQn/VsBmfAUTb4U4oHqfvHtdoT5PpXagKaDAaqxim0=;
-        b=cttmha/9nZDYQ0upSC6KmEnFBAV56gSPLYJW6O8Aqy1h5LbBnCdmK23fmv701Zdfx6
-         vGk9/UqwQaC5/gL7Ml0Nd9DRcA67GRJB4v9x0p3sT3/dZe6rxGnjEWi4pPPI5M/f4XKF
-         coB8VH0Eh5HGvhPfuH8jfXiPpoBMvh5hduveA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712683380; x=1713288180;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gZQn/VsBmfAUTb4U4oHqfvHtdoT5PpXagKaDAaqxim0=;
-        b=l0bFutVA31ytkNeM8IlIWHLfrLMf2VzEXhpJT60L6eP7OxwBVNtO0Zb9yH9FKPu7tX
-         wlYj9n2oknlS7TQUeFbVmm33YqkK6wObgISVsZxyzWlCEzYLBGwd3Plfj7Bv49P5PMDp
-         agBTYo43MNiDR0KB4w2RrRRyiv19F/pRh/FfeAZFUYzk69d6rbOcXnTzpwkpD5GdKNiP
-         GVXwqYU1MZkJUVcryav1psXEuF57B7Ut+wCkHSsm5nTEGEVKWebDHrVR6gCAZSSTisv4
-         NjXWklEoHQX55UqT2GsOJSQnnJZnoVspkbiTEJF2T08B4SAi433B9FJarFaL7cNLN9NV
-         RSFg==
-X-Gm-Message-State: AOJu0YxFx1uo0M7lEmf5Xdf40nM3HhxhNLnEpmqoznueUwabx3N7rTB5
-	3nWM0RQ7cfdUy7WmkOaBnbDWExhTE4Lt4p6Ks45xnhA4MFMOVEjk4EgPYkDUTlKA7hPR33xSM+7
-	YG5jKAw==
-X-Google-Smtp-Source: AGHT+IGuA8Sa58Sz4CTaXSz30kYGL3SnPcBlya3oQo1touClliDnMp3h9drxUkK89SrN1yi6JvFB+w==
-X-Received: by 2002:a2e:9f4a:0:b0:2d6:e148:2463 with SMTP id v10-20020a2e9f4a000000b002d6e1482463mr421870ljk.24.1712683379951;
-        Tue, 09 Apr 2024 10:22:59 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id d10-20020a2eb04a000000b002d875e679aasm1361186ljl.89.2024.04.09.10.22.59
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Apr 2024 10:22:59 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d485886545so103285101fa.2
-        for <linux-security-module@vger.kernel.org>; Tue, 09 Apr 2024 10:22:59 -0700 (PDT)
-X-Received: by 2002:a2e:9f4a:0:b0:2d6:e148:2463 with SMTP id
- v10-20020a2e9f4a000000b002d6e1482463mr421816ljk.24.1712683378788; Tue, 09 Apr
- 2024 10:22:58 -0700 (PDT)
+	s=arc-20240116; t=1712683720; c=relaxed/simple;
+	bh=eHo/igXZcq8HeXdyeAD2kiUayElbdwtoFad+ENVCRhc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=thSPL+MMZTz8is5//9pvqZu88NjB5kxR8up0f164OBDxP77CY9ydFC/Kia10+Eday1zsKr2KhTVNiF7tjLjpNNoI8nZQriRM0V0IFyoJF/vN7afKM1eoBQ5Dw4d4eCyb2ByA5SpWTrngsFdgI7aQxTcoZK0I1RLwC97tXz29gUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1ruFGD-0001dT-16; Tue, 09 Apr 2024 19:27:53 +0200
+Message-ID: <4c6164e5-bcfd-4172-a76e-db989f729a8a@pengutronix.de>
+Date: Tue, 9 Apr 2024 19:27:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 9 Apr 2024 10:22:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh+_xXpnHfUv=FwGWcce4XwqwKvtq7LcxK6WKmbf4eGGA@mail.gmail.com>
-Message-ID: <CAHk-=wh+_xXpnHfUv=FwGWcce4XwqwKvtq7LcxK6WKmbf4eGGA@mail.gmail.com>
-Subject: Hardcoded security module suggestion - stop the stacking insanity
-To: Paul Moore <paul@paul-moore.com>, Kees Cook <keescook@chromium.org>, 
-	KP Singh <kpsingh@kernel.org>
-Cc: LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
+ trusted keys
+Content-Language: en-US
+To: Kshitiz Varshney <kshitiz.varshney@nxp.com>,
+ David Gstir <david@sigma-star.at>, Mimi Zohar <zohar@linux.ibm.com>,
+ James Bottomley <jejb@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>
+Cc: "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ Gaurav Jain <gaurav.jain@nxp.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, David Howells <dhowells@redhat.com>,
+ "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+ Fabio Estevam <festevam@gmail.com>, Paul Moore <paul@paul-moore.com>,
+ Jonathan Corbet <corbet@lwn.net>, Richard Weinberger <richard@nod.at>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ James Morris <jmorris@namei.org>, dl-linux-imx <linux-imx@nxp.com>,
+ "Serge E. Hallyn" <serge@hallyn.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pankaj Gupta <pankaj.gupta@nxp.com>,
+ sigma star Kernel Team <upstream+dcp@sigma-star.at>,
+ "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+ David Oberhollenzer <david.oberhollenzer@sigma-star.at>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Li Yang <leoyang.li@nxp.com>,
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>,
+ "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>, Tejun Heo <tj@kernel.org>,
+ "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Varun Sethi <V.Sethi@nxp.com>
+References: <20240403072131.54935-1-david@sigma-star.at>
+ <20240403072131.54935-4-david@sigma-star.at>
+ <DB6PR04MB31904A8EB8B481A530C90CBB8F072@DB6PR04MB3190.eurprd04.prod.outlook.com>
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <DB6PR04MB31904A8EB8B481A530C90CBB8F072@DB6PR04MB3190.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
 
-People, I know there's been LSM work on the whole "multiple layers of
-security modules" for over a decade, and it's been a design decision
-and a target, but I've complained before about the cost of the
-abstraction, and we just had *another* hardware security issue with
-speculated indirect branches go public.
+Hello Kshitiz,
 
-So I say "suggestion" in the subject line, but  really think it needs
-to be more than that: this whole "nested LSM" stuff as a design goal
-just needs to be all rolled back, and the new design target is "one
-LSM, enabled statically at build time, without the need for indirect
-calls".
+On 09.04.24 12:54, Kshitiz Varshney wrote:
+> Hi David,
+>> +       b->fmt_version = DCP_BLOB_VERSION;
+>> +       get_random_bytes(b->nonce, AES_KEYSIZE_128);
+>> +       get_random_bytes(b->blob_key, AES_KEYSIZE_128);
+> 
+> We can use HWRNG instead of using kernel RNG. Please refer drivers/char/hw_random/imx-rngc.c 
 
-Because we're now in the situation where the security hooks are
-actually a source of not just horrible performance issues, but also
-actual insecurity. The first indirect branch in the kernel is now
-often the security layer, and the latest
+imx-rngc can be enabled and used to seed the kernel entropy pool. Adding
+direct calls into imx-rngc here only introduces duplicated code at no extra
+benefit.
 
-One current PoC literally uses security_task_prctl() as the attack vector.
+Cheers,
+Ahmad
 
-Yes, I realize that the "security" in the LSM name is a bad joke, and
-that to a first level approximation the LSM people don't actually care
-about real security, and that the goal is just "policy".
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-But dammit, I think we need to put our foot down on this. The
-complexity simply isn't worth it, and the flexibility is of
-questionable actual worth.
-
-So here's a challenge to the LSM people: work on walking back all the
-silly nested security layers.
-
-And yes, I'm aware of the random hacks for turning the indirect branch
-into a series of static direct branches by
-
-   https://lore.kernel.org/bpf/20240207124918.3498756-1-kpsingh@kernel.org/#t
-
-but honestly, this series needs to be turned to 11.
-
-Or rather, it needs to be turned *down* from the current maximum of 11
-nested calls to be something sane. This whole "security layer allows
-any policy at all" has been a fundamental design mistake. It
-absolutely needs to stop, and this "you can nest arbitrarily" needs to
-be walked back.
-
-The whole "add cost and insecurity in order to give people random
-policies" must go. When the LSM *becomes* the attack vector, we need
-to just fix things.
-
-                  Linus
 
