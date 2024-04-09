@@ -1,121 +1,134 @@
-Return-Path: <linux-security-module+bounces-2614-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2616-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DE2989E27A
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 20:25:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 305EC89E440
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 22:15:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF772B245B5
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 18:25:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53F461C22771
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 20:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB8C156C46;
-	Tue,  9 Apr 2024 18:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8351586C1;
+	Tue,  9 Apr 2024 20:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="SLjNtE/i"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PZtcfELs"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0DB156975
-	for <linux-security-module@vger.kernel.org>; Tue,  9 Apr 2024 18:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42331581FD
+	for <linux-security-module@vger.kernel.org>; Tue,  9 Apr 2024 20:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712687105; cv=none; b=UOOAiYBSF7DEoecnefE9aoMk1jr3qTIhWmzY6tHYgbMorPBraNJYm4wqIgHqFh14i5lnKCAdsSeZbY5i/t9auvxgBSgpmrlFlKY87gtSRYuWjEqxYLEc/zLuJ5Z9tnDPvzJPwraGgw3hCLrrO0WSLBJayQPEOV3M/5O7+5x/x4M=
+	t=1712693699; cv=none; b=Otq4KoWs2z4lssSUtF+6Jgn4mEYR+n3DyNQkVdL8ezxElt5llINSFNJMtrD+QrbY4a3Ma4T5eczHRo201le3dSyvauQWfIxjUOUMIE+95VIoRL4xunGTB/K1hOwbQfGBMYdpDFgWT+y3stKd2sMR5KlXKiQthimAyzQ4TeUtnGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712687105; c=relaxed/simple;
-	bh=TnTEVY6GSh34M+Bzz7VmtJbXDhI5rgwhzvIBnQk47So=;
+	s=arc-20240116; t=1712693699; c=relaxed/simple;
+	bh=2SbgLvgPGkcDv0lCPd1iXo8d7o7QDk5hgPKEFcSWSls=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wdw4OlZN7OhiFC6WQiHv+AktZY5brz8iOcp0OiTAIKVh4l+t9YdpaKc352lYGp/t5djRZk/xYNTbqMB0CHAE+csfa0vFTYeYX4uPVURIJEOqGhTg15tCvqjVyyy9JrXl6x25Wl1fJK0mOMAAaVNTF3kQRhDphy+7rFumLO49mzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=SLjNtE/i; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a519eae91d1so576198166b.3
-        for <linux-security-module@vger.kernel.org>; Tue, 09 Apr 2024 11:25:03 -0700 (PDT)
+	 To:Cc:Content-Type; b=CTDs1a2eGglfPtn5WENncj0jn/k2nKMUYwP21GmiibX1J++LkbSAUnwXUK+Ojndx+s8PRB2g5b9ne3qO0av5b527AGmQ4PTM5MUKe3cgs4Awr80CqbQcXTKaDbauDu20B3uotyeQ/Z5Tg1wVYCZL1dT+BjDxKUV9pcPDzn/8Mlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PZtcfELs; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dcc84ae94c1so6368318276.1
+        for <linux-security-module@vger.kernel.org>; Tue, 09 Apr 2024 13:14:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1712687102; x=1713291902; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lw5DUGs7JS8G4SFB7desIP/FBgPQWEWdQsI36wfeDxo=;
-        b=SLjNtE/iY4EtBSVi487FbI93I81Qprrhuy5Scww7Cz9b3Te2a73Fon7Zg2NVTvnR2k
-         E4RheFjbqS/7rYA10ooVADNAHW35qubBfn9iJCUEi5ETOHd4tvDvldRxb4DJbRix50XR
-         /08l6E5sqqdOxtMUIas1lY35idsoh0hD7XnBs=
+        d=paul-moore.com; s=google; t=1712693696; x=1713298496; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j0YVQ9djY2M33MWph8FPZMPtyUpc6ybsMtuQAt43J/Y=;
+        b=PZtcfELsz3rwGgDJAZIoMllf//1Z6O7akXXFVcVivFc3oFY0oUs//r3yGCUL1jyLPe
+         pi3Z628Cxz/kqdRFUZRa2QX9cSCgNVGe9wSQMLE/FYv1loD/asr64OhME59V8FzCuDqh
+         UOV1QdeJcF1CI0/+UotCzIDkxGMTx6Difn+iSiFwAOxATq1J834JiWLUiSjcWWXayEBn
+         Ymco/s4fIncJ5Yb5FDkdJ3ifL81/ldft5G/sqTvRfo8TpwhRz4FOsuFyZk4tA44StKzV
+         sQpHSnCT7Jb5iZu2G70tvRBXBRdeB68OEiUXUnMuwatpPcs1GQCwd+9jNDhjmvgzVUah
+         rn1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712687102; x=1713291902;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lw5DUGs7JS8G4SFB7desIP/FBgPQWEWdQsI36wfeDxo=;
-        b=RzEXSgmE3ld0zHfR5/nACXgY3C0o472sMWidq0geYGa+D4sheuR8Jctdl4aMQ5SZ+d
-         hk+IhUb45NJoAYXoaXldhfxycb12u/EemqIMmVNawC5lWQsCdFKOPX83oTiF6ylmsGfW
-         /oOcaItY0G2SU/1oi4n7NEDHJv3tPyEec7Sz7xvuf5nahF0OPvDB7+TQ4lSfwxxwdrj8
-         gjfNJK3OcCKas4lbFyNtU0XqXDPeWsstfr4PUVVzm2vZTphLjf+S+KqSKf5QMfRzYP/f
-         ++w9QCWQVIVL7VCznhl1Yy6i7tSjLcZ4himmOZQnwI27LtnCmC/wU1eqOiaESHN7xJUz
-         Rf+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXacETg075LLw3v7kU9fYLOABgmH7KgOjRKuBvxcYq9vOgjmdCTMFb/9PhmVd6D+JtQvviURh6Zb38MNN7E66ucBbOU8SOehut/Bs8X6ZAujkaosTUs
-X-Gm-Message-State: AOJu0YyEr4vqZMtZfC9E+RRTiaiGM8o7brLpNrnWr7cPA2mCW0Zhd1Ju
-	c+8x+hmT4DjPN73v8xY0ZViqQd4RGRJOuhNOnwsnVPCU4TwroG1ayEmIE+hRHIXQLeTBtKwp7GO
-	FTxlxnQ==
-X-Google-Smtp-Source: AGHT+IHox1t8aEVg8VrEhIhfvZdK3EmGqc8lz0cYVnbhbnKj89c8SzIh5PgEGnQfZXEc6S0B3R50yQ==
-X-Received: by 2002:a17:906:c44f:b0:a46:ec44:477c with SMTP id ck15-20020a170906c44f00b00a46ec44477cmr161834ejb.41.1712687101907;
-        Tue, 09 Apr 2024 11:25:01 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id d9-20020a1709061f4900b00a519054d7ddsm5956436ejk.61.2024.04.09.11.25.01
-        for <linux-security-module@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Apr 2024 11:25:01 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56bdf81706aso7887245a12.2
-        for <linux-security-module@vger.kernel.org>; Tue, 09 Apr 2024 11:25:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV/JDJ99RFa8JFXYKjrQuWCpFM/Ib84ReLw4ioKwnN10/Jodm9m/acR4XIkb4nirGzoCQ0owSy6NVkGNJponPO3pPpLCycdsE+Y089QoqxKHckPwPvj
-X-Received: by 2002:a17:906:4a16:b0:a51:a288:5af9 with SMTP id
- w22-20020a1709064a1600b00a51a2885af9mr172847eju.51.1712687101019; Tue, 09 Apr
- 2024 11:25:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712693696; x=1713298496;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j0YVQ9djY2M33MWph8FPZMPtyUpc6ybsMtuQAt43J/Y=;
+        b=tzOoAfZSBQcDY/4FNrYU9wpEmF0co28ebpdaSk/NG+IvM1p/ndsZFsHSW7HbdXaGnf
+         Gxg444018N4neiYG5PB8E3IFBDkgj5UuQQ/m9Mf4xuxh5wFL5/USdYFAN42ihGT7nKEu
+         a+xShKgi9XX3pHnVzckBuWiblfy/q84wJ9Zzd9pt6b1za9IVu679VDLvcFQhWov1L+D+
+         lGVFXzUc9tKTctaBpIyn1hTCvNXEnz4gzj9MrEMr4IAwbSaloYwgF2CFKmUyfya988z7
+         ZYvVhmd/tbSkyqRTMbWWtgICdNNQl/Y0jXwp4co/O1+OWIvNijQFef4NrUa2L7E5+5W+
+         2oTg==
+X-Gm-Message-State: AOJu0YxnMwL3JO7MQKOdIqcYpTBKuwN0M6rfQutfzYZj93RTyN9MRq2N
+	i1/4LxAZQdLolldnt9yD7XYz4tFIIbE6nn2GuEnbdgtemfliqn7ZykmCwJeEwK29fvXK3Q9KaJT
+	AVeGB2OpT54HK+XqJFla8+Na2VnV4kK4IlRbfkGijoeOSIuR7Vg==
+X-Google-Smtp-Source: AGHT+IHOHfb3Vsx0X6ltkSVRZFRT+zreJyCaHp4J4qYazQG9Rm3OCb+u4xunfbpGxaxtGsfS74W6Ks+5hyL3bJx9lHY=
+X-Received: by 2002:a05:6902:100b:b0:dc7:423c:b8aa with SMTP id
+ w11-20020a056902100b00b00dc7423cb8aamr1106734ybt.12.1712693696380; Tue, 09
+ Apr 2024 13:14:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHk-=wh+_xXpnHfUv=FwGWcce4XwqwKvtq7LcxK6WKmbf4eGGA@mail.gmail.com>
- <202404091041.63A1CFC1A@keescook>
-In-Reply-To: <202404091041.63A1CFC1A@keescook>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 9 Apr 2024 11:24:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whXwcBzFJd65gQ09EGt1yuH6RyuErhOgvJK8pjkAVw07w@mail.gmail.com>
-Message-ID: <CAHk-=whXwcBzFJd65gQ09EGt1yuH6RyuErhOgvJK8pjkAVw07w@mail.gmail.com>
-Subject: Re: Hardcoded security module suggestion - stop the stacking insanity
-To: Kees Cook <keescook@chromium.org>
-Cc: Paul Moore <paul@paul-moore.com>, KP Singh <kpsingh@kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>
+References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+ <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+ <CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com>
+ <20240402210035.GI538574@ZenIV> <CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
+ <87le5mxwry.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87le5mxwry.fsf@email.froward.int.ebiederm.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 9 Apr 2024 16:14:45 -0400
+Message-ID: <CAHC9VhTF=-Sh6w4icTPA_=A25-EL55Nt-z=mvyb1-vONoN=5wg@mail.gmail.com>
+Subject: Re: [GIT PULL] security changes for v6.9-rc3
+To: linux-security-module@vger.kernel.org
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, linux-integrity@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>, 
+	"Eric W. Biederman" <ebiederm@xmission.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 9 Apr 2024 at 11:02, Kees Cook <keescook@chromium.org> wrote:
+On Tue, Apr 9, 2024 at 1:38=E2=80=AFPM Eric W. Biederman <ebiederm@xmission=
+.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
 >
-> I don't think it's sane to demand that LSM stacking be removed. That's
-> just not the world we live in -- we have specific and large scale needs
-> for the infrastructure that is in place.
+> > I know it's everyone's favorite hobby to bash the LSM and LSM devs,
+> > but it's important to note that we don't add hooks without working
+> > with the associated subsystem devs to get approval.
+>
+> Hah!!!!
+>
+> > In the cases
+> > where we don't get an explicit ACK, there is an on-list approval, or
+> > several ignored on-list attempts over weeks/months/years.  We want to
+> > be good neighbors.
+>
+> Hah!!!!
+>
+> You merged a LSM hook that is only good for breaking chrome's sandbox,
+> over my expressed objections.  After I tested and verified that
+> is what it does.
+>
+> I asked for testing. None was done.  It was claimed that no
+> security sensitive code would ever fail to check and deal with
+> all return codes, so no testing was necessary.  Then later a
+> whole bunch of security sensitive code that didn't was found.
+>
+> The only redeeming grace has been that no-one ever actually uses
+> that misbegotten security hook.
+>
+> P.S.  Sorry for this off topic rant but sheesh.   At least from
+> my perspective you deserve plenty of bashing.
 
-I think we really need to push back on this all.
+Just in case people are reading this email and don't recall the
+security_create_user_ns() hook discussions from 2022, I would suggest
+reading those old threads and drawing your own conclusions.  A lore
+link is below:
 
-The whole stacking is new. There can't be too many users. And it damn
-well can be limited.
+https://lore.kernel.org/linux-security-module/?q=3Ds%3Asecurity_create_user=
+_ns
 
-Right now that sttaic stacking code is written to allow 11 levels.
-
-Why? Just because you people cannot agree.
-
-Stop it.
-
-> I don't think describing static calls as "random hacks" is very fair;
-
-Static calls aren't random hacks.
-
-But the "up to eleven levens of nesting" and "reorider arbitrarily" IS.
-
-This needs to be *fixed*.
-
-Seriously, what part of "this is now an attack vector" did people not get?
-
-            Linus
+--=20
+paul-moore.com
 
