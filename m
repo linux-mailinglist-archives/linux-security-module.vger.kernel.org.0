@@ -1,149 +1,134 @@
-Return-Path: <linux-security-module+bounces-2609-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2615-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3873E89E18B
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 19:28:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 085EC89E287
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 20:27:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B023B25393
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 17:28:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A7F31C22977
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Apr 2024 18:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5AD156870;
-	Tue,  9 Apr 2024 17:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E+vy51t5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF57F156C5C;
+	Tue,  9 Apr 2024 18:27:45 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E346915624E
-	for <linux-security-module@vger.kernel.org>; Tue,  9 Apr 2024 17:28:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BE9156C50;
+	Tue,  9 Apr 2024 18:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712683692; cv=none; b=G87NTNKfXN0KWLrbSCwBud3Zb/Lw94ZcQi2uwaKjW4ZDRZYDOqvGAbyCtx2l2HjpNPyLRlMkMkntApvbE0Pw6w0pQ030dH9FLl9lUBc1t4ifgahGQD8h3sjhr11oFrXdrTjC5/qD6599SU0koZ4iVV/fqrI/sTpJp+54m3ic64Q=
+	t=1712687265; cv=none; b=OMOOKs/8unFV2P7PX0wDWn84T6ps9p4BisK1QY5LVnq1SfQnlWxgpCP5PPdT5aLH1pPZUCq4N2vVqHs4CkxWCy9bxyew2eo2nu8iqKMYvmPmdbbG97oeZb6718sDlAiguoCi9vU/WbtclxzUHkmSndxGtuDzbmlabvpIE2ROT64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712683692; c=relaxed/simple;
-	bh=TPhpU6GJEU734JPKrGvqBheDD6F81x0OYRJ4s8MuK+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qF9b6JOA6CcjlvC3bcHCsl+FiurE3jHKPiuY09VWpTlN+M3zfPJfgXA9fRUtj+bH3N63eCk+xK2i8Asb7Q8YSr3vRh1lWhNvZR2+fQgL9fyFQX2sWybQc2jcuJg+kdPkjZ1LHmmY3E+9qFWxfuKAvt5qdI5ZQX8+93EBlCgzRI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E+vy51t5; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-7cc5e664d52so95236539f.0
-        for <linux-security-module@vger.kernel.org>; Tue, 09 Apr 2024 10:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1712683688; x=1713288488; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bzDpECgxcv/gVK2Eh47txfcjeUm+DcSXrEiDNVslfT0=;
-        b=E+vy51t5hbFKtlPfWz63OAwISfam8JoJQJPF3AsULQlTZX/HvoniDiNyRzbxSMrbZ4
-         mk0VY5pVQ9SrzbabNxxJkimfIKhLT06ENVXFV0HjjURiYtwsvqJdGLxrKYQsqSYYXRWB
-         TAbhQeAzpAwOREQqlwbspbUY82B4xrV390hiU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712683688; x=1713288488;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bzDpECgxcv/gVK2Eh47txfcjeUm+DcSXrEiDNVslfT0=;
-        b=coIMtC6Tb4GkRpgB5YRQrbZT+s4TVrlwAGhlhMtqRLJ3tCAe323p/O51HflJfLOzV4
-         4rNaooNVkQx/sx4qZSHmsC2Gp4He8coUrWMpWAzna10hrnpXpcoFG3uH4GWIag29sJpx
-         5rH1Vq/wPAlfBIJvVYAL7C7TmtEvm/JKVyZcqos1E72wjs5k92hEvtEfIjzD+ik6+SlN
-         Bxr9Ga4SZlwLAGAfozBPw7Zj0eQ1+51Fx71bM8kuNaMDniuU/VZJXLY8MmPcChMtTd/w
-         u+5XzjhqVh5/QPDTaE0k4ajE1M7Fe7zpP6Cxf25WYhHIcCzqKGf5T/lT5iXej7o2KrOB
-         RqWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUUY4Pk3/Pp5foTJsTYvdzixDPxm/C9f20U6jyJmWrnw7OMbnC0cJcu+znwDLxQ30+7MAbu3ZLKc2qU1b000ptEuaZZDouLPeLkDDQgN6hBlM3czL50
-X-Gm-Message-State: AOJu0YxfJvId6eyWoZBEo2NAcwKmOxsVJ4AtpQbGKyKLAW+FMbpEp69E
-	8xx4oegVC5/UZSbsb/kRKmVrNt/ycGCO8pjEwGNriqfDKuiaoya6Yz5NDyxHWcw=
-X-Google-Smtp-Source: AGHT+IFk5z8PoAK3T9resPRUq+Mhgn4hfhcghzxIpzPidDvzpWozapI9Iaz2Vi75WE2H0KeSIVTCNQ==
-X-Received: by 2002:a05:6602:3b98:b0:7d5:de5b:1ac2 with SMTP id dm24-20020a0566023b9800b007d5de5b1ac2mr468468iob.2.1712683688027;
-        Tue, 09 Apr 2024 10:28:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id cn23-20020a0566383a1700b00482b4a8f07esm35302jab.61.2024.04.09.10.28.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Apr 2024 10:28:07 -0700 (PDT)
-Message-ID: <5a04e40c-daba-4a1d-b5db-f70d2e51c403@linuxfoundation.org>
-Date: Tue, 9 Apr 2024 11:28:06 -0600
+	s=arc-20240116; t=1712687265; c=relaxed/simple;
+	bh=+e4o3Key427s9PGCVpm+yJBrEgVTXiMxI86rVYGWrbI=;
+	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=UbNlBVbQqJgtgtuqFnH7036xygrCII03Li9HfugCyxLbJ3LiwNJJ6C7dIcOsDSJKhQhtS3nXwXgUtcHyHt3iwUT7FrBVCkdSZam9HVxMwafbtzW6Edr1+B9ePoXIr7ez6rAz+z59Ua4GSdA8xcqAHKuJaB+NbNSMNpY62lsyUfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in02.mta.xmission.com ([166.70.13.52]:38406)
+	by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1ruFQF-007Aen-3v; Tue, 09 Apr 2024 11:38:15 -0600
+Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:58962 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1ruFQE-009VSq-7G; Tue, 09 Apr 2024 11:38:14 -0600
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>,  Linus Torvalds
+ <torvalds@linux-foundation.org>,  Roberto Sassu
+ <roberto.sassu@huaweicloud.com>,  linux-integrity@vger.kernel.org,
+  linux-security-module@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
+  linux-cifs@vger.kernel.org,  linux-kernel@vger.kernel.org,  Roberto Sassu
+ <roberto.sassu@huawei.com>
+References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+	<CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+	<CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com>
+	<20240402210035.GI538574@ZenIV>
+	<CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
+Date: Tue, 09 Apr 2024 12:37:21 -0500
+In-Reply-To: <CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
+	(Paul Moore's message of "Tue, 2 Apr 2024 17:36:30 -0400")
+Message-ID: <87le5mxwry.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 RESEND 0/7] Handle faults in KUnit tests
-To: =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- Brendan Higgins <brendanhiggins@google.com>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "Eric W . Biederman" <ebiederm@xmission.com>, "H . Peter Anvin"
- <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
- James Morris <jamorris@linux.microsoft.com>,
- Kees Cook <keescook@chromium.org>, Luis Chamberlain <mcgrof@kernel.org>,
- "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
- Marco Pagani <marpagan@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Stephen Boyd <sboyd@kernel.org>,
- Thara Gopinath <tgopinath@microsoft.com>,
- Thomas Gleixner <tglx@linutronix.de>, Vitaly Kuznetsov
- <vkuznets@redhat.com>, Zahra Tarkhani <ztarkhani@microsoft.com>,
- kunit-dev@googlegroups.com, kvm@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-um@lists.infradead.org,
- x86@kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240408074625.65017-1-mic@digikod.net>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240408074625.65017-1-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-XM-SPF: eid=1ruFQE-009VSq-7G;;;mid=<87le5mxwry.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19gMkca3jYcuCNyXyTaOnFXicdzcwRWtZ4=
+X-SA-Exim-Connect-IP: 68.227.168.167
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Level: **
+X-Spam-Virus: No
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4480]
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  1.2 XMSubMetaSxObfu_03 Obfuscated Sexy Noun-People
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+	*  1.0 XMSubMetaSx_00 1+ Sexy Words
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 277 ms - load_scoreonly_sql: 0.03 (0.0%),
+	signal_user_changed: 4.1 (1.5%), b_tie_ro: 2.8 (1.0%), parse: 0.71
+	(0.3%), extract_message_metadata: 8 (3.1%), get_uri_detail_list: 0.70
+	(0.3%), tests_pri_-2000: 6 (2.2%), tests_pri_-1000: 1.97 (0.7%),
+	tests_pri_-950: 1.05 (0.4%), tests_pri_-900: 0.80 (0.3%),
+	tests_pri_-90: 59 (21.3%), check_bayes: 57 (20.7%), b_tokenize: 4.6
+	(1.7%), b_tok_get_all: 6 (2.1%), b_comp_prob: 1.51 (0.5%),
+	b_tok_touch_all: 42 (15.1%), b_finish: 0.87 (0.3%), tests_pri_0: 181
+	(65.3%), check_dkim_signature: 0.37 (0.1%), check_dkim_adsp: 7 (2.6%),
+	poll_dns_idle: 0.53 (0.2%), tests_pri_10: 2.7 (1.0%), tests_pri_500: 9
+	(3.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [GIT PULL] security changes for v6.9-rc3
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 
-On 4/8/24 01:46, Mickaël Salaün wrote:
-> Hi,
-> 
-> This patch series teaches KUnit to handle kthread faults as errors, and
-> it brings a few related fixes and improvements.
-> 
-> Shuah, everything should be OK now, could you please merge this series?
-> 
-> All these tests pass (on top of v6.8):
-> ./tools/testing/kunit/kunit.py run --alltests
-> ./tools/testing/kunit/kunit.py run --alltests --arch x86_64
-> ./tools/testing/kunit/kunit.py run --alltests --arch arm64 \
->    --cross_compile=aarch64-linux-gnu-
-> 
-> I also built and ran KUnit tests as a kernel module.
-> 
-> A new test case check NULL pointer dereference, which wasn't possible
-> before.
-> 
-> This is useful to test current kernel self-protection mechanisms or
-> future ones such as Heki: https://github.com/heki-linux
-> 
-> Previous versions:
-> v3: https://lore.kernel.org/r/20240319104857.70783-1-mic@digikod.net
-> v2: https://lore.kernel.org/r/20240301194037.532117-1-mic@digikod.net
-> v1: https://lore.kernel.org/r/20240229170409.365386-1-mic@digikod.net
-> 
-> Regards,
-> 
-> Mickaël Salaün (7):
->    kunit: Handle thread creation error
->    kunit: Fix kthread reference
->    kunit: Fix timeout message
->    kunit: Handle test faults
->    kunit: Fix KUNIT_SUCCESS() calls in iov_iter tests
->    kunit: Print last test location on fault
->    kunit: Add tests for fault
-> 
 
-Thank you for the resend. Applied to linux-kselftest kunit branch
-for Linux 6.10-rc1.
+Paul Moore <paul@paul-moore.com> writes:
 
-thanks,
--- Shuah
+> I know it's everyone's favorite hobby to bash the LSM and LSM devs,
+> but it's important to note that we don't add hooks without working
+> with the associated subsystem devs to get approval.
 
+Hah!!!!
+
+> In the cases
+> where we don't get an explicit ACK, there is an on-list approval, or
+> several ignored on-list attempts over weeks/months/years.  We want to
+> be good neighbors.
+
+Hah!!!!
+
+You merged a LSM hook that is only good for breaking chrome's sandbox,
+over my expressed objections.  After I tested and verified that
+is what it does.
+
+I asked for testing. None was done.  It was claimed that no
+security sensitive code would ever fail to check and deal with
+all return codes, so no testing was necessary.  Then later a
+whole bunch of security sensitive code that didn't was found.
+
+The only redeeming grace has been that no-one ever actually uses
+that misbegotten security hook.
+
+P.S.  Sorry for this off topic rant but sheesh.   At least from
+my perspective you deserve plenty of bashing.
+
+Eric
 
