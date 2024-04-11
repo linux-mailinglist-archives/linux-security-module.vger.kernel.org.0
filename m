@@ -1,280 +1,595 @@
-Return-Path: <linux-security-module+bounces-2626-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2628-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6D4F8A033F
-	for <lists+linux-security-module@lfdr.de>; Thu, 11 Apr 2024 00:24:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5924C8A04DA
+	for <lists+linux-security-module@lfdr.de>; Thu, 11 Apr 2024 02:38:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05B1B1C224EA
-	for <lists+linux-security-module@lfdr.de>; Wed, 10 Apr 2024 22:24:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D78B21F24571
+	for <lists+linux-security-module@lfdr.de>; Thu, 11 Apr 2024 00:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A9D184118;
-	Wed, 10 Apr 2024 22:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938DA8F6D;
+	Thu, 11 Apr 2024 00:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+MEdY6q"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eshBCA+0"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA08912FF7C;
-	Wed, 10 Apr 2024 22:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5276FD0
+	for <linux-security-module@vger.kernel.org>; Thu, 11 Apr 2024 00:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712787875; cv=none; b=BHvB4jMX541wEU+94r3nQ8DP02j7ZuAWkBQUHOu2oErtnQPtHPVg7hGFarBWWiYnlDYwGyPjahxVPnDD8BOVbJjcEIEY0Oi3Jrrnx7BQhIlM3oUuSYCMRD/T9M6QYqlGf4PLaHXUyiaoTcnC3ENflXXukClPbhs1KwlBkdjFHWs=
+	t=1712795921; cv=none; b=slfvSmxIgisE/I8qaSPNq/iRIKHFwonBfpYwMYSrDJ4DM2gjNKd7mq0jqJar4flGt2wj+rOuUUIKnSmV8sMKF23OPLzlVKCdgU/M/Quus9VOwJAmIMsmcSM6eTBGArSO+8ytNGsCtmXEIozGfk17jSZD/Pspz691dOCQ+hWnyHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712787875; c=relaxed/simple;
-	bh=OkZRHG4OUP0/Mknu1H2qrXOnItaKgi574B2w63UEBQc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qMVvCVVmbfX68RWFxptsakVqI3KHIADpGfDc5WPcoh3Nc8w7mpVYdipVW+yRjlQUeA8rqDO8cpDDFvNwORchT4tTlr4MwTrO5uyqYk/IK/gD9K++xa9B2f6fTDjswcDnbkHnypwTgIdllOGF147C89Bv64WUaTW7M5OPCy/rcjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+MEdY6q; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5cdbc4334edso4471139a12.3;
-        Wed, 10 Apr 2024 15:24:33 -0700 (PDT)
+	s=arc-20240116; t=1712795921; c=relaxed/simple;
+	bh=xfByhxGSZPHYk57/68I+sENbrgCfz+Z9gVHvNYodlis=;
+	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
+	 From:To:Cc:Subject:References:In-Reply-To; b=rhekKzp9n8CcfCOTV3W/usxK4lYmklLhe10uWjkzBV4E7tnJkb839rguAN9Dkz1rcVH+9XUdWvItVoEN1jGMPM8lmqUklwK/E5Ig6AgPDNsjuyBFQLtPspC1MHH9zcxEQNO/qTsqJ+g1vB2Ikv4ymvE2RNmDNuFxJqL9JZVo6uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=eshBCA+0; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-78d683c469dso274692985a.1
+        for <linux-security-module@vger.kernel.org>; Wed, 10 Apr 2024 17:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712787873; x=1713392673; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3oArjKw8wsID4rCgeuLIYE0lPG2MnYnaXMSAIhN+7kM=;
-        b=M+MEdY6q1JSEVJ2CM0TCRARTQ4IOOE7RDiBgvzy9CgO3TLi0Z/gsheWiyPzYL1joYp
-         Cg/BM2tpYhwquU/MmUJ3Nqc8MoVpwYlW2aO93ek9AWLUaj5jTCPEVotnBshBigVBbQ+8
-         0Zt0YIBkP6bD82/y/KLDBF4PIq1XMP2yraoA4bBEJf1nATum5lT1FwcUrLRsNZlmkiYJ
-         PfHbdgeWrkRC4Dy+AewxfbcRp1q45D3YzLqeW9YllhsLaDEsCc4GeNaRaR1A2jVGjwwp
-         M4jV13HNAk6yYCUD8b/G4oYenEUF9MDpC5Ziu99yL/CyCK4dDhnSdJGnOz4RK3yqwB1D
-         YT4Q==
+        d=paul-moore.com; s=google; t=1712795917; x=1713400717; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RPX96ZNDhuWGsa5rAJ3iw0YJfisfICCbql0pYn3u5YY=;
+        b=eshBCA+07WIvVnP/Z3AAGM5BxYVHi1u0jkRLQna4maiqzkNStjO+fLhsE6oLFfI1xc
+         wBW4LezI0ejabqheOTQ4Nc5CTGjIaY0dSC2X6gx9/mg/Ark+nVgKrZrZViMIngCyRqKz
+         k4gSakqVhaKYP7hXHcjM4s1J3bqAKkTM2DWMtpLYjqGOdRv99KCthu+F/02U1vaeGE4W
+         ZM+4G1ep61VDRGZ157jbbgLtgdv1OkkUzz5xZQPba+gLyQKCLHRUk7oekzo6ExC763pS
+         tqANqOb3ayKYKh1nnVezmUqD1LrmdPutxJheUvWGvd6zv66soJR+3Jbsb9AAHrf9yjn8
+         d6Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712787873; x=1713392673;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3oArjKw8wsID4rCgeuLIYE0lPG2MnYnaXMSAIhN+7kM=;
-        b=G6oVWpKKmw03b7tUgP0PwQzhglmZ49YWz74z/PTxZtlpq9T7FQSBXS+P+U+9c6lbd/
-         iXQ11xUNkrkCYcd3dBsXQBhiDQcv2WOuEr2OeTq1pxwLdFX67iDKrof0lUiUctoGzIER
-         Z4EbUaE9f0dPRw4wa+EQ5jlE/uCZnnzjTUhkcIEjK76BmsDsY9Xy9dSzkvhrJstCdMJz
-         M4Rb4uXCHhS/NcpzaY2TnGpJ7qdPoEz15Hwd5betzMaTcbcElQbZCgMc5W9w6VpijZdp
-         aZFAKW3wzxRCCvPEsnrkSD3HzlagZL64x86CRzWyO7C1VMPqS5CwgEYnbzDA1WYr1OT/
-         e91Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWeqOA1+KISVk3ISBRfgwieJVix83sE4WK6p+mWsmB6lPUPtBIjtMxobhzak77I3WWl1nIvPVUU820bfR3+YRCuoB5ZQ4DsAy3+Xd77m9Swc9zF70kas7qBuR/DbGHhlVS11crOirSnWPEqWKNmtm5BEGmQ4MJiop3r7h4ou9I0Le+givlLGuCvk8rL
-X-Gm-Message-State: AOJu0Yzk2sZEqhUnMBdoqpsbvy8C1SVVfT5lWJzKkAJI0q5JiolxRqxR
-	saJn6u96qiOteIMOdOUqEyNRUGEWngDNRDud2caXEAyAm4Hp4FAV
-X-Google-Smtp-Source: AGHT+IFVnyKFHxzbXF0rWfmn+H6GI+i3o48dP8yMzH2AEvNtJYBPKOB4FqLuIDM0ICI6BEl+/AwPTw==
-X-Received: by 2002:a05:6a20:1585:b0:1a9:4055:6dce with SMTP id h5-20020a056a20158500b001a940556dcemr4693410pzj.58.1712787872754;
-        Wed, 10 Apr 2024 15:24:32 -0700 (PDT)
-Received: from tahera-OptiPlex-5000 ([136.159.49.124])
-        by smtp.gmail.com with ESMTPSA id ge7-20020a056a00838700b006e567c81d14sm145086pfb.43.2024.04.10.15.24.31
+        d=1e100.net; s=20230601; t=1712795917; x=1713400717;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RPX96ZNDhuWGsa5rAJ3iw0YJfisfICCbql0pYn3u5YY=;
+        b=esKh7/vzKO1enJadnguByuz3jNfEvwb8IUsbaHmOdKinhn8PnYZKuAaq4OCxFav1Mg
+         xgLJzQLyIXHdVXDYbtWWsvr1yVl56RluLMGAptR1+EFp+rvsMvJiawXKq6w6XfUAQl7i
+         EJdT1AXxsVEwBZLf/CBg1GhcTY9+h/S9kdx4ytaZ7bMnXyMfMYpHuGBv2WwP8EhpU8+U
+         lOJA1NrEGZGmSgrFSb4xdE1KrpmDfgE0MtkxZaIcojQFS7KHM8eNvxiJ57or2XbZyt7/
+         dixflc//KruOzaCy66iuhfG0DXFX8PbX99Bn7p4sXJQNK26Bb3SPToG7coCyIiIwQjiW
+         oGNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVLSM3doVDVjojXT0NZ8Nm5e9+1iaiOxscl9k7NL2VJ5VW1R+RNTQbfes1EFtGQpYQSl0R6cBKabIHrnJxObNu7uGys86oheBiKCj6g7PGHKT74yJl3
+X-Gm-Message-State: AOJu0Yxv8aixOPdbs/UODdOpAU1PqAV+ktDegaJHzt61+dlXuwhDdAhi
+	2mmK62mjZ00g7JXKlTHZ2VYctghcdp1pYiKj3U/kD3XrU2L/PR9fK1mBZBYY+g==
+X-Google-Smtp-Source: AGHT+IFZk9jV6HWOSfYfFPndAyK/OuIye90XX09KufepxQhdyDOcvTYA8UkLyVR9CrirRlKYQ/mr3Q==
+X-Received: by 2002:a05:620a:1208:b0:78b:eb13:8912 with SMTP id u8-20020a05620a120800b0078beb138912mr4227406qkj.35.1712795917044;
+        Wed, 10 Apr 2024 17:38:37 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id x18-20020a05620a14b200b0078be30219d3sm275302qkj.74.2024.04.10.17.38.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 15:24:32 -0700 (PDT)
-Date: Wed, 10 Apr 2024 16:24:30 -0600
-From: Tahera Fahimi <fahimitahera@gmail.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	outreachy@lists.linux.dev, netdev@vger.kernel.org,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Jann Horn <jannh@google.com>
-Subject: Re: [PATCH v2] landlock: Add abstract unix socket connect
- restrictions
-Message-ID: <ZhcRnhVKFUgCleDi@tahera-OptiPlex-5000>
-References: <ZgX5TRTrSDPrJFfF@tahera-OptiPlex-5000>
- <20240401.ieC2uqua5sha@digikod.net>
+        Wed, 10 Apr 2024 17:38:36 -0700 (PDT)
+Date: Wed, 10 Apr 2024 20:38:35 -0400
+Message-ID: <a6689b0b5564461b829a18379eb3e83f@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Disposition: inline 
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240401.ieC2uqua5sha@digikod.net>
+From: Paul Moore <paul@paul-moore.com>
+To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, linux-security-module@vger.kernel.org
+Cc: keescook@chromium.org, casey@schaufler-ca.com, song@kernel.org, daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com, andrii@kernel.org, kpsingh@kernel.org
+Subject: Re: [PATCH v9 3/4] security: Replace indirect LSM hook calls with  static calls
+References: <20240207124918.3498756-4-kpsingh@kernel.org>
+In-Reply-To: <20240207124918.3498756-4-kpsingh@kernel.org>
 
-On Tue, Apr 02, 2024 at 11:53:09AM +0200, Mickaël Salaün wrote:
-> Thanks for this patch.  Please CC the netdev mailing list too, they may
-> be interested by this feature. I also added a few folks that previously
-> showed their interest for this feature.
+On Feb  7, 2024 KP Singh <kpsingh@kernel.org> wrote:
 > 
-> On Thu, Mar 28, 2024 at 05:12:13PM -0600, TaheraFahimi wrote:
-> > Abstract unix sockets are used for local interprocess communication without
-> > relying on filesystem. Since landlock has no restriction for connecting to
-> > a UNIX socket in the abstract namespace, a sandboxed process can connect to
-> > a socket outside the sandboxed environment. Access to such sockets should
-> > be scoped the same way ptrace access is limited.
+> LSM hooks are currently invoked from a linked list as indirect calls
+> which are invoked using retpolines as a mitigation for speculative
+> attacks (Branch History / Target injection) and add extra overhead which
+> is especially bad in kernel hot paths:
 > 
-> This is good but it would be better to explain that Landlock doesn't
-> currently control abstract unix sockets and that it would make sense for
-> a sandbox.
+> security_file_ioctl:
+>    0xffffffff814f0320 <+0>:	endbr64
+>    0xffffffff814f0324 <+4>:	push   %rbp
+>    0xffffffff814f0325 <+5>:	push   %r15
+>    0xffffffff814f0327 <+7>:	push   %r14
+>    0xffffffff814f0329 <+9>:	push   %rbx
+>    0xffffffff814f032a <+10>:	mov    %rdx,%rbx
+>    0xffffffff814f032d <+13>:	mov    %esi,%ebp
+>    0xffffffff814f032f <+15>:	mov    %rdi,%r14
+>    0xffffffff814f0332 <+18>:	mov    $0xffffffff834a7030,%r15
+>    0xffffffff814f0339 <+25>:	mov    (%r15),%r15
+>    0xffffffff814f033c <+28>:	test   %r15,%r15
+>    0xffffffff814f033f <+31>:	je     0xffffffff814f0358 <security_file_ioctl+56>
+>    0xffffffff814f0341 <+33>:	mov    0x18(%r15),%r11
+>    0xffffffff814f0345 <+37>:	mov    %r14,%rdi
+>    0xffffffff814f0348 <+40>:	mov    %ebp,%esi
+>    0xffffffff814f034a <+42>:	mov    %rbx,%rdx
 > 
+>    0xffffffff814f034d <+45>:	call   0xffffffff81f742e0 <__x86_indirect_thunk_array+352>
+>    				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> > 
-> > For a landlocked process to be allowed to connect to a target process, it
-> > must have a subset of the target process’s rules (the connecting socket
-> > must be in a sub-domain of the listening socket). This patch adds a new
-> > LSM hook for connect function in unix socket with the related access rights.
+>     Indirect calls that use retpolines leading to overhead, not just due
+>     to extra instruction but also branch misses.
 > 
-> Because of compatibility reasons, and because Landlock should be
-> flexible, we need to extend the user space interface.  As explained in
-> the GitHub issue, we need to add a new "scoped" field to the
-> landlock_ruleset_attr struct. This field will optionally contain a
-> LANDLOCK_RULESET_SCOPED_ABSTRACT_UNIX_SOCKET flag to specify that this
-> ruleset will deny any connection from within the sandbox to its parents
-> (i.e. any parent sandbox or not-sandboxed processes).
-Thanks for the feedback. Here is what I understood, please correct me if
-I am wrong. First, I should add another field to the
-landlock_ruleset_attr (a field like handled_access_net, but for the unix
-sockets) with a flag LANDLOCK_ACCESS_UNIX_CONNECT (it is a flag like
-LANDLOCK_ACCESS_NET_CONNECT_TCP but fot the unix sockets connect).
+>    0xffffffff814f0352 <+50>:	test   %eax,%eax
+>    0xffffffff814f0354 <+52>:	je     0xffffffff814f0339 <security_file_ioctl+25>
+>    0xffffffff814f0356 <+54>:	jmp    0xffffffff814f035a <security_file_ioctl+58>
+>    0xffffffff814f0358 <+56>:	xor    %eax,%eax
+>    0xffffffff814f035a <+58>:	pop    %rbx
+>    0xffffffff814f035b <+59>:	pop    %r14
+>    0xffffffff814f035d <+61>:	pop    %r15
+>    0xffffffff814f035f <+63>:	pop    %rbp
+>    0xffffffff814f0360 <+64>:	jmp    0xffffffff81f747c4 <__x86_return_thunk>
 
-> > 
-> > Link to first draft:
-> > 	https://lore.kernel.org/outreachy/20240328.ShoR4Iecei8o@digikod.net/
+Generally I fix these up, but since there are quite a few long-ish lines
+in the description, and a respin is probably a good idea to reduce the
+merge fuzz, it would be good if you could manage the line lengths a bit
+better.  Aim to have the no wrapped lines in the commit description when
+you run 'git log' on a 80-char wide terminal.  I'm guessing that
+(re)formatting the assembly to something like this will solve most of
+the problems:
+
+  0xff...0360: jmp       0xff...47c4 <__x86_return_thunk>
+
+> The indirect calls are not really needed as one knows the addresses of
+> enabled LSM callbacks at boot time and only the order can possibly
+> change at boot time with the lsm= kernel command line parameter.
 > 
-> You can move this sentence in the below changelog.
+> An array of static calls is defined per LSM hook and the static calls
+> are updated at boot time once the order has been determined.
 > 
-> > 
+> A static key guards whether an LSM static call is enabled or not,
+> without this static key, for LSM hooks that return an int, the presence
+> of the hook that returns a default value can create side-effects which
+> has resulted in bugs [1].
 > 
-> You can add this:
+> With the hook now exposed as a static call, one can see that the
+> retpolines are no longer there and the LSM callbacks are invoked
+> directly:
 > 
-> Closes: https://github.com/landlock-lsm/linux/issues/7
+> security_file_ioctl:
+>    0xffffffff818f0ca0 <+0>:	endbr64
+>    0xffffffff818f0ca4 <+4>:	nopl   0x0(%rax,%rax,1)
+>    0xffffffff818f0ca9 <+9>:	push   %rbp
+>    0xffffffff818f0caa <+10>:	push   %r14
+>    0xffffffff818f0cac <+12>:	push   %rbx
+>    0xffffffff818f0cad <+13>:	mov    %rdx,%rbx
+>    0xffffffff818f0cb0 <+16>:	mov    %esi,%ebp
+>    0xffffffff818f0cb2 <+18>:	mov    %rdi,%r14
+>    0xffffffff818f0cb5 <+21>:	jmp    0xffffffff818f0cc7 <security_file_ioctl+39>
+>   				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    Static key enabled for SELinux
 > 
-> > Signed-off-by: Tahera Fahimi <fahimitahera@gmail.com>
+>    0xffffffff818f0cb7 <+23>:	jmp    0xffffffff818f0cde <security_file_ioctl+62>
+>    				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> Your Git (or email app) configuration doesn't use the same name as here.
+>    Static key enabled for BPF LSM. This is something that is changed to
+>    default to false to avoid the existing side effect issues of BPF LSM
+>    [1] in a subsequent patch.
 > 
-> Please run ./scripts/checkpatch.pl on this patch and fix the warnings.
+>    0xffffffff818f0cb9 <+25>:	xor    %eax,%eax
+>    0xffffffff818f0cbb <+27>:	xchg   %ax,%ax
+>    0xffffffff818f0cbd <+29>:	pop    %rbx
+>    0xffffffff818f0cbe <+30>:	pop    %r14
+>    0xffffffff818f0cc0 <+32>:	pop    %rbp
+>    0xffffffff818f0cc1 <+33>:	cs jmp 0xffffffff82c00000 <__x86_return_thunk>
+>    0xffffffff818f0cc7 <+39>:	endbr64
+>    0xffffffff818f0ccb <+43>:	mov    %r14,%rdi
+>    0xffffffff818f0cce <+46>:	mov    %ebp,%esi
+>    0xffffffff818f0cd0 <+48>:	mov    %rbx,%rdx
+>    0xffffffff818f0cd3 <+51>:	call   0xffffffff81903230 <selinux_file_ioctl>
+>    				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    Direct call to SELinux.
 > 
-> > 
-> > ----
-> > Changes in v2:
-> > - Remove wrapper functions, noted by Casey Schaufler <casey@schaufler-ca.com>
-> > ---
-> >  security/landlock/task.c | 40 ++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> > 
-> > diff --git a/security/landlock/task.c b/security/landlock/task.c
-> > index 849f5123610b..67528f87b7de 100644
-> > --- a/security/landlock/task.c
-> > +++ b/security/landlock/task.c
-> > @@ -13,6 +13,7 @@
-> >  #include <linux/lsm_hooks.h>
-> >  #include <linux/rcupdate.h>
-> >  #include <linux/sched.h>
-> > +#include <net/sock.h>
-> >  
-> >  #include "common.h"
-> >  #include "cred.h"
-> > @@ -108,9 +109,48 @@ static int hook_ptrace_traceme(struct task_struct *const parent)
-> >  	return task_ptrace(parent, current);
-> >  }
-> >  
-> > +static bool unix_sock_is_scoped(struct sock *const sock,
+>    0xffffffff818f0cd8 <+56>:	test   %eax,%eax
+>    0xffffffff818f0cda <+58>:	jne    0xffffffff818f0cbd <security_file_ioctl+29>
+>    0xffffffff818f0cdc <+60>:	jmp    0xffffffff818f0cb7 <security_file_ioctl+23>
+>    0xffffffff818f0cde <+62>:	endbr64
+>    0xffffffff818f0ce2 <+66>:	mov    %r14,%rdi
+>    0xffffffff818f0ce5 <+69>:	mov    %ebp,%esi
+>    0xffffffff818f0ce7 <+71>:	mov    %rbx,%rdx
+>    0xffffffff818f0cea <+74>:	call   0xffffffff8141e220 <bpf_lsm_file_ioctl>
+>    				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    Direct call to BPF LSM.
 > 
-> For consistency with task_is_scoped(), you can rename this to
-> sock_is_scoped().
+>    0xffffffff818f0cef <+79>:	test   %eax,%eax
+>    0xffffffff818f0cf1 <+81>:	jne    0xffffffff818f0cbd <security_file_ioctl+29>
+>    0xffffffff818f0cf3 <+83>:	jmp    0xffffffff818f0cb9 <security_file_ioctl+25>
+>    0xffffffff818f0cf5 <+85>:	endbr64
+>    0xffffffff818f0cf9 <+89>:	mov    %r14,%rdi
+>    0xffffffff818f0cfc <+92>:	mov    %ebp,%esi
+>    0xffffffff818f0cfe <+94>:	mov    %rbx,%rdx
+>    0xffffffff818f0d01 <+97>:	pop    %rbx
+>    0xffffffff818f0d02 <+98>:	pop    %r14
+>    0xffffffff818f0d04 <+100>:	pop    %rbp
+>    0xffffffff818f0d05 <+101>:	ret
+>    0xffffffff818f0d06 <+102>:	int3
+>    0xffffffff818f0d07 <+103>:	int3
+>    0xffffffff818f0d08 <+104>:	int3
+>    0xffffffff818f0d09 <+105>:	int3
 > 
-> > +				struct sock *const other)
-> > +{
-> > +	bool is_scoped = true;
-> > +
-> > +	/* get the ruleset of connecting sock*/
+> While this patch uses static_branch_unlikely indicating that an LSM hook
+> is likely to be not present, a subsequent makes it configurable.
+
+I believe the comment above needs to be updated.
+
+> In most
+> cases this is still a better choice as even when an LSM with one hook is
+> added, empty slots are created for all LSM hooks (especially when many
+> LSMs that do not initialize most hooks are present on the system).
 > 
-> These comments don't help more than the following line, you can remove
-> them.
+> There are some hooks that don't use the call_int_hook and
+> call_void_hook. These hooks are updated to use a new macro called
+> security_for_each_hook where the lsm_callback is directly invoked as an
+> indirect call. Currently, there are no performance sensitive hooks that
+> use the security_for_each_hook macro. However, if, some performance
+> sensitive hooks are discovered, these can be updated to use static calls
+> with loop unrolling as well using a custom macro.
+
+The security_for_each_hook() macro is not present in this patch.
+
+Beyond that, let's find a way to use static calls in the LSM hooks
+which don't use the call_{int,void}_hook() macros.  If we're going to do
+this to help close some attack vectors, let's make sure we do the
+conversion everywhere.
+
+> Below are results of the relevant Unixbench system benchmarks with BPF LSM
+> and SELinux enabled with default policies enabled with and without these
+> patches.
 > 
-> > +	const struct landlock_ruleset *const dom_sock =
+> Benchmark                                               Delta(%): (+ is better)
+> ===============================================================================
+> Execl Throughput                                             +1.9356
+> File Write 1024 bufsize 2000 maxblocks                       +6.5953
+> Pipe Throughput                                              +9.5499
+> Pipe-based Context Switching                                 +3.0209
+> Process Creation                                             +2.3246
+> Shell Scripts (1 concurrent)                                 +1.4975
+> System Call Overhead                                         +2.7815
+> System Benchmarks Index Score (Partial Only):                +3.4859
 > 
-> According to the name it looks like the domain of the socket but it is
-> just the domain of the current task. Just "dom" would be clearer and
-> more consistent with security/landlock/fs.c
+> In the best case, some syscalls like eventfd_create benefitted to about ~10%.
 > 
-> > +		landlock_get_current_domain();
-> > +
-> > +	if (!dom_sock)
-> > +		return true;
-> > +
-> > +	/* get credential of listening sock*/
-> > +	const struct cred *cred_other = get_cred(other->sk_peer_cred);
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Song Liu <song@kernel.org>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
+> ---
+>  include/linux/lsm_hooks.h |  70 +++++++++--
+>  security/security.c       | 244 ++++++++++++++++++++++++--------------
+>  2 files changed, 216 insertions(+), 98 deletions(-)
 > 
-> We have a get but not a put call, so the credentials will never be
-> freed.  The put call must be called before any return, so you
-> probably need to follow the goto/error pattern.
-> 
-> In the context of these LSM hooks, only unix_listen() sets the "other"
-> socket credential, and unix_listen() is guarded by unix_state_lock()
-> which locks unix_sk(s)->lock .  When security_unix_stream_connect() or
-> security_unix_may_send() are called, unix_sk(s)->lock is locked as well,
-> which protects the credentials against race-conditions (TOCTOU:
-> time-of-check to time-of-use).  We should then make that explicit with
-> this assertion (which also documents it):
-> 
-> lockdep_assert_held(&unix_sk(other)->lock);
-> 
-> In theory it is then not required to call get_cred().  However, because
-> the performance impact should be negligible and to avoid a potential
-> use-after-free (not possible in theory with the current code), it would
-> be safer to still call get/put.  It would be worse to have a
-> use-after-free rather than an access control issue.
-> 
-> Another thing to keep in mind is that for this hook to be
-> race-condition-free, the credential must not change anyway.  A comment
-> should highlight that.
-> 
-> > +
-> > +	if (!cred_other)
-> > +		return true;
-> > +
-> > +	/* retrieve the landlock_rulesets */
-> > +	const struct landlock_ruleset *dom_parent;
-> 
-> All declarations should be at the top of functions.
-> 
-> > +
-> > +	rcu_read_lock();
-> 
-> No need for this RCU lock because the lock is managed by
-> unix_state_lock() in this case.
-> 
-> > +	dom_parent = landlock_cred(cred_other)->domain;
-> > +	is_scoped = domain_scope_le(dom_parent, dom_sock);
-> > +	rcu_read_unlock();
-> > +
-> > +	return is_scoped;
-> > +}
-> > +
-> > +static int hook_unix_stream_connect(struct sock *const sock,
-> > +				    struct sock *const other,
-> > +				    struct sock *const newsk)
-> > +{
-> > +	if (unix_sock_is_scoped(sock, other))
-> > +		return 0;
-> > +	return -EPERM;
-> > +}
-> > +
-> >  static struct security_hook_list landlock_hooks[] __ro_after_init = {
-> >  	LSM_HOOK_INIT(ptrace_access_check, hook_ptrace_access_check),
-> >  	LSM_HOOK_INIT(ptrace_traceme, hook_ptrace_traceme),
-> > +	LSM_HOOK_INIT(unix_stream_connect, hook_unix_stream_connect),
-> 
-> Please add a hook for security_unix_may_send() too, it should be quite
-> similar, and simplify the patch's subject accordingly.
-> 
-> You now need to add tests (in a dedicated patch) extending
-> tools/testing/selftests/landlock/ptrace_test.c (I'll rename the file
-> later).
-> 
-> These tests should also check with unnamed and named unix sockets.  I
-> guess the current code doesn't differentiate them and control all kind
-> of unix sockets.  Because they must explicitly be passed, sockets
-> created with socketpair(2) (i.e. unnamed socket) should never be denied.
-> 
-> >  };
-> >  
-> >  __init void landlock_add_task_hooks(void)
-> > -- 
-> > 2.34.1
-> > 
-> > 
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index a2ade0ffe9e7..ba63d8b54448 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -30,16 +30,63 @@
+>  #include <linux/init.h>
+>  #include <linux/rculist.h>
+>  #include <linux/xattr.h>
+> +#include <linux/static_call.h>
+> +#include <linux/unroll.h>
+> +#include <linux/jump_label.h>
+> +#include <linux/lsm_count.h>
+> +
+> +#define SECURITY_HOOK_ACTIVE_KEY(HOOK, IDX) security_hook_active_##HOOK##_##IDX
+> +
+> +/*
+> + * Identifier for the LSM static calls.
+> + * HOOK is an LSM hook as defined in linux/lsm_hookdefs.h
+> + * IDX is the index of the static call. 0 <= NUM < MAX_LSM_COUNT
+> + */
+> +#define LSM_STATIC_CALL(HOOK, IDX) lsm_static_call_##HOOK##_##IDX
+> +
+> +/*
+> + * Call the macro M for each LSM hook MAX_LSM_COUNT times.
+> + */
+> +#define LSM_LOOP_UNROLL(M, ...) 		\
+> +do {						\
+> +	UNROLL(MAX_LSM_COUNT, M, __VA_ARGS__)	\
+> +} while (0)
+> +
+> +#define LSM_DEFINE_UNROLL(M, ...) UNROLL(MAX_LSM_COUNT, M, __VA_ARGS__)
+>  
+>  union security_list_options {
+>  	#define LSM_HOOK(RET, DEFAULT, NAME, ...) RET (*NAME)(__VA_ARGS__);
+>  	#include "lsm_hook_defs.h"
+>  	#undef LSM_HOOK
+> +	void *lsm_callback;
+>  };
+
+It took me a little while to figure out what you were doing with the
+lsm_callback field above, can we get rid of the "callback" bit and go
+with something to indicate this is a generic function address?  How
+about "lsm_func_addr" or similar (bikeshedding, I know ...)?
+
+I'd also like to see a one line comment in there too.
+
+> -struct security_hook_heads {
+> -	#define LSM_HOOK(RET, DEFAULT, NAME, ...) struct hlist_head NAME;
+> -	#include "lsm_hook_defs.h"
+> +/*
+> + * @key: static call key as defined by STATIC_CALL_KEY
+> + * @trampoline: static call trampoline as defined by STATIC_CALL_TRAMP
+> + * @hl: The security_hook_list as initialized by the owning LSM.
+> + * @active: Enabled when the static call has an LSM hook associated.
+> + */
+> +struct lsm_static_call {
+> +	struct static_call_key *key;
+> +	void *trampoline;
+> +	struct security_hook_list *hl;
+> +	/* this needs to be true or false based on what the key defaults to */
+
+Isn't this "true or false based on if @hl is valid or not"?
+
+> +	struct static_key_false *active;
+> +} __randomize_layout;
+> +
+> +/*
+> + * Table of the static calls for each LSM hook.
+> + * Once the LSMs are initialized, their callbacks will be copied to these
+> + * tables such that the calls are filled backwards (from last to first).
+> + * This way, we can jump directly to the first used static call, and execute
+> + * all of them after. This essentially makes the entry point
+> + * dynamic to adapt the number of static calls to the number of callbacks.
+> + */
+> +struct lsm_static_calls_table {
+> +	#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> +		struct lsm_static_call NAME[MAX_LSM_COUNT];
+> +	#include <linux/lsm_hook_defs.h>
+>  	#undef LSM_HOOK
+>  } __randomize_layout;
+>  
+> @@ -58,10 +105,14 @@ struct lsm_id {
+>  /*
+>   * Security module hook list structure.
+>   * For use with generic list macros for common operations.
+> + *
+> + * struct security_hook_list - Contents of a cacheable, mappable object.
+
+The comment above looks odd ... can you explain this a bit more and what
+your intention was with that line?
+
+> + * @scalls: The beginning of the array of static calls assigned to this hook.
+> + * @hook: The callback for the hook.
+> + * @lsm: The name of the lsm that owns this hook.
+>   */
+>  struct security_hook_list {
+> -	struct hlist_node		list;
+> -	struct hlist_head		*head;
+> +	struct lsm_static_call	*scalls;
+>  	union security_list_options	hook;
+>  	const struct lsm_id		*lsmid;
+>  } __randomize_layout;
+> @@ -110,10 +161,12 @@ static inline struct xattr *lsm_get_xattr_slot(struct xattr *xattrs,
+>   * care of the common case and reduces the amount of
+>   * text involved.
+>   */
+> -#define LSM_HOOK_INIT(HEAD, HOOK) \
+> -	{ .head = &security_hook_heads.HEAD, .hook = { .HEAD = HOOK } }
+> +#define LSM_HOOK_INIT(NAME, CALLBACK)			\
+> +	{						\
+> +		.scalls = static_calls_table.NAME,	\
+> +		.hook = { .NAME = CALLBACK }		\
+> +	}
+
+Unless there is something that I'm missing, please just stick with the
+existing "HOOK" name instead of "CALLBACK".
+
+> -extern struct security_hook_heads security_hook_heads;
+>  extern char *lsm_names;
+>  
+>  extern void security_add_hooks(struct security_hook_list *hooks, int count,
+> @@ -151,5 +204,6 @@ extern struct lsm_info __start_early_lsm_info[], __end_early_lsm_info[];
+>  		__aligned(sizeof(unsigned long))
+>  
+>  extern int lsm_inode_alloc(struct inode *inode);
+> +extern struct lsm_static_calls_table static_calls_table __ro_after_init;
+>  
+>  #endif /* ! __LINUX_LSM_HOOKS_H */
+> diff --git a/security/security.c b/security/security.c
+> index 3aaad75c9ce8..e05d2157c95a 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -30,6 +30,8 @@
+>  #include <linux/string.h>
+>  #include <linux/msg.h>
+>  #include <net/flow.h>
+> +#include <linux/static_call.h>
+> +#include <linux/jump_label.h>
+>  
+>  /* How many LSMs were built into the kernel? */
+>  #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
+> @@ -91,7 +93,6 @@ const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+>  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+>  };
+>  
+> -struct security_hook_heads security_hook_heads __ro_after_init;
+>  static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
+>  
+>  static struct kmem_cache *lsm_file_cache;
+> @@ -110,6 +111,51 @@ static __initconst const char *const builtin_lsm_order = CONFIG_LSM;
+>  static __initdata struct lsm_info **ordered_lsms;
+>  static __initdata struct lsm_info *exclusive;
+>  
+> +
+> +#ifdef CONFIG_HAVE_STATIC_CALL
+> +#define LSM_HOOK_TRAMP(NAME, NUM) \
+> +	&STATIC_CALL_TRAMP(LSM_STATIC_CALL(NAME, NUM))
+> +#else
+> +#define LSM_HOOK_TRAMP(NAME, NUM) NULL
+> +#endif
+> +
+> +/*
+> + * Define static calls and static keys for each LSM hook.
+> + */
+> +
+> +#define DEFINE_LSM_STATIC_CALL(NUM, NAME, RET, ...)			\
+> +	DEFINE_STATIC_CALL_NULL(LSM_STATIC_CALL(NAME, NUM),		\
+> +				*((RET(*)(__VA_ARGS__))NULL));		\
+> +	DEFINE_STATIC_KEY_FALSE(SECURITY_HOOK_ACTIVE_KEY(NAME, NUM));
+> +
+> +#define LSM_HOOK(RET, DEFAULT, NAME, ...)				\
+> +	LSM_DEFINE_UNROLL(DEFINE_LSM_STATIC_CALL, NAME, RET, __VA_ARGS__)
+> +#include <linux/lsm_hook_defs.h>
+> +#undef LSM_HOOK
+> +#undef DEFINE_LSM_STATIC_CALL
+> +
+> +/*
+> + * Initialise a table of static calls for each LSM hook.
+> + * DEFINE_STATIC_CALL_NULL invocation above generates a key (STATIC_CALL_KEY)
+> + * and a trampoline (STATIC_CALL_TRAMP) which are used to call
+> + * __static_call_update when updating the static call.
+> + */
+> +struct lsm_static_calls_table static_calls_table __ro_after_init = {
+> +#define INIT_LSM_STATIC_CALL(NUM, NAME)					\
+> +	(struct lsm_static_call) {					\
+> +		.key = &STATIC_CALL_KEY(LSM_STATIC_CALL(NAME, NUM)),	\
+> +		.trampoline = LSM_HOOK_TRAMP(NAME, NUM),		\
+> +		.active = &SECURITY_HOOK_ACTIVE_KEY(NAME, NUM),		\
+> +	},
+> +#define LSM_HOOK(RET, DEFAULT, NAME, ...)				\
+> +	.NAME = {							\
+> +		LSM_DEFINE_UNROLL(INIT_LSM_STATIC_CALL, NAME)		\
+> +	},
+> +#include <linux/lsm_hook_defs.h>
+> +#undef LSM_HOOK
+> +#undef INIT_LSM_STATIC_CALL
+> +};
+> +
+>  static __initdata bool debug;
+>  #define init_debug(...)						\
+>  	do {							\
+> @@ -170,7 +216,7 @@ static void __init append_ordered_lsm(struct lsm_info *lsm, const char *from)
+>  	if (exists_ordered_lsm(lsm))
+>  		return;
+>  
+> -	if (WARN(last_lsm == LSM_COUNT, "%s: out of LSM slots!?\n", from))
+> +	if (WARN(last_lsm == LSM_COUNT, "%s: out of LSM static calls!?\n", from))
+>  		return;
+>  
+>  	/* Enable this LSM, if it is not already set. */
+> @@ -349,6 +395,25 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>  	kfree(sep);
+>  }
+>  
+> +static void __init lsm_static_call_init(struct security_hook_list *hl)
+> +{
+> +	struct lsm_static_call *scall = hl->scalls;
+> +	int i;
+> +
+> +	for (i = 0; i < MAX_LSM_COUNT; i++) {
+> +		/* Update the first static call that is not used yet */
+> +		if (!scall->hl) {
+> +			__static_call_update(scall->key, scall->trampoline,
+> +					     hl->hook.lsm_callback);
+> +			scall->hl = hl;
+> +			static_branch_enable(scall->active);
+> +			return;
+> +		}
+> +		scall++;
+> +	}
+> +	panic("%s - Ran out of static slots.\n", __func__);
+> +}
+> +
+>  static void __init lsm_early_cred(struct cred *cred);
+>  static void __init lsm_early_task(struct task_struct *task);
+>  
+> @@ -428,11 +493,6 @@ int __init early_security_init(void)
+>  {
+>  	struct lsm_info *lsm;
+>  
+> -#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> -	INIT_HLIST_HEAD(&security_hook_heads.NAME);
+> -#include "linux/lsm_hook_defs.h"
+> -#undef LSM_HOOK
+> -
+>  	for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
+>  		if (!lsm->enabled)
+>  			lsm->enabled = &lsm_enabled_true;
+> @@ -560,7 +620,7 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+>  
+>  	for (i = 0; i < count; i++) {
+>  		hooks[i].lsmid = lsmid;
+> -		hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
+> +		lsm_static_call_init(&hooks[i]);
+>  	}
+>  
+>  	/*
+> @@ -846,29 +906,41 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uctx, size_t *uctx_len,
+>   * call_int_hook:
+>   *	This is a hook that returns a value.
+>   */
+> +#define __CALL_STATIC_VOID(NUM, HOOK, ...)				     \
+> +do {									     \
+> +	if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM))) {    \
+
+I'm not a fan of the likely()/unlikely() style markings/macros in cases
+like this as it can vary tremendously.  Drop the likely()/unlikely()
+checks and just do a static_call().
+
+> +		static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__);	     \
+> +	}								     \
+> +} while (0);
+>  
+> -#define call_void_hook(FUNC, ...)				\
+> -	do {							\
+> -		struct security_hook_list *P;			\
+> -								\
+> -		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) \
+> -			P->hook.FUNC(__VA_ARGS__);		\
+> +#define call_void_hook(FUNC, ...)                                 \
+> +	do {                                                      \
+> +		LSM_LOOP_UNROLL(__CALL_STATIC_VOID, FUNC, __VA_ARGS__); \
+>  	} while (0)
+>  
+> -#define call_int_hook(FUNC, IRC, ...) ({			\
+> -	int RC = IRC;						\
+> -	do {							\
+> -		struct security_hook_list *P;			\
+> -								\
+> -		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
+> -			RC = P->hook.FUNC(__VA_ARGS__);		\
+> -			if (RC != 0)				\
+> -				break;				\
+> -		}						\
+> -	} while (0);						\
+> -	RC;							\
+> +#define __CALL_STATIC_INT(NUM, R, HOOK, LABEL, ...)			     \
+> +do {									     \
+> +	if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM))) {  \
+
+See my comments in the void sister function.
+
+> +		R = static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__);    \
+> +		if (R != 0)						     \
+> +			goto LABEL;					     \
+> +	}								     \
+> +} while (0);
+> +
+> +#define call_int_hook(FUNC, IRC, ...)					\
+> +({									\
+> +	__label__ out;							\
+> +	int RC = IRC;							\
+> +	LSM_LOOP_UNROLL(__CALL_STATIC_INT, RC, FUNC, out, __VA_ARGS__);	\
+> +out:									\
+> +	RC;								\
+>  })
+>  
+> +#define lsm_for_each_hook(scall, NAME)					\
+> +	for (scall = static_calls_table.NAME;				\
+> +	     scall - static_calls_table.NAME < MAX_LSM_COUNT; scall++)  \
+> +		if (static_key_enabled(&scall->active->key))
+> +
+>  /* Security operations */
+>  
+
+--
+paul-moore.com
 
