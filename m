@@ -1,112 +1,129 @@
-Return-Path: <linux-security-module+bounces-2678-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2684-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FBC08A39C4
-	for <lists+linux-security-module@lfdr.de>; Sat, 13 Apr 2024 02:58:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 676328A3CA9
+	for <lists+linux-security-module@lfdr.de>; Sat, 13 Apr 2024 13:44:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFCA3284805
-	for <lists+linux-security-module@lfdr.de>; Sat, 13 Apr 2024 00:58:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF002B216DE
+	for <lists+linux-security-module@lfdr.de>; Sat, 13 Apr 2024 11:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85FE243149;
-	Sat, 13 Apr 2024 00:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53F123FB1C;
+	Sat, 13 Apr 2024 11:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="lJOlD+fh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WPkbalI0"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A68F4C97;
-	Sat, 13 Apr 2024 00:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87183839A;
+	Sat, 13 Apr 2024 11:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712969774; cv=none; b=QLvoqBuWL3zaSTRplwhzKWnWhS7Ezy0Istr1bFdcrrlUDmZ25arap0NIPWrhtByFD+j2lPkliNdAYskEv153YSW97rlU4xR6yVtQ4kqV9EyLqbX6hcutL8Q5q68+nSvvKuAVlMrRZyxou4RCz+ezRnoStfOCOKUgtfqbqrcQ6GA=
+	t=1713008658; cv=none; b=plQTZX+mZoqRE+xsxvBKvpQ3dHO44th1kPNntX4yn/8/uxvGQIwuDO+qyUsx4dnry4v8++sMbyy5PnCGWtwrfr70g0f3Iz2WBXIhK2trYwsZyea+HaoQf4s0hzcBTyoJH2jdZHpnCxiQSIPsrRx2a/0lDzznVfZJKfT6RYhc198=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712969774; c=relaxed/simple;
-	bh=pBU/dUpHcW7hv4jahHyUxb9624g5oZLMksU7XwtQcWg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=QT8w+tWBGeKDRK8+TEL8NQu/Q/Ua83Td8mWXu6r4T41Qm0kIymA/UImXMWjTai2XwiJVW3Oc1OMgHXyWOU4Xlhmxqu+XYrG30GtuqxMOpV9zpRLmbOLflLfCEG5FQXzfKgaTB3uoTAfU4c9V2+Xz7sI8CYdrn3v+BlTcnwlXetQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=lJOlD+fh; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-	id AD89A20FC5FA; Fri, 12 Apr 2024 17:56:06 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AD89A20FC5FA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1712969766;
-	bh=RkLiZLmYY6yXHhJqHQYW5lgf/n+IHqe1I+s8c4aEHFk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lJOlD+fhAoGAuJ5iZUO71L5J5LCGOsNCchcUL6JHtoAoyT5JDX0HrG3Eqe3ErOvnU
-	 BvMpI3b83kNEU7wV1u0gMFyOywTOm+CFsHhq6jKBWtwaDvWB2gnKNfr6G56JV/toT7
-	 vogkh3rb+v16VTJ9Opjit07BN+AqWythNOtPfyQ8=
-From: Fan Wu <wufan@linux.microsoft.com>
-To: corbet@lwn.net,
-	zohar@linux.ibm.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	tytso@mit.edu,
-	ebiggers@kernel.org,
-	axboe@kernel.dk,
-	agk@redhat.com,
-	snitzer@kernel.org,
-	eparis@redhat.com,
-	paul@paul-moore.com
-Cc: linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org,
-	dm-devel@lists.linux.dev,
-	audit@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Fan Wu <wufan@linux.microsoft.com>
-Subject: [PATCH v17 21/21] MAINTAINERS: ipe: add ipe maintainer information
-Date: Fri, 12 Apr 2024 17:56:04 -0700
-Message-Id: <1712969764-31039-22-git-send-email-wufan@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
-References: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
+	s=arc-20240116; t=1713008658; c=relaxed/simple;
+	bh=KnBXY5UF6YCzLXbhbJg6nmCpVhH7JaR+37AGQF+vy74=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=e0EcklGe0f3FUpQa0jR086bIrqKzVsF8CwdmqfryVE7vbf5qiErkT5G5D5kUCM7wMT+XJX2fHhAfNoEgiYL4M69JsDdWaFgctJBvAvy3bEAcXgPZwQX3zvfZL+ZNy3bRitmvPVdvHlfckMNb1bJFh3ArAgTxcATBG9nOqzd2GL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WPkbalI0; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56fffb1d14bso2238468a12.1;
+        Sat, 13 Apr 2024 04:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713008654; x=1713613454; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KnBXY5UF6YCzLXbhbJg6nmCpVhH7JaR+37AGQF+vy74=;
+        b=WPkbalI03vkZzvYdbr1qDa0aa7q2ITj4lXALVSJ5nGwknE0WwswGsY7rCyYUV07xZe
+         +I5aeLdst6wWx/VVf/K0vpXUrpxbftmp2y/qV7PUUtKzTb3TLhkwe7zH4BBdSfRitQ25
+         tMBArMH4mOYSIVofe7YubY1xNTnDoVqbfmQd4cKW8CWxaxE1ASq7E4dKMeS9iXmdLcVb
+         Z9WKvcBn2eo1zc5xTtLtKXrDew26PzUfnxH9KulmlLWDEPyGtH7r/CInUmTr4enpYBMu
+         6iwvrKsiUJdt5jNUI+Zx4+ySqNWgDXAJ+TsC3iUGLQZPp0/mqu5c1O6OMcvumxHl+yxQ
+         RXuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713008654; x=1713613454;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KnBXY5UF6YCzLXbhbJg6nmCpVhH7JaR+37AGQF+vy74=;
+        b=PSjC2EPIhSPoc7bkdCZvjQqYkuM1ZkObVgxoAx7rHfVCTUEHObVpHyxe9WY8EVQmrs
+         2eKv0/OwCQeanjjRRLTtnZ19kkfsQ9Ygdb/qh8Ow5ER4IV4TxHZxXJhMZARl81yXu42G
+         OfBVIsTGcOjyNv628atqXJo24cM5hTVO8Yr+Zte/OTY19z3BmxuKb4YJpM3pu3EZUFSk
+         4Az6nNYOAz1Venmm2jSAMZbpWf67EZ51jaknykjsvaUQcJJ0aTHUxsx6o9e5zXYzHgQY
+         meoxsn05Li4cmjZGMktRR/RFqyBQU5/43B6ODqpy5GS1mXB8jVxQ0/XAZ91GowhaOiey
+         zycg==
+X-Forwarded-Encrypted: i=1; AJvYcCUwgCyKyNjyDt2xqrKYZUTgRiYkFjKa1GMg9B5KBatLfy1bV+phKJY2yqsx7PUNFxfqscPQreDFGGLrIYUy+e6a+eSoNy568uA5mh3mtvZ/W7YeBFO9V84RYzDf9pE5A9rjODEyGufHCHzTBWeh5SqiwkX0h5Ri9/A6Go+FpSs8YDOK30UD4y6DWnUQ09fc458OC0jxYnBpOtVhiOBq0MDohqwN
+X-Gm-Message-State: AOJu0Yz64cwcSgL03OzcAr6hBkGxJvra0HkCwemaHiuH49LlVvicLouj
+	nwwMhKo9eDh9PE81eskmXGlag8o+LOj9IYuWvag2aIJK3ivA+7mm
+X-Google-Smtp-Source: AGHT+IECMiHcf/+B/M0rCnj0C9WtMuHWj1fqjvS7fDAhsrEnWpxrFdy5FYVmH4hWp20oU69B2Ib3iw==
+X-Received: by 2002:a50:d78c:0:b0:570:392:aa1a with SMTP id w12-20020a50d78c000000b005700392aa1amr2449745edi.7.1713008653910;
+        Sat, 13 Apr 2024 04:44:13 -0700 (PDT)
+Received: from [192.168.100.206] ([89.28.99.140])
+        by smtp.gmail.com with ESMTPSA id t11-20020a056402240b00b0057010f76bf7sm529238eda.63.2024.04.13.04.44.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Apr 2024 04:44:12 -0700 (PDT)
+Message-ID: <d9f79f367e3a5cdff691e586383e9ad6a831d53d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 03/11] bpf, lsm: Check bpf lsm hook return
+ values in verifier
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski
+ <mattbobrowski@google.com>, Brendan Jackman <jackmanb@chromium.org>, Paul
+ Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E .
+ Hallyn" <serge@hallyn.com>, Khadija Kamran <kamrankhadijadj@gmail.com>,
+ Casey Schaufler <casey@schaufler-ca.com>, Ondrej Mosnacek
+ <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>, John Johansen
+ <john.johansen@canonical.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>, Shung-Hsi Yu
+ <shung-hsi.yu@suse.com>
+Date: Sat, 13 Apr 2024 14:44:09 +0300
+In-Reply-To: <20240411122752.2873562-4-xukuohai@huaweicloud.com>
+References: <20240411122752.2873562-1-xukuohai@huaweicloud.com>
+	 <20240411122752.2873562-4-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Update MAINTAINERS to include ipe maintainer information.
+On Thu, 2024-04-11 at 20:27 +0800, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+>=20
+> A bpf prog returning positive number attached to file_alloc_security hook
+> will make kernel panic.
+>=20
+> The reason is that the positive number returned by bpf prog is not a
+> valid errno, and could not be filtered out with IS_ERR which is used by
+> the file system to check errors. As a result, the file system uses this
+> positive number as file pointer, causing panic.
+>=20
+> Considering that hook file_alloc_security never returned positive number
+> before bpf lsm was introduced, and other bpf lsm hooks may have the same
+> problem, this patch adds lsm return value check in bpf verifier to ensure
+> no unpredicted values will be returned by lsm bpf prog.
+>=20
+> Fixes: 520b7aa00d8c ("bpf: lsm: Initialize the BPF LSM hooks")
+> Reported-by: Xin Liu <liuxin350@huawei.com>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
 
-Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
---
-v1-v16:
-  + Not present
-
-v17:
-  + Introduced
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b5b89687680b..93eb4e12a789 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10745,6 +10745,16 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
- F:	security/integrity/
- F:	security/integrity/ima/
- 
-+INTEGRITY POLICY ENFORCEMENT (IPE)
-+M:	Fan Wu <wufan@linux.microsoft.com>
-+L:	linux-security-module@vger.kernel.org
-+S:	Supported
-+T:	git https://github.com/microsoft/ipe.git
-+F:	Documentation/admin-guide/LSM/ipe.rst
-+F:	Documentation/security/ipe.rst
-+F:	scripts/ipe/
-+F:	security/ipe/
-+
- INTEL 810/815 FRAMEBUFFER DRIVER
- M:	Antonino Daplas <adaplas@gmail.com>
- L:	linux-fbdev@vger.kernel.org
--- 
-2.44.0
 
 
