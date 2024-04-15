@@ -1,204 +1,282 @@
-Return-Path: <linux-security-module+bounces-2692-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2708-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110A68A520E
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Apr 2024 15:44:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BAC38A546C
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Apr 2024 16:36:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90CA31F2399A
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Apr 2024 13:44:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A665DB24087
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Apr 2024 14:36:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2DB073199;
-	Mon, 15 Apr 2024 13:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GmQUOqQM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA9783CC9;
+	Mon, 15 Apr 2024 14:34:01 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912B471B45;
-	Mon, 15 Apr 2024 13:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C038288A;
+	Mon, 15 Apr 2024 14:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713188659; cv=none; b=XUia/Y3T6eDK8GJl7LGjnJ8yI/GjuGC3WO06lRCSPBL5y6vlGrBSLDlGphN03/Eh+gRtzP6NHLOyWS1hStJr8iocqA6S71PkDYgISjJ7DjdUjXE33Hmq1B2sH4L1NDJp9WxSGhHDvdQ4dBEfPMNNuFYA0rTX0Iz8y+XJSOmmRWQ=
+	t=1713191641; cv=none; b=jiCL6Ngcf4eFp2d1slx7BUaT3Y8qInGkUQRtqa3gQ7siTjNBmfjcwhy0Rq2HxBqj5IsamuBqVbIpZ7tR2qdATfrjKqcVvMtZFf/JvAvduW8xv+ivOJD5x3tjSXjhmqFci9hHkeXkvYbeluh/2lWpSpLsH8atCqbcXZt8hW3AzfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713188659; c=relaxed/simple;
-	bh=ZvNyBDTtGOhsFAqdOLjRzSyoKu4RMa5m4+b0d7iOP6k=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:References; b=hZ+9jeVsRSoU5z2R32goWWT3h0W8f171QjsQXjCxa8gqgAMFLtlBNfERiSghQVKO044mTOjjrTjerHVCrxlKDl3dAUf0GHLwRY1Ll1lzRZY5XH4Q/02v23M4dgnfze5IAalsEKH9Vbjw32oLuX2u1psTnsBIudN/vTJL+Q7vWbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GmQUOqQM; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240415134414euoutp0297d8f98bc92bb6ff864c94e374c7eec6~GeAEOwxGg2821928219euoutp02k;
-	Mon, 15 Apr 2024 13:44:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240415134414euoutp0297d8f98bc92bb6ff864c94e374c7eec6~GeAEOwxGg2821928219euoutp02k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1713188654;
-	bh=ZvNyBDTtGOhsFAqdOLjRzSyoKu4RMa5m4+b0d7iOP6k=;
-	h=Date:From:To:Subject:In-Reply-To:References:From;
-	b=GmQUOqQM7o6bjsC22pyUHLVaOsoT93RV618NOsBpAbzPNHZ6j2861bf5MaKl/cKsw
-	 j7+MhrH3FUEqrAX9Jxg9FnzWTwhAyYUeQr203UEEXIn+ANm0pxi+wuuWA4F9tA3feT
-	 d87MPbknncddCQfILpgxP9r4OVHoVB74++gYlDRc=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240415134413eucas1p1083d673739f18b6d571ad70336b76efd~GeAEBZ3J30676906769eucas1p1k;
-	Mon, 15 Apr 2024 13:44:13 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id F9.A2.09875.D2F2D166; Mon, 15
-	Apr 2024 14:44:13 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240415134413eucas1p1077a3baa096cb382c62768ea968a477b~GeADh-LkK0753307533eucas1p1k;
-	Mon, 15 Apr 2024 13:44:13 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240415134413eusmtrp1d53d9c801232f076ee155c4a5c3be4f1~GeADg3WW13030130301eusmtrp1y;
-	Mon, 15 Apr 2024 13:44:13 +0000 (GMT)
-X-AuditID: cbfec7f4-9acd8a8000002693-3b-661d2f2d85a3
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 6B.E6.09010.D2F2D166; Mon, 15
-	Apr 2024 14:44:13 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240415134413eusmtip2a3107c689cd960919bc653278802044d~GeADOocSP0156501565eusmtip2O;
-	Mon, 15 Apr 2024 13:44:13 +0000 (GMT)
-Received: from localhost (106.210.248.128) by CAMSVWEXC02.scsc.local
-	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Mon, 15 Apr 2024 14:44:12 +0100
-Date: Mon, 15 Apr 2024 15:44:06 +0200
-From: Joel Granados <j.granados@samsung.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Muchun Song
-	<muchun.song@linux.dev>, Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
-	<naoya.horiguchi@nec.com>, John Johansen <john.johansen@canonical.com>, Paul
-	Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, David Howells <dhowells@redhat.com>, Jarkko
-	Sakkinen <jarkko@kernel.org>, Kees Cook <keescook@chromium.org>, Herbert Xu
-	<herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, Jens
-	Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, Atish
-	Patra <atishp@atishpatra.org>, Anup Patel <anup@brainfault.org>, Will Deacon
-	<will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Luis Chamberlain <mcgrof@kernel.org>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <apparmor@lists.ubuntu.com>,
-	<linux-security-module@vger.kernel.org>, <keyrings@vger.kernel.org>,
-	<linux-crypto@vger.kernel.org>, <io-uring@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/7] security: Remove the now superfluous sentinel
- element from ctl_table array
-Message-ID: <20240415134406.5l6ygkl55yvioxgs@joelS2.panther.com>
+	s=arc-20240116; t=1713191641; c=relaxed/simple;
+	bh=6HcZNB2GKTsycYKJe1NGj3TZRbra4cpuJ4EXp3SFi0A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aV+2FneaBgTAFdbftf7b075F0PpKGsiZHp2p9gWxZ6lKGp2KQUYnJxX7eNV9EAg+A07kB3VC0+IrlnHebPTA1tbCrl40kpUNxNj/d8ZSnvtVTiX2F0XjuTp9cRrAcWuwo3qmdHCwIbhbuhK2+e3+MpUTgcH5qWRLPGCYu0yRnFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4VJ8314Mk4z9xGYY;
+	Mon, 15 Apr 2024 22:01:01 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 606A21404A9;
+	Mon, 15 Apr 2024 22:17:25 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDHsibqNh1mXSxGBg--.11911S2;
+	Mon, 15 Apr 2024 15:17:24 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: corbet@lwn.net,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	akpm@linux-foundation.org,
+	shuah@kernel.org,
+	mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
+	mic@digikod.net
+Cc: linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v4 00/14] security: digest_cache LSM
+Date: Mon, 15 Apr 2024 16:16:57 +0200
+Message-Id: <20240415141711.2542197-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="qw2zqgk5lfspo27e"
-Content-Disposition: inline
-In-Reply-To: <20240328-jag-sysctl_remset_misc-v1-2-47c1463b3af2@samsung.com>
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA2VTfUxTVxzltve9lo7i42PjiphJHYtxfGnGdhdwURnsLWok+8N9hc1KH+AG
-	RV+p0yUSqMUBopKig1XiYFsBaUXtoAOUyQA/EGjBTkQtDAskwKCglCl2Y7M8tpnsv3N+v3Ny
-	fucmV8j3zREECnfLMxlWLk2TkCJoujpvDguLWJkcqS6PwmXnDCRWzzgIXO/SCnDO1XICl9WY
-	AM4zx2P9wHESl1nUEDtULoiPTARhR64ZYs18EcC1577j4evOXBJ3HUnH9TYVifMf6SA2DvcR
-	+NfBeR6+1NwBsbWpjMSDhr8IbJpVk3im0E5i3e1eHu4vGgW4svE+xL05LQCPWwv5+LB2Gb6n
-	KYHY0mMWYLUtamMwbThtAHRf3gVIn3R1QVqbfZSkT2X3QnpyfBzSdWfu8Oi2PKeAbtQOCGhT
-	Swjdd/EDWt0+RdDWbiVtrMknaeNDjYC+XuqCCcs/FMXImLTd+xg24s2dolSL/new5454f0e/
-	BWSDXK8CIBQi6lV0szqgAIiEvlQ1QNP1vXyOOAHKO3ELcmQWoLH5PwUFwHPRodE4lhZVAD1o
-	KCH/Vc2ZKwBH6gE6WWwn3CGQCkFnzdvdbpIKRZZJ22KGP1UmRAOmMcJNPCgdQDaTBrpVfhSD
-	HuVbSDcWUxtReYOKx2Ef1PH1yKKGT+1H9hIr3x3Ap1agqgWhe+xJbUXfjk/xuVNXI5X9e4LD
-	B9GNurs8dxaiSp9DR50/kdziLTT6uBlw2A9NXKtb6hmEOosLIWcoBujywoyAI3qAKnPmeJwq
-	Gql/GVlybELHnxgI7l29Uf+UD3eoN9KYSvjcWIzyDvty6peRfnASFoHV2meqaZ+ppv2vGjcO
-	ReUXH5L/G7+CKit+43N4A6qtnYblQFADAhilIj2FUayXM5+HK6TpCqU8JTwpI90Inv6MzoVr
-	zgZQNfEgvBXwhKAVvPTUbD+v7wGBUJ4hZyT+YrXfymRfsUx64AuGzfiEVaYxilawQgglAeIQ
-	2YuML5UizWQ+Y5g9DPvPlif0DMzmNZ33tA6cYWe6b29RZO90pcDO8dg2LVZl5mYxuWsSRM/r
-	7x5q6nFmwMdJsujgxMLXE680DbyRmjHblli796yqx8PBBrTvMBoqC5JcaGgzEbc2S3RZfyXo
-	tZuTxcoL31R4Y/36hj9+fOdU1yFHPur00W5KWBcSX+gXHhMqcgyZiegZ2p/4ctXmTyO96EtZ
-	rOSj5ey+oUhzbOz2sZGUY/fCoC3r45ZbjTLJu28HKg0ewe8HHwt7Ic5ioIf11I4fpkfNTPWy
-	Rl1MQ1zy8JO59vdczZIbstHK02umdD+vSnLuddzv1h1kG7dadwnjI7ZFeRnVX20JYakNUaWO
-	A7ZtzIldEqhIla5by2cV0r8BoM6paJQEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA2VSf1CTdRjv++7duxd05+vA/EZyhwvvOBqDjY2+JNjsCt6K1D84u+QKl7yA
-	wTZuP7DMctBMfkxGQ1EGIaBAIvHrGAcad0oeyYX8WoIIjIOiHMlkQXFAYKzZ5V3/fZ7P8/l8
-	nueee0gWr5zwI48qtYxaKU/nE974D+vf20NCQv2Tw8aqKVTWWE8gw7yTjayrFg7K6q5go7K6
-	NoBy+mLQ1QkTgcr6DThyZq/iKH92B3Ke6sORebkQoIbGSxi6vXiKQL35CmQdzyZQ7lI1jlp+
-	GmajSfsyhr7t7MGR7VoZgez1j9mobcFAoHnjNIGqRwYxdK9wBqCajikcDWbdAMhhM7LQF5Yt
-	aMx8Hkf9A30cZBiXynbS9eX1gB7Oacbpc6u9OG3RnyHoUv0gTj90OHC69cooRn+Xs8ihOywT
-	HLrtxi56+Pq7tOHWHJu23dHRLXW5BN3yu5lD376wih947pAwSq3SaZmAVJVGG81PECGxUBSJ
-	hGJJpFAU/tJ7L4ul/NA9UUlM+tFMRh2657Awtdw+ys4Y4X7UebaR0IPPN+cBLxJSEmg2O/E8
-	4E3yqGoA1/T5mKexAzYv3mV7sA/8aziP8IhcAA4XDT0prAAWuB5sOEgSp3bBb/r2uw0EJYD9
-	D8dZbo0vVUbCpfZSjrt4xj1ivM2Mu1U+FAOXcvsJN+ZSMljRno15UqcAtBovsj2NrbCn5Od/
-	DCwqE+Y+WGS7p7Go52HtOummvag4WOWYY3lWfQFmT19+svancGHtF1AIfCxPJVmeSrL8l+Sh
-	g+G9dQf2P/pFWFP5G8uDo2FDwyO8AnDqgC+j0yhSFBqxUCNXaHTKFOERlaIFbDxnW/dyazu4
-	MusSdgGMBF0gcMM53XR1APjhSpWS4ftyDT7+yTxukvzj44xalajWpTOaLiDdOOOXLL9tR1Qb
-	n67UJooiwqQiSURkmDQyIpy/nftGRo6cR6XItUwaw2Qw6n99GOnlp8dOZNnuJvHK07aF9Ba/
-	b7+Qds66MmOvmn02wTxkE1SN7T1QLPuQu3WmNfak3buWUpCjqfFa3cH19MslfX5TkqGV6BOC
-	gP3O3XWzEc38iRJsMD7u8SfGPy8qEsOTZRzwipR+tVdgjN8nwMVBk1aK39S46TXXwB+q4k5D
-	tKLGoT/dHaMq3nR2fG/lakD3tZ6b1awuoijux+vzb2ee9o0pCsw+v++dAt1ioGxtxvRm7ElV
-	p8u0knJwp8F+SXJoeTJoRDOT4BUbbCot6NisaTq8+5H1GO++/C2Rtf5rE+rSeWFzVcdqb4EF
-	kjL6b6kMuhnhvP/V9s9+NUVRH7Cp18Gd4xI+rkmVi4JZao38b8Kw6I4xBAAA
-X-CMS-MailID: 20240415134413eucas1p1077a3baa096cb382c62768ea968a477b
-X-Msg-Generator: CA
-X-RootMTR: 20240328155911eucas1p23472e0c6505ca73df5c76fe019fdd483
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240328155911eucas1p23472e0c6505ca73df5c76fe019fdd483
-References: <20240328-jag-sysctl_remset_misc-v1-0-47c1463b3af2@samsung.com>
-	<CGME20240328155911eucas1p23472e0c6505ca73df5c76fe019fdd483@eucas1p2.samsung.com>
-	<20240328-jag-sysctl_remset_misc-v1-2-47c1463b3af2@samsung.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwDHsibqNh1mXSxGBg--.11911S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr4rXFy5tw4UZF4DWw43GFg_yoWfKr1xp3
+	ykC3W5Kws5ZFy7Aw4xAF129r1Fqa95KF47Gws7Xr13ZrWYqryFy3WIkw17Zry3XrWUXa1S
+	vw47KF15Ww1DJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+	xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+	IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+	6r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2
+	IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
+	87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnU
+	UI43ZEXa7IU0rhL5UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5x1rgABs8
 
---qw2zqgk5lfspo27e
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Hey
+Integrity detection and protection has long been a desirable feature, to
+reach a large user base and mitigate the risk of flaws in the software
+and attacks.
 
-This is the only patch that I have not seen added to the next tree.
-I'll put this in the sysctl-next
-https://git.kernel.org/pub/scm/linux/kernel/git/sysctl/sysctl.git/log/?h=3D=
-sysctl-next
-for testing. Please let me know if It is lined up to be upstream through
-another path.
+However, while solutions exist, they struggle to reach the large user
+base, due to requiring higher than desired constraints on performance,
+flexibility and configurability, that only security conscious people are
+willing to accept.
 
-Best
+This is where the new digest_cache LSM comes into play, it offers
+additional support for new and existing integrity solutions, to make
+them faster and easier to deploy.
 
-On Thu, Mar 28, 2024 at 04:57:49PM +0100, Joel Granados via B4 Relay wrote:
-> From: Joel Granados <j.granados@samsung.com>
->=20
-> This commit comes at the tail end of a greater effort to remove the
-> empty elements at the end of the ctl_table arrays (sentinels) which will
-> reduce the overall build time size of the kernel and run time memory
-> bloat by ~64 bytes per sentinel (further information Link :
-> https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
->=20
-=2E..
+The full documentation with the motivation and the solution details can be
+found in patch 14.
 
---=20
+The IMA integration patch set will be introduced separately. Also a PoC
+based on the current version of IPE can be provided.
 
-Joel Granados
+v3:
+- Rewrite documentation, and remove the installation instructions since
+  they are now included in the README of digest-cache-tools
+- Add digest cache event notifier
+- Drop digest_cache_was_reset(), and send instead to asynchronous
+  notifications
+- Fix digest_cache LSM Kconfig style issues (suggested by Randy Dunlap)
+- Propagate digest cache reset to directory entries
+- Destroy per directory entry mutex
+- Introduce RESET_USER bit, to clear the dig_user pointer on
+  set/removexattr
+- Replace 'file content' with 'file data' (suggested by Mimi)
+- Introduce per digest cache mutex and replace verif_data_lock spinlock
+- Track changes of security.digest_list xattr
+- Stop tracking file_open and use file_release instead also for file writes
+- Add error messages in digest_cache_create()
+- Load/unload testing kernel module automatically during execution of test
+- Add tests for digest cache event notifier
+- Add test for ftruncate()
+- Remove DIGEST_CACHE_RESET_PREFETCH_BUF command in test and clear the
+  buffer on read instead
 
---qw2zqgk5lfspo27e
-Content-Type: application/pgp-signature; name="signature.asc"
+v2:
+- Include the TLV parser in this patch set (from user asymmetric keys and
+  signatures)
+- Move from IMA and make an independent LSM
+- Remove IMA-specific stuff from this patch set
+- Add per algorithm hash table
+- Expect all digest lists to be in the same directory and allow changing
+  the default directory
+- Support digest lookup on directories, when there is no
+  security.digest_list xattr
+- Add seq num to digest list file name, to impose ordering on directory
+  iteration
+- Add a new data type DIGEST_LIST_ENTRY_DATA for the nested data in the
+  tlv digest list format
+- Add the concept of verification data attached to digest caches
+- Add the reset mechanism to track changes on digest lists and directory
+  containing the digest lists
+- Add kernel selftests
 
------BEGIN PGP SIGNATURE-----
+v1:
+- Add documentation in Documentation/security/integrity-digest-cache.rst
+- Pass the mask of IMA actions to digest_cache_alloc()
+- Add a reference count to the digest cache
+- Remove the path parameter from digest_cache_get(), and rely on the
+  reference count to avoid the digest cache disappearing while being used
+- Rename the dentry_to_check parameter of digest_cache_get() to dentry
+- Rename digest_cache_get() to digest_cache_new() and add
+  digest_cache_get() to set the digest cache in the iint of the inode for
+  which the digest cache was requested
+- Add dig_owner and dig_user to the iint, to distinguish from which inode
+  the digest cache was created from, and which is using it; consequently it
+  makes the digest cache usable to measure/appraise other digest caches
+  (support not yet enabled)
+- Add dig_owner_mutex and dig_user_mutex to serialize accesses to dig_owner
+  and dig_user until they are initialized
+- Enforce strong synchronization and make the contenders wait until
+  dig_owner and dig_user are assigned to the iint the first time
+- Move checking IMA actions on the digest list earlier, and fail if no
+  action were performed (digest cache not usable)
+- Remove digest_cache_put(), not needed anymore with the introduction of
+  the reference count
+- Fail immediately in digest_cache_lookup() if the digest algorithm is
+  not set in the digest cache
+- Use 64 bit mask for IMA actions on the digest list instead of 8 bit
+- Return NULL in the inline version of digest_cache_get()
+- Use list_add_tail() instead of list_add() in the iterator
+- Copy the digest list path to a separate buffer in digest_cache_iter_dir()
+- Use digest list parsers verified with Frama-C
+- Explicitly disable (for now) the possibility in the IMA policy to use the
+  digest cache to measure/appraise other digest lists
+- Replace exit(<value>) with return <value> in manage_digest_lists.c
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmYdLyYACgkQupfNUreW
-QU/Z+Qv+MoFmIQO7v4dtD+a9DTbUrllY4Dt8XcDo9bLc+AW59PtH7KPP2RNwklOg
-uIwqgCxi+ERswmjFodCCEkyxjNShbXE14ig9pB63iMWGvgd6pyeta6IntBWQGtDS
-jHDW72wnd67ATBG5Rs8N6lh2RZLx/oP4aGTV0GmcN55+LQrNxLbb+yoVh5CR6a8V
-eD1AdG6QC4HggTof5/OwvU68hO6g+SPSzv/rm5ukU0RpzvH4iOMZ3jHLJX09Vbcy
-pVwCg46kmK6Z7plLaG/jdYZdg8rss6kTGHQVi6q1lOeRj6h8gFjXjE54idNOOESs
-Si/Q17wuejaRfBlvr8VNvz05nzCzlshasz2iSis2Rq2+xDSoZfQ7s/tGgtli0Yhd
-TFvF3qGr3mufAsLNVHPQO2ygs9AZgodjG035XcgpDU5iodz9sxjFcVylksVlit16
-9gNv1GMof9ZqEfXwM5c6FBSHi8gbwxiGugietf95SeKoHNIiglwDZlJssIrJ90SC
-EdWFHI6W
-=nkVv
------END PGP SIGNATURE-----
+Roberto Sassu (14):
+  lib: Add TLV parser
+  security: Introduce the digest_cache LSM
+  digest_cache: Add securityfs interface
+  digest_cache: Add hash tables and operations
+  digest_cache: Populate the digest cache from a digest list
+  digest_cache: Parse tlv digest lists
+  digest_cache: Parse rpm digest lists
+  digest_cache: Add management of verification data
+  digest_cache: Add support for directories
+  digest cache: Prefetch digest lists if requested
+  digest_cache: Reset digest cache on file/directory change
+  digest_cache: Notify digest cache events
+  selftests/digest_cache: Add selftests for digest_cache LSM
+  docs: Add documentation of the digest_cache LSM
 
---qw2zqgk5lfspo27e--
+ Documentation/security/digest_cache.rst       | 763 ++++++++++++++++
+ Documentation/security/index.rst              |   1 +
+ MAINTAINERS                                   |  16 +
+ include/linux/digest_cache.h                  | 117 +++
+ include/linux/kernel_read_file.h              |   1 +
+ include/linux/tlv_parser.h                    |  28 +
+ include/uapi/linux/lsm.h                      |   1 +
+ include/uapi/linux/tlv_digest_list.h          |  72 ++
+ include/uapi/linux/tlv_parser.h               |  59 ++
+ include/uapi/linux/xattr.h                    |   6 +
+ lib/Kconfig                                   |   3 +
+ lib/Makefile                                  |   3 +
+ lib/tlv_parser.c                              | 214 +++++
+ lib/tlv_parser.h                              |  17 +
+ security/Kconfig                              |  11 +-
+ security/Makefile                             |   1 +
+ security/digest_cache/Kconfig                 |  33 +
+ security/digest_cache/Makefile                |  11 +
+ security/digest_cache/dir.c                   | 252 ++++++
+ security/digest_cache/htable.c                | 268 ++++++
+ security/digest_cache/internal.h              | 290 +++++++
+ security/digest_cache/main.c                  | 570 ++++++++++++
+ security/digest_cache/modsig.c                |  66 ++
+ security/digest_cache/notifier.c              | 135 +++
+ security/digest_cache/parsers/parsers.h       |  15 +
+ security/digest_cache/parsers/rpm.c           | 223 +++++
+ security/digest_cache/parsers/tlv.c           | 299 +++++++
+ security/digest_cache/populate.c              | 163 ++++
+ security/digest_cache/reset.c                 | 235 +++++
+ security/digest_cache/secfs.c                 |  87 ++
+ security/digest_cache/verif.c                 | 119 +++
+ security/security.c                           |   3 +-
+ tools/testing/selftests/Makefile              |   1 +
+ .../testing/selftests/digest_cache/.gitignore |   3 +
+ tools/testing/selftests/digest_cache/Makefile |  24 +
+ .../testing/selftests/digest_cache/all_test.c | 815 ++++++++++++++++++
+ tools/testing/selftests/digest_cache/common.c |  78 ++
+ tools/testing/selftests/digest_cache/common.h | 135 +++
+ .../selftests/digest_cache/common_user.c      |  47 +
+ .../selftests/digest_cache/common_user.h      |  17 +
+ tools/testing/selftests/digest_cache/config   |   1 +
+ .../selftests/digest_cache/generators.c       | 248 ++++++
+ .../selftests/digest_cache/generators.h       |  19 +
+ .../selftests/digest_cache/testmod/Makefile   |  16 +
+ .../selftests/digest_cache/testmod/kern.c     | 564 ++++++++++++
+ .../selftests/lsm/lsm_list_modules_test.c     |   3 +
+ 46 files changed, 6047 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/security/digest_cache.rst
+ create mode 100644 include/linux/digest_cache.h
+ create mode 100644 include/linux/tlv_parser.h
+ create mode 100644 include/uapi/linux/tlv_digest_list.h
+ create mode 100644 include/uapi/linux/tlv_parser.h
+ create mode 100644 lib/tlv_parser.c
+ create mode 100644 lib/tlv_parser.h
+ create mode 100644 security/digest_cache/Kconfig
+ create mode 100644 security/digest_cache/Makefile
+ create mode 100644 security/digest_cache/dir.c
+ create mode 100644 security/digest_cache/htable.c
+ create mode 100644 security/digest_cache/internal.h
+ create mode 100644 security/digest_cache/main.c
+ create mode 100644 security/digest_cache/modsig.c
+ create mode 100644 security/digest_cache/notifier.c
+ create mode 100644 security/digest_cache/parsers/parsers.h
+ create mode 100644 security/digest_cache/parsers/rpm.c
+ create mode 100644 security/digest_cache/parsers/tlv.c
+ create mode 100644 security/digest_cache/populate.c
+ create mode 100644 security/digest_cache/reset.c
+ create mode 100644 security/digest_cache/secfs.c
+ create mode 100644 security/digest_cache/verif.c
+ create mode 100644 tools/testing/selftests/digest_cache/.gitignore
+ create mode 100644 tools/testing/selftests/digest_cache/Makefile
+ create mode 100644 tools/testing/selftests/digest_cache/all_test.c
+ create mode 100644 tools/testing/selftests/digest_cache/common.c
+ create mode 100644 tools/testing/selftests/digest_cache/common.h
+ create mode 100644 tools/testing/selftests/digest_cache/common_user.c
+ create mode 100644 tools/testing/selftests/digest_cache/common_user.h
+ create mode 100644 tools/testing/selftests/digest_cache/config
+ create mode 100644 tools/testing/selftests/digest_cache/generators.c
+ create mode 100644 tools/testing/selftests/digest_cache/generators.h
+ create mode 100644 tools/testing/selftests/digest_cache/testmod/Makefile
+ create mode 100644 tools/testing/selftests/digest_cache/testmod/kern.c
+
+-- 
+2.34.1
+
 
