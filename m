@@ -1,102 +1,135 @@
-Return-Path: <linux-security-module+bounces-2785-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2787-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A51788AB5E3
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Apr 2024 22:06:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC2BA8AB749
+	for <lists+linux-security-module@lfdr.de>; Sat, 20 Apr 2024 00:33:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C50EB21197
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Apr 2024 20:06:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CF10281FB6
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Apr 2024 22:33:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1410D13C9CB;
-	Fri, 19 Apr 2024 20:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB44413C3F2;
+	Fri, 19 Apr 2024 22:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EWgTgCD2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NCkMY6iL"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CF82206C;
-	Fri, 19 Apr 2024 20:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC2884FCE;
+	Fri, 19 Apr 2024 22:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713557165; cv=none; b=R1zoB8+7Oe1pJxnw+IOOFiCaonafB0BpdZJYf6AZRzHOfuSf4MPSY6M5UxOrnDuyKhb9UO1smJwYzoNaq4KFW0Ug28WC7smf18Wnn1C1OSqynMxYMC60P6jTiw+DHb90/Xv/w3UUvFCyKW/8tL+SrBzTwPB8jlrxAl67S6vHq7M=
+	t=1713566031; cv=none; b=G+JpwCBvFW/BW4ciiglFpiCA20fL7fENB0Bv/z9Wa8igiy/wcSKLQVv7ikrmBKnR3O+OwUg7xjDvnpRJlVh+E4XYK3wz6wFcptn5f3JV3gl/lGCGurDrk9RRjo04H4l1e+Kg65XUIKZmBuolYu5GcepjAld62FYS/+1QtUzgJSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713557165; c=relaxed/simple;
-	bh=qiBYh7Q4vs/502OF3/ovuHA+agIZHizLsd++YZi/P5A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=r2dBQZ5mFQc4NWLNqj+/y7p4iv6TClNxtafBnCZDu/7mvSPxotTOH9/HZFkLU61CJRR6skzugrvmAbnl3EMsKOO9xgVuMTcS0q1hj2O70zOSdejZ8uz14EJoRM1+D6ULfLwHC3ez6W6+xe9+mDke/9cvOt0S51u8h261QRt3IDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EWgTgCD2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5328C072AA;
-	Fri, 19 Apr 2024 20:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713557164;
-	bh=qiBYh7Q4vs/502OF3/ovuHA+agIZHizLsd++YZi/P5A=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=EWgTgCD20cGXC2obnm+7DRzZMA2SWOgkh8x8neSq1xG/nL3Bp3eW7hGjTQM7iPzXA
-	 ld6cgcD4nAUa4/RwewmqbTEISAXlnKagvG/bJ8uE4PPy1t9lVoo/wzAOn4MRJOQRsA
-	 s4iDGy0T5VemW7vxJ0OaLUtuTQB94ADywih6ZgZafB2XuLokvxmSsOp/rwH7LCNdKD
-	 IkxT83hQQsNf30+99I5rFrKEj1KDmTVATZz9JPacceATz1VvwesUGBuZ37LOQspUhN
-	 Fymm8QpdJpJDcSmnxo/65A7umQY/1MgYimc6AZvALyr2SjAt29l8ZpJnWcbN41hgmM
-	 Y4uMybalywT9g==
+	s=arc-20240116; t=1713566031; c=relaxed/simple;
+	bh=xGwEhGJ3/O7MuoC3DWoEHmTJl0/fQhja8kxeNtaw8rY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nCnymFzRfrVM9xU1vd3HE3JYvoTKAdytSK0NHaJp/1u6H5XfG0FA03olWuSlhhuST2rW+gw2HpVDINvC8eHiTjLkUl/kMugiw2yoghQtumtKflon+17SaYo9oJI969Q4tSpdw6rPPLWu3NTI4xJA9rQWf8DNZ6FjyFunJpX4eG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NCkMY6iL; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1e5c7d087e1so23207325ad.0;
+        Fri, 19 Apr 2024 15:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713566029; x=1714170829; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TO5By6VnNS1IaJWTkgMBtokxedo0r6Z5DxfCvgc5tPg=;
+        b=NCkMY6iLpub/8UpUOubUZurTD3u/ZIPMqKlS96sKrmX/s47KtTeBaCtXEWzCJb6/fT
+         a18VjKYZ2oF+qiU8DOA+n6RZ+NO3YA30jOAgWIkmuiz89CMahEK3oTQ7WCH7JxvyDGuj
+         Vxv8merS9xJCM5TW7vElgY7ptw+avBNUKN58LA8rGj5nEuuGeCQuM0qawzyXjYedLiOI
+         mPzIkP3LwouGOd2NcFDN4TUvMxuc++4U4Gwg10jCdv9EkBuE1hm1c5lxKs76hGay4aTC
+         PTt3ty35nprnw7GdlhOTzhWu1Be7NpkXmS2mdbL5cu+TT65fho1YkEIc8vLUuxcieM7T
+         WY3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713566029; x=1714170829;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TO5By6VnNS1IaJWTkgMBtokxedo0r6Z5DxfCvgc5tPg=;
+        b=N/3NP9T8jeJDaHTiEnlbOWfc5aL85SC8YraR0IUkkzlwtJnU0XMc0miPyDFVBz1+Zd
+         yh8qgSYounJ8es86NT4CpRO9a6pqP1sCPX7FxXiG2dxV/uJA5qAT6nXnEqZTYxdxLEnf
+         F7u2a+Jk7uewxbkaMJrPTN5Iz5cN5QWrsz1JdGkB6102EtDCXnbIx66EiznYdNTacmuJ
+         eXy2qcc6sWNYfHLwasPnTUUf/C3Nq9yMQRJizCMay5MPC61/S3S2eTKywevd7tDzLxht
+         JipuTPleO308KnkRKa1AWzdqt1yu8RGFvpW7monlTJRps7fSG9naNsVoULauEXVLtmnl
+         Q4jw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTeSKNNfDk/3CA8djVur058udizXXq1epX2Hclg7SraKWGlUYM1oXMUtesbW/LT2o096ITjk9WYTlZQpXolD81UWvhslHi7H482ZWUdSxHG40X3f0jwx5ZH6N8CguuBxcVz0u/qNfJyWOAFx6vRN3WzQUOq4LV+/EBbluhGFSWGyxnDePX9fvOq9Y5fvVgE7vDYDMkPbEbIQIyl+mlXVSMAMVTc/jIbSYe4TptU0WOwxoLRYcwpl9aVH8vhB2C+BaKi8RP0wdg
+X-Gm-Message-State: AOJu0Yypl4e7YehDfQxO5JLM93agQPE2reeHfuYAOCXcuHYEtOwQ5RzD
+	ZKrKJmkY8sBiSujHQ1PkC85H4sM0LBZb1nOJCaYax5NUiM81dgtb
+X-Google-Smtp-Source: AGHT+IG3CF+k9p5pj5EbJuozYcjKdiyPH05OIZbYUOjlkQ2/OvmQOXy9/eTRwDRZ+3SD1f2/CoqXMQ==
+X-Received: by 2002:a17:902:ea05:b0:1e8:9054:1019 with SMTP id s5-20020a170902ea0500b001e890541019mr4551953plg.54.1713566029186;
+        Fri, 19 Apr 2024 15:33:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ba5-20020a170902720500b001e2b4f513e1sm3867179plb.106.2024.04.19.15.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Apr 2024 15:33:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 19 Apr 2024 15:33:46 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Kees Cook <keescook@chromium.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+	Marco Pagani <marpagan@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thara Gopinath <tgopinath@microsoft.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Wanpeng Li <wanpengli@tencent.com>,
+	Zahra Tarkhani <ztarkhani@microsoft.com>, kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	linux-um@lists.infradead.org, x86@kernel.org
+Subject: Re: [PATCH v3 7/7] kunit: Add tests for fault
+Message-ID: <928249cc-e027-4f7f-b43f-502f99a1ea63@roeck-us.net>
+References: <20240319104857.70783-1-mic@digikod.net>
+ <20240319104857.70783-8-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 19 Apr 2024 23:05:55 +0300
-Message-Id: <D0ODBDZDHQ6J.ZC4UU90AZPFL@kernel.org>
-Cc: "linux-security-module" <linux-security-module@vger.kernel.org>,
- "linux-doc" <linux-doc@vger.kernel.org>, "linux-kernel"
- <linux-kernel@vger.kernel.org>, "linux-kselftest"
- <linux-kselftest@vger.kernel.org>, "bpf" <bpf@vger.kernel.org>, "zohar"
- <zohar@linux.ibm.com>, "dmitry.kasatkin" <dmitry.kasatkin@gmail.com>,
- "linux-integrity" <linux-integrity@vger.kernel.org>, "wufan"
- <wufan@linux.microsoft.com>, "pbrobinson" <pbrobinson@gmail.com>, "zbyszek"
- <zbyszek@in.waw.pl>, "hch" <hch@lst.de>, "mjg59" <mjg59@srcf.ucam.org>,
- "pmatilai" <pmatilai@redhat.com>, "jannh" <jannh@google.com>, "dhowells"
- <dhowells@redhat.com>, "jikos" <jikos@kernel.org>, "mkoutny"
- <mkoutny@suse.com>, "ppavlu" <ppavlu@suse.com>, "petr.vorel"
- <petr.vorel@gmail.com>, "mzerqung" <mzerqung@0pointer.de>, "kgold"
- <kgold@linux.ibm.com>
-Subject: Re: [PATCH v4 00/14] security: digest_cache LSM
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Bagas Sanjaya" <bagasdotme@gmail.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>, "Roberto Sassu"
- <roberto.sassu@huaweicloud.com>, "corbet" <corbet@lwn.net>, "paul"
- <paul@paul-moore.com>, "jmorris" <jmorris@namei.org>, "serge"
- <serge@hallyn.com>, "akpm" <akpm@linux-foundation.org>, "shuah"
- <shuah@kernel.org>, "mcoquelin.stm32" <mcoquelin.stm32@gmail.com>,
- "alexandre.torgue" <alexandre.torgue@foss.st.com>, "mic" <mic@digikod.net>
-X-Mailer: aerc 0.17.0
-References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
- <Zh4DQ7RGxtWCam8K@archie.me>
- <66201cd2.df0a0220.a8ad5.6fbaSMTPIN_ADDED_BROKEN@mx.google.com>
- <fe361a16-1536-4c92-894a-0b24258384bf@gmail.com>
-In-Reply-To: <fe361a16-1536-4c92-894a-0b24258384bf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240319104857.70783-8-mic@digikod.net>
 
-On Fri Apr 19, 2024 at 2:18 PM EEST, Bagas Sanjaya wrote:
-> On 4/18/24 02:02, Roberto Sassu wrote:
-> >=20
-> > 72374d71c315
-> >=20
-> > Roberto
-> >=20
->
-> Still FTA (fail to apply), unfortunately.
+Hi,
 
-Robert, quick suggestion.
+On Tue, Mar 19, 2024 at 11:48:57AM +0100, Mickaël Salaün wrote:
+> Add a test case to check NULL pointer dereference and make sure it would
+> result as a failed test.
+> 
+> The full kunit_fault test suite is marked as skipped when run on UML
+> because it would result to a kernel panic.
+> 
+> Tested with:
+> ./tools/testing/kunit/kunit.py run --arch x86_64 kunit_fault
+> ./tools/testing/kunit/kunit.py run --arch arm64 \
+>   --cross_compile=aarch64-linux-gnu- kunit_fault
+> 
 
-Maybe pick recent rc for the patch set, rebase on top of that and
-document that to the cover letter?
+What is the rationale for adding those tests unconditionally whenever
+CONFIG_KUNIT_TEST is enabled ? This completely messes up my test system
+because it concludes that it is pointless to continue testing
+after the "Unable to handle kernel NULL pointer dereference" backtrace.
+At the same time, it is all or nothing, meaning I can not disable
+it but still run other kunit tests.
 
-In git: "git rebase <version>" when on branch with the patches
-applied.
-
-BR, Jarkko
+Guenter
 
