@@ -1,125 +1,225 @@
-Return-Path: <linux-security-module+bounces-2959-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-2965-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C65F28BEEFF
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 May 2024 23:45:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FFDF8BEFA5
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 May 2024 00:11:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5306328525F
-	for <lists+linux-security-module@lfdr.de>; Tue,  7 May 2024 21:45:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3D781C22946
+	for <lists+linux-security-module@lfdr.de>; Tue,  7 May 2024 22:11:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81CBD75818;
-	Tue,  7 May 2024 21:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1238F14B974;
+	Tue,  7 May 2024 22:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TicnrHpv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bFBYIwgt"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB241187348;
-	Tue,  7 May 2024 21:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D654877658;
+	Tue,  7 May 2024 22:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715118295; cv=none; b=FwnrQ/lyY37yXmm0CAIuVTUzdYw77O/md60vuKyxs0uQj6+nVuPAhQ01ayp2vRPLxEC4y2xczVGY8gSzZXuDg6SWgTAZs9a3hEsk9efaY9NvRDLF+Iz2p6WBhi6G1josj3sT12a2b1Wzvw+IGHiZrXkFKRq+ZeTwF87Xyf+cLE8=
+	t=1715119859; cv=none; b=atHHntsbnImQiPFkBJ79e4KNQBXiV384gI/1ko6uPq320KCjFaPzXAVgijVCFST+lnS8yFaWKNnCVkBJMmfcji1iKNmJci0nLcqZ5EoVwHeuWYdCXHercENJUQ56JO7FoW3cvrciMItZtl4CQsIQ6bYJlRZLJ3Mc6k/SwC3SIYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715118295; c=relaxed/simple;
-	bh=8Kks+YQ+RgJfm/5ALrDxQU4SyhuXGSCU5OOJP8icVW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sMZrLouHaZPjKGtIoUBGanluPZlBnT3bjx4GKjzHHiXmENeLzPMl+A+Rzp+U23Duj7LACPJ+lkByrOqHjhB+Fhbhb2tkkOHI5xmTfkeOcjMljOIeyBO+b70KsKD30W3r6xa2HiePhUqXhoTq8rhMAgY8m3ert/YtSYia/TYGJiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TicnrHpv; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715118294; x=1746654294;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8Kks+YQ+RgJfm/5ALrDxQU4SyhuXGSCU5OOJP8icVW8=;
-  b=TicnrHpvrmxHMN3SBzU5VfR/yNG8SNAlkd90V3dwF3t1Kp0r0WkoFpdW
-   tA7/eZUFTOlqiq8eIvKc+SxwQASv6O7joPGG8qtiiB5l3dMcoGBmiwmAq
-   NExqkcaILMbeDQE7LlW6ahwN+LuMZQD9jvBeqlNeo8pE1FZltN79M647c
-   yU08MzMsoR3Ds4+9+0AntIL9HmaC23VePRvq3Kl+y71W6cWDw07A++H0R
-   ewedBZHPCgQ678ux7TA3jWgylPpbp1FiGOgARTMgz8wP/ATFJEPJxvCTU
-   YzavNXvZLrgtiH3NBIWRG+nSFgKcWaRr39S95R5KCb9wKCiHcK8c6Avh0
-   w==;
-X-CSE-ConnectionGUID: KptgGozJQQSyvXtFjhrIrg==
-X-CSE-MsgGUID: +XB4dEAxTFaQaDUDCt42qg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="21505746"
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="21505746"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 14:44:53 -0700
-X-CSE-ConnectionGUID: CbGhnG5XQs2gLcCI/53hZw==
-X-CSE-MsgGUID: UNgLkOKIRK6YWhIxhGIM1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
-   d="scan'208";a="33185958"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 May 2024 14:44:51 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s4ScC-0002fG-1m;
-	Tue, 07 May 2024 21:44:48 +0000
-Date: Wed, 8 May 2024 05:43:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Davide Caratti <dcaratti@redhat.com>, paul@paul-moore.com
-Cc: oe-kbuild-all@lists.linux.dev, casey@schaufler-ca.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-	pabeni@redhat.com, xmu@redhat.com
-Subject: Re: [PATCH net v3] netlabel: fix RCU annotation for IPv4 options on
- socket creation
-Message-ID: <202405080517.oMJNehoP-lkp@intel.com>
-References: <ce1a2b59831d74cf8395501f1138923bb842dbce.1714992251.git.dcaratti@redhat.com>
+	s=arc-20240116; t=1715119859; c=relaxed/simple;
+	bh=uPLD44Nxh5xn4KgOnC/Ys+QhBTI+d/3+8T1PBMK6NqA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KrJSR5MGXrmsxnn4/YNOo5s003foXrtKpuzr2ePce/wwihsGWJFCq1X2uPi2bwA5XcqJjuUQdHJu/iWcDCJV+DMqT6/bJlJZFn1tpN33nwnjC88sE+MyriwSfvC7FJtevDDtA9UKLYPK6E7n5A+zXMj89x6zwZqDt9H9eRAxGIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bFBYIwgt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7DCC2BBFC;
+	Tue,  7 May 2024 22:10:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715119858;
+	bh=uPLD44Nxh5xn4KgOnC/Ys+QhBTI+d/3+8T1PBMK6NqA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bFBYIwgtxbAtP8jTo6/H8dCA9jliTJ26i1fAkiaHbh2KFbX4PgWs2YwztTIewOt4C
+	 K/JoNVoWWciRPfCxtH9cEZpEfEx2+xjuWINUwF3Kaxp77eDjOKceCpfyY37fr2xrta
+	 9feGOCJKZ8g0Frm59/MixQQwBAFPpcqY0ehakwM66LFmww8PJzkkWyCSNwdGd8Yihu
+	 2wmtzNhv61/dXZrxPLmyqpDltQNdG+dMyz/6Zl+iPRUjHPTXnGxt17Z+EI+56MUQq5
+	 pQU3A2ESgAtChYUM3JzGQKhByAlgDBqEGjMSxyDPEFthwXZ6eAKpVssbWEhbEtvpKK
+	 8qOPSc/9P123A==
+From: KP Singh <kpsingh@kernel.org>
+To: linux-security-module@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	jackmanb@google.com,
+	renauld@google.com,
+	paul@paul-moore.com,
+	casey@schaufler-ca.com,
+	song@kernel.org,
+	revest@chromium.org,
+	keescook@chromium.org
+Subject: [PATCH bpf-next v10 0/5] Reduce overhead of LSMs with static calls
+Date: Wed,  8 May 2024 00:10:40 +0200
+Message-ID: <20240507221045.551537-1-kpsingh@kernel.org>
+X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce1a2b59831d74cf8395501f1138923bb842dbce.1714992251.git.dcaratti@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Davide,
+# Background
 
-kernel test robot noticed the following build errors:
+LSM hooks (callbacks) are currently invoked as indirect function calls. These
+callbacks are registered into a linked list at boot time as the order of the
+LSMs can be configured on the kernel command line with the "lsm=" command line
+parameter.
 
-[auto build test ERROR on net/main]
+Indirect function calls have a high overhead due to retpoline mitigation for
+various speculative execution attacks.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Davide-Caratti/netlabel-fix-RCU-annotation-for-IPv4-options-on-socket-creation/20240506-184702
-base:   net/main
-patch link:    https://lore.kernel.org/r/ce1a2b59831d74cf8395501f1138923bb842dbce.1714992251.git.dcaratti%40redhat.com
-patch subject: [PATCH net v3] netlabel: fix RCU annotation for IPv4 options on socket creation
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20240508/202405080517.oMJNehoP-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240508/202405080517.oMJNehoP-lkp@intel.com/reproduce)
+Retpolines remain relevant even with newer generation CPUs as recently
+discovered speculative attacks, like Spectre BHB need Retpolines to mitigate
+against branch history injection and still need to be used in combination with
+newer mitigation features like eIBRS.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405080517.oMJNehoP-lkp@intel.com/
+This overhead is especially significant for the "bpf" LSM which allows the user
+to implement LSM functionality with eBPF program. In order to facilitate this
+the "bpf" LSM provides a default callback for all LSM hooks. When enabled,
+the "bpf" LSM incurs an unnecessary / avoidable indirect call. This is
+especially bad in OS hot paths (e.g. in the networking stack).
+This overhead prevents the adoption of bpf LSM on performance critical
+systems, and also, in general, slows down all LSMs.
 
-All errors (new ones prefixed by >>):
+Since we know the address of the enabled LSM callbacks at compile time and only
+the order is determined at boot time, the LSM framework can allocate static
+calls for each of the possible LSM callbacks and these calls can be updated once
+the order is determined at boot.
 
-   ld: vmlinux.o: in function `lockdep_sock_is_held':
->> include/net/sock.h:1665:(.text+0xfe52da): undefined reference to `lockdep_is_held'
->> ld: include/net/sock.h:1666:(.text+0xfe5306): undefined reference to `lockdep_is_held'
+This series is a respin of the RFC proposed by Paul Renauld (renauld@google.com)
+and Brendan Jackman (jackmanb@google.com) [1]
+
+# Performance improvement
+
+With this patch-set some syscalls with lots of LSM hooks in their path
+benefitted at an average of ~3% and I/O and Pipe based system calls benefitting
+the most.
+
+Here are the results of the relevant Unixbench system benchmarks with BPF LSM
+and SELinux enabled with default policies enabled with and without these
+patches.
+
+Benchmark                                               Delta(%): (+ is better)
+===============================================================================
+Execl Throughput                                             +1.9356
+File Write 1024 bufsize 2000 maxblocks                       +6.5953
+Pipe Throughput                                              +9.5499
+Pipe-based Context Switching                                 +3.0209
+Process Creation                                             +2.3246
+Shell Scripts (1 concurrent)                                 +1.4975
+System Call Overhead                                         +2.7815
+System Benchmarks Index Score (Partial Only):                +3.4859
+
+In the best case, some syscalls like eventfd_create benefitted to about ~10%.
+The full analysis can be viewed at https://kpsingh.ch/lsm-perf
+
+[1] https://lore.kernel.org/linux-security-module/20200820164753.3256899-1-jackmanb@chromium.org/
 
 
-vim +1665 include/net/sock.h
+# BPF LSM Side effects
 
-ed07536ed67317 Peter Zijlstra       2006-12-06  1662  
-05b93801a23c21 Matthew Wilcox       2018-01-17  1663  static inline bool lockdep_sock_is_held(const struct sock *sk)
-1e1d04e678cf72 Hannes Frederic Sowa 2016-04-05  1664  {
-1e1d04e678cf72 Hannes Frederic Sowa 2016-04-05 @1665  	return lockdep_is_held(&sk->sk_lock) ||
-1e1d04e678cf72 Hannes Frederic Sowa 2016-04-05 @1666  	       lockdep_is_held(&sk->sk_lock.slock);
-1e1d04e678cf72 Hannes Frederic Sowa 2016-04-05  1667  }
-1e1d04e678cf72 Hannes Frederic Sowa 2016-04-05  1668  
+Patch 4 of the series also addresses the issues with the side effects of the
+default value return values of the BPF LSM callbacks and also removes the
+overheads associated with them making it deployable at hyperscale.
+
+# v9 to v10
+
+* Addressed Paul's comments for Patch 3. I did not remove the acks from this one
+  as changes were minor.
+* Moved BPF LSM specific hook toggling logic bpf_lsm_toggle_hook to s
+  security_toggle_hook as a generic API. I removed the Ack's from this patch
+  as it's worth another look.
+* Refactored the non-standard hooks to use static calls.
+
+# v8 to v9
+
+Paul, I removed the 5th patch about CONFIG_SECURITY_HOOK_LIKELY and went through
+all the feedback. I believe it all should be addressed now.
+But, please let me know if I missed anything.
+
+The patches are based on https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git
+(next branch as of 2024-02-07) and resolved a bunch of conflicts.
+
+I also added Andrii's series ack to indidividual patches.
+
+# v7 to v8
+
+* Addressed Andrii's feedback
+* Rebased (this seems to have removed the syscall changes). v7 has the required
+  conflict resolution incase the conflicts need to be resolved again.
+
+# v6 -> v7
+
+* Rebased with latest LSM id changes merged
+
+NOTE: The warning shown by the kernel test bot is spurious, there is no flex array
+and it seems to come from an older tool chain.
+
+https://lore.kernel.org/bpf/202310111711.wLbijitj-lkp@intel.com/
+
+# v5 -> v6
+
+* Fix a bug in BPF LSM hook toggle logic.
+
+# v4 -> v5
+
+* Rebase to linux-next/master
+* Fixed the case where MAX_LSM_COUNT comes to zero when just CONFIG_SECURITY
+  is compiled in without any other LSM enabled as reported here:
+
+  https://lore.kernel.org/bpf/202309271206.d7fb60f9-oliver.sang@intel.com
+
+# v3 -> v4
+
+* Refactor LSM count macros to use COUNT_ARGS
+* Change CONFIG_SECURITY_HOOK_LIKELY likely's default value to be based on
+  the LSM enabled and have it depend on CONFIG_EXPERT. There are a lot of subtle
+  options behind CONFIG_EXPERT and this should, hopefully alleviate concerns
+  about yet another knob.
+* __randomize_layout for struct lsm_static_call and, in addition to the cover
+  letter add performance numbers to 3rd patch and some minor commit message
+  updates.
+* Rebase to linux-next.
+
+# v2 -> v3
+
+* Fixed a build issue on archs which don't have static calls and enable
+  CONFIG_SECURITY.
+* Updated the LSM_COUNT macros based on Andrii's suggestions.
+* Changed the security_ prefix to lsm_prefix based on Casey's suggestion.
+* Inlined static_branch_maybe into lsm_for_each_hook on Kees' feedback.
+
+# v1 -> v2 (based on linux-next, next-20230614)
+
+* Incorporated suggestions from Kees
+* Changed the way MAX_LSMs are counted from a binary based generator to a clever header.
+* Add CONFIG_SECURITY_HOOK_LIKELY to configure the likelihood of LSM hooks.
+
+KP Singh (5):
+  kernel: Add helper macros for loop unrolling
+  security: Count the LSMs enabled at compile time
+  security: Replace indirect LSM hook calls with static calls
+  security: Update non standard hooks to use static calls
+  bpf: Only enable BPF LSM hooks when an LSM program is attached
+
+ include/linux/args.h      |   6 +-
+ include/linux/lsm_count.h | 128 +++++++++++++
+ include/linux/lsm_hooks.h |  94 +++++++++-
+ include/linux/unroll.h    |  36 ++++
+ kernel/bpf/trampoline.c   |  40 +++-
+ security/bpf/hooks.c      |   2 +-
+ security/security.c       | 382 +++++++++++++++++++++++++-------------
+ 7 files changed, 542 insertions(+), 146 deletions(-)
+ create mode 100644 include/linux/lsm_count.h
+ create mode 100644 include/linux/unroll.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.0.rc1.225.g2a3ae87e7f-goog
+
 
