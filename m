@@ -1,70 +1,70 @@
-Return-Path: <linux-security-module+bounces-3050-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3051-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D78E18C1683
-	for <lists+linux-security-module@lfdr.de>; Thu,  9 May 2024 22:12:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2CDB8C168C
+	for <lists+linux-security-module@lfdr.de>; Thu,  9 May 2024 22:13:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F6B51C22D17
-	for <lists+linux-security-module@lfdr.de>; Thu,  9 May 2024 20:12:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 743B3289B7B
+	for <lists+linux-security-module@lfdr.de>; Thu,  9 May 2024 20:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB2D13C696;
-	Thu,  9 May 2024 20:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299B613CF8D;
+	Thu,  9 May 2024 20:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gssulq3W"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TNgFNOvU"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C56F13C3F4
-	for <linux-security-module@vger.kernel.org>; Thu,  9 May 2024 20:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D2A13C8FA
+	for <linux-security-module@vger.kernel.org>; Thu,  9 May 2024 20:02:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715284944; cv=none; b=aAqoqJlsJ54EjpykouB5hGUcNI/2F/n6lcQ6s2ehIBQ11PeXd7FrUr64/7fWwJOedWLTsMoYz+CiAyatc86+4rFVt3zHs3xQuAibI3HtKTrXtmLqrZ9papT8tEIh5ooTSVl4RPyWVpH5NRHDzVM75OsCM9RG1jGmdXMYyZx1qvM=
+	t=1715284948; cv=none; b=OkH1ZlnhaOgnNENXQ/9+KeESVMrSRRNc9cW6Cr0wf6q6LFxZMKrSOp6O91Wx3yW/c8mkrjQEV9gA0npAraBwk4YSrQouR+SILUi0TlQ1bdxRw4n3EgN49YR1XdePvHvkSy3fHq47TYx0L7EsMdf2cJlORQ67RKU0ni5gDdNIKuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715284944; c=relaxed/simple;
-	bh=WE+AR6jouAPRHEvvVzrby5R77phYzayRUTXYm2QB4lA=;
+	s=arc-20240116; t=1715284948; c=relaxed/simple;
+	bh=XzM7bW4mUcL+MdWLSgy4pPFCyz7AUX0/rTFVbZz4Cks=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=unxGkAyVzyGW+Pjg+9XcUaNwJBgf4ZzUpJWH8QiJK7ZIWE0QZOKO8/hF5d5P+aKogyRINwIfdaqD0gsey6cMkn7fH+Ylcx+bsICnHBaz12HzQ5cHB02fppWRof945bnm0X0sxzPppD+fsaDHwkJ5qbedQ9QGlCERkdVPwKeB2lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gssulq3W; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=MjFCVJ2MSiJ0PztojyrXtEQMpTJF+oaTUtoYcp7J8CPGmYWR1qFte9AglYlIv7ad5VZQpHc4ZPJXitcSqgmaAieSlLV3J5JutWNnhrphuZaVdqPMkmFs1dEuZCoMvtT0UgtkcLaapfR0yBT/rd+WtP9zQYcYbqIKlgePpox1J2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TNgFNOvU; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-61d21cf3d3bso21283397b3.3
-        for <linux-security-module@vger.kernel.org>; Thu, 09 May 2024 13:02:23 -0700 (PDT)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1ee2f06e652so12189095ad.1
+        for <linux-security-module@vger.kernel.org>; Thu, 09 May 2024 13:02:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715284942; x=1715889742; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715284944; x=1715889744; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t/Pst5TQmmPDAJyMHgqtrqTxRb697RB0f9O6Gjfco/Q=;
-        b=Gssulq3WpORjjD4vxfH4Z40X+EaJC4itFJDq6Gm51rxmxNX20+yOnAl+suHO1MypeU
-         nSyWvrqm8VKH7ZxaZ90ca3DBdl/cthV7aqSqD+daEgZjw3YzYBEMrTupp+WB9xTQ0Kym
-         nHtCW8Ok/u0g0C8RtnHodDvZSaYc6GPWfcgN3XUfbK/Hb0L+x/btgUT81en1gWL+Fo2u
-         kY5HabqyPG+iClxgy/iJQVtpRANIHg9XZfEcz6EErxeXrIJzHQ5M6dQSuJcJxYjDbEc8
-         +9SDHaDkIjiLDTOvw72ZkW9S8mRP9S64FvzlIGyqX7ULZa2dhyBFVa//r1QpsG9tMHl0
-         4uoA==
+        bh=ibFWC41ZV4jKFs0EDjRGi9eb9rYUWbe9LL5jTVHUEjs=;
+        b=TNgFNOvUDwSzSzaJ4tw+i7vOl78bZqwx798H7mD/omiE83Av15InytXJwanizgjzCC
+         wSNIkuKBojsiBJJ7Y9S68oOPfkmfC3QTjdo91uUzXY8RFQdVfTpfAv0qxTBqCTtNQuko
+         AwYJi5ORP7CeEXT6S53WXagQQElrKDNGlSg4L2Wh5oYtKIAbenVD1k8u6ga/9MYJpgcu
+         zrGPLPVj+GNImrdIbQUCa5OFe0IXRUZaf/aX7dHnONufx2CXNfV0EJUWKQRslIVuOMPO
+         zes7Aj6ZDCaP+3r6bVriUXvwfq0qQXqSPfO6WmhBwFUXgaqb5k/UXZJgptuflN9+y2me
+         eklA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715284942; x=1715889742;
+        d=1e100.net; s=20230601; t=1715284944; x=1715889744;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t/Pst5TQmmPDAJyMHgqtrqTxRb697RB0f9O6Gjfco/Q=;
-        b=PZfwjWcITEI8DbqRAoBYV4upf8kdYeU/ylsoNBBj/at/V0NpzUjxkX6gwO600m2heY
-         pPK3NZtRkn0lTEtdXOTivRhF7ESIPQ2sIUdqwqztwKoK86AUQlwH+g53lMPPSAqLQLpx
-         yGCJiX1P89GuUz4u4uuo3xvfwQT+qsFnlLqRlQhh2oqv1lq5EPWdNXNYYtluScwfzcLg
-         D7ORWn9d74imxhKc2ncXaos2dOCD47hqv4Trtha237e2vxJa8FvboqX095YoectPWOQX
-         21vqrqaaNqDIxo09rkQ0XP4uz5fOTcwyyXUcowscVlh0V1HwKD3L3xXQuBlJfMZ9Jy0w
-         QjFA==
-X-Forwarded-Encrypted: i=1; AJvYcCXSqD5uUsutmvF4OsEJl0zanfQxfao3/FMY1mEyNgf7O/Z1xoW5cNcJJhYSmyUSvklYHaI9UnvPli+eCN4+sBH+l1yENMkaKrfCTkAoMoLhH2t/S7hj
-X-Gm-Message-State: AOJu0YxuJXWQbujIB5k9tEYObuH7iLPsCHxM4W0jFdMdIW8MGsH2UWLH
-	1YPf5tZ2euBLJbr8zGvp7flrIZt1/svmV1YPgE6g+8okr/7+ya8tq1V4ojdZ2NyqFhnFqWmU5w0
-	qpg==
-X-Google-Smtp-Source: AGHT+IGMbs/JaF926sFyfnviZMWe9jqmOtpPzNvsiWM98FusLZCSeXAn1EjPRZgQVmyQ81yz73NAnaM90ZA=
+        bh=ibFWC41ZV4jKFs0EDjRGi9eb9rYUWbe9LL5jTVHUEjs=;
+        b=b6z242+PBZ17qN4YUmwxr+eDZpubjih+PoT5gEpOy2Iw2JGGhHinHCAgObUPH01cDr
+         s6uXAlKZhbqGjL9+bIy7c3dLyE2oOvGP0nCkboRPDEcMgskQUFNIQtSsSVY7wqNBlXcq
+         cZK3l05Msn/A0LLy3D3dpQWh4jD/uRzjkz3mNcz0dzMh7pasQSq8ISX1HyQM4yu6UZBv
+         V+eAuX9bSbLMWm9WmcOVsE6DCyQNlgEzKqirNpfnPwm4XFRXtUVblv77tbUDl7uh7GoV
+         5Id6OTPkvmqEmfpq9NfHWk2XgAlrwTK5il3DJe/BQyZpLTvUnJ6s3URWPVL+WJung/uk
+         o6Rw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDWXqiS+K4B2oowgR18XpMr2ZqvG1xpXcKo91x0cExWRC2kMlZYonMg+AK0WX1Gw0AjmjIHz80cJYA455HA511j/OAErDxu59rcjoDUSprA79ly/Zo
+X-Gm-Message-State: AOJu0YxpSBYg4X9rAYERQYzWB/I6Zyal5oacQGiioZSBMKtROTBFdz6F
+	r3p9mcIVY054YjTsLWAuuMIpXUQBoSyoAseGZdYigTIq87HQACMdkYIORcbqaEBmgTrAg9ilJXF
+	nwg==
+X-Google-Smtp-Source: AGHT+IEPkGuNPe4HIZuj85oVFOfPMLkPB6Cm4SK3VLdEwwtMiQwP0MRi57NnzjjqYrYIB2JiEx+9LJND0hk=
 X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a05:6902:154a:b0:deb:88f5:fa0e with SMTP id
- 3f1490d57ef6-dee4f1ca69dmr59044276.5.1715284942280; Thu, 09 May 2024 13:02:22
+ (user=edliaw job=sendgmr) by 2002:a17:902:e549:b0:1e5:e676:4b0d with SMTP id
+ d9443c01a7336-1ef43f4b57cmr17425ad.9.1715284944391; Thu, 09 May 2024 13:02:24
  -0700 (PDT)
-Date: Thu,  9 May 2024 19:58:25 +0000
+Date: Thu,  9 May 2024 19:58:26 +0000
 In-Reply-To: <20240509200022.253089-1-edliaw@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240509200022.253089-1-edliaw@google.com>
 X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240509200022.253089-34-edliaw@google.com>
-Subject: [PATCH v3 33/68] selftests/mount: Drop define _GNU_SOURCE
+Message-ID: <20240509200022.253089-35-edliaw@google.com>
+Subject: [PATCH v3 34/68] selftests/mount_setattr: Drop define _GNU_SOURCE
 From: Edward Liaw <edliaw@google.com>
 To: shuah@kernel.org, "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, 
 	"=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>, Christian Brauner <brauner@kernel.org>, 
@@ -84,37 +84,29 @@ To: shuah@kernel.org, "=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
 	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Edward Liaw <edliaw@google.com>
+	Seth Forshee <sforshee@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, Edward Liaw <edliaw@google.com>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	kernel-team@android.com, linux-security-module@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-riscv@lists.infradead.org, bpf@vger.kernel.org
+	netdev@vger.kernel.org, linux-riscv@lists.infradead.org, bpf@vger.kernel.org, 
+	John Hubbard <jhubbard@nvidia.com>, linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 _GNU_SOURCE is provided by lib.mk, so it should be dropped to prevent
 redefinition warnings.
 
 Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
- tools/testing/selftests/mount/nosymfollow-test.c          | 1 -
- tools/testing/selftests/mount/unprivileged-remount-test.c | 1 -
- 2 files changed, 2 deletions(-)
+ tools/testing/selftests/mount_setattr/mount_setattr_test.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mount/nosymfollow-test.c b/tools/testing/selftests/mount/nosymfollow-test.c
-index 650d6d80a1d2..285453750ffc 100644
---- a/tools/testing/selftests/mount/nosymfollow-test.c
-+++ b/tools/testing/selftests/mount/nosymfollow-test.c
-@@ -1,5 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--#define _GNU_SOURCE
- #include <errno.h>
- #include <fcntl.h>
- #include <limits.h>
-diff --git a/tools/testing/selftests/mount/unprivileged-remount-test.c b/tools/testing/selftests/mount/unprivileged-remount-test.c
-index d2917054fe3a..daffcf5c2f6d 100644
---- a/tools/testing/selftests/mount/unprivileged-remount-test.c
-+++ b/tools/testing/selftests/mount/unprivileged-remount-test.c
+diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+index c6a8c732b802..d894417134b6 100644
+--- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
++++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
 @@ -1,5 +1,4 @@
  // SPDX-License-Identifier: GPL-2.0
 -#define _GNU_SOURCE
