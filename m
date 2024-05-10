@@ -1,55 +1,77 @@
-Return-Path: <linux-security-module+bounces-3179-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3181-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFC4C8C2883
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 18:10:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BD358C28ED
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 18:47:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D07C3286A11
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 16:10:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89D0DB20BBA
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 16:47:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6517171E4F;
-	Fri, 10 May 2024 16:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1062115E86;
+	Fri, 10 May 2024 16:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="NT3Xf77F"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="MrFGm8HR"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic301-38.consmr.mail.ne1.yahoo.com (sonic301-38.consmr.mail.ne1.yahoo.com [66.163.184.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448FB171648;
-	Fri, 10 May 2024 16:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21491101DB
+	for <linux-security-module@vger.kernel.org>; Fri, 10 May 2024 16:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715357414; cv=none; b=ki51NPNhxilju1UvB4soqx6AYl2v5ggbUAJlxoVHrzkvAonHQG/QnX8rec5pqVNt/UL8Tw2REsVn6WBtl9RUoio7KFoUcgT/fAXxIZXc2o5W9mgJO06B1B88GzodeMNxqEgOm3M+57REG7ZLmGX7TzH1GrVI05FBe6bP508E5d4=
+	t=1715359663; cv=none; b=UGYHSUB7yqav0E70ucK5jmwd02FdAmrdI8WC9EFdm52jOszBSRHp3u3aWZdvrTOLx7iGhR6vD6ujAelcBP+bxIcsipH50HLaeoa+tMQw6nMaQU9O/2fjoCUg/9jqgRJYnw8u1CIgzUiDzLtneTJS5AcW54EDTzKwPj0rrlCv0+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715357414; c=relaxed/simple;
-	bh=sJkSoIYsMgVLugxKHGmrUMUikx/KOPtmGSW1VK5xJPs=;
+	s=arc-20240116; t=1715359663; c=relaxed/simple;
+	bh=W6GeWHlPCwE5MhjXRcxJ+3YcZWzGFuF32W13U92QquU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HMxattJ8aD3WMftsN0Yu2NwsSDKzmDHRUW/u1Hj3sTfOsItO5IifxeHWM58xC49b2uvO1syeUov6UgmiU824jO3taOch9f1+ZeEhHDa12CNLpYmxZ4s/+1mq30yzcVs1f/bf7PvVTKI+8Wn7v4UG7CoyP+yrk/bdzs66TVgVHUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=NT3Xf77F; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from [10.8.193.2] (unknown [50.39.103.33])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 4A02041D96;
-	Fri, 10 May 2024 16:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1715357410;
-	bh=tYT0vaoGgD7nyqVmqjNAAmm6y89hogcsUK6Tq7LqzP0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=NT3Xf77FVrjr68YXYs2EWcmUHktLkeW5tFmC5Jl9WJKThrcW5ZlTuKNhjspUnr5d4
-	 InGVyef+6wGsmCv9ifhZOc0IiK5a01kZsBmu6wrYvXXoQ4cPfeN2BAThB/JKH68kPx
-	 E2u0CbOzhmW47iRT2Ammjxswo/106bUOSUoRyd99voYTICM9twq2VIfZllNAKvpKUD
-	 s8WRXficY5urxMIwuI9q+dnB7VLoYsCdWYPv7UOGgneL7eZuBnE4gWCAlT/RL0neL4
-	 OCaeXIgHZeUq7+cAcFXR4UVe4wJHyj65Z1RSU2qH0pToXHPh3UjsCJ2DqVOkKudiSw
-	 TY2pM+n9NCvGQ==
-Message-ID: <147b0637-7423-4abc-b7fe-3d8da2c1e57c@canonical.com>
-Date: Fri, 10 May 2024 09:10:03 -0700
+	 In-Reply-To:Content-Type; b=D2OGOzcj7RgLYPAeP82QZELkSDYtjgtaogwzsLKvL6tkugLD9fQP48ADMOAZnHaduqEH/lZwW4abOk6KxCT6o+0uIRUMO4rEuPZ4rUoYlB+TQPRtCA+/29/D0ynuObCAP1OJv1s2AQt8XSDWbf488Lkn/ABqYbKWRzDADYCjnh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=MrFGm8HR; arc=none smtp.client-ip=66.163.184.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715359660; bh=6JC4c7M9zN+e9IcLHOfZPWVSXDalQGIAS82BEuAAnE4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=MrFGm8HRVWJ1OS98DX9d08dVFRpFjL87Hb/MREt3lqldjr3RhPWatLjSxfDbn5+TYkH+uSgswAGXEE5b7+qrdsD6v1xcvUAupRcDHUtr4HoM/NuXdWA9AgAGBfvAzSVzefhbHLp1/S1m6QVZSf+BIag/3KOqine9hg12qm72lIhRgFl31nnI5H2htorjsmexe7L28lZWVYm2s5Iyq6NRdUE1YKWHEtQA0I6SRTRsgDNnDxwlLXu8KFpArhdzW/D5crRuILpz9lFCxnOdXsJVy1W2KxtQCExn0Lhc2EzvgPCJNM9NJTGZpkzLnghVtiOWsrwcpD8OjdP7MAyFoUPEAA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715359660; bh=wogl3bYj0c0VBJaR5J46RWr7A58LX/OyYDljNah8Gsi=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jQLNEzEeSq7HnE0AntmP09e8IKLVcHG2dxaVz1SLHx66Nx9jdCGYW5q0njxlX8LV1qGNR6iFxwpLmGgD2qyzaBIIXpgaFYJwA325K8YA6K4QUd8dRN6J3p918QKQf8RVjwoH0pk4xhEcaqd6+8h1MuBGESJP1XhlplnZ5vtGTgG9kRqV8cHstFy2GFt4aEVWRYgGA5epn7+Fvkm+0wfDnetJzmoKi4gBCSpPhl1/piGdGxGMUA0aOzbl8y6xp5x2jFBzLl3PaEGTXpYkq3/2hbdC9PCxAFUnPHLZHlOyMHJswDkT7uwLwjBwbeEPlqtMJsvXzkNSZT7rYnZGf9EE8A==
+X-YMail-OSG: tSPF1TMVM1kN67GXFncnlW3dSEKLo6EPqX.CEix5Vct8cX6D3GLwWcAwc49VpyI
+ WH4ebIPY92bbXo7qQoGK1nPm2sr4RbosoA3i3.IASHQjarc5iAEXy3DJdWoso9cxJILJQWuvKMj2
+ vzzt11caVF7sbTpbqZUYYqetQGPXXVin.3hMp04LHWnXZOihG8U9la.cNTNZ56148sLmRsdUSLBJ
+ p06O1pcYfHbC4HsaHLdwWa1xf9NgNuRkjBnCG45yQaBwJR7T1vpLMRIySi7KoJ9V_rNZecgL3zrm
+ Z96riAxsiqRk_b_1R4G9Gkq.MYw9KiNVOjnXRwFGl3h5E_lE1X_15OrkjQ0Dpv8.UA6fOErY.Yfm
+ iqDARLkieoRxEjbWjSzHo2aQcN483IBcgBXnZI2bIP46RhoA.eo6cd7gSGgZrIEvv2iSnaR0.iZH
+ q7qaNg7fHwus9PGyiTmpEwwEo55N7zWck40RNL0rXRNLzOs9BfHSW_cikuBh162Jbit2XQdfV8m0
+ 663Jg_M77gp9MdwtOKICvqxrIK5NQ2_fThuaph7Wl.tH0hVFaTk2gp.ED56tMYOTt89DJsdmg6EJ
+ FbW_3cS7YVNuQ3ArhM5eeBn3X2KA5HBO3Y9Ua9dDxDi57MuNWETgf0fag63H.H0Zd.6Gd0nU_3OH
+ zvuVajFCTCrq3Z7CzAVsgiZd536BFYC_VZ0zMUZvEXE1C5xDdpiekodrIzU5ONNqwZo6s1JvGavH
+ NXzhp9bQU1vXJzeMOvl2NqdsUnZeaW0Ch6pC.x56tIHj2fqQ54YYIABdPpEL_zxKbLWdHDZOiUbV
+ ZGLLF4XQkffGToJZmTmrnCawxC7cNedKMy0FptEIaCBnvmVOuNfDKftXfL7EboTZGH5U7ZqhDSvB
+ W07.BdlDFLn2QBR9sykZ2DsvZajk9nrkB7ao4_MGXTtoYJkV7i1cwySePSuws.LrPm5Ai3N9y_g0
+ ADpvOAxySDzOWRW5GlFKMzpolIgtyzBNomhl6GshZc10ANS0ihzdf4fvx44SRxXP7sl8lWnCpFp9
+ FhFjr4kZQkITUNXM5LbVPkNwjYILFsFWxG5MpTa0lBKEYuxWkPCsD9MquolsFam1.Jf1VhnY7quq
+ 8sAA8.Avj5GCu0JammBYYIvfnW_G8dRZbt3UV.xEapx.ZD8qdEj9o5h6zvgnsJQy4A4h2RzmAywh
+ meUza7T9HMaCIuh3wYIVVsQxEQMIUWeyYgSvV6eJbFrRTY3NFEX2FwDVhagQoJOgOt.r032MYtKX
+ rx8pLAcZXfylAsnXz9mJurQiVbhQiAXIIbP4VxTnGtvlcxOA8IwxcQHfME0qFN5YWBzrjMz3MFH2
+ gwygagnWs5KWlG4lTuweg.Z.izGnSQ72bj6yec5fTH49UQLyPgxwBXzugX3DGLdEKb6wUwEkuc9M
+ .b4ZiNT0JkVdVmRobYkcRIaLVzVWqzwl7A.ZyWIESzpmL1iNt2w6TH4UdDqrNeUnIqyrKPV4hiZk
+ SrY0Zv57iQTUx.CW98coSoqgw_Nq2H.UZ_TFhhcLIxcrUXz45qMNn3aqxNDbURylZ6WHZ58IcyhO
+ V4KJGaW9flBviMoOM13ITlqtg9MRU1easbzWVJP.sgop8p5jEOQYpoXcU6LAJXj8mrIwh7KgRyxd
+ xToNoi3YAFYGAqS.wEpnd5_KNAgdW3iTyWkmbsXy8le0_BWNXqYK7VT6VOKSbyqEaEQcf1lL5Xro
+ xuioIsgSjKMhm9RU.BepwNKJRJyDGqHaGw2lELWsWrUocML7RWeYwaH6TOIxEs0KP6HeMHrpBMdW
+ Eyf3EEYNrr26xaLFB0xAXX5UvzGca2aGVkUdNRXIY7F4H8t2.MQqiox8m7V_b_P5VozfhpmwfVHZ
+ 2pqsdi7ZYYJobYtHH7nGmGhjD1rYhLNTn5duM7xvpVq7Q9VVo2vASa9VomhkTC.bLFU9D1338BZN
+ mbO0Oidy5V2DpNaa2USEazhXXoCu3xirnMYpvKGby9ye2JQaiJotirYmNo8ANju.CCxEPxpuIF68
+ 7bI7sYoQ3PdRSLyhxMzVycBotDgpAeJnpMO28eNr9AaU0rRDSUgSI0vfm.KsZ0sPpjXJDfDc2Doy
+ cuzA_H1FG7NR.qsomCXH7eN5Uyl5ZbkAG8aQROSZkQGLAeO5KCS04l53MWC5GINXIuZ9QZj6abYz
+ SM_uTzsl0k7rS5vvKNi1W9kcxJYb1hRarIN0nppiXC9QiFPsCV7ISgYMqFmYimKsmxMRq7LrZZ1m
+ fmglWQI21pMRrfkl4ydBudTh96NylxSDTtQv8ky1e650bl4o5wwTrSpxT89OI.LBm9ISPFi303xF
+ Ykyh0qCagI7n3jEwANw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 617abb55-02ae-491b-b856-8f59c7024a06
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Fri, 10 May 2024 16:47:40 +0000
+Received: by hermes--production-gq1-59c575df44-f4snh (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0ff3e2b4d3d5ba5569bd0a7619da345f;
+          Fri, 10 May 2024 16:47:34 +0000 (UTC)
+Message-ID: <a4d3a0dd-2ef9-4fbc-bf72-fa6cd84231d8@schaufler-ca.com>
+Date: Fri, 10 May 2024 09:47:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -57,108 +79,195 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] AppArmor: Fix lsm_get_self_attr()
-To: Paul Moore <paul@paul-moore.com>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>
-Cc: Casey Schaufler <casey@schaufler-ca.com>, James Morris
- <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
- linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
- stable@vger.kernel.org
-References: <20240223190546.3329966-1-mic@digikod.net>
- <20240223190546.3329966-2-mic@digikod.net>
- <CAHC9VhQGLmeL4Buh3ZzS3LuZ9Grut9s7KEq2q04DYUMCftrVkg@mail.gmail.com>
- <CAHC9VhTUux1j9awg8pBhHv_4-ZZH0_txnEp5jQuiRpAcZy79uQ@mail.gmail.com>
- <CAHC9VhQHpZZDOoPcCqRQJeDc_DOh8XGvhFF3M2wZse4ygCXZJA@mail.gmail.com>
+Subject: Re: [PATCH v11 2/5] security: Count the LSMs enabled at compile time
+To: KP Singh <kpsingh@kernel.org>, linux-security-module@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: ast@kernel.org, paul@paul-moore.com, andrii@kernel.org,
+ keescook@chromium.org, daniel@iogearbox.net, renauld@google.com,
+ revest@chromium.org, song@kernel.org, Kui-Feng Lee <sinquersw@gmail.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240509201421.905965-1-kpsingh@kernel.org>
+ <20240509201421.905965-3-kpsingh@kernel.org>
 Content-Language: en-US
-From: John Johansen <john.johansen@canonical.com>
-Autocrypt: addr=john.johansen@canonical.com; keydata=
- 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 lT9Q
-Organization: Canonical
-In-Reply-To: <CAHC9VhQHpZZDOoPcCqRQJeDc_DOh8XGvhFF3M2wZse4ygCXZJA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20240509201421.905965-3-kpsingh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22321 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 2/27/24 08:01, Paul Moore wrote:
-> On Mon, Feb 26, 2024 at 2:59 PM Paul Moore <paul@paul-moore.com> wrote:
->> On Fri, Feb 23, 2024 at 4:07 PM Paul Moore <paul@paul-moore.com> wrote:
->>> On Fri, Feb 23, 2024 at 2:06 PM Mickaël Salaün <mic@digikod.net> wrote:
->>>>
->>>> aa_getprocattr() may not initialize the value's pointer in some case.
->>>> As for proc_pid_attr_read(), initialize this pointer to NULL in
->>>> apparmor_getselfattr() to avoid an UAF in the kfree() call.
->>>>
->>>> Cc: Casey Schaufler <casey@schaufler-ca.com>
->>>> Cc: John Johansen <john.johansen@canonical.com>
->>>> Cc: Paul Moore <paul@paul-moore.com>
->>>> Cc: stable@vger.kernel.org
->>>> Fixes: 223981db9baf ("AppArmor: Add selfattr hooks")
->>>> Signed-off-by: Mickaël Salaün <mic@digikod.net>
->>>> ---
->>>>   security/apparmor/lsm.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> If you like John, I can send this up to Linus with the related SELinux
->>> fix, I would just need an ACK from you.
->>
->> Reviewed-by: Paul Moore <paul@paul-moore.com>
->>
->> This patch looks good to me, and while we've still got at least two
->> (maybe three?) more weeks before v6.8 is tagged, I think it would be
->> good to get this up to Linus ASAP.  I'll hold off for another day, but
->> if we don't see any comment from John I'll go ahead and merge this and
->> send it up to Linus with the SELinux fix; I'm sure John wouldn't be
->> happy if v6.8 went out the door without this fix.
-> 
-> I just merged this into lsm/stable-6.8 and once the automated
-> build/test has done it's thing and come back clean I'll send this,
-> along with the associated SELinux fix, up to Linus.  Thanks all.
-> 
-> John, if this commit is problematic please let me know and I'll send a
-> fix or a revert.
-> 
+On 5/9/2024 1:14 PM, KP Singh wrote:
+> These macros are a clever trick to determine a count of the number of
+> LSMs that are enabled in the config to ascertain the maximum number of
+> static calls that need to be configured per LSM hook.
+>
+> Without this one would need to generate static calls for the total
+> number of LSMs in the kernel (even if they are not compiled) times the
+> number of LSM hooks which ends up being quite wasteful.
+>
+> Suggested-by: Kui-Feng Lee <sinquersw@gmail.com>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Acked-by: Song Liu <song@kernel.org>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
 
-sorry, I am still trying to dig out of my backlog. This is good, you can
-certainly have my ACK, I know its already in tree so no point in adding
-it there but wanted to just make sure its on list
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
+> ---
+>  include/linux/args.h      |   6 +-
+>  include/linux/lsm_count.h | 128 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 131 insertions(+), 3 deletions(-)
+>  create mode 100644 include/linux/lsm_count.h
+>
+> diff --git a/include/linux/args.h b/include/linux/args.h
+> index 8ff60a54eb7d..2e8e65d975c7 100644
+> --- a/include/linux/args.h
+> +++ b/include/linux/args.h
+> @@ -17,9 +17,9 @@
+>   * that as _n.
+>   */
+>  
+> -/* This counts to 12. Any more, it will return 13th argument. */
+> -#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _n, X...) _n
+> -#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+> +/* This counts to 15. Any more, it will return 16th argument. */
+> +#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _n, X...) _n
+> +#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+>  
+>  /* Concatenate two parameters, but allow them to be expanded beforehand. */
+>  #define __CONCAT(a, b) a ## b
+> diff --git a/include/linux/lsm_count.h b/include/linux/lsm_count.h
+> new file mode 100644
+> index 000000000000..73c7cc81349b
+> --- /dev/null
+> +++ b/include/linux/lsm_count.h
+> @@ -0,0 +1,128 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * Copyright (C) 2023 Google LLC.
+> + */
+> +
+> +#ifndef __LINUX_LSM_COUNT_H
+> +#define __LINUX_LSM_COUNT_H
+> +
+> +#include <linux/args.h>
+> +
+> +#ifdef CONFIG_SECURITY
+> +
+> +/*
+> + * Macros to count the number of LSMs enabled in the kernel at compile time.
+> + */
+> +
+> +/*
+> + * Capabilities is enabled when CONFIG_SECURITY is enabled.
+> + */
+> +#if IS_ENABLED(CONFIG_SECURITY)
+> +#define CAPABILITIES_ENABLED 1,
+> +#else
+> +#define CAPABILITIES_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_SELINUX)
+> +#define SELINUX_ENABLED 1,
+> +#else
+> +#define SELINUX_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_SMACK)
+> +#define SMACK_ENABLED 1,
+> +#else
+> +#define SMACK_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_APPARMOR)
+> +#define APPARMOR_ENABLED 1,
+> +#else
+> +#define APPARMOR_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_TOMOYO)
+> +#define TOMOYO_ENABLED 1,
+> +#else
+> +#define TOMOYO_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_YAMA)
+> +#define YAMA_ENABLED 1,
+> +#else
+> +#define YAMA_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_LOADPIN)
+> +#define LOADPIN_ENABLED 1,
+> +#else
+> +#define LOADPIN_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_LOCKDOWN_LSM)
+> +#define LOCKDOWN_ENABLED 1,
+> +#else
+> +#define LOCKDOWN_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_SAFESETID)
+> +#define SAFESETID_ENABLED 1,
+> +#else
+> +#define SAFESETID_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_BPF_LSM)
+> +#define BPF_LSM_ENABLED 1,
+> +#else
+> +#define BPF_LSM_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_SECURITY_LANDLOCK)
+> +#define LANDLOCK_ENABLED 1,
+> +#else
+> +#define LANDLOCK_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_IMA)
+> +#define IMA_ENABLED 1,
+> +#else
+> +#define IMA_ENABLED
+> +#endif
+> +
+> +#if IS_ENABLED(CONFIG_EVM)
+> +#define EVM_ENABLED 1,
+> +#else
+> +#define EVM_ENABLED
+> +#endif
+> +
+> +/*
+> + *  There is a trailing comma that we need to be accounted for. This is done by
+> + *  using a skipped argument in __COUNT_LSMS
+> + */
+> +#define __COUNT_LSMS(skipped_arg, args...) COUNT_ARGS(args...)
+> +#define COUNT_LSMS(args...) __COUNT_LSMS(args)
+> +
+> +#define MAX_LSM_COUNT			\
+> +	COUNT_LSMS(			\
+> +		CAPABILITIES_ENABLED	\
+> +		SELINUX_ENABLED		\
+> +		SMACK_ENABLED		\
+> +		APPARMOR_ENABLED	\
+> +		TOMOYO_ENABLED		\
+> +		YAMA_ENABLED		\
+> +		LOADPIN_ENABLED		\
+> +		LOCKDOWN_ENABLED	\
+> +		SAFESETID_ENABLED	\
+> +		BPF_LSM_ENABLED		\
+> +		LANDLOCK_ENABLED	\
+> +		IMA_ENABLED		\
+> +		EVM_ENABLED)
+> +
+> +#else
+> +
+> +#define MAX_LSM_COUNT 0
+> +
+> +#endif /* CONFIG_SECURITY */
+> +
+> +#endif  /* __LINUX_LSM_COUNT_H */
 
