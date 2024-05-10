@@ -1,77 +1,77 @@
-Return-Path: <linux-security-module+bounces-3181-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3183-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BD358C28ED
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 18:47:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC8E88C292C
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 19:18:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89D0DB20BBA
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 16:47:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7102B286E32
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 17:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1062115E86;
-	Fri, 10 May 2024 16:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001D3EAF6;
+	Fri, 10 May 2024 17:18:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="MrFGm8HR"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="dRm22nbh"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic301-38.consmr.mail.ne1.yahoo.com (sonic301-38.consmr.mail.ne1.yahoo.com [66.163.184.207])
+Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21491101DB
-	for <linux-security-module@vger.kernel.org>; Fri, 10 May 2024 16:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092CF18030
+	for <linux-security-module@vger.kernel.org>; Fri, 10 May 2024 17:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715359663; cv=none; b=UGYHSUB7yqav0E70ucK5jmwd02FdAmrdI8WC9EFdm52jOszBSRHp3u3aWZdvrTOLx7iGhR6vD6ujAelcBP+bxIcsipH50HLaeoa+tMQw6nMaQU9O/2fjoCUg/9jqgRJYnw8u1CIgzUiDzLtneTJS5AcW54EDTzKwPj0rrlCv0+U=
+	t=1715361508; cv=none; b=LMMP0xDBaJkNBDDTv8d2IaVL9j98Ni5AcgNIAdyaHNZm8JppUdFtpIQTJgSPgVTCvnVP0dorKfkS6b3A4ASeME75vb/nHz+dl26lCSK8NJdwSVQGqL6pIo8lxRt3QBbchSm6qyH0ePNnbFiVrjssg3wu4peDsBKpfeXZpfBOgck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715359663; c=relaxed/simple;
-	bh=W6GeWHlPCwE5MhjXRcxJ+3YcZWzGFuF32W13U92QquU=;
+	s=arc-20240116; t=1715361508; c=relaxed/simple;
+	bh=9OM9BxBAlcx9JR6tbcOD4pzf/znKRwGdvp1zRai5QQI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D2OGOzcj7RgLYPAeP82QZELkSDYtjgtaogwzsLKvL6tkugLD9fQP48ADMOAZnHaduqEH/lZwW4abOk6KxCT6o+0uIRUMO4rEuPZ4rUoYlB+TQPRtCA+/29/D0ynuObCAP1OJv1s2AQt8XSDWbf488Lkn/ABqYbKWRzDADYCjnh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=MrFGm8HR; arc=none smtp.client-ip=66.163.184.207
+	 In-Reply-To:Content-Type; b=nEEghmc38Cyb3b+zZKEpSXgfD4pIvApAliCSeQI8rRAkTowYnpzxm8i7Liixo7ZiYfejp6nvhwfQVUWkXj+AXKTntM9lVzhEU6uJNdXis4wXl1t+U086+t2vS2i34H7H9sS1/CEpxg1m231YKnqGRL6Nk2yhLWRjNWQ6pzqVzog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=dRm22nbh; arc=none smtp.client-ip=66.163.187.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715359660; bh=6JC4c7M9zN+e9IcLHOfZPWVSXDalQGIAS82BEuAAnE4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=MrFGm8HRVWJ1OS98DX9d08dVFRpFjL87Hb/MREt3lqldjr3RhPWatLjSxfDbn5+TYkH+uSgswAGXEE5b7+qrdsD6v1xcvUAupRcDHUtr4HoM/NuXdWA9AgAGBfvAzSVzefhbHLp1/S1m6QVZSf+BIag/3KOqine9hg12qm72lIhRgFl31nnI5H2htorjsmexe7L28lZWVYm2s5Iyq6NRdUE1YKWHEtQA0I6SRTRsgDNnDxwlLXu8KFpArhdzW/D5crRuILpz9lFCxnOdXsJVy1W2KxtQCExn0Lhc2EzvgPCJNM9NJTGZpkzLnghVtiOWsrwcpD8OjdP7MAyFoUPEAA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715359660; bh=wogl3bYj0c0VBJaR5J46RWr7A58LX/OyYDljNah8Gsi=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jQLNEzEeSq7HnE0AntmP09e8IKLVcHG2dxaVz1SLHx66Nx9jdCGYW5q0njxlX8LV1qGNR6iFxwpLmGgD2qyzaBIIXpgaFYJwA325K8YA6K4QUd8dRN6J3p918QKQf8RVjwoH0pk4xhEcaqd6+8h1MuBGESJP1XhlplnZ5vtGTgG9kRqV8cHstFy2GFt4aEVWRYgGA5epn7+Fvkm+0wfDnetJzmoKi4gBCSpPhl1/piGdGxGMUA0aOzbl8y6xp5x2jFBzLl3PaEGTXpYkq3/2hbdC9PCxAFUnPHLZHlOyMHJswDkT7uwLwjBwbeEPlqtMJsvXzkNSZT7rYnZGf9EE8A==
-X-YMail-OSG: tSPF1TMVM1kN67GXFncnlW3dSEKLo6EPqX.CEix5Vct8cX6D3GLwWcAwc49VpyI
- WH4ebIPY92bbXo7qQoGK1nPm2sr4RbosoA3i3.IASHQjarc5iAEXy3DJdWoso9cxJILJQWuvKMj2
- vzzt11caVF7sbTpbqZUYYqetQGPXXVin.3hMp04LHWnXZOihG8U9la.cNTNZ56148sLmRsdUSLBJ
- p06O1pcYfHbC4HsaHLdwWa1xf9NgNuRkjBnCG45yQaBwJR7T1vpLMRIySi7KoJ9V_rNZecgL3zrm
- Z96riAxsiqRk_b_1R4G9Gkq.MYw9KiNVOjnXRwFGl3h5E_lE1X_15OrkjQ0Dpv8.UA6fOErY.Yfm
- iqDARLkieoRxEjbWjSzHo2aQcN483IBcgBXnZI2bIP46RhoA.eo6cd7gSGgZrIEvv2iSnaR0.iZH
- q7qaNg7fHwus9PGyiTmpEwwEo55N7zWck40RNL0rXRNLzOs9BfHSW_cikuBh162Jbit2XQdfV8m0
- 663Jg_M77gp9MdwtOKICvqxrIK5NQ2_fThuaph7Wl.tH0hVFaTk2gp.ED56tMYOTt89DJsdmg6EJ
- FbW_3cS7YVNuQ3ArhM5eeBn3X2KA5HBO3Y9Ua9dDxDi57MuNWETgf0fag63H.H0Zd.6Gd0nU_3OH
- zvuVajFCTCrq3Z7CzAVsgiZd536BFYC_VZ0zMUZvEXE1C5xDdpiekodrIzU5ONNqwZo6s1JvGavH
- NXzhp9bQU1vXJzeMOvl2NqdsUnZeaW0Ch6pC.x56tIHj2fqQ54YYIABdPpEL_zxKbLWdHDZOiUbV
- ZGLLF4XQkffGToJZmTmrnCawxC7cNedKMy0FptEIaCBnvmVOuNfDKftXfL7EboTZGH5U7ZqhDSvB
- W07.BdlDFLn2QBR9sykZ2DsvZajk9nrkB7ao4_MGXTtoYJkV7i1cwySePSuws.LrPm5Ai3N9y_g0
- ADpvOAxySDzOWRW5GlFKMzpolIgtyzBNomhl6GshZc10ANS0ihzdf4fvx44SRxXP7sl8lWnCpFp9
- FhFjr4kZQkITUNXM5LbVPkNwjYILFsFWxG5MpTa0lBKEYuxWkPCsD9MquolsFam1.Jf1VhnY7quq
- 8sAA8.Avj5GCu0JammBYYIvfnW_G8dRZbt3UV.xEapx.ZD8qdEj9o5h6zvgnsJQy4A4h2RzmAywh
- meUza7T9HMaCIuh3wYIVVsQxEQMIUWeyYgSvV6eJbFrRTY3NFEX2FwDVhagQoJOgOt.r032MYtKX
- rx8pLAcZXfylAsnXz9mJurQiVbhQiAXIIbP4VxTnGtvlcxOA8IwxcQHfME0qFN5YWBzrjMz3MFH2
- gwygagnWs5KWlG4lTuweg.Z.izGnSQ72bj6yec5fTH49UQLyPgxwBXzugX3DGLdEKb6wUwEkuc9M
- .b4ZiNT0JkVdVmRobYkcRIaLVzVWqzwl7A.ZyWIESzpmL1iNt2w6TH4UdDqrNeUnIqyrKPV4hiZk
- SrY0Zv57iQTUx.CW98coSoqgw_Nq2H.UZ_TFhhcLIxcrUXz45qMNn3aqxNDbURylZ6WHZ58IcyhO
- V4KJGaW9flBviMoOM13ITlqtg9MRU1easbzWVJP.sgop8p5jEOQYpoXcU6LAJXj8mrIwh7KgRyxd
- xToNoi3YAFYGAqS.wEpnd5_KNAgdW3iTyWkmbsXy8le0_BWNXqYK7VT6VOKSbyqEaEQcf1lL5Xro
- xuioIsgSjKMhm9RU.BepwNKJRJyDGqHaGw2lELWsWrUocML7RWeYwaH6TOIxEs0KP6HeMHrpBMdW
- Eyf3EEYNrr26xaLFB0xAXX5UvzGca2aGVkUdNRXIY7F4H8t2.MQqiox8m7V_b_P5VozfhpmwfVHZ
- 2pqsdi7ZYYJobYtHH7nGmGhjD1rYhLNTn5duM7xvpVq7Q9VVo2vASa9VomhkTC.bLFU9D1338BZN
- mbO0Oidy5V2DpNaa2USEazhXXoCu3xirnMYpvKGby9ye2JQaiJotirYmNo8ANju.CCxEPxpuIF68
- 7bI7sYoQ3PdRSLyhxMzVycBotDgpAeJnpMO28eNr9AaU0rRDSUgSI0vfm.KsZ0sPpjXJDfDc2Doy
- cuzA_H1FG7NR.qsomCXH7eN5Uyl5ZbkAG8aQROSZkQGLAeO5KCS04l53MWC5GINXIuZ9QZj6abYz
- SM_uTzsl0k7rS5vvKNi1W9kcxJYb1hRarIN0nppiXC9QiFPsCV7ISgYMqFmYimKsmxMRq7LrZZ1m
- fmglWQI21pMRrfkl4ydBudTh96NylxSDTtQv8ky1e650bl4o5wwTrSpxT89OI.LBm9ISPFi303xF
- Ykyh0qCagI7n3jEwANw--
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715361499; bh=CUIC893JPgLDznQixg4v/EZ5F/YydGgEBAttMNitzmw=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=dRm22nbhscMbxQXBC8Yj8PjYp7e23LVuZfjGBMNMjzH1MpXEX0mHtOmeanxzcCUS6Kv7TaxSdJEdY4SxCjgNMdG8Sc+JqZ+QfHxiwi0jEbb9bEqd02yiVVWvn/JsDpNvAES8wL13v6Pi4e3TMfqPX87En3SKekU8mGTbcuabmFg8zlowmpO3o/6+ZuvOID/63c/ayyrgzkh/WSxc2QXAMI4srN476511DGdsi4xKTUCZWo5VfGN3uWSwnHJN0/BDpDEspstdKreJvI26tXlki99hsPzXwlNfKGjfVjwDNr1spX3fTYuNaIP7XNJTpMw4zEXX4e7FC/d36SSNGBucfw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715361499; bh=/16G9kVSTkvzRnmAolHnVIxbklm2vyqOTXHsZLV1tCW=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=LQkeBaZHI+P7GgQi/w3LSCztLngdqDhbrHf+4CziXNse1CzCusLv6Wr8X3s8PFSUjLq6j4uZWvN9x57zdSbaCZ24n/D67AQlBapSNsmVCz8m7Tf72ZiKB693R6fCmKs4tnC5rVdGh9GruNEk8XW99iJhLbpzVGEwF2MWaGytqcB+0g2apfBIf32Jvf1/o6b1ZO7nB03szcyN/zxuPH5uf2AHVeeBKtlLZlUgHSOk+XzxgL7WM7n4SIF20B7gBjd5pUnvp9Jfe6aP55QBjyz/9nxCMjmIq/rdIqCBlEkrMgT4FQN4I63fvBIODAILtRQMGURyb3pe2qGX2m6eSboBPQ==
+X-YMail-OSG: 35ELR_UVM1mHruWrgaICnKwC5i_Twag6Dci4Mr3Pq27ckQQ4GhDyqraD0UPM9BU
+ iS7CFXPU27WwDFdnV4lbBi4qm5fvClrtBI.La58Ro33.cVHr9glT76xubCfW7aw.SPI83lWEnORO
+ Eb.T.rXHEUIKtOvm_uvksGG0yWMCIt1lY_t.R1H471TUkiyqZmrjlcUw.Sl4APmmtsRm4v5t3Bfm
+ HIRONtxbpVB_2qgWCRvwliKZfTQh_7_qa6nD8DTu3if7Tqz6nvMgSGAhbdQSU4WevjP3dbbKHbZL
+ JkEDknKRsOpAUt3rskfISGjjT45h6AVrRzf4vIEwmbnBw64AoLtzftOgyRanq4zAgEDXjQQXBA7i
+ GTSEFomoIQ7WGIhEQ8uAvGufM7KSqykDY7QswGXQzQey.vgpZSTZrOc8BqlOmUcwCLM8J90d36yK
+ U1y7AtkqRNhx9NT_O0hKi_5oviRPjTUAR_sXRQpiLxz6kgdFwjms.HXoo2PSSbwMDZiPuwpvPSel
+ BFRLCUV5ju.Uwe3vNPMnhAdIppD47yDSAeNwn2W8Z60d.wJIm1J_LhKkK6qF5cGJVpn0oFeuFiT7
+ H65WvEXedzwbsO.Emx_nzMBGIiCSOpaF4fNPJm.L7rtyGGBoHI7.C4dNkxsyfFN2uoRnYq_HlBsi
+ hIBOQ.XTrNEZvXxc9AQAdf79gKvNArq2WRG5zBAwd.MeS6QBT1Bcs4Z42coNbgJYGpK8UoGhSoZ5
+ vVuERwMZzDBwzO36TcQu.trajkqukWmSCx9mU3PlDMsqfV01eqNixsbQekmyndxUmHeIzUVCyLxB
+ Gvzhzz1q0rDkEiOCx0sOSVjIhEaNMEvksi9EJMlL2jXj4VGMQUWAwTMKsVTnrjP16C6_9wJCQSPk
+ 5TW0OvOqRo_CaFW.rpN6NWufPMTrGOkdg5m7yH39QKbQ2sJTs2TzZ1mDE7HK5zJEK3ly8t.XHbb_
+ 2zmbWwG53GiHU1Nidocg5PUJ3.9ANh7dUYHg7W3zuu_Ph3huhy7ikbqtQm9n_fmQZYEwmQDk9oBU
+ b4O29Vp2yUqcqJSLqtWF6qNWijKsV57cnaQuWhXlz6g1y1JoMwT6026T_nXVanpBVNlGi6OGpKmP
+ 0Ux.J.t9A4kCuRKW93wXJNRBMO_VO_IKSJ7RLYfoDkuUK2vMofiBwvQbBMocc7HQ.5HuZH7Q5S7c
+ ti6Vlj2K9ntV1SB3vJ7JN3IzwgyhCkbeP6G7lsfY3rYpIBEb6q5OCSKEcpwqTxBK9O8aIngs6lqN
+ 6bpaDTV_EmUxet9fL60aLjVLRBxobWY3kOxe8eN2yLzQpO.uikafFG_RZjmuhi4WI_xj4oAgZG1I
+ hlHhU0B.SHDnnKsx3QHVZXhuXrTxXWR0wAgM9Wl2BuJKtYLHe0QooULGPNAO.Ymqr7_oc0h8_pu6
+ MWty2vffyKs5HmfVhIcLkQ.h21Zafvuk6NA5yDZBgEVordKJpliELAjjPWI5H3GmQmC70VzLwC48
+ Wtz8IDS3m1hBql0fqK5t9f9hsOohgyS5yk8dC1ne6W97VNMw_DYouhXUSKR2trzTwne0hckhPQlp
+ 6HBsh2IIuEO91xQO_x2YoMw_6S3dLAfqtufwtKuhpQXe9QSXOMf5D3BIqzq_pqGEguXfPrMiKaTm
+ W2GnN0EASOGXYk8HU6yVzH07MH1b9s0TWXHic_hMp79uYhh3J92oTuOu7C3NAHKONFI5Q8u9PA5.
+ sjzHyILbBIaK4MJI7CYCqBXbGI0D3mrXBcPpdgRGyLclJE7f0oJglheSdjoyxs8xFnzDIX1laEo7
+ b58_8duyZnolTcQVK0kCp08pPn0G8GQSp.82FeG2lKwp8MGXt5KjqSRyaOuKrI.8ZrOkJtPcvs0s
+ lJeRh3wOKQkPn9GndYdDieko6Fx8zqu2r0RpbIgbtPkTsY4QvHsJxIhOmhDLSXgj13s5Q72hbeup
+ 7Bj.e62jrm2AJVuoP4104jZvDp1Rmvdt3xSpZEiUjSXjENuP2JzDj_DoYuiDHymdUMKpVDCuzUIz
+ cBFADmXk97jmX5vX8QyOdEfYU3VwekP5LkLFpLqSVTNkUq60Eil3Ibcm5kuV2is3cMcuero_QFOf
+ i7NgIwnmIU8U7nhAXaTOOJbFwoCxApxW_kltf7TfAomvO43m65wSOtSHslKIaYHfr9pzzSNzI.dD
+ M68jvzNY_sdaK6lX781G.NcG.pewgUXXwFxArqTZJm41gUPrZsgb1S06.TQ3UGyMVwvLr82RR1_X
+ RkBp7O6AG4HsbMSKzUdGrs_3UaSyuS1xdL1HRiDlcOnTj0riURK1woX1Yuw8JN9lPQLO5ZYDoLHe
+ wvKbPhQd5TmqLGD0FWw--
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 617abb55-02ae-491b-b856-8f59c7024a06
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Fri, 10 May 2024 16:47:40 +0000
-Received: by hermes--production-gq1-59c575df44-f4snh (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0ff3e2b4d3d5ba5569bd0a7619da345f;
-          Fri, 10 May 2024 16:47:34 +0000 (UTC)
-Message-ID: <a4d3a0dd-2ef9-4fbc-bf72-fa6cd84231d8@schaufler-ca.com>
-Date: Fri, 10 May 2024 09:47:32 -0700
+X-Sonic-ID: 5ea9c975-ad2a-4336-8106-2f9539c66b01
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Fri, 10 May 2024 17:18:19 +0000
+Received: by hermes--production-gq1-59c575df44-2njcf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 02e28cfe366f359f4bff8812dfd7f276;
+          Fri, 10 May 2024 17:08:05 +0000 (UTC)
+Message-ID: <62a282e2-4cd5-4222-a223-9d38822a6b38@schaufler-ca.com>
+Date: Fri, 10 May 2024 10:08:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -79,195 +79,425 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 2/5] security: Count the LSMs enabled at compile time
+Subject: Re: [PATCH v11 4/5] security: Update non standard hooks to use static
+ calls
 To: KP Singh <kpsingh@kernel.org>, linux-security-module@vger.kernel.org,
  bpf@vger.kernel.org
 Cc: ast@kernel.org, paul@paul-moore.com, andrii@kernel.org,
  keescook@chromium.org, daniel@iogearbox.net, renauld@google.com,
- revest@chromium.org, song@kernel.org, Kui-Feng Lee <sinquersw@gmail.com>,
+ revest@chromium.org, song@kernel.org,
  Casey Schaufler <casey@schaufler-ca.com>
 References: <20240509201421.905965-1-kpsingh@kernel.org>
- <20240509201421.905965-3-kpsingh@kernel.org>
+ <20240509201421.905965-5-kpsingh@kernel.org>
 Content-Language: en-US
 From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20240509201421.905965-3-kpsingh@kernel.org>
+In-Reply-To: <20240509201421.905965-5-kpsingh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Mailer: WebService/1.1.22321 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
 On 5/9/2024 1:14 PM, KP Singh wrote:
-> These macros are a clever trick to determine a count of the number of
-> LSMs that are enabled in the config to ascertain the maximum number of
-> static calls that need to be configured per LSM hook.
+> There are some LSM hooks which do not use the common pattern followed
+> by other LSM hooks and thus cannot use call_{int, void}_hook macros and
+> instead use lsm_for_each_hook macro which still results in indirect
+> call.
 >
-> Without this one would need to generate static calls for the total
-> number of LSMs in the kernel (even if they are not compiled) times the
-> number of LSM hooks which ends up being quite wasteful.
+> There is one additional generalizable pattern where a hook matching an
+> lsmid is called and the indirect calls for these are addressed with the
+> newly added call_hook_with_lsmid macro which internally uses an
+> implementation similar to call_int_hook but has an additional check that
+> matches the lsmid.
 >
-> Suggested-by: Kui-Feng Lee <sinquersw@gmail.com>
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Acked-by: Song Liu <song@kernel.org>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> For the generic case the lsm_for_each_hook macro is updated to accept
+> logic before and after the invocation of the LSM hook (static call) in
+> the unrolled loop.
+>
 > Signed-off-by: KP Singh <kpsingh@kernel.org>
+
+A couple of comments below, nonetheless ...
 
 Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
 > ---
->  include/linux/args.h      |   6 +-
->  include/linux/lsm_count.h | 128 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 131 insertions(+), 3 deletions(-)
->  create mode 100644 include/linux/lsm_count.h
+>  security/security.c | 229 ++++++++++++++++++++++++--------------------
+>  1 file changed, 125 insertions(+), 104 deletions(-)
 >
-> diff --git a/include/linux/args.h b/include/linux/args.h
-> index 8ff60a54eb7d..2e8e65d975c7 100644
-> --- a/include/linux/args.h
-> +++ b/include/linux/args.h
-> @@ -17,9 +17,9 @@
->   * that as _n.
+> diff --git a/security/security.c b/security/security.c
+> index 39ffe949e509..491b807a8a63 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -945,10 +945,41 @@ out:									\
+>  	RC;								\
+>  })
+>  
+> -#define lsm_for_each_hook(scall, NAME)					\
+> -	for (scall = static_calls_table.NAME;				\
+> -	     scall - static_calls_table.NAME < MAX_LSM_COUNT; scall++)  \
+> -		if (static_key_enabled(&scall->active->key))
+> +/*
+> + * Can be used in the context passed to lsm_for_each_hook to get the lsmid of the
+> + * current hook
+> + */
+> +#define current_lsmid() _hook_lsmid
+> +
+> +#define __CALL_HOOK(NUM, HOOK, RC, BODY_BEFORE, BODY_AFTER, ...)	     \
+> +do {									     \
+> +	int __maybe_unused _hook_lsmid;					     \
+> +									     \
+> +	if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM))) {  \
+> +		_hook_lsmid = static_calls_table.HOOK[NUM].hl->lsmid->id;    \
+> +		BODY_BEFORE						     \
+> +		RC = static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__);   \
+> +		BODY_AFTER						     \
+> +	}								     \
+> +} while (0);
+> +
+> +#define lsm_for_each_hook(HOOK, RC, BODY, ...)	\
+> +	LSM_LOOP_UNROLL(__CALL_HOOK, HOOK, RC, ;, BODY, __VA_ARGS__)
+> +
+> +#define call_hook_with_lsmid(HOOK, LSMID, ...)				\
+> +({									\
+> +	__label__ out;							\
+> +	int RC = LSM_RET_DEFAULT(HOOK);					\
+> +									\
+> +	LSM_LOOP_UNROLL(__CALL_HOOK, HOOK, RC, {			\
+> +		if (current_lsmid() != LSMID)				\
+> +			continue;					\
+> +	}, {								\
+> +		goto out;						\
+> +	}, __VA_ARGS__);						\
+> +out:									\
+> +	RC;								\
+> +})
+
+I like how clean these macros look ...
+
+>  
+>  /* Security operations */
+>  
+> @@ -1184,7 +1215,6 @@ int security_settime64(const struct timespec64 *ts, const struct timezone *tz)
 >   */
+>  int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
+>  {
+> -	struct lsm_static_call *scall;
+>  	int cap_sys_admin = 1;
+>  	int rc;
 >  
-> -/* This counts to 12. Any more, it will return 13th argument. */
-> -#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _n, X...) _n
-> -#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-> +/* This counts to 15. Any more, it will return 16th argument. */
-> +#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _n, X...) _n
-> +#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+> @@ -1195,13 +1225,18 @@ int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
+>  	 * agree that it should be set it will. If any module
+>  	 * thinks it should not be set it won't.
+>  	 */
+> -	lsm_for_each_hook(scall, vm_enough_memory) {
+> -		rc = scall->hl->hook.vm_enough_memory(mm, pages);
+> -		if (rc <= 0) {
+> -			cap_sys_admin = 0;
+> -			break;
+> -		}
+> -	}
+> +
+> +	lsm_for_each_hook(
+> +		vm_enough_memory, rc,
+> +		{
+> +			if (rc <= 0) {
+> +				cap_sys_admin = 0;
+> +				goto out;
+> +			}
+> +		},
+> +		mm, pages);
+> +
+> +out:
+
+... but the invocations are quite hideous. Because this looks like code that's
+messed up I would like to see it commented, perhaps something like
+
++
++	lsm_for_each_hook(
++		vm_enough_memory, rc,
++		/* BLOCK BEFORE */
++		{
++			if (rc <= 0) {
++				cap_sys_admin = 0;
++				goto out;
++			}
++		},
++		/* END BLOCK BEFORE */
++		mm, pages);
++
++out:
+
+>  	return __vm_enough_memory(mm, pages, cap_sys_admin);
+>  }
 >  
->  /* Concatenate two parameters, but allow them to be expanded beforehand. */
->  #define __CONCAT(a, b) a ## b
-> diff --git a/include/linux/lsm_count.h b/include/linux/lsm_count.h
-> new file mode 100644
-> index 000000000000..73c7cc81349b
-> --- /dev/null
-> +++ b/include/linux/lsm_count.h
-> @@ -0,0 +1,128 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+> @@ -1343,17 +1378,19 @@ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
+>  int security_fs_context_parse_param(struct fs_context *fc,
+>  				    struct fs_parameter *param)
+>  {
+> -	struct lsm_static_call *scall;
+> -	int trc;
+> +	int trc = LSM_RET_DEFAULT(fs_context_parse_param);
+>  	int rc = -ENOPARAM;
+>  
+> -	lsm_for_each_hook(scall, fs_context_parse_param) {
+> -		trc = scall->hl->hook.fs_context_parse_param(fc, param);
+> -		if (trc == 0)
+> -			rc = 0;
+> -		else if (trc != -ENOPARAM)
+> -			return trc;
+> -	}
+> +	lsm_for_each_hook(
+> +		fs_context_parse_param, trc,
+> +		{
+> +			if (trc == 0)
+> +				rc = 0;
+> +			else if (trc != -ENOPARAM)
+> +				return trc;
+> +		},
+> +		fc, param);
 > +
-> +/*
-> + * Copyright (C) 2023 Google LLC.
-> + */
+>  	return rc;
+>  }
+>  
+> @@ -1578,15 +1615,17 @@ int security_sb_set_mnt_opts(struct super_block *sb,
+>  			     unsigned long kern_flags,
+>  			     unsigned long *set_kern_flags)
+>  {
+> -	struct lsm_static_call *scall;
+>  	int rc = mnt_opts ? -EOPNOTSUPP : LSM_RET_DEFAULT(sb_set_mnt_opts);
+>  
+> -	lsm_for_each_hook(scall, sb_set_mnt_opts) {
+> -		rc = scall->hl->hook.sb_set_mnt_opts(sb, mnt_opts, kern_flags,
+> -					      set_kern_flags);
+> -		if (rc != LSM_RET_DEFAULT(sb_set_mnt_opts))
+> -			break;
+> -	}
+> +	lsm_for_each_hook(
+> +		sb_set_mnt_opts, rc,
+> +		{
+> +			if (rc != LSM_RET_DEFAULT(sb_set_mnt_opts))
+> +				goto out;
+> +		},
+> +		sb, mnt_opts, kern_flags, set_kern_flags);
 > +
-> +#ifndef __LINUX_LSM_COUNT_H
-> +#define __LINUX_LSM_COUNT_H
+> +out:
+>  	return rc;
+>  }
+>  EXPORT_SYMBOL(security_sb_set_mnt_opts);
+> @@ -1777,7 +1816,6 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+>  				 const struct qstr *qstr,
+>  				 const initxattrs initxattrs, void *fs_data)
+>  {
+> -	struct lsm_static_call *scall;
+>  	struct xattr *new_xattrs = NULL;
+>  	int ret = -EOPNOTSUPP, xattr_count = 0;
+>  
+> @@ -1795,18 +1833,19 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+>  			return -ENOMEM;
+>  	}
+>  
+> -	lsm_for_each_hook(scall, inode_init_security) {
+> -		ret = scall->hl->hook.inode_init_security(inode, dir, qstr, new_xattrs,
+> -						  &xattr_count);
+> -		if (ret && ret != -EOPNOTSUPP)
+> -			goto out;
+> +	lsm_for_each_hook(
+> +		inode_init_security, ret,
+> +		{
+>  		/*
+>  		 * As documented in lsm_hooks.h, -EOPNOTSUPP in this context
+>  		 * means that the LSM is not willing to provide an xattr, not
+>  		 * that it wants to signal an error. Thus, continue to invoke
+>  		 * the remaining LSMs.
+>  		 */
+> -	}
+> +			if (ret && ret != -EOPNOTSUPP)
+> +				goto out;
+> +		},
+> +		inode, dir, qstr, new_xattrs, &xattr_count);
+>  
+>  	/* If initxattrs() is NULL, xattr_count is zero, skip the call. */
+>  	if (!xattr_count)
+> @@ -3601,16 +3640,19 @@ int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
+>  {
+>  	int thisrc;
+>  	int rc = LSM_RET_DEFAULT(task_prctl);
+> -	struct lsm_static_call *scall;
+> -
+> -	lsm_for_each_hook(scall, task_prctl) {
+> -		thisrc = scall->hl->hook.task_prctl(option, arg2, arg3, arg4, arg5);
+> -		if (thisrc != LSM_RET_DEFAULT(task_prctl)) {
+> -			rc = thisrc;
+> -			if (thisrc != 0)
+> -				break;
+> -		}
+> -	}
 > +
-> +#include <linux/args.h>
+> +	lsm_for_each_hook(
+> +		task_prctl, thisrc,
+> +		{
+> +			if (thisrc != LSM_RET_DEFAULT(task_prctl)) {
+> +				rc = thisrc;
+> +				if (thisrc != 0)
+> +					goto out;
+> +			}
+> +		},
+> +		option, arg2, arg3, arg4, arg5);
 > +
-> +#ifdef CONFIG_SECURITY
+> +out:
+>  	return rc;
+>  }
+>  
+> @@ -4010,7 +4052,6 @@ EXPORT_SYMBOL(security_d_instantiate);
+>  int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>  			 u32 __user *size, u32 flags)
+>  {
+> -	struct lsm_static_call *scall;
+>  	struct lsm_ctx lctx = { .id = LSM_ID_UNDEF, };
+>  	u8 __user *base = (u8 __user *)uctx;
+>  	u32 entrysize;
+> @@ -4048,31 +4089,40 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>  	 * In the usual case gather all the data from the LSMs.
+>  	 * In the single case only get the data from the LSM specified.
+>  	 */
+> -	lsm_for_each_hook(scall, getselfattr) {
+> -		if (single && lctx.id != scall->hl->lsmid->id)
+> -			continue;
+> -		entrysize = left;
+> -		if (base)
+> -			uctx = (struct lsm_ctx __user *)(base + total);
+> -		rc = scall->hl->hook.getselfattr(attr, uctx, &entrysize, flags);
+> -		if (rc == -EOPNOTSUPP) {
+> -			rc = 0;
+> -			continue;
+> -		}
+> -		if (rc == -E2BIG) {
+> -			rc = 0;
+> -			left = 0;
+> -			toobig = true;
+> -		} else if (rc < 0)
+> -			return rc;
+> -		else
+> -			left -= entrysize;
+> +	LSM_LOOP_UNROLL(
+> +		__CALL_HOOK, getselfattr, rc,
+> +		/* BODY_BEFORE */
+> +		{
+> +			if (single && lctx.id != current_lsmid())
+> +				continue;
+> +			entrysize = left;
+> +			if (base)
+> +				uctx = (struct lsm_ctx __user *)(base + total);
+> +		},
+> +		/* BODY_AFTER */
+> +		{
+> +			if (rc == -EOPNOTSUPP) {
+> +				rc = 0;
+> +			} else {
+> +				if (rc == -E2BIG) {
+> +					rc = 0;
+> +					left = 0;
+> +					toobig = true;
+> +				} else if (rc < 0)
+> +					return rc;
+> +				else
+> +					left -= entrysize;
 > +
-> +/*
-> + * Macros to count the number of LSMs enabled in the kernel at compile time.
-> + */
+> +				total += entrysize;
+> +				count += rc;
+> +				if (single)
+> +					goto out;
+> +			}
+> +		},
+> +		attr, uctx, &entrysize, flags);
 > +
-> +/*
-> + * Capabilities is enabled when CONFIG_SECURITY is enabled.
-> + */
-> +#if IS_ENABLED(CONFIG_SECURITY)
-> +#define CAPABILITIES_ENABLED 1,
-> +#else
-> +#define CAPABILITIES_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_SELINUX)
-> +#define SELINUX_ENABLED 1,
-> +#else
-> +#define SELINUX_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_SMACK)
-> +#define SMACK_ENABLED 1,
-> +#else
-> +#define SMACK_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_APPARMOR)
-> +#define APPARMOR_ENABLED 1,
-> +#else
-> +#define APPARMOR_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_TOMOYO)
-> +#define TOMOYO_ENABLED 1,
-> +#else
-> +#define TOMOYO_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_YAMA)
-> +#define YAMA_ENABLED 1,
-> +#else
-> +#define YAMA_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_LOADPIN)
-> +#define LOADPIN_ENABLED 1,
-> +#else
-> +#define LOADPIN_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_LOCKDOWN_LSM)
-> +#define LOCKDOWN_ENABLED 1,
-> +#else
-> +#define LOCKDOWN_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_SAFESETID)
-> +#define SAFESETID_ENABLED 1,
-> +#else
-> +#define SAFESETID_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_BPF_LSM)
-> +#define BPF_LSM_ENABLED 1,
-> +#else
-> +#define BPF_LSM_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_SECURITY_LANDLOCK)
-> +#define LANDLOCK_ENABLED 1,
-> +#else
-> +#define LANDLOCK_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_IMA)
-> +#define IMA_ENABLED 1,
-> +#else
-> +#define IMA_ENABLED
-> +#endif
-> +
-> +#if IS_ENABLED(CONFIG_EVM)
-> +#define EVM_ENABLED 1,
-> +#else
-> +#define EVM_ENABLED
-> +#endif
-> +
-> +/*
-> + *  There is a trailing comma that we need to be accounted for. This is done by
-> + *  using a skipped argument in __COUNT_LSMS
-> + */
-> +#define __COUNT_LSMS(skipped_arg, args...) COUNT_ARGS(args...)
-> +#define COUNT_LSMS(args...) __COUNT_LSMS(args)
-> +
-> +#define MAX_LSM_COUNT			\
-> +	COUNT_LSMS(			\
-> +		CAPABILITIES_ENABLED	\
-> +		SELINUX_ENABLED		\
-> +		SMACK_ENABLED		\
-> +		APPARMOR_ENABLED	\
-> +		TOMOYO_ENABLED		\
-> +		YAMA_ENABLED		\
-> +		LOADPIN_ENABLED		\
-> +		LOCKDOWN_ENABLED	\
-> +		SAFESETID_ENABLED	\
-> +		BPF_LSM_ENABLED		\
-> +		LANDLOCK_ENABLED	\
-> +		IMA_ENABLED		\
-> +		EVM_ENABLED)
-> +
-> +#else
-> +
-> +#define MAX_LSM_COUNT 0
-> +
-> +#endif /* CONFIG_SECURITY */
-> +
-> +#endif  /* __LINUX_LSM_COUNT_H */
+> +out:
+>  
+> -		total += entrysize;
+> -		count += rc;
+> -		if (single)
+> -			break;
+> -	}
+>  	if (put_user(total, size))
+>  		return -EFAULT;
+>  	if (toobig)
+> @@ -4103,9 +4153,8 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>  int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>  			 u32 size, u32 flags)
+>  {
+> -	struct lsm_static_call *scall;
+>  	struct lsm_ctx *lctx;
+> -	int rc = LSM_RET_DEFAULT(setselfattr);
+> +	int rc;
+>  	u64 required_len;
+>  
+>  	if (flags)
+> @@ -4126,11 +4175,7 @@ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>  		goto free_out;
+>  	}
+>  
+> -	lsm_for_each_hook(scall, setselfattr)
+> -		if ((scall->hl->lsmid->id) == lctx->id) {
+> -			rc = scall->hl->hook.setselfattr(attr, lctx, size, flags);
+> -			break;
+> -		}
+> +	rc = call_hook_with_lsmid(setselfattr, lctx->id, attr, lctx, size, flags);
+>  
+>  free_out:
+>  	kfree(lctx);
+> @@ -4151,14 +4196,7 @@ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
+>  int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
+>  			 char **value)
+>  {
+> -	struct lsm_static_call *scall;
+> -
+> -	lsm_for_each_hook(scall, getprocattr) {
+> -		if (lsmid != 0 && lsmid != scall->hl->lsmid->id)
+> -			continue;
+> -		return scall->hl->hook.getprocattr(p, name, value);
+> -	}
+> -	return LSM_RET_DEFAULT(getprocattr);
+> +	return call_hook_with_lsmid(getprocattr, lsmid, p, name, value);
+>  }
+>  
+>  /**
+> @@ -4175,14 +4213,7 @@ int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
+>   */
+>  int security_setprocattr(int lsmid, const char *name, void *value, size_t size)
+>  {
+> -	struct lsm_static_call *scall;
+> -
+> -	lsm_for_each_hook(scall, setprocattr) {
+> -		if (lsmid != 0 && lsmid != scall->hl->lsmid->id)
+> -			continue;
+> -		return scall->hl->hook.setprocattr(name, value, size);
+> -	}
+> -	return LSM_RET_DEFAULT(setprocattr);
+> +	return call_hook_with_lsmid(setprocattr, lsmid, name, value, size);
+>  }
+>  
+>  /**
+> @@ -5267,23 +5298,13 @@ int security_xfrm_state_pol_flow_match(struct xfrm_state *x,
+>  				       struct xfrm_policy *xp,
+>  				       const struct flowi_common *flic)
+>  {
+> -	struct lsm_static_call *scall;
+> -	int rc = LSM_RET_DEFAULT(xfrm_state_pol_flow_match);
+> -
+>  	/*
+>  	 * Since this function is expected to return 0 or 1, the judgment
+>  	 * becomes difficult if multiple LSMs supply this call. Fortunately,
+>  	 * we can use the first LSM's judgment because currently only SELinux
+>  	 * supplies this call.
+> -	 *
+> -	 * For speed optimization, we explicitly break the loop rather than
+> -	 * using the macro
+>  	 */
+> -	lsm_for_each_hook(scall, xfrm_state_pol_flow_match) {
+> -		rc = scall->hl->hook.xfrm_state_pol_flow_match(x, xp, flic);
+> -		break;
+> -	}
+> -	return rc;
+> +	return call_int_hook(xfrm_state_pol_flow_match, x, xp, flic);
+>  }
+>  
+>  /**
 
