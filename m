@@ -1,370 +1,368 @@
-Return-Path: <linux-security-module+bounces-3182-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3184-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25B348C291D
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 19:11:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10CE78C292D
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 19:19:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 493071C211BF
-	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 17:11:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9B58282FC9
+	for <lists+linux-security-module@lfdr.de>; Fri, 10 May 2024 17:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE173134CC;
-	Fri, 10 May 2024 17:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81EB21758D;
+	Fri, 10 May 2024 17:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="E0dfmbPL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ulq7o5IN"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic301-38.consmr.mail.ne1.yahoo.com (sonic301-38.consmr.mail.ne1.yahoo.com [66.163.184.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C16175AE
-	for <linux-security-module@vger.kernel.org>; Fri, 10 May 2024 17:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8333710965
+	for <linux-security-module@vger.kernel.org>; Fri, 10 May 2024 17:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715361069; cv=none; b=Y8KEJ6cNH/7D2cOxKhE079ZF/5QuB8BWXDkaHcJoATpH2z2ph5IQsfMFdPCWsbBKFZJFpcNdjOT7uKP8n7AoCxG5JjtTv9Nr3wDn3nVOF4xf72F6r1sWGPbuZFASI6IxxxXDLrp09asCV5Fv+q2UGS4e2CVARWdCAiuHoKqStI0=
+	t=1715361589; cv=none; b=Gh8usQ5cDfohcjPqplYnWXLV7oD+vCye39jC+IgzHz/BussbO9WV/gtZySWEWXfVgtF2ZB1gXmUXf94kOdhx47ZfImFlhy+A0wqiIq3AtgFyNMuJJRNR4/tD9Xrh5Y/XwmfY55sS64Yx2jBDG0gl1rIpNi8wCc6wJKlpJMiQHro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715361069; c=relaxed/simple;
-	bh=J4jw99UZQhaWV9TBrFG1/+ogEq+zfiW2uamFrottctY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jPYWZKTQ6v5UHvlNdp4V9hpI39zeXuIlso30kU7kJBD2c27JWc/LI1OJSbeGd7NvRpymhtric2r9ao6QolE2+b6eXnY1eyqyO3Cm7WbjyipkBeWsPyfrnHz+OGoETKTwCgUKn3ZAah+xcgD2FSQhk7ljGhy3teUNsGkdP29uUl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=E0dfmbPL; arc=none smtp.client-ip=66.163.184.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715361067; bh=8PvcDS6xrsPjpXc6V6K4XXDCQmKdIRJzrT6DMnGmcGU=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=E0dfmbPL+l2ZaKGSCQ19dAAstR/CWCJ9TQbhpqjleB8qI7A8oNLraRDeTPwNp+45BJLQpLJB3Nbavw2Mb6F+ROGpNXyo4epJm1+AtKgnaLBq4AdxLimmCng1AwTYJ3HfSJmyNVIFZPoY3BDAenCMxILo+fYA2M+FNHapK96LDPoqxoyMFDy765hPttG8L+nlLZXqgl9swy2u710QCoVeg+VAAL4pwvHlWBA1hT+RsH3o5PgOseSUwS3HluI2VdV9DCabBAm2KPzOFR83EKm4btNupTH8FZb1oFDO0dC+R8EAZO+KqkA6VhW0G1yrlvQyC1lXsTdRR1VEKiGztMUCjQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715361067; bh=NBS+rKgoK072ewIsBLwI8f/cizv6/RYuQPNcHq2nAR/=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=q9PwkIkzvm0tfCG12Tc445y1Cpp92Lbc7s/mnk+aqGTbBiNbbZ1fLk/yJCyym7pghBcG8UR1S+NuJR6Ejpqu5vYZI/csOFs+UFan07aODGPd0LYY1cyGsBm4mEm463ZSNLFO31ZfMLXccMsnXq7w6l0aDN456fSpjq0ufME0t05oALM4W9BN9HmWEbJNhrwlD7VI5BqXBt2Kji1baVi8ZIHFq5pl2KkBjgMavve1Gh0aadk/ZQessj1vlF1NYF2DZmjRrUw1BFKLR9etG1WLF3j6q9T3neEXPDTA19ru9EnMVSiNtnUhPO6+U5lYw2hazI3nVPEiA+7d114AepGmww==
-X-YMail-OSG: w3.MSagVM1lbhV6iScExmTsdldOWEc5o9HsF2aXi4s3avb6p.IoctBm3iSvAgRE
- XTSWhQO.zsp6P_2ETbOXiM7NaU4lpGCYAoNNHkeDezgbGZEUzd1sOk5Ajj7GYWOk.XhAuwxOZ0jB
- ES3tQXF4QUyV2N_Wb7v01x2ela5yzcQrJ9b655d0VFjYnzyy0r_PGtG3xyoSuY7KXcHbLJA.CzCP
- rKzkHWdmqm3Tm41PlG_9Be7WqtyCLujcIgeq8sjcXSi7v1sFEIC6qu5TQqSRLqgbCqdAiinkP7Kx
- agZ4_ro.PRRR8MO5CQnO.pn3NtVMCoh2i6uoXzIrPG2qTL_9mBaXxGPvZxN6rDUyJxlRDXaiB0xq
- Zq9njs8azE4ifqQUUTI_I3eDo7YQCl1BrxhTanJBm8JzeclaQKy7WmVtVRs7AX.HaPEO9uRuTUCJ
- hy0wBIfRS.Sc86cqryplN9IsPizqOMN2JyqXaT3_ld2yKLTvaBlByiVOYPEAHW5WOdp9bL7Nhidu
- G8RXQLyD.PAdYVPpfnrv5DjHGSgT48APJDDvLaZcTMkVQJwhiVpStrBlell80rEIh8pn_svTzmnG
- yt97kS2_xrMezAb0CRoWiPmSjl2cDTKNOPvJQsiBpz7yvAA5pRGzDGlwMMHiy1RVo_TP2Tc5uUZD
- rxPG9TcK.ETwGuXKzcgjt4yP033F8Iz4y4.4RQVe9WPDifoJ8uzZdCJIz6_bmlqqK2c_0EElhDUf
- 8y6b86JwGvzwBogwAHAd7681nAlDS8XRfFMCiPtUv9zgQUdAGxNz7HkYB2wKXZRLGXkD7xL0_Z7p
- g.ZDbdUomQUe4KAvmyh9lT0L9Mijbqa7uvE0JP_zFJ_.hoJ0cqaSzK4DAsp7Ofs1XziH09BhdP1t
- BHBFHT7i87x9Bqv_TBbFS.s1hQGqGSg6ZL5ICkvaPi_8ezPy7ODlIIQZfEQi.7DvGPu_iJ93vKEF
- x7gZgP_MHyxCb_vVF9TzPwwtxz.xUHy6Z_UgwJXQ7TyhBgsQoESjIhjLmUL1Lvv1Bm4Cc9.b2COi
- qOJq54hCE7BZJL.NTZPs2x2UhHVc9k.9AgKcPoNYx8o44kiG0TjOsVmO909_vA1IlKysvAsM57zH
- 8.dXNmCPc5BekoN0JqUeoBwU7YKTQpqWdzwa9zxkB5A3q_0B_SpdldiUHs7u3rZxvnUGgWuPbP3B
- E9OE7PwgDQ9VzoSzihnIyjDK1mj4M90AkEJ5Ib6UW0ShtTeXSvxItMK7Z2gEGuBeN.KzTSY56G8Y
- FBGSHjTT4_N2KxsU6eOG2PbOKERPKakVPbaoyYZWyoXxG_.knS_WpRbsfCfap5TXl2GxIrOYyI5G
- HET0fYoi57Xv2PRqgJ3MxxCoiof4DFwW9ukXJjQeL9R3YCMgW8NQEiJjAR1qoyoerXy8_dBJr0Lh
- iV1_rFHl5cQpS5qvX1DTX.3oMIHjgQM75JMsLmr_LBvWxUVLz.iv1I1TdxDiG7_aXQPNA60tt9jm
- OZdlogNFZTjUJGIJokF4gic5fgc0wYubz0BaJ_hmLTKcUW2__7L0izMpWz9ZSGjBsNH6ZnhJLiqM
- 4AEuRSQagNIJ010LBLSLdwwJ906tvN99MAopS0Ml1M_LXstk9u8OiCytKjkgZ4byvQL4ADvTBf9x
- VVH0GFDiGD_xOoKGEYBa4dVByopGcyOXg4H3QW.Atarw95NEhmmJaVxFEGN6PkPK0YGGgLpLL4gw
- nw5IP3.SQhG32kzZjLaJdIO8yxeGDjUooBbrVVVF.54l0HhfKICpBTmQpjH4XopOMb.2nxlwVoWC
- N.4iyPR9JUPgD_ZIQqbwTHVHHCXr6aKmX1TdYLTyZVjogFzvfPzcLzNRJXHjSbDCSyTkm1kHqcl7
- ZFWmtZ0dLxZ4HJFrbX4fypTp83KbSAXKR8RLyp0u3S7e3IaP4whk10EpRSXKd7gL5gabD_8B2kHz
- Y7J0pbJIWuKLmWTP8jJvkLwJ7cVM_wujseLiRaIhm9zUnTy21S9hYR.sSCpkm7Wu4lpekfhfWiZ2
- Aiv0.wIW6A4GLVGKrUDZzfoLqSGM99NgRmEeZrnYhUVIwVJ2.qDz8qI1wRw5UG.OaFxf0QyqVCUz
- lxg7ofNWh4ZWDnSqsqU96ZBmaNw23DoVQgt8KdCh28T01mV6T0dgTWt7Tb6EdgJVyfint7_fQvd3
- xraLxfjhFTZPKpumjVilnJc9lgymJaF0Q9L9rc8S2.mnxG2I0VRpgdOobmRJdZod2_CfBAfUtgmR
- x.M_oWW61ikabLof2DGErI56IYl8m.WzWt27kp9d2HVa99OQLooz3DWRzOEjYt05.hHNfQn3viti
- VGljsZ370HDApaXcing--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 4a6bcc65-2d47-41bd-934b-81b2ede12e81
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Fri, 10 May 2024 17:11:07 +0000
-Received: by hermes--production-gq1-59c575df44-9fhd5 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ddd4059f127aff04dd8bbec0a94323a9;
-          Fri, 10 May 2024 17:11:02 +0000 (UTC)
-Message-ID: <576d65ff-06c0-4a1d-a6a8-10e416519d95@schaufler-ca.com>
-Date: Fri, 10 May 2024 10:11:00 -0700
+	s=arc-20240116; t=1715361589; c=relaxed/simple;
+	bh=bNj0ojRBVm/kkdrrQey805lWBx+yKHz0xCAEErFAdJM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SiggfLRetVmYqpUZj9YfUawxE68M6rrBBDUGW+UpZcBuSEy6283CD9WGCClPRbN1LLPuu7rJo1G68LiQa09Z2DL11kdau65dSgXGevIZNQkZuh7b78zc7dVbQDeQlRKIZybDM26TNwatkn4Y3h6Ck4vTW/HfEBYO9SR1jyJpsQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ulq7o5IN; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715361586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fUgYr+yRt8wrOQ0a6rn96XtmQprXNpqLn1xtdetBGLU=;
+	b=Ulq7o5INJ85CuaFumZy8jM3+Zxn/gk6h1k+B54Zb1yVJ6Mt0NyWneMO+CPVe85gfShN5Xi
+	AK6sBJBfhMjhLRqkJUAcYWdVFF1nFR5aH7l6LCklhVBmcOwWR766IvLn6Xf8jwpRVzXtH5
+	c9bbHN7dwkcf7DLC2TpZ855F1Q+UhkE=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-575-o6Byob5jN_CG0HnbH9vT6w-1; Fri,
+ 10 May 2024 13:19:36 -0400
+X-MC-Unique: o6Byob5jN_CG0HnbH9vT6w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C924029AA2D7;
+	Fri, 10 May 2024 17:19:35 +0000 (UTC)
+Received: from dcaratti.users.ipa.redhat.com (unknown [10.45.225.109])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A594C200AD5F;
+	Fri, 10 May 2024 17:19:33 +0000 (UTC)
+From: Davide Caratti <dcaratti@redhat.com>
+To: Paul Moore <paul@paul-moore.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Casey Schaufler <casey@schaufler-ca.com>
+Cc: linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Xiumei Mu <xmu@redhat.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>
+Subject: [PATCH net v5] netlabel: fix RCU annotation for IPv4 options on socket creation
+Date: Fri, 10 May 2024 19:19:12 +0200
+Message-ID: <f4260d000a3a55b9e8b6a3b4e3fffc7da9f82d41.1715359817.git.dcaratti@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 5/5] bpf: Only enable BPF LSM hooks when an LSM
- program is attached
-To: KP Singh <kpsingh@kernel.org>, linux-security-module@vger.kernel.org,
- bpf@vger.kernel.org
-Cc: ast@kernel.org, paul@paul-moore.com, andrii@kernel.org,
- keescook@chromium.org, daniel@iogearbox.net, renauld@google.com,
- revest@chromium.org, song@kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20240509201421.905965-1-kpsingh@kernel.org>
- <20240509201421.905965-6-kpsingh@kernel.org>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20240509201421.905965-6-kpsingh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.22321 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-On 5/9/2024 1:14 PM, KP Singh wrote:
-> BPF LSM hooks have side-effects (even when a default value's returned)
-> as some hooks end up behaving differently due to the very presence of
-> the hook.
->
-> The static keys guarding the BPF LSM hooks are disabled by default and
-> enabled only when a BPF program is attached implementing the hook
-> logic. This avoids the issue of the side-effects and also the minor
-> overhead associated with the empty callback.
->
-> security_file_ioctl:
->    0xff...0e30 <+0>:	endbr64
->    0xff...0e34 <+4>:	nopl   0x0(%rax,%rax,1)
->    0xff...0e39 <+9>:	push   %rbp
->    0xff...0e3a <+10>:	push   %r14
->    0xff...0e3c <+12>:	push   %rbx
->    0xff...0e3d <+13>:	mov    %rdx,%rbx
->    0xff...0e40 <+16>:	mov    %esi,%ebp
->    0xff...0e42 <+18>:	mov    %rdi,%r14
->    0xff...0e45 <+21>:	jmp    0xff...0e57 <security_file_ioctl+39>
->    				^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->
->    Static key enabled for SELinux
->
->    0xff...0e47 <+23>:	xchg   %ax,%ax
->    			^^^^^^^^^^^^^^
->
->    Static key disabled for BPF. This gets patched when a BPF LSM
->    program is attached
->
->    0xff...0e49 <+25>:	xor    %eax,%eax
->    0xff...0e4b <+27>:	xchg   %ax,%ax
->    0xff...0e4d <+29>:	pop    %rbx
->    0xff...0e4e <+30>:	pop    %r14
->    0xff...0e50 <+32>:	pop    %rbp
->    0xff...0e51 <+33>:	cs jmp 0xff...0000 <__x86_return_thunk>
->    0xff...0e57 <+39>:	endbr64
->    0xff...0e5b <+43>:	mov    %r14,%rdi
->    0xff...0e5e <+46>:	mov    %ebp,%esi
->    0xff...0e60 <+48>:	mov    %rbx,%rdx
->    0xff...0e63 <+51>:	call   0xff...33c0 <selinux_file_ioctl>
->    0xff...0e68 <+56>:	test   %eax,%eax
->    0xff...0e6a <+58>:	jne    0xff...0e4d <security_file_ioctl+29>
->    0xff...0e6c <+60>:	jmp    0xff...0e47 <security_file_ioctl+23>
->    0xff...0e6e <+62>:	endbr64
->    0xff...0e72 <+66>:	mov    %r14,%rdi
->    0xff...0e75 <+69>:	mov    %ebp,%esi
->    0xff...0e77 <+71>:	mov    %rbx,%rdx
->    0xff...0e7a <+74>:	call   0xff...e3b0 <bpf_lsm_file_ioctl>
->    0xff...0e7f <+79>:	test   %eax,%eax
->    0xff...0e81 <+81>:	jne    0xff...0e4d <security_file_ioctl+29>
->    0xff...0e83 <+83>:	jmp    0xff...0e49 <security_file_ioctl+25>
->    0xff...0e85 <+85>:	endbr64
->    0xff...0e89 <+89>:	mov    %r14,%rdi
->    0xff...0e8c <+92>:	mov    %ebp,%esi
->    0xff...0e8e <+94>:	mov    %rbx,%rdx
->    0xff...0e91 <+97>:	pop    %rbx
->    0xff...0e92 <+98>:	pop    %r14
->    0xff...0e94 <+100>:	pop    %rbp
->    0xff...0e95 <+101>:	ret
->
-> This patch enables this by providing a LSM_HOOK_INIT_TOGGLEABLE
-> variant which allows the LSMs to opt-in to toggleable hooks which can
-> be toggled on/off with security_toogle_hook.
->
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
+Xiumei reports the following splat when netlabel and TCP socket are used:
 
-I know that there's still some bikeshedding to deal with, but
-I don't see that significantly affecting the behavior.
+ =============================
+ WARNING: suspicious RCU usage
+ 6.9.0-rc2+ #637 Not tainted
+ -----------------------------
+ net/ipv4/cipso_ipv4.c:1880 suspicious rcu_dereference_protected() usage!
 
-Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+ other info that might help us debug this:
 
-> ---
->  include/linux/lsm_hooks.h | 30 ++++++++++++++++++++++++++++-
->  kernel/bpf/trampoline.c   | 40 +++++++++++++++++++++++++++++++++++----
->  security/bpf/hooks.c      |  2 +-
->  security/security.c       | 37 +++++++++++++++++++++++++++++++++++-
->  4 files changed, 102 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 5db244308c92..5c0918ed6b80 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -110,11 +110,14 @@ struct lsm_id {
->   * @scalls: The beginning of the array of static calls assigned to this hook.
->   * @hook: The callback for the hook.
->   * @lsm: The name of the lsm that owns this hook.
-> + * @default_state: The state of the LSM hook when initialized. If set to false,
-> + * the static key guarding the hook will be set to disabled.
->   */
->  struct security_hook_list {
->  	struct lsm_static_call	*scalls;
->  	union security_list_options	hook;
->  	const struct lsm_id		*lsmid;
-> +	bool				toggleable;
->  } __randomize_layout;
->  
->  /*
-> @@ -164,7 +167,19 @@ static inline struct xattr *lsm_get_xattr_slot(struct xattr *xattrs,
->  #define LSM_HOOK_INIT(NAME, HOOK)			\
->  	{						\
->  		.scalls = static_calls_table.NAME,	\
-> -		.hook = { .NAME = HOOK }		\
-> +		.hook = { .NAME = HOOK },		\
-> +		.toggleable = false			\
-> +	}
-> +
-> +/*
-> + * Toggleable LSM hooks are enabled at runtime with
-> + * security_toggle_hook and are initialized as inactive.
-> + */
-> +#define LSM_HOOK_INIT_TOGGLEABLE(NAME, HOOK)		\
-> +	{						\
-> +		.scalls = static_calls_table.NAME,	\
-> +		.hook = { .NAME = HOOK },		\
-> +		.toggleable = true			\
->  	}
->  
->  extern char *lsm_names;
-> @@ -206,4 +221,17 @@ extern struct lsm_info __start_early_lsm_info[], __end_early_lsm_info[];
->  extern int lsm_inode_alloc(struct inode *inode);
->  extern struct lsm_static_calls_table static_calls_table __ro_after_init;
->  
-> +#ifdef CONFIG_SECURITY
-> +
-> +int security_toggle_hook(void *addr, bool value);
-> +
-> +#else
-> +
-> +static inline int security_toggle_hook(void *addr, bool value)
-> +{
-> +	return -EINVAL;
-> +}
-> +
-> +#endif /* CONFIG_SECURITY */
-> +
->  #endif /* ! __LINUX_LSM_HOOKS_H */
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index db7599c59c78..5758c5681023 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -521,6 +521,21 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
->  	}
->  }
->  
-> +static int bpf_trampoline_toggle_lsm(struct bpf_trampoline *tr,
-> +				      enum bpf_tramp_prog_type kind)
-> +{
-> +	struct bpf_tramp_link *link;
-> +	bool found = false;
-> +
-> +	hlist_for_each_entry(link, &tr->progs_hlist[kind], tramp_hlist) {
-> +		if (link->link.prog->type == BPF_PROG_TYPE_LSM) {
-> +			found  = true;
-> +			break;
-> +		}
-> +	}
-> +	return security_toggle_hook(tr->func.addr, found);
-> +}
-> +
->  static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
->  {
->  	enum bpf_tramp_prog_type kind;
-> @@ -560,11 +575,22 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
->  
->  	hlist_add_head(&link->tramp_hlist, &tr->progs_hlist[kind]);
->  	tr->progs_cnt[kind]++;
-> -	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
-> -	if (err) {
-> -		hlist_del_init(&link->tramp_hlist);
-> -		tr->progs_cnt[kind]--;
-> +
-> +	if (link->link.prog->type == BPF_PROG_TYPE_LSM) {
-> +		err = bpf_trampoline_toggle_lsm(tr, kind);
-> +		if (err)
-> +			goto cleanup;
->  	}
-> +
-> +	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
-> +	if (err)
-> +		goto cleanup;
-> +
-> +	return 0;
-> +
-> +cleanup:
-> +	hlist_del_init(&link->tramp_hlist);
-> +	tr->progs_cnt[kind]--;
->  	return err;
->  }
->  
-> @@ -593,6 +619,12 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_
->  	}
->  	hlist_del_init(&link->tramp_hlist);
->  	tr->progs_cnt[kind]--;
-> +
-> +	if (link->link.prog->type == BPF_PROG_TYPE_LSM) {
-> +		err = bpf_trampoline_toggle_lsm(tr, kind);
-> +		WARN(err, "BUG: unable to toggle BPF LSM hook");
-> +	}
-> +
->  	return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
->  }
->  
-> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
-> index 57b9ffd53c98..ba1c3a19fb12 100644
-> --- a/security/bpf/hooks.c
-> +++ b/security/bpf/hooks.c
-> @@ -9,7 +9,7 @@
->  
->  static struct security_hook_list bpf_lsm_hooks[] __ro_after_init = {
->  	#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-> -	LSM_HOOK_INIT(NAME, bpf_lsm_##NAME),
-> +	LSM_HOOK_INIT_TOGGLEABLE(NAME, bpf_lsm_##NAME),
->  	#include <linux/lsm_hook_defs.h>
->  	#undef LSM_HOOK
->  	LSM_HOOK_INIT(inode_free_security, bpf_inode_storage_free),
-> diff --git a/security/security.c b/security/security.c
-> index 491b807a8a63..a89eb8fe302b 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -407,7 +407,9 @@ static void __init lsm_static_call_init(struct security_hook_list *hl)
->  			__static_call_update(scall->key, scall->trampoline,
->  					     hl->hook.lsm_func_addr);
->  			scall->hl = hl;
-> -			static_branch_enable(scall->active);
-> +			/* Toggleable hooks are inactive by default */
-> +			if (!hl->toggleable)
-> +				static_branch_enable(scall->active);
->  			return;
->  		}
->  		scall++;
-> @@ -885,6 +887,39 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uctx, u32 *uctx_len,
->  	return rc;
->  }
->  
-> +/**
-> + * security_toggle_hook - Toggle the state of the LSM hook.
-> + * @hook_addr: The address of the hook to be toggled.
-> + * @state: Whether to enable for disable the hook.
-> + *
-> + * Returns 0 on success, -EINVAL if the address is not found.
-> + */
-> +int security_toggle_hook(void *hook_addr, bool state)
-> +{
-> +	struct lsm_static_call *scalls = ((void *)&static_calls_table);
-> +	unsigned long num_entries =
-> +		(sizeof(static_calls_table) / sizeof(struct lsm_static_call));
-> +	int i;
-> +
-> +	for (i = 0; i < num_entries; i++) {
-> +		if (!scalls[i].hl->toggleable)
-> +			continue;
-> +
-> +		if (!scalls[i].hl)
-> +			continue;
-> +
-> +		if (scalls[i].hl->hook.lsm_func_addr != hook_addr)
-> +			continue;
-> +
-> +		if (state)
-> +			static_branch_enable(scalls[i].active);
-> +		else
-> +			static_branch_disable(scalls[i].active);
-> +		return 0;
-> +	}
-> +	return -EINVAL;
-> +}
-> +
->  /*
->   * The default value of the LSM hook is defined in linux/lsm_hook_defs.h and
->   * can be accessed with:
+ rcu_scheduler_active = 2, debug_locks = 1
+ 1 lock held by ncat/23333:
+  #0: ffffffff906030c0 (rcu_read_lock){....}-{1:2}, at: netlbl_sock_setattr+0x25/0x1b0
+
+ stack backtrace:
+ CPU: 11 PID: 23333 Comm: ncat Kdump: loaded Not tainted 6.9.0-rc2+ #637
+ Hardware name: Supermicro SYS-6027R-72RF/X9DRH-7TF/7F/iTF/iF, BIOS 3.0  07/26/2013
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0xa9/0xc0
+  lockdep_rcu_suspicious+0x117/0x190
+  cipso_v4_sock_setattr+0x1ab/0x1b0
+  netlbl_sock_setattr+0x13e/0x1b0
+  selinux_netlbl_socket_post_create+0x3f/0x80
+  selinux_socket_post_create+0x1a0/0x460
+  security_socket_post_create+0x42/0x60
+  __sock_create+0x342/0x3a0
+  __sys_socket_create.part.22+0x42/0x70
+  __sys_socket+0x37/0xb0
+  __x64_sys_socket+0x16/0x20
+  do_syscall_64+0x96/0x180
+  ? do_user_addr_fault+0x68d/0xa30
+  ? exc_page_fault+0x171/0x280
+  ? asm_exc_page_fault+0x22/0x30
+  entry_SYSCALL_64_after_hwframe+0x71/0x79
+ RIP: 0033:0x7fbc0ca3fc1b
+ Code: 73 01 c3 48 8b 0d 05 f2 1b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 29 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d d5 f1 1b 00 f7 d8 64 89 01 48
+ RSP: 002b:00007fff18635208 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
+ RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fbc0ca3fc1b
+ RDX: 0000000000000006 RSI: 0000000000000001 RDI: 0000000000000002
+ RBP: 000055d24f80f8a0 R08: 0000000000000003 R09: 0000000000000001
+
+R10: 0000000000020000 R11: 0000000000000246 R12: 000055d24f80f8a0
+ R13: 0000000000000000 R14: 000055d24f80fb88 R15: 0000000000000000
+  </TASK>
+
+The current implementation of cipso_v4_sock_setattr() replaces IP options
+under the assumption that the caller holds the socket lock; however, such
+assumption is not true, nor needed, in selinux_socket_post_create() hook.
+
+Let all callers of cipso_v4_sock_setattr() specify the "socket lock held"
+condition, except selinux_socket_post_create() _ where such condition can
+safely be set as true even without holding the socket lock.
+
+v5:
+ - fix kernel-doc
+ - adjust #idfefs around prototype of netlbl_sk_lock_check() (thanks Paul Moore)
+
+v4:
+ - fix build when CONFIG_LOCKDEP is unset (thanks kernel test robot)
+
+v3:
+ - rename variable to 'sk_locked' (thanks Paul Moore)
+ - keep rcu_replace_pointer() open-coded and re-add NULL check of 'old',
+   these two changes will be posted in another patch (thanks Paul Moore)
+
+v2:
+ - pass lockdep_sock_is_held() through a boolean variable in the stack
+   (thanks Eric Dumazet, Paul Moore, Casey Schaufler)
+ - use rcu_replace_pointer() instead of rcu_dereference_protected() +
+   rcu_assign_pointer()
+ - remove NULL check of 'old' before kfree_rcu()
+
+Fixes: f6d8bd051c39 ("inet: add RCU protection to inet->opt")
+Reported-by: Xiumei Mu <xmu@redhat.com>
+Acked-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Davide Caratti <dcaratti@redhat.com>
+---
+ include/net/cipso_ipv4.h     |  6 ++++--
+ include/net/netlabel.h       | 12 ++++++++++--
+ net/ipv4/cipso_ipv4.c        |  7 ++++---
+ net/netlabel/netlabel_kapi.c | 31 ++++++++++++++++++++++++++++---
+ security/selinux/netlabel.c  |  5 ++++-
+ security/smack/smack_lsm.c   |  3 ++-
+ 6 files changed, 52 insertions(+), 12 deletions(-)
+
+diff --git a/include/net/cipso_ipv4.h b/include/net/cipso_ipv4.h
+index 53dd7d988a2d..c9111bb2f59b 100644
+--- a/include/net/cipso_ipv4.h
++++ b/include/net/cipso_ipv4.h
+@@ -183,7 +183,8 @@ int cipso_v4_getattr(const unsigned char *cipso,
+ 		     struct netlbl_lsm_secattr *secattr);
+ int cipso_v4_sock_setattr(struct sock *sk,
+ 			  const struct cipso_v4_doi *doi_def,
+-			  const struct netlbl_lsm_secattr *secattr);
++			  const struct netlbl_lsm_secattr *secattr,
++			  bool sk_locked);
+ void cipso_v4_sock_delattr(struct sock *sk);
+ int cipso_v4_sock_getattr(struct sock *sk, struct netlbl_lsm_secattr *secattr);
+ int cipso_v4_req_setattr(struct request_sock *req,
+@@ -214,7 +215,8 @@ static inline int cipso_v4_getattr(const unsigned char *cipso,
+ 
+ static inline int cipso_v4_sock_setattr(struct sock *sk,
+ 				      const struct cipso_v4_doi *doi_def,
+-				      const struct netlbl_lsm_secattr *secattr)
++				      const struct netlbl_lsm_secattr *secattr,
++				      bool sk_locked)
+ {
+ 	return -ENOSYS;
+ }
+diff --git a/include/net/netlabel.h b/include/net/netlabel.h
+index f3ab0b8a4b18..2133ad723fc1 100644
+--- a/include/net/netlabel.h
++++ b/include/net/netlabel.h
+@@ -470,7 +470,8 @@ void netlbl_bitmap_setbit(unsigned char *bitmap, u32 bit, u8 state);
+ int netlbl_enabled(void);
+ int netlbl_sock_setattr(struct sock *sk,
+ 			u16 family,
+-			const struct netlbl_lsm_secattr *secattr);
++			const struct netlbl_lsm_secattr *secattr,
++			bool sk_locked);
+ void netlbl_sock_delattr(struct sock *sk);
+ int netlbl_sock_getattr(struct sock *sk,
+ 			struct netlbl_lsm_secattr *secattr);
+@@ -487,6 +488,7 @@ int netlbl_skbuff_getattr(const struct sk_buff *skb,
+ 			  u16 family,
+ 			  struct netlbl_lsm_secattr *secattr);
+ void netlbl_skbuff_err(struct sk_buff *skb, u16 family, int error, int gateway);
++bool netlbl_sk_lock_check(struct sock *sk);
+ 
+ /*
+  * LSM label mapping cache operations
+@@ -614,7 +616,8 @@ static inline int netlbl_enabled(void)
+ }
+ static inline int netlbl_sock_setattr(struct sock *sk,
+ 				      u16 family,
+-				      const struct netlbl_lsm_secattr *secattr)
++				      const struct netlbl_lsm_secattr *secattr,
++				      bool sk_locked)
+ {
+ 	return -ENOSYS;
+ }
+@@ -673,6 +676,11 @@ static inline struct audit_buffer *netlbl_audit_start(int type,
+ {
+ 	return NULL;
+ }
++
++static inline bool netlbl_sk_lock_check(struct sock *sk)
++{
++	return true;
++}
+ #endif /* CONFIG_NETLABEL */
+ 
+ const struct netlbl_calipso_ops *
+diff --git a/net/ipv4/cipso_ipv4.c b/net/ipv4/cipso_ipv4.c
+index 8b17d83e5fde..dd6d46015058 100644
+--- a/net/ipv4/cipso_ipv4.c
++++ b/net/ipv4/cipso_ipv4.c
+@@ -1815,6 +1815,7 @@ static int cipso_v4_genopt(unsigned char *buf, u32 buf_len,
+  * @sk: the socket
+  * @doi_def: the CIPSO DOI to use
+  * @secattr: the specific security attributes of the socket
++ * @sk_locked: true if caller holds the socket lock
+  *
+  * Description:
+  * Set the CIPSO option on the given socket using the DOI definition and
+@@ -1826,7 +1827,8 @@ static int cipso_v4_genopt(unsigned char *buf, u32 buf_len,
+  */
+ int cipso_v4_sock_setattr(struct sock *sk,
+ 			  const struct cipso_v4_doi *doi_def,
+-			  const struct netlbl_lsm_secattr *secattr)
++			  const struct netlbl_lsm_secattr *secattr,
++			  bool sk_locked)
+ {
+ 	int ret_val = -EPERM;
+ 	unsigned char *buf = NULL;
+@@ -1876,8 +1878,7 @@ int cipso_v4_sock_setattr(struct sock *sk,
+ 
+ 	sk_inet = inet_sk(sk);
+ 
+-	old = rcu_dereference_protected(sk_inet->inet_opt,
+-					lockdep_sock_is_held(sk));
++	old = rcu_dereference_protected(sk_inet->inet_opt, sk_locked);
+ 	if (inet_test_bit(IS_ICSK, sk)) {
+ 		sk_conn = inet_csk(sk);
+ 		if (old)
+diff --git a/net/netlabel/netlabel_kapi.c b/net/netlabel/netlabel_kapi.c
+index 1ba4f58e1d35..cd9160bbc919 100644
+--- a/net/netlabel/netlabel_kapi.c
++++ b/net/netlabel/netlabel_kapi.c
+@@ -965,6 +965,7 @@ int netlbl_enabled(void)
+  * @sk: the socket to label
+  * @family: protocol family
+  * @secattr: the security attributes
++ * @sk_locked: true if caller holds the socket lock
+  *
+  * Description:
+  * Attach the correct label to the given socket using the security attributes
+@@ -977,7 +978,8 @@ int netlbl_enabled(void)
+  */
+ int netlbl_sock_setattr(struct sock *sk,
+ 			u16 family,
+-			const struct netlbl_lsm_secattr *secattr)
++			const struct netlbl_lsm_secattr *secattr,
++			bool sk_locked)
+ {
+ 	int ret_val;
+ 	struct netlbl_dom_map *dom_entry;
+@@ -997,7 +999,7 @@ int netlbl_sock_setattr(struct sock *sk,
+ 		case NETLBL_NLTYPE_CIPSOV4:
+ 			ret_val = cipso_v4_sock_setattr(sk,
+ 							dom_entry->def.cipso,
+-							secattr);
++							secattr, sk_locked);
+ 			break;
+ 		case NETLBL_NLTYPE_UNLABELED:
+ 			ret_val = 0;
+@@ -1090,6 +1092,28 @@ int netlbl_sock_getattr(struct sock *sk,
+ 	return ret_val;
+ }
+ 
++/**
++ * netlbl_sk_lock_check - Check if the socket lock has been acquired.
++ * @sk: the socket to be checked
++ *
++ * Return: true if socket @sk is locked or if lock debugging is disabled at
++ * runtime or compile-time; false otherwise
++ *
++ */
++#ifdef CONFIG_LOCKDEP
++bool netlbl_sk_lock_check(struct sock *sk)
++{
++	if (debug_locks)
++		return lockdep_sock_is_held(sk);
++	return true;
++}
++#else
++bool netlbl_sk_lock_check(struct sock *sk)
++{
++	return true;
++}
++#endif
++
+ /**
+  * netlbl_conn_setattr - Label a connected socket using the correct protocol
+  * @sk: the socket to label
+@@ -1126,7 +1150,8 @@ int netlbl_conn_setattr(struct sock *sk,
+ 		switch (entry->type) {
+ 		case NETLBL_NLTYPE_CIPSOV4:
+ 			ret_val = cipso_v4_sock_setattr(sk,
+-							entry->cipso, secattr);
++							entry->cipso, secattr,
++							netlbl_sk_lock_check(sk));
+ 			break;
+ 		case NETLBL_NLTYPE_UNLABELED:
+ 			/* just delete the protocols we support for right now
+diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
+index 8f182800e412..55885634e880 100644
+--- a/security/selinux/netlabel.c
++++ b/security/selinux/netlabel.c
+@@ -402,7 +402,10 @@ int selinux_netlbl_socket_post_create(struct sock *sk, u16 family)
+ 	secattr = selinux_netlbl_sock_genattr(sk);
+ 	if (secattr == NULL)
+ 		return -ENOMEM;
+-	rc = netlbl_sock_setattr(sk, family, secattr);
++	/* On socket creation, replacement of IP options is safe even if
++	 * the caller does not hold the socket lock.
++	 */
++	rc = netlbl_sock_setattr(sk, family, secattr, true);
+ 	switch (rc) {
+ 	case 0:
+ 		sksec->nlbl_state = NLBL_LABELED;
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index 146667937811..efeac8365ad0 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -2565,7 +2565,8 @@ static int smack_netlbl_add(struct sock *sk)
+ 	local_bh_disable();
+ 	bh_lock_sock_nested(sk);
+ 
+-	rc = netlbl_sock_setattr(sk, sk->sk_family, &skp->smk_netlabel);
++	rc = netlbl_sock_setattr(sk, sk->sk_family, &skp->smk_netlabel,
++				 netlbl_sk_lock_check(sk));
+ 	switch (rc) {
+ 	case 0:
+ 		ssp->smk_state = SMK_NETLBL_LABELED;
+-- 
+2.44.0
+
 
