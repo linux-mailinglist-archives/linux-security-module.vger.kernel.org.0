@@ -1,129 +1,125 @@
-Return-Path: <linux-security-module+bounces-3211-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3213-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 460A98C55F6
-	for <lists+linux-security-module@lfdr.de>; Tue, 14 May 2024 14:24:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ABD38C5BCF
+	for <lists+linux-security-module@lfdr.de>; Tue, 14 May 2024 21:50:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77B1D1C22235
-	for <lists+linux-security-module@lfdr.de>; Tue, 14 May 2024 12:24:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C93D01F22C4C
+	for <lists+linux-security-module@lfdr.de>; Tue, 14 May 2024 19:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92FEDDC0;
-	Tue, 14 May 2024 12:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF5918132D;
+	Tue, 14 May 2024 19:50:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="HUYIhJQS"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="JF+Zbwi4"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37695103D;
-	Tue, 14 May 2024 12:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77B318131E
+	for <linux-security-module@vger.kernel.org>; Tue, 14 May 2024 19:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715689436; cv=none; b=V57XBzYwnEttLoCntFnQhXPtLTBLunhR2Hls+qm5IpfRCbKjAIX7AFxWzW0aju6vdxa7CMPA2x6v88jL8YC/Qv+4nRR3u8YgdP/Z7ujihI6IejbaGx7T2UxCNedHkAnR1AB8Yvt0Vo7741sLvtEdxGOj/nSGvfXaQ7ErqSMXux0=
+	t=1715716223; cv=none; b=U/wlW5vtQQQnPPru5q6pQ51mBQi/u6fT+Wu9LpsZbhDQYf7eHPcsdC4WYhe4EHEt8Yml/BwVUWmhxXb0gaZNtpfdRF+zVHYGpFV7ol7cZLw40tdJQOpVIt0WGvuBBsIzWxXh+4PmV+aU+NjKe1dEWvPTpX1sQs1dEw5UVr4X6ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715689436; c=relaxed/simple;
-	bh=bRkarWPZPXCcGNKnN/GFmEsDu3L8Us8oWBdG536diIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NsZFg4BAI/gfXxhrWwBreOP+dQrbX9EB4u63TIJGzvfCLbHRAbyOu+NiP8pVDZxiTT6yxLuC8aaEf42HCad4QrvVG95063WTLfDW+h7B6qYPu7+facWPpt8LSMrkPFD2o4tFS4DS0UjewnGQQW5/3ZhQ3+yNYxiEopveCyx9TgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=HUYIhJQS; arc=none smtp.client-ip=84.16.66.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4VdwWP64pbzTXk;
-	Tue, 14 May 2024 14:23:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1715689425;
-	bh=I0eZWdP4Q+KPu4Hx3s3mpwHuoQ0UvkeO9/nafOAr82w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HUYIhJQSGxJF3jwUizanlmonUX7sygOvcV8noUaAFzN0V3a3iKwuGB8/GEum6Clxq
-	 EcKo1qBH3Un5VS8jWoGkoTi3TiKlCjIcaIL1kB+8poVzqExKvp5IQ2ywDDPeKqlugY
-	 OVZlyAPCKt5gtA5k6143lcqKUer3NgtqPGvwYp+A=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4VdwWN5tzlzF2L;
-	Tue, 14 May 2024 14:23:44 +0200 (CEST)
-Date: Tue, 14 May 2024 14:23:42 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Nicolas Saenz Julienne <nsaenz@amazon.com>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
-	Kees Cook <keescook@chromium.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Wanpeng Li <wanpengli@tencent.com>, Rick P Edgecombe <rick.p.edgecombe@intel.com>, 
-	Alexander Graf <graf@amazon.com>, Angelina Vu <angelinavu@linux.microsoft.com>, 
-	Anna Trikalinou <atrikalinou@microsoft.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Forrest Yuan Yu <yuanyu@google.com>, James Gowans <jgowans@amazon.com>, 
-	James Morris <jamorris@linux.microsoft.com>, John Andersen <john.s.andersen@intel.com>, 
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Marian Rotariu <marian.c.rotariu@gmail.com>, 
-	Mihai =?utf-8?B?RG9uyJt1?= <mdontu@bitdefender.com>, =?utf-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>, 
-	Thara Gopinath <tgopinath@microsoft.com>, Trilok Soni <quic_tsoni@quicinc.com>, 
-	Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>, 
-	Yu Zhang <yu.c.zhang@linux.intel.com>, =?utf-8?Q?=C8=98tefan_=C8=98icleru?= <ssicleru@bitdefender.com>, 
-	dev@lists.cloudhypervisor.org, kvm@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, qemu-devel@nongnu.org, virtualization@lists.linux-foundation.org, 
-	x86@kernel.org, xen-devel@lists.xenproject.org
-Subject: Re: [RFC PATCH v3 3/5] KVM: x86: Add notifications for Heki policy
- configuration and violation
-Message-ID: <20240514.mai3Ahdoo2qu@digikod.net>
-References: <20240503131910.307630-1-mic@digikod.net>
- <20240503131910.307630-4-mic@digikod.net>
- <ZjTuqV-AxQQRWwUW@google.com>
- <20240506.ohwe7eewu0oB@digikod.net>
- <ZjmFPZd5q_hEBdBz@google.com>
- <20240507.ieghomae0UoC@digikod.net>
- <ZjpTxt-Bxia3bRwB@google.com>
- <D15VQ97L5M8J.1TDNQE6KLW6JO@amazon.com>
+	s=arc-20240116; t=1715716223; c=relaxed/simple;
+	bh=xCGobSiEZZKVIGvtlb17VkXzrJav2cpynpYO5pxHsTg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jY7+YcrEigRexTOkQbNiWzM35hjTSsEUL5LpaO5BrjqKcu/xkYWGMk7z8+i58nykC8Tml0vUbfLYb+wpeK9RcKCpckpMkSgczrJZjk8tZkVwaOfG3sdRxwdl9P+6OHRxXXLP8pc6n2MF3h2OhNS+WYVPf88/jJdhkdEBYKHcx9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=JF+Zbwi4; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-de4665b4969so6196339276.2
+        for <linux-security-module@vger.kernel.org>; Tue, 14 May 2024 12:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1715716220; x=1716321020; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lkp4I1/EP34xCsXz894jXcfOHu9Xc+3+8P13l0GVrxE=;
+        b=JF+Zbwi4A37UVjOELqyuSxI5XF16PnHoy/clBUi83jiG+YRodmecFW52qZKz4Kq726
+         4PTOrHIBMXKsd7NPB6GCHO6oGJCvxjHHJaMw38WnlU+B/cm4WbJETzVMZ2TafdoTfo4X
+         rBPSV09s7/igRv/0AE1D7RnilAUdFI2LXQQWFeHNyDVUgFRiRFPHAJLU+iEB4N2/widJ
+         cASIqHwqPxifXEwwXws+q0QEDlDblFWXqGYAXJmXfXw3VXV1KCegxMxVhRx0XCksA/sB
+         1VxkK02/WpwjROj2m5sVqBTGjVDYmmzXsDovMQ2t1pd4IrqPTv+jT8xruRy07h+w1pWB
+         IsxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715716220; x=1716321020;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lkp4I1/EP34xCsXz894jXcfOHu9Xc+3+8P13l0GVrxE=;
+        b=mDsc4NFrAEFTYvRttWzJPTZZdvpon/IzZUgB9qe0XO/vL6A+7UkvHyH25YEpg8BpyY
+         Vsp9tVrSy74yhwo8cR9pNIw4F3aZbyi9djnA/Qa3niS3+zCsLD9STcJMcvqmjVKDTNEX
+         JQrdpcB+/sJLg3wp2mcjUFXLkhYU+3mn0j5OLIOvpVxACAihUbjPyKlu9KedlDQ3vaHJ
+         Gv4W0ZL6BOzw4JCyeBx/CWp7qk+6zvlFgdACNkvifpIGieUSlrAg5RpCaq6R2W0O2LBk
+         EZKH5JSGCfK0+97gkBgnLlbZf+S4s2oNyms/g1wbWRD7PY1ER81/M7GMEAiegdZIt5o5
+         uhrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVwm3wQ/o5YDQTkX7vVRCd4PzjLTuq2ogZb8pvOvBavJZud2Exp9jhNKXongDWKw/d7mQbjJU6zdlbSLJmwfn+9aBfDQrZytDHvFzMrDJufxFUcZA82
+X-Gm-Message-State: AOJu0Yx76DOOBi2KWnbVeUEZ6mKvTiyJI8kxk9/AjVhTsrAHRdi2qKbS
+	LvGimHg5QXNlsyqvjRVfyqL3yRioYLZlKs5/gQd65D3yKpNYhaNMx6NeUcjDvx85OuDvlGb8Y1a
+	utiPnreEwkxoxu92/y1PvDIUjw3J/PwcSDDa8
+X-Google-Smtp-Source: AGHT+IFWIy5UA2F/+z955H9aT1kkILcAstR0rQ1Z6k7ELYYSk3poMncJ+M812qPYw6M0u0TMB7AFkJo/BviRvM2KHkE=
+X-Received: by 2002:a05:6902:218f:b0:dee:8da8:aeb7 with SMTP id
+ 3f1490d57ef6-dee8da8b092mr8719461276.25.1715716220678; Tue, 14 May 2024
+ 12:50:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <D15VQ97L5M8J.1TDNQE6KLW6JO@amazon.com>
-X-Infomaniak-Routing: alpha
+References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com>
+ <1714775551-22384-21-git-send-email-wufan@linux.microsoft.com>
+ <ZjXsBjAFs-qp9xY4@archie.me> <ab7054cd-affd-47c3-bd98-2cf47d6a6376@linux.microsoft.com>
+In-Reply-To: <ab7054cd-affd-47c3-bd98-2cf47d6a6376@linux.microsoft.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 14 May 2024 15:50:09 -0400
+Message-ID: <CAHC9VhQewDL4cWXSiAgzvrHa8N5rd6TbhSCM3jRp29=Kmr3m-Q@mail.gmail.com>
+Subject: Re: [PATCH v18 20/21] Documentation: add ipe documentation
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>, corbet@lwn.net, zohar@linux.ibm.com, 
+	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, 
+	axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com, 
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 10, 2024 at 10:07:00AM +0000, Nicolas Saenz Julienne wrote:
-> On Tue May 7, 2024 at 4:16 PM UTC, Sean Christopherson wrote:
-> > > If yes, that would indeed require a *lot* of work for something we're not
-> > > sure will be accepted later on.
+On Sat, May 4, 2024 at 4:13=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
+rote:
+> On 5/4/2024 1:04 AM, Bagas Sanjaya wrote:
+> > On Fri, May 03, 2024 at 03:32:30PM -0700, Fan Wu wrote:
+> >> +IPE does not mitigate threats arising from malicious but authorized
+> >> +developers (with access to a signing certificate), or compromised
+> >> +developer tools used by them (i.e. return-oriented programming attack=
+s).
+> >> +Additionally, IPE draws hard security boundary between userspace and
+> >> +kernelspace. As a result, IPE does not provide any protections agains=
+t a
+> >> +kernel level exploit, and a kernel-level exploit can disable or tampe=
+r
+> >> +with IPE's protections.
 > >
-> > Yes and no.  The AWS folks are pursuing VSM support in KVM+QEMU, and SVSM support
-> > is trending toward the paired VM+vCPU model.  IMO, it's entirely feasible to
-> > design KVM support such that much of the development load can be shared between
-> > the projects.  And having 2+ use cases for a feature (set) makes it _much_ more
-> > likely that the feature(s) will be accepted.
-> 
-> Since Sean mentioned our VSM efforts, a small update. We were able to
-> validate the concept of one KVM VM per VTL as discussed in LPC. Right
-> now only for single CPU guests, but are in the late stages of bringing
-> up MP support. The resulting KVM code is small, and most will be
-> uncontroversial (I hope). If other obligations allow it, we plan on
-> having something suitable for review in the coming months.
+> > So how to mitigate kernel-level exploits then?
+>
+> One possible way is to use hypervisor to protect the kernel integrity.
+> https://github.com/heki-linux is one project on this direction. Perhaps
+> I should also add this link to the doc.
 
-Looks good!
+I wouldn't spend a lot of time on kernel exploits in the IPE
+documentation as it is out of scope for IPE.  In face, I would say
+just that in the last sentence in the paragraph above:
 
-> 
-> Our implementation aims to implement all the VSM spec necessary to run
-> with Microsoft Credential Guard. But note that some aspects necessary
-> for HVCI are not covered, especially the ones that depend on MBEC
-> support, or some categories of secure intercepts.
+"As a result, kernel-level exploits are considered outside the scope
+of IPE and mitigation is left to other mechanisms."
 
-We already implemented support for MBEC, so that should not be an issue.
-We just need to find the best interface to configure it.
+(or something similar)
 
-> 
-> Development happens
-> https://github.com/vianpl/{linux,qemu,kvm-unit-tests} and the vsm-next
-> branch, but I'd advice against looking into it until we add some order
-> to the rework. Regardless, feel free to get in touch.
-
-Thanks for the update.
-
-Could we schedule a PUCK meeting to synchronize and help each other?
-What about June 12?
+--=20
+paul-moore.com
 
