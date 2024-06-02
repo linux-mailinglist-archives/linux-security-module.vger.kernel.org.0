@@ -1,70 +1,76 @@
-Return-Path: <linux-security-module+bounces-3640-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3642-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2C288D7770
-	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2024 20:23:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88D718D77BC
+	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2024 22:11:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B5191C209C8
-	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2024 18:23:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40C292814D0
+	for <lists+linux-security-module@lfdr.de>; Sun,  2 Jun 2024 20:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F61060BBE;
-	Sun,  2 Jun 2024 18:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8745074432;
+	Sun,  2 Jun 2024 20:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZfxwuwT"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="TF/kv0wr"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04C739FDD;
-	Sun,  2 Jun 2024 18:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5B26DD08
+	for <linux-security-module@vger.kernel.org>; Sun,  2 Jun 2024 20:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717352612; cv=none; b=YsKjQ2a4CHLLV38k6VmLzLedGlmJNVeQ/Ne/QVTW4obL4s4ogmkkhm5pj653s4GmANi8qV3/Ga4VOkHgrKRm/0uywrtxPdyxpV6hVCzs4bCJ/L/v7EeSp6MuZWJC/s8OtVpx+DaDZUwsLUa8sJYmzofy4fBDJ413CYyj7SzXAmA=
+	t=1717359089; cv=none; b=aaEQRhEeca34x814LSasvnpjgjTPzzSqOXI7LhmAiHqfl76u/SskNhNhwGkZ08rHY9YcvyA/8xYVysNJPVAh8HPqvj/bEMn8BHpUsyFxiB69rqgYmb8YWfdKZCDXlsg7jDzaHFa5o1ejpQumhwAampHrZcC4R5soALQ6W5Dc9h4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717352612; c=relaxed/simple;
-	bh=EjC02BhhSxaLN8L0b3nopo1EYeiw9c1TftvPeiVpOCI=;
+	s=arc-20240116; t=1717359089; c=relaxed/simple;
+	bh=pPpQRofU4aUuWzH8F/QKbmIvQmhWX6HwGWlPQg5XjJs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F0LlAsKe2rThSr5Zav+rDYzut7CAASRsxKLNDmOdXjK5cBOXJGSScvFQo37rMYAa2zPFsApBgoiekI00NpxRS8ZICqUj34aEC9tkfxO2fq7A/GIFBA3SZQ2nDSnV1xV5k8hFVdxfyRAFLOuLPgnVe8ltIaqG5u2/i5eQG0qsMKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZfxwuwT; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4210aa0154eso23602295e9.0;
-        Sun, 02 Jun 2024 11:23:30 -0700 (PDT)
+	 To:Cc:Content-Type; b=pbox+ji2P3O8yRQbXOgFjJGrq7gaaISEAiz0L8Z9P+UHK4KUxxF4LGj7qz551nEWWjoYDgPHR0DsRxDWvm1wDHH5TN01jVjPoR+UFEkbQbcRK/yZMtS7+N9JWbl/NpGCMx+VRHVEb/5r7EqC7bE9RpdqfoaCPUaZVG6AmXX6dNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=TF/kv0wr; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-52b8254338dso4199075e87.2
+        for <linux-security-module@vger.kernel.org>; Sun, 02 Jun 2024 13:11:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717352609; x=1717957409; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gr/6Wsm0egkRb/ylviGUiuT2dKJTjbzFzZRbk1jvK28=;
-        b=CZfxwuwT3gjn608BDHoKB2e5CTZw1/PFD+GwTgCdmR+ROE/1bz4hyABM6OavK/PVU0
-         UJb6AKst0zT0Mae80ClXKT6LY7PPv6RpXELRHAFxgdBQE2I/g+obvwpP2QvjRxyyAGrJ
-         /tMMorX9XQBLCn70DD1SYMEmtzc4j21qUB266OdNi5O1o4AOatkiEdx4RAAMJzaD0Eav
-         TLUBdqTyiQC6fHFky6g+n//6D8mx0MFNJcwLv+3jCqp/J4eB8BP1rmlEdpiqNSYSY0Gn
-         b6nlb+lb63+tawoaaC1+AD08aztwq+ete8Q82Tqvw/zvuGd3fslBKzzsxj7VCOZefoFR
-         GiyQ==
+        d=linux-foundation.org; s=google; t=1717359086; x=1717963886; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ePqimL8VaYhHEJxz6pSQAbNa/K23yw/URyexsY++IVA=;
+        b=TF/kv0wrvU7CMD/1W6pdUuFiz9Lbwi4grNGC/o0BgG9oAogSjQmTfmkE8VCpSAcYoZ
+         5jDtGz0A02AyWPDSM1vbeb8dBu+Czmf2sPpMXUPNC+OD2CcK8oA/3/wUhnSMDNuwNqjM
+         T7IACHmfTs2o3k7Y2QBqEiFfXliZzGut61kEw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717352609; x=1717957409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gr/6Wsm0egkRb/ylviGUiuT2dKJTjbzFzZRbk1jvK28=;
-        b=Btm9JQnkPGY9bsKy8OBCv/bbpJ6KTpFVV1JOWUtiTqwc/eTXnXynU0b0buI0Kz5Ksp
-         9JLklGx3gnDHPk7k3kRZzIKH5OC88w3ev7bK17bOrHrkgcAzgTWnO5ZhDC2EfaAhZSPb
-         W6eJbvdei3pAXmORMpDhG0MPNjqDx+FUHiwD8fvCCQEY6HEVTfbcibVwXzUvLecOduE4
-         uRW0qDRNz4vMhotQ0uE4gzeKrOrhrALKozwasZ1kcOTPweNO+Hn0hClZfMAxGPM9CIRi
-         Q3m/5o3nU4iF7fDEk4TC5a4UWAqwxgAXIDdmw5wgRBlSyGkXveMlQSD17jgk7TDq5r51
-         jj2w==
-X-Forwarded-Encrypted: i=1; AJvYcCVHIhdAk276eyLwzEFjzaqaHSkzq9f14XqQc9SAwMyrajTU5BSheO8Vmk4N6LIbD2LlLw8P9XFKT0j4jyqB8JFLd0DOjCXxKr+XtI9jMAb91AXAz4PDMRlmQZd5X21xPEm5l588vDUZ8/vDoCPjwO4H4k5hZ4QBCCH5z8l0ywJD2wW5TAWHd9Qe77PfHjJDOR0LqAZyUvKipaniySHttV+G99rH1+xQ8liDStsnJXqydeVfKCyjUXHHQ0VIZstoyc/jUfIE3nmq6d9YauDafRo1N3gKCe4qJ0zSV6qT8w==
-X-Gm-Message-State: AOJu0YzIDVByFxcaoFLLDvzVCm8EzRDqzq+zo7+V6KS5+4M0911QD30M
-	qhP/gmKhWiFoF7A5+BYTskkViGlBFY2RZ3b/PORzu8zlqwvSQtcI4Se/UnCGcL9nDpEnEeEUZVX
-	HKpUKnrYKypobfNe+M3O02D6UMww=
-X-Google-Smtp-Source: AGHT+IEqBUebKrFkVe/BMrUTZcNp6QHc5RmcCuTRnWLHtkrfVemXSY7n9l4vdu8nv6VxYuVVes1X9ysaRl9XXhiuDnk=
-X-Received: by 2002:a05:600c:1c19:b0:421:2adb:dd4c with SMTP id
- 5b1f17b1804b1-4212e07009amr62269425e9.22.1717352608691; Sun, 02 Jun 2024
- 11:23:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717359086; x=1717963886;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ePqimL8VaYhHEJxz6pSQAbNa/K23yw/URyexsY++IVA=;
+        b=exS2Z4iL2QFWeTwQSktIyx6NypENh3KGryUhtSclSZYXHYOHKqaRa0swu0E51GhB5o
+         gQ04vNyDzFRJWz60kSG8ze+HbE8qMQrNTxlrF2dQKHi/AnpcCcvW0LtJf6ohCdsLGkg6
+         0UFqkIsv0B3SfSnbDPCjbNN18iH/ThiwK+Cxg0mb5XULMqDUCoErpgs9hjF6lITrSOJ5
+         bVyUHllS3LnoeFlHwD8NQLtJqgtwZyhZKVa4AbJq0lP5GTtD8ucf9drGejwtnoMzyhyC
+         XKIkNBnYI1Aza0m/SymPOH5lbVB1mFq8+Wjl5K1Tc9ql/MhzJZICnfzu/lrkad5QtNLY
+         dzLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUN2t7Z4KbwTXb2fvOdR6LUv7HSlVuxlS5JR7AwjgAcdrPrZlyiAuiAXj5sXQupIWZWX9Bmh2uFNZ/N70hwmbrmrKfjoOa8RDD9rr8eYVGUhIMpknWs
+X-Gm-Message-State: AOJu0Yzw7rrDbGVK8vEbnAaJJ6bjRIyES4ImslvX3iGZdNphCWP14GaL
+	Q9IRrwrY6FJ3Y5CG2avdxVTkUFJED+DX8Yq/utcZPjFiAq3w+1LTxYdsZ1+PrTyv8oRKsrWDdLl
+	p
+X-Google-Smtp-Source: AGHT+IGzLKi44iBsAz0N6wz4Jsz1jeAeUyS3GYdtVmmE0x36v5chchyQNry2sLfGzZ7l3RG/kq9W8w==
+X-Received: by 2002:ac2:4822:0:b0:51a:d08d:bab4 with SMTP id 2adb3069b0e04-52b896bea15mr5797465e87.55.1717359085864;
+        Sun, 02 Jun 2024 13:11:25 -0700 (PDT)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52b84d760e1sm1009220e87.153.2024.06.02.13.11.24
+        for <linux-security-module@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Jun 2024 13:11:25 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2e724bc466fso42210511fa.3
+        for <linux-security-module@vger.kernel.org>; Sun, 02 Jun 2024 13:11:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXPlBpWe7PxeEXdxxq+eU18Kwo08khs7LTldz639lwiGV5KxCas5eoCYg6XVHoWskM2F1OXTcp2KrnMr6maBgN5ayaGEHKuvDbj6nFCXE/QWvHvzatR
+X-Received: by 2002:ac2:5dc3:0:b0:51a:f689:b4df with SMTP id
+ 2adb3069b0e04-52b896bde2emr5480833e87.44.1717359084107; Sun, 02 Jun 2024
+ 13:11:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -75,99 +81,44 @@ References: <20240602023754.25443-1-laoar.shao@gmail.com> <20240602023754.25443-
  <87ikysdmsi.fsf@email.froward.int.ebiederm.org> <CALOAHbAASdjLjfDv5ZH7uj=oChKE6iYnwjKFMu6oabzqfs2QUw@mail.gmail.com>
  <CAADnVQJ_RPg_xTjuO=+3G=4auZkS-t-F2WTs18rU2PbVdJVbdQ@mail.gmail.com> <874jabdygo.fsf@email.froward.int.ebiederm.org>
 In-Reply-To: <874jabdygo.fsf@email.froward.int.ebiederm.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 2 Jun 2024 11:23:17 -0700
-Message-ID: <CAADnVQ+9T4n=ZhNMd57qfu2w=VqHM8Dzx-7UAAinU5MoORg63w@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 2 Jun 2024 13:11:07 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgkgtCjr3aHFnFifYtKnvet0M9jehfMFYhYpL_F7Jbmtg@mail.gmail.com>
+Message-ID: <CAHk-=wgkgtCjr3aHFnFifYtKnvet0M9jehfMFYhYpL_F7Jbmtg@mail.gmail.com>
 Subject: Re: [PATCH 1/6] fs/exec: Drop task_lock() inside __get_task_comm()
 To: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Yafang Shao <laoar.shao@gmail.com>, 
 	linux-mm <linux-mm@kvack.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
 	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, audit@vger.kernel.org, 
 	LSM List <linux-security-module@vger.kernel.org>, selinux@vger.kernel.org, 
 	bpf <bpf@vger.kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
 	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 2, 2024 at 10:53=E2=80=AFAM Eric W. Biederman <ebiederm@xmissio=
-n.com> wrote:
->
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->
-> > On Sat, Jun 1, 2024 at 11:57=E2=80=AFPM Yafang Shao <laoar.shao@gmail.c=
-om> wrote:
-> >>
-> >> On Sun, Jun 2, 2024 at 11:52=E2=80=AFAM Eric W. Biederman <ebiederm@xm=
-ission.com> wrote:
-> >> >
-> >> > Yafang Shao <laoar.shao@gmail.com> writes:
-> >> >
-> >> > > Quoted from Linus [0]:
-> >> > >
-> >> > >   Since user space can randomly change their names anyway, using l=
-ocking
-> >> > >   was always wrong for readers (for writers it probably does make =
-sense
-> >> > >   to have some lock - although practically speaking nobody cares t=
-here
-> >> > >   either, but at least for a writer some kind of race could have
-> >> > >   long-term mixed results
-> >> >
-> >> > Ugh.
-> >> > Ick.
-> >> >
-> >> > This code is buggy.
-> >> >
-> >> > I won't argue that Linus is wrong, about removing the
-> >> > task_lock.
-> >> >
-> >> > Unfortunately strscpy_pad does not work properly with the
-> >> > task_lock removed, and buf_size larger that TASK_COMM_LEN.
-> >> > There is a race that will allow reading past the end
-> >> > of tsk->comm, if we read while tsk->common is being
-> >> > updated.
-> >>
-> >> It appears so. Thanks for pointing it out. Additionally, other code,
-> >> such as the BPF helper bpf_get_current_comm(), also uses strscpy_pad()
-> >> directly without the task_lock. It seems we should change that as
-> >> well.
-> >
-> > Hmm. What race do you see?
-> > If lock is removed from __get_task_comm() it probably can be removed fr=
-om
-> > __set_task_comm() as well.
-> > And both are calling strscpy_pad to write and read comm.
-> > So I don't see how it would read past sizeof(comm),
-> > because 'buf' passed into __set_task_comm is NUL-terminated.
-> > So the concurrent read will find it.
+On Sun, 2 Jun 2024 at 10:53, Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
 > The read may race with a write that is changing the location
 > of '\0'.  Especially if the new value is shorter than
 > the old value.
 
-so ?
-strscpy_pad in __[gs]et_task_comm will read/write either long
-or byte at a time.
-Assume 64 bit and, say, we had comm where 2nd u64 had NUL.
-Now two cpus are racing. One is writing shorter comm.
-Another is reading.
-The latter can read 1st u64 without NUL and will proceed
-to read 2nd u64. Either it will read the old u64 with NUL in it
-or it will read all zeros in 2nd u64 or some zeros in 2nd u64
-depending on how the compiler generated memset(.., 0, ..)
-as part of strscpy_pad().
-_pad() part is critical here.
-If it was just strscpy() then there would indeed be a chance
-of reading both u64-s and not finding NUL in any of them.
+It *shouldn't* happen.
 
-> If you are performing lockless reads and depending upon a '\0'
-> terminator without limiting yourself to the size of the buffer
-> there needs to be a big fat comment as to how in the world
-> you are guaranteed that a '\0' inside the buffer will always
-> be found.
+So 'strscpy()' itself is written to be NUL-safe, in that if it ever
+copies a NUL character, it will stop. Admittedly the byte loop at the
+end might technically need a READ_ONCE() for that to eb strictly true
+in theory, but in practice it already is.
 
-I think Yafang can certainly add such a comment next to
-__[gs]et_task_comm.
+And even if the new string is shorter, the comm[] array will always
+have a NUL terminator _somewhere_, in how the last byte is never
+non-NUL.
 
-I prefer to avoid open coding memcpy + mmemset when strscpy_pad works.
+Now, the only real issue is if something writes *to* the  comm[] array
+without following the rules properly - like writing a non-NULL
+character to the end of the array before then filling it in with NUL
+again.
+
+But that would be a bug on the comm[] writing side, I feel, not a bug
+on the reader side.
+
+               Linus
 
