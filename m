@@ -1,120 +1,66 @@
-Return-Path: <linux-security-module+bounces-3746-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3751-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B13D7901E78
-	for <lists+linux-security-module@lfdr.de>; Mon, 10 Jun 2024 11:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CCCDF902283
+	for <lists+linux-security-module@lfdr.de>; Mon, 10 Jun 2024 15:16:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A5F5283A0F
-	for <lists+linux-security-module@lfdr.de>; Mon, 10 Jun 2024 09:41:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D4932819BF
+	for <lists+linux-security-module@lfdr.de>; Mon, 10 Jun 2024 13:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD98F74C14;
-	Mon, 10 Jun 2024 09:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b="RabQY3O+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LEIkqa0S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B6A82480;
+	Mon, 10 Jun 2024 13:16:45 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from flow1-smtp.messagingengine.com (flow1-smtp.messagingengine.com [103.168.172.136])
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E991DFD0;
-	Mon, 10 Jun 2024 09:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A73E4501B;
+	Mon, 10 Jun 2024 13:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718012463; cv=none; b=ZXcq+8u6IJt5XKh9lDmPCzr+QcIM0TFxEaiXTaO3/rDZOC8eP/bVRugA5cWlRaP2j3zMY2UpqPmPu1WoT9sEUnlfiaxGkp5qxqJ/7kNg4ngtdsgtf2BZyiswt1f7mm26Rp8Zza67mTem+wbB7T/e5SOx98nyZRSUMI60nt0oDRU=
+	t=1718025405; cv=none; b=AbRXtFhtAP3d4jIZ5YWz+14Kby8GPBB4BUYro2sZNj8UQavqs8qLQ6161lfPDBE/xoSmh+DVr2Oc+Gwnt/21haqLW8ff+/uewKlBYryT8Xen6XB/pK2d6svxIA7mpLT0iiuy6hxi0bvHj7mVwp3U/OiivD26OJuAev3JvyLxE6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718012463; c=relaxed/simple;
-	bh=KNKCKklTuYVMpCezbUE7O/dEuK5srQjktU+JvcvNVFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ray4flBOg0A/9wGOjrVmFWjz2jI2hvpmFvY7YtQblUaTiWuvP/Cy9hNbDzk13ariUrL6gwx8JG9HtItIv95tzIMvwXUHeg+oYcrRdTZ0r9jToDgXVl0SyhhMrsyOuBzR6siQkq/Q1hxTR7tZUJK/HJLZJnw9vs4hnSdCCs1TrIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net; spf=pass smtp.mailfrom=3xx0.net; dkim=pass (2048-bit key) header.d=3xx0.net header.i=@3xx0.net header.b=RabQY3O+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LEIkqa0S; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=3xx0.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3xx0.net
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailflow.nyi.internal (Postfix) with ESMTP id 963B22005E8;
-	Mon, 10 Jun 2024 05:41:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 10 Jun 2024 05:41:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=3xx0.net; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1718012460;
-	 x=1718016060; bh=+ir2CVbBvWnglzlujH/fXHt0aYyVxse9Z8DINg2urHY=; b=
-	RabQY3O+4UNdZ0WFareLb30ij2ij24ABk6Lbynu1oSJqzBNhkIQQWgVpYAt6nxZs
-	xtCHgP0hZbwR5BCOd3+A6byK5nCv8/C39etwGTzwROaBpProdCKhOoilOPHqfX4G
-	9BPEw8rqUJ2b4bKJGD097P+GyZmNRYnlE9r5l/3qfgNTjwSIOS5iRdJ2/lcaKWol
-	Ags4NKBIAEP4oDf6E5eP9xySuXZbbf3Rf+ZjrT1E/LFJ3zILwD3bPZl1TONdqocr
-	gWE553KoKC/NxwfzjGl7vRY02Hm/52TNnjdQsoEmz4LyEbSX88ictmd9TYed7QO8
-	Vi4saa1D9ANVTGK3GtTJ1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718012460; x=
-	1718016060; bh=+ir2CVbBvWnglzlujH/fXHt0aYyVxse9Z8DINg2urHY=; b=L
-	EIkqa0ScrIZM+LbM+UQmyBMYTjnw/MyuAVysR6rU8V05ivy3cj/G/xnKynMg4RwD
-	eolvhub/c6EaaAHYadJ+LHXze9kE8kbNYL8xHi+ro2PkwCbmS7v5nIj546/lDQk9
-	yJwzxlK8VjIJ/0IDp2oqBanZ0aNkMNYqHjbhqleFLcoB499khNfsSlT1yTzGh7v9
-	EmPyHRchH8a+BvKi2JzSqd9BNH9HaOU+crMxGt5PAY7FNdjtc9zGlv90XwpX/kNt
-	z61R4Y3DicCu3qYARJku45VG37c3eRLbXkqD58xvt5HnwEavfIXbEfD+lINrb+ee
-	2mSP7VhAJ0kfxhctfS5Hw==
-X-ME-Sender: <xms:LMpmZkGE-eflvtIEwsg6gkccJ5iKsFDRlanTQlH5RisFANCJdKJnyA>
-    <xme:LMpmZtXR8YOXh-iU4niksBMDtYtw-CmQPn8lCGVt2gaM45IzD-8NGWoyXDI4nWDoL
-    kkOeYccTP4-FZd7dtM>
-X-ME-Received: <xmr:LMpmZuINOI586a9DVmBFpEqsB_OfZXOtQGQ0GqS9akWHKky-9_zNVRIlXhBtNkRDHXLyNKqvefaOW-1i3zckVOU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedutddgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkefstddttdejnecuhfhrohhmpeflohhn
-    rghthhgrnhcuvegrlhhmvghlshcuoehjtggrlhhmvghlshesfeiggidtrdhnvghtqeenuc
-    ggtffrrghtthgvrhhnpeetgedutdfggeetleefhfeuhedtheduteekieduvdeigeegvdev
-    vddtieekiedvheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjtggrlhhmvghlshesfeiggidtrdhnvght
-X-ME-Proxy: <xmx:LMpmZmFhkvdeqlm-6M4BTtRkSBGnJu2kqG8SVUIoAI2XSG7pv1KIXQ>
-    <xmx:LMpmZqVggAwTWlvn6rCYXTiNLWrcaJIw9cfxq4zj3Pn-ofQbzZexnQ>
-    <xmx:LMpmZpMAgFgbzUj73s7QZU5vvEe0Q_iTEiktwCD-tvDzkRrejVc9lg>
-    <xmx:LMpmZh3iJSOiy9Hq-l1xA5WL35QxoPplcGdH5uexvRTvlDPFSPP6Sw>
-    <xmx:LMpmZjUhtKFQlMDDlAkcUK3LjflnnZDUVoqCSrR42egFwU8ZMoeN9jzO>
-Feedback-ID: i76614979:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Jun 2024 05:40:56 -0400 (EDT)
-Date: Mon, 10 Jun 2024 02:46:06 -0700
-From: Jonathan Calmels <jcalmels@3xx0.net>
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: brauner@kernel.org, ebiederm@xmission.com,
- 	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
- 	James Morris <jmorris@namei.org>, KP Singh <kpsingh@kernel.org>,
- 	Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>,
- 	Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- 	Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- 	Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- 	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, 	Luis Chamberlain <mcgrof@kernel.org>,
- Kees Cook <kees@kernel.org>, 	Joel Granados <j.granados@samsung.com>,
- John Johansen <john.johansen@canonical.com>,
- 	David Howells <dhowells@redhat.com>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- 	Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, 	Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, containers@lists.linux.dev,
- 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, 	linux-security-module@vger.kernel.org,
- bpf@vger.kernel.org, apparmor@lists.ubuntu.com,
- 	keyrings@vger.kernel.org, selinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] capabilities: Add securebit to restrict userns
- caps
-Message-ID: <svpbmv37f5n537seb3cfsylnlzi6ftuad4dqi5unoycylmcf7r@6knq7sibdw7w>
-References: <20240609104355.442002-1-jcalmels@3xx0.net>
- <20240609104355.442002-3-jcalmels@3xx0.net>
- <20240610023301.GA2183903@mail.hallyn.com>
+	s=arc-20240116; t=1718025405; c=relaxed/simple;
+	bh=77k5rIMoIWHg6IseVGjYJC6hiieeMJ1RXLsTOo5sn9Q=;
+	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=lo9bYUA9nPyAd4qw/6n7qTJ7rBgTEijbFYdu7OmqgLYvob6eo0Lm1my5mCb17U8q4rJd/6k2aH6LbblQMWcxLMUGSn+2inSQINZOYGRitgnoAqC0Wutd8dVxar+NkQFenVHD8NaBUTt7/JmqrQ0xUX3P4/NeRUUv4iLOvrDtRjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in01.mta.xmission.com ([166.70.13.51]:38392)
+	by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1sGeE1-007QxW-Ub; Mon, 10 Jun 2024 06:34:14 -0600
+Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:54200 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1sGeE0-00FROe-SU; Mon, 10 Jun 2024 06:34:13 -0600
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Yafang Shao <laoar.shao@gmail.com>,  Linus Torvalds
+ <torvalds@linux-foundation.org>,  linux-mm <linux-mm@kvack.org>,
+  Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,  linux-trace-kernel
+ <linux-trace-kernel@vger.kernel.org>,  audit@vger.kernel.org,  LSM List
+ <linux-security-module@vger.kernel.org>,  selinux@vger.kernel.org,  bpf
+ <bpf@vger.kernel.org>,  Alexander Viro <viro@zeniv.linux.org.uk>,
+  Christian Brauner <brauner@kernel.org>,  Jan Kara <jack@suse.cz>,  Kees
+ Cook <keescook@chromium.org>
+References: <20240602023754.25443-1-laoar.shao@gmail.com>
+	<20240602023754.25443-2-laoar.shao@gmail.com>
+	<87ikysdmsi.fsf@email.froward.int.ebiederm.org>
+	<CALOAHbAASdjLjfDv5ZH7uj=oChKE6iYnwjKFMu6oabzqfs2QUw@mail.gmail.com>
+	<CAADnVQJ_RPg_xTjuO=+3G=4auZkS-t-F2WTs18rU2PbVdJVbdQ@mail.gmail.com>
+	<874jabdygo.fsf@email.froward.int.ebiederm.org>
+	<CAADnVQ+9T4n=ZhNMd57qfu2w=VqHM8Dzx-7UAAinU5MoORg63w@mail.gmail.com>
+Date: Mon, 10 Jun 2024 07:34:01 -0500
+In-Reply-To: <CAADnVQ+9T4n=ZhNMd57qfu2w=VqHM8Dzx-7UAAinU5MoORg63w@mail.gmail.com>
+	(Alexei Starovoitov's message of "Sun, 2 Jun 2024 11:23:17 -0700")
+Message-ID: <87ikyhrn7q.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -122,46 +68,91 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240610023301.GA2183903@mail.hallyn.com>
+Content-Transfer-Encoding: quoted-printable
+X-XM-SPF: eid=1sGeE0-00FROe-SU;;;mid=<87ikyhrn7q.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX1+aqS3BV7g8TVW+kULFxysO2TVuiqUO+14=
+X-SA-Exim-Connect-IP: 68.227.168.167
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Level: **
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4982]
+	*  0.7 XMSubLong Long Subject
+	*  1.5 XMNoVowels Alpha-numberic number with no vowels
+	*  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+	*  0.0 T_TooManySym_03 6+ unique symbols in subject
+	*  0.0 T_TooManySym_02 5+ unique symbols in subject
+	*  0.0 XM_B_AI_SPAM_COMBINATION Email matches multiple AI-related
+	*      patterns
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+	*  0.2 XM_B_SpammyWords One or more commonly used spammy words
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Alexei Starovoitov <alexei.starovoitov@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 465 ms - load_scoreonly_sql: 0.13 (0.0%),
+	signal_user_changed: 11 (2.3%), b_tie_ro: 9 (1.9%), parse: 1.04 (0.2%),
+	 extract_message_metadata: 12 (2.7%), get_uri_detail_list: 1.43 (0.3%),
+	 tests_pri_-2000: 13 (2.8%), tests_pri_-1000: 3.0 (0.6%),
+	tests_pri_-950: 1.29 (0.3%), tests_pri_-900: 1.09 (0.2%),
+	tests_pri_-90: 82 (17.7%), check_bayes: 81 (17.4%), b_tokenize: 8
+	(1.6%), b_tok_get_all: 10 (2.1%), b_comp_prob: 2.5 (0.5%),
+	b_tok_touch_all: 58 (12.5%), b_finish: 0.75 (0.2%), tests_pri_0: 320
+	(68.9%), check_dkim_signature: 0.66 (0.1%), check_dkim_adsp: 3.4
+	(0.7%), poll_dns_idle: 1.19 (0.3%), tests_pri_10: 2.7 (0.6%),
+	tests_pri_500: 14 (2.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 1/6] fs/exec: Drop task_lock() inside __get_task_comm()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 
-On Sun, Jun 09, 2024 at 09:33:01PM GMT, Serge E. Hallyn wrote:
-> On Sun, Jun 09, 2024 at 03:43:35AM -0700, Jonathan Calmels wrote:
-> > This patch adds a new capability security bit designed to constrain a
-> > task’s userns capability set to its bounding set. The reason for this is
-> > twofold:
-> > 
-> > - This serves as a quick and easy way to lock down a set of capabilities
-> >   for a task, thus ensuring that any namespace it creates will never be
-> >   more privileged than itself is.
-> > - This helps userspace transition to more secure defaults by not requiring
-> >   specific logic for the userns capability set, or libcap support.
-> > 
-> > Example:
-> > 
-> >     # capsh --secbits=$((1 << 8)) --drop=cap_sys_rawio -- \
-> >             -c 'unshare -r grep Cap /proc/self/status'
-> >     CapInh: 0000000000000000
-> >     CapPrm: 000001fffffdffff
-> >     CapEff: 000001fffffdffff
-> >     CapBnd: 000001fffffdffff
-> >     CapAmb: 0000000000000000
-> >     CapUNs: 000001fffffdffff
-> 
-> But you are not (that I can see, in this or the previous patch)
-> keeping SECURE_USERNS_STRICT_CAPS in securebits on the next
-> level unshare.  Though I think it's ok, because by then both
-> cap_userns and cap_bset are reduced and cap_userns can't be
-> expanded.  (Sorry, just thinking aloud here)
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Right this is safe to reset, but maybe we do keep it if the secbit is
-locked? This is kind of a special case compared to the other bits.
+> On Sun, Jun 2, 2024 at 10:53=E2=80=AFAM Eric W. Biederman <ebiederm@xmiss=
+ion.com> wrote:
+>>
+>> If you are performing lockless reads and depending upon a '\0'
+>> terminator without limiting yourself to the size of the buffer
+>> there needs to be a big fat comment as to how in the world
+>> you are guaranteed that a '\0' inside the buffer will always
+>> be found.
+>
+> I think Yafang can certainly add such a comment next to
+> __[gs]et_task_comm.
+>
+> I prefer to avoid open coding memcpy + mmemset when strscpy_pad works.
 
-> > +	/* Limit userns capabilities to our parent's bounding set. */
-> 
-> In the case of userns_install(), it will be the target user namespace
-> creator's bounding set, right?  Not "our parent's"?
+Looking through the code in set_task_comm
+strscpy_pad only works when both the source and designation are aligned.
+Otherwise it performs a byte a time copy, and is most definitely
+susceptible to the race I observed.
 
-Good point, I should reword this comment.
+Further I looked a couple of the uses of set_task_com, in
+fs/proc/base.c, kernel/kthread.c, and kernel/sys.c.
+
+Nowhere do I see a guarantee that the source buffer is word aligned
+or even something that would reasonably cause a compiler to place the
+buffer that is being passed to set_task_comm to be word aligned.
+
+As far as I can tell it is completely up to the compiler if it will
+cause strscpy_pad to honor the word at a time guarantee needed
+to make strscpy_pad safe for reading the information.
+
+This is not to say we can't make it safe.
+
+The easiest would be to create an aligned temporary buffer in
+set_task_comm, and preserve the existing interface.  Alternatively
+a type that has the appropriate size and alignment could be used
+as input to set_task_comm and it could be caller's responsibility
+to use it.
+
+While we can definitely make reading task->comm happen without taking
+the lock.  Doing so without updating set_task_comm to provide the
+guarantees needed to make it safe, looks like a case of play silly
+games, win silly prizes.
+
+Eric
 
