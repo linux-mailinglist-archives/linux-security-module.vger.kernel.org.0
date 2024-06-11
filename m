@@ -1,63 +1,60 @@
-Return-Path: <linux-security-module+bounces-3769-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3771-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 681C090359C
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Jun 2024 10:19:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A5709037D6
+	for <lists+linux-security-module@lfdr.de>; Tue, 11 Jun 2024 11:31:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 025C02811CE
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Jun 2024 08:19:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6DF61F245D9
+	for <lists+linux-security-module@lfdr.de>; Tue, 11 Jun 2024 09:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C53E2C190;
-	Tue, 11 Jun 2024 08:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C33C2032B;
+	Tue, 11 Jun 2024 09:30:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="et2xVbPX"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="p7gWMbH9"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED38918643
-	for <linux-security-module@vger.kernel.org>; Tue, 11 Jun 2024 08:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B26E1BF2A
+	for <linux-security-module@vger.kernel.org>; Tue, 11 Jun 2024 09:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718093965; cv=none; b=um1oGJDBmwnu10CU7p6DhQ8vD289m0OFdSLnNIUGEQrwr6l3EqPmhboatqf/53mRXW7NvoQ87mq24G+89E32YE1DuBT+SltLvHOTxhFCSUO4u1wfn/fYdkhRYnv22NorSbpE+6MtowzFwDB1HFW9mXId4sRZ/gqkzZUqeVFFTxY=
+	t=1718098244; cv=none; b=IjFEJxiQdIhU90I9PHMA86/A0DAy0wmgaCfwC9xDbcrKLPbn+AyN07J3ENpc6875w+t/U2XD8EZHc1MoSQptN8f4/XuJGKupnzUNjS9gw3hdyQvc0iPDkshdX1TVxZycyfYhXrqqRY0NODD8B+3r0EbvtAwN4EpR8TWNtqEM+Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718093965; c=relaxed/simple;
-	bh=DyfZMNqfbelowjKg7Fg2Zw3jpBlT2GRYPwzy3WhZrVY=;
+	s=arc-20240116; t=1718098244; c=relaxed/simple;
+	bh=ybykIiW5VS3w+BkZyxy+Xnk5v4bDo8zglruVsuDtuxI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L7bVJLUpnzvvCJJJv/wzeRnVAr5UtDr0HNjHraUaQSXlUsKW5yP8bLpfiisP2/8u4KwltxyQJThmNQqjf2VHU3KOHXMoijhSMonmm1lzzLnj3LOZZ4SMB/Gaq4PgH9fw8dcnOz7qF7OUbzj1HYA7Hq6922rYD7FYra+WzFdQTrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=et2xVbPX; arc=none smtp.client-ip=45.157.188.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=qvzUHyxAeY7c3tHXweBkbjGZnhLHfsLW3JhLbhnA94v9o3JFmmkwRPnHoUPakNmAiOwEj551SbHwpwx1Kpn/cvxqWRGXhiQ1n/PRaCboKHJWfYjshNAgVjT1LE/j8O4UTJYQLlUdYVt8TFvCfF7LIMoca25IRWGVRlTHCXpdhMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=p7gWMbH9; arc=none smtp.client-ip=45.157.188.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Vz1mH1BnxzmBh;
-	Tue, 11 Jun 2024 10:19:11 +0200 (CEST)
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Vz1mY3v3Kzmd9;
+	Tue, 11 Jun 2024 10:19:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1718093951;
-	bh=7HhB4sE7NSHxAQDCrk3KUOzkf7diWu3HyUqm9CqHvEk=;
+	s=20191114; t=1718093965;
+	bh=NW3ocj6F1Nb72KUy4vifp/1WY92XTuWX9CWEPsfwJug=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=et2xVbPXxCumQmIsI+DjulepJsWh1kePvzlLTh4VmveVuXji/VJMRwDKZ3SrExvKX
-	 gB5KaN1tbWKEs1gfnEsT9+mhjcY6BXpSapxm/IjeqIl+fslwsbZvLtl1qjnOZWtbhT
-	 dU9ltWH1xnmMN0+1OKYI+k090IpP/lU8XYhZ66o4=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Vz1mF6P1kzqRS;
-	Tue, 11 Jun 2024 10:19:09 +0200 (CEST)
-Date: Tue, 11 Jun 2024 10:19:06 +0200
+	b=p7gWMbH9DGOuQoUYjnndqIVt2uAA3gUGDUyubDLx1JaPzfKf5SYKVV51GfcWqciLM
+	 hINyTroRtAcw//sLWZq18//REbzYac0e+KsNpLeubtjEWLLTBgcMIfCoGpB/qvGC/C
+	 oTkqrskWLQVC5V4PYi/DiCCsCQdk3VyQ/u6HJt60=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Vz1mX56RQz9FN;
+	Tue, 11 Jun 2024 10:19:24 +0200 (CEST)
+Date: Tue, 11 Jun 2024 10:19:20 +0200
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
 To: Jann Horn <jannh@google.com>
 Cc: Tahera Fahimi <fahimitahera@gmail.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, outreachy@lists.linux.dev, netdev@vger.kernel.org
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, outreachy@lists.linux.dev, 
+	netdev@vger.kernel.org, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>
 Subject: Re: [PATCH v3] landlock: Add abstract unix socket connect restriction
-Message-ID: <20240611.Eed0Oochaht4@digikod.net>
+Message-ID: <20240611.Pi8Iph7ootae@digikod.net>
 References: <ZmJJ7lZdQuQop7e5@tahera-OptiPlex-5000>
- <ZmLEoBfHyUR3nKAV@google.com>
- <ZmNic8S1KtyLcp7i@tahera-OptiPlex-5000>
- <20240610.Aifee5ingugh@digikod.net>
- <CAG48ez3MBGi6i9Xcj29+pD9Lo1_hKkEtWYn-jNqvOZ_WWQZjYA@mail.gmail.com>
+ <CAG48ez3NvVnonOqKH4oRwRqbSOLO0p9djBqgvxVwn6gtGQBPcw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -67,39 +64,102 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG48ez3MBGi6i9Xcj29+pD9Lo1_hKkEtWYn-jNqvOZ_WWQZjYA@mail.gmail.com>
+In-Reply-To: <CAG48ez3NvVnonOqKH4oRwRqbSOLO0p9djBqgvxVwn6gtGQBPcw@mail.gmail.com>
 X-Infomaniak-Routing: alpha
 
-On Mon, Jun 10, 2024 at 11:49:21PM +0200, Jann Horn wrote:
-> On Mon, Jun 10, 2024 at 6:36 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > On Fri, Jun 07, 2024 at 01:41:39PM -0600, Tahera Fahimi wrote:
-> > > On Fri, Jun 07, 2024 at 10:28:35AM +0200, Günther Noack wrote:
-> > > > Is it intentional that you are both restricting the connection and the sending
-> > > > with the same flag (security_unix_may_send)?  If an existing Unix Domain Socket
-> > > > gets passed in to a program from the outside (e.g. as stdout), shouldn't it
-> > > > still be possible that the program enables a Landlock policy and then still
-> > > > writes to it?  (Does that work?  Am I mis-reading the patch?)
-> >
-> > If a passed socket is already connected, then a write/send should work.
+On Tue, Jun 11, 2024 at 12:27:58AM +0200, Jann Horn wrote:
+> Hi!
 > 
-> If I'm reading unix_dgram_sendmsg() correctly, we'll always hit
-> security_unix_may_send() for any UNIX socket type other than
-> SOCK_SEQPACKET (meaning SOCK_STREAM and SOCK_DGRAM), even if the
-> socket is already connected, and then we'll do the landlock check.
-> That's probably not the intended behavior for Landlock, unless I'm
-> misreading the code?
+> Thanks for helping with making Landlock more comprehensive!
 > 
-> Maybe to get nice semantics it's necessary to add a parameter to
-> security_unix_may_send() that says whether the destination address
-> came from the caller or from the socket?
+> On Fri, Jun 7, 2024 at 1:44 AM Tahera Fahimi <fahimitahera@gmail.com> wrote:
+> > Abstract unix sockets are used for local inter-process communications
+> > without on a filesystem. Currently a sandboxed process can connect to a
+> > socket outside of the sandboxed environment, since landlock has no
+> > restriction for connecting to a unix socket in the abstract namespace.
+> > Access to such sockets for a sandboxed process should be scoped the same
+> > way ptrace is limited.
+> 
+> This reminds me - from what I remember, Landlock also doesn't restrict
+> access to filesystem-based unix sockets yet... I'm I'm right about
+> that, we should probably at some point add code at some point to
+> restrict that as part of the path-based filesystem access rules? (But
+> to be clear, I'm not saying I expect you to do that as part of your
+> patch, just commenting for context.)
 
-I think it would make sense to ignore connected sockets with
-security_unix_may_send() because it should already be controlled by
-security_unix_stream_connect().  This would still allow passed/inherited
-connected sockets to be used, which is an important feature and would
-be consistent with read/write on other passed FDs.  This would not work
-with dgram sockets though.
+Yes, I totally agree.  For now, unix socket binding requires to create
+the LANDLOCK_ACCESS_FS_MAKE_SOCK right, but connecting to an existing
+socket is not controlled.  The abstract unix socket scoping is
+orthogonal and extends Landlock with unix socket LSM hooks, which are
+required to extend the "filesystem" access rights to control path-based
+unix socket.
 
-We need tests for this case and with different socket modes (inspired by
-the net_test.c:protocol variants).
+> 
+> > Because of compatibility reasons and since landlock should be flexible,
+> > we extend the user space interface by adding a new "scoped" field. This
+> > field optionally contains a "LANDLOCK_SCOPED_ABSTRACT_UNIX_SOCKET" to
+> > specify that the ruleset will deny any connection from within the
+> > sandbox to its parents(i.e. any parent sandbox or non-sandbox processes)
+> 
+> You call the feature "LANDLOCK_SCOPED_ABSTRACT_UNIX_SOCKET", but I
+> don't see anything in this code that actually restricts it to abstract
+> unix sockets (as opposed to path-based ones and unnamed ones, see the
+> "Three types of address are distinguished" paragraph of
+> https://man7.org/linux/man-pages/man7/unix.7.html). If the feature is
+> supposed to be limited to abstract unix sockets, I guess you'd maybe
+> have to inspect the unix_sk(other)->addr, check that it's non-NULL,
+> and then check that `unix_sk(other)->addr->name->sun_path[0] == 0`,
+> similar to what unix_seq_show() does? (unix_seq_show() shows abstract
+> sockets with an "@".)
+
+Right, that should be part of the next series.  Tests should check that
+too.
+
+> 
+> Separately, I wonder if it would be useful to have another mode for
+> forbidding access to abstract unix sockets entirely; or alternatively
+> to change the semantics of LANDLOCK_SCOPED_ABSTRACT_UNIX_SOCKET so
+> that it also forbids access from outside the landlocked domain as was
+> discussed elsewhere in the thread. If a landlocked process starts
+> listening on something like "@/tmp/.X11-unix/X0", maybe X11 clients
+> elsewhere on my system shouldn't be confused into connecting to that
+> landlocked socket...
+
+In this case, I think we should have a (light) Landlock domain for a
+user session to make sure apps only connect to the legitimate X11 socket
+(either in the same domain, or through a path-based socket).
+
+There is also ongoing work to restrict socket creation according to their
+type:
+https://lore.kernel.org/all/20240524093015.2402952-1-ivanov.mikhail1@huawei-partners.com/
+This will make possible to control abstract unix socket creation and
+avoid this kind of issue too.
+
+> 
+> [...]
+> > +static bool sock_is_scoped(struct sock *const other)
+> > +{
+> > +       bool is_scoped = true;
+> > +       const struct landlock_ruleset *dom_other;
+> > +       const struct cred *cred_other;
+> > +
+> > +       const struct landlock_ruleset *const dom =
+> > +               landlock_get_current_domain();
+> > +       if (!dom)
+> > +               return true;
+> > +
+> > +       lockdep_assert_held(&unix_sk(other)->lock);
+> > +       /* the credentials will not change */
+> > +       cred_other = get_cred(other->sk_peer_cred);
+> > +       dom_other = landlock_cred(cred_other)->domain;
+> > +       is_scoped = domain_scope_le(dom, dom_other);
+> > +       put_cred(cred_other);
+> 
+> You don't have to use get_cred()/put_cred() here; as the comment says,
+> the credentials will not change, so we don't need to take another
+> reference to them.
+> 
+> > +       return is_scoped;
+> > +}
+> 
 
