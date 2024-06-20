@@ -1,181 +1,124 @@
-Return-Path: <linux-security-module+bounces-3910-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-3906-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC669910E28
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Jun 2024 19:13:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E843910DAA
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Jun 2024 18:54:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B167B23C63
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Jun 2024 17:13:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 504D61C20893
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Jun 2024 16:54:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EDDD1B3757;
-	Thu, 20 Jun 2024 17:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDAE71B151D;
+	Thu, 20 Jun 2024 16:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="IbEjxjHS"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ODwvZO3o"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D762F1B3753
-	for <linux-security-module@vger.kernel.org>; Thu, 20 Jun 2024 17:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4307A1B29DA
+	for <linux-security-module@vger.kernel.org>; Thu, 20 Jun 2024 16:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718903582; cv=none; b=f8/YwM8vO+vfb/34DskD/9EqfdJZ/ltN+hc6/SAb8kVCkWxnXr7eYyu3b+ONeknmdsq8HIWTCr/F8DZ8fXUN0+m0elGI2dyOjh7ntVfg/Mn9f08e/nopY/nPTuWtNoDsaW38X673iHtDw1yrip+UWU8Jo/+IxtveVie9gywBQ4g=
+	t=1718902480; cv=none; b=kgiSl+fb5iH+Mq223tfobbsqgpANZRzDgQWcssGngLYPt0Mf8HLsly6ZG5JoCllyn3LH9QI/2FWcHDbidpZChDVXd/2j4TWbePd6lOBo5PWLggrRBpuLw1HRY80mGarnUNa4YX9edJGL79icOUEXutQYBmxyxodLLCJsLgT/Ejc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718903582; c=relaxed/simple;
-	bh=DT69cig5T+HJP3QxES/sQY6L1UJ1ASS2EvGp9fZoQmo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=SfnT3CYtO+Gyfbik77nV0uUATKZ/xuX6ja6V0o+eOvB0FIGxmjpw6fCo760VJvy/rjK1I+zjLUlXB3xON7UbhuBtow8JqcfhDUQpssqUa1PMGNCMUuXSDEn4opdTY6GqBIztnDlrpS9HljY6w2RLdLmsfyTsxQswfKVU1XZZpP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=IbEjxjHS; arc=none smtp.client-ip=66.163.187.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1718903573; bh=1dCjEj3mjJczEwo7yId4dIQ2YxYDscmgCFAd8ToOFpo=; h=Date:Subject:To:References:Cc:From:In-Reply-To:From:Subject:Reply-To; b=IbEjxjHS+10Sb9GVaFgGhe19WCp1pdY8u1MiqWsyYjthtICBWpi9oNUdQHaAgU1nmLrqE2vvf89dFED1r8tezUiVXqpiQ1L6mEM5GomqwzRmQrdQAQCGQ8nm2UyHosG0n1KxL7R5zpL25jSQhyeP8Wn390n0tyff7IK+JH+yyG9fYiEm6eN+K0zqyUutwHA4H38RPhsphtfj6jKKPVd8Ok3pTqvjeW9cnNVOJ3B8Ew78GxO77jr8dRdCyoUS1V9rt4fI/lnlHQZd938paabbgL0xFODFfX3UsgAbTo8cbjqEfeGmAGRitoz6TeqNfqh0WvJuE0bkLyR2K7YyRUpELA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1718903573; bh=1bWW3Kg/6Os1ArxamqCvxQN9fkzpqFvh6TPzIPMnxdp=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Xs9bVI9goccYKLOg7cTXcGteiCW/XG1sisI0wd5+JdSeNLnrgZSFhhGZ9TgpkJ6eVnO+nBJwQpVY7wSmD439O2daRmhyb5JodT9puERST61c4+27NBBowZRwwncngrctnhlkWNCbl/34A/IJ+ZYzeez1gHXwzZy6R+VYS/eSHn8B5If+GUmbzRIBoNk2YXNQ16jr8zyeEBYADfJBEnNQYFL//Dw5WJsY8a4iRgBreFfEPthbSAA7dj7zQEfo7MXARCpjYkoKAzD9RTwJNSWBHIgVeVU8skTi00nPyEg/VkQfX8M9jwZlClhsbcKVgagxwa8k/gyD5M2Re0lCKtlwXQ==
-X-YMail-OSG: ENgimUcVM1kJgt5J_ADVIHI4k6Osjq3Mpu2oY5Y3qz3JT5hPRKdoiDSQtkR82.P
- _pAyXHNqhSMHxKm7gOUtcmuwhVWlw1JZthIcjYiwjppQpRa.2uBTfplbr6ZciLqujAzgsD9BzQFz
- ZkEBsJW9gUbGBKP3aT889JD9kNe9.B33Xc0Iu2w6FTrkW8KBlXPOMNOseT3LVy1czGPxk3evfuDC
- RPjr_HaAp4uf.ivE0tyckDzj.XDl8O9a.u3dkGGnFryfs_5GVFMIvwZtDKY3KBXSWKsBgM7XcsQF
- 9Rp2GbbkSlrgaQ4rLP3eW5OZA8JthPbJo7i4C0U8oN84ex0tAjZK5dm82zVf.UfQNXpu5ju.sq8Z
- kvd4KzKEZJ77n7SaS5x1IQs.Qj8n760ZdMO6OJB1uQqLLfvwj09u02JKCgPEA8vKF7LC_LOdXQ.b
- u86rJLVk7IvNtOxDXQXxNFd0K0yL2uWoxsWCnWAuF8d_YJvpJOwwKKctjzxmQH1bK70VrKkwBkwl
- cupCfn5kgiRtk91l45fRvKkQaaeqCXP8tYG88gj9ZoLt7Yzz8kR6mN2ISOju_PzFERe3mw36baPP
- nXCXZV1QfuoHvYWXBz83Q757wSbq4NqYd9eNQ2m3uuDIv8nPgOzAD2yTwY0J3Syy9Wgsqp_LiS__
- BbYFtQLg3dDOxv4Gl5.zTrAK8b11g0eW.2CZWd2zVw78k_oUev.6N99ay3Kn2eG9KnUjOe6F6sS5
- 2Vz61SUYb88rYEYZLBPPwhCgVfMIvwzc4t6tlUpObhrX9vLCotwpbWChqdVWLmgKokKD9HZtPith
- 7GOSxxMbmdik52ny0aJ4Qw9yz4dvl0oiYfGRLaNNrBStHC.HyYGACwpdrXMQVX1TSOfF1dpL7GM.
- 3J5IlAOc79n.FQMxcJAD4VKnr.AvKA_n50G.0d9XvIcKrcBs350HcoC_rhQ4T4WI7TrdKwks3RtH
- YZ914jmi1uM5GP4FwWBaLbLtDlAf_IvdJ9ZoDmb.NpyYWQlUbg7enmaHI4v1aNTQnAJdBR6Igycu
- 6occye37k5QjFY0dZrcsqpNVDLrkW6oBX3GyAh.4RsNY3N_l8GqC0cowWJ9Iy6uGIVfhs6sDgzOE
- .T5hwuBRe5xJSKkjYrdKn5lEIoQaEnHYKUNUhhx3wwdkfci._J17Iu3cUfiZ4Hyp8JrMetpRmUoq
- W9V9BbaERZiPPURdbtLmxSUf4Va2x.oOvCCuf2MHb8T2KdzDHWczEYpUf5Sr9L8yhaeGqFMl1zNW
- 7x4SoPjo6hHs_6SnvqIhCnS1Rtfji4RNtQeF2w4fvLcvF_jq51Z_JzmH5eyF7848oY823ZIcbXp4
- 9d2TbYi2AvIJcLVeMMVNjxlZPCzmxYnCDutEkMootf2WVS0uR7Lk5RY96rlx0IaBB2.V9zX.jl24
- Q4I5OocrwTmN8WVznRDkXqVddc9Y3uw5V0tV4yd.T0VrZKNNk1cD6939dc30IU2UPOfD5k9pHSzy
- 55uxRrxYikfr5WdndJ1L0zInwJXWZRr_EDKDGPxDlMRTS99FMyAssCJHXKYPp8UB4Cn8dwJgbXM4
- .9.kYD9tYeg2ev6EXQ0BDHl8beIDMdQIcYDmwe1CHe77toNekiYqlmG0.tRucLOTUXM8U2L7igi3
- NrUAcC.EiFhQpWuoVC.E9OgtY2knUGDCqq3erBCwtZXRKm9YED9kLKntw8VzvxFTiyyLZ_urQnId
- k8MV0Ye.3y031hGXkZKSNDxJzxZaWHa9n3LHcAIRTnEwice1U9aghbzXIA.BAQ.5EbcguY9Ozd7q
- zgIt6DgBevL.khSUiAGN60VToI2cwAzlD5sJuJfPPysH.0lJcCWEZo21A1dGIaYWWMsF3.afAy0C
- HrQ2XYyTrXZkbZHFVp107OMTg_D7HlI.xwSD1sQ506qVSjM1xaT9K7b6axNqkpVo2CLX5hm7Ls_n
- B5eF239VvLvojiZFV4.w158yr2F1dw5EvL1WAx2hadgriSFgCU0SeQozvKU9rKIoQQxFEztbqsiu
- QmTfS7V_5oXIh2kijItoFiV2MiVN23j.xxuKaNdOw7NfOs9nWfY7dZY1ulAOJp6kokr3ShJyBq1M
- QR_pZzvieNvqr1p3rkEoxMeD4WJOR9bI1Fr5IO_itL33GjCw501EP49SnsfWYJMCB2oTJpVp4eyq
- isXL94rzALV31uR1oJ51M1Wb_Q7sLbcLRpMc81zVqQbQldpy4uDI2IT4OfGopaKQQYIN5z7jzBCg
- j6WNPLSNkXfUHApUpu2FnX3_EtZFa0HEyP6AlLsBAj7O.EtT6.C.lnknNr9SisIMmH4iihS2aPRk
- .EqBbOg--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: eda89079-59be-4dc7-9d88-5ef5a8b8f9df
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 20 Jun 2024 17:12:53 +0000
-Received: by hermes--production-gq1-5b4c49485c-vr5s6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b15db0c57ebca36900b26dc3d8ea6aed;
-          Thu, 20 Jun 2024 16:52:38 +0000 (UTC)
-Message-ID: <9b672b38-f580-4278-be20-9b9ca1f0cccf@schaufler-ca.com>
-Date: Thu, 20 Jun 2024 09:52:36 -0700
+	s=arc-20240116; t=1718902480; c=relaxed/simple;
+	bh=Wqp9vZOjGXxNeztCTRhZXaV/kM8U5SAYlJJa2Su7aFY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bd/8VYpvByWTcSrTLwyqhSbvTpWvauKJAMQ5V5jbjAJlRe0jUC+eYQHZUQU4iDw1hbcbEWjM57Zk3Ss94OGtslBtYTEwUBhyGOY1i4PwbYrHO1JgDxj6ftllW1SxcHmouUUYwqb8ji7D1gFezIhYEFS00IZycSzAJR0P88JWoYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ODwvZO3o; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dff06b3f413so1056443276.3
+        for <linux-security-module@vger.kernel.org>; Thu, 20 Jun 2024 09:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1718902478; x=1719507278; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nU32yJqLVWlauO1MOjGbdfeZvhkP3RdEVxn5gIXcZPk=;
+        b=ODwvZO3ogo2UMLwhPrtupguu3JIurgoLDcMxA3oKU5Abw+okdMRfgtCpGq/ZXLgioB
+         uOrWl3X5Nx/efGnBlUSulgfd1mMyhre+nyHhLGGWqQZLYDcjzsR/P3Z9/JlNPEDopCSt
+         clKO17sS7CI7lKviTQzMbOF+eQyR9ZsZVz1fwZsszoAdTpRvKmPWLrNWge3HgVIYGrVi
+         W1tHg6pRNkmKQtgr2XBVMJZNBjbHi1iFyaoG0dIGmdc9ydgy3CC+Qw0F+/sYAuIfd1pM
+         UyY2j6tb97KGh8EWdo7ooBHSuX5ETEyz8HAdf4dsJMQPIGQjW8wcIGZg4qOuQctnNEi/
+         TB5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718902478; x=1719507278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nU32yJqLVWlauO1MOjGbdfeZvhkP3RdEVxn5gIXcZPk=;
+        b=Eeb2/0LLjjB5JrXOf3cA4I+ac0rYdlZnkIOJtAM3xbmpKGwyAGlpTwUn+6BOwkffiI
+         w6UxL3F4IYg04oosG+9xe1Oc2kig1mvPhrewQ4iVDYPw3c8lnZmVnajK1raF9/x+SjSW
+         2mEfq8nmHmy6SaaS/FlKrn2az+HF7g63KN3Px8J2YwTq7x68coNJ33Dk3Lps2onhSYI8
+         KzYlkmD+/+/qbYr62DTYbKdE1umtq2380gPLYLs55UBFIu32XKVHhOek3xGnTAGihqbl
+         z9I0oEQMymrs2YS49paF1QM/zi3ON5NWhPQbv40p2fyxB1+/jW3UDlHshoopdmMw9nbp
+         sDPA==
+X-Forwarded-Encrypted: i=1; AJvYcCUP9kh5TmNJP204Z7jbDNG734dbX/fgqAlV2NNr2LVzn7l8mb59nfntqLmQPIIWg0UfR18oHYRwjND8M8Sqh6sNhaXQY2cXo9u3m21+oJ2zsCf5AeDM
+X-Gm-Message-State: AOJu0YxseW0y7CaLcpd8VEqJU8+vXLUKKA4hrujJcmDsktI7DFxypmIU
+	VtE+1kauiUUyThBd0n8zPfM7Sr+1Fj62zYUECYmrmVICzBP2Jtzu6Wa4RAG7sweys9I9QbtPnR7
+	5XgRRuFrWPJck5Cy86Pxmer5hh5aTnCFjfavQ
+X-Google-Smtp-Source: AGHT+IF13BHpoNYPwS4PQPx7j7170Xyxvk6ucDaOXGDhfaS1JKo7NId9A6sAy7bCJmw3neQ25h0P/Cwv0uX6xpzNWNQ=
+X-Received: by 2002:a25:7442:0:b0:dfe:3e88:3649 with SMTP id
+ 3f1490d57ef6-e02be13b1e3mr6638405276.20.1718902478328; Thu, 20 Jun 2024
+ 09:54:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Yet another vision of Linux security | Endpoint Security
- Framework
-To: Timur Chernykh <tim.cherry.co@gmail.com>,
- linux-security-module@vger.kernel.org
-References: <CABZOZnS13-KscVQY0YqqWZsBwmQaKyRO_G=kzCL8zc9jHxAC=A@mail.gmail.com>
-Content-Language: en-US
-Cc: Casey Schaufler <casey@schaufler-ca.com>
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CABZOZnS13-KscVQY0YqqWZsBwmQaKyRO_G=kzCL8zc9jHxAC=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.22407 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+References: <20240606-md-trusted-v3-0-42716f15e66e@quicinc.com>
+ <20240606-md-trusted-v3-1-42716f15e66e@quicinc.com> <D24EWHXV14EM.S0NQ3H51R892@kernel.org>
+In-Reply-To: <D24EWHXV14EM.S0NQ3H51R892@kernel.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 20 Jun 2024 12:54:26 -0400
+Message-ID: <CAHC9VhSVSS46oCAz_NrUUGstmG3j0NVk70-SwwtCTVJ-R1Z+OA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] KEYS: trusted: add missing MODULE_DESCRIPTION()
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jeff Johnson <quic_jjohnson@quicinc.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	David Howells <dhowells@redhat.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-integrity@vger.kernel.org, 
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/20/2024 6:40 AM, Timur Chernykh wrote:
-> Hello!
+On Wed, Jun 19, 2024 at 8:19=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
+ wrote:
+> On Fri Jun 7, 2024 at 4:47 AM EEST, Jeff Johnson wrote:
+> > kbuild reports:
+> >
+> > WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted=
+-keys/trusted.o
+> >
+> > Add the missing MODULE_DESCRIPTION() macro invocation.
+> >
+> > Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> > ---
+> >  security/keys/trusted-keys/trusted_core.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/=
+trusted-keys/trusted_core.c
+> > index 5113aeae5628..e2d9644efde1 100644
+> > --- a/security/keys/trusted-keys/trusted_core.c
+> > +++ b/security/keys/trusted-keys/trusted_core.c
+> > @@ -395,4 +395,5 @@ static void __exit cleanup_trusted(void)
+> >  late_initcall(init_trusted);
+> >  module_exit(cleanup_trusted);
+> >
+> > +MODULE_DESCRIPTION("Trusted Key type");
+> >  MODULE_LICENSE("GPL");
 >
-> I'm here for yours' opinions.
->
-> The modern Linux, in fact, does not provide convenient options to
-> write AV/EDR software
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Please don't assume that everyone knows your abbreviations.
-Audio Visual / Editable Data Record.
-Sure, "everyone knows" what AV/EDR is today. Except that many of
-us also know what it was in 2010, 2000, 1990, and 1980. Confusion!
+Are you planning on taking these patches Jarkko?
 
->  with real-time system events analysis as far as
-> unified system security events. For now we have only inconsistent
-> self-made events from eBPF, audit, fanotify, etc. eBPF itself is a
-> cool technology, but even CO-RE sometimes works as not expected or
-> gets broken, for example:
-> https://github.com/aquasecurity/tracee/pull/3769/files. This hack (one
-> of a huge amount of the same hacks) looks a bit "crutchy".
->
-> As an EDR developer, I have an idea how to fix this situation, using a
-> unified endpoint security framework (ESF) placed in the kernel. Its
-> must:
-> - Provide unified and consistent security events;
-
-"Consistent" is hardly a term you can use to describe Linux security events.
-Is binding a socket to a port a security event? Where is the security event
-when using io_uring?
-
-> - API to communicate with kernel:
->  - To send program-defined events (as audit has);
->  - Read events from kernel;
-
-A comprehensive set of events is likely to overwhelm any user space
-collector. 
-
-> - Trusted agents delivery mechanisms (signing like kernel modules);
-> - Has a possibility to control what happens on system e.g block some
-> file operations, binary executions and so on;
-
-Performance concerns (locking, sleeping and a host of others) are
-likely to prevent this.
-
-> - Has a portable and flexible events structure which doesn't get
-> broken from version to version;
-
-If the kernel's policies, mechanisms and structures were more consistent
-you might have a chance at this.
-
->
-> For now I have PoC, which describes the concept in more detail:
-> GH mirror: https://github.com/Linux-Endpoint-Security-Framework/linux.
-> It contains all listed above points (maybe except portable event
-> structures)
->
-> There are an examples with:
-> - Security agent:
-> https://github.com/Linux-Endpoint-Security-Framework/linux/blob/esf/main/samples/esf/agent.c
-> - API: https://github.com/Linux-Endpoint-Security-Framework/linux/blob/esf/main/include/uapi/linux/esf/ctl.h
-> - Event structures and types:
-> https://github.com/Linux-Endpoint-Security-Framework/linux/blob/esf/main/include/uapi/linux/esf/defs.h
-> - Main ESF source code:
-> https://github.com/Linux-Endpoint-Security-Framework/linux/tree/esf/main/security/esf
->
-> Questions I'm interested in:
-> How does the community feel about this idea? Is it a viable concept?
-> If all is OK, what should I, as developer, do further? How much kernel
-> code outside the LSM module may be modified to keep further merge
-> acceptable? (currently not all LSM hooks meet to intercept all needed
-> data).
-
-User-space arbitration of kernel events won't work. It's been tried
-repeatedly. I started seeing it in the early 1980's. It always devolved
-into a kernel bolt-on, with sub-optimal performance and versatility.
-
->
-> The general purpose is to make AV/EDR software development easier,
-> more convinient, and stable for Linux-based operating systems. This
-> PoC (as far as technology idea) is inspired by MacOS Endpoint Security
-> based on MAC policy.
->
-> Best regards,
-> Timur Chernykh,
-> Lead developer, F.A.C.C.T.
->
+--=20
+paul-moore.com
 
