@@ -1,75 +1,74 @@
-Return-Path: <linux-security-module+bounces-4150-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4146-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19A3C92AB7F
-	for <lists+linux-security-module@lfdr.de>; Mon,  8 Jul 2024 23:50:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78C4592AB68
+	for <lists+linux-security-module@lfdr.de>; Mon,  8 Jul 2024 23:42:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2C8B280E86
-	for <lists+linux-security-module@lfdr.de>; Mon,  8 Jul 2024 21:50:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C44ECB222E4
+	for <lists+linux-security-module@lfdr.de>; Mon,  8 Jul 2024 21:42:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24821474D4;
-	Mon,  8 Jul 2024 21:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6865914D702;
+	Mon,  8 Jul 2024 21:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="qCWhGIUG"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="Yaa3jzS3"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA867345B
-	for <linux-security-module@vger.kernel.org>; Mon,  8 Jul 2024 21:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60834EB2B
+	for <linux-security-module@vger.kernel.org>; Mon,  8 Jul 2024 21:41:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720475422; cv=none; b=PAyNX+nmbQ0Ek15yb4X+ky63qWnB4LyYZVVGUMx0xjk4mJUeDYqmTXIrO0kBJWXboZ3RPhunRS9bd3EIgDw8J8aWe32xYJ/3NMoi0J2kb9aJuLrXoJ7V6aH8T91JcZo5G6Cyt+XTsds59XOLdpUxIuUpgncmtyC4PBa7Tz0iDZ4=
+	t=1720474911; cv=none; b=WI+HP8UPjxy/D9KO73xCSYoxuS8dYbHkCdO9HFEOeJ/2dbqps3HcWHdyVstG7STUXpUyve+cdfh49S0c9+h0P3YwHPrmJG7lI/IUndG1/0nbbtA61MDGMQUD6xf3Qr8OIZayU18BCqpTDynruMtSOWN3eX71TOcuNK1S3wyV8Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720475422; c=relaxed/simple;
-	bh=PpUDXQ6o71azfJHrdH/OhZ2bLPF7lrV/+fSHDc2R8zE=;
+	s=arc-20240116; t=1720474911; c=relaxed/simple;
+	bh=kEicifXjp/pHDSOUVrWvb+Y4W7vCgUM+hf8ejKvwxk0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=asBso1KWyTOsGXdi0NmSBqONcsJ4t4Ewjplo5uAihIP/t43ME1f04PaRDelvvrToXTO2vrKkRCMgnWtfkpDnrUbxa0fp4o1uYHJcyzGt575+SNuEq77pnxCETPWbJi9zCqvpoZsHcwlyTzIDgKxj45tTBvNCyaWUBlVRrOXbW6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=qCWhGIUG; arc=none smtp.client-ip=66.163.186.211
+	 MIME-Version; b=hQVu+womECNUzPiMCOsz6mIh0ruwsWXgRZR1tDV2xroA8E1oENrqTZKTss88l+tyuFs30CLqrFLlitupLBXbW+Pvt+X+NawXFEnrsZk1Xu5HBNLD17V2FlVFZbUC5KJT/f8wCINnrjsslx50fmu7IU/+8zxsCazoVo3HhhiP5n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=Yaa3jzS3; arc=none smtp.client-ip=66.163.186.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720475420; bh=jszlhQoZn4LKsPN6EY5JS78uZKZIJSkhZKtEJaT66rk=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=qCWhGIUGnsDh+s6fGVGqcW9Gh2cka8EQJgm1LjSb6ry/ECuet/UqCcSwplyufSA+C7wUf4wdGcEiKagW5eVsQUtOoGDlrR1wpMAl4RCCC8rNjRc5UlfwS7CVYghuEnfYjxerO729ieu4Hga/aurBkuQ8fWrOMA78a1p+degdV+fzxCag3x7qKUt8hHfiQE4sPwia4YVcVr1jzC3IOhREz3xo3pWqgEAGqqpWdqQrf7S6sg+IfbsFkR6wFiEYX/yYyatqmcCvEJR0YcR5i20avZDa/lpsROOhJgElXVG9c+RzFv7uHFQGQa0QnrkeA1d0olEmslKb5jCP1HQ0nlm36Q==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720475420; bh=w5ScVXwpXstTdJHkJdP0xrLTqdblac6gk9MzsSNeDBd=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=fkQEN735bxTXHfga/SlNqPY0eonsCmt5WXsvWko+jCpOqBG9YnxRrsoHJ6E2sM0Ek7N1BA+VoO5q9Vg5HZ7ZS3pWAv++LhMjBrmsLYzMkAgpfZPklXrditI+gNiEY2M/Ww2Dcy093+2LRIMxErpfNZcQfI1UwPgoA8gv3GurRSqXak8ZeC0accvLOQ9bN1z95WfRVE9W0fmFaAlDfx7M2WgwKs/kgYXW7N7gUo5yjlhcQgIGorexnsV87HHJrhmiVbgv3efeO3ue8xTTTmMkRn/GCpweqcbDyhmTiALMxn8whz8LsO/kBzQNnNp+YNE2ADePx6wCEthmbkxCLyyuSg==
-X-YMail-OSG: nL86YncVM1m9nZCcnW30tyaU9WAj9hFswYuCIwelLBDAithlWMumE2Cxxf2L_5P
- H2lAT_El1ckLwnxza0M2bxI_RFzt5uhDNAHu4oc5IuHOhAkEfiufBFGi3XpVji_NlzJ09OUmZcCi
- lO7Di7DkyTRWf9FrlpR3LT8K.ZD8ZaJQKwaKMw4vHcUfijOYHrkWb4esnjIeth2dCJCGyUQq69EO
- MPLXFLft0Jv0R.uQw8B0D4_UVQJPiY6BRTxQhg4_Rg4VqBK962EuO4_APJ7Ldyxn5Sd5_YMO6bWB
- TXoyEhNz6tSAYiL7c9u88wbEl_zudN2NaQwBija9GNQL1xK70mu4YqDnHhfbecTkm63FdQGcAT94
- nlj1j0SEu0pCBJ5K_X3q_oTaXGFHSXoCPe.GvzKCkC_T4a51fOAfbvzoQpBti6zJ1gVIalANR3EW
- cqWAo6g0xf0GqqLUXuUAks3ik8qdK6YPLcZNvVblFb53Xa66jrGaiee.d7PJ1xhGqsf5ktIjx0tJ
- sDay4EssaKnosrQFnKDORdu6ytcxPs0UdOfrZXr0SN4PlSkiUwuRNHrszQdSZeQ366w3mGnR2YIg
- ThobdSGpXHnHmHasavzxUFsDHN2C58EPgfAOXaZNOtYAB_WzVGYeC5hyPCHE6vXFQFLYwvMjdKo7
- SvVCbHFPfuNlp2jiQcAZvXne_iY9NWZT.kFd_VsyqIrlI90ahuEUTarxbOxjiKRXkMdGGEhHVzvj
- p35SKiZM9tQvxKT5L8630nwFuTM67CaoCy9ykeabPLgVsRyMXzLFTqMalnNt9.ATlZo2IXVfKeFs
- YUPJzO.qH2CofhhRETwgpikM2.qgtR6_VG4ke8f12oiU7YJR4_XUEmZ7r32PZWA4VOP.BKFvOxQH
- DNjID83IPOLeeTVhQyf1XMaHfBJnHGLArl3JWw0rqnvquzsgEQk11I9vn6xLALJh_P.ZTHMjIsqU
- faeHgEN9jQ6xnV1DC7p7nCbbuRfWOMY.QPB3TUFX2NYNCBVNaWvtXdAOVxRNW9ZNuTYYc6tiSneF
- nozYJDbE3OOWK5Df2TKr0B2OPyaolYkt6SO19fu95eD6d3yEeUYSJtfKKudeAEabLsNNis0CQHAu
- E_GJPzvHkU37xweTOAcAwVkgKSIBDXudootymA6pD7qC31gQ1AqtJre6JJeWadIjhXWsHQYKhjX7
- CqsTKAwQdNaLJtnDhMNH6DtKuJICRVkeSHEhUzkuM6ZQSvMCGZkvQ6BuBCQhDsRzHX6Zt4YcIQUE
- Tk8eHDZb6PgHwmIsm6qVc8.UpVDsD1iUNffvEte_V9ETLZxvPuyY2JNhBTk5voUUW6uVk2WgHoEf
- 3nKAQZqZEyQbZ7jq9Rpl5HfxMnvISL.AYFjOjBiQ9OExf_Rq7z0T6254Gwt5E1ng3Ij6YsXwFoOM
- RoMuEG0IErLqdMQtGvPTXZP3JDCt3xHObGObEf2ugbcESMctfmJtYR3Aj3PNx2YhKiLX1oUVbyzp
- FAjK2AvmV4JMrMydcY.YPud5XtCqAlCazTDfJU9AoBARRZWcntEDI4FkGnT3IrgH55FnLK65whuj
- DzaJakDYZs8masGaDoP5S1Oes5DSeOOYakTHs9b8Jaa18e7iNO9ocAErXvJrWYpQXT3CNWCpG5t2
- IPYeR7nvsMcVUqCpUmiL9EE0I1IPSoNG.3F1iWwstxHEd5B1MWDfl0NDykc4LDWdKVmjAUJP84z4
- yQE6HfnzvCh8DDvktvUxr9Xcf4RyALtFE_Gpk2K4BQVNcKZW0ibZcP18ePrS_nCf0kB87F5cfrES
- wQoAPgVhgPMlQUrfeVtkkzsbc0M_jwsk523H3Uzd0ntck7kmxr0hQluGLlEjBql1R_wMkBJNeg3V
- X45jAijW64A._K0DUXeuqgXu7kPc8JxKPAjwXfglUPU5UT3YeNOk.0TDNwZoxzpLaX4zxwhfoiQn
- uizk6OKJJXDKdwZRzFkaoQE0_9zcqGlIwPFtce3NjNFMn60Z_8dtuPAC1QevrA3yNaQOrynPTfGe
- Y9TNQ28JkWGgRjW4nu86_WUEZUE66Wcx0yUHPHRqeN3sR_RRZ3g2g9iuC7YaKCdmY8lBJtGb9IPN
- k_6w4FVCq5XjrEUWii4liADC5DF9xAnxnyiLg9omU9cNhbBUHlESz_r7qcI.k3y2C7zg522kyvLr
- 0EEV5qkQw._NlWr9ykm9zufr94TfbhvQmgAy9gEII7OPXV7kMMEz.3GLQtxr4qznTITu6kuGrcvk
- bygpzSiCmjjSyKdgRdxfKi9rFo8EmtA7tLLW9kYx1xQVHVXk0rCbeBwioM4tAiDOfeiE5swi2igm
- 4f4WirG9VFg--
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720474908; bh=lPYxJS3I8UNcr8IGIWNo3TVvaFSGbQmk54XmLfp0ZvE=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=Yaa3jzS3Jxh/UzfCtZj4UWrWJIYZhvdwkrbPaky98Q1VhWPBnTy3UQcxhprNAIXHZ3ujd9uPucbTgMld4dd+UNfT7c3LydTYLb6p8o/TptYLpa0hOqP3FYk3y1J0wqj9IYtjeaqSBqD3+mc9UCI1pmsHYBXPgBF338iPGX+uFYwVNa6aN6WT0mcEL/ZeepEIk9h7MR32CeMLsJaYsKp7s7J2iTjpNMbMcmladJ419Z4MPE5UlWrx+j1mIV+wzRe5+89Ex+RcU2DSi0Xy5rqzfNLgeY7D/rSIQme//3JcospOIFijdwZ9pV8GfYLYCimrLmXCPYP0VQa3eT6CAjNAlw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720474908; bh=Cfhq2Ei5arqwizPih7w/fSirEqnfGrSc8yn4Qw1mtdb=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=JM1Da8zMO1zvdcVNWjlyyVS9oCpbySkNlX6m0qiS30IRd/CTUz/gKsjAuZi451UiGdS0bO+51NXcoBmTx7BKxi7FKS3/V3hEjRAtWfX7CC4oPq8QpnfIxZUwMsBsT9tYh7B8TOPyzCOvx9aA78gXas/bElQ5aQchehzwS9vlaJZEUXIfXcgq83xGKTDiz2Xn4YCq127Xh9SAVokfCUcdYnH95VrXL9SZzwTQzxRrWydpwXnjcm7Hfvg20pVujEFOwsW9Dud+p47FWYUKt2f8L9MQp0DzLQ8ADsJMWm145qWoCOCBZIhdvs3LTBG3SnGVgPO6AX4Ue0smMxlj1Tiv/w==
+X-YMail-OSG: mcbKEFkVM1mYkzW.IhUI_Y87GNVC77Ps0wGBrP2rGM.DX.9_Kt4EK6XWCwY1.UI
+ NRvewR7Vv3oSGsfYbSMtDcrB4CnYu5OB.63555I0Apbsjx02JyGJ0zCQjsu4ZgMIMJPbMSfwCdYr
+ svxJcbZAxdAUGBupRal.oW53.DW3PzMvfYSHJrNI_oxR2nmQ8fNs2Vwx83BB.f4BQAR2IyDq0L3O
+ Ha23JUVjiSkxA8Jm7qR9.3sMgbfY_BGWIVL.gyKlPvEDBtl9lpptOzTKgFrkVfmm.Xqqcx1N7N8S
+ d6nMLIswEHLQsQIPtqOVkcnJCBeglt7xgUTDKBBGujf7A4CCzWpDjE6nFRnsW7MgKpSQOOFoq04a
+ 9BAfHB_.gjUNHehPG_sEDONJUyGlb16cB.L4DpLFKo5fHJU9guCVQXacGh6FZNwnrCSH2sBuvDuq
+ pAsVSz0P.3PLrvuymE8tECA5KFWa2ezI8wNvCtm1d84tw6DdpKsW3.LJCh6KwPu0tlvLPQ2otfm2
+ _ZBtGrkAC2OwKBdLjAcJUSB25vI0XBD806YlmY5IBVRHr5.r1FbdGRB4_rxDGVMK190.rvqggcUU
+ L.VFuTRRxIATBDWKqn6Bgf61xeaR5gfp85O7VXw1t2k0vjUKhEILU0BpDfchhOjVloU1Gr5Rx.Qd
+ KU43GsIVibmTR9xP21zL5va3bYD_O0IGTapefJmKrBiPE4yFRh5Asnh1DyCMlfm1M0YtwoTh4sLo
+ 2pLhjxY6XkHnIrRMTVKXltAbfHuBd807vZMCuRcBMUmQfeDgaWYNbhsfDwpp6ZpPX_Qr6xTdL4vc
+ mif9IbQNhqNgBkb5jVzWUKWBDaiewJaI5nZn_EFxAHg40jGgP0Ii6IFT6tsQluo8C0KMJhyq.T8O
+ 0qzxGZ4YF1UfBTB_iew4P0I71VIE7PrfA8jt09NrnIRP2.l0p6g2JuCkfAYALzD9irmBaKfncUX0
+ GcTgKC6L8JVVHZAx4TlAUV3HvYaHY0slCnqm28n02NUmydU7IweR1TVYl8eht92syZaokVUZbfLi
+ auuabQrr18heFuVmeB82SyqjqBkYf3XbinNwunDCsAYOEcEOK81oqAzwvL0Y88QxoPtuXS1llccg
+ k2rI.FJK5wezPegHigqB5OeZk3xZImLTZCc0Xok0ZbgtHG5kDNY9e2TeKa01YehwMGXwGsSQBe_f
+ yOnhioQcq8U709wZZCrD4EYmqRJi_H5uAweqJzOg2fIFumF8zYX8b8d7G_VE6Qlh7Vu11estH0c3
+ XZSfol9zeIHNUcyTErJF0XaMwNWREt7THPgZ9arx_9obWdbn7HuAfFQnLJmDT1q530CXp4Es865X
+ aw7IIMKmaDIU4SKjX8QkAQVf6j5n2Y6K48mgJjpnWH9.mn3v33sKjlV4eQOAoJsukW1SWQzgF0_d
+ 3SsoTu0GDZ5HTav3..YlzQLSKI_qp_VV3hCoNZRQxbxVEtySXnAtwJMvJP2tfQeADApk_1TIDDcE
+ 1uprhUhWZGwuJ0EQRMiOZfgZI9FgXuSIw8K7Ze3IEfVr5bfNCEnCnuLNpKrpYZho3AdbQwvzNVhU
+ L6y0C_uTU16fJnbzrDcdS8.XSfY3bRBy9YkRcHPtUJCrMGYq26O1lriCEpMWyLoMG7IqBlr.KLeK
+ Wqhnd.ZW4QkXFzo9POsIZMtGcgLywCaisG.a_xQZraIOqDiBk0vx7BdTGp3OTj2RglFJEjun7QqT
+ TspowOOSr4MwiGHKENz1o.Re5CmuLzdk55VChoHQhdxiW6wAgYjaesFmrI9vQxYirtyB_fU7psMv
+ 8L_IDO2MY3zifAKwiGH.KWkla0ra8OTdfMtFW08ZnBmscTBguKEneXZIyKqU3AZkeSnJen1XTsxF
+ tV3TNLJZOfj_vx.hZdzpMJVLwEiHHbc.gMBndh6c1Pm2BlRl3UXvW.h0.MV.q_vh9z.CM9TdSYYp
+ hCkNnYFUf.TteaxkFwvepmFo2cLraf161N8dvHK_wx21a1Txpc8_2xnPPNjAJkT2.jTSMYdpKj3F
+ mPye887HQpUoYFSsjCnylOnnU8vr8pe.Wsfwnho5n8Uw8Nq11aOuY.2spAeKps.IysUz1DgSlADw
+ 1jVvMZQb_BnENPLCckFLFExyAjQnV.hUCMtewo8SJQfAM9EFGqmjcCsuyDNA5DZRBdnwaV.yCwR5
+ 2k_2.z2eOAljLuOm3VVwHBrk5KixB0lHnSoDbPCZBixUUsV.0pNiFpyLECOfaXQnzfsSjkrIyNao
+ E9R8XtwUKWlbci8W4_5wd2.pT7XEx
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: fa16f274-1aeb-48b7-a6f4-38aa50cfc9c9
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Mon, 8 Jul 2024 21:50:20 +0000
-Received: by hermes--production-gq1-5b4c49485c-4ls9q (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 493327e53f094c0d7e867cac350cba0d;
-          Mon, 08 Jul 2024 21:40:09 +0000 (UTC)
+X-Sonic-ID: 4925b188-25ee-4405-b864-506f4ddb8809
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Mon, 8 Jul 2024 21:41:48 +0000
+Received: by hermes--production-gq1-5b4c49485c-sbfr9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 804657d20aca575d276c2f9208c57a78;
+          Mon, 08 Jul 2024 21:41:42 +0000 (UTC)
 From: Casey Schaufler <casey@schaufler-ca.com>
 To: casey@schaufler-ca.com,
 	paul@paul-moore.com,
@@ -81,9 +80,9 @@ Cc: jmorris@namei.org,
 	penguin-kernel@i-love.sakura.ne.jp,
 	stephen.smalley.work@gmail.com,
 	mic@digikod.net
-Subject: [PATCH 2/6] LSM: Infrastructure management of the key security blob
-Date: Mon,  8 Jul 2024 14:39:53 -0700
-Message-ID: <20240708213957.20519-3-casey@schaufler-ca.com>
+Subject: [PATCH 3/6] LSM: Add helper for blob allocations
+Date: Mon,  8 Jul 2024 14:39:54 -0700
+Message-ID: <20240708213957.20519-4-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240708213957.20519-1-casey@schaufler-ca.com>
 References: <20240708213957.20519-1-casey@schaufler-ca.com>
@@ -95,315 +94,186 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move management of the key->security blob out of the
-individual security modules and into the security
-infrastructure. Instead of allocating the blobs from within
-the modules the modules tell the infrastructure how much
-space is required, and the space is allocated there.
+Create a helper function lsm_blob_alloc() for general use in the hook
+specific functions that allocate LSM blobs. Change the hook specific
+functions to use this helper. This reduces the code size by a small
+amount and will make adding new instances of infrastructure managed
+security blobs easier.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- include/linux/lsm_hooks.h         |  1 +
- security/security.c               | 41 +++++++++++++++++++++++++++++--
- security/selinux/hooks.c          | 23 +++++------------
- security/selinux/include/objsec.h |  7 ++++++
- security/smack/smack.h            |  7 ++++++
- security/smack/smack_lsm.c        | 33 +++++++++++--------------
- 6 files changed, 75 insertions(+), 37 deletions(-)
+ security/security.c | 97 +++++++++++++++------------------------------
+ 1 file changed, 33 insertions(+), 64 deletions(-)
 
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index efd4a0655159..7233bc0737be 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -76,6 +76,7 @@ struct lsm_blob_sizes {
- 	int	lbs_sock;
- 	int	lbs_superblock;
- 	int	lbs_ipc;
-+	int	lbs_key;
- 	int	lbs_msg_msg;
- 	int	lbs_task;
- 	int	lbs_xattr_count; /* number of xattr slots in new_xattrs array */
 diff --git a/security/security.c b/security/security.c
-index 5e93a72bdca6..aae37481b7be 100644
+index aae37481b7be..438ec6708eb3 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -227,6 +227,9 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
- 		blob_sizes.lbs_inode = sizeof(struct rcu_head);
- 	lsm_set_blob_size(&needed->lbs_inode, &blob_sizes.lbs_inode);
- 	lsm_set_blob_size(&needed->lbs_ipc, &blob_sizes.lbs_ipc);
-+#ifdef CONFIG_KEYS
-+	lsm_set_blob_size(&needed->lbs_key, &blob_sizes.lbs_key);
-+#endif
- 	lsm_set_blob_size(&needed->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
- 	lsm_set_blob_size(&needed->lbs_sock, &blob_sizes.lbs_sock);
- 	lsm_set_blob_size(&needed->lbs_superblock, &blob_sizes.lbs_superblock);
-@@ -402,6 +405,9 @@ static void __init ordered_lsm_init(void)
- 	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
- 	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
- 	init_debug("ipc blob size        = %d\n", blob_sizes.lbs_ipc);
-+#ifdef CONFIG_KEYS
-+	init_debug("key blob size        = %d\n", blob_sizes.lbs_key);
-+#endif /* CONFIG_KEYS */
- 	init_debug("msg_msg blob size    = %d\n", blob_sizes.lbs_msg_msg);
- 	init_debug("sock blob size       = %d\n", blob_sizes.lbs_sock);
- 	init_debug("superblock blob size = %d\n", blob_sizes.lbs_superblock);
-@@ -718,6 +724,29 @@ static int lsm_ipc_alloc(struct kern_ipc_perm *kip)
+@@ -605,27 +605,42 @@ int unregister_blocking_lsm_notifier(struct notifier_block *nb)
+ EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
+ 
+ /**
+- * lsm_cred_alloc - allocate a composite cred blob
+- * @cred: the cred that needs a blob
++ * lsm_blob_alloc - allocate a composite blob
++ * @dest: the destination for the blob
++ * @size: the size of the blob
+  * @gfp: allocation type
+  *
+- * Allocate the cred blob for all the modules
++ * Allocate a blob for all the modules
+  *
+  * Returns 0, or -ENOMEM if memory can't be allocated.
+  */
+-static int lsm_cred_alloc(struct cred *cred, gfp_t gfp)
++static int lsm_blob_alloc(void **dest, size_t size, gfp_t gfp)
+ {
+-	if (blob_sizes.lbs_cred == 0) {
+-		cred->security = NULL;
++	if (size == 0) {
++		*dest = NULL;
+ 		return 0;
+ 	}
+ 
+-	cred->security = kzalloc(blob_sizes.lbs_cred, gfp);
+-	if (cred->security == NULL)
++	*dest = kzalloc(size, gfp);
++	if (*dest == NULL)
+ 		return -ENOMEM;
  	return 0;
  }
  
-+#ifdef CONFIG_KEYS
 +/**
-+ * lsm_key_alloc - allocate a composite key blob
-+ * @key: the key that needs a blob
++ * lsm_cred_alloc - allocate a composite cred blob
++ * @cred: the cred that needs a blob
++ * @gfp: allocation type
 + *
-+ * Allocate the key blob for all the modules
++ * Allocate the cred blob for all the modules
 + *
 + * Returns 0, or -ENOMEM if memory can't be allocated.
 + */
-+static int lsm_key_alloc(struct key *key)
++static int lsm_cred_alloc(struct cred *cred, gfp_t gfp)
 +{
-+	if (blob_sizes.lbs_key == 0) {
-+		key->security = NULL;
-+		return 0;
-+	}
-+
-+	key->security = kzalloc(blob_sizes.lbs_key, GFP_KERNEL);
-+	if (key->security == NULL)
-+		return -ENOMEM;
-+	return 0;
++	return lsm_blob_alloc(&cred->security, blob_sizes.lbs_cred, gfp);
 +}
-+#endif /* CONFIG_KEYS */
 +
  /**
-  * lsm_msg_msg_alloc - allocate a composite msg_msg blob
-  * @mp: the msg_msg that needs a blob
-@@ -5290,7 +5319,14 @@ EXPORT_SYMBOL(security_skb_classify_flow);
- int security_key_alloc(struct key *key, const struct cred *cred,
- 		       unsigned long flags)
- {
--	return call_int_hook(key_alloc, key, cred, flags);
-+	int rc = lsm_key_alloc(key);
-+
-+	if (unlikely(rc))
-+		return rc;
-+	rc = call_int_hook(key_alloc, key, cred, flags);
-+	if (unlikely(rc))
-+		security_key_free(key);
-+	return rc;
- }
- 
- /**
-@@ -5301,7 +5337,8 @@ int security_key_alloc(struct key *key, const struct cred *cred,
+  * lsm_early_cred - during initialization allocate a composite cred blob
+  * @cred: the cred that needs a blob
+@@ -692,15 +707,7 @@ int lsm_inode_alloc(struct inode *inode)
   */
- void security_key_free(struct key *key)
+ static int lsm_task_alloc(struct task_struct *task)
  {
--	call_void_hook(key_free, key);
-+	kfree(key->security);
-+	key->security = NULL;
- }
- 
- /**
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 19346e1817ff..b3de2e941ef7 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -6658,11 +6658,7 @@ static int selinux_key_alloc(struct key *k, const struct cred *cred,
- 			     unsigned long flags)
- {
- 	const struct task_security_struct *tsec;
--	struct key_security_struct *ksec;
+-	if (blob_sizes.lbs_task == 0) {
+-		task->security = NULL;
+-		return 0;
+-	}
 -
--	ksec = kzalloc(sizeof(struct key_security_struct), GFP_KERNEL);
--	if (!ksec)
+-	task->security = kzalloc(blob_sizes.lbs_task, GFP_KERNEL);
+-	if (task->security == NULL)
 -		return -ENOMEM;
-+	struct key_security_struct *ksec = selinux_key(k);
- 
- 	tsec = selinux_cred(cred);
- 	if (tsec->keycreate_sid)
-@@ -6670,18 +6666,9 @@ static int selinux_key_alloc(struct key *k, const struct cred *cred,
- 	else
- 		ksec->sid = tsec->sid;
- 
--	k->security = ksec;
- 	return 0;
+-	return 0;
++	return lsm_blob_alloc(&task->security, blob_sizes.lbs_task, GFP_KERNEL);
  }
  
--static void selinux_key_free(struct key *k)
--{
--	struct key_security_struct *ksec = k->security;
--
--	k->security = NULL;
--	kfree(ksec);
--}
--
- static int selinux_key_permission(key_ref_t key_ref,
- 				  const struct cred *cred,
- 				  enum key_need_perm need_perm)
-@@ -6722,14 +6709,14 @@ static int selinux_key_permission(key_ref_t key_ref,
- 
- 	sid = cred_sid(cred);
- 	key = key_ref_to_ptr(key_ref);
--	ksec = key->security;
-+	ksec = selinux_key(key);
- 
- 	return avc_has_perm(sid, ksec->sid, SECCLASS_KEY, perm, NULL);
- }
- 
- static int selinux_key_getsecurity(struct key *key, char **_buffer)
- {
--	struct key_security_struct *ksec = key->security;
-+	struct key_security_struct *ksec = selinux_key(key);
- 	char *context = NULL;
- 	unsigned len;
- 	int rc;
-@@ -6981,6 +6968,9 @@ struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
- 	.lbs_file = sizeof(struct file_security_struct),
- 	.lbs_inode = sizeof(struct inode_security_struct),
- 	.lbs_ipc = sizeof(struct ipc_security_struct),
-+#ifdef CONFIG_KEYS
-+	.lbs_key = sizeof(struct key_security_struct),
-+#endif /* CONFIG_KEYS */
- 	.lbs_msg_msg = sizeof(struct msg_security_struct),
- 	.lbs_sock = sizeof(struct sk_security_struct),
- 	.lbs_superblock = sizeof(struct superblock_security_struct),
-@@ -7318,7 +7308,6 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
- #endif
- 
- #ifdef CONFIG_KEYS
--	LSM_HOOK_INIT(key_free, selinux_key_free),
- 	LSM_HOOK_INIT(key_permission, selinux_key_permission),
- 	LSM_HOOK_INIT(key_getsecurity, selinux_key_getsecurity),
- #ifdef CONFIG_KEY_NOTIFICATIONS
-diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
-index b074099acbaf..83b9443d6919 100644
---- a/security/selinux/include/objsec.h
-+++ b/security/selinux/include/objsec.h
-@@ -195,6 +195,13 @@ selinux_superblock(const struct super_block *superblock)
- 	return superblock->s_security + selinux_blob_sizes.lbs_superblock;
- }
- 
-+#ifdef CONFIG_KEYS
-+static inline struct key_security_struct *selinux_key(const struct key *key)
-+{
-+	return key->security + selinux_blob_sizes.lbs_key;
-+}
-+#endif /* CONFIG_KEYS */
-+
- static inline struct sk_security_struct *selinux_sock(const struct sock *sock)
- {
- 	return sock->sk_security + selinux_blob_sizes.lbs_sock;
-diff --git a/security/smack/smack.h b/security/smack/smack.h
-index 297f21446f45..dbf8d7226eb5 100644
---- a/security/smack/smack.h
-+++ b/security/smack/smack.h
-@@ -360,6 +360,13 @@ static inline struct socket_smack *smack_sock(const struct sock *sock)
- 	return sock->sk_security + smack_blob_sizes.lbs_sock;
- }
- 
-+#ifdef CONFIG_KEYS
-+static inline struct smack_known **smack_key(const struct key *key)
-+{
-+	return key->security + smack_blob_sizes.lbs_key;
-+}
-+#endif /* CONFIG_KEYS */
-+
- /*
-  * Is the directory transmuting?
-  */
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index a931b44bc959..17bcc9cbf584 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4473,23 +4473,13 @@ static void smack_inet_csk_clone(struct sock *sk,
- static int smack_key_alloc(struct key *key, const struct cred *cred,
- 			   unsigned long flags)
- {
-+	struct smack_known **blob = smack_key(key);
- 	struct smack_known *skp = smk_of_task(smack_cred(cred));
- 
--	key->security = skp;
-+	*blob = skp;
- 	return 0;
- }
- 
--/**
-- * smack_key_free - Clear the key security blob
-- * @key: the object
-- *
-- * Clear the blob pointer
-- */
--static void smack_key_free(struct key *key)
--{
--	key->security = NULL;
--}
--
  /**
-  * smack_key_permission - Smack access on a key
-  * @key_ref: gets to the object
-@@ -4503,6 +4493,8 @@ static int smack_key_permission(key_ref_t key_ref,
- 				const struct cred *cred,
- 				enum key_need_perm need_perm)
+@@ -713,15 +720,7 @@ static int lsm_task_alloc(struct task_struct *task)
+  */
+ static int lsm_ipc_alloc(struct kern_ipc_perm *kip)
  {
-+	struct smack_known **blob;
-+	struct smack_known *skp;
- 	struct key *keyp;
- 	struct smk_audit_info ad;
- 	struct smack_known *tkp = smk_of_task(smack_cred(cred));
-@@ -4540,7 +4532,9 @@ static int smack_key_permission(key_ref_t key_ref,
- 	 * If the key hasn't been initialized give it access so that
- 	 * it may do so.
- 	 */
--	if (keyp->security == NULL)
-+	blob = smack_key(keyp);
-+	skp = *blob;
-+	if (skp == NULL)
- 		return 0;
- 	/*
- 	 * This should not occur
-@@ -4556,8 +4550,8 @@ static int smack_key_permission(key_ref_t key_ref,
- 	ad.a.u.key_struct.key = keyp->serial;
- 	ad.a.u.key_struct.key_desc = keyp->description;
- #endif
--	rc = smk_access(tkp, keyp->security, request, &ad);
--	rc = smk_bu_note("key access", tkp, keyp->security, request, rc);
-+	rc = smk_access(tkp, skp, request, &ad);
-+	rc = smk_bu_note("key access", tkp, skp, request, rc);
- 	return rc;
+-	if (blob_sizes.lbs_ipc == 0) {
+-		kip->security = NULL;
+-		return 0;
+-	}
+-
+-	kip->security = kzalloc(blob_sizes.lbs_ipc, GFP_KERNEL);
+-	if (kip->security == NULL)
+-		return -ENOMEM;
+-	return 0;
++	return lsm_blob_alloc(&kip->security, blob_sizes.lbs_ipc, GFP_KERNEL);
  }
  
-@@ -4572,11 +4566,12 @@ static int smack_key_permission(key_ref_t key_ref,
-  */
- static int smack_key_getsecurity(struct key *key, char **_buffer)
- {
--	struct smack_known *skp = key->security;
-+	struct smack_known **blob = smack_key(key);
-+	struct smack_known *skp = *blob;
- 	size_t length;
- 	char *copy;
- 
--	if (key->security == NULL) {
-+	if (skp == NULL) {
- 		*_buffer = NULL;
- 		return 0;
- 	}
-@@ -5010,6 +5005,9 @@ struct lsm_blob_sizes smack_blob_sizes __ro_after_init = {
- 	.lbs_file = sizeof(struct smack_known *),
- 	.lbs_inode = sizeof(struct inode_smack),
- 	.lbs_ipc = sizeof(struct smack_known *),
-+#ifdef CONFIG_KEYS
-+	.lbs_key = sizeof(struct smack_known *),
-+#endif /* CONFIG_KEYS */
- 	.lbs_msg_msg = sizeof(struct smack_known *),
- 	.lbs_sock = sizeof(struct socket_smack),
- 	.lbs_superblock = sizeof(struct superblock_smack),
-@@ -5146,7 +5144,6 @@ static struct security_hook_list smack_hooks[] __ro_after_init = {
-  /* key management security hooks */
  #ifdef CONFIG_KEYS
- 	LSM_HOOK_INIT(key_alloc, smack_key_alloc),
--	LSM_HOOK_INIT(key_free, smack_key_free),
- 	LSM_HOOK_INIT(key_permission, smack_key_permission),
- 	LSM_HOOK_INIT(key_getsecurity, smack_key_getsecurity),
- #ifdef CONFIG_KEY_NOTIFICATIONS
+@@ -735,15 +734,7 @@ static int lsm_ipc_alloc(struct kern_ipc_perm *kip)
+  */
+ static int lsm_key_alloc(struct key *key)
+ {
+-	if (blob_sizes.lbs_key == 0) {
+-		key->security = NULL;
+-		return 0;
+-	}
+-
+-	key->security = kzalloc(blob_sizes.lbs_key, GFP_KERNEL);
+-	if (key->security == NULL)
+-		return -ENOMEM;
+-	return 0;
++	return lsm_blob_alloc(&key->security, blob_sizes.lbs_key, GFP_KERNEL);
+ }
+ #endif /* CONFIG_KEYS */
+ 
+@@ -757,15 +748,8 @@ static int lsm_key_alloc(struct key *key)
+  */
+ static int lsm_msg_msg_alloc(struct msg_msg *mp)
+ {
+-	if (blob_sizes.lbs_msg_msg == 0) {
+-		mp->security = NULL;
+-		return 0;
+-	}
+-
+-	mp->security = kzalloc(blob_sizes.lbs_msg_msg, GFP_KERNEL);
+-	if (mp->security == NULL)
+-		return -ENOMEM;
+-	return 0;
++	return lsm_blob_alloc(&mp->security, blob_sizes.lbs_msg_msg,
++			      GFP_KERNEL);
+ }
+ 
+ /**
+@@ -792,15 +776,8 @@ static void __init lsm_early_task(struct task_struct *task)
+  */
+ static int lsm_superblock_alloc(struct super_block *sb)
+ {
+-	if (blob_sizes.lbs_superblock == 0) {
+-		sb->s_security = NULL;
+-		return 0;
+-	}
+-
+-	sb->s_security = kzalloc(blob_sizes.lbs_superblock, GFP_KERNEL);
+-	if (sb->s_security == NULL)
+-		return -ENOMEM;
+-	return 0;
++	return lsm_blob_alloc(&sb->s_security, blob_sizes.lbs_superblock,
++			      GFP_KERNEL);
+ }
+ 
+ /**
+@@ -4682,23 +4659,15 @@ EXPORT_SYMBOL(security_socket_getpeersec_dgram);
+ /**
+  * lsm_sock_alloc - allocate a composite sock blob
+  * @sock: the sock that needs a blob
+- * @priority: allocation mode
++ * @gfp: allocation mode
+  *
+  * Allocate the sock blob for all the modules
+  *
+  * Returns 0, or -ENOMEM if memory can't be allocated.
+  */
+-static int lsm_sock_alloc(struct sock *sock, gfp_t priority)
++static int lsm_sock_alloc(struct sock *sock, gfp_t gfp)
+ {
+-	if (blob_sizes.lbs_sock == 0) {
+-		sock->sk_security = NULL;
+-		return 0;
+-	}
+-
+-	sock->sk_security = kzalloc(blob_sizes.lbs_sock, priority);
+-	if (sock->sk_security == NULL)
+-		return -ENOMEM;
+-	return 0;
++	return lsm_blob_alloc(&sock->sk_security, blob_sizes.lbs_sock, gfp);
+ }
+ 
+ /**
 -- 
 2.41.0
 
