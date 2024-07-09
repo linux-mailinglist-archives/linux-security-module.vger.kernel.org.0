@@ -1,162 +1,117 @@
-Return-Path: <linux-security-module+bounces-4183-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4186-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5BAC92C664
-	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2024 01:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09F8A92C686
+	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2024 01:19:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E4011F237C9
-	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jul 2024 23:05:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A88B31F2227E
+	for <lists+linux-security-module@lfdr.de>; Tue,  9 Jul 2024 23:19:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22C11FA3;
-	Tue,  9 Jul 2024 23:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E2B18005C;
+	Tue,  9 Jul 2024 23:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dYDIMy3s"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="KwzqK9LH"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1353156F3C
-	for <linux-security-module@vger.kernel.org>; Tue,  9 Jul 2024 23:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EBC7E765
+	for <linux-security-module@vger.kernel.org>; Tue,  9 Jul 2024 23:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720566342; cv=none; b=MpJexydcZRqU17x9kxdR+aJ4AI2Hn4fHYVdWVL1A+9yufHXciu+a92lGnB2IIOJdEJE1ijNRb+HmboRSfMKuwC769f9TRIP2Un7Xzws8BzT+oLDGZwj4XL4aaqmLkTVnHdpYmOpFiZp6502kFUzNQP4CinfjtcizmSP5oPAyMdE=
+	t=1720567167; cv=none; b=QlvDla2wsKq+UZaFPuFOa1H2tfax8UQMwR/dliwxJk4kMzsLa/rcysAWk/5cdx2qNQTuAMu/DAfgjWWOCBn1kQpk2gK1r1sT2bzfAxkwRG410La66qWPsvWIzFgq0eS0RX9SsWQ89QqUpjQDDxXQRMmZgjl7ZTZ0rYcRpc4mqxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720566342; c=relaxed/simple;
-	bh=5BQJAlJwZxT/0vbnyPxeX/x2m6jHE8o+01GbWKrxvzQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I+c/eyXHAabIdWFcZTaOln/vSEJT6LDKB1JRFE+3aXxLYXnfBRvPm2nmghe2JuTqFa41hQgsFqU3MaD9+B57oFHzy1IEYqo8CsBtl9ngMXt3L9MV55PrA5MumJouHZUDf0iqGOvrcX6U/3tjDEv5IfQ5txjxpjY/VUB1LIJOgtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dYDIMy3s; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-64b9f11b92aso51208557b3.1
-        for <linux-security-module@vger.kernel.org>; Tue, 09 Jul 2024 16:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1720566340; x=1721171140; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tY9c41sNnAt0cMwB8+rfC0lt67qAWf4pCBzn85Yh0Oc=;
-        b=dYDIMy3sn0UJl6MkKkn9IZJ8cnBzKr33QcKU5QXHwMYNaGM4ctV7ebQrBXgOP+LiZ4
-         /L6i/RW7tDJWqxagCArIk92/A9qxj1lj9UW7SjH3E4wxt6gXYpLaHtz0scv5I1myeFIo
-         nvJcGu1t8qUdBJEB6tnbPRvJAf562+SEzjPIUrLRNcwYEMFP4oYqGZCTo7XNnvMm8JA9
-         N55fO1eNgXus6Qa4xsBgeJBSx/I1rlTdsdKWvwy1+LJkKlKmFcvwJmdr/E3sFs5QzFMJ
-         iqWzzqcTksoFT0q/tH5wqQT9AYM0YHMBDv6no73YJqEJivCOvOiZ6en//olrhvRxqpa4
-         0IKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720566340; x=1721171140;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tY9c41sNnAt0cMwB8+rfC0lt67qAWf4pCBzn85Yh0Oc=;
-        b=uYCL2yXPlUMieFpcnqSddnF6lJFsM1/vqhfc7zljMLLhxf/leV/NGyqOeUDOweRo2I
-         7iY+TJxagb507viPv84rPg+AoYY4Ga4gGj1jdHPaXA0gOCgDMQ5G4YaiZMhpSpqDQuFa
-         3WNng96FI0rmrb1DSVjPMthoDlTMNjyvhULwrMbKh2EvH2cK0EUYG8y8yWIC1Cc0szpx
-         Y1DzT1cBkC7aRcDL2gaCuRx16Cq1lQ8qKdsUvsnXYA6PzCnXW3oNJYI1kcUP9QVUanZX
-         LTTAXS9X5L2IKETOC88b7a+llv39rhDPmtA5878DWJDY4klMYnPBb43kr91t+a3lVtG7
-         Cmvw==
-X-Gm-Message-State: AOJu0YzYNngYjdXN/mKgvfoUEPLwAIw1AFC38jW2jLXafCetc4f+xHs1
-	b3nxQd0ON75VHH8RgETITg5M/eFr4rlqL83O4Zj05jfpJv9CsxAiof4hE/RbcqlxPUDQtCmm1QC
-	TeI8vFOH3uL5UQwQYnyTTtgAEc1SEs5+sGlAF
-X-Google-Smtp-Source: AGHT+IEm6mKadb51cVuBUNkBQbHKBndCAf5YpFQ36aM3MgAtoXhacWN7OQzDM8kO+hPR7RJInPl40ICJgHzS9JYMroo=
-X-Received: by 2002:a05:690c:c02:b0:650:8d5b:77c4 with SMTP id
- 00721157ae682-658eee5a277mr50150177b3.20.1720566339675; Tue, 09 Jul 2024
- 16:05:39 -0700 (PDT)
+	s=arc-20240116; t=1720567167; c=relaxed/simple;
+	bh=Sr09OEDgk+IDF34gl5syNKqJEt6iFC5F+z4QjFIlqhc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uBqMV4nyyjpsGjTqGVfbzYH2eAfFoNqz/tWheFO4RoFo+y2nbiw20eFAQqKBfI78fD9FJ9W1lGhUQFPWw8iQ1DQLBri0FizccTufBBQBiJcsEocS+taRLYyStXvrnAFFJ4sV6C998UVdfCht5IMItJKcXCTbpmY5VZ/4jhyW65I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=KwzqK9LH; arc=none smtp.client-ip=66.163.184.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720567165; bh=r6q9KsdOKo12CPtvfd+g3N1lYg4KeeqsmaXmiij71JM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=KwzqK9LHglDlaFM9pplNoEstyXbJAXL6dv+kgO8nrGO+Ogagdu210B1oRnnzGiFEMnVZd6TtFkP5R9d5N3LldwRx/bLpkIKjiYgdXA2p1v2hZUnZf4NfR922dP4panKKxkQNPuYdcY83Y+ND8bYAcaQPfzkTHwouvzZH1dyEebHpmOIhBKVfMkpt3fNKoD4OLaIy5TsdP30wqZN2jk2fXMKu5uusvvnMKFzPLwi9p/mwtLzgAOz8ad2e7oi9aMD+2VndVtKlTx+FbSQk2QKyoWi4vjgJMxghxlGDd0makUvjiDyk1xFOTMThLh9cLI2NzB+KLxO2QKLE/13R8F+uVQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720567165; bh=VbeCfbps5T9jjWEtERs/uUxgZJhZdFU9NvJmsBI37/t=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=a7W5WClvpEcrKXuNhYdaq/nQ+J2l1ZVquh04IM9o4l4km+ZnMSFfAJhPKpNFczLAzNMEiNTbXFINSA0vsXC5r/RACt6OJ18vtb1QUckxuMdnWxnQjy+hBnszyiypJYDvNmKpOiW0G2a8UufY7hT4niTIuqJo6rAbNr9UbquuQb7BdK2k0FpCZiiIuB1kNJKkVuzmAfiSRBwVQ9zvxH9nc+eG1Jcy2Ql6zHdzju+mSpHg8b9zsjD5XGvt4iTHn+BTyk5rplrvpP4tzQaWPhKa2MJE3S5uzhBcS9V5Np0Vh1I6YLbv7pyqCzUb1FPQK2RONgStrFqEnFoPyQAKII/EKw==
+X-YMail-OSG: i4HMDS4VM1mGWTyvnoJLCLmHWU0Szp3VEhbOqooUYDAaekgyDTi3Sq9Sx.LmDrv
+ 63b.zM6ZoJB7Flep4mmBtRIVJlmwQkcThj_5cULUWewssiSYXXZQQ_0M3XgQT3ps_jgg2VqqMi.C
+ Vxekid4LDd4AA0zisr8Vg9Wtx3lGTQ8zJ1ZEclawIcIg_ItXjuak3UF0xK6oaLBbeqUlqwlqXUXn
+ sMs_vMIT3H8VZzdYyJKg2mK2Hx7F59xrgusIgg9PEc5o_c3bQclCkTUIqri1XgqX2yGH8TJyhHr1
+ lDbWPGiL4FRemL7ybJ97SUjjmfu75kPw0ql6VRyS0ORpFxTIKtvZUHeB0_rK9TDkuszhLqesQDu7
+ CS8K68hQO_yDyr52LqZ3SHaFjsYiBbyLH3qCse_ikZ1Xwlhp0Pyl.W2.Dg.dTjrE4UfeFGmE7Agw
+ wQInNuK_GX7mUFDretSZPI8l4hRdugI9g8y3.dUPe4UIOjOx74aEV3WBQrqN1uGo6.txqnI0lmCF
+ jA07YoGcA2EYabuEabW9ci1EFA34ZPCQNgjC9NCm2UxIHN_X5qxKBZb.wWIHJpbCnqcQHhOJS4gy
+ IkTwTnNoXA0VGYX0fHGbY6k1PBCcRUSchAjAjoP4ASecx4N4SbKD1TRyIV1SCDwxRu5LleKIAdFN
+ 1bRwh6RnH0Qzl4qhrVQk7RpKGXUQilEU1_PsaeZfbXp9.YpinbCzB1qaSqVITNkVPwF6LEbDo.Iu
+ _eGnDluevfrBuMYoQxK2U.rHD.gVJlodj.tCt0IR4cDcIE9PBQrJoNMuKyIwdl6KIXpHHp3HDndm
+ x5vmRIzH_k6t_AE3F8RyA1bVGlHOYk.2wg1F1lUloWb4Yox4wIphIIStId6jaQtCP6FaMZtXHX_I
+ oS3H4bxWwbkUKzVt2uHH9onwXtshGA5KwzSmfdT4HVatP3KrUsrR8jFwlmqb2oA4aKWxgep94IEo
+ fKIhkp_Zr.lult6jPbLLvMRVRa20Q3LJO2FQ_c7rQQKt90WHnHhlAGGElSa0GLME2IqiO3rnDMjN
+ b4NPBmBz2U9IiE11Hc67514woEYDBUeh6yA2KyvTiIdZMly0WuCdk6Bz6RWuO5zs5CAAH1r2SUK3
+ C7OIPWnFS61HeqbbB2MOPee3JunXTPiEfii09tVd.QRFnCQL1o2ofZkE__6_nmO6egg5doZbkcyL
+ RR3vAHLCfthGKrz3s40YAtNnuejxpTDEST1Nq7hEsW2aE53CJq0Pe7WvqzP6dw1XrhDsWvjI52UG
+ 5bUwkMIcJS.rk1I0e7LkL_D7Tt.j18dpdjP5x8PTSEXnLq302FaJ5GV7AN9Ms12y8v4I761Ql_1H
+ QvZVS8JPMjQSpLBFSztJ6ohiq558Qfv7tdXs3r6TChaLoi4SNOvlEpb309FCgRXnGAjQWcK5l0zq
+ rvLUx8D.VimuE6itNdln9Ls6VVMFdeLfp40z7q_I9fJggwTxS1fgnwDvF4uTUC9E06B5gwUlnDHg
+ huKq3Gu7h5OjArRR6zwirU0Gv_frJTnoaNa4i7Exq4cwsfIexLZnUbV.3p7W0t66Hv9jsTgg4F5y
+ u4lCFqRXqJRh98X3V_1pIaU8sSF7gOduCT6tTcOE5J6ybC6_3YB2nEBa8iETX_b4y6ucTh3k.SCp
+ ibGgyf37fWYfkB4cGRnv_XKqpw9YeBWYMaGTllLG1lOAy2sxMtLUF3y_m9os0upJyRsi1kGOKrrA
+ 5oXPzPW2O85EU0UDq06IvlO1JSLTQXgNSHatCkkfWFlVuVT84YvzdjRgSw2JqbHpg54lyVoydgO.
+ b6clxhQ9EhxCLJ3kIDhuo3rE6wbxVKdKfNlV41I0V9q3xkHHKd2BqrXNAdS8PZWL9QFPmeoTEMOD
+ soJ7UNjeEXwLIjgoJPv9iGUITbR4SMZeIfQ3d9sxKgx2.kPFIEzaUVaUF6gKVx6JNLfNi185159B
+ LEQfM7eSx_fyn6Yg8Z7onZnz5oghWrneG2rQ78dKdDh0Vjm784XXfc4SwMMvY_IjyrL4GjAtU3hw
+ tmfIfGinVDR9iA6REI0y9a0h8zB6WaXzH272LtIq_2DsOHxLM_0.QQxLY4dTSMxdXqGoSJ81BhUA
+ TX6qYk9bdmATBOeC4eyACJUlj4p0jNQ.N5b.Rgf7sLZmYor8Rwa0az2ZCNHoIyUIb2LfpCwVGRSv
+ wZx7aMvhI0m9xOglm3D9O4.szFOb4odOVyUJ9lpfZvBQ3uGqogDo.PTqoKcmHv9riNtidk0gc770
+ v.A4OCFKKmb8.f7yEV04tRC0SqIQmk1sT2eYxKRXsqozn4JoPAnHFArZoavi8sdgnlAEAlPib0YO
+ yn0J4SiPm6pUY3lA-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 23956769-4401-43c6-b3fd-7a0d999dbf46
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Tue, 9 Jul 2024 23:19:25 +0000
+Received: by hermes--production-gq1-5b4c49485c-gngrd (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f40b5c5275113fb61bad9475a7401a1f;
+          Tue, 09 Jul 2024 23:09:15 +0000 (UTC)
+Message-ID: <df7a8220-b103-4938-89b7-ef2d028310f1@schaufler-ca.com>
+Date: Tue, 9 Jul 2024 16:09:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240708213957.20519-1-casey@schaufler-ca.com>
- <20240708213957.20519-2-casey@schaufler-ca.com> <CAHC9VhR-OOsjS-gB+Y35_bsLxTS__eJEwrYOrzLYou8gU10imw@mail.gmail.com>
- <f815cc68-ca2d-4bd0-b5fe-7093b5bc5e4a@schaufler-ca.com>
-In-Reply-To: <f815cc68-ca2d-4bd0-b5fe-7093b5bc5e4a@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 9 Jul 2024 19:05:29 -0400
-Message-ID: <CAHC9VhRrKOcayQzY1GeExqufzs=COGQrkcnKeW-kAxKrrr0BeA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] LSM: Infrastructure management of the sock security
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: linux-security-module@vger.kernel.org, jmorris@namei.org, serge@hallyn.com, 
-	keescook@chromium.org, john.johansen@canonical.com, 
-	penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, 
-	mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/6] LSM: Add helper for blob allocations
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org
+Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+ john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+ stephen.smalley.work@gmail.com, mic@digikod.net,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240708213957.20519-4-casey@schaufler-ca.com>
+ <a7b378b26bb6b6cafb05d9102da61558@paul-moore.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <a7b378b26bb6b6cafb05d9102da61558@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22464 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Tue, Jul 9, 2024 at 7:00=E2=80=AFPM Casey Schaufler <casey@schaufler-ca.=
-com> wrote:
-> On 7/9/2024 12:15 PM, Paul Moore wrote:
-> > On Mon, Jul 8, 2024 at 5:40=E2=80=AFPM Casey Schaufler <casey@schaufler=
--ca.com> wrote:
-> >> Move management of the sock->sk_security blob out
-> >> of the individual security modules and into the security
-> >> infrastructure. Instead of allocating the blobs from within
-> >> the modules the modules tell the infrastructure how much
-> >> space is required, and the space is allocated there.
-> >>
-> >> Acked-by: Paul Moore <paul@paul-moore.com>
-> >> Reviewed-by: Kees Cook <keescook@chromium.org>
-> >> Reviewed-by: John Johansen <john.johansen@canonical.com>
-> >> Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> >> ---
-> >>  include/linux/lsm_hooks.h         |  1 +
-> >>  security/apparmor/include/net.h   |  3 +-
-> >>  security/apparmor/lsm.c           | 17 +------
-> >>  security/apparmor/net.c           |  2 +-
-> >>  security/security.c               | 36 +++++++++++++-
-> >>  security/selinux/hooks.c          | 80 ++++++++++++++----------------=
--
-> >>  security/selinux/include/objsec.h |  5 ++
-> >>  security/selinux/netlabel.c       | 23 ++++-----
-> >>  security/smack/smack.h            |  5 ++
-> >>  security/smack/smack_lsm.c        | 70 +++++++++++++--------------
-> >>  security/smack/smack_netfilter.c  |  4 +-
-> >>  11 files changed, 133 insertions(+), 113 deletions(-)
-> > ..
-> >
-> >> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> >> index 7eed331e90f0..19346e1817ff 100644
-> >> --- a/security/selinux/hooks.c
-> >> +++ b/security/selinux/hooks.c
-> >> @@ -5495,8 +5488,8 @@ static void selinux_sctp_sk_clone(struct sctp_as=
-sociation *asoc, struct sock *sk
-> >>
-> >>  static int selinux_mptcp_add_subflow(struct sock *sk, struct sock *ss=
-k)
-> >>  {
-> >> -       struct sk_security_struct *ssksec =3D ssk->sk_security;
-> >> -       struct sk_security_struct *sksec =3D sk->sk_security;
-> >> +       struct sk_security_struct *ssksec =3D selinux_sock(ssk);
-> >> +       struct sk_security_struct *sksec =3D selinux_sock(sk);
-> >>
-> >>         ssksec->sclass =3D sksec->sclass;
-> >>         ssksec->sid =3D sksec->sid;
-> > That's new :)
-> >
-> > Unfortunately I merged a previous version of this patch into lsm/dev a
-> > couple of weeks ago (see below) which appears to have a bug based on
-> > the changes in this revision (lore link below).  While I'm generally
-> > adverse to popping patches off the lsm/dev branch so as to not upset
-> > any ongoing development work, given that we are at -rc7 it's probably
-> > okay and much cleaner than doing a full revert; I'll remove that
-> > commit now.
+On 7/9/2024 3:08 PM, Paul Moore wrote:
+> On Jul  8, 2024 Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> Create a helper function lsm_blob_alloc() for general use in the hook
+>> specific functions that allocate LSM blobs. Change the hook specific
+>> functions to use this helper. This reduces the code size by a small
+>> amount and will make adding new instances of infrastructure managed
+>> security blobs easier.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> ---
+>>  security/security.c | 97 +++++++++++++++------------------------------
+>>  1 file changed, 33 insertions(+), 64 deletions(-)
+> Looks good to me, but as it is dependent on 2/6 I'm unable to apply
+> it anywhere right now.
+
+I can reorder 2/6 and 3/6 if that would help.
+
 >
-> Sorry 'bout that. I had troubles with kernels built from lsm/dev crashing=
-,
-> so I switched to linus' tree.
-
-No worries, that's fine, my policy is that I'll typically resolve
-merge conflicts so long as the patches are based on either Linus' or
-the subsystem tree.  In this case it turned out to be a good thing as
-it highlighted the MPTCP omission in the commit merged into lsm/dev.
-
-However, do you have any more detail on the lsm/dev crashes you are
-seeing?  I wonder if it is general v6.10-rc1 instability ...
-
---=20
-paul-moore.com
+> --
+> paul-moore.com
 
