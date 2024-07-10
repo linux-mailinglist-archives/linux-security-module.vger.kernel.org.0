@@ -1,74 +1,75 @@
-Return-Path: <linux-security-module+bounces-4224-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4227-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39C7292DB0F
-	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2024 23:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EBADA92DB13
+	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2024 23:36:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC44B1F22150
-	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2024 21:34:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 475521F2206C
+	for <lists+linux-security-module@lfdr.de>; Wed, 10 Jul 2024 21:36:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B34784D04;
-	Wed, 10 Jul 2024 21:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2756177F0B;
+	Wed, 10 Jul 2024 21:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="afrN0grw"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="Kmokk+8Q"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
+Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6677D8287E
-	for <linux-security-module@vger.kernel.org>; Wed, 10 Jul 2024 21:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D74BD535
+	for <linux-security-module@vger.kernel.org>; Wed, 10 Jul 2024 21:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720647259; cv=none; b=sB+hbjcOxjXk7qyDgvndaMxEzBG5N9Wuw466HcYLthFm/a3LgHHVwPCMQyMrq0kwT650bOXv8hP+Pte2q8doEnBSP+5xpFATRejUysT/Lp+8coZzDxX0elzBSFjRqd6rDq189pOf0Ar2QMFVjj+rIPM9ePfZiJ+Dzkiv6pYtKC8=
+	t=1720647357; cv=none; b=AvKPc3Dgchc3W1lOXx/XpVfPzeTiwrOkcztR7VDL8/XBYMDbSTDHNYYPOXKErbBpjzPI8YPZR2XyFJdi+7fdyYUH4filEiRQ2ZkYoDnfRz1TqzoCctNbMZ/F/I+5OFknGdoXAscKWIP7ZZo5ipMUveY4YwuY+Lu/ClkglJNndPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720647259; c=relaxed/simple;
-	bh=pQ6D/eVGREMzto47KUSU68nUJJbqR88VG/lLRjhPmMo=;
+	s=arc-20240116; t=1720647357; c=relaxed/simple;
+	bh=2EhCYsIzr0si97J1QYfmDT1bDqO4u/uKt2I08nDMfdU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PGnRfE+2l6FJL+dGpRD62/Ytt56Ts3i+b4+7p6IoBIa26/61vjF6jOEg4lGMKGhTah1dzPMurdmyyBIyIIA6cbgwpk5dzYqZqI4YEnbGfQ51dMDFIzsPQw8hmkyccr+nsxOSNVXh5lFLALtbjQoskrUReL90+R8A2/hYo1Mo78E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=afrN0grw; arc=none smtp.client-ip=66.163.184.153
+	 MIME-Version; b=R3b4+utdPaTdKGqep43ANUmbYKAWyeWVUTalNB+hU0j6HhQp5KuqTVAQHS2yytIaNauvRAB7pxxVym6DL0hTLMBxNQzH3LJqMWVX5T0uscgU6fC8GziE727BDkYlmcO0DKnfl47Ky+nMo1NZ6rHYlN5daZRFY2f9QlvkwEWUCgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=Kmokk+8Q; arc=none smtp.client-ip=66.163.187.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720647257; bh=E9cLMQVnTwQkpUE1vZbyi+mBC4SmZ1s2+PXuFp1S1H4=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=afrN0grw9l5dQVjGGZ0i7xH5iLaWtJIbSeQBcl+pHgSck7oo0s4/xLlIA6Dg1WLyIZTsIg0Zfv+ytKBxyuHgQ7Nd0GSwzz+qN66pf0POW6c86pYWJyJNEZkr2Pf2uOxSLqhyUPfHjqMTdELNWKGE8jZBuzGTq1TxWZR+U1LObdDvFup6reZHn6SnvRkXXMJZH8P5hUL2i1RkCFvffuh+PDAkq/TsbV87YNYyEXnbuaBPmOZI0Q0SdEDA3onIA84jp9g2ihoJsBSa0bCjGk4U8W/1ktLA2EOUhyLJTeE15IPDX21UmQwaDY8CBdOvWOB540z+lxBEcM9zz5LZGJe0rg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720647257; bh=ZVuDFNemB7ivI6qWSLbN/JW6Jpw6hzjR1JHTU7vtXW5=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=c9aCCUnm1lcHnE6zb4jhjUZsm3r/e2BxtUn1o541FKYBeXanAZPpvHn47Gv3xBGNeCpcBHCcjgquSSIxx7ZzGlh68b0apuh0D+YElRRm3CmMjo0aX1f+xe10Zz0ZTuXWqlPH5mCaK5mRRzY1779FCBJ9bfHoBPMGy4mSOAVJyKfauOo/2UyI7uG4Q4d7fSRRZfB062abhMCSo0cHievCop6jW+byqdQnM10EprnWFJtGDTAPBXXIQsbT26B2Dcrnb3vUiGuLv1VwUgpBvixaCz6/qYX/swGU7OMoPuxjvkyXEeEjQ/lhP+FhOTddYyvtMOPL/FaEIz50Bx/Ly10r+w==
-X-YMail-OSG: OKTaUN4VM1lqhaB_Q9dzYM_Nrsmj58hHbVadINMymuqgQFxPHWorjKCjBZXd1rD
- q53nrPrOGVaMXFEsk4RKinVjfotl5hn1dPk4socetU4TopFcCzFzJtIQqYLPigWcn4LjI7apXKbX
- uP.2l5px5kMCpgkocn6G.jTtySB39XGcgIv96QV0SF7zdSBE65U1Bp51VOLeqs8NkRysngAYhsTJ
- F6IDdgLh8TjFg9U5OcJXVojfODCJj4xnHjq8jlgVGGAfvDxJGmzdV85XkvxBZMowduQlCGjaY2me
- rQ3MqyoQ8EZH5IxwdCx2Zv8WNlij24dHuwki5JrchMMg65yPMpRjsZE_9IrkWGHpe4mqg747SX2f
- woDnhs1dzq3WabylJ4jVyBRKUL_2RyccGqu76DPmgFYa9f5DnphHk8K29dYzZcDVKzZxjHIr_Jnw
- .yYVg_GBKYPLLAAnwhz2gebSUUeyFT2Kg3D_tdvW6hGePVfj_LdOxA.CFR_q3zvVw5JLLOhUNDGw
- oNdnFyycaOATOXOLEM7LtPw9xAtb1PjbVPVEKVtgzYreZviT7aZdePDfx67CGrdQgnBd1DQUC54c
- colBD2OtUmJ0qV3fG_ee.JTloL6E_LOz891ZWQ.uasbqapfHm_kmtmQCXMarSRP1zrLCms5H_8kt
- U93Upa7ve9IIJeSVCogK8uvG50Q3hJsSJfeT04zeiFu2vQxK.zHeuz8woQ_YHyZCS55tl.d.0jPe
- eFV8Fbc.ajpIpNlJQCXE95bRAhyCLGTOqV60JqltF4CGxr5UOQQvAzXjCz6eQlTq1aqAaVtHPtS2
- m2hn.bIo.H3p7wvW.Zncyd0d7dXfm5beyGyKEZ1uuGjHoJ4gCLS43O7R6uDPaOINBlb4O4jNYaj7
- EjZxHzxMoNgXsDM7AExE2A_uKHYXE7zAfn5pHOEnDzgr_XtVlce4dZUIQ2z_EH08.Ey5f1bA8R5e
- J3k0cC_1W.rWamEPgiH1ScR9ZJ_LBvG30AsM4j7iBSuYltMwe.24T.PHUi9ZVRML.bjxyH3lcX6t
- pOL0DIBA5C_2_6jtPGnvqa26i.SRcHZ.rnKvGCsTlHRN6KOUBCL4Edqutuv28ISEqx.kvpzi.I.U
- uTdahtssGDuCZ9rg_35.9zacqcnB7lN2e_v72Y1jWeGWizRV_1PcfU4o.iiQ2aAPFe3IQuH7LCnh
- tmvuI3HPBh46D7OQwA1xVsNlDdsMu4z5iOeQ09AYliDqux7EjY73t9Rm38lJPbHl40Wpn7X9ozOW
- H0e9o316nFO7d7YYnZdR4rsq0lLgSxWoseeCH._PAZcLVTs1m1bUxK2WIuiDlKvbKfBtOFRy5ruk
- q9xob.nbHrusH2roCEHxr.BTe.LafLGKBVajcM21c73oXYPwzRE13Gh3zg0BAG8sxW1J1nD.oQdY
- QCzG8QbMMgJr0aRKcsk8mP4MB8rcKHJRoTjP5XxSMaE3gVG.rGzHKUnPxDI2sy7EHFS.nm_m8fyU
- 341ivfMUjp_iJW._TJHYqF7uYC8glF1Ug3q4fc_YvRFhu1ab61unYq7WVez0dCuqMKInVjfxJlJI
- WrrpCpr5RDisSXp8_JlQ06UQ9Yfzl4j6QEPe3RZTVy1wTjnXqUlrH8GKrBrz0ZfPPbazbPWxDPaO
- PmuV_jgZz3a4rg.PdPSDIAMjt3YVLHKQgCTKDA59DvWixwqJQA0QSmuVgxC2gXGfAw2E_9MJllq4
- maN07VnerF2tYwT3Ozv1BEYahPzpTgJDnLd13IMN9itxPhmPq_eA4gA9sgcIPi50.20wq8cDZyV.
- mPRXzgdBWylquGXM6aSM2UUT10mrUGFmvT4diTUh1ujXbJioRiSheWQsn_LychrohvsAOQdkeGPC
- KvJ0CqTzikhUvLpLY0grfbL6pV1Sy7W8Dr09z1_uVlnxwTTjzRyZQKc90Um2tlPXo0TN0orAVuS1
- p9GjTMugh3HQ5p5PdTrl13375InWfoDmRLtmP2BNOgKvvbLpH.TUUO81MtiZ6fIxpaPzDpxN1kbv
- VG0OZ2Hd1XJef4ccQgR2h0EUkQbhLGVT9St3ofZX3QsGrzwwc5J0oBtt685UX1Osz2b1BTditPne
- qeei5LDHyzme986qtEVyk0XYfIwO7JzOlqNYAO1czXx4n4y6Ipj6dG1WS7BDak8puWCYSt08UdbE
- xeN18wrtMO2pA4_jdq7dwibLTCcil64eC4a7GQ0MUcWWZUlgXfEZi6aW6kRETFlPs95S9DjcLTb1
- DCN10ug1ufR0tTALf_Cnn610C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720647354; bh=L25Pfj89kcj6bP8haqQKOdpjtzclR6D+8BGBHyqsn9o=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=Kmokk+8QvMaLl7LDD3N2vmVvZfn8WTJ3Hl2NhmE1GE3JBdBkuw8aZg4sbPmrWjNkczA+6AvPIuu48D/UqpokDoS2dIN7XXDBPaVqctMKmgERztuHrYc9ogsc59wfDkXWIN3QCJUx411DIuQ07Sb3MKrI4/iXKFmSka6VxomJDUKYvRJyzXV16rnQQK9u2dTMuoMDeqImWV70ZNKBvrDpmrlESFELOfLiVNHURZZxb7mW6IBU/YyQQTeaerJBcpBAD3VZtsBZNo4pR/oh6mzTHPbFRzf2qEPgp3Z09STHk7+n6SScV39B03unCMaTiosy/S1qSWoZfBj16a83GxguTg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1720647354; bh=9lRrdMoDN2Gqn3i58bSvQEhD+hiHKilVf3qQRUp2SMU=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=VSifdL4dMmBmt2V9ekwJBOkYGooQsmtUTdwkHpcKuzP8HFBzB1QHzExtv1ET+XhfGsOOk8D/qyDWTiULwa7prGJghaIkOPO2coh8as72ysdpkPmc4ZNUpYV3S3g+s32KHZBRtuu/50HStbN+QHRdyZyVjOf2NvQIXzadtNO0w55rj8DFBaJmgY98WWiD5kJJxk3Miny5jCExM2guJ0cLfKGNfiZY7Mdv4u+P3vcqLrhAxVyA/7/spSpovlqEHBX6Dk68ISs8dV8dTM1msO/FAaGQBEH1IKUBj2rAJKpul9eSr/s3k+G/ueLG2yTqJJRXz20sHz2owK6fjFQKvVM8Dw==
+X-YMail-OSG: PlqKp3UVM1kOKmuxcOqkoskYd8_FqX7oDYgx4jO7m2eV5wmMuyNz0U8izOrLhYm
+ cfXGe3uM2DS7_vWga7Zn.xP_BSGgAZhTwYRXirfh8.mWVWFwArh3P_NSVjdQoHnvEbVvHJJqn.gt
+ Ur3KylIUfLH0RjD5dQMvBqL1nQwGryi1mLWlesfazAI4DPV_KK_OB7JLgCcOWUTaJQ9_PcdmRjNP
+ TWaio72R87tcx4yLQuyzeh..MIl.fLkbfjVnulflw4hl.tbrf6.fWzi5h5LfnT6O1AUFpUgoyx8f
+ tyIjV854wKs0xBbnVD_Y31EKnmTrq8mUEbq0ybK3A7QayIxDt3zOZGCd35RCwgKrKv0PcfwnUX3_
+ bYzDnb.WwbHlqRpq7lAk0fdlTHmBq35eT6TGJI_0lyE4gFs0CCZVmWZqIXPMNl2KUi58XHR8Eejo
+ 1SWwFKWhBhhxHSD7Zmj8QTT7FDzImDevh0BKkrgpTZXyxUv83mHn78GNcLmHeh0KgbbATVkS6Wg0
+ ._GsBe9rzQ4NwQ7DnWxtGxXa5K75H2kltqgP2cX99eU2QLK0Bw8e1pipA6CnTETET_E6V7uqpEiE
+ IcPPOUdqIYHscEtzfib8qzSuR5ovgo0MHuJdDVYSDYw6j.__V5DNbpSYSV4qyNeb3Q2JqlevBMXQ
+ vbQOzsw0tFawXdA13nx9jgHxcPsfJ_LqbXcwoh8lfz_GgFwIBEVIp7IDmQE04j5tKbDRUMWF_6sg
+ WZvSa48ky6htl4fS9FPQEuVmRa1ZoD4MpTzR5u387WXgLNmmYWmYHwuLjtaWHbl3NBUrIRnoxXPq
+ QJhMXTUCm7U49_oCummhfgKK1VoGxkDovRbxPh8dDA2zJrsc96Xn0r2ACB3uaBEaOo2KMNOsSr7e
+ 71gkHnROK_VZAH1GUzJQC4rak3Ra9gNwhqGyD5kGT3rCK2ozme.UHaiUDHEtCRiHvaz8YNO0fCKh
+ gcV80PtQesKoSIfUJ6khLN7g8opCecZWNlz.FuBEBEMITXPz6X0u4roE8jR.udGjCTLfqWtXky78
+ ev45mDiGY8htufss5xvcATBc.yeC_Hrz86poWJSCXc1FEkynw4gEKzvbENk3VEzQSgGGj.vRReGf
+ tLAKofX9KEPILvyDy6XyeZgGrJ8f_2_GGQH_3XE4VfDuAYWOCjMRXSCndO8bRq9vHbODz68nwDE5
+ hIEXhKqr8tnxr_K9BxUPYIdVOKlah2UD.Qfxxv6MxHI2QY.YvcAX_gbalu8XmrymToV2o7pQBTny
+ LzOpERV.FF.nnUh946T43pqcQUzVc_T66EyXt1xsPBskXTt8MmHp1K0wpW4.NIEnhbLPONzFKgKR
+ M2XFci6HoEHV.Qwa9LtSg8sfxrCrZVgMJ9LPhewKWXAn6z_ICYZVoWA_Pa1al8iuaVfAg0Dyoybp
+ vURMrva5iSHEU6TmFkeEsCgf0UZrMplA2AUKp2o7jANAOZGtSFZpnhovYmNu4ShXU5h9e5gfyMhT
+ 0XG7uTSRgJ.vyOlww7eTq0aitZOiCN8BHIMof.mBPiUPnW0om9tPbBCaVVBch256zBiE8VY69OoI
+ 5YrTBPCQ4ZDAsG5CJ_ZrDk7z5ujiG5Wlsp7XHk6G02YV4Jksy_w6GUCiyjOT9ECt5.L8Xg0I2upM
+ MN_Q7H4r2mj8nbVA7vneNef2khQM7IZo82u83mHIaacgUz50RjWj8nrOm5s7EqgNBlSnAi_g55tF
+ QoVnJf0FKo0yk3XR4LoCGmLF2R44qX0Mmdq_Fu56yunVRWf0NoalGXgK1d3jneV7TGcdY95vitaj
+ KG66jQh82XUJ1fu9JT5ydwEgCs9OQT_tE7sIDuu9EWiDOXjJBB0s53YJnBmMRi9U18IBX2D6vr.O
+ jdlQV8498aMkCRYuRKhZHp6vwi0xvcj2Fve7ryRdzo3kV8KHO803DIeCdH5lHGFjEyN72M_7C.18
+ ia5nfu_oUxEuuB9c_UsC57duVr6vVec6uQw9nh497Z_0s25RC4BGhmz49bv1Z9uQAcbUH2hGwJNV
+ l3tTihXgmbtCbOnlAn4ElOoDImleqF9sCDkQkRBvn8zKU7YL.Lo2FnltFivxmmycr9yBfR.9CebD
+ SJg7vBUKTXTabE1GiRKD0sJqxHIBdnmConBUqpCmzJlIRWhsDbJt7aoMsSiAlElM1T2kFpnzwySB
+ stp71RnnRO_f.9soBTcGq1VGpyqzwAc7HyCPh1P60qHaEggC7PVi0MqaKYFse.3hvzqLg2w_OlJq
+ izh3TDt5m_ntZbsrBXDNV7Y.thAVFm35.Wo.AIbjVyK.hRVG3fiUrsWvA_bE0yvl.QMCMMqv7m7q
+ zwUY-
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 429c8445-fc75-4698-a56d-dd9792d85b21
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Wed, 10 Jul 2024 21:34:17 +0000
-Received: by hermes--production-gq1-799bb7c8cf-jfh5x (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e290f093598dd7cebf6712409b4ec393;
-          Wed, 10 Jul 2024 21:34:14 +0000 (UTC)
+X-Sonic-ID: 5f687b58-dda2-480a-a420-265863d844e9
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Wed, 10 Jul 2024 21:35:54 +0000
+Received: by hermes--production-gq1-799bb7c8cf-zh7nt (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b02b0457b05e8bf93c289b59d86d57f9;
+          Wed, 10 Jul 2024 21:35:48 +0000 (UTC)
 From: Casey Schaufler <casey@schaufler-ca.com>
 To: casey@schaufler-ca.com,
 	paul@paul-moore.com,
@@ -80,9 +81,9 @@ Cc: jmorris@namei.org,
 	penguin-kernel@i-love.sakura.ne.jp,
 	stephen.smalley.work@gmail.com,
 	mic@digikod.net
-Subject: [PATCH v2 5/6] LSM: Infrastructure management of the infiniband blob
-Date: Wed, 10 Jul 2024 14:32:29 -0700
-Message-ID: <20240710213230.11978-6-casey@schaufler-ca.com>
+Subject: [PATCH v2 6/6] LSM: Infrastructure management of the perf_event security blob
+Date: Wed, 10 Jul 2024 14:32:30 -0700
+Message-ID: <20240710213230.11978-7-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240710213230.11978-1-casey@schaufler-ca.com>
 References: <20240710213230.11978-1-casey@schaufler-ca.com>
@@ -94,154 +95,165 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move management of the infiniband security blob out of the individual
-security modules and into the LSM infrastructure.  The security modules
-tell the infrastructure how much space they require at initialization.
-There are no longer any modules that require the ib_free() hook.
-The hook definition has been removed.
+Move management of the perf_event->security blob out of the individual
+security modules and into the security infrastructure. Instead of
+allocating the blobs from within the modules the modules tell the
+infrastructure how much space is required, and the space is allocated
+there.  There are no longer any modules that require the perf_event_free()
+hook.  The hook definition has been removed.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- include/linux/lsm_hook_defs.h     |  3 +--
+ include/linux/lsm_hook_defs.h     |  1 -
  include/linux/lsm_hooks.h         |  1 +
- security/security.c               | 17 +++++++++++++++--
- security/selinux/hooks.c          | 16 +++-------------
+ security/security.c               | 20 ++++++++++++++++++--
+ security/selinux/hooks.c          | 18 ++++--------------
  security/selinux/include/objsec.h |  6 ++++++
- 5 files changed, 26 insertions(+), 17 deletions(-)
+ 5 files changed, 29 insertions(+), 17 deletions(-)
 
 diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index f1e0d6138845..7c979137c0f2 100644
+index 7c979137c0f2..658e4ba282e6 100644
 --- a/include/linux/lsm_hook_defs.h
 +++ b/include/linux/lsm_hook_defs.h
-@@ -372,8 +372,7 @@ LSM_HOOK(int, 0, mptcp_add_subflow, struct sock *sk, struct sock *ssk)
- LSM_HOOK(int, 0, ib_pkey_access, void *sec, u64 subnet_prefix, u16 pkey)
- LSM_HOOK(int, 0, ib_endport_manage_subnet, void *sec, const char *dev_name,
- 	 u8 port_num)
--LSM_HOOK(int, 0, ib_alloc_security, void **sec)
--LSM_HOOK(void, LSM_RET_VOID, ib_free_security, void *sec)
-+LSM_HOOK(int, 0, ib_alloc_security, void *sec)
- #endif /* CONFIG_SECURITY_INFINIBAND */
- 
- #ifdef CONFIG_SECURITY_NETWORK_XFRM
+@@ -438,7 +438,6 @@ LSM_HOOK(int, 0, locked_down, enum lockdown_reason what)
+ #ifdef CONFIG_PERF_EVENTS
+ LSM_HOOK(int, 0, perf_event_open, struct perf_event_attr *attr, int type)
+ LSM_HOOK(int, 0, perf_event_alloc, struct perf_event *event)
+-LSM_HOOK(void, LSM_RET_VOID, perf_event_free, struct perf_event *event)
+ LSM_HOOK(int, 0, perf_event_read, struct perf_event *event)
+ LSM_HOOK(int, 0, perf_event_write, struct perf_event *event)
+ #endif /* CONFIG_PERF_EVENTS */
 diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 0ff14ff128c8..b6fc6ac88723 100644
+index b6fc6ac88723..f1ca8082075a 100644
 --- a/include/linux/lsm_hooks.h
 +++ b/include/linux/lsm_hooks.h
-@@ -72,6 +72,7 @@ struct security_hook_list {
- struct lsm_blob_sizes {
- 	int	lbs_cred;
- 	int	lbs_file;
-+	int	lbs_ib;
- 	int	lbs_inode;
- 	int	lbs_sock;
- 	int	lbs_superblock;
+@@ -79,6 +79,7 @@ struct lsm_blob_sizes {
+ 	int	lbs_ipc;
+ 	int	lbs_key;
+ 	int	lbs_msg_msg;
++	int	lbs_perf_event;
+ 	int	lbs_task;
+ 	int	lbs_xattr_count; /* number of xattr slots in new_xattrs array */
+ 	int	lbs_tun_dev;
 diff --git a/security/security.c b/security/security.c
-index f1eb93b65ae9..e8f34cbb1990 100644
+index e8f34cbb1990..444b0ea28c04 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -219,6 +219,7 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
+@@ -28,6 +28,7 @@
+ #include <linux/xattr.h>
+ #include <linux/msg.h>
+ #include <linux/overflow.h>
++#include <linux/perf_event.h>
+ #include <net/flow.h>
+ #include <net/sock.h>
  
- 	lsm_set_blob_size(&needed->lbs_cred, &blob_sizes.lbs_cred);
- 	lsm_set_blob_size(&needed->lbs_file, &blob_sizes.lbs_file);
-+	lsm_set_blob_size(&needed->lbs_ib, &blob_sizes.lbs_ib);
- 	/*
- 	 * The inode blob gets an rcu_head in addition to
- 	 * what the modules might need.
-@@ -402,6 +403,7 @@ static void __init ordered_lsm_init(void)
- 
- 	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
- 	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
-+	init_debug("ib blob size         = %d\n", blob_sizes.lbs_ib);
- 	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
- 	init_debug("ipc blob size        = %d\n", blob_sizes.lbs_ipc);
- #ifdef CONFIG_KEYS
-@@ -5070,7 +5072,18 @@ EXPORT_SYMBOL(security_ib_endport_manage_subnet);
+@@ -230,6 +231,7 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
+ 	lsm_set_blob_size(&needed->lbs_ipc, &blob_sizes.lbs_ipc);
+ 	lsm_set_blob_size(&needed->lbs_key, &blob_sizes.lbs_key);
+ 	lsm_set_blob_size(&needed->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
++	lsm_set_blob_size(&needed->lbs_perf_event, &blob_sizes.lbs_perf_event);
+ 	lsm_set_blob_size(&needed->lbs_sock, &blob_sizes.lbs_sock);
+ 	lsm_set_blob_size(&needed->lbs_superblock, &blob_sizes.lbs_superblock);
+ 	lsm_set_blob_size(&needed->lbs_task, &blob_sizes.lbs_task);
+@@ -412,6 +414,7 @@ static void __init ordered_lsm_init(void)
+ 	init_debug("msg_msg blob size    = %d\n", blob_sizes.lbs_msg_msg);
+ 	init_debug("sock blob size       = %d\n", blob_sizes.lbs_sock);
+ 	init_debug("superblock blob size = %d\n", blob_sizes.lbs_superblock);
++	init_debug("perf event blob size = %d\n", blob_sizes.lbs_perf_event);
+ 	init_debug("task blob size       = %d\n", blob_sizes.lbs_task);
+ 	init_debug("tun device blob size = %d\n", blob_sizes.lbs_tun_dev);
+ 	init_debug("xattr slots          = %d\n", blob_sizes.lbs_xattr_count);
+@@ -5659,7 +5662,19 @@ int security_perf_event_open(struct perf_event_attr *attr, int type)
   */
- int security_ib_alloc_security(void **sec)
+ int security_perf_event_alloc(struct perf_event *event)
  {
--	return call_int_hook(ib_alloc_security, sec);
+-	return call_int_hook(perf_event_alloc, event);
 +	int rc;
 +
-+	rc = lsm_blob_alloc(sec, blob_sizes.lbs_ib, GFP_KERNEL);
++	rc = lsm_blob_alloc(&event->security, blob_sizes.lbs_perf_event,
++			    GFP_KERNEL);
 +	if (rc)
 +		return rc;
 +
-+	rc = call_int_hook(ib_alloc_security, *sec);
++	rc = call_int_hook(perf_event_alloc, event);
 +	if (rc) {
-+		kfree(*sec);
-+		*sec = NULL;
++		kfree(event->security);
++		event->security = NULL;
 +	}
 +	return rc;
  }
- EXPORT_SYMBOL(security_ib_alloc_security);
  
-@@ -5082,7 +5095,7 @@ EXPORT_SYMBOL(security_ib_alloc_security);
+ /**
+@@ -5670,7 +5685,8 @@ int security_perf_event_alloc(struct perf_event *event)
   */
- void security_ib_free_security(void *sec)
+ void security_perf_event_free(struct perf_event *event)
  {
--	call_void_hook(ib_free_security, sec);
-+	kfree(sec);
+-	call_void_hook(perf_event_free, event);
++	kfree(event->security);
++	event->security = NULL;
  }
- EXPORT_SYMBOL(security_ib_free_security);
- #endif	/* CONFIG_SECURITY_INFINIBAND */
+ 
+ /**
 diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 34ed787a4bfa..11f4bdabda97 100644
+index 11f4bdabda97..f42f6af55a73 100644
 --- a/security/selinux/hooks.c
 +++ b/security/selinux/hooks.c
-@@ -6776,23 +6776,13 @@ static int selinux_ib_endport_manage_subnet(void *ib_sec, const char *dev_name,
- 			    INFINIBAND_ENDPORT__MANAGE_SUBNET, &ad);
- }
- 
--static int selinux_ib_alloc_security(void **ib_sec)
-+static int selinux_ib_alloc_security(void *ib_sec)
- {
--	struct ib_security_struct *sec;
-+	struct ib_security_struct *sec = selinux_ib(ib_sec);
- 
--	sec = kzalloc(sizeof(*sec), GFP_KERNEL);
--	if (!sec)
--		return -ENOMEM;
- 	sec->sid = current_sid();
--
--	*ib_sec = sec;
- 	return 0;
- }
--
--static void selinux_ib_free_security(void *ib_sec)
--{
--	kfree(ib_sec);
--}
- #endif
- 
- #ifdef CONFIG_BPF_SYSCALL
-@@ -6964,6 +6954,7 @@ struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
+@@ -6950,6 +6950,9 @@ struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
+ 	.lbs_ipc = sizeof(struct ipc_security_struct),
+ 	.lbs_key = sizeof(struct key_security_struct),
+ 	.lbs_msg_msg = sizeof(struct msg_security_struct),
++#ifdef CONFIG_PERF_EVENTS
++	.lbs_perf_event = sizeof(struct perf_event_security_struct),
++#endif
+ 	.lbs_sock = sizeof(struct sk_security_struct),
  	.lbs_superblock = sizeof(struct superblock_security_struct),
  	.lbs_xattr_count = SELINUX_INODE_INIT_XATTRS,
- 	.lbs_tun_dev = sizeof(struct tun_security_struct),
-+	.lbs_ib = sizeof(struct ib_security_struct),
- };
+@@ -6981,24 +6984,12 @@ static int selinux_perf_event_alloc(struct perf_event *event)
+ {
+ 	struct perf_event_security_struct *perfsec;
  
- #ifdef CONFIG_PERF_EVENTS
-@@ -7282,7 +7273,6 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(ib_pkey_access, selinux_ib_pkey_access),
- 	LSM_HOOK_INIT(ib_endport_manage_subnet,
- 		      selinux_ib_endport_manage_subnet),
--	LSM_HOOK_INIT(ib_free_security, selinux_ib_free_security),
- #endif
- #ifdef CONFIG_SECURITY_NETWORK_XFRM
- 	LSM_HOOK_INIT(xfrm_policy_free_security, selinux_xfrm_policy_free),
-diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
-index 461c6985977d..b1878f9395b5 100644
---- a/security/selinux/include/objsec.h
-+++ b/security/selinux/include/objsec.h
-@@ -213,4 +213,10 @@ selinux_tun_dev(void *security)
- 	return security + selinux_blob_sizes.lbs_tun_dev;
+-	perfsec = kzalloc(sizeof(*perfsec), GFP_KERNEL);
+-	if (!perfsec)
+-		return -ENOMEM;
+-
++	perfsec = selinux_perf_event(event->security);
+ 	perfsec->sid = current_sid();
+-	event->security = perfsec;
+ 
+ 	return 0;
  }
  
-+static inline struct ib_security_struct *
-+selinux_ib(void *ib_sec)
+-static void selinux_perf_event_free(struct perf_event *event)
+-{
+-	struct perf_event_security_struct *perfsec = event->security;
+-
+-	event->security = NULL;
+-	kfree(perfsec);
+-}
+-
+ static int selinux_perf_event_read(struct perf_event *event)
+ {
+ 	struct perf_event_security_struct *perfsec = event->security;
+@@ -7310,7 +7301,6 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
+ 
+ #ifdef CONFIG_PERF_EVENTS
+ 	LSM_HOOK_INIT(perf_event_open, selinux_perf_event_open),
+-	LSM_HOOK_INIT(perf_event_free, selinux_perf_event_free),
+ 	LSM_HOOK_INIT(perf_event_read, selinux_perf_event_read),
+ 	LSM_HOOK_INIT(perf_event_write, selinux_perf_event_write),
+ #endif
+diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
+index b1878f9395b5..d632a9180b41 100644
+--- a/security/selinux/include/objsec.h
++++ b/security/selinux/include/objsec.h
+@@ -219,4 +219,10 @@ selinux_ib(void *ib_sec)
+ 	return ib_sec + selinux_blob_sizes.lbs_ib;
+ }
+ 
++static inline struct perf_event_security_struct *
++selinux_perf_event(void *perf_event)
 +{
-+	return ib_sec + selinux_blob_sizes.lbs_ib;
++	return perf_event + selinux_blob_sizes.lbs_perf_event;
 +}
 +
  #endif /* _SELINUX_OBJSEC_H_ */
