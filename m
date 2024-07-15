@@ -1,104 +1,131 @@
-Return-Path: <linux-security-module+bounces-4292-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4294-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ADC7931570
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2024 15:11:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 026449315FB
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2024 15:43:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 209911F21BE4
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2024 13:11:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE72C283017
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Jul 2024 13:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B5018C34E;
-	Mon, 15 Jul 2024 13:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490B218C169;
+	Mon, 15 Jul 2024 13:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stuba.sk header.i=@stuba.sk header.b="yRdfuyUk"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="dz2kURt+"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-out.cvt.stuba.sk (smtp-out.cvt.stuba.sk [147.175.1.21])
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3016E18D4C1;
-	Mon, 15 Jul 2024 13:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.175.1.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130AE18D4CE
+	for <linux-security-module@vger.kernel.org>; Mon, 15 Jul 2024 13:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721049071; cv=none; b=fLVAWrBCYpapmQObrG7anPasg1vD6EJ5FfWMN4BXsuhGiC95CR+zIZUNynmzb9JMcuLKoMNcNy1h0Ug0AgA97N4XTl/NuaPo4Kk7YiRTlWTsbFNuyn0KryND/TQdV5zsMa2mLQoTPzILUFACqmkYGkReSR80ggld5FOgXz/ZfJY=
+	t=1721050966; cv=none; b=PJ8iY0q9Mpbf2AQZvfw1Ml/4V8BEVieuUH+FgW4yG81IJdMGyz3HtkuXBn2a3mtTB9OW4iELx9g1luQI+AGq3b27ymj/xEl8r78oRgGjEVnl4/46EtrxBkYx3QeVGrmh4seKMPbbGpifq6yCOWyAFIlXZ0LsG9kNS618o0md+PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721049071; c=relaxed/simple;
-	bh=UBfgy5+0l8x+M07N7A4Dki6luKXzyCWR4r70sFx/1SY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sookpNAuyUJLYdswfRzgMCfE8lTQgmGKrIwrsyBRUa/49SXmWiAq9VJEIhaG/e4kuxQnjQu/qnciIKnc2twRlSkfLkH66pIhXFIUQ2YdGc40VoU/7Hl8dRpP6b8Wuw+twJqhVJZHcpD6trQklSXOAyzP2buU1dtyY7K8b9Ns7uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=stuba.sk; spf=pass smtp.mailfrom=stuba.sk; dkim=pass (2048-bit key) header.d=stuba.sk header.i=@stuba.sk header.b=yRdfuyUk; arc=none smtp.client-ip=147.175.1.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=stuba.sk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stuba.sk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=stuba.sk;
-	s=20180406; h=Content-Transfer-Encoding:Content-Type:From:To:Subject:
-	MIME-Version:Date:Message-ID; bh=hPXmEGrpNCxQtlE+7MmiOVH/DDCPb8s47qf1vlPNH8Y=
-	; t=1721049068; x=1721481068; b=yRdfuyUka8R8o/yS9lizhVwyr0ygk5Wde5XqpaziEQpOp
-	j1O7FP/gSubqEyJ6/+7NWKmQeGS3K2wpxTQkKnzyWSEDnzagJF0sqCFSpLb7D0nUHnJUfW4WSSvGR
-	SU1o1LEdZMM4NF4htQGocy9AjBNIrLp1lXn7cQPWF1BVsq/87g8mhbHvXRY/nQh6CKpNNj5p1iTq4
-	yB8dWUshaa+TyyUHM2vkXiDGhhBx5ycWvi1zKQwKqGdJqHXgfgYHqUy1YvHV7m/jOJyg7EZNQW1Gu
-	gpUkjMSYm56MDGKnTQYo0apIxf6QzSJn0+oPMHxi5SYjlIzPHAnBii2daofaJGpgGA==;
-X-STU-Diag: 0488aa0426ae2156 (auth)
-Received: from ellyah.uim.fei.stuba.sk ([147.175.106.89])
-	by mx1.stuba.sk (Exim4) with esmtpsa (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-	(envelope-from <matus.jokay@stuba.sk>)
-	id 1sTL8u-000000003nF-2IVT;
-	Mon, 15 Jul 2024 14:49:24 +0200
-Message-ID: <498a6aad-3b53-4918-975e-3827f8230bd0@stuba.sk>
-Date: Mon, 15 Jul 2024 14:49:24 +0200
+	s=arc-20240116; t=1721050966; c=relaxed/simple;
+	bh=w2CZF/Sf6OZjb2TLDfur/PEyCCSgxn7S378G1bFjGlM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FsCD3iAjb6WyK9nEL4UXmS5foP/uXPiF9Q7Ewi/VKpnqijUEZg5KoeJH9hUc2Z+ymEQVoUxqTTWa4IGu7+bRhOXBAXsh4Po0H5xyb69jIHEnRbXliAXZRIpms+WRYXUwVVzCP+YYZCiI+EUwnqNyE7uxPWGv67X0UUiSZzcI8XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=dz2kURt+; arc=none smtp.client-ip=84.16.66.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WN38t55ZyzPdB;
+	Mon, 15 Jul 2024 15:34:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1721050494;
+	bh=mxiIBTixp+v73ahYycbuEAgS9J3hIAVTYJHjh2eboHc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dz2kURt+a5Cw9o79F4tE/9plyG6RS8hcGtyyBe9lDjF/SF+k0TNLe/u16sO7/vL+H
+	 Njli46N6aoPvJQ0HIbD9x/Zrz1JErgjrWLQVSNjbzETwx1xE8PS+u1S8z/KhDM46+z
+	 HSBYrzgFV5DRl8crOiFC6kGAk5MC7KD4iIKlcm08=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4WN38t1YxpzQF2;
+	Mon, 15 Jul 2024 15:34:54 +0200 (CEST)
+Date: Mon, 15 Jul 2024 15:34:53 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Paul Moore <paul@paul-moore.com>
+Cc: linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
+Subject: Re: [RFC PATCH] lsm: add the inode_free_security_rcu() LSM
+ implementation hook
+Message-ID: <20240715.aeyaiRa0quie@digikod.net>
+References: <20240710024029.669314-2-paul@paul-moore.com>
+ <CAHC9VhRAHg3pjHLh8714Wwb-KYReEijfE_C3i48r72VztUmdJQ@mail.gmail.com>
+ <20240710.Thoo5haishei@digikod.net>
+ <CAHC9VhT=t0Y55i7fJx-HHg3sGCnsSKn=nMCiRiXskdBzs1JVvQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] net: Split a __sys_bind helper for io_uring
-To: Jens Axboe <axboe@kernel.dk>, Jakub Kicinski <kuba@kernel.org>
-Cc: Gabriel Krisman Bertazi <krisman@suse.de>, io-uring@vger.kernel.org,
- netdev@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20240614163047.31581-1-krisman@suse.de>
- <20240618174953.5efda404@kernel.org>
- <68b482cd-4516-4e00-b540-4f9ee492d6e3@kernel.dk>
- <20240619080447.6ad08fea@kernel.org>
- <8002392e-5246-4d3e-8c8a-70ccffe39a08@kernel.dk>
-Content-Language: en-US
-From: Matus Jokay <matus.jokay@stuba.sk>
-In-Reply-To: <8002392e-5246-4d3e-8c8a-70ccffe39a08@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhT=t0Y55i7fJx-HHg3sGCnsSKn=nMCiRiXskdBzs1JVvQ@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 
-On 19. 6. 2024 17:06, Jens Axboe wrote:
-> On 6/19/24 9:04 AM, Jakub Kicinski wrote:
->> On Wed, 19 Jun 2024 07:40:40 -0600 Jens Axboe wrote:
->>> On 6/18/24 6:49 PM, Jakub Kicinski wrote:
->>>> On Fri, 14 Jun 2024 12:30:44 -0400 Gabriel Krisman Bertazi wrote:  
->>>>> io_uring holds a reference to the file and maintains a
->>>>> sockaddr_storage address.  Similarly to what was done to
->>>>> __sys_connect_file, split an internal helper for __sys_bind in
->>>>> preparation to supporting an io_uring bind command.
->>>>>
->>>>> Reviewed-by: Jens Axboe <axboe@kernel.dk>
->>>>> Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>  
->>>>
->>>> Acked-by: Jakub Kicinski <kuba@kernel.org>  
->>>
->>> Are you fine with me queueing up 1-2 via the io_uring branch?
->>> I'm guessing the risk of conflict should be very low, so doesn't
->>> warrant a shared branch.
->>
->> Yup, exactly, these can go via io_uring without branch juggling.
+On Wed, Jul 10, 2024 at 12:24:31PM -0400, Paul Moore wrote:
+> On Wed, Jul 10, 2024 at 8:02 AM Mickaël Salaün <mic@digikod.net> wrote:
+> > On Tue, Jul 09, 2024 at 10:47:45PM -0400, Paul Moore wrote:
+> > > On Tue, Jul 9, 2024 at 10:40 PM Paul Moore <paul@paul-moore.com> wrote:
+> > > >
+> > > > The LSM framework has an existing inode_free_security() hook which
+> > > > is used by LSMs that manage state associated with an inode, but
+> > > > due to the use of RCU to protect the inode, special care must be
+> > > > taken to ensure that the LSMs do not fully release the inode state
+> > > > until it is safe from a RCU perspective.
+> > > >
+> > > > This patch implements a new inode_free_security_rcu() implementation
+> > > > hook which is called when it is safe to free the LSM's internal inode
+> > > > state.  Unfortunately, this new hook does not have access to the inode
+> > > > itself as it may already be released, so the existing
+> > > > inode_free_security() hook is retained for those LSMs which require
+> > > > access to the inode.
+> > > >
+> > > > Signed-off-by: Paul Moore <paul@paul-moore.com>
+> > > > ---
+> > > >  include/linux/lsm_hook_defs.h     |  1 +
+> > > >  security/integrity/ima/ima.h      |  2 +-
+> > > >  security/integrity/ima/ima_iint.c | 20 ++++++++------------
+> > > >  security/integrity/ima/ima_main.c |  2 +-
+> > > >  security/landlock/fs.c            |  9 ++++++---
+> > > >  security/security.c               | 26 +++++++++++++-------------
+> > > >  6 files changed, 30 insertions(+), 30 deletions(-)
+> > >
+> > > FYI, this has only received "light" testing, and even that is fairly
+> > > generous.  I booted up a system with IMA set to measure the TCB and
+> > > ran through the audit and SELinux test suites; IMA seemed to be
+> > > working just fine but I didn't poke at it too hard.  I didn't have an
+> > > explicit Landlock test handy, but I'm hoping that the Landlock
+> > > enablement on a modern Rawhide system hit it a little :)
+> >
+> > If you want to test Landlock, you can do so like this:
+> >
+> > cd tools/testing/selftests/landlock
+> > make -C ../../../.. headers_install
+> > make
+> > for f in *_test; ./$f; done
 > 
-> Great thanks!
+> Looks okay?
 > 
-Please fix io_bind and io_listen to not pass NULL ptr to related helpers
-__sys_bind_socket and __sys_listen_socket. The first helper's argument
-shouldn't be NULL, as related security hooks expect a valid socket object.
+> % for f in *_test; do ./$f; done | grep "^# Totals"
+> # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
+> #      SKIP      overlayfs is not supported (setup)
+> #      SKIP      overlayfs is not supported (setup)
+> #      SKIP      this filesystem is not supported (setup)
+> #      SKIP      this filesystem is not supported (setup)
+> #      SKIP      this filesystem is not supported (setup)
+> #      SKIP      this filesystem is not supported (setup)
+> #      SKIP      this filesystem is not supported (setup)
+> # Totals: pass:117 fail:0 xfail:0 xpass:0 skip:7 error:0
+> # Totals: pass:84 fail:0 xfail:0 xpass:0 skip:0 error:0
+> # Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-See the syzkaller's bug report:
-https://lore.kernel.org/linux-security-module/0000000000007b7ce6061d1caec0@google.com/
-
-Thanks,
-mY
+It should be enough, thanks.  FYI, the minimal configuration required to
+run all tests (except hostfs) is listed in
+tools/testing/selftests/landlock/config
 
