@@ -1,103 +1,79 @@
-Return-Path: <linux-security-module+bounces-4323-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4326-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977CD933206
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2024 21:32:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CB5A9333F0
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2024 23:59:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 406591F24FA7
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2024 19:32:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DA01C22D82
+	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2024 21:59:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86C2619F49D;
-	Tue, 16 Jul 2024 19:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6486913C904;
+	Tue, 16 Jul 2024 21:59:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="jYXhLk8H";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="jYXhLk8H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I6O87lMo"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B9819DF73;
-	Tue, 16 Jul 2024 19:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329E513B2B1;
+	Tue, 16 Jul 2024 21:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721158334; cv=none; b=AdJhQBeOObMetFRNDZUn204mAiRKX1lsO496XMNgevUwS+js2mrjCf7egf7FfXVN9TZNNRNYHCz2n5CHItzLD2h5ZSTB1BEoknsTqlQkoObS9L459cf9sPiCtpE6KMOZGSjARNVXFV4Ql8i2AsSv+ERpFvqGgvkAgCKLFi6xfFA=
+	t=1721167162; cv=none; b=PWDjE8F1fNCm8zVwwLF3WofURWBYiDe7gxsRuTb+HgqSnlAT27DqxiF7Zy5CZMSH6OiYlfJAI4rAfxx4aWfFgO7R/g5vFGZl+MLsRWVkx5PljHH1SMG/HQKBqfiKuFAcsCAIFLRXrlOFWhECDWm5VANqc3IrcbUVemmwxN9shmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721158334; c=relaxed/simple;
-	bh=IvPKY2AKdeIjYesoTf4e3qGdCbngas8wRYH5EbuL9tQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HFrYLEUAnVrOAI0p/nhMSNpNUjwxyV8fQMoPVyhWW0EWRbykRYqXDjBjRHAUR3vngW/fFZKJac6WwXHHmnWiZc6O8RrrYV7F9CLyRvswZw9ecB2HdLziBrR8hnfcYhLuvytnh5ucnlbgGlb6ZBrv6TF9bp01vdhKCPK7iXx7CAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=jYXhLk8H; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=jYXhLk8H; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1721158329;
-	bh=IvPKY2AKdeIjYesoTf4e3qGdCbngas8wRYH5EbuL9tQ=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=jYXhLk8HtxnkZuEJD+hT86S263hywt4t1j815ljKSl7sUImFHLgeA4qUNrvt1EGa+
-	 6jTGTXOeewlpLMCCzv57WpsiCUR6R4Xdrs6JtgqPKfaorriCRNu1b1zGXkdMC6tjxf
-	 /5Veorce13yb1FNM2aG6IoY6tMrgJ0PU5o9WEJOw=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 495F91286849;
-	Tue, 16 Jul 2024 15:32:09 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id Xi3ExQViFz9s; Tue, 16 Jul 2024 15:32:09 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1721158329;
-	bh=IvPKY2AKdeIjYesoTf4e3qGdCbngas8wRYH5EbuL9tQ=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=jYXhLk8HtxnkZuEJD+hT86S263hywt4t1j815ljKSl7sUImFHLgeA4qUNrvt1EGa+
-	 6jTGTXOeewlpLMCCzv57WpsiCUR6R4Xdrs6JtgqPKfaorriCRNu1b1zGXkdMC6tjxf
-	 /5Veorce13yb1FNM2aG6IoY6tMrgJ0PU5o9WEJOw=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2E16512867FA;
-	Tue, 16 Jul 2024 15:32:08 -0400 (EDT)
-Message-ID: <36ceafb1513fac502fdfce8fb330fc6e18db47ce.camel@HansenPartnership.com>
-Subject: Re: [PATCH v3] tpm: Relocate buf->handles to appropriate place
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: stable@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>, David Howells
-	 <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, James Morris
-	 <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Tue, 16 Jul 2024 15:32:06 -0400
-In-Reply-To: <20240716185225.873090-1-jarkko@kernel.org>
-References: <20240716185225.873090-1-jarkko@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1721167162; c=relaxed/simple;
+	bh=RLNvHZ7ijUj6F87ttAG5Whxhqk0lI4BCCRd7ZAv11nE=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=q+swYUW96Ii3418tO8KBmNt34ulMqoYs17PedPY/qQIuhAFzkWjtC0ShhRqUN1/L7BvkxIibQImWvKG42khtv8weUjS8mptV98/0hfLoC+4UOGbSsr54ywU3RHFc6BlVT+MV7yEbQP9iTzNIHEqigfcLYuCPKPdn85N2GTKCRI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I6O87lMo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B08B2C116B1;
+	Tue, 16 Jul 2024 21:59:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721167161;
+	bh=RLNvHZ7ijUj6F87ttAG5Whxhqk0lI4BCCRd7ZAv11nE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=I6O87lMouMBamWUHt1gPAMAqXY6/vo0nSP/7rGNlZea7Dp3x87MW0JBdtH3c9AUi9
+	 eQ+uwddo2h9BusMs3UBs0QwBP2zl4UxYpqoAv1N2fyIQkC2gbJuUoT2xRYm40Ip9tf
+	 urZyeiQK7UQaCfR+sUVIrJ7h7Bkc8rDv193ExwV1Lpzto6AFtJUYVlJmljVnoNChBG
+	 Wg0nBJbPvBIXdXciyNojU+OsAR0YNkE4KZuB7GSNjmVpiVBYsaTNv7lLMDpMaOIZRq
+	 zDpJuqP83DLSlF7xr+eDASjSsPxIRap2M01ZWNgSt03qjImFfp5EilS6ndQYO2tp/X
+	 W4peAHSU2Kddg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A469BC43445;
+	Tue, 16 Jul 2024 21:59:21 +0000 (UTC)
+Subject: Re: [GIT PULL] selinux/selinux-pr-20240715
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <4b4df5f5e3d91b9342b56ae69b3fd2be@paul-moore.com>
+References: <4b4df5f5e3d91b9342b56ae69b3fd2be@paul-moore.com>
+X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
+X-PR-Tracked-Message-Id: <4b4df5f5e3d91b9342b56ae69b3fd2be@paul-moore.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20240715
+X-PR-Tracked-Commit-Id: e123134b39dc40af94e8aec49227ae55b5e087a8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: dad8d1a383a8a2123be2a067098fa25afa2ddad7
+Message-Id: <172116716166.1258.7360995268999604207.pr-tracker-bot@kernel.org>
+Date: Tue, 16 Jul 2024 21:59:21 +0000
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, selinux@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-On Tue, 2024-07-16 at 21:52 +0300, Jarkko Sakkinen wrote:
-[...]
-> Further, 'handles' was incorrectly place to struct tpm_buf, as tpm-
-> buf.c does manage its state. It is easy to grep that only piece of
-> code that actually uses the field is tpm2-sessions.c.
-> 
-> Address the issues by moving the variable to struct tpm_chip.
+The pull request you sent on Mon, 15 Jul 2024 15:17:33 -0400:
 
-That's really not a good idea, you should keep counts local to the
-structures they're counting, not elsewhere.
+> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20240715
 
-tpm_buf->handles counts the number of handles present in the command
-encoded in a particular tpm_buf.  Right at the moment we only ever
-construct one tpm_buf per tpm (i.e. per tpm_chip) at any one time, so
-you can get away with moving handles into tpm_chip.  If we ever
-constructed more than one tpm_buf per chip, the handles count would
-become corrupted.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/dad8d1a383a8a2123be2a067098fa25afa2ddad7
 
-James
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
