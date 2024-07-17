@@ -1,79 +1,109 @@
-Return-Path: <linux-security-module+bounces-4325-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4327-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 450529333EF
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2024 23:59:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B286D933563
+	for <lists+linux-security-module@lfdr.de>; Wed, 17 Jul 2024 04:19:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72FB91C22C1D
-	for <lists+linux-security-module@lfdr.de>; Tue, 16 Jul 2024 21:59:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7430F283214
+	for <lists+linux-security-module@lfdr.de>; Wed, 17 Jul 2024 02:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C8813C693;
-	Tue, 16 Jul 2024 21:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ahk9Hh9b"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6326A28EA;
+	Wed, 17 Jul 2024 02:19:14 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1E913AA41;
-	Tue, 16 Jul 2024 21:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAAF4685;
+	Wed, 17 Jul 2024 02:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721167162; cv=none; b=IM3/dCnqH9JMYdjB1zczMdF3z4wPbr1yPdt7XSbn63Cpmfc3sKxHvLsEDla2sZLP/IMr04aPY8nRN3nHFKmGi18WmDyDowAveTQazmwNEOFXuDiLY6GX7EbURknejlHw6wcs2rb49OaCm0tHPvK5JyDtC//ZEcEDKHK0oMUDi6s=
+	t=1721182754; cv=none; b=bFQIqbHrq2AY0jnRTMqWDUhBzCpj6wJYCYOIw5MELAzzET98Gkfk05u4oyt58fzHP68B69tJCfagRAIlrFIh6Hyr7pJO1ql+kkfUUq4geAwgp9tOeQoWMcLTHz0MAXSTne+fvyqXB4eH8jhQrwWdf8CO+piCErs/t021EvMMiis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721167162; c=relaxed/simple;
-	bh=LrSQ4iilkVKAmglZfjQEH2ZVco7OPWRjpoSltuDAnnI=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=RLAxtCgLZ9FPPVJSgePgOS8vopUVZmYRzcwvOrU9ilEf3B6TzYlzmYfvmzDjvHpGPj00bsecOc4h/seU2daeWWqNV/rf2u1NyW1hGnnaDabungtTI3nMrXWY4n4CpivrKN50Pl6/QFQMYaXcvFR2Nw3dPtOCgEA4+vkCocOgGFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ahk9Hh9b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2EC9C4AF0D;
-	Tue, 16 Jul 2024 21:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721167162;
-	bh=LrSQ4iilkVKAmglZfjQEH2ZVco7OPWRjpoSltuDAnnI=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=Ahk9Hh9b2Yw8Jol1j6Y65Xm7F4uYWnXng6CCUCm8o3zmHtGhgF5pGJG9ROrugQgrW
-	 GxfKJvCLgtXzSF7C2O6vfv+fqeDOBL/SdstW3Fa1h83NpFxB8481a10a0ZQjfniFQR
-	 +w7ciFwgt8pii8ZscErydWEnVOqNEp0ZMiuky50MldTUWz5WlPI3z3qAuj+sdPlmji
-	 a/zwEWcwLIK2SY5MqwrPD7bvSW60Pp84yXX1tT50C6nalFI4iRCy6mBNPMdO4uLTKF
-	 lfX6tlEFRz1sSJM/uaiX02oS3kaR5mxCy3pINJ1Yq6sjtPmeRBZn7r9ZPgpY14lIBC
-	 e9cFcC/WyWd4A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E902DC43445;
-	Tue, 16 Jul 2024 21:59:21 +0000 (UTC)
-Subject: Re: [GIT PULL] Smack patches for 6.11
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <c9842562-3564-4977-880f-9042ebe43e62@schaufler-ca.com>
-References: <c9842562-3564-4977-880f-9042ebe43e62.ref@schaufler-ca.com> <c9842562-3564-4977-880f-9042ebe43e62@schaufler-ca.com>
-X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
-X-PR-Tracked-Message-Id: <c9842562-3564-4977-880f-9042ebe43e62@schaufler-ca.com>
-X-PR-Tracked-Remote: https://github.com/cschaufler/smack-next tags/Smack-for-6.10
-X-PR-Tracked-Commit-Id: e86cac0acdb1a74f608bacefe702f2034133a047
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 42b5a01596f1f9471b58a2f59e1fceeb8db79ffc
-Message-Id: <172116716195.1258.16982481654978018987.pr-tracker-bot@kernel.org>
-Date: Tue, 16 Jul 2024 21:59:21 +0000
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, LSM List <linux-security-module@vger.kernel.org>, Linux kernel mailing list <linux-kernel@vger.kernel.org>, Casey Schaufler <casey@schaufler-ca.com>, Konstantin Andreev <andreev@swemel.ru>
+	s=arc-20240116; t=1721182754; c=relaxed/simple;
+	bh=8o9beL6AlKCzXsXyfDU4H0SuyTluNFbx2nwe8j0c8NU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=k6adpPTI6TC1QUJRTtenysh9pA0PSPqScBH8Qf8ZuAW0L/B/DntJ2rdZbECgcPeGaICkNw20yuvY4B613m7pkBKgQaWwAivqfvha40K9zbMTMIo5fL0jJTfForoLummNjRpEyhF1ozF76O93WnYC0+iGJNM1xzYvwPjrNTS6LUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WP03V0x4DznbSL;
+	Wed, 17 Jul 2024 10:18:30 +0800 (CST)
+Received: from kwepemg100016.china.huawei.com (unknown [7.202.181.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id B8F0E1402C8;
+	Wed, 17 Jul 2024 10:19:07 +0800 (CST)
+Received: from [10.67.110.48] (10.67.110.48) by kwepemg100016.china.huawei.com
+ (7.202.181.57) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 17 Jul
+ 2024 10:19:04 +0800
+Message-ID: <9473d6eb-3f56-4c73-8e61-69111837c07b@huawei.com>
+Date: Wed, 17 Jul 2024 10:18:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH testsuite] tests/task_setscheduler: add cgroup v2 case for
+ moving proc to root cgroup
+From: Gong Ruiqi <gongruiqi1@huawei.com>
+To: Paul Moore <paul@paul-moore.com>, Ondrej Mosnacek <omosnace@redhat.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+CC: <selinux@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Wang Weiyang <wangweiyang2@huawei.com>
+References: <20240702095401.16278-1-gongruiqi1@huawei.com>
+Content-Language: en-US
+In-Reply-To: <20240702095401.16278-1-gongruiqi1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemg100016.china.huawei.com (7.202.181.57)
 
-The pull request you sent on Mon, 15 Jul 2024 16:30:34 -0700:
+Ping.
 
-> https://github.com/cschaufler/smack-next tags/Smack-for-6.10
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/42b5a01596f1f9471b58a2f59e1fceeb8db79ffc
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+On 2024/07/02 17:54, GONG, Ruiqi wrote:
+> Currently for systems that only enable cgroup v2, the test script would
+> fail to move the target process into the root cgroup since the cgroup v1
+> path is used, which therefore makes the testcase fail. Add cgroup v2
+> handling here so that no matter which cgroup version the CPU controller
+> is bound to, the target process can always be moved to the root CPU
+> cgroup.
+> 
+> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+> ---
+>  tests/task_setscheduler/test | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tests/task_setscheduler/test b/tests/task_setscheduler/test
+> index c2fe8c6..fa1efb1 100755
+> --- a/tests/task_setscheduler/test
+> +++ b/tests/task_setscheduler/test
+> @@ -20,12 +20,17 @@ vec( $rin, fileno($f), 1 ) = 1;
+>  select( $rin, undef, undef, 5 );
+>  close($f);
+>  
+> -$cgroup_cpu = "/sys/fs/cgroup/cpu/tasks";
+> -if ( -w $cgroup_cpu ) {
+> -
+> -    # We can only set the scheduler policy fo SCHED_{RR,FIFO} in the root
+> -    # cgroup so move our target process to the root cgroup.
+> -    open( my $fd, ">>", $cgroup_cpu );
+> +# We can only set the scheduler policy fo SCHED_{RR,FIFO} in the root
+> +# cgroup so move our target process to the root cgroup.
+> +$cgroup_v1_cpu = "/sys/fs/cgroup/cpu/tasks";
+> +if ( -w $cgroup_v1_cpu ) {
+> +    open( my $fd, ">>", $cgroup_v1_cpu );
+> +    print $fd $pid;
+> +    close $fd;
+> +}
+> +$cgroup_v2 = "/sys/fs/cgroup/cgroup.procs";
+> +if ( -w $cgroup_v2 ) {
+> +    open( my $fd, ">>", $cgroup_v2 );
+>      print $fd $pid;
+>      close $fd;
+>  }
 
