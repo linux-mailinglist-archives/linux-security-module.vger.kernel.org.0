@@ -1,201 +1,157 @@
-Return-Path: <linux-security-module+bounces-4405-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4415-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EA39937539
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Jul 2024 10:45:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFBB9376F0
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Jul 2024 12:57:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4EA31F22158
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Jul 2024 08:45:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A13FE1C20B5B
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Jul 2024 10:57:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D157CF34;
-	Fri, 19 Jul 2024 08:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="EHXhfzo2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B531411DF;
+	Fri, 19 Jul 2024 10:56:00 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A7E7BAF7
-	for <linux-security-module@vger.kernel.org>; Fri, 19 Jul 2024 08:45:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC96683A14;
+	Fri, 19 Jul 2024 10:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721378713; cv=none; b=c8Xcz+jBn1ZntE3kTyuHWMs9IIO5Lj/mXTBd10wRtijtasCc9ajPnDo4TZY/WS/nnRgZkyG/7EcJh3qIdI/FCW4bScMknOxSVIEJVeUJ1gRSdSwY+jvvZxpCEikAj54TdiD0iEIQuR+PldsSva2rqv3ICnm/yk2Xlmi8OW7baA0=
+	t=1721386560; cv=none; b=nQI7y9/aGJe0RmnsTgU5C+A40E5YQ2LXZqpdx9PzmoL9oaoOmlRJjCPTpvSmKK7zBigofjt9p+7Mgu3XeLMknX+nkkqbXq8fXh02Ey6ztC2F2IEcu8BATcTD1/GgjWjtikLfKsUfVEcGrGO19jHE+K4QMPXdyXD6jPxxBZoO3f8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721378713; c=relaxed/simple;
-	bh=9TVMUdV79yx08Oir54aiTDR0gVmSjoHl2tYGjglb9VU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sHq3fw5s2xaj85hZPq5iXX9TNp58R0RR5LKe3fXzNVWHiWE+sxcEpUKzkqYucC0ACkd5jBbUH16zlxS/+TeVo0BZpupVIoB31oEG16+f+PA1Epfoxjg/W5rUJ02zQsz6Tja5I4uC5vpEJCklaBSrHrx/EmNI+9rmmECpLRhPxOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=EHXhfzo2; arc=none smtp.client-ip=84.16.66.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WQNXf71Myzh0Q;
-	Fri, 19 Jul 2024 10:45:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1721378706;
-	bh=D77b+j+Z1jLOY8IPK59eCXt1xDHUtrJGP6+Y0dvzShE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EHXhfzo2I2JDYI5qE9CxmPPNE6gpt2J8KhR+cCzMHYjjH2fwMmVM+PHEN/DbNnqM9
-	 mtqkTTjUwJMsBcZQuV+UjKMG0w4K31OBZzi+rBj3+YBsumqOzkhcwAX7nu2z7Qrtfd
-	 XK9+OPyVWbcYEkJ/Igx9U3zHvqUfzlRRESQQyIi4=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4WQNXX1tprzMyn;
-	Fri, 19 Jul 2024 10:45:00 +0200 (CEST)
-Date: Fri, 19 Jul 2024 10:44:58 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Jeff Xu <jeffxu@google.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
-	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
-	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
-	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Dower <steve.dower@python.org>, 
-	Steve Grubb <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
-	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
-	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Elliott Hughes <enh@google.com>
-Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
-Message-ID: <20240719.shaeK6PaiSie@digikod.net>
-References: <20240704190137.696169-1-mic@digikod.net>
- <20240704190137.696169-2-mic@digikod.net>
- <CALmYWFss7qcpR9D_r3pbP_Orxs55t3y3yXJsac1Wz=Hk9Di0Nw@mail.gmail.com>
- <20240717.neaB5Aiy2zah@digikod.net>
- <CALmYWFt=yXpzhS=HS9FjwVMvx6U1MoR31vK79wxNLhmJm9bBoA@mail.gmail.com>
- <20240718.kaePhei9Ahm9@digikod.net>
- <CALmYWFto4sw-Q2+J0Gc54POhnM9C8YpnJ44wMz=fd_K3_+dWmw@mail.gmail.com>
+	s=arc-20240116; t=1721386560; c=relaxed/simple;
+	bh=rE6Ptw6QyPGUyOgXwCWyVd8DT9HkJTMUPru9G3bLjfo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tlk8zWCmOU+/PECPPROfJLuf3/Blizf7Gc92CjRRxtCSFCJc78Wq3jj7kLR3L6TRGMcuXe4VMQPJivoIV6rb3PYE+YXUV1UToV3qNJpP5bGkaKNvQZBoiV7r+iogVn2GLT+0gWX3gnyy1PfHTDLVtwMBHYgyIzVQ+f32O+B3W80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WQRRG6Tmpz4f3l11;
+	Fri, 19 Jul 2024 18:55:38 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 389771A0572;
+	Fri, 19 Jul 2024 18:55:52 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+	by APP3 (Coremail) with SMTP id _Ch0CgD3BVE0RppmM3cvAg--.11767S2;
+	Fri, 19 Jul 2024 18:55:49 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Kees Cook <kees@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Florent Revest <revest@google.com>
+Subject: [PATCH bpf-next v2 0/9] Add BPF LSM return value range check, BPF part
+Date: Fri, 19 Jul 2024 19:00:50 +0800
+Message-Id: <20240719110059.797546-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALmYWFto4sw-Q2+J0Gc54POhnM9C8YpnJ44wMz=fd_K3_+dWmw@mail.gmail.com>
-X-Infomaniak-Routing: alpha
+X-CM-TRANSID:_Ch0CgD3BVE0RppmM3cvAg--.11767S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw1rArWUZr1UZrW7WF4fuFg_yoW5Xryrpa
+	ykury5tr1FkF12qF4xGFW7CrWrJa1kX343C3Wxtr1rZF1UJryDXrWxGr1Ygr9xJrWFgwnY
+	v3WagFnak3W8Za7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+	6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU0s2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Thu, Jul 18, 2024 at 06:29:54PM -0700, Jeff Xu wrote:
-> On Thu, Jul 18, 2024 at 5:24 AM Mickaël Salaün <mic@digikod.net> wrote:
-> >
-> > On Wed, Jul 17, 2024 at 07:08:17PM -0700, Jeff Xu wrote:
-> > > On Wed, Jul 17, 2024 at 3:01 AM Mickaël Salaün <mic@digikod.net> wrote:
-> > > >
-> > > > On Tue, Jul 16, 2024 at 11:33:55PM -0700, Jeff Xu wrote:
-> > > > > On Thu, Jul 4, 2024 at 12:02 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > > > > >
-> > > > > > Add a new AT_CHECK flag to execveat(2) to check if a file would be
-> > > > > > allowed for execution.  The main use case is for script interpreters and
-> > > > > > dynamic linkers to check execution permission according to the kernel's
-> > > > > > security policy. Another use case is to add context to access logs e.g.,
-> > > > > > which script (instead of interpreter) accessed a file.  As any
-> > > > > > executable code, scripts could also use this check [1].
-> > > > > >
-> > > > > > This is different than faccessat(2) which only checks file access
-> > > > > > rights, but not the full context e.g. mount point's noexec, stack limit,
-> > > > > > and all potential LSM extra checks (e.g. argv, envp, credentials).
-> > > > > > Since the use of AT_CHECK follows the exact kernel semantic as for a
-> > > > > > real execution, user space gets the same error codes.
-> > > > > >
-> > > > > So we concluded that execveat(AT_CHECK) will be used to check the
-> > > > > exec, shared object, script and config file (such as seccomp config),
+From: Xu Kuohai <xukuohai@huawei.com>
 
-> > > > > I think binfmt_elf.c in the kernel needs to check the ld.so to make
-> > > > > sure it passes AT_CHECK, before loading it into memory.
-> > > >
-> > > > All ELF dependencies are opened and checked with open_exec(), which
-> > > > perform the main executability checks (with the __FMODE_EXEC flag).
-> > > > Did I miss something?
-> > > >
-> > > I mean the ld-linux-x86-64.so.2 which is loaded by binfmt in the kernel.
-> > > The app can choose its own dynamic linker path during build, (maybe
-> > > even statically link one ?)  This is another reason that relying on a
-> > > userspace only is not enough.
-> >
-> > The kernel calls open_exec() on all dependencies, including
-> > ld-linux-x86-64.so.2, so these files are checked for executability too.
-> >
-> This might not be entirely true. iiuc, kernel  calls open_exec for
-> open_exec for interpreter, but not all its dependency (e.g. libc.so.6)
+LSM BPF prog may make kernel panic when returning an unexpected value,
+such as returning positive value on hook file_alloc_security.
 
-Correct, the dynamic linker is in charge of that, which is why it must
-be enlighten with execveat+AT_CHECK and securebits checks.
+To fix it, series [1] refactored LSM hook return values and added
+BPF return value check on top of that. Since the refactoring of LSM
+hooks and checking BPF prog return value patches is not closely related,
+this series separates BPF-related patches from [1].
 
-> load_elf_binary() {
->    interpreter = open_exec(elf_interpreter);
-> }
-> 
-> libc.so.6 is opened and mapped by dynamic linker.
-> so the call sequence is:
->  execve(a.out)
->   - open exec(a.out)
->   - security_bprm_creds(a.out)
->   - open the exec(ld.so)
->   - call open_exec() for interruptor (ld.so)
->   - call execveat(AT_CHECK, ld.so) <-- do we want ld.so going through
-> the same check and code path as libc.so below ?
+v2:
+- Update Shung-Hsi's patch with [3]
 
-open_exec() checks are enough.  LSMs can use this information (open +
-__FMODE_EXEC) if needed.  execveat+AT_CHECK is only a user space
-request.
+v1: https://lore.kernel.org/bpf/20240719081749.769748-1-xukuohai@huaweicloud.com/
 
->   - transfer the control to ld.so)
->   - ld.so open (libc.so)
->   - ld.so call execveat(AT_CHECK,libc.so) <-- proposed by this patch,
-> require dynamic linker change.
->   - ld.so mmap(libc.so,rx)
+Changes to [1]:
 
-Explaining these steps is useful. I'll include that in the next patch
-series.
+1. Extend LSM disabled list to include hooks refactored in [1] to avoid
+   dependency on the hooks return value refactoring patches.
 
-> > > A detailed user case will help demonstrate the use case for dynamic
-> > > linker, e.g. what kind of app will benefit from
-> > > SECBIT_EXEC_RESTRICT_FILE = 1, what kind of threat model are we
-> > > dealing with , what kind of attack chain we blocked as a result.
-> >
-> > I explained that in the patches and in the description of these new
-> > securebits.  Please point which part is not clear.  The full threat
-> > model is simple: the TCB includes the kernel and system's files, which
-> > are integrity-protected, but we don't trust arbitrary data/scripts that
-> > can be written to user-owned files or directly provided to script
-> > interpreters.  As for the ptrace restrictions, the dynamic linker
-> > restrictions helps to avoid trivial bypasses (e.g. with LD_PRELOAD)
-> > with consistent executability checks.
-> >
-> On elf loading case, I'm clear after your last email. However, I'm not
-> sure if everyone else follows,  I will try to summarize here:
-> - Problem:  ld.so /tmp/a.out will happily pass, even /tmp/a.out is
-> mounted as non-exec.
->   Solution: ld.so call execveat(AT_CHECK) for a.out before mmap a.out
-> into memory.
-> 
-> - Problem: a poorly built application (a.out) can have a dependency on
-> /tmp/a.o, when /tmp/a.o is on non-exec mount,
->   Solution: ld.so call execveat(AT_CHECK) for a.o, before mmap a.o into memory.
-> 
-> - Problem: application can call mmap (/tmp/a.out, rx), where /tmp is
-> on non-exec mount
+2. Replace the special case patch for bitwise AND on [-1, 0] with Shung-Hsi's
+   general bitwise AND improvement patch [2].
 
-I'd say "malicious or non-enlightened processes" can call mmap without
-execveat+AT_CHECK...
+3. Remove unused patches.
 
->   This is out of scope, i.e. will require enforcement on mmap(), maybe
-> through LSM
+[1] https://lore.kernel.org/bpf/20240711111908.3817636-1-xukuohai@huaweicloud.com
+    https://lore.kernel.org/bpf/20240711113828.3818398-1-xukuohai@huaweicloud.com
 
-Cool, I'll include that as well. Thanks.
+[2] https://lore.kernel.org/bpf/ykuhustu7vt2ilwhl32kj655xfdgdlm2xkl5rff6tw2ycksovp@ss2n4gpjysnw
+
+[3] https://lore.kernel.org/bpf/20240719081702.137173-1-shung-hsi.yu@suse.com/
+
+Shung-Hsi Yu (1):
+  bpf, verifier: improve signed ranges inference for BPF_AND
+
+Xu Kuohai (8):
+  bpf, lsm: Add disabled BPF LSM hook list
+  bpf, lsm: Add check for BPF LSM return value
+  bpf: Prevent tail call between progs attached to different hooks
+  bpf: Fix compare error in function retval_range_within
+  selftests/bpf: Avoid load failure for token_lsm.c
+  selftests/bpf: Add return value checks for failed tests
+  selftests/bpf: Add test for lsm tail call
+  selftests/bpf: Add verifier tests for bpf lsm
+
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_lsm.h                       |   8 +
+ kernel/bpf/bpf_lsm.c                          |  65 ++++++-
+ kernel/bpf/btf.c                              |   5 +-
+ kernel/bpf/core.c                             |  21 ++-
+ kernel/bpf/verifier.c                         | 139 ++++++++++----
+ .../selftests/bpf/prog_tests/test_lsm.c       |  46 ++++-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ tools/testing/selftests/bpf/progs/err.h       |  10 +
+ .../selftests/bpf/progs/lsm_tailcall.c        |  34 ++++
+ .../selftests/bpf/progs/test_sig_in_xattr.c   |   4 +
+ .../bpf/progs/test_verify_pkcs7_sig.c         |   8 +-
+ tools/testing/selftests/bpf/progs/token_lsm.c |   4 +-
+ .../bpf/progs/verifier_global_subprogs.c      |   7 +-
+ .../selftests/bpf/progs/verifier_lsm.c        | 178 ++++++++++++++++++
+ 15 files changed, 486 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_tailcall.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_lsm.c
+
+-- 
+2.30.2
+
 
