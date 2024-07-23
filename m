@@ -1,86 +1,61 @@
-Return-Path: <linux-security-module+bounces-4467-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4469-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 326E393A121
-	for <lists+linux-security-module@lfdr.de>; Tue, 23 Jul 2024 15:17:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFC7693A3AD
+	for <lists+linux-security-module@lfdr.de>; Tue, 23 Jul 2024 17:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 554451C2230A
-	for <lists+linux-security-module@lfdr.de>; Tue, 23 Jul 2024 13:17:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54B191F23F10
+	for <lists+linux-security-module@lfdr.de>; Tue, 23 Jul 2024 15:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61134152799;
-	Tue, 23 Jul 2024 13:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8C12154BE0;
+	Tue, 23 Jul 2024 15:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="QoxHXFmq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MUyJmG7w"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [84.16.66.169])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0043F153505
-	for <linux-security-module@vger.kernel.org>; Tue, 23 Jul 2024 13:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B164A3D55D;
+	Tue, 23 Jul 2024 15:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721740615; cv=none; b=Djwu4CptTwgKuFuJK+DCpWN2zX6UZJ6Vx8+ZB8WTiT1m+j7FqvfkGOR/9Y0TCSylEZpYeCPQc6/jKL+Q7c2CvDxSO4MPevpD0qUTx+dFXtOqdinOROrsUUeDu0rHQRiGl853RtxopyU+3cnlUl/tpOVxWahRFkcQ5B+XrhKwt8s=
+	t=1721747986; cv=none; b=VpDd7x5WhrX3Ae74LSZcC6qdGZuko3jL4B16hTcrFqieB7C/HtZDJz83M8tl4EkgETAZQ9h2DmcCV2Vn4AsQdm2HFN4xvXrQRCo3bHxGObsjag6R0sKEMpkGmipc/97cTuGF06J+F3ePwjcsRohc1Jz7AO90rH6lEgiaM7lhpts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721740615; c=relaxed/simple;
-	bh=xEwc8PxtVvX8tsn9ZtZk7QYu/EDsOr3ij74CMnS5fEM=;
+	s=arc-20240116; t=1721747986; c=relaxed/simple;
+	bh=FwPpgS4qRjlEJADupC/3U3E6AgMhwSAnIXwqKsSfzK4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KFjOnphxv2decdrOw5yWCsgM+nt3NgKv7YdmQLUxrrdiBOTtydvl0/GOK3ubWVAQVZrOHxIqaHRnszn1aommhofqR6ahByc3SPAlreaRU6JZzxupBuQ2YUsHqWMDe4DPutscqIgdYTGi50+hFjrGk43y9McC94sPaYTXuijmPmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=QoxHXFmq; arc=none smtp.client-ip=84.16.66.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WSyNF4BxtzkLM;
-	Tue, 23 Jul 2024 15:16:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1721740605;
-	bh=aewoPXtLEZ2GI0ABNVUxmYfgHpbPmetUh2xF9chmBvU=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=ii+dcZJnIp7mW9iKOiqhJW2PeTPeUXSONDgm2EoMnNmWuxcOc1KmPhrYCSCTEoTw8Fd0n85Lh5iBfWpX7mZg1kbp/YnGvNiEZtUjIP/wegB2qa5aUn74eIaJ3hg+/PrG6dVz9dkWkprR6rc728D4jEU5Z3M4++626pCtEJAvuQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MUyJmG7w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF1C9C4AF09;
+	Tue, 23 Jul 2024 15:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721747986;
+	bh=FwPpgS4qRjlEJADupC/3U3E6AgMhwSAnIXwqKsSfzK4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QoxHXFmq0LCFEzZK0mctxYTvHGqNZ1uCqYaYTsicvHyPtGk6/EoAvbcjptbOdletB
-	 Xb+mo9w40Pve8Z4bqucnZtXJ5vuZ8LzPC439s3sEnEroIcBRqKvnRKpMP3XVQmBgwu
-	 oYK6AKjw5ryx52fN9ih6Bs6OS9r5voySJS6klizc=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WSyND3c4Mz7kk;
-	Tue, 23 Jul 2024 15:16:44 +0200 (CEST)
-Date: Tue, 23 Jul 2024 15:16:41 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>, 
-	Steve Dower <steve.dower@python.org>, Jeff Xu <jeffxu@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
-	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
-	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
-	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Grubb <sgrubb@redhat.com>, 
-	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, Vincent Strubel <vincent.strubel@ssi.gouv.fr>, 
-	Xiaoming Ni <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
-	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Elliott Hughes <enh@google.com>
-Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
-Message-ID: <20240723.eY8boameed1k@digikod.net>
-References: <20240704190137.696169-1-mic@digikod.net>
- <20240704190137.696169-2-mic@digikod.net>
- <CALmYWFss7qcpR9D_r3pbP_Orxs55t3y3yXJsac1Wz=Hk9Di0Nw@mail.gmail.com>
- <a0da7702-dabe-49e4-87f4-5d6111f023a8@python.org>
- <20240717.AGh2shahc9ee@digikod.net>
- <CALCETrUcr3p_APNazMro7Y9FX1zLAiQESvKZ5BDgd8X3PoCdFw@mail.gmail.com>
- <20240718.Niexoo0ahch0@digikod.net>
- <CALCETrVVq4DJZ2q9V9TMuvZ1nb+-Qf4Eu8LVBgUy3XiTa=jFCQ@mail.gmail.com>
- <D2UC8YVOX9WU.1DRD4QFQ92L1U@kernel.org>
+	b=MUyJmG7wwbd1xfqy1LCcUUztVhYv1mjmyLFSESrHiudgz/0+RB0kyJbPuWmOHDS6h
+	 H5hnH3CDR9fHV73GYHyn4+UWJ6bzfK2IO0lueVqppT+0XRSEBT03HfRCjNUSjpjNIE
+	 h6rrL/hDl5sQT0zZ6nn7Q5wmNp88YLeI3o4bOvMBDdRtGzMcJ5TnxohfBnZJIfJ7xf
+	 V8j/HXq/TOkhzg2ymsLEfjJLUyiSz+JnhQMYOX4wBfNbEY/uu+TjTC/qm74q+Wp3Ti
+	 hktBrUpZWIZg3Nj9ckj/Z4OL3WCxrZuNFtt+HEy2Ndfv5G7uzn9lOHCdmgA9WBNq7v
+	 RGhC+8KWPco5g==
+Date: Tue, 23 Jul 2024 17:19:40 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Dave Chinner <david@fromorbit.com>
+Cc: Paul Moore <paul@paul-moore.com>, Matus Jokay <matus.jokay@stuba.sk>, 
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [RFC PATCH] lsm: add the inode_free_security_rcu() LSM
+ implementation hook
+Message-ID: <20240723-winkelmesser-wegschauen-4a8b00031504@brauner>
+References: <20240710024029.669314-2-paul@paul-moore.com>
+ <20240710.peiDu2aiD1su@digikod.net>
+ <ad6c7b2a-219e-4518-ab2d-bd798c720943@stuba.sk>
+ <CAHC9VhRsZBjs2MWXUUotmX_vWTUbboyLT6sR4WbzmqndKEVe8Q@mail.gmail.com>
+ <Zp8k1H/qeaVZOXF5@dread.disaster.area>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -90,139 +65,127 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <D2UC8YVOX9WU.1DRD4QFQ92L1U@kernel.org>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <Zp8k1H/qeaVZOXF5@dread.disaster.area>
 
-On Sat, Jul 20, 2024 at 02:43:41PM +0300, Jarkko Sakkinen wrote:
-> On Sat Jul 20, 2024 at 4:59 AM EEST, Andy Lutomirski wrote:
-> > > On Jul 18, 2024, at 8:22 PM, Mickaël Salaün <mic@digikod.net> wrote:
+On Tue, Jul 23, 2024 at 01:34:44PM GMT, Dave Chinner wrote:
+> On Mon, Jul 22, 2024 at 03:46:36PM -0400, Paul Moore wrote:
+> > On Mon, Jul 22, 2024 at 8:30 AM Matus Jokay <matus.jokay@stuba.sk> wrote:
+> > > On 10. 7. 2024 12:40, Mickaël Salaün wrote:
+> > > > On Tue, Jul 09, 2024 at 10:40:30PM -0400, Paul Moore wrote:
+> > > >> The LSM framework has an existing inode_free_security() hook which
+> > > >> is used by LSMs that manage state associated with an inode, but
+> > > >> due to the use of RCU to protect the inode, special care must be
+> > > >> taken to ensure that the LSMs do not fully release the inode state
+> > > >> until it is safe from a RCU perspective.
+> > > >>
+> > > >> This patch implements a new inode_free_security_rcu() implementation
+> > > >> hook which is called when it is safe to free the LSM's internal inode
+> > > >> state.  Unfortunately, this new hook does not have access to the inode
+> > > >> itself as it may already be released, so the existing
+> > > >> inode_free_security() hook is retained for those LSMs which require
+> > > >> access to the inode.
+> > > >>
+> > > >> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> > > >
+> > > > I like this new hook.  It is definitely safer than the current approach.
+> > > >
+> > > > To make it more consistent, I think we should also rename
+> > > > security_inode_free() to security_inode_put() to highlight the fact that
+> > > > LSM implementations should not free potential pointers in this blob
+> > > > because they could still be dereferenced in a path walk.
+> > > >
+> > > >> ---
+> > > >>  include/linux/lsm_hook_defs.h     |  1 +
+> > > >>  security/integrity/ima/ima.h      |  2 +-
+> > > >>  security/integrity/ima/ima_iint.c | 20 ++++++++------------
+> > > >>  security/integrity/ima/ima_main.c |  2 +-
+> > > >>  security/landlock/fs.c            |  9 ++++++---
+> > > >>  security/security.c               | 26 +++++++++++++-------------
+> > > >>  6 files changed, 30 insertions(+), 30 deletions(-)
+> > 
+> > ...
+> > 
+> > > Sorry for the questions, but for several weeks I can't find answers to two things related to this RFC:
 > > >
-> > > ﻿On Thu, Jul 18, 2024 at 09:02:56AM +0800, Andy Lutomirski wrote:
-> > >>>> On Jul 17, 2024, at 6:01 PM, Mickaël Salaün <mic@digikod.net> wrote:
-> > >>>
-> > >>> On Wed, Jul 17, 2024 at 09:26:22AM +0100, Steve Dower wrote:
-> > >>>>> On 17/07/2024 07:33, Jeff Xu wrote:
-> > >>>>> Consider those cases: I think:
-> > >>>>> a> relying purely on userspace for enforcement does't seem to be
-> > >>>>> effective,  e.g. it is trivial  to call open(), then mmap() it into
-> > >>>>> executable memory.
-> > >>>>
-> > >>>> If there's a way to do this without running executable code that had to pass
-> > >>>> a previous execveat() check, then yeah, it's not effective (e.g. a Python
-> > >>>> interpreter that *doesn't* enforce execveat() is a trivial way to do it).
-> > >>>>
-> > >>>> Once arbitrary code is running, all bets are off. So long as all arbitrary
-> > >>>> code is being checked itself, it's allowed to do things that would bypass
-> > >>>> later checks (and it's up to whoever audited it in the first place to
-> > >>>> prevent this by not giving it the special mark that allows it to pass the
-> > >>>> check).
-> > >>>
-> > >>> Exactly.  As explained in the patches, one crucial prerequisite is that
-> > >>> the executable code is trusted, and the system must provide integrity
-> > >>> guarantees.  We cannot do anything without that.  This patches series is
-> > >>> a building block to fix a blind spot on Linux systems to be able to
-> > >>> fully control executability.
-> > >>
-> > >> Circling back to my previous comment (did that ever get noticed?), I
-> > >
-> > > Yes, I replied to your comments.  Did I miss something?
-> >
-> > I missed that email in the pile, sorry. I’ll reply separately.
-> >
-> > >
-> > >> don’t think this is quite right:
-> > >>
-> > >> https://lore.kernel.org/all/CALCETrWYu=PYJSgyJ-vaa+3BGAry8Jo8xErZLiGR3U5h6+U0tA@mail.gmail.com/
-> > >>
-> > >> On a basic system configuration, a given path either may or may not be
-> > >> executed. And maybe that path has some integrity check (dm-verity,
-> > >> etc).  So the kernel should tell the interpreter/loader whether the
-> > >> target may be executed. All fine.
-> > >>
-> > >> But I think the more complex cases are more interesting, and the
-> > >> “execute a program” process IS NOT BINARY.  An attempt to execute can
-> > >> be rejected outright, or it can be allowed *with a change to creds or
-> > >> security context*.  It would be entirely reasonable to have a policy
-> > >> that allows execution of non-integrity-checked files but in a very
-> > >> locked down context only.
-> > >
-> > > I guess you mean to transition to a sandbox when executing an untrusted
-> > > file.  This is a good idea.  I talked about role transition in the
-> > > patch's description:
-> > >
-> > > With the information that a script interpreter is about to interpret a
-> > > script, an LSM security policy can adjust caller's access rights or log
-> > > execution request as for native script execution (e.g. role transition).
-> > > This is possible thanks to the call to security_bprm_creds_for_exec().
-> >
-> > …
-> >
-> > > This patch series brings the minimal building blocks to have a
-> > > consistent execution environment.  Role transitions for script execution
-> > > are left to LSMs.  For instance, we could extend Landlock to
-> > > automatically sandbox untrusted scripts.
-> >
-> > I’m not really convinced.  There’s more to building an API that
-> > enables LSM hooks than merely sticking the hook somewhere in kernel
-> > code. It needs to be a defined API. If you call an operation “check”,
-> > then people will expect it to check, not to change the caller’s
-> > credentials.  And people will mess it up in both directions (e.g.
-> > callers will call it and then open try to load some library that they
-> > should have loaded first, or callers will call it and forget to close
-> > fds first.
-> >
-> > And there should probably be some interaction with dumpable as well.
-> > If I “check” a file for executability, that should not suddenly allow
-> > someone to ptrace me?
-> >
-> > And callers need to know to exit on failure, not carry on.
-> >
-> >
-> > More concretely, a runtime that fully opts in to this may well "check"
-> > multiple things.  For example, if I do:
-> >
-> > $ ld.so ~/.local/bin/some_program   (i.e. I literally execve ld.so)
-> >
-> > then ld.so will load several things:
-> >
-> > ~/.local/bin/some_program
-> > libc.so
-> > other random DSOs, some of which may well be in my home directory
+> > > 1) How does this patch close [1]?
+> > >    As Mickaël pointed in [2], "It looks like security_inode_free() is called two times on the same inode."
+> > >    Indeed, it does not seem from the backtrace that it is a case of race between destroy_inode and inode_permission,
+> > >    i.e. referencing the inode in a VFS path walk while destroying it...
+> > >    Please, can anyone tell me how this situation could have happened? Maybe folks from VFS... I added them to the copy.
+> > 
+> > The VFS folks can likely provide a better, or perhaps a more correct
+> > answer, but my understanding is that during the path walk the inode is
+> > protected by a RCU lock which allows for multiple threads to access
+> > the inode simultaneously; this could result in some cases where one
+> > thread is destroying the inode while another is accessing it.
 > 
-> What would really help to comprehend this patch set would be a set of
-> test scripts, preferably something that you can run easily with
-> BuildRoot or similar.
-> 
-> Scripts would demonstrate the use cases for the patch set. Then it
-> would be easier to develop scripts that would underline the corner
-> cases. I would keep all this out of kselftest shenanigans for now.
+> Shouldn't may_lookup() be checking the inode for (I_NEW |
+> I_WILLFREE | I_FREE) so that it doesn't access an inode either not
+> completely initialised or being evicted during the RCU path walk?
 
-I'll include a toy script interpreter with the next patch series.  This
-one was an RFC.
+Going from memory since I don't have time to go really into the weeds.
 
-> 
-> I feel that the patch set is hovering in abstractions with examples
-> that you cannot execute.
-> 
-> I added the patches to standard test CI hack:
-> 
-> https://codeberg.org/jarkko/linux-tpmdd-test
-> 
-> But after I booted up a kernel I had no idea what to do with it. And
-> all this lenghty discussion makes it even more confusing.
+A non-completely initalised inode shouldn't appear in path lookup.
+Before the inode is attached to a dentry I_NEW would have been removed
+otherwise this is a bug. That can either happen via unlock_new_inode()
+and d_splice_alias() or in some cases directly via d_instantiate_new().
+Concurrent inode lookup calls on the same inode (e.g., iget_locked() and
+friends) will sleep until I_NEW is cleared.
 
-You can run the tests in the CI.
-
+> All accesses to the VFS inode that don't have explicit reference
+> counts have to do these checks...
 > 
-> Please find some connection to the real world before sending any new
-> version of this (e.g. via test scripts). I think this should not be
-> pulled before almost anyone doing kernel dev can comprehend the "gist"
-> at least in some reasonable level.
+> IIUC, at the may_lookup() point, the RCU pathwalk doesn't have a
+> fully validate reference count to the dentry or the inode at this
+> point, so it seems accessing random objects attached to an inode
+> that can be anywhere in the setup or teardown process isn't at all
+> safe...
 
-You'll find in this patch series (cover letter, patch description, and
-comments) connection to the real world. :)
-The next patch series should take into account the current discussions.
+may_lookup() cannot encounter inodes in random states. It will start
+from a well-known struct path and sample sequence counters for rename,
+mount, and dentry changes. Each component will be subject to checks
+after may_lookup() via these sequence counters to ensure that no change
+occurred that would invalidate the lookup just done. To be precise to
+ensure that no state could be reached via rcu that couldn't have been
+reached via ref walk.
 
-> 
-> BR, Jarkko
+So may_lookup() may be called on something that's about to be freed
+(concurrent unlink on a directory that's empty that we're trying to
+create or lookup something nonexistent under) while we're looking at it
+but all the machinery is in place so that it will be detected and force
+a drop out of rcu and into reference walking mode.
+
+When may_lookup() calls inode_permission() it only calls into the
+filesystem itself if the filesystem has a custom i_op->permission()
+handler. And if it has to call into the filesystem it passes
+MAY_NOT_BLOCK to inform the filesystem about this. And in those cases
+the filesystem must ensure any additional data structures can safely be
+accessed under rcu_read_lock() (documented in path_lookup.rst).
+
+If the filesystem detects that it cannot safely handle this or detects
+that something is invalid it can return -ECHILD causing the VFS to drop
+out of rcu and into ref walking mode to redo the lookup. That may happen
+directly in may_lookup() it unconditionally happens in walk_component()
+when it's verified that the parent had no changes while we were looking
+at it.
+
+The same logic extends to security modules. Both selinux and smack
+handle MAY_NOT_BLOCK calls from security_inode_permission() with e.g.,
+selinux returning -ECHILD in case the inode security context isn't
+properly initialized causing the VFS to drop into ref walking mode and
+allowing selinux to redo the initialization.
+
+Checking inode state flags isn't needed because the VFS already handles
+all of this via other means as e.g., sequence counters in various core
+structs. It also likely wouldn't help because we'd have to take locks to
+access i_state or sample i_state before calling into inode_permission()
+and then it could still change behind our back. It's also the wrong
+layer as we're dealing almost exclusively with dentries as the main data
+structure during lookup.
+
+Fwiw, a bunch of this is documented in path_lookup.rst, vfs.rst, and
+porting.rst.
+
+(I'm running out of time with other stuff so I want to point out that I
+can't really spend a lot more time on this thread tbh.)
 
