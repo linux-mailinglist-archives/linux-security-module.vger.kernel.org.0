@@ -1,45 +1,45 @@
-Return-Path: <linux-security-module+bounces-4579-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-4580-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B9A29439B8
-	for <lists+linux-security-module@lfdr.de>; Thu,  1 Aug 2024 01:58:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 527DE9439BD
+	for <lists+linux-security-module@lfdr.de>; Thu,  1 Aug 2024 01:58:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 704191C21495
-	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2024 23:58:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 084772814B4
+	for <lists+linux-security-module@lfdr.de>; Wed, 31 Jul 2024 23:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A06184531;
-	Wed, 31 Jul 2024 23:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6823189518;
+	Wed, 31 Jul 2024 23:56:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPPubNd+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JUcz5kmb"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4501916DEB3;
-	Wed, 31 Jul 2024 23:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB20C170828;
+	Wed, 31 Jul 2024 23:56:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722470176; cv=none; b=rdDlcuvxFG1jGtAeghdiD4mHZQ4dttVMvQ1V2HThOZCjTbVa4umTV411RzuyH7xq8z2jxxCFtiA5cA8ce57IRv7n4i6h0uuLbvwjSeM5l/Zh06IGdtEsMjW0/JeldDIYsxoNH0rbIm35ZUceESHLPT0GFTdUY6P5IAkKpgbpbFI=
+	t=1722470181; cv=none; b=AOdOUdkxnXTS1haHyaaQaRzfAjf4rbmQequQmVYOXWvmSRsPaQaslH2auYOQ078phYjTqw07D4H5rxHmH6PYGfcOEFlVyjXTEElJrv6nByM2HNaTikLoesf4GJCtje4s0UbcvA2HE1Kd654LR8QA/LJNkWd6K2p7LtbsG5DZluk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722470176; c=relaxed/simple;
-	bh=V9JwiD/f1W2ANfeCw3N34GgWHjDFY8XSLDXushVoX/U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pjWGyTwj70q00q0V/ryo+yZvBEZMScIpo9lBkQogED3DrVxPOJLhdRW47OXB1ve6/TI9ge4TvetX56xIZONDxWuKWqEEzvuUGBwZxcaNiq42PnjF2hrxxasGeqzwcukToV0zjTWPCEvhvPVxFHQjZ8nTNzShkuJf4XamA4rll0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPPubNd+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFBB8C32786;
-	Wed, 31 Jul 2024 23:56:14 +0000 (UTC)
+	s=arc-20240116; t=1722470181; c=relaxed/simple;
+	bh=zA989oxciLKD7z+dOeU1UFyKuH9IA9rl58ezS3coiHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZGA4/+fJ9CKsiv9o3NHTFR7o7q/kmkurC6xDQVnnqcmNzvfvU13DPhH9MWZF2srf0tbAncnb8KG+OypUKw0CW72dhYIgmIAiRPocGwDbEJVth8sfg7+6UclyIVt+1shNhaNcLRnqY+O10Y0sPko0agk+QGJd+W2T/KOthEEY1Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JUcz5kmb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F9D1C116B1;
+	Wed, 31 Jul 2024 23:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722470176;
-	bh=V9JwiD/f1W2ANfeCw3N34GgWHjDFY8XSLDXushVoX/U=;
+	s=k20201202; t=1722470181;
+	bh=zA989oxciLKD7z+dOeU1UFyKuH9IA9rl58ezS3coiHY=;
 	h=From:To:Cc:Subject:Date:From;
-	b=VPPubNd+NAUpNoOJ9kucHzbXn8yoSaVJq7E8cmoYkRrk/fDJhb8TOJd2gK8bvBJRD
-	 sij9DRflLwvcK72B/8ODTiANcCbqlYve6lYwieEG8PUJNo8ZECvVwyGx+321X+4ehy
-	 XYoZSO23MWMs9fDkcHcbLrWtHCNz92IyPfIvP6jnfUJELeFxkUGGwgjywg2x8yNKD8
-	 1AUbpbwj8HOempeT7xZ7n5QTaVE9aLUkXyrkqq0gbJxjXMPvGBzDcaUNIKnWVSV/zI
-	 WfuzdJEcuvylOxT5ZJpwYVqZLEfKUdjJBVPQj6U/OacriJuDwRSsOuJP/tb4iHZnEP
-	 5DleomrrAiVlw==
+	b=JUcz5kmbyynOUuLfGIDoRTK++JMCNKR0RcHlVAxCvY9jJChkz6ORSWgn6SPfgGNjI
+	 +jUl+NUYJNGiWR7sX28cfzTxEhkrwjZmyzCikqSqRVeEHWd+VyOZws3f940H8MPDX9
+	 2EyezVxq1tpCDxC4j33NjxglIvcKRQ439TDs2y3RK0PcwEcHwQaZxie++VG1m+p51R
+	 m3GoUg8MNUC4avp1slGItSwASZY9oyoOHju2+TMF18sU3SxX5gNPnRLeLBoAeP0JvR
+	 ZI/BpkfrHaPltiKQUufYGuE3eIa49BnnMHyGzhbJF8GYp7KE5ykwfzOtDuG9auIaXl
+	 yL1zGC68VxL7A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,9 +51,9 @@ Cc: Leesoo Ahn <lsahn@ooseel.net>,
 	serge@hallyn.com,
 	apparmor@lists.ubuntu.com,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 1/2] apparmor: fix possible NULL pointer dereference
-Date: Wed, 31 Jul 2024 19:56:11 -0400
-Message-ID: <20240731235613.3929589-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 1/2] apparmor: fix possible NULL pointer dereference
+Date: Wed, 31 Jul 2024 19:56:17 -0400
+Message-ID: <20240731235618.3929665-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.164
+X-stable-base: Linux 5.10.223
 Content-Transfer-Encoding: 8bit
 
 From: Leesoo Ahn <lsahn@ooseel.net>
@@ -151,7 +151,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorfs.c
-index 8c7719108d7f7..c70b86f17124a 100644
+index 49d97b331abca..06eac22665656 100644
 --- a/security/apparmor/apparmorfs.c
 +++ b/security/apparmor/apparmorfs.c
 @@ -1679,6 +1679,10 @@ int __aafs_profile_mkdir(struct aa_profile *profile, struct dentry *parent)
