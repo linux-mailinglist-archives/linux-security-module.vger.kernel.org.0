@@ -1,48 +1,63 @@
-Return-Path: <linux-security-module+bounces-5040-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5062-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E744E95EEDB
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 12:51:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A0195F09F
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 14:09:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F7AD284FDE
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 10:51:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55B491C2268A
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 12:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25541155314;
-	Mon, 26 Aug 2024 10:50:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDD4F19148F;
+	Mon, 26 Aug 2024 12:06:01 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from blizzard.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1F8152160;
-	Mon, 26 Aug 2024 10:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36941714B8;
+	Mon, 26 Aug 2024 12:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724669406; cv=none; b=Sn5CJbjHGQiviMmRdWPGxFANZX4D4mqljz2GAYGHZXba+E52M5cAGtnx6dPmuICtKue4T7CDOBEOQQ7IyzQgLNv9gSzKzGFhQnNOpZfhWWUQ6WVAj31gHz+iY7O98qHro5KH0ZMu7i7QBrn1Fv0RqNZik6qx7I1iNar67/5CtgI=
+	t=1724673961; cv=none; b=XYwegzUvQk/SRdokgkMJ1QaVH23WemnJhomb4SRXiOHNuoYgwMDVmoWnQ9bca/q6HIc3ZK11/z5hOR++jX7TpNojI0u4AWscwKT45zhRQ3myNUIDwBmxgtPcTKTS7fye/9aikCBEudDPsd7UdtLz6iuwVeqlC5JbZpAHnAlv7t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724669406; c=relaxed/simple;
-	bh=tsijDg1QpHf/XW2pCyQGKWUItm4MMvjUNdWU+pyh3k8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=E0TjKxM6pdpomHFVFOOSDvZu/cmonOS2KnbB3bcULBnMTNf3FarFFGRPyaerxDuxFTvYwNHanofPXO1nvtVEEgLcXNnkvDPwIkZQT6Jg/QymSDn7ZWEbtFx614mhmGc0MZgt06PvCVubz0BM/lixxUmX6nBVJF9uOovW9tMZoHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjellic.com
-Received: from blizzard.enjellic.com (localhost [127.0.0.1])
-	by blizzard.enjellic.com (8.15.2/8.15.2) with ESMTP id 47QAbWmR003457;
-	Mon, 26 Aug 2024 05:37:32 -0500
-Received: (from greg@localhost)
-	by blizzard.enjellic.com (8.15.2/8.15.2/Submit) id 47QAbW6d003456;
-	Mon, 26 Aug 2024 05:37:32 -0500
-X-Authentication-Warning: blizzard.enjellic.com: greg set sender to greg@enjellic.com using -f
-From: Greg Wettstein <greg@enjellic.com>
-To: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jmorris@namei.org
-Subject: [PATCH v4 14/14] Activate the configuration and build of the TSEM LSM.
-Date: Mon, 26 Aug 2024 05:37:28 -0500
-Message-Id: <20240826103728.3378-15-greg@enjellic.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20240826103728.3378-1-greg@enjellic.com>
-References: <20240826103728.3378-1-greg@enjellic.com>
+	s=arc-20240116; t=1724673961; c=relaxed/simple;
+	bh=jYSQ6pJxpSYwMpwZDbbEJZOSv/YbXrBVP6F9ORiCQek=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RJcMMI2eobD2PV7TFs84x2Al4jmSQp8BcaGgWuVWwTgy4Tk0P6ljkNNcRvadx8G2xbYN6Jqq87shaEVR8aC38WLSxdzA3TdxZjKNpze63uBUAOH9Mi32YR5rqPwRGF+isZlxf8ifUeydoRgszAlBNIcr+vmJdFVc29h0Gfr9zIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WsqB02FC8z1j7CK;
+	Mon, 26 Aug 2024 20:05:12 +0800 (CST)
+Received: from kwepemh100016.china.huawei.com (unknown [7.202.181.102])
+	by mail.maildlp.com (Postfix) with ESMTPS id E18471402E1;
+	Mon, 26 Aug 2024 20:05:20 +0800 (CST)
+Received: from huawei.com (10.175.113.32) by kwepemh100016.china.huawei.com
+ (7.202.181.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 26 Aug
+ 2024 20:05:18 +0800
+From: Kaixiong Yu <yukaixiong@huawei.com>
+To: <akpm@linux-foundation.org>, <mcgrof@kernel.org>
+CC: <ysato@users.sourceforge.jp>, <dalias@libc.org>,
+	<glaubitz@physik.fu-berlin.de>, <luto@kernel.org>, <tglx@linutronix.de>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <jack@suse.cz>,
+	<kees@kernel.org>, <j.granados@samsung.com>, <willy@infradead.org>,
+	<Liam.Howlett@oracle.com>, <vbabka@suse.cz>, <lorenzo.stoakes@oracle.com>,
+	<trondmy@kernel.org>, <anna@kernel.org>, <chuck.lever@oracle.com>,
+	<jlayton@kernel.org>, <neilb@suse.de>, <okorniev@redhat.com>,
+	<Dai.Ngo@oracle.com>, <tom@talpey.com>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <linux-sh@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-nfs@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-security-module@vger.kernel.org>, <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next 00/15] sysctl: move sysctls from vm_table into its own files
+Date: Mon, 26 Aug 2024 20:04:34 +0800
+Message-ID: <20240826120449.1666461-1-yukaixiong@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -50,144 +65,64 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemh100016.china.huawei.com (7.202.181.102)
 
-Complete the implementation by integrating TSEM into the
-configuration and kernel build infrastructure.  This includes
-registration of TSEM with the LSM infrastructure and the
-assignment of an LSM identifier number.
----
- include/uapi/linux/lsm.h |  1 +
- security/Kconfig         | 11 ++++++-----
- security/Makefile        |  1 +
- security/security.c      |  3 ++-
- security/tsem/Kconfig    | 36 ++++++++++++++++++++++++++++++++++++
- security/tsem/Makefile   |  6 ++++++
- 6 files changed, 52 insertions(+), 6 deletions(-)
- create mode 100644 security/tsem/Kconfig
- create mode 100644 security/tsem/Makefile
+This patch series moves sysctls of vm_table in kernel/sysctl.c to
+places where they actually belong, and do some related code clean-ups.
+After this patch series, all sysctls in vm_table have been moved into its
+own files, meanwhile, delete vm_table.
 
-diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-index 33d8c9f4aa6b..6b63c158c1df 100644
---- a/include/uapi/linux/lsm.h
-+++ b/include/uapi/linux/lsm.h
-@@ -64,6 +64,7 @@ struct lsm_ctx {
- #define LSM_ID_LANDLOCK		110
- #define LSM_ID_IMA		111
- #define LSM_ID_EVM		112
-+#define LSM_ID_TSEM		113
- 
- /*
-  * LSM_ATTR_XXX definitions identify different LSM attributes
-diff --git a/security/Kconfig b/security/Kconfig
-index 412e76f1575d..a7802eb29034 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -192,6 +192,7 @@ source "security/yama/Kconfig"
- source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
- source "security/landlock/Kconfig"
-+source "security/tsem/Kconfig"
- 
- source "security/integrity/Kconfig"
- 
-@@ -231,11 +232,11 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
--	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
--	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
--	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
--	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
-+	default "tsem,landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list, except for those with order
-diff --git a/security/Makefile b/security/Makefile
-index 59f238490665..1d4e0a698a2d 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -25,6 +25,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
- obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
- obj-$(CONFIG_BPF_LSM)			+= bpf/
- obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
-+obj-$(CONFIG_SECURITY_TSEM)		+= tsem/
- 
- # Object integrity file lists
- obj-$(CONFIG_INTEGRITY)			+= integrity/
-diff --git a/security/security.c b/security/security.c
-index e5ca08789f74..1dfd85293ad4 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -51,7 +51,8 @@
- 	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_IMA) ? 1 : 0) + \
--	(IS_ENABLED(CONFIG_EVM) ? 1 : 0))
-+	(IS_ENABLED(CONFIG_EVM) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_TSEM) ? 1 : 0))
- 
- /*
-  * These are descriptions of the reasons that can be passed to the
-diff --git a/security/tsem/Kconfig b/security/tsem/Kconfig
-new file mode 100644
-index 000000000000..2e9d54eb3acc
---- /dev/null
-+++ b/security/tsem/Kconfig
-@@ -0,0 +1,36 @@
-+config SECURITY_TSEM
-+	bool "Trusted Security Event Modeling"
-+	depends on SECURITY
-+	depends on NET && INET
-+	select SECURITY_NETWORK
-+	select SECURITYFS
-+	select CRYPTO
-+	select CRYPTO_SHA256
-+	select CRYPTO_HASH_INFO
-+	select TCG_TPM if HAS_IOMEM && !UML
-+	select TCG_TIS if TCG_TPM && X86
-+	select TCG_CRB if TCG_TPM && ACPI
-+	default n
-+	help
-+	  This option selects support for Trusted Security Event
-+	  Modeling (TSEM).  TSEM implements the ability to model
-+	  the security state of either the system at large or in a
-+	  restricted namespace on the basis of the LSM security
-+	  events and attributes that occur in the scope of the model.
-+	  The model may be implemented either in the kernel proper
-+	  or exported to an external Trusted Modeling Agent (TMA).
-+	  If you are unsure how to answer this question, answer N.
-+
-+config SECURITY_TSEM_ROOT_MODEL_PCR
-+	int "TPM PCR index for root domain"
-+	depends on SECURITY_TSEM
-+	range 8 14
-+	default 11
-+	help
-+	  This configuration variable determines the TPM Platform
-+	  Configuration Register (PCR) that the coefficients of
-+	  security events for the root modeling domain are extended
-+	  into.  The default value is one register above the default
-+	  value that IMA uses for its integrity measurements, in order
-+	  to avoid a conflict between the two sub-systems.  If unsure,
-+	  leave the value at its default value of 11.
-diff --git a/security/tsem/Makefile b/security/tsem/Makefile
-new file mode 100644
-index 000000000000..5b26edbe02b0
---- /dev/null
-+++ b/security/tsem/Makefile
-@@ -0,0 +1,6 @@
-+obj-$(CONFIG_SECURITY_TSEM) := tsem.o model.o namespace.o map.o event.o fs.o \
-+	export.o trust.o model0.o
-+
-+ifdef CONFIG_MODULES
-+obj-y += nsmgr.o
-+endif
+All the modifications of this patch series base on
+linux-next(tags/next-20240823). To test this patch series, the code was
+compiled with both the CONFIG_SYSCTL enabled and disabled on arm64 and
+x86_64 architectures. After this patch series is applied, all files
+under /proc/sys/vm can be read or written normally.
+
+Kaixiong Yu (15):
+  mm: vmstat: move sysctls to its own files
+  mm: filemap: move sysctl to its own file
+  mm: swap: move sysctl to its own file
+  mm: vmscan: move vmscan sysctls to its own file
+  mm: util: move sysctls into it own files
+  mm: mmap: move sysctl into its own file
+  security: min_addr: move sysctl into its own file
+  mm: nommu: move sysctl to its own file
+  fs: fs-writeback: move sysctl to its own file
+  fs: drop_caches: move sysctl to its own file
+  sunrpc: use vfs_pressure_ratio() helper
+  fs: dcache: move the sysctl into its own file
+  x86: vdso: move the sysctl into its own file
+  sh: vdso: move the sysctl into its own file
+  sysctl: remove unneeded include
+
+ arch/sh/kernel/vsyscall/vsyscall.c |  14 ++
+ arch/x86/entry/vdso/vdso32-setup.c |  16 ++-
+ fs/dcache.c                        |  21 ++-
+ fs/drop_caches.c                   |  23 ++-
+ fs/fs-writeback.c                  |  28 ++--
+ include/linux/dcache.h             |   7 +-
+ include/linux/mm.h                 |  42 ------
+ include/linux/mman.h               |   2 -
+ include/linux/swap.h               |   9 --
+ include/linux/vmstat.h             |  11 --
+ include/linux/writeback.h          |   4 -
+ kernel/sysctl.c                    | 221 -----------------------------
+ mm/filemap.c                       |  18 ++-
+ mm/internal.h                      |  10 ++
+ mm/mmap.c                          |  75 ++++++++++
+ mm/nommu.c                         |  15 +-
+ mm/swap.c                          |  16 ++-
+ mm/swap.h                          |   1 +
+ mm/util.c                          |  68 +++++++--
+ mm/vmscan.c                        |  23 +++
+ mm/vmstat.c                        |  42 +++++-
+ net/sunrpc/auth.c                  |   2 +-
+ security/min_addr.c                |  11 ++
+ 23 files changed, 349 insertions(+), 330 deletions(-)
+
 -- 
-2.39.1
+2.25.1
 
 
