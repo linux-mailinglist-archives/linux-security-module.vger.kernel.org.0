@@ -1,297 +1,324 @@
-Return-Path: <linux-security-module+bounces-5037-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5043-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1104395ECFE
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 11:20:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C195A95EEE1
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 12:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 358FF1C21893
-	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 09:20:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7B191C21C96
+	for <lists+linux-security-module@lfdr.de>; Mon, 26 Aug 2024 10:51:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FF68145A1E;
-	Mon, 26 Aug 2024 09:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBKObYzu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCF3155C87;
+	Mon, 26 Aug 2024 10:50:18 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8FC14375D;
-	Mon, 26 Aug 2024 09:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from blizzard.enjellic.com (wind.enjellic.com [76.10.64.91])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F62155CAF;
+	Mon, 26 Aug 2024 10:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724664033; cv=none; b=PWzF0hE9TwBQq6//IHE84onOZcarVS8iMhQ6s7yTOfokW9DZa4wHHO0vY/F5orsNW5vtJFUATpg5SRaThFHZRf2NZBpFrSwhKcJ64y3kcqgt1i5pnWXKQrmUVlzd/qs5i8Mobzcgi7iD8nWb9XQF24URuY1H+ggR/QPmlorhDNs=
+	t=1724669418; cv=none; b=F44pdDR6M8UeEudDaPL/F/Jo4RfCnZpHrJiv+cqKrBdqimQDNsvukeC0f/d28cq3qkAbU5LrvaC1P+fsnRu2U+gCrVaN7iHQmKRE9ERDim4/D6VrDYQ3vBbGGpdhHEkg36m6JEtPOrZPJVkvMYyZg7ezJ9HTIegfHP2rSgDwvgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724664033; c=relaxed/simple;
-	bh=rwXP+5eSF7J7wNGs6IQQcMn0Z+ZA7RlktZ3B5d40Kzs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pnof7Wrt6UtCq/2+bmv6CSc7GfsKyi0hrzegnUxuRR9SJzhXnu19jST+ViS/87DCuhbgMp98e8CLQY0GNYId7gJeNuADGOAJFXNWZcsdTD5xJAapUHm76+ZKS/hFHxZwRIT0fm2oHFYZPjjcWKzn5uEwP2DDvTYKGW+JjiCMVrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBKObYzu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D866AC567F3;
-	Mon, 26 Aug 2024 09:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724664032;
-	bh=rwXP+5eSF7J7wNGs6IQQcMn0Z+ZA7RlktZ3B5d40Kzs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iBKObYzuSp3BAhGOIaeeqPeyFwX6izp/CzVO7M8RvdNK3JPks06o2TiJ+t8CcU1m3
-	 XC2jxvvLE+LrcQsgITEHaeINvLSs3UupG1w1zm7DJVCemGYK8PyENOjRP+4VWyK4rW
-	 6+96F9UQ66WtJDHBUhXDroLekZ1v9QlaDlSf7WyqIV33fYeV/H/LAj2gZ4XB5nQq9g
-	 0csBKvjOUBdCLOE8XGNGPoYI2Q5lXCvZd0ZkB+xpUwXtoitcg0Cap60IRO4xzF+pY2
-	 zKBYqCf+TuOJOF9hFXPAXseDtApOVbZA4ykbdbiPOrERygoEXm94IYMk4f1Ml1OAvd
-	 ou7qaxJH4vXgg==
-Date: Mon, 26 Aug 2024 11:20:26 +0200
-From: Alejandro Colomar <alx@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
-	justinstitt@google.com, ebiederm@xmission.com, alexei.starovoitov@gmail.com, 
-	rostedt@goodmis.org, catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Simon Horman <horms@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v7 6/8] mm/util: Deduplicate code in
- {kstrdup,kstrndup,kmemdup_nul}
-Message-ID: <ep44ahlsa2krmpjcqrsvoi5vfoesvnvly44icavup7dsfolewm@flnm5rl23diz>
-References: <20240817025624.13157-1-laoar.shao@gmail.com>
- <20240817025624.13157-7-laoar.shao@gmail.com>
- <nmhexn3mkwhgu5e6o3i7gvipboisbuwdoloshf64ulgzdxr5nv@3gwujx2y5jre>
+	s=arc-20240116; t=1724669418; c=relaxed/simple;
+	bh=UUFJrei0OumLms1I0qyRHxSyE6cxS1dp/bmeovEUbn8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MuXX50tIE9w889bs/bv5bN/rMt/OYloWgS+c0JDYc2bHk/pauHSRc1iybwUkOHS6gw379TlIS1m4ZfHvBcG2witp5kiJnnOiTZwWu68xppBJyd3vacPI5AhQtx15SEc/VquJ9HFfLeKYZXB/LUHNNdzKFsGontKTYAFtC3XQatU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=enjellic.com; arc=none smtp.client-ip=76.10.64.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjellic.com
+Received: from blizzard.enjellic.com (localhost [127.0.0.1])
+	by blizzard.enjellic.com (8.15.2/8.15.2) with ESMTP id 47QAbUEL003401;
+	Mon, 26 Aug 2024 05:37:30 -0500
+Received: (from greg@localhost)
+	by blizzard.enjellic.com (8.15.2/8.15.2/Submit) id 47QAbS0S003400;
+	Mon, 26 Aug 2024 05:37:28 -0500
+X-Authentication-Warning: blizzard.enjellic.com: greg set sender to greg@enjellic.com using -f
+From: Greg Wettstein <greg@enjellic.com>
+To: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: jmorris@namei.org
+Subject: [PATCH v4 00/14] Implement Trusted Security Event Modeling.
+Date: Mon, 26 Aug 2024 05:37:14 -0500
+Message-Id: <20240826103728.3378-1-greg@enjellic.com>
+X-Mailer: git-send-email 2.39.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fr6yymnvpqcqqdt5"
-Content-Disposition: inline
-In-Reply-To: <nmhexn3mkwhgu5e6o3i7gvipboisbuwdoloshf64ulgzdxr5nv@3gwujx2y5jre>
+Content-Transfer-Encoding: 8bit
 
+Good morning, I hope this note finds the week starting well for
+everyone.
 
---fr6yymnvpqcqqdt5
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: akpm@linux-foundation.org, torvalds@linux-foundation.org, 
-	justinstitt@google.com, ebiederm@xmission.com, alexei.starovoitov@gmail.com, 
-	rostedt@goodmis.org, catalin.marinas@arm.com, penguin-kernel@i-love.sakura.ne.jp, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, audit@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Simon Horman <horms@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v7 6/8] mm/util: Deduplicate code in
- {kstrdup,kstrndup,kmemdup_nul}
-References: <20240817025624.13157-1-laoar.shao@gmail.com>
- <20240817025624.13157-7-laoar.shao@gmail.com>
- <nmhexn3mkwhgu5e6o3i7gvipboisbuwdoloshf64ulgzdxr5nv@3gwujx2y5jre>
-MIME-Version: 1.0
-In-Reply-To: <nmhexn3mkwhgu5e6o3i7gvipboisbuwdoloshf64ulgzdxr5nv@3gwujx2y5jre>
+This is the fourth release of Trusted Security Event Modeling (TSEM)
+as a new Linux Security Module (LSM) architecture.
 
-Hi Yafang,
+TSEM provides kernel infrastructure that allows the implementation of
+arbitrary model based mandatory access controls.  TSEM is model
+agnostic and provides infrastructure for implementing deterministic,
+quasi-deterministic, probabilistic or machine learning (AI) based
+security models.
 
-On Sat, Aug 17, 2024 at 10:58:02AM GMT, Alejandro Colomar wrote:
-> Hi Yafang,
->=20
-> On Sat, Aug 17, 2024 at 10:56:22AM GMT, Yafang Shao wrote:
-> > These three functions follow the same pattern. To deduplicate the code,
-> > let's introduce a common helper __kmemdup_nul().
-> >=20
-> > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > Cc: Simon Horman <horms@kernel.org>
-> > Cc: Matthew Wilcox <willy@infradead.org>
-> > ---
-> >  mm/util.c | 67 +++++++++++++++++++++----------------------------------
-> >  1 file changed, 26 insertions(+), 41 deletions(-)
-> >=20
-> > diff --git a/mm/util.c b/mm/util.c
-> > index 4542d8a800d9..310c7735c617 100644
-> > --- a/mm/util.c
-> > +++ b/mm/util.c
-> > @@ -45,33 +45,40 @@ void kfree_const(const void *x)
-> >  EXPORT_SYMBOL(kfree_const);
-> > =20
-> >  /**
-> > - * kstrdup - allocate space for and copy an existing string
-> > - * @s: the string to duplicate
-> > + * __kmemdup_nul - Create a NUL-terminated string from @s, which might=
- be unterminated.
-> > + * @s: The data to copy
-> > + * @len: The size of the data, including the null terminator
-> >   * @gfp: the GFP mask used in the kmalloc() call when allocating memory
-> >   *
-> > - * Return: newly allocated copy of @s or %NULL in case of error
-> > + * Return: newly allocated copy of @s with NUL-termination or %NULL in
-> > + * case of error
-> >   */
-> > -noinline
-> > -char *kstrdup(const char *s, gfp_t gfp)
-> > +static __always_inline char *__kmemdup_nul(const char *s, size_t len, =
-gfp_t gfp)
-> >  {
-> > -	size_t len;
-> >  	char *buf;
-> > =20
-> > -	if (!s)
-> > +	buf =3D kmalloc_track_caller(len, gfp);
-> > +	if (!buf)
-> >  		return NULL;
-> > =20
-> > -	len =3D strlen(s) + 1;
-> > -	buf =3D kmalloc_track_caller(len, gfp);
-> > -	if (buf) {
-> > -		memcpy(buf, s, len);
-> > -		/* During memcpy(), the string might be updated to a new value,
-> > -		 * which could be longer than the string when strlen() is
-> > -		 * called. Therefore, we need to add a null termimator.
-> > -		 */
-> > -		buf[len - 1] =3D '\0';
-> > -	}
-> > +	memcpy(buf, s, len);
-> > +	/* Ensure the buf is always NUL-terminated, regardless of @s. */
-> > +	buf[len - 1] =3D '\0';
-> >  	return buf;
-> >  }
-> > +
-> > +/**
-> > + * kstrdup - allocate space for and copy an existing string
-> > + * @s: the string to duplicate
-> > + * @gfp: the GFP mask used in the kmalloc() call when allocating memory
-> > + *
-> > + * Return: newly allocated copy of @s or %NULL in case of error
-> > + */
-> > +noinline
-> > +char *kstrdup(const char *s, gfp_t gfp)
-> > +{
-> > +	return s ? __kmemdup_nul(s, strlen(s) + 1, gfp) : NULL;
-> > +}
-> >  EXPORT_SYMBOL(kstrdup);
-> > =20
-> >  /**
-> > @@ -106,19 +113,7 @@ EXPORT_SYMBOL(kstrdup_const);
-> >   */
-> >  char *kstrndup(const char *s, size_t max, gfp_t gfp)
-> >  {
-> > -	size_t len;
-> > -	char *buf;
-> > -
-> > -	if (!s)
-> > -		return NULL;
-> > -
-> > -	len =3D strnlen(s, max);
-> > -	buf =3D kmalloc_track_caller(len+1, gfp);
-> > -	if (buf) {
-> > -		memcpy(buf, s, len);
-> > -		buf[len] =3D '\0';
-> > -	}
-> > -	return buf;
-> > +	return s ? __kmemdup_nul(s, strnlen(s, max) + 1, gfp) : NULL;
-> >  }
-> >  EXPORT_SYMBOL(kstrndup);
-> > =20
-> > @@ -192,17 +187,7 @@ EXPORT_SYMBOL(kvmemdup);
-> >   */
-> >  char *kmemdup_nul(const char *s, size_t len, gfp_t gfp)
-> >  {
-> > -	char *buf;
-> > -
-> > -	if (!s)
-> > -		return NULL;
-> > -
-> > -	buf =3D kmalloc_track_caller(len + 1, gfp);
-> > -	if (buf) {
-> > -		memcpy(buf, s, len);
-> > -		buf[len] =3D '\0';
-> > -	}
-> > -	return buf;
-> > +	return s ? __kmemdup_nul(s, len + 1, gfp) : NULL;
-> >  }
-> >  EXPORT_SYMBOL(kmemdup_nul);
->=20
-> I like the idea of the patch, but it's plagued with all those +1 and -1.
-> I think that's due to a bad choice of value being passed by.  If you
-> pass the actual length of the string (as suggested in my reply to the
-> previous patch) you should end up with a cleaner set of APIs.
->=20
-> The only remaining +1 is for kmalloc_track_caller(), which I ignore what
-> it does.
->=20
-> 	char *
-> 	__kmemdup_nul(const char *s, size_t len, gfp_t gfp)
-> 	{
-> 		char *buf;
->=20
-> 		buf =3D kmalloc_track_caller(len + 1, gfp);
-> 		if (!buf)
-> 			return NULL;
->=20
-> 		strcpy(mempcpy(buf, s, len), "");
+TSEM also provides a framework for generic security monitoring that
+can be used to implement Endpoint Detection and Response (EDR) systems
+without the need to write kernel code, implement kernel modules or
+attach BPF programs.
 
-Changing these strcpy(, "") to the usual; =3D'\0' or =3D0, but I'd still
-recommend the rest of the changes, that is, changing the value passed in
-len, to remove several +1 and -1s.
+The only privileges needed for an EDR system based on TSEM is the
+ability to open the pseudo-file that exports security event
+descriptions for a security modeling namespace.  This provides a
+framework for Linux to avoid the possibility of experiencing a
+'CrowdStrike Calamity'.
 
-What do you think?
+TSEM operates under the premise, that operating system security, like
+all other physical phenomena in science and engineering, can be
+mathematically modeled.  TSEM notionally treats the LSM security event
+handlers as a basis set of parameters that can be used to generate a
+functional value for the security state of a system or a confined
+workload.
 
-Have a lovely day!
-Alex
+TSEM uses generative functions, rather than static labels, to create
+the positive accession elements of a multi-dimensional access vector
+matrix.  In doing so, it provides for the highly precise attestation
+of the trust status of a platform or workload.  In the case of a
+security violation, it also provides very precise forensic
+characterizations of the security event.
 
-> 		return buf;
-> 	}
->=20
-> 	char *
-> 	kstrdup(const char *s, gfp_t gfp)
-> 	{
-> 		return s ? __kmemdup_nul(s, strlen(s), gfp) : NULL;
-> 	}
->=20
-> 	char *
-> 	kstrndup(const char *s, size_t n, gfp_t gfp)
-> 	{
-> 		return s ? __kmemdup_nul(s, strnlen(s, n), gfp) : NULL;
-> 	}
->=20
-> 	char *
-> 	kmemdup_nul(const char *s, size_t len, gfp_t gfp)
-> 	{
-> 		return s ? __kmemdup_nul(s, len, gfp) : NULL;
-> 	}
->=20
-> Have a lovely day!
-> Alex
->=20
-> --=20
-> <https://www.alejandro-colomar.es/>
+TSEM's task identity model enables very precise detection and
+characterization of adversarial strategies such as Living Off The Land
+(LOTL).
 
+TSEM is designed to support the concept of a Trust Orchestration
+System (TOS).  Trust orchestration involves the process of modeling
+the security behavior of a workload, or a platform at large, and
+defining whether or not a process is to be trusted, based on whether
+or not the security events produced by it are consistent with a
+security behavior that the workload or platform has been unit tested
+to.
 
+TSEM, in and of itself, does not implement a security policy or model.
+That capability is invested in an entity known as a Trusted Modeling
+Agent (TMA).  A TMA can be implemented in the kernel itself or the
+security event descriptions can be exported to userspace for
+processing in a non-kernel based TMA.
 
---=20
-<https://www.alejandro-colomar.es/>
+To support this architecture, TSEM implements entirely within the
+context of the LSM architecture, the concept of security modeling
+namespaces that are similar in concept to other resource namespaces.
+A security modeling namespace is paired with a TMA that implements the
+root of trust for a namespace.
 
---fr6yymnvpqcqqdt5
-Content-Type: application/pgp-signature; name="signature.asc"
+A TMA implementation uses the characteristics of the calling process
+and the descriptive parameters of a security event to drive generative
+functions that compute security state coefficients for each security
+event.  The sum of these coefficients, represents the security 'state'
+of a model.
 
------BEGIN PGP SIGNATURE-----
+TSEM supports any number of security modeling namespaces that act
+independently of one another and of the root security modeling
+namespace.  Each namespace can be configured with its own unique
+security model definition that can be modeled internally or
+externally.  Alternately, the security modeling namespace can
+asynchronously export all of the security events for external review
+and analysis.
 
-iQIzBAABCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmbMSNoACgkQnowa+77/
-2zLIExAAowwDvn4fGttE88cvxlhQwOy8jHj4erHbWDOLMcKFNLpWhwWRqOaVZyMN
-dseuMqjKxp0vlIjA+QRvwtCSfMPrfGFrF+hSal8nEVG5YPp02IJFeKPVs2UIMirG
-WQfz7OkEGY6BN61CHuNhXQL+WLCzEuP/jqqh6bZ5/l9elU7H+CAEGJgWMq5QeyRo
-eVljlfkFRxJkdzcKPJJFc/wK95vSKXFPe5mE7UGfJx1oO3m6q3j5i2aaBFQcIjm3
-QiBGQ8aXepDV7L3XLJaRPa/Tkm7Cc5fdL6B9KEN4SvxOXn7V5VDRVOlrT8Du9YQ1
-G77o8rFyZ9MNFsPcZh5g6DgqQyK7RWTZLm/Xq8GjfB5/iQ8FeZ7gaLye6d52vDub
-vsvIk9D/L3iWDeGTahM9+5bHe8AHr3sI9eCnKbLayJrZ0TA03KgCEKhj8Sp1kkdu
-hai6+ym4Wc9aAYAGEHdJFI/8Gu93uqXT35bT270ov2E77VMyhVltprOCW6qbziTr
-ebt5iKyJ6f2e/rXOCOlqP4CTLSTtRfo2padaLlAJCSEJLs4Q1YsqZMIyLbn7PYuD
-MpkrWxeysR2d3KsKcb1MYCZoKqsQ+hWtkEHZWqHgygI3fbBPE5tkmCS/ustkAk1s
-15ry+Az65a6wiEv5w38JrVCJnzZ/x0aPwOCDNdgYwS/amQEQP10=
-=I3ve
------END PGP SIGNATURE-----
+Security models to be enforced by a trust orchestrator in a security
+modeling namespace are developed by unit testing of a workload.  This
+approach increases model precision and thus decreases the risk of the
+mandatory controls breaking applications or expected system behavior.
 
---fr6yymnvpqcqqdt5--
+TSEM thus represents a security architecture that is designed to be
+paired with modern software development strategies that embrace
+resource containerization and Continuous Integration and Continuous
+Delivery principles.  The objective of TSEM, along with the Quixote
+TOS implementation, is to bring to Linux security architectures what
+Docker brought to Linux resource namespaces.
+
+TSEM implements support for modifying the processing of security
+events through the use of loadable modules on systems that have
+loadable module support enabled.  Each security modeling namespace can
+select either the default event processing model or any of the event
+models that have been loaded at the time of namespace creation.
+
+The userspace utilities include an example of a small loadable module
+that allows a security modeling namespace to implement functionality
+equivalent to the Linux Integrity Measurement Architecture (IMA).
+
+Included with the implementation is an extensive documentation file
+that can be found in the following location in the kernel sources
+after application of the patch series.
+
+Documentation/admin-guide/LSM/tsem.rst
+
+TSEM formats security event descriptions into JSON encoded messages
+that can be consumed and analyzed by any JSON consuming data
+visualization, analysis, modeling or ingress system.
+
+The following documentation file documents the control plane interface
+for TSEM including the JSON encoding format:
+
+Documentation/ABI/testing/tsem
+
+Reviewers, and others who are interested, are referred to these
+documents for a more extensive discussion into the rationale, design
+and implementation of the TSEM architecture.
+
+Control of TSEM is surfaced entirely via the securityfs filesystem
+through the following directory hierarchy:
+
+/sys/kernel/security/tsem
+
+TSEM is designed to be self-contained and independent of the kernel at
+large and with other LSM's with which it stacks.  Since the security
+guarantee resides in an externally created security model definition,
+it operates without the need for filesystem labeling or cryptographic
+integrity protection of filesystem metadata.
+
+The Quixote userspace utilities that are needed to create, manage,
+interrogate and model security modeling namespaces are available at
+the following project site:
+
+https://github.com/Quixote-Project
+
+Included in the userspace tools are implementations of trust
+orchestrator's and TMA's for the following trust roots:
+
+Kernel.
+
+Userspace process.
+
+SGX enclave.
+
+Xen hypervisor stub-domain.
+
+Hardware based security coprocessors.
+
+An export only utility is also available that will read asynchronously
+exported security event descriptions.  The export utility includes
+support for MQTT based broker connections that allow either on-premise
+or cloud based EDR systems to be implemented.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
+
+V1:
+- Initial release.	  
+
+V2:
+- V1: https://lore.kernel.org/linux-security-module/20230204050954.11583-1-greg@enjellic.com/T/#t
+- Allow compile time configuration of the Platform Configuration
+  Register used to extend security coefficients in the root
+  security modeling namespace.
+- Allow both internal and external modeling of security events
+  that are called in atomic context.
+- Use JSON to encode security event characteristics.
+- Use securityfs for TSEM control plane rooted at
+  /sys/kernel/security/tsem.
+- Use framework of separate directories for internal TMA's to
+  protect ABI compatability.
+- Use key=value arguments for control plane commands.
+- Allow cryptographic hash function used for coefficient
+  generation to be configured on a namespace by namespace basis.
+- Allow selection of initial or current user namespace as the
+  reference for UID/GID resolution to be configured on a namespace
+  by namespace basis.
+- Allow the size of modeling and export structures to be configured
+  on a namespace by namespace basis.
+- Extensively document all globally visible enumerations and structures.
+- Use CAP_ML rather than CAP_TRUST for modeling capability bit.
+- Implement orchestrator<->process mutual authentication.
+- Implement occupancy counts for security state coefficients.
+- Move TSEM to the first LSM in the LSM list.
+
+V3:
+- V2: https://lore.kernel.org/linux-security-module/20230710102319.19716-1-greg@enjellic.com/T/#t
+- Require CAP_MAC_ADMIN capability for namespace creation and management.
+- Implement full modeling for all TSEM captured LSM events.
+- Implement export only namespaces.
+- Support export only root security modeling namespaces.
+- Support invariant models for namespaces that create files.
+- Model all filesystem types.
+- Include device types in path descriptions.
+- Use bprm_committed_creds for TASK_ID generation.
+- Implemented modeling for capget, capset and capable LSM calls.
+- Use static keys to optimize control paths.
+- Standardize all event handlers to use common format.
+- Level tmpfs based filesystems to a common UUID.
+- Implement security event timestamps.
+- Implement parent event tracking.
+- Update TASK_ID generative function to use parent TASK_ID.
+- Multiple style and bug fixes.
+- Update TSEM documentation including per file functional descriptions.
+- Document JSON security event encoding.
+
+V4:
+- V3: https://lore.kernel.org/linux-security-module/20240401105015.27614-1-greg@enjellic.com/T/#m1cc4ad76677d07517220f1fadc2303c36a75bab0
+- Convert tsem_mode command-line parameter to string arguments.
+- Add namespace identity and event sequence numbers to event description.
+- Implement selectable event bypass.
+- Implement loadable security event processing modules.
+- Bug fixes and code corrections and improvements.
+
+Dr. Greg (14):
+  Update MAINTAINERS file.
+  Add TSEM specific documentation.
+  TSEM global declarations.
+  Add primary TSEM implementation file.
+  Add root domain trust implementation.
+  Implement TSEM control plane.
+  Add namespace implementation.
+  Add security event description export facility.
+  Add event processing implementation.
+  Implement security event mapping.
+  Implement the internal Trusted Modeling Agent.
+  Implement configuration and methods for default model.
+  Implement infrastructure for loadable security models.
+  Activate the configuration and build of the TSEM LSM.
+
+ Documentation/ABI/testing/tsem                | 2420 ++++++++++++++++
+ Documentation/admin-guide/LSM/index.rst       |    1 +
+ Documentation/admin-guide/LSM/tsem.rst        | 1680 +++++++++++
+ .../admin-guide/kernel-parameters.txt         |   29 +
+ MAINTAINERS                                   |    8 +
+ include/uapi/linux/lsm.h                      |    1 +
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    1 +
+ security/security.c                           |    3 +-
+ security/tsem/Kconfig                         |   36 +
+ security/tsem/Makefile                        |    6 +
+ security/tsem/event.c                         | 1846 +++++++++++++
+ security/tsem/export.c                        |  429 +++
+ security/tsem/fs.c                            | 2304 ++++++++++++++++
+ security/tsem/map.c                           | 1536 +++++++++++
+ security/tsem/model.c                         |  758 +++++
+ security/tsem/model0.c                        |   21 +
+ security/tsem/namespace.c                     |  530 ++++
+ security/tsem/nsmgr.c                         |  255 ++
+ security/tsem/nsmgr.h                         |   48 +
+ security/tsem/trust.c                         |  261 ++
+ security/tsem/tsem.c                          | 2446 +++++++++++++++++
+ security/tsem/tsem.h                          | 2336 ++++++++++++++++
+ 23 files changed, 16960 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/ABI/testing/tsem
+ create mode 100644 Documentation/admin-guide/LSM/tsem.rst
+ create mode 100644 security/tsem/Kconfig
+ create mode 100644 security/tsem/Makefile
+ create mode 100644 security/tsem/event.c
+ create mode 100644 security/tsem/export.c
+ create mode 100644 security/tsem/fs.c
+ create mode 100644 security/tsem/map.c
+ create mode 100644 security/tsem/model.c
+ create mode 100644 security/tsem/model0.c
+ create mode 100644 security/tsem/namespace.c
+ create mode 100644 security/tsem/nsmgr.c
+ create mode 100644 security/tsem/nsmgr.h
+ create mode 100644 security/tsem/trust.c
+ create mode 100644 security/tsem/tsem.c
+ create mode 100644 security/tsem/tsem.h
+
+-- 
+2.39.1
 
