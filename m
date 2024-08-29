@@ -1,193 +1,175 @@
-Return-Path: <linux-security-module+bounces-5205-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5203-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D139F96461B
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Aug 2024 15:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A3919645B1
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Aug 2024 15:03:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 730E01F268FB
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Aug 2024 13:15:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A035B1F21D0B
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Aug 2024 13:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 730BA1A76A4;
-	Thu, 29 Aug 2024 13:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF463194A67;
+	Thu, 29 Aug 2024 13:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JAep5L+M"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42A71AC429;
-	Thu, 29 Aug 2024 13:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B8D22339;
+	Thu, 29 Aug 2024 13:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724937299; cv=none; b=Wchnb51scD9doYH+nPFLKIE32wQ+kzorylN2ggXfHmuaBpePvHibavKTGcZobxgrwWd0cg0nVE0nV3EBlNpIpNqwo/jSG3UeIMcwFZqERR041Bx5ksweqyKo+65flYPhJ/ZzYGDm/3usNoyQyYHr8K40L5dzGPqJV4G7p2/waQY=
+	t=1724936621; cv=none; b=Q/TD3pAc0JMXnMCLF8kN3CtFLdOKkyFZ153imr2am4KP/+a+dfJzoGJ0jp8MAUT879Scszq0QlaVIWwSp2fnnTbNrZTtAcUmjItqD33ZCV9iaoT3zQeII0ZcY2Z+R7xkTYK1WLp2kRcBBRDIzwSKEh0M97lBS8KPEh95v49U1ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724937299; c=relaxed/simple;
-	bh=3U1uR4RuV3esL0UNoYBOSSQTnZHiAlsJQXfvRBLuWtU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=HFMOA0suhgs23DKOFejyGSwaIrHd8l4+1ZwmDbGXOzymRukjCg8OzdgW/lQye3ECcZlg1Yb9vnqTq6hj1btSEaM8/BX/+grnQ5WhdOUlBJJ46b2+WNT8mZR6exV1UPZTzhzUl/gPnxMA6nLyu9x0VyptANtGaLoiF3xtQxsXQ3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4WvglM1GZxz9v7Hm;
-	Thu, 29 Aug 2024 20:37:03 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 33E3F140B3E;
-	Thu, 29 Aug 2024 20:56:13 +0800 (CST)
-Received: from [10.48.41.179] (unknown [10.48.41.179])
-	by APP2 (Coremail) with SMTP id GxC2BwDntcLkb9Bmo_4oAg--.14990S2;
-	Thu, 29 Aug 2024 13:56:12 +0100 (CET)
-Message-ID: <3fbe1092-d0be-4e30-96a7-4ec72d65b013@huaweicloud.com>
-Date: Thu, 29 Aug 2024 20:56:02 +0800
+	s=arc-20240116; t=1724936621; c=relaxed/simple;
+	bh=ywBHh/JxTt6YtGlc4uMSl9mEGuK+/Sv7BhGHLqH9AWM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g7w89MzcB/6Y+Ei2xsDbym6yr8egUyi0aCS+PXiUtCBKb8SqdUHmri9cON/OoZpgs56rM29fShIuLM5k9NlearTYvc24e/PXjuNFF0iX0uc9L1dom9cno/Y+AGW2HmofOu3wRDnCOu9I9XvnZC4Pxxvrdm/HAIbPMM1RruuDoTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JAep5L+M; arc=none smtp.client-ip=209.85.161.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5dfa315ffbdso221593eaf.3;
+        Thu, 29 Aug 2024 06:03:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724936619; x=1725541419; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XgPkNNrjHTsfiVhNKwoTvKC+dngWh8S1qXD5HQVi94w=;
+        b=JAep5L+Mks8rZEsURm2GZColXYle//QVttVl8ZJ6fp9MTfVfxa4D24tUKNYs7EpDEk
+         Jnw5L9JOjwOCVeGov26e1bAwXOwnEksCJ7XH1aTCwOwRhJSGpFbjjRUo3Mk/2GHENk38
+         xk2oSnLnig5WbzBfBupFikwTexJftl+yj6pCsJVSy+qhxYW1NyDVtZJPugYXThpKo4jI
+         rYsY7toZb65QJx8Bw7XLgrgeMxMnnVu2hny06SlDFGJ3VCWpxeeYI5D4NufyRMjS4GgF
+         uus0RAs2MYlyjUqNDnUqSQZYvzmeWfh7fpIafTcWf3ag7kSnN0rXZnQNN3TjUC9m8eaT
+         n4nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724936619; x=1725541419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XgPkNNrjHTsfiVhNKwoTvKC+dngWh8S1qXD5HQVi94w=;
+        b=YFEGugqxmtkPqT1erEuWtPsijjl0OHQa49ReJo9cE/ihGmkIm7ycu/OQewR8GEQRH0
+         z1nYJGBTlkl/gEzmSN4jxO81tkbOdPyZRTUaxISxEckm8QXQmKcID90In+5hPJmyG4rR
+         LGvhiyuB24nKBt6A6amh/Rt5VWlfX85HXvdIitjlKamNouEqRnC7YjcgWYveq18m6Yjp
+         LA85SAbR3Xmb4FgNLtaqZJZSn0XYnYkShsUruNm/FLc7oEWSzLeeMEa7TUDRI8EQcbJw
+         o2o6aJ0W7MdAQleOYMS4/OZ0E1RAmBe+v+JTQI9gxDM4NYxxwDrRo/Xw/m7A33JyXMD3
+         FnKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsDlcENBvxmvK0G8G56xPMxRH5paKeCpe3H6LQqlYGp4/+H6ypxhdj4AHDBk+wy7PiohWlfHvhmtGI3bxUx7VGzAw2mj/0@vger.kernel.org, AJvYcCVjFK5X4aDPPbXXFBazUKZEA/O3jabG9WgEFabqzmHN9iTcye2J1k1xV2hNsnDru7PAkelDc6ufJg==@vger.kernel.org, AJvYcCXDwPJBfYfo8OcFDE5W6QA6DUS7tH9oGrWAyyI9s49ybThfGJmkB4pFkbkvu1telLkwBQZu6ikgsk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKGUH76oMYdSZFYiEW4T683uqlSMFYYCCqa/681wOP0DlFBONC
+	eKI4BRwklC0Jz1+QpQ65T4LSR+MClC9gzNZMeG6VZVK3pg25oIHJhhc6IDRN/eG6SKwKmC8fJUC
+	biCCFStJTzjZH29pKphk63sIRlAs=
+X-Google-Smtp-Source: AGHT+IGS245lP9KZgpIxgJhwvHOxjn1YcH7WR7eVns7BHxRAJv4FhnyTZpanlEUZI1VaqEQ1vrmMfq53yo3lxpxdhp8=
+X-Received: by 2002:a05:6358:7253:b0:1b1:a803:d9f7 with SMTP id
+ e5c5f4694b2df-1b603c2024fmr359532355d.7.1724936618733; Thu, 29 Aug 2024
+ 06:03:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: WARNING in process_measurement
-To: Xingyu Li <xli399@ucr.edu>, zohar@linux.ibm.com,
- roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com, linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- Yu Hao <yhao016@ucr.edu>
-References: <CALAgD-4hkHVcCq2ycdwnA2hYDBMqijLUOfZgvf1WfFpU-8+42w@mail.gmail.com>
- <CALAgD-7JpFBhb1L+NXL9WoQP4hWbmfwsnWmePsER4SCud-BE9A@mail.gmail.com>
-Content-Language: en-US
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <CALAgD-7JpFBhb1L+NXL9WoQP4hWbmfwsnWmePsER4SCud-BE9A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwDntcLkb9Bmo_4oAg--.14990S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF1kCw1kKw13CrW3JrWrXwb_yoW7CF4rpF
-	10gFyUGr4vqr1xZr1DJr15Ar4UKw4Yya1UXws7Gry8AFy5W3WDXF18JrW7Gr98Jr15ZFy3
-	tFn8Xw48tw1UGaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYY7kG6xAYrwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-	UI43ZEXa7IU5lksDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBGbP2XkFlQACsX
+References: <20240828195129.223395-1-smayhew@redhat.com> <20240828195129.223395-2-smayhew@redhat.com>
+ <3647023f1f4c1326ba3d67ff04c5b84b4896c1bc.camel@kernel.org>
+In-Reply-To: <3647023f1f4c1326ba3d67ff04c5b84b4896c1bc.camel@kernel.org>
+From: Stephen Smalley <stephen.smalley.work@gmail.com>
+Date: Thu, 29 Aug 2024 09:03:25 -0400
+Message-ID: <CAEjxPJ49pt9QMXt=Ssf83kcJ5r3tF6_Hp4sVn_5OT=uNVkCy3g@mail.gmail.com>
+Subject: Re: [PATCH 1/1] selinux,smack: don't bypass permissions check in
+ inode_setsecctx hook
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Scott Mayhew <smayhew@redhat.com>, paul@paul-moore.com, casey@schaufler-ca.com, 
+	chuck.lever@oracle.com, marek.gresko@protonmail.com, selinux@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-nfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/29/2024 12:53 PM, Xingyu Li wrote:
-> The above syzkaller reproducer needs additional support. And here is
-> the C reproducer:
-> https://gist.github.com/freexxxyyy/c3d1ccb8104af6b0d51ed50c29b363d3
+On Thu, Aug 29, 2024 at 7:15=E2=80=AFAM Jeff Layton <jlayton@kernel.org> wr=
+ote:
+>
+> On Wed, 2024-08-28 at 15:51 -0400, Scott Mayhew wrote:
+> > Marek Gresko reports that the root user on an NFS client is able to
+> > change the security labels on files on an NFS filesystem that is
+> > exported with root squashing enabled.
+> >
+> > The end of the kerneldoc comment for __vfs_setxattr_noperm() states:
+> >
+> >  *  This function requires the caller to lock the inode's i_mutex befor=
+e it
+> >  *  is executed. It also assumes that the caller will make the appropri=
+ate
+> >  *  permission checks.
+> >
+> > nfsd_setattr() does do permissions checking via fh_verify() and
+> > nfsd_permission(), but those don't do all the same permissions checks
+> > that are done by security_inode_setxattr() and its related LSM hooks do=
+.
+> >
+> > Since nfsd_setattr() is the only consumer of security_inode_setsecctx()=
+,
+> > simplest solution appears to be to replace the call to
+> > __vfs_setxattr_noperm() with a call to __vfs_setxattr_locked().  This
+> > fixes the above issue and has the added benefit of causing nfsd to
+> > recall conflicting delegations on a file when a client tries to change
+> > its security label.
+> >
+> > Reported-by: Marek Gresko <marek.gresko@protonmail.com>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D218809
+> > Signed-off-by: Scott Mayhew <smayhew@redhat.com>
+> > ---
+> >  security/selinux/hooks.c   | 4 ++--
+> >  security/smack/smack_lsm.c | 4 ++--
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index bfa61e005aac..400eca4ad0fb 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -6660,8 +6660,8 @@ static int selinux_inode_notifysecctx(struct inod=
+e *inode, void *ctx, u32 ctxlen
+> >   */
+> >  static int selinux_inode_setsecctx(struct dentry *dentry, void *ctx, u=
+32 ctxlen)
+> >  {
+> > -     return __vfs_setxattr_noperm(&nop_mnt_idmap, dentry, XATTR_NAME_S=
+ELINUX,
+> > -                                  ctx, ctxlen, 0);
+> > +     return __vfs_setxattr_locked(&nop_mnt_idmap, dentry, XATTR_NAME_S=
+ELINUX,
+> > +                                  ctx, ctxlen, 0, NULL);
+> >  }
+> >
+> >  static int selinux_inode_getsecctx(struct inode *inode, void **ctx, u3=
+2 *ctxlen)
+> > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> > index 4164699cd4f6..002a1b9ed83a 100644
+> > --- a/security/smack/smack_lsm.c
+> > +++ b/security/smack/smack_lsm.c
+> > @@ -4880,8 +4880,8 @@ static int smack_inode_notifysecctx(struct inode =
+*inode, void *ctx, u32 ctxlen)
+> >
+> >  static int smack_inode_setsecctx(struct dentry *dentry, void *ctx, u32=
+ ctxlen)
+> >  {
+> > -     return __vfs_setxattr_noperm(&nop_mnt_idmap, dentry, XATTR_NAME_S=
+MACK,
+> > -                                  ctx, ctxlen, 0);
+> > +     return __vfs_setxattr_locked(&nop_mnt_idmap, dentry, XATTR_NAME_S=
+MACK,
+> > +                                  ctx, ctxlen, 0, NULL);
+> >  }
+> >
+> >  static int smack_inode_getsecctx(struct inode *inode, void **ctx, u32 =
+*ctxlen)
+>
+> Reviewed-by: Jeff Layton <jlayton@kernel.org>
 
-Hi Xingyu
+Reviewed-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+Tested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
 
-do you have a .config for testing?
-
-Thanks
-
-Roberto
-
-> On Sat, Aug 24, 2024 at 10:23 PM Xingyu Li <xli399@ucr.edu> wrote:
->>
->> Hi,
->>
->> We found a bug in Linux 6.10. This is likely a mutex corruption bug,
->> where the mutex's internal state has been compromised, leading to an
->> integrity check failure. The bug occurs in
->> https://elixir.bootlin.com/linux/v6.10/source/security/integrity/ima/ima_main.c#L269.
->>
->> The bug report and syzkaller reproducer are as follows:
->>
->> Bug report:
->>
->> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
->> WARNING: CPU: 0 PID: 8057 at kernel/locking/mutex.c:587
->> __mutex_lock_common kernel/locking/mutex.c:587 [inline]
->> WARNING: CPU: 0 PID: 8057 at kernel/locking/mutex.c:587
->> __mutex_lock+0xc2d/0xd50 kernel/locking/mutex.c:752
->> Modules linked in:
->> CPU: 0 PID: 8057 Comm: cron Not tainted 6.10.0 #13
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
->> RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:587 [inline]
->> RIP: 0010:__mutex_lock+0xc2d/0xd50 kernel/locking/mutex.c:752
->> Code: 04 20 84 c0 0f 85 13 01 00 00 83 3d fc e5 23 04 00 0f 85 e9 f4
->> ff ff 48 c7 c7 60 70 4c 8b 48 c7 c6 e0 70 4c 8b e8 83 f4 54 f6 <0f> 0b
->> e9 cf f4 ff ff 0f 0b e9 dc f8 ff ff 0f 0b e9 5b f5 ff ff 48
->> RSP: 0018:ffffc9000aa77380 EFLAGS: 00010246
->> RAX: 26a6b2d2d0cdac00 RBX: 0000000000000000 RCX: ffff8880241e5a00
->> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
->> RBP: ffffc9000aa774d0 R08: ffffffff8155a25a R09: 1ffff1100c74519a
->> R10: dffffc0000000000 R11: ffffed100c74519b R12: dffffc0000000000
->> R13: ffff888020efc330 R14: 0000000000000000 R15: 1ffff9200154eeb8
->> FS:  00007f902ffb1840(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 00007f902fb7e06a CR3: 0000000018c3c000 CR4: 0000000000350ef0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> Call Trace:
->>   <TASK>
->>   process_measurement+0x536/0x1ff0 security/integrity/ima/ima_main.c:269
->>   ima_file_check+0xec/0x170 security/integrity/ima/ima_main.c:572
->>   security_file_post_open+0x51/0xb0 security/security.c:2982
->>   do_open fs/namei.c:3656 [inline]
->>   path_openat+0x2c0b/0x3580 fs/namei.c:3813
->>   do_filp_open+0x22d/0x480 fs/namei.c:3840
->>   do_sys_openat2+0x13a/0x1c0 fs/open.c:1413
->>   do_sys_open fs/open.c:1428 [inline]
->>   __do_sys_openat fs/open.c:1444 [inline]
->>   __se_sys_openat fs/open.c:1439 [inline]
->>   __x64_sys_openat+0x243/0x290 fs/open.c:1439
->>   do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->>   do_syscall_64+0x7e/0x150 arch/x86/entry/common.c:83
->>   entry_SYSCALL_64_after_hwframe+0x67/0x6f
->> RIP: 0033:0x7f903019a167
->> Code: 25 00 00 41 00 3d 00 00 41 00 74 47 64 8b 04 25 18 00 00 00 85
->> c0 75 6b 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d
->> 00 f0 ff ff 0f 87 95 00 00 00 48 8b 4c 24 28 64 48 2b 0c 25
->> RSP: 002b:00007fff194600a0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
->> RAX: ffffffffffffffda RBX: 0000564dd2fb9cf0 RCX: 00007f903019a167
->> RDX: 0000000000000000 RSI: 00007f902fb7e103 RDI: 00000000ffffff9c
->> RBP: 00007f902fb7e103 R08: 0000000000000008 R09: 0000000000000001
->> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
->> R13: 0000564dd2fb9cf0 R14: 0000000000000001 R15: 0000000000000000
->>   </TASK>
->>
->>
->> Syzkaller reproducer:
->> # {Threaded:false Repeat:true RepeatTimes:0 Procs:1 Slowdown:1
->> Sandbox: SandboxArg:0 Leak:false NetInjection:false NetDevices:false
->> NetReset:false Cgroups:false BinfmtMisc:false CloseFDs:false
->> KCSAN:false DevlinkPCI:false NicVF:false USB:false VhciInjection:false
->> Wifi:false IEEE802154:true Sysctl:true Swap:false UseTmpDir:true
->> HandleSegv:true Trace:false LegacyOptions:{Collide:false Fault:false
->> FaultCall:0 FaultNth:0}}
->> r0 = openat$ptmx(0xffffffffffffff9c, 0x0, 0x141040, 0x0)
->> ioctl$TIOCSETD(r0, 0x5423, 0x0)
->> mmap$IORING_OFF_CQ_RING(&(0x7f0000ffc000/0x4000)=nil, 0x4000, 0x2,
->> 0x20031, 0xffffffffffffffff, 0x8000000)
->> mmap$IORING_OFF_SQ_RING(&(0x7f0000ff4000/0xc000)=nil, 0xc000, 0xe,
->> 0x12, 0xffffffffffffffff, 0x0)
->> openat$sndseq(0xffffffffffffff9c, 0x0, 0x902)
->> write$syz_spec_18446744072532934322_80(0xffffffffffffffff,
->> &(0x7f0000000000)="2b952480c7ca55097d1707935ba64b20f3026c03d658026b81bf264340512b3cb4e01afda2de754299ea7a113343ab7b9bda2fc0a2e2cdbfecbca0233a0772b12ebde5d98a1203cb871672dff7e4c86ec1dccef0a76312fbe8d45dc2bd0f8fc2ebeb2a6be6a300916c5281da2c1ef64d66267091b82429976c019da3645557ed1d439c5a637f6bf58c53bc414539dd87c69098d671402586b631f9ac5c2fe9cedc281a6f005b5c4d1dd5ed9be400",
->> 0xb4)
->> r1 = syz_open_dev$sg(&(0x7f00000003c0), 0x0, 0x8000)
->> ioctl$syz_spec_1724254976_2866(r1, 0x1, &(0x7f0000000080)={0x0, 0x2,
->> [0x85, 0x8, 0x15, 0xd]})
->> ioctl$KDGKBDIACR(0xffffffffffffffff, 0x4bfa, 0x0)
->>
->>
->> --
->> Yours sincerely,
->> Xingyu
-> 
-> 
-> 
-
+Passes all the NFS tests in the selinux-testsuite, and also correctly
+denies root the ability to relabel a file on a root_squash mount but
+allows a normal user to do so (as expected).
 
