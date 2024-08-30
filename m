@@ -1,243 +1,193 @@
-Return-Path: <linux-security-module+bounces-5214-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5223-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79447965369
-	for <lists+linux-security-module@lfdr.de>; Fri, 30 Aug 2024 01:28:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F13E296542B
+	for <lists+linux-security-module@lfdr.de>; Fri, 30 Aug 2024 02:44:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35149282B95
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Aug 2024 23:28:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67AFC1F24D40
+	for <lists+linux-security-module@lfdr.de>; Fri, 30 Aug 2024 00:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49E318EFE2;
-	Thu, 29 Aug 2024 23:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE3D1D1303;
+	Fri, 30 Aug 2024 00:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ucr.edu header.i=@ucr.edu header.b="O6WLoYQ9";
-	dkim=pass (1024-bit key) header.d=ucr.edu header.i=@ucr.edu header.b="gMX8FMpF"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="lNvWH0bD"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx-lax3-2.ucr.edu (mx-lax3-2.ucr.edu [169.235.156.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic308-16.consmr.mail.ne1.yahoo.com (sonic308-16.consmr.mail.ne1.yahoo.com [66.163.187.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1010A189F5B
-	for <linux-security-module@vger.kernel.org>; Thu, 29 Aug 2024 23:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=169.235.156.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB784C7C
+	for <linux-security-module@vger.kernel.org>; Fri, 30 Aug 2024 00:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724974133; cv=none; b=fFUYPX7HdG2m1r76D03WRGInY9O+nwd/NzTRLlDnNFD3fcwEiRMyr1RvwnDagk+NoIOI8m3mtzm2NpB5urChhNCBdeVo6O7Ly4Emvbqi4eUwAlHmuq1XQp0RXADWX2ly7ljTq5anH3WKY8rjpWeNFsVZ4yypC5rhUqJ+Hb9CZV4=
+	t=1724978670; cv=none; b=tWX0vfLxJucl3u06Zs5Z7XQOu14nHm+k1nqhgS0R/mTGUPcl/Ebv0je3cVviXB3OMAugU+dzJqtW1VsdmR58iF8EqQIomcf5lM6KUT7t2HYOsneivMkW5uveS5oBk2G/mvcs6twBi/jfsskW6sV03OJ4Wa8CDP3vydeJG1WmCMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724974133; c=relaxed/simple;
-	bh=o7TxbGOuYb6+2NV9KDNCzI2PYElkRPUUbRTEqJkS/w4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p4xh0ObvoNLeKhuJ7Xtoazr/czJq34WwzhCNcXknIy3jz8dyo3kHeslbi3/UYF5tRcx6diG/bERlZIKzyWl8vh4+nqTEeTN6PaA4SluVXSB8xTUPf3gO86jTV23jwdMJBZHbT9NXc2ATw8ParbA3oIfo8IRneuCrS3hI+9r0tOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ucr.edu; spf=pass smtp.mailfrom=ucr.edu; dkim=pass (2048-bit key) header.d=ucr.edu header.i=@ucr.edu header.b=O6WLoYQ9; dkim=pass (1024-bit key) header.d=ucr.edu header.i=@ucr.edu header.b=gMX8FMpF; arc=none smtp.client-ip=169.235.156.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ucr.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucr.edu
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1724974132; x=1756510132;
-  h=dkim-signature:x-google-dkim-signature:
-   x-forwarded-encrypted:x-gm-message-state:
-   x-google-smtp-source:mime-version:references:in-reply-to:
-   from:date:message-id:subject:to:cc:content-type:
-   content-transfer-encoding:x-cse-connectionguid:
-   x-cse-msgguid;
-  bh=o7TxbGOuYb6+2NV9KDNCzI2PYElkRPUUbRTEqJkS/w4=;
-  b=O6WLoYQ998REet5Q/HjdrZ5cLK2CRynrbAMDJPvyVLia/WepkmnzSCnv
-   6C1DUiSfIkeRwRdQiEtaRpHEtyRSew+6TCYEgOpZj2aDKY1tMnxHDBL7V
-   LeH6Y+Ayu/GfbhtiuM7+ngQGGvzk09mvwBLarbZymlOWxc+tH9yqN3Y2C
-   pitDagz4TeXLH3bacZMQuv2Zdd3AzWuEo+J4kyA11DXnpdusf7NtjvWSn
-   AEwp8MSUxyfoR039Ln8AjrlgZW2sompZRUJPiJ1Q+o3OBKU2lTSyTJKvI
-   VpkCBIatQrFAVS65Geenks3lD3WupH5zhYSjKzWZade5SaGWO+cEVw22X
-   Q==;
-X-CSE-ConnectionGUID: ZoxfY9JAQdGFOGhypTWvvg==
-X-CSE-MsgGUID: dz2bffwYRACj+0POfH/68A==
-Received: from mail-pj1-f71.google.com ([209.85.216.71])
-  by smtp-lax3-2.ucr.edu with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 29 Aug 2024 16:28:51 -0700
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2d404e24c18so1196828a91.3
-        for <linux-security-module@vger.kernel.org>; Thu, 29 Aug 2024 16:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail; t=1724974131; x=1725578931; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8eXCCEcvkF/OtTcfqtjGA5y/ytVcRP5BmWe5mmszibo=;
-        b=gMX8FMpFGetRD+LatlMP3jP+Zqov62BgnL0ClQMYTOvSx/Kt31zFSJqklW+CSQU1T7
-         76QRwW5Mtwv0qn5aQMkBLEbGrCj7b1aFPfRQQgSAbB3TOpXcJdbrjyTZbEBNlFGf0bhs
-         4fuC1PPl1+IKJwvxMra8YewEOxdpO9vuCsvAs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724974131; x=1725578931;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8eXCCEcvkF/OtTcfqtjGA5y/ytVcRP5BmWe5mmszibo=;
-        b=h1VAA+ggn9/02yKh1SRMiAAe3aPuEU39r96iRo3oRBHdDnC/QSjoOaKXArtW62Vcvh
-         /ip/Yd7rUxDQrlNaN1LsSXNFhjzW/Au1tOmrbZJTEawwfAGPWKT8zhp4F81tAQ39u3Zi
-         Fok3WFKkB9vkJFQXPBJsxcy59mqNCYRluR/gdntRudcZKcJNkqbEUvAMjOPn1BCCMDH0
-         kOE1lsM3iGBCMu7b0kABDHqA3RKJmngT5SO2kF18Jx36FucANm5CWMyKIGZG2965ljmB
-         26VJzFGwox0ZfN8nzrsA0+kNg6ZJAmrSrAD2Gm5QorUvB8nKIOJKTK1H/nmnlUdaoc11
-         FC1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUoj2PtI9KBiDr14t/YxDd4K3/pOMMwT3IP6nXiSINRE2j8gepmN6n8q1ypsqiBjAQAly03WEKe5vs9xUNObatTPVqOV00=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzx2PXdsYV+CqGABOprTJkI8vHDDOxeESL55b6mMaJrPZsX6CS5
-	7/FD9xPwLA97PNVuesB1F6vrynQKWMz84NsYKhGDzfVpEEr7UXY4Vo4/ecQCZrEiFbI0TZgq0ex
-	aNxJ+wEyQkDa4G+OpaHl5D/9ZJ3fm1mtZmUnp9/5wSeIseaLXxzxxwUY9+i3cmAVs/hvNzf0rcE
-	TkUfbKFbH/8LEKT4kKTCc70aFnb5jMdm0q9sWvRXD/BPYHFX4yng==
-X-Received: by 2002:a17:90b:17d2:b0:2d3:ce96:eb62 with SMTP id 98e67ed59e1d1-2d8564ad328mr4710859a91.38.1724974130739;
-        Thu, 29 Aug 2024 16:28:50 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF6ftCTWqvGu2AgybuH2oVhw2/tz7HkoHLaFXJSqIW4v/qhGsDpQ+9aZhRhxQLQqyKX/2caJqmY3w718JAC2pQ=
-X-Received: by 2002:a17:90b:17d2:b0:2d3:ce96:eb62 with SMTP id
- 98e67ed59e1d1-2d8564ad328mr4710844a91.38.1724974130377; Thu, 29 Aug 2024
- 16:28:50 -0700 (PDT)
+	s=arc-20240116; t=1724978670; c=relaxed/simple;
+	bh=uBf0mBIUv1rjOA94/InHCZo+azAEq2EXToYV0dHTVXU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=ZZoSXYiln1Dj6RKIvtNXuP2nk4NrzYEBCax7iuw8QocQSim6FXnsusRh4ROqMP2mw5Jexx8i3W61sg0YI+PD3e6+OUdwVbleoH3TZ878PM1QbB+UA5JGumtaAVGFgT2aWIrpT2jcSizPu+TYjtSmCvs3mS2g4CpAwZYrKYgqv7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=lNvWH0bD; arc=none smtp.client-ip=66.163.187.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1724978668; bh=ZdBhIYEn/EPdtiJut86o4A8qrqlJM345imzubnSFQQg=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=lNvWH0bDU2SgdvbB4jElxM2RvObI/9mq0Cy4z86trxVFSJSvUBpNwObBYQi20AcRsHJn+huAcuQ/Dxsy5n5MIisPdAJiOf2rOwMk1xeYXhY62UBS7cqF7nE6zWSKBAy2bohrA8440/orjC0az91PfUT624CYDrQFOfrHRWwqwibL3lUORJrHHA6NZMNi6g0wBlO7xSIyipejzxkIx6F8cPGUE+0RLDsNJQdJURjF+GZu/stoit3tKlzVTuj+kaCcL7ItOlp6n1NBkCuzw0vMZVKhDRWaqHpEpIHVM1zsbY+1XO47rBsha9oo8EOlbUYU28224sY0FitSBFtJAmvQ6A==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1724978668; bh=k6h8KVVtDLT/wX1+8o4p9mTc6MRLfm5oCHeSJvjt74K=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=ceiie9gwVQYlc0GsoztjNx7wRWCEFKs0/v5JaPVoQIof8tKLoG3sWgfsVcY/GoTxM73rS/IJKeSoz3yfhqRP/BpOxosaI+OAwVgv8rErYFNp/hCTIASJmxsxhf59DUKgy9rQ1dMggiElvwP5v7kXoGjCZS0G5oYs2oeSgqsdfjtg8pt7Hraqyj72KUf3JKe0EoxG4af4rAu1nhARjbW+ZQP0AveYsCEC0A1551Q1EGsYRYEDbHlKz6eV8patyATMTnWsU0DU/rgzxcV+Cx7lILkCeDhJOhPO46RQ4B0jk0x+2yaq+7z+sjlv0r1cyFr+DQH+AwQDjsWv7E8NIE1Rog==
+X-YMail-OSG: Hd5Wz7wVM1lDWF1STJD8ErzrGjGSwnvIXyV9RUXNQgtwLH8_5zLIVmgcAbYfG9I
+ vODkJAQlJnMkFd3mdInKMMCrgCLih3W65ZTFqaOUBsqNw.D6IeraeJB_ePYsqqVanJoiUW6SUjf.
+ gmx9sFM5Xr8osnJo4WqcjxLE3bfxH7xn68i8LptSd8DwQka8EPylCvdC3sVZjVCPKDi1yiBPjJ3y
+ d254UwI7J35y31ufhYYwHvAGIV19zKjrOeEmPX.rHvOtfmsSWqBSHb.Q05XEQ35mafItXuVLPLK_
+ WGCFkDyQo6alhdvaH898c6kAZTAoNraX4QVAuNGaQEMqZQlCxPbRnPucPYl7EEdnnl3YpG4uD1Tl
+ 4YzOUPGLrzY1.dev6oEjlcFn9zcHwrroPGnKZwuQOhO846RK6Rp.STYahi4.cszLD1V27p3fr.Wf
+ pg0eWkEyzwcmjCV8.7Vm0LsgIaHpwBKzQRkS0kSqDngczVfHJCPy2GWrI2f1Vf1CeVMVMNHZMeIW
+ 5njXq8EZcFBvtQCL9TVBju7YB3mmx7lQbqFJ.wSg4GfDCYZsZ4WVmQQd314x1a9epWtidtx8j1ac
+ LR8crR8h8cXc0xqkC2jtEhiuQoHaQApAXk4csj1KRDxkoEdzs4VaYjgUgphSbNeSMKQ1J5x1v1WQ
+ Ayx7cYQsljOCYQBOIJ5T3r2HFnVIPGkd0j8owgDyPC0RL4z65Lu1TPEgy0NX4T3n3cBKH5MWZq5t
+ W2JFPDsclAlEWWa.PMsV_oTsuXg16O_rEVp_mBWxV9pU6U4DYcE3NzzQcF6Abz1qPzoxE1SYu1pd
+ z9.M1dPgE5zUy.BJDVfr_2XKaWSE1XVRpgzRWABWAPszMpHqw5WR2W52VJUxNRtCy1q0JHWUVsDU
+ zwHUOvggJWbHbphcXG.rlGr5bZ9T7RDM8ZalghQY13nKJrHychRcNyvqFYRD_B1jZE3cXprLN3PH
+ RmUK0WL4qjX0_xwoHg_uH371oK3GYXhPKPP7zQLyfp2rl9JjFZgeRGzmLfVrIR00E3y1Tp2V5aEa
+ r.TpaoLBH7WBL.5I9ZpmRarx5fGHNLceYGGdx7PNZ3syTmVnIbDJMxBOZbhxb4tjb3zzoinfgRLL
+ Xl6QS.uR69iflxCM6g09k85Xirkax8oaJ9dOa8zgYdqkv12h2aH0SdwK8zkNmPCsErsQR8JS1UV2
+ eDd7v_fz8.9sMyAdL1w6_d2ljyWTDfZdlRf3anEaY.qO2xu7U8tfPQ7yHLoIYs8jKf0Q.JH.rM9c
+ yjzazmVqrivLk1bIoRWYrjjJjVnI4Z8V4Z_CJxT.av8PcO9zqLC8qfKFHIluSMr.SnmalFFzZN9b
+ eFWr_pYAijTIuLT8PeKbyCylcKHUk1sumjb9vUF0nTJjr1Ic7cKwmHu8VHYNx6ZIn.Bz2S7kCpm5
+ 9QeVhDSCOL1vwAXViCYw3fjO2RlpGqpin2MS7GFaoyhh4rhw3qTZ2PJKuT2elTShDcZUm1P2AXMn
+ in.WNp268uHI2cgt2WAq4d_mVCJRXW.vXbmIFAJaO1g1vBMy5F2otC.PVJFr1l92R6_cw7eT2c7d
+ kttqD2bZ9bppL28gyMdvF3lqA3uA_JqoJNltMtMvjWkZRfBOUEoaNZrN55nUG17TN5EPyiZh9L_Y
+ iegPPwGYkh23Zo3G4BeLROmetWhOVTFkANPjrg6wFlZcwQBOZWT4FM6VIe99Bqd_bW_jC3Yuq47p
+ W_i4H5gfKGOIKsCVPGvAFsgrufMKnDf0UnLkgfJu5PT9B7f4XLPmjaVlyQP6dc8ABDWmvkiCtrce
+ pIkm80bw2ee.P9VPkvJy_A9yO4trAaAZKXxKYFdANJJjQwYP7zzsWYjsc8D.2slQ3jwfIFneouoV
+ E6mUyOqt5KRPZiYsj6Npr_Wz0NJAiHesY7MmfgPclb1DbZtowzOvGhZ_qlpYhhCN1Q4vnB1.CyS7
+ 4M1k8TUSpnV_ldq76Y3YoBm0KjKSkJqaQu.QVQ7lv2KLHIxpDpz20LoRv66wBcnQNZDkUF5UCXxA
+ I5JQNFRPb.FNPqehNmxcKovpu9rEAQi7DsmfNdVRt6kstUrsJ8a9YtMLq6SzY8NIoZWIufbNTQel
+ FclZUlhnwM5RfBQKjFy5c787D1i2kCoXXBUisSGvOXG0wMKDApXmlcmuyzHiUF8nLaso3aRpwB_W
+ TK79KAyKTb5DdufCWBM5fUVfpPudBCbV_LirbFmU9wQBEX8Zak_qitME.IQD4MpL7zKcIoLEWXUC
+ HY0oISmvVATa1J74vyxVYPLlYKKHA_yI9_2GBZAfYohf.xr8m_X7uohiToNbWrHa1ZvOU.1fKQFD
+ zjmSluRQeYZT0ez.bOJV3pstlHN0a
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 6f727ff2-846e-4c00-9702-48cdc60f900a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Fri, 30 Aug 2024 00:44:28 +0000
+Received: by hermes--production-gq1-5d95dc458-gnv6n (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 5da78dbe3e0c562970426cfb16ce357c;
+          Fri, 30 Aug 2024 00:34:14 +0000 (UTC)
+From: Casey Schaufler <casey@schaufler-ca.com>
+To: casey@schaufler-ca.com,
+	paul@paul-moore.com,
+	linux-security-module@vger.kernel.org
+Cc: jmorris@namei.org,
+	serge@hallyn.com,
+	keescook@chromium.org,
+	john.johansen@canonical.com,
+	penguin-kernel@i-love.sakura.ne.jp,
+	stephen.smalley.work@gmail.com,
+	linux-kernel@vger.kernel.org,
+	selinux@vger.kernel.org,
+	mic@digikod.net
+Subject: [PATCH v2 00/13] LSM: Move away from secids
+Date: Thu, 29 Aug 2024 17:33:58 -0700
+Message-ID: <20240830003411.16818-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALAgD-4hkHVcCq2ycdwnA2hYDBMqijLUOfZgvf1WfFpU-8+42w@mail.gmail.com>
- <CALAgD-7JpFBhb1L+NXL9WoQP4hWbmfwsnWmePsER4SCud-BE9A@mail.gmail.com> <3fbe1092-d0be-4e30-96a7-4ec72d65b013@huaweicloud.com>
-In-Reply-To: <3fbe1092-d0be-4e30-96a7-4ec72d65b013@huaweicloud.com>
-From: Xingyu Li <xli399@ucr.edu>
-Date: Thu, 29 Aug 2024 16:28:39 -0700
-Message-ID: <CALAgD-47U+dZuVxoq9pSSpYk=Y6H6yTwmpe6iBmFBk-xCADW_w@mail.gmail.com>
-Subject: Re: WARNING in process_measurement
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Yu Hao <yhao016@ucr.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+References: <20240830003411.16818-1-casey.ref@schaufler-ca.com>
 
-Here is the config file:
-https://gist.github.com/TomAPU/64f5db0fe976a3e94a6dd2b621887cdd
+Many of the Linux Security Module (LSM) interfaces use u32
+security ID values (secids) to identify module specific security
+attributes. This is an artifact of the SELinux security server
+architecture and compromises made to allow security attributes
+to be associated with networking mechanisms. There are significant
+performance implications to using this approach, as access control
+decisions must map the secids to the real data to be used. There is
+also impact on the audit system, which must provide textual values
+for security attributes.
 
-On Thu, Aug 29, 2024 at 5:56=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On 8/29/2024 12:53 PM, Xingyu Li wrote:
-> > The above syzkaller reproducer needs additional support. And here is
-> > the C reproducer:
-> > https://gist.github.com/freexxxyyy/c3d1ccb8104af6b0d51ed50c29b363d3
->
-> Hi Xingyu
->
-> do you have a .config for testing?
->
-> Thanks
->
-> Roberto
->
-> > On Sat, Aug 24, 2024 at 10:23=E2=80=AFPM Xingyu Li <xli399@ucr.edu> wro=
-te:
-> >>
-> >> Hi,
-> >>
-> >> We found a bug in Linux 6.10. This is likely a mutex corruption bug,
-> >> where the mutex's internal state has been compromised, leading to an
-> >> integrity check failure. The bug occurs in
-> >> https://elixir.bootlin.com/linux/v6.10/source/security/integrity/ima/i=
-ma_main.c#L269.
-> >>
-> >> The bug report and syzkaller reproducer are as follows:
-> >>
-> >> Bug report:
-> >>
-> >> DEBUG_LOCKS_WARN_ON(lock->magic !=3D lock)
-> >> WARNING: CPU: 0 PID: 8057 at kernel/locking/mutex.c:587
-> >> __mutex_lock_common kernel/locking/mutex.c:587 [inline]
-> >> WARNING: CPU: 0 PID: 8057 at kernel/locking/mutex.c:587
-> >> __mutex_lock+0xc2d/0xd50 kernel/locking/mutex.c:752
-> >> Modules linked in:
-> >> CPU: 0 PID: 8057 Comm: cron Not tainted 6.10.0 #13
-> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 0=
-4/01/2014
-> >> RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:587 [inline]
-> >> RIP: 0010:__mutex_lock+0xc2d/0xd50 kernel/locking/mutex.c:752
-> >> Code: 04 20 84 c0 0f 85 13 01 00 00 83 3d fc e5 23 04 00 0f 85 e9 f4
-> >> ff ff 48 c7 c7 60 70 4c 8b 48 c7 c6 e0 70 4c 8b e8 83 f4 54 f6 <0f> 0b
-> >> e9 cf f4 ff ff 0f 0b e9 dc f8 ff ff 0f 0b e9 5b f5 ff ff 48
-> >> RSP: 0018:ffffc9000aa77380 EFLAGS: 00010246
-> >> RAX: 26a6b2d2d0cdac00 RBX: 0000000000000000 RCX: ffff8880241e5a00
-> >> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-> >> RBP: ffffc9000aa774d0 R08: ffffffff8155a25a R09: 1ffff1100c74519a
-> >> R10: dffffc0000000000 R11: ffffed100c74519b R12: dffffc0000000000
-> >> R13: ffff888020efc330 R14: 0000000000000000 R15: 1ffff9200154eeb8
-> >> FS:  00007f902ffb1840(0000) GS:ffff888063a00000(0000) knlGS:0000000000=
-000000
-> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> CR2: 00007f902fb7e06a CR3: 0000000018c3c000 CR4: 0000000000350ef0
-> >> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> >> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> >> Call Trace:
-> >>   <TASK>
-> >>   process_measurement+0x536/0x1ff0 security/integrity/ima/ima_main.c:2=
-69
-> >>   ima_file_check+0xec/0x170 security/integrity/ima/ima_main.c:572
-> >>   security_file_post_open+0x51/0xb0 security/security.c:2982
-> >>   do_open fs/namei.c:3656 [inline]
-> >>   path_openat+0x2c0b/0x3580 fs/namei.c:3813
-> >>   do_filp_open+0x22d/0x480 fs/namei.c:3840
-> >>   do_sys_openat2+0x13a/0x1c0 fs/open.c:1413
-> >>   do_sys_open fs/open.c:1428 [inline]
-> >>   __do_sys_openat fs/open.c:1444 [inline]
-> >>   __se_sys_openat fs/open.c:1439 [inline]
-> >>   __x64_sys_openat+0x243/0x290 fs/open.c:1439
-> >>   do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-> >>   do_syscall_64+0x7e/0x150 arch/x86/entry/common.c:83
-> >>   entry_SYSCALL_64_after_hwframe+0x67/0x6f
-> >> RIP: 0033:0x7f903019a167
-> >> Code: 25 00 00 41 00 3d 00 00 41 00 74 47 64 8b 04 25 18 00 00 00 85
-> >> c0 75 6b 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d
-> >> 00 f0 ff ff 0f 87 95 00 00 00 48 8b 4c 24 28 64 48 2b 0c 25
-> >> RSP: 002b:00007fff194600a0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-> >> RAX: ffffffffffffffda RBX: 0000564dd2fb9cf0 RCX: 00007f903019a167
-> >> RDX: 0000000000000000 RSI: 00007f902fb7e103 RDI: 00000000ffffff9c
-> >> RBP: 00007f902fb7e103 R08: 0000000000000008 R09: 0000000000000001
-> >> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> >> R13: 0000564dd2fb9cf0 R14: 0000000000000001 R15: 0000000000000000
-> >>   </TASK>
-> >>
-> >>
-> >> Syzkaller reproducer:
-> >> # {Threaded:false Repeat:true RepeatTimes:0 Procs:1 Slowdown:1
-> >> Sandbox: SandboxArg:0 Leak:false NetInjection:false NetDevices:false
-> >> NetReset:false Cgroups:false BinfmtMisc:false CloseFDs:false
-> >> KCSAN:false DevlinkPCI:false NicVF:false USB:false VhciInjection:false
-> >> Wifi:false IEEE802154:true Sysctl:true Swap:false UseTmpDir:true
-> >> HandleSegv:true Trace:false LegacyOptions:{Collide:false Fault:false
-> >> FaultCall:0 FaultNth:0}}
-> >> r0 =3D openat$ptmx(0xffffffffffffff9c, 0x0, 0x141040, 0x0)
-> >> ioctl$TIOCSETD(r0, 0x5423, 0x0)
-> >> mmap$IORING_OFF_CQ_RING(&(0x7f0000ffc000/0x4000)=3Dnil, 0x4000, 0x2,
-> >> 0x20031, 0xffffffffffffffff, 0x8000000)
-> >> mmap$IORING_OFF_SQ_RING(&(0x7f0000ff4000/0xc000)=3Dnil, 0xc000, 0xe,
-> >> 0x12, 0xffffffffffffffff, 0x0)
-> >> openat$sndseq(0xffffffffffffff9c, 0x0, 0x902)
-> >> write$syz_spec_18446744072532934322_80(0xffffffffffffffff,
-> >> &(0x7f0000000000)=3D"2b952480c7ca55097d1707935ba64b20f3026c03d658026b8=
-1bf264340512b3cb4e01afda2de754299ea7a113343ab7b9bda2fc0a2e2cdbfecbca0233a07=
-72b12ebde5d98a1203cb871672dff7e4c86ec1dccef0a76312fbe8d45dc2bd0f8fc2ebeb2a6=
-be6a300916c5281da2c1ef64d66267091b82429976c019da3645557ed1d439c5a637f6bf58c=
-53bc414539dd87c69098d671402586b631f9ac5c2fe9cedc281a6f005b5c4d1dd5ed9be400"=
-,
-> >> 0xb4)
-> >> r1 =3D syz_open_dev$sg(&(0x7f00000003c0), 0x0, 0x8000)
-> >> ioctl$syz_spec_1724254976_2866(r1, 0x1, &(0x7f0000000080)=3D{0x0, 0x2,
-> >> [0x85, 0x8, 0x15, 0xd]})
-> >> ioctl$KDGKBDIACR(0xffffffffffffffff, 0x4bfa, 0x0)
-> >>
-> >>
-> >> --
-> >> Yours sincerely,
-> >> Xingyu
-> >
-> >
-> >
->
+The secid based interfaces are also constrained to supporting a
+single security module. There are clever mechanisms for representing
+multiple 32 bit values in a single 32 bit value, but they add overhead
+and complexity. While the issue of multiple concurrent security modules
+is not explicity addressed here, the move away from secids is required
+to make that possible.
 
+Most uses of secids can be replaced by a security module specific
+value. In SELinux this remains a u32 secid. In Smack the value is
+a pointer into the system label list. In AppArmor a pointer to a
+security context can be used. Because the active security module can
+be specified at boot time using the "security=" or "lsm=" flags,
+the system must be able to use any of the possible values.
 
---=20
-Yours sincerely,
-Xingyu
+A struct lsmblob is introduced to contain the attribute values.
+This struct includes a member for each of the security modules that
+are built into the kernel. Where possible, uses of secids are
+replaced with a lsmblob. LSM interfaces have been modified to use
+lsmblob pointers instead of secids in most cases. Some new interfaces
+have been introduced where it is not practical to replace an existing
+secid interface. This occurs in several networking code paths.
+
+https://github.com/cschaufler/lsm-stacking.git#lsmblob-6.11-rc3#lsmblob-6.11-rc3-v2
+
+Revisons:
+
+v2: Feedback on v1
+    - Share common code in apparmor_*_to_secctx()
+    - Remove stale review tags
+    - Fix mistakes in comments
+
+Casey Schaufler (13):
+  LSM: Add the lsmblob data structure.
+  LSM: Use lsmblob in security_audit_rule_match
+  LSM: Add lsmblob_to_secctx hook
+  Audit: maintain an lsmblob in audit_context
+  LSM: Use lsmblob in security_ipc_getsecid
+  Audit: Update shutdown LSM data
+  LSM: Use lsmblob in security_current_getsecid
+  LSM: Use lsmblob in security_inode_getsecid
+  Audit: use an lsmblob in audit_names
+  LSM: Create new security_cred_getlsmblob LSM hook
+  Audit: Change context data from secid to lsmblob
+  Netlabel: Use lsmblob for audit data
+  LSM: Remove lsmblob scaffolding
+
+ include/linux/lsm/apparmor.h          |  17 +++++
+ include/linux/lsm/bpf.h               |  16 ++++
+ include/linux/lsm/selinux.h           |  16 ++++
+ include/linux/lsm/smack.h             |  17 +++++
+ include/linux/lsm_hook_defs.h         |  20 +++--
+ include/linux/security.h              |  90 ++++++++++++++++++----
+ include/net/netlabel.h                |   2 +-
+ kernel/audit.c                        |  21 +++---
+ kernel/audit.h                        |   7 +-
+ kernel/auditfilter.c                  |   9 ++-
+ kernel/auditsc.c                      |  61 ++++++++-------
+ net/netlabel/netlabel_unlabeled.c     |   2 +-
+ net/netlabel/netlabel_user.c          |   7 +-
+ net/netlabel/netlabel_user.h          |   2 +-
+ security/apparmor/audit.c             |   4 +-
+ security/apparmor/include/audit.h     |   2 +-
+ security/apparmor/include/secid.h     |   2 +
+ security/apparmor/lsm.c               |  17 +++--
+ security/apparmor/secid.c             |  21 +++++-
+ security/integrity/ima/ima.h          |   6 +-
+ security/integrity/ima/ima_api.c      |   6 +-
+ security/integrity/ima/ima_appraise.c |   6 +-
+ security/integrity/ima/ima_main.c     |  60 +++++++--------
+ security/integrity/ima/ima_policy.c   |  20 ++---
+ security/security.c                   | 105 ++++++++++++++++++--------
+ security/selinux/hooks.c              |  49 +++++++-----
+ security/selinux/include/audit.h      |   5 +-
+ security/selinux/ss/services.c        |   7 +-
+ security/smack/smack_lsm.c            |  97 +++++++++++++++---------
+ security/smack/smackfs.c              |   4 +-
+ 30 files changed, 471 insertions(+), 227 deletions(-)
+ create mode 100644 include/linux/lsm/apparmor.h
+ create mode 100644 include/linux/lsm/bpf.h
+ create mode 100644 include/linux/lsm/selinux.h
+ create mode 100644 include/linux/lsm/smack.h
+
+-- 
+2.46.0
+
 
