@@ -1,136 +1,118 @@
-Return-Path: <linux-security-module+bounces-5239-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5241-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B49C4968235
-	for <lists+linux-security-module@lfdr.de>; Mon,  2 Sep 2024 10:41:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A00D4968295
+	for <lists+linux-security-module@lfdr.de>; Mon,  2 Sep 2024 10:58:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0816AB21086
-	for <lists+linux-security-module@lfdr.de>; Mon,  2 Sep 2024 08:41:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D151283CA3
+	for <lists+linux-security-module@lfdr.de>; Mon,  2 Sep 2024 08:58:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6E0186E27;
-	Mon,  2 Sep 2024 08:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7FF186E3C;
+	Mon,  2 Sep 2024 08:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GO/WB/vC"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="MDe3fjvi"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202F317C9B3
-	for <linux-security-module@vger.kernel.org>; Mon,  2 Sep 2024 08:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2235B186E57;
+	Mon,  2 Sep 2024 08:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725266497; cv=none; b=Crdu1oDaaARd0Spe+kp/sjShma63Bao1Eq80hk7gKkSHme+iXNXa7Or+Pgank3bMudfgxjXa8LzzT9Sm38rWDd+IdTG8hOR7MJtxgii+2dQr7eltpUBfSiaYATvc8VUb3EXAhC+cmOiaB014SMFtEd3frUhSlAOLzQBcXTESuWs=
+	t=1725267529; cv=none; b=hcTZLkGRYcmUkJbw1x6TPwL5rry+i79R4QZeCyGjEPXBAtePAiI7VSpJXUjkOn4ROQhf6BTrL4kXbRqXn+U0TkFm+4DWU3GMzr0OjrHknM4Cq9zuKu0wxop58/lBtgr+m0NTjs7Bd+ClAgMzNdf3jC/want7oAnQMcD1sDs9Hnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725266497; c=relaxed/simple;
-	bh=U4pH9n5opeXrTqy96OEvKqqGlgFtHFsAUi+KLg73r+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VGRNCGuu8Dxlp6gIZvwwVc2LFXLIbCq8F/mSoPoVBCUflHO+EkvG2rhyLMMvoHPncXqVnTdK3FNXKG3n9yMgKAWtJ0nW/haxs2kxVUyhhZBWOcYShnaV6/fQ84yMgr0d3HZ/0FDcgHM2BkhHm42Xsc+KEumcgIL05DrelRATUXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GO/WB/vC; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c263118780so284358a12.2
-        for <linux-security-module@vger.kernel.org>; Mon, 02 Sep 2024 01:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725266493; x=1725871293; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Utp1RoWfhaGakPbnKMVk3xSbFrGMSY4DPD6Mxcnr7vM=;
-        b=GO/WB/vCGGjNzm79oYQK5rjK14AoxVVXyRbSHsv+UDfpqclVn2OXYVfU0mT4Un6ATu
-         E9ikzfDEiM8/b60Rxp5ByyPv8kMv+1tAQCf2do9qpF8MoXa9Ks4W/wQQcYE9gjO/8pI2
-         HI2p7tCZTrXM9OGLI8UGhkaMj9zHjEg99SDnQy8sj+2RRswxa7RE7ny3pMBAebsza0fa
-         q3OFXxILxNuRgK2Ldqbj56nCd0qbsaSivRp1Ut/K1o6XE6u3sDBUatpBGHd4SrAz3Aa6
-         i0VnIziTb/CP4w6oSKlMCILJexkykGQf7VbCJIieezvN9x78c81dUFlcZGMYlxOq+lpi
-         nZyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725266493; x=1725871293;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Utp1RoWfhaGakPbnKMVk3xSbFrGMSY4DPD6Mxcnr7vM=;
-        b=I6gJFes5aZ4kAqA5MJfKKnaDlvpUPrP5qCzU6Ev85GsyOQF0ZYxrDTH9xd71CB+KEn
-         aw3i9D/bYAcv9cGrb1xN7d/ZQpXdrnMc4pfNWHinfJWIh6GQMVY+Q84tmKqdHGVObTxh
-         P9yZjIRw/czli086ox3pDfEaKGui0C86NOjQe1yMY4OdT8fSHJvesRakfbjFrvkVyDNh
-         vNki0zkdLtyfp8qbiiMTXjBA2vZtv2SOE1YPDKTLL3G8KG7byRn/Gub8lUcIECY765+P
-         J4qyqKMWhrCWXmZ0RQZKP7RiyIw5HdyMffBOKB10V1bHzkbyNmA+aozwI13qibbwziBN
-         ZTsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmJsevoO2I2tDnW+Dr0HnGrEzhpnAKA8cEbi05eLO3EEHW4Wje6vujPN8xdi0butRi3bhTAl0Meoz7lwvl1WEQFNwV/gs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX0JKg2YHzPrdn21nDw15pfPxfgOrLkIJdtSfk/qTWvXVC12gY
-	7gTmJt+eLa3cl69rx/H2L53v+x+G/V68hMGOOQJJLEPNEDKXf1vrSmbU0KtmGvg=
-X-Google-Smtp-Source: AGHT+IH0oa4HGDBaWmEW2YFqYs/c/VIYcD3KLgtz3Ns27MTTgp0m3AKBLw/5R/bF6mlCHND1zKa/NA==
-X-Received: by 2002:a17:907:60cb:b0:a86:8169:f3d6 with SMTP id a640c23a62f3a-a897fa6bb2fmr1161343566b.49.1725266493202;
-        Mon, 02 Sep 2024 01:41:33 -0700 (PDT)
-Received: from localhost (109-81-82-19.rct.o2.cz. [109.81.82.19])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a89891d6d36sm535496866b.149.2024.09.02.01.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 01:41:32 -0700 (PDT)
-Date: Mon, 2 Sep 2024 10:41:31 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Dave Chinner <david@fromorbit.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christoph Hellwig <hch@lst.de>, Yafang Shao <laoar.shao@gmail.com>,
-	jack@suse.cz, Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-bcachefs@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2 v2] bcachefs: do not use PF_MEMALLOC_NORECLAIM
-Message-ID: <ZtV6OwlFRu4ZEuSG@tiehlicka>
-References: <20240826085347.1152675-2-mhocko@kernel.org>
- <20240827061543.1235703-1-mhocko@kernel.org>
- <Zs6jFb953AR2Raec@dread.disaster.area>
- <ylycajqc6yx633f4sh5g3mdbco7zrjdc5bg267sox2js6ok4qb@7j7zut5drbyy>
- <ZtBzstXltxowPOhR@dread.disaster.area>
- <myb6fw5v2l2byxn4raxlaqozwfdpezdmn3mnacry3y2qxmdxtl@bxbsf4v4qbmg>
- <ZtUFaq3vD+zo0gfC@dread.disaster.area>
- <nawltogcoffous3zv4kd2eerrrwhihbulz7pi2qyfjvslp6g3f@j3qkqftra2qm>
+	s=arc-20240116; t=1725267529; c=relaxed/simple;
+	bh=gdMjarlsxkIjz3GacO7XUTqQrGRcxTtT3SPegpVNcMg=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=Sy7XfN8ecKj26qBXWQXhEcz5pxi2YHP4MyEmdhehBNlr6gSrCY5fYp1SViFoe5X8TzIdm0ZcltXvz/3fCysCE1oAfRtEycPClUGOwuR2N375pJxoA0g1/NLZ6s9+Qw6Ukz7neiiUyNNYxkz2LpYJMSiqVG1wLdaRNmICIwASMto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=MDe3fjvi; arc=none smtp.client-ip=203.205.221.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1725267218;
+	bh=xyAiDIvAC8LrbiIkOc9JTsgcYxtGvhFsoImt2CUMHWo=;
+	h=From:To:Cc:Subject:Date;
+	b=MDe3fjviYVCLiUcQ9mKVnurW6tr5JYmzhHgju/1E5GBqoc0blTHlyudPJP0pHTQqE
+	 aq+lj1YRVVGkRLNs93JTSaBx+UGXZbicWcOeTkos+bR/MT8uANbGYqd8wxqB7vxpR4
+	 d+knpO3Et4DcPFB6lHsnFMLDyau0f3zUHJXIitXQ=
+Received: from localhost.localdomain ([114.246.200.160])
+	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
+	id BD832428; Mon, 02 Sep 2024 16:47:24 +0800
+X-QQ-mid: xmsmtpt1725266844t1yiwz6e7
+Message-ID: <tencent_39FA49154F494DFE0FEC2F20A9A34AA9B308@qq.com>
+X-QQ-XMAILINFO: NhpLzBn2I3XwmRtRQDLpav3czAf1B15RF2AP0KtjFIMLaqOSxwqtGhfKMHR3QP
+	 d7XXIDUS9BpKwgKtlXOw/BrO3UZO3L7uN+fbgBeFOdk/KLeaqRrwBLxi9BCOaX8ps7A5PZYEF1iY
+	 wQ6Ocq1WWiKYVWfPEXBJI7656swXoxA07NdjpsVw1dI+gDwzpBMczQB1zFIFuSQAW5Mretg/6bUC
+	 TlbI3h0iTN7DE5IS8nQkkZXxYDt4hqieOGdorIiwRZenyGG3s7Uy6ab7KbYV6jaZVoB6zUz/PAm7
+	 /TTgTEGQh65po5WlQ5NpakCVxNljXTEQvRwvwhw4tZmNr5GLg2jnwnxOu8jKFDQVWDXulRAvUPZa
+	 KBjE6ctScF2nJyCYEm8A6L7LwP4jgsqqPx6m/hNRabGoT7FoObPdX/OdgJLkYwTkAmFsq8BUVicl
+	 ShRuNLWHazGtJaPUYNzJve1qG4VChmTEJuOQ6L45SdWA3eKEJluW8t0G7HXvULkEESYGSZ7FSPd8
+	 4lBFL2UK4x/GnfQxTSvXooHJHdhz89hbaXXzS6ESps4FjKWv2tqUqGwZhM5jT6U1STWmaqN6nFPu
+	 cTklZs679/ovcnys/rLPqWjRd9TEa2x3IIwqJWKlOIsZDudOCsUMjuLvWlaRZYOpm/vKppIgFHQP
+	 BVl0dOsWmq4al+ZVuNEGtUofRMDZZajTxhaUS6fZzZz712mYT6MmbWkwXTGqW/GZhlKncQa8bZI9
+	 RxHnoUhDWhj0Mq4TW5E4cp1YWXxsLGNMHeysv8jHjncTTK/9RUk1zhx6pVLdG26Q4zS0i7bSUErf
+	 yrIM61UP1LvvRByfWm3mk63GQ6aEvd9P3VIfOA/1vM9nhE2ENf1UnFmmRHsftG0bu8kOxaIx8Bd5
+	 hh0qxmGIBH94329tQcsK+8pjOo3fM4zrfGQHyB0ZtBK7b8hoAssG8l86eJhRZMmeZ5vIyA7m1XR5
+	 ZksvImJZWjjoQiAw0uFPxQJhBHvfzD+VfRU23ET/JBki9vcopPS29x41hkQqGRYvry6uBIjPRUzY
+	 ajxjdGTKWj0RriK6W5lpgdGSazwiG3cy+bAUuc1PnJ0zM7q2DHmDtWHAezAFHzR+v9me4AvA==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+From: Jiawei Ye <jiawei.ye@foxmail.com>
+To: casey@schaufler-ca.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	pawan.kumar.gupta@linux.intel.com
+Cc: linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] smackfs: Use rcu_assign_pointer() to ensure safe assignment in smk_set_cipso
+Date: Mon,  2 Sep 2024 08:47:26 +0000
+X-OQ-MSGID: <20240902084726.26179-1-jiawei.ye@foxmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <nawltogcoffous3zv4kd2eerrrwhihbulz7pi2qyfjvslp6g3f@j3qkqftra2qm>
+Content-Transfer-Encoding: 8bit
 
-On Sun 01-09-24 21:35:30, Kent Overstreet wrote:
-[...]
-> But I am saying that kmalloc(__GFP_NOFAIL) _should_ fail and return NULL
-> in the case of bugs, because that's going to be an improvement w.r.t.
-> system robustness, in exactly the same way we don't use BUG_ON() if it's
-> something that we can't guarantee won't happen in the wild - we WARN()
-> and try to handle the error as best we can.
+In the `smk_set_cipso` function, the `skp->smk_netlabel.attr.mls.cat`
+field is directly assigned to a new value without using the appropriate
+RCU pointer assignment functions. According to RCU usage rules, this is
+illegal and can lead to unpredictable behavior, including data
+inconsistencies and impossible-to-diagnose memory corruption issues.
 
-We have discussed that in a different email thread. And I have to say
-that I am not convinced that returning NULL makes a broken code much
-better. Why? Because we can expect that broken NOFAIL users will not have a
-error checking path. Even valid NOFAIL users will not have one because
-they _know_ they do not have a different than retry for ever recovery
-path. 
+This possible bug was identified using a static analysis tool developed
+by myself, specifically designed to detect RCU-related issues.
 
-That means that an unexpected NULL return either means OOPS or a subtle
-silent error - e.g. memory corruption. The former is a actually a saner
-recovery model because the execution is stopped before more harm can be
-done. I suspect most of those buggy users will simply OOPS but
-systematically checking for latter is a lot of work and needs to be
-constantly because code evolves...
+To address this, the assignment is now done using rcu_assign_pointer(),
+which ensures that the pointer assignment is done safely, with the
+necessary memory barriers and synchronization. This change prevents
+potential RCU dereference issues by ensuring that the `cat` field is
+safely updated while still adhering to RCU's requirements.
 
-I have tried to argue that if allocator cannot or refuse to satisfy
-GFP_NOFAIL request because it is trying to use unsupported allocation
-mode or size then we should terminate the allocation context. That would
-make the API more predictable and therefore safer to use.
+Fixes: 0817534ff9ea ("smackfs: Fix use-after-free in netlbl_catmap_walk()")
+Signed-off-by: Jiawei Ye <jiawei.ye@foxmail.com>
+---
+ security/smack/smackfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is not what the allocator does today though. Atomic NOFAIL
-allocations fail same as kvmalloc requests which are clearly overflows.
-Especially the later could become a risk if they are reachable from the
-userspace with controlable allocation size.
-
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index e22aad7604e8..5dd1e164f9b1 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -932,7 +932,7 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+ 	}
+ 	if (rc >= 0) {
+ 		old_cat = skp->smk_netlabel.attr.mls.cat;
+-		skp->smk_netlabel.attr.mls.cat = ncats.attr.mls.cat;
++		rcu_assign_pointer(skp->smk_netlabel.attr.mls.cat, ncats.attr.mls.cat);
+ 		skp->smk_netlabel.attr.mls.lvl = ncats.attr.mls.lvl;
+ 		synchronize_rcu();
+ 		netlbl_catmap_free(old_cat);
 -- 
-Michal Hocko
-SUSE Labs
+2.34.1
+
 
