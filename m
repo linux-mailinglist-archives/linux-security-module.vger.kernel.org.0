@@ -1,175 +1,191 @@
-Return-Path: <linux-security-module+bounces-5320-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5322-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BBB996C8A4
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Sep 2024 22:37:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8742896CA7C
+	for <lists+linux-security-module@lfdr.de>; Thu,  5 Sep 2024 00:34:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40AFEB2569B
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Sep 2024 20:37:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F7AA283D1D
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Sep 2024 22:34:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B47148317;
-	Wed,  4 Sep 2024 20:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D533E15B56E;
+	Wed,  4 Sep 2024 22:34:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="I6ckhaKT"
+	dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b="E7WNbKTs"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F431EBFEC
-	for <linux-security-module@vger.kernel.org>; Wed,  4 Sep 2024 20:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387191527B1
+	for <linux-security-module@vger.kernel.org>; Wed,  4 Sep 2024 22:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725482233; cv=none; b=d45D7QhtStC43TubWAim7MaBMrefUwejKIgr4C0hXT1LVn0W6JupcNV731LWtaVkWrHYKC7GLkdhl5kdOD4DQASEGMitIlKoD7b6Z1tLmm7B/OxpOBPITqsRvIxoeUC/E4DOHt/BJIHLjR9x+bfZzVWWDzv2hoOsaxCHMPVLD/4=
+	t=1725489284; cv=none; b=kgPBn3W8JM2qeGZNXKDwoCtqG8b9jszrqT50EWMlNzx6q2L6mSXMqZzqnrMx6d9RFQJ9sKSguhPH4KuQp89K8bHJW4PGzr06eKJd8NG+jaM1A08ZY4ZoOtWb0U1KtULvxWKFByGSsBoI1T6J7XceXc0JwyqnrUNbyBOJPjmyI8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725482233; c=relaxed/simple;
-	bh=yQwnYD19n1xUXU4dbty3ehLdSGl/V3zWXm5EKMRaIf8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uP/JiwrGSWvvmQAce4YetJH1D7UXQUOXCIXe4h1QHy790tmVEg+eTi9Ari3lkc3cVPlqn0jBz8ZPTJLr+Dov8jHYVjG6fbR3u/sT44skzf+Y4P5cIYVTXo13oB+RqrOF6FgSVke03j+C4eZdZ1rpafMvOTZ5vtMYuCtEd8REtGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=I6ckhaKT; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6b8f13f28fbso59268427b3.1
-        for <linux-security-module@vger.kernel.org>; Wed, 04 Sep 2024 13:37:11 -0700 (PDT)
+	s=arc-20240116; t=1725489284; c=relaxed/simple;
+	bh=azNdSubL/Np7rjlyzstSXo50QK9v1c6dCaOiUjTAdec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sLbhy2o9Dapp2wam4B0PzswHFyRRVTiBHsVVgeMANsoV8t35DGb6G1D4IUgTK6IdwkTvOQb2wnkgrTJkjnWdY6L+kdl9zUEn+wFlxbcK6xeOhyq8WG1u7uUwJyAojeKjqaP1506rM4AKwQgxiXzMZJvTkz+yZgWnh7wZdmFiwPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com; spf=pass smtp.mailfrom=fromorbit.com; dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b=E7WNbKTs; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fromorbit.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2054e22ce3fso1603865ad.2
+        for <linux-security-module@vger.kernel.org>; Wed, 04 Sep 2024 15:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1725482230; x=1726087030; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+uSNgAoLeuNZ3XWdQeqcMJZ932reV/H1BZ/60TxYWNg=;
-        b=I6ckhaKTHN86Qd0oxsBHDCuvEwxZ+gt388yVPW9pXcoJY4vYyPXXZiONw/+vnLSVnB
-         rpL0lytcQ2cK61+dSKQlwG0gjAU4tc3xOhEJ8WaFOcRgE9ApVHV/XqqtJJO761YMuCUS
-         wJ56hIZ9BkXC8yy0j64OWUGHh9WGXywwrUeepl4rl9MCtPWist6N2OjFOul+g5dIhAYd
-         0UK/Z+8/eznXHOtkh/XYPRGVoh/WKIMOPnxq60cZ85FsKkkBKDSeRq5miz9shOAUvW+T
-         RHoVYGzFtDLa4NzNDWAS1Mjte4nfrHUn/at1AkkEopftDKcxE+qXB8Az5IXEdSsMBJjz
-         W4Lw==
+        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1725489282; x=1726094082; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WyO77SPTX9aXQDMtbIN6DxC5ZyN7lMLaLLUCQ5eXYrk=;
+        b=E7WNbKTs4JxJo1MMAfhzzJrvcBfpWzZkQPIsKx/nbaOW90cPsqOJxCi6ur5obuYqKb
+         pI2JVy18sRsboGfciA1ncu0Zx32TfTuswu1PAJOSgX1pfdn7+6uHqUouQs35btQ1qf5J
+         AmqIer4O8zLHwi6bOjtgK1kR4U2fGY28QzThbrY/rmjLdaaeXN0W5iH0Ls7LgRf9e41V
+         2Ck0l55dFHeNBvCoeZiot1M/90HIL3ki7vgWdqKvFV/PZNJ9edeqrUpvnqhRWYzBzIEA
+         podSwNjgK1uObHw5rUTuDJK5RiTjeTG7Ct3frDGy5+CM9XN5ZzrXKt9owdnEl5H72ub5
+         fZfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725482230; x=1726087030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+uSNgAoLeuNZ3XWdQeqcMJZ932reV/H1BZ/60TxYWNg=;
-        b=TIpQUBvvKxzfuFByLjZYQ3esQdPYpvjASdT3IrSv0ScDsvB51ESoz6N06Lx3U2XOZk
-         q1fHg80UMtekpVxMPskm4CEd8Ty0G8ecS5p+ohkBWoUmmxdlurSqDrlNoFDNTG3XKeNq
-         tKZfs/JIjxgJaR7YYoDqaO6XoIctQC9hnxW8Yar39QQtcIUD3YbXcGuurPH8M5pw73Iz
-         NL7E0Fu6AET5PxkhuGYmejIkzwkDiklk80WOuqRqbESP9j7+WgYR5QL71M9J3vxo4ev8
-         iJFp01JViZY9PscMQVISakLmuByi6/QM09sEu7FepnrvaZAf7N5a2YesPemWXqUffwNm
-         bXnQ==
-X-Gm-Message-State: AOJu0Yz1NZ2J5kHZkMy1p8GPQ4Klp9y87gvjIvNp3KAs7Y6XRuqD37U7
-	YsWlH1zObdX0zqV3mLLlJlhpkUkmRmmyLqvGeZI4XORjvkY3RE0KX7rRkNHvAXkExhMDS4ZTh2m
-	aAzXv0oePkeEHxDk7LgG8cKfs81iD7dmMEuV5
-X-Google-Smtp-Source: AGHT+IG9r5awwLWDaSa/SS1wlz6GDBVERagOH9s3xymO+3hCHtxHEKujYrlOkzwl7hougrLaBBg55clsy/6UTBUp4qs=
-X-Received: by 2002:a05:690c:4589:b0:6d4:f41d:de2f with SMTP id
- 00721157ae682-6d4f42d2475mr143212667b3.39.1725482230428; Wed, 04 Sep 2024
- 13:37:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725489282; x=1726094082;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WyO77SPTX9aXQDMtbIN6DxC5ZyN7lMLaLLUCQ5eXYrk=;
+        b=BRGUqF70YKWGUKyj2iXVlhwPdWf4+uJGAEnm28T9nkaO6ooqsVYF8IO7UPqo4tZGZ0
+         xxG/jrhYP2QxU5oKcJ9mN4faoLTCMMArl5M+K7J46fffNc7UajJEeiBN0NKhQN3F1Rr0
+         PXCLTURPXZRPkhl6yolQcFKnnAW/Jct6NNfxNSKN8a8lpYGzb+T3nYtQhcg/ktPCvaKN
+         01sxezGEV51nJ2Y+RP/nV1jRTns1udKtMy8Ym6tCmFY4TMqtCDyfbJY4VJ8f+292DUM5
+         915h8pDx9KUCudJeM5jf4Ma9Yxm4/ZBJOOQIlcb7hgKr71/s/cB0U4qXiAAVthv5fh9q
+         cxnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVhDn9xQpfbuMQh4NFFCtHyL7sG+JiTIskgC2t9+O6oZpG75E39zpWSdkg6k70zohtbG6TlBp+2bkAZ3zu3Iq5KHLJ7pjg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJq69uFeUFP/FLN8SqaG4ii+GWUHPJLJRYQcTiiQd5+GpcFURT
+	EWNRoYQXi/HcRtUzSNem8XGlmAqotAhU5BmHqt/gz0MW5Dg/h/OajIWLRDeejAQ=
+X-Google-Smtp-Source: AGHT+IEa7j7zwgb9tFFz5fxY6zFlznbHmhxEaWFrBcv9Z9lGCysxf/bgq/9UC3jOBUkEX0m0MasoXw==
+X-Received: by 2002:a17:902:f682:b0:206:9640:e747 with SMTP id d9443c01a7336-20699b21af3mr79663415ad.43.1725489282411;
+        Wed, 04 Sep 2024 15:34:42 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-78-197.pa.nsw.optusnet.com.au. [49.179.78.197])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206aea582f4sm18038375ad.233.2024.09.04.15.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Sep 2024 15:34:41 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+	(envelope-from <david@fromorbit.com>)
+	id 1slyaF-000tWk-0T;
+	Thu, 05 Sep 2024 08:34:39 +1000
+Date: Thu, 5 Sep 2024 08:34:39 +1000
+From: Dave Chinner <david@fromorbit.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Michal Hocko <mhocko@suse.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christoph Hellwig <hch@lst.de>, Yafang Shao <laoar.shao@gmail.com>,
+	jack@suse.cz, Vlastimil Babka <vbabka@suse.cz>,
+	Dave Chinner <dchinner@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-bcachefs@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2 v2] remove PF_MEMALLOC_NORECLAIM
+Message-ID: <Ztjgf/mzdnhj/szl@dread.disaster.area>
+References: <20240902095203.1559361-1-mhocko@kernel.org>
+ <ggrt5bn2lvxnnebqtzivmge3yjh3dnepqopznmjmkrcllb3b35@4vnnapwr36ur>
+ <20240902145252.1d2590dbed417d223b896a00@linux-foundation.org>
+ <yewfyeumr2vj3o6dqcrv6b2giuno66ki7vzib3syitrstjkksk@e2k5rx3xbt67>
+ <qlkjvxqdm72ijaaiauifgsnyzx3mw4edl2hexfabnsdncvpyhd@dvxliffsmkl6>
+ <ZtgI1bKhE3imqE5s@tiehlicka>
+ <xjtcom43unuubdtzj7pudew3m5yk34jdrhim5nynvoalk3bgbu@4aohsslg5c5m>
+ <ZtiOyJ1vjY3OjAUv@tiehlicka>
+ <pmvxqqj5e6a2hdlyscmi36rcuf4kn37ry4ofdsp4aahpw223nk@lskmdcwkjeob>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830003411.16818-2-casey@schaufler-ca.com>
- <0a6ba6a6dbd423b56801b84b01fa8c41@paul-moore.com> <b444ffb9-3ea3-4ef4-b53c-954ea66f7037@schaufler-ca.com>
- <CAHC9VhQ8QDAGc9BsxvPMi6=okwj+euLC+QXL1sgMsr8eHOcx2w@mail.gmail.com> <93952b9f-2e40-42fc-9a61-749b9c8ee306@schaufler-ca.com>
-In-Reply-To: <93952b9f-2e40-42fc-9a61-749b9c8ee306@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 4 Sep 2024 16:36:59 -0400
-Message-ID: <CAHC9VhTwYftY4nLauF8A9AOawAGKdU-+TGoVfM7Paf23x1Vm8w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/13] LSM: Add the lsmblob data structure.
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: linux-security-module@vger.kernel.org, jmorris@namei.org, serge@hallyn.com, 
-	keescook@chromium.org, john.johansen@canonical.com, 
-	penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, 
-	linux-kernel@vger.kernel.org, selinux@vger.kernel.org, mic@digikod.net, 
-	apparmor@lists.ubuntu.com, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <pmvxqqj5e6a2hdlyscmi36rcuf4kn37ry4ofdsp4aahpw223nk@lskmdcwkjeob>
 
-On Wed, Sep 4, 2024 at 4:28=E2=80=AFPM Casey Schaufler <casey@schaufler-ca.=
-com> wrote:
-> On 9/4/2024 1:00 PM, Paul Moore wrote:
-> > On Tue, Sep 3, 2024 at 8:53=E2=80=AFPM Casey Schaufler <casey@schaufler=
--ca.com> wrote:
-> >> On 9/3/2024 5:18 PM, Paul Moore wrote:
-> >>> On Aug 29, 2024 Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > ..
-> >
-> >>>> +/*
-> >>>> + * Data exported by the security modules
-> >>>> + */
-> >>>> +struct lsmblob {
-> >>>> +    struct lsmblob_selinux selinux;
-> >>>> +    struct lsmblob_smack smack;
-> >>>> +    struct lsmblob_apparmor apparmor;
-> >>>> +    struct lsmblob_bpf bpf;
-> >>>> +    struct lsmblob_scaffold scaffold;
-> >>>> +};
-> >>> Warning, top shelf bikeshedding follows ...
-> >> Not unexpected. :)
-> >>
-> >>> I believe that historically when we've talked about the "LSM blob" we=
-'ve
-> >>> usually been referring to the opaque buffers used to store LSM state =
-that
-> >>> we attach to a number of kernel structs using the `void *security` fi=
-eld.
-> >>>
-> >>> At least that is what I think of when I read "struct lsmblob", and I'=
-d
-> >>> like to get ahead of the potential confusion while we still can.
-> >>>
-> >>> Casey, I'm sure you're priority is simply getting this merged and you
-> >>> likely care very little about the name (as long as it isn't too horri=
-ble),
-> >> I would reject lsmlatefordinner out of hand.
-> > Fair enough :)
-> >
-> >>> but what about "lsm_ref"?  Other ideas are most definitely welcome.
-> >> I'm not a fan of the underscore, and ref seems to imply memory managem=
-ent.
-> >> How about "struct lsmsecid", which is a nod to the past "u32 secid"?
-> >> Or, "struct lsmdata", "struct lsmid", "struct lsmattr".
-> >> I could live with "struct lsmref", I suppose, although it pulls me tow=
-ard
-> >> "struct lsmreference", which is a bit long.
-> > For what it's worth, I do agree that "ref" is annoyingly similar to a
-> > reference counter, I don't love it here, but I'm having a hard time
-> > coming up with something appropriate.
-> >
-> > I also tend to like the underscore, at least in the struct name, as it
-> > matches well with the "lsm_ctx" struct we have as part of the UAPI.
-> > When we use the struct name in function names, feel free to drop the
-> > underscore, for example: "lsm_foo" -> "security_get_lsmfoo()".
-> >
-> > My first thought was for something like "lsmid" (ignoring the
-> > underscore debate), but we already have the LSM_ID_XXX defines which
-> > are something entirely different and I felt like we would be trading
-> > one source of confusion for another.  There is a similar problem with
-> > the LSM_ATTR_XXX defines.
-> >
-> > We also already have a "lsm_ctx" struct which sort of rules out
-> > "lsmctx" for what are hopefully obvious reasons.
-> >
-> > I'd also like to avoid anything involving "secid" or "secctx" simply
-> > because the whole point of this struct is to move past the idea of a
-> > single integer or string representing all of the LSM properties for an
-> > entity.
-> >
-> > I can understand "lsm_data", but that is more ambiguous than I would li=
-ke.
-> >
-> > What about "lsm_prop" or "lsm_cred"?
->
-> If we ever do the same sort of thing for the existing blobs we're
-> going to need to have lsm_cred for the cred blob, so I shan't use
-> it here. I can live with lsm_prop, which shouldn't confuse too many
-> developers. We can start saying "property" in place of secid, which
-> would be a good thing.
+On Wed, Sep 04, 2024 at 02:03:13PM -0400, Kent Overstreet wrote:
+> On Wed, Sep 04, 2024 at 06:46:00PM GMT, Michal Hocko wrote:
+> > On Wed 04-09-24 12:05:56, Kent Overstreet wrote:
+> > > But it seems to me that the limit should be lower if you're on e.g. a 2
+> > > GB machine (not failing with a warning, just failing immediately rather
+> > > than oom killing a bunch of stuff first) - and it's going to need to be
+> > > raised above INT_MAX as large memory machines keep growing, I keep
+> > > hitting it in bcachefs fsck code.
+> > 
+> > Do we actual usecase that would require more than couple of MB? The
+> > amount of memory wouldn't play any actual role then.
+> 
+> Which "amount of memory?" - not parsing that.
+> 
+> For large allocations in bcachefs: in journal replay we read all the
+> keys in the journal, and then we create a big flat array with references
+> to all of those keys to sort and dedup them.
+> 
+> We haven't hit the INT_MAX size limit there yet, but filesystem sizes
+> being what they are, we will soon. I've heard of users with 150 TB
+> filesystems, and once the fsck scalability issues are sorted we'll be
+> aiming for petabytes. Dirty keys in the journal scales more with system
+> memory, but I'm leasing machines right now with a quarter terabyte of
+> ram.
 
-Works for me, thanks Casey.
+I've seen xfs_repair require a couple of TB of RAM to repair
+metadata heavy filesystems of relatively small size (sub-20TB).
+Once you get about a few hundred GB of metadata in the filesystem,
+the fsck cross-reference data set size can easily run into the TBs.
 
---=20
-paul-moore.com
+So 256GB might *seem* like a lot of memory, but we were seeing
+xfs_repair exceed that amount of RAM for metadata heavy filesystems
+at least a decade ago...
+
+Indeed, we recently heard about a 6TB filesystem with 15 *billion*
+hardlinks in it.  The cross reference for resolving all those
+hardlinks would require somewhere in the order of 1.5TB of RAM to
+hold. The only way to reliably handle random access data sets this
+large is with pageable memory....
+
+> Another more pressing one is the extents -> backpointers and
+> backpointers -> extents passes of fsck; we do a linear scan through one
+> btree checking references to another btree. For the btree we're checking
+> references to the lookups are random, so we need to cache and pin the
+> entire btree in ram if possible, or if not whatever will fit and we run
+> in multiple passes.
+> 
+> This is the #1 scalability issue hitting a number of users right now, so
+> I may need to rewrite it to pull backpointers into an eytzinger array
+> and do our random lookups for backpointers on that - but that will be
+> "the biggest vmalloc array we can possible allocate", so the INT_MAX
+> size limit is clearly an issue there...
+
+Given my above comments, I think you are approaching this problem
+the wrong way. It is known that the data set that can exceed
+physical kernel memory size, hence it needs to be swappable. That
+way users can extend the kernel memory capacity via swapfiles when
+bcachefs.fsck needs more memory than the system has physical RAM.
+
+This is a problem Darrick had to address for the XFS online repair
+code - we've known for a long time that repair needs to hold a data
+set larger than physical memory to complete successfully. Hence for
+online repair we needed a mechanism that provided us with pagable
+kernel memory. vmalloc() is not an option - it has hard size limits
+(both API based and physical capacity based).
+
+Hence Darrick designed and implemented pageable shmem backed memory
+files (xfiles) to hold these data sets. Hence the size limit of the
+online repair data set is physical RAM + swap space, same as it is
+for offline repair. You can find the xfile code in
+fs/xfs/scrub/xfile.[ch].
+
+Support for large, sortable arrays of fixed size records built on
+xfiles can be found in xfarray.[ch], and blob storage in
+xfblob.[ch].
+
+vmalloc() is really not a good solution for holding arbitrary sized
+data sets in kernel memory....
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
 
