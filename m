@@ -1,94 +1,80 @@
-Return-Path: <linux-security-module+bounces-5426-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5433-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 355BA97428B
-	for <lists+linux-security-module@lfdr.de>; Tue, 10 Sep 2024 20:47:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C815974336
+	for <lists+linux-security-module@lfdr.de>; Tue, 10 Sep 2024 21:11:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1F5F289643
-	for <lists+linux-security-module@lfdr.de>; Tue, 10 Sep 2024 18:47:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BA7C284913
+	for <lists+linux-security-module@lfdr.de>; Tue, 10 Sep 2024 19:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58761A76A3;
-	Tue, 10 Sep 2024 18:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C101A38EB;
+	Tue, 10 Sep 2024 19:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="HocppcJD"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PvqhE2H7"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic306-26.consmr.mail.ne1.yahoo.com (sonic306-26.consmr.mail.ne1.yahoo.com [66.163.189.88])
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F441A707B
-	for <linux-security-module@vger.kernel.org>; Tue, 10 Sep 2024 18:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DF216DC12
+	for <linux-security-module@vger.kernel.org>; Tue, 10 Sep 2024 19:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725993994; cv=none; b=UDlAkPskPA6TGHYdGxAnmul3wcSqFEP0PZIsELbawsFdbCr/q14QagTmyvG4CBf9sgVgW5VRXDcCg+eRwpoGnQfsYyQzk1cl96gvJW31Jo8FsbW/1v+s29oS+HHDs4QGifuRUJkqOWaaz4syz3NWsQTqpQssniGzaukMM/TeUP4=
+	t=1725995486; cv=none; b=WdipRlj4ISu4epE+SL7dj1nCDipzICpDeEqNFn/drkg0IvJkuD3gZGA1P1oswN5SXacdbK9koNeJm/6tl/Isi7ykwDEMoZj4crVy3d6j2w/9EijaECcDnsg1kNIsMwZHehS6ijOmzGX+DFBgFTPCB0OQjiXxnP0sSBHORfnd71s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725993994; c=relaxed/simple;
-	bh=2qqQ0z3D+2ZjCCq07OJJJlzqS2fA4B7I9fk5In9Guvw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GYqKTQz800mL92LCHfWoO+01PJcVCQb1HfbBgajkS5xdfYtM3aDBqO2Fz7EQ+bDqcAn1mpGcIP+/upObKLaHdR7BWDgSTEnLMloLioXJDt7Dd1qh/F8Kg6/OJLCm3rvt7/0ZRCxFqNPfeE+ixS1Kx0c35qgTWe3RTbGtCHy96JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=HocppcJD; arc=none smtp.client-ip=66.163.189.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1725993992; bh=3E0uhKbbsti/31w7Y2vn8vl2KCCg7vNL8Prj7v5QvvM=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=HocppcJDuUDoI5MTgXavveIxmLWxfQrbTf1mJrCIYKCtoooN7FP9KPSCRkjoN70wgL1nt7GpH4N6uIvgGRjo8Il3OmWpyWXxWqA5csC4ODldmSSSPdxTp9wH4cQ+x6zwx6dRujtNh4yNHuH8B4eJ8OUWK1nnaeYIysoq0YQBvMgDYtwiVs7sea9vHHxVRgFEGVHpKzZKcnf+ouysN7hye0gNJOT9K6ONrkcN33r9HHwn7vT9tDut1KsywE1fDeeDELrXWq7+AxOdDRq0CKkgSPBtO41K8HFMjeYy0FNqZmNmtP00Ksgt7fOs2R2IGq/IsSOLTir46oK1TRAZriuxRA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1725993992; bh=m8oMulnKYQb/AESAh3/zts2m12AJ/Vc62CVThC18uOP=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=Y4cMh8Q4mKX5ZqMRXMC/mebzxGmuXUS9saAaSM9KxK4pjV5v95DtDaFSY+5UrBmLQ/Q/EgmO0lWj244lVa+AZt4yP30A8ycuaOTBBm9Xg6x39OntvH3i/lvTcMHCJ6gvDCN+I+xEhqmANVl+H4q8pDkrzmS8Unrhat7IoWei+UEz6MYsZNTUzI7tZ0twrVhGfbKCocZGJgg3XF096nKEcBRpU/XIlByeKtOtMcyMwA3MmbpI5dfUnoRG6uYKbW9wZcGKPUfaSzpvfePEZO4l1IJZeryDJBPfMYCHiW9MKMCdUh7DsvX4z2saEh8/A3ONI49m0CqZ4yE/1gL1+psLeg==
-X-YMail-OSG: XImXzEYVM1miACWdEvitI4BuG19vLEgJEeW1Po4o0fmct88cOsZl3UTw9eaqnJl
- Z2BO0XvPkBXvzd1b9AkfO4renWur3NNJvdKMtVSuJifF4uqK2_yApEDMfBq4qhFbwyZS1flZg3LE
- ULcoPuFWB4hp4FuvVlWlGIUBgTPctvPIdsEjlrHRylwtXcNqO6C6OK_WhIOhGD3y3q3QBlnq2fOe
- mL.dcf.f1KxjJYYl05OIcO6eTybvTKb53efdOloziu6OLvt1zGOWqpqVHUv0LjMZwbYrEndBeRyZ
- Adv.RoTEkj4MwQNPrx4o87iwe_fEnLk9LLDTCTYdC726KL_IQp5.niHk8m3AhZf3gOQ16JNGv_vK
- YB18giQdEZaEUb5RnEG5aqep8CU6YFUmqfYmqUzEgP0vwV7Lhs4JN.CY_hEuzQvNE03i2f1_bSWN
- htINe7aNv0Qo10ii4gAUey34mgbvTqXmZ7xlnf2Y1CaixSW0YGpNGaPvjG_eK8xk_51oBEF8Jxk2
- ocD0f0rN_Y2mBETrBmlGo_s81lSWdnvNUSJqu7RNRW2P9iRu85Q.XJTEsOvmo6PUIoGveoknMezt
- RUZ3O0J6wL2s28E2uXr21rIHg1sNHEElbjWWpP2JX8ATXTNqUKW61cEJbCDWS4YEKGPRc1QmhW8D
- oEBNoUPwmCdldcvVL8.ajkrfdEJJpn6lLDr8IUo54_MPPkn2k95.QulG8IEhnGNc.7Fcv.7aq7OD
- FFh8PlcBOcgFA8IRSiC_uQ0sF1n5zC1LLtXcDhSwtTmgFsGNWkt88oH8E8uR1BQ6ek8YNtsmOkks
- 6us8zhV1A1qaCJrok01BC5Szhg2xkUuMJUkn9udKWTpnSmYYVianJRiG_dJGINljC98U1Ezq98tv
- TRGRd_ZKqTrVQqiu0ZSOClXwbXHlDl6STfzwTt.4BulvjHO61l4IqS9y75UjCXbc8St1XJeaBC3E
- cIdabb021gIlscmwKOJHnt7N_.Ssphl6Q6MDmOeN_PkMLWYgR5OiJJY.4Fw.9IdtFENcPiGVBjC6
- ghJQG0039mal6uTJBQs10yMPhIIpuDTZSHzS.B2Xma0TYXxfp4xgEIpKe8U3mCNsMi_2AEr5Z5e2
- qd50PZubfM4cJykI5yDL.g9T_LHzVlprRG5SGU.j5stKP.qxLeh3aZhp7v4xlgfTrH1E2JQQWfsg
- ilgQ2rH7DpRoqokHUv2KfHniqz6p1Mw2QXg3DBQZCpwyeWuJKctrPgc81zDikSt1o3bk3MxxPahH
- D9S7nTUlnzWl8pUJ2dEZ4YbdEvsCArUWiivbNtg_JKs_7ORRH5LPk6bCz.5Qbwk15.kYx7RxkegV
- rvmwRy9xfLJedijx886TtqtrkKrGPDin.Jp6tjXk6uXn_aenaOsa7iLW5iQioR6XwDyRTmSN6fgv
- ZoKWCYZRrZAyaIyPeA7_iX5Y2B1F5moU0qdNIIgLj5tvADQ3RPeYjT7YNvVUa4OBUrAPJ.hLsWi4
- gizWunNPHJeI7vvlgC.vMvQ5qNVpjJRaIGle81D4PpX1988MSI6TfUmdRnCMyPY93t.ucpNqT4uN
- VIqkXqoLPVuEOEq3eUXAetgDOTj8ehEj27n2fqdsGLuRbgj1HMwf.9xMs7pQ2yTz6LNV_FKFD15X
- crxctLPjPgPyz_bQsUiMKNG3wOWE7njOZDD_N7GylHciG5NdVqMNHWcIUN7buv9txD0oxfixDjaE
- vrS_vABEhpXFlCESXzWgNN1ow1PcFQc1QhVpdB0VaxegK.IWBNVLc1mIO5vuhwU0hmKpklW43GgZ
- ObT_uUcBDKbsp3it29TPI3hKen1A2wosl5cfyQpoDsQ_u_N2H1rOAn.j.l4U3QbQyP11tbgDFR1L
- dPZ8R5U5RB5W6E6uXsruF2oLGJthMjsUv5iKX8Hb47mfV720kwtB6N8NDQK17swFhsmmAmRm6yTP
- LyLnQBjaky4H1XCqAj5rMyU4e_MFbq.s5k2iboUox6mIeHtrZDpKSv6tKP1lBd3cLC_G0XXPpb1y
- Oa5Q8pETULkshA4c3gdvEnTBgBy4HPPQSgMZiKyPeMCFG5uh8N9TlFMw_JRb5xSqaizPFOF3TJAt
- JyOjnKiGy3yuSePfv7F2fxKsdmAzSTZzWwcwBLm3cA6T8O1GYiHeJOgqXAAv27_ePNgruPiTodGx
- j6KajWAjvrgTwZvpFPg0zS2sAhmNELMvqulBqm51GdHRsXYNOgt5dkD0Su73yYsZRQ40lX3akTcv
- Gqsf9YqLuUreu6AK.1BA6OxncCISA0JtQH3Ji5tx.dVUQNLWvMY3aS8Ji2jrDoHjMXztgW2G0ERV
- lXKupt_4U.kQCYO2m3DGNtg4AASSDpiQeRI8gY4Y1ds_7l8pn
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: e3b90c14-4915-4e9e-ac5f-a48a4646717c
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Tue, 10 Sep 2024 18:46:32 +0000
-Received: by hermes--production-gq1-5d95dc458-rx7kt (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2439121b4758407954183c0b5224f0f9;
-          Tue, 10 Sep 2024 18:46:27 +0000 (UTC)
-From: Casey Schaufler <casey@schaufler-ca.com>
-To: casey@schaufler-ca.com,
-	paul@paul-moore.com,
-	linux-security-module@vger.kernel.org
-Cc: jmorris@namei.org,
-	serge@hallyn.com,
-	keescook@chromium.org,
-	john.johansen@canonical.com,
-	penguin-kernel@i-love.sakura.ne.jp,
-	stephen.smalley.work@gmail.com,
-	linux-kernel@vger.kernel.org,
-	selinux@vger.kernel.org,
-	mic@digikod.net
-Subject: [PATCH v3 13/13] LSM: Remove lsm_prop scaffolding
-Date: Tue, 10 Sep 2024 11:41:25 -0700
-Message-ID: <20240910184125.224651-14-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240910184125.224651-1-casey@schaufler-ca.com>
-References: <20240910184125.224651-1-casey@schaufler-ca.com>
+	s=arc-20240116; t=1725995486; c=relaxed/simple;
+	bh=VRKJRu9RUMCW/Ep3bydArOQS+E80rdfLAV15uey/Z34=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GLIvQ3M8LM5MJ2rLI1zWweSBkm54Uj0+kuRu5myYwmxLnLjeG7oLq/sD7yYrF2IJGHYmhP/thmERjTAXiVUjGwlJoNaUg0aRIMacheJVlR5nfkmw7TkDtN+xjdf0/uQ2RhgInUtwwqF28aarQIVxO7DrZ83ZMojqpiUg1LHBGjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PvqhE2H7; arc=none smtp.client-ip=209.85.161.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5dfad5a9c21so3444358eaf.0
+        for <linux-security-module@vger.kernel.org>; Tue, 10 Sep 2024 12:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1725995483; x=1726600283; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yVh+0umsxe3NmEOyboRonlTg0PRACWPVXWQxD+jYRtk=;
+        b=PvqhE2H7Ols45JZplEs1jPTonbZiVLh2KHzyPObKRJRpxyxhorcIZnU7BcgmgBZXQM
+         FkK9onyH9LMP1KxtgE1iBr8L/Z9FOmCsIIItfdqKqvorMyLK5nO9mLXpbMZeTspLZPnE
+         MEaalAhIeQOioObRCx945A1AHTKzY/r9BSQqg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725995483; x=1726600283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yVh+0umsxe3NmEOyboRonlTg0PRACWPVXWQxD+jYRtk=;
+        b=NFNPGFI/kvPzYqEekHkzmREdl5qRFRDuI9Dzcs4IrefJO6PBdvgAP9v6uQ+iuJr2FY
+         5h9P4W5+BAWTHEt5cBifjLhEZrN5ykeYPKKmNOj9r3SP81bahaJEkTOVrfUVBDXx3Vtx
+         rYMWwyVk2ngIhUYCV0hZfIJvlDO7slcvVjz3IyZUqHrTZkYqrf4PWYDRnnWWYjekIwZW
+         jAKGe/8xdqnmdY8MGS2FUxXyM6xCtsRZx3pLG+FjsFK0qDFOdJ+kODovK+NQIbfmFbDR
+         DzlVgeNfyEOwNaX9+hBJ0EfTP3huv9/yr48ECd6X9GBDnu/UdjntO83jX8gmtx6SlXLS
+         Du0g==
+X-Forwarded-Encrypted: i=1; AJvYcCWA0p4pWLiD4KLkrvXrH8VTTmN0/LXaQv1W+DTp0fHUhyu9lnXxzhJP3J2MZOXZYpdXfE9SMKUbMNqFQUADRDwAK90bocw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw44JC+bghH6PQVW/dU0D8QiwsrbX4wOXMCAEShU69+HCiiXjpU
+	a3M03YGLQioLiF6BbREZQ7ReBPSxGqUs9oPQQsJfiC+xDONwANLXD9OzfICpJbZXHUs/BauRpTn
+	PQf/l
+X-Google-Smtp-Source: AGHT+IG+QS+VP8zMZnQg2OGY3vbTxSTiFxzjoQo84bN9fxs5YjL2aFgOtLdbc9SVDXn6UGVsfNaA6Q==
+X-Received: by 2002:a05:6358:7e85:b0:1b8:48bf:16db with SMTP id e5c5f4694b2df-1b84d1a0a28mr500134655d.16.1725995483313;
+        Tue, 10 Sep 2024 12:11:23 -0700 (PDT)
+Received: from rink.c.googlers.com.com (254.82.172.34.bc.googleusercontent.com. [34.172.82.254])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7968ed5sm334305485a.42.2024.09.10.12.11.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Sep 2024 12:11:22 -0700 (PDT)
+From: Jett Rink <jettrink@chromium.org>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: jettrink@chromium.org,
+	linux-security-module@vger.kernel.org,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH v6] tpm: Add new device/vendor ID 0x50666666
+Date: Tue, 10 Sep 2024 19:11:14 +0000
+Message-ID: <20240910191117.1001581-1-jettrink@chromium.org>
+X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -97,266 +83,95 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove the scaffold member from the lsm_prop. Remove the
-remaining places it is being set.
+Accept another DID:VID for the next generation Google TPM. This TPM
+has the same Ti50 firmware and fulfills the same interface.
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jett Rink <jettrink@chromium.org>
 ---
- include/linux/security.h       |  6 ------
- security/apparmor/audit.c      |  6 +-----
- security/apparmor/lsm.c        |  4 ----
- security/apparmor/secid.c      |  6 +-----
- security/selinux/hooks.c       | 18 +-----------------
- security/selinux/ss/services.c |  4 ----
- security/smack/smack_lsm.c     | 33 ++++-----------------------------
- 7 files changed, 7 insertions(+), 70 deletions(-)
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index ed13cf5bbe1f..86610ae0a9d2 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -144,11 +144,6 @@ enum lockdown_reason {
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
+Changes in v6:
+Update comments and string based on internal review.
+
+Changes in v5:
+Correct Suggested-by tag form.
+
+Changes in v4:
+Add Suggested-by tag. Sorry that I forget.
+
+Changes in v3:
+Refactor ternary operators into helper method.
+
+Changes in v2:
+Patchset 2 applies cleanly
+
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 32 +++++++++++++++++++++++++----
+ 1 file changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+index adf22992138e..fea744234aa0 100644
+--- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
++++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+@@ -30,8 +30,9 @@
+ #define TPM_CR50_MAX_BUFSIZE		64
+ #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
+ #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
+-#define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
+-#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
++#define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID for Cr50 H1 */
++#define TPM_TI50_DT_I2C_DID_VID		0x504a6666L	/* Device and vendor ID for Ti50 DT */
++#define TPM_TI50_OT_I2C_DID_VID		0x50666666L	/* Device and vendor ID for TI50 OT */
+ #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
+ #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
+ #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
+@@ -668,6 +669,27 @@ static const struct of_device_id of_cr50_i2c_match[] = {
+ MODULE_DEVICE_TABLE(of, of_cr50_i2c_match);
+ #endif
  
--/* scaffolding */
--struct lsm_prop_scaffold {
--	u32 secid;
--};
--
- /*
-  * Data exported by the security modules
-  */
-@@ -157,7 +152,6 @@ struct lsm_prop {
- 	struct lsm_prop_smack smack;
- 	struct lsm_prop_apparmor apparmor;
- 	struct lsm_prop_bpf bpf;
--	struct lsm_prop_scaffold scaffold;
- };
- 
- extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
-diff --git a/security/apparmor/audit.c b/security/apparmor/audit.c
-index 87df6fa2a48d..73087d76f649 100644
---- a/security/apparmor/audit.c
-+++ b/security/apparmor/audit.c
-@@ -270,11 +270,7 @@ int aa_audit_rule_match(struct lsm_prop *prop, u32 field, u32 op, void *vrule)
- 	struct aa_label *label;
- 	int found = 0;
- 
--	/* scaffolding */
--	if (!prop->apparmor.label && prop->scaffold.secid)
--		label = aa_secid_to_label(prop->scaffold.secid);
--	else
--		label = prop->apparmor.label;
-+	label = prop->apparmor.label;
- 
- 	if (!label)
- 		return -ENOENT;
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 824a85d2ee85..e2e83519d5c3 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -987,8 +987,6 @@ static void apparmor_current_getlsmprop_subj(struct lsm_prop *prop)
- 	struct aa_label *label = __begin_current_label_crit_section();
- 
- 	prop->apparmor.label = label;
--	/* scaffolding */
--	prop->scaffold.secid = label->secid;
- 	__end_current_label_crit_section(label);
- }
- 
-@@ -998,8 +996,6 @@ static void apparmor_task_getlsmprop_obj(struct task_struct *p,
- 	struct aa_label *label = aa_get_task_label(p);
- 
- 	prop->apparmor.label = label;
--	/* scaffolding */
--	prop->scaffold.secid = label->secid;
- 	aa_put_label(label);
- }
- 
-diff --git a/security/apparmor/secid.c b/security/apparmor/secid.c
-index 34610888559f..6350d107013a 100644
---- a/security/apparmor/secid.c
-+++ b/security/apparmor/secid.c
-@@ -102,11 +102,7 @@ int apparmor_lsmprop_to_secctx(struct lsm_prop *prop, char **secdata,
- {
- 	struct aa_label *label;
- 
--	/* scaffolding */
--	if (!prop->apparmor.label && prop->scaffold.secid)
--		label = aa_secid_to_label(prop->scaffold.secid);
--	else
--		label = prop->apparmor.label;
-+	label = prop->apparmor.label;
- 
- 	return apparmor_label_to_secctx(label, secdata, seclen);
- }
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index a523f38faca0..3177d39faf79 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3510,8 +3510,6 @@ static void selinux_inode_getlsmprop(struct inode *inode, struct lsm_prop *prop)
- 	struct inode_security_struct *isec = inode_security_novalidate(inode);
- 
- 	prop->selinux.secid = isec->sid;
--	/* scaffolding */
--	prop->scaffold.secid = isec->sid;
- }
- 
- static int selinux_inode_copy_up(struct dentry *src, struct cred **new)
-@@ -4032,8 +4030,6 @@ static void selinux_cred_getsecid(const struct cred *c, u32 *secid)
- static void selinux_cred_getlsmprop(const struct cred *c, struct lsm_prop *prop)
- {
- 	prop->selinux.secid = cred_sid(c);
--	/* scaffolding */
--	prop->scaffold.secid = prop->selinux.secid;
- }
- 
- /*
-@@ -4174,16 +4170,12 @@ static int selinux_task_getsid(struct task_struct *p)
- static void selinux_current_getlsmprop_subj(struct lsm_prop *prop)
- {
- 	prop->selinux.secid = current_sid();
--	/* scaffolding */
--	prop->scaffold.secid = prop->selinux.secid;
- }
- 
- static void selinux_task_getlsmprop_obj(struct task_struct *p,
- 					struct lsm_prop *prop)
- {
- 	prop->selinux.secid = task_sid_obj(p);
--	/* scaffolding */
--	prop->scaffold.secid = prop->selinux.secid;
- }
- 
- static int selinux_task_setnice(struct task_struct *p, int nice)
-@@ -6348,8 +6340,6 @@ static void selinux_ipc_getlsmprop(struct kern_ipc_perm *ipcp,
- {
- 	struct ipc_security_struct *isec = selinux_ipc(ipcp);
- 	prop->selinux.secid = isec->sid;
--	/* scaffolding */
--	prop->scaffold.secid = isec->sid;
- }
- 
- static void selinux_d_instantiate(struct dentry *dentry, struct inode *inode)
-@@ -6634,13 +6624,7 @@ static int selinux_secid_to_secctx(u32 secid, char **secdata, u32 *seclen)
- static int selinux_lsmprop_to_secctx(struct lsm_prop *prop, char **secdata,
- 				     u32 *seclen)
- {
--	u32 secid = prop->selinux.secid;
--
--	/* scaffolding */
--	if (!secid)
--		secid = prop->scaffold.secid;
--
--	return selinux_secid_to_secctx(secid, secdata, seclen);
-+	return selinux_secid_to_secctx(prop->selinux.secid, secdata, seclen);
- }
- 
- static int selinux_secctx_to_secid(const char *secdata, u32 seclen, u32 *secid)
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index 74b1aafda399..14c583d171fc 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -3659,10 +3659,6 @@ int selinux_audit_rule_match(struct lsm_prop *prop, u32 field, u32 op, void *vru
- 		goto out;
++/**
++ * tpm_cr50_vid_to_name() - Maps VID to name.
++ * @vendor:	Vendor identifier to map to name
++ *
++ * Return:
++ *	A valid string for the vendor or empty string
++ */
++static const char *tpm_cr50_vid_to_name(u32 vendor)
++{
++	switch (vendor) {
++	case TPM_CR50_I2C_DID_VID:
++		return "cr50";
++	case TPM_TI50_DT_I2C_DID_VID:
++		return "ti50 DT";
++	case TPM_TI50_OT_I2C_DID_VID:
++		return "ti50 OT";
++	default:
++		return "unknown";
++	}
++}
++
+ /**
+  * tpm_cr50_i2c_probe() - Driver probe function.
+  * @client:	I2C client information.
+@@ -741,14 +763,16 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
  	}
  
--	/* scaffolding */
--	if (!prop->selinux.secid && prop->scaffold.secid)
--		prop->selinux.secid = prop->scaffold.secid;
--
- 	ctxt = sidtab_search(policy->sidtab, prop->selinux.secid);
- 	if (unlikely(!ctxt)) {
- 		WARN_ONCE(1, "selinux_audit_rule_match: unrecognized SID %d\n",
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 4d236a5ea5c6..e5b47342c274 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -1655,11 +1655,7 @@ static int smack_inode_listsecurity(struct inode *inode, char *buffer,
-  */
- static void smack_inode_getlsmprop(struct inode *inode, struct lsm_prop *prop)
- {
--	struct smack_known *skp = smk_of_inode(inode);
--
--	prop->smack.skp = skp;
--	/* scaffolding */
--	prop->scaffold.secid = skp->smk_secid;
-+	prop->smack.skp = smk_of_inode(inode);
+ 	vendor = le32_to_cpup((__le32 *)buf);
+-	if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
++	if (vendor != TPM_CR50_I2C_DID_VID &&
++	    vendor != TPM_TI50_DT_I2C_DID_VID &&
++	    vendor != TPM_TI50_OT_I2C_DID_VID) {
+ 		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
+ 		tpm_cr50_release_locality(chip, true);
+ 		return -ENODEV;
+ 	}
+ 
+ 	dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+-		 vendor == TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
++		 tpm_cr50_vid_to_name(vendor),
+ 		 client->addr, client->irq, vendor >> 16);
+ 	return tpm_chip_register(chip);
  }
- 
- /*
-@@ -2162,8 +2158,6 @@ static void smack_cred_getlsmprop(const struct cred *cred,
- {
- 	rcu_read_lock();
- 	prop->smack.skp = smk_of_task(smack_cred(cred));
--	/* scaffolding */
--	prop->scaffold.secid = prop->smack.skp->smk_secid;
- 	rcu_read_unlock();
- }
- 
-@@ -2265,11 +2259,7 @@ static int smack_task_getsid(struct task_struct *p)
-  */
- static void smack_current_getlsmprop_subj(struct lsm_prop *prop)
- {
--	struct smack_known *skp = smk_of_current();
--
--	prop->smack.skp = skp;
--	/* scaffolding */
--	prop->scaffold.secid = skp->smk_secid;
-+	prop->smack.skp = smk_of_current();
- }
- 
- /**
-@@ -2282,11 +2272,7 @@ static void smack_current_getlsmprop_subj(struct lsm_prop *prop)
- static void smack_task_getlsmprop_obj(struct task_struct *p,
- 				      struct lsm_prop *prop)
- {
--	struct smack_known *skp = smk_of_task_struct_obj(p);
--
--	prop->smack.skp = skp;
--	/* scaffolding */
--	prop->scaffold.secid = skp->smk_secid;
-+	prop->smack.skp = smk_of_task_struct_obj(p);
- }
- 
- /**
-@@ -3473,11 +3459,8 @@ static int smack_ipc_permission(struct kern_ipc_perm *ipp, short flag)
- static void smack_ipc_getlsmprop(struct kern_ipc_perm *ipp, struct lsm_prop *prop)
- {
- 	struct smack_known **iskpp = smack_ipc(ipp);
--	struct smack_known *iskp = *iskpp;
- 
--	prop->smack.skp = iskp;
--	/* scaffolding */
--	prop->scaffold.secid = iskp->smk_secid;
-+	prop->smack.skp = *iskpp;
- }
- 
- /**
-@@ -4824,10 +4807,6 @@ static int smack_audit_rule_match(struct lsm_prop *prop, u32 field, u32 op,
- 	if (field != AUDIT_SUBJ_USER && field != AUDIT_OBJ_USER)
- 		return 0;
- 
--	/* scaffolding */
--	if (!skp && prop->scaffold.secid)
--		skp = smack_from_secid(prop->scaffold.secid);
--
- 	/*
- 	 * No need to do string comparisons. If a match occurs,
- 	 * both pointers will point to the same smack_known
-@@ -4888,10 +4867,6 @@ static int smack_lsmprop_to_secctx(struct lsm_prop *prop, char **secdata,
- {
- 	struct smack_known *skp = prop->smack.skp;
- 
--	/* scaffolding */
--	if (!skp && prop->scaffold.secid)
--		skp = smack_from_secid(prop->scaffold.secid);
--
- 	if (secdata)
- 		*secdata = skp->smk_known;
- 	*seclen = strlen(skp->smk_known);
 -- 
-2.46.0
+2.46.0.662.g92d0881bb0-goog
 
 
