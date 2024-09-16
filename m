@@ -1,68 +1,61 @@
-Return-Path: <linux-security-module+bounces-5534-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5542-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D19E97A002
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Sep 2024 13:08:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FC3497A23F
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Sep 2024 14:27:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDD6A28334B
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Sep 2024 11:08:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C0EAB25B57
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Sep 2024 12:27:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66FD8157481;
-	Mon, 16 Sep 2024 11:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB83155741;
+	Mon, 16 Sep 2024 12:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AY0jUZP5"
+	dkim=pass (2048-bit key) header.d=buffet.re header.i=@buffet.re header.b="DwviWWQx"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.buffet.re (mx1.buffet.re [51.83.41.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3992714E2DA;
-	Mon, 16 Sep 2024 11:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEF51553B7;
+	Mon, 16 Sep 2024 12:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.83.41.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726484868; cv=none; b=hc2F81Pc0xW8UXNpyawjJzPxGC6b8fG4TatzCC8aF5/OT8WOCByOFcJSXemIvvhP6gZop3HDzp+lvdWYA+rLUh/x6LZHhrvMYB9Yi2INmK1udi63LAhqrg6ACMfB5TMqOWj2ycUxGRw5GtNicGkKnw65bt6prFeptEdDE8N5pZk=
+	t=1726489559; cv=none; b=tSiU9JugjZc/y1r5D8tiV3YseUkttb/vnAJYkZqhDGzYJFgdw3UIBUnwrGHwP5DvjLSwVqzfqkulYfa0ViZy9dmWHt2rni09sRQxYo/TpMS87jTCj32R6FpgAMEuYUn6VYMxMdw054gJPxIajfGY7k2H1D3RF6j+Ug3JHxzIvYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726484868; c=relaxed/simple;
-	bh=xD2s5On1ZCWWzafhSszKhanrFM8TIDWSq6PdNHlzYy0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nANs7SNLPQr/lvGKp2aRioyHycv1Qaw3ozC4Ycen5TpIBO7VPZVQ6gqJ8IlGzph+uKbjRyK3DJcTZaT9O0mlnJfTMqopEB47ZYPiCtFxjldh25ACiS6jtI1VpKxtxQm5LO8QCNa0DVK2wGNoH6esmjCYrwWZtfzX8avTC9OrCvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AY0jUZP5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7251C4CEC4;
-	Mon, 16 Sep 2024 11:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726484868;
-	bh=xD2s5On1ZCWWzafhSszKhanrFM8TIDWSq6PdNHlzYy0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AY0jUZP5uKNbnY5Z8u9a6VGpH+29Fu+8WquuEtw3+rXhKUC7QWKx2b4USwVrhInDH
-	 m/EbDH33kcy2drqRApYKAZTe7ccQGnXeWmMAsmYA2sMJ4D6o7Wtqb2/Tum+9+s58iF
-	 fhixB1bh2UNfyZ4TaE0F4FJFDBVrWqBkssb0W9jyuMxAskhzveCqLsBT/+tW4qx11E
-	 ZoU8MpjO0zqw7/66DE7H0fvQxemxbwsMzbjiYVXvx3OhMc4STH8fkZme24iBdzH7n1
-	 gQRI4Co0YUDx9z26/Ny/DsuJ1RCDoKrcRQ6s5gQUw9667/G+r5r6YxFFR9zeXC6DfC
-	 uLzUK1ql7nIlQ==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: James.Bottomley@HansenPartnership.com,
-	roberto.sassu@huawei.com,
-	mapengyu@gmail.com,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
+	s=arc-20240116; t=1726489559; c=relaxed/simple;
+	bh=u966p51sgSEBSUnLsK0gdEYkL0s4sRyftNWcEuH4hd4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=e/6xiG5N32mYJDyFKWkhTaKoLvWXH8w2o7sIWx7Wm3jNciqe2/o7eoi7wSJVKaXvidfJaokufvRsGcU7Flkx2Bz+sWsYKSLedg/O6S2pERIGOsfFrQyUL4mjJq971Wp7kAy3DrdqcApDslH8Lzg7q7B1TXRWUrHS+h7SvS0Wycw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=buffet.re; spf=pass smtp.mailfrom=buffet.re; dkim=pass (2048-bit key) header.d=buffet.re header.i=@buffet.re header.b=DwviWWQx; arc=none smtp.client-ip=51.83.41.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=buffet.re
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=buffet.re
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=buffet.re; s=mx1;
+	t=1726489282; bh=u966p51sgSEBSUnLsK0gdEYkL0s4sRyftNWcEuH4hd4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DwviWWQxscsbPjrv4RWiczfo4wRhcHcU81HTlYnf/SlrLgfGAjHdi5gqzpjUwp3qm
+	 4GeDipF972tyjUZvhU77ZJNUgIxrDvNsmAGvE+UkMk1dT7WNg0ib0+sXk7WVWMVgkS
+	 Bpn/mzomS2xNAZ7Rb5IqaaLSVzTKmibJScNnrtkZKDuwKae/HcF+iPwnaT0QIIpk6M
+	 N8xbu03rvq5FRNVvQUsw4T0fJyHSb+4f8shZj6UXk7oZcdTraSbfrhCjnkNMjdjEwt
+	 3i+1IewTFfbXen0OJ16QTpKc/XOLZkHBM+plrlSfdNM94Z5GBr4S5qdFz1UrSuyi5M
+	 k2EH1/Z+B3Upg==
+Received: from localhost.localdomain (unknown [10.0.1.3])
+	by mx1.buffet.re (Postfix) with ESMTPA id 8D0661230AA;
+	Mon, 16 Sep 2024 14:21:21 +0200 (CEST)
+From: Matthieu Buffet <matthieu@buffet.re>
+To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
 	Paul Moore <paul@paul-moore.com>,
 	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-kernel@vger.kernel.org (open list),
-	keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v2 6/6] tpm: flush the auth session only when /dev/tpm0 is open
-Date: Mon, 16 Sep 2024 14:07:11 +0300
-Message-ID: <20240916110714.1396407-7-jarkko@kernel.org>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240916110714.1396407-1-jarkko@kernel.org>
-References: <20240916110714.1396407-1-jarkko@kernel.org>
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Matthieu Buffet <matthieu@buffet.re>
+Subject: [RFC PATCH v1 0/7] landlock: Add UDP access control support
+Date: Mon, 16 Sep 2024 14:22:23 +0200
+Message-Id: <20240916122230.114800-1-matthieu@buffet.re>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -71,71 +64,65 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Instead of flushing and reloading the auth session for every single
-transaction, keep the session open unless /dev/tpm0 is open. In practice
-this means applying TPM2_SA_CONTINUE_SESSION to the session attributes.
-Flush the session always when /dev/tpm0 is written.
+Landlocked processes can freely use UDP sockets. This may allow them to
+escape their sandbox if they can reach UDP sockets of other vulnerable
+processes on the same host, or allow them to send/receive to/from unwanted
+hosts.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/char/tpm/tpm-chip.c       | 1 +
- drivers/char/tpm/tpm-dev-common.c | 1 +
- drivers/char/tpm/tpm-interface.c  | 1 +
- drivers/char/tpm/tpm2-sessions.c  | 4 ++++
- 4 files changed, 7 insertions(+)
+This is a first attempt to add access control around UDP usage, based on
+https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git
+Linux 6.11-rc1 (8400291e289e).
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 0ea00e32f575..7a6bb30d1f32 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -680,6 +680,7 @@ void tpm_chip_unregister(struct tpm_chip *chip)
- 	rc = tpm_try_get_ops(chip);
- 	if (!rc) {
- 		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+			tpm2_end_auth_session(chip);
- 			tpm2_flush_context(chip, chip->null_key);
- 			chip->null_key = 0;
- 		}
-diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-index 4bc07963e260..c6fdeb4feaef 100644
---- a/drivers/char/tpm/tpm-dev-common.c
-+++ b/drivers/char/tpm/tpm-dev-common.c
-@@ -29,6 +29,7 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, struct tpm_space *space,
- 
- #ifdef CONFIG_TCG_TPM2_HMAC
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		tpm2_end_auth_session(chip);
- 		tpm2_flush_context(chip, chip->null_key);
- 		chip->null_key = 0;
- 	}
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index bfa47d48b0f2..2363018fa8fb 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -381,6 +381,7 @@ int tpm_pm_suspend(struct device *dev)
- 	if (!rc) {
- 		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
- #ifdef CONFIG_TCG_TPM2_HMAC
-+			tpm2_end_auth_session(chip);
- 			tpm2_flush_context(chip, chip->null_key);
- 			chip->null_key = 0;
- #endif
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index f7746a165695..efe4b0017a83 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -268,6 +268,10 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 	}
- 
- #ifdef CONFIG_TCG_TPM2_HMAC
-+	/* The first write to /dev/tpm{rm0} will flush the session. */
-+	if (!chip->is_open)
-+		attributes |= TPM2_SA_CONTINUE_SESSION;
-+
- 	/*
- 	 * The Architecture Guide requires us to strip trailing zeros
- 	 * before computing the HMAC
+The first two commits fix what I interpret as a bug in landlock's sample's
+options parsing, in order to allow testing the actual patch contents.
+These two are finished afaict and could be merged separately, but are
+bundled here to have a working base-commit and allow the actual patch to
+get a first round of feedback.
+
+Add two new access rights in the same bind/connect hooks as used for
+TCP, with the same semantics.
+
+Also add two new hooks in recvmsg/sendmsg and two additional rights,
+because:
+- UDP allows processes to send traffic to anyone without any `bind()` nor
+  `connect()` by specifying an arbitrary address in `sendmsg()`, so
+  simply using existing hooks cannot prevent sending that traffic;
+- UDP allows processes to receive traffic on ephemeral ports without any
+  `bind()` (e.g. just `sendmsg()` to 127.0.0.1 to get a port assigned, then
+  you can `recv()` on that port).
+
+When benchmarking `iperf3 --udp` with and without sendmsg/recvmsg
+sandboxing, the difference appears negligible on my laptop, which makes
+me think I'm looking at a completely unrelated bottleneck somewhere else.
+Advice or tests from someone with non-potato hardware and benchmarking
+knowledge would be appreciated.
+
+Selftests updated for UDP, coverage should encompass all non-critical-error
+paths.
+
+This is a first kernel patch attempt, any feedback appreciated.
+
+Link: https://github.com/landlock-lsm/linux/issues/10
+
+Matthieu Buffet (7):
+  samples/landlock: Fix port parsing in sandboxer
+  samples/landlock: Clarify option parsing behaviour
+  landlock: Add UDP bind+connect access control
+  landlock: Add UDP send+recv access control
+  samples/landlock: Add sandboxer UDP access control
+  selftests/landlock: Adapt existing tests for UDP
+  selftests/landlock: Add UDP sendmsg/recvmsg tests
+
+ include/uapi/linux/landlock.h                |  58 ++-
+ samples/landlock/sandboxer.c                 | 181 +++++--
+ security/landlock/limits.h                   |   2 +-
+ security/landlock/net.c                      | 255 +++++++--
+ security/landlock/syscalls.c                 |   2 +-
+ tools/testing/selftests/landlock/base_test.c |   2 +-
+ tools/testing/selftests/landlock/net_test.c  | 518 +++++++++++++++++--
+ 7 files changed, 886 insertions(+), 132 deletions(-)
+
 -- 
-2.46.0
+2.39.5
 
 
