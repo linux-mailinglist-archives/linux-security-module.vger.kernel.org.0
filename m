@@ -1,123 +1,135 @@
-Return-Path: <linux-security-module+bounces-5642-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5640-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E34897EB15
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Sep 2024 13:53:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC6CA97EAE1
+	for <lists+linux-security-module@lfdr.de>; Mon, 23 Sep 2024 13:43:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C38FD1C21583
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Sep 2024 11:53:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D7A5B20D1D
+	for <lists+linux-security-module@lfdr.de>; Mon, 23 Sep 2024 11:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0694197A88;
-	Mon, 23 Sep 2024 11:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YateBYjH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E617196C86;
+	Mon, 23 Sep 2024 11:42:58 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B2D1974EA
-	for <linux-security-module@vger.kernel.org>; Mon, 23 Sep 2024 11:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1305752F62;
+	Mon, 23 Sep 2024 11:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727092372; cv=none; b=amOndVys43aCLLMXpHmcdsQMSBije1uJqQqrJs4QbB9yKzrWl1+xUXfFL0+vTfLNs+s6g0gJEWdCeFCswgC/Nwf16/5c7T5mo4zt22P/OY04yUyeTG67L3Avz1gvij8m7SPT4or2asS/tkRSEeKnW1wL3qHxVp04CM9/LVkJjKw=
+	t=1727091778; cv=none; b=u/+GyF2x6iQFCY5uD80ggImivQQRgTnYth7CV6zFsPisEARpi1VS6JIUWUMNMkpKc38Ek6Vzequ6oeArwSwFDlNmLwHUVeaSYeyGEq6sp1d0vn7ilkOdpR2gTLq1VQlCabyTSMxEmsUboVI1W5i9sgKJN+dFB/xrAgn32xrbVcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727092372; c=relaxed/simple;
-	bh=HZTG+GQe52jS6g5Tcq06PZcX/VJwn6XsB9avf7KWn8s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D9Xs/rOtQ/eoiFO22HsFpezjlfcYqrTZyA6Qi/AL8CSqaw4pDQqsfyXvenn8nA4e3uPP0idlvZoOzXydld57e98PVy980L09fLKfDFzS6D/u/a10B5cSOQvdeCMMoJeHcZezBeZW7Id8W8ific6ctbK5+hVRYPJbEu6jdITlvpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YateBYjH; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e201f6eda9fso3663211276.2
-        for <linux-security-module@vger.kernel.org>; Mon, 23 Sep 2024 04:52:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1727092370; x=1727697170; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QcXFy+gXVZbSoblIlaneu9leYvh2hodNZXQ13I8Q1lY=;
-        b=YateBYjHOHSWxRV1t2MxnJmlOFpCzBtukb9MpkAGPlTCRIZQvfoGWiS3m6FohcDJWF
-         dGRm/mIlTTBk+M8bFRrObWfaEHIDkgnyqSUizo0FPvAWKEXXcyhqaCMX2kQakPK3i+kQ
-         O/AzsbRZRrmSMcYBSMnx/MewVH5EvR9m6Y1Q+wuEGCk9fJDzyyU1WLlP1bd7dr2oMzqU
-         l9lrbLJPWLV0SdbU+3K5ACxNwp1rFCaDkkVZriWE+r2zh9lcPZnmRjj5DdTsj/LB8ySt
-         bsv9zH9UoztlApSnJP5uaJCldD/gXoAYrMUkrck1ZHHa6+z1zob/L/aCtbSbWmBh1ABr
-         Zd1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727092370; x=1727697170;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QcXFy+gXVZbSoblIlaneu9leYvh2hodNZXQ13I8Q1lY=;
-        b=gyR6O6tlPsPwuiMTkO+9RmwCGi91EIh14hghDskbIEnfma9clPt9szrGAloyVZbL+u
-         h6GMPSCiXWpKLp0eOI0iWxHAi1J64G35Nds7daBGsovS1yCF1y4B2P5cj54eI5vp5y9N
-         IaheVJaxshus1hsL4FWe/vX7YiM0e/35vDbRX7sw6fZpN/iUgIFmMoSWmojWbHEYRkEI
-         K0mhd5JuuTbxVvFIB4Wbzzj1mhAM3FGNUghvenT9X7CT96dYmE8R17N9iM+Lhni7Nbld
-         oVYtw1GCJ6ImY3WLrZrU2AZiB+yWb/yAuV0t5NxecNpXxAyynqFI9rHBHJIatUMolQWx
-         Nanw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6IQN4s4l8WoUaBYPvBoD/OYOnXM/AEmddTOqPf9oNBmpVRoyLxfOdHS8C3Fj78eNy9KEQLmQYi9133K1UkNr9uGRgGg0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtivLMidpjFTSY3jPCo6lBfWQMPC7rtkCdynd4F4agi+NlnYCL
-	u9msUst9W9fK+NYmWuO15GDOM2XJ1yl7GtTWt5WVHwHxtok0Zec/EcHkNx6cK2ELdmm9cjCpK5V
-	3PwadNjIWn6E8NFsthnblXaKoDcQZqa1luKoE
-X-Google-Smtp-Source: AGHT+IH67k8daKEYTW3HHmz6negW5CiPM7iyxdQ5CKiRgxjRoq1/X/Upes8Q9bMpCpOlddu//dq56AyXXaFan3/oJXs=
-X-Received: by 2002:a05:6902:248c:b0:e1d:2300:29a1 with SMTP id
- 3f1490d57ef6-e2250c5483bmr7783067276.29.1727092369977; Mon, 23 Sep 2024
- 04:52:49 -0700 (PDT)
+	s=arc-20240116; t=1727091778; c=relaxed/simple;
+	bh=b41EEy3szhsO1UvdNry3bFFvKHTBCd5ElOBFgCAFDuk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GOj555L/fJKUJR3j8OLLxSbDIouLmK7x/Ftbl265pE6EuZ57V2pVoVrXuWUb1UXXtBZPNcoL7ORux+NUjR+VNlPcVxIVGeMa4aOJClnOGqTbeMwL6y2JqXWJgdWF/w3TWMn3GuAIjX4DaYdYiblXfj1ADF68N5zx6SM+Nww13UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XC1Jg6spczfd0m;
+	Mon, 23 Sep 2024 19:40:35 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id 34F7E140384;
+	Mon, 23 Sep 2024 19:42:52 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
+ (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 23 Sep
+ 2024 19:42:51 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <wufan@linux.microsoft.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
+	<serge@hallyn.com>, <deven.desai@linux.microsoft.com>,
+	<linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH] ipe: Fix out-of-bound access of kunit_suite_num_test_cases()
+Date: Mon, 23 Sep 2024 19:52:52 +0800
+Message-ID: <20240923115252.3562956-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240923080733.2914087-1-dongtai.guo@linux.dev>
-In-Reply-To: <20240923080733.2914087-1-dongtai.guo@linux.dev>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 23 Sep 2024 07:52:39 -0400
-Message-ID: <CAHC9VhQM7ingdydXFZ7Mt9FHLc4E1q7Mg_FR7FbFajw068TBig@mail.gmail.com>
-Subject: Re: [PATCH 1/1] netlabel: Add missing comment to struct field
-To: George Guo <dongtai.guo@linux.dev>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, netdev@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	George Guo <guodongtai@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
-On Mon, Sep 23, 2024 at 4:08=E2=80=AFAM George Guo <dongtai.guo@linux.dev> =
-wrote:
->
-> From: George Guo <guodongtai@kylinos.cn>
->
-> add a comment to doi_remove in struct netlbl_calipso_ops.
->
-> Flagged by ./scripts/kernel-doc -none.
->
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
->  include/net/netlabel.h | 1 +
->  1 file changed, 1 insertion(+)
+Currently, there is no terminator entry for ipe_parser_test_cases,
+hence facing below KASAN warning,
 
-Looks good to me.
+	BUG: KASAN: global-out-of-bounds in kunit_suite_num_test_cases+0xb4/0xcc
+	Read of size 8 at addr ffffffe21035fec0 by task swapper/0/1
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+	CPU: 1 UID: 0 PID: 1 Comm: swapper/0 Tainted: G                 N 6.11.0+ #327
+	Tainted: [N]=TEST
+	Hardware name: linux,dummy-virt (DT)
+	Call trace:
+	 dump_backtrace+0x94/0xec
+	 show_stack+0x18/0x24
+	 dump_stack_lvl+0x90/0xd0
+	 print_report+0x1f4/0x5b4
+	 kasan_report+0xc8/0x110
+	 __asan_report_load8_noabort+0x20/0x2c
+	 kunit_suite_num_test_cases+0xb4/0xcc
+	 attr_module_get+0x54/0xc0
+	 kunit_print_attr+0x234/0x358
+	 kunit_run_tests+0x138/0xbf4
+	 __kunit_test_suites_init+0x110/0x1d0
+	 kunit_run_all_tests+0x358/0x394
+	 kernel_init_freeable+0x488/0x61c
+	 kernel_init+0x24/0x1e4
+	 ret_from_fork+0x10/0x20
 
-> diff --git a/include/net/netlabel.h b/include/net/netlabel.h
-> index 529160f76cac..4afd934b1238 100644
-> --- a/include/net/netlabel.h
-> +++ b/include/net/netlabel.h
-> @@ -208,6 +208,7 @@ struct netlbl_lsm_secattr {
->   * struct netlbl_calipso_ops - NetLabel CALIPSO operations
->   * @doi_add: add a CALIPSO DOI
->   * @doi_free: free a CALIPSO DOI
-> + * @doi_remove: remove a CALIPSO DOI
->   * @doi_getdef: returns a reference to a DOI
->   * @doi_putdef: releases a reference of a DOI
->   * @doi_walk: enumerate the DOI list
-> --
-> 2.34.1
+	The buggy address belongs to the variable:
+	 ipe_parser_test_cases+0x60/0x1ba0
 
---=20
-paul-moore.com
+	The buggy address belongs to the virtual mapping at
+	 [ffffffe20ffe0000, ffffffe2120c1000) created by:
+	 paging_init+0x474/0x60c
+
+	The buggy address belongs to the physical page:
+	page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x4535f
+	flags: 0x3fffe0000002000(reserved|node=0|zone=0|lastcpupid=0x1ffff)
+	raw: 03fffe0000002000 fffffffec014d7c8 fffffffec014d7c8 0000000000000000
+	raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+	page dumped because: kasan: bad access detected
+
+	Memory state around the buggy address:
+	 ffffffe21035fd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	 ffffffe21035fe00: 00 00 00 00 00 f9 f9 f9 f9 f9 f9 f9 00 00 00 00
+	>ffffffe21035fe80: 00 00 00 00 00 00 00 00 f9 f9 f9 f9 00 00 00 00
+	                                           ^
+	 ffffffe21035ff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	 ffffffe21035ff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	==================================================================
+
+Add a dummy terminator entry at the end to assist
+kunit_suite_num_test_cases() in traversing up to the terminator entry
+without accessing an out-of-boundary index.
+
+Fixes: 10ca05a76065 ("ipe: kunit test for parser")
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ security/ipe/policy_tests.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/security/ipe/policy_tests.c b/security/ipe/policy_tests.c
+index 89521f6b9994..0725fe36f8bb 100644
+--- a/security/ipe/policy_tests.c
++++ b/security/ipe/policy_tests.c
+@@ -286,6 +286,7 @@ static void ipe_parser_widestring_test(struct kunit *test)
+ static struct kunit_case ipe_parser_test_cases[] = {
+ 	KUNIT_CASE_PARAM(ipe_parser_unsigned_test, ipe_policies_gen_params),
+ 	KUNIT_CASE(ipe_parser_widestring_test),
++	{}
+ };
+ 
+ static struct kunit_suite ipe_parser_test_suite = {
+-- 
+2.34.1
+
 
