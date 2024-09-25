@@ -1,46 +1,46 @@
-Return-Path: <linux-security-module+bounces-5681-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5682-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DE6A985471
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 09:46:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F1D998549C
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 09:53:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCD0A1F21301
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 07:46:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1697E1F21640
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 07:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78AC15853B;
-	Wed, 25 Sep 2024 07:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B8E157472;
+	Wed, 25 Sep 2024 07:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lVE9lrlZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L09mQInY"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E4115852F;
-	Wed, 25 Sep 2024 07:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E43154C19;
+	Wed, 25 Sep 2024 07:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727250403; cv=none; b=jqphBibUP46M71CnvFPOuMQPl6V9wXwTZMUvg3aZgzOTc/0rMbAIQ7xhYa4d1Fwplai9JhmD4VQtEo84ACsTEJIFuOmipgmxliZf7Fz8I11k448u8wR2lpHZXoAsnlxIvH5uXQjJlfEW4xmyMeAl509XhmaWl78PN73EJwzdNk0=
+	t=1727250788; cv=none; b=rPOgEV1DsrnywXZJYBLxEsYpy81U2LB2B/xZsCF+aJr2p9rcMRkMbuikSktcwWa+JlIgYGDGvZIcj4LOIABTYai38KjhDKyocgjwn/qAbnRLWS44BA/kHsEyY+yw11BraRUuCX3O8tHIxIcdJg8c3/juRu7vwlLoSjcL1xlJa0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727250403; c=relaxed/simple;
-	bh=gL9fWAQbBAqwAotYYcbC3CfevPSo7imSq39pgy8VqDI=;
+	s=arc-20240116; t=1727250788; c=relaxed/simple;
+	bh=JFD+/TLICslIFiwVPjoesgFsuWrdwIUahgsyCeOj96U=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=uGwhGACWEdXIt5tPeaiM3DhnOkXzmZ9lAnEO8Z5kpj4zau+hQOxSTZhQ14zRh4FiGEk/JK5KwAZFXZIFR/wFZgM/ekseBcc68hpnLw0pxdfU/BvzGnMUOu8b1jP4eAj3M4T21L+dyOLGg2mHw4pDHAeF8W6kRTalYKrRGkTtKy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lVE9lrlZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C8BC4CEC6;
-	Wed, 25 Sep 2024 07:46:42 +0000 (UTC)
+	 References:In-Reply-To; b=YrahciB5Jy6knaudVu4TzS2+j8SdlzYPGztpWtJ4APsrMCDa0eAw4SnihFtmeKPcKMUJ9B6P3LufHuY0Ww44tTHvDZKVhC9s4suYLwN/PqZtgNcF5G+jjlFkZ/ylZyBDhRin9qjeXlDhUxeJEUcHAddE68f3lfXJAb8EkCMfnug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L09mQInY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AACBC4CEC3;
+	Wed, 25 Sep 2024 07:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727250403;
-	bh=gL9fWAQbBAqwAotYYcbC3CfevPSo7imSq39pgy8VqDI=;
+	s=k20201202; t=1727250787;
+	bh=JFD+/TLICslIFiwVPjoesgFsuWrdwIUahgsyCeOj96U=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=lVE9lrlZ1wM2F1DxuN2JDERdW6f9Yd2VkuwnUejsx9LhwJm00nD8q/0yUSotAWfNo
-	 YZrIDxOkkfCACaOTSexine33/+a3dkTloxe0+ZAwzeqwTLh8/oOpYG8niizcQ3EMbc
-	 hqItl8+dig61uSvXUGXtEO4tFw30kf2R+p/Nvkukjj3idcg2lZGdkVbQhLp6xZQHjL
-	 OkEg9ytMcV5H6qiE5ImhscNRpmUZi3w2gZao8affFyvsCiZeAKU26jVoJJlFiSRMI8
-	 xJKypo4EC9PcX4S6oZvTYdiLcZh5BeIQQ98TdcxibAADMy1w46ZLNtKPSFsxFSUo1v
-	 PhdnOtMuUoaPQ==
+	b=L09mQInYz84uGJZbZpBXxi9BygP+ozfZGhGlnbSuydVvehTh6L9NvfGD2UydxKfhL
+	 MEyFDvEZdwW4ZNQUIc929XNtKRRPo0xzQGqQfAdNbI0NlvNW0B+X7zGN5kmW5hSDC4
+	 yis/qnvflml27pBWUodCn0jc/c3NZc4+B7M6qtxG7CoGXSGnHCKi1DpAfnYkdzPPx5
+	 KL9qWYusc/Uc/H1A6o9JHV+Xl9AeQGGawy6VOADgfxrhLnSrWBmi1UQ110R3BmogeN
+	 3ObjPdwJeCowTRjRUMoTqW0I0y3MBKixy3FBcg7ziotb0kxRNO+LnRJ1Uf2+TOnffk
+	 HW61NjouL8dOQ==
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Sep 2024 10:46:39 +0300
-Message-Id: <D4F75ZA3WH4X.2LTKNXM4X60KY@kernel.org>
+Date: Wed, 25 Sep 2024 10:53:03 +0300
+Message-Id: <D4F7AVX5A3KI.235GJ3NRMGWV@kernel.org>
 Cc: <roberto.sassu@huawei.com>, <mapengyu@gmail.com>,
  <stable@vger.kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>, "David
  Howells" <dhowells@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "James
@@ -72,27 +72,33 @@ References: <20240921120811.1264985-1-jarkko@kernel.org>
  <D4EU5PQLA7BO.2J5MI195F8CIF@kernel.org>
  <2b4c10ca905070158a4bc2fb78d5d5b0f32950ad.camel@HansenPartnership.com>
  <D4F72OC53B3R.TJ4FDFPRDC8V@kernel.org>
-In-Reply-To: <D4F72OC53B3R.TJ4FDFPRDC8V@kernel.org>
+ <D4F75ZA3WH4X.2LTKNXM4X60KY@kernel.org>
+In-Reply-To: <D4F75ZA3WH4X.2LTKNXM4X60KY@kernel.org>
 
-On Wed Sep 25, 2024 at 10:42 AM EEST, Jarkko Sakkinen wrote:
-> Fair enough. I can buy this.
+On Wed Sep 25, 2024 at 10:46 AM EEST, Jarkko Sakkinen wrote:
+> On Wed Sep 25, 2024 at 10:42 AM EEST, Jarkko Sakkinen wrote:
+> > Fair enough. I can buy this.
+> >
+> > I'll phrase it that (since it was mentioned in the bugzilla comment)
+> > in the bug in question the root is in PCR extend but since in my own
+> > tests I got overhead from trusted keys I also mention that it overally
+> > affects also that and tpm2_get_random().
 >
-> I'll phrase it that (since it was mentioned in the bugzilla comment)
-> in the bug in question the root is in PCR extend but since in my own
-> tests I got overhead from trusted keys I also mention that it overally
-> affects also that and tpm2_get_random().
+> I do not want to take null key flushing away although I got the
+> reasoning given the small amount of time is saved (maybe 25-50 ms
+> in my QEMU setup if I recall correctly) but it would make sense to
+> squash it auth session patch.
+>
+> I'll also check 1/2 and 2/2 if I'm doing too much in them. Not
+> adding any tags to v6 and it really makes sense to develop=20
+> benchmarks and not rush with the new version now that I got
+> also your feedback, since it is past rc1 timeline.
+>
+> Good target rcX would be around rc3.
 
-I do not want to take null key flushing away although I got the
-reasoning given the small amount of time is saved (maybe 25-50 ms
-in my QEMU setup if I recall correctly) but it would make sense to
-squash it auth session patch.
-
-I'll also check 1/2 and 2/2 if I'm doing too much in them. Not
-adding any tags to v6 and it really makes sense to develop=20
-benchmarks and not rush with the new version now that I got
-also your feedback, since it is past rc1 timeline.
-
-Good target rcX would be around rc3.
+I have to admit this: I had blind spot on that PCR extend comment
+because I did not get hits on that when testing this so it definitely
+needs to be documented. I spotted it only yesterday.
 
 BR, Jarkko
 
