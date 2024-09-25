@@ -1,133 +1,289 @@
-Return-Path: <linux-security-module+bounces-5691-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5693-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 379E198579A
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 13:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C50A98597C
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 13:54:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFAFA28136B
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 11:06:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC01F282C48
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 11:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E815F1474A5;
-	Wed, 25 Sep 2024 11:06:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBD83185B51;
+	Wed, 25 Sep 2024 11:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y0qoZkaG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNeESjoZ"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C09126BFE
-	for <linux-security-module@vger.kernel.org>; Wed, 25 Sep 2024 11:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAA9172BA8;
+	Wed, 25 Sep 2024 11:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727262385; cv=none; b=KzFJPcdDTmQkecudwbr4C5D/eu8m76qZTI53bPybYihfJCbMfm2nMKmse+dae7nKDogQqVA2X5hYxSriVD/AQSq3UvjpoI/OE0EGWDijKtSkDaPaz0UNYoiyTqrzmyGvUtnzU0bPx9qsOWPQ3OT9y0eG1i1EbqkqXipw99y73+k=
+	t=1727264355; cv=none; b=qo6xm2Ob/293yZlRlH2A+4iZf3wACbRA2p6XbQ2EtW/5cojAbZBqEcHHTsxZNFrtiKC7amlOVUifIIf+MUEp3IzWizg6G0G49Af8HVcxE3guGg2QLF0LV5KE/is9fLhoN9hAjdYukH99dpIX3Eo61u60nrSi3Whls2qO6dfpcgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727262385; c=relaxed/simple;
-	bh=v9SOENpp+GEqMEfpbzjHUOzd9Uxz8a8eI7GUtlWQs+g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IkRvbvxAapCFnQJsKaELwHPrhgbDyqvY6DH4ouYwH2SPJ6Y8y/aYSlgOG/TafVlz0/rMHL/5DKuHoM/Fxvf4PMQDEBb/mGVRUcA+VSFjUjdmL69igOQW5p0mNMfe1f2yK0zHxyh6druOEIigkwQ3oIrnDhEyY2EiSCH2jP58aBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y0qoZkaG; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42cb57f8b41so84336255e9.0
-        for <linux-security-module@vger.kernel.org>; Wed, 25 Sep 2024 04:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727262382; x=1727867182; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JhQ4TPCHuI58LZ38MBixhcUn27fdFhOzEs54JQFmEu4=;
-        b=Y0qoZkaGAi7LcUT3oJb4NisLSJU/jQJH27zodADr2z0dvPpCGPDg5u7nQ4RIsCYMak
-         le/mIhlmqZ8X6+GmN3PP2QMCKp6vbmxzotaBm1Yuw0RXmtw32VA+G7yMyWtf4xmzAhKM
-         UcGaIYxfzd8JowKxx+i3zJ6nNRBJXXxEklTgZMxjg+YgF1Z3ofeLDp/41kfNnENqDcCI
-         luE4FdlQEo4BAdOUU66phuSQdN3pka/+v/NSGPGVtV4o41NqrBDjLgAdZqbjZXl89pIh
-         tYk0Dth2KHO+fllaG9Qs7ETkDZAIAD0pLvwMM632vU9VIipk2b6BElfMGUO2065bcTEx
-         X8cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727262382; x=1727867182;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JhQ4TPCHuI58LZ38MBixhcUn27fdFhOzEs54JQFmEu4=;
-        b=gRAYsWZD7qL4rYGfJWE6pGRFkkM46LNckJc85xKX9CfSa0W83Xf0646nx2OKHQ4aGg
-         tIR50J62ZzNIZg5lQoF5r6LQ6j5Yx8ieeuHhr/I2TFHD993kx+AIaolwIo2d+4uRzr43
-         bn5+W59BSHoLpxfvTonN06/5AmPBQ0/GByrIyoa0KAUsAHZpqyiqiKRMTmfmH7y2bOzx
-         1X/JHQI2Vh+LcCRkEUGnOFgDSWwaGvcJMnw5qB0JckaugBG3vR92BEfZQpybsEvf2/hJ
-         M2Uj2qxboipSwpzc1TTqO8DnPRsJ6YHl3ogqkLGH604fE7TzvvmfIPcjpBuACwkzf9iv
-         YkBg==
-X-Forwarded-Encrypted: i=1; AJvYcCWTTsQ2XB+BEIacNdb2UBGNGuo7geLk7O2lhYa0l9Ex0xPq715XosmdedBinu2lqYQUE1BxmvQWDWma+S1LqwIUaoPHE4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDw0Ew17k+yMIKEgw0xSh1wt62I75XJUlPmUN6UJXN8R+gX9pU
-	qL5lxRLQEWwZ8QS+NigHo5QscgF7IUYJV2EteOaCSiCuStT/yrqSX10nBL0aRtZmaP/0UZG5XJr
-	sC/mSZLEm6f3zDKsoWsYIzvNKQXWlFoE9ewbO
-X-Google-Smtp-Source: AGHT+IGFAj+j04oaHOFqsP7FAM4DEPPjCdbCbDCCKy/XEfJz3JFRtsBnFMPeIPy5+2A+yRs/huLSjBw7dGu97fMWSko=
-X-Received: by 2002:a5d:5d86:0:b0:37c:c51b:8d9c with SMTP id
- ffacd0b85a97d-37cc51b8ee6mr1224327f8f.38.1727262382323; Wed, 25 Sep 2024
- 04:06:22 -0700 (PDT)
+	s=arc-20240116; t=1727264355; c=relaxed/simple;
+	bh=vTXufl0h3C6la4/6PIaX/ckU/WVPy9StrNvAw7Nq+fY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VKJIUaHvhVM+vSHkV35AJY+sP0rajkXdNcmUORPSZIXLXJmWD7YIj7REFkHJ44qQQ1IY+3MpWOjclc70tnN+Igh1YeFOTkoTRFZ/P17kbOuYZLsiGbFE8SKFKmDsDXw9B8cw7iuVeKcYN4DANgshXK7YdMwK2fIY3yqZ9HiMlVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNeESjoZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02648C4CEC3;
+	Wed, 25 Sep 2024 11:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727264355;
+	bh=vTXufl0h3C6la4/6PIaX/ckU/WVPy9StrNvAw7Nq+fY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nNeESjoZH+NXCi2aMo3VHDD+aIVZahKGTjmYEjZIz5Wc5TU2mi9SeUiaU+DQ58c17
+	 sq6ioEATGqQtHFwLEU4gTLXXGwFwskvllKwwBW+oV9Gb2lMlGC1y+8PvcvK5seaUgS
+	 vZb2Jvr6uBWDdomgApp0BtkqhLAbiXlgjcmczylNvudm8njDQxVoolPsMjB8tpv6ew
+	 6MIaU1pfpQrWq4pkIVfPJkMWCZUuvVjVj0tnHJ2sKmdnpVFTQ2kmBfu2U3RE7Eh5d2
+	 eIZjObSYQQPT5ScLwubRYOnRYQoXvtdNVl7+/eXNTOvrfsf6PZ5COVmgscnlHChZmA
+	 WPGAH7S7+T51Q==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Adrian Ratiu <adrian.ratiu@collabora.com>,
+	Doug Anderson <dianders@chromium.org>,
+	Jeff Xu <jeffxu@google.com>,
+	Jann Horn <jannh@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	corbet@lwn.net,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	thuth@redhat.com,
+	bp@alien8.de,
+	jpoimboe@kernel.org,
+	tglx@linutronix.de,
+	paulmck@kernel.org,
+	tony@atomide.com,
+	xiongwei.song@windriver.com,
+	akpm@linux-foundation.org,
+	oleg@redhat.com,
+	mic@digikod.net,
+	jlayton@kernel.org,
+	casey@schaufler-ca.com,
+	viro@zeniv.linux.org.uk,
+	adobriyan@gmail.com,
+	linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.11 064/244] proc: add config & param to block forcing mem writes
+Date: Wed, 25 Sep 2024 07:24:45 -0400
+Message-ID: <20240925113641.1297102-64-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240925113641.1297102-1-sashal@kernel.org>
+References: <20240925113641.1297102-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240915-alice-file-v10-0-88484f7a3dcf@google.com>
- <20240915-alice-file-v10-1-88484f7a3dcf@google.com> <20240924194540.GA636453@mail.hallyn.com>
-In-Reply-To: <20240924194540.GA636453@mail.hallyn.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Wed, 25 Sep 2024 13:06:10 +0200
-Message-ID: <CAH5fLgggtjNAAotBzwRQ4RYQ9+WDom0MRyYFMnQ+E5UXgOc3RQ@mail.gmail.com>
-Subject: Re: [PATCH v10 1/8] rust: types: add `NotThreadSafe`
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Carlos Llamas <cmllamas@google.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Matthew Wilcox <willy@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Daniel Xu <dxu@dxuuu.xyz>, 
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, Kees Cook <kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.11
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 24, 2024 at 9:45=E2=80=AFPM Serge E. Hallyn <serge@hallyn.com> =
-wrote:
->
-> On Sun, Sep 15, 2024 at 02:31:27PM +0000, Alice Ryhl wrote:
-> > This introduces a new marker type for types that shouldn't be thread
-> > safe. By adding a field of this type to a struct, it becomes non-Send
-> > and non-Sync, which means that it cannot be accessed in any way from
-> > threads other than the one it was created on.
-> >
-> > This is useful for APIs that require globals such as `current` to remai=
-n
-> > constant while the value exists.
-> >
-> > We update two existing users in the Kernel to use this helper:
-> >
-> >  * `Task::current()` - moving the return type of this value to a
-> >    different thread would not be safe as you can no longer be guarantee=
-d
-> >    that the `current` pointer remains valid.
-> >  * Lock guards. Mutexes and spinlocks should be unlocked on the same
-> >    thread as where they were locked, so we enforce this using the Send
-> >    trait.
->
-> Hi,
->
-> this sounds useful, however from kernel side when I think thread-safe,
-> I think must not be used across a sleep.  Would something like ThreadLock=
-ed
-> or LockedToThread make sense?
+From: Adrian Ratiu <adrian.ratiu@collabora.com>
 
-Hmm, those names seem pretty similar to the current name to me?
+[ Upstream commit 41e8149c8892ed1962bd15350b3c3e6e90cba7f4 ]
 
-Alice
+This adds a Kconfig option and boot param to allow removing
+the FOLL_FORCE flag from /proc/pid/mem write calls because
+it can be abused.
+
+The traditional forcing behavior is kept as default because
+it can break GDB and some other use cases.
+
+Previously we tried a more sophisticated approach allowing
+distributions to fine-tune /proc/pid/mem behavior, however
+that got NAK-ed by Linus [1], who prefers this simpler
+approach with semantics also easier to understand for users.
+
+Link: https://lore.kernel.org/lkml/CAHk-=wiGWLChxYmUA5HrT5aopZrB7_2VTa0NLZcxORgkUe5tEQ@mail.gmail.com/ [1]
+Cc: Doug Anderson <dianders@chromium.org>
+Cc: Jeff Xu <jeffxu@google.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+Link: https://lore.kernel.org/r/20240802080225.89408-1-adrian.ratiu@collabora.com
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../admin-guide/kernel-parameters.txt         | 10 +++
+ fs/proc/base.c                                | 61 ++++++++++++++++++-
+ security/Kconfig                              | 32 ++++++++++
+ 3 files changed, 102 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 09126bb8cc9ff..be010fec76541 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4788,6 +4788,16 @@
+ 	printk.time=	Show timing data prefixed to each printk message line
+ 			Format: <bool>  (1/Y/y=enable, 0/N/n=disable)
+ 
++	proc_mem.force_override= [KNL]
++			Format: {always | ptrace | never}
++			Traditionally /proc/pid/mem allows memory permissions to be
++			overridden without restrictions. This option may be set to
++			restrict that. Can be one of:
++			- 'always': traditional behavior always allows mem overrides.
++			- 'ptrace': only allow mem overrides for active ptracers.
++			- 'never':  never allow mem overrides.
++			If not specified, default is the CONFIG_PROC_MEM_* choice.
++
+ 	processor.max_cstate=	[HW,ACPI]
+ 			Limit processor to maximum C-state
+ 			max_cstate=9 overrides any DMI blacklist limit.
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 72a1acd03675c..f389c69767fa5 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -85,6 +85,7 @@
+ #include <linux/elf.h>
+ #include <linux/pid_namespace.h>
+ #include <linux/user_namespace.h>
++#include <linux/fs_parser.h>
+ #include <linux/fs_struct.h>
+ #include <linux/slab.h>
+ #include <linux/sched/autogroup.h>
+@@ -117,6 +118,40 @@
+ static u8 nlink_tid __ro_after_init;
+ static u8 nlink_tgid __ro_after_init;
+ 
++enum proc_mem_force {
++	PROC_MEM_FORCE_ALWAYS,
++	PROC_MEM_FORCE_PTRACE,
++	PROC_MEM_FORCE_NEVER
++};
++
++static enum proc_mem_force proc_mem_force_override __ro_after_init =
++	IS_ENABLED(CONFIG_PROC_MEM_NO_FORCE) ? PROC_MEM_FORCE_NEVER :
++	IS_ENABLED(CONFIG_PROC_MEM_FORCE_PTRACE) ? PROC_MEM_FORCE_PTRACE :
++	PROC_MEM_FORCE_ALWAYS;
++
++static const struct constant_table proc_mem_force_table[] __initconst = {
++	{ "always", PROC_MEM_FORCE_ALWAYS },
++	{ "ptrace", PROC_MEM_FORCE_PTRACE },
++	{ "never", PROC_MEM_FORCE_NEVER },
++	{ }
++};
++
++static int __init early_proc_mem_force_override(char *buf)
++{
++	if (!buf)
++		return -EINVAL;
++
++	/*
++	 * lookup_constant() defaults to proc_mem_force_override to preseve
++	 * the initial Kconfig choice in case an invalid param gets passed.
++	 */
++	proc_mem_force_override = lookup_constant(proc_mem_force_table,
++						  buf, proc_mem_force_override);
++
++	return 0;
++}
++early_param("proc_mem.force_override", early_proc_mem_force_override);
++
+ struct pid_entry {
+ 	const char *name;
+ 	unsigned int len;
+@@ -835,6 +870,28 @@ static int mem_open(struct inode *inode, struct file *file)
+ 	return ret;
+ }
+ 
++static bool proc_mem_foll_force(struct file *file, struct mm_struct *mm)
++{
++	struct task_struct *task;
++	bool ptrace_active = false;
++
++	switch (proc_mem_force_override) {
++	case PROC_MEM_FORCE_NEVER:
++		return false;
++	case PROC_MEM_FORCE_PTRACE:
++		task = get_proc_task(file_inode(file));
++		if (task) {
++			ptrace_active =	READ_ONCE(task->ptrace) &&
++					READ_ONCE(task->mm) == mm &&
++					READ_ONCE(task->parent) == current;
++			put_task_struct(task);
++		}
++		return ptrace_active;
++	default:
++		return true;
++	}
++}
++
+ static ssize_t mem_rw(struct file *file, char __user *buf,
+ 			size_t count, loff_t *ppos, int write)
+ {
+@@ -855,7 +912,9 @@ static ssize_t mem_rw(struct file *file, char __user *buf,
+ 	if (!mmget_not_zero(mm))
+ 		goto free;
+ 
+-	flags = FOLL_FORCE | (write ? FOLL_WRITE : 0);
++	flags = write ? FOLL_WRITE : 0;
++	if (proc_mem_foll_force(file, mm))
++		flags |= FOLL_FORCE;
+ 
+ 	while (count > 0) {
+ 		size_t this_len = min_t(size_t, count, PAGE_SIZE);
+diff --git a/security/Kconfig b/security/Kconfig
+index 412e76f1575d0..a93c1a9b7c283 100644
+--- a/security/Kconfig
++++ b/security/Kconfig
+@@ -19,6 +19,38 @@ config SECURITY_DMESG_RESTRICT
+ 
+ 	  If you are unsure how to answer this question, answer N.
+ 
++choice
++	prompt "Allow /proc/pid/mem access override"
++	default PROC_MEM_ALWAYS_FORCE
++	help
++	  Traditionally /proc/pid/mem allows users to override memory
++	  permissions for users like ptrace, assuming they have ptrace
++	  capability.
++
++	  This allows people to limit that - either never override, or
++	  require actual active ptrace attachment.
++
++	  Defaults to the traditional behavior (for now)
++
++config PROC_MEM_ALWAYS_FORCE
++	bool "Traditional /proc/pid/mem behavior"
++	help
++	  This allows /proc/pid/mem accesses to override memory mapping
++	  permissions if you have ptrace access rights.
++
++config PROC_MEM_FORCE_PTRACE
++	bool "Require active ptrace() use for access override"
++	help
++	  This allows /proc/pid/mem accesses to override memory mapping
++	  permissions for active ptracers like gdb.
++
++config PROC_MEM_NO_FORCE
++	bool "Never"
++	help
++	  Never override memory mapping permissions
++
++endchoice
++
+ config SECURITY
+ 	bool "Enable different security models"
+ 	depends on SYSFS
+-- 
+2.43.0
+
 
