@@ -1,337 +1,120 @@
-Return-Path: <linux-security-module+bounces-5705-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5707-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5053D986670
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 20:40:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A65EE9866C0
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 21:20:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89FC11C22FA1
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 18:40:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49B882825A8
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Sep 2024 19:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24CE13AD2F;
-	Wed, 25 Sep 2024 18:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04DE12C7FD;
+	Wed, 25 Sep 2024 19:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="GCi5WT9z"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XXtraLGD"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E5F1369BC
-	for <linux-security-module@vger.kernel.org>; Wed, 25 Sep 2024 18:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6F284037
+	for <linux-security-module@vger.kernel.org>; Wed, 25 Sep 2024 19:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727289616; cv=none; b=Ks9Lm9PT1QqE/CllM+h1sP+PibwfSvxnuK80P2a37NP+q+0O9VCV7RXfVpIhC5A/sZynhjV8cySdfbXmYIZ2cl16MParX0X0rp1wB8iKPEEC7u2S6Yu4rqlrtHmnYIu8FrV8+rp/pMOyknvxuVn3wrC/6rv2YocscWL87Tgtcsk=
+	t=1727292032; cv=none; b=FTmyulOlJ4EsvJE789Dr8upWhRTrwquL+HMRS0VwNkWUYar19d5WQZwDsfIvQvMMiMO0KuIlhj7QoiQY9n8ES6T5doNTp9YwoNZy8VLHzjN1RcqDRx76UBBpKHm9nQjOEmkghqAOUFD6HPH0fFyBlrbKcNf4YV2qWDY93/ePtaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727289616; c=relaxed/simple;
-	bh=oXkJhf4zlAd8vbsDUcGIXjbs5T7UCPeUCESzHoJMqoE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VR7oj2EZIx5Kfdck2z9ucr3Opc/uoA4xId/myqBW6+FqUkQ5YNrnQgxfIewzToEqIrXESATMTKe4S1smlBx/9LyiuiBOoeV3PyrOxIYC6h74vBZn2+nvLuM0VjV/vq5bzM7ZFy1kdQI3hR5wr4tnUnjmo5fNKzfe9J5UId9VsNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=GCi5WT9z; arc=none smtp.client-ip=84.16.66.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XDQLN6Mk0z18WP;
-	Wed, 25 Sep 2024 20:31:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1727289116;
-	bh=OJ1R85/3jKtXbBSN+6FrxKGEnEDKYPXbtDwh5v0pVAY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GCi5WT9zSgFOBsBPBl4MxG2mcqvPsOkOeNHP1EjrwF+ZMj3rNouNA6S5JCekO21PD
-	 bvWMrkRXwR8s+5CF6cSzcE+lEZwG0HWdSulaaYw7LfIsV9e/1H32+ibBRJHtTZKHiX
-	 C9pWB/waURrOquZR/8THgva3m5zQ9jOedvwTSQaU=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XDQLN0yfNzBrx;
-	Wed, 25 Sep 2024 20:31:56 +0200 (CEST)
-Date: Wed, 25 Sep 2024 20:31:54 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	willemdebruijn.kernel@gmail.com, gnoack3000@gmail.com, linux-security-module@vger.kernel.org, 
-	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org, yusongping@huawei.com, 
-	artem.kuzin@huawei.com, konstantin.meskhidze@huawei.com, 
-	Matthieu Buffet <matthieu@buffet.re>
-Subject: Re: [RFC PATCH v2 4/9] selftests/landlock: Test listening restriction
-Message-ID: <20240925.aeJ2du2phi4i@digikod.net>
-References: <20240814030151.2380280-1-ivanov.mikhail1@huawei-partners.com>
- <20240814030151.2380280-5-ivanov.mikhail1@huawei-partners.com>
- <ZsSMe1Ce4OiysGRu@google.com>
- <22dcebae-dc5d-0bf1-c686-d2f444558106@huawei-partners.com>
+	s=arc-20240116; t=1727292032; c=relaxed/simple;
+	bh=bUwyJE+2HB4BFiaxFSQQ5eh7au+JrhTrHh6hJ2Ml5f0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Hn2eJRBNd6/oqJHrmmQ60Y2J1kxEKmH09UjspINbECRrIJCjv/F7tGhngqXetDlEAjrcuVW9Jx/6IZmGjtmWhCfeQRfO8AhGTcBgnf2maLqZfydo5w9kkkx/idtEdahefaCna8eF2//Zz9tPChnuWLqrM1xXPsLudKVjPAnlnI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XXtraLGD; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7a9a7bea3cfso14948585a.1
+        for <linux-security-module@vger.kernel.org>; Wed, 25 Sep 2024 12:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1727292029; x=1727896829; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=glGirgm+F5nwQC3LNIKP0kswh+8E+08E5znnFLU+t4Y=;
+        b=XXtraLGDpT9V0pnRdCP5XA2bjK7Zyc650c6kGRBSXcMXPBzcQ+kvThWz9KnDQLeZOM
+         1OM+Nu1q3DwP6c2VlwvXVFJhxUBtde5XNM2Z2Bm6JAG6MidlKOLu6ui3rWRi7f81PaRQ
+         Zpg1PgMrErKylmOjcB57979CksSuQPlTtKFC/zIwLnuhwgGhsfopNyke/QZHJg69X1/L
+         +xOqyg19enJVYvsF9q5h0OCzQ+EdEULDsh1ZISLM6yMrae/k/R/3DlQWXBq6tPlWvrDq
+         ID3LFJ/7DK8imKx5Zpwly+I0nNEKGcrL5j4w41RSXACOcprO8YrYktXruPfpPRWzn4rb
+         2/mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727292029; x=1727896829;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=glGirgm+F5nwQC3LNIKP0kswh+8E+08E5znnFLU+t4Y=;
+        b=kZxpdgOv10Gr6ctCGUjDS9ZR4rR6iPowzRlpYmbcFpmoNKMv6eEf9Qw0d4Y3btYbYC
+         q2cVKTgfh88Atrxc8ePzba62ULdi4rQ9JNTJgHpmxuL5TbsoiCrr/kmgqxzkJO8w6GDk
+         0N9AZTSwfgQ/wYXVvk1yO8MGZs1BsfA/yynihqeLs7Cm9FHr29w9yWcAOiJkn+DNh5/g
+         A2c/08pCV7RZxgk4SuzZVZGkcXnWt1+kMXH7dVkVBX792V+mnCn8DhtUvPlRC0/H3fyJ
+         EX7QorgJ6gziWHxmq2opAbto2V8v/0601JA0ZZra9L2DFJMB2EJcKYyhccomwYV7Yxxa
+         bdUA==
+X-Gm-Message-State: AOJu0Yw0Djccc8Mrz0gXFdwajUF3Yd9Jj9uY+7k4aAvyeZiEkWZ6+5Uz
+	NJunkOKMISTEFnnHEwk6wClR77AIxJr3I+L34+rMHBdjfbT7KRxDJbFsRgmyYdEct9Nglz3oJ24
+	=
+X-Google-Smtp-Source: AGHT+IEt5Vc4efcFyhe1HCk8ez5tzWlppLeI8khusQahmyiae2qGVRjhKhTEnz7BvGtG/ToLXjZZAA==
+X-Received: by 2002:a05:620a:1a27:b0:7ac:9aa5:c5bc with SMTP id af79cd13be357-7ace744d90amr555821785a.47.1727292029469;
+        Wed, 25 Sep 2024 12:20:29 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7acde5fcc98sm200134085a.117.2024.09.25.12.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2024 12:20:29 -0700 (PDT)
+From: Paul Moore <paul@paul-moore.com>
+To: linux-security-module@vger.kernel.org,
+	serge@hallyn.com
+Subject: [RFC PATCH] capabilities: remove cap_mmap_file()
+Date: Wed, 25 Sep 2024 15:20:19 -0400
+Message-ID: <20240925192018.15290-2-paul@paul-moore.com>
+X-Mailer: git-send-email 2.46.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1174; i=paul@paul-moore.com; h=from:subject; bh=bUwyJE+2HB4BFiaxFSQQ5eh7au+JrhTrHh6hJ2Ml5f0=; b=owEBbQKS/ZANAwAIAeog8tqXN4lzAcsmYgBm9GJzVIDZ5kZv4QV5FHQdvRtatIJitq217QS3n 1VOWZY+C9KJAjMEAAEIAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCZvRicwAKCRDqIPLalzeJ c3Z/EAClFziXUbIcLj3qVdEB66thzEz+Tb+DIvvlGzp0RtERwa952Dl4b7qJrqFcPdgmiJhs+37 e3CCDb0+a9iNqKITB5v7J06gu6bqgmevXm/b3iBZNjsLdMY7OqD+bNaDPhnFCUmHBjO18UHOr4A WZs3HyXHW3TVIvvUwwbF5jRy6dHwj302+ihjHy6CFqqwl/D4Vaz2mbRlczx76n5UDbDf2K4WbIM jJfqRFNN/ztVvOXZ4x26sJpfP9Q677jPEu6N1Hok8uPcHvVN1OkAdFqVMBAMWOso769Uyry2Are xWD+gMTX6ppX9TRl+mKo4o2nGf7HOBtsjpcV6Suxqb6dvz8uML9K4l4zXfsS7cOcplXqvj/ezSt yDjf58SPfVFhqFgGDU6mQYhvrNTLbQc7fx4cm+kq0oxnnWDYlFs6J4GuBoJQaRiu+dlZb8j5N3F HRSa7WdKXvJR8pNqnp6zmBi4K1ekgyYhcJJ+xxvHlC8eoeScaEA032lh05GbpA//a8J7sIovZ2t D5cyodsG8Oi0v0dc+GujmT1MYWbPa0vo2Y6BMmmuA2Ws72X5RXBC4Cm4CbbU8i8R7AsNfYkHiU0 fhd7it8P/ywLubk70cXTfg4zRgzOXNeT1etOuz7da/H85Tseha4eJ4UbgP9kSVbv7q7xlriD1Xq ovWSTsKw4KVXv8A==
+X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <22dcebae-dc5d-0bf1-c686-d2f444558106@huawei-partners.com>
-X-Infomaniak-Routing: alpha
 
-On Tue, Aug 20, 2024 at 09:46:56PM +0300, Mikhail Ivanov wrote:
-> 8/20/2024 3:31 PM, Günther Noack wrote:
-> > On Wed, Aug 14, 2024 at 11:01:46AM +0800, Mikhail Ivanov wrote:
-> > > Add a test for listening restriction. It's similar to protocol.bind and
-> > > protocol.connect tests.
-> > > 
-> > > Signed-off-by: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-> > > ---
-> > >   tools/testing/selftests/landlock/net_test.c | 44 +++++++++++++++++++++
-> > >   1 file changed, 44 insertions(+)
-> > > 
-> > > diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
-> > > index 8126f5c0160f..b6fe9bde205f 100644
-> > > --- a/tools/testing/selftests/landlock/net_test.c
-> > > +++ b/tools/testing/selftests/landlock/net_test.c
-> > > @@ -689,6 +689,50 @@ TEST_F(protocol, connect)
-> > >   				    restricted, restricted);
-> > >   }
-> > > +TEST_F(protocol, listen)
-> > > +{
-> > > +	if (variant->sandbox == TCP_SANDBOX) {
-> > > +		const struct landlock_ruleset_attr ruleset_attr = {
-> > > +			.handled_access_net = ACCESS_ALL,
-> > > +		};
-> > > +		const struct landlock_net_port_attr tcp_not_restricted_p0 = {
-> > > +			.allowed_access = ACCESS_ALL,
-> > > +			.port = self->srv0.port,
-> > > +		};
-> > > +		const struct landlock_net_port_attr tcp_denied_listen_p1 = {
-> > > +			.allowed_access = ACCESS_ALL &
-> > > +					  ~LANDLOCK_ACCESS_NET_LISTEN_TCP,
-> > > +			.port = self->srv1.port,
-> > > +		};
-> > > +		int ruleset_fd;
-> > > +
-> > > +		ruleset_fd = landlock_create_ruleset(&ruleset_attr,
-> > > +						     sizeof(ruleset_attr), 0);
-> > 
-> > Nit: The declaration and the assignment of ruleset_fd can be merged into one
-> > line and made const.  (Not a big deal, but it was done a bit more consistently
-> > in the rest of the code, I think.)
-> 
-> Current variant is performed in every TEST_F() method. I assume that
-> this is required in order to not make a mess by combining the
-> ruleset_attr and several rule structures with the operation of creating
-> ruleset. WDYT?
+The cap_mmap_file() LSM callback returns the default value for the
+security_mmap_file() LSM hook and can be safely removed.
 
-Using variant->sandbox helps identify test scenarios.
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+---
+ security/commoncap.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-> 
-> > 
-> > > +		ASSERT_LE(0, ruleset_fd);
-> > > +
-> > > +		/* Allows all actions for the first port. */
-> > > +		ASSERT_EQ(0,
-> > > +			  landlock_add_rule(ruleset_fd, LANDLOCK_RULE_NET_PORT,
-> > > +					    &tcp_not_restricted_p0, 0));
-> > > +
-> > > +		/* Allows all actions despite listen. */
-> > > +		ASSERT_EQ(0,
-> > > +			  landlock_add_rule(ruleset_fd, LANDLOCK_RULE_NET_PORT,
-> > > +					    &tcp_denied_listen_p1, 0));
-> > > +
-> > > +		enforce_ruleset(_metadata, ruleset_fd);
-> > > +		EXPECT_EQ(0, close(ruleset_fd));
-> > > +	}
-> > 
-> > This entire "if (variant->sandbox == TCP_SANDBOX)" conditional does the exact
-> > same thing as the one from patch 5/9.  Should that (or parts of it) get
-> > extracted into a suitable helper?
-> 
-> I don't think replacing
-> 	if (variant->sandbox == TCP_SANDBOX)
-> with
-> 	if (is_tcp_sandbox(variant))
-> will change anything, this condition is already quite simple. If
-> you think that such helper is more convenient, I can add it.
+diff --git a/security/commoncap.c b/security/commoncap.c
+index cefad323a0b1..3d103069903b 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -1428,12 +1428,6 @@ int cap_mmap_addr(unsigned long addr)
+ 	return ret;
+ }
+ 
+-int cap_mmap_file(struct file *file, unsigned long reqprot,
+-		  unsigned long prot, unsigned long flags)
+-{
+-	return 0;
+-}
+-
+ #ifdef CONFIG_SECURITY
+ 
+ static const struct lsm_id capability_lsmid = {
+@@ -1453,7 +1447,6 @@ static struct security_hook_list capability_hooks[] __ro_after_init = {
+ 	LSM_HOOK_INIT(inode_killpriv, cap_inode_killpriv),
+ 	LSM_HOOK_INIT(inode_getsecurity, cap_inode_getsecurity),
+ 	LSM_HOOK_INIT(mmap_addr, cap_mmap_addr),
+-	LSM_HOOK_INIT(mmap_file, cap_mmap_file),
+ 	LSM_HOOK_INIT(task_fix_setuid, cap_task_fix_setuid),
+ 	LSM_HOOK_INIT(task_prctl, cap_task_prctl),
+ 	LSM_HOOK_INIT(task_setscheduler, cap_task_setscheduler),
+-- 
+2.46.1
 
-The variant->sandbox check is OK, but the following code block should
-not be duplicated because it makes more code to review and we may wonder
-if it does the same thing.  Intead we can have something like this:
-
-if (variant->sandbox == TCP_SANDBOX)
-	restrict_tcp_listen(_metadata, self);
-
-> 
-> > 
-> > > +	bool restricted = is_restricted(&variant->prot, variant->sandbox);
-> > > +
-> > > +	test_restricted_net_fixture(_metadata, &self->srv0, false, false,
-> > > +				    false);
-> > > +	test_restricted_net_fixture(_metadata, &self->srv1, false, false,
-> > > +				    restricted);
-> > > +	test_restricted_net_fixture(_metadata, &self->srv2, restricted,
-> > > +				    restricted, restricted);
-> > 
-> > If we start having logic and conditionals in the test implementation (in this
-> > case, in test_restricted_test_fixture()), this might be a sign that that test
-> > implementation should maybe be split apart?  Once the test is as complicated as
-> > the code under test, it does not simplify our confidence in the code much any
-> > more?
-> > 
-> > (It is often considered bad practice to put conditionals in tests, e.g. in
-> > https://testing.googleblog.com/2014/07/testing-on-toilet-dont-put-logic-in.html)
-> > 
-> > Do you think we have a way to simplify that?
-> 
-> I agree.. using 3 external booleans to control behavior of the
-> test is really messy. I believe the best we can do to avoid this is to
-> split "test_restricted_net_fixture()" into few independent tests. For
-> example we can turn this call:
-> 
-> 	test_restricted_net_fixture(_metadata, &self->srv0, false,
-> 		false, false);
-> 
-> into multiple smaller tests:
-> 
-> 	/* Tries to bind with invalid and minimal addrlen. */
-> 	EXPECT_EQ(0, TEST_BIND(&self->srv0));
-> 
-> 	/* Tries to connect with invalid and minimal addrlen. */
-> 	EXPECT_EQ(0, TEST_CONNECT(&self->srv0));
-> 
-> 	/* Tries to listen. */
-> 	EXPECT_EQ(0, TEST_LISTEN(&self->srv0));
-> 
-> 	/* Connection tests. */
-> 	EXPECT_EQ(0, TEST_CLIENT_SERVER(&self->srv0));
-
-These standalone bind/connect/listen/client_server looks good.
-
-> 
-> Each test is wrapped in a macro that implicitly passes _metadata argument.
-
-I'd prefer to not use macros to pass argument because it makes it more
-difficult to understand what is going on. Just create a
-test_*(_metadata, ...) helper.
-
-> 
-> This case in which every access is allowed can be wrapped in a macro:
-> 
-> 	TEST_UNRESTRICTED_NET_FIXTURE(&self->srv0);
-
-Let's try to avoid macros as much as possible.
-
-> 
-> Such approach has following cons though:
-> * A lot of duplicated code. These small helpers should be added to every
->   test that uses "test_restricted_net_fixture()". Currently there
->   are 16 calls of this helper.
-
-We can start by calling these test_listen()-like helpers in
-test_bind_and_connect().  We should be careful to not change too much
-the existing test code to be able to run them against older kernels
-without too much changes.
-
-> 
-> * There is wouldn't be a single entity that is used to test a network
->   under different sandbox scenarios. If we split the helper each test
->   should care about (1) sandboxing, (2) running all required tests. For
->   example TEST_LISTEN() and TEST_CLIENT_SERVER() could not be called if
->   bind is restricted.
-
-Yes, this might be an issue, but for this specific case we may write a
-dedicated test if it helps.
-
-> 
-> For example protocol.bind test would have following lines after
-> "test_restricted_net_fixture()" is removed:
-> 
-> 	TEST_UNRESTRICTED_NET_FIXTURE(&self->srv0);
-> 
-> 	if (is_restricted(&variant->prot, variant->sandbox)) {
-> 		EXPECT_EQ(-EACCES, TEST_BIND(&self->srv1));
-> 		EXPECT_EQ(0, TEST_CONNECT(&self->srv1));
-> 
-> 		EXPECT_EQ(-EACCES, TEST_BIND(&self->srv2));
-> 		EXPECT_EQ(-EACCES, TEST_CONNECT(&self->srv2));
-> 	} else {
-> 		TEST_UNRESTRICTED_NET_FIXTURE(&self->srv1);
-> 		TEST_UNRESTRICTED_NET_FIXTURE(&self->srv2);
-> 	}
-> 
-> I suggest leaving "test_restricted_net_fixture()" and refactor this
-> booleans (in the way you suggested) in order not to lose simplicity in
-> the testing:
-> 
-> 	bool restricted = is_restricted(&variant->prot,
-> 		variant->sandbox);
-> 
-> 	test_restricted_net_fixture(_metadata, &self->srv0,
-> 		(struct expected_net_enforcement){
-> 		.deny_bind = false,
-> 		.deny_connect = false,
-> 		.deny_listen = false
-> 	});
-> 	test_restricted_net_fixture(_metadata, &self->srv1,
-> 		(struct expected_net_enforcement){
-> 		.deny_bind = false,
-> 		.deny_connect = restricted,
-> 		.deny_listen = false
-> 	});
-> 	test_restricted_net_fixture(_metadata, &self->srv2,
-> 		(struct expected_net_enforcement){
-> 		.deny_bind = restricted,
-> 		.deny_connect = restricted,
-> 		.deny_listen = restricted
-> 	});
-> 
-> But it's really not obvious design issue and splitting helper can really
-> be a better solution. WDYT?
-> 
-> > 
-> > 
-> > Readability remark: I am not that strongly invested in this idea, but in the
-> > call to test_restricted_net_fixture(), it is difficult to understand "false,
-> > false, false", without jumping around in the file.  Should we try to make this
-> > more explicit?
-> > 
-> > I wonder whether we should just pass a struct, so that everything at least has a
-> > name?
-> > 
-> >    test_restricted_net_fixture((struct expected_net_enforcement){
-> >      .deny_bind = false,
-> >      .deny_connect = false,
-> >      .deny_listen = false,
-> >    });
-> > 
-> > Then it would be clearer which boolean is which,
-> > and you could use the fact that unspecified struct fields are zero-initialized?
-> > 
-> > (Alternatively, you could also spell out error codes here, instead of booleans.)
-> 
-> Agreed, this is a best option for refactoring.
-> 
-> I've also tried adding access_mask field to the service_fixture struct
-> with all accesses allowed by default. In a test, then you just need to
-> remove the necessary accesses after sandboxing:
-> 
-> 	if (is_restricted(&variant->prot, variant->sandbox))
-> 		clear_access(&self->srv2,
-> 			     LANDLOCK_ACCESS_NET_BIND_TCP |
-> 				     LANDLOCK_ACCESS_NET_CONNECT_TCP);
-> 
-> 	test_restricted_net_fixture(_metadata, &self->srv2);
-> 
-> But this solution is too implicit for the helper. Passing struct would
-> be better.
-
-What about passing the variant to these tests and creating more
-fine-grained is_restricted_*() helpers?
-
-> 
-> > 
-> > > +}
-> > > +
-> > >   TEST_F(protocol, bind_unspec)
-> > >   {
-> > >   	const struct landlock_ruleset_attr ruleset_attr = {
-> > > -- 
-> > > 2.34.1
-> > > 
-> > 
-> > —Günther
-> 
 
