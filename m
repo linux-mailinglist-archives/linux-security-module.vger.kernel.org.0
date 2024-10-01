@@ -1,142 +1,97 @@
-Return-Path: <linux-security-module+bounces-5784-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5786-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8648598BF0D
-	for <lists+linux-security-module@lfdr.de>; Tue,  1 Oct 2024 16:08:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E4B98BF7A
+	for <lists+linux-security-module@lfdr.de>; Tue,  1 Oct 2024 16:16:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B82E21C2362C
-	for <lists+linux-security-module@lfdr.de>; Tue,  1 Oct 2024 14:08:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E191DB26F56
+	for <lists+linux-security-module@lfdr.de>; Tue,  1 Oct 2024 14:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A841C6899;
-	Tue,  1 Oct 2024 14:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5345F1C9EDD;
+	Tue,  1 Oct 2024 14:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TPOVTZbs"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Ut8L1CSX"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [83.166.143.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C461C688E
-	for <linux-security-module@vger.kernel.org>; Tue,  1 Oct 2024 14:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6691C9EC5
+	for <linux-security-module@vger.kernel.org>; Tue,  1 Oct 2024 14:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727791700; cv=none; b=a6kJ4go/gpw6vPiKpnUrHrexKlIqCbiDvk6Zj85eqy47t3jSWOyShodDbbPi7/YWtk4HwFsmgwIkCls4nRCKfvS9E2GOPxQeF783/5XH3jh/Vw7p4av8MALDcA4CRiR88B3kxzg2ZniwvkCZh3+wt6M9c14qUQIancnx+eOYIjw=
+	t=1727791977; cv=none; b=RZvWPyBj76m0baGX/dejPHcrKuuOv5K67MLcIZA3ZsB8pNX+3gJcgziFWV5eRLCQ+HRXpvAbLPfXxO2oa+XQDlFbpR+X1JtZYggvi7JvLX/6tE4LvGhd3gjCep6sRCV3dKDO3kYIagtcwzTD3vg7pVNQFASCGe2VDEzFUY3bQC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727791700; c=relaxed/simple;
-	bh=W+QNiPX1nti+CLpBJHuN8/cmN2sNYpt8FxHX8VHPJEY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bEqwqGu28d7cqCCxqDKVjlT4Kx1FhDH7CCOsW6mLkW1XV91LucJybI6W0WfcqyYrS6Hve7+ywoiFWCo88vSifKzwuLprcr8rdhMbDqBNKP2EPEWhh9lmfa+7x2B2wlhP7NpaT9vZxWBGQeog05ArBwLcuf0BYT3agosNgwuYIwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TPOVTZbs; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6e23b300bf9so41167487b3.3
-        for <linux-security-module@vger.kernel.org>; Tue, 01 Oct 2024 07:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1727791698; x=1728396498; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oDjggatD71ZQVI9QAnN1g0svCgVssGB6YJc3cVqA30E=;
-        b=TPOVTZbsaRXPOSuU1+moXlU6TTm2kSxUrLrsweA84jVeyRgji6K4MofSXf6giqtn50
-         7MbER1U4LXBTT71SRYd3sSXbHIzZLypjiLdKhFd4BssW6vdjIxLQcYeuLYTTDVChvKQL
-         FDIm7qE3eHv51Q1n+N/mMrexNMLChECHtKY0UuUw6z3Bl/vCrND2EkNJ92++Srqm3jFi
-         HQbu+uURYk20OVvHZd4xybUshfO4G1smrpMI3/KDii+uc3TNTYo3OKRf5SPzRwenSsxA
-         kPHJqJVI/C5q/pWX/Oai4rjmF2Ytcj9uGkoaLzYQlIMGcoxWGIdkvZpuf5rn5l2mPiWg
-         K/VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727791698; x=1728396498;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oDjggatD71ZQVI9QAnN1g0svCgVssGB6YJc3cVqA30E=;
-        b=UGk6NO+5VUm9kJhs/NYJxJCqyvCf851B46o+NHekfQX/ldst7zTtE7QNDsi0hh6Lxo
-         25rg4AuW/QWuck/oy18ugXNjQ/5UPpsI6+QcEx2AjcaR+747RI4+pe9pFT0N7TT1rOBU
-         sCUwXsnu1aCWuINu9Kpwws/c3gwTzp8r8wZvUrT+41UzB2698kdW6883elg+n5tYYiM7
-         HMKpB2L49WIC/23rZzpTkhIpl2TAZKK6iDe1CGj/8qzSjgVaezQgHegGK+5MojTZMJPG
-         v1NFidj0eBWz5lo0VPISWw9KuR58zngMt0fywgbHbC8YFy6KiHK39l8zSe8J1tuMVfIf
-         aXdA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2di8YLiuo7zQ771HkN6h/vtMZs94sRIleI+Tl80kwEg6ojpbKP/vTWIXEAQ8/TXm++Xgm4L09wdBrXcI+ULp+7wREh3k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAj3kZCxjh24Bzoa5s+CPuQznT+KiS+IqEy54F4x/wB/fG/miX
-	ZsxchvHoeg6OFM6C4vhkJ1kM9jXetsSuE8F3hov914nM+V5BL4zY318+ifpBua7xifovKn3eaYc
-	mW8ZYfypen1N6gpsVM+HW0DJWP9Hs/zaB406PftQs9gYbL+4ewQ==
-X-Google-Smtp-Source: AGHT+IFmA8Zee8fvFoqButoQCNXrJRm6d9pm/RW6pBrhj8FnIAtVHSojfHfEI7J5bxJQaICwjRNEXwhJDSnljiwYoeM=
-X-Received: by 2002:a05:690c:f94:b0:65f:a0e5:8324 with SMTP id
- 00721157ae682-6e2474d10b6mr134839147b3.4.1727791697954; Tue, 01 Oct 2024
- 07:08:17 -0700 (PDT)
+	s=arc-20240116; t=1727791977; c=relaxed/simple;
+	bh=N3VsT/aRIrZo7RNF5L0dZF4glg3oLt0KJkLSq216upU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=J1T0YDYQQ0tofsZY9xhdJVXGeviN+iIZas503FQkfO8tc7fiLcf5E+vI+Dn3De7IZpv42hdCk80nLL5RiP/BS+gTSjWMyarny70W6FOS67Eul5GvAjWM/0vtjqKuGVw2mcghSK0zbxFYcLbxs07Nr8qLm+BFcNF7ngEEojf9QZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Ut8L1CSX; arc=none smtp.client-ip=83.166.143.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XJ0JV4d0Kz2Td;
+	Tue,  1 Oct 2024 16:12:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1727791962;
+	bh=wdaQ4HNfZ3uEX8A3QKomp7kIV90mH4kYU36cEBiD3J4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Ut8L1CSXZhUpZ2f0Qb07SY8PtV++HvbIfFYgglxb9Xy4CzCq5QqkqOcJayM56UjrV
+	 b3W1z8p/mcJqLrNnwNellTY1kJhzdcyI4fQHj2KCR2aQh3zFIMa+Fo0UXxx+XxGAom
+	 ZZUu+GNDpST8tcFcv93rSEo74pbYMfDWwQheTBN0=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XJ0JT6PYDznvr;
+	Tue,  1 Oct 2024 16:12:41 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v1 0/3] Refactor Landlock access mask management
+Date: Tue,  1 Oct 2024 16:12:31 +0200
+Message-ID: <20241001141234.397649-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925192018.15290-2-paul@paul-moore.com> <dd386a1f-9245-45ae-b0fe-d07d1dec5100@schaufler-ca.com>
- <20240926131157.GA683524@mail.hallyn.com> <CAHC9VhSyYkq=AxiVkwkuk1jsTTCqt9xypdto5yaX3jdLXy+Xxg@mail.gmail.com>
- <20240926132251.GB683524@mail.hallyn.com> <CAHC9VhRj5BvBBir3_sWo5whbpRVmpppYEqrvgRf17mR2-xHdAQ@mail.gmail.com>
- <20240930210801.GA778168@mail.hallyn.com>
-In-Reply-To: <20240930210801.GA778168@mail.hallyn.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 1 Oct 2024 10:08:04 -0400
-Message-ID: <CAHC9VhQZ1wM-pYW5sPEcP9=uKi4sAFR1nEiEXu-tYypy7feHqA@mail.gmail.com>
-Subject: Re: [RFC PATCH] capabilities: remove cap_mmap_file()
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Casey Schaufler <casey@schaufler-ca.com>, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On Mon, Sep 30, 2024 at 5:08=E2=80=AFPM Serge E. Hallyn <serge@hallyn.com> =
-wrote:
-> On Thu, Sep 26, 2024 at 09:24:06AM -0400, Paul Moore wrote:
-> > On Thu, Sep 26, 2024 at 9:22=E2=80=AFAM Serge E. Hallyn <serge@hallyn.c=
-om> wrote:
-> > > On Thu, Sep 26, 2024 at 09:16:04AM -0400, Paul Moore wrote:
-> > > > On Thu, Sep 26, 2024 at 9:11=E2=80=AFAM Serge E. Hallyn <serge@hall=
-yn.com> wrote:
-> > > > > On Wed, Sep 25, 2024 at 12:45:20PM -0700, Casey Schaufler wrote:
-> > > > > > On 9/25/2024 12:20 PM, Paul Moore wrote:
-> > > > > > > The cap_mmap_file() LSM callback returns the default value fo=
-r the
-> > > > > > > security_mmap_file() LSM hook and can be safely removed.
-> > > > > > >
-> > > > > > > Signed-off-by: Paul Moore <paul@paul-moore.com>
-> > > > > >
-> > > > > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > > >
-> > > > > Reviewed-by: Serge Hallyn <serge@hallyn.com>
-> > > >
-> > > > Thanks Serge.  Any interest in pulling this via the capabilities tr=
-ee
-> > > > or would you prefer I take this via the LSM tree?
-> > >
-> > > Oh, jinkeys - I guess should take it through the capabilities tree if
-> > > only to check that it still works!
-> >
-> >  :)
-> >
-> > Sounds good, if you change your mind let me know and I'll pick this up.
->
-> Just got access back to my kernel.org account.  Too late for 6.12 cycle, =
-so
-> I'll keep it ready for 6.13 window.  I suppose I should see about hooking
-> back into the -next kernel for testing.
+Hi,
 
-Sorry for the delay, network access was spotty over the past few days,
-and what little I did have was just my phone.
+To simplify code for new access types [1], add 2 new helpers:
+- landlock_merge_access_masks()
+- landlock_filter_access_masks()
 
-Anyway, yes, this was intended for v6.13 anyway so no harm there.
-Glad you're setup again on kernel.org.
+The last patch uses these helpers to optimize Landlock scope management
+like with filesystem and network access checks.
 
-Hooking up to linux-next is pretty easy, basically just send some
-mail, but if I can offer a suggestion you might want to make your
-linux-next branch a automatically generated "composite" branch so you
-are better able to get both linux-stable and linux-next patches tested
-via the normal linux-next mechanisms.  I'm sure you've seen this
-already, but here is the approach I take with the LSM tree:
+[1] https://lore.kernel.org/r/3433b163-2371-e679-cc8a-e540a0218bca@huawei-partners.com
 
-https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/tree/README=
-.md#n94
+Regards,
 
---=20
-paul-moore.com
+Mickaël Salaün (3):
+  landlock: Refactor filesystem access mask management
+  landlock: Refactor network access mask management
+  landlock: Optimize scope enforcement
+
+ security/landlock/fs.c       | 21 ++++-----------
+ security/landlock/net.c      | 22 ++++------------
+ security/landlock/ruleset.h  | 51 +++++++++++++++++++++++++++---------
+ security/landlock/syscalls.c |  2 +-
+ security/landlock/task.c     | 22 +++++++++++++---
+ 5 files changed, 68 insertions(+), 50 deletions(-)
+
+
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+-- 
+2.46.1
+
 
