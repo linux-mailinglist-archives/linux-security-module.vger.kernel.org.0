@@ -1,55 +1,55 @@
-Return-Path: <linux-security-module+bounces-5819-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5821-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 902C998E86A
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2024 04:28:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 664D598E875
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2024 04:33:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3F66B20D79
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2024 02:28:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17C2D2810D7
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Oct 2024 02:33:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2416317993;
-	Thu,  3 Oct 2024 02:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D181A28D;
+	Thu,  3 Oct 2024 02:33:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="rSn00OHO"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="N/9EBLM5"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E770D168DC;
-	Thu,  3 Oct 2024 02:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF4E16415;
+	Thu,  3 Oct 2024 02:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727922476; cv=none; b=uAsmmcmLf/BmfbVd1Z96EhjQwbWUy04xT0QtH2z3UO9fkwMWZdNxqaIXRhcCetLgYFC026lrCJwoR8qd9fsDEmw2t05jj8qvZ/zrXhJ6oTNv8MvQDznKO92r6XG4SHKgaQhbE7g032ugQVkD2UCVqdaR7a60oVDt7OCKFDg0D6U=
+	t=1727922828; cv=none; b=C6FFHddYRu1HKZcxE+Rns2McCpXz9gqhdFCCudSQz65AhKkBf2ao3Sj4F6sgE9mSmruf8zluKT+Rcp1/qGffSkG0jbksaw6sHHmH5mIV1G+3BN76jGrTsqE6kTAOEKaJD1a4HhpcElHcKkd5zrnncaRdWxc12X5MBrANa5eq4Zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727922476; c=relaxed/simple;
-	bh=3OPAftrtMV+qIp4Qz8NWHzz2E0fBiQnLd7zeRbcYWmU=;
+	s=arc-20240116; t=1727922828; c=relaxed/simple;
+	bh=D+XzrM4kffemXExnwULMa6Y85zx78Tn2w+hWwqe677M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZyeIPCgO+ASVggpfH8I/nsVPY/9LNd8JFCFMJ0EklPopwiCKjmxvKN5YxFdT8S7aItaz8m3woyO3vGlDOscH8L3159H8JFf6llP9vyVDFN3VR3zZuahxdzFKlw4jc4LmWPhrEvAcGp+zjs2HgbR+Pc5Fuyv/wN2hFgHzZ2BLi8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=rSn00OHO; arc=none smtp.client-ip=185.125.188.120
+	 In-Reply-To:Content-Type; b=P+P0vY4Lp1bK1iNcgTPfdap9lm6JakmRJBwUEBX8jEkE4augrEGr6k8FJyPwBbTubAL0Y6o4QC13xzxoFui3GPguaBGwIF8svNNnVc2CmGaRadU3eNEbtjZ0K7vcDWR7GsXrIC2ET6v9aiQm0kqk1C9DcyRFj3CsLbqN8zv6k4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=N/9EBLM5; arc=none smtp.client-ip=185.125.188.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [192.168.192.84] (unknown [50.39.103.33])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id AD9F23F24D;
-	Thu,  3 Oct 2024 02:27:49 +0000 (UTC)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 72A283F0A2;
+	Thu,  3 Oct 2024 02:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1727922470;
-	bh=RN31JBI6bHBo+rutpHLe7KMAvry1bQmwrXCcjkow2zY=;
+	s=20210705; t=1727922823;
+	bh=bqHosOLOSfOAxFroc9/HxDPruNIp6CA5pgnWnRYFeM0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=rSn00OHOGcx/Sa+PnHbQZzOaC3CmQKvdnvnEWwV5PHQg91Qwc96tkqsBo8G8LqBJd
-	 fB1eSCg5u3X1zSX963q7a1Rli7mNmXnFjq+WTgYYhufKPCYFUoj4iNrzj8mGJsY2qq
-	 WNpNST0AL5HFMAuMJqXzljA9bYn3nRP12nLP2hrY4szf8ndUEjp7AyAQ0dRpDvC/xG
-	 aukVdl1O4fDpzZXZXBWAbvrigPiOd/VHQRElJBg8brTiYHDkAbUa76pamFJrFDnLba
-	 e41s7pSQqnMUSTwyf0vlGxcVmtgD+N0zJQTxG54na6bhgBz6WGG1bG+aig5GxGpoKA
-	 h/1SAmTnA6PJw==
-Message-ID: <033eb4d9-482b-4b70-a251-dc8bcc738f40@canonical.com>
-Date: Wed, 2 Oct 2024 19:27:47 -0700
+	b=N/9EBLM5OOAuNiWG6QtCdpzrnvebwgMsjolT4prAOIfYjdPTseoryGirOrezlTaH2
+	 LtqELmyMXCNUIp7koee4541qCL3k9rqjuVMqyIDTPtEt3/jTxarKS3lxt4k/cWWgkE
+	 6dppkPMwB63EQREPe8AnmO2GqCxTZbzgAe+mlk9E8fa/JeVaJZHZVZs4VEqXvoyZHH
+	 fD2NqAnCc3iLAcEqionGQEkuE0Lt4GFUGEEZo/Vf/aIPn4B1A2PaWqCqIClDt9LoPx
+	 m7HwIxJ9lsumh2fuOYFSjR0IMw3JSovvkcV7opLKzbEu01vJv6MS/nRdhLdOIcUix+
+	 oRKkW1PWcU6/w==
+Message-ID: <f930e51e-3eb9-4146-a68c-1f226304cc86@canonical.com>
+Date: Wed, 2 Oct 2024 19:33:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -58,16 +58,16 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [GIT PULL] tomoyo update for v6.12
-To: "Dr. Greg" <greg@enjellic.com>,
+To: Paul Moore <paul@paul-moore.com>,
  Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Paul Moore <paul@paul-moore.com>, Jonathan Corbet <corbet@lwn.net>,
+Cc: Jonathan Corbet <corbet@lwn.net>,
  Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
  LKML <linux-kernel@vger.kernel.org>, linux-security-module@vger.kernel.org
 References: <0c4b443a-9c72-4800-97e8-a3816b6a9ae2@I-love.SAKURA.ne.jp>
  <877cavdgsu.fsf@trenco.lwn.net>
  <CAHC9VhRnTrjP3kNXMmzsK4oZL7WD+uH0OuXszEPgTc5YoT5dew@mail.gmail.com>
  <CAHk-=wjLdoBcY-r64oBbKXo3hSEr5AawrP_5GSFQ4NEbCNt4Kg@mail.gmail.com>
- <20241002103830.GA22253@wind.enjellic.com>
+ <CAHC9VhS_8JtU0KQyy3rEGt0CQ_XMQFt2Kic-bz-Qd=SMjeWe4Q@mail.gmail.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -113,121 +113,42 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <20241002103830.GA22253@wind.enjellic.com>
+In-Reply-To: <CAHC9VhS_8JtU0KQyy3rEGt0CQ_XMQFt2Kic-bz-Qd=SMjeWe4Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/2/24 03:38, Dr. Greg wrote:
-> On Tue, Oct 01, 2024 at 09:36:16AM -0700, Linus Torvalds wrote:
-> 
-> Good morning Linus, I hope the week is going well for you.
-> 
-> Some reflections, for the record, on this issue.
-> 
+On 10/1/24 11:22, Paul Moore wrote:
+> On Tue, Oct 1, 2024 at 12:36 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 >> On Tue, 1 Oct 2024 at 07:00, Paul Moore <paul@paul-moore.com> wrote:
 >>>
 >>> Linus, it's unclear if you're still following this thread after the
 >>> pull, but can you provide a little insight on your thoughts here?
 > 
->> I absolutely hate the whole "security people keep arguing", and I
->> cannot personally find it in myself to care about tomoyo.  I don't
->> even know where it is used - certainly not in Fedora, which is the
->> only distro I can check quickly.
->>
->> If the consensus is that we should revert, I'll happily revert. This
->> was all inside of the tomoyo subdirectory, so I didn't see it as
->> some kind of sidestepping, and treated the pull request as a regular
+> ...
+> 
+>> If the consensus is that we should revert, I'll happily revert.
+> 
+> Starting tomorrow when I'm reliably back in front of computer I'll
+> sort this out with the rest of the LSM folks.  Unless something
+> unexpected comes up in the discussion I'll send you a revert later
+> this week.
+> 
+I agree that this is the wrong approach and will add that it is
+egregious enough that Ubuntu is going to have to disable Tomoyo as
+it effectively allows by-passing signed module loads.
+
+you can add my
+Acked-by: John Johansen <john.johansen@canonical.com>
+
+>> This
+>> was all inside of the tomoyo subdirectory, so I didn't see it as some
+>> kind of sidestepping, and treated the pull request as a regular
 >> "another odd security subsystem update".
 > 
-> I see that Paul Moore has further responded with commentary about the
-> 'LSM community' responding to this issue.  I wanted, on behalf of our
-> project and in support of Tetsuo's concerns, to register directly with
-> you a sense of jaded skepticism about the notion of a community
-> response.
-> 
-> Fixing Tetsuo's issue, at least to the extent it can be fixed,
-> requires technical improvements in the Linux security architecture.
-
-yes and that is correct place to do it. Doing it within a single
-LSM is very much the wrong approach
-
-> Currently, potential technical improvements in this venue are
-> struggling to receive any kind of acknowledgement or review, to the
-> ultimate detriment of enhancements that Linux should be bringing
-> forward to address, not only this issue, but the security industry
-> writ-large.
-> 
-
-everyone in the LSM community is struggling with available time, and
-yes there are disagreements around how this should be done so it
-moves slow.
-
-> We have made multiple submissions of technology, that can at least
-> positively impact Tetsuo's concerns, and in the process perhaps
-> improve the opportunity for security innovation in Linux.  After 20
-> months of doing so we have yet to receive anything that would resemble
-> substantive technical review [1].
-> 
-> The following are links to the four submissions.  We believe an
-> unbiased observer would conclude that they provide ample evidence of
-> very little interest in reviewing submissions for enhancements to the
-> Linux security eco-system, outside of perhaps certain constituencies:
-> 
-> V1:
-> https://lore.kernel.org/linux-security-module/20230204050954.11583-1-greg@enjellic.com/T/#t
-> 
-> V2:
-> https://lore.kernel.org/linux-security-module/20230710102319.19716-1-greg@enjellic.com/T/#t
-> 
-> V3:
-> https://lore.kernel.org/linux-security-module/20240401105015.27614-1-greg@enjellic.com/T/#t
-> 
-> V4:
-> https://lore.kernel.org/linux-security-module/20240826103728.3378-1-greg@enjellic.com/T/#t
-> 
-> As of the V4 release, we have added support for an approach that may
-> positively impact Tetsuo's concerns.  We do that without touching any
-> infrastructure outside of our proposed LSM.
-> 
-> We can speak, at great length, as to why we feel that Linux would
-> benefit from structural improvements to its security infrastructure.
-> We will refrain from doing so in this thread, given your stated
-> sentiments on these types of discussions.
-> 
-> However, your mantra, recently expressed on security infrastucture
-> issues, has always been:
-> 
-> "Code talks, bullshit walks."
-> 
-> For all of this to work, and the Linux community to remain healthy,
-> the code needs to be listened to and that is not effectively happening
-> in the security arena.
-> 
-> I started my involvement with Linux in late 1991.  All of what I see
-> is giving me a great deal of pause about the health of our community
-> moving forward and the potential negative impact these issues have on
-> the opportunity for security innovation to emerge
-> 
->>                    Linus
-> 
-> Have a good remainder of the week.
-> 
-> Apologies in advance for extending conversations you find tiresome.
-> 
-> As always,
-> Dr. Greg
-> 
-> The Quixote Project - Flailing at the Travails of Cybersecurity
->                https://github.com/Quixote-Project
-> 
-> 
-> [1]: A thank you to Casey Schaufler, despite our lively disagreement
-> about some issues, who has offered specific review comments and
-> dialogue about security modeling.  To Greg Kroah Hartman for
-> recommending the most important change we have implemented with
-> respect to JSON encoding of security events and a handful of other
-> individuals who have provided helpful procedural and technical point
-> suggestions.
+> Yes, that's fair, I think you would need a deeper understanding of the
+> LSM framework as well as an understanding of recent discussions on the
+> list to appreciate all of the details.
 > 
 
 
