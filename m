@@ -1,103 +1,201 @@
-Return-Path: <linux-security-module+bounces-5878-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5880-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A466C990199
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2024 12:50:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F4EA99029A
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2024 14:02:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DD11282715
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2024 10:50:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1979F281F8B
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Oct 2024 12:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 518F7148FF3;
-	Fri,  4 Oct 2024 10:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B405415B972;
+	Fri,  4 Oct 2024 12:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0n8bqCyF"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892BC1465A1
-	for <linux-security-module@vger.kernel.org>; Fri,  4 Oct 2024 10:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F147C15852F
+	for <linux-security-module@vger.kernel.org>; Fri,  4 Oct 2024 12:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728039015; cv=none; b=YWcq+ltUUP7uQZxGJ942glI+MJ6/vDJWoGHex6BRGLPhG26AQ07NXZlYXah8Ppu/OHDRVANVgPFL4PEEKGXFXnZrYtkeu7Qo0GWfcBf+p8buVnhGRcSzgezDvc2fmx6zxl5WtL5OGancFpoOiq96ySGj7pevMtrmE+jURivcBHo=
+	t=1728043313; cv=none; b=U8xA6f/CTzv4uVddog/XEttxWY5dETfuoH63sScy/LsSoYp0PO9c3DQ6hXWOKnfIqXryCvu1ZeK8y2bdtNCqxms9MjGQi1lrD4qm4LP9nOhJ1Fsx9/Ft3D3XoeCUPpDUE/1qGcbXqZpLAsRdge9D/LUDeU2YFrWGyNL8ulwsP/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728039015; c=relaxed/simple;
-	bh=aFpRPIm051C03Jhmg+n1F2c288gl81+09gq2/wWHdwU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qAvc5N8BPVWhzkrl52Mx/z5DNQsAZvXJa3SidFnEHVlPc5jzwoGJn84pvLqMamvsEg1GWFnD1cee4EIybKfOhRihyorFuBMT7j3znpfnSGgTZw3Mh39BWUZCae87r/j05UxP6de/BaxMuaejk2L3cj1FZNEsJEWpAplIiwTZp08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 494Ao5Zx082254;
-	Fri, 4 Oct 2024 19:50:05 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 494Ao5Fl082250
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 4 Oct 2024 19:50:05 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <bc8bd0d5-ce58-4146-8bfa-1042c6575290@I-love.SAKURA.ne.jp>
-Date: Fri, 4 Oct 2024 19:50:05 +0900
+	s=arc-20240116; t=1728043313; c=relaxed/simple;
+	bh=bVrMBs0CrOjOoAR7i6eKmzV5c+8J2r1zokBipbTZ7Og=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T5K/AX5thtD99UdhEgK0MstsstFAbFS10WoHblgAoHEZyUhKfgf9LEl7FbrVMD/jgc5BseQqQ+yqPwTIEodS88LX+l4fb3UG17O4HN6B4M4X1zOdrVLAGBiwoXizG7ilTxT8Dp6uIlFoMyE9G3a1bAom7a7hgWxp8pnrlEMgqWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0n8bqCyF; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42cb7a2e4d6so20811545e9.0
+        for <linux-security-module@vger.kernel.org>; Fri, 04 Oct 2024 05:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728043309; x=1728648109; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GOom1Jkoy4BQFztAW4256sSNg2cH9tlbYpqxilJfV6k=;
+        b=0n8bqCyFzbFKJw0gKcc8wJUG7n65UvMdzdIXAnprtE0eIj4K/105vchveIo5pDo62e
+         QJdUW0N+WNzQtgJa8riaCzKaTTnJLqe/S5pKr+UJHJ2KjHO+4DxHXX5jhHLJLjS6z1Zm
+         eIR6HqpVtMI15/27R7HdVJmQq2vwxzKac0CaCRnBlyQTBKnVwncTP6oH1hOtRIcCwc79
+         idjX2nxK/4LAmvg3/1F2RawNTXyVJ3vkStuzskkmsyB0XiKGb4jFgqGF7h0jyqDLkNPf
+         /ibpst08K3LZUEbvIs2a1edmxiUApZa0hu6lNs1iDWdF65n4lVGoe9HAQ/3atjfUSbnX
+         NBmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728043309; x=1728648109;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GOom1Jkoy4BQFztAW4256sSNg2cH9tlbYpqxilJfV6k=;
+        b=iztg4k4cHm/5FF3vokbrZszay4VNxyLqH6nKoW+0VRDUfTZKI8bJ6bmqzx3ZOmGe0B
+         jOfwKBoUDY/syf+a85kqhFKhnnl/7LUW8PxHkr3cOKgfvk5sN7kmjHM5BF8bCSdyjEqO
+         Gh86kZR2bT6Zzs9esPdaaRKtlflRBDzdNdSyLjrsjc6Bt0w4RDskT/2aGvb43src3ah+
+         mI/6mlck1yb1iiCitiHllUpUoaL++Rv3gFbcikrQUlAPcKYJhbZIcDUs4TylN/058EHB
+         KASmn+lwHeQi72zlDsm5vqPutFQ7Eq1ZYLpZCrk1UteYTatmBN1OtTAq13Ar1/PZmUK4
+         9wxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWKk4GaPULwrf8EwzvddPifwZea14XUNEC9mmG+BYIkuBTvWCERxa2+sgQa/3ibO5+MIWQQArdAPPk4V9TAoiZia/nVfAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmBasbWRoAn80jXCsfdIcdANp1qncjvDycTGXQ+rDjKZtXzVwr
+	YKta9Ikw0pSR344XZJEwaaCEc9JNVm7+jPFz8SISCRBnJyso3UTwgU5irnqU4IcDDd5Tdi1MeT0
+	k+ujEZjmVEgW2hQZisMVnCh7AjUSvYxUGYYXo
+X-Google-Smtp-Source: AGHT+IFSxpuFoLIKo3xZcb3aLkK001iUGVcwYMaj98CyRyr/Gc5dKmCpozl6LE5XE5+L+/WMEBkSYOvi9zZWsA434Zw=
+X-Received: by 2002:a05:600c:68d9:b0:42f:512f:fafc with SMTP id
+ 5b1f17b1804b1-42f8947de8dmr287875e9.29.1728043308993; Fri, 04 Oct 2024
+ 05:01:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: TOMOYO's pull request for v6.12
-To: "Serge E. Hallyn" <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>
-Cc: Fan Wu <wufan@linux.microsoft.com>,
-        =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>,
-        Mimi Zohar <zohar@linux.ibm.com>, Micah Morton <mortonm@chromium.org>,
-        Casey Schaufler
- <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        KP Singh <kpsingh@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-security-module@vger.kernel.org
-References: <CAHC9VhR=QjdoHG3wJgHFJkKYBg7vkQH2MpffgVzQ0tAByo_wRg@mail.gmail.com>
- <20241003024307.GA833999@mail.hallyn.com>
- <CAHC9VhSa-Jpqmej=3WsLFvSKWamZjFDwUpLHrJOyxaPPujM6ww@mail.gmail.com>
- <20241003162940.GA848724@mail.hallyn.com>
-Content-Language: en-US
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20241003162940.GA848724@mail.hallyn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Virus-Status: clean
-X-Anti-Virus-Server: fsav103.rs.sakura.ne.jp
+References: <20241002-brauner-rust-pid_namespace-v5-1-a90e70d44fde@kernel.org>
+In-Reply-To: <20241002-brauner-rust-pid_namespace-v5-1-a90e70d44fde@kernel.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Fri, 4 Oct 2024 14:01:36 +0200
+Message-ID: <CAH5fLgg+zsU4q5mrv19+0MhVvTZARsJJzw9aonj6g6tAo5av1g@mail.gmail.com>
+Subject: Re: [PATCH v5] rust: add PidNamespace
+To: Christian Brauner <brauner@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Bjoern Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Peter Zijlstra <peterz@infradead.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Arve Hjonnevag <arve@android.com>, Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Carlos Llamas <cmllamas@google.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Matthew Wilcox <willy@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Daniel Xu <dxu@dxuuu.xyz>, 
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	Kees Cook <kees@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024/10/04 1:29, Serge E. Hallyn wrote:
-> Well, this didn't occur to me last night, but what I'd be curious to
-> hear is whether Tetsuo has discussed this with RedHat.  Because unless
-> this makes them say "ok we'll enable that", it still doesn't help him.
-> And I don't imagine them agreeing to enable the CONFIG_TOMOYO_LKM.
+On Wed, Oct 2, 2024 at 1:38=E2=80=AFPM Christian Brauner <brauner@kernel.or=
+g> wrote:
+>
+> The lifetime of `PidNamespace` is bound to `Task` and `struct pid`.
+>
+> The `PidNamespace` of a `Task` doesn't ever change once the `Task` is
+> alive. A `unshare(CLONE_NEWPID)` or `setns(fd_pidns/pidfd, CLONE_NEWPID)`
+> will not have an effect on the calling `Task`'s pid namespace. It will
+> only effect the pid namespace of children created by the calling `Task`.
+> This invariant guarantees that after having acquired a reference to a
+> `Task`'s pid namespace it will remain unchanged.
+>
+> When a task has exited and been reaped `release_task()` will be called.
+> This will set the `PidNamespace` of the task to `NULL`. So retrieving
+> the `PidNamespace` of a task that is dead will return `NULL`. Note, that
+> neither holding the RCU lock nor holding a referencing count to the
+> `Task` will prevent `release_task()` being called.
+>
+> In order to retrieve the `PidNamespace` of a `Task` the
+> `task_active_pid_ns()` function can be used. There are two cases to
+> consider:
+>
+> (1) retrieving the `PidNamespace` of the `current` task (2) retrieving
+> the `PidNamespace` of a non-`current` task
+>
+> From system call context retrieving the `PidNamespace` for case (1) is
+> always safe and requires neither RCU locking nor a reference count to be
+> held. Retrieving the `PidNamespace` after `release_task()` for current
+> will return `NULL` but no codepath like that is exposed to Rust.
+>
+> Retrieving the `PidNamespace` from system call context for (2) requires
+> RCU protection. Accessing `PidNamespace` outside of RCU protection
+> requires a reference count that must've been acquired while holding the
+> RCU lock. Note that accessing a non-`current` task means `NULL` can be
+> returned as the non-`current` task could have already passed through
+> `release_task()`.
+>
+> To retrieve (1) the `current_pid_ns!()` macro should be used which
+> ensure that the returned `PidNamespace` cannot outlive the calling
+> scope. The associated `current_pid_ns()` function should not be called
+> directly as it could be abused to created an unbounded lifetime for
+> `PidNamespace`. The `current_pid_ns!()` macro allows Rust to handle the
+> common case of accessing `current`'s `PidNamespace` without RCU
+> protection and without having to acquire a reference count.
+>
+> For (2) the `task_get_pid_ns()` method must be used. This will always
+> acquire a reference on `PidNamespace` and will return an `Option` to
+> force the caller to explicitly handle the case where `PidNamespace` is
+> `None`, something that tends to be forgotten when doing the equivalent
+> operation in `C`. Missing RCU primitives make it difficult to perform
+> operations that are otherwise safe without holding a reference count as
+> long as RCU protection is guaranteed. But it is not important currently.
+> But we do want it in the future.
+>
+> Note for (2) the required RCU protection around calling
+> `task_active_pid_ns()` synchronizes against putting the last reference
+> of the associated `struct pid` of `task->thread_pid`. The `struct pid`
+> stored in that field is used to retrieve the `PidNamespace` of the
+> caller. When `release_task()` is called `task->thread_pid` will be
+> `NULL`ed and `put_pid()` on said `struct pid` will be delayed in
+> `free_pid()` via `call_rcu()` allowing everyone with an RCU protected
+> access to the `struct pid` acquired from `task->thread_pid` to finish.
+>
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 
-Majority of Linux users I work for are using Red Hat. But I have absolutely
-too little relationship with Red Hat people to involve somebody else into
-this problem. Too little attention/interest to make progress.
-https://bugzilla.redhat.com/show_bug.cgi?id=2303689
+Overall looks good! A few comments below.
 
-Chicken-and-egg problem here; since TOMOYO is not available in Red Hat
-kernels, I have no room/chance to help/involve with Red Hat community.
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 
-If I implement a subset of TOMOYO that does not refuse requests (something
-like SELinux without the "enforcing mode"), can such LSM module be accepted
-by the upstream kernel? (The "patent examination" is a barrier for doing it.)
+> +            task: unsafe { &*PidNamespace::from_ptr(pidns) },
 
-You might think that such LSM module is not a security. But TOMOYO is
-also used as a sort of system-wide strace-like profiler. Understanding
-what the users' systems are doing is useful/helpful for users.
+I think you can simplify this to:
+task: unsafe { PidNamespace::from_ptr(pidns) },
 
-If one of Red Hat's worries that refusing requests due to broken policy is
-gone, the barrier for enabling such LSM module in Red Hat's kernels will be
-lowered. If such LSM module becomes available in Red Hat kernels, I might be
-able to find room/chance to help/involve with Red Hat community.
+> +    /// Returns the given task's pid in the provided pid namespace.
+> +    #[doc(alias =3D "task_tgid_nr_ns")]
+> +    pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+> +        match pidns {
+> +            // SAFETY: By the type invariant, we know that `self.0` is v=
+alid. We received a valid
+> +            // PidNamespace that we can use as a pointer.
+> +            Some(pidns) =3D> unsafe { bindings::task_tgid_nr_ns(self.0.g=
+et(), pidns.as_ptr()) },
+> +            // SAFETY: By the type invariant, we know that `self.0` is v=
+alid. We received an empty
+> +            // PidNamespace and thus pass a null pointer. The underlying=
+ C function is safe to be
+> +            // used with NULL pointers.
+> +            None =3D> unsafe { bindings::task_tgid_nr_ns(self.0.get(), p=
+tr::null_mut()) },
 
+The compiler generates better code if you do this:
+
+let pidns =3D match pidns {
+    Some(pidns) =3D> pidns.as_ptr(),
+    None =3D> core::ptr::null_mut(),
+};
+unsafe { bindings::task_tgid_nr_ns(self.0.get(), pidns) };
+
+Here it should be able to compile the entire match statement down to a
+no-op since None is represented as a null pointer.
+
+
+Alice
 
