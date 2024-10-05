@@ -1,49 +1,46 @@
-Return-Path: <linux-security-module+bounces-5925-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5923-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F5BA9918E3
-	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 19:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E61C9918DB
+	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 19:30:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1849C282942
-	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 17:34:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D639282CFD
+	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 17:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0529125763;
-	Sat,  5 Oct 2024 17:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nightmared.fr header.i=@nightmared.fr header.b="WVp+7faI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84ED8158D92;
+	Sat,  5 Oct 2024 17:29:54 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail.nightmared.fr (mail.nightmared.fr [51.158.148.24])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC9E231C81
-	for <linux-security-module@vger.kernel.org>; Sat,  5 Oct 2024 17:34:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.158.148.24
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA85158D81;
+	Sat,  5 Oct 2024 17:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728149670; cv=none; b=W1Wc0DRf/Umarra30Yvw7PHntsoNjXLNrxEfCbAuXLDAeoJRxIxifFL+rCFOivQiFKpOSb8LSrMGeqjk6nd86ER3r2N42UU1jiHvXu5TYqKltmxqq3iFfuDK4Bd0D08/mDKJBJVynvsxf1jcqzEmE0jMfmZWhhPF9rjMPM2rD6Q=
+	t=1728149394; cv=none; b=NaBBr2IyCqetDm09E6B8M5I+KQj2aPTGhGzj3GuZWX4mlo6P5xQdkqUl2poqF0srOEfnsvEztShRboDql3TlgTTPHRbSF5Jx5XsXNt8999pySBf5QZZ+YeHupraN5mYbC3QHCSl/9U1ooOQSdN5tbgLtflSL7og2JApfCitLMh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728149670; c=relaxed/simple;
-	bh=t4j0Cc6xR/4r6W3pH1zuEjJWM/OJSLYIe8q+BAcAy4A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GD1AaPKmighziSkSuTPg+e7qsmXXTsHjLftzdpzk6MjglgOAJTBvwd+E7J/05Ph+FS3Zm9VRyIFeQa5sIP+MFFWHzBuqR8r1FypuS5xAzHhBG/4avJB1W5ksZAg1FrHO9sXL4mo4bsp81fc97YQu/l3k05a1KBknjPbEyJEFfSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nightmared.fr; spf=pass smtp.mailfrom=nightmared.fr; dkim=pass (2048-bit key) header.d=nightmared.fr header.i=@nightmared.fr header.b=WVp+7faI; arc=none smtp.client-ip=51.158.148.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nightmared.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nightmared.fr
-Received: from [192.168.1.3] (alyon-657-1-781-204.w80-9.abo.wanadoo.fr [80.9.175.204])
-	by mail.nightmared.fr (Postfix) with ESMTPSA id 54A0F10E0053;
-	Sat,  5 Oct 2024 17:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nightmared.fr;
-	s=docker; t=1728149317;
-	bh=t4j0Cc6xR/4r6W3pH1zuEjJWM/OJSLYIe8q+BAcAy4A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=WVp+7faI0er6HFNGgtDcHajBO5exDZ7fMPIlMq/8Zb84WGgS3OL4zzDLQy5Lpr7dy
-	 T6sByyp//0KvBfSiNzzVuFKmLWa5edx5gFQ/aCEf6Io8lNusiBEa09YGIqxwYPyKic
-	 cag2EVxvn5JL/BmibSOZ71kx3HRdJQq13JFHO7P+XKuXFjVjy6vZW8NIUYa8FUQgJW
-	 91F/T+D5w2CHsjKB7kgRpn4oErzhM/edxBqtxRRMbrz4YLotZjgWIqwoar2TmF/IZI
-	 0yL0aqgvvLDgiwl2P4i8t7Ghd0GeBnwsf7ya3M1dIXiziD8g8C+awgv6kKQDJgUHaJ
-	 sKgOePNA5lAsA==
-Message-ID: <ec8770e0-8f7c-42b7-b66b-7f830be7271a@nightmared.fr>
-Date: Sat, 5 Oct 2024 19:28:35 +0200
+	s=arc-20240116; t=1728149394; c=relaxed/simple;
+	bh=yKuWImx5CLK6/jQfJwcJD4qFxtkCxjuZ5fJ1Vg6VeiU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=qhZPb2b4ZyT9oW/LozkBWobKbj1cAG5UxYSbUqjMBZXrNBwRpZ7auSutY8t2TyhJnE1FeUlBjXIKfDxzHI5NlHTjtZtUQcP0FzSIkFRwklR1YdnDZs+AvFqtIvWt+eb5vBOnDiGhPS2Gti70zJUUHFLmCfowjwhPbCuJWHu62rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XLXS35t4Nz1T8Bb;
+	Sun,  6 Oct 2024 01:28:03 +0800 (CST)
+Received: from kwepemj200016.china.huawei.com (unknown [7.202.194.28])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4393D180113;
+	Sun,  6 Oct 2024 01:29:42 +0800 (CST)
+Received: from [10.123.123.159] (10.123.123.159) by
+ kwepemj200016.china.huawei.com (7.202.194.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sun, 6 Oct 2024 01:29:38 +0800
+Message-ID: <70ae6422-4e8c-465f-9bbf-5ff4df52a057@huawei-partners.com>
+Date: Sat, 5 Oct 2024 20:29:34 +0300
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -51,80 +48,89 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: TOMOYO's pull request for v6.12
-To: Paul Moore <paul@paul-moore.com>,
- Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Kees Cook <kees@kernel.org>, Fan Wu <wufan@linux.microsoft.com>,
- =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- Mimi Zohar <zohar@linux.ibm.com>, Micah Morton <mortonm@chromium.org>,
- Casey Schaufler <casey@schaufler-ca.com>,
- John Johansen <john.johansen@canonical.com>,
- Roberto Sassu <roberto.sassu@huawei.com>, KP Singh <kpsingh@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, linux-security-module@vger.kernel.org
-References: <CAHC9VhR=QjdoHG3wJgHFJkKYBg7vkQH2MpffgVzQ0tAByo_wRg@mail.gmail.com>
- <202410041305.544EA7E4E@keescook>
- <ece0c7bd-0d28-4562-8760-c54b0077583a@I-love.SAKURA.ne.jp>
- <202410041645.27A48DA@keescook>
- <5b09909b-fe43-4a9c-b9a7-2e1122b2cdb6@I-love.SAKURA.ne.jp>
- <CAHC9VhQLONjomYjs6pK2tibVfOaPY+TbDA2CYQ1YEGX7ENVkYw@mail.gmail.com>
-Content-Language: en-US
-From: Simon Thoby <git@nightmared.fr>
-In-Reply-To: <CAHC9VhQLONjomYjs6pK2tibVfOaPY+TbDA2CYQ1YEGX7ENVkYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [RFC PATCH v2 8/9] selftests/landlock: Test changing socket
+ backlog with listen(2)
+Content-Language: ru
+To: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+CC: <mic@digikod.net>, <willemdebruijn.kernel@gmail.com>,
+	<linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<netfilter-devel@vger.kernel.org>, <yusongping@huawei.com>,
+	<artem.kuzin@huawei.com>, <konstantin.meskhidze@huawei.com>
+References: <20240814030151.2380280-1-ivanov.mikhail1@huawei-partners.com>
+ <20240814030151.2380280-9-ivanov.mikhail1@huawei-partners.com>
+ <20241005.c0501f9d61a8@gnoack.org>
+From: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
+In-Reply-To: <20241005.c0501f9d61a8@gnoack.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ kwepemj200016.china.huawei.com (7.202.194.28)
 
-On 10/5/24 6:30 PM, Paul Moore wrote:
-> On Sat, Oct 5, 2024 at 3:11 AM Tetsuo Handa
-> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->> I think that this pull request succeeded in revealing what LSM community thinks.
->> Each developer is thinking different things. One thinks "anyone can rebuild kernels
->> with whatever changes", but that opinion ignored secure boot / module signing part.
+On 10/5/2024 7:57 PM, Günther Noack wrote:
+> On Wed, Aug 14, 2024 at 11:01:50AM +0800, Mikhail Ivanov wrote:
+>> listen(2) can be used to change length of the pending connections queue
+>> of the listening socket. Such scenario shouldn't be restricted by Landlock
+>> since socket doesn't change its state.
 > 
-> As I believe that I'm the developer quoted above, let me say that my
-> comment did not ignore UEFI SB.  The Machine Owner Key (MOK) concept
-> provided by shims/bootloaders is designed just for this use case.
-> More advanced users can even replace the UEFI SB key databases, on
-> hardware that supports it, with their own to permit loading of their
-> self-built kernels without the need for the MOK; this is arguably one
-> of the most "secure" UEFI SB configurations.
+> Yes, this behavior makes sense to me as well. 👍 __inet_listen_sk()
+> only changes sk->sk_max_ack_backlog when listen() gets called a second
+> time.
 > 
-> I've successfully used MOK on my own systems to support my own kernel
-> builds, and I've successfully replaced the UEFI SB key databases in
-> VMs to use UEFI SB and my own kernel builds without MOK.
+>> * Implement test that validates this case.
+>>
+>> Signed-off-by: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
+>> ---
+>>   tools/testing/selftests/landlock/net_test.c | 26 +++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
+>> index 6831d8a2e9aa..dafc433a0068 100644
+>> --- a/tools/testing/selftests/landlock/net_test.c
+>> +++ b/tools/testing/selftests/landlock/net_test.c
+>> @@ -1768,6 +1768,32 @@ TEST_F(ipv4_tcp, with_fs)
+>>   	EXPECT_EQ(-EACCES, bind_variant(bind_fd, &self->srv1));
+>>   }
+>>   
+>> +TEST_F(ipv4_tcp, double_listen)
+>> +{
+>> +	const struct landlock_ruleset_attr ruleset_attr = {
+>> +		.handled_access_net = LANDLOCK_ACCESS_NET_LISTEN_TCP,
+>> +	};
+>> +	int ruleset_fd;
+>> +	int listen_fd;
+>> +
+>> +	listen_fd = socket_variant(&self->srv0);
+>> +	ASSERT_LE(0, listen_fd);
+>> +
+>> +	EXPECT_EQ(0, bind_variant(listen_fd, &self->srv0));
+>> +	EXPECT_EQ(0, listen_variant(listen_fd, backlog));
+>> +
+>> +	ruleset_fd =
+>> +		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
+>> +	ASSERT_LE(0, ruleset_fd);
+>> +
+>> +	/* Denies listen. */
+>> +	enforce_ruleset(_metadata, ruleset_fd);
+>> +	EXPECT_EQ(0, close(ruleset_fd));
+>> +
+>> +	/* Tries to change backlog value of listening socket. */
+>> +	EXPECT_EQ(0, listen_variant(listen_fd, backlog + 1));
 > 
+> For test clarity: Without reading the commit message, I believe it
+> might not be obvious to the reader *why* the second listen() is
+> supposed to work.  This might be worth a comment.
 
-Indeed, I'm probably sidetracking the discussion a bit, but I have met all three use
-cases both personally and professionally:
-- Signing an out-of-tree kernel modules with a local certificate (MOK) enrolled in the
-  MOKList via shim (e.g. to support Nvidia GPUs on SecureBoot-enabled machines)
-- Enrolling user boot keys (changing the PK, adding my own KEK to Microsoft's and the platform
-  manufacturer's, then extending the DB list) the signing my kernel with my own key
-- Completely replacing the secure boot keys to only allow my own (sadly, this may be risky
-  on some platforms, like ThinkPads, where essential UEFIs drivers may not load, thus
-  bricking the device)
+Ofc, thanks!
 
-I say all this to emphasize that the options outlined by Paul are not theoretical, but
-very practical use cases that one may encounter in the industry (and I have, even
-in fairly conservative industries).
-In addition, I strongly believe this is the way to go: any kernel module or dynamic
-configuration (if I push this idea to the extreme, maybe in the future this could
-even include eBPF payloads in some hardened configurations) should be signed by a trusted
-authority to be loaded in the kernel.
-That authority may be the Linux distribution, but it can also be you (or your company
-IT department), thanks to MOK (or its heavier alternatives).
-You retain the flexibility to load kernel modules not built by the distributor,
-or even out-of-tree modules, but without degrading the security of your computers
-(assuming the signing keys are properly protected, of course).
-
-Perhaps you would be better served by providing your users with a snippet of documentation
-explaining how to configure MOK and to rebuild the RHEL kernel with TOMOYO enabled?
-To be fair, I know that your customers may find this a time-consuming ordeal compared to using
-the official kernel - especially as you want to keep up with the frequent updates.
-But OTOH that's not end-of-the-world complexity either, which makes it fine for occasional use,
-e.g. to behave like "a sort of system-wide strace-like profiler" (I'm guessing your customers
-are only doing this operation from time to time, not continuously in production).
-There's no perfect solution I guess, but to keep lobbying distributors to enabled TOMOYO
-in their kernels.
-
-Simon
+> 
+>> +}
+>> +
+>>   FIXTURE(port_specific)
+>>   {
+>>   	struct service_fixture srv0;
+>> -- 
+>> 2.34.1
+>>
+> 
+> Reviewed-by: Günther Noack <gnoack3000@gmail.com>
 
