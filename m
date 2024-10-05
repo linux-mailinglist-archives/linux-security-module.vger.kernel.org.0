@@ -1,137 +1,130 @@
-Return-Path: <linux-security-module+bounces-5922-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5925-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F2BB9918A7
-	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 19:04:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F5BA9918E3
+	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 19:34:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6287F1C20F37
-	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 17:04:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1849C282942
+	for <lists+linux-security-module@lfdr.de>; Sat,  5 Oct 2024 17:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0F68157A55;
-	Sat,  5 Oct 2024 17:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0529125763;
+	Sat,  5 Oct 2024 17:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nightmared.fr header.i=@nightmared.fr header.b="WVp+7faI"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99CA613C836
-	for <linux-security-module@vger.kernel.org>; Sat,  5 Oct 2024 17:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from mail.nightmared.fr (mail.nightmared.fr [51.158.148.24])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC9E231C81
+	for <linux-security-module@vger.kernel.org>; Sat,  5 Oct 2024 17:34:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.158.148.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728147846; cv=none; b=THAYemmK0k47cflO1TBmxo0nWtyIxV9PTHA/nCxD597Qb4NOYHCvJpJom7U34tGChXZEmV53WoAfUMLQcIKJHGl7fyqXUCAr8srXD9k6SdByUJmumBCru/i9YDoZqE4Wi6gCvsyG21l6LlbIzijhpj7/qOH+VFmZH1QweUUnVrU=
+	t=1728149670; cv=none; b=W1Wc0DRf/Umarra30Yvw7PHntsoNjXLNrxEfCbAuXLDAeoJRxIxifFL+rCFOivQiFKpOSb8LSrMGeqjk6nd86ER3r2N42UU1jiHvXu5TYqKltmxqq3iFfuDK4Bd0D08/mDKJBJVynvsxf1jcqzEmE0jMfmZWhhPF9rjMPM2rD6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728147846; c=relaxed/simple;
-	bh=xfBKd1Ewon7HWbo7J2W+BGsGSpP0B3g6NS+w11psddo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X4A1R3tyR5Lkg95VWf6KQtHVG7Zzckq+EB9r7kG/wAnPESNX08VCWSM3lKgzhVmhB8kt4siNTl5SBP5Nd038JWtw/X/hG5ckb8MM/NFnfojSEj5CG1qJU6T7RS3APStloauqiLK6a4kjfjBLfXkMOrcPraK43+yQ+Sc502eS1Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 495H2bgY024279;
-	Sat, 5 Oct 2024 12:02:37 -0500
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 495H2Z0c024278;
-	Sat, 5 Oct 2024 12:02:35 -0500
-Date: Sat, 5 Oct 2024 12:02:35 -0500
-From: "Dr. Greg" <greg@enjellic.com>
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>,
-        Fan Wu <wufan@linux.microsoft.com>, Micka??l Sala??n <mic@digikod.net>,
-        Mimi Zohar <zohar@linux.ibm.com>, Micah Morton <mortonm@chromium.org>,
-        John Johansen <john.johansen@canonical.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        KP Singh <kpsingh@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        linux-security-module@vger.kernel.org
-Subject: Re: TOMOYO's pull request for v6.12
-Message-ID: <20241005170235.GA24016@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <CAHC9VhR=QjdoHG3wJgHFJkKYBg7vkQH2MpffgVzQ0tAByo_wRg@mail.gmail.com> <202410041305.544EA7E4E@keescook> <ece0c7bd-0d28-4562-8760-c54b0077583a@I-love.SAKURA.ne.jp> <202410041645.27A48DA@keescook> <5b09909b-fe43-4a9c-b9a7-2e1122b2cdb6@I-love.SAKURA.ne.jp> <4eaea237-d259-44bb-a546-26a0558a4453@schaufler-ca.com>
+	s=arc-20240116; t=1728149670; c=relaxed/simple;
+	bh=t4j0Cc6xR/4r6W3pH1zuEjJWM/OJSLYIe8q+BAcAy4A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GD1AaPKmighziSkSuTPg+e7qsmXXTsHjLftzdpzk6MjglgOAJTBvwd+E7J/05Ph+FS3Zm9VRyIFeQa5sIP+MFFWHzBuqR8r1FypuS5xAzHhBG/4avJB1W5ksZAg1FrHO9sXL4mo4bsp81fc97YQu/l3k05a1KBknjPbEyJEFfSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nightmared.fr; spf=pass smtp.mailfrom=nightmared.fr; dkim=pass (2048-bit key) header.d=nightmared.fr header.i=@nightmared.fr header.b=WVp+7faI; arc=none smtp.client-ip=51.158.148.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nightmared.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nightmared.fr
+Received: from [192.168.1.3] (alyon-657-1-781-204.w80-9.abo.wanadoo.fr [80.9.175.204])
+	by mail.nightmared.fr (Postfix) with ESMTPSA id 54A0F10E0053;
+	Sat,  5 Oct 2024 17:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nightmared.fr;
+	s=docker; t=1728149317;
+	bh=t4j0Cc6xR/4r6W3pH1zuEjJWM/OJSLYIe8q+BAcAy4A=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=WVp+7faI0er6HFNGgtDcHajBO5exDZ7fMPIlMq/8Zb84WGgS3OL4zzDLQy5Lpr7dy
+	 T6sByyp//0KvBfSiNzzVuFKmLWa5edx5gFQ/aCEf6Io8lNusiBEa09YGIqxwYPyKic
+	 cag2EVxvn5JL/BmibSOZ71kx3HRdJQq13JFHO7P+XKuXFjVjy6vZW8NIUYa8FUQgJW
+	 91F/T+D5w2CHsjKB7kgRpn4oErzhM/edxBqtxRRMbrz4YLotZjgWIqwoar2TmF/IZI
+	 0yL0aqgvvLDgiwl2P4i8t7Ghd0GeBnwsf7ya3M1dIXiziD8g8C+awgv6kKQDJgUHaJ
+	 sKgOePNA5lAsA==
+Message-ID: <ec8770e0-8f7c-42b7-b66b-7f830be7271a@nightmared.fr>
+Date: Sat, 5 Oct 2024 19:28:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4eaea237-d259-44bb-a546-26a0558a4453@schaufler-ca.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Sat, 05 Oct 2024 12:02:37 -0500 (CDT)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: TOMOYO's pull request for v6.12
+To: Paul Moore <paul@paul-moore.com>,
+ Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Kees Cook <kees@kernel.org>, Fan Wu <wufan@linux.microsoft.com>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ Mimi Zohar <zohar@linux.ibm.com>, Micah Morton <mortonm@chromium.org>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ John Johansen <john.johansen@canonical.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>, KP Singh <kpsingh@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, linux-security-module@vger.kernel.org
+References: <CAHC9VhR=QjdoHG3wJgHFJkKYBg7vkQH2MpffgVzQ0tAByo_wRg@mail.gmail.com>
+ <202410041305.544EA7E4E@keescook>
+ <ece0c7bd-0d28-4562-8760-c54b0077583a@I-love.SAKURA.ne.jp>
+ <202410041645.27A48DA@keescook>
+ <5b09909b-fe43-4a9c-b9a7-2e1122b2cdb6@I-love.SAKURA.ne.jp>
+ <CAHC9VhQLONjomYjs6pK2tibVfOaPY+TbDA2CYQ1YEGX7ENVkYw@mail.gmail.com>
+Content-Language: en-US
+From: Simon Thoby <git@nightmared.fr>
+In-Reply-To: <CAHC9VhQLONjomYjs6pK2tibVfOaPY+TbDA2CYQ1YEGX7ENVkYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 05, 2024 at 09:10:08AM -0700, Casey Schaufler wrote:
+On 10/5/24 6:30 PM, Paul Moore wrote:
+> On Sat, Oct 5, 2024 at 3:11 AM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>> I think that this pull request succeeded in revealing what LSM community thinks.
+>> Each developer is thinking different things. One thinks "anyone can rebuild kernels
+>> with whatever changes", but that opinion ignored secure boot / module signing part.
+> 
+> As I believe that I'm the developer quoted above, let me say that my
+> comment did not ignore UEFI SB.  The Machine Owner Key (MOK) concept
+> provided by shims/bootloaders is designed just for this use case.
+> More advanced users can even replace the UEFI SB key databases, on
+> hardware that supports it, with their own to permit loading of their
+> self-built kernels without the need for the MOK; this is arguably one
+> of the most "secure" UEFI SB configurations.
+> 
+> I've successfully used MOK on my own systems to support my own kernel
+> builds, and I've successfully replaced the UEFI SB key databases in
+> VMs to use UEFI SB and my own kernel builds without MOK.
+> 
 
-Good morning to everyone, I hope the weekend is going well.
+Indeed, I'm probably sidetracking the discussion a bit, but I have met all three use
+cases both personally and professionally:
+- Signing an out-of-tree kernel modules with a local certificate (MOK) enrolled in the
+  MOKList via shim (e.g. to support Nvidia GPUs on SecureBoot-enabled machines)
+- Enrolling user boot keys (changing the PK, adding my own KEK to Microsoft's and the platform
+  manufacturer's, then extending the DB list) the signing my kernel with my own key
+- Completely replacing the secure boot keys to only allow my own (sadly, this may be risky
+  on some platforms, like ThinkPads, where essential UEFIs drivers may not load, thus
+  bricking the device)
 
-I saw this go by while I was multi-tasking between draining the oil
-out of the lower unit on my boat motor and welding the boat lift
-canopy frame and wanted to make sure that Tetsuo's comment is
-interpreted in the correct context.
+I say all this to emphasize that the options outlined by Paul are not theoretical, but
+very practical use cases that one may encounter in the industry (and I have, even
+in fairly conservative industries).
+In addition, I strongly believe this is the way to go: any kernel module or dynamic
+configuration (if I push this idea to the extreme, maybe in the future this could
+even include eBPF payloads in some hardened configurations) should be signed by a trusted
+authority to be loaded in the kernel.
+That authority may be the Linux distribution, but it can also be you (or your company
+IT department), thanks to MOK (or its heavier alternatives).
+You retain the flexibility to load kernel modules not built by the distributor,
+or even out-of-tree modules, but without degrading the security of your computers
+(assuming the signing keys are properly protected, of course).
 
-> On 10/5/2024 12:10 AM, Tetsuo Handa wrote:
-> > ... It is possible that an attempt to make it
-> > possible to use SELinux and Smack together is a wrong direction. Even if SELinux
-> > and TSEM conflicts about their security models (and cannot be used together), it
-> > might not be something we need to care...
+Perhaps you would be better served by providing your users with a snippet of documentation
+explaining how to configure MOK and to rebuild the RHEL kernel with TOMOYO enabled?
+To be fair, I know that your customers may find this a time-consuming ordeal compared to using
+the official kernel - especially as you want to keep up with the frequent updates.
+But OTOH that's not end-of-the-world complexity either, which makes it fine for occasional use,
+e.g. to behave like "a sort of system-wide strace-like profiler" (I'm guessing your customers
+are only doing this operation from time to time, not continuously in production).
+There's no perfect solution I guess, but to keep lobbying distributors to enabled TOMOYO
+in their kernels.
 
-> In the past I have said that having SELinux and Smack on the same
-> system is the test case for module stacking, but that I didn't see
-> it having a practical application. I have since been presented with
-> a use case that seems reasonable. Because LSM is a mechanism for
-> additional restrictions it is impossible for two security models to
-> "conflict". LSMs *must* be written to allow for cases where access
-> is denied for other reasons. You never get to the MAC check if the
-> DAC check has already failed. If TSEM can't handle what SELinux or
-> TOMOYO decides it shouldn't be accepted.
-
-I believe that Tetsuo misinterpreted the discussions you and I have
-had about what represents a 'security model'.
-
-For the record, TSEM has no issue with handling whatever SeLinux,
-SMACK, Tomoyo, AppArmor et.al. decide to do, full stop.
-
-It functions like all of the rest of the LSM modules, it determines
-whether or not a security event is inconsistent with the 'model' that
-the process is running in, and if so denies it, otherwise it stands
-aside and lets the other LSM's have a run at it.
-
-If some other LSM in front of it decides to deny an event, well and
-good, the event is over with from TSEM's perspective, as well as
-anything else behind the denying LSM for that matter.
-
-You raised the issue, I believe in V1, as to where we had positioned
-TSEM in the LSM call list.  After you expressed concern we moved it to
-the front of the call list because we don't care and everyone else
-seems to want to be later in the stack, particularly at the end, which
-would now seem to be be a privileged position held only by BPF.
-
-To extend on this a bit for further clarification.
-
-As we have evolved TSEM we realized that we actually want to be first,
-if that isn't also a coveted position.
-
-For example, internally, we have TSEM 'models' whose only function is
-to validate that the extended security attributes of an inode match
-what the workload was unit tested to, in order to thwart offline
-modification attacks.  In this case you want TSEM to be running ahead
-of the security attribute based models, since presumably, you would
-not want those models making a decision on extended attributes that
-have been modified.
-
-Hopefully this clarifies the issue.
-
-We have a long standing question, that has never been answered,
-regarding module stacking and multiple MAC implementations on the same
-OS instance but we will leave that to another conversation.
-
-Now back to MIG welder.
-
-Have a good weekend.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
+Simon
 
