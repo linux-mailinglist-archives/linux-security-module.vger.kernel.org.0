@@ -1,46 +1,46 @@
-Return-Path: <linux-security-module+bounces-5939-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5941-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D48F9929C3
-	for <lists+linux-security-module@lfdr.de>; Mon,  7 Oct 2024 13:00:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D713A992A29
+	for <lists+linux-security-module@lfdr.de>; Mon,  7 Oct 2024 13:26:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 088AA1F20F30
-	for <lists+linux-security-module@lfdr.de>; Mon,  7 Oct 2024 11:00:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94B63280C7C
+	for <lists+linux-security-module@lfdr.de>; Mon,  7 Oct 2024 11:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BEC18BB91;
-	Mon,  7 Oct 2024 11:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47C9A199225;
+	Mon,  7 Oct 2024 11:26:13 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBF73FBA5
-	for <linux-security-module@vger.kernel.org>; Mon,  7 Oct 2024 11:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407F52AD05;
+	Mon,  7 Oct 2024 11:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728298842; cv=none; b=qzazvqihBcEvexHOeXo4cnSebTYw/jXMGBnCEKUXs7NNFcO2YmWvrS7rnprYiAgdL7OskrhxIyc5Ty/ZBycamtVYMdZoSiKi0K8dNjEqAv9NJXzzbBXBjtFE4/uJFKTt9csxbuCJkEV2gJLt3Yv7Mntz8FdkTtzvrqatPgdKAw0=
+	t=1728300373; cv=none; b=ghYMhkg7tPF8+bL9ZQ4C1pge299bEhYjeZZA3lf5jrwEEpvOodvIMq2T/D5llCj+sb2LDixIV3SkP3fKcr6/NH8XTir2tvVwNLCVlLkjFA3ape3bhcwsiZoU/OJ+gmAw/FZhiD2H1gY9JfSBTbCSr61FCGf6Fylu+Nr41Kl8pdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728298842; c=relaxed/simple;
-	bh=Jwk/cwBsHIyELooC1cFNZghHD22ncXEH8OKEGBgAZJE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Un0oOv8G9QtO5tMbO3p9t8l4/7TGcoPQFbLIcxa9KcKfpfVCfkNve1mr8Eir+APovWFeIH8iHCmwqatH4cs9Uzk088U/MHvVdeKoV+aE604zmfijgqD7QScWUbcaAbajUfpVRDkRcA88Ant/D7K8qkGlhpTh9gxyO0R/7KkLlXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 497B0WS3014397;
-	Mon, 7 Oct 2024 20:00:32 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 497B0WS4014393
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 7 Oct 2024 20:00:32 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <9230bf37-487e-443a-82de-d399f30704f3@I-love.SAKURA.ne.jp>
-Date: Mon, 7 Oct 2024 20:00:31 +0900
+	s=arc-20240116; t=1728300373; c=relaxed/simple;
+	bh=WbP7IFHD4Op/uqoUMJOL1wlTaq7Jp2l76U8wVR9kpP4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=entYcVqKQCAQH7r8Cg5tTwnXT2WonkCJdXSV9BIFHrG6dhJVpwsd7+23keky1MYed1c0IzDwFQ9xAodc3N0awJMucEUu9B9idQkK8ETLkilhHRNcfoFKcvl8+bimIMqFVgog/EsmbU9ckl8iTz3jSAM8dKrJRcCxj65x8ogX+0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XMbt45Mtmz1j9ND;
+	Mon,  7 Oct 2024 19:05:48 +0800 (CST)
+Received: from kwepemj200016.china.huawei.com (unknown [7.202.194.28])
+	by mail.maildlp.com (Postfix) with ESMTPS id 47AAD1402CD;
+	Mon,  7 Oct 2024 19:06:51 +0800 (CST)
+Received: from [10.123.123.159] (10.123.123.159) by
+ kwepemj200016.china.huawei.com (7.202.194.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 7 Oct 2024 19:06:47 +0800
+Message-ID: <9ae80f8c-1fb4-715f-87e1-b605ea4af59c@huawei-partners.com>
+Date: Mon, 7 Oct 2024 14:06:42 +0300
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -48,76 +48,161 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: TOMOYO's pull request for v6.12
-To: Simon Thoby <git@nightmared.fr>, "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Paul Moore <paul@paul-moore.com>, Kees Cook <kees@kernel.org>,
-        Fan Wu <wufan@linux.microsoft.com>,
-        =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>,
-        Mimi Zohar <zohar@linux.ibm.com>, Micah Morton <mortonm@chromium.org>,
-        Casey Schaufler
- <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        KP Singh <kpsingh@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        linux-security-module@vger.kernel.org
-References: <CAHC9VhR=QjdoHG3wJgHFJkKYBg7vkQH2MpffgVzQ0tAByo_wRg@mail.gmail.com>
- <202410041305.544EA7E4E@keescook>
- <ece0c7bd-0d28-4562-8760-c54b0077583a@I-love.SAKURA.ne.jp>
- <202410041645.27A48DA@keescook>
- <5b09909b-fe43-4a9c-b9a7-2e1122b2cdb6@I-love.SAKURA.ne.jp>
- <CAHC9VhQLONjomYjs6pK2tibVfOaPY+TbDA2CYQ1YEGX7ENVkYw@mail.gmail.com>
- <ec8770e0-8f7c-42b7-b66b-7f830be7271a@nightmared.fr>
- <20241006000206.GA901131@mail.hallyn.com>
- <28dd6c35-c201-4367-b853-d637534d9d3f@I-love.SAKURA.ne.jp>
- <3f43ee1c-b297-4a4d-bc3a-bdcaa1613039@nightmared.fr>
-Content-Language: en-US
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <3f43ee1c-b297-4a4d-bc3a-bdcaa1613039@nightmared.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Virus-Status: clean
-X-Anti-Virus-Server: fsav205.rs.sakura.ne.jp
+Subject: Re: [RFC PATCH v1 1/2] landlock: Fix non-TCP sockets restriction
+Content-Language: ru
+To: =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, Paul Moore
+	<paul@paul-moore.com>
+CC: <gnoack@google.com>, <willemdebruijn.kernel@gmail.com>,
+	<linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<netfilter-devel@vger.kernel.org>, <yusongping@huawei.com>,
+	<artem.kuzin@huawei.com>, <konstantin.meskhidze@huawei.com>, Matthieu Buffet
+	<matthieu@buffet.re>
+References: <20241003143932.2431249-1-ivanov.mikhail1@huawei-partners.com>
+ <20241003143932.2431249-2-ivanov.mikhail1@huawei-partners.com>
+ <20241003.wie1aiphaeCh@digikod.net>
+ <8f023c51-bac1-251e-0f40-24dbe2bba729@huawei-partners.com>
+ <20241004.rel9ja7IeDo4@digikod.net>
+ <0774e9f1-994f-1131-17f9-7dd8eb96738f@huawei-partners.com>
+ <20241005.eeKoiweiwe8a@digikod.net>
+From: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
+In-Reply-To: <20241005.eeKoiweiwe8a@digikod.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ kwepemj200016.china.huawei.com (7.202.194.28)
 
-On 2024/10/06 20:14, Simon Thoby wrote:
->> It is sad that the LSM community does not like e.g. loadable LSM modules despite
->> writable variables are not a practical attack vector for my customers...
+On 10/5/2024 6:49 PM, Mickaël Salaün wrote:
+> On Fri, Oct 04, 2024 at 09:16:56PM +0300, Mikhail Ivanov wrote:
+>> On 10/4/2024 1:13 PM, Mickaël Salaün wrote:
+>>> On Fri, Oct 04, 2024 at 12:30:02AM +0300, Mikhail Ivanov wrote:
+>>>> On 10/3/2024 8:45 PM, Mickaël Salaün wrote:
+>>>>> Please also add Matthieu in Cc for the network patch series.
+>>>>>
+>>>>> On Thu, Oct 03, 2024 at 10:39:31PM +0800, Mikhail Ivanov wrote:
+>>>>>> Do not check TCP access right if socket protocol is not IPPROTO_TCP.
+>>>>>> LANDLOCK_ACCESS_NET_BIND_TCP and LANDLOCK_ACCESS_NET_CONNECT_TCP
+>>>>>> should not restrict bind(2) and connect(2) for non-TCP protocols
+>>>>>> (SCTP, MPTCP, SMC).
+>>>>>>
+>>>>>> Closes: https://github.com/landlock-lsm/linux/issues/40
+>>>>>> Fixes: fff69fb03dde ("landlock: Support network rules with TCP bind and connect")
+>>>>>> Signed-off-by: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
+>>>>>> ---
+>>>>>>     security/landlock/net.c | 2 +-
+>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/security/landlock/net.c b/security/landlock/net.c
+>>>>>> index bc3d943a7118..6f59dd98bb13 100644
+>>>>>> --- a/security/landlock/net.c
+>>>>>> +++ b/security/landlock/net.c
+>>>>>> @@ -68,7 +68,7 @@ static int current_check_access_socket(struct socket *const sock,
+>>>>>>     		return -EACCES;
+>>>>>>     	/* Checks if it's a (potential) TCP socket. */
+>>>>>
+>>>>> We can extend this comment to explain that we don't use sk_is_tcp()
+>>>>> because we need to handle the AF_UNSPEC case.
+>>>>
+>>>> Indeed, I'll do this.
 >>
+>> I've noticed that we still should check sk->sk_family = AF_INET{,6}
+>> here (so sk_is_tcp() is suitable). AF_UNSPEC can be only related to
+>> addresses and we should not provide any checks (for address) if socket
+>> is unrestrictable (i.e. it's not TCP). It's not useful and might lead to
+>> error incosistency for non-TCP sockets.
 > 
-> The difficulty is that the LSM community need to think of what's best for all users,
-> and that include users where the writable static calls may be an exploitable path.
-
-I explained how __ro_after_init linked-list can be made writable only while registering
-callbacks at https://lkml.kernel.org/r/5b09909b-fe43-4a9c-b9a7-2e1122b2cdb6@I-love.SAKURA.ne.jp .
-What is the reason this approach can't be applied to __ro_after_init static calls?
-
-I don't think that the LSM framework will forever never allow adding callbacks after
-the __init phase. This is a matter of deciding whether the LSM framework allows
-"making read-only a bit later the __init phase" (or "making writable only while
-registering callbacks"). And if we decide to implement it, then we can write a
-proper API.
-
-
-
->> Going back to tomoyo.ko seen from my customers point of view.
->>
->> Advantage of building TOMOYO into vmlinux is that the procedure for
->> communicating with managers/developers/operators becomes simple.
->>
->> Advantage of building TOMOYO as tomoyo.ko is that users can update only
->> tomoyo.ko (thanks to KABI in RHEL kernels) when a bug is found in TOMOYO.
->> Minimizing possible code changes helps minimizing cost for updating packages.
->> But secure boot / module signing (not a topic to consider for current
->> environment, but possibly becomes a topic to consider for future environment)
->> needs to be taken into account.
+> Good catch, let's use sk_is_tcp().
 > 
-> Finally, I must admit that I know nearly nothing of both TOMOYO and BPF-LSM.
-> Nevertheless, for your tracing needs (this may not work well for enforcing a
-> policy, but I kind of inferred from your emails that you were mostly interested
-> in tracing/debugging capabilities), may you could reproduce the necessary functionalities
-> of TOMOYO via BPF-LSM?
+>>
+>> Btw, I suppose we can improve error consistency by bringing more checks
+>> from INET/TCP stack. For example it may be useful to return EISCONN
+>> instead of EACCES while connect(2) is called on a connected socket.
+> 
+> Yes, that would be nice (with the related tests).
+> 
+>>
+>> This should be done really carefully and only for some useful cases.
+>> Anyway it's not related to the current patch (since it's not a bug).
+> 
+> Sure.
 
-I already considered using BPF-LSM. My conclusion is that BPF-LSM is too
-restricted to mimic TOMOYO's tracing capability.
+I have a little question to clarify before sending a next version. Are
+we condisering order of network checks for error consistency?
 
+For example, in the current_check_access_socket() we have following
+order of checks for ipv4 connect(2) action:
+(1) addrlen < sizeof(struct sockaddr_in) -> return -EINVAL
+(2) sa_family != sk_family -> return -EINVAL
+
+The ipv4 stack has a check for sock->state before (1) and (2), which can
+return -EISCONN if the socket is already connected.
+
+This results in the possiblity of two following scenarios:
+
+Landlock enabled:
+1. socket(ipv4) -> OK
+2. connect(ipv4 address) -> OK
+3. connect(ipv6 address) -> -EINVAL (sa_family != sk_family)
+
+Landlock disabled:
+1. socket(ipv4) -> OK
+2. connect(ipv4 address) -> OK
+3. connect(ipv6 address) -> -EISCONN (socket is already connected)
+
+I have always considered the order of network checks as part of error
+consistency, and I'd like to make sure that we're on the same page
+before extending current patch with error inconsistency fixes.
+
+> 
+> The following patch series could probably be extended for all LSM to
+> benefit from these fixes:
+> https://lore.kernel.org/all/20240327120036.233641-1-mic@digikod.net/
+> 
+> Mikhail, according to your SCTP tests with SELinux, it looks like this
+> patch series should be updated, but that should be simple.
+> 
+> Paul, what is the status of this LSM patch series?  Could Mikhail
+> integrate this LSM patch (with the SCTP fix) as part of the current
+> Landlock patch series?  This would help fixing the Landlock tests (which
+> check SCTP error consistency) when run with SELinux.
+> 
+>>
+>>>>
+>>>>>
+>>>>>> -	if (sock->type != SOCK_STREAM)
+>>>>>> +	if (sock->type != SOCK_STREAM || sock->sk->sk_protocol != IPPROTO_TCP)
+>>>>>
+>>>>> I think we should check sock->sk->sk_type instead of sock->type (even if
+>>>>> it should be the same).  To make it simpler, we should only use sk in
+>>>>> current_check_access_socket():
+>>>>> struct sock *sk = sock->sk;
+>>>>
+>>>> Agreed.
+>>>>
+>>>>>
+>>>>> Could you please also do s/__sk_common\.skc_/sk_/g ?
+>>>>
+>>>> Ofc
+>>>>
+>>>> Btw, there is probably incorrect read of skc_family in this function
+>>>> [1]. I'll add READ_ONCE for sk->sk_family.
+>>>>
+>>>> [1] https://lore.kernel.org/all/20240202095404.183274-1-edumazet@google.com/
+>>>
+>>> I think it should not be a bug with the current code (IPv6 -> IPV4, and
+>>> socket vs. sock) but we should indeed use READ_ONCE() (and add this link
+>>> to the commit message).
+>>
+>> ok
+>>
+>>>
+>>>>
+>>>>>
+>>>>>>     		return 0;
+>>>>>>     	/* Checks for minimal header length to safely read sa_family. */
+>>>>>> -- 
+>>>>>> 2.34.1
+>>>>>>
+>>>>>>
+>>>>
+>>
 
