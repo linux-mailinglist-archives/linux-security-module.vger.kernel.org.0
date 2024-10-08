@@ -1,183 +1,473 @@
-Return-Path: <linux-security-module+bounces-5975-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-5977-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92AE8994D60
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Oct 2024 15:04:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9006E995527
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Oct 2024 18:58:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A784B29B93
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Oct 2024 13:00:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EF0D1C24807
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Oct 2024 16:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60711DED74;
-	Tue,  8 Oct 2024 12:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="pEre8go+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014C41E102E;
+	Tue,  8 Oct 2024 16:58:02 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CED1DF275
-	for <linux-security-module@vger.kernel.org>; Tue,  8 Oct 2024 12:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE631DF964;
+	Tue,  8 Oct 2024 16:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728392363; cv=none; b=lMhhBGVUEOi9xiHzNkxZZNtgOxZPQFbD2qSr78kycWa4nkFZOJkG6mDCYNZzSYAXvZRE5xEMKj6+DgQdNoY9jcEQSQHcDSxGd0xML8U8shdBVzKs9K82R07ozIFsfeTU7uddWK5XNRESB6nRxN+OtZmQOs+iVgdeLTRu1TZAbIU=
+	t=1728406681; cv=none; b=pnpRzi0i38rmOVQYgbQZM76q2IhPp2M+XkLORZMZPc88JBMpLSYk92b8Q7Cx3AAMxZqYFcqqc4h/egV0RTOYKcNW6c5ZqnruwwQG14Y86mnWisFelugrChtsQ53mRsrX6VoRI4veOOYCxW7YPbzI4uwrHjNEcnYzxGaZEN+u+II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728392363; c=relaxed/simple;
-	bh=XEQ84zSaVaFCcNhIzuJn6oUzj6Js6KHVuGb3P1chFyM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dnFDG25iSYYQV31ijdzYYF35srABIqD7DkM89okSZ8tygUeVABd6F5GSAOJTqaSJn5TAI7ODfQ7G4th4wmJBinhH46y5Q3jBvI3eKihn576C7/+rrsaLkItpQvrSCUrSi7KfFdTXCYt4gli33BvDbseUJrP9PVQ/jfnACjH2Nx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=pEre8go+; arc=none smtp.client-ip=185.125.25.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XNGLS0FSsz4X7;
-	Tue,  8 Oct 2024 14:59:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1728392351;
-	bh=lubKm596ajxruAowyOac0GqBl8F51f/htwsSzeT4WHY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pEre8go+mybnR8ts9txJRzOFe7SezCcGaT0Pca6Uro5RQz3NmFZstJNFsr1yAZiiD
-	 zdu4NDVN38vP5KFqwymW4L2skhrA9eQN1UkeP547Rfi34OyNw8IjMTzk9AU7SX3sMN
-	 p05+vrFJtJvzdlox7dQDOowI6oDXivNjkPFjhy7U=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XNGLQ6mfKzMvr;
-	Tue,  8 Oct 2024 14:59:10 +0200 (CEST)
-Date: Tue, 8 Oct 2024 14:59:07 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Dave Chinner <david@fromorbit.com>, Jan Kara <jack@suse.cz>, 
-	Christoph Hellwig <hch@infradead.org>, linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org, 
-	linux-bcachefs@vger.kernel.org, kent.overstreet@linux.dev, Jann Horn <jannh@google.com>, 
-	Serge Hallyn <serge@hallyn.com>, Kees Cook <keescook@chromium.org>, 
-	linux-security-module@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-Subject: Re: lsm sb_delete hook, was Re: [PATCH 4/7] vfs: Convert
- sb->s_inodes iteration to super_iter_inodes()
-Message-ID: <20241008.Pohc0dixeiZ8@digikod.net>
-References: <20241002014017.3801899-1-david@fromorbit.com>
- <20241002014017.3801899-5-david@fromorbit.com>
- <Zv5GfY1WS_aaczZM@infradead.org>
- <Zv5J3VTGqdjUAu1J@infradead.org>
- <20241003115721.kg2caqgj2xxinnth@quack3>
- <CAHk-=whg7HXYPV4wNO90j22VLKz4RJ2miCe=s0C8ZRc0RKv9Og@mail.gmail.com>
- <ZwRvshM65rxXTwxd@dread.disaster.area>
- <CAHk-=wi5ZpW73nLn5h46Jxcng6wn_bCUxj6JjxyyEMAGzF5KZg@mail.gmail.com>
+	s=arc-20240116; t=1728406681; c=relaxed/simple;
+	bh=X59DJW+OtGgKWLWosloDcJz8o4IgMFFhEe6CwNhc4dQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QR6rtCoJtMk3X3l9BlKRVM4IEH/fTkDXwfNmc04TYldq6Di6g4Qs7hKF7wxuYZJaizSIcvrQKd3gqUheqVdf9H0Yo5swsePHFlp7ATsfLQSr0eLONW7HbBqG6rB5Si8f4EHOUd5WYFnJ0GGiAsB4jZVv+PiVvrrefW2XYXSz4G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4XNMBf6XQYz9v7Hm;
+	Wed,  9 Oct 2024 00:37:46 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 727D61401F0;
+	Wed,  9 Oct 2024 00:57:44 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDnlseAZAVng2B7Ag--.64194S2;
+	Tue, 08 Oct 2024 17:57:43 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com
+Cc: linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ebpqwerty472123@gmail.com,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 1/3] ima: Remove inode lock
+Date: Tue,  8 Oct 2024 18:57:30 +0200
+Message-Id: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi5ZpW73nLn5h46Jxcng6wn_bCUxj6JjxyyEMAGzF5KZg@mail.gmail.com>
-X-Infomaniak-Routing: alpha
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwDnlseAZAVng2B7Ag--.64194S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfGry3tF13ZFyxXFWkCw1xXwb_yoW8JrW7Ko
+	WSy3sxJrn8WrySyay8Ww1SyFW8u39xG3yfCrs5XFnrK3W2kryUX347W3W3JFW3Xr4rGr1q
+	k3s7Jw4kJF9rJ3Wkn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+	7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x02
+	62kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+	026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+	Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+	vEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
+	67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+	uYvjxU4NB_UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBGcElPgLNgAAs9
 
-On Mon, Oct 07, 2024 at 05:28:57PM -0700, Linus Torvalds wrote:
-> On Mon, 7 Oct 2024 at 16:33, Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > There may be other inode references being held that make
-> > the inode live longer than the dentry cache. When should the
-> > fsnotify marks be removed from the inode in that case? Do they need
-> > to remain until, e.g, writeback completes?
-> 
-> Note that my idea is to just remove the fsnotify marks when the dentry
-> discards the inode.
-> 
-> That means that yes, the inode may still have a lifetime after the
-> dentry (because of other references, _or_ just because I_DONTCACHE
-> isn't set and we keep caching the inode).
-> 
-> BUT - fsnotify won't care. There won't be any fsnotify marks on that
-> inode any more, and without a dentry that points to it, there's no way
-> to add such marks.
-> 
-> (A new dentry may be re-attached to such an inode, and then fsnotify
-> could re-add new marks, but that doesn't change anything - the next
-> time the dentry is detached, the marks would go away again).
-> 
-> And yes, this changes the timing on when fsnotify events happen, but
-> what I'm actually hoping for is that Jan will agree that it doesn't
-> actually matter semantically.
-> 
-> > > Then at umount time, the dentry shrinking will deal with all live
-> > > dentries, and at most the fsnotify layer would send the FS_UNMOUNT to
-> > > just the root dentry inodes?
-> >
-> > I don't think even that is necessary, because
-> > shrink_dcache_for_umount() drops the sb->s_root dentry after
-> > trimming the dentry tree. Hence the dcache drop would cleanup all
-> > inode references, roots included.
-> 
-> Ahh - even better.
-> 
-> I didn't actually look very closely at the actual umount path, I was
-> looking just at the fsnotify_inoderemove() place in
-> dentry_unlink_inode() and went "couldn't we do _this_ instead?"
-> 
-> > > Wouldn't that make things much cleaner, and remove at least *one* odd
-> > > use of the nasty s_inodes list?
-> >
-> > Yes, it would, but someone who knows exactly when the fsnotify
-> > marks can be removed needs to chime in here...
-> 
-> Yup. Honza?
-> 
-> (Aside: I don't actually know if you prefer Jan or Honza, so I use
-> both randomly and interchangeably?)
-> 
-> > > I have this feeling that maybe we can just remove the other users too
-> > > using similar models. I think the LSM layer use (in landlock) is bogus
-> > > for exactly the same reason - there's really no reason to keep things
-> > > around for a random cached inode without a dentry.
-> >
-> > Perhaps, but I'm not sure what the landlock code is actually trying
-> > to do.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-In Landlock, inodes (see landlock_object) may be referenced by several
-rulesets, either tied to a task's cred or a ruleset's file descriptor.
-A ruleset may outlive its referenced inodes, and this should not block
-related umounts.  security_sb_delete() is used to gracefully release
-such references.
+Move out the mutex in the ima_iint_cache structure to a new structure
+called ima_iint_cache_lock, so that a lock can be taken regardless of
+whether or not inode integrity metadata are stored in the inode.
 
-> 
-> Yeah, I wouldn't be surprised if it's just confused - it's very odd.
-> 
-> But I'd be perfectly happy just removing one use at a time - even if
-> we keep the s_inodes list around because of other users, it would
-> still be "one less thing".
-> 
-> > Hence, to me, the lifecycle and reference counting of inode related
-> > objects in landlock doesn't seem quite right, and the use of the
-> > security_sb_delete() callout appears to be papering over an internal
-> > lifecycle issue.
-> >
-> > I'd love to get rid of it altogether.
+Introduce ima_inode_security() to simplify accessing the new structure in
+the inode security blob.
 
-I'm not sure to fully understand the implications for now, but it would
-definitely be good to simplify this lifetime management.  The only
-requirement for Landlock is that inodes references should live as long
-as the related inodes are accessible by user space or already in use.
-The sooner these references are removed from related ruleset, the
-better.
+Move the mutex initialization and annotation in the new function
+ima_inode_alloc_security() and introduce ima_iint_lock() and
+ima_iint_unlock() to respectively lock and unlock the mutex.
 
-> 
-> Yeah, I think the inode lifetime is just so random these days that
-> anything that depends on it is questionable.
-> 
-> The quota case is probably the only thing where the inode lifetime
-> *really* makes sense, and that's the one where I looked at the code
-> and went "I *hope* this can be converted to traversing the dentry
-> tree", but at the same time it did look sensible to make it be about
-> inodes.
-> 
-> If we can convert the quota side to be based on dentry lifetimes, it
-> will almost certainly then have to react to the places that do
-> "d_add()" when re-connecting an inode to a dentry at lookup time.
-> 
-> So yeah, the quota code looks worse, but even if we could just remove
-> fsnotify and landlock, I'd still be much happier.
-> 
->              Linus
+Finally, expand the critical region in process_measurement() guarded by
+iint->mutex up to where the inode was locked, use only one iint lock in
+__ima_inode_hash(), since the mutex is now in the inode security blob, and
+replace the inode_lock()/inode_unlock() calls in ima_check_last_writer().
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima.h      | 26 ++++++++---
+ security/integrity/ima/ima_api.c  |  4 +-
+ security/integrity/ima/ima_iint.c | 77 ++++++++++++++++++++++++++-----
+ security/integrity/ima/ima_main.c | 39 +++++++---------
+ 4 files changed, 104 insertions(+), 42 deletions(-)
+
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 3c323ca213d4..6474a15b584a 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -182,7 +182,6 @@ struct ima_kexec_hdr {
+ 
+ /* IMA integrity metadata associated with an inode */
+ struct ima_iint_cache {
+-	struct mutex mutex;	/* protects: version, flags, digest */
+ 	struct integrity_inode_attributes real_inode;
+ 	unsigned long flags;
+ 	unsigned long measured_pcrs;
+@@ -195,35 +194,48 @@ struct ima_iint_cache {
+ 	struct ima_digest_data *ima_hash;
+ };
+ 
++struct ima_iint_cache_lock {
++	struct mutex mutex;	/* protects: version, flags, digest */
++	struct ima_iint_cache *iint;
++};
++
+ extern struct lsm_blob_sizes ima_blob_sizes;
+ 
++static inline struct ima_iint_cache_lock *ima_inode_security(void *i_security)
++{
++	return i_security + ima_blob_sizes.lbs_inode;
++}
++
+ static inline struct ima_iint_cache *
+ ima_inode_get_iint(const struct inode *inode)
+ {
+-	struct ima_iint_cache **iint_sec;
++	struct ima_iint_cache_lock *iint_lock;
+ 
+ 	if (unlikely(!inode->i_security))
+ 		return NULL;
+ 
+-	iint_sec = inode->i_security + ima_blob_sizes.lbs_inode;
+-	return *iint_sec;
++	iint_lock = ima_inode_security(inode->i_security);
++	return iint_lock->iint;
+ }
+ 
+ static inline void ima_inode_set_iint(const struct inode *inode,
+ 				      struct ima_iint_cache *iint)
+ {
+-	struct ima_iint_cache **iint_sec;
++	struct ima_iint_cache_lock *iint_lock;
+ 
+ 	if (unlikely(!inode->i_security))
+ 		return;
+ 
+-	iint_sec = inode->i_security + ima_blob_sizes.lbs_inode;
+-	*iint_sec = iint;
++	iint_lock = ima_inode_security(inode->i_security);
++	iint_lock->iint = iint;
+ }
+ 
+ struct ima_iint_cache *ima_iint_find(struct inode *inode);
+ struct ima_iint_cache *ima_inode_get(struct inode *inode);
++int ima_inode_alloc_security(struct inode *inode);
+ void ima_inode_free_rcu(void *inode_security);
++void ima_iint_lock(struct inode *inode);
++void ima_iint_unlock(struct inode *inode);
+ void __init ima_iintcache_init(void);
+ 
+ extern const int read_idmap[];
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index 984e861f6e33..37c2a228f0e1 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -234,7 +234,7 @@ static bool ima_get_verity_digest(struct ima_iint_cache *iint,
+  * Calculate the file hash, if it doesn't already exist,
+  * storing the measurement and i_version in the iint.
+  *
+- * Must be called with iint->mutex held.
++ * Must be called with iint mutex held.
+  *
+  * Return 0 on success, error code otherwise
+  */
+@@ -343,7 +343,7 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
+  *	- the inode was previously flushed as well as the iint info,
+  *	  containing the hashing info.
+  *
+- * Must be called with iint->mutex held.
++ * Must be called with iint mutex held.
+  */
+ void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
+ 			   const unsigned char *filename,
+diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/ima_iint.c
+index 00b249101f98..c176fd0faae7 100644
+--- a/security/integrity/ima/ima_iint.c
++++ b/security/integrity/ima/ima_iint.c
+@@ -40,18 +40,18 @@ struct ima_iint_cache *ima_iint_find(struct inode *inode)
+  * mutex to avoid lockdep false positives related to IMA + overlayfs.
+  * See ovl_lockdep_annotate_inode_mutex_key() for more details.
+  */
+-static inline void ima_iint_lockdep_annotate(struct ima_iint_cache *iint,
+-					     struct inode *inode)
++static inline void ima_iint_lock_lockdep_annotate(struct mutex *mutex,
++						  struct inode *inode)
+ {
+ #ifdef CONFIG_LOCKDEP
+-	static struct lock_class_key ima_iint_mutex_key[IMA_MAX_NESTING];
++	static struct lock_class_key ima_iint_lock_mutex_key[IMA_MAX_NESTING];
+ 
+ 	int depth = inode->i_sb->s_stack_depth;
+ 
+ 	if (WARN_ON_ONCE(depth < 0 || depth >= IMA_MAX_NESTING))
+ 		depth = 0;
+ 
+-	lockdep_set_class(&iint->mutex, &ima_iint_mutex_key[depth]);
++	lockdep_set_class(mutex, &ima_iint_lock_mutex_key[depth]);
+ #endif
+ }
+ 
+@@ -68,14 +68,11 @@ static void ima_iint_init_always(struct ima_iint_cache *iint,
+ 	iint->ima_read_status = INTEGRITY_UNKNOWN;
+ 	iint->ima_creds_status = INTEGRITY_UNKNOWN;
+ 	iint->measured_pcrs = 0;
+-	mutex_init(&iint->mutex);
+-	ima_iint_lockdep_annotate(iint, inode);
+ }
+ 
+ static void ima_iint_free(struct ima_iint_cache *iint)
+ {
+ 	kfree(iint->ima_hash);
+-	mutex_destroy(&iint->mutex);
+ 	kmem_cache_free(ima_iint_cache, iint);
+ }
+ 
+@@ -108,6 +105,26 @@ struct ima_iint_cache *ima_inode_get(struct inode *inode)
+ 	return iint;
+ }
+ 
++/**
++ * ima_inode_alloc_security - Called to init an inode
++ * @inode: Pointer to the inode
++ *
++ * Initialize and annotate the mutex in the ima_iint_cache_lock structure.
++ *
++ * Return: Zero.
++ */
++int ima_inode_alloc_security(struct inode *inode)
++{
++	struct ima_iint_cache_lock *iint_lock;
++
++	iint_lock = ima_inode_security(inode->i_security);
++
++	mutex_init(&iint_lock->mutex);
++	ima_iint_lock_lockdep_annotate(&iint_lock->mutex, inode);
++
++	return 0;
++}
++
+ /**
+  * ima_inode_free_rcu - Called to free an inode via a RCU callback
+  * @inode_security: The inode->i_security pointer
+@@ -116,11 +133,49 @@ struct ima_iint_cache *ima_inode_get(struct inode *inode)
+  */
+ void ima_inode_free_rcu(void *inode_security)
+ {
+-	struct ima_iint_cache **iint_p = inode_security + ima_blob_sizes.lbs_inode;
++	struct ima_iint_cache_lock *iint_lock;
++
++	iint_lock = ima_inode_security(inode_security);
++
++	mutex_destroy(&iint_lock->mutex);
++
++	/* iint_lock->iint should be NULL if !IS_IMA(inode) */
++	if (iint_lock->iint)
++		ima_iint_free(iint_lock->iint);
++}
++
++/**
++ * ima_iint_lock - Lock integrity metadata
++ * @inode: Pointer to the inode
++ *
++ * Lock integrity metadata.
++ */
++void ima_iint_lock(struct inode *inode)
++{
++	struct ima_iint_cache_lock *iint_lock;
++
++	iint_lock = ima_inode_security(inode->i_security);
++
++	/* Only inodes with i_security are processed by IMA. */
++	if (iint_lock)
++		mutex_lock(&iint_lock->mutex);
++}
++
++/**
++ * ima_iint_unlock - Unlock integrity metadata
++ * @inode: Pointer to the inode
++ *
++ * Unlock integrity metadata.
++ */
++void ima_iint_unlock(struct inode *inode)
++{
++	struct ima_iint_cache_lock *iint_lock;
++
++	iint_lock = ima_inode_security(inode->i_security);
+ 
+-	/* *iint_p should be NULL if !IS_IMA(inode) */
+-	if (*iint_p)
+-		ima_iint_free(*iint_p);
++	/* Only inodes with i_security are processed by IMA. */
++	if (iint_lock)
++		mutex_unlock(&iint_lock->mutex);
+ }
+ 
+ static void ima_iint_init_once(void *foo)
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 06132cf47016..7852212c43ce 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -163,7 +163,7 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
+ 	if (!(mode & FMODE_WRITE))
+ 		return;
+ 
+-	mutex_lock(&iint->mutex);
++	ima_iint_lock(inode);
+ 	if (atomic_read(&inode->i_writecount) == 1) {
+ 		struct kstat stat;
+ 
+@@ -181,7 +181,7 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
+ 				ima_update_xattr(iint, file);
+ 		}
+ 	}
+-	mutex_unlock(&iint->mutex);
++	ima_iint_unlock(inode);
+ }
+ 
+ /**
+@@ -247,7 +247,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	if (action & IMA_FILE_APPRAISE)
+ 		func = FILE_CHECK;
+ 
+-	inode_lock(inode);
++	ima_iint_lock(inode);
+ 
+ 	if (action) {
+ 		iint = ima_inode_get(inode);
+@@ -259,15 +259,11 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 		ima_rdwr_violation_check(file, iint, action & IMA_MEASURE,
+ 					 &pathbuf, &pathname, filename);
+ 
+-	inode_unlock(inode);
+-
+ 	if (rc)
+ 		goto out;
+ 	if (!action)
+ 		goto out;
+ 
+-	mutex_lock(&iint->mutex);
+-
+ 	if (test_and_clear_bit(IMA_CHANGE_ATTR, &iint->atomic_flags))
+ 		/* reset appraisal flags if ima_inode_post_setattr was called */
+ 		iint->flags &= ~(IMA_APPRAISE | IMA_APPRAISED |
+@@ -412,10 +408,10 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	if ((mask & MAY_WRITE) && test_bit(IMA_DIGSIG, &iint->atomic_flags) &&
+ 	     !(iint->flags & IMA_NEW_FILE))
+ 		rc = -EACCES;
+-	mutex_unlock(&iint->mutex);
+ 	kfree(xattr_value);
+ 	ima_free_modsig(modsig);
+ out:
++	ima_iint_unlock(inode);
+ 	if (pathbuf)
+ 		__putname(pathbuf);
+ 	if (must_appraise) {
+@@ -580,18 +576,13 @@ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+ 	struct ima_iint_cache *iint = NULL, tmp_iint;
+ 	int rc, hash_algo;
+ 
+-	if (ima_policy_flag) {
++	ima_iint_lock(inode);
++
++	if (ima_policy_flag)
+ 		iint = ima_iint_find(inode);
+-		if (iint)
+-			mutex_lock(&iint->mutex);
+-	}
+ 
+ 	if ((!iint || !(iint->flags & IMA_COLLECTED)) && file) {
+-		if (iint)
+-			mutex_unlock(&iint->mutex);
+-
+ 		memset(&tmp_iint, 0, sizeof(tmp_iint));
+-		mutex_init(&tmp_iint.mutex);
+ 
+ 		rc = ima_collect_measurement(&tmp_iint, file, NULL, 0,
+ 					     ima_hash_algo, NULL);
+@@ -600,22 +591,24 @@ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+ 			if (rc != -ENOMEM)
+ 				kfree(tmp_iint.ima_hash);
+ 
++			ima_iint_unlock(inode);
+ 			return -EOPNOTSUPP;
+ 		}
+ 
+ 		iint = &tmp_iint;
+-		mutex_lock(&iint->mutex);
+ 	}
+ 
+-	if (!iint)
++	if (!iint) {
++		ima_iint_unlock(inode);
+ 		return -EOPNOTSUPP;
++	}
+ 
+ 	/*
+ 	 * ima_file_hash can be called when ima_collect_measurement has still
+ 	 * not been called, we might not always have a hash.
+ 	 */
+ 	if (!iint->ima_hash || !(iint->flags & IMA_COLLECTED)) {
+-		mutex_unlock(&iint->mutex);
++		ima_iint_unlock(inode);
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+@@ -626,11 +619,12 @@ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+ 		memcpy(buf, iint->ima_hash->digest, copied_size);
+ 	}
+ 	hash_algo = iint->ima_hash->algo;
+-	mutex_unlock(&iint->mutex);
+ 
+ 	if (iint == &tmp_iint)
+ 		kfree(iint->ima_hash);
+ 
++	ima_iint_unlock(inode);
++
+ 	return hash_algo;
+ }
+ 
+@@ -1118,7 +1112,7 @@ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
+  * @kmod_name: kernel module name
+  *
+  * Avoid a verification loop where verifying the signature of the modprobe
+- * binary requires executing modprobe itself. Since the modprobe iint->mutex
++ * binary requires executing modprobe itself. Since the modprobe iint mutex
+  * is already held when the signature verification is performed, a deadlock
+  * occurs as soon as modprobe is executed within the critical region, since
+  * the same lock cannot be taken again.
+@@ -1193,6 +1187,7 @@ static struct security_hook_list ima_hooks[] __ro_after_init = {
+ #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+ 	LSM_HOOK_INIT(kernel_module_request, ima_kernel_module_request),
+ #endif
++	LSM_HOOK_INIT(inode_alloc_security, ima_inode_alloc_security),
+ 	LSM_HOOK_INIT(inode_free_security_rcu, ima_inode_free_rcu),
+ };
+ 
+@@ -1210,7 +1205,7 @@ static int __init init_ima_lsm(void)
+ }
+ 
+ struct lsm_blob_sizes ima_blob_sizes __ro_after_init = {
+-	.lbs_inode = sizeof(struct ima_iint_cache *),
++	.lbs_inode = sizeof(struct ima_iint_cache_lock),
+ };
+ 
+ DEFINE_LSM(ima) = {
+-- 
+2.34.1
+
 
