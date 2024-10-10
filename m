@@ -1,191 +1,127 @@
-Return-Path: <linux-security-module+bounces-6014-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6016-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 059BF997826
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 00:03:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD739997AFC
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 05:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B483E283A10
-	for <lists+linux-security-module@lfdr.de>; Wed,  9 Oct 2024 22:03:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6428FB23DBF
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 03:02:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C8051E230C;
-	Wed,  9 Oct 2024 22:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74DF188A3B;
+	Thu, 10 Oct 2024 03:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="G9kM3YPp"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SFRa6cBT"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06871E0489
-	for <linux-security-module@vger.kernel.org>; Wed,  9 Oct 2024 22:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060672AEFC;
+	Thu, 10 Oct 2024 03:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728511377; cv=none; b=CrVeUnO8GOJXZoHXmRBUY/SODgDanmgxkgTZhOxYuRJVl8FBjqOFrD54ITVGILNHHDVAWT7O18MODlddDkhQTeKTKeUV3vx/2/0JtTKcKouTEAt/noQVN08TPeP/xQI72fNRCkwA/Ua1C01jI1w6+nz4UHPmQbkKJglwEfq0xho=
+	t=1728529339; cv=none; b=QMzzncNS+KzHKBHpnUNiK6WmfGicHN+vDB+cGYl1aABO7y5kOEab215CCEzDoRerdORYFNj/J++SGSdp2COWc2UUzQvMHisJa3hEr/azasHZkPgKUz1EmAdvi1Wvpwm2jQdEMGojQVY9XIzJ2qaUglaDJh4pfy2CgnJRDvvfgKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728511377; c=relaxed/simple;
-	bh=uZxY76m36ydLtto+ybFprLgpvUQq3up5tcHkr6TI6eY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bl0bA3sFa071R1wS2UiJdhfveyI1n3RVAAsZ+A5QxuZtRFJrL0UFEhu3Seq0l4b1Wuws2zkEfjbe0Kj8fNgMAr80w8r7i6DWtnUUm5JIn4VmENzXo5U9u666/IPHHYzAmCy1+REnWDX2nGCM5VLAJH0BHFLJx1yi8Y0ObGdN124=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=G9kM3YPp; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e28fd83b5bbso266261276.0
-        for <linux-security-module@vger.kernel.org>; Wed, 09 Oct 2024 15:02:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1728511375; x=1729116175; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qALeGv0lrJMi11SU4W4SJLWzuz/xtDH2PNt93jl4Qu0=;
-        b=G9kM3YPp9bL6B52kT7rJeGOWinOt1yjMDHhQRztJguXcw0jHVefIgME54gtjrc5ye6
-         OA6b+ty0PnLoAQvOQmk4DzQqKI+jPadjfU8Jhb9YrCAtc9mX9gahlAN9nf0hW/PFlDzH
-         tFkXluKxDDm2ssCoiKUfUKMz1kFb6j5S6zBwviRsZQ1Cqi5B6E6s9B0F1YOSeKUZgHol
-         QRxiNjP5i2L4CA3NsiOuXSm3T4fDbNlL/tD1Q9GkclUbV2DyfOM+JPO/ikR1NqKUimK6
-         ggllE1I/v6dRZk8GFZFU6TOunreyTJEla7i3jTfU7cd9WqSUUN0K6UY8j25Za7Va9veB
-         Z6oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728511375; x=1729116175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qALeGv0lrJMi11SU4W4SJLWzuz/xtDH2PNt93jl4Qu0=;
-        b=J5+zBHnJ7P7X3mCQe8SS+cKt+j0v/pUuJQqcQHwAMcRxZlkW3xYEjJ+bBtg3w/ZMfQ
-         6GwxX5qDvsJRdBIBSGK3ZYTpF/JcUZvRmYeNthqBSQJRaav94+9CJ8hmqJuTY/XsfmfJ
-         wcwdSr7ws2vUZSLtnY5OBYdTD2xmtTW7dfkE6bDcoeaZCOnMyUUd9DDFNxe9y4luuL0X
-         hGfTa81p0TldqM7FTVbytfwvjlEkXcc/8DErGr7gqS2pbfjSrjz7PVM4Zn6DxtuXvJ3A
-         hMpENv+E/VmS6hPRWjlxB/zwSTF55nZHKT/QwdNib0+qDke0UeAIJB9Hj48/HcouLCZO
-         JyKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUYqtTSRZ6bmkiJ6DXlnyt/bz9z5T+YWaxipQCqRHPpXz8pFjLtRP4csprxy4XLU1cHeBOoKtgFgzWUBnTjxKu32ovvwEs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdqpEAl4yG8K08shcdG/lhEIgC+2UAdFWAjVq4HE6wVEOkST6X
-	Hq43MG+gPeAJYOWYEqavFP6TnJ0FAeGGCmU8HCNdoHKiAPg4fOMaGSnlvV55M6puPuG4YK4pxKF
-	e3sXGvqttXY5scmm8CJj9lri5mXY0pqnu4YDL
-X-Google-Smtp-Source: AGHT+IG1hXmGzW6t4TPA1Xvx/ba3I0vLTALPaDTo/4Z8b9Pf7FLaaDUI4r/rqTzCQTCNGBbiARVnORqzWvm00b3PHNQ=
-X-Received: by 2002:a05:690c:5083:b0:6e3:3227:ec64 with SMTP id
- 00721157ae682-6e33227eff0mr792437b3.35.1728511374654; Wed, 09 Oct 2024
- 15:02:54 -0700 (PDT)
+	s=arc-20240116; t=1728529339; c=relaxed/simple;
+	bh=4BgPCK+F3LiivdMjYfBfIZJiX2GAwTIMuPjuDQpPFBE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WDLm0zUNUHFrBRF7MY/z8kfN9dWOciTa9vbWCSXomWYUPfZzQKFF09UCU3Xx8YFTNA7rJrpQF/mHcpjqMooJsFP5sDaSKIyKoQ4heFpocv6xYZ1rAd2emk6OQ5TUskf0NJxvlQs0L1ARaf+Yxp6YOgpUFnFpuzTHSmEeMbC6oPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SFRa6cBT; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49A302ie032232;
+	Thu, 10 Oct 2024 03:00:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:subject:from:to:cc:date:in-reply-to:references
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	HtPgc7a33i+KxQeGQwFZGzpWFHyY7NpEQ7Dwhb4PZE8=; b=SFRa6cBTBlbHerBI
+	N53+ZGT7A3S0zNEkkDJDoWgAlvCyR6mB9jFkmU6Hk3FfYvQW4bwHIwAcrmsXVWIj
+	jGW9U2LetZwBhgDTqQGrrEkKHQIlshd1u12IOx27TDYzmUhth7yHGOZ3K1ewIq5i
+	Nt6/PX+WyWsaVM5NnAZeRKD/Y0ImG2udxe0PjA6wQ+VYRi/GnGTxenKQy0wzf7J4
+	tw9UeTkKQwT4K2LxcoLdIe7f2eG7DoeN9ibx/ISki+PzvrGDX5R5soJXAmwjnZFS
+	EwqaXTMp2yeUrtXtkSEn/Ex9LN2NBIxOVLRRjrQKoNGW9iwJcN9T8XO2ERSTn5//
+	zIR+rw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4266mpg00r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 03:00:02 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49A302p2032247;
+	Thu, 10 Oct 2024 03:00:02 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4266mpg00g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 03:00:02 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 499NPiFR022861;
+	Thu, 10 Oct 2024 03:00:01 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 423jg153fu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 03:00:01 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49A301NB40501566
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Oct 2024 03:00:01 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2946B58055;
+	Thu, 10 Oct 2024 03:00:01 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8A52758043;
+	Thu, 10 Oct 2024 03:00:00 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.45.194])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 10 Oct 2024 03:00:00 +0000 (GMT)
+Message-ID: <7a4f5be16e822236901e8cae032b0bee417d5f50.camel@linux.ibm.com>
+Subject: Re: [PATCH] evm: stop avoidably reading i_writecount in
+ evm_file_release
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Mateusz Guzik <mjguzik@gmail.com>, roberto.sassu@huawei.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date: Wed, 09 Oct 2024 23:00:00 -0400
+In-Reply-To: <20240806133607.869394-1-mjguzik@gmail.com>
+References: <20240806133607.869394-1-mjguzik@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241009203218.26329-1-richard@nod.at>
-In-Reply-To: <20241009203218.26329-1-richard@nod.at>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 9 Oct 2024 18:02:44 -0400
-Message-ID: <CAHC9VhSbAM3iWxhO+rgJ0d0qOtrSouw0McrjstuP5xQw3=A35Q@mail.gmail.com>
-Subject: Re: [PATCH] netfilter: Record uid and gid in xt_AUDIT
-To: Richard Weinberger <richard@nod.at>
-Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, pabeni@redhat.com, 
-	kuba@kernel.org, edumazet@google.com, davem@davemloft.net, 
-	kadlec@netfilter.org, pablo@netfilter.org, rgb@redhat.com, 
-	upstream+net@sigma-star.at, audit@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: C5HIWflkvMbHnIq5KDRL2uOAhffbOyub
+X-Proofpoint-GUID: LzIkJNG4EN0eC1IZLxcRruNI0sWvK33e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-09_23,2024-10-09_02,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ impostorscore=0 spamscore=0 mlxlogscore=611 phishscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410100017
 
-On Wed, Oct 9, 2024 at 4:33=E2=80=AFPM Richard Weinberger <richard@nod.at> =
-wrote:
->
-> When recording audit events for new outgoing connections,
-> it is helpful to log the user info of the associated socket,
-> if available.
-> Therefore, check if the skb has a socket, and if it does,
-> log the owning fsuid/fsgid.
->
-> Signed-off-by: Richard Weinberger <richard@nod.at>
-> ---
->  net/netfilter/xt_AUDIT.c | 27 +++++++++++++++++++++++++--
->  1 file changed, 25 insertions(+), 2 deletions(-)
->
-> diff --git a/net/netfilter/xt_AUDIT.c b/net/netfilter/xt_AUDIT.c
-> index b6a015aee0cec..d88b5442beaa6 100644
-> --- a/net/netfilter/xt_AUDIT.c
-> +++ b/net/netfilter/xt_AUDIT.c
-> @@ -9,16 +9,19 @@
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->
->  #include <linux/audit.h>
-> +#include <linux/cred.h>
-> +#include <linux/file.h>
-> +#include <linux/if_arp.h>
->  #include <linux/module.h>
->  #include <linux/skbuff.h>
->  #include <linux/tcp.h>
->  #include <linux/udp.h>
-> -#include <linux/if_arp.h>
->  #include <linux/netfilter/x_tables.h>
->  #include <linux/netfilter/xt_AUDIT.h>
->  #include <linux/netfilter_bridge/ebtables.h>
-> -#include <net/ipv6.h>
->  #include <net/ip.h>
-> +#include <net/ipv6.h>
-> +#include <net/sock.h>
->
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Thomas Graf <tgraf@redhat.com>");
-> @@ -66,7 +69,9 @@ static bool audit_ip6(struct audit_buffer *ab, struct s=
-k_buff *skb)
->  static unsigned int
->  audit_tg(struct sk_buff *skb, const struct xt_action_param *par)
->  {
-> +       struct sock *sk =3D skb->sk;
->         struct audit_buffer *ab;
-> +       bool got_uidgid =3D false;
->         int fam =3D -1;
->
->         if (audit_enabled =3D=3D AUDIT_OFF)
-> @@ -99,6 +104,24 @@ audit_tg(struct sk_buff *skb, const struct xt_action_=
-param *par)
->         if (fam =3D=3D -1)
->                 audit_log_format(ab, " saddr=3D? daddr=3D? proto=3D-1");
->
-> +       if (sk && sk_fullsock(sk)) {
-> +               read_lock_bh(&sk->sk_callback_lock);
-> +               if (sk->sk_socket && sk->sk_socket->file) {
-> +                       const struct file *file =3D sk->sk_socket->file;
-> +                       const struct cred *cred =3D file->f_cred;
-> +
-> +                       audit_log_format(ab, " uid=3D%u gid=3D%u",
-> +                                        from_kuid(&init_user_ns, cred->f=
-suid),
-> +                                        from_kgid(&init_user_ns, cred->f=
-sgid));
+On Tue, 2024-08-06 at 15:36 +0200, Mateusz Guzik wrote:
+> The EVM_NEW_FILE flag is unset if the file already existed at the time
+> of open and this can be checked without looking at i_writecount.
+>=20
+> Not accessing it reduces traffic on the cacheline during parallel open
+> of the same file and drop the evm_file_release routine from second place
+> to bottom of the profile.
+>=20
+> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
 
-[CC'ing the audit and LSM lists for obvious reasons]
+Sorry for the delay.  It's now queued in next-integrity.
 
-If we're logging the subjective credentials of the skb's associated
-socket, we really should also log the socket's LSM secctx similar to
-what we do with audit_log_task() and audit_log_task_context().
-Unfortunately, I don't believe we currently have a LSM interface that
-return the secctx from a sock/socket, although we do have
-security_inode_getsecctx() which *should* yield the same result using
-SOCK_INODE(sk->sk_socket).
+thanks,
 
-I should also mention that I'm currently reviewing a patchset which is
-going to add proper support for multiple LSMs in audit which will
-likely impact this work.
+Mimi
 
-https://lore.kernel.org/linux-security-module/20241009173222.12219-1-casey@=
-schaufler-ca.com/
 
-> +                       got_uidgid =3D true;
-> +               }
-> +               read_unlock_bh(&sk->sk_callback_lock);
-> +       }
-> +
-> +       if (!got_uidgid)
-> +               audit_log_format(ab, " uid=3D? gid=3D?");
-> +
->         audit_log_end(ab);
->
->  errout:
-> --
-> 2.35.3
-
---=20
-paul-moore.com
 
