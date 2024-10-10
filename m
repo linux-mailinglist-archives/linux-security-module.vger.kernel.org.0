@@ -1,47 +1,48 @@
-Return-Path: <linux-security-module+bounces-6040-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6038-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 495E4998BED
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 17:41:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5847998B7B
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 17:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97C15B362C2
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 15:27:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 015931C267BE
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 15:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4C51CCEF6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1631CCEDF;
 	Thu, 10 Oct 2024 15:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="x5Kg8XAg"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="gKW1gsty"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EE220DD2;
-	Thu, 10 Oct 2024 15:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC0B1CC8BB
+	for <linux-security-module@vger.kernel.org>; Thu, 10 Oct 2024 15:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728574029; cv=none; b=TGCZ1gnraAV4NcDcGQIq2IXa26DQH72DPpg6DNVL0RUskH7fKc0uU4chYXI30zeF+1wQGRPkSU2GvDeQfr6ArqINmEYq6sBmVqYTNbgofzqRzoPpJ+lmtD84+HQkYnI6g81HKJnPuRbKIw9SPPTIi6SaWkQkH6l1eByU+Ij5VxE=
+	t=1728574029; cv=none; b=pV+YePCePonwDJYpPa5hjinxPNEjGArT/KWnMr/nkZECWwmsR639xJdKfB4YzBgPr6KJDghJU+j5M79qkZmsC2YGdcPN2w1OLPeN/ufatD09qKnRGUqFtnAlpipsUvSCOZ3oNZ/OsifxI0ao3gSRcWGXbhZKzAkrzXuEaFBUdFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728574029; c=relaxed/simple;
-	bh=pWtLcjsmW4Qrm1YUcmTcA7tapQRt91fGtH3cEhWZ1EY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i5vsf5snPj+VdOB0Tx+er62cyAjzUv7Df66g49+rX7h3vk1TvJpE7WZNyp2wBcF/t8RNAdYzmV1CSyR+nM9ofRZBISLMXJhsXWq35mS9o7IBkLKTj3JCnrW7qXzH0BFAncKEi6E2G11eA5monkpDSK9HpZ6Q4bwEMLgiMCaUIrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=x5Kg8XAg; arc=none smtp.client-ip=84.16.66.173
+	bh=IP04WyH8b5ClX6RyMbLRjoix/rEmabeVB5T705Da+EI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lB7yN8z3RU+Ye5pdJBBmWq/KX1IM7fGZAJ+Ag2zY9rg6NIMXUqUc0BH3P2Sra+N1kW2e1jBChkMAU64MvaDZswLT0nZmQ3RUoBfi0zCQ7o9NEKyoo2ZMOFV8rb+c2LTN1RE73od/2WYZhO87C2UvjFH3sZDqCweQ9guOL2pDVeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=gKW1gsty; arc=none smtp.client-ip=83.166.143.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XPYX03MtCz63h;
-	Thu, 10 Oct 2024 17:26:56 +0200 (CEST)
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XPYX13NR6zVX;
+	Thu, 10 Oct 2024 17:26:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1728574016;
-	bh=oCSwOw598EhYP254uOWzIyCUOB7f8SxQQTeZxoKvSLU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=x5Kg8XAgBFXfFqaybiH6SHrYOau3tOPmMTIzkIEP/oFRB4WdWdWgzZ4LNSB6l+rSK
-	 l1NE5fgNuGMKWC036+wChsgGxCX8H5R0sG0z3TrH4Ik52EwcHt/Tb4wgCMzb+jdctv
-	 kWakYI2PbopwRZiy5bTbYX/iDfpUfJpPgauzuq8Q=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XPYWz5bv6zQj1;
-	Thu, 10 Oct 2024 17:26:55 +0200 (CEST)
+	s=20191114; t=1728574017;
+	bh=Df586XROJKMF1yQSr381EiSbt/vI6xpJkJY3x0sWo24=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gKW1gstyIqxFplH2KkdMo3/4XmIDKzp7/O2Ibj1sLoDJfTS6MRKhEY4nvBxMuja5W
+	 bYy0A4L+fiNz/URueq3YROpu+osO3p+sBKsvN5EUPTCIl8TWIenJiDHdm8IPu39l1f
+	 +y6wzQ55DHIZMxcNqruev0BkrBpS0PAFPPVEOm7g=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XPYX06nnGz9Rb;
+	Thu, 10 Oct 2024 17:26:56 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Christian Brauner <brauner@kernel.org>,
 	Paul Moore <paul@paul-moore.com>
@@ -50,13 +51,12 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-nfs@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	audit@vger.kernel.org,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>
-Subject: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement get_ino() for NFS
-Date: Thu, 10 Oct 2024 17:26:41 +0200
-Message-ID: <20241010152649.849254-1-mic@digikod.net>
+	Eric Paris <eparis@redhat.com>
+Subject: [RFC PATCH v1 2/7] audit: Fix inode numbers
+Date: Thu, 10 Oct 2024 17:26:42 +0200
+Message-ID: <20241010152649.849254-2-mic@digikod.net>
+In-Reply-To: <20241010152649.849254-1-mic@digikod.net>
+References: <20241010152649.849254-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -67,143 +67,65 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-When a filesystem manages its own inode numbers, like NFS's fileid shown
-to user space with getattr(), other part of the kernel may still expose
-the private inode->ino through kernel logs and audit.
+Use the new inode_get_ino() helper to log the user space's view of
+inode's numbers instead of the private kernel values.
 
-Another issue is on 32-bit architectures, on which ino_t is 32 bits,
-whereas the user space's view of an inode number can still be 64 bits.
-
-Add a new inode_get_ino() helper calling the new struct
-inode_operations' get_ino() when set, to get the user space's view of an
-inode number.  inode_get_ino() is called by generic_fillattr().
-
-Implement get_ino() for NFS.
-
-Cc: Trond Myklebust <trondmy@kernel.org>
-Cc: Anna Schumaker <anna@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Eric Paris <eparis@redhat.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
+ security/lsm_audit.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-I'm not sure about nfs_namespace_getattr(), please review carefully.
-
-I guess there are other filesystems exposing inode numbers different
-than inode->i_ino, and they should be patched too.
----
- fs/nfs/inode.c     | 6 ++++--
- fs/nfs/internal.h  | 1 +
- fs/nfs/namespace.c | 2 ++
- fs/stat.c          | 2 +-
- include/linux/fs.h | 9 +++++++++
- 5 files changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
-index 542c7d97b235..5dfc176b6d92 100644
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -83,18 +83,19 @@ EXPORT_SYMBOL_GPL(nfs_wait_bit_killable);
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 849e832719e2..c39a22b27cce 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -227,7 +227,7 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 		if (inode) {
+ 			audit_log_format(ab, " dev=");
+ 			audit_log_untrustedstring(ab, inode->i_sb->s_id);
+-			audit_log_format(ab, " ino=%lu", inode->i_ino);
++			audit_log_format(ab, " ino=%llu", inode_get_ino(inode));
+ 		}
+ 		break;
+ 	}
+@@ -240,7 +240,7 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 		if (inode) {
+ 			audit_log_format(ab, " dev=");
+ 			audit_log_untrustedstring(ab, inode->i_sb->s_id);
+-			audit_log_format(ab, " ino=%lu", inode->i_ino);
++			audit_log_format(ab, " ino=%llu", inode_get_ino(inode));
+ 		}
+ 		break;
+ 	}
+@@ -253,7 +253,7 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 		if (inode) {
+ 			audit_log_format(ab, " dev=");
+ 			audit_log_untrustedstring(ab, inode->i_sb->s_id);
+-			audit_log_format(ab, " ino=%lu", inode->i_ino);
++			audit_log_format(ab, " ino=%llu", inode_get_ino(inode));
+ 		}
  
- /**
-  * nfs_compat_user_ino64 - returns the user-visible inode number
-- * @fileid: 64-bit fileid
-+ * @inode: inode pointer
-  *
-  * This function returns a 32-bit inode number if the boot parameter
-  * nfs.enable_ino64 is zero.
-  */
--u64 nfs_compat_user_ino64(u64 fileid)
-+u64 nfs_compat_user_ino64(const struct *inode)
- {
- #ifdef CONFIG_COMPAT
- 	compat_ulong_t ino;
- #else	
- 	unsigned long ino;
- #endif
-+	u64 fileid = NFS_FILEID(inode);
- 
- 	if (enable_ino64)
- 		return fileid;
-@@ -103,6 +104,7 @@ u64 nfs_compat_user_ino64(u64 fileid)
- 		ino ^= fileid >> (sizeof(fileid)-sizeof(ino)) * 8;
- 	return ino;
- }
-+EXPORT_SYMBOL_GPL(nfs_compat_user_ino64);
- 
- int nfs_drop_inode(struct inode *inode)
- {
-diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
-index 430733e3eff2..f5555a71a733 100644
---- a/fs/nfs/internal.h
-+++ b/fs/nfs/internal.h
-@@ -451,6 +451,7 @@ extern void nfs_zap_acl_cache(struct inode *inode);
- extern void nfs_set_cache_invalid(struct inode *inode, unsigned long flags);
- extern bool nfs_check_cache_invalid(struct inode *, unsigned long);
- extern int nfs_wait_bit_killable(struct wait_bit_key *key, int mode);
-+extern u64 nfs_compat_user_ino64(const struct *inode);
- 
- #if IS_ENABLED(CONFIG_NFS_LOCALIO)
- /* localio.c */
-diff --git a/fs/nfs/namespace.c b/fs/nfs/namespace.c
-index e7494cdd957e..d9b1e0606833 100644
---- a/fs/nfs/namespace.c
-+++ b/fs/nfs/namespace.c
-@@ -232,11 +232,13 @@ nfs_namespace_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
- const struct inode_operations nfs_mountpoint_inode_operations = {
- 	.getattr	= nfs_getattr,
- 	.setattr	= nfs_setattr,
-+	.get_ino	= nfs_compat_user_ino64,
- };
- 
- const struct inode_operations nfs_referral_inode_operations = {
- 	.getattr	= nfs_namespace_getattr,
- 	.setattr	= nfs_namespace_setattr,
-+	.get_ino	= nfs_compat_user_ino64,
- };
- 
- static void nfs_expire_automounts(struct work_struct *work)
-diff --git a/fs/stat.c b/fs/stat.c
-index 41e598376d7e..05636919f94b 100644
---- a/fs/stat.c
-+++ b/fs/stat.c
-@@ -50,7 +50,7 @@ void generic_fillattr(struct mnt_idmap *idmap, u32 request_mask,
- 	vfsgid_t vfsgid = i_gid_into_vfsgid(idmap, inode);
- 
- 	stat->dev = inode->i_sb->s_dev;
--	stat->ino = inode->i_ino;
-+	stat->ino = inode_get_ino(inode);
- 	stat->mode = inode->i_mode;
- 	stat->nlink = inode->i_nlink;
- 	stat->uid = vfsuid_into_kuid(vfsuid);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index e3c603d01337..0eba09a21cf7 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2165,6 +2165,7 @@ struct inode_operations {
- 			    struct dentry *dentry, struct fileattr *fa);
- 	int (*fileattr_get)(struct dentry *dentry, struct fileattr *fa);
- 	struct offset_ctx *(*get_offset_ctx)(struct inode *inode);
-+	u64 (*get_ino)(const struct inode *inode);
- } ____cacheline_aligned;
- 
- static inline int call_mmap(struct file *file, struct vm_area_struct *vma)
-@@ -2172,6 +2173,14 @@ static inline int call_mmap(struct file *file, struct vm_area_struct *vma)
- 	return file->f_op->mmap(file, vma);
- }
- 
-+static inline u64 inode_get_ino(struct inode *inode)
-+{
-+	if (unlikely(inode->i_op->get_ino))
-+		return inode->i_op->get_ino(inode);
-+
-+	return inode->i_ino;
-+}
-+
- extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
- extern ssize_t vfs_write(struct file *, const char __user *, size_t, loff_t *);
- extern ssize_t vfs_copy_file_range(struct file *, loff_t , struct file *,
+ 		audit_log_format(ab, " ioctlcmd=0x%hx", a->u.op->cmd);
+@@ -271,7 +271,7 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 		if (inode) {
+ 			audit_log_format(ab, " dev=");
+ 			audit_log_untrustedstring(ab, inode->i_sb->s_id);
+-			audit_log_format(ab, " ino=%lu", inode->i_ino);
++			audit_log_format(ab, " ino=%llu", inode_get_ino(inode));
+ 		}
+ 		break;
+ 	}
+@@ -290,7 +290,7 @@ static void dump_common_audit_data(struct audit_buffer *ab,
+ 		}
+ 		audit_log_format(ab, " dev=");
+ 		audit_log_untrustedstring(ab, inode->i_sb->s_id);
+-		audit_log_format(ab, " ino=%lu", inode->i_ino);
++		audit_log_format(ab, " ino=%llu", inode_get_ino(inode));
+ 		rcu_read_unlock();
+ 		break;
+ 	}
 -- 
 2.46.1
 
