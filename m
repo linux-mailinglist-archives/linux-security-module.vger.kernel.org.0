@@ -1,137 +1,210 @@
-Return-Path: <linux-security-module+bounces-6035-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6040-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 342B7998937
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 16:20:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 495E4998BED
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 17:41:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6376E1C24B9C
-	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 14:20:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97C15B362C2
+	for <lists+linux-security-module@lfdr.de>; Thu, 10 Oct 2024 15:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 946431E8821;
-	Thu, 10 Oct 2024 14:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4C51CCEF6;
+	Thu, 10 Oct 2024 15:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="x5Kg8XAg"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7D71E7C21;
-	Thu, 10 Oct 2024 14:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EE220DD2;
+	Thu, 10 Oct 2024 15:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728569542; cv=none; b=RVnGeU0BaxojRjuvmkiV/un8SWgAMpr03T1aBjgFsi9XsATXCTvxDBHucKhqpXWy/Nk9eDuaLfi/6bNsgI8AE3qvYuAbeclHkAE4Bqq6fiGOOCaeXNxfkIN0bIbyIGom/PHexPCx4PmJyORez61nvHdDORf9w+kuXiBJRO5trUE=
+	t=1728574029; cv=none; b=TGCZ1gnraAV4NcDcGQIq2IXa26DQH72DPpg6DNVL0RUskH7fKc0uU4chYXI30zeF+1wQGRPkSU2GvDeQfr6ArqINmEYq6sBmVqYTNbgofzqRzoPpJ+lmtD84+HQkYnI6g81HKJnPuRbKIw9SPPTIi6SaWkQkH6l1eByU+Ij5VxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728569542; c=relaxed/simple;
-	bh=3Bjfe7NAtCXidb5TFTCiuIh/dnHj0G/gKNNhaIgHxTY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C0Mo0gu6kmEC2G+kPmnWPcXnDmTwem8BZp8M2lh4Hfxw5I6DUlg2+yB7o5aZPgbd7DPS+hQjbpEUy9by+P+dklEVE2ABPz9mmHVPO9ubdHpcUl3VBNXdJ/+WriQ8DvMsGaqjL+kzW+34YTZ32ajcAtSKt+PJqskSISQennokphI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XPWq6495SzfdDh;
-	Thu, 10 Oct 2024 22:09:54 +0800 (CST)
-Received: from kwepemh100016.china.huawei.com (unknown [7.202.181.102])
-	by mail.maildlp.com (Postfix) with ESMTPS id CE3A218007C;
-	Thu, 10 Oct 2024 22:12:18 +0800 (CST)
-Received: from huawei.com (10.175.113.32) by kwepemh100016.china.huawei.com
- (7.202.181.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 10 Oct
- 2024 22:12:15 +0800
-From: Kaixiong Yu <yukaixiong@huawei.com>
-To: <akpm@linux-foundation.org>, <mcgrof@kernel.org>
-CC: <ysato@users.sourceforge.jp>, <dalias@libc.org>,
-	<glaubitz@physik.fu-berlin.de>, <luto@kernel.org>, <tglx@linutronix.de>,
-	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-	<hpa@zytor.com>, <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
-	<jack@suse.cz>, <kees@kernel.org>, <j.granados@samsung.com>,
-	<willy@infradead.org>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
-	<lorenzo.stoakes@oracle.com>, <trondmy@kernel.org>, <anna@kernel.org>,
-	<chuck.lever@oracle.com>, <jlayton@kernel.org>, <neilb@suse.de>,
-	<okorniev@redhat.com>, <Dai.Ngo@oracle.com>, <tom@talpey.com>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
-	<linux-sh@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-nfs@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-security-module@vger.kernel.org>, <dhowells@redhat.com>,
-	<haifeng.xu@shopee.com>, <baolin.wang@linux.alibaba.com>,
-	<shikemeng@huaweicloud.com>, <dchinner@redhat.com>, <bfoster@redhat.com>,
-	<souravpanda@google.com>, <hannes@cmpxchg.org>, <rientjes@google.com>,
-	<pasha.tatashin@soleen.com>, <david@redhat.com>, <ryan.roberts@arm.com>,
-	<ying.huang@intel.com>, <yang@os.amperecomputing.com>,
-	<zev@bewilderbeest.net>, <serge@hallyn.com>, <vegard.nossum@oracle.com>,
-	<wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>
-Subject: [PATCH v3 -next 15/15] sysctl: remove unneeded include
-Date: Thu, 10 Oct 2024 23:22:15 +0800
-Message-ID: <20241010152215.3025842-16-yukaixiong@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241010152215.3025842-1-yukaixiong@huawei.com>
-References: <20241010152215.3025842-1-yukaixiong@huawei.com>
+	s=arc-20240116; t=1728574029; c=relaxed/simple;
+	bh=pWtLcjsmW4Qrm1YUcmTcA7tapQRt91fGtH3cEhWZ1EY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=i5vsf5snPj+VdOB0Tx+er62cyAjzUv7Df66g49+rX7h3vk1TvJpE7WZNyp2wBcF/t8RNAdYzmV1CSyR+nM9ofRZBISLMXJhsXWq35mS9o7IBkLKTj3JCnrW7qXzH0BFAncKEi6E2G11eA5monkpDSK9HpZ6Q4bwEMLgiMCaUIrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=x5Kg8XAg; arc=none smtp.client-ip=84.16.66.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XPYX03MtCz63h;
+	Thu, 10 Oct 2024 17:26:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1728574016;
+	bh=oCSwOw598EhYP254uOWzIyCUOB7f8SxQQTeZxoKvSLU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=x5Kg8XAgBFXfFqaybiH6SHrYOau3tOPmMTIzkIEP/oFRB4WdWdWgzZ4LNSB6l+rSK
+	 l1NE5fgNuGMKWC036+wChsgGxCX8H5R0sG0z3TrH4Ik52EwcHt/Tb4wgCMzb+jdctv
+	 kWakYI2PbopwRZiy5bTbYX/iDfpUfJpPgauzuq8Q=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XPYWz5bv6zQj1;
+	Thu, 10 Oct 2024 17:26:55 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Christian Brauner <brauner@kernel.org>,
+	Paul Moore <paul@paul-moore.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	linux-fsdevel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	audit@vger.kernel.org,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>
+Subject: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement get_ino() for NFS
+Date: Thu, 10 Oct 2024 17:26:41 +0200
+Message-ID: <20241010152649.849254-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100016.china.huawei.com (7.202.181.102)
+X-Infomaniak-Routing: alpha
 
-Removing unneeded mm includes in kernel/sysctl.c.
+When a filesystem manages its own inode numbers, like NFS's fileid shown
+to user space with getattr(), other part of the kernel may still expose
+the private inode->ino through kernel logs and audit.
 
-Signed-off-by: Kaixiong Yu <yukaixiong@huawei.com>
-Reviewed-by: Kees Cook <kees@kernel.org>
+Another issue is on 32-bit architectures, on which ino_t is 32 bits,
+whereas the user space's view of an inode number can still be 64 bits.
+
+Add a new inode_get_ino() helper calling the new struct
+inode_operations' get_ino() when set, to get the user space's view of an
+inode number.  inode_get_ino() is called by generic_fillattr().
+
+Implement get_ino() for NFS.
+
+Cc: Trond Myklebust <trondmy@kernel.org>
+Cc: Anna Schumaker <anna@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- kernel/sysctl.c | 6 ------
- 1 file changed, 6 deletions(-)
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index f04da9f3abc6..6e3e0ce4da79 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -20,8 +20,6 @@
+I'm not sure about nfs_namespace_getattr(), please review carefully.
+
+I guess there are other filesystems exposing inode numbers different
+than inode->i_ino, and they should be patched too.
+---
+ fs/nfs/inode.c     | 6 ++++--
+ fs/nfs/internal.h  | 1 +
+ fs/nfs/namespace.c | 2 ++
+ fs/stat.c          | 2 +-
+ include/linux/fs.h | 9 +++++++++
+ 5 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+index 542c7d97b235..5dfc176b6d92 100644
+--- a/fs/nfs/inode.c
++++ b/fs/nfs/inode.c
+@@ -83,18 +83,19 @@ EXPORT_SYMBOL_GPL(nfs_wait_bit_killable);
+ 
+ /**
+  * nfs_compat_user_ino64 - returns the user-visible inode number
+- * @fileid: 64-bit fileid
++ * @inode: inode pointer
+  *
+  * This function returns a 32-bit inode number if the boot parameter
+  * nfs.enable_ino64 is zero.
   */
+-u64 nfs_compat_user_ino64(u64 fileid)
++u64 nfs_compat_user_ino64(const struct *inode)
+ {
+ #ifdef CONFIG_COMPAT
+ 	compat_ulong_t ino;
+ #else	
+ 	unsigned long ino;
+ #endif
++	u64 fileid = NFS_FILEID(inode);
  
- #include <linux/module.h>
--#include <linux/mm.h>
--#include <linux/slab.h>
- #include <linux/sysctl.h>
- #include <linux/bitmap.h>
- #include <linux/signal.h>
-@@ -30,7 +28,6 @@
- #include <linux/proc_fs.h>
- #include <linux/security.h>
- #include <linux/ctype.h>
--#include <linux/kmemleak.h>
- #include <linux/filter.h>
- #include <linux/fs.h>
- #include <linux/init.h>
-@@ -41,7 +38,6 @@
- #include <linux/highuid.h>
- #include <linux/writeback.h>
- #include <linux/ratelimit.h>
--#include <linux/hugetlb.h>
- #include <linux/initrd.h>
- #include <linux/key.h>
- #include <linux/times.h>
-@@ -52,13 +48,11 @@
- #include <linux/reboot.h>
- #include <linux/ftrace.h>
- #include <linux/perf_event.h>
--#include <linux/oom.h>
- #include <linux/kmod.h>
- #include <linux/capability.h>
- #include <linux/binfmts.h>
- #include <linux/sched/sysctl.h>
- #include <linux/mount.h>
--#include <linux/userfaultfd_k.h>
- #include <linux/pid.h>
+ 	if (enable_ino64)
+ 		return fileid;
+@@ -103,6 +104,7 @@ u64 nfs_compat_user_ino64(u64 fileid)
+ 		ino ^= fileid >> (sizeof(fileid)-sizeof(ino)) * 8;
+ 	return ino;
+ }
++EXPORT_SYMBOL_GPL(nfs_compat_user_ino64);
  
- #include "../lib/kstrtox.h"
+ int nfs_drop_inode(struct inode *inode)
+ {
+diff --git a/fs/nfs/internal.h b/fs/nfs/internal.h
+index 430733e3eff2..f5555a71a733 100644
+--- a/fs/nfs/internal.h
++++ b/fs/nfs/internal.h
+@@ -451,6 +451,7 @@ extern void nfs_zap_acl_cache(struct inode *inode);
+ extern void nfs_set_cache_invalid(struct inode *inode, unsigned long flags);
+ extern bool nfs_check_cache_invalid(struct inode *, unsigned long);
+ extern int nfs_wait_bit_killable(struct wait_bit_key *key, int mode);
++extern u64 nfs_compat_user_ino64(const struct *inode);
+ 
+ #if IS_ENABLED(CONFIG_NFS_LOCALIO)
+ /* localio.c */
+diff --git a/fs/nfs/namespace.c b/fs/nfs/namespace.c
+index e7494cdd957e..d9b1e0606833 100644
+--- a/fs/nfs/namespace.c
++++ b/fs/nfs/namespace.c
+@@ -232,11 +232,13 @@ nfs_namespace_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ const struct inode_operations nfs_mountpoint_inode_operations = {
+ 	.getattr	= nfs_getattr,
+ 	.setattr	= nfs_setattr,
++	.get_ino	= nfs_compat_user_ino64,
+ };
+ 
+ const struct inode_operations nfs_referral_inode_operations = {
+ 	.getattr	= nfs_namespace_getattr,
+ 	.setattr	= nfs_namespace_setattr,
++	.get_ino	= nfs_compat_user_ino64,
+ };
+ 
+ static void nfs_expire_automounts(struct work_struct *work)
+diff --git a/fs/stat.c b/fs/stat.c
+index 41e598376d7e..05636919f94b 100644
+--- a/fs/stat.c
++++ b/fs/stat.c
+@@ -50,7 +50,7 @@ void generic_fillattr(struct mnt_idmap *idmap, u32 request_mask,
+ 	vfsgid_t vfsgid = i_gid_into_vfsgid(idmap, inode);
+ 
+ 	stat->dev = inode->i_sb->s_dev;
+-	stat->ino = inode->i_ino;
++	stat->ino = inode_get_ino(inode);
+ 	stat->mode = inode->i_mode;
+ 	stat->nlink = inode->i_nlink;
+ 	stat->uid = vfsuid_into_kuid(vfsuid);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index e3c603d01337..0eba09a21cf7 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2165,6 +2165,7 @@ struct inode_operations {
+ 			    struct dentry *dentry, struct fileattr *fa);
+ 	int (*fileattr_get)(struct dentry *dentry, struct fileattr *fa);
+ 	struct offset_ctx *(*get_offset_ctx)(struct inode *inode);
++	u64 (*get_ino)(const struct inode *inode);
+ } ____cacheline_aligned;
+ 
+ static inline int call_mmap(struct file *file, struct vm_area_struct *vma)
+@@ -2172,6 +2173,14 @@ static inline int call_mmap(struct file *file, struct vm_area_struct *vma)
+ 	return file->f_op->mmap(file, vma);
+ }
+ 
++static inline u64 inode_get_ino(struct inode *inode)
++{
++	if (unlikely(inode->i_op->get_ino))
++		return inode->i_op->get_ino(inode);
++
++	return inode->i_ino;
++}
++
+ extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
+ extern ssize_t vfs_write(struct file *, const char __user *, size_t, loff_t *);
+ extern ssize_t vfs_copy_file_range(struct file *, loff_t , struct file *,
 -- 
-2.34.1
+2.46.1
 
 
