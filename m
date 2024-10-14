@@ -1,152 +1,96 @@
-Return-Path: <linux-security-module+bounces-6141-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6145-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 252CB99CA9F
-	for <lists+linux-security-module@lfdr.de>; Mon, 14 Oct 2024 14:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AB9899CB61
+	for <lists+linux-security-module@lfdr.de>; Mon, 14 Oct 2024 15:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 559C91C22961
-	for <lists+linux-security-module@lfdr.de>; Mon, 14 Oct 2024 12:49:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97E5E1C2300B
+	for <lists+linux-security-module@lfdr.de>; Mon, 14 Oct 2024 13:17:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920731AA7A7;
-	Mon, 14 Oct 2024 12:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313351AB535;
+	Mon, 14 Oct 2024 13:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="DOPmenqH"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="v993vigk"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADFA1AA7A1
-	for <linux-security-module@vger.kernel.org>; Mon, 14 Oct 2024 12:48:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D23E61AA793
+	for <linux-security-module@vger.kernel.org>; Mon, 14 Oct 2024 13:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728910131; cv=none; b=MCIUQXj5hrAQ48R0GitlSUKHsXXNpHVZEbGpTgZ7vk1bQR7hOrN/5InWqJLR8cw6HMlLVdeTbaC4C30Q22p4Lqd6/lh1iAsO1koC06XIUkmCLvYWSHg8CLPdYILm/dzXutJne4lKRzEh9u5tZBdWeeZTVfZdWc3ReOv9mvBeqKY=
+	t=1728911640; cv=none; b=EDxBr2uwzy7eSEXOU6pDwZLtSO16a7oyl5d66hUvy4FBbrtt6h1BuuLLKX3R2xGcGK39RDagohici/pQFYqNV8j9O6UVCoulPZLw/cqEyNJ5GBvt1pPG2ZnMPLVTLEFzwXLuDJL6whWAEYbIPR7fFi2o4Lu3gvUKvLvJOLZngM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728910131; c=relaxed/simple;
-	bh=rNxJpcFBERK76idcXNshrfrnJJj+cQuOURuyJF0cfJw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qdy+INfkeF0ZHnCL77IQ77r4P1/B1+bEGmNR8UJt9nOMLaDXW4O8kKsEpvalfcGQyCBpdIACRCk2ClnvehkivzBJyoiawDqoTqUnLiO5hisFiEYuFLI0rWQDwFmlTsV6KA9neV1HlbXfph1imHmADi8K6/Ln9hTVZXvDLGoRgzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=DOPmenqH; arc=none smtp.client-ip=45.157.188.12
+	s=arc-20240116; t=1728911640; c=relaxed/simple;
+	bh=YZAwdhLxqIVEsN8AzkOH372BYEQdFlQUVF42OlinRyY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G/3vj7qUHjGrDdYb7CUmbOYiMug/Ap5a+FgfRej/pEvsnKsXeR/Ec+ERO5EHiz5v+pt0dIbEyzrrVsFEK4++0cKRPOAMWoYcqZK7OB45ypBFOqNzEb6OV0p/7qQsrfv2AD14IXtqK2IoAESc/VwsNIwIfYlpo3v6hq9aIOjXrdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=v993vigk; arc=none smtp.client-ip=45.157.188.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XRxqd2NKkz1vw;
-	Mon, 14 Oct 2024 14:48:45 +0200 (CEST)
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XRyNX6m0TzlcM;
+	Mon, 14 Oct 2024 15:13:48 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1728910125;
-	bh=Js8NTxW4n99qeYYGTT5T0Yl1gQ8Ca8EIDdDrVsVOI8U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DOPmenqH6j5DSb25lUZORcI4hxzFBLkYRaOYQXvxiF1IWS7zkoBAwaz9ekeSUVNuK
-	 t853wHJ2Mv/fZOJZ3I11IcqRDxl2pMwiyr3q8t6mxx6WuXBZcI1kQpQM9LMDhtpe7D
-	 muOM9k5i/hVg+8jmt9WM3vladCCH4EjEmxTkvjBY=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XRxqc6FfQzDPH;
-	Mon, 14 Oct 2024 14:48:44 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Tahera Fahimi <fahimitahera@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v2 3/3] landlock: Optimize scope enforcement
-Date: Mon, 14 Oct 2024 14:48:35 +0200
-Message-ID: <20241014124835.1152246-4-mic@digikod.net>
-In-Reply-To: <20241014124835.1152246-1-mic@digikod.net>
-References: <20241014124835.1152246-1-mic@digikod.net>
+	s=20191114; t=1728911628;
+	bh=Yd8xTfXZsZiPbyGaXM8oxi4qY6znQrMCC6wFQMaJAxg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=v993vigkwHSQ+l5Pil6ZeqOGzi3Wn6Wx5mLsxeB7hlZzqMM9EaGIziSps/pGeDj1l
+	 /VHneQcEcsHKkGRF+Qo2W/liXjdSO/njK8zyIPP9sXRuWkao3/+iBL7tY4zdiduUED
+	 jauTWinPO4rysuIze5V6zh4EsvKyDu+ykcY0b658=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XRyNX2wWwzFjk;
+	Mon, 14 Oct 2024 15:13:45 +0200 (CEST)
+Date: Mon, 14 Oct 2024 15:13:41 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Burn Alting <burn.alting@iinet.net.au>, audit@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 1/7] fs: Add inode_get_ino() and implement
+ get_ino() for NFS
+Message-ID: <20241014.seeN6daap2ta@digikod.net>
+References: <20241011.yai6KiDa7ieg@digikod.net>
+ <Zwkm5HADvc5743di@infradead.org>
+ <20241011.aetou9haeCah@digikod.net>
+ <Zwk4pYzkzydwLRV_@infradead.org>
+ <20241011.uu1Bieghaiwu@digikod.net>
+ <05cb94c0dda9e1b23fe566c6ecd71b3d1739b95b.camel@kernel.org>
+ <0e4e7a6d-09e0-480d-baa9-a2e7522a088a@iinet.net.au>
+ <ZwzeGausiU0IDkFy@infradead.org>
+ <e0188174-a8ae-461b-b30a-bc7acd545a18@iinet.net.au>
+ <Zw0L8ZrEani3uWa5@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Zw0L8ZrEani3uWa5@infradead.org>
 X-Infomaniak-Routing: alpha
 
-Do not walk through the domain hierarchy when the required scope is not
-supported by this domain.  This is the same approach as for filesystem
-and network restrictions.
+On Mon, Oct 14, 2024 at 05:17:53AM -0700, Christoph Hellwig wrote:
+> On Mon, Oct 14, 2024 at 11:12:25PM +1100, Burn Alting wrote:
+> > > > PATH records is no longer forensically defensible and it's use as a
+> > > > correlation item is of questionable value now?
+> > > 
+> > > What do you mean with forensically defensible?
+> > 
+> > If the auditd system only maintains a 32 bit variable for an inode value,
+> > when it emits an inode number, then how does one categorically state/defend
+> > that the inode value in the audit event is the actual one on the file
+> > system. The PATH record will offer one value (32 bits) but the returned
+> > inode value from a stat will return another (the actual 64 bit value).
+> > Basically auditd would not be recording the correct value.
+> 
+> Does auditd only track 32-bit inodes?  If yes, it is fundamentally
+> broken.
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-Cc: Tahera Fahimi <fahimitahera@gmail.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241014124835.1152246-4-mic@digikod.net
----
- security/landlock/task.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
-
-diff --git a/security/landlock/task.c b/security/landlock/task.c
-index 4acbd7c40eee..9725e0fd36d2 100644
---- a/security/landlock/task.c
-+++ b/security/landlock/task.c
-@@ -204,12 +204,22 @@ static bool is_abstract_socket(struct sock *const sock)
- 	return false;
- }
- 
-+static const struct landlock_ruleset *get_current_unix_scope_domain(void)
-+{
-+	const union access_masks unix_scope = {
-+		.scope = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET,
-+	};
-+
-+	return landlock_match_ruleset(landlock_get_current_domain(),
-+				      unix_scope);
-+}
-+
- static int hook_unix_stream_connect(struct sock *const sock,
- 				    struct sock *const other,
- 				    struct sock *const newsk)
- {
- 	const struct landlock_ruleset *const dom =
--		landlock_get_current_domain();
-+		get_current_unix_scope_domain();
- 
- 	/* Quick return for non-landlocked tasks. */
- 	if (!dom)
-@@ -225,7 +235,7 @@ static int hook_unix_may_send(struct socket *const sock,
- 			      struct socket *const other)
- {
- 	const struct landlock_ruleset *const dom =
--		landlock_get_current_domain();
-+		get_current_unix_scope_domain();
- 
- 	if (!dom)
- 		return 0;
-@@ -243,6 +253,10 @@ static int hook_unix_may_send(struct socket *const sock,
- 	return 0;
- }
- 
-+static const union access_masks signal_scope = {
-+	.scope = LANDLOCK_SCOPE_SIGNAL,
-+};
-+
- static int hook_task_kill(struct task_struct *const p,
- 			  struct kernel_siginfo *const info, const int sig,
- 			  const struct cred *const cred)
-@@ -256,6 +270,7 @@ static int hook_task_kill(struct task_struct *const p,
- 	} else {
- 		dom = landlock_get_current_domain();
- 	}
-+	dom = landlock_match_ruleset(dom, signal_scope);
- 
- 	/* Quick return for non-landlocked tasks. */
- 	if (!dom)
-@@ -279,7 +294,8 @@ static int hook_file_send_sigiotask(struct task_struct *tsk,
- 
- 	/* Lock already held by send_sigio() and send_sigurg(). */
- 	lockdep_assert_held(&fown->lock);
--	dom = landlock_file(fown->file)->fown_domain;
-+	dom = landlock_match_ruleset(landlock_file(fown->file)->fown_domain,
-+				     signal_scope);
- 
- 	/* Quick return for unowned socket. */
- 	if (!dom)
--- 
-2.47.0
-
+auditd logs 32-bit inodes on 32-bit architecture, whereas it should
+always log 64-bit inodes.  The goal of this patch series is to fix this
+this issue for auditd and other kernel logs (and to backport these
+fixes).
 
