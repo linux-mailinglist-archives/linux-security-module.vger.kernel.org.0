@@ -1,104 +1,108 @@
-Return-Path: <linux-security-module+bounces-6422-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6424-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C17189B8655
-	for <lists+linux-security-module@lfdr.de>; Thu, 31 Oct 2024 23:54:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B38149B86D5
+	for <lists+linux-security-module@lfdr.de>; Fri,  1 Nov 2024 00:15:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D1A51F22826
-	for <lists+linux-security-module@lfdr.de>; Thu, 31 Oct 2024 22:54:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 518552814D8
+	for <lists+linux-security-module@lfdr.de>; Thu, 31 Oct 2024 23:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 409CE1E885F;
-	Thu, 31 Oct 2024 22:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="QA7Izg30"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7465B1D0DE6;
+	Thu, 31 Oct 2024 23:15:28 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [213.95.27.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C8C1DBB36
-	for <linux-security-module@vger.kernel.org>; Thu, 31 Oct 2024 22:53:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2552ECF;
+	Thu, 31 Oct 2024 23:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.27.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730415231; cv=none; b=QrcObH8eHkbUEV+f2B3NwhXd9uT048SM3oqtaWA5fvARs5D/+wO32ObiftAEmqvj7qRhyIeHtw6ra2oXKrjGfQokF88ebIHlVflJl1feQ+DsWYcSLgjs5GyMO6CyO4ZQDAdN86QR/QdfxL0hjtEj7j6Pxg9vdJtA0lZrfomHPLc=
+	t=1730416528; cv=none; b=jGFFFc22sUFKT/nkPHETjzNXP66D46+SeK5RhdHnkenVafc0VLmceeA7uYhrtfg3Y+gHtvKQnl83LKPIeZfY017yNp+4Y78q4ATV6gNE8LDByQQOM/GGp6Y7JSGylQnMaoGXsqBrn8umckXRSzdggAncOVcArspf2E4vM7xnfNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730415231; c=relaxed/simple;
-	bh=lZVUy6CT2xfH+CAuoNtGeBUN2aklgjohf5KFRghgbZI=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=kbzwozD8qHMCHKwxYWovqEptsVyb9kOWGbvSbnlewhhzjtFzHafR4w5WnZaiWDymknwks3qjPjJkBQBOdUHQQ5hT3tU8gyVIhNRHEc5c+YCVlwqLmZn4YznNiPOd5pnUDOILapUZncSaa6V/qrFbZuboqXw9qKIWpKhW/w9XNQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=QA7Izg30; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7b1507c42faso195950285a.0
-        for <linux-security-module@vger.kernel.org>; Thu, 31 Oct 2024 15:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1730415223; x=1731020023; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OryhN0ZlONGvRFH33cTUoM2Hme/OP4dCS9YbGTHGdck=;
-        b=QA7Izg30oc1vSG7IsFKrq9RLxYzvsbftt3+mwW8M/gLWL6yymnkgjat/jgaP5Gnvzf
-         04qUb508rVrhEZ5odZJruRTOlAW1ZltWqPQcce733v2cWQhmnB5wmGUvrC70VOIdzG/v
-         vWz3RdIwcaFbOr9i0MU11S5+S9uokYe4aL6xyg5oiMjpy1rnjBUM/oUxZEr+cekeJTdA
-         Cx5ipMpOpZ3wCVh927SZ4y9hkQTEfEsinUchc4/Xfvv1k3YgXSbgE2IEj/7N0Las8LmN
-         3rz/5b6FHzv7zsGXZmy38fwSGwRt0P6Tpnx0nm2fJTBdZT4xwiJnvqdHWXeaUyZoqeMP
-         9bZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730415223; x=1731020023;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OryhN0ZlONGvRFH33cTUoM2Hme/OP4dCS9YbGTHGdck=;
-        b=YMuuNUN+5PfLqVyHf1pu9/9qBh2qDzMNf8umi36+UMLBpd3uEfmHHQJjBudImpsf1f
-         0NSqqaBwdHNDPD7QvJ3TurnpN3s3RP6fMXMMK9h96jEdcZVjiJ9iaJvP80Tg8JH0EV8D
-         0idjV+JY/+iSeCoot+JtdJTE0vFRHVu+d7bLj4ojZA7QScr5bF5YUZB0XLBbbP4r0lGA
-         h5gVc7OdMOo95HF9MTV4GIV4/iBLnSsLzAIZlvid0V+yuScvRRBgXazuCYt4LBKenKwn
-         Te2OXBw2bFdVIUU7rHeAqO/+Fy1SF0jg5kAy5ZfMMzUtatC5L5CTmjkubeURC8jHN/1y
-         Jwxw==
-X-Forwarded-Encrypted: i=1; AJvYcCX2oX4LH8g76D2xuhxhtsGzyEsXa/i98VseMM6Vh+SAWii3e0T2m/bR8hhMOAmhAZGAR5oXJ6GvGsSroSgy18N1eUpRYjo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpAf3B34pg5aa77h69Sq1jqc/LV9kDgJpg64cqs6JdshKaji3m
-	nS1y69/x6TZLdHtZNHtDjVsI3/Mb76HuiIFxUezcVxuDq/X9kqmsXk4OgCn26g==
-X-Google-Smtp-Source: AGHT+IGk3MtE2UlABsbiTHjlYLvi4TvMpopHs6UsBnSfvXRUKlH33/ovhbphFSBsW/Hi7+aTcXuQLg==
-X-Received: by 2002:a05:620a:40d3:b0:7b1:8cfa:9222 with SMTP id af79cd13be357-7b2f3cd6603mr653801485a.1.1730415222731;
-        Thu, 31 Oct 2024 15:53:42 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f3a9babfsm114210485a.125.2024.10.31.15.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 15:53:42 -0700 (PDT)
-Date: Thu, 31 Oct 2024 18:53:41 -0400
-Message-ID: <424b4bb4db5c4e126072179ac8ac8fd2@paul-moore.com>
+	s=arc-20240116; t=1730416528; c=relaxed/simple;
+	bh=n+ofn+IZQGqt0nNbyFaFX0NIR/Sl6Ip5PYCmvfDHYD8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G8GJ7AfMejFpCzndkTOhyhZMpUCnKEsdFjuMSV1RIhOrzwDcPj0qSTj6kDi1xcHkHp4kTTtwLTm+/+7UOyTV7ntrDJG+hP3IQJl+Iw2a7UP2RNmomwCYbpD3fLaJGfsXYNa5IOEcwiaVHDjxub6D8K1TrYoWD67w8783rY0Ew2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=gnumonks.org; arc=none smtp.client-ip=213.95.27.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnumonks.org
+Received: from [78.30.37.63] (port=40956 helo=gnumonks.org)
+	by ganesha.gnumonks.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <pablo@gnumonks.org>)
+	id 1t6eNh-00HKVf-Ac; Fri, 01 Nov 2024 00:15:15 +0100
+Date: Fri, 1 Nov 2024 00:15:08 +0100
+From: Pablo Neira Ayuso <pablo@netfilter.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Casey Schaufler <casey@schaufler-ca.com>,
+	linux-security-module@vger.kernel.org, jmorris@namei.org,
+	serge@hallyn.com, keescook@chromium.org,
+	john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+	stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+	selinux@vger.kernel.org, mic@digikod.net, netdev@vger.kernel.org,
+	audit@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	Todd Kjos <tkjos@google.com>
+Subject: Re: [PATCH v3 2/5] LSM: Replace context+len with lsm_context
+Message-ID: <ZyQPfFvPD72rx4ME@calendula>
+References: <20241023212158.18718-3-casey@schaufler-ca.com>
+ <68a956fa44249434dedf7d13cd949b35@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20241031_1534/pstg-lib:20241031_1459/pstg-pwork:20241031_1534
-From: Paul Moore <paul@paul-moore.com>
-To: Casey Schaufler <casey@schaufler-ca.com>, casey@schaufler-ca.com, linux-security-module@vger.kernel.org
-Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, selinux@vger.kernel.org, mic@digikod.net
-Subject: Re: [PATCH v3 5/5] LSM: secctx provider check on release
-References: <20241023212158.18718-6-casey@schaufler-ca.com>
-In-Reply-To: <20241023212158.18718-6-casey@schaufler-ca.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <68a956fa44249434dedf7d13cd949b35@paul-moore.com>
+X-Spam-Score: -1.9 (-)
 
-On Oct 23, 2024 Casey Schaufler <casey@schaufler-ca.com> wrote:
+Hi Paul,
+
+This patch breaks nf_conntrack_netlink, Casey mentioned that he will
+post another series.
+
+On Thu, Oct 31, 2024 at 06:53:38PM -0400, Paul Moore wrote:
+> On Oct 23, 2024 Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > 
+> > Replace the (secctx,seclen) pointer pair with a single
+> > lsm_context pointer to allow return of the LSM identifier
+> > along with the context and context length. This allows
+> > security_release_secctx() to know how to release the
+> > context. Callers have been modified to use or save the
+> > returned data from the new structure.
+> > 
+> > security_secid_to_secctx() and security_lsmproc_to_secctx()
+> > will now return the length value on success instead of 0.
+> > 
+> > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> > Cc: netdev@vger.kernel.org
+> > Cc: audit@vger.kernel.org
+> > Cc: netfilter-devel@vger.kernel.org
+> > Cc: Todd Kjos <tkjos@google.com>
+> > ---
+> >  drivers/android/binder.c                |  5 ++-
+> >  include/linux/lsm_hook_defs.h           |  5 ++-
+> >  include/linux/security.h                |  9 +++---
+> >  include/net/scm.h                       |  5 ++-
+> >  kernel/audit.c                          |  9 +++---
+> >  kernel/auditsc.c                        | 16 ++++------
+> >  net/ipv4/ip_sockglue.c                  |  4 +--
+> >  net/netfilter/nf_conntrack_netlink.c    |  8 ++---
+> >  net/netfilter/nf_conntrack_standalone.c |  4 +--
+> >  net/netfilter/nfnetlink_queue.c         | 27 +++++++---------
+> >  net/netlabel/netlabel_unlabeled.c       | 14 +++------
+> >  net/netlabel/netlabel_user.c            |  3 +-
+> >  security/apparmor/include/secid.h       |  5 ++-
+> >  security/apparmor/secid.c               | 26 +++++++--------
+> >  security/security.c                     | 34 +++++++++-----------
+> >  security/selinux/hooks.c                | 23 +++++++++++---
+> >  security/smack/smack_lsm.c              | 42 +++++++++++++++----------
+> >  17 files changed, 118 insertions(+), 121 deletions(-)
 > 
-> Verify that the LSM releasing the secctx is the LSM that
-> allocated it. This was not necessary when only one LSM could
-> create a secctx, but once there can be more than one it is.
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->  security/apparmor/secid.c | 13 +++++--------
->  security/selinux/hooks.c  | 13 +++++--------
->  2 files changed, 10 insertions(+), 16 deletions(-)
+> See my note on patch 1/5, merging into lsm/dev.
 
-See my note on patch 1/5, merging into lsm/dev.
-
---
-paul-moore.com
 
