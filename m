@@ -1,153 +1,83 @@
-Return-Path: <linux-security-module+bounces-6497-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6499-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F1BF9C2C27
-	for <lists+linux-security-module@lfdr.de>; Sat,  9 Nov 2024 12:25:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE9289C2C2F
+	for <lists+linux-security-module@lfdr.de>; Sat,  9 Nov 2024 12:30:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 909B31C210D8
-	for <lists+linux-security-module@lfdr.de>; Sat,  9 Nov 2024 11:25:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8911D282778
+	for <lists+linux-security-module@lfdr.de>; Sat,  9 Nov 2024 11:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E1915666C;
-	Sat,  9 Nov 2024 11:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D3A148848;
+	Sat,  9 Nov 2024 11:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="JC/H7GsM"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="FaUXsK1a"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [185.125.25.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B896154C12
-	for <linux-security-module@vger.kernel.org>; Sat,  9 Nov 2024 11:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512C5154BE9
+	for <linux-security-module@vger.kernel.org>; Sat,  9 Nov 2024 11:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731151516; cv=none; b=lhuWV77aJ54QgdWew/Lmw+cN7cVn/JGvcSR7k4T1npFzX4tTIj/NQXI21NguuDcZEswOGkULci01lhUXAIaqWiBD5FuVQqSjT5sBbQ+ZEjPyP4D5UaSHgeum0Uc/UyhA5wJZMYTUkN4WHzN2suPD6XbmE+SkBqRQO/pFtIEiIMo=
+	t=1731151815; cv=none; b=rVlAz7OhZw/AwbrnSjFEF3tfnvIHxElxGWu5fav08RjnvXWHTYReZNhHgzRxE4sTKIJxfy68LpRL8gOlm7QLtFjUZ4HZl0c0GNh6ZB1mg60Tt8bAjzqdP98BKMrW4RvH+1ma6TZrk1Cl3V4AfQto0QxbfPyiy5TrTwGbwUKmY4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731151516; c=relaxed/simple;
-	bh=Ia5hTMOLKaax1IxZmH3a+EoHfBXcP6f9RKCxsxQBfmE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cVEwUbeBw5ccuCt57jM7rzNPxfJ6C10g2yRqDPo6xDV+Y8P7lU+DvmZk9YEOJJ7KnP8UT20wnbHsbC42WwcZbOvWbdpNPW7NmMbzFwR2cnJzPbCS5lrTTYkQrVlpYIUs1YvSvYd/LvcfTjPzSmZ3Wd6PTysiRBI4VDZsiTtVzAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=JC/H7GsM; arc=none smtp.client-ip=84.16.66.173
+	s=arc-20240116; t=1731151815; c=relaxed/simple;
+	bh=c9Vww4CT0SN/2jGjFWdoneL43s1239/xTGQn1r7f53o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kZDm5lQSU2eKba87KYQsYgtJp91QdElzdUE05QW8zaVjXXFohl4n32S0hylF/ltL1zJYknWjDbbkNgkAuLNrZ57zGKH1aod4ND/Wyn1M4sEJCpvBbwU+Q68h8PejZR9fF724koNoVWX+HM9xmS/T9mRe++oi0nXf8JuZ3H7/BjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=FaUXsK1a; arc=none smtp.client-ip=185.125.25.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XltNj07LFz7xw;
-	Sat,  9 Nov 2024 12:09:09 +0100 (CET)
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XltWM67jkz93h;
+	Sat,  9 Nov 2024 12:14:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1731150548;
-	bh=UvZP4U1+PJ/HP+QehB8ZwzNPYbHZqDuMCkn9yYHrC3g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JC/H7GsMStKSqzeD1NZosXeyyUeQOuqhko9No2y8QPs0y7ipm/a2oxl3KMS9JrwBz
-	 UIlFrTXzhTCH3eHsiNL4T+EDA+mUDvUjK/pOsrsL3ulg5CYAae6+s2eL8IaAOG35/h
-	 0mHD1IQ8PqfeTgS5Q0QxHqiON1/KrnFQ2eHdNVGM=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XltNh1qDFzs4C;
-	Sat,  9 Nov 2024 12:09:08 +0100 (CET)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	s=20191114; t=1731150895;
+	bh=M8sVqSHb9q1m4LHO4Ex5Vu4KLnEMo7PjEHIwnhi+B0o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FaUXsK1aoEIN933EGMYl01Vq02XZFF01bYedsFZN65Bz6zMGszPpttHqffjA67mEJ
+	 8lSRuoKNdAFxVwiuUgbK2tcO7ASTZWNM8nZUze9Qnk+OLbbt8KmaceHaaSiNAgz1Co
+	 o2kygWLzhaOUApBkOFu/5qLRELKng8WLMkjse/Rk=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XltWM23tHzksM;
+	Sat,  9 Nov 2024 12:14:55 +0100 (CET)
+Date: Sat, 9 Nov 2024 12:14:49 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
 	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Tahera Fahimi <fahimitahera@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v4 3/3] landlock: Optimize scope enforcement
-Date: Sat,  9 Nov 2024 12:08:56 +0100
-Message-ID: <20241109110856.222842-4-mic@digikod.net>
-In-Reply-To: <20241109110856.222842-1-mic@digikod.net>
+Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
+	Paul Moore <paul@paul-moore.com>, Tahera Fahimi <fahimitahera@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] landlock: Refactor filesystem access mask
+ management
+Message-ID: <20241109.xie6Quae9chi@digikod.net>
 References: <20241109110856.222842-1-mic@digikod.net>
+ <20241109110856.222842-2-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241109110856.222842-2-mic@digikod.net>
 X-Infomaniak-Routing: alpha
 
-Do not walk through the domain hierarchy when the required scope is not
-supported by this domain.  This is the same approach as for filesystem
-and network restrictions.
+On Sat, Nov 09, 2024 at 12:08:54PM +0100, Mickaël Salaün wrote:
+> Replace get_raw_handled_fs_accesses() with a generic
+> landlock_merge_access_masks(), and replace get_fs_domain() with a
+> generic landlock_match_ruleset().  These helpers will also be useful for
+> other types of access.
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-Cc: Tahera Fahimi <fahimitahera@gmail.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241109110856.222842-4-mic@digikod.net
----
+Of course I need to update the commit messages with the new names...
 
-Changes since v2:
-* Make the unix_scope variable global to the file and remove
-  previous get_current_unix_scope_domain().
----
- security/landlock/task.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/security/landlock/task.c b/security/landlock/task.c
-index 4acbd7c40eee..dc7dab78392e 100644
---- a/security/landlock/task.c
-+++ b/security/landlock/task.c
-@@ -204,12 +204,17 @@ static bool is_abstract_socket(struct sock *const sock)
- 	return false;
- }
- 
-+static const struct access_masks unix_scope = {
-+	.scope = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET,
-+};
-+
- static int hook_unix_stream_connect(struct sock *const sock,
- 				    struct sock *const other,
- 				    struct sock *const newsk)
- {
- 	const struct landlock_ruleset *const dom =
--		landlock_get_current_domain();
-+		landlock_get_applicable_domain(landlock_get_current_domain(),
-+					       unix_scope);
- 
- 	/* Quick return for non-landlocked tasks. */
- 	if (!dom)
-@@ -225,7 +230,8 @@ static int hook_unix_may_send(struct socket *const sock,
- 			      struct socket *const other)
- {
- 	const struct landlock_ruleset *const dom =
--		landlock_get_current_domain();
-+		landlock_get_applicable_domain(landlock_get_current_domain(),
-+					       unix_scope);
- 
- 	if (!dom)
- 		return 0;
-@@ -243,6 +249,10 @@ static int hook_unix_may_send(struct socket *const sock,
- 	return 0;
- }
- 
-+static const struct access_masks signal_scope = {
-+	.scope = LANDLOCK_SCOPE_SIGNAL,
-+};
-+
- static int hook_task_kill(struct task_struct *const p,
- 			  struct kernel_siginfo *const info, const int sig,
- 			  const struct cred *const cred)
-@@ -256,6 +266,7 @@ static int hook_task_kill(struct task_struct *const p,
- 	} else {
- 		dom = landlock_get_current_domain();
- 	}
-+	dom = landlock_get_applicable_domain(dom, signal_scope);
- 
- 	/* Quick return for non-landlocked tasks. */
- 	if (!dom)
-@@ -279,7 +290,8 @@ static int hook_file_send_sigiotask(struct task_struct *tsk,
- 
- 	/* Lock already held by send_sigio() and send_sigurg(). */
- 	lockdep_assert_held(&fown->lock);
--	dom = landlock_file(fown->file)->fown_domain;
-+	dom = landlock_get_applicable_domain(
-+		landlock_file(fown->file)->fown_domain, signal_scope);
- 
- 	/* Quick return for unowned socket. */
- 	if (!dom)
--- 
-2.47.0
-
+> 
+> Cc: Günther Noack <gnoack@google.com>
+> Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> Link: https://lore.kernel.org/r/20241109110856.222842-2-mic@digikod.net
 
