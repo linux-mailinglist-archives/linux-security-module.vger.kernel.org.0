@@ -1,134 +1,437 @@
-Return-Path: <linux-security-module+bounces-6539-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6541-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC4C59C60BA
-	for <lists+linux-security-module@lfdr.de>; Tue, 12 Nov 2024 19:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12A229C6146
+	for <lists+linux-security-module@lfdr.de>; Tue, 12 Nov 2024 20:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92A861F22C79
-	for <lists+linux-security-module@lfdr.de>; Tue, 12 Nov 2024 18:47:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97DF71F22B6A
+	for <lists+linux-security-module@lfdr.de>; Tue, 12 Nov 2024 19:22:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C28D230994;
-	Tue, 12 Nov 2024 18:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92DEB155CBF;
+	Tue, 12 Nov 2024 19:19:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="CGu3iysX"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="UaGhink2"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic305-27.consmr.mail.ne1.yahoo.com (sonic305-27.consmr.mail.ne1.yahoo.com [66.163.185.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [84.16.66.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4955A21791C
-	for <linux-security-module@vger.kernel.org>; Tue, 12 Nov 2024 18:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.185.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF286218950
+	for <linux-security-module@vger.kernel.org>; Tue, 12 Nov 2024 19:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731437142; cv=none; b=jxnalR0rCZjjF32qVJl5uxLhBs8ZyuQpVueP60sr65LctURfpPRg/QQopf8P6I329BEmLqctwXrygTzck34H3wpR7v+TDdnJ3wYwagftuGJz6dG8pGauLdoh1LAG8S3dlloXKsjGTTLi1hm1n+/q+paZ4esVofC/rP+IRhYMxAw=
+	t=1731439167; cv=none; b=mWr8liPApYA+oCeNVvuV56nzDmbcBnCRs2rQfPrxuLXFLAaqivEdpFnnayYYeg1uLGGvlpDay0a11hbCYRBsUpBq3ncxXkrpPwjMKafWpx+q9lrVGQfb+s/wN8ygI/jvwGwBPw7ar0Q1lqWMHVTL6E/VIbIiruDQwgs2lmbHjng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731437142; c=relaxed/simple;
-	bh=5AfxsiIGnThkCH9+gv4t/5YzNoha7tPyUzDonhfXsDI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MT+ZPHJdHBfZzp76O32PP8nWh3E54uyH/UopG8t6ZM/h4BjkLP+MZ8bnbJ3QlbWwX+ztYghSP9ji//sFeAPxEXyUdT6VPUI/xtpGOIk7A/3Mq+lOO9iS36ufmR60wG4TMHF82gf/0poTdJkavWhZIzk25DCw54fh8cPnutkQmws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=CGu3iysX; arc=none smtp.client-ip=66.163.185.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731437132; bh=44dFyDMdFWCMHOzhpZuUtqKywMz30N+fbraStaI1L/E=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=CGu3iysXr3o4XqYPqFYJhiFA0/kVDR7xydNpXZojXAg3ehSAgqo1KnngT/r2Kyw+VXseNysHTIWD2WYh6E0n0ACnFVIZUCh2XTPXrq4wAlcoelWJdiqmzs/Fes5JUJAftJbAPFDGIsp4vFvCNGlXc36AI+W8jgqCzdReWWyeA1ihJ45kkRcbyeQxJsnDR0cIvJU80Mu3xW/sIhuPgJM0ad1Ta3exJg0avI/+DMtJVSOZSGDQWj0Esi8M232av6cMZDAPjfOW7xGCMA8We/M0mCZvwkjF+LkZFNHb9ad0SVj37BBmtUhtEZUOkmqgx6oIog3fT5LZV9KrStoxSThzug==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731437132; bh=stVwctm+rHDaZV5WnCWt/qR0FsE4RGRrgUsQjLDT+Ya=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=YE0YxkdhA4vuca5RHtFnxxJmgqbWcPjktb6/34U2+MxzQpSKikTnlOPDSNbRDYtqiFJcr58V8EEvhbrimRdOnezH+3FkgjPKBuyFjUroYVXKLnYud5iRRrLhPDet05Ef4LSbHnmogmeyYsLQBgSmRcZ0Qnkd2VxH2dt6nV8Bl8RvtGjdC2V4SfwtpS2Pbp53l3Rj68FpksOw0jwqetA7b9dR2DAjdwuYreDnZY2y9H9buE1MlJ80kf1cO6MllvFo99+b6PFaIjN+d+2FslTfYFMV/TOFf+5s8THnC3KbETD7jgBTx/wLxkjtfHWh8HlCM6NcqIrs/soMb/V8BvwUFw==
-X-YMail-OSG: mfFEfiUVM1k9jpYadsLcoTcNbR8iNtaf4VkGV3FO3GYWkqdmuAMN0KUv4b5D_yf
- SmRzqrPlp0x0Ifm2ZbHNi0do9nNiR57MOBSABtvcYKiOzoCjK_vf6vduQxttnHlt87HyUJICHhBr
- y6ZwRtUFuGy_woTRw2Ehd9AviLy5i8fSWwtrzfPv8Ks8B0QB7ufp_Mq2Ef5OIyG2dWCqHC1aooeO
- 2P.L3FVRZL2NKuUWm.omnzE3V.CdnKxaF6NbarCHVfMu8HaBk6eDW5upk8bTf2zv0hdzYoJuHxZ5
- 2e1TyeTfzfTlm3FRJo8lo_xLQtRdc603GpLTv41XtpUjMU3Egxgs5_19Ddz5F0E4YN.3OKcGCbeF
- 2YqZMuSDXD6Wl07NbTCguFVS3M3359gNVQFl.fWrX29gsJ4luW9zgJ9yd2Ini4_xZR0MaFTNp4Qd
- TKi9YG3lCcPDANPNm7q5OrMQLDVgi3Exf5MkdodSL6GNw66BrrXETn4Kygr922IVPams9Y2wHMM7
- XMNQwHYNUotxUB8PkCZMpdD3zCCLtzRnAgXPiDW2WyJxmhE.ESfnlgc2tKb.AzNHPGHOHjEMDL12
- 8IKEHtRsAp8vcCwxip0FS2fDZL36IHROl41wTAYzOg6JMesAsiyX4I9gP8lQfEK4vH7eY0Yb8Svv
- hjH49EX9UXozaWtIQCqXXI2VXgiHzeShT4ALI.2e469yoaSkDJ7Fw9_3G3oapARYbV1F96rMurk8
- 7blTWv2kCx7RLSuJ6jJPst4KK0sqYG6pjFL_dH.jZJDRh875Vzs8GB7Wauh6XIeFPEpF8CsOi004
- V16Be6aa1DBWt6mxd49_MjzxO1jUIl6Hi8onJalDtiQ0Xt7bRPYIDQEnrzhtTbuCWRlANKnHWIgA
- eS9BQWHQKkD2dHXeztIrMv5GshTq2_FxLnVLwGuqfiCXdwxVuNlGWW7n2lRf886cuJ1klqtj.HkM
- .HuzKUWO2vi3GqHeQP6dz5PDkMsDrOJ20LgS0zq58gQoGu0pGU.k5ZhVwJ5tlAkWkREztxgMAFBI
- zwkYl14NrTju5K.XGBO0PBOK7lhtIlFbIZBjP5_c430GcfUXytmXWv2P3MaajvTl51lCFi8MyB12
- eQn.nLKAha9YzAts3T9rWcQMwHlNGLGKijUHGbWes.1hDElSTSTPGVyBm2VjejcL3uXyEcoFsXZ5
- s9VjllxBBypNAtcBGHNMTeCdq5AOvSCqbqdz7pkSfSJiwmOOhCl1zmabVkF84f4lm9d.DxnCaKeO
- Z5XAJH9GUws1iCcm11OgzUocNQaS_DlnxATvkDtx2vziaGU_l1yVSlpQTwQUNNBcIDm04ekuZN9X
- .vuNzqEIs0SLf8CwX_HUcGYhvLKFAEJ1ydgnk3UNJR2wbvmcaGgz1hamiO1.TsV687aw18YT4T4S
- tBNH3okxMY937vdy2IPKHMLQjwI_g1f9FMSpi5l9Vrytuv4sYInSxl0n4ubWPd7Lf3jhZk2x6aTR
- 23pTuNdWjOUjV2LobHU96519JFW6SBTceNVybVqJjdqrXQjz3ADW0ZJrIS1A_9Uo1J7.fv8fiO7M
- tHIPBFy7gXIi8W9xcEzfS3Zpwr9P90jASsJSwGEQrJKs3b52HsS3Gv2qbZP_pd8I.0pMLq9qUUsu
- 72jg8MBDJZJywIcTD2KyOAjpany4o4QspMAOyGsCoEb8SpgCK2rxaWtmeKM0baGgS.ZZm6ZEhlxx
- gEHPsqd.2wwuap3x7WQBDzpUChNOdKXdYuQxhHPmsErKyqwwyC.33vfL3HL4lfp4SoLcWYV_46YP
- fRIpsz_tJLlPC8JVR0fZ1dd7WekLDaxDiK6SB0M5hrqwJo7X.WDFL1GkF1ieaoFXiGHW57JVQc1J
- hgG6vNsQDTnrpLGUR6I5Y.Ofb4moLOgHrrIHADNW5QlQttKVgVCAOXlW1VGY4zwQsJWsMHvhC3gF
- nBFWGOcMk_BxXurJIB6MOMvyuOqY2VdlJSw0.q7SiOdodXBYIQw_MIr7LtyI_LXGnGXabfh39aOq
- RDMHTya1JVsA1wzpwgT3P91_dU95TXRNveFWIPAWhWTkRwejCCrzmIJLPs9d78fE_YrXA1ca.Ldn
- Kt9CDj8BfWP8VX_QUo7srmpNXFKNKfn1jDBfQEXGusTdwau_Gnwzyv1d5F3ZmhakPDb4bSLJoN1y
- lcjvSMd8DebRVusDDqUiOvCkN0OxLVsuYzIuIYbY6mYGjNp9l9Rn0E4RWpSOQUS7i5PlguDaMBkS
- WQgcoXjsDsHznjRbPZEOIbqsFKCjI5Qrxl1mvkO1_gWN6DbUi9mHm6irAIsaOf.w7Tgqi._T8Q2q
- OK2rnYejuLhIaRhzNogjjozekt3s-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: fd96ef61-f196-4ec9-90a5-cdea99300bc5
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ne1.yahoo.com with HTTP; Tue, 12 Nov 2024 18:45:32 +0000
-Received: by hermes--production-gq1-5dd4b47f46-pfhh2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8729408aad8f9c6002e94a5bf8721013;
-          Tue, 12 Nov 2024 18:45:27 +0000 (UTC)
-Message-ID: <ccfb14f5-4efe-4958-962e-9542009352cc@schaufler-ca.com>
-Date: Tue, 12 Nov 2024 10:45:25 -0800
+	s=arc-20240116; t=1731439167; c=relaxed/simple;
+	bh=AZASCbI89lTLK4X84Rptkzq280wwgQBU9BUi9vtLTqc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XfB5BuNy/GFdu4I7X+w3JVBviGM2K/83WwqNbjKi6HCDyJsReljdOfsho2glCUeMIrGp9Z7IMC/DNkecvx4ePi1qr+9PULBWN+ucMCxYuw8094jG98Pg1Bd5m/yeQPy5Fc8pjg018ZXeWyCybotbhUEy53X61Ns6c1nnb/pllFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=UaGhink2; arc=none smtp.client-ip=84.16.66.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Xnx6p2jsLzGyq;
+	Tue, 12 Nov 2024 20:19:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1731439154;
+	bh=fd5JDeC6T0CPT2RqYA+1Evau9hYhTp50cehqg3rHFq8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UaGhink2uNHigAtVpd5Iu/NcYhyJbmoXSPpE5NoM/wlQlDTfx7oTE96r+1BOtX8/S
+	 nov8iG2HT3Ezp1pOg6JSKnA2/9bP04RyKglMkzvdtCu/rqAfld2DRkorbBqC4ZYrhZ
+	 /7kDr6pvbz0t8Exv0503YriyXouslsCsNKLG8Gyg=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Xnx6k1jM0zqL4;
+	Tue, 12 Nov 2024 20:19:10 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Serge Hallyn <serge@hallyn.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+	Alejandro Colomar <alx@kernel.org>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Christian Heimes <christian@python.org>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Elliott Hughes <enh@google.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Eric Chiang <ericchiang@google.com>,
+	Fan Wu <wufan@linux.microsoft.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Jan Kara <jack@suse.cz>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jordan R Abrahams <ajordanr@google.com>,
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Luca Boccassi <bluca@debian.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Matthew Garrett <mjg59@srcf.ucam.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Miklos Szeredi <mszeredi@redhat.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
+	Scott Shell <scottsh@microsoft.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Steve Dower <steve.dower@python.org>,
+	Steve Grubb <sgrubb@redhat.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+	Xiaoming Ni <nixiaoming@huawei.com>,
+	Yin Fengwei <fengwei.yin@intel.com>,
+	kernel-hardening@lists.openwall.com,
+	linux-api@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v21 0/6] Script execution control (was O_MAYEXEC)
+Date: Tue, 12 Nov 2024 20:18:52 +0100
+Message-ID: <20241112191858.162021-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: lsm: Refactor
- `flags_overset_lsm_set_self_attr` test
-To: Amit Vadhavana <av2082000@gmail.com>, paul@paul-moore.com,
- jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
-Cc: ricardo@marliere.net, skhan@linuxfoundation.org,
- linux-kernel-mentees@lists.linux.dev, linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20241112182810.24761-1-av2082000@gmail.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20241112182810.24761-1-av2082000@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.22876 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On 11/12/2024 10:28 AM, Amit Vadhavana wrote:
-> - Remove unnecessary `tctx` variable, use `ctx` directly.
-> - Simplified code with no functional changes.
->
-> Signed-off-by: Amit Vadhavana <av2082000@gmail.com>
+Hi,
 
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+The goal of this patch series is to be able to ensure that direct file
+execution (e.g. ./script.sh) and indirect file execution (e.g. sh
+script.sh) lead to the same result, especially from a security point of
+view.
 
-> ---
->  tools/testing/selftests/lsm/lsm_set_self_attr_test.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-> index 66dec47e3ca3..732e89fe99c0 100644
-> --- a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-> +++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-> @@ -56,16 +56,15 @@ TEST(flags_zero_lsm_set_self_attr)
->  TEST(flags_overset_lsm_set_self_attr)
->  {
->  	const long page_size = sysconf(_SC_PAGESIZE);
-> -	char *ctx = calloc(page_size, 1);
-> +	struct lsm_ctx *ctx = calloc(page_size, 1);
->  	__u32 size = page_size;
-> -	struct lsm_ctx *tctx = (struct lsm_ctx *)ctx;
->  
->  	ASSERT_NE(NULL, ctx);
->  	if (attr_lsm_count()) {
-> -		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, tctx, &size,
-> +		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
->  					       0));
->  	}
-> -	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, tctx,
-> +	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, ctx,
->  					size, 0));
->  
->  	free(ctx);
+The main changes from the previous version are the rename of AT_CHECK to
+AT_EXECVE_CHECK and the conversion of UAPI comments to a proper RST
+documentation.
+
+The current status is summarized in this article:
+https://lwn.net/Articles/982085/
+I also gave a talk at LPC last month:
+https://lpc.events/event/18/contributions/1692/
+And here is a proof of concept for Python (for now, for the previous
+version: v19): https://github.com/zooba/spython/pull/12
+
+Kees, would you like to take this series in your tree?
+
+Overview
+--------
+
+This patch series is a new approach of the initial O_MAYEXEC feature,
+and a revamp of the previous patch series.  Taking into account the last
+reviews [1], we now stick to the kernel semantic for file executability.
+One major change is the clear split between access check and policy
+management.
+
+The first patch brings the AT_EXECVE_CHECK flag to execveat(2).  The
+goal is to enable user space to check if a file could be executed (by
+the kernel).  Unlike stat(2) that only checks file permissions,
+execveat2(2) + AT_EXECVE_CHECK take into account the full context,
+including mount points (noexec), caller's limits, and all potential LSM
+extra checks (e.g. argv, envp, credentials).
+
+The second patch brings two new securebits used to set or get a security
+policy for a set of processes.  For this to be meaningful, all
+executable code needs to be trusted.  In practice, this means that
+(malicious) users can be restricted to only run scripts provided (and
+trusted) by the system.
+
+[1] https://lore.kernel.org/r/CAHk-=wjPGNLyzeBMWdQu+kUdQLHQugznwY7CvWjmvNW47D5sog@mail.gmail.com
+
+Script execution
+----------------
+
+One important thing to keep in mind is that the goal of this patch
+series is to get the same security restrictions with these commands:
+* ./script.py
+* python script.py
+* python < script.py
+* python -m script.py
+
+However, on secure systems, we should be able to forbid these commands
+because there is no way to reliably identify the origin of the script:
+* xargs -a script.py -d '\r' -- python -c
+* cat script.py | python
+* python
+
+Background
+----------
+
+Compared to the previous patch series, there is no more dedicated
+syscall nor sysctl configuration.  This new patch series only add new
+flags: one for execveat(2) and four for prctl(2).
+
+This kind of script interpreter restriction may already be used in
+hardened systems, which may need to fork interpreters and install
+different versions of the binaries.  This mechanism should enable to
+avoid the use of duplicate binaries (and potential forked source code)
+for secure interpreters (e.g. secure Python [2]) by making it possible
+to dynamically enforce restrictions or not.
+
+The ability to control script execution is also required to close a
+major IMA measurement/appraisal interpreter integrity [3].
+
+This new execveat + AT_EXECVE_CHECK should not be confused with the
+O_EXEC flag (for open) which is intended for execute-only, which
+obviously doesn't work for scripts.
+
+I gave a talk about controlling script execution where I explain the
+previous approaches [4].  The design of the WIP RFC I talked about
+changed quite a bit since then.
+
+[2] https://github.com/zooba/spython
+[3] https://lore.kernel.org/lkml/20211014130125.6991-1-zohar@linux.ibm.com/
+[4] https://lssna2023.sched.com/event/1K7bO
+
+Execution policy
+----------------
+
+The "execution" usage means that the content of the file descriptor is
+trusted according to the system policy to be executed by user space,
+which means that it interprets the content or (try to) maps it as
+executable memory.
+
+It is important to note that this can only enable to extend access
+control managed by the kernel.  Hence it enables current access control
+mechanism to be extended and become a superset of what they can
+currently control.  Indeed, the security policy could also be delegated
+to an LSM, either a MAC system or an integrity system.
+
+Complementary W^X protections can be brought by SELinux or IPE [5].
+
+Being able to restrict execution also enables to protect the kernel by
+restricting arbitrary syscalls that an attacker could perform with a
+crafted binary or certain script languages.  It also improves multilevel
+isolation by reducing the ability of an attacker to use side channels
+with specific code.  These restrictions can natively be enforced for ELF
+binaries (with the noexec mount option) but require this kernel
+extension to properly handle scripts (e.g. Python, Perl).  To get a
+consistent execution policy, additional memory restrictions should also
+be enforced (e.g. thanks to SELinux).
+
+[5] https://lore.kernel.org/lkml/1716583609-21790-1-git-send-email-wufan@linux.microsoft.com/
+
+Prerequisite for security use
+-----------------------------
+
+Because scripts might not currently have the executable permission and
+still run well as is, or because we might want specific users to be
+allowed to run arbitrary scripts, we also need a configuration
+mechanism.
+
+According to the threat model, to get a secure execution environment on
+top of these changes, it might be required to configure and enable
+existing security mechanisms such as secure boot, restrictive mount
+points (e.g. with rw AND noexec), correct file permissions (including
+executable libraries), IMA/EVM, SELinux policy...
+
+The first thing to patch is the libc to check loaded libraries (e.g. see
+chromeOS changes).  The second thing to patch are the script
+interpreters by checking direct scripts executability and by checking
+their own libraries (e.g. Python's imported files or argument-passed
+modules).  For instance, the PEP 578 [6] (Runtime Audit Hooks) enables
+Python 3.8 to be extended with policy enforcement points related to code
+interpretation, which can be used to align with the PowerShell audit
+features.  Additional Python security improvements (e.g. a limited
+interpreter without -c, stdin piping of code) are developed [2] [7].
+
+[6] https://www.python.org/dev/peps/pep-0578/
+[7] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
+
+libc patch
+----------
+
+Dynamic linking needs still need to check the libraries the same way
+interpreters need to check scripts.
+
+chromeOS patches glibc with a fstatvfs check [8] [9]. This enables to
+check against noexec mount points, which is OK but doesn't fit with
+execve semantics.  Moreover, the kernel is not aware of such check, so
+all access control checks are not performed (e.g. file permission, LSMs
+security policies, integrity and authenticity checks), it is not handled
+with audit, and more importantly this would not work on generic
+distributions because of the strict requirement and chromeOS-specific
+assumptions.
+
+[8] https://issuetracker.google.com/issues/40054993
+[9] https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/6abfc9e327241a5f684b8b941c899b7ca8b6dbc1/sys-libs/glibc/files/local/glibc-2.37/0007-Deny-LD_PRELOAD-of-files-in-NOEXEC-mount.patch
+
+Examples
+--------
+
+The initial idea comes from CLIP OS 4 and the original implementation
+has been used for more than a decade:
+https://github.com/clipos-archive/clipos4_doc
+Chrome OS has a similar approach:
+https://www.chromium.org/chromium-os/developer-library/guides/security/noexec-shell-scripts/
+
+User space patches can be found here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+There is more than the O_MAYEXEC changes (which matches this search)
+e.g., to prevent Python interactive execution. There are patches for
+Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
+also some related patches which do not directly rely on O_MAYEXEC but
+which restrict the use of browser plugins and extensions, which may be
+seen as scripts too:
+https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
+
+Past talks and articles
+-----------------------
+
+Closing the script execution control gap at Linux Plumbers Conference
+2024: https://lpc.events/event/18/contributions/1692/
+
+An introduction to O_MAYEXEC was given at the Linux Security Summit
+Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+
+LWN articles:
+* https://lwn.net/Articles/982085/
+* https://lwn.net/Articles/832959/
+* https://lwn.net/Articles/820000/
+
+FAQ
+Link: https://lore.kernel.org/r/20241112191858.162021-1-mic@digikod.net
+---
+
+Q: Why not extend open(2) or openat2(2) with a new flag like O_MAYEXEC?
+A: Because it is not flexible enough:
+https://lore.kernel.org/r/CAG48ez0NAV5gPgmbDaSjo=zzE=FgnYz=-OHuXwu0Vts=B5gesA@mail.gmail.com
+
+Q: Why not only allowing file descriptor to avoid TOCTOU?
+A: Because there are different use cases:
+https://lore.kernel.org/r/CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com
+
+Q: We can copy a script into a memfd and use it as an executable FD.
+   Wouldn't that bypass the purpose of this patch series?
+A: If an attacker can create a memfd it means that a
+   malicious/compromised code is already running and it's too late for
+   script execution control to help.  This patch series makes it more
+   difficult for an attacker to execute arbitrary code on a trusted
+   system in the first place:
+https://lore.kernel.org/all/20240717.AGh2shahc9ee@digikod.net/
+
+Q: What about ROP?
+A: See previous answer. If ROP is exploited then the attacker already
+   controls some code:
+https://lore.kernel.org/all/20240718.ahph4che5Shi@digikod.net/
+
+Q: What about LD_PRELOAD environment variable?
+A: The dynamic linker should be enlighten to check if libraries are
+   allowed to be loaded.
+
+Q: What about The PATH environment variable?
+A: All programs allowed to be executed are deemed trusted.
+
+Q: Should we check seccomp filters too?
+A: Yes, they should be considered as executable code because they can
+   change the behavior of processes, similarly to code injection:
+https://lore.kernel.org/all/20240705.IeTheequ7Ooj@digikod.net/
+
+Q: Could that be used for role transition?
+A: That would be risky and difficult to implement correctly:
+https://lore.kernel.org/all/20240723.Tae5oovie2ah@digikod.net/
+
+Previous versions
+-----------------
+
+v20: https://lore.kernel.org/r/20241011184422.977903-1-mic@digikod.net
+v19: https://lore.kernel.org/r/20240704190137.696169-1-mic@digikod.net
+v18: https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
+v17: https://lore.kernel.org/r/20211115185304.198460-1-mic@digikod.net
+v16: https://lore.kernel.org/r/20211110190626.257017-1-mic@digikod.net
+v15: https://lore.kernel.org/r/20211012192410.2356090-1-mic@digikod.net
+v14: https://lore.kernel.org/r/20211008104840.1733385-1-mic@digikod.net
+v13: https://lore.kernel.org/r/20211007182321.872075-1-mic@digikod.net
+v12: https://lore.kernel.org/r/20201203173118.379271-1-mic@digikod.net
+v11: https://lore.kernel.org/r/20201019164932.1430614-1-mic@digikod.net
+v10: https://lore.kernel.org/r/20200924153228.387737-1-mic@digikod.net
+v9: https://lore.kernel.org/r/20200910164612.114215-1-mic@digikod.net
+v8: https://lore.kernel.org/r/20200908075956.1069018-1-mic@digikod.net
+v7: https://lore.kernel.org/r/20200723171227.446711-1-mic@digikod.net
+v6: https://lore.kernel.org/r/20200714181638.45751-1-mic@digikod.net
+v5: https://lore.kernel.org/r/20200505153156.925111-1-mic@digikod.net
+v4: https://lore.kernel.org/r/20200430132320.699508-1-mic@digikod.net
+v3: https://lore.kernel.org/r/20200428175129.634352-1-mic@digikod.net
+v2: https://lore.kernel.org/r/20190906152455.22757-1-mic@digikod.net
+v1: https://lore.kernel.org/r/20181212081712.32347-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (6):
+  exec: Add a new AT_EXECVE_CHECK flag to execveat(2)
+  security: Add EXEC_RESTRICT_FILE and EXEC_DENY_INTERACTIVE securebits
+  selftests/exec: Add 32 tests for AT_EXECVE_CHECK and exec securebits
+  selftests/landlock: Add tests for execveat + AT_EXECVE_CHECK
+  samples/check-exec: Add set-exec
+  samples/check-exec: Add an enlighten "inc" interpreter and 28 tests
+
+ Documentation/userspace-api/check_exec.rst    | 131 +++++
+ Documentation/userspace-api/index.rst         |   1 +
+ fs/exec.c                                     |  20 +-
+ include/linux/binfmts.h                       |   7 +-
+ include/uapi/linux/fcntl.h                    |   4 +
+ include/uapi/linux/securebits.h               |  24 +-
+ kernel/audit.h                                |   1 +
+ kernel/auditsc.c                              |   1 +
+ samples/Kconfig                               |   9 +
+ samples/Makefile                              |   1 +
+ samples/check-exec/.gitignore                 |   2 +
+ samples/check-exec/Makefile                   |  15 +
+ samples/check-exec/inc.c                      | 205 ++++++++
+ samples/check-exec/run-script-ask.inc         |   8 +
+ samples/check-exec/script-ask.inc             |   4 +
+ samples/check-exec/script-exec.inc            |   3 +
+ samples/check-exec/script-noexec.inc          |   3 +
+ samples/check-exec/set-exec.c                 |  85 ++++
+ security/commoncap.c                          |  29 +-
+ security/security.c                           |  10 +
+ tools/testing/selftests/exec/.gitignore       |   4 +
+ tools/testing/selftests/exec/Makefile         |  19 +-
+ .../selftests/exec/check-exec-tests.sh        | 205 ++++++++
+ tools/testing/selftests/exec/check-exec.c     | 448 ++++++++++++++++++
+ tools/testing/selftests/exec/config           |   2 +
+ tools/testing/selftests/exec/false.c          |   5 +
+ .../selftests/kselftest/ktap_helpers.sh       |   2 +-
+ tools/testing/selftests/landlock/fs_test.c    |  27 ++
+ 28 files changed, 1263 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/userspace-api/check_exec.rst
+ create mode 100644 samples/check-exec/.gitignore
+ create mode 100644 samples/check-exec/Makefile
+ create mode 100644 samples/check-exec/inc.c
+ create mode 100755 samples/check-exec/run-script-ask.inc
+ create mode 100755 samples/check-exec/script-ask.inc
+ create mode 100755 samples/check-exec/script-exec.inc
+ create mode 100644 samples/check-exec/script-noexec.inc
+ create mode 100644 samples/check-exec/set-exec.c
+ create mode 100755 tools/testing/selftests/exec/check-exec-tests.sh
+ create mode 100644 tools/testing/selftests/exec/check-exec.c
+ create mode 100644 tools/testing/selftests/exec/config
+ create mode 100644 tools/testing/selftests/exec/false.c
+
+
+base-commit: 2d5404caa8c7bb5c4e0435f94b28834ae5456623
+-- 
+2.47.0
+
 
