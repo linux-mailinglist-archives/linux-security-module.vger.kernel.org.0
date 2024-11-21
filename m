@@ -1,105 +1,85 @@
-Return-Path: <linux-security-module+bounces-6742-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6745-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AC229D54C1
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Nov 2024 22:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 27D6E9D5695
+	for <lists+linux-security-module@lfdr.de>; Fri, 22 Nov 2024 01:15:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8D1FB21567
-	for <lists+linux-security-module@lfdr.de>; Thu, 21 Nov 2024 21:33:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99713B2135D
+	for <lists+linux-security-module@lfdr.de>; Fri, 22 Nov 2024 00:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 017701DBB19;
-	Thu, 21 Nov 2024 21:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6825625;
+	Fri, 22 Nov 2024 00:14:55 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail.lichtvoll.de (lichtvoll.de [37.120.160.25])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B75D1DA60B;
-	Thu, 21 Nov 2024 21:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.120.160.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D52917C
+	for <linux-security-module@vger.kernel.org>; Fri, 22 Nov 2024 00:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732224770; cv=none; b=WK3iFSilED86MgnYZQTfno5Xk1gcLUfZLNsVLCl4Y5a69e3yToTwy4VmCeSiIviseER0sxVWNTd4FzU/pXT6Q22t742DRU0qrJDjvT2ucDNDMMz4SIt5xa8Na2oWfCLHzhJBhuERuhJ3ZaMv+8LWKSoGbe3KciB9eoQDIprQ9hk=
+	t=1732234495; cv=none; b=YXqWQIpxgJ25FjASOarlz+XqAcnlrdOZfKsb5DNpmf4UtZR4zUvnteirvZ3qO5nB1DqzuBmjSvn+GW0JCUhc8J3YvG4tv1QLBn+jtGPIhX9VjMCTVCrTEkTvRSBasqWhhUEubzpjJTaxPlG2RaPiKEAX+8WRdE6ghtDOAj7hjj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732224770; c=relaxed/simple;
-	bh=f2zjqGjXIS0zXz+SfweyuQuJmizq0SK3ammdZElZGAQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eIFRKwS1zqLQzMmk1aiqF6+9Ks4W2KL9zp8f6WyANsurXKsSWa1qP/kyLLitaE/M33XamttcnC+Usx750sjQkvXTK6pt76Qc6jx4g03y9EYWPaoPN8h5fwLDwqixRPfpQWYc/1M1rspHonzsADmvVWFUb4JKfdnEy8bRvhBRBnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de; spf=pass smtp.mailfrom=lichtvoll.de; arc=none smtp.client-ip=37.120.160.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lichtvoll.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lichtvoll.de
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
-	(No client certificate requested)
-	by mail.lichtvoll.de (Postfix) with ESMTPSA id DFC898FC39;
-	Thu, 21 Nov 2024 21:32:44 +0000 (UTC)
-Authentication-Results: mail.lichtvoll.de;
-	auth=pass smtp.auth=martin@lichtvoll.de smtp.mailfrom=martin@lichtvoll.de
-From: Martin Steigerwald <martin@lichtvoll.de>
-To: Kent Overstreet <kent.overstreet@linux.dev>, Theodore Ts'o <tytso@mit.edu>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, Michal Hocko <mhocko@suse.com>,
- Dave Chinner <david@fromorbit.com>,
- Andrew Morton <akpm@linux-foundation.org>, Christoph Hellwig <hch@lst.de>,
- Yafang Shao <laoar.shao@gmail.com>, jack@suse.cz,
- Christian Brauner <brauner@kernel.org>,
- Alexander Viro <viro@zeniv.linux.org.uk>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-bcachefs@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org, "conduct@kernel.org" <conduct@kernel.org>
-Subject: Re: [PATCH 1/2 v2] bcachefs: do not use PF_MEMALLOC_NORECLAIM
-Date: Thu, 21 Nov 2024 22:32:44 +0100
-Message-ID: <7747240.EvYhyI6sBW@lichtvoll.de>
-In-Reply-To: <20241120234759.GA3707860@mit.edu>
-References:
- <ZtWH3SkiIEed4NDc@tiehlicka>
- <v2ur4jcqvjc4cqdbllij5gh6inlsxp3vmyswyhhjiv6m6nerxq@mrekyulqghv2>
- <20241120234759.GA3707860@mit.edu>
+	s=arc-20240116; t=1732234495; c=relaxed/simple;
+	bh=mG+DXTW+A1g5POJQbvEOR2uCSsy3v5zu2m4K1wnmo3o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=S0XJ0BjqXGkcVYzBYph2r/4xdSXWHcNHs6stYNW/30V/h80s1bTBP1Ll12+vRzhs0N/anZXsYHp6h96gNe75M6B7yG3pEvqMlxk9yjh9Etzz5BRnitTvFs3OM+ZAp0BN3uVrc35opoSTZQHtTkPX2FSkpEGLPfUoA5Di3Jy/Prc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 4ALNM5eY072285;
+	Fri, 22 Nov 2024 08:22:05 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 4ALNM5Ex072279
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 22 Nov 2024 08:22:05 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <ad1b3db0-b5b5-40c4-9a44-ce11195cd1b5@I-love.SAKURA.ne.jp>
+Date: Fri, 22 Nov 2024 08:22:07 +0900
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: TOMOYO and runc containers dislike one another.
+To: "Dr. Greg" <greg@enjellic.com>
+References: <20241121184207.GA11007@wind.enjellic.com>
+Content-Language: en-US
+Cc: linux-security-module@vger.kernel.org
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20241121184207.GA11007@wind.enjellic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Anti-Virus-Server: fsav104.rs.sakura.ne.jp
+X-Virus-Status: clean
 
-Hi Ted, hi everyone.
+Hello.
 
-Theodore Ts'o - 21.11.24, 00:47:59 MEZ:
-> If you look at the git history of the kernel sources, you will see
-> that a large number of your fellow maintainers assented to this
-> approach --- for example by providing their Acked-by in commit
-> 1279dbeed36f ("Code of Conduct Interpretation: Add document explaining
-> how the Code of Conduct is to be interpreted").
+On 2024/11/22 3:42, Dr. Greg wrote:
+> Kernel version is 6.10 something.
+> 
+> The path causing the issue is as follows:
+> 
+> /dev/fd/7
+> 
+> Here are the warning messages that runc spits out:
+> 
+> FATA[0000] nsexec[1291]: could not ensure we are a cloned binary: No
+> such file or directory
+> 
+> ERRO[0000] runc run failed: unable to start container process: waiting
+> for init preliminary setup: read init-p: connection reset by peer
 
-A large number of people agreeing on a process like this does not 
-automatically make it an effective idea for resolving conflict. As I 
-outlined in my other mail, this kind of forced public apology approach in 
-my point of view is just serving to escalate matters. And actually it 
-seems that exactly that just happened right now. See my other mail for 
-suggestions on what I think might work better.
+Please try applying commit ada1986d0797 ("tomoyo: fallback to realpath
+if symlink's pathname does not exist").
 
-A large number of people agreeing on anything does not automatically make 
-it right.
-
-I'd suggest to avoid any kind of power-play like "we are more than you" in 
-here. What would respectful communication would look like? What does 
-happen if *everyone* involved considers how it might feel in the shoes of 
-the other one?
-
-I have and claim no standing in kernel community. So take this for 
-whatever it is worth for you. I won't be offended in case you disregard it. 
-Also I do not need any reply.
-
-And again, just for clarity: I certainly do not condone of the tone Kent 
-has used.
-
-Best,
--- 
-Martin
-
+Regards.
 
 
