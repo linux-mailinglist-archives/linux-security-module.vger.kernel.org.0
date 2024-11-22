@@ -1,48 +1,48 @@
-Return-Path: <linux-security-module+bounces-6772-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6756-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDE859D609C
-	for <lists+linux-security-module@lfdr.de>; Fri, 22 Nov 2024 15:41:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 332169D6064
+	for <lists+linux-security-module@lfdr.de>; Fri, 22 Nov 2024 15:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B299728226A
-	for <lists+linux-security-module@lfdr.de>; Fri, 22 Nov 2024 14:41:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A487B24D41
+	for <lists+linux-security-module@lfdr.de>; Fri, 22 Nov 2024 14:35:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23420143736;
-	Fri, 22 Nov 2024 14:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F071DF243;
+	Fri, 22 Nov 2024 14:34:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="q6BM95T0"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="jEV3Jnu2"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B3713D53B
-	for <linux-security-module@vger.kernel.org>; Fri, 22 Nov 2024 14:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E651213A41F
+	for <linux-security-module@vger.kernel.org>; Fri, 22 Nov 2024 14:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732286414; cv=none; b=Bl699543JMAuoZKrk870Xm/RgU8IwAxryi8GFEMi4Xi2b1cped/9gRrhYUFcoBnK14iffxYBZUOKoRpWegdSvwUN+KQdwXpit86KEFoFeSRGSN9U9gNiq9a8u3BCG+cb5Bhm0kQjlerpSCMlcIBzLE+SqrGdd1dQZG8jlOXdgo8=
+	t=1732286063; cv=none; b=t9fruJVSgidGckvoeJgdBkM5IfGoBzsszA8Mv9pus8g0wK+bVd9b1Cvegb+ecUyiBsRJpnqmt47j5G141basdqFkFwfA6QvNtQtnFt3z3olZupUEuKcgOiXu33cZ4khI92KcKXTAYe9La+gvynqv3humxaOyp8qQEwGx8twtCCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732286414; c=relaxed/simple;
-	bh=9Fxkj6Lw7DP1eAfNHnWrp7Twfjs6P7rVD5OBZe4cpq8=;
+	s=arc-20240116; t=1732286063; c=relaxed/simple;
+	bh=mVC7q9Ce6Q1K0aAdZRv8tYbd5tKt0qtqBh8/IziLuH4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cks/z2FO6ztDG23iVe82scKMzWqUJu1sDaXEZ69YZQkdCwyUGfOmBsFc+fJiVy+x5Kp04k2G1J9Kg8xnA8i6ZoZ/crbDCWyO5x3vpK1YFqwltY7ii7t6UksvgV6cVgrGGtf8hjq+DovGGfIcJDFc2t+KKREiuVJVVQonQd3kcOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=q6BM95T0; arc=none smtp.client-ip=84.16.66.170
+	 MIME-Version:Content-Type; b=ObU0ns8QHeAsZD4YKGDqKiZfFNh0v2ZUHkCMZS9r29Ato+LbJqTeJw3hLdcnqynkh1xVcXAZxg/uRYCE1vuv7J5lSr3+Q/H6O4+vrvBAjXJCb74f70nEMdWDIysyprZ+NMjMJpam9ideYhWQKVDs06WfkaHoSlLTb4y3yzcWDos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=jEV3Jnu2; arc=none smtp.client-ip=84.16.66.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKG6yVGzlKF;
-	Fri, 22 Nov 2024 15:34:10 +0100 (CET)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XvyKJ0yNXzjWt;
+	Fri, 22 Nov 2024 15:34:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1732286050;
-	bh=w3WVR4dmJCr/E++3tly2leydnVO6iM/bONHgj5qQ1yI=;
+	s=20191114; t=1732286052;
+	bh=zrUJcPUH/dxLKFnwEajCgdM87MK2R1jazfUbUqjfOnM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q6BM95T0+P8uMIKRgmgG7gxiJuT4hmcDLlWAlHYvGEL7lgBaMIdIKUH8wkHbEJdK5
-	 BlroYM60s3HtzWnhD59eIRDiFFftfL//m0J8IlkjXv2wBX7N2fkQUARVW3O9aXMPf9
-	 RPbomBAvJwrMnUAnIG7swAf5t/VavRlx0Iwzqx9o=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKG274Lzm5q;
-	Fri, 22 Nov 2024 15:34:10 +0100 (CET)
+	b=jEV3Jnu2ZYE+EzZmP/ZKuDuPGESVVRcQyG9PuOSEXpytA/PMO7yd7yoZXbLUckrkE
+	 jdKil2DMeqRDVyS9a0+WDRDIJDcvVmDpbFUAXIUbxJpUsEjCBGYinG0fTKzjhg6qqw
+	 P0BPzI3gR1x4xg4td11cB9L9NkO5YKJENTgs+nLI=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4XvyKH3YGSzlPp;
+	Fri, 22 Nov 2024 15:34:11 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -70,9 +70,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v3 06/23] landlock: Simplify initially denied access rights
-Date: Fri, 22 Nov 2024 15:33:36 +0100
-Message-ID: <20241122143353.59367-7-mic@digikod.net>
+Subject: [PATCH v3 07/23] landlock: Move domain hierarchy management
+Date: Fri, 22 Nov 2024 15:33:37 +0100
+Message-ID: <20241122143353.59367-8-mic@digikod.net>
 In-Reply-To: <20241122143353.59367-1-mic@digikod.net>
 References: <20241122143353.59367-1-mic@digikod.net>
 Precedence: bulk
@@ -85,98 +85,179 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Upgrade domain's handled access masks when creating a domain from a
-ruleset, instead of converting them at runtime.  This is more consistent
-and helps with audit support.
+Create a new domain.h file containing the struct landlock_hierarchy
+definition and helpers.  This type will grow with audit support.  This
+also prepares for a new domain type.
 
 Cc: Günther Noack <gnoack@google.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241122143353.59367-7-mic@digikod.net
+Link: https://lore.kernel.org/r/20241122143353.59367-8-mic@digikod.net
 ---
 
-Changes since v2:
+Changes since v1:
 - New patch.
 ---
- security/landlock/access.h  | 17 ++++++++++++++++-
- security/landlock/fs.c      | 10 +---------
- security/landlock/ruleset.c |  3 ++-
- 3 files changed, 19 insertions(+), 11 deletions(-)
+ security/landlock/domain.h  | 48 +++++++++++++++++++++++++++++++++++++
+ security/landlock/ruleset.c | 21 +++-------------
+ security/landlock/ruleset.h | 17 +------------
+ security/landlock/task.c    |  1 +
+ 4 files changed, 53 insertions(+), 34 deletions(-)
+ create mode 100644 security/landlock/domain.h
 
-diff --git a/security/landlock/access.h b/security/landlock/access.h
-index a64694287d2c..1e302775cc23 100644
---- a/security/landlock/access.h
-+++ b/security/landlock/access.h
-@@ -20,7 +20,8 @@
- /*
-  * All access rights that are denied by default whether they are handled or not
-  * by a ruleset/layer.  This must be ORed with all ruleset->access_masks[]
-- * entries when we need to get the absolute handled access masks.
-+ * entries when we need to get the absolute handled access masks, see
-+ * landlock_upgrade_handled_access_masks().
-  */
- /* clang-format off */
- #define _LANDLOCK_ACCESS_FS_INITIALLY_DENIED ( \
-@@ -59,4 +60,18 @@ typedef u16 layer_mask_t;
- /* Makes sure all layers can be checked. */
- static_assert(BITS_PER_TYPE(layer_mask_t) >= LANDLOCK_MAX_NUM_LAYERS);
- 
-+/* Upgrades with all initially denied by default access rights. */
-+static inline struct access_masks
-+landlock_upgrade_handled_access_masks(struct access_masks access_masks)
-+{
-+	/*
-+	 * All access rights that are denied by default whether they are
-+	 * explicitly handled or not.
-+	 */
-+	if (access_masks.fs)
-+		access_masks.fs |= _LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
+diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+new file mode 100644
+index 000000000000..015d61fd81ec
+--- /dev/null
++++ b/security/landlock/domain.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Landlock LSM - Domain management
++ *
++ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2018-2020 ANSSI
++ */
 +
-+	return access_masks;
++#ifndef _SECURITY_LANDLOCK_DOMAIN_H
++#define _SECURITY_LANDLOCK_DOMAIN_H
++
++#include <linux/mm.h>
++#include <linux/refcount.h>
++
++/**
++ * struct landlock_hierarchy - Node in a domain hierarchy
++ */
++struct landlock_hierarchy {
++	/**
++	 * @parent: Pointer to the parent node, or NULL if it is a root
++	 * Landlock domain.
++	 */
++	struct landlock_hierarchy *parent;
++	/**
++	 * @usage: Number of potential children domains plus their parent
++	 * domain.
++	 */
++	refcount_t usage;
++};
++
++static inline void
++landlock_get_hierarchy(struct landlock_hierarchy *const hierarchy)
++{
++	if (hierarchy)
++		refcount_inc(&hierarchy->usage);
 +}
 +
- #endif /* _SECURITY_LANDLOCK_ACCESS_H */
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 3da5f1945158..9779170d9199 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -389,14 +389,6 @@ static bool is_nouser_or_private(const struct dentry *dentry)
- 		unlikely(IS_PRIVATE(d_backing_inode(dentry))));
- }
- 
--static access_mask_t
--get_handled_fs_accesses(const struct landlock_ruleset *const domain)
--{
--	/* Handles all initially denied by default access rights. */
--	return landlock_union_access_masks(domain).fs |
--	       _LANDLOCK_ACCESS_FS_INITIALLY_DENIED;
--}
--
- static const struct access_masks any_fs = {
- 	.fs = ~0,
- };
-@@ -788,7 +780,7 @@ static bool is_access_to_paths_allowed(
- 		 * a superset of the meaningful requested accesses).
- 		 */
- 		access_masked_parent1 = access_masked_parent2 =
--			get_handled_fs_accesses(domain);
-+			landlock_union_access_masks(domain).fs;
- 		is_dom_check = true;
- 	} else {
- 		if (WARN_ON_ONCE(dentry_child1 || dentry_child2))
++static inline void landlock_put_hierarchy(struct landlock_hierarchy *hierarchy)
++{
++	while (hierarchy && refcount_dec_and_test(&hierarchy->usage)) {
++		const struct landlock_hierarchy *const freeme = hierarchy;
++
++		hierarchy = hierarchy->parent;
++		kfree(freeme);
++	}
++}
++
++#endif /* _SECURITY_LANDLOCK_DOMAIN_H */
 diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
-index cae69f2f01d9..dbc528f5f3b7 100644
+index dbc528f5f3b7..4b3dfa3e6fcb 100644
 --- a/security/landlock/ruleset.c
 +++ b/security/landlock/ruleset.c
-@@ -385,7 +385,8 @@ static int merge_ruleset(struct landlock_ruleset *const dst,
+@@ -21,6 +21,7 @@
+ #include <linux/workqueue.h>
+ 
+ #include "access.h"
++#include "domain.h"
+ #include "limits.h"
+ #include "object.h"
+ #include "ruleset.h"
+@@ -305,22 +306,6 @@ int landlock_insert_rule(struct landlock_ruleset *const ruleset,
+ 	return insert_rule(ruleset, id, &layers, ARRAY_SIZE(layers));
+ }
+ 
+-static void get_hierarchy(struct landlock_hierarchy *const hierarchy)
+-{
+-	if (hierarchy)
+-		refcount_inc(&hierarchy->usage);
+-}
+-
+-static void put_hierarchy(struct landlock_hierarchy *hierarchy)
+-{
+-	while (hierarchy && refcount_dec_and_test(&hierarchy->usage)) {
+-		const struct landlock_hierarchy *const freeme = hierarchy;
+-
+-		hierarchy = hierarchy->parent;
+-		kfree(freeme);
+-	}
+-}
+-
+ static int merge_tree(struct landlock_ruleset *const dst,
+ 		      struct landlock_ruleset *const src,
+ 		      const enum landlock_key_type key_type)
+@@ -475,7 +460,7 @@ static int inherit_ruleset(struct landlock_ruleset *const parent,
  		err = -EINVAL;
  		goto out_unlock;
  	}
--	dst->access_masks[dst->num_layers - 1] = src->access_masks[0];
-+	dst->access_masks[dst->num_layers - 1] =
-+		landlock_upgrade_handled_access_masks(src->access_masks[0]);
+-	get_hierarchy(parent->hierarchy);
++	landlock_get_hierarchy(parent->hierarchy);
+ 	child->hierarchy->parent = parent->hierarchy;
  
- 	/* Merges the @src inode tree. */
- 	err = merge_tree(dst, src, LANDLOCK_KEY_INODE);
+ out_unlock:
+@@ -499,7 +484,7 @@ static void free_ruleset(struct landlock_ruleset *const ruleset)
+ 		free_rule(freeme, LANDLOCK_KEY_NET_PORT);
+ #endif /* IS_ENABLED(CONFIG_INET) */
+ 
+-	put_hierarchy(ruleset->hierarchy);
++	landlock_put_hierarchy(ruleset->hierarchy);
+ 	kfree(ruleset);
+ }
+ 
+diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+index 2f29b9f40392..39169b6860e3 100644
+--- a/security/landlock/ruleset.h
++++ b/security/landlock/ruleset.h
+@@ -15,6 +15,7 @@
+ #include <linux/workqueue.h>
+ 
+ #include "access.h"
++#include "domain.h"
+ #include "limits.h"
+ #include "object.h"
+ 
+@@ -106,22 +107,6 @@ struct landlock_rule {
+ 	struct landlock_layer layers[] __counted_by(num_layers);
+ };
+ 
+-/**
+- * struct landlock_hierarchy - Node in a ruleset hierarchy
+- */
+-struct landlock_hierarchy {
+-	/**
+-	 * @parent: Pointer to the parent node, or NULL if it is a root
+-	 * Landlock domain.
+-	 */
+-	struct landlock_hierarchy *parent;
+-	/**
+-	 * @usage: Number of potential children domains plus their parent
+-	 * domain.
+-	 */
+-	refcount_t usage;
+-};
+-
+ /**
+  * struct landlock_ruleset - Landlock ruleset
+  *
+diff --git a/security/landlock/task.c b/security/landlock/task.c
+index dc7dab78392e..98894ad1abc7 100644
+--- a/security/landlock/task.c
++++ b/security/landlock/task.c
+@@ -18,6 +18,7 @@
+ 
+ #include "common.h"
+ #include "cred.h"
++#include "domain.h"
+ #include "fs.h"
+ #include "ruleset.h"
+ #include "setup.h"
 -- 
 2.47.0
 
