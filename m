@@ -1,147 +1,169 @@
-Return-Path: <linux-security-module+bounces-6808-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6810-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B70F9D848C
-	for <lists+linux-security-module@lfdr.de>; Mon, 25 Nov 2024 12:34:34 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B22FC162F57
-	for <lists+linux-security-module@lfdr.de>; Mon, 25 Nov 2024 11:34:30 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EA27187355;
-	Mon, 25 Nov 2024 11:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ReKwAG6x"
-X-Original-To: linux-security-module@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF1479D84CB
+	for <lists+linux-security-module@lfdr.de>; Mon, 25 Nov 2024 12:50:04 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C81717B4EC
-	for <linux-security-module@vger.kernel.org>; Mon, 25 Nov 2024 11:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FB1B28B8DC
+	for <lists+linux-security-module@lfdr.de>; Mon, 25 Nov 2024 11:50:03 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1F8F19645D;
+	Mon, 25 Nov 2024 11:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="jTojhiyu"
+X-Original-To: linux-security-module@vger.kernel.org
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068881A01BE;
+	Mon, 25 Nov 2024 11:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732534460; cv=none; b=eolAqvuUNylBGQDfB+MOWQ3pfzMHiqS7lKJrvqedR49yXpPztHPdgeVtcG1IZ2oc25L7zAqK0u0v8eGexnlQWmmCZt/TA4ocjdlfpd4j+UoN7A1C9opRJsM6nOyvy6NO8ti/UG00of7d8PejI29tIegdllqcA4ZyPuir+IStBrI=
+	t=1732535320; cv=none; b=kJ0HuTVhdAB86eZNNzIXc/10upnHG4fdREnke76IIR4i/fsfIveCc6Dl6JfDcxJg3Z/FMQMRkmHR9eQciFZlvSQWMa0WWcLFPfYqzHa8C1SHu4sphnHobvOzkClEXlFYiYlLIpPVKIqp0qsEUJPknFCEoySb0pyTk63hrricbU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732534460; c=relaxed/simple;
-	bh=oKiIL23t9JON49nCNZT6Ou8nEPC13GPtL4HwJhWTs4o=;
+	s=arc-20240116; t=1732535320; c=relaxed/simple;
+	bh=AhyJjQBTjioYzgxJDPHVAqiDUJIeso9JI8kilmR9JSo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eNy0bbxBSEbAL9zf6e8fq8xFMcPEQNvH+Jf2V19+6CXApaCQocLu39fLeXz2hg3KOacro+E9noIcBzuMKWwgswbnqht48HVtp2oI271B9zXJo/H57voyMJYJTMBsPjJ7BXeYPXibC8TGxZ+93MLAvAnw2yUUzlN4aDHl2oLUbXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ReKwAG6x; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732534456;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QOFP6FdjF7HR5DJ0NsQmq4Ef0zujb0dhq0/nwgl+fPQ=;
-	b=ReKwAG6xggBXaHM0846BJLqrG1U3HtaIF6bfC1jba60opx5dw2+TDs8ph7rrsgYIQBRygm
-	G31BUmR0nuumOQGhPzE9dwfIsDvIMDCZVfbAXdYYkGu9P0wK9R5eqJH+etgxbyOAkDF2HF
-	5Ok34sL08A9NdYzQTpyrgxyNgY3pLAE=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-577-w_cOx3bqOZChphSvw_TKOg-1; Mon, 25 Nov 2024 06:34:15 -0500
-X-MC-Unique: w_cOx3bqOZChphSvw_TKOg-1
-X-Mimecast-MFC-AGG-ID: w_cOx3bqOZChphSvw_TKOg
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-211f6b49476so58802405ad.3
-        for <linux-security-module@vger.kernel.org>; Mon, 25 Nov 2024 03:34:14 -0800 (PST)
+	 To:Cc:Content-Type; b=amWXoDLnQNg/GvY0Q0UJZFOwZJsJLKH2/1ZB4IfgQtl8qasiIjAVkgIWy7kZcJ1h22l4IQ0k4g2h8ID66AEkCAvZ2378xFfCLm+2/J7+B4+bh4mdfWC14552SsPcDxKBST8GgV0PEqRu4M0g9p6A+p0oKGZUfVub8jnCkvft4v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=jTojhiyu; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e3882273bc8so3926848276.1;
+        Mon, 25 Nov 2024 03:48:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1732535318; x=1733140118; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=476juWLLXH68WdEd6CCvoohOL74hVP8YdxJenm7T9uk=;
+        b=jTojhiyu7vegKl28NqlUtELG8uB4Tn6YJdFWtWTt+kSfthukjF4QNGkpqlPpHqcUmn
+         pWxu3/Ab6egj7GdI/cXysfF0Rm2//6nPLZO/o4/T+nl2ahj78p8Q+YOF5Bv6wjv9ifZj
+         3IBU+aPukGrX6Z0aG1CG7itgYVISPr1rsifu13pSy7zcKLpbFWV6QeSFb1zZdxvWCWkW
+         A4676UapBIZY7WN9ofhXKvQJRhujfIQgntEhGCrkq5kpvaSTnEpCslZrCjXrBoTgvfs+
+         Hrh7+DcmFurle8cg4hybr0tyy5QNREG2FBYY9v6QsIQllHAUWj/jxk5jxKGv0sPZ9Rth
+         LTbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732534454; x=1733139254;
+        d=1e100.net; s=20230601; t=1732535318; x=1733140118;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QOFP6FdjF7HR5DJ0NsQmq4Ef0zujb0dhq0/nwgl+fPQ=;
-        b=G8dV0f/sOuSqM9Ide7XbarhIzADiDK/o2/xkKTzbW0XwdRIRgA17dfeptHBSGYUZAA
-         Bn5DnR0G/FZbYbOvBVtMHrQFy+BXwNQhQOUp1Kcdj5AjkTjia6GPPenZJUd5pM+3nYUP
-         M46VlNrZt0/UbwqZwgI87VD0qhNFhTwHVdC/0a/uXXBVWDHT/ZjC9xxYT9Hv/T49Zlf8
-         Ij5kmmMWgylzM9iVG2FkWRocBr8CWHzagOmlz4T0a1AGVpD6GwhL8Q1Q4wLxf77cVCCn
-         sQmmjgvDdL01aXgRNO5UgABCXVAw+p4Vg55UyAJdtSOa6V3YeH5OA4XSx8AHWGXZsrKZ
-         FlDA==
-X-Gm-Message-State: AOJu0Yx7FWpQrwqWE1JycnLHATXiqAV7wntbv3cxsGB8LJ3T13y+Trc8
-	tKyJ+0Ut/gVSPS1OIQtPs1gOnhtdLbpAp3ts/sGqWQjo51RgVAme0JKaGOjcrtVjlCDcFn5o22Z
-	seFuSTZ1QzTQ/jzL1rPsNuOHTFsLadkIODXBjJpoE2fuaJPe4SwqSoTo2/j+6NyJiDPbnNr+vtX
-	nwdn9Do4GuRUkdNwBj/iiHsWZA1jOSxtDDgtZ67ajXVDRRtxnC
-X-Gm-Gg: ASbGncubHz/TO7K47F2hTNhQwBypSB1x0hqchd6dUfmLqBvM+bQZV/SJM2RPbpnu5Uq
-	uirLmf5pZhqof0e6/FylikTyZR1zOKg==
-X-Received: by 2002:a17:902:f64c:b0:212:6981:7587 with SMTP id d9443c01a7336-2129fd0fc42mr208252815ad.24.1732534454160;
-        Mon, 25 Nov 2024 03:34:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHblig9i49prrqDlUeZETVKtu2gFAI4HQKWoBxXGngksx/l9PRt93GGuLopiLDUeU5NzeAE1cUQ0J/uiU3YMRU=
-X-Received: by 2002:a17:902:f64c:b0:212:6981:7587 with SMTP id
- d9443c01a7336-2129fd0fc42mr208252465ad.24.1732534453881; Mon, 25 Nov 2024
- 03:34:13 -0800 (PST)
+        bh=476juWLLXH68WdEd6CCvoohOL74hVP8YdxJenm7T9uk=;
+        b=g9XMkdc9du1bdUfXoCQ8CFsjQ1GPV4lwYxzyVipsyxiNsK6TsqAZ5dbhuKw+PcySu/
+         aQ68LXQTe6RnrvhfieffeaQCI8K9pseUumiotjsJ86F/vrh3RYBQgpP7FFsSwfXUbVbl
+         EYvU0Zt+nxI23SvCgXnF/eW8UGCWJvToLX8J9Nq7h987y7SfudMzIHioq2zdSPy06NTo
+         SGtMUaGedN0/glBx86RxOLMLu6EfAEP6eNfkv4he9OAj71h1zFOfkkARVLVkUR+mbGBS
+         zk1DTuP81TGFOQX3e+p9ubxFb+jPnq/YzleJ7HgE9cpEBmSrb4ShcBiAgMSBwHKAtVdl
+         4Jfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBVnUctIsHsyQ3CD3+KLEZw8AZ0xicqNyrPRPoCHPse6vdIbiNnVIoEZyMtyTiLNk0NE+xU+O2VgW2zAE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyROU7rlX4U8hJMCExULV0OfUF41jt8yz4hfywE+O81h5NLaonB
+	CjqnJ3XfDRoltPXSOaal71T3OENVVCMUTdJHkCoJkO3C8cvu+2hPAqJRawch1vxtipR1N+T/mfw
+	buPzeRgr1c7Rh7wDyxKQbnbU8mCs=
+X-Gm-Gg: ASbGncus+HnKKncqbctxHVMT7vHQTTZXPWUTNqglcF00KmBIvEuFY8//gU/0ekZNZD6
+	yVWFrGyhJ3085ipmqHb5w5b20K1z+yVku
+X-Google-Smtp-Source: AGHT+IGYP2SKdODKsnDK/PfBnKLbQWqO3MML2UPkyylWYXOgHgp7Wt8KYifNK0fRtunrvJy8VyVVbVwzaUlM3QnofG0=
+X-Received: by 2002:a05:6902:2084:b0:e38:ea81:d01e with SMTP id
+ 3f1490d57ef6-e38f8aca119mr9503432276.8.1732535317875; Mon, 25 Nov 2024
+ 03:48:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241125104011.36552-1-cgoettsche@seltendoof.de> <20241125104011.36552-7-cgoettsche@seltendoof.de>
-In-Reply-To: <20241125104011.36552-7-cgoettsche@seltendoof.de>
-From: Andreas Gruenbacher <agruenba@redhat.com>
-Date: Mon, 25 Nov 2024 12:34:02 +0100
-Message-ID: <CAHc6FU5t0cB=+9ijwx26NUEck1YS7304ue_5FRwqXRzBq14jjA@mail.gmail.com>
-Subject: Re: [PATCH 08/11] gfs2: reorder capability check last
-To: cgzones@googlemail.com
-Cc: linux-security-module@vger.kernel.org, Serge Hallyn <serge@hallyn.com>, 
+References: <20241125104011.36552-1-cgoettsche@seltendoof.de>
+ <20241125104011.36552-5-cgoettsche@seltendoof.de> <1045101183.70157813.1732534258584.JavaMail.zimbra@nod.at>
+In-Reply-To: <1045101183.70157813.1732534258584.JavaMail.zimbra@nod.at>
+From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date: Mon, 25 Nov 2024 12:48:27 +0100
+Message-ID: <CAJ2a_Dd_sz2LYEEJJhiJE=JP81V4AvET=jgSyRe73eF-YjeXhg@mail.gmail.com>
+Subject: Re: [PATCH 06/11] ubifs: reorder capability check last
+To: Richard Weinberger <richard@nod.at>
+Cc: LSM <linux-security-module@vger.kernel.org>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
+	Liviu Dudau <liviu.dudau@arm.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	chengzhihao1 <chengzhihao1@huawei.com>, "Serge E. Hallyn" <serge@hallyn.com>, 
 	Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
-	linux-kernel@vger.kernel.org, gfs2@lists.linux.dev, cocci@inria.fr
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: oGG56Wf-enJASCJxLfuia-7rIuVEtj5fGFGhQugiXBE_1732534454
-X-Mimecast-Originator: redhat.com
+	linux-kernel <linux-kernel@vger.kernel.org>, 
+	DRI mailing list <dri-devel@lists.freedesktop.org>, linux-mtd <linux-mtd@lists.infradead.org>, 
+	cocci <cocci@inria.fr>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 25, 2024 at 11:46=E2=80=AFAM Christian G=C3=B6ttsche
-<cgoettsche@seltendoof.de> wrote:
-> From: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+On Mon, 25 Nov 2024 at 12:31, Richard Weinberger <richard@nod.at> wrote:
 >
-> capable() calls refer to enabled LSMs whether to permit or deny the
-> request.  This is relevant in connection with SELinux, where a
-> capability check results in a policy decision and by default a denial
-> message on insufficient permission is issued.
-> It can lead to three undesired cases:
->   1. A denial message is generated, even in case the operation was an
->      unprivileged one and thus the syscall succeeded, creating noise.
->   2. To avoid the noise from 1. the policy writer adds a rule to ignore
->      those denial messages, hiding future syscalls, where the task
->      performs an actual privileged operation, leading to hidden limited
->      functionality of that task.
->   3. To avoid the noise from 1. the policy writer adds a rule to permit
->      the task the requested capability, while it does not need it,
->      violating the principle of least privilege.
+> ----- Urspr=C3=BCngliche Mail -----
+> > Von: "Christian G=C3=B6ttsche" <cgoettsche@seltendoof.de>
+> > capable() calls refer to enabled LSMs whether to permit or deny the
+> > request.  This is relevant in connection with SELinux, where a
+> > capability check results in a policy decision and by default a denial
+> > message on insufficient permission is issued.
+> > It can lead to three undesired cases:
+> >  1. A denial message is generated, even in case the operation was an
+> >     unprivileged one and thus the syscall succeeded, creating noise.
+> >  2. To avoid the noise from 1. the policy writer adds a rule to ignore
+> >     those denial messages, hiding future syscalls, where the task
+> >     performs an actual privileged operation, leading to hidden limited
+> >     functionality of that task.
+> >  3. To avoid the noise from 1. the policy writer adds a rule to permit
+> >     the task the requested capability, while it does not need it,
+> >     violating the principle of least privilege.
+> >
+> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > ---
+> > drivers/gpu/drm/panthor/panthor_drv.c | 2 +-
 >
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> ---
->  fs/gfs2/quota.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/gfs2/quota.h b/fs/gfs2/quota.h
-> index f462d9cb3087..988f38dc5b2c 100644
-> --- a/fs/gfs2/quota.h
-> +++ b/fs/gfs2/quota.h
-> @@ -44,8 +44,8 @@ static inline int gfs2_quota_lock_check(struct gfs2_ino=
-de *ip,
->         int ret;
->
->         ap->allowed =3D UINT_MAX; /* Assume we are permitted a whole lot =
-*/
-> -       if (capable(CAP_SYS_RESOURCE) ||
-> -           sdp->sd_args.ar_quota =3D=3D GFS2_QUOTA_OFF)
-> +       if (sdp->sd_args.ar_quota =3D=3D GFS2_QUOTA_OFF ||
-> +           capable(CAP_SYS_RESOURCE))
->                 return 0;
->         ret =3D gfs2_quota_lock(ip, NO_UID_QUOTA_CHANGE, NO_GID_QUOTA_CHA=
-NGE);
->         if (ret)
-> --
-> 2.45.2
+> This change is unrelated, please remove it.
 
-Applied, thanks.
+Sorry, somehow these two changes got erroneously combined in a single patch=
+.
+I'll send a v2 with them split into separate ones.
 
-Andreas
+>
+> > fs/ubifs/budget.c                     | 5 +++--
+> > 2 files changed, 4 insertions(+), 3 deletions(-)
+>
+> [...]
+>
+> > diff --git a/fs/ubifs/budget.c b/fs/ubifs/budget.c
+> > index d76eb7b39f56..6137aeadec3f 100644
+> > --- a/fs/ubifs/budget.c
+> > +++ b/fs/ubifs/budget.c
+> > @@ -256,8 +256,9 @@ long long ubifs_calc_available(const struct ubifs_i=
+nfo *c,
+> > int min_idx_lebs)
+> >  */
+> > static int can_use_rp(struct ubifs_info *c)
+> > {
+> > -     if (uid_eq(current_fsuid(), c->rp_uid) || capable(CAP_SYS_RESOURC=
+E) ||
+> > -         (!gid_eq(c->rp_gid, GLOBAL_ROOT_GID) && in_group_p(c->rp_gid)=
+))
+> > +     if (uid_eq(current_fsuid(), c->rp_uid) ||
+> > +         (!gid_eq(c->rp_gid, GLOBAL_ROOT_GID) && in_group_p(c->rp_gid)=
+) ||
+> > +         capable(CAP_SYS_RESOURCE))
+> >               return 1;
+> >       return 0;
+> > }
+>
+> The UBIFS part looks ok:
+>
+> Acked-by: Richard Weinberger <richard@nod.at>
+>
+> Since I was not CC'ed to the whole series, I miss a lot of context.
 
+The series consists of similar patches to other subsystems and a
+coccinelle script addition.
+See https://lore.kernel.org/linux-security-module/20241125104011.36552-11-c=
+goettsche@seltendoof.de/#t
+
+> Will this series merged as a whole? By whom?
+>
+> Thanks,
+> //richard
 
