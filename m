@@ -1,136 +1,150 @@
-Return-Path: <linux-security-module+bounces-6945-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-6938-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7A099E4589
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2024 21:20:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53C769E4693
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2024 22:26:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98EE428265E
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2024 20:20:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A62CDB2ADD6
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Dec 2024 19:28:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB551F03EE;
-	Wed,  4 Dec 2024 20:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6579F1C3BE8;
+	Wed,  4 Dec 2024 19:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DsbWMXPW"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="yC1l2Qed"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052B31F03C8
-	for <linux-security-module@vger.kernel.org>; Wed,  4 Dec 2024 20:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACAE2391AA;
+	Wed,  4 Dec 2024 19:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733343654; cv=none; b=Q181Re3PZMmUaPdQrDe2oFqz/6WBG0udATsfrE0XwP1AqfSOZv5TBgF1To34+nMyoWuGf7Y9K5XQdYxmct2++cSfffjbVCrXMR4lW12iurx8e42FnbxSCXFrnRhSk/u1XcZvUs+W+gia/zFJYo3MVsq3yDsvJFXOpbZAhu7U1aQ=
+	t=1733340488; cv=none; b=bKUMc39slCMMiNBboooVfT7By8UuOEW3eZM0F5RR96PhV6TAEpg+3Gn/yA6T0wMDMkH9P124o7PedbEP/xhdaCzGtEoFgrRy2BiXpYptHwbfYNiSxx01IfF8rtwhsZFQe5hizCfZakxOT6VmCTZVGGYl9Pq6FwvG2CP+BelMe/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733343654; c=relaxed/simple;
-	bh=qvmU/VAVN0pvhP+IwnYOoDWxB9kfEGI58cN9BjeqFTM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q5H8e9ujct0PQuJ/Zhx7L816lAt2PPbNTW6BSCczRLiXlqTt2fq/I8bQVJcH7OXHTtSfb8mREgSBNsijskcCuQ/uE0rXCSl44uEktC+zMNZN+DaCVoUnKDeqEiZM2XVZbiYyTY6IuwjAEuTySk0DP2YiV+lQa4OHpaMBuiAuQZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DsbWMXPW; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e0875f1e9edso251683276.1
-        for <linux-security-module@vger.kernel.org>; Wed, 04 Dec 2024 12:20:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1733343651; x=1733948451; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OLVo1t0oglaNriHIRqIrOTtgfyInHa0criF3pQMsL9c=;
-        b=DsbWMXPWB7LyGAUEY/s9BtHUKNNv35HOoN6wwzyPaSle7wgArfU66800LgjRatcZVL
-         R5OlJqK1EpuEqJUxnSNqsiOwJJzHGRdyQcWXdvXvGC9P/aqPC8Y154APZDJLoYQ0xfo3
-         sjxatG4nj7gicxY9zUtWfUXX+emd0FrBNXf8oq90FAh1TcvbaQMKraKrBHqZ2LACfcC5
-         OnK9mBmbrS/H0EyaVzMCp7zhDBTp73pWY+Vz7pZ6erHioE/A9nWjnYMgnK5OgfibjBV6
-         GCG/e8DbzTLPL6W/jm59i4pd1CGLxw8RvIXTpMEYyyNLKwIyUMwaQwWn3T8Y41b9IL85
-         VbIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733343651; x=1733948451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OLVo1t0oglaNriHIRqIrOTtgfyInHa0criF3pQMsL9c=;
-        b=VH5YDBN5khTL8Kslovv7hKA9kUnXCjkKfa2IOTShhBaqRr+UuYCQR+T///L3Q1KKTe
-         /J6NGa3zi6GVtm4SRQpRcwkk9bocwq2OePuWO+slZhqq0wyX0yOKfoWC8gPeZYzFx/yp
-         /44lCl1YmNwVgAXmNR0J85/fkmQzevN4c8xmnB6zRGdTBPJBna1f54syXzDdLmo2zzfd
-         hk+Lsu1pAUmm8IrgG6KfS19Q3rEMPs1CNb1fV4qqXsGrBlQjS1QgsSPK9hGor4RzC0Rx
-         hwwYnkOmxwlgcor4mTvJVmlEB38IoROLJIRgpXmkf7DnnL8ZnjkXkjxmAhaiAEYU0Qt8
-         iCwA==
-X-Forwarded-Encrypted: i=1; AJvYcCXr3Onxa/CwxmfFgpPwv9K4/vw7mtSpDKqgU2qf2VPEp7FRjLMruENsv6khFFTvLcjSEwX9b/5Y/PZ0+qnSumOn6o/wtL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8ZAX9+Z05rJ5ge8OnY60sNIqrK8JWQ4vM8+k7YaSwnEPDVc8d
-	F68QOZ27c2sFRM8iMyhyosG5PpfKOBQzKb4GHwXzx4kGDEvIej2hSiQJ78qlbjwaF/RSTHh7MzF
-	G2w+wuYRdCaxj6YsaPqYHHtRVvFKkn2tbxePA
-X-Gm-Gg: ASbGncs5iXbof+PbYfSzcGZORJW1VyMHyOuTOZdKM9s9S4gV9SD6nPJktBc3LxvdB9C
-	LiSeILutpUBK7EkY6mUkPNMa7os8zXg==
-X-Google-Smtp-Source: AGHT+IGtVlwm84qT6rzw7pFpty5lCqYBj1sQiR2A/cPp+IyhVfhXcyQ32GDnNhOfrYx+lZ2qHzOiPX1sC1xsOA9pfII=
-X-Received: by 2002:a05:6902:2782:b0:e39:73bf:f731 with SMTP id
- 3f1490d57ef6-e39d438da25mr7742955276.50.1733343650945; Wed, 04 Dec 2024
- 12:20:50 -0800 (PST)
+	s=arc-20240116; t=1733340488; c=relaxed/simple;
+	bh=gVf/mBxTJvebnqEdIle6xkNZAvjDrLxAz+i2Ut8HxyQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t5C6Ifc5lu7+DpOoAPsc8aOJJ71s2PKmNdbNr4IXjDlDaAwUj+kdy6TBd+rqwf2TCPTao9sr10fKMWsCgkX2cGLe0Q3LkvB0zxmM88zU7tLheG6YwZoRtxk7pvR91toCw3TqGWeakZ3Ctv6ggQBB8Sue7pO4NzfOJhlhwXn35YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=yC1l2Qed; arc=none smtp.client-ip=45.157.188.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Y3SGl1wkfzXvV;
+	Wed,  4 Dec 2024 20:27:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1733340479;
+	bh=K6b7RkVHa81TH/U1AVRf2JXY8+WHDWPpbx+OOiCCbFE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yC1l2QedjWBXPi2WNHZJ/QvF/BU0TzsyXnWrh6KkpD5KMJ370QTmWCuHpHgCjCA+t
+	 6jbtXLxbmKl6g+VO9dbqsCOTumZbVjS6+Alfdm6/NGXvrugGxMaQbm0hET1cD/dg/i
+	 TPMli8FpzCIJA9s8n7hThfpW+R6Db/JZsVBEG1Sc=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Y3SGk2Q7cz1h6;
+	Wed,  4 Dec 2024 20:27:58 +0100 (CET)
+Date: Wed, 4 Dec 2024 20:27:57 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	gnoack@google.com, willemdebruijn.kernel@gmail.com, matthieu@buffet.re, 
+	linux-security-module@vger.kernel.org, netdev@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	yusongping@huawei.com, artem.kuzin@huawei.com, konstantin.meskhidze@huawei.com, 
+	MPTCP Linux <mptcp@lists.linux.dev>, David Laight <David.Laight@aculab.com>
+Subject: Re: [RFC PATCH v2 1/8] landlock: Fix non-TCP sockets restriction
+Message-ID: <20241204.fahVio7eicim@digikod.net>
+References: <20241017110454.265818-1-ivanov.mikhail1@huawei-partners.com>
+ <20241017110454.265818-2-ivanov.mikhail1@huawei-partners.com>
+ <49bc2227-d8e1-4233-8bc4-4c2f0a191b7c@kernel.org>
+ <20241018.Kahdeik0aaCh@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f16f8d81-3894-404d-baeb-febf2fba16f7.ref@schaufler-ca.com>
- <f16f8d81-3894-404d-baeb-febf2fba16f7@schaufler-ca.com> <CAHC9VhTfKfAeKKbe3P-ZxP-0Y01r0GF6pPvt=2FxvQzAeTGjag@mail.gmail.com>
- <6bf287dd-36a6-48e4-b847-3030fe3f7bb9@schaufler-ca.com> <CAHC9VhR8Pay3cePZVdvVwks36d7pfGNLUhUxSs5xPCuRcVtbRg@mail.gmail.com>
- <c8f5b77c-71d6-4cf9-9245-997ddffd72ec@schaufler-ca.com>
-In-Reply-To: <c8f5b77c-71d6-4cf9-9245-997ddffd72ec@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 4 Dec 2024 15:20:40 -0500
-Message-ID: <CAHC9VhRxr0B9w_ntXRbhorfwZyJSbdJAJb_gF0E=GRrK2kCf1Q@mail.gmail.com>
-Subject: Re: LSM: Replace secctx/len pairs with lsm_context
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>, 
-	LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241018.Kahdeik0aaCh@digikod.net>
+X-Infomaniak-Routing: alpha
 
-On Wed, Dec 4, 2024 at 12:16=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
-> On 12/3/2024 3:06 PM, Paul Moore wrote:
-> > On Tue, Dec 3, 2024 at 5:54=E2=80=AFPM Casey Schaufler <casey@schaufler=
--ca.com> wrote:
-> >> On 12/3/2024 1:59 PM, Paul Moore wrote:
-> >>> On Tue, Dec 3, 2024 at 2:29=E2=80=AFPM Casey Schaufler <casey@schaufl=
-er-ca.com> wrote:
-> >>>> Paul, do you want a revised patch set for the lsm_context change,
-> >>>> or do you want to stick with what's in dev-staging?
-> >>> I figured I would just move dev-staging over (I've already ported the=
-m
-> >>> to v6.13-rc1 in my tree), but if you want to send out another patchse=
-t
-> >>> I guess that's fine too.  Although looking at the related patches in
-> >>> dev-staging right now, excluding the rust update from Alice, there is
-> >>> only a kdoc fix (me), a signedness fix (Dan Carpenter), and then the
-> >>> two fixes from you.  If you like, I can just squash your fixes into
-> >>> the relevant patches since there is no authorship issue, and to be
-> >>> frank I'm fine with squashing my kdoc fix too, which leaves us with
-> >>> just Dan's fix ... which I think is okay~ish to leave standalone, but
-> >>> if Dan's okay with squashing that I can do that too as it would be
-> >>> preferable.  Dan?
-> >>>
-> >>> In case anyone is wondering, yes, squashing does take a little bit of
-> >>> work on my end, but it borders on trivial, and it is much quicker tha=
-n
-> >>> re-reviewing a patchset.
-> >> I figured that it could go either way. I won't resend. Thank you.
-> > No problem.  Just to be clear, do I have your okay to squash your patch=
-es?
->
-> Yes.
+On Fri, Oct 18, 2024 at 08:08:12PM +0200, Mickaël Salaün wrote:
+> On Thu, Oct 17, 2024 at 02:59:48PM +0200, Matthieu Baerts wrote:
+> > Hi Mikhail and Landlock maintainers,
+> > 
+> > +cc MPTCP list.
+> 
+> Thanks, we should include this list in the next series.
+> 
+> > 
+> > On 17/10/2024 13:04, Mikhail Ivanov wrote:
+> > > Do not check TCP access right if socket protocol is not IPPROTO_TCP.
+> > > LANDLOCK_ACCESS_NET_BIND_TCP and LANDLOCK_ACCESS_NET_CONNECT_TCP
+> > > should not restrict bind(2) and connect(2) for non-TCP protocols
+> > > (SCTP, MPTCP, SMC).
+> > 
+> > Thank you for the patch!
+> > 
+> > I'm part of the MPTCP team, and I'm wondering if MPTCP should not be
+> > treated like TCP here. MPTCP is an extension to TCP: on the wire, we can
+> > see TCP packets with extra TCP options. On Linux, there is indeed a
+> > dedicated MPTCP socket (IPPROTO_MPTCP), but that's just internal,
+> > because we needed such dedicated socket to talk to the userspace.
+> > 
+> > I don't know Landlock well, but I think it is important to know that an
+> > MPTCP socket can be used to discuss with "plain" TCP packets: the kernel
+> > will do a fallback to "plain" TCP if MPTCP is not supported by the other
+> > peer or by a middlebox. It means that with this patch, if TCP is blocked
+> > by Landlock, someone can simply force an application to create an MPTCP
+> > socket -- e.g. via LD_PRELOAD -- and bypass the restrictions. It will
+> > certainly work, even when connecting to a peer not supporting MPTCP.
+> > 
+> > Please note that I'm not against this modification -- especially here
+> > when we remove restrictions around MPTCP sockets :) -- I'm just saying
+> > it might be less confusing for users if MPTCP is considered as being
+> > part of TCP. A bit similar to what someone would do with a firewall: if
+> > TCP is blocked, MPTCP is blocked as well.
+> 
+> Good point!  I don't know well MPTCP but I think you're right.  Given
+> it's close relationship with TCP and the fallback mechanism, it would
+> make sense for users to not make a difference and it would avoid bypass
+> of misleading restrictions.  Moreover the Landlock rules are simple and
+> only control TCP ports, not peer addresses, which seems to be the main
+> evolution of MPTCP.
 
-Thanks.  Everything has now been moved over to the lsm/dev branch and
-should be in the next linux-next build.  Thanks again everyone.
+Thinking more about this, this makes sense from the point of view of the
+network stack, but looking at external (potentially bogus) firewalls or
+malware detection systems, it is something different.  If we don't
+provide a way for users to differenciate the control of SCTP from TCP,
+malicious use of SCTP could still bypass this kind of bogus security
+appliances.  It would then be safer to stick to the protocol semantic by
+clearly differenciating TCP from MPTCP (or any other protocol).
 
-> I may have introduced some formatting (e.g. tabs in struct definitions)
-> that you dislike. Feel free to "correct" any you find as well.
+Mikhail, could you please send a new patch series containing one patch
+to fix the kernel and another to extend tests?  We should also include
+this rationale in the commit message.
 
-FYI, the only changes I made when going from lsm/dev-staging to
-lsm/dev was to squash the patches.
+> 
+> > 
+> > I understand that a future goal might probably be to have dedicated
+> > restrictions for MPTCP and the other stream protocols (and/or for all
+> > stream protocols like it was before this patch), but in the meantime, it
+> > might be less confusing considering MPTCP as being part of TCP (I'm not
+> > sure about the other stream protocols).
+> 
+> We need to take a closer look at the other stream protocols indeed.
 
---=20
-paul-moore.com
+It would be nice to add support for MPTCP too, but this will be treated
+as a new Landlock feature (with a proper ABI bump).
+
+> 
+> > 
+> > 
+> > > sk_is_tcp() is used for this to check address family of the socket
+> > > before doing INET-specific address length validation. This is required
+> > > for error consistency.
+> > > 
+> > > Closes: https://github.com/landlock-lsm/linux/issues/40
+> > > Fixes: fff69fb03dde ("landlock: Support network rules with TCP bind and connect")
 
