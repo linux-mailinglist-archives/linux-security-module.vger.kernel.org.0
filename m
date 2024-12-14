@@ -1,161 +1,143 @@
-Return-Path: <linux-security-module+bounces-7071-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7078-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DADF79F1A4D
-	for <lists+linux-security-module@lfdr.de>; Sat, 14 Dec 2024 00:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B7169F207F
+	for <lists+linux-security-module@lfdr.de>; Sat, 14 Dec 2024 19:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11799162DB1
-	for <lists+linux-security-module@lfdr.de>; Fri, 13 Dec 2024 23:51:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7480168504
+	for <lists+linux-security-module@lfdr.de>; Sat, 14 Dec 2024 18:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682541B392F;
-	Fri, 13 Dec 2024 23:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412A31991C1;
+	Sat, 14 Dec 2024 18:53:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XtbDPPlZ"
+	dkim=pass (2048-bit key) header.d=buffet.re header.i=@buffet.re header.b="D9GOcKeC"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.buffet.re (mx1.buffet.re [51.83.41.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D067190696;
-	Fri, 13 Dec 2024 23:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1392580C02;
+	Sat, 14 Dec 2024 18:53:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.83.41.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734133911; cv=none; b=aoKa6lLC+oR3L6A5RRs4FBjKlGvfpRw9Z9+hhRBo4jSK6w5NmsQbt3yYeVP3r8KyvM+owPYilb69+3ySytDtmkm+WXeCjU83VZxKOVNX2BbfSWSd45PNRrQMNzlwGdEvgNuLgQE594rmlV7fESaYegM7uMemchqv+N3E/6Jmvl4=
+	t=1734202424; cv=none; b=Qtpumkgbkmj3dTp0EBBOYrdqo6BGz1gW9d7PFiUwmg5dv+BA2anlAbgChogImQqP2JVyY8Oo1r7CPt7QHEicY7Jwx2ihfhlEqkQMNxS9IaLEGDpL4mTy8VvSLgNeKUk2PdxBOfn0PY2Kdh/B7MJxntldWJ0VvFPGOTPcud1RzfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734133911; c=relaxed/simple;
-	bh=LBl8bC14OQtqtIKs1HukcWT3y7YKXmSmDiIE/yMGSmc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZBYWL5kWj3xp5ZRKeIHO56165wo624WY1G1og1YY5K8amLkpLilhC8KlyWifHYvnwn1At5RkBY+9sJXuE7ku8O/wJK1bnpY67m59oVVFijrZiNad3e6GT1V/LKf0BaBNOjxkWnhp0w1oxMpop2TwrGY6fh2uKxEUZ0qjYc5WGZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XtbDPPlZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94490C4CED0;
-	Fri, 13 Dec 2024 23:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734133910;
-	bh=LBl8bC14OQtqtIKs1HukcWT3y7YKXmSmDiIE/yMGSmc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XtbDPPlZbvqi8CN6Oxf/cp0n+oSr7ObvLvF/U2VDgAChn1LmY9vPTTrZPXt16xhat
-	 inbTnXZlRscl4snJJ6UgFlEeSj8INrtWj3w+kY5Zw6Xwg/PSii2l0HnKE9BmyS9OVT
-	 8N0rE6al1xzB6jamo6faQdVxRpqtjSmRmiAwfcJhnFdx0fBBSN910Mi1qMJ5n+kktQ
-	 5hNIUPaZXmQiXX9jVYYu5/7CRPAvUoy2K6AFHWYU/z5bFe44BQV9tOCZxs16Vn8N4x
-	 pKammezScSiU7mB84NioErtAEA5PzW9kkj2h4m+pmdJm0TyG9CjJqpZAVG7w4/b+7Y
-	 1sa1Hb94hlvOw==
-Date: Fri, 13 Dec 2024 15:51:48 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
-	Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 02/16] perf tools: arc: Support generic syscall headers
-Message-ID: <Z1zIlKq19lAXMoGs@google.com>
-References: <20241212-perf_syscalltbl-v2-0-f8ca984ffe40@rivosinc.com>
- <20241212-perf_syscalltbl-v2-2-f8ca984ffe40@rivosinc.com>
+	s=arc-20240116; t=1734202424; c=relaxed/simple;
+	bh=oCKT2oHPdAe+VXkRCxa2XD6OUm8jUcAcZdM74Lx+AXI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fN07ouaYJ0QgVtAhLM6Xi9vqthyJ7YFRuNbIjhpXshArAzL3m47jw7+siQgr52/jArriQpHYvPAO/ZHBpeShQCI6salwXDLawB56g8NnoR0Knw9oRGPKYkaBknAzpRA3G5tNIRLRZQLvvT8dJfSNcnViKFBYOerfNCYPAFsPzZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=buffet.re; spf=pass smtp.mailfrom=buffet.re; dkim=pass (2048-bit key) header.d=buffet.re header.i=@buffet.re header.b=D9GOcKeC; arc=none smtp.client-ip=51.83.41.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=buffet.re
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=buffet.re
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=buffet.re; s=mx1;
+	t=1734201974; bh=oCKT2oHPdAe+VXkRCxa2XD6OUm8jUcAcZdM74Lx+AXI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=D9GOcKeCXjU2qwnNqTooTW5qFY3JsaE/qkyCLHarBk496R9Q6oehRfWOJJgu2uWLY
+	 TFUseMEPnXy440X7PQlMVWwJuogZm7+hpejuycvID0SFuDFzkMeLG/6Z3JQcPaK/3E
+	 PegRRuVbKcBGqDkX2ynoMYfqeWbSEllEUIbIwkye8tV9BeOtJ3fS6TqwC3TE/DcvJe
+	 2NDvTQ0aaxyrKjGxTrdz4oP2kvX+d1nTdEfBzraPL4ShF7xINKyMkCW/zwt8PW48d2
+	 C2bhRZAQv8t/4c8y8tQ/gSF5xYlHmxWKjGyQp6NpS1DH8A11yukduVUIgJBwgZlkRt
+	 CeLI+UJSe87gA==
+Received: from localhost.localdomain (unknown [10.0.1.3])
+	by mx1.buffet.re (Postfix) with ESMTPSA id 3309A1233B5;
+	Sat, 14 Dec 2024 19:46:14 +0100 (CET)
+From: Matthieu Buffet <matthieu@buffet.re>
+To: Mickael Salaun <mic@digikod.net>
+Cc: Gunther Noack <gnoack@google.com>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	konstantin.meskhidze@huawei.com,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Matthieu Buffet <matthieu@buffet.re>
+Subject: [PATCH v2 0/6] landlock: Add UDP access control support
+Date: Sat, 14 Dec 2024 19:45:34 +0100
+Message-Id: <20241214184540.3835222-1-matthieu@buffet.re>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241212-perf_syscalltbl-v2-2-f8ca984ffe40@rivosinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 12, 2024 at 04:32:52PM -0800, Charlie Jenkins wrote:
-> Arc uses the generic syscall table, use that in perf instead of
-> requiring libaudit.
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->  tools/perf/Makefile.config                           | 2 +-
->  tools/perf/Makefile.perf                             | 2 +-
->  tools/perf/arch/arc/entry/syscalls/Kbuild            | 2 ++
->  tools/perf/arch/arc/entry/syscalls/Makefile.syscalls | 3 +++
->  tools/perf/arch/arc/include/syscall_table.h          | 2 ++
->  5 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index a72f25162714f0117a88d94474da336814d4f030..3959a9c9972999f6d1bb85e8c1d7dc5dce92fd09 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -36,7 +36,7 @@ ifneq ($(NO_SYSCALL_TABLE),1)
->    endif
->  
->    # architectures that use the generic syscall table scripts
-> -  ifeq ($(SRCARCH),riscv)
-> +  ifeq ($(SRCARCH),$(filter $(SRCARCH),riscv arc))
+Hi Mickael,
 
-This might work as well.
+Thanks for your comments on the v1 of this patch, I should have everything
+fixed so (hopefully) this v2 boils down to something simpler.
 
-  ifneq ($(filter $(SRCARCH), riscv arc),)
+This patchset is based on
+https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git
+Linux 6.12 (adc218676eef).
 
-And maybe you can add a variable for supported archs.
+This patchset should add basic support to completely block a process
+from sending and receiving UDP datagrams, and delegate the right to
+send/receive based on remote/local port. It should fit nicely with
+the socket creation restrictions WIP (either don't have UDP at all, or
+have it with just the rights needed).
 
-Thanks,
-Namhyung
+@Mikhail: I saw the discussions around TCP error code inconsistencies +
+over-restriction, and your patch v1. I took extra care to minimize this
+diff size: no unnecessary comment/refactor, especially in
+current_check_access_socket(). It should be just what is required for a
+basic UDP support without changing error handling in that main function.
+
+The only question that remained open from v1 was about UDP rights naming.
+Since there were no strong preferences and the hooks now only handle
+sendmsg() if an explicit address is specified, that's now
+LANDLOCK_ACCESS_NET_UDP_SENDTO since the name (and prototype with a
+destination address parameter) of sendto(3) is closer to these semantics.
+
+Changes since v1 (link below):
+- recvmsg hook is gone and sendmsg hook doesn't apply to connected
+  sockets anymore, to improve performance
+- don't add a get_addr_port() helper function, which required a weird "am
+  I in IPv4 or IPv6 context" to avoid a addrlen>sizeof(struct sockaddr_in)
+  check in connect(AF_UNSPEC) IPv6 context. A helper was useful when ports
+  also needed to be read in a recvmsg() hook, now it's just a simple
+  switch case in the sendmsg() hook, more readable
+- rename sendmsg access right to LANDLOCK_ACCESS_NET_UDP_SENDTO
+- reorder hook prologue for consistency: check domain, then type and
+  family
+- add additional selftests cases around minimal address length
+- update documentation
+
+lcov gives me net.c going from 94% lines/80% functions to 96.6% lines/
+85.7% functions
+
+Any feedback welcome!
+
+Link: https://lore.kernel.org/all/20240916122230.114800-1-matthieu@buffet.re/
+Closes: https://github.com/landlock-lsm/linux/issues/10
+
+Link: https://lore.kernel.org/all/20241017110454.265818-1-ivanov.mikhail1@huawei-partners.com/
+Cc: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
+
+Matthieu Buffet (6):
+  landlock: Add UDP bind+connect access control
+  selftests/landlock: Adapt existing bind/connect for UDP
+  landlock: Add UDP sendmsg access control
+  selftests/landlock: Add ACCESS_NET_SENDTO_UDP
+  samples/landlock: Add sandboxer UDP access control
+  doc: Add landlock UDP support
+
+ Documentation/userspace-api/landlock.rst     |  84 +++-
+ include/uapi/linux/landlock.h                |  67 ++-
+ samples/landlock/sandboxer.c                 |  58 ++-
+ security/landlock/limits.h                   |   2 +-
+ security/landlock/net.c                      | 137 +++++-
+ security/landlock/syscalls.c                 |   2 +-
+ tools/testing/selftests/landlock/base_test.c |   2 +-
+ tools/testing/selftests/landlock/net_test.c  | 455 +++++++++++++++++--
+ 8 files changed, 715 insertions(+), 92 deletions(-)
 
 
->      NO_SYSCALL_TABLE := 0
->      CFLAGS += -DGENERIC_SYSCALL_TABLE
->      CFLAGS += -I$(OUTPUT)/tools/perf/arch/$(SRCARCH)/include/generated
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index f5278ed9f778f928436693a14e016c5c3c5171c1..3b463b42b0e3982e74056e672b2ee6adad5a3f0e 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -311,7 +311,7 @@ FEATURE_TESTS := all
->  endif
->  endif
->  # architectures that use the generic syscall table
-> -ifeq ($(SRCARCH),riscv)
-> +ifeq ($(SRCARCH),$(filter $(SRCARCH),riscv arc))
->  include $(srctree)/tools/perf/scripts/Makefile.syscalls
->  endif
->  include Makefile.config
-> diff --git a/tools/perf/arch/arc/entry/syscalls/Kbuild b/tools/perf/arch/arc/entry/syscalls/Kbuild
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..11707c481a24ecf4e220e51eb1aca890fe929a13
-> --- /dev/null
-> +++ b/tools/perf/arch/arc/entry/syscalls/Kbuild
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +syscall-y += syscalls_32.h
-> diff --git a/tools/perf/arch/arc/entry/syscalls/Makefile.syscalls b/tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..391d30ab7a831b72d2ed3f2e7966fdbf558a9ed7
-> --- /dev/null
-> +++ b/tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +syscall_abis_32 += arc time32 renameat stat64 rlimit
-> diff --git a/tools/perf/arch/arc/include/syscall_table.h b/tools/perf/arch/arc/include/syscall_table.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..4c942821662d95216765b176a84d5fc7974e1064
-> --- /dev/null
-> +++ b/tools/perf/arch/arc/include/syscall_table.h
-> @@ -0,0 +1,2 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <asm/syscalls_32.h>
-> 
-> -- 
-> 2.34.1
-> 
+base-commit: adc218676eef25575469234709c2d87185ca223a
+-- 
+2.39.5
+
 
