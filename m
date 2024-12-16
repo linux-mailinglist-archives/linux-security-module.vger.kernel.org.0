@@ -1,90 +1,110 @@
-Return-Path: <linux-security-module+bounces-7088-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7090-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00FAA9F2A27
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Dec 2024 07:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 489C59F2BA9
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Dec 2024 09:20:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93F2D1885650
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Dec 2024 06:31:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5B511885037
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Dec 2024 08:20:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323E91C4A3D;
-	Mon, 16 Dec 2024 06:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145721FF61C;
+	Mon, 16 Dec 2024 08:20:35 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A835BF9D6
-	for <linux-security-module@vger.kernel.org>; Mon, 16 Dec 2024 06:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BE61CEAC3;
+	Mon, 16 Dec 2024 08:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734330665; cv=none; b=azJrfvaJ1A215WOtP/m9o3H4aztXSJQ7jK2sYuVicEy/YQpdJ3cV5nhzNfpg+UrqGG2OdoxwYtV7caz4tIrFEJfJ/d8tjJ4Ay60Q1eff8z4MmXg1/GlMYKPhGlpO3M4i496gkL8F8RrANe1cB7iB0XtOR2IvYlQChinQ3MeqTtw=
+	t=1734337235; cv=none; b=CLDD8IMGh8Hf/Ucqj0DcaEgACfJJfEcdFjORM7sIzTcVqjY9cMGMJoiPkBgimmzJaO0K45kCbZ6zbuQFdGixWfOToPIbuG2m1VHWTMTLrZXnhzTWFfYW9xwhdeHGJ8U77w0+CuvBd/J2fxMFDZOEY/XnCUO21t9aOSC6Tn9bx6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734330665; c=relaxed/simple;
-	bh=3E2pDLSWpHz+qKRsyOCvMIVk3xBO/le3IAkheabOoFY=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=nadFhiYCPPafablJSb9eWzgcHitUitj//lh4rP37NxOGYpu02RSIfKGKQha+oEJsCb8VKjOfqTXIV7/5UMIrd8vtCdeDgxUhQgsPP1jP2r4QJjo54TB4WfPa4CZVtguehPDjL8pXfMawi4NLtf1rYw5huMsdbCcfK+l/KDVGQjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a7d85ab308so35428825ab.3
-        for <linux-security-module@vger.kernel.org>; Sun, 15 Dec 2024 22:31:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734330663; x=1734935463;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FGgwY9doc2BDYdLeq+Akm53OqV4dukJ6miTwWudPyro=;
-        b=EmDlz/KmlFk+dC8rvBk0xFWmbn2BnxW1zszWrIAcx7jK/qLuSDg2zyf61ZLJrQOTTN
-         6VHtaa8Mn+APZD5dXd2pz0Ay1Z5izw2dPiNcs/JOakR2qejENVclcWt+Dl90v8oKn3sh
-         VqnN/vo+cr2leJWnaI/d5AbV2tdBDQMfrrG9ZvISlasADFyY3u+dpiKubCML0dE+AQnn
-         R3KmCasWq0RfNn5kBLt4WW6HrbUAE1N0h7EM4xFtANkaIYYumZP4EWykJ4ynUhapDFFT
-         rcYT9PuooNUpAdfEZU5Q6fF0TXHpt35N41m3CSNoQ/nc4en7I4hIkIttxIMkB6Rwsv/r
-         s/dA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJtTAnvSY+g4ZKpj8HADipxaBerCEDcX51SEVx62TX2mFTeyxawBmv64XtNRc5P+ljnSy9YDS4jFXOGzGNvrYPqDLLigw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0gBzNk6ovehXj9FQnZXD9ZsgTdzqkyLpZvvw+o/d11VBBmIQk
-	cf/DbK5ojXJM8A428w36DIRfIAMCBODyNE+jAExKnuK8cbylX5Wl+L3tQCk4m/IdOJ3pejlboyV
-	mEl0mKlVo/5EXNUs7m/J/tGg+lhTzIZriMf2uCtu/QA8fcrrwg4YMTvg=
-X-Google-Smtp-Source: AGHT+IHqyW8xz9AMDJraQb4QIo+grq8CirvIaFyaiu/OxyxIYJNdfxD/b3iOyQaCcqMOivRLvs+i9Vhs3cxNSZWzH/wAGnEz188Q
+	s=arc-20240116; t=1734337235; c=relaxed/simple;
+	bh=C0ggwz8jnAhNvdObNS6uFwAKsivdC5NXr8WVRzGiZWU=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RiSO8f7c4JZ6Vic0rv9CqoXmeTu6zyVsKUBiMwMumnqtxiDN9qpZWPlOVuxLPY2lsEnvt3pmMo+2TUJu8sGdCNLLyI3gX9cJ8+bEVKJRYpIs5zsmsceTH+KVv/cZH1fXNDHgWpxkDYv7jWeAFT5RI5pOAeuI2lUAAGUbgVQx3C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG6LaBC031360;
+	Mon, 16 Dec 2024 00:19:58 -0800
+Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 43hadq1axt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 16 Dec 2024 00:19:57 -0800 (PST)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.43; Mon, 16 Dec 2024 00:19:57 -0800
+Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
+ 15.1.2507.43 via Frontend Transport; Mon, 16 Dec 2024 00:19:54 -0800
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <syzbot+7536f77535e5210a5c76@syzkaller.appspotmail.com>
+CC: <jmorris@namei.org>, <linux-kernel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>, <paul@paul-moore.com>,
+        <penguin-kernel@I-love.SAKURA.ne.jp>, <serge@hallyn.com>,
+        <syzkaller-bugs@googlegroups.com>, <takedakn@nttdata.co.jp>,
+        <tomoyo-dev-en@lists.osdn.me>
+Subject: [PATCH] tomoyo: prevent bad buffer size in tracing_cpumask_write
+Date: Mon, 16 Dec 2024 16:19:53 +0800
+Message-ID: <20241216081953.3566217-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <675f4ea7.050a0220.37aaf.0105.GAE@google.com>
+References: <675f4ea7.050a0220.37aaf.0105.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12cd:b0:3a7:e592:55cd with SMTP id
- e9e14a558f8ab-3aff086d9admr103467895ab.14.1734330662864; Sun, 15 Dec 2024
- 22:31:02 -0800 (PST)
-Date: Sun, 15 Dec 2024 22:31:02 -0800
-In-Reply-To: <PUZPR04MB6316F684BF023564B7DDD812813B2@PUZPR04MB6316.apcprd04.prod.outlook.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <675fc926.050a0220.37aaf.0116.GAE@google.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] INFO: task hung in
- process_measurement (2)
-From: syzbot <syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com>
-To: linkinjeon@kernel.org, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	sj1557.seo@samsung.com, syzkaller-bugs@googlegroups.com, yuezhang.mo@sony.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: epUPU7DP5eOOwc1Ycndj4EL0cL_-kCXk
+X-Authority-Analysis: v=2.4 cv=INT4ChvG c=1 sm=1 tr=0 ts=675fe2ad cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=RZcAm9yDv7YA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8 a=z8QvZRE759NthNQqPukA:9 a=DcSpbTIhAlouE1Uv7lRv:22
+ a=cQPPKAXgyycSBL8etih5:22 a=FdTzh2GWekK77mhwV6Dw:22
+X-Proofpoint-GUID: epUPU7DP5eOOwc1Ycndj4EL0cL_-kCXk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-16_03,2024-12-13_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 phishscore=0 mlxlogscore=544 adultscore=0 suspectscore=0
+ bulkscore=0 classifier=spam authscore=0 adjust=0 reason=mlx scancount=1
+ engine=8.21.0-2411120000 definitions=main-2412160067
 
-Hello,
+User input a too large buffer size 0xfffffdeful, although it is truncated to
+MAX_RW_COUNT in vfs_write, its value is still too large, causing warning when
+allocating memory in tomoyo_write_control.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Add a check for it to avoid this case.
 
-Reported-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
-Tested-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
+Reported-by: syzbot+7536f77535e5210a5c76@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=7536f77535e5210a5c76
+Tested-by: syzbot+7536f77535e5210a5c76@syzkaller.appspotmail.com
+Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+---
+ security/tomoyo/common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Tested on:
+diff --git a/security/tomoyo/common.c b/security/tomoyo/common.c
+index 5c7b059a332a..f63388c2fffd 100644
+--- a/security/tomoyo/common.c
++++ b/security/tomoyo/common.c
+@@ -2654,6 +2654,8 @@ ssize_t tomoyo_write_control(struct tomoyo_io_buffer *head,
+ 
+ 	if (!head->write)
+ 		return -EINVAL;
++	if (avail_len > KMALLOC_MAX_SIZE)
++		return -EINVAL;
+ 	if (mutex_lock_interruptible(&head->io_sem))
+ 		return -EINTR;
+ 	cp0 = head->write_buf;
+-- 
+2.43.0
 
-commit:         78d4f34e Linux 6.13-rc3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11259ed7980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6fe704d2356374ad
-dashboard link: https://syzkaller.appspot.com/bug?extid=1de5a37cb85a2d536330
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=105d1730580000
-
-Note: testing is done by a robot and is best-effort only.
 
