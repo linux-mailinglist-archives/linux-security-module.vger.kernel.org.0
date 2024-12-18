@@ -1,275 +1,154 @@
-Return-Path: <linux-security-module+bounces-7206-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7208-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 637FE9F6A3E
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Dec 2024 16:41:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2F879F6BD4
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Dec 2024 18:04:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A11016D14E
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Dec 2024 15:40:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0502E188F5A9
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Dec 2024 17:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 956567080D;
-	Wed, 18 Dec 2024 15:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8BE1B423D;
+	Wed, 18 Dec 2024 17:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1/Oo8xQ"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="c5FDh1H/"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DAC4AD2C;
-	Wed, 18 Dec 2024 15:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22521547E2
+	for <linux-security-module@vger.kernel.org>; Wed, 18 Dec 2024 17:03:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734536433; cv=none; b=M012QPkgOZ1fMr2XHJHE9sq7GxBRs/gs2XvD/a0X7DjLArrAc0oq9CNET/URbnL9gVjntICi0LZ7vcUqHs2u6RsIlzyGs1WwXGsv11Cyugm590BpsmyZmGx19vhWEC1/dxyDEcb8nup+2biduj0gai8rCvZAt9f1nfuUx19DjUc=
+	t=1734541384; cv=none; b=NlXj+DvZ3Zlhx2wxbee4VOOTIfHsvF16b8ZsM5T//zHbiSu9h+Hcv88BqZ0Of170eTRtCjh1d7s1C8JxdSAzdIc/Kdc2iavQW1eS9etMw164PnwjN/potvRdGyeLXckqxg1v309QX5ZwfeBAPOz+5LBvl2Q1ljOEQTvofc/QRaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734536433; c=relaxed/simple;
-	bh=4UXu81Y9Z6hjel3iUJcWt8StxEyhWs1lo6Dz/EHQ+yc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HGTQFrHe1ENK9Gmel39RYj4Liy4Z4vhIBR85oqHXMSk6/hb+IX2fAyNyUZhmCuc1oRy9uUqgFi4MD/0o8GGBmt89C5ZbPV2Hdp7TIA/eANgNAfiKZuq1U/2708AOKAX5YDM7a277fLWElEQCxYTUduHOg19RrDamL/E3mVEG4vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1/Oo8xQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D18C4CECD;
-	Wed, 18 Dec 2024 15:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734536432;
-	bh=4UXu81Y9Z6hjel3iUJcWt8StxEyhWs1lo6Dz/EHQ+yc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D1/Oo8xQwb3FjKZ40FzXuHkV25NXViji3iuyRSY1K3pm79LnJPPMtRYvGcghR5Ke6
-	 mpfXSuMofaU0vyGOBnqjwmA+VDoTqhlFwIwC0ks85UskzFhO+J1HBF9wkWpIfvTtJC
-	 vxixSau35Mwpa/kfmdYWBuvwMiPuFezpSu+Ov67L0K44hrzTjhubaJKaUCFsa6CwyE
-	 iWKxLyoy7ZzqMXBNptPXDbbFeKEc8wlre1Jjeq4934+7S5VJmMRRjOtMEPJNvRDooI
-	 al1KjmUO9FU7K3JXW/o73BchCjmtUk8w22xht9dNmVZ3O8bygSTAlIP6b0haUDdETC
-	 O7bKoFUSJedPA==
-Date: Wed, 18 Dec 2024 15:40:25 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Nelson Chu <nelson@rivosinc.com>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 1/2] kbuild: Check version of objdump
-Message-ID: <20241218-hypnotic-acid-630e8a8d35da@spud>
-References: <20241216-perf_fix_riscv_obj_reading-v1-0-b75962660a9b@rivosinc.com>
- <20241216-perf_fix_riscv_obj_reading-v1-1-b75962660a9b@rivosinc.com>
- <20241218-sandfish-hence-5fa18539f7ca@spud>
+	s=arc-20240116; t=1734541384; c=relaxed/simple;
+	bh=P49RzAa9SdEPdNelbe0LpGG/WOml4l7jM/0SZCDOf3k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VO0lQhZpiABLH3CX+7AisRvFBGUmolhxxAST+9SVIXlYRv4TZDojSbbre6/RO0XCsDi8yN2bysiVAnY62UfuZXPumElEJ3Az6wtNiqn+fSMzh8xuDKqDTOREHNkKK5+t5WpZSdJKbz26v34k1ATdD1NUaI7PmbBI9IiN5cZ4uTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=c5FDh1H/; arc=none smtp.client-ip=66.163.188.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1734541382; bh=U2Be5nyqR9PTDwMjbIWe2Cyum/Tkak+nQevNA+8z8kA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=c5FDh1H/QmZ8nra5jCbMrLT/wrMhkxhZMbS+oXy0TFcloLTG0jdpY2lQ/IEBtDO1l9VMvP8RS71fgnIvfTVsCNcsrM/IBNWjNIKxr3DCFi0Ol6lC0Yv8WfpYt5cyiiMYH3KiSoWAT8/ejB+bJMpZD3FeeUy3MWAWQz6deZpAVpK6QtYt6sCtL0bs3uBvZFimSH5QyH9u95fVFLy3AKt9TtWxjm6ztpu615O89cxKv1KF8PW+A/RkyuquvYsjPBxAb55gG++ND7jC5zFyLGZ4hn1laa1CRXrfc7z3QMJ4g6Cu93X+HtJJ+dii3SMQvW2ysJSPg0CMgFYaQphMzD/V7A==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1734541382; bh=52cbhWme0Pu/ugHCperpJjNSNdjzM11KD8gtDYX2kPb=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=AoGuqjx0pZiR6C/j0RrRxncOQ3kfClxQv3qsPJcxQALbcdhMEa9PvTEEXn64T4CtJpV2RqC4ntqmWSmbWvtq8ukcpqeQo7vRoEUCJbxdlOZloNE6QgJ6zq0h0u+SdlZv8tyMM/BJ/xPelpLqjrhq6t5vTyJ9/00U4l+kHxKMMaliYXvSpBG6XrZmlUemlwIDOu2FY96eF+MQwxtHYLzAZK1KBF9iKYEQImWlGwezXhb1Vwd4wTvAkzBqao2nIxQ1DvM3X8JIaJBu0wOo9LKjdXjTdWvB/Y9E5FWIjJ3mxfo3nnBPogefxlQe1sSxLKJeKDcQgrmGkkTdNpjmeGuLtQ==
+X-YMail-OSG: yEUtj4gVM1n2m0tiudg5nFroB78rsxi2kr4MBuj_mY.MrvOYob4jZK4tEjNXhih
+ EevAx7bCH9yf9Evfk0uuz8DU7IJihVwp_30hacgJ6VGobyGR_pAwqq6RaUEyn3a6Qu4wCAeoHfzP
+ yqCBHbfHiT0YrXlB_ejvG3HVIKrMYGIxy163jPXax1JDzOLLdvVZCELKEJHIqM6rz0rCYWpDq21r
+ pSctZLGxq.gosmWf7as8C1VhwRZGsZ_ye3SxnxnASursL_GzKxxwjH3x.GNjg.x0.1v3LkAWGaoW
+ GtRHrxUAqBFIU33qQvZSAAdK5.u3JlasZOZcL8.86dEqIOtrsHmRfTrY88ig9OBsCTtncAIygvQy
+ dSzZo5tov_EAG84O8oFUQd6fE6NpkTX80rDS6IOjwLCBAkUX9ZZxtDzAmOx6i22Rvbw6mXPjbpWg
+ ebALhJ8_ppu1g_fz5H1uZtbH189bvvcT6A8Cd1cUPN4N5jq3jkHY8FO3ClaI21t6Mhjc.Tl5TmZZ
+ VmWATeUJ6_iRprIXI3zM2S4unR2etoGr.NFVmJlW5EqZ5b_3wGUPMYPXQekELqXwvWFk2u1Y_4NS
+ nL7Y3OHZm3WfnNPVEUKTm0WPSDBsLuuySMao5C5SeVUuhhMgF__JeVI4Ugycmkd5LoMmGwtvl5m_
+ V43I4fH031gjZ0JVNnLMy_FHGAEYU2fpmMN.IBYwanRDoQ8lcQSh3WNcGlP7Z5D2B1TkSgLdE5AF
+ Wcbapbzt_IbIj0Md25R1Mnk8h1vBzAzjDVsjsz8uHdVq15wT_YsSr0fQUue3M10glJqqe681aFp.
+ nbniAGckjsSOv1iIWnFfpmxnZD2fRUOUzmracVejRYRoF7z761EmfIQ95Xn2craQGY8WZepnclL7
+ EUg9WO7F1kr1BMIf9FznxfWL7NbXX3JRgSnsGuvq2laWqanDvZO4Dal8zpB1UrlPAYyrAE2LcHZo
+ LCNeFPblfR.tQXhWB1YvUbYCUKQTtfglvsS8v9cjr1VWAY7C.nY6BLyN3c2ayCfTkdW_hirBG0j.
+ JI_OhNrQPplgYZzyyfHxtrzRwHX45kyDdkee8aWL8ZmhgkZgEv8rZNUP.EoqhpJkfnijTeWMfhKQ
+ CrUe.Sl68KiRVx9OuwfaWp82xYi9P5VQ9wzNsQCO102BQGf.XVWhJymtLxdHAMpXgfELyS1N1.RO
+ G7qYYRVOtLRcCiINze2ZVAUNCB5GECbRirYzHhlyJTg2NaCf0ZzOnYTuBH4kV4foaHHYSSiTyK0W
+ zUZd.OsC61oqTWj5B3oxWb7gT_RiKwpSnw5XBt1EjdLO6A.gONryYkFrPrLF8Ndd5mH.eDfwbz2n
+ F2hSw5rTIvEdg7eSXmzhG.j3CRygbymGlDHW1wRmDSu7xKyhTWj1tigHiCL6OSf91T0KJzxMbJEL
+ 7g2FTpIr8uzyKxrBZwiIUUsNhYuL5JWzXjvpSuvGcNmq.K2a7L9Ky2cSRGKzVE7XmjHWBIeKP2R0
+ w.etOs1IFhfwEAk4t9ch68rkUEuo8RnhRKd3Jl5ACu3DrFqXYnkhNthhUJxBNn_uFqHa1JJG3CJK
+ Li_gkgBri1vTxGNsnS3iw55lYnOC6WNKWJQkwDAj0bY9NuCyDGuet9EYLXyZwMUjkwMiZXN_ftJS
+ X4JFgTyq32Z5bb0PdBJ84LmuJdJU__mOtAxW3krqzQAeru__5W8wmUCQS4.i_IeYNNgcpqwZoOkK
+ _SASdPE_JxiRy9VNp9Fn5hlhXCZUWg8l4ed00Xw1Ze4Yyq_mepgQ6rH0Jlx8DYPACNijhAFHhBRX
+ k0_m1u_cglWN65XjWaT05C1B1JAOQg8vOEsdimaq1BgXZ1aowhOz9RqQ3nnSzz5L.UWONGi3ifCl
+ CppLTpl3DDLsCCraEKerkLsEZkIcDLcxYa8ynA6HpEX79e4kS3cdQoXS9t1BiS_8zRZ7LrV3irtZ
+ xatmCvTyNzC7pKJbg14mTuqVt.yuzZYsmeLZ271ZJjz_byaLVGrpT7wnReXZ4.W53nDnPrI4vezW
+ HyJKUu_5eaT6OJoXA7WItKCy0NRaAxXcmfo1TGz5AgRBjxvCowWGy9U88oojPz34kVLGAM2Pyuwv
+ wB8868D8nb.enbQ2HYbdeLmzjX0.4gRiw1kpyuDI_IokK1ketHScO7QIqB2uFhpbJLkhfljmMx0w
+ oux2TDLWkT0WPN9aVpvVUvWAq1oUh.m3i1mxMRyzndLb6QqQo6yE8e68SPjREQ9BJL1mzehWKVYS
+ s2Mvn_DOzTGg_LHbjp6gxLL58FT9s9jLdy_KLEubrC_yRuvJJKsEMS5lq8sJICdud4mmEHGDzGOy
+ .dsyPT5C0JQYVTWbEXVveag_p9_6r9ILXyqZcYMx5efeZlqdMzw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: abe0c9a1-c56a-45eb-8240-8692074d8de5
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 18 Dec 2024 17:03:02 +0000
+Received: by hermes--production-gq1-5dd4b47f46-5xsmt (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 12f7b58890c13094f67761df9a4a1cf5;
+          Wed, 18 Dec 2024 16:42:41 +0000 (UTC)
+Message-ID: <518fdb73-8daf-4181-a8e6-528e4824d955@schaufler-ca.com>
+Date: Wed, 18 Dec 2024 08:42:39 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="LousDMB+Lw3TRXhr"
-Content-Disposition: inline
-In-Reply-To: <20241218-sandfish-hence-5fa18539f7ca@spud>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 0/2] ima: evm: Add kernel cmdline options to disable IMA/EVM
+To: Song Liu <songliubraving@meta.com>,
+ "roberto.sassu@huawei.com" <roberto.sassu@huawei.com>
+Cc: Paul Moore <paul@paul-moore.com>, Song Liu <song@kernel.org>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+ "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
+ "jmorris@namei.org" <jmorris@namei.org>, "serge@hallyn.com"
+ <serge@hallyn.com>, Kernel Team <kernel-team@meta.com>,
+ "brauner@kernel.org" <brauner@kernel.org>, "jack@suse.cz" <jack@suse.cz>,
+ "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20241217202525.1802109-1-song@kernel.org>
+ <fc60313a-67b3-4889-b1a6-ba2673b1a67d@schaufler-ca.com>
+ <CAHC9VhTAJQJ1zh0EZY6aj2Pv=eMWJgTHm20sh_j9Z4NkX_ga=g@mail.gmail.com>
+ <8FCA52F6-F9AB-473F-AC9E-73D2F74AA02E@fb.com>
+ <B1D93B7E-7595-4B84-BC41-298067EAC8DC@fb.com>
+ <CAHC9VhRWhbFbeM0aNhatFTxZ+q0qKVKgPGUUKq4GuZMOzR2aJw@mail.gmail.com>
+ <6E598674-720E-40CE-B3F2-B480323C1926@fb.com>
+ <191ABC6C-1F0C-4B12-8785-C0548251ADDD@fb.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <191ABC6C-1F0C-4B12-8785-C0548251ADDD@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.23040 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
+On 12/17/2024 10:41 PM, Song Liu wrote:
+>> On Dec 17, 2024, at 3:33 PM, Song Liu <songliubraving@meta.com> wrote:
+> [...]
+>
+>>>> +
+>>>>                               found = true;
+>>>>                       }
+>>>>               }
+>>>> @@ -386,7 +389,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>>>>
+>>>>       /* LSM_ORDER_LAST is always last. */
+>>>>       for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+>>>> -               if (lsm->order == LSM_ORDER_LAST)
+>>>> +               if (lsm->order == LSM_ORDER_LAST && is_enabled(lsm))
+>>>>                       append_ordered_lsm(lsm, "   last");
+>> Before this change, lsm with order==LSM_ORDER_LAST is always considered
+>> enabled, which is a bug (if I understand you and Casey correctly).
+> According to commit 42994ee3cd7298b27698daa6848ed7168e72d056, LSMs with 
+> order LSM_ORDER_LAST is expected to be always enabled:
+>
+> "Similarly to LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled
+> and put at the end of the LSM list, if selected in the kernel
+> configuration. "
+>
+> Roberto, it feels weird to have two "last and always on" LSMs (ima and evm)
+> I guess this is not the expected behavior? At least, it appears to be a
+> surprise for Paul and Casey.
 
---LousDMB+Lw3TRXhr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I can't speak for Paul, but having multiple "first" and "last" entries
+comes as no surprise to me. We should probably have used LSM_ORDER_EARLY
+and LSM_ORDER_LATE instead of LSM_ORDER_FIRST and LSM_ORDER_LAST. As for
+"always on", I recall that being an artifact of compatibility for the
+security= boot option.
 
-On Wed, Dec 18, 2024 at 03:14:46PM +0000, Conor Dooley wrote:
-> On Mon, Dec 16, 2024 at 03:12:51PM -0800, Charlie Jenkins wrote:
-> > Similar to ld-version, add a way to check the version of objdump. This
-> > should most of the time end up being the binutils version or the llvm
-> > version.
-> >=20
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
->=20
-> This fails for allmodconfig and rv32_defconfig with clang. 19.1.1
-> according to Bjorn :)
-
-Some additional info from Bjorn:
-https://paste.debian.net/1340410
-and the steps to reproduce:
-https://paste.debian.net/1340408
-
-That should not be reporting 13.0.1, it should be 19.1.x, there's one
-included in the toolchains we use from https://mirrors.edge.kernel.org/pub/=
-tools/llvm/
-
-13.0.1 looks like a host toolchain?
-
->=20
-> Cheers,
-> Conor.
->=20
-> > ---
-> >  init/Kconfig               | 10 +++++++
-> >  scripts/Kconfig.include    |  6 ++++
-> >  scripts/objdump-version.sh | 69 ++++++++++++++++++++++++++++++++++++++=
-++++++++
-> >  3 files changed, 85 insertions(+)
-> >=20
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index a20e6efd3f0fbdd7f0df2448854cc30734a0ee4f..0b5d36f939e1de89c12ebdd=
-61e4815015314d4f1 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -60,6 +60,16 @@ config LLD_VERSION
-> >  	default $(ld-version) if LD_IS_LLD
-> >  	default 0
-> > =20
-> > +config OBJDUMP_IS_GNU
-> > +	def_bool $(success,test "$(objdump-name)" =3D objdump)
-> > +
-> > +config OBJDUMP_IS_LLVM
-> > +	def_bool $(success,test "$(objdump-name)" =3D llvm-objdump)
-> > +
-> > +config OBJDUMP_VERSION
-> > +	int
-> > +	default $(objdump-version)
-> > +
-> >  config RUSTC_VERSION
-> >  	int
-> >  	default $(rustc-version)
-> > diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
-> > index 33193ca6e8030e659d6b321acaea1acd42c387a4..cb3e2d2564fea8cce780adb=
-3be672c9596b7ccf2 100644
-> > --- a/scripts/Kconfig.include
-> > +++ b/scripts/Kconfig.include
-> > @@ -58,6 +58,12 @@ $(error-if,$(success,test -z "$(ld-info)"),Sorry$(co=
-mma) this linker is not supp
-> >  ld-name :=3D $(shell,set -- $(ld-info) && echo $1)
-> >  ld-version :=3D $(shell,set -- $(ld-info) && echo $2)
-> > =20
-> > +# Get the objdump name, version, and error out if it is not supported.
-> > +objdump-info :=3D $(shell,$(srctree)/scripts/objdump-version.sh $(OBJD=
-UMP))
-> > +$(error-if,$(success,test -z "$(objdump-info)"),Sorry$(comma) this obj=
-dump is not supported.)
-> > +objdump-name :=3D $(shell,set -- $(objdump-info) && echo $1)
-> > +objdump-version :=3D $(shell,set -- $(objdump-info) && echo $2)
-> > +
-> >  # machine bit flags
-> >  #  $(m32-flag): -m32 if the compiler supports it, or an empty string o=
-therwise.
-> >  #  $(m64-flag): -m64 if the compiler supports it, or an empty string o=
-therwise.
-> > diff --git a/scripts/objdump-version.sh b/scripts/objdump-version.sh
-> > new file mode 100755
-> > index 0000000000000000000000000000000000000000..fa24f8dc2d3c42fd1195fce=
-b3c96b27f7127db25
-> > --- /dev/null
-> > +++ b/scripts/objdump-version.sh
-> > @@ -0,0 +1,69 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Print the objdump name and its version in a 5 or 6-digit form.
-> > +# Also, perform the minimum version check.
-> > +
-> > +set -e
-> > +
-> > +# Convert the version string x.y.z to a canonical 5 or 6-digit form.
-> > +get_canonical_version()
-> > +{
-> > +	IFS=3D.
-> > +	set -- $1
-> > +
-> > +	# If the 2nd or 3rd field is missing, fill it with a zero.
-> > +	#
-> > +	# The 4th field, if present, is ignored.
-> > +	# This occurs in development snapshots as in 2.35.1.20201116
-> > +	echo $((10000 * $1 + 100 * ${2:-0} + ${3:-0}))
-> > +}
-> > +
-> > +orig_args=3D"$@"
-> > +
-> > +# Get the first line of the --version output.
-> > +IFS=3D'
-> > +'
-> > +set -- $(LC_ALL=3DC "$@" --version)
-> > +
-> > +# Split the line on spaces.
-> > +IFS=3D' '
-> > +set -- $1
-> > +
-> > +min_tool_version=3D$(dirname $0)/min-tool-version.sh
-> > +
-> > +if [ "$1" =3D GNU -a "$2" =3D objdump ]; then
-> > +	shift $(($# - 1))
-> > +	version=3D$1
-> > +	min_version=3D$($min_tool_version binutils)
-> > +	disp_name=3D"GNU objdump"
-> > +else
-> > +	while [ $# -gt 1 -a "$1" !=3D "LLVM" ]; do
-> > +		shift
-> > +	done
-> > +
-> > +	if [ "$1" =3D LLVM ]; then
-> > +		version=3D$3
-> > +		min_version=3D$($min_tool_version llvm)
-> > +		disp_name=3D"llvm-objdump"
-> > +	else
-> > +		echo "$orig_args: unknown objdump" >&2
-> > +		exit 1
-> > +	fi
-> > +fi
-> > +
-> > +version=3D${version%%[!0-9.]*}
-> > +
-> > +cversion=3D$(get_canonical_version $version)
-> > +min_cversion=3D$(get_canonical_version $min_version)
-> > +
-> > +if [ "$cversion" -lt "$min_cversion" ]; then
-> > +	echo >&2 "***"
-> > +	echo >&2 "*** objdump is too old."
-> > +	echo >&2 "***   Your $disp_name version:    $version"
-> > +	echo >&2 "***   Minimum $disp_name version: $min_version"
-> > +	echo >&2 "***"
-> > +	exit 1
-> > +fi
-> > +
-> > +echo objdump $cversion
-> >=20
-> > --=20
-> > 2.34.1
-> >=20
-> >=20
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-
-
-
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
-
---LousDMB+Lw3TRXhr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ2Ls6QAKCRB4tDGHoIJi
-0kuDAQC+EaYIUlICW9MBqdDryPPH7cCjqTfIFcmueFHN4mEhhQEA28HuCVuS/lMp
-gmsNZmbDpAA/hZMA5yOmrmxoUxE+qwg=
-=XJPD
------END PGP SIGNATURE-----
-
---LousDMB+Lw3TRXhr--
+> I will send patch that allow enable/disable ima and evm with lsm= cmdline.
+> We can further discuss the topic with the patch. 
+>
+> Thanks,
+> Song
+>
+>
 
