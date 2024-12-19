@@ -1,210 +1,260 @@
-Return-Path: <linux-security-module+bounces-7234-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7236-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF859F74E4
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Dec 2024 07:36:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BE2C9F750A
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Dec 2024 08:00:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5478516ABA7
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Dec 2024 06:36:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7A571890574
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Dec 2024 07:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6418F1F8928;
-	Thu, 19 Dec 2024 06:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EFF217652;
+	Thu, 19 Dec 2024 06:59:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cqsoftware.com.cn header.i=@cqsoftware.com.cn header.b="Eod0uYXb"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="GpcFYKV7"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-m12783.qiye.163.com (mail-m12783.qiye.163.com [115.236.127.83])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159AA7082A;
-	Thu, 19 Dec 2024 06:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.83
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734590169; cv=none; b=fwKQvVkk2BG43TVuge9LOmHZX2fHRbUPrU5aJzkiiwzFhcelTq4uEQG53RkDQ7sQJi6p6oa03vofkZ6TFgFZpeMWg3//oAJq4fzyZZWI2mBvY/vkC+ddx1BPZFEWVKH23zSJ58X46j1kOt52pLKWA0sp8ZIZvFs6XArfwxRoDvs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734590169; c=relaxed/simple;
-	bh=xFj2C0TeVO4NtNI6E9ROrfYkVTX/2GvRVZuqyOPGF7g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tJvXi2ERvuJHyiOTQNWADSc+z1wnxdwJ25mQY9pyh1i2fdxM93aWqewh2+iE5NpFalu9/C1Y0P0wGMoIrEYTGd9+cXggCngYMsDvnJM5lgQx1rfgYgLW0ghh5syD/QV4ekG7vy1R5AsmCKI7IIvaT3exoaLbT+IsHaJlzvzHjJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cqsoftware.com.cn; spf=pass smtp.mailfrom=cqsoftware.com.cn; dkim=pass (1024-bit key) header.d=cqsoftware.com.cn header.i=@cqsoftware.com.cn header.b=Eod0uYXb; arc=none smtp.client-ip=115.236.127.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cqsoftware.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cqsoftware.com.cn
-Received: from localhost.localdomain (unknown [123.149.2.140])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 63054557;
-	Thu, 19 Dec 2024 14:30:47 +0800 (GMT+08:00)
-From: Yuehui Zhao <zhaoyuehui@cqsoftware.com.cn>
-To: alexs@kernel.org,
-	si.yanteng@linux.dev,
-	corbet@lwn.net
-Cc: dzm91@hust.edu.cn,
-	mic@digikod.net,
-	gnoack@google.com,
-	linux-doc@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Yuehui Zhao <zhaoyuehui@cqsoftware.com.cn>
-Subject: [PATCH v2 2/2] docs/zh_CN: Add security lsm Chinese translation
-Date: Thu, 19 Dec 2024 14:30:35 +0800
-Message-ID: <d7582527ff42abf20b56ca6b145bfb91873c9ded.1734575890.git.zhaoyuehui@cqsoftware.com.cn>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <cover.1734575890.git.zhaoyuehui@cqsoftware.com.cn>
-References: <cover.1734575890.git.zhaoyuehui@cqsoftware.com.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D60216E38;
+	Thu, 19 Dec 2024 06:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.153.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734591591; cv=fail; b=Fxf12/NOUGRlR2E2sNElDhFDGRPrc9yUWyYWwbNj1/nMeOipKNO4bV3AlLnaA6qaHERv6vJhds9BKldSe0pDA+DXAW8Obs6HkEUtJHZgXmnGnJMTKjSJLlfSidOZeHEeyiRs6H2BRP4i1TDAHlOV8lXSoldJu50F2jqvo217WwM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734591591; c=relaxed/simple;
+	bh=vw9T6dCMPGujh7OBL5qqgRuzWvkZGeV/fXPXow+GOGI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=fu37RGJPDzFWjHAs2vFTdTxU1MIGjnzdpVn9cwmSeR0cCIqpW8QWCCYXPpu8cwPygM6ewQV/SpPjptoAQ5Gt9f9+ZpZwpn30iORPKpOq7G/H1dqLlfNCU6/88o6r9ok21X0kncrsLdVcDPUwXC9jAYRmhQeUgoSpXxyiT+B+qPg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=GpcFYKV7; arc=fail smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJ4rkYk016189;
+	Wed, 18 Dec 2024 22:59:48 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	s2048-2021-q4; bh=vw9T6dCMPGujh7OBL5qqgRuzWvkZGeV/fXPXow+GOGI=; b=
+	GpcFYKV7xK1avKDfte5GUOlPg+WoaNetF2O6Gu4gdjAzD1wqIStLW6QB/OGLN8t8
+	Hz1wXzBc6mG4MGjQr7DlH95uN99ENfu2Kp7V37tonLG6QGzj1XUhD++Z+0pNHAYc
+	OxKcnveNXKHMLwV1RF83TdpIl7nr7z78Lx4toH7QHFvmhuxkFvn97SZ8eaBS3ojG
+	FXd+ud5p6S9Kgd7RI/hy9zRvUSjARC8cRWlRs+Fcq4EyKRoyRfz5jj+P0ElEkNlR
+	pdOzpjARfFlSxnxSPZt4WeA+tetyDFVMRcrVnTEEE7qnAHywwBw02u+cpEKtorgr
+	dghIBW85uGS+db9HXyeMBg==
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43mcur8p3e-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 18 Dec 2024 22:59:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uc6jPIC7rNgilz3mrnZNn+Bvh0vBfMkkPDM9Uw7cD7TyJTPxS4jh6UsTCsUMOdAXTCMYhemCjRo45DgehPW3UssDxI+nRHzPLwgsSpIZ4lbH3EVtIftgqC041b4aQ2/EWn3J4crIi4VJetnuroGacTKhZ/b+KX4fLMq//aBhimNaAkpNqxabWsu8Gl5ypq4YfhChe4nW+KP9dd/YX4/B0Fz9knW+YTQSSacyGLWxVrsR26MvsiWnRhNN4mEQUSa1HpLnGy+AjQUPCPA561IuNpiwR0aThJJqARjVc2XPSxjmR8ds99MBC3SrnzN4FjBosdUJxFo+KgsbbEfzqeNxAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vw9T6dCMPGujh7OBL5qqgRuzWvkZGeV/fXPXow+GOGI=;
+ b=iUdznxcZCZSyyNi29b3Pc8p3XQztFAUdUN7gKXKjW/bKryc0MpYbPjv/A1f5nFJACdm7cE5i7mNQhYIFGBaAfcu/Dy9Jm76GYb1qzMldIKcu97fxzvfo15N+IIGHQJnqAiFPKS2hwcaX+syQnM98bhEIb/30xfgj9NIeO2JuRf8ASxNIGBi5EoZFp81SNSvaifcGhocjhmvakshEL7XS08uc6yvRjdGafUzbEyGCkNfa/QaQV5jD2Fwyq6fDM8ODBaEkaxM/O6JmlEqU7ySrj32QXvIux+u1o7qGQkLaPbBruBBHmLem43znQ3iTFBbC2EUREMYWopk4dYYssT2M3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by CO6PR15MB4180.namprd15.prod.outlook.com (2603:10b6:5:34a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.13; Thu, 19 Dec
+ 2024 06:59:44 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::662b:d7bd:ab1b:2610]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::662b:d7bd:ab1b:2610%7]) with mapi id 15.20.8272.005; Thu, 19 Dec 2024
+ 06:59:44 +0000
+From: Song Liu <songliubraving@meta.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC: Song Liu <songliubraving@meta.com>, Song Liu <song@kernel.org>,
+        bpf
+	<bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        LSM List
+	<linux-security-module@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau
+	<martin.lau@linux.dev>,
+        KP Singh <kpsingh@kernel.org>,
+        Matt Bobrowski
+	<mattbobrowski@google.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris
+	<jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH v5 bpf-next 4/5] bpf: fs/xattr: Add BPF kfuncs to set and
+ remove xattrs
+Thread-Topic: [PATCH v5 bpf-next 4/5] bpf: fs/xattr: Add BPF kfuncs to set and
+ remove xattrs
+Thread-Index: AQHbUQgH26q3Z2MAsEyHPIKkiJbGP7Lsg1AAgAAHd4CAACoPgIAAcDeA
+Date: Thu, 19 Dec 2024 06:59:44 +0000
+Message-ID: <A8A5C206-CEAA-472B-A2BE-99D3E8940159@fb.com>
+References: <20241218044711.1723221-1-song@kernel.org>
+ <20241218044711.1723221-5-song@kernel.org>
+ <CAADnVQK2chjFr8EwpzbnsqLwGRfoxjRs6yXDXmUuBRFo-iwV_A@mail.gmail.com>
+ <BF2BF0EC-90C2-4BFC-B1F3-D842AE1B7761@fb.com>
+ <CAADnVQ+vgt=LV+3srtGQUtKKc3ohZkaMdHyouXThNmYG2qGoYg@mail.gmail.com>
+In-Reply-To:
+ <CAADnVQ+vgt=LV+3srtGQUtKKc3ohZkaMdHyouXThNmYG2qGoYg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Apple Mail (2.3826.200.121)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|CO6PR15MB4180:EE_
+x-ms-office365-filtering-correlation-id: ca47a67c-6fd1-45cd-ddab-08dd1ffab7e8
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?SHBUcm9NYjk5cllVWDNQMkdvTGpHcHNPU2hFdXhLQmsrZXZ5U1dibnBYcmYx?=
+ =?utf-8?B?Um5YdnlDRERETVlPNE5CZFl6M0h0eEFCUWJjUnlOMm5ZN3VLZnVmSGpFaGZC?=
+ =?utf-8?B?bFBRL2VSZWdIYTZ1bzZaYTVvZTY3aUZRY1FHMnYvVFJnYUdmSkRuaG5vWGo1?=
+ =?utf-8?B?amZVSHQ2TGFtWENjRWFidk5HZG5sR1dhZWhuT2MwTmpPQTU0SFl6WEVCN1o4?=
+ =?utf-8?B?cEMrSTM3cktNdnJxQ2QwUEVJa0NGdjBZOWl1SHZaaWpyT0dxVSt6bVZxNWNs?=
+ =?utf-8?B?TUlPNTVSSzJRNzZJc25JSEtoVExwanVrVjhjbnV6dVRGUkxBcUpmdy9GalA4?=
+ =?utf-8?B?cmw5TnBkbjBhMWFxMmhYeEIyWjVzaGJLS2dxMDJxdTRYV1l6cUZ6dUU2bFhZ?=
+ =?utf-8?B?SHozdDRxc3pWdEVzZC9qb2l1cVRmV0VnTWRKRUx4N2YwMnhaelpaL3VhT3M2?=
+ =?utf-8?B?ejQwT3kyYnJ5cHlnbHhDaVlId1BVZFFMS085RnVZQmt6SnRnMkRjSkFBcVk0?=
+ =?utf-8?B?SmVJTis1N01XdGR1Uk1tMUVxWkt2cGdad0ZFdG5XU1c4SVFLcTNIQktaV3Bv?=
+ =?utf-8?B?d0tEamdISnhyTzBHL1hzQVdjSEJLVXZBK3NGaHU0d2ZsMnUzd21sd3NEZTdS?=
+ =?utf-8?B?blRCTHhKK3UyTDZydUVFTUROR0V4dk5zKzdDTDFnOWZpdHZKemFSZ2VWQ2dl?=
+ =?utf-8?B?S1A2Q0MzS3E2RVNEM29kTnRLUThkaVhKMG1kaFVTRWhGbWpmNlBoT3c3emxr?=
+ =?utf-8?B?dHlSUUNCMEFEUDFFM2owNm5vMUxHMVpGOUx0eitWQTVaVkh5b0gxaHNVNXls?=
+ =?utf-8?B?d1U0UXRXTlJFRWw2ZFk3UHE4eXpaUjVBU0pva1g1RVVpeTlaY3IvdE1VakVi?=
+ =?utf-8?B?QnFHVlJ0RjhSNTNROHJtZmxTNEM2YlVkOUhNK283SHNudE5rTzk2aUFtRmt4?=
+ =?utf-8?B?UlJlM0ZJdUhwK3hqOHp5SEo5TzRidHBzOFk3T2ZBcFRELzMzQlpFbGpMME9Z?=
+ =?utf-8?B?WS92UGQ4YTFJUk1YdEhHQk4vOUJXd3ovSzlRSndEc09nYUUyT1RpaWJXSkRp?=
+ =?utf-8?B?bGRUUXhmbnVuazF3NHhsMlllcUxiTmQ0ODR6TEhCNjlmVGd0NXNCR01Mc041?=
+ =?utf-8?B?VVpwa0ozVFduMVpwNEZSYmxqVFZHSllqUEI1NkkwY2g2aWVlNTBHK1FpNjkx?=
+ =?utf-8?B?QUNUaytaSWYvc212cHJjWWlPQ09ueGsrMyszcTM5YzVhZjZPZEtMZzBSUFpy?=
+ =?utf-8?B?MXdmK1gxakxWVjBia2MvcnF3Wm1jVVhPdW96ZjNKTzdyRWF4Y1FBdGpERGUv?=
+ =?utf-8?B?bzZQUzFaV0VjVTJINGtKVU9aSGdSR3kwcHBweVVFbGZrbUI4RlAzaFNPYm5v?=
+ =?utf-8?B?NHByRUxpRlNDVXJrajdZckpXK2xCUGRYcEQ3eUZYR3RhTTd4T2laS0NrU016?=
+ =?utf-8?B?WklhK0Fna040a1plbGFQZmVST1pVWldkVytRYWhpOS96UTViU0dNQXB2Sm1Y?=
+ =?utf-8?B?dno3SUxFQmQxaTV4T3VSV0hUUkp3WUxnZE50Ni9pMXUvaVBtN1hTTGNhRkNI?=
+ =?utf-8?B?bmJ1aUdQcFozTGFnMFEyMVZ4NDArTnhxWUNZZnU3NzAwSVU5NXlxVEgybHV5?=
+ =?utf-8?B?Ti9zTjM3YUlKWDltUlZiVjNsbkVpeSt2M1o2TXpUZDhFZFZZWmpqeUFKUDhN?=
+ =?utf-8?B?eDA0c254Z0VqS0tlT3psLzFJTnpoNW1EdFFrSXJuYkRSTTA3ZFFMVks3MU1F?=
+ =?utf-8?B?bTRIdTNobkd3b01sMmN1ZGpmNlF0UUJBVW1ibUZXTmdFb0VrYU8yRUFSdS9L?=
+ =?utf-8?B?U08vZTJKL1FJSDdpN2hpZ1JJOHpDWmg2SHlvWWM1Nzd3MmdSRjg0KytSMzVk?=
+ =?utf-8?B?ckpZTlZwOVVZM1JFWFFvQ0JoWEkyM21Ndlc1dzkwVjVEbGNVc0FxeXJLZUJG?=
+ =?utf-8?Q?j6lsEJx2usNK7RZq9bxezTFMTf2+Byh1?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?U3FmS1dHTHlDSFVDV2FEa040MlhqcXp2cXdrdHZ4NFdqWmhpY296S3k3YkZU?=
+ =?utf-8?B?TjBaSXY2cjJzYjIyT29zSGNTcDd0WG5uWUlOQXNyZ25ZN1FPMDJJWDgzTTdl?=
+ =?utf-8?B?ZFZ4TkZlMzB5TVpBTHg3amo4b0N4aFNxVFV0V2wrL2RyWnFSc01MenQ4MGNk?=
+ =?utf-8?B?YThXVW42WTYwODBKMjhkUnl2UEFiQUt1V2ZTMlNDRGdsVnlUeGVBSU5HWlhk?=
+ =?utf-8?B?L1ZrQS8vL1RZcnRtVnJ0T1RGdVNIMFcrQTZsbEZwMENFMzlnZXdxbmh1TVVO?=
+ =?utf-8?B?bFdrY29yMkJaalZ6S2ZZdE9hYzI2UzcrR21hdkJKeUJ4VnVBMDhQdGJqZTNo?=
+ =?utf-8?B?bnRPUmUwNkEvczkybmhPdXcwSUlpajJQakU3UG41V2t1c2NyMnB2SG1kWVdz?=
+ =?utf-8?B?NVA4ZEdkYzJ1NmVlNmRrOUthaXlEOThRY0xBY3dNeUhYR1dWdkh0NmRmN0pO?=
+ =?utf-8?B?QmFTVU5mL1daSjFlcDltb2RLaHgxNnVYUXpKUndCMVRXRHd4elJzRDY1NXc2?=
+ =?utf-8?B?RUxDODhBWFlLSTduSGFQT3F4MDlITHNrZWJCYU5sZ3h0KzVhMHpJN2tmei8w?=
+ =?utf-8?B?MmFsMkpFUXhHaHdSNHNtL1luVDRQQ3FXU2Y0S3lxcnN6VWZ0TzV3RWxLVVdJ?=
+ =?utf-8?B?bGg5VWZ6STQrcVpsZE1yd1hnSjUwNmRHdklweldodlNUdXJVZTc3K0hiQ2Zk?=
+ =?utf-8?B?cU9Id2UreTJydTQ4MVk4Wkc5SWQvajhvRE94UFdQemtIUExiY09VZ3IxdTVt?=
+ =?utf-8?B?R1BJNUdMZmd0QmNIWER6aVQrckI3QjF2My85dGlGK0J6S0VHOEFkS01YMG1N?=
+ =?utf-8?B?Q2VGTTlVQ0FQVXJMU2wvekd5SEpFaHFPbVY1ejJnVTQxNHp6alI1eGs2b2RK?=
+ =?utf-8?B?TEcwcG1IYlQ0OEhSQVdUanl3cGlLcDBWV0dzUDdDSHRBakt6STBjL1ROUm02?=
+ =?utf-8?B?SmliRjZZRVBrOG5reUYyUkQ1RXZ6WjM2T3l2eDkrUDhIU2Q3K2FwbGtGaWZB?=
+ =?utf-8?B?Zjh4aUlQOGFHVko3S0pCb2FEUkZHcFhmMmdSTmFBeFJUSFk5VG5pajUvOEp6?=
+ =?utf-8?B?YUhwajZpdXRYb2tBbHRBdkhHUWR6OXNGd1VsdDZWS0gycE5na2tuaVY3THg3?=
+ =?utf-8?B?MTB6ZXBYSHc3MmsyWWl3a3prR3RoRld0STJJT3VQQXdFZE5BVW0wYi9wT2d5?=
+ =?utf-8?B?emw3S1N1TXVoc0RucG95eEsveFlqWlJiUERXY3k4L0ovTkcrYklYV3hmVWVo?=
+ =?utf-8?B?Q0FsKzl6WitmYmlwSUN6bjNUa0o4RXYrd2pTQitKSGpwbzVNQXVBanAwMUpL?=
+ =?utf-8?B?M0RIa24vYnZUeW9TdWVGSno3NWk0bEdIK1pld0xEQVBwQnhObU4vRnJVUlMx?=
+ =?utf-8?B?KzBtTmN5Q1ZkNTVEaC9VNUNqOVpvb0Rvb1cvTXVhVlZnMFZHd0hPNEhaWGVY?=
+ =?utf-8?B?anF4VC9Xd0cyUDFrVU1ZOEhCQUlKTG5KNWtRZFZiYUlyZHh2MnlZUUpPV3dv?=
+ =?utf-8?B?cWV0R0lhak5zRWF1WiszNTlGR1pVTEpDc3Vrcm9rZVZEVnBMbDYzOGlDS1pm?=
+ =?utf-8?B?UFFwMklUdW9UUXQ5UVlubEp5a1V3aXk0M1IrM2RaWkMweHpNVnNZYW5ML0s2?=
+ =?utf-8?B?Q1hDdTFpQUZzeFhXelNXVGNPbHFVN2lIb01qY0U5cmt6TDRVUGUrNWR4Uy96?=
+ =?utf-8?B?NkRjeDNpdUllOWY5a0IwdnJ3R2ZKYzZRbGE0MmZCWXBIaTlNWG1kcTc2Um5m?=
+ =?utf-8?B?R1BNUHByZTlaVUFMNGN1N1pBQkRPeTFrUk55eGEvYkk1YlhwNFdWWEJoRk1V?=
+ =?utf-8?B?bFpzMitiSFk5c2tTY05FSUluclRPSTJLS21ObENFWDN6czBaVm1HUEpodjFQ?=
+ =?utf-8?B?SjZKSE1tUnBzTkNTc3hPUGdheG85RkY3QTRtMFUyNzFrbzRQQlk3bU5Ka3Ra?=
+ =?utf-8?B?U04vSVc5c2l0bksvRVd3QWs0NW9HSCtQL3VQbVN2bzRNTHFLZUR3OUh1L1Qz?=
+ =?utf-8?B?cjU2TXNvcEZKZGZhQyt0aFFVSjJGZkNhU3dCMVE1RC8xUm83MURWeE16T2JI?=
+ =?utf-8?B?d1Z3NUIrejJJL2RaUkRqRlh0eGJ6OU9jVG92bmZHS01zZ3p3bmc2eVcxTHQz?=
+ =?utf-8?B?bVJ5eTFsaE9qbEVyUXlPM0NyQktFRnlzL2k3V0ZacVI2aXcrcW94MEtEc2dj?=
+ =?utf-8?B?OHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D48C7F759D59114DA5C95C118AA448A6@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHUlNVk9OHUgfGU4dH01MSVYVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKSUhVSk9CVUlVSk9LWVdZFhoPEhUdFFlBWU9LSFVKS0hKTENKVUpLS1
-	VKQktLWQY+
-X-HM-Tid: 0a93dd9c96b503a3kunm63054557
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PC46CRw4FDIRPhUzPxQRLh8x
-	AggKCyNVSlVKTEhPTkNCQ09DSUxIVTMWGhIXVQETGhQCDh4TDhI7GAoIFB0PDBoJHlUYFBZVGBVF
-	WVdZEgtZQVlKSUhVSk9CVUlVSk9LWVdZCAFZQU1DT083Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=Eod0uYXbWlnYKjoJVVb16a0ZAVmJuKLRkKAAvYe9eFvQ3Mz6H8AUCCKWBfNJK9joR/Jyx2uNuIZAWhdjyByhcY7Gc58dP9kotZrjL0E5IP+Yiz7yAI+hFUsZ8Py8BkWUb0b8i2K/DcJxhxhiITscEAYmTmgUCrzZGOWOWkHXyns=; c=relaxed/relaxed; s=default; d=cqsoftware.com.cn; v=1;
-	bh=VaLt2rPSfqtlGWCHK8+MuC/3m2hpM2fDzcZr9Qd51kk=;
-	h=date:mime-version:subject:message-id:from;
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca47a67c-6fd1-45cd-ddab-08dd1ffab7e8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2024 06:59:44.3704
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: E22QibR0P9bbVKtQEaRK4Vu030jERoG75yGXSAVCaEBwYh99sPtJe4k7OHIqH2SiEFrRCAoOHz8CI2E4xOAKHw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR15MB4180
+X-Proofpoint-ORIG-GUID: j5VanV7tGH1Mca294Y7XQJ2ziV2fXYau
+X-Proofpoint-GUID: j5VanV7tGH1Mca294Y7XQJ2ziV2fXYau
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
 
-Translate .../security/lsm.rst into Chinese.
-
-Update the translation through commit 6d2ed653185b ("lsm: move hook
- comments docs to security/security.c")
-
-Signed-off-by: Yuehui Zhao <zhaoyuehui@cqsoftware.com.cn>
----
- .../translations/zh_CN/security/index.rst     |  3 +-
- .../translations/zh_CN/security/lsm.rst       | 95 +++++++++++++++++++
- 2 files changed, 97 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/security/lsm.rst
-
-diff --git a/Documentation/translations/zh_CN/security/index.rst b/Documentation/translations/zh_CN/security/index.rst
-index 6b56b4f87315..92e2d8a7dec8 100644
---- a/Documentation/translations/zh_CN/security/index.rst
-+++ b/Documentation/translations/zh_CN/security/index.rst
-@@ -15,12 +15,13 @@
- .. toctree::
-    :maxdepth: 1
- 
-+   lsm
-+
- TODOLIST:
- * credentials
- * snp-tdx-threat-model
- * IMA-templates
- * keys/index
--* lsm
- * lsm-development
- * sak
- * SCTP
-diff --git a/Documentation/translations/zh_CN/security/lsm.rst b/Documentation/translations/zh_CN/security/lsm.rst
-new file mode 100644
-index 000000000000..941f94fb2acc
---- /dev/null
-+++ b/Documentation/translations/zh_CN/security/lsm.rst
-@@ -0,0 +1,95 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/security/lsm.rst
-+
-+:翻译:
-+
-+ 赵岳辉 Yuehui Zhao <zhaoyuehui@cqsoftware.com.cn>
-+
-+================================
-+Linux安全模块：Linux通用安全钩子
-+================================
-+
-+:作者: Stephen Smalley
-+:作者: Timothy Fraser
-+:作者: Chris Vance
-+
-+.. note::
-+
-+    本文中描述的api已经过时了。
-+
-+介绍
-+====
-+
-+在2001年3月，美国国家安全局（NSA）在2.5 Linux内核峰会上做了一个关于安全
-+增强Linux（SELinux）的报告。SELinux是Linux内核中一种实现灵活且细粒度的非
-+自主访问控制，最初作为自己特定的内核补丁实现。其他一些安全项目（例如RSBAC、
-+Medusa）也为Linux内核开发了灵活的访问控制架构，并且多个项目为Linux开发了
-+特定的访问控制模型（例如LIDS、DTE、SubDomain）。每个项目都开发并维护了自
-+己的内核补丁，以支持其安全需求。
-+
-+针对美国国家安全局的报告，Linus Torvalds发表了一系列言论，描述了一个他愿
-+意考虑纳入主流Linux内核的安全框架。他描述了一个通用的框架，该框架将提供
-+一组安全钩子来控制对内核对象的操作，同时在内核数据结构中提供一组不透明的
-+安全域来维护安全属性。这个框架可以被可加载的内核模块用来实现任何所需的安
-+全模型。Linus还提出了将Linux权能代码迁移到这样一个模块中的可能性。
-+
-+Linux安全模块（LSM）项目是由WireX发起开发的这样一个框架。LSM是几个安全
-+项目共同开发的成果，包括immununix、SELinux、SGI和Janus，以及包括
-+Greg Kroah-Hartman和James Morris在内的几个人，来开发一个实现这一框架的
-+Linux内核补丁。这项工作在2003年12月被纳入主流内核。此技术报告概述了该框
-+架和权能安全模块的内容。
-+
-+LSM框架
-+=======
-+
-+LSM框架提供了一个通用的内核框架来支持安全模块。特别地，LSM框架主要关注
-+支持访问控制模块，尽管未来的开发可能会解决其他安全需求，比如沙箱。就其
-+本身而言，框架不提供任何额外的安全；它仅提供了支持安全模块的基础架构。
-+LSM框架是可选的，要求开启 `CONFIG_SECURITY` 配置。权能逻辑作为一个安全
-+模块被实现。该权能模块将在 `LSM权能模块`_ 一节中进一步讨论。
-+
-+LSM框架在内核数据结构中包含安全域，并在内核代码的关键点调用钩子函数来
-+管理这些安全域并执行访问控制。它还增加了注册安全模块的函数。接口
-+/sys/kernel/security/lsm记录了一个以逗号分隔的安全模块列表，这些模块在
-+系统中是激活的。
-+
-+LSM安全域只是 ``void*`` 指针。数据被称为blob，这些数据可以由框架或使用
-+它的各个安全模块进行管理。多个安全模块共同使用的安全blob通常由框架管理。
-+对于进程和程序执行的安全信息，安全域包含在  :c:type:
-+`struct task_struct <task_struct>` 和 :c:type: `struct cred <cred>` 中。
-+对于文件系统的安全信息，安全域包含在 :c:type:
-+`struct super_block <super_block>` 中。对于管道、文件和套接字的安全信息，
-+安全域包含在 :c:type: `struct inode <inode>` 和 :c:type: `struct file <file>`
-+中。对于System V IPC的安全信息，安全域被添加到 :c:type:
-+`struct kern_ipc_perm <kern_ipc_perm>` 和 :c:type: `struct msg_msg <msg_msg>`
-+中；另外，:c:type: `struct msg_msg <msg_msg>` 、struct msg_queue和
-+struct shmid_kernel的定义被移动到头文件中（ ``include/linux/msg.h`` 和
-+``include/linux/shm.h`` 视情况而定），以允许安全模块使用这些定义。
-+
-+对于数据包和网络设备的安全信息，安全域被添加到 :c:type:
-+`struct sk_buff <sk_buff>` 和 :c:type: `struct scm_cookie <scm_cookie>` 中。
-+与其他安全模块数据不同，这里使用的数据是一个32位整数。安全模块需要将这些值
-+进行映射或关联到真正的安全属性。
-+
-+LSM钩子被维护在链表中。每个钩子函数都维护一个链表，这些钩子按照CONFIG_LSM中
-+指定的顺序被调用。每个钩子的详细文档都包含在 `security/security.c` 源文件中。
-+
-+LSM框架提供了一种近似通用的安全模块堆栈。它定义了security_add_hooks()，每个安
-+全模块向它传递一个 :c:type: `struct security_hooks_list <security_hooks_list>`
-+，该结构会被添加到链表中。LSM框架没有提供移除已注册钩子的机制。SELinux安全
-+模块已经实现了一种移除自身的方法，然而该特性已被弃用。
-+
-+这些钩子可以分为两大类：用于管理安全域的钩子和用于执行访问控制的钩子。
-+第一类钩子的示例包括security_inode_alloc()和security_inode_free()，这些
-+钩子用于为inode对象分配和释放安全结构。第二类钩子的示例是
-+security_inode_permission()钩子，该钩子在访问inode时检查权限。
-+
-+LSM权能模块
-+===========
-+
-+POSIX.1e 权能逻辑作为一个安全模块维护，存储在文件 ``security/commoncap.c``
-+中。权能模块使用 :c:type: `lsm_info` 描述中的order域来标识它为第一个注册
-+的安全模块。与其他模块不同，权能安全模块不使用通用的安全blob。其原因是历史
-+性的，主要基于开销、复杂性和性能的考虑。
--- 
-2.43.5
-
+DQo+IE9uIERlYyAxOCwgMjAyNCwgYXQgNDoxN+KAr1BNLCBBbGV4ZWkgU3Rhcm92b2l0b3YgPGFs
+ZXhlaS5zdGFyb3ZvaXRvdkBnbWFpbC5jb20+IHdyb3RlOg0KDQpbLi4uXQ0KDQo+Pj4gVGhpcyBw
+YXJ0IGlzIG5vdCBuZWNlc3NhcnkuDQo+Pj4gX2xvY2tlZCgpIHNob3VsZG4ndCBiZSBleHBvc2Vk
+IGFuZCBpdCBzaG91bGQgYmUgYW4gZXJyb3INCj4+PiBpZiBicGYgcHJvZyBhdHRlbXB0cyB0byB1
+c2UgaW52YWxpZCBrZnVuYy4NCj4+IA0KPj4gSSB3YXMgaW1wbGVtZW50aW5nIHRoaXMgaW4gZGlm
+ZmVyZW50IHdheSB0aGFuIHRoZSBzb2x1dGlvbiB5b3UgYW5kIEt1bWFyDQo+PiBzdWdnZXN0ZWQu
+IEluc3RlYWQgb2YgdXBkYXRpbmcgdGhpcyBpbiBhZGRfa2Z1bmNfY2FsbCwgY2hlY2tfa2Z1bmNf
+Y2FsbCwNCj4+IGFuZCBmaXh1cF9rZnVuY19jYWxsLCByZW1hcF9rZnVuY19sb2NrZWRfZnVuY19p
+ZCBoYXBwZW5zIGJlZm9yZQ0KPj4gYWRkX2tmdW5jX2NhbGwuIFRoZW4sIGZvciB0aGUgcmVzdCBv
+ZiB0aGUgcHJvY2VzcywgdGhlIHZlcmlmaWVyIGhhbmRsZXMNCj4+IF9sb2NrZWQgdmVyc2lvbiBh
+bmQgbm90IF9sb2NrZWQgdmVyc2lvbiBhcyB0d28gZGlmZmVyZW50IGtmdW5jcy4gVGhpcyBpcw0K
+Pj4gd2h5IHdlIG5lZWQgdGhlIF9sb2NrZWQgdmVyc2lvbiBpbiBicGZfZnNfa2Z1bmNfc2V0X2lk
+cy4gSSBwZXJzb25hbGx5DQo+PiB0aGluayB0aGlzIGFwcHJvYWNoIGlzIGEgbG90IGNsZWFuZXIu
+DQo+IA0KPiBJIHNlZS4gQmxpbmQgcmV3cml0ZSBpbiBhZGRfa2Z1bmNfY2FsbCgpIGxvb2tzIHNp
+bXBsZXIsDQo+IGJ1dCBhbGxvd2luZyBwcm9ncyBjYWxsIF9sb2NrZWQoKSB2ZXJzaW9uIGRpcmVj
+dGx5IGlzIG5vdCBjbGVhbi4NCg0KQWdyZWVkLiANCg0KPiANCj4gU2VlIHNwZWNpYWxpemVfa2Z1
+bmMoKSBhcyBhbiBleGlzdGluZyBhcHByb2FjaCB0aGF0IGRvZXMgcG9seW1vcnBoaXNtLg0KPiAN
+Cj4gX2xvY2tlZCgpIGRvZXNuJ3QgbmVlZCB0byBiZSBfX2JwZl9rZnVuYyBhbm5vdGF0ZWQuDQo+
+IEl0IGNhbiBiZSBqdXN0IGxpa2UgYnBmX2R5bnB0cl9mcm9tX3NrYl9yZG9ubHkuDQoNCkkgYW0g
+dGhpbmtpbmcgYWJvdXQgYSBtb3JlIG1vZHVsYXIgYXBwcm9hY2guIEluc3RlYWQgb2YgcHVzaGlu
+ZyB0aGUNCnBvbHltb3JwaGlzbSBsb2dpYyB0byB2ZXJpZmVyLmMsIHdlIGNhbiBoYXZlIGVhY2gg
+YnRmX2tmdW5jX2lkX3NldCANCmhhbmRsZSB0aGUgcmVtYXAgb2YgaXRzIGtmdW5jcy4gU3BlY2lm
+aWNhbGx5LCB3ZSBjYW4gZXh0ZW5kIA0KYnRmX2tmdW5jX2lkX3NldCBhczoNCg0KdHlwZWRlZiB1
+MzIgKCpidGZfa2Z1bmNfcmVtYXBfdCkoY29uc3Qgc3RydWN0IGJwZl9wcm9nICpwcm9nLCB1MzIg
+a2Z1bmNfaWQpOw0KDQpzdHJ1Y3QgYnRmX2tmdW5jX2lkX3NldCB7DQogICAgICAgIHN0cnVjdCBt
+b2R1bGUgKm93bmVyOw0KICAgICAgICBzdHJ1Y3QgYnRmX2lkX3NldDggKnNldDsNCiAgICAgICAg
+LyogaGlkZGVuX3NldCBjb250YWlucyBrZnVuY3MgdGhhdCBhcmUgbm90IG1hcmtlZCBhcyBrZnVu
+YyBpbg0KICAgICAgICAgKiB2bWxpbnV4LmguIFRoZXNlIGtmdW5jcyBhcmUgdXN1YWxseSBhIHZh
+cmlhdGlvbiBvZiBhIGtmdW5jDQogICAgICAgICAqIGluIEBzZXQuDQogICAgICAgICAqLw0KICAg
+ICAgICBzdHJ1Y3QgYnRmX2lkX3NldDggKmhpZGRlbl9zZXQ7DQogICAgICAgIGJ0Zl9rZnVuY19m
+aWx0ZXJfdCBmaWx0ZXI7DQogICAgICAgIC8qIEByZW1hcCBtZXRob2QgbWF0Y2hlcyBrZnVuY3Mg
+aW4gQHNldCB0byBwcm9wZXIgdmVyc2lvbiBpbg0KICAgICAgICAgKiBAaGlkZGVuX3NldC4NCiAg
+ICAgICAgICovDQogICAgICAgIGJ0Zl9rZnVuY19yZW1hcF90IHJlbWFwOw0KfTsNCg0KSW4gdGhp
+cyBjYXNlLCBub3RfbG9ja2VkIHZlcnNpb24gb2Yga2Z1bmNzIHdpbGwgYmUgYWRkZWQgdG8gQHNl
+dDsNCndoaWxlIF9sb2NrZWQga2Z1bmNzIHdpbGwgYmUgYWRkZWQgdG8gQGhpZGRlbl9zZXQuIEBo
+aWRkZW5fc2V0IA0Kd2lsbCBub3QgYmUgZXhwb3NlZCBpbiB2bWxpbnV4LmguIFRoZW4gdGhlIG5l
+dyByZW1hcCBtZXRob2QgaXMgDQp1c2VkIHRvIG1hcCBub3RfbG9ja2VkIGtmdW5jcyB0byBfbG9j
+a2VkIGtmdW5jcyBmb3IgaW5vZGUtbG9ja2VkIA0KY29udGV4dC4gDQoNCldlIGNhbiBhbHNvIG1v
+dmUgYnBmX2R5bnB0cl9mcm9tX3NrYl9yZG9ubHkgdG8gdGhpcyBtb2RlbCwgYW5kIA0Kc2ltcGxp
+Znkgc3BlY2lhbGl6ZV9rZnVuYygpLiANCg0KSSB3aWxsIHNlbmQgcGF0Y2ggZm9yIHRoaXMgdmVy
+c2lvbiBmb3IgcmV2aWV3LiANCg0KVGhhbmtzLA0KU29uZw0KDQo=
 
