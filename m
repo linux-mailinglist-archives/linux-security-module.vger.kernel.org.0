@@ -1,137 +1,223 @@
-Return-Path: <linux-security-module+bounces-7337-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7339-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FC829FB026
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Dec 2024 15:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 380FD9FB202
+	for <lists+linux-security-module@lfdr.de>; Mon, 23 Dec 2024 17:13:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5479C188C96C
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Dec 2024 14:35:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A0A1188556D
+	for <lists+linux-security-module@lfdr.de>; Mon, 23 Dec 2024 16:13:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D6841E3DF8;
-	Mon, 23 Dec 2024 14:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A940D1B3948;
+	Mon, 23 Dec 2024 16:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gjO5KOjs"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BC51E3DE7;
-	Mon, 23 Dec 2024 14:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80C17E0FF;
+	Mon, 23 Dec 2024 16:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734963680; cv=none; b=teLPAcG5/qDCtru4GnQx2MQWwOz2ivOdcyXCdkynIXkr1UhjqZm5MN/zl70P9YRnjwXIddDOglGozXxDtTDEVh2u2XoHBdQpr/Cxc01AJaLpY2yQK6EZjIfUJMMHf90D0oWwfUGTsb5UKkhgOqf3N6j9B4gVxK1ecCaREBQ8loQ=
+	t=1734970380; cv=none; b=Qm3+1Dj7cXnL+cN+IH06H0rMDTruzTdloiExWCq9daxXey9SCCKuqTMhg0LkO5SZAQpl2BViK/m1dqv+JDH8QQA2C1Fu0zoflkS6wyQZe9kjJiSYnTYWyr4b6adZ0qvbijHW8BLKr9isOWnN5limWwZBjOe62cqmxMZe1ObdEs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734963680; c=relaxed/simple;
-	bh=QlnJEpBp4fXU3fC+e0GKeOTxfhyigAYnpz0GbfIk3zI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=exVZo0PJjCHrCffO3aCXqKM18YcfCEbEN1g6KEXSGlc7YDAhN1iQNuCuKYvxJmerzDYB0L++z1Ml99F8ReL+177nNY8F1fvVr7sgjVY5viIuxmET+4tADdHlIb6Ee9EPnm38/w8gbIK2Zt8mj+CXCS0Z9wJo1icCttS+x+FFc94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4YH0ZR5blCz20mgG;
-	Mon, 23 Dec 2024 22:21:35 +0800 (CST)
-Received: from kwepemh100016.china.huawei.com (unknown [7.202.181.102])
-	by mail.maildlp.com (Postfix) with ESMTPS id 486461A016C;
-	Mon, 23 Dec 2024 22:21:16 +0800 (CST)
-Received: from huawei.com (10.175.113.32) by kwepemh100016.china.huawei.com
- (7.202.181.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 23 Dec
- 2024 22:21:12 +0800
-From: Kaixiong Yu <yukaixiong@huawei.com>
-To: <akpm@linux-foundation.org>, <mcgrof@kernel.org>
-CC: <ysato@users.sourceforge.jp>, <dalias@libc.org>,
-	<glaubitz@physik.fu-berlin.de>, <luto@kernel.org>, <tglx@linutronix.de>,
-	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-	<hpa@zytor.com>, <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
-	<jack@suse.cz>, <kees@kernel.org>, <j.granados@samsung.com>,
-	<willy@infradead.org>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
-	<lorenzo.stoakes@oracle.com>, <trondmy@kernel.org>, <anna@kernel.org>,
-	<chuck.lever@oracle.com>, <jlayton@kernel.org>, <neilb@suse.de>,
-	<okorniev@redhat.com>, <Dai.Ngo@oracle.com>, <tom@talpey.com>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
-	<linux-sh@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-nfs@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-security-module@vger.kernel.org>, <dhowells@redhat.com>,
-	<haifeng.xu@shopee.com>, <baolin.wang@linux.alibaba.com>,
-	<shikemeng@huaweicloud.com>, <dchinner@redhat.com>, <bfoster@redhat.com>,
-	<souravpanda@google.com>, <hannes@cmpxchg.org>, <rientjes@google.com>,
-	<pasha.tatashin@soleen.com>, <david@redhat.com>, <ryan.roberts@arm.com>,
-	<ying.huang@intel.com>, <yang@os.amperecomputing.com>,
-	<zev@bewilderbeest.net>, <serge@hallyn.com>, <vegard.nossum@oracle.com>,
-	<wangkefeng.wang@huawei.com>
-Subject: [PATCH v4 -next 15/15] sysctl: remove unneeded include
-Date: Mon, 23 Dec 2024 22:15:50 +0800
-Message-ID: <20241223141550.638616-32-yukaixiong@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241223141550.638616-1-yukaixiong@huawei.com>
-References: <20241223141550.638616-1-yukaixiong@huawei.com>
+	s=arc-20240116; t=1734970380; c=relaxed/simple;
+	bh=UtOCTThwOblyR5slazuQ5DRaahQq72ajfmyR4avObJ0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Zr4mL0pmGN77EfQipP/5U4XlQOe7xbGJpc7z5kzDEriaWQc2tzvjIi0FbKGORkMnKTRLyffzsn3f7edlOnQi7OwjcLoPVkBrzHF/svU8OMEBYLEb0f7F8BQ7OrHRdYqNEgqF+IxgkQXLgyWY8HFXRlsx0QSSZ2nybp0CPEgsx98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gjO5KOjs; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNE6m0g010100;
+	Mon, 23 Dec 2024 16:11:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=N0YlXv
+	pThyCaloTijE44N+X/vXn8K189/uxnRfbTsO8=; b=gjO5KOjszlMa3CE1dvBXXa
+	Zcp8iyosndSxa8eReS1uoUGP1nvV+ZWm5+QjuhX6W7w286Tsi2dT59DnBu+qHmVW
+	y1K4+d2Gau6M3rpSmQd64ih+Ls1LT2OziM67fXxqM8C9nXWNM6l1bZrrsSazBe1N
+	TWQv3cVr0F2QFi5xt9WmhaQFWW5C3iLugiijCRE7WYaqsUe0GzsXnJgDEQLItO91
+	5e9aUQ4uh6Hr6Bzn6oLBniXgwko+/XIWiCiQgHBG72p3TarNYmqSG2GwgXBygkJ6
+	ucVwqbDxZgg6YcqvjejM5ENbIoHUrlkXvhkYJWyTZFIRtT6Ut6E+MT7lcy6In9dQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q9b4ggby-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Dec 2024 16:11:31 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BNGBUHY022869;
+	Mon, 23 Dec 2024 16:11:30 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q9b4ggbu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Dec 2024 16:11:30 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNEe4gv020602;
+	Mon, 23 Dec 2024 16:11:30 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43p8cy6ee0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Dec 2024 16:11:30 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BNGBTlK27394700
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Dec 2024 16:11:29 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5871C5805A;
+	Mon, 23 Dec 2024 16:11:29 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E12A75803F;
+	Mon, 23 Dec 2024 16:11:27 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.4.210])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 23 Dec 2024 16:11:27 +0000 (GMT)
+Message-ID: <984b472672b4ff4b93963700e9c52dc873ea1924.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v3 02/13] certs: Introduce ability to link to a
+ system key
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Eric Snowberg <eric.snowberg@oracle.com>,
+        linux-security-module@vger.kernel.org
+Cc: dhowells@redhat.com, dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, ardb@kernel.org, jarkko@kernel.org,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, mic@digikod.net,
+        casey@schaufler-ca.com, stefanb@linux.ibm.com, ebiggers@kernel.org,
+        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Date: Mon, 23 Dec 2024 11:11:27 -0500
+In-Reply-To: <20241017155516.2582369-3-eric.snowberg@oracle.com>
+References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
+	 <20241017155516.2582369-3-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemh100016.china.huawei.com (7.202.181.102)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zWC_HwY6eOMjnFjJIxS35vwJKxpFNaBC
+X-Proofpoint-GUID: t9XBt8-Af9dxcZVpdvCwK2uRSMsNNu_j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ mlxscore=0 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412230143
 
-Removing unneeded mm includes in kernel/sysctl.c.
+On Thu, 2024-10-17 at 09:55 -0600, Eric Snowberg wrote:
+> Introduce system_key_link(), a new function to allow a keyring to link
+> to a key contained within one of the system keyrings (builtin, secondary,
+> or platform). Depending on how the kernel is built, if the machine
+> keyring is available, it will be checked as well, since it is linked to
+> the secondary keyring. If the asymmetric key id matches a key within one
+> of these system keyrings, the matching key is linked into the passed in
+> keyring.
+>=20
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 
-Signed-off-by: Kaixiong Yu <yukaixiong@huawei.com>
-Reviewed-by: Kees Cook <kees@kernel.org>
----
- kernel/sysctl.c | 6 ------
- 1 file changed, 6 deletions(-)
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index cebd0ef5d19d..aece984bee19 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -20,8 +20,6 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/mm.h>
--#include <linux/slab.h>
- #include <linux/sysctl.h>
- #include <linux/bitmap.h>
- #include <linux/signal.h>
-@@ -30,7 +28,6 @@
- #include <linux/proc_fs.h>
- #include <linux/security.h>
- #include <linux/ctype.h>
--#include <linux/kmemleak.h>
- #include <linux/filter.h>
- #include <linux/fs.h>
- #include <linux/init.h>
-@@ -41,7 +38,6 @@
- #include <linux/highuid.h>
- #include <linux/writeback.h>
- #include <linux/ratelimit.h>
--#include <linux/hugetlb.h>
- #include <linux/initrd.h>
- #include <linux/key.h>
- #include <linux/times.h>
-@@ -52,13 +48,11 @@
- #include <linux/reboot.h>
- #include <linux/ftrace.h>
- #include <linux/perf_event.h>
--#include <linux/oom.h>
- #include <linux/kmod.h>
- #include <linux/capability.h>
- #include <linux/binfmts.h>
- #include <linux/sched/sysctl.h>
- #include <linux/mount.h>
--#include <linux/userfaultfd_k.h>
- #include <linux/pid.h>
- 
- #include "../lib/kstrtox.h"
--- 
-2.34.1
+> ---
+>  certs/system_keyring.c        | 30 ++++++++++++++++++++++++++++++
+>  include/keys/system_keyring.h |  7 ++++++-
+>  2 files changed, 36 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index e344cee10d28..4abee7514442 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -20,6 +20,9 @@
+>  static struct key *builtin_trusted_keys;
+>  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+>  static struct key *secondary_trusted_keys;
+> +#define system_trusted_keys secondary_trusted_keys
+> +#else
+> +#define system_trusted_keys builtin_trusted_keys
+>  #endif
+>  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
+>  static struct key *machine_trusted_keys;
+> @@ -420,3 +423,30 @@ void __init set_platform_trusted_keys(struct key *ke=
+yring)
+>  	platform_trusted_keys =3D keyring;
+>  }
+>  #endif
+> +
+> +/**
+> + * system_key_link - Link to a system key
+> + * @keyring: The keyring to link into
+> + * @id: The asymmetric key id to look for in the system keyring
+> + *
+> + * Search the system keyrings to see if one of them contains a matching =
+"id".
+> + * If there is a match, link the key into "keyring".  System keyrings al=
+ways
+> + * includes the builtin. If any of the following keyrings are enabled:
+> + * secondary, machine, and platform they are searched as well.
+> + */
+> +int system_key_link(struct key *keyring, struct asymmetric_key_id *id)
+> +{
+> +	struct key *key;
+> +
+> +	key =3D find_asymmetric_key(system_trusted_keys, id, NULL, NULL, false)=
+;
+> +	if (!IS_ERR(key))
+> +		return key_link(keyring, key);
+> +
+> +	if (platform_trusted_keys) {
+> +		key =3D find_asymmetric_key(platform_trusted_keys, id, NULL, NULL, fal=
+se);
+> +		if (!IS_ERR(key))
+> +			return key_link(keyring, key);
+> +	}
+> +
+> +	return -ENOKEY;
+> +}
+> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.=
+h
+> index 8365adf842ef..b47ac8e2001a 100644
+> --- a/include/keys/system_keyring.h
+> +++ b/include/keys/system_keyring.h
+> @@ -9,6 +9,7 @@
+>  #define _KEYS_SYSTEM_KEYRING_H
+> =20
+>  #include <linux/key.h>
+> +struct asymmetric_key_id;
+> =20
+>  enum blacklist_hash_type {
+>  	/* TBSCertificate hash */
+> @@ -28,7 +29,7 @@ int restrict_link_by_digsig_builtin(struct key *dest_ke=
+yring,
+>  				    const union key_payload *payload,
+>  				    struct key *restriction_key);
+>  extern __init int load_module_cert(struct key *keyring);
+> -
+> +extern int system_key_link(struct key *keyring, struct asymmetric_key_id=
+ *id);
+>  #else
+>  #define restrict_link_by_builtin_trusted restrict_link_reject
+>  #define restrict_link_by_digsig_builtin restrict_link_reject
+> @@ -38,6 +39,10 @@ static inline __init int load_module_cert(struct key *=
+keyring)
+>  	return 0;
+>  }
+> =20
+> +static inline int system_key_link(struct key *keyring, struct asymmetric=
+_key_id *id)
+> +{
+> +	return 0;
+> +}
+>  #endif
+> =20
+>  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
 
 
