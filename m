@@ -1,90 +1,173 @@
-Return-Path: <linux-security-module+bounces-7376-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7378-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F98D9FE2AE
-	for <lists+linux-security-module@lfdr.de>; Mon, 30 Dec 2024 06:48:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D87D9FE2F8
+	for <lists+linux-security-module@lfdr.de>; Mon, 30 Dec 2024 07:43:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C334D161620
-	for <lists+linux-security-module@lfdr.de>; Mon, 30 Dec 2024 05:48:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCD613A1D03
+	for <lists+linux-security-module@lfdr.de>; Mon, 30 Dec 2024 06:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B084F15FD01;
-	Mon, 30 Dec 2024 05:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 186D7165F16;
+	Mon, 30 Dec 2024 06:43:29 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A121487FA
-	for <linux-security-module@vger.kernel.org>; Mon, 30 Dec 2024 05:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189CAD530;
+	Mon, 30 Dec 2024 06:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735537684; cv=none; b=gLHF9qJSVuv+I46IJ381uV6tc9jfdwHEKE/t4im6u+ReAUBQAfvlNLw1uxHMeQTQ7nUI7QorW3fTq1y5u2VQOUzzsla67IRoMAclxqdFv2vcN47IltT8k34d3l6KPBGtAbijyMTW4VT5ssFPEaqshCBhOBqQeLZj9PwlhoKaK50=
+	t=1735541009; cv=none; b=QSrf1gzgEn5HxVpIjVrnr3JzcB+eSZJXFFYZyGD+6TZZqyWvVTda7CdzklCsJAAB7VWjkSkXwGnHEz7v6GdfkU/xRsuzL+KaobfqJkghnuaSKiYcfDCT0g+OSuQ3110vrU/mozizVwU3EAoZY6xtucKSLTuoa9QlVoKiGzp3rKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735537684; c=relaxed/simple;
-	bh=X/pTaxeY9uxzixcgUNMI8spaGnMaud+VI8PLVKwD3QU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=RHdaiuX/afG2E6ajDy1WWnq1116byk4+JUl9/ARZXeS9FfGXAgCteFzL1ME+ZM02YiQFvDqBDoyMFx0DMOM7IOFuyJNXUNxJZEOjW2P2ED0nKNyx6zG/Gjj9HNsUay8RQIlG18cQw8CUWFZh0ORZFY1+mnET3nIheJe4KCJ//Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-844db107601so737628439f.2
-        for <linux-security-module@vger.kernel.org>; Sun, 29 Dec 2024 21:48:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735537682; x=1736142482;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XEn0TNgC+Egj9+u1OPA67mOeXDAmTFT/Bzf3azKUXZE=;
-        b=oseH7iDlwFHq6THqmgwe3gDOyhwFYhjy/VzIlfr1nEHO86H03eVaVxMaCaP/dRnQal
-         dT2Vhdp4Y7JsZ8+TqPHHvC+Q+aFB+57sFHvxaOvqhSzc4VuYKFPWLwTwr4JqM6v52MjV
-         337TXz5ixJTc5emKubkqjN2+AgFO2lSZ3Hc+ToOyplUpd5J+gGgioQgrc7RIWjqs7ZJt
-         4UGwalU7jSFZmgmYBqWPwbD0AIMSOvV07430NMIPZrh57cqUJwNPBffiR0+UeSBJlk2N
-         BJuqmAZjQ7pi+6gI0JHoKQ3gV/2L2bdyfmlIfI22QDWWLDL6N87cKLpP74/ANHtT1+Gi
-         KCFg==
-X-Forwarded-Encrypted: i=1; AJvYcCXy4+a8CrDgB96r1svAl9j2GHsKK2cyOdXAOWfq99+FunZpzW4CpHY2HIAsEKcMfcR86bmg/UcC2CF8kubEgV4MTBnN6WM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybWq5HE5fP3B0ix3zE5gIWnd1vCY7vVpu6dOTEZ0L8nJ9LMwqC
-	GQtsDIXcXYYJwS+/657iNCGM5EvAs3h2mHjqiLqra5IKerjFqDsH+519gzMRqlUWp24VIksysGX
-	RLiK8nzotUX7DVXs8wga8il7fz7+OBIJv5dcw6+O5CdejfH/uqH3bpXY=
-X-Google-Smtp-Source: AGHT+IHNSi+yiedUS+vS8rNLSbjMlJ+TTOLzwjGT3CV4B+A5XArc7fz0pVC+9I6xjxqhhAqh1llINQUlH7F7e8BJC+NA3MUyrTVG
+	s=arc-20240116; t=1735541009; c=relaxed/simple;
+	bh=hgtYLPXFw9jFNSs9BsfEAhODWPHNf7RSkc7FIyqxQfQ=;
+	h=Subject:To:References:CC:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=QsnHQEWNB6gG5fo6VylF9HHJxj5hxbam521Vrnvi/3D/CHrRhHXXD9snLmWYkxV+S5NfYFIXFIsQwaAr0JPBo5HMH+Zj2gjA9cBBU5xiGF+YRfTtRwLMTB4slVi0iv36tre6I9rPGPTOO8XYOUsN82W8AlfNXXccdHmBBhck1jY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4YM60M4PbVz1W3F6;
+	Mon, 30 Dec 2024 14:39:47 +0800 (CST)
+Received: from kwepemh100016.china.huawei.com (unknown [7.202.181.102])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7F47D140382;
+	Mon, 30 Dec 2024 14:43:17 +0800 (CST)
+Received: from [10.174.179.93] (10.174.179.93) by
+ kwepemh100016.china.huawei.com (7.202.181.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 30 Dec 2024 14:43:13 +0800
+Subject: Re: [PATCH v4 -next 13/15] x86: vdso: move the sysctl to
+ arch/x86/entry/vdso/vdso32-setup.c
+To: Brian Gerst <brgerst@gmail.com>
+References: <20241228145746.2783627-1-yukaixiong@huawei.com>
+ <20241228145746.2783627-14-yukaixiong@huawei.com>
+ <CAMzpN2hf-CFpO6x58aDK_FX_6C2MBKh1g7PdV4Y=ypaeUNVfRw@mail.gmail.com>
+CC: <akpm@linux-foundation.org>, <mcgrof@kernel.org>,
+	<ysato@users.sourceforge.jp>, <dalias@libc.org>,
+	<glaubitz@physik.fu-berlin.de>, <luto@kernel.org>, <tglx@linutronix.de>,
+	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+	<hpa@zytor.com>, <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+	<jack@suse.cz>, <kees@kernel.org>, <j.granados@samsung.com>,
+	<willy@infradead.org>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
+	<lorenzo.stoakes@oracle.com>, <trondmy@kernel.org>, <anna@kernel.org>,
+	<chuck.lever@oracle.com>, <jlayton@kernel.org>, <neilb@suse.de>,
+	<okorniev@redhat.com>, <Dai.Ngo@oracle.com>, <tom@talpey.com>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
+	<linux-sh@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-nfs@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-security-module@vger.kernel.org>, <dhowells@redhat.com>,
+	<haifeng.xu@shopee.com>, <baolin.wang@linux.alibaba.com>,
+	<shikemeng@huaweicloud.com>, <dchinner@redhat.com>, <bfoster@redhat.com>,
+	<souravpanda@google.com>, <hannes@cmpxchg.org>, <rientjes@google.com>,
+	<pasha.tatashin@soleen.com>, <david@redhat.com>, <ryan.roberts@arm.com>,
+	<ying.huang@intel.com>, <yang@os.amperecomputing.com>,
+	<zev@bewilderbeest.net>, <serge@hallyn.com>, <vegard.nossum@oracle.com>,
+	<wangkefeng.wang@huawei.com>
+From: yukaixiong <yukaixiong@huawei.com>
+Message-ID: <3ed73b8d-1080-941b-ce6a-2d742b078193@huawei.com>
+Date: Mon, 30 Dec 2024 14:43:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:6004:b0:844:caac:ad61 with SMTP id
- ca18e2360f4ac-8499e6c4d75mr2967592739f.13.1735537682521; Sun, 29 Dec 2024
- 21:48:02 -0800 (PST)
-Date: Sun, 29 Dec 2024 21:48:02 -0800
-In-Reply-To: <PUZPR04MB6316D814E4CF26B2A62EB24381092@PUZPR04MB6316.apcprd04.prod.outlook.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67723412.050a0220.226966.00cf.GAE@google.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] INFO: task hung in
- process_measurement (2)
-From: syzbot <syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com>
-To: linkinjeon@kernel.org, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	sj1557.seo@samsung.com, syzkaller-bugs@googlegroups.com, yuezhang.mo@sony.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAMzpN2hf-CFpO6x58aDK_FX_6C2MBKh1g7PdV4Y=ypaeUNVfRw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggpeml100003.china.huawei.com (7.185.36.120) To
+ kwepemh100016.china.huawei.com (7.202.181.102)
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
-Tested-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
+On 2024/12/30 7:05, Brian Gerst wrote:
+> On Sat, Dec 28, 2024 at 10:17 AM Kaixiong Yu <yukaixiong@huawei.com> wrote:
+>> When CONFIG_X86_32 is defined and CONFIG_UML is not defined,
+>> vdso_enabled belongs to arch/x86/entry/vdso/vdso32-setup.c.
+>> So, move it into its own file.
+>>
+>> Before this patch, vdso_enabled was allowed to be set to
+>> a value exceeding 1 on x86_32 architecture. After this patch is
+>> applied, vdso_enabled is not permitted to set the value more than 1.
+>> It does not matter, because according to the function load_vdso32(),
+>> only vdso_enabled is set to 1, VDSO would be enabled. Other values
+>> all mean "disabled". The same limitation could be seen in the
+>> function vdso32_setup().
+>>
+>> Signed-off-by: Kaixiong Yu <yukaixiong@huawei.com>
+>> Reviewed-by: Kees Cook <kees@kernel.org>
+>> ---
+>> v4:
+>>   - const qualify struct ctl_table vdso_table
+>> ---
+>> ---
+>>   arch/x86/entry/vdso/vdso32-setup.c | 16 +++++++++++-----
+>>   kernel/sysctl.c                    |  8 +-------
+>>   2 files changed, 12 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/arch/x86/entry/vdso/vdso32-setup.c b/arch/x86/entry/vdso/vdso32-setup.c
+>> index 76e4e74f35b5..f71625f99bf9 100644
+>> --- a/arch/x86/entry/vdso/vdso32-setup.c
+>> +++ b/arch/x86/entry/vdso/vdso32-setup.c
+>> @@ -51,15 +51,17 @@ __setup("vdso32=", vdso32_setup);
+>>   __setup_param("vdso=", vdso_setup, vdso32_setup, 0);
+>>   #endif
+>>
+>> -#ifdef CONFIG_X86_64
+>>
+>>   #ifdef CONFIG_SYSCTL
+>> -/* Register vsyscall32 into the ABI table */
+>>   #include <linux/sysctl.h>
+>>
+>> -static struct ctl_table abi_table2[] = {
+>> +static const struct ctl_table vdso_table[] = {
+>>          {
+>> +#ifdef CONFIG_X86_64
+>>                  .procname       = "vsyscall32",
+>> +#elif (defined(CONFIG_X86_32) && !defined(CONFIG_UML))
+> vdso32-setup,.c is not used when building UML, so this can be reduced
+> to "#else".
+>
+>> +               .procname       = "vdso_enabled",
+>> +#endif
+>>                  .data           = &vdso32_enabled,
+>>                  .maxlen         = sizeof(int),
+>>                  .mode           = 0644,
+>> @@ -71,10 +73,14 @@ static struct ctl_table abi_table2[] = {
+>>
+>>   static __init int ia32_binfmt_init(void)
+>>   {
+>> -       register_sysctl("abi", abi_table2);
+>> +#ifdef CONFIG_X86_64
+>> +       /* Register vsyscall32 into the ABI table */
+>> +       register_sysctl("abi", vdso_table);
+>> +#elif (defined(CONFIG_X86_32) && !defined(CONFIG_UML))
+> Same as above.
+>
+>
+>
+>> +       register_sysctl_init("vm", vdso_table);
+>> +#endif
+>>          return 0;
+>>   }
+>>   __initcall(ia32_binfmt_init);
+>>   #endif /* CONFIG_SYSCTL */
+>>
+>> -#endif /* CONFIG_X86_64 */
+>
+> Brian Gerst
+> .
+Hello all；
 
-Tested on:
+I want to confirm that I should send a new patch series, such as "PATCH 
+v5 -next"， or just modify this patch by
+"git send-email -in-reply-to xxxxx"，or the maintainer will fix this issue ?
 
-commit:         fc033cf2 Linux 6.13-rc5
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=155a6818580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba7cde9482d6bb6
-dashboard link: https://syzkaller.appspot.com/bug?extid=1de5a37cb85a2d536330
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=162126df980000
-
-Note: testing is done by a robot and is best-effort only.
 
