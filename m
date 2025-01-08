@@ -1,48 +1,48 @@
-Return-Path: <linux-security-module+bounces-7484-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7490-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 926CAA0607B
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:45:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE360A0608C
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:46:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E3CF1673AC
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:45:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A52F67A285B
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E974E1FFC60;
-	Wed,  8 Jan 2025 15:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32AAE20126C;
+	Wed,  8 Jan 2025 15:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="vMoi7bzn"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="EE6astl+"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
+Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [185.125.25.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBAE1FF7BF
-	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5718A200127
+	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736351045; cv=none; b=mb4McsDFzQTeUZlvl4Uh/deV6LnXOZY81i1nUDn/PfJuLJI8MuWJbcW7YmY1XRZBs2cH7zju8vR6mqIwd/HtvQGkua1xxJhIgeK0zEHIrtSXQHgxq9ty0tHNtNBgBtKDd1In+7VAwG22uqKGrVtlhKA4qwcMPK4gjcJ5596buyE=
+	t=1736351054; cv=none; b=BLWuIUOGODdwJinqR3dW67eLmeiuzZGY/Aia8JmrSNxJfa30BqWVMrL8Wvn0PZkpSpk9KDnIY6hMb1zJKHQVkMnvjbrdbCZSai5u8buL8uAnGWx44dStVJHCzjWcn+x67RsG2wHWe0wmBrfu99bipYOk2hsroE8nynuzx/1wpoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736351045; c=relaxed/simple;
-	bh=sIMzLxtiqYnuIL+sirssPezjol92I2zFln5U2PbP2Bs=;
+	s=arc-20240116; t=1736351054; c=relaxed/simple;
+	bh=7ibfBYEi6f3gRg6pygE5JOGwb52bRToRkj9Kef1B8ek=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bsPKywWuiJWiCkGlAEwJ3hENaWELQK9XoK+4A2802XLrPGaefpHOaXhkBw0SKpF2tn/wNsh7aCTTq7Ua6QIUXwV3JiVoM0K1LEY60PeVYql99eFY2OBLgtufbtC2GMsJ6BjVO38Rt1TjTiGU9hE6yyLkNMIiwAb2ZG8jU7AnsaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=vMoi7bzn; arc=none smtp.client-ip=83.166.143.168
+	 MIME-Version:Content-Type; b=Ve68zjQvses1QQVJ+WFTQxLlnIWO1wpfkFPzCTawUgZ2QPUwpvUQHKrq8b1zGR2Eg+HK/7AdhhTxOzecYLL1oqTw6CkNf1VLehDm9QCRqJ6EMzkdYE/FIsSXS1yAxQEFjX5smUqG9rZCQHc/PR/SpvEaPTg0fM5I4/mlSpjczxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=EE6astl+; arc=none smtp.client-ip=185.125.25.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsf971Xhz4JR;
-	Wed,  8 Jan 2025 16:44:01 +0100 (CET)
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfC2vR0zrLS;
+	Wed,  8 Jan 2025 16:44:03 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736351041;
-	bh=sA3tQ0E1xt/REioAAG6B7sH7UGS9WSxhmY0Puu/KnBg=;
+	s=20191114; t=1736351043;
+	bh=St27lDxiIu3v5ST9RZRvjuRVlErWHof4RK6UwUhVE6s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vMoi7bznWU0HGrjEeznEs60tb3rtDsKVrjjUa6ObJD27315eokYxbPV1PUr4uWmTx
-	 zrTZIELE90PHk+zYE6wA2OJv1liUP0SOPUyIIj17WhDYZhyxpxjQlkhq1UhVzT771T
-	 Ae1S2T52dEiHbsKx/BfbA4OZjhp++0XINzAauuH8=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsf8725Gzs0d;
-	Wed,  8 Jan 2025 16:44:00 +0100 (CET)
+	b=EE6astl+NKDQZY4iKCq9GAxWqt3IG1EENFRkpE8H4fDeq6O/LM8chyhOGtDypQiPq
+	 d/hSPBLSQ9cJyWAPawwpK0HiukFyXm9zAHfl4hHdcaOfIbMxbmVGYDN2sFqhjkzChJ
+	 ayrLksfAHMq35lCSixBfhEwAFr4/7LitgPrcg73I=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfB4Ypyz2F3;
+	Wed,  8 Jan 2025 16:44:02 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -72,9 +72,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v4 10/30] landlock: Log mount-related denials
-Date: Wed,  8 Jan 2025 16:43:18 +0100
-Message-ID: <20250108154338.1129069-11-mic@digikod.net>
+Subject: [PATCH v4 11/30] landlock: Align partial refer access checks with final ones
+Date: Wed,  8 Jan 2025 16:43:19 +0100
+Message-ID: <20250108154338.1129069-12-mic@digikod.net>
 In-Reply-To: <20250108154338.1129069-1-mic@digikod.net>
 References: <20250108154338.1129069-1-mic@digikod.net>
 Precedence: bulk
@@ -87,235 +87,76 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add audit support for sb_mount, move_mount, sb_umount, sb_remount, and
-sb_pivot_root hooks.
+Fix a logical issue that could have been visible if the source or the
+destination of a rename/link action was allowed for either the source or
+the destination but not both.  However, this logical bug is unreachable
+because either:
+- the rename/link action is allowed by the access rights tied to the
+  same mount point (without relying on access rights in a parent mount
+  point) and the access request is allowed (i.e. allow_parent1 and
+  allow_parent2 are true in current_check_refer_path),
+- or a common rule in a parent mount point updates the access check for
+  the source and the destination (cf. is_access_to_paths_allowed).
 
-The new related blocker is "fs.change_layout".
+See the following layout1.refer_part_mount_tree_is_allowed test that
+work with and without this fix.
 
-Add and use a new landlock_match_layer_level() helper.
-
-Audit event sample:
-
-  type=LANDLOCK_DENY msg=audit(1729738800.349:44): domain=195ba459b blockers=fs.change_layout name="/" dev="tmpfs" ino=1
+This fix does not impact current code but it is required for the audit
+support.
 
 Cc: Günther Noack <gnoack@google.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250108154338.1129069-11-mic@digikod.net
+Link: https://lore.kernel.org/r/20250108154338.1129069-12-mic@digikod.net
 ---
-
-Changes since v3:
-- Cosmetic change to the "fs.change_layout" name.
 
 Changes since v2:
-- Log the domain that denied the action because not all layers block FS
-  layout changes.
-- Fix landlock_match_layer_level().
-
-Changes since v1:
-- Rebased on the TCP patch series.
-- Don't log missing permissions, only domain layer, and then remove the
-  permission word (suggested by Günther)
+- New patch.
 ---
- security/landlock/audit.c   |  3 ++
- security/landlock/audit.h   |  1 +
- security/landlock/fs.c      | 64 ++++++++++++++++++++++++++++++++++---
- security/landlock/ruleset.h | 31 ++++++++++++++++++
- 4 files changed, 94 insertions(+), 5 deletions(-)
+ security/landlock/fs.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-index ccc591146f8a..aae93b2c994b 100644
---- a/security/landlock/audit.c
-+++ b/security/landlock/audit.c
-@@ -20,6 +20,9 @@ static const char *get_blocker(const enum landlock_request_type type)
- 	switch (type) {
- 	case LANDLOCK_REQUEST_PTRACE:
- 		return "ptrace";
-+
-+	case LANDLOCK_REQUEST_FS_CHANGE_LAYOUT:
-+		return "fs.change_layout";
- 	}
- 
- 	WARN_ON_ONCE(1);
-diff --git a/security/landlock/audit.h b/security/landlock/audit.h
-index 7bc67ca2e470..745dcf7b1b6d 100644
---- a/security/landlock/audit.h
-+++ b/security/landlock/audit.h
-@@ -15,6 +15,7 @@
- 
- enum landlock_request_type {
- 	LANDLOCK_REQUEST_PTRACE = 1,
-+	LANDLOCK_REQUEST_FS_CHANGE_LAYOUT,
- };
- 
- /*
 diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 9779170d9199..171012efb559 100644
+index 171012efb559..ddadc465581e 100644
 --- a/security/landlock/fs.c
 +++ b/security/landlock/fs.c
-@@ -23,6 +23,7 @@
- #include <linux/kernel.h>
- #include <linux/limits.h>
- #include <linux/list.h>
-+#include <linux/lsm_audit.h>
- #include <linux/lsm_hooks.h>
- #include <linux/mount.h>
- #include <linux/namei.h>
-@@ -37,6 +38,7 @@
- #include <uapi/linux/landlock.h>
+@@ -567,6 +567,12 @@ static void test_no_more_access(struct kunit *const test)
+ #undef NMA_TRUE
+ #undef NMA_FALSE
  
- #include "access.h"
-+#include "audit.h"
- #include "common.h"
- #include "cred.h"
- #include "fs.h"
-@@ -1301,6 +1303,38 @@ static void hook_sb_delete(struct super_block *const sb)
- 		       !atomic_long_read(&landlock_superblock(sb)->inode_refs));
- }
- 
-+static void
-+log_fs_change_layout_path(const struct landlock_ruleset *const domain,
-+			  const struct path *const path)
++static bool is_layer_masks_allowed(
++	layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCESS_FS])
 +{
-+	const struct landlock_request request = {
-+		.type = LANDLOCK_REQUEST_FS_CHANGE_LAYOUT,
-+		.audit = {
-+			.type = LSM_AUDIT_DATA_PATH,
-+			.u.path = *path,
-+		},
-+		.layer_plus_one = landlock_match_layer_level(domain, any_fs) + 1,
-+	};
-+
-+	landlock_log_denial(domain, &request);
-+}
-+
-+static void
-+log_fs_change_layout_dentry(const struct landlock_ruleset *const domain,
-+			    struct dentry *const dentry)
-+{
-+	const struct landlock_request request = {
-+		.type = LANDLOCK_REQUEST_FS_CHANGE_LAYOUT,
-+		.audit = {
-+			.type = LSM_AUDIT_DATA_DENTRY,
-+			.u.dentry = dentry,
-+		},
-+		.layer_plus_one = landlock_match_layer_level(domain, any_fs) + 1,
-+	};
-+
-+	landlock_log_denial(domain, &request);
++	return !memchr_inv(layer_masks, 0, sizeof(*layer_masks));
 +}
 +
  /*
-  * Because a Landlock security policy is defined according to the filesystem
-  * topology (i.e. the mount namespace), changing it may grant access to files
-@@ -1323,16 +1357,24 @@ static int hook_sb_mount(const char *const dev_name,
- 			 const struct path *const path, const char *const type,
- 			 const unsigned long flags, void *const data)
- {
--	if (!get_current_fs_domain())
-+	const struct landlock_ruleset *const dom = get_current_fs_domain();
+  * Removes @layer_masks accesses that are not requested.
+  *
+@@ -584,7 +590,8 @@ scope_to_request(const access_mask_t access_request,
+ 
+ 	for_each_clear_bit(access_bit, &access_req, ARRAY_SIZE(*layer_masks))
+ 		(*layer_masks)[access_bit] = 0;
+-	return !memchr_inv(layer_masks, 0, sizeof(*layer_masks));
 +
-+	if (!dom)
- 		return 0;
-+
-+	log_fs_change_layout_path(dom, path);
- 	return -EPERM;
++	return is_layer_masks_allowed(layer_masks);
  }
  
- static int hook_move_mount(const struct path *const from_path,
- 			   const struct path *const to_path)
- {
--	if (!get_current_fs_domain())
-+	const struct landlock_ruleset *const dom = get_current_fs_domain();
-+
-+	if (!dom)
- 		return 0;
-+
-+	log_fs_change_layout_path(dom, to_path);
- 	return -EPERM;
- }
+ #ifdef CONFIG_SECURITY_LANDLOCK_KUNIT_TEST
+@@ -773,9 +780,14 @@ static bool is_access_to_paths_allowed(
+ 	if (WARN_ON_ONCE(domain->num_layers < 1 || !layer_masks_parent1))
+ 		return false;
  
-@@ -1342,15 +1384,23 @@ static int hook_move_mount(const struct path *const from_path,
-  */
- static int hook_sb_umount(struct vfsmount *const mnt, const int flags)
- {
--	if (!get_current_fs_domain())
-+	const struct landlock_ruleset *const dom = get_current_fs_domain();
++	allowed_parent1 = is_layer_masks_allowed(layer_masks_parent1);
 +
-+	if (!dom)
- 		return 0;
+ 	if (unlikely(layer_masks_parent2)) {
+ 		if (WARN_ON_ONCE(!dentry_child1))
+ 			return false;
 +
-+	log_fs_change_layout_dentry(dom, mnt->mnt_root);
- 	return -EPERM;
- }
- 
- static int hook_sb_remount(struct super_block *const sb, void *const mnt_opts)
- {
--	if (!get_current_fs_domain())
-+	const struct landlock_ruleset *const dom = get_current_fs_domain();
++		allowed_parent2 = is_layer_masks_allowed(layer_masks_parent2);
 +
-+	if (!dom)
- 		return 0;
-+
-+	log_fs_change_layout_dentry(dom, sb->s_root);
- 	return -EPERM;
- }
- 
-@@ -1365,8 +1415,12 @@ static int hook_sb_remount(struct super_block *const sb, void *const mnt_opts)
- static int hook_sb_pivotroot(const struct path *const old_path,
- 			     const struct path *const new_path)
- {
--	if (!get_current_fs_domain())
-+	const struct landlock_ruleset *const dom = get_current_fs_domain();
-+
-+	if (!dom)
- 		return 0;
-+
-+	log_fs_change_layout_path(dom, new_path);
- 	return -EPERM;
- }
- 
-diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
-index 39169b6860e3..7dba8bf960f6 100644
---- a/security/landlock/ruleset.h
-+++ b/security/landlock/ruleset.h
-@@ -267,6 +267,37 @@ landlock_get_applicable_domain(const struct landlock_ruleset *const domain,
- 	return NULL;
- }
- 
-+/**
-+ * landlock_match_layer_level - Return the layer level restricting @masks
-+ *
-+ * @domain: Landlock ruleset (used as a domain)
-+ * @masks: access masks
-+ *
-+ * Returns: the number of the layer restricting/handling any right of @access,
-+ * or return 0 (i.e. first layer) otherwise.
-+ */
-+static inline size_t
-+landlock_match_layer_level(const struct landlock_ruleset *const domain,
-+			   const struct access_masks masks)
-+{
-+	const union access_masks_all masks_all = {
-+		.masks = masks,
-+	};
-+	ssize_t layer_level;
-+
-+	for (layer_level = domain->num_layers; layer_level >= 0;
-+	     layer_level--) {
-+		union access_masks_all layer = {
-+			.masks = domain->access_masks[layer_level],
-+		};
-+
-+		if (masks_all.all & layer.all)
-+			return layer_level;
-+	}
-+
-+	return 0;
-+}
-+
- static inline void
- landlock_add_fs_access_mask(struct landlock_ruleset *const ruleset,
- 			    const access_mask_t fs_access_mask,
+ 		/*
+ 		 * For a double request, first check for potential privilege
+ 		 * escalation by looking at domain handled accesses (which are
 -- 
 2.47.1
 
