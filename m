@@ -1,48 +1,48 @@
-Return-Path: <linux-security-module+bounces-7504-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7501-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCA57A060A7
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:50:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17614A0609F
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:49:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FB227A3E7B
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:49:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 161A6167DBA
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:49:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6051205504;
-	Wed,  8 Jan 2025 15:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB9BA204F7E;
+	Wed,  8 Jan 2025 15:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ngm0imtV"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="DOXHg6Bq"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
+Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [83.166.143.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8BF2054E1
-	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48982204C2A
+	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736351075; cv=none; b=CvX9/H0a/Y8P0u1Hfc5kdkBtvzbbLZ11SB30PuT1JwsUywdNYgvS0uLcRklfDhwreTaRoWzS+drPHHOqmqdRCO2Nhk1nzky1bh8xz0IZr3t0bLz+wCakekqM8cQOQh/eyUnTiC0fyoWCdxs5Zg/xn16SBjRfhYn/AMk6NRF5ztg=
+	t=1736351071; cv=none; b=XpovOJASf9dZk2GzyD3tU6n1DaKj0EOv7EFNbWYcmNEQhjr8SuLKrCgPK1dKvDeApG/u2oAHJQOj87mdOOWvvEcaCC/cIAntsGeVws1ffvbEDrzHgI8glrZt2ql4VfBSREypqaV/nPx5IerVC6hHCLdJU3C392Mv/1ZYmXH1370=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736351075; c=relaxed/simple;
-	bh=gr04gmEEgm3mYJS/FkFRKYILFVc7EQJ9YfJe6y01BrU=;
+	s=arc-20240116; t=1736351071; c=relaxed/simple;
+	bh=pW499YWVaRnWVTNaXtUOgQ7lkzGTPh+Wwe+6wiE8Ohg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NHpCnZ0XgAK2Idw1F2dDd7dLul3Ddi7ejtrRDXGys1hMFPMf9qclioR6wXfUQPY1GZGf2+hogcOOViBF+Cuh8gPtL2QgtLePvigM1eO26VQckDSeuY+e6L6iaHU7pLFd4CNwYYFeQL9LHtMbzsSaR1lpv5D8x5yUOaoB41gpyJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ngm0imtV; arc=none smtp.client-ip=84.16.66.174
+	 MIME-Version:Content-Type; b=ii9pn4Vv0J9o+1TUXZQIbDJFH9CL0ixy0t1cv/Eio4Ub06yuOlNHlk+wEGIgBPBwHCBywE+JJA1+IgrOdmaVni3MbEE8ukiU/I49WbfON44ngQAr8lo13TsvzxlT9v6DEFCKGPp04N8+xyDNg5IFl2uchk9T1ek17YyuV1bPoo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=DOXHg6Bq; arc=none smtp.client-ip=83.166.143.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfd2k2nzCjN;
-	Wed,  8 Jan 2025 16:44:25 +0100 (CET)
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfg53yHztsy;
+	Wed,  8 Jan 2025 16:44:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736351065;
-	bh=vYwh4DC0IRpFCSYDmtTUOVM5Ik78zG1VxJIN9X5plHs=;
+	s=20191114; t=1736351067;
+	bh=E2Dmree0e1EpVbxU6ktNYpMoszkVcilFnXqplxTgABI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ngm0imtVY1ebrW1n+uP0tClXWfpeHRmzTZxGKGwtoGdMVv0hAvKHKgiwzw0zOBn29
-	 17DwbAeZOHGivGe2YaZCdlJjhB++Rpb0cWxrdyS7mt7HPKEWIax+TXDWEdkY/7sR1k
-	 kebTljqiFyCXds2XojGkB7PY1xfhronMPD21uuDA=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfc4C0wzHsP;
-	Wed,  8 Jan 2025 16:44:24 +0100 (CET)
+	b=DOXHg6Bq2lz9wQDlSrRroKlF694ur8X7I+fK9hTTfl6RY1QEIIcUSgEyp3YDpMgzD
+	 u1OsD3fGRqXNK/Ab7xlfsoV2Orctoi3WoEIvjIobIUyifJVOFMzp5L/izMKAOmo1UO
+	 i2r9Z03M1kn5GZzh6jydRGUaLvB6v1WwagHwGOpY=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfd6q13zFc4;
+	Wed,  8 Jan 2025 16:44:25 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -71,10 +71,14 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	Tyler Hicks <code@tyhicks.com>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v4 26/30] landlock: Export and rename landlock_get_inode_object()
-Date: Wed,  8 Jan 2025 16:43:34 +0100
-Message-ID: <20250108154338.1129069-27-mic@digikod.net>
+	linux-security-module@vger.kernel.org,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	Josef Bacik <josef@toxicpanda.com>
+Subject: [PATCH v4 27/30] fs: Add iput() cleanup helper
+Date: Wed,  8 Jan 2025 16:43:35 +0100
+Message-ID: <20250108154338.1129069-28-mic@digikod.net>
 In-Reply-To: <20250108154338.1129069-1-mic@digikod.net>
 References: <20250108154338.1129069-1-mic@digikod.net>
 Precedence: bulk
@@ -87,110 +91,56 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-This will be used by security/landlock/audit.c in a following commit.
+Add a simple scope-based helper to put an inode reference, similar to
+the fput() helper.
 
-Cc: Günther Noack <gnoack@google.com>
+This is used in a following commit.
+
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250108154338.1129069-27-mic@digikod.net
+Link: https://lore.kernel.org/r/20250108154338.1129069-28-mic@digikod.net
 ---
 
 Changes since v3:
 - New patch.
 ---
- security/landlock/fs.c | 22 ++++++++++++----------
- security/landlock/fs.h |  2 ++
- 2 files changed, 14 insertions(+), 10 deletions(-)
+ include/linux/fs.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 6404961ecbc7..4b718b669ebe 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -74,13 +74,14 @@ static void release_inode(struct landlock_object *const object)
- 	spin_unlock(&object->lock);
- 	/*
- 	 * Because object->underobj was not NULL, hook_sb_delete() and
--	 * get_inode_object() guarantee that it is safe to reset
-+	 * landlock_get_inode_object() guarantee that it is safe to reset
- 	 * landlock_inode(inode)->object while it is not NULL.  It is therefore
- 	 * not necessary to lock inode->i_lock.
- 	 */
- 	rcu_assign_pointer(landlock_inode(inode)->object, NULL);
- 	/*
--	 * Now, new rules can safely be tied to @inode with get_inode_object().
-+	 * Now, new rules can safely be tied to @inode with
-+	 * landlock_get_inode_object().
- 	 */
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 7e29433c5ecc..bd5a28b0871f 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -47,6 +47,8 @@
+ #include <linux/rw_hint.h>
+ #include <linux/file_ref.h>
+ #include <linux/unicode.h>
++#include <linux/cleanup.h>
++#include <linux/err.h>
  
- 	iput(inode);
-@@ -259,7 +260,7 @@ update_request(struct landlock_request *const request,
+ #include <asm/byteorder.h>
+ #include <uapi/linux/fs.h>
+@@ -2698,6 +2700,8 @@ extern void iput(struct inode *);
+ int inode_update_timestamps(struct inode *inode, int flags);
+ int generic_update_time(struct inode *, int);
  
- /* Ruleset management */
- 
--static struct landlock_object *get_inode_object(struct inode *const inode)
-+struct landlock_object *landlock_get_inode_object(struct inode *const inode)
- {
- 	struct landlock_object *object, *new_object;
- 	struct landlock_inode_security *inode_sec = landlock_inode(inode);
-@@ -291,7 +292,7 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
- 		return new_object;
- 
- 	/*
--	 * Protects against concurrent calls to get_inode_object() or
-+	 * Protects against concurrent calls to landlock_get_inode_object() or
- 	 * hook_sb_delete().
- 	 */
- 	spin_lock(&inode->i_lock);
-@@ -347,7 +348,8 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
- 	/* Transforms relative access rights to absolute ones. */
- 	access_rights |= LANDLOCK_MASK_ACCESS_FS &
- 			 ~landlock_get_fs_access_mask(ruleset, 0);
--	id.key.object = get_inode_object(d_backing_inode(path->dentry));
-+	id.key.object =
-+		landlock_get_inode_object(d_backing_inode(path->dentry));
- 	if (IS_ERR(id.key.object))
- 		return PTR_ERR(id.key.object);
- 	mutex_lock(&ruleset->lock);
-@@ -1288,7 +1290,7 @@ static void hook_sb_delete(struct super_block *const sb)
- 
- 		/*
- 		 * Protects against concurrent modification of inode (e.g.
--		 * from get_inode_object()).
-+		 * from landlock_get_inode_object()).
- 		 */
- 		spin_lock(&inode->i_lock);
- 		/*
-@@ -1327,16 +1329,16 @@ static void hook_sb_delete(struct super_block *const sb)
- 
- 			/*
- 			 * Because object->underobj was not NULL,
--			 * release_inode() and get_inode_object() guarantee
--			 * that it is safe to reset
-+			 * release_inode() and landlock_get_inode_object()
-+			 * guarantee that it is safe to reset
- 			 * landlock_inode(inode)->object while it is not NULL.
- 			 * It is therefore not necessary to lock inode->i_lock.
- 			 */
- 			rcu_assign_pointer(landlock_inode(inode)->object, NULL);
- 			/*
- 			 * At this point, we own the ihold() reference that was
--			 * originally set up by get_inode_object() and the
--			 * __iget() reference that we just set in this loop
-+			 * originally set up by landlock_get_inode_object() and
-+			 * the __iget() reference that we just set in this loop
- 			 * walk.  Therefore the following call to iput() will
- 			 * not sleep nor drop the inode because there is now at
- 			 * least two references to it.
-diff --git a/security/landlock/fs.h b/security/landlock/fs.h
-index 9f52c9b37898..3e428fa51cec 100644
---- a/security/landlock/fs.h
-+++ b/security/landlock/fs.h
-@@ -109,4 +109,6 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
- 			    const struct path *const path,
- 			    access_mask_t access_hierarchy);
- 
-+struct landlock_object *landlock_get_inode_object(struct inode *const inode);
++DEFINE_FREE(iput, struct inode *, if (!IS_ERR_OR_NULL(_T)) iput(_T))
 +
- #endif /* _SECURITY_LANDLOCK_FS_H */
+ /* /sys/fs */
+ extern struct kobject *fs_kobj;
+ 
+@@ -3108,8 +3112,6 @@ static inline bool is_dot_dotdot(const char *name, size_t len)
+ 		(len == 1 || (len == 2 && name[1] == '.'));
+ }
+ 
+-#include <linux/err.h>
+-
+ /* needed for stackable file system support */
+ extern loff_t default_llseek(struct file *file, loff_t offset, int whence);
+ 
 -- 
 2.47.1
 
