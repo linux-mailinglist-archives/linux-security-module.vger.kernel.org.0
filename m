@@ -1,48 +1,48 @@
-Return-Path: <linux-security-module+bounces-7494-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7496-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30053A0609D
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:49:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05030A06097
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFD2A3A806A
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:47:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA04716603A
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5E21FF1B1;
-	Wed,  8 Jan 2025 15:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E098820469E;
+	Wed,  8 Jan 2025 15:44:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="XaQBz8Xn"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="lMTL62Mr"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FFD2036F0
-	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78432040BE
+	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736351060; cv=none; b=MG3gDHTFq3R8v2HMyU/i8lDk/xu1L2RLl0rapuPJDIoB2G8dEcXuvyEXUOeYe2TrFt/nClQ4B1ewUyKw6f8lvAgFf25kqDnlq+7c1BYkp85mFedPVRPbtvGLdUrRBFrZndGGKJ55vJL5mcyDant6uAYTAUGUbJiareh552vX+ng=
+	t=1736351063; cv=none; b=mv+Lu1dSLImEL0sMReJDr56fLoq0nu1SZqKfCjbXgx8xQsOR1S5crmP+KM40WDGCNyNjrmAL/w3pobKtksa1GkBre+qZN3pLUBYdFvxaG96jDaQVjTCbpgBF+GMc/m7aa/foITjI5VdcN+4iqJ0EnQPHgw/Bgap2QtInspxnfNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736351060; c=relaxed/simple;
-	bh=y/wtqJxZmkGaNNbxtbWPEhGfGtFUdjlHTa/P+YkzL4g=;
+	s=arc-20240116; t=1736351063; c=relaxed/simple;
+	bh=ys0gfj0ZPhIrZ71rVw4Hj9YHndpMNBXQDbmI490dfc0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RHOeOl5i2HeEI5NaxD/EDbF7JtqBFfbG6TimeViAtgTkl2vCkAsK3lKaTnpkE+v+CKOc9mPX7lKiY9RszFbvrdLPJxyCgJdOWrTW/urrZ4xvsiLM4/cycmfOs742t18XWMPwGLwPuWycaXnFOgFL+F4jdZJ0yjjHAOP66iI773k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=XaQBz8Xn; arc=none smtp.client-ip=84.16.66.170
+	 MIME-Version:Content-Type; b=TY21x9HaBz26YGRlbA7YZVcXYHt7kwKqGwQkLRE2WzOpFcGID/BCixIfI9Z3isCBvkqY1V3QijW5i/+mrXZhWTVHk47mjLkrEkPjk4RFVpzHSBc0iGBpW2wcvLisByjTJKzypF97Tz+RUGjsrIEPh3w9ojVZTuEcFr41L4hxEpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=lMTL62Mr; arc=none smtp.client-ip=185.125.25.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfS4s6pz7Bw;
-	Wed,  8 Jan 2025 16:44:16 +0100 (CET)
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfV1Yt2zsKj;
+	Wed,  8 Jan 2025 16:44:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736351056;
-	bh=mk13RvEuPQJ/sgasE14gboAmV4076jIAJAJ4kAt2QAU=;
+	s=20191114; t=1736351058;
+	bh=ONxcSYqi3rxpAxp9apstv0/k6UVxQZhru1STqtTkwEs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XaQBz8XnskIBQ6GYys95KRNToEY4Oe2nQDcNQSTetTkHWkhMRiaRGnaF+9ohJmEIq
-	 abudOrENn3fYyR8VJqNbW1L0hUljXGovj1wCXAyIhCogA78wiskmewKFyRhf5QQVZm
-	 lg7g5IYtzJSW8jrRD677CFB1ObGfDSRDi/bbVH1g=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfR5Fl8zsJG;
-	Wed,  8 Jan 2025 16:44:15 +0100 (CET)
+	b=lMTL62MryvWLepFqJJwgv3K7/MG/Xy8fxEzI/J/K14y9NIyKxUnnxaQkGo2ft00oO
+	 eaWinTcw6lRUDG8XZudVeYLuJoZzaOswShJaO8zPqhxJT/qxJlfGVv/KcagLk3oHdg
+	 B+BD+odm/MO1uXbt2KydVWBTi/3kMPXlbGQtxdcY=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfT2msmz4Kh;
+	Wed,  8 Jan 2025 16:44:17 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -72,9 +72,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v4 20/30] selftests/landlock: Fix error message
-Date: Wed,  8 Jan 2025 16:43:28 +0100
-Message-ID: <20250108154338.1129069-21-mic@digikod.net>
+Subject: [PATCH v4 21/30] selftests/landlock: Add wrappers.h
+Date: Wed,  8 Jan 2025 16:43:29 +0100
+Message-ID: <20250108154338.1129069-22-mic@digikod.net>
 In-Reply-To: <20250108154338.1129069-1-mic@digikod.net>
 References: <20250108154338.1129069-1-mic@digikod.net>
 Precedence: bulk
@@ -87,35 +87,145 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-The global variable errno may not be set in test_execute().  Do not use
-it in related error message.
+Extract syscall wrappers to make them usable by standalone binaries (see
+next commit).
 
 Cc: Günther Noack <gnoack@google.com>
-Fixes: e1199815b47b ("selftests/landlock: Add user space tests")
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250108154338.1129069-21-mic@digikod.net
+Link: https://lore.kernel.org/r/20250108154338.1129069-22-mic@digikod.net
 ---
 
 Changes since v3:
 - New patch.
 ---
- tools/testing/selftests/landlock/fs_test.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/testing/selftests/landlock/common.h   | 37 +---------------
+ tools/testing/selftests/landlock/wrappers.h | 47 +++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 36 deletions(-)
+ create mode 100644 tools/testing/selftests/landlock/wrappers.h
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 42ce1e79ba82..a359c0d3107f 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -2011,8 +2011,7 @@ static void test_execute(struct __test_metadata *const _metadata, const int err,
- 	ASSERT_EQ(1, WIFEXITED(status));
- 	ASSERT_EQ(err ? 2 : 0, WEXITSTATUS(status))
- 	{
--		TH_LOG("Unexpected return code for \"%s\": %s", path,
--		       strerror(errno));
-+		TH_LOG("Unexpected return code for \"%s\"", path);
- 	};
- }
+diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
+index 61056fa074bb..8391ab574f64 100644
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -9,17 +9,15 @@
  
+ #include <arpa/inet.h>
+ #include <errno.h>
+-#include <linux/landlock.h>
+ #include <linux/securebits.h>
+ #include <sys/capability.h>
+ #include <sys/socket.h>
+-#include <sys/syscall.h>
+-#include <sys/types.h>
+ #include <sys/un.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+ 
+ #include "../kselftest_harness.h"
++#include "wrappers.h"
+ 
+ #define TMP_DIR "tmp"
+ 
+@@ -30,34 +28,6 @@
+ /* TEST_F_FORK() should not be used for new tests. */
+ #define TEST_F_FORK(fixture_name, test_name) TEST_F(fixture_name, test_name)
+ 
+-#ifndef landlock_create_ruleset
+-static inline int
+-landlock_create_ruleset(const struct landlock_ruleset_attr *const attr,
+-			const size_t size, const __u32 flags)
+-{
+-	return syscall(__NR_landlock_create_ruleset, attr, size, flags);
+-}
+-#endif
+-
+-#ifndef landlock_add_rule
+-static inline int landlock_add_rule(const int ruleset_fd,
+-				    const enum landlock_rule_type rule_type,
+-				    const void *const rule_attr,
+-				    const __u32 flags)
+-{
+-	return syscall(__NR_landlock_add_rule, ruleset_fd, rule_type, rule_attr,
+-		       flags);
+-}
+-#endif
+-
+-#ifndef landlock_restrict_self
+-static inline int landlock_restrict_self(const int ruleset_fd,
+-					 const __u32 flags)
+-{
+-	return syscall(__NR_landlock_restrict_self, ruleset_fd, flags);
+-}
+-#endif
+-
+ static void _init_caps(struct __test_metadata *const _metadata, bool drop_all)
+ {
+ 	cap_t cap_p;
+@@ -250,11 +220,6 @@ struct service_fixture {
+ 	};
+ };
+ 
+-static pid_t __maybe_unused sys_gettid(void)
+-{
+-	return syscall(__NR_gettid);
+-}
+-
+ static void __maybe_unused set_unix_address(struct service_fixture *const srv,
+ 					    const unsigned short index)
+ {
+diff --git a/tools/testing/selftests/landlock/wrappers.h b/tools/testing/selftests/landlock/wrappers.h
+new file mode 100644
+index 000000000000..32963a44876b
+--- /dev/null
++++ b/tools/testing/selftests/landlock/wrappers.h
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Landlock helpers
++ *
++ * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2019-2020 ANSSI
++ * Copyright © 2021-2024 Microsoft Corporation
++ */
++
++#define _GNU_SOURCE
++#include <linux/landlock.h>
++#include <sys/syscall.h>
++#include <sys/types.h>
++#include <unistd.h>
++
++#ifndef landlock_create_ruleset
++static inline int
++landlock_create_ruleset(const struct landlock_ruleset_attr *const attr,
++			const size_t size, const __u32 flags)
++{
++	return syscall(__NR_landlock_create_ruleset, attr, size, flags);
++}
++#endif
++
++#ifndef landlock_add_rule
++static inline int landlock_add_rule(const int ruleset_fd,
++				    const enum landlock_rule_type rule_type,
++				    const void *const rule_attr,
++				    const __u32 flags)
++{
++	return syscall(__NR_landlock_add_rule, ruleset_fd, rule_type, rule_attr,
++		       flags);
++}
++#endif
++
++#ifndef landlock_restrict_self
++static inline int landlock_restrict_self(const int ruleset_fd,
++					 const __u32 flags)
++{
++	return syscall(__NR_landlock_restrict_self, ruleset_fd, flags);
++}
++#endif
++
++static inline pid_t sys_gettid(void)
++{
++	return syscall(__NR_gettid);
++}
 -- 
 2.47.1
 
