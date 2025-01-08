@@ -1,48 +1,48 @@
-Return-Path: <linux-security-module+bounces-7500-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7504-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE250A060A6
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:50:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCA57A060A7
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 16:50:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4CA53A6D18
-	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:48:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FB227A3E7B
+	for <lists+linux-security-module@lfdr.de>; Wed,  8 Jan 2025 15:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4D60204C11;
-	Wed,  8 Jan 2025 15:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6051205504;
+	Wed,  8 Jan 2025 15:44:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="epRy4Xu+"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ngm0imtV"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1D52046B5
-	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8BF2054E1
+	for <linux-security-module@vger.kernel.org>; Wed,  8 Jan 2025 15:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736351067; cv=none; b=oqzgNaaKL5zSzCE+n3WknXcYUO3mlo2E59glGj2H3HLfHch9zOyhv04vRv7PpuI2e4ND6fO2aaZfv5ZOgp6XvGJLjfQw3Ucj5B8/e96VMHh2aNG9WfT7ydFjDCznRa/dz1Cis0bTH2kjO8rVVWk5yPuawTkgGSaquNB2ZgNAahM=
+	t=1736351075; cv=none; b=CvX9/H0a/Y8P0u1Hfc5kdkBtvzbbLZ11SB30PuT1JwsUywdNYgvS0uLcRklfDhwreTaRoWzS+drPHHOqmqdRCO2Nhk1nzky1bh8xz0IZr3t0bLz+wCakekqM8cQOQh/eyUnTiC0fyoWCdxs5Zg/xn16SBjRfhYn/AMk6NRF5ztg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736351067; c=relaxed/simple;
-	bh=6XP/xC3WVZjggEPtm6+uY2nDqA5pCTb9WxLd8yXQQKU=;
+	s=arc-20240116; t=1736351075; c=relaxed/simple;
+	bh=gr04gmEEgm3mYJS/FkFRKYILFVc7EQJ9YfJe6y01BrU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gpZiTsJcNl2lm2niukx1XhZG5UQjcr6l0mm7zM1amyoHaTH+5+i1rW1FlAFN7rqOLq6CXBUAZCtUTIJa6KFGCenHfajKiK1B2h93+CoC3zV4yXcwlXvUU127pAdmqCz/0VeQZe7QnUO54kqlt1bkcYr2zIBokgsjQDyaDbCFUA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=epRy4Xu+; arc=none smtp.client-ip=45.157.188.11
+	 MIME-Version:Content-Type; b=NHpCnZ0XgAK2Idw1F2dDd7dLul3Ddi7ejtrRDXGys1hMFPMf9qclioR6wXfUQPY1GZGf2+hogcOOViBF+Cuh8gPtL2QgtLePvigM1eO26VQckDSeuY+e6L6iaHU7pLFd4CNwYYFeQL9LHtMbzsSaR1lpv5D8x5yUOaoB41gpyJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ngm0imtV; arc=none smtp.client-ip=84.16.66.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfb6h7lzslV;
-	Wed,  8 Jan 2025 16:44:23 +0100 (CET)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YSsfd2k2nzCjN;
+	Wed,  8 Jan 2025 16:44:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736351063;
-	bh=uFtzYGWF8xstOZnxCGiviNFcQ0C9xk8VJGsQEMF8W+w=;
+	s=20191114; t=1736351065;
+	bh=vYwh4DC0IRpFCSYDmtTUOVM5Ik78zG1VxJIN9X5plHs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=epRy4Xu++eO55XgPtBGDshLQNVX9f4ZtiTXgkZX7/tZQZ5ud4NobikIuboRS90l9U
-	 NXH3in2SPI7rknrFGCi5oaXDUJFa7n7ruuIGdIbwJZZQL8d8kBhYOLqZ0bhAoeJKYh
-	 afvijuGBU9mXotYkp0Cjm90gBjYqokln/CLebkW4=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfb1Nd7zJKV;
-	Wed,  8 Jan 2025 16:44:23 +0100 (CET)
+	b=ngm0imtVY1ebrW1n+uP0tClXWfpeHRmzTZxGKGwtoGdMVv0hAvKHKgiwzw0zOBn29
+	 17DwbAeZOHGivGe2YaZCdlJjhB++Rpb0cWxrdyS7mt7HPKEWIax+TXDWEdkY/7sR1k
+	 kebTljqiFyCXds2XojGkB7PY1xfhronMPD21uuDA=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YSsfc4C0wzHsP;
+	Wed,  8 Jan 2025 16:44:24 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Eric Paris <eparis@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -72,9 +72,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v4 25/30] selftests/landlock: Add audit tests for ptrace
-Date: Wed,  8 Jan 2025 16:43:33 +0100
-Message-ID: <20250108154338.1129069-26-mic@digikod.net>
+Subject: [PATCH v4 26/30] landlock: Export and rename landlock_get_inode_object()
+Date: Wed,  8 Jan 2025 16:43:34 +0100
+Message-ID: <20250108154338.1129069-27-mic@digikod.net>
 In-Reply-To: <20250108154338.1129069-1-mic@digikod.net>
 References: <20250108154338.1129069-1-mic@digikod.net>
 Precedence: bulk
@@ -87,191 +87,110 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add tests for all ptrace actions.  This improves all the ptrace tests by
-making sure that the restrictions comes from Landlock, and with the
-expected objects.  These extended tests are like enhanced errno checks
-that make sure Landlock enforcement is consistent.
-
-Test coverage for security/landlock is 93.4% of 1619 lines according to
-gcc/gcov-14.
+This will be used by security/landlock/audit.c in a following commit.
 
 Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250108154338.1129069-26-mic@digikod.net
+Link: https://lore.kernel.org/r/20250108154338.1129069-27-mic@digikod.net
 ---
 
 Changes since v3:
-- Update test coverage.
-
-Changes since v2:
 - New patch.
 ---
- .../testing/selftests/landlock/ptrace_test.c  | 67 +++++++++++++++++--
- 1 file changed, 63 insertions(+), 4 deletions(-)
+ security/landlock/fs.c | 22 ++++++++++++----------
+ security/landlock/fs.h |  2 ++
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/testing/selftests/landlock/ptrace_test.c
-index a19db4d0b3bd..20a1ca7801aa 100644
---- a/tools/testing/selftests/landlock/ptrace_test.c
-+++ b/tools/testing/selftests/landlock/ptrace_test.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-  * Copyright © 2019-2020 ANSSI
-+ * Copyright © 2024-2025 Microsoft Corporation
-  */
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index 6404961ecbc7..4b718b669ebe 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -74,13 +74,14 @@ static void release_inode(struct landlock_object *const object)
+ 	spin_unlock(&object->lock);
+ 	/*
+ 	 * Because object->underobj was not NULL, hook_sb_delete() and
+-	 * get_inode_object() guarantee that it is safe to reset
++	 * landlock_get_inode_object() guarantee that it is safe to reset
+ 	 * landlock_inode(inode)->object while it is not NULL.  It is therefore
+ 	 * not necessary to lock inode->i_lock.
+ 	 */
+ 	rcu_assign_pointer(landlock_inode(inode)->object, NULL);
+ 	/*
+-	 * Now, new rules can safely be tied to @inode with get_inode_object().
++	 * Now, new rules can safely be tied to @inode with
++	 * landlock_get_inode_object().
+ 	 */
  
- #define _GNU_SOURCE
-@@ -17,6 +18,7 @@
- #include <sys/wait.h>
- #include <unistd.h>
+ 	iput(inode);
+@@ -259,7 +260,7 @@ update_request(struct landlock_request *const request,
  
-+#include "audit.h"
- #include "common.h"
+ /* Ruleset management */
  
- /* Copied from security/yama/yama_lsm.c */
-@@ -85,9 +87,27 @@ static int get_yama_ptrace_scope(void)
- 	return ret;
- }
- 
--/* clang-format off */
--FIXTURE(hierarchy) {};
--/* clang-format on */
-+static int matches_log_ptrace(struct __test_metadata *const _metadata,
-+			      int audit_fd, const pid_t opid)
-+{
-+	static const char log_template[] = REGEX_LANDLOCK_PREFIX
-+		" blockers=ptrace opid=%d ocomm=\"ptrace_test\"$";
-+	char log_match[sizeof(log_template) + 10];
-+	int log_match_len;
-+
-+	log_match_len =
-+		snprintf(log_match, sizeof(log_match), log_template, opid);
-+	if (log_match_len > sizeof(log_match))
-+		return -E2BIG;
-+
-+	return audit_match_record(audit_fd, AUDIT_LANDLOCK_DENY, log_match);
-+}
-+
-+FIXTURE(hierarchy)
-+{
-+	struct audit_filter audit_filter;
-+	int audit_fd;
-+};
- 
- FIXTURE_VARIANT(hierarchy)
+-static struct landlock_object *get_inode_object(struct inode *const inode)
++struct landlock_object *landlock_get_inode_object(struct inode *const inode)
  {
-@@ -245,10 +265,16 @@ FIXTURE_VARIANT_ADD(hierarchy, deny_with_forked_domain) {
+ 	struct landlock_object *object, *new_object;
+ 	struct landlock_inode_security *inode_sec = landlock_inode(inode);
+@@ -291,7 +292,7 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
+ 		return new_object;
  
- FIXTURE_SETUP(hierarchy)
- {
-+	disable_caps(_metadata);
-+	set_cap(_metadata, CAP_AUDIT_CONTROL);
-+	self->audit_fd = audit_init_with_exe_filter(&self->audit_filter);
-+	EXPECT_LE(0, self->audit_fd);
-+	clear_cap(_metadata, CAP_AUDIT_CONTROL);
- }
- 
--FIXTURE_TEARDOWN(hierarchy)
-+FIXTURE_TEARDOWN_PARENT(hierarchy)
- {
-+	EXPECT_EQ(0, audit_cleanup(-1, NULL));
- }
- 
- /* Test PTRACE_TRACEME and PTRACE_ATTACH for parent and child. */
-@@ -261,6 +287,7 @@ TEST_F(hierarchy, trace)
- 	char buf_parent;
- 	long ret;
- 	bool can_read_child, can_trace_child, can_read_parent, can_trace_parent;
-+	struct audit_records records;
- 
- 	yama_ptrace_scope = get_yama_ptrace_scope();
- 	ASSERT_LE(0, yama_ptrace_scope);
-@@ -336,17 +363,29 @@ TEST_F(hierarchy, trace)
- 		err_proc_read = test_ptrace_read(parent);
- 		if (can_read_parent) {
- 			EXPECT_EQ(0, err_proc_read);
-+			EXPECT_EQ(-EAGAIN,
-+				  matches_log_ptrace(_metadata, self->audit_fd,
-+						     parent));
- 		} else {
- 			EXPECT_EQ(EACCES, err_proc_read);
-+			EXPECT_EQ(0,
-+				  matches_log_ptrace(_metadata, self->audit_fd,
-+						     parent));
- 		}
- 
- 		/* Tests PTRACE_ATTACH on the parent. */
- 		ret = ptrace(PTRACE_ATTACH, parent, NULL, 0);
- 		if (can_trace_parent) {
- 			EXPECT_EQ(0, ret);
-+			EXPECT_EQ(-EAGAIN,
-+				  matches_log_ptrace(_metadata, self->audit_fd,
-+						     parent));
- 		} else {
- 			EXPECT_EQ(-1, ret);
- 			EXPECT_EQ(EPERM, errno);
-+			EXPECT_EQ(can_read_parent ? -EAGAIN : 0,
-+				  matches_log_ptrace(_metadata, self->audit_fd,
-+						     parent));
- 		}
- 		if (ret == 0) {
- 			ASSERT_EQ(parent, waitpid(parent, &status, 0));
-@@ -358,9 +397,16 @@ TEST_F(hierarchy, trace)
- 		ret = ptrace(PTRACE_TRACEME);
- 		if (can_trace_child) {
- 			EXPECT_EQ(0, ret);
-+			EXPECT_EQ(-EAGAIN,
-+				  matches_log_ptrace(_metadata, self->audit_fd,
-+						     parent));
- 		} else {
- 			EXPECT_EQ(-1, ret);
- 			EXPECT_EQ(EPERM, errno);
-+			/* We should indeed see the parent process. */
-+			EXPECT_EQ(can_read_child ? -EAGAIN : 0,
-+				  matches_log_ptrace(_metadata, self->audit_fd,
-+						     parent));
- 		}
+ 	/*
+-	 * Protects against concurrent calls to get_inode_object() or
++	 * Protects against concurrent calls to landlock_get_inode_object() or
+ 	 * hook_sb_delete().
+ 	 */
+ 	spin_lock(&inode->i_lock);
+@@ -347,7 +348,8 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+ 	/* Transforms relative access rights to absolute ones. */
+ 	access_rights |= LANDLOCK_MASK_ACCESS_FS &
+ 			 ~landlock_get_fs_access_mask(ruleset, 0);
+-	id.key.object = get_inode_object(d_backing_inode(path->dentry));
++	id.key.object =
++		landlock_get_inode_object(d_backing_inode(path->dentry));
+ 	if (IS_ERR(id.key.object))
+ 		return PTR_ERR(id.key.object);
+ 	mutex_lock(&ruleset->lock);
+@@ -1288,7 +1290,7 @@ static void hook_sb_delete(struct super_block *const sb)
  
  		/*
-@@ -408,17 +454,25 @@ TEST_F(hierarchy, trace)
- 	err_proc_read = test_ptrace_read(child);
- 	if (can_read_child) {
- 		EXPECT_EQ(0, err_proc_read);
-+		EXPECT_EQ(-EAGAIN,
-+			  matches_log_ptrace(_metadata, self->audit_fd, child));
- 	} else {
- 		EXPECT_EQ(EACCES, err_proc_read);
-+		EXPECT_EQ(0,
-+			  matches_log_ptrace(_metadata, self->audit_fd, child));
- 	}
+ 		 * Protects against concurrent modification of inode (e.g.
+-		 * from get_inode_object()).
++		 * from landlock_get_inode_object()).
+ 		 */
+ 		spin_lock(&inode->i_lock);
+ 		/*
+@@ -1327,16 +1329,16 @@ static void hook_sb_delete(struct super_block *const sb)
  
- 	/* Tests PTRACE_ATTACH on the child. */
- 	ret = ptrace(PTRACE_ATTACH, child, NULL, 0);
- 	if (can_trace_child) {
- 		EXPECT_EQ(0, ret);
-+		EXPECT_EQ(-EAGAIN,
-+			  matches_log_ptrace(_metadata, self->audit_fd, child));
- 	} else {
- 		EXPECT_EQ(-1, ret);
- 		EXPECT_EQ(EPERM, errno);
-+		EXPECT_EQ(can_read_child ? -EAGAIN : 0,
-+			  matches_log_ptrace(_metadata, self->audit_fd, child));
- 	}
+ 			/*
+ 			 * Because object->underobj was not NULL,
+-			 * release_inode() and get_inode_object() guarantee
+-			 * that it is safe to reset
++			 * release_inode() and landlock_get_inode_object()
++			 * guarantee that it is safe to reset
+ 			 * landlock_inode(inode)->object while it is not NULL.
+ 			 * It is therefore not necessary to lock inode->i_lock.
+ 			 */
+ 			rcu_assign_pointer(landlock_inode(inode)->object, NULL);
+ 			/*
+ 			 * At this point, we own the ihold() reference that was
+-			 * originally set up by get_inode_object() and the
+-			 * __iget() reference that we just set in this loop
++			 * originally set up by landlock_get_inode_object() and
++			 * the __iget() reference that we just set in this loop
+ 			 * walk.  Therefore the following call to iput() will
+ 			 * not sleep nor drop the inode because there is now at
+ 			 * least two references to it.
+diff --git a/security/landlock/fs.h b/security/landlock/fs.h
+index 9f52c9b37898..3e428fa51cec 100644
+--- a/security/landlock/fs.h
++++ b/security/landlock/fs.h
+@@ -109,4 +109,6 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+ 			    const struct path *const path,
+ 			    access_mask_t access_hierarchy);
  
- 	if (ret == 0) {
-@@ -434,6 +488,11 @@ TEST_F(hierarchy, trace)
- 	if (WIFSIGNALED(status) || !WIFEXITED(status) ||
- 	    WEXITSTATUS(status) != EXIT_SUCCESS)
- 		_metadata->exit_code = KSFT_FAIL;
++struct landlock_object *landlock_get_inode_object(struct inode *const inode);
 +
-+	/* Makes sure there is no superfluous logged records. */
-+	audit_count_records(self->audit_fd, &records);
-+	EXPECT_EQ(0, records.deny);
-+	EXPECT_EQ(0, records.info);
- }
- 
- TEST_HARNESS_MAIN
+ #endif /* _SECURITY_LANDLOCK_FS_H */
 -- 
 2.47.1
 
