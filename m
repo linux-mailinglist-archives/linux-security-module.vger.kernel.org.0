@@ -1,210 +1,167 @@
-Return-Path: <linux-security-module+bounces-7654-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7662-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F1FFA0BD05
-	for <lists+linux-security-module@lfdr.de>; Mon, 13 Jan 2025 17:12:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526E7A0BD6F
+	for <lists+linux-security-module@lfdr.de>; Mon, 13 Jan 2025 17:28:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F63B1693B0
-	for <lists+linux-security-module@lfdr.de>; Mon, 13 Jan 2025 16:12:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F1123AB9D6
+	for <lists+linux-security-module@lfdr.de>; Mon, 13 Jan 2025 16:28:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E8122BAA7;
-	Mon, 13 Jan 2025 16:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Kn/tRBTy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D842920F08A;
+	Mon, 13 Jan 2025 16:26:21 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C097420F092
-	for <linux-security-module@vger.kernel.org>; Mon, 13 Jan 2025 16:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B537233543
+	for <linux-security-module@vger.kernel.org>; Mon, 13 Jan 2025 16:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736784694; cv=none; b=BOfzgd/pcYZlA2ScboZ7iD47/YMh31NPrXH/SOk7qdXNJGjPuDbbhdrgHA3+PrgTpGMPYLdGcRMBd+GlHW8jBe0fYvX5TqfUSmpqLagICMOVvkwQCWGdbTUXy+NjPgBXE33jSzL8ozSBxpBJxFioD6mGB8+/m9Hld8cq6YYCRpc=
+	t=1736785581; cv=none; b=aJeNMOaC/Fj+F0wZ8Vf2qt8v1HYck748lMC27L3EfEQsel7ugnpDXi4pO8+0ylB+sIiSgDDqKWAQW3a8bH+bfTVkbLoy8cSdTVsQjDJGHDwg0lBnZzKQ8heRT7ZkXvxR75Yvr7+Gtgfe/L/JmjgEQQp7RMQt7GgVGkM+tJfPIU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736784694; c=relaxed/simple;
-	bh=8TLaqHxOAqnpOnK0y/4l9elkW6+voC28qWJNnf/smEA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u80+ZNc3CvooPJ+h69fUgrAVVe92KE0IJwZ6sLokr5S7hy1v1hcMo9XPlrZFYo6+RjtteRquyZs1WTRoN1lfxARxS3kyQ0Gad5dWpQP29mBhvseNR91bG01V+8+3KNXgZ13Y0wwjGMJu1JtoP9XO7KfcVPczzI4sFzTJdq1bRRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Kn/tRBTy; arc=none smtp.client-ip=83.166.143.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YWy1S22bQz169r;
-	Mon, 13 Jan 2025 17:11:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736784684;
-	bh=/rhNS+Hm78vBKNItT+NMBCUhZo36eNGFBlgsINUtEN0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kn/tRBTyC1Cp0cgsNvqz311E+cNcBWvQVqax5eJHGlq+Yy5DjDg1BumPfAK0S1JuK
-	 oDoSd/K/VL0pGxFksD7JR+Q3jfAfDRvX/0KViwyTwhcXmcUzyOAf8JG4TiToxrp0yo
-	 Gm/noGlOaH4OaB8HnbWX3v2UAFtdtkT4WB/cuSI4=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YWy1R58vYzRbL;
-	Mon, 13 Jan 2025 17:11:23 +0100 (CET)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Matthieu Buffet <matthieu@buffet.re>,
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Shervin Oloumi <enlightened@chromium.org>,
-	Waiman Long <longman@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v1 4/4] landlock: Use scoped guards for mutex
-Date: Mon, 13 Jan 2025 17:11:12 +0100
-Message-ID: <20250113161112.452505-5-mic@digikod.net>
-In-Reply-To: <20250113161112.452505-1-mic@digikod.net>
-References: <20250113161112.452505-1-mic@digikod.net>
+	s=arc-20240116; t=1736785581; c=relaxed/simple;
+	bh=sFLyBSuLrvullFBEAJNO+fofARBeP56USsuwBnXypkg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eALyOL7Zijrllup+Dl+mZNR9alA4LWZz1jhkZL9FjQGsfaitWqIuHZ6qHnq+gkBdDUa8mnitphTGYfbqJGlt8yOsNA9QDDRYooxmjq5Y58Gr+gqNHxdvr8BVOhat3fJasJfPGgl9EW80QZSOaZXbjaQwA7xLMZ/ZxehnM+4wgU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tXNFs-0000JE-AS; Mon, 13 Jan 2025 17:25:32 +0100
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tXNFp-000HzE-2Z;
+	Mon, 13 Jan 2025 17:25:30 +0100
+Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
+	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tXNFq-007FQL-2t;
+	Mon, 13 Jan 2025 17:25:30 +0100
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: [PATCH v2 00/12] reboot: support runtime configuration of
+ emergency hw_protection action
+Date: Mon, 13 Jan 2025 17:25:25 +0100
+Message-Id: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHU+hWcC/22NwQ6CMBBEf4Xs2Zp2QaSe/A9DDMICe2nJtiKG8
+ O9WEm8e32TmzQqBhCnAJVtBaObA3iXAQwbt2LiBFHeJATUWBk2lxtd9Eh+pjamphB7eR2VLe8o
+ Lm5+xbCBNJ6Gel117qxOPHKKX9/4ym2/6E9r/wtkorbDMG92arq80XidywzOKd7wcO4J627YPZ
+ ZUH3L0AAAA=
+X-Change-ID: 20241218-hw_protection-reboot-96953493726a
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Fabio Estevam <festevam@denx.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Serge Hallyn <serge@hallyn.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+ Guenter Roeck <groeck@chromium.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+ kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>, 
+ Matteo Croce <mcroce@microsoft.com>
+X-Mailer: b4 0.14.2
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-security-module@vger.kernel.org
 
-Simplify error handling by replacing goto statements with automatic
-calls to mutex_unlock() when going out of scope.
+We currently leave the decision of whether to shutdown or reboot to
+protect hardware in an emergency situation to the individual drivers.
 
-Do not initialize the err variable for compiler/linter to warn us about
-inconsistent use, if any.
+This works out in some cases, where the driver detecting the critical
+failure has inside knowledge: It binds to the system management controller
+for example or is guided by hardware description that defines what to do.
 
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Günther Noack <gnoack@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250113161112.452505-5-mic@digikod.net
+This is inadequate in the general case though as a driver reporting e.g.
+an imminent power failure can't know whether a shutdown or a reboot would
+be more appropriate for a given hardware platform.
+
+To address this, this series adds a hw_protection kernel parameter and
+sysfs toggle that can be used to change the action from the shutdown
+default to reboot. A new hw_protection_trigger API then makes use of
+this default action.
+
+My particular use case is unattended embedded systems that don't
+have support for shutdown and that power on automatically when power is
+supplied:
+
+  - A brief power cycle gets detected by the driver
+  - The kernel powers down the system and SoC goes into shutdown mode
+  - Power is restored
+  - The system remains oblivious to the restored power
+  - System needs to be manually power cycled for a duration long enough
+    to drain the capacitors
+
+With this series, such systems can configure the kernel with
+hw_protection=reboot to have the boot firmware worry about critical
+conditions.
+
 ---
- security/landlock/ruleset.c | 52 +++++++++++++++----------------------
- 1 file changed, 21 insertions(+), 31 deletions(-)
-
-diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
-index f27b7bdb19b9..f1c3104aea6c 100644
---- a/security/landlock/ruleset.c
-+++ b/security/landlock/ruleset.c
-@@ -367,7 +367,7 @@ static int merge_tree(struct landlock_ruleset *const dst,
- static int merge_ruleset(struct landlock_ruleset *const dst,
- 			 struct landlock_ruleset *const src)
- {
--	int err = 0;
-+	int err;
- 
- 	might_sleep();
- 	/* Should already be checked by landlock_merge_ruleset() */
-@@ -378,32 +378,28 @@ static int merge_ruleset(struct landlock_ruleset *const dst,
- 		return -EINVAL;
- 
- 	/* Locks @dst first because we are its only owner. */
--	mutex_lock(&dst->lock);
--	mutex_lock_nested(&src->lock, SINGLE_DEPTH_NESTING);
-+	guard(mutex)(&dst->lock);
-+	guard(mutex_nest_1)(&src->lock);
- 
- 	/* Stacks the new layer. */
--	if (WARN_ON_ONCE(src->num_layers != 1 || dst->num_layers < 1)) {
--		err = -EINVAL;
--		goto out_unlock;
--	}
-+	if (WARN_ON_ONCE(src->num_layers != 1 || dst->num_layers < 1))
-+		return -EINVAL;
-+
- 	dst->access_masks[dst->num_layers - 1] = src->access_masks[0];
- 
- 	/* Merges the @src inode tree. */
- 	err = merge_tree(dst, src, LANDLOCK_KEY_INODE);
- 	if (err)
--		goto out_unlock;
-+		return err;
- 
- #if IS_ENABLED(CONFIG_INET)
- 	/* Merges the @src network port tree. */
- 	err = merge_tree(dst, src, LANDLOCK_KEY_NET_PORT);
- 	if (err)
--		goto out_unlock;
-+		return err;
- #endif /* IS_ENABLED(CONFIG_INET) */
- 
--out_unlock:
--	mutex_unlock(&src->lock);
--	mutex_unlock(&dst->lock);
--	return err;
-+	return 0;
- }
- 
- static int inherit_tree(struct landlock_ruleset *const parent,
-@@ -441,47 +437,41 @@ static int inherit_tree(struct landlock_ruleset *const parent,
- static int inherit_ruleset(struct landlock_ruleset *const parent,
- 			   struct landlock_ruleset *const child)
- {
--	int err = 0;
-+	int err;
- 
- 	might_sleep();
- 	if (!parent)
- 		return 0;
- 
- 	/* Locks @child first because we are its only owner. */
--	mutex_lock(&child->lock);
--	mutex_lock_nested(&parent->lock, SINGLE_DEPTH_NESTING);
-+	guard(mutex)(&child->lock);
-+	guard(mutex_nest_1)(&parent->lock);
- 
- 	/* Copies the @parent inode tree. */
- 	err = inherit_tree(parent, child, LANDLOCK_KEY_INODE);
- 	if (err)
--		goto out_unlock;
-+		return err;
- 
- #if IS_ENABLED(CONFIG_INET)
- 	/* Copies the @parent network port tree. */
- 	err = inherit_tree(parent, child, LANDLOCK_KEY_NET_PORT);
- 	if (err)
--		goto out_unlock;
-+		return err;
- #endif /* IS_ENABLED(CONFIG_INET) */
- 
--	if (WARN_ON_ONCE(child->num_layers <= parent->num_layers)) {
--		err = -EINVAL;
--		goto out_unlock;
--	}
-+	if (WARN_ON_ONCE(child->num_layers <= parent->num_layers))
-+		return -EINVAL;
-+
- 	/* Copies the parent layer stack and leaves a space for the new layer. */
- 	memcpy(child->access_masks, parent->access_masks,
- 	       flex_array_size(parent, access_masks, parent->num_layers));
- 
--	if (WARN_ON_ONCE(!parent->hierarchy)) {
--		err = -EINVAL;
--		goto out_unlock;
--	}
-+	if (WARN_ON_ONCE(!parent->hierarchy))
-+		return -EINVAL;
-+
- 	get_hierarchy(parent->hierarchy);
- 	child->hierarchy->parent = parent->hierarchy;
+Changes in v2:
+- Added Rob's dt-bindings Acked-by
+- Add kernel-doc for all newly introduced enums, functions and
+  function parameters (lkp)
+- Fix kernel-doc warning for do_kernel_restart even though it
+  wasn't introduced in this series (lkp)
+- Rename the work function and object in patch 2 already to align
+  with the functional change
 -
--out_unlock:
--	mutex_unlock(&parent->lock);
--	mutex_unlock(&child->lock);
--	return err;
-+	return 0;
- }
- 
- static void free_ruleset(struct landlock_ruleset *const ruleset)
+- Link to v1: https://lore.kernel.org/r/20241219-hw_protection-reboot-v1-0-263a0c1df802@pengutronix.de
+
+---
+Ahmad Fatoum (12):
+      reboot: replace __hw_protection_shutdown bool action parameter with an enum
+      reboot: reboot, not shutdown, on hw_protection_reboot timeout
+      docs: thermal: sync hardware protection doc with code
+      reboot: describe do_kernel_restart's cmd argument in kernel-doc
+      reboot: rename now misleading __hw_protection_shutdown symbols
+      reboot: indicate whether it is a HARDWARE PROTECTION reboot or shutdown
+      reboot: add support for configuring emergency hardware protection action
+      regulator: allow user configuration of hardware protection action
+      platform/chrome: cros_ec_lpc: prepare for hw_protection_shutdown removal
+      dt-bindings: thermal: give OS some leeway in absence of critical-action
+      thermal: core: allow user configuration of hardware protection action
+      reboot: retire hw_protection_reboot and hw_protection_shutdown helpers
+
+ Documentation/ABI/testing/sysfs-kernel-reboot      |   8 ++
+ Documentation/admin-guide/kernel-parameters.txt    |   6 +
+ .../devicetree/bindings/thermal/thermal-zones.yaml |   5 +-
+ Documentation/driver-api/thermal/sysfs-api.rst     |  25 ++--
+ drivers/platform/chrome/cros_ec_lpc.c              |   2 +-
+ drivers/regulator/core.c                           |   4 +-
+ drivers/regulator/irq_helpers.c                    |  16 +--
+ drivers/thermal/thermal_core.c                     |  17 +--
+ drivers/thermal/thermal_core.h                     |   1 +
+ drivers/thermal/thermal_of.c                       |   7 +-
+ include/linux/reboot.h                             |  36 ++++--
+ include/uapi/linux/capability.h                    |   1 +
+ kernel/reboot.c                                    | 140 ++++++++++++++++-----
+ 13 files changed, 195 insertions(+), 73 deletions(-)
+---
+base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
+change-id: 20241218-hw_protection-reboot-96953493726a
+
+Best regards,
 -- 
-2.47.1
+Ahmad Fatoum <a.fatoum@pengutronix.de>
 
 
