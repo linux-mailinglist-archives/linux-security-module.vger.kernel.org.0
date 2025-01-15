@@ -1,78 +1,78 @@
-Return-Path: <linux-security-module+bounces-7715-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7717-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F24A12F69
-	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jan 2025 00:53:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52FFDA12F6B
+	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jan 2025 00:53:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD7711887F4A
-	for <lists+linux-security-module@lfdr.de>; Wed, 15 Jan 2025 23:53:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5E193A6386
+	for <lists+linux-security-module@lfdr.de>; Wed, 15 Jan 2025 23:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492B51DDC18;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D6B1DDC33;
 	Wed, 15 Jan 2025 23:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="SUgCBt8d"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eWmB2uws"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0F71DDA31
-	for <linux-security-module@vger.kernel.org>; Wed, 15 Jan 2025 23:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA8D12BF24
+	for <linux-security-module@vger.kernel.org>; Wed, 15 Jan 2025 23:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736985191; cv=none; b=DUcM163vQ3kHC7arV6UEPUzcpSCfWlQvxnvdsBWVYo8H6ZRepdRhdeKw8KUcF64rSHO4QA71YPO8wHG9TKIL0DM66dcB7zo3PyRgCKy1SRDwnt6ZvpGzk/ugr26i6DLs7TGV/DC/N1PXp/E48V9kw5T5s97ojNiLYuD8gf5YI8w=
+	t=1736985191; cv=none; b=kzzrDkdN24jaVMATpxv4WlEujTUYd3vJn6BCPK/5y2QiBvQ662Louqc2tHQHpDZKnEw44/8wX6lHvesIDs7rklXQfHsrPwaAh0TyKdAAuOy845IeL1KItWwzkHHkPBs1HJYed5eISkbb1XHY4l4cNK4YWaRbFPb7UmuTEfFm2MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736985191; c=relaxed/simple;
-	bh=IjabEPs0I4hNYHkgGdzWVBCCcYQiwr0PX253DxcEMBA=;
+	bh=w1jIE9hJSQLAasM7TNhoYeU19kfzxbDAm9Fb79w17Zc=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=OIP0gwZOSys96L4750dlkGuwmGF962qLSBSPdIN1rYS0iRHq3KyUNucjFfuCXjrHT0ggUuAttpHv/TyH5Hhuukq8wTqCx6ovIJG61hurq671PT03TWttP+8y44UjHB9kHuTR6hMzLpj0J93bHRWDYH/oDjMQdEqxPya5KHnjdAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=SUgCBt8d; arc=none smtp.client-ip=209.85.222.173
+	 References:In-Reply-To; b=qYAt2mF8cU+j1d7CPba8OBmksgfLPZ98r2jn4pzZdXCSRIURV9vlOviVfEcTSZ6RensZ/ygOPZGttRB2CLQJ8fMdYCaXFtNqDyWMd6weM0bH5B+FuIrWBVYGBzhiCQY6IclzRtyF/FYAuBMZL02IHwdL6b2wdJh7/zK48vpOa04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=eWmB2uws; arc=none smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6f75f61f9so44522785a.0
-        for <linux-security-module@vger.kernel.org>; Wed, 15 Jan 2025 15:53:09 -0800 (PST)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7b702c3c021so30501285a.3
+        for <linux-security-module@vger.kernel.org>; Wed, 15 Jan 2025 15:53:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736985188; x=1737589988; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1736985189; x=1737589989; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tMPFbikgUnRgHwWdcFDsLokvyAaCPmB7VxOaO1AMn/I=;
-        b=SUgCBt8dO0bsySLaoyUhEH9xSbIUQk5pIulbhRoVZ80ddRYo/22u0nFGiIyv6rYFDe
-         FVciVqUY4SY/ePB5kMi5b2V6jmGO9mgv4JskA29r/4I1OnnATNEGCkVvlvfbqlPNBVgQ
-         KOAcou592kfRCaE2DTHpZqpl2EKwRaf7g0SVHKD5pmbXdfNweppXID8YUvdTvVxUY3Ze
-         iyC2B1ORiy+dAtZMLCgKK1bLXRf/juhHurtYbU8EKwilE66BogXaQWJIPNhq96ouZzzR
-         W7SenaNE+1lTsrpBejwGRrtKXxmpFy2TuzuxWFYD1nrBldD7lZXgsFlNKcyybKxJgNXQ
-         m6Jw==
+        bh=bJh+T7Hv8PTpEPApQXjKvV56GIOkdSD6Exn3cyfJMsI=;
+        b=eWmB2uwscZSkqgcsmyAUiGk8MXYioHcwTTK8Z/FmMZ9zQWk1D3ZUj66GpT9p49yyIX
+         JS2GBqfR3fwi+MlEmz8+HKQ2jdw4Z477SDyvExFCfbR62qlZJSIgCxz7HneNl1VG0/5u
+         i12lNmdYkOaF4suZi6ohihiP69DmdIbNkyV5S/xF58Ye7xsWDHgjXNaK79vhwpa+jrr/
+         fDq66xBFjVZKvIJ2sC6EXEQUdcEFAn1NCiMqIhvWSbIUxqa6XFYvOs0bZvFhWQ6F+wtO
+         4oj9ie3zRIP1XFrgLYt/jeCsyPDvm4LFoRJ5a4azTbfEATxnVEUn85ocvKJkOca7crY1
+         dMFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736985188; x=1737589988;
+        d=1e100.net; s=20230601; t=1736985189; x=1737589989;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=tMPFbikgUnRgHwWdcFDsLokvyAaCPmB7VxOaO1AMn/I=;
-        b=nznzcLygbpypY5pwWVFul7ELOAD/RYQelxp9dnPSO52MXLnzS9NCdcna18ewOfi1BZ
-         4o3eAlxRVpWJJSovhodOJ5OiyGcR01743uKSURdIYfISHQPedmKqd675FuTfgzF+jS4W
-         YB1tb1BWBmJFeF18xmyO7EukANvTr9OiAcJEYNblWZLp9x4OeRsoB6XeNuTM3zHOLe/f
-         43lN0gU37fCaAc43KtDJCBFcp8HzNvVP74wb8nrIGOByWqXo67Ktvtsuh2sotbGNUloz
-         2PhieWamu84Z3TeNoZIHS1w6eCToGErf9LZxvR1rQYgGbU2cN4oI/sczcBV3g1IYKGyV
-         MykQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVhI2UB1mTVvQxdP4WYdE1aTLyefpXR4sPZPFdurmEEOMP1l0huabGHXUaw1uZEFbcsZSCol5lcGYp1gcRlF9qaFrtzr9s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZsf4LACmU5C9EcXKle+gIB66s5LdxUbiUEDgGPSn4spc1AcTj
-	3SvK+/ea96XFbtV7Wz4sa4VHxl72wH6KMCMApd4VQ7wmxLLiQKzaRZqndJgceA==
-X-Gm-Gg: ASbGncvQzVb+XgCIAhysBrpcLB8Z1ETH7ac2OM2YFJ5OwqF0CvFJnk2WD8ZwC8XJwwd
-	/OPENG5P/pEfumFl7yWt2G6HRBQ43/ycYq71ik5fpBHkVOFEdY91zDlTgOie5KASWk8gpAOylVX
-	OFpqKgBDCmfaEf8yPIvGHCR/ywIcshSb3d7XxnkjCb3wWF6cBhMggftBKao2JYTGGxSVIWfBTxy
-	Zum1AM3eSqZv9odCZfrv5fYd4RBn9CGb7iplUd0pIZi9/AD1tU=
-X-Google-Smtp-Source: AGHT+IHuFsbyq9Y/tzxO03I3cjYigkJG8pw4nUDpN6wUv/2ZNeRVRowyABfLHteGVlW4iSQ6uqljBg==
-X-Received: by 2002:a05:620a:84c3:b0:7a9:b914:279c with SMTP id af79cd13be357-7bcd961c2e5mr4565556185a.0.1736985188295;
-        Wed, 15 Jan 2025 15:53:08 -0800 (PST)
+        bh=bJh+T7Hv8PTpEPApQXjKvV56GIOkdSD6Exn3cyfJMsI=;
+        b=GmWHgye0qkctqEK9zTgKhqczrj4RPcwKfFpassuXUkDmOJiNP2mLledrMIHwz3f3yE
+         D5lkHuKNlHUig1guAVheXs1oHbFJoQFoy3rQ52EAB76mWFaGHBr8dxXvssinhL8l5dOR
+         D3cNLYfhaFyGND2a7NXX7NiuiVVpbUEChLZsVHfcYtSNCvmLXAOlsjCK2BdlIDjEGBwG
+         OLtJnpd1Us2xt1f+Hw0gVzghvuO0ASKQTWpoYUzvmTW+86oe6JN5ktQMXLXzw+hQDhzT
+         YYrkwH99ccNEi13qoU3IYcNOy9wvT5otQhM7DiIT/63924jLnWoKg11ZRgFPSOsVcpf8
+         sRoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXEkjGrbQWbhoL5IazyeLYFkr+5C1wx6olQI+nIs0ZoeX1TI2cmWKk511U31bOYo+FVE1jUXR0wygnz//gA49AQ/XXW/fc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweauuqrxXjyTWil6EmRaa4BZAw5HtvVHxFFWPqxxrKvijUaG6S
+	JcUnIW/ZrFIotCvjDDhvf9dGpiTbAlCa2L3sFoerWs2sHrDTPlr72jgtaV6zwA==
+X-Gm-Gg: ASbGncuzorSMsDr6eYvw9PNatF4aCwlqX1y5MJWyjAVbbVeda1UsnJydmrUdNkas7BG
+	VB7+MbpiukgimjJLrIbAyWUVjxRErIvyWRj5Aaa6VE5E+T25HYJ01OBv9z9uv2TLLUJqs2CkNUN
+	O1l4CojYfKz+02lcU7OiKbekUipbc5qRvrnuE2BIS/75603ZJkAS/YG0vjkTrRJhyPwScWoLMxH
+	DlrTcpZyrAuUTrChi3vTWOpxXxVOgIkhfyugfcX6ANAwIRve04=
+X-Google-Smtp-Source: AGHT+IGlGPvAT10vh7zR6GchXN0fLnmopYZatnQZSEGB+wWm79pzK4V/AiofLks/o3AMcVKKkQY4vw==
+X-Received: by 2002:a05:620a:1793:b0:7b6:c93a:7f2f with SMTP id af79cd13be357-7bcd9709142mr4501376085a.14.1736985189359;
+        Wed, 15 Jan 2025 15:53:09 -0800 (PST)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7bce3502a56sm768094385a.91.2025.01.15.15.53.07
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7bce3515f40sm766857685a.99.2025.01.15.15.53.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 15:53:07 -0800 (PST)
-Date: Wed, 15 Jan 2025 18:53:07 -0500
-Message-ID: <1a169f22750aec9db4d7a377a4f99733@paul-moore.com>
+        Wed, 15 Jan 2025 15:53:08 -0800 (PST)
+Date: Wed, 15 Jan 2025 18:53:08 -0500
+Message-ID: <1ac8548a7b42eaed3f4392690011eb8b@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -85,170 +85,28 @@ X-Mailer: pstg-pwork:20250115_1512/pstg-lib:20250114_2216/pstg-pwork:20250115_15
 From: Paul Moore <paul@paul-moore.com>
 To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Eric Paris <eparis@redhat.com>, =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>, "Serge E . Hallyn" <serge@hallyn.com>
 Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, Ben Scarlato <akhna@google.com>, Casey Schaufler <casey@schaufler-ca.com>, Charles Zaffery <czaffery@roblox.com>, Daniel Burgener <dburgener@linux.microsoft.com>, Francis Laniel <flaniel@linux.microsoft.com>, James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jorge Lucangeli Obes <jorgelo@google.com>, Kees Cook <kees@kernel.org>, Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, Matt Bobrowski <mattbobrowski@google.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Phil Sutter <phil@nwl.cc>, Praveen K Paladugu <prapal@linux.microsoft.com>, Robert Salvet <robert.salvet@roblox.com>, Shervin Oloumi <enlightened@google.com>, Song Liu <song@kernel.org>, Tahera Fahimi <fahimitahera@gmail.com>, Tyler Hicks <code@tyhicks.com>, audit@vger.kernel.org, linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 9/30] landlock: Add AUDIT_LANDLOCK_DOM_{INFO,DROP} and  log domain properties
-References: <20250108154338.1129069-10-mic@digikod.net>
-In-Reply-To: <20250108154338.1129069-10-mic@digikod.net>
+Subject: Re: [PATCH v4 28/30] audit,landlock: Add AUDIT_EXE_LANDLOCK_DENY rule  type
+References: <20250108154338.1129069-29-mic@digikod.net>
+In-Reply-To: <20250108154338.1129069-29-mic@digikod.net>
 
 On Jan  8, 2025 =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net> wrote:
 > 
-> Asynchronously log domain information when it first denies an access.
-> This minimize the amount of generated logs, which makes it possible to
-> always log denials since they should not happen (except with the new
-> LANDLOCK_RESTRICT_SELF_QUIET flag).  These records are identified with
-> the new AUDIT_LANDLOCK_DOM_INFO type.
+> Landlock manages a set of standalone security policies, which can be
+> loaded by any process.  Because a sandbox policy may contain errors and
+> can lead to log spam, we need a way to exclude some of them.  It is
+> simple and it makes sense to identify Landlock domains (i.e. security
+> policies) per binary path that loaded such policy.
 > 
-> The AUDIT_LANDLOCK_DOM_INFO message contains:
-> - the "domain" ID which is described,
-> - the "creation" time of this domain,
-> - a minimal set of properties to easily identify the task that loaded
->   the domain's policy with landlock_restrict_self(2): "pid", "uid",
->   executable path ("exe"), and command line ("comm").
-> 
-> This requires each domain to save these task properties at creation
-> time in the new struct landlock_details.  A reference to the PID is kept
-> for the lifetime of the domain to avoid race conditions when
-> investigating the related task.  The executable path is resolved and
-> stored to not keep a reference to the filesystem and block related
-> actions.  All these metadata are stored for the lifetime of the related
-> domain and should then be minimal.  The required memory is not accounted
-> to the task calling landlock_restrict_self(2) contrary to most other
-> Landlock allocations (see related comment).
-> 
-> The AUDIT_LANDLOCK_DOM_INFO record follows the first AUDIT_LANDLOCK_DENY
-> record for the same domain, which is always followed by AUDIT_SYSCALL
-> and AUDIT_PROCTITLE.  This is in line with the audit logic to first
-> record the cause of an event, and then add context with other types of
-> record.
-> 
-> Audit event sample for a first denial:
-> 
->   type=LANDLOCK_DENY msg=audit(1732186800.349:44): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
->   type=LANDLOCK_DOM_INFO msg=audit(1732186800.349:44): domain=195ba459b creation=1732186800.345 pid=300 uid=0 exe="/root/sandboxer" comm="sandboxer"
->   type=SYSCALL msg=audit(1732186800.349:44): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
-> 
-> Audit event sample for a following denial:
-> 
->   type=LANDLOCK_DENY msg=audit(1732186800.372:45): domain=195ba459b blockers=ptrace opid=1 ocomm="systemd"
->   type=SYSCALL msg=audit(1732186800.372:45): arch=c000003e syscall=101 success=no [...] pid=300 auid=0
->
-> Log domain deletion with the new AUDIT_LANDLOCK_DOM_DROP record type
-> when a domain was previously logged.  This makes it possible for log
-> parsers to free potential resources when a domain ID will never show
-> again.
-> 
-> The AUDIT_LANDLOCK_DOM_DROP message contains:
-> - the "domain" ID which is being freed,
-> - the number of "denials" accounted to this domain, which is at least 1.
-> 
-> The number of denied access requests is useful to easily check how many
-> access requests a domain blocked and potentially if some of them are
-> missing in logs because of audit rate limiting or audit rules.  Rate
-> limiting could also drop this record though.
+> Add a new AUDIT_EXE_LANDLOCK_DENY rule type to enables system
+> administrator to filter logs according to the origin or the security
+> policy responsible for a denial.
 
-Wait, what rate limiting?  Landlock shouldn't be adding any audit event
-rate limiting beyond the queue management knobs built into the audit
-subsystem.  If you are comfortable rate limiting the logging of an event
-it is a good sign that it probably shouldn't be an audit event.
+For reasons similar to why I didn't want to expose the audit timestamp
+to users outside of audit, I'm not very enthusiastic about expanding
+the audit filtering code at this point in time.
 
-The audit subsystem is for security releveant events, not diagnostic,
-debugging, or other "nice to know" messages.
+I'm not saying "no" exactly, just "not right now".
 
-> Audit event sample for a deletion of a domain that denied something:
-> 
->   type=LANDLOCK_DOM_DROP msg=audit(1732186800.393:46): domain=195ba459b denials=2
-
-As mentioned earlier, I don't like the number of different Landlock
-specific audit record types that are being created.  I'm going to
-suggest combining the LANDLOCK_DOM_INFO and LANDLOCK_DOM_DROP
-records into one (LANDLOCK_DOM?) and using an "op=" field to indicate
-creation/registration or destruction/unregistration of the domain ID.
-
-> Cc: Günther Noack <gnoack@google.com>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> Link: https://lore.kernel.org/r/20250108154338.1129069-10-mic@digikod.net
-> ---
-> Questions about AUDIT_LANDLOCK_DOM_INFO messages (keeping in mind that
-> each logged metadata may need to be stored for the lifetime of each
-> domain):
-> - Should we also log the initially restricted task's loginuid?
-> - Should we also log the initially restricted task's sessionid?
-
-...
-
-> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> index 60c909c396c0..a72f7b3403be 100644
-> --- a/include/uapi/linux/audit.h
-> +++ b/include/uapi/linux/audit.h
-> @@ -147,6 +147,8 @@
->  #define AUDIT_IPE_CONFIG_CHANGE	1421	/* IPE config change */
->  #define AUDIT_IPE_POLICY_LOAD	1422	/* IPE policy load */
->  #define AUDIT_LANDLOCK_DENY	1423	/* Landlock denial */
-> +#define AUDIT_LANDLOCK_DOM_INFO	1424	/* Landlock domain properties */
-> +#define AUDIT_LANDLOCK_DOM_DROP	1425	/* Landlock domain release */
->  
->  #define AUDIT_FIRST_KERN_ANOM_MSG   1700
->  #define AUDIT_LAST_KERN_ANOM_MSG    1799
-> diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-> index d90680a5026a..ccc591146f8a 100644
-> --- a/security/landlock/audit.c
-> +++ b/security/landlock/audit.c
-> @@ -8,6 +8,8 @@
->  #include <kunit/test.h>
->  #include <linux/audit.h>
->  #include <linux/lsm_audit.h>
-> +#include <linux/pid.h>
-> +#include <linux/uidgid.h>
->  
->  #include "audit.h"
->  #include "domain.h"
-> @@ -30,6 +32,43 @@ static void log_blockers(struct audit_buffer *const ab,
->  	audit_log_format(ab, "%s", get_blocker(type));
->  }
->  
-> +static void log_node(struct landlock_hierarchy *const node)
-> +{
-> +	struct audit_buffer *ab;
-> +
-> +	if (WARN_ON_ONCE(!node))
-> +		return;
-> +
-> +	/* Ignores already logged domains.  */
-> +	if (READ_ONCE(node->log_status) == LANDLOCK_LOG_RECORDED)
-> +		return;
-> +
-> +	ab = audit_log_start(audit_context(), GFP_ATOMIC,
-> +			     AUDIT_LANDLOCK_DOM_INFO);
-> +	if (!ab)
-> +		return;
-> +
-> +	WARN_ON_ONCE(node->id == 0);
-> +	audit_log_format(
-> +		ab,
-> +		"domain=%llx creation=%llu.%03lu pid=%d uid=%u exe=", node->id,
-> +		/* See audit_log_start() */
-> +		(unsigned long long)node->details->creation.tv_sec,
-> +		node->details->creation.tv_nsec / 1000000,
-> +		pid_nr(node->details->pid),
-> +		from_kuid(&init_user_ns, node->details->cred->uid));
-> +	audit_log_untrustedstring(ab, node->details->exe_path);
-> +	audit_log_format(ab, " comm=");
-> +	audit_log_untrustedstring(ab, node->details->comm);
-> +	audit_log_end(ab);
-
-I'm still struggling to understand why you need to log the domain's
-creation time if you are connecting various Landlock audit events for a
-single domain by the domain ID.  To be clear, I'm not opposed if you
-want to include it, it just seems like there is a disconnect between
-how audit is typically used and what you are proposing.
-
-> +	/*
-> +	 * There may be race condition leading to logging of the same domain
-> +	 * several times but that is OK.
-> +	 */
-> +	WRITE_ONCE(node->log_status, LANDLOCK_LOG_RECORDED);
-> +}
-> +
 
 --
 paul-moore.com
