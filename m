@@ -1,50 +1,54 @@
-Return-Path: <linux-security-module+bounces-7731-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7729-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 892EDA146C9
-	for <lists+linux-security-module@lfdr.de>; Fri, 17 Jan 2025 00:50:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59AC9A146C7
+	for <lists+linux-security-module@lfdr.de>; Fri, 17 Jan 2025 00:50:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF7E4188D6B8
-	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jan 2025 23:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E56B16230A
+	for <lists+linux-security-module@lfdr.de>; Thu, 16 Jan 2025 23:50:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD3A25A636;
-	Thu, 16 Jan 2025 23:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C4325A659;
+	Thu, 16 Jan 2025 23:50:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="jvtuN4Kr"
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="L9ZUTXWd"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2B425A630
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B30D25A627
 	for <linux-security-module@vger.kernel.org>; Thu, 16 Jan 2025 23:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737071422; cv=none; b=oeKAUICXTXt4FqF94yGjgMzvXWbCri6kjMLXSJYfjhMi4jwC34loQTJu3pmquzOEBxeKbPsluksoTDEchoOa1F7Vm5Sr+++UKwIHwe+VNF5kvNlZ/7KTQ30D9lM7adBWgt2tX81EXrN6DROFLHLoRaeT8O+MX3+98KXBYorgn2U=
+	t=1737071421; cv=none; b=d9X5qpiLxSvJZG4SphRCpZEIsWCFYiAzxa2+uU2eRi0vRAagB+98zAT/F6OYWZ+KBXkvi9sDloAkgp6yVqUa9nB9Ce9cKNh3uikBY4RhHFQ5/yXgkyofhdn2YxacsdECEetOT4d5SpyKKwzb3nAiTuVB7Z50ZiomCgzWPA7Umhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737071422; c=relaxed/simple;
-	bh=0uIbOvY7vWLYycAlhK8VqXbafkYeZ7AeUEGvVs34E2k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I4u2ZwfgVmS3q7yurIpoxJkoRfYmxRv6DDeTD+HRzIOb19v5zE2L9E1341aiqnLce++hUjby364xzv1oJuwM1k7lnvY8MScS7meHAhxCMYB9AB7qjw9RhYWHEoTYEf3EKkM9Kt9JsGHuxAfzscFHy/COaFLtJG3AxPPkgeV70yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=jvtuN4Kr; arc=none smtp.client-ip=95.143.211.150
+	s=arc-20240116; t=1737071421; c=relaxed/simple;
+	bh=hNrv0hCr8yjDh83tC20QzcG/CIlBatkxaXHq+vF5fZA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KV6HL/iUawmWrg6CKO4bQZXWtXI2Bgfio5T+Uy7alW/sbvmQlZlK9y7vVylAAZxgQZlXsPdAbraucBLi5WGvoXR3a9s8TdvOyQ9aUBXdzWIyJZRraUnlIlrRc0b2Bdq0R4RqfLAsaY7kW/DdK5dM3QltfhwFMA0qRs6nRi3Wgs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=L9ZUTXWd; arc=none smtp.client-ip=95.143.211.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
 From: Konstantin Andreev <andreev@swemel.ru>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-	t=1737070875;
+	t=1737070876;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SJK6O2euHswKcvpPtpkf+nTNWFV/9JASqjlvapynFiA=;
-	b=jvtuN4KrhdBSeMf7HaPHXkl+iQAMAD22xTH8SnwpWQLjc7PyO0rzdYU0cJLL/n0Rzpk6vQ
-	Eg5+9IslkYyeg2xDhl5nOMCaFWTGIalTbftekZmmkhYRL5SmEgRqSOIi7YzqxlWudjPZ8l
-	L4V1ERGUvkVzjB6cvfnpRdU95GM0uLA=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pb/MNHvhvFXBbhTWO7zGURzWNjB4hwzKQfEEZrk0CrU=;
+	b=L9ZUTXWdbB5GYVuJzAINkOW4o/FMSL4EDz6ike1lrooxKYYjUKND3yOGkDYMsPV3Ikimgu
+	E9ysC/O+84SUwY1et8LK+HnsbVk2xgOiWYldo8AGfv9VQxeHbwuLzrA3aJjcn9C/U3iKR8
+	2G7N/UqyYgDpic27+7cXQLPTsT7splg=
 To: Casey Schaufler <casey@schaufler-ca.com>
 Cc: linux-security-module@vger.kernel.org
-Subject: [PATCH 0/2] smack: recognize ipv4 CIPSO w/o categories
-Date: Fri, 17 Jan 2025 02:40:32 +0300
-Message-ID: <20250116234043.2904723-1-andreev@swemel.ru>
+Subject: [PATCH 1/2] smack: Revert "smackfs: Added check catlen"
+Date: Fri, 17 Jan 2025 02:40:33 +0300
+Message-ID: <20250116234043.2904723-2-andreev@swemel.ru>
+In-Reply-To: <20250116234043.2904723-1-andreev@swemel.ru>
+References: <20250116234043.2904723-1-andreev@swemel.ru>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -53,22 +57,56 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Before [1] SMACK did not recognize CIPSO w/o categories (sensitivity only)
-[1] tried to address this, but did this wrong.
+This reverts commit ccfd889acb06eab10b98deb4b5eef0ec74157ea0
 
-The 1st patch reverts [1],
-the 2nd patch addresses CIPSO w/o categories better than [1].
+The indicated commit
+* does not describe the problem that change tries to solve
+* has programming issues
+* introduces a bug: forever clears NETLBL_SECATTR_MLS_CAT
+         in (struct smack_known *)skp->smk_netlabel.flags
 
-[1] https://lore.kernel.org/linux-security-module/20230124105037.23108-1-arefev@swemel.ru/
-    ccfd889acb06 ("smackfs: Added check catlen")  2023-01-24
+Reverting the commit to reapproach original problem
 
-Konstantin Andreev (2):
-  smack: Revert "smackfs: Added check catlen"
-  smack: recognize ipv4 CIPSO w/o categories
+Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
+---
+ security/smack/smackfs.c | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
- security/smack/smackfs.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
-
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index 357188f764ce..ef34b0bac603 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -812,7 +812,7 @@ static int smk_open_cipso(struct inode *inode, struct file *file)
+ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+ 				size_t count, loff_t *ppos, int format)
+ {
+-	struct netlbl_lsm_catmap *old_cat, *new_cat = NULL;
++	struct netlbl_lsm_catmap *old_cat;
+ 	struct smack_known *skp;
+ 	struct netlbl_lsm_secattr ncats;
+ 	char mapcatset[SMK_CIPSOLEN];
+@@ -899,19 +899,8 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+ 
+ 		smack_catset_bit(cat, mapcatset);
+ 	}
+-	ncats.flags = 0;
+-	if (catlen == 0) {
+-		ncats.attr.mls.cat = NULL;
+-		ncats.attr.mls.lvl = maplevel;
+-		new_cat = netlbl_catmap_alloc(GFP_ATOMIC);
+-		if (new_cat)
+-			new_cat->next = ncats.attr.mls.cat;
+-		ncats.attr.mls.cat = new_cat;
+-		skp->smk_netlabel.flags &= ~(1U << 3);
+-		rc = 0;
+-	} else {
+-		rc = smk_netlbl_mls(maplevel, mapcatset, &ncats, SMK_CIPSOLEN);
+-	}
++
++	rc = smk_netlbl_mls(maplevel, mapcatset, &ncats, SMK_CIPSOLEN);
+ 	if (rc >= 0) {
+ 		old_cat = skp->smk_netlabel.attr.mls.cat;
+ 		rcu_assign_pointer(skp->smk_netlabel.attr.mls.cat, ncats.attr.mls.cat);
 -- 
 2.43.0
 
