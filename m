@@ -1,49 +1,46 @@
-Return-Path: <linux-security-module+bounces-7759-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7763-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9313AA16D4D
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 Jan 2025 14:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AE53A1724F
+	for <lists+linux-security-module@lfdr.de>; Mon, 20 Jan 2025 18:46:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 671207A134E
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 Jan 2025 13:21:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A1E97A047C
+	for <lists+linux-security-module@lfdr.de>; Mon, 20 Jan 2025 17:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9B11DF98A;
-	Mon, 20 Jan 2025 13:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083051EF09B;
+	Mon, 20 Jan 2025 17:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cFXLS8MX"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="oz1+08NC"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43D71DED4B;
-	Mon, 20 Jan 2025 13:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785F82033A;
+	Mon, 20 Jan 2025 17:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737379293; cv=none; b=gEaqIGApiZVahF8/nS3IM2vhb7UztdHmNK5cQiFyCjnBTsewtriKQpt+/A3o1c6BbXmuECMi1r1XaO0XU/s/29rN9W+j/mDI0jPXhVB/kYa6M0FMqF7iXsILdWWg2O2tdJRR/4NqMujMTUfhqfiPnbMwIcn++mW5C+FoA/YTW/k=
+	t=1737395145; cv=none; b=uLXGBb0UuNfNZCGK/Fy1JkFgYYmhtX5IpCBap2RZeJvjGsq/7MfHBlYtiz7+wnMCbpk13Xv+VmOTI5bAxixeOoHfJ/5zpGIvY+Mnt6Gb1AcUK75VkxdhvZm3XaCinlfim21BSJQMl38G9qr0yNCxoPc77L22zkDHqrnXSuNxtyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737379293; c=relaxed/simple;
-	bh=gC579WahATfW87vCukQ9zNWcta2vXe56nrlKbwqFpRs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QbM+pjK/8wEdKlVGNmXW3f/QXO0EEErbjHXc2bfyp6ZCU5zmfBDA3dAjWqy0PxjiHBGr7PHxeznrbbnkZN04XMNvQtNxSFNqncIjm1bjMv+8R8N2D73qyyknOFj0qZUdbTtDjAvb/pOoZKxE+elVPHx5JJPo/b4cl/0fZuhlaLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cFXLS8MX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADE1C4CEE3;
-	Mon, 20 Jan 2025 13:21:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737379293;
-	bh=gC579WahATfW87vCukQ9zNWcta2vXe56nrlKbwqFpRs=;
-	h=From:Date:Subject:To:Cc:From;
-	b=cFXLS8MXbTJnyamRQM5Q9/pC1nGmdK3aG1XFh26BqzUb1xdbt8dBq76nJzui8QRCL
-	 a3ZfKdfry6AzHIE3563IMrZp9GdCpbA46SjNRhAghmWOoWtn+kFnqIYNWzoDubVdZG
-	 Ucl63ZrqXNu27D4JjQbNZRKCwHJQ+Hwyfo6AqFizQiux57NRqckAB5HVKlx1UVnDz/
-	 Yd8tWFmh6htp1Ftu9Ixwol2bsgK66KiCPVo2j5qg3uM8ZKcjSaINQ2/WHR5hzBzIvh
-	 mlJrfW0uAS7W9iur1rYRskU0ZB6eg+TCYozyWSD33Rswzn7WEX/1wNt7ifdUbdy/bv
-	 SJL+V+4P5djPA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 20 Jan 2025 06:21:14 -0700
-Subject: [PATCH] apparmor: Remove unused variable 'sock' in
- __file_sock_perm()
+	s=arc-20240116; t=1737395145; c=relaxed/simple;
+	bh=Anacu4YjU7Y+0UFvshDNslsiaYXQWIpLpz4Odcpokpo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=P7JM0TEXzgj6F9PZzoFedapb8iXh7NTBOuYE7beXNCI6q5L4Qo7RY8SsIfWCu0e2EMqXnsfrwoac/Moyj6IYPjXv3+TSbbbI4CZw6qxHgZ5UcLAAtA8cwHznLEOzrMajY1Q4+ofYd9B1vo0IHTFZ2W9ISL7o5H07I9y/RZ4FWro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=oz1+08NC; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1737395132;
+	bh=Anacu4YjU7Y+0UFvshDNslsiaYXQWIpLpz4Odcpokpo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=oz1+08NC3D+Rhd49WpzRylo0D1eWe2OT8a5wTIivYU5cjl3JtKdXh4Ln81QznbVUt
+	 BpwSg82Fu+Avhuurp8TmaaxU8/OV2rCosrm8dgANrflMmq2ffR/yft7tf01Y4FsCKo
+	 QzLduNvOYkBFAFDyIBlXqP+rkMi+iw6cnfRw8qX0=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 0/6] module: Introduce hash-based integrity checking
+Date: Mon, 20 Jan 2025 18:44:19 +0100
+Message-Id: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -51,69 +48,109 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250120-apparmor-fix-unused-sock-__file_sock_perm-v1-1-8d17bd672c6a@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMlNjmcC/x2N0QrCMBAEf6XcswdpqBb8FZGQphs9tEm4UBFK/
- 73Rt5mH2d2oQgWVrt1Gio9UyalJf+ooPH16gGVuTtbYs+mtYV+K1yUrR/nymtaKmWsOL3Yuyhv
- ux65AFzYYLnacAuI0Utsritb8v273fT8AS3kMWXsAAAA=
-X-Change-ID: 20250120-apparmor-fix-unused-sock-__file_sock_perm-0e4627bcefb7
-To: John Johansen <john.johansen@canonical.com>
-Cc: apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
- patches@lists.linux.dev, kernel test robot <lkp@intel.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1657; i=nathan@kernel.org;
- h=from:subject:message-id; bh=gC579WahATfW87vCukQ9zNWcta2vXe56nrlKbwqFpRs=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOl9vrenr5XmPNRl71GfsOh6LPvTEIbyPScX8D6b1C8U4
- mDs6dPQUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACZSUM7wz559x0x+7wVdrTMS
- 5BzSCqb4P1uW++dJ0HvThFmZha4vmRj+V/nYx062XfWEcynT8xz7QK04vrmewV2OoWY/DJZMry1
- gBAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHOLjmcC/3XMQQrCMBCF4auUWTuSpJaAK+8hXYRkagY0lUwbl
+ ZK7G7t3+T943wZCmUng3G2QqbDwnFqYQwc+unQj5NAajDInbcyAjzmsd8LoJJKgdYNy1nvjegX
+ t88w08Xv3rmPryLLM+bPzRf/Wf1LRqDBYrTxZ109BX17EIuLjGo+JFhhrrV+L53jTrwAAAA==
+X-Change-ID: 20241225-module-hashes-7a50a7cc2a30
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+ Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+ kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ linux-doc@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737395132; l=3412;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=Anacu4YjU7Y+0UFvshDNslsiaYXQWIpLpz4Odcpokpo=;
+ b=n8+AYe5cOrCdvMkfIk3unYSBDTJ/R6Pp6/qaXgD2sDJMYgTaiUbZDVr0KAUbEB3gqDIfVjOb5
+ xe5U1rXRsKNBER8mFF9akip/deC0okGKLPSwwC9ROq9AQ9Ah9xnfYX3
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-When CONFIG_SECURITY_APPARMOR_DEBUG_ASSERTS is disabled, there is a
-warning that sock is unused:
+The current signature-based module integrity checking has some drawbacks
+in combination with reproducible builds:
+Either the module signing key is generated at build time, which makes
+the build unreproducible, or a static key is used, which precludes
+rebuilds by third parties and makes the whole build and packaging
+process much more complicated.
+Introduce a new mechanism to ensure only well-known modules are loaded
+by embedding a list of hashes of all modules built as part of the full
+kernel build into vmlinux.
 
-  security/apparmor/file.c: In function '__file_sock_perm':
-  security/apparmor/file.c:544:24: warning: unused variable 'sock' [-Wunused-variable]
-    544 |         struct socket *sock = (struct socket *) file->private_data;
-        |                        ^~~~
+Interest has been proclaimed by NixOS, Arch Linux, Proxmox, SUSE and the
+general reproducible builds community.
 
-sock was moved into aa_sock_file_perm(), where the same check is
-present, so remove sock and the assertion from __file_sock_perm() to fix
-the warning.
+To properly test the reproducibility in combination with CONFIG_INFO_BTF
+another patch is needed:
+"[PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation" [0]
+(If you happen to test that one, please give some feedback)
 
-Fixes: c05e705812d1 ("apparmor: add fine grained af_unix mediation")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202501190757.myuLxLyL-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Questions for current patch:
+* Naming
+* Can the number of built-in modules be retrieved while building
+  kernel/module/hashes.o? This would remove the need for the
+  preallocation step in link-vmlinux.sh.
+
+Further improvements:
+* Use a LSM/IMA/Keyring to store and validate hashes
+* Use MODULE_SIG_HASH for configuration
+* UAPI for discovery?
+
+[0] https://lore.kernel.org/lkml/20241211-pahole-reproducible-v1-1-22feae19bad9@weissschuh.net/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- security/apparmor/file.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/security/apparmor/file.c b/security/apparmor/file.c
-index 85f89814af1e..e3a858649942 100644
---- a/security/apparmor/file.c
-+++ b/security/apparmor/file.c
-@@ -541,11 +541,8 @@ static int __file_sock_perm(const char *op, const struct cred *subj_cred,
- 			    struct aa_label *flabel, struct file *file,
- 			    u32 request, u32 denied)
- {
--	struct socket *sock = (struct socket *) file->private_data;
- 	int error;
- 
--	AA_BUG(!sock);
--
- 	/* revalidation due to label out of date. No revocation at this time */
- 	if (!denied && aa_label_is_subset(flabel, label))
- 		return 0;
+Changes in v2:
+- Drop RFC state
+- Mention interested parties in cover letter
+- Expand Kconfig description
+- Add compatibility with CONFIG_MODULE_SIG
+- Parallelize module-hashes.sh
+- Update Documentation/kbuild/reproducible-builds.rst
+- Link to v1: https://lore.kernel.org/r/20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net
 
 ---
-base-commit: e6b087676954e36a7b1ed51249362bb499f8c1c2
-change-id: 20250120-apparmor-fix-unused-sock-__file_sock_perm-0e4627bcefb7
+Thomas Weißschuh (6):
+      kbuild: add stamp file for vmlinux BTF data
+      module: Make module loading policy usable without MODULE_SIG
+      module: Move integrity checks into dedicated function
+      module: Move lockdown check into generic module loader
+      lockdown: Make the relationship to MODULE_SIG a dependency
+      module: Introduce hash-based integrity checking
+
+ .gitignore                                   |  1 +
+ Documentation/kbuild/reproducible-builds.rst |  5 ++-
+ Makefile                                     |  8 ++++-
+ include/asm-generic/vmlinux.lds.h            | 11 ++++++
+ include/linux/module.h                       |  8 ++---
+ include/linux/module_hashes.h                | 17 +++++++++
+ kernel/module/Kconfig                        | 21 ++++++++++-
+ kernel/module/Makefile                       |  1 +
+ kernel/module/hashes.c                       | 52 +++++++++++++++++++++++++++
+ kernel/module/internal.h                     |  8 +----
+ kernel/module/main.c                         | 54 +++++++++++++++++++++++++---
+ kernel/module/signing.c                      | 24 +------------
+ scripts/Makefile.modfinal                    | 10 ++++--
+ scripts/Makefile.vmlinux                     |  5 +++
+ scripts/link-vmlinux.sh                      | 31 +++++++++++++++-
+ scripts/module-hashes.sh                     | 26 ++++++++++++++
+ security/lockdown/Kconfig                    |  2 +-
+ 17 files changed, 238 insertions(+), 46 deletions(-)
+---
+base-commit: 2cd5917560a84d69dd6128b640d7a68406ff019b
+change-id: 20241225-module-hashes-7a50a7cc2a30
 
 Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
+Thomas Weißschuh <linux@weissschuh.net>
 
 
