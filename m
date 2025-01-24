@@ -1,55 +1,55 @@
-Return-Path: <linux-security-module+bounces-7889-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7886-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8F5CA1BE42
-	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 23:05:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09A36A1BE2E
+	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 22:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48BE83A16F9
-	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 22:05:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B6A0165F4D
+	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 21:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99921DD866;
-	Fri, 24 Jan 2025 22:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C1BF3232;
+	Fri, 24 Jan 2025 21:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="F2i+x+v+"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="TRysiucF"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F60C14D430;
-	Fri, 24 Jan 2025 22:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95133C00
+	for <linux-security-module@vger.kernel.org>; Fri, 24 Jan 2025 21:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737756305; cv=none; b=qaC1iCX34i+emxf0HmoiSCBqiTtmKFSfNPBDCRiy7JuuT81lVnACh9B5o9z1Ci0vGycUL4ZAvqkGb0/1sGDlhZEekzBo8IzbxfrgZSvnUBpqJtMV/ahCqChCFQD+ncSwLRpKjJ7v0kb7PlqlmjYnzGsB5d8sEiw+9HLkLqmXaQs=
+	t=1737755987; cv=none; b=W6EVfKN9kMIpNxzwVF7iMUxTDN++o0MmqCCja72/zlBcCBcVZA6DE11OVlAhNYfnUbzvYMujU9i1fO8eq0pDfZbUPdT11I5TVLS0F+dlGQCZOuPyiHjlLSX0j9XN/iJJQT9wnHQbIAnw9JcWTPjgn+nD08WmpN4KM8tl6nMzbGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737756305; c=relaxed/simple;
-	bh=nPgzmYPDqN5JmrWi6BsUKgJFJXD7cVZTxBGB66jUWGs=;
+	s=arc-20240116; t=1737755987; c=relaxed/simple;
+	bh=20aEpxQNko3NkId9Veoz6QAg5OBmgLrK3vGSfIv5KVI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iODhSd3G7PKOtDwA8JFUd7v3dQhDU7QActYcnhs7IYd4q4GZ7RaKB+8MxuKKivy9Ojze8yVx620/82xxowFICIfTuQ9N/t0IDOvtz6A2UDO16ZlP1p2Q3GWj1QGfnDOpJiT3RvUV14m7ETcUhEluXxNGPYsXeBFzFfrQEDpLiak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=F2i+x+v+; arc=none smtp.client-ip=185.125.188.120
+	 In-Reply-To:Content-Type; b=DrTHlskgMprdXn86fGaHDP+XLchVXFv/mbuqdDEX2qB7mvlpb32bDiKYWHRvZ5UTN7H+emyXFtMJ1PM6tzijrP8v7Xv9/Xk/ZYSCnuI2N+zP9+KYoBbgY6xo+jkk+vkx4Pu7bQXySimDMu3rLep/GmMn77tTp1/B6XPqNIvph1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=TRysiucF; arc=none smtp.client-ip=185.125.188.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [192.168.192.85] (unknown [50.39.104.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id A78C03F18C;
-	Fri, 24 Jan 2025 21:57:03 +0000 (UTC)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 601E33FBAB;
+	Fri, 24 Jan 2025 21:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1737755825;
-	bh=hgDoAqgGec76Qn1es80BEKttyfB8mlXTWAm6Mg9ImBw=;
+	s=20210705; t=1737755979;
+	bh=UzAV6c2tj+Gz46sK4WwRJnge7aAxaiZDlcKh2m8wnrQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=F2i+x+v+H1IrJNjAKlfSTrnzxhiU8f9/f/rKamu5W/BZGcD+MOsm3DKuGQx5VLaqy
-	 86ysZl92I/o5LSKy0UceiqryesBxzSmoRvehLpBZZGq89TzSrNh8GErjTaynHae87x
-	 k8t/mHJpa/sNxUqiDIjIjyC3ZiXfopTQuIvlztoWzx8j+WuTbjo18kKFeyyOKWx9aW
-	 wOX2N6E2kIHRzVBVnWev1ZinQs5+loxUzbXEvbqE4sroz6ekw/e2O6fbYFErxg5uLJ
-	 c4nLzS4An3CYvQlpVnNbxGQ0jTsh4Ng5dT0xyYpGYMC3Djnvf0WqoKLfxs+zze7mwl
-	 IyeGZgagIRllA==
-Message-ID: <7122554b-d53e-4916-9531-4ceba28ad43f@canonical.com>
-Date: Fri, 24 Jan 2025 13:56:59 -0800
+	b=TRysiucFsweGOubBvi9HkcGEY/i6JqoY6Bfr4GoGTgBPf7sp1xR8Imk0XcIpeK/dJ
+	 ggImWtwRumZrW1r6WPvk+3FpvNpbSB0BJr1HTN5JsezLdD8e3HecdnFEJOBWo2EC51
+	 9In3XEC6FcCHcQUUH6h9cu5upidD5rFpKEbT3WDUxEW2bZ8ooalUfGdU9SU6BL77Ny
+	 liSlu7I4TyYJqZd2juXGWe2ufn9PWQeXuoCwdnVGDLjlanroySpb1MTD4rDwwl3Wsv
+	 Rm8FhwDnCcqgq46jIzwpj0QZWAuVyRDZE7GKEV6fKbgb/2R9utJjqAmodPqzeC/nKq
+	 lwLSPRtnm9EWA==
+Message-ID: <15e13942-965b-49f9-bf69-36579237a4cb@canonical.com>
+Date: Fri, 24 Jan 2025 13:59:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -57,14 +57,13 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH] apparmor: Use str_yes_no() helper function
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241220192243.1856-1-thorsten.blum@linux.dev>
- <d93ed7bb-b184-4153-8084-b693eb1e2b85@canonical.com>
- <1C3FAFB6-14DB-4E2D-8310-06022B2BB20A@linux.dev>
+Subject: Re: [PATCH] apparmor: Fix checking address of an array in
+ accum_label_info()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev,
+ kernel test robot <lkp@intel.com>
+References: <20250120-apparmor-pointer-bool-conversion-label-v1-1-5957d28ffde6@kernel.org>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -110,31 +109,52 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <1C3FAFB6-14DB-4E2D-8310-06022B2BB20A@linux.dev>
+In-Reply-To: <20250120-apparmor-pointer-bool-conversion-label-v1-1-5957d28ffde6@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/14/25 02:15, Thorsten Blum wrote:
-> On 20. Dec 2024, at 21:19, John Johansen wrote:
->> On 12/20/24 11:22, Thorsten Blum wrote:
->>> Remove hard-coded strings by using the str_yes_no() helper function.
->>> Fix a typo in a comment: s/unpritable/unprintable/
->>> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
->>
->> Hey Thorsten,
->>
->> sorry for the delay on this I am just really backlogged and will try to catch-up
->> on the mailing list traffic this weekend.
->>
->> Acked-by: John Johansen <john.johansen@canonical.com>
->>
->> I have pulled this into my tree and it should migrate into linux-next soon
+On 1/20/25 05:12, Nathan Chancellor wrote:
+> clang warns:
 > 
-> Hi John, I can't find this in linux-next yet. Any ideas?
+>    security/apparmor/label.c:206:15: error: address of array 'new->vec' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+>      206 |         AA_BUG(!new->vec);
+>          |                ~~~~~~^~~
 > 
+> The address of this array can never be NULL because it is not at the
+> beginning of a structure. Convert the assertion to check that the new
+> pointer is not NULL.
+> 
+> Fixes: de4754c801f4 ("apparmor: carry mediation check on label")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501191802.bDp2voTJ-lkp@intel.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-yeah sorry, I had to disable my pre push hook, it does some sanity checks around
-sign-offs, checkpatch, etc and well takes a while. Any ways it was tripping on some stuff
-causing it not to push, and the last few week being crazy I just missed it.
+Acked-by: John Johansen <john.johansen@canonical.com>
+
+I have pulled this into my tree
+
+> ---
+>   security/apparmor/label.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/apparmor/label.c b/security/apparmor/label.c
+> index afded9996f61..79be2d3d604b 100644
+> --- a/security/apparmor/label.c
+> +++ b/security/apparmor/label.c
+> @@ -203,7 +203,7 @@ static void accum_label_info(struct aa_label *new)
+>   	long u = FLAG_UNCONFINED;
+>   	int i;
+>   
+> -	AA_BUG(!new->vec);
+> +	AA_BUG(!new);
+>   
+>   	/* size == 1 is a profile and flags must be set as part of creation */
+>   	if (new->size == 1)
+> 
+> ---
+> base-commit: e6b087676954e36a7b1ed51249362bb499f8c1c2
+> change-id: 20250120-apparmor-pointer-bool-conversion-label-7c1027964c7f
+> 
+> Best regards,
 
 
