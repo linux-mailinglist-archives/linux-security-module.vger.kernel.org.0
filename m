@@ -1,55 +1,55 @@
-Return-Path: <linux-security-module+bounces-7888-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7890-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8C1BA1BE3E
-	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 23:04:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11CC5A1BE4D
+	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 23:06:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46D123A19F9
-	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 22:04:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CB9D16DD92
+	for <lists+linux-security-module@lfdr.de>; Fri, 24 Jan 2025 22:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347481DB14B;
-	Fri, 24 Jan 2025 22:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D2F61DB128;
+	Fri, 24 Jan 2025 22:06:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="Q4OpDZ3V"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="FT4LQJvv"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6598314D430;
-	Fri, 24 Jan 2025 22:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747021DD872;
+	Fri, 24 Jan 2025 22:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737756248; cv=none; b=BFR4Rg2ZGUQ/eT5ElCqKGwOnsyCx5txE9LESeTAndsm44cnAYNT4a2MpMBeXxLirhZvl9HK2nDA4bL+FMRN2UWfTHz93N5oMWgB3M9fpEeP91PRR3iz/nt3/iafJcY1t7LzDD5LgvWMJ6IUFJqtxUvc3XwjRIY0C6wypwEjPC2s=
+	t=1737756366; cv=none; b=thnkd/CQHrPaXA+ko3BLcGEbDtDMN28xSa3VM7P7ddmV6thkrmlka43ibJNGGZz1NhXs1eWg3DJque2YskSag3t4JaU9pl/9oCObvOeDOgBjC74tryB/2JS5nwRnwhv9nfcKz2y8q0xukgRrHO3VGws8N507jHaNnhIvp97jsmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737756248; c=relaxed/simple;
-	bh=nUSp0i0lk1mbBolsxZjL8xTxlMkyP8B/YnKHjYhEaSQ=;
+	s=arc-20240116; t=1737756366; c=relaxed/simple;
+	bh=Q9Dli/n+4wzBAakS8bSHeA+5yUl1pFCI3Uq2EWY/YTk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U8G8a4Cdaaw0c+nW/WYN1xIUO2PCtOsOdkwlLN0ax79rnfN0diHN+cZ9vTAI9pBGCfnVnpxElCWXi4yhRMAFAUxYWEnrpcrYI3fPtUdG2uSpNxQx4+iictPySq9ScHOD5ExOZFeqDrRfuPSfA27WT743F0mzBvXXGFmCMcbcMbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=Q4OpDZ3V; arc=none smtp.client-ip=185.125.188.120
+	 In-Reply-To:Content-Type; b=hvwPgby/1hNwsKInZtfm7vow1FrQlW92hQ0JRwcwPPmiqa13tt6s/Jppzj4C7FBiMw2+laX8J+t6Jv7iQIXZvi1uxrBiBcQq8Wtn5YzEq5ry3tEE+HTZKi0rnNpaDd1uGZrig/WtAbd9a/uZgUF+suQM3XEuZ7x3UI6cSRhO/bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=FT4LQJvv; arc=none smtp.client-ip=185.125.188.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [192.168.192.85] (unknown [50.39.104.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 8D5EB3F925;
-	Fri, 24 Jan 2025 22:04:00 +0000 (UTC)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id F3A083F2C6;
+	Fri, 24 Jan 2025 22:06:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1737756241;
-	bh=o1YAUvONUu7Ul6dC45x+y0GtGKT4EgXqn8OAU5T2e4M=;
+	s=20210705; t=1737756362;
+	bh=v4qT4ZLIJbMuOhJT1595QhIXGdIoxQjQww3s9OLSjWw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=Q4OpDZ3VUruvOLzKmep0cOekl0qkaB/l3hT+zz2N90te5QewZmF+gNZrwTY9cGuOA
-	 f4k/tUOTl8wddn+e7mM9UiRIcK1/Ry4IKnj8aXucYAU2yFIsSt0NqHv4NcC9DzRwLX
-	 3wXBBDmiRkBpoI15qFjowzb78HI8n/YumaG84uigzooJbo7AL9cuOLGYqAOSAgf7cN
-	 irPR694c/iQPHgZLE8TpfZLGuoKhFtZNgk3z0/dyPSDwKgThr5NSYuq2iSrXenN3LE
-	 fdUwRIeGoEHnLWQrcUhNkxUUF+pcxwuDJgdRYUC1T7RUeFgy/OFsT9ISnD8CrtnnxQ
-	 mKeBGyl6ssV3A==
-Message-ID: <38ca7459-4034-4171-a231-6c06af1391f2@canonical.com>
-Date: Fri, 24 Jan 2025 14:03:58 -0800
+	b=FT4LQJvvlaN4FlN0msj5F/23rcbxMIOQoxJYjC1/nChk9n2AGEGftPsUrIdd8MElO
+	 rhlnR37r1IS0wVEjW8F4FzTD+Gx+ND7nvInUMVvn05z5YZ7dAoaSwcmZzhlGInRAUy
+	 GhgrZfOvnPXyR4eBZK0TVkvA4QitUY7fL/51xPyCiawHrY+4cbsOID2W4YbORT7Qgo
+	 M7F72GyS9BQ8j52QfOj336/6DLANBlvdJJR3S2OqniCypmB4q4pyDifnR3fzPeUMYp
+	 PzfgLgf8LY6KMetU2IxoJwO641VxoOzoxQhfeZ4ZH9BGV0bOIE5xwsEUALL2MOpX3c
+	 4Yr0JvF7fWpnw==
+Message-ID: <97669024-c5df-46dc-93bb-3b54f179db1d@canonical.com>
+Date: Fri, 24 Jan 2025 14:05:32 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -57,13 +57,12 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next 1/2] apparmor: Modify mismatched function name
+Subject: Re: [PATCH -next 2/2] apparmor: Modify mismatched function name
 To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 Cc: paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
  apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
  linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
 References: <20250121024444.88981-1-jiapeng.chong@linux.alibaba.com>
- <20250121024444.88981-2-jiapeng.chong@linux.alibaba.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -109,17 +108,17 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <20250121024444.88981-2-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20250121024444.88981-1-jiapeng.chong@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/20/25 18:44, Jiapeng Chong wrote:
 > No functional modification involved.
 > 
-> security/apparmor/file.c:184: warning: expecting prototype for aa_lookup_fperms(). Prototype was for aa_lookup_condperms() instead.
+> security/apparmor/lib.c:93: warning: expecting prototype for aa_mask_to_str(). Prototype was for val_mask_to_str() instead.
 > 
 > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=13605
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=13606
 > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
 Acked-by: John Johansen <john.johansen@canonical.com>
@@ -127,21 +126,21 @@ Acked-by: John Johansen <john.johansen@canonical.com>
 I have pulled this into my tree
 
 > ---
->   security/apparmor/file.c | 2 +-
+>   security/apparmor/lib.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/security/apparmor/file.c b/security/apparmor/file.c
-> index 85f89814af1e..f113eedbc208 100644
-> --- a/security/apparmor/file.c
-> +++ b/security/apparmor/file.c
-> @@ -169,7 +169,7 @@ static int path_name(const char *op, const struct cred *subj_cred,
+> diff --git a/security/apparmor/lib.c b/security/apparmor/lib.c
+> index dd5dcbe5daf7..325f26f39a63 100644
+> --- a/security/apparmor/lib.c
+> +++ b/security/apparmor/lib.c
+> @@ -82,7 +82,7 @@ int aa_parse_debug_params(const char *str)
+>   }
 >   
->   struct aa_perms default_perms = {};
 >   /**
-> - * aa_lookup_fperms - convert dfa compressed perms to internal perms
-> + * aa_lookup_condperms - convert dfa compressed perms to internal perms
->    * @subj_uid: uid to use for subject owner test
->    * @rules: the aa_policydb to lookup perms for  (NOT NULL)
->    * @state: state in dfa
+> - * aa_mask_to_str - convert a perm mask to its short string
+> + * val_mask_to_str - convert a perm mask to its short string
+>    * @str: character buffer to store string in (at least 10 characters)
+>    * @str_size: size of the @str buffer
+>    * @chrs: NUL-terminated character buffer of permission characters
 
 
