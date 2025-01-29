@@ -1,326 +1,177 @@
-Return-Path: <linux-security-module+bounces-7993-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-7995-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29EA8A220C9
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 16:44:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 589FDA22263
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 17:58:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68104162D8E
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 15:44:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 767183A5A73
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 16:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A8C1DE2DA;
-	Wed, 29 Jan 2025 15:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D781DFE16;
+	Wed, 29 Jan 2025 16:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qvnqSt4o"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F0DlUy1+"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D291C3BF7;
-	Wed, 29 Jan 2025 15:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66D11DF250
+	for <linux-security-module@vger.kernel.org>; Wed, 29 Jan 2025 16:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738165473; cv=none; b=DwAn30jnZBEO8GrNuozkaZ6Rdow3SxvCNDbNJA0kSGJzqOc7QDPZZJxDLo5ZDi8vf+CGqg6QHlhOXxoL28Uxg1WHPyqVLPhhBqehlZFTekxdbaB0sGScQPAbSN1DJ1n/IguIdjNy7vm/pj2S9tTrvHdGfh2txO+FIeP/BZn1gsQ=
+	t=1738169893; cv=none; b=DRAziczeAA5bnoyz6CrTpSMZUKkSxc2Yy7+q5W67yiIm62/9Qj3c9rlX0Hyij6zyJgEz4kBacgCgG3KDJtwKv4mDOADpAct4ZdKojIcM9HFhtTTr7YmGRZtlv5tdJqgXqfVA6mfaSuVoV4DoVMbbsmf04LFg3zFP/puUZtRhGwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738165473; c=relaxed/simple;
-	bh=UFm2qW/fRg6wqQYQxjoQT9PzURXgo+EKJkDzIsXHGyY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f46T9kpprI//9QjX/rn6nEP/lUuZpTE5bUEY4s6gYyoJbHVPkCAHckWJvnTl5Tvla2nOJ+MhwTvHIlGp5h3O50foYyCHHP99Zudpwbke23ipWjvWdFCfBkKKNMSEBcD2P99FpQlenSEuqJA+bBs/jY3kcy5jJyMowh5bqLb/QEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qvnqSt4o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E68C4CED1;
-	Wed, 29 Jan 2025 15:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738165472;
-	bh=UFm2qW/fRg6wqQYQxjoQT9PzURXgo+EKJkDzIsXHGyY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qvnqSt4oPwG672mqSgIqY6PIPq+pF7KsJJJy5U0pkCLQM99YHAE7wLM5xkCFNaYX/
-	 NMtRDrvZYXHeTAusSOI0R/oJYPVMbfDNmz+Msyqw0XGzlHIo1G4E6/jO1INeUR/2Cz
-	 flsj4aRAYp9E72Ide/YgAao/srYGu4zV3YuVQxSktxjyzOVsjmx2VH5kLNJbgrc3Yi
-	 VXTcOFVh38G8mbQgGZoxMJCh48qgH1xFIX7nSgoN0E33dWkTHIbmsRnyHPIiSQx+uP
-	 9ZtkD9r7oNxXbqw3zemHl0xOA4qmwBj430RgL36WRC+Gm871jSg+/RVNaEvlZvVyaV
-	 XX5bS5Ro6C3jw==
-Message-ID: <64b1de00-c724-4748-9133-acd0a79b6d72@kernel.org>
-Date: Wed, 29 Jan 2025 16:44:18 +0100
+	s=arc-20240116; t=1738169893; c=relaxed/simple;
+	bh=JIWQ1QO7BCksiEGMetoA9lKc3PKsttFlXXgneRTjly4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=PtHOqgtcuK2ZgSDYeAo1c3M3O09uAGZIOBG09/xMOChUq9+RDVWT47xPHz+6SheqmHMtBGDenQVbpCjguy4TZyyhJc2ymWnGuYdC11BCuKhbaKZWWKeelMv1PLGu7vVCcFxQnynxAM9x700MkURQ18Ibuk798nwo9F6sUSAnEZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F0DlUy1+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738169890;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=K47kaWwlvB0QgUEcbod96X79kXNV4c3e9UEBsXFBFcM=;
+	b=F0DlUy1+qL4e2IePa5rEaFNbIXSafaqM5QWCWPdRzr0SZlSVMVmjBXxYpsGztjg3BDcDtc
+	EpQI4CP46dog1JUzRdE+vJf47uKSu5COEBMUHlT2HJSuB2aOm9fa27fmiesTqscFpqsqX9
+	p3OlKO8LWCF3M6zdPav1RyXjqHQibxI=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-448-hDbKLrJ3NsGrTQAjNWvCcQ-1; Wed, 29 Jan 2025 11:58:07 -0500
+X-MC-Unique: hDbKLrJ3NsGrTQAjNWvCcQ-1
+X-Mimecast-MFC-AGG-ID: hDbKLrJ3NsGrTQAjNWvCcQ
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-aaf8396f65fso715100866b.0
+        for <linux-security-module@vger.kernel.org>; Wed, 29 Jan 2025 08:58:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738169886; x=1738774686;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K47kaWwlvB0QgUEcbod96X79kXNV4c3e9UEBsXFBFcM=;
+        b=HjEZHHOh6KEprd2q8x0/Q5xzaqu5NzvZR6QeyT6Ow/jmYUrS+iKtfywGC83qT/QIST
+         OgpKdjk9uH4D7DXgc7YsjGSaIhk9PfdyMo3wTthDrRL7txi2ezUMCpH61iCfNJWKCZQk
+         1Wd+0WpHV20Y8zqs2zrqjbzfuF9Dqbg3aF6gFF+UJT7zEE2XCkgreBDPtWSBW6m/xRSK
+         fhYqLgQNHwBQB874WguTrUcEjHvBb6spXLTqUzL56mXAb4LimebUtBIjd1u3JUkCnCyE
+         pLmn7mQdZTK/alwr9PrVV32Mhm+SHzFMl3Tt+Dl5FLfz/LIoBLvnt178/8eAYblHTCk9
+         gfaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVHDXI/Tr7bvjduhgGsk9qQh1gQCFt6tF6MD6BoWOM+CYiNXR/qxCIpdqzKYeKWhMFB0NgQmn2cFDWa/evW6ZH2gw2EYRQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtF4ss7zgrhwnqJxDRcfZyQ5706PQvZ4LTVsGnMOotSNFSkE5k
+	OPjRNMLxFuiw9GJovSgyXImbOPXV/04ZsN5R8ptuyvGtYzJGh3Wfg+Ej90Y0BnHZeYm1DSUqyUA
+	TJfxm8Dy2ndeI95KSaQpWT1JvTFoGm65qGUVo+QhrhL5XAZcmKEaytSG/QL5L5svPSzX7nWIzXQ
+	==
+X-Gm-Gg: ASbGncv5xkocovbFEgVcYNvIoJswyqZJrgMeEvOlglE1G7vWy8BgIGtTe2HhmV06gY0
+	MdKd7FwYZCTurND7u5nkhezKWrnaCY+la0Tt8KX4YFDyQH+E1i+gANSbsfuRXaafP0itB0DTRmn
+	/MST4Lp6M6VWkzAeI+MYMsKgV22I0LdNcIniNqC53mUwdfmAkZLB2iL2qP6VdK+XEEQHul/tIWM
+	Suu54MkxnfnUbhqEgKm289tILd7Q6rOJSHVhaTLEevFifz/VlPZhmBcLZFnPDV5cB64kfTmRDK3
+	GxqqcH18ZdnIO5fIkaDTXqxYP2ZobtzBHMxqWgXPkr+r2hPZ2UnPM2RE
+X-Received: by 2002:a17:907:971f:b0:aa6:a844:8791 with SMTP id a640c23a62f3a-ab6cfe120e9mr362630466b.45.1738169885879;
+        Wed, 29 Jan 2025 08:58:05 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH3fQki93wvSIZNI2gPgUJncSMHks44LgIjMTqpIUAYXOgBM3KZNLb1wrvEfXMxgDFWGdYD3g==
+X-Received: by 2002:a17:907:971f:b0:aa6:a844:8791 with SMTP id a640c23a62f3a-ab6cfe120e9mr362628766b.45.1738169885491;
+        Wed, 29 Jan 2025 08:58:05 -0800 (PST)
+Received: from maszat.piliscsaba.szeredi.hu (91-82-183-41.pool.digikabel.hu. [91.82.183.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab675e653c6sm1002813366b.64.2025.01.29.08.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2025 08:58:04 -0800 (PST)
+From: Miklos Szeredi <mszeredi@redhat.com>
+To: linux-fsdevel@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Karel Zak <kzak@redhat.com>,
+	Lennart Poettering <lennart@poettering.net>,
+	Ian Kent <raven@themaw.net>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Paul Moore <paul@paul-moore.com>,
+	selinux@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	selinux-refpolicy@vger.kernel.org
+Subject: [PATCH v5 0/3] mount notification
+Date: Wed, 29 Jan 2025 17:57:58 +0100
+Message-ID: <20250129165803.72138-1-mszeredi@redhat.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [RFC PATCH v2 1/8] landlock: Fix non-TCP sockets restriction
-Content-Language: en-GB
-To: =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-Cc: gnoack@google.com, willemdebruijn.kernel@gmail.com, matthieu@buffet.re,
- linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
- netfilter-devel@vger.kernel.org, yusongping@huawei.com,
- artem.kuzin@huawei.com, konstantin.meskhidze@huawei.com,
- MPTCP Linux <mptcp@lists.linux.dev>, linux-nfs@vger.kernel.org,
- Paul Moore <paul@paul-moore.com>
-References: <20250124.gaegoo0Ayahn@digikod.net>
- <2f970b00-7648-1865-858a-214c5c6af0c4@huawei-partners.com>
- <20250127.Uph4aiph9jae@digikod.net>
- <d3d589c3-a70b-fc6e-e1bb-d221833dfef5@huawei-partners.com>
- <594263fc-f4e7-43ce-a613-d3f8ebb7f874@kernel.org>
- <f6e72e71-c5ed-8a9c-f33e-f190a47b8c27@huawei-partners.com>
- <2e727df0-c981-4e0c-8d0d-09109cf27d6f@kernel.org>
- <103de503-be0e-2eb2-b6f0-88567d765148@huawei-partners.com>
- <1d1d58b3-2516-4fc8-9f9a-b10604bbe05b@kernel.org>
- <b9823ff1-2f66-3992-b389-b8e631ec03ba@huawei-partners.com>
- <20250129.Oo1xou8ieche@digikod.net>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20250129.Oo1xou8ieche@digikod.net>
-Content-Type: text/plain; charset=UTF-8
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ZcqNm9GAtRxlWbb9QpGR9GMQuqz-x9AEk8UYznB0EKE_1738169886
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Mickaël,
+This should be ready for adding to the v6.15 queue.  I don't see the
+SELinux discussion converging, so I took the simpler version out of the two
+that were suggested.
 
-On 29/01/2025 15:51, Mickaël Salaün wrote:
-> On Wed, Jan 29, 2025 at 02:47:19PM +0300, Mikhail Ivanov wrote:
->> On 1/29/2025 2:33 PM, Matthieu Baerts wrote:
->>> On 29/01/2025 12:02, Mikhail Ivanov wrote:
->>>> On 1/29/2025 1:25 PM, Matthieu Baerts wrote:
->>>>> Hi Mikhail,
->>>>>
->>>>> On 29/01/2025 10:52, Mikhail Ivanov wrote:
->>>>>> On 1/28/2025 9:14 PM, Matthieu Baerts wrote:
->>>>>>> Hi Mikhail,
->>>>>>>
->>>>>>> Sorry, I didn't follow all the discussions in this thread, but here are
->>>>>>> some comments, hoping this can help to clarify the MPTCP case.
->>>>>>
->>>>>> Thanks a lot for sharing your knowledge, Matthieu!
->>>>>>
->>>>>>>
->>>>>>> On 28/01/2025 11:56, Mikhail Ivanov wrote:
->>>>>>>> On 1/27/2025 10:48 PM, Mickaël Salaün wrote:
->>>>>>>
->>>>>>> (...)
->>>>>>>
->>>>>>>>> I'm a bit worried that we miss some of these places (now or in future
->>>>>>>>> kernel versions).  We'll need a new LSM hook for that.
->>>>>>>>>
->>>>>>>>> Could you list the current locations?
->>>>>>>>
->>>>>>>> Currently, I know only about TCP-related transformations:
->>>>>>>>
->>>>>>>> * SMC can fallback to TCP during connection. TCP connection is used
->>>>>>>>      (1) to exchange CLC control messages in default case and (2)
->>>>>>>> for the
->>>>>>>>      communication in the case of fallback. If socket was connected or
->>>>>>>>      connection failed, socket can not be reconnected again. There
->>>>>>>> is no
->>>>>>>>      existing security hook to control the fallback case,
->>>>>>>>
->>>>>>>> * MPTCP uses TCP for communication between two network interfaces
->>>>>>>> in the
->>>>>>>>      default case and can fallback to plain TCP if remote peer does not
->>>>>>>>      support MPTCP. AFAICS, there is also no security hook to
->>>>>>>> control the
->>>>>>>>      fallback transformation,
->>>>>>>
->>>>>>> There are security hooks to control the path creation, but not to
->>>>>>> control the "fallback transformation".
->>>>>>>
->>>>>>> Technically, with MPTCP, the userspace will create an IPPROTO_MPTCP
->>>>>>> socket. This is only used "internally": to communicate between the
->>>>>>> userspace and the kernelspace, but not directly used between network
->>>>>>> interfaces. This "external" communication is done via one or multiple
->>>>>>> kernel TCP sockets carrying extra TCP options for the mapping. The
->>>>>>> userspace cannot directly control these sockets created by the kernel.
->>>>>>>
->>>>>>> In case of fallback, the kernel TCP socket "simply" drop the extra TCP
->>>>>>> options needed for MPTCP, and carry on like normal TCP. So on the wire
->>>>>>> and in the Linux network stack, it is the same TCP connection, without
->>>>>>> the MPTCP options in the TCP header. The userspace continue to
->>>>>>> communicate with the same socket.
->>>>>>>
->>>>>>> I'm not sure if there is a need to block the fallback: it means only
->>>>>>> one
->>>>>>> path can be used at a time.
-> 
-> Thanks Matthieu.
-> 
-> So user space needs to specific IPPROTO_MPTCP to use MPTCP, but on the
-> network this socket can translate to "augmented" or plain TCP.
+Will work on adding selftests.
 
-Correct. On the wire, you will only see packet with the IPPROTO_TCP
-protocol. When MPTCP is used, extra MPTCP options will be present in the
-TCP headers, but the protocol is still IPPROTO_TCP on the network.
+Thanks to everyone for the reviews!
 
-> From Landlock point of view, what matters is to have a consistent policy
-> that maps to user space code.  The fear was that a malicious user space
-> that is only allowed to use MPTCP could still transform an MPTCP socket
-> to a TCP socket, while it wasn't allowed to create a TCP socket in the
-> first place.  I now think this should not be an issue because:
-> 1. MPTCP is kind of a superset of TCP
-> 2. user space legitimately using MPTCP should not get any error related
->    to a Landlock policy because of TCP/any automatic fallback.  To say
->    it another way, such fallback is independent of user space requests
->    and may not be predicted because it is related to the current network
->    path.  This follows the principle of least astonishment (at least
->    from user space point of view).
-> 
-> So, if I understand correctly, this should be simple for the Landlock
-> socket creation control:  we only check socket properties at creation
-> time and we ignore potential fallbacks.  This should be documented
-> though.
+Miklos
 
-It depends on the restrictions that are put in place: are the user and
-kernel sockets treated the same way? If yes, blocking TCP means that
-even if it will be possible for the userspace to create an IPPROTO_MPTCP
-socket, the kernel will not be allowed to IPPROTO_TCP ones to
-communicate with the outside world. So blocking TCP will implicitly
-block MPTCP.
+---
+v5:
+ - drop FS_MNT_CHANGE (Christian)
+ - rebased on current mainline (Amir)
+ - add FSNOTIFY_MNT_EVENTS (Amir)
+ - change selinux permission check to FILE__WATCH_MOUNT (Paul)
 
-On the other hand, if only TCP user sockets are blocked, then it will be
-possible to use MPTCP to communicate to any TCP sockets: with an
-IPPROTO_MPTCP socket, it is possible to communicate with any IPPROTO_TCP
-sockets, but without the extra features supported by MPTCP.
+v4:
+  - add notification on attribute change
+  - deal with two FIXMEs
+  - move data and code to #ifdef CONFIG_FSNOTIFY regions
+  - function renames for more consistentcy (Christian)
+  - explanation comment in umount_tree() (Christian)
+  - style cleanups in fanotify (Amir, Jan)
+  - changed FAN_MNT_* values (Amir)
 
-> As an example, if a Landlock policies only allows MPTCP: socket(...,
-> IPPROTO_MPTCP) should be allowed and any legitimate use of the returned
-> socket (according to MPTCP) should be allowed, including TCP fallback.
-> However, socket(..., IPPROTO_TCP/0), should only be allowed if TCP is
-> explicitly allowed.  This means that we might end up with an MPTCP
-> socket only using TCP, which is OK.
+v3:
+  - use a global list protected for temporarily storing (Christian)
+  - move fsnotify_* calls to namespace_unlock() (Christian)
+  - downgrade namespace_sem to read for fsnotify_* calls (Christian)
+  - add notification for reparenting in propagate_umount (Christian)
+  - require nsfs file (/proc/PID/ns/mnt) in fanotify_mark(2) (Christian)
+  - cleaner check for fsnotify being initialized (Amir)
+  - fix stub __fsnotify_mntns_delete (kernel test robot)
+  - don't add FANOTIFY_MOUNT_EVENTS to FANOTIFY_FD_EVENTS (Amir)
 
-Would it not be confusing for the person who set the Landlock policies?
-Especially for the ones who had policies to block TCP, and thought they
-were "safe", no?
+v2:
+  - notify for whole namespace as this seems to be what people prefer
+  - move fsnotify() calls outside of mount_lock
+  - only report mnt_id, not parent_id
 
-If only TCP is blocked on the userspace side, simply using IPPROTO_MPTCP
-instead of IPPROTO_TCP will allow any users to continue to talk with the
-outside world. Also, it is easy to force apps to use IPPROTO_MPTCP
-instead of IPPROTO_TCP, e.g. using 'mptcpize' which set LD_PRELOAD in
-order to change the parameters of the socket() call.
 
-   mptcpize run curl https://check.mptcp.dev
+Miklos Szeredi (3):
+  fsnotify: add mount notification infrastructure
+  fanotify: notify on mount attach and detach
+  vfs: add notifications for mount attach and detach
 
-> I guess this should be the same for other protocols, except if user
-> space can explicitly transform a specific socket type to use an
-> *arbitrary* protocol, but I think this is not possible.
-I'm sorry, I don't know what is possible with the other ones. But again,
-blocking both user and kernel sockets the same way might make more sense
-here.
+ fs/mount.h                         | 26 +++++++++
+ fs/namespace.c                     | 93 ++++++++++++++++++++++++++++--
+ fs/notify/fanotify/fanotify.c      | 38 +++++++++++-
+ fs/notify/fanotify/fanotify.h      | 18 ++++++
+ fs/notify/fanotify/fanotify_user.c | 87 +++++++++++++++++++++++-----
+ fs/notify/fdinfo.c                 |  5 ++
+ fs/notify/fsnotify.c               | 47 ++++++++++++---
+ fs/notify/fsnotify.h               | 11 ++++
+ fs/notify/mark.c                   | 14 ++++-
+ fs/pnode.c                         |  4 +-
+ include/linux/fanotify.h           | 12 ++--
+ include/linux/fsnotify.h           | 20 +++++++
+ include/linux/fsnotify_backend.h   | 42 ++++++++++++++
+ include/uapi/linux/fanotify.h      | 10 ++++
+ security/selinux/hooks.c           |  4 ++
+ 15 files changed, 396 insertions(+), 35 deletions(-)
 
->>>>>>
->>>>>> You mean that users always rely on a plain TCP communication in the case
->>>>>> the connection of MPTCP multipath communication fails?
->>>>>
->>>>> Yes, that's the same TCP connection, just without extra bit to be able
->>>>> to use multiple TCP connections associated to the same MPTCP one.
->>>>
->>>> Indeed, so MPTCP communication should be restricted the same way as TCP.
->>>> AFAICS this should be intuitive for MPTCP users and it'll be better
->>>> to let userland define this dependency.
->>>
->>> Yes, I think that would make more sense.
->>>
->>> I guess we can look at MPTCP as TCP with extra features.
->>
->> Yeap
->>
->>>
->>> So if TCP is blocked, MPTCP should be blocked as well. (And eventually
->>> having the possibility to block only TCP but not MPTCP and the opposite,
->>> but that's a different topic: a possible new feature, but not a bug-fix)
->> What do you mean by the "bug fix"?
->>
->>>
->>>>>>>> * IPv6 -> IPv4 transformation for TCP and UDP sockets withon
->>>>>>>>      IPV6_ADDRFORM. Can be controlled with setsockopt() security hook.
-> 
-> According to the man page: "It is allowed only for IPv6 sockets that are
-> connected and bound to a v4-mapped-on-v6 address."
-> 
-> This compatibility feature makes sense from user space point of view and
-> should not result in an error because of Landlock.
-> 
->>>>>>>>
->>>>>>>> As I said before, I wonder if user may want to use SMC or MPTCP and
->>>>>>>> deny
->>>>>>>> TCP communication, since he should rely on fallback transformation
->>>>>>>> during the connection in the common case. It may be unexpected for
->>>>>>>> connect(2) to fail during the fallback due to security politics.
->>>>>>>
->>>>>>> With MPTCP, fallbacks can happen at the beginning of a connection, when
->>>>>>> there is only one path. This is done after the userspace's
->>>>>>> connect(). If
-> 
-> A remaining question is then, can we repurpose an MPTCP socket that did
-> fallback to TCP, to (re)connect to another destination (this time
-> directly with TCP)?
-
-If the socket was created with the IPPROTO_MPTCP protocol, the protocol
-will not change after a disconnection. But still, with an MPTCP socket,
-it is by design possible to connect to a TCP one no mater how the socket
-was used before.
-
-> I guess this is possible.  If it is the case, I think it should be OK
-> anyway.  That could be used by an attacker, but that should not give
-> more access because of the MPTCP fallback mechanism anyway.  We should
-> see MPTCP as a superset of TCP.  At the end, security policy is in the
-> hands of user space.
-
-As long as it is documented and not seen as a regression :)
-
-To me, it sounds strange to have to add extra rules for MPTCP if TCP is
-blocked, but that's certainly because I see MPTCP like it is seen on the
-wire: as an extension to TCP, not as a different protocol.
-
-(...)
-
-Cheers,
-Matt
 -- 
-Sponsored by the NGI0 Core fund.
+2.48.1
 
 
