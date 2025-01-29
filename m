@@ -1,165 +1,148 @@
-Return-Path: <linux-security-module+bounces-7998-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8000-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7BABA2237F
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 18:59:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65904A2252F
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 21:40:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 916813A1ABA
-	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 17:58:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC1601636AF
+	for <lists+linux-security-module@lfdr.de>; Wed, 29 Jan 2025 20:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5381E0DD1;
-	Wed, 29 Jan 2025 17:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6336D1E32BD;
+	Wed, 29 Jan 2025 20:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ZrgeFQrq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xd41c4UU"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A47AE190661;
-	Wed, 29 Jan 2025 17:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AF21E2847;
+	Wed, 29 Jan 2025 20:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738173516; cv=none; b=Lz37ZdNQDLgm8NADKrVdb+INDlTxm9IcPZ9wFr6SsvYyxb+uGWidqYYxQEScWlZdYumYbJlGP0vCHSzL6Pe7cmdrQRXXmvTPQwE9WjlNcn3mWGFbKdkdmXyptTD+Zbl3OUvRBM0Q2WeWgMkp5gnYZmZYW7roqZPbjhN1zSZ2TiM=
+	t=1738183242; cv=none; b=ek2cRwJKJ65qMeTWShn4SPa23qIihKCn5gWepwV++3vtNbbtdaDnbmZ1SFcNE6uQwfaGUInGQMqk35IMn24fwNdl2wN1uzGW85zTmnHJEG02UEt8v1ihaBI4ovR6kZ0PjqrkvOSL3vJ+i4uiVfK1SABu8dmpfKVxP5pM4n1cxIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738173516; c=relaxed/simple;
-	bh=8xGh50OkPIQTLDP9gaG7cqIHeiecFwaWhFj7d59rlMM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JEDI4rP3hr8EdoCILK30GqSi5onEH0KuUxvgUEa2vBDEEI8E0p2U9JxbST8juUAu12xP8WkvCFO6YIqPBHE8eUiRG0B70BnILAemdwVAHqUCnKjfcU+HmyxSw6E09Zx1+XIKUAx61rYDMVEv6AdCRXyqYv4bcbYfqp1DFY9Y+Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ZrgeFQrq; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.17.64.118] (unknown [131.107.1.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id D67E02037174;
-	Wed, 29 Jan 2025 09:58:33 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D67E02037174
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1738173514;
-	bh=uRSQTrMFEFDm2zsBktN/wmD1BfYmyTblYMj8j8PqD2U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZrgeFQrqCXeYWNNY77CxMlSyVGM0q02Rzm2yrX2VrT8T8pTkoQDHtma7jyQkgm7iy
-	 Y2Hd1Mg12s/B0HXsRrQHcR7nayo8ie91WlsexMfid0DGaPHjxfjUjh8L6hkKiUEn5W
-	 srcOdvPpwhR2wOMSQ9X4E2NSCCzTm6YLKwtkBZm8=
-Message-ID: <0bc207f9-2392-4cb0-ad5b-479033997612@linux.microsoft.com>
-Date: Wed, 29 Jan 2025 09:58:33 -0800
+	s=arc-20240116; t=1738183242; c=relaxed/simple;
+	bh=TvUphb/vlGuqwwWD+ZxDY8HH0Mf2NGUG6U/J+wtc9zA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RMcCzcPpCO8FC4roTYxIThTyf1N+vECCxfHVijN53342qmH1Rk/87qddX7W/OjiU+Bwk0ZuEveOaMBYKd0Mtbeuj48Xl8G/rmkuLm0MhyDxLneRkLV4LB0EZGRIgDNTTDkaBpJAhujR3oAfVm4LnI8fSaNajSEo2F3MxyM4nFEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xd41c4UU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED86C4CEED;
+	Wed, 29 Jan 2025 20:40:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738183239;
+	bh=TvUphb/vlGuqwwWD+ZxDY8HH0Mf2NGUG6U/J+wtc9zA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Xd41c4UU4fyEfrNAqf6xoW7OKWID7moCyhMfXJfDPcaESFSvKp+E9+0KkfY7Eo3lc
+	 ffz3Umx7wqSHwOzwftAS8vBX+xj8D7LUlJBTb2Hf1gQSUNYpE9PlAFXIzhRHN/4A0F
+	 okVjeWVu6UdwrkqWwTZ21wRxZgn9u5mNAskzF6prH8HNTwUGK00cPE0hTH3RQDZcF/
+	 6L7hMPSI65PyxHiq93BHe33XjP2ANtvtn6z0FQuXiyjlOqO16ST/I/cxRQwYyuWMso
+	 jWftYOlkUfnWdfA3dgwvrbv5I3/uzSzIsAyVPI9Wtba6uj9TliyiyNr5SSsq0aLnIU
+	 kTPFgH7LyEeDA==
+From: wufan@kernel.org
+To: corbet@lwn.net,
+	jmorris@namei.org,
+	paul@paul-moore.com,
+	serge@hallyn.com,
+	akpm@linux-foundation.org
+Cc: linux-doc@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	Fan Wu <wufan@kernel.org>
+Subject: [RFC PATCH v2 0/2] ipe support for anonymous memory and memfd
+Date: Wed, 29 Jan 2025 20:39:30 +0000
+Message-Id: <20250129203932.22165-1-wufan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/7] ima: kexec: skip IMA segment validation after
- kexec soft reboot
-To: Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
- roberto.sassu@huaweicloud.com, petr@tesarici.cz, eric.snowberg@oracle.com,
- paul@paul-moore.com, code@tyhicks.com, nramas@linux.microsoft.com,
- James.Bottomley@HansenPartnership.com, madvenka@linux.microsoft.com
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250124225547.22684-1-chenste@linux.microsoft.com>
- <20250124225547.22684-4-chenste@linux.microsoft.com>
- <35dcea8e-6418-4c60-b4ab-8e6c26721715@linux.ibm.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <35dcea8e-6418-4c60-b4ab-8e6c26721715@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 1/28/2025 7:23 AM, Stefan Berger wrote:
->
->
-> On 1/24/25 5:55 PM, steven chen wrote:
->> kexec_calculate_store_digests() calculates and stores the digest of the
->> segment at kexec_file_load syscall where the IMA segment is also
->> allocated.  With this series, the IMA segment will be updated with the
->> measurement log at kexec soft reboot.  Therefore, it may fail digest
->
-> ... log at kexec execute stage when the soft reboot is initiated.
->
->> verification in verify_sha256_digest() after kexec soft reboot into the
-> > new Kernel.  Therefore, the digest calculation/verification of the IMA
->
-> kernel
->
->> segment needs to be skipped.
->>
->> Skip IMA segment from calculating and storing digest in function
->> kexec_calculate_store_digests() so that it is not added to the
->> 'purgatory_sha_regions'.
->>
->> Since verify_sha256_digest() only verifies 'purgatory_sha_regions',
->> no change is needed in verify_sha256_digest() in this context.
->>
->> With this change, the IMA segment is not included in the digest
->> calculation, storage, and verification.
->>
->> Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> Signed-off-by: steven chen <chenste@linux.microsoft.com>
->> ---
->>   include/linux/kexec.h              |  3 +++
->>   kernel/kexec_file.c                | 10 ++++++++++
->>   security/integrity/ima/ima_kexec.c |  3 +++
->>   3 files changed, 16 insertions(+)
->>
->> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
->> index f8413ea5c8c8..f3246e881ac8 100644
->> --- a/include/linux/kexec.h
->> +++ b/include/linux/kexec.h
->> @@ -362,6 +362,9 @@ struct kimage {
->>         phys_addr_t ima_buffer_addr;
->>       size_t ima_buffer_size;
->> +
->> +    unsigned long ima_segment_index;
->> +    bool is_ima_segment_index_set;
-> >   #endif>
->>       /* Core ELF header buffer */
->> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
->> index 3eedb8c226ad..4ff3ba0f3e8e 100644
->> --- a/kernel/kexec_file.c
->> +++ b/kernel/kexec_file.c
->> @@ -764,6 +764,16 @@ static int kexec_calculate_store_digests(struct 
->> kimage *image)
->>           if (ksegment->kbuf == pi->purgatory_buf)
->>               continue;
->>   +#ifdef CONFIG_IMA_KEXEC
->> +        /*
->> +         * Skip the segment if ima_segment_index is set and matches
->> +         * the current index
->> +         */
->> +        if (image->is_ima_segment_index_set &&
->> +            i == image->ima_segment_index)
->> +            continue;
->> +#endif
->> +
->>           ret = crypto_shash_update(desc, ksegment->kbuf,
->>                         ksegment->bufsz);
->>           if (ret)
->> diff --git a/security/integrity/ima/ima_kexec.c 
->> b/security/integrity/ima/ima_kexec.c
->> index b60a902460e2..283860d20521 100644
->> --- a/security/integrity/ima/ima_kexec.c
->> +++ b/security/integrity/ima/ima_kexec.c
->> @@ -162,6 +162,7 @@ void ima_add_kexec_buffer(struct kimage *image)
->>       kbuf.buffer = kexec_buffer;
->>       kbuf.bufsz = kexec_buffer_size;
->>       kbuf.memsz = kexec_segment_size;
->> +    image->is_ima_segment_index_set = false;
->>       ret = kexec_add_buffer(&kbuf);
->>       if (ret) {
->>           pr_err("Error passing over kexec measurement buffer.\n");
->> @@ -172,6 +173,8 @@ void ima_add_kexec_buffer(struct kimage *image)
->>       image->ima_buffer_addr = kbuf.mem;
->>       image->ima_buffer_size = kexec_segment_size;
->>       image->ima_buffer = kexec_buffer;
->> +    image->ima_segment_index = image->nr_segments - 1;
->> +    image->is_ima_segment_index_set = true;
->>         /*
->>        * kexec owns kexec_buffer after kexec_add_buffer() is called
->
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+From: Fan Wu <wufan@kernel.org>
 
-Thanks. Will update in next release.
+This patchset adds support for anonymous memory and memfd to the IPE LSM.
+Currently, the IPE policy language can only allow or deny a physical file
+from an integrity-verified source. However, for events triggered by
+anonymous memory, either created via mmap() with MAP_ANONYMOUS or via
+memfd_create(), IPE provides no mechanism to explicitly allow or deny
+these events.
+
+Execution from anonymous memory is a common use case in modern
+applications. For example, JIT compilers store generated code in such
+regions. This patchset introduces a new IPE property, anonymous_memory,
+to let administrators explicitly allow or deny events triggered by
+anonymous memory.
+
+For example, the following policy:
+
+  policy_name=example_policy policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE dmverity_signature=TRUE action=ALLOW
+  op=EXECUTE anonymous_memory=TRUE action=ALLOW
+
+will allow execution of files from a signed dm-verity volume and also
+execution from anonymous memory.
+
+In the current design, the anonymous_memory property covers both
+memory regions created by mmap() with MAP_ANONYMOUS and those
+allocated by memfd_create(), as both share the same semantics [1].
+However, because regular files on tmpfs, shmemfs, or hugetlbfs are
+also backed by anonymous memory, the policy language might not be
+entirely clear to users. An alternative approach would be to define
+two separate properties, one covering MAP_ANONYMOUS and another
+covering memfd_create().
+
+Nonetheless, allowing execution from anonymous memory does increase
+the attack surface. Future work will add additional properties to
+the IPE policy language to provide more fine-grained control.
+For instance, one possibility is to permit only processes with certain
+security attributes, such as specific SELinux labels, to execute code
+from anonymous memory.
+
+The ipe test suite has been updated to include anonymous memory tests:
+https://github.com/microsoft/ipe/tree/test-suite
+
+[1] https://man7.org/linux/man-pages/man2/memfd_create.2.html
+
+Previous Postings
+-----------------
+v1: https://lore.kernel.org/all/66922c42-c3a2-4634-a8f0-4c8c2b4c051a@kernel.org/T/
+
+Changelog
+---------
+
+V2:
+  * Update test suite to include anonymous memory tests
+  * Fix property implementation and add memfd support
+
+Fan Wu (2):
+  memfd,lsm: add a security hook to memfd_create()
+  ipe: add 'anonymous_memory' property for policy decisions
+
+ Documentation/admin-guide/LSM/ipe.rst | 12 ++++++++++
+ Documentation/security/ipe.rst        |  9 +++----
+ include/linux/lsm_hook_defs.h         |  3 +++
+ include/linux/security.h              |  8 +++++++
+ mm/memfd.c                            |  2 ++
+ security/ipe/Kconfig                  | 10 ++++++++
+ security/ipe/audit.c                  |  2 ++
+ security/ipe/eval.c                   | 34 +++++++++++++++++++++++----
+ security/ipe/eval.h                   | 13 ++++++----
+ security/ipe/hooks.c                  | 12 ++++++++++
+ security/ipe/hooks.h                  |  4 ++++
+ security/ipe/ipe.c                    |  7 ++++--
+ security/ipe/policy.h                 |  2 ++
+ security/ipe/policy_parser.c          |  4 ++++
+ security/security.c                   | 11 +++++++++
+ 15 files changed, 119 insertions(+), 14 deletions(-)
+
+-- 
+2.47.1
 
 
