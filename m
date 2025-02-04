@@ -1,184 +1,228 @@
-Return-Path: <linux-security-module+bounces-8121-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8123-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 460A6A276FE
-	for <lists+linux-security-module@lfdr.de>; Tue,  4 Feb 2025 17:19:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CA02A27B74
+	for <lists+linux-security-module@lfdr.de>; Tue,  4 Feb 2025 20:40:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD3DE16487F
-	for <lists+linux-security-module@lfdr.de>; Tue,  4 Feb 2025 16:19:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93FC3162342
+	for <lists+linux-security-module@lfdr.de>; Tue,  4 Feb 2025 19:40:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394582153C8;
-	Tue,  4 Feb 2025 16:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7985204F7D;
+	Tue,  4 Feb 2025 19:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yf2TOE5y"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UfBeuDgt"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70DF1214A60
-	for <linux-security-module@vger.kernel.org>; Tue,  4 Feb 2025 16:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053D0204C15;
+	Tue,  4 Feb 2025 19:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738685958; cv=none; b=AGSehJ05t1HKyz9qK56q2+zdwUKWooIVBIHYlZGXr4OFw+CafL9+wUj/TVzbHn6WVzIg8fog3EF1+Z/mCHO28hicGHdI+u2Leq0eUFNEET07nhOD9YyjyiwQoc9/VFAIb0u4Hgz1S5lcc3oNuqdWvFnTxRIjc5vvRysfanfiW8E=
+	t=1738698038; cv=none; b=rs0jdvKFHyziy5W/hy+HyiMQLXCPnBraqcqj77mSZV+fikPTBrGudEkYCz5PX5i0kuY3YdOfP/6Wrq0Bhlg9hvf/k0dQCR1+LpcrbAxNE+sB0Km6+Xq+1AKf2lqfY6knNTJoXJBcJHJp8TC1wXqZB5Y3jUpib4c7IgIjZNwhlrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738685958; c=relaxed/simple;
-	bh=74T0US/o9kjlBij28lGopeWdzH++KQNYK++WmLFe1uQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AtAE9OvLp03Wb6v8iXDp9daG1UWJVrhBWUoB0q4UQvtXxgYXtEAK2J4xBxWr/6tq/avq4zlbYhr9YSvLWcPe4eeNA9KIHg9diYd2yZq2zJvlFVU9tI2yJVlOjRvIliqqd2LibT3qZoPMld+L8SeIUEU1Eh/wMFUG8HSjm0WfM2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yf2TOE5y; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738685955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=74T0US/o9kjlBij28lGopeWdzH++KQNYK++WmLFe1uQ=;
-	b=Yf2TOE5yEju9v+/toRjI2+NgIr8PnXA3h3WRIt+lJ8Ezbb4yN66qRJz5twTIRN1r9CUHlk
-	U+zzr/Fhd5pzJxb1MNg6wg6Bb3+Sb2Ewja+RyfL+vfe0Kzlh82KpCht40hw/kuosGHZNiq
-	YAL50nr8RyC/b5Ja3DE/9W6oaLVEnNA=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-374-mjrTbfxgN2a0SFKxMZm9pw-1; Tue, 04 Feb 2025 11:19:12 -0500
-X-MC-Unique: mjrTbfxgN2a0SFKxMZm9pw-1
-X-Mimecast-MFC-AGG-ID: mjrTbfxgN2a0SFKxMZm9pw
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2f9c78739f5so1283185a91.1
-        for <linux-security-module@vger.kernel.org>; Tue, 04 Feb 2025 08:19:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738685951; x=1739290751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=74T0US/o9kjlBij28lGopeWdzH++KQNYK++WmLFe1uQ=;
-        b=flYB8/3n0PpDYtFEd/HDuWPib22A0PU3dtJAVH4jfG4fL3oLPL1on5kBYwKYb0CGsJ
-         Sg0sTwxSf1eFdySAZwTmxGQK2TJV9ysHlsmTExwFFAKM+fnWhDACbfQnsIsCDP+lFdqv
-         s02Ru0lbjP2b7BsaUbKpJIAd+mPWKGLmW20+WmB/5Evrt2HFbKytM3E884oLUyJVw41I
-         Rm10nFJJyGHzVFZka6OzJTXDYj3VCrhDhPgPr61fYPxkLkPIBGJIsDkAeVqHU0QMKKA+
-         yg+Rlv36g3yAosOeRh8xGpCE6ijd1n2nJ8Oqu+iE1aBBtQVckWufXhYJq7oMN/cFDV2v
-         ZyJg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/cz9cZ8pV7oKrYAaOYmbFuZF2ejF9RvulTCMuM02R/1vcsFDA9Nce/dyMor5InxKxTGcvkdOWSpaUeI3MtaRbgYM+Fpo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5RSbe7U9WNT1cR0AWAAWXA4XyjrYO3YIhhuzOTLR+NWVoAZ43
-	cAUbwwl5hSMipeSPaY+DABOoQAR+uN+LBWx6KHBNma11ItzkkaiZWmT8jCBDX2UtAnhsPfWj1az
-	QEGpXHFhIlZE+tzUsH4mcX+hKaWw2UWy2RwFzrGe2eWvAzzTrOd4HFQ80tSvytPrFIC9J2NRdw4
-	au6vYNGHePV6prsy9jojphSgmPl33ROqae9SAtN9aWipaBDrNm
-X-Gm-Gg: ASbGncv5HN9TQ/4phP3RXMeMcP0C9qGwiS9Tt3Eg2qk1OxW2N1KBWxuAL9tzWvxnB3U
-	t1RRQBpNL1dmiAHgHNt6a0IZPUYChWrPu8bVwiT9d8DEfLFkMIRp+tVCqczhH1Q==
-X-Received: by 2002:a17:90b:2884:b0:2f9:9c3a:ed3 with SMTP id 98e67ed59e1d1-2f9ba73e992mr5850930a91.16.1738685951013;
-        Tue, 04 Feb 2025 08:19:11 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF3tNzqy+EU7XvxQi+cg7fICk2NlmjtW/FLHsyarEoa9g32uMgqKoDLiZihP/6mbIUzBrFaPLZ4sIHN3Vf+DyA=
-X-Received: by 2002:a17:90b:2884:b0:2f9:9c3a:ed3 with SMTP id
- 98e67ed59e1d1-2f9ba73e992mr5850904a91.16.1738685950735; Tue, 04 Feb 2025
- 08:19:10 -0800 (PST)
+	s=arc-20240116; t=1738698038; c=relaxed/simple;
+	bh=9uM5IP0WLr9HdjNFniPf6qQTeKQb6IUb02V93ndFUCo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UIm2F0eZ4eIBbF5g2kH3qHVSy7FSNvp/uzQB7EKEeD6kkCotgN358MCyiVoVSJZXqHJvwFysIF+wd/vSkwc0cSPEjWy0eOcMklrT888D2MghD/+d7UCAe/oxIdkmTW5SFFNur01YxLKQT4CI15JHt10FWJQ/P2l90xOqgZeoOmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UfBeuDgt; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 514GEqdr029409;
+	Tue, 4 Feb 2025 19:39:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=nbwy+n
+	Gq+1o1SgLagklaC9pBWpqbNKasmV3JuWKyZLs=; b=UfBeuDgtkXLMAI5NU2Sdtm
+	YtpMl3HS6smuCs0CwZNbh0KxzTG3wY4FZO+LfJpmJPN3fx3Yq72q5z8RfH24kas0
+	ntawlnZH/6EKALI6j0VvZS4lFB+GyT/3KIP50blMRse81ueGCvzIs1UbF4hvu/OY
+	neuesc3TYK39T8JexvYCViU/iRZoe4EMy2NlsbOIfcWGQ/TRum9oxVdloeoZHuVf
+	H7VTNA9tVVXk/j/HQ8+He5dqLC+Twn9KAoW0VEN5yyn9tdjVGW/yt8EQVi+a83mC
+	brO9HH0vZHfRNGMRMT68ZHqp0jPo0oOvIPONyy/UL0SwFR6DOK/s1V9J1jUkvGdg
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44k8y9n2br-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 19:39:11 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 514GagLE006516;
+	Tue, 4 Feb 2025 19:39:09 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44hyekd2jd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 19:39:09 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 514Jd92H28705426
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 4 Feb 2025 19:39:09 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0CD2D58055;
+	Tue,  4 Feb 2025 19:39:09 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3033458043;
+	Tue,  4 Feb 2025 19:39:08 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  4 Feb 2025 19:39:08 +0000 (GMT)
+Message-ID: <00eeeb8b-cc28-42af-873f-3478cd22fb6e@linux.ibm.com>
+Date: Tue, 4 Feb 2025 14:39:07 -0500
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFqZXNtkCBT4f+PwyVRmQGoT3p1eVa01fCG_aNtpt6dakXncUg@mail.gmail.com>
- <e8b6c6f9-9647-4ab6-8bbb-ccc94b04ade4@yandex.ru> <67979d24d21bc_3f1a29434@willemb.c.googlers.com.notmuch>
- <CAFqZXNscJnX2VF-TyZaEC5nBtUUXdWPM2ejXTWBL8=5UyakssA@mail.gmail.com>
- <6798f1fb5e1ba_987d9294dc@willemb.c.googlers.com.notmuch> <c4413e16-d04f-4370-8edc-e4db21cc25f6@yandex.ru>
- <67996154e30ce_d9324294c4@willemb.c.googlers.com.notmuch> <8b81a534-9c30-4123-bd7d-bf3a9d89dfcb@yandex.ru>
- <679a376739b99_132e08294f3@willemb.c.googlers.com.notmuch>
- <04879909-72e5-4ab6-8c28-5d3cb551feb5@yandex.ru> <679bace3a753f_1d35f32942d@willemb.c.googlers.com.notmuch>
- <CAHC9VhS-uSaVmy65oA8p6tCzMZxMsuzdmxO-vf7L0p44ZKO=_A@mail.gmail.com>
-In-Reply-To: <CAHC9VhS-uSaVmy65oA8p6tCzMZxMsuzdmxO-vf7L0p44ZKO=_A@mail.gmail.com>
-From: Ondrej Mosnacek <omosnace@redhat.com>
-Date: Tue, 4 Feb 2025 17:18:58 +0100
-X-Gm-Features: AWEUYZmXehgyVPBBQTLARAnAWlLsy16wrENGnIjpxFiM8a4vwAAtZ0X_3p-nmQw
-Message-ID: <CAFqZXNtq7SZSu_JyY5yaiOQy89c=5jG+vqdg3_RSUWm4JNN00w@mail.gmail.com>
-Subject: Re: Possible mistake in commit 3ca459eaba1b ("tun: fix group
- permission check")
-To: Paul Moore <paul@paul-moore.com>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, stsp <stsp2@yandex.ru>, 
-	Willem de Bruijn <willemb@google.com>, Jason Wang <jasowang@redhat.com>, 
-	Jakub Kicinski <kuba@kernel.org>, network dev <netdev@vger.kernel.org>, 
-	Linux Security Module list <linux-security-module@vger.kernel.org>, 
-	SElinux list <selinux@vger.kernel.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ylyhLmaCGVOkmG_U2um7zdF8pn8xKzIKUr6k5I94Ot8_1738685951
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 3/7] ima: kexec: skip IMA segment validation after
+ kexec soft reboot
+To: steven chen <chenste@linux.microsoft.com>, zohar@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com
+References: <20250203232033.64123-1-chenste@linux.microsoft.com>
+ <20250203232033.64123-4-chenste@linux.microsoft.com>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20250203232033.64123-4-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3lTu4algauG_2DnpSlkJw5Wp7jnps3fb
+X-Proofpoint-ORIG-GUID: 3lTu4algauG_2DnpSlkJw5Wp7jnps3fb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-04_09,2025-02-04_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 clxscore=1015
+ spamscore=0 mlxscore=0 adultscore=0 impostorscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502040145
 
-On Tue, Feb 4, 2025 at 1:30=E2=80=AFAM Paul Moore <paul@paul-moore.com> wro=
-te:
->
-> On Thu, Jan 30, 2025 at 11:48=E2=80=AFAM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> > stsp wrote:
-> > > 29.01.2025 17:12, Willem de Bruijn =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > > > stsp wrote:
-> > > >> 29.01.2025 01:59, Willem de Bruijn =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > > >>> stsp wrote:
-> > > >>>> By doing that you indeed avoid
-> > > >>>> the problem of "completely
-> > > >>>> inaccessible tap". However, that
-> > > >>>> breaks my setup, as I really
-> > > >>>> intended to provide tap to the
-> > > >>>> owner and the unrelated group.
-> > > >>>> This is because, eg when setting
-> > > >>>> a CI job, you can add the needed
-> > > >>>> user to the needed group, but
-> > > >>>> you also need to re-login, which
-> > > >>>> is not always possible. :(
-> > > >>> Could you leave tun->owner unset?
-> > > >> That's exactly the problem: when
-> > > >> the user is not in the needed group,
-> > > >> then you need to unset _both_.
-> > > >> Unsetting only owner is not enough.
-> > > >> Adding the user to the group is not
-> > > >> enough because then you need to
-> > > >> re-login (bad for CI jobs).
-> > > > At some point we can question whether the issue is with the setup,
-> > > > rather than the kernel mechanism.
-> > > >
-> > > > Why does your setup have an initial user that lacks the group
-> > > > permissions of the later processes, and a tun instance that has bot=
-h
-> > > > owner and group constraints set?
-> > > >
-> > > > Can this be fixed in userspace, rather than allow this odd case in =
-the
-> > > > kernel. Is it baked deeply into common containerization tools, say?
-> > >
-> > > No-no, its not a real or unfixible
-> > > problem. At the end, I can just
-> > > drop both group and user ownership
-> > > of the TAP, and simply not to care.
-> >
-> > In that case the safest course of action is to revert the patch.
-> >
-> > It relaxes some access control restrictions that other users may have
-> > come to depend on.
-> >
-> > Say, someone expects that no process can use the device until it
-> > adds the user to one of the groups.
-> >
-> > It's farfetched, but in cases of access control, err on the side of
-> > caution. Especially retroactively.
->
-> If a revert is the best path forward for v6.14, do you think it would
-> be possible to get this fixed this week, or do you expect it to take
-> longer?
+On 2/3/25 6:20 PM, steven chen wrote:
+> kexec_calculate_store_digests() calculates and stores the digest of the
+> segment at kexec_file_load syscall where the IMA segment is also
+> allocated.  With this series, the IMA segment will be updated with the
+> measurement log at kexec excute stage when soft reboot is initiated.
 
-Willem has already posted patches on netdev [1][2] (thanks!), so I
-expect it will be fixed soon.
+s/excute/execute
 
-[1] https://lore.kernel.org/netdev/20250204161015.739430-1-willemdebruijn.k=
-ernel@gmail.com/
-[2] https://lore.kernel.org/netdev/20250203150615.96810-1-willemdebruijn.ke=
-rnel@gmail.com/
+> Therefore, it may fail digest verification in verify_sha256_digest()
+> after kexec soft reboot into the new kernel. Therefore, the digest
+> calculation/verification of the IMA segment needs to be skipped.
+> 
+> Skip IMA segment from calculating and storing digest in function
 
---=20
-Ondrej Mosnacek
-Senior Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+Skip the calculation and storing of the digest of the IMA segment in 
+kexec_calculate_store_digests() so that ...
+
+
+> kexec_calculate_store_digests() so that it is not added to the
+> 'purgatory_sha_regions'.
+> 
+> Since verify_sha256_digest() only verifies 'purgatory_sha_regions',
+> no change is needed in verify_sha256_digest() in this context.
+> 
+> With this change, the IMA segment is not included in the digest
+> calculation, storage, and verification.
+> 
+> Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+ > --->   include/linux/kexec.h              |  3 +++
+>   kernel/kexec_file.c                | 23 +++++++++++++++++++++++
+>   security/integrity/ima/ima_kexec.c |  3 +++
+>   3 files changed, 29 insertions(+)
+> 
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index f8413ea5c8c8..f3246e881ac8 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -362,6 +362,9 @@ struct kimage {
+>   
+>   	phys_addr_t ima_buffer_addr;
+>   	size_t ima_buffer_size;
+> +
+> +	unsigned long ima_segment_index;
+> +	bool is_ima_segment_index_set;
+>   #endif
+>   
+>   	/* Core ELF header buffer */
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 3eedb8c226ad..a3370a0dce20 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -38,6 +38,22 @@ void set_kexec_sig_enforced(void)
+>   }
+>   #endif
+>   
+> +#ifdef CONFIG_IMA_KEXEC
+> +static bool check_ima_segment_index(struct kimage *image, int i)
+> +{
+> +	if (image->is_ima_segment_index_set &&
+> +			i == image->ima_segment_index)
+
+The 'i =' should be indented under 'image->'.
+
+With these nits fixed:
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+
+> +		return true;
+> +	else
+> +		return false;
+> +}
+> +#else
+> +static bool check_ima_segment_index(struct kimage *image, int i)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +
+>   static int kexec_calculate_store_digests(struct kimage *image);
+>   
+>   /* Maximum size in bytes for kernel/initrd files. */
+> @@ -764,6 +780,13 @@ static int kexec_calculate_store_digests(struct kimage *image)
+>   		if (ksegment->kbuf == pi->purgatory_buf)
+>   			continue;
+>   
+> +		/*
+> +		 * Skip the segment if ima_segment_index is set and matches
+> +		 * the current index
+> +		 */
+> +		if (check_ima_segment_index(image, i))
+> +			continue;
+> +
+>   		ret = crypto_shash_update(desc, ksegment->kbuf,
+>   					  ksegment->bufsz);
+>   		if (ret)
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index b60a902460e2..283860d20521 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -162,6 +162,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+>   	kbuf.buffer = kexec_buffer;
+>   	kbuf.bufsz = kexec_buffer_size;
+>   	kbuf.memsz = kexec_segment_size;
+> +	image->is_ima_segment_index_set = false;
+>   	ret = kexec_add_buffer(&kbuf);
+>   	if (ret) {
+>   		pr_err("Error passing over kexec measurement buffer.\n");
+> @@ -172,6 +173,8 @@ void ima_add_kexec_buffer(struct kimage *image)
+>   	image->ima_buffer_addr = kbuf.mem;
+>   	image->ima_buffer_size = kexec_segment_size;
+>   	image->ima_buffer = kexec_buffer;
+> +	image->ima_segment_index = image->nr_segments - 1;
+> +	image->is_ima_segment_index_set = true;
+>   
+>   	/*
+>   	 * kexec owns kexec_buffer after kexec_add_buffer() is called
 
 
