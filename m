@@ -1,94 +1,211 @@
-Return-Path: <linux-security-module+bounces-8174-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8178-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A43EFA30CC8
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Feb 2025 14:26:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 351A8A3102F
+	for <lists+linux-security-module@lfdr.de>; Tue, 11 Feb 2025 16:50:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62A053A58ED
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Feb 2025 13:26:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9721168945
+	for <lists+linux-security-module@lfdr.de>; Tue, 11 Feb 2025 15:50:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26FDD524F;
-	Tue, 11 Feb 2025 13:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B88C253B69;
+	Tue, 11 Feb 2025 15:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="0/mPYFNx"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Y+D9bioG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="cUfJNtWX";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Y+D9bioG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="cUfJNtWX"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [185.125.25.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6787320F
-	for <linux-security-module@vger.kernel.org>; Tue, 11 Feb 2025 13:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D21253B4C;
+	Tue, 11 Feb 2025 15:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739280374; cv=none; b=k91N/tcER/C5GviOSCQS8/MeVKtLCYciDMBI9d4EngUa0S98kuQMs8VAlwoxXq40Bc2sQ8kaqPB2uMmow7uJVDzhFIn+VWcoL0t/HaUvjw75shTP5q3NZfQwQLR6fN6pOAGGqMZMHTGn6a4TheFAJiGIGV8UZBVZT5q9TeZRkbU=
+	t=1739289046; cv=none; b=ovdTJTLkn/95DomUBi+9WQrnNf3KBrAX0zTFM1g+/6do2sfEBrsYuyyw7/pxjBD4qR6loaHrXdZS5NuPwJYzPSc93Y51lFy27xbuRJaM0vKwKBY681mr+OjKx3ZphRnZ2P/W1A0Y1nhabGnGj9mq+LH9Emhz5sNYngaKGohb2xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739280374; c=relaxed/simple;
-	bh=foLtz4YAIIZIFxsL+bD71O1Y2wSQEYbhjmhB/7tGWUg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=B1y2tFzHTFVkSYP+XIPjjrc6V0InFreyiRBIWr9yWJk1xXnbgiN1rtKgj+zQaDjWnRkqc3m9u2B2XTNAhfMNcp+QrVAGjiYE6xluiEET45mx0smYeW+IXfPaFbAmpwgxsYDzNAXxlu1xGZdZ4VvYL9DLDgt3Ho8mOI/rwijJErU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=0/mPYFNx; arc=none smtp.client-ip=185.125.25.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YshzD21WVzpvH;
-	Tue, 11 Feb 2025 14:26:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1739280360;
-	bh=oEI1dLX3z3WnJRwXX4fVmgXzFsVcJphDLTIJHUJ5OaE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=0/mPYFNx54hTAEE2qfyb6AIN2Yv/hJLqox9Y4CTypfHJpJlYTZLwS2QdivihjFr9b
-	 T1c9jKE1H5gT0FZWNxQd38Gzsl5JaqIexJ8aRt60CErdlukY7gYDxJ43BK5m4v+ZAA
-	 7ti0ZrOEoLZ2fGNSweznagWQZKo46EPXdMfhelx0=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4YshzC5mr4zCjj;
-	Tue, 11 Feb 2025 14:25:59 +0100 (CET)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Florent Revest <revest@chromium.org>
-Subject: [PATCH v1] selftests/landlock: Enable the new CONFIG_AF_UNIX_OOB
-Date: Tue, 11 Feb 2025 14:25:28 +0100
-Message-ID: <20250211132531.1625566-1-mic@digikod.net>
+	s=arc-20240116; t=1739289046; c=relaxed/simple;
+	bh=DLoVaWN4pPM06i7274kUimEBAEHvEAUb+WbMY772pi4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LKVMwjvJ+uqCU1O3fFX8zTCxB01A6G/cmKtEDDS1E6kCI6v0bLfgKvqFo3xgLusxIiRYA1XIe0PJEH5XlZL09WCRBcIUQYcpc8AFGd7fwiZSP+FAqwbn86JhXU2qjzJirj2YrX3t9++q8SJ8d3EI1gX/f3A4BRvIs8oLTS9R4ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Y+D9bioG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=cUfJNtWX; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Y+D9bioG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=cUfJNtWX; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 90B43339CA;
+	Tue, 11 Feb 2025 13:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1739280741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OQgKLohp9UJppT3FHipy+VgWaxpWCieTbQmYejKjYXo=;
+	b=Y+D9bioGmHa3DDMKdgMsSTgkLT52ggg513kAY8MGyJo9J+RRuPxmzxrz2jzIjsDWXn/LZ8
+	gEyfQUVq5fthuIEy1dQCcDrvTlKHeG82eM0LeaBA5HNEqG/YHozg+247wLhrLpkFo/hl5R
+	pFWJ2Z2FDhZp23o6G91hAm+hxv4AFXI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1739280741;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OQgKLohp9UJppT3FHipy+VgWaxpWCieTbQmYejKjYXo=;
+	b=cUfJNtWXPk4bQ4zdkwAwWtQYsC8ktoRqy5MbAny9T2dyKu7Ut+agGB3+Aw1OF1M/YyifI0
+	0iL5fMt+7L4VmmAA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Y+D9bioG;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=cUfJNtWX
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1739280741; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OQgKLohp9UJppT3FHipy+VgWaxpWCieTbQmYejKjYXo=;
+	b=Y+D9bioGmHa3DDMKdgMsSTgkLT52ggg513kAY8MGyJo9J+RRuPxmzxrz2jzIjsDWXn/LZ8
+	gEyfQUVq5fthuIEy1dQCcDrvTlKHeG82eM0LeaBA5HNEqG/YHozg+247wLhrLpkFo/hl5R
+	pFWJ2Z2FDhZp23o6G91hAm+hxv4AFXI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1739280741;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OQgKLohp9UJppT3FHipy+VgWaxpWCieTbQmYejKjYXo=;
+	b=cUfJNtWXPk4bQ4zdkwAwWtQYsC8ktoRqy5MbAny9T2dyKu7Ut+agGB3+Aw1OF1M/YyifI0
+	0iL5fMt+7L4VmmAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8292513715;
+	Tue, 11 Feb 2025 13:32:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id AW7cH2VRq2dTOgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 11 Feb 2025 13:32:21 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 41745A095C; Tue, 11 Feb 2025 14:32:17 +0100 (CET)
+Date: Tue, 11 Feb 2025 14:32:17 +0100
+From: Jan Kara <jack@suse.cz>
+To: Miklos Szeredi <mszeredi@redhat.com>
+Cc: linux-fsdevel@vger.kernel.org, Christian Brauner <brauner@kernel.org>, 
+	Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>, Karel Zak <kzak@redhat.com>, 
+	Lennart Poettering <lennart@poettering.net>, Ian Kent <raven@themaw.net>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux-refpolicy@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] fanotify: notify on mount attach and detach
+Message-ID: <7fjcocufagvqgytwiqvbcehovmehgwytz67jv76327c52jrz2y@5re5g57otcws>
+References: <20250129165803.72138-1-mszeredi@redhat.com>
+ <20250129165803.72138-3-mszeredi@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250129165803.72138-3-mszeredi@redhat.com>
+X-Rspamd-Queue-Id: 90B43339CA
+X-Spam-Score: -4.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_COUNT_THREE(0.00)[3];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,suse.cz,gmail.com,redhat.com,poettering.net,themaw.net,zeniv.linux.org.uk,paul-moore.com];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:email]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-Since commit 5155cbcdbf03 ("af_unix: Add a prompt to
-CONFIG_AF_UNIX_OOB"), the Landlock selftests's configuration is not
-enough to build a minimal kernel.  Because scoped_signal_test checks
-with the MSG_OOB flag, we need to enable CONFIG_AF_UNIX_OOB for tests:
+On Wed 29-01-25 17:58:00, Miklos Szeredi wrote:
+> Add notifications for attaching and detaching mounts.  The following new
+> event masks are added:
+> 
+>   FAN_MNT_ATTACH  - Mount was attached
+>   FAN_MNT_DETACH  - Mount was detached
+> 
+> If a mount is moved, then the event is reported with (FAN_MNT_ATTACH |
+> FAN_MNT_DETACH).
+> 
+> These events add an info record of type FAN_EVENT_INFO_TYPE_MNT containing
+> these fields identifying the affected mounts:
+> 
+>   __u64 mnt_id    - the ID of the mount (see statmount(2))
+> 
+> FAN_REPORT_MNT must be supplied to fanotify_init() to receive these events
+> and no other type of event can be received with this report type.
+> 
+> Marks are added with FAN_MARK_MNTNS, which records the mount namespace from
+> an nsfs file (e.g. /proc/self/ns/mnt).
+> 
+> Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
 
- #  RUN           fown.no_sandbox.sigurg_socket ...
- # scoped_signal_test.c:420:sigurg_socket:Expected 1 (1) == send(client_socket, ".", 1, MSG_OOB) (-1)
- # sigurg_socket: Test terminated by assertion
- #          FAIL  fown.no_sandbox.sigurg_socket
- ...
+Just one small comment below. Otherwise feel free to add:
 
-Cc: Florent Revest <revest@chromium.org>
-Cc: Günther Noack <gnoack@google.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- tools/testing/selftests/landlock/config | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-diff --git a/tools/testing/selftests/landlock/config b/tools/testing/selftests/landlock/config
-index 29af19c4e9f9..361f94f8cb0d 100644
---- a/tools/testing/selftests/landlock/config
-+++ b/tools/testing/selftests/landlock/config
-@@ -1,3 +1,4 @@
-+CONFIG_AF_UNIX_OOB=y
- CONFIG_CGROUPS=y
- CONFIG_CGROUP_SCHED=y
- CONFIG_INET=y
+> @@ -1847,6 +1890,19 @@ static int do_fanotify_mark(int fanotify_fd, unsigned int flags, __u64 mask,
+>  		return -EINVAL;
+>  	group = fd_file(f)->private_data;
+>  
+> +	/* Only report mount events on mnt namespace */
+> +	if (FAN_GROUP_FLAG(group, FAN_REPORT_MNT)) {
+> +		if (mask & ~FANOTIFY_MOUNT_EVENTS)
+> +			return -EINVAL;
+> +		if (mark_type != FAN_MARK_MNTNS)
+> +			return -EINVAL;
+> +	} else {
+> +		if (mask & FANOTIFY_MOUNT_EVENTS)
+> +			return -EINVAL;
+> +		if (mark_type == FAN_MARK_MNTNS)
+> +			return -EINVAL;
+> +	}
+> +
+>  	/*
+>  	 * An unprivileged user is not allowed to setup mount nor filesystem
+>  	 * marks.  This also includes setting up such marks by a group that
+> @@ -1888,7 +1944,7 @@ static int do_fanotify_mark(int fanotify_fd, unsigned int flags, __u64 mask,
+>  	 * point.
+>  	 */
+>  	fid_mode = FAN_GROUP_FLAG(group, FANOTIFY_FID_BITS);
+> -	if (mask & ~(FANOTIFY_FD_EVENTS|FANOTIFY_EVENT_FLAGS) &&
+> +	if (mask & ~(FANOTIFY_FD_EVENTS|FANOTIFY_MOUNT_EVENTS|FANOTIFY_EVENT_FLAGS) &&
+
+I understand why you need this but the condition is really hard to
+understand now and the comment above it becomes out of date. Perhaps I'd
+move this and the following two checks for FAN_RENAME and
+FANOTIFY_PRE_CONTENT_EVENTS into !FAN_GROUP_FLAG(group, FAN_REPORT_MNT)
+branch to make things more obvious?
+
+								Honza
 -- 
-2.48.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
