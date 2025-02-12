@@ -1,160 +1,139 @@
-Return-Path: <linux-security-module+bounces-8186-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8188-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05621A31542
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Feb 2025 20:28:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B6DA32615
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 Feb 2025 13:44:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE9251649AE
-	for <lists+linux-security-module@lfdr.de>; Tue, 11 Feb 2025 19:28:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF905168B5E
+	for <lists+linux-security-module@lfdr.de>; Wed, 12 Feb 2025 12:44:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE95C267F6A;
-	Tue, 11 Feb 2025 19:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1B020D515;
+	Wed, 12 Feb 2025 12:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="vuMpHyMU"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bU3Rd2tJ"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [185.125.25.9])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9149267F54
-	for <linux-security-module@vger.kernel.org>; Tue, 11 Feb 2025 19:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC9F20C487;
+	Wed, 12 Feb 2025 12:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739301868; cv=none; b=QOnO0g2pUDDmQEm3CUcg7tyqKUs3WAvtOi/gZSd5wESolOXFcK66qofvqMPLz4MNypo008RY2CG7Cm0XLV3vfqfIJbNZFIGKB5ZcEl1LbGnCy1C8GmDvO//mxVe0ZscipDw5vP2ChSSxJ0ddxMphuHEC6XgVWVG1PfvxZVxoHuk=
+	t=1739364280; cv=none; b=eC1V6NbN2D+wZehPEJirz05q/pZ15BReOilCNivm5qtY+PYXnFSXkNR9Tqiz9orfJ7q1oDNJwSBDmPrUE+X+SOvLWRRQHvBPPBv+lU3gsBQ8UgjYNtHW8iUpJMiMltXaV+spXzqhoZPDQ+aK9N6/ZP0qsQBw7cwHrBNG+w8i89M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739301868; c=relaxed/simple;
-	bh=15B3NB2Jc6UAvD+/Ts407VLwdrwuTRLKfsAMpL4R0rA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rpOaVQ2jEGXfWlVaFm+ZOx2NUvtxkU1g0i+RgnCUNuTAk8rfD/hOR/1sNByUBX8Wn4CJmRST+NNeayPcSpA8EZNboviPPx0lf+J0qh9PTmb8CiQ4RVZhqGabZ/gHH4Y0XOgIAKGGdPU2MxeWHS1ouxdFjsBirqm2eMbbbFPOJaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=vuMpHyMU; arc=none smtp.client-ip=185.125.25.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Ysrwl3kM7zQSk;
-	Tue, 11 Feb 2025 20:24:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1739301863;
-	bh=+bzsGKDDfDPHHZ5hnwg/FUMPKucsS5mykrkkOVX0PAg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vuMpHyMUyBsWqKt2OTBBJHszaQyhM/vmZJ4y7lPQUzcHqr3+4uQY0GYb7gEKkUs/U
-	 e7cl0CMbkiffoMtROiw8zsTh18vT1mQ4mw5v4VpHCQ2bS31ucqhSx/ZCpjBzWyb0jN
-	 7ow1TbKUAwDPpgPJxa/H4j3UF8ktYdun6KaCGjoA=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Ysrwk1MjNzSyL;
-	Tue, 11 Feb 2025 20:24:22 +0100 (CET)
-Date: Tue, 11 Feb 2025 20:24:21 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Alejandro Colomar <alx@kernel.org>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	linux-security-module@vger.kernel.org, Tahera Fahimi <fahimitahera@gmail.com>, 
-	Tanya Agarwal <tanyaagarwal25699@gmail.com>, Daniel Burgener <dburgener@linux.microsoft.com>, 
-	tools@kernel.org, linux-doc@vger.kernel.org, linux-man@vger.kernel.org
-Subject: Re: [PATCH 1/2] landlock: Minor typo and grammar fixes in IPC
- scoping documentation
-Message-ID: <20250211.oavooPhap9OX@digikod.net>
-References: <20250124154445.162841-1-gnoack@google.com>
- <20250211.Ree5bu6Eph2p@digikod.net>
- <22olfm76rcgjfs4vrr3adtbznsnz47kaehlr3ljn6e5jkc6waq@ue7azstxlwfv>
- <20250211.ieSoo7Phe5oh@digikod.net>
- <3unkhxarmiddobfjvojx4sdpgitjld26udcagka2ocgrb6c2jc@dcg4w5yk5mut>
+	s=arc-20240116; t=1739364280; c=relaxed/simple;
+	bh=+mhHkXqhc4VDwPi7MLWcNjZdhTc4zZo0gwq+T5cTOIY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qt0m9RiwmHpRLQ+XABRLF70jn5Z3s8Omob7SQxcEzofj9DsdXtgtXADQGaShYhHZ8Nzjt6U/VYRJA+MqLDmALy3uzGNLld4J3hmKFLToTVHkIFZefFDFRhKpoHc0QFLmC0CyoXPE1ncwS+jdmU4MIe0C4OfW7hVFgDo4meB9P3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bU3Rd2tJ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51CBpiSd013640;
+	Wed, 12 Feb 2025 12:43:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=+mhHkX
+	qhc4VDwPi7MLWcNjZdhTc4zZo0gwq+T5cTOIY=; b=bU3Rd2tJlFFQqu5BV1YnSW
+	tkSX87Qk0oNHNsqBvOCKKjQZaMiiiZktgkFwm6RXdYLRIRz3064de3ZJXTpXluHu
+	jR03F9uRrZfaZigIPn78pnGDR9HygsJhvJ5DYCArhv2PG3aDrjD9XnfD+jBDYhlz
+	xI8W+J8GZ+nTiq+IF6s6C8efmO99g52z7VbIvRvo7u/PcEmBojze6dbCKo6XXUlL
+	j/3GiABLIEtJd6Ef0p7jqIKghjbxcTQr0y0HzxcxSdS0S7J5xaN+VGT0Pq9ntVu1
+	f6RR3BKMvXasb0aO6cNUobfx/7R+rEz600ZMWb7fDBrUlrWX8HgZMXek6yAfaF7A
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44rfpa3bm3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Feb 2025 12:43:04 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 51CCK66g021894;
+	Wed, 12 Feb 2025 12:43:03 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44rfpa3bky-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Feb 2025 12:43:03 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51CCdn11028217;
+	Wed, 12 Feb 2025 12:43:02 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44phyygqa4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Feb 2025 12:43:02 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51CCh1wq27132606
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 12 Feb 2025 12:43:01 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7A3245805F;
+	Wed, 12 Feb 2025 12:43:01 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3039258051;
+	Wed, 12 Feb 2025 12:43:00 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.169.88])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 12 Feb 2025 12:43:00 +0000 (GMT)
+Message-ID: <6f7120f292a7863e7c69d3cb49f224efd12ee629.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v3 07/13] keys: Add ability to track intended usage
+ of the public key
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Jarkko Sakkinen <jarkko.sakkinen@kernel.org>,
+        Eric Snowberg
+	 <eric.snowberg@oracle.com>
+Cc: linux-security-module@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+        ardb@kernel.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
+        mic@digikod.net, casey@schaufler-ca.com, stefanb@linux.ibm.com,
+        ebiggers@kernel.org, rdunlap@infradead.org,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Date: Wed, 12 Feb 2025 07:42:59 -0500
+In-Reply-To: <Z6UU7anXtW43AhNR@kernel.org>
+References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
+	 <20241017155516.2582369-8-eric.snowberg@oracle.com>
+	 <Z6UU7anXtW43AhNR@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3unkhxarmiddobfjvojx4sdpgitjld26udcagka2ocgrb6c2jc@dcg4w5yk5mut>
-X-Infomaniak-Routing: alpha
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WPOio9vJuKimRSeTX5erqwTICYwt3Uiv
+X-Proofpoint-ORIG-GUID: PANYEldy6s1JY0QEJs3RxZgvBxokQCaR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-12_04,2025-02-11_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ mlxscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ mlxlogscore=923 clxscore=1011 phishscore=0 impostorscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
+ definitions=main-2502120097
 
-On Tue, Feb 11, 2025 at 05:13:21PM +0100, Alejandro Colomar wrote:
-> Hi!
-> 
-> On Tue, Feb 11, 2025 at 04:53:44PM +0100, Mickaël Salaün wrote:
-> > > Let me suggest the opposite: Could we move the kernel docs to manual
-> > > pages in man9?  (As is the historic place for kernel docs.)
-> > > (You could keep man9 in the kernel tree if you want, or could handle it
-> > >  to the Linux man-pages project, if you want.)  That would help have a
-> > > more clear separation between the two sets of documentation, and prevent
-> > > duplication.
-> > 
-> > I didn't know about man9 but it's not clear to me what would be the
-> > content.
-> 
-> The official name of man9 is "Kernel Developer's Manual".
-> In-scope in man9 are internal kernel APIs, and in general anything that
-> is of interest to kernel developers but not to user-space developers.
-> 
-> >  Because I want new kernel features to come with proper tests
-> > and documentation, it would be much easier to apply all these patches to
-> > the same repository, at the same time.  Using the same repository should
-> > also help to synchronize documentation with code changes.
-> > 
-> > One remaining issue would be that some generated documentation come from
-> > the kernel source files, especially the UAPI headers, which also helps
-> > maintaining the documentation in sync with the code.  What would you
-> > suggest to improve the current workflow?
-> 
-> For generated documentation, I'd really avoid that.  Currently, in the
-> man-pages we only have bpf-helpers(7), and I'd very much not follow that
-> for other pages.
+On Thu, 2025-02-06 at 22:13 +0200, Jarkko Sakkinen wrote:
+> On Thu, Oct 17, 2024 at 09:55:10AM -0600, Eric Snowberg wrote:
+> > Add two new fields in public_key_signature to track the intended usage =
+of
+> > the signature.=C2=A0 Also add a flag for the revocation pass.=C2=A0 Dur=
+ing signature
+> > validation, two verifications can take place for the same signature.=C2=
+=A0 One
+> > to see if it verifies against something on the .blacklist keyring and
+> > the other to see if it verifies against the supplied keyring. The flag
+> > is used to determine which stage the verification is in.
+> >=20
+> > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+>=20
+> Mimi, was this the patch set you asked to look at while ago?</offtopic>
 
-OK, kernel doc in man9 would not be a good fit then.
+Yes, in particular please take a look at Paul's comment on 00/13.
 
-> 
-> For APIs that change often, that may make sense, but in general, APIs
-> shouldn't change significantly enough to prefer generated docs.
-> 
-> > > I personally don't like the idea of having man2 in the kernel tree.
-> > > Michael Kerrisk already mentioned several reasons for why it's a bad
-> > > idea in the past.  On top of them, I'd add that the build system of the
-> > > Linux man-pages project is quite more powerful than the kernel one, and
-> > > it would be an important regression to have to adapt to the kernel
-> > > Makefiles in the manual pages.
-> > 
-> > For the Landlock syscalls case, could we move the syscall documentation
-> > to man9?
-> 
-> man9 is for internal kernel APIs.  Here's intro(9) in different systems,
-> which documents what should go into man9, and what shouldn't:
-> 
-> <https://man.netbsd.org/intro.9>
-> <https://man.openbsd.org/intro.9>
-> <https://man.freebsd.org/cgi/man.cgi?query=intro&apropos=0&sektion=9&manpath=FreeBSD+14.2-RELEASE+and+Ports&arch=default&format=html>
-> 
-> Debian had a project which documented some Linux kernel internals in
-> man9, but it was eventually dropped.  I don't know who maintained that,
-> and what was the history about it.
-> 
-> If Landlock has internal documentation that only matters to kernel
-> developers, yes, that would be in-scope for man9.  The user-facing docs
-> are more relevant in man2 and man7, though.
-> 
-> I would be happy to take all the landlock docs in the form of man9 pages
-> if you handle them to the Linux man-pages project.  I can do the work of
-> transforming the .rst docs into man(7) pages; that's fine by me.
-> 
-> If there's consensus in the kernel of moving to man9 docs, I'd be happy
-> to help with that.  I fear that some maintainers may fear man(7) pages.
-> If you need me to give any talks to explain how to write man(7) source
-> code, and show that it's easier than it looks like, I could do that
-> (Günther already suggested me to do so :).  Maybe I should give a talk
-> at Plumbers.
-
-It would be interesting to get the point of view of other kernel
-maintainers but I guess a lot of them would have the same: to lower the
-bar of contributions.
-
-> 
-> 
-> Cheers,
-> Alex
-> 
-> -- 
-> <https://www.alejandro-colomar.es/>
-
-
+Mimi
 
