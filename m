@@ -1,142 +1,156 @@
-Return-Path: <linux-security-module+bounces-8201-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8203-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53864A38283
-	for <lists+linux-security-module@lfdr.de>; Mon, 17 Feb 2025 12:59:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19497A383F1
+	for <lists+linux-security-module@lfdr.de>; Mon, 17 Feb 2025 14:07:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 433747A138C
-	for <lists+linux-security-module@lfdr.de>; Mon, 17 Feb 2025 11:58:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF3E0173903
+	for <lists+linux-security-module@lfdr.de>; Mon, 17 Feb 2025 13:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 163AA217723;
-	Mon, 17 Feb 2025 11:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sTkB8PHK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9653F21C16A;
+	Mon, 17 Feb 2025 13:06:52 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B802153DD
-	for <linux-security-module@vger.kernel.org>; Mon, 17 Feb 2025 11:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72ADE215F49;
+	Mon, 17 Feb 2025 13:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739793539; cv=none; b=Po5dAm37zekpqM8ntYlDfn4yC+TS4ubfzqczUj1/bm2oWtb+9j/zl4301B8R869/hgV2PNUR1w3ejQg93cQZRbcM+UPaqsfCkOL4S0SFgpdPTIIFKe8vIIEo2vaZ9NuHi2k0fOLNH0RZKkOUMpKk5pAJzxUqDySaZan6lwdiwYQ=
+	t=1739797612; cv=none; b=Km2BKqIHOkvdycGF7fIei6jyphauagyLNpqdX3O/yn52nxbfhFswJAAxJuzBBkFEjQbXyof9cHzJ7sAwCH6JdF52PvtCxUZcY035dBr0WUjV+1V/sMWi/9a5AKNawpZWOPvautdRcB7yhfI/FOPTxe0gRNPU94Z0ORMSBlvJCCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739793539; c=relaxed/simple;
-	bh=LGHA7kSXDJ+acUeALqJkXXIxAC/7LMsVhJSunkrC0ho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=auMh8kAvVOAKJ9ScFfF4sZPe5jcv22sdqKWFWMoKjOvfBE5ec3G22cGoNyXB5KiCwWmRoyXUzZpWpoBqx+dW/+o5Utu1hwCh9S2vWVbGJ27XHezYh2OSGqAZ41Ah+/AAbXDPQBE4Kx44jKruJDNeUf10aF+KO0XLjZEBsLgT83k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sTkB8PHK; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-abb81285d33so298592966b.0
-        for <linux-security-module@vger.kernel.org>; Mon, 17 Feb 2025 03:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739793535; x=1740398335; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RaIXPrVsnekGZ6+y+FuiHvhs8/YBKFNcBPjcA8hkexg=;
-        b=sTkB8PHK2ynWPczClwn1tSPgElj4LYx+3vAXc7WrrHZBCZOOPtYtR77QXEhkyZ3dUR
-         nknQ/vnCmC9DNIBNiVbvM5zfYYf56U+q3ug89YuKqluV3j6u8lvH1MjoOHVSvKhUhACZ
-         FmMFM2hYkg2R/VJRwclpeCDjl4i+6EJFzMbzEKC7koKsqlSnxlV66W/Gj1deoRjrIy6e
-         k2FXo+A/LlM61/MhZOHJbryRM2R6+Bwm1EnhrRSzQgeAjuS2xk6JD/cMxUq5tNEC1W1G
-         trsYFTTWDw5IQAcCEJJsUy1gk4zqlYFKlSMqK/hs826L3+f2W+laZhoSPetMWa+sPWrN
-         jhkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739793535; x=1740398335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RaIXPrVsnekGZ6+y+FuiHvhs8/YBKFNcBPjcA8hkexg=;
-        b=bqOOhaEdiFW/MnY6fj0DwIVJhwgrP+vYgJgZy03wvI3Qxx/d4dAfPCcJDjodYgRih6
-         /62NJkIFE4H06UwDpIsVX8NwftAx414zS8ywXW/WS2HJaeqLdl9bM4dHuZgfuIDQ1iBl
-         XyCuDXpJUGMNl2xI7VfonvIcW/DC5p2rTOagUTHmKV3Wx+/8zaUaP/Yx6+ENCzFP8Yhx
-         foWLcNPFJVOMDnJmiSZ9k2FinabXCAe8ZY4hYi/BG+sHj2cclm78zI0MI54Ep/Pks8QW
-         XS+cLiSRkJu/jT99KKr+KdOcG55PHJoNCLlXd+LwX0u95maarbBCRJkb5/I0LlEmY57w
-         TPiw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfqBsd5yhRFdKdG80E/RUe1z6Pc6ZE2KSeAXVM44FFP2+x5p7WWcNZ6JOahu7PljbdpCewxsoeLLseGES6vWH+HE+dYXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrD2A3ivZqnXvmIM5NwhgNnrLpjf/gqDH2fcPqv7M9PXsvp9Kf
-	HRellcubx8+3lvOhBKeEtq7WV3J9CIy8bG8RY9YmUKyJIBwtYzjL9C+/z+wY1TTTr/PYfAcuw6y
-	pMA02RDdMLVvtx9c3VFQ1zMKQgjixw0DEHolB
-X-Gm-Gg: ASbGncuWU4EQn7kE4dKgBYEo+84KwZ1gJKFebx/pOjXp+lebkmD7UjBUHYop8UoRCti
-	JgvsO980tiyBTaItUdv5ZEfNHaWMgFUh1B2qCORyYC0sFQ5PivqqEku7G+jQhf2ZdDashYGR7UQ
-	==
-X-Google-Smtp-Source: AGHT+IGQTHcBd/2PvLwdIDrdzY1gITJeTXr12QGHG667SSdoKqwNmhWpZV0+hJ2mRbHEz5uu3eBkVx/QqrQsXHUlZDA=
-X-Received: by 2002:a17:906:6a03:b0:ab7:9aa2:5043 with SMTP id
- a640c23a62f3a-abb70de2922mr1112341866b.46.1739793535471; Mon, 17 Feb 2025
- 03:58:55 -0800 (PST)
+	s=arc-20240116; t=1739797612; c=relaxed/simple;
+	bh=nN4o3P1mouOHENLPIOBJJsndTSO4QsgADBehLhpRlW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oNmQ/wR8Y3BaMXlbC+OQn67HLpVQRtFsTaHuUUswSy+8hdb0xqMs4HMXbwtWPx8irPQMmtDpslFii7LKQTzc9njVypckkDVO0VX74Us259zueBvi0lx5NrqeOJxHrdwEbzqcXqvMeRfhDH4GIUI9/8xnzcDCiAd7scFccPO9AyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 51HCjfgB011690;
+	Mon, 17 Feb 2025 06:45:41 -0600
+Received: (from greg@localhost)
+	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 51HCjcjw011689;
+	Mon, 17 Feb 2025 06:45:38 -0600
+Date: Mon, 17 Feb 2025 06:45:38 -0600
+From: "Dr. Greg" <greg@enjellic.com>
+To: James Morris <jmorris@namei.org>
+Cc: linux-security-module@vger.kernel.org,
+        Linux Security Summit Program Committee <lss-pc@lists.linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        linux-integrity@vger.kernel.org, lwn@lwn.net
+Subject: Re: [Announce] Linux Security Summit North America 2025 CfP
+Message-ID: <20250217124538.GA11605@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <35b17495-427f-549f-6e46-619c56545b34@namei.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <5055ba8f8f72bdcb602faa299faca73c280b7735.1739743613.git.sd@queasysnail.net>
-In-Reply-To: <5055ba8f8f72bdcb602faa299faca73c280b7735.1739743613.git.sd@queasysnail.net>
-From: Eric Dumazet <edumazet@google.com>
-Date: Mon, 17 Feb 2025 12:58:44 +0100
-X-Gm-Features: AWEUYZmGQcf2SAE7ihBT6VvEcWgoxnUVjpdPLy3YcirIjnOYyCmIfpW7akpRbaw
-Message-ID: <CANn89iLZ9SuWnKD1cVu_3cvVYD9jzziq6P=AJy=nUyQUOe4T4g@mail.gmail.com>
-Subject: Re: [PATCH net v2] tcp: drop secpath at the same time as we currently
- drop dst
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Neal Cardwell <ncardwell@google.com>, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, David Ahern <dsahern@kernel.org>, 
-	linux-security-module@vger.kernel.org, Paul Moore <paul@paul-moore.com>, 
-	Xiumei Mu <xmu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35b17495-427f-549f-6e46-619c56545b34@namei.org>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Mon, 17 Feb 2025 06:45:41 -0600 (CST)
 
-On Mon, Feb 17, 2025 at 11:23=E2=80=AFAM Sabrina Dubroca <sd@queasysnail.ne=
-t> wrote:
->
-> Xiumei reported hitting the WARN in xfrm6_tunnel_net_exit while
-> running tests that boil down to:
->  - create a pair of netns
->  - run a basic TCP test over ipcomp6
->  - delete the pair of netns
->
-> The xfrm_state found on spi_byaddr was not deleted at the time we
-> delete the netns, because we still have a reference on it. This
-> lingering reference comes from a secpath (which holds a ref on the
-> xfrm_state), which is still attached to an skb. This skb is not
-> leaked, it ends up on sk_receive_queue and then gets defer-free'd by
-> skb_attempt_defer_free.
->
-> The problem happens when we defer freeing an skb (push it on one CPU's
-> defer_list), and don't flush that list before the netns is deleted. In
-> that case, we still have a reference on the xfrm_state that we don't
-> expect at this point.
->
-> We already drop the skb's dst in the TCP receive path when it's no
-> longer needed, so let's also drop the secpath. At this point,
-> tcp_filter has already called into the LSM hooks that may require the
-> secpath, so it should not be needed anymore. However, in some of those
-> places, the MPTCP extension has just been attached to the skb, so we
-> cannot simply drop all extensions.
->
-> Fixes: 68822bdf76f1 ("net: generalize skb freeing deferral to per-cpu lis=
-ts")
-> Reported-by: Xiumei Mu <xmu@redhat.com>
-> Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
-> ---
-> v1: drop all extensions just before calling skb_attempt_defer_free
->     https://lore.kernel.org/netdev/879a4592e4e4bd0c30dbe29ca189e224ec1739=
-a5.1739201151.git.sd@queasysnail.net/
-> v2: - drop only secpath, as soon as possible - per Eric's feedback
->     - add debug warns if trying to add to sk_receive_queue an skb with
->       a dst or a secpath
->
-> @Eric feel free to add some tags (Suggested-by? sign-off?) for the
-> code I adapted from
-> https://lore.kernel.org/netdev/CANn89i+JdDukwEhZ%3D41FxY-w63eER6JVixkwL+s=
-2eSOjo6aWEQ@mail.gmail.com/
+On Mon, Feb 10, 2025 at 01:03:02PM -0800, James Morris wrote:
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Good morning, I hope the week is starting well for everyone.
 
-Thanks !
+> The Call for Participation for the 2025 Linux Security Summit North 
+> America (LSS-NA) is now open.
+> 
+> LSS-NA 2025 is a technical forum for collaboration between Linux 
+> developers, researchers, and end-users. Its primary aim is to foster 
+> community efforts in deeply analyzing and solving Linux operating system 
+> security challenges, including those in the Linux kernel. Presentations 
+> are expected to focus deeply on new or improved technology and how it 
+> advances the state of practice for addressing these challenges.
+>
+> Key dates:
+> 
+>     - CFP Closes:  Monday, March 10 at 11:59 PM MDT / 10:59 PM PDT
+>     - CFP Notifications: Monday, March 31
+>     - Schedule Announcement: Wednesday, April 2
+>     - Presentation Slide Due Date: Tuesday, June 24
+>     - Event Dates: Thursday, June 26 ??? Friday, June 27
+> 
+> Location: Denver, Colorado, USA (co-located with OSS).
+
+I reflected a great deal before responding to this note and finally
+elected to do so.  Given the stated desire of this conference to
+'focus deeply on new or improved technologies' for advancing the state
+of practice in addressing the security challenges facing Linux, and
+presumably by extension, the technology industry at large.
+
+I'm not not sure what defines membership in the Linux 'security
+community'.  I first presented at the Linux Security Summit in 2015,
+James you were moderating the event and sitting in the first row.
+
+If there is a desire by the Linux Foundation to actually promote
+security innovation, it would seem the most productive use of
+everyone's time would be to have a discussion at this event focusing
+on how this can best be accomplished in the context of the current
+Linux development environment.
+
+If we have done nothing else with our Quixote/TSEM initiative, I
+believe we have demonstrated that Linux security development operates
+under the 'omniscient maintainer' model, a concept that is the subject
+of significant discussion in other venues of the Linux community:
+
+https://lore.kernel.org/lkml/CAEg-Je9BiTsTmaadVz7S0=Mj3PgKZSu4EnFixf+65bcbuu7+WA@mail.gmail.com/
+
+I'm not here to debate whether that is a good or bad model.  I do
+believe, that by definition, it constrains the innovation that can
+successfully emerge to something that an 'omniscient' maintainer
+understands, feels comfortable with or is not offended by.
+
+It should be lost on no one that the history of the technology
+industry has largely been one of disruptive innovation that is
+completely missed by technology incumbents.
+
+The future may be the BPF/LSM, although no one has yet publically
+demonstrated the ability to implement something on the order of
+SeLinux, TOMOYO or Apparmor through that mechanism.  It brings as an
+advantage the ability to innovate without constraints as to would be
+considered 'acceptable' security.
+
+Unfortunately, a careful review of the LSM mailing list would suggest
+that the BPF/LSM, as a solution, is not politically popular in some
+quarters of the Linux security community.  There have been public
+statements that there isn't much concern if BPF breaks, as the concept
+of having external security policy is not something that should be
+supported.
+
+We took an alternative approach with TSEM, but after two years of
+submissions, no code was ever reviewed.  I'm not here to bitch about
+that, however, the simple fact is that two years with no progress is
+an eternity in the technology industry, particularly security, and
+will serve to drive security innovation out of the kernel.
+
+One can make a reasoned and informed argument that has already
+happened.  One of the questions worthy of debate at a conference with
+the objectives stated above.
+
+I apologize if these reflections are less than popular but they are
+intended to stimulate productive discussion, if the actual intent of
+the conference organizers is to focus deeply on new and improved
+security technology.
+
+There is far more technology potentially available than there are good
+answers to the questions as to how to effectively exploit it.
+
+> James Morris
+> <jmorris@namei.org>
+
+Best wishes for a productive week.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
+              https://github.com/Quixote-Project
 
