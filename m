@@ -1,77 +1,77 @@
-Return-Path: <linux-security-module+bounces-8261-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8258-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 145E3A3CBE9
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 23:00:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0A97A3CBD1
+	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 22:51:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E06C93AFFB1
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 22:00:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2E987A84D1
+	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 21:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD1B1BD9CE;
-	Wed, 19 Feb 2025 22:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A8EE2580C4;
+	Wed, 19 Feb 2025 21:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="LY9w8d2d"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="kjE6BSi/"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A1B1B87D3
-	for <linux-security-module@vger.kernel.org>; Wed, 19 Feb 2025 22:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C3E216389
+	for <linux-security-module@vger.kernel.org>; Wed, 19 Feb 2025 21:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740002429; cv=none; b=H0qnNFYxuBgUHHVrGTVbD1EJR2mAVsJ+tj67yuzkE1YJ3LJGYpgS0WDWXRRerrH+20Yrn3f1/lBK+q4fCJcXC2OcGZk1meHbbi50wV6eNYkipAe+LWxd044nFau6QkDz72Zp0qg5GL3vk0gOBVVt/6MiWkAiCsqew7lu8TOKoB0=
+	t=1740001910; cv=none; b=j9F1njOdRgJ7964flGXe9uuODfBLsnTZlBFlqhl94u9TXb7t12lUeAi8NvXb3TkhcJFzF5Jg0fJczdSbbb8aW9SSVd2k+zAUPfgOKF24Nk1EOrAHMdlr8aPyc5JmAN/scwEXXBS9OQ5yrpUIJ72ufz2T0QID30OX5u2p0QWB38w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740002429; c=relaxed/simple;
-	bh=p5lxr/7Yg8uoE/udMMTQdc65QMVJnF7Q2atCyf79uS8=;
+	s=arc-20240116; t=1740001910; c=relaxed/simple;
+	bh=4o5+dtdo+FMb6rV2Wmp6zS1XLpCp3aFBgexmx+ZBco0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nwj2yssLL2CT5toTRk0ITIo7VR+aJMiyGf3Si8D5pj5JYIdI+NvYnkW3TglvHeW5SbyGWnmJrakY5NX611pNlEuBf055rnPzmQrkBeBgWAZ1tl6FVamClzSovYVYNbUS+L19bs7iv9Rea2f1QRYU9A174sCKmkmDgt2ZZruBnaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=LY9w8d2d; arc=none smtp.client-ip=66.163.188.211
+	 In-Reply-To:Content-Type; b=ZWR69I1At4kA3yXtsMvXSJkBHZZI3qKS4Xlv2d2QFzRwHzUejDaPS9s9qwCSoBBlEpvhY/Z6zVWJQCpiWL6/tbPbcD8PuXIYYJkr8URvh6eWMyfodLqV+VDVddXIeEYfdhdPW4CDsBiJkBjPf/knCtsR3ublWcW6MGZRgzSoBWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=kjE6BSi/; arc=none smtp.client-ip=66.163.188.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740002427; bh=7lepMhb1ZtNZCpzupbwL34GqoGi7KEOrY1Ykp0YTjEY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=LY9w8d2dTVqDQB6Z180gPIbXNNnupJSdAPrfrXe1dE5BnhsVqeV9HdTEW+BfB+zw6CZDOic0fBT3iOzduIXO9LeatPOZrwv9alyNRQWK4XLvngMwDX45PS+ge6N7Od9H3dKZ9U756de9rTxtavjCZNAICKDKvfvA1YKqH/zIq3qISbimgd2d/lRiYl5y/xBtgDg9CKKSUBEM9iRz7h38s45j2RUQk0hqzDea0eGd8S7/KOMX2nwChHyWEciKq3hX0hW+R4rgMNQQl0chlkdtTVlPVvOgONbQyEQWebnkBwk3t6+1QKiWV6TEUtnsz91+WYr357yrJnsH1nbDvV03JA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740002427; bh=8jWi6At/3xx+1H8Z+rgzGPLYvl3cbtqW5vwANQ+pkdx=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jLRtMyaJiR3WTM1moccfDYvPVNrdvXhdVKuYBrbnDvy36Uv416Vrucnnr4sUnRkrLzg/zpjmumdC45EQTOwPM5nrrlINjprvY9MkD4u21Cgd9dSGwtiupA0J5upUz5nGOOr7MLJwq3TgQN9HNDTIVb5xBhGd3VcyYg+5Caz6Bj5N2xGZpYxMOpYfpTcugoS+i0yVAXTyKGz79sQneJPrCzlwsPecAgzvcN3J56i0oWeV3xceUbjuG8ppP/omOGlxl6z6qmh/qQ32/2Qf3l/LwUpKasE8O0tkyJjJtUqXwiJHQonJHSlzHoNQVVraupKyBkJhrIH/SUue+ThIJPaTbg==
-X-YMail-OSG: 0hTPg.YVM1lYOdn5TGyzuqv1w6AvtuqVTaF434oiZpdQtgSKtGur59PtZKlFqaY
- 8IIAG8jrcjXJgzhJSkKZrVbXnK_ZduGv1dRgflCZF1hxB5qDqVSQdY5yFI0cGm5ebPPBuSw84xzP
- x0_XUmTAWvvs2VmT9w2sqGgDVVGUIzd7JkurwtnhXUecKTlk77s4WR7Xujx.BxXn4WnKhQHRvJ31
- IRxX9N0cGEbqk2AzQHadB37_ICC6N7j75a8TUCXiY2P9bbIXx3uF7hXQO4pG4NAPvi4tDp2Np4_P
- QNIpSpT3QzxVfFE58NkWIhCJ_Ax9MxS4o_Ilc7ynpEU_lhrjvL96BwEjUtuz01ZkfB9bFzY59Em1
- a72uZ_yDPSs93FeWpWSLMJJXMLDhfMMtzjY0zwMalPw4aPkAABw4HzBR9K7ph4GlulkkFIR3o1BM
- DE4AGqrRGe9Btuu_d7fw8UPp.jMZafnAAwDR7ufRyEoiNzQ_qze4Q1d9MsX0qdcZx_k2_ohjCxFJ
- 6lLqivnIBmLF2IJJZUjBsPHq5qzH92Bvn8z0dHODHxhfYTYgWPWkTBQzEZjMPRpFOsCz8fEZoQb4
- 5Dv1cLcHtQXsUow.flo_WP4rfXgpeBxx824tbe7J4gBaQPhNNcyy5ut3zlqoy0xL9PeKpt8RQjBu
- 1L148wQT1msEM_xM5ksvswnVFpHFQPnzzGrsyLKrUZ59nitC8H9Tg6y4MP3rSqYO6jXVJmdZmMLz
- .5z8M4uDPZClg7kqq90u7Vra99Jjbfe5lvEvrtjIczK1vAaLKQsGuZYIRZYQgghSDmjswWCIm_Zi
- LhnW6T2hfrJSBOQbQ.4MlJq_zJTthZEKVGaTP.1inNexXqfdESDKJYpAKHvacqHKB.6DGbvMWS1G
- .CoUkBY4Jke6HdaiZiBXSZDR70LpOlIcGW1vKvpfiS94SCi.ovSJXVqa7ZUik3uKW4.kios4Oo92
- tcalqXI4l_yC.fG1XomIUJfMZZff4tnbWun6e2iazc1hHnMLrdtSZPIVYsGGyRtRFC17SpLLu8iu
- YyAIqzy.P8HonTi.oSvCXbtLhlue_816KRKPP.21u90iZJYj9tQszys01.vuAeAYwdZ7hJdLgrmy
- P9R.MPC1Eio2qPkgUpTLCotjX1_zbmHSs_.mISCEe3g1GwXWwlFdwwBPZH3nc6LGJGg0_zI_ntA_
- 0yxaxDVHGK_W2qXd3ET33OeeXjBdUT44ePf7IrBvcJDjajQdXqRHGuQ9xyt9tkFfuEwnfFyGvZqs
- H5e1Gvli0cyyiOn5UYIqw2YCEondJjstGbRUmlHW0Tt1n2A0Q9qnobuXBFCXtZU75_jP3EhsqFL2
- oA9Zg9KlRkRuV_xtGaVCaezLlfK4fIsdLr_l_wpKMNk49vuIW1ZaWpIuoRdE6WtrFIRq.KeUHiBf
- 0v8je_0z89L_xz0wgst2SNN71a3Q4a0CrRjzFzl.UolTTsH8azEGLDSU5Ve1wWwHSjVYpXWsYP3I
- xAvwQ3j4sU0fFLxZcXj8ARwnvMMos_NCAyWIt.goJFRtCn3Erea4GZ09d8RjNSa6F.sPwKcwgNMh
- ZH9VkuM6YwLA3tM0ZKpgXDb.OnRqngDQYtAq7lE.HuHydrJf4UjBWYDRTrQ6ZLKYK8C3zKviSBEa
- K1w_BIq4iQZ7chIS7ldYy4O67FA3IK_wQBm_N64fWMmkIcs9AtP96xrohvauTtlr0PtuXxjEVRu1
- A0ujnjmEgbGAhf_lPy3Nf.hRHnpoMyH8BD05o8qkOcRvU7Sdugb1VhmY98HwbCI50N5cOUoPgxuk
- A9N87QIaGckA1x0CQNCaOQOuKgqA9eFcM2L7x.0.dForplOJgcBU0bBZlDJexkoDbNift3cugLlq
- 5tnLI099JltJ2w3gnfXMkLeSpdBFcbzQC2Fc1rcWl_Oi3I35u4GZd4Mub1c4Tv5.Og5dhqsCIylG
- N6pCiamoJS99nwcJec9Gq.3kDTqZ1F3MEUqlex9lgMBkOA8yVRVx_GtZRkwOg272QMznwDAGnbPa
- TsxGfhNPzz5Wd3a59.ZGBYDI9x1QJYWJh_hKZ8PRd2JeDaHX4GVtZ7Owz2W_.Wkj8sWsZhumKZvA
- 9vBmYawh1dkh55WChjqVtaM5LqHPiKfhNTeXRUbxDoHK75nyN7rxldi3qOMAEMiH0IWsz.DkVGJk
- IC1Cqu3suu.YhNsEZa3nH9mFDiUMGoCMUIgcXAN9sh3vLrKXgnbPxl1X.oVP3l5RiqgWI6hbljmX
- 7wA6erSEqTXUE0FEMDOP76LtN2NzMk8Z7dMUhrh8GQ1D8ylK68uGxkwnL8wlNzz6uBiv9voT_m4v
- 6H8s-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740001901; bh=G8qforFtoNBqtXBu+yXzsQj2QW24dqQJUK1R5Ron3uU=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=kjE6BSi/P8FSw9ffr0m2cOuGIeZNnCKl8jZEeY4kwtxN0YEPIGrP6b+JZVt7WBeKDtSbHlhD/+mZAqTBnzy6U3tp7kTY5UJI0eQMO1hUKYZtfygFTZzyDpwSkotqIuJE/dnkEqf0VMu4jiym0qrKHeXWPtBn29k66QsGJnyCaTwLq2LdEQM/7PPQ//IxNrzv9sLNsgJnluqKKbqRsXJBtMbZii6qP/clz+4WoiSXblo8wkADe7RK87LbcPu/AkmtAV6qRMToQo8+eeIOsuPrFZVxvUghHUbV6K9LkBtuRlYBrkSd12fc4eXP3eXQNOpnXVkt5MlBCYg3W2yUzGJZ5A==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740001901; bh=u/x+Tyb7oqmLE2N6sS45e/dtk+1h/vdPY106PLe7EXg=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=elXHx4G+P7Vas1oe7xDHg+QwnA00B2/gq0gZeUly7x/FBlxXBQbKDC9Zt9n5Kigh4q/2PuBUXo2mmB3pQuJR9yjRomp8LsZrUrHM97rjwmjNPQs2i0FUbsxuUh3tA1lJLINJExlWWcuIwup/rcyoKOQVk4i+Wh0OpPaV4mw6yZE5uw0KLO+FHoQBopRf5dnsrTVy3eQwE+zCDVd5OgeNwCzspUS8960+CCmkYugeu7hQ/M+YQtoBvZMe5MP5W5jopRQ2nkfSq0JFpSnsV1+4RbMBcr/IwfutCW5sT7tkPWAciP2m9/1GF5KfMzHZrdLUEQEwZ4zOgdPH5S8J8iLxuw==
+X-YMail-OSG: _i2UJr4VM1l693NcGeZNljVvQX4nXgrVk_3re.di3hxj.CgOjWZlFc.VRY0Bp8O
+ sT9D2HO0YyXWtFrbnadeSFGRp_cK1tsJ5brUttNMdj7fEiGpazmENl86MHgcOJ4v.G5MryYueH1G
+ NwGU96KLqGFaF.zkM2AXcEDIX9wVveQ37HHwKOgvuJbaF4DotOcSEJSrzWpgB18SgDqvIZH8xdMz
+ JphcagOmlNyj8YOM7xFP4hL8.45o9Om0ZnQrVcPmmnw6_pXSfYBe.dQ.y.JwMO5GGT9HLJdD90wY
+ o.DZwtatVQz0U_aHrk5XmktoFn3CHChdstKuTnR1h31.wwtEd_8UVlqihxAIx8e1HShCkAAGpnwZ
+ RVc_VBGZ7eX5hTAdKmWWNX2j2zvGsgh7XU0TNbrB02vrTKPNhMKaOh_XvQR9xh.3xHO9FJ7QCthI
+ rmclw.j4ww6SbM4ej15dy26IOejflI4iaVH4WFylk34FH1CYlgeOSnz8iURnBbszkXF.aGu0k4CF
+ h70nfTaYdasx0T.qJGaDLR4NLBCYSioecmJhMfpoUE3Rt2m8.ra1s2X.b3G2i1CP7M8_r_Us8yxV
+ ksT7Uicgtx5A_ApPbitkKlfZhpzPL61qIj4BgnODOJdxXQFDVgyblzfZHVNOb9LWUM6i73IXn6Es
+ RVvIr37kc9Ah.3j56ALMQdFLxU1mgSpX5LhHDrT0wJmtpTBnjjeKHVj92mqdkOLjjvaLbUTUEoBH
+ OvAl8WLe.rE8RYtoj0j3xZQw_zS8m1UBLaHydK2aftvKn4Cv6o.6QOrR28M9GUtOV1KrYc_8AXqd
+ b5jy3u1TViEEPjuV90DLTMbbXMVg45uk.HssU12HxPgc7AsJkRFLmoCwD8RGv6IERKR6nf47cQ3J
+ 1NhtO24mpGdbrwX0SI5hGWlW4RltYFhlO5.8gZWhhCCxn1nm3lfuDCUVCDqJkMymxasnmAKsfzxF
+ Fbf_sNJWq18leVpShTzCl_X.nlwuVnUqhzuToNHUlcItDyrHAkbKg7lDtkMvfpQaMwev63nzsl9w
+ BFISbF5L_OCkhi9xrXZeDwvSttvQ.GePi.6vsceKgo0Va.BLrAA_waB89jE7eS2FU9DUciGwLQ.d
+ HixoCT_.cZq62UluS.yZeTNv3zvsyTwgvW.jpmT6Vjh67SeC4cgxGRhRbdMP7c9X8ayu4RbrSFKB
+ kGQJkcQZaGKFRvh6I8fheyTT7RuvxDUSzyj9mSnA9OUlV2hXejp5bpxwC9xqo8XW.TjwUJJmZbjr
+ YvDSBBOSHV.zR3Wyp8Gc5KpPrf9yzZ5eKt9CGysWtw9_IG2.YkpbbuZtN_9BzbZmBcNYpM8iI8vt
+ o1sN43G7tE5hXMSI9QQQSvAW3T3bf4q0qhj5XBJpZpgn_bYB2GabWI.q1ttGVDP8VK42tMvO661m
+ sieMBVzx.g.Vn9jChhtUqgWhd_gxK7ZmAPkC1sjeybG2b2tDoy2Pb2ZFfV_X2R5p2MUurHv4Euro
+ DXbsA23v49aJNkBE9W6r2FsC4f9MTF9ZnJv56I3kYfmhS41iWLNRArokAaJp1VhB1gPIoq3CZxvk
+ j7N_ow_LJR4BGEM_Yydz2k69DhECLGLEQXMLzGfoT_oImC29WI8lbPlMNjiN1RMu8EjHVzGDqKce
+ 0YsorWgJ8SZCe.roqI2HwkTLhe3AxgGIBRfeK3CTEw9xuXRfezZH9gVHoUqMPpjCzjysgEBVVS2_
+ IzvtRwY4gg1vV8NBG.rHZucaGLCm_mtBP072Nue0.eUF2o5lozQjhsnOrH9oW_7KWOv52N6KxUho
+ FOxXC_nY8oiy_DK7F8zTLx2Eux4E6eUlf2IBEBZceGrst7LoOE3PfoWyGBvi3uYmC3Z0CDpUZWmV
+ Qn1kOCbncS5jkcf3ox8v5qcPO92yMWqrTdJ_lKxt7Biv7ANocRnNNTKVz20jMaRTW7Wo1_KzJdSA
+ hbdH2KSEWpS8jbhNU2Yr8h5tdwxXNc6.JSFGIBoAOSk.DoDZAOVy8vfWlTgVKyQKXf0JvCybLe06
+ hhn1fvDgW4wK8KiBOiZ_.koRx_nwGE6IpEG1DckpuD15mA4pZVQpsek.xejkD6IrbpBxbdvPGmNP
+ lYs5H6jPkRYQVWJfrade0AEdEPzYcpKCe6MLlv7DjZ83KUsNslgsFWHCcRoy1urNm9bgeMicjPdJ
+ IYdT0hXptK7kW_UOvgqpLBm8kbBYL8cGzqQrzN80oKu81kRqKj5EAGz0CpF_bqq_FvP249tu8pHp
+ _oh_yyH8ZWkeIey0SWtd_03FLk637BgfsCBiOb1i_z3Q6Rb_nKQwprjRGP4O0YI2kZkOVqkX6Hcr
+ rUgLL4tN8fg--
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 871ac868-874b-4215-bcc1-d5dc6613ba57
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 19 Feb 2025 22:00:27 +0000
-Received: by hermes--production-gq1-5dd4b47f46-pfhh2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a406640f051c837991ba1bd6e84527b2;
-          Wed, 19 Feb 2025 21:50:18 +0000 (UTC)
-Message-ID: <9c0a3b8d-76a6-4c65-9bf3-106c24dfcebf@schaufler-ca.com>
-Date: Wed, 19 Feb 2025 13:50:16 -0800
+X-Sonic-ID: 69650217-0a2a-4cd8-b701-1e66856b243d
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 19 Feb 2025 21:51:41 +0000
+Received: by hermes--production-gq1-5dd4b47f46-xsxj6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9d891d70db66ebcb9254fc0c9f4e2e97;
+          Wed, 19 Feb 2025 21:51:37 +0000 (UTC)
+Message-ID: <205188fc-fff7-40ba-9fee-0fbca1e4a704@schaufler-ca.com>
+Date: Wed, 19 Feb 2025 13:51:34 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -79,36 +79,139 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] smack: recognize ipv4 CIPSO w/o categories
+Subject: Re: [PATCH] smack: dont compile ipv6 code unless ipv6 is configured
 To: Konstantin Andreev <andreev@swemel.ru>
 Cc: linux-security-module@vger.kernel.org,
  Casey Schaufler <casey@schaufler-ca.com>
-References: <20250116234043.2904723-1-andreev@swemel.ru>
+References: <20250117163645.3069927-1-andreev@swemel.ru>
 Content-Language: en-US
 From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20250116234043.2904723-1-andreev@swemel.ru>
+In-Reply-To: <20250117163645.3069927-1-andreev@swemel.ru>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.23369 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Mailer: WebService/1.1.23394 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 1/16/2025 3:40 PM, Konstantin Andreev wrote:
-> Before [1] SMACK did not recognize CIPSO w/o categories (sensitivity only)
-> [1] tried to address this, but did this wrong.
+On 1/17/2025 8:36 AM, Konstantin Andreev wrote:
+> I want to be sure that ipv6-specific code
+> is not compiled in kernel binaries
+> if ipv6 is not configured.
 >
-> The 1st patch reverts [1],
-> the 2nd patch addresses CIPSO w/o categories better than [1].
+> [1] was getting rid of "unused variable" warning, but,
+> with that, it also mandated compilation of a handful ipv6-
+> specific functions in ipv4-only kernel configurations:
 >
-> [1] https://lore.kernel.org/linux-security-module/20230124105037.23108-1-arefev@swemel.ru/
->     ccfd889acb06 ("smackfs: Added check catlen")  2023-01-24
+> smk_ipv6_localhost, smack_ipv6host_label, smk_ipv6_check.
 >
-> Konstantin Andreev (2):
->   smack: Revert "smackfs: Added check catlen"
->   smack: recognize ipv4 CIPSO w/o categories
+> Their compiled bodies are likely to be removed by compiler
+> from the resulting binary, but, to be on the safe side,
+> I remove them from the compiler view.
+>
+> [1]
+> Fixes: 00720f0e7f28 ("smack: avoid unused 'sip' variable warning")
+>
+> Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
 
-I have accepted these patches. They are in smack-next.
+I have accepted this patch. It is in smack-next.
 
+> ---
+>  security/smack/smack.h     |  6 ++++++
+>  security/smack/smack_lsm.c | 10 +++++++++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
 >
->  security/smack/smackfs.c | 21 +++++++--------------
->  1 file changed, 7 insertions(+), 14 deletions(-)
->
+> diff --git a/security/smack/smack.h b/security/smack/smack.h
+> index 4608b07607a3..c4d998972ba5 100644
+> --- a/security/smack/smack.h
+> +++ b/security/smack/smack.h
+> @@ -152,6 +152,7 @@ struct smk_net4addr {
+>  	struct smack_known	*smk_label;	/* label */
+>  };
+>  
+> +#if IS_ENABLED(CONFIG_IPV6)
+>  /*
+>   * An entry in the table identifying IPv6 hosts.
+>   */
+> @@ -162,7 +163,9 @@ struct smk_net6addr {
+>  	int			smk_masks;	/* mask size */
+>  	struct smack_known	*smk_label;	/* label */
+>  };
+> +#endif /* CONFIG_IPV6 */
+>  
+> +#ifdef SMACK_IPV6_PORT_LABELING
+>  /*
+>   * An entry in the table identifying ports.
+>   */
+> @@ -175,6 +178,7 @@ struct smk_port_label {
+>  	short			smk_sock_type;	/* Socket type */
+>  	short			smk_can_reuse;
+>  };
+> +#endif /* SMACK_IPV6_PORT_LABELING */
+>  
+>  struct smack_known_list_elem {
+>  	struct list_head	list;
+> @@ -315,7 +319,9 @@ extern struct smack_known smack_known_web;
+>  extern struct mutex	smack_known_lock;
+>  extern struct list_head smack_known_list;
+>  extern struct list_head smk_net4addr_list;
+> +#if IS_ENABLED(CONFIG_IPV6)
+>  extern struct list_head smk_net6addr_list;
+> +#endif /* CONFIG_IPV6 */
+>  
+>  extern struct mutex     smack_onlycap_lock;
+>  extern struct list_head smack_onlycap_list;
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index c3f8de53aefd..ce7d44509973 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -2492,6 +2492,7 @@ static struct smack_known *smack_ipv4host_label(struct sockaddr_in *sip)
+>  	return NULL;
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_IPV6)
+>  /*
+>   * smk_ipv6_localhost - Check for local ipv6 host address
+>   * @sip: the address
+> @@ -2559,6 +2560,7 @@ static struct smack_known *smack_ipv6host_label(struct sockaddr_in6 *sip)
+>  
+>  	return NULL;
+>  }
+> +#endif /* CONFIG_IPV6 */
+>  
+>  /**
+>   * smack_netlbl_add - Set the secattr on a socket
+> @@ -2663,6 +2665,7 @@ static int smk_ipv4_check(struct sock *sk, struct sockaddr_in *sap)
+>  	return rc;
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_IPV6)
+>  /**
+>   * smk_ipv6_check - check Smack access
+>   * @subject: subject Smack label
+> @@ -2695,6 +2698,7 @@ static int smk_ipv6_check(struct smack_known *subject,
+>  	rc = smk_bu_note("IPv6 check", subject, object, MAY_WRITE, rc);
+>  	return rc;
+>  }
+> +#endif /* CONFIG_IPV6 */
+>  
+>  #ifdef SMACK_IPV6_PORT_LABELING
+>  /**
+> @@ -3027,7 +3031,9 @@ static int smack_socket_connect(struct socket *sock, struct sockaddr *sap,
+>  		return 0;
+>  	if (addrlen < offsetofend(struct sockaddr, sa_family))
+>  		return 0;
+> -	if (IS_ENABLED(CONFIG_IPV6) && sap->sa_family == AF_INET6) {
+> +
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +	if (sap->sa_family == AF_INET6) {
+>  		struct sockaddr_in6 *sip = (struct sockaddr_in6 *)sap;
+>  		struct smack_known *rsp = NULL;
+>  
+> @@ -3047,6 +3053,8 @@ static int smack_socket_connect(struct socket *sock, struct sockaddr *sap,
+>  
+>  		return rc;
+>  	}
+> +#endif /* CONFIG_IPV6 */
+> +
+>  	if (sap->sa_family != AF_INET || addrlen < sizeof(struct sockaddr_in))
+>  		return 0;
+>  	rc = smk_ipv4_check(sock->sk, (struct sockaddr_in *)sap);
 
