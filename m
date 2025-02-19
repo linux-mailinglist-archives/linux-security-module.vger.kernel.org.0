@@ -1,282 +1,114 @@
-Return-Path: <linux-security-module+bounces-8257-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8261-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1064CA3CBC9
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 22:50:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 145E3A3CBE9
+	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 23:00:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12B391888B50
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 21:50:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E06C93AFFB1
+	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 22:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AB724E4BC;
-	Wed, 19 Feb 2025 21:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD1B1BD9CE;
+	Wed, 19 Feb 2025 22:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P7rDDLg0"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="LY9w8d2d"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC961A841F;
-	Wed, 19 Feb 2025 21:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A1B1B87D3
+	for <linux-security-module@vger.kernel.org>; Wed, 19 Feb 2025 22:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740001795; cv=none; b=pAvSBS3eSYb09EUmmGS9J0ijus46KEPb/G+r29/3kpxSF4P8kLnGL/osuW/0KG3r6sr58aqhf/LZGrLwt5OLPcyoe1/cF53IPaYToIKg95VYZnpDLFxkp1q9+Ydd+/Jmbzdiy7goir5LYc8Sc1QTdWPyE6drVQbEf24CiFcGYwc=
+	t=1740002429; cv=none; b=H0qnNFYxuBgUHHVrGTVbD1EJR2mAVsJ+tj67yuzkE1YJ3LJGYpgS0WDWXRRerrH+20Yrn3f1/lBK+q4fCJcXC2OcGZk1meHbbi50wV6eNYkipAe+LWxd044nFau6QkDz72Zp0qg5GL3vk0gOBVVt/6MiWkAiCsqew7lu8TOKoB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740001795; c=relaxed/simple;
-	bh=3PKt05ljZv8g2rQYsANwxhIafJZUF6GjM/CyQA+RHXc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cafIZsh8mDjxNlMZ2w3N8WxZRuB9kZ5GghczsXTUlManodvoxYxOI5RhRkDYGS8ZLT3f93B1FEo76MLcjuvSKl717HYPI8fW1jSkkRS1fCuHep/JCpP3HQaS6f9N6ZvJTKPkATTjp5fNaGFijIqEeqBu3pH4H3CpGnAx8vfV8Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P7rDDLg0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA0D0C4CEDD;
-	Wed, 19 Feb 2025 21:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740001794;
-	bh=3PKt05ljZv8g2rQYsANwxhIafJZUF6GjM/CyQA+RHXc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=P7rDDLg0/NCf2tquoieOcye6rWhvmASWCW0v3bn+EgkM3XCej1xKVqdLx82TNligb
-	 w+5FiwZkCDxlm1mZ3IDHOEHvt2kffc+yj9RL94rZqsAR1NoAgov/uApR7w1gh+IQy3
-	 LyglBhRh9J3O7Zdygu0kmlpb0TW6uzfiaWe0DW3CK4fOIGcrd4YqIy/0oLqKerIu/T
-	 ZKS/wJSz+sEW1IvHcFDfCaDGEGHIfDUkiKh9OviBg1oBMd8utIa6opI0WTkmj1WhPk
-	 fEYsbuFb8vwZxM6tUf2vptC8L6uzaFCmAzPMkwSbHB+AYgNEbiCmqRfW4kqIJybKOk
-	 Cfo3mjGUjt9YQ==
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6fb8de54da9so1563937b3.3;
-        Wed, 19 Feb 2025 13:49:54 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVHwKh2RMjwPxh6Ttv+sFSG7PcC8cjpwhrHK33Yg81SnpwiaVB/uz7wUyVMrl6ZKYmbELLCJJvWjJwG9wf9@vger.kernel.org, AJvYcCWSfsT4+D6PyRdwpuqZa0v05PDFLfCGIVPS5yeUzPxSc1nYffnLcxUSwMUMIAtYi7sK8Zc9gz9um4s=@vger.kernel.org, AJvYcCXo1NJ91+HPfAFtkQv9/yuOxOi4ONMtEXAP21eSZKTKcZxUOsZ4vyISQB9AYwIVip4M7GeoRAMjc85aTyYmyikf44ZyYhW+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh5y/JRi2wflmK6pE1husxms+ceyz73c/oo3u/sKzvkckq+mo+
-	00cb7VNNZjfiaOw/ydRcmujPOPeFIwz/3j5nU7yi8yOHtlJ79thjxT0EG0a7/zpIWEq6nkUrDqg
-	Tx9byMrqEh1Xer7WGgkyEBuPqsFY=
-X-Google-Smtp-Source: AGHT+IFfW/kTsMF3/b5hGSimcnQ5syQeEWvWlsiwfRMqHDODCQa+tqQ8gb1rxKxnSSJM9fZXa3IafkaERJrxgJAwG9A=
-X-Received: by 2002:a05:690c:6405:b0:6ef:4a57:fc98 with SMTP id
- 00721157ae682-6fb582a192fmr191129947b3.16.1740001794053; Wed, 19 Feb 2025
- 13:49:54 -0800 (PST)
+	s=arc-20240116; t=1740002429; c=relaxed/simple;
+	bh=p5lxr/7Yg8uoE/udMMTQdc65QMVJnF7Q2atCyf79uS8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nwj2yssLL2CT5toTRk0ITIo7VR+aJMiyGf3Si8D5pj5JYIdI+NvYnkW3TglvHeW5SbyGWnmJrakY5NX611pNlEuBf055rnPzmQrkBeBgWAZ1tl6FVamClzSovYVYNbUS+L19bs7iv9Rea2f1QRYU9A174sCKmkmDgt2ZZruBnaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=LY9w8d2d; arc=none smtp.client-ip=66.163.188.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740002427; bh=7lepMhb1ZtNZCpzupbwL34GqoGi7KEOrY1Ykp0YTjEY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=LY9w8d2dTVqDQB6Z180gPIbXNNnupJSdAPrfrXe1dE5BnhsVqeV9HdTEW+BfB+zw6CZDOic0fBT3iOzduIXO9LeatPOZrwv9alyNRQWK4XLvngMwDX45PS+ge6N7Od9H3dKZ9U756de9rTxtavjCZNAICKDKvfvA1YKqH/zIq3qISbimgd2d/lRiYl5y/xBtgDg9CKKSUBEM9iRz7h38s45j2RUQk0hqzDea0eGd8S7/KOMX2nwChHyWEciKq3hX0hW+R4rgMNQQl0chlkdtTVlPVvOgONbQyEQWebnkBwk3t6+1QKiWV6TEUtnsz91+WYr357yrJnsH1nbDvV03JA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740002427; bh=8jWi6At/3xx+1H8Z+rgzGPLYvl3cbtqW5vwANQ+pkdx=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=jLRtMyaJiR3WTM1moccfDYvPVNrdvXhdVKuYBrbnDvy36Uv416Vrucnnr4sUnRkrLzg/zpjmumdC45EQTOwPM5nrrlINjprvY9MkD4u21Cgd9dSGwtiupA0J5upUz5nGOOr7MLJwq3TgQN9HNDTIVb5xBhGd3VcyYg+5Caz6Bj5N2xGZpYxMOpYfpTcugoS+i0yVAXTyKGz79sQneJPrCzlwsPecAgzvcN3J56i0oWeV3xceUbjuG8ppP/omOGlxl6z6qmh/qQ32/2Qf3l/LwUpKasE8O0tkyJjJtUqXwiJHQonJHSlzHoNQVVraupKyBkJhrIH/SUue+ThIJPaTbg==
+X-YMail-OSG: 0hTPg.YVM1lYOdn5TGyzuqv1w6AvtuqVTaF434oiZpdQtgSKtGur59PtZKlFqaY
+ 8IIAG8jrcjXJgzhJSkKZrVbXnK_ZduGv1dRgflCZF1hxB5qDqVSQdY5yFI0cGm5ebPPBuSw84xzP
+ x0_XUmTAWvvs2VmT9w2sqGgDVVGUIzd7JkurwtnhXUecKTlk77s4WR7Xujx.BxXn4WnKhQHRvJ31
+ IRxX9N0cGEbqk2AzQHadB37_ICC6N7j75a8TUCXiY2P9bbIXx3uF7hXQO4pG4NAPvi4tDp2Np4_P
+ QNIpSpT3QzxVfFE58NkWIhCJ_Ax9MxS4o_Ilc7ynpEU_lhrjvL96BwEjUtuz01ZkfB9bFzY59Em1
+ a72uZ_yDPSs93FeWpWSLMJJXMLDhfMMtzjY0zwMalPw4aPkAABw4HzBR9K7ph4GlulkkFIR3o1BM
+ DE4AGqrRGe9Btuu_d7fw8UPp.jMZafnAAwDR7ufRyEoiNzQ_qze4Q1d9MsX0qdcZx_k2_ohjCxFJ
+ 6lLqivnIBmLF2IJJZUjBsPHq5qzH92Bvn8z0dHODHxhfYTYgWPWkTBQzEZjMPRpFOsCz8fEZoQb4
+ 5Dv1cLcHtQXsUow.flo_WP4rfXgpeBxx824tbe7J4gBaQPhNNcyy5ut3zlqoy0xL9PeKpt8RQjBu
+ 1L148wQT1msEM_xM5ksvswnVFpHFQPnzzGrsyLKrUZ59nitC8H9Tg6y4MP3rSqYO6jXVJmdZmMLz
+ .5z8M4uDPZClg7kqq90u7Vra99Jjbfe5lvEvrtjIczK1vAaLKQsGuZYIRZYQgghSDmjswWCIm_Zi
+ LhnW6T2hfrJSBOQbQ.4MlJq_zJTthZEKVGaTP.1inNexXqfdESDKJYpAKHvacqHKB.6DGbvMWS1G
+ .CoUkBY4Jke6HdaiZiBXSZDR70LpOlIcGW1vKvpfiS94SCi.ovSJXVqa7ZUik3uKW4.kios4Oo92
+ tcalqXI4l_yC.fG1XomIUJfMZZff4tnbWun6e2iazc1hHnMLrdtSZPIVYsGGyRtRFC17SpLLu8iu
+ YyAIqzy.P8HonTi.oSvCXbtLhlue_816KRKPP.21u90iZJYj9tQszys01.vuAeAYwdZ7hJdLgrmy
+ P9R.MPC1Eio2qPkgUpTLCotjX1_zbmHSs_.mISCEe3g1GwXWwlFdwwBPZH3nc6LGJGg0_zI_ntA_
+ 0yxaxDVHGK_W2qXd3ET33OeeXjBdUT44ePf7IrBvcJDjajQdXqRHGuQ9xyt9tkFfuEwnfFyGvZqs
+ H5e1Gvli0cyyiOn5UYIqw2YCEondJjstGbRUmlHW0Tt1n2A0Q9qnobuXBFCXtZU75_jP3EhsqFL2
+ oA9Zg9KlRkRuV_xtGaVCaezLlfK4fIsdLr_l_wpKMNk49vuIW1ZaWpIuoRdE6WtrFIRq.KeUHiBf
+ 0v8je_0z89L_xz0wgst2SNN71a3Q4a0CrRjzFzl.UolTTsH8azEGLDSU5Ve1wWwHSjVYpXWsYP3I
+ xAvwQ3j4sU0fFLxZcXj8ARwnvMMos_NCAyWIt.goJFRtCn3Erea4GZ09d8RjNSa6F.sPwKcwgNMh
+ ZH9VkuM6YwLA3tM0ZKpgXDb.OnRqngDQYtAq7lE.HuHydrJf4UjBWYDRTrQ6ZLKYK8C3zKviSBEa
+ K1w_BIq4iQZ7chIS7ldYy4O67FA3IK_wQBm_N64fWMmkIcs9AtP96xrohvauTtlr0PtuXxjEVRu1
+ A0ujnjmEgbGAhf_lPy3Nf.hRHnpoMyH8BD05o8qkOcRvU7Sdugb1VhmY98HwbCI50N5cOUoPgxuk
+ A9N87QIaGckA1x0CQNCaOQOuKgqA9eFcM2L7x.0.dForplOJgcBU0bBZlDJexkoDbNift3cugLlq
+ 5tnLI099JltJ2w3gnfXMkLeSpdBFcbzQC2Fc1rcWl_Oi3I35u4GZd4Mub1c4Tv5.Og5dhqsCIylG
+ N6pCiamoJS99nwcJec9Gq.3kDTqZ1F3MEUqlex9lgMBkOA8yVRVx_GtZRkwOg272QMznwDAGnbPa
+ TsxGfhNPzz5Wd3a59.ZGBYDI9x1QJYWJh_hKZ8PRd2JeDaHX4GVtZ7Owz2W_.Wkj8sWsZhumKZvA
+ 9vBmYawh1dkh55WChjqVtaM5LqHPiKfhNTeXRUbxDoHK75nyN7rxldi3qOMAEMiH0IWsz.DkVGJk
+ IC1Cqu3suu.YhNsEZa3nH9mFDiUMGoCMUIgcXAN9sh3vLrKXgnbPxl1X.oVP3l5RiqgWI6hbljmX
+ 7wA6erSEqTXUE0FEMDOP76LtN2NzMk8Z7dMUhrh8GQ1D8ylK68uGxkwnL8wlNzz6uBiv9voT_m4v
+ 6H8s-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 871ac868-874b-4215-bcc1-d5dc6613ba57
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 19 Feb 2025 22:00:27 +0000
+Received: by hermes--production-gq1-5dd4b47f46-pfhh2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a406640f051c837991ba1bd6e84527b2;
+          Wed, 19 Feb 2025 21:50:18 +0000 (UTC)
+Message-ID: <9c0a3b8d-76a6-4c65-9bf3-106c24dfcebf@schaufler-ca.com>
+Date: Wed, 19 Feb 2025 13:50:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1739569319-22015-1-git-send-email-jasjivsingh@linux.microsoft.com>
-In-Reply-To: <1739569319-22015-1-git-send-email-jasjivsingh@linux.microsoft.com>
-From: Fan Wu <wufan@kernel.org>
-Date: Wed, 19 Feb 2025 13:49:43 -0800
-X-Gmail-Original-Message-ID: <CAKtyLkFg2+8ciy4DM=g+vcTVvuRPNL2SHbN+m9ObErxtYXZYPw@mail.gmail.com>
-X-Gm-Features: AWEUYZl1mRQGqsBn25Luyk_5Z6YcizuwBL9mpTiqYU4QidVils0KwxhFvIM9t4E
-Message-ID: <CAKtyLkFg2+8ciy4DM=g+vcTVvuRPNL2SHbN+m9ObErxtYXZYPw@mail.gmail.com>
-Subject: Re: [RFC PATCH] ipe: add errno field to IPE policy load auditing
-To: Jasjiv Singh <jasjivsingh@linux.microsoft.com>
-Cc: corbet@lwn.net, jmorris@namei.org, serge@hallyn.com, eparis@redhat.com, 
-	paul@paul-moore.com, linux-doc@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-audit@redhat.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] smack: recognize ipv4 CIPSO w/o categories
+To: Konstantin Andreev <andreev@swemel.ru>
+Cc: linux-security-module@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20250116234043.2904723-1-andreev@swemel.ru>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20250116234043.2904723-1-andreev@swemel.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.23369 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Fri, Feb 14, 2025 at 1:42=E2=80=AFPM Jasjiv Singh
-<jasjivsingh@linux.microsoft.com> wrote:
+On 1/16/2025 3:40 PM, Konstantin Andreev wrote:
+> Before [1] SMACK did not recognize CIPSO w/o categories (sensitivity only)
+> [1] tried to address this, but did this wrong.
 >
-...
+> The 1st patch reverts [1],
+> the 2nd patch addresses CIPSO w/o categories better than [1].
 >
-> AUDIT_IPE_POLICY_LOAD(1422):
+> [1] https://lore.kernel.org/linux-security-module/20230124105037.23108-1-arefev@swemel.ru/
+>     ccfd889acb06 ("smackfs: Added check catlen")  2023-01-24
 >
-> audit: AUDIT1422 policy_name=3D"boot_verified" policy_version=3D0.0.0
->   policy_digest=3Dsha256:820EEA5B40CA42B51F68962354BA083122A20BB846F2676
->   auid=3D4294967295 ses=3D4294967295 lsm=3Dipe res=3D1 errno=3D0
-> The above record shows a new policy has been successfully loaded into
-> the kernel with the policy name, version, and hash with the errno=3D0.
->
-> AUDIT_IPE_POLICY_LOAD(1422) with error:
->
-> audit: AUDIT1422 policy_name=3D"boot_verified" policy_version=3D0.0.0
->   policy_digest=3Dsha256:820EEA5B40CA42B51F68962354BA083122A20BB846F2676
->   auid=3D4294967295 ses=3D4294967295 lsm=3Dipe res=3D0 errno=3D-74
+> Konstantin Andreev (2):
+>   smack: Revert "smackfs: Added check catlen"
+>   smack: recognize ipv4 CIPSO w/o categories
 
-This doesn't seem to be right in the error case, I suggest copying a
-real record from a running system.
+I have accepted these patches. They are in smack-next.
 
 >
-> The above record shows a policy load failure due to an invalid policy.
->
-> By adding this error field, we ensure that all policy load attempts,
-> whether successful or failed, are logged, providing a comprehensive
-> audit trail for IPE policy management.
->
-> Signed-off-by: Jasjiv Singh <jasjivsingh@linux.microsoft.com>
-> ---
->  Documentation/admin-guide/LSM/ipe.rst | 17 ++++++++++++-----
->  security/ipe/audit.c                  | 17 ++++++++++++++---
->  security/ipe/policy.c                 |  4 +++-
->  3 files changed, 29 insertions(+), 9 deletions(-)
->
-> diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admin-=
-guide/LSM/ipe.rst
-> index f93a467db628..2143165f48c9 100644
-> --- a/Documentation/admin-guide/LSM/ipe.rst
-> +++ b/Documentation/admin-guide/LSM/ipe.rst
-> @@ -423,7 +423,7 @@ Field descriptions:
->
->  Event Example::
->
-> -   type=3D1422 audit(1653425529.927:53): policy_name=3D"boot_verified" p=
-olicy_version=3D0.0.0 policy_digest=3Dsha256:820EEA5B40CA42B51F68962354BA08=
-3122A20BB846F26765076DD8EED7B8F4DB auid=3D4294967295 ses=3D4294967295 lsm=
-=3Dipe res=3D1
-> +   type=3D1422 audit(1653425529.927:53): policy_name=3D"boot_verified" p=
-olicy_version=3D0.0.0 policy_digest=3Dsha256:820EEA5B40CA42B51F68962354BA08=
-3122A20BB846F26765076DD8EED7B8F4DB auid=3D4294967295 ses=3D4294967295 lsm=
-=3Dipe res=3D1 errno=3D0
->     type=3D1300 audit(1653425529.927:53): arch=3Dc000003e syscall=3D1 suc=
-cess=3Dyes exit=3D2567 a0=3D3 a1=3D5596fcae1fb0 a2=3Da07 a3=3D2 items=3D0 p=
-pid=3D184 pid=3D229 auid=3D4294967295 uid=3D0 gid=3D0 euid=3D0 suid=3D0 fsu=
-id=3D0 egid=3D0 sgid=3D0 fsgid=3D0 tty=3Dpts0 ses=3D4294967295 comm=3D"pyth=
-on3" exe=3D"/usr/bin/python3.10" key=3D(null)
->     type=3D1327 audit(1653425529.927:53): PROCTITLE proctitle=3D707974686=
-F6E3300746573742F6D61696E2E7079002D66002E2E
->
-> @@ -436,11 +436,11 @@ Field descriptions:
->  +----------------+------------+-----------+-----------------------------=
-----------------------+
->  | Field          | Value Type | Optional? | Description of Value        =
-                      |
->  +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> -| policy_name    | string     | No        | The policy_name             =
-                      |
-> +| policy_name    | string     | Yes       | The policy_name             =
-                      |
->  +----------------+------------+-----------+-----------------------------=
-----------------------+
-> -| policy_version | string     | No        | The policy_version          =
-                      |
-> +| policy_version | string     | Yes       | The policy_version          =
-                      |
->  +----------------+------------+-----------+-----------------------------=
-----------------------+
-> -| policy_digest  | string     | No        | The policy hash             =
-                      |
-> +| policy_digest  | string     | Yes       | The policy hash             =
-                      |
->  +----------------+------------+-----------+-----------------------------=
-----------------------+
->  | auid           | integer    | No        | The login user ID           =
-                      |
->  +----------------+------------+-----------+-----------------------------=
-----------------------+
-> @@ -450,7 +450,14 @@ Field descriptions:
->  +----------------+------------+-----------+-----------------------------=
-----------------------+
->  | res            | integer    | No        | The result of the audited op=
-eration(success/fail) |
->  +----------------+------------+-----------+-----------------------------=
-----------------------+
-> -
-> +| errno          | integer    | No        | The result of the policy err=
-or as follows:        |
-> +|                |            |           |                             =
-                      |
-> +|                |            |           | +  0: no error              =
-                      |
-> +|                |            |           | +  -EBADMSG: policy is inval=
-id                    |
-> +|                |            |           | +  -ENOMEM: out of memory (O=
-OM)                   |
-> +|                |            |           | +  -ERANGE: policy version n=
-umber overflow        |
-> +|                |            |           | +  -EINVAL: policy version p=
-arsing error          |
-> ++----------------+------------+-----------+-----------------------------=
-----------------------+
->
->  1404 AUDIT_MAC_STATUS
->  ^^^^^^^^^^^^^^^^^^^^^
-> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
-> index f05f0caa4850..f810f7004498 100644
-> --- a/security/ipe/audit.c
-> +++ b/security/ipe/audit.c
-> @@ -21,6 +21,8 @@
->
->  #define AUDIT_POLICY_LOAD_FMT "policy_name=3D\"%s\" policy_version=3D%hu=
-.%hu.%hu "\
->                               "policy_digest=3D" IPE_AUDIT_HASH_ALG ":"
-> +#define AUDIT_POLICY_LOAD_NULL_FMT "policy_name=3D? policy_version=3D? "=
-\
-> +                                  "policy_digest=3D?"
-
-How about AUDIT_POLICY_LOAD_FAIL_FMT instead.
-
->  #define AUDIT_OLD_ACTIVE_POLICY_FMT "old_active_pol_name=3D\"%s\" "\
->                                     "old_active_pol_version=3D%hu.%hu.%hu=
- "\
->                                     "old_policy_digest=3D" IPE_AUDIT_HASH=
-_ALG ":"
-> @@ -253,6 +255,8 @@ void ipe_audit_policy_activation(const struct ipe_pol=
-icy *const op,
->   */
->  void ipe_audit_policy_load(const struct ipe_policy *const p)
->  {
-> +       int res =3D 0;
-> +       int err =3D 0;
-
-I would try to avoid using these two variables since this function is
-fairly short. Also please use Reverse XMAS tree declarations in
-future.
-
->         struct audit_buffer *ab;
->
->         ab =3D audit_log_start(audit_context(), GFP_KERNEL,
-> @@ -260,10 +264,17 @@ void ipe_audit_policy_load(const struct ipe_policy =
-*const p)
->         if (!ab)
->                 return;
->
-> -       audit_policy(ab, AUDIT_POLICY_LOAD_FMT, p);
-> -       audit_log_format(ab, " auid=3D%u ses=3D%u lsm=3Dipe res=3D1",
-> +       if (!IS_ERR(p)) {
-> +               audit_policy(ab, AUDIT_POLICY_LOAD_FMT, p);
-> +               res =3D 1;
-> +       } else {
-> +               audit_log_format(ab, AUDIT_POLICY_LOAD_NULL_FMT);
-> +               err =3D PTR_ERR(p);
-> +       }
-> +
-> +       audit_log_format(ab, " auid=3D%u ses=3D%u lsm=3Dipe res=3D%d errn=
-o=3D%d",
->                          from_kuid(&init_user_ns, audit_get_loginuid(curr=
-ent)),
-> -                        audit_get_sessionid(current));
-> +                        audit_get_sessionid(current), res, err);
->
->         audit_log_end(ab);
->  }
-> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
-> index b628f696e32b..0f616e9fbe61 100644
-> --- a/security/ipe/policy.c
-> +++ b/security/ipe/policy.c
-> @@ -202,7 +202,9 @@ struct ipe_policy *ipe_new_policy(const char *text, s=
-ize_t textlen,
->         return new;
->  err:
->         ipe_free_policy(new);
-> -       return ERR_PTR(rc);
-> +       new =3D ERR_PTR(rc);
-> +       ipe_audit_policy_load(new);
-> +       return new;
-
-Auditing failure here is not correct. ipe_new_policy() can succeed
-while the following security fs nodes creation can fail. Similarly
-insufficient permission error is not audited.
-I suggest auditing the failure cases in new_policy() and update_policy().
-
--Fan
-
->  }
->
->  /**
-> --
-> 2.34.1
->
+>  security/smack/smackfs.c | 21 +++++++--------------
+>  1 file changed, 7 insertions(+), 14 deletions(-)
 >
 
