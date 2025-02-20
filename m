@@ -1,263 +1,147 @@
-Return-Path: <linux-security-module+bounces-8260-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8262-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEB00A3CBDD
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 22:55:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B2EEA3CE47
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Feb 2025 01:54:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAAC5171AA7
-	for <lists+linux-security-module@lfdr.de>; Wed, 19 Feb 2025 21:54:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07A211895BB1
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Feb 2025 00:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59462580D8;
-	Wed, 19 Feb 2025 21:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DED1B433C0;
+	Thu, 20 Feb 2025 00:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="aK9zRx7K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hEBV1IaM"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B6D23DEB6
-	for <linux-security-module@vger.kernel.org>; Wed, 19 Feb 2025 21:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AD63214;
+	Thu, 20 Feb 2025 00:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740002089; cv=none; b=BsQ7J3y98tgM5keFMELj1eSkmrtKB+j0DeEIED0aXEm+F707zFgZCiAGC0NjndixL2Rgd1h3phAJD68t734WSVGwgr6UVZCmHPsldPbQuABbRqiUcNBVoJ8NFxLLG3R9dkxoGFuhOo+FufUXWdnGMNT4WfLXIr9wwgmSfQrP8SU=
+	t=1740012881; cv=none; b=uh0mZ4KkyOLGVtVebd7H1JaiifQcDyeaF2ec0Fs3d/qQ71F0jc2BvyBaefNTVlU5dMmAHEl7rKiOe/OspMTGEDYpDlWgv0txZa0rT4cZrBaE2Ugskk0cuNLg3gMqSbMoyFSbPNLttV8haLFM03s9NUDcQg48vZDjdpYsppNDgkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740002089; c=relaxed/simple;
-	bh=9Ku9pMB4kt/k02+wHC+lbrXe1wvqEuDsnDXLxdTBU1Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BxPU+z+ebipdEkslZhUBZrICiHANYEtwsuxPzfcbmXs9QmGm0U+sB3o2t3Th41AonEV69oJdE3YP275aLKiIXZVsWedwqriQR2wgwBnmFXZhoY4Jd9XgnUUPYFHB2suHTj2wBOpXQnXp6QpYDY8qMbreyB1znmda3UEfUOJ1+FQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=aK9zRx7K; arc=none smtp.client-ip=66.163.188.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740002086; bh=FVnfgmx0V6brS6SXbloTGvC0lg9apx7f4ABj0LYxkKI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=aK9zRx7KdWE7i4Hz7usE7V2Obr04cIA0m4uDvuEKE8P1eGSeuuWQ37cd7ml4XWsO7PmErrmqueckGQuhArM10mK/znrweOdaq7iSbmmENia9eFK6Q0BRsodGUJXRG+emV9yjOPvuFnMhF0i0TDf+SiL+fXitIlmleB58ki2fUivVNhK3j5U9BzT+dcpUR8gWJwDulSjlzK12jDDbdfWBrAT7ebdP+0sDD2ux6WxsdlI3/SwAF3JeoJ1E8sJVkOV6GWPEaftnQRbF9OkYt9/7Hv1L5juinV+Y9wKZEzxLuxvzzsTClHX6Z4VRInRNQCbkekyca1mFJdBlH4B3E29fwQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1740002086; bh=B73I1U3SXoznEjNuH3z2Jv96tCXn2ZR09TyezhBY7sr=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=NOfeZYDaYjpx24OgDRTG/7ncKzG3W5+GPLnDWQkJ5ut2j1985+tiy2jS3ci3HPmS6hkriY+ts4MnoKeMMCYMNSUEilxnxNwayMmxB+m6lfM2OL/9Yr/eFU+mDqjjsMNUe97j6erur/5iSjsTqXH+u8yey8M7c3zOStvgdS/8w9olmzNo9PW8zUuSxIXHJVRkoGch4iUlu042ovpAtwRKkloUAXeTJbDGdm0WiGuU6rX02q1Gj5XwGfAftzXfFSUZD9hn+xxWSxjSCkq6mB/cSk3ca7zs5jjYfng8+WnYiHQ8Nayh6Td7d0HGwa+48SQ6UKQ5MQF7o1ZVFqAu66oUag==
-X-YMail-OSG: DIb9D5YVM1m3U5PADDgAZJXfBm02zYZcZXYItjtV88Ey2MZE2AbHm4Nqrc8VKNq
- HMJo6DZrQSOotCUloHCqc51hs_4mXD_eFiA0E0dtwb3vjznfQzSmWODZkBYuDNb9u13SHoUXg9Wj
- IvdtGIsfEjn2Z.sWqe8PtP3i4NBdtqvzh4tihOux_a8nnWZcrkh5LXQ.1ehHqymtsGGQi.s3Uxde
- LFb1eLOke4WkozXBvi0DPX4JaMHnNSf4lsxKBnxR_yNvAOAHQWVou1YXbZlSBbwBv1oWoLriGN5.
- E1MUExTjd91DO8HKHbj5o6oi7H_i6BumNxyQS428PL8Bh54vvSNj6TiqLJCBi.hawaDhUmytxuOc
- ObTcmOGR20WIj7eezePpphbz9ndXXsdJgHgAvWGlHb.8hyYcjJLWtOrSZ5AfXOjUzGWPRbksM_u4
- 9kCkF76SUM96QEU7YRmUnmk4Rk99G6FXKwyqQBRSbSVpZxu0IaHze1zxxmKiELfTqAwQRSqNCqwK
- bfjMenCiJjMEzP43eNK922WsR0eD0H3VOvIqgLDXfvUCrxX2hcgGZvZ4GGoiULO8ScsL9W09ZR2r
- 4IZ0x6rxoPzYOZP3BxcFpE0mxrpo1BREDqgIluVBT1ZTh7hGLQ.w1KYsqy00Bnw5R8GZ8pC1pJWo
- 0RxK6kb2ium5R7gArj1AIpCB2iqj.aORsnS4RZQ8vDb.27lpH9AC9NIVCn8H062eCAbiHLHFW9Wx
- Xv1YOIBPxjgGmWUN.YkeU1nfDdKy6K118xGjs03.T32Wb7xUv5s8M.am9cozAv0NkjUjdsa0H8CW
- u3_euS2HEjwjtKmaXNgbxNwIIArEyq06zdfEloOxc5AY9D90YfvH5zYEk61ducZy5pNMsGt2ZxHz
- gkCGxmLLIcaN5Fb6QYVbD7f.RSpDzmf_eQbrg2vBWobMsuxDsryEQoWP_dzdZSyAJHdKttuX1zDQ
- V_dKSout3_8KgvyYmMgtih8AMcGSOXQVVtCF8dQ7kzIZfptUhh.XF3fenzr9EBzMAKahe84O0mwP
- 5sWErcA6lgzghcbNZbqVEvo5Whxg0Y104.RAWnTN8LiUway4Kc_V3CF_GfhiW0ndJ4NXA9mN08G2
- .D0gRTMIoncJgNzL6BvU4ik8XopcY13P0iLc.MBXjmc3i7VFqe.L0wrUhUkrH_H9yyfgZQmA7rGp
- tqAynYTxmNLfQne1qksbSSDHiQUjvzPTf6E84BPwGc8Q4yrBGspYmhHzYq9v6lL8P_EW99ecYdZC
- IKjSfv2l8abX_2WhTCcUZdnrSUJm8uy5DHQyHwiX6eSfXUebT1KF8rNM7NgFWSX5fPoZ8g_TmQMT
- C3YVXG9pSE.J9MlicsKcyBViw7DltAw1UHoz6rgT4TT5Gdq5KRBKqC7jHtzqfIhKj8hVKGsJx34o
- ezbSzoJYR2c9sUlzr8Ud7bDZgbCFGj9noSSiCq6hXI37qvj4p25PM4.X8WcfN_TFXgcW7BQybn1j
- uKxo6E9q_oNj2YCZ2kfC9I0NmkCWu3PKRPdWgvdUJLuf2aPUxZulH7qVE0VzZvqayZ_k81SePs83
- 4kkUxKjPjC4anwaF4w2IFDg2r0y4i9ncZzpor9ULn6DBcLMXj.onapNf7RawYiJOYhthkmfWw3iy
- tmL6WAJpOCNMld1fafu9ebR4Xr9LqcZYdvUgs_vTtP2WrgUKqehioeNxl06ofCKtLCKrDmOzsRWq
- _OWynvfDBLaC1K90QO4l.mxvmEV59IM.pOWZeARqtC2k_pMqmqGfINPClQml06R.se_ffUqi4AVN
- yPEaj8Pnw1N_pD0yBpxyfG9.QbTXtY7PdTowWSnFprF7XF2sPPr6n_6KKnUd.MquiH.Pbh0Uq9XU
- u9xrhhwQHDRc5zAkfnnNXoBCYoUi5ig6cXS0BphjvYBdpDgZTVcRA0BYbUhyL.rutJdrgDT9Lzcb
- TZGSwK3OX5_g5bzQWjYLNn58nAolhrxdooweH4QWpn2UomuJoGkASRQ3dxHphnnpxc8hd1FfL9a5
- K8v1ad_rXNulsnrQcG9OebjOnmoz8xASZzKjNuXl1X4H4vH2B2loizmzomBYPdnV74G9JG4M6J9O
- 2C33u3_r7xwgg9qxZfjg3OaiTyZVlE1sIgp_rhhGWtOjeJ9zcmVdZloOdsM5j__IiJRDu5ZvytPp
- hzIVGsHq7WZeePtvuTt6eCOOu_0k64YnNRdBr4zoP1LFgl26taX9zMIwwkUZ_VgMvY7UrTeE1AO.
- aE3sQlW263DxpEuK08kUUqmc24yqTujj.6E8dnI7rKJHV6yO3jTU48OF_bvOecC3.rK9SaCmfdqx
- WRM2vS9ix0etuQ6hByxU8.XaGGN0X
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 995c5849-5748-47c2-8267-08f51816560d
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 19 Feb 2025 21:54:46 +0000
-Received: by hermes--production-gq1-5dd4b47f46-9j75b (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3e73d72e5d241818b13006ef21946cc8;
-          Wed, 19 Feb 2025 21:54:44 +0000 (UTC)
-Message-ID: <e929c863-a569-4911-a617-8da02fa826ba@schaufler-ca.com>
-Date: Wed, 19 Feb 2025 13:54:41 -0800
+	s=arc-20240116; t=1740012881; c=relaxed/simple;
+	bh=hwUtCzqyh6aH1mIHsXsfvOdcnu0WliYUJzQAHSkkG70=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BIPAb3MIpo0bsb3XLnsLT8UGnsQzkmp6vCZqUEBVrF34OpFlXIAT6BxrTBAvThgbjSmy7TmcC5P7UdFI/AyrXzmfnByxYITPl0cz8qxg/qfjIBrFacZxc/7+o1aSsZWaGFXdxqvuV08LjW9tQoEqOIm89AVB2rB3UNB/KJyW+0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hEBV1IaM; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740012880; x=1771548880;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hwUtCzqyh6aH1mIHsXsfvOdcnu0WliYUJzQAHSkkG70=;
+  b=hEBV1IaM63DUG1hRRr21QcZ0SfdcHNI2nzbZQhEYQ48DbGneMWhVEXFq
+   g+Wu0tXQ6MGAIJxjaMDiqyNzJ0IOivYLTUFlWKwS6V6SUPHeeq27VJOf0
+   NVcSi+YH7CAkDLwWFbzZMbTGuH8UtIpnML4aB7lseCGZOeZu2Dm10qwG+
+   f84p5Qdy5HOtMdG3SrYEQaY9LTUwByboemqm/F9Xu8cxul9yGle57fv+B
+   oQW8r4mYyizFM1fsskl8zMZeeSv2Hhh9o/V04cl73/L7iR9VXIzwA/Fg5
+   T8psbrXtZIs6jFr/2o6e9kTkOWXTIbz7tR2SI7077IjDML+YyUeVM4LiP
+   g==;
+X-CSE-ConnectionGUID: SC/dPss+SeypeadUHbrp7Q==
+X-CSE-MsgGUID: hJGucJOAQOenEd7oFzgNPg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="52209162"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="52209162"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 16:54:39 -0800
+X-CSE-ConnectionGUID: qeMsjbubQyOQIon3FZs7uQ==
+X-CSE-MsgGUID: 4Mqc+Lu2SYmP5XegMdo/+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="115785521"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 19 Feb 2025 16:54:34 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tkupg-0003hv-13;
+	Thu, 20 Feb 2025 00:54:29 +0000
+Date: Thu, 20 Feb 2025 08:53:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: steven chen <chenste@linux.microsoft.com>, zohar@linux.ibm.com,
+	stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
+	roberto.sassu@huawei.com, eric.snowberg@oracle.com,
+	ebiederm@xmission.com, paul@paul-moore.com, code@tyhicks.com,
+	bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+	kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, madvenka@linux.microsoft.com,
+	nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
+	bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com
+Subject: Re: [PATCH v8 2/7] kexec: define functions to map and unmap segments
+Message-ID: <202502200848.MJEuphR1-lkp@intel.com>
+References: <20250218225502.747963-3-chenste@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] smack: ipv4/ipv6: tcp/dccp/sctp: fix incorrect child
- socket label
-To: Konstantin Andreev <andreev@swemel.ru>
-Cc: linux-security-module@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20250126140735.3296531-1-andreev@swemel.ru>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20250126140735.3296531-1-andreev@swemel.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.23369 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250218225502.747963-3-chenste@linux.microsoft.com>
 
-On 1/26/2025 6:07 AM, Konstantin Andreev wrote:
-> Since inception [1], SMACK initializes ipv* child socket security
-> for connection-oriented communications (tcp/sctp/dccp)
-> during accept() syscall, in the security_sock_graft() hook:
+Hi steven,
 
-I have accepted this patch. It is in smack-next.
+kernel test robot noticed the following build warnings:
 
->
-> | void smack_sock_graft(struct sock *sk, ...)
-> | {
-> |     // only ipv4 and ipv6 are eligible here
-> |     // ...
-> |     ssp = sk->sk_security; // socket security
-> |     ssp->smk_in = skp;     // process label: smk_of_current()
-> |     ssp->smk_out = skp;    // process label: smk_of_current()
-> | }
->
-> This approach is incorrect for two reasons:
->
-> A) initialization occurs too late for child socket security:
->
->    The child socket is created by the kernel once the handshake
->    completes (e.g., for tcp: after receiving ack for syn+ack).
->
->    Data can legitimately start arriving to the child socket
->    immediately, long before the application calls accept()
->    on the socket.
->
->    Those data are (currently — were) processed by SMACK using
->    incorrect child socket security attributes.
->
-> B) Incoming connection requests are handled using the listening
->    socket's security, hence, the child socket must inherit the
->    listening socket's security attributes.
->
->    smack_sock_graft() initilizes the child socket's security with
->    a process label, as is done for a new socket()
->
->    But ... the process label is not necessarily the same as the
->    listening socket label. A privileged application may legitimately
->    set other in/out labels for a listening socket.
->
->    When this happens, SMACK processes incoming packets using
->    incorrect socket security attributes.
->
-> In [2] Michael Lontke noticed (A) and fixed it in [3] by adding
-> socket initialization into security_sk_clone_security() hook like
->
-> | void smack_sk_clone_security(struct sock *oldsk, struct sock *newsk)
-> | {
-> |    *(struct socket_smack *)newsk->sk_security =
-> |    *(struct socket_smack *)oldsk->sk_security;
-> | }
->
-> This initializes the child socket security with the parent (listening)
-> socket security at the appropriate time.
->
-> I was forced to revisit this old story because
->
-> smack_sock_graft() was left in place by [3] and continues overwriting
-> the child socket's labels with the process label,
-> and there might be a reason for this, so I undertook a study.
->
-> If the process label differs from the listening socket's labels,
-> the following occurs for ipv4:
->
-> assigning the smk_out is not accompanied by netlbl_sock_setattr,
-> so the outgoing packet's cipso label does not change.
->
-> So, the only effect of this assignment for interhost communications
-> is a divergence between the program-visible “out” socket label and
-> the cipso network label. For intrahost communications this label,
-> however, becomes visible via secmark netfilter marking, and is
-> checked for access rights by the client, receiving side.
->
-> Assigning the smk_in affects both interhost and intrahost
-> communications: the server begins to check access rights against
-> an wrong label.
->
-> Access check against wrong label (smk_in or smk_out),
-> unsurprisingly fails, breaking the connection.
->
-> The above affects protocols that calls security_sock_graft()
-> during accept(), namely: {tcp,dccp,sctp}/{ipv4,ipv6}
-> One extra security_sock_graft() caller, crypto/af_alg.c`af_alg_accept
-> is not affected, because smack_sock_graft() does nothing for PF_ALG.
->
-> To reproduce, assign non-default in/out labels to a listening socket,
-> setup rules between these labels and client label, attempt to connect
-> and send some data.
->
-> Ipv6 specific: ipv6 packets do not convey SMACK labels. To reproduce
-> the issue in interhost communications set opposite labels in
-> /smack/ipv6host on both hosts.
-> Ipv6 intrahost communications do not require tricking, because SMACK
-> labels are conveyed via secmark netfilter marking.
->
-> So, currently smack_sock_graft() is not useful, but harmful,
-> therefore, I have removed it.
->
-> This fixes the issue for {tcp,dccp}/{ipv4,ipv6},
-> but not sctp/{ipv4,ipv6}.
->
-> Although this change is necessary for sctp+smack to function
-> correctly, it is not sufficient because:
-> sctp/ipv4 does not call security_sk_clone() and
-> sctp/ipv6 ignores SMACK completely.
->
-> These are separate issues, belong to other subsystem,
-> and should be addressed separately.
->
-> [1] 2008-02-04,
-> Fixes: e114e473771c ("Smack: Simplified Mandatory Access Control Kernel")
->
-> [2] Michael Lontke, 2022-08-31, SMACK LSM checks wrong object label
->                                 during ingress network traffic
-> Link: https://lore.kernel.org/linux-security-module/6324997ce4fc092c5020a4add075257f9c5f6442.camel@elektrobit.com/
->
-> [3] 2022-08-31, michael.lontke,
->     commit 4ca165fc6c49 ("SMACK: Add sk_clone_security LSM hook")
->
-> Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
-> ---
->  security/smack/smack_lsm.c | 24 ------------------------
->  1 file changed, 24 deletions(-)
->
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index ce7d44509973..1084ec5fca98 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -4350,29 +4350,6 @@ static int smack_socket_getpeersec_dgram(struct socket *sock,
->  	return 0;
->  }
->  
-> -/**
-> - * smack_sock_graft - Initialize a newly created socket with an existing sock
-> - * @sk: child sock
-> - * @parent: parent socket
-> - *
-> - * Set the smk_{in,out} state of an existing sock based on the process that
-> - * is creating the new socket.
-> - */
-> -static void smack_sock_graft(struct sock *sk, struct socket *parent)
-> -{
-> -	struct socket_smack *ssp;
-> -	struct smack_known *skp = smk_of_current();
-> -
-> -	if (sk == NULL ||
-> -	    (sk->sk_family != PF_INET && sk->sk_family != PF_INET6))
-> -		return;
-> -
-> -	ssp = smack_sock(sk);
-> -	ssp->smk_in = skp;
-> -	ssp->smk_out = skp;
-> -	/* cssp->smk_packet is already set in smack_inet_csk_clone() */
-> -}
-> -
->  /**
->   * smack_inet_conn_request - Smack access check on connect
->   * @sk: socket involved
-> @@ -5179,7 +5156,6 @@ static struct security_hook_list smack_hooks[] __ro_after_init = {
->  	LSM_HOOK_INIT(sk_free_security, smack_sk_free_security),
->  #endif
->  	LSM_HOOK_INIT(sk_clone_security, smack_sk_clone_security),
-> -	LSM_HOOK_INIT(sock_graft, smack_sock_graft),
->  	LSM_HOOK_INIT(inet_conn_request, smack_inet_conn_request),
->  	LSM_HOOK_INIT(inet_csk_clone, smack_inet_csk_clone),
->  
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.14-rc3 next-20250219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/steven-chen/ima-define-and-call-ima_alloc_kexec_file_buf/20250219-065931
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250218225502.747963-3-chenste%40linux.microsoft.com
+patch subject: [PATCH v8 2/7] kexec: define functions to map and unmap segments
+config: x86_64-buildonly-randconfig-004-20250220 (https://download.01.org/0day-ci/archive/20250220/202502200848.MJEuphR1-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200848.MJEuphR1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502200848.MJEuphR1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/crash_dump.h:5,
+                    from mm/mm_init.c:30:
+>> include/linux/kexec.h:479:47: warning: 'struct kimage' declared inside parameter list will not be visible outside of this definition or declaration
+     479 | static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
+         |                                               ^~~~~~
+
+
+vim +479 include/linux/kexec.h
+
+   466	
+   467	#define kexec_dprintk(fmt, arg...) \
+   468	        do { if (kexec_file_dbg_print) pr_info(fmt, ##arg); } while (0)
+   469	
+   470	extern void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size);
+   471	extern void kimage_unmap_segment(void *buffer);
+   472	#else /* !CONFIG_KEXEC_CORE */
+   473	struct pt_regs;
+   474	struct task_struct;
+   475	static inline void __crash_kexec(struct pt_regs *regs) { }
+   476	static inline void crash_kexec(struct pt_regs *regs) { }
+   477	static inline int kexec_should_crash(struct task_struct *p) { return 0; }
+   478	static inline int kexec_crash_loaded(void) { return 0; }
+ > 479	static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
+   480	{ return NULL; }
+   481	static inline void kimage_unmap_segment(void *buffer) { }
+   482	#define kexec_in_progress false
+   483	#endif /* CONFIG_KEXEC_CORE */
+   484	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
