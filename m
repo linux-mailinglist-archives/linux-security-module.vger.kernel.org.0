@@ -1,146 +1,167 @@
-Return-Path: <linux-security-module+bounces-8533-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8535-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D999A4FFE4
-	for <lists+linux-security-module@lfdr.de>; Wed,  5 Mar 2025 14:14:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28788A50455
+	for <lists+linux-security-module@lfdr.de>; Wed,  5 Mar 2025 17:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDF287A28C7
-	for <lists+linux-security-module@lfdr.de>; Wed,  5 Mar 2025 13:13:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77629188406D
+	for <lists+linux-security-module@lfdr.de>; Wed,  5 Mar 2025 16:15:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E1F0248886;
-	Wed,  5 Mar 2025 13:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B504C8F;
+	Wed,  5 Mar 2025 16:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqRKz+N5"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="EEj+i5tc"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CE4247DDD
-	for <linux-security-module@vger.kernel.org>; Wed,  5 Mar 2025 13:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3918A42AA3
+	for <linux-security-module@vger.kernel.org>; Wed,  5 Mar 2025 16:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741180401; cv=none; b=nqkhTkIELnTgFWY44xtEoDtvbEF4jqZe9AmQq1YyRET4i39e0rrB/61dpaD7D52bPFQZPpOdhEdd1CxLAhB6hpJTiSeXwKMRdo76Isiqv7rWv9U8/XULZqpMDmGzsZP6CYKfhGEFoJ6m2llY5znIrUZAwHhkEs5n4DDv9yrCCGQ=
+	t=1741191317; cv=none; b=npTm7eloQBtIv1xX/PpX4QtxsDljiVYrk0wF35XzlNtt8qcj1SoYG3xXl9aJdSxxKwK22VtxsqbD+uHeoXl/tp7uvYhzWpW615k5P8iRSZ1PRS0j9SRPvEbxYt7cPUs+Bkws3SQJqf3i/T29VOMqwYMFZG8XI9aEEao05S+rOnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741180401; c=relaxed/simple;
-	bh=9emQwHWxb8VCLca77hMH9GFlMcpST0gO3AS01KnNkGs=;
+	s=arc-20240116; t=1741191317; c=relaxed/simple;
+	bh=pIpO/sGgffZOuvaq2q5nTstfJhAfEQcyhnbXoKHfr3I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FYGqwvl5zumj9juqqMsxZqu41t6daq4Jl9PjEucW5nx69lLy1fSitFoZGzUAYqleaSn0PPkw3WuU6lAsoI3HFUSZDk3vpsIziL9rQq9UZzCIU5M6SJUZeGd2tq3NtvqheYEO+4v73CfArxNmVdJPD57p4FVIQoIhPTBEiN2Q2eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqRKz+N5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47707C4CEE2;
-	Wed,  5 Mar 2025 13:13:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741180400;
-	bh=9emQwHWxb8VCLca77hMH9GFlMcpST0gO3AS01KnNkGs=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=j0APbaEwVod1HehKPFfwqIhJz+ZFZiCJUqSwMhQjRd8HuJOSCPgjR4cSuHvP58/t2OVy0g+L7qkMZMGc0sAVdUYe1XcypOqfdsO3xc37EodWX9LvRhDL6AZqRcpg5LDFvKRoNUnJuCGiMGt1JPLLKqq/tBy5lkSLnW0Frbu7Pvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=EEj+i5tc; arc=none smtp.client-ip=185.125.25.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:0])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Z7HYm3Zw2zVK7;
+	Wed,  5 Mar 2025 17:09:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1741190972;
+	bh=KKGDt/nLgnhpo+poV9GrvakQkNVBTtJnLYA4bSB9DkM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mqRKz+N5wDfN+Mn+ssTLOjb/Y8ySsnFbM9uTT134an/3gqKJEWIWFn8yopltEw+Ka
-	 Gs6jFiDhJmHYvhjrj0Hj9DUcZn3OjEYTYUqnqpQ8jrGkobLm4dA72X7pom4F+5eKL9
-	 p8RShZJQKm2ww44m2QCg7BZt0VYKq8jELCC+Rumj5MrBVetVl9VHgB8VDzUA8XsND+
-	 ccOUuVYgSJKakt7nRhVyB4RhALYjSED5TC8EWXKt99XIqCH4u5ln9TIFtjnTG3blSO
-	 bJwvLuuC+3aq1U/WqRWhigrx1HCQwFqzBvnwXm3NB8mmOOSIbEhJmJ5EYQvP3voZKM
-	 w2d/drfX48yBQ==
-Date: Wed, 5 Mar 2025 14:13:10 +0100
-From: Alejandro Colomar <alx@kernel.org>
-To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, Tanya Agarwal <tanyaagarwal25699@gmail.com>, 
-	linux-security-module@vger.kernel.org, Daniel Burgener <dburgener@linux.microsoft.com>
-Subject: Re: [PATCH v3 0/1] landlock: Clarify IPC scoping documentation
-Message-ID: <5ke64hfsqorjpnrq347ubtyz6wa6r652kh44n537eeqrhbjy6o@rxl5uv4nyo5w>
-References: <20250303194510.135506-2-gnoack@google.com>
+	b=EEj+i5tcx2Z6xdW3LNmAbNEDDdxHvQlSUPzblCUMPTdasbk6TuZ47Vjo54tSxITGF
+	 Fc+/ImQQzaLAMo2Lo9OrbIUr5rY3PrtylwKqLFygVTrfNCWcCgpESkSG4kKizZsoM7
+	 9t45lzvrlhe2xwExJLStpE2YrbEkkkYHPSYdEybE=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Z7HYl3MzfzHJP;
+	Wed,  5 Mar 2025 17:09:31 +0100 (CET)
+Date: Wed, 5 Mar 2025 17:09:30 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Tingmao Wang <m@maowtm.org>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Jan Kara <jack@suse.cz>, linux-security-module@vger.kernel.org, 
+	Amir Goldstein <amir73il@gmail.com>, Matthew Bobrowski <repnop@google.com>, 
+	linux-fsdevel@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>, Jann Horn <jannh@google.com>, 
+	Andy Lutomirski <luto@amacapital.net>
+Subject: Re: [RFC PATCH 4/9] User-space API for creating a supervisor-fd
+Message-ID: <20250305.peiLairahj3A@digikod.net>
+References: <cover.1741047969.git.m@maowtm.org>
+ <03d822634936f4c3ac8e4843f9913d1b1fa9d081.1741047969.git.m@maowtm.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vcfu2hbzhqvwhuyk"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250303194510.135506-2-gnoack@google.com>
+In-Reply-To: <03d822634936f4c3ac8e4843f9913d1b1fa9d081.1741047969.git.m@maowtm.org>
+X-Infomaniak-Routing: alpha
 
+On Tue, Mar 04, 2025 at 01:13:00AM +0000, Tingmao Wang wrote:
+> We allow the user to pass in an additional flag to landlock_create_ruleset
+> which will make the ruleset operate in "supervise" mode, with a supervisor
+> attached. We create additional space in the landlock_ruleset_attr
+> structure to pass the newly created supervisor fd back to user-space.
+> 
+> The intention, while not implemented yet, is that the user-space will read
+> events from this fd and write responses back to it.
+> 
+> Note: need to investigate if fd clone on fork() is handled correctly, but
+> should be fine if it shares the struct file. We might also want to let the
+> user customize the flags on this fd, so that they can request no
+> O_CLOEXEC.
+> 
+> NOTE: despite this patch having a new uapi, I'm still very open to e.g.
+> re-using fanotify stuff instead (if that makes sense in the end). This is
+> just a PoC.
 
---vcfu2hbzhqvwhuyk
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-From: Alejandro Colomar <alx@kernel.org>
-To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	Tahera Fahimi <fahimitahera@gmail.com>, Tanya Agarwal <tanyaagarwal25699@gmail.com>, 
-	linux-security-module@vger.kernel.org, Daniel Burgener <dburgener@linux.microsoft.com>
-Subject: Re: [PATCH v3 0/1] landlock: Clarify IPC scoping documentation
-References: <20250303194510.135506-2-gnoack@google.com>
-MIME-Version: 1.0
-In-Reply-To: <20250303194510.135506-2-gnoack@google.com>
+The main security risk of this feature is for this FD to leak and be
+used by a sandboxed process to bypass all its restrictions.  This should
+be highlighted in the UAPI documentation.
 
-Hi G=C3=BCnther,
+> 
+> Signed-off-by: Tingmao Wang <m@maowtm.org>
+> ---
+>  include/uapi/linux/landlock.h |  10 ++++
+>  security/landlock/syscalls.c  | 102 +++++++++++++++++++++++++++++-----
+>  2 files changed, 98 insertions(+), 14 deletions(-)
+> 
+> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+> index e1d2c27533b4..7bc1eb4859fb 100644
+> --- a/include/uapi/linux/landlock.h
+> +++ b/include/uapi/linux/landlock.h
+> @@ -50,6 +50,15 @@ struct landlock_ruleset_attr {
+>  	 * resources (e.g. IPCs).
+>  	 */
+>  	__u64 scoped;
+> +	/**
+> +	 * @supervisor_fd: Placeholder to store the supervisor file
+> +	 * descriptor when %LANDLOCK_CREATE_RULESET_SUPERVISE is set.
+> +	 */
+> +	__s32 supervisor_fd;
 
-On Mon, Mar 03, 2025 at 08:45:10PM +0100, G=C3=BCnther Noack wrote:
-> Hello!
->=20
-> Thank you for your feedback, here is the third version.
->=20
-> Changes in V3:
->=20
-> * Various man page improvements suggested by Alejandro Colomar
->=20
-> * Squashed man page commits 2/3 and 3/3.
->=20
-> * (No changes in the kernel side documentation)
+This interface would require the ruleset_attr becoming updatable by the
+kernel, which might be OK in theory but requires current syscall wrapper
+signature update, see sandboxer.c change.  It also creates a FD which
+might not be useful (e.g. if an error occurs before the actual
+enforcement).
 
-Thanks!  Both man-pages patches LGTM and I've applied them both.
+I see a few alternatives.  We could just use/extend the ruleset FD
+instead of creating a new one, but because leaking current rulesets is
+not currently a security risk, we should be careful to not change that.
 
+Another approach, similar to seccomp unotify, is to get a
+"[landlock-domain]" FD returned by the landlock_restrict_self(2) when a
+new LANDLOCK_RESTRICT_SELF_DOMAIN_FD flag is set.  This FD would be a
+reference to the newly created domain, which is more specific than the
+ruleset used to created this domain (and that can be used to create
+other domains).  This domain FD could be used for introspection (i.e.
+to get read-only properties such as domain ID), but being able to
+directly supervise the referenced domain only with this FD would be a
+risk that we should limit.
 
-Have a lovely day!
-Alex
+What we can do is to implement an IOCTL command for such domain FD that
+would return a supervisor FD (if the LANDLOCK_RESTRICT_SELF_SUPERVISED
+flag was also set).  The key point is to check (one time) that the
+process calling this IOCTL is not restricted by the related domain (see
+the scope helpers).
 
->=20
-> Changes in V2:
->=20
-> * As Micka=C3=ABl already applied the first commit ("Minor typo and gramm=
-ar fixes in
->   IPC scoping documentation"), this one is left out here.
->=20
-> * Applied remarks by Daniel Burgener, Alejandro Colomar and Micka=C3=ABl =
-Sala=C3=BCn
->=20
-> * Replaced reference to send(2) with sendto(2), which is slightly more
->   appropriate in that place.
->=20
-> =E2=80=94G=C3=BCnther
->=20
-> G=C3=BCnther Noack (1):
->   landlock: Clarify IPC scoping documentation
->=20
->  Documentation/userspace-api/landlock.rst | 45 ++++++++++++------------
->  1 file changed, 22 insertions(+), 23 deletions(-)
->=20
+Relying on IOCTL commands (for all these FD types) instead of read/write
+operations should also limit the risk of these FDs being misused through
+a confused deputy attack (because such IOCTL command would convey an
+explicit intent):
+https://docs.kernel.org/security/credentials.html#open-file-credentials
+https://lore.kernel.org/all/CAG48ez0HW-nScxn4G5p8UHtYy=T435ZkF3Tb1ARTyyijt_cNEg@mail.gmail.com/
+We should get inspiration from seccomp unotify for this too:
+https://lore.kernel.org/all/20181209182414.30862-1-tycho@tycho.ws/
 
---=20
-<https://www.alejandro-colomar.es/>
+> +	/**
+> +	 * @pad: Unused, must be zero.
+> +	 */
+> +	__u32 pad;
 
---vcfu2hbzhqvwhuyk
-Content-Type: application/pgp-signature; name="signature.asc"
+In this case we should pack the struct instead.
 
------BEGIN PGP SIGNATURE-----
+>  };
+>  
+>  /*
+> @@ -60,6 +69,7 @@ struct landlock_ruleset_attr {
+>   */
+>  /* clang-format off */
+>  #define LANDLOCK_CREATE_RULESET_VERSION			(1U << 0)
+> +#define LANDLOCK_CREATE_RULESET_SUPERVISE		(1U << 1)
+>  /* clang-format on */
+>  
+>  /**
 
-iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmfITeYACgkQ64mZXMKQ
-wqlmiQ//XTMYQesbMzo+T6QREHZglKi9Ki43YBMD0ylWc+XSXW5/OrAiACCEy3iJ
-Dg7DpsJduGXZWP2tW4LtjHbYjmOeF8eWQORuzSMMASMLGlJ6zcx942eef/wCuguD
-e6eo/yXGGqh4Tn3fIXBGoHP0scIKMdhWkhOcEJnanDmf7dzKfWpccqFpyJhc83zs
-PKFI6QhR6bc/XOYv6gUTQGte8xDSnjVkVdtM+FGlhzPPZ/lINPVk/LHRhD7tGE2+
-12h8pEIT4zGBxCbOT6G5n5LUmXdX5IJLyc63mj3pCk50JHkWGgRTogP3Ft8OusLb
-YdURlHwx85oO991VRlo5D69EJbEGQ2t9K4NnHnjt+JH8lFjkP18TM4Rw/Tr505xX
-EMiBjkC52IKfhMuz5wRWi9hyKK18QyZdoIhvjEysvC52gM+sXXOcHYkOVINn2nWL
-k3zMW7y/TBfTMu4ayG9Vk+xjePXB8YGOI6vBs74NyxKCDcZJNm+RC9g8DFT7rDD+
-8fMCN/Yxy1uh0/W9i3e27PPZFjMjd7iXeeTiRBINZG+/zDtLraZmQ6De9+D2RUOJ
-wiVjp2rw4TIcsK1rnDFM8Lryb6F86LmFWYo6m7v8KSJfOL/45NvrN9lKnjsYiv2B
-Q8REMtHPszec6Ig8kxX+STdZ+5pMySlDQc1WXVtlZmUnmF7MRVs=
-=0/fX
------END PGP SIGNATURE-----
-
---vcfu2hbzhqvwhuyk--
+[...]
 
