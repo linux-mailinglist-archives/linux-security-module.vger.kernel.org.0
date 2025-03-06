@@ -1,120 +1,116 @@
-Return-Path: <linux-security-module+bounces-8561-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8565-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5721CA55A18
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Mar 2025 23:46:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4FD3A55AA9
+	for <lists+linux-security-module@lfdr.de>; Fri,  7 Mar 2025 00:07:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FA5B177E7A
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Mar 2025 22:46:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54FB97A8C69
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Mar 2025 23:06:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6367E27C15F;
-	Thu,  6 Mar 2025 22:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4803A2E3373;
+	Thu,  6 Mar 2025 23:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="frZ2g56C"
+	dkim=pass (2048-bit key) header.d=delugo.co.za header.i=@delugo.co.za header.b="fwtHEr3Z"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40CC200B95;
-	Thu,  6 Mar 2025 22:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from outgoing1.cpt4.host-h.net (outgoing1.cpt4.host-h.net [197.189.247.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38B9202F7C
+	for <linux-security-module@vger.kernel.org>; Thu,  6 Mar 2025 23:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=197.189.247.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741301160; cv=none; b=a8c7pA4vH9TO+4XmuXXFGt7jjNOZXcKUUrAyadeIHIoxdWBkw/6BigZX7GPQBw1P5fOo0qogJ0i+v6R8y+oqjD/UEfU8bZih0cl+kfpgWVIIFRYVvxiFWyhHwqKfD8FXy8HPPyZya8Y6FbuA3p97Khu3yo0vb9tibzkPsqkZE3k=
+	t=1741302347; cv=none; b=rKefMxBhU1ckZ+vezi28Az7+D9EoVYc6dRE03QSP64RlR3OsPAgCLW20mWKUtEfBsUmZs/V8iZSj4YemGNL9TGUiG2zXZX4maWUxTbBXV1PpPl5d1IMIp2+DjgXX5Eg3kTFmFzzLb74w7OR7CxXEsFxxNlDVmzxN5a2EG+OKeJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741301160; c=relaxed/simple;
-	bh=73rsgDoass/Y1+2HG5CNEyi1Fuz1zgyePDkEuCjqoog=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BrRaxCOJyE4T8cMkez8613+RBekqWZjkXKRmKNTh1KtGpd8Kn6t6ARgWzaUDG8KpDRFCFC2sSIzYx8YBURprgMns6jK9I3r2Z2BmENZjbvcE0md0RE/cCgm7GdgXXNdDuWmqabub4IQygE5VmTjbM8QIPybZDUsbST5/l3d2fBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=frZ2g56C; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.17.64.156] (unknown [131.107.174.156])
-	by linux.microsoft.com (Postfix) with ESMTPSA id A21DB211049E;
-	Thu,  6 Mar 2025 14:45:51 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A21DB211049E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741301151;
-	bh=3h7ftrzvKeXTY/PZI7hZ0Sx+af2u9JaEQAn6P8Go0PY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=frZ2g56CJBXLTlvFGP10n2vV/Lei/JOHKPeR+oJ+BoOYE4NEjI4GdM5s5AvOja4F1
-	 e9x3Q4hPs5Z9OFTrxEDuZSVeSuZf2eaMpxJ46AbqeZBCaiFvT54SezOOZdv8w5cOZw
-	 CccLoMZbeAJsRhpSgj0J0ugVr2zhbfTBS/qXOFTU=
-Message-ID: <8bc74dd8-ecd0-44ad-88a2-8b36fa61100a@linux.microsoft.com>
-Date: Thu, 6 Mar 2025 14:45:50 -0800
+	s=arc-20240116; t=1741302347; c=relaxed/simple;
+	bh=UOdy1uc1Ja6Ouzx9Gp3orqw2OLpxN4Hd+lHG4CKFzvE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ot4D9M7CCzxR968Nrd9Q5pbtx0C3X17ANAJUn+slgVvPY7Oi1f7ZTgkoJkwA2q47Yo+59KDTvlM2+OzVCchVgwk6qTEHJ43v5jrPttiPUwiQMuTAO4Axk9SVoGANVtKhRYcCRza0vVc3WMg2f0r1z1Qb+V11oJ13wrH6Jr7pSMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=delugo.co.za; spf=pass smtp.mailfrom=delugo.co.za; dkim=pass (2048-bit key) header.d=delugo.co.za header.i=@delugo.co.za header.b=fwtHEr3Z; arc=none smtp.client-ip=197.189.247.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=delugo.co.za
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=delugo.co.za
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=delugo.co.za; s=xneelo; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:sender:cc:bcc:
+	in-reply-to:references; bh=UOdy1uc1Ja6Ouzx9Gp3orqw2OLpxN4Hd+lHG4CKFzvE=; b=fw
+	tHEr3ZSIHOwWIKEPebj9JS/+1ME3VusP1PwAkr9QLCLgpZ26gXwTRHCALYHepdjE4w/mxDsDfk8QT
+	Vi2GAOtA7/Bd2t6uBpDyIG/tZx8hXZTMCw5DPTcJaeqUtKIBeJ3fL0Ls5SRATOdb6+72+nEPnnoYG
+	7+1Wj/2m6Z2JmQzam6DXLgyuQT9qHqv4zW3jkSK5+AVWrCLrMCwkBGBxb/rSKLe7XZaFORZJ12Kvi
+	QW6qJ7wNRljmW8A8aVFr9gBXNMqwBse0K3Un2afZSqvta3o8PGKSGysDL4K+WTM4R45lN3p03ZzsK
+	5Wan3D+ygOnudzr7z/a9QemxSfFvbXeg==;
+Received: from www46.cpt3.host-h.net ([197.221.14.46])
+	by antispam1-cpt4.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <orders@delugo.co.za>)
+	id 1tqKHb-001Ufq-UV
+	for linux-security-module@vger.kernel.org; Fri, 07 Mar 2025 01:05:41 +0200
+Received: from [104.192.5.240] (helo=delugo.co.za)
+	by www46.cpt3.host-h.net with esmtpsa (TLS1.2:ECDHE_SECP521R1__RSA_SHA512__AES_256_GCM:256)
+	(Exim 4.98)
+	(envelope-from <orders@delugo.co.za>)
+	id 1tqK54-0000000Dm2d-2zgk
+	for linux-security-module@vger.kernel.org;
+	Fri, 07 Mar 2025 00:52:43 +0200
+Reply-To: barry@investorstrustco.net
+From: Barry <orders@delugo.co.za>
+To: linux-security-module@vger.kernel.org
+Subject: Re: The Business Loan/financing.1
+Date: 06 Mar 2025 22:52:41 +0000
+Message-ID: <20250306223012.65CEFDE1D0C500F3@delugo.co.za>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 1/7] ima: copy only complete measurement records across
- kexec
-To: Mimi Zohar <zohar@linux.ibm.com>, Baoquan He <bhe@redhat.com>
-Cc: stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
- roberto.sassu@huawei.com, eric.snowberg@oracle.com, ebiederm@xmission.com,
- paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
- linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
- James.Bottomley@hansenpartnership.com, vgoyal@redhat.com, dyoung@redhat.com
-References: <20250304190351.96975-1-chenste@linux.microsoft.com>
- <20250304190351.96975-2-chenste@linux.microsoft.com>
- <Z8g+uhZQ6totYLmp@MiWiFi-R3L-srv>
- <fe6e3c1333a50d66dc876b5a196d3491170802a8.camel@linux.ibm.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <fe6e3c1333a50d66dc876b5a196d3491170802a8.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authenticated-Sender: orders@delugo.co.za
+X-Virus-Scanned: Clear
+X-SpamExperts-Domain: delugo.co.za
+X-SpamExperts-Username: 
+Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@delugo.co.za
+X-SpamExperts-Outgoing-Class: unsure
+X-SpamExperts-Outgoing-Evidence: Combined (0.75)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+5DhM0jw86KsbkaGfFMuQCPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5zVMa2hcQPbXPlbMCsY+hkkq9cT4r4LC0gkQwZss7ZfdvSI
+ QWGhDYOqY2O5fqfx9M7XFT0qB5tFv92nRX4mJdp7UUlLXMUeAXT7hcGmFUnSlv0+BnD7wi70qQBB
+ Bsu5GMahLqLPt2D6hJ605Bnjj1q6iCsJyqSmvP2BysP8HrSPvrHARmuVDmgPGNNuts+ba30rnvUy
+ zoTfAGEbL5I354EAw8VSKe5hYjiYkc7xjE70WreMPUhTBWui6U/2qinoPDthn6sps0oXop0Wpl2m
+ +lnlLYyKfoR+hbZIJAc+0m+mU5EyYYf7TmlI3iEcqXK4A61ChHMQHCMEWTX9HEhwSP4/MSl+mev0
+ M9cO0xP2892D0fA6hpTapNg/3VwnapSOnzMvfUiXer9Hk+cBCIH95/C9L4QFy0eB/isP83e9uHLE
+ BeHTPI/rzJIRbhotX0RECi6mGIdkjXgJzNr4g6HQm7Ihb/f3QhLRbOgisvi5VU9eNCzoJDM55WJG
+ VWcFLzKvCHLdZh03ExTqDquACpNsmDrlcntZzD+8euQ3PTJH+fGZGHMcN6qoXPjenLhIOF1oeRYQ
+ IKkaWXerM1u+fwXJu+tuGEDHQue2QZHF055tGS+SvSlfJF3VFFhgaOmHSC78Ngi9P+5Lf0oV1WuF
+ nNMdSZz/eBksJ0GzgEY832zb4/bETantKr6+crm+rffkaQ6ZgOhecDS00P8Fc8OWE6jtCYt+lNx7
+ b76pl5pevnFznkcIx8H+6Fv7XKRVCdPrl4S6mURwxc3o2KyPRa0Vg6NfcXRhctgzcDoFd+96Xw4Q
+ UNtTnX41RgS4hAw4xf8QWxdHHi13boj4UU49ILZd2HDXpRdrzviI9CRCIiamRgyDQudwNxUd81Og
+ MWXFNTBQD09QdRCR27r9HYUzziTFhEVK8LUg5R4IAJ8DqZLMftAhiZ5VBhI+iM6gPdcRK2u+Vqin
+ 8bA0g/W+lOecImzPxJzzUQScBEigpxA1CSufo+L91Hr9qg==
+X-Report-Abuse-To: spam@antispamquarantine.host-h.net
+X-Complaints-To: abuse@antispammaster.host-h.net
 
-On 3/5/2025 4:27 AM, Mimi Zohar wrote:
-> On Wed, 2025-03-05 at 20:08 +0800, Baoquan He wrote:
->> On 03/04/25 at 11:03am, steven chen wrote:
->>> Carrying the IMA measurement list across kexec requires allocating a
->>> buffer and copying the measurement records.  Separate allocating the
->>> buffer and copying the measurement records into separate functions in
->>> order to allocate the buffer at kexec 'load' and copy the measurements
->>> at kexec 'execute'.
->>>
->>> This patch includes the following changes:
->> I don't know why one patch need include so many changes. From below log,
->> it should be split into separate patches. It may not need to make one
->> patch to reflect one change, we should at least split and wrap several
->> kind of changes to ease patch understanding and reviewing. My personal
->> opinion.
-> Agreed, well explained.
->
-> Mimi
->
->>>   - Refactor ima_dump_measurement_list() to move the memory allocation
->>>     to a separate function ima_alloc_kexec_file_buf() which allocates
->>>     buffer of size 'kexec_segment_size' at kexec 'load'.
->>>   - Make the local variable ima_kexec_file in ima_dump_measurement_list()
->>>     a local static to the file, so that it can be accessed from
->>>     ima_alloc_kexec_file_buf(). Compare actual memory required to ensure
->>>     there is enough memory for the entire measurement record.
->>>   - Copy only complete measurement records.
->>>   - Make necessary changes to the function ima_add_kexec_buffer() to call
->>>     the above two functions.
->>>   - Compared the memory size allocated with memory size of the entire
->>>     measurement record. Copy only complete measurement records if there
->>>     is enough memory. If there is not enough memory, it will not copy
->>>     any IMA measurement records, and this situation will result in a
->>>     failure of remote attestation.
->>>
->>> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
->>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->>> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+Hello,
 
-I will split this patch into the following two patches:
+My name is Barry at Investment Consult, we are a consultancy and
+brokerage Firm specializing in Growth Financial Loan and joint
+partnership venture. We specialize in investments in all Private
+and public sectors in a broad range of areas within our Financial
+Investment Services.
 
-     ima: define and call ima_alloc_kexec_file_buf
-     ima: copy measurement records as much as possible across kexec
+ We are experts in financial and operational management, due
+diligence and capital planning in all markets and industries. Our
+Investors wish to invest in any viable Project presented by your
+Management after reviews on your Business Project Presentation
+Plan.
 
-Thanks,
+ We look forward to your Swift response. We also offer commission
+to consultants and brokers for any partnership referrals.
 
-Steven
-
+ Regards,
+Barry
+Senior Broker
 
