@@ -1,50 +1,54 @@
-Return-Path: <linux-security-module+bounces-8562-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8564-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 635D3A55A30
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Mar 2025 23:52:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B114CA55A32
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Mar 2025 23:52:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63E303AD93C
-	for <lists+linux-security-module@lfdr.de>; Thu,  6 Mar 2025 22:52:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4A687A297E
+	for <lists+linux-security-module@lfdr.de>; Thu,  6 Mar 2025 22:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE0927C840;
-	Thu,  6 Mar 2025 22:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF33A2D;
+	Thu,  6 Mar 2025 22:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="tc08pqmm"
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="P8qusKEh"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DD927BF7B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D6920408A
 	for <linux-security-module@vger.kernel.org>; Thu,  6 Mar 2025 22:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741301545; cv=none; b=MM2ACaIPB5IS2DlBUS316d5VtEVjCi1znEyu3BhrbHBKg2/THb4KfODIvaAo43YrQR2Qui8EWHqw/ya5rxp7bVkKnqPpVsDA7K49nwU943KlLY0R6wuAWO1Yf45+FZkhN3fyL52izQuxTtN/XPLUJ2egWZX/Hk00clBzYhOdY/w=
+	t=1741301547; cv=none; b=mtycSGlrY8hsajkrLTDOo1dcP26/knMcN52cagoaRYbzCgoMYRpApmx2NR6n/cs0bu9CcGTnGUQ6OZIJLIUxoahy5V6VSgi2q/2bExRBMQXw+/TldEZYrPvEjdonpcyU2vvpI8VUuhqcS82pbJ2zl/+A20ormZ78iwLYJFhqAV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741301545; c=relaxed/simple;
-	bh=bLdkRwqv0NGub04Yap9M/BupDFpWFTorx5fYfbe09sw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I1jqmcQ3KaC6fizRgHmYUM9DIrkq/NoiLkkGYEark+trg2TEYVN57lVZEkE8djymb8Fe1ZrSs8P2mXW0wx1EXwW+kPbVUAIoKLdnZ7BrHs0s7nlrt6P4pkBtYZl9BHVkSI6Lo6V+jSkfKYAdNX2dCyIvQEeRApwBGsnLO5QDx1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=tc08pqmm; arc=none smtp.client-ip=95.143.211.150
+	s=arc-20240116; t=1741301547; c=relaxed/simple;
+	bh=s29hAu3o5AIjEq8hz9TNADtyrBBY1ellMHPlbEFWKjE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LyaAdZHWZmjrwU9Mkcm5dNPMgyvxBYl7mWvsj7D0CoOSeT0k+UttRBQtPlAT0PZu6zg9HqgWCkLMYfojN2Y/YGF+EyMDmI+LeDsdpf5JMvn30OocMR8COMaKQP2s8+9BxvYDG41A5DT6crPjFQExO115XFekjJn6uKyB6VQNYSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=P8qusKEh; arc=none smtp.client-ip=95.143.211.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
 From: Konstantin Andreev <andreev@swemel.ru>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-	t=1741301006;
+	t=1741301007;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ulyI95aPz1KYh7PUGBCxs2uGCwrE3yGBj9vuSnKxPNY=;
-	b=tc08pqmmh/uqf3GyYbohU+xazyP14l0L65P2Ez8SXiuwtts6Dqh9jSGAXXa//Xj+5OATUW
-	n2DOHSAK3Uo2vhHgnCEnJdazCUEtm9lOOmgi7VDMWT5hbsIP4TxcJbmMMQ67XSW6/X6xn2
-	mhOIkTMn6S89HKoVyUJmqI/r6Lg6kNs=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zf4VwUOlXB6jjWOFBW7pFx6FBHAXresnCyqaXANAmGA=;
+	b=P8qusKEhL5AQzFmVG5EDVgt0uall1CwxtSDflyGxZ0sGCvS+A/RbteBcb2Aj3TqqFloOVp
+	CQryMmdQ/GtGs0pJeoB8PRkSNkZAS30gx1EBGgYw7rf7LlpczNm6/pUItUxOMT2bhIMmxt
+	JdCE30Di1A+1gKDxhIDumZZpZhkcYCM=
 To: Casey Schaufler <casey@schaufler-ca.com>
 Cc: linux-security-module@vger.kernel.org
-Subject: [PATCH 0/2] smack: fix two bugs in setting task label
-Date: Fri,  7 Mar 2025 01:43:01 +0300
-Message-ID: <20250306224317.416365-1-andreev@swemel.ru>
+Subject: [PATCH 1/2] smack: fix bug: unprivileged task can create labels
+Date: Fri,  7 Mar 2025 01:43:02 +0300
+Message-ID: <20250306224317.416365-2-andreev@swemel.ru>
+In-Reply-To: <20250306224317.416365-1-andreev@swemel.ru>
+References: <20250306224317.416365-1-andreev@swemel.ru>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -53,21 +57,93 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These two patches have distinct subjects,
-but work on the same object,
-  security/smack/smack_lsm.c`do_setattr()
-and the second patch partially overwrites first,
-so I combine them in a series.
+If an unprivileged task is allowed to relabel itself
+(/smack/relabel-self is not empty),
+it can freely create new labels by writing their
+names into own /proc/PID/attr/smack/current
 
-Konstantin Andreev (2):
-  smack: fix bug: unprivileged task can create labels
-  smack: fix bug: setting task label silently ignores input garbage
+This occurs because do_setattr() imports
+the provided label in advance,
+before checking "relabel-self" list.
 
- security/smack/smack.h        |   3 +
- security/smack/smack_access.c |  93 +++++++++++++++++++++++-------
- security/smack/smack_lsm.c    | 104 ++++++++++++++++++++++------------
- 3 files changed, 143 insertions(+), 57 deletions(-)
+This change ensures that the "relabel-self" list
+is checked before importing the label.
 
+Fixes: 38416e53936e ("Smack: limited capability for changing process label")
+Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
+---
+ security/smack/smack_lsm.c | 41 +++++++++++++++++++++++++-------------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
+
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index 99833168604e..95a614ae4c9c 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -3732,8 +3732,8 @@ static int do_setattr(u64 attr, void *value, size_t size)
+ 	struct task_smack *tsp = smack_cred(current_cred());
+ 	struct cred *new;
+ 	struct smack_known *skp;
+-	struct smack_known_list_elem *sklep;
+-	int rc;
++	char *labelstr;
++	int rc = 0;
+ 
+ 	if (!smack_privileged(CAP_MAC_ADMIN) && list_empty(&tsp->smk_relabel))
+ 		return -EPERM;
+@@ -3744,28 +3744,41 @@ static int do_setattr(u64 attr, void *value, size_t size)
+ 	if (attr != LSM_ATTR_CURRENT)
+ 		return -EOPNOTSUPP;
+ 
+-	skp = smk_import_entry(value, size);
+-	if (IS_ERR(skp))
+-		return PTR_ERR(skp);
++	labelstr = smk_parse_smack(value, size);
++	if (IS_ERR(labelstr))
++		return PTR_ERR(labelstr);
+ 
+ 	/*
+ 	 * No process is ever allowed the web ("@") label
+ 	 * and the star ("*") label.
+ 	 */
+-	if (skp == &smack_known_web || skp == &smack_known_star)
+-		return -EINVAL;
++	if (labelstr[1] == '\0' /* '@', '*' */) {
++		const char c = labelstr[0];
++
++		if (c == *smack_known_web .smk_known ||
++		    c == *smack_known_star.smk_known) {
++			rc = -EPERM;
++			goto free_labelstr;
++		}
++	}
+ 
+ 	if (!smack_privileged(CAP_MAC_ADMIN)) {
+-		rc = -EPERM;
++		const struct smack_known_list_elem *sklep;
+ 		list_for_each_entry(sklep, &tsp->smk_relabel, list)
+-			if (sklep->smk_label == skp) {
+-				rc = 0;
+-				break;
+-			}
+-		if (rc)
+-			return rc;
++			if (strcmp(sklep->smk_label->smk_known, labelstr) == 0)
++				goto free_labelstr;
++		rc = -EPERM;
+ 	}
+ 
++free_labelstr:
++	kfree(labelstr);
++	if (rc)
++		return -EPERM;
++
++	skp = smk_import_entry(value, size);
++	if (IS_ERR(skp))
++		return PTR_ERR(skp);
++
+ 	new = prepare_creds();
+ 	if (new == NULL)
+ 		return -ENOMEM;
 -- 
 2.43.0
 
