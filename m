@@ -1,195 +1,243 @@
-Return-Path: <linux-security-module+bounces-8993-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8995-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BDF0A70793
-	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 18:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3586CA707C4
+	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 18:10:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E13911688E4
-	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 17:01:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F62F16B0D5
+	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 17:10:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B8B25C716;
-	Tue, 25 Mar 2025 17:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE842E339B;
+	Tue, 25 Mar 2025 17:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MZCgjoVe"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB412E339B;
-	Tue, 25 Mar 2025 17:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D4825F986;
+	Tue, 25 Mar 2025 17:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742922089; cv=none; b=G10GeKC6DKTfP7PdaxzVv9zsWI03svSU7TZKBCw+Q96vsNkhJ6/p1MI9ddsCyhIFMvC1rbOxXudpbxYone2Z5OaYnc67OVPLtxK39x6awttLF42ZcmF59Qh1PXCr2/BV3z/04ajM3ck4lB56/XC6CleLPem+EEAwi1ii3TvKpSI=
+	t=1742922612; cv=none; b=phBxi3S2+xlTfZzLFgB13/MP6AJvSdgoJYIK6wEL5sBuHJnVlxBAc4Zz2EyOXI3DSVaTPZz8Q/cZ5SciTQs0YpAEhTp7vkWJ53XNc+Hy0vX3R5PExhAAc00DQznbpy6TyUjEYBp37MbZBHdLGMCZWO9WyzBnfLKRt3hV2fkcKiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742922089; c=relaxed/simple;
-	bh=4hzZb9JEzCVAK6mXROmkBBNUCC+Z2V6igSqYiSTZu80=;
+	s=arc-20240116; t=1742922612; c=relaxed/simple;
+	bh=w9BBWOgSO/rGkVzgU/ZNodDjACEIv3l9gGHZ2yNZ4Kk=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hZ5nxPXOH82y5YsFLdW6TvHTt+3e1KJi2Q8Sc48WszMBQERclST/wKUlEd2ZhJvUq/6jcL5cjaQoiE+BXOL1cBfnbSGJjGytfsfcONwjJ9D6xMKxpz5knSmarGk7cwt/ubYQCfDu7CDkYNfRZeQ+XVLw3IAeVUqqoPJh+13WuW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4ZMblt0KwGz1HBjV;
-	Wed, 26 Mar 2025 01:00:58 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id EBFA51402DA;
-	Wed, 26 Mar 2025 01:01:22 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwCnXeBZ4eJnCIvSBA--.48204S2;
-	Tue, 25 Mar 2025 18:01:22 +0100 (CET)
-Message-ID: <c1185901c99091a29a865f7a862bc979873301ad.camel@huaweicloud.com>
-Subject: Re: [PATCH] ima: process_measurement() needlessly takes
- inode_lock() on MAY_READ
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Frederick Lawler <fred@cloudflare.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>, Roberto Sassu <roberto.sassu@huawei.com>, Eric
- Snowberg <eric.snowberg@oracle.com>, James Morris
- <james.l.morris@oracle.com>, "Serge E. Hallyn" <serge@hallyn.com>,
- linux-ima-devel@lists.sourceforge.net, 
- linux-ima-user@lists.sourceforge.net,
- linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-team@cloudflare.com
-Date: Tue, 25 Mar 2025 18:01:09 +0100
-In-Reply-To: <Z-Lc5WxW7NRA6AiT@CMGLRV3>
-References: <20250325155934.4120184-1-fred@cloudflare.com>
-	 <ed260472-c07e-4172-b389-deb8e92f416f@huaweicloud.com>
-	 <Z-Lc5WxW7NRA6AiT@CMGLRV3>
+	 Content-Type:MIME-Version; b=i6PJcS4OcZNlO/4B6r9XSSvw6QvVtgsIjesG1xLVzdiOpR9Gt0VCrvRpwzJ6bDXsS7itEIm5hNpCzOdkgjAR7C/yqSweGlTgEnecNcvKE5HJTqBLkTCzY/E8V6GhMbA66YQEH2xq6e814/xn/0nKvPcpKXaq9fqwxrPIZ+PMbwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MZCgjoVe; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52P9Qx7f024088;
+	Tue, 25 Mar 2025 17:09:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ffp4PO
+	3ojizHrqbGvLCBZPWbAyU8EVjNnz0/qg/oYMM=; b=MZCgjoVeNKgKaWIv+9jkVp
+	eq281PhuIQaUasCOFkjLqhi2QOIQ6BB1oJFGAz5WWqHlx8gNBs8e+nfgJupKP6ez
+	FAbcV6iq9eNwGrC1AKD9wZ4ZFP2I61TtAj/6Rr0G1vvs2T3ybEIp4oSjC7quNTdF
+	eJ8F+EV53LEcqQA/p+RkcPsX7eUIyGlYV7QWr/fguJ5wle2EziPcY+cyxhgJ66DR
+	4EUtr0G9kWvPs8mUGZ1QvMSW+AMQYoar85aVos/j298TdsQXru3g5+Mj4iQcrz5Q
+	4fU18vFCO/tffURNtdTqYSlT6dJkQzwQPb71L68FcrU3hj/bk/8xzAQMehV1Gxxw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45kekyw25c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Mar 2025 17:09:56 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52PGrEK4007426;
+	Tue, 25 Mar 2025 17:09:55 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45kekyw258-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Mar 2025 17:09:55 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52PFr3q2025455;
+	Tue, 25 Mar 2025 17:09:55 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45j7x04jct-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Mar 2025 17:09:55 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52PH9sSf14549736
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 25 Mar 2025 17:09:54 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9DE1A58059;
+	Tue, 25 Mar 2025 17:09:54 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 70B1658055;
+	Tue, 25 Mar 2025 17:09:53 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.132.195])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 25 Mar 2025 17:09:53 +0000 (GMT)
+Message-ID: <3cd5975b7a5773e1d3f1017c35b2e48222eb2d4a.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 08/13] ima: track the set of PCRs ever extended
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Nicolai Stange <nstange@suse.de>,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen
+ <jarkko@kernel.org>,
+        James Bottomley
+ <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date: Tue, 25 Mar 2025 13:09:53 -0400
+In-Reply-To: <20250323140911.226137-9-nstange@suse.de>
+References: <20250323140911.226137-1-nstange@suse.de>
+	 <20250323140911.226137-9-nstange@suse.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwCnXeBZ4eJnCIvSBA--.48204S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXry5uw1rGr1rZryfAFyDtrb_yoW5uFyfp3
-	y8Ka1IyF4DKry2kr9rtws0vr4vv3ykGF4UJws5ZF18A3s5Xr1vqr15tayY9FyfXrn5A3Wa
-	vF4Ygr43Zan0vFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBGfiVd0JSQACsY
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7nH4B76iea20nszB2qiZHx8Mze8BcI6Q
+X-Proofpoint-GUID: OtCSeARAVbLVoC1eupEewqNkvIguZTV9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-25_07,2025-03-25_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2503250119
 
-On Tue, 2025-03-25 at 11:42 -0500, Frederick Lawler wrote:
-> On Tue, Mar 25, 2025 at 05:30:32PM +0100, Roberto Sassu wrote:
-> > On 3/25/2025 4:58 PM, Frederick Lawler wrote:
-> > > On IMA policy update, if a measure rule exists in the policy,
-> > > IMA_MEASURE is set for ima_policy_flags which makes the violation_che=
-ck
-> > > variable always true. Coupled with a no-action on MAY_READ for a
-> > > FILE_CHECK call, we're always taking the inode_lock().
-> > >=20
-> > > This becomes a performance problem for extremely heavy read-only work=
-loads.
-> > > Therefore, prevent this only in the case there's no action to be take=
-n.
-> > >=20
-> > > Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-> > > ---
-> > >   security/integrity/ima/ima_main.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/i=
-ma/ima_main.c
-> > > index 2aebb7984437..78921e69ee14 100644
-> > > --- a/security/integrity/ima/ima_main.c
-> > > +++ b/security/integrity/ima/ima_main.c
-> > > @@ -181,7 +181,7 @@ static int process_measurement(struct file *file,=
- char *buf, loff_t size,
-> > >   	action =3D ima_get_action(inode, mask, func, &pcr);
-> > >   	violation_check =3D ((func =3D=3D FILE_CHECK || func =3D=3D MMAP_C=
-HECK) &&
-> > >   			   (ima_policy_flag & IMA_MEASURE));
-> > > -	if (!action && !violation_check)
-> > > +	if (!action && (mask =3D=3D MAY_READ || !violation_check))
-> > >   		return 0;
-> >=20
+On Sun, 2025-03-23 at 15:09 +0100, Nicolai Stange wrote:
+> Right now, PCR banks with unsupported hash algorithms are getting
+> invalidated over and over again for each new measurement list entry
+> recorded.
 >=20
-> Hi Roberto,
+> A subsequent patch will make IMA to invalidate PCR banks associated with
+> unsupported hash algorithms only once at a PCR's first use. To prepare fo=
+r
+> that, make it track the set of PCRs ever extended.
 >=20
-> > Hi Frederick
-> >=20
-> > thanks, nice catch!
-> >=20
-> > Thinking... in fact you are saying that there are conditions for which
-> > ima_rdwr_violation_check() does nothing.
-> >=20
-> > For better clarity, I would add the conditions for which we are doing a
-> > violation check in violation_check directly. So that, one can just go t=
-o the
-> > function and see that in fact nothing special is done other than doing =
-the
-> > same checks in advance before taking the lock (the conditions you are
-> > checking on are immutable, so it is fine).
-> >=20
-> > So, it is not a write, and the file is not being measured (this would b=
-e a
-> > bit redundant given that we are checking anyway !action).
-> >=20
-> > Thanks
-> >=20
+> Maintain the set of touched PCRs in an unsigned long bitmask,
+> 'ima_extended_pcrs_mask'.
 >=20
-> The ima_rdwr_violation_check() call takes a action & IMA_MEASURE
-> argument anyway.
+> Amend the IMA_INVALID_PCR() #define to check that a given PCR can get
+> represented in that bitmask. Note that this is only for improving code
+> maintainablity, it does not actually constain the set of allowed PCR
+> indices any further.
 >=20
-> My initial thought was to replace ima_flag_policy & IMA_MEASURE with
-> action & IMA_MEASURE there, but I wasn't sure if there was a race
-> problem that the ima_rdwr_violation_check() is trying to catch for the no=
-n
-> FILE_CHECK cases.
-
-Let's keep as it is for now.
-
-> Otherwise, I think the checks in the ima_rdwr_violation_check() demand th=
-e lock,
-> and therefore we can't just move them out to that violation_check
-> variable--unless I'm missing something. As for other conditions, I think
-> it's _just_ the MAY_READ we care about.
-
-Yes, of course.
-
-I meant, since in ima_rdwr_violation_check() there is:
-
-
-if (mode & FMODE_WRITE)
-...
-else if (... && must_measure)
-
-
-which don't need to be under lock, then I would have modified
-violation_check to:
-
-	violation_check =3D ((func =3D=3D FILE_CHECK || func =3D=3D MMAP_CHECK ||
-			    func =3D=3D MMAP_CHECK_REQPROT) &&
-			   (ima_policy_flag & IMA_MEASURE)) &&
-			   ((action & IMA_MEASURE) || (mask & MAY_WRITE));
-
-Roberto
-
-> Is what you're suggesting to move the check mask =3D=3D MAY_READ to inste=
-ad be in
-> that violation_check variable than the branch?
+> Make ima_pcr_extend() to maintain the ima_extended_pcrs_mask, i.e. to set
+> the currently extented PCR's corresponding bit.
 >=20
-> > Roberto
-> >=20
-> > >   	must_appraise =3D action & IMA_APPRAISE;
-> >=20
+> Note that at this point there's no provision to restore the
+> ima_extended_pcrs_mask value after kexecs yet, that will be the subject o=
+f
+> later patches.
 >=20
-> Thanks,
-> Fred
+> Signed-off-by: Nicolai Stange <nstange@suse.de>
+
+Hi Nicolai,
+
+IMA extends measurements in the default TPM PCR based on the Kconfig
+CONFIG_IMA_MEASURE_PCR_IDX option.  Normally that is set to PCR 10.  The IM=
+A
+policy rules may override the default PCR with a per policy rule specific P=
+CR.
+
+INVALID_PCR() checks the IMA policy rule specified is a valid PCR register.
+
+Is the purpose of this patch to have a single per TPM bank violation or mul=
+tiple
+violations, one for each PCR used within the TPM bank?
+
+thanks,
+
+Mimi
+
+> ---
+>  security/integrity/ima/ima.h       |  8 ++++++--
+>  security/integrity/ima/ima_queue.c | 17 +++++++++++++----
+>  2 files changed, 19 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 1158a7b8bf6b..f99b1f81b35c 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -20,6 +20,7 @@
+>  #include <linux/hash.h>
+>  #include <linux/tpm.h>
+>  #include <linux/audit.h>
+> +#include <linux/minmax.h>
+>  #include <crypto/hash_info.h>
+> =20
+>  #include "../integrity.h"
+> @@ -62,6 +63,8 @@ extern int ima_hash_algo_idx __ro_after_init;
+>  extern int ima_extra_slots __ro_after_init;
+>  extern struct ima_algo_desc *ima_algo_array __ro_after_init;
+> =20
+> +extern unsigned long ima_extended_pcrs_mask;
+> +
+>  extern int ima_appraise;
+>  extern struct tpm_chip *ima_tpm_chip;
+>  extern const char boot_aggregate_name[];
+> @@ -198,8 +201,9 @@ struct ima_iint_cache {
+>  	struct ima_digest_data *ima_hash;
+>  };
+> =20
+> -#define IMA_INVALID_PCR(a) (((a) < 0) || \
+> -	(a) >=3D (sizeof_field(struct ima_iint_cache, measured_pcrs) * 8))
+> +#define IMA_INVALID_PCR(a) (((a) < 0) ||				    \
+> +	(a) >=3D (8 * min(sizeof_field(struct ima_iint_cache, measured_pcrs), \
+> +			sizeof(ima_extended_pcrs_mask))))
+> =20
+> =20
+>  extern struct lsm_blob_sizes ima_blob_sizes;
+> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/=
+ima_queue.c
+> index 0cc1189446a8..6e8a7514d9f6 100644
+> --- a/security/integrity/ima/ima_queue.c
+> +++ b/security/integrity/ima/ima_queue.c
+> @@ -51,6 +51,11 @@ static DEFINE_MUTEX(ima_extend_list_mutex);
+>   */
+>  static bool ima_measurements_suspended;
+> =20
+> +/*
+> + * Set of PCRs ever extended by IMA.
+> + */
+> +unsigned long ima_extended_pcrs_mask;
+> +
+>  /* lookup up the digest value in the hash table, and return the entry */
+>  static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
+>  						       int pcr)
+> @@ -144,15 +149,19 @@ unsigned long ima_get_binary_runtime_size(void)
+> =20
+>  static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
+>  {
+> -	int result =3D 0;
+> +	int result;
+> =20
+>  	if (!ima_tpm_chip)
+> -		return result;
+> +		return 0;
+> =20
+>  	result =3D tpm_pcr_extend(ima_tpm_chip, pcr, digests_arg);
+> -	if (result !=3D 0)
+> +	if (result !=3D 0) {
+>  		pr_err("Error Communicating to TPM chip, result: %d\n", result);
+> -	return result;
+> +		return result;
+> +	}
+> +
+> +	ima_extended_pcrs_mask |=3D BIT(pcr);
+> +	return 0;
+>  }
+> =20
+>  /*
 
 
