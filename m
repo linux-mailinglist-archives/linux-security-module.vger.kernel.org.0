@@ -1,45 +1,77 @@
-Return-Path: <linux-security-module+bounces-8992-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-8994-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CADFA70756
-	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 17:49:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB53DA70792
+	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 18:01:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC1E61885882
-	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 16:50:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74EDB188D885
+	for <lists+linux-security-module@lfdr.de>; Tue, 25 Mar 2025 17:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9663F25D91E;
-	Tue, 25 Mar 2025 16:49:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311AA42A96;
+	Tue, 25 Mar 2025 17:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="e29ojos+"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C3425A2CF;
-	Tue, 25 Mar 2025 16:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCD718024
+	for <linux-security-module@vger.kernel.org>; Tue, 25 Mar 2025 17:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742921385; cv=none; b=GiBiDukrDkP3JP9UQHaHa79gVE5lMtYvQZ27fPZE3OhXub4NIVFrXlAc1kYwWHiZmXfvaoqOClF1gl4J02cYOy3CsNc1kd8Jem33LIC+7kgmwYg78rSPCZA0L6RZ0VGXjC+PwVrjZsbkRER7msKXaeBldqX4r4Eqk5dp5G+QyZY=
+	t=1742922100; cv=none; b=KkJqys1klyAwFXRFFRhT9d2Pgld6ddQINNhwV4kQ1l3gGMU+xeK3W2uQ4I8eqtizRf4akVk5N2e6Lf9TV6Cpm4q/5p3WG0MyHZWhQjDN8L9M/B9CbHziITLlWpveSS5p8FWMJwoiVGydOffjGlAuzbIVvjb0KwcCayhCheeTlrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742921385; c=relaxed/simple;
-	bh=zoU3gwFolxp7eipK1+P+Baqd3/1sqUEWtu2YpZVO8AM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qTo0ypb9H8c11lAKOA0aGleH0ya7YRwk5VmF7XNmInVW9ZHNd895WC8O3f48BQ4CkcDW5sZpP9i/NEw0xPlCuVGulgHyzzCfY72DamjNI4H2KqyLyTBhkt2bL3E84G2uAAqaFhJINkNnl9ExEkiZJmo4OPsVTL2cKX4/MJqk8S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4ZMb4W74V5z1HBQX;
-	Wed, 26 Mar 2025 00:30:19 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id DA684140392;
-	Wed, 26 Mar 2025 00:30:44 +0800 (CST)
-Received: from [10.221.98.126] (unknown [10.221.98.126])
-	by APP1 (Coremail) with SMTP id LxC2BwDHS0or2uJn7PTYBA--.47295S2;
-	Tue, 25 Mar 2025 17:30:44 +0100 (CET)
-Message-ID: <ed260472-c07e-4172-b389-deb8e92f416f@huaweicloud.com>
-Date: Tue, 25 Mar 2025 17:30:32 +0100
+	s=arc-20240116; t=1742922100; c=relaxed/simple;
+	bh=jS67oAesz1Y8NauC3CC0XT71C2aVOdBEhvuvi52kWMg=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type:
+	 References; b=XbN9kV/bER3JT7b4uGZCf+ha+ys8+G4fU07Rl0erOMG353pJgsxKbnU82Z0Jhmix8vBxaLAXdQqT04E3c6hu1NdEEuuhELorAS0vFK5qpBL3Gn7JXx64Hv/7hky/CkQi73cosOPZ7wWQ7c2MSyCYpXxxfcGjxKY7pqwBZL67tgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=e29ojos+; arc=none smtp.client-ip=66.163.188.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1742922097; bh=IdykXTVI7p69c2IyaMS+lYXEfvBTHgFMPP9Erx27P4c=; h=Date:To:Cc:From:Subject:References:From:Subject:Reply-To; b=e29ojos+ss6yCAgP73oW0bvidnQySAyulJ2vJnOIIlfrXC/hsAoXu4q1cn4XihFpABlkLA7NAHk6Jq8SaQrc2npUg4SK64YnQS0FN6Z+hZm7Pbe13QjaX18//BOo6UeTagLcIHx+QnuYReeLPVgXbhidKABaUlo4+AQ4Lo5grl+RUN1QEX7/jJtq4uvrr7011/o/RUCTXrJY14PvW5mCjk8FJfOoPevEzdoa2C0tZyV69E6RvrV1HqKDTJ2budKQhKheMZ8XfsjbNdGKt055jQEmGBGKNuwhj6+TTdgi+14GYK6ObceOR/i+mX239SU39Be9LYLMcOZzWW5dVo1vJQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1742922097; bh=K/1o+bFzeleqH+jipe0QFZBxxtY/J9dTHO3j65EWGK5=; h=X-Sonic-MF:Date:To:From:Subject:From:Subject; b=gDRLkd+akpftsitH44hammQfiP64casyrrnW8L2El6Bhu88/B6jxdTl3cO8JeCDmhA9bn/9N+rfDKmJwzPHKycV/cGTdlG7nh3RhuWc1TK9gOOxTmMwD9RUxp+chRJ4ys8kxySP2vtB1yLdBmiG6/HPwd15wAovJue98fTweYn4mxvNGELcFoty76aam6m4+bRw25UU0JWhL8tH2n6qOXLsSkJzCnIUPJsfIrCCj8+JwED9DH0guEjbN/J4/63HNLYNn4aawbWjL67c/pLHP3flhfZO6AzXIYhF//keLy5kHJgds3rK5J/JhHHzPlaXZLK918g6OLHBZ+htsp5oNIg==
+X-YMail-OSG: hh8J610VM1nn8Q7n2Y0stMAoO0augQKmaIrHkmErDYZt7wtQyW3SQ472oFrbEdL
+ 172vHTm6gsX6GkSiBt5xzb.4WC2nlSkUTPuT8NCt_Wd2RJXWPT7jUN64X6a7JIMzqOflZODcLu0m
+ frtHIYnjtHNlnfU1_YKz48.44WUApWeXErcbYj2H3M.OpXqFQKuK6Wn2VuhORh8nRXl9rWO9FTGb
+ MPT3lVjR5B5hmIn2xB1LlZVg7puXQndIrSsklIAm82aEDYcFQeh3a456DxDfTAkymRHRM1RInI2Y
+ gdoB55ixNUGexCYPsqfpHrQNZG7jJNwWAq_2xU4Ax4UNCR22Zqu.rrfCAQow7PzuR6SJ1UVppGB0
+ _lHYMqiHP4A3zYnmut2urA0tx5dXV08irSB2RV_0.N1R8S3Yiw4I5NfkBBfoS.qC4DsEoOCA_r_Y
+ Edz_epOVydesNXsQF.l8xRP_eSy7c0X9g3KxNJeBCKLgXDg9XpHEy2cAN8N3a18TqPZlAWtv.agk
+ qKA_N4P26nxGwnHRqYwDtx8GifL7YvSSfXth8KWE90k7bgdzaUYO2Ull8J0ECiBuhfPQMDFKHIrb
+ ETIUWr1jKaMND._PFX4j6E6KFDr1Vj.4b0nf.XmRkUbcu50xPZUfVczPtBjWGlpsWEIYRKg7VcIs
+ ewI6J8zsttK54RzO5HSbjV3x7kzPYsDkYQ1Pulgt0WB8rxnZ1XDMIJLzMBHob6l0SsES1zzvtLjX
+ G2_EfAXB6VhuYmmSfZJh.F1YrlnXotjUUv9lQwGCQt_veKn89NOJ4j_rzN_08UOBl5cUAyBrdLO3
+ AWYsM2LCnAXdWU2blQ1Jx.ELIIIJg8NA1.Ixi_lp7iDibtc1ABci46MrfEEi7HnyO8Ecdb2AlnAH
+ G1Vl.0Rb.kpP_xn05o893LewqRyv9DsHy8M1tjlN9BLH_TWeVfDSakxT8UUiefCIUpdqG91BQMNj
+ AJb7WcWnHQ5S3NPViV1F6rfPg23qVHiOg2PVlK2d6D5dL51HQXunFDLsvmO47A6WThZhNG2lnpUG
+ 12zCeCXNTcr.z5Sbg5O404sYPHGRCT30gixj6QYo4IhjcpybVh0ZRmIsCKxe01njBxQDQZfn6hQ8
+ rbB_mvHpVsEyyNbpUSnV4YfO4DnIvsVXrcWrVvD51tVSbPrc6awbDXI7knaNEBqK39Lq_.I_9_od
+ AguP702uuI7PwPQCIeKaq7C7XyQTZ3OTGXoquT00I002RDVqzgiB.TxWJ_VhE5pT7iBl1lxKKqVc
+ ECWUAi8KuUMmDPqXUl.JzNGl3LYdhyZc8c3b.gk3cfEYv.iy.HejHFpTU_qzZruqjU_cTvjzRH3N
+ OZtmkO7z7csyxOM_jvjhIX8AtAJP2evmC_NP4O1bngIX2YG9ktfxGf.LnhlbRWFntzQ2Ck4KOlIN
+ 26AAUqaf8IgXKO2mcp7nizf2UsRQf2Gu6pr7IarlyMatzsaLXjh7VBWd4hl9B80.DtOo.7ROaSLf
+ phyt6T99ZzdrbcoJ4xu.Jty07IPPEpreDrUPviB0ckLJ9mezlmv_hqQqxLBWDsDWza04gRCpH_if
+ 1zR_4Cl9ReXCrSkfoPlhISMbPGhfywGq_QC2qODNrlHjncuwK4ZSCK48VsFUB3WfMRdNhCucyE0d
+ 0P.fnON.S299u1WlCCP6o1F5BxAnHxvP9yMt4A4VrRZ40EGTLW9qhy7kIWkX0Boc4_q7o56lRH7i
+ WlLCJ8j4AZ7K6SGv0p3hQQsYRRtl8XFnJ1qsGc8wcs4I.eqPq6J2VjZOCThL41RqqJtiD1M3wpGa
+ kJaDQLAF_1Vr6R8omJZfojQ9uIDa2NU9V_l4kbuuN7V0r93pRP3swyPBPMXytxBPtYMp7QdLKM1D
+ L8TcVrsqj97YI1X70oK82IteSsjWIuz6qhEeO6Fr1gfR_Ub9pGHDZHB.LfUJoNN2pmyIWjF_esuu
+ f.X9.2vmoVNYSSWb3AUM3XaYIKuq1vXHkpJ3rLLmaEP7Z3wIhWXOE0G1kVGtKoTWT21XPry8oEFP
+ dL.Pda8LeZCpzyPAnMJRH_5zrayqwVvDZnCsEgK7.loH.uNMe93kj5hVwUcM1RL92AD0_7FdQAlR
+ W0K.Rk1yUDrRlfMcPR8K2yPms6AespA0nw4sj5pO.CJ2FtqSjvKRx6V6EJThkAntGkfEuwbb1DV4
+ OHNEryIONgrRg63e048KkFWjOZ13fAn3KIypmm2Hug1fsdsid4HaBRjh4kvosCxgyCS9I5z5iJJm
+ Z5_0KsdFt8ZdRJ6toeOL7DQQ.OebtnUKCzr0MN.d3sC1W0QKVndEzeKNOfTi7e1cQRJdXHewS1ym
+ 0axDhl84NF3B5DUKDL9lFCw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 18af2867-df7f-47b9-ba43-8f57eb44f25f
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Tue, 25 Mar 2025 17:01:37 +0000
+Received: by hermes--production-gq1-5c477bf655-s8xr7 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4653def2fdc5d2c09a7af09c5b8d8672;
+          Tue, 25 Mar 2025 16:41:21 +0000 (UTC)
+Message-ID: <8040a0e7-2121-4389-88e5-c6f209bfca0a@schaufler-ca.com>
+Date: Tue, 25 Mar 2025 09:41:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -47,87 +79,58 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ima: process_measurement() needlessly takes inode_lock()
- on MAY_READ
-To: Frederick Lawler <fred@cloudflare.com>, Mimi Zohar <zohar@linux.ibm.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Roberto Sassu <roberto.sassu@huawei.com>
-Cc: Eric Snowberg <eric.snowberg@oracle.com>,
- James Morris <james.l.morris@oracle.com>, "Serge E. Hallyn"
- <serge@hallyn.com>, linux-ima-devel@lists.sourceforge.net,
- linux-ima-user@lists.sourceforge.net, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-team@cloudflare.com
-References: <20250325155934.4120184-1-fred@cloudflare.com>
 Content-Language: en-US
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <20250325155934.4120184-1-fred@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: LSM List <linux-security-module@vger.kernel.org>,
+ Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ konstantin Andreev <andreev@swemel.ru>
+From: Casey Schaufler <casey@schaufler-ca.com>
+Subject: [GIT PULL] Smack patches for 6.15
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:LxC2BwDHS0or2uJn7PTYBA--.47295S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFWkGF17KFWDCFW5Kw17Wrg_yoW8CFWfpa
-	1ktF48Ar1UKFyakry7Jan0yrZ5G3ykKr4UJw15ZF1UAan5XF1vvrZ0y3Wj9ryfXrnYy34S
-	qa1agrW3Aan0yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBGfiVdoI3gABsJ
+References: <8040a0e7-2121-4389-88e5-c6f209bfca0a.ref@schaufler-ca.com>
+X-Mailer: WebService/1.1.23533 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 3/25/2025 4:58 PM, Frederick Lawler wrote:
-> On IMA policy update, if a measure rule exists in the policy,
-> IMA_MEASURE is set for ima_policy_flags which makes the violation_check
-> variable always true. Coupled with a no-action on MAY_READ for a
-> FILE_CHECK call, we're always taking the inode_lock().
-> 
-> This becomes a performance problem for extremely heavy read-only workloads.
-> Therefore, prevent this only in the case there's no action to be taken.
-> 
-> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-> ---
->   security/integrity/ima/ima_main.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 2aebb7984437..78921e69ee14 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -181,7 +181,7 @@ static int process_measurement(struct file *file, char *buf, loff_t size,
->   	action = ima_get_action(inode, mask, func, &pcr);
->   	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK) &&
->   			   (ima_policy_flag & IMA_MEASURE));
-> -	if (!action && !violation_check)
-> +	if (!action && (mask == MAY_READ || !violation_check))
->   		return 0;
+Hello Linus,
 
-Hi Frederick
+Here is the Smack pull request for v6.15.
 
-thanks, nice catch!
+This is a larger set of patches than usual. It consists of
+a set of build clean-ups, a rework of error handling in setting
+up CIPSO label specification and a bug fix in network labeling.
+All have been tested and in next for some time.
 
-Thinking... in fact you are saying that there are conditions for which 
-ima_rdwr_violation_check() does nothing.
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
-For better clarity, I would add the conditions for which we are doing a 
-violation check in violation_check directly. So that, one can just go to 
-the function and see that in fact nothing special is done other than 
-doing the same checks in advance before taking the lock (the conditions 
-you are checking on are immutable, so it is fine).
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
-So, it is not a write, and the file is not being measured (this would be 
-a bit redundant given that we are checking anyway !action).
+are available in the Git repository at:
 
-Thanks
+  https://github.com/cschaufler/smack-next tags/Smack-for-6.15
 
-Roberto
+for you to fetch changes up to a158a937d864d0034fea14913c1f09c6d5f574b8:
 
->   	must_appraise = action & IMA_APPRAISE;
+  smack: recognize ipv4 CIPSO w/o categories (2025-02-16 14:17:55 -0800)
+
+----------------------------------------------------------------
+Smack patches for v6.15
+
+----------------------------------------------------------------
+Casey Schaufler (1):
+      Smack: fix typos and spelling errors
+
+Konstantin Andreev (5):
+      smack: dont compile ipv6 code unless ipv6 is configured
+      smack: ipv4/ipv6: tcp/dccp/sctp: fix incorrect child socket label
+      smack: remove /smack/logging if audit is not configured
+      smack: Revert "smackfs: Added check catlen"
+      smack: recognize ipv4 CIPSO w/o categories
+
+ security/smack/smack.h        | 20 +++++++++++++-------
+ security/smack/smack_access.c |  6 ++++--
+ security/smack/smack_lsm.c    | 40 ++++++++++++----------------------------
+ security/smack/smackfs.c      | 29 ++++++++++++++---------------
+ 4 files changed, 43 insertions(+), 52 deletions(-)
 
 
