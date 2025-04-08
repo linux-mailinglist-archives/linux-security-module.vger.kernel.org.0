@@ -1,157 +1,137 @@
-Return-Path: <linux-security-module+bounces-9178-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-9180-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F026EA81271
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Apr 2025 18:34:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 297FCA81703
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Apr 2025 22:37:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5457E4A5EBB
-	for <lists+linux-security-module@lfdr.de>; Tue,  8 Apr 2025 16:32:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8606E3BFAF3
+	for <lists+linux-security-module@lfdr.de>; Tue,  8 Apr 2025 20:37:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39385230988;
-	Tue,  8 Apr 2025 16:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DA1242914;
+	Tue,  8 Apr 2025 20:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Np9ga4Lx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6R423Vf"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D03E22E3E7;
-	Tue,  8 Apr 2025 16:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8CF722AE76;
+	Tue,  8 Apr 2025 20:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744129914; cv=none; b=WtdaIaAeeivfCLOVAumO/+zxMnKasnOJrG/XDCF8gV4hRXLsG3dBRO3gsdbTaXaxxW/QD6oGeW27YI8kBpy9umZ7WmmeyvoKQYBy8vlwCkUmGH+a6UGIYg3hJU26QBvza8+hxrsh7UO30G5lf5Ni6vA5TblMR0LU1uE0PHU4yRY=
+	t=1744144650; cv=none; b=LgDBz/tv6Ey0P9Wau+JUQqrJdKNRVvk4OiufwW/fsjBfM246rko8UrHQlkUY+5KsaGkHIrWz6wJTZrFy/GRov2lGE/+yDYlp0+lq7JKOiXSEVuwmuh/mVw+i3X0m7o0ERJtzFojkVqeW+KPFnMPIz//nDajyKz0mlFBShDTH+2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744129914; c=relaxed/simple;
-	bh=+ERSTFFT+pj0IqkbN5I2RfqLIPmHFJG5gQVrw2eXwxc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aclseDXHfPZ48sbKVINhcGla4Gq9Nt2MknnH6fGQfTNSZbWy3J/sN9Hiy2hmqZ6FFgA7Irb2LtPku1rLo6HOSvS60t7QiUTN9lw3xptFjcAE2X3iHAgTqcgn1qZ//KW8D5W/l1wsT9M0uDd3opBt7NDzFWOBoOAZh39f4OE/7FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Np9ga4Lx; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 538G0D94029154;
-	Tue, 8 Apr 2025 16:31:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=GJgoec
-	yAtEFkNbhaljeXNLdB75CNdGBhYrBniuFPltE=; b=Np9ga4LxZRMtXQiirqQTTx
-	fF0RFDPSIbcrUht5WUHcfUOYB78uTPLeVUIQOTCh/BsDnTSjgsDKvyy1I+bRUwLF
-	abnw32nwq/85xV4d3xrLxjJ0UlO+qxzl70vSvQfi/KOfNwz3BsXt2E6oYpDf+WVg
-	uZwRxp9zPqjA5ku0btysHRS5DqbSRBbpqjfOlIK1fUSTekpIRsMr1n0L9Z/JhLaL
-	kS+t0lHm+czkZCJAVdU3ANonBJG532ZrGm1nYt0ZA9l2+oDnbaeH+htgJr7N/d+N
-	KzbR/c8LhXtR37t4aJyofcS+j0b36WLAjhgZhFXevfrHagQcdhMUpZKKNUTYPbrA
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45vnx0mqwf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Apr 2025 16:31:25 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 538CxRUr025525;
-	Tue, 8 Apr 2025 16:31:24 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45ugbkuf3u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Apr 2025 16:31:24 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 538GVOp032703192
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 8 Apr 2025 16:31:24 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 009AF58065;
-	Tue,  8 Apr 2025 16:31:24 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C7B4158062;
-	Tue,  8 Apr 2025 16:31:22 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.48.163])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  8 Apr 2025 16:31:22 +0000 (GMT)
-Message-ID: <59ba139f5454f00cd25e3b802780a5cae0e51978.camel@linux.ibm.com>
-Subject: Re: [PATCH v11 9/9] ima: measure kexec load and exec events as
- critical data
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
-        code@tyhicks.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
-        vgoyal@redhat.com, dyoung@redhat.com
-Date: Tue, 08 Apr 2025 12:31:22 -0400
-In-Reply-To: <20250402124725.5601-10-chenste@linux.microsoft.com>
-References: <20250402124725.5601-1-chenste@linux.microsoft.com>
-	 <20250402124725.5601-10-chenste@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1744144650; c=relaxed/simple;
+	bh=Jgwkt5NOumKoCt3v7LCMsS2bOUorP3HUBUfty04iFRE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=QMGxtI9Xg1T/3mECMauFn2DyadiaJ5WFPsNGyBaSs9sR+YFbBFOy8FHbxqfgjsr0rIGc3J29fKW4NgqBz5Xyz+pkGCDMtU3XNxUWEYXwB2HyAWAhEEnT+nlZrTyyHqos7WfZtyBRXxsH3bDwXPTYiWZ4X6v3J0oasxJEPGwWK0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6R423Vf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F5F6C4CEE5;
+	Tue,  8 Apr 2025 20:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744144649;
+	bh=Jgwkt5NOumKoCt3v7LCMsS2bOUorP3HUBUfty04iFRE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=U6R423Vf5m5vIXPLlj+iJWAw9EG9Wh/YA+nBLb+ZVkFHwaA8clBjr2KZRXobuOAP7
+	 d/vEA7OqfEU36jdvUZBR7GQYmFtGK75P5hNs7nNglFf9NkbJnLBESCV6ap79AW6m83
+	 4872B+/AZss3mqrnJBkfpJKzrrol6XN3MVUS7CinRhOlFkLXK1VAtjVAnupSBvI3SE
+	 3XabzuYAiCD3JKJowNi8dzuocakioTOX1u90OspM4wAy6CMt+KhXqg0nsn+J7EU5hA
+	 qgDAXWoLPPtZmRzskPtI3o55G1atYXe4dxuiMPCKf2JVTLFdCNd08iFC8djvJCIc6f
+	 YyQjI9fI/D2Ew==
+Date: Tue, 08 Apr 2025 13:37:25 -0700
+From: Kees Cook <kees@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+CC: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+ =?ISO-8859-1?Q?G=FCnther_Noack?= <gnoack@google.com>,
+ linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH] gcc-plugins: Disable GCC plugins for compile test builds
+User-Agent: K-9 Mail for Android
+In-Reply-To: <08393aa3-05a3-4e3f-8004-f374a3ec4b7e@app.fastmail.com>
+References: <20250407-kbuild-disable-gcc-plugins-v1-1-5d46ae583f5e@kernel.org> <CAHk-=wjTbWiYwfj2wF9iP8SSVk2A_cZFDr5hu1bgU_PfxhyiiA@mail.gmail.com> <8cbe0cac-2952-47b6-9b0d-1400aec0bf25@sirena.org.uk> <08393aa3-05a3-4e3f-8004-f374a3ec4b7e@app.fastmail.com>
+Message-ID: <482D3DA9-7336-4D36-8758-4F8DB48EA8B9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: M9Xvki70YhfvYI4U2on_ZEHiHQP19y1O
-X-Proofpoint-ORIG-GUID: M9Xvki70YhfvYI4U2on_ZEHiHQP19y1O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-08_07,2025-04-08_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 lowpriorityscore=0 phishscore=0 priorityscore=1501
- clxscore=1015 malwarescore=0 mlxscore=0 adultscore=0 spamscore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504080114
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2025-04-02 at 05:47 -0700, steven chen wrote:
-> The amount of memory allocated at kexec load, even with the extra memory
-> allocated, might not be large enough for the entire measurement list.  Th=
+
+
+On April 8, 2025 2:22:52 AM PDT, Arnd Bergmann <arnd@arndb=2Ede> wrote:
+>On Tue, Apr 8, 2025, at 00:02, Mark Brown wrote:
+>> On Mon, Apr 07, 2025 at 02:33:40PM -0700, Linus Torvalds wrote:
+>>> On Mon, 7 Apr 2025 at 14:10, Mark Brown <broonie@kernel=2Eorg> wrote:
+>>
+>>> > Arnd bisected this to c56f649646ec ("landlock: Log mount-related
+>>> > denials") but that commit is fairly obviously not really at fault he=
+re,
+>>> > most likely this is an issue in the plugin=2E  Given how disruptive =
+having
+>>> > key configs like this failing let's disable the plugins for compile =
+test
+>>> > builds until a fix is found=2E
+>>
+>>> I'm not against this, but I do want to bring up the "are the plugins
+>>> worth having at all" discussion again=2E
+>>
+>>> They've been a pain before=2E Afaik, the actual useful cases are now
+>>> done by actual real compiler support (and by clang, at that)=2E
+>>
+>>> Who actually *uses* the gcc plugins? They just worry me in general,
+>>> and this is not the first time they have caused ICE problems=2E
+>>
+>> There was a bit of discussion of that on IRC which didn't summon up hug=
 e
-> indeterminate interval between kexec 'load' and 'execute' could exacerbat=
-e
-> this problem.
->=20
-> Define two new IMA events, 'kexec_load' and 'kexec_execute', to be=20
-> measured as critical data at kexec 'load' and 'execute' respectively.
-> Report the allocated kexec segment size, IMA binary log size and the
-> runtime measurements count as part of those events.
->=20
-> These events, and the values reported through them, serve as markers in
-> the IMA log to verify the IMA events are captured during kexec soft
-> reboot.  The presence of a 'kexec_load' event in between the last two
-> 'boot_aggregate' events in the IMA log implies this is a kexec soft
-> reboot, and not a cold-boot. And the absence of 'kexec_execute' event
-> after kexec soft reboot implies missing events in that window which
-> results in inconsistency with TPM PCR quotes, necessitating a cold boot
-> for a successful remote attestation.
->=20
-> These critical data events are displayed as hex encoded ascii in the
-> ascii_runtime_measurement_list.  Verifying the critical data hash require=
-s=20
-> calculating the hash of the decoded ascii string. =20
->=20
-> For example, to verify the 'kexec_load' data hash:
->=20
-> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements=
-=20
-> > grep  kexec_load | cut -d' ' -f 6 | xxd -r -p | sha256sum
->=20
->=20
-> To verify the 'kexec_execute' data hash:
->=20
-> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements=
-=20
-> > grep kexec_execute | cut -d' ' -f 6 | xxd -r -p | sha256sum
->=20
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Signed-off-by: steven chen <chenste@linux.microsoft.com>
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>> enthusiasm for them=2E  Arnd noted that:
+>>
+>>     https://github=2Ecom/nyrahul/linux-kernel-configs
+>>
+>> indicates that Talos 1=2E9=2E1 uses latent_entropy (but we didn't check=
+ how
+>> accurate that survey is)=2E
 
-Thanks, Steven.=20
+The early RNG for small machines remains pretty bad, so I can understand w=
+anting to keep that around=2E For bigger machines it's not as much of a ben=
+efit=2E
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>Talos also uses stackleak=2E I also see that alpine and qubes have the
+>same two gcc plugins enabled=2E
 
+Yeah, stackleak has no viable alternative=2E It's effectively init_on_free=
+ for stack=2E It's be nice if there were a way to do this with upstream com=
+pilers (track call depth)=2E
+
+>On the other hand none of the other 60 distros on that list use any
+>plugins, and most of those kernels appear to be built with a compiler
+>that doesn't support plugins=2E A few notable ones (Arch, Fedora
+>CoreOS 35, RHEL 9) in the list have CONFIG_GCC_PLUGINS=3Dy but then
+>don't enable any of them=2E
+>
+>>  He also noted that GCC_PLUGIN_SANCOV is
+>> obsolete as of GCC 6 (!) and both CC_HAVE_STACKPROTECTOR_TLS and
+>> GCC_PLUGIN_STRUCTLEAK_BYREF_ALL as of GCC 12, Ard indicated he wasn't
+>> worried about loosing CC_HAVE_STACKPROTECTOR_TLS=2E
+>
+>I've drafted patches to remove these three now: even if we're
+>only moving from gcc-5 to gcc-8 as the minimum supported version,
+>I don't think there is much intersection between users of those
+>plugins and those that are stuck on gcc-11 or earlier=2E
+
+I have no problem removing sanconv (no longer needed), structleak (zero-in=
+it is more complete), and stackprot-tls (assuming it really is supported af=
+ter GCC 12?)
+
+-Kees
+
+--=20
+Kees Cook
 
