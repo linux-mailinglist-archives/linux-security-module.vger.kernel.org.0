@@ -1,86 +1,86 @@
-Return-Path: <linux-security-module+bounces-9299-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-9301-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 594D5A85132
-	for <lists+linux-security-module@lfdr.de>; Fri, 11 Apr 2025 03:23:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BA80A85156
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Apr 2025 03:50:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 037321BA3E8D
-	for <lists+linux-security-module@lfdr.de>; Fri, 11 Apr 2025 01:22:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6699B1B67887
+	for <lists+linux-security-module@lfdr.de>; Fri, 11 Apr 2025 01:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F1426FD94;
-	Fri, 11 Apr 2025 01:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C02E413D8A3;
+	Fri, 11 Apr 2025 01:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ShCFN5lc"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Hfv/q26Z"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3822226FA7B
-	for <linux-security-module@vger.kernel.org>; Fri, 11 Apr 2025 01:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519A52AD14
+	for <linux-security-module@vger.kernel.org>; Fri, 11 Apr 2025 01:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744334520; cv=none; b=PHVL5QkHFXHxK6uvdRObg/BwsIRv+UI60054b12JNokvQpBIhpEdk2s4XHoKobrKYuUdJN747war2cnAkvVdvS8lDdMQ+b1cyCODGgs+tsaR8gp1gURSK/9C+rx+VhFRNNXJ3LOndMovqpkTvaFyK9lxxafAGCRYjl/9SdkpPnQ=
+	t=1744336224; cv=none; b=FmRTxE03FKtAwqo4KuozW1yRZbuMGn2uuGnPuOvp8SaDu6jKawXKwNid0Xjzh3TandoV92F7Pt/Rtgv4ciKIOHzO5H+6k2LjZYiV0NSVly1B1B0s4SEoVrAHYKqPZWgsgZO4DAXVfwQ7A2gHuuH77Gm3iI5bfDDXfQgOwUTAJCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744334520; c=relaxed/simple;
-	bh=0W34x8Ck2m4q/Qa+lzOYSRJAJBcw975BtQwXfNHZXj4=;
+	s=arc-20240116; t=1744336224; c=relaxed/simple;
+	bh=QYVRJoIbp02k9ro1Ax8tSLzruGUWDFtzS5dyKaT2E5w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xmwe/eZOmfVxfAhYXySKPapsAvpjy7qybxCVIABBb/Z0nfnGKocDUE/XdXNxSE4pN87r+CX42iaiWPT5m65iETIps1ALeetpHiMxK7Bv7UNnuvtmRkENM/oGWD4qFod9RvVr1QL2rShCi6YLVJxPVlgMvltXzNh5GcQe0T1PNf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ShCFN5lc; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=j+DJlvpvFdDAWXyqMKIF0cMltFXOcpMJ3xRnWTRMEYoyhivzLmzZdGbRe3Ud4CsVtBBgeQE25Nb2p2EwFxG9VjVfd9TCg8NEUw7fLmlhriTbdkb50ryKhxLXpNQzn2RO9JdcFhzKTjU2FHLiLTJujeBEuVKm10MwzLgX84/K9Nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Hfv/q26Z; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e637edaa652so1128269276.1
-        for <linux-security-module@vger.kernel.org>; Thu, 10 Apr 2025 18:21:57 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-703cd93820fso15566387b3.2
+        for <linux-security-module@vger.kernel.org>; Thu, 10 Apr 2025 18:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1744334517; x=1744939317; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1744336221; x=1744941021; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mDZj3yQ14A5xcIpe7c0DSs5qSG0Hnq5KDdt6cHHAOgY=;
-        b=ShCFN5lcBIMD2qx87n80CsrOt1TElZUZ/3xNWFNSnMM5cqtnoJe077KRiCZb52IrlK
-         zJi9mQToaJa6+MV1qUj9XtDfrv2wYtKWjgj3DPUmOalhR6t+On0UG9dL+rKLx5unhpLI
-         6HPvtfdmARbLxfdux3fGN50TB2+w1T8TvggoVzcadtAkk1UvpqMQkKTeiHsW/vrbu9Pi
-         IyKM165CYs2uku3Arc9FJSNJqLVeSHOPra+JgSmziW6UG7M2ZpgfIv37Pcgf04uMVbb0
-         9qxHDz0/jaoZqz1fbxNH8TKC88iZwyBYCr4X8/q8uDmEZQm/HsnQXACGVIU+NOm3mG6d
-         zufA==
+        bh=LWCJOJlxzYSawY8S2YrEidc5ixEU2jj2JYExg/ffIDI=;
+        b=Hfv/q26Zd32iPqVTeFNL9ZRHvLHgm+8k6CHQolJffKKV65BPTSOz0GVLqiLJm55VFU
+         HteunkCRRzd8mStuzha//zXdzQO4kurkZorwDGIudfFh1Unk9IRD5j9QNIfP4N9vc9Ih
+         ug3z4gdZm48shdt12AwMlJFkznWwb6ZY+aC3GIBiedU1vispjtEzw2mtEJscJeBjLZO0
+         M3Pvq4HpoVB6h9jcdmV5TcNeYILG4E4SUCnqZhAFK90ajkBzLPbepEAIGz1ACCytvVsH
+         eiIE9lPH+JYYh7QryBRP6rarBzCIVHGuZGa1tQriG46oDNxR7qEtM2glIUP02eXGsTMB
+         JznA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744334517; x=1744939317;
+        d=1e100.net; s=20230601; t=1744336221; x=1744941021;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mDZj3yQ14A5xcIpe7c0DSs5qSG0Hnq5KDdt6cHHAOgY=;
-        b=H3GJrN1uf5GmbhVZAsOizAfE13LBS43CeuIJugqC4ZjoIwh57E9j886y6a3/68nrbw
-         G/Y7YBSEihkbZ2P0seToHU04xUQd3ijk5MK+yY62fEiurkoIb/xUQ+9UIGxGLYxnKxxx
-         uWcIqTqn4EB/nXlal+tbvpJhJIn4vzUAB77OXl8qjb019+iuScZQllifTLswHHlOLt3E
-         ZWrRzo68zp83lbNnndr0aUHAQQV4/lQhRa6pzXITpVqsVLyX8IkhAt8cM1K8U5cNuRJ7
-         krH8boz0yw5wVhPxoWT6oE8AFX8F3qvB0DcnZLFt4l/gsK7jq2515NL68UXwjGlMJ7aX
-         F0pw==
-X-Gm-Message-State: AOJu0YxhSbZSp0EYiKgFCF/8MyCXZTOMN1za3p+kilKzkiqnqdvXzx/X
-	jQJcGNyEwgAEcbwgZzBGyzQTNgW6aviq2xFCam1EKM+AtNKScJNe5Beqocpkq0UVEvKnXy2Bb/J
-	CQk2wdkfcja9Vft0oM/dp7z7jnN8/f/8yFKWu
-X-Gm-Gg: ASbGncvsmG2DcJ9+qrt9ryQLJqcQCc7RzITWY7mul9jsh4s3cQRzUfxtqGxAiDGMeFt
-	ltZnjXhF7gzTrFzHWsar2L4flnA1q8txwZTBD8GingdmUWO7QqI5ZDOwmdtXEN0bxD83aIdqbpx
-	RlO2uI3mvf/jBlfDg9UOMcDw==
-X-Google-Smtp-Source: AGHT+IG7WXGp7fnjjFYKUmfliUjJExX03/TYU/y9D8duxhk/OQGZU8sKLSMddfn2XvWf/re46nHpnP9HIJ7dpJxGopo=
-X-Received: by 2002:a05:6902:91a:b0:e5a:b05e:4da8 with SMTP id
- 3f1490d57ef6-e704e025162mr1839801276.42.1744334517198; Thu, 10 Apr 2025
- 18:21:57 -0700 (PDT)
+        bh=LWCJOJlxzYSawY8S2YrEidc5ixEU2jj2JYExg/ffIDI=;
+        b=GytRTptGGIKaznILeEslgtpQOs12JlCtyAm1bNU9L1XtNX0Sz/xCpQzfILBuFeP8/N
+         n7gZROvV7IZ+4lFkGSut+3ErZ3A61UdHOyJnbpHTc62w/JkesgvrbQag82J2rEVMQyxI
+         rSzvWURVQ+1JpRnuHgF9zei/eV/3v/sO1/n58rkizKC9hN/gbfgXiThxgfh6vSMc93it
+         pZSHL9iDCHLh9BXjCTNINIskeXiU6o71MUoqVCKIQF9qC/iwcO1Ou1lBei94wnb5iVmS
+         wStXfpGtsVwa4mIqUnkiulhxN2t4KG3Pin6mZu8xNQjhqfRtW2PacIbwAhNg5qzTxWTY
+         XZFg==
+X-Gm-Message-State: AOJu0YxrztjHyotWHaMCmJJDa841pEyXhixYdXK5c1I1u5KQ6z6WMXKV
+	h4AJoqZ5+MVzTNiIws8mrccUnsEHsWqXmvcVPr3LaF2PD0NUyfPtAdIjk5cohRTPm6qEzy1Rx+7
+	jflXJvhcLX6kUhJVcGKWxTdTGye4jxSmREgvW
+X-Gm-Gg: ASbGncuUGDG/M04+fCoBvXqngpYEfNhhhBZCSiMd51Iictj54j+o0aYtc7nN7RMmqnP
+	G6MOckpKw2yHgYB+d86uwA6S3aa+I0+/eHnFe6bzD2GWV0svXm2ZD4vSEwzlYPgSyyYoKla8Ajh
+	g9fNnEPE1NPcWV7JAenlNCWg==
+X-Google-Smtp-Source: AGHT+IF39r4/xCsM2s0Xl2G799TT+cgKymnHxCfrkg4q2FjdtLZ7eLonDSIC+7dWHdaz0rxcK0vmCdtlEEKm63GDpIY=
+X-Received: by 2002:a05:690c:9a8a:b0:703:b606:73a5 with SMTP id
+ 00721157ae682-705599894e8mr17318847b3.8.1744336221259; Thu, 10 Apr 2025
+ 18:50:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-58-paul@paul-moore.com>
- <202504091649.E30A1670@keescook>
-In-Reply-To: <202504091649.E30A1670@keescook>
+References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-40-paul@paul-moore.com>
+ <202504091656.21EEF38DCA@keescook>
+In-Reply-To: <202504091656.21EEF38DCA@keescook>
 From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 10 Apr 2025 21:21:46 -0400
-X-Gm-Features: ATxdqUFV6nml9Pgs1tXUY-RKXULr_XkSZF2rF4yd2I4HaYI1g1tN1bIqwvmlvGI
-Message-ID: <CAHC9VhSFGfEJ1-f48hdBMgrXwCMcqxi22ze5WZz1N_yPuFdriQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 27/29] lsm: consolidate all of the LSM framework initcalls
+Date: Thu, 10 Apr 2025 21:50:10 -0400
+X-Gm-Features: ATxdqUEgEemI0oUZk3AE1WBtSOsxh1400exynhftXCI3SbBTAqc0p4ZhaZXuw-8
+Message-ID: <CAHC9VhT7M4GWLJ0Kx0nkCAC+kirQ0LKqBVaqps9z-0kOc77iDw@mail.gmail.com>
+Subject: Re: [RFC PATCH 09/29] lsm: cleanup and normalize the LSM enabled functions
 To: Kees Cook <kees@kernel.org>
 Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
 	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
@@ -92,44 +92,164 @@ Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 9, 2025 at 7:52=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
-> On Wed, Apr 09, 2025 at 02:50:12PM -0400, Paul Moore wrote:
-> > The LSM framework itself registers a small number of initcalls, this
-> > patch converts these initcalls into the new initcall mechanism.
+On Wed, Apr 9, 2025 at 8:11=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+> On Wed, Apr 09, 2025 at 02:49:54PM -0400, Paul Moore wrote:
+> > One part of a larger effort to cleanup the LSM framework initialization
+> > code.
 > >
 > > Signed-off-by: Paul Moore <paul@paul-moore.com>
 > > ---
-> >  security/inode.c    |  3 +--
-> >  security/lsm.h      |  4 ++++
-> >  security/lsm_init.c | 14 ++++++++++++--
-> >  security/min_addr.c |  5 +++--
-> >  4 files changed, 20 insertions(+), 6 deletions(-)
-
-...
-
-> > @@ -503,7 +508,12 @@ early_initcall(security_initcall_early);
-> >   */
-> >  static int __init security_initcall_core(void)
-> >  {
-> > -     return lsm_initcall(core);
-> > +     int rc_sfs, rc_lsm;
-> > +
-> > +     rc_sfs =3D securityfs_init();
-> > +     rc_lsm =3D lsm_initcall(core);
-> > +
-> > +     return (rc_sfs ? rc_sfs : rc_lsm);
-> >  }
-> >  core_initcall(security_initcall_core);
+> >  security/inode.c    |   9 ++--
+> >  security/lsm_init.c | 110 ++++++++++++++++++++++++--------------------
+> >  2 files changed, 63 insertions(+), 56 deletions(-)
+> >
+> > diff --git a/security/inode.c b/security/inode.c
+> > index 49bc3578bd23..f687e22e6809 100644
+> > --- a/security/inode.c
+> > +++ b/security/inode.c
+> > @@ -351,18 +351,17 @@ static ssize_t lsm_read(struct file *filp, char _=
+_user *buf, size_t count,
+> >
+> >       for (i =3D 0; i < lsm_count; i++)
+> >               /* the '+ 1' accounts for either a comma or a NUL termina=
+tor */
+> > -             len +=3D strlen(lsm_order[i]->id->name) + 1;
+> > +             len +=3D strlen(lsm_idlist[i]->name) + 1;
+> >
+> >       str =3D kmalloc(len, GFP_KERNEL);
+> >       if (!str)
+> >               return -ENOMEM;
+> >       str[0] =3D '\0';
+> >
+> > -     i =3D 0;
+> > -     while (i < lsm_count) {
+> > -             strcat(str, lsm_order[i]->id->name);
+> > -             if (++i < lsm_count)
+> > +     for (i =3D 0; i < lsm_count; i++) {
+> > +             if (i > 0)
+> >                       strcat(str, ",");
+> > +             strcat(str, lsm_idlist[i]->name);
+> >       }
+> >
+> >       rc =3D simple_read_from_buffer(buf, count, ppos, str, len);
 >
-> Hrm. Given these aren't really _lsm_ hooks, maybe just leave this out. I
-> worry about confusing the lsm inits with the lsm subsystem's core inits.
+> This chunk needs to be folded into the lsm_names changing patch, I
+> think. I missed this on the first pass, but lsm_order can never be used
+> here because lsm_order is initdata -- it will be thrown away after init
+> is done.
 
-I'm not too concerned about that, and I do prefer it this way.
+Yeah, I noticed this when I was reverting that
+/lsm_active_cnt/lsm_count/ change and fixed it up to use lsm_idlist[]
+which should address that problem.  Later patches convert over to
+lsm_idlist[] anyway, which is likely why I didn't catch this in the
+preliminary testing.
 
-> Or we need a new stacking type for "required"? But that seems ... heavy.
+> > diff --git a/security/lsm_init.c b/security/lsm_init.c
+> > index 978bb81b58fa..7f2bc8c22ce9 100644
+> > --- a/security/lsm_init.c
+> > +++ b/security/lsm_init.c
+> > @@ -10,6 +10,10 @@
+> >
+> >  #include "lsm.h"
+> >
+> > +/* LSM enabled constants. */
+> > +int lsm_enabled_true =3D 1;
+> > +int lsm_enabled_false =3D 0;
+>
+> Why are these losing static and __initdata? It looks like they're
+> staying assigned to the __init-marked lsm_info instances.
 
-So I understand the motivation behind that, but that's a big hard "no"
-from me at this point in time ;)
+Good point.  I'm not sure what happened here, it may have been a
+victim of an earlier change which I dropped.
+
+> > +/**
+> > + * lsm_is_enabled - Determine if a LSM is enabled
+> > + * @lsm: LSM definition
+> > + */
+> > +static inline bool lsm_is_enabled(struct lsm_info *lsm)
+> >  {
+> >       if (!lsm->enabled)
+> >               return false;
+> > -
+> >       return *lsm->enabled;
+> >  }
+>
+> This could be one-lined, actually:
+>
+>         return lsm->enabled ? *lsm->enabled : false;
+
+Sure.
+
+> > -/* Is an LSM already listed in the ordered LSMs list? */
+> > -static bool __init exists_ordered_lsm(struct lsm_info *lsm)
+> > +/**
+> > + * lsm_order_exists - Determine if a LSM exists in the ordered list
+> > + * @lsm: LSM definition
+> > + */
+> > +static bool __init lsm_order_exists(struct lsm_info *lsm)
+> >  {
+> >       struct lsm_info **check;
+> >
+> > @@ -118,25 +123,29 @@ static bool __init exists_ordered_lsm(struct lsm_=
+info *lsm)
+> >       return false;
+> >  }
+> >
+> > -/* Append an LSM to the list of ordered LSMs to initialize. */
+> > -static int last_lsm __initdata;
+> > -static void __init append_ordered_lsm(struct lsm_info *lsm, const char=
+ *from)
+> > +/**
+> > + * lsm_order_append - Append a LSM to the ordered list
+> > + * @lsm: LSM definition
+> > + * @src: source of the addition
+> > + */
+> > +static void __init lsm_order_append(struct lsm_info *lsm, const char *=
+src)
+> >  {
+> >       /* Ignore duplicate selections. */
+> > -     if (exists_ordered_lsm(lsm))
+> > +     if (lsm_order_exists(lsm))
+> >               return;
+> >
+> > -     if (WARN(last_lsm =3D=3D MAX_LSM_COUNT, "%s: out of LSM static ca=
+lls!?\n", from))
+> > -             return;
+> > +     /* Skip explicitly disabled LSMs. */
+> > +     if (lsm->enabled && !lsm_is_enabled(lsm)) {
+> > +             if (WARN(lsm_count =3D=3D MAX_LSM_COUNT,
+> > +                      "%s: out of LSM static calls!?\n", src))
+> > +                     return;
+> > +             lsm_enabled_set(lsm, true);
+> > +             lsm_order[lsm_count] =3D lsm;
+> > +             lsm_idlist[lsm_count++] =3D lsm->id;
+> > +     }
+> >
+> > -     /* Enable this LSM, if it is not already set. */
+> > -     if (!lsm->enabled)
+> > -             lsm->enabled =3D &lsm_enabled_true;
+> > -     lsm_order[last_lsm] =3D lsm;
+> > -     lsm_idlist[last_lsm++] =3D lsm->id;
+>
+> I don't understand the logic change here. I may be missing something (it
+> feels like a lot of logic changes mixed together again), but this logic:
+>
+>      /* Enable this LSM, if it is not already set. */
+>      if (!lsm->enabled)
+>              lsm->enabled =3D &lsm_enabled_true;
+>
+> seems like it has gone missing now?
+
+It's a little confusing as lsm_order_append() gets heavily reworked a
+couple of patches later in "lsm: cleanup the LSM ordered parsing",
+which is essentially this function's end state from a logic
+perspective.  I think the best thing to do might be to squash those
+two patches ... lemme see how ugly that ends up ...
+
+> The simple renamings looks fine, but would be nicer if they got split
+> out.
+
+I can look into doing that, let me try the squashing first.
 
 --=20
 paul-moore.com
