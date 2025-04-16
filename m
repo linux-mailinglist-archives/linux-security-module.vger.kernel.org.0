@@ -1,161 +1,111 @@
-Return-Path: <linux-security-module+bounces-9375-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-9377-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10297A907F7
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Apr 2025 17:48:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A0CFA90A01
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Apr 2025 19:31:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D911219023FC
-	for <lists+linux-security-module@lfdr.de>; Wed, 16 Apr 2025 15:48:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75CEE3B0A1C
+	for <lists+linux-security-module@lfdr.de>; Wed, 16 Apr 2025 17:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBF8210180;
-	Wed, 16 Apr 2025 15:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94EDF21578D;
+	Wed, 16 Apr 2025 17:31:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="kTOvehOi"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="TJVRAyam"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB76720F090
-	for <linux-security-module@vger.kernel.org>; Wed, 16 Apr 2025 15:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E32884E1C;
+	Wed, 16 Apr 2025 17:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744818460; cv=none; b=LCqe1Os5RQ7UKwyQSg/y2X5DWVxDn8qZzbH8ugyjbHo/LeghpssUt9dDJhfDpK5wPxDmagkkhN5MTXugcoITozFSe5WIMszAUVWsZwYcE3+tSDwKzrshkFziT4GZKVI7V2VdJ200+PohkChYMJpWMLeZ88Psgv2hakCtxCADwwI=
+	t=1744824691; cv=none; b=D112bay0m7XE+Vj/hkzkE9hZPnuUGUwfGZ2xTZipyOp3LYwMVcpZRUH+pnjEbJfZva1suW8uQj6sB94tv2xyZmdnzK711dqhzkNFbLIRmnjhKP/O2uuvv7+r8A20fBHAVw+7S0tUQDUzY4DsfFhN5NLW8VVqp8vKkR6ZAoaOZMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744818460; c=relaxed/simple;
-	bh=SKdgVwJ3B/QAoYs/cq0+2AuMhB96fY/juGltdML2hoE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mq/KD3U5BKMIguSuZVJUrDTEN6zi68eD0lNlaLlK2o+fgJBloExKxEv532tou5agWT1HjsCI1HeNbBDu8lOiEsPMO1R8Eti7ATHI8d6gF4g+EgySOYQslshAODYnHvmLKoWwn+1AJCuWQUpQ+sBNZy9BpG+oclDA1qW/2LNEU0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=kTOvehOi; arc=none smtp.client-ip=45.157.188.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Zd54w5JqWzWMk;
-	Wed, 16 Apr 2025 17:47:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1744818448;
-	bh=Qqdle/3GA0+h4fFIpiAU9PmEUG/kG/uBYpe7KdmFvzs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kTOvehOiUeCLYAk2HA0w4rA3ghX1p7wGhJ/I0yN+47PM4jwxtEc0qVwFPOmDuaU+P
-	 hSMB95d4OIWBiuRqfy+c9oEkUFlqGuLTf0iYLQQAXuOnrfAmPsxbYgtQ8AfY17FS7y
-	 Yxw075sbIsuGiRYg+1joyhcMRSlYLYzRe9IPHdCA=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Zd54w2K5LzG13;
-	Wed, 16 Apr 2025 17:47:28 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Paul Moore <paul@paul-moore.com>
-Subject: [PATCH v1 3/3] landlock: Update log documentation
-Date: Wed, 16 Apr 2025 17:47:13 +0200
-Message-ID: <20250416154716.1799902-3-mic@digikod.net>
-In-Reply-To: <20250416154716.1799902-1-mic@digikod.net>
-References: <20250416154716.1799902-1-mic@digikod.net>
+	s=arc-20240116; t=1744824691; c=relaxed/simple;
+	bh=5Pv3Hc0R8ZXL+oH8n2b7z3OtCOacHKIR1ANqXH+K9c0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Z6xAiaGvNQheyQ613Gf8n2WutwhQB4Ggf/OdQ9ZWAejineJRBApQhgWc3kPaOzvAb9+pl5V+zXfDL33JkEkj+Ub/Kwc6kz9o+vEh27VTA5OxVJPRTGd+i46sezK5If3i7vEs8J4bohK+yf8Jje/gFqSX/zb20N+OYJniVzMq8dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TJVRAyam; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from narnia (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id CA0032052508;
+	Wed, 16 Apr 2025 10:31:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CA0032052508
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744824689;
+	bh=b7cZx62sBqiNAK+Z5g1uUfPSpgmxvu8T11NIoXrTY/o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=TJVRAyamNt8PTaChjPR4KaTuMaecAOHx9O2mwAnlkPR9lulk07gjnRGoxXT/5rHwB
+	 ZlrItUV1NU7JpKbyzk/UEEXb1e+ROAv34a6ZYR5OoptpDpkfF+e1fJEz/jPiDVMnTN
+	 ekQqoaiXnzkMd9ip4K/kRhdBVUggBCaWt16+ZVoo=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
+ =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
+ Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jarkko Sakkinen
+ <jarkko@kernel.org>, Jan Stancek <jstancek@redhat.com>, Neal Gompa
+ <neal@gompa.dev>, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, keyrings@vger.kernel.org, Linux
+ Crypto Mailing List <linux-crypto@vger.kernel.org>, LSM List
+ <linux-security-module@vger.kernel.org>, Linux Kbuild mailing list
+ <linux-kbuild@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, nkapron@google.com, Matteo Croce
+ <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, Cong Wang
+ <xiyou.wangcong@gmail.com>
+Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
+In-Reply-To: <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+ <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+ <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
+ <87semdjxcp.fsf@microsoft.com>
+ <CAADnVQ+JGfwRgsoe2=EHkXdTyQ8ycn0D9nh1k49am++4oXUPHg@mail.gmail.com>
+ <87friajmd5.fsf@microsoft.com>
+ <CAADnVQKb3gPBFz+n+GoudxaTrugVegwMb8=kUfxOea5r2NNfUA@mail.gmail.com>
+ <87a58hjune.fsf@microsoft.com>
+ <CAADnVQ+LMAnyT4yV5iuJ=vswgtUu97cHKnvysipc6o7HZfEbUA@mail.gmail.com>
+Date: Wed, 16 Apr 2025 10:31:18 -0700
+Message-ID: <87y0w0hv2x.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain
 
-Fix and improve documentation related to landlock_restrict_self(2)'s
-flags.  Update the LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF
-documentation according to the current semantic.
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- include/uapi/linux/landlock.h | 64 +++++++++++++++++++++--------------
- 1 file changed, 38 insertions(+), 26 deletions(-)
+> History repeats itself.
+> 1. the problem is hard.
+> 2. you're only interested in addressing your own use case.
+> There is no end-to-end design here and no attempt to
+> think it through how it will work for others.
+>
 
-diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-index 8b2a1dc5c70b..f030adc462ee 100644
---- a/include/uapi/linux/landlock.h
-+++ b/include/uapi/linux/landlock.h
-@@ -74,37 +74,49 @@ struct landlock_ruleset_attr {
-  *
-  * **Flags**
-  *
-+ * By default, denied accesses originating from programs that sandbox themselves
-+ * are logged via the audit subsystem. Such events typically indicate unexpected
-+ * behavior, such as bugs or exploitation attempts. However, to avoid excessive
-+ * logging, access requests denied by a domain not created by the originating
-+ * program are not logged by default. The rationale is that programs should know
-+ * their own behavior, but not necessarily the behavior of other programs.  This
-+ * default configuration is suitable for most programs that sandbox themselves.
-+ * For specific use cases, the following flags allow programs to modify this
-+ * default logging behavior.
-+ *
-+ * The %LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF and
-+ * %LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON flags apply to the newly created
-+ * Landlock domain.
-+ *
-  * %LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF
-- *     Do not create any log related to the enforced restrictions.  This should
-- *     only be set by tools launching unknown or untrusted programs (e.g. a
-- *     sandbox tool, container runtime, system service manager).  Because
-- *     programs sandboxing themselves should fix any denied access, they should
-- *     not set this flag to be aware of potential issues reported by system's
-- *     logs (i.e. audit).
-+ *     Disables logging of denied accesses originating from the thread creating
-+ *     the Landlock domain, as well as its children, as long as they continue
-+ *     running the same executable code (i.e., without an intervening
-+ *     :manpage:`execve(2)` call). This is intended for programs that execute
-+ *     unknown code without invoking :manpage:`execve(2)`, such as script
-+ *     interpreters. Programs that only sandbox themselves should not set this
-+ *     flag, so users can be notified of unauthorized access attempts via system
-+ *     logs.
-  *
-  * %LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
-- *     Explicitly ask to continue logging denied access requests even after an
-- *     :manpage:`execve(2)` call.  This flag should only be set if all the
-- *     programs than can legitimately be executed will not try to request a
-- *     denied access (which could spam audit logs).
-+ *     Enables logging of denied accesses after an :manpage:`execve(2)` call,
-+ *     providing visibility into unauthorized access attempts by newly executed
-+ *     programs within the created Landlock domain. This flag is recommended
-+ *     only when all potential executables in the domain are expected to comply
-+ *     with the access restrictions, as excessive audit log entries could make
-+ *     it more difficult to identify critical events.
-  *
-  * %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-- *     Do not create any log related to the enforced restrictions coming from
-- *     future nested domains created by the caller or its descendants.  This
-- *     should only be set according to a runtime configuration (i.e. not
-- *     hardcoded) by programs launching other unknown or untrusted programs that
-- *     may create their own Landlock domains and spam logs.  The main use case
-- *     is for container runtimes to enable users to mute buggy sandboxed
-- *     programs for a specific container image.  Other use cases include
-- *     sandboxer tools and init systems.  Unlike
-- *     ``LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF``,
-- *     ``LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF`` does not impact the
-- *     requested restriction (if any) but only the future nested domains.
-- *
-- *     It is allowed to only pass the
-- *     ``LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF`` flag with a @ruleset_fd
-- *     value of -1.
-- *
-+ *     Disables logging of denied accesses originating from nested Landlock
-+ *     domains created by the caller or its descendants. This flag should be set
-+ *     according to runtime configuration, not hardcoded, to avoid suppressing
-+ *     important security events. It is useful for container runtimes or
-+ *     sandboxing tools that may launch programs which themselves create
-+ *     Landlock domains and could otherwise generate excessive logs. Unlike
-+ *     ``LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF``, this flag only affects
-+ *     future nested domains, not the one being created. It can also be used
-+ *     with a @ruleset_fd value of -1 to mute subdomain logs without creating a
-+ *     domain.
-  */
- /* clang-format off */
- #define LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF		(1U << 0)
--- 
-2.49.0
+Well, I suppose anything worth doing is going to be hard :)
 
+The end-to-end design for this is the same end-to-end design that exists
+for signing kernel modules today. We envisioned it working for others
+the same way module signing works for others. 
+
+> Hacking into bpf internal objects like maps is not acceptable.
+
+We've heard your concerns about kern_sys_bpf and we agree that the LSM
+should not be calling it. The proposal in this email should meet both of
+our needs
+https://lore.kernel.org/bpf/874iypjl8t.fsf@microsoft.com/
+
+
+-blaise
 
