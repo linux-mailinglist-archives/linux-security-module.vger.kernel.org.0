@@ -1,45 +1,46 @@
-Return-Path: <linux-security-module+bounces-9543-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-9546-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C607A9DE69
-	for <lists+linux-security-module@lfdr.de>; Sun, 27 Apr 2025 03:38:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37AAFA9DE68
+	for <lists+linux-security-module@lfdr.de>; Sun, 27 Apr 2025 03:38:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 005487A4393
-	for <lists+linux-security-module@lfdr.de>; Sun, 27 Apr 2025 01:37:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DBD8463516
+	for <lists+linux-security-module@lfdr.de>; Sun, 27 Apr 2025 01:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 981F11FFC55;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1140227EAE;
 	Sun, 27 Apr 2025 01:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKNEOsP2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LKhpFlMw"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698C88BE7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699BD1DE2C9;
 	Sun, 27 Apr 2025 01:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745717919; cv=none; b=qau31aixhwTpTq/4LxB8qBu2EQyO9r7G0MXgSJZsCnU+TFeTvVUWPqTu83JOETPTf4E3tIRzI4mq1VoDYViNn13biSdxCLBBlreBI7wgnbSJy1guyooAeI3bzxTV5VCcYGbdRByBnxRcdLakHAgl2uyuqob0mJ2JNRaDhePnPYg=
+	t=1745717919; cv=none; b=HR3qKJTZgSu7S8aRM2PgwFVtRCldlIkauHhUBGnf0OLb4CQk2VCiAysPOfS7JMCzTr0cs5JBUBkOARQbnwnLcVLPIQlTketurIw65d9XrlPslwKVs3S8eB8B34OuTF8bNT9kQjE7DXnJbHEOfVzao6R/Fe1guqhpeB6jUReTalg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745717919; c=relaxed/simple;
-	bh=W6SN/J+RmPz+uzurgEk6TqbUvQ3pMLDP/yQDqSqqdIo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=N9ALYtJ8mHO5b9GsCfe2z4+k3HLXKqClspWn7WrCRW3byY6g60/+0+pi3k9XdfVoIk/Nrem73XoCl2fBEOw3hrjNSNQS25YP5E9wrZkatsFsMBkK5U/9rAshCtKhKN3prtSak/pIedsdGLMLpm1r1q+rNZFp1RKGebKNcntgT5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKNEOsP2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD454C4AF0C;
+	bh=ZgdoQkssZwtgKxsSyH83cNs9nHOLWMIdu0B1U5RulHc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pOhKqm/piRZaekPoSSBz348oJ+V+RSr2csDcU5q7lXVXy33WPueF2gqXLSzj/KvGIb0s3x07cnDgk+28twpXQHWwYd0pDtO3EDCRbPdQP6RwKLnV9xOzHu/z0zp84WFOIJKilakESrTKwbjAj+I2V0w+fesw70MfYEH/aDQwgfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LKhpFlMw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89DAC4CEEA;
 	Sun, 27 Apr 2025 01:38:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1745717918;
-	bh=W6SN/J+RmPz+uzurgEk6TqbUvQ3pMLDP/yQDqSqqdIo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PKNEOsP26KcYZcTw0psvOQxNfhzsvt6h3QRZZHErbdaEBG72PcaD42zYA4Yq+8vVr
-	 DqqrWpEyXJttG8H4HAla1KAPbY0JW7EkTPs9BKxHzoeuUeWYtfep2x6d21p4F+WL2F
-	 CzYFQgBoStQhQq95omVQWDB9Bw4JEEzqLyzn/pwcHrpC+HJ2talD45ADh/Ne9PIQj7
-	 wSryssH+UalegFIK7qCqhKFqaGWiJEM4VfelRqsY/DsOMB51O1Yd35HRx6F4JcRi3P
-	 vdh0yY8Vm/NLOxjKSfvNkS6qoDTZhyJc+CjNdSkJ/3ONAoPG6fjD3Y69iCCpersa14
-	 wcLBpx191OdmQ==
+	bh=ZgdoQkssZwtgKxsSyH83cNs9nHOLWMIdu0B1U5RulHc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LKhpFlMw1vEPcyVhEh8gNMV2G7Ht8ORqhW2ugENa1pSqmfiFX/MJhdGrVRUsfeicl
+	 a21Zyawsxo+eRlcT1EYu9IfgBsHEmQ/3oQwB9KWjp1/U5c7M0o0gN31cTY3sz9plc0
+	 EYrG0GfTSMhdJn+l+rwJxDq2XeIFj4UGTEtEIBvNwVwcj/bI0i0lIEGm8Z77IfX0aR
+	 vixC1Cyjzfd9IR6iacVmDJ1M1fRK5T6RWbv33rjewaf9sMEMV5+yBWUNW5yVanMlTD
+	 8PifQKWeegD33ATnmY9behhd4djKFygzq/aGo/gEVQt/uVjoz5p2J2Z/Vf16KYHuK1
+	 OJ+fXVn2Lubsw==
 From: Kees Cook <kees@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>
 Cc: Kees Cook <kees@kernel.org>,
@@ -67,10 +68,12 @@ Cc: Kees Cook <kees@kernel.org>,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH 0/3] randstruct: gcc-plugin: Remove bogus void member
-Date: Sat, 26 Apr 2025 18:38:32 -0700
-Message-Id: <20250427013604.work.926-kees@kernel.org>
+Subject: [PATCH 1/3] randstruct: gcc-plugin: Remove bogus void member
+Date: Sat, 26 Apr 2025 18:38:33 -0700
+Message-Id: <20250427013836.877214-1-kees@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250427013604.work.926-kees@kernel.org>
+References: <20250427013604.work.926-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -78,34 +81,118 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=918; i=kees@kernel.org; h=from:subject:message-id; bh=W6SN/J+RmPz+uzurgEk6TqbUvQ3pMLDP/yQDqSqqdIo=; b=owGbwMvMwCVmps19z/KJym7G02pJDBm8XTPP1rEcOrBGSNM6XOiD8hwjxi0cHwK5Ex6bPGkuk jzid9Swo5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCI6JowMS3L1mTLWJv9NnXJR KNtr6/ezprOfT478rSTv+n2h/EnOXwx/pVw5hbjMD/4uzl2ydJHinJStwfOlrikYd+Q2zwxZGLC FFwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4947; i=kees@kernel.org; h=from:subject; bh=ZgdoQkssZwtgKxsSyH83cNs9nHOLWMIdu0B1U5RulHc=; b=owGbwMvMwCVmps19z/KJym7G02pJDBm8XbPcJ+o/eOrw2+939mwfK8E7a7SYHQ40mAsck58+T /N0LV9tRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwEQKuhkZFl1qWzaZOcW14+Hx NheftgNlJV7/0zIYje5EZdx54XGuhZHhQ0TxVTbBCYVPFi9fFPzh89OVjxK5PG20YtsmqhQkH57 GAgA=
 X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Hi,
+When building the randomized replacement tree of struct members, the
+randstruct GCC plugin would insert, as the first member, a 0-sized void
+member. This appears as though it was done to catch non-designated
+("unnamed") static initializers, which wouldn't be stable since they
+depend on the original struct layout order.
 
-Okay, I've tracked down the problem with the randstruct GCC plugin,
-and written a KUnit test to validate behaviors. This lets us add
-it back the COMPILE_TEST builds.
+This was accomplished by having the side-effect of the "void member"
+tripping an assert in GCC internals (count_type_elements) if the member
+list ever needed to be counted (e.g. for figuring out the order of members
+during a non-designated initialization), which would catch impossible type
+(void) in the struct:
 
-No need for https://lore.kernel.org/all/20250421000854.work.572-kees@kernel.org/
+security/landlock/fs.c: In function ‘hook_file_ioctl_common’:
+security/landlock/fs.c:1745:61: internal compiler error: in count_type_elements, at expr.cc:7075
+ 1745 |                         .u.op = &(struct lsm_ioctlop_audit) {
+      |                                                             ^
 
--Kees
+static HOST_WIDE_INT
+count_type_elements (const_tree type, bool for_ctor_p)
+{
+  switch (TREE_CODE (type))
+...
+    case VOID_TYPE:
+    default:
+      gcc_unreachable ();
+    }
+}
 
-Kees Cook (3):
-  randstruct: gcc-plugin: Remove bogus void member
-  lib/tests: Add randstruct KUnit test
-  Revert "hardening: Disable GCC randstruct for COMPILE_TEST"
+However this is a redundant safety measure since randstruct uses the
+__designated_initializer attribute both internally and within the
+__randomized_layout attribute macro so that this would be enforced
+by the compiler directly even when randstruct was not enabled (via
+-Wdesignated-init).
 
- MAINTAINERS                                   |   1 +
- lib/Kconfig.debug                             |   8 +
- lib/tests/Makefile                            |   1 +
- lib/tests/randstruct_kunit.c                  | 283 ++++++++++++++++++
- scripts/gcc-plugins/randomize_layout_plugin.c |  18 +-
- security/Kconfig.hardening                    |   2 +-
- 6 files changed, 295 insertions(+), 18 deletions(-)
- create mode 100644 lib/tests/randstruct_kunit.c
+A recent change in Landlock ended up tripping the same member counting
+routine when using a full-struct copy initializer as part of an anonymous
+initializer. This, however, is a false positive as the initializer is
+copying between identical structs (and hence identical layouts). The
+"path" member is "struct path", a randomized struct, and is being copied
+to from another "struct path", the "f_path" member:
 
+        landlock_log_denial(landlock_cred(file->f_cred), &(struct landlock_request) {
+                .type = LANDLOCK_REQUEST_FS_ACCESS,
+                .audit = {
+                        .type = LSM_AUDIT_DATA_IOCTL_OP,
+                        .u.op = &(struct lsm_ioctlop_audit) {
+                                .path = file->f_path,
+                                .cmd = cmd,
+                        },
+                },
+	...
+
+As can be seen with the coming randstruct KUnit test, there appears to
+be no behavioral problems with this kind of initialization when the void
+member is removed from the randstruct GCC plugin, so remove it.
+
+Reported-by: "Dr. David Alan Gilbert" <linux@treblig.org>
+Closes: https://lore.kernel.org/lkml/Z_PRaKx7q70MKgCA@gallifrey/
+Reported-by: Mark Brown <broonie@kernel.org>
+Closes: https://lore.kernel.org/lkml/20250407-kbuild-disable-gcc-plugins-v1-1-5d46ae583f5e@kernel.org/
+Reported-by: WangYuli <wangyuli@uniontech.com>
+Closes: https://lore.kernel.org/lkml/337D5D4887277B27+3c677db3-a8b9-47f0-93a4-7809355f1381@uniontech.com/
+Fixes: 313dd1b62921 ("gcc-plugins: Add the randstruct plugin")
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: "Mickaël Salaün" <mic@digikod.net>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: "Günther Noack" <gnoack@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ scripts/gcc-plugins/randomize_layout_plugin.c | 18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
+
+diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
+index 5694df3da2e9..971a1908a8cc 100644
+--- a/scripts/gcc-plugins/randomize_layout_plugin.c
++++ b/scripts/gcc-plugins/randomize_layout_plugin.c
+@@ -344,29 +344,13 @@ static int relayout_struct(tree type)
+ 
+ 	shuffle(type, (tree *)newtree, shuffle_length);
+ 
+-	/*
+-	 * set up a bogus anonymous struct field designed to error out on unnamed struct initializers
+-	 * as gcc provides no other way to detect such code
+-	 */
+-	list = make_node(FIELD_DECL);
+-	TREE_CHAIN(list) = newtree[0];
+-	TREE_TYPE(list) = void_type_node;
+-	DECL_SIZE(list) = bitsize_zero_node;
+-	DECL_NONADDRESSABLE_P(list) = 1;
+-	DECL_FIELD_BIT_OFFSET(list) = bitsize_zero_node;
+-	DECL_SIZE_UNIT(list) = size_zero_node;
+-	DECL_FIELD_OFFSET(list) = size_zero_node;
+-	DECL_CONTEXT(list) = type;
+-	// to satisfy the constify plugin
+-	TREE_READONLY(list) = 1;
+-
+ 	for (i = 0; i < num_fields - 1; i++)
+ 		TREE_CHAIN(newtree[i]) = newtree[i+1];
+ 	TREE_CHAIN(newtree[num_fields - 1]) = NULL_TREE;
+ 
+ 	main_variant = TYPE_MAIN_VARIANT(type);
+ 	for (variant = main_variant; variant; variant = TYPE_NEXT_VARIANT(variant)) {
+-		TYPE_FIELDS(variant) = list;
++		TYPE_FIELDS(variant) = newtree[0];
+ 		TYPE_ATTRIBUTES(variant) = copy_list(TYPE_ATTRIBUTES(variant));
+ 		TYPE_ATTRIBUTES(variant) = tree_cons(get_identifier("randomize_performed"), NULL_TREE, TYPE_ATTRIBUTES(variant));
+ 		TYPE_ATTRIBUTES(variant) = tree_cons(get_identifier("designated_init"), NULL_TREE, TYPE_ATTRIBUTES(variant));
 -- 
 2.34.1
 
