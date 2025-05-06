@@ -1,208 +1,122 @@
-Return-Path: <linux-security-module+bounces-9682-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-9685-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1DDEAAB864
-	for <lists+linux-security-module@lfdr.de>; Tue,  6 May 2025 08:33:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C12AAAB8AC
+	for <lists+linux-security-module@lfdr.de>; Tue,  6 May 2025 08:39:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60D1D1C22BA8
-	for <lists+linux-security-module@lfdr.de>; Tue,  6 May 2025 06:26:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DFAB3BA494
+	for <lists+linux-security-module@lfdr.de>; Tue,  6 May 2025 06:28:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADF02DF540;
-	Tue,  6 May 2025 01:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC2EC35C939;
+	Tue,  6 May 2025 03:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="dMMzqUNW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dI3hsFJr"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A841241C49E;
-	Tue,  6 May 2025 00:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F7331E163
+	for <linux-security-module@vger.kernel.org>; Tue,  6 May 2025 00:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746491315; cv=none; b=rgih/tXm/SAXPGi1+0/Bp497FpL4MGCqPpBV9xg7x2oXDsBvWT5GAbWQbrzmwt/AzPRCKPCD/BZMVUC0OoZENeoZutZxozOb1Mc+0MNn42sTTxi871fPo/uBgJfZLvZK8mg3UBxkJNWIQ6J9RuRTsIY+nQ0a2Mlgko3hzeS8QZo=
+	t=1746490902; cv=none; b=F0XFwvA57HJx1ciefo7idFk1wJLup+01IvANzEtmlJBxc0I5OzJxzlYxrbPQE0bt0WjbPjcM6S/rDHqnNwnHty/PRU7juJsOhDOMsc9msw6hNrc7QoBPGOm0qLdsaZ6cr2hYfStJPd0ZAyCUVefE5I5M2A7HwxxsXNVUM69lCZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746491315; c=relaxed/simple;
-	bh=eF+gNBjOxLKhwFhrMZg53t7zwD/CWXXQi/+cXTRSx+0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E105q9O8iEf6PB5RCRX6gR/xCMQMFzgCMi75X11glyXALYfc6Pbca3tEByaLo+yieW3blhyuwWd5uEjkRhLP22TzX+ssjCkKjqInED4X4R2us8oiHFYQlsISfMMK/En6VG6YAbvp3EmGydXWoVHS84I6kyUjkeT1ap5DVd7z/Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=dMMzqUNW; arc=none smtp.client-ip=52.119.213.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1746491314; x=1778027314;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=E0aenAy0eD64Xs5FaiMQor/yEM13BIeMpBetrAePIGU=;
-  b=dMMzqUNWUYi80yhDS2pl83l61sCiKXZQiDbXpZ0Sn+GhKluItuLomEvH
-   MKnBFzfmYH4+fa8pL4u6NmKhNq20bSSRPMIgovKj/kaRNVekeusNRtgEs
-   ZsrOtC+p0e3DJYyPH0lBPwPyHOo9A8/1hb6N7FfLpKtjiNPqXCTimZ5vT
-   s=;
-X-IronPort-AV: E=Sophos;i="6.15,264,1739836800"; 
-   d="scan'208";a="741839383"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2025 00:28:28 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.21.151:41035]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.10.32:2525] with esmtp (Farcaster)
- id 6243d7f0-d118-4e51-afcb-f54cd88bd55f; Tue, 6 May 2025 00:28:27 +0000 (UTC)
-X-Farcaster-Flow-ID: 6243d7f0-d118-4e51-afcb-f54cd88bd55f
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 6 May 2025 00:28:26 +0000
-Received: from 6c7e67bfbae3.amazon.com (10.187.170.18) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 6 May 2025 00:28:21 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-	<brauner@kernel.org>, <casey@schaufler-ca.com>, <daniel@iogearbox.net>,
-	<eddyz87@gmail.com>, <gnoack@google.com>, <haoluo@google.com>,
-	<jmorris@namei.org>, <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-	<kpsingh@kernel.org>, <kuni1840@gmail.com>, <kuniyu@amazon.com>,
-	<linux-security-module@vger.kernel.org>, <martin.lau@linux.dev>,
-	<mic@digikod.net>, <netdev@vger.kernel.org>, <omosnace@redhat.com>,
-	<paul@paul-moore.com>, <sdf@fomichev.me>, <selinux@vger.kernel.org>,
-	<serge@hallyn.com>, <song@kernel.org>, <stephen.smalley.work@gmail.com>,
-	<yonghong.song@linux.dev>
-Subject: Re: [PATCH v1 bpf-next 0/5] af_unix: Allow BPF LSM to scrub SCM_RIGHTS at sendmsg().
-Date: Mon, 5 May 2025 17:21:27 -0700
-Message-ID: <20250506002813.65225-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <CAP01T77STmncrPt=BsFfEY6SX1+oYNXhPeZ1HC9J=S2jhOwQoQ@mail.gmail.com>
-References: <CAP01T77STmncrPt=BsFfEY6SX1+oYNXhPeZ1HC9J=S2jhOwQoQ@mail.gmail.com>
+	s=arc-20240116; t=1746490902; c=relaxed/simple;
+	bh=AtDKckcds667iu9oDsou6O2i2ETY50cEHmCvGTB/aJU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=by7IjA2sjq+Nw2kqP+X9bcGVuUYYOmQY5colZg+QFtOB6Vz3qGmysuc4B3hkAsyWCjsKT5FSeoboDgD2hDbwAxZwJVKM7J25qcX5VV6kqoZ9uRr3GG00BXFLBl+wXLeWIaeQcxXYxNi5ZHsNDrjRjnpCmPrVuJLrr/TvD48uB9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dI3hsFJr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CAEFC4CEF1
+	for <linux-security-module@vger.kernel.org>; Tue,  6 May 2025 00:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746490902;
+	bh=AtDKckcds667iu9oDsou6O2i2ETY50cEHmCvGTB/aJU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=dI3hsFJrJCawW85Fmn6xhuGuuaUl3N7nu03FJPtnYjvyXZwwA4e5r2+keAIVACmSP
+	 1hNqWyavQJZHBxCAbSTTTggKV6sWW6R6lAvoy1hQL4xZqDUXpthCIqUkQjH+VmeDFU
+	 dnDRa6r5QKTavzy9MeDSOWSBU7IN0y8RwG3j+tzx7DMRlcIaGniD04cqfnVWs+rcQH
+	 ILAElsVKfV4C3vybvOy39a1eG7tlehrQ9sgeM1SA4mIJqCdw3+roY0A2BDLy5E5BYF
+	 xMiUFgR8BpblfnkUo7Di2YX8FvQQHaQ5JBJ1hM4oynfPMXGjxLtvxlFVz9wSEKn0up
+	 Bp7eNuq2YBQoA==
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6ecfc7ed0c1so47319356d6.3
+        for <linux-security-module@vger.kernel.org>; Mon, 05 May 2025 17:21:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUkUvdALjUfXF6Hj0xtu7T3xlgfuETmIzpPFqZshCBLq4Vp6HjzRQPx2I8TLJBwzli9IDcdpNstXfn70xWOg0Xj4x4eeCw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz73F5IpUhQ1bo/jLqdPW9SO9xbFn9zeirZ3wv4/50lqCCm67oW
+	8TmwDozJwY1IJWMM9pqbTe2E4aulkB2pOH53o/t5H3jHJL8j9zWXGLpZZp0VXjJFwsc/SqTqRi5
+	xEjk82LIU4gvYT/Xjd+f2dLzYBF4=
+X-Google-Smtp-Source: AGHT+IEE+di7C+Mup+fdRHVAiggVfXa7tF3dfapc04RR34jWvgZLeIQoU1ztXWBPsZS3Du4DEIjsYRM31xV7BDlhdr8=
+X-Received: by 2002:a05:6214:1943:b0:6e8:f2bf:7262 with SMTP id
+ 6a1803df08f44-6f5358ee090mr15468686d6.41.1746490901386; Mon, 05 May 2025
+ 17:21:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D036UWB004.ant.amazon.com (10.13.139.170) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+References: <CAHC9VhTiABmrJNkTYSfTQkjAS5u-GJdYxd+zJ8PcryScBtsXNA@mail.gmail.com>
+ <295201ef-5299-4bf0-b0ee-6e1e2a74174b@I-love.SAKURA.ne.jp>
+ <CAPhsuW4U5ULtOQ9ucucs3bs+jw+EbBzrCfhAuvOCO=1g5aWAHg@mail.gmail.com> <CAHC9VhRBkqzEkJLyZ2gbdyfU6C3grGSOQUY40G2zA5+HnQZ2hw@mail.gmail.com>
+In-Reply-To: <CAHC9VhRBkqzEkJLyZ2gbdyfU6C3grGSOQUY40G2zA5+HnQZ2hw@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 5 May 2025 17:21:29 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6P8mR=5w+5wV6Wf94-ph9wQ=XYw0Dm8rKZ9H-brLJpAg@mail.gmail.com>
+X-Gm-Features: ATxdqUGnUA1qBNJdt2vl1NRo2fv8f55wADrVQj929m_QSYWxe9bVv2J0ZvFKG1Y
+Message-ID: <CAPhsuW6P8mR=5w+5wV6Wf94-ph9wQ=XYw0Dm8rKZ9H-brLJpAg@mail.gmail.com>
+Subject: Re: [RFC] LSM deprecation / removal policies
+To: Paul Moore <paul@paul-moore.com>
+Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
+	linux-security-module@vger.kernel.org, Fan Wu <wufan@linux.microsoft.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Micah Morton <mortonm@chromium.org>, 
+	Casey Schaufler <casey@schaufler-ca.com>, John Johansen <john.johansen@canonical.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, KP Singh <kpsingh@kernel.org>, 
+	Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 6 May 2025 00:49:11 +0200
-> On Mon, 5 May 2025 at 23:58, Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+On Mon, May 5, 2025 at 4:10=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
+te:
+>
+> On Mon, May 5, 2025 at 5:54=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+> > On Sat, May 3, 2025 at 4:47=E2=80=AFAM Tetsuo Handa
+> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> > >
+> > > On 2025/05/03 5:01, Paul Moore wrote:
+> > > > ## Removing LSM Hooks
+> > > >
+> > > > If a LSM hook is no longer used by any in-kernel LSMs, there is no =
+ongoing work
+> > > > in progress involving the hook, and no expectation of future work t=
+hat will use
+> > > > the hook, the LSM community may consider removal of the LSM hook.  =
+The decision
+> > > > to ultimately remove the LSM hook should balance ongoing maintenanc=
+e and
+> > > > performance concerns with the social challenges of reintroducing th=
+e hook if
+> > > > it is needed at a later date.
+> > >
+> > > What about BPF-based LSM users? Since BPF-based LSMs cannot be in-ker=
+nel LSMs,
+> > > it will be difficult for users of BPF-based LSMs to respond (that som=
+eone wants
+> > > some to-be-removed LSM hook) when removal of an LSM hook is proposed.
 > >
-> > As long as recvmsg() or recvmmsg() is used with cmsg, it is not
-> > possible to avoid receiving file descriptors via SCM_RIGHTS.
-> >
-> > This behaviour has occasionally been flagged as problematic.
-> >
-> > For instance, as noted on the uAPI Group page [0], an untrusted peer
-> > could send a file descriptor pointing to a hung NFS mount and then
-> > close it.  Once the receiver calls recvmsg() with msg_control, the
-> > descriptor is automatically installed, and then the responsibility
-> > for the final close() now falls on the receiver, which may result
-> > in blocking the process for a long time.
-> >
-> > systemd calls cmsg_close_all() [1] after each recvmsg() to close()
-> > unwanted file descriptors sent via SCM_RIGHTS.
-> >
-> > However, this cannot work around the issue because the last fput()
-> > could occur on the receiver side once sendmsg() with SCM_RIGHTS
-> > succeeds.  Also, even filtering by LSM at recvmsg() does not work
-> > for the same reason.
-> >
-> > Thus, we need a better way to filter SCM_RIGHTS on the sender side.
-> >
-> > This series allows BPF LSM to inspect skb at sendmsg() and scrub
-> > SCM_RIGHTS fds by kfunc.
-> >
-> > Link: https://uapi-group.org/kernel-features/#disabling-reception-of-scm_rights-for-af_unix-sockets #[0]
-> > Link: https://github.com/systemd/systemd/blob/v257.5/src/basic/fd-util.c#L612-L628 #[1]
-> >
-> 
-> This sounds pretty useful!
-> 
-> I think you should mention the cases of possible DoS on close() or
-> flooding, e.g. with FUSE controlled fd/NFS hangs in the commit log
-> itself.
-> I think it's been an open problem for a while now with no good solution.
-> Currently systemd's FDSTORE=1 for PID 1 is susceptible to the same
-> problem, even if the underlying service isn't root.
+> > If a LSM hook is important for an out-of-tree BPF LSM solution, the own=
+er can
+> > add a BPF selftest for this specific hook. This does not guarantee the =
+hook will
+> > stay, but it can most likely detect unintentional removal of LSM hooks.
+>
+> Sure, however, like you said, we aren't going to keep a LSM hook
+> simply because it is used by a selftest.
 
-Good point, will add the description in v2.
+Agreed 100%. If it makes sense to remove a LSM hook, we will adjust the
+selftest accordingly.
 
-
-> 
-> I think it is also useful for restricting what individual file
-> descriptors can be passed around by a process.
-> Say restricting usage of an fd to a process and its children, but not
-> allowing it to be shared with others.
-> Send side hook is the right point to enforce it.
-
-Agreed.
-
-Actually, I tried per-fd filtering first and failed somehow so
-wanted some advice from BPF folks :)
-
-For example, I implemented kfunc like:
-
-__bpf_kfunc int bpf_unix_scrub_file(struct sk_buff *skb, struct file *filp)
-{
-	/* scrub fd matching file if exists */
-}
-
-and tried filp == NULL -> scrub all so that I can gradually extend
-the functionality, but verifier didn't allow passing NULL.
-
-Also, once a fd is scrubbed, I do not want to leave the array entry
-empty to avoid adding unnecessary "if (fpl->fp[i] == -1)" test in
-other places.
-
-       struct scm_fp_list *fpl = UNIXCB(skb).fp;
-
-       /* scrubbed fpl->fp[i] here. */
-
-       fpl->fp[i] = fpl->fp[fpl->count - 1];
-       fpl->count--;
-
-But this could confuse BPF prog if it was iterating fpl->fp[] in for
-loop and I was wondering how the interface should be like.
-
-  * Keep the empty index and ignore at core code ?
-  * Provide a fd iterator ?
-  * Scrub based on index ? matching fd ? or struct file ?
-    * -1 works as ALL_INDEX or ALL_FDS but NULL doesn't
-  * Invoke BPF LSM per-fd ?
-    * Maybe no as sender/receiver pair is always same for the same skb
-
-I guess keeping the empty index as is and index based scrubbing
-would be simpler and cleaner ?
-
-
-> 
-> Therefore exercising scm_fp_list would be a good idea.
-> We should provide some more examples of the filtering policy in the selftests.
-> Maybe a simple example, e.g. only memfd or a pipe fd can be passed,
-> and nothing else.
-> It would require checking file->f_ops.
-
-Yes, and I thought we need fd-to-file kfunc or BPF helper, but I was
-not sure which would be better as both functionality should be stable.
-But given the user needs to inspect the raw scm_fp_list, kfunc is better ?
-
-* bpf_fd_to_file()
-or
-* bpf_unix_get_scm_rights() -> return struct file ?
-
-plus
-
-* bpf_unix_scrub_scm_rights() -> scrub based on fd or file ?
-
-
-> 
-> I don't think "scrub all file descriptors" is the only possible usage scenario.
-> In the case of FDSTORE=1, it might be "everything except fuse or NFS fds" etc.
-> 
-> Eventually if file local storage happens, more interesting policies
-> may be possible.
-> 
+Song
 
