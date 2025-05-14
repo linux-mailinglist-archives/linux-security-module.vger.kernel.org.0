@@ -1,49 +1,50 @@
-Return-Path: <linux-security-module+bounces-9946-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-9948-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88942AB78AC
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 May 2025 00:06:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F8FDAB78AD
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 May 2025 00:07:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96E284E0AE6
-	for <lists+linux-security-module@lfdr.de>; Wed, 14 May 2025 22:06:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8535189E6F9
+	for <lists+linux-security-module@lfdr.de>; Wed, 14 May 2025 22:07:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D2122FF22;
-	Wed, 14 May 2025 22:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15DB2225797;
+	Wed, 14 May 2025 22:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OKrpacmM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PUdZ7K0j"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0242253A8;
-	Wed, 14 May 2025 22:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D740E2153D8;
+	Wed, 14 May 2025 22:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747260269; cv=none; b=Ptm39vCn+WcnmuvBNzyclq8jlhBVjFsoEzxjUlWRC77GFKKMvt/lRImD2z8ZzQN8FL5/sAJxahRTwUWWK4CXS/1t4DWVsCI35V+t/kq8HbNqetBF+ER9d4lcrymFvhzdv5uZaZcuSzBVMtVLzEBUkw+rlE0sSXRnFAZWZxDp5eo=
+	t=1747260280; cv=none; b=dhwMPkH54szJuhLOHTDfAf3KnTKEnWSWtznrCdZ0vCtvWztH50RQvSOzF1Eyh7xpWvReIA3JTVYXb5SsOnCrfq7bTdehpLDnVGCi3DXoDzI0M/GyHRVs6QROYykYQODpdJthwIzU37PajcWYi6x52wF4JoItB3HIsyLpsvZTp3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747260269; c=relaxed/simple;
-	bh=g1fZL9UHjL0fdEg1HQk9U39MiHvgvwYopqxavC+sk70=;
+	s=arc-20240116; t=1747260280; c=relaxed/simple;
+	bh=WF46UsPN75VDjMGLBPpKqGhF8yXGNp/YIhfAlM9Ro+U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jLcHVdeh4NF/2eJJYVzPvzoZQbJ5p7vvVbTGrz/LRVn52NOmZ9c0DHvFVbndMFRf2cvw76qsX2aj98N560K1DfffpX9AOYGU89gbii2px6ghabnoj6KWejv6nM33yxo2Pc/yJC40j67VUKnMsamGf6Ym7GYT1bIz/xCStN3Mwvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OKrpacmM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5156CC4CEE3;
-	Wed, 14 May 2025 22:04:24 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=IG9u3ra5NFGEVdrBHRcHQtpmnHG4ef4xR5e3rfXCp/TO7WkVLWGAIf2YSBSAqz9CAMokQM27dt/FvOY7jX1bw7cWdQfD47TSvt24gsUYy9FlhqVS5Mg0hojgjPpO+u/g++QjcKCA1PmNUNN03lmnsqKl4DMnyBP/gLLeElwCqtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PUdZ7K0j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B48C4CEE3;
+	Wed, 14 May 2025 22:04:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747260269;
-	bh=g1fZL9UHjL0fdEg1HQk9U39MiHvgvwYopqxavC+sk70=;
+	s=k20201202; t=1747260279;
+	bh=WF46UsPN75VDjMGLBPpKqGhF8yXGNp/YIhfAlM9Ro+U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OKrpacmML91nkBfYMF3/bgtlkVMboBLMScfTioqJiYFHDRym2zTdrxECB8risLyTw
-	 b8zfcpLRTMlOLYEZDSOovdavV8aA6CDL5nPD83/ESGredWpNZn5BAxtL5fORYSBExk
-	 tIF9DFoH9kzEuHiUJmOy0tZd6dD/lDBAMH0bHZat0RhbT08m6qzGGnMKZFqXLHNujm
-	 xu6q72F5r+w0KRDyRYaa7/IeP/jrMcxleAcUu0UBbOcf0pjpkgwcmFjWcUwOlvde4Y
-	 4uoUkq6cy9QmLiyPgVGCJLb6R3B/sUM1/eFbHCOqog/m0GshzXx3SDTsS4iDRAy5kF
-	 sC7puHjQDgHbw==
+	b=PUdZ7K0j17nsI5ayN7DSVjltWpYjm6oTU1mp9NUMsiQ9ampYAeKPhPeTt5brHKqQh
+	 b1YCx1yrkI4VntLHgZSntgzZxTZm/caerNwwEbZfo3cmjqmUAAc+WZtu2wrI3aEliM
+	 ri/vW74f+MTIsZTTIZ9s9SYep4C/tnT4eUj+KgBI15odyyFD3ZMQTMMsWqMdoD3TBE
+	 BQo0NsjZUHoei2FKsRI6FKvdPXAoQNC2wdOgDR1y60rz7ozbuM8mS24iiXkbAH+g6f
+	 SGDX5xFhxlvhWX7rj2wfQa8CG5G5AJztoexZMQcmzdeXHoign0VYTe4epLf9WTRdY2
+	 WYn7RL2x4q9UA==
 From: Christian Brauner <brauner@kernel.org>
-Date: Thu, 15 May 2025 00:03:39 +0200
-Subject: [PATCH v7 6/9] coredump: show supported coredump modes
+Date: Thu, 15 May 2025 00:03:41 +0200
+Subject: [PATCH v7 8/9] selftests/pidfd: add PIDFD_INFO_COREDUMP
+ infrastructure
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-work-coredump-socket-v7-6-0a1329496c31@kernel.org>
+Message-Id: <20250515-work-coredump-socket-v7-8-0a1329496c31@kernel.org>
 References: <20250515-work-coredump-socket-v7-0-0a1329496c31@kernel.org>
 In-Reply-To: <20250515-work-coredump-socket-v7-0-0a1329496c31@kernel.org>
 To: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
@@ -72,53 +73,63 @@ Cc: Eric Dumazet <edumazet@google.com>, Oleg Nesterov <oleg@redhat.com>,
  Christian Brauner <brauner@kernel.org>, 
  Alexander Mikhalitsyn <alexander@mihalicyn.com>
 X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1120; i=brauner@kernel.org;
- h=from:subject:message-id; bh=g1fZL9UHjL0fdEg1HQk9U39MiHvgvwYopqxavC+sk70=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSoCntUvQ8X3b5k6ZxfRq/CTEtdV0c2iu+Rk1x89VWvR
- mGtWmdGRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwEScTzIynBM8lSR8MZI3XP/E
- njeHdz/fZ2p6SeTKYbYQg3PyW+aK8zIyfG5dopHJE3o04am+NadCcO3iP6duZN5f0VLyanVuyrs
- rrAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1381; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=WF46UsPN75VDjMGLBPpKqGhF8yXGNp/YIhfAlM9Ro+U=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSoCntKiHV/2tWx+UDRFq9PT75FCXS2rnSs5PT8MNHWi
+ tPMcK1VRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwEQKixkZ1mqXeZYdZTVnDI+1
+ 0p/xf7HU1aasrZ6W2dVuX6avPCwby/DPxi1xptY83v/HVkpxXs2729aYl3PifPG23QrbV8S9cGr
+ hAgA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Allow userspace to discover what coredump modes are supported.
+Add PIDFD_INFO_COREDUMP infrastructure so we can use it in tests.
 
 Signed-off-by: Christian Brauner <brauner@kernel.org>
 ---
- fs/coredump.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ tools/testing/selftests/pidfd/pidfd.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index bfc4a32f737c..6ee38e3da108 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -1240,6 +1240,12 @@ static int proc_dostring_coredump(const struct ctl_table *table, int write,
+diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+index 55bcf81a2b9a..887c74007086 100644
+--- a/tools/testing/selftests/pidfd/pidfd.h
++++ b/tools/testing/selftests/pidfd/pidfd.h
+@@ -131,6 +131,26 @@
+ #define PIDFD_INFO_EXIT			(1UL << 3) /* Always returned if available, even if not requested */
+ #endif
  
- static const unsigned int core_file_note_size_min = CORE_FILE_NOTE_SIZE_DEFAULT;
- static const unsigned int core_file_note_size_max = CORE_FILE_NOTE_SIZE_MAX;
-+static char core_modes[] = {
-+	"file\npipe"
-+#ifdef CONFIG_UNIX
-+	"\nsocket"
++#ifndef PIDFD_INFO_COREDUMP
++#define PIDFD_INFO_COREDUMP	(1UL << 4)
 +#endif
-+};
- 
- static const struct ctl_table coredump_sysctls[] = {
- 	{
-@@ -1283,6 +1289,13 @@ static const struct ctl_table coredump_sysctls[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
-+	{
-+		.procname	= "core_modes",
-+		.data		= core_modes,
-+		.maxlen		= sizeof(core_modes) - 1,
-+		.mode		= 0444,
-+		.proc_handler	= proc_dostring,
-+	},
++
++#ifndef PIDFD_COREDUMPED
++#define PIDFD_COREDUMPED	(1U << 0) /* Did crash and... */
++#endif
++
++#ifndef PIDFD_COREDUMP_SKIP
++#define PIDFD_COREDUMP_SKIP	(1U << 1) /* coredumping generation was skipped. */
++#endif
++
++#ifndef PIDFD_COREDUMP_USER
++#define PIDFD_COREDUMP_USER	(1U << 2) /* coredump was done as the user. */
++#endif
++
++#ifndef PIDFD_COREDUMP_ROOT
++#define PIDFD_COREDUMP_ROOT	(1U << 3) /* coredump was done as root. */
++#endif
++
+ #ifndef PIDFD_THREAD
+ #define PIDFD_THREAD O_EXCL
+ #endif
+@@ -150,6 +170,9 @@ struct pidfd_info {
+ 	__u32 fsuid;
+ 	__u32 fsgid;
+ 	__s32 exit_code;
++	__u32 coredump_mask;
++	__u32 __spare1;
++	__u64 coredump_cookie;
  };
  
- static int __init init_fs_coredump_sysctls(void)
+ /*
 
 -- 
 2.47.2
