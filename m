@@ -1,434 +1,462 @@
-Return-Path: <linux-security-module+bounces-9969-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-9965-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8F0BAB8955
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 May 2025 16:24:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B21AB88EB
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 May 2025 16:08:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DC4BA05D43
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 May 2025 14:23:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF7D9164FBB
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 May 2025 14:08:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC771D88BE;
-	Thu, 15 May 2025 14:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FC771C1F12;
+	Thu, 15 May 2025 14:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b="LUvJyP/4"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C25717B4EC;
-	Thu, 15 May 2025 14:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9290D154C17
+	for <linux-security-module@vger.kernel.org>; Thu, 15 May 2025 14:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747319020; cv=none; b=HRyLauaZhoqc0wsQzyABnvcylmOc5u0t6rCp5iVteqFXk8H/QZ0uFjOFSyLNt0agOqQTnrycAYxEuwPokMMnFAx0G9PPb5zWDlsZHm9qj9H+Kjp4JytsDA3cRjOQoksawlD6FAlIiTJXqB/e//AOT7dp0gkRegeKg72wJc2Eqk4=
+	t=1747318110; cv=none; b=V3wb31gNYtAFbMr4NE1SwNQLzcTTECFIsawcpsDiKbfJUR3IVtXXTK3z+epPnc3Pv5abHwZvwfR7TRMEi9yGtg+VsW/BYeB/EFiuqgNmoNjNNfEN8mMS5inZ6U5zSszcsxnz7Z8LZsWZS77lFWYMDULrsnFL4qPbW97eCPnD3Aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747319020; c=relaxed/simple;
-	bh=fe+w4ZuASKrsjB6Mk0us7ZJoFuL+FYsxcteMZ8Kq7DI=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gUSbab7ze8e0vr9ONHp70a876FSXjiZlCmxz7prY4xwmlzHcpMgiKYBsXQoI9wGbcIPSz2Ad/EvQUwPT9+om7eCw/Jj7eT0BWUMpZ6KGHJ8Nvhju2NlxHSgesY7icXzvTXXTcB0p1TgAjV4e/2QjC1SLmJiZXbv4azuoBC9FaWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4ZysSC0ckyzsS7t;
-	Thu, 15 May 2025 22:05:47 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id F16C31402ED;
-	Thu, 15 May 2025 22:06:20 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHjkzN9CVoj1btBw--.64056S2;
-	Thu, 15 May 2025 15:06:19 +0100 (CET)
-Message-ID: <38c28bd4dc40b2e992c13a6fdba820a667861d8c.camel@huaweicloud.com>
-Subject: Re: [syzbot] [lsm?] [integrity?] KMSAN: uninit-value in
- ima_add_template_entry (3)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: syzbot <syzbot+3f0b3970f154dfc95e6e@syzkaller.appspotmail.com>, 
- dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org, 
- linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-security-module@vger.kernel.org, paul@paul-moore.com, 
- roberto.sassu@huawei.com, serge@hallyn.com,
- syzkaller-bugs@googlegroups.com,  zohar@linux.ibm.com,
- kent.overstreet@linux.dev, linux-bcachefs@vger.kernel.org
-Date: Thu, 15 May 2025 16:06:02 +0200
-In-Reply-To: <6824aea8.a00a0220.104b28.0011.GAE@google.com>
-References: <6824aea8.a00a0220.104b28.0011.GAE@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1747318110; c=relaxed/simple;
+	bh=9VmEHRvbOUYY2kOCO7kEzLjU7lCkScd3CaiU4PIIzdo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pkzvfO6dgD1+xCAV1pQACScCr41TjApUsWrndCFLI1n2vlrkWVzQ9acX+CmEMo4Ft4D/AI9KwpiS66EmlFizTtQCbw/f6v8Z0+BKKjfX7/CD8Z+VsKm9XsFEJMrn0g5rS+2r4UXfIhyCIczZHdVv292TzBYlEkHS/kF90dndE/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com; spf=pass smtp.mailfrom=mihalicyn.com; dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b=LUvJyP/4; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mihalicyn.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30bf7d0c15eso8666601fa.0
+        for <linux-security-module@vger.kernel.org>; Thu, 15 May 2025 07:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mihalicyn.com; s=mihalicyn; t=1747318105; x=1747922905; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zlNPK/1z36znT+gkUbgbVHXLqL8fwZcYFOdBbadwik4=;
+        b=LUvJyP/419hEuiW3lsr6iCX+MBEUw9vtrL1a6FCdHBe8ZbZD7QbvW/I9i33vQNLfmW
+         KDELluXcESBfeW9Bkfed6TEc08Os3lsGKNWdD2vv8fSUWUTjI8bhDm4wOWfgvnSXX8nX
+         ckd8pNDi6K0CbDuOz/mxAQqoosCQISFFBg6n4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747318105; x=1747922905;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zlNPK/1z36znT+gkUbgbVHXLqL8fwZcYFOdBbadwik4=;
+        b=gpp5sg2Jw+fpyl51uB2ujHMojC4Nfv8KZi0dHRW/57buI9Ickg6dzKUwIyqQrbUSqU
+         tAjlu/4f0K4PkZXKcgtaAA5bFGjhO/L184YRFKII3ZVV/CuCWbp2uCqB164Gi2DNKe2S
+         PY2TYFnnsOTIhoskn43lzH1YeP0A+Oi/pfjrAn3mWO7SAh87vzBTdJ5mxpJNQm2F8/pg
+         GJfNbFy8C6NOMjTrWdUJxDixcGyXyFCF13+wWs/9nsNmL4cNgzzrsmXPuoTBZFACcsGm
+         OXi3UMJzAwxKANRmo2XYsr5Cnk6FDmGq3PFA761dfmoQmuTr7yejlX4TboHdWv/BQ09X
+         fILQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVOZwdamN+oETPsiJivRSjAt0268Gtn0KXYPEPiBj3G+JzY0fWa8Y44sjKUyEFWgdCMSX6sXpjhGC8d5Cei+YmoCeETyDI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ15zH8194cU796AMlQC8EuXtt2ji3ZLAkhOQGyTfjVWtEPjZ+
+	Jd4HDVNqfbBHL3aOQGZCWq3qOJONiBekHeZMoNkqJ0XsLMjOCfjjl+WjYKivbVAIE4HMX914vDv
+	AG9NWuWuB0lMx/x+Mh9Z28agAGyqQ/dd4CDHrVw==
+X-Gm-Gg: ASbGncvrIvER4TMP8FPwFcby2wuDxclFQ0gLHoVOvQoyBlRj3xx0cFl5C4LBr+wi+lj
+	LepZ7x/PcAy2zkf1/fZ9MUuP0oAf629RbSg42xHp/gu2c+F4kw6YCxbw0PE3UcrTxyPUxS3sinI
+	8ydG0q/PmznkjWCrpbIYj1/mnoZe5OelSB4g==
+X-Google-Smtp-Source: AGHT+IGG20PtI++hE8yDk6QEBSUwuUvn9V5k/Nv6PNWbTdXdi8Qzd9UzXUUJl23CSX4iciWSDusCvlA50MDj88zA+Bo=
+X-Received: by 2002:a2e:a9a2:0:b0:31c:d57e:b6f6 with SMTP id
+ 38308e7fff4ca-327fabc40e9mr11042271fa.8.1747318104365; Thu, 15 May 2025
+ 07:08:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwAHjkzN9CVoj1btBw--.64056S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3tw4kWw1rAr1rZrW8XF4fZrb_yoW8CrWUCo
-	Za9wsxCr15JFW3JFWIyFsrZw4fuF4rXry7XrWv9rW5KF12v34DGryrAFyUJF4fXr43WF1U
-	X3y2qa40qFnrK3Wfn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUY-7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIccxYrVCFb41lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-	DU0xZFpf9x07boa0PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBGglkmQFUQAFsm
+References: <20250515-work-coredump-socket-v7-0-0a1329496c31@kernel.org> <20250515-work-coredump-socket-v7-5-0a1329496c31@kernel.org>
+In-Reply-To: <20250515-work-coredump-socket-v7-5-0a1329496c31@kernel.org>
+From: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Date: Thu, 15 May 2025 16:08:13 +0200
+X-Gm-Features: AX0GCFtEFde-SVXMph4csubR6h1lBYhA7PILE7qan5SniY73PDOxFcp0KliU8N8
+Message-ID: <CAJqdLrrNxYGmdZdt_1oTeXw40Ox1D5TQAWtYjweT0AUMLs7mRQ@mail.gmail.com>
+Subject: Re: [PATCH v7 5/9] pidfs, coredump: add PIDFD_INFO_COREDUMP
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kuniyuki Iwashima <kuniyu@amazon.com>, 
+	Eric Dumazet <edumazet@google.com>, Oleg Nesterov <oleg@redhat.com>, 
+	"David S. Miller" <davem@davemloft.net>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Daan De Meyer <daan.j.demeyer@gmail.com>, David Rheinsberg <david@readahead.eu>, 
+	Jakub Kicinski <kuba@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Lennart Poettering <lennart@poettering.net>, Luca Boccassi <bluca@debian.org>, Mike Yuan <me@yhndnzj.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	=?UTF-8?Q?Zbigniew_J=C4=99drzejewski=2DSzmek?= <zbyszek@in.waw.pl>, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2025-05-14 at 07:54 -0700, syzbot wrote:
-> Hello,
+Am Do., 15. Mai 2025 um 00:04 Uhr schrieb Christian Brauner
+<brauner@kernel.org>:
+>
+> Extend the PIDFD_INFO_COREDUMP ioctl() with the new PIDFD_INFO_COREDUMP
+> mask flag. This adds the fields @coredump_mask and @coredump_cookie to
+> struct pidfd_info.
+>
+> When a task coredumps the kernel will provide the following information
+> to userspace in @coredump_mask:
+>
+> * PIDFD_COREDUMPED is raised if the task did actually coredump.
+> * PIDFD_COREDUMP_SKIP is raised if the task skipped coredumping (e.g.,
+>   undumpable).
+> * PIDFD_COREDUMP_USER is raised if this is a regular coredump and
+>   doesn't need special care by the coredump server.
+> * PIDFD_COREDUMP_ROOT is raised if the generated coredump should be
+>   treated as sensitive and the coredump server should restrict to the
+>   generated coredump to sufficiently privileged users.
+>
+> If userspace uses the coredump socket to process coredumps it needs to
+> be able to discern connection from the kernel from connects from
+> userspace (e.g., Python generating it's own coredumps and forwarding
+> them to systemd). The @coredump_cookie extension uses the SO_COOKIE of
+> the new connection. This allows userspace to validate that the
+> connection has been made from the kernel by a crashing task:
+>
+>    fd_coredump = accept4(fd_socket, NULL, NULL, SOCK_CLOEXEC);
+>    getsockopt(fd_coredump, SOL_SOCKET, SO_PEERPIDFD, &fd_peer_pidfd, &fd_peer_pidfd_len);
+>
+>    struct pidfd_info info = {
+>            info.mask = PIDFD_INFO_EXIT | PIDFD_INFO_COREDUMP,
+>    };
+>
+>    ioctl(pidfd, PIDFD_GET_INFO, &info);
+>    /* Refuse connections that aren't from a crashing task. */
+>    if (!(info.mask & PIDFD_INFO_COREDUMP) || !(info.coredump_mask & PIDFD_COREDUMPED) )
+>            close(fd_coredump);
+>
+>    /*
+>     * Make sure that the coredump cookie matches the connection cookie.
+>     * If they don't it's not the coredump connection from the kernel.
+>     * We'll get another connection request in a bit.
+>     */
+>    getsocketop(fd_coredump, SOL_SOCKET, SO_COOKIE, &peer_cookie, &peer_cookie_len);
+>    if (!info.coredump_cookie || (info.coredump_cookie != peer_cookie))
+>            close(fd_coredump);
+>
+> The kernel guarantees that by the time the connection is made the all
+> PIDFD_INFO_COREDUMP info is available.
+>
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 
-+ Kent, bcachefs mailing list
+Reviewed-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 
-I have the feeling that this was recently fixed in one of the latest
-pull requests in bcachefs. I don't see it occurring anymore, and there
-are more commits after the one reported by syzbot.
-
-Roberto
-
-> syzbot found the following issue on:
->=20
-> HEAD commit:    02ddfb981de8 Merge tag 'scsi-fixes' of git://git.kernel.o=
-r..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1116967058000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D9dc42c34a3f5c=
-357
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D3f0b3970f154dfc=
-95e6e
-> compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd=
-6-1~exp1~20250402004600.97), Debian LLD 20.1.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1574d768580=
-000
->=20
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/5ca57f5a3f77/dis=
-k-02ddfb98.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/3f23cbc11e68/vmlinu=
-x-02ddfb98.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/73e63afac354/b=
-zImage-02ddfb98.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/0afd18737a=
-ed/mount_2.gz
->=20
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+3f0b3970f154dfc95e6e@syzkaller.appspotmail.com
->=20
-> bcachefs (loop2): going read-write
-> bcachefs (loop2): done starting filesystem
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> BUG: KMSAN: uninit-value in ima_lookup_digest_entry security/integrity/im=
-a/ima_queue.c:64 [inline]
-> BUG: KMSAN: uninit-value in ima_add_template_entry+0x7a5/0x8d0 security/i=
-ntegrity/ima/ima_queue.c:191
->  ima_lookup_digest_entry security/integrity/ima/ima_queue.c:64 [inline]
->  ima_add_template_entry+0x7a5/0x8d0 security/integrity/ima/ima_queue.c:19=
-1
->  ima_store_template security/integrity/ima/ima_api.c:122 [inline]
->  ima_store_measurement+0x388/0x970 security/integrity/ima/ima_api.c:383
->  process_measurement+0x3075/0x40e0 security/integrity/ima/ima_main.c:393
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> <Zero or more stacks not recorded to save memory>
->=20
-> Uninit was stored to memory at:
->  sha256_transform lib/crypto/sha256.c:117 [inline]
->  sha256_transform_blocks+0x276d/0x2880 lib/crypto/sha256.c:127
->  lib_sha256_base_do_finalize include/crypto/sha256_base.h:101 [inline]
->  __sha256_final lib/crypto/sha256.c:142 [inline]
->  sha256_final+0x169/0x460 lib/crypto/sha256.c:148
->  crypto_sha256_final+0xca/0x120 crypto/sha256_generic.c:49
->  crypto_shash_final+0x72/0xa0 crypto/shash.c:58
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:498 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x240a/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> Uninit was stored to memory at:
->  sha256_transform lib/crypto/sha256.c:117 [inline]
->  sha256_transform_blocks+0x276d/0x2880 lib/crypto/sha256.c:127
->  lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
->  sha256_update+0x392/0x410 lib/crypto/sha256.c:136
->  crypto_sha256_update+0x35/0x60 crypto/sha256_generic.c:39
->  crypto_shash_update+0x7a/0xb0 crypto/shash.c:52
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:491 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x20d7/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> Uninit was stored to memory at:
->  BLEND_OP lib/crypto/sha256.c:61 [inline]
->  sha256_transform lib/crypto/sha256.c:91 [inline]
->  sha256_transform_blocks+0xded/0x2880 lib/crypto/sha256.c:127
->  lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
->  sha256_update+0x392/0x410 lib/crypto/sha256.c:136
->  crypto_sha256_update+0x35/0x60 crypto/sha256_generic.c:39
->  crypto_shash_update+0x7a/0xb0 crypto/shash.c:52
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:491 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x20d7/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> Uninit was stored to memory at:
->  BLEND_OP lib/crypto/sha256.c:61 [inline]
->  sha256_transform lib/crypto/sha256.c:92 [inline]
->  sha256_transform_blocks+0xe00/0x2880 lib/crypto/sha256.c:127
->  lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
->  sha256_update+0x392/0x410 lib/crypto/sha256.c:136
->  crypto_sha256_update+0x35/0x60 crypto/sha256_generic.c:39
->  crypto_shash_update+0x7a/0xb0 crypto/shash.c:52
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:491 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x20d7/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> Uninit was stored to memory at:
->  BLEND_OP lib/crypto/sha256.c:61 [inline]
->  sha256_transform lib/crypto/sha256.c:93 [inline]
->  sha256_transform_blocks+0xe15/0x2880 lib/crypto/sha256.c:127
->  lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
->  sha256_update+0x392/0x410 lib/crypto/sha256.c:136
->  crypto_sha256_update+0x35/0x60 crypto/sha256_generic.c:39
->  crypto_shash_update+0x7a/0xb0 crypto/shash.c:52
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:491 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x20d7/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> Uninit was stored to memory at:
->  LOAD_OP lib/crypto/sha256.c:56 [inline]
->  sha256_transform lib/crypto/sha256.c:82 [inline]
->  sha256_transform_blocks+0x268b/0x2880 lib/crypto/sha256.c:127
->  lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
->  sha256_update+0x392/0x410 lib/crypto/sha256.c:136
->  crypto_sha256_update+0x35/0x60 crypto/sha256_generic.c:39
->  crypto_shash_update+0x7a/0xb0 crypto/shash.c:52
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:491 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x20d7/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> Uninit was stored to memory at:
->  memcpy_to_iter lib/iov_iter.c:65 [inline]
->  iterate_kvec include/linux/iov_iter.h:86 [inline]
->  iterate_and_advance2 include/linux/iov_iter.h:306 [inline]
->  iterate_and_advance include/linux/iov_iter.h:328 [inline]
->  _copy_to_iter+0x176c/0x32f0 lib/iov_iter.c:185
->  copy_page_to_iter+0x43c/0x8b0 lib/iov_iter.c:362
->  copy_folio_to_iter include/linux/uio.h:198 [inline]
->  filemap_read+0xced/0x2190 mm/filemap.c:2753
->  bch2_read_iter+0x559/0x21c0 fs/bcachefs/fs-io-direct.c:221
->  __kernel_read+0x750/0xda0 fs/read_write.c:528
->  integrity_kernel_read+0x77/0x90 security/integrity/iint.c:28
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:480 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x1ff9/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> Uninit was created at:
->  __alloc_frozen_pages_noprof+0x689/0xf00 mm/page_alloc.c:4993
->  alloc_pages_mpol+0x328/0x860 mm/mempolicy.c:2301
->  alloc_frozen_pages_noprof mm/mempolicy.c:2372 [inline]
->  alloc_pages_noprof mm/mempolicy.c:2392 [inline]
->  folio_alloc_noprof+0x109/0x360 mm/mempolicy.c:2402
->  filemap_alloc_folio_noprof+0x9d/0x420 mm/filemap.c:1007
->  ractl_alloc_folio mm/readahead.c:186 [inline]
->  ra_alloc_folio mm/readahead.c:441 [inline]
->  page_cache_ra_order+0x93f/0x14f0 mm/readahead.c:509
->  page_cache_sync_ra+0x108a/0x13e0 mm/readahead.c:621
->  filemap_get_pages+0xfb3/0x3a70 mm/filemap.c:2591
->  filemap_read+0x5c6/0x2190 mm/filemap.c:2702
->  bch2_read_iter+0x559/0x21c0 fs/bcachefs/fs-io-direct.c:221
->  __kernel_read+0x750/0xda0 fs/read_write.c:528
->  integrity_kernel_read+0x77/0x90 security/integrity/iint.c:28
->  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:480 [inline]
->  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
->  ima_calc_file_hash+0x1ff9/0x3fd0 security/integrity/ima/ima_crypto.c:568
->  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
->  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
->  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
->  security_file_post_open+0xbf/0x530 security/security.c:3130
->  do_open fs/namei.c:3882 [inline]
->  path_openat+0x5ac3/0x6760 fs/namei.c:4039
->  do_filp_open+0x280/0x660 fs/namei.c:4066
->  do_sys_openat2+0x1bb/0x2f0 fs/open.c:1429
->  do_sys_open fs/open.c:1444 [inline]
->  __do_sys_openat fs/open.c:1460 [inline]
->  __se_sys_openat fs/open.c:1455 [inline]
->  __x64_sys_openat+0x240/0x300 fs/open.c:1455
->  x64_sys_call+0x213/0x3db0 arch/x86/include/generated/asm/syscalls_64.h:2=
-58
->  do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->  do_syscall_64+0xd9/0x1b0 arch/x86/entry/syscall_64.c:94
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->=20
-> CPU: 0 UID: 0 PID: 7337 Comm: syz.2.106 Not tainted 6.15.0-rc3-syzkaller-=
-00094-g02ddfb981de8 #0 PREEMPT(undef)=20
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 05/07/2025
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->=20
->=20
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->=20
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->=20
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
->=20
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
->=20
-> If you want to overwrite report's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
->=20
-> If the report is a duplicate of another one, reply with:
-> #syz dup: exact-subject-of-another-report
->=20
-> If you want to undo deduplication, reply with:
-> #syz undup
-
+>  fs/coredump.c              | 34 ++++++++++++++++++++
+>  fs/pidfs.c                 | 79 ++++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pidfs.h      | 10 ++++++
+>  include/uapi/linux/pidfd.h | 22 +++++++++++++
+>  net/unix/af_unix.c         |  7 ++++
+>  5 files changed, 152 insertions(+)
+>
+> diff --git a/fs/coredump.c b/fs/coredump.c
+> index e1256ebb89c1..bfc4a32f737c 100644
+> --- a/fs/coredump.c
+> +++ b/fs/coredump.c
+> @@ -46,7 +46,9 @@
+>  #include <linux/pidfs.h>
+>  #include <linux/net.h>
+>  #include <linux/socket.h>
+> +#include <net/af_unix.h>
+>  #include <net/net_namespace.h>
+> +#include <net/sock.h>
+>  #include <uapi/linux/pidfd.h>
+>  #include <uapi/linux/un.h>
+>
+> @@ -598,6 +600,8 @@ static int umh_coredump_setup(struct subprocess_info *info, struct cred *new)
+>                 if (IS_ERR(pidfs_file))
+>                         return PTR_ERR(pidfs_file);
+>
+> +               pidfs_coredump(cp);
+> +
+>                 /*
+>                  * Usermode helpers are childen of either
+>                  * system_unbound_wq or of kthreadd. So we know that
+> @@ -876,8 +880,34 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+>                         goto close_fail;
+>                 }
+>
+> +               /*
+> +                * Set the thread-group leader pid which is used for the
+> +                * peer credentials during connect() below. Then
+> +                * immediately register it in pidfs...
+> +                */
+> +               cprm.pid = task_tgid(current);
+> +               retval = pidfs_register_pid(cprm.pid);
+> +               if (retval) {
+> +                       sock_release(socket);
+> +                       goto close_fail;
+> +               }
+> +
+> +               /*
+> +                * ... and set the coredump information so userspace
+> +                * has it available after connect()...
+> +                */
+> +               pidfs_coredump(&cprm);
+> +
+> +               /*
+> +                * ... On connect() the peer credentials are recorded
+> +                * and @cprm.pid registered in pidfs...
+> +                */
+>                 retval = kernel_connect(socket, (struct sockaddr *)(&addr),
+>                                         addr_len, O_NONBLOCK | SOCK_COREDUMP);
+> +
+> +               /* ... So we can safely put our pidfs reference now... */
+> +               pidfs_put_pid(cprm.pid);
+> +
+>                 if (retval) {
+>                         if (retval == -EAGAIN)
+>                                 coredump_report_failure("Coredump socket %s receive queue full", addr.sun_path);
+> @@ -886,6 +916,10 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+>                         goto close_fail;
+>                 }
+>
+> +               /* ... and validate that @sk_peer_pid matches @cprm.pid. */
+> +               if (WARN_ON_ONCE(unix_peer(socket->sk)->sk_peer_pid != cprm.pid))
+> +                       goto close_fail;
+> +
+>                 cprm.limit = RLIM_INFINITY;
+>                 cprm.file = no_free_ptr(file);
+>  #else
+> diff --git a/fs/pidfs.c b/fs/pidfs.c
+> index 3b39e471840b..d7b9a0dd2db6 100644
+> --- a/fs/pidfs.c
+> +++ b/fs/pidfs.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/time_namespace.h>
+>  #include <linux/utsname.h>
+>  #include <net/net_namespace.h>
+> +#include <linux/coredump.h>
+>
+>  #include "internal.h"
+>  #include "mount.h"
+> @@ -33,6 +34,8 @@ static struct kmem_cache *pidfs_cachep __ro_after_init;
+>  struct pidfs_exit_info {
+>         __u64 cgroupid;
+>         __s32 exit_code;
+> +       __u32 coredump_mask;
+> +       __u64 coredump_cookie;
+>  };
+>
+>  struct pidfs_inode {
+> @@ -240,6 +243,22 @@ static inline bool pid_in_current_pidns(const struct pid *pid)
+>         return false;
+>  }
+>
+> +static __u32 pidfs_coredump_mask(unsigned long mm_flags)
+> +{
+> +       switch (__get_dumpable(mm_flags)) {
+> +       case SUID_DUMP_USER:
+> +               return PIDFD_COREDUMP_USER;
+> +       case SUID_DUMP_ROOT:
+> +               return PIDFD_COREDUMP_ROOT;
+> +       case SUID_DUMP_DISABLE:
+> +               return PIDFD_COREDUMP_SKIP;
+> +       default:
+> +               WARN_ON_ONCE(true);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static long pidfd_info(struct file *file, unsigned int cmd, unsigned long arg)
+>  {
+>         struct pidfd_info __user *uinfo = (struct pidfd_info __user *)arg;
+> @@ -280,6 +299,13 @@ static long pidfd_info(struct file *file, unsigned int cmd, unsigned long arg)
+>                 }
+>         }
+>
+> +       if (mask & PIDFD_INFO_COREDUMP) {
+> +               kinfo.mask |= PIDFD_INFO_COREDUMP;
+> +               smp_rmb();
+> +               kinfo.coredump_cookie = READ_ONCE(pidfs_i(inode)->__pei.coredump_cookie);
+> +               kinfo.coredump_mask = READ_ONCE(pidfs_i(inode)->__pei.coredump_mask);
+> +       }
+> +
+>         task = get_pid_task(pid, PIDTYPE_PID);
+>         if (!task) {
+>                 /*
+> @@ -296,6 +322,16 @@ static long pidfd_info(struct file *file, unsigned int cmd, unsigned long arg)
+>         if (!c)
+>                 return -ESRCH;
+>
+> +       if (!(kinfo.mask & PIDFD_INFO_COREDUMP)) {
+> +               task_lock(task);
+> +               if (task->mm) {
+> +                       smp_rmb();
+> +                       kinfo.coredump_cookie = READ_ONCE(pidfs_i(inode)->__pei.coredump_cookie);
+> +                       kinfo.coredump_mask = pidfs_coredump_mask(task->mm->flags);
+> +               }
+> +               task_unlock(task);
+> +       }
+> +
+>         /* Unconditionally return identifiers and credentials, the rest only on request */
+>
+>         user_ns = current_user_ns();
+> @@ -559,6 +595,49 @@ void pidfs_exit(struct task_struct *tsk)
+>         }
+>  }
+>
+> +#if defined(CONFIG_COREDUMP) && defined(CONFIG_UNIX)
+> +void pidfs_coredump_cookie(struct pid *pid, u64 coredump_cookie)
+> +{
+> +       struct pidfs_exit_info *exit_info;
+> +       struct dentry *dentry = pid->stashed;
+> +       struct inode *inode;
+> +
+> +       if (WARN_ON_ONCE(!dentry))
+> +               return;
+> +
+> +       inode = d_inode(dentry);
+> +       exit_info = &pidfs_i(inode)->__pei;
+> +       /* Can't use smp_store_release() because of 32bit. */
+> +       smp_wmb();
+> +       WRITE_ONCE(exit_info->coredump_cookie, coredump_cookie);
+> +}
+> +#endif
+> +
+> +#ifdef CONFIG_COREDUMP
+> +void pidfs_coredump(const struct coredump_params *cprm)
+> +{
+> +       struct pid *pid = cprm->pid;
+> +       struct pidfs_exit_info *exit_info;
+> +       struct dentry *dentry;
+> +       struct inode *inode;
+> +       __u32 coredump_mask = 0;
+> +
+> +       dentry = pid->stashed;
+> +       if (WARN_ON_ONCE(!dentry))
+> +               return;
+> +
+> +       inode = d_inode(dentry);
+> +       exit_info = &pidfs_i(inode)->__pei;
+> +       /* Note how we were coredumped. */
+> +       coredump_mask = pidfs_coredump_mask(cprm->mm_flags);
+> +       /* Note that we actually did coredump. */
+> +       coredump_mask |= PIDFD_COREDUMPED;
+> +       /* If coredumping is set to skip we should never end up here. */
+> +       VFS_WARN_ON_ONCE(coredump_mask & PIDFD_COREDUMP_SKIP);
+> +       smp_store_release(&exit_info->coredump_mask, coredump_mask);
+> +}
+> +#endif
+> +
+>  static struct vfsmount *pidfs_mnt __ro_after_init;
+>
+>  /*
+> diff --git a/include/linux/pidfs.h b/include/linux/pidfs.h
+> index 2676890c4d0d..497997bc5e34 100644
+> --- a/include/linux/pidfs.h
+> +++ b/include/linux/pidfs.h
+> @@ -2,11 +2,21 @@
+>  #ifndef _LINUX_PID_FS_H
+>  #define _LINUX_PID_FS_H
+>
+> +struct coredump_params;
+> +
+>  struct file *pidfs_alloc_file(struct pid *pid, unsigned int flags);
+>  void __init pidfs_init(void);
+>  void pidfs_add_pid(struct pid *pid);
+>  void pidfs_remove_pid(struct pid *pid);
+>  void pidfs_exit(struct task_struct *tsk);
+> +#ifdef CONFIG_COREDUMP
+> +void pidfs_coredump(const struct coredump_params *cprm);
+> +#endif
+> +#if defined(CONFIG_COREDUMP) && defined(CONFIG_UNIX)
+> +void pidfs_coredump_cookie(struct pid *pid, u64 coredump_cookie);
+> +#elif defined(CONFIG_UNIX)
+> +static inline void pidfs_coredump_cookie(struct pid *pid, u64 coredump_cookie) { }
+> +#endif
+>  extern const struct dentry_operations pidfs_dentry_operations;
+>  int pidfs_register_pid(struct pid *pid);
+>  void pidfs_get_pid(struct pid *pid);
+> diff --git a/include/uapi/linux/pidfd.h b/include/uapi/linux/pidfd.h
+> index 8c1511edd0e9..69267c5ae6d0 100644
+> --- a/include/uapi/linux/pidfd.h
+> +++ b/include/uapi/linux/pidfd.h
+> @@ -25,9 +25,28 @@
+>  #define PIDFD_INFO_CREDS               (1UL << 1) /* Always returned, even if not requested */
+>  #define PIDFD_INFO_CGROUPID            (1UL << 2) /* Always returned if available, even if not requested */
+>  #define PIDFD_INFO_EXIT                        (1UL << 3) /* Only returned if requested. */
+> +#define PIDFD_INFO_COREDUMP            (1UL << 4) /* Only returned if requested. */
+>
+>  #define PIDFD_INFO_SIZE_VER0           64 /* sizeof first published struct */
+>
+> +/*
+> + * Values for @coredump_mask in pidfd_info.
+> + * Only valid if PIDFD_INFO_COREDUMP is set in @mask.
+> + *
+> + * Note, the @PIDFD_COREDUMP_ROOT flag indicates that the generated
+> + * coredump should be treated as sensitive and access should only be
+> + * granted to privileged users.
+> + *
+> + * If the coredump AF_UNIX socket is used for processing coredumps
+> + * @coredump_cookie will be set to the socket SO_COOKIE of the receivers
+> + * client socket. This allows the coredump handler to detect whether an
+> + * incoming coredump connection was initiated from the crashing task.
+> + */
+> +#define PIDFD_COREDUMPED       (1U << 0) /* Did crash and... */
+> +#define PIDFD_COREDUMP_SKIP    (1U << 1) /* coredumping generation was skipped. */
+> +#define PIDFD_COREDUMP_USER    (1U << 2) /* coredump was done as the user. */
+> +#define PIDFD_COREDUMP_ROOT    (1U << 3) /* coredump was done as root. */
+> +
+>  /*
+>   * The concept of process and threads in userland and the kernel is a confusing
+>   * one - within the kernel every thread is a 'task' with its own individual PID,
+> @@ -92,6 +111,9 @@ struct pidfd_info {
+>         __u32 fsuid;
+>         __u32 fsgid;
+>         __s32 exit_code;
+> +       __u32 coredump_mask;
+> +       __u32 __spare1;
+> +       __u64 coredump_cookie;
+>  };
+>
+>  #define PIDFS_IOCTL_MAGIC 0xFF
+> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> index a9d1c9ba2961..053d2e48e918 100644
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+> @@ -99,6 +99,7 @@
+>  #include <linux/seq_file.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/slab.h>
+> +#include <linux/sock_diag.h>
+>  #include <linux/socket.h>
+>  #include <linux/splice.h>
+>  #include <linux/string.h>
+> @@ -742,6 +743,7 @@ static void unix_release_sock(struct sock *sk, int embrion)
+>
+>  struct unix_peercred {
+>         struct pid *peer_pid;
+> +       u64 cookie;
+>         const struct cred *peer_cred;
+>  };
+>
+> @@ -777,6 +779,8 @@ static void drop_peercred(struct unix_peercred *peercred)
+>  static inline void init_peercred(struct sock *sk,
+>                                  const struct unix_peercred *peercred)
+>  {
+> +       if (peercred->cookie)
+> +               pidfs_coredump_cookie(peercred->peer_pid, peercred->cookie);
+>         sk->sk_peer_pid = peercred->peer_pid;
+>         sk->sk_peer_cred = peercred->peer_cred;
+>  }
+> @@ -1713,6 +1717,9 @@ static int unix_stream_connect(struct socket *sock, struct sockaddr *uaddr,
+>         unix_peer(newsk)        = sk;
+>         newsk->sk_state         = TCP_ESTABLISHED;
+>         newsk->sk_type          = sk->sk_type;
+> +       /* Prepare a new socket cookie for the receiver. */
+> +       if (flags & SOCK_COREDUMP)
+> +               peercred.cookie = sock_gen_cookie(newsk);
+>         init_peercred(newsk, &peercred);
+>         newu = unix_sk(newsk);
+>         newu->listener = other;
+>
+> --
+> 2.47.2
+>
 
