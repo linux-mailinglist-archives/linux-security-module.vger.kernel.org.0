@@ -1,85 +1,160 @@
-Return-Path: <linux-security-module+bounces-10055-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10052-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 075D5ABC7FC
-	for <lists+linux-security-module@lfdr.de>; Mon, 19 May 2025 21:47:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7343ABC700
+	for <lists+linux-security-module@lfdr.de>; Mon, 19 May 2025 20:20:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BAA33BC0D7
-	for <lists+linux-security-module@lfdr.de>; Mon, 19 May 2025 19:47:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7A951B60BAC
+	for <lists+linux-security-module@lfdr.de>; Mon, 19 May 2025 18:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFFA1DE2A8;
-	Mon, 19 May 2025 19:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B111EF0BE;
+	Mon, 19 May 2025 18:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ZVJEgHKj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgY69Bxp"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E311C8604
-	for <linux-security-module@vger.kernel.org>; Mon, 19 May 2025 19:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9843171D2;
+	Mon, 19 May 2025 18:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747684040; cv=none; b=uVKkbcXt/Q5p4nlKar8mjGAwPsJVoxaCsFP8ddXVrxBp27kzMJ8ZzhAlGha6WERoYgrrziUfLNmpouMPDuVMhh8HoUfPF8Xy/WhAB1O0Q4K+LvyjdwOYazSyJrnJdFVXcrWdyH5tUNBnsbEW28KhJmsC7oghg0KAYUZAWmAxYmo=
+	t=1747678798; cv=none; b=ulGObdJ2VPGdpUL+020tKaIOqNDV0FZhdeKMHMfOcjViTt+VxhqfQ5KLBwRK7eZ0FeJP22gQNx3zqjBWZe05MJWDRe0MLAQiynE+41PengpyifkIwCWODQNlYqNsLG0ccRw+Cd5htnezsOH2HYlcLqNh6qv+WB8rsIExk+t88rQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747684040; c=relaxed/simple;
-	bh=kOL0MCAdn1nJGpbhN364DDGzuobCcGyCACHnk5le9ZA=;
+	s=arc-20240116; t=1747678798; c=relaxed/simple;
+	bh=Kmxs929ZOWp5SNI8oGlYhKZHAd9hzey0D1QNUWF3RgE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kJO5Rv9nEjtFsubMnqo0cCuAi59YAGfj0hf6QRqqvb1jebRaOJH2/DkojnYjGf4dRxp6KTfnQUbVI42SsuT9/Kv+QCzmUy7oN8trTULxVpgXzq6IeTWaAB3+EVNy4tpQws0Ebrl6xv6K/XDu+I6P39y1YlrgSZXdZYOlOydvRnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ZVJEgHKj; arc=none smtp.client-ip=45.157.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4b1QrL1XPQzvbc;
-	Mon, 19 May 2025 20:17:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1747678626;
-	bh=o0H4N/bdp3J6R7Xxv5HUPBp/AKsmuH3GhzDoLlaY008=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=dvoPn2e0mjkrhyr4kSc59lMk16cNQ1LYfDZOOWFJbjB1kPmEqcRg4xiVtaBgDDzUYlFqNkunwzPwj5g5xoT505jwl+7gUDInbOBcOF1idnVAVnhCCMs1+oMvSe0nq7NNlIwI6Q7hZVnaDsy+aeKgKzd1gOpEFuTCgPHv4UYvS84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JgY69Bxp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59B97C4CEE4;
+	Mon, 19 May 2025 18:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747678796;
+	bh=Kmxs929ZOWp5SNI8oGlYhKZHAd9hzey0D1QNUWF3RgE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZVJEgHKjpkLSvZSPlxtaAug59+FrJc2zR6Zj90yUP0moQ1SUF0PS+WKhi7pq7IGIi
-	 ftO+xgSWDykYC6gOxovXZ/5oXvfC2JWxipc2brVySX/ACuN2FkGOPrj/rTw9qboWxf
-	 Ozz2AwB4cKkaISEybkaXPPXDWhpuEFnRNSRldu1Q=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4b1QrH5tK6znCQ;
-	Mon, 19 May 2025 20:17:03 +0200 (CEST)
-Date: Mon, 19 May 2025 20:17:01 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Zygmunt Krynicki <me@zygoon.pl>
-Cc: landlock@lists.linux.dev, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Tahera Fahimi <fahimitahera@gmail.com>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, Ryan Sullivan <rysulliv@redhat.com>, lwn@lwn.net, 
-	linux-security-module@vger.kernel.org, oss-security@lists.openwall.com
-Subject: Re: Landlock news #5
-Message-ID: <20250519.queejoh3Phei@digikod.net>
-References: <20250519.ceihohf6a3uT@digikod.net>
- <dc6aa0e2-5a82-4b00-82b2-b38fffb33167@zygoon.pl>
+	b=JgY69Bxpk8AB1cILkkJz4CG7zJR5luHUNFhoERMmkl6OheX7U5QK1c42iQk8QQI4U
+	 fkEUGwySu+xY0JGEhEwhtzVaDImXqaiBNJ0i7fQd0I/lpQSDd6W+eUyJyusu/8aUCt
+	 LKbV/pJizCJ4cOxOK8WRFbplqE44G+8hYLZ3SK37TOQPQrnIy2DGF0dWZc74cdtQ/1
+	 C/Fx7IMt9bxIbUwJmhzBgVad/pkY1RBDVSMbkkOI2Y6P5qpTjJTBR53gdNOeU9j1P6
+	 /+EkQzWXO1G2VQcOMJgtdLNwj5SXyFf+5XrNay5rX5Y/kHP/eJ6SqjaqmECuy0Fbth
+	 SiribDQorXD3Q==
+Date: Mon, 19 May 2025 11:19:53 -0700
+From: Kees Cook <kees@kernel.org>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-security-module@vger.kernel.org,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>
+Subject: Re: linux-next: Tree for May 16 (security/landlock/ruleset.c)
+Message-ID: <202505191117.C094A90F88@keescook>
+References: <20250516202417.31b13d13@canb.auug.org.au>
+ <e3754f69-1dea-4542-8de0-a567a14fb95b@infradead.org>
+ <20250519.jiveise8Rau8@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc6aa0e2-5a82-4b00-82b2-b38fffb33167@zygoon.pl>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20250519.jiveise8Rau8@digikod.net>
 
-On Mon, May 19, 2025 at 05:20:19PM +0200, Zygmunt Krynicki wrote:
+On Mon, May 19, 2025 at 05:29:30PM +0200, Mickaël Salaün wrote:
+> On Fri, May 16, 2025 at 07:54:14PM -0700, Randy Dunlap wrote:
+> > 
+> > 
+> > On 5/16/25 3:24 AM, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Changes since 20250515:
 > 
+> Thanks for the report.
 > 
-> W dniu 19.05.2025 oÂ 16:30, MickaÃ«l SalaÃ¼n pisze:
-> > Official website:https://landlock.io
-> > Previews newsletter:
-> > https://lore.kernel.org/landlock/20240716.yui4Iezai8ae@digikod.net/
+> It is the same warning as reported here:
+> https://lore.kernel.org/all/202501040747.S3LYfvYq-lkp@intel.com/
 > 
-> This points to the 4th newsletter, is that expected?
+> I don't know what the actual issue is though.
+> 
+> > 
+> > on i386:
+> > 
+> > In file included from ../arch/x86/include/asm/string.h:3,
+> >                  from ../include/linux/string.h:65,
+> >                  from ../include/linux/bitmap.h:13,
+> >                  from ../include/linux/cpumask.h:12,
+> >                  from ../include/linux/smp.h:13,
+> >                  from ../include/linux/lockdep.h:14,
+> >                  from ../security/landlock/ruleset.c:16:
+> > ../security/landlock/ruleset.c: In function 'create_rule':
+> > ../arch/x86/include/asm/string_32.h:150:25: warning: '__builtin_memcpy' accessing 4294967295 bytes at offsets 20 and 0 overlaps 6442450943 bytes at offset -2147483648 [-Wrestrict]
+> >   150 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > ../security/landlock/ruleset.c:137:9: note: in expansion of macro 'memcpy'
+> >   137 |         memcpy(new_rule->layers, layers,
+> >       |         ^~~~~~
+> > 
+> > 
+> > Full randconfig file is attached.
 
-Yes, that's the previous newsletter. :)
+The trigger appears to be CONFIG_PROFILE_ALL_BRANCHES, and GCC getting
+tricked into thinking check_mul_overflow() returns true:
 
-> 
-> Best regards
-> ZK
-> 
+In file included from ../arch/x86/include/asm/string.h:3,
+                 from ../include/linux/string.h:65,
+                 from ../include/linux/bitmap.h:13,
+                 from ../include/linux/cpumask.h:12,
+                 from ../include/linux/smp.h:13,
+                 from ../include/linux/lockdep.h:14,
+                 from ../security/landlock/ruleset.c:16:
+../security/landlock/ruleset.c: In function 'create_rule':
+../arch/x86/include/asm/string_32.h:150:25: warning: '__builtin_memcpy' accessing 4294967295 bytes at offsets 0 and 0 overlaps 6442450943 bytes at offset -2147483648 [-Wrestrict]
+  150 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+../security/landlock/ruleset.c:137:9: note: in expansion of macro 'memcpy'
+  137 |         memcpy(new_rule->layers, layers,
+      |         ^~~~~~
+  'create_rule': event 1
+../include/linux/compiler.h:69:46:
+   68 |         (cond) ?                                        \
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   69 |                 (__if_trace.miss_hit[1]++,1) :          \
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+      |                                              |
+      |                                              (1) when the condition is evaluated to true
+   70 |                 (__if_trace.miss_hit[0]++,0);           \
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+../include/linux/compiler.h:57:69: note: in expansion of macro '__trace_if_value'
+   57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+      |                                                                     ^~~~~~~~~~~~~~~~
+../include/linux/compiler.h:55:28: note: in expansion of macro '__trace_if_var'
+   55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+      |                            ^~~~~~~~~~~~~~
+../include/linux/overflow.h:270:9: note: in expansion of macro 'if'
+  270 |         if (check_mul_overflow(factor1, factor2, &bytes))
+      |         ^~
+  'create_rule': event 2
+../arch/x86/include/asm/string_32.h:150:25:
+  150 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                         |
+      |                         (2) out of array bounds here
+../security/landlock/ruleset.c:137:9: note: in expansion of macro 'memcpy'
+  137 |         memcpy(new_rule->layers, layers,
+      |         ^~~~~~
+make[1]: Leaving directory '/srv/code/gcc-bug'
+
+
+I'll take a look at ways to make either the overflow macros or memcpy
+robust against this kind of weirdness...
+
+-- 
+Kees Cook
 
