@@ -1,98 +1,98 @@
-Return-Path: <linux-security-module+bounces-10114-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10116-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5497CABFD57
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 21:34:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60EA2ABFD58
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 21:34:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 775801B61D7F
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 19:35:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06CAD4E3812
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 19:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA543264A7C;
-	Wed, 21 May 2025 19:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767E628ECC5;
+	Wed, 21 May 2025 19:34:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b="OdfAcIQp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="B4Bl3Pl9"
+	dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b="WC2tER4k";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FjaQmyNH"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B27266F00
-	for <linux-security-module@vger.kernel.org>; Wed, 21 May 2025 19:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C1828F942
+	for <linux-security-module@vger.kernel.org>; Wed, 21 May 2025 19:34:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747856091; cv=none; b=Hiuor5XlEY8oSjRoouMcmhqvYZE7W0+vOAj4/ehVasTgGdld9e7U/fv+5ucFCEDUkTZXjwtuAx5mdm/Ojx8270/KSC0cRFnz5d0fGiWY1WtS/KfRcrl6b/QA3nLHwxdROPtDACvq8JWJGMD992Jsg3LLd/h1gr8xeAknT/813/A=
+	t=1747856093; cv=none; b=N+WvdCTtklZe9V1wGW7/iaCR11WMD1of99THLHxI6PzqsFa0WsHSb9NCSG2m+SXgTGUGvbfTotyv1to3lpwO6Jnxay0RpbeyS0M49rAbX5pMcou6dEzkKT9w05zNCs/fRDp4mClhrDscX4DJCOWhVfhXj1CJkkw1rnV9wmiwrG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747856091; c=relaxed/simple;
-	bh=+dOUnHgz5gsUMsTK9BYIBSmYBDyoAmtyZqC+FzSrSdE=;
+	s=arc-20240116; t=1747856093; c=relaxed/simple;
+	bh=mNH8DEXWvMAf0hHTKBZiM9wuY2gFjAtwpn+FohyruD0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fs1HIC1XyE96GyULRMrwPbQA5IT2xlkd3dOpXxY69xtEAUymP9mIslTQhj6ZfVI3CFfT07K1AuolF+cywcwCG3SPFNkEZCC4QTmoqwxun0agBDSuk/xQCou+ymFoNYk7Dcbcsmb8f7wNyKok237in64Nkj9LA6a1yyjGbqItkUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=maowtm.org; spf=pass smtp.mailfrom=maowtm.org; dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b=OdfAcIQp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=B4Bl3Pl9; arc=none smtp.client-ip=103.168.172.151
+	 MIME-Version:Content-Type; b=YutqGOVpBYLV7DZMQ0+OT/j6Nz4Yqp0fY+EGcrvwlL3JNo0d69kjHtF7lZhF/bWdH5laJL8+tyLSL8EUP88HXTQBztp/WQ+Vv61/A7CSD8mkryDvikq15R/soyhlJBlPVs66gavCrGYb2c+kpULKHsUUnBXQ5PVB0BY1JFcExD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=maowtm.org; spf=pass smtp.mailfrom=maowtm.org; dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b=WC2tER4k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FjaQmyNH; arc=none smtp.client-ip=103.168.172.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=maowtm.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maowtm.org
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id 5D1FF1380434;
-	Wed, 21 May 2025 15:34:49 -0400 (EDT)
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfout.phl.internal (Postfix) with ESMTP id A8E091380078;
+	Wed, 21 May 2025 15:34:50 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Wed, 21 May 2025 15:34:49 -0400
+  by phl-compute-06.internal (MEProxy); Wed, 21 May 2025 15:34:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maowtm.org; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1747856089; x=
-	1747942489; bh=t7BvLy36rqOQW4MskC/3iOEhqKHAzYloaRUH5yngGpU=; b=O
-	dfAcIQpyYO4eGFnUWkrZ9ppYaIQrShNAKu9UBivjECOPJEvEZWxUCjElCIfeZ/Th
-	9wSovuSk6+6qTUgP7Y0PiKJ+GmPNC9a5z/KX6NLdySz+84m8t8Mi+BawrClBu3wu
-	t5MGbNZTBucBR0DskXys5E/WAxMyHLz6NFuiX/P4h4CpJK5/7RVwcbtT2y2BMk3J
-	8OnqG6ndct9sctYfcxCsxADXwBCLQs9bAdE4ToyC60W9KABXIUt1HPbrxZuXCXB4
-	cMmh0NV1MILeAFb+C6+7zgjWSwBM/btyGNgV/PRMsBhB/apispBab2iNkTpS/HYo
-	9lUYRI9AKOFb5Za9xFmhQ==
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1747856090;
+	 x=1747942490; bh=YLzHNg+N48ctvppl/v0HP776x+da3ecEYcFJtfgowrk=; b=
+	WC2tER4kArmWV7fR0/8gc+vc8dF44y+4GAkKV667UD6UihAgLuOM3vd9yqP4FrIw
+	KWM+GYiSecFmWk7hQVkNK90UbkAiledXDLWzVncSpTb1hDF7/RXy5Ct0gJeULHxm
+	wT/9jXmB+OYqOA9YZ+TSyx5NTgtU4rGUF8ZhzagCqfehc2jD+bIfbKiue7HmoQTH
+	GwnBpuuGEA2fCcyqJCzsvwgDRYlk9Z7S4kKDSIRlBkHjRRWvKFVF+1H4VrHfclL6
+	vOxLW1GVXWQQBUodsAVD6nEzt0uvYiF17v8QZFbk93qzN8L44MDE6rGN7y01cq91
+	n6hh8rWianR5g+eICc6L6g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1747856089; x=1747942489; bh=t
-	7BvLy36rqOQW4MskC/3iOEhqKHAzYloaRUH5yngGpU=; b=B4Bl3Pl9z6ja0FAfn
-	wfj6lFz1CtOofYdYVqlZMaZPIgGsXQnTQvbZS4ziTln3i2W9coo8kGy34YM1EbSO
-	NXSntjpTEQKgtIeVP0Y85C58Y9mbmVPaaUpvj3S2cdKYmQSe0mJPcI3ckujJVUZM
-	3pRC8qHBgOhAmeAWD12+QBoJkd0vG64tsmJpaMvecEfurH24Pwf/kkc1QtDg1X2z
-	DKLEmV4vbsbJ2QmIncIKOQ6VMajkDQBhanwzmzyqa+VP86kf2Ms9ldn0tIES5Zv4
-	kxLvSGPm2/KB1C9FuIte6gtPxkwJdTFcP5O235kcD3SNeUgVlYGw3//aj8BVbrml
-	fP8BQ==
-X-ME-Sender: <xms:2SouaMRHDg-UxKM3w8VeDo7F7M46uGtU8_8vdT-HVVO2w9yyGO7Kqw>
-    <xme:2SouaJzCNKbvzIrgw-oUXYjLVyXAQbnr2lKim9yoS4oRWOhjeHR9sA_Z9AHj2BH0j
-    KaiqLaDNe5gzBMdSdQ>
-X-ME-Received: <xmr:2SouaJ1cf9JLV055GQx1mVC1F2oB6oBFBq7iXeWihQX8HLegZPHoCuE78T0x5PXKChQ48uW67PeX3OGyYu7xoedQUTGMaqKIWWlfAzVwSrLHjwhovBNFhQ>
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1747856090; x=
+	1747942490; bh=YLzHNg+N48ctvppl/v0HP776x+da3ecEYcFJtfgowrk=; b=F
+	jaQmyNHiQlXEamWFk1He7Y1j53WA/5+Dq4cF/Fg9+9poRKui7Km28Npj72Fg5CRx
+	YOTrbopI62fSWLXDmeryHDAYFAZB6NVETrnDy69qDn0woCm4ct0SUDNFu1YKtafv
+	5nPs+qicMOY678qlzUl08Uveg+oiJqTaet8NyP38Z6ycvrqFfPePTjko0ZDBZMFm
+	IP1hteVA/liENtvCkUlbCxwdLoriIieelmGY3we08aNAkncP/5NDj9ZDyEupZsrj
+	MZURcAzsWAoCmKra5xQXmnqZFAEXjD5HiVdW4ahwbmp6irBOBxT2Aj63Q9aC5GqP
+	6UhpSW+o4o05jpLJwrihw==
+X-ME-Sender: <xms:2iouaM7UINvhP0V9y6geHzpSXVMmLcjJgCMbBwTm7Gz22pfB48Yscg>
+    <xme:2iouaN7LCebiBl_jjmky5kmUIK_k-8r0D9EW2i3nJT7ra7deR1XJp1Tg8hhGiOxGM
+    SpYzTCLHzTSZZfwI94>
+X-ME-Received: <xmr:2iouaLeZXSvT5NnV4pHnfd_Hpxe-aoIKYBD89GsssvmNZK6gn3KZPgtPOC1HFnc-rs2ANnYa5h-ptRHQT5w5WQ0rhWDBMWu0kS327M4pyNs6YzV0P7dPRg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdefleefucdltddurdegfedvrddttd
     dmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgf
     nhhsuhgsshgtrhhisggvpdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttd
     enucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgj
-    fhgggfestdekredtredttdenucfhrhhomhepvfhinhhgmhgrohcuhggrnhhguceomhesmh
-    grohifthhmrdhorhhgqeenucggtffrrghtthgvrhhnpeeuuddthefhhefhvdejteevvddv
-    teefffegteetueegueeljeefueekjeetieeuleenucevlhhushhtvghrufhiiigvpedune
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehmsehmrghofihtmhdrohhrghdpnhgspghrtghp
-    thhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhhitgesughighhikh
-    hougdrnhgvthdprhgtphhtthhopehmsehmrghofihtmhdrohhrghdprhgtphhtthhopehg
-    nhhorggtkhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqshgvtghurh
-    hithihqdhmohguuhhlvgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:2SouaADpDtkVmvF1rofAh532t58mT_dDYLr_Ga6fponBdtZ7bfjHYw>
-    <xmx:2SouaFj58tjpznt0LRWA5YiHERzI0dKVdWka2nZKscLBGrcMO8gzqA>
-    <xmx:2SouaMrWf1nzF2woluGaDPwP39I25uIL0V0YG3qM9qfqj6vmkrmS8A>
-    <xmx:2SouaIiBPZeP3Nr6DKwnofR9lKE5n_kuxUZRG27KfrxoF6TS50Om9w>
-    <xmx:2SouaIAsDhX-RIFqSOPwjhxNN1kYeew5QYOn01NOSuFXYOdlSw213WsI>
+    fhggtgfgsehtkeertdertdejnecuhfhrohhmpefvihhnghhmrghoucghrghnghcuoehmse
+    hmrghofihtmhdrohhrgheqnecuggftrfgrthhtvghrnhepieeigeeghedtffeifffhkeeu
+    ffehhfevuefgvdekjeekhedvtedtgfdvgefhudejnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepmhesmhgrohifthhmrdhorhhgpdhnsggprhgt
+    phhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihgtseguihhgih
+    hkohgurdhnvghtpdhrtghpthhtohepmhesmhgrohifthhmrdhorhhgpdhrtghpthhtohep
+    ghhnohgrtghksehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhsvggtuh
+    hrihhthidqmhhoughulhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:2iouaBJJjDrBkWC9_kK4gCrsA-gThrVYuFLlgFfP3Hh6G3UIWuDi0Q>
+    <xmx:2iouaAINPSzAZeC5WVQi8xvDPLMXyJyz_ijnQCKnlIXJGh2Dzp5VPw>
+    <xmx:2iouaCzybOqu2Aq9VaW7p67ENzluAUMUiV0LK6ugvfqKrPqi55hH-w>
+    <xmx:2iouaEI2JI0PqM4tmU3H-YjwT-46RRRjL_VK87DlkmFBLjrML6N5YA>
+    <xmx:2iouaFdrh_c8lDleynNpvYcw0ZqoKbwosE9pgxF05pvLmFiRUElxh5SL>
 Feedback-ID: i580e4893:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 May 2025 15:34:48 -0400 (EDT)
+ 21 May 2025 15:34:49 -0400 (EDT)
 From: Tingmao Wang <m@maowtm.org>
 To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 Cc: Tingmao Wang <m@maowtm.org>,
 	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
 	linux-security-module@vger.kernel.org
-Subject: [RFC PATCH 05/10] Add hlist_node member to struct landlock_rule
-Date: Wed, 21 May 2025 20:32:01 +0100
-Message-ID: <3a9336cad807610a8b85cb95363c3769c863c978.1747836146.git.m@maowtm.org>
+Subject: [RFC PATCH 06/10] landlock/domain: Define landlock_domain
+Date: Wed, 21 May 2025 20:32:02 +0100
+Message-ID: <33630445684e7f8388ba056d757a3279798bff7e.1747836146.git.m@maowtm.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1747836146.git.m@maowtm.org>
 References: <cover.1747836146.git.m@maowtm.org>
@@ -102,62 +102,117 @@ List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This is to prepare for the new domain. Since a rule can only be in either
-a ruleset (rbtree based) or a landlock_domain (hashtable based), we can
-make the node/hlist member of a union.  For now let create_rule initialize
-is as before.
-
-(Alternatively, if we use hashtable for both cases, then we save 8 bytes
-per each rule, but then we will need some kind of resizable hashtable)
-
-(Maybe we should use the relativistic hash tables after all?)
+This will eventually take the role of landlock_ruleset (and maybe
+landlock_hirearchy?), but for now it is just the inode rules hashtable.
 
 Signed-off-by: Tingmao Wang <m@maowtm.org>
 ---
- security/landlock/ruleset.h | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ security/landlock/domain.c | 36 ++++++++++++++++++++++++++++++++++++
+ security/landlock/domain.h | 27 +++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+)
 
-diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
-index 215578ad82f7..07823771b402 100644
---- a/security/landlock/ruleset.h
-+++ b/security/landlock/ruleset.h
-@@ -87,10 +87,16 @@ struct landlock_id {
-  * struct landlock_rule - Access rights tied to an object
+diff --git a/security/landlock/domain.c b/security/landlock/domain.c
+index a647b68e8d06..180ed75da9e2 100644
+--- a/security/landlock/domain.c
++++ b/security/landlock/domain.c
+@@ -5,6 +5,7 @@
+  * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+  * Copyright © 2018-2020 ANSSI
+  * Copyright © 2024-2025 Microsoft Corporation
++ * Copyright © 2025      Tingmao Wang <m@maowtm.org>
   */
- struct landlock_rule {
--	/**
--	 * @node: Node in the ruleset's red-black tree.
--	 */
--	struct rb_node node;
-+	union {
-+		/**
-+		 * @node: Node in the ruleset's red-black tree.
-+		 */
-+		struct rb_node node;
-+		/**
-+		 * @hlist: Node in the domain's hash table.
-+		 */
-+		struct hlist_node hlist;
-+	};
- 	/**
- 	 * @key: A union to identify either a kernel object (e.g. an inode) or
- 	 * a raw data value (e.g. a network socket port). This is used as a key
-@@ -248,7 +254,13 @@ landlock_create_rule(const struct landlock_id id,
- 			   GFP_KERNEL_ACCOUNT);
- 	if (!new_rule)
- 		return ERR_PTR(-ENOMEM);
+ 
+ #include <kunit/test.h>
+@@ -24,6 +25,41 @@
+ #include "domain.h"
+ #include "id.h"
+ 
++struct landlock_domain *landlock_alloc_domain(size_t num_inode_entries,
++					      u16 num_layers)
++{
++	struct landlock_domain *new_domain =
++		kzalloc(sizeof(struct landlock_domain), GFP_KERNEL_ACCOUNT);
 +
-+	/*
-+	 * We assume the rule will be in a rbtree for now - in the
-+	 * landlock_domain case caller can init the hlist afterward
++	if (!new_domain)
++		return NULL;
++	refcount_set(&new_domain->usage, 1);
++	new_domain->num_layers = num_layers;
++	if (landlock_hash_init(num_inode_entries, &new_domain->inode_table)) {
++		kfree(new_domain);
++		return NULL;
++	}
++
++	return new_domain;
++}
++
++static void free_domain(struct landlock_domain *const domain)
++{
++	might_sleep();
++
++	landlock_hash_free(&domain->inode_table, LANDLOCK_KEY_INODE);
++	kfree(domain);
++}
++
++void landlock_put_domain(struct landlock_domain *const domain)
++{
++	might_sleep();
++
++	if (domain && refcount_dec_and_test(&domain->usage)) {
++		free_domain(domain);
++	}
++}
++
+ #ifdef CONFIG_AUDIT
+ 
+ /**
+diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+index 7fb70b25f85a..ed685f8ad52e 100644
+--- a/security/landlock/domain.h
++++ b/security/landlock/domain.h
+@@ -5,6 +5,7 @@
+  * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+  * Copyright © 2018-2020 ANSSI
+  * Copyright © 2024-2025 Microsoft Corporation
++ * Copyright © 2025      Tingmao Wang <m@maowtm.org>
+  */
+ 
+ #ifndef _SECURITY_LANDLOCK_DOMAIN_H
+@@ -20,6 +21,32 @@
+ 
+ #include "access.h"
+ #include "audit.h"
++#include "hash.h"
++
++struct landlock_domain {
++	struct landlock_hashtable inode_table;
++
++	/**
++	 * @usage: Reference count for this struct.
 +	 */
- 	RB_CLEAR_NODE(&new_rule->node);
++	refcount_t usage;
 +
- 	if (is_object_pointer(id.type)) {
- 		/* This should have been caught by insert_rule(). */
- 		WARN_ON_ONCE(!id.key.object);
++	/**
++	 * @num_layers: Number of layers in this domain.
++	 */
++	u16 num_layers;
++};
++
++struct landlock_domain *landlock_alloc_domain(size_t num_inode_entries,
++					      u16 num_layers);
++
++static inline void landlock_get_domain(struct landlock_domain *const domain)
++{
++	if (domain)
++		refcount_inc(&domain->usage);
++}
++
++void landlock_put_domain(struct landlock_domain *const domain);
+ 
+ enum landlock_log_status {
+ 	LANDLOCK_LOG_PENDING = 0,
 -- 
 2.49.0
 
