@@ -1,242 +1,234 @@
-Return-Path: <linux-security-module+bounces-10109-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10111-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F63ABFC84
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 19:47:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9BE0ABFD54
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 21:34:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 403C917ACC0
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 17:47:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F17B9E74AC
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 May 2025 19:34:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC824289837;
-	Wed, 21 May 2025 17:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0245227FB11;
+	Wed, 21 May 2025 19:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b="cR0Gv6YY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="g4XRJYkC"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0D323909F
-	for <linux-security-module@vger.kernel.org>; Wed, 21 May 2025 17:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E888622F15E
+	for <linux-security-module@vger.kernel.org>; Wed, 21 May 2025 19:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747849652; cv=none; b=Td7c++CuiSOB4ObE9QWi/Zxuz5fOmcqk7yyXlZuFOTZ3kZv7N16YfLTL5408mdVD+4hXJTeIRslrVnleqHl7psUPhKHwuRcuIFR77fr8bI0bueIT0ABx4ZDFugPFUziSPIz2PS+eajFhn9vKsNT3FO2l7WmnpQqwDHLOAp5QbC8=
+	t=1747856087; cv=none; b=CwfLKx1Udw3jCxxWv2JJIMQfSBLyDUPmZoV/tmFt0WWOEjF2cqIHwjO1fbG4cT5utIwyOn7vIMaMAH0BmtjFecGbPZ63F2G9F8ygxxBAg2ImlNQFk1RTBHqTi/L0jOaElECNuZZFvD6rjod8OdChuZiotqemnW5CSVRNydn5gmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747849652; c=relaxed/simple;
-	bh=miR8lyLraFkbpXwdmCbNKFQvHvtAU72aRD8h6kj2LRI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=mJ48SweOhqeraoZ9jWgSCRyHcLFZ9GRbSxtcuIFb8VrfyZ4FtFI+MSlkVucl8WGxqxeCFMetqEETTHMtszVh/ASC/ChOgoEbaeYVRtVcUzvr6YXqBs0M67nn5jJsoUhKwT43txb0d8OZ/yluscc2q2Rr94Tfw9zZh8aW48aj02g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3dc879a9d68so10861055ab.0
-        for <linux-security-module@vger.kernel.org>; Wed, 21 May 2025 10:47:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747849650; x=1748454450;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GFRlxxr5q/oFiqmYoyxlbBF5QhEAtZh2WG5O57V5aw8=;
-        b=a2wlQig2CktZfmwAHNaU6ZyK5GezKgq06ByFJPgYD0txSVAzPKnYk7p74VtoF7QQPh
-         l/ycNJC0CNEtnuqEQhJ+zDXKfVqVj5jumfBKscHTSLIiTevzRc3f5ZTmb/kFlOKrZwMG
-         Hj9grNtECAlJgWbNSL4ZdFZh7kPh1BC+KGtiwrW1XB73VFc6HUx1dZLfYaO/6gsiCCPp
-         MvogRHvq0d2UN62UvG/kpF9xU72gMyldWIN1+Ndq0NzX96XGmWLnVqFh9zUQmE4QJymJ
-         Hw0jab9vZX3HSpqEM5zzhN/imCV+BmLyS41EkUPGQZi4ZbB2UMf2VefjSPmMYJ/sq1k2
-         ZMgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWF24HzU1y5kxw2AFGvCzo1UHFIgLsuufyKHI8Lq8ywasmG7OCghy69lAIy9RaLzY+asq7KC+cEJ9FvA9BNXJ9nBrVip7w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQ+Knkg3PFxzM0uAZy3ztZRpUcpNYaQ0n4SYpMuCerMPaDH6ru
-	V9mo7Y59Jc9Jt9EIDT4CtW8MRA6l3WB1vb79VjgfLfYV+m0D1rSod6lStxDzVxP4tkA+07Sg3JX
-	+pbn9lh6Zrmu42vVdQokpfNCpNpaAt5gEgaycDiKwL38QihE4RdoDaCvoiRU=
-X-Google-Smtp-Source: AGHT+IHgAaPQ0lG4Qb3DlcMMS8TnBYFKFtvsykayCG6Bt+L/0n3F80q+nU1nO17Pm6I0dP6ygR87LyenQ3hXLXUX714DlADdD654
+	s=arc-20240116; t=1747856087; c=relaxed/simple;
+	bh=MsDQzfrIQt+yd7rdf/YZJ01BM83y+cEJLdT/lGC4eos=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ARJE+K6o44GCGT4jRp869ri3Hs5VxegZylA2MohTsn1WM6wo3TsZ1VO9OWut0iGSelGuA+2PzrHSAaHgYYEuQm7wbxtS2mWYNMc1jxwVA2w/MzFTogzTHxJ/IwhgQ88Wddg2iAOg2vBmzzPeSBs33eTakKXWOc+iJObewL6nhF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=maowtm.org; spf=pass smtp.mailfrom=maowtm.org; dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b=cR0Gv6YY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=g4XRJYkC; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=maowtm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maowtm.org
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 0BFB01380190;
+	Wed, 21 May 2025 15:34:43 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Wed, 21 May 2025 15:34:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maowtm.org; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1747856083; x=1747942483; bh=WP
+	QJdCxNk6FAHopRPJwO1kn1ONTxWnHTXU8L8rTZq98=; b=cR0Gv6YYEHnW9lOsh0
+	rAZXwbxVqmI0lrI2oqtH3pfTSIVL2XYShRVBrVWmzRQOjNwS/CZnLdzDisjVwb11
+	s0YepDGO7CyBYvlwgydUaFiUSIgfq/A5Q/1H5JmLKIzaXdPGr/EoFETn5sH4/tmx
+	v4/ffwvKBMH2t9KlqrCnef3Nw7wyTJmBwoOctOlHllvg70Mmo+FLIiyrE0rm4lEO
+	5O5X9BrwhGxzkCxsYqXc3W8kTp9pY2pjVxpXJ/auOQb1GnaQVmnJr8PsZpA4F5Bx
+	5wvsAD7/Bsp0YxbUJIt80jnRMkNg+OHWs1h+LlQaXPwDnRQEvu5AE6vg0awXl3Dc
+	s8Zg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1747856083; x=1747942483; bh=WPQJdCxNk6FAHopRPJwO1kn1ONTx
+	WnHTXU8L8rTZq98=; b=g4XRJYkCA/pDiOrx+pBvdpN1EVFUEf7iX07Y/aRlXB5p
+	6S7K4ZvZTKp12/Ibw5dGMDUtFplmzwPhCb5jCdit3bIpTgG5vQonvhCwrXLAciqI
+	xYjHd9N12+jqTMbi2rUJTX2xUs7IkU3F2RS5tYqqtYVuIbLSzhP+bboJgxFDdK1F
+	mc1AsnJaouN2asOEfxarODyTDJPYtzBp4zsATUw8Fr0ZoOBDdC5psV26UNliEiQz
+	qFZnl2GOTqc50/tt8mBTPriKlMGu26Ji56Tjy0AcH1kOt7LKfap6O9zTF8aTNI/I
+	htgUkIEK0IDXWMakkoePsQgKRrVrcCtdl+qTjINphQ==
+X-ME-Sender: <xms:0iouaFV1rNVMDkuEBscoelU4DohjiwjRNSNK7zyAF_9wAuMp6aBp5A>
+    <xme:0iouaFlvKhTLjoiYWorPKsWT4QJWnBoM2Q32TRUrmjftxKPBywfnNtwJViz2xJdwZ
+    VkMezH3xbWOs7iaQys>
+X-ME-Received: <xmr:0iouaBa3h4GSoTSxiOhlImxS5-cqU0m7rGbMzXb9rYwcMa87igJTVT_lJpPTPGrDEipSJUdZ4zh2w7BbDH85yK1C4gnOZHUQcJZK_qzO8ZOVFC3InaR_Cg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdefleegucdltddurdegfedvrddttd
+    dmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgf
+    nhhsuhgsshgtrhhisggvpdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttd
+    enucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgg
+    tgfgsehtkeertdertdejnecuhfhrohhmpefvihhnghhmrghoucghrghnghcuoehmsehmrg
+    hofihtmhdrohhrgheqnecuggftrfgrthhtvghrnhepffduheduvdeuvdfhiefhvdetieet
+    keelueehheeigfduveeggfevleetuefhjeffnecuffhomhgrihhnpehgihhthhhusgdrtg
+    homhdpmhgrohifthhmrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
+    pehmrghilhhfrhhomhepmhesmhgrohifthhmrdhorhhgpdhnsggprhgtphhtthhopeegpd
+    hmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihgtseguihhgihhkohgurdhnvght
+    pdhrtghpthhtohepmhesmhgrohifthhmrdhorhhgpdhrtghpthhtohepghhnohgrtghkse
+    hgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhsvggtuhhrihhthidqmhho
+    ughulhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:0iouaIUkcjZgC9acFd8_kc7nHMSrarPF1znY9OMzJL2Y64RKANVPWA>
+    <xmx:0iouaPnOSPgfBE3YHuKTDtNYrziF04VffabtBTakjCC9ApQyHR2spQ>
+    <xmx:0iouaFdyZl016pIsMuyj2ESKoZSmFIHb5mXH_3yXG2J6rw57MGJLAg>
+    <xmx:0iouaJFqKhztVpbaZM6nLkGx_frlV9qfGDJ6yyCVofJEDwhLP8QMuQ>
+    <xmx:0youaCmW_gCs9y-njkJpPiO-Owo8yTxaQCtVx5QsILSSso4obxbqc1f3>
+Feedback-ID: i580e4893:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 May 2025 15:34:42 -0400 (EDT)
+From: Tingmao Wang <m@maowtm.org>
+To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc: Tingmao Wang <m@maowtm.org>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	linux-security-module@vger.kernel.org
+Subject: landlock: Use hashtable for merged domains
+Date: Wed, 21 May 2025 20:31:56 +0100
+Message-ID: <cover.1747836146.git.m@maowtm.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1745:b0:3d9:36a8:3d98 with SMTP id
- e9e14a558f8ab-3db84296deemr261924655ab.2.1747849649857; Wed, 21 May 2025
- 10:47:29 -0700 (PDT)
-Date: Wed, 21 May 2025 10:47:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <682e11b1.050a0220.ade60.09e5.GAE@google.com>
-Subject: [syzbot] [integrity?] [lsm?] INFO: task hung in process_measurement (3)
-From: syzbot <syzbot+cb9e66807bcb882cd0c5@syzkaller.appspotmail.com>
-To: bfoster@redhat.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	jmorris@namei.org, kent.overstreet@linux.dev, linux-bcachefs@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul@paul-moore.com, 
-	roberto.sassu@huawei.com, serge@hallyn.com, syzkaller-bugs@googlegroups.com, 
-	zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Hi Mickaël,
 
-syzbot found the following issue on:
+This is a set of (incomplete) patches for the "domain hashtable" work.
+While this is still a WIP, I'm sending it now as per our discussion.  You
+can take a look and see if the approach needs correcting / if we want to
+go ahead with using hashtable.
 
-HEAD commit:    172a9d94339c Merge tag '6.15-rc6-smb3-client-fixes' of git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=142a5ef4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea35e429f965296e
-dashboard link: https://syzkaller.appspot.com/bug?extid=cb9e66807bcb882cd0c5
-compiler:       Debian clang version 20.1.2 (++20250402124445+58df0ef89dd6-1~exp1~20250402004600.97), Debian LLD 20.1.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16836e70580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1617a2d4580000
+Currently only implemented for fs access.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c7d5b496fd25/disk-172a9d94.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/965a0ad50b10/vmlinux-172a9d94.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/62675d801af8/bzImage-172a9d94.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/a11594a5d459/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/84492c682353/mount_4.gz
-
-The issue was bisected to:
-
-commit 1d16c605cc55ef26f0c65b362665a6c99080ccbc
-Author: Kent Overstreet <kent.overstreet@linux.dev>
-Date:   Thu Nov 9 19:22:46 2023 +0000
-
-    bcachefs: Disk space accounting rewrite
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f61e70580000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=100e1e70580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f61e70580000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cb9e66807bcb882cd0c5@syzkaller.appspotmail.com
-Fixes: 1d16c605cc55 ("bcachefs: Disk space accounting rewrite")
-
-INFO: task syz-executor236:5862 blocked for more than 143 seconds.
-      Not tainted 6.15.0-rc6-syzkaller-00278-g172a9d94339c #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor236 state:D stack:26936 pid:5862  tgid:5849  ppid:5845   task_flags:0x400140 flags:0x00004006
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5382 [inline]
- __schedule+0x168f/0x4c70 kernel/sched/core.c:6767
- __schedule_loop kernel/sched/core.c:6845 [inline]
- schedule+0x165/0x360 kernel/sched/core.c:6860
- schedule_preempt_disabled+0x13/0x30 kernel/sched/core.c:6917
- rwsem_down_write_slowpath+0xbec/0x1030 kernel/locking/rwsem.c:1176
- __down_write_common kernel/locking/rwsem.c:1304 [inline]
- __down_write kernel/locking/rwsem.c:1313 [inline]
- down_write+0x1ab/0x1f0 kernel/locking/rwsem.c:1578
- inode_lock include/linux/fs.h:867 [inline]
- process_measurement+0x3d8/0x1a40 security/integrity/ima/ima_main.c:260
- ima_file_check+0xd7/0x120 security/integrity/ima/ima_main.c:613
- security_file_post_open+0xbb/0x290 security/security.c:3130
- do_open fs/namei.c:3882 [inline]
- path_openat+0x2f26/0x3830 fs/namei.c:4039
- do_filp_open+0x1fa/0x410 fs/namei.c:4066
- do_sys_openat2+0x121/0x1c0 fs/open.c:1429
- do_sys_open fs/open.c:1444 [inline]
- __do_sys_creat fs/open.c:1522 [inline]
- __se_sys_creat fs/open.c:1516 [inline]
- __x64_sys_creat+0x8f/0xc0 fs/open.c:1516
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xf6/0x210 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fd31f9f4ef9
-RSP: 002b:00007fd31f95f218 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
-RAX: ffffffffffffffda RBX: 00007fd31fa9b6e8 RCX: 00007fd31f9f4ef9
-RDX: ffffffffffffffb0 RSI: c9028ba210c11e9b RDI: 00002000000000c0
-RBP: 00007fd31fa9b6e0 R08: 0000000000000000 R09: 0000000000000000
-R10: 00007ffcb62f60c7 R11: 0000000000000246 R12: 00007fd31fa67314
-R13: 00002000000000c0 R14: 0030656c69662f2e R15: 00007ffcb62f60c8
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by khungtaskd/31:
- #0: ffffffff8df3dce0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
- #0: ffffffff8df3dce0 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:841 [inline]
- #0: ffffffff8df3dce0 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x2e/0x180 kernel/locking/lockdep.c:6764
-1 lock held by kworker/u8:3/53:
- #0: ffff8880b88399d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:605
-1 lock held by klogd/5178:
- #0: ffff8880b88399d8 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:605
-2 locks held by getty/5577:
- #0: ffff8880340120a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
- #1: ffffc900036ec2f0 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x43e/0x1400 drivers/tty/n_tty.c:2222
-3 locks held by syz-executor236/5850:
- #0: ffff888078b629b8 (&f->f_pos_lock){+.+.}-{4:4}, at: fdget_pos+0x247/0x320 fs/file.c:1213
- #1: ffff88823bfbe420 (sb_writers#9){.+.+}-{0:0}, at: file_start_write include/linux/fs.h:3041 [inline]
- #1: ffff88823bfbe420 (sb_writers#9){.+.+}-{0:0}, at: vfs_write+0x211/0xa90 fs/read_write.c:680
- #2: ffff8880761b08e0 (&sb->s_type->i_mutex_key#14){+.+.}-{4:4}, at: inode_lock include/linux/fs.h:867 [inline]
- #2: ffff8880761b08e0 (&sb->s_type->i_mutex_key#14){+.+.}-{4:4}, at: bch2_direct_write+0x267/0x2d50 fs/bcachefs/fs-io-direct.c:612
-2 locks held by syz-executor236/5862:
- #0: ffff88823bfbe420 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x41/0x90 fs/namespace.c:556
- #1: ffff8880761b08e0 (&sb->s_type->i_mutex_key#14){+.+.}-{4:4}, at: inode_lock include/linux/fs.h:867 [inline]
- #1: ffff8880761b08e0 (&sb->s_type->i_mutex_key#14){+.+.}-{4:4}, at: process_measurement+0x3d8/0x1a40 security/integrity/ima/ima_main.c:260
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 31 Comm: khungtaskd Not tainted 6.15.0-rc6-syzkaller-00278-g172a9d94339c #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-Call Trace:
- <TASK>
- dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
- nmi_cpu_backtrace+0x39e/0x3d0 lib/nmi_backtrace.c:113
- nmi_trigger_cpumask_backtrace+0x17a/0x300 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:158 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:274 [inline]
- watchdog+0xfee/0x1030 kernel/hung_task.c:437
- kthread+0x70e/0x8a0 kernel/kthread.c:464
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:153
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted 6.15.0-rc6-syzkaller-00278-g172a9d94339c #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/07/2025
-RIP: 0010:pv_native_safe_halt+0x13/0x20 arch/x86/kernel/paravirt.c:81
-Code: 43 d4 02 00 cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d a3 9f 18 00 f3 0f 1e fa fb f4 <e9> 18 d4 02 00 cc cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90
-RSP: 0018:ffffc90000197de0 EFLAGS: 000002c6
-RAX: a55f7e0638390b00 RBX: ffffffff81977048 RCX: a55f7e0638390b00
-RDX: 0000000000000001 RSI: ffffffff8d73a84c RDI: ffffffff8bc12000
-RBP: ffffc90000197f20 R08: ffff8880b8932b5b R09: 1ffff1101712656b
-R10: dffffc0000000000 R11: ffffed101712656c R12: ffffffff8f7e0670
-R13: 0000000000000001 R14: 0000000000000001 R15: 1ffff110038dcb40
-FS:  0000000000000000(0000) GS:ffff8881261f6000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055b5f126d168 CR3: 000000000dd38000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- arch_safe_halt arch/x86/include/asm/paravirt.h:107 [inline]
- default_idle+0x13/0x20 arch/x86/kernel/process.c:748
- default_idle_call+0x74/0xb0 kernel/sched/idle.c:117
- cpuidle_idle_call kernel/sched/idle.c:185 [inline]
- do_idle+0x1e8/0x510 kernel/sched/idle.c:325
- cpu_startup_entry+0x44/0x60 kernel/sched/idle.c:423
- start_secondary+0x101/0x110 arch/x86/kernel/smpboot.c:315
- common_startup_64+0x13e/0x147
- </TASK>
+This set of changes is also available on the landlock-hashmap branch of
+https://github.com/micromaomao/linux-dev.git
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+struct landlock_domain
+----------------------
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+One of the major thing I'm not sure about in this patch is the fact that
+I've decided to create a standalone `struct landlock_domain`, instead of
+re-using landlock_ruleset.  My original hope was that it might help make
+the code a bit clearer - struct landlock_ruleset would just be for
+unmerged rulesets (and it can use rbtree if we still wants to), and we can
+use this new type for domains (and add new fields and locks to it that
+wouldn't be on a ruleset, for the mutable domains / supervisor work).
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+I also wanted to split the logic of dealing with rules in a merged domain
+(hence needing to copy multiple layers etc) out of create_rule and
+insert_rule, and simply these functions (especially insert_rule) by
+letting them just deal with unmerged rulesets (so only one layer) - the
+logic for merged domains would be different anyway since it's no longer a
+rbtree walk (but something like landlock_hash_upsert in patch 8 instead).
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+However, looking back at it, I'm not sure if creating this landlock_domain
+was actually a good idea.  Going down this route eventually I will just
+have to move all the domain-related logic from using ruleset to using
+landlock_domain.  If we decide to use hashtable for unmerged rulesets too
+(not done in this patch, and need more thoughts on how that would work),
+then separating this out is even less value.
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Regardless, the relevant code in this patch should still be easily
+portable to just extend landlock_ruleset with hashtables, so I'm happy to
+do that instead in the next version.
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
 
-If you want to undo deduplication, reply with:
-#syz undup
+Hashtable implementation
+------------------------
+
+Since I couldn't find a suitable existing wrapper for runtime-sized (but
+fixed after creation) hashtables, this patch uses a newly hand-rolled
+implementation.  It's not very complex so this might be fine, but there is
+also rhashtable which would be especially suitable if we want to use hash
+table for unmerged rulesets too.  See patch 2 message for details.
+
+
+Testing
+-------
+
+selftests/landlock/fs_tests all passes under KASAN, lockdep etc.  Other
+tests showed no obvious issues, but base and net fails due to missing
+config (no MPTCP, no CONFIG_ASYMMETRIC_KEY_TYPE i.e. keyctl)
+
+I ran benchmark with before/after using two workloads, on the same machine
+and setup:
+
+    1. run_microbench with different depth and number of extra rules using
+    code in https://github.com/landlock-lsm/landlock-test-tools/pull/17
+
+    2. A more "typical" workload I put together quickly, calling git status
+    and the like repeatedly:
+    https://github.com/torvalds/linux/commit/f1865ce970af97ac3b6f4edf580529b8cdc66371
+
+On the "typical" workload, which has 2 layers and ~15 rules, we have:
+
+Comparing:                    orig	  hashtable  (% change)
+  landlock_overhead:
+    (this is the % of time spent in landlock hook in the open syscall)
+                        avg = 34      33         (-2.9%)
+                     median = 34      33         (-2.9%)
+
+  landlock_hook:        avg = 837     775        (-7.4%) (unit: ns)
+                     median = 813     748        (-8.0%) (unit: ns)
+
+  open_syscall:         avg = 2429    2324       (-4.3%) (unit: ns)
+                     median = 2370    2265       (-4.4%) (unit: ns)
+
+Using the microbench script, for an extreme case on a path beneath 28
+directories and with 10000 rules:
+
+Comparing:                    orig	  hashtable  (% change)
+  landlock_overhead:    avg = 27      24         (-11.1%)
+                     median = 29      25         (-13.8%)
+  landlock_hook:        avg = 1913    1577       (-17.6%)
+                     median = 1884    1544       (-18.0%)
+  open_syscall:         avg = 6775    6259       (-7.6%)
+                     median = 6666    6115       (-8.3%)
+
+The full results can be found at
+https://fileshare.maowtm.org/landlock/20250521/index.html
+
+Closes: https://github.com/landlock-lsm/linux/issues/1
+
+Tingmao Wang (10):
+  landlock: Add some debug output
+  landlock/hash: define (dynamic, non-resizable) hash table helpers
+  landlock/hash: Use linear search for small tables
+  landlock/ruleset: Rename and extract create_rule
+  Add hlist_node member to struct landlock_rule
+  landlock/domain: Define landlock_domain
+  landlock: Add the new domain to landlock_cred_security
+  landlock: Construct the inode hashtable in the new landlock_domain
+  landlock/fs: Use the new hashtable-based domain to find inode rules
+  landlock: Debug print inode hashtable in landlock_merge_ruleset2
+
+ security/landlock/cred.c     |   8 +-
+ security/landlock/cred.h     |   1 +
+ security/landlock/domain.c   | 145 +++++++++++++++++
+ security/landlock/domain.h   |  45 ++++++
+ security/landlock/fs.c       | 107 +++++++++----
+ security/landlock/fs.h       |   1 +
+ security/landlock/hash.h     | 294 +++++++++++++++++++++++++++++++++++
+ security/landlock/ruleset.c  |  80 +---------
+ security/landlock/ruleset.h  |  99 +++++++++++-
+ security/landlock/syscalls.c |  35 +++++
+ 10 files changed, 702 insertions(+), 113 deletions(-)
+ create mode 100644 security/landlock/hash.h
+
+
+base-commit: 3039ed432745f8fdf5cbb43fdc60b2e1aad624c1
+--
+2.49.0
 
