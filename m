@@ -1,70 +1,52 @@
-Return-Path: <linux-security-module+bounces-10159-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10161-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 687F6AC2801
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 18:58:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9F9DAC2982
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 20:22:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 215527AEB66
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 16:56:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A2DE189FB44
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 18:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C89229711A;
-	Fri, 23 May 2025 16:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="U00W9avv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E760298CD1;
+	Fri, 23 May 2025 18:21:57 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [185.125.25.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7955A2957B6
-	for <linux-security-module@vger.kernel.org>; Fri, 23 May 2025 16:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AF0298CAA;
+	Fri, 23 May 2025 18:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748019487; cv=none; b=DZuOWDnpCKaK2B7fZwQHt/oNqxUeq5+TOtkp7kA+N01rR8eqJs67nSVpwOGWHNtRw1v/TH0yfw96gjVpCy0SBubmr7yVB9npabaM+IldSS4MY7s3ydCGS5vsg9bnHAQRCfKVCvzZBZXTMizQ3LsRCRxBSsWbGpYm8oum+Pd4ap0=
+	t=1748024517; cv=none; b=aWal3V3cSGdLzmTDhzDJaXT4Zv8rPeIx+42/pFfX1s9EnWrsQLdTJTrbiKc1zQ58vE9AJOwaEsik7eAeG49TeCy18NBc6mQ/sWw0uSIuehylWw98HhwSks6Fg8+6z9O3+inLz9VDQFkM4YgtmLFO5QnF+8+NML6IL8eK0UaV+GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748019487; c=relaxed/simple;
-	bh=qoT4E9GhBZuvYKLo8fK5UUgcK2Flcfg1QzMdbP1/jfA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EoHFJK6l/QEwe8lny00GoS059GxjNtbcqM/4HVU1Q+tG1e29ouoX9W1T7qSAj/FXpxgZs/Rzj5hE8JeLuCpSI4ZhIkSuben4Qh0lmWAg4O00arRKX01gZAQTmdsGn/rvyz2nFRx04/PtUUA0yPL1Qfv58Gd+6w0/Hwh3UfKhwVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=U00W9avv; arc=none smtp.client-ip=185.125.25.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4b3rv946vNzSp0;
-	Fri, 23 May 2025 18:57:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1748019477;
-	bh=bOTcKXU+PDpiWDHdJRBRF5Z4uUKEW6uWVNwHUlqc3s0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U00W9avvgb1hOW3vvTA/78kZbESS8P31RQ+pFqmgBmHk9TgjGzXDUhMYzRo5XkivN
-	 pea7D2cSICG9mmQl8DaKAZEs/wzk+QX9wutbzoVItFMPqhrb7KsYGENmzhet2HgA9k
-	 SGyAL20cFr3AuhiPTN7UiR2t3EJoZo3w8rFL8XOI=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4b3rv86MlTzM3C;
-	Fri, 23 May 2025 18:57:56 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Tingmao Wang <m@maowtm.org>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Daniel Burgener <dburgener@linux.microsoft.com>,
-	Jann Horn <jannh@google.com>,
-	Jeff Xu <jeffxu@google.com>,
-	Kees Cook <kees@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Matthieu Buffet <matthieu@buffet.re>,
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
-	Ryan Sullivan <rysulliv@redhat.com>,
-	Shervin Oloumi <enlightened@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 5/5] landlock: Add landlock_check_rule tracepoint
-Date: Fri, 23 May 2025 18:57:41 +0200
-Message-ID: <20250523165741.693976-6-mic@digikod.net>
-In-Reply-To: <20250523165741.693976-1-mic@digikod.net>
+	s=arc-20240116; t=1748024517; c=relaxed/simple;
+	bh=nDe+eGSii8vpLzWz3C4x8Jl8wqRIMxtnUqMOb4hhn50=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=T9Fx/x1WuWE8S1uLh9AA67lSKnRM5Bxt9kRkEcbLhSzgHlud+QxZw1VubIIsqzTPApVNioPq/bI4PLksA1mi3cnT1VDhbQ68PLAzQ1Q5CancdwVi7q4Nu8caixVyajbohC+GDDfbo1Idyu4XHfO7H3cuP0uAiyCn9TJ1c/YCY80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27148C4CEEF;
+	Fri, 23 May 2025 18:21:54 +0000 (UTC)
+Date: Fri, 23 May 2025 14:22:42 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: =?UTF-8?B?R8O8bnRoZXI=?= Noack <gnoack@google.com>, Tingmao Wang
+ <m@maowtm.org>, Daniel Burgener <dburgener@linux.microsoft.com>, Jann Horn
+ <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Kees Cook
+ <kees@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Matthieu Buffet
+ <matthieu@buffet.re>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+ Ryan Sullivan <rysulliv@redhat.com>, Shervin Oloumi
+ <enlightened@google.com>, linux-security-module@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 3/5] tracing: Add __print_untrusted_str()
+Message-ID: <20250523142242.1be10abb@gandalf.local.home>
+In-Reply-To: <20250523165741.693976-4-mic@digikod.net>
 References: <20250523165741.693976-1-mic@digikod.net>
+	<20250523165741.693976-4-mic@digikod.net>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -72,174 +54,154 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Transfer-Encoding: quoted-printable
 
-Add a tracepoint called by landlock_unmask_layers() when a rule matches
-the current Landlock domain.  This enables us to observe each matching
-rule for a specific access request.
+On Fri, 23 May 2025 18:57:39 +0200
+Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
 
-The main difference with audit events is that traces are disabled by
-default, can be very verbose, and can be filtered according to Landlock
-properties (e.g. domain ID).  This event show all steps leading to an
-access decision.  We can also attach eBPF programs to this tracepoint
-and the landlock_add_rule_fs one to get a more standalone view of
-Landlock.
+> Add a new __print_untrusted_str() helper to safely print strings after es=
+caping
+> all special characters, including common separators (space, equal sign),
+> quotes, and backslashes.  This transforms a string from an untrusted sour=
+ce
+> (e.g. user space) to make it:
+> - safe to parse,
+> - easy to read (for simple strings),
+> - easy to get back the original.
 
-In the followning example, we create a directory with special
-characters, then create a initial sandbox allowing reading the parent
-directory, and then a nested sandbox not allowing reading of the parent
-directory:
-  mkdir "$(printf 'a\\\n\047\042 \a\e')"
-  cd "$_"
-  LL_FS_RO=/usr LL_FS_RW=.. ../sandboxer sh -c \
-          "LL_FS_RO=/usr LL_FS_RW=. ../sandboxer ls .."
+Hmm, so this can be an issue if this is printed out via seq_file()?
 
-The landlock_add_rule_fs traces show the initial sandbox's rules:
-  ruleset=0x000000007e3b1c4a key=inode:0xffff888004f59260 allowed=0xd dev=0:16 ino=306 path=/usr
-  ruleset=0x000000007e3b1c4a key=inode:0xffff888004f59240 allowed=0xffff dev=0:16 ino=346 path=/root
+I'm curious to what exactly can be "unsafe" about a string being printed
+via "%s"?
 
-0xd maps to FS_EXECUTE | FS_READ_FILE | FS_READ_DIR, and 0xffff maps to
-all supported access rights.
+I'm not against this change, I just want to understand more about what the
+issue is.
 
-We can then see some access requests with the landlock_check_rule
-traces. The first 0x4005 maps to a read-execute (with optional truncate)
-request, and the second 0x4004 maps to a read (with optional truncate)
-request:
-  domain=1362e78a1 key=inode:0xffff888004f59240 request=0x4005 allowed={0xffff}
-  domain=1362e78a1 key=inode:0xffff888004f59260 request=0x4004 allowed={0xd}
+>=20
+> Cc: G=C3=BCnther Noack <gnoack@google.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tingmao Wang <m@maowtm.org>
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> ---
+>  include/linux/trace_events.h               |  3 ++
+>  include/trace/stages/stage3_trace_output.h |  4 +++
+>  include/trace/stages/stage7_class_define.h |  1 +
+>  kernel/trace/trace_output.c                | 40 ++++++++++++++++++++++
+>  4 files changed, 48 insertions(+)
+>=20
+> diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+> index fa9cf4292dff..78f543bb7558 100644
+> --- a/include/linux/trace_events.h
+> +++ b/include/linux/trace_events.h
+> @@ -54,6 +54,9 @@ trace_print_hex_dump_seq(struct trace_seq *p, const cha=
+r *prefix_str,
+>  			 int prefix_type, int rowsize, int groupsize,
+>  			 const void *buf, size_t len, bool ascii);
+> =20
+> +const char *trace_print_untrusted_str_seq(struct trace_seq *s, const cha=
+r *str);
+> +
+> +
+>  struct trace_iterator;
+>  struct trace_event;
+> =20
+> diff --git a/include/trace/stages/stage3_trace_output.h b/include/trace/s=
+tages/stage3_trace_output.h
+> index 1e7b0bef95f5..36947ca2abcb 100644
+> --- a/include/trace/stages/stage3_trace_output.h
+> +++ b/include/trace/stages/stage3_trace_output.h
+> @@ -133,6 +133,10 @@
+>  	trace_print_hex_dump_seq(p, prefix_str, prefix_type,		\
+>  				 rowsize, groupsize, buf, len, ascii)
+> =20
+> +#undef __print_untrusted_str
+> +#define __print_untrusted_str(str)							\
+> +		trace_print_untrusted_str_seq(p, __get_str(str))
+> +
+>  #undef __print_ns_to_secs
+>  #define __print_ns_to_secs(value)			\
+>  	({						\
+> diff --git a/include/trace/stages/stage7_class_define.h b/include/trace/s=
+tages/stage7_class_define.h
+> index fcd564a590f4..bc10b69b755d 100644
+> --- a/include/trace/stages/stage7_class_define.h
+> +++ b/include/trace/stages/stage7_class_define.h
+> @@ -24,6 +24,7 @@
+>  #undef __print_array
+>  #undef __print_dynamic_array
+>  #undef __print_hex_dump
+> +#undef __print_untrusted_string
+>  #undef __get_buf
+> =20
+>  /*
+> diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+> index b9ab06c99543..17d576941147 100644
+> --- a/kernel/trace/trace_output.c
+> +++ b/kernel/trace/trace_output.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/btf.h>
+>  #include <linux/bpf.h>
+>  #include <linux/hashtable.h>
+> +#include <linux/string_helpers.h>
+> =20
+>  #include "trace_output.h"
+>  #include "trace_btf.h"
+> @@ -297,6 +298,45 @@ trace_print_hex_dump_seq(struct trace_seq *p, const =
+char *prefix_str,
+>  }
+>  EXPORT_SYMBOL(trace_print_hex_dump_seq);
+> =20
+> +/**
+> + * trace_print_untrusted_str_seq - print a string after escaping charact=
+ers
+> + * @s: trace seq struct to write to
+> + * @src: The string to print
+> + *
+> + * Prints a string to a trace seq after escaping all special characters,
+> + * including common separators (space, equal sign), quotes, and backslas=
+hes.
+> + * This transforms a string from an untrusted source (e.g. user space) t=
+o make
+> + * it:
+> + * - safe to parse,
+> + * - easy to read (for simple strings),
+> + * - easy to get back the original.
+> + */
+> +const char *trace_print_untrusted_str_seq(struct trace_seq *s,
+> +                                          const char *src)
+> +{
+> +	int escaped_size;
+> +	char *buf;
+> +	size_t buf_size =3D seq_buf_get_buf(&s->seq, &buf);
+> +	const char *ret =3D trace_seq_buffer_ptr(s);
+> +
+> +	if (!src || WARN_ON(buf_size =3D=3D 0))
 
-The landlock_add_rule_fs traces show the nested sandbox's rules:
-  ruleset=0x000000007e3b1c4a key=inode:0xffff888004f59260 allowed=0xd dev=0:16 ino=306 path=/usr
-  ruleset=0x000000007e3b1c4a key=inode:0xffff888004f59280 allowed=0xffff dev=0:16 ino=210608 path=/root/a\\\n\047\"\040\a\e
+		    WARN_ON_ONCE() please.
 
-We can finally see some access requests with the landlock_check_rule
-traces, listing access rights per layers.  Because the second layer does
-not allow access (0x0) to /root (inode:0xffff888004f59240), this request
-is denied:
-  domain=1362e78a7 key=inode:0xffff888004f59240 request=0x4008 allowed={0xffff,0x0}
-  domain=1362e78a7 key=inode:0xffff888004f59260 request=0x4004 allowed={0xd,0xd}
+-- Steve
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Tingmao Wang <m@maowtm.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- include/trace/events/landlock.h | 56 +++++++++++++++++++++++++++++++++
- security/landlock/ruleset.c     |  3 ++
- security/landlock/trace.c       |  1 +
- 3 files changed, 60 insertions(+)
-
-diff --git a/include/trace/events/landlock.h b/include/trace/events/landlock.h
-index 41e10965ba7b..c88c51aaf22b 100644
---- a/include/trace/events/landlock.h
-+++ b/include/trace/events/landlock.h
-@@ -11,6 +11,7 @@
- 
- #include <linux/tracepoint.h>
- 
-+struct landlock_rule;
- struct landlock_rule_ref;
- struct landlock_ruleset;
- struct path;
-@@ -62,6 +63,61 @@ TRACE_EVENT(landlock_add_rule_fs,
- 	)
- );
- 
-+TRACE_EVENT(landlock_check_rule,
-+
-+	TP_PROTO(
-+		const struct landlock_ruleset *domain,
-+		const struct landlock_rule_ref *ref,
-+		access_mask_t access_request,
-+		const struct landlock_rule *rule
-+	),
-+
-+	TP_ARGS(domain, ref, access_request, rule),
-+
-+	TP_STRUCT__entry(
-+		__field(__u64, domain_id)
-+		__field(access_mask_t, access_request)
-+		__field(int, ref_type)
-+		__field(uintptr_t, ref_key)
-+		__dynamic_array(access_mask_t, layers, domain->num_layers)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->domain_id = domain->hierarchy->id;
-+		__entry->access_request = access_request;
-+		__entry->ref_type = ref->type;
-+		/* TODO: Use an object's Landlock ID instead of a kernel address. */
-+		__entry->ref_key = ref->key.data;
-+
-+		for (size_t level = 1, i = 0;
-+			level <= __get_dynamic_array_len(layers) / sizeof(access_mask_t);
-+			level++) {
-+			access_mask_t allowed;
-+
-+			if (i < rule->num_layers &&
-+			    level == rule->layers[i].level) {
-+				allowed = rule->layers[i].access;
-+				i++;
-+			} else {
-+				allowed = 0;
-+			}
-+			((access_mask_t *)__get_dynamic_array( layers))[level - 1] = allowed;
-+		}
-+	),
-+
-+	/* TODO: Do not print network ports as big endian. */
-+	TP_printk("domain=%llx key=%s:0x%lx request=0x%x allowed=%s",
-+		__entry->domain_id,
-+		__print_symbolic(__entry->ref_type,
-+			{ LANDLOCK_KEY_INODE, "inode" },
-+			{ LANDLOCK_KEY_NET_PORT, "net_port" }
-+		),
-+		__entry->ref_key,
-+		__entry->access_request,
-+		__print_dynamic_array(layers, sizeof(access_mask_t))
-+	)
-+);
-+
- #endif /* _TRACE_LANDLOCK_H */
- 
- /* This part must be outside protection */
-diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
-index 20a4bbb2526f..f9e407e4038c 100644
---- a/security/landlock/ruleset.c
-+++ b/security/landlock/ruleset.c
-@@ -21,6 +21,7 @@
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/workqueue.h>
-+#include <trace/events/landlock.h>
- 
- #include "access.h"
- #include "audit.h"
-@@ -629,6 +630,8 @@ bool landlock_unmask_layers(const struct landlock_ruleset *const domain,
- 	if (!rule)
- 		return false;
- 
-+	trace_landlock_check_rule(domain, &ref, access_request, rule);
-+
- 	/*
- 	 * An access is granted if, for each policy layer, at least one rule
- 	 * encountered on the pathwalk grants the requested access,
-diff --git a/security/landlock/trace.c b/security/landlock/trace.c
-index 98874cda473b..c0c450536be9 100644
---- a/security/landlock/trace.c
-+++ b/security/landlock/trace.c
-@@ -8,6 +8,7 @@
- #include <linux/path.h>
- 
- #include "access.h"
-+#include "domain.h"
- #include "ruleset.h"
- 
- #define CREATE_TRACE_POINTS
--- 
-2.49.0
+> +		return NULL;
+> +
+> +	escaped_size =3D string_escape_mem(src, strlen(src), buf, buf_size,
+> +		ESCAPE_SPACE | ESCAPE_SPECIAL | ESCAPE_NAP | ESCAPE_APPEND |
+> +		ESCAPE_OCTAL, " =3D'\"\\");
+> +	if (unlikely(escaped_size >=3D buf_size)) {
+> +		/* We need some room for the final '\0'. */
+> +		seq_buf_set_overflow(&s->seq);
+> +		s->full =3D 1;
+> +		return NULL;
+> +	}
+> +	seq_buf_commit(&s->seq, escaped_size);
+> +	trace_seq_putc(s, 0);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(trace_print_untrusted_str_seq);
+> +
+>  int trace_raw_output_prep(struct trace_iterator *iter,
+>  			  struct trace_event *trace_event)
+>  {
 
 
