@@ -1,105 +1,131 @@
-Return-Path: <linux-security-module+bounces-10153-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10156-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ED2FAC2629
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 17:16:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 942DCAC27FF
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 18:58:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90E675425F6
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 15:16:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 398117AE28B
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 May 2025 16:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBA5D207DFD;
-	Fri, 23 May 2025 15:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180BA21FF2F;
+	Fri, 23 May 2025 16:58:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HX8ckC8A"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="DdyGENMZ"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8CF7DA7F;
-	Fri, 23 May 2025 15:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7FE297116
+	for <linux-security-module@vger.kernel.org>; Fri, 23 May 2025 16:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748013354; cv=none; b=TaxsJS+Zx2WQLxgEvIm2vOoOZdrmbuGNC+V61nhGV8Cf66Hejy+VFbM7pP48IVLOxnUIqKYN3sXWAZ7gk3Lm93v0xwu5PAWKvDW0AkEBdSzKr4zSWK1V8Lb1gM85qYs/YgX1yM9/p/3gzbhSpSzDVRZtDpxHuVEpQICOMdHxUOc=
+	t=1748019481; cv=none; b=ryVdfsjj+J0oXuFXk3WeLX0KBBU1o7Zm17AihfUkd5//pwON4oCzjKqEf0SG6BLW8cbtxIXtO9NX0T0iBMHxcRhBXqaLIuGyeAuwPIX2Ln/7KxwxePFUnCcnjznHPhzIbBlib8MfZqdcun37uPoAajsgmRM5AwMXIKxHpJkTlb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748013354; c=relaxed/simple;
-	bh=XWCE6jqKFyONnv3rqRo5aIekZYBw6AYzIcZy4RKLG3w=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=gUvbWIjqZGzR0kwBk9GxyLtL3M9i+ynSJrVbCTXlDQA560qtQa44FhYAbR3seiEPvon5wCBSKuavj3TY1q5K4ntsUwBVvVITJbvor4jl449ydX3lPNEItpX/T468aHuHhP/lTqKJrC7HZTlcIHqjIPyRz/bxtnKtnk0N3aQ3Wnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HX8ckC8A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C994AC4CEE9;
-	Fri, 23 May 2025 15:15:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748013353;
-	bh=XWCE6jqKFyONnv3rqRo5aIekZYBw6AYzIcZy4RKLG3w=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=HX8ckC8AMTt3FFPZ5hRUKl69FZBqaXO6fLB2Y7SpVFP65PAO1kjsi8SJWon7Y8VAL
-	 5AlZGipDmdwo6ASrUJHjlZWt23IWVhtZ8w28sd2J+3k/5KL0Ds5/1Kd8fX92L9NeSK
-	 djeiHI1ul7E3zdbl/W4YgmZQN1kHFHTDKeqsu/HEEZ+Cnkla1/YwztmITvG8ynuDgE
-	 JgYg8/t8HUSDfYIDhxSbHCCufsrGiAF7Z4dT97PjU3++rt/osFUnAzdC53SPsceP8v
-	 LTwB//5TEGvRiD/yhKtzXkNNBxvtdGzOsRy/8HOt85jlnfIqIfWPNhzlqEZfOF+w9l
-	 PDqA51dZv9e7g==
-Date: Fri, 23 May 2025 08:15:49 -0700
-From: Kees Cook <kees@kernel.org>
-To: Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>
-CC: Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>,
- "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
- "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>, linuxppc-dev@lists.ozlabs.org,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Marco Elver <elver@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, x86@kernel.org, kasan-dev@googlegroups.com,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-efi@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
- sparclinux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 08/14] powerpc: Handle KCOV __init vs inline mismatches
-User-Agent: K-9 Mail for Android
-In-Reply-To: <e50abba6c962772c73342bacf20fb87dc99dd542.camel@linux.ibm.com>
-References: <20250523043251.it.550-kees@kernel.org> <20250523043935.2009972-8-kees@kernel.org> <e50abba6c962772c73342bacf20fb87dc99dd542.camel@linux.ibm.com>
-Message-ID: <6E407BC0-4D84-4420-AE07-EF85EBA1AB1C@kernel.org>
+	s=arc-20240116; t=1748019481; c=relaxed/simple;
+	bh=AuEqfyOM+2M+kJH1W+E0BKDYc/4gC3489fplTUkiyg0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gaFy6teUAIpcBTQZ2ZqLRTY70BDEHn+OZA8TBMKU9lYLHkjqOkxUUTLEklAySMDb16Rx+4gTaRe3wTeqzH5+YpzVk0YTRlUbnYpp18ZAkhPl6gjWSvVUcOsAxeG+BB36Yxb2T6fuQYEzMuTaxvDVhJWsvpx/37jk9gIh0uGNvHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=DdyGENMZ; arc=none smtp.client-ip=84.16.66.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4b3rv062ltzfcj;
+	Fri, 23 May 2025 18:57:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1748019468;
+	bh=yCnQwaSlLqRMn1OhK7lne/Tos9ZsvKgFoIagtHHu7wM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DdyGENMZ1msg+uHfDwkcqpvHoVSQbrXPeZdmy9FsXYsZTcuBsEu607qFVo18jIpkt
+	 xHSlrFAVS20gO8ODen+UdkARvudBDXAeqJke8czmvTYvSAHFiQ/xG7tG8YFiUFDwUg
+	 4o9+P2VIoKvH9nYJbBmIHAm0vWVt5DltZ2MPd0VM=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4b3rtz3wp7zBsk;
+	Fri, 23 May 2025 18:57:47 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Tingmao Wang <m@maowtm.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Daniel Burgener <dburgener@linux.microsoft.com>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Matthieu Buffet <matthieu@buffet.re>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	Ryan Sullivan <rysulliv@redhat.com>,
+	Shervin Oloumi <enlightened@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-security-module@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [RFC PATCH v1 0/5] Landlock tracepoints
+Date: Fri, 23 May 2025 18:57:36 +0200
+Message-ID: <20250523165741.693976-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+
+Hi,
+
+This series adds two tracepoints to Landlock, one tied to rule addition,
+and another to rule checking.  With these new tracepoints, we can see
+all steps leading to an access decision.  They can be directly used with
+/sys/kernel/tracing/events/landlock/* or attached by eBPF programs to
+get a more complete view of Landlock internals.
+
+This new feature is useful to trouble shoot policy issues, and it should
+also limit the need for custom debugging kernel code when developing new
+Landlock features.
+
+Landlock already has audit support, which enables us to log denied
+access requests.  Audit is useful to identify security issues or sandbox
+misconfiguration.  However, it might not be enough to debug Landlock
+policies.  The main differences with audit events is that traces are
+disabled by default, can be very verbose, and can be filtered according
+to process and Landlock properties (e.g. domain ID).
+
+As for audit, this tracing feature may expose sensitive information and
+must then only be accessible to the system administrator.
+
+This RFC only fully supports filesystem rules but the next series will
+also support network rules.  Tests are also missing for now.
+
+Regards,
+
+Mickaël Salaün (5):
+  landlock: Rename landlock_id to landlock_rule_ref
+  landlock: Merge landlock_find_rule() into landlock_unmask_layers()
+  tracing: Add __print_untrusted_str()
+  landlock: Add landlock_add_rule_fs tracepoint
+  landlock: Add landlock_check_rule tracepoint
+
+ MAINTAINERS                                |   1 +
+ include/linux/trace_events.h               |   3 +
+ include/trace/events/landlock.h            | 124 ++++++++++++++
+ include/trace/stages/stage3_trace_output.h |   4 +
+ include/trace/stages/stage7_class_define.h |   1 +
+ kernel/trace/trace_output.c                |  40 +++++
+ security/landlock/Makefile                 |  11 +-
+ security/landlock/fs.c                     | 178 +++++++++++++--------
+ security/landlock/fs.h                     |   3 +
+ security/landlock/net.c                    |  18 +--
+ security/landlock/ruleset.c                |  65 ++++----
+ security/landlock/ruleset.h                |  15 +-
+ security/landlock/trace.c                  |  15 ++
+ 13 files changed, 365 insertions(+), 113 deletions(-)
+ create mode 100644 include/trace/events/landlock.h
+ create mode 100644 security/landlock/trace.c
 
 
+base-commit: a5806cd506af5a7c19bcd596e4708b5c464bfd21
+-- 
+2.49.0
 
-On May 22, 2025 10:24:30 PM PDT, Andrew Donnellan <ajd@linux=2Eibm=2Ecom> =
-wrote:
->On Thu, 2025-05-22 at 21:39 -0700, Kees Cook wrote:
->> When KCOV is enabled all functions get instrumented, unless
->> the __no_sanitize_coverage attribute is used=2E To prepare for
->> __no_sanitize_coverage being applied to __init functions, we have to
->> handle differences in how GCC's inline optimizations get resolved=2E
->> For
->> s390 this requires forcing a couple functions to be inline with
->
->I assume you mean powerpc here, though I'm sure my employer is happy
->that you're at least confusing us with IBM's other architecture :)
-
-Whoops! Yes=2E Paste-o on my part=2E The rest of the sentence was updated =
-correctly though=2E :)
-
---=20
-Kees Cook
 
