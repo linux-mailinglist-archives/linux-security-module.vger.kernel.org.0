@@ -1,62 +1,92 @@
-Return-Path: <linux-security-module+bounces-10408-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10413-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089B3AD0A52
-	for <lists+linux-security-module@lfdr.de>; Sat,  7 Jun 2025 01:30:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFA5FAD0AC6
+	for <lists+linux-security-module@lfdr.de>; Sat,  7 Jun 2025 03:12:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF9B418925A7
-	for <lists+linux-security-module@lfdr.de>; Fri,  6 Jun 2025 23:30:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E58863A85FA
+	for <lists+linux-security-module@lfdr.de>; Sat,  7 Jun 2025 01:11:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79DD623FC49;
-	Fri,  6 Jun 2025 23:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62523241696;
+	Sat,  7 Jun 2025 01:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UzRWirsS"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="X8LQuLNX"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic307-16.consmr.mail.ne1.yahoo.com (sonic307-16.consmr.mail.ne1.yahoo.com [66.163.190.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537E11F4C94;
-	Fri,  6 Jun 2025 23:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAD7273F9
+	for <linux-security-module@vger.kernel.org>; Sat,  7 Jun 2025 01:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.190.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749252587; cv=none; b=aLYUE4PYH82iGe7DFsmQ9nTzxfw8RqDfH0TmKa6k8lBrXrdYwo8cjvP8wwYyJlVXjNYe/RtN171nrSPUI2CFUT+tY6OnArLuJrLCQHFueFJnm6X+ldEGTG8enNzIn36AJsZc+BKV9MMQSGe15ByEBAxUFTWcmnoCMedIbzhjydU=
+	t=1749258718; cv=none; b=roNFM61gb/XLu2qMXhzAl9lEA54JlJr2OpPqUt3+jnn8DIMh7Q8DlEdqeXHb8TJ6Jgu0AX6gnrKothK4muMuZe8kr8gyU8agKkENcDghJWXvKeIgOvK2jNSz/1fpvEVYq9UbOpGQirJ0K5qPrTkK6ZEWCg4dQIBTNFbd1dyw8uI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749252587; c=relaxed/simple;
-	bh=8ctlzKseucpE7aGXDNMTlsA5aXRSrdbgZ77QeTtQd84=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ecbPe4C7VEXZunyFz4kga2RhQw+sZQdtQJx3Ko/0oCQJAMbspXf+EpeM4C7Nctjw6iAAIWjjLXHCuviQaiED9yRHA1xa8cXczKlfDfXzjnKadEV5FZ/S4jJtBFZIwnIDqfHoxDHQaHb+DAUXUTMeIJxblxhZj5WmhvTvcIfqa1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UzRWirsS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61AF6C4CEEF;
-	Fri,  6 Jun 2025 23:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749252587;
-	bh=8ctlzKseucpE7aGXDNMTlsA5aXRSrdbgZ77QeTtQd84=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UzRWirsSgY2/TMCcyrbgODFjccmpba9+ygpm1pvKBepBEKLWrgeMcARFp0IPRWRn0
-	 KoiqYRhW7Xjz7ohX0gC1IezCok1iggLyKHtvPeYrtGp/mlrlCYeZ8lyO8XVsp5c+8A
-	 ECKIFIUJYUWp1g7yPWufxJDyMMkSqyvTmVCRM84CG254ILNbmG6+P8Ws4Qa9enA4AV
-	 DM//189NphZxHelBTBoDxb6vySEvbiLn/g3vKzX5Nowuqk2LZNWKzh55O3HoZUCfbk
-	 1kgxiCoiraHBEjJOT+dyZpyF2p2K31DKlLxISwYC+JXVmvZqMAisXJux3VEr3GUgY+
-	 X2ukg674LmLQg==
-From: KP Singh <kpsingh@kernel.org>
-To: bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Cc: bboscaccy@linux.microsoft.com,
+	s=arc-20240116; t=1749258718; c=relaxed/simple;
+	bh=35O3bnvh5n4X7Z+GZimBknXeddsK3bvrowCSOAosKEQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=ArLCpht57lLWyhowV50K3DCFONjo2H4QLlmfNDU/j8KrdTj5k9oPC/luoRJtmOkYzlhzrwj9I75UtTyjjt/Sdz/jHqP/sl6GOXqWMlccowGzjQnOnSi3YSyK6OSA/R5+uoyMoNTZMj+XvNdLLdyan0yQqAP8/O5DH1zq2cffP+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=X8LQuLNX; arc=none smtp.client-ip=66.163.190.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1749258715; bh=HwtOuxPXkaV/TM2242shxO68DjffLsvsEmfEB27DYkg=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=X8LQuLNX6Ph6gwcZArOI1JvzsRa0BSDauSyUDiU/fL7unqqkYsOw4Jw+C9eOmIwjNqEuoqAduKLEVj6tiA4wbwFbq7KhLATnFjworPr3Hnb9vALrP9zPkaQaaNdZWpfy3TdFtSInpPH+21aFEUO77wreaxnz3rMbNw0wZg9k3IkLpnw50Fdf/DgBU5TeTTr4Lb6m0kYZTA6PacSebD7FUK12X8iqRsHOhE5iQxyhkHQ2A+a3B0SaxaxAeVzp9Yxcn7wvmJ7FXKV5/UyvyJtGaIdypzQBM39qfN3qnZEZoJrl0Pb5xb+k18GZ8IbN5mAwDf+QcOXexe6jqFbSL4SGHQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1749258715; bh=D0T1l7pO9pF2qP4D9Vqkx5yRTqZ9W0o0PaTeVZkrFrU=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=XFq/308KyVsOnGdXyj+LdpJjgoJL2+DaQxcjiM02vL+v8fUQI1ZX1klFcBdqQ+Z6sM1bZcEQOCB0FxAH0MphhkfoSMTohUfsNh64inuPxyGrsHvEUeo42G0KEuauJ4ZdgkGfZLWnxTnOJjgWMXH3T9hmDa2FMBKqPz65jf1PHxuP/v7iwlxAZORTl0taNbo1v6pgEQnPAnLIINELdnGMhLqvloSHcDUISOLEm13CBNsWLqDM2OhrjIaiSYPTgnAwbbbO2Uf4qYl84N/2D306MucmSLGk/juXhgujeroUlroNEN1W9+8CevEN12uF4DlHGMJmXr/eD75XrgsAWqSbGw==
+X-YMail-OSG: t_GdkHkVM1kSZv1FgANrhhX_HY_7cbs5uXKukcJ4EqkZpoTjNGSJMwiqKNSOeWP
+ kIr6ZaNO8f6.cWpG6Aa0Q4QiNashurIEunM3I1D4d0zlzeGoGhxgDY4ndRvla_Spl7jcwaaEPh2O
+ bBFfdSssZGswB3KL7_NCV8iBHFslewHvTsI0OkbKQTyU06nV4WYBpM1wM9mJvBhdGAxEorgIZ2WC
+ _xVboA2IKU7JLSwEzAZ2z1KsVp.RvzwvjOmGpVHkbuJmjeCpDQ0fWkevSICOf7VqbdL3N7k0lrHu
+ Uk6z3Q.eWqioqiP.mojswzZdqYgHLWz2NAKNjLCp_8CPvGwduqvVU7vzoVbQ_iGcHAf.PL7pWJ_3
+ WOB5rX.kENeu5fkim7zgMO03ocneyfIh9c4mEVgMIPM0IL4oaWJ0WvRRT3NWztgvmZZ3I.d80vDd
+ 02cxXT8UsKRpBBmQvAiDJrngbCrHDh3E0uTinfU7NnxHlYr1I6P1Hi_gbvDbP8DANINy4wFulCe1
+ pYQQ1JJa9AUeftFUJRLu4kUhw_Lmow5quq38m0iFQNlIOQmkvUh42rZjZnhkoEEU4mGvNMSi8OmQ
+ Hj70CX7gwwUyudmlUeEi3v4xi.qp1ji0JE9XDuvBNISlFsic_oSvcx5MvjY_cKG8qsLYwYBZJ8BO
+ UkODPJ3JoqmEiItBLTcGgF1OPK7viW3rvrSAvmD8EfEe10H1ioiXs2wMN6q3kqD7skwLR6ZbijMD
+ 6g8kDnwGoSkj2qx37r.SSC.H0Gamn4Ry4euioM908q7U8UsnzAuEKJ12pkL81mFIAn7TalZqZnvU
+ GgE36EJfE0BFkXOhSd52Yc2D6ftSvXBCCfMkmRrtZgyuiYlXVOdA81_RmOGDw4DI_LJJCW4pvVHF
+ 3iVsVb6nclL1PijKA17dLaDT7Z8mqr.CArWS0bCG7esQAY9vndXak.nRP1J2P7i1W7maZdJ6j5He
+ 7FT_cY8ohPaYTqxk6amH9p93E6uAHwP9J2F_QrwqRjN3jXSwwX7eUNArpr92rV0W79xraWLBuoHR
+ LlehxRN9NW_tDdaQhGtnXO6H__zVtop_xocxyN29S0e4V12mffqr_.rX3SZAszZbi2BTr92I6C.2
+ koSKasyYygAD25BCZmftBz0E6jc1H1x2JodIoY4l19afOjr0yqJu_aOM4bIkngozQkv2c5KJv8au
+ 5gahevqdAv0VinphxVN6rlGyQz7KbLFuwReadbqPs3tv5LoTFBFMA8KvlypTipD1RjA8mkG7_oQg
+ ANupQFV2qR9ng57sc97kIwsIrCNPTgN8z8Qh9ToKbqBi2wd2YHJXmj4asPJ9BrJ8blUxroi33kPv
+ zPR8HmJL2l6wpgIPwyAt7.oYS8s.I3ZqiDXbja_spdwWyRwYociZPBMUbz6Bul9tloNCDKqtaeVQ
+ P9ZO20d9X6aYtfOr9PSw1wGxstjWYUcpMcjDgzHEKTaDDiinJ1zHhUS4KSvcLqIXhku3PiTrXDzD
+ sZjEap_84mvRw5sdqzh.1MxRxn6lWliLNXKpj.1mvMJW9sW7sibrkMffpSeGtrK2TTAA6HtQzhuF
+ o7yGhm_QnhEpJ6_BKb.GY4UyNbAUBaJDrWRoZmT3.SR6YVlfXQIy5P_V_18ftuyLA_k0qDcJV8W7
+ No1e1_nGXE7Xu.H7eA51D94Vdxj1MtVTR243w7NsWWrNFPFy8tksAvZKTZH_fmcaJ5Avj8k24Q4j
+ wdyzAPFCX9IQJu2nHU40a3NHMPcxvpGZKlUWuay27Hi4JLF1aIHx3ZmQB67Wl56BtPc94e2e63eY
+ UZefpl9bgxy.ktAGEjb79.QS_JDYu7tdUuDTjvUs76bLrdM4mbAo4kgb55DIoWdS.2kbaZYoksi1
+ xnGEoTxnfFps_aFespY.dteVjSRoRZhS97Yl2tWE9ImH4a_XZrKLijnze.XHvgK36a2E.Mz3bnom
+ JptF5ImsLwJpj0FGtO1zieaoRT7RuvEwwrkPH8ATtigNpzJtZYEF5GrNBOA4yvATx6KSl0B7uuIR
+ SB.EajGU_x5sIv68v28raJhwd2PZsZP.MXk9oeF6fft668ripdf9SvzmP75P3yREZhzFjCNvaGYQ
+ _4GHFCN4fJSRmcSSLB7ZbWg4OeP79v0f9VIi0Dq0k.WjUm0hz7fZRd4kxwHLk1RpZt2dxDac5I61
+ TPJtsnxsySds4nX_qN.DLrLbUJH0fHGuEXMtLxvUAJLO1I7OJu0WgnKBMx2v.lIU3MHFeEmlR_bk
+ SkK_HyPGvfRCwZWMEtRWZTa5Jf9VM0SSz4TYe9n8d7.Qu2YH6EO.FEKmXyXlbUArdZHvbDYf2QNj
+ 8VhIdluHQPSlJvCyH8rEteWQ-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: b9ab1a19-93bb-4016-adc2-9fecbd8da5fb
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Sat, 7 Jun 2025 01:11:55 +0000
+Received: by hermes--production-gq1-74d64bb7d7-5qmwx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 7461f2feac0d1a8decd03521522bae75;
+          Sat, 07 Jun 2025 00:51:38 +0000 (UTC)
+From: Casey Schaufler <casey@schaufler-ca.com>
+To: casey@schaufler-ca.com,
 	paul@paul-moore.com,
-	kys@microsoft.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	KP Singh <kpsingh@kernel.org>
-Subject: [PATCH 12/12] selftests/bpf: Enable signature verification for all lskel tests
-Date: Sat,  7 Jun 2025 01:29:14 +0200
-Message-ID: <20250606232914.317094-13-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250606232914.317094-1-kpsingh@kernel.org>
-References: <20250606232914.317094-1-kpsingh@kernel.org>
+	eparis@redhat.com,
+	linux-security-module@vger.kernel.org,
+	audit@vger.kernel.org
+Cc: jmorris@namei.org,
+	serge@hallyn.com,
+	keescook@chromium.org,
+	john.johansen@canonical.com,
+	penguin-kernel@i-love.sakura.ne.jp,
+	stephen.smalley.work@gmail.com,
+	linux-kernel@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: [PATCH v4 0/4] Audit: Records for multiple security contexts
+Date: Fri,  6 Jun 2025 17:51:30 -0700
+Message-ID: <20250607005134.10488-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -64,129 +94,71 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+References: <20250607005134.10488-1-casey.ref@schaufler-ca.com>
 
-Convert the kernel's generated verification certificate into a C header
-file using xxd.  Finally, update the main test runner to load this
-certificate into the session keyring via the add_key() syscall before
-executing any tests.
+The Linux audit system includes LSM based security "context" information
+in its events. Historically, only one LSM that uses security contexts can
+be active on a system. One of the few obsticles to allowing multiple LSM
+support is the inability to report more than one security context in an
+audit event. This patchset provides a mechanism to provide supplimental
+records containing more than one security context for subjects and
+objects.
 
-The kernel's module signing verification certificate is converted to a
-headerfile and loaded as a session key and all light skeleton tests are
-updated to be signed.
+The mechanism for reporting multiple security contexts inspired
+considerable discussion. It would have been possible to add multiple
+contexts to existing records using sophisticated formatting. This would
+have significant backward compatibility issues, and require additional
+parsing in user space code. Adding new records for an event that contain
+the contexts is more in keeping with the way audit events have been
+constructed in the past.
 
-Signed-off-by: KP Singh <kpsingh@kernel.org>
----
- tools/testing/selftests/bpf/.gitignore   |  1 +
- tools/testing/selftests/bpf/Makefile     | 13 +++++++++++--
- tools/testing/selftests/bpf/test_progs.c | 13 +++++++++++++
- 3 files changed, 25 insertions(+), 2 deletions(-)
+Only audit events associated with system calls have required multiple
+records prior to this. Mechanism has been added allowing any event
+to be composed of multiple records. This should make it easier to
+add information to existing audit events without breaking backward
+compatability.
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index e2a2c46c008b..5ab96f8ab1c9 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -45,3 +45,4 @@ xdp_redirect_multi
- xdp_synproxy
- xdp_hw_metadata
- xdp_features
-+verification_cert.h
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index cf5ed3bee573..778b54be7ef4 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -7,6 +7,7 @@ CXX ?= $(CROSS_COMPILE)g++
- 
- CURDIR := $(abspath .)
- TOOLSDIR := $(abspath ../../..)
-+CERTSDIR := $(abspath ../../../../certs)
- LIBDIR := $(TOOLSDIR)/lib
- BPFDIR := $(LIBDIR)/bpf
- TOOLSINCDIR := $(TOOLSDIR)/include
-@@ -534,7 +535,7 @@ HEADERS_FOR_BPF_OBJS := $(wildcard $(BPFDIR)/*.bpf.h)		\
- # $1 - test runner base binary name (e.g., test_progs)
- # $2 - test runner extra "flavor" (e.g., no_alu32, cpuv4, bpf_gcc, etc)
- define DEFINE_TEST_RUNNER
--
-+LSKEL_SIGN := -S -k $(CERTSDIR)/signing_key.pem -i $(CERTSDIR)/signing_key.x509
- TRUNNER_OUTPUT := $(OUTPUT)$(if $2,/)$2
- TRUNNER_BINARY := $1$(if $2,-)$2
- TRUNNER_TEST_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.test.o,	\
-@@ -601,7 +602,7 @@ $(TRUNNER_BPF_LSKELS): %.lskel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o)
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o)
- 	$(Q)diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
--	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.llinked3.o) name $$(notdir $$(<:.bpf.o=_lskel)) > $$@
-+	$(Q)$$(BPFTOOL) gen skeleton $(LSKEL_SIGN) $$(<:.o=.llinked3.o) name $$(notdir $$(<:.bpf.o=_lskel)) > $$@
- 	$(Q)rm -f $$(<:.o=.llinked1.o) $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
- 
- $(LINKED_BPF_OBJS): %: $(TRUNNER_OUTPUT)/%
-@@ -697,6 +698,13 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
- 
- endef
- 
-+CERT_HEADER := verification_cert.h
-+CERT_SOURCE := $(CERTSDIR)/signing_key.x509
-+
-+$(CERT_HEADER): $(CERT_SOURCE)
-+	@echo "GEN-CERT-HEADER: $(CERT_HEADER) from $<"
-+	$(Q)xxd -i -n test_progs_verification_cert $< > $@
-+
- # Define test_progs test runner.
- TRUNNER_TESTS_DIR := prog_tests
- TRUNNER_BPF_PROGS_DIR := progs
-@@ -716,6 +724,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
- 			 disasm.c		\
- 			 disasm_helpers.c	\
- 			 json_writer.c 		\
-+			 $(CERT_HEADER)		\
- 			 flow_dissector_load.h	\
- 			 ip_check_defrag_frags.h
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 309d9d4a8ace..02a85dda30e6 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -14,12 +14,14 @@
- #include <netinet/in.h>
- #include <sys/select.h>
- #include <sys/socket.h>
-+#include <linux/keyctl.h>
- #include <sys/un.h>
- #include <bpf/btf.h>
- #include <time.h>
- #include "json_writer.h"
- 
- #include "network_helpers.h"
-+#include "verification_cert.h"
- 
- /* backtrace() and backtrace_symbols_fd() are glibc specific,
-  * use header file when glibc is available and provide stub
-@@ -1928,6 +1930,13 @@ static void free_test_states(void)
- 	}
- }
- 
-+static __u32 register_session_key(const char *key_data, size_t key_data_size)
-+{
-+	return syscall(__NR_add_key, "asymmetric", "libbpf_session_key",
-+			(const void *)key_data, key_data_size,
-+			KEY_SPEC_SESSION_KEYRING);
-+}
-+
- int main(int argc, char **argv)
- {
- 	static const struct argp argp = {
-@@ -1961,6 +1970,10 @@ int main(int argc, char **argv)
- 	/* Use libbpf 1.0 API mode */
- 	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
- 	libbpf_set_print(libbpf_print_fn);
-+	err = register_session_key((const char *)test_progs_verification_cert,
-+				   test_progs_verification_cert_len);
-+	if (err < 0)
-+		return err;
- 
- 	traffic_monitor_set_print(traffic_monitor_print_fn);
- 
+v4:
+Use LSM_ID_UNDEF when checking for valid LSM IDs in
+security_lsmprop_to_secctx().
+Fix the object record to include only those for LSMs that use them.
+Squash the two patches dealing with subject contexts.
+Base the patches on Paul Moore's LSM initialization patchset.
+https://lore.kernel.org/all/20250409185019.238841-31-paul@paul-moore.com/
+v3:
+Rework how security modules identify that they provide security
+contexts to the audit system. Maintain a list within the audit
+system of the security modules that provide security contexts.
+Revert the separate counts of subject and object contexts.
+v2:
+Maintain separate counts for LSMs using subject contexts and object
+contexts. AppArmor uses the former but not the latter.
+Correct error handling in object record creation.
+
+https://github.com/cschaufler/lsm-stacking#audit-6.14-rc1-v4
+
+Casey Schaufler (4):
+  Audit: Create audit_stamp structure
+  LSM: security_lsmblob_to_secctx module selection
+  Audit: Add record for multiple task security contexts
+  Audit: Add record for multiple object contexts
+
+ include/linux/audit.h        |  23 +++
+ include/linux/security.h     |   6 +-
+ include/uapi/linux/audit.h   |   2 +
+ kernel/audit.c               | 274 ++++++++++++++++++++++++++++++-----
+ kernel/audit.h               |  13 +-
+ kernel/auditsc.c             |  65 +++------
+ net/netlabel/netlabel_user.c |   8 +-
+ security/apparmor/lsm.c      |   3 +
+ security/lsm.h               |   4 -
+ security/lsm_init.c          |   5 -
+ security/security.c          |  16 +-
+ security/selinux/hooks.c     |   4 +
+ security/smack/smack_lsm.c   |   4 +
+ 13 files changed, 318 insertions(+), 109 deletions(-)
+
 -- 
-2.43.0
+2.47.0
 
 
