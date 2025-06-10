@@ -1,254 +1,165 @@
-Return-Path: <linux-security-module+bounces-10449-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10451-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C118AD3F7E
-	for <lists+linux-security-module@lfdr.de>; Tue, 10 Jun 2025 18:51:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E468EAD40EF
+	for <lists+linux-security-module@lfdr.de>; Tue, 10 Jun 2025 19:37:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 004B717C681
-	for <lists+linux-security-module@lfdr.de>; Tue, 10 Jun 2025 16:51:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C15BD18847A3
+	for <lists+linux-security-module@lfdr.de>; Tue, 10 Jun 2025 17:37:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F994242930;
-	Tue, 10 Jun 2025 16:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A75224AE9;
+	Tue, 10 Jun 2025 17:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="A5JFk4yG"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="1E636ncN"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AF98BF8;
-	Tue, 10 Jun 2025 16:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99202367CC
+	for <linux-security-module@vger.kernel.org>; Tue, 10 Jun 2025 17:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749574283; cv=none; b=NqjQLo0GW0DS/w/j51bEYFCu61c8HCoh7aXyBneF7EWNUlWUq7kyF1/Q8hsUfY/9fyPYEeGMhK4IaDa9AVdNkIIju+BVc5eDSxflV6N0zMIyvN6lEl8sxXZVg45GMsJq5JCmE9/ujwYjourWuCnAHTU10HpCJWSJSoQ18zEii64=
+	t=1749577046; cv=none; b=UIqr2TtwHaR5VaudOFWLnE9FtWXvLvpqeiXBUk8MEvcjmIF6PL+URY4wBkxJynevmQ5yXPE8AyAVzbhTiwz9Lnw9YAAQi1414Sv43aI6Az9dkHxDwM4dYWdkdVxe7rd5X+RoBWeaC2DyDzT9TNzHCW2PxvX3hcYlXjxOW6l2i7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749574283; c=relaxed/simple;
-	bh=Vnp2pGDBFC1FRRFjLh56HzSPYJIAcN4hN39e6nTO3i4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WVVo3KzLjmt/l1d3J9GfT4zgDtzWpkBjYmzmhBh7xlrZeHb2nU5rj5CCaJqTawIFwDU/YeHzX9zg2m9Qs9PY50xgI70lpLTFi2LjZzssQaodsLR8chYMPo5+5QAlpft9plxDZ+PG0gprwwgj5Bwmj6ZyA0bfmXGthCK4217Smn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=A5JFk4yG; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from narnia (unknown [40.78.13.147])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 91EA82027DFC;
-	Tue, 10 Jun 2025 09:51:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 91EA82027DFC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1749574281;
-	bh=iVKMmCMXdyVuVJ1kvt9F0Q2gH7f1XhSnOnf/XpzVitw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=A5JFk4yGJS5XEuWBZTeYrfGmtBBXea+cmST9lD8/cf1L0D9DCjGgTmar/1Fm/6dzU
-	 VGvi4Tejr5AD58W3+8GRIoW8H3UdkdGPIrjPSJcodTnJ2h194vjC+xL50Dw7jMPJJ8
-	 pazSZmDxGbst9HlObyY/qAWlzG3D7RscbLKkBI6g=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org
-Cc: paul@paul-moore.com, kys@microsoft.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, KP Singh <kpsingh@kernel.org>
-Subject: Re: [PATCH 10/12] libbpf: Embed and verify the metadata hash in the
- loader
-In-Reply-To: <20250606232914.317094-11-kpsingh@kernel.org>
-References: <20250606232914.317094-1-kpsingh@kernel.org>
- <20250606232914.317094-11-kpsingh@kernel.org>
-Date: Tue, 10 Jun 2025 09:51:19 -0700
-Message-ID: <87qzzrleuw.fsf@microsoft.com>
+	s=arc-20240116; t=1749577046; c=relaxed/simple;
+	bh=Ur5dV8QKH80XZZ3n1/Lz8iLMGTqBPVVJWTX10PB5Ssc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y5b3v8ykxKJfTzMwLC88rLgDKSF3AJqRUTaDZCUG4uZaU2lzvA3J+98hQKs5JNxuFc9K/zBV/QjDf0Y5shY9ayfZ9aYtoAZHNWs8WJstJK9DNVjP7opJ6+beQfO+/GN2BjQ3hhBKOupScUVoE1R4VmOcG+LxsBhn+PHauk/T8Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=1E636ncN; arc=none smtp.client-ip=185.125.25.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4bGwW71MT6zltw;
+	Tue, 10 Jun 2025 19:18:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1749575939;
+	bh=N4poSoqHkFTaRXhQjec38Gy8OXs4VTV9129KaB1cSFU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1E636ncNZwlaEm4q4CVWcB5uhlKB/7nQVHrRoGQsZxN+rX35ZlNeak99oLezrDhs3
+	 Au6GVp08oBSerwGGOvFuUtVKYrOZ9EEkhnxPlI0WN3Isik1Gr9mUva/Ewlq1zvonAi
+	 kcoekPkFHgQosvOHcRfjlA2Y7Yb4lsshBfuJs/oA=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4bGwW60ZtKzNsQ;
+	Tue, 10 Jun 2025 19:18:58 +0200 (CEST)
+Date: Tue, 10 Jun 2025 19:18:57 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Song Liu <song@kernel.org>
+Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, kernel-team@meta.com, 
+	andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@linux.dev, viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
+	kpsingh@kernel.org, mattbobrowski@google.com, amir73il@gmail.com, repnop@google.com, 
+	jlayton@kernel.org, josef@toxicpanda.com, gnoack@google.com, m@maowtm.org
+Subject: Re: [PATCH v3 bpf-next 1/5] namei: Introduce new helper function
+ path_walk_parent()
+Message-ID: <20250610.rox7aeGhi7zi@digikod.net>
+References: <20250606213015.255134-1-song@kernel.org>
+ <20250606213015.255134-2-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250606213015.255134-2-song@kernel.org>
+X-Infomaniak-Routing: alpha
 
-KP Singh <kpsingh@kernel.org> writes:
-
-> To fulfill the BPF signing contract, represented as Sig(I_loader ||
-> H_meta), the generated trusted loader program must verify the integrity
-> of the metadata. This signature cryptographically binds the loader's
-> instructions (I_loader) to a hash of the metadata (H_meta).
->
-> The verification process is embedded directly into the loader program.
-> Upon execution, the loader loads the runtime hash from struct bpf_map
-> i.e. BPF_PSEUDO_MAP_IDX and compares this runtime hash against an
-> expected hash value that has been hardcoded directly by
-> bpf_obj__gen_loader.
->
-> The load from bpf_map can be improved by calling
-> BPF_OBJ_GET_INFO_BY_FD from the kernel context after BPF_OBJ_GET_INFO_BY_FD
-> has been updated for being called from the kernel context.
->
-> The following instructions are generated:
->
->     ld_imm64 r1, const_ptr_to_map // insn[0].src_reg == BPF_PSEUDO_MAP_IDX
->     r2 = *(u64 *)(r1 + 0);
->     ld_imm64 r3, sha256_of_map_part1 // constant precomputed by
-> bpftool (part of H_meta)
->     if r2 != r3 goto out;
->
->     r2 = *(u64 *)(r1 + 8);
->     ld_imm64 r3, sha256_of_map_part2 // (part of H_meta)
->     if r2 != r3 goto out;
->
->     r2 = *(u64 *)(r1 + 16);
->     ld_imm64 r3, sha256_of_map_part3 // (part of H_meta)
->     if r2 != r3 goto out;
->
->     r2 = *(u64 *)(r1 + 24);
->     ld_imm64 r3, sha256_of_map_part4 // (part of H_meta)
->     if r2 != r3 goto out;
->     ...
->
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
+On Fri, Jun 06, 2025 at 02:30:11PM -0700, Song Liu wrote:
+> This helper walks an input path to its parent. Logic are added to handle
+> walking across mount tree.
+> 
+> This will be used by landlock, and BPF LSM.
+> 
+> Signed-off-by: Song Liu <song@kernel.org>
 > ---
->  tools/lib/bpf/bpf_gen_internal.h |  2 ++
->  tools/lib/bpf/gen_loader.c       | 52 ++++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.h           |  3 +-
->  3 files changed, 56 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
-> index 6ff963a491d9..49af4260b8e6 100644
-> --- a/tools/lib/bpf/bpf_gen_internal.h
-> +++ b/tools/lib/bpf/bpf_gen_internal.h
-> @@ -4,6 +4,7 @@
->  #define __BPF_GEN_INTERNAL_H
->  
->  #include "bpf.h"
-> +#include "libbpf_internal.h"
->  
->  struct ksym_relo_desc {
->  	const char *name;
-> @@ -50,6 +51,7 @@ struct bpf_gen {
->  	__u32 nr_ksyms;
->  	int fd_array;
->  	int nr_fd_array;
-> +	int hash_insn_offset[SHA256_DWORD_SIZE];
->  };
->  
->  void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps);
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index 113ae4abd345..3d672c09e948 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-> @@ -110,6 +110,7 @@ static void emit2(struct bpf_gen *gen, struct bpf_insn insn1, struct bpf_insn in
->  
->  static int add_data(struct bpf_gen *gen, const void *data, __u32 size);
->  static void emit_sys_close_blob(struct bpf_gen *gen, int blob_off);
-> +static void bpf_gen__signature_match(struct bpf_gen *gen);
->  
->  void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps)
->  {
-> @@ -152,6 +153,8 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
->  	/* R7 contains the error code from sys_bpf. Copy it into R0 and exit. */
->  	emit(gen, BPF_MOV64_REG(BPF_REG_0, BPF_REG_7));
->  	emit(gen, BPF_EXIT_INSN());
-> +	if (gen->opts->gen_hash)
-> +		bpf_gen__signature_match(gen);
+>  fs/namei.c            | 51 +++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/namei.h |  2 ++
+>  2 files changed, 53 insertions(+)
+> 
+> diff --git a/fs/namei.c b/fs/namei.c
+> index 4bb889fc980b..f02183e9c073 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -1424,6 +1424,57 @@ static bool choose_mountpoint(struct mount *m, const struct path *root,
+>  	return found;
 >  }
 >  
->  static int add_data(struct bpf_gen *gen, const void *data, __u32 size)
-> @@ -368,6 +371,25 @@ static void emit_sys_close_blob(struct bpf_gen *gen, int blob_off)
->  	__emit_sys_close(gen);
->  }
->  
-> +static int compute_sha_udpate_offsets(struct bpf_gen *gen)
+> +/**
+> + * path_walk_parent - Walk to the parent of path
+> + * @path: input and output path.
+> + * @root: root of the path walk, do not go beyond this root. If @root is
+> + *        zero'ed, walk all the way to real root.
+> + *
+> + * Given a path, find the parent path. Replace @path with the parent path.
+> + * If we were already at the real root or a disconnected root, @path is
+> + * not changed.
+> + *
+> + * The logic of path_walk_parent() is similar to follow_dotdot(), except
+> + * that path_walk_parent() will continue walking for !path_connected case.
+> + * This effectively means we are walking from disconnected bind mount to
+> + * the original mount. If this behavior is not desired, the caller can add
+> + * a check like:
+> + *
+> + *   if (path_walk_parent(&path) && !path_connected(path.mnt, path.dentry)
+> + *           // continue walking
+> + *   else
+> + *           // stop walking
+> + *
+> + * Returns:
+> + *  true  - if @path is updated to its parent.
+> + *  false - if @path is already the root (real root or @root).
+> + */
+> +bool path_walk_parent(struct path *path, const struct path *root)
 > +{
-> +	__u64 sha[SHA256_DWORD_SIZE];
-> +	int i, err;
+> +	struct dentry *parent;
 > +
-> +	err = libbpf_sha256(gen->data_start, gen->data_cur - gen->data_start, sha);
-> +	if (err < 0) {
-> +		pr_warn("sha256 computation of the metadata failed");
-> +		return err;
+> +	if (path_equal(path, root))
+> +		return false;
+> +
+> +	if (unlikely(path->dentry == path->mnt->mnt_root)) {
+> +		struct path p;
+> +
+> +		if (!choose_mountpoint(real_mount(path->mnt), root, &p))
+> +			return false;
+> +		path_put(path);
+> +		*path = p;
 > +	}
-> +	for (i = 0; i < SHA256_DWORD_SIZE; i++) {
-> +		struct bpf_insn *insn =
-> +			(struct bpf_insn *)(gen->insn_start + gen->hash_insn_offset[i]);
-> +		insn[0].imm = (__u32)sha[i];
-> +		insn[1].imm = sha[i] >> 32;
-> +	}
-> +	return 0;
+> +
+> +	if (unlikely(IS_ROOT(path->dentry)))
+
+path would be updated while false is returned, which is not correct.
+
+> +		return false;
+> +
+> +	parent = dget_parent(path->dentry);
+> +	dput(path->dentry);
+> +	path->dentry = parent;
+> +	return true;
 > +}
+> +EXPORT_SYMBOL_GPL(path_walk_parent);
 > +
->  int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
->  {
->  	int i;
-> @@ -394,6 +416,12 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
->  			      blob_fd_array_off(gen, i));
->  	emit(gen, BPF_MOV64_IMM(BPF_REG_0, 0));
->  	emit(gen, BPF_EXIT_INSN());
-> +	if (gen->opts->gen_hash) {
-> +		gen->error = compute_sha_udpate_offsets(gen);
-> +		if (gen->error)
-> +			return gen->error;
-> +	}
-> +
->  	pr_debug("gen: finish %s\n", errstr(gen->error));
->  	if (!gen->error) {
->  		struct gen_loader_opts *opts = gen->opts;
-> @@ -557,6 +585,30 @@ void bpf_gen__map_create(struct bpf_gen *gen,
->  		emit_sys_close_stack(gen, stack_off(inner_map_fd));
->  }
+>  /*
+>   * Perform an automount
+>   * - return -EISDIR to tell follow_managed() to stop and return the path we
+> diff --git a/include/linux/namei.h b/include/linux/namei.h
+> index 5d085428e471..cba5373ecf86 100644
+> --- a/include/linux/namei.h
+> +++ b/include/linux/namei.h
+> @@ -85,6 +85,8 @@ extern int follow_down_one(struct path *);
+>  extern int follow_down(struct path *path, unsigned int flags);
+>  extern int follow_up(struct path *);
 >  
-> +static void bpf_gen__signature_match(struct bpf_gen *gen)
-> +{
-> +	__s64 off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
-> +	int i;
+> +bool path_walk_parent(struct path *path, const struct path *root);
 > +
-> +	for (i = 0; i < SHA256_DWORD_SIZE; i++) {
-> +		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
-> +						 0, 0, 0, 0));
-> +		emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, i * sizeof(__u64)));
-> +		gen->hash_insn_offset[i] = gen->insn_cur - gen->insn_start;
-> +		emit2(gen,
-> +		      BPF_LD_IMM64_RAW_FULL(BPF_REG_3, 0, 0, 0, 0, 0));
-> +
-> +		if (is_simm16(off)) {
-> +			emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
-> +			emit(gen,
-> +			     BPF_JMP_REG(BPF_JNE, BPF_REG_2, BPF_REG_3, off));
-> +		} else {
-> +			gen->error = -ERANGE;
-> +			emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
-> +		}
-> +	}
-> +}
-> +
-
-The above code gets generated per-program and exists out-of-tree in a
-very unreadable format in it's final form. I have general objections to
-being forced to "trust" out-of-tree code, when it's demostrably trivial
-to perform this check in-kernel, without impeding any of the other
-stated use cases. There is no possible audit log nor LSM hook for these
-operations. There is no way to know that this check was ever performed.
-
-Further, this check ends up happeing in an entirely different syscall,
-the LSM layer and the end user may both see invalid programs successfully
-being loaded into the kernel, that may fail mysteriously later.
-
-Also, this patch seems to rely on hacking into struct internals and
-magic binary layouts.
-
--blaise
-
->  void bpf_gen__record_attach_target(struct bpf_gen *gen, const char *attach_name,
->  				   enum bpf_attach_type type)
->  {
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index b6ee9870523a..084372fa54f4 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -1803,9 +1803,10 @@ struct gen_loader_opts {
->  	const char *insns;
->  	__u32 data_sz;
->  	__u32 insns_sz;
-> +	bool gen_hash;
->  };
->  
-> -#define gen_loader_opts__last_field insns_sz
-> +#define gen_loader_opts__last_field gen_hash
->  LIBBPF_API int bpf_object__gen_loader(struct bpf_object *obj,
->  				      struct gen_loader_opts *opts);
->  
+>  extern struct dentry *lock_rename(struct dentry *, struct dentry *);
+>  extern struct dentry *lock_rename_child(struct dentry *, struct dentry *);
+>  extern void unlock_rename(struct dentry *, struct dentry *);
 > -- 
-> 2.43.0
+> 2.47.1
+> 
+> 
 
