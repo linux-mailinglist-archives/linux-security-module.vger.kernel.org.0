@@ -1,119 +1,111 @@
-Return-Path: <linux-security-module+bounces-10593-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10595-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B718ADB59D
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 17:37:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BAB0ADB7AF
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 19:19:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 263B816D4B6
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 15:37:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 482BC17368D
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 17:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB6F20F09A;
-	Mon, 16 Jun 2025 15:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E961ADFE4;
+	Mon, 16 Jun 2025 17:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="nzoh8IYa"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="rMOUuf4c"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CCE2063E7
-	for <linux-security-module@vger.kernel.org>; Mon, 16 Jun 2025 15:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7350219F42D
+	for <linux-security-module@vger.kernel.org>; Mon, 16 Jun 2025 17:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750088226; cv=none; b=lM90Bk+AqKtfMJcKtkDa8odg+uurNBPexyBqfnmW3eVMItLQwwYB8aTUNlLKjlmnVuu0uzuHevS/FPGSelk26XhX5SnzQellC8QqXSNL+G62e2mQNeZ1HT2jdBrxac4bMv0mKQkrGCWTz/Yy1xKWmsPwSbd2ov6dvx95ep+YmDo=
+	t=1750094355; cv=none; b=uflRMWF7mtmOr2PPYzKR7k9Ib6LjklAzDmXY4cz8b12WKxK5/GtXUuImKEj8Nxo3NRdw68nFfghDLjDXYla61PgoCXf4ZbeTuPORrFCdVBtYm0diRFXKWq6bcZVy3WpgPQs7Pu0J2HS/IHspJK+MqP6TBVP23/UNj/XFpthkAt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750088226; c=relaxed/simple;
-	bh=180+fvQmghlJ4dELQpA9Q9GzoY6ozYQlhMfrL81At4g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ukw19TaqwYi5AXsY8GvLTfPa7Ir3g6FYIaWknXiK0viYrN7tvOYaGBZAEueVXiFPAtsBUKMWue3tC8XuGsjLKiEnt0t13w7sRvdxGMpSt4WBvFLoD2fkCgh1YRhk7NRiieMj7zBh/EYLNtBAgrjLVQX65EQy/6p1XTwNIsTo5II=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=nzoh8IYa; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3BEAA3F479
-	for <linux-security-module@vger.kernel.org>; Mon, 16 Jun 2025 15:36:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1750088216;
-	bh=180+fvQmghlJ4dELQpA9Q9GzoY6ozYQlhMfrL81At4g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=nzoh8IYaizjaXlwtNf6VSxH0O3bKqwGARsQnt2RhrZLPxHI3k6qwDTDv49X+JCE2b
-	 ZMt3/DYoy2QShs0zX+weQ7CKotmyTs6ZwGJzqozvFNd4rO52LGG5uC47l4I106rqEH
-	 CiiD2HFdQlE3xMwYvKNgngSgGcKuJ4O0FEfMUPupoio5j9MA+6tQlj+uzFQI2339VQ
-	 QOozOIKul9gd0axkbl1sFPBov8xtsTcv89izcc9iKKwFk4xv7Fk+CG8mtzB2OQwsCT
-	 ihVOk6MJEKf+AVkqbBc3GCs5Iwb42laFQgUMe8HCmKUqZv4axlmWOz2i4OKTdLl4AU
-	 gJiMQL+27SEuQ==
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ad8a2dc92ddso312745666b.1
-        for <linux-security-module@vger.kernel.org>; Mon, 16 Jun 2025 08:36:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750088216; x=1750693016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=180+fvQmghlJ4dELQpA9Q9GzoY6ozYQlhMfrL81At4g=;
-        b=Qti/93wmpttq3Xu2zeWc/qhVeoEJ8J+NFEJ4KqKLfwwJNVz/cabubH6eMiUhDeKNhQ
-         FtKlcEWIPozPH/yXso2fZ7laOe3Q5BIEbX16aTaoZ56vRG1IbAMeDcPtbPKJpiqZZ5XW
-         /esFLw4ghgcnkE77WHHaUys3an9l6KdFDGsJbm3APKd9eSolr29D0RzT/jdTGSGiaUGe
-         n5GvQy+0oXHAPxmF/XLqs9XcE8m8rufFq6dmgVGRDkzmnnEZr0WZ38EIXfDsNfYj2Ht+
-         1pFSaaj8LRKvTZwp8zemJHGdFODI0OfNXnWI/shGl87DziQKwhZb46ytvsZA8eD9FWiy
-         I43g==
-X-Forwarded-Encrypted: i=1; AJvYcCWJmQ9idN8LayTraFmRLthyvqfsVbjJ2KJ7axjsa9Me66eZBO69vIXAduyqE81+1jegj8u5ZkJUaC1fFBjqlmja48eBH8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze3roW1sDGzHbRwGoKij3Y+d8J7C8slKQdZC2dvST2zvj1I/We
-	LaL01+9LrQDsqxThTCGR7+YYDnsHSfQ9vIAz3Dt7gK52FjC9vGH2jAI7WEo9eRUIur0XBd/6dHs
-	5tTQokEDvXAMbNf8JSd6RkPfNZas4r5W+I1BjNOL0yUPRyQ7dsBEvf9QMWTcvCR3YondiIUvjYF
-	SvawlJzSP/2GUA91tIzdkmx5l+vELxFg70dVc1KFvah9AokgjbL+SmkTu4wu5i+rkX+4P4
-X-Gm-Gg: ASbGncuAbHOt1xfXNy7Wy1TRvzDxzpp0kzShaOdInJBgl8uWIPZZePnY3hUbPWuEutK
-	y6p3VLGghhe/ujE4EejchKoRAM7DnB3GKEssLUfo1DMwyXgjc77eMdUA4cwQ61dSFZaBZOFx39H
-	/oNvA=
-X-Received: by 2002:a17:906:f597:b0:ad1:e7f0:d8e5 with SMTP id a640c23a62f3a-adfad31a6b6mr999250166b.16.1750088215716;
-        Mon, 16 Jun 2025 08:36:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHQJQ/hxkf9NwqjXLunZ2BtPoIP+ffyUhg6RAkOlGAz65yqlO6T/4AupYPgi3j+vAgE7ysMiMcbZuj7k5Zd7QU=
-X-Received: by 2002:a17:906:f597:b0:ad1:e7f0:d8e5 with SMTP id
- a640c23a62f3a-adfad31a6b6mr999247466b.16.1750088215333; Mon, 16 Jun 2025
- 08:36:55 -0700 (PDT)
+	s=arc-20240116; t=1750094355; c=relaxed/simple;
+	bh=R/S7eNlj6z6nMKjuHHfUYtmROaW+6s7ToD+uBw7qJp4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JbytzdOU29IiwQraio050cdkJeqKQm1t0Vag9fezw5E4BThR5wmGeRMzF8QM0njggMX7xayOq0z1VYV67KsEId1Hwtyt0RDxZYhCNORRWzheFLJTzqzCD6kK0XYo1UKDocZ50q9OyW4AYXS89z1e+7JU2+711hQL8L9oYWD//7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=rMOUuf4c; arc=none smtp.client-ip=66.163.189.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750094352; bh=R/S7eNlj6z6nMKjuHHfUYtmROaW+6s7ToD+uBw7qJp4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=rMOUuf4cu84VUCGXTiZLWcVGPAdkSAPq1hOwdHexON78DR1D4ecx9lnVx6FXDEjGnYMfgsMSxIP8EDJfg9IqcOIutaXbR6I9XCaM7Vej7YWYZPt2eYp0EYkm49pPHh27IiIbViMmkY3M5BI+WroQLqIC+5bOXYmNun4e1+e+YthzC2P0RP+mZ6IYt1qZp64WY37Lyemo9n+PuHMgAvHElIisJdXR4q9owQTcE3Lq2CCzQwulOFLHTaAzBPjHKPSiuPFvOuu5qRa67T4OKBFP6lsImC+jgEpDAx7mOfhWJ1gZ2Yho4BvujypfcO5PQRwuJybnWXVSJZJ1KN25xihXUg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750094352; bh=v9ln3YBrfZQ9qem0Yzj4+TVjF977nKAKZ0J4eYRziKc=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=GuEXXQ0ouEYmKhMT07KgAYR6Wt1joIzUcvgqsZF7Exd+a3PDFYDoUWRu3nuqH70tgrgM6/VxvlplHgXavycPU4vGdGPBdroGXQPmk0Zkag5DQ+SzQQs0hW3U6J31Evdwk403lNlbPbTf8uMF25gm2GTdp32zSsrVoI5crcOaO0i+qTV9qu+1MwY63kynJc2zfgwZqeCmoNFKqbnjchHKnrIG+zZtK0hfNt7d0rmA8oWtRxwSd2aq0bzq/+6T9YhnOIgqbMtKK0i1vuW6aIB+43EoxNF5qq+cxdg2pq2Qk7RbY3eqbBHY+mAEa9t0t/HguRlwMOHkL8f56hvw14d8sA==
+X-YMail-OSG: wKd6zloVM1kSL9dR.gRbK_M7jScuOUe9OqkhM18U5WTeQtdID1YF0SmHayc6ufc
+ w23Lb3uF4JWSQ1ZJEkaksEdO96qtrjvgFM9QWaTiJ7cpR8W5.8t2OwCFcPhgRS.RU4wV.Wkhx6AZ
+ MciucCy_PIcSc3WMDFhXZ4JQBNU5nGe.0fo0V4loz3wSbMVlWhP62RAnNgIRrFvJHi1VJHbwDXDG
+ OX4oH81.RpFVuVT09F5WazgDAjocT2k_XvJKLAkkkwSzLR8Xp74g7r5vnx0OO6vvUtR5IxkfvJF0
+ K73JEjt.QC2ZJ8LABw1FxNlcz6oTrPp9Tkgd1V3PeKi5Gg2FIzKbp5A9bUrQN89bkqAe0RkWt1Jy
+ M45WEWu8RuxTIJxBNpL6xGO7SZfL87RbKGpPVYXD42jxkVfWKBtm2u6lBQKFEg4jfda95VLcU9GW
+ suAu67DTbGybsaQbVqDxu7M1MugxFVqhwQ7adp2ODHAqqeAVGZBuAkSEZFuwmQHlFc.zhZnBzB.P
+ nA7TrvkjksiiiKQxVvTUxr1fMhmW9Fh2Gzn5dZ.lLBBVv0WGgGfSgdqyIwO8Fz.qHPR3vChi_Y_e
+ JO2BF4CC0Lff7z8vl2MNyLbKRuf2xRuANTRr9rz3gLAzvQWZA3w0W8Bpc.QuSWUohLrnd6cT85QY
+ EalgDbPtPG4fi2w2WIORxUazZVBO.R18ZFOEppMCf1FtHHVet8rNtUdmwYk4A86iH1y2gpf7HxXv
+ nDf7Ud5VKNTYH9v0yMMW4rZI7AjS_GEPgJIdb4alnr5SkA3zvEgu7MUAXQoICmiz6luXbZ5Pmepc
+ vf0LecA0j2RzgIPruf8RyfksHnsXE7ZOChhSxZi8TaFJfzAmWJa_zyWW5hiXthJZj044xacsWNgN
+ vCwr2qB3rP7xP.ZdhOnKwpHFYVRZJ.H2c6J7k7ZBnGBBLauCTkrWJnQhepSZHKx2j2H4Dkswjb.w
+ 1IkSfnxtPUB.r7UJjqJ0xgA8KeoJIQqUZlKBXECGPzNQuEMEDPfQAAe1pX7fNDXOb1sj7y9dmSH8
+ cFBMGbq49Fot0uLflxtLqsgGU4fwNPvTOgHv2Fq7GIFpAmbDofIpyZGs5r4brqHDom2f9WqsXM.t
+ mD_9r86uQOuytQmqq7AJ5C4XvlMffx_Y8cOp651A7WTYk1C4fVMVAUHTdZ6eu1GGz2gszzWE1mP_
+ wWCG8Nqpk8g9OjS4aLmi0mK9XKYLVHatTCyPkunfsjK6Rp7joYCRFaO3wrcvCYJqAxO8ImOBT9mQ
+ M9pHmqi.Hq8.9f70ZRpyBk7c_hNtH5hctzwtVohV.oCOVJyUe_5WMWXnyCQIQhuds6rVevOwgJZ5
+ 7agFPcpRtr5QZbIlKzCMEX38h6dPbVbPwGMfl5RNSpYOUePORmvWseRoYX.ZScteAJTkr_1QDHV1
+ Pf4x6gap9JgM4X.pSWXYbqXOOum5I4hkhKnvp_6nL2BF.z6e1rR9UnuS0lvjFD17xlMDwWBfa7av
+ jQxxUenBYa0dcK9183M8hLKR8Wv9.GtyUtCf433fZbuXRSigpJ2T48feZbN6K3lCbviKqKiTPaAf
+ t_Xj.W7vKlzVcDbbrJx4CtAHVytNFyvcivfaS0Li9wGi3S6eXMKQ44ujWnbh0ZFb3fLzcrRaj5s5
+ CTkqnL98QRr8q4M4E_ME7xyPpjhvqGc_e1BD91Exd3ZtanTYxXWJc.FNuwLOdSHLUqCXWokEesiP
+ PS4S2Zft7KynymnHfM5le_l9DkPaMaVevsntooGc0zB7nNQM_5YATFCZ26lTOKb5cx3.eGEMF_49
+ kZq0.3VIvprTlu10OskXljgPD7guC2CHAVE05scUDhIJ.RJwPGJF2Ex2jg.vr5FjVHqRdjh73OyN
+ Go46JDpPPgfUVHyA54tVD_BvEcPp76ye51g0Jn8T1jWe4PlvPprWbbMedOIDNxIQT2JEdxusP64e
+ ZauvTxYal1S3xwUcO6yNUfPkQxR4EpqBkERPDPqLMx9fPLFX4XDx0XRxLWfB5hrjpPGYisgp7W0R
+ Cj6f6n2xehhqf4W.bwa2.ebF2nve9OS.h07ltBYjDnIxE9EC8J74.JLtKQN2ARPmTdXuBh07PMgp
+ NW9zwVKIeP16xQwCANnysUyS3rohpHyXx0uQ6Xni_qeUGuw5Dv2Ekr0lAuQ4zFK5WyQTnkJhj3qG
+ VzykeLmMWraG9vAhM1_OeCJduKNoNFlFCCWXxhCqs5hDfa5wLj3d7yNTVm.Xbl5_OFm_0DBxXHk3
+ opuCst5SD4bP4QZgCLyjmvscEpm2LjMGPh_JUKlgm_3gspkYaOmQ4S2Fxi2nizWL0gcZdHNTv2Oy
+ Y
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 63d996e4-870a-4ffb-a687-e08305e3e3c8
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Mon, 16 Jun 2025 17:19:12 +0000
+Received: by hermes--production-gq1-74d64bb7d7-s6s6l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e0504c6c08f1e26149627925f357933e;
+          Mon, 16 Jun 2025 16:58:56 +0000 (UTC)
+Message-ID: <c512e831-796b-4a97-9ae2-5eeea7321e62@schaufler-ca.com>
+Date: Mon, 16 Jun 2025 09:58:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250615003011.GD1880847@ZenIV> <20250615003110.GA3011112@ZenIV> <20250616-holzlatten-biografie-94d47ed640ea@brauner>
-In-Reply-To: <20250616-holzlatten-biografie-94d47ed640ea@brauner>
-From: Ryan Lee <ryan.lee@canonical.com>
-Date: Mon, 16 Jun 2025 08:36:43 -0700
-X-Gm-Features: AX0GCFuA0E_AeS4fXVbbXeQ-QJYneMvLTC9afYzBWHzkjGBvUYmdb71wV7nw2uQ
-Message-ID: <CAKCV-6sD3tq3GQhq4YuSV_xPi4pA9Vv0zqxxZ=KTOzQutaR4kQ@mail.gmail.com>
-Subject: Re: [PATCH] apparmor: file never has NULL f_path.mnt
-To: apparmor <apparmor@lists.ubuntu.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] smack: fix two bugs in setting task label
+To: Konstantin Andreev <andreev@swemel.ru>
+Cc: linux-security-module@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20250315015723.1357541-1-andreev@swemel.ru>
+ <0c8e9341-d044-42ca-9332-2b284a0e3e5f@swemel.ru>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <0c8e9341-d044-42ca-9332-2b284a0e3e5f@swemel.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.24021 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-Forwarding message thread to the AppArmor mailing list so that it also
-has a record of this patch.
-
----------- Forwarded message ---------
-From: Christian Brauner <brauner@kernel.org>
-Date: Mon, Jun 16, 2025 at 7:23=E2=80=AFAM
-Subject: Re: [PATCH] apparmor: file never has NULL f_path.mnt
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: <linux-fsdevel@vger.kernel.org>, <linux-security-module@vger.kernel.org=
+On 6/15/2025 6:52 PM, Konstantin Andreev wrote:
+> Konstantin Andreev, 15/03/2025 в 04:57 по Москве:
+>> These two patches have distinct subjects,
+>> but work on the same object,
+>>    security/smack/smack_lsm.c`do_setattr()
+>> and the second patch partially overwrites first,
+>> so I combine them in a series.
+>> ...
 >
-
-
-On Sun, Jun 15, 2025 at 01:31:10AM +0100, Al Viro wrote:
-> [don't really care which tree that goes through; right now it's
-> in viro/vfs.git #work.misc, but if somebody prefers to grab it
-> through a different tree, just say so]
+> Hi, Casey.
 >
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> ---
+> If you have time and you could have a look, that would be great.
 
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+Looking at it today. Monday rc rituals must be tended to, of course.
+
+
 
