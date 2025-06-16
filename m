@@ -1,77 +1,77 @@
-Return-Path: <linux-security-module+bounces-10594-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10598-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C575ADB7A6
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 19:12:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51A74ADB7E4
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 19:42:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD87D7A7CE8
-	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 17:10:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 590A33B540D
+	for <lists+linux-security-module@lfdr.de>; Mon, 16 Jun 2025 17:42:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2240626463A;
-	Mon, 16 Jun 2025 17:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE644286421;
+	Mon, 16 Jun 2025 17:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="ZKoechxQ"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="ESEo59HI"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032301E8332
-	for <linux-security-module@vger.kernel.org>; Mon, 16 Jun 2025 17:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69CD221D92
+	for <linux-security-module@vger.kernel.org>; Mon, 16 Jun 2025 17:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750093924; cv=none; b=GaoQ9KbjWq6S0kW/8a8/XglW+KVSGK9dCP2w60wBb1A7NGtiLnAOSRQ9Sbop8W72f6bwGWSpjc/RgwS5957q+Nhnvl7VbI/qvCNMbBu+4GZsJJPMfeDCrhFAD10eTl71OWZ/8HFTO60VI7knVDWZMOeo2PbwwBSoOl+UOqjV72g=
+	t=1750095765; cv=none; b=KZa3pelwXTG7ZgT0sUD8CoqUiPG2iv+yg+qgzGE2+mFJfU6F28svhDo5xDtLWi8VsuidOAJP83LIM7wQgFs4COzvy3C/0SO9q+Qyr8cysXxvQUvMeQwthfD5Sx6evgA7hbddUxsyZd98MipQraLV0K4JEModBV71+e/pCP5DxhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750093924; c=relaxed/simple;
-	bh=z3wfm19/K2dbJBuj2N56yw8HpSPDTiCcrLHUeUHGS5c=;
+	s=arc-20240116; t=1750095765; c=relaxed/simple;
+	bh=ypwWDR752Brl/yP1GVT7O+pBYSXpSCA6k5ypA26i6FE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NRRQdqsP54U5noSGnANhLpQw+CRcDYcNUWpBhxljkebIpSexIwSCIw9oH+XGUeBAr9uXnGp1YdkHyNP9Fw1XmRIPsjYa1dzWl0jJVS0TrCwIpbo/sdnmrhVktFxYzZk9iyCWVAm6FIKuvD8g/w2G6loe2YwyflQjWCv+NN9oc9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=ZKoechxQ; arc=none smtp.client-ip=66.163.188.211
+	 In-Reply-To:Content-Type; b=KNmKjNVvB9ZLOSJKwm3lsjdvsjpAZ/9I152udxuikM0+wKxke7nzjrPJx6/s9Uj2ZFyoF0oDRjxbnpU9v/SM/fsDbwM1UhlQrslNE27fPjii5XsN+t91MRw6Z8ax+U7IRM9BYHQFjFuQ5i6WKSZSyBtbYH5cjjIwXrVkDnI+7Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=ESEo59HI; arc=none smtp.client-ip=66.163.189.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750093920; bh=J2U4deFp5WsOwad5K79E6NvGyjG3HdmWMl4tqVrcW6g=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ZKoechxQTclADvTNWG6OqYX9wyiOe+Cftsl26J1cnSaDxoQKNEknXx5bEFZvdu/coK6ZC43wUKKAZiMfrVhXAeeeJ/VpQrs+j1/9a9AKbIbK9et+AcHLEHzPRZIYDFmSPzNJSn2v6cgL7EPhTK3h6EOkabxyyxK3hvmzGJPux3+Y6ihHDMkcwdX+Q/P2k1NRL2FBfDU7nVDKNpzmWQHIOHNHq/UAH9wb0JhTf2hwoQyyhkzdvW5ZtY0qM4uFr5NJov68+8dZcAUaYOxh1MxrOjSuuqHa00cDkHWRfhYa/9g4XXHNlH7wNAjE+AKYPQ+c8Ep5NGCXrpQ9M75I0kY42w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750093920; bh=EmBuG7dy06KUmymNUA2r9i4E+dvxNen8eO53+EsFLJz=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=osaktALP37I3yCZc97LEtPDi9GarvwCn0pVHZ0YLTPMFi7lsICdv5pHabEIpVPP9GxnUscqeM5iWGQtc3QVOPyTwv6WrMj9xSW4iznN+Eo592XUfhWVMniddQ6g4+hhbKxgA/hncGjORTUMBQBD2c/HRqRQ5PlV4qG80z90W5L7k3o7+GL9tQX91luVtGokgccViD/aRYMAlARLQbhU/bduifDuzQSeh883f8THcd25wKxQt9LhNq9YodgXdrDgBthykceQ7ysSYDr6eIXsBznkmJOEMBPEXg43mgQlXItcDqdXi7hnSAPxJ/Epe64akYjNdCOeDDa2ukiLLcoHxWw==
-X-YMail-OSG: 8fpnjrQVM1mU2j3inq8ipZFDaVvr0kfeTeTFwm0Mknbinv6DGtIHxPssrRCZaiT
- _5qvpYSyMujEnAtHzOeWdMrPz51KpaYeRbbQKTP92Q8IZXJmZTGu5skN2Ld8ZyzHly.VoFEBlNoT
- QWhzazo9GhnAXk1bUHrVbOjtEKr4jVOAheMmJjZvC2KMlCGyYKYFys8itUnYaL_QWq.aL8OZvi52
- zxzMAZZkB32s9XPgXjW4gbqsVWu87iLocMUhv2.oLpBDvXCcUtWFczRWsbixCiqVZvWs8j4fRq8P
- PqT4b5XT0TkdzLolVoJUL2YEzPDPeBTrW5PA8ESk6eNFoLm.i8I_W62rla8Q6Mw8HOXvGrYZMUS1
- f0cCNIwpLRSnC8xFx2XVoFqact0zJVJOOhz4ANRMkuWJT1KSqwKhYAUj2Neq2CObFQCvDibWTUGT
- bQRFVM4J4bi0zW6Lj4TZzXHzVhFs0UvZM2p76ClbbHF4RN1Jf2mtaicxWtGAHnqSrWAmhVN2FdD.
- nPH8Km7ZK2muiRIS_.bu4iW3EtetF7H2kOmdkcEZDCfKGOvI0JfIWybpvR5BNCMqJgQhLEG34rj3
- CbRJEgZyQcWo66zbRlZ_K6kf824JSdDJeD12lnf63wCWki.4iKLgohdQcs7ZOzeycHJFymAtKzma
- 7jdVeYJazEdIuGmA1Ku4CYUGlTRaONL5GRP9YiyQsJL.WxvHKH3wRngv0ii2IP1Ls07E4tZM9bqi
- EUxXD5b7QZ1rYRwxFNl0ibg9tYXkV.likQng.Er_8aeM25KF2H_KZQ.U9z5UP80cVUL0eARJtseD
- jt4eH5KWm933IxyDRYPsMD5DJvyif.D72pPhGBmt3jTI_E4e.OTcgw1KS6ZyRNLKTaRr5Rq.1LSm
- alu2HKvz_CCoP1gKOQkMiZSlLWaeHXahve4kNWyES9PY6Z8Y2yXDoCAwWdaBxcZk8wh4iMctC7pa
- itElQdvc1Csg9ZZLOkIXAOMAuGOyH8nCblE9VJ85zQEJIBX3qS9mtRDk4_7Rj8Am1.WQEBCVJIn_
- MA5IwH1sOHqZN3BAlx2EhpEGzB7O_NlEj4mZ5tDrSW9mofuMMK_yWIxFq3Vl7EVTTtXORk30QeU6
- xw9nZuAnAWgADvehJ.k82t6JXY_cyjUR7rnbeEBh1dTs7AsQTNNIiL3ANlV7evWzwKUifYFizeVc
- wr6B3USvK3TohmIsLeShfhzqHZq3CQwPHUypx3Wp7yz1kG1vfcMYiXet.0IcmzVaYgzgG1B4kgTo
- NRFf4yZ8rltEYZRTPiJ4g7mW3Eub7r4aA0zc.4CXIJNGS1V0brfyjw1_vsVcXa_IF..zbqRLYaXr
- ZKDZC2CQJdp0tDc_7Rljwf8kzdFCn_0p3RLTKshkT06TUggJEASXU_SAMRkauOaQXjlQxqT_I5tF
- 3YElTE7FU3GQQGnazgQlhSoHSZ_sw0pW4Qxe2Ti2z3.mwyccbKSLCKJzK.wOAT1OZxbVlhuIPqnX
- FnF53YLohwhq2lrza37CT7s7nRoqdVOtREq_reNvT4ybd_Rn77nfHO8hBs5KlFkwTGjJxPYIHUNm
- 2lhdUebbbfa4v2joZJyQ5GRt1GE2W9JNUN5GjrUtD_kztpJs0Gsgn2ppopIXgTLip.zWuhVO0lBU
- Wnv4aiulDJYRzb0xH5j8ROpqlz0jbVfLnGAeVMyEc31UFXwjfX2XTbdi.Waup2VNPDbH17aZXcut
- hOz5rZDFcCG5wWH64_2qoN482YHnvuZ4R42VCXCkPo9vPN6gWD2M8YvgeCD.r7ndNf9Y_bEB9s4m
- mdV5Iq_SaASaa4H.AQi6TTaAWAV7vvfg_4n0tKxjGueGX5oK6yQMBT9GYORBsyFgU30qjYnFFcEj
- vJTej1FZLCoLkGFTkf8VwUdcZhAZ0YDZexqNdSLLxBO5Kuk8GbLWaTUhlV_uOcbhHP_3_h9LoVWm
- qQ_Ct1tR.t_XhJmidhqzwulOauzvZ5BISsfNR2iPaEVKO0LGNhBEE.N3vAWKrgnxxoK3FrgsePM6
- oMOonhmmZl9p3pe9W3YQMgMmae317DSP.SM3vBdsmmX4QBuXBR6UBPj20Qfb1MwUGy92qrsQyv76
- 9G5AYZUCieS8lanfUYcTl7ll086oFboUMKCHw9gFzKIWVP02B_1qYic70S5TdEF7xqTO03Y.8F5J
- R8lFZUac2Gw4il.S.94lWDFYfZKppE6x08M38tUeZGnB5fBzj2vWyeND7AHVte2CTzyCA7mWB7gz
- 8DP9TK51hWw.koxNHnOyQG0YmuTyPlgAHElqckkT0uHKpal2fWsNRQHlK7.RaiU7NmO2ZnLjJVsn
- M13vlRg27jrnAjHpEgQ--
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750095762; bh=ypwWDR752Brl/yP1GVT7O+pBYSXpSCA6k5ypA26i6FE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ESEo59HIKswgH98C+N03D9Yfoa3B7iDbLOgHhaJ23m2AyNamPIqd00mEZafmL0wXNgHDfablV0IT51HudqkuVHmS4BCiaNxiREQKqtJf+WEkQsixU9pfU14YNW8PP3j/27sZhhxLztwX2v3OFucvatLg/PzgpzR4cJ1joKLLUVUxiiZkjg3myRNpJ/o/PSxSlz8/8BD7odRPaIWmvOndP6nK5+t1HcNlzC/J9L05CGXnCzJ14NYuiMn5cI3NhhIniMVlYcmsHgSYldOhOGKhUgG1c3REZTZb/hpsd5s8OrZ8bqsRSKufY/kxAqOd3mRXuxlz1nwyPYo5QAm7/pEJEg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750095762; bh=HEUwDrCU2Cw8FmpnWmc7jAe3IKOpOKn/uxS6vdOra2Y=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=s/ah04ndvaVRdmZP0MHTt8dj/xM4feGK7Sf8aGnXRVji6TSIpw5D0EntlWteftJ7O1gZPEDfc3BZhxbSGU25Q1SHwJwC8SM8/m13ygv0NrpeMrRyQnpcb+aFRPMfgc7mDlVuxSUE40hHA8yZBRSLNfgRJ9hdPp+pT6L7e9JkcpiYtUgVMf40apme0ad7gQZxj/wUHRH2nVHYDciSWAtk8/GLpXcKwosY0UixfQOUt9Gk086zyZ0TfEOtwMqSgqpt9FN4JwvIIMpczB0Suck7XW/jkqBnJP/5tqZoN5+yG8C4ZQfc6b16CsayWqsmd3gplbTN3ybMv7i+c1tUJtlwIQ==
+X-YMail-OSG: VpV8dEwVM1mBfxS6lg4klHPADX3rq9cKyr_XwyxX0I7o160PYLmc.mucuD0kxQN
+ KDFbqlieTwkdOPe2ixfamO_BSnGKR7siRh8t4x0LOvlnHwUiQp4NpAHItAutAJ60sX6fEvVL2krT
+ 5d39.44VB.p_MsmdZvV6O0dSGHt101E9eGnPfwAvURw2TZicbwDrqXDgjhmY7XhKc_jf4rouGT5N
+ QxhPUCwaC1iBdpjiYWqiWQjgngF5YbLOf44nPN4P4dIdjW21tW.sBazmgqgWetRCyKQ1pUMJOFms
+ CrlAf2NLwTl06ENH_s56NPOsrZUOCnTW6Ww0L5_119WyQD6Ya_pYIxwYfNotyilJMz8oHVvKEF21
+ dpTZqS9YukQ5pVPXhnOSPdGgulrJClsXFhijRb6nFhojbmxdUe1UyaeH1BrDvP8wsPrr8tJQE15u
+ DnR6vyq2gXEL29.e5DGUwf2k5ld4j5U5PDlzZL1CSv4AhYhpM4ivnz8h4D3n9CWIeZiil4CZ0h9U
+ OAUya3o39q8npZEKRImm1C5rfOVdmupYh3Andyirsi1stLcFuJYuBpV0Odgj9zq_MYk6qqcJPHPP
+ qFnuEOiUbdwC.d28QkJLaBg_z5wk2PGc1KlSQVNdq.OWTTn_4WZjCwMhX03FlkCCXTPkR17MKK9H
+ WJJgfmrvxfkqhenhgJeHCcpEcalpcC88xUYL4Pqj8OTPrYDCxRCfBfHLLOKnpEDYDNUp0dqnTkcr
+ Ax4jRWfOfYOvGcAyGLcqdoY.4XSqVSHEQm0K9AudORdHu0.leyT5M7iFSctKvvhPQglbugwhOwOy
+ dE1HvrhoLGeinzoF0b1kxEr71cbnULWlzG8umHDTBrSWGoxcM0EWjahen6crxFiSsJSVIVFsImqi
+ FA_9UWoL6Dn8s2ArSZ15dIqZvT7SxLNw_ycrMviBMLiqojkQGfGgt.Th2IJcT2EQIiSZbJxXGqbt
+ ZNfK97gjITXBt4.gJmbfGG_kLnpncFrXFwO5sX4WqcxMDM2CWATjmhaFkU15nOhfJAiKsk4_qJdY
+ Hnw7pLGqKwjJWl1eqFQoTsylrtsiPLvtf8GML30YaVt2eVMFTpFOUAbZRsuTjOF3033qyLf8.g_1
+ 0YjlWZW0SPrftAxpvLL6WW6_7n.QcOxIJOVJwWpACaz0k7Bpwnl2JQFifseFELKJs8NufHCVa82t
+ 5hLlHa8uqO81zxtq.tWTZrQnDcp1JlRQSAlAJv9_LJcys2p_ZZSHeGrhvOu.sCw13DTn3Cd_hoM_
+ 0us93WDy_KJ1L23uAvQCHEHuOiXwBlI630pcLW7V.6Z3ELm_fJVFkhmtzD9bsl66kAbBI28yH6tQ
+ nwJ_Y0atyLtILQ1tGtNK9b22Q3BRhkNq_tN2HFVF5TmIQ_D2tfUqPOtMkKasU2jd_7rhcIGo.1.7
+ 0TEVPmlPButvqlq73z5F4edevnI7DZ3e3u0E.LnY2SrQKIFQeeBlUM1FX63S2PtRvSeScqYm0BPh
+ Ta7AEkMjJ12Xl5YCAI0H61uxJ_PGf6tZTp5zBXOgEXk5OPdYRtcAxeTLG3Oap_TLmPQBByZWhXNN
+ nMhb0JQP7p6YDP257QIBg3tn1tQjRvl29YNnwfrW7XGLMuPJRnOXlD2WlLxmCXYqOR9GVQE9oY0.
+ WKLCYCqWbZkjioOPems.NxOiK5Dq1mCOPDsqBuhNS_RAa0qTQEpB3YvZ6f7nwTz6izXNfpibaYnF
+ 4VCF97HopgQ50z5.QPj2m0u3idu81Ru3QXCcchN9S3umx4ZnHvPEALue5SwO59QJp2Z8EZ7Z9blj
+ yZhqj68mZ4Iic2A5ZQqjEYWKa_oS9jbWli.NQLQroLldPnreoPyRN3aJkjGcGLR0RCgkLC9fvQDQ
+ uQ.0F6fbd3dI41R4iWxgaimj5i5SQ2U0nXIr2KYFtd0Nipkj63K6WuczKrTswN8yfa3OIOr79H82
+ irc7In1f9jJXDT5O3.iHpRG1foZQWPd07x_ksEO4WWopGU_TYVPOmxy_CejJCj.bsqntCiY1wUSb
+ tz5cQGHmtBrr.BnIDQBUFTko6AskLs10PpwMpdb8nAzY1bVyTRF9seKN8DlSb4w1i8I.2oXe6Hsh
+ k47jC46PAwz4OclagAUTAPpPm5NdyapE23Xmy40soSlANcMZe_ulW1lzsCIVvrbSgK.z71Iw5GR4
+ eiidHYdvsazJXISWZ5kkaAAZmiBPF_Cve99Q6SkoE8DhBObIdvmv8j_gfN812aPkg1POjN42.KQG
+ YnH5eY0Y1uoJXc4YZ39CBFPuEm8Odn9vVoaxWiNjtZuBqjTr71RMa9AAKiesig9I9B1n.JzS5y.U
+ aty0HKbMln38Du0cH7Q--
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: fd17b6b4-9787-4dde-af89-271d2632a6c5
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Mon, 16 Jun 2025 17:12:00 +0000
-Received: by hermes--production-gq1-74d64bb7d7-lwch7 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e7cc649d56177fe9cd5522bbbf3a3deb;
-          Mon, 16 Jun 2025 17:11:57 +0000 (UTC)
-Message-ID: <38c13fcb-2ed5-4b17-850e-b57562321683@schaufler-ca.com>
-Date: Mon, 16 Jun 2025 10:11:55 -0700
+X-Sonic-ID: 53e56017-2cae-4282-abbf-5e887099ad0b
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Mon, 16 Jun 2025 17:42:42 +0000
+Received: by hermes--production-gq1-74d64bb7d7-6nlps (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3e1c64c2a5b3a430392db9f269b02567;
+          Mon, 16 Jun 2025 17:22:24 +0000 (UTC)
+Message-ID: <225c8775-5213-4a9c-af32-b80e78d98abb@schaufler-ca.com>
+Date: Mon, 16 Jun 2025 10:22:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -79,79 +79,35 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] smack: fix bug: invalid label of unix socket file
+Subject: Re: [PATCH v2 0/2] smack: fix two bugs in setting task label
 To: Konstantin Andreev <andreev@swemel.ru>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: linux-security-module@vger.kernel.org,
  Casey Schaufler <casey@schaufler-ca.com>
-References: <20250616010745.800386-1-andreev@swemel.ru>
- <20250616010745.800386-6-andreev@swemel.ru>
- <147eb5a5c06ed28eec9cf33a877cfb200e9a6103.camel@huaweicloud.com>
- <df5f6bdd-b7f7-47df-8fc7-a5aa32e2f92a@swemel.ru>
+Cc: linux-security-module@vger.kernel.org
+References: <20250315015723.1357541-1-andreev@swemel.ru>
+ <0c8e9341-d044-42ca-9332-2b284a0e3e5f@swemel.ru>
+ <c512e831-796b-4a97-9ae2-5eeea7321e62@schaufler-ca.com>
 Content-Language: en-US
 From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <df5f6bdd-b7f7-47df-8fc7-a5aa32e2f92a@swemel.ru>
+In-Reply-To: <c512e831-796b-4a97-9ae2-5eeea7321e62@schaufler-ca.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Mailer: WebService/1.1.24021 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 6/16/2025 4:46 AM, Konstantin Andreev wrote:
-> Roberto Sassu, 16 Jun 2025 11:05:11 +0200:
->> On Mon, 2025-06-16 at 04:07 +0300, Konstantin Andreev wrote:
->>> According to [1], the label of a UNIX domain socket (UDS)
->>>
->>> [irrelevant portion of the message deleted]
->>>
->>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
->>> index fb23254c8a54..1b41ae053966 100644
->>> --- a/security/smack/smack_lsm.c
->>> +++ b/security/smack/smack_lsm.c
->>> @@ -1021,6 +1021,16 @@ static int smack_inode_init_security(struct
->>> inode *inode, struct inode *dir,
->>>       bool trans_cred;
->>>       bool trans_rule;
->>>   +    /*
->>> +     * UNIX domain sockets use lower level socket data. Let
->>> +     * UDS inode have fixed * label to keep
->>> smack_inode_permission() calm
->>> +     * when called from unix_find_bsd()
->>> +     */
->>> +    if (S_ISSOCK(inode->i_mode)) {
->>> +        /* forced label, no need to save to xattrs */
->>> +        issp->smk_inode = &smack_known_star;
->>> +        goto instant_inode;
+On 6/16/2025 9:58 AM, Casey Schaufler wrote:
+> On 6/15/2025 6:52 PM, Konstantin Andreev wrote:
+>> Konstantin Andreev, 15/03/2025 в 04:57 по Москве:
+>>> These two patches have distinct subjects,
+>>> but work on the same object,
+>>>    security/smack/smack_lsm.c`do_setattr()
+>>> and the second patch partially overwrites first,
+>>> so I combine them in a series.
+>>> ...
+>> Hi, Casey.
 >>
->> Maybe you could also set SMK_INODE_INSTANT here and just return.
->
-> Certainly.
->
-> But I personally avoid duplication even of small cleanups
-> and avoid multiple returns at the price of few gotos.
+>> If you have time and you could have a look, that would be great.
+> Looking at it today. Monday rc rituals must be tended to, of course.
 
-I generally prefer
+I don't have your v2 patches. I have the 0/2, but not the changes.
+Can you please resend them?
 
-	if (xyzzy)
-		return -ESOMETHING;
-
-to
-
-	if (xyzzy)
-		goto err_out;
-	...
-err_out:
-	return -ESOMETHING;
-
-I grew up in the era of "gotos considered harmful". When
-err_out does more than just return a goto is fine, but a goto
-that has nothing but a return is unnecessary and adds code that
-needn't be there.
-
->
-> A matter of style. Either way is fine for me.
-> Let Casey decide.
->
-> Konstantin
->
-> [the rest of the message deleted]
->
 
