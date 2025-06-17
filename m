@@ -1,459 +1,164 @@
-Return-Path: <linux-security-module+bounces-10629-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10627-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0890ADDDBA
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 23:11:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54410ADDD93
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 23:04:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4512517D2C2
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 21:11:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAFDA17B2E0
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 21:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2B52F003B;
-	Tue, 17 Jun 2025 21:11:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06DCE2E717D;
+	Tue, 17 Jun 2025 21:04:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="CvbnbsIa"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="d8kRfGIp"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 967A52ECD0C
-	for <linux-security-module@vger.kernel.org>; Tue, 17 Jun 2025 21:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EBA23B634
+	for <linux-security-module@vger.kernel.org>; Tue, 17 Jun 2025 21:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750194686; cv=none; b=g35TP6rKS46FjRIfvm0aLJshQtF+nqJR7qY/fgJLCzm7+HNQGALmjTaKdeJZ98uDGBrDxRMwOnDjBgeeolF+oaWXLtmfXkZi08M8hcFRcTa2N0B5T/CSOCPKptVZq5+RFJJ0HkYWhNHrIMYfZnGhuYMaTl1SVYyhAHYSzxOupRg=
+	t=1750194272; cv=none; b=AmfqFXIlu3ylHmDRGMDvo6G50oQlv2/tOlhg5smCLARAsVFBaa1qht2Tfi73ZrW5UJiz/HFylwOhql+fH7DpLgdZwCkAZ5z9fotIEStEFRdqjMW+DbJ0Gfkhe0Wu4jWm9chyAMnqGdm13BUfUctrp3e9lcWGjPd4dgPZg7OuiSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750194686; c=relaxed/simple;
-	bh=s6Zlbdl8RXwqc2QBqLF39ACjWvYfI+KbaL3DtQhXQ0U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SKocfigVDkCsD8+uA6QTi2T+64ul8/SbhdAbmZySp6zZnFmD9JYo7mqPcrQ3OEJW+rQ90P6o3Dm1OFlvtoZ6/vO2pH29uGIWxwn+wOa3Bamu67qvvh5QPJ7HbPY7UXpcQDJLMOyRyP9LqXjo6pxOts5OPKGC8N6+165z/iwbzPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=CvbnbsIa; arc=none smtp.client-ip=66.163.186.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750194682; bh=xkBYRFAHX7ZhFADk14XFnsgj0mIElQL2qR7XvnrGWF8=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=CvbnbsIaFvtUCUtloXlXjqSHOg8D+kKtkZwGWdLXa/KDat7GeMmRocrSVM8W2Al7Km+XtalnCoRMwnPoDs8GdBf8ihPccz27oja7vAb85LAf8IkKbgiCPiVfg9XppCWIY9Koq2HRZe6KkF9snrDrOTKNFSEWTFkwBXx7aeikdRXs0Rd8etTaJZkd/mG6kbCgbuwyi8lVaO5Jzjs5DO2exquUKzqMOyvwRTJgdFqNNSBm/CsSVSEk9lj0157Ea3bCuI29Of5nynlWtxGyPI3fDWLlfbhYdBBwzpvTqplcGtRLY5vJyu3Ajc4sPzFDbCnQOs+PCULdw/eWOubeeNGJVQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750194682; bh=ETqbeqkNtItQgBV6ZOGTO5SKG2JU1UR9Lg2XqbYZRPt=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=bCmGRWSMT14B4Tm3qW3BgB2IQpFb1jAu2zkuUZbwOYk+FZ2lC5nNVrhmqzm8oLlnrwwGLQpn1T43iRkm36eWmqHoiXKJIN96fUDSRK6jZ3vas+zY7y1drF1HG+ZO4tk1Zp0LNwkSCXuc99Lup4jO+7K8InizyXrt99V9RMqwgAlnW7Vdsckv0nQ+VTlm2Xbcx5Faen1MHrygBX60OXQwlcCjQV98p8sgnDJr2ebdxeKAbWH71Vr+qPdbKwAVUaKGPuwlMxBcsJtybQn8bpgW3NYxxDkKz+kfIzpqwAEVm1e8/JUvjGxuCGtDr8BhdrrywTG9T6MJrvnX6X8TXGXNpw==
-X-YMail-OSG: KZRtb5YVM1lVDF9XgijnLRCF2Xol2vu1vFyI_i2uLuYWS9r62LW3OEcXWxsP6wr
- 3_QzUJJQ_A2pqzm_OVNaFaJHOFfiEJUB882XtfgCuWwCUxe_wps1lxyA7mrHc6AMb_U7IHGnQveX
- YNN.vkZ2ycfWZpwfgjTnEPcrEs96aRX83CZi7b1m5NWghXP3IKoFFuWhpk2KJzB53YaKKCaA4bA2
- H9n2K6GYSwZaGD9bUz.qAdu036bMw55AR1R_Yb8_84.EfGkUy8y3jNjHFMv8DZ91t8cjL30ngC5j
- 6dMHU9Jo3q2dNsZdQJpeE0NtH6NwVfFVEDdxuVHwoQvr8mcPbkfsdoeoXqKcQ1AFhN3s8KNFxwpj
- tzLo3eC9pXmIvnsTi2H9e5.w_4G80q_2CJhAKSui8P52Ah5SutOex4_JV6anTgl9D4Rh.okqCkPN
- eIbVOrr2rWOYkPiBok79vVYtyZzyUX8j29dxw0UtmuOMJMWw23GAe_eDVl7xAoWnpLqSw6yGx2hf
- q179kaHDeOSeiRf_pofl3s92aA3hPUflKb_87KQ7wIx.NScTIHqdlgfvofI2g.ZRcWxDVu92.Wf9
- N1ZtjUvC9lVroYAT9JxcY.m_fXZ1nQlwqEkpZSxeLt2EN3n6bv3OCAIDNyx1KPuX9u2S.tCAIjot
- Va.BZ6PE5V2Rjh_gFlRnCBFzLYYbgHI6GuODeTS19WH7cXZX9Twb8nxhf4OgRKjA8DDps4yTRXZz
- fvxX7upR4wn8b6CAVdo995RFrTJEqghApcTPhZ5zS1S9eN7WkW4Ga5aCcc_KV_El86uAdRPM.ulU
- vhJUMouHyjq6iSnkYKZPbkbnv44NEGaee28Q4dJqn_9lYze7iZ_VFS4PJ04HdEN6NCInUi_d79Gq
- tGQQakmxnaUQnXMjL0sf48dn1DdQy._57oSLcBNd3hkzGbPaCGy9pF_iGVJwRzlhM6GGApXc2Vt3
- dJbA1FDK3qReNp2E0RoQ0o4xUe7I.8hGd_hUwbE6_zixYsrGOGzWAvukgjNk1P3eIbKnXAU68aoc
- ckQ.r90TGDvRttHskLLAxWecsagXHvKEKef0R7c8mt24Tuk9d5b25CHW3tmw2NsJ2gFRdJtT7RBG
- hYgVi1zX8otdendmprOVwY6xBCYkSEhWSMRBVK8kw9WvusEVgNEVZnJ2LEiNwz0V.YXKIp89jWNI
- 9xOv4rY_mVy.njTxgg7n3PNQY0g30cgTtjw1SK5YMHxMbDiwpmqp.TCPk96hbOEskG7XH.Uns9qn
- n0sJa6uBgPvYVcwhEE7w6tip8dnno_ZJcYBbQXBOPpngy4W5ekRrE76JoJyXwMib7Hg036frG0F9
- HCUaYQWX6ITbjf6eRQkkI3lvZ98dJGp_AR5faXMHaEGYy4.zPE08p13KaGpjsQ.2hT0RMpFZb3GY
- FVMn7aUOIQGgkfpf3nHZtn7jhClp6kehRVLKF6zupbkr._IHp3l.WMrH7xrduGlHFoXUfcNx4qCh
- oUyFAPgYakmKDZ72RhYXSMPSN0pY9kkNoOhq.Zs9FtDttPkUAPdAIP0QZSIynjMEj2z9E.554kgw
- nKUTV7Mu2k.bA_nnl8bYv2NhyYXRyao3xYwIDaiUeaXoFN7OcxQEjotptaJQ6bE48pCyuO_Qkk1Q
- cOUxL1wMpqbqjf__fwBy0kqKUtnq_lscAlbsm0e2GlkqOuLdBchT.Dh.SYp3_jJ_U9KBOmRwa.pc
- hLRKF01GaxckjpZvVZxc1UPK6wTClLd837nhHAeCnu1LA.WP2mx7Aev4WzDE0RZvC_Pewa3VEDR1
- coIhpfPY5FZvxXb0N230eUg5mm4YqHxQDgNQ3V1rfGbxbI8HLjj__5IAsEKw7N9o_6LYzJsKf4.w
- _9I4DLP0Ea1reJd.J9.ktdNlEXv7rkPH509nS9K1jX0K17nsUfEX06NPT2JqhNZM1OHWX.BcyF46
- DO0NgClvf6geIkhHAU0IWawc2hsG72gb2Pk5SG.QeupqR3Xlv19oUJSn4AB.xxC_gTxXzcMbDRjd
- hFPvgF34jRI7JIBmZg1K6XjGyAqjHg9DYphlXW53165czptIp9uPctDBOfYqUBBSkvyRdw4_DnI3
- X5gbo50ZEgPCgi1yfxMoPGS0uM9sQIlKsT5Mq9iE7URUsTmDcmTxI9FFvFckmqzEjSDNHQ2DA7xf
- bhbZWjGoNVmepRESXrQnkq4WRaqqQxqPcqVz5Za2K9zbi54n0CeOxRAts5EF9HtPtB34a4F120bV
- c3IrowqtY13FYBJzGbB7FP2sh8pq7DNmWki7b3EynaW0lvYboJ4Sx5pWQk.jfwbJz0UPt2fE042b
- pK09WEF2aW8LGUxEYQiWGw9Ysfpjd
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 7d08d374-ec9d-4edb-9e4d-1b9affbe8ac1
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Jun 2025 21:11:22 +0000
-Received: by hermes--production-gq1-74d64bb7d7-f4j4n (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 5c2f63bee58180d330568dcd5f1b3323;
-          Tue, 17 Jun 2025 21:01:14 +0000 (UTC)
-From: Casey Schaufler <casey@schaufler-ca.com>
-To: casey@schaufler-ca.com,
-	paul@paul-moore.com,
-	eparis@redhat.com,
-	linux-security-module@vger.kernel.org
-Cc: jmorris@namei.org,
-	serge@hallyn.com,
-	keescook@chromium.org,
-	john.johansen@canonical.com,
-	penguin-kernel@i-love.sakura.ne.jp,
-	stephen.smalley.work@gmail.com,
-	linux-kernel@vger.kernel.org,
-	selinux@vger.kernel.org
-Subject: [PATCH 3/3] LSM: Infrastructure management of the mnt_opts security blob
-Date: Tue, 17 Jun 2025 14:01:05 -0700
-Message-ID: <20250617210105.17479-4-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20250617210105.17479-1-casey@schaufler-ca.com>
-References: <20250617210105.17479-1-casey@schaufler-ca.com>
+	s=arc-20240116; t=1750194272; c=relaxed/simple;
+	bh=G7EyBO9aaixvVybf61PXE6lTfXuLk1htvEcQFvTJAzM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bw7hD0/EPPpHiwH3Ak7ZHiElObpfmid4Rdsd3d/UW2VthNUCHKsMhKSX3NoxBvU0YLr1nh3k/KOZFKdzF6I1ZTK1dABKkiuF6jOuiPmeeNUH86q0LtYOcByMRdSGmGn8zX6NpChYfrOr/D1eZtHz8Od7KseeCpV/4N6LCSvwuWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=d8kRfGIp; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-71101668dedso53966217b3.1
+        for <linux-security-module@vger.kernel.org>; Tue, 17 Jun 2025 14:04:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1750194270; x=1750799070; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CLSaH5FJ0osFIVIC7b0ua1GAmBIi8+s8Y1MlWceWV4Y=;
+        b=d8kRfGIp3RdQR+cjCI8hG3Oau0KjjVm2IcPrRSLhktOd4p0gxHWAu/iYgTGn/lY8Mo
+         pT7ieg3bOESqn25Fh/zzwEZ9QmOakDGGm0qEZGpgpU1V/IYtWBFU73Ac0KkK+5bzqcMT
+         CPJR+b4xJ45cwPnsuvr+cL+PHCKal30Y0O8DmhFeF4nTjm7lPtZHwl5DC+e8nmdHcN4X
+         H6EhKQm728EDGDFgwr1vMMDqD9w+O9VrMhjUbPbXAInmC6fNLi9FbUgJzQtNIetWKiJA
+         52amJ3mIrdqyz7Sq9VjwVWmRk4Z/knaZbtwIqKWIodpZVD0IIzoTGwbSSr9R6hZJFVnL
+         YFqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750194270; x=1750799070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CLSaH5FJ0osFIVIC7b0ua1GAmBIi8+s8Y1MlWceWV4Y=;
+        b=Mdvq3pei1qq3SF/MLyEoMjeTIFxE9FNQyr04wVWjzG6K4D9vc7oOA8I+mJTssRsB/2
+         S9gI4MEFklh3Jwg64DA8zf8MahgGjU2chrOwDl9zmGT2LyhVF5Fwe8iZxWxX4w1L1hQE
+         v3kgttZIUE2ydCnwN1Xlj6UDFBBCsIy11v9lPoSgEB6nVGtVCDwTt+qDWoRabw1Ssa3n
+         TqlwOBy2r/gZnl1JPa+f3bi07mKOClEq/uIrb/UZohMD2KaSYCLrMQswlr0qk3RrlyfS
+         jBO326zwv6Gs1LGWHQyyE3gKhf/s6GKhL3lxfa8ojTt18+0v18twijaOf1ChnWL1xfYj
+         /WpA==
+X-Forwarded-Encrypted: i=1; AJvYcCUodEQP0RLBnmduLf0z+pxvERozWeM7AvqMMQI6D9qb0J239wIh9TFhjjxdrY08z5M1HPUjWB6iS/tmuNFokrJjyvmLdC0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+1dl1SJongan8+LBDHm4nkM592yZra4wdaS1WCmoawM8s3btX
+	dKlYFPJwqKR3lcf+57A4Gvjd2zYjtaZsP15l9gXdvnVPta4V7yJVUAA9W2r5fq5SQQc7fl88Gdq
+	VoM0bk2HCPUpbXwK2kF2AMMahhKxOow0wQeW912/5
+X-Gm-Gg: ASbGnctnGDgFeGlVx84U7yXCZFBH+hbg+b67ulAse6lY6JDeFH7+i4eOHWExFknaGvi
+	Z0UKtigjRQJucpNWVE76hLe/M6E0oxnuWTfWabBu5H9z6l5fpap5fAAUMzpcI2u65FePuyoXF8o
+	L5kVQTm3kHDjyPMrWDvQ9zKlK9kOJOmKe9kh0QZBm54yY=
+X-Google-Smtp-Source: AGHT+IF1EZ1a0hQWE4asfB5JT5FSJBolOr0rcgGVLC/42lBKbzDGscabkq8Ij553a+7rnbN0R+EVacrmZkz63U4IiPM=
+X-Received: by 2002:a05:690c:6:b0:70b:6651:b3e2 with SMTP id
+ 00721157ae682-71175384ed3mr212955347b3.6.1750194269666; Tue, 17 Jun 2025
+ 14:04:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250616172612.920438-1-kuni1840@gmail.com>
+In-Reply-To: <20250616172612.920438-1-kuni1840@gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 17 Jun 2025 17:04:18 -0400
+X-Gm-Features: Ac12FXxP97gXP9l2v6eRR4pipJgnyOXpsbqjly8R6nBKnPWsPTOXFXGZ5UfFv1c
+Message-ID: <CAHC9VhTPymjNwkz9FHFHQbbRMgjMQT80zj1aT+3CFDVY=Eo5wg@mail.gmail.com>
+Subject: Re: [PATCH v1 net] calipso: Fix null-ptr-deref in calipso_req_{set,del}attr().
+To: Kuniyuki Iwashima <kuni1840@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Huw Davies <huw@codeweavers.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>, 
+	John Cheung <john.cs.hey@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Move management of the mnt_opts->security blob out of the
-individual security modules and into the security
-infrastructure. Blobs are still allocated within the modules
-as they are only required when mount options are present.
-The modules tell the infrastructure how much space is required,
-and the space is allocated if needed. Modules can no longer
-count on the presence of a blob implying that mount options
-specific to that module are present, so flags are added
-to the module specific blobs to indicate that this module
-has options.
+On Mon, Jun 16, 2025 at 1:26=E2=80=AFPM Kuniyuki Iwashima <kuni1840@gmail.c=
+om> wrote:
+>
+> From: Kuniyuki Iwashima <kuniyu@google.com>
+>
+> syzkaller reported a null-ptr-deref in sock_omalloc() while allocating
+> a CALIPSO option.  [0]
+>
+> The NULL is of struct sock, which was fetched by sk_to_full_sk() in
+> calipso_req_setattr().
+>
+> Since commit a1a5344ddbe8 ("tcp: avoid two atomic ops for syncookies"),
+> reqsk->rsk_listener could be NULL when SYN Cookie is returned to its
+> client, as hinted by the leading SYN Cookie log.
+>
+> Here are 3 options to fix the bug:
+>
+>   1) Return 0 in calipso_req_setattr()
+>   2) Return an error in calipso_req_setattr()
+>   3) Alaways set rsk_listener
+>
+> 1) is no go as it bypasses LSM, but 2) effectively disables SYN Cookie
+> for CALIPSO.  3) is also no go as there have been many efforts to reduce
+> atomic ops and make TCP robust against DDoS.  See also commit 3b24d854cb3=
+5
+> ("tcp/dccp: do not touch listener sk_refcnt under synflood").
+>
+> As of the blamed commit, SYN Cookie already did not need refcounting,
+> and no one has stumbled on the bug for 9 years, so no CALIPSO user will
+> care about SYN Cookie.
+>
+> Let's return an error in calipso_req_setattr() and calipso_req_delattr()
+> in the SYN Cookie case.
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- security/security.c        | 14 ++++-----
- security/selinux/hooks.c   | 58 +++++++++++++++++++++++-------------
- security/smack/smack_lsm.c | 61 ++++++++++++++++++++++++++------------
- 3 files changed, 85 insertions(+), 48 deletions(-)
+I think that's reasonable, but I think it would be nice to have a
+quick comment right before the '!sk' checks to help people who may hit
+the CALIPSO/SYN-cookie issue in the future.  Maybe "/*
+tcp_syncookies=3D2 can result in sk =3D=3D NULL */" ?
 
-diff --git a/security/security.c b/security/security.c
-index ec61fb7e6492..01fa3b5336b0 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -843,17 +843,14 @@ int security_fs_context_parse_param(struct fs_context *fc,
- 				    struct fs_parameter *param)
- {
- 	struct lsm_static_call *scall;
--	int trc;
--	int rc = -ENOPARAM;
-+	int rc;
- 
- 	lsm_for_each_hook(scall, fs_context_parse_param) {
--		trc = scall->hl->hook.fs_context_parse_param(fc, param);
--		if (trc == 0)
--			rc = 0;
--		else if (trc != -ENOPARAM)
--			return trc;
-+		rc = scall->hl->hook.fs_context_parse_param(fc, param);
-+		if (rc != -ENOPARAM)
-+			return rc;
- 	}
--	return rc;
-+	return -ENOPARAM;
- }
- 
- /**
-@@ -927,6 +924,7 @@ void security_free_mnt_opts(void **mnt_opts)
- 	if (!*mnt_opts)
- 		return;
- 	call_void_hook(sb_free_mnt_opts, *mnt_opts);
-+	kfree(*mnt_opts);
- 	*mnt_opts = NULL;
- }
- EXPORT_SYMBOL(security_free_mnt_opts);
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index f7eda0cce68f..b00c78e0a650 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -378,15 +378,28 @@ static void inode_free_security(struct inode *inode)
- }
- 
- struct selinux_mnt_opts {
-+	bool initialized;
- 	u32 fscontext_sid;
- 	u32 context_sid;
- 	u32 rootcontext_sid;
- 	u32 defcontext_sid;
- };
- 
-+static inline struct selinux_mnt_opts *selinux_mnt_opts(void *mnt_opts)
-+{
-+	if (mnt_opts)
-+		return mnt_opts + selinux_blob_sizes.lbs_mnt_opts;
-+	return NULL;
-+}
-+
- static void selinux_free_mnt_opts(void *mnt_opts)
- {
--	kfree(mnt_opts);
-+	struct selinux_mnt_opts *opts;
-+
-+	if (mnt_opts) {
-+		opts = selinux_mnt_opts(mnt_opts);
-+		opts->initialized = false;
-+	}
- }
- 
- enum {
-@@ -641,7 +654,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
- 	const struct cred *cred = current_cred();
- 	struct superblock_security_struct *sbsec = selinux_superblock(sb);
- 	struct dentry *root = sb->s_root;
--	struct selinux_mnt_opts *opts = mnt_opts;
-+	struct selinux_mnt_opts *opts = selinux_mnt_opts(mnt_opts);
- 	struct inode_security_struct *root_isec;
- 	u32 fscontext_sid = 0, context_sid = 0, rootcontext_sid = 0;
- 	u32 defcontext_sid = 0;
-@@ -657,7 +670,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
- 	mutex_lock(&sbsec->lock);
- 
- 	if (!selinux_initialized()) {
--		if (!opts) {
-+		if (!opts || !opts->initialized) {
- 			/* Defer initialization until selinux_complete_init,
- 			   after the initial policy is loaded and the security
- 			   server is ready to handle calls. */
-@@ -695,7 +708,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
- 	 * also check if someone is trying to mount the same sb more
- 	 * than once with different security options.
- 	 */
--	if (opts) {
-+	if (opts && opts->initialized) {
- 		if (opts->fscontext_sid) {
- 			fscontext_sid = opts->fscontext_sid;
- 			if (bad_option(sbsec, FSCONTEXT_MNT, sbsec->sid,
-@@ -1004,7 +1017,7 @@ static int selinux_sb_clone_mnt_opts(const struct super_block *oldsb,
-  */
- static int selinux_add_opt(int token, const char *s, void **mnt_opts)
- {
--	struct selinux_mnt_opts *opts = *mnt_opts;
-+	struct selinux_mnt_opts *opts;
- 	u32 *dst_sid;
- 	int rc;
- 
-@@ -1019,12 +1032,12 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
- 		return -EINVAL;
- 	}
- 
--	if (!opts) {
--		opts = kzalloc(sizeof(*opts), GFP_KERNEL);
--		if (!opts)
-+	if (!*mnt_opts) {
-+		*mnt_opts = lsm_mnt_opts_alloc(GFP_KERNEL);
-+		if (!*mnt_opts)
- 			return -ENOMEM;
--		*mnt_opts = opts;
- 	}
-+	opts = selinux_mnt_opts(*mnt_opts);
- 
- 	switch (token) {
- 	case Opt_context:
-@@ -1051,6 +1064,7 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
- 		WARN_ON(1);
- 		return -EINVAL;
- 	}
-+	opts->initialized = true;
- 	rc = security_context_str_to_sid(s, dst_sid, GFP_KERNEL);
- 	if (rc)
- 		pr_warn("SELinux: security_context_str_to_sid (%s) failed with errno=%d\n",
-@@ -2650,10 +2664,7 @@ static int selinux_sb_eat_lsm_opts(char *options, void **mnt_opts)
- 	return 0;
- 
- free_opt:
--	if (*mnt_opts) {
--		selinux_free_mnt_opts(*mnt_opts);
--		*mnt_opts = NULL;
--	}
-+	selinux_free_mnt_opts(*mnt_opts);
- 	return rc;
- }
- 
-@@ -2704,13 +2715,13 @@ static int selinux_sb_mnt_opts_compat(struct super_block *sb, void *mnt_opts)
- 
- static int selinux_sb_remount(struct super_block *sb, void *mnt_opts)
- {
--	struct selinux_mnt_opts *opts = mnt_opts;
-+	struct selinux_mnt_opts *opts = selinux_mnt_opts(mnt_opts);
- 	struct superblock_security_struct *sbsec = selinux_superblock(sb);
- 
- 	if (!(sbsec->flags & SE_SBINITIALIZED))
- 		return 0;
- 
--	if (!opts)
-+	if (!opts || !opts->initialized)
- 		return 0;
- 
- 	if (opts->fscontext_sid) {
-@@ -2808,9 +2819,13 @@ static int selinux_fs_context_submount(struct fs_context *fc,
- 	if (!(sbsec->flags & (FSCONTEXT_MNT|CONTEXT_MNT|DEFCONTEXT_MNT)))
- 		return 0;
- 
--	opts = lsm_mnt_opts_alloc(GFP_KERNEL);
--	if (!opts)
--		return -ENOMEM;
-+	if (!fc->security) {
-+		fc->security = lsm_mnt_opts_alloc(GFP_KERNEL);
-+		if (!fc->security)
-+			return -ENOMEM;
-+	}
-+	opts = selinux_mnt_opts(fc->security);
-+	opts->initialized = true;
- 
- 	if (sbsec->flags & FSCONTEXT_MNT)
- 		opts->fscontext_sid = sbsec->sid;
-@@ -2818,14 +2833,14 @@ static int selinux_fs_context_submount(struct fs_context *fc,
- 		opts->context_sid = sbsec->mntpoint_sid;
- 	if (sbsec->flags & DEFCONTEXT_MNT)
- 		opts->defcontext_sid = sbsec->def_sid;
--	fc->security = opts;
- 	return 0;
- }
- 
- static int selinux_fs_context_dup(struct fs_context *fc,
- 				  struct fs_context *src_fc)
- {
--	const struct selinux_mnt_opts *src = src_fc->security;
-+	const struct selinux_mnt_opts *src = selinux_mnt_opts(src_fc->security);
-+	struct selinux_mnt_opts *dst;
- 
- 	if (!src)
- 		return 0;
-@@ -2834,7 +2849,8 @@ static int selinux_fs_context_dup(struct fs_context *fc,
- 	if (!fc->security)
- 		return -ENOMEM;
- 
--	memcpy(fc->security, src, sizeof(*src));
-+	dst = selinux_mnt_opts(fc->security);
-+	memcpy(dst, src, sizeof(*src));
- 	return 0;
- }
- 
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 1d456df40096..e88de89a5bc1 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -544,6 +544,7 @@ static int smack_sb_alloc_security(struct super_block *sb)
- }
- 
- struct smack_mnt_opts {
-+	bool initialized;
- 	const char *fsdefault;
- 	const char *fsfloor;
- 	const char *fshat;
-@@ -551,24 +552,37 @@ struct smack_mnt_opts {
- 	const char *fstransmute;
- };
- 
-+static inline struct smack_mnt_opts *smack_mnt_opts(void *mnt_opts)
-+{
-+	if (mnt_opts)
-+		return mnt_opts + smack_blob_sizes.lbs_mnt_opts;
-+	return NULL;
-+}
-+
- static void smack_free_mnt_opts(void *mnt_opts)
- {
--	kfree(mnt_opts);
-+	struct smack_mnt_opts *opts;
-+
-+	if (mnt_opts) {
-+		opts = smack_mnt_opts(mnt_opts);
-+		opts->initialized = false;
-+	}
- }
- 
- static int smack_add_opt(int token, const char *s, void **mnt_opts)
- {
--	struct smack_mnt_opts *opts = *mnt_opts;
-+	struct smack_mnt_opts *opts;
- 	struct smack_known *skp;
- 
--	if (!opts) {
--		opts = kzalloc(sizeof(struct smack_mnt_opts), GFP_KERNEL);
--		if (!opts)
-+	if (!s)
-+		return -EINVAL;
-+
-+	if (!*mnt_opts) {
-+		*mnt_opts = lsm_mnt_opts_alloc(GFP_KERNEL);
-+		if (!*mnt_opts)
- 			return -ENOMEM;
--		*mnt_opts = opts;
- 	}
--	if (!s)
--		return -ENOMEM;
-+	opts = smack_mnt_opts(*mnt_opts);
- 
- 	skp = smk_import_entry(s, 0);
- 	if (IS_ERR(skp))
-@@ -601,6 +615,7 @@ static int smack_add_opt(int token, const char *s, void **mnt_opts)
- 		opts->fstransmute = skp->smk_known;
- 		break;
- 	}
-+	opts->initialized = true;
- 	return 0;
- 
- out_opt_err:
-@@ -622,10 +637,12 @@ static int smack_fs_context_submount(struct fs_context *fc,
- 	struct smack_mnt_opts *ctx;
- 	struct inode_smack *isp;
- 
--	ctx = lsm_mnt_opts_alloc(GFP_KERNEL);
--	if (!ctx)
--		return -ENOMEM;
--	fc->security = ctx;
-+	if (!fc->security) {
-+		fc->security = lsm_mnt_opts_alloc(GFP_KERNEL);
-+		if (!fc->security)
-+			return -ENOMEM;
-+	}
-+	ctx = smack_mnt_opts(fc->security);
- 
- 	sbsp = smack_superblock(reference);
- 	isp = smack_inode(reference->s_root->d_inode);
-@@ -655,6 +672,7 @@ static int smack_fs_context_submount(struct fs_context *fc,
- 				return -ENOMEM;
- 		}
- 	}
-+	ctx->initialized = true;
- 	return 0;
- }
- 
-@@ -668,16 +686,21 @@ static int smack_fs_context_submount(struct fs_context *fc,
- static int smack_fs_context_dup(struct fs_context *fc,
- 				struct fs_context *src_fc)
- {
--	struct smack_mnt_opts *dst, *src = src_fc->security;
-+	struct smack_mnt_opts *src;
-+	struct smack_mnt_opts *dst;
- 
-+	src = smack_mnt_opts(src_fc->security);
- 	if (!src)
- 		return 0;
- 
--	fc->security = lsm_mnt_opts_alloc(GFP_KERNEL);
--	if (!fc->security)
--		return -ENOMEM;
-+	if (!fc->security) {
-+		fc->security = lsm_mnt_opts_alloc(GFP_KERNEL);
-+		if (!fc->security)
-+			return -ENOMEM;
-+	}
- 
--	dst = fc->security;
-+	dst = smack_mnt_opts(fc->security);
-+	dst->initialized = src->initialized;
- 	dst->fsdefault = src->fsdefault;
- 	dst->fsfloor = src->fsfloor;
- 	dst->fshat = src->fshat;
-@@ -787,7 +810,7 @@ static int smack_set_mnt_opts(struct super_block *sb,
- 	struct superblock_smack *sp = smack_superblock(sb);
- 	struct inode_smack *isp;
- 	struct smack_known *skp;
--	struct smack_mnt_opts *opts = mnt_opts;
-+	struct smack_mnt_opts *opts = smack_mnt_opts(mnt_opts);
- 	bool transmute = false;
- 
- 	if (sp->smk_flags & SMK_SB_INITIALIZED)
-@@ -820,7 +843,7 @@ static int smack_set_mnt_opts(struct super_block *sb,
- 
- 	sp->smk_flags |= SMK_SB_INITIALIZED;
- 
--	if (opts) {
-+	if (opts && opts->initialized) {
- 		if (opts->fsdefault) {
- 			skp = smk_import_entry(opts->fsdefault, 0);
- 			if (IS_ERR(skp))
--- 
-2.47.0
+> diff --git a/net/ipv6/calipso.c b/net/ipv6/calipso.c
+> index 62618a058b8f..e25ed02a54bf 100644
+> --- a/net/ipv6/calipso.c
+> +++ b/net/ipv6/calipso.c
+> @@ -1207,6 +1207,9 @@ static int calipso_req_setattr(struct request_sock =
+*req,
+>         struct ipv6_opt_hdr *old, *new;
+>         struct sock *sk =3D sk_to_full_sk(req_to_sk(req));
+>
+> +       if (!sk)
+> +               return -ENOMEM;
+> +
+>         if (req_inet->ipv6_opt && req_inet->ipv6_opt->hopopt)
+>                 old =3D req_inet->ipv6_opt->hopopt;
+>         else
+> @@ -1247,6 +1250,9 @@ static void calipso_req_delattr(struct request_sock=
+ *req)
+>         struct ipv6_txoptions *txopts;
+>         struct sock *sk =3D sk_to_full_sk(req_to_sk(req));
+>
+> +       if (!sk)
+> +               return;
+> +
+>         if (!req_inet->ipv6_opt || !req_inet->ipv6_opt->hopopt)
+>                 return;
+>
+> --
+> 2.49.0
 
+--=20
+paul-moore.com
 
