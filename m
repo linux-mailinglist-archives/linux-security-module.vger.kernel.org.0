@@ -1,119 +1,124 @@
-Return-Path: <linux-security-module+bounces-10625-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10628-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9960ADDCAC
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 21:49:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 188E8ADDDB6
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 23:11:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5B733B546C
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 19:48:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1E4D3ACE5D
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 21:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4CD2EF9BB;
-	Tue, 17 Jun 2025 19:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9140B2E719C;
+	Tue, 17 Jun 2025 21:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bUxwQMJs"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="bjAq5Mw4"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic306-28.consmr.mail.ne1.yahoo.com (sonic306-28.consmr.mail.ne1.yahoo.com [66.163.189.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3522DE1EC;
-	Tue, 17 Jun 2025 19:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C62C1F1315
+	for <linux-security-module@vger.kernel.org>; Tue, 17 Jun 2025 21:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750189747; cv=none; b=TWFEY4qotH5UhaScgPcFxzgnC2ZbCNIrU1Sb9MCYJV5ILIV/JqehcL+PbUsoq/ru2jDVD04pWELv6fOEaAVj618zcWgNCIXbcbht0Rbz0S5B5zm0xEjgJW8rmCQcipTm7NBq/yxkUnNcolgzaSbprg77yr6FK3U6pOz1z98dbvo=
+	t=1750194685; cv=none; b=ug0TYa17CReUdY+frLDSC6nmISjC3+Aw0rcpbqA5q2qQInxasrWLUHkyW4YfVHokh3XpAh3Nu0FXpp32JD+Fcl3aN+kJ39SHuWLlepZSeTm4Zet0G0MkMS8JZjjswzZ88zxU5GTeMD/rCEIwRcOD1mNwH13z+ImolwderhRZ9EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750189747; c=relaxed/simple;
-	bh=aagMmVjoFGIYooU76+oJ4BsIIRerzvH88d8vqyRVSxg=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=gojZIAvXf2KaoJrsystXJA78lxilYVU9ShYcNHfvtmy2xMknxlKosSddFCR+ZfmcFvxFRAHTX+tLHyxV/qX5VfyJYbyhtkAA2hEmpamPyMEsCIUbx9SWBCdXighoiuCa8ti4wov30RzNGImmOlGhvBz/ol16wAwyfDV88300+Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bUxwQMJs; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55HBWqBu012534;
-	Tue, 17 Jun 2025 19:49:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=aagMmV
-	joFGIYooU76+oJ4BsIIRerzvH88d8vqyRVSxg=; b=bUxwQMJs9bBkX/CC6y6b7g
-	hrdWresNEA+W4sey5Td8TmO9E4o3qEugXseC6Saap7461sXVq1JbV4wj6eG1GMDK
-	GUdAh9843UYXER6nv2jzH1cvYs1k3YPiZDkHzeVtY06+uR7lKfmbuoHdGVTO35X0
-	ITDGmqYeXRFvDwONg1aBwnxMJ5IL/kS0si0eDT7gm8q0S2MO0uYxZ3A8o4oPkfvY
-	OZEHFzn4rjNS3tvaEGxLx+5PXC+ONeYZfv3rhzXHGagkUr4bhr0BGw3XDucEYFx4
-	bhZLAjIf5MriePgWbSBbsxyR13WQB52Kysibz/rjhCRqJPbpHVLEy8W5OG3P9rPg
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4794qp9enm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 19:49:04 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55HJC7r4027480;
-	Tue, 17 Jun 2025 19:49:03 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 479ksywcyv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Jun 2025 19:49:03 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55HJn2PB25952840
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Jun 2025 19:49:02 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 906265805D;
-	Tue, 17 Jun 2025 19:49:02 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1148E58059;
-	Tue, 17 Jun 2025 19:49:02 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 17 Jun 2025 19:49:01 +0000 (GMT)
-Message-ID: <f2435646f262ee5eee432b9f5d54d90621db2faa.camel@linux.ibm.com>
-Subject: Re: [PATCH 08/10] evm_secfs: clear securityfs interactions
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Al Viro <viro@zeniv.linux.org.uk>, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-In-Reply-To: <20250612031154.2308915-8-viro@zeniv.linux.org.uk>
-References: <20250612030951.GC1647736@ZenIV>
-	 <20250612031154.2308915-1-viro@zeniv.linux.org.uk>
-	 <20250612031154.2308915-8-viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 17 Jun 2025 15:49:01 -0400
+	s=arc-20240116; t=1750194685; c=relaxed/simple;
+	bh=tCT/IkQxcE0Vbq14CwG/Hp5G6xxf/831Jyydl3V67Zw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=nLcCmiSf3d4T3UF1G0OZMlLoCHl5ZANaJ5t94YM+hc/dOHnRuhtbt4GZ48PtloBMJeOMAZ0jEDU26ZtB9JJZvLFxm7GLztakRV34ELKXZX6/8J1e/brh/9ceA94feQsbXNM4KnapeGNevZiIVwZ8z+xZ7iDcB512FYYKIbojagQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=bjAq5Mw4; arc=none smtp.client-ip=66.163.189.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750194683; bh=AK3vqdHMB3C88L5thv0zFgtAigMgw0Q4QfxeUz6vjpE=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=bjAq5Mw4GEY5Xkf5lLtJ4cSlTsCGfEtX80EBdD6QXKgM5mDAUf8DQlE11AR/bGYw4HVEuhmvWgm/EUaCiDJas5nx1KbNyerPt8s7Rgx1W84H923b/ihuA3sKaSOpS75ATGFMjy55bn+1ctc1PTT0PYfiAuGdz/plIkebVrF7Bb5fqYWJ4mTyz3irAmwVvuKCH9o7rdyM2QZ2Sk5qyUcftXZ8moicUwOp9iuA/bmQJy98ZtuiZkSOxqjx3SDPK4rl7uXg/kWgtkoxxDw3xoQAPrq+odxhTHQ17HN4Wt7H2h52TEvX5xumJduSBsjd2otWGQ1U88eydUC+QWEa/qcwsQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750194683; bh=tkoa6uhUfLc33pFa+O7pJ0RZpyinDDIiTNSYDFRzr3I=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=ha2dU/yGM3YhhKRbzmYoVkEto5gVk7tGOL4Fem/96yvUx+y8BuglKq/uUPfPbbvouOhLFh5KJ/O2ptLSBodaZkJ1s49zYt/FhG3qF+rnArtK2xSa55GhR/Zq0ob1zTQfeqjsaAO/hDYuaWsbnz6RD+HysygkrzpK1euhCB1unFD5lQ6muWx6BlPQ9BiZMJQXz1gHhlbhZ0LOwJD0GUpMUCdmpQvajS5OXiJQtxo4Wc74+V0MrXd0bUtKgxTxI6DktqnF1YLCH9qPrnrQqzEIS/BX1lg1pVBIF20msdXpKHd7a9/x5ofXA6/Rdi4nSGNHRiTJbEcwPwcc49ZOHbPyCw==
+X-YMail-OSG: _hgOV7kVM1n4ZMKNDdy4PekzRCpTxDP9kddLdxBfz_qoLBkpRVTQxWTTc7adBQg
+ JSANU4Mq1AeCT7Pq.P.Oq1xmQ5osBNuXz3yAH2wtTwPt4O0OEVv7qJ83Er0e5FcWRsH4HKExPm4z
+ ikc1lhEaJjaXYWKMqa5stGcHPHLVun4IUHQZdS5FZWs3EGHPjpuSl.tLx64WylX2P6RBd1s0gNmK
+ 2dmisQu_arHAbxBz3MMMHdQWsyEn05wZIm4sCyukdceu2CD9BYCu3ks_5jt0HRO9jZkWF1mPMazQ
+ 3WM8ha.7b7FFJZ7b8dRq0NoJp4TiNix0VU.lpAMzyUKEQ4M.gtKCq2qnGX21ANMCLBBXa3mLjsQv
+ rLt3ulFnkNsykJCMxzHapi_tm2y.LYmSKBM1XnEEN.eS1_du2hnvk0X34wuOVpb8WGzvKqFkoXMb
+ 9p_fb_7L3HbOOi55kWS16FDV6w1NbCR2QaQyDG2PUjfkL_LXwlA2MlDuMOsmyclxlt7JlEPXa8JO
+ rkZ7v8A6nddkG7p6TNFPb0Ok0TPunTZCuW9tFER4_paFwRG3T76sL7f7FSYDw8NtkQ9SujzcN9lW
+ YzLZoiPsN_Zc9ujvcLaBA7.0.Qn72OtoJ8mapePAtesWmZWcm3pekz5MluyTI_q8G.TLJCUiWoeN
+ 9sBT1bHfHl7HxP74MEdXXl8NOuILcMMyLMDYB7FxH.ju3VHFVza_TWpG1dKKPBkJiz7RHoXLuJbU
+ HgtZduGxhNxbHn1lyCtQ2pznmkKwNps77.wn5efDXGNSyMY5.4GrcQjm.povo64ZpAg_iujvpbPt
+ T3JV4PnavJ2ben__G.6Xofcw3cPh6HqXYScTcxfMl4Rjsrh4bRvZrTh6Lit1vnozoOIfSicKxBnd
+ btoz55lDNPZshLiIfVEi1B1VT9RzQG_P6A4DRBC1TImRnOHPbsZQ4RFXAl9B2v1ToOiRVDRuM1u0
+ YsSgNxV7dePB4mJqN.1dUVP3w1wy2Zc5MmrtA35oCgpQYPl2lPRBtlO.hyvxe7VtVhVuUfw1.lIB
+ W0XbDAhYS5Yk1xgNB9mKqEgR0A.qgLT0sQVJB.Ng9dPNKw1VmbccoJhbji4RqxypHcVGy23Jn7aW
+ TbfW7xZOWVgf6NVG37hrS4KrrqjyE4_QwePWd20SJ4ryUdxxtaqMa.hkwjCeG9A0RXzsXif5wdgR
+ 8Wqo.TZLNeQhes2T4TTqJAbe_UK9zORGnEgaeOrUndQ9atrFi9tYCturZdvVFgL9yL03d8cVJubF
+ .GqVCTjZE4RG7oi1tKD3_CgDC3xL8SSzq2Uv6p.PqfWvWv4DJBiyxnkRtN4ZjIP5VVqdrhAoMgEl
+ nxSWtkDfgmbMOZ.oJbjqbfCHvIquxBknfapiUo149anlvpr3SQO0s87iXU6JBLHYIgDz5gyoz.mR
+ NyQ.teUdlb_ghkBm7w.hyUKXmS4PydTUOkUzQKAQeu.ApvxV_U3grkY2tg7s191vRsqWbZpmhq9L
+ uLS_52Z0cQK9Zwb.of7GjEAJXF5v_guITiUvBJRzow6LpIsEJM9xhVZZE_W5dWsf_PUMsaMZe_fj
+ a_ybaGis9WujqtMxrssOVXdzYPLmw8.PXBfWBoBc0vRiMAZtBIJDgb3D1zQ.99sLtkwHBX8uYCaK
+ JhvNC0KzbPgO4RahJfR4D3hmfpYuoXmYHftkJ4Z9Feb8L3ZfzhvonvG8BRRHnAWtxxK3u1hg5s6n
+ vywNEoNOuajKtigOwyI1jrELBzvFTdIVELm.V5SP0nIUbREk5znILTTXxq7Yvd4BVa6alTsZO8pu
+ 5MIXbDHr2PGL237sqn4rwFTfqRCl9.Zi5NydwvU8Cy2JCA0ieZt1gTaR97AaLEwU9Wq5WhiN2sBq
+ bEKH.AuPAIMDoUH4.MsKYdazp_2Y0ZrYK7qhD7sqdtEWUDG.1wmo0b4OhEUHilYg28j9MNETloRN
+ 1BARNFrn6UR_0KhAFE0dDhJwkpWdQ9pXYj86aehGzjNub9GxdXECB11b9zY8QoNjSpF5pxWm_HWK
+ x85ncHnnULOOugYJOUQXIs79WYbe1nwnVYd53gbpxKfZBIFDtC6mp.l9BsZ05XFYcUqb2HDjAOBi
+ lBgFFA6rL.68ImcUtPFIK9fpGVcYJfcIsoj_YcQpNQGxS2FypEsbe6Zf.qQiLcDt5KQ56HzOVQew
+ LbY24tDaeFZ0xRPaIDiCFu_kyD5o.goZb0yIoN1jzX_6HF4D6.rp0jnxMSrj16cRZWhvh.An.Jw3
+ Tu95kNjX704vnyMPKJxd40hcgomJcQTnIhxBa4TOYsLyGPKSxEPX4zHMXndL3FR.K35aWvdmaIEg
+ q7O9RFuEPihKTw2qEXmCM.A--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: bbaa3d12-d970-4f7f-8d3e-d76350235311
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Jun 2025 21:11:23 +0000
+Received: by hermes--production-gq1-74d64bb7d7-f4j4n (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 5c2f63bee58180d330568dcd5f1b3323;
+          Tue, 17 Jun 2025 21:01:09 +0000 (UTC)
+From: Casey Schaufler <casey@schaufler-ca.com>
+To: casey@schaufler-ca.com,
+	paul@paul-moore.com,
+	eparis@redhat.com,
+	linux-security-module@vger.kernel.org
+Cc: jmorris@namei.org,
+	serge@hallyn.com,
+	keescook@chromium.org,
+	john.johansen@canonical.com,
+	penguin-kernel@i-love.sakura.ne.jp,
+	stephen.smalley.work@gmail.com,
+	linux-kernel@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: [PATCH 0/3] LSM: Multiple LSM mount options
+Date: Tue, 17 Jun 2025 14:01:02 -0700
+Message-ID: <20250617210105.17479-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: I_PmAo-WNvMFCXcNnn9TCabVadsk26zH
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE3MDE1OSBTYWx0ZWRfX//hO8t3KiPXG QdQFiJM3IdJYr48EgjJWOF8ARxoDfJSCeyHBGCZI1ibZhyo9ridafBAQp7l6XntzgYyA4gr1abk Xf37xK5RmnO89ABA7gwtqj5lbHTv5o5nRQalOJR60QYCaSakBboOF18zf3WTh6ix6wZH2KPAv+6
- atkQuZ/MJf3f3xeFHhB4mIth4swyNHMpSs9/AFXOWW/um8RuQ1E3qA3UpZ9u7NLI+zJUeBEfdNK cPUJ8hNb2Tzpw55JHh4ifXIw4Tycyxqn/Ig2q0YN5UOoeqV1h9RO9cWiThhiPXFABpFe3++bFVu SrTWdl5mQAnKkBq2C2nwaoi3VTLfYlXY1TN5v3WVVgb/qqf6DNYP9ZtqTHKCr/XH6cgQDJgoYKF
- sN8w7NOxLwYNftuAgxr0TT5EbAtYHrkT6/qVdb5h9jVyqA11BGryxx5v/4SfNCA89aPkKXgf
-X-Authority-Analysis: v=2.4 cv=NYfm13D4 c=1 sm=1 tr=0 ts=6851c6b0 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=drOt6m5kAAAA:8 a=VnNF1IyMAAAA:8 a=nJUR2TE5ViME3R_j7e8A:9 a=QEXdDO2ut3YA:10
- a=RMMjzBEyIzXRtoq5n5K6:22
-X-Proofpoint-ORIG-GUID: I_PmAo-WNvMFCXcNnn9TCabVadsk26zH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-17_08,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- suspectscore=0 mlxlogscore=512 mlxscore=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506170159
+Content-Transfer-Encoding: 8bit
+References: <20250617210105.17479-1-casey.ref@schaufler-ca.com>
 
-On Thu, 2025-06-12 at 04:11 +0100, Al Viro wrote:
-> 1) creation never returns NULL; error is reported as ERR_PTR()
-> 2) no need to remove file before removing its parent
->=20
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Linux Security Module (LSM) that support mount options, currently SELinux
+and Smack, allocate their own data for those options. This patch set
+moves the handling of mount option data out of the individual LSMs and
+into the LSM infrastructure. This allows for multiple LSMs to support
+mount options at the same time.
 
-Nice cleanup.
+https://github.com/cschaufler/lsm-stacking#mount-opts-6.16-rc1
 
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Based on patches Paul Moore's LSM initialization patchset.
+https://lore.kernel.org/all/20250409185019.238841-31-paul@paul-moore.com/v3
+
+Casey Schaufler (3):
+  LSM: Add mount opts blob size tracking
+  LSM: allocate mnt_opts blobs instead of module specific data
+  LSM: Infrastructure management of the mnt_opts security blob
+
+ include/linux/lsm_hooks.h  |  2 ++
+ security/lsm_init.c        |  2 ++
+ security/security.c        | 26 ++++++++++-----
+ security/selinux/hooks.c   | 65 +++++++++++++++++++++++++-------------
+ security/smack/smack_lsm.c | 62 +++++++++++++++++++++++++-----------
+ 5 files changed, 108 insertions(+), 49 deletions(-)
+
+-- 
+2.47.0
 
 
