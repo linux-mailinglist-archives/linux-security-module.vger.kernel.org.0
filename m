@@ -1,164 +1,150 @@
-Return-Path: <linux-security-module+bounces-10627-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10631-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54410ADDD93
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 23:04:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B66C1ADDDDC
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 23:23:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAFDA17B2E0
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 21:04:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DCA0189D5CF
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Jun 2025 21:24:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06DCE2E717D;
-	Tue, 17 Jun 2025 21:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40202F0031;
+	Tue, 17 Jun 2025 21:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="d8kRfGIp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LRPcXb6/"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EBA23B634
-	for <linux-security-module@vger.kernel.org>; Tue, 17 Jun 2025 21:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548BD2F002C;
+	Tue, 17 Jun 2025 21:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750194272; cv=none; b=AmfqFXIlu3ylHmDRGMDvo6G50oQlv2/tOlhg5smCLARAsVFBaa1qht2Tfi73ZrW5UJiz/HFylwOhql+fH7DpLgdZwCkAZ5z9fotIEStEFRdqjMW+DbJ0Gfkhe0Wu4jWm9chyAMnqGdm13BUfUctrp3e9lcWGjPd4dgPZg7OuiSU=
+	t=1750195423; cv=none; b=VordSDddkk0f49PTZDCgRXnMniQonVL8yQ6FKGzbxFFHgqJe+Bk5tCK22xXpwKweo2CvkXFYFFdmxksYFb4QUf+G+6FIID8JXiWr1RDRD1eLUpVc1cnIoYua/UK2cUX5JmPDapfIjazttpyU3Qos6LxZOLYBk5Yk536x4PuaytQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750194272; c=relaxed/simple;
-	bh=G7EyBO9aaixvVybf61PXE6lTfXuLk1htvEcQFvTJAzM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bw7hD0/EPPpHiwH3Ak7ZHiElObpfmid4Rdsd3d/UW2VthNUCHKsMhKSX3NoxBvU0YLr1nh3k/KOZFKdzF6I1ZTK1dABKkiuF6jOuiPmeeNUH86q0LtYOcByMRdSGmGn8zX6NpChYfrOr/D1eZtHz8Od7KseeCpV/4N6LCSvwuWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=d8kRfGIp; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-71101668dedso53966217b3.1
-        for <linux-security-module@vger.kernel.org>; Tue, 17 Jun 2025 14:04:30 -0700 (PDT)
+	s=arc-20240116; t=1750195423; c=relaxed/simple;
+	bh=xCaeqnGFURa4WE7ZGAQiMIxRYtRhwOv7fu5xpngpuHE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h+ARYKY7pYTWcgxC50UOV7WPwHGmQB+la8oVCkTwDOf94cBZdLzWJgo26qFx9EfKFnzOQKAh8lbhGzAjxeaL0/QWjHv3EjZPnwi9Fd/kR0jD14huUHDkJvjhvd1b6mnP1XdsL6QQBlRrAen+h4Wm84AniLtmzSSFO3hBSvVmaUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LRPcXb6/; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2353a2bc210so55404455ad.2;
+        Tue, 17 Jun 2025 14:23:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1750194270; x=1750799070; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1750195416; x=1750800216; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CLSaH5FJ0osFIVIC7b0ua1GAmBIi8+s8Y1MlWceWV4Y=;
-        b=d8kRfGIp3RdQR+cjCI8hG3Oau0KjjVm2IcPrRSLhktOd4p0gxHWAu/iYgTGn/lY8Mo
-         pT7ieg3bOESqn25Fh/zzwEZ9QmOakDGGm0qEZGpgpU1V/IYtWBFU73Ac0KkK+5bzqcMT
-         CPJR+b4xJ45cwPnsuvr+cL+PHCKal30Y0O8DmhFeF4nTjm7lPtZHwl5DC+e8nmdHcN4X
-         H6EhKQm728EDGDFgwr1vMMDqD9w+O9VrMhjUbPbXAInmC6fNLi9FbUgJzQtNIetWKiJA
-         52amJ3mIrdqyz7Sq9VjwVWmRk4Z/knaZbtwIqKWIodpZVD0IIzoTGwbSSr9R6hZJFVnL
-         YFqw==
+        bh=3aS75VzdIUay76QJsK2VftduMxFyEPBUJ8MrlD9vVBg=;
+        b=LRPcXb6/dATDFd5GZtbhOxAWiGpnLHScMZsWBMjo6JxGGEzW3Ij9akopnK1hYBzGiT
+         JrPdHW8NUWyIniNFlh56tdIxGQTTqjtCGDbEh4pC+RFQZIMHMHck93L8dyu+6voHONA0
+         sE0yyVdXUs/xQdHnHgAbLOuNdzz0fsR8O8FVEcLvvohWpqhW6ISl0nDrUuovvLkAAXmQ
+         7FF6YF7gLDWgjg74Hhn2f9Xgg5jFxt4Tz6WvsjLwm9Z6Pxwq7xeZPjg6eUS5G5FBJzwC
+         o272MZK1F2j3aK5Obg3LNBEo6dScMlICvPmeQ+xMDm5zdnddW5PwJt3hwe0fD5U8PqIB
+         mYag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750194270; x=1750799070;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1750195416; x=1750800216;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CLSaH5FJ0osFIVIC7b0ua1GAmBIi8+s8Y1MlWceWV4Y=;
-        b=Mdvq3pei1qq3SF/MLyEoMjeTIFxE9FNQyr04wVWjzG6K4D9vc7oOA8I+mJTssRsB/2
-         S9gI4MEFklh3Jwg64DA8zf8MahgGjU2chrOwDl9zmGT2LyhVF5Fwe8iZxWxX4w1L1hQE
-         v3kgttZIUE2ydCnwN1Xlj6UDFBBCsIy11v9lPoSgEB6nVGtVCDwTt+qDWoRabw1Ssa3n
-         TqlwOBy2r/gZnl1JPa+f3bi07mKOClEq/uIrb/UZohMD2KaSYCLrMQswlr0qk3RrlyfS
-         jBO326zwv6Gs1LGWHQyyE3gKhf/s6GKhL3lxfa8ojTt18+0v18twijaOf1ChnWL1xfYj
-         /WpA==
-X-Forwarded-Encrypted: i=1; AJvYcCUodEQP0RLBnmduLf0z+pxvERozWeM7AvqMMQI6D9qb0J239wIh9TFhjjxdrY08z5M1HPUjWB6iS/tmuNFokrJjyvmLdC0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+1dl1SJongan8+LBDHm4nkM592yZra4wdaS1WCmoawM8s3btX
-	dKlYFPJwqKR3lcf+57A4Gvjd2zYjtaZsP15l9gXdvnVPta4V7yJVUAA9W2r5fq5SQQc7fl88Gdq
-	VoM0bk2HCPUpbXwK2kF2AMMahhKxOow0wQeW912/5
-X-Gm-Gg: ASbGnctnGDgFeGlVx84U7yXCZFBH+hbg+b67ulAse6lY6JDeFH7+i4eOHWExFknaGvi
-	Z0UKtigjRQJucpNWVE76hLe/M6E0oxnuWTfWabBu5H9z6l5fpap5fAAUMzpcI2u65FePuyoXF8o
-	L5kVQTm3kHDjyPMrWDvQ9zKlK9kOJOmKe9kh0QZBm54yY=
-X-Google-Smtp-Source: AGHT+IF1EZ1a0hQWE4asfB5JT5FSJBolOr0rcgGVLC/42lBKbzDGscabkq8Ij553a+7rnbN0R+EVacrmZkz63U4IiPM=
-X-Received: by 2002:a05:690c:6:b0:70b:6651:b3e2 with SMTP id
- 00721157ae682-71175384ed3mr212955347b3.6.1750194269666; Tue, 17 Jun 2025
- 14:04:29 -0700 (PDT)
+        bh=3aS75VzdIUay76QJsK2VftduMxFyEPBUJ8MrlD9vVBg=;
+        b=Be2lyDOc6EHp/4xvhWm+KmGy2p31+8N/277/WSn6pPBxajVG2WBUwHklxIVkCj2iEi
+         Z8M+cFC1mUPUIWDz26KM6Zhp5wiE9F7SPuJcsUJnjffwZw2nKBo3t9kHI8tIgyvyfimm
+         6vNxPoo0fZP/fWd13MhtABn5YcoPwJgfnCEGMLRc/qkvlrqhYK8YvEDe05WPtPO63q2s
+         hCXSkX+qT70iznwfA89OPvmDXynFjrS3YPB2zkBa7qhX1mGSzLU+MrGULClag6NU8iIn
+         s7JQa/X5zGUYN5hKXAKijxryj8bIHuxHQXLobfnD/+7Bzvdvno0/kWWIz3oUUCi/Mazk
+         s3wA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcySXnrcCE2/F/cV1hVk0MMv30G5/awx9RThSedrVVJKh7fujuzjHzmgjewEZuUWb4MKrcXll9@vger.kernel.org, AJvYcCUffizbbQlIR+5XVAeZnFkMbbGKFFSyFg0hhKx6nMhgARzw+LCmoDbq1s5yHSPotaI9Ac1BraptaYJ1cniCiVf2H6UsDBU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3JZykYeGfOpN9imosmgIbuvjYuGRCHVwetYLPsv4r3+2wRYP4
+	O8QMpVThmsZCh9j/cLv7Nu1/NwhQEtAXBmUYAFT/TSYpW8DfVTtVVfE=
+X-Gm-Gg: ASbGncs5gVwiveF7X/5BdA9LwKvwR0KqHpIfsXL78LnqLfWyKRahZMGJEUTW+JPJY5w
+	09EMNLAbhBYTjWUrQFnpQbTkfgcZYtTHSfo+UVe0z6XrQ1YF1t7zLuzJdhCmzY3Oa6Ax7LCbFX0
+	JuR2Xm94J9ZX9+hzyXRgLMcsOCad23MLUgAi06lc5zqhXyrg1Op3elZXT8iTq1GCqs7wYBJinWU
+	OpHNr9YthCo9TDbGsXgiC0SFZYwYmWUqm3S1dVDWkC9F2hdo13ZnwhwQapN0YWT2cWjd96p7aBJ
+	2XKwne605vGKNeqU39Tf1ZVOwAbUgOly7RdLWu4=
+X-Google-Smtp-Source: AGHT+IFHZ0ZWlFVwyZopd1xDHLBtbjq+QG30lwWa8nF+92idCEzGbE1SXnaJi7UyFS4DRU/i0m1k5Q==
+X-Received: by 2002:a17:902:f68d:b0:234:8f5d:e3a4 with SMTP id d9443c01a7336-2366b32e4camr222408265ad.2.1750195416453;
+        Tue, 17 Jun 2025 14:23:36 -0700 (PDT)
+Received: from fedora.. ([2601:647:6700:3390::c8d1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23699a75d65sm12534805ad.91.2025.06.17.14.23.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 14:23:35 -0700 (PDT)
+From: Kuniyuki Iwashima <kuni1840@gmail.com>
+To: paul@paul-moore.com
+Cc: davem@davemloft.net,
+	dsahern@kernel.org,
+	edumazet@google.com,
+	horms@kernel.org,
+	huw@codeweavers.com,
+	john.cs.hey@gmail.com,
+	kuba@kernel.org,
+	kuni1840@gmail.com,
+	kuniyu@google.com,
+	linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	syzkaller@googlegroups.com
+Subject: Re: [PATCH v1 net] calipso: Fix null-ptr-deref in calipso_req_{set,del}attr().
+Date: Tue, 17 Jun 2025 14:22:36 -0700
+Message-ID: <20250617212334.1910048-1-kuni1840@gmail.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <CAHC9VhTPymjNwkz9FHFHQbbRMgjMQT80zj1aT+3CFDVY=Eo5wg@mail.gmail.com>
+References: <CAHC9VhTPymjNwkz9FHFHQbbRMgjMQT80zj1aT+3CFDVY=Eo5wg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616172612.920438-1-kuni1840@gmail.com>
-In-Reply-To: <20250616172612.920438-1-kuni1840@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
 From: Paul Moore <paul@paul-moore.com>
 Date: Tue, 17 Jun 2025 17:04:18 -0400
-X-Gm-Features: Ac12FXxP97gXP9l2v6eRR4pipJgnyOXpsbqjly8R6nBKnPWsPTOXFXGZ5UfFv1c
-Message-ID: <CAHC9VhTPymjNwkz9FHFHQbbRMgjMQT80zj1aT+3CFDVY=Eo5wg@mail.gmail.com>
-Subject: Re: [PATCH v1 net] calipso: Fix null-ptr-deref in calipso_req_{set,del}attr().
-To: Kuniyuki Iwashima <kuni1840@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Huw Davies <huw@codeweavers.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>, 
-	John Cheung <john.cs.hey@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> On Mon, Jun 16, 2025 at 1:26 PM Kuniyuki Iwashima <kuni1840@gmail.com> wrote:
+> >
+> > From: Kuniyuki Iwashima <kuniyu@google.com>
+> >
+> > syzkaller reported a null-ptr-deref in sock_omalloc() while allocating
+> > a CALIPSO option.  [0]
+> >
+> > The NULL is of struct sock, which was fetched by sk_to_full_sk() in
+> > calipso_req_setattr().
+> >
+> > Since commit a1a5344ddbe8 ("tcp: avoid two atomic ops for syncookies"),
+> > reqsk->rsk_listener could be NULL when SYN Cookie is returned to its
+> > client, as hinted by the leading SYN Cookie log.
+> >
+> > Here are 3 options to fix the bug:
+> >
+> >   1) Return 0 in calipso_req_setattr()
+> >   2) Return an error in calipso_req_setattr()
+> >   3) Alaways set rsk_listener
+> >
+> > 1) is no go as it bypasses LSM, but 2) effectively disables SYN Cookie
+> > for CALIPSO.  3) is also no go as there have been many efforts to reduce
+> > atomic ops and make TCP robust against DDoS.  See also commit 3b24d854cb35
+> > ("tcp/dccp: do not touch listener sk_refcnt under synflood").
+> >
+> > As of the blamed commit, SYN Cookie already did not need refcounting,
+> > and no one has stumbled on the bug for 9 years, so no CALIPSO user will
+> > care about SYN Cookie.
+> >
+> > Let's return an error in calipso_req_setattr() and calipso_req_delattr()
+> > in the SYN Cookie case.
+> 
+> I think that's reasonable, but I think it would be nice to have a
+> quick comment right before the '!sk' checks to help people who may hit
+> the CALIPSO/SYN-cookie issue in the future.  Maybe "/*
+> tcp_syncookies=2 can result in sk == NULL */" ?
 
-On Mon, Jun 16, 2025 at 1:26=E2=80=AFPM Kuniyuki Iwashima <kuni1840@gmail.c=
-om> wrote:
->
-> From: Kuniyuki Iwashima <kuniyu@google.com>
->
-> syzkaller reported a null-ptr-deref in sock_omalloc() while allocating
-> a CALIPSO option.  [0]
->
-> The NULL is of struct sock, which was fetched by sk_to_full_sk() in
-> calipso_req_setattr().
->
-> Since commit a1a5344ddbe8 ("tcp: avoid two atomic ops for syncookies"),
-> reqsk->rsk_listener could be NULL when SYN Cookie is returned to its
-> client, as hinted by the leading SYN Cookie log.
->
-> Here are 3 options to fix the bug:
->
->   1) Return 0 in calipso_req_setattr()
->   2) Return an error in calipso_req_setattr()
->   3) Alaways set rsk_listener
->
-> 1) is no go as it bypasses LSM, but 2) effectively disables SYN Cookie
-> for CALIPSO.  3) is also no go as there have been many efforts to reduce
-> atomic ops and make TCP robust against DDoS.  See also commit 3b24d854cb3=
-5
-> ("tcp/dccp: do not touch listener sk_refcnt under synflood").
->
-> As of the blamed commit, SYN Cookie already did not need refcounting,
-> and no one has stumbled on the bug for 9 years, so no CALIPSO user will
-> care about SYN Cookie.
->
-> Let's return an error in calipso_req_setattr() and calipso_req_delattr()
-> in the SYN Cookie case.
+tcp_syncookies=1 enables SYN cookie and =2 forces it for every request.
+I just used =2 to reproduce the issue without SYN flooding, so it would
+be /* sk is NULL for SYN+ACK w/ SYN Cookie */
 
-I think that's reasonable, but I think it would be nice to have a
-quick comment right before the '!sk' checks to help people who may hit
-the CALIPSO/SYN-cookie issue in the future.  Maybe "/*
-tcp_syncookies=3D2 can result in sk =3D=3D NULL */" ?
-
-> diff --git a/net/ipv6/calipso.c b/net/ipv6/calipso.c
-> index 62618a058b8f..e25ed02a54bf 100644
-> --- a/net/ipv6/calipso.c
-> +++ b/net/ipv6/calipso.c
-> @@ -1207,6 +1207,9 @@ static int calipso_req_setattr(struct request_sock =
-*req,
->         struct ipv6_opt_hdr *old, *new;
->         struct sock *sk =3D sk_to_full_sk(req_to_sk(req));
->
-> +       if (!sk)
-> +               return -ENOMEM;
-> +
->         if (req_inet->ipv6_opt && req_inet->ipv6_opt->hopopt)
->                 old =3D req_inet->ipv6_opt->hopopt;
->         else
-> @@ -1247,6 +1250,9 @@ static void calipso_req_delattr(struct request_sock=
- *req)
->         struct ipv6_txoptions *txopts;
->         struct sock *sk =3D sk_to_full_sk(req_to_sk(req));
->
-> +       if (!sk)
-> +               return;
-> +
->         if (!req_inet->ipv6_opt || !req_inet->ipv6_opt->hopopt)
->                 return;
->
-> --
-> 2.49.0
-
---=20
-paul-moore.com
+But I think no one will hit it (at least so for 9 years) and wonder why
+because SYN could be dropped randomly under such a event.
 
