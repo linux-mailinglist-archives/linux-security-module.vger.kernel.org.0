@@ -1,75 +1,75 @@
-Return-Path: <linux-security-module+bounces-10729-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10731-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3349AE2AAF
-	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 19:22:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18412AE2AB2
+	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 19:22:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF0333BDE51
-	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 17:21:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92C08189C414
+	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 17:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EAC8221FB2;
-	Sat, 21 Jun 2025 17:20:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DBC12594BD;
+	Sat, 21 Jun 2025 17:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="XFqs2s88"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="Mx9YMRUr"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C839D22CBE9
-	for <linux-security-module@vger.kernel.org>; Sat, 21 Jun 2025 17:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D299925487D
+	for <linux-security-module@vger.kernel.org>; Sat, 21 Jun 2025 17:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750526451; cv=none; b=Y7+zkNv7E7HTmLmrqk9BR9aU9QHd73nPWCVyzVT8u0/C3Nmox7HrbZuhWYg83Q7Qs4gnbluY/erohr1Npj2PxK3zAqLdFNyg0NP+1P6/pnODLL7qWx0r6gSVV30d8pxYvC+PyBELqIeu2W9u0gz4Q6jlAAysKv2KwJDM6zjJJ34=
+	t=1750526540; cv=none; b=f2lrXyaHh+IJa+7Y6TtBcvW8IPtFEQEA89LPurD1ZZl/Tf1titV4w/lC1MrBy5zPoiD3UtmdM9Bcv85+qJHAuWaqtrK0N3LgIQg07PvhtyYgslYYjPeuT0zfOfrjjw92Eyzf/9Ybw1HPp3EEoBdYTObtm0zuEU3pj0CakkDUxns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750526451; c=relaxed/simple;
-	bh=aGOH+aAyANs+mfgpijgWGmqq9R5UIKA9AhxcYrw7YSs=;
+	s=arc-20240116; t=1750526540; c=relaxed/simple;
+	bh=cXiQebxgLX00fT/tSH95ainL+DuArcuKLJT9NWIis24=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UEKvY/r0PuFgRRn0KLywjWUyMO56PUKhfCSElQqCxEDaLhl46VuuJpA/U1f4HGfWxrh//gYTsz8COjtmq9++GsHIBpEOy0ixZ6c673W7eIahuV2BRm0wwSS4n6BJBsErDH0jZyUThXvTvVlCfrR/2+HA5FU8qMGzG0G/R4Q4DSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=XFqs2s88; arc=none smtp.client-ip=66.163.186.211
+	 MIME-Version; b=ZaXGJSinTw/G7W4pkrycgFfcHD194FpF8smVXyR8fbCm+3YGI3LWfhAcK2hc09cAKH0/x0n0z4WxLY5HueB7MiUAlTHq3zw5VPKPg3jxA7C2d9samgd2ln+DBcXwjr8icdMmdiy3bN/5NtvfihI2MgE8OQLNzgGpQ6F7WuUyDDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=Mx9YMRUr; arc=none smtp.client-ip=66.163.189.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526442; bh=28BsSsKBMb/CRoqFk+67h23muo0Ip5+8Af2Px0B+JrA=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=XFqs2s88nK22KFcbLKBsip5hLp0g6vIn2P0RICkblH7u+PKUxlEmKC4F9ry6HLnpOMeCopInzIew6mbZkp72ZBtxJVZUtIogmgrP+mib491slsTmdLiCV/ZZn9ychoamuDsmJ6dPfz2q73EloCdIvpgJGMOzfO5unqw2RnQ6taUtLKS0Ap41/MCHKZG8QNu8zN7w5YjlyOziCMTWpnHqOzf6Ys47F029EXPMh0hvweSwy0cemUkjiSqCTy1ec7OgSBCO7mTQDUvYp71FeLjDadhaTb5kn2OkFD58A50ywgO9+LCgpszczhvQS+29n1ypuFqaJiKmNu53IuxY29bQfQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526442; bh=oJ9PYsGMMW0JYw7aHEo6Nq//kF6oA2q3BZ9qxW1ORKs=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=qf9M/JrC/qmRwWipob4mzwLxRc8fTHQFIG2Dt2sjOmDNPIlmXXJj4UcyE0V3KPcYOezOi9T1eDa7gm5dXCeE5i7zqAN22hQThqqV7AgIb5FDvQ0CaVbcYPyqH8daf84cox32JgJi9cq1W0MLoNrcYU21Sf3lZQFiRqO4e0yMh/hKCYXjKsvVvQnKi9AWNgeYNzKiXWUW4JmYlb7Duri85xmsaqwijZPrM1Ts5tO2Pk6snvZI4CnLjQkECi5bzqdWsyFsDqzHwiEcPMqbnzmPEVNniTDp5H0y5qwLgNj3RLVZNyuSUThIvEb0Q0mmIr23pF5t2gy3ZdhhUDD1PC7ZVw==
-X-YMail-OSG: xMaNaS0VM1nwKa67gwCV7oVs6MyB.OSqshu.Zs3nP_ZX4AAUG0ACyo2Q_JRRtby
- YWcEQyA9vs8Ml6O0MgA.heIISR.M.H0RHn.HDok1PICV0h.s0zbPBlroTdUI_AY22Ijr2VHLni_g
- 3yJT0q3r5W1GoXG9zDO83hnlLVftrFuP.Q2EYWfBPnHPpyngvNjZBsqc04GEAOKrtN0ZbzHEH.UN
- 1NYaoPbg0uX59Qrlk5p7LyqNn_I1CrlQYbmEY_wfk7ocTIzuI3szAcKOIVVlT7jF67zttw0QZXs1
- svB4.VijSFJCc.DbxKrCv2DwQ2S7mz69SdF3eLAaktV2tONObgb_PI_2entpfA6C2v85p8AXPhBo
- VnIbSuVFoMeYwcwi_CHoZf1Yj21U0rM6ArdplIZEgwaMv1hUvyYrkUwd9L6tvCLaoDyd3glmm3bG
- STh0dMUPMVh_MxJVvVm932R9kAbST.7HkpxOIbz85IpKin7ZO4aunWAphRD26ozNguhK.Wf2ghnA
- Hhmx0lo7oxzPlFB1CvYQqH1Kbakn9o9KsX36Pv0qBsoBwYI4VWTx5BSUMn58.QZDzd4Q2B7u0A_O
- H.XT8JSF3HEPChRXFOpvNlKKRs4ZhAuYR.7FFe8XIyESvrK0Ylvsj1yhFkUjGiPXtgmO.ijwnT4s
- vvrllM8tbO8Cenl.UWh33Ij040PdhfnJVhBthNVKDmYpODXXItB0c8D.w7IKQesAmwKzvVW1gEnY
- CAenHwJKr_cGstpqOuClg3uKNasv6LbXfkb9MV52bEyKyHXEWGyo2RV.8EB35cN_20T_dGaNRZpw
- zT5zt7.0y8MwOnbzqCR_6aTL.ekVHUqhyPgxdHMo.rAZmIK3i_R0bXsxi9fwgcxepkpuIg.XEcjW
- pcWpWV8wo0idbb1faiDdgxtCTlFcQVUc393u68Xsn3RObvZxPbIqZWq2CVXnTXgp_a0SNVw4bDKF
- zhnGdcfuhI0lDinTMvwr_nBgUth8RBsRzjV.Jf4lWXtlty2PfEWPNQO5EStXFrxHhPRMQ29bJxW_
- 1U7wuQVMrzMYKvC7LLCGggGnHACbBsuvaAUQVrfa7RC5yC1vD4PSzzXTIzTbuopU0WNkSgcDEKbx
- lt9m8qDMqlJe47u.q9TmiKNRahpOHYQoo_83VgUorG8UVVN.hUxfiGnbnp41nTCiw.ZYYcnF1KrZ
- 0izHNlSLeloNLb1P1Xc9OVm5J_4z6cRUQqNbB6_1NSD0AP1p3UaKJuBtaDH_emJFmhEMzEceaPPh
- VdlJMMiqgS6j2vhUg7u2SxRhywwf5vvowvGjkD17vSdYabHCBU_ADOPJ.ahA8.7citjt4fJXBR.Y
- 2Jy11J2WD2OdnBtL4ztjsPrQF.IPQ8gfbcD40MwreKFDtLN6Etisr1WlyopdWr4mm3uzrkBber.Z
- kM3jVxrfvXl5_YOr0Tn4RKWjfDzkXP0QM8D22P55_ytVU0K7W2ZUsCMYLZ2wI.FzWPv6nJDu6Om.
- 3jBGFFruFerR5a0eNvSyYh9pc_rWXGsFMGxkYKvCfxUUiKns1aj1_f0gYNgg3DM3XQC1V6OzKq3S
- 37n.hdJwet5UBgC9T90MOLe5u43PzVvximzjrITa52Yjf.LEvve_ZvWsKclN4ZV0dOwYQQlAO8mG
- U1.cVOcldnmPhF1b5LsDX3Z6EDuLVbje48v0OLqdQDhY7dQyu8xBTmOba4ZiMZV.CjxAJ7mI5m3N
- pbVvTXoGPAfcn36siGjQPmNnvDxYM4uAZU4.hsYCT7gu.OLC8WaLnQdwxEAFARDYwClJuwFUVW2Y
- 3QZ8w0bpCVnjlOsRTs5KW4Wg.tOWGc2FMvpDwC0pgEg6IkOuJkrGvCgIne35QQso58k514SZK1od
- agx7ynqU_Zo9GiDd7jhzolgrlJVFwfCG21402gyYtviVesSM2dq5VdFwI3ZsfzlvdZsencEcn03B
- JmdHeyRvELjrtzksY9ziYMcucOUp2yCb3kWiszOCzO0pIwYq8heTGz1EKLJk913iMjisOn.rNeYY
- qGpZwVLwLKYz5WE07XfvI_z1bLoU0dEUmX7a._eRZhf_F_D94v6iv_40uDOlMCkDc8seZATOkvLj
- KbYNZ7kvxYlteH9ezGxLQtiliQpnNXDMNsN7I4K8OGBWa2y_UZhJsamf.33hCBNz2pHhkk4UNClT
- WmPfwZZxGmJqW_x7XAsbfmCYs4NI8FwzSkSe0P0_q.l2HDQNIZPr4AcbXVuyyurIkStLEcq0AHaP
- zwJJdPIrrUa2oChIZHXLfBVcAMp2fWqmVJf9nWlpLtP4SFi4DzEYleutqBfI7vbeMOu_RwI805.g
- JRJiwnl5mQteVZPPhalF5vaLrkKk-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526538; bh=rabLJkQuOMiYX35FNRjwZiFevYSDVzgMqoGPRpzLUwg=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=Mx9YMRUr9cv9oXwRTjvF2wllIhjBfqP3y0HtjSaaHzxIR1Qw5tYPOoeyZ41mGqc60pOKKCM8nwOQpOG01O5o0Clv1Q/y1O6DRVAE+jwsmhwT8r4kV0UEI0SHY5cfZxw+BnpXNSfDfOs5ZuqzQBk4UmBC80nYN9RWF1GuUP+8bkt4lnFMRkgG31tcydD541dPURku9FULWlHAiag/0WQYKV62rz0bQ192jWlrgwO20JJ8q28WB3WeSvoioU1sOGLul1dYRb1dlseicu/v4/UXVkiou7SXrKLB+iY16qosUfXb7VOOlsRaZ7iYx6M5XpvUMDsLYfzuzyMjt/0dEWPBQg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526538; bh=TPRHdfcg3c9hvB4bdbvELaIMfGbtH/TwK3fKgCCl3mr=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=e7Qf5MT6NMYV4TqQyiwrQ46/KQswsTFdev9J5f79CE+4CHeuCU4929lUFLEr2PRHGS2NdGfrc9uVo5yUBFcadAhQ2DJpyo9WgdbUQoa0NI/TzfM8Ks5CXvc23qKVyLVrLdAzwEgVO6cLoiqe+asX5LyGV1y9lMUdiDm30FLEyyXe5KDEI+TK0X8oI3+YZSzMeEh1daDifXwoPFz/9du3Xk+xXrCaxV9Jq/KKrl6OM9C2ZZHkaEBEm5M9fSstxdc1kLbWpk5SF4JDr3OJ1FualQU7UuD1pqC3WIZfJJdaKy8dXpVuikp5OZbkQv5mLErHMlD58FLYD2Dgk/fKABCN9A==
+X-YMail-OSG: _HJuy2AVM1k14Uw3UABYidswokWmfNEAS1ytmRt2BfMnYMIX6qpizcvLO.TKgQE
+ UjPRmtipwjEZ2R5FLcvK43XoOTBDxsyyg0jLdMZC1iDQFOmuqUUb5NEG5ZdCZW_5xhEK756FCiBg
+ oQ5Urb4UQsFTxpVEknf6D.TCOxda1OPXkkMcTWq1zR0SblAV0yVWoooTXSnNtJxNdoM6qzIoO_VN
+ Dg4vf16lIWOaksj13bu9oYvK44GpIN3cY1z0IPiEV7Ace3jKIcod5dIc433HdxxyOngRv9eTq8_d
+ z62hFW.jDRfG3RIpcDMfZPKnvn3qH73OjYbXJT3zJVpcm2fLo_SVqWyc7Q4K2YZC1XXTyXpaYW9f
+ w1WtxdQH12sO2TEf0rIdwz4eUFTJX0nQW1zCEf_IlY3ysETKkD3J2K8AnyWFgG8ANSJEZ6Tyb1PX
+ DdExZZBBrGa0zk8pGAqjwiR5WIswbgnw_P.kJWnL5n97KOGlxNtp7avDxoEOsgwxHTqTLhqXnOzf
+ PFYdYCMjKUtDfbW6iEd.nEPpRJ26pxkpORG9Qmol0VrFDkw7pCCReckqXAqESrzXqq8CGippXsUG
+ 9eiax0mKnsFHmkp0rGlUwktCYD2xPTN4I0_24SRCMHINA_5MsHHriDyEJvJsnbHANI.sHMbP_z51
+ AWy6.VNOQmf8hOzQ6lCQGdteACZdLaQuX.s_BROV7vzr3CovpjYu24ZlgWBxRlVTpk0D1AG6YeuK
+ uG3yymS5vv.TwL5asa8FdvIGKN3Sj7WcyPCS9CeZcjSnfqDXVQ4VYyykRyMeZMOgGCuob9CGOzlt
+ ctX23Dxyw71oXZ9PvoB3RyJ3cUmCgU8XKG25Tpx_7Ge7uXy4xRJ005tgfsGsvnBfLiKyEp8eC0eV
+ ozJnob_Lft.jd0kRZKpc8epp9oRetjOIX46MXxEes3KtJNuYaOSeq0aD4TaHew2YVt0uPvyNX2lN
+ nlMHCI2cqQzuFGzFsgIQQZ.EMpI.FsFzK0fBLclT.9rkZfOe3HTbZ71W.qdDQUTf.FwhR61u3x7.
+ RKZGrTwCePLeFvlrZElkHijIQnsFjTqquaOxnqIxibsw5tS3OwG_xlhvGAhubQ3PvhhJ0hhUu27m
+ 40ywYwCAZmJuvydyqgoJjShxpG2Rs1e_076J3DZkYMCXOZ19FoYzd1uO.SCwq1iqHTAirq2_nu3j
+ SOacJ5OOBeH16wsfCPsyK0MNoVyq9Jc2imKK9QlFUms_4OJlGQn3GT9qhVOv5kN.9_spXPbeNypV
+ WJ5O0aGp9Rcy1J0AXKuUWsG.qV3VMPPfVTaqau2ggufsXW4ZHe2IKtAthrnY09isA13uGXVbl_VD
+ FOLGTXgzrFBcH4H1slk9sn1zE48t.TWkGwAb49g.01Mrufrfj64CTwUXMhIh0YFSwyJof5Wfebot
+ 9Hm5n2k21SompOy2iz_ncnUMdPn3J3azRyoa7Guup7.uFr8CLTiqjwz8u1K2ia9FZApgxOCbIygo
+ iI5qV0DAHrN6l0TRP.2zACMzHl3a5tA7bK.F00Z4gtP2g5eVfFqGtdinYQ6fWasCsABunwzcZq6m
+ RtP3hPoP107UjR5n68ttHSp5MUoDl7vSms3vDwPth7AnHWR5h0G4SKildOyhWXMit4jJexvTQUpc
+ yxSI6CWOroLTn82CJZCD86lk1URPmr4w3oO1rJ4eoF7wMcDxEd_rFdkYtK09o48iUmtiEU1j.iyE
+ hDXLXuIEX1Lw0yMKYfP27c4u0E35iZvjMIW6RPy4ZAJ8qMLxW2RSsXBub.QSVj1m9skb53E8c8Q7
+ 3bZSOe.HtB9QKDuYBEUa3cHxtiWylFeu4QwxgLyFyd0gWiNB_br2guO4iXyBIAG0u70qcmMG7jm2
+ 0mzUKIcjXNk4m4ujGAJ_X0zy0Q.REIA1aNsSGYhUtaHAABuvdBStSs76gY.YRF4oXsY8U6wiNyzH
+ KWvTNsTG248b7jWEWyWsA_JxrqOIWPVljSVDCuyRbwnE_ikWHpG7bxV3S0XObj9iyzg7kIvBCtJy
+ VXoNT0WqaJbNiqH5da3J4XImCtMq0htu2_GdZIjkUYrpKP7rZ6B_3wY69m1i1xjvwfPQQwvIOMmc
+ WGhoLu_Xt_Tmi55g36Ogtc4hMcT9Fj9r6g2i.j1rlGX_fbJ7LTT9161tkpnyhOdlNTFKSd0xq756
+ qmwKcipn5G2zi.48wQZOYuWwnyMAJOrNqSrh3FZnjAN8lNSyAZ1zQvu_V4DZJjXxcu.dFE__wD3J
+ 9swQUXF7FTk9G88hqAZyjLVu6L8NeaX198.7K0I9BdjeYwd0sbVM974HnhHs5HnW4EzMEzH8a8dm
+ N4I7CRRZaD0_Bcg3y9BBAf.KJ
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 11436d48-2019-47aa-a971-74adf09de465
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Sat, 21 Jun 2025 17:20:42 +0000
-Received: by hermes--production-gq1-74d64bb7d7-cmxx8 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 311260ab82870132bd75579510690963;
-          Sat, 21 Jun 2025 17:20:38 +0000 (UTC)
+X-Sonic-ID: 295b33d7-51bf-4ad8-9a32-de7877d31889
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Sat, 21 Jun 2025 17:22:18 +0000
+Received: by hermes--production-gq1-74d64bb7d7-dp9cd (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID be755b04d481595739dfcf42be1b4c68;
+          Sat, 21 Jun 2025 17:22:13 +0000 (UTC)
 From: Casey Schaufler <casey@schaufler-ca.com>
 To: casey@schaufler-ca.com,
 	paul@paul-moore.com,
@@ -84,9 +84,9 @@ Cc: jmorris@namei.org,
 	stephen.smalley.work@gmail.com,
 	linux-kernel@vger.kernel.org,
 	selinux@vger.kernel.org
-Subject: [RFC PATCH 07/15] Audit: Call only the first of the audit rule hooks
-Date: Sat, 21 Jun 2025 10:18:42 -0700
-Message-ID: <20250621171851.5869-8-casey@schaufler-ca.com>
+Subject: [RFC PATCH 08/15] AppArmor: Remove the exclusive flag
+Date: Sat, 21 Jun 2025 10:18:43 -0700
+Message-ID: <20250621171851.5869-9-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20250621171851.5869-1-casey@schaufler-ca.com>
 References: <20250621171851.5869-1-casey@schaufler-ca.com>
@@ -98,79 +98,28 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The audit system is not (yet) capable for distinguishing
-between audit rules specified for multiple security modules.
-Call only the first registered of the audit rule hooks.
-The order of registration, which can be specified with the
-lsm= boot parameter, is hence an important consideration.
+With the preceeding audit changes AppArmor no longer needs
+to be treated as an "exclusive" security module. Remove the
+flag that indicates it is exclusive.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- security/security.c | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ security/apparmor/lsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/security.c b/security/security.c
-index 2286285f8aea..93d4ac39fe9f 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -5056,7 +5056,13 @@ void security_key_post_create_or_update(struct key *keyring, struct key *key,
- int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
- 			     gfp_t gfp)
- {
--	return call_int_hook(audit_rule_init, field, op, rulestr, lsmrule, gfp);
-+	struct lsm_static_call *scall;
-+
-+	lsm_for_each_hook(scall, audit_rule_init) {
-+		return scall->hl->hook.audit_rule_init(field, op, rulestr,
-+						       lsmrule, gfp);
-+	}
-+	return LSM_RET_DEFAULT(audit_rule_init);
- }
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index 255d2e40386f..ac38864d9bce 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -2278,7 +2278,7 @@ static int __init apparmor_init(void)
  
- /**
-@@ -5070,7 +5076,12 @@ int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
-  */
- int security_audit_rule_known(struct audit_krule *krule)
- {
--	return call_int_hook(audit_rule_known, krule);
-+	struct lsm_static_call *scall;
-+
-+	lsm_for_each_hook(scall, audit_rule_known) {
-+		return scall->hl->hook.audit_rule_known(krule);
-+	}
-+	return LSM_RET_DEFAULT(audit_rule_known);
- }
- 
- /**
-@@ -5082,7 +5093,12 @@ int security_audit_rule_known(struct audit_krule *krule)
-  */
- void security_audit_rule_free(void *lsmrule)
- {
--	call_void_hook(audit_rule_free, lsmrule);
-+	struct lsm_static_call *scall;
-+
-+	lsm_for_each_hook(scall, audit_rule_free) {
-+		scall->hl->hook.audit_rule_free(lsmrule);
-+		return;
-+	}
- }
- 
- /**
-@@ -5101,7 +5117,13 @@ void security_audit_rule_free(void *lsmrule)
- int security_audit_rule_match(struct lsm_prop *prop, u32 field, u32 op,
- 			      void *lsmrule)
- {
--	return call_int_hook(audit_rule_match, prop, field, op, lsmrule);
-+	struct lsm_static_call *scall;
-+
-+	lsm_for_each_hook(scall, audit_rule_match) {
-+		return scall->hl->hook.audit_rule_match(prop, field, op,
-+							lsmrule);
-+	}
-+	return LSM_RET_DEFAULT(audit_rule_match);
- }
- #endif /* CONFIG_AUDIT */
- 
+ DEFINE_LSM(apparmor) = {
+ 	.id = &apparmor_lsmid,
+-	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
++	.flags = LSM_FLAG_LEGACY_MAJOR,
+ 	.enabled = &apparmor_enabled,
+ 	.blobs = &apparmor_blob_sizes,
+ 	.init = apparmor_init,
 -- 
 2.47.0
 
