@@ -1,75 +1,75 @@
-Return-Path: <linux-security-module+bounces-10727-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10729-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 597B9AE2A9E
-	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 19:21:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3349AE2AAF
+	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 19:22:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDCF6179974
-	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 17:21:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF0333BDE51
+	for <lists+linux-security-module@lfdr.de>; Sat, 21 Jun 2025 17:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8941222576;
-	Sat, 21 Jun 2025 17:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EAC8221FB2;
+	Sat, 21 Jun 2025 17:20:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="SsYp2fBV"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="XFqs2s88"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic303-27.consmr.mail.ne1.yahoo.com (sonic303-27.consmr.mail.ne1.yahoo.com [66.163.188.153])
+Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5E914A0B7
-	for <linux-security-module@vger.kernel.org>; Sat, 21 Jun 2025 17:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C839D22CBE9
+	for <linux-security-module@vger.kernel.org>; Sat, 21 Jun 2025 17:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750526442; cv=none; b=WUy3Ia9yqXYSqgZxB/T+WX/o/P5pFsYE/Q53Z958RVS+jTT8EMXijJNTUDIBLNw81hdySQJAVewkxCUAQaFRLUibtUR2H58iW4EVf5Mb2VtSbRBhfEZR8nx9fvR9bOuQXEw992H6auBfLEI4p2j4nqWbfCYQSoVT30GN58bDQhw=
+	t=1750526451; cv=none; b=Y7+zkNv7E7HTmLmrqk9BR9aU9QHd73nPWCVyzVT8u0/C3Nmox7HrbZuhWYg83Q7Qs4gnbluY/erohr1Npj2PxK3zAqLdFNyg0NP+1P6/pnODLL7qWx0r6gSVV30d8pxYvC+PyBELqIeu2W9u0gz4Q6jlAAysKv2KwJDM6zjJJ34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750526442; c=relaxed/simple;
-	bh=UyCJBTfuhEp+Ni4G5mlbGTTMVkJdAVgVfFk2ItfgdCo=;
+	s=arc-20240116; t=1750526451; c=relaxed/simple;
+	bh=aGOH+aAyANs+mfgpijgWGmqq9R5UIKA9AhxcYrw7YSs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M3ZMIyUBwXbycXRkLHo72vEu87hunuXd+4Fx9CoNerT0JMkC7W2Du+7lBDiLrXJiY1HxKBBE0jfm1OvfIBoBlaAyGfkoN+BKkRqMLX/vlQ8M1mAqCtqb1mtHNvOLN/W8Vyz9yVnKqlP8PHWjyVSTWSE76DrEF1OyZ3+gVYB/pVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=SsYp2fBV; arc=none smtp.client-ip=66.163.188.153
+	 MIME-Version; b=UEKvY/r0PuFgRRn0KLywjWUyMO56PUKhfCSElQqCxEDaLhl46VuuJpA/U1f4HGfWxrh//gYTsz8COjtmq9++GsHIBpEOy0ixZ6c673W7eIahuV2BRm0wwSS4n6BJBsErDH0jZyUThXvTvVlCfrR/2+HA5FU8qMGzG0G/R4Q4DSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=XFqs2s88; arc=none smtp.client-ip=66.163.186.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526440; bh=7BSeliQV1VLiCfSV65JktQ+lUnNoX3/LR/dHf0syM7M=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=SsYp2fBVaZtVWvF6m0VIZDBGFwoUlo52YswPtvcMnIOfHv+OJyk/2yi63hr+V22+mL/6N4eQFpCP4ewdiX26IxdqJne9QrHPeVmXI2Hx1jVO9PGiHN5+oGrc8fZOsFDCsIQZA+dK5rBeP/3JIYPa9A3Nt2aXUsia0jXyaThtAAyWiG+/KO1RWo9UwauewZONNO1QgC6MwHDNqNpaY/0N/G2S8gZrvEQnpdFckWJtRThJnwRPUcuajPvGq4b71eMFeUa5DxERAtQXD9hc4w090Nn5YJ9d4CiQpVOXdSTk2FTP09WsMkNxFn50ot2fPcBeJ9tUZecLCuS3oqc318uQtQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526440; bh=lI283QOmAWHWBmQjMNMGJxgXApdqw0BW7OMdI0Zg+6u=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=ZHF2rhGnh4RFIrNLnZsoXbjIfK0hlMuswT8AUY3oNFjxheIqzl8JqosAlUSCJQ1ODam4uUmvxfRmqh5brcBajz6Y1LS4SrGFmNm0X2SL9/JwJxduh7KbIly8OCpIaXy21j7R0lC31CnOKMFI0lgsa7a8gEcZn+27nzvD69GCLihkNxv30xwslqwvto8Ht1GDOPE2uh9EK+f+X2NIyWPOzE/z4ZBZtSZ7vrVl5UKbQC7IdgGVEXmDQnRDv0EqzwtqpDSb/9mAa3w5i3DkdAGacUQkPe+N01kLxAuOqCZhYoNHhM8JcTVPGS71iDfgItbF4ZgwcMRJfDJcBlfGWCneRA==
-X-YMail-OSG: rGY7mw8VM1m2vedgZmNuOCGJg5dcFAerDfyZNhEr_qtWyjJ8E0WG_GmtWQXNBl9
- mCMOyKO3gpf4V8M8vt1V6D_.qtDFUNgpzfLT8C_JM6a6YlA38a3nii.xbKM8Ubz8qwMun3gmU3ph
- cRZSGvt6wyj8W3TZVKkeorjSmdZrQLTL90lpuvTIO17UrKqKoNEvF69zbn8uxsSN1jgR1XLtZ_dR
- c7bEPwi0ICXqqjwzRO2aUuptrY7d.JOkl3ELpwFeluG_yYgq4.j5BEEqgkX.bAxW7lU9pJU1cG3B
- riamvjBWqnccCfQdWBxhoxyXA7VvZhuWQ20z42u2E41XquUfM8KJpiDZ0YroiDUSRBv4amBkBtCa
- xpVIHqFe2ZvJhie6f6poTu1Yehi3t06ioCqFssnkZC2CTlIGXiDZ3CmP2kIeqFnDLWLcsZNEc950
- sTsnjYdmdSoXa2mmTskUYLdyMjVEyU.Z4FFN7xxYEYo1B2kE_Fa_O9n0niV6A3uV1oAeRMHlqFMT
- 3Hia5B7TxVnbIyrMOkFzZEsFclnHhfv9pxBOPmWO1h5AB.n39Wxbz2ZInjDshBJGqZU23kJcO35A
- FrSPxEHKBSr3upMwCP_oEhcY2oj53Gwf_n.6KKjl.4FUyByZCdvZkHT806mtiUFOkRZpdKkoB4vU
- w0s26qVOfSl6NlBYEMUi9xu5d9y4vijVNOIWDP1_CrvualKcLf5wLeato.Va2DumQp95PhhNFyTC
- 1B8isk2Ep8R3N8k6uPxtS9DyIRPUiPtVc3xli_Y1zgzPED.UbxtDWr6.d.Nb.w4aTrSxh0aqpZfU
- FELACwHUNXRAYSSmfyy7tUhpOWR0CREVFFjRYI7cLl2k6s9atycRm...kCRhWeODcCB2JsFkyzMf
- 28Mz9WqT9I7Q8Vd5pQ9svtBI8_IBOVZtsIdeTbvSEeB2MQHKL7mYMnYEEc8e52QggkT6VZ44hbGQ
- RNnTEiIZ_2sYYg_2gQXMY30Cp51r5mzGZcOtfPLmQE.BQxm6D5tvbJEZ55iPUrHjDXY8DNtBCWRI
- DD_KFyFFobAYfWbbgdbYkB4I9A0UMeOMezOg8Yg7JQ7DRARg2.wWCrqL1MfIjVItGqORO8CdG4M3
- slcP1ffu5YD3OG2klJlgdf7yW7i7coY8d.T0BZCrNpdRnyPz3KtkUEc9OxML3uOBqTYeSBicjnpN
- .Qz.WRNbjz1wi_8iAP2Xa6wGNT62cGB0UM6lxljaJvtH6OUhV0oIqlBvOzzrGLtWXthAmLwY9jiu
- h6.bDpveSNbd8fP0Rplkb7Mv3JPRvJSpWVj0RPe1KkhPzD0lVVKzyg7XQwNfsHy4Udt95tHt9GFV
- RFlVrG1xG6K7cNxlXV7SPr2S6hIpn7ysjax0z8zGUffe5grPMbjxUr42bzk330IRVWo3NkFq5.U6
- cT3RsBocPhVMqfcB_QUGLxkPQxNnbO7gb5EPNnsMixLtTCoIPGYdh.Ee7R4KePzlLbvPdT9FYEAB
- HFEMG8kRU9HZNzv6pjcguo5DrYloY1rLN._M9rnurBjh0UgXF8rqrSw3A7L7d8Xds9KBZG0pvGuV
- uq5z7Nd34kXAeekHjlqTQiXrorXe1rX4MubTpSJHQXIPqN_k.vuylZqpLlHsu5QLOJfegZLnrVdW
- zA7fq73DW_qdxSXj.nl.AUEUzEelTP8RdDsdVn.TmqxgaJgJxIzS8ThwFdPqEnCea77mX1jjdCs3
- MYYKa5kX1us1iF.Rg_ey9FkM7Kn.apq.KQ.zQDgWeGYKBC3PW2AhwWSg9fI1eKUPObDrqehQF8Hr
- 5Xk9ilBI36sL1MLev8km.uOt2opldCIxm79lyo6CDaUz7WSgWXGfnqD_HRPpT9rD7qwlvIrVv.MA
- lrVu1znWg0Qb5ifHB4l.bUPB9NmSDQjraZQI2aamp7.BK8xFHR1Ig.rS93jJ8Q9blO3_5QVRGWSS
- hQJeKtsxbHNzlk75z5HbKb7XlR1p5r.idIkXj75ABsKMYKpOiskwoP1D2RVUBb2E43RIS8.cM77Q
- oNJGkfkfnBZ4.u2yYape2YDdzDUQzlu3MlvmJEOZiK7XjKZkQ5QjFIW8RwHSQZQiN.BSy_xwq_Cc
- OgcKN_FgBoo6CgL5djpNqWnP2uDqLeX4J17rpgPqfmcPJu6Qy6Sdac9vjueiNiCbKLbF0b9sAx4b
- mFJ3_ExJElqwog4qY9Jz.ZxhGMkXmVQhWwzAYxGKIktf_ljmb_R9oXCy1XLMW3Yt1ql_Ti_3yfbm
- UHVPdluCSpMfzU87AwtCfv15.tsOOiiJhC4zR4HOvSE1SuKuDXwORLGvraTUfXiQ1O7KyEri6n8b
- 753Qm32NqL5oylIPETeVxYpRp7P1w
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526442; bh=28BsSsKBMb/CRoqFk+67h23muo0Ip5+8Af2Px0B+JrA=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=XFqs2s88nK22KFcbLKBsip5hLp0g6vIn2P0RICkblH7u+PKUxlEmKC4F9ry6HLnpOMeCopInzIew6mbZkp72ZBtxJVZUtIogmgrP+mib491slsTmdLiCV/ZZn9ychoamuDsmJ6dPfz2q73EloCdIvpgJGMOzfO5unqw2RnQ6taUtLKS0Ap41/MCHKZG8QNu8zN7w5YjlyOziCMTWpnHqOzf6Ys47F029EXPMh0hvweSwy0cemUkjiSqCTy1ec7OgSBCO7mTQDUvYp71FeLjDadhaTb5kn2OkFD58A50ywgO9+LCgpszczhvQS+29n1ypuFqaJiKmNu53IuxY29bQfQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1750526442; bh=oJ9PYsGMMW0JYw7aHEo6Nq//kF6oA2q3BZ9qxW1ORKs=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=qf9M/JrC/qmRwWipob4mzwLxRc8fTHQFIG2Dt2sjOmDNPIlmXXJj4UcyE0V3KPcYOezOi9T1eDa7gm5dXCeE5i7zqAN22hQThqqV7AgIb5FDvQ0CaVbcYPyqH8daf84cox32JgJi9cq1W0MLoNrcYU21Sf3lZQFiRqO4e0yMh/hKCYXjKsvVvQnKi9AWNgeYNzKiXWUW4JmYlb7Duri85xmsaqwijZPrM1Ts5tO2Pk6snvZI4CnLjQkECi5bzqdWsyFsDqzHwiEcPMqbnzmPEVNniTDp5H0y5qwLgNj3RLVZNyuSUThIvEb0Q0mmIr23pF5t2gy3ZdhhUDD1PC7ZVw==
+X-YMail-OSG: xMaNaS0VM1nwKa67gwCV7oVs6MyB.OSqshu.Zs3nP_ZX4AAUG0ACyo2Q_JRRtby
+ YWcEQyA9vs8Ml6O0MgA.heIISR.M.H0RHn.HDok1PICV0h.s0zbPBlroTdUI_AY22Ijr2VHLni_g
+ 3yJT0q3r5W1GoXG9zDO83hnlLVftrFuP.Q2EYWfBPnHPpyngvNjZBsqc04GEAOKrtN0ZbzHEH.UN
+ 1NYaoPbg0uX59Qrlk5p7LyqNn_I1CrlQYbmEY_wfk7ocTIzuI3szAcKOIVVlT7jF67zttw0QZXs1
+ svB4.VijSFJCc.DbxKrCv2DwQ2S7mz69SdF3eLAaktV2tONObgb_PI_2entpfA6C2v85p8AXPhBo
+ VnIbSuVFoMeYwcwi_CHoZf1Yj21U0rM6ArdplIZEgwaMv1hUvyYrkUwd9L6tvCLaoDyd3glmm3bG
+ STh0dMUPMVh_MxJVvVm932R9kAbST.7HkpxOIbz85IpKin7ZO4aunWAphRD26ozNguhK.Wf2ghnA
+ Hhmx0lo7oxzPlFB1CvYQqH1Kbakn9o9KsX36Pv0qBsoBwYI4VWTx5BSUMn58.QZDzd4Q2B7u0A_O
+ H.XT8JSF3HEPChRXFOpvNlKKRs4ZhAuYR.7FFe8XIyESvrK0Ylvsj1yhFkUjGiPXtgmO.ijwnT4s
+ vvrllM8tbO8Cenl.UWh33Ij040PdhfnJVhBthNVKDmYpODXXItB0c8D.w7IKQesAmwKzvVW1gEnY
+ CAenHwJKr_cGstpqOuClg3uKNasv6LbXfkb9MV52bEyKyHXEWGyo2RV.8EB35cN_20T_dGaNRZpw
+ zT5zt7.0y8MwOnbzqCR_6aTL.ekVHUqhyPgxdHMo.rAZmIK3i_R0bXsxi9fwgcxepkpuIg.XEcjW
+ pcWpWV8wo0idbb1faiDdgxtCTlFcQVUc393u68Xsn3RObvZxPbIqZWq2CVXnTXgp_a0SNVw4bDKF
+ zhnGdcfuhI0lDinTMvwr_nBgUth8RBsRzjV.Jf4lWXtlty2PfEWPNQO5EStXFrxHhPRMQ29bJxW_
+ 1U7wuQVMrzMYKvC7LLCGggGnHACbBsuvaAUQVrfa7RC5yC1vD4PSzzXTIzTbuopU0WNkSgcDEKbx
+ lt9m8qDMqlJe47u.q9TmiKNRahpOHYQoo_83VgUorG8UVVN.hUxfiGnbnp41nTCiw.ZYYcnF1KrZ
+ 0izHNlSLeloNLb1P1Xc9OVm5J_4z6cRUQqNbB6_1NSD0AP1p3UaKJuBtaDH_emJFmhEMzEceaPPh
+ VdlJMMiqgS6j2vhUg7u2SxRhywwf5vvowvGjkD17vSdYabHCBU_ADOPJ.ahA8.7citjt4fJXBR.Y
+ 2Jy11J2WD2OdnBtL4ztjsPrQF.IPQ8gfbcD40MwreKFDtLN6Etisr1WlyopdWr4mm3uzrkBber.Z
+ kM3jVxrfvXl5_YOr0Tn4RKWjfDzkXP0QM8D22P55_ytVU0K7W2ZUsCMYLZ2wI.FzWPv6nJDu6Om.
+ 3jBGFFruFerR5a0eNvSyYh9pc_rWXGsFMGxkYKvCfxUUiKns1aj1_f0gYNgg3DM3XQC1V6OzKq3S
+ 37n.hdJwet5UBgC9T90MOLe5u43PzVvximzjrITa52Yjf.LEvve_ZvWsKclN4ZV0dOwYQQlAO8mG
+ U1.cVOcldnmPhF1b5LsDX3Z6EDuLVbje48v0OLqdQDhY7dQyu8xBTmOba4ZiMZV.CjxAJ7mI5m3N
+ pbVvTXoGPAfcn36siGjQPmNnvDxYM4uAZU4.hsYCT7gu.OLC8WaLnQdwxEAFARDYwClJuwFUVW2Y
+ 3QZ8w0bpCVnjlOsRTs5KW4Wg.tOWGc2FMvpDwC0pgEg6IkOuJkrGvCgIne35QQso58k514SZK1od
+ agx7ynqU_Zo9GiDd7jhzolgrlJVFwfCG21402gyYtviVesSM2dq5VdFwI3ZsfzlvdZsencEcn03B
+ JmdHeyRvELjrtzksY9ziYMcucOUp2yCb3kWiszOCzO0pIwYq8heTGz1EKLJk913iMjisOn.rNeYY
+ qGpZwVLwLKYz5WE07XfvI_z1bLoU0dEUmX7a._eRZhf_F_D94v6iv_40uDOlMCkDc8seZATOkvLj
+ KbYNZ7kvxYlteH9ezGxLQtiliQpnNXDMNsN7I4K8OGBWa2y_UZhJsamf.33hCBNz2pHhkk4UNClT
+ WmPfwZZxGmJqW_x7XAsbfmCYs4NI8FwzSkSe0P0_q.l2HDQNIZPr4AcbXVuyyurIkStLEcq0AHaP
+ zwJJdPIrrUa2oChIZHXLfBVcAMp2fWqmVJf9nWlpLtP4SFi4DzEYleutqBfI7vbeMOu_RwI805.g
+ JRJiwnl5mQteVZPPhalF5vaLrkKk-
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: ffe1763e-d3af-4a28-ac8e-854791229561
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Sat, 21 Jun 2025 17:20:40 +0000
+X-Sonic-ID: 11436d48-2019-47aa-a971-74adf09de465
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Sat, 21 Jun 2025 17:20:42 +0000
 Received: by hermes--production-gq1-74d64bb7d7-cmxx8 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 311260ab82870132bd75579510690963;
-          Sat, 21 Jun 2025 17:20:37 +0000 (UTC)
+          Sat, 21 Jun 2025 17:20:38 +0000 (UTC)
 From: Casey Schaufler <casey@schaufler-ca.com>
 To: casey@schaufler-ca.com,
 	paul@paul-moore.com,
@@ -84,9 +84,9 @@ Cc: jmorris@namei.org,
 	stephen.smalley.work@gmail.com,
 	linux-kernel@vger.kernel.org,
 	selinux@vger.kernel.org
-Subject: [RFC PATCH 06/15] LSM: Exclusive secmark usage
-Date: Sat, 21 Jun 2025 10:18:41 -0700
-Message-ID: <20250621171851.5869-7-casey@schaufler-ca.com>
+Subject: [RFC PATCH 07/15] Audit: Call only the first of the audit rule hooks
+Date: Sat, 21 Jun 2025 10:18:42 -0700
+Message-ID: <20250621171851.5869-8-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20250621171851.5869-1-casey@schaufler-ca.com>
 References: <20250621171851.5869-1-casey@schaufler-ca.com>
@@ -98,208 +98,79 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The network secmark can only be used by one security module
-at a time. Establish mechanism to identify to security modules
-whether they have access to the secmark. SELinux already
-incorparates mechanism, but it has to be added to Smack and
-AppArmor.
+The audit system is not (yet) capable for distinguishing
+between audit rules specified for multiple security modules.
+Call only the first registered of the audit rule hooks.
+The order of registration, which can be specified with the
+lsm= boot parameter, is hence an important consideration.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- include/linux/lsm_hooks.h        |  1 +
- security/apparmor/include/net.h  |  5 +++++
- security/apparmor/lsm.c          |  7 ++++---
- security/lsm_init.c              |  6 ++++++
- security/selinux/hooks.c         |  4 +++-
- security/smack/smack.h           |  5 +++++
- security/smack/smack_lsm.c       |  3 ++-
- security/smack/smack_netfilter.c | 10 ++++++++--
- 8 files changed, 34 insertions(+), 7 deletions(-)
+ security/security.c | 30 ++++++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 5bc144c5f685..1ad9f8a86b10 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -122,6 +122,7 @@ struct lsm_blob_sizes {
- 	unsigned int lbs_xattr_count; /* num xattr slots in new_xattrs array */
- 	unsigned int lbs_tun_dev;
- 	unsigned int lbs_bdev;
-+	bool lbs_secmark; /* expressed desire for secmark use */
- };
- 
- /*
-diff --git a/security/apparmor/include/net.h b/security/apparmor/include/net.h
-index c42ed8a73f1c..2e43e1e8303c 100644
---- a/security/apparmor/include/net.h
-+++ b/security/apparmor/include/net.h
-@@ -51,6 +51,11 @@ struct aa_sk_ctx {
- 	struct aa_label *peer;
- };
- 
-+static inline bool aa_secmark(void)
-+{
-+	return apparmor_blob_sizes.lbs_secmark;
-+}
+diff --git a/security/security.c b/security/security.c
+index 2286285f8aea..93d4ac39fe9f 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -5056,7 +5056,13 @@ void security_key_post_create_or_update(struct key *keyring, struct key *key,
+ int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
+ 			     gfp_t gfp)
+ {
+-	return call_int_hook(audit_rule_init, field, op, rulestr, lsmrule, gfp);
++	struct lsm_static_call *scall;
 +
- static inline struct aa_sk_ctx *aa_sock(const struct sock *sk)
++	lsm_for_each_hook(scall, audit_rule_init) {
++		return scall->hl->hook.audit_rule_init(field, op, rulestr,
++						       lsmrule, gfp);
++	}
++	return LSM_RET_DEFAULT(audit_rule_init);
+ }
+ 
+ /**
+@@ -5070,7 +5076,12 @@ int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
+  */
+ int security_audit_rule_known(struct audit_krule *krule)
  {
- 	return sk->sk_security + apparmor_blob_sizes.lbs_sock;
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 4ba6db93e5b0..255d2e40386f 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1291,7 +1291,7 @@ static int apparmor_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
+-	return call_int_hook(audit_rule_known, krule);
++	struct lsm_static_call *scall;
++
++	lsm_for_each_hook(scall, audit_rule_known) {
++		return scall->hl->hook.audit_rule_known(krule);
++	}
++	return LSM_RET_DEFAULT(audit_rule_known);
+ }
+ 
+ /**
+@@ -5082,7 +5093,12 @@ int security_audit_rule_known(struct audit_krule *krule)
+  */
+ void security_audit_rule_free(void *lsmrule)
  {
- 	struct aa_sk_ctx *ctx = aa_sock(sk);
- 
--	if (!skb->secmark)
-+	if (!aa_secmark() || !skb->secmark)
- 		return 0;
- 
- 	/*
-@@ -1407,7 +1407,7 @@ static int apparmor_inet_conn_request(const struct sock *sk, struct sk_buff *skb
- {
- 	struct aa_sk_ctx *ctx = aa_sock(sk);
- 
--	if (!skb->secmark)
-+	if (!aa_secmark() || !skb->secmark)
- 		return 0;
- 
- 	return apparmor_secmark_check(ctx->label, OP_CONNECT, AA_MAY_CONNECT,
-@@ -1423,6 +1423,7 @@ struct lsm_blob_sizes apparmor_blob_sizes __ro_after_init = {
- 	.lbs_file = sizeof(struct aa_file_ctx),
- 	.lbs_task = sizeof(struct aa_task_ctx),
- 	.lbs_sock = sizeof(struct aa_sk_ctx),
-+	.lbs_secmark = true,
- };
- 
- static const struct lsm_id apparmor_lsmid = {
-@@ -2085,7 +2086,7 @@ static unsigned int apparmor_ip_postroute(void *priv,
- 	struct aa_sk_ctx *ctx;
- 	struct sock *sk;
- 
--	if (!skb->secmark)
-+	if (!aa_secmark() || !skb->secmark)
- 		return NF_ACCEPT;
- 
- 	sk = skb_to_full_sk(skb);
-diff --git a/security/lsm_init.c b/security/lsm_init.c
-index 54166688efff..4e3944c68bc8 100644
---- a/security/lsm_init.c
-+++ b/security/lsm_init.c
-@@ -313,6 +313,12 @@ static void __init lsm_prep_single(struct lsm_info *lsm)
- 	lsm_blob_size_update(&blobs->lbs_xattr_count,
- 			     &blob_sizes.lbs_xattr_count);
- 	lsm_blob_size_update(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
-+	if (blobs->lbs_secmark) {
-+		if (blob_sizes.lbs_secmark)
-+			blobs->lbs_secmark = false;
-+		else
-+			blob_sizes.lbs_secmark = true;
+-	call_void_hook(audit_rule_free, lsmrule);
++	struct lsm_static_call *scall;
++
++	lsm_for_each_hook(scall, audit_rule_free) {
++		scall->hl->hook.audit_rule_free(lsmrule);
++		return;
 +	}
  }
  
  /**
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 9f816e25198a..18ab1f13f3f9 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -165,7 +165,8 @@ __setup("checkreqprot=", checkreqprot_setup);
-  */
- static int selinux_secmark_enabled(void)
+@@ -5101,7 +5117,13 @@ void security_audit_rule_free(void *lsmrule)
+ int security_audit_rule_match(struct lsm_prop *prop, u32 field, u32 op,
+ 			      void *lsmrule)
  {
--	return (selinux_policycap_alwaysnetwork() ||
-+	return selinux_blob_sizes.lbs_secmark &&
-+	       (selinux_policycap_alwaysnetwork() ||
- 		atomic_read(&selinux_secmark_refcount));
- }
- 
-@@ -7160,6 +7161,7 @@ struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
- 	.lbs_xattr_count = SELINUX_INODE_INIT_XATTRS,
- 	.lbs_tun_dev = sizeof(struct tun_security_struct),
- 	.lbs_ib = sizeof(struct ib_security_struct),
-+	.lbs_secmark = true,
- };
- 
- #ifdef CONFIG_PERF_EVENTS
-diff --git a/security/smack/smack.h b/security/smack/smack.h
-index 709e0d6cd5e1..2f7b8d79b69f 100644
---- a/security/smack/smack.h
-+++ b/security/smack/smack.h
-@@ -389,6 +389,11 @@ static inline int smk_inode_transmutable(const struct inode *isp)
- 	return (sip->smk_flags & SMK_INODE_TRANSMUTE) != 0;
- }
- 
-+static inline bool smack_secmark(void)
-+{
-+	return smack_blob_sizes.lbs_secmark;
-+}
+-	return call_int_hook(audit_rule_match, prop, field, op, lsmrule);
++	struct lsm_static_call *scall;
 +
- /*
-  * Present a pointer to the smack label entry in an inode blob.
-  */
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index d363adead435..c8c173bb9cc3 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4102,7 +4102,7 @@ static int smk_skb_to_addr_ipv6(struct sk_buff *skb, struct sockaddr_in6 *sip)
- #ifdef CONFIG_NETWORK_SECMARK
- static struct smack_known *smack_from_skb(struct sk_buff *skb)
- {
--	if (skb == NULL || skb->secmark == 0)
-+	if (!smack_secmark() || skb == NULL || skb->secmark == 0)
- 		return NULL;
- 
- 	return smack_from_secid(skb->secmark);
-@@ -5030,6 +5030,7 @@ struct lsm_blob_sizes smack_blob_sizes __ro_after_init = {
- 	.lbs_sock = sizeof(struct socket_smack),
- 	.lbs_superblock = sizeof(struct superblock_smack),
- 	.lbs_xattr_count = SMACK_INODE_INIT_XATTRS,
-+	.lbs_secmark = true,
- };
- 
- static const struct lsm_id smack_lsmid = {
-diff --git a/security/smack/smack_netfilter.c b/security/smack/smack_netfilter.c
-index 17ba578b1308..1dcaba0d224a 100644
---- a/security/smack/smack_netfilter.c
-+++ b/security/smack/smack_netfilter.c
-@@ -26,7 +26,7 @@ static unsigned int smack_ip_output(void *priv,
- 	struct socket_smack *ssp;
- 	struct smack_known *skp;
- 
--	if (sk) {
-+	if (smack_secmark() && sk) {
- 		ssp = smack_sock(sk);
- 		skp = ssp->smk_out;
- 		skb->secmark = skp->smk_secid;
-@@ -54,12 +54,18 @@ static const struct nf_hook_ops smack_nf_ops[] = {
- 
- static int __net_init smack_nf_register(struct net *net)
- {
-+	if (!smack_secmark())
-+		return 0;
-+
- 	return nf_register_net_hooks(net, smack_nf_ops,
- 				     ARRAY_SIZE(smack_nf_ops));
++	lsm_for_each_hook(scall, audit_rule_match) {
++		return scall->hl->hook.audit_rule_match(prop, field, op,
++							lsmrule);
++	}
++	return LSM_RET_DEFAULT(audit_rule_match);
  }
+ #endif /* CONFIG_AUDIT */
  
- static void __net_exit smack_nf_unregister(struct net *net)
- {
-+	if (!smack_secmark())
-+		return;
-+
- 	nf_unregister_net_hooks(net, smack_nf_ops, ARRAY_SIZE(smack_nf_ops));
- }
- 
-@@ -70,7 +76,7 @@ static struct pernet_operations smack_net_ops = {
- 
- int __init smack_nf_ip_init(void)
- {
--	if (smack_enabled == 0)
-+	if (smack_enabled == 0 || !smack_secmark())
- 		return 0;
- 
- 	printk(KERN_DEBUG "Smack: Registering netfilter hooks\n");
 -- 
 2.47.0
 
