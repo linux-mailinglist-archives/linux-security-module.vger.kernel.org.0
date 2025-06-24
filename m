@@ -1,108 +1,112 @@
-Return-Path: <linux-security-module+bounces-10792-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10794-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A81D5AE7348
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Jun 2025 01:33:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79FE7AE736B
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Jun 2025 01:44:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A560E5A0624
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Jun 2025 23:33:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C8251BC36E9
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Jun 2025 23:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2590526B779;
-	Tue, 24 Jun 2025 23:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0475826AAB8;
+	Tue, 24 Jun 2025 23:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Kt4KOY5Q"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OvPSwlip"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E169219E0
-	for <linux-security-module@vger.kernel.org>; Tue, 24 Jun 2025 23:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0B226AA98
+	for <linux-security-module@vger.kernel.org>; Tue, 24 Jun 2025 23:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750807971; cv=none; b=JdYRXyz45uXQu6vyYeal2zkOvlthK601xYuLHglgzXmoWISIkY3YOtmj9cpFyEPW+d9u2mVdA5aWy4LdzkBoV9AWH6nhe6f75/BqfsIuSFdoYNviuFGGEk6DFhk8b4xBrVk7fzpzv8bc58I0s65SY2+IxoRqLVIfWyGwHksEg3M=
+	t=1750808676; cv=none; b=NcPrIxyudRPO0MUTLs2gnGvPzCfJuqlBAf6qUezpVRaFk0KHt9t12GH6KoHIdJIrVF5CaudMTmMqoTcqUpVzH3wMh91xpvXJF8Eh95Ko96BeNIpETt7RlpgJA9HWazkPID8Sy5NiOJ+rD+/pe/PZduTTui7GzBnj/pJrXF7/yUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750807971; c=relaxed/simple;
-	bh=9plsle3xhilIscWtN80aVYEmbDNhgd7b9z+Vcv7fJNw=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=lqDR7Qto2g/0Zg+GeXvs/ZfN95/3GfAyqk61Dq5f73QeNtd/tSoameyIVCVVoE7sHVoO0jEk5uL5Em3yspM0pPqLpe6qqskwxZbnDN+kMtvHhQYV5RFRTXdXIbXyOyrIZV+ZaI6CEALRO+xqkCPRPctKvjDTuBNPaOPa2YIt4H0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Kt4KOY5Q; arc=none smtp.client-ip=209.85.222.180
+	s=arc-20240116; t=1750808676; c=relaxed/simple;
+	bh=phaDN7eV8f6TzylrwNnPTs5X3yC1ERVNmiyd0BZDIls=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=og+kCcw+EgbQ6TkHCJIk8yLPqSUvwUbf8cMtGbAe1bSva3MPlAGJOZ+pW2QPoVfDy+GcHa3sjjamn1Ophj7O3LGn7q160wWZFdF5aS3++3BroU/o/yjPAX/pg/vdaAiR3M2HMtbl1b+YYBuNgo6xmXK6lWAWkQInqeAqK/stwfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OvPSwlip; arc=none smtp.client-ip=209.85.128.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7d41cd4114aso147277385a.2
-        for <linux-security-module@vger.kernel.org>; Tue, 24 Jun 2025 16:32:47 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-70a57a8ffc3so11878937b3.0
+        for <linux-security-module@vger.kernel.org>; Tue, 24 Jun 2025 16:44:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1750807967; x=1751412767; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XeW71QVolHQc9XFtJ5X/We4h7FBJVSJJ3quBDuyBJMw=;
-        b=Kt4KOY5QvevxhjR31oBXxaQRWgMES/N2zEePcT80JzurJMRrodDmOBCly633i1Lha2
-         js7ms6/eS1MpNpdOdOIPxtMUPQoZvPQITSR4B5jd1wSX1cI+mwdqOVSnCxxpFGxyLT1p
-         S7BgJASFaDCiPkLmqTKeIwTP1JNFz0NwutStH6FFFebK+S5zgOucd1nCBlyXvLalaNod
-         JhaJAgm1iZxaDgxJbR/2wJIhLKGrUdo0iAIUqusuXsPLT1yuquJjN8HNMeLZ558K06/3
-         C1vHfsJaVjnaLp8IYUszmGF5tgtw5DvFtXpCvhLOxSJsC/79MSIIbgqRrTWOyjszjjwz
-         tIDw==
+        d=paul-moore.com; s=google; t=1750808674; x=1751413474; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ypGqRXT9B6uz9VhXeJhe2F5sbavYCtgIItdaOAEXkS4=;
+        b=OvPSwlip4Kazt/S9ri2j5VeDhKda3I8b1Q9PV6y68MNtHjhVuPC5elfuYB9bigs5tO
+         w+nA6MHplF++ChPYTyd5lhDGickosH0q7WTpJdbfAH36b4jWbY1PaO/47pnIhnj3nvXt
+         WK8upkmDTdi41+Lxu4KGwmDsn8oVgXum2GQJ1+EQHlk2Kn++fV9YmmpED0OdnRGA9buF
+         JRurl5/iI5DdCi6xxf7+WFBbOGojJP9yxyeLEf8H8Njt0hi1es4pbsPNZx/tVZvFHV1R
+         EjIGqPCIIO/ijxKP6QgRpKDlZdcqL9Nu0fmVuIqcgbCBpTcTyvyYmwwjB8Q2b96ZRxsg
+         rfKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750807967; x=1751412767;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XeW71QVolHQc9XFtJ5X/We4h7FBJVSJJ3quBDuyBJMw=;
-        b=JLXYvxKc//2F4JV4hTuUDPu9374EAHW4tPbTxmMY1UuLSOhM0nv1pQGvDMHaOxuoOl
-         qjHV3xBv7KauzQBa6eua/ksBhxOGfQaDbvA6xtNKGKEHuGRhoNw5dzSvMfu2/sBdaOd/
-         G3EurOIAD0Dy6K/JFIDLx+6rMWPaSV/JjVOSNRdNdytNiNu9k4zGxsm8qWpKIVT5w2rm
-         o2K3fEKG5WTGG1OOUue5BW7CE5AqmB7DXSy+WfmJKL4AWe/ed9oW7cIDnie3M1cDo1JU
-         d7HPj+0/I00smseSYQQJeiC41WTU85AM/nas38EihZbSQ2IApvpn+6qclwZ6yjBUr9V+
-         04Aw==
-X-Gm-Message-State: AOJu0YzUP+IqrQur6+n0m6PiSM3YK4VRyaphBK9wX9pceu8BrQ95KueY
-	GS7/Iw0FXDfnKevHZ0rwGjUifj55jMN/dqgBkfPljBSbLUDkrQBPtdP8wkBFsPRLkKs+jy859Y1
-	ZjoE=
-X-Gm-Gg: ASbGnctuHNKz8+aGCCy1qa3NNnux1C9bSNgnYGsG19zUQCZ8cV4cAThsVACxJmZKHZY
-	VgynQG575fT7qzeodphaJFl5w1nnp3/DxVSt9EW6xGSANVipFXAsMKgNaHlaEZQUwdtTV5F7P3A
-	FGTkHT+79ABtlt+RJLENERKCINirXyQel0E7CPJIEn2WIjbKDwnHdlLOV6NSnq3kMUGc2W+k6x6
-	aGJ/eOrKraiy+4e2omQILbK43l6y6UE1JbDOubBT+JXO4GiH0XvDvbNiREgXVnTEbPJFmveYqTT
-	yulTSLdS5qs4scDEBooSyYJQauNP4nEBsbRj7/ECFFtn3OoqMr2NU6Uu1F3/6Xon5v5RYwCm9us
-	Tc2ImyU9ZcbJ7ElppFGFFdGvb1elGxrI=
-X-Google-Smtp-Source: AGHT+IFmpTDa3Q7jBgXHoXXWbdTLlDC6+XgCE8TmlP1MQKwjZ0tjBgSroBHg8qJ3R4JT9IeEALD73Q==
-X-Received: by 2002:a05:620a:2589:b0:7d0:996f:9c48 with SMTP id af79cd13be357-7d4296c9e4cmr152296385a.9.1750807967077;
-        Tue, 24 Jun 2025 16:32:47 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6fd09538369sm62013446d6.60.2025.06.24.16.32.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 16:32:46 -0700 (PDT)
-Date: Tue, 24 Jun 2025 19:32:46 -0400
-Message-ID: <c6da4c0e398d393b06e4257c8beaac3f@paul-moore.com>
+        d=1e100.net; s=20230601; t=1750808674; x=1751413474;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ypGqRXT9B6uz9VhXeJhe2F5sbavYCtgIItdaOAEXkS4=;
+        b=CpJuu0i/8ZLgEr7aeXIeagaNorOfXmm7P+5ntF/GZYeN4AdWxjeFduKRmE63OvNraJ
+         kaGgmibyDX8lWIlNs+rxOUc7ZYn+gT7CS1adxFImzLil6MbzWHDYeV/WXolqL42GNgaw
+         20rseNWjuhifPKhHxcpexKp3WM3hPqRkJ1GzNCcN4jbCHhCS6e/loZYxVVd8ezeW02Qf
+         IhY3nw/y3ZAIWCj1vl9VWGnRiUtdCbUyLCnuUDyNnOJk8LDEQGmxnnEGSlt3SfdB2EKg
+         16ILyBy0BzTpB07wpk1ubJJzm6GCcYee7bPk5ldOfq080YdfKGwsAIkU6Bd1O29QAK6J
+         LClQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUjb4lfCOHf3GczcLnHXS0z/BPnIByGYi/N0vVMCC+1JHalvcw3cEh1aDXX6q2THiPf4n4hl0brFS1B4r6Bu7cD1EIe1i4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAruuSx7nBu2hy2g1B44vWsWwVnZ60oQGh+dhY2mLiFTTKRv2D
+	RYKh9o0v2fwoIA7lA/xhJbNitwrmyJfYeJL7vf5KYe6U/qjACvjDMwjK51b7Ewy/rtedEzYxKXE
+	3D+ORBOVPFSoGKra3FVHbX0j2WjEzPFD5nnmrwJKK
+X-Gm-Gg: ASbGnctH0v5HjZ1AyqA3tMy3KDtduBuKQ2WuT7AJhSib+A1Z6IHmi/GP4QC7YKl604D
+	0R817e8dIMrgAjvfpGplvfepb/tGN9R2UHFasTLblX4POLAvy6AU7QRGzG17B2qk/SN5U58stJS
+	efd4e7SLDHPLu44KxUaz9ByH5hvzdXxx+hAR+1mx2SpaU=
+X-Google-Smtp-Source: AGHT+IHYYzpIRcCARvY/5Tfe83HpMMGfatz5XhMVHQG4Ncv8Gwm83fUH9i11USV7knuqyOID1THO3kDuJPt0AFVqMkg=
+X-Received: by 2002:a05:690c:7011:b0:70c:a854:8384 with SMTP id
+ 00721157ae682-71406cb4bc7mr15901777b3.11.1750808674451; Tue, 24 Jun 2025
+ 16:44:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20250624_1155/pstg-lib:20250624_1155/pstg-pwork:20250624_1155
+MIME-Version: 1.0
+References: <20250615003011.GD1880847@ZenIV> <20250615003110.GA3011112@ZenIV> <20250615020154.GE1880847@ZenIV>
+In-Reply-To: <20250615020154.GE1880847@ZenIV>
 From: Paul Moore <paul@paul-moore.com>
-To: Yue Haibing <yuehaibing@huawei.com>, <jmorris@namei.org>, <serge@hallyn.com>, <casey@schaufler-ca.com>
-Cc: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <yuehaibing@huawei.com>
-Subject: Re: [PATCH] security: Remove unused declaration cap_mmap_file()
-References: <20250624014108.3686460-1-yuehaibing@huawei.com>
-In-Reply-To: <20250624014108.3686460-1-yuehaibing@huawei.com>
+Date: Tue, 24 Jun 2025 19:44:23 -0400
+X-Gm-Features: Ac12FXwcVhx-YeOi1FT2F4B7uxfo2lfTBSXihnFcoA7yu_J3MLk0q4urxj_iGGE
+Message-ID: <CAHC9VhR6BAOqHuBf+DdWQC-D+Lfd2C9WLTEpFjy1XQkqH1syig@mail.gmail.com>
+Subject: Re: [PATCH] selinuxfs_fill_super(): don't bother with
+ selinuxfs_info_free() on failures
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Jun 23, 2025 Yue Haibing <yuehaibing@huawei.com> wrote:
-> 
-> Commit 3f4f1f8a1ab7 ("capabilities: remove cap_mmap_file()")
-> removed the implementation but leave declaration.
-> 
-> Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+On Sat, Jun 14, 2025 at 10:02=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> =
+wrote:
+>
+> [don't really care which tree that goes through; right now it's
+> in viro/vfs.git #work.misc, but if somebody prefers to grab it
+> through a different tree, just say so]
+>
+> Failures in there will be followed by sel_kill_sb(), which will call
+> selinuxfs_info_free() anyway.
+>
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 > ---
->  include/linux/security.h | 2 --
+>  security/selinux/selinuxfs.c | 2 --
 >  1 file changed, 2 deletions(-)
 
-Merged into lsm/dev, thanks for noticing this and submitting a patch.
+Thanks Al.  I went ahead and merged this into the selinux/dev branch
+to help avoid any merge issues, but if you've changed your mind and
+feel strongly about taking it via your tree let me know.
 
---
+--=20
 paul-moore.com
 
