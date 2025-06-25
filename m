@@ -1,91 +1,94 @@
-Return-Path: <linux-security-module+bounces-10799-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10801-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21A66AE73FF
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Jun 2025 02:58:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2062AE741B
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Jun 2025 03:10:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6F8416B614
-	for <lists+linux-security-module@lfdr.de>; Wed, 25 Jun 2025 00:58:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80081189B287
+	for <lists+linux-security-module@lfdr.de>; Wed, 25 Jun 2025 01:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D4F7E0E8;
-	Wed, 25 Jun 2025 00:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="WurVgxZE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0A686338;
+	Wed, 25 Jun 2025 01:10:07 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DE81C69D;
-	Wed, 25 Jun 2025 00:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD55D8634A;
+	Wed, 25 Jun 2025 01:10:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750813077; cv=none; b=BwCOwV4p94s7VzQwYwQSqlpuVgXT9/RXYuWn6YL0xKMGlazK6DCpGP36hpDH+QkgxMnQrffytrDI/5Ayvl6aAzSPQ1Y69I/npCH8qS/IUxr34P3ZErOSxT2y2jqCgWK4RSuXnzMZMhBlvv/7689Glz66qPS+rmNLorlvQIUpwlA=
+	t=1750813807; cv=none; b=kL7YrfEa1nKQ/zRH5ePCSaFTjoeIGtqF0URQmirgU04QU5JmSaDoaM2crtEOUgxmMuvqcR4n0X9IiN/SXrywtChiAeQqhHpV3WpnzagPxGoom0e5DFD7z+2IOmfFQl6XJmZggoSm0PUM+s4v7DH/PtmPdSc/m7uB8z0jMv1ZMLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750813077; c=relaxed/simple;
-	bh=3sxog9KarjUra1bsPTIgTp68dHv6ihs9IGtnMgPj24I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eaTyZSTA9ozvfR2Qc8F151beNYFvnb052oiILzC1RzQZ1BGWsQ8ImhEI3dHwUMU+kXXJN1wJLK6CsLQabYwPaOFUVl6FZ73Ov3bhP2CaK0er2RcEGJYnQ8VLmTv1UpEUvBlnpq9HSD4W7+uh7g20Fx8u1MwbIaepH+GCKjZEb6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=WurVgxZE; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-	bh=atVojG7bUTPZmKUSvlctp8HQyu35rHIBOIdL8quSxiE=; b=WurVgxZEUVqMBFhFWx3cZF0/IF
-	v2qTI11x5HFTbgEzDZJDkXsgxvs/wMo7Hs1IFqnwwGbO8HCVzjcLMXwob66ce15LcDd5FHuV8qnUP
-	OqGfLCtPZO28RIqf32+PYYpcxRXuN8fRaZWkMcCPo9zrvZamgr+mHvtw8H+8vqgutOOdS+Vphb7Uv
-	cpgz4qDfZFNjLG3O1YWHudbaJBFSGok3eR6nPd83uzr8+OBmp15BxOVyq+OlwUHQx2DqfyhKr8E9b
-	6q66Rwz/Ng4klFSV1Z925YaDkD0FJsdXtiCNRZ/tXo3DzrtWXCkA7gbnTpy568dzm8LoYmT/77w/n
-	hd/YEP8g==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uUESW-00000006N6e-2vN2;
-	Wed, 25 Jun 2025 00:57:52 +0000
-Date: Wed, 25 Jun 2025 01:57:52 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH] selinuxfs_fill_super(): don't bother with
- selinuxfs_info_free() on failures
-Message-ID: <20250625005752.GP1880847@ZenIV>
-References: <20250615003011.GD1880847@ZenIV>
- <20250615003110.GA3011112@ZenIV>
- <20250615020154.GE1880847@ZenIV>
- <CAHC9VhR6BAOqHuBf+DdWQC-D+Lfd2C9WLTEpFjy1XQkqH1syig@mail.gmail.com>
+	s=arc-20240116; t=1750813807; c=relaxed/simple;
+	bh=jY+C/TpjBj7NczdPxP5qJzNzfhMM6ZTS+CIqe8D+ro4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a9UcwYmF9B9dfYy3lYXahcaFrUBImvTpqm2Tl4EM9rxhAXZlrkLDZiWG3zOOVyH5ZcakjLrRuj+fkoo4Yc6PFmBKSl+SH+VDHZ6wZjd2cFpEqsyjYrvhmUD84v72+jH8oH6LX1EuJ5dkm2pObnymdwwpUJlxeA7GDlMaWghezdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 55P18vOg012417;
+	Wed, 25 Jun 2025 10:08:57 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 55P18uSx012413
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Wed, 25 Jun 2025 10:08:56 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <945bf443-32b4-4432-8702-41ff7b15e420@I-love.SAKURA.ne.jp>
+Date: Wed, 25 Jun 2025 10:08:55 +0900
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] lsm: introduce security_lsm_config_*_policy hooks
+To: =?UTF-8?Q?Maxime_B=C3=A9lair?= <maxime.belair@canonical.com>,
+        linux-security-module@vger.kernel.org
+Cc: john.johansen@canonical.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, mic@digikod.net, kees@kernel.org,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        takedakn@nttdata.co.jp, song@kernel.org, rdunlap@infraread.org,
+        linux-api@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-kernel@vger.kernel.org
+References: <20250624143211.436045-1-maxime.belair@canonical.com>
+ <20250624143211.436045-3-maxime.belair@canonical.com>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20250624143211.436045-3-maxime.belair@canonical.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhR6BAOqHuBf+DdWQC-D+Lfd2C9WLTEpFjy1XQkqH1syig@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Virus-Status: clean
+X-Anti-Virus-Server: fsav304.rs.sakura.ne.jp
 
-On Tue, Jun 24, 2025 at 07:44:23PM -0400, Paul Moore wrote:
-> On Sat, Jun 14, 2025 at 10:02 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > [don't really care which tree that goes through; right now it's
-> > in viro/vfs.git #work.misc, but if somebody prefers to grab it
-> > through a different tree, just say so]
-> >
-> > Failures in there will be followed by sel_kill_sb(), which will call
-> > selinuxfs_info_free() anyway.
-> >
-> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> > ---
-> >  security/selinux/selinuxfs.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> 
-> Thanks Al.  I went ahead and merged this into the selinux/dev branch
-> to help avoid any merge issues, but if you've changed your mind and
-> feel strongly about taking it via your tree let me know.
+On 2025/06/24 23:30, Maxime Bélair wrote:
+> +config LSM_CONFIG_SELF_POLICY_MAX_BUFFER_SIZE
+> +	int "Maximum buffer size for lsm_config_self_policy"
+> +	range 16384 1073741824
+> +	depends on SECURITY
+> +	default 4194304
+> +	help
+> +	  The maximum size of the buffer argument of lsm_config_self_policy.
+> +
+> +	  The default value of 4194304 (4MiB) is reasonable and should be large
+> +	  enough to fit policies in for most cases.
+> +
 
-Dropped from #work.misc and #for-next
+Do we want to define LSM_CONFIG_{SELF,SYSTEM}_POLICY_MAX_BUFFER_SIZE as Kconfig?
+
+If security_lsm_config_{self,system}_policy() are meant to be used by multiple
+LSM modules, the upper limit each LSM module wants to impose would vary. Also,
+1073741824 is larger than KMALLOC_MAX_SIZE; kmalloc()-based memory copying
+functions will hit WARN_ON_ONCE_GFP() at __alloc_frozen_pages_noprof().
+
+Since some of LSM modules might use vmalloc()-based memory copying functions from
+security_lsm_config_{self,system}_policy(), the upper limit should be imposed by
+individual LSM module which provides security_lsm_config_{self,system}_policy().
+
 
