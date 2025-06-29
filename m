@@ -1,133 +1,155 @@
-Return-Path: <linux-security-module+bounces-10853-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10855-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFE03AECC5C
-	for <lists+linux-security-module@lfdr.de>; Sun, 29 Jun 2025 14:03:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82E20AECDF6
+	for <lists+linux-security-module@lfdr.de>; Sun, 29 Jun 2025 16:27:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0B3F1895538
-	for <lists+linux-security-module@lfdr.de>; Sun, 29 Jun 2025 12:03:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37CAD172FAF
+	for <lists+linux-security-module@lfdr.de>; Sun, 29 Jun 2025 14:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86B21DF97D;
-	Sun, 29 Jun 2025 12:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9D2227BA1;
+	Sun, 29 Jun 2025 14:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="peKCN4lG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8dhbIvj"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.eurecom.fr (smtp.eurecom.fr [193.55.113.210])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD35978F2E
-	for <linux-security-module@vger.kernel.org>; Sun, 29 Jun 2025 12:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.55.113.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CA6224B02
+	for <linux-security-module@vger.kernel.org>; Sun, 29 Jun 2025 14:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751198616; cv=none; b=XEy8H1iusa0Y/czCiVontbZwiOqYCC6UbZ0bq+iD+nNpkynCFiKUsgMlogaRkBygsZt3z8UnpiIpoM+JImFc2JGTCpF2QyYcBMCrfuoUsnwY7eiy02adlS3o7TOBuhrrZ2A08vNMTnBVW1uvTHq2KR/N6/fqW9HZ4z2tScVs/UM=
+	t=1751207261; cv=none; b=BnAYuppfcZQ4cZ3h634QnPAWCu/4clepyx4XeFTM8d07V07ikFyMQVkmWnR8GJm/eOL1htBRyJNPqdXC2oOrkxE2v0u9KYFf0z+a5iyVjs/FXvfDri6UhIUwhd9VtDWnev0WNXBkYPfTrYuEknVlrUkUMb0rhytGWyXEF4RpwUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751198616; c=relaxed/simple;
-	bh=Wf77jwR5XI8CpZdD00ogisakj6eAB3rzeNATzIWMHDQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UQNG0hq4IAzZY95eYwYEDADuDiprKS6ZQbOBr80AVevSR4m2q7/xZHuXKZ/Fmcrxhbw1AZsIKgDKt4oYo24HUJNqG6J8LFh1uRVKQ3r8gmEkDrQDdyJhqRDAX0hWWMgf54o7dHfuMsvMyNX+/mjxFBWxppvdoJYWVE+KpT7id0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=peKCN4lG; arc=none smtp.client-ip=193.55.113.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eurecom.fr
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=eurecom.fr; i=@eurecom.fr; q=dns/txt; s=default;
-  t=1751198614; x=1782734614;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Wf77jwR5XI8CpZdD00ogisakj6eAB3rzeNATzIWMHDQ=;
-  b=peKCN4lGtkD+o9DeOirOSg0L6dEr9sJYlrxtRR35TvnFqmPUGIhXKRzY
-   9CYjYWAKe5/mwN2yMzxcs3sNMc7F5iysZc4gzb2K6OX37+QihH5zqseck
-   hbQJ3S1wMdWMgCkTs6Mi6GRk/epS1IL2cGR7Q54OpcAwgdcF/+UqwUaqx
-   U=;
-X-CSE-ConnectionGUID: q2whxXu+QkOKGis2j3daHw==
-X-CSE-MsgGUID: f+dl+bwTT/GFEafKDwuPww==
-X-IronPort-AV: E=Sophos;i="6.16,275,1744063200"; 
-   d="scan'208,217";a="1972335"
-Received: from waha.eurecom.fr (HELO smtps.eurecom.fr) ([10.3.2.236])
-  by drago1i.eurecom.fr with ESMTP; 29 Jun 2025 14:03:32 +0200
-Received: from s76.. (88-183-119-157.subs.proxad.net [88.183.119.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtps.eurecom.fr (Postfix) with ESMTPSA id E9F8C2B53;
-	Sun, 29 Jun 2025 14:03:30 +0200 (CEST)
-From: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
-To: linux-security-module@vger.kernel.org
-Cc: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>,
-	Serge Hallyn <serge@hallyn.com>,
-	"Andrew G . Morgan" <morgan@kernel.org>
-Subject: [PATCH 1/1] uapi: fix broken link in linux/capability.h
-Date: Sun, 29 Jun 2025 14:03:01 +0200
-Message-Id: <20250629120301.1702897-2-ariel.otilibili-anieli@eurecom.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250629120301.1702897-1-ariel.otilibili-anieli@eurecom.fr>
-References: <20250629120301.1702897-1-ariel.otilibili-anieli@eurecom.fr>
+	s=arc-20240116; t=1751207261; c=relaxed/simple;
+	bh=8n6o9bwrxkN+4gbzwe6Km9SGKFqHTyRJVSydp61XDiU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oIu6iVTwQZZ0uC76kuqSxHnPKRbvc9BNgE5iuVrzlefY+OKBhDTQM08p1hU0CdXssEWB0nZ9t7QrVU36DAirH7Sy/6y4MXpK9OBeGri4720XwhlA96q381iKX2AmwQHnhYhNls2vKpNs3P5th9wJ/bTG+WeRs0P804CBQLN5LSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8dhbIvj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880FDC4CEF0
+	for <linux-security-module@vger.kernel.org>; Sun, 29 Jun 2025 14:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751207261;
+	bh=8n6o9bwrxkN+4gbzwe6Km9SGKFqHTyRJVSydp61XDiU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Q8dhbIvjWH9ZiGPCYXjSBW2HDpBFp2YnZJGH4NINgHeOs+8nE6ER3kFhJDMoziiAr
+	 pe4kPCiRjTpVp+/pD7meKi9YpyAlfqeFrsAl6OTr79obRaDgyWrnJNKlNg/NNqEyVp
+	 v1A3e9XUAf9LyVvX5ap8Nbu/wlgkdA5K04rw7u3iExTjyUzdgbUzh/tvas3acvKGLc
+	 nLERvZA1nLTHbQJdVNo4ecSG5D2pUMG1psP+o5iQBNd1FqkRGSS/5ckujZ9zKKVH6Z
+	 ylwBnTlb9g8KWREJF1O2mR8MMcA+XVYWqVsO1/CuEJF0apCpgHgSWlkp+dzygtztka
+	 ZFYipQCXz6aLg==
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-315cd33fa79so2336395a91.3
+        for <linux-security-module@vger.kernel.org>; Sun, 29 Jun 2025 07:27:41 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yzn/xNIlvCO00CPo1JthPsAYVm4W1uo/x1rhv4YzqgXOPBwYHLw
+	6+QMGEbT8eWEqiTh9L+jimkKdY1/Rww49XwAAzhFTe7D3AbB1fBRZaFLt2bSWxkoya8cPV9sepE
+	1iSoFD1zKN+rBvl2NFpSs1UcfzB6Bf6Y=
+X-Google-Smtp-Source: AGHT+IFcs8JwyMKWUBS437Rit5vj+1NFcI1Rwd06m4rZ0N31xz1e/gbCBuVOWPMmk33yxgs+vLc8hmtVSafQV+4fsiU=
+X-Received: by 2002:a17:90b:586e:b0:2ee:d371:3227 with SMTP id
+ 98e67ed59e1d1-318c9231255mr15362987a91.17.1751207261209; Sun, 29 Jun 2025
+ 07:27:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250629120301.1702897-1-ariel.otilibili-anieli@eurecom.fr> <20250629120301.1702897-2-ariel.otilibili-anieli@eurecom.fr>
+In-Reply-To: <20250629120301.1702897-2-ariel.otilibili-anieli@eurecom.fr>
+From: "Andrew G. Morgan" <morgan@kernel.org>
+Date: Sun, 29 Jun 2025 07:27:29 -0700
+X-Gmail-Original-Message-ID: <CACmP8UJ+Mp_53e9cnKDV3st+3_H_nYW3qkfvib34BS_s+5UPng@mail.gmail.com>
+X-Gm-Features: Ac12FXxg7gTtFE7_7AGEDiIR7x_5wsnS105gb8j9IZolYrlV0DY9kJctS_iBRFQ
+Message-ID: <CACmP8UJ+Mp_53e9cnKDV3st+3_H_nYW3qkfvib34BS_s+5UPng@mail.gmail.com>
+Subject: Re: [PATCH 1/1] uapi: fix broken link in linux/capability.h
+To: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+Cc: linux-security-module@vger.kernel.org, Serge Hallyn <serge@hallyn.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The link to the libcap library is outdated:
+Thanks for noticing that!
 
-> $ curl "https://www.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.6/"
+Acked-by: Andrew G. Morgan <morgan@kernel.org>
+
+Cheers
+
+Andrew
+
+On Sun, Jun 29, 2025 at 5:03=E2=80=AFAM Ariel Otilibili
+<ariel.otilibili-anieli@eurecom.fr> wrote:
 >
-> <html>
-> <head><title>Index of /pub/linux/libs/security/linux-privs/kernel-2.6/</title></head>
-> <body>
-> <h1>Index of /pub/linux/libs/security/linux-privs/kernel-2.6/</h1><hr><pre><a href="../">../</a>
-> </pre><hr></body>
-> </html>
-
-Instead, use a link to the libcap2 library:
-
-> $ curl "https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/"
+> The link to the libcap library is outdated:
 >
-> <html>
-> <head><title>Index of /pub/linux/libs/security/linux-privs/libcap2/</title></head>
-> <body>
-> <h1>Index of /pub/linux/libs/security/linux-privs/libcap2/</h1><hr><pre><a href="../">../</a>
-> <a href="old/">old/</a>                                               08-Nov-2007 06:34       -
-> <a href="libcap-2.00.tar.gz">libcap-2.00.tar.gz</a>                                 11-Jan-2014 16:49     37K
-> <a href="libcap-2.00.tar.sign">libcap-2.00.tar.sign</a>                               11-Jan-2014 16:49     819
-> [...]
-> <a href="libcap-2.76.tar.sign">libcap-2.76.tar.sign</a>                               13-Apr-2025 18:20     833
-> <a href="libcap-2.76.tar.xz">libcap-2.76.tar.xz</a>                                 13-Apr-2025 18:20    195K
-> <a href="sha256sums.asc">sha256sums.asc</a>                                     13-Apr-2025 18:25     14K
-> </pre><hr></body>
-> </html>
-
-As well, give the complete reference of the POSIX compliance.
-
-Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
----
-Cc: Serge Hallyn <serge@hallyn.com>
-Cc: Andrew G. Morgan <morgan@kernel.org>
----
- include/uapi/linux/capability.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
-index 2e21b5594f81..ea5a0899ecf0 100644
---- a/include/uapi/linux/capability.h
-+++ b/include/uapi/linux/capability.h
-@@ -6,9 +6,10 @@
-  * Alexander Kjeldaas <astor@guardian.no>
-  * with help from Aleph1, Roland Buresund and Andrew Main.
-  *
-- * See here for the libcap library ("POSIX draft" compliance):
-+ * See here for the libcap2 library (compliant with Section 25 of
-+ * the withdrawn POSIX 1003.1e Draft 17):
-  *
-- * ftp://www.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.6/
-+ * https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/
-  */
- 
- #ifndef _UAPI_LINUX_CAPABILITY_H
--- 
-2.34.1
-
+> > $ curl "https://www.kernel.org/pub/linux/libs/security/linux-privs/kern=
+el-2.6/"
+> >
+> > <html>
+> > <head><title>Index of /pub/linux/libs/security/linux-privs/kernel-2.6/<=
+/title></head>
+> > <body>
+> > <h1>Index of /pub/linux/libs/security/linux-privs/kernel-2.6/</h1><hr><=
+pre><a href=3D"../">../</a>
+> > </pre><hr></body>
+> > </html>
+>
+> Instead, use a link to the libcap2 library:
+>
+> > $ curl "https://www.kernel.org/pub/linux/libs/security/linux-privs/libc=
+ap2/"
+> >
+> > <html>
+> > <head><title>Index of /pub/linux/libs/security/linux-privs/libcap2/</ti=
+tle></head>
+> > <body>
+> > <h1>Index of /pub/linux/libs/security/linux-privs/libcap2/</h1><hr><pre=
+><a href=3D"../">../</a>
+> > <a href=3D"old/">old/</a>                                              =
+ 08-Nov-2007 06:34       -
+> > <a href=3D"libcap-2.00.tar.gz">libcap-2.00.tar.gz</a>                  =
+               11-Jan-2014 16:49     37K
+> > <a href=3D"libcap-2.00.tar.sign">libcap-2.00.tar.sign</a>              =
+                 11-Jan-2014 16:49     819
+> > [...]
+> > <a href=3D"libcap-2.76.tar.sign">libcap-2.76.tar.sign</a>              =
+                 13-Apr-2025 18:20     833
+> > <a href=3D"libcap-2.76.tar.xz">libcap-2.76.tar.xz</a>                  =
+               13-Apr-2025 18:20    195K
+> > <a href=3D"sha256sums.asc">sha256sums.asc</a>                          =
+           13-Apr-2025 18:25     14K
+> > </pre><hr></body>
+> > </html>
+>
+> As well, give the complete reference of the POSIX compliance.
+>
+> Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+> ---
+> Cc: Serge Hallyn <serge@hallyn.com>
+> Cc: Andrew G. Morgan <morgan@kernel.org>
+> ---
+>  include/uapi/linux/capability.h | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capabil=
+ity.h
+> index 2e21b5594f81..ea5a0899ecf0 100644
+> --- a/include/uapi/linux/capability.h
+> +++ b/include/uapi/linux/capability.h
+> @@ -6,9 +6,10 @@
+>   * Alexander Kjeldaas <astor@guardian.no>
+>   * with help from Aleph1, Roland Buresund and Andrew Main.
+>   *
+> - * See here for the libcap library ("POSIX draft" compliance):
+> + * See here for the libcap2 library (compliant with Section 25 of
+> + * the withdrawn POSIX 1003.1e Draft 17):
+>   *
+> - * ftp://www.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.6/
+> + * https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/
+>   */
+>
+>  #ifndef _UAPI_LINUX_CAPABILITY_H
+> --
+> 2.34.1
+>
 
