@@ -1,98 +1,93 @@
-Return-Path: <linux-security-module+bounces-10852-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10854-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA52BAEC4AA
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Jun 2025 05:41:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 956ECAECC5D
+	for <lists+linux-security-module@lfdr.de>; Sun, 29 Jun 2025 14:04:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 782A07ABE3B
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Jun 2025 03:39:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A68B7A4A53
+	for <lists+linux-security-module@lfdr.de>; Sun, 29 Jun 2025 12:03:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3019B21B191;
-	Sat, 28 Jun 2025 03:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F445204C0C;
+	Sun, 29 Jun 2025 12:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="N5qBEX1g"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+Received: from smtp.eurecom.fr (smtp.eurecom.fr [193.55.113.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7551A7083C
-	for <linux-security-module@vger.kernel.org>; Sat, 28 Jun 2025 03:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C829478F2E
+	for <linux-security-module@vger.kernel.org>; Sun, 29 Jun 2025 12:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.55.113.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751082068; cv=none; b=Bl0eProgaA1SjEbGyKnBDhYrUI3K6v0Td0YL2pW/ebjuIGMXSUsdfwz7J2YSRcErVV3Xf4cwsbjGl02ma7I4KYZtj6dDJotu1hgXqp09YettrxbZTyxJtwmiWjXb8qAouVV7lr3tS48jI7M5HvfVEIuYenjqCk5oKfw10JTHzuQ=
+	t=1751198672; cv=none; b=jAA04Jl4kkrsMu1uIvxfkmRReOk2S2tDahPiYT0+w8i1mSK0+vdscNrHm0c8fl/NS86z6LS6vslSTUWaXRMLP1EHZMNsoI/1cAPXbxs3Jx7GJHyGZUS2SwvS2JKpvVBrkEaxfgH8HovpSywTagkQ4LChXrWwiOybuwqbo7aLXGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751082068; c=relaxed/simple;
-	bh=JNh/U3x/vwGB3PlSMx9ke/L5mBBI0/UM/H9Pznl7+0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OkzKZszPMhhsjNM+c1D5W/iOtPvZiuR3gJBj7JpfqgXJnzt7EoDhyS3WsAwNC4daCbQUrQFwAiVLcocxi1JLI/xp0ljpRNx9SwBATrEmc9trFlMYrwyuBM77Mw6WObWBpLPchfTckOxdjBETRWh4/LmC7lv+dWdYgUZrvrEXtbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id DABC661C; Fri, 27 Jun 2025 22:40:55 -0500 (CDT)
-Date: Fri, 27 Jun 2025 22:40:55 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Luigi Semenzato <semenzato@google.com>
-Cc: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org
-Subject: Re: adding CAP_RESERVED_# bits
-Message-ID: <20250628034055.GA94340@mail.hallyn.com>
-References: <CAA25o9TqH3LNWy8F2tXO7P6AdQk0x+boWiPhy+CKL=wDouKODw@mail.gmail.com>
- <CAHC9VhT-UKWRbmsuJfkWO6BK_Mon4KUMB8DU5py1gDBJgYwJDw@mail.gmail.com>
- <CAA25o9QqmFGA1AsxK+5jds80uDV-3=BtM7kH0WgU=k+DEuxaiA@mail.gmail.com>
+	s=arc-20240116; t=1751198672; c=relaxed/simple;
+	bh=dwZHe49PCtDMVmCsKzYlISJ8cwHJTQvM1YYb6a3TYRg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tDzSaT+h+w0rYdVdtHXJaNoAa667tIjyuybVnmIIdchtPitv9YzjJi18KgeiEe0qvQXnIPEOOdb1TLk6aAK8VuMW8U0N5/2RcNND/Tk3bCQKQZYdE6AW4lGYDPwN2Z93u37GXrWABlBK3c04o+h0nFfhGxoy4Md8Yl7NucrNC4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=N5qBEX1g; arc=none smtp.client-ip=193.55.113.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eurecom.fr
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=eurecom.fr; i=@eurecom.fr; q=dns/txt; s=default;
+  t=1751198670; x=1782734670;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dwZHe49PCtDMVmCsKzYlISJ8cwHJTQvM1YYb6a3TYRg=;
+  b=N5qBEX1gR+YmaVs5MELgWGcbGQB1yfNkxPwlZ9esyIpSoW7BIyL0DhJU
+   9TCa2QC5XbkjnkWqhRu7qZibvMM7v+m7VMjIrLxlT/QoB34Exe6pDZhDF
+   wxvAuryqrOg18Bb3hvOo9LO2KASekGShoGKy3ATEmC9SgkEWQAyFaNyS0
+   w=;
+X-CSE-ConnectionGUID: q2KKUFEATcuh8YjpOsSlaQ==
+X-CSE-MsgGUID: 2GS2CilSRTmfiwIyhJulFg==
+X-IronPort-AV: E=Sophos;i="6.16,275,1744063200"; 
+   d="scan'208";a="1972332"
+Received: from waha.eurecom.fr (HELO smtps.eurecom.fr) ([10.3.2.236])
+  by drago1i.eurecom.fr with ESMTP; 29 Jun 2025 14:03:18 +0200
+Received: from s76.. (88-183-119-157.subs.proxad.net [88.183.119.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtps.eurecom.fr (Postfix) with ESMTPSA id 345D42B52;
+	Sun, 29 Jun 2025 14:03:17 +0200 (CEST)
+From: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+To: linux-security-module@vger.kernel.org
+Cc: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>,
+	Serge Hallyn <serge@hallyn.com>,
+	"Andrew G . Morgan" <morgan@kernel.org>
+Subject: [PATCH 0/1] uapi: fix broken link in linux/capability.h
+Date: Sun, 29 Jun 2025 14:03:00 +0200
+Message-Id: <20250629120301.1702897-1-ariel.otilibili-anieli@eurecom.fr>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAA25o9QqmFGA1AsxK+5jds80uDV-3=BtM7kH0WgU=k+DEuxaiA@mail.gmail.com>
 
-Sorry... why not just request a real capability bit be reserved?
+Hello,
 
-Ok, I see at https://lore.kernel.org/all/?q=Luigi%20Semenzato%20capability
-that Casey was suitably cautious.  However, I'd say if we end up needing to do
-the painful transition to 128bit caps, we should face that, rather than
-make people do ugly hacks.
+This patch fixes a broken link to the libcap library. Moreover it gives the full reference of its compliance with POSIX.
 
--serge
+The README of libcap2 says it is based on Draft 15 [1]; but, as far as I could see, only copies of Draft 17 exist online [2, 3].
 
-On Fri, Jun 27, 2025 at 01:26:54PM -0700, Luigi Semenzato wrote:
-> Sorry for the delay in responding, and thank you so much for
-> clarifying the Linux priorities.
-> 
-> For our project we ended up hijacking an existing bit which we're
-> comfortably sure we won't need for that binary (or any binary,
-> really), plus a seccomp filter.  It's a total hack, but a simple one,
-> and it beats the alternatives.
-> 
-> 
-> On Fri, Jun 6, 2025 at 7:11 PM Paul Moore <paul@paul-moore.com> wrote:
-> >
-> > On Fri, Jun 6, 2025 at 1:58 PM Luigi Semenzato <semenzato@google.com> wrote:
-> > >
-> > > Recently I inquired about the decision process for adding a CAP_DRM
-> > > bit to capability.h (to become DRM master).  It occurred to me that
-> > > the process for adding ANY bit would be fraught with controversies (to
-> > > say the least).
-> > >
-> > > So I looked into maintaining a patch in our own kernel sources, but
-> > > that was surprisingly messy due to the build-time dependencies of
-> > > capability.h and the way we maintain and share sources internally for
-> > > multiple kernel versions.  This would have been quite simple if there
-> > > were a few reserved bits, such as CAP_RESERVED_0, ..,
-> > > CAP_RESERVED_<N-1> with, say, N=3.
-> > >
-> > > Would this also be controversial?
-> >
-> > Yes, and likely rejected too.  The upstream Linux kernel generally
-> > doesn't make any sacrifices to support out-of-tree kernel code, and
-> > giving up precious capability bitmap space would definitely be
-> > considered a sacrifice.
-> >
-> > --
-> > paul-moore.com
+Your feedback is much appreciated,
+Ariel
+
+[1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/tree/README
+[2] https://drive.google.com/file/d/16yTUA10JLyi6zKky9_KBu7P8FpZrprl3/view?usp=sharing
+[3] https://simson.net/ref/1997/posix_1003.1e-990310.pdf
+
+Ariel Otilibili (1):
+  uapi: fix broken link in linux/capability.h
+
+ include/uapi/linux/capability.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+
 
