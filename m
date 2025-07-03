@@ -1,258 +1,154 @@
-Return-Path: <linux-security-module+bounces-10911-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10913-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACD8EAF672A
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Jul 2025 03:34:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82937AF67D0
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Jul 2025 04:14:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E19821C41652
-	for <lists+linux-security-module@lfdr.de>; Thu,  3 Jul 2025 01:34:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81DBF4E1B10
+	for <lists+linux-security-module@lfdr.de>; Thu,  3 Jul 2025 02:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649CB35946;
-	Thu,  3 Jul 2025 01:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0A71E1DE0;
+	Thu,  3 Jul 2025 02:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="e8xmKeux"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13E62F32;
-	Thu,  3 Jul 2025 01:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D4C1386B4
+	for <linux-security-module@vger.kernel.org>; Thu,  3 Jul 2025 02:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751506447; cv=none; b=BgmWUm5+MvNgITyBRJtMUb7wKC3b4Fe8E/N891M8Sz3k3WQZayxfTQvm/s71cvhP7jUnXUWoEzVJp+w/MATJ55bMxLCaJyewwSubnTOGnb7gLR/UuvHs4r0w3BVFJVBum+fcx3qoZpwr3l8BN2a92nS5ZxwR+SKmGgT7QD4AEwo=
+	t=1751508801; cv=none; b=Aj9nvgROsj9BoECz5SrdwzWtrlv/3mK/VNWwq2XZSquzGJNtgEwxRqT/o/MmZy8OSB3Llahv3rAv4lAZ+ohH9g65W7ZCd6jrnI3p1gbd8pwXss0RDWcXVy8lvjupCaXOTrl466+FvUARa3BebU1KKojDQ8YYTCIy+TDDkbQdHMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751506447; c=relaxed/simple;
-	bh=eYmZ2mHPvEoDojVBRzNnkUN2xFEKbDFZ5fiTmku9tlA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ejaZcwS1TOJcmZ6nYRwMIIXwo4a5wLm/6RTQWdngnld+t58wwCbBZfa8u86SJCXRvWZzsTL3RgcsmNmlmGOrOGS8yJA22UWiciNeerZKnGRZa2udI0NH0rcCHJcWQ+kDOnXwOFdTODAFFHKgYoVMqzhKtd8/0hRAc02wxMDqkkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4bXfMR06RRzvQBm;
-	Thu,  3 Jul 2025 09:29:55 +0800 (CST)
-Received: from kwepemg100016.china.huawei.com (unknown [7.202.181.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3A7E21400CA;
-	Thu,  3 Jul 2025 09:33:56 +0800 (CST)
-Received: from huawei.com (10.67.174.33) by kwepemg100016.china.huawei.com
- (7.202.181.57) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 3 Jul
- 2025 09:33:55 +0800
-From: GONG Ruiqi <gongruiqi1@huawei.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
-	<roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
-CC: Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore
-	<paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E . Hallyn"
-	<serge@hallyn.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H . Peter Anvin"
-	<hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-	<linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-efi@vger.kernel.org>, <keyrings@vger.kernel.org>, Lu Jialin
-	<lujialin4@huawei.com>, <gongruiqi1@huawei.com>
-Subject: [PATCH v3 2/2] integrity: Extract secure boot enquiry function out of IMA
-Date: Thu, 3 Jul 2025 09:43:53 +0800
-Message-ID: <20250703014353.3366268-3-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250703014353.3366268-1-gongruiqi1@huawei.com>
-References: <20250703014353.3366268-1-gongruiqi1@huawei.com>
+	s=arc-20240116; t=1751508801; c=relaxed/simple;
+	bh=5ymmmvaYHZkZ63J3xtIxq0o0ASFDyKJPxoguG2Sd+B0=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=QOfEqcQkg5PEETOLs6DYdoJBH5h/FhfL9iFVyQAna+dg2U4aOB0ZCW4Ioazrka8fYy9IfWrZXV3NFm28mxw2rawBF8nP4kHJF6hdi0ANbq5ggJ7iEvC/ecP8TuwBflo+RzpeldO/WNOb2jcVTYkWCth0IRr9/RFIn8Zh3nKKvEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=e8xmKeux; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4a9741b513eso32553061cf.1
+        for <linux-security-module@vger.kernel.org>; Wed, 02 Jul 2025 19:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1751508797; x=1752113597; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TzXhie4CIWJW7jzt+VKFb4S+L+Efm25Tu2fG/WJtN10=;
+        b=e8xmKeuxN8pjpI9dI7PMfKLhAdn3rhXeTwTPuJGm6mG9lYLViCvAOysvO2DA4uva3e
+         LQ3aEQrfZ+HPPm7h4flY5zzSEnL8Ncib/SROeW5ptYSgE8iLE8WUrmYT53DFkvaZeuXU
+         GJ2uZa1xQUJVL0lFeVEUpCD3+YvgvqIVQCaXJIYv08dPIfdQdQVllVa3bVwyyQpyUep5
+         bBGjwkBqY/d4VSINVzCUXbjhrkY30HGAOc2R2MFl7ADcVuBRky5z3vSJ0Pb+zyNiLN83
+         ljIYpLU1QinagELHB2JpPhKWvflRsq1RXfaHvFqOTosaebS9V4Fr6OGwqR20+pZfZGGp
+         NSIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751508797; x=1752113597;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TzXhie4CIWJW7jzt+VKFb4S+L+Efm25Tu2fG/WJtN10=;
+        b=IuJeQSd1a1fkp0UTyvBfwH8cZD2nK++rm0ni+SCSGHupeSQjuhWsPgYd6IlpB4wni+
+         VwqsjxsXPxM3pZfZfSdpzfQniDJRBNqfFUdl6H9S71tUu74JOO3izf3tpgC8RW24UWHl
+         d/FWljqcZJGk/6wQnNmut6DSJMlMPfwn4sLxN6EaX4S8wvjg/i+suNqNOeoTtt1E+uGC
+         2gJIMzyfIGiRb9jJuk0w3fT2N8JR+ph02K/q9kMnaKyQ8LC/wKSFl2SYKOsBCy5oVPMu
+         VejYgrMNpUXWNgqFUsen7XNxcjCaulz+jkxqCbg2u3oV0iiP0ylrXv+FRjot14jxGJlj
+         RcpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWQHw1/JvT1yvvAxPq7DolWl6kK21TlY1oC9cHr13AjtQ+BYnO4s2L4m18dS1fpKC8ZORpi7RpL9QlBsoEd1vG/TwCdtlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRkoRCll3zUIWYTba2ieUKpKdVfVLrUDmrttfGcb1zucGgVPBI
+	fwF+pUOonXJqSqWXt7h+U8CWm0F5NnYWKGcsYqqHZ74/OuicP7iQMIwRxwXxaRPy+g==
+X-Gm-Gg: ASbGnctS9T3hQrwJyfPlsUjmHCuFJbP6pJcV/exo5ISDH6oLe9fAB0XTbinnKiK7EWh
+	AnEXMh68e3r00oz5ad6Q5fQuL7VSbfXcbX2WnKrSNnswrzA9iREpv7fbPZRL9ecLjgtpLQ0OdDe
+	//vD9AIIb6yrA9oAaq/1XyPZ1SsxRRbUS3q3W46kJdVUyn8NIX287qLWRtWOybrHkFqrVZGBU9M
+	r5GrtVHV21g6FKpEINiL1KpcOtJkxwcK03xdcVq2yjjFxmk8XD/tatJ4S4FnW5YBESIwSYNn0VH
+	aJkXQVDWVNW6UkDwBAwqFlPw1iz1RbhIU8PsMD408xfh4el7msL7xmJpY4858n1X/f/HF9nNa4K
+	EIV3PKUkHgBGW5JsRehFK9tqX3p39GV0=
+X-Google-Smtp-Source: AGHT+IELjxIty3QvxZPgn1IkijyUpwDEpAbFyjSsKr5nQr+vunzikG5BR25gm20fjjhw/qG4dKVsnw==
+X-Received: by 2002:a05:622a:4e:b0:476:add4:d2cf with SMTP id d75a77b69052e-4a9879c3c8fmr28867621cf.16.1751508797160;
+        Wed, 02 Jul 2025 19:13:17 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7d44316a54fsm1034468285a.34.2025.07.02.19.13.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jul 2025 19:13:16 -0700 (PDT)
+Date: Wed, 02 Jul 2025 22:13:16 -0400
+Message-ID: <a888364d0562815ca7e848b4d4f5b629@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemg100016.china.huawei.com (7.202.181.57)
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20250702_2201/pstg-lib:20250702_2201/pstg-pwork:20250702_2201
+From: Paul Moore <paul@paul-moore.com>
+To: Shivank Garg <shivankg@amd.com>, <david@redhat.com>, <akpm@linux-foundation.org>, <brauner@kernel.org>, <rppt@kernel.org>, <viro@zeniv.linux.org.uk>
+Cc: <seanjc@google.com>, <vbabka@suse.cz>, <willy@infradead.org>, <pbonzini@redhat.com>, <tabba@google.com>, <afranji@google.com>, <ackerleytng@google.com>, <shivankg@amd.com>, <jack@suse.cz>, <hch@infradead.org>, <cgzones@googlemail.com>, <ira.weiny@intel.com>, <roypat@amazon.co.uk>, <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v3] fs: generalize anon_inode_make_secure_inode() and fix  secretmem LSM bypass
+References: <20250626191425.9645-5-shivankg@amd.com>
+In-Reply-To: <20250626191425.9645-5-shivankg@amd.com>
 
-Commit 92ad19559ea9 ("integrity: Do not load MOK and MOKx when secure
-boot be disabled") utilizes arch_ima_get_secureboot() to perform a
-secure boot status check before loading the Machine Owner Key (MOK).
+On Jun 26, 2025 Shivank Garg <shivankg@amd.com> wrote:
+> 
+> Extend anon_inode_make_secure_inode() to take superblock parameter and
+> make it available via fs.h. This allows other subsystems to create
+> anonymous inodes with proper security context.
+> 
+> Use this function in secretmem to fix a security regression, where
+> S_PRIVATE flag wasn't cleared after alloc_anon_inode(), causing
+> LSM/SELinux checks to be skipped.
+> 
+> Using anon_inode_make_secure_inode() ensures proper security context
+> initialization through security_inode_init_security_anon().
+> 
+> Fixes: 2bfe15c52612 ("mm: create security context for memfd_secret inodes")
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Suggested-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Signed-off-by: Shivank Garg <shivankg@amd.com>
+> Acked-by: Pankaj Gupta <pankaj.gupta@amd.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+> The handling of the S_PRIVATE flag for these inodes was discussed
+> extensively ([1], [2], [3]).
+> 
+> As per discussion [3] with Mike and Paul, KVM guest_memfd and secretmem
+> result in user-visible file descriptors, so they should be subject to
+> LSM/SELinux security policies rather than bypassing them with S_PRIVATE.
+> 
+> [1] https://lore.kernel.org/all/b9e5fa41-62fd-4b3d-bb2d-24ae9d3c33da@redhat.com
+> [2] https://lore.kernel.org/all/cover.1748890962.git.ackerleytng@google.com
+> [3] https://lore.kernel.org/all/aFOh8N_rRdSi_Fbc@kernel.org
+> 
+> V3:
+> - Drop EXPORT to be added later in separate patch for KVM guest_memfd and
+>   keep this patch focused on fix.
+> 
+> V2: https://lore.kernel.org/all/20250620070328.803704-3-shivankg@amd.com
+> - Use EXPORT_SYMBOL_GPL_FOR_MODULES() since KVM is the only user.
+> 
+> V1: https://lore.kernel.org/all/20250619073136.506022-2-shivankg@amd.com
+> 
+>  fs/anon_inodes.c   | 22 +++++++++++++++++-----
+>  include/linux/fs.h |  2 ++
+>  mm/secretmem.c     |  9 +--------
+>  3 files changed, 20 insertions(+), 13 deletions(-)
 
-However, only when CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=y can this
-function be functional, while this config could be turned on/off
-parallelly with CONFIG_LOAD_UEFI_KEYS. So the kernel could behave
-unintuitively in case that CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=n and
-CONFIG_LOAD_UEFI_KEYS=y, as it would refuse to load MOK even if secure
-boot is enabled.
+Thanks again for your continued work on this!  I think the patch looks
+pretty reasonable, but it would be good to hear a bit about how you've
+tested this before ACK'ing the patch.  For example, have you tested this
+against any of the LSMs which provide anonymous inode support?
 
-Given that what arch_ima_get_secureboot() does is just to retrieve
-secure boot status via EFI interfaces and can be decoupled with IMA,
-refactor this functionality into integrity_get_efi_secureboot(), a
-general helper in the integrity subsystem that both MOK loading and IMA
-can make use of. By using the new helper, the implicit dependence of
-CONFIG_LOAD_UEFI_KEYS on CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT is
-removed.
+At the very least, the selinux-testsuite has a basic secretmem test, it
+would be good to know if the test passes with this patch or if any
+additional work is needed to ensure compatibility.
 
-Signed-off-by: GONG Ruiqi <gongruiqi1@huawei.com>
----
- include/linux/integrity.h                     |  1 +
- security/integrity/Makefile                   |  1 +
- security/integrity/ima/ima_efi.c              | 42 +----------------
- security/integrity/platform_certs/load_uefi.c |  3 +-
- security/integrity/secureboot.c               | 46 +++++++++++++++++++
- 5 files changed, 51 insertions(+), 42 deletions(-)
- create mode 100644 security/integrity/secureboot.c
+https://github.com/SELinuxProject/selinux-testsuite
 
-diff --git a/include/linux/integrity.h b/include/linux/integrity.h
-index f5842372359b..157d29cab5cd 100644
---- a/include/linux/integrity.h
-+++ b/include/linux/integrity.h
-@@ -61,5 +61,6 @@ integrity_inode_attrs_changed(const struct integrity_inode_attributes *attrs,
- 		!inode_eq_iversion(inode, attrs->version));
- }
- 
-+extern bool integrity_get_efi_secureboot(void);
- 
- #endif /* _LINUX_INTEGRITY_H */
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index 92b63039c654..3a216ea573fb 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -18,6 +18,7 @@ integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
- integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-                                      platform_certs/load_powerpc.o \
-                                      platform_certs/keyring_handler.o
-+integrity-$(CONFIG_EFI) += secureboot.o
- # The relative order of the 'ima' and 'evm' LSMs depends on the order below.
- obj-$(CONFIG_IMA)			+= ima/
- obj-$(CONFIG_EVM)			+= evm/
-diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-index 9f9c30dcde17..3cf08f8ca3b7 100644
---- a/security/integrity/ima/ima_efi.c
-+++ b/security/integrity/ima/ima_efi.c
-@@ -2,51 +2,13 @@
- /*
-  * Copyright (C) 2018 IBM Corporation
-  */
--#include <linux/efi.h>
- #include <linux/module.h>
- #include <linux/ima.h>
--#include <asm/efi.h>
--
--#ifndef arch_integrity_efi_boot_mode
--#define arch_integrity_efi_boot_mode efi_secureboot_mode_unset
--#endif
--
--static enum efi_secureboot_mode get_sb_mode(void)
--{
--	enum efi_secureboot_mode mode;
--
--	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) {
--		pr_info("ima: secureboot mode unknown, no efi\n");
--		return efi_secureboot_mode_unknown;
--	}
--
--	mode = efi_get_secureboot_mode(efi.get_variable);
--	if (mode == efi_secureboot_mode_disabled)
--		pr_info("ima: secureboot mode disabled\n");
--	else if (mode == efi_secureboot_mode_unknown)
--		pr_info("ima: secureboot mode unknown\n");
--	else
--		pr_info("ima: secureboot mode enabled\n");
--	return mode;
--}
-+#include <linux/integrity.h>
- 
- bool arch_ima_get_secureboot(void)
- {
--	static enum efi_secureboot_mode sb_mode;
--	static bool initialized;
--
--	if (!initialized && efi_enabled(EFI_BOOT)) {
--		sb_mode = arch_integrity_efi_boot_mode;
--
--		if (sb_mode == efi_secureboot_mode_unset)
--			sb_mode = get_sb_mode();
--		initialized = true;
--	}
--
--	if (sb_mode == efi_secureboot_mode_enabled)
--		return true;
--	else
--		return false;
-+	return integrity_get_efi_secureboot();
- }
- 
- /* secureboot arch rules */
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
-index d1fdd113450a..deebdbf4393e 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -7,7 +7,6 @@
- #include <linux/err.h>
- #include <linux/efi.h>
- #include <linux/slab.h>
--#include <linux/ima.h>
- #include <keys/asymmetric-type.h>
- #include <keys/system_keyring.h>
- #include "../integrity.h"
-@@ -212,7 +211,7 @@ static int __init load_uefi_certs(void)
- 	}
- 
- 	/* the MOK/MOKx can not be trusted when secure boot is disabled */
--	if (!arch_ima_get_secureboot())
-+	if (!integrity_get_efi_secureboot())
- 		return 0;
- 
- 	mokx = get_cert_list(L"MokListXRT", &mok_var, &mokxsize, &status);
-diff --git a/security/integrity/secureboot.c b/security/integrity/secureboot.c
-new file mode 100644
-index 000000000000..64207ae37e6b
---- /dev/null
-+++ b/security/integrity/secureboot.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2025 Huawei Technologies Co., Ltd
-+ */
-+#include <linux/efi.h>
-+#include <linux/integrity.h>
-+#include <asm/efi.h>
-+
-+#ifndef arch_integrity_efi_boot_mode
-+#define arch_integrity_efi_boot_mode efi_secureboot_mode_unset
-+#endif
-+
-+static enum efi_secureboot_mode get_sb_mode(void)
-+{
-+	enum efi_secureboot_mode mode;
-+
-+	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) {
-+		pr_info("integrity: secureboot mode unknown, no efi\n");
-+		return efi_secureboot_mode_unknown;
-+	}
-+
-+	mode = efi_get_secureboot_mode(efi.get_variable);
-+	if (mode == efi_secureboot_mode_disabled)
-+		pr_info("integrity: secureboot mode disabled\n");
-+	else if (mode == efi_secureboot_mode_unknown)
-+		pr_info("integrity: secureboot mode unknown\n");
-+	else
-+		pr_info("integrity: secureboot mode enabled\n");
-+	return mode;
-+}
-+
-+bool integrity_get_efi_secureboot(void)
-+{
-+	static enum efi_secureboot_mode sb_mode;
-+	static bool initialized;
-+
-+	if (!initialized && efi_enabled(EFI_BOOT)) {
-+		sb_mode = arch_integrity_efi_boot_mode;
-+
-+		if (sb_mode == efi_secureboot_mode_unset)
-+			sb_mode = get_sb_mode();
-+		initialized = true;
-+	}
-+
-+	return sb_mode == efi_secureboot_mode_enabled;
-+}
--- 
-2.25.1
-
+--
+paul-moore.com
 
