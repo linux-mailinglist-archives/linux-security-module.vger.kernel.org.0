@@ -1,258 +1,140 @@
-Return-Path: <linux-security-module+bounces-10928-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-10931-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E52F2AF89B6
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Jul 2025 09:40:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BB38AF8DB6
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Jul 2025 11:10:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F256C1C880BF
-	for <lists+linux-security-module@lfdr.de>; Fri,  4 Jul 2025 07:41:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D23C0767D4F
+	for <lists+linux-security-module@lfdr.de>; Fri,  4 Jul 2025 09:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A98283FCD;
-	Fri,  4 Jul 2025 07:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346D42F85D3;
+	Fri,  4 Jul 2025 09:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Vw4T7YWj"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3854A27A10A;
-	Fri,  4 Jul 2025 07:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3121A2BE7B1;
+	Fri,  4 Jul 2025 09:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751614835; cv=none; b=F/JyV8NaFJdzvErCDfhnTZ9iY1V2dsOfqKRVk649Cw+zJhZqmmYF4YansE6kPlaO3q8cxEShvP0TepoD6zsK+zJmyGCyrfmZJFsU4FnCrLekhsS3TbRmD86td4GjToARqOaGC9rpCLoiuAnEH5fGG3wq+PYoV6yXLTQXySGXYy4=
+	t=1751619650; cv=none; b=Cw10DNv//STuyObbf+HtJTvc0jcXJGawXFG8Jzi7kTtniLtDJG/1DQZNlPs2rutd1TLKfe68szXxE6Z3HpznLUQBzxGC6YpZSxgD6VwF1p6N8mTVgutDINAhBVGOdbxNhjppeyzDr5Uo75fvhDdW64xDyNE/6UwWBmjvFEPQ4xU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751614835; c=relaxed/simple;
-	bh=3Gq7q6sk1e4OCAoXoS9edGKymQuwCCfAdN07peh6VIg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZAIZI6cORfT9m9nXShL9OmmpBAcfUzkrVoMmpYoy2SjTGyo8u+RBvQYPot+mZIpzLjTEsyHAj78tiPJAzmI9OLhADa2O599G4ojkMJBuWB362Rw/aeNRy/AReV98MIqoWuhWBXaHCs7hLgElMNlArLUafRE2XhrSLHHVMwS9QZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4bYQTf1r75z1d1t7;
-	Fri,  4 Jul 2025 15:37:58 +0800 (CST)
-Received: from kwepemg100016.china.huawei.com (unknown [7.202.181.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 538D6140156;
-	Fri,  4 Jul 2025 15:40:30 +0800 (CST)
-Received: from huawei.com (10.67.174.33) by kwepemg100016.china.huawei.com
- (7.202.181.57) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 4 Jul
- 2025 15:40:29 +0800
-From: GONG Ruiqi <gongruiqi1@huawei.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
-	<roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
-CC: Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore
-	<paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E . Hallyn"
-	<serge@hallyn.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H . Peter Anvin"
-	<hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-	<linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-efi@vger.kernel.org>, <keyrings@vger.kernel.org>, Lu Jialin
-	<lujialin4@huawei.com>, <gongruiqi1@huawei.com>
-Subject: [PATCH v4 2/2] integrity: Extract secure boot enquiry function out of IMA
-Date: Fri, 4 Jul 2025 15:51:14 +0800
-Message-ID: <20250704075114.3709609-3-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250704075114.3709609-1-gongruiqi1@huawei.com>
-References: <20250704075114.3709609-1-gongruiqi1@huawei.com>
+	s=arc-20240116; t=1751619650; c=relaxed/simple;
+	bh=cLwWQyrB0mwed4cU0+cVqyYgNBtoPEX59tc7uNEyzC0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rRQ5L9D/eljrhxDMoZ/+XrUhPoDJuI60Hm+1o2/liVRZndPCY3fZ53TiaWpSqBJTdEbOUyWC8yfUQmZotoxHiaevA9KU7HUUY7vzc/H7xfxGf//oZbBGIZ8R44QhaP6WG3gh9u+b+PoGq3GFzxSoAJkgVZp3UOjGQWDMvKuL0JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Vw4T7YWj; arc=none smtp.client-ip=45.157.188.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4bYSK33ksszLpZ;
+	Fri,  4 Jul 2025 11:00:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1751619639;
+	bh=d3B0Gl5NVIkFKbxEnnnoas390sBQL3HhXfp2/141yac=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vw4T7YWjqqarK0hzIK+mYBSKByM3YmZa15/CNzENwM488+YCclY06+Q7b2iMPxEv0
+	 Xyj5R7UTvG9FaWdeQRu/kX4AFt4xvHq2VHqL2zBxyvlCFJQDGE3BwnkgfWY27g+ihH
+	 mpqujgWOXcwyos0XAMuUxRVDESIVsKIwzrUgYKtQ=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4bYSK21vkQzMBN;
+	Fri,  4 Jul 2025 11:00:38 +0200 (CEST)
+Date: Fri, 4 Jul 2025 11:00:37 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Song Liu <songliubraving@meta.com>
+Cc: Song Liu <song@kernel.org>, "brauner@kernel.org" <brauner@kernel.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, Kernel Team <kernel-team@meta.com>, 
+	"andrii@kernel.org" <andrii@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
+	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>, 
+	"jack@suse.cz" <jack@suse.cz>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"mattbobrowski@google.com" <mattbobrowski@google.com>, "m@maowtm.org" <m@maowtm.org>, 
+	"neil@brown.name" <neil@brown.name>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Jann Horn <jannh@google.com>
+Subject: Re: [PATCH v5 bpf-next 2/5] landlock: Use path_walk_parent()
+Message-ID: <20250704.quio1ceil4Xi@digikod.net>
+References: <20250617061116.3681325-1-song@kernel.org>
+ <20250617061116.3681325-3-song@kernel.org>
+ <20250703.ogh0eis8Ahxu@digikod.net>
+ <C62BF1A0-8A3C-4B58-8CC8-5BD1A17B1BDB@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemg100016.china.huawei.com (7.202.181.57)
+In-Reply-To: <C62BF1A0-8A3C-4B58-8CC8-5BD1A17B1BDB@meta.com>
+X-Infomaniak-Routing: alpha
 
-Commit 92ad19559ea9 ("integrity: Do not load MOK and MOKx when secure
-boot be disabled") utilizes arch_ima_get_secureboot() to perform a
-secure boot status check before loading the Machine Owner Key (MOK).
+On Thu, Jul 03, 2025 at 10:27:02PM +0000, Song Liu wrote:
+> Hi Mickaël,
+> 
+> > On Jul 3, 2025, at 11:29 AM, Mickaël Salaün <mic@digikod.net> wrote:
+> > 
+> > On Mon, Jun 16, 2025 at 11:11:13PM -0700, Song Liu wrote:
+> >> Use path_walk_parent() to walk a path up to its parent.
+> >> 
+> >> No functional changes intended.
+> > 
+> > Using this helper actualy fixes the issue highlighted by Al.  Even if it
+> > was reported after the first version of this patch series, the issue
+> > should be explained in the commit message and these tags should be
+> > added:
+> > 
+> > Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+> > Closes: https://lore.kernel.org/r/20250529231018.GP2023217@ZenIV 
+> > Fixes: cb2c7d1a1776 ("landlock: Support filesystem access-control")
+> > 
+> > I like this new helper but we should have a clear plan to be able to
+> > call such helper in a RCU read-side critical section before we merge
+> > this series.  We're still waiting for Christian.
+> > 
+> > I sent a patch to fix the handling of disconnected directories for
+> > Landlock, and it will need to be backported:
+> > https://lore.kernel.org/all/20250701183812.3201231-1-mic@digikod.net/
+> > Unfortunately a rebase would be needed for the path_walk_parent patch,
+> > but I can take it in my tree if everyone is OK.
+> 
+> The fix above also touches VFS code (makes path_connected available 
+> out of namei.c. It probably should also go through VFS tree? 
+> 
+> Maybe you can send 1/5 and 2/5 of this set (with necessary changes) 
+> and your fix together to VFS tree. Then, I will see how to route the
+> BPF side patches. 
 
-However, only when CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=y can this
-function be functional, while this config could be turned on/off
-parallelly with CONFIG_LOAD_UEFI_KEYS. So the kernel could behave
-unintuitively in case that CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=n and
-CONFIG_LOAD_UEFI_KEYS=y, as it would refuse to load MOK even if secure
-boot is enabled.
+That could work, but because it would be much more Landlock-specific
+code than VFS-specific code, and there will probably be a few versions
+of my fixes, I'd prefer to keep this into my tree if VFS folks are OK.
+BTW, my fixes already touch the VFS subsystem a bit.
 
-Given that what arch_ima_get_secureboot() does is just to retrieve
-secure boot status via EFI interfaces and can be decoupled with IMA,
-refactor this functionality into integrity_get_efi_secureboot(), a
-general helper in the integrity subsystem that both MOK loading and IMA
-can make use of. By using the new helper, the implicit dependence of
-CONFIG_LOAD_UEFI_KEYS on CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT is
-removed.
+However, as pointed out in my previous email, the disconnected directory
+case should be carefully considered for the path_walk_parent() users to
+avoid BPF LSM programs having the same issue I'm fixing for Landlock.
+The safe approaches I can think of to avoid this issue for BPF programs
+while making the interface efficient (by not calling path_connected()
+after each path_walk_parent() call) is to either have some kind of
+iterator as Tingmao proposed, or a callback function as Neil proposed.
+The callback approach looks simpler and more future-proof, but I guess
+you'll have to make it compatible with the eBPF runtime.  I think the
+best approach would be to have a VFS API with a callback, and a BPF
+helper (leveraging this VFS API) with an iterator state.
 
-Signed-off-by: GONG Ruiqi <gongruiqi1@huawei.com>
----
- include/linux/integrity.h                     |  1 +
- security/integrity/Makefile                   |  1 +
- security/integrity/efi_secureboot.c           | 46 +++++++++++++++++++
- security/integrity/ima/ima_efi.c              | 42 +----------------
- security/integrity/platform_certs/load_uefi.c |  3 +-
- 5 files changed, 51 insertions(+), 42 deletions(-)
- create mode 100644 security/integrity/efi_secureboot.c
+I'm aware that this disconnected directory fix might delay your patch
+series, but the good news is that it's an opportunity for eBPF programs
+to not have the issue I'm fixing for Landlock.
 
-diff --git a/include/linux/integrity.h b/include/linux/integrity.h
-index f5842372359b..157d29cab5cd 100644
---- a/include/linux/integrity.h
-+++ b/include/linux/integrity.h
-@@ -61,5 +61,6 @@ integrity_inode_attrs_changed(const struct integrity_inode_attributes *attrs,
- 		!inode_eq_iversion(inode, attrs->version));
- }
- 
-+extern bool integrity_get_efi_secureboot(void);
- 
- #endif /* _LINUX_INTEGRITY_H */
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index 92b63039c654..45dfdedbdad4 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -18,6 +18,7 @@ integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
- integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-                                      platform_certs/load_powerpc.o \
-                                      platform_certs/keyring_handler.o
-+integrity-$(CONFIG_EFI) += efi_secureboot.o
- # The relative order of the 'ima' and 'evm' LSMs depends on the order below.
- obj-$(CONFIG_IMA)			+= ima/
- obj-$(CONFIG_EVM)			+= evm/
-diff --git a/security/integrity/efi_secureboot.c b/security/integrity/efi_secureboot.c
-new file mode 100644
-index 000000000000..64207ae37e6b
---- /dev/null
-+++ b/security/integrity/efi_secureboot.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2025 Huawei Technologies Co., Ltd
-+ */
-+#include <linux/efi.h>
-+#include <linux/integrity.h>
-+#include <asm/efi.h>
-+
-+#ifndef arch_integrity_efi_boot_mode
-+#define arch_integrity_efi_boot_mode efi_secureboot_mode_unset
-+#endif
-+
-+static enum efi_secureboot_mode get_sb_mode(void)
-+{
-+	enum efi_secureboot_mode mode;
-+
-+	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) {
-+		pr_info("integrity: secureboot mode unknown, no efi\n");
-+		return efi_secureboot_mode_unknown;
-+	}
-+
-+	mode = efi_get_secureboot_mode(efi.get_variable);
-+	if (mode == efi_secureboot_mode_disabled)
-+		pr_info("integrity: secureboot mode disabled\n");
-+	else if (mode == efi_secureboot_mode_unknown)
-+		pr_info("integrity: secureboot mode unknown\n");
-+	else
-+		pr_info("integrity: secureboot mode enabled\n");
-+	return mode;
-+}
-+
-+bool integrity_get_efi_secureboot(void)
-+{
-+	static enum efi_secureboot_mode sb_mode;
-+	static bool initialized;
-+
-+	if (!initialized && efi_enabled(EFI_BOOT)) {
-+		sb_mode = arch_integrity_efi_boot_mode;
-+
-+		if (sb_mode == efi_secureboot_mode_unset)
-+			sb_mode = get_sb_mode();
-+		initialized = true;
-+	}
-+
-+	return sb_mode == efi_secureboot_mode_enabled;
-+}
-diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-index 9f9c30dcde17..3cf08f8ca3b7 100644
---- a/security/integrity/ima/ima_efi.c
-+++ b/security/integrity/ima/ima_efi.c
-@@ -2,51 +2,13 @@
- /*
-  * Copyright (C) 2018 IBM Corporation
-  */
--#include <linux/efi.h>
- #include <linux/module.h>
- #include <linux/ima.h>
--#include <asm/efi.h>
--
--#ifndef arch_integrity_efi_boot_mode
--#define arch_integrity_efi_boot_mode efi_secureboot_mode_unset
--#endif
--
--static enum efi_secureboot_mode get_sb_mode(void)
--{
--	enum efi_secureboot_mode mode;
--
--	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) {
--		pr_info("ima: secureboot mode unknown, no efi\n");
--		return efi_secureboot_mode_unknown;
--	}
--
--	mode = efi_get_secureboot_mode(efi.get_variable);
--	if (mode == efi_secureboot_mode_disabled)
--		pr_info("ima: secureboot mode disabled\n");
--	else if (mode == efi_secureboot_mode_unknown)
--		pr_info("ima: secureboot mode unknown\n");
--	else
--		pr_info("ima: secureboot mode enabled\n");
--	return mode;
--}
-+#include <linux/integrity.h>
- 
- bool arch_ima_get_secureboot(void)
- {
--	static enum efi_secureboot_mode sb_mode;
--	static bool initialized;
--
--	if (!initialized && efi_enabled(EFI_BOOT)) {
--		sb_mode = arch_integrity_efi_boot_mode;
--
--		if (sb_mode == efi_secureboot_mode_unset)
--			sb_mode = get_sb_mode();
--		initialized = true;
--	}
--
--	if (sb_mode == efi_secureboot_mode_enabled)
--		return true;
--	else
--		return false;
-+	return integrity_get_efi_secureboot();
- }
- 
- /* secureboot arch rules */
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
-index d1fdd113450a..deebdbf4393e 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -7,7 +7,6 @@
- #include <linux/err.h>
- #include <linux/efi.h>
- #include <linux/slab.h>
--#include <linux/ima.h>
- #include <keys/asymmetric-type.h>
- #include <keys/system_keyring.h>
- #include "../integrity.h"
-@@ -212,7 +211,7 @@ static int __init load_uefi_certs(void)
- 	}
- 
- 	/* the MOK/MOKx can not be trusted when secure boot is disabled */
--	if (!arch_ima_get_secureboot())
-+	if (!integrity_get_efi_secureboot())
- 		return 0;
- 
- 	mokx = get_cert_list(L"MokListXRT", &mok_var, &mokxsize, &status);
--- 
-2.25.1
-
+> 
+> Thanks,
+> Song
+> 
+> 
 
