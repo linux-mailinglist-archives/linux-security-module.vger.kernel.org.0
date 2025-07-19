@@ -1,81 +1,80 @@
-Return-Path: <linux-security-module+bounces-11095-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11098-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C042B0AF8A
-	for <lists+linux-security-module@lfdr.de>; Sat, 19 Jul 2025 13:14:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EEF8B0AFF2
+	for <lists+linux-security-module@lfdr.de>; Sat, 19 Jul 2025 14:41:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 842817A4CD2
-	for <lists+linux-security-module@lfdr.de>; Sat, 19 Jul 2025 11:12:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF3DF567957
+	for <lists+linux-security-module@lfdr.de>; Sat, 19 Jul 2025 12:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684B523B62C;
-	Sat, 19 Jul 2025 11:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B82286433;
+	Sat, 19 Jul 2025 12:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGb0DUF2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4584JBp"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D9B23AE60;
-	Sat, 19 Jul 2025 11:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D838E220F33;
+	Sat, 19 Jul 2025 12:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752923602; cv=none; b=ZgmaG6PVqhgko9lDITS+SrU5GWmeEb2ZyE2UF3MOYvpppTcwdWFA3E1zsvZKlsh+8qI1Fw27CntqT9+b/Cpr3QyNpRxsf91Ppra7zNJF/WSbjIi11SYtQKdkjKchrV6QZweB5UfUAlDWI1pRcfp7asMb3OJYXm6i9sQNYKkTEbA=
+	t=1752928890; cv=none; b=jvyXGgLrY8w682YDb9ubcZVt1Gf2omIvGWW7RxoeZm1ps/nkZwJ1XSoxKmZrGHKZdD9376PkDiMoD0a3OQwUlO5acZVJ15VutM1Op+/FFHTlC9TkY3FLw37YtUw3tXvBdeWmCzyxhHKzA4NJNmknzKA67Eh3INIfPMQ7edtg/Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752923602; c=relaxed/simple;
-	bh=Iww/UpGyLtrx1j10ruDTf8LZMrndDjrz8uY2/BP9cpc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uAIT/0oCL8473lAnk/Lkea+zh0jLFridSTWL2Tyhf5AcWHI7hUubW8A8gfMAgFRaeHlq0qC8ky9pAUZtHeUJvZyz7UuNvnziAY3gdIznR0dwBBZ8r52SbU26Bpx585ForPtKWP9Rj9gaC9PN9dD3s8U0VqQSfYSzkvGwbk6ovO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UGb0DUF2; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1752928890; c=relaxed/simple;
+	bh=js+NEXzscP4oAohjSSvFlh4ITLOaKJD+68LJUSDlPeo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cJLoaEWWz5j71eFpUze4G4zgVy9YwjiTFZmd8MmREYK3llFdhGOuguw11bqB8ezvnRIS3lyagZGvVP3dHDtEJK3+ojhIVBGglwdVUcVGjXTddxemAu0UJBLEjRbRh0Q00E0x+rOXYMCKm7ifL8J9oeXLM6+exQWPsVfNZmgaSnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4584JBp; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2363616a1a6so24755525ad.3;
-        Sat, 19 Jul 2025 04:13:20 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-748d982e92cso2093862b3a.1;
+        Sat, 19 Jul 2025 05:41:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752923600; x=1753528400; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Jd/5d465A0jCumj6dQXUppGRMZZOxb6FPpLcIZ9JVE=;
-        b=UGb0DUF2c37L0yQF4ikb0YxS/G7UIKZoJ2L1Mxewe6zMnB86DVISH4VBKZiHF7qaZ8
-         JB+LYNbCf19lYFN+CjH3Aq5oFR18Nx+kiLI0195NsK1dg5+ILeDkDj413ZorwM8yH7G+
-         PE6Ovx+zm4mLqsAawvOa5Ec/xuE8/ewAdsp3amUj8vciEPwsKHI1hd9A+nlCTe6ntLMm
-         fjxYRHdVKVG5lYK+eST9sYspChDiXW7mP8sypVaSlz3ZJx46i+PKNMIqCnDPph3LSgw4
-         nxoOc4dz/9CiQsomqnwSpJYpsA8tXQY+Te5aEN46ixsqf1gbfu0PZyRGHd/VX1+ta8Me
-         nDBQ==
+        d=gmail.com; s=20230601; t=1752928888; x=1753533688; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+A9fG1vUwfNuLTOBYgLudT4FTnVYQKEY46ePYx2dj0w=;
+        b=g4584JBp75LMH7VNMbN0ThOhJ0nQeb6eN7jYL3LYWKS2ahRmHIFSqHVM6b+MKryvQR
+         LBB9qtwnufZcx2ZqRBFRI4zYdR3ecPGmHhUIeBP+pAYKZ2vlXCSDdIKxuZmYAO1YaAPo
+         lXcAPhgmi7KndX2upM33WdBBa0MzBv+FHRaelHGQDe6ISEY3eVVUZOkcEExLFEzeA00v
+         VdaP+qxlbJLSvua/pT9ECdGKbPPrqVbpbY1A8PpHUWKqwprBLMQarSEFgfJKuQAjHIuI
+         HrCyxZx3nc6Zy/nmop4jfof7oDDRdUUeQx+8G7vtojW0wcy7UrmTPz4D95dB7g6R0qZ7
+         lcOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752923600; x=1753528400;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3Jd/5d465A0jCumj6dQXUppGRMZZOxb6FPpLcIZ9JVE=;
-        b=A/24311TQxEC9YFEuUGGc3KSn+azy8awiXzBuH26xOVZeZ/tIPCx6ciPsxWqjHKaJU
-         lOoyN+sk2ZME3hWmuKz5HFj4SHTwrFKat1zLuvvTkDLrcY+jioj3vGodoKX75lMF/RIJ
-         NhHpgL1FFDWR+3Y19gcg8MPxbxXz6XARAHg8DMNtYQx1c/QqLZVJ6GQvCS1tdFpVzOr7
-         iFJrP8pYSNj8yzOsP2ci2PfhCBiXwm32B7DkwxxCSo5Mw5KNE6ZI7z2leJF8dmNHFV+7
-         KmjYrWUfO2IecOOx+g4sU+dnM0C5gdh8bKo2pQ+m97LPd9VxqBElqCS3Oxiq0CtwK5je
-         lePw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0ImEOu805hWMnR13w2p31fM8hnjpcsZUdViXT1X8HB7bgPER0pxVG76hPCWsWuZof8EDbpsAWK3mDUy0XEVzq@vger.kernel.org, AJvYcCX3PxB1rVznfb9TuG0o1hu3q7fbBFfaJUSqqNbt6/d3ov1QDDF+q4sizxc4BqgG+bIuFgHKLpX7WBRbjCw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzOMZ879sUa4yf0ZZ9nb707ecRLaz6dcgQEmZTyhEy8dPnXJY6
-	pCr2NG5mu/ocDYo9eZEWuz61FGQOud6GZzZdStw6GrNtF+5hqKBCc6sr
-X-Gm-Gg: ASbGncsmv98B1F0aZxgalY90ruS7j7ySJfiU4ZlzvQSH6DUid+aJEHHrb0zAiSzf8zd
-	XRTkUDJQuojw7polfZOSuUASzjOSwaUMkGC/aevdd/TtZYomyCjt7WiWZHJo/uvE20MhnsDKoGc
-	YGACiyvAYglCygL9eJQ0HxDGbU/izDU2cagPNrqmY9aFb4IURZzTO3IoHVNga5iNHwbMQfRMfGQ
-	I0+znk+2hGHHq4Oi9jpXnL/n/Wocf7JratTgjHrcA2fEd365jbpddbBz1BlnzMfqdlh+01fkhC+
-	0V/GwM4kaS8kUAcyKJ+crDpswm7E7PyBwccK3HsOHYkhGMcBJoEfLNcOuVnAkxN+f9yrivn7MSq
-	zt78wHuyrDV0tYd8ZFkJJ
-X-Google-Smtp-Source: AGHT+IEAPjC4pj685n73OCXBGa3ulx7qROou2OgY1ptOxHHWKAYpNN7RhIDQ9S1zZEHJLglu5uD+8g==
-X-Received: by 2002:a17:902:c409:b0:234:b41e:37a4 with SMTP id d9443c01a7336-23e256848f5mr163928225ad.6.1752923599651;
-        Sat, 19 Jul 2025 04:13:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752928888; x=1753533688;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+A9fG1vUwfNuLTOBYgLudT4FTnVYQKEY46ePYx2dj0w=;
+        b=xDcKNBKnJ/9LxcWzGHPDpFEoz0F2QPVlJCZEp9Ep50IuQyOP8CAv15Id41uybjmh/D
+         qbCAo7HRFRqZ63SADTy1oiOBpyUcj4Ieqi521Gsgi1zxFKd0O9aax1J8BW2S9YKixOCC
+         Ogo5NhUa2ByPQynqh/+jLBsNlbVcZgMO+Bg0uJ8z+qOUluGyqHsqn4KkegPuUT17TEA9
+         aDK8/ZEtc99pR6uRz8yVhGZyoYAD2ibopcPZ/lhmbWGaasSyyVoNL6j2x7dGnXcJevqL
+         +8rrVzBb8jD0/Pam7r53+syLU6A3ye1oEzHmaKn+3otZA4I+O3DcP7XUFnFXQ59tXp3Q
+         8LHw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4s9J/Z+ZJS2sqeK7lLP0C5gw8VVhxY4VpcEOTHrtY4hLDMB93hGEbB5wtiqxAgro/FYXEtFU/NI6bZDPOoMVX@vger.kernel.org, AJvYcCXtKrdmEHDeCJNssUX5dvYMUCY+/uuOLE5TcY6/hCcSfh5HRWMpu2CLLAk+3mo82/Db30Z9yLqDVGVG6Fo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvnRtM57v9Us8bVWRWH35CuJlLw06Jdj9HbOyb5+pvU1Nz9K9P
+	rG2sjxN+4zUPe6/h359t8lgj2jdAJwHtmga76ICYbz2yHo/X1hjn7+cfYoPkOP9hYzM=
+X-Gm-Gg: ASbGncstgtLjkL/5SHCF2297fULUXGeBqwkLM0eNi4LwEiEpfNcJYQGTLFRHk9f+3jK
+	jRLEVsD220P4P84AQqW2JxUCzjzmnvWWBKLKATM1nzaCFQTev3MfQwryoG9GW6yXccxVwazH+s0
+	1gPFLgcdRje5NCaCMrEz148/cmP6fZxDxQPi0G41XZjDtlmJ//tJoYCjmreYXIySeiJCe/QcdzU
+	LQRcR7iQkga4VHDtkse5thUW7Xtepaj+5SGCl1ekIcHesh0eb/0LiAi286yaznV6ah+wprlwkn1
+	l/wyU37YFMd3XamOeMIumg9278nvoGG/63pdLx/Bs0dT3Qa/iGSqtQrpYOv6Ut2Q5vYYvOqIndb
+	F4fEAHY78BbrQ0P+GMlte
+X-Google-Smtp-Source: AGHT+IGC6z7QNyz2PZQgG7VCCcPICPxMUNj+Y+sYGA5Syj47O6zNcy2fpWE6AIBAPerBeZvodkx5bQ==
+X-Received: by 2002:a17:902:f745:b0:22e:421b:49b1 with SMTP id d9443c01a7336-23e24f9477dmr221114035ad.48.1752928887646;
+        Sat, 19 Jul 2025 05:41:27 -0700 (PDT)
 Received: from [0.0.5.57] ([136.159.213.146])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6b4c81sm27388875ad.114.2025.07.19.04.13.18
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23e3b6b4b36sm28630285ad.92.2025.07.19.05.41.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Jul 2025 04:13:19 -0700 (PDT)
+        Sat, 19 Jul 2025 05:41:27 -0700 (PDT)
 From: Abhinav Saxena <xandfury@gmail.com>
-Date: Sat, 19 Jul 2025 05:13:14 -0600
-Subject: [PATCH RFC 4/4] selftests/landlock: add memfd execution tests
+Subject: [PATCH RFC 0/3] selftests/landlock: scoping abstractions
+Date: Sat, 19 Jul 2025 06:41:23 -0600
+Message-Id: <20250719-landlock_abstractions-v1-0-2c4fd61f8973@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -83,378 +82,169 @@ List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250719-memfd-exec-v1-4-0ef7feba5821@gmail.com>
-References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
-In-Reply-To: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHOSe2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDc0NT3ZzEvJSc/OTs+MSk4pKixOQSoIZi3ZSkZIPExKQ0QwMzYyWg3oK
+ i1LTMCrC50UpBbs5KsbW1AKdFmoBsAAAA
 To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
  =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
- "Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
- Abhinav Saxena <xandfury@gmail.com>
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Abhinav Saxena <xandfury@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752923593; l=10834;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752928886; l=5045;
  i=xandfury@gmail.com; s=20250614; h=from:subject:message-id;
- bh=Iww/UpGyLtrx1j10ruDTf8LZMrndDjrz8uY2/BP9cpc=;
- b=kIjDOTlzaXRksQJMV4lD0AKnhdTH0vFXs450vzHO9XXX4DPVtJbviuK8aZKqG2ckFvORf7mmK
- 3sV2DwdEZCPBwGjmRnqKTUmFMhGYKAjUyCwn8jwjUyLmr7pbp67hTD2
+ bh=js+NEXzscP4oAohjSSvFlh4ITLOaKJD+68LJUSDlPeo=;
+ b=i25NBAWuy6eBEXAUiiOmp/jRKEy9droqXe2PEgVaQNZ1zW9rDDcMmLg7q9J57ou6MWSUUsFko
+ mVOFJka2i/0DNxH4w05JlAh++dV46uQs9QOXIV6nEo8eIx84AC2AOb4
 X-Developer-Key: i=xandfury@gmail.com; a=ed25519;
  pk=YN6w7WNet8skqvMWxhG5BlAmtd1SQmo8If6Mofh4k44=
 
-Add core test suite for LANDLOCK_SCOPE_MEMFD_EXEC covering:
+Hi all,
 
-- Same-domain execution restriction (prevent read-to-execute bypass)
-- execve() family syscall restrictions via /proc/self/fd/ path
-- Regular filesystem files remain unaffected by memfd scoping
+I was starting to work on the memfd-exec[1] feature and observed that
+Landlock's scoped-IPC features (abstract UNIX sockets and signals)
+follow a consistent high-level model, which I'm calling a
+resource-accessor pattern:
 
-Tests validate that memfd execution restrictions are properly enforced
-while ensuring surgical targeting that doesn't impact legitimate file
-operations. Covers key attack vectors including anonymous execution
-and W^X policy bypass attempts.
+Resource Process <-> Accessor Process
+    - Resource process: owns or manages the asset
+        - socket creator (bind/accept)
+        - signal handler  
+        - memfd creator
+    - Accessor process: attempts to use the asset
+        - socket client (connect/sendto)
+        - signal sender
+        - memfd executor
+
+RESOURCE-ACCESSOR PATTERN FUNDAMENTALS
+======================================
+
+This pattern appears fundamental to Landlock scoping because:
+
+1. Consistent enforcement model: Landlock restrictions are enforced
+   only on the accessor side; the resource side remains unconstrained
+   across all scope types.
+
+2. Reflects actual security boundaries: In practice, sandboxed
+   processes typically need to access resources created by other
+   processes, not the reverse.
+
+3. Scalable design: This model works consistently whether processes
+   are in parent-child relationships or independent peer domains.
+
+4. Real-world usage patterns: Container runtimes and sandbox
+   orchestrators routinely start multiple workers that restrict
+   themselves independently.
+
+CURRENT TEST COVERAGE GAP
+=========================
+
+Existing self-tests cover hierarchical resource <-> accessor pairs
+but do not exercise the case where each task enters an independent
+domain. While 'sibling_domain' tests exist, they still use
+parent-child relationship patterns rather than true peer domains.
+
+Current Coverage (Linear Hierarchies Only):
+-------------------------------------------
+
+Type 1: Parent-Child (scoped_domains)
+   P1 ---- P2
+
+Type 2: Three Generations (scoped_vs_unscoped)  
+   P1 ---- P2 ---- P3
+
+Variations tested for both types:
+- No domains
+- Various scoped domain combinations  
+- Nested domains within inherited domains
+- Mixed domain types (SCOPE vs OTHER vs NONE)
+
+Missing Coverage (True Sibling Scenarios):
+------------------------------------------
+
+Root
+ |
+ +-- Child A [various domain types]
+ |
+ +-- Child B [various domain types]
+
+Missing test scenarios:
+- A <-> B cross-sibling communication
+- Mixed sibling domain combinations
+- Sibling isolation enforcement
+- Parent -> A, Parent -> B differential access
+
+SOLUTION
+========
+
+This series implements the missing sibling pattern using the
+resource-accessor model. The tests create a fork tree that looks
+like this:
+
+    coordinator (no domain)  
+    |
+    +-- resource_proc (Domain X) /* owns the resource */  
+    |
+    +-- accessor_proc (Domain Y) /* tries to access */
+
+This directly addresses the missing coverage by creating two
+independent child processes that establish peer domains, rather than
+the hierarchical parent-child domains covered by existing tests.
+
+Both children call landlock_restrict_self() for the first time, so
+their struct landlock_domain->parent pointers are NULL, creating
+true peer domains. The harness exposes four test variants:
+
+Variant name       | Resource domain | Accessor domain | Result   
+-------------------|-----------------|-----------------|----------
+none_to_none       | none            | none            | ALLOW    
+none_to_scoped     | none            | scoped          | DENY     
+scoped_to_none     | scoped          | none            | ALLOW    
+scoped_to_scoped   | scoped          | scoped (peer)   | DENY
+
+The scoped_to_scoped case was missing from current coverage.
+
+TESTING
+=======
+
+All patches apply cleanly to v6.14-rc2 and pass on landlock/master.
+The helpers are small and re-use the existing kselftest_harness.h
+fixture/variant pattern. All patches have been validated with
+scripts/checkpatch.pl --strict and show no warnings.
+
+This series introduces **no kernel changes**, only selftests additions.
+
+Feedback very welcome.
+
+Thanks,
+Abhinav
+
+[1] https://github.com/landlock-lsm/linux/issues/37
+
+Links:
+- Landlock documentation: https://docs.kernel.org/userspace-api/landlock.html
+- Landlock LSM kernel docs: https://docs.kernel.org/security/landlock.html
+- Existing tests: tools/testing/selftests/landlock/scoped_*
 
 Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
 ---
- .../selftests/landlock/scoped_memfd_exec_test.c    | 325 +++++++++++++++++++++
- 1 file changed, 325 insertions(+)
+Abhinav Saxena (3):
+      selftests/landlock: move sandbox_type to common
+      selftests/landlock: add cross-domain variants
+      selftests/landlock: add cross-domain signal tests
 
-diff --git a/tools/testing/selftests/landlock/scoped_memfd_exec_test.c b/tools/testing/selftests/landlock/scoped_memfd_exec_test.c
-new file mode 100644
-index 000000000000..2513a44d8320
---- /dev/null
-+++ b/tools/testing/selftests/landlock/scoped_memfd_exec_test.c
-@@ -0,0 +1,325 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Landlock tests for LANDLOCK_SCOPE_MEMFD_EXEC domain restrictions
-+ *
-+ * These tests validate Landlock's hierarchical execution control for memfd
-+ * objects. The scoping mechanism prevents processes from executing memfd
-+ * created in different domain contexts.
-+ *
-+ * Copyright © 2025 Abhinav Saxena <xandfury@gmail.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/landlock.h>
-+#include <linux/memfd.h>
-+#include <signal.h>
-+#include <sys/mman.h>
-+#include <sys/prctl.h>
-+#include <sys/socket.h>
-+#include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "common.h"
-+#include "scoped_common.h"
-+
-+static int create_test_memfd(struct __test_metadata *const _metadata)
-+{
-+	int memfd;
-+	static const char test_data[] = "#!/bin/sh\nexit 42\n";
-+
-+	memfd = memfd_create("test_exec", 0);
-+	ASSERT_LE(0, memfd)
-+	{
-+		TH_LOG("Failed to create memfd: %s", strerror(errno));
-+	}
-+
-+	ASSERT_EQ(fchmod(memfd, 0700), 0);
-+
-+	ASSERT_EQ(0, ftruncate(memfd, sizeof(test_data)));
-+	ASSERT_EQ(sizeof(test_data),
-+		  write(memfd, test_data, sizeof(test_data)));
-+	ASSERT_EQ(0, lseek(memfd, 0, SEEK_SET));
-+
-+	return memfd;
-+}
-+
-+static bool test_mmap_exec_restriction(int memfd, bool expect_denied)
-+{
-+	void *addr;
-+	const size_t page_size = getpagesize();
-+
-+	addr = mmap(NULL, page_size, PROT_READ | PROT_EXEC, MAP_PRIVATE, memfd,
-+		    0);
-+
-+	if (expect_denied) {
-+		bool correctly_denied = (addr == MAP_FAILED && errno == EACCES);
-+
-+		if (addr != MAP_FAILED)
-+			munmap(addr, page_size);
-+		return correctly_denied;
-+	}
-+
-+	if (addr == MAP_FAILED)
-+		return false;
-+
-+	munmap(addr, page_size);
-+	return true;
-+}
-+
-+/* clang-format off */
-+FIXTURE(scoped_domains) {};
-+/* clang-format on */
-+
-+#include "scoped_base_variants.h"
-+
-+FIXTURE_SETUP(scoped_domains)
-+{
-+	drop_caps(_metadata);
-+}
-+
-+FIXTURE_TEARDOWN(scoped_domains)
-+{
-+}
-+
-+/*
-+ * Test that regular filesystem files are unaffected by memfd restrictions
-+ *
-+ * This test ensures that LANDLOCK_SCOPE_MEMFD_EXEC scoping only affects
-+ * memfd objects and does not interfere with normal file execution or
-+ * memory mapping of regular filesystem files.
-+ *
-+ * Security scenarios tested:
-+ * - Scope isolation: memfd restrictions don't affect regular files
-+ * - Proper targeting: only anonymous memory objects are restricted
-+ *
-+ * Scenarios considered (while allowing legitimate use):
-+ * - Malicious process creates executable memfd -> BLOCKED
-+ * - Same process maps legitimate executable file ->ALLOWED
-+ * - Ensures restrictions are surgical, not broad
-+ *
-+ * Test flow:
-+ * 1. Parent optionally creates scoped domain
-+ * 2. Parent forks child process
-+ * 3. Child optionally creates scoped domain
-+ * 4. Child creates regular temporary file with executable content
-+ * 5. Child creates memfd with same content
-+ * 6. Test memfd execution ->should follow scoping rules
-+ * 7. Test regular file execution ->should always work regardless of memfd
-+ * scoping
-+ * 8. Verify differential behavior confirms proper targeting
-+ */
-+TEST_F(scoped_domains, regular_file_unaffected)
-+{
-+	int tmp_fd, memfd;
-+	char tmp_path[] = "/tmp/landlock_test_XXXXXX";
-+	void *addr;
-+	const size_t page_size = getpagesize();
-+	bool memfd_should_be_denied;
-+
-+	memfd_should_be_denied = variant->domain_child ||
-+				 variant->domain_parent;
-+
-+	if (variant->domain_parent)
-+		create_scoped_domain(_metadata, LANDLOCK_SCOPE_MEMFD_EXEC);
-+
-+	pid_t child = fork();
-+
-+	ASSERT_LE(0, child);
-+
-+	if (child == 0) {
-+		/* Child process */
-+		if (variant->domain_child)
-+			create_scoped_domain(_metadata,
-+					     LANDLOCK_SCOPE_MEMFD_EXEC);
-+
-+		/* Create regular file with executable test content */
-+		tmp_fd = mkstemp(tmp_path);
-+		ASSERT_LE(0, tmp_fd);
-+		ASSERT_EQ(0, fchmod(tmp_fd, 0755));
-+
-+		static const char test_data[] = "#!/bin/sh\nexit 42\n";
-+
-+		ASSERT_EQ(sizeof(test_data),
-+			  write(tmp_fd, test_data, sizeof(test_data)));
-+		ASSERT_EQ(0, lseek(tmp_fd, 0, SEEK_SET));
-+
-+		/* Create memfd with identical content for comparison */
-+		memfd = create_test_memfd(_metadata);
-+
-+		/* Test memfd execution - should follow scoping restrictions */
-+		bool memfd_correctly_handled = test_mmap_exec_restriction(
-+			memfd, memfd_should_be_denied);
-+		EXPECT_TRUE(memfd_correctly_handled);
-+
-+		/*
-+		 * Test regular file execution - should always work regardless
-+		 * of memfd scoping
-+		 */
-+		addr = mmap(NULL, page_size, PROT_READ | PROT_EXEC, MAP_PRIVATE,
-+			    tmp_fd, 0);
-+		EXPECT_NE(MAP_FAILED, addr);
-+		if (addr != MAP_FAILED)
-+			munmap(addr, page_size);
-+
-+		/* Cleanup */
-+		close(memfd);
-+		close(tmp_fd);
-+		unlink(tmp_path);
-+		_exit(_metadata->exit_code);
-+	}
-+
-+	/* Parent waits for child */
-+	int status;
-+
-+	ASSERT_EQ(child, waitpid(child, &status, 0));
-+	if (WIFSIGNALED(status) || !WIFEXITED(status) ||
-+	    WEXITSTATUS(status) != EXIT_SUCCESS)
-+		_metadata->exit_code = KSFT_FAIL;
-+}
-+
-+/*
-+ * Test execve() family syscall restrictions on memfd
-+ *
-+ * This test validates that direct execution of memfd files via execve(),
-+ * execveat(), and fexecve() syscalls is properly blocked when domain
-+ * scoping is enabled. Tests the /proc/self/fd/ execution path commonly
-+ * used for anonymous execution.
-+ *
-+ * Security scenarios tested:
-+ * - Direct memfd execution via /proc/self/fd/ path
-+ * - Anonymous execution prevention
-+ * - execve() hook integration with memfd scoping
-+ *
-+ * Attack scenarios prevented:
-+ * 1. execve("/proc/self/fd/N") where N is memfd file descriptor
-+ * 2. execveat(memfd_fd, "", args, env, AT_EMPTY_PATH) - anonymous execution
-+ * 3. fexecve(memfd_fd, args, env) - file descriptor execution
-+ *
-+ * Test flow:
-+ * 1. Parent optionally creates scoped domain
-+ * 2. Parent forks child process
-+ * 3. Child optionally creates scoped domain
-+ * 4. Child creates memfd with executable script content
-+ * 5. Child attempts execve() using /proc/self/fd/N path
-+ * 6. Verify: EACCES if scoped, successful execution (exit 42) if not scoped
-+ * 7. Parent checks child exit status to determine success/failure
-+ */
-+TEST_F(scoped_domains, execve_restriction)
-+{
-+	int memfd;
-+	char fd_path[64];
-+	bool should_be_denied;
-+
-+	should_be_denied = variant->domain_child || variant->domain_parent;
-+	TH_LOG("execve_restriction: parent=%d, child=%d\n",
-+	       variant->domain_parent, variant->domain_child);
-+
-+	if (variant->domain_parent)
-+		create_scoped_domain(_metadata, LANDLOCK_SCOPE_MEMFD_EXEC);
-+
-+	pid_t child = fork();
-+
-+	ASSERT_LE(0, child);
-+
-+	if (child == 0) {
-+		/* Child process */
-+		if (variant->domain_child) {
-+			create_scoped_domain(_metadata,
-+					     LANDLOCK_SCOPE_MEMFD_EXEC);
-+		}
-+
-+		memfd = create_test_memfd(_metadata);
-+		snprintf(fd_path, sizeof(fd_path), "/proc/self/fd/%d", memfd);
-+
-+		/* Attempt execve on memfd via /proc/self/fd/ path */
-+		char *const argv[] = { "test", NULL };
-+		char *const envp[] = { NULL };
-+
-+		int ret = execve(fd_path, argv, envp);
-+
-+		ASSERT_EQ(-1, ret);
-+
-+		/* If we reach here, execve failed */
-+		if (should_be_denied) {
-+			EXPECT_EQ(EACCES,
-+				  errno); /* Should be blocked by Landlock */
-+		} else {
-+			/* execve should have succeeded but failed for other reason */
-+			TH_LOG("execve failed unexpectedly: %s",
-+			       strerror(errno));
-+		}
-+
-+		close(memfd);
-+		_exit(_metadata->exit_code);
-+	}
-+
-+	/* Parent waits for child and checks exit status */
-+	int status;
-+
-+	ASSERT_EQ(child, waitpid(child, &status, 0));
-+
-+	if (should_be_denied) {
-+		/* Child should exit normally after execve was blocked */
-+		EXPECT_TRUE(WIFEXITED(status));
-+	} else {
-+		/*
-+		 * Child should have executed successfully with script's
-+		 * exit code
-+		 */
-+		EXPECT_TRUE(WIFEXITED(status));
-+		EXPECT_EQ(42,
-+			  WEXITSTATUS(status)); /* Exit code from test script */
-+	}
-+}
-+
-+/*
-+ * Test same-domain execution restriction (should always be denied when scoped)
-+ *
-+ * This test validates the "Same domain: DENY" rule from the security matrix.
-+ * When a process is in a scoped domain, it should not be able to execute
-+ * memfd objects that it created itself, preventing read-to-execute bypass.
-+ *
-+ * Security scenarios tested:
-+ * - Read-to-execute bypass prevention within same domain
-+ * - Self-execution blocking for memfd objects
-+ *
-+ * Attack scenario prevented:
-+ * - Attacker process creates writable memfd in current domain
-+ * - Writes malicious shellcode to the memfd via write() syscalls
-+ * - Attempts to execute the same memfd via mmap(PROT_EXEC)
-+ * - Should be BLOCKED by same-domain denial rule
-+ * - Prevents bypassing W^X policies via anonymous memory
-+ *
-+ * Test flow:
-+ * 1. Process optionally creates scoped domain
-+ * 2. Process creates memfd (inherits current domain context)
-+ * 3. Process attempts to mmap its own memfd with PROT_EXEC
-+ * 4. Verify: ALLOW if not scoped, DENY if scoped (same domain rule)
-+ */
-+TEST_F(scoped_domains, same_domain_restriction)
-+{
-+	int memfd;
-+	bool should_be_denied;
-+
-+	/* Same domain should be denied when scoped, allowed when not scoped */
-+	should_be_denied = variant->domain_parent;
-+
-+	if (variant->domain_parent)
-+		create_scoped_domain(_metadata, LANDLOCK_SCOPE_MEMFD_EXEC);
-+
-+	/* Process creates and tries to execute its own memfd (same domain) */
-+	memfd = create_test_memfd(_metadata);
-+
-+	bool test_passed = test_mmap_exec_restriction(memfd, should_be_denied);
-+
-+	EXPECT_TRUE(test_passed);
-+
-+	close(memfd);
-+}
-+
-+TEST_HARNESS_MAIN
+ tools/testing/selftests/landlock/scoped_common.h   |   7 +
+ .../landlock/scoped_cross_domain_variants.h        |  54 +++++
+ .../landlock/scoped_multiple_domain_variants.h     |   7 -
+ .../selftests/landlock/scoped_signal_test.c        | 237 +++++++++++++++++++++
+ 4 files changed, 298 insertions(+), 7 deletions(-)
+---
+base-commit: 5b74b2eff1eeefe43584e5b7b348c8cd3b723d38
+change-id: 20250715-landlock_abstractions-dbc0aabf1063
 
+Best regards,
 -- 
-2.43.0
+Abhinav Saxena <xandfury@gmail.com>
 
 
