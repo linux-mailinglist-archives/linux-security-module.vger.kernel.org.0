@@ -1,423 +1,216 @@
-Return-Path: <linux-security-module+bounces-11182-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11184-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93912B0E55C
-	for <lists+linux-security-module@lfdr.de>; Tue, 22 Jul 2025 23:21:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF443B0E770
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Jul 2025 02:02:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B55F6547B50
-	for <lists+linux-security-module@lfdr.de>; Tue, 22 Jul 2025 21:21:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3976F5665AA
+	for <lists+linux-security-module@lfdr.de>; Wed, 23 Jul 2025 00:02:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE1A285C8B;
-	Tue, 22 Jul 2025 21:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3398B23A6;
+	Wed, 23 Jul 2025 00:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Dqn8K8nd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IAj2DzIM"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0CE06F06B;
-	Tue, 22 Jul 2025 21:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF5B1FDA;
+	Wed, 23 Jul 2025 00:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753219309; cv=none; b=AgfwGBxkD2DURq3nTvUyfDoEfYPzwGas2MfiEBHuEBFCcB+EDz78HGs+uqSV2eNZUUCDAkQ/SeTYg0JUlD1ZwOsIaZNbsIIzt+9NJOwtTPId5Dm4q1HxpN3QUDusVJq4HXWuINF+7ba0AOmZLETUucMLUB81MzpYK2LeoG4XnrU=
+	t=1753228931; cv=none; b=l9FNM/R1lurZeUVX97yXPmoP2pemdK3f/Lm3cukS2aS7n3L0eJKPeb60mV2c6aR2NBCo3unZXeO1Sg1qrqmIMYd6CtT+Btww4AMJEVzppADcAlN6JalgH718SuYnXN0ebeFwc9++fnITZjAMCMBUXN2GXqOFJcZM8V0nQpICnjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753219309; c=relaxed/simple;
-	bh=XrnpoJlS+kIzusQ6wg+AgThvzL7cR2cbx2SkS3z/T2g=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Ikuhbt07Pbv2Sq6m+7JGLMTVulctoAgNieqyv9vaelvjfRuPmRdvhmkYUCuxqi/xvq30YW/zxILxDoN3mW7JElhQcGjze9b9ZciJSoLXfQ1ArZr6SAMYNpiCfTKD7LjU1QPjNPCLTF9nG76PP1QzVMp6LW7rR/M+BO2VAi/Vlic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Dqn8K8nd; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from narnia.corp.microsoft.com (unknown [40.86.183.173])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3850621268B0;
-	Tue, 22 Jul 2025 14:21:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3850621268B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1753219307;
-	bh=v2qRwMEll6JJz01rpCJMZbc9SZPepGpyWnk0eqCwAzk=;
-	h=From:To:Subject:Date:From;
-	b=Dqn8K8ndQ6+ZNaU0zOKnA6Zxu/oblYuD7q4Y6c5lVQX5zv4dh1KVd1Py2g9boEb4a
-	 T8Pm/qYwnKHZPObjzoQpW8hY0UztPm8o6T52WyIAhE6H19TMI5PPIUOlnjGPUytARU
-	 I0DgF/CbYRQBzEZvcjD4cfz3sBhRTo+iBFel4Iks=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	John Johansen <john.johansen@canonical.com>,
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
-	=?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-	Song Liu <song@kernel.org>,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	selinux@vger.kernel.org
-Subject: [PATCH v2] lsm,selinux: Add LSM blob support for BPF objects
-Date: Tue, 22 Jul 2025 14:21:34 -0700
-Message-ID: <20250722212139.1666060-1-bboscaccy@linux.microsoft.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1753228931; c=relaxed/simple;
+	bh=dewk3TAValYYQExAPJkqLo7eeu1mdvuRf3ddUbYlT50=;
+	h=From:To:Cc:Subject:Date:References:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=YmK/14Nl7fU5ab5jTt4e4HY+ooqXSRnx4BP9KXSMR+go/i0/YcbsImItJa0NMybuKrCM1YHJlOB67RO5wUGLIyDOUWr9R9SeyppsFf1eqWXbZhiULyb9hgItS8003BVav3g6HQzn+Dp8wBlShbZoZnZg3wMPO/qWRdYabO9MxK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IAj2DzIM; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-748d982e92cso4089496b3a.1;
+        Tue, 22 Jul 2025 17:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753228929; x=1753833729; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
+        b=IAj2DzIMXqzjWTLRYOTSEOCVkh1q4c/3h+3dkF0IaRLHtWFZAbzBLJcDHm9FoBMxRW
+         lX9F/tF5ewl6OixEhAeOHgQiQr+PKM0Bq1/EWpcuK6FjEIKxrbUxKGrkDWpcS9b4uz12
+         8L41N2BrgfHx69/7ae9qLZpa+o7sndemJDAJnUoxxQ0FNuEhan7pUaDt81V3iXmWjgz9
+         p4JC0zS172mNy/KJnc9hD1TvlRSHf37sPu2e3fH345LDeQpGgnmIM+DnQi+VwbptFxcB
+         4MupB26J+4Lq/xQz61gOJRXvFQ04UvGPZ7QkTpbTTp5r9IVIZC3dOWFyqVfAtMCTHHs6
+         DamQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753228929; x=1753833729;
+        h=mime-version:message-id:in-reply-to:user-agent:references:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=afioNrw39xivAx0anOKx/PDNnLStyhXg1rvkkGxqeuY=;
+        b=c0nSV5MBMpH6zN6RxtS/t7bu3rqU/rV2lDx4KkJ/L4QQ53I2/60uIStL7zPs1DK90u
+         UPwwJrU3Mootf1+7FIaqVCkoC9sPrKNBhF4o40HVmac2zgUcHebmks5ByGdSiZro46HH
+         YsrZQ4TSgMljQIXKFd8EwgiEOCZfjQQgJ4eHGXdavx82dqoPLvuciIZ1OfZqFfCTqQGo
+         Y31tbsCgwbPrDTq2dFT4S+SmaiA9CIE/p4zYC6OxyP2aEokP6kXXrfelF9tyqjzLtNJo
+         fqaAUG7GMNIwhe38fZrF33RseezxPtEJpIelRMq1eWRcslLcXYXBm2ytQ0jb3LfhFnCy
+         JyHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP0ni5f/ddLuckEOSAd7fIAWWZ9iJUwDZ8GV1W6NbFdtLRL9GD4ChV4/keAJem5bY4365CzEIFqhMt5nGbDYH9gEG6LCfa@vger.kernel.org, AJvYcCWOF1j42vDL04S/zZJ5/cRX6z1Hd4/buQcN+60Emb3r24aRPHY3Fk+9hU0pR/hL8SJM0sD507B15Y28Rng=@vger.kernel.org, AJvYcCXOqvU6CBiDR3Zrap1et1If2KiMFJO58szIEKopUQbYve8zqC99yHddVW8/KSOGHV3BS6kR82KgoM22tdAGrq6P@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKDZN69PheFDG9BgpZnXyH+WY+u/CKjXVBKwU9EUx2Y/tjvzPe
+	fsXIkEi74xkx+TsCXIfo/1YsJ88yt/PMIQdmdaZisYNN4r6MPck7PUpz
+X-Gm-Gg: ASbGncuNkP4hYe28R2dXw3AgvhPijJQ/Uqd9+uDcegEvc0xeq8xYDVz2np2AjG/5U8k
+	JdWOt2RD43pxLGNKaZY9pmljPZPMpV6m6ykJqOx35T+I88MGT7viTUSocaDXi97d68J80CNqU1f
+	c410PqnIH2inur4Anwl/9q8fOw2hBScs1MpkZB97nQawOUEOvZlYThlD2zQiE3hAbOPW1PyGP0M
+	bNb+aOesEyG3tDuFWC0GsPM0A/S7OHYC5uoVqHT8Vrybt95odJgrEMmYKct9kD/3oJnX38GF/C4
+	otLyQdaD87ZOnabgdvrn0pWOjrLJCAS0OrPxyANpxJ3eGR7m5h0qr24BR6Iwp6S8YCjbNs07MuV
+	vC3K2HzuJTLVVCCKQKcXG7BY=
+X-Google-Smtp-Source: AGHT+IEOrOtE3x8MeA1SKBJMd59JULb3/k3gDSOBVNnDEa6DvuyNQgbznfPDnTFZY/cLR7sKgxhnHQ==
+X-Received: by 2002:a05:6a21:6b0d:b0:222:d191:5bbd with SMTP id adf61e73a8af0-23d491446f0mr1142486637.39.1753228928763;
+        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
+Received: from 1337 ([136.159.213.219])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759c89d5820sm8437213b3a.52.2025.07.22.17.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jul 2025 17:02:08 -0700 (PDT)
+From: Abhinav Saxena <xandfury@gmail.com>
+To: Fan Wu <wufan@kernel.org>
+Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G?=
+ =?utf-8?Q?=C3=BCnther?= Noack <gnoack@google.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
+ E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>,
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH RFC 2/4] landlock: implement memfd detection
+Date: Tue, 22 Jul 2025 15:56:38 -0600
+References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
+ <20250719-memfd-exec-v1-2-0ef7feba5821@gmail.com>
+ <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+User-agent: mu4e 1.10.8; emacs 30.1
+In-reply-to: <CAKtyLkEJKLgO1GvpTNmW=DnRhrsiPXGgz9=F7oJXVQPLSocSeA@mail.gmail.com>
+Message-ID: <87v7nj7p1d.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="=-=-="
 
-This patch introduces LSM blob support for BPF maps, programs, and
-tokens to enable LSM stacking and multiplexing of LSM modules that
-govern BPF objects. Additionally, the existing BPF hooks used by
-SELinux have been updated to utilize the new blob infrastructure,
-removing the assumption of exclusive ownership of the security
-pointer.
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
----
-v2:
-- Use lsm_blob_alloc
-- Remove unneded null check
-- ifdef guard bpf alloc helpers
----
- include/linux/lsm_hooks.h         |  3 ++
- security/security.c               | 86 +++++++++++++++++++++++++++++--
- security/selinux/hooks.c          | 56 ++++----------------
- security/selinux/include/objsec.h | 17 ++++++
- 4 files changed, 113 insertions(+), 49 deletions(-)
+Fan Wu <wufan@kernel.org> writes:
 
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 090d1d3e19fed..79ec5a2bdcca7 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -116,6 +116,9 @@ struct lsm_blob_sizes {
- 	int lbs_xattr_count; /* number of xattr slots in new_xattrs array */
- 	int lbs_tun_dev;
- 	int lbs_bdev;
-+	int lbs_bpf_map;
-+	int lbs_bpf_prog;
-+	int lbs_bpf_token;
- };
- 
- /*
-diff --git a/security/security.c b/security/security.c
-index 596d418185773..e34b33ffc26cf 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -283,6 +283,9 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
- 	lsm_set_blob_size(&needed->lbs_xattr_count,
- 			  &blob_sizes.lbs_xattr_count);
- 	lsm_set_blob_size(&needed->lbs_bdev, &blob_sizes.lbs_bdev);
-+	lsm_set_blob_size(&needed->lbs_bpf_map, &blob_sizes.lbs_bpf_map);
-+	lsm_set_blob_size(&needed->lbs_bpf_prog, &blob_sizes.lbs_bpf_prog);
-+	lsm_set_blob_size(&needed->lbs_bpf_token, &blob_sizes.lbs_bpf_token);
- }
- 
- /* Prepare LSM for initialization. */
-@@ -480,6 +483,9 @@ static void __init ordered_lsm_init(void)
- 	init_debug("tun device blob size = %d\n", blob_sizes.lbs_tun_dev);
- 	init_debug("xattr slots          = %d\n", blob_sizes.lbs_xattr_count);
- 	init_debug("bdev blob size       = %d\n", blob_sizes.lbs_bdev);
-+	init_debug("bpf map blob size    = %d\n", blob_sizes.lbs_bpf_map);
-+	init_debug("bpf prog blob size   = %d\n", blob_sizes.lbs_bpf_prog);
-+	init_debug("bpf token blob size  = %d\n", blob_sizes.lbs_bpf_token);
- 
- 	/*
- 	 * Create any kmem_caches needed for blobs
-@@ -835,6 +841,47 @@ static int lsm_bdev_alloc(struct block_device *bdev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+/**
-+ * lsm_bpf_map_alloc - allocate a composite bpf_map blob
-+ * @map: the bpf_map that needs a blob
-+ *
-+ * Allocate the bpf_map blob for all the modules
-+ *
-+ * Returns 0, or -ENOMEM if memory can't be allocated.
-+ */
-+static int lsm_bpf_map_alloc(struct bpf_map *map)
-+{
-+	return lsm_blob_alloc(&map->security, blob_sizes.lbs_bpf_map, GFP_KERNEL);
-+}
-+
-+/**
-+ * lsm_bpf_prog_alloc - allocate a composite bpf_prog blob
-+ * @prog: the bpf_prog that needs a blob
-+ *
-+ * Allocate the bpf_prog blob for all the modules
-+ *
-+ * Returns 0, or -ENOMEM if memory can't be allocated.
-+ */
-+static int lsm_bpf_prog_alloc(struct bpf_prog *prog)
-+{
-+	return lsm_blob_alloc(&prog->aux->security, blob_sizes.lbs_bpf_prog, GFP_KERNEL);
-+}
-+
-+/**
-+ * lsm_bpf_token_alloc - allocate a composite bpf_token blob
-+ * @token: the bpf_token that needs a blob
-+ *
-+ * Allocate the bpf_token blob for all the modules
-+ *
-+ * Returns 0, or -ENOMEM if memory can't be allocated.
-+ */
-+static int lsm_bpf_token_alloc(struct bpf_token *token)
-+{
-+	return lsm_blob_alloc(&token->security, blob_sizes.lbs_bpf_token, GFP_KERNEL);
-+}
-+#endif /* CONFIG_BPF_SYSCALL */
-+
- /**
-  * lsm_early_task - during initialization allocate a composite task blob
-  * @task: the task that needs a blob
-@@ -5684,7 +5731,16 @@ int security_bpf_prog(struct bpf_prog *prog)
- int security_bpf_map_create(struct bpf_map *map, union bpf_attr *attr,
- 			    struct bpf_token *token, bool kernel)
- {
--	return call_int_hook(bpf_map_create, map, attr, token, kernel);
-+	int rc = 0;
-+
-+	rc = lsm_bpf_map_alloc(map);
-+	if (unlikely(rc))
-+		return rc;
-+
-+	rc = call_int_hook(bpf_map_create, map, attr, token, kernel);
-+	if (unlikely(rc))
-+		security_bpf_map_free(map);
-+	return rc;
- }
- 
- /**
-@@ -5703,7 +5759,16 @@ int security_bpf_map_create(struct bpf_map *map, union bpf_attr *attr,
- int security_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
- 			   struct bpf_token *token, bool kernel)
- {
--	return call_int_hook(bpf_prog_load, prog, attr, token, kernel);
-+	int rc = 0;
-+
-+	rc = lsm_bpf_prog_alloc(prog);
-+	if (unlikely(rc))
-+		return rc;
-+
-+	rc = call_int_hook(bpf_prog_load, prog, attr, token, kernel);
-+	if (unlikely(rc))
-+		security_bpf_prog_free(prog);
-+	return rc;
- }
- 
- /**
-@@ -5720,7 +5785,16 @@ int security_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
- int security_bpf_token_create(struct bpf_token *token, union bpf_attr *attr,
- 			      const struct path *path)
- {
--	return call_int_hook(bpf_token_create, token, attr, path);
-+	int rc = 0;
-+
-+	rc = lsm_bpf_token_alloc(token);
-+	if (unlikely(rc))
-+		return rc;
-+
-+	rc = call_int_hook(bpf_token_create, token, attr, path);
-+	if (unlikely(rc))
-+		security_bpf_token_free(token);
-+	return rc;
- }
- 
- /**
-@@ -5764,6 +5838,8 @@ int security_bpf_token_capable(const struct bpf_token *token, int cap)
- void security_bpf_map_free(struct bpf_map *map)
- {
- 	call_void_hook(bpf_map_free, map);
-+	kfree(map->security);
-+	map->security = NULL;
- }
- 
- /**
-@@ -5775,6 +5851,8 @@ void security_bpf_map_free(struct bpf_map *map)
- void security_bpf_prog_free(struct bpf_prog *prog)
- {
- 	call_void_hook(bpf_prog_free, prog);
-+	kfree(prog->aux->security);
-+	prog->aux->security = NULL;
- }
- 
- /**
-@@ -5786,6 +5864,8 @@ void security_bpf_prog_free(struct bpf_prog *prog)
- void security_bpf_token_free(struct bpf_token *token)
- {
- 	call_void_hook(bpf_token_free, token);
-+	kfree(token->security);
-+	token->security = NULL;
- }
- #endif /* CONFIG_BPF_SYSCALL */
- 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 595ceb314aeb3..8052fb5fafc4d 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -7038,14 +7038,14 @@ static int bpf_fd_pass(const struct file *file, u32 sid)
- 
- 	if (file->f_op == &bpf_map_fops) {
- 		map = file->private_data;
--		bpfsec = map->security;
-+		bpfsec = selinux_bpf_map_security(map);
- 		ret = avc_has_perm(sid, bpfsec->sid, SECCLASS_BPF,
- 				   bpf_map_fmode_to_av(file->f_mode), NULL);
- 		if (ret)
- 			return ret;
- 	} else if (file->f_op == &bpf_prog_fops) {
- 		prog = file->private_data;
--		bpfsec = prog->aux->security;
-+		bpfsec = selinux_bpf_prog_security(prog);
- 		ret = avc_has_perm(sid, bpfsec->sid, SECCLASS_BPF,
- 				   BPF__PROG_RUN, NULL);
- 		if (ret)
-@@ -7059,7 +7059,7 @@ static int selinux_bpf_map(struct bpf_map *map, fmode_t fmode)
- 	u32 sid = current_sid();
- 	struct bpf_security_struct *bpfsec;
- 
--	bpfsec = map->security;
-+	bpfsec = selinux_bpf_map_security(map);
- 	return avc_has_perm(sid, bpfsec->sid, SECCLASS_BPF,
- 			    bpf_map_fmode_to_av(fmode), NULL);
- }
-@@ -7069,7 +7069,7 @@ static int selinux_bpf_prog(struct bpf_prog *prog)
- 	u32 sid = current_sid();
- 	struct bpf_security_struct *bpfsec;
- 
--	bpfsec = prog->aux->security;
-+	bpfsec = selinux_bpf_prog_security(prog);
- 	return avc_has_perm(sid, bpfsec->sid, SECCLASS_BPF,
- 			    BPF__PROG_RUN, NULL);
- }
-@@ -7079,69 +7079,33 @@ static int selinux_bpf_map_create(struct bpf_map *map, union bpf_attr *attr,
- {
- 	struct bpf_security_struct *bpfsec;
- 
--	bpfsec = kzalloc(sizeof(*bpfsec), GFP_KERNEL);
--	if (!bpfsec)
--		return -ENOMEM;
--
-+	bpfsec = selinux_bpf_map_security(map);
- 	bpfsec->sid = current_sid();
--	map->security = bpfsec;
- 
- 	return 0;
- }
- 
--static void selinux_bpf_map_free(struct bpf_map *map)
--{
--	struct bpf_security_struct *bpfsec = map->security;
--
--	map->security = NULL;
--	kfree(bpfsec);
--}
--
- static int selinux_bpf_prog_load(struct bpf_prog *prog, union bpf_attr *attr,
- 				 struct bpf_token *token, bool kernel)
- {
- 	struct bpf_security_struct *bpfsec;
- 
--	bpfsec = kzalloc(sizeof(*bpfsec), GFP_KERNEL);
--	if (!bpfsec)
--		return -ENOMEM;
--
-+	bpfsec = selinux_bpf_prog_security(prog);
- 	bpfsec->sid = current_sid();
--	prog->aux->security = bpfsec;
- 
- 	return 0;
- }
- 
--static void selinux_bpf_prog_free(struct bpf_prog *prog)
--{
--	struct bpf_security_struct *bpfsec = prog->aux->security;
--
--	prog->aux->security = NULL;
--	kfree(bpfsec);
--}
--
- static int selinux_bpf_token_create(struct bpf_token *token, union bpf_attr *attr,
- 				    const struct path *path)
- {
- 	struct bpf_security_struct *bpfsec;
- 
--	bpfsec = kzalloc(sizeof(*bpfsec), GFP_KERNEL);
--	if (!bpfsec)
--		return -ENOMEM;
--
-+	bpfsec = selinux_bpf_token_security(token);
- 	bpfsec->sid = current_sid();
--	token->security = bpfsec;
- 
- 	return 0;
- }
--
--static void selinux_bpf_token_free(struct bpf_token *token)
--{
--	struct bpf_security_struct *bpfsec = token->security;
--
--	token->security = NULL;
--	kfree(bpfsec);
--}
- #endif
- 
- struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
-@@ -7159,6 +7123,9 @@ struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
- 	.lbs_xattr_count = SELINUX_INODE_INIT_XATTRS,
- 	.lbs_tun_dev = sizeof(struct tun_security_struct),
- 	.lbs_ib = sizeof(struct ib_security_struct),
-+	.lbs_bpf_map = sizeof(struct bpf_security_struct),
-+	.lbs_bpf_prog = sizeof(struct bpf_security_struct),
-+	.lbs_bpf_token = sizeof(struct bpf_security_struct),
- };
- 
- #ifdef CONFIG_PERF_EVENTS
-@@ -7510,9 +7477,6 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(bpf, selinux_bpf),
- 	LSM_HOOK_INIT(bpf_map, selinux_bpf_map),
- 	LSM_HOOK_INIT(bpf_prog, selinux_bpf_prog),
--	LSM_HOOK_INIT(bpf_map_free, selinux_bpf_map_free),
--	LSM_HOOK_INIT(bpf_prog_free, selinux_bpf_prog_free),
--	LSM_HOOK_INIT(bpf_token_free, selinux_bpf_token_free),
- #endif
- 
- #ifdef CONFIG_PERF_EVENTS
-diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
-index 6ee7dc4dfd6e0..9f935ed9a761f 100644
---- a/security/selinux/include/objsec.h
-+++ b/security/selinux/include/objsec.h
-@@ -26,6 +26,7 @@
- #include <linux/lsm_hooks.h>
- #include <linux/msg.h>
- #include <net/net_namespace.h>
-+#include <linux/bpf.h>
- #include "flask.h"
- #include "avc.h"
- 
-@@ -237,4 +238,20 @@ selinux_perf_event(void *perf_event)
- 	return perf_event + selinux_blob_sizes.lbs_perf_event;
- }
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+static inline struct bpf_security_struct *selinux_bpf_map_security(struct bpf_map *map)
-+{
-+	return map->security + selinux_blob_sizes.lbs_bpf_map;
-+}
-+
-+static inline struct bpf_security_struct *selinux_bpf_prog_security(struct bpf_prog *prog)
-+{
-+	return prog->aux->security + selinux_blob_sizes.lbs_bpf_prog;
-+}
-+
-+static inline struct bpf_security_struct *selinux_bpf_token_security(struct bpf_token *token)
-+{
-+	return token->security + selinux_blob_sizes.lbs_bpf_token;
-+}
-+#endif /* CONFIG_BPF_SYSCALL */
- #endif /* _SELINUX_OBJSEC_H_ */
--- 
-2.48.1
+> On Sat, Jul 19, 2025 at 4:13=E2=80=AFAM Abhinav Saxena <xandfury@gmail.co=
+m> wrote:
+>>
+>> Add is_memfd_file() function to reliably detect memfd files by checking
+>> for =E2=80=9Cmemfd:=E2=80=9D prefix in dentry names on shmem-backed file=
+s. This
+>> distinguishes true memfd files from regular shmem files.
+>>
+>> Move domain_is_scoped() to domain.c for reuse across subsystems.
+>> Add comprehensive kunit tests for memfd detection edge cases.
+>>
+>> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+>> =E2=80=94
+>>  security/landlock/domain.c |  67 +++++++++++++++
+>>  security/landlock/domain.h |   4 +
+>>  security/landlock/fs.c     | 210 ++++++++++++++++++++++++++++++++++++++=
++++++++
+>>  security/landlock/task.c   |  67 =E2=80=94=E2=80=94=E2=80=94=E2=80=94=
+=E2=80=94
+>>  4 files changed, 281 insertions(+), 67 deletions(-)
+>
+> =E2=80=A6
+>
+>>
+>> +/**
+>> + * is_memfd_file - Check if file was created via memfd_create()
+>> + * @file: File to check
+>> + *
+>> + * Returns true if @file was created via memfd_create(), false otherwis=
+e.
+>> + *
+>> + * memfd files are shmem-backed files with =E2=80=9Cmemfd:=E2=80=9D pre=
+fix in their dentry name.
+>> + * This is the definitive way to distinguish memfd files from regular s=
+hmem
+>> + * files.
+>> + */
+>> +static bool is_memfd_file(struct file *file)
+>> +{
+>> +       const struct dentry *dentry;
+>> +       const unsigned char *name;
+>> +       size_t name_len;
+>> +
+>> +       /* Fast path: basic validation */
+>> +       if (unlikely(!file))
+>> +               return false;
+>> +
+>> +       /* Must be shmem-backed first - this is the cheapest definitive =
+check */
+>> +       if (!shmem_file(file))
+>> +               return false;
+>> +
+>> +#ifdef CONFIG_MEMFD_CREATE
+>> +
+>> +       /* Validate dentry and get name info */
+>> +       dentry =3D file->f_path.dentry;
+>> +       if (unlikely(!dentry))
+>> +               return false;
+>> +
+>> +       name_len =3D dentry->d_name.len;
+>> +       name =3D dentry->d_name.name;
+>> +
+>> +       /* memfd files always have =E2=80=9Cmemfd:=E2=80=9D prefix (6 ch=
+aracters) */
+>> +       if (name_len < 6 || unlikely(!name))
+>> +               return false;
+>> +
+>> +       /* Check for exact =E2=80=9Cmemfd:=E2=80=9D prefix */
+>> +       return memcmp(name, =E2=80=9Cmemfd:=E2=80=9D, 6) =3D=3D 0;
+>> +#else
+>> +       return false;
+>> +#endif
+>
+> I was trying to do something similar early this year but didn=E2=80=99t h=
+ear
+> feedback from the linux-mm folks.
+> <https://lore.kernel.org/linux-security-module/20250129203932.22165-1-wuf=
+an@kernel.org/>
+>
+> I have considered this approach but didn=E2=80=99t use it. My concern is,
+> potentially a malicious user can create a file in a shmem fs, e.g.
+> tmpfs , with the =E2=80=9Cmemfd:=E2=80=9D prefix, which can be used to by=
+pass security
+> policy.
+> (Resending this message due to a misconfiguration with my email
+> client. Apologies for any inconvenience.)
+>
+> -Fan
 
+Hi Fan,
+
+Thanks for your comments.
+
+I agree that an LSM hook into memfd_create() would be a much better
+solution. In the absence of such a function, do you think adding a
+`d_unlinked(dentry)` check could serve as an additional verification?
+
+I say things since I *think* that legitimate memfd files are always
+unlinked while spoofed tmpfs files remain linked. I could be wrong
+though.
+
+In any case, we can test this approach using kprobes to validate
+the behavior.
+
+-Abhinav
+
+--=-=-=--
 
