@@ -1,34 +1,34 @@
-Return-Path: <linux-security-module+bounces-11202-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11201-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B397B10AFD
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:10:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C546B10AFB
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:10:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79FFC18991A2
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:11:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26627AE368A
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E23E2D63F2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD062D6412;
 	Thu, 24 Jul 2025 13:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="aMUvFtxA"
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="Jc6rDJa9"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3132D5432
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9792D543D
 	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 13:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753362634; cv=none; b=Sgxa9CX1YHBY0c8qwieC8Bpkzx3RCqi0WOzLloCvdVWHB4noWu5Yi+DZKUQglG6sFMnBuDyxldMgqAcI+3CkSsrF92+Rocr7MucpoQjEVrmYR/mPmq+gOxQuuInxDP193zlPQu3KjYsk7Dr9izeAc8790E9QJZUMCc4sIaWXJ8U=
+	t=1753362634; cv=none; b=lXnyhhFJurj3XWC3iAOAwpkz73QOEnRrlt0u0jrk2Rhs//x5ZHiy4gLMCgLk2mu+g5coDAkX1GkHszvst1RpgkPjnA9QXGTyQQQVkCUnZ8SGKzogFcI7q8uIhlv0EOzvVhb/Wz0PvY4nsxU3QvyEMSbJ1fQCiYHSAGvowtHkO+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753362634; c=relaxed/simple;
-	bh=XTXMoP9lLoDVsCOuRal8Q7eoir6M05PsVfG4ekm8Abo=;
+	bh=Av0yxjzhFwBvLV/HGjZEGbQbA/cOAU8vKGNmkrSy9Bo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lDX2zqodqmdVHtScpnwysy0bkTOX0HXPU8BppA74aNcTVuT/lEbk93wcTji6O+aIKjxuH+A7zp+kVFo7DsABTMSITBJ+Oeww70227YvOJy5r40Ej3m+0GUDxD2uCp6FyM4hnfBd8AibscSO0x//0AKGMIqFmkg7kT3xjJc5VzNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=aMUvFtxA; arc=none smtp.client-ip=95.143.211.150
+	 MIME-Version; b=k5NLXsdcL2zsJakO+jmnVo769vkMcm0sL+o1rKz+29WAUMHDsU7OrZ2Fmxh97Jx9PjEppL3R90A5M/6F4q2OfoQEMw01HAjmEBPBrXXyXTDpxTGT8/bPkmhdCje0Wjbynkrm7tAUMrxQzfGAVLHZQSxEC+vhP6LUyiAdJyVTQEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=Jc6rDJa9; arc=none smtp.client-ip=95.143.211.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
 From: Konstantin Andreev <andreev@swemel.ru>
@@ -38,15 +38,15 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=05UXL8o1ADx/s9TETfV1PnJnajAEf5yIdVY23fe2RKI=;
-	b=aMUvFtxAyFl8rSCv0Nidws61CIA/TAysMfKWZxNNjlI/nVzGHrZq4BpsgLhNpJNSsjEG2t
-	qNs9VhH64QHXn6VhiWETnlt5dnAVGGDUEjHT5W2x0T58kxEZ/ZC2LOnWmJdjZgzq4xM1Op
-	2u54TdckUVsckqW7lLCoLbMwx4itrCM=
+	bh=Dr1RGMeRgy9xyVGtkplYQ5jqlo8GkNgKxRwpyemd3RY=;
+	b=Jc6rDJa9xB+jxw+eAfs1m4SR7zG85gYMKx46dByo7Oeu9wrwp7bOnPx6Lrj7d1/EjeU9YZ
+	AzZShkxVaNsfU2ta+oS52i3s3EcHj8X38MD/zkcOav8hRZF5m0Wrj0X0WMTNvlbIPEus/T
+	y++ZgaeWSk8VYM5/AqtMX+5kmDbzFnk=
 To: casey@schaufler-ca.com
 Cc: linux-security-module@vger.kernel.org
-Subject: [PATCH 12/19] smack: restrict setxattr() SMACK64IPIN/IPOUT to sockets
-Date: Thu, 24 Jul 2025 16:09:45 +0300
-Message-ID: <94ce83e5caf3c322d778b5cb5d737f05da754359.1753356770.git.andreev@swemel.ru>
+Subject: [PATCH 13/19] smack: restrict setxattr() SMACK64EXEC/MMAP to regular files
+Date: Thu, 24 Jul 2025 16:09:46 +0300
+Message-ID: <dcd7ab960d9ed3fee8936cbc2f130b3b5128dfe2.1753356770.git.andreev@swemel.ru>
 In-Reply-To: <cover.1753356770.git.andreev@swemel.ru>
 References: <cover.1753356770.git.andreev@swemel.ru>
 Precedence: bulk
@@ -57,108 +57,63 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The SMACK64IPIN and SMACK64IPOUT xattrs apply
-only to sockets. However, smack_inode_setxattr()
-currently allows setting them on any filesystem
-object, including regular files, FIFOs, and others.
+The SMACK64EXEC and SMACK64MMAP xattrs apply
+only to regular files. However, setxattr() currently
+allows setting them on any filesystem object,
+including FIFOs, device nodes, and others. E.g.
 
-These xattrs are even written to disk by the
-underlying filesystem. E.g. you can
+   root# setfattr  -n security.SMACK64EXEC -v foo /dev/null
+   root# getfattr -hn security.SMACK64EXEC        /dev/null
+   # file: dev/null
+   security.SMACK64EXEC="foo"
 
-  # setfattr -n security.SMACK64IPIN -v foo /etc/passwd
-  # # no error
-
-and have SMACK64IPIN on disk.
-
-This change restricts setting SMACK64IPIN/IPOUT
-in smack_inode_setxattr() to socket inodes only.
-
-Given that, the corresponding check in
-smack_inode_setsecurity() may be omitted,
-as it called after smack_inode_setxattr()
-for SMACK64IPIN/IPOUT:
-
-    fs/xattr.c:
-
-    ...
-    ` __vfs_setxattr_locked
-      ` security_inode_setxattr
-      ` __vfs_setxattr_noperm
-        ` security_inode_setsecurity
-
-Additionally, with this change the error code returned by setxattr()
-for unsupported SMACK64IPIN/OUT xattrs
-changes from -ENODATA [1]:
-
-  # setfattr -n security.SMACK64IPIN -v foo /sys/kernel/debug/sleep_time
-  setfattr: /sys/kernel/debug/sleep_time: No such attribute
-
-back to -EOPNOTSUPP:
-
-  # setfattr -n security.SMACK64IPIN -v foo /sys/kernel/debug/sleep_time
-  setfattr: /sys/kernel/debug/sleep_time: Operation not supported
-
-[1] 2025-07 andreev
-commit ("smack: smack_inode_setsecurity:
-         prevent setting SMACK64IPIN/OUT in other LSMs")
-Link: https://lore.kernel.org/linux-security-module/a0d039a407a8164a2025847f5b00fd5f3c2e5def.1753356770.git.andreev@swemel.ru/
+This change restricts setting SMACK64EXEC and
+SMACK64MMAP to regular files only.
 
 Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
 ---
- Documentation/admin-guide/LSM/Smack.rst |  3 ++-
- security/smack/smack_lsm.c              | 16 +++++++++-------
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ security/smack/smack_lsm.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/admin-guide/LSM/Smack.rst b/Documentation/admin-guide/LSM/Smack.rst
-index c5ed775f2d10..ce8be25333a7 100644
---- a/Documentation/admin-guide/LSM/Smack.rst
-+++ b/Documentation/admin-guide/LSM/Smack.rst
-@@ -693,7 +693,8 @@ can only be set by privileged tasks, but any task can read them for their own
- sockets.
- 
-   SMACK64IPIN:
--	The Smack label of the task object. A privileged
-+	The Smack label of incoming packets must have write access to the
-+	Smack label, specified in the SMACK64IPIN attribute. A privileged
- 	program that will enforce policy may set this to the star label.
- 
-   SMACK64IPOUT:
 diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 672be8b47821..a66fa2c16dc2 100644
+index a66fa2c16dc2..6712fa047722 100644
 --- a/security/smack/smack_lsm.c
 +++ b/security/smack/smack_lsm.c
-@@ -1415,7 +1415,14 @@ static int smack_inode_setxattr(struct mnt_idmap *idmap,
- 			return -EINVAL;
- 	} else if (strcmp(name, XATTR_NAME_SMACKIPIN) == 0 ||
- 		   strcmp(name, XATTR_NAME_SMACKIPOUT) == 0) {
--		;
-+		/*
-+		 * inode of socket file descriptor (sockfs inode) only
-+		 */
-+		if (inode->i_sb->s_magic != SOCKFS_MAGIC)
-+			return -EOPNOTSUPP;
-+
-+		if (SOCKET_I(inode)->sk == NULL)
-+			return -EOPNOTSUPP;
+@@ -1425,6 +1425,8 @@ static int smack_inode_setxattr(struct mnt_idmap *idmap,
+ 			return -EOPNOTSUPP;
  	} else if (strcmp(name, XATTR_NAME_SMACKEXEC) == 0 ||
  		   strcmp(name, XATTR_NAME_SMACKMMAP) == 0) {
++		if (!S_ISREG(i_mode))
++			return -EOPNOTSUPP;
  		task_label = true;
-@@ -3015,14 +3022,9 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
- 		return -ENODATA;
- 	/*
- 	 * The rest of the Smack xattrs are only on sockets.
-+	 * smack_inode_setxattr() has checked that inode is sockfs
- 	 */
--	if (inode->i_sb->s_magic != SOCKFS_MAGIC)
--		return -ENODATA;
--
- 	sock = SOCKET_I(inode);
--	if (sock->sk == NULL)
--		return -ENODATA;
--
- 	ssp = smack_sock(sock->sk);
+ 	} else if (strcmp(name, XATTR_NAME_SMACKTRANSMUTE) == 0) {
+ 		if (!S_ISDIR(i_mode) ||
+@@ -3754,15 +3756,17 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
+ 		/*
+ 		 * Don't let the exec or mmap label be "*" or "@".
+ 		 */
+-		skp = smk_fetch(XATTR_NAME_SMACKEXEC, inode, dp);
+-		if (IS_ERR(skp) || smk_task_invalid_label(skp))
+-			skp = NULL;
+-		isp->smk_task = skp;
++		if (S_ISREG(inode->i_mode)) {
++			skp = smk_fetch(XATTR_NAME_SMACKEXEC, inode, dp);
++			if (IS_ERR(skp) || smk_task_invalid_label(skp))
++				skp = NULL;
++			isp->smk_task = skp;
  
- 	if (strcmp(name, XATTR_SMACK_IPIN) == 0)
+-		skp = smk_fetch(XATTR_NAME_SMACKMMAP, inode, dp);
+-		if (IS_ERR(skp) || smk_task_invalid_label(skp))
+-			skp = NULL;
+-		isp->smk_mmap = skp;
++			skp = smk_fetch(XATTR_NAME_SMACKMMAP, inode, dp);
++			if (IS_ERR(skp) || smk_task_invalid_label(skp))
++				skp = NULL;
++			isp->smk_mmap = skp;
++		}
+ 
+ 		dput(dp);
+ 		break;
 -- 
 2.43.0
 
