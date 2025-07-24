@@ -1,93 +1,101 @@
-Return-Path: <linux-security-module+bounces-11212-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11214-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC1E1B10B3C
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:20:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 820E0B10B3D
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:20:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2039E1CE3BCC
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:20:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 729D53ADE2F
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F25C32D5430;
-	Thu, 24 Jul 2025 13:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6078B2D59E5;
+	Thu, 24 Jul 2025 13:20:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="kg8Mz3R/"
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="W+hZ6L9g"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60366267B9B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4052D5C6B
 	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 13:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753363213; cv=none; b=CBQrnbMkIoQjeAJmJqz7terGNNqiLbU0/sJhOu9ypn4PpW96qs6qNVw4C6Mjuw3s53E201EJPpWx9ScpzCc6107fpLGNFZXhzmx/89Rj2LBFJRO3MoIPZBvw/g6G0YqdUByr+qcd1C5FFbWJ/AkHFMcspugN/ngebMziVce2BeU=
+	t=1753363214; cv=none; b=todLqxRN5P3jsuR9YGbK6Vv+UZ4BVlK1n2y/HdGyk0zy73+V9gmIPuAH1jIwGYWH1RBAZqBy0WXAtJNaVPubKRpreOZHC/1xuy/hAXv7CFFWpvUeKA+RT0wyzI6FEoJUn+UgQb6aSafC2sZ8PkJT0akBPaTLCWM3V05FkkGpu0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753363213; c=relaxed/simple;
-	bh=oG/DsAwFDCTbp0l2B3usokGhizVfBRXogzvqsy+9VJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BmuN+lxVpEDHhxcMuuOhcqQSHtDqk2VesBsxYyF7goNRm/XIQDY4LqbDN9siJDpg+L5eltKh7a/DYJk4j48Dv36qJaLr/RtE6TPhrI35ejc6OoH0C2EUc+bEK4j2KRbhrLyzjycIO14eW8ftQEH4EBWp+LRDZZPmsgmoOtHst2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=kg8Mz3R/; arc=none smtp.client-ip=95.143.211.150
+	s=arc-20240116; t=1753363214; c=relaxed/simple;
+	bh=Z0aFehqnkn/IRx6YFwa9K1TmfJEq1gkVqb1ojLacLpg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Y/EkW4qA8nk1k8lYPKWwvBaupLOA+uujvmALOnp0LeI4NkgfLdi00QPjds7Z/J62Sk1Ckxmi00frfX80dMGkFPUpl1dz54JoMVBelcOpGt5g5EOHQRIhEsMWMtNLxOhtYxgUx+5Q8pG4+ejnGbXnu6X8LuK7c2F4xcaiqFG+Efw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=W+hZ6L9g; arc=none smtp.client-ip=95.143.211.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
 From: Konstantin Andreev <andreev@swemel.ru>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-	t=1753362619;
+	t=1753362620;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0Xox2g9UldDiSOWvjLLVt7vJF9+PobGEqyMI12P0Ot4=;
-	b=kg8Mz3R/CCTf0Vjus5ZXDn/Aa+ews9JsyqxKxFR0dbqv0WOo9A9lDwq1t6KQPbHOWCSvrS
-	1rAQjzQ3MgdC88QYFTKo43hS84xExcYUzU9fJ+znW/e8WRgfeHHone1Da1ZWi0uc+Ixsun
-	boohuQjRWv6bnDCa52HLrgFp13XLLZ8=
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DrXgsJcMXOWmFZpWwi0USmu3kREI0JtaAsWz2x2CqaI=;
+	b=W+hZ6L9ggbGuFGe7ioO7pwvua5FmgqBlC+JBUsi94CzTUJTNmwGL+GiuhGsewBxms7jpoR
+	Ve96wKy8Om1mKaBUa4ji2V/29CI01n1EwrV1oqGsZ4KTynUViTJjHjduxScItCZIYUlc4W
+	V4Kee5p60/rDtYNZ6rONREmxqYxZMb8=
 To: casey@schaufler-ca.com
 Cc: linux-security-module@vger.kernel.org
-Subject: [PATCH 00/19] smack: clean up xattr handling
-Date: Thu, 24 Jul 2025 16:09:33 +0300
-Message-ID: <cover.1753356770.git.andreev@swemel.ru>
+Subject: [PATCH 01/19] smack: fix bug: changing Smack xattrs requires cap_sys_admin
+Date: Thu, 24 Jul 2025 16:09:34 +0300
+Message-ID: <19c4b78c9b2840663b5d46417ee06181cfca8d06.1753356770.git.andreev@swemel.ru>
+In-Reply-To: <cover.1753356770.git.andreev@swemel.ru>
+References: <cover.1753356770.git.andreev@swemel.ru>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A set of minor bug fixes and optimizations in Smack xattr handling.
-Logically independent, but with the code dependencies.
+[1] introduced a new LSM hook, inode_xattr_skipcap.
+This hook is intended to identify security xattrs
+for which the LSM takes responsibility for access control.
 
-The patch set applies on top of:
-https://github.com/cschaufler/smack-next/commits/next
-commit 6ddd169d0288
+However, the Smack implementation, smack_inode_xattr_skipcap(),
+has never worked as intended. It mistakenly does not recognize
+the security.SMACK64* xattrs it owns.
 
-Konstantin Andreev (19):
-  smack: fix bug: changing Smack xattrs requires cap_sys_admin
-  smack: fix bug: changing Smack xattrs requires cap_mac_override
-  smack: fix bug: setting label-containing xattrs silently ignores input garbage
-  smack: stop polling other LSMs & VFS to getxattr() unsupported SMACK64IPIN/OUT
-  smack: restrict getxattr() SMACK64TRANSMUTE to directories
-  smack: fix bug: getxattr() returns invalid SMACK64EXEC/MMAP
-  smack: deduplicate task label validation
-  smack: smack_inode_setsecurity: prevent setting SMACK64EXEC/MMAP in other LSMs
-  smack: smack_inode_setsecurity: prevent setting SMACK64IPIN/OUT in other LSMs
-  smack: fix bug: smack_inode_setsecurity() imports alien xattrs as labels
-  smack: fix bug: smack_inode_setsecurity() false EINVAL for alien xattrs
-  smack: restrict setxattr() SMACK64IPIN/IPOUT to sockets
-  smack: restrict setxattr() SMACK64EXEC/MMAP to regular files
-  smack: return EOPNOTSUPP for setxattr() unsupported SMACK64(TRANSMUTE)
-  smack: smack_inode_setsecurity(): skip checks for SMACK64TRANSMUTE
-  smack: smack_inode_notifysecctx(): reject invalid labels
-  smack: smack_inode_post_setxattr(): find label instead of import
-  smack: smack_inode_setsecurity(): find label instead of import
-  smack: deduplicate strcmp(name, XATTR_{,NAME_}SMACK*)
+As a result, Smack does not inform the common security layer
+(security/security.c) that Smack is responsible for
+security.SMACK64* xattrs. Consequently, the generic access
+control functions (cap_inode_removexattr, cap_inode_setxattr)
+are invoked, and they require cap_sys_admin to be effective.
 
- Documentation/admin-guide/LSM/Smack.rst |   3 +-
- security/smack/smack.h                  |   2 +
- security/smack/smack_access.c           |  22 +-
- security/smack/smack_lsm.c              | 492 +++++++++++++++---------
- 4 files changed, 324 insertions(+), 195 deletions(-)
+This change corrects smack_inode_xattr_skipcap(),
+allowing Smack xattrs to skip cap_inode_*xattr() calls.
 
+[1] 2024-05-02, Paul Moore
+Fixes: 61df7b828204 ("lsm: fixup the inode xattr capability handling")
+Link: https://lore.kernel.org/linux-security-module/20240503005850.466144-2-paul@paul-moore.com/
+
+Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
+---
+ security/smack/smack_lsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index adf1c542d213..42fdac05d32d 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -1312,7 +1312,7 @@ static int smack_inode_getattr(const struct path *path)
+  */
+ static int smack_inode_xattr_skipcap(const char *name)
+ {
+-	if (strncmp(name, XATTR_SMACK_SUFFIX, strlen(XATTR_SMACK_SUFFIX)))
++	if (strncmp(name, XATTR_NAME_SMACK, sizeof(XATTR_NAME_SMACK) - 1))
+ 		return 0;
+ 
+ 	if (strcmp(name, XATTR_NAME_SMACK) == 0 ||
 -- 
 2.43.0
 
