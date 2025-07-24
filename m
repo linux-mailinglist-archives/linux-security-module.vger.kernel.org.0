@@ -1,52 +1,52 @@
-Return-Path: <linux-security-module+bounces-11199-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11196-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58203B10AF9
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:10:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5461BB10AFC
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:10:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4905EAE32D9
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:10:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01C3D7B3415
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:09:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D3D2D63F1;
-	Thu, 24 Jul 2025 13:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE4C169AE6;
+	Thu, 24 Jul 2025 13:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="pQPIVRj1"
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="jrLh1V4s"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58CF2D4B7F
-	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 13:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBB12D541E
+	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 13:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753362634; cv=none; b=XoNGRIzBF1Lw0rQ+GgazIQm439BPlvZR5/m+qF5BCciA3FxNcsCqX/PbiWevew/venDnUKjvOdQmSbrLg9fWStitsV76EDl7xMnOGEr+uNxQXxTRLh4JiVj5KebPDIbFZzGPAcp4UvTafJkG+sj/fl4l3PFoKk0m+0qy3G1NSAc=
+	t=1753362633; cv=none; b=QSAZADAeDTAocR3WQB7BlcS0Kxps4KSzzPJeb7vIeu0xZ4sBDDQhxq+3801Iz3PD6Oqer7l1tIc4/b6SALAc0WPeHn4G7L68fwCV20zMDYDHQ1SpUrF1ydhs5L07PjUzpA+XZeOpQlQBYktil9AAjzSIsEn53FDXqZyISmlD9TQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753362634; c=relaxed/simple;
-	bh=/OIHc13IayAjdk4tsOsc5S9rlc1kp1tHAm6aoj591/k=;
+	s=arc-20240116; t=1753362633; c=relaxed/simple;
+	bh=hlWdOzi5wzaLWjpUOQ3Eahe+iFYLiZCAV8O8I0bP0Gw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PN6Ik2YjegMZ+lthABF3lldHGuXupefqkj7h56NuF47Ca2Bfp1Fjh49ucO6X4pWEHZ2+S/oHRgZ5+JH6IlhcvxadS8NTTJTzLDuCEjnzq+W2eyoOOsPDiNIX0dKUArW4AmcLtSVvMn6w19dGuoMqg5BaB/CnDrEpv+/s4+wrR1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=pQPIVRj1; arc=none smtp.client-ip=95.143.211.150
+	 MIME-Version; b=Wq2Jq3y6syX+gcQMxvxXKcU3Fmi1mVOdz9JEpQd2GnRWkrvVs9I/c/ku5oZHhVSoRIu53GhhXHj9swwUktWVbguqwKkRCjLhQ2i3aXMKzsCPTS5bSSIg4KRMdnZM+jjmbgmbp3bVVLJxTacDuLY7MI7m+HXyicLVrID392Dx6ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=jrLh1V4s; arc=none smtp.client-ip=95.143.211.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
 From: Konstantin Andreev <andreev@swemel.ru>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-	t=1753362622;
+	t=1753362623;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=skIkhH1NKxeiIAV7iO9xLr+DahEScv+8+BgeCQlij2k=;
-	b=pQPIVRj1kOlATWkuS9Z+0LDxOL8YV4nWSFphXSA2bTMBIm7DEhYnh0VLyIlqj/nwAPrVJ2
-	mH4uSLtmEb9XKqTpVPZE2C47/zPjW9uLac+bA6Cwnok5QWMjkaudxf+geJZBp6uliua9Bo
-	qQD2ssjY7iPubh7f+3WpYZsHZKYrxQY=
+	bh=fq3VOJ1dJreCiLx0hahE6thxJnrKBL5E3rFCrZ8p+W4=;
+	b=jrLh1V4sD1q6kt9MctPdn3CdSqj2+bUuNnBdLDjjXoZHu1+vOuY1+tyW1O+0K98/R4DEi6
+	QTdo0Vo4YKU5TaZoOu2rhfQ3M3jLnYbpEW1h43n+VWNYEVRu6Bc4WzbQE4/9OP0rrR6+Kn
+	NQZFPdf9mDQV5M2vg2AE3TZaz9BKrkQ=
 To: casey@schaufler-ca.com
 Cc: linux-security-module@vger.kernel.org
-Subject: [PATCH 10/19] smack: fix bug: smack_inode_setsecurity() imports alien xattrs as labels
-Date: Thu, 24 Jul 2025 16:09:43 +0300
-Message-ID: <994ee5c88dd704741d45f71792924730444cb943.1753356770.git.andreev@swemel.ru>
+Subject: [PATCH 11/19] smack: fix bug: smack_inode_setsecurity() false EINVAL for alien xattrs
+Date: Thu, 24 Jul 2025 16:09:44 +0300
+Message-ID: <9e89e63e2d419aba71b11100ababb36affce9da0.1753356770.git.andreev@swemel.ru>
 In-Reply-To: <cover.1753356770.git.andreev@swemel.ru>
 References: <cover.1753356770.git.andreev@swemel.ru>
 Precedence: bulk
@@ -57,34 +57,38 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, smack_inode_setsecurity() calls smk_import_entry()
-to import the xattr value as a label before checking whether
-the xattr is actually a Smack xattr.
+Currently, smack_inode_setsecurity() checks
+the validity of the xattr value before checking
+whether the xattr is actually a Smack xattr.
 
-For example, attempting to set security.foo=bar on a socket
-fails as expected, but the value 'bar' is still imported
-into Smack as a label.
+This was correct when only one LSM
+could be active in the system.
+Since [1] this is no longer incorrect.
 
-This change ensures that the xattr is recognized
-as a Smack xattr before importing its value.
+When Smack mistakenly EINVALidates a non-Smack xattr,
+Smack may prevent owner LSM from seeing the xattr.
 
-2008-02-04 Casey Schaufler
-Fixes: e114e473771c ("Smack: Simplified Mandatory Access Control Kernel")
+The change ensures that the xattr is recognized
+as a Smack xattr before looking into the value.
+
+[1] 2015-05-02 Casey Schaufler
+Fixes: b1d9e6b0646d ("LSM: Switch to lists of hooks")
 
 Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
 ---
- security/smack/smack_lsm.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ security/smack/smack_lsm.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
 diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 7108696083d8..6f74be82ae45 100644
+index 6f74be82ae45..672be8b47821 100644
 --- a/security/smack/smack_lsm.c
 +++ b/security/smack/smack_lsm.c
-@@ -2991,6 +2991,14 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
- 		return 0;
- 	}
+@@ -2979,6 +2979,15 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
+ 	struct socket *sock;
+ 	int rc = 0;
  
 +	if (!(strcmp(name, XATTR_SMACK_SUFFIX) == 0 ||
++	      strcmp(name, XATTR_SMACK_TRANSMUTE) == 0 ||
 +	      strcmp(name, XATTR_SMACK_EXEC) == 0 ||
 +	      strcmp(name, XATTR_SMACK_MMAP) == 0 ||
 +	      strcmp(name, XATTR_SMACK_IPIN) == 0 ||
@@ -92,20 +96,24 @@ index 7108696083d8..6f74be82ae45 100644
 +	))
 +		return -EOPNOTSUPP;
 +
+ 	if (value == NULL || size > SMK_LONGLABEL || size == 0)
+ 		return -EINVAL;
+ 
+@@ -2991,14 +3000,6 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
+ 		return 0;
+ 	}
+ 
+-	if (!(strcmp(name, XATTR_SMACK_SUFFIX) == 0 ||
+-	      strcmp(name, XATTR_SMACK_EXEC) == 0 ||
+-	      strcmp(name, XATTR_SMACK_MMAP) == 0 ||
+-	      strcmp(name, XATTR_SMACK_IPIN) == 0 ||
+-	      strcmp(name, XATTR_SMACK_IPOUT) == 0
+-	))
+-		return -EOPNOTSUPP;
+-
  	skp = smk_import_entry(value, size);
  	if (IS_ERR(skp))
  		return PTR_ERR(skp);
-@@ -3004,10 +3012,6 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
- 	if (strcmp(name, XATTR_SMACK_EXEC) == 0 ||
- 	    strcmp(name, XATTR_SMACK_MMAP) == 0)
- 		return -ENODATA;
--
--	if (!(strcmp(name, XATTR_SMACK_IPIN) == 0 ||
--	      strcmp(name, XATTR_SMACK_IPOUT) == 0))
--		return -EOPNOTSUPP;
- 	/*
- 	 * The rest of the Smack xattrs are only on sockets.
- 	 */
 -- 
 2.43.0
 
