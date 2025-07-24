@@ -1,34 +1,34 @@
-Return-Path: <linux-security-module+bounces-11197-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11205-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69319B10AF8
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:10:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D05B10B05
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:10:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54E34AE32AD
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:10:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E44157B3855
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C752D541E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3E52D5432;
 	Thu, 24 Jul 2025 13:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="ur8rd4c5"
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="XKCBXVte"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A0C2D541C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59A92D5419
 	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 13:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753362634; cv=none; b=YfGOAUJDs3YEvsn2F/I2WSnGegxOI3SWb3mjdb/8/Tu+NlJcH5f5BvVOiGHcfpesVgqSXMaxAHflTJgnAUblDaxzkQPMI6jdycnGMhPGpYBrhMi2sG6jRzCFOJ2pGLcZlrh+EFaXAspFnYUVEHpkLw8ePDLExtk3RdMeaJB9nBY=
+	t=1753362634; cv=none; b=QCNBZt9lhpvdj6DNL1hQWx6VEremvFzL3hYz1tT0eZfpZKz4hpj6jQuHX+jyjRlLPRd8SisJfF/O+0usRyvKWbDSXTsmasZwE26lYgUdT9fgrfm3l7asDXFHnnBLAryOVXEoWafV+dqM0+B0hqME1zb5MEvFGzaFANuOen4YtXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753362634; c=relaxed/simple;
-	bh=/tJO0L6mpuW6h9/1qgw1iJNUfSMrCrTFhpR1+5++VNA=;
+	bh=vWjBzb4s0yuEkOn1tDGPPQB0CvT5TouAtgZASY6IAxE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qC49GkJjry6Ho9WT+M5jLx/Fe9n85IXRzexk8CM2o4FkLBXI6HfiXb2/90c1/eBGFGm8qwwBVDu+Pwusg0dZVif1vdgT3BtRtE3rNoMFwJIGzcNB6W5N+WSFqrsY0Ffpn5zsHJCn3VxZNwwJtqKp0ULsmjEY/+keCg6/qCjVz0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=ur8rd4c5; arc=none smtp.client-ip=95.143.211.150
+	 MIME-Version; b=QAWVwnup4rK5nRQMw0VrRjkDuO2flcP5n9fB63jRD6n4csf+U5RYX05GULWT4x4tHY6REmyQQwUkvX/8tsOIi4XTyA4/0vN36k9Fma0fuf3i3aAkp8oZrZXWrGbYLyizbWtEbhEpMTxwyIP5jHIAVpNzfjhGo94RKcJ944ByuXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=XKCBXVte; arc=none smtp.client-ip=95.143.211.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
 From: Konstantin Andreev <andreev@swemel.ru>
@@ -38,15 +38,15 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=M9R3JJyimrIE2MMqTk5tXmLGCnU/W+BhAoCx3a6hkv8=;
-	b=ur8rd4c5f7BAFrx7vsKkAiy3NYrfcKeMfoJqD9HD69AXbVGiH7uZu7kWrZ4yKwMBGf966y
-	Jw2XNlvbLxF43qXywsGPa53fnE+utxHvmelHWvDqMFfxVpDoyfknF0O+g7r3rNDjJRXjrL
-	U3+qK0Ozd23v0Itv7IPyBKSJdey9Pgo=
+	bh=PFg82fKn0ZDDjUPcUjdZL1UpItuGZcfB/qqD5z6BcVo=;
+	b=XKCBXVtep11iRQFpQZXXuk/+ecyi6PaQLLxdvcehhLwjG1v4frrpHoadXuMptCOcLHfyQq
+	oCIA6Drjiz38SNLj+osXHIbdP3rbcvVXlwG77/RuWM/YPlXtxDNwlOK54XfxlwRxlr8xSJ
+	49EtQjkP70GmL59+uodXWOOUy9Iat30=
 To: casey@schaufler-ca.com
 Cc: linux-security-module@vger.kernel.org
-Subject: [PATCH 08/19] smack: smack_inode_setsecurity: prevent setting SMACK64EXEC/MMAP in other LSMs
-Date: Thu, 24 Jul 2025 16:09:41 +0300
-Message-ID: <e453fc199b8fd061a57d450abff1e5d353e1869d.1753356770.git.andreev@swemel.ru>
+Subject: [PATCH 09/19] smack: smack_inode_setsecurity: prevent setting SMACK64IPIN/OUT in other LSMs
+Date: Thu, 24 Jul 2025 16:09:42 +0300
+Message-ID: <a0d039a407a8164a2025847f5b00fd5f3c2e5def.1753356770.git.andreev@swemel.ru>
 In-Reply-To: <cover.1753356770.git.andreev@swemel.ru>
 References: <cover.1753356770.git.andreev@swemel.ru>
 Precedence: bulk
@@ -57,24 +57,35 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-smack_inode_setsecurity() does not support setting
-the SMACK64EXEC and SMACK64MMAP xattrs, and returns
--EOPNOTSUPP if an attempt is made to set them.
+smack_inode_setsecurity() equally returns -EOPNOTSUPP
+either the inode does not come from socket (sockfs
+inode) or the xattr is a security.NOT-SMACK-XATTR
 
-However, since [1], the -EOPNOTSUPP return value
-from the inode_setsecurity LSM hook
-has been interpreted by security_inode_setsecurity()
+This did make no difference until [1]. Since [1]
+-EOPNOTSUPP is reserved by security_inode_setsecurity()
 as a signal to "continue polling other LSMs".
 
-As a result, security_inode_setsecurity() proceeds
-to query other LSMs and attempts to store the
-SMACK64EXEC/MMAP xattrs there.
+When xattr is SMACK64IPIN or SMACK64IPOUT and inode
+is not from socket then return code is -EOPNOTSUPP,
+and the security_inode_setsecurity() proceeds to query
+other LSMs and attempts to store the xattr there.
 
 Passing a Smack property to other LSMs is incorrect,
 as Smack owns these xattrs.
 
-Returning -ENODATA instead of -EOPNOTSUPP is not ideal,
-but it makes sense and prevents fallback to other LSMs.
+This change returns -ENODATA if inode does not come
+from sockfs and the xattr is SMACK64IPIN/OUT.
+This causes change from
+
+  # setfattr -n security.SMACK64IPIN -v foo /sys/kernel/debug/sleep_time
+  setfattr: /sys/kernel/debug/sleep_time: Operation not supported
+
+to
+
+  # setfattr -n security.SMACK64IPIN -v foo /sys/kernel/debug/sleep_time
+  setfattr: /sys/kernel/debug/sleep_time: No such attribute
+
+not ideal, but it makes sense and prevents fallback to other LSMs.
 
 [1] 2016-05-31 Casey Schaufler
 commit 2885c1e3e0c2 ("LSM: Fix for security_inode_getsecurity
@@ -83,24 +94,53 @@ Link: https://lore.kernel.org/lkml/d8a4d26e-46c8-975d-d075-a3848130981c@schaufle
 
 Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
 ---
- security/smack/smack_lsm.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ security/smack/smack_lsm.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 39e2e7b5bc3c..00d4b5bf1056 100644
+index 00d4b5bf1056..7108696083d8 100644
 --- a/security/smack/smack_lsm.c
 +++ b/security/smack/smack_lsm.c
-@@ -3000,6 +3000,10 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
- 		nsp->smk_flags |= SMK_INODE_INSTANT;
- 		return 0;
- 	}
+@@ -3004,21 +3004,25 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
+ 	if (strcmp(name, XATTR_SMACK_EXEC) == 0 ||
+ 	    strcmp(name, XATTR_SMACK_MMAP) == 0)
+ 		return -ENODATA;
 +
-+	if (strcmp(name, XATTR_SMACK_EXEC) == 0 ||
-+	    strcmp(name, XATTR_SMACK_MMAP) == 0)
-+		return -ENODATA;
++	if (!(strcmp(name, XATTR_SMACK_IPIN) == 0 ||
++	      strcmp(name, XATTR_SMACK_IPOUT) == 0))
++		return -EOPNOTSUPP;
  	/*
  	 * The rest of the Smack xattrs are only on sockets.
  	 */
+ 	if (inode->i_sb->s_magic != SOCKFS_MAGIC)
+-		return -EOPNOTSUPP;
++		return -ENODATA;
+ 
+ 	sock = SOCKET_I(inode);
+-	if (sock == NULL || sock->sk == NULL)
+-		return -EOPNOTSUPP;
++	if (sock->sk == NULL)
++		return -ENODATA;
+ 
+ 	ssp = smack_sock(sock->sk);
+ 
+ 	if (strcmp(name, XATTR_SMACK_IPIN) == 0)
+ 		ssp->smk_in = skp;
+-	else if (strcmp(name, XATTR_SMACK_IPOUT) == 0) {
++	else {
+ 		ssp->smk_out = skp;
+ 		if (sock->sk->sk_family == PF_INET) {
+ 			rc = smack_netlbl_add(sock->sk);
+@@ -3027,8 +3031,7 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
+ 					"Smack: \"%s\" netlbl error %d.\n",
+ 					__func__, -rc);
+ 		}
+-	} else
+-		return -EOPNOTSUPP;
++	}
+ 
+ #ifdef SMACK_IPV6_PORT_LABELING
+ 	if (sock->sk->sk_family == PF_INET6)
 -- 
 2.43.0
 
