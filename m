@@ -1,224 +1,215 @@
-Return-Path: <linux-security-module+bounces-11218-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11222-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 099C3B10DFF
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 16:49:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3DC9B10E57
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 17:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1742189AA1C
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 14:49:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D033518922E0
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:10:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9B9428D83A;
-	Thu, 24 Jul 2025 14:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D1D255240;
+	Thu, 24 Jul 2025 15:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WLCQBMLF"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="DSsSP/V8"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFAF263C7F
-	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 14:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD6D2D0C81
+	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 15:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753368570; cv=none; b=EganzGvinZsf2PUGNhXA9P+zaDvhX0qGGymqFik37T5LDVdlIzRPraR6z1mzmiMTI6eIg/cPJhF8HE1xTfICLh8wWablsPARcRbggt4pzoFCkQdnmXMrBpyBzmzN/MDwTSju/ol8s/rOQk3sPckMtLBDr8TK1sBIpe/el/sJj+4=
+	t=1753369787; cv=none; b=AntJ/oZiM00HK4cuen+ZOiPy3NIrsHWXsk6UfQ30nI0qC8rBhT/TbO6BVrj1hyfZ8nNCfo9nlXzmZLvrC1vUzHLqdx889DGodezwKg4mSdsUT6cXMHitGOb7nzPeNX0hyjTCEx4gCQjNTYGbo4AnGMmNy3pV0l90Eov6VCX0PyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753368570; c=relaxed/simple;
-	bh=YmARGcz9wv3OsEhUy+7NgjOpWp1jlbhwdLoF2F5RrdM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bbRcFb/xu9SHlg8xq/+3SdqiQWgacaPWPIG5Dplq+rpPxHJrwWSQVKIJJqh+pCWS5B5nWeYm01vS01fg4tXM9EJBhb7WFvNU63qV7c4d6lG85lDWvtqqxme8Qgm/O5IqTbSiln7PsOKA0X1yF3pUKRSwZmlxtlpwqLVarhiPuH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--gnoack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WLCQBMLF; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gnoack.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-45611579300so7518905e9.0
-        for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 07:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1753368567; x=1753973367; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YRbxqspNvpyg2zYT0onkzpmjQFDQ7HfOK5gXqw/PXt4=;
-        b=WLCQBMLFBCdpg6kLuL5JSZWCDy+t9XMnLugsmsCIYOAyVbuw3HqUTTlu6GaS9RKtc9
-         5RfuIeLQhWZN11HwSptXN0I3uiEqAFcWPp/oHmwc3fqzQVYmKULBHcZY0+9F4th/w9pJ
-         SQW0++Owog5zGuwcwW9J3z50Ya2NtbE8q5Q+Fo+f8TB9lMGDIgY2FnFRkjkud701O2zF
-         pi54V+DKXkc83LxIGNaGIHF7+xSr5fLaKYpkqZK0cAXeDn+R2eOCMlEH9ATtlXb33ia+
-         yp43nS6mUxxSnfUQVKb0eV0d/E3ovkL51mkZFjhsMkkXqvD7ghOXoFot3dAMj/6xWUut
-         4tVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753368567; x=1753973367;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YRbxqspNvpyg2zYT0onkzpmjQFDQ7HfOK5gXqw/PXt4=;
-        b=b6+lKoIAKzWxgYKzF/CFu6MAenOWfn9nvDyJ1vuv97Hb1ZbMAcOqmfwEOcCV5V6DhV
-         Un0h0HVNR5nFFqj2/yx7cdJEsS4oFSOdxDzC0Os+ytPPx4yC84cvHw9CfbbbuBF+1eGL
-         ryTpg3nB7BnsAn1+PEiyZFnYCA4hHY9NGkDwlCwglQ+afzjkXnyGXB+hCJi7C/8o6WHp
-         mnHnd4ybYh5HQowiLlqjGN6S2J+KkZ2e9yfsQrlXXp6Db2fTIl2UlFGoxCdbYZ11H3/b
-         AL8QsGxhMIEhxCeLmyD+ZxtJ60/USYLEwpUUBYKcBnMUz1SmTUFdvTw7lEXdBNYLVDXt
-         v5/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXf25sgKiBQZQ/KnoCRrOVN7atpN+V0zmdziN4ounAAYIJCtFJPh4TDYSdNmEw5ijLgSJ7KCA5TrqRJb3hLCdViUn1KYR0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7tt88H7mjtupKGGhw1Kcbi8qqmvvPM+RaHPGFhQekqqRwcybK
-	p0w3456IN1Bzzzb72kv4Jnz1TpitLckufm7IHZZ6QR9wdt1Xl+aU4m4ZIy/ks2az+5k6G1FZ2M3
-	HSCogDw==
-X-Google-Smtp-Source: AGHT+IFC95NWFAcMCRVE1tz1A3E6NzEiALzu//+2BuWa9o5yv3qmRbvmfvt5gtpiIp0bCUJdV8JgYzWT4ZQ=
-X-Received: from wmsr8.prod.google.com ([2002:a05:600c:8b08:b0:450:def3:7fc6])
- (user=gnoack job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:1785:b0:3a4:fbd9:58e6
- with SMTP id ffacd0b85a97d-3b768f01e5bmr5320462f8f.50.1753368567238; Thu, 24
- Jul 2025 07:49:27 -0700 (PDT)
-Date: Thu, 24 Jul 2025 16:49:24 +0200
-In-Reply-To: <20250723.vouso1Kievao@digikod.net>
+	s=arc-20240116; t=1753369787; c=relaxed/simple;
+	bh=YYqsTuNHQfr2r328rpb2mLMHlYe22eUtT1NxSPbiFk4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MHmcNvER6tW79IkQ+1M3IKCJpVe7iEyYlPv9xv7Jz8m+VpnzaLlJQxWaS2agr3emPWqFkSoECzFrtqLCkFl6XoqerzuVnvrBnxpCN6UWiIaAyTfnOvHyoiJP5ev45xZRcNAt3XWEg4LgIzU2w2iLOyGycG3P32R7re29NZ3552c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=DSsSP/V8; arc=none smtp.client-ip=66.163.187.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1753369785; bh=GKpU8Lr4KERCPJ/YI1WntB9JYltkrcxN3ijErftnLY0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=DSsSP/V8stnPeGT0bavzIgOmbjgRZA5Xwlb6LHM+Z9FDM/XOkiGvA78RSn5S3uGZDqqyiKvBIEtL2c1C9FvP/laifvDe3b3FgcdfIT4Jw55NmBnpZhWoLlOFCHuFpabgVVeVo6RUNeT9ihJj0/ohRpeuppOGZGWlatAwn6IuBZMUo+FMgELt/wVVMdjw+SqsXw2dta6Kqc+Jy5M0hkHd2tCliZFWOhIT0bbz2kIsOWDMYUgcrHSQWXhKA4fRMD9sccsYVVUP5759wo4AjZkg7nF+w5GtIv0ANQFsPKzPahkQUHjOapYJC9eVP/tsQxepYREODCQzCKgit3VdGdTqJA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1753369785; bh=p2CDxWLq/ff+QpcRwmtqffJTgvrYQQ+8njmD8u225OZ=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=BYEu4rgYo83w0y80rUfcu5rFMFmdYE2p+yzQ4Ir4GE8uiyGkNh9+CDlYr2k6of7Aue+jgsgEX+VkVouhISCbm8S/o7knCg8Pmv7Xi/CRXp+JJqOMRhxENJZNk1NrMApC3f8rHNerT6sLKjPHNtzKxZxIPCesbDg5IzpIzdgjG1nwstOVesTgbfUcp0K4UmP9Oe0tVnuXAuNxW0+vkbMxWYzCUxHOO596YfktmO2mlI4cvvgKEtmxF+e0mMpJNDftG0mMEBrPrWXft32gcw+6P4aIEqSG5IC3wcOFDkhWSs9JrDviLf1yrbVGbGlnD4Jvax3T6FKvpJ3H9Dei5TR2KA==
+X-YMail-OSG: _aT.iiwVM1lzMjrvAbKDot2bqC6poXm9L1u4l0nm7BwygktqPyRMpVPfxORCGXZ
+ Ty2hMLHdhXKMmWmPKSV21aH7hkO3JypqXFzlEFYiyK0qbYLRbymDXX0gA4_mfLebriIuR1oCvg7Q
+ ..xqDouRDmMZnglgo3zMV2jDj3OjniEWZPaqV9R.GDqrsUqbUtkndfySw6qfMkj7PRsrF4gW0mog
+ Vf_Gt7cwQRGHxTad7bAOoidBfJAMmaOuOUzRPfv8jg2ndTE4i76ppYrACzn5d3fZDW7xqdn9GRor
+ rLki59Hh2lm9lrZihRgECFcgOpC.IQgNEttDkJp30aSMpeQm88i_N.Lpy2CYVWZaOdvVIH9hc8q7
+ XINu9OMak0MbouwcupT.k.LDEG0U5NeiYdhl3brVVc626Yx0cJqdwpnVuxdaAp01WiGFIdv5wTrS
+ iOxlloWTi5eRvJdDqePpGUyS_qe0GvBdhTdHQD5mYGgTgb_OFYOUVY7j6uasaaJJ_vt9wVXqfQjR
+ VsCPTI_8p.W.4Gpgjp_9Hrqpg4hhAJrEm.6lnKGLoIzrHX6_O08r8wtzHr3c9yHM7mm0Qat9dlc6
+ Bx9jMuQ2XTc07USli9E2is9mobvnRUHFInR0f6dlf05sfR4wD.w2bttfgURHNL3U6cYR2nMoUttU
+ SIjFqc5Y.C.Kow2BbBzksnjC56m3seg2sKaYx5i70CwS5agUs9d5sc3rpJv7Xvr5wDWI.6I_kgjM
+ 9fR7JkVH1WtU6AhyhAbY0Z37vfqO.K46F4LWJ_I8XKifkwTSDvCPCzFDn2avaPo4uODYw3fiLfy_
+ zlR2AydrcAwwmZUHK6Pqmz0DFOmMgU4.oJ2RtE_tTGXYVjojbpWFcUjJqZSFt6h0FJATR5aarIyB
+ tMwUcwSwFGzDaluZXUJ3ZypS2OCk4uzt_aJcNQzlXI7XmKqNzx26tkxE9ACwrFeIY7n._gODK4IV
+ f9mZGk55E3S3dGknk9fO755_6htEU2TjLTBX_oBRQYRoGPdwrB8BJzGG_7Sgety.zmVFYuWiO5Uj
+ t2y6JF7MIZbxxCOWa0_ME3oQ4LoHbg.WzH78O99B9O78lvxWLC2ymQ3M2q44XYjR6HDzHgHT7dl7
+ sa5QinT90Psbn9_okRwgMBO8M8rS2_7DNqZmJmk5roz_lhdT_RfunBZA3IAGfkV8h5ALm6Rjk5Df
+ sbgkB4l2DLd.mdHbRTX_WyLdmQ.T5qSGrXLikbCRq705V_iz1QkkHfdAxxJXSmgINI35rM6mm9Bz
+ GTHGRaVzlgiCbpJnnMx7kMPwfsLfrtJT0KdFXkTpOj2c87yu7OvXTfnYKvuUATZYXHHwKy5Dyq1Q
+ CnbE5kX72.qRLhd1IP7AGX6maHBXsUerW5jXYggImLePbLTvQnWiK.oEs0DyS9Tv2xZbJgIPE7Mh
+ oLpCijPvPMda7YZbX_RivBMGFxm52XpUwhMD_3EiHp4svdoi_uUzuIAzszNAKfECft.ct.MQfSyX
+ ATRQYN7j9wUxKwPmbBaEKZMJH0a_lfJ5DJbkx70GubPvxK8xHMPXz7aV723X0lhkRZWiD0Xam.ml
+ gu9G3a6kwH1.JWfOtuWnKE9Hid1D.7.SAxFJYH83oAHJOnW2Qq6QOXlmQRsuTp416I9IQ.d8X0Oz
+ HjXQqhH6d0efr1FjEyHBHZAgF68qpqiH2X1UsBz0CBMogMQZUM57QTYiRkBOGRel21ofgMW9VhIB
+ XF49drK8l.7Z01kpmE8RB5vmyrxrOXE36x3VUC3LyvCUPaAzdzIokJimk0XbLrrlG8QNjQT7gYo5
+ Po6zD1.XUUgCBe7EMFOsLE1hqmKr8goq9sgTc2JEVMcL0YPXcu15SgZkFwwO8zy5grXsVeodbvVo
+ rwWba1lXm6599Xa3.q0Qk.67DESqsuucygoEen5gR6pKjbYlCc9_lWtqRAhn8krrIc5GlzTwO.pW
+ agvUlt0ala5D_kPuIz6FNWCdxmYJ9W4hWq09gBH0.VLU.m5VCsI7odNuOmA8AC9BYe9ERmf1NcGS
+ KUCy7vvbWyVKJR0EG5y2eJe3ekAwsUVaC3JeAA4AcDE_yYxLjiZwBEV4L5rn5WnEctrOmNadgQXA
+ kf0VarpEzU5HGBr3RaNALt46fX.PLK_8QBg.c85S11jaGW3RPRE8yaEwmUH33hig0ZpVB87H2tJs
+ nl517gDDPtk_UXMIabfpv5DXjo5H9UXNDQQM2.t45GqmP11tpGbcrzz_SPunz_en4VixY4c5N9O4
+ Fr7S7rh6wKIyh35s1PiqnWDV6NbJjtfI59Vvl4egdaZFOXn29gThWGokDzX6A79so24.e6Pl_FcH
+ 9NQStrYUTqqI4cbxcBOaV2g--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 85d9168a-817e-4894-9f96-de24c0b4e419
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 24 Jul 2025 15:09:45 +0000
+Received: by hermes--production-gq1-74d64bb7d7-6nlps (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9e5599fdaa5f1b7062e67c44c27e5632;
+          Thu, 24 Jul 2025 14:49:27 +0000 (UTC)
+Message-ID: <161dfaa8-8273-4b15-8a26-abd1af2fb739@schaufler-ca.com>
+Date: Thu, 24 Jul 2025 07:49:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250719104204.545188-1-mic@digikod.net> <20250719104204.545188-3-mic@digikod.net>
- <18425339-1f4b-4d98-8400-1decef26eda7@maowtm.org> <20250723.vouso1Kievao@digikod.net>
-Message-ID: <aIJH9CoEKWNq0HwN@google.com>
-Subject: Re: [PATCH v3 2/4] landlock: Fix handling of disconnected directories
-From: "=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>
-To: "=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>
-Cc: Tingmao Wang <m@maowtm.org>, Jann Horn <jannh@google.com>, 
-	John Johansen <john.johansen@canonical.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Ben Scarlato <akhna@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Daniel Burgener <dburgener@linux.microsoft.com>, Jeff Xu <jeffxu@google.com>, 
-	NeilBrown <neil@brown.name>, Paul Moore <paul@paul-moore.com>, 
-	Ryan Sullivan <rysulliv@redhat.com>, Song Liu <song@kernel.org>, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 01/34] lsm: split the notifier code out into
+ lsm_notifier.c
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+ Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
+ Fan Wu <wufan@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+ Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+ Xiu Jianfeng <xiujianfeng@huawei.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20250721232142.77224-36-paul@paul-moore.com>
+ <20250721232142.77224-37-paul@paul-moore.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20250721232142.77224-37-paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.24187 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Wed, Jul 23, 2025 at 11:01:42PM +0200, Micka=C3=ABl Sala=C3=BCn wrote:
-> On Tue, Jul 22, 2025 at 07:04:02PM +0100, Tingmao Wang wrote:
-> > On the other hand, I'm still a bit uncertain about the domain check
-> > semantics.  While it would not cause a rename to be allowed if it is
-> > otherwise not allowed by any rules on or above the mountpoint, this get=
-s a
-> > bit weird if we have a situation where renames are allowed on the
-> > mountpoint or everywhere, but not read/writes, however read/writes are
-> > allowed directly on a file, but the dir containing that file gets
-> > disconnected so the sandboxed application can't read or write to it.
-> > (Maybe someone would set up such a policy where renames are allowed,
-> > expecting Landlock to always prevent renames where additional permissio=
-ns
-> > would be exposed?)
-> >=20
-> > In the above situation, if the file is then moved to a connected
-> > directory, it will become readable/writable again.
->=20
-> We can generalize this issue to not only the end file but any component
-> of the path: disconnected directories.  In fact, the main issue is the
-> potential inconsistency of access checks over time (e.g. between two
-> renames).  This could be exploited to bypass the security checks done
-> for FS_REFER.
->=20
-> I see two solutions:
->=20
-> 1. *Always* walk down to the IS_ROOT directory, and then jump to the
->    mount point.  This makes it possible to have consistent access checks
->    for renames and open/use.  The first downside is that that would
->    change the current behavior for bind mounts that could get more
->    access rights (if the policy explicitly sets rights for the hidden
->    directories).  The second downside is that we'll do more walk.
->=20
-> 2. Return -EACCES (or -ENOENT) for actions involving disconnected
->    directories, or renames of disconnected opened files.  This second
->    solution is simpler and safer but completely disables the use of
->    disconnected directories and the rename of disconnected files for
->    sandboxed processes.
->=20
-> It would be much better to be able to handle opened directories as
-> (object) capabilities, but that is not currently possible because of the
-> way paths are handled by the VFS and LSM hooks.
->=20
-> Tingmao, G=C3=BCnther, Jann, what do you think?
+On 7/21/2025 4:21 PM, Paul Moore wrote:
+> In an effort to decompose security/security.c somewhat to make it less
+> twisted and unwieldy, pull out the LSM notifier code into a new file
+> as it is fairly well self-contained.
+>
+> No code changes.
+>
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> Reviewed-by: John Johansen <john.johansen@canonical.com>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-I have to admit that so far, I still failed to wrap my head around the
-full patch set and its possible corner cases.  I hope I did not
-misunderstand things all too badly below:
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
-As far as I understand the proposed patch, we are "checkpointing" the
-intermediate results of the path walk at every mount point boundary,
-and in the case where we run into a disconnected directory in one of
-the nested mount points, we restore from the intermediate result at
-the previous mount point directory and skip to the next mount point.
-
-Visually speaking, if the layout is this (where ":" denotes a
-mountpoint boundary between the mountpoints MP1, MP2, MP3):
-
-                          dirfd
-                            |
-          :                 V         :
-	  :       ham <--- spam <--- eggs <--- x.txt
-	  :    (disconn.)             :
-          :                           :
-  / <--- foo <--- bar <--- baz        :
-          :                           :
-    MP1                 MP2                  MP3
-
-When a process holds a reference to the "spam" directory, which is now
-disconnected, and invokes openat(dirfd, "eggs/x.txt", ...), then we
-would:
-
-  * traverse x.txt
-  * traverse eggs (checkpointing the intermediate result) <-.
-  * traverse spam                                           |
-  * traverse ham                                            |
-  * discover that ham is disconnected:                      |
-     * restore the intermediate result from "eggs" ---------'
-     * continue the walk at foo
-  * end up at the root
-
-So effectively, since the results from "spam" and "ham" are discarded,
-we would traverse only the inodes in the outer and inner mountpoints
-MP1 and MP3, but effectively return a result that looks like we did
-not traverse MP2?
-
-Maybe (likely) I misread the code. :) It's not clear to me what the
-thinking behind this is.  Also, if there was another directory in
-between "spam" and "eggs" in MP2, wouldn't we be missing the access
-rights attached to this directory?
-
-
-Regarding the capability approach:
-
-I agree that a "capability" approach would be the better solution, but
-it seems infeasible with the existing LSM hooks at the moment.  I
-would be in favor of it though.
-
-To spell it out a bit more explicitly what that would mean in my mind:
-
-When a path is looked up relative to a dirfd, the path walk upwards
-would terminate at the dirfd and use previously calculated access
-rights stored in the associated struct file.  These access rights
-would be determined at the time of opening the dirfd, similar to how we
-are already storing the "truncate" access right today for regular
-files.
-
-(Remark: There might still be corner cases where we have to solve it
-the hard way, if someone uses ".." together with a dirfd-relative
-lookup.)
-
-I also looked at what it would take to change the LSM hooks to pass
-the directory that the lookup was done relative to, but it seems that
-this would have to be passed through a bunch of VFS callbacks as well,
-which seems like a larger change.  I would be curious whether that
-would be deemed an acceptable change.
-
-=E2=80=94G=C3=BCnther
-
-
-P.S. Related to relative directory lookups, there is some movement in
-the BSDs as well to use dirfds as capabilities, by adding a flag to
-open directories that enforces O_BENEATH on subsequent opens:
-
- * https://undeadly.org/cgi?action=3Darticle;sid=3D20250529080623
- * https://reviews.freebsd.org/D50371
-
-(both found via https://news.ycombinator.com/item?id=3D44575361)
-
-If a dirfd had such a flag, that would get rid of the corner case
-above.
+> ---
+>  security/Makefile       |  2 +-
+>  security/lsm_notifier.c | 31 +++++++++++++++++++++++++++++++
+>  security/security.c     | 23 -----------------------
+>  3 files changed, 32 insertions(+), 24 deletions(-)
+>  create mode 100644 security/lsm_notifier.c
+>
+> diff --git a/security/Makefile b/security/Makefile
+> index 22ff4c8bd8ce..14d87847bce8 100644
+> --- a/security/Makefile
+> +++ b/security/Makefile
+> @@ -11,7 +11,7 @@ obj-$(CONFIG_SECURITY) 			+= lsm_syscalls.o
+>  obj-$(CONFIG_MMU)			+= min_addr.o
+>  
+>  # Object file lists
+> -obj-$(CONFIG_SECURITY)			+= security.o
+> +obj-$(CONFIG_SECURITY)			+= security.o lsm_notifier.o
+>  obj-$(CONFIG_SECURITYFS)		+= inode.o
+>  obj-$(CONFIG_SECURITY_SELINUX)		+= selinux/
+>  obj-$(CONFIG_SECURITY_SMACK)		+= smack/
+> diff --git a/security/lsm_notifier.c b/security/lsm_notifier.c
+> new file mode 100644
+> index 000000000000..c92fad5d57d4
+> --- /dev/null
+> +++ b/security/lsm_notifier.c
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * LSM notifier functions
+> + *
+> + */
+> +
+> +#include <linux/notifier.h>
+> +#include <linux/security.h>
+> +
+> +static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
+> +
+> +int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+> +{
+> +	return blocking_notifier_call_chain(&blocking_lsm_notifier_chain,
+> +					    event, data);
+> +}
+> +EXPORT_SYMBOL(call_blocking_lsm_notifier);
+> +
+> +int register_blocking_lsm_notifier(struct notifier_block *nb)
+> +{
+> +	return blocking_notifier_chain_register(&blocking_lsm_notifier_chain,
+> +						nb);
+> +}
+> +EXPORT_SYMBOL(register_blocking_lsm_notifier);
+> +
+> +int unregister_blocking_lsm_notifier(struct notifier_block *nb)
+> +{
+> +	return blocking_notifier_chain_unregister(&blocking_lsm_notifier_chain,
+> +						  nb);
+> +}
+> +EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
+> diff --git a/security/security.c b/security/security.c
+> index fc8405928cc7..ea09a71d9767 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -90,8 +90,6 @@ const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+>  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+>  };
+>  
+> -static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
+> -
+>  static struct kmem_cache *lsm_file_cache;
+>  static struct kmem_cache *lsm_inode_cache;
+>  
+> @@ -643,27 +641,6 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+>  	}
+>  }
+>  
+> -int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+> -{
+> -	return blocking_notifier_call_chain(&blocking_lsm_notifier_chain,
+> -					    event, data);
+> -}
+> -EXPORT_SYMBOL(call_blocking_lsm_notifier);
+> -
+> -int register_blocking_lsm_notifier(struct notifier_block *nb)
+> -{
+> -	return blocking_notifier_chain_register(&blocking_lsm_notifier_chain,
+> -						nb);
+> -}
+> -EXPORT_SYMBOL(register_blocking_lsm_notifier);
+> -
+> -int unregister_blocking_lsm_notifier(struct notifier_block *nb)
+> -{
+> -	return blocking_notifier_chain_unregister(&blocking_lsm_notifier_chain,
+> -						  nb);
+> -}
+> -EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
+> -
+>  /**
+>   * lsm_blob_alloc - allocate a composite blob
+>   * @dest: the destination for the blob
 
