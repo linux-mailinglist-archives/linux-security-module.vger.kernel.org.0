@@ -1,52 +1,52 @@
-Return-Path: <linux-security-module+bounces-11216-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11213-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B0BDB10B40
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:20:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51E6FB10B3E
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 15:20:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 175977AB7AB
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:19:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FCF31CE3B9F
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 13:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4662D8367;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A53267B9B;
 	Thu, 24 Jul 2025 13:20:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="jrNFgvQw"
+	dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b="ahmeZbU1"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4732D77F1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5012D77FE
 	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 13:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.143.211.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753363214; cv=none; b=Q3a/LsNUmC/MvmwN7Ux1v3ajh9qafG081O/ONYLFcPZVZpTec0oPNVKnbk4OxxhyIwozzF01ogQcCofT0eC2fCoU7t6iJWeuCgv45k6DV9cNAqI2SgddiF6kUVzBal9Et3/Hp1K2T6kI0aRhrz4FMY7agMPEy6wRoZ3lqN0lUTs=
+	t=1753363214; cv=none; b=dJ4oMr3OgoECAZouIPYPNxO4wIzYkejcSLMj+CxAOpRpTZ3M1TzGOLl7CCk/0bNRcAzYCw9ZG0iCE1njkEwFYkLhDdp4Yf1poeo254QAb7MbjRbfNyiB6lgsmSAmT7jGRcI1SRp4KPTGKCR4KVAZJcYYYBErxEV98ju6UMF6Msc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753363214; c=relaxed/simple;
-	bh=/9vFDBPGMRFWsmmc2G8vrgrFdHH30SptzmsK++WuB+E=;
+	bh=7S72GIVU1OwEfmUzd9uFTWd8Av7bKWCccnTdHISiYHw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hDhV45p4/gOqikk/m6AKIKnj4aWExmMP2ndLDpdeWAdLoGXLtulLuf/ywnhX6i16iKv6soFg7aT8qN1zes/fMKKSYmDtet/MHrREVuCBpImH/YgJqXBSUsUDtqhI8gHghpZY44a6o0p16dfE4lKFLyodudF6kL7tY3khgFtDV58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=jrNFgvQw; arc=none smtp.client-ip=95.143.211.150
+	 MIME-Version:Content-Type; b=uS/I9u+4ks+7tiCOSvgdDyQyPFywV+gLcL+LiRh1N6hT9DQOEYuVwvP7kWIwQ0zZbJX64WhkN383Jl4F5lg2+xr4xKcI2d3cIND8Pr/hkjUowZlPdjrQHMCG0YN62Yw/HMijYWWO5I0k+J+LZckWl1lKIVbzh2aGFq7zPvfDlLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru; spf=pass smtp.mailfrom=swemel.ru; dkim=pass (1024-bit key) header.d=swemel.ru header.i=@swemel.ru header.b=ahmeZbU1; arc=none smtp.client-ip=95.143.211.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=swemel.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swemel.ru
 From: Konstantin Andreev <andreev@swemel.ru>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
 	t=1753362621;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=KxgI/jMP79/JDWegobrSDvfa7kaVU4yGIXj32r516UA=;
-	b=jrNFgvQww4DN/JtxhoOAQMPbejwUNAL0SMLynfnJQBjBsbBb2BmX+sLkiPYRaqx7/RYD15
-	LmZOttFaGGMvy5X0eJE9POGn14F5QmlXIE3XyeAjg7zr3gsXghrTwiNFpU5n+PMgsy8bVL
-	EjKr2/WuhHZPE0JDFoO23Hn/Rwymct8=
+	bh=EM3GlXX8SvuD7id+tyqoBdBEtOe2uXljYrI5nN2x4qc=;
+	b=ahmeZbU1Ex0+pCx7YqiLEGw054Wmwyzfl+TDAFI5M0KEnGCJcMPP1UlFJrwNdsbJBwdE3g
+	mJhC7SOuF3vjsPQCWVALh0xekIRdfLGcoZA1ClTgHoseqLopzzaKsC12Ev16z89hrg+KGR
+	1XwXPp6SDbwTEYJyoM29vb3CkUl+Nac=
 To: casey@schaufler-ca.com
 Cc: linux-security-module@vger.kernel.org
-Subject: [PATCH 03/19] smack: fix bug: setting label-containing xattrs silently ignores input garbage
-Date: Thu, 24 Jul 2025 16:09:36 +0300
-Message-ID: <ae1100894499a1f6ce8e783727635388b3ac3af8.1753356770.git.andreev@swemel.ru>
+Subject: [PATCH 04/19] smack: stop polling other LSMs & VFS to getxattr() unsupported SMACK64IPIN/OUT
+Date: Thu, 24 Jul 2025 16:09:37 +0300
+Message-ID: <f88923ca06d4b2790a92296a399ae56f1ae4a7e0.1753356770.git.andreev@swemel.ru>
 In-Reply-To: <cover.1753356770.git.andreev@swemel.ru>
 References: <cover.1753356770.git.andreev@swemel.ru>
 Precedence: bulk
@@ -55,221 +55,104 @@ List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following command:
-    # setfattr -n security.SMACK64 -v foo/bar FILE
+smack_inode_getsecurity() returns -EOPNOTSUPP
+for the SMACK64IPIN and SMACK64IPOUT xattrs
+if the inode is not a socket.
 
-sets the label of FILE to 'foo' w/o indication
-that label does not match input.
+Since [1], the -EOPNOTSUPP return value
+from the inode_getsecurity LSM hook
+has been interpreted by security_inode_getsecurity()
+as a signal to "continue polling other LSMs".
 
-This happens due to the use of an unsuitable parsing
-function: smk_import_entry(), which acquires only
-that part from the beginning of the input
-that looks like a label.
+As a result, security_inode_getsecurity() queries
+other LSMs for these Smack xattrs.
 
-This is exactly the same issue as described in [1],
-but it occurs with Smack label-containing xattrs
-instead of /proc/PID/attr/smack/current.
+Furthermore, the VFS layer is also aware of the convention
+and attempts to read SMACK64IPIN and SMACK64IPOUT from disk
+via __vfs_getxattr() if all LSMs return -EOPNOTSUPP.
 
-Curiously,
+Looking for Smack propertу in these places is incorrect,
+as Smack does own these xattrs - even if
+they are irrelevant for a particular inode.
 
-    # setfattr -n security.SMACK64     -v foo/bar FILE
-    # setfattr -n security.SMACK64EXEC -v fo2/ba2 FILE
-    # setfattr -n security.SMACK64MMAP -v fo3/ba3 FILE
-    # getfattr -hd -m - FILE
-    security.SMACK64="foo"            // garbage ignored
-    security.SMACK64EXEC="fo2/ba2"    // garbage taken?!
-    security.SMACK64MMAP="fo3/ba3"    // garbage taken?!
+Returning -ENODATA (no such attribute) instead of
+-EOPNOTSUPP is more appropriate, as it stops further
+fallback to other LSMs and the filesystem.
 
-It looks like label-containing xattrs SMACK64EXEC
-and SMACK64MMAP can acquire invalid Smack label.
+This appears safe, since __vfs_getxattr() also returns
+-ENODATA when the attribute does not exist.
 
-In fact, inode contains the labels `fo2' and `fo3',
-but, due to another Smack bug [2] we do not see them -
-instead we see the on-disk content of the SMACK64EXEC
-and SMACK64MMAP xattrs, that is, indeed, `fo2/ba2'
-and `fo3/ba3'
-
-This change detects input garbage by adding a check:
-   taken label length == input length
-and indicates -EINVAL to the caller if they do not match
-
-(2008-02-04 Casey Schaufler)
-Fixes: e114e473771c ("Smack: Simplified Mandatory Access Control Kernel")
-
-[1] 2025-06-17 andreev
-commit 674e2b24791c ("smack: fix bug: setting task label
-                      silently ignores input garbage")
-Link: https://lore.kernel.org/linux-security-module/20250315015723.1357541-3-andreev@swemel.ru/
-
-[2] 2025-07 andreev (forward reference)
-commit ("smack: fix bug: getxattr() returns invalid SMACK64EXEC/MMAP")
-Link: https://lore.kernel.org/linux-security-module/ba2af0356940d61d932af15d4b1a265a61e7d16c.1753356770.git.andreev@swemel.ru/
+[1] 2016-05-31 Casey Schaufler
+commit 2885c1e3e0c2 ("LSM: Fix for security_inode_getsecurity
+                      and -EOPNOTSUPP")
+Link: https://lore.kernel.org/lkml/d8a4d26e-46c8-975d-d075-a3848130981c@schaufler-ca.com/
 
 Signed-off-by: Konstantin Andreev <andreev@swemel.ru>
 ---
- security/smack/smack_lsm.c | 81 +++++++++++++++++++++++++++-----------
- 1 file changed, 57 insertions(+), 24 deletions(-)
+ security/smack/smack_lsm.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
 diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 5a159a2653a6..4ef6355c84c0 100644
+index 4ef6355c84c0..7bd47baac481 100644
 --- a/security/smack/smack_lsm.c
 +++ b/security/smack/smack_lsm.c
-@@ -263,6 +263,49 @@ static int smk_bu_credfile(const struct cred *cred, struct file *file,
- #define smk_bu_credfile(cred, file, mode, RC) (RC)
- #endif
- 
-+/**
-+ * smk_parse_label - check @string (not \0-terminated) is a valid Smack label
-+ * @string: a string to check, not \0-terminated
-+ * @string_len: the length of the @string
-+ *
-+ * Return: 0 or an error code
-+ */
-+static int
-+smk_parse_label(const char *string, size_t string_len)
-+{
-+	int label_len;
-+
-+	if (unlikely(string == NULL || string_len == 0 ||
-+		     string_len >= SMK_LONGLABEL))
-+		return -EINVAL;
-+
-+	label_len = smk_parse_label_len(string, string_len);
-+	if (label_len < 0 ||         /* invalid label */
-+	    label_len != string_len) /* garbage after label */
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+/**
-+ * smk_import_label - import a label, return the list entry
-+ * @string: a text string that may be a valid Smack label, not \0-terminated
-+ * @string_len: the length of the text string in the @string
-+ *
-+ * Contrast to smk_import_entry(), the full @string_len of the @string
-+ * must constitute a valid Smack label to be imported.
-+ *
-+ * Return: see description of smk_import_entry()
-+ */
-+static struct smack_known *
-+smk_import_label(const char *string, int string_len)
-+{
-+	if (smk_parse_label(string, string_len))
-+		return ERR_PTR(-EINVAL);
-+
-+	return smk_import_valid_label(string, string_len, GFP_NOFS);
-+}
-+
- /**
-  * smk_fetch - Fetch the smack label from a file.
-  * @name: type of the label (attribute)
-@@ -1343,14 +1386,11 @@ static int smack_inode_setxattr(struct mnt_idmap *idmap,
- 				struct dentry *dentry, const char *name,
- 				const void *value, size_t size, int flags)
+@@ -1649,10 +1649,6 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 				   struct inode *inode, const char *name,
+ 				   void **buffer, bool alloc)
  {
--	int check_import = 0;
-+	bool label_inside = true;
- 	int check_star = 0;
- 	struct inode * const inode = d_backing_inode(dentry);
- 	umode_t const i_mode = inode->i_mode;
- 
--	/*
--	 * Check label validity here so import won't fail in post_setxattr
--	 */
- 	if (strcmp(name, XATTR_NAME_SMACK) == 0) {
+-	struct socket_smack *ssp;
+-	struct socket *sock;
+-	struct super_block *sbp;
+-	struct inode *ip = inode;
+ 	struct smack_known *isp;
+ 	struct inode_smack *ispp;
+ 	size_t label_len;
+@@ -1666,27 +1662,29 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 			label = TRANS_TRUE;
+ 		else
+ 			label = "";
+-	} else {
++	} else if (strcmp(name, XATTR_SMACK_IPIN) == 0 ||
++		   strcmp(name, XATTR_SMACK_IPOUT) == 0) {
  		/*
- 		 * inode of socket file descriptor (sockfs inode) and
-@@ -1358,19 +1398,18 @@ static int smack_inode_setxattr(struct mnt_idmap *idmap,
+-		 * The rest of the Smack xattrs are only on sockets.
++		 * These Smack xattrs are only on sockets.
  		 */
- 		if (S_ISSOCK(i_mode))
- 			return -EINVAL;
--		check_import = 1;
- 	} else if (strcmp(name, XATTR_NAME_SMACKIPIN) == 0 ||
- 		   strcmp(name, XATTR_NAME_SMACKIPOUT) == 0) {
--		check_import = 1;
-+		;
- 	} else if (strcmp(name, XATTR_NAME_SMACKEXEC) == 0 ||
- 		   strcmp(name, XATTR_NAME_SMACKMMAP) == 0) {
--		check_import = 1;
- 		check_star = 1;
- 	} else if (strcmp(name, XATTR_NAME_SMACKTRANSMUTE) == 0) {
- 		if (!S_ISDIR(i_mode) ||
- 		    size != TRANS_TRUE_SIZE ||
- 		    strncmp(value, TRANS_TRUE, TRANS_TRUE_SIZE) != 0)
- 			return -EINVAL;
-+		label_inside = false;
- 	} else {
- 		/*
- 		 * treat other xattrs as labeled data
-@@ -1387,13 +1426,13 @@ static int smack_inode_setxattr(struct mnt_idmap *idmap,
- 	if (!smack_privileged(CAP_MAC_ADMIN))
- 		return -EPERM;
+-		sbp = ip->i_sb;
+-		if (sbp->s_magic != SOCKFS_MAGIC)
+-			return -EOPNOTSUPP;
++		const struct socket_smack *ssp;
++		const struct sock *sk;
  
--	if (check_import) {
--		const struct smack_known *skp;
-+	/*
-+	 * Import label now, so import won't fail in smack_inode_post_setxattr
-+	 */
-+	if (label_inside) {
-+		const struct smack_known * const skp =
-+			smk_import_label(value, size);
+-		sock = SOCKET_I(ip);
+-		if (sock == NULL || sock->sk == NULL)
+-			return -EOPNOTSUPP;
++		if (inode->i_sb->s_magic != SOCKFS_MAGIC)
++			return -ENODATA;
  
--		if (size == 0)
--			return -EINVAL;
--
--		skp = smk_import_entry(value, size);
- 		if (IS_ERR(skp))
- 			return PTR_ERR(skp);
+-		ssp = smack_sock(sock->sk);
++		sk = SOCKET_I(inode)->sk;
++		if (sk == NULL)
++			return -ENODATA;
++
++		ssp = smack_sock(sk);
  
-@@ -3781,23 +3820,17 @@ static int do_setattr(unsigned int attr, void *value, size_t size)
- 	struct task_smack *tsp = smack_cred(current_cred());
- 	struct cred *new;
- 	struct smack_known *skp;
--	int label_len;
+ 		if (strcmp(name, XATTR_SMACK_IPIN) == 0)
+ 			isp = ssp->smk_in;
+-		else if (strcmp(name, XATTR_SMACK_IPOUT) == 0)
+-			isp = ssp->smk_out;
+ 		else
+-			return -EOPNOTSUPP;
+-	}
++			isp = ssp->smk_out;
++	} else
++		return -EOPNOTSUPP;
  
- 	/*
- 	 * let unprivileged user validate input, check permissions later
- 	 */
--	if (value == NULL || size == 0 || size >= SMK_LONGLABEL)
-+	if (smk_parse_label(value, size))
- 		return -EINVAL;
--
--	label_len = smk_parse_label_len(value, size);
--	if (label_len < 0 || label_len != size)
--		return -EINVAL;
--
- 	/*
- 	 * No process is ever allowed the web ("@") label
- 	 * and the star ("*") label.
- 	 */
--	if (label_len == 1 /* '@', '*' */) {
-+	if (size == 1 /* '@', '*' */) {
- 		const char c = *(const char *)value;
- 
- 		if (c == *smack_known_web.smk_known ||
-@@ -3810,8 +3843,8 @@ static int do_setattr(unsigned int attr, void *value, size_t size)
- 		list_for_each_entry(sklep, &tsp->smk_relabel, list) {
- 			const char *cp = sklep->smk_label->smk_known;
- 
--			if (strlen(cp) == label_len &&
--			    strncmp(cp, value, label_len) == 0)
-+			if (strlen(cp) == size &&
-+			    strncmp(cp, value, size) == 0)
- 				goto in_relabel;
- 		}
- 		return -EPERM;
-@@ -3819,7 +3852,7 @@ static int do_setattr(unsigned int attr, void *value, size_t size)
- 		;
- 	}
- 
--	skp = smk_import_valid_label(value, label_len, GFP_KERNEL);
-+	skp = smk_import_valid_label(value, size, GFP_KERNEL);
- 	if (IS_ERR(skp))
- 		return PTR_ERR(skp);
- 
+ 	if (!label)
+ 		label = isp->smk_known;
 -- 
 2.43.0
 
