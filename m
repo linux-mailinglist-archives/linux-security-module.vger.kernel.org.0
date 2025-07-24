@@ -1,215 +1,236 @@
-Return-Path: <linux-security-module+bounces-11238-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11245-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDBABB1106A
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 19:36:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C807B114D2
+	for <lists+linux-security-module@lfdr.de>; Fri, 25 Jul 2025 01:40:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF5035A422B
-	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 17:36:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEB171CE63A6
+	for <lists+linux-security-module@lfdr.de>; Thu, 24 Jul 2025 23:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11FA2EB5B4;
-	Thu, 24 Jul 2025 17:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDF4248F63;
+	Thu, 24 Jul 2025 23:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="YBkgsVL/"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="cgZCliAM"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDD1285045;
-	Thu, 24 Jul 2025 17:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80E62417C3
+	for <linux-security-module@vger.kernel.org>; Thu, 24 Jul 2025 23:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753378567; cv=none; b=UKmpLzMl0TdKBiwwiMihJHIO9kf5JnKfOKQMhht+FisozsSgDO9m+xveIBaqCpeDIQ7C6UX90QYsHRmYzMIWaZzDJVXX3mQCL99wF5Zb4giI+Zf4bbXAMCZVsTJdZBTD79jjeT+jKcgzm/OYwflj/EbgWpc0WU8F7bcPiSz8zXQ=
+	t=1753400329; cv=none; b=GPOk0Fk0E5cKnrBjh7w1Y3kKhsKTF4oVgLWj1u5MR6vY9CF2ID1ol5UsYMQnSLdAwklWKjetoaVsC+G/5DgttReg2ir1zJCroVv/4w1dtbWY1ka8E3zgHciYA3jH/iWS0xOrYjA/B16THryH5O1KmPPPKf1GE0bOgNhKVSQRESY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753378567; c=relaxed/simple;
-	bh=D2M/54N8zJdjcIvoq97yxEel8qGk9C9JommktQkhxgk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FrAteMyb+1Wup/fl3+v1jV6zA7tTFcX7f/x5ser8ZLY5Nlxl2TKq8XXzrwDCcBC+77/W/31+a7TZLitloxxYsyLfibekkJz4H+1nqomkltzcPq13zyAlXCnwXqUJVHfwMqTlnAVbPBGAKGEMCEUZUosCKYOPiqMZB+sGdSfFBdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=YBkgsVL/; arc=none smtp.client-ip=185.125.25.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4bnypN0JkbzZFV;
-	Thu, 24 Jul 2025 19:35:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1753378555;
-	bh=HbR89xL0fAs890Zk4g+qtVNW0JcpnRM+e9fsbsymfzQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YBkgsVL/y/clichoX+1MWFq35vB9gAha7jDqPq3GNLrkjbKlA1dq6EwQchjig3Ci8
-	 1bVaB4Cpj8L7lWGdAH8lrtKArewe0lM3Jz3rrUKQXRafhD7sUaeYYpZz5YKndRT1d/
-	 0GR03WaeVnf4t+P7BIXoYtfVPSaXZzE1AIK6HLJg=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4bnypM0b6NzxQB;
-	Thu, 24 Jul 2025 19:35:55 +0200 (CEST)
-Date: Thu, 24 Jul 2025 19:35:54 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Song Liu <songliubraving@meta.com>
-Cc: NeilBrown <neil@brown.name>, Christian Brauner <brauner@kernel.org>, 
-	Tingmao Wang <m@maowtm.org>, Song Liu <song@kernel.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, Kernel Team <kernel-team@meta.com>, 
-	"andrii@kernel.org" <andrii@kernel.org>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
-	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
-	"martin.lau@linux.dev" <martin.lau@linux.dev>, "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>, 
-	"jack@suse.cz" <jack@suse.cz>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
-	"mattbobrowski@google.com" <mattbobrowski@google.com>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Jann Horn <jannh@google.com>
-Subject: Re: [PATCH v5 bpf-next 0/5] bpf path iterator
-Message-ID: <20250724.ij7AhF9quoow@digikod.net>
-References: <474C8D99-6946-4CFF-A925-157329879DA9@meta.com>
- <175210911389.2234665.8053137657588792026@noble.neil.brown.name>
- <B33A07A6-6133-486D-B333-970E1C4C5CA3@meta.com>
- <2243B959-AA11-4D24-A6D0-0598E244BE3E@meta.com>
+	s=arc-20240116; t=1753400329; c=relaxed/simple;
+	bh=aCC308KJfoZ/CaIGTyAHzfu45D9FuichQqV6CMTczsA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tg/XORLQuUhxQakjW+eyvGANpoHbbwmEGxPVGIZ34KOAfa67DcZmAakp3MwwkRUyisn4UWF/w+yId8B3YUC3Dv2GfH8lGJz1d7UoHiNuloUC2qcYzvz4F6EgWw+JbG5LLlFaQ1dKexPs05zizTIi+J4siv+hRzom2Bc1Lgo+Qo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=cgZCliAM; arc=none smtp.client-ip=66.163.187.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1753400327; bh=+C3riNC/TX6NHstud+/7Wumte0yEFTDkdaHRjubdjqQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=cgZCliAM0Ax8qW0MIiM8vxgZKDgkGvweFUpjKZPyNYCLpzmk4ecsgL0DUr0hkSHf+5hTQ77n7q4CoNBCiUjqavqm+jNb2UrVVfnMGbnG7xt2SMvMjrSvYoHe+bjnP4nwB03bAIzzrikULB9fCrV71MxHV5OLJuIKRwQRhIvM59lkQPlI3K+VpzGXQwmdSfaZGBEvugFzPYLSZtpmTXW1DKj1rqqqW6GXV2BJHPDQO6UoqRjtE0eNdiNZ2eHucr94OToksJy2LX+eC4IFe6fat7ScesM2uX0/sppRHyfgDhLIIXTPdcflSQvlhOMMN0lBMN8OlkUUq41r1Vt9Y2VvAg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1753400327; bh=0gh9QWR2pNiW0FWv+i8+ICBamJnXGyPs+YV9GjchaMT=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=hwhoAV/lbR0XiTf5qJCzk3NN0oGwa8vZDVo3ZMgyI7JhTWJdgcqyj1+sh9km7UtWDOoBnWmrRxNUdWENVCAPOXivUu/z71Yka+dkgvPypVEQjylTsLrse/0gns5Rx4HwFmEQ24UAs6nTBL+66GkX0vKU5MTBgF+djOFnMjQqZLMtdm4tliqCulXDnidLtg2Nw34tYS3FHhEccZSbcoWc0ToTQttlr1RRyWPMfFXCyHu+MF3C+h+JOALsyTh6o025YpzJcsljWpOFWyipnspdvHvTdFlwdcEKzTAW9ynGFwDc/MXE36VGfzq8+Kutft4V+oOh4y/duGsor5Es/F7OJw==
+X-YMail-OSG: c9cxzeIVM1nP.wnWAf2TUd9EAtKDBVM8RpjdowI2AIm0Wjwa8yHP81XWrpcXtdx
+ oaPpSR4Q_9ayMXVfJnvdj.sy2cchMoJjaGGxaCLaB6RfHZEKxAT8BOpIhZbdNVefVq.YnMIyWruK
+ ChxTWpA75dZK0GSQ2wxwTAS.6OjdIIR761nrNJiJ7LtGZqjBZClmbTujGIxC7.i8vuBcrloLm9_Q
+ Gl2qvQEu95OOIbsZ.28RzveE1DE0Gahh9ya.PBwk2orHPOPcLj.Q2R.frQvGBpGw8DQUAVYmIUHl
+ hrFZeFsiGDC4p.IFxsxVV4wTESyYBFLR0Dn2c5TmdKL3_tPhGpWGTTGlXwNfhpNgxMRtbxGriAFS
+ mp2lVGpZM0TmkQCzAxDIzdji43VrqYv4amIo.UhM2mB8I_lX3DyTyl6ebTEGUWXbLlF85qfV2RXx
+ XCLXIzmPlj5E6JfsXwCpW0dzI2DAv_rcQmRw8T4ZGFK7PVmizwt5_8XB27eCU2TFeKiwTJwJAbxt
+ 9HD_Vs9ryvQIoDJda47m1LMwONsf42VjOh9H71CMs5C3EhDFI9.jHN5ax23.7hcw8_w8rG2eCtHv
+ 4B0WTA22uf8K2ULnsuRGl68Tjei1ASbRCgWWJc0gARPvHSG4eoVYcJrSM7gvmXv41wZDE3BSIgS2
+ F06_gLK4bN7aXrQAGXPPYpg7CRxay8.oFHMmQj.ShwRCySkdP1XZDeCd.3nBRenQmwGASppkUPaY
+ yrrBPD5HYjYqG3RFehgZ.MSvMemOzBzTmJN3K3z22cxQPq5vjJ6OA1Onm_yCHMssBgIZetkMT0Y5
+ qG4aabZlUOFsESxZMv1kk5zI8v8Y56Z2LMSKQ1At0b_DTjk_U4cxGzyltPFAtFCfNjpgYIYrfyGh
+ foyMyttN4H4Ya3Ye0zJ823kt2_wDUtPseQPP9aHhMI8d_WlcX7Z89Lja..TYhBd4woRh4raG5iAI
+ 5jC9L5X8s2SjjJeHG75azUCj6jid4Yz.WbvUSeoE.2zEKHLeL3DzFUQBsVoFnLxr3WO5fOIfWadr
+ L6mVu.WkrmDyoWfEqPUlcfH4PoeSPUT945zjeTo0NM0dp92lTRkEqJIcZKY0JB6QSBzawFiEQdhq
+ v6PsE.YVTKlPQrFFtc_aPuBBH6G0Q7Zrpbm6jNCIHjTxukCiPVCwHPcTzrQ72SF_2FljrH8jSh4e
+ gD5GjyfzvmYaGXliog_6Q6vQtksyVGzJzO87yrwiFDJCVxFDqqGo_2BfJLC1PntmDNSF.CtMCKno
+ Linzwo0CTBC87ud92yNsUcbw29LFHnIfqIvGZ314s6aJ4Pc_.Xqc3spfIgFWbPvG08Hrl9flam.0
+ iPRZlPb6.H8MaM130EOshsmymU2JhqJ.nVxYxfC14TFJM0p1avtaeNohwe0mBYoNuo4UId8tK_0J
+ 3kYBVXv8f_.yKWVuF1JruPmN0qq17K.XxMsnswyZCQmnT1GHgz_9.lCIk_gsQLez8Ze8BYSH0y0U
+ xw.w7on0aP_1FGRmsibNwHjT0uoWtl2BuO1n2KRT8ZCg_OJcrCQtVeH7LsiQ1Un9oixDnwpR6d7m
+ R2z1_YXsj9AH9aJa8YfSiDGg9bBFboKK6EeuncP9bVLlUQnV3iweDKeweni3ylKST5xyaf9IVsUx
+ IpbJIDAriZ1OAnFm3Salx.27SOcZPUvR4BBX6d3IDcUCNOI8wyFNgSuyAfHE42SYma6tMYMhAo8j
+ cQdc8SdQz.OK2yR5dBuUYS9FZq.rPzvRNJw.7rFjCsKulIZQ_jNX26VVK.FPy0ZKQEc5xbOuo0Gg
+ rfJYN3kyrw4cQiLGcDfVbGcsEOD4ddponcOFGZ.tk_LTRN8t7bTD8VmC_0i8HnxI3_4aX95a0nsR
+ PjRisAyQW7QlyX1wG0R3QTmiURnZon9KjwQBaAzv5xOcxm9kpQzOFtDZ2SXUEicZ6TEYgWZUlMls
+ nGNAtA4DNwWrfG9EhRQP.dTOgG5lq5xUPgkBZYIkEBYHMOkkKbxIY3HliKg3FG26KBHG7HuMZ18R
+ GgluhC.SVeBRoS5B6q1wZ0LjQRUW02vAofzzbwG8shfwkSfrQlIntRA_LIfz2Mq1oRjtGgqRKbJh
+ 0AeEYvLX.x_57jmGUCHyn5wYW3rN8tjUCyepa2lPs8.kHTCUhHSHiOtkL4IUea2vcrwqVw5YVZGJ
+ 2MJIJP7fCxCMbHxZrhdvYNuK29c4Ox81mb62MEafgGSm0unz4XDMC1j71syRW7bNa4XlUstLIIAs
+ EUIEIkL5sH8Dtr8Fv_C4G0wvyCisS7LTK29hiqSREs2ynUz4bdhVHx2uP0uNHdCxrKA6jOn9dtw.
+ X9B4_IpViHGNbzDW.b2jTKCPdbnv4y5KqtBvYkXh8ILzJ
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: d7740bf5-090d-4dc2-906f-0daef84a0900
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 24 Jul 2025 23:38:47 +0000
+Received: by hermes--production-gq1-74d64bb7d7-khmfd (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4992f4192d3866ee88909385bbfb7ff4;
+          Thu, 24 Jul 2025 23:28:38 +0000 (UTC)
+Message-ID: <cd7a91fa-a731-48e2-a0e7-d098559603a1@schaufler-ca.com>
+Date: Thu, 24 Jul 2025 16:28:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2243B959-AA11-4D24-A6D0-0598E244BE3E@meta.com>
-X-Infomaniak-Routing: alpha
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 16/34] lsm: cleanup the LSM blob size code
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+ Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
+ Fan Wu <wufan@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+ Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+ Xiu Jianfeng <xiujianfeng@huawei.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20250721232142.77224-36-paul@paul-moore.com>
+ <20250721232142.77224-52-paul@paul-moore.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20250721232142.77224-52-paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.24187 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Mon, Jul 14, 2025 at 09:09:42PM +0000, Song Liu wrote:
-> 
-> > On Jul 9, 2025, at 11:28 PM, Song Liu <songliubraving@meta.com> wrote:
-> 
-> [...]
-> 
-> >>>> It isn't clear to me that vfs_walk_ancestors() needs to return anything.
-> >>>> All the communication happens through walk_cb()
-> >>>> 
-> >>>> walk_cb() is called with a path, the data, and a "may_sleep" flag.
-> >>>> If it needs to sleep but may_sleep is not set, it returns "-ECHILD"
-> >>>> which causes the walk to restart and use refcounts.
-> >>>> If it wants to stop, it returns 0.
-> >>>> If it wants to continue, it returns 1.
-> >>>> If it wants a reference to the path then it can use (new)
-> >>>> vfs_legitimize_path() which might fail.
-> >>>> If it wants a reference to the path and may_sleep is true, it can use
-> >>>> path_get() which won't fail.
-> >>>> 
-> >>>> When returning -ECHILD (either because of a need to sleep or because
-> >>>> vfs_legitimize_path() fails), walk_cb() would reset_data().
-> >>> 
-> >>> This might actually work. 
-> >>> 
-> >>> My only concern is with vfs_legitimize_path. It is probably safer if 
-> >>> we only allow taking references with may_sleep==true, so that path_get
-> >>> won’t fail. In this case, we will not need walk_cb() to call 
-> >>> vfs_legitimize_path. If the user want a reference, the walk_cb will 
-> >>> first return -ECHILD, and call path_get when may_sleep is true.
-> >> 
-> >> What is your concern with vfs_legitimize_path() ??
-> >> 
-> >> I've since realised that always restarting in response to -ECHILD isn't
-> >> necessary and isn't how normal path-walk works.  Restarting might be
-> >> needed, but the first response to -ECHILD is to try legitimize_path().
-> >> If that succeeds, then it is safe to sleep.
-> >> So returning -ECHILD might just result in vfs_walk_ancestors() calling
-> >> legitimize_path() and then calling walk_cb() again.  Why not have
-> >> walk_cb() do the vfs_legitimize_path() call (which will almost always
-> >> succeed in practice).
-> > 
-> > After reading the emails and the code more, I think I misunderstood 
-> > why we need to call vfs_legitimize_path(). The goal of “legitimize” 
-> > is to get a reference on @path, so a reference-less walk may not
-> > need legitimize_path() at all. Do I get this right this time? 
-> > 
-> > However, I still have some concern with legitimize_path: it requires
-> > m_seq and r_seq recorded at the beginning of the walk, do we want
-> > to pass those to walk_cb()? IIUC, one of the reason we prefer a 
-> > callback based solution is that it doesn’t expose nameidata (or a
-> > subset of it). Letting walk_cb to call legitimize_path appears to 
-> > defeat this benefit, no? 
+On 7/21/2025 4:21 PM, Paul Moore wrote:
+> Convert the lsm_blob_size fields to unsigned integers as there is no
+> current need for them to be negative, change "lsm_set_blob_size()" to
+> "lsm_blob_size_update()" to better reflect reality, and perform some
+> other minor cleanups to the associated code.
+>
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> Reviewed-by: John Johansen <john.johansen@canonical.com>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-Yes, walk_cb() should be very light and non-blocking/non-sleepable.  If
-the caller cannot give these guarantees, then it can just pass NULL
-instead of a valid walk_cb(), and continue the walk (if needed) by
-calling the vfs_walk_ancentors() helper again, which would not benefit
-from the RCU optimization in this case.
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
-Before this patch series land, handling of disconnected directories
-should be well defined, or at least let the caller deal with it.  How do
-you plan to handle disconnected directories for the eBPF use case?  See
-https://lore.kernel.org/all/20250719104204.545188-1-mic@digikod.net/
-Unfortunately, this issue is not solved for Landlock yet.
 
-> > 
-> > 
-> > A separate question below. 
-> > 
-> > I still have some question about how vfs_walk_ancestors() and the 
-> > walk_cb() interact. Let’s look at the landlock use case: the user 
-> > (landlock) just want to look at each ancestor, but doesn’t need to 
-> > take any references. walk_cb() will check @path against @root, and 
-> > return 0 when @path is the same as @root. 
-> > 
-> > IIUC, in this case, we will record m_seq and r_seq at the beginning
-> > of vfs_walk_ancestors(), and check them against mount_lock and 
-> > rename_lock at the end of the walk. (Maybe we also need to check 
-> > them at some points before the end of the walk?) If either seq
-> > changed during the walk, we need to restart the walk, and take
-> > reference on each step. Did I get this right so far? 
-
-I think so.  You should get some inspiration from prepend_path().
-
-> > 
-> > If the above is right, here are my questions about the 
-> > reference-less walk above: 
-> > 
-> > 1. Which function (vfs_walk_ancestors or walk_cb) will check m_seq 
-> >   and r_seq? I think vfs_walk_ancestors should check them. 
-
-Yes, walk_cb() should be as simple as possible: the simpler version
-should just return a constant.
-
-> > 2. When either seq changes, which function will call reset_data?
-> >   I think there are 3 options here:
-> >  2.a: vfs_walk_ancestors calls reset_data, which will be another
-> >       callback function the caller passes to vfs_walk_ancestors. 
-> >  2.b: walk_cb will call reset_data(), but we need a mechanism to
-> >       tell walk_cb to do it, maybe a “restart” flag?
-> >  2.c: Caller of vfs_walk_ancestors will call reset_data(). In 
-> >       this case, vfs_walk_ancestors will return -ECHILD to its
-> >       caller. But I think this option is NACKed. 
-> > 
-> > I think the right solution is to have vfs_walk_ancestors check
-> > m_seq and r_seq, and have walk_cb call reset_data. But this is
-> > Different to the proposal above. 
-
-I'm not sure a reset_data() would be useful if walk_cb() never sleep.
-
-If we really need such reset_data(), a fourth option would be for
-walk_cb() to return a specific value (an enum instead of a bool) to
-trigger the reset.
-
-> > 
-> > Do my questions above make any sense? Or maybe I totally 
-> > misunderstood something?
-> 
-> Hi Neil, 
-> 
-> Did my questions/comments above make sense? I am hoping we can 
-> agree on some design soon. 
-> 
-> Christian and Mickaël, 
-> 
-> Could you please also share your thoughts on this?
-> 
-> Current requirements from BPF side is straightforward: we just
-> need a mechanism to “walk up one level and hold reference”. So
-> most of the requirement comes from LandLock side. 
-
-Have you thought about how to handle disconnected directories?
-
-> 
-> Thanks,
-> Song
-> 
+> ---
+>  include/linux/lsm_hooks.h | 28 ++++++++++-----------
+>  security/lsm_init.c       | 51 +++++++++++++++++++++++----------------
+>  2 files changed, 44 insertions(+), 35 deletions(-)
+>
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index bc477fb20d02..a7ecb0791a0f 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -102,20 +102,20 @@ struct security_hook_list {
+>   * Security blob size or offset data.
+>   */
+>  struct lsm_blob_sizes {
+> -	int lbs_cred;
+> -	int lbs_file;
+> -	int lbs_ib;
+> -	int lbs_inode;
+> -	int lbs_sock;
+> -	int lbs_superblock;
+> -	int lbs_ipc;
+> -	int lbs_key;
+> -	int lbs_msg_msg;
+> -	int lbs_perf_event;
+> -	int lbs_task;
+> -	int lbs_xattr_count; /* number of xattr slots in new_xattrs array */
+> -	int lbs_tun_dev;
+> -	int lbs_bdev;
+> +	unsigned int lbs_cred;
+> +	unsigned int lbs_file;
+> +	unsigned int lbs_ib;
+> +	unsigned int lbs_inode;
+> +	unsigned int lbs_sock;
+> +	unsigned int lbs_superblock;
+> +	unsigned int lbs_ipc;
+> +	unsigned int lbs_key;
+> +	unsigned int lbs_msg_msg;
+> +	unsigned int lbs_perf_event;
+> +	unsigned int lbs_task;
+> +	unsigned int lbs_xattr_count; /* num xattr slots in new_xattrs array */
+> +	unsigned int lbs_tun_dev;
+> +	unsigned int lbs_bdev;
+>  };
+>  
+>  /*
+> diff --git a/security/lsm_init.c b/security/lsm_init.c
+> index b1156f414491..aad363e37140 100644
+> --- a/security/lsm_init.c
+> +++ b/security/lsm_init.c
+> @@ -169,16 +169,22 @@ static void __init lsm_order_append(struct lsm_info *lsm, const char *src)
+>  		   lsm_is_enabled(lsm) ? "enabled" : "disabled");
+>  }
+>  
+> -static void __init lsm_set_blob_size(int *need, int *lbs)
+> +/**
+> + * lsm_blob_size_update - Update the LSM blob size and offset information
+> + * @sz_req: the requested additional blob size
+> + * @sz_cur: the existing blob size
+> + */
+> +static void __init lsm_blob_size_update(unsigned int *sz_req,
+> +					unsigned int *sz_cur)
+>  {
+> -	int offset;
+> +	unsigned int offset;
+>  
+> -	if (*need <= 0)
+> +	if (*sz_req == 0)
+>  		return;
+>  
+> -	offset = ALIGN(*lbs, sizeof(void *));
+> -	*lbs = offset + *need;
+> -	*need = offset;
+> +	offset = ALIGN(*sz_cur, sizeof(void *));
+> +	*sz_cur = offset + *sz_req;
+> +	*sz_req = offset;
+>  }
+>  
+>  /**
+> @@ -193,24 +199,27 @@ static void __init lsm_prepare(struct lsm_info *lsm)
+>  		return;
+>  
+>  	/* Register the LSM blob sizes. */
+> -	lsm_set_blob_size(&blobs->lbs_cred, &blob_sizes.lbs_cred);
+> -	lsm_set_blob_size(&blobs->lbs_file, &blob_sizes.lbs_file);
+> -	lsm_set_blob_size(&blobs->lbs_ib, &blob_sizes.lbs_ib);
+> +	blobs = lsm->blobs;
+> +	lsm_blob_size_update(&blobs->lbs_cred, &blob_sizes.lbs_cred);
+> +	lsm_blob_size_update(&blobs->lbs_file, &blob_sizes.lbs_file);
+> +	lsm_blob_size_update(&blobs->lbs_ib, &blob_sizes.lbs_ib);
+>  	/* inode blob gets an rcu_head in addition to LSM blobs. */
+>  	if (blobs->lbs_inode && blob_sizes.lbs_inode == 0)
+>  		blob_sizes.lbs_inode = sizeof(struct rcu_head);
+> -	lsm_set_blob_size(&blobs->lbs_inode, &blob_sizes.lbs_inode);
+> -	lsm_set_blob_size(&blobs->lbs_ipc, &blob_sizes.lbs_ipc);
+> -	lsm_set_blob_size(&blobs->lbs_key, &blob_sizes.lbs_key);
+> -	lsm_set_blob_size(&blobs->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
+> -	lsm_set_blob_size(&blobs->lbs_perf_event, &blob_sizes.lbs_perf_event);
+> -	lsm_set_blob_size(&blobs->lbs_sock, &blob_sizes.lbs_sock);
+> -	lsm_set_blob_size(&blobs->lbs_superblock, &blob_sizes.lbs_superblock);
+> -	lsm_set_blob_size(&blobs->lbs_task, &blob_sizes.lbs_task);
+> -	lsm_set_blob_size(&blobs->lbs_tun_dev, &blob_sizes.lbs_tun_dev);
+> -	lsm_set_blob_size(&blobs->lbs_xattr_count,
+> -			  &blob_sizes.lbs_xattr_count);
+> -	lsm_set_blob_size(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
+> +	lsm_blob_size_update(&blobs->lbs_inode, &blob_sizes.lbs_inode);
+> +	lsm_blob_size_update(&blobs->lbs_ipc, &blob_sizes.lbs_ipc);
+> +	lsm_blob_size_update(&blobs->lbs_key, &blob_sizes.lbs_key);
+> +	lsm_blob_size_update(&blobs->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
+> +	lsm_blob_size_update(&blobs->lbs_perf_event,
+> +			     &blob_sizes.lbs_perf_event);
+> +	lsm_blob_size_update(&blobs->lbs_sock, &blob_sizes.lbs_sock);
+> +	lsm_blob_size_update(&blobs->lbs_superblock,
+> +			     &blob_sizes.lbs_superblock);
+> +	lsm_blob_size_update(&blobs->lbs_task, &blob_sizes.lbs_task);
+> +	lsm_blob_size_update(&blobs->lbs_tun_dev, &blob_sizes.lbs_tun_dev);
+> +	lsm_blob_size_update(&blobs->lbs_xattr_count,
+> +			     &blob_sizes.lbs_xattr_count);
+> +	lsm_blob_size_update(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
+>  }
+>  
+>  /* Initialize a given LSM, if it is enabled. */
 
