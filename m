@@ -1,107 +1,302 @@
-Return-Path: <linux-security-module+bounces-11515-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11518-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E83B2D663
-	for <lists+linux-security-module@lfdr.de>; Wed, 20 Aug 2025 10:30:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1853FB2E065
+	for <lists+linux-security-module@lfdr.de>; Wed, 20 Aug 2025 17:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40DD2188D599
-	for <lists+linux-security-module@lfdr.de>; Wed, 20 Aug 2025 08:29:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82730B63711
+	for <lists+linux-security-module@lfdr.de>; Wed, 20 Aug 2025 15:10:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5356C2D8789;
-	Wed, 20 Aug 2025 08:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56BFE369968;
+	Wed, 20 Aug 2025 15:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fdUab7eR"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="VGziGNUB"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3672D8762
-	for <linux-security-module@vger.kernel.org>; Wed, 20 Aug 2025 08:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA81222582
+	for <linux-security-module@vger.kernel.org>; Wed, 20 Aug 2025 15:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755678538; cv=none; b=HJraOGGZntw4EbhAa4jjg9Gbs/y09IZL/3nBhBh8x20oaULR7UFPSabgPbhkYoVLshssyxHBU4bHod38e914bz8WP3yugBD2puI7svDwOkfHZLMUc7nBLLiet8ak/UIvTd5mpIOrUlh9Wh+f6GmPkAv/K8ePquvEWcbxW7LM67E=
+	t=1755702015; cv=none; b=Zxa+u1m3fjkIk1sp6DmX2b4+aKn/cNGNPXb4jPKydIcByVv9GtQGf3gaq5wvC6JzZdnSRoV+omOZLIgDomY3tyFcPwhxkp7rRMg9QYJBhKvPGJPfQRhSJ5AaZEeE7JCLWubBHkTsRET+/Mj++50UcgbQysYvbkZf2qaZctczucE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755678538; c=relaxed/simple;
-	bh=zF0KJzDGb4FVwJYN7hE92OHSrRFWAOyPof8nv4wkan0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mf29VERDEe7tPUIeTPZA27pmOOMzJegUyMTAifwPJXaNmrOQSDN8KOloBZikA//0Chkyt+KZs/th4L1QVF2DFE59O6oAnpqc7c8gOTYx9ydD+zUR+QhKY1jGcBCXDBM50zEo6Qsku3b6Rm7wZGWJ1SYsIDM0zNevYdI1mCFZMoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fdUab7eR; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3b9e41475edso4379594f8f.2
-        for <linux-security-module@vger.kernel.org>; Wed, 20 Aug 2025 01:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755678533; x=1756283333; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xc1tKyYSTPJPxeU53+y1RcwFkYkWpuTBa3RAA51ynQg=;
-        b=fdUab7eRZrBgOuepxSVALOxiDozd3rsCAUwlR6Tr8Oh3+cWlB2Qa6rjlOmxExNZnh0
-         37iQay8ASNrTqd2X6Qg5TY8aBr55JA057jlWROUztQ+yuQ5wWBD1xUAOaTjy+UB/gaRs
-         41RJg5vofWpOA5G+1jvmW74gLQ7p3YjbP9smNI7WpGlpJ/cjz42aU06wxndr0t/6dQKi
-         DXGbJKz1uDPabg8eHmpf6m4+CR+ODIrc98ZFfkbqOL+r0wkEWEuqw6g5B+D4/HnyBFA5
-         0vO3SDbY7DsTrBG5NTWoN87KhhjuKSAzEAxF+pQEQSzFq0yY7uwGZPfCWDrb/bSQUNmw
-         nFYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755678533; x=1756283333;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xc1tKyYSTPJPxeU53+y1RcwFkYkWpuTBa3RAA51ynQg=;
-        b=L0Go38H+4SUlc1YRK2U2aBitFGPuAAQ3NWae5aGv2HEAJ+VW7vc+yAnMnoAPP4SVfL
-         rL35gab063CfKnicYbKjkIUxIU7CLLK8AiTBMUcllupWsvg7djSdFyt22oBXdHU4aEeE
-         kKCDG10t5M9Rre8SUA0RJzvdgf/jjrrKwE06JGefgk72/KciaLopTuROAFPK8FSd6UGi
-         YHF9BXgB53KHqiWNv8lLSvZs6pcqk0l4pXStZk9ciA/+QLNjjTxxbKrOQm++WH7re4cv
-         +xJiaElWiCZ/QRnWIsQR7ej8UCAKWUJlTbHJtpb7RRLF+AIiDByhqJiaZzM2aJUSMYrO
-         +DNg==
-X-Gm-Message-State: AOJu0YyxoWeIaaY9J6V/wDVT7JAOHgkjTtqwDO04I9lao1f8UfgJsCbd
-	XpJZsAQHiQHRrzlhJWAfv3T4/ypamOGIe9uSYWj6kC+r8QOf+Jynm25DWAyS01tS65znVGjA9bz
-	XYd4qIp20plH3KytYPQ==
-X-Google-Smtp-Source: AGHT+IFAyzNnBS6IDJSFSMEJ/UC4rW4CUjOyxVXmLmSBHEX87SDM2/8LeBdUjyimto1XFzjeWwzfcrQ1TRzdQh4=
-X-Received: from wrs12.prod.google.com ([2002:a05:6000:64c:b0:3b8:e341:aea3])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a5d:5f8b:0:b0:3b4:9721:2b13 with SMTP id ffacd0b85a97d-3c32ca06babmr1467563f8f.14.1755678533695;
- Wed, 20 Aug 2025 01:28:53 -0700 (PDT)
-Date: Wed, 20 Aug 2025 08:28:52 +0000
-In-Reply-To: <20250819195841.238246-2-paul@paul-moore.com>
+	s=arc-20240116; t=1755702015; c=relaxed/simple;
+	bh=c7IzczsWMi0gWGbbRidHwgG2cUmQEowvfBheaY9l/xE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2kcl+2RzJZHvyFgTrfQ+TLNjDUsv0/PsCTsVeZ9nCbMZH44O/YueKcMRd/y9ZNZ+ZAS12Sbjc41iMOfFNs1C+gRqKvEpD7XCbZuFqoRJaoFXzAqGccnXKjP23K6ShPTnj6TI2qx0p6hGJl/Mo+qfJ85X22scB5ehlh1Ha5Ugtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=VGziGNUB; arc=none smtp.client-ip=83.166.143.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4c6TCR139CzfNT;
+	Wed, 20 Aug 2025 16:21:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1755699682;
+	bh=0wqyaZFSWYtPdNqfHhuyrQQKSv9Wt2BD7UTOvZEAprc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VGziGNUBmbblOW0eVOkJCIxxDosgWLCB+YmJ0lxig5WaddOYAD09cJwu7LpkYXT95
+	 2b6FmpIFOQpHnMxkdGuui6Hn34/NrbiZj7VNE25Ri7Z9o8XuFIyJBtUD3U0cShv8jT
+	 axCQWIPeeCb+Ok0mijyzTF8KAgT0ZIUgnoGFM7uM=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4c6TCM1TCqzPC8;
+	Wed, 20 Aug 2025 16:21:19 +0200 (CEST)
+Date: Wed, 20 Aug 2025 16:21:18 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Maxime =?utf-8?Q?B=C3=A9lair?= <maxime.belair@canonical.com>
+Cc: linux-security-module@vger.kernel.org, john.johansen@canonical.com, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, kees@kernel.org, 
+	stephen.smalley.work@gmail.com, casey@schaufler-ca.com, takedakn@nttdata.co.jp, 
+	penguin-kernel@i-love.sakura.ne.jp, song@kernel.org, rdunlap@infradead.org, 
+	linux-api@vger.kernel.org, apparmor@lists.ubuntu.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] lsm: introduce security_lsm_config_*_policy hooks
+Message-ID: <20250820.Ao3iquoshaiB@digikod.net>
+References: <20250709080220.110947-1-maxime.belair@canonical.com>
+ <20250709080220.110947-3-maxime.belair@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250819195841.238246-2-paul@paul-moore.com>
-Message-ID: <aKWHRADe-EmKumGJ@google.com>
-Subject: Re: [PATCH] MAINTAINERS: add the associated Rust helper to the
- CREDENTIALS section
-From: Alice Ryhl <aliceryhl@google.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250709080220.110947-3-maxime.belair@canonical.com>
+X-Infomaniak-Routing: alpha
 
-On Tue, Aug 19, 2025 at 03:58:42PM -0400, Paul Moore wrote:
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> ---
-
-Acked-by: Alice Ryhl <aliceryhl@google.com>
-
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
+On Wed, Jul 09, 2025 at 10:00:55AM +0200, Maxime Bélair wrote:
+> Define two new LSM hooks: security_lsm_config_self_policy and
+> security_lsm_config_system_policy and wire them into the corresponding
+> lsm_config_*_policy() syscalls so that LSMs can register a unified
+> interface for policy management. This initial, minimal implementation
+> only supports the LSM_POLICY_LOAD operation to limit changes.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d61f7246e5bf..0ee0098f2df8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6484,6 +6484,7 @@ S:	Supported
->  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git
->  F:	include/linux/cred.h
->  F:	kernel/cred.c
-> +F:	rust/kernel/cred.rs
->  F:	Documentation/security/credentials.rst
+> Signed-off-by: Maxime Bélair <maxime.belair@canonical.com>
+> ---
+>  include/linux/lsm_hook_defs.h |  4 +++
+>  include/linux/security.h      | 20 ++++++++++++
+>  include/uapi/linux/lsm.h      |  8 +++++
+>  security/lsm_syscalls.c       | 17 ++++++++--
+>  security/security.c           | 60 +++++++++++++++++++++++++++++++++++
+>  5 files changed, 107 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index bf3bbac4e02a..fca490444643 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -464,3 +464,7 @@ LSM_HOOK(int, 0, bdev_alloc_security, struct block_device *bdev)
+>  LSM_HOOK(void, LSM_RET_VOID, bdev_free_security, struct block_device *bdev)
+>  LSM_HOOK(int, 0, bdev_setintegrity, struct block_device *bdev,
+>  	 enum lsm_integrity_type type, const void *value, size_t size)
+> +LSM_HOOK(int, -EINVAL, lsm_config_self_policy, u32 lsm_id, u32 op,
+> +	 void __user *buf, size_t size, u32 flags)
+> +LSM_HOOK(int, -EINVAL, lsm_config_system_policy, u32 lsm_id, u32 op,
+> +	 void __user *buf, size_t size, u32 flags)
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index cc9b54d95d22..54acaee4a994 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -581,6 +581,11 @@ void security_bdev_free(struct block_device *bdev);
+>  int security_bdev_setintegrity(struct block_device *bdev,
+>  			       enum lsm_integrity_type type, const void *value,
+>  			       size_t size);
+> +int security_lsm_config_self_policy(u32 lsm_id, u32 op, void __user *buf,
+> +				    size_t size, u32 flags);
+> +int security_lsm_config_system_policy(u32 lsm_id, u32 op, void __user *buf,
+> +				      size_t size, u32 flags);
+> +
+>  #else /* CONFIG_SECURITY */
 >  
->  INTEL CRPS COMMON REDUNDANT PSU DRIVER
+>  /**
+> @@ -1603,6 +1608,21 @@ static inline int security_bdev_setintegrity(struct block_device *bdev,
+>  	return 0;
+>  }
+>  
+> +static inline int security_lsm_config_self_policy(u32 lsm_id, u32 op,
+> +						  void __user *buf,
+> +						  size_t size, u32 flags)
+> +{
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline int security_lsm_config_system_policy(u32 lsm_id, u32 op,
+> +						    void __user *buf,
+> +						    size_t size, u32 flags)
+> +{
+> +
+> +	return -EOPNOTSUPP;
+> +}
+>  #endif	/* CONFIG_SECURITY */
+>  
+>  #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
+> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+> index 938593dfd5da..2b9432a30cdc 100644
+> --- a/include/uapi/linux/lsm.h
+> +++ b/include/uapi/linux/lsm.h
+> @@ -90,4 +90,12 @@ struct lsm_ctx {
+>   */
+>  #define LSM_FLAG_SINGLE	0x0001
+>  
+> +/*
+> + * LSM_POLICY_XXX definitions identify the different operations
+> + * to configure LSM policies
+> + */
+> +
+> +#define LSM_POLICY_UNDEF	0
+> +#define LSM_POLICY_LOAD		100
+
+Why the gap between 0 and 100?
+
+> +
+>  #endif /* _UAPI_LINUX_LSM_H */
+> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
+> index a3cb6dab8102..dd016ba6976c 100644
+> --- a/security/lsm_syscalls.c
+> +++ b/security/lsm_syscalls.c
+> @@ -122,11 +122,24 @@ SYSCALL_DEFINE3(lsm_list_modules, u64 __user *, ids, u32 __user *, size,
+>  SYSCALL_DEFINE5(lsm_config_self_policy, u32, lsm_id, u32, op, void __user *,
+>  		buf, u32 __user *, size, u32, flags)
+
+Given these are a multiplexor syscalls, I'm wondering if they should not
+have common flags and LSM-specific flags.  Alternatively, the op
+argument could also contains some optional flags.  In either case, the
+documentation should guide LSM developers for flags that may be shared
+amongst LSMs.
+
+Examples of such flags could be to restrict the whole process instead of
+the calling thread.
+
+>  {
+> -	return 0;
+> +	size_t usize;
+> +
+> +	if (get_user(usize, size))
+
+Size should just be u32, not a pointer.
+
+> +		return -EFAULT;
+> +
+> +	return security_lsm_config_self_policy(lsm_id, op, buf, usize, flags);
+>  }
+>  
+>  SYSCALL_DEFINE5(lsm_config_system_policy, u32, lsm_id, u32, op, void __user *,
+>  		buf, u32 __user *, size, u32, flags)
+>  {
+> -	return 0;
+> +	size_t usize;
+> +
+> +	if (!capable(CAP_SYS_ADMIN))
+> +		return -EPERM;
+
+I like this mandatory capability check for this specific syscall.  This
+makes the semantic clearer.  However, to avoid the superpower of
+CAP_SYS_ADMIN, I'm wondering how we could use the CAP_MAC_ADMIN instead.
+This syscall could require CAP_MAC_ADMIN, and current LSMs (relying on a
+filesystem interface for policy configuration) could also enforce
+CAP_SYS_ADMIN for compatibility reasons.
+
+In fact, this "system" syscall could be a "namespace" syscall, which
+would take a security/LSM namespace file descriptor as argument.  If the
+namespace is not the initial namespace, any CAP_SYS_ADMIN implemented by
+current LSMs could be avoided.  See
+https://lore.kernel.org/r/CAHC9VhRGMmhxbajwQNfGFy+ZFF1uN=UEBjqQZQ4UBy7yds3eVQ@mail.gmail.com
+
+> +
+> +	if (get_user(usize, size))
+
+ditto
+
+> +		return -EFAULT;
+> +
+> +	return security_lsm_config_system_policy(lsm_id, op, buf, usize, flags);
+>  }
+> diff --git a/security/security.c b/security/security.c
+> index fb57e8fddd91..166d7d9936d0 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -5883,6 +5883,66 @@ int security_bdev_setintegrity(struct block_device *bdev,
+>  }
+>  EXPORT_SYMBOL(security_bdev_setintegrity);
+>  
+> +/**
+> + * security_lsm_config_self_policy() - Configure caller's LSM policies
+> + * @lsm_id: id of the LSM to target
+> + * @op: Operation to perform (one of the LSM_POLICY_XXX values)
+> + * @buf: userspace pointer to policy data
+> + * @size: size of @buf
+> + * @flags: lsm policy configuration flags
+> + *
+> + * Configure the policies of a LSM for the current domain/user. This notably
+> + * allows to update them even when the lsmfs is unavailable or restricted.
+> + * Currently, only LSM_POLICY_LOAD is supported.
+> + *
+> + * Return: Returns 0 on success, error on failure.
+> + */
+> +int security_lsm_config_self_policy(u32 lsm_id, u32 op, void __user *buf,
+> +				 size_t size, u32 flags)
+> +{
+> +	int rc = LSM_RET_DEFAULT(lsm_config_self_policy);
+> +	struct lsm_static_call *scall;
+> +
+> +	lsm_for_each_hook(scall, lsm_config_self_policy) {
+> +		if ((scall->hl->lsmid->id) == lsm_id) {
+> +			rc = scall->hl->hook.lsm_config_self_policy(lsm_id, op, buf, size, flags);
+
+The lsm_id should not be passed to the hook.
+
+The LSM syscall should manage the argument copy and buffer allocation
+instead of duplicating this code in each LSM hook implementation (see
+other LSM syscalls).
+
+> +			break;
+> +		}
+> +	}
+> +
+> +	return rc;
+> +}
+> +
+> +/**
+> + * security_lsm_config_system_policy() - Configure system LSM policies
+> + * @lsm_id: id of the lsm to target
+> + * @op: Operation to perform (one of the LSM_POLICY_XXX values)
+> + * @buf: userspace pointer to policy data
+> + * @size: size of @buf
+> + * @flags: lsm policy configuration flags
+> + *
+> + * Configure the policies of a LSM for the whole system. This notably allows
+> + * to update them even when the lsmfs is unavailable or restricted. Currently,
+> + * only LSM_POLICY_LOAD is supported.
+> + *
+> + * Return: Returns 0 on success, error on failure.
+> + */
+> +int security_lsm_config_system_policy(u32 lsm_id, u32 op, void __user *buf,
+> +				   size_t size, u32 flags)
+> +{
+> +	int rc = LSM_RET_DEFAULT(lsm_config_system_policy);
+> +	struct lsm_static_call *scall;
+> +
+> +	lsm_for_each_hook(scall, lsm_config_system_policy) {
+> +		if ((scall->hl->lsmid->id) == lsm_id) {
+> +			rc = scall->hl->hook.lsm_config_system_policy(lsm_id, op, buf, size, flags);
+
+ditto
+
+> +			break;
+> +		}
+> +	}
+> +
+> +	return rc;
+> +}
+> +
+>  #ifdef CONFIG_PERF_EVENTS
+>  /**
+>   * security_perf_event_open() - Check if a perf event open is allowed
 > -- 
-> 2.50.1
+> 2.48.1
+> 
 > 
 
