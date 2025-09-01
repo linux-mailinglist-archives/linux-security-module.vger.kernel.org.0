@@ -1,220 +1,195 @@
-Return-Path: <linux-security-module+bounces-11670-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11668-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F779B3EC31
-	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 18:26:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29EEEB3EBCC
+	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 18:02:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 618B3444B78
-	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 16:25:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4BEC188779A
+	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 16:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE51224B1F;
-	Mon,  1 Sep 2025 16:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F5CC2E6CCD;
+	Mon,  1 Sep 2025 16:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Be6gZbre"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30EA2EC0BF;
-	Mon,  1 Sep 2025 16:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D8E2E6CBC
+	for <linux-security-module@vger.kernel.org>; Mon,  1 Sep 2025 16:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756743940; cv=none; b=WgVj6FnJJ4Szy866+SB5nw+TE/zMqQ7V7S6yiUyNSr74Q5z1NIzO6434t1b2935PaorrOAdGFeyH7LxUGZT6tYNnV+c1Z4WgHS+OGWqLSrkrq4CoEWtMAcxgIuzJ+/X+ttL+AzsEhdIO0D3/wt1pWVIpes1Llw91n6RpJT6DYvs=
+	t=1756742489; cv=none; b=ixQTSNBoOFrKhzPt3HvI5KbaMHjumACy7VwEDhzu5HUZcTWzYG9MbclY+uCtdgGa1iQd9f7oM/7qUElcWlVskBXb+gCf5osXAQ8x3Qkecv1WXXChyp1m1570RKmDh3LRQHQkEp1b5RzpBC4gSaR0ou06ykVErgeoqg+pC6mWsDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756743940; c=relaxed/simple;
-	bh=YSdNzI/RlDvC138bwYa7GdT4nAHmk7mHD3OnkpEXI00=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BLaD3z7ZiFI8uNUcQnzDZ7niRbYmtoFYgbigTJbTdJSKkweA6jBpPcxOyyquf2a+Z+M7C012+GIi993+XE7uT70c5vODDrJbxVPV+3pLNDsPaoYCDH1lHzAJy09LMI8FeNXov7nHASRMU/ktv+TXduz7BqDfLO5QtD+FKjcC7Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 581G15de009275;
-	Mon, 1 Sep 2025 11:01:05 -0500
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 581G1253009273;
-	Mon, 1 Sep 2025 11:01:02 -0500
-Date: Mon, 1 Sep 2025 11:01:02 -0500
-From: "Dr. Greg" <greg@enjellic.com>
-To: John Johansen <john.johansen@canonical.com>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: LSM namespacing API
-Message-ID: <20250901160102.GA9179@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <CAHC9VhRGMmhxbajwQNfGFy+ZFF1uN=UEBjqQZQ4UBy7yds3eVQ@mail.gmail.com> <CAEjxPJ5EvR+2fboLu_nBGZu+ZVUpX4KM6xdPUqDErCmw=iA37g@mail.gmail.com> <67e72960-c985-48e1-aaeb-a4286cc8508f@canonical.com> <aKcskclwVVe1X4kP@mail.hallyn.com> <6c69fc81-32a7-442c-8c7f-992eda9c2d18@canonical.com>
+	s=arc-20240116; t=1756742489; c=relaxed/simple;
+	bh=fRGtPoXNXozo7EUo/+X+0CRDT4KEoSMrhbUl6FXLK04=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LSoXRrFJ2y7VIlp0pY97q/3dgf6jiNtuPqLlgfbS7fpkyxlhv+b+xGsjvCgzZ4RJKqVOagZxlL8DgOTSfdRQNBUezUtwpFcaZBQz4JeIILRO8tsB5iQM2W2gu0EuqlJQ+Z4uiJ1iU3AxcVKRKQJFsVD6P3KF8Ffo/nz7gvjcAso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Be6gZbre; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D08C4CEF0
+	for <linux-security-module@vger.kernel.org>; Mon,  1 Sep 2025 16:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756742489;
+	bh=fRGtPoXNXozo7EUo/+X+0CRDT4KEoSMrhbUl6FXLK04=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Be6gZbrekSBh/5dAtjQa0AVkotHrpMepNP2fhgzNLIeTA1Vp2M6/O0nufTtZy0Pcg
+	 8eSL59J369c3kclQjetFcyapiDKTTxvL3FC9VGc8cuLPFGwKe2l/NblzGm9LVhBVwE
+	 8htnZXHsxFHrqR6eTcWoaO5Wsa9y/DkU2P1R12MarW2qFwj7qTMg8CtytYnwDm6RjG
+	 FopDBEj3MWIYpooxtbzxhmnXPLT1NYQaqrfN603eIJsTGj5h+JhDbrmom+BDkesdMf
+	 6IYAcNHw5uPHyxLZ9wZiiLsnHP82d9O1DTB9vwz69zd3f+QFiEg6Z7dqsRHnWgNXGp
+	 BXH3Fu+dU2i0g==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55f7b6e4145so1096947e87.1
+        for <linux-security-module@vger.kernel.org>; Mon, 01 Sep 2025 09:01:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUDoirecB6dm4Mpp77aKfxs7p7zOK+zaqYgiriZxaCnPg1nxsq+P86YmIzIU3smKHMmye64r+yfET3yNK0FFQnTCKPGY9w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAeCnT/UnluHxjJUfafuW5FmgL4O4qUP+YmUCXS2ofkhFMOl/n
+	hiULxVjdjwIQFovCAZR9hgCr6XZ/0wR4glUjJKZRCH3bvppjf1scSd8AIqoTKGVwXfwRssujZXJ
+	KCoHSyLRgwXVoHcMUCCFho48VUcPDDgWBqsYDqODF
+X-Google-Smtp-Source: AGHT+IHnj6OIwdQiXJlgVo5UF3VJeh7L4asptxGZmWwqZWC31UpjffLFt4qPv8DDjEOzi1qlSKdOs+b3QNOSTgcuUzg=
+X-Received: by 2002:a05:6512:448e:b0:55f:4485:9620 with SMTP id
+ 2adb3069b0e04-55f709bf748mr1461445e87.51.1756742486920; Mon, 01 Sep 2025
+ 09:01:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c69fc81-32a7-442c-8c7f-992eda9c2d18@canonical.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Mon, 01 Sep 2025 11:01:05 -0500 (CDT)
+MIME-Version: 1.0
+References: <20250822170800.2116980-1-mic@digikod.net> <20250826-skorpion-magma-141496988fdc@brauner>
+ <20250826.aig5aiShunga@digikod.net> <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
+ <CALCETrWHKga33bvzUHnd-mRQUeNXTtXSS8Y8+40d5bxv-CqBhw@mail.gmail.com>
+ <aLDDk4x7QBKxLmoi@mail.hallyn.com> <CAG48ez0p1B9nmG3ZyNRywaSYTtEULSpbxueia912nVpg2Q7WYA@mail.gmail.com>
+In-Reply-To: <CAG48ez0p1B9nmG3ZyNRywaSYTtEULSpbxueia912nVpg2Q7WYA@mail.gmail.com>
+From: Andy Lutomirski <luto@kernel.org>
+Date: Mon, 1 Sep 2025 09:01:15 -0700
+X-Gmail-Original-Message-ID: <CALCETrUM7LAzm-pXwgTVACvO7uvaUZ0B7j=6Vy0BrDkngpu=yg@mail.gmail.com>
+X-Gm-Features: Ac12FXwKS6-FHwq3nvpTeXOsn_tseUs4dZWGKJnLf2Z-xopwBmsE6DWor8ej0K0
+Message-ID: <CALCETrUM7LAzm-pXwgTVACvO7uvaUZ0B7j=6Vy0BrDkngpu=yg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/2] Add O_DENY_WRITE (complement AT_EXECVE_CHECK)
+To: Jann Horn <jannh@google.com>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>, Andy Lutomirski <luto@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Elliott Hughes <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Luca Boccassi <bluca@debian.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Robert Waite <rowait@microsoft.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Scott Shell <scottsh@microsoft.com>, 
+	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
+	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 21, 2025 at 07:57:11AM -0700, John Johansen wrote:
-
-Good morning, I hope the week is starting well for everyone.
-
-Now that everyone is getting past the summer holiday season, it would
-seem useful to specifically clarify some of the LSM namespace
-implementation details.
-
-> On 8/21/25 07:26, Serge E. Hallyn wrote:
-> >On Thu, Aug 21, 2025 at 12:46:10AM -0700, John Johansen wrote:
-> >>On 8/19/25 10:47, Stephen Smalley wrote:
-> >>>On Tue, Aug 19, 2025 at 10:56???AM Paul Moore <paul@paul-moore.com> 
-> >>>wrote:
-> >>>>
-> >>>>Hello all,
-> >>>>
-> >>>>As most of you are likely aware, Stephen Smalley has been working on
-> >>>>adding namespace support to SELinux, and the work has now progressed
-> >>>>to the point where a serious discussion on the API is warranted.  For
-> >>>>those of you are unfamiliar with the details or Stephen's patchset, or
-> >>>>simply need a refresher, he has some excellent documentation in his
-> >>>>work-in-progress repo:
-> >>>>
-> >>>>* https://github.com/stephensmalley/selinuxns
-> >>>>
-> >>>>Stephen also gave a (pre-recorded) presentation at LSS-NA this year
-> >>>>about SELinux namespacing, you can watch the presentation here:
-> >>>>
-> >>>>* https://www.youtube.com/watch?v=AwzGCOwxLoM
-> >>>>
-> >>>>In the past you've heard me state, rather firmly at times, that I
-> >>>>believe namespacing at the LSM framework layer to be a mistake,
-> >>>>although if there is something that can be done to help facilitate the
-> >>>>namespacing of individual LSMs at the framework layer, I would be
-> >>>>supportive of that.  I think that a single LSM namespace API, similar
-> >>>>to our recently added LSM syscalls, may be such a thing, so I'd like
-> >>>>us to have a discussion to see if we all agree on that, and if so,
-> >>>>what such an API might look like.
-> >>>>
-> >>>>At LSS-NA this year, John Johansen and I had a brief discussion where
-> >>>>he suggested a single LSM wide clone*(2) flag that individual LSM's
-> >>>>could opt into via callbacks.  John is directly CC'd on this mail, so
-> >>>>I'll let him expand on this idea.
-> >>>>
-> >>>>While I agree with John that a fs based API is problematic (see all of
-> >>>>our discussions around the LSM syscalls), I'm concerned that a single
-> >>>>clone*(2) flag will significantly limit our flexibility around how
-> >>>>individual LSMs are namespaced, something I don't want to see happen.
-> >>>>This makes me wonder about the potential for expanding
-> >>>>lsm_set_self_attr(2) to support a new LSM attribute that would support
-> >>>>a namespace "unshare" operation, e.g. LSM_ATTR_UNSHARE.  This would
-> >>>>provide a single LSM framework API for an unshare operation while also
-> >>>>providing a mechanism to pass LSM specific via the lsm_ctx struct if
-> >>>>needed.  Just as we do with the other LSM_ATTR_* flags today,
-> >>>>individual LSMs can opt-in to the API fairly easily by providing a
-> >>>>setselfattr() LSM callback.
-> >>>>
-> >>>>Thoughts?
-> >>>
-> >>>I think we want to be able to unshare a specific security module
-> >>>namespace without unsharing the others, i.e. just SELinux or just
-> >>>AppArmor.
-> >>
-> >>yes which is part of the problem with the single flag. That choice
-> >>would be entirely at the policy level, without any input from userspace.
+On Mon, Sep 1, 2025 at 4:06=E2=80=AFAM Jann Horn <jannh@google.com> wrote:
+>
+> On Thu, Aug 28, 2025 at 11:01=E2=80=AFPM Serge E. Hallyn <serge@hallyn.co=
+m> wrote:
+> > On Wed, Aug 27, 2025 at 05:32:02PM -0700, Andy Lutomirski wrote:
+> > > On Wed, Aug 27, 2025 at 5:14=E2=80=AFPM Aleksa Sarai <cyphar@cyphar.c=
+om> wrote:
+> > > >
+> > > > On 2025-08-26, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
+> > > > > On Tue, Aug 26, 2025 at 11:07:03AM +0200, Christian Brauner wrote=
+:
+> > > > > > Nothing has changed in that regard and I'm not interested in st=
+uffing
+> > > > > > the VFS APIs full of special-purpose behavior to work around th=
+e fact
+> > > > > > that this is work that needs to be done in userspace. Change th=
+e apps,
+> > > > > > stop pushing more and more cruft into the VFS that has no busin=
+ess
+> > > > > > there.
+> > > > >
+> > > > > It would be interesting to know how to patch user space to get th=
+e same
+> > > > > guarantees...  Do you think I would propose a kernel patch otherw=
+ise?
+> > > >
+> > > > You could mmap the script file with MAP_PRIVATE. This is the *actua=
+l*
+> > > > protection the kernel uses against overwriting binaries (yes, ETXTB=
+SY is
+> > > > nice but IIRC there are ways to get around it anyway).
+> > >
+> > > Wait, really?  MAP_PRIVATE prevents writes to the mapping from
+> > > affecting the file, but I don't think that writes to the file will
+> > > break the MAP_PRIVATE CoW if it's not already broken.
+> > >
+> > > IPython says:
+> > >
+> > > In [1]: import mmap, tempfile
+> > >
+> > > In [2]: f =3D tempfile.TemporaryFile()
+> > >
+> > > In [3]: f.write(b'initial contents')
+> > > Out[3]: 16
+> > >
+> > > In [4]: f.flush()
+> > >
+> > > In [5]: map =3D mmap.mmap(f.fileno(), f.tell(), flags=3Dmmap.MAP_PRIV=
+ATE,
+> > > prot=3Dmmap.PROT_READ)
+> > >
+> > > In [6]: map[:]
+> > > Out[6]: b'initial contents'
+> > >
+> > > In [7]: f.seek(0)
+> > > Out[7]: 0
+> > >
+> > > In [8]: f.write(b'changed')
+> > > Out[8]: 7
+> > >
+> > > In [9]: f.flush()
+> > >
+> > > In [10]: map[:]
+> > > Out[10]: b'changed contents'
 > >
-> >AIUI Paul's suggestion is the user can pre-set the details of which
-> >lsms to unshare and how with the lsm_set_self_attr(), and then a
-> >single CLONE_LSM effects that.
+> > That was surprising to me, however, if I split the reader
+> > and writer into different processes, so
+>
+> Testing this in python is a terrible idea because it obfuscates the
+> actual syscalls from you.
+>
+> > P1:
+> > f =3D open("/tmp/3", "w")
+> > f.write('initial contents')
+> > f.flush()
+> >
+> > P2:
+> > import mmap
+> > f =3D open("/tmp/3", "r")
+> > map =3D mmap.mmap(f.fileno(), f.tell(), flags=3Dmmap.MAP_PRIVATE, prot=
+=3Dmmap.PROT_READ)
+> >
+> > Back to P1:
+> > f.seek(0)
+> > f.write('changed')
+> >
+> > Back to P2:
+> > map[:]
+> >
+> > Then P2 gives me:
+> >
+> > b'initial contents'
+>
+> Because when you executed `f.write('changed')`, Python internally
+> buffered the write. "changed" is never actually written into the file
+> in your example. If you add a `f.flush()` in P1 after this, running
+> `map[:]` in P2 again will show you the new data.
+>
 
-> yes, I was specifically addressing the conversation I had with Paul at
-> LSS that Paul brought up. That is
-> 
->   At LSS-NA this year, John Johansen and I had a brief discussion where
->   he suggested a single LSM wide clone*(2) flag that individual LSM's
->   could opt into via callbacks.
-> 
-> the idea there isn't all that different than what Paul proposed. You
-> could have a single flag, if you can provide ancillary information. But
-> a single flag on its own isn't sufficient.
+These days, one can type in Python, ask an LLM to translate to C, and
+get almost-correct output :)  Or one can use os.write(), which is
+exactly what I should have done.
 
-If one thing has come out of this thread, it would seem to be the fact
-that there is going to be little commonality in the requirements that
-various LSM's will have for the creation of a namespace.
-
-Given that, the most infrastructure that the LSM should provide would
-be a common API for a resource orchestrator to request namespace
-separation and to provide a framework for configuring the namespace
-prior to when execution begins in the context of the namespace.
-
-The first issue to resolve would seem to be what namespace separation
-implies.
-
-John, if I interpret your comments in this discussion correctly, your
-contention is that when namespace separation is requested, all of the
-LSM's that implement namespaces will create a subordinate namespace,
-is that a correct assumption?
-
-It would seem, consistent with the 'stacking' concept, that any LSM
-with namespace capability that chooses not to separate, will result in
-denial of the separation request.  That in turn will imply the need to
-unwind or delete any namespace context that other LSM's may have
-allocated before the refusal occurred.
-
-This model also implies that the orchestrator requesting the
-separation will need to pass a set of parameters describing the
-characteristics of each namespace, described by the LSM identifier
-that they pertain to.  Since there may be a need to configure multiple
-namespaces there would be a requirement to pass an array or list of
-these parameter sets.
-
-There will also be a need to inject, possibly substantial amounts of
-policy or model information into the namespace, before execution in
-the context of the namespace begins.
-
-There will also be a need to decide whether namespace separation
-should occur at the request of the orchestrator or at the next fork,
-the latter model being what the other resource namespaces use.  We
-believe the argument for direct separation can be made by looking at
-the gymnastics that orchestrators need to jump through with the
-'change-on-fork' model.
-
-Case in point, it would seem realistic that a process with sufficient
-privilege, may desire to place itself in a new LSM namespace context
-in a manner that does not require re-execution of itself.
-
-With respect to separation, the remaining issue is if a new security
-capability bit needs to be implemented to gate namespace separation.
-John, based on your comments, I believe you would support this need?
-
-> You can do a subset with a single flag and only policy directing things,
-> but that would cut container managers out of the decision. Without a
-> universal container identifier that really limits what you can do. In
-> another email I likend it to the MCS label approach to the container
-> where you have a single security policy for the container and each
-> container gets to be a unique instance of that policy. Its not a perfect
-> analogy as with namespace policy can be loaded into the namespace making
-> it unique. I don't think the approach is right because not all namespaces
-> implement a loadable policy, and even when they do I think we can do a
-> better job if the container manager is allowed to provide additional
-> context with the namespacing request.
-
-In order to be relevant, the configuration of LSM namespaces need to
-be under control of a resource orchestrator or container manager.
-
-What we hear from people doing Kubernetes, at scale, is a desire to be
-able to request that a container be run somewhere in the hardware
-resource pool and for that container to implement a security model
-specific to the needs of the workload running in that container.  In a
-manner that is orthogonal from other security policies that may be in
-effect for other workloads, on the host or in other containers.
-
-Hopefully the above will be of assistance in furthering discussion.
-
-Have a good week.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
+--Andy
 
