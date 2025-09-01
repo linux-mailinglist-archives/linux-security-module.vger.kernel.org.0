@@ -1,201 +1,220 @@
-Return-Path: <linux-security-module+bounces-11667-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11670-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70102B3E66C
-	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 15:59:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F779B3EC31
+	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 18:26:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 807071A85559
-	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 13:59:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 618B3444B78
+	for <lists+linux-security-module@lfdr.de>; Mon,  1 Sep 2025 16:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B2F340D99;
-	Mon,  1 Sep 2025 13:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE51224B1F;
+	Mon,  1 Sep 2025 16:25:40 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E96733CE8E;
-	Mon,  1 Sep 2025 13:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30EA2EC0BF;
+	Mon,  1 Sep 2025 16:25:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756735121; cv=none; b=p8myWMRv021lBeeFX36nJctacuR2N0Fc8JxpJah+XfSwCAfc6CvRcWUeFGW+/Gj9fPN3JjBHpvrCmIj+yYtFaQGMv5eU8LY0MW37uzRA/zdqWzNzIIMWTQ1yZvumcpVy7vzgG6LkAOWgVrvcbvTmXEK4vwI2Nv+ljPY4lzw9usM=
+	t=1756743940; cv=none; b=WgVj6FnJJ4Szy866+SB5nw+TE/zMqQ7V7S6yiUyNSr74Q5z1NIzO6434t1b2935PaorrOAdGFeyH7LxUGZT6tYNnV+c1Z4WgHS+OGWqLSrkrq4CoEWtMAcxgIuzJ+/X+ttL+AzsEhdIO0D3/wt1pWVIpes1Llw91n6RpJT6DYvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756735121; c=relaxed/simple;
-	bh=oUIhwrLYwstlzlY55FK1ZW41MS2asLYsST3xVM4ctTc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TmMOEnLWS5DUAxAXIHggxgGsFCo6JdM2ALfcpCibpy0SGTw14eqETYC+W3usYj3GY5L+1+HSZB/iMHh2glZ9jTkb9Q7Vv01E70AsoBSKMAUea7QHOrmBMoLxGwjlUT0Jkb21Sfwf9so6ub2QIhrzcbd6Jv8sL+15y97HrprQnug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3ea8b3a64b5so37258755ab.2;
-        Mon, 01 Sep 2025 06:58:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756735118; x=1757339918;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NmDip3pK7R1bCI3jhASK9yPIU2OeMFz+fVnQvMU5RZM=;
-        b=ookCPzvg4cb5ovsdKebhU9K1Jellm/G19uG0vP9BQQd5+2BvVH/x/LbzCj/FX3czQU
-         D56X+ZNQR7t7AVnlBd956tJMelVCbbrRJGozIquP7a//oFufEZ0nAPJPay1Cjy3MPG3W
-         opeW/AwAjHbpXcaPkhEMhyjYURdxax0GksqLu3ku76N3QQhkljfXw23BRWrgqNoC0GPO
-         nYSHznM2/yatV/Py7Ad9ScpoRF3Tdc9qERGrKCrCmXaMxY/cWl9X/3vhazam6F41YZTC
-         kgVW6itpB1+DuYTrG64iiKVbNdK9wG2GLajqrGfhVbcs6p0uTM72mdNfRYEB8U9/Nsy2
-         TPbA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPk72/MJ1XL3orkt1h30T5dNqDAG1qze7Ps6g0NLrj8nImuVqFVYOTYHZQp4W2X5SZyJ8FeKOD/6qkD6cht9k=@vger.kernel.org, AJvYcCVmSHHSt0VVUuLIVw0i8yLvBfUJw2EhT3oKbfHEnyuFrkXS1+z49GCGRPz99IAhnr6GqfhqLDGopU9JGZjW@vger.kernel.org, AJvYcCVnrDmBmUXjqoQGDIMhoMipYV/LX5YaskjBvZOpPmEdqk2u4Rm3oiE/ErkIbAKeNT4+g0W3Ba7gJIXPwA==@vger.kernel.org, AJvYcCWJ/QPcMNYaQAF0GSkT8o4Cml92E+oPD/FCUCVuqUJ+bI+dvZAkYTTlZgdUNueRcib0zmIJG0khaGzgTpXP@vger.kernel.org, AJvYcCWJOwfMQy0qWS3M9oRdV9FNrUl7qPanIqNpnQkL+OOLqliwzB3tob4ZUD6rtSpnLa0uchOag+jZEmfygQ==@vger.kernel.org, AJvYcCWq0KyV93N6QOXX1OrDyT1klUvQ26lgsdAF37wkwJAQLXnr2pQQVDhwcJO4xm+pe53Yd+CcVMZ+7Ql1Zb8=@vger.kernel.org, AJvYcCWrQAYj8WGWxIR7AUxBgeWBPxKjrBdvdcflvQrq+mj1lItZCZnHZJCwjjk4T+2PjB7GRJyn/tAp@vger.kernel.org, AJvYcCWsduK2I9NsCHHGe5HItJOxFRex8ufP21bnwGEtPtynq7ZzPs3aqWNiftxK9W6DNxffoUqKuFafsp2MlU4=@vger.kernel.org, AJvYcCX+v0Gn/VSMF8kaFdc21KTXDdyJqZzeg/kwfVIIr3mNvEZ+uC5Nc5bLdGcFE+vwiInmKO0iQvhtkA==@vger.kernel.org, AJvYcCX0Dn1kBR7hrJOAciV1
- qKjHqcnS5MXJAAhc4sgEOPZE/JY3XuIdaFf9qjYPuxZ5ZV+Qk8vWCvm9@vger.kernel.org, AJvYcCXBEbf5r102sOi+/VhZEgxB8NTRa5AJMJRlmaTRlvrM9ERsZH+/6UrQJxe/1c9o6+gurzx7aAKqw//85Q==@vger.kernel.org, AJvYcCXEDC2OdkZbDzDZ3Jqp/dx3nhb2cBTRwIr1ROGDMF4AP8TOnU3RueUZb0qSYav73wSbdll5XEozbp1RDA==@vger.kernel.org, AJvYcCXGW+ChK4FRj6QsFSo4YvUb2sRNw9YHJvJqTHsZt7AOmuwDDjXiThnsNZLn9GZMD8KIY72brkgfqdjz1DfDrQ==@vger.kernel.org, AJvYcCXNb9gJWF099r/WlJ1U4rkeEbZrflQ2STzzvSSQCcghkie2xVoKCx1uCWXdrEz5JASBr8kBXmGizUM=@vger.kernel.org, AJvYcCXOnpq0fM1hPHETsIvAEp/fFtS6s1HtQB//tCqJxxK4MBI68hTqZnW1fsX+R4PSxEOvv6fBuWvipGME6r2fvT7nVOOClU4R@vger.kernel.org, AJvYcCXYAiRGiLEB4I5uZCecFQWCWyPlBk33XCItexigMxdnGZU+OP9tuL7UbBLnTFtUKVaQgrkLxBHp2ihAdwq9XA==@vger.kernel.org, AJvYcCXb6UgBlEMzvCZ3VCRBZwJm9kLfr8fvtVWcS7lPagqcXLWb0SytKF7dgrP+/7+zY1RgnkNCSOy4etam8dEIPMifQw==@vger.kernel.org, AJvYcCXwSDbsq6XqXbKbWoC/d6nEeJizTQq8OBf2TYK+Dh29G6NpyxSQXVUXMjug1kWDE5JwbPpaLtnPMe/qFNVHna+Rctqx@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUyk8HjxOOjTH5RoSbkckQLqIq9/b5p9QDj8sFrmWXDSbd7zBb
-	RETIIEF1qtNcOhY1hj/SXpae0sbMVoX4Dcq4lG2XuhI4ix+CuuSuuTnDj/0lfYYPZ+8=
-X-Gm-Gg: ASbGncsTq2wOGyoDJ3IhiHCsLAo73elOod8a4B9S63dCuNP0ZZfoAjVxwfy2iVMIUZ0
-	uqN/qO/BTDNzAXIMPqC4wmgNLVoRcmbO09FVOPzzuphm4yWUMS6M86y5mo5D02nf8UPVOptdtgC
-	G//RVSHD53Wq8heqh8ewsk+4hs9X+Zj/0Kt01bUAGt+uirjehtnTAdszj8LB7bUtVXyPrB7UCa8
-	2N2IJaBZS+hIvgsd4IjNBFgfv6sDpXf317pgLAsH42sGLFNfXa8+eq7jdpphoyCRWSP1h7ZRVcu
-	hmQM6yR9JKzsB3Md+5jkCF7wBPiW/ohQq2D8fR4bmbbCxJH8wLD/n7kg/0a/6vf2G076dhgOARd
-	nB9+t1Z4tQ1BBKqtpX7Fx/5MEWCdawtuDcuW64D1xVN7iYYlw8AKAEAolgDnh
-X-Google-Smtp-Source: AGHT+IE1J+AW0AMEEiqaet6OiGOZk/hzIXBMdylebzV2SmaVtuyinJakXg/+9VDOjnZLVzI4feXpcQ==
-X-Received: by 2002:a05:6e02:1a4c:b0:3ed:eab:439a with SMTP id e9e14a558f8ab-3f400475d88mr158077645ab.12.1756735105932;
-        Mon, 01 Sep 2025 06:58:25 -0700 (PDT)
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3f3e07ea04fsm29940595ab.25.2025.09.01.06.58.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 06:58:25 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-8873044d611so46683239f.1;
-        Mon, 01 Sep 2025 06:58:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUS5YqmU67qM4/ABmrAkAJCKdOCvdDtgVK2AFgFiwihzx21YfOZ0W+rZQbXYLPi5E4xKvQ43jTFSeCck+15@vger.kernel.org,
- AJvYcCUg/+3jdpYxm4bpCGgWJ7aVbv69npnj7c5DUZmlsppOoQ6FxzTrUDiJUuxlabquLMCQt1RwDYQJGg==@vger.kernel.org,
- AJvYcCUn2CbUvtkyFG88YuUQYnva+624tedkL0Qd+KxmDG0r7vboKSUecYLeu/3DsaPnAO0lBF6xwySMiBjg/51E@vger.kernel.org,
- AJvYcCUrgt2NVbgowDyxI9LPiIsxJiN6AhN1NymMkUftPY53HaSzECRDbq7NtifZBAmyszYsp6MlQX4iTQ4=@vger.kernel.org,
- AJvYcCUuEvr87UeSno31ysMo6JkpPqSyt5paj4yx1hSiLNQjaSUTyArEjU3eMYRRk1mp29ss9czxhq8zEgxEjw==@vger.kernel.org,
- AJvYcCV+ts6sMYcJOnntCRU3vJsQDvt+iVy58SmJHi5hwLabDYIf0hW6m7dqKLBfQPoM+TyP/jt9oog4DYimOg==@vger.kernel.org,
- AJvYcCV9ffK3RX8jSxXMalgnqigWjFcWRh22J+Emh4yqH9RC89FkBSXz+/fzTYJ8YLFErNdoUz9c+xtU@vger.kernel.org,
- AJvYcCVAao1Qttj7NHcENAyE8JRuBJufneZFHwKpczRuX8NvJOlNj9R3U8ER+E9TwOQR0TCjqBioOEWUFwJGGTcsFWYWgQ==@vger.kernel.org,
- AJvYcCVnucVCiFAMk46UDvr6gHeKu2x9RyjujKsjeFO68G9dpzS+eWoclRD3LLN2DVz/Il91fpVcpuGV@vger.kernel.org,
- AJvYcCVtFxTLZAMeU+l5eMn3Ad+L6orDWE2PO71aHWYWqDEt+nFG/Jap+NcQXfIHcYdjRN50AJeFjgL/LQh7fw==@vger.kernel.org,
- AJvYcCVtqsSdCSpF9AF3XYjtVg0ktspu38/42kOz7riEI0Foc1aLh7hHZl9m2yJxIuGyc9bGcB+mFVW9YqO/z10=@vger.kernel.org,
- AJvYcCVvoLYodC8U/JcsCmFFu2AdJvLnt1hsvHCYICYysx4qd7UnUMW2W22MRI+Tuq3cWlg6CCc82b7iReVcRmgFVg==@vger.kernel.org,
- AJvYcCVwxUaV4TERRuoLaXpiRwUkQNN5P3+Op8Ve4/TxnnQ6+1VEd1atmnWGJpx9qq9ZBFD7/MRECqW66XJxZQ==@vger.kernel.org,
- AJvYcCW2hwihokiau9oJoZLUwL6S0pFYtLt7TpGkZhSestGKgUpav9QW+cug26Ax7pexr5/GEUfq+vWJrSvGuFmidK8=@vger.kernel.org,
- AJvYcCWAMFF+j80ZiO88t2JPIF0QxDmQWvWMJ7730a4AcruwNz5tww3fttvVoBsvuXzOKolzTxO6kMLAtOqsqqve4g==@vger.kernel.org,
- AJvYcCWFMqLfYqkrqukIzoFX9uHfJ8NxuKFCKENdkvRFL3kbFejcrbL6mwOru3uJo++oDsrO5UboYATBQi8YPcw=@vger.kernel.org,
- AJvYcCXBW+kMjmply+YARH3geGX0gj2rM8QakCmir//t5q9DtT+RObNyGsWo1kUlZ09Z+mYLX7BdAFPAYPS1UQLtS763539D@vger.kernel.org,
- AJvYcCXBWYTcLnG07iyMSiB2MoZFjcHdmtPgK+exmYc1V3jJNtAU45g1rgGiXuR2QiI+XQ2i4OaqiBab+xd1OyaWbe9o239AVzvZ@vger.kernel.org
-X-Received: by 2002:a05:6102:3053:b0:52a:c340:11db with SMTP id
- ada2fe7eead31-52b1bb24afcmr2206016137.27.1756734711158; Mon, 01 Sep 2025
- 06:51:51 -0700 (PDT)
+	s=arc-20240116; t=1756743940; c=relaxed/simple;
+	bh=YSdNzI/RlDvC138bwYa7GdT4nAHmk7mHD3OnkpEXI00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BLaD3z7ZiFI8uNUcQnzDZ7niRbYmtoFYgbigTJbTdJSKkweA6jBpPcxOyyquf2a+Z+M7C012+GIi993+XE7uT70c5vODDrJbxVPV+3pLNDsPaoYCDH1lHzAJy09LMI8FeNXov7nHASRMU/ktv+TXduz7BqDfLO5QtD+FKjcC7Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 581G15de009275;
+	Mon, 1 Sep 2025 11:01:05 -0500
+Received: (from greg@localhost)
+	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 581G1253009273;
+	Mon, 1 Sep 2025 11:01:02 -0500
+Date: Mon, 1 Sep 2025 11:01:02 -0500
+From: "Dr. Greg" <greg@enjellic.com>
+To: John Johansen <john.johansen@canonical.com>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Subject: Re: LSM namespacing API
+Message-ID: <20250901160102.GA9179@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <CAHC9VhRGMmhxbajwQNfGFy+ZFF1uN=UEBjqQZQ4UBy7yds3eVQ@mail.gmail.com> <CAEjxPJ5EvR+2fboLu_nBGZu+ZVUpX4KM6xdPUqDErCmw=iA37g@mail.gmail.com> <67e72960-c985-48e1-aaeb-a4286cc8508f@canonical.com> <aKcskclwVVe1X4kP@mail.hallyn.com> <6c69fc81-32a7-442c-8c7f-992eda9c2d18@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250901-nios2-implement-clone3-v2-0-53fcf5577d57@siemens-energy.com>
- <20250901-nios2-implement-clone3-v2-3-53fcf5577d57@siemens-energy.com>
-In-Reply-To: <20250901-nios2-implement-clone3-v2-3-53fcf5577d57@siemens-energy.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 1 Sep 2025 15:51:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWyCbOgs6XyW=8PG2pVw1-zhWP_VtsXsGz1HeFrZ6kjdA@mail.gmail.com>
-X-Gm-Features: Ac12FXxyJUafI_d6iF6chcUi31LuXt_e8cojxsF4wFcxCNHCg2s17r6RQqbjdms
-Message-ID: <CAMuHMdWyCbOgs6XyW=8PG2pVw1-zhWP_VtsXsGz1HeFrZ6kjdA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] arch: copy_thread: pass clone_flags as u64
-To: schuster.simon@siemens-energy.com
-Cc: Dinh Nguyen <dinguyen@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Kees Cook <kees@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Guo Ren <guoren@kernel.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	John Johansen <john.johansen@canonical.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Kentaro Takeda <takedakn@nttdata.co.jp>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Brian Cain <bcain@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Jonas Bonn <jonas@southpole.se>, 
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	selinux@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c69fc81-32a7-442c-8c7f-992eda9c2d18@canonical.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Mon, 01 Sep 2025 11:01:05 -0500 (CDT)
 
-On Mon, 1 Sept 2025 at 15:10, Simon Schuster via B4 Relay
-<devnull+schuster.simon.siemens-energy.com@kernel.org> wrote:
-> From: Simon Schuster <schuster.simon@siemens-energy.com>
->
-> With the introduction of clone3 in commit 7f192e3cd316 ("fork: add
-> clone3") the effective bit width of clone_flags on all architectures was
-> increased from 32-bit to 64-bit, with a new type of u64 for the flags.
-> However, for most consumers of clone_flags the interface was not
-> changed from the previous type of unsigned long.
->
-> While this works fine as long as none of the new 64-bit flag bits
-> (CLONE_CLEAR_SIGHAND and CLONE_INTO_CGROUP) are evaluated, this is still
-> undesirable in terms of the principle of least surprise.
->
-> Thus, this commit fixes all relevant interfaces of the copy_thread
-> function that is called from copy_process to consistently pass
-> clone_flags as u64, so that no truncation to 32-bit integers occurs on
-> 32-bit architectures.
->
-> Signed-off-by: Simon Schuster <schuster.simon@siemens-energy.com>
+On Thu, Aug 21, 2025 at 07:57:11AM -0700, John Johansen wrote:
 
-Fixes: c5febea0956fd387 ("fork: Pass struct kernel_clone_args into copy_thread")
+Good morning, I hope the week is starting well for everyone.
 
->  arch/m68k/kernel/process.c       | 2 +-
+Now that everyone is getting past the summer holiday season, it would
+seem useful to specifically clarify some of the LSM namespace
+implementation details.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+> On 8/21/25 07:26, Serge E. Hallyn wrote:
+> >On Thu, Aug 21, 2025 at 12:46:10AM -0700, John Johansen wrote:
+> >>On 8/19/25 10:47, Stephen Smalley wrote:
+> >>>On Tue, Aug 19, 2025 at 10:56???AM Paul Moore <paul@paul-moore.com> 
+> >>>wrote:
+> >>>>
+> >>>>Hello all,
+> >>>>
+> >>>>As most of you are likely aware, Stephen Smalley has been working on
+> >>>>adding namespace support to SELinux, and the work has now progressed
+> >>>>to the point where a serious discussion on the API is warranted.  For
+> >>>>those of you are unfamiliar with the details or Stephen's patchset, or
+> >>>>simply need a refresher, he has some excellent documentation in his
+> >>>>work-in-progress repo:
+> >>>>
+> >>>>* https://github.com/stephensmalley/selinuxns
+> >>>>
+> >>>>Stephen also gave a (pre-recorded) presentation at LSS-NA this year
+> >>>>about SELinux namespacing, you can watch the presentation here:
+> >>>>
+> >>>>* https://www.youtube.com/watch?v=AwzGCOwxLoM
+> >>>>
+> >>>>In the past you've heard me state, rather firmly at times, that I
+> >>>>believe namespacing at the LSM framework layer to be a mistake,
+> >>>>although if there is something that can be done to help facilitate the
+> >>>>namespacing of individual LSMs at the framework layer, I would be
+> >>>>supportive of that.  I think that a single LSM namespace API, similar
+> >>>>to our recently added LSM syscalls, may be such a thing, so I'd like
+> >>>>us to have a discussion to see if we all agree on that, and if so,
+> >>>>what such an API might look like.
+> >>>>
+> >>>>At LSS-NA this year, John Johansen and I had a brief discussion where
+> >>>>he suggested a single LSM wide clone*(2) flag that individual LSM's
+> >>>>could opt into via callbacks.  John is directly CC'd on this mail, so
+> >>>>I'll let him expand on this idea.
+> >>>>
+> >>>>While I agree with John that a fs based API is problematic (see all of
+> >>>>our discussions around the LSM syscalls), I'm concerned that a single
+> >>>>clone*(2) flag will significantly limit our flexibility around how
+> >>>>individual LSMs are namespaced, something I don't want to see happen.
+> >>>>This makes me wonder about the potential for expanding
+> >>>>lsm_set_self_attr(2) to support a new LSM attribute that would support
+> >>>>a namespace "unshare" operation, e.g. LSM_ATTR_UNSHARE.  This would
+> >>>>provide a single LSM framework API for an unshare operation while also
+> >>>>providing a mechanism to pass LSM specific via the lsm_ctx struct if
+> >>>>needed.  Just as we do with the other LSM_ATTR_* flags today,
+> >>>>individual LSMs can opt-in to the API fairly easily by providing a
+> >>>>setselfattr() LSM callback.
+> >>>>
+> >>>>Thoughts?
+> >>>
+> >>>I think we want to be able to unshare a specific security module
+> >>>namespace without unsharing the others, i.e. just SELinux or just
+> >>>AppArmor.
+> >>
+> >>yes which is part of the problem with the single flag. That choice
+> >>would be entirely at the policy level, without any input from userspace.
+> >
+> >AIUI Paul's suggestion is the user can pre-set the details of which
+> >lsms to unshare and how with the lsm_set_self_attr(), and then a
+> >single CLONE_LSM effects that.
 
-Gr{oetje,eeting}s,
+> yes, I was specifically addressing the conversation I had with Paul at
+> LSS that Paul brought up. That is
+> 
+>   At LSS-NA this year, John Johansen and I had a brief discussion where
+>   he suggested a single LSM wide clone*(2) flag that individual LSM's
+>   could opt into via callbacks.
+> 
+> the idea there isn't all that different than what Paul proposed. You
+> could have a single flag, if you can provide ancillary information. But
+> a single flag on its own isn't sufficient.
 
-                        Geert
+If one thing has come out of this thread, it would seem to be the fact
+that there is going to be little commonality in the requirements that
+various LSM's will have for the creation of a namespace.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Given that, the most infrastructure that the LSM should provide would
+be a common API for a resource orchestrator to request namespace
+separation and to provide a framework for configuring the namespace
+prior to when execution begins in the context of the namespace.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+The first issue to resolve would seem to be what namespace separation
+implies.
+
+John, if I interpret your comments in this discussion correctly, your
+contention is that when namespace separation is requested, all of the
+LSM's that implement namespaces will create a subordinate namespace,
+is that a correct assumption?
+
+It would seem, consistent with the 'stacking' concept, that any LSM
+with namespace capability that chooses not to separate, will result in
+denial of the separation request.  That in turn will imply the need to
+unwind or delete any namespace context that other LSM's may have
+allocated before the refusal occurred.
+
+This model also implies that the orchestrator requesting the
+separation will need to pass a set of parameters describing the
+characteristics of each namespace, described by the LSM identifier
+that they pertain to.  Since there may be a need to configure multiple
+namespaces there would be a requirement to pass an array or list of
+these parameter sets.
+
+There will also be a need to inject, possibly substantial amounts of
+policy or model information into the namespace, before execution in
+the context of the namespace begins.
+
+There will also be a need to decide whether namespace separation
+should occur at the request of the orchestrator or at the next fork,
+the latter model being what the other resource namespaces use.  We
+believe the argument for direct separation can be made by looking at
+the gymnastics that orchestrators need to jump through with the
+'change-on-fork' model.
+
+Case in point, it would seem realistic that a process with sufficient
+privilege, may desire to place itself in a new LSM namespace context
+in a manner that does not require re-execution of itself.
+
+With respect to separation, the remaining issue is if a new security
+capability bit needs to be implemented to gate namespace separation.
+John, based on your comments, I believe you would support this need?
+
+> You can do a subset with a single flag and only policy directing things,
+> but that would cut container managers out of the decision. Without a
+> universal container identifier that really limits what you can do. In
+> another email I likend it to the MCS label approach to the container
+> where you have a single security policy for the container and each
+> container gets to be a unique instance of that policy. Its not a perfect
+> analogy as with namespace policy can be loaded into the namespace making
+> it unique. I don't think the approach is right because not all namespaces
+> implement a loadable policy, and even when they do I think we can do a
+> better job if the container manager is allowed to provide additional
+> context with the namespacing request.
+
+In order to be relevant, the configuration of LSM namespaces need to
+be under control of a resource orchestrator or container manager.
+
+What we hear from people doing Kubernetes, at scale, is a desire to be
+able to request that a container be run somewhere in the hardware
+resource pool and for that container to implement a security model
+specific to the needs of the workload running in that container.  In a
+manner that is orthogonal from other security policies that may be in
+effect for other workloads, on the host or in other containers.
+
+Hopefully the above will be of assistance in furthering discussion.
+
+Have a good week.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
+              https://github.com/Quixote-Project
 
