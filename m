@@ -1,100 +1,147 @@
-Return-Path: <linux-security-module+bounces-11743-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11746-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C8FBB43FF7
-	for <lists+linux-security-module@lfdr.de>; Thu,  4 Sep 2025 17:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0F2CB442A1
+	for <lists+linux-security-module@lfdr.de>; Thu,  4 Sep 2025 18:25:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF91CA057B4
-	for <lists+linux-security-module@lfdr.de>; Thu,  4 Sep 2025 15:07:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E130F480831
+	for <lists+linux-security-module@lfdr.de>; Thu,  4 Sep 2025 16:25:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B4D306D3E;
-	Thu,  4 Sep 2025 15:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F12D2248AF;
+	Thu,  4 Sep 2025 16:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Avj5ZyE1"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [45.157.188.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A9D302CDA
-	for <linux-security-module@vger.kernel.org>; Thu,  4 Sep 2025 15:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EC9225A29
+	for <linux-security-module@vger.kernel.org>; Thu,  4 Sep 2025 16:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756998427; cv=none; b=lHC5I0sc92PrIwzMYrRV7NSE7DVHc0pCSQ23/oqoyYA1ZXFmY+jsirezShr7Ll8yNTD4fsUIE+ztZKHszBFuIhcw1hnWz/X4Re66N0YR3BqwijFl8XMA+QFt3J8b210aMaL+i8HKZvKJnRm2ragWXa111qDZhuh84RHU+pPL/e4=
+	t=1757003121; cv=none; b=jJqBdaEDobkrlmjLd07kbJJkLhlkxMf6+7hlWQWIh/IecErdPAtmWHyKJiQ6i8hUAAtkomGA2er13Ak9RAZ6c8GZzr0lI6hFOCb90WNb7YG8wr5Xgvay7uVuHvgYJdBgrgfMgF3Y+WBaEsICf/qL5dK89kV/3d3w2nTX6ECdJ/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756998427; c=relaxed/simple;
-	bh=WdSMSR85x87X0+DfffqCowskGNW4tPHLqZlvNo3jcgU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=e1oXNkjKBkcXBPIeAQf8tWhvso1sr3TkwDqn/Y6j1bK+x4WBfgLHvH+ASH/X2OwPqgnmjercR7WMPoF6S258w4zURZD/uE/i3XfcZwmwwX/aI1QkdjLzAxo0Uczu0t2vlnnO1xiXENksD4xIkmxtnCfw9kCtMs/l4px/6u2RtlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3f31ac5bd9cso13846805ab.3
-        for <linux-security-module@vger.kernel.org>; Thu, 04 Sep 2025 08:07:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756998425; x=1757603225;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tLO91xyldPwJGtv4KAJ9Dss03Zr2mNg6Ty96jb715OM=;
-        b=RE88OEcwvDBhmR9SQrudWb7KXJ0KRmDxhi4kmr+7yonr0xA7iB+zsVglPv48EiQSz5
-         1rWX8ZVk3gmJyTx8/Ds+wN1U7b0/S7okomsb5eXElwaAdaa8cwltwAhJiNfZNTN3m66v
-         DCPGLYvHhhAjgi1HNJFyKMKQg8reHSD9G4jgE2pXc9VAruK0zkYFomMjEFaFqQvLSPxu
-         yt0A7+GQngvDDfOkRGMDbEKQwgZN9C9aJnHwefZDUDmyhbMvOkBx6Aoq/bOVf9DlJf01
-         SPzfRDpBGwz6S1uoDJRIroADX/p+4JbS1Lra0wRgKcOcX2/lvg2RtzZIqEiu3qoDJxBa
-         l7EA==
-X-Forwarded-Encrypted: i=1; AJvYcCW1IjeQqDn3U5dYL3YBPadGsHcC+pIG5b9ge0B9mm80OQoQF4h4twRbSaVzGfoJEfa9qb7FEwvCeuvS5qsrP6JCIuzbemI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRAUIxoQvgzhCZv4Sjt4N43d1ztbIkviTx/d91MBgfPiIRpcGP
-	dYGp3eH/B21DKuA14Q3LEZbFAjR3wcaR0JkxiFp/xwItsI2UHdOFV+WRrn9htuJ6Fv+1rDMyIzW
-	YwzDOHPnJ3ACCJRR1ghsC4pMcPN7Jwp4X70w/HbBEOOQvvlz4eHA1jHlJIyk=
-X-Google-Smtp-Source: AGHT+IGPt5XXPZQ71LRSq35os/98bkbkleFEzJZRK9KO1wphEAorWaJE0sjRcGoS9N8q2GtO62tIzPc9fUr+UXPnANVDnXDcNjgk
+	s=arc-20240116; t=1757003121; c=relaxed/simple;
+	bh=Xr7HXV2EDj1MUXPmxuHpYx/sRLGDUigEszHvOfugdJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mGhYHxC+Gz2fbPqONMAfkPOHwrS0HrxXn2fG7oKLxjz+tZJ0ho3mXdF4TPcbjGA2UywyXK4l0p+BUPHegvQL+HiRDwpr2SjjLG4Qst+uuuDbFQaSiLeuIbFxLIUKrOmmHlBCbD2bk2xiTB1e+cqDXnepFKsT5dY2BU35exKG7fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Avj5ZyE1; arc=none smtp.client-ip=45.157.188.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cHjcS5yPWzfRJ;
+	Thu,  4 Sep 2025 17:11:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1756998696;
+	bh=U2mCz3zznSLsWb7GNeP1eHBLdUbSnWIoGL7c11C9feg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Avj5ZyE1T5StHeQ9hVNvK1r+CVM1voY2tYMZDYfh6WHLK689wDoxb87r3+Piou/oE
+	 XFN8qdXhQRcGm1ATYXkTX//HIHbm/jEhpPjqTopY8M/J8tLsLcP1JvYnlyQb0dgA3X
+	 XAgvq4GMpLViKLATuUEVpW29hYN27jFBVfXN9kcQ=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4cHjcS0Bk0zGB8;
+	Thu,  4 Sep 2025 17:11:35 +0200 (CEST)
+Date: Thu, 4 Sep 2025 17:11:35 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Tingmao Wang <m@maowtm.org>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	linux-security-module@vger.kernel.org, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	Jann Horn <jannh@google.com>
+Subject: Re: [RFC PATCH] selftests/landlock: Support running the full fs test
+ suite on another FS
+Message-ID: <20250904.Jai9ahj2eoh2@digikod.net>
+References: <20250830034753.186551-1-m@maowtm.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:144c:b0:3ef:969c:c91 with SMTP id
- e9e14a558f8ab-3f400097800mr372808605ab.6.1756998424765; Thu, 04 Sep 2025
- 08:07:04 -0700 (PDT)
-Date: Thu, 04 Sep 2025 08:07:04 -0700
-In-Reply-To: <68b93e3c.a00a0220.eb3d.0000.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68b9ab18.050a0220.192772.0008.GAE@google.com>
-Subject: Re: [syzbot] [kernel?] INFO: trying to register non-static key in
- skb_dequeue (4)
-From: syzbot <syzbot+bb185b018a51f8d91fd2@syzkaller.appspotmail.com>
-To: apparmor@lists.ubuntu.com, audit@vger.kernel.org, casey@schaufler-ca.com, 
-	davem@davemloft.net, edumazet@google.com, eparis@redhat.com, 
-	eric.dumazet@gmail.com, horms@kernel.org, jmorris@namei.org, 
-	john.johansen@canonical.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, luto@kernel.org, 
-	netdev@vger.kernel.org, omosnace@redhat.com, pabeni@redhat.com, 
-	paul@paul-moore.com, peterz@infradead.org, selinux@vger.kernel.org, 
-	serge@hallyn.com, stephen.smalley.work@gmail.com, 
-	syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250830034753.186551-1-m@maowtm.org>
+X-Infomaniak-Routing: alpha
 
-syzbot has bisected this issue to:
+On Sat, Aug 30, 2025 at 11:47:51AM +0800, Tingmao Wang wrote:
+> Adds a TMP_BIND_TO environment variable which the test binary will check,
+> and if present, instead of mounting a tmpfs on ./tmp, it will bind mount
+> that path to ./tmp instead.
+> 
+> Currently there is the layout3_fs tests which runs a few tests (but not
+> the full set of Landlock tests) in separate filesystems, notably no file
+> creation/write/rename etc.  This is necessary for certain special fs such
+> as proc or sysfs, as the tests can only read a specific path.  However,
+> for a more typical fs like v9fs, this is limitting.
+> 
+> This test makes it possible to run the full set on any filesystem (even
+> though this is still not automated).  Note that there are some expected
+> failures, such as v9fs not supporting RENAME_EXCHANGE, as well as the
+> known issue of ephemeral inodes, which may be fixed by a later revision of
+> [1].
+> 
+> Suggestions for alternatives welcome.  Maybe we need to also detect the
+> fs, and disable known-unsupported tests like RENAME_EXCHANGE?
 
-commit eb59d494eebd4c5414728a35cdea6a0ba78ff26e
-Author: Casey Schaufler <casey@schaufler-ca.com>
-Date:   Sat Aug 16 17:28:58 2025 +0000
+Extending layout3_fs tests with new ones that make sense (i.e. those you
+listed) would make be more consistent whithout scaling issue.  We can
+extend the fixture variants to skip some tests.
 
-    audit: add record for multiple task security contexts
+This patch should help:
+https://lore.kernel.org/all/20250704171345.1393451-1-mic@digikod.net/
+Feel free to take it with your 9pfs patch series and add a new patch
+with extended checks.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1199fe62580000
-start commit:   5d50cf9f7cf2 Add linux-next specific files for 20250903
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1399fe62580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1599fe62580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d2429dff5531d80
-dashboard link: https://syzkaller.appspot.com/bug?extid=bb185b018a51f8d91fd2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b9a312580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16819e62580000
-
-Reported-by: syzbot+bb185b018a51f8d91fd2@syzkaller.appspotmail.com
-Fixes: eb59d494eebd ("audit: add record for multiple task security contexts")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> 
+> Link: https://lore.kernel.org/v9fs/cover.1743971855.git.m@maowtm.org/ [1]
+> Signed-off-by: Tingmao Wang <m@maowtm.org>
+> ---
+>  tools/testing/selftests/landlock/fs_test.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+> index fa0f18ec62c4..847be67fff9e 100644
+> --- a/tools/testing/selftests/landlock/fs_test.c
+> +++ b/tools/testing/selftests/landlock/fs_test.c
+> @@ -285,6 +285,22 @@ static const struct mnt_opt mnt_tmp = {
+>  	.data = MNT_TMP_DATA,
+>  };
+>  
+> +static struct mnt_opt get_tmp_mnt_opt(void)
+> +{
+> +	const char *const tmp_bind_to = getenv("TMP_BIND_TO");
+> +
+> +	if (tmp_bind_to) {
+> +		struct mnt_opt mnt = {
+> +			.flags = MS_BIND,
+> +			.source = tmp_bind_to
+> +		};
+> +
+> +		return mnt;
+> +	}
+> +
+> +	return mnt_tmp;
+> +}
+> +
+>  static int mount_opt(const struct mnt_opt *const mnt, const char *const target)
+>  {
+>  	return mount(mnt->source ?: mnt->type, target, mnt->type, mnt->flags,
+> @@ -322,7 +338,9 @@ static void prepare_layout_opt(struct __test_metadata *const _metadata,
+>  
+>  static void prepare_layout(struct __test_metadata *const _metadata)
+>  {
+> -	prepare_layout_opt(_metadata, &mnt_tmp);
+> +	struct mnt_opt mnt = get_tmp_mnt_opt();
+> +
+> +	prepare_layout_opt(_metadata, &mnt);
+>  }
+>  
+>  static void cleanup_layout(struct __test_metadata *const _metadata)
+> 
+> base-commit: 1b237f190eb3d36f52dffe07a40b5eb210280e00
+> -- 
+> 2.51.0
+> 
+> 
 
