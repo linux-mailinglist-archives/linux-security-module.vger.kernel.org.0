@@ -1,190 +1,110 @@
-Return-Path: <linux-security-module+bounces-11813-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11816-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52BB3B527F9
-	for <lists+linux-security-module@lfdr.de>; Thu, 11 Sep 2025 07:05:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A3F8B52867
+	for <lists+linux-security-module@lfdr.de>; Thu, 11 Sep 2025 07:59:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EABF6878BC
-	for <lists+linux-security-module@lfdr.de>; Thu, 11 Sep 2025 05:05:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77736188D3A0
+	for <lists+linux-security-module@lfdr.de>; Thu, 11 Sep 2025 06:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98719247291;
-	Thu, 11 Sep 2025 05:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3796F23BD02;
+	Thu, 11 Sep 2025 05:59:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="YSYfuLqI"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JBE/GwkS"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E898A21C160;
-	Thu, 11 Sep 2025 05:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD551547EE
+	for <linux-security-module@vger.kernel.org>; Thu, 11 Sep 2025 05:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757567138; cv=none; b=PDyASY2Z7Hox9lMN67p0tZyrZtVJbl2d7jRSimcCIszeMW+6kFUOOuhquVplrtE6XnUctpqnSZK/jlUIZLypO/rSWpT2Jr43UGIpmUs+zgY6UblMRtpgVqLDfu8Hgzwe0TU6/2DEjXrt7b4PrWeghn2w/NLd2AQ6uplx6E1JAzA=
+	t=1757570394; cv=none; b=nsnFbvuED2M5civVuWR84UfkzHiDjfz9HbHL0d2tVVaOS3OeZ5Dak6tAwzVyUYHgYRiHNmTLrpDFte/wkG84ponVhnj9328Bw/lV/BbJion7D4DSh6xkUVXuwYJBBz6FXuDYIM3ld56AeTNF1OhT9gAk9kRBJCPhPKNIh7/uXXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757567138; c=relaxed/simple;
-	bh=glpgGqMyPX1WzvhFr1t2cS7C9dXSXSxwAH/vX786+3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bEldBINO9/Y1DKdGGE1OM6pynL5H2ipc5fopIsDA5jgK0TvG5a2ZDjFwsY2OsSJtBM1vg3I3nO1l1JwzvBLPyLY4PReLV7Srf2wkbGMcFe4qGQ0pwvE2weLP+PmGexbq6BRllW+UTNt83jqT/48xKP2fy42/lpuKe+krCsa7LcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=YSYfuLqI; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=0CcKvldIZNJW79kRmpAdQE4cnrrBpI7RXSbDm77cZJY=; b=YSYfuLqIekKKX0gyv8gAWtg9zr
-	D7Jzy3Iy7GMj1hYnj+N/ejjVsi0DlLa/t6G3jYWbBcg4kNmVeiDF5kIh6GrQkK4AMU9ucpGsCrksU
-	crW5ZHYVA1NCYqwXM+aXn4j+CYkpIRiWf7nyD99n35P15LaI4BuXGBqR7FSOAzl6L7l/nZaHOIrx+
-	KGmzDtiYbie1L/yqjfKjtjD5hkRDPicg2P52Lq891wmPbhk3fwvrfATCttVm/mKRu1OKvtJIYrWnn
-	flH0bhwJMZJq4ahUfznJo2cUeptcDSpBs1M89k17/uBDEB+9mdxtq/xkkUkm3KL1M9+UO4t/yVLqn
-	GkZOuQAw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uwZV1-0000000D4l0-22UM;
-	Thu, 11 Sep 2025 05:05:35 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-Cc: torvalds@linux-foundation.org,
-	brauner@kernel.org,
-	jack@suse.cz,
-	neil@brown.name,
-	linux-security-module@vger.kernel.org,
-	dhowells@redhat.com,
-	linkinjeon@kernel.org
-Subject: [PATCH 6/6] make it easier to catch those who try to modify ->d_name
-Date: Thu, 11 Sep 2025 06:05:34 +0100
-Message-ID: <20250911050534.3116491-6-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250911050534.3116491-1-viro@zeniv.linux.org.uk>
+	s=arc-20240116; t=1757570394; c=relaxed/simple;
+	bh=YLJ7E8D39ZQye1/XBWf2REKukXkr7dKknYd/ulrZr5w=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=JaUODl7Prqk1YDfMpDQv9Bb6OLZzuGS7b0l8zr5PKjrLxTcwzvQ4RfT799OmzY29DxW+zmo5v0v5/WuY/EWdvO43HuSiz3v08kaPO5/FWa6vRvcmvxLN6tGe8SjA3uCDoWM23jA+n3f/7QQGMfELZ1UVOCbmjfvCOkJ44fhu76Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JBE/GwkS; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757570391;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EvIv0Fme/12Gy6QkmPve1p56d0YuJiZc9uDe1Fge2qw=;
+	b=JBE/GwkSGJR+dHxrs1rFkoS3bnBh9tWvogXeIF7TqACCMNjtnDPb8WgSCDxSk+4P7gZeCM
+	a099NCp2Fm0U6vZV17fDwxiby3/f7Zq2ZhU+3IRxFA3wM8KZG6OMbz0d+65hrqZKOtD+8o
+	MMSZkVEXYKTNxehG7UzmapAm2R4PrhY=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-450-thmt30oePk6tg_klA7gfxA-1; Thu,
+ 11 Sep 2025 01:59:50 -0400
+X-MC-Unique: thmt30oePk6tg_klA7gfxA-1
+X-Mimecast-MFC-AGG-ID: thmt30oePk6tg_klA7gfxA_1757570389
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 876411800291;
+	Thu, 11 Sep 2025 05:59:48 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.6])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 12C46300018D;
+	Thu, 11 Sep 2025 05:59:45 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20250911050149.GW31600@ZenIV>
 References: <20250911050149.GW31600@ZenIV>
- <20250911050534.3116491-1-viro@zeniv.linux.org.uk>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: dhowells@redhat.com, linux-fsdevel@vger.kernel.org,
+    Linus Torvalds <torvalds@linux-foundation.org>,
+    Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+    NeilBrown <neil@brown.name>, linux-security-module@vger.kernel.org,
+    Namjae Jeon <linkinjeon@kernel.org>
+Subject: Re: [PATCHES] simple part of ->d_name stuff
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1910270.1757570384.1@warthog.procyon.org.uk>
+Date: Thu, 11 Sep 2025 06:59:44 +0100
+Message-ID: <1910271.1757570384@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Turn d_name into an anon union of const struct qstr d_name with
-struct qstr __d_name.  Very few places need to modify it (all
-in fs/dcache.c); those are switched to use of ->__d_name.
+Al Viro <viro@zeniv.linux.org.uk> wrote:
 
-Note that ->d_name can actually change under you unless you have
-the right locking environment; this const just prohibits accidentally
-doing stores without being easily spotted.
+> 	Rules for ->d_name access are rather unpleasant and so's
+> verifying that they are followed.  There is a relatively simple part,
+> though - nobody outside of fs/dcache.c has any business modifying
+> that thing.
+> 
+> 	So let's make sure that all functions we are passing
+> &dentry->d_name are taking const struct qstr * and replace
+> ->d_name with an anon union of struct qstr *__d_name and
+> const struct qstr *d_name.
+> 
+> 	It is *not* enough to guarantee that another thread will
+> not call __d_move() right under you - checking the requirements
+> for that is the hard part.  It does make it easy to verify that
+> nothing else accidentally starts changing it.
+> 
+> 	This stuff lives in
+> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.qstr
+> Branch is -rc4-based, individual patches in followups.
+> 
+> 	Please, review.  If nobody objects, I'll put that in #for-next.
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/dcache.c            | 26 +++++++++++++-------------
- include/linux/dcache.h |  5 ++++-
- 2 files changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 60046ae23d51..b4cd5e1321b3 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -1717,13 +1717,13 @@ static struct dentry *__d_alloc(struct super_block *sb, const struct qstr *name)
- 		dname = dentry->d_shortname.string;
- 	}	
- 
--	dentry->d_name.len = name->len;
--	dentry->d_name.hash = name->hash;
-+	dentry->__d_name.len = name->len;
-+	dentry->__d_name.hash = name->hash;
- 	memcpy(dname, name->name, name->len);
- 	dname[name->len] = 0;
- 
- 	/* Make sure we always see the terminating NUL character */
--	smp_store_release(&dentry->d_name.name, dname); /* ^^^ */
-+	smp_store_release(&dentry->__d_name.name, dname); /* ^^^ */
- 
- 	dentry->d_flags = 0;
- 	lockref_init(&dentry->d_lockref);
-@@ -2743,15 +2743,15 @@ static void swap_names(struct dentry *dentry, struct dentry *target)
- 			/*
- 			 * Both external: swap the pointers
- 			 */
--			swap(target->d_name.name, dentry->d_name.name);
-+			swap(target->__d_name.name, dentry->__d_name.name);
- 		} else {
- 			/*
- 			 * dentry:internal, target:external.  Steal target's
- 			 * storage and make target internal.
- 			 */
--			dentry->d_name.name = target->d_name.name;
-+			dentry->__d_name.name = target->__d_name.name;
- 			target->d_shortname = dentry->d_shortname;
--			target->d_name.name = target->d_shortname.string;
-+			target->__d_name.name = target->d_shortname.string;
- 		}
- 	} else {
- 		if (unlikely(dname_external(dentry))) {
-@@ -2759,9 +2759,9 @@ static void swap_names(struct dentry *dentry, struct dentry *target)
- 			 * dentry:external, target:internal.  Give dentry's
- 			 * storage to target and make dentry internal
- 			 */
--			target->d_name.name = dentry->d_name.name;
-+			target->__d_name.name = dentry->__d_name.name;
- 			dentry->d_shortname = target->d_shortname;
--			dentry->d_name.name = dentry->d_shortname.string;
-+			dentry->__d_name.name = dentry->d_shortname.string;
- 		} else {
- 			/*
- 			 * Both are internal.
-@@ -2771,7 +2771,7 @@ static void swap_names(struct dentry *dentry, struct dentry *target)
- 				     target->d_shortname.words[i]);
- 		}
- 	}
--	swap(dentry->d_name.hash_len, target->d_name.hash_len);
-+	swap(dentry->__d_name.hash_len, target->__d_name.hash_len);
- }
- 
- static void copy_name(struct dentry *dentry, struct dentry *target)
-@@ -2781,11 +2781,11 @@ static void copy_name(struct dentry *dentry, struct dentry *target)
- 		old_name = external_name(dentry);
- 	if (unlikely(dname_external(target))) {
- 		atomic_inc(&external_name(target)->count);
--		dentry->d_name = target->d_name;
-+		dentry->__d_name = target->__d_name;
- 	} else {
- 		dentry->d_shortname = target->d_shortname;
--		dentry->d_name.name = dentry->d_shortname.string;
--		dentry->d_name.hash_len = target->d_name.hash_len;
-+		dentry->__d_name.name = dentry->d_shortname.string;
-+		dentry->__d_name.hash_len = target->__d_name.hash_len;
- 	}
- 	if (old_name && likely(atomic_dec_and_test(&old_name->count)))
- 		kfree_rcu(old_name, head);
-@@ -3133,7 +3133,7 @@ void d_mark_tmpfile(struct file *file, struct inode *inode)
- 		!d_unlinked(dentry));
- 	spin_lock(&dentry->d_parent->d_lock);
- 	spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
--	dentry->d_name.len = sprintf(dentry->d_shortname.string, "#%llu",
-+	dentry->__d_name.len = sprintf(dentry->d_shortname.string, "#%llu",
- 				(unsigned long long)inode->i_ino);
- 	spin_unlock(&dentry->d_lock);
- 	spin_unlock(&dentry->d_parent->d_lock);
-diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index cc3e1c1a3454..c83e02b94389 100644
---- a/include/linux/dcache.h
-+++ b/include/linux/dcache.h
-@@ -95,7 +95,10 @@ struct dentry {
- 	seqcount_spinlock_t d_seq;	/* per dentry seqlock */
- 	struct hlist_bl_node d_hash;	/* lookup hash list */
- 	struct dentry *d_parent;	/* parent directory */
--	struct qstr d_name;
-+	union {
-+	struct qstr __d_name;		/* for use ONLY in fs/dcache.c */
-+	const struct qstr d_name;
-+	};
- 	struct inode *d_inode;		/* Where the name belongs to - NULL is
- 					 * negative */
- 	union shortname_store d_shortname;
--- 
-2.47.2
+Reviewed-by: David Howells <dhowells@redhat.com>
 
 
