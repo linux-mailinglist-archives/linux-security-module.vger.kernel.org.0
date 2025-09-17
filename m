@@ -1,161 +1,149 @@
-Return-Path: <linux-security-module+bounces-11950-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-11952-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9888B80619
-	for <lists+linux-security-module@lfdr.de>; Wed, 17 Sep 2025 17:09:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EEE1B81495
+	for <lists+linux-security-module@lfdr.de>; Wed, 17 Sep 2025 20:02:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 184E4583E11
-	for <lists+linux-security-module@lfdr.de>; Wed, 17 Sep 2025 15:02:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C79101C80CEF
+	for <lists+linux-security-module@lfdr.de>; Wed, 17 Sep 2025 18:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6019535A28B;
-	Wed, 17 Sep 2025 15:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0132FF64C;
+	Wed, 17 Sep 2025 18:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="UDRF/3Sf"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VagvdSJ2"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC702F657C
-	for <linux-security-module@vger.kernel.org>; Wed, 17 Sep 2025 15:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778302F99BC
+	for <linux-security-module@vger.kernel.org>; Wed, 17 Sep 2025 18:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758121236; cv=none; b=CmWr1g+DyXOMIHVVmHADsKFFGEARVKHHoMr/S5UwV5cwvi+/jd4s9/Q2s7CBVEVnjlhad9ZPZcvj0zUGfx8sliIBzIEGM5Bf7I7PPH/xF2pCbsQSS6tcjARjQWDLgv/Ljp3y26krNlVhd2iY0n6ULT5puSbfzlmXRPgcvfj/hfk=
+	t=1758132146; cv=none; b=qhplyQynFsx2P6RyxsWfidwSUhOKoFHMxUHgK995WkyLzS78yuojJQ++vJpDF9cdyjEbmq2JMV090omMSnnAas9qlwSMz5I4lo4/IhhfSMmEPgMnsddYQ9DaC+juxAO3XE8sx0FQaXlmuIw7GNqh6ekricIS+kKef0Nba5oIWos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758121236; c=relaxed/simple;
-	bh=kUknV5WKpxqxen6YllO7EndW/9+UBC/114j9r0F6OAs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L4jLObgMJIq3f+h4bMBZL7UXNbUJK8l/Y5B7azDk/JDQTY5mNLaJl2oduv9kz2pgFx4OwIQemKMhyW06iy7F8fSXQzSeLMtA11tZKix+w5C3SvfT3wCljSi4d85zmyS1UkiASj2UE6/3JwcL/cBunfANqGgjbPRzY59EHAnCY+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=UDRF/3Sf; arc=none smtp.client-ip=84.16.66.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cRhlW6rTTzC01;
-	Wed, 17 Sep 2025 17:00:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1758121223;
-	bh=+45b6a8YTAEI9zyXy5cY7AS59XYHHDZqWbTvbxo1FxU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UDRF/3SffXxjKytOWxXm3JgK/CZgebWXr5PGhgWjJr9lLyIoQuHbCGfbv7PAXlHXP
-	 FB6QX8qmHVjKGzCz4GgyR/PbQm4ioGTyyA1wkBxYqgoC0gjqSi8lL6nsbRR3JC3xoZ
-	 e7bJGu2tWSKQERvIFGRqgoGtJdryMVZCZ9IWgTSc=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cRhlW1wt0zBcl;
-	Wed, 17 Sep 2025 17:00:23 +0200 (CEST)
-Date: Wed, 17 Sep 2025 17:00:22 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc: Dominique Martinet <asmadeus@codewreck.org>, 
-	Tingmao Wang <m@maowtm.org>, Eric Van Hensbergen <ericvh@kernel.org>, 
-	Latchesar Ionkov <lucho@ionkov.net>, v9fs@lists.linux.dev, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, linux-security-module@vger.kernel.org, Jan Kara <jack@suse.cz>, 
-	Amir Goldstein <amir73il@gmail.com>, Matthew Bobrowski <repnop@google.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] fs/9p: Reuse inode based on path (in addition to
- qid)
-Message-ID: <20250917.Eip1ahj6neij@digikod.net>
-References: <aMih5XYYrpP559de@codewreck.org>
- <3070012.VW4agfvzBM@silver>
- <f2c94b0a-2f1e-425a-bda1-f2d141acdede@maowtm.org>
- <3774641.iishnSSGpB@silver>
+	s=arc-20240116; t=1758132146; c=relaxed/simple;
+	bh=c45IjX5cJSPCE8t6J9t1ECSHcRcCXtq2ZmI6fywkbX0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T96qb7WCnpBVwXagUaiEZ8BsSQKGlR5VfnUSMg49cLZGbT+mZ8TxM0t2yXedDFQgVLN/wsyNAIkumfRkYTBd3OI+5FCtxAOUubmt/gtuyzK2uOmlEcRWZVLfOk69db42Ob73LJ4AnZAJUfIxi7VCnf+gi7Cp26WnfZiJN3boFsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VagvdSJ2; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-32e34f472d9so19819a91.3
+        for <linux-security-module@vger.kernel.org>; Wed, 17 Sep 2025 11:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1758132143; x=1758736943; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BUM77tLsoDUjAibRwyKv5SQ08Xu0AqfeFVlC0hwSnKI=;
+        b=VagvdSJ2r9uFKGGeClrK15lB2EhNSeeQRQMrictJduqkXxj929ofT7snHx4BK6/r/Z
+         SFvz4Xqj62YLBkF9AN9Ruv3FZ1Fn0m9OaaJ+MfBa4dLynGUUUFDZK4jFJlPRTPsN1u7M
+         OXKScerVZPGmiX38s8bK0IzVXU1C6g1SHJb8Prcxg+lPbvkIrfftJ9Xi+NOH7aN0Rrb/
+         E88X2TTs4jvhY8hzCeL3KyYal3dwqzYVhXUbWeRyYl19UmzBMoDUj+h9fGngS6ZdQb/y
+         +W0n7z0lMWkG84oqL0+poSnd8RD99XI+/SZ3P7yuFMlPD+uefxa6H0o2xiBW9zSTQypW
+         0Jmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758132143; x=1758736943;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BUM77tLsoDUjAibRwyKv5SQ08Xu0AqfeFVlC0hwSnKI=;
+        b=ApgMeneaJ9oWxMtCbhx3wSkep7ZCKxFjaeQeM3s85zgGqHQGwq47Y4J7HqcT1FG00z
+         0QYYqa594NpWf+FaawToauLu/zm61OJSwp603XBFHCaK89X6GSgLc4cdTXDKMXmduM1S
+         XKRH/zWNp9V4M+dQHruGKGs+flsLtj2dPXmPbxACPem2vt2qpLEulz5o/SpwyDDIZeME
+         djlfP9y3j2GR1EAAoMPgyqVLUAz9bvQUlbdb2bQvQEPxjcrn+wmmXVyZNelj4Aj+KOPQ
+         Ozq7TIcXDjo+CP1eFZ0kIRq6EaxEAF0iy2uW+OeOtO6nm8UW5Sl+S83KwTwZ9H0xl0yO
+         Nc0A==
+X-Forwarded-Encrypted: i=1; AJvYcCVJRZ+MNevHHcT/zVDpOOthLsHZ9vGwTYtQ6GaJX77qpLJTS7840G+MG3VhCczODm6cNNKIqFebpIY6aAFPXQuUF6NHwb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFuMtm0O2NV+EOZjqUh2ctyoB3GMffLGndko+wuwzJ87R5Arsf
+	j5TEztFKMY+j6Mq95wd9ThI7jGts+x4dYe+dC2fmbT8AW9pRaV1v8hbIBIIUqWOVDfp82Ex+1yw
+	fCzNVgYi1Nh0tAZvkWRmWX9DxpI2pYfwXTamj+kS2
+X-Gm-Gg: ASbGncu0uZSepsiFtl5JysY5W0e8YEANs4VdNdE3UC6oFcS8BRk5wBF3494rPhENoPc
+	mjqHZbemq3l1dVIjY/jCkIjrZwPUw8bTRK5WJzwWGgAwuo7c64G/82AwfuQsSqerpNzMMWbWWjv
+	auCtFR9Zch63fF4O/6/pnjX4dl3rwpKk5pzuf+XLTojYxPD3pTUEOr5+hTJstn+YmvhgRX3uhTI
+	1A7Vzg=
+X-Google-Smtp-Source: AGHT+IHS8hOdCDVgiuUdP/vRW/9oLFhnIxkpzATPwO934ELt+GqvfVJnYqe1LADwkFmuGaSy/4pUKM2P+XlmDtuGwHY=
+X-Received: by 2002:a17:90b:4a90:b0:32a:e706:b7b6 with SMTP id
+ 98e67ed59e1d1-32ee3ecfc30mr3766058a91.11.1758132142492; Wed, 17 Sep 2025
+ 11:02:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3774641.iishnSSGpB@silver>
-X-Infomaniak-Routing: alpha
+References: <202509171951.rXOi8Oez-lkp@intel.com>
+In-Reply-To: <202509171951.rXOi8Oez-lkp@intel.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 17 Sep 2025 14:02:09 -0400
+X-Gm-Features: AS18NWAYbfQp7PVjmPX7J13L8lVmlULdlb1F4ZsAfSLFrxqxS41iXrPrFiQ_TeQ
+Message-ID: <CAHC9VhSNoAP98XnBXz681-G-f08ycZULhTZRS6t37Lg1P6qUQA@mail.gmail.com>
+Subject: Re: [pcmoore-lsm:working-lsm_init_rework 40/41] security/lsm_init.c:516:undefined
+ reference to `securityfs_init'
+To: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, Casey Schaufler <casey@schaufler-ca.com>, 
+	John Johansen <john.johhansen@canonical.com>, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 17, 2025 at 11:52:35AM +0200, Christian Schoenebeck wrote:
-> On Wednesday, September 17, 2025 1:59:21 AM CEST Tingmao Wang wrote:
-> > On 9/16/25 20:22, Christian Schoenebeck wrote:
-> > > On Tuesday, September 16, 2025 4:01:40 PM CEST Tingmao Wang wrote:
-> [...]
-> > > I see that you are proposing an option for your proposed qid based
-> > > re-using of dentries. I don't think it should be on by default though,
-> > > considering what we already discussed (e.g. inodes recycled by ext4, but
-> > > also not all 9p servers handling inode collisions).
-> > 
-> > Just to be clear, this approach (Landlock holding a fid reference, then
-> > using the qid as a key to search for rules when a Landlocked process
-> > accesses the previously remembered file, possibly after the file has been
-> > moved on the server) would only be in Landlock, and would only affect
-> > Landlock, not 9pfs (so not sure what you meant by "re-using of dentries").
-> > 
-> > The idea behind holding a fid reference within Landlock is that, because
-> > we have the file open, the inode would not get recycled in ext4, and thus
-> > no other file will reuse the qid, until we close that reference (when the
-> > Landlock domain terminates, or when the 9p filesystem is unmounted)
-> 
-> So far I only had a glimpse on your kernel patches and had the impression that 
-> they are changing behaviour for all users, since you are touching dentry 
-> lookup.
+On Wed, Sep 17, 2025 at 7:57=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git w=
+orking-lsm_init_rework
+> head:   8ea7358ca612bb85eef9179ae746edeb5f1dc9ac
+> commit: bf19c9b17d8d2f27e2031822337e8d137b2c6224 [40/41] lsm: consolidate=
+ all of the LSM framework initcalls
+> config: x86_64-randconfig-003-20250917 (https://download.01.org/0day-ci/a=
+rchive/20250917/202509171951.rXOi8Oez-lkp@intel.com/config)
+> compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250917/202509171951.rXOi8Oez-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202509171951.rXOi8Oez-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    ld: security/lsm_init.o: in function `security_initcall_core':
+> >> security/lsm_init.c:516:(.init.text+0x101b): undefined reference to `s=
+ecurityfs_init'
+>
+>
+> vim +516 security/lsm_init.c
+>
+>    508
+>    509  /**
+>    510   * security_initcall_core - Run the LSM core initcalls
+>    511   */
+>    512  static int __init security_initcall_core(void)
+>    513  {
+>    514          int rc_sfs, rc_lsm;
+>    515
+>  > 516          rc_sfs =3D securityfs_init();
+>    517          rc_lsm =3D lsm_initcall(core);
+>    518
+>    519          return (rc_sfs ? rc_sfs : rc_lsm);
+>    520  }
+>    521  core_initcall(security_initcall_core);
+>    522
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-I think we should not hold dentries because:
-- they reference other dentries (i.e. a file hierarchy),
-- they block umount and I'm convinced the VFS (and users) are not going
-  to like long-lived dentries,
-- Landlock and inotify don't need dentries, just inodes.
+Fixed in the lsm/working-lsm_init_rework branch in case anyone wants
+to take a look.  However, as the fix really doesn't have anything to
+do with the IMA/EVM patch, I'll wait to repost the patchset until Mimi
+has a chance to look at the IMA/EVM patch from Roberto.
 
-I'm wondering why fid are referenced by dentries instead of inodes.
-
-The need for Landlock is to be able to match an inode with a previously
-seen one.  Not all LSM hooks (nor VFS internals) always have access to
-dentries, but they do have access to inodes.
-
-> 
-> > > For all open FIDs QEMU retains a descriptor to the file/directory.
-> > > 
-> > > Which 9p message do you see sent to server, Trename or Trenameat?
-> > > 
-> > > Does this always happen to you or just sometimes, i.e. under heavy load?
-> > 
-> > Always happen, see log: (no Trename since the rename is done on the host)
-> [...]
-> > Somehow if I rename in the guest, it all works, even though it's using the
-> > same fid 2 (and it didn't ask QEMU to walk the new path)
-> 
-> Got it. Even though QEMU *should* hold a file descriptor (or a DIR* stream, 
-
-It's reasonable to assume that QEMU and other should hold opened fid In
-practice, this might not always be the case, but let's move on and
-consider that a 9p server bug.
-
-Landlock and fanotify need some guarantees on opened files, and we
-cannot consider every server bug.  For Landlock, inode may get an
-"ephemeral tag" (with the Landlock object mechanism) to match previously
-seen inodes.  In a perfect world, Landlock could keep a reference on 9p
-inodes (as for other filesystems) and these inodes would always match
-the same file.  In practice this is not the case, but the 9p client
-requirements and the Landlock requirements are not exactly the same.
-
-A 9p client (the kernel) wants to safely deal with duplicated qid, which
-should not happen but still happen in practice as explained before.
-On the other side, Landlock wants to not deny access to allowed files
-(currently identified by their inodes), but I think it would be
-reasonable to allow access theoretically denied (i.e. not allowed to be
-precise, because of the denied by default mechanism) files because of a
-9p server bug mishandling qid (e.g. mapping them to recycled ext4
-inodes).
-
-All that to say that it looks reasonable for Landlock to trust the
-filesystem, and by that I mean all its dependencies, including the 9p
-server, to not have bugs.
-
-Another advantage to rely on qid and server-side opened files is that we
-get (in theory) the same semantic as when Landlock is used with local
-filesystems (e.g. files moved on the server should still be correctly
-identified by Landlock on the client).
-
-> which should imply a file descriptor), there is still a path string stored at 
-> V9fsFidState and that path being processed at some places, probably because 
-> there are path based and FID based variants (e.g Trename vs. Trenameat). Maybe 
-> that clashes somewhere, not sure. So I fear you would need to debug this.
-
-Good to know that it is not a legitimate behavior for a 9p client.
+--=20
+paul-moore.com
 
