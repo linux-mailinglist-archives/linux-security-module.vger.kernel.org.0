@@ -1,314 +1,150 @@
-Return-Path: <linux-security-module+bounces-12035-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12037-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C79AB87D56
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Sep 2025 05:49:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2E4FB88194
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Sep 2025 09:06:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A6921CC0570
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Sep 2025 03:50:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0B4EB60227
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Sep 2025 07:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107EA25FA29;
-	Fri, 19 Sep 2025 03:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6362C2368;
+	Fri, 19 Sep 2025 07:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hCKo2pF/"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71BD21FF45;
-	Fri, 19 Sep 2025 03:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AC52C11C7
+	for <linux-security-module@vger.kernel.org>; Fri, 19 Sep 2025 07:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758253779; cv=none; b=cOY5JYjEwDpvfeZ5BC4p1gWR/i5kHux+FRACiRQ0lpml2k7L8CYT95ic49klpJEH8J1VI6VoNAhDOXj/5xy/kikkeQz5F17by2nJAEW++nmmwf9N9Q/uyVqiCo/qPnQHof39/Ld4LRQHqP0VjDe32m1ZdrU69EC7nhtiv4e+o8w=
+	t=1758265567; cv=none; b=e1civ4yYlXYjrOXjrIkZzC6Yhq3+AVaWhjwvbR0Meou+auF1G36prXfATE2xTWnGiiAsBB1IFH4pAs/MJeqvQSbBaD5oDfg+6QvgAxNr0UO1D/RjLW8BIF2G8TxRpQukHcaGUQfqqWrO2tGPReaGxAB2g7P9LS3ovErYrV3xwdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758253779; c=relaxed/simple;
-	bh=ZKwhkrmf78fE1drA6uOaBAgJGNVlmr5uJlAnb2EaGhY=;
+	s=arc-20240116; t=1758265567; c=relaxed/simple;
+	bh=ItZKaGQl9It/js9gzPNXCsAEXczA+CYbzua9BHh+ovk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B9sjTdsF4eq6SUx5sjUjX3zN8SdetRFqf26uDCMKYZRnmTNnaZO2BBX1z83nNXUNOCCEekCrj3oiG5QNfm1FVMUq8P6ZcbQ5gi9CNVquGsAoLhCsY8Rp2dBco+9eC2HAFzZmy3cAzeHDebd206JB3m9t4kq+DWigRVm54Fzdwk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id CC80C499; Thu, 18 Sep 2025 22:49:28 -0500 (CDT)
-Date: Thu, 18 Sep 2025 22:49:28 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org,
-	=?iso-8859-1?Q?Fr=E9d=E9ric?= Jouen <fjouen@sealsq.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm: use a map for tpm2_calc_ordinal_duration()
-Message-ID: <aMzSyCQks3NlMhPI@mail.hallyn.com>
-References: <20250918193019.4018706-1-jarkko@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gFxppYKBVuaqrFjNOM1Z/tfl49iSEwJY31yTktCq56jdEuwpi/pwfViLuPEwbl+z0yvrM3beBTYQZf9kImjl3UvURSI/mK65HtF/4AzAr+nw2e8UuhEyvfJXUAmxBAIdx2rTu116JZ5nYHVAZVLxG93hPd9Iwo8wtttM3AenUEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hCKo2pF/; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3ee1381b835so833763f8f.1
+        for <linux-security-module@vger.kernel.org>; Fri, 19 Sep 2025 00:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758265564; x=1758870364; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Klo+L3KBBL4ssbFZ2YOqJt7BcxJ8M+dYCfYzeUYYBY=;
+        b=hCKo2pF/F78auKEP48toZ9iiNufcpa9c36bPf4P6fwtH1zaEBgaQ/RUiLIQk92rhWc
+         B1LgQpeOqlgQlCfm8iif2jUa154KDKMvYQlSys5NZtt+K1jFjuxbzMGsfZi6gawxzMjn
+         PH1A3hFkQbnoa61/vfXUDV3CSh6jvceVmBuMfBRP49NRPxq7AcTmj8PJJt5FMoY07PFM
+         f45k7CojLt6eIQlQbuDN/fIh6vTw8m23VBVFZPh7tGbrilgmVh+/LguX/Dq/QoxcwGQt
+         4CRU8KcVWlbcPIAhwDzT0GR2qRk3ORkC5h6ualYsffvKdotgOB88M7c91H+ryPIHp9Um
+         Nvcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758265564; x=1758870364;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/Klo+L3KBBL4ssbFZ2YOqJt7BcxJ8M+dYCfYzeUYYBY=;
+        b=AtctJY5huFjPSmQCm0W6FyayiNm42EOSp64A2Vmh9szNfcMsxbEUEBDjfKvIokcfCd
+         6XrY8VadZzOA+3YYOLZmbgJSHiu9g9vPs7AhmSzNUTl6TQ2ZUsUUBWoAosrZlKXZ0nYO
+         sSmCHgcStmmW/TTBfjqoThAaBfMxDSQUK3eWUjSdHAoRJ6j/CGARq/CpxrLntfItp1GW
+         wV+sbSxJdagpy1K3yFrPTtJ1MOuthYoVP3gS2suMcKPiNZryVsOx4IqjJ+rNERT7Pbba
+         3AggRY99g6xAHY3FqM0K9eSpGf51F7kzauWMqFFtIc9UhZ8xIE7AULDY7X+KSJE6uT2n
+         mAqw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHiQS/VX1dKG0yeORNsVnINhlCRF6pao7v0UFOOU4J0uLFbrsuoUtwbm1PxvQj+ricOpDiafFNkbfsiD7nOFvPZ8L3Rxg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyypjFrnNBdLdYvZmwNjSCVPPd+sIEoihDEAEZi9mLhW+/N46un
+	aZc2N2oJ2SpxlEwb4bXcE3B0SvfY5HOAGXYG2anz2pRE8WqSkZGRTuUrVoDXmVIMTw==
+X-Gm-Gg: ASbGncuBt1uJq9V03DL+OpnIM5NnXL+XRygePpf7jJG6FEmSvEjrFdSFazVJh53EEb/
+	6JTad+zpQWMFEagtxYsFEQ8QwHOWiwWyKOdlGlyZmbCFScZcNSPeQWJ/7STy8R/nTQ+Vbmz6KDW
+	E+MOCmE+J6G5DsXls86OrPGB3c7z6uKQiadkxE3IPYIkY0K0KLFtTm/ruqtXZAqNetm1CXLvcQm
+	t9CBVE0wBvq5rroMcrtE1H9KxBenkH8qRGKbAda8KGN+XhQnLcVcnLRBlv/zjzGKyixlDqTVeIb
+	jKxInv30NVpCPMTKaunY/qMzrDAoXFL/TZOb1kyoVTYdzHaBqiyaAYSUs1tA1iMBp0zE4kCKKXm
+	/FOg1i8zjNB4plYcoiFq50wTX7wNihBRJtC6cOS4pafe9eGH0pymw0Galpxg=
+X-Google-Smtp-Source: AGHT+IHPi1pgPaxjy0qFYAQQyA+9c6RpQAFZf3vA/UzVRkHTrs+JR5MqjC9zARfGu5kWXbLyHGkoeg==
+X-Received: by 2002:a05:6000:2c0b:b0:3ea:6680:8fcd with SMTP id ffacd0b85a97d-3ee7c925245mr1570227f8f.13.1758265563176;
+        Fri, 19 Sep 2025 00:06:03 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:2834:9:1f7a:8520:7568:dac6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3ee0fbf1d35sm7200088f8f.55.2025.09.19.00.06.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Sep 2025 00:06:02 -0700 (PDT)
+Date: Fri, 19 Sep 2025 09:05:54 +0200
+From: Marco Elver <elver@google.com>
+To: syzbot ci <syzbot+ciac51bb7578ba7c59@syzkaller.appspotmail.com>
+Cc: arnd@arndb.de, boqun.feng@gmail.com, bvanassche@acm.org, corbet@lwn.net,
+	davem@davemloft.net, dvyukov@google.com, edumazet@google.com,
+	frederic@kernel.org, glider@google.com, gregkh@linuxfoundation.org,
+	hch@lst.de, herbert@gondor.apana.org.au, irogers@google.com,
+	jannh@google.com, joelagnelf@nvidia.com, josh@joshtriplett.org,
+	justinstitt@google.com, kasan-dev@googlegroups.com, kees@kernel.org,
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	linux-sparse@vger.kernel.org, llvm@lists.linux.dev,
+	longman@redhat.com, luc.vanoostenryck@gmail.com,
+	lukas.bulwahn@gmail.com, mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com, mingo@kernel.org, mingo@redhat.com,
+	morbo@google.com, nathan@kernel.org, neeraj.upadhyay@kernel.org,
+	nick.desaulniers@gmail.com, ojeda@kernel.org, paulmck@kernel.org,
+	penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
+	rcu@vger.kernel.org, rostedt@goodmis.org, takedakn@nttdata.co.jp,
+	tglx@linutronix.de, tgraf@suug.ch, urezki@gmail.com,
+	will@kernel.org, syzbot@lists.linux.dev,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot ci] Re: Compiler-Based Capability- and Locking-Analysis
+Message-ID: <aM0A0p4-3lwLeAWF@elver.google.com>
+References: <20250918140451.1289454-1-elver@google.com>
+ <68cc6067.a00a0220.37dadf.0003.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250918193019.4018706-1-jarkko@kernel.org>
+In-Reply-To: <68cc6067.a00a0220.37dadf.0003.GAE@google.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Thu, Sep 18, 2025 at 10:30:18PM +0300, Jarkko Sakkinen wrote:
-> The current shenanigans for duration calculation introduce too much
-> complexity for a trivial problem, and further the code is hard to patch and
-> maintain.
+On Thu, Sep 18, 2025 at 12:41PM -0700, syzbot ci wrote:
+> syzbot ci has tested the following series
 > 
-> Address these issues with a flat look-up table, which is easy to understand
-> and patch. If leaf driver specific patching is required in future, it is
-> easy enough to make a copy of this table during driver initialization and
-> add the chip parameter back.
+> [v3] Compiler-Based Capability- and Locking-Analysis
+[...]
+> and found the following issue:
+> general protection fault in validate_page_before_insert
 > 
-> 'chip->duration' is retained for TPM 1.x.
+> Full report is available here:
+> https://ci.syzbot.org/series/81182522-74c0-4494-bcf8-976133df7dc7
 > 
-> As the first entry for this new behavior address TCG spec update mentioned
-> in this issue:
+> ***
 > 
-> https://github.com/raspberrypi/linux/issues/7054
-> 
-> Therefore, for TPM_SelfTest the duration is set to 3000 ms.
-> 
-> This does not categorize a as bug, given that this is introduced to the
-> spec after the feature was originally made.
-> 
-> Cc: Frédéric Jouen <fjouen@sealsq.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> general protection fault in validate_page_before_insert
 
-fwiw (which shouldn't be much) looks good to me, but two questions,
-one here and one below.
+Thanks, syzbot ci!
 
-First, it looks like in the existing code it is possible for a tpm2
-chip to set its own timeouts and then set the TPM_CHIP_FLAG_HAVE_TIMEOUTS
-flag to avoid using the defaults, but I don't see anything using that
-in-tree.  Is it possible that there are out of tree drivers that will be
-sabotaged here?  Or am I misunderstanding that completely?
+I messed up the type when moving kcov->area access inside the critical
+section. This is the fix:
 
-> ---
-> v2:
-> - Add the missing msec_to_jiffies() calls.
-> - Drop redundant stuff.
-> ---
->  drivers/char/tpm/tpm-interface.c |   2 +-
->  drivers/char/tpm/tpm.h           |   2 +-
->  drivers/char/tpm/tpm2-cmd.c      | 127 ++++++++-----------------------
->  include/linux/tpm.h              |   5 +-
->  4 files changed, 37 insertions(+), 99 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> index b71725827743..c9f173001d0e 100644
-> --- a/drivers/char/tpm/tpm-interface.c
-> +++ b/drivers/char/tpm/tpm-interface.c
-> @@ -52,7 +52,7 @@ MODULE_PARM_DESC(suspend_pcr,
->  unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
->  {
->  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> -		return tpm2_calc_ordinal_duration(chip, ordinal);
-> +		return tpm2_calc_ordinal_duration(ordinal);
->  	else
->  		return tpm1_calc_ordinal_duration(chip, ordinal);
->  }
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 7bb87fa5f7a1..2726bd38e5ac 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -299,7 +299,7 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
->  ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip);
->  int tpm2_auto_startup(struct tpm_chip *chip);
->  void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
-> -unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
-> +unsigned long tpm2_calc_ordinal_duration(u32 ordinal);
->  int tpm2_probe(struct tpm_chip *chip);
->  int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip);
->  int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 524d802ede26..7d77f6fbc152 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -28,120 +28,57 @@ static struct tpm2_hash tpm2_hash_map[] = {
->  
->  int tpm2_get_timeouts(struct tpm_chip *chip)
->  {
-> -	/* Fixed timeouts for TPM2 */
->  	chip->timeout_a = msecs_to_jiffies(TPM2_TIMEOUT_A);
->  	chip->timeout_b = msecs_to_jiffies(TPM2_TIMEOUT_B);
->  	chip->timeout_c = msecs_to_jiffies(TPM2_TIMEOUT_C);
->  	chip->timeout_d = msecs_to_jiffies(TPM2_TIMEOUT_D);
-> -
-> -	/* PTP spec timeouts */
-> -	chip->duration[TPM_SHORT] = msecs_to_jiffies(TPM2_DURATION_SHORT);
-> -	chip->duration[TPM_MEDIUM] = msecs_to_jiffies(TPM2_DURATION_MEDIUM);
-> -	chip->duration[TPM_LONG] = msecs_to_jiffies(TPM2_DURATION_LONG);
-> -
-> -	/* Key creation commands long timeouts */
-> -	chip->duration[TPM_LONG_LONG] =
-> -		msecs_to_jiffies(TPM2_DURATION_LONG_LONG);
-> -
->  	chip->flags |= TPM_CHIP_FLAG_HAVE_TIMEOUTS;
-> -
->  	return 0;
->  }
->  
-> -/**
-> - * tpm2_ordinal_duration_index() - returns an index to the chip duration table
-> - * @ordinal: TPM command ordinal.
-> - *
-> - * The function returns an index to the chip duration table
-> - * (enum tpm_duration), that describes the maximum amount of
-> - * time the chip could take to return the result for a  particular ordinal.
-> - *
-> - * The values of the MEDIUM, and LONG durations are taken
-> - * from the PC Client Profile (PTP) specification (750, 2000 msec)
-> - *
-> - * LONG_LONG is for commands that generates keys which empirically takes
-> - * a longer time on some systems.
-> - *
-> - * Return:
-> - * * TPM_MEDIUM
-> - * * TPM_LONG
-> - * * TPM_LONG_LONG
-> - * * TPM_UNDEFINED
-> +/*
-> + * Contains the maximum durations in milliseconds for TPM2 commands.
->   */
-> -static u8 tpm2_ordinal_duration_index(u32 ordinal)
-> -{
-> -	switch (ordinal) {
-> -	/* Startup */
-> -	case TPM2_CC_STARTUP:                 /* 144 */
-> -		return TPM_MEDIUM;
-> -
-> -	case TPM2_CC_SELF_TEST:               /* 143 */
-> -		return TPM_LONG;
-> -
-> -	case TPM2_CC_GET_RANDOM:              /* 17B */
-> -		return TPM_LONG;
-> -
-> -	case TPM2_CC_SEQUENCE_UPDATE:         /* 15C */
-> -		return TPM_MEDIUM;
-> -	case TPM2_CC_SEQUENCE_COMPLETE:       /* 13E */
-> -		return TPM_MEDIUM;
-> -	case TPM2_CC_EVENT_SEQUENCE_COMPLETE: /* 185 */
-> -		return TPM_MEDIUM;
-> -	case TPM2_CC_HASH_SEQUENCE_START:     /* 186 */
-> -		return TPM_MEDIUM;
-> -
-> -	case TPM2_CC_VERIFY_SIGNATURE:        /* 177 */
-> -		return TPM_LONG_LONG;
-> -
-> -	case TPM2_CC_PCR_EXTEND:              /* 182 */
-> -		return TPM_MEDIUM;
-> -
-> -	case TPM2_CC_HIERARCHY_CONTROL:       /* 121 */
-> -		return TPM_LONG;
-> -	case TPM2_CC_HIERARCHY_CHANGE_AUTH:   /* 129 */
-> -		return TPM_LONG;
-> -
-> -	case TPM2_CC_GET_CAPABILITY:          /* 17A */
-> -		return TPM_MEDIUM;
-> -
-> -	case TPM2_CC_NV_READ:                 /* 14E */
-> -		return TPM_LONG;
-> -
-> -	case TPM2_CC_CREATE_PRIMARY:          /* 131 */
-> -		return TPM_LONG_LONG;
-> -	case TPM2_CC_CREATE:                  /* 153 */
-> -		return TPM_LONG_LONG;
-> -	case TPM2_CC_CREATE_LOADED:           /* 191 */
-> -		return TPM_LONG_LONG;
-> -
-> -	default:
-> -		return TPM_UNDEFINED;
-> -	}
-> -}
-> +static const struct {
-> +	unsigned long ordinal;
-> +	unsigned long duration;
-> +} tpm2_ordinal_duration_map[] = {
-> +	{TPM2_CC_STARTUP, 750},
-> +	{TPM2_CC_SELF_TEST, 3000},
 
-I assume you intended to increase TPM2_CC_SELF_TEST from 2000 to 3000
-here?  But it's not mentioned in the commit, so making sure...
+    fixup! kcov: Enable capability analysis
 
-> +	{TPM2_CC_GET_RANDOM, 2000},
-> +	{TPM2_CC_SEQUENCE_UPDATE, 750},
-> +	{TPM2_CC_SEQUENCE_COMPLETE, 750},
-> +	{TPM2_CC_EVENT_SEQUENCE_COMPLETE, 750},
-> +	{TPM2_CC_HASH_SEQUENCE_START, 750},
-> +	{TPM2_CC_VERIFY_SIGNATURE, 30000},
-> +	{TPM2_CC_PCR_EXTEND, 750},
-> +	{TPM2_CC_HIERARCHY_CONTROL, 2000},
-> +	{TPM2_CC_HIERARCHY_CHANGE_AUTH, 2000},
-> +	{TPM2_CC_GET_CAPABILITY, 750},
-> +	{TPM2_CC_NV_READ, 2000},
-> +	{TPM2_CC_CREATE_PRIMARY, 30000},
-> +	{TPM2_CC_CREATE, 30000},
-> +	{TPM2_CC_CREATE_LOADED, 30000},
-> +};
->  
->  /**
-> - * tpm2_calc_ordinal_duration() - calculate the maximum command duration
-> - * @chip:    TPM chip to use.
-> + * tpm2_calc_ordinal_duration() - Calculate the maximum command duration
->   * @ordinal: TPM command ordinal.
->   *
-> - * The function returns the maximum amount of time the chip could take
-> - * to return the result for a particular ordinal in jiffies.
-> - *
-> - * Return: A maximal duration time for an ordinal in jiffies.
-> + * Returns the maximum amount of time the chip is expected by kernel to
-> + * take in jiffies.
->   */
-> -unsigned long tpm2_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
-> +unsigned long tpm2_calc_ordinal_duration(u32 ordinal)
->  {
-> -	unsigned int index;
-> +	int i;
->  
-> -	index = tpm2_ordinal_duration_index(ordinal);
-> +	for (i = 0; i < ARRAY_SIZE(tpm2_ordinal_duration_map); i++)
-> +		if (ordinal == tpm2_ordinal_duration_map[i].ordinal)
-> +			return msecs_to_jiffies(tpm2_ordinal_duration_map[i].duration);
->  
-> -	if (index != TPM_UNDEFINED)
-> -		return chip->duration[index];
-> -	else
-> -		return msecs_to_jiffies(TPM2_DURATION_DEFAULT);
-> +	return msecs_to_jiffies(TPM2_DURATION_DEFAULT);
->  }
->  
-> -
->  struct tpm2_pcr_read_out {
->  	__be32	update_cnt;
->  	__be32	pcr_selects_cnt;
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index b0e9eb5ef022..dc0338a783f3 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -228,10 +228,11 @@ enum tpm2_timeouts {
->  	TPM2_TIMEOUT_B          =   4000,
->  	TPM2_TIMEOUT_C          =    200,
->  	TPM2_TIMEOUT_D          =     30,
-> +};
-> +
-> +enum tpm2_durations {
->  	TPM2_DURATION_SHORT     =     20,
-> -	TPM2_DURATION_MEDIUM    =    750,
->  	TPM2_DURATION_LONG      =   2000,
-> -	TPM2_DURATION_LONG_LONG = 300000,
->  	TPM2_DURATION_DEFAULT   = 120000,
->  };
->  
-> -- 
-> 2.39.5
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index 1897c8ca6209..e81e3c0d01c6 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -497,7 +497,7 @@ static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
+ 	unsigned long size, off;
+ 	struct page *page;
+ 	unsigned long flags;
+-	unsigned long *area;
++	void *area;
+ 
+ 	spin_lock_irqsave(&kcov->lock, flags);
+ 	size = kcov->size * sizeof(unsigned long);
 
