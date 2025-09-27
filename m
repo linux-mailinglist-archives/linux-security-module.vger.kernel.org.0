@@ -1,170 +1,240 @@
-Return-Path: <linux-security-module+bounces-12211-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12213-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C31C5BA6112
-	for <lists+linux-security-module@lfdr.de>; Sat, 27 Sep 2025 17:44:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44A07BA62E9
+	for <lists+linux-security-module@lfdr.de>; Sat, 27 Sep 2025 21:40:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9384F189AB73
-	for <lists+linux-security-module@lfdr.de>; Sat, 27 Sep 2025 15:44:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8FDF17ED44
+	for <lists+linux-security-module@lfdr.de>; Sat, 27 Sep 2025 19:40:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5151A00F0;
-	Sat, 27 Sep 2025 15:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118D4223DD0;
+	Sat, 27 Sep 2025 19:39:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b="t8fKRyV4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IHJ2C9Va"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="z2M6YNCs"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D188819E968
-	for <linux-security-module@vger.kernel.org>; Sat, 27 Sep 2025 15:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B021816A956
+	for <linux-security-module@vger.kernel.org>; Sat, 27 Sep 2025 19:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758987837; cv=none; b=iMZ+66pMZXMgkcf1vtL3EpxPY6uH4a8naRVWi9sk8P38boXmgwlqD0rmBz5Aq8a74Gy26R+VTiPV1BysZksaC/0gUMv/eNvvvgwFREta9Sdo9VX9gi1WPX/YrR2XtJ/FeBbSWg395FkcFhy8xQT4ZhXcF2c7uSn8CNyBPcymbZY=
+	t=1759001998; cv=none; b=U7mHZwYpNdpJtyokDgyxtSsio1/m+TgjRtVDhUIWYi6W5emj8QgVx7FR+BIvF17bDmHPrAMIz28IF6E2iuvDzf2pt8fLsP2B41jDAhc2VeY5/X2xZlzRuES2An024WfuNTsAGLRul7ZWr4fqJLZr0qG1mq8V9rFCzJ21jadwXeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758987837; c=relaxed/simple;
-	bh=jiYVZbGhzRTDrn5zSw/VZDsV2L3e+qahjATfG8AJLHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aPi+I+iHIuPV6HEVz+fZixUQlwYrI33LA7yHQGYBiAGOhZHrdAWgXF2td7wnk3KpsbqYCkFZIcaJj6UlshZjuPBiJD84Ndzc309TJWlV/Lcrg2Gg7J9Ahy+52X5pa+xHlnxpaQfm+U1dNo9l9MAHSHK/BXsFarCkAjufQ2m6LCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=maowtm.org; spf=pass smtp.mailfrom=maowtm.org; dkim=pass (2048-bit key) header.d=maowtm.org header.i=@maowtm.org header.b=t8fKRyV4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IHJ2C9Va; arc=none smtp.client-ip=202.12.124.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=maowtm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maowtm.org
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfout.stl.internal (Postfix) with ESMTP id B23871D00182;
-	Sat, 27 Sep 2025 11:43:53 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Sat, 27 Sep 2025 11:43:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maowtm.org; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758987833;
-	 x=1759074233; bh=riIiti5JRr/cUlls3gbXy3hCUYTVjs+qJIp38v/DYSA=; b=
-	t8fKRyV4KR+2XBrwU3In/L6SmxReSJlen/sBRZBtai4uSzEuJkJghopHA7EuNlJx
-	acfYLpttlac14KOaB+JIthjVssSimueALwwrmrhawYM8LlV9CNdzg3pGujerkN+A
-	N01crvO0pwLMudSDAAPRx3j7In0XZ80isCeK9yWTH/zhMlZaeSuIlb6L+5idf/zo
-	2phBnubhfOzn6Jbl6swsxQOyebRiq7yYDiqydYvqVJJOEobFNC+AhCVQgxlZQnO7
-	HZ4qU9bOK4V1bxY01JGxzbHnWeFh+6t+4I2PcCAS6nkeri59MBTP9f/M0Mh+hg73
-	57YuDSnBJk4X41L5sGok1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1758987833; x=
-	1759074233; bh=riIiti5JRr/cUlls3gbXy3hCUYTVjs+qJIp38v/DYSA=; b=I
-	HJ2C9VaPgrEfm1Ob7F78rjeStkjztVSZzdcChJOTZUbr+s5N/f2vW1nQC5pEqCPn
-	oG/3G3r5RnPE2JMicIAsf9S8er2XERjBLHaTrM2xtqDYnkUbHSA3/m17y3VYqRX8
-	SDBK8GkNUJVdYgpZdwCmrzrOLLcHHT/sg1n8gUs4dgK1iv1Bt8pIKGAALalGg5bk
-	U5+Q0qEwwMH8s9cenAkowVV687hFvfAxfBvjxgTALl1yUVbolXgzCKxjtdl2AqcP
-	HL9mulLcTpetJ2mP7LjAvxPLRyX5j+Ye+HqHey7YgQq5kiqq7E4iaUc1ZTPfj/LG
-	CL5fcDVs1v899KYYgL+cA==
-X-ME-Sender: <xms:OQbYaDB6rESykWLlV54pPG5iFELrM8SfBF80cGZHqEZpAi68fWWOIw>
-    <xme:OQbYaAjnpdpLVQI2aPivTAuqoDgJR3GfjBKAuf2Rt4NWD_MxGUIDU65HhiuRDfkfC
-    mNI1OurjNPd-lefBLPBEgA8jTV2rjhPOcQKFsB5gIA5KtWPXs2Tyi0>
-X-ME-Received: <xmr:OQbYaDmcfn-ZRjNWJxuaOG2c4mYZSEW1i1YXLdi0PCmYdX7zWmC5Kc15a0HhQ2nuIw1yFDcI_g78ARYAzHSl2cg7>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdejvdeigecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomhepvfhinhhgmhgr
-    ohcuhggrnhhguceomhesmhgrohifthhmrdhorhhgqeenucggtffrrghtthgvrhhnpeduke
-    evhfegvedvveeihedvvdeghfeglefgudegfeetvdekiefgledtheeggefhgfenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmsehmrghofihtmh
-    drohhrghdpnhgspghrtghpthhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpthht
-    ohepmhhitgesughighhikhhougdrnhgvthdprhgtphhtthhopehgnhhorggtkhesghhooh
-    hglhgvrdgtohhmpdhrtghpthhtohepjhgrtghksehsuhhsvgdrtgiipdhrtghpthhtohep
-    lhhinhhugidqshgvtghurhhithihqdhmohguuhhlvgesvhhgvghrrdhkvghrnhgvlhdroh
-    hrgh
-X-ME-Proxy: <xmx:OQbYaErI71TP8oXcen5NSHLCZ_sAwyJY8rQpRgatM6bkI6Rx64-4iw>
-    <xmx:OQbYaEH5gxX2FWDPCHwoJ4_zCBOO6ES_B5pOro0HmwOqRquqFA3vKA>
-    <xmx:OQbYaIzUoy_4phqywZov6hrRGjP01zoWQechXPBlAjbFh-aDS_VAew>
-    <xmx:OQbYaBpbslpX894nz5La7cZJ6Mx4k5TKGebkcY4EL_Kfx9v_TX5cHw>
-    <xmx:OQbYaLgJGSRoqMZ-3KjQZK5hFPtasifoF-Lc5uviWj9eAUZ2GJhWyEN0>
-Feedback-ID: i580e4893:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 27 Sep 2025 11:43:51 -0400 (EDT)
-Message-ID: <090e272e-64b4-4c56-9928-0e0be0288e64@maowtm.org>
-Date: Sat, 27 Sep 2025 16:43:50 +0100
+	s=arc-20240116; t=1759001998; c=relaxed/simple;
+	bh=zRBHicTB9sjA4dRaz3QW6V1ha1bk2Plwp329+JiC1TU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bEaLr/V6Bp7WQPWdsJAHxv7CEgOm8ZT3nBK4Z28Brmhl8KPscTyx5tuKB3MOGqaDQB777s/MSZY1Ohb/8XjZz714meJUzxBr6y9xvpYMJjk+48LHfPoX+CGh4JZfePxUpf+PWT17Nsy7pKSLkzVDExl3lEmuheh2VAMYKf0DXlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=z2M6YNCs; arc=none smtp.client-ip=84.16.66.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cYwtD5xZkzXfY;
+	Sat, 27 Sep 2025 20:27:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1758997668;
+	bh=Mhj/EUax+KSAUv+ReFJsSboLBZB2tKC758FHqYfK114=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=z2M6YNCsF2RcPj4q1DUV+GroIYzLA7vqA/MgOruDRXbkE5h8OwZsKFRobsgMLA1Ed
+	 KGm0Gh6dn7yY6iXQEZSpGblkeLouuVFVOTwW5MOMVzIQtauHcYDmAS38Y225eD3k/2
+	 jG/EsSlyD+Ae/GE9ttUcxlWiXUaD+BS/cp3zzM3g=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cYwtC2QQnz9N0;
+	Sat, 27 Sep 2025 20:27:47 +0200 (CEST)
+Date: Sat, 27 Sep 2025 20:27:44 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Tingmao Wang <m@maowtm.org>, Greg Kurz <groug@kaod.org>
+Cc: Christian Schoenebeck <linux_oss@crudebyte.com>, 
+	Dominique Martinet <asmadeus@codewreck.org>, Eric Van Hensbergen <ericvh@kernel.org>, 
+	Latchesar Ionkov <lucho@ionkov.net>, v9fs@lists.linux.dev, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, linux-security-module@vger.kernel.org, Jan Kara <jack@suse.cz>, 
+	Amir Goldstein <amir73il@gmail.com>, Matthew Bobrowski <repnop@google.com>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org
+Subject: Re: [PATCH v2 0/7] fs/9p: Reuse inode based on path (in addition to
+ qid)
+Message-ID: <20250927.ahGhiiy0koo0@digikod.net>
+References: <aMih5XYYrpP559de@codewreck.org>
+ <3070012.VW4agfvzBM@silver>
+ <f2c94b0a-2f1e-425a-bda1-f2d141acdede@maowtm.org>
+ <3774641.iishnSSGpB@silver>
+ <20250917.Eip1ahj6neij@digikod.net>
+ <f1228978-dac0-4d1a-a820-5ac9562675d0@maowtm.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/6] landlock: Add a place for flags to layer rules
-To: =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-Cc: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Jan Kara <jack@suse.cz>, linux-security-module@vger.kernel.org
-References: <cover.1757376311.git.m@maowtm.org>
- <841550c5d7bbc7ffcd74f85ee659caf1e29cff67.1757376311.git.m@maowtm.org>
- <20250919.oanahnoon2Za@digikod.net>
- <a43a9985-cf62-482b-9a2d-fce463ca69b0@maowtm.org>
- <20250924.wu8Ieku8aiph@digikod.net>
-Content-Language: en-US
-From: Tingmao Wang <m@maowtm.org>
-In-Reply-To: <20250924.wu8Ieku8aiph@digikod.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f1228978-dac0-4d1a-a820-5ac9562675d0@maowtm.org>
+X-Infomaniak-Routing: alpha
 
-On 9/24/25 10:20, Mickaël Salaün wrote:
-> On Mon, Sep 22, 2025 at 12:52:19AM +0100, Tingmao Wang wrote:
->> [...]
->> "accumulative".  Therefore if this (different "quietness" for different
->> access bits) becomes a strong need, we should probably consider some way
->> of implementing it, rather than expecting a sandboxer to do this two-layer
->> hack.  (But implementing this does have the potential to result in needing
->> to have a (number of access bits) x (number of layers) matrix...)
+Adding Greg Kurz too.
+
+On Sun, Sep 21, 2025 at 05:24:49PM +0100, Tingmao Wang wrote:
+> On 9/17/25 16:00, Mickaël Salaün wrote:
+> > On Wed, Sep 17, 2025 at 11:52:35AM +0200, Christian Schoenebeck wrote:
+> >> On Wednesday, September 17, 2025 1:59:21 AM CEST Tingmao Wang wrote:
+> >>> On 9/16/25 20:22, Christian Schoenebeck wrote:
+> >>>> On Tuesday, September 16, 2025 4:01:40 PM CEST Tingmao Wang wrote:
+> >> [...]
+> >>>> I see that you are proposing an option for your proposed qid based
+> >>>> re-using of dentries. I don't think it should be on by default though,
+> >>>> considering what we already discussed (e.g. inodes recycled by ext4, but
+> >>>> also not all 9p servers handling inode collisions).
+> >>>
+> >>> Just to be clear, this approach (Landlock holding a fid reference, then
+> >>> using the qid as a key to search for rules when a Landlocked process
+> >>> accesses the previously remembered file, possibly after the file has been
+> >>> moved on the server) would only be in Landlock, and would only affect
+> >>> Landlock, not 9pfs (so not sure what you meant by "re-using of dentries").
+> >>>
+> >>> The idea behind holding a fid reference within Landlock is that, because
+> >>> we have the file open, the inode would not get recycled in ext4, and thus
+> >>> no other file will reuse the qid, until we close that reference (when the
+> >>> Landlock domain terminates, or when the 9p filesystem is unmounted)
+> >>
+> >> So far I only had a glimpse on your kernel patches and had the impression that 
+> >> they are changing behaviour for all users, since you are touching dentry 
+> >> lookup.
+> > 
+> > I think we should not hold dentries because:
+> > - they reference other dentries (i.e. a file hierarchy),
+> > - they block umount and I'm convinced the VFS (and users) are not going
+> >   to like long-lived dentries,
+> > - Landlock and inotify don't need dentries, just inodes.
+> > 
+> > I'm wondering why fid are referenced by dentries instead of inodes.
+> > 
+> > The need for Landlock is to be able to match an inode with a previously
+> > seen one.  Not all LSM hooks (nor VFS internals) always have access to
+> > dentries, but they do have access to inodes.
+> > 
+> >>
+> >>>> For all open FIDs QEMU retains a descriptor to the file/directory.
+> >>>>
+> >>>> Which 9p message do you see sent to server, Trename or Trenameat?
+> >>>>
+> >>>> Does this always happen to you or just sometimes, i.e. under heavy load?
+> >>>
+> >>> Always happen, see log: (no Trename since the rename is done on the host)
+> >> [...]
+> >>> Somehow if I rename in the guest, it all works, even though it's using the
+> >>> same fid 2 (and it didn't ask QEMU to walk the new path)
+> >>
+> >> Got it. Even though QEMU *should* hold a file descriptor (or a DIR* stream, 
+> > 
+> > It's reasonable to assume that QEMU and other should hold opened fid In
+> > practice, this might not always be the case, but let's move on and
+> > consider that a 9p server bug.
+> > 
+> > Landlock and fanotify need some guarantees on opened files, and we
+> > cannot consider every server bug.  For Landlock, inode may get an
+> > "ephemeral tag" (with the Landlock object mechanism) to match previously
+> > seen inodes.  In a perfect world, Landlock could keep a reference on 9p
+> > inodes (as for other filesystems) and these inodes would always match
+> > the same file.  In practice this is not the case, but the 9p client
+> > requirements and the Landlock requirements are not exactly the same.
+> > 
+> > A 9p client (the kernel) wants to safely deal with duplicated qid, which
+> > should not happen but still happen in practice as explained before.
+> > On the other side, Landlock wants to not deny access to allowed files
+> > (currently identified by their inodes), but I think it would be
+> > reasonable to allow access theoretically denied (i.e. not allowed to be
+> > precise, because of the denied by default mechanism) files because of a
+> > 9p server bug mishandling qid (e.g. mapping them to recycled ext4
+> > inodes).
+> > 
+> > All that to say that it looks reasonable for Landlock to trust the
+> > filesystem, and by that I mean all its dependencies, including the 9p
+> > server, to not have bugs.
+> > 
+> > Another advantage to rely on qid and server-side opened files is that we
+> > get (in theory) the same semantic as when Landlock is used with local
+> > filesystems (e.g. files moved on the server should still be correctly
+> > identified by Landlock on the client).
+> > 
+> >> which should imply a file descriptor), there is still a path string stored at 
+> >> V9fsFidState and that path being processed at some places, probably because 
+> >> there are path based and FID based variants (e.g Trename vs. Trenameat). Maybe 
+> >> that clashes somewhere, not sure. So I fear you would need to debug this.
+> > 
+> > Good to know that it is not a legitimate behavior for a 9p client.
 > 
-> Yes, that will indeed increase the size of rules, which is why I'm not
-> sure if it worth it.
+> So I did some quick debugging and realized that I had a wrong
+> understanding of how fids relates to opened files on the host, under QEMU.
+> It turns out that in QEMU's 9p server implementation, a fid does not
+> actually correspond to any opened file descriptors - it merely represents
+> a (string-based) path that QEMU stores internally.  It only opens the
+> actual file if the client actually does an T(l)open, which is in fact
+> separate from acquiring the fid with T(l)walk.  The reason why renaming
+> file/dirs from the client doesn't break those fids is because QEMU will
+> actually fix those paths when a rename request is processed - c.f.
+> v9fs_fix_fid_paths [1].
+> 
+> It turns out that even if a guest process opens the file with O_PATH, that
+> file descriptor does not cause an actual Topen, and therefore QEMU does
+> not open the file on the host, and later on reopening that fd with another
+> mode (via e.g. open("/proc/self/fd/...", O_RDONLY)) will fail if the file
+> has moved on the host without QEMU's knowledge.  Also, openat will fail if
+> provided with a dir fd that "points" to a moved directory, regardless of
+> whether the fd is opened with O_PATH or not, since path walk in QEMU is
+> completely string-based and does not actually issue openat on the host fs
+> [2].
+> 
+> I'm not sure if this was is intentional in QEMU - it would seem to me that
+> a fid should translate to a fd (maybe opened with just O_PATH) on the
+> host, and path walks based on that fid should be done via openat with this
+> fd, which will also "automatically" handle renames without QEMU needing to
+> fixup the string paths?
 
-In addition to the size of each rule, another concern is that we would
-need another layer_mask_t[LANDLOCK_NUM_ACCESS_FS] matrix on the stack in
-order to correctly accumulate quiet bits when multiple access bits are
-requested, and the quiet bits are only set on some of them / spread out
-between different objects.  For example, for this 1 layer domain:
+I agree, it would make sense for QEMU to map fid to FD+O_PATH.  That
+would avoid the kind of issues you mentioned.
 
-/         quiet: r
-  /etc    quiet: w
-
-request: /etc/file rw
-    # This should not audit log, but if we only keep one accumulated bit
-    # per layer, we would not be able to tell that all access bits are
-    # eventually "covered" by quiet flags.
-
-The alternative approach you suggested below would get rid of this
-situation as well.
+Christian, Greg, what do you think?
 
 > 
-> The alternative I was thinking about is to only increase the size of
-> struct landlock_ruleset (which would be negligible) to include sets of
-> quiet access rights.  A request to such access right *on* a quiet object
-> would never be logged.  I think this approach is flexible enough and
-> doesn't increase much the complexity.  This would also be useful to not
-> log access rights that don't have associated rules (e.g. scopes), and
-> then no identified objects.  To avoid the kind of hack you pointed out,
-> this feature should probably be part of this patch series though.  What
-> do you think?
+> In any case, this probably means that even if Landlock were to hold a fid
+> reference, and QEMU does qid remapping, that's still not enough to
+> guarantees that we won't have a different, unrelated file ending up with
+> the same qid, at least under ext4.
+> 
+> I'm not sure what's the way forward - would Landlock need to actually
+> "open" the files (or do something that will cause a Topen to be issued by
+> v9fs)?
 
-This seems reasonable to me, especially if we don't think that having
-separate quiet access bit controls for each object would be a common need.
-Although if for some reason such control is needed, one might still be
-tempted to use the kind of two layer hack I mentioned.  Maybe some program
-would like to quiet reads globally but only quiet writes to /run...?
+> Alternatively if we believe this to be a QEMU issue, maybe
+> Landlock don't need to work around it and should just hold fids (and use
+> QIDs to key the rules) anyway despite server quirks like these.  This can
+> perhaps then be fixed in QEMU?
 
-But maybe later on when we get to have supervised domains, the supervisor
-can tell Landlock whether to audit log or not for individual denied
-requests, or do such logging itself, therefore offering fine-grained
-control without hacks, and could potentially be more flexible e.g. only
-log once per request per process, etc.
+Yes, I think it would make sense for Landlock to open and keep open a
+fid (and hopefully the related remote file).  However, the v9fs umount
+should be handled gracefully the same way Landlock tag inodes are
+handled.  This should come with a QEMU patch to fix the consistency
+issue.
 
-I think the most obvious way to implement this is to add a field to struct
-landlock_ruleset_attr, and landlock_create_ruleset would use the passed in
-size to determine if the quiet access bits field should be read or not?
+> 
+> (I guess the fact that QEMU is doing path tracking in the first place does
+> gives more precedent for justifying doing path tracking in v9fs as well,
+> but maybe that's the wrong way to think about it)
 
-Also, do we want to consider calling this something else instead, like
-"suppress_audit"?
+Anyway, if QEMU does it, wouldn't it be the same for Landlock to just
+rely on fid?  If QEMU uses FD+O_PATH, then Landlock would work even for
+server-moved files.
+
+> 
+> Test programs: openat.c [3], open_procselffd.c [4]
+> 
+> 
+> [1]: https://gitlab.com/qemu-project/qemu/-/blob/44f51c1a3cf435daa82eb757740b59b1fd4fe71c/hw/9pfs/9p.c#L3403
+> [2]: https://gitlab.com/qemu-project/qemu/-/blob/371a269ff8ce561c28e4fa03bb49e4940f990637/hw/9pfs/9p-local.c#L1243
+> [3]: https://fileshare.maowtm.org/9pfs-landlock-fix/20250921/openat.c
+> [4]: https://fileshare.maowtm.org/9pfs-landlock-fix/20250921/open_procselffd.c
+> 
 
