@@ -1,444 +1,206 @@
-Return-Path: <linux-security-module+bounces-12317-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12319-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7999ABB1F53
-	for <lists+linux-security-module@lfdr.de>; Thu, 02 Oct 2025 00:17:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7177BB4146
+	for <lists+linux-security-module@lfdr.de>; Thu, 02 Oct 2025 15:48:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8CFF166FFC
-	for <lists+linux-security-module@lfdr.de>; Wed,  1 Oct 2025 22:17:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B4B519C6B94
+	for <lists+linux-security-module@lfdr.de>; Thu,  2 Oct 2025 13:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7508625F995;
-	Wed,  1 Oct 2025 22:17:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1C118C26;
+	Thu,  2 Oct 2025 13:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="DnRHlmJ0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWYIx6hv"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from sonic307-16.consmr.mail.ne1.yahoo.com (sonic307-16.consmr.mail.ne1.yahoo.com [66.163.190.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FAC23C8C7
-	for <linux-security-module@vger.kernel.org>; Wed,  1 Oct 2025 22:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.190.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CAB34BA2B
+	for <linux-security-module@vger.kernel.org>; Thu,  2 Oct 2025 13:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759357034; cv=none; b=G1QNida51WZkBKOFwIN978YeiCifwY4YIZ3sdO3PfNINLc+U1QFsSUxOYf/txXmWP0DZy8p8eEEKP2xOsZWe1qJDHCmvnUPKLAeNINoU/f7yKTw30G54rnw82fCyHUKMHEAcLfKNQkOlsI495wQDXNGapx2ev9tn2Dxc5IiCKpM=
+	t=1759412927; cv=none; b=AAWwSeY1Rsheymiv0qtDwV7Kb24/cpefYFfozW852PdE8vOMQt/qkOialA2/YV2FLpR/Uh+GAbOiU+cREUupTCH0G1bWBECyovgyRTIP0AYFDqtnK96XeOLTZIww9cYzFuqNrszp8BKQFwiReOFUz/PkYHLO4VFfswItTvqkkdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759357034; c=relaxed/simple;
-	bh=O4vgldMJkfJVR3WKnspyouNxUzyUTx1wJmAoHTW+4Ww=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ghwR3u1u5yw25uPHzXQ7c8pJ9RdpNaudsErcHwT3i+c/glR+UiRo8K9loEYwYViKMSNcEi2MtEjGJ8bPKonooEfY1dHZLowZLhyUew40/Z3+Zt8Y5oUgdrYOIHz7/eoWlQRvON7XQBPY1vxfh8/vK6UhsKYq8xt14lBibzLPS4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=DnRHlmJ0; arc=none smtp.client-ip=66.163.190.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1759357031; bh=GHB9c/lhZUSJNqBAsqXREjpMs70P0O1p9YElSjptZzU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=DnRHlmJ0pVw/G7PBewMtoYeHWYRW5xqDXtOAnNd41ANGwar+ybpMRN4PetHuzJdGdXgjLICav6QSjdY3kbCSozCfIdImws5hSSDcviKdTxnMVCc1F+QHfGdi3HGt2Z4lAaGP/DIAZsojxlwuwWLPXUbEp9DX6bcRGRrqQ9tSdoyOymF9Op+Od18+2G4X9tfeKtj2KyLtl5EcNVYMu9HY4jljkL9EfktCW505eTTQuhwGiq0Y4qTLDuJ07fnkXZGc2WMoMRw/fH1jT/lyA6oepbjURmsujik3jlW4Ac8Wr9McDbtBWbMzBBY87IBkkvYJ1V1vT3gZ0MBBNDZH8YLaVQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1759357031; bh=MFaT0OgmYzjPk5BdHyKIoyjSI4Y1byGz2MiixH7XRHs=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=GVzkeh50KPx3qwLqB/pXytMo43f+zDJn3S2JQ4pZMv+JzO8RJNfAjdCtVYpo1pTV98YbDM8vcdjAoR8hNzmMLXwmhjw20Yafcqy4cBFlpxsh+EvR6w1SeTkHd1e2URjCGlaharlb+FI/t50OOXXM+3ZfNBKQ5qETO2tagY5Z21C/lSugksiRP35vinzLL2v9h12Kz43NB005tiWjwZcW6tQcnCYO0EQnnY57jppNqRV4KYcwNgO54i6kEP1g5AA7jrqMiM396s2psdo9ROnx9PCSGUoXSay6W/rcdXVymSfnyhaygVTJepC5XyBSM06K5PM4x6cfObsq2DrQyvV0Iw==
-X-YMail-OSG: m_NG6hYVM1l9VPNbPf6AaCglffgtfgGJp9RQeuwz1BOXfDZkAOfOK2sgSd8yfLO
- cWgZAS77A0I.Qp67rSksqqqwOU3CTsaGtjVZ9ZTdZ2nQ.ZmkRgNkzOurGMzucpE0v8yb1qmClRHu
- 7KbpJctjF9E0z7qAdZMuuFnIQ0xwZwFhnHxq4ljfe1por1VGS10gBlgYoWTsrJsW26o5uBdeU.dC
- 2yb4wOcHLQPLN.HJyj5KE1Sfyhtk.OYR8Qo8kISACbSmdsRBuN9SY1U8OmkHNzqu3DgTRuezA._5
- 2qwmpd3lr0pCxRQl4QzfNnlCVbr7guwewMgPcpP45ZNdPdjRmvA3paL8u7UxJm_7v6N5dGHrC1P2
- pIxwkVxfS3PvzCLgbD2OKPddNC540V8rU32gDGxbozQA9mKN5u2Kd5uEHZ3_Fi9hMdYpMg1ElU.I
- COdEhtW5YgaemsTjDtjYuHR6C0e34MhA.tZUuLthrYVitCoP6QOREyFOKXRzMahHnLzjsBRiOkme
- MoqD73_SG.eeF5YhZmGc9JussRo62lyFxZTsUP6GH2Paj0Yau1iKMjfKgabBFaSd1P0I6KYgWwvn
- QT.Ooc7RUurj4Exx5H2bnZDVBlriJQYgEBQRuA1qepl96.pvoUPg1bh_6t5i79kbY.w.IBeYrjfE
- y75gkKrJosfDX24tgD846vr1CRG4NfKBzNdDjStsf6oVgnjp4CWv8FzbLJCA.hUGxdaUgsudeTEH
- st2yFfrIHUjM6PneMxMgoyr5LkOi4Rk9IcYIcIYIf4NYvMTg2RoaSo2ZrOFUHoIFyXTpe2dF8bHd
- xkT4XNv_aDTmKqPyoJgSBrxvVhmcGxzH3k1q.Tp8AQVELNdCS93dcKC4h3zR4_30r5raPGKbvg4l
- Abg6_7IXwmBOj.oNiy9YNuRTwFY_yBa9yuUBgv85R.lUDQ0NlJ5mDCqEK.iDzbIZWJfrtKbS0FpL
- 4g5.nIE2pKWr_x9VsZGyTSUK4WPC2fAJf_BZ8hWopq57bOxqCPfINK6CTG9RQ5h6TZh_H3_IMlpf
- bH3LcMo9sXAY_msQ0wCqIjXwqb1spxpx0i4UIPSXRrnTKGyJPI3ITpTm2qIvP7ub_vvd19T_n05l
- jv5xtqlsqsetBskoRxlo3VlBCRXUxpDhtz.2bdbp_zOA.GbRAWMBa_iED1i1tEg0UlDFfYWw3UY5
- mRKudl80KV47TMsJHJ640rM4S8caYWm1wuh6gOML7t5p_sQGM_mzVq6bb3fA9jYMJ7t8So1Rdcsg
- eaRae4gPAsLOloep5yqn8uDsuHFUU79HUa1lthZ.c_gDk_RP7zzcRoenAJWC91Sjh3_yW32JMhYi
- qMCmmGeGALVnYLx.rz9HvyBcnV1MMLxrP6z7rvU1tB85_UgRAduH1BMPwR.p7zgJH7Ul.FC5ISbE
- eUoFoMftNQ9YnX2YM2fDJMSauRPK3U8oKKE8pt__hCOmJkXNA93YHlp2ewkiSB9M6TFddqwoUJmC
- SbSImMW9b40uVEJSq9tqZPEhBgbzsQqjhrCqgJBmv2Lgy4xSCIVP_ZIn51Iy.DB1SGNbqGdNh51t
- p2ozDqGB63ovNGE0mWl77W5o_fiQQK6eEMRuVVZigcmeezrFd47haJuCrn6HTqQkG5XjQQIJpjqg
- Oda4xyKqRJMWXkYrwRkuUa_nny4wSiBkORM4pAD3L7sKrJR4nNtiH7_alDjutc84P1H5DsjM5Jfq
- KPip1L3j09UMEctonekdeqzIW18yzPJ.CaAa7sXqFivKHj4Ot6ZSdLyKPjQGQNdv59yqr6BeGNje
- AFhceYumV9OzMZLKuJbkgMEcgEMkdI0k00j1162WWzpsrHooBLFij.32V2lYrp3pwIqTrTr_YmTD
- Gb2FzTRitWoG4lc02WDe8RO4iGI9uT2S1mHz4DZrJ3RnZMjFxedI_e92lnw4qBraXcW1AxwPjEI2
- jmQAJkNShYHuU9Lnb7DQ0CvXwno0lpsx0LQso6OYp_xKqgS7BQis3NRDLCU1r_qpNSxsOmm6LZ6m
- UoimNexyfW4SOQOXuZnPTBWfDHQTYa4jOJhlt7NnUB2BEQbSVJ61fC2C8pzQYAqqR3K3P98OiRkT
- cZg6kCzIUn8o.eGfWo4U0KeBdtCDla8KTdTjKBBxskG8BfnP0LJT7me17JPPwwBVKahf5WqkjV1b
- 2.eNeJklitDO.QD1vtCQVBJG7TKkxIZV0IEvk18hEBAYS.INX_4lJEukYJp8A6EhH9_eUs3I4Vsy
- 8cCZiL_bVh_m.lTsw52M2kfe8cICzqNXVtZxiZ7He86iZP5E4FHTQnHXnzr0vspKZHtH_yZGxMNi
- nC25xoB5668mPUunSpbIxMGPG
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: deeb574e-584b-4ed3-bea1-ed12d77e7f16
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Wed, 1 Oct 2025 22:17:11 +0000
-Received: by hermes--production-gq1-66b66ffd5-4kj8j (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 49e653aa15d96dc3c9cb4665110aa952;
-          Wed, 01 Oct 2025 21:56:56 +0000 (UTC)
-From: Casey Schaufler <casey@schaufler-ca.com>
-To: casey@schaufler-ca.com,
-	paul@paul-moore.com,
-	linux-security-module@vger.kernel.org
-Cc: jmorris@namei.org,
-	serge@hallyn.com,
-	keescook@chromium.org,
-	john.johansen@canonical.com,
-	penguin-kernel@i-love.sakura.ne.jp,
-	stephen.smalley.work@gmail.com,
-	linux-kernel@vger.kernel.org,
-	selinux@vger.kernel.org
-Subject: [PATCH 2/2] LSM: Allow reservation of netlabel
-Date: Wed,  1 Oct 2025 14:56:43 -0700
-Message-ID: <20251001215643.31465-3-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251001215643.31465-1-casey@schaufler-ca.com>
-References: <20251001215643.31465-1-casey@schaufler-ca.com>
+	s=arc-20240116; t=1759412927; c=relaxed/simple;
+	bh=9Ff1IwWNy93oXu64Q4BiN1QZkpj+h3I9ouZGA9yoNJk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pT70nGyYc/o5NtwGvtpZIIspsJMGE9blPFsiTk4xwAc0Q0a3gbz1g9TvaPbwSAbJfgiCIyFdmqVY93ApgzSlq8FMh1eCrshdwOr9XugyS+1dss70mwZQdpllFN10ke2BV0YEzNTzbnQbM5CyA1xJ3vgvrF8MlMrFvjGN1554xI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWYIx6hv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2CAC4CEFB
+	for <linux-security-module@vger.kernel.org>; Thu,  2 Oct 2025 13:48:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759412926;
+	bh=9Ff1IwWNy93oXu64Q4BiN1QZkpj+h3I9ouZGA9yoNJk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=HWYIx6hv+6bv6+XSqF0VcT7RqGGvbPKi4HR2E6YnW+zeG4ZGZFdFWqUApKTzoDAFa
+	 t8InPyvdiFlaopiLoAZ0ezfnI7nh1fsrvRPdrmOpyvJcz0E2KhAPZstGYFYppIQeg+
+	 7mh08uqMDYP0xjdFwb3XiwmkEKJqDHBI2xodSdN9abJCpz6uBRHFFzjNaDvxQYW/Yk
+	 zLoEXKdY07ulP4phJW+B+nThS9KsEeZmdcEhuK69ht3t5L4ioTfAjmFdqTeBCZdJ4s
+	 7lUVKdvFGurmzMwt2UiWtadVLx5SxAMfUrC4Rb+KjlDssLYMx05i/czH+qbosrjLX8
+	 M2uxiu/Sjcadg==
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3f0134ccc0cso617451f8f.1
+        for <linux-security-module@vger.kernel.org>; Thu, 02 Oct 2025 06:48:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWVJyZXQEKICwci9qDChKTugjrUiaOnak5h1Ktm5XwPt0wAl9oqelaLOttc+EsesTaQU+BBnDT/yIA8ceqC2bcdJg8AKMo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqMllGDEb0F1/xwJBl3gjvPKhPg7tL6PMzyFtx4QqEKF+cEuW0
+	CboAUojZGqcVYIwXSO6u4bqUxSN6eRMN9KLtkgh147VaVc0A6G4pxAdLecENs9NjxQT1s+QG8CV
+	Usdy5+9hDodYcrBaEliMhsCUJriz/T8FuCIYpIe6c
+X-Google-Smtp-Source: AGHT+IH1dN6IDmrUwxgIXsG+8PYYgV0rG7YIPLOGWpG/qZ3dQdD71//Cu/PMbo3C2ZiClVnk4i+mbNj3u2mLy9E2ZJw=
+X-Received: by 2002:a05:6000:2909:b0:411:3c14:3ac9 with SMTP id
+ ffacd0b85a97d-42557820099mr4926287f8f.59.1759412925413; Thu, 02 Oct 2025
+ 06:48:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250929213520.1821223-1-bboscaccy@linux.microsoft.com> <CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com>
+In-Reply-To: <CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com>
+From: KP Singh <kpsingh@kernel.org>
+Date: Thu, 2 Oct 2025 15:48:34 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ4yG1d8ujZ8PVzsRr_PWpyr6goD9DezQTu8ydaf-skn6g@mail.gmail.com>
+X-Gm-Features: AS18NWDR2V32kHl6e06nyB7JdSmw2OjmHo0LVJsbfsChvLGWcEDxe_YY0pjHE_c
+Message-ID: <CACYkzJ4yG1d8ujZ8PVzsRr_PWpyr6goD9DezQTu8ydaf-skn6g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] BPF signature hash chains
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, ast@kernel.org, 
+	james.bottomley@hansenpartnership.com, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, kys@microsoft.com, 
+	daniel@iogearbox.net, andrii@kernel.org, wufan@linux.microsoft.com, 
+	qmo@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Allow LSMs to request exclusive access to the netlabel facility.
-Provide mechanism for LSMs to determine if they have access to
-netlabel. Update the current users of netlabel, SELinux and Smack,
-to use and respect the exclusive use of netlabel.
+On Wed, Oct 1, 2025 at 11:37=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- include/linux/lsm_hooks.h           |  1 +
- security/security.c                 |  6 +++++
- security/selinux/hooks.c            |  7 +++---
- security/selinux/include/netlabel.h |  5 ++++
- security/selinux/netlabel.c         |  4 ++--
- security/smack/smack.h              |  5 ++++
- security/smack/smack_lsm.c          | 36 +++++++++++++++++++++--------
- security/smack/smackfs.c            | 20 +++++++++++++++-
- 8 files changed, 69 insertions(+), 15 deletions(-)
+[...]
 
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 69c1b509577a..e49b5617383f 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -117,6 +117,7 @@ struct lsm_blob_sizes {
- 	int lbs_tun_dev;
- 	int lbs_bdev;
- 	bool lbs_secmark; /* expressed desire for secmark use */
-+	bool lbs_netlabel; /* expressed desire for netlabel use */
- };
- 
- /*
-diff --git a/security/security.c b/security/security.c
-index e59e3d403de6..9eca10844b56 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -289,6 +289,12 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
- 		else
- 			blob_sizes.lbs_secmark = true;
- 	}
-+	if (needed->lbs_netlabel) {
-+		if (blob_sizes.lbs_netlabel)
-+			needed->lbs_netlabel = false;
-+		else
-+			blob_sizes.lbs_netlabel = true;
-+	}
- }
- 
- /* Prepare LSM for initialization. */
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 5b6db7d8effb..24edeef41d25 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -182,7 +182,7 @@ static int selinux_secmark_enabled(void)
- static int selinux_peerlbl_enabled(void)
- {
- 	return (selinux_policycap_alwaysnetwork() ||
--		netlbl_enabled() || selinux_xfrm_enabled());
-+		selinux_netlbl_enabled() || selinux_xfrm_enabled());
- }
- 
- static int selinux_netcache_avc_callback(u32 event)
-@@ -5863,7 +5863,7 @@ static unsigned int selinux_ip_forward(void *priv, struct sk_buff *skb,
- 				 SECCLASS_PACKET, PACKET__FORWARD_IN, &ad))
- 			return NF_DROP;
- 
--	if (netlbl_enabled())
-+	if (selinux_netlbl_enabled())
- 		/* we do this in the FORWARD path and not the POST_ROUTING
- 		 * path because we want to make sure we apply the necessary
- 		 * labeling before IPsec is applied so we can leverage AH
-@@ -5880,7 +5880,7 @@ static unsigned int selinux_ip_output(void *priv, struct sk_buff *skb,
- 	struct sock *sk;
- 	u32 sid;
- 
--	if (!netlbl_enabled())
-+	if (!selinux_netlbl_enabled())
- 		return NF_ACCEPT;
- 
- 	/* we do this in the LOCAL_OUT path and not the POST_ROUTING path
-@@ -7185,6 +7185,7 @@ struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
- 	.lbs_tun_dev = sizeof(struct tun_security_struct),
- 	.lbs_ib = sizeof(struct ib_security_struct),
- 	.lbs_secmark = true,
-+	.lbs_netlabel = true,
- };
- 
- #ifdef CONFIG_PERF_EVENTS
-diff --git a/security/selinux/include/netlabel.h b/security/selinux/include/netlabel.h
-index 5731c0dcd3e8..5be82aa8e7ca 100644
---- a/security/selinux/include/netlabel.h
-+++ b/security/selinux/include/netlabel.h
-@@ -134,4 +134,9 @@ static inline int selinux_netlbl_socket_connect_locked(struct sock *sk,
- }
- #endif /* CONFIG_NETLABEL */
- 
-+static inline bool selinux_netlbl_enabled(void)
-+{
-+	return selinux_blob_sizes.lbs_netlabel && netlbl_enabled();
-+}
-+
- #endif
-diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
-index d51dfe892312..a6c58b8e7bfd 100644
---- a/security/selinux/netlabel.c
-+++ b/security/selinux/netlabel.c
-@@ -199,7 +199,7 @@ int selinux_netlbl_skbuff_getsid(struct sk_buff *skb,
- 	int rc;
- 	struct netlbl_lsm_secattr secattr;
- 
--	if (!netlbl_enabled()) {
-+	if (!selinux_netlbl_enabled()) {
- 		*type = NETLBL_NLTYPE_NONE;
- 		*sid = SECSID_NULL;
- 		return 0;
-@@ -444,7 +444,7 @@ int selinux_netlbl_sock_rcv_skb(struct sk_security_struct *sksec,
- 	u32 perm;
- 	struct netlbl_lsm_secattr secattr;
- 
--	if (!netlbl_enabled())
-+	if (!selinux_netlbl_enabled())
- 		return 0;
- 
- 	netlbl_secattr_init(&secattr);
-diff --git a/security/smack/smack.h b/security/smack/smack.h
-index 89bf62ad60f1..46e513f27e0a 100644
---- a/security/smack/smack.h
-+++ b/security/smack/smack.h
-@@ -374,6 +374,11 @@ static inline struct smack_known **smack_key(const struct key *key)
- }
- #endif /* CONFIG_KEYS */
- 
-+static inline bool smack_netlabel(void)
-+{
-+	return smack_blob_sizes.lbs_netlabel;
-+}
-+
- /*
-  * Is the directory transmuting?
-  */
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index ee86818633c1..4cbdb8c91a07 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -2575,6 +2575,9 @@ static int smack_netlbl_add(struct sock *sk)
- 	struct smack_known *skp = ssp->smk_out;
- 	int rc;
- 
-+	if (!smack_netlabel())
-+		return 0;
-+
- 	local_bh_disable();
- 	bh_lock_sock_nested(sk);
- 
-@@ -2606,6 +2609,9 @@ static void smack_netlbl_delete(struct sock *sk)
- {
- 	struct socket_smack *ssp = smack_sock(sk);
- 
-+	if (!smack_netlabel())
-+		return;
-+
- 	/*
- 	 * Take the label off the socket if one is set.
- 	 */
-@@ -2656,7 +2662,7 @@ static int smk_ipv4_check(struct sock *sk, struct sockaddr_in *sap)
- 		/*
- 		 * Clear the socket netlabel if it's set.
- 		 */
--		if (!rc)
-+		if (!rc && smack_netlabel())
- 			smack_netlbl_delete(sk);
- 	}
- 	rcu_read_unlock();
-@@ -3982,6 +3988,8 @@ static struct smack_known *smack_from_secattr(struct netlbl_lsm_secattr *sap,
- 	int acat;
- 	int kcat;
- 
-+	if (!smack_netlabel())
-+		return smack_net_ambient;
- 	/*
- 	 * Netlabel found it in the cache.
- 	 */
-@@ -4132,6 +4140,9 @@ static struct smack_known *smack_from_netlbl(const struct sock *sk, u16 family,
- 	struct socket_smack *ssp = NULL;
- 	struct smack_known *skp = NULL;
- 
-+	if (!smack_netlabel())
-+		return NULL;
-+
- 	netlbl_secattr_init(&secattr);
- 
- 	if (sk)
-@@ -4202,7 +4213,7 @@ static int smack_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
- 		rc = smk_access(skp, ssp->smk_in, MAY_WRITE, &ad);
- 		rc = smk_bu_note("IPv4 delivery", skp, ssp->smk_in,
- 					MAY_WRITE, rc);
--		if (rc != 0)
-+		if (rc != 0 && smack_netlabel())
- 			netlbl_skbuff_err(skb, family, rc, 0);
- 		break;
- #if IS_ENABLED(CONFIG_IPV6)
-@@ -4390,7 +4401,7 @@ static int smack_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- 	if (skp == NULL) {
- 		skp = smack_from_netlbl(sk, family, skb);
- 		if (skp == NULL)
--			skp = &smack_known_huh;
-+			skp = smack_net_ambient;
- 	}
- 
- #ifdef CONFIG_AUDIT
-@@ -4411,8 +4422,11 @@ static int smack_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- 	/*
- 	 * Save the peer's label in the request_sock so we can later setup
- 	 * smk_packet in the child socket so that SO_PEERCRED can report it.
-+	 *
-+	 * Only do this if Smack is using netlabel.
- 	 */
--	req->peer_secid = skp->smk_secid;
-+	if (smack_netlabel())
-+		req->peer_secid = skp->smk_secid;
- 
- 	/*
- 	 * We need to decide if we want to label the incoming connection here
-@@ -4425,10 +4439,13 @@ static int smack_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
- 	hskp = smack_ipv4host_label(&addr);
- 	rcu_read_unlock();
- 
--	if (hskp == NULL)
--		rc = netlbl_req_setattr(req, &ssp->smk_out->smk_netlabel);
--	else
--		netlbl_req_delattr(req);
-+	if (smack_netlabel()) {
-+		if (hskp == NULL)
-+			rc = netlbl_req_setattr(req,
-+						&ssp->smk_out->smk_netlabel);
-+		else
-+			netlbl_req_delattr(req);
-+	}
- 
- 	return rc;
- }
-@@ -4446,7 +4463,7 @@ static void smack_inet_csk_clone(struct sock *sk,
- 	struct socket_smack *ssp = smack_sock(sk);
- 	struct smack_known *skp;
- 
--	if (req->peer_secid != 0) {
-+	if (smack_netlabel() && req->peer_secid != 0) {
- 		skp = smack_from_secid(req->peer_secid);
- 		ssp->smk_packet = skp;
- 	} else
-@@ -5031,6 +5048,7 @@ struct lsm_blob_sizes smack_blob_sizes __ro_after_init = {
- 	.lbs_superblock = sizeof(struct superblock_smack),
- 	.lbs_xattr_count = SMACK_INODE_INIT_XATTRS,
- 	.lbs_secmark = true,
-+	.lbs_netlabel = true,
- };
- 
- static const struct lsm_id smack_lsmid = {
-diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-index b1e5e62f5cbd..b2487f676e0a 100644
---- a/security/smack/smackfs.c
-+++ b/security/smack/smackfs.c
-@@ -79,7 +79,7 @@ static DEFINE_MUTEX(smk_net6addr_lock);
-  * If it isn't somehow marked, use this.
-  * It can be reset via smackfs/ambient
-  */
--struct smack_known *smack_net_ambient;
-+struct smack_known *smack_net_ambient = &smack_known_floor;
- 
- /*
-  * This is the level in a CIPSO header that indicates a
-@@ -671,6 +671,9 @@ static void smk_cipso_doi(void)
- 	struct cipso_v4_doi *doip;
- 	struct netlbl_audit nai;
- 
-+	if (!smack_netlabel())
-+		return;
-+
- 	smk_netlabel_audit_set(&nai);
- 
- 	rc = netlbl_cfg_map_del(NULL, PF_INET, NULL, NULL, &nai);
-@@ -711,6 +714,9 @@ static void smk_unlbl_ambient(char *oldambient)
- 	int rc;
- 	struct netlbl_audit nai;
- 
-+	if (!smack_netlabel())
-+		return;
-+
- 	smk_netlabel_audit_set(&nai);
- 
- 	if (oldambient != NULL) {
-@@ -834,6 +840,8 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
- 	 */
- 	if (!smack_privileged(CAP_MAC_ADMIN))
- 		return -EPERM;
-+	if (!smack_netlabel())
-+		return -EINVAL;
- 	if (*ppos != 0)
- 		return -EINVAL;
- 	if (format == SMK_FIXED24_FMT &&
-@@ -1156,6 +1164,8 @@ static ssize_t smk_write_net4addr(struct file *file, const char __user *buf,
- 	 */
- 	if (!smack_privileged(CAP_MAC_ADMIN))
- 		return -EPERM;
-+	if (!smack_netlabel())
-+		return -EINVAL;
- 	if (*ppos != 0)
- 		return -EINVAL;
- 	if (count < SMK_NETLBLADDRMIN || count > PAGE_SIZE - 1)
-@@ -1414,6 +1424,8 @@ static ssize_t smk_write_net6addr(struct file *file, const char __user *buf,
- 	 */
- 	if (!smack_privileged(CAP_MAC_ADMIN))
- 		return -EPERM;
-+	if (!smack_netlabel())
-+		return -EINVAL;
- 	if (*ppos != 0)
- 		return -EINVAL;
- 	if (count < SMK_NETLBLADDRMIN || count > PAGE_SIZE - 1)
-@@ -1585,6 +1597,8 @@ static ssize_t smk_write_doi(struct file *file, const char __user *buf,
- 
- 	if (!smack_privileged(CAP_MAC_ADMIN))
- 		return -EPERM;
-+	if (!smack_netlabel())
-+		return -EINVAL;
- 
- 	if (count >= sizeof(temp) || count == 0)
- 		return -EINVAL;
-@@ -1652,6 +1666,8 @@ static ssize_t smk_write_direct(struct file *file, const char __user *buf,
- 
- 	if (!smack_privileged(CAP_MAC_ADMIN))
- 		return -EPERM;
-+	if (!smack_netlabel())
-+		return -EINVAL;
- 
- 	if (count >= sizeof(temp) || count == 0)
- 		return -EINVAL;
-@@ -1730,6 +1746,8 @@ static ssize_t smk_write_mapped(struct file *file, const char __user *buf,
- 
- 	if (!smack_privileged(CAP_MAC_ADMIN))
- 		return -EPERM;
-+	if (!smack_netlabel())
-+		return -EINVAL;
- 
- 	if (count >= sizeof(temp) || count == 0)
- 		return -EINVAL;
--- 
-2.51.0
+> With the lack of engagement from the BPF devs, I'm now at the point
+> where I'm asking Linus to comment on the current situation around
 
+The lack of engagement is because Blaise has repeatedly sent patches
+and ignored maintainer feedback and continued pushing a broken
+approach. The community, in fact, prioritized the signing work to
+unblock your use-case.
+
+> Blaise's patchset.  I recognize that Alexei and KP have a strong
+> affinity for the signature scheme implemented in KP's patchset, which
+> is fine, but if we are going to be serious about implementing BPF
+> signature verification that can be used by a number of different user
+> groups, we also need to support the signature scheme that Blaise is
+> proposing[6].
+>
+
+Blaise's implementation fails on any modern BPF programs since
+programs use more than one map, BTF information and kernel functions.
+
+> To make it clear at the start, Blaise's patchset does not change,
+> block, or otherwise prevent the BPF program signature scheme
+> implemented in KP's patchset.  Blaise intentionally designed his
+> patches such that the two signature schemes can coexist together in
+
+We cannot have multiple signature schemes, this is not the experience
+we want for BPF users.
+
+> the same kernel, allowing users to select which scheme to use on each
+> BPF program load, enabling the kernel to support policy to selectively
+> enforce rules around which signature scheme is permitted for each BPF
+> program load.
+>
+> Blaise's patch implements an alternate BPF program signature scheme,
+> using the same basic concepts as KP's design (light skeletons, hash
+> chaining, etc.), but does so in such a way that the kernel verifies
+> all relevant parts of the BPF program load prior to calling the
+> security_bpf_prog_load() LSM hook.  KP's signature scheme only
+> verifies the light skeleton prior to calling the LSM hook and relies
+
+You are confusing a light skeleton from a loader program. Loader
+programs are independent of light skeletons.
+
+> on the BPF code in the light skeleton to verify the original BPF
+> program.
+>
+> Relying on a light skeleton to verify the BPF program means that any
+> verification failures in the light skeleton will be "lost" as there is
+> no way to convey an error code back to the user who is attempting the
+
+This is not correct, the error is propagated back if the loader program fai=
+ls.
+
+> BPF program load.  Blaise's approach to verifying the full signature
+> in the kernel, and not relying on the light skeleton for verification,
+> means that verification failures can be returned to the user; there
+> are no silent signature verification failures like one can experience
+> with KP's verification scheme.
+>
+> KP's signature verification scheme is a two-part scheme with the
+> security_bpf_prog_load() LSM hook being called after the light
+> skeleton signature has been verified, but before the light skeleton
+> verifies the BPF program.  Aside from breaking with typical
+
+Again you mean, loader BPF program. Skeletons are just for
+convenience. You don't have to use them. libbpf provides an
+implementation to easily generate loader programs, but you don't have
+to use that either.
+
+> conventions around the placement of LSM hooks, this "halfway" approach
+> makes it difficult for LSMs to log anything about the signature status
+> of a BPF program being loaded, or use the signature status in any type
+> of access decision.  This is important for a number of user groups
+> that use LSM based security policies as a way to help reason about the
+> security properties of a system, as KP's scheme would require the
+> users to analyze the signature verification code in every BPF light
+> skeleton they authorize as well as the LSM policy in order to reason
+> about the security mechanisms involved in BPF program loading.
+>
+> Blaise's signature scheme also has the nice property that BPF ELF
+> objects created using his scheme are backwards compatible with
+> existing released kernels that do not support any BPF signature
+> verification schemes, of course without any signature verification.
+> Loading a BPF ELF object using KP's signature scheme will likely fail
+> when loaded on existing released kernels.
+
+This does not make any sense. The ELF format and the way loaders like
+libbpf interpret it, has nothing to do with the kernel or UAPI.
+
+I had given detailed feedback to Blaise in
+https://lore.kernel.org/bpf/CACYkzJ6yNjFOTzC04uOuCmFn=3D+51_ie2tB9_x-u2xbcO=
+=3DyobTw@mail.gmail.com/
+mentions also why we don't want any additional UAPI.
+
+You keep mentioning having visibility  in the LSM code and I again
+ask, to implement what specific security policy and there is no clear
+answer? On a system where you would like to only allow signed BPF
+programs, you can purely deny any programs where the signature is not
+provided and this can be implemented today.
+
+Stable programs work as it is, programs that require runtime
+relocation work with loader programs. We don't want to add more UAPI
+as, in the future, it's quite possible that we can make the
+instruction buffer stable.
+
+- KP
+
+>
+> [1] https://lore.kernel.org/linux-security-module/CAADnVQ+C2KNR1ryRtBGOZT=
+Nk961pF+30FnU9n3dt3QjaQu_N6Q@mail.gmail.com/
+> [2] https://lore.kernel.org/linux-security-module/CAHC9VhRjKV4AbSgqb4J_-x=
+hkWAp_VAcKDfLJ4GwhBNPOr+cvpg@mail.gmail.com/
+> [3] https://lore.kernel.org/linux-security-module/87sei58vy3.fsf@microsof=
+t.com/
+> [4] https://lore.kernel.org/linux-security-module/20250909162345.569889-2=
+-bboscaccy@linux.microsoft.com/
+> [5] https://lore.kernel.org/linux-security-module/20250926203111.1305999-=
+1-bboscaccy@linux.microsoft.com/
+> [6] https://lore.kernel.org/linux-security-module/20250929213520.1821223-=
+1-bboscaccy@linux.microsoft.com/
+>
+> --
+> paul-moore.com
 
