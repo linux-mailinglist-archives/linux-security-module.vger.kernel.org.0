@@ -1,144 +1,195 @@
-Return-Path: <linux-security-module+bounces-12435-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12440-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B63BBDFFCE
-	for <lists+linux-security-module@lfdr.de>; Wed, 15 Oct 2025 20:06:23 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7876DBE0571
+	for <lists+linux-security-module@lfdr.de>; Wed, 15 Oct 2025 21:16:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 05CDD4E7EC6
-	for <lists+linux-security-module@lfdr.de>; Wed, 15 Oct 2025 18:06:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 87A76345EA4
+	for <lists+linux-security-module@lfdr.de>; Wed, 15 Oct 2025 19:15:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7AD301492;
-	Wed, 15 Oct 2025 18:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82EB727E05F;
+	Wed, 15 Oct 2025 19:15:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hiY5QYtE"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="e/cYM99+"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7587530103F
-	for <linux-security-module@vger.kernel.org>; Wed, 15 Oct 2025 18:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC461624D5
+	for <linux-security-module@vger.kernel.org>; Wed, 15 Oct 2025 19:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760551559; cv=none; b=PyOi+dDCgUfk4ijEOGSfRlPG0X2e+yjq4Zq/oJ0EJBACEzXGxyH0o9kxYYepWUDrMzGhszMzLI+8k0g8PBcz6f0twsEiLawg/cDOcV7JClmpjpSEIA4jVyMe7z6sbJqyU5cVUk0HS0p3l910YxMqku1d01O+vzZSSgWvesOwk0Q=
+	t=1760555756; cv=none; b=X5iu5ZgZPKpCUzmKzKiuYjLbADJiN3/LssAcB9RCztJcDKkdmyv9zJqk0jaY/wx47O8ejTjgufxWkJ76RXEaqP2t4ZAtJd/nfdI/EjJyL0pnY7pYT5tGQqQOa+3tuwROeFr8OzcPUuf8DXBfFkEsR2LbuCTp9m5zpjpaBMVjSRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760551559; c=relaxed/simple;
-	bh=ozdKul5OP276A3h3Wjm2x2XarpQcUWp1UVCAyeuTdSY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EY13QlapK3FKUhoa5euOvRGUiGbofUOcgj8rI1Ct69pZ6WHh/25lWa5ZEjOYfj3hOFx2Y3NL/8WDuhdmzsuHDluoqwFeMy+VU3/3jLID1e2Fq3JO6VOd8gjGkHJXXM4nERVu8XWnEnpJu0El9uAlXUfNkguxowOSSLokEe08fAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hiY5QYtE; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2904e9e0ef9so145739735ad.3
-        for <linux-security-module@vger.kernel.org>; Wed, 15 Oct 2025 11:05:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760551557; x=1761156357; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wj/ujD0eXtGvKYdVuuqLrx+hKA4SG0aPTcTudPvMU20=;
-        b=hiY5QYtEpveuJQ3GbSnBDDXz5b7tFq/FMKy0gFT20cj6giwmL8q4Mh0LFH56veNEYF
-         JGywApRFaF3M3jB/LxzaK5TYG3wiIPdyLA019g7yKN4nOQ5/e10ISsVrWEz7iperQzdV
-         oZX2RznS+iz83f0ymdb26UtOTr0XrQMcNh+WRgQMPZoGpNln5z+dSnS/rPq7YJkZCL7e
-         ClrlWThmjmQQxohicODRYSlyv33ENTwTqHqIBf1A1TBzcuisSBRbNV43V5lJudqs4xYC
-         S0dS5lG8OAygmR+OVmej7Qqp9sS98SLfTWn7dlNyPLpqViCGxu06AKz0VeOR5mKQtyCs
-         eS3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760551557; x=1761156357;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wj/ujD0eXtGvKYdVuuqLrx+hKA4SG0aPTcTudPvMU20=;
-        b=PxGsA5hNlA/AlOMDe++EznthSbol9/cvCV1IgTvD4rdo3RVvbQMMeoBk/PRp1MbzuY
-         E0S6QrZhHitYpUbinJq9Yxh+czWrK3KrJ0AjlLgF6sPxGJvkvZfHnfcTzOb0EXrhkM4O
-         KLTT7/azmYWryD5cV6HCjHcpGfP02RiM8VVY+x5R8SCzjIKw1pRBmfozXzlj5c9cthIR
-         6zhy6A3oz0hw7QVwu1nBTt38FwJ4bCJytEV/irRxL/4yXhwCX8YYRe9keXE6SpvT/743
-         AZJTf/I8f9BlDunDxWFCfyhG5iVonZZdPkiDFOQ36MI/35Gi0ckvZ5BjmACMKIPWERJ3
-         DqqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrNR4tU10hjvhxiPHMdfj+RF3DY0V4HUopyIzp2bBnaKs8y59d12MRoiGhgWpSu4nkLuXfnTWGuLi8kTJHkQiq8DGSO70=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSi2dRHqsvfG/4BZ46fsAsh++jTVHeTrzpdnss6YL3o/zRyjUr
-	ToPb1oIMXkrC6+Lf3g+pFJJY6x6Uspq2fZVe/8/HiKrI5JKoTOvSm+kFHmd3nZaJJ6JjzXPi30q
-	lM2ZQpQ==
-X-Google-Smtp-Source: AGHT+IH/Mc5bux0nHPu+CkauZuwZIYiV046udmQ4p4yB6kgoXdVfplmR64sQJckJg1s2r9B+yaVqVDHEGb8=
-X-Received: from pjrv8.prod.google.com ([2002:a17:90a:bb88:b0:32e:b34b:92eb])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3d05:b0:26e:49e3:55f1
- with SMTP id d9443c01a7336-29027373d9amr366930845ad.18.1760551555936; Wed, 15
- Oct 2025 11:05:55 -0700 (PDT)
-Date: Wed, 15 Oct 2025 11:02:44 -0700
-In-Reply-To: <20250827175247.83322-2-shivankg@amd.com>
+	s=arc-20240116; t=1760555756; c=relaxed/simple;
+	bh=y+vg5TaQbM79SI9CONaFDZmnaifPeFmDvk0wvPMVM64=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kxkMWSdjGVjRjiAuApB4qZ6LU9JdPELszyDV69IoIUijn/QMH1vsly5wW/nkzvSLTEoopIuH6ANi5u5ATecz37w8SR1Z/AqDbtt83TmaiiWbXmIku7YumvsrqgJdXtq28SWMGeZGkaY/jKqGQ5NaEmMqCB6udLx7mjLqUsI2aqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=e/cYM99+; arc=none smtp.client-ip=185.125.25.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cn0v12nKTzSJS;
+	Wed, 15 Oct 2025 21:06:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1760555213;
+	bh=C0f/xsFRAwWXnuN++o6H1vHIvfYxXQWcQGBhNInl0Hc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e/cYM99+mnyqW9vk0S+ppqrohMIf+MIKmiB19c+4EBq9nDbJxTZGJghpEJZPTeuhe
+	 SVTflFf1Jxg88Cx6XGABfLuw7X3RL/tRbOxJxrGLaZWHKU/KK8ME/1DWvyAmXJbRGb
+	 qx81cUmYW7Rsd+Y8SzYJQTgrrDsJqQA+iYLoMV+8=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4cn0v05w5MzSXv;
+	Wed, 15 Oct 2025 21:06:52 +0200 (CEST)
+Date: Wed, 15 Oct 2025 21:06:49 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Tingmao Wang <m@maowtm.org>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Jan Kara <jack@suse.cz>, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] Implement LANDLOCK_ADD_RULE_QUIET
+Message-ID: <20251015.Gaim1tieCesi@digikod.net>
+References: <cover.1759686613.git.m@maowtm.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250827175247.83322-2-shivankg@amd.com>
-X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
-Message-ID: <176055105546.1527431.3611256810380818215.b4-ty@google.com>
-Subject: Re: [PATCH kvm-next V11 0/7] Add NUMA mempolicy support for KVM guest-memfd
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, willy@infradead.org, akpm@linux-foundation.org, 
-	david@redhat.com, pbonzini@redhat.com, shuah@kernel.org, vbabka@suse.cz, 
-	Shivank Garg <shivankg@amd.com>
-Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, dsterba@suse.com, 
-	xiang@kernel.org, chao@kernel.org, jaegeuk@kernel.org, clm@fb.com, 
-	josef@toxicpanda.com, kent.overstreet@linux.dev, zbestahu@gmail.com, 
-	jefflexu@linux.alibaba.com, dhavale@google.com, lihongbo22@huawei.com, 
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, rppt@kernel.org, 
-	surenb@google.com, mhocko@suse.com, ziy@nvidia.com, matthew.brost@intel.com, 
-	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, 
-	gourry@gourry.net, ying.huang@linux.alibaba.com, apopple@nvidia.com, 
-	tabba@google.com, ackerleytng@google.com, paul@paul-moore.com, 
-	jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz, bfoster@redhat.com, 
-	vannapurve@google.com, chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, 
-	michael.day@amd.com, shdhiman@amd.com, yan.y.zhao@intel.com, 
-	Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com, michael.roth@amd.com, 
-	aik@amd.com, kalyazin@amazon.com, peterx@redhat.com, jack@suse.cz, 
-	hch@infradead.org, cgzones@googlemail.com, ira.weiny@intel.com, 
-	rientjes@google.com, roypat@amazon.co.uk, chao.p.peng@intel.com, 
-	amit@infradead.org, ddutile@redhat.com, dan.j.williams@intel.com, 
-	ashish.kalra@amd.com, gshan@redhat.com, jgowans@amazon.com, 
-	pankaj.gupta@amd.com, papaluri@amd.com, yuzhao@google.com, 
-	suzuki.poulose@arm.com, quic_eberman@quicinc.com, 
-	linux-bcachefs@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-coco@lists.linux.dev, Jason Gunthorpe <jgg@ziepe.ca>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1759686613.git.m@maowtm.org>
+X-Infomaniak-Routing: alpha
 
-On Wed, 27 Aug 2025 17:52:41 +0000, Shivank Garg wrote:
-> This series introduces NUMA-aware memory placement support for KVM guests
-> with guest_memfd memory backends. It builds upon Fuad Tabba's work (V17)
-> that enabled host-mapping for guest_memfd memory [1] and can be applied
-> directly applied on KVM tree [2] (branch kvm-next, base commit: a6ad5413,
-> Merge branch 'guest-memfd-mmap' into HEAD)
+This patch series is not simple but really good, thanks!  I mostly have
+nicking comments.  I'm looking forward the kselftests.
+
+On Sun, Oct 05, 2025 at 06:55:23PM +0100, Tingmao Wang wrote:
+> Hi,
 > 
-> == Background ==
-> KVM's guest-memfd memory backend currently lacks support for NUMA policy
-> enforcement, causing guest memory allocations to be distributed across host
-> nodes  according to kernel's default behavior, irrespective of any policy
-> specified by the VMM. This limitation arises because conventional userspace
-> NUMA control mechanisms like mbind(2) don't work since the memory isn't
-> directly mapped to userspace when allocations occur.
-> Fuad's work [1] provides the necessary mmap capability, and this series
-> leverages it to enable mbind(2).
+> This is the v2 of the "quiet flag" series, implementing the feature as
+> proposed in [1].
 > 
-> [...]
-
-Applied the non-KVM change to kvm-x86 gmem.  We're still tweaking and iterating
-on the KVM changes, but I fully expect them to land in 6.19.
-
-Holler if you object to taking these through the kvm tree.
-
-[1/7] mm/filemap: Add NUMA mempolicy support to filemap_alloc_folio()
-      https://github.com/kvm-x86/linux/commit/601aa29f762f
-[2/7] mm/filemap: Extend __filemap_get_folio() to support NUMA memory policies
-      https://github.com/kvm-x86/linux/commit/2bb25703e5bd
-[3/7] mm/mempolicy: Export memory policy symbols
-      https://github.com/kvm-x86/linux/commit/e1b4cf7d6be3
-
---
-https://github.com/kvm-x86/linux/tree/next
+> v1: https://lore.kernel.org/all/cover.1757376311.git.m@maowtm.org/
+> 
+> The quiet flag allows a sandboxer to suppress audit logs for uninteresting
+> denials.  The flag can be set on objects and inherits downward in the
+> filesystem hierarchy.  On a denial, the youngest denying layer's quiet
+> flag setting decides whether to audit.  The motivation for this feature is
+> to reduce audit noise, and also prepare for a future supervisor feature
+> which will use this bit to suppress supervisor notifications.
+> 
+> In this version, the most significant change is that we now have a quiet
+> access mask in the ruleset_attr, which gets eventually stored in the
+> hierarchy. This allows the user to specify which access should be affected
+> by quiet bits.  One can then, for example, make it such that read accesses
+> to certain files are not audited (but still denied), but all writes are
+> still audited, regardless of location.
+> 
+> This version also implements quiet support for optional accesses (truncate
+> and ioctl), scope denials (signal, abstract unix socket), addresses
+> suggestions from v1 review, and further enhances sandboxer to allow full
+> customization of which access to quiet.  Network and scope access quieting
+> are now also supported by the sandboxer via additional environment
+> variables.
+> 
+> I still haven't added any selftests yet but did some testing with
+> sandboxer.  I would like this to be reviewed as it stands, before
+> finishing up the tests which I will hopefully add in v3.
+> 
+> Patches removed since v1:
+> - landlock/access: Improve explanation on the deny_masks_t
+> 
+> Demo:
+> 
+>     /# LL_FS_RO=/usr LL_FS_RW= LL_FORCE_LOG=1 LL_FS_QUIET=/dev:/tmp:/etc LL_FS_QUIET_ACCESS=r ./sandboxer bash
+>     ...
+>     audit: type=1423 audit(1759680175.562:195): domain=15bb25f6b blockers=fs.write_file,fs.read_file path="/dev/tty" dev="devtmpfs" ino=11
+>     ^^^^^^^^
+>     # note: because write is not quieted, we see the above line. blockers
+>     # contains read as well since that's the originally requested access.
+>     audit: type=1424 audit(1759680175.562:195): domain=15bb25f6b status=allocated mode=enforcing pid=616 uid=0 exe="/sandboxer" comm="sandboxer"
+>     audit: type=1300 audit(1759680175.562:195): arch=c000003e syscall=257 success=no exit=-13 a0=ffffffffffffff9c a1=5565c86113d1 a2=802 a3=0 items=0 ppid=605 pid=616 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="bash" exe="/usr/bin/bash" key=(null)
+>     audit: type=1327 audit(1759680175.562:195): proctitle="bash"
+>     bash: cannot set terminal process group (605): Inappropriate ioctl for device
+>     bash: no job control in this shell
+>     bash: /etc/bash.bashrc: Permission denied
+>     audit: type=1423 audit(1759680175.570:196): domain=15bb25f6b blockers=fs.read_file path="/.bash_history" dev="virtiofs" ino=36963
+>     ^^^^^^^^
+>     # read outside /dev:/tmp:/etc - not quieted
+>     audit: type=1300 audit(1759680175.570:196): arch=c000003e syscall=257 success=no exit=-13 a0=ffffffffffffff9c a1=5565c868e400 a2=0 a3=0 items=0 ppid=605 pid=616 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="bash" exe="/usr/bin/bash" key=(null)
+>     audit: type=1327 audit(1759680175.570:196): proctitle="bash"
+>     audit: type=1423 audit(1759680175.570:197): domain=15bb25f6b blockers=fs.read_file path="/.bash_history" dev="virtiofs" ino=36963
+>     audit: type=1300 audit(1759680175.570:197): arch=c000003e syscall=257 success=no exit=-13 a0=ffffffffffffff9c a1=5565c868e400 a2=0 a3=0 items=0 ppid=605 pid=616 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="bash" exe="/usr/bin/bash" key=(null)
+>     audit: type=1327 audit(1759680175.570:197): proctitle="bash"
+> 
+>     bash-5.2# head /etc/passwd
+>     head: cannot open '/etc/passwd' for reading: Permission denied
+>     ^^^^^^^^
+>     # reads to /etc are quieted
+> 
+>     bash-5.2# echo evil >> /etc/passwd
+>     bash: /etc/passwd: Permission denied
+>     audit: type=1423 audit(1759680227.030:198): domain=15bb25f6b blockers=fs.write_file path="/etc/passwd" dev="virtiofs" ino=790
+>     ^^^^^^^^
+>     # writes are not quieted
+>     audit: type=1300 audit(1759680227.030:198): arch=c000003e syscall=257 success=no exit=-13 a0=ffffffffffffff9c a1=5565c86ab030 a2=441 a3=1b6 items=0 ppid=605 pid=616 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="bash" exe="/usr/bin/bash" key=(null)
+>     audit: type=1327 audit(1759680227.030:198): proctitle="bash"
+> 
+> Design:
+> 
+> - The user can set the quiet flag for a layer on any part of the fs
+>   hierarchy (whether it allows any access on it or not), and the flag
+>   inherits down (no support for "cancelling" the inheritance of the flag
+>   in specific subdirectories).
+> 
+> - The youngest layer that denies a request gets to decide whether the
+>   denial is audited or not.  This means that a compromised binary, for
+>   example, cannot "turn off" Landlock auditing when it tries to access
+>   files, unless it denies access to the files itself.  There is some
+>   debate to be had on whether, if a parent layer sets the quiet flag, but
+>   the request is denied by a deeper layer, whether Landlock should still
+>   audit anyway (since the rule author of the child layer likely did not
+>   expect the denial, so it would be good diagnostic).  The current
+>   approach is to ignore the quiet on the parent layer and audit anyway.
+> 
+> All existing kselftests pass.
+> 
+> [1]: https://github.com/landlock-lsm/linux/issues/44#issuecomment-2876500918
+> 
+> Kind regards,
+> Tingmao
+> 
+> Tingmao Wang (6):
+>   landlock: Add a place for flags to layer rules
+>   landlock: Add API support and docs for the quiet flags
+>   landlock/audit: Check for quiet flag in landlock_log_denial
+>   landlock/audit: Fix wrong type usage
+>   samples/landlock: Add quiet flag support to sandboxer
+>   Implement quiet for optional accesses
+> 
+>  include/uapi/linux/landlock.h                |  64 +++++++++
+>  samples/landlock/sandboxer.c                 | 133 +++++++++++++++++--
+>  security/landlock/audit.c                    | 113 +++++++++++++---
+>  security/landlock/audit.h                    |   4 +-
+>  security/landlock/domain.c                   |  23 ++++
+>  security/landlock/domain.h                   |  10 ++
+>  security/landlock/fs.c                       | 103 ++++++++------
+>  security/landlock/fs.h                       |  36 +++--
+>  security/landlock/net.c                      |  11 +-
+>  security/landlock/net.h                      |   3 +-
+>  security/landlock/ruleset.c                  |  19 ++-
+>  security/landlock/ruleset.h                  |  39 +++++-
+>  security/landlock/syscalls.c                 |  72 +++++++---
+>  security/landlock/task.c                     |  12 +-
+>  tools/testing/selftests/landlock/base_test.c |   4 +-
+>  15 files changed, 538 insertions(+), 108 deletions(-)
+> 
+> 
+> base-commit: e5f0a698b34ed76002dc5cff3804a61c80233a7a
+> -- 
+> 2.51.0
+> 
+> 
 
