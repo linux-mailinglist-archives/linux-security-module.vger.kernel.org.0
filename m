@@ -1,343 +1,170 @@
-Return-Path: <linux-security-module+bounces-12512-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12515-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF8E5BF35FB
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 Oct 2025 22:22:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF7DEBF3FDE
+	for <lists+linux-security-module@lfdr.de>; Tue, 21 Oct 2025 01:13:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BE63406CE5
-	for <lists+linux-security-module@lfdr.de>; Mon, 20 Oct 2025 20:22:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A0E018A7504
+	for <lists+linux-security-module@lfdr.de>; Mon, 20 Oct 2025 23:13:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C3B1EF39E;
-	Mon, 20 Oct 2025 20:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFAA82F5328;
+	Mon, 20 Oct 2025 23:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Wqm0DmOF"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="HEwesnfC"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D47A2D3A7C
-	for <linux-security-module@vger.kernel.org>; Mon, 20 Oct 2025 20:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE4A2475CD;
+	Mon, 20 Oct 2025 23:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760991752; cv=none; b=GdQBLPAaiU8HJ5ULAKuYx2MptkCDGMkm5BQ4dvYPrGRbOmLEKBF2iVdrhG9hzg3gDJSUtngh62I0QvZx6lCqDsYaZSjb4dOFSuIAKfmB0Hcr6mRqx4n9vICciI+NpcQ0uq2Z+GVLgZHN7W6GRBOwxeZvnmJU/a5WjC1JrXDg2Yg=
+	t=1761002004; cv=none; b=ExLnEhH33L1J3PiXup69nzI54sOMFY9zL+Baf1rxD545/6xbqU2gS2sYv7PhQrewHp9cgwlhPMo8xXdPip24Jc40vWDZgxCj9eb9di1UTlmMoy8+WYnNt8iEaf84GVHmGUWyAcXl3rlo+1q8sfaQTe6oTktjQqyT0Fsit245ZyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760991752; c=relaxed/simple;
-	bh=6kNPhuRiBBz6eK85k02AcQPOM8SZT6X4c9MTYpvct88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AOsxaq3NcqqvUc91CHA9TDZonauYBZi71QnUUtaXj3c9P4Tz3al2v36lxscUk/2WK36PttH5hq4NOFGfZrESXHTz46aVu9WcwnF8vfbLZauBXAUeWpc47XkZv5nJHWbQuOM3Z/TroP1iEqTCY0cEUD0pzdPx9cb5GSw5Ko1ZHTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Wqm0DmOF; arc=none smtp.client-ip=45.157.188.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cr66j1JMyzXgN;
-	Mon, 20 Oct 2025 22:12:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1760991165;
-	bh=m6emVONqhZZHyt02jsZvQbeIf6OtX3AvAAi7i5edG6Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wqm0DmOFHUXDTYU8CcZZ+w5vqMFGwNsYJm6Ny3+LUq4gpP2HQDBEHqErPx0vjHCbE
-	 HgzgC7X+Uxldoib7dW7tUR510wqO4P95o4Nr3lYKRccY0aO73bSNUH1aL9BEPk7518
-	 c4CPs+FKLlbmNHbDs7Z5A7Am1K9gO/dn66+b6X/s=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4cr66h4tpkzWLP;
-	Mon, 20 Oct 2025 22:12:44 +0200 (CEST)
-Date: Mon, 20 Oct 2025 22:12:44 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-Cc: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>, 
-	Tingmao Wang <m@maowtm.org>, Paul Moore <paul@paul-moore.com>, 
-	linux-security-module@vger.kernel.org, Jann Horn <jannh@google.com>
-Subject: Re: [PATCH v2 1/2] landlock: Multithreading support for
- landlock_restrict_self()
-Message-ID: <20251020.fohbo6Iecahz@digikod.net>
-/rom: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-References: <20251001111807.18902-1-gnoack@google.com>
- <20251001111807.18902-2-gnoack@google.com>
+	s=arc-20240116; t=1761002004; c=relaxed/simple;
+	bh=d1CzqJujTpmoonXQjO/rxn6MhmNh0S7D56wVmjAHJRc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=q0ymSGk0oCYl2i62lR3iccpqAoGX81SEs32hoagvOO4QOUXrQGfy/5mOH+iOYnOPBu3wLMTtsncW9s/3Q1cHRzhPrk3WAw7h51WOYWZA8++XMeFKCqPeeZwShZObVk7P5sivx3hTtInvfTXMuVEHDcAtFlGFyShJidNsUBMf97s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=HEwesnfC; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1761002000;
+	bh=d1CzqJujTpmoonXQjO/rxn6MhmNh0S7D56wVmjAHJRc=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=HEwesnfChn6fQJ7tdcLNShiozcyG9DNdW5U9kYnizTGLr0ov2XVFC33PuK2qFBa5s
+	 iHal9wxBagsGA+T8EP9/NTCO5JcJv4iCLo0TT0Ln97pgKg5JfM6CUny7qUJZxpFsfQ
+	 He994C96cGXGlnEJ9v10GAz0gugocJhDaBw52qzg=
+Received: from [172.20.40.240] (unknown [32.142.2.106])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 530AB1C027F;
+	Mon, 20 Oct 2025 19:13:20 -0400 (EDT)
+Message-ID: <bc823ddbaf63e0e177eb46d1cc15076e4e2e689d.camel@HansenPartnership.com>
+Subject: Re: [PATCH bpf-next v2 0/3] BPF signature hash chains
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Paul Moore
+	 <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Alexei Starovoitov
+ <ast@kernel.org>, KP Singh <kpsingh@kernel.org>, Blaise Boscaccy
+ <bboscaccy@linux.microsoft.com>, bpf <bpf@vger.kernel.org>, LSM List
+ <linux-security-module@vger.kernel.org>, "K. Y. Srinivasan"
+ <kys@microsoft.com>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii
+ Nakryiko <andrii@kernel.org>, wufan@linux.microsoft.com, Quentin Monnet
+ <qmo@kernel.org>
+Date: Mon, 20 Oct 2025 19:13:19 -0400
+In-Reply-To: <CAADnVQLRtfPrH6sffaPVyFP4Aib+e7uVVWLi7bb79d9TrHjHpQ@mail.gmail.com>
+References: <20250929213520.1821223-1-bboscaccy@linux.microsoft.com>
+	 <CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com>
+	 <CACYkzJ4yG1d8ujZ8PVzsRr_PWpyr6goD9DezQTu8ydaf-skn6g@mail.gmail.com>
+	 <CAHC9VhR2Ab8Rw8RBm9je9-Ss++wufstxh4fB3zrZXnBoZpSi_Q@mail.gmail.com>
+	 <CACYkzJ7u_wRyknFjhkzRxgpt29znoTWzz+ZMwmYEE-msc2GSUw@mail.gmail.com>
+	 <CAHC9VhSDkwGgPfrBUh7EgBKEJj_JjnY68c0YAmuuLT_i--GskQ@mail.gmail.com>
+	 <CACYkzJ4mJ6eJBzTLgbPG9A6i_dN2e0B=1WNp6XkAr-WmaEyzkA@mail.gmail.com>
+	 <CAHC9VhRyG9ooMz6wVA17WKA9xkDy=UEPVkD4zOJf5mqrANMR9g@mail.gmail.com>
+	 <CAADnVQLfyh=qby02AFe+MfJYr2sPExEU0YGCLV9jJk=cLoZoaA@mail.gmail.com>
+	 <88703f00d5b7a779728451008626efa45e42db3d.camel@HansenPartnership.com>
+	 <CAADnVQKdsF5_9Vb_J+z27y5Of3P6J3gPNZ=hXKFi=APm6AHX3w@mail.gmail.com>
+	 <42bc677e031ed3df4f379cd3d6c9b3e1e8fadd87.camel@HansenPartnership.com>
+	 <CAADnVQ+M+_zLaqmd6As0z95A5BwGR8n8oFto-X-i4BgMvuhrXQ@mail.gmail.com>
+	 <fe538d3d723b161ee5354bb2de8e3a2ac7cf8255.camel@HansenPartnership.com>
+	 <CAHC9VhSU0UCHW9ApHsVQLX9ar6jTEfAW4b4bBi5-fbbsOaashg@mail.gmail.com>
+	 <CAHC9VhTvxgufmxHZFBd023xgkOyp9Cmq-hA-Gv8sJF1xYQBFSA@mail.gmail.com>
+	 <CAADnVQJw_B-T6=TauUdyMLOxcfMDZ1hdHUFVnk59NmeWDBnEtw@mail.gmail.com>
+	 <CAHC9VhSRiZacAy=JTKgWnBDbycey37JRVC61373HERTEUFmxEA@mail.gmail.com>
+	 <CAADnVQLRtfPrH6sffaPVyFP4Aib+e7uVVWLi7bb79d9TrHjHpQ@mail.gmail.com>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251001111807.18902-2-gnoack@google.com>
-X-Infomaniak-Routing: alpha
 
-On Wed, Oct 01, 2025 at 01:18:06PM +0200, Günther Noack wrote:
-> Introduce the LANDLOCK_RESTRICT_SELF_TSYNC flag.  With this flag, a
-> given Landlock ruleset is applied to all threads of the calling
-> process, instead of only the current one.
-> 
-> Without this flag, multithreaded userspace programs currently resort
-> to using the nptl(7)/libpsx hack for multithreaded policy enforcement,
-> which is also used by libcap and for setuid(2).  Using this scheme,
-> the threads of a process enforce the same Landlock ruleset, but the
-> resulting Landlock domains are still separate, which makes a
-> difference for Landlock's "scoped" access rights, where the domain
-> identity and nesting is used.  As a result, when using
-> LANLDOCK_SCOPE_SIGNAL, signaling between sibling threads stops
-> working.  This is a problem for programming languages and frameworks
-> which are inherently multithreaded (e.g. Go).
-> 
-> Cc: Mickaël Salaün <mic@digikod.net>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: linux-security-module@vger.kernel.org
-> Suggested-by: Jann Horn <jannh@google.com>
-> Signed-off-by: Günther Noack <gnoack@google.com>
-> ---
->  include/uapi/linux/landlock.h |   4 +
->  security/landlock/cred.h      |  12 +
->  security/landlock/limits.h    |   2 +-
->  security/landlock/syscalls.c  | 433 +++++++++++++++++++++++++++++++++-
->  4 files changed, 448 insertions(+), 3 deletions(-)
+On Fri, 2025-10-17 at 11:03 -0700, Alexei Starovoitov wrote:
+> On Thu, Oct 16, 2025 at 6:36=E2=80=AFPM Paul Moore <paul@paul-moore.com>
+> wrote:
+> >=20
+> > On Thu, Oct 16, 2025 at 6:01=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > > On Thu, Oct 16, 2025 at 1:51=E2=80=AFPM Paul Moore <paul@paul-moore.c=
+om>
+> > > wrote:
+> > > > On Sun, Oct 12, 2025 at 10:12=E2=80=AFPM Paul Moore
+> > > > <paul@paul-moore.com> wrote:
+> > > > > On Sat, Oct 11, 2025 at 1:09=E2=80=AFPM James Bottomley
+> > > > > <James.Bottomley@hansenpartnership.com> wrote:
+> > > > > > On Sat, 2025-10-11 at 09:31 -0700, Alexei Starovoitov
+> > > > > > wrote:
+> > > > > > > On Sat, Oct 11, 2025 at 7:52=E2=80=AFAM James Bottomley
+> > > > > > > <James.Bottomley@hansenpartnership.com> wrote:
+> > > > > > > >=20
+> > > > > > > > It doesn't need to, once we check both the loader and
+> > > > > > > > the map, the integrity is verified and the loader can
+> > > > > > > > be trusted to run and relocate the map into the bpf
+> > > > > > > > program
+> > > > > > >=20
+> > > > > > > You should read KP's cover letter again and then research
+> > > > > > > trusted hash chains. Here is a quote from the first
+> > > > > > > googled link:
+> > > > > > >=20
+> > > > > > > "A trusted hash chain is a cryptographic process used to
+> > > > > > > verify the integrity and authenticity of data by creating
+> > > > > > > a sequence of hash values, where each hash is linked to
+> > > > > > > the next".
+> > > > > > >=20
+> > > > > > > In addition KP's algorithm was vetted by various security
+> > > > > > > teams. There is nothing novel here. It's a classic
+> > > > > > > algorithm used to verify integrity and that's what was
+> > > > > > > implemented.
+> > > > > >=20
+> > > > > > Both KP and Blaise's patch sets are implementations of
+> > > > > > trusted hash chains.=C2=A0 The security argument isn't about
+> > > > > > whether the hash chain algorithm works, it's about where,
+> > > > > > in relation to the LSM hook, the hash chain verification
+> > > > > > completes.
+> > >=20
+> > > Not true. Blaise's patch is a trusted hash chain denial.
+> >=20
+> > It would be helpful if you could clarify what you mean by "trusted
+> > hash chain denial" and how that differs from a "trusted hash
+> > chain".
+>=20
+> Paul,
+> This is getting ridiculous. You're arguing about the code that you
+> don't understand. Stop this broken phone and let Blaise defend his
+> code.
 
-> +/*
-> + * restrict_sibling_threads - enables a Landlock policy for all sibling threads
-> + */
-> +static int restrict_sibling_threads(const struct cred *old_cred,
-> +				    const struct cred *new_cred)
-> +{
-> +	int res;
-> +	struct task_struct *thread, *caller;
-> +	struct tsync_shared_context shared_ctx;
-> +	struct tsync_works works = {};
-> +	size_t newly_discovered_threads;
-> +	bool found_more_threads;
-> +	struct tsync_work *ctx;
-> +
-> +	atomic_set(&shared_ctx.preparation_error, 0);
-> +	init_completion(&shared_ctx.all_prepared);
-> +	init_completion(&shared_ctx.ready_to_commit);
-> +	atomic_set(&shared_ctx.num_unfinished, 0);
-> +	init_completion(&shared_ctx.all_finished);
-> +	shared_ctx.old_cred = old_cred;
-> +	shared_ctx.new_cred = new_cred;
-> +
-> +	caller = current;
-> +
-> +	/*
-> +	 * We schedule a pseudo-signal task_work for each of the calling task's
-> +	 * sibling threads.  In the task work, each thread:
-> +	 *
-> +	 * 1) runs prepare_creds() and writes back the error to
-> +	 *    shared_ctx.preparation_error, if needed.
-> +	 *
-> +	 * 2) signals that it's done with prepare_creds() to the calling task.
-> +	 *    (completion "all_prepared").
-> +	 *
-> +	 * 3) waits for the completion "ready_to_commit".  This is sent by the
-> +	 *    calling task after ensuring that all sibling threads have done
-> +	 *    with the "preparation" stage.
-> +	 *
-> +	 *    After this barrier is reached, it's safe to read
-> +	 *    shared_ctx.preparation_error.
-> +	 *
-> +	 * 4) reads shared_ctx.preparation_error and then either does
-> +	 *    commit_creds() or abort_creds().
-> +	 *
-> +	 * 5) signals that it's done altogether (barrier synchronization
-> +	 *    "all_finished")
-> +	 */
-> +	do {
-> +		found_more_threads = false;
-> +
-> +		/*
-> +		 * The "all_prepared" barrier is used locally to the inner loop,
-> +		 * this use of for_each_thread().  We can reset it on each loop
-> +		 * iteration because all previous loop iterations are done with
-> +		 * it already.
-> +		 *
-> +		 * num_preparing is initialized to 1 so that the counter can not
-> +		 * go to 0 and mark the completion as done before all task works
-> +		 * are registered.  (We decrement it at the end of this loop.)
-> +		 */
-> +		atomic_set(&shared_ctx.num_preparing, 1);
-> +		reinit_completion(&shared_ctx.all_prepared);
-> +
+That might be my fault: I told Blaise only to respond to technical
+issues and arguing about what you want to name an algorithm isn't
+really a technical=C2=A0issue with the patch.
 
-> +		/* In RCU read-lock, count the threads we need. */
-> +		newly_discovered_threads = 0;
-> +		rcu_read_lock();
-> +		for_each_thread(caller, thread) {
-> +			/* Skip current, since it is initiating the sync. */
-> +			if (thread == caller)
-> +				continue;
-> +
-> +			/* Skip exited threads. */
-> +			if (thread->flags & PF_EXITING)
-> +				continue;
-> +
-> +			/* Skip threads that we have already seen. */
-> +			if (tsync_works_contains_task(&works, thread))
-> +				continue;
-> +
-> +			newly_discovered_threads++;
-> +		}
-> +		rcu_read_unlock();
+The point, for me, is when doing integrity tests both patch sets
+produce identical results and correctly detect when integrity of a
+light skeleton is compromised (in mathematical terms that means they're
+functionally equivalent).=C2=A0 The only difference is that with Blaise's
+patch set verification completes before the LSM load hook is called and
+with KP's it completes after ... and the security problem with the
+latter case is that there's no LSM hook to collect the verification
+result.
 
-This RCU block could be moved in a dedicated helper that will return the
-number of newly discovered threads.  In this helper, we could use
-guard()(rcu).
+Regards,
 
-> +
-> +		if (newly_discovered_threads == 0)
-> +			break; /* done */
-> +
-> +		res = tsync_works_grow_by(&works, newly_discovered_threads,
-> +					  GFP_KERNEL_ACCOUNT);
-> +		if (res) {
-> +			atomic_set(&shared_ctx.preparation_error, res);
-> +			break;
-> +		}
-> +
-> +		rcu_read_lock();
-> +		for_each_thread(caller, thread) {
-> +			/* Skip current, since it is initiating the sync. */
-> +			if (thread == caller)
-> +				continue;
-> +
-> +			/* Skip exited threads. */
-> +			if (thread->flags & PF_EXITING)
-> +				continue;
-> +
-> +			/* Skip threads that we already looked at. */
-> +			if (tsync_works_contains_task(&works, thread))
-> +				continue;
-> +
-> +			/*
-> +			 * We found a sibling thread that is not doing its
-> +			 * task_work yet, and which might spawn new threads
-> +			 * before our task work runs, so we need at least one
-> +			 * more round in the outer loop.
-> +			 */
-> +			found_more_threads = true;
-> +
-> +			ctx = tsync_works_provide(&works, thread);
-> +			if (!ctx) {
-> +				/*
-> +				 * We ran out of preallocated contexts -- we
-> +				 * need to try again with this thread at a later
-> +				 * time!  found_more_threads is already true
-> +				 * at this point.
-> +				 */
-> +				break;
-> +			}
-> +
-> +			ctx->shared_ctx = &shared_ctx;
-> +
-> +			atomic_inc(&shared_ctx.num_preparing);
-> +			atomic_inc(&shared_ctx.num_unfinished);
-> +
-> +			init_task_work(&ctx->work,
-> +				       restrict_one_thread_callback);
-> +			res = task_work_add(thread, &ctx->work, TWA_SIGNAL);
-> +			if (res) {
-> +				/*
-> +				 * Remove the task from ctx so that we will
-> +				 * revisit the task at a later stage, if it
-> +				 * still exists.
-> +				 */
-> +				put_task_struct_rcu_user(ctx->task);
-> +				ctx->task = NULL;
-> +
-> +				atomic_set(&shared_ctx.preparation_error, res);
-> +				atomic_dec(&shared_ctx.num_preparing);
-> +				atomic_dec(&shared_ctx.num_unfinished);
-> +			}
-> +		}
-> +		rcu_read_unlock();
-
-As for the other RCU block, it might help to move this RCU block into a
-dedicated helper.  It seems that it would look easier to read and
-maintain.
-
-> +
-> +		/*
-> +		 * Decrement num_preparing for current, to undo that we
-> +		 * initialized it to 1 at the beginning of the inner loop.
-> +		 */
-> +		if (atomic_dec_return(&shared_ctx.num_preparing) > 0)
-> +			wait_for_completion(&shared_ctx.all_prepared);
-> +	} while (found_more_threads &&
-> +		 !atomic_read(&shared_ctx.preparation_error));
-
-Is it safe to prevent inconsistencies wrt execve?  seccomp uses
-cred_guard_mutex (new code should probably use exec_update_lock), why
-should Landlock not do the same?
-
-Why shouldn't we lock sighand as well?
-
-Answers to these questions should be explained in comments.
-
-> +
-> +	/*
-> +	 * We now have all sibling threads blocking and in "prepared" state in
-> +	 * the task work. Ask all threads to commit.
-> +	 */
-> +	complete_all(&shared_ctx.ready_to_commit);
-> +
-> +	if (works.size)
-> +		wait_for_completion(&shared_ctx.all_finished);
-> +
-> +	tsync_works_free(&works);
-> +
-> +	return atomic_read(&shared_ctx.preparation_error);
-> +}
-> +
->  /**
->   * sys_landlock_restrict_self - Enforce a ruleset on the calling thread
->   *
-> @@ -454,12 +866,20 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
->   *         - %LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF
->   *         - %LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
->   *         - %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-> + *         - %LANDLOCK_RESTRICT_SELF_TSYNC
->   *
-> - * This system call enables to enforce a Landlock ruleset on the current
-> - * thread.  Enforcing a ruleset requires that the task has %CAP_SYS_ADMIN in its
-> + * This system call enforces a Landlock ruleset on the current thread.
-> + * Enforcing a ruleset requires that the task has %CAP_SYS_ADMIN in its
->   * namespace or is running with no_new_privs.  This avoids scenarios where
->   * unprivileged tasks can affect the behavior of privileged children.
->   *
-> + * If %LANDLOCK_RESTRICT_SELF_TSYNC is specified in @flags, all other threads of
-> + * the process will be brought into the exact same Landlock configuration as the
-> + * calling thread.  This includes both the enforced ruleset and logging
-> + * configuration, and happens irrespective of previously established rulesets
-> + * and logging configurations on these threads.  If required, this operation
-> + * also enables the no_new_privs flag for these threads.
-> + *
->   * Possible returned errors are:
->   *
->   * - %EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
-> @@ -484,6 +904,7 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
->  	struct landlock_cred_security *new_llcred;
->  	bool __maybe_unused log_same_exec, log_new_exec, log_subdomains,
->  		prev_log_subdomains;
-> +	int res;
->  
->  	if (!is_initialized())
->  		return -EOPNOTSUPP;
-> @@ -566,5 +987,13 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
->  	new_llcred->domain_exec |= BIT(new_dom->num_layers - 1);
->  #endif /* CONFIG_AUDIT */
->  
-> +	if (flags & LANDLOCK_RESTRICT_SELF_TSYNC) {
-> +		res = restrict_sibling_threads(current_cred(), new_cred);
-> +		if (res != 0) {
-> +			abort_creds(new_cred);
-> +			return res;
-> +		}
-> +	}
-> +
->  	return commit_creds(new_cred);
->  }
-> -- 
-> 2.51.0.618.g983fd99d29-goog
-> 
-> 
+James
 
