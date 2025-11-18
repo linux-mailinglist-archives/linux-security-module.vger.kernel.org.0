@@ -1,206 +1,149 @@
-Return-Path: <linux-security-module+bounces-12865-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12867-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEE26C69B34
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 Nov 2025 14:50:12 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56DE3C69E82
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 Nov 2025 15:21:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 9824C2B083
-	for <lists+linux-security-module@lfdr.de>; Tue, 18 Nov 2025 13:50:11 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 9E46E2C348
+	for <lists+linux-security-module@lfdr.de>; Tue, 18 Nov 2025 14:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9468F35A141;
-	Tue, 18 Nov 2025 13:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC58B262FFF;
+	Tue, 18 Nov 2025 14:17:03 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC50358D11;
-	Tue, 18 Nov 2025 13:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21F03546E7;
+	Tue, 18 Nov 2025 14:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763473637; cv=none; b=ZPCoLfYPnKNfyXvMKIgS6cS3TMuRWqxFyRzzAEPNbivWP7UObhKPhIdiPNgHwjDPRcUAqmyNjKBV7HSKqbLzy3wgGwKdOvHEG3ONq+fYYiP6mFEEy2a+6L2RqArzssW9zGCWV7HagwnNEnIkZ+hxgmUZ2DN1FpXW55rQ9X/fIH8=
+	t=1763475423; cv=none; b=dEPr3GPailmoNvW3KWmhUAOcWiJMiwRnmED73F02KYz1Fq53U87cU1Tov61NB51QYnt6JO7ayDa/3elj81W+gu7I4VGLwWiTS07aiHpP0znKm4pYNrb0doDoQMj/JHOhbnCwAUIHRjCusNO2HMVwPR522S8FLoc1J50yyehkkVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763473637; c=relaxed/simple;
-	bh=9LsR1sVmTcxFSzMrb0BVLV7ghy87Yimdmp8ZgQOctjQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mhPL3WXwGJUIJKS86ZvG2M0jrmhpMFD0YyRDMO8J7hgBHjYNuGOYtF9f/1bHWkY+eKUkpBoSlXcDNi+plRgVQ1A4GaMqY6KzGnYgY9Nn/q7JbZa2wLSgxsUHDCO1srxwwnTDUWR5ywceh3FdR0YOELIdwlE1OZbujYTLneCLTnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d9m9m28d4zHnH7f;
-	Tue, 18 Nov 2025 21:46:36 +0800 (CST)
-Received: from mscpeml500004.china.huawei.com (unknown [7.188.26.250])
-	by mail.maildlp.com (Postfix) with ESMTPS id 35B661402F3;
-	Tue, 18 Nov 2025 21:47:07 +0800 (CST)
-Received: from mscphis02103.huawei.com (10.123.65.215) by
- mscpeml500004.china.huawei.com (7.188.26.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 18 Nov 2025 16:47:06 +0300
-From: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
-To: <mic@digikod.net>, <gnoack@google.com>
-CC: <willemdebruijn.kernel@gmail.com>, <matthieu@buffet.re>,
-	<linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<netfilter-devel@vger.kernel.org>, <yusongping@huawei.com>,
-	<artem.kuzin@huawei.com>, <konstantin.meskhidze@huawei.com>
-Subject: [RFC PATCH v4 19/19] landlock: Document socket rule type support
-Date: Tue, 18 Nov 2025 21:46:39 +0800
-Message-ID: <20251118134639.3314803-20-ivanov.mikhail1@huawei-partners.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251118134639.3314803-1-ivanov.mikhail1@huawei-partners.com>
-References: <20251118134639.3314803-1-ivanov.mikhail1@huawei-partners.com>
+	s=arc-20240116; t=1763475423; c=relaxed/simple;
+	bh=XFPbK1QualsnUGJsByYYFNsWe9rOHvb4jSlX1SDesFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AaIrfX+hsouNj1B6YuWM2/qEsXt3A1TpXcjt05DmjnUvrfYHcA5FG0d/tD/FZQ9N2pbpMGxgoGFgyma0bAd4xieJMjlaud/Lb30JbTA4tOqIgazOCz3p4vBc+LUwOjoT2kJ3+p+pX2n0hpiknl7DANnrJAQ2Wtz6LauNqu7qWfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id C1A73758; Tue, 18 Nov 2025 08:16:52 -0600 (CST)
+Date: Tue, 18 Nov 2025 08:16:52 -0600
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: lkml <linux-kernel@vger.kernel.org>,
+	linux-security-module@vger.kernel.org,
+	Paul Moore <paul@paul-moore.com>,
+	Ryan Foster <foster.ryan.r@gmail.com>,
+	Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH] Clarify the rootid_owns_currentns
+Message-ID: <aRx/1MvvBqu5MhKv@mail.hallyn.com>
+References: <aRegH8P4cPlzzlX9@mail.hallyn.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: mscpeml500004.china.huawei.com (7.188.26.250) To
- mscpeml500004.china.huawei.com (7.188.26.250)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aRegH8P4cPlzzlX9@mail.hallyn.com>
 
-Extend documentation with socket rule type description.
+On Fri, Nov 14, 2025 at 03:33:19PM -0600, Serge E. Hallyn wrote:
+> Split most of the rootid_owns_currentns() functionality
+> into a more generic rootid_owns_ns() function which
+> will be easier to write tests for.
+> 
+> Rename the functions and variables to make clear that
+> the ids being tested could be any uid.
+> 
+> Signed-off-by: Serge Hallyn <serge@hallyn.com>
+> CC: Ryan Foster <foster.ryan.r@gmail.com>
+> CC: Christian Brauner <brauner@kernel.org>
 
-Signed-off-by: Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>
----
-Changes since v3:
-* Fixes identantion.
----
- Documentation/userspace-api/landlock.rst | 48 ++++++++++++++++++++----
- 1 file changed, 41 insertions(+), 7 deletions(-)
+Paul, Christian, let me know if you have any objections, else I will
+queue this up in caps-next.
 
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-index 1d0c2c15c22e..49fdc897db24 100644
---- a/Documentation/userspace-api/landlock.rst
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -8,7 +8,7 @@ Landlock: unprivileged access control
- =====================================
- 
- :Author: Mickaël Salaün
--:Date: March 2025
-+:Date: November 2025
- 
- The goal of Landlock is to enable restriction of ambient rights (e.g. global
- filesystem or network access) for a set of processes.  Because Landlock
-@@ -33,7 +33,7 @@ A Landlock rule describes an action on an object which the process intends to
- perform.  A set of rules is aggregated in a ruleset, which can then restrict
- the thread enforcing it, and its future children.
- 
--The two existing types of rules are:
-+The three existing types of rules are:
- 
- Filesystem rules
-     For these rules, the object is a file hierarchy,
-@@ -44,14 +44,18 @@ Network rules (since ABI v4)
-     For these rules, the object is a TCP port,
-     and the related actions are defined with `network access rights`.
- 
-+Socket rules (since ABI v8)
-+    For these rules, the object is a pair of an address family and a socket type,
-+    and the related actions are defined with `socket access rights`.
-+
- Defining and enforcing a security policy
- ----------------------------------------
- 
- We first need to define the ruleset that will contain our rules.
- 
- For this example, the ruleset will contain rules that only allow filesystem
--read actions and establish a specific TCP connection. Filesystem write
--actions and other TCP actions will be denied.
-+read actions, create TCP sockets and establish a specific TCP connection.
-+Filesystem write actions, non-TCP sockets creation other TCP actions will be denied.
- 
- The ruleset then needs to handle both these kinds of actions.  This is
- required for backward and forward compatibility (i.e. the kernel and user
-@@ -81,6 +85,8 @@ to be explicit about the denied-by-default access rights.
-         .handled_access_net =
-             LANDLOCK_ACCESS_NET_BIND_TCP |
-             LANDLOCK_ACCESS_NET_CONNECT_TCP,
-+        .handled_access_socket =
-+            LANDLOCK_ACCESS_SOCKET_CREATE,
-         .scoped =
-             LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
-             LANDLOCK_SCOPE_SIGNAL,
-@@ -127,6 +133,11 @@ version, and only use the available subset of access rights:
-         /* Removes LANDLOCK_SCOPE_* for ABI < 6 */
-         ruleset_attr.scoped &= ~(LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
-                                  LANDLOCK_SCOPE_SIGNAL);
-+    case 6:
-+    case 7:
-+         /* Removes LANDLOCK_ACCESS_SOCKET for ABI < 8 */
-+         ruleset_attr.handled_access_socket &=
-+             ~LANDLOCK_ACCESS_SOCKET_CREATE;
-     }
- 
- This enables the creation of an inclusive ruleset that will contain our rules.
-@@ -178,6 +189,21 @@ for the ruleset creation, by filtering access rights according to the Landlock
- ABI version.  In this example, this is not required because all of the requested
- ``allowed_access`` rights are already available in ABI 1.
- 
-+For socket access-control, we can add a rule to allow TCP sockets creation. UNIX,
-+UDP/IP and other protocols will be denied by the ruleset.
-+
-+.. code-block:: c
-+
-+    struct landlock_net_port_attr tcp_socket = {
-+        .allowed_access = LANDLOCK_ACCESS_SOCKET_CREATE,
-+        .family = AF_INET,
-+        .type = SOCK_STREAM,
-+        .protocol = 0,
-+    };
-+
-+    err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_SOCKET,
-+                            &tcp_socket, 0);
-+
- For network access-control, we can add a set of rules that allow to use a port
- number for a specific action: HTTPS connections.
- 
-@@ -194,7 +220,8 @@ number for a specific action: HTTPS connections.
- The next step is to restrict the current thread from gaining more privileges
- (e.g. through a SUID binary).  We now have a ruleset with the first rule
- allowing read access to ``/usr`` while denying all other handled accesses for
--the filesystem, and a second rule allowing HTTPS connections.
-+the filesystem, a second rule allowing TCP sockets and a third rule allowing
-+HTTPS connections.
- 
- .. code-block:: c
- 
-@@ -442,7 +469,7 @@ Access rights
- -------------
- 
- .. kernel-doc:: include/uapi/linux/landlock.h
--    :identifiers: fs_access net_access scope
-+    :identifiers: fs_access net_access socket_access scope
- 
- Creating a new ruleset
- ----------------------
-@@ -461,7 +488,7 @@ Extending a ruleset
- 
- .. kernel-doc:: include/uapi/linux/landlock.h
-     :identifiers: landlock_rule_type landlock_path_beneath_attr
--                  landlock_net_port_attr
-+                  landlock_net_port_attr landlock_socket_attr
- 
- Enforcing a ruleset
- -------------------
-@@ -604,6 +631,13 @@ Landlock audit events with the ``LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF``,
- sys_landlock_restrict_self().  See Documentation/admin-guide/LSM/landlock.rst
- for more details on audit.
- 
-+Socket support (ABI < 8)
-+-------------------------
-+
-+Starting with the Landlock ABI version 8, it is now possible to restrict
-+creation of user space sockets to only a set of allowed protocols thanks
-+to the new ``LANDLOCK_ACCESS_SOCKET_CREATE`` access right.
-+
- .. _kernel_support:
- 
- Kernel support
--- 
-2.34.1
+Ryan, based on this you would be able to do more useful unit ktests:
+you could create some simple user namespaces with mappings which do
+or do not have uid 0 in ns mapped to the kuid you are querying.
 
+> ---
+>  security/commoncap.c | 35 +++++++++++++++++++++++------------
+>  1 file changed, 23 insertions(+), 12 deletions(-)
+> 
+> diff --git a/security/commoncap.c b/security/commoncap.c
+> index 6bd4adeb4795..8a81fdc12cbe 100644
+> --- a/security/commoncap.c
+> +++ b/security/commoncap.c
+> @@ -358,17 +358,18 @@ int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry)
+>  	return error;
+>  }
+>  
+> -static bool rootid_owns_currentns(vfsuid_t rootvfsuid)
+> +/**
+> + * kuid_root_in_ns - check whether the given kuid is root in the given ns
+> + *
+> + * @kuid - the kuid to be tested
+> + * @ns - the user namespace to test against
+> + *
+> + * Returns true if @kuid represents the root user in @ns, false otherwise.
+> + */
+> +static bool kuid_root_in_ns(kuid_t kuid, struct user_namespace *ns)
+>  {
+> -	struct user_namespace *ns;
+> -	kuid_t kroot;
+> -
+> -	if (!vfsuid_valid(rootvfsuid))
+> -		return false;
+> -
+> -	kroot = vfsuid_into_kuid(rootvfsuid);
+> -	for (ns = current_user_ns();; ns = ns->parent) {
+> -		if (from_kuid(ns, kroot) == 0)
+> +	for (;; ns = ns->parent) {
+> +		if (from_kuid(ns, kuid) == 0)
+>  			return true;
+>  		if (ns == &init_user_ns)
+>  			break;
+> @@ -377,6 +378,16 @@ static bool rootid_owns_currentns(vfsuid_t rootvfsuid)
+>  	return false;
+>  }
+>  
+> +static bool vfsuid_root_in_currentns(vfsuid_t vfsuid)
+> +{
+> +	kuid_t kuid;
+> +
+> +	if (!vfsuid_valid(vfsuid))
+> +		return false;
+> +	kuid = vfsuid_into_kuid(vfsuid);
+> +	return kuid_root_in_ns(kuid, current_user_ns());
+> +}
+> +
+>  static __u32 sansflags(__u32 m)
+>  {
+>  	return m & ~VFS_CAP_FLAGS_EFFECTIVE;
+> @@ -481,7 +492,7 @@ int cap_inode_getsecurity(struct mnt_idmap *idmap,
+>  		goto out_free;
+>  	}
+>  
+> -	if (!rootid_owns_currentns(vfsroot)) {
+> +	if (!vfsuid_root_in_currentns(vfsroot)) {
+>  		size = -EOVERFLOW;
+>  		goto out_free;
+>  	}
+> @@ -722,7 +733,7 @@ int get_vfs_caps_from_disk(struct mnt_idmap *idmap,
+>  	/* Limit the caps to the mounter of the filesystem
+>  	 * or the more limited uid specified in the xattr.
+>  	 */
+> -	if (!rootid_owns_currentns(rootvfsuid))
+> +	if (!vfsuid_root_in_currentns(rootvfsuid))
+>  		return -ENODATA;
+>  
+>  	cpu_caps->permitted.val = le32_to_cpu(caps->data[0].permitted);
+> -- 
+> 2.34.1
+> 
 
