@@ -1,157 +1,184 @@
-Return-Path: <linux-security-module+bounces-12947-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12945-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E348C7543B
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 17:13:44 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4882C751E9
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 16:49:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0BE7C34DA40
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 16:07:13 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 51CF536142E
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 15:44:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA2335BDDE;
-	Thu, 20 Nov 2025 16:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B3323EA9D;
+	Thu, 20 Nov 2025 15:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="afGi3yXH"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E739C34F257;
-	Thu, 20 Nov 2025 16:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9C42773E6;
+	Thu, 20 Nov 2025 15:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763654828; cv=none; b=U6S+KMikdb5gtxat9ocYg17NamHpF1EFQXMVbdR/nJBfpWX2ictFER80MGDusZxFbjWE+swI81pXHq5ZRcl2IHm9Cmn5NhI7a3CdtyYhkQXPsvNyAB7/ggSecY6GoBweBC7EywUh8rVooUVKOCCprEMoOSM7+gT3euQ52zEBzyQ=
+	t=1763653209; cv=none; b=Gpht1Wll+W4iXElKi3snfRV8Xq7ca0YKbX2F72LGQ4QysjdiRIcUsbAD70GwOIcfr8bBFNuo62KJ65empaSc+dt1oRg2MhfCVbnJILCu9oBjpt8sKRaIlPBuAOL6Sftn1TMPxgE09EXXlRtGYzRFUp4VFEXKrAFnRModu4wf0Ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763654828; c=relaxed/simple;
-	bh=+RMqJQELsQfiJaUTMfH5DjOLFa4QNsEAB9sxfepEuog=;
-	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=g55EW3ouHcSzDc3ZVSxBvinsWCPHb7YbkjJUD/v3KnWhD4kJkafC4WW395/ioB3dm6DjghCoWJqW2LdfKNYWLcTKm9v4EUEnsGpKBJ2thru8WdDFNfeEP6ujWTwscfPM6KIHsKehkV1kKzDsnRNaCWRECdZf7PGkP9F8wgj0NCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in02.mta.xmission.com ([166.70.13.52]:44142)
-	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vM6OE-00Be3t-5G; Thu, 20 Nov 2025 08:16:06 -0700
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:59778 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vM6OD-00B1Wa-2m; Thu, 20 Nov 2025 08:16:05 -0700
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Alexey Dobriyan
- <adobriyan@gmail.com>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
- <kees@kernel.org>,  Andy Lutomirski <luto@amacapital.net>,  Will Drewry
- <wad@chromium.org>,  Christian Brauner <brauner@kernel.org>,  Andrew
- Morton <akpm@linux-foundation.org>,  Michal Hocko <mhocko@suse.com>,
-  Serge Hallyn <serge@hallyn.com>,  James Morris
- <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
-  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
- <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
- <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
- <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
-  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  linux-security-module@vger.kernel.org,  tiozhang
- <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
- Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
- <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
-  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
-  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
-  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
- <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
- <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
- Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
- <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
- <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
- Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
-  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
- <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
- Dumazet <edumazet@google.com>
-In-Reply-To: <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	(Bernd Edlinger's message of "Tue, 18 Nov 2025 19:13:33 +0100")
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-Date: Thu, 20 Nov 2025 09:15:57 -0600
-Message-ID: <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1763653209; c=relaxed/simple;
+	bh=XDAyAEci4/N6LxfoiJFw04BNQW2HE9TmENDL0opohHw=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=ol8ij/B2CRY0VYvTmmKuLbF1gv0GeUeHNarRrhJHGWR3/KXk++RUi5knecoOf+guxBJVNu8pnnZqaZ5HYR+TGOmkU2BShTLM/SP5B4k6WPje3xzvzkMSYkLRv/BigFsCuox6Ank7FW+CCcdKvjTOfgE4YyIbVnkQ+B0UCUJnCD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=afGi3yXH; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AKCVGgT004022;
+	Thu, 20 Nov 2025 15:39:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=cRR0o2
+	N2FBm3wf13KB7hlFlLM/YGfjnr7VgEdvhnT3M=; b=afGi3yXHAkBS67ptTT5Dg6
+	KIOjThGgHhZeAafvndSwyWNVbFIz8YqdpF2WPuk5AqPD2kh9v4PWB+u3o/oZvJSa
+	EI0XG2KFFVLeFkFcAAhMUgVEOrxTP5ppd6Mf/yBrCesOJdg4jCitrmyqskrCL/gY
+	fzOjwj8ME6UFz4Z71wVk30B4G3uQEgw7F9MmOFkjFCeSwNvro4RMEvfwv3q5SNJl
+	z81+9iPaBTD2k8hAl7VC+g5DnUgxXDQXjDMKlBnPlTxN6mkMKJ9+8nCjY2L42nV1
+	Q/+EVe+unmluKFVm51/6HgRUQlC3hDhOvvhUK3OmC0AyGpab9k8Yjxse00VOFv7w
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejju5rk6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 20 Nov 2025 15:39:35 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AKFdZEk015036;
+	Thu, 20 Nov 2025 15:39:35 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejju5rk3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 20 Nov 2025 15:39:35 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AKEc0ue017326;
+	Thu, 20 Nov 2025 15:39:34 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af6j1xuqg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 20 Nov 2025 15:39:34 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AKFdXAd39781040
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 20 Nov 2025 15:39:33 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7C78D58054;
+	Thu, 20 Nov 2025 15:39:33 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6417C58052;
+	Thu, 20 Nov 2025 15:39:32 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.44.232])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 20 Nov 2025 15:39:32 +0000 (GMT)
+Message-ID: <9f593c5f5882e8ed0d807376eefd4530462741d3.camel@linux.ibm.com>
+Subject: Re: [Patch V1] ima: avoid duplicate policy rules insertions
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Tahera Fahimi <taherafahimi@linux.microsoft.com>, roberto.sassu@huawei.com,
+        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, code@tyhicks.com
+Cc: Lennart Poettering <mzxreary@0pointer.de>
+In-Reply-To: <16c73b4e0761a1622770102d1d48982fe9ae86ac.camel@linux.ibm.com>
+References: <20251106181404.3429710-1-taherafahimi@linux.microsoft.com>
+	 <16c73b4e0761a1622770102d1d48982fe9ae86ac.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 20 Nov 2025 10:39:31 -0500
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1vM6OD-00B1Wa-2m;;;mid=<87tsyozqdu.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19QcsFpf8D1sbddVLnmxux1sHku3bCtmFE=
-X-Spam-Level: 
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.5000]
-	*  0.7 XMSubLong Long Subject
-	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  1.0 XM_B_SpammyTLD Contains uncommon/spammy TLD
-	*  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Bernd Edlinger <bernd.edlinger@hotmail.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 459 ms - load_scoreonly_sql: 0.04 (0.0%),
-	signal_user_changed: 10 (2.2%), b_tie_ro: 9 (1.9%), parse: 0.95 (0.2%),
-	 extract_message_metadata: 12 (2.5%), get_uri_detail_list: 0.89 (0.2%),
-	 tests_pri_-2000: 4.4 (1.0%), tests_pri_-1000: 11 (2.3%),
-	tests_pri_-950: 1.30 (0.3%), tests_pri_-900: 1.09 (0.2%),
-	tests_pri_-90: 161 (35.0%), check_bayes: 150 (32.7%), b_tokenize: 16
-	(3.5%), b_tok_get_all: 9 (2.0%), b_comp_prob: 2.3 (0.5%),
-	b_tok_touch_all: 119 (25.9%), b_finish: 0.94 (0.2%), tests_pri_0: 246
-	(53.5%), check_dkim_signature: 0.59 (0.1%), check_dkim_adsp: 3.1
-	(0.7%), poll_dns_idle: 1.20 (0.3%), tests_pri_10: 2.0 (0.4%),
-	tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v18] exec: Fix dead-lock in de_thread with ptrace_attach
-X-SA-Exim-Connect-IP: 166.70.13.52
-X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out01.mta.xmission.com); SAEximRunCond expanded to false
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NRgJbhtNLeCAqPbRYsjw6qnS0Phsok9N
+X-Proofpoint-ORIG-GUID: nZXzqB3Y4K6G6ifu_Acve7niwZA4FPVj
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX8a5s9pbUlcZ6
+ P6eFxLQnYNUA7vLcZv6dCc5EFSvHDHPdLFbQpkUdYww2ie29VM1KNR48l1zZZnRPiAZ41x6rUIO
+ 8HdyHXYLqgl9EqT6iL+rT/+9byUIB40loZU/flQaZf0VRNN6bVwR5l9P4v7p+E+2viVW+UuVMF6
+ MeJZrk/bSTXvERQXe+VNKXtd2u98jky+QFQRvlb0WfEXk0EyKbYYjx0xceJbkePL7g4sr8aSqAg
+ Ksu17MIfkR99bWuYXVDhuOkohcteGautJAaGqZt/zwAIcZ71ceU8Az2UMiZi/HY9r0RZ5GioA6m
+ kbMQ17VEzB9RpIYUxwxgNpTBrbDIqhayOX8QOUzuv78D7zZ3lmCSaFTJy8xykp4dPqR4V6R5ia2
+ L3jCzOAD2H74QzCiJHZtmpvTBPvQ6Q==
+X-Authority-Analysis: v=2.4 cv=SvOdKfO0 c=1 sm=1 tr=0 ts=691f3637 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=yMhMjlubAAAA:8 a=ecaSOxdSUfGXkan3tZ8A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-20_05,2025-11-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
+ definitions=main-2511150032
 
-Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
+On Tue, 2025-11-11 at 06:40 -0500, Mimi Zohar wrote:
+> [Cc'ing Lennart Poettering]
+>=20
+> On Thu, 2025-11-06 at 18:14 +0000, Tahera Fahimi wrote:
+> > Prevent redundant IMA policy rules by checking for duplicates before in=
+sertion. This ensures that
+> > rules are not re-added when userspace is restarted (using systemd-soft-=
+reboot) without a full system
+> > reboot. ima_rule_exists() detects duplicates in both temporary and acti=
+ve rule lists.
+> >=20
+> > Signed-off-by: Tahera Fahimi <taherafahimi@linux.microsoft.com>
+>=20
+> Sorry for the delay in responding ...
+>=20
+> Before trying to fix the "problem", let's try to understand it first.  At=
+ least
+> on my test system (-rc5), kexec is working as designed.  On boot, systemd
+> replaces the existing builtin IMA policy with a custom IMA policy.  The a=
+rch
+> specific policies are not affected, as they are persistent.  On a soft re=
+boot
+> (kexec), the IMA custom policy is re-loaded as expected.
+>=20
+> To verify the above behavior, extend the IMA policy before the soft reboo=
+t.=20
+> Notice after the soft reboot that the original custom IMA policy is loade=
+d and
+> not the extended IMA policy.  Roberto, if there is a problem with this be=
+havior,
+> we'll discuss it independently of this proposed patch.
+>=20
+> The question is why are you seeing duplicate IMA policy rules?  What is s=
+pecial
+> about your environment?
 
-> This introduces signal->exec_bprm, which is used to
-> fix the case when at least one of the sibling threads
-> is traced, and therefore the trace process may dead-lock
-> in ptrace_attach, but de_thread will need to wait for the
-> tracer to continue execution.
+I'm now able to reproduce what you're seeing by executing "systemctl soft-
+reboot".  After each soft-reboot the custom IMA policy rules are re-loaded =
+and
+appended to the existing IMA policy.  As Roberto mentioned, there is no opt=
+ion
+to replace the existing custom IMA policy rules with a new custom policy. W=
+e
+might consider doing so in the future, but for now the onus for not re-load=
+ing
+the custom IMA policy should not be on IMA, but on systemd.
 
-A small quibble it isn't a dead lock.  It isn't even really a live lock,
-as it is possible to SIGKILL our way out.
+Reading the same securityfs policy file used for loading the IMA policy wil=
+l
+return the current IMA policy. systemd could detect whether the existing IM=
+A
+policy contains the custom policy rules, before actually loading them.  The=
+re's
+no reason for adding this functionality in the kernel.
 
-Thinking about this there is a really silly and simple way we can deal
-with this situation for PTRACE_ATTACH.  We can send SIGSTOP and wait for
-the thread to stop before doing anything with cred_guard_mutex.
+--=20
+thanks,
 
-PTRACE_ATTACH already implies sending SIGSTOP so as long as we have
-enough permissions to send SIGSTOP I don't see that being a problem.
+Mimi
 
-The worst case I can see is that we get a case where we stop the
-process, the permission check fails under cred_guard_mutex and
-and ptrace attach has fails and has to send SIGCONT to undo it's
-premature SIGSTOP.  That might almost be visible, but it would still
-be legitimate because we can still check that we have permission to
-send SIGSTOP.
-
-Eric
 
