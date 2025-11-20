@@ -1,175 +1,73 @@
-Return-Path: <linux-security-module+bounces-12903-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12905-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08E84C731F4
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 10:27:34 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE57BC738F2
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 11:53:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C8A874E5B7F
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 09:26:54 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 651C3348877
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 10:53:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8942E13D503;
-	Thu, 20 Nov 2025 09:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqvvyLJD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEB73304BD7;
+	Thu, 20 Nov 2025 10:52:55 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp20.cstnet.cn [159.226.251.20])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12F2224249
-	for <linux-security-module@vger.kernel.org>; Thu, 20 Nov 2025 09:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855053093BA;
+	Thu, 20 Nov 2025 10:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763630811; cv=none; b=oHgMQoWCd0Gvaycb9myn1xzM48DJn+xmN0VU8g0REoij0f6V5WXHeMr7b+WIOsxw6/keoSGgVpMqB2FVkem6ZIA6St5zCpcZyqPiSPyhQRHzG/uyIct8Yv5fjIjxw2mpvxDlPT6MmJX/j7AOg3su5uf/XPqR8/Llun52yEM3F0A=
+	t=1763635975; cv=none; b=Ri6aaLHjUB6szg0Lgto3I1BpSRSP5zFUuMfKOfDcPXtevcyOuyLgehlm9a8pPJAeFvTN9ZU0WBWjx0dKVNG3tL/4/cwM8hk6eEb82+PKT04MjVDNefSbFUJhMPTvqG80xgQ0lM3adgqmElr79zrmVZp/urUciO2VQrA6AY2KcWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763630811; c=relaxed/simple;
-	bh=FGbe2QJ35IWC87sUETNWg6RlVC1TZZq96naSHX+aXm0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rT7iQvW9ofIhB8vAztReYpRP9l2dWl4+9uFlsIzwXO0zNSrSjDAB3yYZ8VBz0kZl2uf9mK7glS/JpQgYxwTsC08OBrKJkMl+4hT0Fdz0T3AUIqz7hVUr+fqfMzOeU7qFrtTJGQi89RDc7cb+8dIWAQDLKCHkNEGkF5tWWFYocl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqvvyLJD; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-880499b2bc7so5593166d6.3
-        for <linux-security-module@vger.kernel.org>; Thu, 20 Nov 2025 01:26:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763630809; x=1764235609; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5rNfEEw4vHnSGPrrOqGBlUEcYjNEIn+vm1yCxi49VeY=;
-        b=nqvvyLJDLW0qQ5AVPBd5aPNl6w+dvbzoam2rRdhW/5YMaM30PkjHOn3r46xXjXcnDn
-         TXdNSiEIANVJhEuwCHEee2VNw77kTiSy7snpP3paqh+acUZga0ZHr5ZpJcB9Xc4l1+ef
-         I5b38RJjxb1giKsZvCcUB2qXeT78Zq+EqvU1RUuzam7x30BjDY0eGp/o9QADxqYSZ5lQ
-         BZEGaVNCxu6Rz5IOe1FQW4vRFMNIYsy32rynCsjfo5QVziAn86sltsVEzYJq4XnDGRN3
-         MWGu5k3lYJeJ97jmW99MPQQl8tPOeDCLGRMSvUgnBLixhBlJVx8cUlkK46YXXHpDr3y6
-         4dhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763630809; x=1764235609;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5rNfEEw4vHnSGPrrOqGBlUEcYjNEIn+vm1yCxi49VeY=;
-        b=Cj/bnbChrdZr7T4Aw7f1jeoisrG8wHwSYuKkh36/TisYAWRJJaQ4kmzyvi+tu5fzu9
-         EsoG4jPopGvaUGYC034bfX25ps1yC6p7VRHJAh1TP2Jk5cWA4oNQW9fQxJjxw7ElC+8D
-         5fTHzchQMvIfeyvsE04er++8JTQqDdReXTHfJYJXziMIF+/M4lYsSqrJ7AJ9sIqdilvB
-         p4jg68mtn8YRtt/KY6oUyTcRSJGUHAJ3rxFcsDjD9OrMjkUtRVVITcrIhVowUEQD7SbR
-         qMTtDPHw4Off+mKnX7l8LhOpvIF5k/EfPLzBXvtpRK7quZL580j9zAyW7cj7dj6nYrQa
-         g+aw==
-X-Gm-Message-State: AOJu0Yz6X3cLwm6eAbxzgWbBDwqGeTaIZ1PFnt5bAES1pwxUeAIgu00O
-	NcbmPhFzh/xpxCFV9MqlkzZ4hxLh9fM+rLrZTZJDBnR85RTLLOabjqtv
-X-Gm-Gg: ASbGncuxC2NngDis4TBd/V2WRyQCVoPoLT2dLKm/lBn+3lFu66D4aVX8hiWWHNa9IW/
-	orp0fwobwVGhfgatHOloCPOcbY9ztz5FVHxqTba2NQbgIo0irnM1WGiUQAbWSnfwz/agK4gNMsE
-	3SXvsaY7KYOn0Lp5ZNSaol+ug9DPLOg9Sbm5crGUb6hJDRsJOVgOXui/3r4Qh+BWLxD/UPNSWf0
-	OYOESzuo9+1LQT73JKOPC/bwbSNtY09VCoqKLTCn8ETSZ5WgG1sa8mST2RfnHoXszk6CpW2ot6m
-	zKKTI+TaIFIbgvxTUzbj8pjsh7XKbyTuOHpddmmryXAbk/XHerx0PO0Qw2B3UHI630HxdAtIcve
-	lR1zgcZpWOMCQs52fhWbfv9mAJG27WOfQPN3ELEP5+BcNY9LHNWT0joqw+Yfj6QMqXSeQecd360
-	LYnx6LbtA8K1XdjhLF6NvyeR7dYLODWxWYdZtKE2lHNw==
-X-Google-Smtp-Source: AGHT+IErijzjvVB6QHM2SddkkZKIVjIoxlhrkbOqhzMQX/h3ZCJn9AHYFiv/1s4Xuegx61VoNALOKw==
-X-Received: by 2002:a05:6214:4903:b0:880:5279:98e9 with SMTP id 6a1803df08f44-8846e131c85mr33483786d6.40.1763630808772;
-        Thu, 20 Nov 2025 01:26:48 -0800 (PST)
-Received: from daniel-desktop3.localnet ([204.48.92.24])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8846e54c9b9sm13611896d6.28.2025.11.20.01.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 01:26:48 -0800 (PST)
-From: Daniel Tang <danielzgtg.opensource@gmail.com>
-To: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>, Paul Moore <paul@paul-moore.com>,
- Xiujianfeng <xiujianfeng@huaweicloud.com>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- Nathan Lynch <nathanl@linux.ibm.com>, Matthew Garrett <mjg59@google.com>,
- Kees Cook <keescook@chromium.org>, David Howells <dhowells@redhat.com>,
- James Morris <jmorris@namei.org>
-Subject: Re: [PATCH v2] lockdown: Only log restrictions once
-Date: Thu, 20 Nov 2025 04:26:45 -0500
-Message-ID: <7645139.4DdEvYhyI6@daniel-desktop3>
-In-Reply-To: <2f4a1af8-adc6-4cbc-813f-4cc8e9bc75ae@huaweicloud.com>
-References:
- <3641397.L58v44csPz@daniel-desktop3> <1961790.USuA9gRusQ@daniel-desktop3>
- <2f4a1af8-adc6-4cbc-813f-4cc8e9bc75ae@huaweicloud.com>
+	s=arc-20240116; t=1763635975; c=relaxed/simple;
+	bh=9nzyk9mNVcHprIrLE1aBJ7fjhWppihHnOAs67iC37BI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=aBGZEiU1vedL8UNeB7scFvHuqJzB9YV+K8xxJwSeNr7BPES0GRuy7CBazNTOH7RIPhjBfy7gpMNXUqeMMbVVMSMKnqmvKMHzGRuhbx0xRGDiwPvTFDGEI2MLTCPWkW9f+JOYwa38XLwPg6ZNrroGZVUxeeULNvCZq5AVwzrMZig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mails.ucas.ac.cn; spf=pass smtp.mailfrom=mails.ucas.ac.cn; arc=none smtp.client-ip=159.226.251.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mails.ucas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.ucas.ac.cn
+Received: from xujiakai24$mails.ucas.ac.cn ( [210.73.43.101] ) by
+ ajax-webmail-APP-10 (Coremail) ; Thu, 20 Nov 2025 18:52:35 +0800
+ (GMT+08:00)
+Date: Thu, 20 Nov 2025 18:52:35 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: =?UTF-8?B?6K645L2z5Yev?= <xujiakai24@mails.ucas.ac.cn>
+To: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, 
+	=?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Subject: Re: Re: [BUG] landlock: sleeping function called from invalid
+ context in hook_sb_delete()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.1-cmXT5 build
+ 20240627(e6c6db66) Copyright (c) 2002-2025 www.mailtech.cn cnic.cn
+In-Reply-To: <20251120.c5c17c664315@gnoack.org>
+References: <20dd8187.9d18.19a75eadc43.Coremail.xujiakai24@mails.ucas.ac.cn>
+ <20251120.c5c17c664315@gnoack.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Message-ID: <94cfae8.22396.19aa0e50801.Coremail.xujiakai24@mails.ucas.ac.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:tACowACHcOjz8h5pk2QDAA--.36795W
+X-CM-SenderInfo: 50xmxthndljko6pdxz3voxutnvoduhdfq/1tbiDAcME2kem3F6OAA
+	CsJ
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On Thursday, 20 November 2025, 02:37:56 EST Xiujianfeng <xiujianfeng@huawei=
-cloud.com> wrote:
-> Is it possible to adjust the printk_ratelimit & printk_ratelimit_burst
-> in /proc/sys/kernel/ to reduce the logs in your scenario?
-
-It's not working. Watching the console after setting the sysctl and
-repeatedly clicking org.freedesktop.login1.Manager.CanSuspend in
-qdbusviewer (simulating what the lockscreen does), I see:
-
-```console
-root@daniel-desktop3:~# uname -a
-Linux daniel-desktop3 6.17.0-6-generic #6-Ubuntu SMP PREEMPT_DYNAMIC Tue Oc=
-t  7 13:34:17 UTC 2025 x86_64 GNU/Linux
-root@daniel-desktop3:~# sysctl kernel.printk_ratelimit_burst=3D1
-kernel.printk_ratelimit_burst =3D 1
-root@daniel-desktop3:~# sysctl kernel.printk_ratelimit=3D999999
-kernel.printk_ratelimit =3D 999999
-root@daniel-desktop3:~# dmesg -W
-[14385.334698] lockdown_is_locked_down: 3 callbacks suppressed
-[14385.334701] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14385.614738] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14385.878857] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14386.166744] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14386.454771] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14386.750900] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14387.038795] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14387.334770] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14387.622696] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14387.926763] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14390.366582] lockdown_is_locked_down: 7 callbacks suppressed
-[14390.366585] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14390.798744] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14391.118802] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14391.422728] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14391.742754] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14392.046735] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14392.350745] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14392.654992] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14392.974797] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-[14393.270741] Lockdown: systemd-logind: hibernation is restricted; see man=
- kernel_lockdown.7
-```
-
-At my desk, I lock my screen every 5 hours. In public, I might lock my
-screen every 1 minute, 5 minute, or 15 *minutes*. printk_ratelimit
-seems to be targeted towards things that happen every N *seconds*.
-
-> logs here serve a purpose similar to auditing. Based on this, I think
-> this change will meaningfully degrade the quality of the logs, making it
-> hard for users to find out what happens when lockdown is active=EF=BC=8C
-> especially after a long time running.
-
-=46or v3 in December, I'm thinking of adding a code path to special-case
-*reads* from /sys/power/state. What do you think?
-
-
+SGVsbG8gR8O8bnRoZXIsCgpUaGFua3MgYSBsb3QgZm9yIHlvdXIgZGV0YWlsZWQgcmVwbHkuCgpZ
+b3VyIGV4cGxhbmF0aW9uIG1ha2VzIHBlcmZlY3Qgc2Vuc2UuIEkgYWdyZWUgdGhpcyBpcyBpbmRl
+ZWQgYSBmYWxzZSBwb3NpdGl2ZS4KVGhhbmtzIGZvciBwb2ludGluZyB0aGF0IG91dCBhbmQgZm9y
+IHRoZSBjbGFyaWZpY2F0aW9uLgoKSSBhcHByZWNpYXRlIHlvdXIgdGltZSBhbmQgdGhlIGhlbHBm
+dWwgYW5hbHlzaXMuCgpCZXN0IHJlZ2FyZHMsCi1KaWFrYWkK
 
