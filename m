@@ -1,70 +1,70 @@
-Return-Path: <linux-security-module+bounces-12938-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12941-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB619C74F16
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 16:27:50 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E045C74F82
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 16:30:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A59884E8F94
-	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 15:20:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 7174732D3E
+	for <lists+linux-security-module@lfdr.de>; Thu, 20 Nov 2025 15:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E52336BCF3;
-	Thu, 20 Nov 2025 15:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB2A35B15A;
+	Thu, 20 Nov 2025 15:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tfd5+sNz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CJHAYRpj"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E625E363C54
-	for <linux-security-module@vger.kernel.org>; Thu, 20 Nov 2025 15:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61108358D22
+	for <linux-security-module@vger.kernel.org>; Thu, 20 Nov 2025 15:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651663; cv=none; b=MhMLuhfM7njAh9HLeovDaF6k0/p9hyzLezyne5G1PXND+FUzFY91+b2ZbIAz1XC1M1Yku8eLQxkEbDZtg+HpWBXAmnYVh3CMui851Qtlr9WJTOcDRyQfhRfYLnK3gLeiGwFQSY0QPuTJ6y0CpSlyxWDBsGS+xmbdrrpF1fbyOig=
+	t=1763651686; cv=none; b=O5qCrrIbEHwsK2B4dTIs1PhjOqEGzugrvpAvC1fLgI98usKdp5XNiumdYW3AByO0VSB4tP6gms1Kze+r+czpygm1FQIUV0FcsgB1eoURbGXH1xg/ddB9lKFhryXEX4DwS8x3v/HfJpHQ3ekv76IU6dJzdFqES1UBYOPrhtDNzOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651663; c=relaxed/simple;
-	bh=G9IQ138jpwR+uE1NOvzTwqHJtpOPEovCGYGymNY85fg=;
+	s=arc-20240116; t=1763651686; c=relaxed/simple;
+	bh=JghkiwHvBvL6JcsywiEEh15XJk0LP4WSUGT+cTqq5kc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=p7Js5s1k3BGdBgo8wiKPq7HqjFQpNE9BtdG+/doWNCMwnnThX6WyPsPetIAuojGfEryRbu6eFK2/emy10UWlRxmZ+P/eTkZ7UvBbB7E16aP7+52BQ2HSzRoM7dcDGUhzOe7xhZjBJl8ODh9b30htS/vglbtIO3mGBzSQEAjXvdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tfd5+sNz; arc=none smtp.client-ip=209.85.208.73
+	 To:Cc:Content-Type; b=kG2McOlI8AoLVjtw93iqrO90sdVSJErcSTmkyIruYJZKGbHCGJJpV5eTlMCd6XWJQrtPqH5N/dv19ZGnXmoJdYvUpUN9HUEBJ8Mb1mKyVA+SQNZV14kXbM0TEC7R8D1+vHMxtyozOMUCTBb4oBEHzupbkqjpwEC6ucKC+S2aKLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CJHAYRpj; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
-Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-6411e349b73so1479458a12.2
-        for <linux-security-module@vger.kernel.org>; Thu, 20 Nov 2025 07:13:53 -0800 (PST)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4775d8428e8so7791745e9.0
+        for <linux-security-module@vger.kernel.org>; Thu, 20 Nov 2025 07:13:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763651632; x=1764256432; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763651635; x=1764256435; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6fdZE8GnxjevnV+ZPYXMwhSIUCp4xQbOOIBc42V/94A=;
-        b=Tfd5+sNzidchE6sT77FoycNmQhH8CDs/sq8jYiABkNkr9Mip+6ZJd07+8UI6efMhIU
-         z1yjZL+7glaN7soppNN7k8/79cdCOcE8/9/JuqcMbJ/Jw+iGdk4hOAjY29LSUU4kKC2S
-         d5ZGZtQXljrGuGj5ZBpAV/n1DCpF3N3HjYjAIKH0Nakd/U9SSejjRvMpdmfsFo2Axg8K
-         nSNvRKdtRbXrqaJaCDseHPv2ZtQz0gD8EnfMUbY9Qm+LmQGZPVRpBU022Jrrq0pFNn32
-         /SM2myGI5i2utc773ypGqQB6b6PoJ3ayAjvZBE+igkKxKBJxip7NdiVDz48scHPaBmu1
-         nMaA==
+        bh=Im5hsj1DltxV90KwIidFCTn0DS8FZncDFP7kTqaMpC0=;
+        b=CJHAYRpj8OdyNZb9AA1JEkkGxogTxd4rLTjbLE2ImVrpUNP7iruS7fNrJbcEcbFDmR
+         S4R0OuQRmnqP1zeN+epjN/RUXQcciANAC/S+LWnHaii0RAyiiT02phA5POdjnHUaMeDw
+         wp1XhYYHnkB8BWvNIwB9MM2D7GO0wERdk6U53yuEk2HVRbKTSQ3dE4PBA47tye4tNUBc
+         G6QqCwUs0XGMY53xRTBVYJnFcYzzcUZe1DsVIDWkTe5jl0Q21Nug0wQyG9AMTsGHD4P5
+         p3HwB23RqXXJD9VgamMqIW4abFlWzPcir+ji95zxTIsUttAENUCrTRjy0LI6SxOEQ7Ig
+         qejg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763651632; x=1764256432;
+        d=1e100.net; s=20230601; t=1763651635; x=1764256435;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6fdZE8GnxjevnV+ZPYXMwhSIUCp4xQbOOIBc42V/94A=;
-        b=tR9deJGmn4AXqo7rUd4BEEDHSazHlQu/ri64RI5djhb9XWVPAd6E/owDW05YRaVPlF
-         omxwPuyTCHMThT63HUqrGgUkfwzPZw835LN5k/1u0OkJxUmoa2YUx+6L3G8rfQUMabfg
-         qc4IQv370W6rWS/Rvc1+s0tWNcOtp0hkKsIa9AOqJBN5RvqzxxX00S7MYLOZtq8iLzhJ
-         upSkDedcF6CdydK54M0JL2vz9nekUuklhykDFbNV2mI8b4YvS14hbLaHtEi7ryyagdUP
-         NkyrCMt9yJ5KWNB+nJr8+uzsDKSiQx7XUKe3JinAk4XPK/Lf5jJg+dDxuPfIHDN41pc6
-         /aUA==
-X-Forwarded-Encrypted: i=1; AJvYcCWP1OtK5o5JH+TvwxqC/xAJ10xdE9P8DQqmqoYDw5dZnMIJoatE2pauLOyak55ou5vGcq+mZd7iKMfHDY9EA5ehDx8WQwk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyxRCYXBT05IwVdiT8+SOnOLQ3ckkZ7sjy9DX/ZpM87fSZ7o37
-	AQxi4L92/FUSSp2YrbUIdRYAcwaHaPNKFiaAbrjv/O4IQAfFNdjKwFG1xaDFNkiwhQJTX1qFuAo
-	RgQ==
-X-Google-Smtp-Source: AGHT+IG30dCuNBar8/1ZUCLz7Q8CeRd41MarYyChAvsUEwFL2biNgm+WJS8WZ3PYD5ZG2UR0ZpJ7H5ssIw==
-X-Received: from edp1.prod.google.com ([2002:a05:6402:4381:b0:641:661a:2bff])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:3586:b0:640:a7a9:289f
- with SMTP id 4fb4d7f45d1cf-645363c6b54mr3185434a12.2.1763651631398; Thu, 20
- Nov 2025 07:13:51 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:09:56 +0100
+        bh=Im5hsj1DltxV90KwIidFCTn0DS8FZncDFP7kTqaMpC0=;
+        b=AizVvPI47B4OUS+o7DGHEWYWB+dp3+uxNr7NfPQpCIM1eHK9vubhkAo2oE7Zyo+ure
+         E/X3Y6c91f5hqShnUkmgpks5CdiHRA8hPvVjQ70TH69qT49GD8Z8O2SQfZsLeUJ8lkhz
+         eU1rxF779jyJBzkmugSShUN490XVImRHgt5uV+0jvBkHWMvEH9t23JBunApdbYillE5M
+         NHl8WFw04d9fpk/lSqDZArl6fIDYwgj//e0HKqaR0QBCCI6MClU+XjrOHj4CO7vGSlK0
+         UoEl4PkUtOszr5CL7J48wJYGu6nP0GAbQOaEP6hLd+U5qHv+f8BS5NZV1UfYkPzHY+Sb
+         BEEw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9qXv5RazsdZSjo8hFsMcRugshQdRZAx9qeXvVAP15QlhlImRK/jxYNcQOwYu7O5a8Te2XIGgbppae3pFl8omgEa1tUas=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywy/icGdBgO26mhIIbk79DTuyTFnooaBfPLOyxT/0NfSiT1ZAIB
+	xZZNbXL8AM84IznamHQVEXtruIFoAWeW4md6/XLOH/ozQFdeEZHP5/Kb+ZiQWSd4MjOZzwP5xM0
+	oPA==
+X-Google-Smtp-Source: AGHT+IE0txFyfqWr7t8p06ZvcBdzNhQeJVfQ06tB7yPqhvYYx4yW0lw4v6t9Cn2mD+Uk9FOLbPP2gAnnVA==
+X-Received: from wmd10.prod.google.com ([2002:a05:600c:604a:b0:477:9c68:bd6])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:1c1b:b0:471:c72:c7f8
+ with SMTP id 5b1f17b1804b1-477b9e1cbfbmr31262875e9.21.1763651635197; Thu, 20
+ Nov 2025 07:13:55 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:09:57 +0100
 In-Reply-To: <20251120151033.3840508-7-elver@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251120145835.3833031-2-elver@google.com> <20251120151033.3840508-7-elver@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251120151033.3840508-32-elver@google.com>
-Subject: [PATCH v4 31/35] rhashtable: Enable context analysis
+Message-ID: <20251120151033.3840508-33-elver@google.com>
+Subject: [PATCH v4 32/35] printk: Move locking annotation to printk.c
 From: Marco Elver <elver@google.com>
 To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, 
 	Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
@@ -102,166 +102,62 @@ Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenry
 	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Enable context analysis for rhashtable, which was used as an initial
-test as it contains a combination of RCU, mutex, and bit_spinlock usage.
+With Sparse support gone, Clang is a bit more strict and warns:
 
-Users of rhashtable now also benefit from annotations on the API, which
-will now warn if the RCU read lock is not held where required.
+./include/linux/console.h:492:50: error: use of undeclared identifier 'console_mutex'
+  492 | extern void console_list_unlock(void) __releases(console_mutex);
+
+Since it does not make sense to make console_mutex itself global, move
+the annotation to printk.c. Context analysis remains disabled for
+printk.c.
+
+This is needed to enable context analysis for modules that include
+<linux/console.h>.
 
 Signed-off-by: Marco Elver <elver@google.com>
-Cc: Thomas Graf <tgraf@suug.ch>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org
 ---
-v4:
-* Rename capability -> context analysis.
-
 v2:
-* Remove disable/enable_context_analysis() around headers.
+* New patch.
 ---
- include/linux/rhashtable.h | 14 +++++++++++---
- lib/Makefile               |  2 ++
- lib/rhashtable.c           |  5 +++--
- 3 files changed, 16 insertions(+), 5 deletions(-)
+ include/linux/console.h | 4 ++--
+ kernel/printk/printk.c  | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-index 05a221ce79a6..5ba7356d79f0 100644
---- a/include/linux/rhashtable.h
-+++ b/include/linux/rhashtable.h
-@@ -245,16 +245,17 @@ void *rhashtable_insert_slow(struct rhashtable *ht, const void *key,
- void rhashtable_walk_enter(struct rhashtable *ht,
- 			   struct rhashtable_iter *iter);
- void rhashtable_walk_exit(struct rhashtable_iter *iter);
--int rhashtable_walk_start_check(struct rhashtable_iter *iter) __acquires(RCU);
-+int rhashtable_walk_start_check(struct rhashtable_iter *iter) __acquires_shared(RCU);
+diff --git a/include/linux/console.h b/include/linux/console.h
+index 031a58dc2b91..1eb3c9d9d6ae 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -488,8 +488,8 @@ static inline bool console_srcu_read_lock_is_held(void)
+ extern int console_srcu_read_lock(void);
+ extern void console_srcu_read_unlock(int cookie);
  
- static inline void rhashtable_walk_start(struct rhashtable_iter *iter)
-+	__acquires_shared(RCU)
+-extern void console_list_lock(void) __acquires(console_mutex);
+-extern void console_list_unlock(void) __releases(console_mutex);
++extern void console_list_lock(void);
++extern void console_list_unlock(void);
+ 
+ extern struct hlist_head console_list;
+ 
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 5aee9ffb16b9..7646952a92f1 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -245,6 +245,7 @@ int devkmsg_sysctl_set_loglvl(const struct ctl_table *table, int write,
+  * For console list or console->flags updates
+  */
+ void console_list_lock(void)
++	__acquires(&console_mutex)
  {
- 	(void)rhashtable_walk_start_check(iter);
+ 	/*
+ 	 * In unregister_console() and console_force_preferred_locked(),
+@@ -269,6 +270,7 @@ EXPORT_SYMBOL(console_list_lock);
+  * Counterpart to console_list_lock()
+  */
+ void console_list_unlock(void)
++	__releases(&console_mutex)
+ {
+ 	mutex_unlock(&console_mutex);
  }
- 
- void *rhashtable_walk_next(struct rhashtable_iter *iter);
- void *rhashtable_walk_peek(struct rhashtable_iter *iter);
--void rhashtable_walk_stop(struct rhashtable_iter *iter) __releases(RCU);
-+void rhashtable_walk_stop(struct rhashtable_iter *iter) __releases_shared(RCU);
- 
- void rhashtable_free_and_destroy(struct rhashtable *ht,
- 				 void (*free_fn)(void *ptr, void *arg),
-@@ -325,6 +326,7 @@ static inline struct rhash_lock_head __rcu **rht_bucket_insert(
- 
- static inline unsigned long rht_lock(struct bucket_table *tbl,
- 				     struct rhash_lock_head __rcu **bkt)
-+	__acquires(__bitlock(0, bkt))
- {
- 	unsigned long flags;
- 
-@@ -337,6 +339,7 @@ static inline unsigned long rht_lock(struct bucket_table *tbl,
- static inline unsigned long rht_lock_nested(struct bucket_table *tbl,
- 					struct rhash_lock_head __rcu **bucket,
- 					unsigned int subclass)
-+	__acquires(__bitlock(0, bucket))
- {
- 	unsigned long flags;
- 
-@@ -349,6 +352,7 @@ static inline unsigned long rht_lock_nested(struct bucket_table *tbl,
- static inline void rht_unlock(struct bucket_table *tbl,
- 			      struct rhash_lock_head __rcu **bkt,
- 			      unsigned long flags)
-+	__releases(__bitlock(0, bkt))
- {
- 	lock_map_release(&tbl->dep_map);
- 	bit_spin_unlock(0, (unsigned long *)bkt);
-@@ -402,13 +406,14 @@ static inline void rht_assign_unlock(struct bucket_table *tbl,
- 				     struct rhash_lock_head __rcu **bkt,
- 				     struct rhash_head *obj,
- 				     unsigned long flags)
-+	__releases(__bitlock(0, bkt))
- {
- 	if (rht_is_a_nulls(obj))
- 		obj = NULL;
- 	lock_map_release(&tbl->dep_map);
- 	rcu_assign_pointer(*bkt, (void *)obj);
- 	preempt_enable();
--	__release(bitlock);
-+	__release(__bitlock(0, bkt));
- 	local_irq_restore(flags);
- }
- 
-@@ -589,6 +594,7 @@ static inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
- static __always_inline struct rhash_head *__rhashtable_lookup(
- 	struct rhashtable *ht, const void *key,
- 	const struct rhashtable_params params)
-+	__must_hold_shared(RCU)
- {
- 	struct rhashtable_compare_arg arg = {
- 		.ht = ht,
-@@ -642,6 +648,7 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
- static __always_inline void *rhashtable_lookup(
- 	struct rhashtable *ht, const void *key,
- 	const struct rhashtable_params params)
-+	__must_hold_shared(RCU)
- {
- 	struct rhash_head *he = __rhashtable_lookup(ht, key, params);
- 
-@@ -692,6 +699,7 @@ static __always_inline void *rhashtable_lookup_fast(
- static __always_inline struct rhlist_head *rhltable_lookup(
- 	struct rhltable *hlt, const void *key,
- 	const struct rhashtable_params params)
-+	__must_hold_shared(RCU)
- {
- 	struct rhash_head *he = __rhashtable_lookup(&hlt->ht, key, params);
- 
-diff --git a/lib/Makefile b/lib/Makefile
-index 2e983f37d173..4ca9e8ce66bb 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -50,6 +50,8 @@ lib-$(CONFIG_MIN_HEAP) += min_heap.o
- lib-y	+= kobject.o klist.o
- obj-y	+= lockref.o
- 
-+CONTEXT_ANALYSIS_rhashtable.o := y
-+
- obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
- 	 bust_spinlocks.o kasprintf.o bitmap.o scatterlist.o \
- 	 list_sort.o uuid.o iov_iter.o clz_ctz.o \
-diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-index fde0f0e556f8..6074ed5f66f3 100644
---- a/lib/rhashtable.c
-+++ b/lib/rhashtable.c
-@@ -358,6 +358,7 @@ static int rhashtable_rehash_table(struct rhashtable *ht)
- static int rhashtable_rehash_alloc(struct rhashtable *ht,
- 				   struct bucket_table *old_tbl,
- 				   unsigned int size)
-+	__must_hold(&ht->mutex)
- {
- 	struct bucket_table *new_tbl;
- 	int err;
-@@ -392,6 +393,7 @@ static int rhashtable_rehash_alloc(struct rhashtable *ht,
-  * bucket locks or concurrent RCU protected lookups and traversals.
-  */
- static int rhashtable_shrink(struct rhashtable *ht)
-+	__must_hold(&ht->mutex)
- {
- 	struct bucket_table *old_tbl = rht_dereference(ht->tbl, ht);
- 	unsigned int nelems = atomic_read(&ht->nelems);
-@@ -724,7 +726,7 @@ EXPORT_SYMBOL_GPL(rhashtable_walk_exit);
-  * resize events and always continue.
-  */
- int rhashtable_walk_start_check(struct rhashtable_iter *iter)
--	__acquires(RCU)
-+	__acquires_shared(RCU)
- {
- 	struct rhashtable *ht = iter->ht;
- 	bool rhlist = ht->rhlist;
-@@ -940,7 +942,6 @@ EXPORT_SYMBOL_GPL(rhashtable_walk_peek);
-  * hash table.
-  */
- void rhashtable_walk_stop(struct rhashtable_iter *iter)
--	__releases(RCU)
- {
- 	struct rhashtable *ht;
- 	struct bucket_table *tbl = iter->walker.tbl;
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
