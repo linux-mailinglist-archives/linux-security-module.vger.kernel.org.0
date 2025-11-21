@@ -1,169 +1,554 @@
-Return-Path: <linux-security-module+bounces-12968-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-12970-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9FD3C7A94F
-	for <lists+linux-security-module@lfdr.de>; Fri, 21 Nov 2025 16:38:27 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAB7BC7B1FF
+	for <lists+linux-security-module@lfdr.de>; Fri, 21 Nov 2025 18:48:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A31D33A06B8
-	for <lists+linux-security-module@lfdr.de>; Fri, 21 Nov 2025 15:38:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E74B1364F53
+	for <lists+linux-security-module@lfdr.de>; Fri, 21 Nov 2025 17:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DAA02D47E1;
-	Fri, 21 Nov 2025 15:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3D413469FD;
+	Fri, 21 Nov 2025 17:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iG08a2oP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EpVXDH3C"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE72277CBF;
-	Fri, 21 Nov 2025 15:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0C41DE4F6
+	for <linux-security-module@vger.kernel.org>; Fri, 21 Nov 2025 17:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763739503; cv=none; b=diRvASY7aKgVel53FJ2kYrmwoCygNuCTbQ2u+VZbUI78WuoNfJ70F3tv/El+chCjzLApHjWCwuCsgdkosqmxovHUogs1OncnCGiiowb97TnGTW3UpORnlsWvvdgFxDbAWzCTto3qosdvcTudLGArnvTZPi6mOqvLDI/g3amwQxA=
+	t=1763747311; cv=none; b=sECGA3579XHCMFlxNwNdN3TPGkjQ7hcpPMzq7njZ0W4GbpJj2yGGIcfMIBCXB7oXxPA8YWBBNo8OysAtZ+tZP2E4+g2Qw2/yF30fp4YyQJY3kEePqowj00ygvVfmqFGouFckMfrFSB4cb9MHYTtheM5CU1dAGgVzGHNzOc67/1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763739503; c=relaxed/simple;
-	bh=4hdIvqlYYwOST62CezvgRrxud4tyBrXo/4O5lrgugx4=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=c19DrnxkDaS6OJ5XXhe4gmzOxlK1zPSeJFlVuzvHASvhjOPN8xJI2+XJSsLQ3bn240X9C+703KUuMtJ4RMK6LVdA62VRdVm4qAkHB9B0XsHaF/y4NG/nL7ouJO0fqtl7SM6gP2vlx/IvqWEx456zlLkeULgwgO9xYe4IjcOPWJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iG08a2oP; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5ALE7U9M013975;
-	Fri, 21 Nov 2025 15:38:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=9uvpeu
-	gAJT+jvnOmxXNuodJVl4KxJHP+fjJPjqvut5A=; b=iG08a2oPhBjrDeTjRDrpkH
-	Sk6lnHyyS5PIfYh6R9KEVd0mjDG9WZbYJHC0gN0vznmx+ZOE+ZjDaLG02cXIdfXR
-	LNioa3Z6PH2MyPKMsJ/0YdOjCJwSk12thVGYj+KFLmBF9HMBuKpQH5e2H3kLJg2I
-	GfW5E1UOxO/pI+mfyPShhHlEkDpL02/S7UcDt2oqwgTmtgrwA5oiwo5wHlZ6QQge
-	cfwM+qnuCE13AIfNUnlXy7ZfFrmDBsRIWOrsi/bwHIeN3g1VHn+UcuqP/bsFXs5B
-	Lq7mMuIzwrPkJYkzmftynzWOWX0Q7sk1sUZh1pSSYYxvIXeWwzqZUfpFpjcgmc6w
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejgxb74v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Nov 2025 15:38:07 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5ALFWQEK025505;
-	Fri, 21 Nov 2025 15:38:07 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejgxb74s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Nov 2025 15:38:07 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5ALCH8CE022354;
-	Fri, 21 Nov 2025 15:38:06 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4af4uncxx0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Nov 2025 15:38:06 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5ALFc5AH23921214
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Nov 2025 15:38:05 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BC73B58062;
-	Fri, 21 Nov 2025 15:38:05 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3C00D5805E;
-	Fri, 21 Nov 2025 15:38:05 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.152.207])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 21 Nov 2025 15:38:05 +0000 (GMT)
-Message-ID: <c846d6966822b3822a4386c8fc36e658139ac427.camel@linux.ibm.com>
-Subject: Re: [PATCH -next] ima: Handle error code returned by
- ima_filter_rule_match()
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Zhao Yipeng <zhaoyipeng5@huawei.com>, roberto.sassu@huawei.com,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com
-Cc: lujialin4@huawei.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20251120071805.1604864-1-zhaoyipeng5@huawei.com>
-References: <20251120071805.1604864-1-zhaoyipeng5@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 21 Nov 2025 10:38:04 -0500
+	s=arc-20240116; t=1763747311; c=relaxed/simple;
+	bh=NULRrJfiaMcji9y13f7iXvuyBqCUp2oDsalvWoh3bn0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JF0+KYhDZDSDMRETFWMKBwN6sUpJp7mw2VM79MSLC9vWYj5NfNVFPdH683yBbXKDdEG/gGXvkLO0hYgIHy5VNystXyjbf2Rf2RLKILzB9dYe6vBdzuWa4J2mY2uvLn+54dg+kEh/ACSkKg1iZddXSSGwKerpCKnhsVD1nCfn2vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EpVXDH3C; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-297e264528aso26773835ad.2
+        for <linux-security-module@vger.kernel.org>; Fri, 21 Nov 2025 09:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763747309; x=1764352109; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+eQqmO4BmDMVoeWkR2e76r309EUpKcaBoghmCD5rl1o=;
+        b=EpVXDH3CV3zSKy/SD4xkshO49uWo+D9Fl6csh0Qk5T+zXLy3NmXachmnNzaKB0ZEzL
+         uqHFzGIsTY8L5IA43ugePj5vd4ucghVqnB0ZnBCMH3BZ42MX4QRaEDkOQLpo3qZ9pN6b
+         UI9OO1JMFejZ60I2RaTH5Okau/dusWA9XX9g5JZn4XeaMRNHujaHwvtiy7Y2PuaN+W1+
+         7gQOSiebTbjOueYLLAlO4Nn4EZrk4pMXOhT9yueClA/KyD9FjaDx0QpW56sIln141gut
+         FO2yxgbK/Mp1SsG+xERMx/K4yHe2hkvjoVBzp1dr4E0jTUilYzCE8KLYsKGJlmJ7X3N/
+         IFDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763747309; x=1764352109;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+eQqmO4BmDMVoeWkR2e76r309EUpKcaBoghmCD5rl1o=;
+        b=h8Ovjyy8BCKETfWJ0aQbXJz7Y7qr1ksQfabDrnilJG32EcUCrOa0r4k9+HwSiDBu+p
+         KqUypC8X+5kmE6XsBPvO6Nz2EQ7TNQSX842GFypoYJuStor+FaVEZjpXbuGy0MX5sdAh
+         V+1ffeoN8mTCwVZYM9CCljv8aUCVRo27so8GBKOgQXEAtzWyzs9uzZSL1NV1mKKWQjwH
+         d4DN6rfeEuaii4g8bVFezmONczWUgDeMPefY4fHbpclsgqYClRFrxSvtwTQofhedRHZU
+         2WD2o7hpQUaFeDL/F3iPzihk0gr2FnEkMjfiqMYCTZcEQQKQ539jSFBVhn4EzRR17D30
+         cgMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWu95z20XvfGBBwuaVH3Lh03nrW/9QKYRYlCqrM97AiPz4QrFc1eiNFFKLHgIX9R2guRiw7t1CbvOY1FfpEILwi1fx7kFI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4aNdNCKlzyhP4ldNqr/+he6hWyslzQTpIFa8iUfpwh6w2KCUX
+	RvKrWhd2dyfopCX8BQkxr4BxnpTaoEsti16VvhJMQqWsiCljSl9fc3PF
+X-Gm-Gg: ASbGncuRqGiu40H5qaHLzKZbi7MKnaVTy3zh1NTDZaiZwybPXGFgt4MzN4p6G3PppTT
+	QZwrkuo3VR9eVQx9M3S4B02cHg1EXJS3vtb/HlV8AmN/lNeovQFZR3YDmT0wCWnRPk64kKe6+vJ
+	m7XbKFnblovi3hSwaFlFoHv1TYW28oIQbuVqVsjnemPEaZoz9Mu2dpcF9RjldxjfF5palKDunOA
+	5udBPBQznDfJIon+88t1FjHFKUJ6xnkNQEoG7e24ZjNZlEP3+H+4oCSkIkCBU+N9oJRKPjSwSKA
+	GkfALxYVitQl9U7r2FCGsnNqjIh1VkzCgoeBBlkdig2aYaUWF+1TSUG67JLhSEnRZwinIivwGWY
+	54WtuolBv21QCWOBsq0tBasxpQ/vKok0GO+e/NJmU4gOjYoJ8xniAI/I5pInYpF5Fkzwvow4vqu
+	fN5MH07JMBP3vaODFiEJ+BQUalEkAWlddUb2pnmEk3cE7+c4YVwguYZLr6pTFipposhXNC
+X-Google-Smtp-Source: AGHT+IEnbLYDdEUSfyjfVgKDClXEpb/AwJhU3QHKe6oiaOxiArgSFmxpyTyY9U4LCCnzyNTQxqCNqw==
+X-Received: by 2002:a17:903:1a2f:b0:274:3db8:e755 with SMTP id d9443c01a7336-29b6bf3b833mr43051295ad.30.1763747308753;
+        Fri, 21 Nov 2025 09:48:28 -0800 (PST)
+Received: from kailas.hsd1.or.comcast.net ([2601:1c2:982:6040:d03b:3305:c447:d166])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b25e0f0sm61261185ad.46.2025.11.21.09.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Nov 2025 09:48:27 -0800 (PST)
+From: Ryan Foster <foster.ryan.r@gmail.com>
+To: serge@hallyn.com,
+	paul@paul-moore.com,
+	linux-security-module@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Ryan Foster <foster.ryan.r@gmail.com>
+Subject: [PATCH v2] security: Rename functions and add namespace mapping tests
+Date: Fri, 21 Nov 2025 09:48:26 -0800
+Message-ID: <20251121174826.190381-1-foster.ryan.r@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251110143748.4144288-1-foster.ryan.r@gmail.com>
+References: <20251110143748.4144288-1-foster.ryan.r@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: x5-8fcud3X9kdQsyEkM351qSSQhWEzV_
-X-Authority-Analysis: v=2.4 cv=YqwChoYX c=1 sm=1 tr=0 ts=6920875f cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=i0EeH86SAAAA:8 a=R9X4wcUyAwSOqeJDW9UA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: NQU1QvnrC6qYe-nw630ft6alrzbjeudf
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX9XszSELlgbrl
- bAWFlimLpFTasUvRRldJJPpTkiGEIirNGd8CV2A3/u/0vWT5CVNCR0hIg53JjuIxozPPOZucCCq
- He0Qpuq4oKvMpOHDsi7VNlBDNlh7vOOvgwrbvCNpCuIpyHfFnKHcGrYwoQSa8++8+wMGL15BO1U
- 55oGTCyIzOgJNnVlptcg2GVHzfp3YEDygLjlXVoszomaEduJpVa6N2HYLIoUdB4iNcVzuXFV6g0
- MnhkOTEAW1Wku8CreVZCpZ0qe+MQCEr1y4cXXtl30HuOXIrJfzZnXHNuyIATLeNZYZB+haCFdcn
- fUwucR6EJi7t6QsjrRJCE059v7yAfRjefZEcQqvkLi7JI3jAacpEbrS50Tv2GOb+xcXmyjVtF+N
- JS8zVUzBqjM+1PvrvUyBjQcBmjEAbw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-21_04,2025-11-21_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1011 adultscore=0 bulkscore=0 phishscore=0 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
- definitions=main-2511150032
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2025-11-20 at 15:18 +0800, Zhao Yipeng wrote:
-> In ima_match_rules(), if ima_filter_rule_match() returns -ENOENT due to
-> the rule being NULL, the function incorrectly skips the 'if (!rc)' check
-> and sets 'result =3D true'. The LSM rule is considered a match, causing
-> extra files to be measured by IMA.
->=20
-> This issue can be reproduced in the following scenario:
-> After unloading the SELinux policy module via 'semodule -d', if an IMA
-> measurement is triggered before ima_lsm_rules is updated,
-> in ima_match_rules(), the first call to ima_filter_rule_match() returns
-> -ESTALE. This causes the code to enter the 'if (rc =3D=3D -ESTALE &&
-> !rule_reinitialized)' block, perform ima_lsm_copy_rule() and retry. In
-> ima_lsm_copy_rule(), since the SELinux module has been removed, the rule
-> becomes NULL, and the second call to ima_filter_rule_match() returns
-> -ENOENT. This bypasses the 'if (!rc)' check and results in a false match.
->=20
-> Call trace:
->   selinux_audit_rule_match+0x310/0x3b8
->   security_audit_rule_match+0x60/0xa0
->   ima_match_rules+0x2e4/0x4a0
->   ima_match_policy+0x9c/0x1e8
->   ima_get_action+0x48/0x60
->   process_measurement+0xf8/0xa98
->   ima_bprm_check+0x98/0xd8
->   security_bprm_check+0x5c/0x78
->   search_binary_handler+0x6c/0x318
->   exec_binprm+0x58/0x1b8
->   bprm_execve+0xb8/0x130
->   do_execveat_common.isra.0+0x1a8/0x258
->   __arm64_sys_execve+0x48/0x68
->   invoke_syscall+0x50/0x128
->   el0_svc_common.constprop.0+0xc8/0xf0
->   do_el0_svc+0x24/0x38
->   el0_svc+0x44/0x200
->   el0t_64_sync_handler+0x100/0x130
->   el0t_64_sync+0x3c8/0x3d0
->=20
-> Fix this by changing 'if (!rc)' to 'if (rc <=3D 0)' to ensure that error
-> codes like -ENOENT do not bypass the check and accidentally result in a
-> successful match.
->=20
-> Fixes: 4af4662fa4a9d ("integrity: IMA policy")
-> Signed-off-by: Zhao Yipeng <zhaoyipeng5@huawei.com>
+Rename rootid_owns_currentns() to uid_owns_currentns() and
+rootid_owns_userns() to uid_owns_ns() for clarity, as the function checks
+any UID, not just root. Update all call sites accordingly.
 
-Thank you. The patch is now queued in next-integrity.
+Add tests that create actual user namespaces with different UID mappings
+to verify namespace traversal logic. The tests create namespaces where
+uid 0 maps to different kuids (e.g., kuid 1000, 2000) and verify that
+uid_owns_ns() correctly identifies ownership based on the namespace
+hierarchy traversal.
 
-Mimi
+This addresses feedback to use clearer function naming and test actual
+namespace functionality with real user namespace creation and mappings,
+rather than just basic input validation.
+---
+ security/commoncap.c      |  26 ++--
+ security/commoncap_test.c | 286 ++++++++++++++++++++++++++++++++------
+ 2 files changed, 254 insertions(+), 58 deletions(-)
+
+diff --git a/security/commoncap.c b/security/commoncap.c
+index 15d8147a34c4..cca291df9551 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -359,16 +359,16 @@ int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry)
+ }
+ 
+ #ifdef CONFIG_SECURITY_COMMONCAP_KUNIT_TEST
+-bool rootid_owns_userns(struct user_namespace *ns, kuid_t kroot);
+-bool rootid_owns_userns(struct user_namespace *ns, kuid_t kroot)
++bool uid_owns_ns(struct user_namespace *ns, kuid_t kuid);
++bool uid_owns_ns(struct user_namespace *ns, kuid_t kuid)
+ #else
+-static bool rootid_owns_userns(struct user_namespace *ns, kuid_t kroot)
++static bool uid_owns_ns(struct user_namespace *ns, kuid_t kuid)
+ #endif
+ {
+ 	struct user_namespace *iter;
+ 
+ 	for (iter = ns;; iter = iter->parent) {
+-		if (from_kuid(iter, kroot) == 0)
++		if (from_kuid(iter, kuid) == 0)
+ 			return true;
+ 		if (iter == &init_user_ns)
+ 			break;
+@@ -378,19 +378,19 @@ static bool rootid_owns_userns(struct user_namespace *ns, kuid_t kroot)
+ }
+ 
+ #ifdef CONFIG_SECURITY_COMMONCAP_KUNIT_TEST
+-bool rootid_owns_currentns(vfsuid_t rootvfsuid);
+-bool rootid_owns_currentns(vfsuid_t rootvfsuid)
++bool uid_owns_currentns(vfsuid_t vfsuid);
++bool uid_owns_currentns(vfsuid_t vfsuid)
+ #else
+-static bool rootid_owns_currentns(vfsuid_t rootvfsuid)
++static bool uid_owns_currentns(vfsuid_t vfsuid)
+ #endif
+ {
+-	kuid_t kroot;
++	kuid_t kuid;
+ 
+-	if (!vfsuid_valid(rootvfsuid))
++	if (!vfsuid_valid(vfsuid))
+ 		return false;
+ 
+-	kroot = vfsuid_into_kuid(rootvfsuid);
+-	return rootid_owns_userns(current_user_ns(), kroot);
++	kuid = vfsuid_into_kuid(vfsuid);
++	return uid_owns_ns(current_user_ns(), kuid);
+ }
+ 
+ static __u32 sansflags(__u32 m)
+@@ -497,7 +497,7 @@ int cap_inode_getsecurity(struct mnt_idmap *idmap,
+ 		goto out_free;
+ 	}
+ 
+-	if (!rootid_owns_currentns(vfsroot)) {
++	if (!uid_owns_currentns(vfsroot)) {
+ 		size = -EOVERFLOW;
+ 		goto out_free;
+ 	}
+@@ -738,7 +738,7 @@ int get_vfs_caps_from_disk(struct mnt_idmap *idmap,
+ 	/* Limit the caps to the mounter of the filesystem
+ 	 * or the more limited uid specified in the xattr.
+ 	 */
+-	if (!rootid_owns_currentns(rootvfsuid))
++	if (!uid_owns_currentns(rootvfsuid))
+ 		return -ENODATA;
+ 
+ 	cpu_caps->permitted.val = le32_to_cpu(caps->data[0].permitted);
+diff --git a/security/commoncap_test.c b/security/commoncap_test.c
+index 962aa899455d..7f066dc0df5d 100644
+--- a/security/commoncap_test.c
++++ b/security/commoncap_test.c
+@@ -10,6 +10,8 @@
+ #include <linux/user_namespace.h>
+ #include <linux/uidgid.h>
+ #include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/refcount.h>
+ 
+ /* Forward declare types and functions we need from mnt_idmapping.h
+  * We avoid including the full header because it contains inline functions
+@@ -50,38 +52,38 @@ static inline kuid_t vfsuid_into_kuid(vfsuid_t vfsuid)
+ #ifdef CONFIG_SECURITY_COMMONCAP_KUNIT_TEST
+ 
+ /* Forward declarations - functions are exported when KUNIT_TEST is enabled */
+-extern bool rootid_owns_userns(struct user_namespace *ns, kuid_t kroot);
+-extern bool rootid_owns_currentns(vfsuid_t rootvfsuid);
++extern bool uid_owns_ns(struct user_namespace *ns, kuid_t kuid);
++extern bool uid_owns_currentns(vfsuid_t vfsuid);
+ 
+ /**
+- * test_rootid_owns_currentns_init_ns - Test rootid_owns_currentns with init ns
++ * test_uid_owns_currentns_init_ns - Test uid_owns_currentns with init ns
+  *
+- * Verifies that a root ID in the init namespace correctly owns the current
++ * Verifies that UID 0 in the init namespace correctly owns the current
+  * namespace when running in init_user_ns.
+  *
+  * @test: KUnit test context
+  */
+-static void test_rootid_owns_currentns_init_ns(struct kunit *test)
++static void test_uid_owns_currentns_init_ns(struct kunit *test)
+ {
+-	vfsuid_t root_vfsuid;
+-	kuid_t root_kuid;
++	vfsuid_t vfsuid;
++	kuid_t kuid;
+ 
+-	/* Create a root UID in init namespace */
+-	root_kuid = KUIDT_INIT(0);
+-	root_vfsuid = VFSUIDT_INIT(root_kuid);
++	/* Create UID 0 in init namespace */
++	kuid = KUIDT_INIT(0);
++	vfsuid = VFSUIDT_INIT(kuid);
+ 
+-	/* In init namespace, root should own current namespace */
+-	KUNIT_EXPECT_TRUE(test, rootid_owns_currentns(root_vfsuid));
++	/* In init namespace, UID 0 should own current namespace */
++	KUNIT_EXPECT_TRUE(test, uid_owns_currentns(vfsuid));
+ }
+ 
+ /**
+- * test_rootid_owns_currentns_invalid - Test rootid_owns_currentns with invalid vfsuid
++ * test_uid_owns_currentns_invalid - Test uid_owns_currentns with invalid vfsuid
+  *
+  * Verifies that an invalid vfsuid correctly returns false.
+  *
+  * @test: KUnit test context
+  */
+-static void test_rootid_owns_currentns_invalid(struct kunit *test)
++static void test_uid_owns_currentns_invalid(struct kunit *test)
+ {
+ 	vfsuid_t invalid_vfsuid;
+ 
+@@ -89,74 +91,268 @@ static void test_rootid_owns_currentns_invalid(struct kunit *test)
+ 	invalid_vfsuid = INVALID_VFSUID;
+ 
+ 	/* Invalid vfsuid should return false */
+-	KUNIT_EXPECT_FALSE(test, rootid_owns_currentns(invalid_vfsuid));
++	KUNIT_EXPECT_FALSE(test, uid_owns_currentns(invalid_vfsuid));
+ }
+ 
+ /**
+- * test_rootid_owns_currentns_nonroot - Test rootid_owns_currentns with non-root UID
++ * test_uid_owns_currentns_nonzero - Test uid_owns_currentns with non-zero UID
+  *
+- * Verifies that a non-root UID correctly returns false.
++ * Verifies that a non-zero UID correctly returns false.
+  *
+  * @test: KUnit test context
+  */
+-static void test_rootid_owns_currentns_nonroot(struct kunit *test)
++static void test_uid_owns_currentns_nonzero(struct kunit *test)
+ {
+-	vfsuid_t nonroot_vfsuid;
+-	kuid_t nonroot_kuid;
++	vfsuid_t vfsuid;
++	kuid_t kuid;
+ 
+-	/* Create a non-root UID */
+-	nonroot_kuid = KUIDT_INIT(1000);
+-	nonroot_vfsuid = VFSUIDT_INIT(nonroot_kuid);
++	/* Create a non-zero UID */
++	kuid = KUIDT_INIT(1000);
++	vfsuid = VFSUIDT_INIT(kuid);
+ 
+-	/* Non-root UID should return false */
+-	KUNIT_EXPECT_FALSE(test, rootid_owns_currentns(nonroot_vfsuid));
++	/* Non-zero UID should return false */
++	KUNIT_EXPECT_FALSE(test, uid_owns_currentns(vfsuid));
+ }
+ 
+ /**
+- * test_rootid_owns_userns_init_ns - Test rootid_owns_userns with init namespace
++ * test_uid_owns_ns_init_ns_uid0 - Test uid_owns_ns with init namespace and UID 0
+  *
+- * Verifies that rootid_owns_userns correctly identifies root UID in init namespace.
+- * This tests the core namespace traversal logic.
++ * Verifies that uid_owns_ns correctly identifies UID 0 in init namespace.
++ * This tests the core namespace traversal logic. In init namespace, UID 0
++ * maps to itself, so it should own the namespace.
+  *
+  * @test: KUnit test context
+  */
+-static void test_rootid_owns_userns_init_ns(struct kunit *test)
++static void test_uid_owns_ns_init_ns_uid0(struct kunit *test)
+ {
+-	kuid_t root_kuid;
++	kuid_t kuid;
+ 	struct user_namespace *init_ns;
+ 
+-	root_kuid = KUIDT_INIT(0);
++	kuid = KUIDT_INIT(0);
+ 	init_ns = &init_user_ns;
+ 
+-	/* Root UID should own init namespace */
+-	KUNIT_EXPECT_TRUE(test, rootid_owns_userns(init_ns, root_kuid));
++	/* UID 0 should own init namespace */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(init_ns, kuid));
+ }
+ 
+ /**
+- * test_rootid_owns_userns_nonroot - Test rootid_owns_userns with non-root UID
++ * test_uid_owns_ns_init_ns_nonzero - Test uid_owns_ns with init namespace and non-zero UID
+  *
+- * Verifies that rootid_owns_userns correctly rejects non-root UIDs.
++ * Verifies that uid_owns_ns correctly rejects non-zero UIDs in init namespace.
++ * Only UID 0 should own a namespace.
+  *
+  * @test: KUnit test context
+  */
+-static void test_rootid_owns_userns_nonroot(struct kunit *test)
++static void test_uid_owns_ns_init_ns_nonzero(struct kunit *test)
+ {
+-	kuid_t nonroot_kuid;
++	kuid_t kuid;
+ 	struct user_namespace *init_ns;
+ 
+-	nonroot_kuid = KUIDT_INIT(1000);
++	kuid = KUIDT_INIT(1000);
+ 	init_ns = &init_user_ns;
+ 
+-	/* Non-root UID should not own namespace */
+-	KUNIT_EXPECT_FALSE(test, rootid_owns_userns(init_ns, nonroot_kuid));
++	/* Non-zero UID should not own namespace */
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(init_ns, kuid));
++}
++
++/**
++ * test_uid_owns_ns_init_ns_various_uids - Test uid_owns_ns with various UIDs
++ *
++ * Verifies that uid_owns_ns correctly identifies only UID 0 as owning
++ * the namespace, regardless of the UID value tested.
++ *
++ * @test: KUnit test context
++ */
++static void test_uid_owns_ns_init_ns_various_uids(struct kunit *test)
++{
++	struct user_namespace *init_ns;
++	kuid_t kuid;
++
++	init_ns = &init_user_ns;
++
++	/* UID 0 should own the namespace */
++	kuid = KUIDT_INIT(0);
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(init_ns, kuid));
++
++	/* Other UIDs should not own the namespace */
++	kuid = KUIDT_INIT(1);
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(init_ns, kuid));
++
++	kuid = KUIDT_INIT(1000);
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(init_ns, kuid));
++
++	kuid = KUIDT_INIT(65534);
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(init_ns, kuid));
++}
++
++/**
++ * create_test_user_ns_with_mapping - Create a test user namespace with uid mapping
++ *
++ * Creates a minimal user namespace for testing where uid 0 in the namespace
++ * maps to the specified kuid in the parent namespace.
++ *
++ * The mapping semantics:
++ * - first: uid in this namespace (0)
++ * - lower_first: kuid in parent namespace (mapped_kuid)
++ * - count: range size (1)
++ *
++ * This means: from_kuid(ns, mapped_kuid) will return 0
++ * because map_id_up looks for kuid in [lower_first, lower_first+count)
++ * and returns first + (kuid - lower_first) = 0 + (mapped_kuid - mapped_kuid) = 0
++ *
++ * @test: KUnit test context
++ * @parent_ns: Parent user namespace
++ * @mapped_kuid: The kuid that uid 0 in the new namespace maps to
++ *
++ * Returns: The new user namespace, or NULL on failure
++ */
++static struct user_namespace *create_test_user_ns_with_mapping(struct kunit *test,
++								struct user_namespace *parent_ns,
++								kuid_t mapped_kuid)
++{
++	struct user_namespace *ns;
++	struct uid_gid_extent extent;
++
++	/* Allocate a test namespace - use kzalloc to zero all fields */
++	ns = kunit_kzalloc(test, sizeof(*ns), GFP_KERNEL);
++	if (!ns)
++		return NULL;
++
++	/* Initialize basic namespace structure fields */
++	ns->parent = parent_ns;
++	ns->level = parent_ns ? parent_ns->level + 1 : 0;
++	ns->owner = mapped_kuid;
++	ns->group = KGIDT_INIT(0);
++
++	/* Initialize ns_common structure */
++	refcount_set(&ns->ns.__ns_ref, 1);
++
++	/* Set up uid mapping: uid 0 in this namespace maps to mapped_kuid in parent
++	 * Format: first (uid in ns) : lower_first (kuid in parent) : count
++	 * So: uid 0 in ns -> kuid mapped_kuid in parent
++	 * This means from_kuid(ns, mapped_kuid) returns 0
++	 */
++	extent.first = 0;                              /* uid 0 in this namespace */
++	extent.lower_first = __kuid_val(mapped_kuid);  /* maps to this kuid in parent */
++	extent.count = 1;
++
++	ns->uid_map.extent[0] = extent;
++	ns->uid_map.nr_extents = 1;
++
++	/* Set up gid mapping: gid 0 maps to gid 0 in parent (simplified) */
++	extent.first = 0;
++	extent.lower_first = 0;
++	extent.count = 1;
++
++	ns->gid_map.extent[0] = extent;
++	ns->gid_map.nr_extents = 1;
++
++	return ns;
++}
++
++/**
++ * test_uid_owns_ns_with_mapping - Test uid_owns_ns with namespace where uid 0
++ *				   maps to different kuid
++ *
++ * Creates a user namespace where uid 0 maps to kuid 1000 in the parent namespace.
++ * Verifies that uid_owns_ns correctly identifies kuid 1000 as owning the namespace.
++ *
++ * Note: uid_owns_ns walks up the namespace hierarchy, so it checks the current
++ * namespace first, then parent, then parent's parent, etc. So:
++ * - kuid 1000 owns test_ns because from_kuid(test_ns, 1000) == 0
++ * - kuid 0 also owns test_ns because from_kuid(init_user_ns, 0) == 0
++ *   (checked in parent)
++ *
++ * This tests the actual functionality as requested: creating namespaces with
++ * different values for the namespace's uid 0.
++ *
++ * @test: KUnit test context
++ */
++static void test_uid_owns_ns_with_mapping(struct kunit *test)
++{
++	struct user_namespace *test_ns;
++	struct user_namespace *parent_ns;
++	kuid_t mapped_kuid, other_kuid;
++
++	parent_ns = &init_user_ns;
++	mapped_kuid = KUIDT_INIT(1000);  /* uid 0 in test_ns maps to kuid 1000 */
++	other_kuid = KUIDT_INIT(2000);   /* This should not own the namespace */
++
++	/* Create test namespace where uid 0 maps to kuid 1000 */
++	test_ns = create_test_user_ns_with_mapping(test, parent_ns, mapped_kuid);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_ns);
++
++	/* kuid 1000 should own the namespace (because uid 0 in test_ns maps to it) */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(test_ns, mapped_kuid));
++
++	/* kuid 0 also owns the namespace because it maps to 0 in init_user_ns (parent) */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(test_ns, KUIDT_INIT(0)));
++
++	/* Other kuids that don't map to 0 in test_ns or any parent should not own */
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(test_ns, other_kuid));
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(test_ns, KUIDT_INIT(500)));
++}
++
++/**
++ * test_uid_owns_ns_with_different_mappings - Test with multiple namespaces
++ *					      having different mappings
++ *
++ * Creates multiple test namespaces with different uid 0 mappings to verify
++ * the function correctly identifies ownership based on the mapping.
++ *
++ * Since uid_owns_ns walks up the hierarchy, kuids that map to 0 in init_user_ns
++ * (like kuid 0) will own all namespaces. But we can still verify that the
++ * specific mapped kuids own their respective namespaces.
++ *
++ * @test: KUnit test context
++ */
++static void test_uid_owns_ns_with_different_mappings(struct kunit *test)
++{
++	struct user_namespace *ns1, *ns2, *ns3;
++	struct user_namespace *parent_ns;
++
++	parent_ns = &init_user_ns;
++
++	/* Namespace 1: uid 0 maps to kuid 1000 */
++	ns1 = create_test_user_ns_with_mapping(test, parent_ns, KUIDT_INIT(1000));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ns1);
++	/* kuid 1000 owns ns1 because it maps to uid 0 in ns1 */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(ns1, KUIDT_INIT(1000)));
++	/* kuid 0 also owns ns1 because it maps to 0 in init_user_ns (parent) */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(ns1, KUIDT_INIT(0)));
++	/* kuid 2000 doesn't map to 0 in ns1 or any parent */
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(ns1, KUIDT_INIT(2000)));
++
++	/* Namespace 2: uid 0 maps to kuid 2000 */
++	ns2 = create_test_user_ns_with_mapping(test, parent_ns, KUIDT_INIT(2000));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ns2);
++	/* kuid 2000 owns ns2 because it maps to uid 0 in ns2 */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(ns2, KUIDT_INIT(2000)));
++	/* kuid 0 also owns ns2 because it maps to 0 in init_user_ns (parent) */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(ns2, KUIDT_INIT(0)));
++	/* kuid 1000 doesn't map to 0 in ns2 or any parent */
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(ns2, KUIDT_INIT(1000)));
++
++	/* Namespace 3: uid 0 maps to kuid 0 (identity mapping) */
++	ns3 = create_test_user_ns_with_mapping(test, parent_ns, KUIDT_INIT(0));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ns3);
++	/* kuid 0 owns ns3 because it maps to uid 0 in ns3 */
++	KUNIT_EXPECT_TRUE(test, uid_owns_ns(ns3, KUIDT_INIT(0)));
++	/* kuid 1000 doesn't map to 0 in ns3 or any parent */
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(ns3, KUIDT_INIT(1000)));
++	/* kuid 2000 doesn't map to 0 in ns3 or any parent */
++	KUNIT_EXPECT_FALSE(test, uid_owns_ns(ns3, KUIDT_INIT(2000)));
+ }
+ 
+ static struct kunit_case commoncap_test_cases[] = {
+-	KUNIT_CASE(test_rootid_owns_currentns_init_ns),
+-	KUNIT_CASE(test_rootid_owns_currentns_invalid),
+-	KUNIT_CASE(test_rootid_owns_currentns_nonroot),
+-	KUNIT_CASE(test_rootid_owns_userns_init_ns),
+-	KUNIT_CASE(test_rootid_owns_userns_nonroot),
++	KUNIT_CASE(test_uid_owns_currentns_init_ns),
++	KUNIT_CASE(test_uid_owns_currentns_invalid),
++	KUNIT_CASE(test_uid_owns_currentns_nonzero),
++	KUNIT_CASE(test_uid_owns_ns_init_ns_uid0),
++	KUNIT_CASE(test_uid_owns_ns_init_ns_nonzero),
++	KUNIT_CASE(test_uid_owns_ns_init_ns_various_uids),
++	KUNIT_CASE(test_uid_owns_ns_with_mapping),
++	KUNIT_CASE(test_uid_owns_ns_with_different_mappings),
+ 	{}
+ };
+ 
+-- 
+2.43.0
+
 
