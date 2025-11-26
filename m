@@ -1,78 +1,78 @@
-Return-Path: <linux-security-module+bounces-13036-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13038-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E01FC89BB6
-	for <lists+linux-security-module@lfdr.de>; Wed, 26 Nov 2025 13:21:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69065C89BBC
+	for <lists+linux-security-module@lfdr.de>; Wed, 26 Nov 2025 13:21:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3F59F349AE6
-	for <lists+linux-security-module@lfdr.de>; Wed, 26 Nov 2025 12:21:14 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 856353475C4
+	for <lists+linux-security-module@lfdr.de>; Wed, 26 Nov 2025 12:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3593626ED5F;
-	Wed, 26 Nov 2025 12:21:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637D9325736;
+	Wed, 26 Nov 2025 12:21:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dyUuvDJY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XSkeSR2M"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B702325707
-	for <linux-security-module@vger.kernel.org>; Wed, 26 Nov 2025 12:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E1B31AF2A
+	for <linux-security-module@vger.kernel.org>; Wed, 26 Nov 2025 12:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764159669; cv=none; b=SIVYoHm9sz7Qm+pzzfxsSrjxv0KcvW/NbEg33fxvK+zcaWDLd8JqMqEZByDhTdYzUcn4mPL7aaQvIR8ek+pri8/nVFSJ8tyfmGOJwFdrZpXw082zis9V6yJlNZJGXluZE5GS8vUTb/XXyxh+vcjCfR+kGoQosVMnpVnCSR0cmk0=
+	t=1764159670; cv=none; b=Y9Gp8KrKNqy/p4gElWgf96S7XftTaksehksusvwqk73f7LxTTiY8EKJ589I5FPQr0LJ07JAmIF5jNcMIMbYAsUVeMn7nnCR3LxLeJNQQhxGz/7M9pDyt0fEKo5Qg0O3lo8G07GLtLBF4DpYR0+18aIIHytGB1sKtbEqaE6oauR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764159669; c=relaxed/simple;
-	bh=HDmmr1IPRNMCl6NXH7ebTWR3pZr+9YvInNSeMIAy9SQ=;
+	s=arc-20240116; t=1764159670; c=relaxed/simple;
+	bh=Vn3oaos5+DCo6R4F5yq/UMz2En87vy58Ep9Ivcl01mE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m0fRb4D/NA9JWfCd9oN1Q+foCGkl8G5mo8Om6NBVFKaCyvRf2BhhRt3h1joSd8V+1usJ97nmPCD/Yh0UDN7YnJrH5C6XLSgWxm4BjD+3XB42QMVyYl6LMZLLTDIprOXxZHsss5mDm0iG7bFSoY7DMuQwQByD++4G7E/fBEafOGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dyUuvDJY; arc=none smtp.client-ip=74.125.224.49
+	 MIME-Version; b=WOFiJpTsSxLh6fvXGqmCyh+rWRVOs2JkWdyzfDxkjTjIUec38ZSiImAI34B35mPIiYsRD2gXP78gKI+cGT71lKgSZiTYUftj9QItjH2ji0JK0o2S476JO4ahg4bleLk2wP8xFwokUWIT+yG+VuSw0URrJ06VcF5FFeHYKXOgYQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XSkeSR2M; arc=none smtp.client-ip=74.125.224.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-640f2c9ccbdso5445430d50.1
-        for <linux-security-module@vger.kernel.org>; Wed, 26 Nov 2025 04:21:07 -0800 (PST)
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-640d0895d7cso1167500d50.1
+        for <linux-security-module@vger.kernel.org>; Wed, 26 Nov 2025 04:21:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764159666; x=1764764466; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764159667; x=1764764467; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=axhRyg/ZXVYRS6JssWrRfipxfSrH7rpq/tWdb8+j4Vs=;
-        b=dyUuvDJYUtaDpxChgb9PhWayMB59qUjL1nzfY4lqKvka3VFcB3UNwiz1qp6GK0GCVy
-         wnAYpPFojZ9GZNn434YpgC5cx9mFpjUfmV3+Dc9dJB3hdSb25Y62qaIe9l5NuLaqDft6
-         VA93rUZaBfdy43PCkD+ow6qU0LKkALgbxqC/seOI4+tQvPyWspYyY5QYbGq7HuLWaLh0
-         IYYvzxvo3i/meZctDjbUku02GDiEvmVHb/TeHlEWWo/j92LB7rWEcKAc9U6s5pVrNX0k
-         rctCkdako5q3Q2Lt3jgBLf6wTKQJYxnB00AKZ8OvD3+HbnDDdKz9k+ODZTgXaGoM1oN1
-         ZZQQ==
+        bh=rNJ8QW6rGDhZa9fk6NwsGdRfr26cdHeqQYReTfEm3oU=;
+        b=XSkeSR2MrMmRpLIG4VmX9eyQxkdZVrA+FTgq3RF2KIqsOHQvy8wGrLAypsvYAeeHBc
+         NAudOfuBv0AuFklsEdWaeCAtrg25ySRWB9TBgLDKDHA6XYALiCN1q13FVwObAWv6mFCW
+         IvVW1UahyEGEfePc0pOCxZa6x3XFi+Z1mzwGeArG4HBC63+j8zk9PEizJqvVt7ZHikAm
+         6nTx543x3sI+/yJ9hbVvPnmEKibDMiPsFUececJzUcxFt/OVsMn9ednGQ8A2pTZTsNwx
+         jfDWxnLJNogbip/MApqEAqF6inieriHgwDlQ4NeJJUibwQCGQEMMa3n3ogBiT7QzPp1G
+         1+vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764159666; x=1764764466;
+        d=1e100.net; s=20230601; t=1764159667; x=1764764467;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=axhRyg/ZXVYRS6JssWrRfipxfSrH7rpq/tWdb8+j4Vs=;
-        b=xLnv4QaNH3zTSCqTabpRo8BG83scw1BPvzKwC/qNgbogZoFOGBy9X5jvqOtfCtfBmp
-         mym7WLUgwUh3Pkg8a50Q4Faidimoi0J7dv60G+Bf4fZmjANDBDuvyIqnpy3au9h/qxK4
-         22CpIFYIXvTMUbL/9711qUVb0ifWzkeusDanuOtHSzzbemuCSfyMHgyGkQjgkXotVeEX
-         aqJslRhtlocvJ6YKJnbpf7wa9viDry4GU+bDLS+rpgobee5ct6rhqBRcPcFeXfoTRpzB
-         j3z7XqqGwNFeH+/cqb//kUfpOWP11esznaPICNUvLzwzTd7lKH9GI4UXRsmpew8vo7mm
-         4Qzg==
-X-Gm-Message-State: AOJu0YxP7h43fBt9S1Obl8dD6JrOD5m5476TjHfP4L5tDt15bRL6DtUR
-	R6MR8PgzMhtgsv4IEBNauorr6ZHN+XkIRUZRSAQWS1sBo5ByHbYvjTJSjUaSH77x
-X-Gm-Gg: ASbGncszJCe1OReHGNlQYLMdkgcRxVS7Tr4sOd0/pVONpfEISePIrQZyIXnf2FQJQlG
-	mVLwuvDl/SLyPMlQPPqIoyBhPTY2WJXIpwRccJnuHyLQVcXGDNfEo6XuaIA2f59nCU/Z3rilJX1
-	3/iU+YYFmRH9nMW3xU3w+AgUHvphxNS+a68A7Su22tRtfKBrWkGdAuL4PghpiZaJlyS05Mhd+VP
-	nWmOBZuBw0pYF9et4FSTcMB7FoS4FjMlNOz1/nXvEdvK5DmlaJDYvzraPZp+63WCpDq4oTnU/CW
-	yMQ/d+76fBDyjQ33ccOOfbDtUTejSAcz9Boe3US2BIhz/vs4AjdAnQKhsQM7se7NqYNJh0LOgW6
-	vatypM6qZfaAAL2SSHZ1HfdhJN//vRfCMmmWElpZtctpVSxBlJ4G2mj7BR4MNdODw1L1OFSIRbb
-	RUGE0zKH4Gykd41gpmA/OciE3rbgS8GvK+Jc76ZbkdaKZJOXktjkIhy8oLpIgK
-X-Google-Smtp-Source: AGHT+IGHutL7Okds73W5vGqcCqBVHlgihDGeEuuQKl90iC1/lAQyOqyW45mVIbUWVaM9o53xWWvJ5A==
-X-Received: by 2002:a05:690e:2ca:b0:640:dd25:d84 with SMTP id 956f58d0204a3-64329399769mr3183937d50.47.1764159666196;
-        Wed, 26 Nov 2025 04:21:06 -0800 (PST)
+        bh=rNJ8QW6rGDhZa9fk6NwsGdRfr26cdHeqQYReTfEm3oU=;
+        b=OlA04t2Yman5jeYVE7hG7duf9AUTF052FaCiqLhBlOh+2i4cXJONJerkbqyoPMzBFF
+         I4uZsdhB2/rcPYslsSqvBNV8SxATNjntue6rdUU8Zr+YeaU/0ObO1LgzUrlO9Izflp1G
+         881mMJHib61kFIDulZypKi2y1K/io2wV03t+mNMUGVZoINWBqfl3QZUxqUtGAnNYbMVf
+         UTvBifwrdxQ/7WIXLXwVJ0ZUvoVpbdQN65Y/M+c1IxehhO74QBSdc8VbMZvTIBTaRvEH
+         Q2uxuL9L9A1z76Ald7MufU4RONaXWEW+qkBRcp5jQkiN140r53vNFtQrSNnNKir6nrFA
+         byZg==
+X-Gm-Message-State: AOJu0YxyXIcrMtjKTFaiYxUoFTFkMNWE+SVrMbgOMA2dIc8p8KNSo8/F
+	WSiIH9H1uN1MExfCm/dK9GUPfR16ccs0KKoHRL1/Ul07I93QvzephfOAACrxIGKt
+X-Gm-Gg: ASbGncvLmOkX9sds7BrhJjaOlQMGMU8ksLWcG1Xdoawx/+Tq6s3/GYPVN+rlgGVdff4
+	lhiAl1OkfnI5uTSSzpLZeqqQhq6gZUIX0/ecdTleNXVQOwwYtQzLv8obxlMQWc2aiVgRwoQFCyf
+	LW+3kKFoh8mTJwiZGrm+MaTWaX9vjOogO+H91BwD4XT3VS4TDhDT/1SAQ6yFkhvmUBmgA6tvA8X
+	8BRnUZ36e+CBFc/lknyGx+jwtbD1uXBbqcCJrQD3zMDwaNFq2DNARjlBzPpxwg+vS36eJLoAe9y
+	biTj4DlOWNIKBOymAfj41AlkRCQB3wK/H4YFm7c1zd1bG1lP7XOa+WST4A6pv/NGTWcBvCLkZrX
+	j9ugdVUidoTjWp4IwG9YKdDBBvvO94VnfMclcKD8ZRsZ/D87oVyAvW8qtbTv51W3M0onlcxArHz
+	tdlSGfvLrjyzQdPDhSxT1hYKoKaQwBA4g4dQ2i1cAvR1BmM+PgeHvuBVc2WZpR
+X-Google-Smtp-Source: AGHT+IFzq3w1Sht+fAcvLQ5IPMf3ERYZyuRuS6KVSuCiJug34ymmzxd7/8j3PecuL3AQXHYgaFcZ+A==
+X-Received: by 2002:a05:690e:1c1c:b0:640:d707:4f6 with SMTP id 956f58d0204a3-6430260f822mr13219286d50.24.1764159667402;
+        Wed, 26 Nov 2025 04:21:07 -0800 (PST)
 Received: from zenbox (71-132-185-69.lightspeed.tukrga.sbcglobal.net. [71.132.185.69])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78a7992799dsm66318057b3.33.2025.11.26.04.21.05
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78a7992799dsm66318057b3.33.2025.11.26.04.21.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 04:21:05 -0800 (PST)
+        Wed, 26 Nov 2025 04:21:07 -0800 (PST)
 From: Justin Suess <utilityemal77@gmail.com>
 To: linux-security-module@vger.kernel.org
 Cc: Tingmao Wang <m@maowtm.org>,
@@ -81,9 +81,9 @@ Cc: Tingmao Wang <m@maowtm.org>,
 	Abhinav Saxena <xandfury@gmail.com>,
 	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH v3 5/5] landlock: Implement KUnit test for LANDLOCK_ADD_RULE_NO_INHERIT
-Date: Wed, 26 Nov 2025 07:20:38 -0500
-Message-ID: <20251126122039.3832162-6-utilityemal77@gmail.com>
+Subject: [PATCH v3 5/5] landlock: landlock: Implement KUnit test for LANDLOCK_ADD_RULE_NO_INHERIT
+Date: Wed, 26 Nov 2025 07:20:39 -0500
+Message-ID: <20251126122039.3832162-7-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251126122039.3832162-1-utilityemal77@gmail.com>
 References: <20251126122039.3832162-1-utilityemal77@gmail.com>
@@ -104,8 +104,6 @@ changes v2..v3:
      patch.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
-
-	build.log
 ---
  security/landlock/ruleset.c | 89 +++++++++++++++++++++++++++++++++++++
  1 file changed, 89 insertions(+)
