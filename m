@@ -1,163 +1,111 @@
-Return-Path: <linux-security-module+bounces-13119-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13121-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08808C92BA9
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 Nov 2025 18:02:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58474C92C91
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 Nov 2025 18:22:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 27CC84E3CD5
-	for <lists+linux-security-module@lfdr.de>; Fri, 28 Nov 2025 17:02:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 914093A8969
+	for <lists+linux-security-module@lfdr.de>; Fri, 28 Nov 2025 17:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5ACB2BDC26;
-	Fri, 28 Nov 2025 17:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD2832ED26;
+	Fri, 28 Nov 2025 17:22:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="jt6Llu3a"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="RGQoObzu"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
+Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [83.166.143.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEC3284889
-	for <linux-security-module@vger.kernel.org>; Fri, 28 Nov 2025 17:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB882C235E
+	for <linux-security-module@vger.kernel.org>; Fri, 28 Nov 2025 17:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764349357; cv=none; b=ha1iSD8i77m53kCW+rUsYL2rzrd1mm5Frs68mUmZiP6WDQtQ1ksxWRHIo0RLXHi7lRcFb9qzdTHc3TulkAibY3bOoDEO57mRwCYq85gmCYvVteU9GMsQe+Yw6f82Gz/uFWmJUkOe/TMn2VmwkF8HgQmTAQn+ZY0VdGrjnvWu9i4=
+	t=1764350543; cv=none; b=XmjrJ2vtCQFKBJlQ9whCk0PzscUWY0r9+pWrOhi/StXTf7Ec0QjKfJnAWQHpygt6JDTgq8sDvON3Uvs8don+hVVvYfVhpLuBxVJcecyc3WvyVReoOM9HVes7+Xymj/hYy+2u8lRO8HZX5Vxh421UBUYgrnKFuORERqXHJoUZE+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764349357; c=relaxed/simple;
-	bh=5a/KZrW0A9GQei5mM0R5P2xPq0Ot8BgBWZpdHRpIRH8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aSnffFHzTIzd1jl/YDa0TuGMc2R6ABhvkSfmi9sHDvH6grlreN4iBeLSXwPDbr1eiR4fqsNOj1ozvzmY+aR1HVMkojskOBNgHuWoo+kVBux1FhgtARk+8Vcr+Co+fCnUIwcbLRDJQ7w2xlv4DCcLsfRpqbOs1x19rPn+Iv+Uw+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=jt6Llu3a; arc=none smtp.client-ip=185.125.25.14
+	s=arc-20240116; t=1764350543; c=relaxed/simple;
+	bh=P6UIVr2CNd4ad7Fu1upHIBzuTPQC7fing/byQ1HTTrc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aMQbQVRJOQK2HR4ki005zpupQsOUhkmFMLo90760WnjZ0O9qmo+ZnVey8hC12QKkhMBGswm37i9h3/U73Xp4sYTzaUSzDfq2mZ5SULRNHTggwh8b69DyMUECeURqYM2pI9kYNS5/6RTyArhESUrfbH7FSLeNzwwgwfiXmXKyggE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=RGQoObzu; arc=none smtp.client-ip=83.166.143.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dHzwj6RxkzRgw;
-	Fri, 28 Nov 2025 17:56:53 +0100 (CET)
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dJ0Tw4jyCz5Dj;
+	Fri, 28 Nov 2025 18:22:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1764349010;
-	bh=TIpd7YF1NtXKZclZu6eTYoVD0AdCSNp5YWfa6nAMZ20=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jt6Llu3akl54ddEx8Bwglt1lMVV+uWolhvalHwqVIYJ3bgKp4rYmZkErAEEk6ljx3
-	 Z6SqrkaJwx77VESFX+HrCqxrX3LfmB6dYyeHwJvUQlYZPQTFm8KOSMEI+CPygnoHD7
-	 WxvVwaWR4M2uejr8Mx1mfuidwHjuoTBGNbywdEpE=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dHzwd2kqsz1BPK;
-	Fri, 28 Nov 2025 17:56:49 +0100 (CET)
-Date: Fri, 28 Nov 2025 17:56:39 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Tingmao Wang <m@maowtm.org>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Ben Scarlato <akhna@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Justin Suess <utilityemal77@gmail.com>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
-	Paul Moore <paul@paul-moore.com>, Song Liu <song@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	s=20191114; t=1764350532;
+	bh=iaAABCSbs4TYzo2GswVcvmxZzq7Ib83Nu4YA+H9Sx3o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RGQoObzuNjoGHzARj+mFO5BRVuoUsij/20wM9sLmHM+ptWQANMtx3C4f9OLyshK8L
+	 Ve9JcRlRNgkzVREHQ52l79/g9Jf7h4rHtVvUPL10MqEzu6THg6BmP5p/73VLJzPESa
+	 6QsOfZcrBrfbAC6kFL934GFXrCO4NopynzG5oiS0=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dJ0Tv5hpgz3tl;
+	Fri, 28 Nov 2025 18:22:11 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Tingmao Wang <m@maowtm.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Ben Scarlato <akhna@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Justin Suess <utilityemal77@gmail.com>,
+	Matthieu Buffet <matthieu@buffet.re>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	NeilBrown <neil@brown.name>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Paul Moore <paul@paul-moore.com>,
+	Song Liu <song@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] landlock: Fix handling of disconnected directories
-Message-ID: <20251128.oht7Aic8nu9d@digikod.net>
-References: <20251126191159.3530363-1-mic@digikod.net>
- <20251126191159.3530363-2-mic@digikod.net>
- <adf1f57c-8f8e-45a9-922c-4e08899bf14a@maowtm.org>
+Subject: [PATCH v5 0/4] Landlock: Disconnected directory handling
+Date: Fri, 28 Nov 2025 18:21:55 +0100
+Message-ID: <20251128172200.760753-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <adf1f57c-8f8e-45a9-922c-4e08899bf14a@maowtm.org>
 X-Infomaniak-Routing: alpha
 
-On Fri, Nov 28, 2025 at 01:45:29AM +0000, Tingmao Wang wrote:
-> Hi Mickaël,
-> 
-> I think this implementation makes sense - to me this feels better than
-> ignoring rules between the leaf and the mount when disconnected, given the
-> interaction with domain checks.  This approach is also simpler in code.
-> 
-> However, there is one caveat which, while requiring a slightly problematic
-> policy to happen in the first place, might still be a bit surprising: if,
-> for some reason, there are rules "hidden" in the "real" parent of a (bind)
-> mounted dir, a sandboxed program that is able to cause directories to be
-> disconnected (for example, because there are more bind mounts within the
-> bind mount, and the program has enough rename access (but not read/write))
-> may be able to "surface" those rules and "gain access" (requires the
-> existance of the already questionable "hidden" rule):
+Hi,
 
-The crux of the issue is indeed the policy.
+This patch series fixes and test Landlock's handling of disconnected
+directories.
 
-> 
->   root@g3ef6e4434e3a-dirty /# mkdir -p /hidden/bind1_src /bind1_dst
->   /# cd hidden
->   /hidden# mount --bind bind1_src /bind1_dst
->   /hidden# mkdir -p bind1_src/bind2_src/dir bind1_src/bind2_dst
->   /hidden# mount --bind /bind1_dst/bind2_src /bind1_dst/bind2_dst
->   /hidden# echo secret > bind1_src/bind2_src/dir/secret
->   /hidden# ls -la /bind1_dst/bind2_dst/dir/secret 
->   -rw-r--r-- 1 root root 7 Nov 28 00:49 /bind1_dst/bind2_dst/dir/secret
->   /hidden# mount -t tmpfs none /hidden
->   /hidden# ls .
->   bind1_src/
->   /hidden# ls /hidden
->   /hidden# LL_FS_RO=/usr:/bin:/lib:/etc:. LL_FS_RW= LL_FS_CREATE_DELETE_REFER=./bind1_src /sandboxer bash
->                                         ^ this attaches a read rule to a "invisible" dir
->   Executing the sandboxed command...
->   /hidden# cd /
->   /# ls /hidden
->   ls: cannot open directory '/hidden': Permission denied
->   /# cd /bind1_dst/bind2_dst/dir       
->   /bind1_dst/bind2_dst/dir# cat secret
->   cat: secret: Permission denied
->   /bind1_dst/bind2_dst/dir# mv -v /bind1_dst/bind2_src/dir /bind1_dst/outside
->   renamed '/bind1_dst/bind2_src/dir' -> '/bind1_dst/outside'
->   /bind1_dst/bind2_dst/dir# ls ..
->   ls: cannot access '..': No such file or directory
->   /bind1_dst/bind2_dst/dir# cat secret
->   secret
+This fifth version improve a comment and add more tests.
 
-This is valid, but in this case access to secret is explicitly allowed
-by the policy, even if the related path is no longer reachable.
+This approach is not perfect but it is the best we found:
+https://lore.kernel.org/r/20251128.oht7Aic8nu9d@digikod.net
 
-> 
-> Earlier I was thinking we could make domain check for rename/links
-> stricter, in that it would make sure there are no rules granting more
-> access on the destination than what's granted by the "visible" rules on
-> the source even if those rules are "hidden" within the fs above the
-> mountpoint.  This way, the application would not be able to move the
-> source's parent to cause a disconnection in the first place.  However, I'm
-> not sure if this is worth the complication (e.g. in the case of exchange
-> rename, source is also the destination, and so this check needs to also
-> check that there are no "hidden" rules on the source that grants more access
-> than the "visible" rules on the destination).
-> 
-> I see another approach to mitigate this - we can disallow (return with
-> -EXDEV probably) rename/links altogether when the destination (and also
-> source if exchange) contains "hidden" rules that grants more access than
-> the "visible" rules.  However this approach would break backward
-> compatibility if a sandboxer or Landlock-enlightened application creates
-> such problematic policies (most likely unknowingly).
-> 
-> Stepping back a bit, I also think it is reasonable to leave this issue as
-> is and not mitigate it (maybe warn about it in some way in the docs),
-> given that this can only happen if the policy is already weird (if the
-> intention is to protect some file, setting an allow access rule on its
-> parent, even if that parent is "hidden", is questionable).
+Previous versions:
+v4: https://lore.kernel.org/r/20251126191159.3530363-1-mic@digikod.net
+v3: https://lore.kernel.org/r/20250719104204.545188-1-mic@digikod.net
+v2: https://lore.kernel.org/r/20250711191938.2007175-1-mic@digikod.net
+v1: https://lore.kernel.org/r/20250701183812.3201231-1-mic@digikod.net
 
-I agree.
+Regards,
 
-> 
-> Not sure which is best, but even with this issue this patch is probably
-> still an improvement over the existing behavior (i.e. the one currently in
-> mainline, where if the path is disconnected, the "hidden" rules are used
-> and any "normal" rules from mnt_parent and above are ignored).
-> 
-> Reviewed-by: Tingmao Wang <m@maowtm.org>
+Mickaël Salaün (3):
+  landlock: Fix handling of disconnected directories
+  landlock: Improve variable scope
+  selftests/landlock: Add disconnected leafs and branch test suites
 
-Thanks for the deep analysis!
+Tingmao Wang (1):
+  selftests/landlock: Add tests for access through disconnected paths
 
-> 
-> Kind regards,
-> Tingmao
-> 
+ security/landlock/errata/abi-1.h           |   16 +
+ security/landlock/fs.c                     |   43 +-
+ tools/testing/selftests/landlock/fs_test.c | 1474 +++++++++++++++++++-
+ 3 files changed, 1512 insertions(+), 21 deletions(-)
+ create mode 100644 security/landlock/errata/abi-1.h
+
+-- 
+2.51.0
+
 
