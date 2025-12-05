@@ -1,90 +1,104 @@
-Return-Path: <linux-security-module+bounces-13237-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13235-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36309CA7C50
-	for <lists+linux-security-module@lfdr.de>; Fri, 05 Dec 2025 14:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E7DBCA7966
+	for <lists+linux-security-module@lfdr.de>; Fri, 05 Dec 2025 13:38:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 959E7324A350
-	for <lists+linux-security-module@lfdr.de>; Fri,  5 Dec 2025 13:29:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 092BB3005EA6
+	for <lists+linux-security-module@lfdr.de>; Fri,  5 Dec 2025 12:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BE53358A2;
-	Fri,  5 Dec 2025 13:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D650B32F767;
+	Fri,  5 Dec 2025 12:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="vqE0mVUn"
+	dkim=pass (1024-bit key) header.d=duck.com header.i=@duck.com header.b="T6FNl+5H"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [84.16.66.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-outbound7.duck.com (smtp-outbound7.duck.com [20.67.222.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF8233A02B
-	for <linux-security-module@vger.kernel.org>; Fri,  5 Dec 2025 13:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427DC3176FD
+	for <linux-security-module@vger.kernel.org>; Fri,  5 Dec 2025 12:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=20.67.222.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764941253; cv=none; b=ifUlSIKhtufaXpOtIcNOzh/WCodlCMqOVA8wQYCjxoxQrSY436xu6M23k6Zw21JZkpsALYEuiInN74vTe9RaKiaz3Bj/Ze+/lfPNhlrnoVpoTlbc3HrN3m5GIJaSR1pQJq05pNyMTAH8aAU6sYNeX/ka6wzSihEqr++02NgBkU4=
+	t=1764938133; cv=none; b=Pj7gXya+HOkW8eSetxTAxrTpo2b7wmTmZnaMdJJO6K7Z9eBmfoIqieFhtr04EuCEqqbKxOd9itFeL8ZVdldAKEnWjEGLV/x6ZCnFSs21cYbof/GZ246c2EHYc3ml9wIeytzF7m22WGntLVOe15BfUtEHEO65DDKYGlF2sSgFuG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764941253; c=relaxed/simple;
-	bh=oJFbKKZFPUtKDtfFc5ZkZLzx5D0XO1U0HGAmgB8977w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PHCqos4vxOdFGdlXO4OEd3UXIFbth/+Q/CRQ1nKzJ/5zuBrf2qtcDopNvITndqWxkoGMJh2etKy3x1FqIAtCs/Jx8/m9w/GpFjneNvPDF6qL0IEErR8+VD9Ax+EvT3ipzK1m6tqcpnBE9vyOAzUq2b6eVxfha+NUXn7Itm4zQMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=vqE0mVUn; arc=none smtp.client-ip=84.16.66.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dN89k1rXFz9Tl;
-	Fri,  5 Dec 2025 12:22:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1764933754;
-	bh=P7/SNAvxehwVySP+J4NNT2Hdq+hxaMMqD0lo7cddUcc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=vqE0mVUnSM4UZCPZcgCu2F4xkyPs5mQT0Y/VaW24U024sffblrIcwmoPed7J0jh3y
-	 VpxN9jqrBz2Z2qQDQUOquhBhALXPsG+T8lmDhiu9JOkKQ/naYc7StSj3Z2i8m3/29a
-	 z/Bm+nXLgFKydnOHNr6NbmvV9PQz1bk1rNveBxxE=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4dN89j4GJxzTs2;
-	Fri,  5 Dec 2025 12:22:33 +0100 (CET)
-Date: Fri, 5 Dec 2025 12:22:28 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: landlock@lists.linux.dev
-Cc: oss-security@lists.openwall.com, linux-security-module@vger.kernel.org, 
-	lwn@lwn.net
-Subject: Island: Sandboxing tool powered by Landlock
-Message-ID: <20251205.saiZ2Pauleew@digikod.net>
+	s=arc-20240116; t=1764938133; c=relaxed/simple;
+	bh=Hx3WVft33VG5sni4+hebJOysxL8mSnognrrBb4rEePM=;
+	h=Subject:References:MIME-Version:Content-Type:To:Cc:Message-ID:
+	 Date:From; b=crOKgeeD/VmavBOnZZNrJH9mMYAlpcIt419DqJSOnKhJYsT7dIGMqlGjRHm2Vqd/5fXn2mwtiXJxAnOraoM1Z4/iYFPO4N1qFPYsnt6mVM/1XGMlVzf8O270bGZmvFt7SGya6x4u+01h7HVscPx8oDzLU+gJFDkZyyo0mR54USg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=duck.com; spf=pass smtp.mailfrom=duck.com; dkim=pass (1024-bit key) header.d=duck.com header.i=@duck.com header.b=T6FNl+5H; arc=none smtp.client-ip=20.67.222.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=duck.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=duck.com
+Subject: Re: [oss-security] Island: Sandboxing tool powered by Landlock
+References: <20251205.saiZ2Pauleew@digikod.net> <303DA753-37EF-4530-AA63-4C3579E9A454.1@smtp-inbound1.duck.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Bar: -
+X-Rspamd-Report: DMARC_POLICY_ALLOW(-0.5) R_DKIM_ALLOW(-0.2) MIME_GOOD(-0.1) R_SPF_ALLOW(-0.2)
+X-Rspamd-Score: -1
+X-Rspamd-Action: no action
+To: "oss-security@lists.openwall.com" <oss-security@lists.openwall.com>
+Cc: "landlock@lists.linux.dev" <landlock@lists.linux.dev>,
+ "linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>,
+ "lwn@lwn.net" <lwn@lwn.net>
+Received: by smtp-inbound1.duck.com; Fri, 05 Dec 2025 07:35:29 -0500
+Message-ID: <EA19FE16-EB55-4DF0-8F53-04C2B83EA2E6.1@smtp-inbound1.duck.com>
+Date: Fri, 05 Dec 2025 07:35:29 -0500
+From: kf503bla@duck.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duck.com; h=From:
+ Date: Message-ID: Cc: To: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: References: Subject; q=dns/txt; s=postal-KpyQVw;
+ t=1764938129; bh=Hx3WVft33VG5sni4+hebJOysxL8mSnognrrBb4rEePM=;
+ b=T6FNl+5H/khTbCqgtgcyaGFHHG6UjSslO2uQ9kRPRUOBYzUnrPQFWGck0nO9erf6CsGvA74UJ
+ FrYimahGawclwNjPd9owXRokzjXNYThgg/2eBpO+h1lJpdvEqiBQgGlWW+W+BnO2fpnrwxG4xX8
+ w8eQuOs2bu6q4syfCLl99yA=
 
-Hi,
+Why would you publish it on github? Please consider codeberg or src hut.
 
-I just released Island, a sandboxing tool powered by Landlock:
-https://github.com/landlock-lsm/island
 
-Island makes Landlock practical for everyday workflows by acting as a
-high-level wrapper and policy manager.  Developed alongside the kernel
-feature and its Rust libraries, it bridges the gap between raw security
-mechanisms and user activity through:
-- Zero-code integration: Runs existing binaries without modification.
-- Declarative policies: Uses TOML profiles instead of code-based rules.
-- Context-aware activation: Automatically applies security profiles
-  based on your current working directory.
-- Full environment isolation: Manages isolated workspaces (XDG
-  directories, TMPDIR) in addition to access control.
-- Transparent shell integration: Automatically sandboxes commands in
-  your shell without changing your workflow.
-- Zero-privilege operation: No root access or special capabilities
-  required.
-- Layered protection: Multiple profiles compose cleanly with
-  deterministic ordering.
 
-It's a work in progress, so be careful.
 
-Feedback welcome!
+Sent with Proton Mail secure email.
 
-Regards,
- Mickaël
+On Friday, December 5th, 2025 at 5:14 PM, Micka=C3=ABl Sala=C3=BCn =
+<mic_at_digikod.net_kf503bla@duck.com> wrote:
+
+>=20
+>=20
+> Hi,
+>=20
+> I just released Island, a sandboxing tool powered by Landlock:
+> https://github.com/landlock-lsm/island
+>=20
+> Island makes Landlock practical for everyday workflows by acting as a
+> high-level wrapper and policy manager. Developed alongside the kernel
+> feature and its Rust libraries, it bridges the gap between raw security
+> mechanisms and user activity through:
+> - Zero-code integration: Runs existing binaries without modification.
+> - Declarative policies: Uses TOML profiles instead of code-based rules.
+> - Context-aware activation: Automatically applies security profiles
+> based on your current working directory.
+> - Full environment isolation: Manages isolated workspaces (XDG
+> directories, TMPDIR) in addition to access control.
+> - Transparent shell integration: Automatically sandboxes commands in
+> your shell without changing your workflow.
+> - Zero-privilege operation: No root access or special capabilities
+> required.
+> - Layered protection: Multiple profiles compose cleanly with
+> deterministic ordering.
+>=20
+> It's a work in progress, so be careful.
+>=20
+> Feedback welcome!
+>=20
+> Regards,
+> Micka=C3=ABl
+
 
