@@ -1,123 +1,137 @@
-Return-Path: <linux-security-module+bounces-13501-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13503-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D113ACBF486
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 18:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 11F5CCBF9CF
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 20:55:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0FDB3300D156
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 17:46:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 002543053283
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 19:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBFC2D6E71;
-	Mon, 15 Dec 2025 17:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13CF532860F;
+	Mon, 15 Dec 2025 19:43:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nbVecw4j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQfJY1B4"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C1E22068D
-	for <linux-security-module@vger.kernel.org>; Mon, 15 Dec 2025 17:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A6132860A;
+	Mon, 15 Dec 2025 19:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765820760; cv=none; b=Baj1HoW3ocoCRHFzp6Mz3AynD7V2WcBS5dwR+Ceh3cnbRH18yBaeVMNfm9VAk/BanFvVpQyix2lVBIb+AjudGkWIELtmhxY2OIRUFmwYzpY5E6mdsAempgwub52W7CYC5pf0bs1cQ41pRez98phbE6oBC947fO0nkUY6ecQvO2Q=
+	t=1765827807; cv=none; b=CYh7aeVqU7sMAqmmTgO6bl8y+1R4Alhd8qop8bW+kr/kmnCdVbEz1m0SVlUqhJBj8PBZ+o/5d3f/h6ImVzWIAAAM2F4jVJvPZ28Pa1XUJNGWRRpDiUL8pUOKpetiQx8NbaiRHseJw8uXxdgDVIlTbTiDAjNYd+0OaJjkF1vfKQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765820760; c=relaxed/simple;
-	bh=aYrTt9D8MKq+zjjyW0pVCKBpgOeDzFVAhdtV7GIBWxc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BASrpxN/R83ArpHf7mWxrk/xm3/xzHPh2nwuaVwX/QQK6Mh4JsXQTXspHXA3ahTFcKnF4azlH/U4IqZLcgpmy2B1JKnQ/6vcXuyfIt36NNbxiHqXXzYEdRHOGQBqyyCnkvg/5HH5bUBS6hAwio8Ejbf3baqA+zVHm2oZnF7pqJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nbVecw4j; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-34b75fba315so3181673a91.3
-        for <linux-security-module@vger.kernel.org>; Mon, 15 Dec 2025 09:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765820758; x=1766425558; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B8gAlOJLXsZJ6S8BYRXwAkXE7FMVUf7e3keU7azU8fg=;
-        b=nbVecw4jf7m2ycZSAB48mj+E1aNwnwnkyWemYVGI5adJ3pW+xRh5nlFTadKLKLF5CD
-         JUbi0027akMnnBIuAmb0KH5gIRqcKTa4kSSU50FN+knL4X8iEiRS8EqdzjN4mI+7KsoG
-         0S6TyBAAdQqY0BuukbVgX/5MLrt2rkRJbwqhzAm7lpSrCDlpUTbS1diYp0WtUjCMz9sR
-         uouKg71q21g70VsXqVtxDKX3/CLrEwPlO/WJnD+FSBzPa1dqRqrvSihjY8S8YOWdONG+
-         IXz4b1VdqrZNlILxYenesdk60QnlDTEgqnAy8PVYicff272tSZCtEt0QD+YpLDRqlLzk
-         XI/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765820758; x=1766425558;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=B8gAlOJLXsZJ6S8BYRXwAkXE7FMVUf7e3keU7azU8fg=;
-        b=JKPNYmjLdaZbBLfnVPae61N89ZluqV+uYlGeVoNeis8jf7wA5ndh8CWWWbY1YpHZST
-         8C4GOUWRGzOoPEFqz6z3ofaQ+QoBlkH+6SghQbjXrdoXUw1C3d2xsbpuGhEsXjr7EPPP
-         bi88b+ZvSrlg6t7LKoxlJxL0VoSt6toB1vUS8Viaps3yRTawt+m6RnnuJA3KvrjpXI5s
-         FfUpOTzdQe6tC8lSn3gGIU0+5YSLWQxQDaM+LCg+ST/uDE9DuT5lr2IzBqd/Go1iBXkO
-         43rnMgtjMislMbMSF5X82e9XTGJegf/k/X8ykjT3JmwlegLrY6HMBGvolC00vsFQ9o0K
-         g52A==
-X-Forwarded-Encrypted: i=1; AJvYcCUWRb0fbcn7ySmIR6VJQYrHLLukbKSDUUdnJgs6kG/W8fePPawnS40EYlo2IOSGq0j7Dvm1NYL1fkW4REkJNAbf0zWlxCE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3aV0uH3f/imFOmJt1MjYaAzGXQzm3hmNVixYpOX2+KUPOSPwS
-	EodDXyTDvlz8UsebMQAcT5/QHpZh/Qqw23xbR6YeM63b3SK6oTpBo4wG
-X-Gm-Gg: AY/fxX77IQIXRZM72wtcKpSoyGCNrP7M2DUf81bPpcO24Ksf5jylDUj+oZoabKcWIvR
-	HjpMlFldjSxh5g+QQLiajY9gOzgQ2b3nZ36nVTHc5dvCLlR2tjUBxs7crlZZCOXLuFsnjqXAYOd
-	OjL2cNt0SVydoFHqJMNyp9DNE00hEBpfvE+6jY2fyECV6+BaDWbHEGzh9NVy2qhtgTfz7vUb7Q4
-	1FTh5fRLODU49hy5ijEf9leEmcA3AM+7d74IrmlbNi/ffu+UmGcV6IP3c+zmu3d/Ht1Sn94HFjw
-	kueN2FHo0245mBnsQvdDPmZ0L/CTaN3230sNzeBvdiuCBVg6t6LH+5YHw6VEBofpiQucPnetBcA
-	yLTLRCAhzXORVJhpxhxGEAeJKDEpiOBWw3bdbqfww+QT3BueZDVcwJn1Jr01HvXUliTdRPptObF
-	q6gFJRZi+FQfwAO67aIgGO21NPznIsekKYvZH6pT1K2A0KZOdGGuZF57XmHLbDoM7nCA9EpQcYP
-	HPOHWk=
-X-Google-Smtp-Source: AGHT+IFmt3L3m0vzaclxKT/EjpoHTKVzh/8Nr2SELf/F1FfzF8lXdwvt3LIRhMP3R/xg30Kdhr/n1g==
-X-Received: by 2002:a17:90b:3949:b0:32e:a10b:ce33 with SMTP id 98e67ed59e1d1-34abe478148mr9761921a91.21.1765820757864;
-        Mon, 15 Dec 2025 09:45:57 -0800 (PST)
-Received: from kailas.hsd1.or.comcast.net ([2601:1c2:982:6040:274f:618c:1657:f235])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34abe200077sm9623156a91.3.2025.12.15.09.45.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 09:45:57 -0800 (PST)
-From: Ryan Foster <foster.ryan.r@gmail.com>
-To: bboscaccy@linux.microsoft.com
-Cc: James.Bottomley@HansenPartnership.com,
-	akpm@linux-foundation.org,
-	bpf@vger.kernel.org,
-	corbet@lwn.net,
-	dhowells@redhat.com,
-	gnoack@google.com,
-	jmorris@namei.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux@treblig.org,
-	mic@digikod.net,
-	paul@paul-moore.com,
-	serge@hallyn.com,
-	Ryan <foster.ryan.r@gmail.com>
-Subject: Re: [RFC 00/11] Reintroduce Hornet LSM
-Date: Mon, 15 Dec 2025 09:45:50 -0800
-Message-ID: <20251215174550.19519-1-foster.ryan.r@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251211021257.1208712-1-bboscaccy@linux.microsoft.com>
-References: <20251211021257.1208712-1-bboscaccy@linux.microsoft.com>
+	s=arc-20240116; t=1765827807; c=relaxed/simple;
+	bh=1818rPQS9rLRu83VuxQ+h/HCQ5TQatiiaGQ7D4cXuak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e5zZBg204A5IJLNiuRaQtcqzJCNMp/T3Sr9LdSAfzn2uTh4wcvf4IdGiFawpmYPMvFPcBxry2HzO3Ft3p5z2KDvRr63vb35FSLwnb+oq9nxNuzueFgl4MnwoT2p1kNN4mt6eeLyLJ8HH7wriZAcc+HEB7qTiL3H9lT1U7a3bxoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQfJY1B4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96181C4CEF5;
+	Mon, 15 Dec 2025 19:43:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765827806;
+	bh=1818rPQS9rLRu83VuxQ+h/HCQ5TQatiiaGQ7D4cXuak=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dQfJY1B4MZuT0NmsC+jszc1MnyjvyjEcJlSgHR+PLS/ofnZcBYjACuHcsDFApeySO
+	 3Y5cDNmEcaif+x6f4YBDKJMECEc/RIHeVmNC+BUzi4qXwATP/uTVWZDJDfiXY+Ms3w
+	 T/ka5L28Z7RWrfr7K4iMY7CbVTiT8lrYDNPBMNeZqpZXX3GJTZVKawPjEKD3omVqXQ
+	 tenWZC9y/UrlH5WbuL65gThtapYRNHyDVQZe857CO/ohma5cMlNm31gqLPrIqEx0qJ
+	 8W84RrZdekBf4AEk3riLBWmXuWr9IQssAP9Cb2298x+5BK9rY5Ic/TBRfp5cAa0irq
+	 XNdG6Xu9T8IaQ==
+Date: Mon, 15 Dec 2025 21:43:22 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	"open list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KEYS: trusted: Use get_random-fallback for TPM
+Message-ID: <aUBk2nUpd2V8p9qc@kernel.org>
+References: <20251214213236.339586-1-jarkko@kernel.org>
+ <64e3e4e0a92848fd3b02a213c754f096d2026463.camel@HansenPartnership.com>
+ <aT-uHgyYw3XhFasi@kernel.org>
+ <60cf8bd2afbad5e930119d73ccf069e95ee4fd9d.camel@HansenPartnership.com>
+ <aT_Lh8l3E2yQJYI7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aT_Lh8l3E2yQJYI7@kernel.org>
 
-From: Ryan <foster.ryan.r@gmail.com>
+On Mon, Dec 15, 2025 at 10:49:15AM +0200, Jarkko Sakkinen wrote:
+> On Mon, Dec 15, 2025 at 04:55:58PM +0900, James Bottomley wrote:
+> > On Mon, 2025-12-15 at 08:43 +0200, Jarkko Sakkinen wrote:
+> > > On Mon, Dec 15, 2025 at 07:18:41AM +0900, James Bottomley wrote:
+> > > > On Sun, 2025-12-14 at 23:32 +0200, Jarkko Sakkinen wrote:
+> > > > > 1. tpm2_get_random() is costly when TCG_TPM2_HMAC is enabled and
+> > > > > thus its use should be pooled rather than directly used. This
+> > > > > both reduces latency and improves its predictability.
+> > > > > 
+> > > > > 2. Linux is better off overall if every subsystem uses the same
+> > > > > source for the random bistream as the de-facto choice, unless
+> > > > > *force majeure* reasons point to some other direction.
+> > > > > 
+> > > > > In the case, of TPM there is no reason for trusted keys to invoke
+> > > > > TPM directly.
+> > > > 
+> > > > That assertion isn't correct: you seem to have forgotten we had
+> > > > this argument six or seven years ago, but even that was a reprise
+> > > > of an even earlier one.  Lore doesn't go back far enough for the
+> > > > intermediate one on the tpm list, but the original was cc'd to
+> > > > lkml:
+> > > > 
+> > > > https://lore.kernel.org/all/1378920168.26698.64.camel@localhost/
+> > > > 
+> > > > The decision then was to use the same random source as the key
+> > > > protection.  Unfortunately most of the active participants have
+> > > > moved on from IBM and I don't have their current email addresses,
+> > > > but the bottom line is there were good reasons to do trusted keys
+> > > > this way that your assertions above don't overcome.  I'm not saying
+> > > > we shouldn't reconsider the situation, but we need a reasoned
+> > > > debate rather than simply doing it by fiat.
+> > > 
+> > > The way I see this is that given that kernel is not running inside
+> > > TPM, FIPS certification of the RNG does not have any measurable
+> > > value.
+> > > 
+> > > Random data generation should happen as part of object creation
+> > > process i.e. should be fully self-contained process within the TPM in
+> > > order for FIPS to matter.
+> > 
+> > In FIPS terms, there's no distinction between keeping the whole
+> > generation process internal to the TPM and using the FIPS certified rng
+> > of the TPM to source the contents of a kernel protected key.  Both
+> > provide equally valid, and FIPS certified data.
+> 
+> I understand being "FIPS certified" embedding the premise that kernel
+> is also FIPS certified, which covers also crypto etc. This is the case
+> with enterprise kernels.
+> 
+> I have understanding FIPS certification dies at the point when random
+> data is acquired by a kernel, which is not FIPS certified. It's not 
+> really a safe closure.
+> 
+> Using same code path for RNG universally should actually help with any
+> certification processes.
 
-Hi all,
+I think there is misunderstanding with FIPS.
 
-I want to confirm I understand the current semantics, and specific issues this series is addressing.  
+Having FIPS certificated RNG in TPM matters but it only matters only in 
+the sense that callers can be FIPS certified as they use that RNG as a 
+source.
 
-In the signed BPF two step flow, the LSM makes decisions using what is known at the time of run hooks.  At load time, the only clear fact is "the loader is signed".  However, if we really want integrity for "the final program that will execute after relocation, and any inputs as part of the contract, matches what was signed".  The fact exists after loader runs, so the kernel could end up allowing and auditing based on the signed loader, even though it cannot yet truthfully say the runnable payload has been verified.
+Using FIPS certified RNG does not magically make callers be FIPS 
+ceritified actors. The data is contaminated in that sense at the point
+when kernel acquires it.
 
-If this is the right understanding, perhaps we could consider a design that moves enforcement to the moment the program becomes effective. E.g.  Load can create a program object, but it is inert by default.  The kernel should only allow attach or link creation if the kernel has already recorded a verified record of the final relocated instruction stream plus referenced state for inputs, is included in the "integrity contract".  
-
-If the referenced state is mutable, then either state must be frozen before the contract is verified, or any mutation must invalidate verified and force re-verification and a new policy decision. Otherwise the state is susceptible to TOCTOU issues.
-
-Is this the semantic goal Hornet is aiming for, and is attach or link creation the intended enforcement point for the "cannot become effective until verified" rule, instead of trying to make a load time hook represent final payload verification? 
-
-Thanks,
-Ryan
+BR, Jarkko
 
