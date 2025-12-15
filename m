@@ -1,126 +1,145 @@
-Return-Path: <linux-security-module+bounces-13500-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13502-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B9F6CBF3B3
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 18:26:40 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 707E4CBF518
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 18:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EA01A30287E9
-	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 17:21:04 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6DB2A3008565
+	for <lists+linux-security-module@lfdr.de>; Mon, 15 Dec 2025 17:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5FA2DE6FB;
-	Mon, 15 Dec 2025 17:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53ECE322B8E;
+	Mon, 15 Dec 2025 17:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="cB7fvNlV"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [67.230.224.160])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC0E28466F
-	for <linux-security-module@vger.kernel.org>; Mon, 15 Dec 2025 17:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.230.224.160
+Received: from sonic301-38.consmr.mail.ne1.yahoo.com (sonic301-38.consmr.mail.ne1.yahoo.com [66.163.184.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B973322B8F
+	for <linux-security-module@vger.kernel.org>; Mon, 15 Dec 2025 17:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765819263; cv=none; b=iGKt8rNx7O38TvthypRn423HV4ovx8k1CZeCMQvmkOdGQSjnnqpWPl+tCNxzblnnmGg/zzx1T67mACfgA7R1eI+ezvplCR0pT7EycNuMcmJLQR8Wsxv2eYYLJ2T6m65NydqCrpLnBtXZqceogsK4Od8pG+AxBBkmb5323FgytuQ=
+	t=1765821305; cv=none; b=lp0Hzxd6g/lRJOQsbSziemXgrsLi3z172ToniFJUgXv4FKKNzRwQsnb2g8KEROmmal4gGeT1hFo7kpWDM6O4AHnN2cOhcvBt0qoVwWZoadZDJ4RZgOGyOn8OUZmDZJp9gZukX+FBdYm1OYkcIRCbV5q9eZ0YKHEQLvjojOZtjLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765819263; c=relaxed/simple;
-	bh=2D1E8cnZ2EHY1RUVdG07pimBEVIvWUt5lrRmjG50N40=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gCCfgQt5hlvEbS/Gz5nPs4XrIeQQQGa68mF+ZTmCKFa9zUXS2zQmCNw/zufyv0G+hZXBGjUmHmqWp3NPyYNnkT9Ztgx/huNiGjh2oxF73VovfkH+sjhYrC8EqwT4A+aGmWPYpTaWQqkDJrmRozIOiaba+4z09GP+hGwSmOs0K60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=67.230.224.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 5BFGvKec012547;
-	Mon, 15 Dec 2025 10:57:20 -0600
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 5BFGvHgD012546;
-	Mon, 15 Dec 2025 10:57:17 -0600
-Date: Mon, 15 Dec 2025 10:57:17 -0600
-From: "Dr. Greg" <greg@enjellic.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-security-module@vger.kernel.org, corbet@lwn.net
-Subject: Re: A formal request for process clarifications.
-Message-ID: <20251215165717.GA12485@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20251215070838.GA7209@wind.enjellic.com> <CAHk-=whqzs-3u6Y7UC03A_XJEy6H1kNWvFO_A8jqsuob7SZCLA@mail.gmail.com>
+	s=arc-20240116; t=1765821305; c=relaxed/simple;
+	bh=rwwp1VUZT+vawFd4KpFBqiBkY5J2v5L9dvzSpW2W4no=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O1DeQnL/m6BauoW4p05Ouq92m6Zw7m974/qJAIb9uFO+VaPeJ7UX611BDnlcibj/dwREOHbB3SvtgD4m9FnXLNEz1ijpNVAGJPtavVQ8AFwIx1FUlYuloeZFFZds5hq7Eq6MNaXjrnuu0iJ+QJHE5nOPV82O+YdQwlZqTrwSkeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=cB7fvNlV; arc=none smtp.client-ip=66.163.184.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1765821300; bh=/ymUV8GA5Ky8RGJPy2v5lkVFzajWccp9EcJbhcHuJUI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=cB7fvNlVTPoFnB6y0dLym1EwKuXUQ23MobeNZdgJZ1hNAt1dzipdtLXrZ/XTZFoIxXwG4lS41CR64qwQxNtTQGm69gPwmQ4GgE7Z93GgIq4DRFHl2ZjZzEu1VWevdgjh4M61sd68jaig/5V4looIgNejuFY8UI42pfi/5jvEONe5XeSLcTplemcpoDOlkbsuzCHTzRDCu3J0C1VnmJ5/zDWc1iEVXiZ6YL4Ky2i4eaUyyK3CFx7d1+8XyD+iC7jhyaaWN2WCmVIuLy8+4H5b5JFhFhREkZ9Huj3EDq9SLuOp1sn7o6WLUqhEO+/dIS6v9Fgg9uq2Av95E4nsyNgiBA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1765821300; bh=+OLok3AKyOE4/mBJZZWu2six48p3OHGCbmtJVkD0s4+=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=AxBhBufKNaysBsZQZGF0ct0YsErr0GyiTBXSumwzvzesD4icQ+RlMZHnnMsk7Z+N1ENvDVmj2cZvE/y5gRI/Ni/NKwz3jUrDH5YjFgEFK3DFj/gzarJS5huJDX8IbHhy7VAFOWs/Ik2lpKbHObntNMYIkZenhygVYCdjebFZk2kR/zmIbQavbMb0jMUA9KWE2e8DM/GfR29hIJQW+x1EG22xuMNaShHDVySS+WkNV6qopJOyfplDxv1Jxpj3bl12n/t03bUOnqmxqsfbzOHof9MPUnIXEBvRCyG9noMxUkEaxatuO7lXC0oGTHrij+Y9s6R/3t1C2ekKzSPJPDDEGg==
+X-YMail-OSG: SWLTVVwVM1kkvRSmBYzp85OpjbbheAYA.kkl9G2nu7fnSDNGdNq6ZHDHOMt4gES
+ qXE9lF0qv3PYCLid9FkZpNEzpS3ahsCo0lzlS91QP7vkF4CNWWQ1Is12fyZ6Le_XcKWHjWe3rALO
+ CM6GJSIhlfLRyQ6Tl5gMV3sbxJzTHz_3wWX1NdEkqQUcfTONzYl6t3JKYUy6ErmKYZ.ZxAHv9VOH
+ Dm0OKq5B1OpLKOl0aRwptsSP0GAzSgJy.0X6nvBy3FKVWl7VBkCX0gsIKhhxeRnwzSfXwBwPJUg3
+ oxbN2jQeUebffbVPT39ybG2Ie2pgX57wLlSoU3I7OxbnElYf9esCvOHqAOwK3ZLYF.YcYC.khqrA
+ oTs31dpx0UvHWQZmGvYjD7sKhbNta1oPCGe0cLF0_XDAiZaU1Lu44EVyHYPyE1j8GSdC77VhLlSy
+ qQSDYnzW_AZdLa2VrEotasx1glb4WsjU8_WsLw6IvKzWHw2QCPJdAt.SZVWK1d1bF7A7b0m9eUtG
+ N2WwwHiuyJzJBZhPdY83LfIusVS7AeovEz2w1gNVVb6ybKLjFsH_hWqJ34Tcy86UWa.10_LbvB5N
+ BLFEmDC1NmkJaxVEWZnYWSZEfkRxlm_eSB0VC7JO8uQRVFRNFISIMLgVxZ_jc4uMGNqMp7UFmYWE
+ rRHS5D48CZORl6c2j7aM4Mm18.BW4JNCpyqVbBAi1EU8lf2ttBKjIPhYb026JowJMRrHPB4OtEPc
+ QMFiQ9fJDSzEidiiEJDY29xU8T5QmN.6n7RNw4GlRq6cgfBmUQAlZ1kf4Biva6eNDso2ldgcTyoC
+ 0MYQgywTyav53YI7yQHiFV6U3hiAwHmDKzpYZ7sf20dJH74bqxFvx6P8bBROb6gxEvOu340S9npl
+ RihwMqXa3.jcL53OSos5HFVf4CyIRATrGbDCyxDDdv6bTfAg9zFF7ZZnEaUEOlejkk.OaADWo1yR
+ AOiQkgFDG6FDz1TlIAJk2Wkps_985FyNAD.c3eSnE23wfZqDR5bnTxNM_Iv_H58CBz_Sn_q76wJH
+ g.toh9IuV6Ah9cQih7KlnvnszuvhbEZJz9SHGwrXjCBWjludT73wMmd1v1qwRbhaXALp6z07Y0wI
+ ATKMhM3RNamg.KnPmOQ_B0TIA0aX3znvXJwbcphtF3mviCAZppSX6gV2noUnXSf6skHObUrDePgz
+ l2nx9tI66HYuwcWKqr5pEmg_fPnjwchwtejpwG._FlnfEMvjdwYnWz1BAllTAbQiNkjGuI6lsOsu
+ ZEKBrNze1DjUVjtO6L7qAc3T.C_RSYT6jiM5WKjtVTUt3eyTEN3g7I3xTYxNw2NH9LerL6EOLq5A
+ klX_a0_0ir4TtVlxd6zUW8g855ke5iH56lItsXz6bPkDqJdgVmNno30RBgSLfbxeV4N4Tg9Bsvhd
+ PSaBEy3QpS5VLww3k1lk6fR996Tkj2whTy_ABhQXa0pBvNIc2siYft8jcqtichRB9GS_xpXQQhXZ
+ p.drue45GypUKs7QTn3op9IaFLfpcVVZ1JVwftgXIcvVQGpHRdgN5SEvrafdmSBnQxLzF4tp9x3w
+ ajTTAbs6nKrHtHRwjlUjQDWLrctoBwGTx3sJuo7wESn3mjk_HWRWun1gWCsxpwTScm4jmI6ZfB_6
+ Dl3pxWAqzdz0Q7fTLFRsXacNFEECgcPvxME7JUoyyDD2iN9dTYowpxmw.ikA7LJp8FeMjp.4uWcF
+ t5LdKEjRcH_szxlDFKsp7PquBYbvY_lV4m9FCsvk7kNbV12AGJybA_SlFDSA6O7t0_PaRGFDVX7Z
+ KI.iDg_YSO_GP4vjdoyxaU2j3fKe2Izdn.5HL1j6lCtUVHqvXMw74eIPh8gzqNYsGsWxyOwHaGwL
+ AZPvHhNGo7VRLmoxAOYddBvVieDNhpww.3Hl1uw.gaaH1KSA_kw5idRCVz6.qXMBgWeYpUghNYR9
+ WWzoYvYdkXgeM6rL39KMlY1aG_a3mHzRDYY77yw.TUJTHkLyS_.mdiMZV1XBhRoSMprdEnL0wh8p
+ 8r0ZB0uSt.ggJpC3ROqv3InKB92RGLHBG_jcl2mmZU2SHS27Rkso3QE0bX3ep_s0ltJNHJw9ugq1
+ hwGerKLfabE6ItI1pfm.GT755UcDsEazl2_EYEptPfFEN0IGUq_JA99eJib.nd_yDUvaevs3iaUa
+ Zcplafxbcx3W5Mt4DlIxuiXxzMX0OSc9T15j4pV0h6vlXL016I3aNNyhdXbO8sDaIOX592tCvTVh
+ 5tX95eXiPaQ3xl6EuiuZ7dd132KEaOHkPb6kPpAeISD4hOOB.GJl2grxTxFRQ7nBpNVGq0SHwkGM
+ -
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 1d2a3e02-982a-4fb8-89bb-99201a06fb02
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Mon, 15 Dec 2025 17:55:00 +0000
+Received: by hermes--production-gq1-54bf57fc64-7k4gx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b4dee8fbcbf5bd416f5b7b08f931448c;
+          Mon, 15 Dec 2025 17:44:51 +0000 (UTC)
+Message-ID: <932e4d17-5fd5-40d5-8c73-b52bf91104e6@schaufler-ca.com>
+Date: Mon, 15 Dec 2025 09:44:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whqzs-3u6Y7UC03A_XJEy6H1kNWvFO_A8jqsuob7SZCLA@mail.gmail.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Mon, 15 Dec 2025 10:57:20 -0600 (CST)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: An opinion about Linux security
+To: "Dr. Greg" <greg@enjellic.com>
+Cc: Timur Chernykh <tim.cherry.co@gmail.com>, torvalds@linux-foundation.org,
+ linux-security-module@vger.kernel.org
+References: <CABZOZnS4im-wNK4jtGKvp3YT9hPobA503rgiptutOF8rZEwt_w@mail.gmail.com>
+ <20251212054524.GA23417@wind.enjellic.com>
+ <950ac630-c75e-4d4c-ac70-5e4b0e397989@schaufler-ca.com>
+ <20251215045524.GA6104@wind.enjellic.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20251215045524.GA6104@wind.enjellic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.24866 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Mon, Dec 15, 2025 at 07:38:58PM +1200, Linus Torvalds wrote:
+On 12/14/2025 8:55 PM, Dr. Greg wrote:
+> On Fri, Dec 12, 2025 at 03:43:07PM -0800, Casey Schaufler wrote:
+>
+> Good morning Casey, pleasant as always to hear from you.
+>
+>> On 12/11/2025 9:45 PM, Dr. Greg wrote:
+>>> On Wed, Dec 10, 2025 at 03:15:39AM +0300, Timur Chernykh wrote:
+>>>
+>>> Good morning Timur, I hope this note finds your week having gone well.
+>>>
+>>>> Hello Linus,
+>>>>
+>>>> I'm writing to ask for your opinion. What do you think about Linux's
+>>>> current readiness for security-focused commercial products?  I'm
+>>>> particularly interested in several areas.
+>>> I don't expect you will receive an answer.
+>>>
+>>> Based on his previous comments and long standing position on this
+>>> issue, I believe it can be fairly stated that he looks at the LSM as
+>>> an unnecessary evil.
+>>>
+>>> So in his absence, some 'in loco parentis' reflections on the issues
+>>> you raise.
+>>>
+>>> I've been advised, more than once, that in this day and age, no one is
+>>> interested in reading more than a two sentence paragraph, so a short
+>>> response to your issues here and a bit more detail for anyone who
+>>> wants to read more, at the end.
+>>>
+>>> There is active art available to address the shortcomings you outline
+>>> in your post below.  Our TSEM LSM was designed to service the
+>>> realitities of the modern security environment and where it is going.
+>>> In a manner that doesn't provide any restrictions on how 'security'
+>>> can be implemented.
+>>>
+>>> We've done four releases over three years and we believe an unbiased
+>>> observer would conclude they have received no substantive technical
+>>> review that would support interest in upstream integration.
+>> Stop. Really, I mean it. I put significant effort into trying to teach
+>> you how to submit a patch set that could be reviewed. You ignored it.
+>> I can't speak to what an "unbiased observer" would conclude because
+>> your behavior has certainly left me with bias. Rather than writing
+>> full length novels about why you submitted patches the way you've
+>> done it you might consider heeding the advice. Grrr.
+> No, we are not going to stop, see immediately below.
 
-Good morning Linus, thanks for taking the time to respond.
+Rather than addressing the issues you again explain, in great detail,
+why you're right about everything. And I never hit the enter key with my
+pinky.
 
-> On Mon, 15 Dec 2025 at 19:13, Dr. Greg <greg@enjellic.com> wrote:
-> >
-> > Three years ago our team had submitted for review our TSEM LSM that
-> > provides a framework for generic security modeling,
-
-> If you can't convince the LSM people to take your code, you sure can't
-> convince me.
-> 
-> I already think we have too many of those pointless things. There's a
-> fine line between diversity and "too much confusion because everybody
-> thinks they know best". And the linux security modules passed that
-> line years ago.
-> 
-> So my suggestion is to standardize on normal existing security models
-> instead of thinking that you can do better by making yet another one.
-> Or at least work with the existing people instead of trying to bypass
-> them and ignoring what they tell you.
-> 
-> Yes, I know that security people always think they know best, and they
-> all disagree with each other, which is why we already have tons of
-> security modules.  Ask ten people what model is the right one, and you
-> get fifteen different answers.
-> 
-> I'm not in the least interested in becoming some kind of arbiter or
-> voice of sanity in this.
-
-First, to be very clear, we are not asking for any kind of
-intervention or arbitration on your part.
-
-Second and most importantly.  You've been belly-aching about this
-problem for as long as I can remember and you I go back to 1992
-together with Linux.
-
-You, and only you, can fix the problem if you want it fixed.  Issue an
-immediate statement that you will no longer accept any code that
-implements an 'LSM'.
-
-That will drive security development out of the kernel, which is where
-it is going to go eventually anyway OR it will drive the security
-community to try and fix what it considers to be the challenges with
-eBPF when it comes to building security solutions.
-
-Somewhat paradoxically in all of this, TSEM isn't even an LSM that
-implements security policy.  It is generic infrastructure that was
-built to address the very problem you are bitching about.
-
-If Linux is really about technology, as you have continually
-advocated, then there has to be an open playing field for
-contributors.  Absent that, Linux will balkanize, the same way the
-commercial Unix implementations did, around corporate driven
-interests and motivations.
-
-We will pursue the open playing field issue through the TAB if
-necessary.
-
-
->               Linus
-
-Once again, with all due respect, fix the problem if it annoys you,
-you would be doing a lot of people a favor.
-
-Best wishes for a pleasant holiday season to you and your family.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
 
