@@ -1,165 +1,156 @@
-Return-Path: <linux-security-module+bounces-13676-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13674-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80543CD2315
-	for <lists+linux-security-module@lfdr.de>; Sat, 20 Dec 2025 00:38:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD341CD20B1
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Dec 2025 22:48:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 130A5300C0C5
-	for <lists+linux-security-module@lfdr.de>; Fri, 19 Dec 2025 23:37:46 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F2B313044105
+	for <lists+linux-security-module@lfdr.de>; Fri, 19 Dec 2025 21:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FE8450FE;
-	Fri, 19 Dec 2025 23:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30012459DD;
+	Fri, 19 Dec 2025 21:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dafyMkQn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZbybHZHV"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79C8231858
-	for <linux-security-module@vger.kernel.org>; Fri, 19 Dec 2025 23:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB5B2D0616
+	for <linux-security-module@vger.kernel.org>; Fri, 19 Dec 2025 21:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766187465; cv=none; b=Qd7Onxr6VCpq/UD7LdQ60YuDETFfiwdQOSEzW8dfq4Akfq7wjoLVkjuDfnJ/Pp51TInYYRMOGRFTxvQ146YiDLwnLZX6uqC8gmdlTkjEzfAJ18Db8RP+qdxUKTGtH9kw2DPud4B/rX3dsY325X+qTMvLILx2LKL35B9GHUUF+OE=
+	t=1766180866; cv=none; b=Mpsj6DbLLQNgtTfspJHrzfxJEfc0cQCq6qZ3O9LM04NGwKDEB8lgPW0VtsY4CdRvOAvrMdcPmhua3Wyehv12m8ZCFirFWQ/9Oy7nq9M6OKXyVpEzcO23Ep0bVuJKIQuNGdf+aBRWO/JLT0UoOVb3nEPiGdBzmJCEJxS8FADE6oE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766187465; c=relaxed/simple;
-	bh=kqYAQZ609rJygFWC7CbHOEHNatKsPADzGjHUdHPU3XE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=goOINY6NRrSsWMRTy6rnw6qlNFLL9CpCRB4nMkcpcPQsnlKiJaCwzWNI1X2aLgWsRUIOvNC/8bEK4pRwxPQSjdIIFI839SG0Vatoa8SixfjO/+3yOIXahgJzU98C6YfaVRZ1Fm2jDOQwBjCaAyEN5twJuCb5oOSFiutJ+E3IHoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dafyMkQn; arc=none smtp.client-ip=209.85.210.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-7f121c00dedso3020338b3a.0
-        for <linux-security-module@vger.kernel.org>; Fri, 19 Dec 2025 15:37:43 -0800 (PST)
+	s=arc-20240116; t=1766180866; c=relaxed/simple;
+	bh=Ms51wSRYcNMLU08U6XlitTxavoeEVdn7PylZ66BFoeI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pPbRI3lwJUc7dVbRkKOqFu9H9ctN6OjrDJhUQd6sDJdYCKrReeTw7etRL5nGG8c0zd4vJQxuCaKvYAI7vpZGT1MzwGzrSVjpGTUDWaHq8IjZt/UckHpR3MKCfbixV7Wx43JcYyzit/p5lj+6Ij6WDKuhVHkh3VDH4QpUuqsyMSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZbybHZHV; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-bc0d7255434so1347091a12.0
+        for <linux-security-module@vger.kernel.org>; Fri, 19 Dec 2025 13:47:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766187463; x=1766792263; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Xjhz9NvSIj1nkwStS3EsBbpnWvjG3hzX9yFNjSmaNpQ=;
-        b=dafyMkQngPq7e8Uy0NWFFTGBQwd9S/8Vop/KCuF40UJiabXtkbZnBMB53pgSUCRcSp
-         cPUskdt2naTnhKRHocgbO+orYaYcKghLEQhP3XCXVCQuzRIaYgR8qhmMvJi1xLUmaSkL
-         0xymdlos81DD96mztK0x5CZ6MM8CxCDjD2S5ImcuHaILrJuOs33bb2D0+RFFoqQz6Fdh
-         GamPSfIQQm8hPjo8UWKhFto9eMjsOncHQPrNiNRU6zs/4nxj0BXQLBU4P2JVLv9gvJOc
-         wo1jyCTAOzOeBXwqJN8QFQCHRVUAJS6k7nDLlQ+ekYQuiI876cYh273s0/f/gABLoo6+
-         R1bg==
+        d=google.com; s=20230601; t=1766180864; x=1766785664; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ms51wSRYcNMLU08U6XlitTxavoeEVdn7PylZ66BFoeI=;
+        b=ZbybHZHVykrdpRAlGtriqn3wHVaP0BEV7RckU3M5QqDWGgWfvo2hRQBbphxvS2BNwA
+         pLQzrwBPxR7Cax+FXCV/hUhwNkt3G3JC3gTCeB1WvXqlvvEj6IxAfy7hZHBa67+7q+ex
+         HG4cCHZjp16WhljmP/3OuO0e6kNRarA12msX2ZrhpVhXUX3ANQUCUvxEhe8SS9He9o8q
+         obqn5RvnxYUC+q75XIHGpumO6is2s9sPQnNCDIuDgJzOS5D8YafOkIAZN+vy+ar77UPH
+         uIx2RfkQsx8sZvum/zbXR4najDOHCyezCoClEbFYMDFluQRWWOUCT29Tg9IAouUwjXo5
+         DjWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766187463; x=1766792263;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xjhz9NvSIj1nkwStS3EsBbpnWvjG3hzX9yFNjSmaNpQ=;
-        b=Vap8HRjTsfF3V3jZ2OmGqsN8yK+HSDZ0JW4mmQAmh9WlWmjCoeBM5GU/hf9RXUG6Yb
-         l8HPHGYuSteDOIRaWTKoF8DuRiBBYbCpvR4Fy3nRBxptZu07wGQInUnoX7vIi4BWzC5a
-         mrDPsgYVrT/8y4a1myiJLyQNq3XbIn2P3NY97fgvD0YkaWVXnC66Am4xQSzUlFET+xKi
-         IvX1FZtB7jx/M4GXX9m3R1Rra/KB9fDC39ifqjNNhPN7qnwFhX8Ss3sIsUmo16vT7D+o
-         bq+BLBGzHFL4ZXYWOm4yQr708Pha8VQRQNBS6aLEj0QOhE2t4zGIQNUesJ8HIugsrzx9
-         8rHg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZdtL509hq6H+R/E15FjOCTEKHXtTVm0uaQH1rcgrHNiUIUVL41GwyCvXE01rW89MBxdvxFxxaSJWc6xtXVyYfgbhkwW0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKjUR5TrM5pUByNylbGfAvSt61MSaoyk0SgLNFFlSr2QYtaV9k
-	DrgIUzLJq9Ul1KiETqElE//BurfjMhQPROj0Fv0aA12Md9ULiRQN9j1z
-X-Gm-Gg: AY/fxX4yxG2OCfH9Rmitbfw8jV48PCDgs7IYvNE5ZSZ7pCwoqELnDWqY4TwMyi+FgAD
-	HmjLE3IALMyraE2aNPlSoQC/g4GKroUNdZpt9W7soiddCjA9kJ1xBKHuONYSwBSj2rArbhZjm2y
-	6WOfK/BTaCNhV9Im0g0V8UpaJdQqgFmYvqNA/SXCkgZ3D/A6F3HbfC7HbEO6xdDWKCO1jv8xnjA
-	QFzZ4Y6gSW6ygat0cts1sYbecyrj5ehbvgDtCpx6ktJslxzfmp1fEAGW3rhYSPS+VcVR7hf1JA6
-	hH1vNGikxp5w6g1IbAkso1xVKZiUUxPnbF7yshDbG+Mj+/SRqGphuLmqQAVsyKJDfNltVNRPJS8
-	LbhFYzMXR1RwGTTsgWhsH3H3q4XcMR2J4UbjyTWUEttHXri0UYDy5184uciDJgWLJn7e3loewz6
-	bdRGJeT9wgAQuCFNJVYqFC3kMVGHUJXtanNock27cKpJxviq442bGXlBHJ60d7CPq7VyykYXjqn
-	zaarQsCNtRaSM7yVC4BN+sIPfJiw0gUWs/3DOjLo0Qj2wCLEet8ipNrT+GwZ960+L8ksNUt2kmj
-	ANY=
-X-Google-Smtp-Source: AGHT+IFD9VEfhTkWGAUJ+KrkgUpiheofAxrSZVwNtEffu0+8gx+hrdlGu9tKXSDKwQO+mDr4xt9mXg==
-X-Received: by 2002:a05:7022:3a83:b0:11c:b397:2657 with SMTP id a92af1059eb24-121722be81emr4954809c88.22.1766180747284;
-        Fri, 19 Dec 2025 13:45:47 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:5874:79f3:80da:a7a3? ([2a00:79e0:2e7c:8:5874:79f3:80da:a7a3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b05fe99410sm10260116eec.2.2025.12.19.13.45.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Dec 2025 13:45:46 -0800 (PST)
-Message-ID: <ae957ee5-cb47-433f-b0b3-f4ac8ec7116b@gmail.com>
-Date: Fri, 19 Dec 2025 14:45:45 -0700
+        d=1e100.net; s=20230601; t=1766180864; x=1766785664;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ms51wSRYcNMLU08U6XlitTxavoeEVdn7PylZ66BFoeI=;
+        b=RHqx03va423OcY8fb/S3JskmqSC0A9Td8VjpXtk0l91i+3Nl4+FBi7lZSgn9DDsFsD
+         L+mRGlqZFgMnp6AlM6ID2O7xuhQ0iXikkdN2dftAWM6sbJ3uQ8YLwpmCDZdqQmhcAnXc
+         H7G1/WjooHCisgU80WwCOu7/YM4m1jbTyUggmk3xPSQg/V1CKkjnb0wnDEL7x3xghXK6
+         Es0/VLtpTZwhqN6ubbWH65bS/tQPHRzDT8lNLpxFUJP+jSu5UFWEO9O/9qdygH0v/kQW
+         HShMCov2rcYEP4EzciGmCqVUG65GxK2NKwPI8/DDU1wK1i+drHrPUbeHrJVnvVfswBke
+         LiKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV0H40liOOwObiB9TNXWeoaibytgcZlz8rB9ald+MN3RkLinr0Edd3UUMfj4ZRqxwN3VUbicFphrxRF5PSMpS97kr66ums=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjmGLWbJyLAl/7uP3KkBdQ31kOgU4QD8emv3GVEuvIbCWtlr7q
+	hSldapvd5rnt6bHIGlrkcNSew2h/KwTY094GrUMc2QROOBYDHgHpmZR7T2exwgIWfxaJz7diBvS
+	+xwYEVEE+ZIGwNc92dqZFrnAEyjZ8LEHR8llAruYa
+X-Gm-Gg: AY/fxX4ofNmnJDNyIb3JT4v6+Qxi8nffI7VPRyB1YHnvZ2osbIA3KZtl25TqD5b90F6
+	VBp61JNLaKSCClPpweV+ku7ez9yr6HQRUIrwpmjRhvf8Ef8FrUIm0F/jd/1cfpwn2w1VYXEcnXh
+	vJZI5X6WUCDMjTSwtFfY4d+52hfBFdiXjZFn6D1QeMfkvmq9aUPYcBqjmChslFiNV7+bqExwHuw
+	05r1DYkSaRUIdXox2Z2+P2Xa9vSRGVcuH6SfHJDRe6l6WPD+aUIeSPRHM7z8On1xoBAX5ljCye2
+	DMHcV0q3BsTJOs346hrMTPnE8F4=
+X-Google-Smtp-Source: AGHT+IFIxJn1IGPy0nHsxYCQasesjc20OB/If1nT0iJGZS/3DeBiPOVvBE4Lni1iekMVipiY5AEcIb2ButU5L5/gdvQ=
+X-Received: by 2002:a05:7022:5f0b:b0:11b:9d52:9102 with SMTP id
+ a92af1059eb24-121721aaff1mr2914480c88.6.1766180863274; Fri, 19 Dec 2025
+ 13:47:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Bart Van Assche <bart.vanassche@gmail.com>
-Subject: Re: [PATCH v5 08/36] locking/rwlock, spinlock: Support Clang's
- context analysis
-To: Peter Zijlstra <peterz@infradead.org>, Marco Elver <elver@google.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
- Will Deacon <will@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
- Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>,
- Christoph Hellwig <hch@lst.de>, Dmitry Vyukov <dvyukov@google.com>,
- Eric Dumazet <edumazet@google.com>, Frederic Weisbecker
- <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>,
- Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>,
- Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>,
- Josh Triplett <josh@joshtriplett.org>, Justin Stitt
- <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
- Kentaro Takeda <takedakn@nttdata.co.jp>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland
- <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
- Thomas Gleixner <tglx@linutronix.de>, Thomas Graf <tgraf@suug.ch>,
- Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>,
- kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org,
- linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
-References: <20251219154418.3592607-1-elver@google.com>
- <20251219154418.3592607-9-elver@google.com>
- <17723ae6-9611-4731-905c-60dab9fb7102@acm.org>
- <CANpmjNO0B_BBse12kAobCRBK0D2pKkSu7pKa5LQAbdzBZa2xcw@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CANpmjNO0B_BBse12kAobCRBK0D2pKkSu7pKa5LQAbdzBZa2xcw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20251219154418.3592607-1-elver@google.com> <20251219154418.3592607-8-elver@google.com>
+ <cdde6c60-7f6f-4715-a249-5aab39438b57@acm.org> <CANpmjNPJXVtZgT96PP--eNAkHNOvw1MrYzWt5f2aA0LUeK8iGA@mail.gmail.com>
+ <ecb35204-ea13-488b-8d60-e21d4812902a@gmail.com>
+In-Reply-To: <ecb35204-ea13-488b-8d60-e21d4812902a@gmail.com>
+From: Marco Elver <elver@google.com>
+Date: Fri, 19 Dec 2025 22:47:06 +0100
+X-Gm-Features: AQt7F2oOvMMB1QIst16kG-Ehhh_fmZRMYn3rIRXwuCNiu1TQ-QKGkuW-c2bqFwM
+Message-ID: <CANpmjNPp6Gkz3rdaD0V7EkPrm60sA5tPpw+m8Xg3u8MTXuc2mg@mail.gmail.com>
+Subject: Re: [PATCH v5 07/36] lockdep: Annotate lockdep assertions for context analysis
+To: Bart Van Assche <bart.vanassche@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	Chris Li <sparse@chrisli.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ian Rogers <irogers@google.com>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Triplett <josh@joshtriplett.org>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Graf <tgraf@suug.ch>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	kasan-dev@googlegroups.com, linux-crypto@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 12/19/25 1:02 PM, Marco Elver wrote:
-> On Fri, 19 Dec 2025 at 21:26, Bart Van Assche <bvanassche@acm.org> wrote:
->> On 12/19/25 7:39 AM, Marco Elver wrote:
->>> - extern void do_raw_read_lock(rwlock_t *lock) __acquires(lock);
->>> + extern void do_raw_read_lock(rwlock_t *lock) __acquires_shared(lock);
->>
->> Given the "one change per patch" rule, shouldn't the annotation fixes
->> for rwlock operations be moved into a separate patch?
->>
->>> -typedef struct {
->>> +context_lock_struct(rwlock) {
->>>        arch_rwlock_t raw_lock;
->>>    #ifdef CONFIG_DEBUG_SPINLOCK
->>>        unsigned int magic, owner_cpu;
->>> @@ -31,7 +31,8 @@ typedef struct {
->>>    #ifdef CONFIG_DEBUG_LOCK_ALLOC
->>>        struct lockdep_map dep_map;
->>>    #endif
->>> -} rwlock_t;
->>> +};
->>> +typedef struct rwlock rwlock_t;
->>
->> This change introduces a new globally visible "struct rwlock". Although
->> I haven't found any existing "struct rwlock" definitions, maybe it's a
->> good idea to use a more unique name instead.
-> 
-> This doesn't actually introduce a new globally visible "struct
-> rwlock", it's already the case before.
-> An inlined struct definition in a typedef is available by its struct
-> name, so this is not introducing a new name
-> (https://godbolt.org/z/Y1jf66e1M).
+On Fri, 19 Dec 2025 at 22:28, Bart Van Assche <bart.vanassche@gmail.com> wrote:
+>
+> On 12/19/25 2:16 PM, Marco Elver wrote:
+> > It's basically an escape hatch to defer to dynamic analysis where the
+> > limits of the static analysis are reached.
+>
+> That's not how lockdep_assert_held() is used in the kernel.
 
-Please take another look. The godbolt example follows the pattern
-"typedef struct name { ... } name_t;". The "name" part is missing from
-the rwlock_t definition. This is why I wrote that the above code
-introduces a new global struct name.
+Because there had not been any static analysis like this, and dynamic
+analysis is the only reasonable option.
 
-Bart.
+> This macro
+> is more often than not used to document assumptions that can be verified
+> at compile time.
+
+In that case the lockdep_assert can be dropped.
+
+> This patch seems like a step in the wrong direction to me because it
+> *suppresses* compile time analysis compile-time analysis is useful. I
+> think that this patch either should be dropped or that the __assume()
+> annotations should be changed into __must_hold() annotations.
+
+If we drop this patch, e.g. the "sched: Enable context analysis for
+core.c and fair.c" will no longer compile.
+
+It's a trade-off: more false positives vs. more complete analysis. For
+an analysis to be useful, these trade-offs make or break the analysis
+depending on the system they are applied to.
+
+In the kernel, our experience with developer tooling has been that any
+efforts to reduce false positives will help a tool succeed at scale.
+Later you can claw back some completeness, but focusing on
+completeness first will kill the tool if false positives cannot
+reasonably be dealt with.
+
+From the user space world we know that "assert lock held" [1] as this
+kind of escape hatch is valuable to deal with cases the static
+analysis just can't deal with. Sure, here we can make our own rules,
+but I'd argue we're in a worse position than most user space code, in
+that kernel code is significantly more complex (which is the reason I
+spent over half a year banging my head to make Clang's analysis
+significantly more capable).
+
+[1] https://github.com/abseil/abseil-cpp/blob/a8960c053bf4adadac097c1101d0028742d8042f/absl/synchronization/mutex.h#L210
+(ASSERT_EXCLUSIVE_LOCK() == __assume_ctx_lock())
 
