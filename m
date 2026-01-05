@@ -1,135 +1,194 @@
-Return-Path: <linux-security-module+bounces-13830-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13832-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C2FBCF3B38
-	for <lists+linux-security-module@lfdr.de>; Mon, 05 Jan 2026 14:06:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2554CF47A6
+	for <lists+linux-security-module@lfdr.de>; Mon, 05 Jan 2026 16:46:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 37DB43015588
-	for <lists+linux-security-module@lfdr.de>; Mon,  5 Jan 2026 13:06:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 55EAF307633E
+	for <lists+linux-security-module@lfdr.de>; Mon,  5 Jan 2026 15:41:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299963385B5;
-	Mon,  5 Jan 2026 12:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF80BA3F;
+	Mon,  5 Jan 2026 15:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xb6xyMR5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RUBiqiVx"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EC933769A
-	for <linux-security-module@vger.kernel.org>; Mon,  5 Jan 2026 12:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B5A33D50C
+	for <linux-security-module@vger.kernel.org>; Mon,  5 Jan 2026 15:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767616971; cv=none; b=QAVqZAEHDkwWGVWpdY9Z89UtnQMFWEF2ixW8CmlifGqPMxxdQ0V/3hBDhUqpHzXI9vIY7w2IdqaNv1qoaTvU6Y8YPLeYBXlahtHcW7QjjDpbLOLd5yVSEiKYQnJT8lNpAw2+TjFKM6u816FS3YUAfyPF7lHvyykgOI7Xygd8slw=
+	t=1767627675; cv=none; b=Wdcq9u7oN5QmnYyhTukbl1f1SMmGdhY5bfiMTSJYTBuoOe9c/Spob77p6CNU81PIdh9QfLU/Soeob7z+uiJFX73ctmdwbCrix6L2hvs7vDdwULessgiSZgi0Kw0YXavc/jDch84khMjsAuNEZkQcQy6ixB5j7KTHsHJXqTsy+kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767616971; c=relaxed/simple;
-	bh=VbQO8D2iAr6md4hBhmn/NGgmQ1GRwF0Hgf8inuSVV2s=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QbkZFxjI8vtRNHoLuRlEaPF6zGwePkhQWwZxFtrTEOsuEqcENUkvMyOwPXb6GlLaS5qBg719hvtfmTBX1DPW1v26woCDMh+EKS8FWjSmi5zU8jL10+Bpld44FPVrPWxs7FxgK+OfwYCBJYJXVWvCdeVqXF148GI1NoT2Phr8+iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xb6xyMR5; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4779edba8f3so113015045e9.3
-        for <linux-security-module@vger.kernel.org>; Mon, 05 Jan 2026 04:42:48 -0800 (PST)
+	s=arc-20240116; t=1767627675; c=relaxed/simple;
+	bh=7XOckaOqG/PMRqT76fU8qmeyL4hEz8+C+ksukJDZjK4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mGWGPUD2CrOy2ltnG3WXiXaS+Wmh/F9WokNBeF633DIgfXlPrV69eN5VFmQdo8en4KhyklF40fOnEAqIFEho+z+dK1sgOPlHPYWev51n6NbNbPS448ebBqPVma6EUFmp3zjBW9XDYjke97Z4RrA4mTxDvDsHDpR0ZuzrVHh1OVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RUBiqiVx; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-88a367a1db0so242332036d6.3
+        for <linux-security-module@vger.kernel.org>; Mon, 05 Jan 2026 07:41:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767616967; x=1768221767; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mk5Ycm28hIYHxTsDaCVqW9TzFl8aqhJTKbC0p4I2uF0=;
-        b=Xb6xyMR523gUlzsh09VKVnIQO2JEQAMtPgk9HgRJrr7G2HM8EQ/5PiTi46u6ViJsbR
-         p9Baddf00OOyfbteeBGW9JBQaU2E2umZIFCWlW0AjOO6SrrOXWj464KaLAX0XdvI8a4F
-         hRqjanvfuaE2m1nnNE2lHy2a5257Bpyu4OM2AamRViYHlRGt1l4oiJsWXQtoLszlVwhp
-         tBeyBsphFykDHDyKQ+aAnNjgtdV4HtJ94E8XKf4ctMwICI0PIVvmanHr+w1PSgFDR8FV
-         kcpOnCYmFBlI97nPeALujK2fxTyWukGbgvWjDBHX7Vqft0HxlUOIjYgjThIaxjv/MLjE
-         aNmg==
+        d=gmail.com; s=20230601; t=1767627672; x=1768232472; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r6BA1g1a3pdykyjLkvUREMTVpM7/WCPoUOv36P4M2nY=;
+        b=RUBiqiVx/t7vGe/RuVzxTndk5myDZoEYkfhTue9om2uBkHmkh6wNYFMeygSKfoG57i
+         g4rocB+BZkVWJDBF7aG5eK98iD/gtEoPszHnHmGmpL+7ZCWkvaMX9L5UKFDteiHD8EeS
+         l7UHrIFRjibO8zrknZ7cgchU9IdVmyS2x9PsbihAp3V7VnZzIdR27daG66XcrUu+p/hc
+         kmb0YHtx/4U2mjfU8CLYz1IKFKPfHw3hMBTu/8Fp/fRZeSmFdwkh/nhiCu6gxmqohHT+
+         WFO/Gce068TXQuHwMpO/73nAGE7zUo8xE9+WRcSk/fWGkW7IHuvTxVEXWmk4HcteKsL4
+         GMIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767616967; x=1768221767;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mk5Ycm28hIYHxTsDaCVqW9TzFl8aqhJTKbC0p4I2uF0=;
-        b=JGszUAph3TGHwTyyE9oz3GfyjV3Eh5Ymt9/c+RX2e7eEmHt26BKreV58GeJU1G5Zi8
-         nW+VxMD1pPqPHkHB3wuvDW1RUu5PnnX2wyEK/aRT5Cvvxl6FlBL5FAYBLGZv+qb3GYZG
-         5QMxyUMBKeilZw07eMyo/OEdxRakCuyeZS3UOIWKC9doK07zFID+o6Es6cDzstjHHTss
-         30VweVA2Y1mdJLqyNKX/gUi5qOFNijXAQlfkjoNOO3Cc++jTrmxsSZg80GgbwpZVaF8n
-         uSEd3hT6nxI7uR1Ke7gKPPhBFYmzH8xhNkHx3DjBD3bo2z4Co5qEloKNdh145iWVVT1I
-         pSRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUjEn2PAH+xofMLSQENsc9eHZfwX/ewqV8FHPI+sYedlc16jfXQsuCairXX3ZqBJUXYIVhu7myjl1CpRAnch1ME3mrKNcg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaEHTI+/q1espuFGPHpl/tUqdI+aCSXAx82djinKqnMJZkSnSg
-	Sb5Y3pk1HsD6Vls07EE4VsA9OF2RB4x5zz6FlYimDHpMDIxoojPTn7LG6dJ4HyCzIKyHPyJA1nq
-	4dR46LSEKriaZ/TBWKg==
-X-Google-Smtp-Source: AGHT+IFXejFNTaaTMK6NB9LtQQMCPav08dwDcr+UaE1CM7qp3nZ+shXwfmslVq4IDm/pw/KKVEDRem3vj7iQ6AY=
-X-Received: from wmbf6.prod.google.com ([2002:a05:600c:5946:b0:46e:3422:1fcc])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:c494:b0:47b:d914:98a7 with SMTP id 5b1f17b1804b1-47d19582a05mr562157035e9.29.1767616967436;
- Mon, 05 Jan 2026 04:42:47 -0800 (PST)
-Date: Mon, 05 Jan 2026 12:42:20 +0000
-In-Reply-To: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
+        d=1e100.net; s=20230601; t=1767627672; x=1768232472;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=r6BA1g1a3pdykyjLkvUREMTVpM7/WCPoUOv36P4M2nY=;
+        b=MqgHQkoxY+MG7rbZjvSC419zAWGrNHQNGr96WoGC+Q9ZvXYqqPEjwdWV4Q3OQuyono
+         dnQVuq8OVggpqM3EPI2Lz5aZXFxTaLODMKZC7qxUEpfbVXhgy73sNegI8rBaw8oAZcup
+         eoABi/EequABqd8J2JTpEgQrenag7+98EMvEzwohuD+6a0jmbSlNC4QVum49V6mnd7wM
+         XR6KFZh8AkjNM1CvYJWEmSUGhwgTihKhaMP7CQBDsKatnqwLb1KfJtsF0y2iI26Iu+cm
+         KtyJYlDG4JcFAqSat5MSghMYKgOQQHMaFTxsYRcLXMwmvojeagVNOnHAjm6FqjtsMGmA
+         MgIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwyDkscynCR3e69eKchIspbuXGjXc34mkKZ3Q8ZeXPLKSSWRPhElX3QEw5RoiIxBgArDDRTY7lzqd3o4zV25uSPfiGjPQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUB7Iw/KPxnhCfmhMMRG8rj6s+3RkSM/DiIHOeaLlxMPdjmpFQ
+	OW2OHn94zIuT3sEw7UttfkmILGnNP9ZVdCkxK7Zw5Gl6661RmgszPOlg
+X-Gm-Gg: AY/fxX6rgGwWksTrb/pLwMHsN1o8Z8w54CWmp2//ayfAkLbWq3mLHWMMeffNnr8BcOt
+	UCesSbH9Mm3/AOZHIhuz1I3iRLiZyeKAJLKKtVVE17j1/ur4lWpLT1AXzpnI+NtQ2MjzhdxACO9
+	Jxr12kWplNzp1sBHGPg6ZKGI+pnZ0uO4K5Kb0KUb0tvDgZvIB9ecgzvfcNXpxwymb+xLygVxMbZ
+	U0ZPlGpdLdDtXjA1q/OFXJA8DPWBsdgDvbgD7GRhybr5Pm6UJ0H/lrpwZwwgSKGtrif56QQOAiV
+	DYCx3SUdT06KWcn4KqnIn3zZiD5FD3l3ZC+dnA3LA8ElGZYozQyq18iW0ckEIHQJaeZOmWrzeAI
+	teE6ZSUFgUq7Wx9wDw59BqIy8JHo+bz3/90WdZQYpSxd5nSWSiNHJdcfgcZJGsIE91qmHwqfWlU
+	YJQGpFKZUmB40LH5wXzszQwU0gP4zuXzwjomPzsli5L/DPdBjW/4QdnXJKwDiXgN4xWt5Glzs5B
+	wyZNyXUnuhuEl4=
+X-Google-Smtp-Source: AGHT+IHeeyt4Xeum2e3H4UlfOCeEPZyOgjULTv/XI4YZg24EjWSSkO3V7ao10G0yIxqhA1gkrd4grw==
+X-Received: by 2002:ad4:5250:0:b0:88a:4ab2:5f52 with SMTP id 6a1803df08f44-88d83d65360mr521106156d6.51.1767627672608;
+        Mon, 05 Jan 2026 07:41:12 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89075557d23sm1207046d6.41.2026.01.05.07.41.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jan 2026 07:41:12 -0800 (PST)
+Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 8F0F5F40068;
+	Mon,  5 Jan 2026 10:41:11 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-11.internal (MEProxy); Mon, 05 Jan 2026 10:41:11 -0500
+X-ME-Sender: <xms:l9tbaQl8adq_q8oemVdp9py9aCB5rEYMUXGPUHOfxSENDh0M6SOSiw>
+    <xme:l9tbaVrCyG7LEDf5sozj9kkhyLQ0sPqK87jUAC_qJfbekq6ICe_xe5QMuMoTjEKUA
+    tB0zjAhiqSBWufmhb_KP365bDbxKmKQ-BUeRDG7AXs90zPIyqpX-w>
+X-ME-Received: <xmr:l9tbaTuvJMNXCwyVLLEQxwAkDuZHya194bV4WrOdHwOVBYRN60UCxK-j>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdeljeeilecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudffiedv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
+    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
+    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
+    drnhgrmhgvpdhnsggprhgtphhtthhopeehkedpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtoheprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprhhush
+    htqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    epghgrrhihsehgrghrhihguhhordhnvghtpdhrtghpthhtohepphgvthgvrhiisehinhhf
+    rhgruggvrggurdhorhhgpdhrtghpthhtohepvghllhgvseifvggrthhhvghrvgguqdhsth
+    gvvghlrdguvghvpdhrtghpthhtoheprgdrhhhinhgusghorhhgsehkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehlihhnuhigqdgslhhotghksehvghgvrhdrkhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepfhhujhhithgrrdhtohhmohhnohhrihesghhmrghilhdrtghomh
+X-ME-Proxy: <xmx:l9tbabmkDu5goAML_Vw6wQks5sr1-oqWVGEVyl7SpncPG41qLq8PqQ>
+    <xmx:l9tbaZEvXpCwph3gfl5iq-kHa4fsrJ-e6g21CjltgBbR441YOY405w>
+    <xmx:l9tbaa8pxEfCJ2_idKerH3733Rocx35rGJlDBn4X7HlKs2MkaFUX5A>
+    <xmx:l9tbaW7nR-qjUaIEByc4-kPNbC8tpKXp-OM_EvS1h_evQ7bx_68mJA>
+    <xmx:l9tbaS4UkZJm3L0Tu3phQb3ItLU_OD6WXZGJ8xIIxpleNVBlr6HjnmTP>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Jan 2026 10:41:10 -0500 (EST)
+Date: Mon, 5 Jan 2026 23:41:08 +0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Gary Guo <gary@garyguo.net>, Peter Zijlstra <peterz@infradead.org>,
+	Elle Rhumsaa <elle@weathered-steel.dev>,
+	Andreas Hindborg <a.hindborg@kernel.org>,	linux-block@vger.kernel.org,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+	Benno Lossin <lossin@kernel.org>,	Danilo Krummrich <dakr@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,	Paul Moore <paul@paul-moore.com>,
+ Serge Hallyn <sergeh@kernel.org>,	linux-security-module@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,	Ard Biesheuvel <ardb@kernel.org>,
+	Andrew Ballance <andrewjballance@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	maple-tree@lists.infradead.org, linux-mm@kvack.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vitaly Wool <vitaly.wool@konsulko.se>,	Rob Herring <robh@kernel.org>,
+ devicetree@vger.kernel.org,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Michal Wilczynski <m.wilczynski@samsung.com>,	linux-pwm@vger.kernel.org,
+ "Paul E. McKenney" <paulmck@kernel.org>,	rcu@vger.kernel.org,
+ Will Deacon <will@kernel.org>,	Fiona Behrens <me@kloenk.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,	Ingo Molnar <mingo@redhat.com>,
+ Waiman Long <longman@redhat.com>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,	Lyude Paul <lyude@redhat.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	John Stultz <jstultz@google.com>, linux-usb@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Tamir Duberstein <tamird@gmail.com>, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 00/27] Allow inlining C helpers into Rust when using
+ LTO
+Message-ID: <aVvblLp8sjFB7JvB@tardis-2.local>
+References: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1036; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=VbQO8D2iAr6md4hBhmn/NGgmQ1GRwF0Hgf8inuSVV2s=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpW7G7xiG52Kq7HkvE/zsYwVfDQYUWBBy8h7V7N
- WNZ+OcmviuJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaVuxuwAKCRAEWL7uWMY5
- RnxiD/0WpbhztWk/Y7Ztogunp/taSq0RfvCk2REjL0ilSu/M4Uguhg787+fVv1uySd2CIlEXQDp
- uiwortuxv6Dc+3lXQpPyMFYWUU6TF1tM9WlgmC5opTi8kTfF1oS78EVkcj0CdVU4oRiPr6YFiHz
- UIzdTtJlr/SNSplU3uxYSPpxU+vAJte4jwBVuGGPtTrxZRVuKDhkpqE0at9FnNDxqHDvFKQNKQn
- G8uSVUqQJPT1pN3RlxcwDZG1nkIK9MkYtY06Tmjc72389snwjyabK8NL9Ua+xhk6/3Wdscctl1C
- szVVYbT0Eo07Aeze6S25CViEA7ZHpCWOEskTQ3NhzE04EyCMH8wH4mcaf86qjxzZF5KksGMrsqN
- c/5c9C1otKr22zjR01xpGdFtokwxFmBdrSf1lQa4rwGDi3x+MgoWww2dhAnObw9v+/NgxIPhLTP
- B87gsXdaoyDSr8CFHJWwxSFnyb30wnUKNeVr+mPtqkvyGO9cn1IAw+pOh2kpon7wtfGSSKf9hg8
- eqrWeW1XDXK7vX11AWtaiQeAZJW4qXdurxG7i8n49YPeF5xrf4uSg2xqMwsrRwp602TYhhdnk6W
- cEktWbCFC8Tlu5LxcjtTpOlmDt0dyTVx7n06CocEHazp9xxlehpOletIlzMG4Su/4mxBy9ERypA yJzBiC1VpZzcgig==
-X-Mailer: b4 0.14.2
-Message-ID: <20260105-define-rust-helper-v2-7-51da5f454a67@google.com>
-Subject: [PATCH v2 07/27] rust: cred: add __rust_helper to helpers
-From: Alice Ryhl <aliceryhl@google.com>
-To: rust-for-linux@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260105-define-rust-helper-v2-0-51da5f454a67@google.com>
 
-This is needed to inline these helpers into Rust code.
+On Mon, Jan 05, 2026 at 12:42:13PM +0000, Alice Ryhl wrote:
+> This patch series adds __rust_helper to every single rust helper. The
+> patches do not depend on each other, so maintainers please go ahead and
+> pick up any patches relevant to your subsystem! Or provide your Acked-by
+> so that Miguel can pick them up.
+> 
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: Serge Hallyn <sergeh@kernel.org>
-Cc: linux-security-module@vger.kernel.org
----
- rust/helpers/cred.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I queued the following into rust-sync:
 
-diff --git a/rust/helpers/cred.c b/rust/helpers/cred.c
-index fde7ae20cdd19f04ac5f28808586c65de6b72f09..a56a7b7536232733dcdc640f09f8f2537e69d75e 100644
---- a/rust/helpers/cred.c
-+++ b/rust/helpers/cred.c
-@@ -2,12 +2,12 @@
- 
- #include <linux/cred.h>
- 
--const struct cred *rust_helper_get_cred(const struct cred *cred)
-+__rust_helper const struct cred *rust_helper_get_cred(const struct cred *cred)
- {
- 	return get_cred(cred);
- }
- 
--void rust_helper_put_cred(const struct cred *cred)
-+__rust_helper void rust_helper_put_cred(const struct cred *cred)
- {
- 	put_cred(cred);
- }
+       rust: barrier: add __rust_helper to helpers
+       rust: blk: add __rust_helper to helpers
+       rust: completion: add __rust_helper to helpers
+       rust: cpu: add __rust_helper to helpers
+       rust: processor: add __rust_helper to helpers
+       rust: rcu: add __rust_helper to helpers
+       rust: refcount: add __rust_helper to helpers
+       rust: sync: add __rust_helper to helpers
+       rust: task: add __rust_helper to helpers
+       rust: time: add __rust_helper to helpers
+       rust: wait: add __rust_helper to helpers
 
--- 
-2.52.0.351.gbe84eed79e-goog
+Thanks!
 
+Regards,
+Boqun
+
+> These changes were generated by adding __rust_helper and running
+> ClangFormat. Unrelated formatting changes were removed manually.
+> 
+[...]
 
