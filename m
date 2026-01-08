@@ -1,65 +1,65 @@
-Return-Path: <linux-security-module+bounces-13885-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13887-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4210D039CE
-	for <lists+linux-security-module@lfdr.de>; Thu, 08 Jan 2026 16:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31694D03354
+	for <lists+linux-security-module@lfdr.de>; Thu, 08 Jan 2026 15:00:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 297493075D3B
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jan 2026 14:54:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0143D3032CC1
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jan 2026 13:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBCB3487095;
-	Thu,  8 Jan 2026 11:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 141AE3AEF4F;
+	Thu,  8 Jan 2026 12:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="rkQq4zoJ"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="vKeHkq/p"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1F7487597
-	for <linux-security-module@vger.kernel.org>; Thu,  8 Jan 2026 11:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D283AE6FD
+	for <linux-security-module@vger.kernel.org>; Thu,  8 Jan 2026 12:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767873016; cv=none; b=DNfIpBVfRmBR3dOuA/m9Ea9Qful6PL64y0nvdpz7I4+vKmPlvXJ29zUGI6ARyTbqcwSf5HO8g4dpALxDlLFJpPNG4o1TuT83AAQivPsr1+HJKC6mXoqc3pyksPZ1Oe9wjPwje3AAHJ6nfqRiaaWzvLlWBwStJGDciY9xUxVzG1I=
+	t=1767876017; cv=none; b=LwAMXP6X9t9gyIGGlgXzCZ5TZg0KPX9JgLHBLb9qtcC3Fqm+C1peABtbvSx227IbdFP8jMQ3DCh90N3fH4dwOaizi/NleRXPzgywRCfjLNAkpDxpLRGXlouzUX4BlrX9D7Ko70oHfZtawdL8JRlF2MjNgKPK5n9iyN4dJ31gG4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767873016; c=relaxed/simple;
-	bh=zMrDOdJlJfblUj3s8NSBHfHcO493THfQb+u8c0TgY4w=;
+	s=arc-20240116; t=1767876017; c=relaxed/simple;
+	bh=HLwV7Is5lkxTUQGPFEAgQewzV6Ep3PmR/xp1lM4wAyk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CVm3hY4VVZ/Ct2ylk/pHjobxzAfrWe9p6tdKWDlei4X4wZXgsquPS2Dgu4uRkzj01YelYzmjPHeUloVk5vT5MVzGJ/HeuMuxHR0L2jJdOqj9g1zAuIvdDxCTa1/yXNZkELnZnNJisn/u/tLAi1KpUIX+532oF/B7uF3rNOOl45Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=rkQq4zoJ; arc=none smtp.client-ip=185.125.25.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=d0JSYC/XkDCJIJaJP3/ZPVVFlNKBnKDfkdmamnm7Wzj6ilUPQOdnsEUI6/lJvaEZPs57f0gmpDVU5fSXDNaw9kDAPLWojJCDmxnV3T76yAvpoRGwwFUOFzs+ot1agCiBvQc9OPBaLAahoHIpspOp8McVf5QcioKTduT8cHd9XK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=vKeHkq/p; arc=none smtp.client-ip=45.157.188.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dn2P34SlJz1C1;
-	Thu,  8 Jan 2026 12:14:47 +0100 (CET)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dn3gL416Mz14bN;
+	Thu,  8 Jan 2026 13:12:14 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1767870887;
-	bh=MLSPNFwurXe0dw5EDD88i0r1rQxZlhSMUT+r4QQRUzI=;
+	s=20191114; t=1767874334;
+	bh=s85DhQIcafXG1peBDnmh0Zu+fNK+q7mdW9IuKsYyrSs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rkQq4zoJuu0WEeEw2XOfMt8lvW5AGtGTqB2yTWkjqYZVsc00pwfdSIJVkoXnI5zUL
-	 X6GmKd4C3jpn88mztMTlcaFXIdsI4gWfgXu4ilk6tqTThBtDj3EuzRijXk8iSyeebF
-	 6PCzbPBTjN06UKvYE8BJLH9XSJvIKK2x2XOi5V7I=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4dn2P30FgMzgf2;
-	Thu,  8 Jan 2026 12:14:47 +0100 (CET)
-Date: Thu, 8 Jan 2026 12:14:41 +0100
+	b=vKeHkq/phg0/y5q/B2OQZeATNODmmdCwBxysxxft4l2YnXwX4tvPOypOhJ1y+lFgL
+	 mxruuUDwDsYpFhV3V9xT2BiO6PJKTsyZyuYDBh8hSiwRb6Pq0c1QExxphuixwk1Gz1
+	 jWzG4NECB+RJDhjSumikRdzoUfDSB2bs7T2wPEAQ=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dn3gK0zKSzYkM;
+	Thu,  8 Jan 2026 13:12:13 +0100 (CET)
+Date: Thu, 8 Jan 2026 13:12:07 +0100
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Demi Marie Obenour <demiobenour@gmail.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>, 
-	Tingmao Wang <m@maowtm.org>, Paul Moore <paul@paul-moore.com>, 
-	linux-security-module@vger.kernel.org, Justin Suess <utilityemal77@gmail.com>, 
-	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, Matthieu Buffet <matthieu@buffet.re>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, konstantin.meskhidze@huawei.com, Alyssa Ross <hi@alyssa.is>, 
-	Jann Horn <jannh@google.com>, Tahera Fahimi <fahimitahera@gmail.com>
-Subject: Re: [RFC PATCH 0/5] landlock: Pathname-based UNIX connect() control
-Message-ID: <20260108.uoD0aesh8Uth@digikod.net>
-References: <20260101134102.25938-1-gnoack3000@gmail.com>
- <61a6be66-a9bd-4d68-98ed-29aac65b7dfb@gmail.com>
- <73c5509a-5daa-4ea5-ab9f-e24a59786f6d@maowtm.org>
- <1d36b2ee-b967-42d7-a6c2-e5b1602a512f@gmail.com>
- <20260102.93e0d7b9c9b5@gnoack.org>
- <81f908e3-8a98-46e7-b20c-fe647784ceb4@gmail.com>
- <20260102.17e1c2b9faa4@gnoack.org>
- <64484ab4-e137-4fd9-9441-a63ccdff1616@gmail.com>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
+Cc: Demi Marie Obenour <demiobenour@gmail.com>, 
+	Justin Suess <utilityemal77@gmail.com>, Tingmao Wang <m@maowtm.org>, fahimitahera@gmail.com, 
+	hi@alyssa.is, ivanov.mikhail1@huawei-partners.com, jannh@google.com, 
+	konstantin.meskhidze@huawei.com, linux-security-module@vger.kernel.org, matthieu@buffet.re, 
+	paul@paul-moore.com, samasth.norway.ananda@oracle.com
+Subject: Re: [RFC PATCH 3/5] samples/landlock: Add support for
+ LANDLOCK_ACCESS_FS_CONNECT_UNIX
+Message-ID: <20260108.Thaex5ruach2@digikod.net>
+References: <20260101134102.25938-4-gnoack3000@gmail.com>
+ <20260101193009.4005972-1-utilityemal77@gmail.com>
+ <423dd2ca-ecba-47cf-98a7-4d99a48939da@maowtm.org>
+ <22e29fd8-2f39-4a64-b08c-2f41153e3be8@gmail.com>
+ <2d02eefa-bc86-4f04-b190-beed304337d4@maowtm.org>
+ <43c0515d-afd3-4e00-a0fe-4d651a1d5cf1@gmail.com>
+ <884e44c6-7695-49a2-8d60-c7e76d260bea@gmail.com>
+ <20260102.d6870733fe10@gnoack.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -69,72 +69,93 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <64484ab4-e137-4fd9-9441-a63ccdff1616@gmail.com>
+In-Reply-To: <20260102.d6870733fe10@gnoack.org>
 X-Infomaniak-Routing: alpha
 
-On Fri, Jan 02, 2026 at 01:37:14PM -0500, Demi Marie Obenour wrote:
-> On 1/2/26 05:50, Günther Noack wrote:
-> > On Fri, Jan 02, 2026 at 05:27:40AM -0500, Demi Marie Obenour wrote:
-> >> On 1/2/26 05:16, Günther Noack wrote:
-> >>> On Thu, Jan 01, 2026 at 05:44:51PM -0500, Demi Marie Obenour wrote:
-> >>>> On 1/1/26 17:34, Tingmao Wang wrote:
-> >>>>> On 1/1/26 22:14, Demi Marie Obenour wrote:
-> >>>>>> [...]
-> >>>>>> Does this leave directory traversal as the only missing Landlock
-> >>>>>> filesystem access control?  Ideally Landlock could provide the same
-> >>>>>> isolation from the filesystem that mount namespaces do.
-> >>>>>
-> >>>>> I think that level of isolation would require path walk control - see:
-> >>>>> https://github.com/landlock-lsm/linux/issues/9
-> >>>>>
-> >>>>> (Landlock also doesn't currently control some metadata operations - see
-> >>>>> the warning at the end of the "Filesystem flags" section in [1])
-> >>>>>
-> >>>>> [1]: https://docs.kernel.org/6.18/userspace-api/landlock.html#filesystem-flags
-> >>>>
-> >>>> Could this replace all of the existing hooks?
-> >>>
-> >>> If you do not need to distinguish between the different operations
-> >>> which Landlock offers access rights for, but you only want to limit
-> >>> the visibility of directory hierarchies in the file system, then yes,
-> >>> the path walk control described in issue 9 would be sufficient and a
-> >>> more complete control.
-> >>>
-> >>> The path walk control is probably among the more difficult Landlock
-> >>> feature requests.  A simple implementation would be easy to implement
-> >>> technically, but it also requires a new LSM hook which will have to
-> >>> get called *during* path lookup, and we'd have to make sure that the
-> >>> performance impact stays in check.  Path lookup is after all a very
-> >>> central facility in a OS kernel.
-> >>
-> >> What about instead using the inode-based hooks for directory searching?
-> >> SELinux can already restrict that.
+On Fri, Jan 02, 2026 at 10:53:49AM +0100, Günther Noack wrote:
+> On Thu, Jan 01, 2026 at 05:39:26PM -0500, Demi Marie Obenour wrote:
+> > On 1/1/26 17:38, Justin Suess wrote:
+> > > On 1/1/26 17:19, Tingmao Wang wrote:
+> > >> On 1/1/26 22:11, Demi Marie Obenour wrote:
+> > >>> On 1/1/26 17:07, Tingmao Wang wrote:
+> > >>>
+> > >>> (snip)
+> > >>>
+> > >>>> Looking at this I guess it might also make sense for the kernel side to
+> > >>>> enforce only being able to add LANDLOCK_ACCESS_FS_CONNECT_UNIX on socket
+> > >>>> files (S_ISSOCK(d_backing_inode)) too in landlock_append_fs_rule?
+> > >>>>
+> > >>>> Also, for the sandboxer logic, maybe a better way would be having
+> > >>>> LANDLOCK_ACCESS_FS_CONNECT_UNIX in ACCESS_FILE (matching the kernel code),
+> > >>>> then another if(!S_ISSOCK) below this that will clear out
+> > >>>> LANDLOCK_ACCESS_FS_CONNECT_UNIX if not socket.
+> > >>> A process might legitimately need to connect to a socket that doesn't
+> > >>> exist at the time it sandboxes itself.  Therefore, I think it makes
+> > >>> sense to for LANDLOCK_ACCESS_FS_CONNECT_UNIX access to a directory
+> > >>> to allow LANDLOCK_ACCESS_FS_CONNECT_UNIX to any socket under that
+> > >>> directory.  This matches the flexibility mount namespaces can achieve.
+> > >> Right, I forgot about the fact that we also need it on dirs, apologies.
+> > >>
+> > >> (But maybe it might still make sense to not allow this on files which are
+> > >> neither a socket or a dir? (If the file later gets removed and recreated
+> > >> as a socket, the rule would not apply retroactively anyway due to being
+> > >> tied to the inode.))
+> > > How do we handle IOCTL access on regular files? I think that landlock will let you put IOCTL rights on regular files even they are not valid for that operation.
 > > 
-> > Oh, thanks, good pointer!  I was under the impression that this didn't
-> > exist yet -- I assume you are referring to the
-> > security_inode_follow_link() hook, which is already happening during
-> > path resolution?
+> > Regular files definitely support ioctls.
 > 
-> I'm not familiar with existing LSM hooks, but I do know that SELinux
-> enforces checks on searching and reading directories and symlinks.
+> The LANDLOCK_ACCESS_FS_IOCTL_DEV right only applies to ioctl(2)
+> invocations on device files.
+> 
+> 
+> > > Sockets seem like a similar case where the operation is only valid for a subset of file types.
+> > > 
+> > > I think we should mirror the existing behavior is for consistency.
+> > > 
+> > > Besides, restricting which file types can have that right also makes it harder for applications that may not care about the specific file type, but now would have to check the filetype before making a policy on them (also opening them to TOCTOU).
+> > 
+> > I agree.
+> 
+> I also agree with your interpretation, Justin.
+> 
+> For the record, Landlock's kernel implementation currently groups FS
+> access rights into two groups:
+> 
+>  - file access rights
+>  - directory-only rights
+> 
+> When adding a rule, the directory access rights can only be granted on
+> a directory inode.  The file access rights can be granted on both a
+> directory inode and a regular file inode.
+> 
+> It is pointless to grant the CONNECT_UNIX (or IOCTL_DEV) right on a
+> file which is not a Unix socket (or device file).  But it complicates
+> the userspace API if we introduce more special rules there. - Users of
+> Landlock would have to keep track of all these special cases and
+> mirror the logic, which is error prone.  IMHO is is granular enough if
+> we differentiate between files and directories as we currently do.
 
-SELinux uses inode-based hooks, which is not (directly) possible for
-Landlock because it is an unprivileged access control, which means it
-cannot rely on extended file attributes to define a security policy.
-
-See https://github.com/landlock-lsm/linux/issues/9
+Agreed. We discussed about making it more granular (see the IOCTL patch
+series), but it is not worth it.  Even the directory/file
+differentiation is questionable, but I initially made this decision to
+incentivise user space to know if they are dealing with directories or
+files because access right inheritance should be carefully managed.
+In most cases, when programs sandbox themselves, they should not need to
+stat the file because they should already know if it's a file or a
+directory; only sandboxers need too check the file type.
 
 > 
-> > I take it back then. :) If there is prior art, implementing this might
-> > be more feasible than I thought.
+> For reference, this is documented at
+> https://docs.kernel.org/userspace-api/landlock.html#filesystem-flags
+> and the logic is implemented in landlock_append_fs_rule() in fs.c.
 > 
-> I think so too!
-> -- 
-> Sincerely,
-> Demi Marie Obenour (she/her/hers)
+> (Actually, in the implementation, the IOCTL_DEV right is treated the
+> same as one of the ACCESS_FILE rights - I should probably revise that
+> documentation: That right does not *directly* apply to a directory
+> inode, as directories are not device files.  It only inherits down in
+> the file system hierarchy.  Looking back at earlier versions of the
+> IOCTL_DEV patch set, it was different there.  I think I missed to keep
+> the documentation in-line.)
 
-
-
-
-
+Indeed
 
