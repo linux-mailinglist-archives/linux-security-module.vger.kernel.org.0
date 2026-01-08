@@ -1,109 +1,77 @@
-Return-Path: <linux-security-module+bounces-13884-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13889-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F831D04466
-	for <lists+linux-security-module@lfdr.de>; Thu, 08 Jan 2026 17:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 50F10D04682
+	for <lists+linux-security-module@lfdr.de>; Thu, 08 Jan 2026 17:33:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7DB0331885CC
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jan 2026 15:55:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4D76330C4B9D
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jan 2026 16:11:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A9A3D6691;
-	Thu,  8 Jan 2026 11:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="e3VcWrxP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 816511DFDB8;
+	Thu,  8 Jan 2026 16:11:38 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AB93D1CAA
-	for <linux-security-module@vger.kernel.org>; Thu,  8 Jan 2026 11:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
+Received: from wind.enjellic.com (wind.enjellic.com [67.230.224.160])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F05AD24
+	for <linux-security-module@vger.kernel.org>; Thu,  8 Jan 2026 16:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.230.224.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767871818; cv=none; b=WZdC24jZkbcpc39YLx88JdsVucvsEtOJ+xnshK4mqdHL2ETIRdKHMvdmH/ueQ8us50GXVeUGr/nirCGLAOnrfuMVrVtiNK3TbSEiAOL2gm/9qrj2CU1fwPDkFqVCWvCL824vK/LORacP6N2aYbrjk5glzhoAh2tiOSQBTkDRTQ0=
+	t=1767888698; cv=none; b=h78k4f/2Zm/FWhYIPB0Usob9tanGF4WnJCZkrbZFxIutWfiub70GJaTTtMgKAdjrWvBCYeLqb1AOy5me8itSdSTXzru2cTwu2wLByfslgTseFMMZ3p350dUlcse0h7ciYeuRk0qhLok8+8XGsi1g4SJ8w5Oh6b960z3nczezNYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767871818; c=relaxed/simple;
-	bh=Moly6GtMJnTRFeQwFsM2KVbUOKElTrPfqr32dbajSys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KZ61DxnGiK+EQXtiqwoJVq2m1UjYmLPqRZsOG4CK0wNpq1QRPIGt5s+VEhabonJ8Q5Voww6nu39V2yBJ/wKprDnacOZPCFmXceuvsngcud4ZKASsbSPaT7nW+f2vAShepxF5YpHy6abhmxuqKCPBaUiWLfMz7lvY7RhVn517mcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=e3VcWrxP; arc=none smtp.client-ip=185.125.25.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dn2Nm0FgCzpF;
-	Thu,  8 Jan 2026 12:14:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1767870871;
-	bh=s95m8BRIXxPPL9x6ob2pjucpUbxmBpRymZiOprntk7Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e3VcWrxPA2n5khecardYeD2P84Agz3+3UwQqjkchB6vMU7bOVK4M5aysVINbfxxfU
-	 DA7sOfg6u3XJWLaynnRQBY2ijd0qsbKjKK6SkX95Ly0EH0BHsQVrSqG1y3b8E+3yVz
-	 Wrj4xetzmKPdz8U0ob1tMIsYOUBedKRMMIHFtNvU=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dn2Nl0cMGzJhj;
-	Thu,  8 Jan 2026 12:14:31 +0100 (CET)
-Date: Thu, 8 Jan 2026 12:14:24 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
-Cc: Demi Marie Obenour <demiobenour@gmail.com>, 
-	Tingmao Wang <m@maowtm.org>, Paul Moore <paul@paul-moore.com>, 
-	linux-security-module@vger.kernel.org, Justin Suess <utilityemal77@gmail.com>, 
-	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, Matthieu Buffet <matthieu@buffet.re>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, konstantin.meskhidze@huawei.com, Alyssa Ross <hi@alyssa.is>, 
-	Jann Horn <jannh@google.com>, Tahera Fahimi <fahimitahera@gmail.com>
-Subject: Re: [RFC PATCH 0/5] landlock: Pathname-based UNIX connect() control
-Message-ID: <20260108.ahyiez5eeQua@digikod.net>
-References: <20260101134102.25938-1-gnoack3000@gmail.com>
- <61a6be66-a9bd-4d68-98ed-29aac65b7dfb@gmail.com>
- <73c5509a-5daa-4ea5-ab9f-e24a59786f6d@maowtm.org>
- <1d36b2ee-b967-42d7-a6c2-e5b1602a512f@gmail.com>
- <20260102.93e0d7b9c9b5@gnoack.org>
- <20260102.ae35fcc3c4d8@gnoack.org>
+	s=arc-20240116; t=1767888698; c=relaxed/simple;
+	bh=a2risomvSkbclWqO/xOIGA1Xq4rJTPZMP/KquX50Ox0=;
+	h=Date:From:To:Cc:Subject:Message-ID:Mime-Version:Content-Type:
+	 Content-Disposition; b=BNgy7l4B5uefDUH8rcDevKMf9PTD61eHX8ii6g5x+fJC2FsCcRR1vOz9cfz1+fiAdJcGw1NMCPe8jO4oI2ZqmWyIwHF9hQrzSNMEAxj2ii+auChfNX+0dujQiC7FC25qnOfFpN8va8KmiTlXCVBxsuYeKPEwnbi+w/p9q1VRMw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=67.230.224.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 608FkCgM014369;
+	Thu, 8 Jan 2026 09:46:12 -0600
+Received: (from greg@localhost)
+	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 608Fk5Ze014361;
+	Thu, 8 Jan 2026 09:46:05 -0600
+Date: Thu, 8 Jan 2026 09:46:05 -0600
+From: "Dr. Greg" <greg@enjellic.com>
+To: paul@paul-moore.com
+Cc: linux-security-module@vger.kernel.org
+Subject: Improved guidance for LSM submissions.
+Message-ID: <20260108154604.GA14181@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260102.ae35fcc3c4d8@gnoack.org>
-X-Infomaniak-Routing: alpha
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 08 Jan 2026 09:46:12 -0600 (CST)
 
-On Fri, Jan 02, 2026 at 11:25:38AM +0100, Günther Noack wrote:
-> On Fri, Jan 02, 2026 at 11:16:33AM +0100, Günther Noack wrote:
-> > Regarding the un-restrictable operations, Tingmao's pointers are
-> > correct.  In the warning box in the documentation, the missing
-> > operations that I am aware of are (a) the Unix socket connect()
-> > operation, and (b) the symlink lookup which happens implicitly during
-> > path traversal and which Landlock and other LSMs can not control
-> > through LSM hooks at the moment.  (A symlink always gets implicitly
-> > resolved during path lookup even when you do not have directory read
-> > permissions on the directory where the symlink is.)
-> 
-> I forgot to mention - the error codes returned by Landlock make it
-> possible to probe for the presence of files, even when all available
+Good morning Paul, I hope this note finds your week going well and you
+were able to have enjoyed a pleasant holiday season.
 
-It is not specifically the error codes but the inability to restrict
-path resolution.
+The Linux security community has benefited from your prescriptive
+guidelines for the sub-system that you developed when you took over
+the maintainership role.
 
-> FS access rights are denied on a directory.  Attempting to open a file
-> for reading will return EEXIST if it is missing, but will return
-> EACCES if it is denied by Landlock.
-> 
-> gnoack:/tmp/xxx$ ls
-> foobar.txt
-> gnoack:/tmp/xxx$ landlock-restrict -rofiles /proc /usr /bin /etc/ -- /bin/cat foobar.txt
-> cat: foobar.txt: Permission denied
-> gnoack:/tmp/xxx$ landlock-restrict -rofiles /proc /usr /bin /etc/ -- /bin/cat nonexistent.txt
-> cat: nonexistent.txt: No such file or directory
-> gnoack:/tmp/xxx$ landlock-restrict -rofiles /proc /usr /bin /etc/ -- /bin/ls
-> ls: cannot open directory '.': Permission denied
+What is not clear in these guidelines is how a virgin LSM should be
+structured for initial submission.  Moving forward, we believe the
+community would benefit from having clear guidance on this issue.
 
-FYI, there are several ways to infer file presence, and this also work
-with other LSMs such as AppArmor and Tomoyo.  It is a limitation of
-path-based hooks, see https://github.com/landlock-lsm/linux/issues/52
+It would be helpful if the guidance covers a submission of 10-15 KLOC
+of code and 5-8 compilation units, which seems to cover the average
+range of sizes for LSM's that have significant coverage of the event
+handlers/hooks.
 
-As Tingmao noted, this is part of Landlock's documentation, but it could
-be improved.
+We will look forward to your reflections and guidance on this issue.
+
+Have a good remainder of the week.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
+              https://github.com/Quixote-Project
 
