@@ -1,171 +1,109 @@
-Return-Path: <linux-security-module+bounces-13888-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13884-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9F24D03369
-	for <lists+linux-security-module@lfdr.de>; Thu, 08 Jan 2026 15:02:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F831D04466
+	for <lists+linux-security-module@lfdr.de>; Thu, 08 Jan 2026 17:18:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13101303E420
-	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jan 2026 13:39:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7DB0331885CC
+	for <lists+linux-security-module@lfdr.de>; Thu,  8 Jan 2026 15:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018E04782EB;
-	Thu,  8 Jan 2026 13:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A9A3D6691;
+	Thu,  8 Jan 2026 11:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CH1+bSbA"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="e3VcWrxP"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C642A46661C;
-	Thu,  8 Jan 2026 13:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AB93D1CAA
+	for <linux-security-module@vger.kernel.org>; Thu,  8 Jan 2026 11:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767878877; cv=none; b=j6wPHa7YeJNOgnZItHKIjmlr6mApBl2CxWnnjHiq3VNFy25ouKF2e207FFfA91QoPqTCyRorjftVq6dpKp20kWrOvCULuuVnp+vJHPcgESFyNoPrzp8AZcabWCasc+xtFtU9aKuDXGi2I/61Pypt/tSDRUjr0OEv/ZKJepZnyTw=
+	t=1767871818; cv=none; b=WZdC24jZkbcpc39YLx88JdsVucvsEtOJ+xnshK4mqdHL2ETIRdKHMvdmH/ueQ8us50GXVeUGr/nirCGLAOnrfuMVrVtiNK3TbSEiAOL2gm/9qrj2CU1fwPDkFqVCWvCL824vK/LORacP6N2aYbrjk5glzhoAh2tiOSQBTkDRTQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767878877; c=relaxed/simple;
-	bh=aZNd5ZfiO0jANMEUjjmztVseOVSusFwq/OISmXO7svU=;
+	s=arc-20240116; t=1767871818; c=relaxed/simple;
+	bh=Moly6GtMJnTRFeQwFsM2KVbUOKElTrPfqr32dbajSys=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S8PAy4pY6inFSMuBLJCFLl+a73xzN19k76kJtQnOYG4RBNHozsq6qx/3KIZ+3xP36fYPVuSvOIbFxJUv0pSe30enJ9IePFIMqF7h53U83qBjVKiPSEayLO3iiuyHxjB06zW9I/ISGEljeFq4XTki936XTqfVCsXidTZsYqJXp/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CH1+bSbA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5147C19421;
-	Thu,  8 Jan 2026 13:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767878877;
-	bh=aZNd5ZfiO0jANMEUjjmztVseOVSusFwq/OISmXO7svU=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=KZ61DxnGiK+EQXtiqwoJVq2m1UjYmLPqRZsOG4CK0wNpq1QRPIGt5s+VEhabonJ8Q5Voww6nu39V2yBJ/wKprDnacOZPCFmXceuvsngcud4ZKASsbSPaT7nW+f2vAShepxF5YpHy6abhmxuqKCPBaUiWLfMz7lvY7RhVn517mcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=e3VcWrxP; arc=none smtp.client-ip=185.125.25.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dn2Nm0FgCzpF;
+	Thu,  8 Jan 2026 12:14:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1767870871;
+	bh=s95m8BRIXxPPL9x6ob2pjucpUbxmBpRymZiOprntk7Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CH1+bSbA5L8VA7mSCokBdbx0AQgkjkRqmlrahfX8ELEJ2ypQXmqMvcVRFwP7BZeA7
-	 BSx1jwXQromcfmdUn8aCj7co5SIo6jWylGAll+D8/cqvoddu2YDx/42e4v3GQ3kfOz
-	 +1PoWfVz+3t/HWc4puXWpPQCy6NYloGtTiCiECELj0Y0Hp+zjD/1J3iVbJxox5Ity6
-	 QaQzo86aAYTUV/n2JZ6YOjcvzpmeH/Yfp1Gl7rASdzecJ/OYwGp/JWhgiT6oliOfkr
-	 BlTlJ/L02ES4BbNGkIKJon53evIWuoF0ZuqgYoqF07gC76ayOx/8VUA7eTOYM4Hwv9
-	 qpH7uZBqvoYSw==
-Date: Thu, 8 Jan 2026 15:27:52 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Srish Srinivasan <ssrish@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-	James.Bottomley@hansenpartnership.com, zohar@linux.ibm.com,
-	nayna@linux.ibm.com, rnsastry@linux.ibm.com,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] keys/trusted_keys: establish PKWM as a trusted
- source
-Message-ID: <aV-w2NbxAPuuXy_U@kernel.org>
-References: <20260106150527.446525-1-ssrish@linux.ibm.com>
- <20260106150527.446525-6-ssrish@linux.ibm.com>
+	b=e3VcWrxPA2n5khecardYeD2P84Agz3+3UwQqjkchB6vMU7bOVK4M5aysVINbfxxfU
+	 DA7sOfg6u3XJWLaynnRQBY2ijd0qsbKjKK6SkX95Ly0EH0BHsQVrSqG1y3b8E+3yVz
+	 Wrj4xetzmKPdz8U0ob1tMIsYOUBedKRMMIHFtNvU=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dn2Nl0cMGzJhj;
+	Thu,  8 Jan 2026 12:14:31 +0100 (CET)
+Date: Thu, 8 Jan 2026 12:14:24 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
+Cc: Demi Marie Obenour <demiobenour@gmail.com>, 
+	Tingmao Wang <m@maowtm.org>, Paul Moore <paul@paul-moore.com>, 
+	linux-security-module@vger.kernel.org, Justin Suess <utilityemal77@gmail.com>, 
+	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, Matthieu Buffet <matthieu@buffet.re>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, konstantin.meskhidze@huawei.com, Alyssa Ross <hi@alyssa.is>, 
+	Jann Horn <jannh@google.com>, Tahera Fahimi <fahimitahera@gmail.com>
+Subject: Re: [RFC PATCH 0/5] landlock: Pathname-based UNIX connect() control
+Message-ID: <20260108.ahyiez5eeQua@digikod.net>
+References: <20260101134102.25938-1-gnoack3000@gmail.com>
+ <61a6be66-a9bd-4d68-98ed-29aac65b7dfb@gmail.com>
+ <73c5509a-5daa-4ea5-ab9f-e24a59786f6d@maowtm.org>
+ <1d36b2ee-b967-42d7-a6c2-e5b1602a512f@gmail.com>
+ <20260102.93e0d7b9c9b5@gnoack.org>
+ <20260102.ae35fcc3c4d8@gnoack.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260106150527.446525-6-ssrish@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260102.ae35fcc3c4d8@gnoack.org>
+X-Infomaniak-Routing: alpha
 
-On Tue, Jan 06, 2026 at 08:35:26PM +0530, Srish Srinivasan wrote:
-> The wrapping key does not exist by default and is generated by the
-> hypervisor as a part of PKWM initialization. This key is then persisted by
-> the hypervisor and is used to wrap trusted keys. These are variable length
-> symmetric keys, which in the case of PowerVM Key Wrapping Module (PKWM) are
-> generated using the kernel RNG. PKWM can be used as a trust source through
-> the following example keyctl commands:
+On Fri, Jan 02, 2026 at 11:25:38AM +0100, Günther Noack wrote:
+> On Fri, Jan 02, 2026 at 11:16:33AM +0100, Günther Noack wrote:
+> > Regarding the un-restrictable operations, Tingmao's pointers are
+> > correct.  In the warning box in the documentation, the missing
+> > operations that I am aware of are (a) the Unix socket connect()
+> > operation, and (b) the symlink lookup which happens implicitly during
+> > path traversal and which Landlock and other LSMs can not control
+> > through LSM hooks at the moment.  (A symlink always gets implicitly
+> > resolved during path lookup even when you do not have directory read
+> > permissions on the directory where the symlink is.)
 > 
-> keyctl add trusted my_trusted_key "new 32" @u
-> 
-> Use the wrap_flags command option to set the secure boot requirement for
-> the wrapping request through the following keyctl commands
-> 
-> case1: no secure boot requirement. (default)
-> keyctl usage: keyctl add trusted my_trusted_key "new 32" @u
-> 	      OR
-> 	      keyctl add trusted my_trusted_key "new 32 wrap_flags=0x00" @u
-> 
-> case2: secure boot required to in either audit or enforce mode. set bit 0
-> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x01" @u
-> 
-> case3: secure boot required to be in enforce mode. set bit 1
-> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x02" @u
-> 
-> NOTE:
-> -> Setting the secure boot requirement is NOT a must.
-> -> Only either of the secure boot requirement options should be set. Not
-> both.
-> -> All the other bits are required to be not set.
-> -> Set the kernel parameter trusted.source=pkwm to choose PKWM as the
-> backend for trusted keys implementation.
-> -> CONFIG_PSERIES_PLPKS must be enabled to build PKWM.
-> 
-> Add PKWM, which is a combination of IBM PowerVM and Power LPAR Platform
-> KeyStore, as a new trust source for trusted keys.
-> 
-> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  MAINTAINERS                               |   9 ++
->  include/keys/trusted-type.h               |   7 +-
->  include/keys/trusted_pkwm.h               |  22 +++
->  security/keys/trusted-keys/Kconfig        |   8 ++
->  security/keys/trusted-keys/Makefile       |   2 +
->  security/keys/trusted-keys/trusted_core.c |   6 +-
->  security/keys/trusted-keys/trusted_pkwm.c | 168 ++++++++++++++++++++++
->  7 files changed, 220 insertions(+), 2 deletions(-)
->  create mode 100644 include/keys/trusted_pkwm.h
->  create mode 100644 security/keys/trusted-keys/trusted_pkwm.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a0dd762f5648..ba51eff21a16 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14003,6 +14003,15 @@ S:	Supported
->  F:	include/keys/trusted_dcp.h
->  F:	security/keys/trusted-keys/trusted_dcp.c
->  
-> +KEYS-TRUSTED-PLPKS
-> +M:	Srish Srinivasan <ssrish@linux.ibm.com>
-> +M:	Nayna Jain <nayna@linux.ibm.com>
-> +L:	linux-integrity@vger.kernel.org
-> +L:	keyrings@vger.kernel.org
-> +S:	Supported
-> +F:	include/keys/trusted_plpks.h
-> +F:	security/keys/trusted-keys/trusted_pkwm.c
-> +
->  KEYS-TRUSTED-TEE
->  M:	Sumit Garg <sumit.garg@kernel.org>
->  L:	linux-integrity@vger.kernel.org
-> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-> index 4eb64548a74f..45c6c538df22 100644
-> --- a/include/keys/trusted-type.h
-> +++ b/include/keys/trusted-type.h
-> @@ -19,7 +19,11 @@
->  
->  #define MIN_KEY_SIZE			32
->  #define MAX_KEY_SIZE			128
-> -#define MAX_BLOB_SIZE			512
-> +#if IS_ENABLED(CONFIG_TRUSTED_KEYS_PKWM)
-> +#define MAX_BLOB_SIZE			1152
-> +#else
-> +#define MAX_BLOB_SIZE                   512
-> +#endif
->  #define MAX_PCRINFO_SIZE		64
->  #define MAX_DIGEST_SIZE			64
->  
-> @@ -46,6 +50,7 @@ struct trusted_key_options {
->  	uint32_t policydigest_len;
->  	unsigned char policydigest[MAX_DIGEST_SIZE];
->  	uint32_t policyhandle;
-> +	uint16_t wrap_flags;
->  };
+> I forgot to mention - the error codes returned by Landlock make it
+> possible to probe for the presence of files, even when all available
 
-We should introduce:
+It is not specifically the error codes but the inability to restrict
+path resolution.
 
-	void *private;
+> FS access rights are denied on a directory.  Attempting to open a file
+> for reading will return EEXIST if it is missing, but will return
+> EACCES if it is denied by Landlock.
+> 
+> gnoack:/tmp/xxx$ ls
+> foobar.txt
+> gnoack:/tmp/xxx$ landlock-restrict -rofiles /proc /usr /bin /etc/ -- /bin/cat foobar.txt
+> cat: foobar.txt: Permission denied
+> gnoack:/tmp/xxx$ landlock-restrict -rofiles /proc /usr /bin /etc/ -- /bin/cat nonexistent.txt
+> cat: nonexistent.txt: No such file or directory
+> gnoack:/tmp/xxx$ landlock-restrict -rofiles /proc /usr /bin /etc/ -- /bin/ls
+> ls: cannot open directory '.': Permission denied
 
-And hold backend specific fields there.
+FYI, there are several ways to infer file presence, and this also work
+with other LSMs such as AppArmor and Tomoyo.  It is a limitation of
+path-based hooks, see https://github.com/landlock-lsm/linux/issues/52
 
-This patch set does not necessarily have to migrate TPM fields to this
-new framework, only start a better convention before this turns into
-a chaos.
-
-BR, Jarkko
+As Tingmao noted, this is part of Landlock's documentation, but it could
+be improved.
 
