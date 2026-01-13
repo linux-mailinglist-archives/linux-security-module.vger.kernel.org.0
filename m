@@ -1,198 +1,168 @@
-Return-Path: <linux-security-module+bounces-13964-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13969-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BA75D18DC9
-	for <lists+linux-security-module@lfdr.de>; Tue, 13 Jan 2026 13:43:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E73C2D19AF4
+	for <lists+linux-security-module@lfdr.de>; Tue, 13 Jan 2026 16:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8C715309B685
-	for <lists+linux-security-module@lfdr.de>; Tue, 13 Jan 2026 12:39:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D56F23081E04
+	for <lists+linux-security-module@lfdr.de>; Tue, 13 Jan 2026 14:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90317392C20;
-	Tue, 13 Jan 2026 12:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A987F2D738F;
+	Tue, 13 Jan 2026 14:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="O9Xe+RO7"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sSx4mOU4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EElHHGGH"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83773921DF;
-	Tue, 13 Jan 2026 12:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42709284686;
+	Tue, 13 Jan 2026 14:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307873; cv=none; b=DTjFljwrcrDWMJ822amGWflm9MtMFwTy5Ijd0xyqhhNqchcxqaVjq8vcaGrRIDdbviEwnKHsURohX9tTBS05t10oGT1kqRX8lxXcIpf6XP13RI4SfyBZblqHlrhNvyqRC6ss9uyX0taAFXsofsi6bKaDcq640z/pqY/SEjYljRQ=
+	t=1768316201; cv=none; b=o0wgjhKmbdX/h3jJdxLDMvVofaOuMK5KwvkFqNTYatnZhEON0CIjItTyiB4lD3Bk9kKOd8vh+IUbOnHmA+bBjQD5vA+JDoGwzdJ/XwSjBVx5iLM74NQdzOky6PfRwnfseMLcYM14SeCi1U2L4XEg/mE6DeysuL87U7MoHGOn4Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768307873; c=relaxed/simple;
-	bh=Ws8Eb0NwBaSsIELRvPFLQCi4wI4t0JSg+rOArDpr4jQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HjOf+Y5245XTTrgtw4f9eWg0iAhuR0JmA0ALGMuygvDMLP+7H8D6VrOFCRy0IMUbd5KfZ66tC+iHOX7yqCVSO6QXc+FRNm9LhGHWkSIPBYxWXsogALvwZnY/zRRA+dNTLx7LFaO0i5YC18enGv+ZXnL9jYy+dpnR+CspE38JQ/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=O9Xe+RO7; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1768307861;
-	bh=Ws8Eb0NwBaSsIELRvPFLQCi4wI4t0JSg+rOArDpr4jQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=O9Xe+RO75UPCb36u5nzxwzV4aFggvjHY0s8dnC9SRndh/IQGhUfIuuT5vLRHHP6Mc
-	 K1sGiiSW4ebwVx+7Utb4cgjie5ndXNJBjH7Lg49kYigRXnXpkxRbcHBRO0bqcmXgZj
-	 MgNncGcUilz/vm19oRV49rtYw8DPUlXsLyytbp+Y=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 13 Jan 2026 13:29:01 +0100
-Subject: [PATCH v4 17/17] kbuild: make CONFIG_MODULE_HASHES compatible with
- module stripping
+	s=arc-20240116; t=1768316201; c=relaxed/simple;
+	bh=NAqsrBRRVQ9IjNII30nTZcG+axDLjmdYDnjuoF9bBio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HV6KWreyR79nz9hSHBqcqHWaQbSfQWstauNtshrJCeATQeFxgDWFsRTR7WbRw5h67t7Q5CJ3yfLkQXGbHQCUnghie4yR31tS3dXYfvRPQl/iLOnxj1AVfkqBlbialY/ys9scasObMUhnq0rTFf8Tt7MA/o2EiLmeSe/FsXFh1JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sSx4mOU4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EElHHGGH; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 13 Jan 2026 15:56:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768316198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
+	b=sSx4mOU4qkDYzkkx/o4BEtWyl3KyxW3euTuarzApOzTpXlaTS++4XY/zozFEdwI+2D4gqc
+	X/2YYXHPhJ39OiUekNo9mxCgbd3mRKVP6iJ5LixKaumKVEOue7aHTdj2/SSw9AIA7xysiw
+	khwRiBeHIgbbxPJE6nsPK4snz9MXXmwk6QsCaNwglaoU9+6Hv1fw7AOuDtH/SrsWBwtrSs
+	Zpm5UWEXMa1w74IQw5HzaMgnRUPa2rwJxDOUlrasiueQFGxKTnhVEfsy49uPFRY/wFDjFK
+	OtlrNM9syil5J8J1N2p2o6zWC7xe4RZ5ft3jv1L7pqgXQLYRRkdUm/6V+g4TPg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768316198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
+	b=EElHHGGH26sj8RjZyTS7MzBbQHDhVABCJGxSUKy3ePFAS2cW41IbJqoE/+HSbaCGe4llt6
+	VlRf7PDMccGp4EBA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
+Message-ID: <20260113145635.YfSTBhVs@linutronix.de>
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260113-module-hashes-v4-17-0b932db9b56b@weissschuh.net>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
-In-Reply-To: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
-To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, 
- Nicolas Schier <nicolas.schier@linux.dev>, 
- Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- Nicolas Schier <nsc@kernel.org>, 
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, 
- Xiu Jianfeng <xiujianfeng@huawei.com>, Nicolas Schier <nsc@kernel.org>, 
- Christophe Leroy <chleroy@kernel.org>
-Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
- Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
- kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>, 
- =?utf-8?q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768307859; l=3767;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Ws8Eb0NwBaSsIELRvPFLQCi4wI4t0JSg+rOArDpr4jQ=;
- b=oEsyx/jtBizezIcvSkje+0qtObz/4ddhy8qPoVzSRgXe5bKNpF2FVLAcW5REc98tF23qYcGl2
- oWzLDhETAiYD5GsTguxB0tE2w91SHoXCLNfs4qDbap5w+MSSx88FHYp
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
 
-CONFIG_MODULE_HASHES needs to process the modules at build time in the
-exact form they will be loaded at runtime. If the modules are stripped
-afterwards they will not be loadable anymore.
+On 2026-01-13 13:28:59 [+0100], Thomas Wei=C3=9Fschuh wrote:
+> --- /dev/null
+> +++ b/scripts/modules-merkle-tree.c
+> @@ -0,0 +1,467 @@
+=E2=80=A6
+> +static void build_proof(struct mtree *mt, unsigned int n, int fd)
+> +{
+> +	unsigned char cur[EVP_MAX_MD_SIZE];
+> +	unsigned char tmp[EVP_MAX_MD_SIZE];
 
-Also evaluate INSTALL_MOD_STRIP at build time and build the hashes based
-on modules stripped this way.
+This and a few other instances below could be optimized to avoid
+hashing. I probably forgot to let you know.
+-> https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/mtree-hashed-mod=
+s.git/commit/?id=3D10b565c123c731da37befe862de13678b7c54877
 
-If users specify inconsistent values of INSTALL_MOD_STRIP between build
-and installation time, an error is reported.
+> +	struct file_entry *fe, *fe_sib;
+> +
+> +	fe =3D &fh_list[n];
+> +
+> +	if ((n & 1) =3D=3D 0) {
+> +		/* No pair, hash with itself */
+> +		if (n + 1 =3D=3D num_files)
+> +			fe_sib =3D fe;
+> +		else
+> +			fe_sib =3D &fh_list[n + 1];
+> +	} else {
+> +		fe_sib =3D &fh_list[n - 1];
+> +	}
+> +	/* First comes the node position into the file */
+> +	write_be_int(fd, n);
+> +
+> +	if ((n & 1) =3D=3D 0)
+> +		hash_entry(fe->hash, fe_sib->hash, cur);
+> +	else
+> +		hash_entry(fe_sib->hash, fe->hash, cur);
+> +
+> +	/* Next is the sibling hash, followed by hashes in the tree */
+> +	write_hash(fd, fe_sib->hash);
+> +
+> +	for (unsigned int i =3D 0; i < mt->levels - 1; i++) {
+> +		n >>=3D 1;
+> +		if ((n & 1) =3D=3D 0) {
+> +			void *h;
+> +
+> +			/* No pair, hash with itself */
+> +			if (n + 1 =3D=3D mt->entries[i])
+> +				h =3D cur;
+> +			else
+> +				h =3D mt->l[i][n + 1].hash;
+> +
+> +			hash_entry(cur, h, tmp);
+> +			write_hash(fd, h);
+> +		} else {
+> +			hash_entry(mt->l[i][n - 1].hash, cur, tmp);
+> +			write_hash(fd, mt->l[i][n - 1].hash);
+> +		}
+> +		memcpy(cur, tmp, hash_size);
+> +	}
+> +
+> +	 /* After all that, the end hash should match the root hash */
+> +	if (memcmp(cur, mt->l[mt->levels - 1][0].hash, hash_size))
+> +		errx(1, "hash mismatch");
+> +}
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- .gitignore                | 1 +
- kernel/module/Kconfig     | 5 +++++
- scripts/Makefile.modfinal | 9 +++++++--
- scripts/Makefile.modinst  | 4 ++--
- scripts/Makefile.vmlinux  | 1 +
- 5 files changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/.gitignore b/.gitignore
-index 299c54083672..900251c72ade 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -29,6 +29,7 @@
- *.gz
- *.i
- *.ko
-+*.ko.stripped
- *.lex.c
- *.ll
- *.lst
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index c00ca830330c..9fd34765ce2c 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -425,6 +425,11 @@ config MODULE_HASHES
- 
- 	  Also see the warning in MODULE_SIG about stripping modules.
- 
-+# To validate the consistency of INSTALL_MOD_STRIP for MODULE_HASHES
-+config MODULE_INSTALL_STRIP
-+	string
-+	default "$(INSTALL_MOD_STRIP)"
-+
- config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
- 	bool "Allow loading of modules with missing namespace imports"
- 	help
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 5b8e94170beb..890724edac69 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -63,10 +63,14 @@ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- endif
- 	+$(call cmd,check_tracepoint)
- 
-+%.ko.stripped: %.ko $(wildcard include/config/MODULE_INSTALL_STRIP)
-+	$(call cmd,install_mod)
-+	$(call cmd,strip_mod)
-+
- quiet_cmd_merkle = MERKLE  $@
--      cmd_merkle = $(objtree)/scripts/modules-merkle-tree $@ .ko
-+      cmd_merkle = $(objtree)/scripts/modules-merkle-tree $@ $(if $(CONFIG_MODULE_INSTALL_STRIP),.ko.stripped,.ko)
- 
--.tmp_module_hashes.c: $(modules:%.o=%.ko) $(objtree)/scripts/modules-merkle-tree FORCE
-+.tmp_module_hashes.c: $(if $(CONFIG_MODULE_INSTALL_STRIP),$(modules:%.o=%.ko.stripped),$(modules:%.o=%.ko)) $(objtree)/scripts/modules-merkle-tree $(wildcard include/config/MODULE_INSTALL_STRIP) FORCE
- 	$(call cmd,merkle)
- 
- ifdef CONFIG_MODULE_HASHES
-@@ -75,6 +79,7 @@ endif
- 
- targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o) .module-common.o
- targets += $(modules:%.o=%.merkle) .tmp_module_hashes.c
-+targets += $(modules:%.o=%.ko.stripped)
- 
- # Add FORCE to the prerequisites of a target to force it to be always rebuilt.
- # ---------------------------------------------------------------------------
-diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-index 07380c7233a0..45606f994ad9 100644
---- a/scripts/Makefile.modinst
-+++ b/scripts/Makefile.modinst
-@@ -68,8 +68,8 @@ __modinst: $(install-y)
- 
- ifdef CONFIG_MODULE_HASHES
- ifeq ($(KBUILD_EXTMOD),)
--ifdef INSTALL_MOD_STRIP
--$(error CONFIG_MODULE_HASHES and INSTALL_MOD_STRIP are mutually exclusive)
-+ifneq ($(INSTALL_MOD_STRIP),$(CONFIG_MODULE_INSTALL_STRIP))
-+$(error Inconsistent values for INSTALL_MOD_STRIP between build and installation)
- endif
- endif
- endif
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index f4e38b953b01..4ce849f6253a 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -81,6 +81,7 @@ endif
- ifdef CONFIG_MODULE_HASHES
- vmlinux.unstripped: $(objtree)/scripts/modules-merkle-tree
- vmlinux.unstripped: modules.order
-+vmlinux.unstripped: $(wildcard include/config/MODULE_INSTALL_STRIP)
- endif
- 
- # vmlinux
-
--- 
-2.52.0
-
+Sebastian
 
