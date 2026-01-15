@@ -1,246 +1,277 @@
-Return-Path: <linux-security-module+bounces-13982-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-13984-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5697D23CEC
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jan 2026 11:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E7EACD23D91
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jan 2026 11:11:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4CAB230076A4
-	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jan 2026 10:05:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CA2FE3019E04
+	for <lists+linux-security-module@lfdr.de>; Thu, 15 Jan 2026 10:10:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7BD359FB3;
-	Thu, 15 Jan 2026 10:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07693359FB3;
+	Thu, 15 Jan 2026 10:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KtwXDZCw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dvvzsaPq"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110B532E728;
-	Thu, 15 Jan 2026 10:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E5A3570BA
+	for <linux-security-module@vger.kernel.org>; Thu, 15 Jan 2026 10:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768471552; cv=none; b=DzkrvdS4Ex8i4gIEp7x8BS0hF0eHwUaCB/LCqb8JQtcOC/YErP4R0Gy1xlllu7/pBswD28alXzxRUh4VuYFYcTgDmnl9yVbI8uRjKGI/G7XCADCs0WO8JoY5VRNsdjq5zbYvxLHxuYi23EVFMqjHzJefJPzBwj8gRrWcDtNCXHQ=
+	t=1768471812; cv=none; b=GUZNnlBWZP9GqlhgOIrXxRbqEWzJOt8X6f+ziNIJA9sVBtLzYqgG8s+yNNnHOsGvBUlUea/Qj8Z4Z/PdN81lwm2SQ19uYWu5pG+zsZ03gRpdkR+TTpN7OWgTlh4Pn0tvloU9ajVp7Tqkt82jh3UOgvTGGNhisbDI/745MyFSF/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768471552; c=relaxed/simple;
-	bh=aqRdULq4kucJKLo7juH0QAnXYCAWo1Kzpfc6JBUoEtQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UoGSvn9lU3ja8jZbksBE22Cv7gZ9EKqBg7d9HzjShBVyzdprgXLS5kS2PRXVEI/UmGn7dSYey/HKAAuNJsdQ7+n3Ao/k9I1nCLQtMJfZWQgjTCv9+fm7v0ORCZ9I85EvKZOs3IbQ6a20IryWZSuG6oF/ocCf9F6drjgGegPyq3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KtwXDZCw; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60EJVYA4021117;
-	Thu, 15 Jan 2026 10:05:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=56BhBO+/eHWjmoR1c
-	5fXFEtI4KtKouXiVgC1S4fhn/U=; b=KtwXDZCwHY2uLltHX3I9FZtQ13bF0cNBr
-	XEeWb9/JrN8p1Q3GXwy9EpBBGXww29F7q1+hC71p2gZx4JQWOBigCF73ifCd+BhX
-	91WkCD9qalFgGHnwBg+nrO9SH/kRoIYi4mes6Ebm49g8jaW6zsV9Y9IMSJV11o31
-	Vwt0ctoBaTERzjpdAfuoYpK5jS7oKuo3fa8iST6yHdzuTNx8gKYxOfNmr02o9Gxw
-	4LHAlAIVbV3QOG3jwJhufszHGpNj90Gr+PfRdzmEK8+rbtCtPjZm+mAPWwv/aNWg
-	iHkqCvJ6weUF9FL+GH46rkDmeEuuyUwhaMZVoTOL0iYiU9z6Fdxlg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkc6hdmyp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 10:05:36 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60FA02Dv032568;
-	Thu, 15 Jan 2026 10:05:35 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkc6hdmym-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 10:05:35 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60F9UrZC031294;
-	Thu, 15 Jan 2026 10:05:34 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bm3t1y13d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 10:05:34 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60FA5Uow52232584
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Jan 2026 10:05:31 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D64FE20065;
-	Thu, 15 Jan 2026 10:05:30 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5311B2004E;
-	Thu, 15 Jan 2026 10:05:27 +0000 (GMT)
-Received: from li-fc74f8cc-3279-11b2-a85c-ef5828687581.ibm.com.com (unknown [9.39.20.65])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 15 Jan 2026 10:05:27 +0000 (GMT)
-From: Srish Srinivasan <ssrish@linux.ibm.com>
-To: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, James.Bottomley@HansenPartnership.com,
-        jarkko@kernel.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
-        rnsastry@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, ssrish@linux.ibm.com
-Subject: [PATCH v4 6/6] docs: trusted-encryped: add PKWM as a new trust source
-Date: Thu, 15 Jan 2026 15:35:04 +0530
-Message-ID: <20260115100504.488665-7-ssrish@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260115100504.488665-1-ssrish@linux.ibm.com>
-References: <20260115100504.488665-1-ssrish@linux.ibm.com>
+	s=arc-20240116; t=1768471812; c=relaxed/simple;
+	bh=9k+hI8ee/XChzzMZqRaSR1BQU4YqamW09mjAmEnwWew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WlzDh3lF7hvVIx6vuyeg3lbYFqFLriU8Hw+kewI96IjqW9N00c2WWGTGyWIH2OjjuMaCGcJ1oeOwzx+aW+sMftHe7+1Kws/noDxzytAYJSQbtqlvhhn2pbl5Y3ciJW81VfDLr5XrT2iLXwlbTszNPeTBEx1JaXu8so+WdtyNGLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dvvzsaPq; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b8768225837so111747566b.2
+        for <linux-security-module@vger.kernel.org>; Thu, 15 Jan 2026 02:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768471809; x=1769076609; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2FkwmQ3JsIlKc/0pGdsmQ0lUazTKrfor6cVyG/d0vIo=;
+        b=dvvzsaPqq3N6WofqzdwEaZevSR2x06v9DI8NYZ69IG5vkSyeSgiXt+UODKVz6H8xOb
+         CwZvkC250alr07NNvVi/3FJhumpD1DVZjrLdRxSVY94dFmY8oGw6zubR+uEdntlybrWj
+         Pi3ca4FULdM2WOMLdWdqMjtIb3NN/ohRCBqIoy+Q09UMhQhe25KonMwFhEx9RBj8/9AM
+         R5lrhF8eMLaRpvGk+ZOOa2FenrtdZDcz2kmq7XEY7NUMQgoUiNKjral+69acWaUyn2wC
+         Z0RouyhSIGwuovGFDVPtVeToVtF6Iy0Xk1rn260oyfDovNEs+GtaeoqeVbDPqP/gVNr7
+         go7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768471809; x=1769076609;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2FkwmQ3JsIlKc/0pGdsmQ0lUazTKrfor6cVyG/d0vIo=;
+        b=CSEwCS0tL7msQEIxLBugaBnVPAcS+3KhK8CMRBX0UeduneSz0tlip3B9kK//3mTRYf
+         2wgHglC0Cl0sbizLKaSn5YVO++WingxxNHMoLHr3fhWWgbcit66ID2ep3Fi+pYcpdw0J
+         CYlabdtWBmz8WUT30WrkxSBmNLvIgJ6NYvRVOnEZ3pjZ2fvbRbJ4Zy6t8B7oRuBDmGQa
+         FNmT+KAnuwh2Moukum+ZNZrhwwO2nSQowoCBaN44Lo9ashx7DRMAxlb8Uy9zzp3u+tU6
+         4+rM1axEYpPoloRFw7NfYyoymiYY7BCw39ZtjGiNKVHt7GGwiVGBqPFTdGPyKg74YtHO
+         d5Wg==
+X-Forwarded-Encrypted: i=1; AJvYcCVavn8rEBYBfEjk2yJNDZVfRSAgIEUXyK7X69UTFkXvifMKkl99f3I0sNl1PboG5k5UCjxgxERl3nmOKRWnjnd1fL39+Mk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxebkWstCjplplech8CpWFZ6urX1RvdbEzABSBdKmHeRRrzbU5h
+	pZEq3bkCMEekbWP9nDCzxwSUAoB1Z2fW9NKJPiD4qQKKvpvMk84easeH
+X-Gm-Gg: AY/fxX7yTf4VR9GeqpdSiwR+Gi16Is4FDjLEcEtvYNjp+U98M6Uaxu6b7RDbomjOiyX
+	vhdYTH/Brm+qT9ViDlEQufe7x4itSwXR7HY8zoiM8wA1nLRI49W7nk4BC5Ge2JwQmmuQv7EyXCS
+	ymrltc/9WUYIXyYdShYXn4wKPI1cw23edEf7nkhkSeBvlCYlOjGVBnq2ZmuKi5nYweH0xBOFLS3
+	TVqz4TuJRtWmW9km/WmUBnTEHO2OAzq2oTR0aX1I69FqDrgl4BqNCyDZlI0p8LLH+VwT1Ux+jqW
+	/Kst/FGSYyk6NEWy+oNuOYD7t9Q7OHoBnYC6kjQl51GP/9jiJ1KK/8QMRJOuqiulrNzrHcB9HND
+	IaHmKX9k/MkMvqnEwpi+jGjXyBrZUz7L4F8oqTQ9eFPc5Fy2QSETojJFXqM+GT2fcWO+F8WXoAi
+	J/pFtnK6txMTaXQFzjKY5DGWGuV0pxNqUe70mT
+X-Received: by 2002:a17:907:3a12:b0:b87:35fc:ae5f with SMTP id a640c23a62f3a-b87678c36d9mr303953666b.52.1768471809054;
+        Thu, 15 Jan 2026 02:10:09 -0800 (PST)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b842a5180bdsm2659833866b.57.2026.01.15.02.10.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jan 2026 02:10:08 -0800 (PST)
+Date: Thu, 15 Jan 2026 11:10:02 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: Paul Moore <paul@paul-moore.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Justin Suess <utilityemal77@gmail.com>
+Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	linux-security-module@vger.kernel.org, Tingmao Wang <m@maowtm.org>,
+	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>,
+	Matthieu Buffet <matthieu@buffet.re>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	konstantin.meskhidze@huawei.com,
+	Demi Marie Obenour <demiobenour@gmail.com>,
+	Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>,
+	Tahera Fahimi <fahimitahera@gmail.com>,
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v2 1/5] lsm: Add hook unix_path_connect
+Message-ID: <20260115.b5977d57d52d@gnoack.org>
+References: <20260110143300.71048-2-gnoack3000@gmail.com>
+ <20260110143300.71048-4-gnoack3000@gmail.com>
+ <20260113-kerngesund-etage-86de4a21da24@brauner>
+ <CAHC9VhQOQ096WEZPLo4-57cYkM8c38qzE-F8L3f_cSSB4WadGg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZZTzovOmBRFF-Skx-OJQ3W6LCbNzmlt9
-X-Proofpoint-ORIG-GUID: cPQT5v8ryDtZQNLmHA9AtQzwWRPHZoHk
-X-Authority-Analysis: v=2.4 cv=TaibdBQh c=1 sm=1 tr=0 ts=6968bbf0 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=ULK339cd-4IVAxCgyX4A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDA2OSBTYWx0ZWRfX53EA6qxhzXln
- KM+ff8pNI6BelJLMdYu5YRGIwA8jibvCk1zuYtp/mvHMqwr3gxdRaPutETFqv+C6o7j1yNGlNkI
- OgHNbZRPCBnkiUl3anY26p5N3VsAgEvwEIcbsi9+MGqNPhzYc11+eVkDnJoWG10W4dsMVdAPxvs
- cL9+8w2U5kXpFhX6XhGTcPQdqYooNJ+eySCuQKPpkY9NzjEJ/nIuxnV3MmA3lzgqiy8Kfo96NO0
- G3fXCWjjEnLpt8uvuk2G95r1EIHnBFzzXTK9kNyGJvsdvfSnN3jv2GR6BBGDFQMB1F3rLg54zLq
- uKc/0gOdUhBacfPOPr5XEcKL8aPyxqP3dSn4yubO6V7OM3bO6ER5PHsatSnTr/pu2Cut69ZCfkM
- YHpnGjJ2dTu41Vl3V7641SKOFILfB5wCeicK1bDQiGAcyDnvvHgWK56jlP08Pspk/gpfsYTm78K
- DK7tDBCOTo9Au8TNvbw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-15_03,2026-01-14_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 phishscore=0 impostorscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2512120000
- definitions=main-2601150069
+In-Reply-To: <CAHC9VhQOQ096WEZPLo4-57cYkM8c38qzE-F8L3f_cSSB4WadGg@mail.gmail.com>
 
-From: Nayna Jain <nayna@linux.ibm.com>
+On Tue, Jan 13, 2026 at 06:27:15PM -0500, Paul Moore wrote:
+> On Tue, Jan 13, 2026 at 4:34 AM Christian Brauner <brauner@kernel.org> wrote:
+> > On Sat, Jan 10, 2026 at 03:32:57PM +0100, Günther Noack wrote:
+> > > From: Justin Suess <utilityemal77@gmail.com>
+> > >
+> > > Adds an LSM hook unix_path_connect.
+> > >
+> > > This hook is called to check the path of a named unix socket before a
+> > > connection is initiated.
+> > >
+> > > Cc: Günther Noack <gnoack3000@gmail.com>
+> > > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> > > ---
+> > >  include/linux/lsm_hook_defs.h |  4 ++++
+> > >  include/linux/security.h      | 11 +++++++++++
+> > >  net/unix/af_unix.c            |  9 +++++++++
+> > >  security/security.c           | 20 ++++++++++++++++++++
+> > >  4 files changed, 44 insertions(+)
+> 
+> ...
+> 
+> > > diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> > > index 55cdebfa0da0..3aabe2d489ae 100644
+> > > --- a/net/unix/af_unix.c
+> > > +++ b/net/unix/af_unix.c
+> > > @@ -1226,6 +1226,15 @@ static struct sock *unix_find_bsd(struct sockaddr_un *sunaddr, int addr_len,
+> > >       if (!S_ISSOCK(inode->i_mode))
+> > >               goto path_put;
+> > >
+> > > +     /*
+> > > +      * We call the hook because we know that the inode is a socket
+> > > +      * and we hold a valid reference to it via the path.
+> > > +      */
+> > > +     err = security_unix_path_connect(&path, type, flags);
+> > > +     if (err)
+> > > +             goto path_put;
+> >
+> > Couldn't we try reflowing the code here so the path is passed ...
+> 
+> It would be good if you could be a bit more specific about your
+> desires here.  Are you talking about changing the
+> unix_find_other()/unix_find_bsd() code path such that the path is
+> available to unix_find_other() callers and not limited to the
+> unix_find_bsd() scope?
+> 
+> > ... to
+> > security_unix_stream_connect() and security_unix_may_send() so that all
+> > LSMs get the same data and we don't have to have different LSMs hooks
+> > into different callpaths that effectively do the same thing.
+> >
+> > I mean the objects are even in two completely different states between
+> > those hooks. Even what type of sockets get a call to the LSM is
+> > different between those two hooks.
+> 
+> I'm working on the assumption that you are talking about changing the
+> UNIX socket code so that the path info is available to the existing
+> _may_send() and _stream_connect() hooks.  If that isn't the case, and
+> you're thinking of something different, disregard my comments below.
+> 
+> In both the unix_dgram_{connect(),sendmsg()}, aka
+> security_unix_may_send(), cases and the unix_stream_connect(), aka
+> security_unix_stream_connect(), case the call to unix_find_other() is
+> done to lookup the other end of the communication channel, which does
+> seem reasonably consistent to me.  Yes, of course, once you start
+> getting into the specifics of the UNIX socket handling the unix_dgram_
+> and unix_stream_ cases are very different, including their
+> corresponding existing LSM hooks, but that doesn't mean in the context
+> of unix_find_bsd() that security_unix_path_connect() doesn't have
+> value.
+> 
+> The alternative would be some rather serious surgery in af_unix.c to
+> persist the path struct from unix_find_bsd() until the later LSM hooks
+> are executed.  It's certainly not impossible, but I'm not sure it is
+> necessary or desirable at this point in time.  LSMs that wish to
+> connect the information from _unix_path_connect() to either
+> _unix_stream_connect() or _unix_may_send() can do so today without
+> needing to substantially change af_unix.c.
 
-Update Documentation/security/keys/trusted-encrypted.rst and Documentation/
-admin-guide/kernel-parameters.txt with PowerVM Key Wrapping Module (PKWM)
-as a new trust source
+Thanks for the review, Christan and Paul!
 
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
----
- .../admin-guide/kernel-parameters.txt         |  1 +
- .../security/keys/trusted-encrypted.rst       | 50 +++++++++++++++++++
- 2 files changed, 51 insertions(+)
+I am also unconvinced by the approach. It has also crossed my mind
+before though, and my reasoning is as follows:
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a8d0afde7f85..ccb9c2f502fb 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -7755,6 +7755,7 @@ Kernel parameters
- 			- "tee"
- 			- "caam"
- 			- "dcp"
-+			- "pkwm"
- 			If not specified then it defaults to iterating through
- 			the trust source list starting with TPM and assigns the
- 			first trust source as a backend which is initialized
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index eae6a36b1c9a..ddff7c7c2582 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -81,6 +81,14 @@ safe.
-          and the UNIQUE key. Default is to use the UNIQUE key, but selecting
-          the OTP key can be done via a module parameter (dcp_use_otp_key).
- 
-+     (5) PKWM (PowerVM Key Wrapping Module: IBM PowerVM + Platform KeyStore)
-+
-+         Rooted to a unique, per-LPAR key, which is derived from a system-wide,
-+         randomly generated LPAR root key. Both the per-LPAR keys and the LPAR
-+         root key are stored in hypervisor-owned secure memory at runtime,
-+         and the LPAR root key is additionally persisted in secure locations
-+         such as the processor SEEPROMs and encrypted NVRAM.
-+
-   *  Execution isolation
- 
-      (1) TPM
-@@ -102,6 +110,14 @@ safe.
-          environment. Only basic blob key encryption is executed there.
-          The actual key sealing/unsealing is done on main processor/kernel space.
- 
-+     (5) PKWM (PowerVM Key Wrapping Module: IBM PowerVM + Platform KeyStore)
-+
-+         Fixed set of cryptographic operations done on on-chip hardware
-+         cryptographic acceleration unit NX. Keys for wrapping and unwrapping
-+         are managed by PowerVM Platform KeyStore, which stores keys in an
-+         isolated in-memory copy in secure hypervisor memory, as well as in a
-+         persistent copy in hypervisor-encrypted NVRAM.
-+
-   * Optional binding to platform integrity state
- 
-      (1) TPM
-@@ -129,6 +145,11 @@ safe.
-          Relies on Secure/Trusted boot process (called HAB by vendor) for
-          platform integrity.
- 
-+     (5) PKWM (PowerVM Key Wrapping Module: IBM PowerVM + Platform KeyStore)
-+
-+         Relies on secure and trusted boot process of IBM Power systems for
-+         platform integrity.
-+
-   *  Interfaces and APIs
- 
-      (1) TPM
-@@ -149,6 +170,11 @@ safe.
-          Vendor-specific API that is implemented as part of the DCP crypto driver in
-          ``drivers/crypto/mxs-dcp.c``.
- 
-+     (5) PKWM (PowerVM Key Wrapping Module: IBM PowerVM + Platform KeyStore)
-+
-+         Platform Keystore has well documented interfaces in PAPR document.
-+         Refer to ``Documentation/arch/powerpc/papr_hcalls.rst``
-+
-   *  Threat model
- 
-      The strength and appropriateness of a particular trust source for a given
-@@ -191,6 +217,10 @@ selected trust source:
-      a dedicated hardware RNG that is independent from DCP which can be enabled
-      to back the kernel RNG.
- 
-+   * PKWM (PowerVM Key Wrapping Module: IBM PowerVM + Platform KeyStore)
-+
-+     The normal kernel random number generator is used to generate keys.
-+
- Users may override this by specifying ``trusted.rng=kernel`` on the kernel
- command-line to override the used RNG with the kernel's random number pool.
- 
-@@ -321,6 +351,26 @@ Usage::
- specific to this DCP key-blob implementation.  The key length for new keys is
- always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
- 
-+Trusted Keys usage: PKWM
-+------------------------
-+
-+Usage::
-+
-+    keyctl add trusted name "new keylen [options]" ring
-+    keyctl add trusted name "load hex_blob" ring
-+    keyctl print keyid
-+
-+    options:
-+       wrap_flags=   ascii hex value of security policy requirement
-+                       0x00: no secure boot requirement (default)
-+                       0x01: require secure boot to be in either audit or
-+                             enforced mode
-+                       0x02: require secure boot to be in enforced mode
-+
-+"keyctl print" returns an ASCII hex copy of the sealed key, which is in format
-+specific to PKWM key-blob implementation.  The key length for new keys is
-+always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-+
- Encrypted Keys usage
- --------------------
- 
--- 
-2.47.3
+For reference, the function call hierarchy in af_unix.c is:
 
+* unix_dgram_connect()   (*)
+  * unix_find_other()
+    * unix_find_bsd()
+  * security_unix_may_send()
+
+* unix_dgram_sendmsg()   (*)
+  * unix_find_other()
+    * unix_find_bsd()
+  * security_unix_may_send()
+
+* unix_stream_connect()  (*)
+  * unix_find_other()
+    * unix_find_bsd()
+  * security_unix_stream_connect()
+
+In my understanding, the hypothetical implementation would be:
+
+* allocate a struct path on the stack of these proto_ops hook
+  functions (marked with (*) above)
+* pass a pointer to that path down to unix_find_other(), only to be
+  filled out in the case that this is a pathname UNIX socket (not an
+  abstract UNIX socket)
+* pass a const pointer to that path to the LSM hooks
+
+and then the LSM hooks would have to check whether the struct path has
+non-zero pointers and could do the check.
+
+This has the upside that it does not introduce a new LSM hook, but
+only adds a "path" parameter to two existing LSM hooks.
+
+On the other side, I see the following drawbacks:
+
+* The more serious surgery in af_unix, which Paul also discussed:
+
+  The function interface to unix_find_other() would need additional
+  parameters for the sole purpose of supporting these LSM hooks and
+  the refcounting of the struct path would have to be done in three
+  functions instead of just in one.  That would complicate the
+  af_unix.c logic, even when CONFIG_SECURITY_PATH is not set.
+
+* The cases in which we pass a non-zero path argument to the LSM hooks
+  would have surprising semantics IMHO, because it is not always set:
+
+  * If a UNIX dgram user uses connect(2) and then calls sendmsg(2)
+    without explicit recipient address, unix_dgram_sendmsg() would
+    *not* do the look up any more and we can not provide the path to
+    the security_unix_may_send() hook.
+  * For abstract UNIX sockets it is not set either, of course.
+
+  The path argument to the LSM hook would be present in the exact same
+  cases where we now call the new UNIX path lookup LSM hook, but it
+  would be invoked with a delay.
+
+* Some properties of the resolved socket are still observable to
+  userspace:
+
+  When we only pass the path to a later LSM hook, there are a variety
+  of additional error case checks in af_unix.c which are based on the
+  "other" socket which we looked up through the path.  Examples:
+
+  * was other shutdown(2)? (ECONNREFUSED on connect or EPIPE on dgram_sendmsg)
+  * does other support SO_PASSRIGHTS (fd passing)? (EPERM on dgram_sendmsg)
+  * would sendmsg pass sk_filter() (on dgram_sendmsg)
+
+  For a LSM policy that is supposed to restrict the resolution of a
+  UNIX socket by path, I would not expect such properties of the
+  resolved socket to be observable?
+
+  (And we also can't fix this up in the LSM by returning a matching
+  error code, because at least unix_dgram_sendmsg() returns multiple
+  different error codes in these error cases.)
+
+  I would prefer if the correctness of our LSM did not depend on
+  keeping track of the error scenarios in af_unix.c.  This seems
+  brittle.
+
+Overall, I am not convinced that using pre-existing hooks is the right
+way and I would prefer the approach where we have a more dedicated LSM
+hook for the path lookup.
+
+Does that seem reasonable?  Let me know what you think.
+
+–Günther
 
