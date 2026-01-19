@@ -1,178 +1,162 @@
-Return-Path: <linux-security-module+bounces-14017-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14020-lists+linux-security-module=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-security-module@lfdr.de
 Delivered-To: lists+linux-security-module@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB01D3A212
-	for <lists+linux-security-module@lfdr.de>; Mon, 19 Jan 2026 09:51:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08225D3A359
+	for <lists+linux-security-module@lfdr.de>; Mon, 19 Jan 2026 10:41:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0C0B630022EA
-	for <lists+linux-security-module@lfdr.de>; Mon, 19 Jan 2026 08:51:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8A78B300B379
+	for <lists+linux-security-module@lfdr.de>; Mon, 19 Jan 2026 09:40:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E23F134FF61;
-	Mon, 19 Jan 2026 08:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28EB3563CE;
+	Mon, 19 Jan 2026 09:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zaSVgH3W"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="37uQbcQ1"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D5834F49C
-	for <linux-security-module@vger.kernel.org>; Mon, 19 Jan 2026 08:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4197F296BA5
+	for <linux-security-module@vger.kernel.org>; Mon, 19 Jan 2026 09:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768812679; cv=none; b=fgzWcEqzyWGLH72+GWhMr0CHqcDorOPY1iskGCerZiy9SJ5uZf4gQ2ov+DQOzWcWhKc2rTyqGqmqP04TLZ6StsmehvNQLuq0BhFD9q1POL2MHajeS5+GuGJu/4Nmxlnm9TWX8INVVpOUauQ3rM4lgGKFcKa1tDNYOdgugB08XjA=
+	t=1768815648; cv=none; b=JGfMSThlkZMIavZ+JjWtKxW6i9WcVjOuPCL2e+EOcK4pJEviZTpFmNc212HUj0qMhRwseQBmZRdt43lEsGn1wMH06eY4tg5WsGe75B53LJr3NDBXL6hR2Wptkn0nJE/xw38EROu3BBR1QMf6trVwVcZaG+0dWOnS4R+UnJE9cKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768812679; c=relaxed/simple;
-	bh=Ax8wgaK+ez15fxYYZiVX8seyZwmcTdJyLJpygBaT6qg=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=T2x0y/6Qu40C30qQAN4PjqfReu2/o/5rLvR/uVGJDo3dS64ERamTE5hi4RmsEyCE/3CuKsMWVBNN/U0RS5vMBGAqSlfI94qUowJ+KZswdwaNp0Eu7dxiuAyx3ZYoHAtzKnJl1LavwN+R4rG4fMU8mjmi/5dC+ntBP8iVJyEhGx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zaSVgH3W; arc=none smtp.client-ip=209.85.221.74
+	s=arc-20240116; t=1768815648; c=relaxed/simple;
+	bh=LFRNb1gEQo9FV1jLi6+eyd+fRn/YHv3OptpdwWFbVxE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Co2zlrnF00kEMQevar6omF+xgZraCt7Qx+2/ODDfzC9bix8lC/gl41EhNXN1BIfXSHMTe/6zV/6PrtQy5RVV6ktfU256FtkCIBmIIXDkFWEoE3RxG64J5izec0eMUTTefn4HOetOnkTguaEWouyL0QHwsioWIVpvssZXNAVLdz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=37uQbcQ1; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-4310062d97bso2406267f8f.0
-        for <linux-security-module@vger.kernel.org>; Mon, 19 Jan 2026 00:51:18 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-47d28e7960fso43450185e9.0
+        for <linux-security-module@vger.kernel.org>; Mon, 19 Jan 2026 01:40:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768812677; x=1769417477; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1768815646; x=1769420446; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=e6YT/SSIHC+I60myLHN8wqfFYBBYrwfHUs2Kiakqa00=;
-        b=zaSVgH3Wnpw2bKHfgqo6elwroE+Sw8kZjNBesFrsgXb4R7J1OKyZLnXV7Ez/jLVCsI
-         /wQg6e4roy1RLeEmzZA5b8iHfq1yNrFiQzpxPebHQ+1jyQbyeySbW7wCywrxB/DsxRYK
-         xbp8h18LKNdDFaJ9hpaUkz/tvRNtIuK0l4eZhS5V/3goqUWUAT/IU9TE1SUBEknPd0we
-         2NBBm2haB5Qfo91e8v3wUttMXbwkGv6klAOjqDnbvXcta0KaqKCPcKbMzjfGgHRTqlIz
-         Sw0vE441T8Ud1ANj+vEClvC9Gi5zzmCB8dYKgVj4gSV5eBbh21+Eb5kmHm1orLLBmiDG
-         fm+w==
+        bh=Tir03/0eTjGqYap+VXkH/YQyday94uYso0Z0/c7DdeU=;
+        b=37uQbcQ1CKqDDkAdb1lkP+I8pU0UDUltDhqfAVpP5SPDcQYJlViZ3k3dBVEq0WO12m
+         cIQccXy65LtV3IQv6H2M1jM4r7qEmkHAgILU6jRxF63kky97kNdQvKiE44GmhP27jDpp
+         mg5IPaWxJXg92hXihjlaEAo8Qw6TGqtc8JdJ7B9zk6nXT4dS9isbTmf2IzKi0P6Em1UJ
+         cwuT6tb5G0EslSIjR9kl6/E8R3TvBamDcsup8v/Xbqlm6ntQhsM0hI7cJiG2zwppXp1x
+         lPQaGz1ZK0Q1/17NzOKTPoJhh8MZSRzU+xrLLg2G8MGBcIboKCU67EwBDWVmM1cNsRUD
+         m9oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768812677; x=1769417477;
+        d=1e100.net; s=20230601; t=1768815646; x=1769420446;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e6YT/SSIHC+I60myLHN8wqfFYBBYrwfHUs2Kiakqa00=;
-        b=PGAD5rqEhTcUoZZznEvvIZrANyodLI5wNZcR+pmZyCfMYZ86f7ltO9RN4adrzMj3YZ
-         zwpBs6jcElwgb0aP+KN6hFSMRp6JV09a3X/9aDpm2PGPfWyDEkE1MIjvVfHnPkDHmTH6
-         bi2OjqZESgAXRSl+PqNZOU9JjVJhlsi638PT4WjCCnrjS+tV14fw+iDlkAk0OYtXImSA
-         qJ0DutMu2KlVc/QDxA59+cMdUQoVqA8RV8t/NvdOMxf1EfW9GIpwPx37ojMPqiemoudR
-         8ll+ukpWiicPvrYkqKTZV8vnC4rkxtCEs8VFHdvdhi+aq84TP4unRUQyxFP3dLg8gAN9
-         HJ6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVV15ovpLFO1XS4dq4p/0AQAl9LsMS0JK5to4yxno5Crx8jGhCDPHhu0IOHRj0U621WfziLRnTHci445bI4uMs5NzMgUIY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLcuQFdroUKOoO4z35DzVH78jbIE8/SGIM6R2HNwh0/+s8I/vj
-	0i1gUSKA/L4tfBq4j5ATdi0hKbgiltUXPvvoXrGhVeVSnMZ2P0X2JllyGGHTpM/Ru2C+Q0Ogk2o
-	YocRAVPcv/stn4QbPEA==
-X-Received: from wrwq3.prod.google.com ([2002:a5d:5743:0:b0:432:c091:266a])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:1787:b0:431:104:6db7 with SMTP id ffacd0b85a97d-4356a02c9f0mr14599765f8f.26.1768812676695;
- Mon, 19 Jan 2026 00:51:16 -0800 (PST)
-Date: Mon, 19 Jan 2026 08:51:07 +0000
+        bh=Tir03/0eTjGqYap+VXkH/YQyday94uYso0Z0/c7DdeU=;
+        b=pV6o06zA8XZI54uhmts5E7E3PjLIqQdIrE5bA0arxW+lcXgywM7K3Cd1CVIsXBSkQX
+         dj2KTUwsAUDI0Y+3/0xLjU7ArnwJhCRxAKIVVcU73T0xXPYA9Mz3pe8xFUL889U5dCX+
+         e1NPULAHavXYH09f0yy/uv8O4/VKV5TJTPX2iAxVdy5NAOEsTox5joFvdyrGqnB2t0XF
+         ZeR2ygmsDuFc0aGIQuCtOZiHaUgtY6jvM+U+h8w88NXvdoR4SrZ/GULccPr/vHJcZ/r1
+         Jiyl7febw6xy4+NLZEPvbDNypwiYV7DbjqAS1eH5ggZJlG6xhgQqyQSSQ15jy8Gq9V9y
+         CNRw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIWlTl+Wb8FgT6IvROPblBSHbFypEQvVP0YPsPHEvu0KEBWzdKgav+nQkg/wZXNxMyefn+CunS4FThieqR5uc7B7J1DWQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmbUROG/3KGcbGUOYV7mxOW7AJe+TXOC1jACwlfYwcfOREmQ7b
+	hRK39heueWCCE2xE54E5SMNOAawhY4FQm0nzITR9UB+BSdO9VYvEF5E+Jx2FsDEUFyhJQumm965
+	G0A==
+X-Received: from wmbil25.prod.google.com ([2002:a05:600c:a599:b0:46e:1e57:dbd6])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:358e:b0:470:fe3c:a3b7
+ with SMTP id 5b1f17b1804b1-4801e2f3083mr136239335e9.5.1768815645684; Mon, 19
+ Jan 2026 01:40:45 -0800 (PST)
+Date: Mon, 19 Jan 2026 10:05:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2668; i=aliceryhl@google.com;
- h=from:subject; bh=Ax8wgaK+ez15fxYYZiVX8seyZwmcTdJyLJpygBaT6qg=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpbfB0H6u938zFWwZxBk8W9injxH0DUlnOu6hQr
- I9pSqjICDCJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaW3wdAAKCRAEWL7uWMY5
- RpEPD/9s0mWghFgMzJPD/QM93dAQDoNAJOGO/mppcLzJ6KEcbUO8WdVMFqw0HNIgLpmwQGasgOl
- rvTeycYj9P9eaJDRd0ByV+iNF5El8QgqIUPbVfnEHQJG+Ck3ZXpk2/u0UVxQ1MPdF1xwPO+6IqQ
- XepW+bMkOtv8Xq1rzJD+xjv3io1GiqI5AnklqE4mQJkHlOSmlSxQNH7sge4YA8HyaKtPmXdHA36
- RCEeR9nLDud9oIFWbSfJhkolbktNopYMuvJRylPFgtPbVQRVj7FdDyES/+pIPpoTyEesVRN1CUP
- s56VYZoKQIrQVokgEYeeIi2E12cNj/4KqOM8peQBi9oZiA9oPOTln9DhbB/kS51aITYWyIFasVY
- otTv1uuwc7h4BSgqqW01+OaDAm2fdyvcHWa/LcQGQtY2nmcVAqTO+Oy9N3HI8MBZ3cWpSt8pvl0
- e/s4qn3CyEZJEFgx2A05UUHW+hXp0i3wJGnPp9WqpsJDqEfXh42Ow2MrPl/KIKW/xdAuzL9mner
- pIC+pDjlGGH3HGd75Y+PBG6gtdLV2goWtIoEpjPZYwbO2pAu49r9smAml+uvuAdsy9m1fPk52ep
- PdZoGYtzCBrYEtl6lrFOoycgPw8nIBwBS2OQJFGBmnbWTkvaAh6RB1hHBWzSo+xwqiruJ/c+726 HkrKPpFUUsLgLjQ==
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260119085109.2238878-1-aliceryhl@google.com>
-Subject: [PATCH] security: export binder symbols
-From: Alice Ryhl <aliceryhl@google.com>
-To: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Carlos Llamas <cmllamas@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Message-ID: <20260119094029.1344361-1-elver@google.com>
+Subject: [PATCH tip/locking/core 0/6] compiler-context-analysis: Scoped init guards
+From: Marco Elver <elver@google.com>
+To: elver@google.com, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Christoph Hellwig <hch@lst.de>, Steven Rostedt <rostedt@goodmis.org>, Bart Van Assche <bvanassche@acm.org>, 
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+	linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-To enable building Rust Binder (possibly also C Binder) as a module,
-export these symbols.
+Current context analysis treats lock_init() as implicitly "holding" the
+lock to allow initializing guarded members. This causes false-positive
+"double lock" reports if the lock is acquired immediately after
+initialization in the same scope; for example:
 
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
- security/security.c | 4 ++++
- 1 file changed, 4 insertions(+)
+	mutex_init(&d->mtx);
+	/* ... counter is guarded by mtx ... */
+	d->counter = 0;  /* ok, but mtx is now "held" */
+	...
+	mutex_lock(&d->mtx); /* warning: acquiring mutex already held */
 
-diff --git a/security/security.c b/security/security.c
-index 31a688650601..b4776f0e25b3 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -479,61 +479,65 @@ int security_binder_set_context_mgr(const struct cred *mgr)
- /**
-  * security_binder_set_context_mgr() - Check if becoming binder ctx mgr is ok
-  * @mgr: task credentials of current binder process
-  *
-  * Check whether @mgr is allowed to be the binder context manager.
-  *
-  * Return: Return 0 if permission is granted.
-  */
- int security_binder_set_context_mgr(const struct cred *mgr)
- {
- 	return call_int_hook(binder_set_context_mgr, mgr);
- }
-+EXPORT_SYMBOL_GPL(security_binder_set_context_mgr);
- 
- /**
-  * security_binder_transaction() - Check if a binder transaction is allowed
-  * @from: sending process
-  * @to: receiving process
-  *
-  * Check whether @from is allowed to invoke a binder transaction call to @to.
-  *
-  * Return: Returns 0 if permission is granted.
-  */
- int security_binder_transaction(const struct cred *from,
- 				const struct cred *to)
- {
- 	return call_int_hook(binder_transaction, from, to);
- }
-+EXPORT_SYMBOL_GPL(security_binder_transaction);
- 
- /**
-  * security_binder_transfer_binder() - Check if a binder transfer is allowed
-  * @from: sending process
-  * @to: receiving process
-  *
-  * Check whether @from is allowed to transfer a binder reference to @to.
-  *
-  * Return: Returns 0 if permission is granted.
-  */
- int security_binder_transfer_binder(const struct cred *from,
- 				    const struct cred *to)
- {
- 	return call_int_hook(binder_transfer_binder, from, to);
- }
-+EXPORT_SYMBOL_GPL(security_binder_transfer_binder);
- 
- /**
-  * security_binder_transfer_file() - Check if a binder file xfer is allowed
-  * @from: sending process
-  * @to: receiving process
-  * @file: file being transferred
-  *
-  * Check whether @from is allowed to transfer @file to @to.
-  *
-  * Return: Returns 0 if permission is granted.
-  */
- int security_binder_transfer_file(const struct cred *from,
- 				  const struct cred *to, const struct file *file)
- {
- 	return call_int_hook(binder_transfer_file, from, to, file);
- }
-+EXPORT_SYMBOL_GPL(security_binder_transfer_file);
- 
- /**
-  * security_ptrace_access_check() - Check if tracing is allowed
+This series proposes a solution to this by introducing scoped init
+guards which Peter suggested, using the guard(type_init)(&lock) or
+scoped_guard(type_init, ..) interface. This explicitly marks init scope
+where we can initialize guarded members. With that we can revert the
+"implicitly hold" after init annotations, which allows use after
+initialization scope as follows:
 
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-prerequisite-patch-id: 0000000000000000000000000000000000000000
+	scoped_guard(mutex_init, &d->mtx) {
+		d->counter = 0;
+	}
+	...
+	mutex_lock(&d->mtx); /* ok */
+
+Note: Scoped guarded initialization remains optional, and normal
+initialization can still be used if no guarded members are being
+initialized. Another alternative is to just disable context analysis to
+initialize guarded members with `context_unsafe(var = init)` or adding
+the `__context_unsafe(init)` function attribute (the latter not being
+recommended for non-trivial functions due to lack of any checking):
+
+	mutex_init(&d->mtx);
+	context_unsafe(d->counter = 0);  /* ok */
+	...
+	mutex_lock(&d->mtx);
+
+This series is an alternative to the approach in [1]:
+
+   * Scoped init guards (this series): Sound interface, requires use of
+     guard(type_init)(&lock) or scoped_guard(type_init, ..) for guarded
+     member initialization.
+
+   * Reentrant init [1]: Less intrusive, type_init() just works, and
+     also allows guarded member initialization with later lock use in
+     the same function. But unsound, and e.g. misses double-lock bugs
+     immediately after init, trading false positives for false negatives.
+
+[1] https://lore.kernel.org/all/20260115005231.1211866-1-elver@google.com/
+
+Marco Elver (6):
+  cleanup: Make __DEFINE_LOCK_GUARD handle commas in initializers
+  compiler-context-analysis: Introduce scoped init guards
+  kcov: Use scoped init guard
+  crypto: Use scoped init guard
+  tomoyo: Use scoped init guard
+  compiler-context-analysis: Remove __assume_ctx_lock from initializers
+
+ Documentation/dev-tools/context-analysis.rst | 30 ++++++++++++++++++--
+ crypto/crypto_engine.c                       |  2 +-
+ crypto/drbg.c                                |  2 +-
+ include/linux/cleanup.h                      |  8 +++---
+ include/linux/compiler-context-analysis.h    |  9 ++----
+ include/linux/local_lock.h                   |  8 ++++++
+ include/linux/local_lock_internal.h          |  4 +--
+ include/linux/mutex.h                        |  4 ++-
+ include/linux/rwlock.h                       |  3 +-
+ include/linux/rwlock_rt.h                    |  1 -
+ include/linux/rwsem.h                        |  6 ++--
+ include/linux/seqlock.h                      |  6 +++-
+ include/linux/spinlock.h                     | 17 ++++++++---
+ include/linux/spinlock_rt.h                  |  1 -
+ include/linux/ww_mutex.h                     |  1 -
+ kernel/kcov.c                                |  2 +-
+ lib/test_context-analysis.c                  | 22 ++++++--------
+ security/tomoyo/common.c                     |  2 +-
+ 18 files changed, 80 insertions(+), 48 deletions(-)
+
 -- 
 2.52.0.457.g6b5491de43-goog
 
