@@ -1,132 +1,236 @@
-Return-Path: <linux-security-module+bounces-14100-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14084-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iL74Bq/Rb2mgMQAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14100-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 20 Jan 2026 20:04:15 +0100
+	id IBmwNDOFcGktYAAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14084-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 08:50:11 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C90849FA2
-	for <lists+linux-security-module@lfdr.de>; Tue, 20 Jan 2026 20:04:14 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78913530C4
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 08:50:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 81B4396FA00
-	for <lists+linux-security-module@lfdr.de>; Tue, 20 Jan 2026 18:27:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C6E18743BC9
+	for <lists+linux-security-module@lfdr.de>; Tue, 20 Jan 2026 10:52:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B734441037;
-	Tue, 20 Jan 2026 18:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C963ECBEC;
+	Tue, 20 Jan 2026 10:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="AqUY9lXl"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="POGQsvVP"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A0F43CEC2;
-	Tue, 20 Jan 2026 18:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30E7379984;
+	Tue, 20 Jan 2026 10:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768933458; cv=none; b=SjCxfC5olskmHXucy4TcEXOGmFz7bK+1dsI1xRtJGCCK6Ufq14WIH6xar286YIUdXpB1QEgUcxJtg3MAaah9K3Qr94oyubXj49j2VAuOMRtD+ROHG06W7OEOonWeBVrYJAmDEnJp245okCE74eyhu3hFLgRnkid8cfDb5S8r+5U=
+	t=1768906343; cv=none; b=N41gaAO+RTrR455Q72JL6L88r5vtiavVFDjdmsU4bozTgbL5dz8QB/yodRqPlKwnXjyFZ7FTuQol3lyLKs7qSdk6+CqzRONSCAvovlMUJNWP2ZS4ODRxs76pn8c7fzl9z6etn6oTXNTE62zS/t0h4sQ9zV9U0Zxm85I43QhRGcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768933458; c=relaxed/simple;
-	bh=laO+s2zBiXudQJg6l9/ECBEXlmXile3qngJMXioXyAw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ut5AHp7ssOavVixWTlUWRopMN2tGgbWSP/fA2DqQ0fc0om+Gaj/ALZ4djek16TcTYQi2XE4bU/NK8uG5xlT12NZOXTDPwnwT1LQhrL15SiQCzEFG9BnXGOCPZ/YuJyxRSmeXQjSsk0A4mxsCTE1dt4mRfdgZh4FFpBJW64hryN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=AqUY9lXl; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dwbM41s2Lz1XM0ns;
-	Tue, 20 Jan 2026 18:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1768933453; x=1771525454; bh=laO+s2zBiXudQJg6l9/ECBEX
-	lmXile3qngJMXioXyAw=; b=AqUY9lXlAQ4tazuUKBYtOVKX+Sxi+fpryjzp/hnc
-	Z1AscB9YpGz0GenM7OjEN3g14T9M/Kuce+x+5f3bG4kmckbcwZYJfJq9EyaysY72
-	qJw4hePIJKaAvOspdV2bQDFO4HeyNL8JD44+P+BQ14XFhP4xmlsr4FXDo/i4cnMe
-	mxRS9QxPfqEku4O18CCxatl0wvE3GFMMsFeS6BDvIQf/ih6+wet/Un5jjJk7Kwu9
-	4MDVTUzSLTlaMMbwyaZOfz8lROQZTYXIty0LXRmrI+JGyQesgVrQwNJcCJ0zvbYZ
-	jGcUcHjjHU95vSmMp/u05P9C9WLBkOPKCOICmMqwX+l2Zg==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id vZGs651jTWFO; Tue, 20 Jan 2026 18:24:13 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dwbLx272pz1XM5jn;
-	Tue, 20 Jan 2026 18:24:08 +0000 (UTC)
-Message-ID: <16d01754-cab9-4067-a65f-60040ac6d47e@acm.org>
-Date: Tue, 20 Jan 2026 10:24:08 -0800
+	s=arc-20240116; t=1768906343; c=relaxed/simple;
+	bh=7tTn9KomlvNB6ws9NmjAQ2DQsDaQvHCfQzljpMZnb9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I14L4la/M7HODoNjthmwEHngaubrzVNUw8mRYaIF/KCOE3Lbd4GZJCn4Tg//gswOq1kOKuOhmEvBoPDmDBjQ86goDAzgVGRvwDfjD6I8fimhSYyVLzwBo4VBHMtXe9LlDk0cLavEp8ohWAccElSZtC6w7T1Uvr3xI3I/qk51zMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=POGQsvVP; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=qkRq9Kh+t9q2WeybfZmZ0D2kPKKoLj074IxXeupVa34=; b=POGQsvVPUouyYNoj21sDqBPYKZ
+	R0lCPeU5PRUnjN8MYEExDU20JEhGYMjxgs3bHFc43CwzxDrAUIp4J3NWjt4DYhHjj6peWPSyPdUAm
+	6HHdmNtG4AUOAnoVy30ZQtX9lB99C1cCkXmHBVfvkSd7Z8HVc63IWlEcdzbKwIZSu8CB/nWt+I+tG
+	U5nDyOddIWAX1IePkez6A4+ZLukEt9GQMNHdzWv80ifqFYIA2NbDkDWfregXWOoQ4mQxKSfDbvAZl
+	d3xwt4+zPTEpB3W4t9ePIX0x+7KVg8sFTAyT2++38imeqMTa+Gl3And/cNLGx+jj5EAyuz/H6NhRX
+	IMA2qUpA==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vi9LI-0000000DqiH-27xI;
+	Tue, 20 Jan 2026 10:52:12 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 022A5301C52; Tue, 20 Jan 2026 11:52:12 +0100 (CET)
+Date: Tue, 20 Jan 2026 11:52:11 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Marco Elver <elver@google.com>, Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Bart Van Assche <bvanassche@acm.org>, kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev, linux-crypto@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH tip/locking/core 0/6] compiler-context-analysis: Scoped
+ init guards
+Message-ID: <20260120105211.GW830755@noisy.programming.kicks-ass.net>
+References: <20260119094029.1344361-1-elver@google.com>
+ <20260120072401.GA5905@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH tip/locking/core 0/6] compiler-context-analysis: Scoped
- init guards
-To: Marco Elver <elver@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
- Christoph Hellwig <hch@lst.de>, Steven Rostedt <rostedt@goodmis.org>,
- kasan-dev@googlegroups.com, llvm@lists.linux.dev,
- linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260119094029.1344361-1-elver@google.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260119094029.1344361-1-elver@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260120072401.GA5905@lst.de>
 X-Spamd-Result: default: False [-0.46 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[acm.org:s=mr01];
+	R_DKIM_ALLOW(-0.20)[infradead.org:s=desiato.20200630];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[linutronix.de,kernel.org,gmail.com,redhat.com,lst.de,goodmis.org,googlegroups.com,lists.linux.dev,vger.kernel.org];
+	FREEMAIL_CC(0.00)[google.com,kernel.org,linutronix.de,gmail.com,redhat.com,goodmis.org,acm.org,googlegroups.com,lists.linux.dev,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14100-lists,linux-security-module=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14084-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[acm.org,reject];
-	DKIM_TRACE(0.00)[acm.org:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[infradead.org,none];
+	DKIM_TRACE(0.00)[infradead.org:+];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bvanassche@acm.org,linux-security-module@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[peterz@infradead.org,linux-security-module@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,acm.org:mid,acm.org:dkim]
-X-Rspamd-Queue-Id: 4C90849FA2
+	TAGGED_RCPT(0.00)[linux-security-module];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:dkim,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 78913530C4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 1/19/26 1:05 AM, Marco Elver wrote:
-> This series proposes a solution to this by introducing scoped init
-> guards which Peter suggested, using the guard(type_init)(&lock) or
-> scoped_guard(type_init, ..) interface.
-Although I haven't had the time yet to do an in-depth review, from a
-quick look all patches in this series look good to me.
+On Tue, Jan 20, 2026 at 08:24:01AM +0100, Christoph Hellwig wrote:
+> On Mon, Jan 19, 2026 at 10:05:50AM +0100, Marco Elver wrote:
+> > Note: Scoped guarded initialization remains optional, and normal
+> > initialization can still be used if no guarded members are being
+> > initialized. Another alternative is to just disable context analysis to
+> > initialize guarded members with `context_unsafe(var = init)` or adding
+> > the `__context_unsafe(init)` function attribute (the latter not being
+> > recommended for non-trivial functions due to lack of any checking):
+> 
+> I still think this is doing the wrong for the regular non-scoped
+> cased, and I think I finally understand what is so wrong about it.
+> 
+> The fact that mutex_init (let's use mutexes for the example, applied
+> to other primitives as well) should not automatically imply guarding
+> the members for the rest of the function.  Because as soon as the
+> structure that contains the lock is published that is not actually
+> true, and we did have quite a lot of bugs because of that in the
+> past.
+> 
+> So I think the first step is to avoid implying the safety of guarded
+> member access by initialing the lock.  We then need to think how to
+> express they are save, which would probably require explicit annotation
+> unless we can come up with a scheme that makes these accesses fine
+> before the mutex_init in a magic way.
 
-Thanks,
+But that is exactly what these patches do!
 
-Bart.
+Note that the current state of things (tip/locking/core,next) is that
+mutex_init() is 'special'. And I agree with you that that is quite
+horrible.
+
+Now, these patches, specifically patch 6, removes this implied
+horribleness.
+
+The alternative is an explicit annotation -- as you suggest.
+
+
+So given something like:
+
+struct my_obj {
+	struct mutex	mutex;
+	int		data __guarded_by(&mutex);
+	...
+};
+
+
+tip/locking/core,next:
+
+init_my_obj(struct my_obj *obj)
+{
+	mutex_init(&obj->mutex); // implies obj->mutex is taken until end of function
+	obj->data = FOO;	 // OK, because &obj->mutex 'held'
+	...
+}
+
+And per these patches that will no longer be true. So if you apply just
+patch 6, which removes this implied behaviour, you get a compile fail.
+Not good!
+
+So patches 1-5 introduces alternatives.
+
+So your preferred solution:
+
+hch_my_obj(struct my_obj *obj)
+{
+	mutex_init(&obj->mutex);
+	mutex_lock(&obj->mutex); // actually acquires lock
+	obj->data = FOO;
+	...
+}
+
+is perfectly fine and will work. But not everybody wants this. For the
+people that only need to init the data fields and don't care about the
+lock state we get:
+
+init_my_obj(struct my_obj *obj)
+{
+	guard(mutex_init)(&obj->mutex); // initializes mutex and considers lock
+					// held until end of function
+	obj->data = FOO;
+	...
+}
+
+For the people that want to first init the object but then actually lock
+it, we get:
+
+use_my_obj(struct my_obj *obj)
+{
+	scoped_guard (mutex_init, &obj->mutex) { // init mutex and 'hold' for scope
+		obj->data = FOO;
+		...
+	}
+
+	mutex_lock(&obj->lock);
+	...
+}
+
+And for the people that *reaaaaaly* hate guards, it is possible to write
+something like:
+
+ugly_my_obj(struct my_obj *obj)
+{
+	mutex_init(&obj->mutex);
+	__acquire_ctx_lock(&obj->mutex);
+	obj->data = FOO;
+	...
+	__release_ctx_lock(&obj->mutex);
+
+	mutex_lock(&obj->lock);
+	...
+}
+
+And, then there is the option that C++ has:
+
+init_my_obj(struct my_obj *obj)
+	__no_context_analysis // STFU!
+{
+	mutex_init(&obj->mutex);
+	obj->data = FOO;	 // WARN; but ignored
+	...
+}
+
+All I can make from your email is that you must be in favour of these
+patches.
 
