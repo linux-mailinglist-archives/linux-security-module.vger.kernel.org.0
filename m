@@ -1,149 +1,152 @@
-Return-Path: <linux-security-module+bounces-14107-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14108-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aL5cCaA2cGl9XAAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14107-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 03:14:56 +0100
+	id KJh2Mui9cmk9pAAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14108-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 01:16:40 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACEB94F9A3
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 03:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5BBF6EB98
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 01:16:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 00D9DB6F557
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 02:14:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7A7C54E119D
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 04:36:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 082C42E54B6;
-	Wed, 21 Jan 2026 02:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GzbraiEK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B708E3BC4D1;
+	Wed, 21 Jan 2026 04:36:06 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from r9103.ps.combzmail.jp (r9103.ps.combzmail.jp [49.212.47.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958C01B4223;
-	Wed, 21 Jan 2026 02:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C200330650
+	for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 04:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.47.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768961688; cv=none; b=FnT+RLtqiOdSdKz0xGVHwZcTHgXCZWoC1myTEkQNtBuciZipqZ0u/GVMIe2o3bH+LVMoWsv6XVuGE5/jNcIROSWhFiOA0x7Cb2ikZfA82+0G4XjGE5ky7JRGxSUucZGyEwyGdnjyWBlMYoOIodu1W0BMrkDpqfv3nfHD4U6PPrQ=
+	t=1768970166; cv=none; b=l2BKCpRKqLzWYU3c6hnFCL13gInHayleDEYT5rk0NkmzcGFck28+Lh7k1sjb8lGztihYGEYUxYCoN4aQ1nBgEKQc/B6UwfkwF/oQwRDuiiNwrnnrJKLR2zcrWhnHM12BPjr11GNKpOEhLesi7qmuF1CmeYbhLZEcmLhyrJowYe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768961688; c=relaxed/simple;
-	bh=+VU/5+GtMQCmxJITGpUxqmCSpN2iCuJboXxFd2d+4L0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jK5pxA/raQMsfSEE5M0ewmzdZN1LeEVokZFX6pImryD4KMLPG65CElUlVNUkTjfFWxqA8V3dtPXleVtQCsn8zMnpmd/FTX0bnGoULjgEnFci4cEXUdM0xizTssU+klicHjZ9vNOQOpoZYMkF5szlm/NWnFcs3IQQgfj25h4BoFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=GzbraiEK; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60KIck473032110;
-	Wed, 21 Jan 2026 02:14:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=Sz3mo
-	lskkerDj7ax+7g16iiI7PZbmekCL4E8nCy4Lic=; b=GzbraiEKY/skrDIRHzXtl
-	EGL86+g0pB9Kndj1beXb1htCTGIO6ERpXAy/qbBSzOcnBPKM1srG5k6IzRFxqDhs
-	rznFaMcmmnz2DBLtMdfeixVIkddmt8vTKacDpy+YBv4VIZVR3ck478hVPxynDcdF
-	D4KmcS96igW9Yqa4nF7MEpsyNbXHoEGPxuoJ2HNDyyZUy+k8Kp83Tl1HH24nTOtD
-	aUjUHNGwsFbTZPpDS8g4caT3zOpE1frNJomX7baQNj27ipEwG0fGjRtRezfHAPwz
-	v9geijaeR/k9T0IpDroZOc/7UuB4DAe4AWWhTfHq8ieeE5ZzoyndoHHQRwUFqzAe
-	w==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4br2ypvuas-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 Jan 2026 02:14:40 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60L0KI52015492;
-	Wed, 21 Jan 2026 02:14:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4br0vajpvt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 Jan 2026 02:14:40 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60L2EdQb032867;
-	Wed, 21 Jan 2026 02:14:39 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4br0vajpvk-1;
-	Wed, 21 Jan 2026 02:14:39 +0000
-From: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
-To: samasth.norway.ananda@oracle.com
-Cc: gnoack@google.com, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v2] [Reminder] Landlock documentation improvements
-Date: Tue, 20 Jan 2026 18:14:38 -0800
-Message-ID: <20260121021438.1939661-1-samasth.norway.ananda@oracle.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260103002722.1465371-1-samasth.norway.ananda@oracle.com>
-References: <20260103002722.1465371-1-samasth.norway.ananda@oracle.com>
+	s=arc-20240116; t=1768970166; c=relaxed/simple;
+	bh=XBU+++9iHfohCJf3P8UKuil9x2ZtPz+kuLJkMie84SQ=;
+	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=eR4HLRJ0h1po7dFfaQ6zVJZqjiGHrhgWOnmipOUjoKzZI1OYseMomJe53dDuaA2ZZLHmBqBSCw/aF6kDKeFD7E2JhxzbaW1J0wLrEGKMOULQZEJ3cifnDxSzb/OAFY79uX34R/X8tJYa/6KNr+ewShrSlAKtN39qJQKVfBZGbIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gosso.biz; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=49.212.47.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gosso.biz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
+Received: by r9103.ps.combzmail.jp (Postfix, from userid 99)
+	id 2813818681C; Wed, 21 Jan 2026 13:24:16 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9103.ps.combzmail.jp 2813818681C
+To: linux-security-module@vger.kernel.org
+From: =?ISO-2022-JP?B?GyRCJEgkLSRvRGIlVSVpJXMlQSVjJSQlOjt2TDM2SRsoQg==?= <info@gosso.biz>
+X-Ip: 7325711480736640
+X-Ip-source: k85gj76048dnsareu0p6gd
+Precedence: bulk
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Subject: =?ISO-2022-JP?B?VFYbJEIkRyRiT0NCaiEjQ09KfSRHTFkkKyRrISIbKEI=?=
+ =?ISO-2022-JP?B?GyRCPkZGeSVTJTglTSU5GyhC?=
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-21_01,2026-01-20_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 adultscore=0
- phishscore=0 suspectscore=0 spamscore=0 mlxlogscore=850 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
- definitions=main-2601210017
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIxMDAxNyBTYWx0ZWRfXyWZ1NqNILjT3
- 8h5VHWApr1rnX7M8Ry7Ky0ctRWCN2wPFSrsetdIMYYVqksXHKGC5agxq6j69rFSpiYAKeRVuXJd
- ylJJUSw8MO5agh8K4n/DgD0dmmlg9lGr3E9X7TOSF+arOUc5+dAG15sMwNdFCsN48g+MggdrPtP
- FKgcW+EhNLxw1D7aj//BbXEEqahxw1vIRWru9v6ILoAxN05U5eqDUcazklRQuLyX7HBH/dLH4S2
- A17vzkF8DkNiRnQMWxR7Co1FsMkCt1krgvnizNJE3whNIPDdzsJuv6drnWpQQ/tpJoXmOa0FBdj
- 1d3sbdjS8SWR6E2LFbwVyoR6kUXKuotezaKBl/Tc4A1gZmYrOG8UZ0nXSWt11ePb7nAJc3gGYbV
- djpzsBUpFO8fuSxiUM5yAsUvJyWuaM0w55Pg+ZxmuC91mbebSSNUtanDm5JsV6qOlOetXYUVZwy
- cSz8q1RU0KXJsmUSjpg==
-X-Authority-Analysis: v=2.4 cv=de6NHHXe c=1 sm=1 tr=0 ts=69703690 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
- a=QT1oPoSZdec7cShRik8A:9 a=ZXulRonScM0A:10
-X-Proofpoint-ORIG-GUID: anMKzacQBoyCsCQJ-0GddTCx-oRTjB5e
-X-Proofpoint-GUID: anMKzacQBoyCsCQJ-0GddTCx-oRTjB5e
-X-Spamd-Result: default: False [-0.46 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-MagazineId: 60re
+X-uId: 6764225941486057744241691040
+X-Sender: CombzMailSender
+X-Url: http://www.combzmail.jp/
+Message-Id: <20260121042448.2813818681C@r9103.ps.combzmail.jp>
+Date: Wed, 21 Jan 2026 13:24:16 +0900 (JST)
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [5.84 / 15.00];
+	RSPAMD_URIBL(4.50)[tokiwatei-fc.work:url];
+	DATE_IN_PAST(1.00)[43];
+	MV_CASE(0.50)[];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[oracle.com:+];
-	DMARC_POLICY_ALLOW(0.00)[oracle.com,reject];
+	TAGGED_FROM(0.00)[bounces-14108-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14107-lists,linux-security-module=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	FROM_NEQ_ENVFROM(0.00)[samasth.norway.ananda@oracle.com,linux-security-module@vger.kernel.org];
+	DMARC_NA(0.00)[gosso.biz];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
+	GREYLIST(0.00)[pass,body];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
 	TO_DN_NONE(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:mid,oracle.com:dkim,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: ACEB94F9A3
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[info@gosso.biz,linux-security-module@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	NEURAL_HAM(-0.00)[-0.177];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:142.0.200.124:c];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
+X-Rspamd-Queue-Id: E5BBF6EB98
 X-Rspamd-Action: no action
-X-Rspamd-Server: lfdr
 
-Hi Mickael/Gunther,
+　
+　
+　新たな事業をお考えの経営者様へ
+　
+　
+　いつもお世話になります。
+　
+　TBSテレビ『坂上＆指原のつぶれない店』で取り上げられるなど、
+　今話題の、待ち時間0秒の飲み放題を提供する
 
-Just a friendly ping on the landlock documentation v2 patchset. I haven't heard back yet, and I wanted to check if you had the chance to review it.
-If there are any issues or further changes required, please let me know.
+　焼肉酒場「 ときわ亭 」のフランチャイズシステム説明会をご案内いたします。
+　　
+　わずか2年半で全国80店舗展開した
+　「0秒レモンサワー　ときわ亭」の
+　
+　ビジネスモデル、収益性や最新の飲食市場実態を
+　オンラインによる説明会形式で分かりやすく、丁寧にお伝えします。
+　
+　※本セミナー参加、店舗オープンの場合
+　　研修費用50万円を本部支援！
+　　専門家による、資金調達相談が無料！
+　
+　
+　このような方におススメ
+　・銀行融資を受けやすくなるコツをしりたい
+　・飲食店の経営に興味がある
+　・焼肉屋の経営実態がしりたい
 
-("landlock: Documentation improvements")
-https://lore.kernel.org/linux-security-module/20260103002722.1465371-1-samasth.norway.ananda@oracle.com/
+　こういった方は、ぜひお気軽にご視聴くださいませ。
+　
+　
+　▼　オンライン説明会のご視聴予約はこちら　▼
+　　　https://tokiwatei-fc.work/web/
 
-Thanks again for your time and feedback!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Best regards,  
-Samasth.
+　■　ご説明するフランチャイズシステム
+　　0秒レモンサワー　仙台ホルモン焼肉酒場ときわ亭
+
+　■　開催日程
+　・　1月27日（火）15:00〜16:30　＠オンライン開催
+　
+　■　定員
+　・10社限定
+　
+　■　参加費
+　・不要
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+本メールが不要の方には大変失礼しました。
+今後ご案内が不要な際は、下記URLにて配信解除を承っています。
+https://tokiwatei-fc.work/mail/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+主催：GOSSO株式会社（ときわ亭フランチャイズ本部）
+東京都渋谷区宇田川町14-13 宇田川ビルディング6F
+03-6316-8191　
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
