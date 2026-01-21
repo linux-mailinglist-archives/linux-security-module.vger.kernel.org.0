@@ -1,127 +1,147 @@
-Return-Path: <linux-security-module+bounces-14116-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14117-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eNy4LkU7cWnKfQAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14116-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 21:47:01 +0100
+	id aGyxC9FRcWkKCQAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14117-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 23:23:13 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 336065D8C0
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 21:47:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A645D5EBC8
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 23:23:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BF40FAAB74C
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 19:54:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B8C13841CFC
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 22:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1AA630F94B;
-	Wed, 21 Jan 2026 19:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C74410D0E;
+	Wed, 21 Jan 2026 22:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUDI/4qh"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="S4dG24wt"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463753C1FD2
-	for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 19:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01810441030
+	for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 22:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769025271; cv=none; b=pofIf87IrE3ymm61QREpJSDcSSR6jbAvroQOaD3rk6Q9Jj8VOlxB8zzD6WWJocWL0dXl1heAgZa6OgCV6M7FQXknjElw8p0hZ4jZeWIukAoqc317mI9GHrefEPh9EzFKS9KYsZAnya0Z5vp02/cfKjGgfAZu1hVrdFHaw2BfJw8=
+	t=1769033823; cv=none; b=ViFxoePUNJotiUlBaimYjQ6k2vCBeCGnLtJyzzAiY2Qt8cPAUchuDlQTXvCfVEYtWLsA4odejBz9J+9Fa/dOIizyxkTIV9515u1fnSu/8tkTdhSs1xZSknz5MlM8nNL/ELyM46GIVwjjPcgzY5NfzURgax+xSoNoFep1bSBz1SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769025271; c=relaxed/simple;
-	bh=yxb1cCLikrz2Q1MgxwqzQ5lzefaBn1M5G2M/HCfRNgY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Njy8yp/ELs6NntvLfEPATzO245szTXqRKiVjG3y97lUulCL/HWu3pgK8njVuab48jTPrt5cKsXWLZ7cXEqYvgmzfM+X+0liOlMCPKaGQ4WN8pxkxT2qN+N5npN8DDY1ALBbo8YAJpp8Jd+6WZVMAOPd+uoQ219ovKaQVpxnPFbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUDI/4qh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4B2C19425
-	for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 19:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769025271;
-	bh=yxb1cCLikrz2Q1MgxwqzQ5lzefaBn1M5G2M/HCfRNgY=;
-	h=From:Date:Subject:To:Cc:From;
-	b=GUDI/4qhY0h3SydNMQLjsepsrDn/uXGppXV5x1MgfnxUCxGGVEQ8U0iWoTZ66qgJF
-	 naQW0uRQp5hiUCuTexSRO0qBIt3Qpe1rgBNx8oKA9tYr2NaVhkx10H1kZTtqEc2RLS
-	 ov7VZO8g96t2Q9wr1mENqAGtX9eWozuj+JE2/n1FLGYq5jDiasWd0N0Bln0c3ewUli
-	 PGmdQWu6NF6s5mQLArASgEdaPMTFju0XDzOrzycVqsjsSuS+aSIbab0rEqsH1RWs0m
-	 +36sfA9ecJ2xZxKcxst2K4qJOsjcJ+85YH1oFSUJkY3lVwHjVN8nfWXxHdf6elgezU
-	 JWfdzDBe27Nzw==
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8c655e0ee70so25714085a.3
-        for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 11:54:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUpAalikvCnqZvi4Lyd5tphc53Vi/MAozWRjIT5jc6+oVA8naXgQ+ZPzvuCtmaXguZCKarLu8kOzD23Ql5c0YRpXkKkerE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUZVZBDUeuGclgxWIRg9VF3SpIoXvyIvZ+B7TqSzHCwVoNSHJp
-	5X+rbh6+d1DSwqM+3KPXQS7RUe5u9lert7e0UrwWX/1BCG4dQqNAoMtewQ+q7u2zfNG+kdEcJpm
-	l8bG2fHDUHOWEqW2KhHDI6uZprtkE17A=
-X-Received: by 2002:a05:620a:1710:b0:892:ca0f:fc21 with SMTP id
- af79cd13be357-8c6ccde2807mr822897485a.40.1769025270110; Wed, 21 Jan 2026
- 11:54:30 -0800 (PST)
+	s=arc-20240116; t=1769033823; c=relaxed/simple;
+	bh=Ey4EMn+8C6Ed9DgmC3+xSbgecyaGuaw68enbpV58avE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NCAfUUCDhHFjqtkneT40AIRZiTarjXbUpYBzS+7Ofs5AkJGfSd2e5Tv10T/5h1sQnAAG6Fvru68+m1WriC9Qto2jWBX/B+ltfoLU6o3+TU6NrLomKYWFtzaHVcrhlhi7mOvk+72hlAwvU+JzReLsdyNuWPMszBtNnCXBvuuH980=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=S4dG24wt; arc=none smtp.client-ip=84.16.66.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dxJSv6qNjzrwx;
+	Wed, 21 Jan 2026 23:16:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1769033807;
+	bh=6az7+I2dsOoX/r8d1bLgbw9XOtkL24htYR2/5dF/Mro=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S4dG24wtozqU97T4EmY0uIsO6QbF+xfoKIRu7pUplFJ0XM7zFLkCiIKln7jlt5ReQ
+	 G329+8F0EUn3Z4/AtIMh+sWN7Dy1euBIb822QulI9KRUovXnXhIeexAOnfmCTNbONY
+	 m7uhN+eyyu9YbUfO6D9kkHQfMvRzeoLEG3m8X80k=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4dxJSv15hTz3d4;
+	Wed, 21 Jan 2026 23:16:47 +0100 (CET)
+Date: Wed, 21 Jan 2026 23:16:42 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
+Cc: linux-security-module@vger.kernel.org, Tingmao Wang <m@maowtm.org>, 
+	Justin Suess <utilityemal77@gmail.com>, Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, 
+	Matthieu Buffet <matthieu@buffet.re>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	konstantin.meskhidze@huawei.com
+Subject: Re: [RFC PATCH 2/2] landlock: transpose the layer masks data
+ structure
+Message-ID: <20260121.fae3Dahc3foo@digikod.net>
+References: <20251230103917.10549-3-gnoack3000@gmail.com>
+ <20251230103917.10549-7-gnoack3000@gmail.com>
+ <20260111.11c57c607174@gnoack.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Song Liu <song@kernel.org>
-Date: Wed, 21 Jan 2026 11:54:18 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
-X-Gm-Features: AZwV_QgsgjhWfk0YsKkFKCqOs7PpeRWozME_nBh0y5sHUbGGKqGmpO-fzfyjEZo
-Message-ID: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
-Subject: [LSF/MM/BPF TOPIC] Refactor LSM hooks for VFS mount operations
-To: bpf <bpf@vger.kernel.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	lsf-pc@lists.linux-foundation.org, 
-	linux-security-module <linux-security-module@vger.kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-1.96 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260111.11c57c607174@gnoack.org>
+X-Infomaniak-Routing: alpha
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-0.79 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_MIXED_CHARSET(0.67)[subject];
+	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_FROM(0.00)[bounces-14116-lists,linux-security-module=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14117-lists,linux-security-module=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,maowtm.org,gmail.com,oracle.com,buffet.re,huawei-partners.com,huawei.com];
+	DKIM_TRACE(0.00)[digikod.net:+];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[digikod.net];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[song@kernel.org,linux-security-module@vger.kernel.org];
-	RCPT_COUNT_FIVE(0.00)[6];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	TAGGED_RCPT(0.00)[linux-security-module];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	FROM_NEQ_ENVFROM(0.00)[mic@digikod.net,linux-security-module@vger.kernel.org];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 336065D8C0
+	TAGGED_RCPT(0.00)[linux-security-module];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
+X-Rspamd-Queue-Id: A645D5EBC8
 X-Rspamd-Action: no action
-X-Rspamd-Server: lfdr
 
-Current LSM hooks do not have good coverage for VFS mount operations.
-Specifically, there are the following issues (and maybe more..):
+On Sun, Jan 11, 2026 at 10:52:26PM +0100, Günther Noack wrote:
+> On Tue, Dec 30, 2025 at 11:39:21AM +0100, Günther Noack wrote:
+> > diff --git a/security/landlock/access.h b/security/landlock/access.h
+> > index 7961c6630a2d7..aa0efa36a37db 100644
+> > --- a/security/landlock/access.h
+> > +++ b/security/landlock/access.h
+> >  [...]
+> >  /*
+> >   * Tracks domains responsible of a denied access.  This is required to avoid
+> >   * storing in each object the full layer_masks[] required by update_request().
+> > + *
+> > + * Each nibble represents the layer index of the newest layer which denied a
+> > + * certain access right.  For file system access rights, the upper four bits are
+> > + * the index of the layer which denies LANDLOCK_ACCESS_FS_IOCTL_DEV and the
+> > + * lower nibble represents LANDLOCK_ACCESS_FS_TRUNCATE.
+> >   */
+> >  typedef u8 deny_masks_t;
+> 
+> FYI: I left this out for now because it felt a bit out of scope (and
+> transposing the layer masks was adventurous enough), but I was tempted
+> to go one step further here and turn this into a struct with
+> bitfields:
+> 
+> /* A collection of layer indices denying specific access rights. */
+> struct layers_denying_fs_access {
+>   unsigned int truncate  : 4;
+>   unsigned int ioctl_dev : 4;
+> }
+> 
+> (Type name TBD, I am open for suggestions.)
+> 
+> I think if we accept that this data structure is specific to FS access
+> rights, we win clarity in the code.  When I came across the code that
+> put this together dynamically and in a more generic way, it took me a
+> while to figure out what it did.
 
-1. security_sb_mount suffers from the TOCTOU bug for bind mount and
-    move mount [1];
-2. There is not sufficient coverage for new mount syscalls (open_tree, fspick,
-    etc.) [2].
-
-A key consideration of this refactor is to minimize lock contention, especially
-around namespace_sem.
-
-I also want to discuss what features in the kernel side (kfuncs,
-iterators, etc.)
-are needed to enable reliable monitoring of mount operations in BPF LSM.
-
-Thanks,
-Song
-
-PS: I am not sure whether other folks are already working on it. I will prepare
-some RFC patches before the conference if I don't see other proposals.
-
-[1] https://lore.kernel.org/bpf/20251130064609.GR3538@ZenIV/
-[2] https://lore.kernel.org/linux-security-module/20250711-pfirsich-worum-c408f9a14b13@brauner/
+This change should help indeed (in a standalone patch).  Maybe we could
+make the rest of the logic more generic in a way that it would be
+simpler to add this kind of access right?
 
