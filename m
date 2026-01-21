@@ -1,257 +1,147 @@
-Return-Path: <linux-security-module+bounces-14110-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14112-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eEFeKVmgcGlyYgAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14110-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 10:46:01 +0100
+	id cIiyNl/QcGkOaAAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14112-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 14:10:55 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CCA054A06
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 10:46:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id F157B575C9
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 14:10:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C8B505E79E5
-	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 09:40:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 014146013D6
+	for <lists+linux-security-module@lfdr.de>; Wed, 21 Jan 2026 12:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E41B3D522A;
-	Wed, 21 Jan 2026 09:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3REDpPS+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE274218AB;
+	Wed, 21 Jan 2026 12:57:29 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sub0000529476.hmk-temp.com (mail.btob-mail.work [180.222.184.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC3C3A9D8C
-	for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 09:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B571C48122E
+	for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 12:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.222.184.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768988268; cv=none; b=f+qerkEc0pxtUlTTlppz69k0Y8t7+vvrL12YyM6XiM4/t8GRFwlGqIxJW26rN1RzkfBk/FwRZ0GZKbOrc3jnr/emrmNZJM5yH26ThoDawrFCFJQHv7ybHpNIeSe0c+c8oJ+8bw2s5zdYlEPxWsDAzvKdqx0+YAZUbyeIIvqx/fQ=
+	t=1769000249; cv=none; b=rDmGaOZqXtUMSGSVsTieMPGvD9PHWQtEHht/Sa97ILHbj7nkzXEtiMigDtXLMK7NQmFHUYmEOSUuuBkuuJA9SXRcT/Z4y3FV9DOwg8a0NpHlU9Z5kLJ9JpeJmeF8GdzDDRDGAvm06pIVL2l12n0/6VfXCnggnrN8kFGIsiK30es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768988268; c=relaxed/simple;
-	bh=3Y5ZT2VCoepAX5qzQunqbwa1vfvEuZu4MagMfD+bqDs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OmlSzwt9bm+PhMY/8coru2CN9r26roaoLFC+do16lVhM14Mk6Hc4uyyAK/kLizuZ88sZ3tpi4DZGev6od6Zb0wBzQ4IunMYgje37ikpG8QzyrO115WC6HcTXQt3BjKyOfuCq0/LekytgGAP5N9Wog1yqQWFKLaV1Uc3SUTR0eNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3REDpPS+; arc=none smtp.client-ip=209.85.221.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-43591b55727so1164280f8f.3
-        for <linux-security-module@vger.kernel.org>; Wed, 21 Jan 2026 01:37:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768988264; x=1769593064; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iXqeTKnaesD/s95x6BykBBgnpofIAgHmHNlWTvmzDVU=;
-        b=3REDpPS+D2Njc3+r5+f1S2k+EXMe96UQbPFS5Z+PboUNVF9v+4UPgBn7M1VkZhVeag
-         9Bf661NusvKHvnNBP2ob2NZBsUjkLUZh6PZKLBIu7VqJc348fnYt0ESbjrRxDQqmEVBL
-         adKvappSg3VWdTwDfRFEqnk0dUClhWB6E/sNhzsIWKrf8HC0fKn4CU86YZPsvXB2Nq+B
-         xVDQ+sI5qYUbemp7fwNPh2t3bxRvTRX+YV4hQgUH7snC8IX1BMLv6g7JuliuGE4VX4EV
-         HmCFsw4c+aNz/dG1IGH6sdJUznBXBPyVvYHxNkCtZ5S2IfP22PX7Saccb1kGUHHDGu2/
-         32NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768988264; x=1769593064;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iXqeTKnaesD/s95x6BykBBgnpofIAgHmHNlWTvmzDVU=;
-        b=rwlvqeEgI7Ow+WpmHfGxBx1t+n7fjChbcTcva2HYT/f5suIAqYsyPHxvsjncy0XBKD
-         v03Rs9BkyQQ3UnJfl00TxSjfjOHQ7F14uf70KJ0nF40DpSPLHgUzhxQu0u+UtQ6CUnjV
-         q0uAtZ93zXHV9oN3jBMelzw8M75uopUKnYc3b++Ux1bJXZKJOLjbIfexBZUZVBw24zoL
-         nWF83Tt/ovbVupt2FGt4i2mnvTTJ/ExFb/Dub5Fz4tC3Xxl0pt6ZGw0reze2jbvsGejt
-         Tl/3yRV9HTlQcl41+/vcGD8cgSW52hOC7NoRF16DZPHQwlA0Ei6aaMG4JdbqDCHbsp0x
-         k+BA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtnDTHbz7tUyFKmlzxgW/AlFGt/DVlxIrob+e52LU2xajDVCbCPzGwA/eCPvUp1TOMdNUYac+E4/AK21fCdl5cpL7oHdM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxVYSDmtZ1OSq7zrmV07ChTyikIOv8OGEqnYn4RKLnK6fsH5lk
-	g+tB3aef27k0J5nPhvVFEw/rnRiY9DGv3ATj1FuabFnBeqP8H1kWMwOBVrGbwTvu0p95MXIMVeS
-	yStJTQKtMzvg=
-X-Gm-Gg: AZuq6aI7hLQafwZDYehc2RL9AO6/K+QQAP8HFZldetyQqo2UXMXZEWnLhOOBoEldTZm
-	FABdSzH1hsPKBXmz+zJGNf2Zo7dVo30WliS7jXlxkuafeHK+dpB/xjwqUA/tktMCVMBi5ingyPM
-	KtOHjOJ5pz0/rV54tdbw/bPmLx9Zer5Ia7Dbm0HmujOABJejm09+nRZVWkguf4ME9ITrPPFy1fO
-	LMjtOrXkwhYdWsUr9LHZhOX0ibIPLztovcado1dUWsYKPLowu6N8vlAotm9OqpTbcY7q9zNfjSd
-	cMUkFoOV0umETYmmXPOtUCnajlWAYH+jNt2EwexZ50TxAdrPMfvmuT8ZoXsMO40adP8jfXJELLu
-	NjDyb9Re6pKYM297AGEZk80NaHSUgSdQxEk/yM8PYvy2SKoAhXnNjPBWuJXaO+U4wM8jfFYrDc6
-	6fLclgcIWJSayS9KH5QvGAtN1Il6JicgRFRNSZOrtveQ==
-X-Received: by 2002:a05:6000:2282:b0:431:abb:942f with SMTP id ffacd0b85a97d-4356a083757mr25813356f8f.54.1768988264074;
-        Wed, 21 Jan 2026 01:37:44 -0800 (PST)
-Received: from google.com ([2a00:79e0:288a:8:4dcd:eab0:72dc:f1a9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43596b62700sm6518170f8f.42.2026.01.21.01.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 01:37:43 -0800 (PST)
-Date: Wed, 21 Jan 2026 10:37:38 +0100
-From: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-To: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
-Cc: mic@digikod.net, linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] landlock: Add missing ABI 7 case in documentation
- example
-Message-ID: <aXCeYnLuKMaNmaP0@google.com>
-References: <20260103002722.1465371-1-samasth.norway.ananda@oracle.com>
- <20260103002722.1465371-2-samasth.norway.ananda@oracle.com>
+	s=arc-20240116; t=1769000249; c=relaxed/simple;
+	bh=XWhwz5XfX6dcp6E8MvIbZWFetA2FciHeSNylbn60qUY=;
+	h=From:To:Subject:Content-Type:Date:Message-ID; b=Bno85DNZVY5REyPLmG3dl+G/cuBgcuFBW8YSLJQVAMH28T5+/SGQihFXNh2wGy+diKtHpzYqOe+Gb0FK4aVHHsO51vtU0okIemqWn5Zo804TEnLkTkQkDkVV61dxiFsJlcK+FBrHvSVmGFuIbhXv3LaGk4Ykf1KL/+MgMoGRSoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=headmint.biz; spf=fail smtp.mailfrom=headmint.biz; arc=none smtp.client-ip=180.222.184.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=headmint.biz
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=headmint.biz
+Received: (qmail 17371 invoked from network); 21 Jan 2026 17:32:03 +0900
+Received: from ai126170209163.41.access-internet.ne.jp (HELO DESKTOP-17GBPQK) (126.170.209.163)
+  by mail.btob-mail.work with ESMTPSA (DHE-RSA-AES256-GCM-SHA384 encrypted, authenticated); 21 Jan 2026 17:32:03 +0900
+From: =?iso-2022-jp?B?GyRCJVglQyVJJV8lcyVIGyhC?= <info@headmint.biz>
+To: linux-security-module@vger.kernel.org
+Subject: =?iso-2022-jp?B?GyRCJCIkPyReQGxMZyROJGIkXyRbJDAkN0U5GyhCIA==?==?iso-2022-jp?B?GyRCPH0xV0AtRXkhPzM1TVc7cU5BGyhC?=
+X-Mailer: Mail Magic Professional Version 16
+Content-Type: text/plain;
+	charset=iso-2022-jp
+Date: Wed, 21 Jan 2026 18:38:27 +0900
+Message-ID: <202601211838270354.12EEEDB0602C4CDF87E3F6D39281BD7E@btob-mail.work>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260103002722.1465371-2-samasth.norway.ananda@oracle.com>
-X-Spamd-Result: default: False [-1.96 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+X-Spamd-Result: default: False [6.84 / 15.00];
+	ABUSE_SURBL(5.00)[dryheadspa-hm.biz:url];
+	MISSING_MIME_VERSION(2.00)[];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[google.com:+];
+	DMARC_NA(0.00)[headmint.biz];
+	TAGGED_FROM(0.00)[bounces-14112-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_POLICY_ALLOW(0.00)[google.com,reject];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14110-lists,linux-security-module=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
-	TO_DN_SOME(0.00)[];
+	GREYLIST(0.00)[pass,meta];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
+	FROM_NEQ_ENVFROM(0.00)[info@headmint.biz,linux-security-module@vger.kernel.org];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gnoack@google.com,linux-security-module@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,oracle.com:email]
-X-Rspamd-Queue-Id: 4CCA054A06
-X-Rspamd-Action: no action
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,dryheadspa-hm.biz:url]
+X-Rspamd-Queue-Id: F157B575C9
+X-Rspamd-Action: add header
 X-Rspamd-Server: lfdr
+X-Spam: Yes
 
-Thanks for the updated documentation!
-
-The comments below are mostly about the structure in the bigger
-document context.  The wording seems good.
-
-On Fri, Jan 02, 2026 at 04:27:13PM -0800, Samasth Norway Ananda wrote:
-> Add the missing case 6 and case 7 handling in the ABI version
-> compatibility example to properly handle ABI < 7 kernels.
-> 
-> Add an optional backwards compatibility section for restrict flags
-> between the case analysis and landlock_restrict_self() call. The main
-> tutorial example remains unchanged with
-> landlock_restrict_self(ruleset_fd, 0) to keep it simple for users who
-> don't need logging flags.
-> 
-> Also fix misleading description of the /usr rule which incorrectly
-> stated it "only allow[s] reading" when the code actually allows both
-> reading and executing (LANDLOCK_ACCESS_FS_EXECUTE is included in
-> allowed_access).
-> 
-> Signed-off-by: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
-> ---
->  Documentation/userspace-api/landlock.rst | 35 +++++++++++++++++++++---
->  1 file changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-> index 1d0c2c15c22e..650c7b368561 100644
-> --- a/Documentation/userspace-api/landlock.rst
-> +++ b/Documentation/userspace-api/landlock.rst
-> @@ -127,6 +127,12 @@ version, and only use the available subset of access rights:
->          /* Removes LANDLOCK_SCOPE_* for ABI < 6 */
->          ruleset_attr.scoped &= ~(LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
->                                   LANDLOCK_SCOPE_SIGNAL);
-> +        __attribute__((fallthrough));
-> +    case 6:
-> +        /* Removes logging flags for ABI < 7 */
-> +        __attribute__((fallthrough));
-> +    case 7:
-> +        break;
->      }
-
-This code does nothing, and the comment about removing logging flags
-is unclear in that context without pointing to the later section.
-IMHO we can either say that logging flags are removed in the code
-further below, or just leave it out.
-
-The "case 7" case is not necessary.
-
->  
->  This enables the creation of an inclusive ruleset that will contain our rules.
-> @@ -142,8 +148,9 @@ This enables the creation of an inclusive ruleset that will contain our rules.
->      }
->  
->  We can now add a new rule to this ruleset thanks to the returned file
-> -descriptor referring to this ruleset.  The rule will only allow reading the
-> -file hierarchy ``/usr``.  Without another rule, write actions would then be
-> +descriptor referring to this ruleset.  The rule will allow reading and
-> +executing files in the ``/usr`` hierarchy.  Without another rule, write actions
-> +and other operations (make_dir, remove_file, etc.) would then be
->  denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with the
->  ``O_PATH`` flag and fill the &struct landlock_path_beneath_attr with this file
->  descriptor.
-> @@ -191,10 +198,30 @@ number for a specific action: HTTPS connections.
->      err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_NET_PORT,
->                              &net_port, 0);
->  
-> +Backwards compatibility for restrict flags
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you were to add this header, then the section about prctl() and
-landlock_restrict_self() would also now appear under "Backwards
-compatibility for restrict flags", and that would be confusing.  I
-would recommend to drop the header for now and clarify in the text
-what it is about.  (IMHO, it is visually reasonably easy to understand
-the structure of the different sections, as they always follow the
-structure "text + code snippet".)
-
-If we want to introduce a new level of headers below "Defining and
-enforcing a security policy", we would have to introduce subsections
-for the other steps as well, so that it is more structured.  (If we
-wanted to do that though, it would probably be better to do it in a
-separate commit.)
+$B$*@$OC$K$J$j$^$9!#(B
 
 
-> +When passing a non-zero ``flags`` argument to ``landlock_restrict_self()``, the
-> +following backwards compatibility check needs to be taken into account:
-> +
-> +.. code-block:: c
-> +
-> +    /*
-> +     * Desired restriction flags, see ABI version section above.
-                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+$B%3%s%Q%/%H$K%9%?!<%H$G$-$F<j7x$/<}1W$r$"$2$k$3$H$N$G$-$k(B
+$B%U%i%s%A%c%$%:%S%8%M%9$N;v6H35MW;qNA$r$40FFb?=$7>e$2$^$9!#(B
 
-The ABI section does not talk about the restriction flags much;
-I would have expected that to link to the place where the restriction
-flags are documented, which would be the system call documentation
-from the header?
 
-https://docs.kernel.org/userspace-api/landlock.html#enforcing-a-ruleset
+$B!!!!!!(B $B>.;qK\!?>.%9%Z!<%9!?>/?M?t$N(B
+$B!!!!!!!!%3%s%Q%/%H!&%U%i%s%A%c%$%:(B
 
-> +     * This value is only an example and differs by use case.
-> +     */
-> +    int restrict_flags = LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON;
-> +    if (abi < 7) {
-> +        /* Clear logging flags unsupported in ABI < 7 */
-> +        restrict_flags &= ~(LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF |
-> +                           LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON |
-> +                           LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF);
-> +    }
-> +
->  The next step is to restrict the current thread from gaining more privileges
->  (e.g. through a SUID binary).  We now have a ruleset with the first rule
-> -allowing read access to ``/usr`` while denying all other handled accesses for
-> -the filesystem, and a second rule allowing HTTPS connections.
-> +allowing read and execute access to ``/usr`` while denying all other handled
-> +accesses for the filesystem, and a second rule allowing HTTPS connections.
->  
+$B!!!!!!!!!!%I%i%$%X%C%I%9%Q@lLgE9(B
+$B!!!!!!!!!!!!(B $B!H%X%C%I%_%s%H!I(B
 
-If you are setting a "restrict_flags" variable here, then you would
-also need to use that variable in the call to landlock_restrict_self()
-in the documentation below, so that the different code sections in the
-documentation work together.
+$B!!!!!!!!!!!!!!!&<}1W%b%G%k(B
+$B!!!!!!!!!!!!!!!&3+6H$KI,MW$J;q6b(B
+$B!!!!!!!!!!!!!!!&%m%$%d%j%F%#(B
+$B!!!!!!!!!!!!!!!&%9%1%8%e!<%k!!(Betc
+$B!!!!(B $B!!!!(B $B"-!!(B FC$B;v6H35MW;qNA(B $B!!"-(B
+  $B!!(B $B!!(B https://dryheadspa-hm.biz/fc/
 
-—Günther
+
+$B%I%i%$%X%C%I%9%Q$H$O!!!=!=!=!!?e$r;H$o$J$$%X%C%I%9%Q$G$9!#(B
+
+
+$BB-$D$\$d<*$D$\$J$I!"@lLg$N$b$_$[$0$7E9$,$"$j$^$9$,(B
+$B$4>R2p$9$k%5%m%s$O!V!!F,$KFC2=$7$?$b$_$[$0$7E9!!!W$G$9!#(B
+
+
+$B%I%i%$%X%C%I%9%Q$H$$$&%8%c%s%k$NG'CNEY$O!"(B
+$B8=;~E@$G$O$=$l$[$I9b$/$"$j$^$;$s!#(B
+
+
+$B$K$b4X$o$i$:!";d$I$b$,%U%i%s%A%c%$%:E83+$9$k!H%X%C%I%_%s%H!I$N(B
+$BE9J^$K$O7n4V(B450$B?M0J>e$N?75,5R$,MhE9$7!"K~@J$,B3$$$F$$$^$9!#(B
+
+
+$B$3$l$+$i@h!"G'CNEY$,9b$^$k$3$H$G(B
+$BGzH/E*$K?-$S$k%]%F%s%7%c%k$rHk$a$F$$$^$9!#(B
+
+
+$B%U%i%s%A%c%$%:$K$h$k;v6H$rE83+$7$F$$$^$9$N$G!"(B
+$B?7$?$J<}1W$E$/$j$r$*9M$($NJ}$O!"$^$:$O35MW;qNA$r$4Mw$/$@$5$$!#(B
+
+
+$B!!!!!!!!!!%I%i%$%X%C%I%9%Q@lLgE9(B
+$B!!!!!!!!!!!!!!!!%X%C%I%_%s%H(B
+$B!!!!!!(B
+$B!!!!(B $B!!!!(B $B"-!!(B FC$B;v6H35MW;qNA(B $B!!"-(B
+  $B!!(B $B!!(B https://dryheadspa-hm.biz/fc/
+
+
+$B$h$m$7$/$*4j$$$7$^$9!#(B
+
+
+------------------------------------------
+$B!!3t<02q<R$8$`$d(B
+$B!!0&CN8)L>8E20;TCf6hBg?\(B3-26-41$BKYED%S%k(B
+$B!!(BTEL$B!'(B052-263-4688
+------------------------------------------
+$B!!K\>pJs$,$4ITMW$JJ}$K$O$4LBOG$r$*$+$1$7?=$7Lu$4$6$$$^$;$s!#(B
+$B!!%a!<%k%^%,%8%s$N2r=|$O!"2<5-(BURL$B$K$F>5$C$F$*$j$^$9!#(B
+$B!!(B https://dryheadspa-hm.biz/mail/
+$B!!$*<j?t$*3]$1$7$^$9$,$h$m$7$/$*4j$$$7$^$9!#(B
 
